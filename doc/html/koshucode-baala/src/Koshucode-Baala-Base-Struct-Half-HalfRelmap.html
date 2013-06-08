@@ -14,7 +14,7 @@
 <a name="line-5"></a>  <span class='hs-varid'>makeConsRelmap</span>
 <a name="line-6"></a><span class='hs-layout'>,</span> <span class='hs-conid'>ConsRelmap</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span>
 <a name="line-7"></a><span class='hs-layout'>,</span> <span class='hs-conid'>RelmapImplement</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span>
-<a name="line-8"></a><span class='hs-layout'>,</span> <span class='hs-conid'>RelmapParser</span>
+<a name="line-8"></a><span class='hs-layout'>,</span> <span class='hs-conid'>OperandParser</span>
 <a name="line-9"></a>  <span class='hs-comment'>-- * Half constructor</span>
 <a name="line-10"></a><span class='hs-layout'>,</span> <span class='hs-conid'>RelmapHalfCons</span>
 <a name="line-11"></a><span class='hs-layout'>,</span> <span class='hs-varid'>consHalfRelmap</span>
@@ -57,14 +57,14 @@
 <a name="line-48"></a><a name="RelmapImplement"></a><span class='hs-comment'>--   and (4) usage of operator.</span>
 <a name="line-49"></a><a name="RelmapImplement"></a><span class='hs-keyword'>data</span> <span class='hs-conid'>RelmapImplement</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>RelmapImplement</span>
 <a name="line-50"></a>    <span class='hs-conid'>String</span>              <span class='hs-comment'>-- Operator name</span>
-<a name="line-51"></a>    <span class='hs-conid'>RelmapParser</span>        <span class='hs-comment'>-- Operand parser</span>
+<a name="line-51"></a>    <span class='hs-conid'>OperandParser</span>       <span class='hs-comment'>-- Operand parser</span>
 <a name="line-52"></a>    <span class='hs-layout'>(</span><span class='hs-conid'>RelmapFullCons</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span>  <span class='hs-comment'>-- Relmap full constructor</span>
 <a name="line-53"></a>    <span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span>            <span class='hs-comment'>-- Description of operator usage</span>
 <a name="line-54"></a>
-<a name="line-55"></a><a name="RelmapParser"></a><span class='hs-comment'>-- | Parser for operand of relational operator.</span>
-<a name="line-56"></a><a name="RelmapParser"></a><span class='hs-comment'>--   This parsers docompose operand trees,</span>
-<a name="line-57"></a><a name="RelmapParser"></a><span class='hs-comment'>--   and give a name to suboperand.</span>
-<a name="line-58"></a><a name="RelmapParser"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>RelmapParser</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Named</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span><span class='hs-keyglyph'>]</span>
+<a name="line-55"></a><a name="OperandParser"></a><span class='hs-comment'>-- | Parser for operand of relational operator.</span>
+<a name="line-56"></a><a name="OperandParser"></a><span class='hs-comment'>--   This parsers docompose operand trees,</span>
+<a name="line-57"></a><a name="OperandParser"></a><span class='hs-comment'>--   and give a name to suboperand.</span>
+<a name="line-58"></a><a name="OperandParser"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>OperandParser</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Named</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span><span class='hs-keyglyph'>]</span>
 <a name="line-59"></a>
 <a name="line-60"></a>
 <a name="line-61"></a>

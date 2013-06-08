@@ -59,7 +59,7 @@
 <a name="line-50"></a><span class='hs-definition'>rehead</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Relhead</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Relhead</span>
 <a name="line-51"></a><span class='hs-definition'>rehead</span> <span class='hs-varid'>f</span> <span class='hs-layout'>(</span><span class='hs-conid'>Relhead</span> <span class='hs-varid'>h</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Relhead</span> <span class='hs-varop'>$</span> <span class='hs-varid'>map</span> <span class='hs-conid'>Term</span> <span class='hs-varop'>$</span> <span class='hs-varid'>f</span> <span class='hs-varop'>$</span> <span class='hs-varid'>names</span> <span class='hs-varid'>h</span>
 <a name="line-52"></a>
-<a name="line-53"></a><span class='hs-comment'>-- -- -- -- -- Index</span>
+<a name="line-53"></a><span class='hs-comment'>-- ----------------------  Index</span>
 <a name="line-54"></a>
 <a name="line-55"></a><a name="headIndex"></a><span class='hs-definition'>headIndex</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Relhead</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-keyglyph'>[</span><span class='hs-conid'>Int</span><span class='hs-keyglyph'>]</span><span class='hs-keyglyph'>]</span>
 <a name="line-56"></a><span class='hs-definition'>headIndex</span> <span class='hs-varid'>h</span> <span class='hs-varid'>n</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>termLook</span> <span class='hs-varid'>n</span> <span class='hs-varop'>$</span> <span class='hs-varid'>headTerms</span> <span class='hs-varid'>h</span>
@@ -79,7 +79,7 @@
 <a name="line-70"></a>    <span class='hs-varid'>ps2</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>map</span> <span class='hs-varid'>head</span> <span class='hs-varid'>ps</span>
 <a name="line-71"></a>    <span class='hs-varid'>pos</span> <span class='hs-varid'>n</span> <span class='hs-varid'>p</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>TermPos</span> <span class='hs-varid'>p</span> <span class='hs-varid'>n</span>
 <a name="line-72"></a>
-<a name="line-73"></a><span class='hs-comment'>-- -- -- -- --  Term position</span>
+<a name="line-73"></a><span class='hs-comment'>-- ----------------------  Term position</span>
 <a name="line-74"></a>
 <a name="line-75"></a><a name="TermPos"></a><span class='hs-comment'>-- | Term position</span>
 <a name="line-76"></a><a name="TermPos"></a><span class='hs-keyword'>data</span> <span class='hs-conid'>TermPos</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>TermPos</span> <span class='hs-layout'>{</span>
