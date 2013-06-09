@@ -9,75 +9,141 @@
 <body>
 <pre><a name="line-1"></a><span class='hs-comment'>{-# OPTIONS_GHC -Wall #-}</span>
 <a name="line-2"></a>
-<a name="line-3"></a><span class='hs-comment'>-- | Fundamental operators in Tropashko lattice.</span>
-<a name="line-4"></a>
-<a name="line-5"></a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Minimal</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span><span class='hs-varop'>.</span><span class='hs-conid'>Tropashko</span>
-<a name="line-6"></a><span class='hs-layout'>(</span> <span class='hs-comment'>-- * Functions on relmap</span>
-<a name="line-7"></a>  <span class='hs-varid'>relmapMeet</span><span class='hs-layout'>,</span> <span class='hs-varid'>relmapJoin</span>
-<a name="line-8"></a>  <span class='hs-comment'>-- * Functions on rel</span>
-<a name="line-9"></a><span class='hs-layout'>,</span> <span class='hs-varid'>relMeet</span><span class='hs-layout'>,</span> <span class='hs-varid'>relJoin</span>
-<a name="line-10"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
-<a name="line-11"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Data</span>
-<a name="line-12"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Prelude</span> <span class='hs-varid'>hiding</span> <span class='hs-layout'>(</span><span class='hs-varid'>maybe</span><span class='hs-layout'>)</span>
-<a name="line-13"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Kit</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>Kit</span>
-<a name="line-14"></a>
+<a name="line-3"></a><span class='hs-comment'>-- | Fundamental operators in relational algebra.</span>
+<a name="line-4"></a><span class='hs-comment'>-- </span>
+<a name="line-5"></a><span class='hs-comment'>--   Tropashko's relational lattice is a kind of relational algebra.</span>
+<a name="line-6"></a><span class='hs-comment'>--   Relational algebra is an algebraic formulation for relational model.</span>
+<a name="line-7"></a><span class='hs-comment'>--   In constrast to Codd's original relational algebra,</span>
+<a name="line-8"></a><span class='hs-comment'>--   Tropashko lattice is in more conventional and strict ways.</span>
+<a name="line-9"></a><span class='hs-comment'>--   The lattice has fundamental operators from which</span>
+<a name="line-10"></a><span class='hs-comment'>--   other operators are derived.</span>
+<a name="line-11"></a>
+<a name="line-12"></a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Minimal</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span><span class='hs-varop'>.</span><span class='hs-conid'>Tropashko</span>
+<a name="line-13"></a><span class='hs-layout'>(</span> <span class='hs-comment'>-- * Fundamental operators</span>
+<a name="line-14"></a>  <span class='hs-comment'>-- $FundamentalOperators</span>
 <a name="line-15"></a>
-<a name="line-16"></a><span class='hs-comment'>-- ----------------------  Functions on relmap</span>
-<a name="line-17"></a>
-<a name="line-18"></a><a name="relmapMeet"></a><span class='hs-comment'>-- | Meet two relations.</span>
-<a name="line-19"></a><span class='hs-comment'>--   Meeting operation is a generalized intersection.</span>
-<a name="line-20"></a><span class='hs-definition'>relmapMeet</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Ord</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>HalfRelmap</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span> <span class='hs-varid'>v</span>
-<a name="line-21"></a><span class='hs-definition'>relmapMeet</span> <span class='hs-varid'>h</span> <span class='hs-varid'>m</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>confl</span> <span class='hs-varid'>h</span> <span class='hs-str'>"meet"</span> <span class='hs-varid'>sub</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>m</span><span class='hs-keyglyph'>]</span> <span class='hs-keyword'>where</span>
-<a name="line-22"></a>    <span class='hs-varid'>sub</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>r2</span><span class='hs-keyglyph'>]</span> <span class='hs-varid'>r1</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>relMeet</span> <span class='hs-varid'>r1</span> <span class='hs-varid'>r2</span>
-<a name="line-23"></a>    <span class='hs-varid'>sub</span> <span class='hs-keyword'>_</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>undefined</span>
-<a name="line-24"></a>
-<a name="line-25"></a><a name="relmapJoin"></a><span class='hs-comment'>-- | Join two relations.</span>
-<a name="line-26"></a><span class='hs-comment'>--   Joining operation is a generalized union.</span>
-<a name="line-27"></a><span class='hs-definition'>relmapJoin</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Ord</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>HalfRelmap</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span> <span class='hs-varid'>v</span>
-<a name="line-28"></a><span class='hs-definition'>relmapJoin</span> <span class='hs-varid'>h</span> <span class='hs-varid'>m</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>confl</span> <span class='hs-varid'>h</span> <span class='hs-str'>"join"</span> <span class='hs-varid'>sub</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>m</span><span class='hs-keyglyph'>]</span> <span class='hs-keyword'>where</span>
-<a name="line-29"></a>    <span class='hs-varid'>sub</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>r2</span><span class='hs-keyglyph'>]</span> <span class='hs-varid'>r1</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>relJoin</span> <span class='hs-varid'>r1</span> <span class='hs-varid'>r2</span>
-<a name="line-30"></a>    <span class='hs-varid'>sub</span> <span class='hs-keyword'>_</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>undefined</span>
+<a name="line-16"></a>  <span class='hs-comment'>-- * Naming conventions</span>
+<a name="line-17"></a>  <span class='hs-comment'>-- $NamingConventions</span>
+<a name="line-18"></a>
+<a name="line-19"></a>  <span class='hs-comment'>-- * Functions on relmap</span>
+<a name="line-20"></a>  <span class='hs-varid'>relmapMeet</span><span class='hs-layout'>,</span> <span class='hs-varid'>relmapJoin</span><span class='hs-layout'>,</span>
+<a name="line-21"></a>
+<a name="line-22"></a>  <span class='hs-comment'>-- * Functions on rel</span>
+<a name="line-23"></a>  <span class='hs-varid'>relMeet</span><span class='hs-layout'>,</span> <span class='hs-varid'>relJoin</span>
+<a name="line-24"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a name="line-25"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Data</span>
+<a name="line-26"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Kit</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>Kit</span>
+<a name="line-27"></a>
+<a name="line-28"></a>
+<a name="line-29"></a>
+<a name="line-30"></a><span class='hs-comment'>-- ----------------------  Functions on relmap</span>
 <a name="line-31"></a>
-<a name="line-32"></a>
-<a name="line-33"></a>
-<a name="line-34"></a><span class='hs-comment'>-- ----------------------  Functions on relation</span>
-<a name="line-35"></a>
-<a name="line-36"></a><a name="relMeet"></a><span class='hs-definition'>relMeet</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Ord</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>v</span>
-<a name="line-37"></a><span class='hs-definition'>relMeet</span> <span class='hs-varid'>r1</span> <span class='hs-varid'>r2</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>h3</span> <span class='hs-varid'>b3</span> <span class='hs-keyword'>where</span>
-<a name="line-38"></a>    <span class='hs-conid'>Rel</span> <span class='hs-varid'>h1</span> <span class='hs-varid'>args1</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>r1</span>
-<a name="line-39"></a>    <span class='hs-conid'>Rel</span> <span class='hs-varid'>h2</span> <span class='hs-varid'>args2</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>r2</span>
+<a name="line-32"></a><a name="relmapMeet"></a><span class='hs-comment'>-- | Meet two relations.</span>
+<a name="line-33"></a><span class='hs-definition'>relmapMeet</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Ord</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span>
+<a name="line-34"></a>    <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>HalfRelmap</span>   <span class='hs-comment'>-- ^ Source infomation</span>
+<a name="line-35"></a>    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span> <span class='hs-varid'>v</span>     <span class='hs-comment'>-- ^ Subrelmap of join operator</span>
+<a name="line-36"></a>    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span> <span class='hs-varid'>v</span>     <span class='hs-comment'>-- ^ Relmap of join operator</span>
+<a name="line-37"></a><span class='hs-definition'>relmapMeet</span> <span class='hs-varid'>h</span> <span class='hs-varid'>m</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapConfl</span> <span class='hs-varid'>h</span> <span class='hs-str'>"meet"</span> <span class='hs-varid'>sub</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>m</span><span class='hs-keyglyph'>]</span> <span class='hs-keyword'>where</span>
+<a name="line-38"></a>    <span class='hs-varid'>sub</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>r2</span><span class='hs-keyglyph'>]</span> <span class='hs-varid'>r1</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>relMeet</span> <span class='hs-varid'>r1</span> <span class='hs-varid'>r2</span>
+<a name="line-39"></a>    <span class='hs-varid'>sub</span> <span class='hs-keyword'>_</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>undefined</span>
 <a name="line-40"></a>
-<a name="line-41"></a>    <span class='hs-varid'>posh12</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>headPosh</span> <span class='hs-varid'>h1</span> <span class='hs-varid'>h2</span>
-<a name="line-42"></a>    <span class='hs-varid'>share1</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>headPoss</span> <span class='hs-varid'>h1</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>possInner</span> <span class='hs-varid'>posh12</span>
-<a name="line-43"></a>    <span class='hs-varid'>share2</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>headPoss</span> <span class='hs-varid'>h2</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>possInner</span> <span class='hs-varid'>posh12</span>
-<a name="line-44"></a>    <span class='hs-varid'>side2</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>headPoss</span> <span class='hs-varid'>h2</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>possOuter</span> <span class='hs-varid'>posh12</span>
-<a name="line-45"></a>
-<a name="line-46"></a>    <span class='hs-varid'>m2</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>gatherToMap</span> <span class='hs-varop'>$</span> <span class='hs-varid'>map</span> <span class='hs-varid'>pair</span> <span class='hs-varid'>args2</span>
-<a name="line-47"></a>    <span class='hs-varid'>pair</span> <span class='hs-varid'>arg2</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>possPick</span> <span class='hs-varid'>share2</span> <span class='hs-varid'>arg2</span><span class='hs-layout'>,</span>
-<a name="line-48"></a>                 <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>possPick</span> <span class='hs-varid'>side2</span>  <span class='hs-varid'>arg2</span><span class='hs-layout'>)</span>
-<a name="line-49"></a>
-<a name="line-50"></a>    <span class='hs-varid'>h3</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>mappend</span> <span class='hs-varid'>h2</span> <span class='hs-varid'>h1</span>
-<a name="line-51"></a>    <span class='hs-varid'>b3</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>concatMap</span> <span class='hs-varid'>step</span> <span class='hs-varid'>args1</span>
-<a name="line-52"></a>    <span class='hs-varid'>step</span> <span class='hs-varid'>arg1</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>case</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>lookupMap</span> <span class='hs-layout'>(</span><span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>possPick</span> <span class='hs-varid'>share1</span> <span class='hs-varid'>arg1</span><span class='hs-layout'>)</span> <span class='hs-varid'>m2</span> <span class='hs-keyword'>of</span>
-<a name="line-53"></a>                  <span class='hs-conid'>Just</span> <span class='hs-varid'>side</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>map</span> <span class='hs-layout'>(</span><span class='hs-varop'>++</span> <span class='hs-varid'>arg1</span><span class='hs-layout'>)</span> <span class='hs-varid'>side</span>
-<a name="line-54"></a>                  <span class='hs-conid'>Nothing</span>   <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>[]</span>
-<a name="line-55"></a>
-<a name="line-56"></a><a name="relJoin"></a><span class='hs-comment'>-- | Join two relations.</span>
-<a name="line-57"></a><span class='hs-definition'>relJoin</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Ord</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>v</span>
-<a name="line-58"></a><span class='hs-definition'>relJoin</span> <span class='hs-varid'>r1</span> <span class='hs-varid'>r2</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>h3</span> <span class='hs-varid'>b3</span> <span class='hs-keyword'>where</span>
-<a name="line-59"></a>    <span class='hs-conid'>Rel</span> <span class='hs-varid'>h1</span> <span class='hs-varid'>args1</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>r1</span>
-<a name="line-60"></a>    <span class='hs-conid'>Rel</span> <span class='hs-varid'>h2</span> <span class='hs-varid'>args2</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>r2</span>
-<a name="line-61"></a>
-<a name="line-62"></a>    <span class='hs-varid'>posh12</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>possInner</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>headPosh</span> <span class='hs-varid'>h1</span> <span class='hs-varid'>h2</span>
-<a name="line-63"></a>    <span class='hs-varid'>pick1</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>possPick</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>headPoss</span> <span class='hs-varid'>h1</span> <span class='hs-varid'>posh12</span>
-<a name="line-64"></a>    <span class='hs-varid'>pick2</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>possPick</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>headPoss</span> <span class='hs-varid'>h2</span> <span class='hs-varid'>posh12</span>
-<a name="line-65"></a>
-<a name="line-66"></a>    <span class='hs-varid'>h3</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>rehead</span> <span class='hs-varid'>pick1</span> <span class='hs-varid'>h1</span>
-<a name="line-67"></a>    <span class='hs-varid'>b3</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>unique</span> <span class='hs-varop'>$</span>
-<a name="line-68"></a>         <span class='hs-varid'>map</span> <span class='hs-varid'>pick1</span> <span class='hs-varid'>args1</span> <span class='hs-varop'>++</span>
-<a name="line-69"></a>         <span class='hs-varid'>map</span> <span class='hs-varid'>pick2</span> <span class='hs-varid'>args2</span>
-<a name="line-70"></a>
-<a name="line-71"></a>
+<a name="line-41"></a><a name="relmapJoin"></a><span class='hs-comment'>-- | Join two relations.</span>
+<a name="line-42"></a><span class='hs-definition'>relmapJoin</span>
+<a name="line-43"></a>    <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Ord</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span>
+<a name="line-44"></a>    <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>HalfRelmap</span>   <span class='hs-comment'>-- ^ Source infomation</span>
+<a name="line-45"></a>    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span> <span class='hs-varid'>v</span>     <span class='hs-comment'>-- ^ Subrelmap of join operator</span>
+<a name="line-46"></a>    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span> <span class='hs-varid'>v</span>     <span class='hs-comment'>-- ^ Relmap of join operator</span>
+<a name="line-47"></a><span class='hs-definition'>relmapJoin</span> <span class='hs-varid'>h</span> <span class='hs-varid'>m</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapConfl</span> <span class='hs-varid'>h</span> <span class='hs-str'>"join"</span> <span class='hs-varid'>sub</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>m</span><span class='hs-keyglyph'>]</span> <span class='hs-keyword'>where</span>
+<a name="line-48"></a>    <span class='hs-varid'>sub</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>r2</span><span class='hs-keyglyph'>]</span> <span class='hs-varid'>r1</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>relJoin</span> <span class='hs-varid'>r1</span> <span class='hs-varid'>r2</span>
+<a name="line-49"></a>    <span class='hs-varid'>sub</span> <span class='hs-keyword'>_</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>undefined</span>
+<a name="line-50"></a>
+<a name="line-51"></a>
+<a name="line-52"></a>
+<a name="line-53"></a><span class='hs-comment'>-- ----------------------  Functions on relation</span>
+<a name="line-54"></a>
+<a name="line-55"></a><a name="relMeet"></a><span class='hs-comment'>-- | Meet two relations.</span>
+<a name="line-56"></a><span class='hs-definition'>relMeet</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Ord</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span>
+<a name="line-57"></a>    <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>v</span>    <span class='hs-comment'>-- ^ Input relation /R1/</span>
+<a name="line-58"></a>    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>v</span>    <span class='hs-comment'>-- ^ Input relation /R2/</span>
+<a name="line-59"></a>    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>v</span>    <span class='hs-comment'>-- ^ Meet of /R1/ and /R2/</span>
+<a name="line-60"></a><span class='hs-definition'>relMeet</span> <span class='hs-varid'>r1</span> <span class='hs-varid'>r2</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>h3</span> <span class='hs-varid'>b3</span> <span class='hs-keyword'>where</span>
+<a name="line-61"></a>    <span class='hs-conid'>Rel</span> <span class='hs-varid'>h1</span> <span class='hs-varid'>args1</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>r1</span>
+<a name="line-62"></a>    <span class='hs-conid'>Rel</span> <span class='hs-varid'>h2</span> <span class='hs-varid'>args2</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>r2</span>
+<a name="line-63"></a>
+<a name="line-64"></a>    <span class='hs-varid'>posh12</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>headPosh</span> <span class='hs-varid'>h1</span> <span class='hs-varid'>h2</span>
+<a name="line-65"></a>    <span class='hs-varid'>share1</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>headPoss</span> <span class='hs-varid'>h1</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>possInner</span> <span class='hs-varid'>posh12</span>
+<a name="line-66"></a>    <span class='hs-varid'>share2</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>headPoss</span> <span class='hs-varid'>h2</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>possInner</span> <span class='hs-varid'>posh12</span>
+<a name="line-67"></a>    <span class='hs-varid'>side2</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>headPoss</span> <span class='hs-varid'>h2</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>possOuter</span> <span class='hs-varid'>posh12</span>
+<a name="line-68"></a>
+<a name="line-69"></a>    <span class='hs-varid'>m2</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>gatherToMap</span> <span class='hs-varop'>$</span> <span class='hs-varid'>map</span> <span class='hs-varid'>pair</span> <span class='hs-varid'>args2</span>
+<a name="line-70"></a>    <span class='hs-varid'>pair</span> <span class='hs-varid'>arg2</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>possPick</span> <span class='hs-varid'>share2</span> <span class='hs-varid'>arg2</span><span class='hs-layout'>,</span>
+<a name="line-71"></a>                 <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>possPick</span> <span class='hs-varid'>side2</span>  <span class='hs-varid'>arg2</span><span class='hs-layout'>)</span>
 <a name="line-72"></a>
+<a name="line-73"></a>    <span class='hs-varid'>h3</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>mappend</span> <span class='hs-varid'>h2</span> <span class='hs-varid'>h1</span>
+<a name="line-74"></a>    <span class='hs-varid'>b3</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>concatMap</span> <span class='hs-varid'>step</span> <span class='hs-varid'>args1</span>
+<a name="line-75"></a>    <span class='hs-varid'>step</span> <span class='hs-varid'>arg1</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>case</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>lookupMap</span> <span class='hs-layout'>(</span><span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>possPick</span> <span class='hs-varid'>share1</span> <span class='hs-varid'>arg1</span><span class='hs-layout'>)</span> <span class='hs-varid'>m2</span> <span class='hs-keyword'>of</span>
+<a name="line-76"></a>                  <span class='hs-conid'>Just</span> <span class='hs-varid'>side</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>map</span> <span class='hs-layout'>(</span><span class='hs-varop'>++</span> <span class='hs-varid'>arg1</span><span class='hs-layout'>)</span> <span class='hs-varid'>side</span>
+<a name="line-77"></a>                  <span class='hs-conid'>Nothing</span>   <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>[]</span>
+<a name="line-78"></a>
+<a name="line-79"></a><a name="relJoin"></a><span class='hs-comment'>-- | Join two relations.</span>
+<a name="line-80"></a><span class='hs-definition'>relJoin</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Ord</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span>
+<a name="line-81"></a>    <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>v</span>    <span class='hs-comment'>-- ^ Input relation /R1/</span>
+<a name="line-82"></a>    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>v</span>    <span class='hs-comment'>-- ^ Input relation /R2/</span>
+<a name="line-83"></a>    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>v</span>    <span class='hs-comment'>-- ^ Join of /R1/ and /R2/</span>
+<a name="line-84"></a><span class='hs-definition'>relJoin</span> <span class='hs-varid'>r1</span> <span class='hs-varid'>r2</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>h3</span> <span class='hs-varid'>b3</span> <span class='hs-keyword'>where</span>
+<a name="line-85"></a>    <span class='hs-conid'>Rel</span> <span class='hs-varid'>h1</span> <span class='hs-varid'>args1</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>r1</span>
+<a name="line-86"></a>    <span class='hs-conid'>Rel</span> <span class='hs-varid'>h2</span> <span class='hs-varid'>args2</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>r2</span>
+<a name="line-87"></a>
+<a name="line-88"></a>    <span class='hs-varid'>posh12</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>possInner</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>headPosh</span> <span class='hs-varid'>h1</span> <span class='hs-varid'>h2</span>
+<a name="line-89"></a>    <span class='hs-varid'>pick1</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>possPick</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>headPoss</span> <span class='hs-varid'>h1</span> <span class='hs-varid'>posh12</span>
+<a name="line-90"></a>    <span class='hs-varid'>pick2</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>possPick</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>headPoss</span> <span class='hs-varid'>h2</span> <span class='hs-varid'>posh12</span>
+<a name="line-91"></a>
+<a name="line-92"></a>    <span class='hs-varid'>h3</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>rehead</span> <span class='hs-varid'>pick1</span> <span class='hs-varid'>h1</span>
+<a name="line-93"></a>    <span class='hs-varid'>b3</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>unique</span> <span class='hs-varop'>$</span>
+<a name="line-94"></a>         <span class='hs-varid'>map</span> <span class='hs-varid'>pick1</span> <span class='hs-varid'>args1</span> <span class='hs-varop'>++</span>
+<a name="line-95"></a>         <span class='hs-varid'>map</span> <span class='hs-varid'>pick2</span> <span class='hs-varid'>args2</span>
+<a name="line-96"></a>
+<a name="line-97"></a>
+<a name="line-98"></a>
+<a name="line-99"></a><span class='hs-comment'>-- ----------------------</span>
+<a name="line-100"></a><span class='hs-comment'>-- $FundamentalOperators</span>
+<a name="line-101"></a><span class='hs-comment'>--</span>
+<a name="line-102"></a><span class='hs-comment'>-- In lattice theory, there are two operators /meet/ and /join/.</span>
+<a name="line-103"></a><span class='hs-comment'>--</span>
+<a name="line-104"></a><span class='hs-comment'>-- [R1 ^ R2]</span>
+<a name="line-105"></a><span class='hs-comment'>-- Meet of /R1/ and /R2/.</span>
+<a name="line-106"></a><span class='hs-comment'>-- This operator is one of generalized intersection.</span>
+<a name="line-107"></a><span class='hs-comment'>-- ''Meet'' is same as ''natural join'' in SQL.</span>
+<a name="line-108"></a><span class='hs-comment'>-- /R1/ tuple is meetable to /R2/ tuple if and only if</span>
+<a name="line-109"></a><span class='hs-comment'>-- shared terms of /R1/ tuple and /R2/ tuple are same contents.</span>
+<a name="line-110"></a><span class='hs-comment'>-- </span>
+<a name="line-111"></a><span class='hs-comment'>-- [R1 v R2]</span>
+<a name="line-112"></a><span class='hs-comment'>-- Join of /R1/ and /R2/.</span>
+<a name="line-113"></a><span class='hs-comment'>-- This operator is one of generalized union.</span>
+<a name="line-114"></a><span class='hs-comment'>-- Toropashko calls it ''inner union''.</span>
+<a name="line-115"></a><span class='hs-comment'>-- Join of /R1/ and /R2/ is ordinary union of</span>
+<a name="line-116"></a><span class='hs-comment'>-- shared-term-projection tuples in /R1/ and /R2/.</span>
+<a name="line-117"></a>
+<a name="line-118"></a><span class='hs-comment'>-- ----------------------</span>
+<a name="line-119"></a><span class='hs-comment'>-- $NamingConventions</span>
+<a name="line-120"></a><span class='hs-comment'>--</span>
+<a name="line-121"></a><span class='hs-comment'>-- Functions for relational mapping are</span>
+<a name="line-122"></a><span class='hs-comment'>-- named under some conventions.</span>
+<a name="line-123"></a><span class='hs-comment'>-- Relational mapping is a kind of functions</span>
+<a name="line-124"></a><span class='hs-comment'>-- that calculate relations from relations.</span>
+<a name="line-125"></a><span class='hs-comment'>--</span>
+<a name="line-126"></a><span class='hs-comment'>-- [@relXxx@]</span>
+<a name="line-127"></a><span class='hs-comment'>-- Functions from 'Rel' to 'Rel'.</span>
+<a name="line-128"></a><span class='hs-comment'>-- These are basic functions for relational operators.</span>
+<a name="line-129"></a><span class='hs-comment'>--</span>
+<a name="line-130"></a><span class='hs-comment'>-- [@relmapXxx@]</span>
+<a name="line-131"></a><span class='hs-comment'>-- Functions from 'Kit.Relmap' to 'Kit.Relmap'.</span>
+<a name="line-132"></a><span class='hs-comment'>-- </span>
+<a name="line-133"></a><span class='hs-comment'>-- [@fullXxx@]</span>
+<a name="line-134"></a><span class='hs-comment'>-- Functions of 'Koshucode.Baala.Base.Struct.Half.HalfRelmap.RelmapFullCons'.</span>
+<a name="line-135"></a><span class='hs-comment'>-- These functions construct 'Kit.Relmap' from operator usages,</span>
+<a name="line-136"></a><span class='hs-comment'>-- but constructions are failed if operators are misused.</span>
+<a name="line-137"></a>
+<a name="line-138"></a>
 </pre></body>
 </html>
