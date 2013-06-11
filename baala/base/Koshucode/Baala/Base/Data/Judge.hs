@@ -1,0 +1,57 @@
+{-# OPTIONS_GHC -Wall #-}
+
+-- | Judgements: a symbolic representations of affirmed or denied statements.
+
+module Koshucode.Baala.Base.Data.Judge
+( Judge (Judge)
+, Relsign, Relarg
+, abcJudge
+) where
+
+import qualified Data.List as List
+import Koshucode.Baala.Base.Prelude.Pretty
+
+-- | Judgement on type 'v'.
+-- 
+--   Judgement (or judge for short) is divided into three parts:
+--   logical quality, sign of relation, and argument.
+--   'Bool' value of logical quality corresponds to
+--   affirmed or denied judge.
+--   'String' value of sign represents certain sentence pattern
+--   that gives intepretation of data.
+--   Sentence pattern has placeholders filled by
+--   ('String', 'v') values of argument.
+-- 
+data Judge v = Judge Bool Relsign (Relarg v)
+               deriving (Show, Eq, Ord)
+
+-- | Sign of relation, or relation name.
+type Relsign = String
+
+-- | List of terms.
+type Relarg v = [(String, v)]
+
+-- Apply function to each values
+instance Functor Judge where
+    fmap f (Judge q s a) = Judge q s $ map g a
+        where g (n, v) = (n, f v)
+
+--  Pretty printing
+instance (Ord v, Pretty v) => Pretty (Judge v) where
+    doc (Judge q s a) = quality q <+> sign <+> arg a
+        where
+          -- Frege's judgement stroke, content line,
+          -- and logical quality
+          quality True  = text "|--"
+          quality False = text "|-X"
+          -- relsign
+          sign | ':' `elem` s = docQuote $ text s
+               | otherwise    = text s
+          -- term name and term value
+          arg ((n,v) : a2) = text n <+> doc v <+> arg a2
+          arg [] = empty
+
+-- | Sort terms in alphabetical order.
+abcJudge :: (Ord v) => Judge v -> Judge v
+abcJudge (Judge q s a) = Judge q s $ List.sort a
+
