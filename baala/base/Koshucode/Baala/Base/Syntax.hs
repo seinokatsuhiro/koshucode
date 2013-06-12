@@ -1,5 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Modules on syntax
+
 module Koshucode.Baala.Base.Syntax
 ( module Koshucode.Baala.Base.Syntax.Binary
 , module Koshucode.Baala.Base.Syntax.TokenTree

@@ -106,12 +106,6 @@ consHalfRelmap half = make where
           Just xs -> HalfRelmap usage op opd $ map make' xs
           Nothing -> h  -- no subrelmaps
 
-divideBy :: (Eq a) => a -> [a] -> [[a]]
-divideBy dv = loop where
-    loop xs = case break (== dv) xs of
-                (x, _ : xs2) -> x : loop xs2
-                (x, [])      -> [x]
-
 halfAppend :: [HalfRelmap] -> HalfRelmap
 halfAppend = HalfRelmap ["RELMAP | RELMAP"] "|" []
 

@@ -4,11 +4,22 @@
 -- | Tokens in Koshucode
 
 module Koshucode.Baala.Base.Syntax.Token
-( Token (..),
-  isTerm, isBlank,
-  sweep, sweepLeft,
-  tokens, untokens
+(
+  -- * Token type
+  -- $TokenType
+  Token (..)
+, isBlank
+, isTerm
+
+  -- * Tokenizer
+,  tokens
+, untokens
+
+  -- * Othre functions
+, sweepToken
+, sweepLeft
 ) where
+
 import Data.Generics (Data, Typeable)
 import Koshucode.Baala.Base.Prelude
 import qualified Data.Char as C
@@ -17,11 +28,11 @@ data Token
     = Word Int String   -- ^ Text
     | TermN   [String]  -- ^ Term name
     | TermP   [Int]     -- ^ Term position
-    | Open    String    -- ^ Open paren, like @(@
-    | Close   String    -- ^ Close paren, like @)@
+    | Open    String    -- ^ Open paren
+    | Close   String    -- ^ Close paren
     | Space   Int       -- ^ N space chars
     | Newline           -- ^ Newline char
-    | Comment String    -- ^ Comment text, like @% ...@
+    | Comment String    -- ^ Comment text
       deriving (Show, Eq, Ord, Data, Typeable)
 
 instance Name Token where
@@ -32,70 +43,41 @@ instance Name Token where
     name (Comment s) = s
     name x = error $ "unknown name: " ++ show x
 
--- | Test the token is a term,
---   i.e., 'TermN' or 'TermP'
-isTerm :: Token -> Bool
-isTerm (TermN _)    = True
-isTerm (TermP _)    = True
-isTerm _            = False
-
--- | Test the token is blank.
---   i.e., 'Space', 'Newline', or 'Comment'.
+-- | Test the token is blank, i.e., 'Space', 'Newline', or 'Comment'.
 isBlank :: Token -> Bool
 isBlank (Space _)   = True
 isBlank (Newline)   = True
 isBlank (Comment _) = True
 isBlank _           = False
 
--- | Remove blank tokens.
-sweep :: [Token] -> [Token]
-sweep = filter (not . isBlank)
-
--- | Skip blank tokens.
-sweepLeft :: [Token] -> [Token]
-sweepLeft [] = []
-sweepLeft xxs@(x:xs) | isBlank x = sweepLeft xs
-                     | otherwise = xxs
-
-
-
--- ----------------------  Untokenizer
-
--- | Convert back a token list to a source string
-untokens :: [Token] -> String
-untokens [] = []
-untokens (Open a : xs) = a ++ untokens xs
-untokens (x : Close a : xs) = untoken x ++ untokens (Close a : xs)
-untokens [x] = untoken x
-untokens (x:xs) = untoken x ++ " " ++ untokens xs
-
-untoken :: Token -> String
-untoken (Word 1 s)  = "'" ++ s ++ "'"
-untoken (Word 2 s)  = "\"" ++ s ++ "\""
-untoken (Word _ s)  = s
-untoken (TermN  ss) = concat ss
-untoken (TermP  ns) = concatMap show ns
-untoken (Open   s)  = s
-untoken (Close  s)  = s
-untoken (Space  n)  = replicate n ' '
-untoken (Newline)   = "\n"
-untoken (Comment s) = "** " ++ s ++ "\n"
+-- | Test the token is a term, i.e., 'TermN' or 'TermP'
+isTerm :: Token -> Bool
+isTerm (TermN _)    = True
+isTerm (TermP _)    = True
+isTerm _            = False
 
 
 
 -- ----------------------  Tokenizer
 
--- | Tokenizer: split a string to a list of tokens
+-- | Split string into list of tokens
+-- 
+--   >>> tokens "|-- R  /a A0 /b 31"
+--   [Word 0 "|--", Space 1, Word 0 "R", Space 2,
+--    TermN ["/a"], Space 1, Word 0 "A0", Space 1,
+--    TermN ["/b"], Space 1, Word 0 "31"]
+
 tokens :: String -> [Token]
-tokens [] = []
-tokens s = let (t, s2) = token s
-           in  t : tokens s2
+tokens = gather token
 
 token :: String -> (Token, String)
 token ccs =
     case ccs of
-      ('*' : '*' : _)  -> comment ccs []
-      ('(' : '*' : _)  -> comment ccs [] -- todo (* commented *)
+      ('*' : '*' : c : _)
+        | c == '-'     -> commB c ccs []
+        | c == '='     -> commB c ccs []
+        | otherwise    -> commL ccs [] 
+      ('*' : '*' : _)  -> commL ccs []
       ('(' : ')' : cs) -> (Word 0 "()", cs) -- nil
       (c:cs)
         | isOpen    c  -> (Open   [c] , cs)
@@ -108,34 +90,55 @@ token ccs =
         | isSpace c    -> white 1 cs
       _                -> error $ "unknown token type: " ++ ccs
     where
-      -- Collect chars
-      tk cs k xs = (k $ reverse xs, cs)
+      -- collect chars
+      tk tokenType xs cs = (tokenType $ reverse xs, cs)
 
-      word (c:cs) xs    | isWord c    = word cs (c:xs)
-      word ccs2 xs                    = tk ccs2 (Word 0) xs
+      -- line comment
+      commL (c:cs) xs | isMidline c  = commL cs (c:xs)
+      commL ccs2 xs                  = tk Comment xs $ ccs2
 
-      quote _ [] xs                   = tk [] (Word 1) xs
-      quote q (c:cs) xs | c == q      = tk cs (Word 1) xs
-                        | isNewline c = error "newline in quote"
-                        | otherwise   = quote q cs (c:xs)
+      -- block comment
+      commB _ [] xs                  = tk Comment xs $ []
+      commB q (c : '*' : '*' : cs) xs
+          | c == q                   = tk Comment ('*' : '*' : c : xs) $ cs
+      commB q (c:cs) xs              = commB q cs (c:xs)
 
-      term (c:cs) xs ns | c == '/'    = term cs [c] $ t xs ns
-                        | isWord c    = term cs (c:xs) ns
-      term ccs2 xs ns                 = tk ccs2 TermN $ t xs ns
+      word (c:cs) xs | isWord c      = word cs (c:xs)
+      word ccs2 xs                   = tk (Word 0) xs $ ccs2
+
+      quote q [] xs                  = tk (quoteWord q) xs $ []
+      quote q (c:cs) xs
+          | c == q                   = tk (quoteWord q) xs $ cs
+          | isNewline c              = error "newline in quote"
+          | otherwise                = quote q cs (c:xs)
+
+      quoteWord '\'' = Word 1
+      quoteWord '"'  = Word 2
+      quoteWord _    = Word 0
+
+      term (c:cs) xs ns | c == '/'   = term cs [c] $ t xs ns
+                        | isWord c   = term cs (c:xs) ns
+      term ccs2 xs ns                = tk TermN (t xs ns) $ ccs2
       t xs = (reverse xs :)
 
-      white n (c:cs)    | isSpace c   = white (n+1) cs
-      white n ccs2                    = (Space n, ccs2)
+      white n (c:cs)    | isSpace c  = white (n+1) cs
+      white n ccs2                   = (Space n, ccs2)
 
-      comment (c:cs) xs | isMidline c = comment cs (c:xs)
-      comment ccs2 xs                 = tk ccs2 Comment xs
-
+-- word
 -- e1 = tokens "aa bb"
 -- e2 = tokens "'aa' '' \"cc\""
 -- e3 = tokens "aa (bb (cc))"
--- e4 = tokens "/aa 00 /bb 11"
--- e5 = tokens "count /r/x/t"
--- e6 = tokens "///x /r/"
+
+-- terms
+-- e1 = tokens "|-- rel /a A0 /b 31"
+-- e2 = tokens "count /r/x/t"
+-- e3 = tokens "///x /r/"
+
+-- comment
+-- e0 = tokens . unlines
+-- e1 = e0 ["www", "** ccc", "www"]
+-- e2 = e0 ["www", "**-", "  ccc", "-**", "www"]
+-- e3 = e0 ["www", "**=", "  ccc", "=**", "www"]
 
 
 
@@ -144,17 +147,79 @@ token ccs =
 isOpen, isClose, isSingle, isQuote, isNewline :: Char -> Bool
 isMidline, isSpace, isWord, isNonWord, maybeWord :: Char -> Bool
 
-isOpen    c = c `elem` "([{"
-isClose   c = c `elem` "}])"
-isSingle  c = c `elem` ":="
-isQuote   c = c `elem` "'\""
-isNewline c = c == '\n'
-isMidline   = not . isNewline
-isSpace   c = C.isSpace c && not (isNewline c)
-isWord    c = maybeWord c && not (isNonWord c)
-isNonWord c = isOpen c || isClose c || isSingle c
-maybeWord c = C.isAlphaNum c
-              || C.isMark c
-              || C.isSymbol c
-              || C.isPunctuation c
+isOpen    c  = c `elem` "([{"
+isClose   c  = c `elem` "}])"
+isSingle  c  = c `elem` ":="
+isQuote   c  = c `elem` "'\""
+isNewline c  = c == '\n'
+isMidline    = not . isNewline
+isSpace   c  = C.isSpace c && not (isNewline c)
+isWord    c  = maybeWord c && not (isNonWord c)
+isNonWord c  = isOpen c || isClose c || isSingle c
+maybeWord c  = C.isAlphaNum c
+               || C.isMark c
+               || C.isSymbol c
+               || C.isPunctuation c
+
+
+
+-- ----------------------  Untokenizer
+
+-- | Convert back a token list to a source string
+untokens :: [Token] -> String
+untokens (Open a : xs) = a ++ untokens xs
+untokens (x : Close a : xs) = untoken x ++ untokens (Close a : xs)
+untokens [x] = untoken x
+untokens (x:xs) = untoken x ++ untokens xs
+untokens [] = []
+
+untoken :: Token -> String
+untoken (Word 1 s)   = "'" ++ s ++ "'"
+untoken (Word 2 s)   = "\"" ++ s ++ "\""
+untoken (Word _ s)   = s
+untoken (TermN  ns)  = concat ns
+untoken (TermP  ns)  = concatMap show ns
+untoken (Open   s)   = s
+untoken (Close  s)   = s
+untoken (Space  n)   = replicate n ' '
+untoken (Newline)    = "\n"
+untoken (Comment s)  = s
+
+
+
+-- ---------------------- Other functions
+
+-- | Remove blank tokens.
+sweepToken :: [Token] -> [Token]
+sweepToken = filter (not . isBlank)
+
+-- | Skip leading blank tokens.
+sweepLeft :: [Token] -> [Token]
+sweepLeft [] = []
+sweepLeft xxs@(x:xs) | isBlank x = sweepLeft xs
+                     | otherwise = xxs
+
+
+
+-- ----------------------
+-- $TokenType
+--
+-- [Word]
+-- Character sequence not including special characters,
+-- e.g., @aa@, @r2d2@, @12.0@, etc.
+--
+-- [Term name]
+-- Word beginning with slash, e.g., @\/aa@.
+-- Term name like @\/a\/b@ is used for nested relation,
+-- that means term @\/b@ in the relation of term @\/a@.
+--
+-- [Parens]
+-- Open paren @(@ and closed paren @)@.
+--
+-- [Line comment]
+-- Text from @**@ to end of line,
+-- except for @**-@ and @**=@.
+--
+-- [Block comment]
+-- Multiline text from @**-@ to @-**@, or from @**=@ to @=**@.
 

@@ -11,7 +11,7 @@ module Koshucode.Baala.Base.Prelude.Utility
 , Named
 -- * List
 , unique, unionUp
-, singleton
+, singleton, divideBy
 -- * Collection
 , gather, gatherToMap, lookupMap
 -- * Application
@@ -90,6 +90,12 @@ lookupMap = Map.lookup
 -- | Singleton list
 singleton :: a -> [a]
 singleton x = [x]
+
+divideBy :: (Eq a) => a -> [a] -> [[a]]
+divideBy dv = loop where
+    loop xs = case break (== dv) xs of
+                (x, _ : xs2) -> x : loop xs2
+                (x, [])      -> [x]
 
 -- | Types that has name
 class Name a where

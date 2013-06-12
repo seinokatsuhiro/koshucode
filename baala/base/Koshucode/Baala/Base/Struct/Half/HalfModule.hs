@@ -75,7 +75,7 @@ clauseBody i = mid where
 
 classify :: RelmapHalfCons -> [Token] -> [HalfModule]
 classify half toks = halfMod toks' where
-    toks' = sweep toks
+    toks' = sweepToken toks
 
     halfRel :: [Token] -> HalfRelmap
     halfRel = consHalfRelmap half . tokenTrees

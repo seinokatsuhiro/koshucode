@@ -7,7 +7,6 @@ module Koshucode.Baala.Base.Syntax.TokenTree
 , module Koshucode.Baala.Base.Syntax.Token
 , module Koshucode.Baala.Base.Syntax.Tree
 ) where
-
 import Koshucode.Baala.Base.Syntax.Token
 import Koshucode.Baala.Base.Syntax.Tree
 
@@ -20,7 +19,7 @@ tokenTree = Branch 0 . tokenTrees
 
 -- | Parse tokens into parened trees.
 tokenTrees :: [Token] -> [TokenTree]
-tokenTrees = trees parenType . sweep
+tokenTrees = trees parenType . sweepToken
 
 parenType :: ParenType Token
 typeParen :: TypeParen Token
