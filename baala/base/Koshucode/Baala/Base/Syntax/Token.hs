@@ -31,8 +31,8 @@ data Token
     | Open    String    -- ^ Open paren
     | Close   String    -- ^ Close paren
     | Space   Int       -- ^ N space chars
-    | Newline           -- ^ Newline char
     | Comment String    -- ^ Comment text
+    | Line Int String   -- ^ Source infomation
       deriving (Show, Eq, Ord, Data, Typeable)
 
 instance Name Token where
@@ -43,47 +43,65 @@ instance Name Token where
     name (Comment s) = s
     name x = error $ "unknown name: " ++ show x
 
--- | Test the token is blank, i.e., 'Space', 'Newline', or 'Comment'.
+-- | Test the token is blank, i.e.,
+--   'Comment', 'Line', or 'Space'.
 isBlank :: Token -> Bool
-isBlank (Space _)   = True
-isBlank (Newline)   = True
-isBlank (Comment _) = True
-isBlank _           = False
+isBlank (Space _)    = True
+isBlank (Comment _)  = True
+isBlank (Line _ _)   = True
+isBlank _            = False
 
 -- | Test the token is a term, i.e., 'TermN' or 'TermP'
 isTerm :: Token -> Bool
-isTerm (TermN _)    = True
-isTerm (TermP _)    = True
-isTerm _            = False
+isTerm (TermN _)     = True
+isTerm (TermP _)     = True
+isTerm _             = False
 
 
 
 -- ----------------------  Tokenizer
 
+data SrcLine
+    = SrcLine Int String    -- ^ Line number and contents
+    | MidLine String        -- ^ Subline
+      deriving (Show, Eq)
+
 -- | Split string into list of tokens
 -- 
 --   >>> tokens "|-- R  /a A0 /b 31"
---   [Word 0 "|--", Space 1, Word 0 "R", Space 2,
+--   [Line 1 "|-- R  /a A0 /b 31",
+--    Word 0 "|--", Space 1, Word 0 "R", Space 2,
 --    TermN ["/a"], Space 1, Word 0 "A0", Space 1,
 --    TermN ["/b"], Space 1, Word 0 "31"]
 
 tokens :: String -> [Token]
-tokens = gather token
+tokens = gather token . numbering . lines where
+    numbering = zipWith SrcLine [1..]
 
-token :: String -> (Token, String)
-token ccs =
+token :: [SrcLine] -> (Token, [SrcLine])
+token (SrcLine n line : ls) = tokenLines ls (Line n line, line)
+token (MidLine   line : ls) = tokenLines ls (tokenInLine line)
+token [] = error "token for empty list"
+
+tokenLines :: [SrcLine] -> (Token, String) -> (Token, [SrcLine])
+tokenLines ls (tk, line)
+    | line == ""  = (tk, ls)
+    | otherwise   = (tk, MidLine line : ls)
+
+tokenInLine :: String -> (Token, String)
+tokenInLine ccs =
     case ccs of
       ('*' : '*' : c : _)
         | c == '-'     -> commB c ccs []
         | c == '='     -> commB c ccs []
         | otherwise    -> commL ccs [] 
       ('*' : '*' : _)  -> commL ccs []
+      ('#' : '!' : _)  -> commL ccs []
       ('(' : ')' : cs) -> (Word 0 "()", cs) -- nil
       (c:cs)
         | isOpen    c  -> (Open   [c] , cs)
         | isClose   c  -> (Close  [c] , cs)
         | isSingle  c  -> (Word 0 [c] , cs)
-        | isNewline c  -> (Newline    , cs)
         | c == '/'     -> term cs [c]  []
         | isQuote c    -> quote   c cs []
         | isWord c     -> word    ccs  []
@@ -109,7 +127,6 @@ token ccs =
       quote q [] xs                  = tk (quoteWord q) xs $ []
       quote q (c:cs) xs
           | c == q                   = tk (quoteWord q) xs $ cs
-          | isNewline c              = error "newline in quote"
           | otherwise                = quote q cs (c:xs)
 
       quoteWord '\'' = Word 1
@@ -182,8 +199,8 @@ untoken (TermP  ns)  = concatMap show ns
 untoken (Open   s)   = s
 untoken (Close  s)   = s
 untoken (Space  n)   = replicate n ' '
-untoken (Newline)    = "\n"
 untoken (Comment s)  = s
+untoken (Line _ s)   = s
 
 
 
@@ -213,13 +230,16 @@ sweepLeft xxs@(x:xs) | isBlank x = sweepLeft xs
 -- Term name like @\/a\/b@ is used for nested relation,
 -- that means term @\/b@ in the relation of term @\/a@.
 --
--- [Parens]
--- Open paren @(@ and closed paren @)@.
+-- [Paren]
+-- Open and closed parens.
 --
--- [Line comment]
--- Text from @**@ to end of line,
--- except for @**-@ and @**=@.
+-- [Comment]
+-- Text from @**@ to end of line is single line comment.
+-- Text from @**-@ to @-**@, or from @**=@ to @=**@ is multiline comment.
 --
--- [Block comment]
--- Multiline text from @**-@ to @-**@, or from @**=@ to @=**@.
+-- [Space]
+-- Space characters.
+--
+-- [Line]
+-- Source line.
 

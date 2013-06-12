@@ -5,17 +5,25 @@
 module Koshucode.Baala.Base.Prelude.Utility
 (
 -- * Pair
-  mapFst, mapSnd, cons1
-, mapmapFst, mapmapSnd
+  mapFst
+, mapSnd
+, cons1
+, mapmapFst
+, mapmapSnd
 , maybePairs
 , Named
+
 -- * List
-, unique, unionUp
-, singleton, divideBy
+, unique
+, unionUp
+, singleton
+, divideBy
+
 -- * Collection
-, gather, gatherToMap, lookupMap
--- * Application
-, (|>), ($>)
+, gather
+, gatherToMap
+, lookupMap
+
 -- * Class
 , Name (..)
 ) where
@@ -46,17 +54,6 @@ maybePairs :: [a] -> Maybe [(a,a)]
 maybePairs (a:b:xs) = liftA ((a,b):) $ maybePairs xs
 maybePairs []       = Just []
 maybePairs _        = Nothing
-
--- | Composition of functions
-(|>) :: (a -> b) -> (b -> c) -> a -> c
-f |> g = g . f
-
--- | Function application
-($>) :: a -> (a -> b) -> b
-x $> f = f x
-
-infixr 6 |>
-infix  5 $>
 
 -- | Remove duplicate elements
 unique :: (Ord a) => [a] -> [a]

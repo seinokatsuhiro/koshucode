@@ -7,6 +7,8 @@ module Koshucode.Baala.Base.Syntax.Utility
   termNames
 , termNamePairs
 , termTreePairs
+, operandGroup
+
   -- * Calculation
 , Calc
 , Ripen
@@ -25,12 +27,12 @@ termName (Bloom (TermN [n])) = Right n
 termName x = Left $ AbortMissingTermName (show x)
 
 -- | Extract a list of term names.
+-- 
+--   >>> termNames $ tokenTrees $ tokens "/a /b /c"
+--   Right ["/a","/b","/c"]
+
 termNames :: [TokenTree] -> AbortOr [String]
-termNames [] = Right []
-termNames (x:xs) = do
-  n  <- termName x
-  ns <- termNames xs
-  Right $ n : ns
+termNames = mapM termName
 
 -- e1 = termNames . tokenTrees . tokens
 -- e2 = e1 ""
@@ -39,6 +41,10 @@ termNames (x:xs) = do
 -- e5 = e1 "/a bb /c"
 
 -- | Extract a list of name-and-name pairs.
+-- 
+--   >>> termNamePairs $ tokenTrees $ tokens "/a /x /b /y"
+--   Right [("/a","/x"), ("/b","/y")]
+
 termNamePairs :: [TokenTree] -> AbortOr [(String, String)]
 termNamePairs = loop where
     loop (a : b : xs) =
@@ -57,6 +63,10 @@ termNamePairs = loop where
 -- e6 = e1 "/a /x (/b /y)"
 
 -- | Extract a list of name-and-tree pairs.
+-- 
+--   >>> termTreePairs $ tokenTrees $ tokens "/a 'A3' /b 10"
+--   Right [("/a", Bloom (Word 1 "A3")), ("/b", Bloom (Word 0 "10"))]
+
 termTreePairs :: [TokenTree] -> AbortOr [(String, TokenTree)]
 termTreePairs = loop where
     loop (a : b : xs) =
@@ -71,6 +81,32 @@ termTreePairs = loop where
 -- e3 = e1 "/a /x"
 -- e4 = e1 "/a (/x + 1) /b /y"
 -- e5 = e1 "/a (/x + 1) /b"
+
+-- | Split operand into named group.
+--   Non quoted words beginning with hyphen, e.g., @-x@,
+--   are name of group.
+-- 
+--   >>> operandGroup $ tokenTrees $ tokens "a b -x c 'd' -y e"
+--   [("",   [Bloom (Word 0 "a"), Bloom (Word 0 "b")]),
+--    ("-x", [Bloom (Word 0 "c"), Bloom (Word 1 "d")]),
+--    ("-y", [Bloom (Word 0 "e")])]
+
+operandGroup :: [TokenTree] -> [(String, [TokenTree])]
+operandGroup = gather $ anon [] where
+    -- anonymous group
+    anon ys xs@(Bloom (Word 0 n@('-' : _)) : xs2)
+        | ys == []     = named n [] xs2  -- no anonymous group
+        | otherwise    = group "" ys xs
+    anon ys []         = group "" ys []
+    anon ys (x:xs)     = anon (x:ys) xs
+
+    -- named group
+    named n ys xs@(Bloom (Word 0 ('-' : _)) : _) = group n ys xs
+    named n ys []      = group n ys []
+    named n ys (x:xs)  = named n (x:ys) xs
+
+    -- operand group named 'n'
+    group n ys xs = ((n, reverse ys), xs)
 
 
 

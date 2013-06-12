@@ -23,15 +23,14 @@ import Prelude hiding (exp, mod)
 --   make full section :: [HalfSection] -> Section v
 --   make full relmap  :: HalfRelmap    -> Relmap v
 
--- todo: add source information
 data HalfModule
-    = HModule  (Maybe String)             -- ^ Module name
-    | HImport  [Token] (Maybe HalfModule) -- ^ Importing module name
-    | HExport  String                     -- ^ Exporting relmap name
-    | HRelmap  String HalfRelmap          -- ^ Relmap and its name
-    | HAssert  Bool String HalfRelmap     -- ^ Assertions of relmaps
-    | HJudge   Bool String [Token]        -- ^ Here data
-    | HUnknown [Token]                    -- ^ Unknown clause
+    = HModule  [SourceLine] (Maybe String)             -- ^ Module name
+    | HImport  [SourceLine] [Token] (Maybe HalfModule) -- ^ Importing module name
+    | HExport  [SourceLine] String                     -- ^ Exporting relmap name
+    | HRelmap  [SourceLine] String HalfRelmap      -- ^ Relmap and its name
+    | HAssert  [SourceLine] Bool String HalfRelmap -- ^ Assertions of relmaps
+    | HJudge   [SourceLine] Bool String [Token]    -- ^ Here data
+    | HUnknown [SourceLine]       -- ^ Unknown clause
       deriving (Show, Data, Typeable)
 
 
@@ -46,24 +45,30 @@ consHalfModule
 consHalfModule relmap = concatMap (classify relmap) . gather clause
 
 -- | Split into first clause and rest tokens
-clause :: [Token] -> ([Token], [Token])
-clause (Newline : xs) = clause xs        -- skipt empty line
-clause (Space i : xs) = clauseBody i xs  -- initial indent is 'i' spaces
-clause xs             = clauseBody 0 xs  -- no indent
+clause :: [Token] -> (([SourceLine], [Token]), [Token])
+clause = loop [] where
+    loop ls (x@(Line _ _) : xs) = loop (x:ls) xs
+    loop ls ((Comment _) : xs)  = loop ls xs
+    loop ls (Space i : xs) = up ls $ clauseBody i xs -- initial indent is 'i' spaces
+    loop ls xs             = up ls $ clauseBody 0 xs -- no indent
+
+    up ls (c, xs) = ((map src ls, c), xs)
+    src (Line n line) = SourceLine n line
+    src _ = bug
 
 clauseBody :: Int -> [Token] -> ([Token], [Token])
 clauseBody i = mid where
     -- middle of line
-    mid (x : xs) | x == Newline    = x `cons1` beg xs
-                 | otherwise       = x `cons1` mid xs
-    mid xxs                        = ([], xxs)
+    mid ((Line _ _) : xs)    = beg xs
+    mid (x : xs)             = x `cons1` mid xs
+    mid xxs                  = ([], xxs)
 
     -- beginning of line
-    beg (x@Newline   : xs)         = x `cons1` beg xs  -- skip empty line
+    beg ((Line _ _) : xs)          = beg xs  -- skip empty line
     beg (x@(Space n) : xs) | n > i = x `cons1` mid xs  -- indented line
     beg xxs                        = ([], xxs)     -- non indented line
 
--- e1 = clause . tokens
+-- e1 = gather clause . tokens
 -- e2 = e1 "a\nb\nc\n"
 -- e3 = e1 "a\n b\nc\n"
 -- e4 = e1 " a\n b\nc\n"
@@ -73,8 +78,8 @@ clauseBody i = mid where
 -- e8 = e1 "a\n\n b\nc\n"
 -- e9 = e1 "a\n  \n b\nc\n"
 
-classify :: RelmapHalfCons -> [Token] -> [HalfModule]
-classify half toks = halfMod toks' where
+classify :: RelmapHalfCons -> ([SourceLine], [Token]) -> [HalfModule]
+classify half (src, toks) = halfMod toks' where
     toks' = sweepToken toks
 
     halfRel :: [Token] -> HalfRelmap
@@ -94,24 +99,24 @@ classify half toks = halfMod toks' where
         | k == "|-x"      = jud False xs
     halfMod _             = unk
 
-    unk                   = [HUnknown toks]
+    unk                   = [HUnknown src]
 
-    mod [Word _ n]        = [HModule $ Just n]
-    mod []                = [HModule Nothing]
+    mod [Word _ n]        = [HModule src $ Just n]
+    mod []                = [HModule src Nothing]
     mod _                 = unk
 
-    exp [Word _ n]        = [HExport n]
-    exp (Word _ n : Word _ ":" : xs) = HExport n : rel n xs
+    exp [Word _ n]        = [HExport src n]
+    exp (Word _ n : Word _ ":" : xs) = HExport src n : rel n xs
     exp _                 = unk
 
-    imp _                 = [HImport toks Nothing]
+    imp _                 = [HImport src toks Nothing]
 
-    rel n xs              = [HRelmap n $ halfRel xs]
+    rel n xs              = [HRelmap src n $ halfRel xs]
 
-    jud q (Word _ s : xs) = [HJudge q s xs]
+    jud q (Word _ s : xs) = [HJudge src q s xs]
     jud _ _ = unk
 
-    ass q (Word _ s : xs) = [HAssert q s $ halfRel xs]
+    ass q (Word _ s : xs) = [HAssert src q s $ halfRel xs]
     ass _ _ = unk
 
 -- e1 = consHalfModule $ makeSynth1 []
@@ -133,6 +138,7 @@ consFullModule
     -> [HalfModule]       -- ^ Half modules (Output of 'consHalfModule')
     -> AbortOr (Module v) -- ^ Result full module
 consFullModule whole xs = do
+  _       <- unk xs
   imports <- sequence $ imp xs
   judges  <- sequence $ jud xs
   relmaps <- rel xs
@@ -148,33 +154,37 @@ consFullModule whole xs = do
       consRel = whole
       consMod = consFullModule whole
 
-      mod (HModule n : _) = n
-      mod (_:xs2) = mod xs2
+      mod (HModule _ n : _) = n
+      mod (_ : xs2) = mod xs2
       mod [] = Nothing
 
-      imp (HImport _ (Nothing) : xs2) = Right emptyModule : imp xs2
-      imp (HImport _ (Just e)  : xs2) = consMod [e] : imp xs2
+      imp (HImport _ _ (Nothing) : xs2) = Right emptyModule : imp xs2
+      imp (HImport _ _ (Just e)  : xs2) = consMod [e] : imp xs2
       imp xs2 = skip imp xs2
 
-      exp (HExport n : xs2) = n : exp xs2
+      exp (HExport _ n : xs2) = n : exp xs2
       exp xs2 = skip exp xs2
 
-      jud (HJudge q s xs2 : xs3) = judge q s xs2 : jud xs3
+      jud (HJudge _ q s xs2 : xs3) = judge q s xs2 : jud xs3
       jud xs2 = skip jud xs2
 
-      rel (HRelmap n r : xs2) =
+      rel (HRelmap _ n r : xs2) =
           do m  <- consRel r
              ms <- rel xs2
              Right $ (n, m) : ms
       rel (_ : xs2) = rel xs2
       rel [] = Right []
 
-      ass (HAssert q s r : xs2) =
+      ass (HAssert _ q s r : xs2) =
           do a  <- consRel r
              as <- ass xs2
              Right $ (Assert q s a) : as
       ass (_ : xs2) = ass xs2
       ass [] = Right []
+
+      unk (HUnknown src : _) = Left $ AbortUnknownClause src
+      unk (_ : xs2) = unk xs2
+      unk [] = Right []
 
 skip :: ([a] -> [b]) -> [a] -> [b]
 skip loop (_ : xs) = loop xs

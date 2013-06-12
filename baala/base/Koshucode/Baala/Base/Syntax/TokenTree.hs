@@ -1,8 +1,10 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Parened tree of tokens
+
 module Koshucode.Baala.Base.Syntax.TokenTree
 ( TokenTree
-, tokenTree, tokenTrees
+, tokenTrees
 , tokenTreesSource
 , module Koshucode.Baala.Base.Syntax.Token
 , module Koshucode.Baala.Base.Syntax.Tree
@@ -13,11 +15,18 @@ import Koshucode.Baala.Base.Syntax.Tree
 -- | Tree of tokens
 type TokenTree = Tree Token
 
--- | Parse tokens into a parened tree.
-tokenTree :: [Token] -> TokenTree
-tokenTree = Branch 0 . tokenTrees
-
 -- | Parse tokens into parened trees.
+--   Blank tokens are excluded.
+-- 
+--   >>> tokenTrees $ tokens $ "meet (R | pick /a /b)"
+--   [Bloom (Word 0 "meet"),
+--    Branch 1 [
+--      Bloom (Word 0 "R"),
+--      Bloom (Word 0 "|"),
+--      Bloom (Word 0 "pick"),
+--      Bloom (TermN ["/a"]),
+--      Bloom (TermN ["/b"])]]
+
 tokenTrees :: [Token] -> [TokenTree]
 tokenTrees = trees parenType . sweepToken
 
@@ -28,10 +37,11 @@ typeParen :: TypeParen Token
         (2, Open "[", Close "]"),
         (3, Open "{", Close "}") ]
 
--- | Convert tree to list of tokens
+-- | Convert back tree to list of tokens
 tokenUntrees :: [TokenTree] -> [Token]
 tokenUntrees = untrees typeParen
 
+-- | Convert back tree to source string
 tokenTreesSource :: [TokenTree] -> String
 tokenTreesSource = untokens . tokenUntrees
 
