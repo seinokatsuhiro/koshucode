@@ -1,5 +1,9 @@
-Koshucode is a relational data processor,
-and also a notational system for relational data,
+Koshucode is a notation for people who
+read, write, and calculate relational data.
+This repository includes a command of
+relational data processor named 'koshu'.
 There are no released software products yet.
 Please check Haddock documentations at
-http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala/
+http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/
+http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/
+http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-toolkit/
