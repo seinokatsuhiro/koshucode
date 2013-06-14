@@ -14,7 +14,7 @@ module Koshucode.Baala.Base.Struct.ModuleIO
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Struct.Full.Assert
 import Koshucode.Baala.Base.Struct.Full.Module
-import Koshucode.Baala.Base.Struct.Half.HalfModule
+import Koshucode.Baala.Base.Struct.Half.Clause
 import Koshucode.Baala.Base.Struct.Half.HalfRelmap
 import Koshucode.Baala.Base.Syntax
 import Koshucode.Baala.Base.Prelude as Prelude
@@ -30,7 +30,7 @@ moduleRead
     -> AbortOr (Module v)  -- ^ Result module from source text
 moduleRead md src = md2 where
     (ConsRelmap half full) = moduleCons md
-    md2 = consFullModule full $ consHalfModule half $ tokens src
+    md2 = consFullModule full $ consClause half $ tokens src
 
 -- | Read module from file.
 moduleFile

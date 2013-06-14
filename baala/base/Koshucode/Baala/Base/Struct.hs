@@ -21,7 +21,7 @@
 --   * 'RelmapFullCons' uses 'Relmap' and
 --     'Koshucode.Baala.Base.Syntax.TokenTree.TokenTree'.
 -- 
---   * 'HalfModule' uses 'HalfRelmap', 'HalfModule', and
+--   * 'Clause' uses 'HalfRelmap', 'Clause', and
 --     'Koshucode.Baala.Base.Syntax.Token.Token'.
 -- 
 --   * 'HalfRelmap' uses 'HalfRelmap' and
@@ -31,7 +31,7 @@ module Koshucode.Baala.Base.Struct
 ( module Koshucode.Baala.Base.Struct.Full.Assert
 , module Koshucode.Baala.Base.Struct.Full.Module
 , module Koshucode.Baala.Base.Struct.Full.Relmap
-, module Koshucode.Baala.Base.Struct.Half.HalfModule
+, module Koshucode.Baala.Base.Struct.Half.Clause
 , module Koshucode.Baala.Base.Struct.Half.HalfRelmap
 , module Koshucode.Baala.Base.Struct.Half.Quoter
 , module Koshucode.Baala.Base.Struct.ModuleIO
@@ -39,7 +39,7 @@ module Koshucode.Baala.Base.Struct
 import Koshucode.Baala.Base.Struct.Full.Assert
 import Koshucode.Baala.Base.Struct.Full.Module
 import Koshucode.Baala.Base.Struct.Full.Relmap
-import Koshucode.Baala.Base.Struct.Half.HalfModule
+import Koshucode.Baala.Base.Struct.Half.Clause
 import Koshucode.Baala.Base.Struct.Half.HalfRelmap
 import Koshucode.Baala.Base.Struct.Half.Quoter
 import Koshucode.Baala.Base.Struct.ModuleIO

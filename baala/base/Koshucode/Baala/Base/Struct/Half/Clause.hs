@@ -1,9 +1,11 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Struct.Half.HalfModule
-( HalfModule
-, consHalfModule
+{-| Intermidiate structure between 'String' and 'Section'. -}
+
+module Koshucode.Baala.Base.Struct.Half.Clause
+( Clause
+, consClause
 , consFullModule
 ) where
 import Data.Generics
@@ -24,14 +26,14 @@ import Prelude hiding (exp, mod)
 --   make full section :: [HalfSection] -> Section v
 --   make full relmap  :: HalfRelmap    -> Relmap v
 
-data HalfModule
-    = HModule  [SourceLine] (Maybe String)             -- ^ Module name
-    | HImport  [SourceLine] [Token] (Maybe HalfModule) -- ^ Importing module name
-    | HExport  [SourceLine] String                     -- ^ Exporting relmap name
-    | HRelmap  [SourceLine] String HalfRelmap      -- ^ Relmap and its name
-    | HAssert  [SourceLine] Bool String HalfRelmap -- ^ Assertions of relmaps
-    | HJudge   [SourceLine] Bool String [Token]    -- ^ Here data
-    | HUnknown [SourceLine]       -- ^ Unknown clause
+data Clause
+    = CModule  [SourceLine] (Maybe String)         -- ^ Module name
+    | CImport  [SourceLine] [Token] (Maybe Clause) -- ^ Importing module name
+    | CExport  [SourceLine] String                 -- ^ Exporting relmap name
+    | CRelmap  [SourceLine] String HalfRelmap      -- ^ Relmap and its name
+    | CAssert  [SourceLine] Bool String HalfRelmap -- ^ Assertions of relmaps
+    | CJudge   [SourceLine] Bool String [Token]    -- ^ Here data
+    | CUnknown [SourceLine]       -- ^ Unknown clause
       deriving (Show, Data, Typeable)
 
 
@@ -45,17 +47,20 @@ sourceLine :: Token -> Maybe SourceLine
 sourceLine (Line src) = Just src
 sourceLine _ = Nothing
 
--- | First step of module construction.
-consHalfModule
+zeroLine :: SourceLine
+zeroLine = SourceLine 0 ""
+
+{-| First step of constructing 'Section'. -}
+consClause
     :: RelmapHalfCons  -- ^ Relmap half constructor
     -> [Token]         -- ^ Source tokens
-    -> [HalfModule]    -- ^ Result half modules
-consHalfModule relmap = concatMap (classify relmap) . gather clause
+    -> [Clause]        -- ^ Result clauses
+consClause relmap = concatMap (classify relmap) . gather clause
 
--- | Split into first clause and rest tokens
+{-| Split into first clause and rest tokens -}
 clause :: [Token] -> ([Token], [Token])
 clause = loop zero where
-    zero = Line $ SourceLine 0 ""
+    zero = Line zeroLine
     loop _  (ln@(Line _) : xs)   = loop ln xs
     loop ln ((Comment _) : xs)   = loop ln xs
     loop ln (Space i : xs) = clauseBody i ln xs -- initial indent is 'i' spaces
@@ -83,17 +88,17 @@ clauseBody i ln xs = ln `cons1` mid xs where
 -- e8 = e1 "a\n\n b\nc\n"
 -- e9 = e1 "a\n  \n b\nc\n"
 
-classify :: RelmapHalfCons -> [Token] -> [HalfModule]
-classify half toks = halfMod toks' where
+classify :: RelmapHalfCons -> [Token] -> [Clause]
+classify half toks = cl toks' where
     toks' = sweepToken toks
     src   = sourceLines toks
 
     halfRel :: [Token] -> HalfRelmap
     halfRel = consHalfRelmap half src . tokenTrees
 
-    halfMod :: [Token] -> [HalfModule]
-    halfMod (Word 0 n : Word 0 ":" : xs) = rel n xs
-    halfMod (Word 0 k : xs)
+    cl :: [Token] -> [Clause]
+    cl (Word 0 n : Word 0 ":" : xs) = rel n xs
+    cl (Word 0 k : xs)
         | k == "module"   = mod xs
         | k == "import"   = imp xs
         | k == "export"   = exp xs
@@ -103,30 +108,30 @@ classify half toks = halfMod toks' where
         | k == "|-"       = jud True  xs
         | k == "|-X"      = jud False xs
         | k == "|-x"      = jud False xs
-    halfMod []            = []
-    halfMod _             = unk
+    cl []                 = []
+    cl _                  = unk
 
-    unk                   = [HUnknown src]
+    unk                   = [CUnknown src]
 
-    mod [Word _ n]        = [HModule src $ Just n]
-    mod []                = [HModule src Nothing]
+    mod [Word _ n]        = [CModule src $ Just n]
+    mod []                = [CModule src Nothing]
     mod _                 = unk
 
-    exp [Word _ n]        = [HExport src n]
-    exp (Word _ n : Word _ ":" : xs) = HExport src n : rel n xs
+    exp [Word _ n]        = [CExport src n]
+    exp (Word _ n : Word _ ":" : xs) = CExport src n : rel n xs
     exp _                 = unk
 
-    imp _                 = [HImport src toks Nothing]
+    imp _                 = [CImport src toks Nothing]
 
-    rel n xs              = [HRelmap src n $ halfRel xs]
+    rel n xs              = [CRelmap src n $ halfRel xs]
 
-    jud q (Word _ s : xs) = [HJudge src q s xs]
+    jud q (Word _ s : xs) = [CJudge src q s xs]
     jud _ _ = unk
 
-    ass q (Word _ s : xs) = [HAssert src q s $ halfRel xs]
+    ass q (Word _ s : xs) = [CAssert src q s $ halfRel xs]
     ass _ _ = unk
 
--- e1 = consHalfModule $ makeSynth1 []
+-- e1 = consClause $ makeSynth1 []
 -- e2 = e1 "module 'http://example.com/'"
 -- e3 = e1 "import 'http://example.com/'"
 -- e4 = e1 "export aa"
@@ -138,12 +143,12 @@ classify half toks = halfMod toks' where
 
 -- ----------------------  Full construction
 
--- | Second step of module construction.
+{-| Second step of module construction. -}
 consFullModule
     :: (StringValue v)
     => RelmapWholeCons v   -- ^ Relmap full constructor
-    -> [HalfModule]       -- ^ Half modules (Output of 'consHalfModule')
-    -> AbortOr (Module v) -- ^ Result full module
+    -> [Clause]            -- ^ Half modules (Output of 'consClause')
+    -> AbortOr (Module v)  -- ^ Result full module
 consFullModule whole xs = do
   _       <- unk xs
   imports <- sequence $ imp xs
@@ -161,35 +166,35 @@ consFullModule whole xs = do
       consRel = whole
       consMod = consFullModule whole
 
-      mod (HModule _ n : _) = n
+      mod (CModule _ n : _) = n
       mod (_ : xs2) = mod xs2
       mod [] = Nothing
 
-      imp (HImport _ _ (Nothing) : xs2) = Right emptyModule : imp xs2
-      imp (HImport _ _ (Just e)  : xs2) = consMod [e] : imp xs2
+      imp (CImport _ _ (Nothing) : xs2) = Right emptyModule : imp xs2
+      imp (CImport _ _ (Just e)  : xs2) = consMod [e] : imp xs2
       imp xs2 = skip imp xs2
 
-      exp (HExport _ n : xs2) = n : exp xs2
+      exp (CExport _ n : xs2) = n : exp xs2
       exp xs2 = skip exp xs2
 
-      jud (HJudge _ q s xs2 : xs3) = judge q s xs2 : jud xs3
+      jud (CJudge _ q s xs2 : xs3) = judge q s xs2 : jud xs3
       jud xs2 = skip jud xs2
 
-      rel (HRelmap _ n r : xs2) =
+      rel (CRelmap _ n r : xs2) =
           do m  <- consRel r
              ms <- rel xs2
              Right $ (n, m) : ms
       rel (_ : xs2) = rel xs2
       rel [] = Right []
 
-      ass (HAssert _ q s r : xs2) =
+      ass (CAssert _ q s r : xs2) =
           do a  <- consRel r
              as <- ass xs2
              Right $ (Assert q s a) : as
       ass (_ : xs2) = ass xs2
       ass [] = Right []
 
-      unk (HUnknown src : _) = Left $ AbortUnknownClause src
+      unk (CUnknown src : _) = Left $ AbortUnknownClause src
       unk (_ : xs2) = unk xs2
       unk [] = Right []
 

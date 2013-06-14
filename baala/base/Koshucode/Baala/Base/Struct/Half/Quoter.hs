@@ -9,8 +9,8 @@ import Data.Generics
 import Koshucode.Baala.Base.Syntax
 import Koshucode.Baala.Base.Struct.Full.Relmap
 import Koshucode.Baala.Base.Struct.Half.HalfRelmap
-import Koshucode.Baala.Base.Struct.Half.HalfModule
-import Language.Haskell.TH
+import Koshucode.Baala.Base.Struct.Half.Clause
+import Language.Haskell.TH hiding (Clause)
 import Language.Haskell.TH.Quote
 
 -- | Make quasiquoter for @[koshu| ... |]@.
@@ -27,16 +27,16 @@ koshuQ half fullQ = dispatch . tokens where
     dispatch toks = case sweepLeft toks of
                     (Word 0 "module" : _) -> moduleQ toks
                     _                     -> relmapQ toks
-    moduleQ = consFullModuleQ fullQ . consHalfModule half
+    moduleQ = consFullModuleQ fullQ . consClause half
     relmapQ = consFullRelmapQ fullQ . consHalfRelmap half [] . tokenTrees
 
 -- Construct ExpQ of Module
 -- Tokens like @name in module context and relmap context
 -- are Haskell variables.
 consFullModuleQ
-    :: ExpQ          -- ^ Quotation expression of 'RelmapFullCons'
-    -> [HalfModule]  -- ^ Materials of module
-    -> ExpQ          -- ^ ExpQ of 'Module'
+    :: ExpQ      -- ^ Quotation expression of 'RelmapFullCons'
+    -> [Clause]  -- ^ Materials of module
+    -> ExpQ      -- ^ ExpQ of 'Module'
 consFullModuleQ fullQ xs =
     [| either consError id
          (consFullModule $fullQ $(dataToExpQ plain xs)) |]

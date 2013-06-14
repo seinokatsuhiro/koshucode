@@ -7,9 +7,15 @@
 --   (3) /data modules/ that provide data.
 
 module Koshucode.Baala.Base.Struct.Full.Module
-( Module (..)
+(
+  -- * Process
+  -- $Process
+
+  -- * Section
+  Module (..)
 , moduleLinkedAssert
--- * Constructors
+
+  -- * Constructors
 , makeEmptyModule
 , emptyModule
 , dataModule
@@ -84,3 +90,29 @@ emptyModule = makeEmptyModule $ makeConsRelmap []
 -- | Module that has only here data.
 dataModule :: [Judge v] -> Module v
 dataModule js = emptyModule { moduleJudge = js }
+
+
+
+-- ----------------------
+-- $Process
+--
+-- Section is constructed using following steps.
+-- 
+-- [1. @??? -> String@]
+--     Get string from something.
+-- 
+-- [2. @String -> \[String\]@]
+--     Split string into lines.
+-- 
+-- [3. @\[String\] -> \[Token\]@]
+--     Split line-breaked strings into tokens.
+--
+-- [4. @\[Token\] -> \[\[Token\]\]@]
+--     Collect tokens for clauses.
+--
+-- [5. @\[\[Token\]\] -> \[Clause\]@]
+--     Classify tokens.
+--
+-- [6. @\[Clause\] -> Section a@]
+--     Make section from list of clauses.
+
