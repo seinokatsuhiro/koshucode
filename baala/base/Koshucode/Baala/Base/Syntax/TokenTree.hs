@@ -19,13 +19,13 @@ type TokenTree = Tree Token
 --   Blank tokens are excluded.
 -- 
 --   >>> tokenTrees $ tokens $ "meet (R | pick /a /b)"
---   [Bloom (Word 0 "meet"),
---    Branch 1 [
---      Bloom (Word 0 "R"),
---      Bloom (Word 0 "|"),
---      Bloom (Word 0 "pick"),
---      Bloom (TermN ["/a"]),
---      Bloom (TermN ["/b"])]]
+--   [TreeL (Word 0 "meet"),
+--    TreeB 1 [
+--      TreeL (Word 0 "R"),
+--      TreeL (Word 0 "|"),
+--      TreeL (Word 0 "pick"),
+--      TreeL (TermN ["/a"]),
+--      TreeL (TermN ["/b"])]]
 
 tokenTrees :: [Token] -> [TokenTree]
 tokenTrees = trees parenType . sweepToken

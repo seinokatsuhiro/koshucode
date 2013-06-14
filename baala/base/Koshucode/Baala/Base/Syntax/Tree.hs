@@ -58,19 +58,19 @@ parenTable xs = (parenType, typeParen) where
 
 -- ----------------------  Tree
 
--- | Bloom-and-branch tree
+-- | Tree of leaf and branch
 data Tree a
-    = Bloom a              -- ^ Terminal of a tree
-    | Branch Int [Tree a]  -- ^ Paren-type and subtrees
+    = TreeL a             -- ^ Terminal of a tree
+    | TreeB Int [Tree a]  -- ^ Paren-type and subtrees
       deriving (Show, Eq, Ord, Data, Typeable)
 
 instance Functor Tree where
-    fmap f (Bloom x)     = Bloom (f x)
-    fmap f (Branch n xs) = Branch n $ map (fmap f) xs
+    fmap f (TreeL x)     = TreeL (f x)
+    fmap f (TreeB n xs) = TreeB n $ map (fmap f) xs
 
 -- | Convert a list of elements to a single tree
 tree :: (Show a) => ParenType a -> [a] -> Tree a
-tree p = Branch 0 . trees p
+tree p = TreeB 0 . trees p
 
 -- | Convert a list of elements to trees
 trees :: (Show a) => ParenType a -> [a] -> [Tree a]
@@ -80,10 +80,10 @@ trees parenType xs = fst $ loop xs 0 where
     loop [] _ = ([], [])
     loop (x : xs2) p
         -- non paren
-        | px == 0  = add (Bloom x) xs2 p
+        | px == 0  = add (TreeL x) xs2 p
         -- open paren
         | px > 0   = let (trees2, xs3) = loop xs2 px
-                     in  add (Branch px trees2) xs3 p
+                     in  add (TreeB px trees2) xs3 p
         -- close paren
         | px < 0 && px == -p = ([], xs2)
         -- unknown token
@@ -100,21 +100,21 @@ untrees typeParen = concatMap (untree typeParen)
 -- | Convert tree to list of tokens
 untree :: TypeParen a -> Tree a -> [a]
 untree typeParen = loop where
-    loop (Bloom x) = [x]
-    loop (Branch n xs) =
+    loop (TreeL x) = [x]
+    loop (TreeB n xs) =
         let (open, close) = typeParen n
         in [open] ++ concatMap loop xs ++ [close]
 
 -- | Simplify tree by removing double parens,
 --   like @((a))@ to @(a)@.
 undouble :: Tree a -> Tree a
-undouble (Branch n xs) =
+undouble (TreeB n xs) =
     case map undouble xs of
       [x] -> x
-      xs2 -> Branch n xs2
+      xs2 -> TreeB n xs2
 undouble x = x
 
--- e1 = Branch 2 [Branch 1 [Branch 0 [Bloom 0]]]
--- e2 = Branch 2 [e1, Branch 1 [Branch 0 [Bloom 0]]]
+-- e1 = TreeB 2 [TreeB 1 [TreeB 0 [TreeL 0]]]
+-- e2 = TreeB 2 [e1, TreeB 1 [TreeB 0 [TreeL 0]]]
 -- e3 = undouble e2
 

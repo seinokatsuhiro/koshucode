@@ -23,7 +23,7 @@ import Koshucode.Baala.Base.Prelude
 
 -- | Extract a term name.
 termName :: TokenTree -> AbortOr String
-termName (Bloom (TermN [n])) = Right n
+termName (TreeL (TermN [n])) = Right n
 termName x = Left $ AbortMissingTermName [] (show x)
 
 -- | Extract a list of term names.
@@ -65,7 +65,7 @@ termNamePairs = loop where
 -- | Extract a list of name-and-tree pairs.
 -- 
 --   >>> termTreePairs $ tokenTrees $ tokens "/a 'A3' /b 10"
---   Right [("/a", Bloom (Word 1 "A3")), ("/b", Bloom (Word 0 "10"))]
+--   Right [("/a", TreeL (Word 1 "A3")), ("/b", TreeL (Word 0 "10"))]
 
 termTreePairs :: [TokenTree] -> AbortOr [(String, TokenTree)]
 termTreePairs = loop where
@@ -87,21 +87,21 @@ termTreePairs = loop where
 --   are name of group.
 -- 
 --   >>> operandGroup $ tokenTrees $ tokens "a b -x c 'd' -y e"
---   [("",   [Bloom (Word 0 "a"), Bloom (Word 0 "b")]),
---    ("-x", [Bloom (Word 0 "c"), Bloom (Word 1 "d")]),
---    ("-y", [Bloom (Word 0 "e")])]
+--   [("",   [TreeL (Word 0 "a"), TreeL (Word 0 "b")]),
+--    ("-x", [TreeL (Word 0 "c"), TreeL (Word 1 "d")]),
+--    ("-y", [TreeL (Word 0 "e")])]
 
 operandGroup :: [TokenTree] -> [(String, [TokenTree])]
 operandGroup = gather $ anon [] where
     -- anonymous group
-    anon ys xs@(Bloom (Word 0 n@('-' : _)) : xs2)
+    anon ys xs@(TreeL (Word 0 n@('-' : _)) : xs2)
         | ys == []     = named n [] xs2  -- no anonymous group
         | otherwise    = group "" ys xs
     anon ys []         = group "" ys []
     anon ys (x:xs)     = anon (x:ys) xs
 
     -- named group
-    named n ys xs@(Bloom (Word 0 ('-' : _)) : _) = group n ys xs
+    named n ys xs@(TreeL (Word 0 ('-' : _)) : _) = group n ys xs
     named n ys []      = group n ys []
     named n ys (x:xs)  = named n (x:ys) xs
 
@@ -126,8 +126,8 @@ crop
   -> Tree x      -- ^ Cropping target
   -> Calc v      -- ^ Calculator
 crop ripen tree1 arg = c tree1 [] where
-    c (Bloom x)         vs = ripen x vs arg
-    c (Branch _ (x:xs)) vs = c x $ map (`c` vs) xs
+    c (TreeL x)        vs = ripen x vs arg
+    c (TreeB _ (x:xs)) vs = c x $ map (`c` vs) xs
     c _ _ = undefined
 
 -- gather a crop

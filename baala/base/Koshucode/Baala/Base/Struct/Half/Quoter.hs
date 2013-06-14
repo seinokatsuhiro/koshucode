@@ -28,7 +28,7 @@ koshuQ half fullQ = dispatch . tokens where
                     (Word 0 "section" : _) -> sectionQ toks
                     _                      -> relmapQ toks
     sectionQ = consFullSectionQ fullQ . consClause half
-    relmapQ  = consFullRelmapQ fullQ . consHalfRelmap half [] . tokenTrees
+    relmapQ  = consFullRelmapQ  fullQ . consHalfRelmap half [] . tokenTrees
 
 -- Construct ExpQ of Section
 -- Tokens like @name in section context and relmap context

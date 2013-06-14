@@ -93,11 +93,11 @@ consHalfRelmap half src = make where
     make' x = make [x]
 
     bar :: TokenTree
-    bar = Bloom $ Word 0 "|"  -- non-quoted vertical bar
+    bar = TreeL $ Word 0 "|"  -- non-quoted vertical bar
 
     one :: [TokenTree] -> HalfRelmap
-    one [Branch _ xs] = make xs
-    one (Bloom (Word 0 op) : opd) = sub $ half op src opd
+    one [TreeB _ xs] = make xs
+    one (TreeL (Word 0 op) : opd) = sub $ half op src opd
     one opd = HalfRelmap [] src "?" [("operand", opd)] [] -- no operator
 
     -- collect subrelmaps

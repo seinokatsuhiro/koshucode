@@ -48,12 +48,12 @@ binaryTree :: (Show a)
     -> Tree a               -- ^ Infixed tree
     -> Tree a               -- ^ Prefixed tree
 binaryTree ht tree1 = undouble $ binaryHeightMap loop ht tree1 where
-    loop tree2@(Bloom _)     = tree2
-    loop tree2@(Branch n xs) =
+    loop tree2@(TreeL _)     = tree2
+    loop tree2@(TreeB n xs) =
         case binaryPos $ heightList tree2 of
-          Right p | p <= 0 -> Branch n $ map loop xs
+          Right p | p <= 0 -> TreeB n $ map loop xs
           Right p -> let (left, r:ight) = splitAt p xs
-                     in  Branch n $
+                     in  TreeB n $
                          if null ight
                          then [r, sub n left]
                          else [r, sub n left, sub n ight]
@@ -62,21 +62,21 @@ binaryTree ht tree1 = undouble $ binaryHeightMap loop ht tree1 where
                          ++ show (xs !! q)
 
     sub _ [x] = loop x
-    sub n xs  = loop $ Branch n xs
+    sub n xs  = loop $ TreeB n xs
 
 -- e0 = heightTable [(Left 5, "="), (Right 3, "+-"), (Left 3, "*/")]
--- e1 = map Bloom
+-- e1 = map TreeL
 -- e2 = binaryTree e0 . binaryTree e0
--- e3 = e2 (Branch 0 $ e1 "1+2=0")
--- e4 = e2 (Branch 0 $ e1 "1+2*3+4=0")
--- e5 = e2 (Branch 0 $ e1 "1+2+3")
--- e6 = e2 (Branch 0 $ e1 "1+2-3")
--- e7 = e2 (Branch 0 $ e1 "1+2*3")
+-- e3 = e2 (TreeB 0 $ e1 "1+2=0")
+-- e4 = e2 (TreeB 0 $ e1 "1+2*3+4=0")
+-- e5 = e2 (TreeB 0 $ e1 "1+2+3")
+-- e6 = e2 (TreeB 0 $ e1 "1+2-3")
+-- e7 = e2 (TreeB 0 $ e1 "1+2*3")
 
 heightList :: Tree (BinaryHeight, a) -> [BinaryHeight]
-heightList (Branch _ xs) = map f xs where
-    f (Bloom (ht, _)) = ht
-    f (Branch _ _)    = Left 0
+heightList (TreeB _ xs) = map f xs where
+    f (TreeL (ht, _)) = ht
+    f (TreeB _ _)    = Left 0
 heightList _ = undefined
 
 binaryPos :: [BinaryHeight] -> Either (Int, Int) Int

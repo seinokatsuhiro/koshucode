@@ -4,7 +4,7 @@
 {-| Intermidiate structure between 'String' and 'Section'. -}
 
 module Koshucode.Baala.Base.Struct.Half.Clause
-( Clause
+( Clause (..)
 , consClause
 , consFullSection
 ) where
@@ -143,12 +143,12 @@ classify half toks = cl toks' where
 
 -- ----------------------  Full construction
 
-{-| Second step of section construction. -}
+{-| Second step of constructing 'Section'. -}
 consFullSection
     :: (StringValue v)
     => RelmapWholeCons v   -- ^ Relmap full constructor
-    -> [Clause]            -- ^ Half sections (Output of 'consClause')
-    -> AbortOr (Section v)  -- ^ Result full section
+    -> [Clause]            -- ^ Output of 'consClause'
+    -> AbortOr (Section v) -- ^ Result section
 consFullSection whole xs = do
   _       <- unk xs
   imports <- sequence $ imp xs
