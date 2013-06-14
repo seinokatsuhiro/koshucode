@@ -1,22 +1,19 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Abort symbol
+{- | Abort symbol -}
 
 module Koshucode.Baala.Base.Prelude.Abort.Symbol
 ( AbortOr
 , Abort (..)
-, abortTitle
-, abortMain
-, abortSub
-, abortLines
 ) where
 import Koshucode.Baala.Base.Prelude.Pretty
 import Koshucode.Baala.Base.Prelude.Utility
 import Koshucode.Baala.Base.Prelude.Abort.Source
 
+{- | Abortable type -}
 type AbortOr a = Either Abort a
 
--- | Abort symbols
+{- | Abort symbols -}
 data Abort
     = AbortLookup           [SourceLine] String
     | AbortMalformedOperand [SourceLine] String
@@ -28,39 +25,38 @@ data Abort
       deriving (Show, Eq, Ord)
 
 instance Name Abort where
-    name = head . words . show
+    name = abortSymbol
 
-abortTitle :: Abort -> String
-abortTitle (AbortLookup _ _)             = "項目がない"
-abortTitle (AbortMalformedOperand _ _)   = "演算子の引数がおかしい"
-abortTitle (AbortMalformedTerms _ _)     = "項目名と項目内容の並びがおかしい"
-abortTitle (AbortMissingTermName _ _)    = "項目名ではない記号"
-abortTitle (AbortUnknownClause _)        = "未知の構文"
-abortTitle (AbortUnknownRelmap _ _)      = "未知の演算子"
-abortTitle (AbortUsage _ _)              = "使用法の間違い"
+instance AbortSymbol Abort where
+    abortSymbol = head . words . show
 
-abortMain :: Abort -> Doc
-abortMain (AbortLookup _ s)           = paragraph s
-abortMain (AbortMalformedOperand _ s) = paragraph s
-abortMain (AbortMalformedTerms _ s)   = paragraph s
-abortMain (AbortMissingTermName _ s)  = paragraph s
-abortMain (AbortUnknownClause _)      = empty
-abortMain (AbortUnknownRelmap _ s)    = paragraph s
-abortMain (AbortUsage _ ss)           = docv $ map paragraph ss
+    abortTitle a = case a of
+        (AbortLookup _ _)             -> "項目がない"
+        (AbortMalformedOperand _ _)   -> "演算子の引数がおかしい"
+        (AbortMalformedTerms _ _)     -> "項目名と項目内容の並びがおかしい"
+        (AbortMissingTermName _ _)    -> "項目名ではない記号"
+        (AbortUnknownClause _)        -> "未知の構文"
+        (AbortUnknownRelmap _ _)      -> "未知の演算子"
+        (AbortUsage _ _)              -> "使用法の間違い"
 
-paragraph :: String -> Doc
-paragraph = fsep . map text . words
+    abortMain a = case a of
+        (AbortLookup _ s)             -> par s
+        (AbortMalformedOperand _ s)   -> par s
+        (AbortMalformedTerms _ s)     -> par s
+        (AbortMissingTermName _ s)    -> par s
+        (AbortUnknownClause _)        -> empty
+        (AbortUnknownRelmap _ s)      -> par s
+        (AbortUsage _ ss)             -> docv $ map par ss
 
-abortSub :: Abort -> Doc
-abortSub _ = empty
+    abortLines a = case a of
+        (AbortLookup ln _)            -> ln
+        (AbortMalformedOperand ln _)  -> ln
+        (AbortMalformedTerms ln _)    -> ln
+        (AbortMissingTermName ln _)   -> ln
+        (AbortUnknownClause ln)       -> ln
+        (AbortUnknownRelmap ln _)     -> ln
+        (AbortUsage ln _)             -> ln
 
-abortLines :: Abort -> [SourceLine]
-abortLines (AbortLookup ln _)           = ln
-abortLines (AbortMalformedOperand ln _) = ln
-abortLines (AbortMalformedTerms ln _)   = ln
-abortLines (AbortMissingTermName ln _)  = ln
-abortLines (AbortUnknownClause ln)      = ln
-abortLines (AbortUnknownRelmap ln _)    = ln
-abortLines (AbortUsage ln _)            = ln
-
+par :: String -> Doc
+par = fsep . map text . words
 

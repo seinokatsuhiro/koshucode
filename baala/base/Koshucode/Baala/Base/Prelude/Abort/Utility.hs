@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Abort utility
+{-| Abort utility -}
 
 module Koshucode.Baala.Base.Prelude.Abort.Utility
 ( (<!!>),
@@ -12,49 +12,53 @@ module Koshucode.Baala.Base.Prelude.Abort.Utility
 import qualified System.Exit as Sys
 import qualified Data.Char   as Char
 import Koshucode.Baala.Base.Prelude.Pretty
-import Koshucode.Baala.Base.Prelude.Utility
+import Koshucode.Baala.Base.Prelude.Abort.Source
 import Koshucode.Baala.Base.Prelude.Abort.Symbol
 
--- | Stop program execution abnormally.
-abort :: Abort -> IO ()
+{-| Stop program execution abnormally. -}
+abort :: (AbortSymbol a) => a -> IO ()
 abort a = do
   putMessage a
   putStrLn "(ステータス 1 で終了します)"
   Sys.exitWith $ Sys.ExitFailure 1
 
-addAbort :: Abort -> AbortOr a -> AbortOr a
+addAbort :: (AbortSymbol a) => a -> Either a b -> Either a b
 addAbort a2 (Left _) = Left a2
 addAbort _ x = x
 
-abortIO :: (a -> IO ()) -> AbortOr a -> IO ()
+abortIO :: (AbortSymbol a) => (b -> IO ()) -> Either a b -> IO ()
 abortIO _ (Left a)  = abort a
 abortIO f (Right output) = f output
 
-putMessage :: Abort -> IO ()
+putMessage :: (AbortSymbol a) => a -> IO ()
 putMessage = putStr . vline . renderStyle sty . messageDoc where
     sty      = style { lineLength = 60 }
     vline    = unlines . map ("**  " ++) . lines
 
-messageDoc :: Abort -> Doc
+messageDoc :: (AbortSymbol a) => a -> Doc
 messageDoc a =
     docv [ text ""
          , text "処理を中断しました"
          , text ""
-         , text (label "種類") <> text (name a)
+         , text (label "種類") <> text (abortSymbol a)
          , text (label "概要") <> text (abortTitle a)
          , opt  (label "おもな情報") $ abortMain a
          , opt  (label "補助情報") $ abortSub a
          , text ""
-         , docv $ abortLines a
+         , src $ abortLines a
          , text ""
          , text ""
          ]
 
-label :: String -> String
-label = fill 12
+src :: [SourceLine] -> Doc
+src = docv . map d where
+    d (SourceLine n line) = (text $ label $ show n) <> text line
 
-fill :: Int -> String -> String
-fill n s = s ++ replicate rest ' ' where
+label :: String -> String
+label = rpad 12
+
+rpad :: Int -> String -> String
+rpad n s = s ++ replicate rest ' ' where
     rest = max 0 (n - len)
     len  = sum $ map (size . Char.ord) s where
     size c | c > 255   = 2
@@ -64,11 +68,13 @@ opt :: String -> Doc -> Doc
 opt lbl x | isEmpty x = empty
             | otherwise = text lbl <> x
 
--- | Stop on error @"bug in koshucode"@
+{-| Stop on error ''bug in koshucode'' -}
 bug :: a
 bug = error "bug in koshucode"
 
--- | Lookup association list
+{-| Lookup association list.
+    This function may abort on AbortLookup. -}
+
 (<!!>) :: [(String, a)] -> String -> AbortOr a
 (<!!>) assoc key = loop assoc where
     loop [] = Left $ AbortLookup [] key
