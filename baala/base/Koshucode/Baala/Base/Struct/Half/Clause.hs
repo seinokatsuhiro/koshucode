@@ -6,14 +6,14 @@
 module Koshucode.Baala.Base.Struct.Half.Clause
 ( Clause
 , consClause
-, consFullModule
+, consFullSection
 ) where
 import Data.Generics
 import qualified Data.Maybe as Maybe
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude as Prelude
 import Koshucode.Baala.Base.Struct.Full.Assert
-import Koshucode.Baala.Base.Struct.Full.Module
+import Koshucode.Baala.Base.Struct.Full.Section
 import Koshucode.Baala.Base.Struct.Full.Relmap
 import Koshucode.Baala.Base.Struct.Half.HalfRelmap
 import Koshucode.Baala.Base.Syntax
@@ -27,8 +27,8 @@ import Prelude hiding (exp, mod)
 --   make full relmap  :: HalfRelmap    -> Relmap v
 
 data Clause
-    = CModule  [SourceLine] (Maybe String)         -- ^ Module name
-    | CImport  [SourceLine] [Token] (Maybe Clause) -- ^ Importing module name
+    = CSection [SourceLine] (Maybe String)         -- ^ Section name
+    | CImport  [SourceLine] [Token] (Maybe Clause) -- ^ Importing section name
     | CExport  [SourceLine] String                 -- ^ Exporting relmap name
     | CRelmap  [SourceLine] String HalfRelmap      -- ^ Relmap and its name
     | CAssert  [SourceLine] Bool String HalfRelmap -- ^ Assertions of relmaps
@@ -61,13 +61,13 @@ consClause relmap = concatMap (classify relmap) . gather clause
 clause :: [Token] -> ([Token], [Token])
 clause = loop zero where
     zero = Line zeroLine
-    loop _  (ln@(Line _) : xs)   = loop ln xs
-    loop ln ((Comment _) : xs)   = loop ln xs
-    loop ln (Space i : xs) = clauseBody i ln xs -- initial indent is 'i' spaces
-    loop ln xs             = clauseBody 0 ln xs -- no indent
+    loop _  (ln@(Line _) : xs)  = loop ln xs
+    loop ln ((Comment _) : xs)  = loop ln xs
+    loop ln (Space i : xs) = clause2 i ln xs -- initial indent is 'i' spaces
+    loop ln xs             = clause2 0 ln xs -- no indent
 
-clauseBody :: Int -> Token -> [Token] -> ([Token], [Token])
-clauseBody i ln xs = ln `cons1` mid xs where
+clause2 :: Int -> Token -> [Token] -> ([Token], [Token])
+clause2 i ln xs = ln `cons1` mid xs where
     -- middle of line
     mid xxs@(Line _ : _)    = beg xxs   -- next line
     mid (x : xs2)           = x `cons1` mid xs2
@@ -99,7 +99,7 @@ classify half toks = cl toks' where
     cl :: [Token] -> [Clause]
     cl (Word 0 n : Word 0 ":" : xs) = rel n xs
     cl (Word 0 k : xs)
-        | k == "module"   = mod xs
+        | k == "section"  = mod xs
         | k == "import"   = imp xs
         | k == "export"   = exp xs
         | k == "affirm"   = ass True  xs
@@ -113,8 +113,8 @@ classify half toks = cl toks' where
 
     unk                   = [CUnknown src]
 
-    mod [Word _ n]        = [CModule src $ Just n]
-    mod []                = [CModule src Nothing]
+    mod [Word _ n]        = [CSection src $ Just n]
+    mod []                = [CSection src Nothing]
     mod _                 = unk
 
     exp [Word _ n]        = [CExport src n]
@@ -132,7 +132,7 @@ classify half toks = cl toks' where
     ass _ _ = unk
 
 -- e1 = consClause $ makeSynth1 []
--- e2 = e1 "module 'http://example.com/'"
+-- e2 = e1 "section 'http://example.com/'"
 -- e3 = e1 "import 'http://example.com/'"
 -- e4 = e1 "export aa"
 -- e5 = e1 "|-- A /x 0 /y 0"
@@ -143,34 +143,35 @@ classify half toks = cl toks' where
 
 -- ----------------------  Full construction
 
-{-| Second step of module construction. -}
-consFullModule
+{-| Second step of section construction. -}
+consFullSection
     :: (StringValue v)
     => RelmapWholeCons v   -- ^ Relmap full constructor
-    -> [Clause]            -- ^ Half modules (Output of 'consClause')
-    -> AbortOr (Module v)  -- ^ Result full module
-consFullModule whole xs = do
+    -> [Clause]            -- ^ Half sections (Output of 'consClause')
+    -> AbortOr (Section v)  -- ^ Result full section
+consFullSection whole xs = do
   _       <- unk xs
   imports <- sequence $ imp xs
   judges  <- sequence $ jud xs
   relmaps <- rel xs
   asserts <- ass xs
-  Right $ emptyModule { moduleName   = mod xs
-                      , moduleImport = imports
-                      , moduleExport = exp xs
-                      , moduleAssert = asserts
-                      , moduleRelmap = relmaps
-                      , moduleJudge  = judges
-                      }
+  Right $ emptySection {
+              sectionName   = mod xs
+            , sectionImport = imports
+            , sectionExport = exp xs
+            , sectionAssert = asserts
+            , sectionRelmap = relmaps
+            , sectionJudge  = judges
+            }
     where
       consRel = whole
-      consMod = consFullModule whole
+      consMod = consFullSection whole
 
-      mod (CModule _ n : _) = n
+      mod (CSection _ n : _) = n
       mod (_ : xs2) = mod xs2
       mod [] = Nothing
 
-      imp (CImport _ _ (Nothing) : xs2) = Right emptyModule : imp xs2
+      imp (CImport _ _ (Nothing) : xs2) = Right emptySection : imp xs2
       imp (CImport _ _ (Just e)  : xs2) = consMod [e] : imp xs2
       imp xs2 = skip imp xs2
 

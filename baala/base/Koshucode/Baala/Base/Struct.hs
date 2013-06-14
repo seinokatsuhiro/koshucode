@@ -1,11 +1,11 @@
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Runtime structure for calculations written in Koshucode.
---   'Module' is bundle of calculation stuff.
+--   'Section' is bundle of calculation stuff.
 -- 
 --   Dependencies of significant data types.
 -- 
---   * 'Module' uses 'Module', 'Assert', 'Relmap',
+--   * 'Section' uses 'Section', 'Assert', 'Relmap',
 --     'Koshucode.Baala.Base.Data.Judge.Judge' and 'ConsRelmap'.
 -- 
 --   * 'Assert' uses 'Relmap'.
@@ -29,17 +29,17 @@
 
 module Koshucode.Baala.Base.Struct
 ( module Koshucode.Baala.Base.Struct.Full.Assert
-, module Koshucode.Baala.Base.Struct.Full.Module
+, module Koshucode.Baala.Base.Struct.Full.Section
 , module Koshucode.Baala.Base.Struct.Full.Relmap
 , module Koshucode.Baala.Base.Struct.Half.Clause
 , module Koshucode.Baala.Base.Struct.Half.HalfRelmap
 , module Koshucode.Baala.Base.Struct.Half.Quoter
-, module Koshucode.Baala.Base.Struct.ModuleIO
+, module Koshucode.Baala.Base.Struct.SectionIO
 ) where
 import Koshucode.Baala.Base.Struct.Full.Assert
-import Koshucode.Baala.Base.Struct.Full.Module
+import Koshucode.Baala.Base.Struct.Full.Section
 import Koshucode.Baala.Base.Struct.Full.Relmap
 import Koshucode.Baala.Base.Struct.Half.Clause
 import Koshucode.Baala.Base.Struct.Half.HalfRelmap
 import Koshucode.Baala.Base.Struct.Half.Quoter
-import Koshucode.Baala.Base.Struct.ModuleIO
+import Koshucode.Baala.Base.Struct.SectionIO

@@ -1,24 +1,24 @@
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Data structure for relational calculations.
---   There are three types of module:
---   (1) /editing modules/ that output judges and read other modules,
---   (2) /library modules/ that make relmaps reusable,
---   (3) /data modules/ that provide data.
+--   There are three types of section:
+--   (1) /editing sections/ that output judges and read other sections,
+--   (2) /library sections/ that make relmaps reusable,
+--   (3) /data sections/ that provide data.
 
-module Koshucode.Baala.Base.Struct.Full.Module
+module Koshucode.Baala.Base.Struct.Full.Section
 (
   -- * Process
   -- $Process
 
   -- * Section
-  Module (..)
-, moduleLinkedAssert
+  Section (..)
+, sectionLinkedAssert
 
   -- * Constructors
-, makeEmptyModule
-, emptyModule
-, dataModule
+, makeEmptySection
+, emptySection
+, dataSection
 ) where
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
@@ -26,37 +26,37 @@ import Koshucode.Baala.Base.Struct.Full.Assert
 import Koshucode.Baala.Base.Struct.Full.Relmap
 import Koshucode.Baala.Base.Struct.Half.HalfRelmap
 
-data Module v = Module {
-      moduleName   :: Maybe String       -- ^ Module name
-    , moduleImport :: [Module v]         -- ^ Importing module
-    , moduleExport :: [String]           -- ^ Exporting relmap names
-    , moduleAssert :: [Assert v]         -- ^ Assertions of relmaps
-    , moduleRelmap :: [Named (Relmap v)] -- ^ Relmaps and its name
-    , moduleJudge  :: [Judge v]          -- ^ Here data
-    , moduleCons   :: ConsRelmap v       -- ^ Readers and writers for this module
+data Section v = Section {
+      sectionName   :: Maybe String       -- ^ Section name
+    , sectionImport :: [Section v]        -- ^ Importing section
+    , sectionExport :: [String]           -- ^ Exporting relmap names
+    , sectionAssert :: [Assert v]         -- ^ Assertions of relmaps
+    , sectionRelmap :: [Named (Relmap v)] -- ^ Relmaps and its name
+    , sectionJudge  :: [Judge v]          -- ^ Here data
+    , sectionCons   :: ConsRelmap v       -- ^ Readers and writers for this section
     } deriving (Show)
 
-instance (Ord v, Pretty v) => Pretty (Module v) where
-    doc = docModule
+instance (Ord v, Pretty v) => Pretty (Section v) where
+    doc = docSection
 
-docModule :: (Ord v, Pretty v) => Module v -> Doc
-docModule md = dModule where
-    dModule = docv [dRelmap, dAssert, dJudge]
-    dRelmap = docv $ map docRelmap $ moduleRelmap md
+docSection :: (Ord v, Pretty v) => Section v -> Doc
+docSection md = dSection where
+    dSection = docv [dRelmap, dAssert, dJudge]
+    dRelmap = docv $ map docRelmap $ sectionRelmap md
     docRelmap (n,m) = zeroWidthText (n ++ " :") <+> doc m $$ text ""
-    dJudge  = docv $ moduleJudge md
-    dAssert = docv $ moduleAssert md
+    dJudge  = docv $ sectionJudge md
+    dAssert = docv $ sectionAssert md
 
 
 
 -- ----------------------  Linking relmaps
 
--- | Select assertions like 'moduleAssert'.
+-- | Select assertions like 'sectionAssert'.
 --   It returns relmap-liked assertions.
 --   We can run these assertions using 'runAssertJudges'.
-moduleLinkedAssert :: Module v -> [Assert v]
-moduleLinkedAssert md = map a $ moduleAssert md where
-    rs'    = linkRelmap $ moduleRelmap md
+sectionLinkedAssert :: Section v -> [Assert v]
+sectionLinkedAssert md = map a $ sectionAssert md where
+    rs'    = linkRelmap $ sectionRelmap md
     linker = makeLinker rs'
     a (Assert q s r) = Assert q s $ linker r
 
@@ -79,17 +79,17 @@ makeLinker rs' = link where
 
 -- ----------------------  Constructor
 
--- | Module that has no contents.
-makeEmptyModule :: ConsRelmap v -> Module v
-makeEmptyModule = Module Nothing [] [] [] [] []
+-- | Section that has no contents.
+makeEmptySection :: ConsRelmap v -> Section v
+makeEmptySection = Section Nothing [] [] [] [] []
 
--- | Module that has no contents.
-emptyModule :: Module v
-emptyModule = makeEmptyModule $ makeConsRelmap []
+-- | Section that has no contents.
+emptySection :: Section v
+emptySection = makeEmptySection $ makeConsRelmap []
 
--- | Module that has only here data.
-dataModule :: [Judge v] -> Module v
-dataModule js = emptyModule { moduleJudge = js }
+-- | Section that has only here data.
+dataSection :: [Judge v] -> Section v
+dataSection js = emptySection { sectionJudge = js }
 
 
 
