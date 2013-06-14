@@ -9,10 +9,11 @@ module Koshucode.Baala.Base.Syntax.Token
   -- $TokenType
   Token (..)
 , isBlank
+, isLineToken
 , isTerm
 
   -- * Tokenizer
-,  tokens
+, tokens
 , untokens
 
   -- * Othre functions
@@ -32,7 +33,7 @@ data Token
     | Close   String    -- ^ Close paren
     | Space   Int       -- ^ N space chars
     | Comment String    -- ^ Comment text
-    | Line Int String   -- ^ Source infomation
+    | Line SourceLine   -- ^ Source infomation
       deriving (Show, Eq, Ord, Data, Typeable)
 
 instance Name Token where
@@ -48,8 +49,12 @@ instance Name Token where
 isBlank :: Token -> Bool
 isBlank (Space _)    = True
 isBlank (Comment _)  = True
-isBlank (Line _ _)   = True
+isBlank (Line _)     = True
 isBlank _            = False
+
+isLineToken :: Token -> Bool
+isLineToken (Line _)   = True
+isLineToken _          = False
 
 -- | Test the token is a term, i.e., 'TermN' or 'TermP'
 isTerm :: Token -> Bool
@@ -79,7 +84,7 @@ tokens = gather token . numbering . lines where
     numbering = zipWith SrcLine [1..]
 
 token :: [SrcLine] -> (Token, [SrcLine])
-token (SrcLine n line : ls) = tokenLines ls (Line n line, line)
+token (SrcLine n line : ls) = tokenLines ls (Line $ SourceLine n line, line)
 token (MidLine   line : ls) = tokenLines ls (tokenInLine line)
 token [] = error "token for empty list"
 
@@ -200,7 +205,7 @@ untoken (Open   s)   = s
 untoken (Close  s)   = s
 untoken (Space  n)   = replicate n ' '
 untoken (Comment s)  = s
-untoken (Line _ s)   = s
+untoken (Line (SourceLine _ s)) = s
 
 
 

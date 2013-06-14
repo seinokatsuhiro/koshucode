@@ -62,12 +62,12 @@ linkRelmap rs = rs' where
 
 makeLinker :: [Named (Relmap v)] -> Relmap v -> Relmap v
 makeLinker rs' = link where
-    link (RelmapAppend r1 r2) = RelmapAppend (link r1) (link r2)
+    link (RelmapAppend r1 r2)  = RelmapAppend (link r1) (link r2)
     link (RelmapCalc h n f rs) = RelmapCalc h n f $ map link rs
-    link r@(RelmapName n)     = case lookup n rs' of
-                                  Just r' -> r'
-                                  Nothing -> r
-    link r                    = r
+    link r@(RelmapName _ n)    = case lookup n rs' of
+                                   Just r' -> r'
+                                   Nothing -> r
+    link r                     = r
 
 
 

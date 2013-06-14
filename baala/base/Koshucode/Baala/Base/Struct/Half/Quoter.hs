@@ -28,7 +28,7 @@ koshuQ half fullQ = dispatch . tokens where
                     (Word 0 "module" : _) -> moduleQ toks
                     _                     -> relmapQ toks
     moduleQ = consFullModuleQ fullQ . consHalfModule half
-    relmapQ = consFullRelmapQ fullQ . consHalfRelmap half . tokenTrees
+    relmapQ = consFullRelmapQ fullQ . consHalfRelmap half [] . tokenTrees
 
 -- Construct ExpQ of Module
 -- Tokens like @name in module context and relmap context
@@ -55,9 +55,9 @@ consFullRelmapQ
     -> ExpQ        -- ^ ExpQ of 'Relmap' v
 consFullRelmapQ fullQ = make where
     make = dataToExpQ (plain `extQ` custom)
-    custom (HalfRelmap _ ('@':op) _ _) =
+    custom (HalfRelmap _ _ ('@':op) _ _) =
         Just $ varE $ mkName op
-    custom (HalfRelmap _ op opd subs) =
+    custom (HalfRelmap _ _ op opd subs) =
         Just $ [| either consError id
                     ($fullQ
                      $(litE (stringL op))      -- String

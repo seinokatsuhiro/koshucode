@@ -7,6 +7,7 @@ module Koshucode.Baala.Base.Struct.Half.HalfModule
 , consFullModule
 ) where
 import Data.Generics
+import qualified Data.Maybe as Maybe
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude as Prelude
 import Koshucode.Baala.Base.Struct.Full.Assert
@@ -37,6 +38,13 @@ data HalfModule
 
 -- ----------------------  Half construction
 
+sourceLines :: [Token] -> [SourceLine]
+sourceLines xs = Maybe.mapMaybe sourceLine xs
+
+sourceLine :: Token -> Maybe SourceLine
+sourceLine (Line src) = Just src
+sourceLine _ = Nothing
+
 -- | First step of module construction.
 consHalfModule
     :: RelmapHalfCons  -- ^ Relmap half constructor
@@ -45,31 +53,28 @@ consHalfModule
 consHalfModule relmap = concatMap (classify relmap) . gather clause
 
 -- | Split into first clause and rest tokens
-clause :: [Token] -> (([SourceLine], [Token]), [Token])
-clause = loop [] where
-    loop ls (x@(Line _ _) : xs) = loop (x:ls) xs
-    loop ls ((Comment _) : xs)  = loop ls xs
-    loop ls (Space i : xs) = up ls $ clauseBody i xs -- initial indent is 'i' spaces
-    loop ls xs             = up ls $ clauseBody 0 xs -- no indent
+clause :: [Token] -> ([Token], [Token])
+clause = loop zero where
+    zero = Line $ SourceLine 0 ""
+    loop _  (ln@(Line _) : xs)   = loop ln xs
+    loop ln ((Comment _) : xs)   = loop ln xs
+    loop ln (Space i : xs) = clauseBody i ln xs -- initial indent is 'i' spaces
+    loop ln xs             = clauseBody 0 ln xs -- no indent
 
-    up ls (c, xs) = ((map src ls, c), xs)
-    src (Line n line) = SourceLine n line
-    src _ = bug
-
-clauseBody :: Int -> [Token] -> ([Token], [Token])
-clauseBody i = mid where
+clauseBody :: Int -> Token -> [Token] -> ([Token], [Token])
+clauseBody i ln xs = ln `cons1` mid xs where
     -- middle of line
-    mid ((Line _ _) : xs)    = beg xs
-    mid (x : xs)             = x `cons1` mid xs
-    mid xxs                  = ([], xxs)
+    mid xxs@(Line _ : _)    = beg xxs   -- next line
+    mid (x : xs2)           = x `cons1` mid xs2
+    mid xxs                 = ([], xxs)
 
     -- beginning of line
-    beg ((Line _ _) : xs)          = beg xs  -- skip empty line
-    beg (x@(Space n) : xs) | n > i = x `cons1` mid xs  -- indented line
-    beg xxs                        = ([], xxs)     -- non indented line
+    beg (x1@(Line _) : x2@(Space n) : xs2)
+        | n > i = x1 `cons1` (x2 `cons1` mid xs2) -- indented line
+    beg xxs     = ([], xxs)                   -- non indented line
 
 -- e1 = gather clause . tokens
--- e2 = e1 "a\nb\nc\n"
+-- e2 = e1 "a\nb\nc\n\n"
 -- e3 = e1 "a\n b\nc\n"
 -- e4 = e1 " a\n b\nc\n"
 -- e5 = e1 " a\n  b\nc\n"
@@ -78,12 +83,13 @@ clauseBody i = mid where
 -- e8 = e1 "a\n\n b\nc\n"
 -- e9 = e1 "a\n  \n b\nc\n"
 
-classify :: RelmapHalfCons -> ([SourceLine], [Token]) -> [HalfModule]
-classify half (src, toks) = halfMod toks' where
+classify :: RelmapHalfCons -> [Token] -> [HalfModule]
+classify half toks = halfMod toks' where
     toks' = sweepToken toks
+    src   = sourceLines toks
 
     halfRel :: [Token] -> HalfRelmap
-    halfRel = consHalfRelmap half . tokenTrees
+    halfRel = consHalfRelmap half src . tokenTrees
 
     halfMod :: [Token] -> [HalfModule]
     halfMod (Word 0 n : Word 0 ":" : xs) = rel n xs
@@ -97,6 +103,7 @@ classify half (src, toks) = halfMod toks' where
         | k == "|-"       = jud True  xs
         | k == "|-X"      = jud False xs
         | k == "|-x"      = jud False xs
+    halfMod []            = []
     halfMod _             = unk
 
     unk                   = [HUnknown src]
@@ -201,7 +208,7 @@ terms (TermN [n] : Word _ w : xs) = do
   xs' <- terms xs
   Right $ (n, stringValue w) : xs'
 terms [] = Right []
-terms (TermN ns : _) = Left $ AbortMalformedTerms (show ns) -- no content
-terms (Word _ c : _) = Left $ AbortMalformedTerms (show c) -- no name
-terms (x : _)        = Left $ AbortMalformedTerms (show x) -- ???
+terms (TermN ns : _) = Left $ AbortMalformedTerms [] (show ns) -- no content
+terms (Word _ c : _) = Left $ AbortMalformedTerms [] (show c) -- no name
+terms (x : _)        = Left $ AbortMalformedTerms [] (show x) -- ???
 

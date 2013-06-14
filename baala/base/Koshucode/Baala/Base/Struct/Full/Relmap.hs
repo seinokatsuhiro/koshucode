@@ -67,7 +67,7 @@ data Relmap v
     -- | Relmap that joints two relmaps
     | RelmapAppend (Relmap v) (Relmap v)
     -- | Relmap reference
-    | RelmapName   String
+    | RelmapName   HalfRelmap String
 
 -- | Function of relmap
 type RelmapSub v = [Rel v] -> Rel v -> Rel v
@@ -120,7 +120,7 @@ showRelmap = sh where
     sh (RelmapAlias  _ m)        = "RelmapAlias "  ++ show m
     sh (RelmapCalc   _ n _ subs) = "RelmapCalc "   ++ show n ++ " _" ++ joinSubs subs
     sh (RelmapAppend m1 m2)      = "RelmapAppend"  ++ joinSubs [m1, m2]
-    sh (RelmapName n)            = "RelmapName "   ++ show n
+    sh (RelmapName _ n)          = "RelmapName "   ++ show n
 
     joinSubs = concatMap sub
     sub m = " (" ++ sh m ++ ")"
@@ -130,7 +130,7 @@ instance Monoid (Relmap v) where
     mappend = RelmapAppend
 
 halfid :: HalfRelmap
-halfid = HalfRelmap ["id"] "id" [("operand", [])] []
+halfid = HalfRelmap ["id"] [] "id" [("operand", [])] []
 
 relid :: RelmapSub v
 relid _ r = r
@@ -148,7 +148,7 @@ instance Pretty (Relmap v) where
     doc (RelmapAlias  h _)     = doc h
     doc (RelmapCalc   h _ _ _) = doc h -- hang (text $ name m) 2 (doch (map doc ms))
     doc (RelmapAppend m1 m2)   = hang (doc m1) 2 (docRelmapAppend m2)
-    doc (RelmapName n)         = text n
+    doc (RelmapName   _ n)     = text n
 
 docRelmapAppend :: Relmap v -> Doc
 docRelmapAppend = docv . map pipe . relmapAppendList where
@@ -165,6 +165,7 @@ docRelmapAppend = docv . map pipe . relmapAppendList where
 
 data HalfRelmap = HalfRelmap
     { halfUsage    :: [String]      -- ^ Usages description
+    , halfLines    :: [SourceLine]  -- ^ Source information
     , halfOperator :: String        -- ^ Operator name of relmap operation
     , halfOperand  :: [Named [TokenTree]] -- ^ Operand of relmap operation
     , halfSubmap   :: [HalfRelmap]        -- ^ Subrelmaps in the operand
@@ -195,5 +196,5 @@ runRelmap ds = (<$>) where
                                    Right $ f rs' r
     RelmapAppend m1 m2  <$> r = do r' <- m1 <$> r
                                    m2 <$> r'
-    RelmapName op       <$> _ = Left $ AbortUnknownRelmap op
+    RelmapName h op     <$> _ = Left $ AbortUnknownRelmap (halfLines h) op
 

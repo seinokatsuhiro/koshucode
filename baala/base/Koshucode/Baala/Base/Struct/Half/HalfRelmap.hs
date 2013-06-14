@@ -65,6 +65,7 @@ type OperandParser = [TokenTree] -> [Named [TokenTree]]
 --   make 'HalfRelmap' from use of relational operator.
 type RelmapHalfCons
     =  String         -- ^ Operator name
+    -> [SourceLine]
     -> [TokenTree]    -- ^ Operand as source trees
     -> HalfRelmap     -- ^ Result half relmap with empty subs
 
@@ -72,17 +73,17 @@ makeRelmapHalfCons
     :: [(String, ([String], [TokenTree] -> [Named [TokenTree]]))]
        -- ^ [(op, (usage, half))]
     -> RelmapHalfCons
-makeRelmapHalfCons halfs op opd =
+makeRelmapHalfCons halfs op src opd =
     case lookup op halfs of
-      Just (usage, half) -> HalfRelmap usage op (addOperand opd $ half opd) []
-      Nothing -> HalfRelmap [] op [("operand", opd)] []
+      Just (usage, half) -> HalfRelmap usage src op (addOperand opd $ half opd) []
+      Nothing -> HalfRelmap [] src op [("operand", opd)] []
 
 addOperand :: a -> [(Named a)] -> [(Named a)]
 addOperand opd = (("operand", opd) :)
 
 -- | Construct half relmaps from source trees.
-consHalfRelmap :: RelmapHalfCons -> [TokenTree] -> HalfRelmap
-consHalfRelmap half = make where
+consHalfRelmap :: RelmapHalfCons -> [SourceLine] -> [TokenTree] -> HalfRelmap
+consHalfRelmap half src = make where
     make :: [TokenTree] -> HalfRelmap
     make xs = case divideBy bar xs of
                 [x] -> one x
@@ -96,18 +97,18 @@ consHalfRelmap half = make where
 
     one :: [TokenTree] -> HalfRelmap
     one [Branch _ xs] = make xs
-    one (Bloom (Word 0 op) : opd) = sub $ half op opd
-    one opd = HalfRelmap [] "?" [("operand", opd)] [] -- no operator
+    one (Bloom (Word 0 op) : opd) = sub $ half op src opd
+    one opd = HalfRelmap [] src "?" [("operand", opd)] [] -- no operator
 
     -- collect subrelmaps
     sub :: HalfRelmap -> HalfRelmap
-    sub h@(HalfRelmap usage op opd _) =
+    sub h@(HalfRelmap usage _ op opd _) =
         case lookup "relmap" opd of
-          Just xs -> HalfRelmap usage op opd $ map make' xs
+          Just xs -> HalfRelmap usage src op opd $ map make' xs
           Nothing -> h  -- no subrelmaps
 
 halfAppend :: [HalfRelmap] -> HalfRelmap
-halfAppend = HalfRelmap ["RELMAP | RELMAP"] "|" []
+halfAppend = HalfRelmap ["RELMAP | RELMAP"] [] "|" []
 
 
 
@@ -127,9 +128,9 @@ type RelmapFullCons v
 -- | Construct (full) relmap.
 makeConsFullRelmap :: [Named (RelmapFullCons v)] -> RelmapWholeCons v
 makeConsFullRelmap fullmap = whole where
-    whole h@(HalfRelmap u op _ hs) =
+    whole h@(HalfRelmap u src op _ hs) =
         case lookup op fullmap of
-          Nothing   -> Right $ RelmapName op
+          Nothing   -> Right $ RelmapName h op
           Just full -> do ms <- mapM whole hs
-                          addAbort (AbortUsage u) $ full ms h
+                          addAbort (AbortUsage src u) $ full ms h
 
