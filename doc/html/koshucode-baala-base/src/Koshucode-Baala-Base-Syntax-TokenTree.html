@@ -28,13 +28,13 @@
 <a name="line-19"></a><span class='hs-comment'>--   Blank tokens are excluded.</span>
 <a name="line-20"></a><span class='hs-comment'>-- </span>
 <a name="line-21"></a><span class='hs-comment'>--   &gt;&gt;&gt; tokenTrees $ tokens $ "meet (R | pick /a /b)"</span>
-<a name="line-22"></a><span class='hs-comment'>--   [Bloom (Word 0 "meet"),</span>
-<a name="line-23"></a><span class='hs-comment'>--    Branch 1 [</span>
-<a name="line-24"></a><span class='hs-comment'>--      Bloom (Word 0 "R"),</span>
-<a name="line-25"></a><span class='hs-comment'>--      Bloom (Word 0 "|"),</span>
-<a name="line-26"></a><span class='hs-comment'>--      Bloom (Word 0 "pick"),</span>
-<a name="line-27"></a><span class='hs-comment'>--      Bloom (TermN ["/a"]),</span>
-<a name="line-28"></a><span class='hs-comment'>--      Bloom (TermN ["/b"])]]</span>
+<a name="line-22"></a><span class='hs-comment'>--   [TreeL (Word 0 "meet"),</span>
+<a name="line-23"></a><span class='hs-comment'>--    TreeB 1 [</span>
+<a name="line-24"></a><span class='hs-comment'>--      TreeL (Word 0 "R"),</span>
+<a name="line-25"></a><span class='hs-comment'>--      TreeL (Word 0 "|"),</span>
+<a name="line-26"></a><span class='hs-comment'>--      TreeL (Word 0 "pick"),</span>
+<a name="line-27"></a><span class='hs-comment'>--      TreeL (TermN ["/a"]),</span>
+<a name="line-28"></a><span class='hs-comment'>--      TreeL (TermN ["/b"])]]</span>
 <a name="line-29"></a>
 <a name="line-30"></a><a name="tokenTrees"></a><span class='hs-definition'>tokenTrees</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Token</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span>
 <a name="line-31"></a><span class='hs-definition'>tokenTrees</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>trees</span> <span class='hs-varid'>parenType</span> <span class='hs-varop'>.</span> <span class='hs-varid'>sweepToken</span>
