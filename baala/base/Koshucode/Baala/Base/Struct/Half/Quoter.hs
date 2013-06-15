@@ -13,7 +13,7 @@ import Koshucode.Baala.Base.Struct.Half.Clause
 import Language.Haskell.TH hiding (Clause)
 import Language.Haskell.TH.Quote
 
--- | Make quasiquoter for @[koshu| ... |]@.
+{-| Make quasiquoter for @[koshu| ... |]@. -}
 koshuQuoter
     :: RelmapHalfCons -- ^ Relmap half constructor
     -> ExpQ           -- ^ Quotation expression of 'RelmapFullCons'
@@ -27,28 +27,29 @@ koshuQ half fullQ = dispatch . tokens where
     dispatch toks = case sweepLeft toks of
                     (Word 0 "section" : _) -> sectionQ toks
                     _                      -> relmapQ toks
-    sectionQ = consFullSectionQ fullQ . consClause half
-    relmapQ  = consFullRelmapQ  fullQ . consHalfRelmap half [] . tokenTrees
+    sectionQ = consSectionQ fullQ . consClause half
+    relmapQ  = consFullRelmapQ fullQ . consHalfRelmap half [] . tokenTrees
 
--- Construct ExpQ of Section
--- Tokens like @name in section context and relmap context
--- are Haskell variables.
-consFullSectionQ
+{- Construct ExpQ of Section
+   Tokens like @name in section context and relmap context
+   are Haskell variables. -}
+consSectionQ
     :: ExpQ      -- ^ Quotation expression of 'RelmapFullCons'
     -> [Clause]  -- ^ Materials of section
     -> ExpQ      -- ^ ExpQ of 'Section'
-consFullSectionQ fullQ xs =
+consSectionQ fullQ xs =
     [| either consError id
-         (consFullSection $fullQ $(dataToExpQ plain xs)) |]
+         (consSection $fullQ $(dataToExpQ plain xs)) |]
 
+{- construction error -}
 consError :: a -> b
 consError _ = error "Syntax error in [|koshu ...|]"
 
 plain :: b -> Maybe a
 plain _ = Nothing
 
--- Construct ExpQ of Relmap
--- Tokens like @name in relmap context are Haskell variables.
+{- Construct ExpQ of Relmap
+   Tokens like @name in relmap context are Haskell variables. -}
 consFullRelmapQ
     :: ExpQ        -- ^ Quotation expression of 'RelmapFullCons'
     -> HalfRelmap  -- ^ Target relmap operator
@@ -57,10 +58,9 @@ consFullRelmapQ fullQ = make where
     make = dataToExpQ (plain `extQ` custom)
     custom (HalfRelmap _ _ ('@':op) _ _) =
         Just $ varE $ mkName op
-    custom (HalfRelmap _ _ op opd subs) =
+    custom h@(HalfRelmap _ _ op opd subs) =
         Just $ [| either consError id
-                    ($fullQ
-                     $(litE (stringL op))      -- String
-                     $(dataToExpQ plain opd)   -- [Relmap v]
-                     $(listE (map make subs))) -- [HalfRelmap] -> [Relmap]
+                    ($fullQ $(dataToExpQ plain h))
+--                     $(dataToExpQ plain opd)   -- [Relmap v]
+--                     $(listE (map make subs))) -- [HalfRelmap] -> [Relmap]
                 |]

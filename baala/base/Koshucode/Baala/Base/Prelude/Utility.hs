@@ -33,6 +33,7 @@ import qualified Data.List as List
 import qualified Data.Map  as Map
 import qualified Data.Set  as Set
 
+{-| Entry in association list. -}
 type Named a = (String, a)
 
 mapFst :: (a -> c) -> (a,b) -> (c,b)
@@ -55,7 +56,7 @@ maybePairs (a:b:xs) = liftA ((a,b):) $ maybePairs xs
 maybePairs []       = Just []
 maybePairs _        = Nothing
 
--- | Remove duplicate elements
+{-| Remove duplicate elements. -}
 unique :: (Ord a) => [a] -> [a]
 unique xs = loop xs Set.empty where
     loop [] _ = []
@@ -66,13 +67,14 @@ unique xs = loop xs Set.empty where
 unionUp :: (Eq a) => [a] -> [a] -> [a]
 unionUp xs ys = (xs List.\\ ys) ++ ys
 
+{-| Gather what is gotten by splitter. -}
 gather :: ([a] -> (b, [a])) -> [a] -> [b]
-gather f = loop where
+gather one = loop where
     loop [] = []
-    loop xs = let (next, xs2) = f xs
-              in next : gather f xs2
+    loop xs = let (y, xs2) = one xs
+              in y : loop xs2
 
--- gather (key,value) to a Map key [value]
+{-| Gather (key,value) to a Map key [value] -}
 gatherToMap :: (Ord k) => [(k,v)] -> Map.Map k [v]
 gatherToMap xs = loop xs Map.empty where
     loop [] m = m

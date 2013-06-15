@@ -6,17 +6,18 @@ module Koshucode.Baala.Base.Struct.Half.HalfRelmap
 , ConsRelmap (..)
 , RelmapImplement (..)
 , OperandParser
+
   -- * Half constructor
 , RelmapHalfCons
 , consHalfRelmap
+
   -- * Full constructor
 , RelmapWholeCons
 , RelmapFullCons
 ) where
+import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Struct.Full.Relmap
 import Koshucode.Baala.Base.Syntax
-import Koshucode.Baala.Base.Prelude.Abort
-import Koshucode.Baala.Base.Prelude
 
 
 
@@ -114,8 +115,8 @@ halfAppend = HalfRelmap ["RELMAP | RELMAP"] [] "|" []
 
 -- ----------------------  Full construction
 
--- | Second step of relmap synthesis,
---   make 'Relmap' from contents of 'HalfRelmap'.
+{-| Second step of constructing relmap,
+    make 'Relmap' from contents of 'HalfRelmap'. -}
 type RelmapWholeCons v
     = HalfRelmap
     -> AbortOr (Relmap v) -- ^ Result relmap
@@ -125,7 +126,7 @@ type RelmapFullCons v
     -> HalfRelmap
     -> AbortOr (Relmap v) -- ^ Result relmap
 
--- | Construct (full) relmap.
+{-| Construct (full) relmap. -}
 makeConsFullRelmap :: [Named (RelmapFullCons v)] -> RelmapWholeCons v
 makeConsFullRelmap fullmap = whole where
     whole h@(HalfRelmap u src op _ hs) =

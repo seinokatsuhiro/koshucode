@@ -4,20 +4,23 @@
 {-| Intermidiate structure between 'String' and 'Section'. -}
 
 module Koshucode.Baala.Base.Struct.Half.Clause
-( Clause (..)
+( -- * Documentation
+  -- $Documentation
+  Clause (..)
 , consClause
-, consFullSection
+, consSection
 ) where
+
 import Data.Generics
-import qualified Data.Maybe as Maybe
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude as Prelude
 import Koshucode.Baala.Base.Struct.Full.Assert
-import Koshucode.Baala.Base.Struct.Full.Section
 import Koshucode.Baala.Base.Struct.Full.Relmap
+import Koshucode.Baala.Base.Struct.Full.Section
 import Koshucode.Baala.Base.Struct.Half.HalfRelmap
 import Koshucode.Baala.Base.Syntax
 import Prelude hiding (exp, mod)
+import qualified Data.Maybe as Maybe
 
 -- Synthesis process
 --
@@ -40,17 +43,8 @@ data Clause
 
 -- ----------------------  Half construction
 
-sourceLines :: [Token] -> [SourceLine]
-sourceLines xs = Maybe.mapMaybe sourceLine xs
-
-sourceLine :: Token -> Maybe SourceLine
-sourceLine (Line src) = Just src
-sourceLine _ = Nothing
-
-zeroLine :: SourceLine
-zeroLine = SourceLine 0 ""
-
-{-| First step of constructing 'Section'. -}
+{-| Construct 'Clause' list from 'Token' list.
+    This is a first step of constructing 'Section'. -}
 consClause
     :: RelmapHalfCons  -- ^ Relmap half constructor
     -> [Token]         -- ^ Source tokens
@@ -87,6 +81,16 @@ clause2 i ln xs = ln `cons1` mid xs where
 -- e7 = e1 "\na\nb\n"
 -- e8 = e1 "a\n\n b\nc\n"
 -- e9 = e1 "a\n  \n b\nc\n"
+
+sourceLines :: [Token] -> [SourceLine]
+sourceLines xs = Maybe.mapMaybe sourceLine xs
+
+sourceLine :: Token -> Maybe SourceLine
+sourceLine (Line src) = Just src
+sourceLine _ = Nothing
+
+zeroLine :: SourceLine
+zeroLine = SourceLine 0 ""
 
 classify :: RelmapHalfCons -> [Token] -> [Clause]
 classify half toks = cl toks' where
@@ -144,12 +148,12 @@ classify half toks = cl toks' where
 -- ----------------------  Full construction
 
 {-| Second step of constructing 'Section'. -}
-consFullSection
+consSection
     :: (StringValue v)
     => RelmapWholeCons v   -- ^ Relmap full constructor
     -> [Clause]            -- ^ Output of 'consClause'
     -> AbortOr (Section v) -- ^ Result section
-consFullSection whole xs = do
+consSection whole xs = do
   _       <- unk xs
   imports <- sequence $ imp xs
   judges  <- sequence $ jud xs
@@ -164,15 +168,14 @@ consFullSection whole xs = do
             , sectionJudge  = judges
             }
     where
-      consRel = whole
-      consMod = consFullSection whole
+      consSec = consSection whole
 
       mod (CSection _ n : _) = n
       mod (_ : xs2) = mod xs2
       mod [] = Nothing
 
       imp (CImport _ _ (Nothing) : xs2) = Right emptySection : imp xs2
-      imp (CImport _ _ (Just e)  : xs2) = consMod [e] : imp xs2
+      imp (CImport _ _ (Just e)  : xs2) = consSec [e] : imp xs2
       imp xs2 = skip imp xs2
 
       exp (CExport _ n : xs2) = n : exp xs2
@@ -182,14 +185,14 @@ consFullSection whole xs = do
       jud xs2 = skip jud xs2
 
       rel (CRelmap _ n r : xs2) =
-          do m  <- consRel r
+          do m  <- whole r
              ms <- rel xs2
              Right $ (n, m) : ms
       rel (_ : xs2) = rel xs2
       rel [] = Right []
 
       ass (CAssert _ q s r : xs2) =
-          do a  <- consRel r
+          do a  <- whole r
              as <- ass xs2
              Right $ (Assert q s a) : as
       ass (_ : xs2) = ass xs2
@@ -217,4 +220,28 @@ terms [] = Right []
 terms (TermN ns : _) = Left $ AbortMalformedTerms [] (show ns) -- no content
 terms (Word _ c : _) = Left $ AbortMalformedTerms [] (show c) -- no name
 terms (x : _)        = Left $ AbortMalformedTerms [] (show x) -- ???
+
+
+
+-- ----------------------
+-- $Documentation
+--
+-- There are five types of 'Clause'.
+-- Textual representation of 'Section' is a list of clauses.
+-- 'consClause' constructs clause list from section text.
+--
+-- [name @:@ relmap]
+--   Relmap clause
+--
+-- [@affirm@ relsign relmap]
+--   Assertion clause
+--
+-- [@deny@ relsign relmap]
+--   Assertion clause
+--
+-- [@|--@ relsign \/name content ...]
+--   Judgement clause
+--
+-- [@|-X@ relsign \/name content ...]
+--   Judgement clause
 
