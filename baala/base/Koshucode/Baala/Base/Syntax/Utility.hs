@@ -7,6 +7,10 @@ module Koshucode.Baala.Base.Syntax.Utility
   termNames
 , termNamePairs
 , termTreePairs
+
+  -- * Liner
+, liner
+, sourceLines
 , operandGroup
 
   -- * Calculation
@@ -14,8 +18,10 @@ module Koshucode.Baala.Base.Syntax.Utility
 , Ripen
 , crop
 ) where
+
 import Koshucode.Baala.Base.Syntax.TokenTree
 import Koshucode.Baala.Base.Prelude
+import qualified Data.Maybe as Maybe
 
 
 
@@ -81,6 +87,54 @@ termTreePairs = loop where
 -- e3 = e1 "/a /x"
 -- e4 = e1 "/a (/x + 1) /b /y"
 -- e5 = e1 "/a (/x + 1) /b"
+
+
+
+-- ---------------------- Liner
+
+liner :: [Token] -> [[Token]]
+liner = gather linerSplit
+
+{-| Split into first clause and rest tokens -}
+linerSplit :: [Token] -> ([Token], [Token])
+linerSplit = loop zero where
+    zero = Line zeroLine
+    loop _  (ln@(Line _) : xs)  = loop ln xs
+    loop ln ((Comment _) : xs)  = loop ln xs
+    loop ln (Space i : xs) = linerSplit2 i ln xs -- initial indent is 'i' spaces
+    loop ln xs             = linerSplit2 0 ln xs -- no indent
+
+linerSplit2 :: Int -> Token -> [Token] -> ([Token], [Token])
+linerSplit2 i ln xs = ln `cons1` mid xs where
+    -- middle of line
+    mid xxs@(Line _ : _)    = beg xxs   -- next line
+    mid (x : xs2)           = x `cons1` mid xs2
+    mid xxs                 = ([], xxs)
+
+    -- beginning of line
+    beg (x1@(Line _) : x2@(Space n) : xs2)
+        | n > i = x1 `cons1` (x2 `cons1` mid xs2) -- indented line
+    beg xxs     = ([], xxs)                   -- non indented line
+
+zeroLine :: SourceLine
+zeroLine = SourceLine 0 ""
+
+sourceLines :: [Token] -> [SourceLine]
+sourceLines xs = Maybe.mapMaybe sourceLine xs
+
+sourceLine :: Token -> Maybe SourceLine
+sourceLine (Line src) = Just src
+sourceLine _ = Nothing
+
+-- e1 = mapM_ print . liner . tokens
+-- e2 = e1 "a\nb\nc\n\n"
+-- e3 = e1 "a\n b\nc\n"
+-- e4 = e1 " a\n b\nc\n"
+-- e5 = e1 " a\n  b\nc\n"
+-- e6 = e1 " a\nb\nc\n"
+-- e7 = e1 "\na\nb\n"
+-- e8 = e1 "a\n\n b\nc\n"
+-- e9 = e1 "a\n  \n b\nc\n"
 
 -- | Split operand into named group.
 --   Non quoted words beginning with hyphen, e.g., @-x@,

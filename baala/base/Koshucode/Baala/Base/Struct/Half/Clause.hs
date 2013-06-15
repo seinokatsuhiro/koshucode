@@ -20,7 +20,6 @@ import Koshucode.Baala.Base.Struct.Full.Section
 import Koshucode.Baala.Base.Struct.Half.HalfRelmap
 import Koshucode.Baala.Base.Syntax
 import Prelude hiding (exp, mod)
-import qualified Data.Maybe as Maybe
 
 -- Synthesis process
 --
@@ -30,12 +29,14 @@ import qualified Data.Maybe as Maybe
 --   make full relmap  :: HalfRelmap    -> Relmap v
 
 data Clause
-    = CSection [SourceLine] (Maybe String)         -- ^ Section name
-    | CImport  [SourceLine] [Token] (Maybe Clause) -- ^ Importing section name
-    | CExport  [SourceLine] String                 -- ^ Exporting relmap name
-    | CRelmap  [SourceLine] String HalfRelmap      -- ^ Relmap and its name
-    | CAssert  [SourceLine] Bool String HalfRelmap -- ^ Assertions of relmaps
-    | CJudge   [SourceLine] Bool String [Token]    -- ^ Here data
+    = CSection [SourceLine] (Maybe String)          -- ^ Section name
+    | CImport  [SourceLine] [Token] (Maybe Clause)  -- ^ Importing section name
+    | CExport  [SourceLine] String                  -- ^ Exporting relmap name
+    | CRelmap  [SourceLine] String HalfRelmap       -- ^ Relmap and its name
+    | TRelmap  [SourceLine] String [TokenTree]      -- ^ Not include HalfRelmap
+    | CAssert  [SourceLine] Bool String HalfRelmap  -- ^ Assertions of relmaps
+    | TAssert  [SourceLine] Bool String [TokenTree] -- ^ Not include HalfRelmap
+    | CJudge   [SourceLine] Bool String [Token]     -- ^ Here data
     | CUnknown [SourceLine]       -- ^ Unknown clause
       deriving (Show, Data, Typeable)
 
@@ -49,56 +50,19 @@ consClause
     :: RelmapHalfCons  -- ^ Relmap half constructor
     -> [Token]         -- ^ Source tokens
     -> [Clause]        -- ^ Result clauses
-consClause relmap = concatMap (classify relmap) . gather clause
+consClause half = clauseHalf half . concatMap clause . liner
 
-{-| Split into first clause and rest tokens -}
-clause :: [Token] -> ([Token], [Token])
-clause = loop zero where
-    zero = Line zeroLine
-    loop _  (ln@(Line _) : xs)  = loop ln xs
-    loop ln ((Comment _) : xs)  = loop ln xs
-    loop ln (Space i : xs) = clause2 i ln xs -- initial indent is 'i' spaces
-    loop ln xs             = clause2 0 ln xs -- no indent
+clauseHalf :: RelmapHalfCons -> [Clause] -> [Clause]
+clauseHalf half = map f where
+    cons = consHalfRelmap half
+    f (TRelmap src n ts)   = CRelmap src n   $ cons src ts
+    f (TAssert src q s ts) = CAssert src q s $ cons src ts
+    f x = x
 
-clause2 :: Int -> Token -> [Token] -> ([Token], [Token])
-clause2 i ln xs = ln `cons1` mid xs where
-    -- middle of line
-    mid xxs@(Line _ : _)    = beg xxs   -- next line
-    mid (x : xs2)           = x `cons1` mid xs2
-    mid xxs                 = ([], xxs)
-
-    -- beginning of line
-    beg (x1@(Line _) : x2@(Space n) : xs2)
-        | n > i = x1 `cons1` (x2 `cons1` mid xs2) -- indented line
-    beg xxs     = ([], xxs)                   -- non indented line
-
--- e1 = gather clause . tokens
--- e2 = e1 "a\nb\nc\n\n"
--- e3 = e1 "a\n b\nc\n"
--- e4 = e1 " a\n b\nc\n"
--- e5 = e1 " a\n  b\nc\n"
--- e6 = e1 " a\nb\nc\n"
--- e7 = e1 "\na\nb\n"
--- e8 = e1 "a\n\n b\nc\n"
--- e9 = e1 "a\n  \n b\nc\n"
-
-sourceLines :: [Token] -> [SourceLine]
-sourceLines xs = Maybe.mapMaybe sourceLine xs
-
-sourceLine :: Token -> Maybe SourceLine
-sourceLine (Line src) = Just src
-sourceLine _ = Nothing
-
-zeroLine :: SourceLine
-zeroLine = SourceLine 0 ""
-
-classify :: RelmapHalfCons -> [Token] -> [Clause]
-classify half toks = cl toks' where
+clause :: [Token] -> [Clause]
+clause toks = cl toks' where
     toks' = sweepToken toks
     src   = sourceLines toks
-
-    halfRel :: [Token] -> HalfRelmap
-    halfRel = consHalfRelmap half src . tokenTrees
 
     cl :: [Token] -> [Clause]
     cl (Word 0 n : Word 0 ":" : xs) = rel n xs
@@ -127,15 +91,15 @@ classify half toks = cl toks' where
 
     imp _                 = [CImport src toks Nothing]
 
-    rel n xs              = [CRelmap src n $ halfRel xs]
+    rel n xs              = [TRelmap src n $ tokenTrees xs]
 
     jud q (Word _ s : xs) = [CJudge src q s xs]
     jud _ _ = unk
 
-    ass q (Word _ s : xs) = [CAssert src q s $ halfRel xs]
+    ass q (Word _ s : xs) = [TAssert src q s $ tokenTrees xs]
     ass _ _ = unk
 
--- e1 = consClause $ makeSynth1 []
+-- e1 = mapM_ print . clause . tokens
 -- e2 = e1 "section 'http://example.com/'"
 -- e3 = e1 "import 'http://example.com/'"
 -- e4 = e1 "export aa"
