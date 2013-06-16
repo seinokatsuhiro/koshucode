@@ -6,16 +6,16 @@
 --   Dependencies of significant data types.
 -- 
 --   * 'Section' uses 'Section', 'Assert', 'Relmap',
---     'Koshucode.Baala.Base.Data.Judge.Judge' and 'ConsRelmap'.
+--     'Koshucode.Baala.Base.Data.Judge.Judge' and 'RelmapCons'.
 -- 
 --   * 'Assert' uses 'Relmap'.
 -- 
 --   * 'Relmap' uses 'Relmap' and
 --     'Koshucode.Baala.Base.Data.Rel.Rel'.
 --     
---   * 'ConsRelmap' uses 'ConsHalfRelmap' and 'RelmapFullCons'.
+--   * 'RelmapCons' uses 'RelmapHalfCons' and 'RelmapFullCons'.
 -- 
---   * 'ConsHalfRelmap' uses 'HalfRelmap' and
+--   * 'RelmapHalfCons' uses 'HalfRelmap' and
 --     'Koshucode.Baala.Base.Syntax.TokenTree.TokenTree'.
 -- 
 --   * 'RelmapFullCons' uses 'Relmap' and
@@ -29,16 +29,19 @@
 
 module Koshucode.Baala.Base.Struct
 ( module Koshucode.Baala.Base.Struct.Full.Assert
-, module Koshucode.Baala.Base.Struct.Full.Section
+, module Koshucode.Baala.Base.Struct.Full.HalfRelmap
 , module Koshucode.Baala.Base.Struct.Full.Relmap
+, module Koshucode.Baala.Base.Struct.Full.Section
 , module Koshucode.Baala.Base.Struct.Half.Clause
 , module Koshucode.Baala.Base.Struct.Half.HalfRelmap
 , module Koshucode.Baala.Base.Struct.Half.Quoter
 , module Koshucode.Baala.Base.Struct.SectionIO
 ) where
+
 import Koshucode.Baala.Base.Struct.Full.Assert
-import Koshucode.Baala.Base.Struct.Full.Section
+import Koshucode.Baala.Base.Struct.Full.HalfRelmap
 import Koshucode.Baala.Base.Struct.Full.Relmap
+import Koshucode.Baala.Base.Struct.Full.Section
 import Koshucode.Baala.Base.Struct.Half.Clause
 import Koshucode.Baala.Base.Struct.Half.HalfRelmap
 import Koshucode.Baala.Base.Struct.Half.Quoter

@@ -8,8 +8,8 @@ module Koshucode.Baala.Base.Syntax.Utility
 , termNamePairs
 , termTreePairs
 
-  -- * Liner
-, liner
+  -- * Lines
+, clausify
 , sourceLines
 , operandGroup
 
@@ -90,22 +90,23 @@ termTreePairs = loop where
 
 
 
--- ---------------------- Liner
+-- ---------------------- Clausify
 
-liner :: [Token] -> [[Token]]
-liner = gather linerSplit
+{-| Convert token list into list of token clauses -}
+clausify :: [Token] -> [[Token]]
+clausify = gather clausifySplit
 
 {-| Split into first clause and rest tokens -}
-linerSplit :: [Token] -> ([Token], [Token])
-linerSplit = loop zero where
+clausifySplit :: [Token] -> ([Token], [Token])
+clausifySplit = loop zero where
     zero = Line zeroLine
     loop _  (ln@(Line _) : xs)  = loop ln xs
     loop ln ((Comment _) : xs)  = loop ln xs
-    loop ln (Space i : xs) = linerSplit2 i ln xs -- initial indent is 'i' spaces
-    loop ln xs             = linerSplit2 0 ln xs -- no indent
+    loop ln (Space i : xs) = clausifySplit2 i ln xs -- initial indent is 'i' spaces
+    loop ln xs             = clausifySplit2 0 ln xs -- no indent
 
-linerSplit2 :: Int -> Token -> [Token] -> ([Token], [Token])
-linerSplit2 i ln xs = ln `cons1` mid xs where
+clausifySplit2 :: Int -> Token -> [Token] -> ([Token], [Token])
+clausifySplit2 i ln xs = ln `cons1` mid xs where
     -- middle of line
     mid xxs@(Line _ : _)    = beg xxs   -- next line
     mid (x : xs2)           = x `cons1` mid xs2
@@ -126,7 +127,7 @@ sourceLine :: Token -> Maybe SourceLine
 sourceLine (Line src) = Just src
 sourceLine _ = Nothing
 
--- e1 = mapM_ print . liner . tokens
+-- e1 = mapM_ print . clausify . tokens
 -- e2 = e1 "a\nb\nc\n\n"
 -- e3 = e1 "a\n b\nc\n"
 -- e4 = e1 " a\n b\nc\n"

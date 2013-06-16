@@ -1,9 +1,11 @@
 {-# OPTIONS_GHC -Wall #-}
 
+{-| Intermediate data between 'String' and 'Relmap'. -}
+
 module Koshucode.Baala.Base.Struct.Half.HalfRelmap
 ( -- * Relmap implementation
-  makeConsRelmap
-, ConsRelmap (..)
+  makeRelmapCons
+, RelmapCons (..)
 , RelmapImplement (..)
 , OperandParser
 
@@ -15,7 +17,9 @@ module Koshucode.Baala.Base.Struct.Half.HalfRelmap
 , RelmapWholeCons
 , RelmapFullCons
 ) where
-import Koshucode.Baala.Base.Prelude
+
+import Koshucode.Baala.Base.Prelude hiding (cat)
+import Koshucode.Baala.Base.Struct.Full.HalfRelmap
 import Koshucode.Baala.Base.Struct.Full.Relmap
 import Koshucode.Baala.Base.Syntax
 
@@ -24,24 +28,24 @@ import Koshucode.Baala.Base.Syntax
 -- ----------------------  Relmap implementation
 
 -- | Make half and full relmap constructors.
-makeConsRelmap
+makeRelmapCons
     :: [RelmapImplement v]  -- ^ Implementations of relmap operator
-    -> (ConsRelmap v)       -- ^ Relmap constructors
-makeConsRelmap = make . unzip . map split where
+    -> (RelmapCons v)       -- ^ Relmap constructors
+makeRelmapCons = make . unzip . map split where
     split (RelmapImplement n half full usage) =
         ((n, (usage, half)), (n, full))
     make (halfs, fulls) = let half = makeRelmapHalfCons halfs
                               full = makeConsFullRelmap fulls
-                          in ConsRelmap half full
+                          in RelmapCons half full
 
 -- | Half and full relmap constructor
-data ConsRelmap v = ConsRelmap
+data RelmapCons v = RelmapCons
     { consHalf :: RelmapHalfCons
     , consFull :: RelmapWholeCons v
     }
 
-instance Show (ConsRelmap v) where
-    show _ = "ConsRelmap half full"
+instance Show (RelmapCons v) where
+    show _ = "RelmapCons <half> <full>"
 
 -- | Implementation of relmap operator.
 --   It consists of (1) operator name,
@@ -66,7 +70,7 @@ type OperandParser = [TokenTree] -> [Named [TokenTree]]
 --   make 'HalfRelmap' from use of relational operator.
 type RelmapHalfCons
     =  String         -- ^ Operator name
-    -> [SourceLine]
+    -> [SourceLine]   -- ^ Source information
     -> [TokenTree]    -- ^ Operand as source trees
     -> HalfRelmap     -- ^ Result half relmap with empty subs
 
@@ -82,34 +86,48 @@ makeRelmapHalfCons halfs op src opd =
 addOperand :: a -> [(Named a)] -> [(Named a)]
 addOperand opd = (("operand", opd) :)
 
--- | Construct half relmaps from source trees.
+{-| Construct half relmaps from source trees.
+
+    [@\[TokenTree\] -> \[\[TokenTree\]\]@]
+       Divide list of 'TokenTree' by vertical bar (@|@).
+
+    [@\[\[TokenTree\]\] -> \[HalfRelmap\]@]
+       Construct each 'HalfRelmap' from lists of 'TokenTree'.
+       When there are subrelmaps in token trees,
+       constructs 'HalfRelmap' recursively.
+
+    [@\[HalfRelmap\] -> HalfRelmap@]
+       Wrap list of 'HalfRelmap' into one 'HalfRelmap'
+       that has these relmaps in 'halfSubmap'.
+ -}
 consHalfRelmap :: RelmapHalfCons -> [SourceLine] -> [TokenTree] -> HalfRelmap
-consHalfRelmap half src = make where
-    make :: [TokenTree] -> HalfRelmap
-    make xs = case divideBy bar xs of
+consHalfRelmap half src = cons where
+    cons' :: TokenTree -> HalfRelmap
+    cons' x = cons [x]
+
+    cons :: [TokenTree] -> HalfRelmap
+    cons xs = case bar xs of
                 [x] -> one x
-                xs2 -> halfAppend $ map make xs2
+                xs2 -> cat $ map cons xs2
 
-    make' :: TokenTree -> HalfRelmap
-    make' x = make [x]
+    bar :: [TokenTree] -> [[TokenTree]]
+    bar = divideBy $ TreeL (Word 0 "|") -- non-quoted vertical bar
 
-    bar :: TokenTree
-    bar = TreeL $ Word 0 "|"  -- non-quoted vertical bar
+    cat :: [HalfRelmap] -> HalfRelmap
+    cat = HalfRelmap ["RELMAP | RELMAP"] src "|" []
 
+    -- half relmap from tokens
     one :: [TokenTree] -> HalfRelmap
-    one [TreeB _ xs] = make xs
-    one (TreeL (Word 0 op) : opd) = sub $ half op src opd
+    one [TreeB _ xs] = cons xs
+    one (TreeL (Word 0 op) : opd) = submap $ half op src opd
     one opd = HalfRelmap [] src "?" [("operand", opd)] [] -- no operator
 
     -- collect subrelmaps
-    sub :: HalfRelmap -> HalfRelmap
-    sub h@(HalfRelmap usage _ op opd _) =
+    submap :: HalfRelmap -> HalfRelmap
+    submap h@(HalfRelmap u _ op opd _) =
         case lookup "relmap" opd of
-          Just xs -> HalfRelmap usage src op opd $ map make' xs
+          Just xs -> HalfRelmap u src op opd $ map cons' xs
           Nothing -> h  -- no subrelmaps
-
-halfAppend :: [HalfRelmap] -> HalfRelmap
-halfAppend = HalfRelmap ["RELMAP | RELMAP"] [] "|" []
 
 
 
@@ -123,7 +141,7 @@ type RelmapWholeCons v
 
 type RelmapFullCons v
     =  [Relmap v]         -- ^ Subrelmaps computed by 'consFullRelmap'
-    -> HalfRelmap
+    -> HalfRelmap         -- ^ Half-constructed relmap
     -> AbortOr (Relmap v) -- ^ Result relmap
 
 {-| Construct (full) relmap. -}

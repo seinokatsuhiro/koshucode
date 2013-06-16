@@ -8,6 +8,7 @@ module Koshucode.Baala.Base.Struct.Full.Assert
 , runAssertJudges
 , runAssertDataset
 ) where
+
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Struct.Full.Relmap
@@ -15,9 +16,9 @@ import Koshucode.Baala.Base.Struct.Full.Relmap
 -- | Affirm or deny a relation.
 --   It consists of logical quality, relsign, and relmap.
 data Assert v = Assert
-    { assertQuality :: Bool
-    , assertRelsign :: Relsign
-    , assertRelmap  :: Relmap v
+    { assertQuality :: Bool        -- ^ Logical quality
+    , assertRelsign :: Relsign     -- ^ Sign of relation
+    , assertRelmap  :: Relmap v    -- ^ Relmap
     } deriving (Show)
 
 instance Name (Assert v) where
@@ -45,12 +46,19 @@ runAssertJudges
 runAssertJudges as = runAssertDataset as . dataset
 
 -- | Calculate assertion list.
-runAssertDataset :: (Ord v, Nil v) => [Assert v] -> Dataset v
-                 -> AbortOr [Judge v]
-runAssertDataset as ds = mapM each as >>= return . concat
-    where each (Assert q s m) = do
-            let judges (Rel h b) = map (judge h) b
-                judge h = Judge q s . zip (headNames h)
-            r <- runRelmap ds m reldee
-            return $ judges r
+runAssertDataset ::
+    (Ord v, Nil v) => [Assert v] -> Dataset v -> AbortOr [Judge v]
+runAssertDataset as ds = judges where
+    judges = do
+      js <- mapM each as
+      return $ concat js
+    each (Assert q s m) = do
+      r <- runRelmap ds m reldee
+      return $ judgesFromRel q s r
+
+{-| Convert relation to list of judges -}
+judgesFromRel :: Bool -> Relsign -> Rel v -> [Judge v]
+judgesFromRel q s = judges where
+    judges (Rel h b) = map (judge h) b
+    judge h = Judge q s . zip (headNames h)
 

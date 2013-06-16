@@ -29,7 +29,7 @@ sectionRead
     -> String     -- ^ Source text
     -> AbortOr (Section v)  -- ^ Result section from source text
 sectionRead md src = md2 where
-    (ConsRelmap half full) = sectionCons md
+    (RelmapCons half full) = sectionCons md
     md2 = consSection full $ consClause half $ tokens src
 
 -- | Read section from file.

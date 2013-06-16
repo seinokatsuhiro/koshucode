@@ -33,7 +33,7 @@ data Section v = Section {
     , sectionAssert :: [Assert v]         -- ^ Assertions of relmaps
     , sectionRelmap :: [Named (Relmap v)] -- ^ Relmaps and its name
     , sectionJudge  :: [Judge v]          -- ^ Here data
-    , sectionCons   :: ConsRelmap v       -- ^ Readers and writers for this section
+    , sectionCons   :: RelmapCons v       -- ^ Readers and writers for this section
     } deriving (Show)
 
 instance (Ord v, Pretty v) => Pretty (Section v) where
@@ -80,12 +80,12 @@ makeLinker rs' = link where
 -- ----------------------  Constructor
 
 -- | Section that has no contents.
-makeEmptySection :: ConsRelmap v -> Section v
+makeEmptySection :: RelmapCons v -> Section v
 makeEmptySection = Section Nothing [] [] [] [] []
 
 -- | Section that has no contents.
 emptySection :: Section v
-emptySection = makeEmptySection $ makeConsRelmap []
+emptySection = makeEmptySection $ makeRelmapCons []
 
 -- | Section that has only here data.
 dataSection :: [Judge v] -> Section v

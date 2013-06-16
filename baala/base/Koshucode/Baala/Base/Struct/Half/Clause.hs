@@ -15,7 +15,7 @@ import Data.Generics
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude as Prelude
 import Koshucode.Baala.Base.Struct.Full.Assert
-import Koshucode.Baala.Base.Struct.Full.Relmap
+import Koshucode.Baala.Base.Struct.Full.HalfRelmap
 import Koshucode.Baala.Base.Struct.Full.Section
 import Koshucode.Baala.Base.Struct.Half.HalfRelmap
 import Koshucode.Baala.Base.Syntax
@@ -50,7 +50,7 @@ consClause
     :: RelmapHalfCons  -- ^ Relmap half constructor
     -> [Token]         -- ^ Source tokens
     -> [Clause]        -- ^ Result clauses
-consClause half = clauseHalf half . concatMap clause . liner
+consClause half = clauseHalf half . concatMap clause . clausify
 
 clauseHalf :: RelmapHalfCons -> [Clause] -> [Clause]
 clauseHalf half = map f where

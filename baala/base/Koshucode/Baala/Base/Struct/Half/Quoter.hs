@@ -7,7 +7,7 @@ module Koshucode.Baala.Base.Struct.Half.Quoter
 ) where
 import Data.Generics
 import Koshucode.Baala.Base.Syntax
-import Koshucode.Baala.Base.Struct.Full.Relmap
+import Koshucode.Baala.Base.Struct.Full.HalfRelmap
 import Koshucode.Baala.Base.Struct.Half.HalfRelmap
 import Koshucode.Baala.Base.Struct.Half.Clause
 import Language.Haskell.TH hiding (Clause)
