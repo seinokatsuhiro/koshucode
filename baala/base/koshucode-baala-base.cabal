@@ -1,0 +1,105 @@
+-- The name of the package.
+name:                koshucode-baala-base
+
+-- The package version.  See the Haskell package versioning policy (PVP) 
+-- for standards guiding when and how versions should be incremented.
+-- http://www.haskell.org/haskellwiki/Package_versioning_policy
+-- PVP summary:      +-+------- breaking API changes
+--                   | | +----- non-breaking API additions
+--                   | | | +--- code changes with no API change
+version:             0.10.0.0
+
+-- A short (one-line) description of the package.
+synopsis:            A notational system for relational data
+
+-- A longer description of the package.
+description:         Koshucode is a notation for people and computers
+                     who read, write, and calculate relational data.
+                     This library provides functions for handling
+                     koshucode on computers.
+
+-- The license under which the package is released.
+license:             BSD3
+
+-- The file containing the license text.
+license-file:        LICENSE
+
+-- The package author(s).
+author:              SEINO Katsuhiro
+
+-- An email address to which users can send suggestions, bug reports, and 
+-- patches.
+maintainer:
+
+-- A copyright notice.
+copyright:           2013, SEINO Katsuhiro
+
+category:            Data, Database, Language, Text
+
+build-type:          Simple
+
+-- Constraint on the version of Cabal needed to build this package.
+cabal-version:       >= 1.8
+
+extra-source-files:
+
+library
+  -- Modules exported by the library.
+  exposed-modules:
+        Koshucode.Baala.Base
+
+        Koshucode.Baala.Base.Data
+        Koshucode.Baala.Base.Data.Dataset
+        Koshucode.Baala.Base.Data.Judge
+        Koshucode.Baala.Base.Data.Rel
+        Koshucode.Baala.Base.Data.Rel.Relhead
+        Koshucode.Baala.Base.Data.Rel.Relterm
+        Koshucode.Baala.Base.Data.ValueClass
+
+        Koshucode.Baala.Base.Kit
+        Koshucode.Baala.Base.Kit.Order
+        Koshucode.Baala.Base.Kit.WithName
+
+        Koshucode.Baala.Base.Prelude
+        Koshucode.Baala.Base.Prelude.Abort
+        Koshucode.Baala.Base.Prelude.Abort.Source
+        Koshucode.Baala.Base.Prelude.Abort.Symbol
+        Koshucode.Baala.Base.Prelude.Abort.Utility
+        Koshucode.Baala.Base.Prelude.Position
+        Koshucode.Baala.Base.Prelude.Pretty
+        Koshucode.Baala.Base.Prelude.Utility
+
+        Koshucode.Baala.Base.Relmap
+        Koshucode.Baala.Base.Relmap.Assert
+        Koshucode.Baala.Base.Relmap.HalfRelmap
+        Koshucode.Baala.Base.Relmap.Implement
+        Koshucode.Baala.Base.Relmap.Relmap
+        Koshucode.Baala.Base.Relmap.RelmapCons
+
+        Koshucode.Baala.Base.Section
+        Koshucode.Baala.Base.Section.Clause
+        Koshucode.Baala.Base.Section.Quoter
+        Koshucode.Baala.Base.Section.Run
+        Koshucode.Baala.Base.Section.Section
+        Koshucode.Baala.Base.Section.SectionIO
+        Koshucode.Baala.Base.Section.SectionUnion
+
+        Koshucode.Baala.Base.Syntax
+        Koshucode.Baala.Base.Syntax.Binary
+        Koshucode.Baala.Base.Syntax.Token
+        Koshucode.Baala.Base.Syntax.TokenTree
+        Koshucode.Baala.Base.Syntax.Tree
+        Koshucode.Baala.Base.Syntax.Utility
+
+  -- Modules included in this library but not exported.
+  --other-modules:       
+  
+  -- Other library packages from which modules are imported.
+  build-depends:
+         base             == 4.5.*
+       , containers       == 0.4.*
+       , pretty           == 1.1.*
+       , syb              == 0.3.*
+       , template-haskell == 2.7.*
+
+  --ghc-options:         -Wall -fno-ignore-asserts
