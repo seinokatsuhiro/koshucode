@@ -12,25 +12,30 @@
 <a name="line-3"></a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Vanilla</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span><span class='hs-varop'>.</span><span class='hs-conid'>Operand</span>
 <a name="line-4"></a><span class='hs-layout'>(</span> <span class='hs-conid'>VanillaOperand</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span>
 <a name="line-5"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
-<a name="line-6"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Minimal</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>M</span>
-<a name="line-7"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Struct</span>
+<a name="line-6"></a>
+<a name="line-7"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Minimal</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>Mini</span>
 <a name="line-8"></a>
-<a name="line-9"></a><a name="VanillaOperand"></a><span class='hs-comment'>-- | 'M.OperandPattern' for relational operations.</span>
+<a name="line-9"></a><a name="VanillaOperand"></a><span class='hs-comment'>-- | 'Mini.OperandPattern' for relational operations.</span>
 <a name="line-10"></a><a name="VanillaOperand"></a><span class='hs-keyword'>data</span> <span class='hs-conid'>VanillaOperand</span>
-<a name="line-11"></a>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>LikeHold</span>    <span class='hs-comment'>-- ^ Boolean expression</span>
-<a name="line-12"></a>    <span class='hs-keyglyph'>|</span> <span class='hs-conid'>LikeVal</span>     <span class='hs-comment'>-- ^ List of new term and expression</span>
-<a name="line-13"></a>    <span class='hs-keyglyph'>|</span> <span class='hs-conid'>LikeMeet</span>    <span class='hs-comment'>-- ^ Relmap and maybe shared terms</span>
-<a name="line-14"></a>    <span class='hs-keyglyph'>|</span> <span class='hs-conid'>LikeSource</span>  <span class='hs-comment'>-- ^ Relsign and list of terms</span>
-<a name="line-15"></a>      <span class='hs-keyword'>deriving</span> <span class='hs-layout'>(</span><span class='hs-conid'>Show</span><span class='hs-layout'>,</span> <span class='hs-conid'>Eq</span><span class='hs-layout'>,</span> <span class='hs-conid'>Enum</span><span class='hs-layout'>)</span>
+<a name="line-11"></a>    <span class='hs-comment'>{-| Boolean expression -}</span>
+<a name="line-12"></a>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>LikeHold</span>
+<a name="line-13"></a>
+<a name="line-14"></a>    <span class='hs-comment'>{-| List of new term and expression -}</span>
+<a name="line-15"></a>    <span class='hs-keyglyph'>|</span> <span class='hs-conid'>LikeVal</span>
 <a name="line-16"></a>
-<a name="line-17"></a><a name="instance%20M.OperandPattern%20VanillaOperand"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>M</span><span class='hs-varop'>.</span><span class='hs-conid'>OperandPattern</span> <span class='hs-conid'>VanillaOperand</span> <span class='hs-keyword'>where</span>
-<a name="line-18"></a>    <span class='hs-varid'>operandParser</span> <span class='hs-conid'>LikeHold</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>terms</span>
-<a name="line-19"></a>    <span class='hs-varid'>operandParser</span> <span class='hs-conid'>LikeVal</span>    <span class='hs-keyglyph'>=</span> <span class='hs-varid'>terms</span>
-<a name="line-20"></a>    <span class='hs-varid'>operandParser</span> <span class='hs-conid'>LikeMeet</span>   <span class='hs-keyglyph'>=</span> <span class='hs-conid'>M</span><span class='hs-varop'>.</span><span class='hs-varid'>operandParser</span> <span class='hs-conid'>M</span><span class='hs-varop'>.</span><span class='hs-conid'>LikeMeet</span>
-<a name="line-21"></a>    <span class='hs-varid'>operandParser</span> <span class='hs-conid'>LikeSource</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>M</span><span class='hs-varop'>.</span><span class='hs-varid'>operandParser</span> <span class='hs-conid'>M</span><span class='hs-varop'>.</span><span class='hs-conid'>LikeSource</span>
+<a name="line-17"></a>    <span class='hs-comment'>{-| Relmap and maybe shared terms -}</span>
+<a name="line-18"></a>    <span class='hs-keyglyph'>|</span> <span class='hs-conid'>LikeMeet</span>
+<a name="line-19"></a>
+<a name="line-20"></a>    <span class='hs-comment'>{-| Relsign and list of terms -}</span>
+<a name="line-21"></a>    <span class='hs-keyglyph'>|</span> <span class='hs-conid'>LikeSource</span>
 <a name="line-22"></a>
-<a name="line-23"></a><a name="terms"></a><span class='hs-definition'>terms</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>OperandParser</span>
-<a name="line-24"></a><span class='hs-definition'>terms</span> <span class='hs-varid'>xs</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyglyph'>[</span><span class='hs-layout'>(</span><span class='hs-str'>"term"</span><span class='hs-layout'>,</span> <span class='hs-varid'>xs</span><span class='hs-layout'>)</span><span class='hs-keyglyph'>]</span>
-<a name="line-25"></a>
+<a name="line-23"></a>      <span class='hs-keyword'>deriving</span> <span class='hs-layout'>(</span><span class='hs-conid'>Show</span><span class='hs-layout'>,</span> <span class='hs-conid'>Eq</span><span class='hs-layout'>,</span> <span class='hs-conid'>Enum</span><span class='hs-layout'>)</span>
+<a name="line-24"></a>
+<a name="line-25"></a><a name="instance%20Mini.OperandPattern%20VanillaOperand"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>Mini</span><span class='hs-varop'>.</span><span class='hs-conid'>OperandPattern</span> <span class='hs-conid'>VanillaOperand</span> <span class='hs-keyword'>where</span>
+<a name="line-26"></a>    <span class='hs-varid'>operandParser'</span> <span class='hs-conid'>LikeHold</span>   <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Mini</span><span class='hs-varop'>.</span><span class='hs-varid'>likePick</span>
+<a name="line-27"></a>    <span class='hs-varid'>operandParser'</span> <span class='hs-conid'>LikeVal</span>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Mini</span><span class='hs-varop'>.</span><span class='hs-varid'>likePick</span>
+<a name="line-28"></a>    <span class='hs-varid'>operandParser'</span> <span class='hs-conid'>LikeMeet</span>   <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Mini</span><span class='hs-varop'>.</span><span class='hs-varid'>likeMeet</span>
+<a name="line-29"></a>    <span class='hs-varid'>operandParser'</span> <span class='hs-conid'>LikeSource</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Mini</span><span class='hs-varop'>.</span><span class='hs-varid'>likeMeet</span>
+<a name="line-30"></a>
 </pre></body>
 </html>
