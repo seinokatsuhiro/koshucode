@@ -4,61 +4,36 @@
 
 module Koshucode.Baala.Base.Struct.Full.Assert
 ( Assert (..)
-, affirm, deny
-, runAssertJudges
-, runAssertDataset
+, affirm
+, deny
 ) where
 
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Struct.Full.Relmap
 
--- | Affirm or deny a relation.
---   It consists of logical quality, relsign, and relmap.
+{-| Assertion of affirming or denying relation.
+    It consists of logical quality, relsign, and relmap. -}
 data Assert v = Assert
     { assertQuality :: Bool        -- ^ Logical quality
     , assertRelsign :: Relsign     -- ^ Sign of relation
     , assertRelmap  :: Relmap v    -- ^ Relmap
     } deriving (Show)
 
-instance Name (Assert v) where
-    name (Assert True  _ _) = "affirm"
-    name (Assert False _ _) = "deny"
-
 instance Pretty (Assert v) where
-    doc a@(Assert _ k m) =
-        hang (text (name a) <+> text k) 2 (doc m)
+    doc (Assert q s m) =
+        let qs = text (verb q) <+> text s
+        in hang qs 2 (doc m)
 
--- | Make affirmed judges from a relation.
+verb :: Bool -> String
+verb True  = "affirm"
+verb False = "deny"
+
+{-| Make affirmed assertion. -}
 affirm :: Relsign -> Relmap v -> Assert v
 affirm = Assert True
 
--- | Make denied judges from a relation.
+{-| Make denied assertion. -}
 deny :: Relsign -> Relmap v -> Assert v
 deny = Assert False
-
--- | Calculate assertion list.
-runAssertJudges
-    :: (Ord v, Nil v)
-    => [Assert v]   -- ^ Assertion list
-    -> [Judge v]    -- ^ Input judges
-    -> AbortOr [Judge v]    -- ^ Output judges
-runAssertJudges as = runAssertDataset as . dataset
-
--- | Calculate assertion list.
-runAssertDataset ::
-    (Ord v, Nil v) => [Assert v] -> Dataset v -> AbortOr [Judge v]
-runAssertDataset as ds = judges where
-    judges = do
-      js <- mapM each as
-      return $ concat js
-    each (Assert q s m) = do
-      r <- runRelmap ds m reldee
-      return $ judgesFromRel q s r
-
-{-| Convert relation to list of judges -}
-judgesFromRel :: Bool -> Relsign -> Rel v -> [Judge v]
-judgesFromRel q s = judges where
-    judges (Rel h b) = map (judge h) b
-    judge h = Judge q s . zip (headNames h)
 

@@ -8,7 +8,7 @@ module Koshucode.Baala.Base.Struct.Half.Quoter
 import Data.Generics
 import Koshucode.Baala.Base.Syntax
 import Koshucode.Baala.Base.Struct.Full.HalfRelmap
-import Koshucode.Baala.Base.Struct.Half.HalfRelmap
+import Koshucode.Baala.Base.Struct.Half.RelmapCons
 import Koshucode.Baala.Base.Struct.Half.Clause
 import Language.Haskell.TH hiding (Clause)
 import Language.Haskell.TH.Quote
@@ -28,7 +28,7 @@ koshuQ half fullQ = dispatch . tokens where
                     (Word 0 "section" : _) -> sectionQ toks
                     _                      -> relmapQ toks
     sectionQ = consSectionQ fullQ . consClause half
-    relmapQ  = consFullRelmapQ fullQ . consHalfRelmap half [] . tokenTrees
+    relmapQ  = consFullRelmapQ fullQ . half [] . tokenTrees
 
 {- Construct ExpQ of Section
    Tokens like @name in section context and relmap context

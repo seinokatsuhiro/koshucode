@@ -24,7 +24,7 @@ import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Struct.Full.Assert
 import Koshucode.Baala.Base.Struct.Full.Relmap
-import Koshucode.Baala.Base.Struct.Half.HalfRelmap
+import Koshucode.Baala.Base.Struct.Half.RelmapCons
 
 data Section v = Section {
       sectionName   :: Maybe String       -- ^ Section name
@@ -85,7 +85,7 @@ makeEmptySection = Section Nothing [] [] [] [] []
 
 -- | Section that has no contents.
 emptySection :: Section v
-emptySection = makeEmptySection $ makeRelmapCons []
+emptySection = makeEmptySection $ relmapCons []
 
 -- | Section that has only here data.
 dataSection :: [Judge v] -> Section v

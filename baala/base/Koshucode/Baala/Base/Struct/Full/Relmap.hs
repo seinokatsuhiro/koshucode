@@ -3,19 +3,27 @@
 -- | Data structures for relation-to-relation mappings
 
 module Koshucode.Baala.Base.Struct.Full.Relmap
-( -- * Relmap
+( 
+  -- * Data
   Relmap (..)
+
+  -- ** Function type
 , RelmapSub
 , RelmapBin
+
+  -- ** Append relmaps
+  -- $AppendRelmaps
+
+  -- * Constructor
 , relmapSource
-, relmapSourceList
-, relmapAppendList
 , relmapCalc
 , relmapConfl
-, flow
-  -- * Run
-, runRelmap
+
+  -- * Selector
+, relmapSourceList
+, relmapAppendList
 ) where
+
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Struct.Full.HalfRelmap
@@ -23,34 +31,11 @@ import Data.Monoid
 
 
 
--- ----------------------  Relmap
+-- ----------------------  Data
 
--- | Relation-to-relation mapping.
---   A Relmap is correspond to a pair of operator and its operands,
---   that is a use of relational operator.
---   Calculations for relations are done by 'runRelmap'.
--- 
---   This picture represents calculation
---   of mapping input relation to output relation.
--- 
---   @   input -[ relmap ]- output   @
--- 
---   Relmap /A/ maps relation /R1/ to relation /R2/.
---   Another relmap /B/ maps /R2/ to /R3/.
--- 
---   @   R1 -[ A ]- R2
---   R2 -[ B ]- R3   @
--- 
---   Two relmaps /A/ and /B/ are jointed
---   with intermidiate relation /R2/.
---   
---   @   R1 -[ A ]- R2 -[ B ]- R3   @
--- 
---   Or, we can draw a directly jointed picture.
---   This whole structure is also 'Relmap' of 'RelmapAppend' /A B/.
--- 
---   @   R1 -[ A ]--[ B ]- R3   @
-
+{-| Relation-to-relation mapping.
+    A 'Relmap' is correspond to a use of relational operator,
+    that is pair of operator and its operand. -}
 data Relmap v
     -- | Relmap that retrieves a relation from a dataset
     = RelmapSource HalfRelmap String [String]
@@ -70,37 +55,6 @@ type RelmapSub v = [Rel v] -> Rel v -> Rel v
 
 -- | Confluent operator, like binary operator
 type RelmapBin v = Relmap v -> Relmap v
-
--- | List of 'RelmapSource'
-relmapSourceList :: Relmap v -> [Relmap v]
-relmapSourceList = loop where
-    loop m@(RelmapSource _ _ _) = [m]
-    loop (RelmapConst _ _ _)    = []
-    loop (RelmapAppend m1 m2) = loop m1 ++ loop m2
-    loop (RelmapCalc _ _ _ ms)  = concatMap loop ms
-    loop _ = undefined
-
--- | Expand 'RelmapAppend' to list of 'Relmap'
-relmapAppendList :: Relmap v -> [Relmap v]
-relmapAppendList = loop where
-    loop (RelmapAppend m1 m2) = loop m1 ++ loop m2
-    loop m = [m]
-
--- | Retrieve relation from dataset
-relmapSource :: HalfRelmap -> String -> [String] -> (Relmap v)
-relmapSource = RelmapSource
-
--- | Make a non-confluent relmap
-relmapCalc :: HalfRelmap -> String -> RelmapSub v -> Relmap v
-relmapCalc h op sub = RelmapCalc h op sub []
-
--- | Make a confluent relmap
-relmapConfl :: HalfRelmap -> String -> RelmapSub v -> [Relmap v] -> Relmap v
-relmapConfl = RelmapCalc
-
--- | Make a flow relmap
-flow :: String -> RelmapFun v -> Relmap v
-flow = undefined -- RelmapFlow
 
 
 
@@ -152,22 +106,61 @@ docRelmapAppend = docv . map pipe . relmapAppendList where
 
 
 
--- ----------------------  Run
+-- ----------------------  Constructor
 
--- | Calculate 'Relmap' for 'Rel'.
-runRelmap
-    :: (Ord v, Nil v)
-    => Dataset v        -- ^ Judges read from @source@ operator
-    -> Relmap v         -- ^ Mapping from 'Rel' to 'Rel'
-    -> Rel v            -- ^ Input relation
-    -> AbortOr (Rel v)  -- ^ Output relation
-runRelmap ds = (<$>) where
-    RelmapSource _ s ns <$> _ = Right (selectRelation ds s ns)
-    RelmapConst _ _ r   <$> _ = Right r
-    RelmapAlias _ m     <$> r = m <$> r
-    RelmapCalc _ _ f ms <$> r = do rs' <- mapM (<$> reldee) ms
-                                   Right $ f rs' r
-    RelmapAppend m1 m2  <$> r = do r' <- m1 <$> r
-                                   m2 <$> r'
-    RelmapName h op     <$> _ = Left $ AbortUnknownRelmap (halfLines h) op
+-- | Retrieve relation from dataset
+relmapSource :: HalfRelmap -> String -> [String] -> (Relmap v)
+relmapSource = RelmapSource
+
+-- | Make a non-confluent relmap
+relmapCalc :: HalfRelmap -> String -> RelmapSub v -> Relmap v
+relmapCalc h op sub = RelmapCalc h op sub []
+
+-- | Make a confluent relmap
+relmapConfl :: HalfRelmap -> String -> RelmapSub v -> [Relmap v] -> Relmap v
+relmapConfl = RelmapCalc
+
+
+
+-- ----------------------  Selector
+
+-- | List of 'RelmapSource'
+relmapSourceList :: Relmap v -> [Relmap v]
+relmapSourceList = loop where
+    loop m@(RelmapSource _ _ _) = [m]
+    loop (RelmapConst _ _ _)    = []
+    loop (RelmapAppend m1 m2) = loop m1 ++ loop m2
+    loop (RelmapCalc _ _ _ ms)  = concatMap loop ms
+    loop _ = undefined
+
+-- | Expand 'RelmapAppend' to list of 'Relmap'
+relmapAppendList :: Relmap v -> [Relmap v]
+relmapAppendList = loop where
+    loop (RelmapAppend m1 m2) = loop m1 ++ loop m2
+    loop m = [m]
+
+
+-- ----------------------
+-- $AppendRelmaps
+--
+-- This picture represents calculation
+-- of mapping input relation to output relation.
+-- 
+-- @ input -[ relmap ]- output @
+-- 
+-- Relmap /A/ maps relation /R1/ to relation /R2/.
+-- Another relmap /B/ maps /R2/ to /R3/.
+-- 
+-- @ R1 -[ A ]- R2
+-- R2 -[ B ]- R3 @
+-- 
+-- Two relmaps /A/ and /B/ are jointed
+-- with intermidiate relation /R2/.
+-- 
+-- @ R1 -[ A ]- R2 -[ B ]- R3 @
+-- 
+-- Or, we can draw a directly jointed picture.
+-- This whole structure is also 'RelmapAppend' /A B/.
+-- 
+-- @ R1 -[ A ]--[ B ]- R3 @
 

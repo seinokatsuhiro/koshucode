@@ -31,9 +31,11 @@ module Koshucode.Baala.Base.Struct
 ( module Koshucode.Baala.Base.Struct.Full.Assert
 , module Koshucode.Baala.Base.Struct.Full.HalfRelmap
 , module Koshucode.Baala.Base.Struct.Full.Relmap
+, module Koshucode.Baala.Base.Struct.Full.Run
 , module Koshucode.Baala.Base.Struct.Full.Section
 , module Koshucode.Baala.Base.Struct.Half.Clause
-, module Koshucode.Baala.Base.Struct.Half.HalfRelmap
+, module Koshucode.Baala.Base.Struct.Half.RelmapCons
+, module Koshucode.Baala.Base.Struct.Half.Implement
 , module Koshucode.Baala.Base.Struct.Half.Quoter
 , module Koshucode.Baala.Base.Struct.SectionIO
 ) where
@@ -41,8 +43,11 @@ module Koshucode.Baala.Base.Struct
 import Koshucode.Baala.Base.Struct.Full.Assert
 import Koshucode.Baala.Base.Struct.Full.HalfRelmap
 import Koshucode.Baala.Base.Struct.Full.Relmap
+import Koshucode.Baala.Base.Struct.Full.Run
 import Koshucode.Baala.Base.Struct.Full.Section
 import Koshucode.Baala.Base.Struct.Half.Clause
-import Koshucode.Baala.Base.Struct.Half.HalfRelmap
+import Koshucode.Baala.Base.Struct.Half.RelmapCons
+import Koshucode.Baala.Base.Struct.Half.Implement
 import Koshucode.Baala.Base.Struct.Half.Quoter
 import Koshucode.Baala.Base.Struct.SectionIO
+

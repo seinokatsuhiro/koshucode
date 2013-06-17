@@ -17,7 +17,7 @@ import Koshucode.Baala.Base.Prelude as Prelude
 import Koshucode.Baala.Base.Struct.Full.Assert
 import Koshucode.Baala.Base.Struct.Full.HalfRelmap
 import Koshucode.Baala.Base.Struct.Full.Section
-import Koshucode.Baala.Base.Struct.Half.HalfRelmap
+import Koshucode.Baala.Base.Struct.Half.RelmapCons
 import Koshucode.Baala.Base.Syntax
 import Prelude hiding (exp, mod)
 
@@ -54,9 +54,8 @@ consClause half = clauseHalf half . concatMap clause . clausify
 
 clauseHalf :: RelmapHalfCons -> [Clause] -> [Clause]
 clauseHalf half = map f where
-    cons = consHalfRelmap half
-    f (TRelmap src n ts)   = CRelmap src n   $ cons src ts
-    f (TAssert src q s ts) = CAssert src q s $ cons src ts
+    f (TRelmap src n ts)   = CRelmap src n   $ half src ts
+    f (TAssert src q s ts) = CAssert src q s $ half src ts
     f x = x
 
 clause :: [Token] -> [Clause]
@@ -114,7 +113,7 @@ clause toks = cl toks' where
 {-| Second step of constructing 'Section'. -}
 consSection
     :: (StringValue v)
-    => RelmapWholeCons v   -- ^ Relmap full constructor
+    => RelmapFullCons v    -- ^ Relmap full constructor
     -> [Clause]            -- ^ Output of 'consClause'
     -> AbortOr (Section v) -- ^ Result section
 consSection whole xs = do

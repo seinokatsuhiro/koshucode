@@ -12,10 +12,10 @@ module Koshucode.Baala.Base.Struct.SectionIO
 , runSectionIO
 ) where
 import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Base.Struct.Full.Assert
 import Koshucode.Baala.Base.Struct.Full.Section
+import Koshucode.Baala.Base.Struct.Full.Run
 import Koshucode.Baala.Base.Struct.Half.Clause
-import Koshucode.Baala.Base.Struct.Half.HalfRelmap
+import Koshucode.Baala.Base.Struct.Half.RelmapCons
 import Koshucode.Baala.Base.Syntax
 import Koshucode.Baala.Base.Prelude as Prelude
 
