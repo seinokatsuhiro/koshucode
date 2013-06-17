@@ -4,9 +4,9 @@
 
 -- | A notational system for relational data
 --   
---   Koshucode is a notation for people who read, write, and calculate
---   relational data. This library provides functions for handling
---   koshucode on computers.
+--   Koshucode is a notation for people and computers who read, write, and
+--   calculate relational data. This library provides functions for
+--   handling koshucode on computers.
 @package koshucode-baala-base
 @version 0.10.0.0
 
@@ -443,7 +443,9 @@ termNamePairs :: [TokenTree] -> AbortOr [(String, String)]
 --   Right [("/a", TreeL (Word 1 "A3")), ("/b", TreeL (Word 0 "10"))]
 --   </pre>
 termTreePairs :: [TokenTree] -> AbortOr [(String, TokenTree)]
-liner :: [Token] -> [[Token]]
+
+-- | Convert token list into list of token clauses
+clausify :: [Token] -> [[Token]]
 sourceLines :: [Token] -> [SourceLine]
 
 -- | Split operand into named group. Non quoted words beginning with
@@ -469,6 +471,34 @@ crop :: Ripen x v -> Tree x -> Calc v
 
 -- | Modules on syntax
 module Koshucode.Baala.Base.Syntax
+
+module Koshucode.Baala.Base.Relmap.HalfRelmap
+
+-- | Intermediate data that represents use of relational operator.
+--   
+--   <a>HalfRelmap</a> is constructed from list of <a>TokenTree</a>, and
+--   (full) <tt>Relmap</tt> is constructed from <a>HalfRelmap</a>.
+data HalfRelmap
+HalfRelmap :: [String] -> [SourceLine] -> String -> [Named [TokenTree]] -> [HalfRelmap] -> HalfRelmap
+
+-- | Usages description
+halfUsage :: HalfRelmap -> [String]
+
+-- | Source information
+halfLines :: HalfRelmap -> [SourceLine]
+
+-- | Operator name of relmap operation
+halfOperator :: HalfRelmap -> String
+
+-- | Operand of relmap operation
+halfOperand :: HalfRelmap -> [Named [TokenTree]]
+
+-- | Subrelmaps in the operand
+halfSubmap :: HalfRelmap -> [HalfRelmap]
+instance Typeable HalfRelmap
+instance Show HalfRelmap
+instance Data HalfRelmap
+instance Pretty HalfRelmap
 
 
 -- | Type for relations
@@ -593,40 +623,10 @@ type WithTerms2 v = ([(String, String)] -> RelmapFun v) -> String -> RelmapFun v
 
 
 -- | Data structures for relation-to-relation mappings
-module Koshucode.Baala.Base.Struct.Full.Relmap
+module Koshucode.Baala.Base.Relmap.Relmap
 
--- | Relation-to-relation mapping. A Relmap is correspond to a pair of
---   operator and its operands, that is a use of relational operator.
---   Calculations for relations are done by <a>runRelmap</a>.
---   
---   This picture represents calculation of mapping input relation to
---   output relation.
---   
---   <pre>
---   input -[ relmap ]- output
---   </pre>
---   
---   Relmap <i>A</i> maps relation <i>R1</i> to relation <i>R2</i>. Another
---   relmap <i>B</i> maps <i>R2</i> to <i>R3</i>.
---   
---   <pre>
---   R1 -[ A ]- R2
---   R2 -[ B ]- R3
---   </pre>
---   
---   Two relmaps <i>A</i> and <i>B</i> are jointed with intermidiate
---   relation <i>R2</i>.
---   
---   <pre>
---   R1 -[ A ]- R2 -[ B ]- R3
---   </pre>
---   
---   Or, we can draw a directly jointed picture. This whole structure is
---   also <a>Relmap</a> of <a>RelmapAppend</a> <i>A B</i>.
---   
---   <pre>
---   R1 -[ A ]--[ B ]- R3
---   </pre>
+-- | Relation-to-relation mapping. A <a>Relmap</a> is correspond to a use
+--   of relational operator, that is pair of operator and its operand.
 data Relmap v
 
 -- | Relmap that retrieves a relation from a dataset
@@ -656,49 +656,17 @@ type RelmapBin v = Relmap v -> Relmap v
 -- | Retrieve relation from dataset
 relmapSource :: HalfRelmap -> String -> [String] -> (Relmap v)
 
--- | List of <a>RelmapSource</a>
-relmapSourceList :: Relmap v -> [Relmap v]
-
--- | Expand <a>RelmapAppend</a> to list of <a>Relmap</a>
-relmapAppendList :: Relmap v -> [Relmap v]
-
 -- | Make a non-confluent relmap
 relmapCalc :: HalfRelmap -> String -> RelmapSub v -> Relmap v
 
 -- | Make a confluent relmap
 relmapConfl :: HalfRelmap -> String -> RelmapSub v -> [Relmap v] -> Relmap v
 
--- | Make a flow relmap
-flow :: String -> RelmapFun v -> Relmap v
+-- | List of <a>RelmapSource</a>
+relmapSourceList :: Relmap v -> [Relmap v]
 
--- | Intermediate data that represents use of relational operator.
---   
---   <a>HalfRelmap</a> is constructed from list of <a>TokenTree</a>, and
---   (full) <a>Relmap</a> is constructed from <a>HalfRelmap</a>.
-data HalfRelmap
-HalfRelmap :: [String] -> [SourceLine] -> String -> [Named [TokenTree]] -> [HalfRelmap] -> HalfRelmap
-
--- | Usages description
-halfUsage :: HalfRelmap -> [String]
-
--- | Source information
-halfLines :: HalfRelmap -> [SourceLine]
-
--- | Operator name of relmap operation
-halfOperator :: HalfRelmap -> String
-
--- | Operand of relmap operation
-halfOperand :: HalfRelmap -> [Named [TokenTree]]
-
--- | Subrelmaps in the operand
-halfSubmap :: HalfRelmap -> [HalfRelmap]
-
--- | Calculate <a>Relmap</a> for <a>Rel</a>.
-runRelmap :: (Ord v, Nil v) => Dataset v -> Relmap v -> Rel v -> AbortOr (Rel v)
-instance Typeable HalfRelmap
-instance Show HalfRelmap
-instance Data HalfRelmap
-instance Pretty HalfRelmap
+-- | Expand <a>RelmapAppend</a> to list of <a>Relmap</a>
+relmapAppendList :: Relmap v -> [Relmap v]
 instance Pretty (Relmap v)
 instance Name (Relmap v)
 instance Monoid (Relmap v)
@@ -706,72 +674,102 @@ instance Show (Relmap v)
 
 
 -- | Data structure for mapping relation to judges
-module Koshucode.Baala.Base.Struct.Full.Assert
+module Koshucode.Baala.Base.Relmap.Assert
 
--- | Affirm or deny a relation. It consists of logical quality, relsign,
---   and relmap.
+-- | Assertion of affirming or denying relation. It consists of logical
+--   quality, relsign, and relmap.
 data Assert v
 Assert :: Bool -> Relsign -> Relmap v -> Assert v
+
+-- | Logical quality
 assertQuality :: Assert v -> Bool
+
+-- | Sign of relation
 assertRelsign :: Assert v -> Relsign
+
+-- | Relmap
 assertRelmap :: Assert v -> Relmap v
 
--- | Make affirmed judges from a relation.
+-- | Make affirmed assertion.
 affirm :: Relsign -> Relmap v -> Assert v
 
--- | Make denied judges from a relation.
+-- | Make denied assertion.
 deny :: Relsign -> Relmap v -> Assert v
+instance Show (Assert v)
+instance Pretty (Assert v)
+
+module Koshucode.Baala.Base.Relmap.Implement
+
+-- | Implementation of relmap operator. It consists of (1) operator name,
+--   (2) operand parser, (3) constructor of operator, and (4) usage of
+--   operator.
+data RelmapImplement v
+RelmapImplement :: String -> OperandParser -> (OperatorCons v) -> [String] -> RelmapImplement v
+
+-- | Parser for operand of relational operator. This parsers docompose
+--   operand trees, and give a name to suboperand.
+type OperandParser = [TokenTree] -> [Named [TokenTree]]
+
+-- | Constructor of relational operator <a>Relmap</a>. <a>Relmap</a> is
+--   constructed from <a>HalfRelmap</a> and subrelmaps in it.
+type OperatorCons v = [Relmap v] -> HalfRelmap -> AbortOr (Relmap v)
+
+
+-- | <a>Relmap</a> construction.
+--   
+--   Construction process of half relmaps from source trees.
+--   
+--   <ul>
+--   <li><i><tt>[TokenTree] -&gt; [[TokenTree]]</tt></i> Divide list of
+--   <a>TokenTree</a> by vertical bar (<tt>|</tt>).</li>
+--   <li><i><tt>[[TokenTree]] -&gt; [HalfRelmap]</tt></i> Construct each
+--   <a>HalfRelmap</a> from lists of <a>TokenTree</a>. When there are
+--   subrelmaps in token trees, constructs <a>HalfRelmap</a>
+--   recursively.</li>
+--   <li><i><tt>[HalfRelmap] -&gt; HalfRelmap</tt></i> Wrap list of
+--   <a>HalfRelmap</a> into one <a>HalfRelmap</a> that has these relmaps in
+--   <a>halfSubmap</a>.</li>
+--   </ul>
+module Koshucode.Baala.Base.Relmap.RelmapCons
+
+-- | Make half and full relmap constructors.
+relmapCons :: [RelmapImplement v] -> (RelmapCons v)
+
+-- | Half and full relmap constructor
+data RelmapCons v
+RelmapCons :: RelmapHalfCons -> RelmapFullCons v -> RelmapCons v
+consHalf :: RelmapCons v -> RelmapHalfCons
+consFull :: RelmapCons v -> RelmapFullCons v
+
+-- | First step of constructing relmap, make <a>HalfRelmap</a> from use of
+--   relational operator.
+type RelmapHalfCons = [SourceLine] -> [TokenTree] -> HalfRelmap
+
+-- | Second step of constructing relmap, make <a>Relmap</a> from contents
+--   of <a>HalfRelmap</a>.
+type RelmapFullCons v = HalfRelmap -> AbortOr (Relmap v)
+instance Show (RelmapCons v)
+
+module Koshucode.Baala.Base.Relmap
+
+
+-- | Running relational calculation.
+module Koshucode.Baala.Base.Section.Run
 
 -- | Calculate assertion list.
 runAssertJudges :: (Ord v, Nil v) => [Assert v] -> [Judge v] -> AbortOr [Judge v]
 
 -- | Calculate assertion list.
 runAssertDataset :: (Ord v, Nil v) => [Assert v] -> Dataset v -> AbortOr [Judge v]
-instance Show (Assert v)
-instance Pretty (Assert v)
-instance Name (Assert v)
-
-module Koshucode.Baala.Base.Struct.Half.HalfRelmap
-
--- | Make half and full relmap constructors.
-makeConsRelmap :: [RelmapImplement v] -> (ConsRelmap v)
-
--- | Half and full relmap constructor
-data ConsRelmap v
-ConsRelmap :: RelmapHalfCons -> RelmapWholeCons v -> ConsRelmap v
-consHalf :: ConsRelmap v -> RelmapHalfCons
-consFull :: ConsRelmap v -> RelmapWholeCons v
-
--- | Implementation of relmap operator. It consists of (1) operator name,
---   (2) operand parser, (3) full constructor, and (4) usage of operator.
-data RelmapImplement v
-RelmapImplement :: String -> OperandParser -> (RelmapFullCons v) -> [String] -> RelmapImplement v
-
--- | Parser for operand of relational operator. This parsers docompose
---   operand trees, and give a name to suboperand.
-type OperandParser = [TokenTree] -> [Named [TokenTree]]
-
--- | First step of relmap construction, make <a>HalfRelmap</a> from use of
---   relational operator.
-type RelmapHalfCons = String -> [SourceLine] -> [TokenTree] -> HalfRelmap
-
--- | Construct half relmaps from source trees.
-consHalfRelmap :: RelmapHalfCons -> [SourceLine] -> [TokenTree] -> HalfRelmap
-
--- | Second step of constructing relmap, make <a>Relmap</a> from contents
---   of <a>HalfRelmap</a>.
-type RelmapWholeCons v = HalfRelmap -> AbortOr (Relmap v)
-type RelmapFullCons v = [Relmap v] -> HalfRelmap -> AbortOr (Relmap v)
-instance Show (ConsRelmap v)
 
 
 -- | Data structure for relational calculations. There are three types of
 --   section: (1) <i>editing sections</i> that output judges and read other
 --   sections, (2) <i>library sections</i> that make relmaps reusable, (3)
 --   <i>data sections</i> that provide data.
-module Koshucode.Baala.Base.Struct.Full.Section
+module Koshucode.Baala.Base.Section.Section
 data Section v
-Section :: Maybe String -> [Section v] -> [String] -> [Assert v] -> [Named (Relmap v)] -> [Judge v] -> ConsRelmap v -> Section v
+Section :: Maybe String -> [Section v] -> [String] -> [Assert v] -> [Named (Relmap v)] -> [Judge v] -> RelmapCons v -> Section v
 
 -- | Section name
 sectionName :: Section v -> Maybe String
@@ -792,14 +790,15 @@ sectionRelmap :: Section v -> [Named (Relmap v)]
 sectionJudge :: Section v -> [Judge v]
 
 -- | Readers and writers for this section
-sectionCons :: Section v -> ConsRelmap v
+sectionCons :: Section v -> RelmapCons v
 
 -- | Select assertions like <a>sectionAssert</a>. It returns relmap-liked
---   assertions. We can run these assertions using <a>runAssertJudges</a>.
+--   assertions. We can run these assertions using
+--   <tt>runAssertJudges</tt>.
 sectionLinkedAssert :: Section v -> [Assert v]
 
 -- | Section that has no contents.
-makeEmptySection :: ConsRelmap v -> Section v
+makeEmptySection :: RelmapCons v -> Section v
 
 -- | Section that has no contents.
 emptySection :: Section v
@@ -809,13 +808,13 @@ dataSection :: [Judge v] -> Section v
 instance Show v => Show (Section v)
 instance (Ord v, Pretty v) => Pretty (Section v)
 
-module Koshucode.Baala.Base.Struct.SectionUnion
+module Koshucode.Baala.Base.Section.SectionUnion
 sectionUnion :: Section v -> Section v -> Section v
 sectionUse :: Section v -> Section v -> Section v
 
 
 -- | Intermidiate structure between <a>String</a> and <a>Section</a>.
-module Koshucode.Baala.Base.Struct.Half.Clause
+module Koshucode.Baala.Base.Section.Clause
 data Clause
 
 -- | Section name
@@ -850,18 +849,18 @@ CUnknown :: [SourceLine] -> Clause
 consClause :: RelmapHalfCons -> [Token] -> [Clause]
 
 -- | Second step of constructing <a>Section</a>.
-consSection :: StringValue v => RelmapWholeCons v -> [Clause] -> AbortOr (Section v)
+consSection :: StringValue v => RelmapFullCons v -> [Clause] -> AbortOr (Section v)
 instance Typeable Clause
 instance Show Clause
 instance Data Clause
 
-module Koshucode.Baala.Base.Struct.Half.Quoter
+module Koshucode.Baala.Base.Section.Quoter
 
 -- | Make quasiquoter for <tt>[koshu| ... |]</tt>.
 koshuQuoter :: RelmapHalfCons -> ExpQ -> QuasiQuoter
 data QuasiQuoter :: *
 
-module Koshucode.Baala.Base.Struct.SectionIO
+module Koshucode.Baala.Base.Section.SectionIO
 sectionRead :: StringValue v => Section v -> String -> AbortOr (Section v)
 
 -- | Read section from file.
@@ -885,22 +884,22 @@ runSectionIO :: Value v => Section v -> IO ()
 --   Dependencies of significant data types.
 --   
 --   <ul>
---   <li><a>Section</a> uses <a>Section</a>, <a>Assert</a>, <a>Relmap</a>,
---   <a>Judge</a> and <a>ConsRelmap</a>.</li>
---   <li><a>Assert</a> uses <a>Relmap</a>.</li>
---   <li><a>Relmap</a> uses <a>Relmap</a> and <a>Rel</a>.</li>
---   <li><a>ConsRelmap</a> uses <tt>ConsHalfRelmap</tt> and
---   <a>RelmapFullCons</a>.</li>
---   <li><tt>ConsHalfRelmap</tt> uses <a>HalfRelmap</a> and
+--   <li><a>Section</a> uses <a>Section</a>, <tt>Assert</tt>,
+--   <tt>Relmap</tt>, <a>Judge</a> and <tt>RelmapCons</tt>.</li>
+--   <li><tt>Assert</tt> uses <tt>Relmap</tt>.</li>
+--   <li><tt>Relmap</tt> uses <tt>Relmap</tt> and <a>Rel</a>.</li>
+--   <li><tt>RelmapCons</tt> uses <tt>RelmapHalfCons</tt> and
+--   <tt>RelmapFullCons</tt>.</li>
+--   <li><tt>RelmapHalfCons</tt> uses <tt>HalfRelmap</tt> and
 --   <a>TokenTree</a>.</li>
---   <li><a>RelmapFullCons</a> uses <a>Relmap</a> and
+--   <li><tt>RelmapFullCons</tt> uses <tt>Relmap</tt> and
 --   <a>TokenTree</a>.</li>
---   <li><a>Clause</a> uses <a>HalfRelmap</a>, <a>Clause</a>, and
+--   <li><a>Clause</a> uses <tt>HalfRelmap</tt>, <a>Clause</a>, and
 --   <a>Token</a>.</li>
---   <li><a>HalfRelmap</a> uses <a>HalfRelmap</a> and
+--   <li><tt>HalfRelmap</tt> uses <tt>HalfRelmap</tt> and
 --   <a>TokenTree</a>.</li>
 --   </ul>
-module Koshucode.Baala.Base.Struct
+module Koshucode.Baala.Base.Section
 
 
 -- | Kit for implementing relmaps.
