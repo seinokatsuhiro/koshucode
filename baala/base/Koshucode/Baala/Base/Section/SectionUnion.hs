@@ -1,10 +1,10 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Struct.SectionUnion
+module Koshucode.Baala.Base.Section.SectionUnion
 ( sectionUnion
 , sectionUse
 ) where
-import Koshucode.Baala.Base.Struct.Full.Section
+import Koshucode.Baala.Base.Section.Section
 
 sectionUnion :: Section v -> Section v -> Section v
 sectionUnion m1 m2 =

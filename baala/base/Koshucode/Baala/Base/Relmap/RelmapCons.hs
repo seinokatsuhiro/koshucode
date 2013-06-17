@@ -17,7 +17,7 @@
        that has these relmaps in 'halfSubmap'.
  -}
 
-module Koshucode.Baala.Base.Struct.Half.RelmapCons
+module Koshucode.Baala.Base.Relmap.RelmapCons
 ( relmapCons,
   RelmapCons (..),
   RelmapHalfCons,
@@ -25,9 +25,9 @@ module Koshucode.Baala.Base.Struct.Half.RelmapCons
 ) where
 
 import Koshucode.Baala.Base.Prelude hiding (cat)
-import Koshucode.Baala.Base.Struct.Full.HalfRelmap
-import Koshucode.Baala.Base.Struct.Full.Relmap
-import Koshucode.Baala.Base.Struct.Half.Implement
+import Koshucode.Baala.Base.Relmap.HalfRelmap
+import Koshucode.Baala.Base.Relmap.Relmap
+import Koshucode.Baala.Base.Relmap.Implement
 import Koshucode.Baala.Base.Syntax
 
 

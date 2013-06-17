@@ -3,7 +3,7 @@
 
 {-| Intermidiate structure between 'String' and 'Section'. -}
 
-module Koshucode.Baala.Base.Struct.Half.Clause
+module Koshucode.Baala.Base.Section.Clause
 ( -- * Documentation
   -- $Documentation
   Clause (..)
@@ -14,10 +14,8 @@ module Koshucode.Baala.Base.Struct.Half.Clause
 import Data.Generics
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude as Prelude
-import Koshucode.Baala.Base.Struct.Full.Assert
-import Koshucode.Baala.Base.Struct.Full.HalfRelmap
-import Koshucode.Baala.Base.Struct.Full.Section
-import Koshucode.Baala.Base.Struct.Half.RelmapCons
+import Koshucode.Baala.Base.Relmap
+import Koshucode.Baala.Base.Section.Section
 import Koshucode.Baala.Base.Syntax
 import Prelude hiding (exp, mod)
 

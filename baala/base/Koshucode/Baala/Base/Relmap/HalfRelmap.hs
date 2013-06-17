@@ -1,9 +1,10 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Struct.Full.HalfRelmap
+module Koshucode.Baala.Base.Relmap.HalfRelmap
 ( HalfRelmap (..)
 ) where
+
 import Data.Generics
 import Koshucode.Baala.Base.Syntax
 import Koshucode.Baala.Base.Prelude

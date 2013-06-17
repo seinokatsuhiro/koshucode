@@ -1,14 +1,14 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Struct.Half.Implement
+module Koshucode.Baala.Base.Relmap.Implement
 ( RelmapImplement (..),
   OperandParser,
   OperatorCons
 ) where
 
 import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Base.Struct.Full.HalfRelmap
-import Koshucode.Baala.Base.Struct.Full.Relmap
+import Koshucode.Baala.Base.Relmap.HalfRelmap
+import Koshucode.Baala.Base.Relmap.Relmap
 import Koshucode.Baala.Base.Syntax
 
 {-| Implementation of relmap operator.

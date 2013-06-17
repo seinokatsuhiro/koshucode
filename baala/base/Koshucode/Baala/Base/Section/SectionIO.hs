@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Struct.SectionIO
+module Koshucode.Baala.Base.Section.SectionIO
 (
 -- * Reading section
   sectionRead
@@ -12,10 +12,10 @@ module Koshucode.Baala.Base.Struct.SectionIO
 , runSectionIO
 ) where
 import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Base.Struct.Full.Section
-import Koshucode.Baala.Base.Struct.Full.Run
-import Koshucode.Baala.Base.Struct.Half.Clause
-import Koshucode.Baala.Base.Struct.Half.RelmapCons
+import Koshucode.Baala.Base.Relmap
+import Koshucode.Baala.Base.Section.Section
+import Koshucode.Baala.Base.Section.Run
+import Koshucode.Baala.Base.Section.Clause
 import Koshucode.Baala.Base.Syntax
 import Koshucode.Baala.Base.Prelude as Prelude
 
@@ -46,7 +46,7 @@ sectionFile md path =
 
 -- | Convert input judges into output judges by editing section.
 --   This function calls 'runAssert' for list of assertions in section,
---   and @runAssert@ calls 'Koshucode.Baala.Base.Struct.Full.Relmap.runRelmap'
+--   and @runAssert@ calls 'Koshucode.Baala.Base.Relmap.Relmap.runRelmap'
 --   for relmap in assertion.
 runSectionJudges
     :: (Value v)

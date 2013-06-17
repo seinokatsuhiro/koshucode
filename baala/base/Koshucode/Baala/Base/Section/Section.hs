@@ -6,7 +6,7 @@
 --   (2) /library sections/ that make relmaps reusable,
 --   (3) /data sections/ that provide data.
 
-module Koshucode.Baala.Base.Struct.Full.Section
+module Koshucode.Baala.Base.Section.Section
 (
   -- * Process
   -- $Process
@@ -20,11 +20,10 @@ module Koshucode.Baala.Base.Struct.Full.Section
 , emptySection
 , dataSection
 ) where
+
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Base.Struct.Full.Assert
-import Koshucode.Baala.Base.Struct.Full.Relmap
-import Koshucode.Baala.Base.Struct.Half.RelmapCons
+import Koshucode.Baala.Base.Relmap
 
 data Section v = Section {
       sectionName   :: Maybe String       -- ^ Section name

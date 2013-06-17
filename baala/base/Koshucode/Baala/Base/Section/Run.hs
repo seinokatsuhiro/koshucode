@@ -2,15 +2,13 @@
 
 -- | Running relational calculation.
 
-module Koshucode.Baala.Base.Struct.Full.Run
+module Koshucode.Baala.Base.Section.Run
 ( runAssertJudges
 , runAssertDataset
 ) where
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Base.Struct.Full.Assert
-import Koshucode.Baala.Base.Struct.Full.HalfRelmap
-import Koshucode.Baala.Base.Struct.Full.Relmap
+import Koshucode.Baala.Base.Relmap
 
 
 
