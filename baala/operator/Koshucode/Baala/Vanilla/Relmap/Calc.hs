@@ -37,8 +37,8 @@ valBody e _ (Rel h1 b1) = Rel h3 b3 where
 -- ----------------------  Restriction
 
 -- | Keep leading tuples.
-limit :: (Ord v) => Kit.HalfRelmap -> Int -> String -> Kit.Relmap v
-limit h c ns = Kit.relmapCalc h "limit" (limit2 c ns)
+limit :: (Ord v) => Kit.OpUse v -> Int -> String -> Kit.Relmap v
+limit use c ns = Kit.relmapCalc use "limit" (limit2 c ns)
 
 limit2 :: (Ord v) => Int -> String -> a -> Rel v -> Rel v
 limit2 c ns _ (Rel h1 b1) = Rel h1 b2 where

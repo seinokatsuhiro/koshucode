@@ -7,11 +7,13 @@ module Koshucode.Baala.Minimal.Relmap.Unary
 ( -- * Projection
   project
 , relEmpty, relmapEmpty
+
   -- * Naming
 , renameNP
 , prefix
 , unprefix
 , prefixChange
+
   -- * Current
 , enclose
 , conf
@@ -39,8 +41,8 @@ project f ns2 _ (Rel h1 b1) = Rel h2 b2 where
 relEmpty :: Rel v -> Rel v
 relEmpty (Rel h1 _) = Rel h1 []
 
-relmapEmpty :: Kit.HalfRelmap -> Kit.Relmap v
-relmapEmpty h = Kit.relmapCalc h "empty" sub where
+relmapEmpty :: Kit.OpUse v -> Kit.Relmap v
+relmapEmpty use = Kit.relmapCalc use "empty" sub where
     sub _ = relEmpty
 
 
@@ -56,7 +58,10 @@ renameNP np _ (Rel h1 b1) = Rel h2 b1 where
 
 -- | Add prefix to terms
 prefix :: String -> Kit.Relmap v
-prefix ns = Kit.flow "prefix" $ Kit.withP prefix2 ns
+prefix ns = flow "prefix" $ Kit.withP prefix2 ns
+
+flow :: String -> RelmapFun v -> Kit.Relmap v
+flow = undefined
 
 prefix2 :: [String] -> Rel v -> Rel v
 prefix2 (p:ns) (Rel h1 b1) = Rel h2 b1 where
@@ -67,7 +72,7 @@ prefix2 _ _ = undefined
 
 -- | Remove prefix
 unprefix :: String -> Kit.Relmap v
-unprefix n = Kit.flow "unprefix" $ Kit.withP unprefix2 n
+unprefix n = flow "unprefix" $ Kit.withP unprefix2 n
 
 unprefix2 :: [String] -> Rel v -> Rel v
 unprefix2 [p] (Rel h1 b1) = Rel h2 b1 where
@@ -76,7 +81,7 @@ unprefix2 _ _ = undefined
 
 -- | Change prefix
 prefixChange :: String -> Kit.Relmap v
-prefixChange np = Kit.flow "prefixChange" $ Kit.withP prefixChange2 np
+prefixChange np = flow "prefixChange" $ Kit.withP prefixChange2 np
 
 prefixChange2 :: [[Char]] -> Rel v -> Rel v
 prefixChange2 [n,p] (Rel h1 b1) = Rel h2 b1 where
@@ -104,7 +109,7 @@ unprefixName pre n =
 
 -- | Enclose the current relation in a term.
 enclose :: (RelValue v) => String -> Kit.Relmap v
-enclose n = Kit.flow "enclose" $ Kit.withN1 enclose2 n
+enclose n = flow "enclose" $ Kit.withN1 enclose2 n
 
 enclose2 :: (RelValue v) => [String] -> Rel v -> Rel v
 enclose2 [n] r@(Rel h1 _) = Rel h2 b2 where
@@ -114,7 +119,7 @@ enclose2 _ _ = undefined
 
 -- | Current term configuration.
 conf :: (StringValue v) => String -> Kit.Relmap v
-conf n = Kit.flow "conf" $ Kit.withN1 conf2 n
+conf n = flow "conf" $ Kit.withN1 conf2 n
 
 conf2 :: (StringValue v) => [String] -> Rel t -> Rel v
 conf2 [n] (Rel h1 _) = Rel h2 b2 where
@@ -125,7 +130,7 @@ conf2 _ _ = undefined
 
 -- | Current cardinality.
 size :: (IntValue v) => String -> Kit.Relmap v
-size n = Kit.flow "size" $ Kit.withN1 size2 n
+size n = flow "size" $ Kit.withN1 size2 n
 
 size2 :: (IntValue v) => [String] -> Rel t -> Rel v
 size2 [n] (Rel _ b1) = Rel h2 b2 where

@@ -146,8 +146,13 @@ sourceLine _ = Nothing
 --    ("-x", [TreeL (Word 0 "c"), TreeL (Word 1 "d")]),
 --    ("-y", [TreeL (Word 0 "e")])]
 
-operandGroup :: [TokenTree] -> [(String, [TokenTree])]
-operandGroup = gather $ anon [] where
+operandGroup :: [TokenTree] -> [Named [TokenTree]]
+operandGroup = nil . (gather $ anon []) where
+    -- add empty operand
+    nil xs = case lookup "" xs of
+               Nothing -> ("", []) : xs
+               Just _  -> xs
+
     -- anonymous group
     anon ys xs@(TreeL (Word 0 n@('-' : _)) : xs2)
         | ys == []     = named n [] xs2  -- no anonymous group

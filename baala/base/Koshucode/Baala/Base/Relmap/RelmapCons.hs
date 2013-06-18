@@ -100,7 +100,7 @@ consHalfRelmap bundle src = cons where
     -- collect subrelmaps
     submap :: HalfRelmap -> HalfRelmap
     submap h@(HalfRelmap u _ op opd _) =
-        case lookup "relmap" opd of
+        case lookup "-relmap" opd of
           Just xs -> HalfRelmap u src op opd $ map cons' xs
           Nothing -> h  -- no subrelmaps
 
@@ -115,11 +115,12 @@ type RelmapFullCons v
     -> AbortOr (Relmap v) -- ^ Result relmap
 
 {-| Construct (full) relmap. -}
-fullBundle :: [Named (OperatorCons v)] -> RelmapFullCons v
+fullBundle :: [Named (OpCons v)] -> RelmapFullCons v
 fullBundle fulls = full where
     full h@(HalfRelmap u src op _ hs) =
         case lookup op fulls of
           Nothing   -> Right $ RelmapName h op
           Just cons -> do ms <- mapM full hs
-                          addAbort (AbortUsage src u) $ cons ms h
+                          addAbort (AbortUsage src u)
+                             $ cons $ OpUse h ms
 

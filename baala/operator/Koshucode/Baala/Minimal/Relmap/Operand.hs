@@ -3,56 +3,71 @@
 -- | Operand patterns
 
 module Koshucode.Baala.Minimal.Relmap.Operand
-( relmaps
-, OperandPattern (..)
-, MinimalOperand (..)
+( MinimalOperand (..)
+, likePick
+, likeMeet
+, likeRename
+, likeSource
 ) where
-import Koshucode.Baala.Base.Struct
 
--- | Make relmap implementations.
-relmaps
-    :: (OperandPattern p)
-    => [(String, p, RelmapFullCons v, [String])] -- ^ Operator implementations
-    -> [RelmapImplement v] -- ^ Result
-relmaps = map f where
-    f (op, opd, full, usage) =
-        let parser = operandParser opd
-        in RelmapImplement op parser full usage
-
--- | Class for operand pattern.
-class OperandPattern p where
-    operandParser :: p -> OperandParser
-
-
-
--- ----------------------  Operand patterns
+import Koshucode.Baala.Base.Kit
+import Koshucode.Baala.Minimal.Relmap.Pattern
 
 -- | 'OperandPattern' for minimal operators
 data MinimalOperand
-    = LikeConst   -- ^ No operand
-    | LikeMeet    -- ^ Relmap and maybe shared terms
-    | LikeNone    -- ^ No operand
-    | LikePick    -- ^ List of present terms
-    | LikeRename  -- ^ List of new term and present term
-    | LikeSource  -- ^ Relsign and list of terms
+    {-| No operand -}
+    = LikeEmpty
+
+    {-| Relmap and maybe shared terms -}
+    | LikeMeet
+
+    {-| List of present terms -}
+    | LikePick
+
+    {-| List of new term and present term.
+        @-term@ pairs of new and present terms -}
+    | LikeRename
+
+    {-| Relsign and list of terms.
+        @-sign@ relsign
+        @-term@ term names -}
+    | LikeSource
       deriving (Show, Eq, Enum)
 
 instance OperandPattern MinimalOperand where
-    operandParser LikeConst  = terms
-    operandParser LikeMeet   = rels
-    operandParser LikeNone   = terms
-    operandParser LikePick   = terms
-    operandParser LikeRename = terms
-    operandParser LikeSource = src
+    operandParser' LikeEmpty  = id
+    operandParser' LikeMeet   = likeMeet
+    operandParser' LikePick   = likePick
+    operandParser' LikeRename = likeRename
+    operandParser' LikeSource = likeSource
 
-terms :: OperandParser
-terms xs = [("term", xs)]
+    operandUsage   LikeEmpty  = [""]
+    operandUsage   LikeMeet   = ["RELMAP"]
+    operandUsage   LikePick   = ["/NAME ..."]
+    operandUsage   LikeRename = ["/NEW /OLD ..."]
+    operandUsage   LikeSource = ["SIGN /NAME ..."]
 
-rels :: OperandParser
-rels xs = [("relmap", xs)]
+likePick :: OperandParser'
+likePick xs =
+    case lookup "" xs of
+      Just xs2 -> [("-term", xs2)] ++ xs
+      _ -> xs
 
-src :: OperandParser
-src (s:xs) = [("sign", [s]), ("term", xs)]
-src _      = []
+likeMeet :: OperandParser'
+likeMeet xs =
+    case lookup "" xs of
+      Just xs2@[_] -> [("-relmap", xs2)] ++ xs
+      _ -> xs
 
---operandChunks :: [TokenTree] -> [Named [TokenTree]]
+likeRename :: OperandParser'
+likeRename xs =
+    case lookup "" xs of
+      Just xs2 -> [("-term", xs2)] ++ xs
+      _ -> xs
+
+likeSource :: OperandParser'
+likeSource xs =
+    case lookup "" xs of
+      Just (s:ns) -> [("-sign", [s]), ("-term", ns)] ++ xs
+      _ -> xs
+

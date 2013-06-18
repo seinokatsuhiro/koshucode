@@ -8,115 +8,99 @@ module Koshucode.Baala.Minimal.Relmap.Implement
 
   -- * Implementations of operators
   minimalRelmaps,
-  relmapRename,
-
-  -- * Utilities
-  abortableHead,
-  signFromOperand
+  relmapRename
 ) where
+
 import Data.Monoid
 import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Base.Struct
-import Koshucode.Baala.Base.Prelude.Abort
-import Koshucode.Baala.Base.Prelude
+import Koshucode.Baala.Base.Kit as Kit
+import Koshucode.Baala.Minimal.Relmap.Get
+import Koshucode.Baala.Minimal.Relmap.Operand
+import Koshucode.Baala.Minimal.Relmap.Pattern
 import Koshucode.Baala.Minimal.Relmap.Tropashko
 import Koshucode.Baala.Minimal.Relmap.Unary
-import Koshucode.Baala.Minimal.Relmap.Operand
-import qualified Koshucode.Baala.Base.Kit as Kit
-import qualified Koshucode.Baala.Base.Syntax as Syn
 
 
 
 -- ----------------------  Operators
 
+builtinRelmaps :: (Ord v) => [RelmapImplement v]
+builtinRelmaps = relmaps [ ("|", LikeEmpty, consConcat) ]
+
+consConcat :: OpCons v
+consConcat = Right . mconcat . opSub
+
 -- | Minimal implementations of relmaps
 minimalRelmaps :: (Ord v) => [RelmapImplement v]
-minimalRelmaps = relmaps
+minimalRelmaps = builtinRelmaps ++ relmaps
     -- Relmap operators in alphabetical order
-    [ o "|"      LikeNone   fullConcat ["RELMAP | RELMAP"]
-    , o "cut"    LikePick   fullCut    ["cut /NAME ..."]
-    , o "empty"  LikeNone   fullEmpty  ["empty"]
-    , o "join"   LikeMeet   fullJoin   ["join RELMAP"]
-    , o "meet"   LikeMeet   fullMeet   ["meet RELMAP"]
-    , o "pick"   LikePick   fullPick   ["pick /NAME ..."]
-    , o "reldee" LikeConst  fullReldee ["reldee"]
-    , o "reldum" LikeConst  fullReldum ["reldum"]
-    , o "rename" LikeRename fullRename ["rename /NEW /OLD ..."]
-    , o "source" LikeSource fullSource ["source SIGN /NAME ..."]
-    ] where o = (,,,)
-
-fullConcat :: RelmapFullCons v
-fullConcat ms _ = Right $ mconcat ms
-
-fullReldee, fullReldum :: RelmapFullCons v
-fullReldee = fullRelcon "reldee" reldee
-fullReldum = fullRelcon "reldee" reldum
-
-fullRelcon :: String -> Rel v -> RelmapFullCons v
-fullRelcon op r _ h = Right $ RelmapConst h op r
-
-fullCut :: (Ord v) => RelmapFullCons v
-fullCut _ h = do
-  let opd = halfOperand h
-  term <- opd <!!> "term"
-  ns   <- Syn.termNames term
-  Right $ Kit.relmapCalc h "cut" (project Kit.indexCut ns)
-
-fullEmpty :: (Ord v) => RelmapFullCons v
-fullEmpty _ h = Right $ relmapEmpty h
-
-fullJoin :: (Ord v) => RelmapFullCons v
-fullJoin ms h = do
-  m <- abortableHead ms
-  Right $ relmapJoin h m
-
-fullMeet :: (Ord v) => RelmapFullCons v
-fullMeet ms h = do
-  m <- abortableHead ms
-  Right $ relmapMeet h m
-
-fullPick :: (Ord v) => RelmapFullCons v
-fullPick _ h = do
-  let opd = halfOperand h
-  term <- opd <!!> "term"
-  ns   <- Syn.termNames term
-  Right $ Kit.relmapCalc h "pick" (project Kit.indexPick ns)
-
-fullRename :: RelmapFullCons v
-fullRename _ h = do
-  let opd = halfOperand h
-  term <- opd <!!> "term"
-  np   <- Syn.termNamePairs term
-  Right $ relmapRename h np
-
--- | Change term names
-relmapRename :: HalfRelmap -> [(String, String)] -> (Relmap v)
-relmapRename h np = Kit.relmapCalc h "rename" (renameNP np)
-
-fullSource :: RelmapFullCons v
-fullSource _ h = do
-  let opd = halfOperand h
-  sign <- signFromOperand opd
-  term <- opd <!!> "term"
-  ns   <- Syn.termNames term
-  Right $ relmapSource h sign ns
+    [ o "cut"     LikePick    consCut
+    , o "empty"   LikeEmpty   consEmpty
+    , o "join"    LikeMeet    consJoin
+    , o "meet"    LikeMeet    consMeet
+    , o "pick"    LikePick    consPick
+    , o "reldee"  LikeEmpty   consReldee
+    , o "reldum"  LikeEmpty   consReldum
+    , o "rename"  LikeRename  consRename
+    , o "source"  LikeSource  consSource
+    ] where o = (,,)
 
 
 
--- ----------------------  Utility
+-- ----------------------  Constructors
 
--- | Abortable 'head'
-abortableHead :: [a] -> AbortOr a
-abortableHead (x:_) = Right x
-abortableHead _     = Left $ AbortLookup "head"
+consEmpty :: OpCons v
+consEmpty use = Right $ relmapEmpty use
 
--- | Extract relsign from operand set
-signFromOperand :: [Named [Syn.TokenTree]] -> AbortOr String
-signFromOperand opd = do
-  sign <- opd <!!> "sign"
-  case sign of
-    [Syn.Bloom (Syn.Word _ s)] -> Right s
-    _ -> Left $ AbortLookup "sign"
+consRename :: OpCons v
+consRename use = do
+  np <- getTermPairs use "-term"
+  Right $ relmapRename use np
+
+{-| Change term names -}
+relmapRename :: OpUse v -> [(String, String)] -> (Relmap v)
+relmapRename use np = Kit.relmapCalc use "rename" (renameNP np)
+
+consSource :: OpCons v
+consSource use = do
+  sign <- getWord  use "-sign"
+  ns   <- getTerms use "-term"
+  Right $ relmapSource use sign ns
+
+-- Constant
+
+consReldee, consReldum :: OpCons v
+consReldee = consRelcon "reldee" reldee
+consReldum = consRelcon "reldee" reldum
+
+consRelcon :: String -> Rel v -> OpCons v
+consRelcon op r use = Right $ RelmapConst (opHalf use) op r
+
+-- Project
+
+consCut :: (Ord v) => OpCons v
+consCut use = do
+  ns <- getTerms use "-term"
+  Right $ Kit.relmapCalc use "cut" (project Kit.indexCut ns)
+
+consPick :: (Ord v) => OpCons v
+consPick use = do
+  ns <- getTerms use "-term"
+  Right $ Kit.relmapCalc use "pick" (project Kit.indexPick ns)
+
+-- Binary operation
+
+consJoin :: (Ord v) => OpCons v
+consJoin use = do
+  m <- getRelmap1 use
+  Right $ relmapJoin use m
+
+consMeet :: (Ord v) => OpCons v
+consMeet use = do
+  m <- getRelmap1 use
+  Right $ relmapMeet use m
+
+
 
 -- ----------------------
 -- $ListOfOperators

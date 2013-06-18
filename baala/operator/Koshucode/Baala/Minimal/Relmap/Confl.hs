@@ -72,9 +72,9 @@ relJoin r1 r2 = Rel h3 b3 where
 
 -- | Hanging relation, like grouping.
 hang :: (Ord v, RelValue v)
-    => Kit.HalfRelmap -> String
+    => Kit.OpUse v -> String
     -> Kit.Relmap v -> Kit.Relmap v
-hang h ns rm2 = Kit.relmapConfl h "hang" (Kit.withP2 relHang ns) [rm2]
+hang use ns rm2 = Kit.relmapConfl use "hang" (Kit.withP2 relHang ns) [rm2]
 
 relHang :: (Ord v, RelValue v)
     => [String] -> [Rel v] -> Rel v -> Rel v
@@ -105,13 +105,13 @@ selfhang = undefined
 
 -- ----------------------  Semijoin
 
-relmapSome :: (Ord v) => Kit.HalfRelmap -> Kit.Relmap v -> Kit.Relmap v
-relmapSome h m = Kit.relmapConfl h "minus" sub [m] where
+relmapSome :: (Ord v) => Kit.OpUse v -> Kit.Relmap v -> Kit.Relmap v
+relmapSome use m = Kit.relmapConfl use "minus" sub [m] where
     sub [r2] r1 = relSome r1 r2
     sub _ _     = undefined
 
-relmapMinus :: (Ord v) => Kit.HalfRelmap -> Kit.Relmap v -> Kit.Relmap v
-relmapMinus h m = Kit.relmapConfl h "minus" sub [m] where
+relmapMinus :: (Ord v) => Kit.OpUse v -> Kit.Relmap v -> Kit.Relmap v
+relmapMinus use m = Kit.relmapConfl use "minus" sub [m] where
     sub [r2] r1 = relMinus r1 r2
     sub _ _     = undefined
 

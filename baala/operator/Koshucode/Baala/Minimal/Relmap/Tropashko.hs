@@ -17,10 +17,12 @@ module Koshucode.Baala.Minimal.Relmap.Tropashko
   -- $NamingConventions
 
   -- * Functions on rel
-  relMeet, relJoin,
+  relMeet,
+  relJoin,
 
   -- * Functions on relmap
-  relmapMeet, relmapJoin
+  relmapMeet,
+  relmapJoin
 ) where
 import Koshucode.Baala.Base.Data
 import qualified Koshucode.Baala.Base.Kit as Kit
@@ -81,20 +83,20 @@ relJoin (Rel h1 b1) (Rel h2 b2) = Rel h3 b3 where
 
 -- | Meet two relations.
 relmapMeet :: (Ord v)
-    => Kit.HalfRelmap   -- ^ Source infomation
+    => Kit.OpUse v      -- ^ Source infomation
     -> Kit.Relmap v     -- ^ Subrelmap of join operator
     -> Kit.Relmap v     -- ^ Relmap of join operator
-relmapMeet h m = Kit.relmapConfl h "meet" sub [m] where
+relmapMeet use m = Kit.relmapConfl use "meet" sub [m] where
     sub [r2] r1 = relMeet r1 r2
     sub _ _ = undefined
 
 -- | Join two relations.
 relmapJoin
     :: (Ord v)
-    => Kit.HalfRelmap   -- ^ Source infomation
+    => Kit.OpUse v      -- ^ Source infomation
     -> Kit.Relmap v     -- ^ Subrelmap of join operator
     -> Kit.Relmap v     -- ^ Relmap of join operator
-relmapJoin h m = Kit.relmapConfl h "join" sub [m] where
+relmapJoin use m = Kit.relmapConfl use "join" sub [m] where
     sub [r2] r1 = relJoin r1 r2
     sub _ _ = undefined
 
@@ -134,8 +136,8 @@ relmapJoin h m = Kit.relmapConfl h "join" sub [m] where
 -- [@relmapXxx@]
 -- Functions from 'Kit.Relmap' to 'Kit.Relmap'.
 -- 
--- [@fullXxx@]
--- Functions of 'Koshucode.Baala.Base.Struct.Half.HalfRelmap.RelmapFullCons'.
+-- [@consXxx@]
+-- Functions of 'Koshucode.Baala.Base.Relmap.HalfRelmap.OpCons'.
 -- These functions construct 'Kit.Relmap' from operator usages,
 -- but constructions are failed if operators are misused.
 

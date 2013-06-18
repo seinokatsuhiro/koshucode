@@ -16,6 +16,7 @@ koshu = Kit.koshuQuoter vanillaHalf [| vanillaFull |]
 
 -- relmap constructors
 vanillaHalf :: Kit.RelmapHalfCons
-vanillaFull :: Kit.RelmapWholeCons Val
-(Kit.ConsRelmap vanillaHalf vanillaFull) = Kit.makeConsRelmap vanillaRelmaps
+vanillaFull :: Kit.RelmapFullCons Val
+(Kit.RelmapCons vanillaHalf vanillaFull)
+    = Kit.relmapCons vanillaRelmaps
 

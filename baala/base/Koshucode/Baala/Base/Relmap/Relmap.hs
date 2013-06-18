@@ -15,6 +15,7 @@ module Koshucode.Baala.Base.Relmap.Relmap
   -- $AppendRelmaps
 
   -- * Constructor
+, OpUse (..)
 , relmapSource
 , relmapCalc
 , relmapConfl
@@ -24,10 +25,10 @@ module Koshucode.Baala.Base.Relmap.Relmap
 , relmapAppendList
 ) where
 
+import Data.Monoid
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Relmap.HalfRelmap
-import Data.Monoid
 
 
 
@@ -108,17 +109,23 @@ docRelmapAppend = docv . map pipe . relmapAppendList where
 
 -- ----------------------  Constructor
 
+data OpUse v = OpUse {
+      opHalf :: HalfRelmap
+    , opSub  :: [Relmap v]
+    } deriving (Show)
+
 -- | Retrieve relation from dataset
-relmapSource :: HalfRelmap -> String -> [String] -> (Relmap v)
-relmapSource = RelmapSource
+relmapSource :: OpUse v -> String -> [String] -> (Relmap v)
+relmapSource use = RelmapSource $ opHalf use
 
 -- | Make a non-confluent relmap
-relmapCalc :: HalfRelmap -> String -> RelmapSub v -> Relmap v
-relmapCalc h op sub = RelmapCalc h op sub []
+relmapCalc :: OpUse v -> String -> RelmapSub v -> Relmap v
+relmapCalc use op sub = RelmapCalc h op sub [] where
+    h = opHalf use
 
 -- | Make a confluent relmap
-relmapConfl :: HalfRelmap -> String -> RelmapSub v -> [Relmap v] -> Relmap v
-relmapConfl = RelmapCalc
+relmapConfl :: OpUse v -> String -> RelmapSub v -> [Relmap v] -> Relmap v
+relmapConfl use = RelmapCalc $ opHalf use
 
 
 
