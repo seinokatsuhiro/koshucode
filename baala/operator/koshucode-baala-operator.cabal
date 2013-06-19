@@ -47,6 +47,7 @@ library
   -- Modules exported by the library.
   exposed-modules:
         Koshucode.Baala.Minimal
+        Koshucode.Baala.Minimal.OpeKit
         Koshucode.Baala.Minimal.Relmap.Confl
         Koshucode.Baala.Minimal.Relmap.Get
         Koshucode.Baala.Minimal.Relmap.Implement
