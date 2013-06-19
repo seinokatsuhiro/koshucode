@@ -11,8 +11,7 @@ module Koshucode.Baala.Minimal.Relmap.Get
   getRelmap1
 ) where
 
-import Koshucode.Baala.Base.Prelude.Abort
-import Koshucode.Baala.Base.Relmap
+import Koshucode.Baala.Minimal.OpeKit as Kit
 import Koshucode.Baala.Base.Syntax
 
 type OperandGet v a

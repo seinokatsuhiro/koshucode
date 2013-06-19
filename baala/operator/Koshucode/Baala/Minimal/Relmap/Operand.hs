@@ -10,7 +10,7 @@ module Koshucode.Baala.Minimal.Relmap.Operand
 , likeSource
 ) where
 
-import Koshucode.Baala.Base.Kit
+import Koshucode.Baala.Minimal.OpeKit as Kit
 import Koshucode.Baala.Minimal.Relmap.Pattern
 
 -- | 'OperandPattern' for minimal operators

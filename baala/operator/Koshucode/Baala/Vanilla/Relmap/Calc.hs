@@ -3,15 +3,16 @@
 -- | Relational mappers
 
 module Koshucode.Baala.Vanilla.Relmap.Calc
-( holdBody, valBody
+( holdBody
+, valBody
 , limit
 --, divide, range
 ) where
-import Koshucode.Baala.Base.Syntax
+
+import Koshucode.Baala.Minimal.OpeKit as Kit
 import Koshucode.Baala.Vanilla.Value.Relval
+import Koshucode.Baala.Vanilla.Calc as Calc
 import qualified Data.List as List
-import qualified Koshucode.Baala.Vanilla.Calc as Calc
-import qualified Koshucode.Baala.Base.Kit as Kit
 
 
 

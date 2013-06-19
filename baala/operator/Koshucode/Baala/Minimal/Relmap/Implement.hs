@@ -11,9 +11,7 @@ module Koshucode.Baala.Minimal.Relmap.Implement
   relmapRename
 ) where
 
-import Data.Monoid
-import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Base.Kit as Kit
+import Koshucode.Baala.Minimal.OpeKit as Kit
 import Koshucode.Baala.Minimal.Relmap.Get
 import Koshucode.Baala.Minimal.Relmap.Operand
 import Koshucode.Baala.Minimal.Relmap.Pattern
@@ -81,13 +79,12 @@ consRelcon op r use = Right $ RelmapConst (opHalf use) op r
 consCut :: (Ord v) => OpCons v
 consCut use = do
   ns <- getTerms use "-term"
-  Right $ Kit.relmapCalc use "cut" (project Kit.indexCut ns)
+  Right $ Kit.relmapCalc use "cut" (project indexCut ns)
 
 consPick :: (Ord v) => OpCons v
 consPick use = do
   ns <- getTerms use "-term"
-  Right $ Kit.relmapCalc use "pick" (project Kit.indexPick ns)
-
+  Right $ Kit.relmapCalc use "pick" (project indexPick ns)
 -- Binary operation
 
 consJoin :: (Ord v) => OpCons v

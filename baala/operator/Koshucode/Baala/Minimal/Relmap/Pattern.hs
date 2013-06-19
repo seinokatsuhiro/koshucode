@@ -7,8 +7,7 @@ module Koshucode.Baala.Minimal.Relmap.Pattern
 , relmaps
 ) where
 
-import Koshucode.Baala.Base.Kit
-import Koshucode.Baala.Base.Syntax
+import Koshucode.Baala.Minimal.OpeKit as Kit
 
 -- | Class for operand pattern.
 class OperandPattern p where

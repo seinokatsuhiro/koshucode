@@ -8,6 +8,7 @@ module Koshucode.Baala.Vanilla.Value.Relval
 , module Koshucode.Baala.Vanilla.Value.Val
 , module Koshucode.Baala.Base.Prelude
 ) where
+
 import Koshucode.Baala.Vanilla.Value.Val
 import Koshucode.Baala.Base.Prelude hiding ((<>), hang, empty, semi)
 

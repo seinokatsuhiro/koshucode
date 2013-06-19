@@ -24,8 +24,8 @@ module Koshucode.Baala.Minimal.Relmap.Tropashko
   relmapMeet,
   relmapJoin
 ) where
-import Koshucode.Baala.Base.Data
-import qualified Koshucode.Baala.Base.Kit as Kit
+
+import Koshucode.Baala.Minimal.OpeKit as Kit
 
 
 
@@ -42,13 +42,13 @@ relMeet (Rel h1 b1) (Rel h2 b2) = Rel h3 b3 where
     share2 = Kit.headPoss h2 $ Kit.possInner posh12
     side2  = Kit.headPoss h2 $ Kit.possOuter posh12
 
-    m2 = Kit.gatherToMap $ map pair b2
+    m2 = gatherToMap $ map pair b2
     pair arg2 = (Kit.possPick share2 arg2,
                  Kit.possPick side2  arg2)
 
     h3 = Kit.mappend h2 h1
     b3 = concatMap step b1
-    step arg1 = case Kit.lookupMap (Kit.possPick share1 arg1) m2 of
+    step arg1 = case lookupMap (Kit.possPick share1 arg1) m2 of
                   Just side -> map (++ arg1) side
                   Nothing   -> []
 
@@ -63,7 +63,7 @@ relJoin (Rel h1 b1) (Rel h2 b2) = Rel h3 b3 where
     pick2  = Kit.possPick  $ Kit.headPoss h2 posh12
 
     h3 = Kit.rehead pick1 h1
-    b3 = Kit.unique $
+    b3 = unique $
          map pick1 b1 ++
          map pick2 b2
 

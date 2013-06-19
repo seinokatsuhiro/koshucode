@@ -19,23 +19,23 @@ module Koshucode.Baala.Minimal.Relmap.Unary
 , conf
 , size
 ) where
-import Koshucode.Baala.Base.Data
+
 import Koshucode.Baala.Base.Prelude
+import Koshucode.Baala.Minimal.OpeKit as Kit
 import qualified Data.List  as List
 import qualified Data.Maybe as Maybe
 import qualified Data.Tuple as Tuple
-import qualified Koshucode.Baala.Base.Kit as Kit
 
 
 
 -- ----------------------  projection
 
-project :: (Ord v) => ([Int] -> Kit.Livmap2 v) -> [String] -> a -> RelmapFun v
+project :: (Ord v) => ([Int] -> Listmap v) -> [String] -> a -> RelmapFun v
 project f ns2 _ (Rel h1 b1) = Rel h2 b2 where
     pos = List.sort $ Kit.headPoss h1 (map singleton ns2)
     pj  = f $ Kit.posPoss pos
     h2  = Kit.rehead pj h1
-    b2  = Kit.unique $ map pj b1
+    b2  = unique $ map pj b1
 
 -- | Throw away all tuples in a relation.
 relEmpty :: Rel v -> Rel v

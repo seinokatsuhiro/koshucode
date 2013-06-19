@@ -6,17 +6,17 @@
 module Koshucode.Baala.Vanilla.Quoter
 ( koshu
 ) where
-import Koshucode.Baala.Vanilla.Value.Relval
+import Koshucode.Baala.Minimal.OpeKit as Kit
 import Koshucode.Baala.Vanilla.Relmap.Implement
-import qualified Koshucode.Baala.Base.Kit as Kit
+import Koshucode.Baala.Vanilla.Value.Relval
 
 -- | Quasiquoter for @[koshu| ... |]@.
-koshu :: Kit.QuasiQuoter
+koshu :: QuasiQuoter
 koshu = Kit.koshuQuoter vanillaHalf [| vanillaFull |]
 
 -- relmap constructors
-vanillaHalf :: Kit.RelmapHalfCons
-vanillaFull :: Kit.RelmapFullCons Val
-(Kit.RelmapCons vanillaHalf vanillaFull)
+vanillaHalf :: RelmapHalfCons
+vanillaFull :: RelmapFullCons Val
+(RelmapCons vanillaHalf vanillaFull)
     = Kit.relmapCons vanillaRelmaps
 
