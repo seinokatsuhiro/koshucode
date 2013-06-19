@@ -61,86 +61,297 @@ module Koshucode.Baala.Vanilla.Value.Relval
 terms :: [String] -> [Relterm]
 unionUpTerm :: Name a => [String] -> [a] -> [Relterm]
 
-module Koshucode.Baala.Vanilla.Calc.Ripen
-calcRipen :: Ripen Token Val
 
--- | Convert infix form to prefix form
-calcBinary :: TokenTree -> TokenTree
+-- | Kit for implementing relational operators
+module Koshucode.Baala.Minimal.OpeKit
 
-module Koshucode.Baala.Vanilla.Calc
+-- | An associative operation
+mappend :: Monoid a => a -> a -> a
 
--- | Prepare calculation. <tt>makeCalc</tt> <i>H E</i> is a calculator from
---   an expression <i>E</i> on a head <i>H</i>. Terms in <i>E</i> must be
---   terms in <i>H</i>. If not in <i>H</i>, an error is reported.
-makeCalc :: Relhead -> TokenTree -> Calc Val
+-- | Fold a list using the monoid. For most types, the default definition
+--   for <a>mconcat</a> will be used, but the function is included in the
+--   class definition so that an optimized version can be provided for
+--   specific types.
+mconcat :: Monoid a => [a] -> a
 
--- | Prepare named calculators
-makeHeadCalcs :: Relhead -> [TokenTree] -> (Relhead, [Calc Val])
+-- | Abort symbols
+data Abort :: *
+AbortLookup :: [SourceLine] -> String -> Abort
+AbortMalformedOperand :: [SourceLine] -> String -> Abort
+AbortMalformedTerms :: [SourceLine] -> String -> Abort
+AbortMissingTermName :: [SourceLine] -> String -> Abort
+AbortUnknownClause :: [SourceLine] -> Abort
+AbortUnknownRelmap :: [SourceLine] -> String -> Abort
+AbortUsage :: [SourceLine] -> [String] -> Abort
 
+-- | Abortable type
+type AbortOr a = Either Abort a
 
--- | Relational mappers
-module Koshucode.Baala.Vanilla.Relmap.Calc
+-- | Lookup association list. This function may abort on AbortLookup.
+(<!!>) :: [(String, a)] -> String -> AbortOr a
+class IntValue v
+intValue :: IntValue v => Int -> v
 
--- | Make relmap function for <tt>hold</tt> operator.
-holdBody :: (Val -> Val -> Bool) -> TokenTree -> a -> RelmapFun Val
+-- | Relations on type v. Heading of relation and body of relation as a
+--   list of tuples.
+data Rel v :: * -> *
+Rel :: Relhead -> Relbody v -> Rel v
+class RelValue v
+relValue :: RelValue v => Rel v -> v
 
--- | Make relmap function for <tt>val</tt> operator.
-valBody :: [TokenTree] -> a -> RelmapFun Val
+-- | Heading of relation as a list of terms
+data Relhead :: *
+Relhead :: [Relterm] -> Relhead
+headTerms :: Relhead -> [Relterm]
 
--- | Keep leading tuples.
-limit :: Ord v => HalfRelmap -> Int -> String -> Relmap v
+-- | Relation-to-relation mapping
+type RelmapFun v = Rel v -> Rel v
 
+-- | Term in heading of relation
+data Relterm :: *
+Term :: String -> Relterm
+Nest :: String -> [Relterm] -> Relterm
+class StringValue v
+stringValue :: StringValue v => String -> v
 
--- | Unary relational mappers
-module Koshucode.Baala.Minimal.Relmap.Unary
-project :: Ord v => ([Int] -> Livmap2 v) -> [String] -> a -> RelmapFun v
+-- | Make head from term names
+headFrom :: [String] -> Relhead
 
--- | Throw away all tuples in a relation.
-relEmpty :: Rel v -> Rel v
-relmapEmpty :: HalfRelmap -> Relmap v
+-- | Positions of given (sub)head in a head
+headPosh :: Relhead -> Relhead -> [TermPos]
 
--- | Change name of terms.
-renameNP :: [(String, String)] -> a -> RelmapFun v
+-- | Positions of given names in a head
+headPoss :: Relhead -> [[String]] -> [TermPos]
+intValue :: IntValue v => Int -> v
 
--- | Add prefix to terms
-prefix :: String -> Relmap v
+-- | Indicies
+posPoss :: [TermPos] -> [Int]
 
--- | Remove prefix
-unprefix :: String -> Relmap v
+-- | Pick an inner part.
+possInner :: [TermPos] -> [[String]]
 
--- | Change prefix
-prefixChange :: String -> Relmap v
+-- | Pick an outer part.
+possOuter :: [TermPos] -> [[String]]
 
--- | Enclose the current relation in a term.
-enclose :: RelValue v => String -> Relmap v
+-- | Pick values
+possPick :: [TermPos] -> [v] -> [v]
 
--- | Current term configuration.
-conf :: StringValue v => String -> Relmap v
+-- | Reconstruct head
+rehead :: ([String] -> [String]) -> Relhead -> Relhead
+relValue :: RelValue v => Rel v -> v
 
--- | Current cardinality.
-size :: IntValue v => String -> Relmap v
+-- | Relational constant that has no terms and the empty tuple
+reldee :: Rel v
 
+-- | Relational constant that has no terms and no tuples
+reldum :: Rel v
+stringValue :: StringValue v => String -> v
+orders :: String -> [OrderCap [Char]]
+sortByName :: (Ord v, Eq n) => [OrderCap n] -> [n] -> [[v]] -> [[v]]
+type Listmap a = forall a. [a] -> [a]
 
--- | Fundamental operators in relational algebra.
+-- | Gather (key,value) to a Map key [value]
+gatherToMap :: Ord k => [(k, v)] -> Map k [v]
+
+-- | Cut indexed elements
 --   
---   Tropashko's relational lattice is a kind of relational algebra.
---   Relational algebra is an algebraic formulation for relational model.
---   In constrast to Codd's original relational algebra, Tropashko lattice
---   is in more conventional and strict ways. The lattice has fundamental
---   operators from which other operators are derived.
-module Koshucode.Baala.Minimal.Relmap.Tropashko
+--   <pre>
+--   &gt;&gt;&gt; indexCut [1,3] "abcdefg"
+--   "acefg"
+--   </pre>
+indexCut :: [Int] -> [a] -> [a]
 
--- | Meet two relations.
-relMeet :: Ord v => Rel v -> Rel v -> Rel v
+-- | Pick indexed elements.
+--   
+--   <pre>
+--   &gt;&gt;&gt; indexPick [1,3] "abcdefg"
+--   "bd"
+--   </pre>
+indexPick :: [Int] -> [a] -> [a]
+lookupMap :: Ord k => k -> Map k a -> Maybe a
 
--- | Join two relations.
-relJoin :: Ord v => Rel v -> Rel v -> Rel v
+-- | Remove duplicate elements.
+unique :: Ord a => [a] -> [a]
 
--- | Meet two relations.
-relmapMeet :: Ord v => HalfRelmap -> Relmap v -> Relmap v
+-- | Constructor of relational operator <a>Relmap</a>. <a>Relmap</a> is
+--   constructed from <tt>HalfRelmap</tt> and subrelmaps in it.
+type OpCons v = OpUse v -> AbortOr (Relmap v)
+data OpUse v :: * -> *
+OpUse :: HalfRelmap -> [Relmap v] -> OpUse v
+opHalf :: OpUse v -> HalfRelmap
+opSub :: OpUse v -> [Relmap v]
 
--- | Join two relations.
-relmapJoin :: Ord v => HalfRelmap -> Relmap v -> Relmap v
+-- | Parser for operand of relational operator. This parsers docompose
+--   operand trees, and give a name to suboperand.
+type OperandParser = [TokenTree] -> [Named [TokenTree]]
+type OperandParser' = [Named [TokenTree]] -> [Named [TokenTree]]
+
+-- | Relation-to-relation mapping. A <a>Relmap</a> is correspond to a use
+--   of relational operator, that is pair of operator and its operand.
+data Relmap v :: * -> *
+
+-- | Relmap that retrieves a relation from a dataset
+RelmapSource :: HalfRelmap -> String -> [String] -> Relmap v
+
+-- | Relmap that has a constant relation
+RelmapConst :: HalfRelmap -> String -> Rel v -> Relmap v
+
+-- | Relmap that has equavalent relmap
+RelmapAlias :: HalfRelmap -> Relmap v -> Relmap v
+
+-- | Relmap that maps relations to a relation
+RelmapCalc :: HalfRelmap -> String -> RelmapSub v -> [Relmap v] -> Relmap v
+
+-- | Relmap that joints two relmaps
+RelmapAppend :: Relmap v -> Relmap v -> Relmap v
+
+-- | Relmap reference
+RelmapName :: HalfRelmap -> String -> Relmap v
+
+-- | Half and full relmap constructor
+data RelmapCons v :: * -> *
+RelmapCons :: RelmapHalfCons -> RelmapFullCons v -> RelmapCons v
+consHalf :: RelmapCons v -> RelmapHalfCons
+consFull :: RelmapCons v -> RelmapFullCons v
+
+-- | Second step of constructing relmap, make <a>Relmap</a> from contents
+--   of <a>HalfRelmap</a>.
+type RelmapFullCons v = HalfRelmap -> AbortOr (Relmap v)
+
+-- | First step of constructing relmap, make <a>HalfRelmap</a> from use of
+--   relational operator.
+type RelmapHalfCons = [SourceLine] -> [TokenTree] -> HalfRelmap
+
+-- | Implementation of relmap operator. It consists of (1) operator name,
+--   (2) operand parser, (3) constructor of operator, and (4) usage of
+--   operator.
+data RelmapImplement v :: * -> *
+RelmapImplement :: String -> OperandParser -> OpCons v -> [String] -> RelmapImplement v
+
+-- | Operand of relmap operation
+halfOperand :: HalfRelmap -> [Named [TokenTree]]
+
+-- | Make a non-confluent relmap
+relmapCalc :: OpUse v -> String -> RelmapSub v -> Relmap v
+
+-- | Make a confluent relmap
+relmapConfl :: OpUse v -> String -> RelmapSub v -> [Relmap v] -> Relmap v
+
+-- | Make half and full relmap constructors.
+relmapCons :: [RelmapImplement v] -> RelmapCons v
+
+-- | Retrieve relation from dataset
+relmapSource :: OpUse v -> String -> [String] -> Relmap v
+data QuasiQuoter :: *
+
+-- | Make quasiquoter for <tt>[koshu| ... |]</tt>.
+koshuQuoter :: RelmapHalfCons -> ExpQ -> QuasiQuoter
+
+-- | Calculator combining values into a single value
+type Calc v = [v] -> v
+
+-- | Set of operators
+type Ripen x v = x -> [v] -> Calc v
+data Token :: *
+
+-- | Text
+Word :: Int -> String -> Token
+
+-- | Term name
+TermN :: [String] -> Token
+
+-- | Term position
+TermP :: [Int] -> Token
+
+-- | Open paren
+Open :: String -> Token
+
+-- | Close paren
+Close :: String -> Token
+
+-- | N space chars
+Space :: Int -> Token
+
+-- | Comment text
+Comment :: String -> Token
+
+-- | Source infomation
+Line :: SourceLine -> Token
+
+-- | Tree of tokens
+type TokenTree = Tree Token
+
+-- | Tree of leaf and branch
+data Tree a :: * -> *
+
+-- | Terminal of a tree
+TreeL :: a -> Tree a
+
+-- | Paren-type and subtrees
+TreeB :: Int -> [Tree a] -> Tree a
+
+-- | Split branches in a given tree at infixed binary operators
+binaryTree :: Show a => (a -> BinaryHeight) -> Tree a -> Tree a
+
+-- | Calculate a value of tree
+crop :: Ripen x v -> Tree x -> Calc v
+
+-- | Make the height function from a height table of operators
+heightTable :: Ord a => [(BinaryHeight, [a])] -> a -> BinaryHeight
+
+-- | Split operand into named group. Non quoted words beginning with
+--   hyphen, e.g., <tt>-x</tt>, are name of group.
+--   
+--   <pre>
+--   &gt;&gt;&gt; operandGroup $ tokenTrees $ tokens "a b -x c 'd' -y e"
+--   [("",   [TreeL (Word 0 "a"), TreeL (Word 0 "b")]),
+--    ("-x", [TreeL (Word 0 "c"), TreeL (Word 1 "d")]),
+--    ("-y", [TreeL (Word 0 "e")])]
+--   </pre>
+operandGroup :: [TokenTree] -> [Named [TokenTree]]
+
+-- | Extract a list of name-and-tree pairs.
+--   
+--   <pre>
+--   &gt;&gt;&gt; termTreePairs $ tokenTrees $ tokens "/a 'A3' /b 10"
+--   Right [("/a", TreeL (Word 1 "A3")), ("/b", TreeL (Word 0 "10"))]
+--   </pre>
+termTreePairs :: [TokenTree] -> AbortOr [(String, TokenTree)]
+
+-- | Call a relmap function with new term names.
+withN1 :: WithTerms v
+
+-- | Call a relmap function with present term names.
+withP :: WithTerms v
+
+-- | Call a relconfl function with present term names.
+withP2 :: ([String] -> [Rel v] -> RelmapFun v) -> String -> [Rel v] -> RelmapFun v
+
+
+-- | Confluent relational mapping
+module Koshucode.Baala.Minimal.Relmap.Confl
+relmapSome :: Ord v => OpUse v -> Relmap v -> Relmap v
+relmapMinus :: Ord v => OpUse v -> Relmap v -> Relmap v
+relSome :: Ord v => Rel v -> Rel v -> Rel v
+relMinus :: Ord v => Rel v -> Rel v -> Rel v
+
+
+-- | OperandGet
+module Koshucode.Baala.Minimal.Relmap.Get
+type OperandGet v a = OpUse v -> String -> AbortOr a
+
+-- | Abortable <a>head</a>
+getHead :: [a] -> AbortOr a
+
+-- | Get word from named operand.
+getWord :: OperandGet v String
+
+-- | Get list of term names from named operand.
+getTerms :: OperandGet v [String]
+
+-- | Get list of term-name pairs from named operand.
+getTermPairs :: OperandGet v [(String, String)]
+getRelmap1 :: OpUse v -> AbortOr (Relmap v)
 
 
 -- | Class for operand patterns
@@ -153,7 +364,7 @@ operandParser' :: OperandPattern p => p -> OperandParser'
 operandUsage :: OperandPattern p => p -> [String]
 
 -- | Make relmap implementations.
-relmaps :: OperandPattern p => [(String, p, OperatorCons v)] -> [RelmapImplement v]
+relmaps :: OperandPattern p => [(String, p, OpCons v)] -> [RelmapImplement v]
 
 
 -- | Operand patterns
@@ -188,21 +399,56 @@ instance Enum MinimalOperand
 instance OperandPattern MinimalOperand
 
 
--- | OperandGet
-module Koshucode.Baala.Minimal.Relmap.Get
-type OperandGet a = [Named [TokenTree]] -> String -> AbortOr a
+-- | Fundamental operators in relational algebra.
+--   
+--   Tropashko's relational lattice is a kind of relational algebra.
+--   Relational algebra is an algebraic formulation for relational model.
+--   In constrast to Codd's original relational algebra, Tropashko lattice
+--   is in more conventional and strict ways. The lattice has fundamental
+--   operators from which other operators are derived.
+module Koshucode.Baala.Minimal.Relmap.Tropashko
 
--- | Abortable <a>head</a>
-getHead :: [a] -> AbortOr a
+-- | Meet two relations.
+relMeet :: Ord v => Rel v -> Rel v -> Rel v
 
--- | Get word from named operand.
-getWord :: OperandGet String
+-- | Join two relations.
+relJoin :: Ord v => Rel v -> Rel v -> Rel v
 
--- | Get list of term names from named operand.
-getTerms :: OperandGet [String]
+-- | Meet two relations.
+relmapMeet :: Ord v => OpUse v -> Relmap v -> Relmap v
 
--- | Get list of term-name pairs from named operand.
-getTermPairs :: OperandGet [(String, String)]
+-- | Join two relations.
+relmapJoin :: Ord v => OpUse v -> Relmap v -> Relmap v
+
+
+-- | Unary relational mappers
+module Koshucode.Baala.Minimal.Relmap.Unary
+project :: Ord v => ([Int] -> Listmap v) -> [String] -> a -> RelmapFun v
+
+-- | Throw away all tuples in a relation.
+relEmpty :: Rel v -> Rel v
+relmapEmpty :: OpUse v -> Relmap v
+
+-- | Change name of terms.
+renameNP :: [(String, String)] -> a -> RelmapFun v
+
+-- | Add prefix to terms
+prefix :: String -> Relmap v
+
+-- | Remove prefix
+unprefix :: String -> Relmap v
+
+-- | Change prefix
+prefixChange :: String -> Relmap v
+
+-- | Enclose the current relation in a term.
+enclose :: RelValue v => String -> Relmap v
+
+-- | Current term configuration.
+conf :: StringValue v => String -> Relmap v
+
+-- | Current cardinality.
+size :: IntValue v => String -> Relmap v
 
 
 -- | Minimal implementations of relmaps
@@ -212,19 +458,36 @@ module Koshucode.Baala.Minimal.Relmap.Implement
 minimalRelmaps :: Ord v => [RelmapImplement v]
 
 -- | Change term names
-relmapRename :: HalfRelmap -> [(String, String)] -> (Relmap v)
+relmapRename :: OpUse v -> [(String, String)] -> (Relmap v)
+
+module Koshucode.Baala.Vanilla.Calc.Ripen
+calcRipen :: Ripen Token Val
+
+-- | Convert infix form to prefix form
+calcBinary :: TokenTree -> TokenTree
+
+module Koshucode.Baala.Vanilla.Calc
+
+-- | Prepare calculation. <tt>makeCalc</tt> <i>H E</i> is a calculator from
+--   an expression <i>E</i> on a head <i>H</i>. Terms in <i>E</i> must be
+--   terms in <i>H</i>. If not in <i>H</i>, an error is reported.
+makeCalc :: Relhead -> TokenTree -> Calc Val
+
+-- | Prepare named calculators
+makeHeadCalcs :: Relhead -> [TokenTree] -> (Relhead, [Calc Val])
 
 
--- | Confluent relational mapping
-module Koshucode.Baala.Minimal.Relmap.Confl
+-- | Relational mappers
+module Koshucode.Baala.Vanilla.Relmap.Calc
 
--- | Hanging relation, like grouping.
-hang :: (Ord v, RelValue v) => HalfRelmap -> String -> Relmap v -> Relmap v
-selfhang :: a
-relmapSome :: Ord v => HalfRelmap -> Relmap v -> Relmap v
-relmapMinus :: Ord v => HalfRelmap -> Relmap v -> Relmap v
-relSome :: Ord v => Rel v -> Rel v -> Rel v
-relMinus :: Ord v => Rel v -> Rel v -> Rel v
+-- | Make relmap function for <tt>hold</tt> operator.
+holdBody :: (Val -> Val -> Bool) -> TokenTree -> a -> RelmapFun Val
+
+-- | Make relmap function for <tt>val</tt> operator.
+valBody :: [TokenTree] -> a -> RelmapFun Val
+
+-- | Keep leading tuples.
+limit :: Ord v => OpUse v -> Int -> String -> Relmap v
 
 
 -- | Relational mappings
@@ -262,6 +525,11 @@ vanillaRelmaps :: [RelmapImplement Val]
 
 -- | like SQL's left join
 relMaybe :: (Ord v, Nil v) => Rel v -> Rel v -> Rel v
+
+-- | Hanging relation, like grouping.
+hang :: (Ord v, RelValue v) => OpUse v -> String -> Relmap v -> Relmap v
+relHang :: (Ord v, RelValue v) => [String] -> [Rel v] -> Rel v -> Rel v
+selfhang :: a
 
 
 -- | Quasiquoter of Koshucode
