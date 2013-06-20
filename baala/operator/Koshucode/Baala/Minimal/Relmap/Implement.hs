@@ -3,12 +3,11 @@
 -- | Minimal implementations of relmaps
 
 module Koshucode.Baala.Minimal.Relmap.Implement
-( -- * List of operators
-  -- $ListOfOperators
+( -- * Implementation
+  minimalRelmaps
 
-  -- * Implementations of operators
-  minimalRelmaps,
-  relmapRename
+  -- * Operators
+  -- $ListOfOperators
 ) where
 
 import Koshucode.Baala.Minimal.OpKit as Kit
@@ -54,10 +53,6 @@ consRename :: OpCons v
 consRename use = do
   np <- getTermPairs use "-term"
   Right $ relmapRename use np
-
-{-| Change term names -}
-relmapRename :: OpUse v -> [(String, String)] -> (Relmap v)
-relmapRename use np = Kit.relmapCalc use "rename" (renameNP np)
 
 consSource :: OpCons v
 consSource use = do

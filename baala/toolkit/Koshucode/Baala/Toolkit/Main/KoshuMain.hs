@@ -44,6 +44,7 @@ data Option
     | OptShowEncoding
     | OptRun
     | OptPretty
+    | OptStdin
       deriving (Show, Eq, Ord, Enum, Bounded)
 
 koshuOptions :: [OptDescr Option]
@@ -53,20 +54,29 @@ koshuOptions =
     , Option ""  ["run"]      (NoArg OptRun)     "Run section."
     , Option ""  ["show-encoding"] (NoArg OptShowEncoding) "Show character encoding."
     , Option ""  ["pretty"]   (NoArg OptPretty) "Pretty print section."
+    , Option "i" ["stdin"]    (NoArg OptStdin)  "Read from stdin."
     ]
 
 version :: String
 version = "koshu-" ++ versionString
 
-usage :: String -> String
-usage prog = usageInfo (header prog) koshuOptions
+usage :: String
+usage = usageInfo header koshuOptions
 
-header :: String -> String
-header prog = unlines
-    [ "USAGE: " ++ prog ++ " [OPTION ...] CALC.k < INPUT.k > OUTPUT.k"
-    , "  A relational data processor in koshucode."
+header :: String
+header = unlines
+    [ "DESCRIPTION"
+    , "  This is a relational data processor in Koshucode."
+    , "  Koshucode is a notation for people and computers"
+    , "  who read, write, and calculate relational data."
     , ""
-    ] ++ "OPTIONS:"
+    , "EXAMPLES"  -- TYPICAL USAGES
+    , "  koshu CALC.k DATA1.k DATA2.k   Calculate using CALC.k"
+    , "                                 for input DATAn.k"
+    , "  koshu -i CALC.k < DATA.k       Read input data from"
+    , "                                 standard input"
+    , ""
+    ] ++ "OPTIONS"
 
 
 
@@ -82,13 +92,14 @@ koshuMain relmaps =
   in koshuMain' root =<< prelude
 
 koshuMain' :: (Value v) => Kit.Section v -> (String, [String]) -> IO ()
-koshuMain' root (prog, argv) =
+koshuMain' root (_, argv) =
     case getOpt Permute koshuOptions argv of
       (opts, files, [])
-          | has OptHelp         -> putSuccess $ usage prog
+          | has OptHelp         -> putSuccess usage
           | has OptVersion      -> putSuccess $ version ++ "\n"
           | has OptShowEncoding -> putSuccess =<< currentEncodings
-          | has OptPretty       -> prettySection root prog files
+          | has OptPretty       -> prettySection root files
+          | has OptStdin        -> runStdin root files
           | otherwise           -> run root files
           where has = (`elem` opts)
       (_, _, errs) -> putFailure $ concat errs
@@ -99,21 +110,28 @@ run root files = do
   sects <- mapM (Kit.sectionFile root) files
   abortIO Kit.runSectionIO $ concatMM sects
 
+runStdin :: (Value v) => Kit.Section v -> [FilePath] -> IO ()
+runStdin root files = do
+  input <- getContents
+  let sect = Kit.sectionRead root input
+  sects <- mapM (Kit.sectionFile root) files
+  abortIO Kit.runSectionIO $ concatMM (sect : sects)
+
 concatMM :: (Monad m, Monoid a) => [m a] -> m a
 concatMM [] = return mempty
 concatMM (s:ss) = do s'  <- s
                      ss' <- concatMM ss
                      return $ mappend s' ss'
 
-prettySection :: (Value v) => Kit.Section v -> String -> [FilePath] -> IO ()
-prettySection root prog files =
+prettySection :: (Value v) => Kit.Section v -> [FilePath] -> IO ()
+prettySection root files =
     case files of
       [file] -> do md <- Kit.sectionFile root file
                    prettyPrint md
       []     -> do stdin <- getContents
                    let md = Kit.sectionRead root stdin
                    prettyPrint md
-      _      -> putSuccess $ usage prog
+      _      -> putSuccess usage
     where prettyPrint md = abortIO (print . Pretty.doc) md
 
 

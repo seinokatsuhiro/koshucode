@@ -6,7 +6,7 @@ module Koshucode.Baala.Vanilla.Relmap.Operand
 
 import qualified Koshucode.Baala.Minimal as Mini
 
--- | 'Mini.OperandPattern' for relational operations.
+-- | 'Mini.OpPattern' for relational operations.
 data VanillaOperand
     {-| Boolean expression -}
     = LikeHold
@@ -22,7 +22,7 @@ data VanillaOperand
 
       deriving (Show, Eq, Enum)
 
-instance Mini.OperandPattern VanillaOperand where
+instance Mini.OpPattern VanillaOperand where
     operandParser' LikeHold   = Mini.likePick
     operandParser' LikeVal    = Mini.likePick
     operandParser' LikeMeet   = Mini.likeMeet

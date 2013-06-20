@@ -3,7 +3,10 @@
 -- | Operand patterns
 
 module Koshucode.Baala.Minimal.Relmap.Operand
-( MinimalOperand (..)
+( -- * Operand patterns
+  MinimalOperand (..)
+
+  -- * Operand parsers
 , likePick
 , likeMeet
 , likeRename
@@ -13,7 +16,11 @@ module Koshucode.Baala.Minimal.Relmap.Operand
 import Koshucode.Baala.Minimal.OpKit as Kit
 import Koshucode.Baala.Minimal.Relmap.Pattern
 
--- | 'OperandPattern' for minimal operators
+
+
+-- ----------------------  Opernd paterns
+
+-- | 'OpPattern' for minimal operators
 data MinimalOperand
     {-| No operand -}
     = LikeEmpty
@@ -34,7 +41,7 @@ data MinimalOperand
     | LikeSource
       deriving (Show, Eq, Enum)
 
-instance OperandPattern MinimalOperand where
+instance OpPattern MinimalOperand where
     operandParser' LikeEmpty  = id
     operandParser' LikeMeet   = likeMeet
     operandParser' LikePick   = likePick
@@ -46,6 +53,10 @@ instance OperandPattern MinimalOperand where
     operandUsage   LikePick   = ["/NAME ..."]
     operandUsage   LikeRename = ["/NEW /OLD ..."]
     operandUsage   LikeSource = ["SIGN /NAME ..."]
+
+
+
+-- ----------------------  Opernd parsers
 
 likePick :: OpParser'
 likePick xs =

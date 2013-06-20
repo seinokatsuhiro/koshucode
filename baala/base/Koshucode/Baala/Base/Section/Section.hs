@@ -13,6 +13,8 @@ module Koshucode.Baala.Base.Section.Section
 
   -- * Section
   Section (..)
+
+  -- * Selectors
 , sectionLinkedAssert
 
   -- * Constructors

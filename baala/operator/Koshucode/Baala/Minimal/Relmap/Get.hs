@@ -1,9 +1,9 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | OperandGet
+-- | Extract suboperand
 
 module Koshucode.Baala.Minimal.Relmap.Get
-( OperandGet,
+( OpGet,
   getHead,
   getWord,
   getTerms,
@@ -14,7 +14,7 @@ module Koshucode.Baala.Minimal.Relmap.Get
 import Koshucode.Baala.Minimal.OpKit as Kit
 import Koshucode.Baala.Base.Syntax
 
-type OperandGet v a
+type OpGet v a
     = OpUse v      -- ^ Operater use
     -> String      -- ^ Lookup key
     -> AbortOr a   -- ^ Suboperand
@@ -25,7 +25,7 @@ getHead (x:_) = Right x
 getHead _     = Left $ AbortLookup [] "head"
 
 {-| Get word from named operand. -}
-getWord :: OperandGet v String
+getWord :: OpGet v String
 getWord use n = do
   let opd = halfOperand $ opHalf use
   sign <- opd <!!> n
@@ -34,14 +34,14 @@ getWord use n = do
     _ -> Left $ AbortLookup [] n
 
 {-| Get list of term names from named operand. -}
-getTerms :: OperandGet v [String]
+getTerms :: OpGet v [String]
 getTerms use n = do
   let opd = halfOperand $ opHalf use
   term <- opd <!!> n
   termNames term
 
 {-| Get list of term-name pairs from named operand. -}
-getTermPairs :: OperandGet v [(String, String)]
+getTermPairs :: OpGet v [(String, String)]
 getTermPairs use n = do
   let opd = halfOperand $ opHalf use
   term <- opd <!!> n

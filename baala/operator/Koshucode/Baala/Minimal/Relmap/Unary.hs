@@ -9,6 +9,7 @@ module Koshucode.Baala.Minimal.Relmap.Unary
 , relEmpty, relmapEmpty
 
   -- * Naming
+, relmapRename
 , renameNP
 , prefix
 , unprefix
@@ -48,6 +49,10 @@ relmapEmpty use = Kit.relmapCalc use "empty" sub where
 
 
 -- ----------------------  naming
+
+{-| Change term names -}
+relmapRename :: OpUse v -> [(String, String)] -> (Relmap v)
+relmapRename use np = Kit.relmapCalc use "rename" (renameNP np)
 
 -- | Change name of terms.
 renameNP :: [(String, String)] -> a -> RelmapFun v
