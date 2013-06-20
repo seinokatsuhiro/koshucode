@@ -11,7 +11,7 @@ module Koshucode.Baala.Minimal.Relmap.Implement
   relmapRename
 ) where
 
-import Koshucode.Baala.Minimal.OpeKit as Kit
+import Koshucode.Baala.Minimal.OpKit as Kit
 import Koshucode.Baala.Minimal.Relmap.Get
 import Koshucode.Baala.Minimal.Relmap.Operand
 import Koshucode.Baala.Minimal.Relmap.Pattern
@@ -22,14 +22,14 @@ import Koshucode.Baala.Minimal.Relmap.Unary
 
 -- ----------------------  Operators
 
-builtinRelmaps :: (Ord v) => [RelmapImplement v]
+builtinRelmaps :: (Ord v) => [OpImplement v]
 builtinRelmaps = relmaps [ ("|", LikeEmpty, consConcat) ]
 
 consConcat :: OpCons v
 consConcat = Right . mconcat . opSub
 
 -- | Minimal implementations of relmaps
-minimalRelmaps :: (Ord v) => [RelmapImplement v]
+minimalRelmaps :: (Ord v) => [OpImplement v]
 minimalRelmaps = builtinRelmaps ++ relmaps
     -- Relmap operators in alphabetical order
     [ o "cut"     LikePick    consCut

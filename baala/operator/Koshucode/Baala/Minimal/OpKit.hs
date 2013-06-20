@@ -2,7 +2,7 @@
 
 -- | Kit for implementing relational operators
 
-module Koshucode.Baala.Minimal.OpeKit
+module Koshucode.Baala.Minimal.OpKit
 ( 
   -- * Monoid
   Monoid.mappend
@@ -49,14 +49,14 @@ module Koshucode.Baala.Minimal.OpeKit
 
   -- * Relmap
 , Relmap.OpCons
+, Relmap.OpImplement (..)
+, Relmap.OpParser
+, Relmap.OpParser'
 , Relmap.OpUse (..)
-, Relmap.OperandParser
-, Relmap.OperandParser'
 , Relmap.Relmap (..)
 , Relmap.RelmapCons (..)
 , Relmap.RelmapFullCons
 , Relmap.RelmapHalfCons
-, Relmap.RelmapImplement (..)
 , Relmap.halfOperand
 , Relmap.relmapCalc
 , Relmap.relmapConfl

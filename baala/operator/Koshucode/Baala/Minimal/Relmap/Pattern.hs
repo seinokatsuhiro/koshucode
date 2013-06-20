@@ -7,14 +7,14 @@ module Koshucode.Baala.Minimal.Relmap.Pattern
 , relmaps
 ) where
 
-import Koshucode.Baala.Minimal.OpeKit as Kit
+import Koshucode.Baala.Minimal.OpKit as Kit
 
 -- | Class for operand pattern.
 class OperandPattern p where
-    operandParser :: p -> OperandParser
+    operandParser :: p -> OpParser
     operandParser p = operandParser' p . operandGroup
 
-    operandParser' :: p -> OperandParser'
+    operandParser' :: p -> OpParser'
     operandParser' _ = id
 
     operandUsage :: p -> [String]
@@ -24,10 +24,10 @@ class OperandPattern p where
 relmaps
     :: (OperandPattern p)
     => [(String, p, OpCons v)] -- ^ Operator implementations
-    -> [RelmapImplement v] -- ^ Result
+    -> [OpImplement v] -- ^ Result
 relmaps = map f where
     f (op, p, full) =
         let parser  = operandParser p
             addOp u = op ++ " " ++ u
-        in RelmapImplement op parser full (map addOp $ operandUsage p)
+        in OpImplement op parser full (map addOp $ operandUsage p)
 

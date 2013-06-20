@@ -9,7 +9,7 @@ module Koshucode.Baala.Minimal.Relmap.Confl
 , relMinus
 ) where
 
-import Koshucode.Baala.Minimal.OpeKit as Kit
+import Koshucode.Baala.Minimal.OpKit as Kit
 
 relmapSome :: (Ord v) => Kit.OpUse v -> Kit.Relmap v -> Kit.Relmap v
 relmapSome use m = Kit.relmapConfl use "minus" sub [m] where

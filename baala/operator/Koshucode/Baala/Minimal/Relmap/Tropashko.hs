@@ -25,7 +25,7 @@ module Koshucode.Baala.Minimal.Relmap.Tropashko
   relmapJoin
 ) where
 
-import Koshucode.Baala.Minimal.OpeKit as Kit
+import Koshucode.Baala.Minimal.OpKit as Kit
 
 
 

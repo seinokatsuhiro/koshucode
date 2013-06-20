@@ -5,7 +5,7 @@ module Koshucode.Baala.Vanilla.Calc.Ripen
 , calcBinary
 ) where
 
-import Koshucode.Baala.Minimal.OpeKit as Kit
+import Koshucode.Baala.Minimal.OpKit as Kit
 import Koshucode.Baala.Vanilla.Value.Relval
 import qualified Data.List as List
 import qualified Data.Map  as Map

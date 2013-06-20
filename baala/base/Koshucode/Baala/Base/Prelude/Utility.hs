@@ -1,4 +1,5 @@
-{-# OPTIONS_GHC -Wall #-}
+{-# LANGUAGE Rank2Types #-}
+{-# OPTIONS_GHC #-}
 
 -- | General utilities
 
@@ -26,6 +27,7 @@ module Koshucode.Baala.Base.Prelude.Utility
 
 -- * Class
 , Name (..)
+, Listmap
 ) where
 
 import Control.Applicative
@@ -101,4 +103,6 @@ class Name a where
     name :: a -> String
     names :: [a] -> [String]
     names = map name
+
+type Listmap a = forall a. [a] -> [a]
 

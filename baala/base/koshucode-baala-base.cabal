@@ -7,7 +7,7 @@ name:                koshucode-baala-base
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:             0.11.0.0
+version:             0.12.0.0
 
 -- A short (one-line) description of the package.
 synopsis:            A notational system for relational data
@@ -70,15 +70,15 @@ library
 
         Koshucode.Baala.Base.Relmap
         Koshucode.Baala.Base.Relmap.Assert
+        Koshucode.Baala.Base.Relmap.Construct
         Koshucode.Baala.Base.Relmap.HalfRelmap
         Koshucode.Baala.Base.Relmap.Implement
         Koshucode.Baala.Base.Relmap.Relmap
-        Koshucode.Baala.Base.Relmap.RelmapCons
+        Koshucode.Baala.Base.Relmap.Run
 
         Koshucode.Baala.Base.Section
         Koshucode.Baala.Base.Section.Clause
         Koshucode.Baala.Base.Section.Quoter
-        Koshucode.Baala.Base.Section.Run
         Koshucode.Baala.Base.Section.Section
         Koshucode.Baala.Base.Section.SectionIO
         Koshucode.Baala.Base.Section.SectionUnion

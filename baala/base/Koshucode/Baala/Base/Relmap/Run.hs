@@ -2,13 +2,16 @@
 
 -- | Running relational calculation.
 
-module Koshucode.Baala.Base.Section.Run
+module Koshucode.Baala.Base.Relmap.Run
 ( runAssertJudges
 , runAssertDataset
 ) where
+
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Base.Relmap
+import Koshucode.Baala.Base.Relmap.Assert
+import Koshucode.Baala.Base.Relmap.HalfRelmap
+import Koshucode.Baala.Base.Relmap.Relmap
 
 
 
@@ -26,9 +29,9 @@ runRelmapDataset ds = runRelmapSelector $ selectRelation ds
 runRelmapSelector
     :: (Ord v, Nil v)
     => (Relsign -> [String] -> Rel v)  -- ^ Relation selector
-    -> Relmap v         -- ^ Mapping from 'Rel' to 'Rel'
-    -> Rel v            -- ^ Input relation
-    -> AbortOr (Rel v)  -- ^ Output relation
+    -> Relmap v          -- ^ Mapping from 'Rel' to 'Rel'
+    -> Rel v             -- ^ Input relation
+    -> AbortOr (Rel v)   -- ^ Output relation
 runRelmapSelector select = (<$>) where
     RelmapSource _ s ns <$> _ = Right $ select s ns
     RelmapConst  _ _ r  <$> _ = Right r
@@ -46,9 +49,9 @@ runRelmapSelector select = (<$>) where
 {-| Calculate assertion list. -}
 runAssertJudges
     :: (Ord v, Nil v)
-    => [Assert v]   -- ^ Assertion list
-    -> [Judge v]    -- ^ Input judges
-    -> AbortOr [Judge v]    -- ^ Output judges
+    => [Assert v]        -- ^ Assertion list
+    -> [Judge v]         -- ^ Input judges
+    -> AbortOr [Judge v] -- ^ Output judges
 runAssertJudges as = runAssertDataset as . dataset
 
 {-| Calculate assertion list. -}

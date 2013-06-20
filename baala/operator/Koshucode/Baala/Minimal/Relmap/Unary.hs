@@ -21,7 +21,7 @@ module Koshucode.Baala.Minimal.Relmap.Unary
 ) where
 
 import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Minimal.OpeKit as Kit
+import Koshucode.Baala.Minimal.OpKit as Kit
 import qualified Data.List  as List
 import qualified Data.Maybe as Maybe
 import qualified Data.Tuple as Tuple

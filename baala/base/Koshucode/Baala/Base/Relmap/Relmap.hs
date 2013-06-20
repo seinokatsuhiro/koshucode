@@ -14,15 +14,15 @@ module Koshucode.Baala.Base.Relmap.Relmap
   -- ** Append relmaps
   -- $AppendRelmaps
 
+  -- * Selector
+, relmapSourceList
+, relmapAppendList
+
   -- * Constructor
 , OpUse (..)
 , relmapSource
 , relmapCalc
 , relmapConfl
-
-  -- * Selector
-, relmapSourceList
-, relmapAppendList
 ) where
 
 import Data.Monoid
@@ -107,6 +107,25 @@ docRelmapAppend = docv . map pipe . relmapAppendList where
 
 
 
+-- ----------------------  Selector
+
+-- | List of 'RelmapSource'
+relmapSourceList :: Relmap v -> [Relmap v]
+relmapSourceList = loop where
+    loop m@(RelmapSource _ _ _) = [m]
+    loop (RelmapConst _ _ _)    = []
+    loop (RelmapAppend m1 m2) = loop m1 ++ loop m2
+    loop (RelmapCalc _ _ _ ms)  = concatMap loop ms
+    loop _ = undefined
+
+-- | Expand 'RelmapAppend' to list of 'Relmap'
+relmapAppendList :: Relmap v -> [Relmap v]
+relmapAppendList = loop where
+    loop (RelmapAppend m1 m2) = loop m1 ++ loop m2
+    loop m = [m]
+
+
+
 -- ----------------------  Constructor
 
 data OpUse v = OpUse {
@@ -127,24 +146,6 @@ relmapCalc use op sub = RelmapCalc h op sub [] where
 relmapConfl :: OpUse v -> String -> RelmapSub v -> [Relmap v] -> Relmap v
 relmapConfl use = RelmapCalc $ opHalf use
 
-
-
--- ----------------------  Selector
-
--- | List of 'RelmapSource'
-relmapSourceList :: Relmap v -> [Relmap v]
-relmapSourceList = loop where
-    loop m@(RelmapSource _ _ _) = [m]
-    loop (RelmapConst _ _ _)    = []
-    loop (RelmapAppend m1 m2) = loop m1 ++ loop m2
-    loop (RelmapCalc _ _ _ ms)  = concatMap loop ms
-    loop _ = undefined
-
--- | Expand 'RelmapAppend' to list of 'Relmap'
-relmapAppendList :: Relmap v -> [Relmap v]
-relmapAppendList = loop where
-    loop (RelmapAppend m1 m2) = loop m1 ++ loop m2
-    loop m = [m]
 
 
 -- ----------------------

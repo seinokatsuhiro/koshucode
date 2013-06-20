@@ -9,7 +9,7 @@ module Koshucode.Baala.Vanilla.Relmap.Implement
 , selfhang
 ) where
 
-import Koshucode.Baala.Minimal.OpeKit as Kit
+import Koshucode.Baala.Minimal.OpKit as Kit
 import Koshucode.Baala.Vanilla.Relmap.Calc
 import Koshucode.Baala.Vanilla.Relmap.Operand
 import Koshucode.Baala.Vanilla.Value.Relval
@@ -20,10 +20,10 @@ import qualified Koshucode.Baala.Minimal as Mini
 -- ----------------------  Operators
 
 -- | Implementation of relational operators.
-vanillaRelmaps :: [Kit.RelmapImplement Val]
+vanillaRelmaps :: [Kit.OpImplement Val]
 vanillaRelmaps = Mini.minimalRelmaps ++ vanillaRelmapsAddition
 
-vanillaRelmapsAddition :: [Kit.RelmapImplement Val]
+vanillaRelmapsAddition :: [Kit.OpImplement Val]
 vanillaRelmapsAddition = Mini.relmaps
     -- Relmap operators in alphabetical order
     [ o "hold"    LikeHold    consHold

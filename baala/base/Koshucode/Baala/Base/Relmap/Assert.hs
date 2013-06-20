@@ -3,7 +3,10 @@
 -- | Data structure for mapping relation to judges
 
 module Koshucode.Baala.Base.Relmap.Assert
-( Assert (..)
+( -- * Datatype
+  Assert (..)
+
+  -- * Constructors
 , affirm
 , deny
 ) where

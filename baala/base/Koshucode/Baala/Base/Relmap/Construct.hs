@@ -17,7 +17,7 @@
        that has these relmaps in 'halfSubmap'.
  -}
 
-module Koshucode.Baala.Base.Relmap.RelmapCons
+module Koshucode.Baala.Base.Relmap.Construct
 ( relmapCons,
   RelmapCons (..),
   RelmapHalfCons,
@@ -26,8 +26,8 @@ module Koshucode.Baala.Base.Relmap.RelmapCons
 
 import Koshucode.Baala.Base.Prelude hiding (cat)
 import Koshucode.Baala.Base.Relmap.HalfRelmap
-import Koshucode.Baala.Base.Relmap.Relmap
 import Koshucode.Baala.Base.Relmap.Implement
+import Koshucode.Baala.Base.Relmap.Relmap
 import Koshucode.Baala.Base.Syntax
 
 
@@ -36,12 +36,12 @@ import Koshucode.Baala.Base.Syntax
 
 {-| Make half and full relmap constructors. -}
 relmapCons
-    :: [RelmapImplement v]  -- ^ Implementations of relmap operator
-    -> (RelmapCons v)       -- ^ Relmap constructors
+    :: [OpImplement v]   -- ^ Implementations of relmap operator
+    -> (RelmapCons v)     -- ^ Relmap constructors
 relmapCons = make . unzip . map split where
     make (halfs, fulls) =
         RelmapCons (halfBundle halfs) (fullBundle fulls)
-    split (RelmapImplement n half full usage) =
+    split (OpImplement n half full usage) =
         ((n, (usage, half)), (n, full))
 
 {-| Half and full relmap constructor -}
@@ -64,7 +64,7 @@ type RelmapHalfCons
     -> [TokenTree]    -- ^ Operand as source trees
     -> HalfRelmap     -- ^ Result half relmap
 
-halfBundle :: [(String, ([String], OperandParser))] -> RelmapHalfCons
+halfBundle :: [(String, ([String], OpParser))] -> RelmapHalfCons
 halfBundle halfs = consHalfRelmap bundle where
     bundle :: String -> RelmapHalfCons
     bundle op src opd = case lookup op halfs of

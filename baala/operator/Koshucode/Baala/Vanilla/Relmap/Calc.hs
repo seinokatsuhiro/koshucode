@@ -9,7 +9,7 @@ module Koshucode.Baala.Vanilla.Relmap.Calc
 --, divide, range
 ) where
 
-import Koshucode.Baala.Minimal.OpeKit as Kit
+import Koshucode.Baala.Minimal.OpKit as Kit
 import Koshucode.Baala.Vanilla.Value.Relval
 import Koshucode.Baala.Vanilla.Calc as Calc
 import qualified Data.List as List

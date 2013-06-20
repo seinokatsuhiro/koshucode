@@ -1,17 +1,22 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Koshucode relational data processor.
+{-| Koshucode relational data processor. -}
 
 module Koshucode.Baala.Toolkit.Main.KoshuMain
 ( koshuMain
+
+-- * koshu.hs
+-- $koshu.hs
 ) where
+
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Toolkit.Library.Version
 import Koshucode.Baala.Toolkit.Library.Exit
 import System.Console.GetOpt
-import qualified Koshucode.Baala.Base.Struct as Struct
-import qualified Koshucode.Baala.Base.Kit as Kit
+import Data.Monoid
+import qualified Koshucode.Baala.Minimal.OpKit as Kit
+import qualified Koshucode.Baala.Base.Section as Kit
 import qualified Koshucode.Baala.Base.Prelude.Pretty as Pretty
 
 -- Flow
@@ -67,11 +72,12 @@ header prog = unlines
 
 -- ----------------------  Main
 
--- | The main function for @koshu@ command.
---   See 'Koshucode.Baala.Vanilla.Relmap.vanillaRelmaps' for default argument.
-koshuMain :: (Value v) => [Struct.RelmapImplement v] -> IO ()
+{-| The main function for @koshu@ command.
+    See 'Koshucode.Baala.Vanilla.Relmap.Implement.vanillaRelmaps'
+    for default argument. -}
+koshuMain :: (Value v) => [Kit.OpImplement v] -> IO ()
 koshuMain relmaps =
-  let cons = Struct.makeConsRelmap relmaps
+  let cons = Kit.relmapCons relmaps
       root = Kit.makeEmptySection cons
   in koshuMain' root =<< prelude
 
@@ -80,18 +86,24 @@ koshuMain' root (prog, argv) =
     case getOpt Permute koshuOptions argv of
       (opts, files, [])
           | has OptHelp         -> putSuccess $ usage prog
-          | has OptVersion      -> putSuccess version
+          | has OptVersion      -> putSuccess $ version ++ "\n"
           | has OptShowEncoding -> putSuccess =<< currentEncodings
           | has OptPretty       -> prettySection root prog files
-          | otherwise           -> runSection root prog files
+          | otherwise           -> run root files
           where has = (`elem` opts)
       (_, _, errs) -> putFailure $ concat errs
 
-runSection :: (Value v) => Kit.Section v -> String -> [FilePath] -> IO ()
-runSection root _ [file] = do
-  calc <- Kit.sectionFile root file
-  abortIO Kit.runSectionIO calc
-runSection _ prog _ = putSuccess $ usage prog
+{-| Read and union sections from files, and run the section. -}
+run :: (Value v) => Kit.Section v -> [FilePath] -> IO ()
+run root files = do
+  sects <- mapM (Kit.sectionFile root) files
+  abortIO Kit.runSectionIO $ concatMM sects
+
+concatMM :: (Monad m, Monoid a) => [m a] -> m a
+concatMM [] = return mempty
+concatMM (s:ss) = do s'  <- s
+                     ss' <- concatMM ss
+                     return $ mappend s' ss'
 
 prettySection :: (Value v) => Kit.Section v -> String -> [FilePath] -> IO ()
 prettySection root prog files =
@@ -139,4 +151,19 @@ prettySection root prog files =
 
 -- flow :: [Kit.Assert v] -> IO ()
 -- flow = putStrLn . show . Pretty.docv . map Pretty.doc
+
+-- ----------------------
+-- $koshu.hs
+--
+-- @koshu@ command is implemented using 'koshuMain'.
+--
+-- @
+-- import Koshucode.Baala.Toolkit.Main.KoshuMain
+-- import Koshucode.Baala.Vanilla
+-- @
+--
+-- @
+-- main :: IO ()
+-- main = koshuMain vanillaRelmaps
+-- @
 

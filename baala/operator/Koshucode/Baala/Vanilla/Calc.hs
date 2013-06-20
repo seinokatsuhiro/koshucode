@@ -6,7 +6,7 @@ module Koshucode.Baala.Vanilla.Calc
 ) where
 import Koshucode.Baala.Vanilla.Calc.Ripen
 import Koshucode.Baala.Vanilla.Value.Relval
-import Koshucode.Baala.Minimal.OpeKit as Kit
+import Koshucode.Baala.Minimal.OpKit as Kit
 
 -- 1. string
 -- 2. list of token

@@ -10,7 +10,7 @@ module Koshucode.Baala.Minimal.Relmap.Operand
 , likeSource
 ) where
 
-import Koshucode.Baala.Minimal.OpeKit as Kit
+import Koshucode.Baala.Minimal.OpKit as Kit
 import Koshucode.Baala.Minimal.Relmap.Pattern
 
 -- | 'OperandPattern' for minimal operators
@@ -47,25 +47,25 @@ instance OperandPattern MinimalOperand where
     operandUsage   LikeRename = ["/NEW /OLD ..."]
     operandUsage   LikeSource = ["SIGN /NAME ..."]
 
-likePick :: OperandParser'
+likePick :: OpParser'
 likePick xs =
     case lookup "" xs of
       Just xs2 -> [("-term", xs2)] ++ xs
       _ -> xs
 
-likeMeet :: OperandParser'
+likeMeet :: OpParser'
 likeMeet xs =
     case lookup "" xs of
       Just xs2@[_] -> [("-relmap", xs2)] ++ xs
       _ -> xs
 
-likeRename :: OperandParser'
+likeRename :: OpParser'
 likeRename xs =
     case lookup "" xs of
       Just xs2 -> [("-term", xs2)] ++ xs
       _ -> xs
 
-likeSource :: OperandParser'
+likeSource :: OpParser'
 likeSource xs =
     case lookup "" xs of
       Just (s:ns) -> [("-sign", [s]), ("-term", ns)] ++ xs

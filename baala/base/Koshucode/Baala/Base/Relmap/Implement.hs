@@ -1,9 +1,9 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Relmap.Implement
-( RelmapImplement (..),
-  OperandParser,
-  OperandParser',
+( OpImplement (..),
+  OpParser,
+  OpParser',
   OpCons
 ) where
 
@@ -17,15 +17,15 @@ import Koshucode.Baala.Base.Syntax
     (2) operand parser,
     (3) constructor of operator, and
     (4) usage of operator. -}
-data RelmapImplement v =
-    RelmapImplement String OperandParser (OpCons v) [String]
+data OpImplement v =
+    OpImplement String OpParser (OpCons v) [String]
     
 {-| Parser for operand of relational operator.
     This parsers docompose operand trees,
     and give a name to suboperand. -}
-type OperandParser = [TokenTree] -> [Named [TokenTree]]
+type OpParser = [TokenTree] -> [Named [TokenTree]]
 
-type OperandParser' = [Named [TokenTree]] -> [Named [TokenTree]]
+type OpParser' = [Named [TokenTree]] -> [Named [TokenTree]]
 
 {-| Constructor of relational operator 'Relmap'.
     'Relmap' is constructed from 'HalfRelmap' and subrelmaps in it. -}
