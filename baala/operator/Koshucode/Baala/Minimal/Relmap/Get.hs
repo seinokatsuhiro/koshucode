@@ -6,6 +6,7 @@ module Koshucode.Baala.Minimal.Relmap.Get
 ( OpGet,
   getHead,
   getWord,
+  getTerm1,
   getTerms,
   getTermPairs,
   getRelmap1
@@ -39,6 +40,14 @@ getTerms use n = do
   let opd = halfOperand $ opHalf use
   term <- opd <!!> n
   termNames term
+
+{-| Get list of term names from named operand. -}
+getTerm1 :: OpGet v String
+getTerm1 use n = do
+  ts <- getTerms use n
+  case ts of
+    [t] -> Right t
+    _   -> Left $ AbortLookup [] n
 
 {-| Get list of term-name pairs from named operand. -}
 getTermPairs :: OpGet v [(String, String)]

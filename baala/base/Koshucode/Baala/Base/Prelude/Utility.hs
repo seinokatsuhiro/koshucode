@@ -27,6 +27,7 @@ module Koshucode.Baala.Base.Prelude.Utility
 
 -- * Class
 , Name (..)
+, Map
 , Listmap
 ) where
 
@@ -104,5 +105,7 @@ class Name a where
     names :: [a] -> [String]
     names = map name
 
-type Listmap a = forall a. [a] -> [a]
+type Map a = a -> a
+
+type Listmap a = forall a. Map [a]
 

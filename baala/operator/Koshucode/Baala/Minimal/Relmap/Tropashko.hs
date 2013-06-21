@@ -1,37 +1,43 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Fundamental operators in relational algebra.
--- 
---   Tropashko's relational lattice is a kind of relational algebra.
---   Relational algebra is an algebraic formulation for relational model.
---   In constrast to Codd's original relational algebra,
---   Tropashko lattice is in more conventional and strict ways.
---   The lattice has fundamental operators from which
---   other operators are derived.
+{-| Fundamental operators in relational algebra.
+ 
+    Tropashko's relational lattice is a kind of relational algebra.
+    Relational algebra is an algebraic formulation for relational model.
+    In constrast to Codd's original relational algebra,
+    Tropashko lattice is in more conventional and strict ways.
+    The lattice has fundamental operators from which
+    other operators are derived. -}
 
 module Koshucode.Baala.Minimal.Relmap.Tropashko
 ( -- * Fundamental operators
   -- $FundamentalOperators
 
-  -- * Naming conventions
-  -- $NamingConventions
-
-  -- * Functions on rel
-  relMeet,
-  relJoin,
-
-  -- * Functions on relmap
+  -- * Meet (Natural join)
   relmapMeet,
-  relmapJoin
+  relMeet,
+
+  -- * Join (Inner union)
+  relmapJoin,
+  relJoin
 ) where
 
 import Koshucode.Baala.Minimal.OpKit as Kit
 
 
 
--- ----------------------  Functions on relation
+-- ----------------------  Meet
 
--- | Meet two relations.
+{-| Meet two relations. -}
+relmapMeet :: (Ord v)
+    => Kit.OpUse v      -- ^ Source infomation
+    -> Kit.Relmap v     -- ^ Subrelmap of join operator
+    -> Kit.Relmap v     -- ^ Relmap of join operator
+relmapMeet use m = Kit.relmapConfl use "meet" sub [m] where
+    sub [r2] r1 = relMeet r1 r2
+    sub _ _ = undefined
+
+{-| Meet two relations. -}
 relMeet :: (Ord v)
     => Rel v    -- ^ Input relation /R1/
     -> Rel v    -- ^ Input relation /R2/
@@ -52,7 +58,22 @@ relMeet (Rel h1 b1) (Rel h2 b2) = Rel h3 b3 where
                   Just side -> map (++ arg1) side
                   Nothing   -> []
 
--- | Join two relations.
+
+
+
+-- ----------------------  Join
+
+{-| Join two relations. -}
+relmapJoin
+    :: (Ord v)
+    => Kit.OpUse v      -- ^ Source infomation
+    -> Kit.Relmap v     -- ^ Subrelmap of join operator
+    -> Kit.Relmap v     -- ^ Relmap of join operator
+relmapJoin use m = Kit.relmapConfl use "join" sub [m] where
+    sub [r2] r1 = relJoin r1 r2
+    sub _ _ = undefined
+
+{-| Join two relations. -}
 relJoin :: (Ord v)
     => Rel v    -- ^ Input relation /R1/
     -> Rel v    -- ^ Input relation /R2/
@@ -79,29 +100,6 @@ relJoin (Rel h1 b1) (Rel h2 b2) = Rel h3 b3 where
 
 
 
--- ----------------------  Functions on relmap
-
--- | Meet two relations.
-relmapMeet :: (Ord v)
-    => Kit.OpUse v      -- ^ Source infomation
-    -> Kit.Relmap v     -- ^ Subrelmap of join operator
-    -> Kit.Relmap v     -- ^ Relmap of join operator
-relmapMeet use m = Kit.relmapConfl use "meet" sub [m] where
-    sub [r2] r1 = relMeet r1 r2
-    sub _ _ = undefined
-
--- | Join two relations.
-relmapJoin
-    :: (Ord v)
-    => Kit.OpUse v      -- ^ Source infomation
-    -> Kit.Relmap v     -- ^ Subrelmap of join operator
-    -> Kit.Relmap v     -- ^ Relmap of join operator
-relmapJoin use m = Kit.relmapConfl use "join" sub [m] where
-    sub [r2] r1 = relJoin r1 r2
-    sub _ _ = undefined
-
-
-
 -- ----------------------
 -- $FundamentalOperators
 --
@@ -120,25 +118,4 @@ relmapJoin use m = Kit.relmapConfl use "join" sub [m] where
 -- Toropashko calls it ''inner union''.
 -- Join of /R1/ and /R2/ is ordinary union of
 -- shared-term-projection tuples in /R1/ and /R2/.
-
--- ----------------------
--- $NamingConventions
---
--- Functions for relational mapping are
--- named under some conventions.
--- Relational mapping is a kind of functions
--- that calculate relations from relations.
---
--- [@relXxx@]
--- Functions from 'Rel' to 'Rel'.
--- These are basic functions for relational operators.
---
--- [@relmapXxx@]
--- Functions from 'Kit.Relmap' to 'Kit.Relmap'.
--- 
--- [@consXxx@]
--- Functions of 'Koshucode.Baala.Base.Relmap.HalfRelmap.OpCons'.
--- These functions construct 'Kit.Relmap' from operator usages,
--- but constructions are failed if operators are misused.
-
 

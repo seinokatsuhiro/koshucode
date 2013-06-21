@@ -11,6 +11,7 @@ module Koshucode.Baala.Vanilla.Relmap.Implement
 
 import Koshucode.Baala.Minimal.OpKit as Kit
 import Koshucode.Baala.Vanilla.Relmap.Calc
+import Koshucode.Baala.Vanilla.Relmap.Naming
 import Koshucode.Baala.Vanilla.Relmap.Operand
 import Koshucode.Baala.Vanilla.Value.Relval
 import qualified Koshucode.Baala.Minimal as Mini
@@ -26,12 +27,15 @@ vanillaRelmaps = Mini.minimalRelmaps ++ vanillaRelmapsAddition
 vanillaRelmapsAddition :: [Kit.OpImplement Val]
 vanillaRelmapsAddition = Mini.relmaps
     -- Relmap operators in alphabetical order
-    [ o "hold"    LikeHold    consHold
-    , o "maybe"   LikeMeet    consMaybe
-    , o "mmaybe"  LikeMeet    consMMaybe
-    , o "rdf"     LikeSource  consRdf
-    , o "unhold"  LikeHold    consUnhold
-    , o "val"     LikeVal     consVal
+    [ o "hold"           LikeHold          consHold
+    , o "maybe"          LikeMeet          consMaybe
+    , o "mmaybe"         LikeMeet          consMMaybe
+    , o "prefix"         LikePrefix        consPrefix
+    , o "prefix-change"  LikePrefixChange  consPrefixChange
+    , o "unprefix"       LikeUnprefix      consUnprefix
+    , o "rdf"            LikeSource        consRdf
+    , o "unhold"         LikeHold          consUnhold
+    , o "val"            LikeVal           consVal
     ] where o = (,,)
 
 
@@ -55,7 +59,6 @@ consRdf :: Kit.OpCons Val
 consRdf use = do
   let h = Kit.opHalf use
   sign  <- Mini.getWord use "-sign"
-  --term  <- opd <!!> "-term"
   [s,o] <- Mini.getTerms use "-term"
   Right $ Kit.RelmapAlias h $
         Kit.relmapSource use sign ["/s", "/o"] `mappend`
@@ -148,4 +151,25 @@ relHang _ _ _ = undefined
 
 selfhang :: a
 selfhang = undefined
+
+
+
+-- ----------------------  Naming
+
+consPrefix :: Kit.OpCons Val
+consPrefix use = do
+  pre <- Mini.getTerm1 use "-prefix"
+  ns  <- Mini.getTerms use "-term"
+  Right $ relmapPrefix use pre ns
+
+consUnprefix :: Kit.OpCons Val
+consUnprefix use = do
+  pre <- Mini.getTerm1 use "-prefix"
+  Right $ relmapUnprefix use pre
+
+consPrefixChange :: Kit.OpCons Val
+consPrefixChange use = do
+  new <- Mini.getTerm1 use "-new"
+  old <- Mini.getTerm1 use "-old"
+  Right $ relmapPrefixChange use new old
 

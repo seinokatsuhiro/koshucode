@@ -40,6 +40,7 @@ module Koshucode.Baala.Minimal.OpKit
 , Order.sortByName
 
   -- * Prelude
+, Prelude.Map
 , Prelude.Listmap
 , Prelude.gatherToMap
 , Prelude.indexCut
