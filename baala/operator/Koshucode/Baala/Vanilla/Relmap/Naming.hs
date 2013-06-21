@@ -1,15 +1,15 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Vanilla.Relmap.Naming
-( -- * Prefix
+( -- * prefix
   relmapPrefix
 , relPrefix
 
-  -- * Unprefix
+  -- * unprefix
 , relmapUnprefix
 , relUnprefix
 
-  -- * Prefix change
+  -- * prefix-change
 , relmapPrefixChange
 , relPrefixChange
 ) where
@@ -19,7 +19,7 @@ import qualified Data.List as List
 
 
 
--- ----------------------  Prefix
+-- ----------------------  prefix
 
 relmapPrefix :: OpUse v -> String -> [String] -> Relmap v
 relmapPrefix use pre ns = Kit.relmapCalc use "prefix" sub where
@@ -41,7 +41,7 @@ prefixName _ _ = undefined
 
 
 
--- ----------------------  Unprefix
+-- ----------------------  unprefix
 
 relmapUnprefix :: OpUse v -> String -> Relmap v
 relmapUnprefix use pre = Kit.relmapCalc use "unprefix" sub where
@@ -62,7 +62,7 @@ unprefixName pre n =
 
 
 
--- ----------------------  Change prefix
+-- ----------------------  prefix-change
 
 relmapPrefixChange :: OpUse v -> String -> String -> Relmap v
 relmapPrefixChange use new old =

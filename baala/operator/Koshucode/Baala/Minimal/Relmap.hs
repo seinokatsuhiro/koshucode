@@ -3,17 +3,15 @@
 {-| Minimal relational operators. -}
 
 module Koshucode.Baala.Minimal.Relmap
-( -- * Modules
-
-  -- ** Utility
+( -- * Utility
   module Koshucode.Baala.Minimal.Relmap.Get
 , module Koshucode.Baala.Minimal.Relmap.Pattern
 , module Koshucode.Baala.Minimal.Relmap.Operand
 
-  -- ** Implementation
+  -- * Implementation
 , module Koshucode.Baala.Minimal.Relmap.Tropashko
 , module Koshucode.Baala.Minimal.Relmap.Unary
-, module Koshucode.Baala.Minimal.Relmap.Confl
+, module Koshucode.Baala.Minimal.Relmap.Restrict
 , module Koshucode.Baala.Minimal.Relmap.Implement
 
   -- * Naming conventions
@@ -26,7 +24,7 @@ import Koshucode.Baala.Minimal.Relmap.Operand
 
 import Koshucode.Baala.Minimal.Relmap.Tropashko
 import Koshucode.Baala.Minimal.Relmap.Unary
-import Koshucode.Baala.Minimal.Relmap.Confl
+import Koshucode.Baala.Minimal.Relmap.Restrict
 import Koshucode.Baala.Minimal.Relmap.Implement
 
 
@@ -50,4 +48,10 @@ import Koshucode.Baala.Minimal.Relmap.Implement
 -- Functions of 'Koshucode.Baala.Base.Relmap.HalfRelmap.OpCons'.
 -- These functions construct 'Relmap' from operator usages,
 -- but constructions are failed if operators are misused.
+--
+-- [@likeXxx@]
+-- Operand parser.
+--
+-- [@LikeXxx@]
+-- Operand pattern.
 

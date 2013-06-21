@@ -5,5 +5,5 @@ import Koshucode.Baala.Toolkit.Main.KoshuMain
 import qualified Koshucode.Baala.Vanilla as V
 
 main :: IO ()
-main = koshuMain V.vanillaRelmaps
+main = koshuMain V.vanillaOperators
 

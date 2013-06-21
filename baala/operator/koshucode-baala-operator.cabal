@@ -48,11 +48,11 @@ library
   exposed-modules:
         Koshucode.Baala.Minimal
         Koshucode.Baala.Minimal.OpKit
-        Koshucode.Baala.Minimal.Relmap.Confl
         Koshucode.Baala.Minimal.Relmap.Get
         Koshucode.Baala.Minimal.Relmap.Implement
         Koshucode.Baala.Minimal.Relmap.Operand
         Koshucode.Baala.Minimal.Relmap.Pattern
+        Koshucode.Baala.Minimal.Relmap.Restrict
         Koshucode.Baala.Minimal.Relmap.Tropashko
         Koshucode.Baala.Minimal.Relmap.Unary
 

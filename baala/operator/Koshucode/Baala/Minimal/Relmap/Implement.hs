@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Minimal.Relmap.Implement
 ( -- * Implementation
-  minimalRelmaps
+  minimalOperators
 
   -- * Operators
   -- $ListOfOperators
@@ -14,6 +14,7 @@ import Koshucode.Baala.Minimal.OpKit as Kit
 import Koshucode.Baala.Minimal.Relmap.Get
 import Koshucode.Baala.Minimal.Relmap.Operand
 import Koshucode.Baala.Minimal.Relmap.Pattern
+import Koshucode.Baala.Minimal.Relmap.Restrict
 import Koshucode.Baala.Minimal.Relmap.Tropashko
 import Koshucode.Baala.Minimal.Relmap.Unary
 
@@ -21,24 +22,26 @@ import Koshucode.Baala.Minimal.Relmap.Unary
 
 -- ----------------------  Operators
 
-builtinRelmaps :: (Ord v) => [OpImplement v]
-builtinRelmaps = relmaps [ ("|", LikeEmpty, consConcat) ]
+builtinOperators :: (Ord v) => [OpImplement v]
+builtinOperators = operators [ ("|", LikeEmpty, consConcat) ]
 
 consConcat :: OpCons v
 consConcat = Right . mconcat . opSub
 
 -- | Minimal implementations of relmaps
-minimalRelmaps :: (Ord v) => [OpImplement v]
-minimalRelmaps = builtinRelmaps ++ relmaps
+minimalOperators :: (Ord v) => [OpImplement v]
+minimalOperators = builtinOperators ++ operators
     -- Relmap operators in alphabetical order
     [ o "cut"     LikePick    consCut
     , o "empty"   LikeEmpty   consEmpty
     , o "join"    LikeMeet    consJoin
     , o "meet"    LikeMeet    consMeet
+    , o "minus"   LikeMeet    consMinus
     , o "pick"    LikePick    consPick
     , o "reldee"  LikeEmpty   consReldee
     , o "reldum"  LikeEmpty   consReldum
     , o "rename"  LikeRename  consRename
+    , o "some"    LikeMeet    consSome
     , o "source"  LikeSource  consSource
     ] where o = (,,)
 
@@ -74,12 +77,13 @@ consRelcon op r use = Right $ RelmapConst (opHalf use) op r
 consCut :: (Ord v) => OpCons v
 consCut use = do
   ns <- getTerms use "-term"
-  Right $ Kit.relmapCalc use "cut" (project indexCut ns)
+  Right $ relmapCut use ns
 
 consPick :: (Ord v) => OpCons v
 consPick use = do
   ns <- getTerms use "-term"
-  Right $ Kit.relmapCalc use "pick" (project indexPick ns)
+  Right $ relmapPick use ns
+
 -- Binary operation
 
 consJoin :: (Ord v) => OpCons v
@@ -91,6 +95,16 @@ consMeet :: (Ord v) => OpCons v
 consMeet use = do
   m <- getRelmap1 use
   Right $ relmapMeet use m
+
+consSome :: (Ord v) => OpCons v
+consSome use = do
+  m <- getRelmap1 use
+  Right $ relmapSome use m
+
+consMinus :: (Ord v) => OpCons v
+consMinus use = do
+  m <- getRelmap1 use
+  Right $ relmapMinus use m
 
 
 

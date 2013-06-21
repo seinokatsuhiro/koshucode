@@ -83,7 +83,7 @@ header = unlines
 -- ----------------------  Main
 
 {-| The main function for @koshu@ command.
-    See 'Koshucode.Baala.Vanilla.Relmap.Implement.vanillaRelmaps'
+    See 'Koshucode.Baala.Vanilla.Relmap.Implement.vanillaOperators'
     for default argument. -}
 koshuMain :: (Value v) => [Kit.OpImplement v] -> IO ()
 koshuMain relmaps =
@@ -182,6 +182,6 @@ prettySection root files =
 --
 -- @
 -- main :: IO ()
--- main = koshuMain vanillaRelmaps
+-- main = koshuMain vanillaOperators
 -- @
 

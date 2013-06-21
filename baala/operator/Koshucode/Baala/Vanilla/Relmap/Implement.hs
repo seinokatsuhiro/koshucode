@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Vanilla.Relmap.Implement
-( vanillaRelmaps
+( vanillaOperators
 , relMaybe
 
 , hang
@@ -21,11 +21,11 @@ import qualified Koshucode.Baala.Minimal as Mini
 -- ----------------------  Operators
 
 -- | Implementation of relational operators.
-vanillaRelmaps :: [Kit.OpImplement Val]
-vanillaRelmaps = Mini.minimalRelmaps ++ vanillaRelmapsAddition
+vanillaOperators :: [Kit.OpImplement Val]
+vanillaOperators = Mini.minimalOperators ++ vanillaOperators'
 
-vanillaRelmapsAddition :: [Kit.OpImplement Val]
-vanillaRelmapsAddition = Mini.relmaps
+vanillaOperators' :: [Kit.OpImplement Val]
+vanillaOperators' = Mini.operators
     -- Relmap operators in alphabetical order
     [ o "hold"           LikeHold          consHold
     , o "maybe"          LikeMeet          consMaybe

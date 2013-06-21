@@ -4,11 +4,19 @@
 {-| Unary relational operators. -}
 
 module Koshucode.Baala.Minimal.Relmap.Unary
-( -- * Projection
-  project
-, relEmpty, relmapEmpty
+( -- * empty
+  relmapEmpty
+, relEmpty
 
-  -- * Naming
+  -- * cut
+, relmapCut
+, relCut
+
+  -- * pick
+, relmapPick
+, relPick
+
+  -- * rename
 , relmapRename
 , relRename
 
@@ -28,20 +36,34 @@ import qualified Data.Tuple as Tuple
 
 -- ----------------------  projection
 
-project :: (Ord v) => ([Int] -> Listmap v) -> [String] -> a -> Map (Rel v)
-project f ns2 _ (Rel h1 b1) = Rel h2 b2 where
+relmapCut :: (Ord v) => OpUse v -> [String] -> Relmap v
+relmapCut use ns = Kit.relmapCalc use "cut" sub where
+    sub _ = relCut ns
+
+relCut :: (Ord v) => [String] -> Map (Rel v)
+relCut = project indexCut
+
+relmapPick :: (Ord v) => OpUse v -> [String] -> Relmap v
+relmapPick use ns = Kit.relmapCalc use "pick" sub where
+    sub _ = relPick ns
+
+relPick :: (Ord v) => [String] -> Map (Rel v)
+relPick = project indexPick
+
+project :: (Ord v) => ([Int] -> Listmap v) -> [String] -> Map (Rel v)
+project f ns2 (Rel h1 b1) = Rel h2 b2 where
     pos = List.sort $ Kit.headPoss h1 (map singleton ns2)
     pj  = f $ Kit.posPoss pos
     h2  = Kit.rehead pj h1
     b2  = unique $ map pj b1
 
--- | Throw away all tuples in a relation.
-relEmpty :: Map (Rel v)
-relEmpty (Rel h1 _) = Rel h1 []
-
 relmapEmpty :: Kit.OpUse v -> Kit.Relmap v
 relmapEmpty use = Kit.relmapCalc use "empty" sub where
     sub _ = relEmpty
+
+{-| Throw away all tuples in a relation. -}
+relEmpty :: Map (Rel v)  -- ^ Any relation to empty relation
+relEmpty (Rel h1 _) = Rel h1 []
 
 
 

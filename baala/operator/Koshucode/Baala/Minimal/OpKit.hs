@@ -12,6 +12,7 @@ module Koshucode.Baala.Minimal.OpKit
 , Abort.Abort (..)
 , Abort.AbortOr
 , (Abort.<!!>)
+, bug
 
   -- * Data
 , Data.IntValue

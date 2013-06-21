@@ -41,7 +41,6 @@ getTerms use n = do
   term <- opd <!!> n
   termNames term
 
-{-| Get list of term names from named operand. -}
 getTerm1 :: OpGet v String
 getTerm1 use n = do
   ts <- getTerms use n

@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Minimal.Relmap.Pattern
 ( OpPattern (..)
-, relmaps
+, operators
 ) where
 
 import Koshucode.Baala.Minimal.OpKit as Kit
@@ -21,11 +21,11 @@ class OpPattern p where
     operandUsage _ = []
 
 -- | Make relmap implementations.
-relmaps
+operators
     :: (OpPattern p)
     => [(String, p, OpCons v)] -- ^ Operator implementations
     -> [OpImplement v] -- ^ Result
-relmaps = map f where
+operators = map f where
     f (op, p, full) =
         let parser  = operandParser p
             addOp u = op ++ " " ++ u
