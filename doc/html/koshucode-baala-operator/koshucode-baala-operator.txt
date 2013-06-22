@@ -8,7 +8,7 @@
 --   expressions are written in Koshucode. Koshucode is a notation for both
 --   of descriptions and calculations of data.
 @package koshucode-baala-operator
-@version 0.11.0.0
+@version 0.13.0.0
 
 
 -- | Term values
@@ -63,7 +63,7 @@ unionUpTerm :: Name a => [String] -> [a] -> [Relterm]
 
 
 -- | Kit for implementing relational operators
-module Koshucode.Baala.Minimal.OpeKit
+module Koshucode.Baala.Minimal.OpKit
 
 -- | An associative operation
 mappend :: Monoid a => a -> a -> a
@@ -89,6 +89,9 @@ type AbortOr a = Either Abort a
 
 -- | Lookup association list. This function may abort on AbortLookup.
 (<!!>) :: [(String, a)] -> String -> AbortOr a
+
+-- | Stop on error ''bug in koshucode''
+bug :: a
 class IntValue v
 intValue :: IntValue v => Int -> v
 
@@ -148,7 +151,8 @@ reldum :: Rel v
 stringValue :: StringValue v => String -> v
 orders :: String -> [OrderCap [Char]]
 sortByName :: (Ord v, Eq n) => [OrderCap n] -> [n] -> [[v]] -> [[v]]
-type Listmap a = forall a. [a] -> [a]
+type Map a = a -> a
+type Listmap a = forall a. Map [a]
 
 -- | Gather (key,value) to a Map key [value]
 gatherToMap :: Ord k => [(k, v)] -> Map k [v]
@@ -176,15 +180,21 @@ unique :: Ord a => [a] -> [a]
 -- | Constructor of relational operator <a>Relmap</a>. <a>Relmap</a> is
 --   constructed from <tt>HalfRelmap</tt> and subrelmaps in it.
 type OpCons v = OpUse v -> AbortOr (Relmap v)
+
+-- | Implementation of relmap operator. It consists of (1) operator name,
+--   (2) operand parser, (3) constructor of operator, and (4) usage of
+--   operator.
+data OpImplement v :: * -> *
+OpImplement :: String -> OpParser -> OpCons v -> [String] -> OpImplement v
+
+-- | Parser for operand of relational operator. This parsers docompose
+--   operand trees, and give a name to suboperand.
+type OpParser = [TokenTree] -> [Named [TokenTree]]
+type OpParser' = [Named [TokenTree]] -> [Named [TokenTree]]
 data OpUse v :: * -> *
 OpUse :: HalfRelmap -> [Relmap v] -> OpUse v
 opHalf :: OpUse v -> HalfRelmap
 opSub :: OpUse v -> [Relmap v]
-
--- | Parser for operand of relational operator. This parsers docompose
---   operand trees, and give a name to suboperand.
-type OperandParser = [TokenTree] -> [Named [TokenTree]]
-type OperandParser' = [Named [TokenTree]] -> [Named [TokenTree]]
 
 -- | Relation-to-relation mapping. A <a>Relmap</a> is correspond to a use
 --   of relational operator, that is pair of operator and its operand.
@@ -222,12 +232,6 @@ type RelmapFullCons v = HalfRelmap -> AbortOr (Relmap v)
 --   relational operator.
 type RelmapHalfCons = [SourceLine] -> [TokenTree] -> HalfRelmap
 
--- | Implementation of relmap operator. It consists of (1) operator name,
---   (2) operand parser, (3) constructor of operator, and (4) usage of
---   operator.
-data RelmapImplement v :: * -> *
-RelmapImplement :: String -> OperandParser -> OpCons v -> [String] -> RelmapImplement v
-
 -- | Operand of relmap operation
 halfOperand :: HalfRelmap -> [Named [TokenTree]]
 
@@ -238,7 +242,7 @@ relmapCalc :: OpUse v -> String -> RelmapSub v -> Relmap v
 relmapConfl :: OpUse v -> String -> RelmapSub v -> [Relmap v] -> Relmap v
 
 -- | Make half and full relmap constructors.
-relmapCons :: [RelmapImplement v] -> RelmapCons v
+relmapCons :: [OpImplement v] -> RelmapCons v
 
 -- | Retrieve relation from dataset
 relmapSource :: OpUse v -> String -> [String] -> Relmap v
@@ -328,29 +332,22 @@ withP :: WithTerms v
 withP2 :: ([String] -> [Rel v] -> RelmapFun v) -> String -> [Rel v] -> RelmapFun v
 
 
--- | Confluent relational mapping
-module Koshucode.Baala.Minimal.Relmap.Confl
-relmapSome :: Ord v => OpUse v -> Relmap v -> Relmap v
-relmapMinus :: Ord v => OpUse v -> Relmap v -> Relmap v
-relSome :: Ord v => Rel v -> Rel v -> Rel v
-relMinus :: Ord v => Rel v -> Rel v -> Rel v
-
-
--- | OperandGet
+-- | Extract suboperand
 module Koshucode.Baala.Minimal.Relmap.Get
-type OperandGet v a = OpUse v -> String -> AbortOr a
+type OpGet v a = OpUse v -> String -> AbortOr a
 
 -- | Abortable <a>head</a>
 getHead :: [a] -> AbortOr a
 
 -- | Get word from named operand.
-getWord :: OperandGet v String
+getWord :: OpGet v String
+getTerm1 :: OpGet v String
 
 -- | Get list of term names from named operand.
-getTerms :: OperandGet v [String]
+getTerms :: OpGet v [String]
 
 -- | Get list of term-name pairs from named operand.
-getTermPairs :: OperandGet v [(String, String)]
+getTermPairs :: OpGet v [(String, String)]
 getRelmap1 :: OpUse v -> AbortOr (Relmap v)
 
 
@@ -358,19 +355,19 @@ getRelmap1 :: OpUse v -> AbortOr (Relmap v)
 module Koshucode.Baala.Minimal.Relmap.Pattern
 
 -- | Class for operand pattern.
-class OperandPattern p where operandParser p = operandParser' p . operandGroup operandParser' _ = id operandUsage _ = []
-operandParser :: OperandPattern p => p -> OperandParser
-operandParser' :: OperandPattern p => p -> OperandParser'
-operandUsage :: OperandPattern p => p -> [String]
+class OpPattern p where operandParser p = operandParser' p . operandGroup operandParser' _ = id operandUsage _ = []
+operandParser :: OpPattern p => p -> OpParser
+operandParser' :: OpPattern p => p -> OpParser'
+operandUsage :: OpPattern p => p -> [String]
 
 -- | Make relmap implementations.
-relmaps :: OperandPattern p => [(String, p, OpCons v)] -> [RelmapImplement v]
+operators :: OpPattern p => [(String, p, OpCons v)] -> [OpImplement v]
 
 
 -- | Operand patterns
 module Koshucode.Baala.Minimal.Relmap.Operand
 
--- | <a>OperandPattern</a> for minimal operators
+-- | <a>OpPattern</a> for minimal operators
 data MinimalOperand
 
 -- | No operand
@@ -389,14 +386,22 @@ LikeRename :: MinimalOperand
 -- | Relsign and list of terms. <tt>-sign</tt> relsign <tt>-term</tt> term
 --   names
 LikeSource :: MinimalOperand
-likePick :: OperandParser'
-likeMeet :: OperandParser'
-likeRename :: OperandParser'
-likeSource :: OperandParser'
+likePick :: OpParser'
+likeMeet :: OpParser'
+likeRename :: OpParser'
+likeSource :: OpParser'
 instance Show MinimalOperand
 instance Eq MinimalOperand
 instance Enum MinimalOperand
-instance OperandPattern MinimalOperand
+instance OpPattern MinimalOperand
+
+
+-- | Restrict by relation
+module Koshucode.Baala.Minimal.Relmap.Restrict
+relmapSome :: Ord v => OpUse v -> Map (Relmap v)
+relSome :: Ord v => Rel v -> Map (Rel v)
+relmapMinus :: Ord v => OpUse v -> Map (Relmap v)
+relMinus :: Ord v => Rel v -> Map (Rel v)
 
 
 -- | Fundamental operators in relational algebra.
@@ -409,37 +414,34 @@ instance OperandPattern MinimalOperand
 module Koshucode.Baala.Minimal.Relmap.Tropashko
 
 -- | Meet two relations.
-relMeet :: Ord v => Rel v -> Rel v -> Rel v
-
--- | Join two relations.
-relJoin :: Ord v => Rel v -> Rel v -> Rel v
+relmapMeet :: Ord v => OpUse v -> Relmap v -> Relmap v
 
 -- | Meet two relations.
-relmapMeet :: Ord v => OpUse v -> Relmap v -> Relmap v
+relMeet :: Ord v => Rel v -> Rel v -> Rel v
 
 -- | Join two relations.
 relmapJoin :: Ord v => OpUse v -> Relmap v -> Relmap v
 
+-- | Join two relations.
+relJoin :: Ord v => Rel v -> Rel v -> Rel v
 
--- | Unary relational mappers
+
+-- | Unary relational operators.
 module Koshucode.Baala.Minimal.Relmap.Unary
-project :: Ord v => ([Int] -> Listmap v) -> [String] -> a -> RelmapFun v
-
--- | Throw away all tuples in a relation.
-relEmpty :: Rel v -> Rel v
 relmapEmpty :: OpUse v -> Relmap v
 
--- | Change name of terms.
-renameNP :: [(String, String)] -> a -> RelmapFun v
+-- | Throw away all tuples in a relation.
+relEmpty :: Map (Rel v)
+relmapCut :: Ord v => OpUse v -> [String] -> Relmap v
+relCut :: Ord v => [String] -> Map (Rel v)
+relmapPick :: Ord v => OpUse v -> [String] -> Relmap v
+relPick :: Ord v => [String] -> Map (Rel v)
 
--- | Add prefix to terms
-prefix :: String -> Relmap v
+-- | Change term names
+relmapRename :: OpUse v -> [(String, String)] -> Relmap v
 
--- | Remove prefix
-unprefix :: String -> Relmap v
-
--- | Change prefix
-prefixChange :: String -> Relmap v
+-- | Change terms names
+relRename :: [(String, String)] -> Map (Rel v)
 
 -- | Enclose the current relation in a term.
 enclose :: RelValue v => String -> Relmap v
@@ -455,10 +457,7 @@ size :: IntValue v => String -> Relmap v
 module Koshucode.Baala.Minimal.Relmap.Implement
 
 -- | Minimal implementations of relmaps
-minimalRelmaps :: Ord v => [RelmapImplement v]
-
--- | Change term names
-relmapRename :: OpUse v -> [(String, String)] -> (Relmap v)
+minimalOperators :: Ord v => [OpImplement v]
 
 module Koshucode.Baala.Vanilla.Calc.Ripen
 calcRipen :: Ripen Token Val
@@ -489,8 +488,22 @@ valBody :: [TokenTree] -> a -> RelmapFun Val
 -- | Keep leading tuples.
 limit :: Ord v => OpUse v -> Int -> String -> Relmap v
 
+module Koshucode.Baala.Vanilla.Relmap.Naming
+relmapPrefix :: OpUse v -> String -> [String] -> Relmap v
 
--- | Relational mappings
+-- | Add prefix to terms.
+relPrefix :: String -> [String] -> Map (Rel v)
+relmapUnprefix :: OpUse v -> String -> Relmap v
+
+-- | Remove prefix
+relUnprefix :: String -> Map (Rel v)
+relmapPrefixChange :: OpUse v -> String -> String -> Relmap v
+
+-- | Change prefix
+relPrefixChange :: String -> String -> Map (Rel v)
+
+
+-- | Minimal relational operators.
 module Koshucode.Baala.Minimal.Relmap
 
 
@@ -499,7 +512,7 @@ module Koshucode.Baala.Minimal
 
 module Koshucode.Baala.Vanilla.Relmap.Operand
 
--- | <a>OperandPattern</a> for relational operations.
+-- | <a>OpPattern</a> for relational operations.
 data VanillaOperand
 
 -- | Boolean expression
@@ -511,17 +524,26 @@ LikeVal :: VanillaOperand
 -- | Relmap and maybe shared terms
 LikeMeet :: VanillaOperand
 
+-- | Prefix
+LikePrefix :: VanillaOperand
+
 -- | Relsign and list of terms
 LikeSource :: VanillaOperand
+
+-- | Prefix
+LikeUnprefix :: VanillaOperand
+
+-- | Prefix
+LikePrefixChange :: VanillaOperand
 instance Show VanillaOperand
 instance Eq VanillaOperand
 instance Enum VanillaOperand
-instance OperandPattern VanillaOperand
+instance OpPattern VanillaOperand
 
 module Koshucode.Baala.Vanilla.Relmap.Implement
 
 -- | Implementation of relational operators.
-vanillaRelmaps :: [RelmapImplement Val]
+vanillaOperators :: [OpImplement Val]
 
 -- | like SQL's left join
 relMaybe :: (Ord v, Nil v) => Rel v -> Rel v -> Rel v

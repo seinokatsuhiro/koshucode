@@ -12,33 +12,33 @@
 <a name="line-3"></a><span class='hs-comment'>-- | Class for operand patterns</span>
 <a name="line-4"></a>
 <a name="line-5"></a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Minimal</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span><span class='hs-varop'>.</span><span class='hs-conid'>Pattern</span>
-<a name="line-6"></a><span class='hs-layout'>(</span> <span class='hs-conid'>OperandPattern</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span>
-<a name="line-7"></a><span class='hs-layout'>,</span> <span class='hs-varid'>relmaps</span>
+<a name="line-6"></a><span class='hs-layout'>(</span> <span class='hs-conid'>OpPattern</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span>
+<a name="line-7"></a><span class='hs-layout'>,</span> <span class='hs-varid'>operators</span>
 <a name="line-8"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
 <a name="line-9"></a>
-<a name="line-10"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Minimal</span><span class='hs-varop'>.</span><span class='hs-conid'>OpeKit</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>Kit</span>
+<a name="line-10"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Minimal</span><span class='hs-varop'>.</span><span class='hs-conid'>OpKit</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>Kit</span>
 <a name="line-11"></a>
-<a name="line-12"></a><a name="OperandPattern"></a><span class='hs-comment'>-- | Class for operand pattern.</span>
-<a name="line-13"></a><a name="OperandPattern"></a><span class='hs-keyword'>class</span> <span class='hs-conid'>OperandPattern</span> <span class='hs-varid'>p</span> <span class='hs-keyword'>where</span>
-<a name="line-14"></a>    <span class='hs-varid'>operandParser</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>p</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>OperandParser</span>
+<a name="line-12"></a><a name="OpPattern"></a><span class='hs-comment'>-- | Class for operand pattern.</span>
+<a name="line-13"></a><a name="OpPattern"></a><span class='hs-keyword'>class</span> <span class='hs-conid'>OpPattern</span> <span class='hs-varid'>p</span> <span class='hs-keyword'>where</span>
+<a name="line-14"></a>    <span class='hs-varid'>operandParser</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>p</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>OpParser</span>
 <a name="line-15"></a>    <span class='hs-varid'>operandParser</span> <span class='hs-varid'>p</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>operandParser'</span> <span class='hs-varid'>p</span> <span class='hs-varop'>.</span> <span class='hs-varid'>operandGroup</span>
 <a name="line-16"></a>
-<a name="line-17"></a>    <span class='hs-varid'>operandParser'</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>p</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>OperandParser'</span>
+<a name="line-17"></a>    <span class='hs-varid'>operandParser'</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>p</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>OpParser'</span>
 <a name="line-18"></a>    <span class='hs-varid'>operandParser'</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>id</span>
 <a name="line-19"></a>
 <a name="line-20"></a>    <span class='hs-varid'>operandUsage</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>p</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span>
 <a name="line-21"></a>    <span class='hs-varid'>operandUsage</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>[]</span>
 <a name="line-22"></a>
-<a name="line-23"></a><a name="relmaps"></a><span class='hs-comment'>-- | Make relmap implementations.</span>
-<a name="line-24"></a><span class='hs-definition'>relmaps</span>
-<a name="line-25"></a>    <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>OperandPattern</span> <span class='hs-varid'>p</span><span class='hs-layout'>)</span>
+<a name="line-23"></a><a name="operators"></a><span class='hs-comment'>-- | Make relmap implementations.</span>
+<a name="line-24"></a><span class='hs-definition'>operators</span>
+<a name="line-25"></a>    <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>OpPattern</span> <span class='hs-varid'>p</span><span class='hs-layout'>)</span>
 <a name="line-26"></a>    <span class='hs-keyglyph'>=&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-layout'>(</span><span class='hs-conid'>String</span><span class='hs-layout'>,</span> <span class='hs-varid'>p</span><span class='hs-layout'>,</span> <span class='hs-conid'>OpCons</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span><span class='hs-keyglyph'>]</span> <span class='hs-comment'>-- ^ Operator implementations</span>
-<a name="line-27"></a>    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>RelmapImplement</span> <span class='hs-varid'>v</span><span class='hs-keyglyph'>]</span> <span class='hs-comment'>-- ^ Result</span>
-<a name="line-28"></a><span class='hs-definition'>relmaps</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>map</span> <span class='hs-varid'>f</span> <span class='hs-keyword'>where</span>
+<a name="line-27"></a>    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>OpImplement</span> <span class='hs-varid'>v</span><span class='hs-keyglyph'>]</span> <span class='hs-comment'>-- ^ Result</span>
+<a name="line-28"></a><span class='hs-definition'>operators</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>map</span> <span class='hs-varid'>f</span> <span class='hs-keyword'>where</span>
 <a name="line-29"></a>    <span class='hs-varid'>f</span> <span class='hs-layout'>(</span><span class='hs-varid'>op</span><span class='hs-layout'>,</span> <span class='hs-varid'>p</span><span class='hs-layout'>,</span> <span class='hs-varid'>full</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span>
 <a name="line-30"></a>        <span class='hs-keyword'>let</span> <span class='hs-varid'>parser</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>operandParser</span> <span class='hs-varid'>p</span>
 <a name="line-31"></a>            <span class='hs-varid'>addOp</span> <span class='hs-varid'>u</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>op</span> <span class='hs-varop'>++</span> <span class='hs-str'>" "</span> <span class='hs-varop'>++</span> <span class='hs-varid'>u</span>
-<a name="line-32"></a>        <span class='hs-keyword'>in</span> <span class='hs-conid'>RelmapImplement</span> <span class='hs-varid'>op</span> <span class='hs-varid'>parser</span> <span class='hs-varid'>full</span> <span class='hs-layout'>(</span><span class='hs-varid'>map</span> <span class='hs-varid'>addOp</span> <span class='hs-varop'>$</span> <span class='hs-varid'>operandUsage</span> <span class='hs-varid'>p</span><span class='hs-layout'>)</span>
+<a name="line-32"></a>        <span class='hs-keyword'>in</span> <span class='hs-conid'>OpImplement</span> <span class='hs-varid'>op</span> <span class='hs-varid'>parser</span> <span class='hs-varid'>full</span> <span class='hs-layout'>(</span><span class='hs-varid'>map</span> <span class='hs-varid'>addOp</span> <span class='hs-varop'>$</span> <span class='hs-varid'>operandUsage</span> <span class='hs-varid'>p</span><span class='hs-layout'>)</span>
 <a name="line-33"></a>
 </pre></body>
 </html>
