@@ -11,23 +11,23 @@ import Koshucode.Baala.Minimal.OpKit as Kit
 
 -- | Class for operand pattern.
 class OpPattern p where
-    operandParser :: p -> OpParser
-    operandParser p = operandParser' p . operandGroup
+    opParser :: p -> OpParser
+    opParser p = opParser' p . operandGroup
 
-    operandParser' :: p -> OpParser'
-    operandParser' _ = id
+    opParser' :: p -> OpParser'
+    opParser' _ = id
 
-    operandUsage :: p -> [String]
-    operandUsage _ = []
+    opUsage :: p -> [String]
+    opUsage _ = []
 
 -- | Make relmap implementations.
 operators
     :: (OpPattern p)
     => [(String, p, OpCons v)] -- ^ Operator implementations
-    -> [OpImplement v] -- ^ Result
+    -> [OpImplement v]         -- ^ Implementation list
 operators = map f where
-    f (op, p, full) =
-        let parser  = operandParser p
+    f (op, pat, cons) =
+        let parser  = opParser pat
             addOp u = op ++ " " ++ u
-        in OpImplement op parser full (map addOp $ operandUsage p)
+        in OpImplement op parser cons (map addOp $ opUsage pat)
 

@@ -125,7 +125,7 @@ relmapMMaybe use = Kit.relmapConfl use "mmaybe" sub ms where
 
 consHang :: Kit.OpCons Val
 consHang use = do
-  n <- Mini.getTerm1 use "-term"
+  n <- Mini.getTerm use "-term"
   Right $ relmapHang use n
 
 relmapHang :: (Ord v, RelValue v) => OpUse v -> String -> Relmap v
@@ -160,19 +160,19 @@ relHang n r2 r1 = Rel h3 b3 where
 
 consPrefix :: Kit.OpCons Val
 consPrefix use = do
-  pre <- Mini.getTerm1 use "-prefix"
+  pre <- Mini.getTerm use "-prefix"
   ns  <- Mini.getTerms use "-term"
   Right $ relmapPrefix use pre ns
 
 consUnprefix :: Kit.OpCons Val
 consUnprefix use = do
-  pre <- Mini.getTerm1 use "-prefix"
+  pre <- Mini.getTerm use "-prefix"
   Right $ relmapUnprefix use pre
 
 consPrefixChange :: Kit.OpCons Val
 consPrefixChange use = do
-  new <- Mini.getTerm1 use "-new"
-  old <- Mini.getTerm1 use "-old"
+  new <- Mini.getTerm use "-new"
+  old <- Mini.getTerm use "-old"
   Right $ relmapPrefixChange use new old
 
 
@@ -181,7 +181,7 @@ consPrefixChange use = do
 
 consSize :: Kit.OpCons Val
 consSize use = do
-  n <- Mini.getTerm1 use "-term"
+  n <- Mini.getTerm use "-term"
   Right $ relmapSize use n
 
 relmapSize :: (IntValue v) => OpUse v -> String -> Relmap v
@@ -203,7 +203,7 @@ relSize n (Rel _ b1) = Rel h2 b2 where
 
 consConf :: Kit.OpCons Val
 consConf use = do
-  n <- Mini.getTerm1 use "-term"
+  n <- Mini.getTerm use "-term"
   Right $ relmapConf use n
 
 relmapConf :: (StringValue v) => OpUse v -> String -> Relmap v
@@ -226,7 +226,7 @@ relConf n (Rel h1 _) = Rel h2 b2 where
 
 consEnclose :: Kit.OpCons Val
 consEnclose use = do
-  n <- Mini.getTerm1 use "-term"
+  n <- Mini.getTerm use "-term"
   Right $ relmapEnclose use n
 
 relmapEnclose :: (RelValue v) => OpUse v -> String -> Relmap v

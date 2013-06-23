@@ -40,14 +40,14 @@ data VanillaOperand
       deriving (Show, Eq, Enum)
 
 instance Mini.OpPattern VanillaOperand where
-    operandParser' LikeHold          = Mini.likePick
-    operandParser' LikeVal           = Mini.likePick
-    operandParser' LikeMeet          = Mini.likeMeet
-    operandParser' LikePrefix        = likePrefix
-    operandParser' LikePrefixChange  = likePrefixChange
-    operandParser' LikeUnprefix      = likeUnprefix
-    operandParser' LikeSource        = Mini.likeMeet
-    operandParser' LikeSize          = likeSize
+    opParser' LikeHold          = Mini.likePick
+    opParser' LikeVal           = Mini.likePick
+    opParser' LikeMeet          = Mini.likeMeet
+    opParser' LikePrefix        = likePrefix
+    opParser' LikePrefixChange  = likePrefixChange
+    opParser' LikeUnprefix      = likeUnprefix
+    opParser' LikeSource        = Mini.likeMeet
+    opParser' LikeSize          = likeSize
 
 likePrefix :: OpParser'
 likePrefix xs =

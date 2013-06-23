@@ -42,17 +42,17 @@ data MinimalOperand
       deriving (Show, Eq, Enum)
 
 instance OpPattern MinimalOperand where
-    operandParser' LikeEmpty  = id
-    operandParser' LikeMeet   = likeMeet
-    operandParser' LikePick   = likePick
-    operandParser' LikeRename = likeRename
-    operandParser' LikeSource = likeSource
+    opParser' LikeEmpty  = id
+    opParser' LikeMeet   = likeMeet
+    opParser' LikePick   = likePick
+    opParser' LikeRename = likeRename
+    opParser' LikeSource = likeSource
 
-    operandUsage   LikeEmpty  = [""]
-    operandUsage   LikeMeet   = ["RELMAP"]
-    operandUsage   LikePick   = ["/NAME ..."]
-    operandUsage   LikeRename = ["/NEW /OLD ..."]
-    operandUsage   LikeSource = ["SIGN /NAME ..."]
+    opUsage   LikeEmpty  = [""]
+    opUsage   LikeMeet   = ["RELMAP"]
+    opUsage   LikePick   = ["/NAME ..."]
+    opUsage   LikeRename = ["/NEW /OLD ..."]
+    opUsage   LikeSource = ["SIGN /NAME ..."]
 
 
 

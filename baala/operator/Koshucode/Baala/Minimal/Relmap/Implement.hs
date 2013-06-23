@@ -88,22 +88,22 @@ consPick use = do
 
 consJoin :: (Ord v) => OpCons v
 consJoin use = do
-  m <- getRelmap1 use
+  m <- getRelmap use
   Right $ relmapJoin use m
 
 consMeet :: (Ord v) => OpCons v
 consMeet use = do
-  m <- getRelmap1 use
+  m <- getRelmap use
   Right $ relmapMeet use m
 
 consSome :: (Ord v) => OpCons v
 consSome use = do
-  m <- getRelmap1 use
+  m <- getRelmap use
   Right $ relmapSome use m
 
 consMinus :: (Ord v) => OpCons v
 consMinus use = do
-  m <- getRelmap1 use
+  m <- getRelmap use
   Right $ relmapMinus use m
 
 
