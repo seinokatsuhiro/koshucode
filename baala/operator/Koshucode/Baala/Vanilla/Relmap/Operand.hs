@@ -18,17 +18,24 @@ data VanillaOperand
     {-| Relmap and maybe shared terms -}
     | LikeMeet
 
-    {-| Prefix -}
+    {-| Prefix.
+        @-prefix@, @-term@ -}
     | LikePrefix
 
     {-| Relsign and list of terms -}
     | LikeSource
 
-    {-| Prefix -}
+    {-| Prefix.
+        @-prefix@ -}
     | LikeUnprefix
 
-    {-| Prefix -}
+    {-| Prefix.
+        @-new@, @-old@ -}
     | LikePrefixChange
+
+    {-| Size.
+        @-term@ -}
+    | LikeSize
 
       deriving (Show, Eq, Enum)
 
@@ -40,6 +47,7 @@ instance Mini.OpPattern VanillaOperand where
     operandParser' LikePrefixChange  = likePrefixChange
     operandParser' LikeUnprefix      = likeUnprefix
     operandParser' LikeSource        = Mini.likeMeet
+    operandParser' LikeSize          = likeSize
 
 likePrefix :: OpParser'
 likePrefix xs =
@@ -57,5 +65,11 @@ likePrefixChange :: OpParser'
 likePrefixChange xs =
     case lookup "" xs of
       Just [x,y] -> [("-new", [x]), ("-old", [y])] ++ xs
+      _ -> xs
+
+likeSize :: OpParser'
+likeSize xs =
+    case lookup "" xs of
+      Just [n] -> [("-term", [n])] ++ xs
       _ -> xs
 

@@ -2,11 +2,6 @@
 
 module Koshucode.Baala.Vanilla.Relmap.Implement
 ( vanillaOperators
-, relMaybe
-
-, hang
-, relHang
-, selfhang
 ) where
 
 import Koshucode.Baala.Minimal.OpKit as Kit
@@ -22,19 +17,23 @@ import qualified Koshucode.Baala.Minimal as Mini
 
 -- | Implementation of relational operators.
 vanillaOperators :: [Kit.OpImplement Val]
-vanillaOperators = Mini.minimalOperators ++ vanillaOperators'
+vanillaOperators = vanillaOperators' ++ Mini.minimalOperators
 
 vanillaOperators' :: [Kit.OpImplement Val]
 vanillaOperators' = Mini.operators
     -- Relmap operators in alphabetical order
-    [ o "hold"           LikeHold          consHold
+    [ o "conf"           LikeSize          consConf
+    , o "enclose"        LikeSize          consEnclose
+    , o "hang"           LikeMeet          consHang
+    , o "hold"           LikeHold          consHold
     , o "maybe"          LikeMeet          consMaybe
     , o "mmaybe"         LikeMeet          consMMaybe
     , o "prefix"         LikePrefix        consPrefix
     , o "prefix-change"  LikePrefixChange  consPrefixChange
-    , o "unprefix"       LikeUnprefix      consUnprefix
     , o "rdf"            LikeSource        consRdf
+    , o "size"           LikeSize          consSize
     , o "unhold"         LikeHold          consUnhold
+    , o "unprefix"       LikeUnprefix      consUnprefix
     , o "val"            LikeVal           consVal
     ] where o = (,,)
 
@@ -73,26 +72,15 @@ consVal use = do
 
 
 
--- ----------------------  Maybe and MMaybe
+-- ----------------------  maybe
 
 consMaybe :: Kit.OpCons Val
 consMaybe use = Right $ relmapMaybe use
 
-consMMaybe :: Kit.OpCons Val
-consMMaybe use = Right $ relmapMMaybe use
-
--- | like SQL's left join
 relmapMaybe :: (Ord v, Nil v) => Kit.OpUse v -> Kit.Relmap v
 relmapMaybe use = Kit.relmapConfl use "maybe" sub ms where
     ms = Kit.opSub use
     sub [r2] r1 = relMaybe r1 r2
-    sub _ _     = undefined
-
--- | like SQL's full join
-relmapMMaybe :: (Ord v, Nil v) => Kit.OpUse v -> Kit.Relmap v
-relmapMMaybe use = Kit.relmapConfl use "mmaybe" sub ms where
-    ms = Kit.opSub use
-    sub [r2] r1 = Mini.relJoin (relMaybe r1 r2) (relMaybe r2 r1)
     sub _ _     = undefined
 
 -- | like SQL's left join
@@ -119,17 +107,36 @@ relMaybe r1 r2 = Rel h3 b3 where
 
 
 
+-- ----------------------  mmaybe
+
+consMMaybe :: Kit.OpCons Val
+consMMaybe use = Right $ relmapMMaybe use
+
+-- | like SQL's full join
+relmapMMaybe :: (Ord v, Nil v) => Kit.OpUse v -> Kit.Relmap v
+relmapMMaybe use = Kit.relmapConfl use "mmaybe" sub ms where
+    ms = Kit.opSub use
+    sub [r2] r1 = Mini.relJoin (relMaybe r1 r2) (relMaybe r2 r1)
+    sub _ _     = undefined
+
+
+
 -- ----------------------  Nested relation
 
--- | Hanging relation, like grouping.
-hang :: (Ord v, RelValue v)
-    => Kit.OpUse v -> String
-    -> Kit.Relmap v -> Kit.Relmap v
-hang use ns rm2 = Kit.relmapConfl use "hang" (Kit.withP2 relHang ns) [rm2]
+consHang :: Kit.OpCons Val
+consHang use = do
+  n <- Mini.getTerm1 use "-term"
+  Right $ relmapHang use n
 
-relHang :: (Ord v, RelValue v)
-    => [String] -> [Rel v] -> Rel v -> Rel v
-relHang [n] [r2] r1 = Rel h3 b3 where
+relmapHang :: (Ord v, RelValue v) => OpUse v -> String -> Relmap v
+relmapHang use n = Kit.relmapConfl use "hang" sub ms where
+    ms = Kit.opSub use
+    sub [r2] r1 = relHang n r2 r1
+    sub _ _     = undefined
+
+-- | Hanging relation, like grouping.
+relHang :: (Ord v, RelValue v) => String -> Rel v -> Map (Rel v)
+relHang n r2 r1 = Rel h3 b3 where
     Rel h1 args1 = r1
     Rel h2 args2 = r2
 
@@ -146,11 +153,6 @@ relHang [n] [r2] r1 = Rel h3 b3 where
     step arg1 = case Kit.lookupMap (Kit.possPick share1 arg1) m2 of
                   Just args2' -> (relValue $ Rel h2 args2') : arg1
                   Nothing     -> []
-
-relHang _ _ _ = undefined
-
-selfhang :: a
-selfhang = undefined
 
 
 
@@ -172,4 +174,71 @@ consPrefixChange use = do
   new <- Mini.getTerm1 use "-new"
   old <- Mini.getTerm1 use "-old"
   Right $ relmapPrefixChange use new old
+
+
+
+-- ----------------------  size
+
+consSize :: Kit.OpCons Val
+consSize use = do
+  n <- Mini.getTerm1 use "-term"
+  Right $ relmapSize use n
+
+relmapSize :: (IntValue v) => OpUse v -> String -> Relmap v
+relmapSize use n = Kit.relmapCalc use "size" sub where
+    sub _ = relSize n
+
+{-| Change terms names -}
+relSize
+    :: (IntValue v)
+    => String        -- ^ List of term name (/to/, /from/)
+    -> Map (Rel v)   -- ^ Relation to relation
+relSize n (Rel _ b1) = Rel h2 b2 where
+    h2 = Kit.headFrom [n]
+    b2 = [[intValue $ length b1]]
+
+
+
+-- ----------------------  conf
+
+consConf :: Kit.OpCons Val
+consConf use = do
+  n <- Mini.getTerm1 use "-term"
+  Right $ relmapConf use n
+
+relmapConf :: (StringValue v) => OpUse v -> String -> Relmap v
+relmapConf use n = Kit.relmapCalc use "conf" sub where
+    sub _ = relConf n
+
+{-| Change terms names -}
+relConf
+    :: (StringValue v)
+    => String        -- ^ Term name
+    -> Map (Rel v)   -- ^ Relation to relation
+relConf n (Rel h1 _) = Rel h2 b2 where
+    h2 = Kit.headFrom [n]
+    b2 = [[stringValue $ show s]]
+    s  = show $ docParen $ doc h1
+
+
+
+-- ----------------------  enclose
+
+consEnclose :: Kit.OpCons Val
+consEnclose use = do
+  n <- Mini.getTerm1 use "-term"
+  Right $ relmapEnclose use n
+
+relmapEnclose :: (RelValue v) => OpUse v -> String -> Relmap v
+relmapEnclose use n = Kit.relmapCalc use "enclose" sub where
+    sub _ = relEnclose n
+
+{-| Enclose the current relation in a term. -}
+relEnclose
+    :: (RelValue v)
+    => String        -- ^ Term name
+    -> Map (Rel v)   -- ^ Relation to relation
+relEnclose n r@(Rel h1 _) = Rel h2 b2 where
+    h2 = Relhead [Nest n $ headTerms h1]
+    b2 = [[relValue r]]
 
