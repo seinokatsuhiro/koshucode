@@ -29,30 +29,9 @@ import qualified Data.Tuple as Tuple
 
 
 
--- ----------------------  projection
+-- ----------------------  empty
 
-relmapCut :: (Ord v) => OpUse v -> [String] -> Relmap v
-relmapCut use ns = Kit.relmapCalc use "cut" sub where
-    sub _ = relCut ns
-
-relCut :: (Ord v) => [String] -> Map (Rel v)
-relCut = project indexCut
-
-relmapPick :: (Ord v) => OpUse v -> [String] -> Relmap v
-relmapPick use ns = Kit.relmapCalc use "pick" sub where
-    sub _ = relPick ns
-
-relPick :: (Ord v) => [String] -> Map (Rel v)
-relPick = project indexPick
-
-project :: (Ord v) => ([Int] -> Listmap v) -> [String] -> Map (Rel v)
-project f ns2 (Rel h1 b1) = Rel h2 b2 where
-    pos = List.sort $ Kit.headPoss h1 (map singleton ns2)
-    pj  = f $ Kit.posPoss pos
-    h2  = Kit.rehead pj h1
-    b2  = unique $ map pj b1
-
-relmapEmpty :: Kit.OpUse v -> Kit.Relmap v
+relmapEmpty :: OpUse v -> Relmap v
 relmapEmpty use = Kit.relmapCalc use "empty" sub where
     sub _ = relEmpty
 
@@ -60,7 +39,34 @@ relmapEmpty use = Kit.relmapCalc use "empty" sub where
 relEmpty :: Map (Rel v)  -- ^ Any relation to empty relation
 relEmpty (Rel h1 _) = Rel h1 []
 
+-- ----------------------  cut & pick
 
+relmapCut :: (Ord v) => OpUse v -> [String] -> Relmap v
+relmapCut use ns = Kit.relmapCalc use "cut" sub where
+    sub _ = relCut ns
+
+relCut
+    :: (Ord v)
+    => [String]      -- ^ Term names
+    -> Map (Rel v)   -- ^ Mapping relation to relation
+relCut = project indexCut
+
+relmapPick :: (Ord v) => OpUse v -> [String] -> Relmap v
+relmapPick use ns = Kit.relmapCalc use "pick" sub where
+    sub _ = relPick ns
+
+relPick
+    :: (Ord v)
+    => [String]      -- ^ Term names
+    -> Map (Rel v)   -- ^ Mapping relation to relation
+relPick = project indexPick
+
+project :: (Ord v) => ([Int] -> Listmap v) -> [String] -> Map (Rel v)
+project f ns (Rel h1 b1) = Rel h2 b2 where
+    pos = List.sort $ Kit.headPoss h1 (map singleton ns)
+    pj  = f $ Kit.posPoss pos
+    h2  = Kit.rehead pj h1
+    b2  = unique $ map pj b1
 
 -- ----------------------  rename
 

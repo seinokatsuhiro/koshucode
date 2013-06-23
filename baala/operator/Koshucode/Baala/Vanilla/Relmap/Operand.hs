@@ -2,6 +2,10 @@
 
 module Koshucode.Baala.Vanilla.Relmap.Operand
 ( VanillaOperand (..)
+, likePrefix
+, likeUnprefix
+, likePrefixChange
+, likeSize
 ) where
 
 import Koshucode.Baala.Minimal.OpKit as Kit

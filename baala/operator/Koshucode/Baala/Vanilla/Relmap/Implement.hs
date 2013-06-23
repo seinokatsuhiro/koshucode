@@ -2,6 +2,9 @@
 
 module Koshucode.Baala.Vanilla.Relmap.Implement
 ( vanillaOperators
+
+-- * Operators
+-- $Operators
 ) where
 
 import Koshucode.Baala.Minimal.OpKit as Kit
@@ -27,7 +30,7 @@ vanillaOperators' = Mini.operators
     , o "hang"           LikeMeet          consHang
     , o "hold"           LikeHold          consHold
     , o "maybe"          LikeMeet          consMaybe
-    , o "mmaybe"         LikeMeet          consMMaybe
+    , o "maybe-both"     LikeMeet          consMaybeBoth
     , o "prefix"         LikePrefix        consPrefix
     , o "prefix-change"  LikePrefixChange  consPrefixChange
     , o "rdf"            LikeSource        consRdf
@@ -109,12 +112,12 @@ relMaybe r1 r2 = Rel h3 b3 where
 
 -- ----------------------  mmaybe
 
-consMMaybe :: Kit.OpCons Val
-consMMaybe use = Right $ relmapMMaybe use
+consMaybeBoth :: Kit.OpCons Val
+consMaybeBoth use = Right $ relmapMaybeBoth use
 
 -- | like SQL's full join
-relmapMMaybe :: (Ord v, Nil v) => Kit.OpUse v -> Kit.Relmap v
-relmapMMaybe use = Kit.relmapConfl use "mmaybe" sub ms where
+relmapMaybeBoth :: (Ord v, Nil v) => Kit.OpUse v -> Kit.Relmap v
+relmapMaybeBoth use = Kit.relmapConfl use "mmaybe" sub ms where
     ms = Kit.opSub use
     sub [r2] r1 = Mini.relJoin (relMaybe r1 r2) (relMaybe r2 r1)
     sub _ _     = undefined
@@ -242,3 +245,31 @@ relEnclose n r@(Rel h1 _) = Rel h2 b2 where
     h2 = Relhead [Nest n $ headTerms h1]
     b2 = [[relValue r]]
 
+-- ----------------------
+-- $Operators
+--
+-- [@conf@]
+--
+-- [@enclose@]
+--
+-- [@hang@]
+--
+-- [@hold@]
+--
+-- [@maybe@]
+--
+-- [@maybe-both@]
+--
+-- [@prefix@]
+--
+-- [@prefix-change@]
+--
+-- [@rdf@]
+--
+-- [@size@]
+--
+-- [@unhold@]
+--
+-- [@unprefix@]
+--
+-- [@val@]

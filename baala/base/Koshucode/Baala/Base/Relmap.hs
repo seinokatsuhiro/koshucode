@@ -3,14 +3,12 @@
 {-| Relation-to-relation mapping. -}
 
 module Koshucode.Baala.Base.Relmap
-( -- * Modules
-
-  -- ** Datatypes
+( -- * Datatypes
   module Koshucode.Baala.Base.Relmap.HalfRelmap
 , module Koshucode.Baala.Base.Relmap.Relmap
 , module Koshucode.Baala.Base.Relmap.Assert
 
-  -- ** Processes
+  -- * Processes
 , module Koshucode.Baala.Base.Relmap.Implement
 , module Koshucode.Baala.Base.Relmap.Construct
 , module Koshucode.Baala.Base.Relmap.Run
