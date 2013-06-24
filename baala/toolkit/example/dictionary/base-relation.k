@@ -1,9 +1,10 @@
 ** -*- koshu -*-
 
 s    : source S  /sno /sname /status /city
+p    : source P  /pno /pname /color /weight /city
 sp   : source SP /sno /pno /qty
 
-ssp  : s | meet sp
-
-affirm SSP ssp
+affirm S  s
+affirm P  p
+affirm SP sp
 

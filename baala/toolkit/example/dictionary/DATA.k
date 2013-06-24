@@ -8,15 +8,15 @@
 **  and translates into Koshucode.
 **
 
-** Supplier
+**  Supplier
 
-|-- S /sno S1 /sname Smith /staus 20 /city London
-|-- S /sno S2 /sname Jones /staus 10 /city Pairs
-|-- S /sno S3 /sname Blake /staus 30 /city Pairs
-|-- S /sno S4 /sname Clark /staus 20 /city London
-|-- S /sno S5 /sname Adams /staus 30 /city Athens
+|-- S /sno S1 /sname Smith /status 20 /city London
+|-- S /sno S2 /sname Jones /status 10 /city Pairs
+|-- S /sno S3 /sname Blake /status 30 /city Pairs
+|-- S /sno S4 /sname Clark /status 20 /city London
+|-- S /sno S5 /sname Adams /status 30 /city Athens
 
-** Part
+**  Part
 
 |-- P /pno P1 /pname Nut   /color Red   /weight 12.0 /city London
 |-- P /pno P2 /pname Bolt  /color Green /weight 17.0 /city Paris
@@ -25,7 +25,7 @@
 |-- P /pno P5 /pname Cam   /color Blue  /weight 12.0 /city Paris
 |-- P /pno P6 /pname Cog   /color Red   /weight 19.0 /city London
 
-** Shipment
+**  Shipment
 
 |-- SP /sno S1 /pno P1 /qty 300
 |-- SP /sno S1 /pno P2 /qty 200
