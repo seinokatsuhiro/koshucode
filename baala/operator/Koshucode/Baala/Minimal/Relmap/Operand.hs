@@ -22,37 +22,31 @@ import Koshucode.Baala.Minimal.Relmap.Pattern
 
 -- | 'OpPattern' for minimal operators
 data MinimalOperand
-    {-| No operand -}
-    = LikeEmpty
-
-    {-| Relmap and maybe shared terms -}
-    | LikeMeet
-
-    {-| List of present terms -}
-    | LikePick
-
-    {-| List of new term and present term.
-        @-term@ pairs of new and present terms -}
-    | LikeRename
-
-    {-| Relsign and list of terms.
-        @-sign@ relsign
-        @-term@ term names -}
-    | LikeSource
+    = LikeEmpty   -- ^ no operand
+    | LikeMeet    -- ^ { @-relmap@ } relmap [ @-share@ \/name ... ]
+    | LikePick    -- ^ { @-term@ } \/name ...
+    | LikeRename  -- ^ { @-term@ } \/new \/old ...
+    | LikeSource  -- ^ { @-sign@ } relsign { @-term@ } \/name ...
       deriving (Show, Eq, Enum)
 
 instance OpPattern MinimalOperand where
-    opParser' LikeEmpty  = id
-    opParser' LikeMeet   = likeMeet
-    opParser' LikePick   = likePick
-    opParser' LikeRename = likeRename
-    opParser' LikeSource = likeSource
+    opParser'  LikeEmpty  = id
+    opParser'  LikeMeet   = likeMeet
+    opParser'  LikePick   = likePick
+    opParser'  LikeRename = likeRename
+    opParser'  LikeSource = likeSource
 
-    opUsage   LikeEmpty  = [""]
-    opUsage   LikeMeet   = ["RELMAP"]
-    opUsage   LikePick   = ["/NAME ..."]
-    opUsage   LikeRename = ["/NEW /OLD ..."]
-    opUsage   LikeSource = ["SIGN /NAME ..."]
+    opPart     LikeEmpty  = []
+    opPart     LikeMeet   = ["-relmap", "-share"]
+    opPart     LikePick   = ["-term"]
+    opPart     LikeRename = ["-term"]
+    opPart     LikeSource = ["-sign", "-term"]
+
+    opUsage    LikeEmpty  = [""]
+    opUsage    LikeMeet   = ["RELMAP [-share /NAME ...]"]
+    opUsage    LikePick   = ["/NAME ..."]
+    opUsage    LikeRename = ["/NEW /OLD ..."]
+    opUsage    LikeSource = ["RELSIGN /NAME ..."]
 
 
 

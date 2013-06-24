@@ -60,9 +60,11 @@ module Koshucode.Baala.Minimal.OpKit
 , Relmap.RelmapFullCons
 , Relmap.RelmapHalfCons
 , Relmap.halfOperand
+, Relmap.relmapAlias
 , Relmap.relmapCalc
 , Relmap.relmapConfl
 , Relmap.relmapCons
+, Relmap.relmapConst
 , Relmap.relmapSource
 
   -- * Section

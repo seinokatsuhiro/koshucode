@@ -79,9 +79,9 @@ getTermPairs use n = do
     -}
 
 getRelmap :: OpUse v -> AbortOr (Relmap v)
-getRelmap use = getHead $ opSub use
+getRelmap use = getHead $ opSubmap use
 
 {-| Get relmaps from operator use. -}
 getRelmaps :: OpUse v -> AbortOr [Relmap v]
-getRelmaps use = Right $ opSub use
+getRelmaps use = Right $ opSubmap use
 

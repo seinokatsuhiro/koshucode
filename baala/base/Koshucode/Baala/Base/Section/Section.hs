@@ -38,47 +38,29 @@ data Section v = Section {
     } deriving (Show)
 
 instance (Ord v, Pretty v) => Pretty (Section v) where
-    doc = docSection
-
-docSection :: (Ord v, Pretty v) => Section v -> Doc
-docSection md = dSection where
-    dSection = docv [dRelmap, dAssert, dJudge]
-    dRelmap = docv $ map docRelmap $ sectionRelmap md
-    docRelmap (n,m) = zeroWidthText (n ++ " :") <+> doc m $$ text ""
-    dJudge  = docv $ sectionJudge md
-    dAssert = docv $ sectionAssert md
+    doc sec = dSection where
+        dSection = docv [dRelmap, dAssert, dJudge]
+        dRelmap  = docv $ map docRelmap $ sectionRelmap sec
+        docRelmap (n,m) = zeroWidthText (n ++ " :") <+> doc m $$ text ""
+        dJudge   = docv $ sectionJudge sec
+        dAssert  = docv $ sectionAssert sec
 
 
 
--- ----------------------  Linking relmaps
+-- ----------------------  Selectors
 
--- | Select assertions like 'sectionAssert'.
---   It returns relmap-liked assertions.
---   We can run these assertions using 'runAssertJudges'.
+{-| Select assertions like 'sectionAssert'.
+    It returns relmap-liked assertions.
+    We can run these assertions using 'runAssertJudges'. -}
 sectionLinkedAssert :: Section v -> [Assert v]
-sectionLinkedAssert md = map a $ sectionAssert md where
-    rs'    = linkRelmap $ sectionRelmap md
-    linker = makeLinker rs'
+sectionLinkedAssert sec = map a $ sectionAssert sec where
+    rs'    = relmapLink $ sectionRelmap sec
+    linker = relmapLinker rs'
     a (Assert q s r) = Assert q s $ linker r
 
-linkRelmap :: [Named (Relmap v)] -> [Named (Relmap v)]
-linkRelmap rs = rs' where
-    rs'     = map f rs
-    linker  = makeLinker rs'
-    f (n,r) = (n, linker r)
-
-makeLinker :: [Named (Relmap v)] -> Relmap v -> Relmap v
-makeLinker rs' = link where
-    link (RelmapAppend r1 r2)  = RelmapAppend (link r1) (link r2)
-    link (RelmapCalc h n f rs) = RelmapCalc h n f $ map link rs
-    link r@(RelmapName _ n)    = case lookup n rs' of
-                                   Just r' -> r'
-                                   Nothing -> r
-    link r                     = r
 
 
-
--- ----------------------  Constructor
+-- ----------------------  Constructors
 
 -- | Section that has no contents.
 makeEmptySection :: RelmapCons v -> Section v

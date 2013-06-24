@@ -17,10 +17,11 @@ module Koshucode.Baala.Base.Relmap
   -- $Dependencies
 ) where
 
-import Koshucode.Baala.Base.Relmap.Assert
 import Koshucode.Baala.Base.Relmap.HalfRelmap
-import Koshucode.Baala.Base.Relmap.Implement
 import Koshucode.Baala.Base.Relmap.Relmap
+import Koshucode.Baala.Base.Relmap.Assert
+
+import Koshucode.Baala.Base.Relmap.Implement
 import Koshucode.Baala.Base.Relmap.Construct
 import Koshucode.Baala.Base.Relmap.Run
 

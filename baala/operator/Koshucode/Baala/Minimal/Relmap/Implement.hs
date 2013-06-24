@@ -26,7 +26,7 @@ builtinOperators :: (Ord v) => [OpImplement v]
 builtinOperators = operators [ ("|", LikeEmpty, consConcat) ]
 
 consConcat :: OpCons v
-consConcat = Right . mconcat . opSub
+consConcat = Right . mconcat . opSubmap
 
 -- | Minimal implementations of relmaps
 minimalOperators :: (Ord v) => [OpImplement v]
@@ -70,7 +70,7 @@ consReldee = consRelcon "reldee" reldee
 consReldum = consRelcon "reldee" reldum
 
 consRelcon :: String -> Rel v -> OpCons v
-consRelcon op r use = Right $ RelmapConst (opHalf use) op r
+consRelcon op r use = Right $ relmapConst use op r
 
 -- Project
 

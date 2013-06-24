@@ -53,6 +53,17 @@ instance Mini.OpPattern VanillaOperand where
     opParser' LikeSource        = Mini.likeMeet
     opParser' LikeSize          = likeSize
 
+    opPart    LikeHold          = ["-exp"]
+    opPart    LikeVal           = ["-exp"]
+    opPart    LikeMeet          = ["-relmap"]
+    opPart    LikePrefix        = ["-prefix", "-term"]
+    opPart    LikePrefixChange  = ["-new", "-old"]
+    opPart    LikeUnprefix      = ["-prefix"]
+    opPart    LikeSource        = ["-sign", "-term"]
+    opPart    LikeSize          = ["-term"]
+
+    opUsage   _ = []
+
 likePrefix :: OpParser'
 likePrefix xs =
     case lookup "" xs of

@@ -9,18 +9,23 @@ module Koshucode.Baala.Minimal.Relmap.Pattern
 
 import Koshucode.Baala.Minimal.OpKit as Kit
 
--- | Class for operand pattern.
+{-| Class for operand pattern. -}
 class OpPattern p where
+    {-| Operand parser. -}
     opParser :: p -> OpParser
     opParser p = opParser' p . operandGroup
 
+    {-| Simplified operand parser. -}
     opParser' :: p -> OpParser'
     opParser' _ = id
 
-    opUsage :: p -> [String]
-    opUsage _ = []
+    {-| Names of suboperands. -}
+    opPart :: p -> [String]
 
--- | Make relmap implementations.
+    {-| Synopsis. -}
+    opUsage :: p -> [String]
+
+{-| Make implementations of relational operators. -}
 operators
     :: (OpPattern p)
     => [(String, p, OpCons v)] -- ^ Operator implementations

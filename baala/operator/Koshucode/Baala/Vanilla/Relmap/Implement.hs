@@ -59,10 +59,9 @@ consHoldFor op test use = do
 
 consRdf :: Kit.OpCons Val
 consRdf use = do
-  let h = Kit.opHalf use
-  sign  <- Mini.getWord use "-sign"
+  sign  <- Mini.getWord  use "-sign"
   [s,o] <- Mini.getTerms use "-term"
-  Right $ Kit.RelmapAlias h $
+  Right $ Kit.relmapAlias use $
         Kit.relmapSource use sign ["/s", "/o"] `mappend`
         Mini.relmapRename use [(s,"/s"), (o,"/o")]
 
@@ -82,7 +81,7 @@ consMaybe use = Right $ relmapMaybe use
 
 relmapMaybe :: (Ord v, Nil v) => Kit.OpUse v -> Kit.Relmap v
 relmapMaybe use = Kit.relmapConfl use "maybe" sub ms where
-    ms = Kit.opSub use
+    ms = Kit.opSubmap use
     sub [r2] r1 = relMaybe r1 r2
     sub _ _     = undefined
 
@@ -110,7 +109,7 @@ relMaybe r1 r2 = Rel h3 b3 where
 
 
 
--- ----------------------  mmaybe
+-- ----------------------  maybe-both
 
 consMaybeBoth :: Kit.OpCons Val
 consMaybeBoth use = Right $ relmapMaybeBoth use
@@ -118,7 +117,7 @@ consMaybeBoth use = Right $ relmapMaybeBoth use
 -- | like SQL's full join
 relmapMaybeBoth :: (Ord v, Nil v) => Kit.OpUse v -> Kit.Relmap v
 relmapMaybeBoth use = Kit.relmapConfl use "mmaybe" sub ms where
-    ms = Kit.opSub use
+    ms = Kit.opSubmap use
     sub [r2] r1 = Mini.relJoin (relMaybe r1 r2) (relMaybe r2 r1)
     sub _ _     = undefined
 
@@ -133,7 +132,7 @@ consHang use = do
 
 relmapHang :: (Ord v, RelValue v) => OpUse v -> String -> Relmap v
 relmapHang use n = Kit.relmapConfl use "hang" sub ms where
-    ms = Kit.opSub use
+    ms = Kit.opSubmap use
     sub [r2] r1 = relHang n r2 r1
     sub _ _     = undefined
 
@@ -245,6 +244,8 @@ relEnclose n r@(Rel h1 _) = Rel h2 b2 where
     h2 = Relhead [Nest n $ headTerms h1]
     b2 = [[relValue r]]
 
+
+
 -- ----------------------
 -- $Operators
 --
@@ -273,3 +274,4 @@ relEnclose n r@(Rel h1 _) = Rel h2 b2 where
 -- [@unprefix@]
 --
 -- [@val@]
+
