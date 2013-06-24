@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.12.0.0
+@version 0.13.0.0
 
 
 -- | General utilities
@@ -42,7 +42,8 @@ lookupMap :: Ord k => k -> Map k a -> Maybe a
 class Name a where names = map name
 name :: Name a => a -> String
 names :: Name a => [a] -> [String]
-type Listmap a = forall a. [a] -> [a]
+type Map a = a -> a
+type Listmap a = forall a. Map [a]
 
 
 -- | Position in list.
@@ -649,29 +650,40 @@ RelmapAppend :: (Relmap v) -> (Relmap v) -> Relmap v
 RelmapName :: HalfRelmap -> String -> Relmap v
 
 -- | Function of relmap
-type RelmapSub v = [Rel v] -> Rel v -> Rel v
-
--- | Confluent operator, like binary operator
-type RelmapBin v = Relmap v -> Relmap v
+type RelmapSub v = [Rel v] -> Map (Rel v)
 
 -- | List of <a>RelmapSource</a>
 relmapSourceList :: Relmap v -> [Relmap v]
 
 -- | Expand <a>RelmapAppend</a> to list of <a>Relmap</a>
 relmapAppendList :: Relmap v -> [Relmap v]
+
+-- | Use of operator
 data OpUse v
 OpUse :: HalfRelmap -> [Relmap v] -> OpUse v
-opHalf :: OpUse v -> HalfRelmap
-opSub :: OpUse v -> [Relmap v]
 
--- | Retrieve relation from dataset
+-- | Syntactic data of operator use
+opHalf :: OpUse v -> HalfRelmap
+
+-- | Subrelmaps
+opSubmap :: OpUse v -> [Relmap v]
+
+-- | Retrieve relation from dataset.
 relmapSource :: OpUse v -> String -> [String] -> (Relmap v)
 
--- | Make a non-confluent relmap
+-- | Constant relmap.
+relmapConst :: OpUse v -> String -> Rel v -> Relmap v
+
+-- | Alias relmap.
+relmapAlias :: OpUse v -> Relmap v -> Relmap v
+
+-- | Make a non-confluent relmap.
 relmapCalc :: OpUse v -> String -> RelmapSub v -> Relmap v
 
--- | Make a confluent relmap
+-- | Make a confluent relmap.
 relmapConfl :: OpUse v -> String -> RelmapSub v -> [Relmap v] -> Relmap v
+relmapLink :: Map [Named (Relmap v)]
+relmapLinker :: [Named (Relmap v)] -> Map (Relmap v)
 instance Show (OpUse v)
 instance Pretty (Relmap v)
 instance Name (Relmap v)
