@@ -53,10 +53,9 @@ instance (Ord v, Pretty v) => Pretty (Section v) where
     It returns relmap-liked assertions.
     We can run these assertions using 'runAssertJudges'. -}
 sectionLinkedAssert :: Section v -> [Assert v]
-sectionLinkedAssert sec = map a $ sectionAssert sec where
-    rs'    = relmapLink $ sectionRelmap sec
-    linker = relmapLinker rs'
-    a (Assert q s r) = Assert q s $ linker r
+sectionLinkedAssert Section{ sectionRelmap = ms, sectionAssert = ass }
+    = map linker ass where
+      linker = assertMap $ relmapLinker ms
 
 
 

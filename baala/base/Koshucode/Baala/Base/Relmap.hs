@@ -32,17 +32,17 @@ import Koshucode.Baala.Base.Relmap.Run
 --
 -- Dependencies of significant datatypes.
 -- 
--- * Data 'HalfRelmap' has
---   'HalfRelmap',
---   'Koshucode.Baala.Base.Prelude.Abort.SourceLine' and
---   'Koshucode.Baala.Base.Syntax.TokenTree.TokenTree'.
+-- * Data 'Assert' has 'Relmap'.
 -- 
 -- * Data 'Relmap' has
 --   'Relmap',
 --   'Koshucode.Baala.Base.Data.Rel.Rel', and
 --   'HalfRelmap'.
 -- 
--- * Data 'Assert' has 'Relmap'.
+-- * Data 'HalfRelmap' has
+--   'HalfRelmap',
+--   'Koshucode.Baala.Base.Prelude.Abort.SourceLine' and
+--   'Koshucode.Baala.Base.Syntax.TokenTree.TokenTree'.
 -- 
 -- Datatypes for implementing 'Relmap' operators.
 --
@@ -57,7 +57,15 @@ import Koshucode.Baala.Base.Relmap.Run
 --   'OpUse' and
 --   'Relmap'.
 --
+-- * Data 'OpUse' has
+--   'HalfRelmap' and
+--   'Relmap'.
+--
 -- Datatypes for constructing 'Relmap'.
+-- 
+-- * Data 'RelmapCons' has
+--   'RelmapHalfCons' and
+--   'RelmapFullCons'.
 --    
 -- * Type 'RelmapHalfCons' has
 --   'HalfRelmap',
@@ -67,9 +75,5 @@ import Koshucode.Baala.Base.Relmap.Run
 -- * Type 'RelmapFullCons' has
 --   'HalfRelmap' and
 --   'Relmap'.
--- 
--- * Data 'RelmapCons' has
---   'RelmapHalfCons' and
---   'RelmapFullCons'.
 --
 

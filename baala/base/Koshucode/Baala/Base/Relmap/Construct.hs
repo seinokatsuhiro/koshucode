@@ -1,27 +1,15 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| 'Relmap' construction.
-
-    Construction process of half relmaps from source trees.
-
-    [@\[TokenTree\] -> \[\[TokenTree\]\]@]
-       Divide list of 'TokenTree' by vertical bar (@|@).
-
-    [@\[\[TokenTree\]\] -> \[HalfRelmap\]@]
-       Construct each 'HalfRelmap' from lists of 'TokenTree'.
-       When there are subrelmaps in token trees,
-       constructs 'HalfRelmap' recursively.
-
-    [@\[HalfRelmap\] -> HalfRelmap@]
-       Wrap list of 'HalfRelmap' into one 'HalfRelmap'
-       that has these relmaps in 'halfSubmap'.
- -}
+{-| 'Relmap' construction. -}
 
 module Koshucode.Baala.Base.Relmap.Construct
 ( relmapCons,
   RelmapCons (..),
   RelmapHalfCons,
   RelmapFullCons
+
+  -- * Construction process
+  -- $ConstructionProcess
 ) where
 
 import Koshucode.Baala.Base.Prelude hiding (cat)
@@ -36,7 +24,7 @@ import Koshucode.Baala.Base.Syntax
 
 {-| Make half and full relmap constructors. -}
 relmapCons
-    :: [OpImplement v]   -- ^ Implementations of relmap operator
+    :: [OpImplement v]   -- ^ Implementations of relational operators
     -> (RelmapCons v)     -- ^ Relmap constructors
 relmapCons = make . unzip . map split where
     make (halfs, fulls) =
@@ -111,7 +99,7 @@ consHalfRelmap bundle src = cons where
 {-| Second step of constructing relmap,
     make 'Relmap' from contents of 'HalfRelmap'. -}
 type RelmapFullCons v
-    = HalfRelmap
+    = HalfRelmap          -- ^ Half relmap from 'RelmapHalfCons'
     -> AbortOr (Relmap v) -- ^ Result relmap
 
 {-| Construct (full) relmap. -}
@@ -123,4 +111,21 @@ fullBundle fulls = full where
           Just cons -> do ms <- mapM full hs
                           addAbort (AbortUsage src u)
                              $ cons $ OpUse h ms
+
+-- ----------------------
+-- $ConstructionProcess
+--
+-- Construction process of half relmaps from source trees.
+--
+-- [@\[TokenTree\] -> \[\[TokenTree\]\]@]
+--    Divide list of 'TokenTree' by vertical bar (@|@).
+--
+-- [@\[\[TokenTree\]\] -> \[HalfRelmap\]@]
+--    Construct each 'HalfRelmap' from lists of 'TokenTree'.
+--    When there are subrelmaps in token trees,
+--    constructs 'HalfRelmap' recursively.
+--
+-- [@\[HalfRelmap\] -> HalfRelmap@]
+--    Wrap list of 'HalfRelmap' into one 'HalfRelmap'
+--    that has these relmaps in 'halfSubmap'.
 

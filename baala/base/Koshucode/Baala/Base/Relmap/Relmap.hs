@@ -13,20 +13,10 @@ module Koshucode.Baala.Base.Relmap.Relmap
 
   -- * Selectors
 , relmapSourceList
+, relmapNameList
 , relmapAppendList
 
-  -- * Use of operator
-, OpUse (..)
-
-  -- * Constructors
-, relmapSource
-, relmapConst
-, relmapAlias
-, relmapCalc
-, relmapConfl
-
   -- * Linker
-, relmapLink
 , relmapLinker
 ) where
 
@@ -40,26 +30,26 @@ import Koshucode.Baala.Base.Relmap.HalfRelmap
 -- ----------------------  Data
 
 {-| Relation-to-relation mapping.
-    A 'Relmap' is correspond to a use of relational operator,
-    that is pair of operator and its operand. -}
+    A 'Relmap' is correspond to a use of relational operator. -}
 data Relmap v
-    -- | Relmap that retrieves a relation from a dataset
+    -- | Retrieve a relation from a dataset
     = RelmapSource HalfRelmap String [String]
-    -- | Relmap that has a constant relation
+    -- | Constant relation
     | RelmapConst  HalfRelmap String (Rel v)
-    -- | Relmap that has equavalent relmap
+    -- | Equavalent relmap
     | RelmapAlias  HalfRelmap (Relmap v)
     -- | Relmap that maps relations to a relation
     | RelmapCalc   HalfRelmap String (RelmapSub v) [Relmap v]
-    -- | Relmap that joints two relmaps
+    -- | Connect two relmaps
     | RelmapAppend (Relmap v) (Relmap v)
     -- | Relmap reference
     | RelmapName   HalfRelmap String
 
-{-| Function of relmap -}
+{-| Function of relmap. -}
 type RelmapSub v
-    = [Rel v]       -- ^ Subrelmaps
-    -> Map (Rel v)  -- ^ Mapping relation to relation
+    = [Rel v]   -- ^ Relations in operand
+    -> Rel v    -- ^ Main input relation
+    -> Rel v    -- ^ Output relation
 
 
 
@@ -113,16 +103,26 @@ docRelmapAppend = docv . map pipe . relmapAppendList where
 
 -- ----------------------  Selector
 
--- | List of 'RelmapSource'
+{-| List of 'RelmapSource' -}
 relmapSourceList :: Relmap v -> [Relmap v]
-relmapSourceList = loop where
-    loop m@(RelmapSource _ _ _) = [m]
-    loop (RelmapConst _ _ _)    = []
+relmapSourceList = relmapList f where
+    f m@(RelmapSource _ _ _) = [m]
+    f _ = []
+
+{-| List of name in 'RelmapName' -}
+relmapNameList :: Relmap v -> [String]
+relmapNameList = relmapList f where
+    f (RelmapName _ n) = [n]
+    f _ = []
+
+relmapList :: Map (Relmap v -> [a])
+relmapList f = loop where
+    loop (RelmapAlias _ m1)     = loop m1
     loop (RelmapAppend m1 m2)   = loop m1 ++ loop m2
     loop (RelmapCalc _ _ _ ms)  = concatMap loop ms
-    loop _ = undefined
+    loop m = f m
 
--- | Expand 'RelmapAppend' to list of 'Relmap'
+{-| Expand 'RelmapAppend' to list of 'Relmap' -}
 relmapAppendList :: Relmap v -> [Relmap v]
 relmapAppendList = loop where
     loop (RelmapAppend m1 m2) = loop m1 ++ loop m2
@@ -130,76 +130,30 @@ relmapAppendList = loop where
 
 
 
--- ----------------------  Use of operator
-
-{-| Use of operator -}
-data OpUse v = OpUse {
-      opHalf    :: HalfRelmap   -- ^ Syntactic data of operator use
-    , opSubmap  :: [Relmap v]   -- ^ Subrelmaps
-    } deriving (Show)
-
-
-
--- ----------------------  Constructor
-
-{-| Retrieve relation from dataset. -}
-relmapSource
-    :: OpUse v     -- ^ Use of operator
-    -> String      -- ^ Operator name
-    -> [String]    -- ^ List of term names
-    -> (Relmap v)  -- ^ Result relmap
-relmapSource use = RelmapSource $ opHalf use
-
-{-| Constant relmap. -}
-relmapConst
-    :: OpUse v     -- ^ Use of operator
-    -> String      -- ^ Operator name
-    -> Rel v       -- ^ Constant relation
-    -> Relmap v    -- ^ Result relmap
-relmapConst use = RelmapConst $ opHalf use
-
-{-| Alias relmap. -}
-relmapAlias
-    :: OpUse v     -- ^ Use of operator
-    -> Relmap v    -- ^ 
-    -> Relmap v    -- ^ Result relmap
-relmapAlias use = RelmapAlias $ opHalf use
-
-{-| Make a non-confluent relmap. -}
-relmapCalc
-    :: OpUse v      -- ^ Use of operator
-    -> String       -- ^ Operator name
-    -> RelmapSub v  -- ^ Calculation of operation
-    -> Relmap v     -- ^ Result relmap
-relmapCalc use op sub = relmapConfl use op sub []
-
-{-| Make a confluent relmap. -}
-relmapConfl
-    :: OpUse v      -- ^ Use of operator
-    -> String       -- ^ Operator name
-    -> RelmapSub v  -- ^ Calculation of operation
-    -> [Relmap v]   -- ^ Subrelmaps
-    -> Relmap v     -- ^ Result relmap
-relmapConfl use = RelmapCalc $ opHalf use
-
-
-
 -- ----------------------  Link
 
-relmapLink :: Map [Named (Relmap v)]
-relmapLink rs = rs' where
-    rs'     = map f rs
-    linker  = relmapLinker rs'
-    f (n,r) = (n, linker r)
+{-| Link relmaps by its name. -}
+relmapLinker
+    :: [Named (Relmap v)]  -- ^ Relmap and its linking name
+    -> Relmap v            -- ^ Relmap before linking
+    -> Relmap v            -- ^ Linked relmap
+relmapLinker = relmapLinker' . relmapLink
 
-relmapLinker :: [Named (Relmap v)] -> Map (Relmap v)
-relmapLinker rs' = link where
-    link (RelmapAppend r1 r2)  = RelmapAppend (link r1) (link r2)
-    link (RelmapCalc h n f rs) = RelmapCalc h n f $ map link rs
-    link r@(RelmapName _ n)    = case lookup n rs' of
-                                   Just r' -> r'
-                                   Nothing -> r
-    link r                     = r
+relmapLinker' :: [Named (Relmap v)] -> Map (Relmap v)
+relmapLinker' ms' = link where
+    link (RelmapAlias h m)     = RelmapAlias h (link m)
+    link (RelmapAppend m1 m2)  = RelmapAppend (link m1) (link m2)
+    link (RelmapCalc h n f ms) = RelmapCalc h n f $ map link ms
+    link m@(RelmapName _ n)    = case lookup n ms' of
+                                   Just m' -> m'
+                                   Nothing -> m
+    link m                     = m
+
+relmapLink :: Map [Named (Relmap v)]
+relmapLink ms = ms' where
+    ms'         = map link ms  -- make linked relmaps
+    link (n, m) = (n, linker m)
+    linker      = relmapLinker' ms'
 
 
 
