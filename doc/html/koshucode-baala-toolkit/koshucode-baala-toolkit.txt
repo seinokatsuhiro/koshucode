@@ -8,7 +8,7 @@
 --   written in Koshucode. Koshucode is a notation for both of descriptions
 --   and calculations of data.
 @package koshucode-baala-toolkit
-@version 0.11.0.0
+@version 0.14.0.0
 
 module Paths_koshucode_baala_toolkit
 version :: Version
@@ -67,12 +67,24 @@ instance Enum Option
 instance Bounded Option
 
 
+-- | Koshucode syntactic tool.
+module Koshucode.Baala.Toolkit.Main.KoshuSyntax
+
+-- | The main function for <tt>koshu-syntax</tt> command.
+koshuSyntaxMain :: IO ()
+instance Show Option
+instance Eq Option
+instance Ord Option
+instance Enum Option
+instance Bounded Option
+
+
 -- | Koshucode relational data processor.
 module Koshucode.Baala.Toolkit.Main.KoshuMain
 
 -- | The main function for <tt>koshu</tt> command. See
---   <a>vanillaRelmaps</a> for default argument.
-koshuMain :: Value v => [RelmapImplement v] -> IO ()
+--   <a>vanillaOperators</a> for default argument.
+koshuMain :: Value v => [OpImplement v] -> IO ()
 instance Show Option
 instance Eq Option
 instance Ord Option
