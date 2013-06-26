@@ -27,26 +27,26 @@ Highlight on Emacs
 . A
 . ad hoc polymorphism
 $ aggregate operator
-$ ALGEBRA
-$ algebra
-$ alias
-$ ALL BUT
-$ ALPHA
-$ alternate key
-$ AND
+. ALGEBRA
+. algebra
+. alias
+. ALL BUT
+. ALPHA
+. alternate key
+. AND
 $ appearance
-$ argument
+. argument
 $ arity
-$ Armstrong's inference rules
-$ arrow
-$ assignment
-$ Assignment Principle, The
-$ associative
+. Armstrong's inference rules
+. arrow
+. assignment
+. Assignment Principle, The
+* associative
 $ associative addressing
-$ atomic predicate
-$ atomic proposition
-$ atomic statement
-$ atomic value
+. atomic predicate
+. atomic proposition
+. atomic statement
+. atomic value
 $ attribute
 $ attribute constraint
 $ attribute extractor
@@ -91,15 +91,15 @@ $ catalog
 . column
 * commutative
 $ comparison
-$ complement
-$ complement (set theory)
-$ completeness
-$ component
-$ composite attribute
+. complement
+. complement (set theory)
+. completeness
+. component
+. composite attribute
 $ composition
-$ compound predicate
-$ compound proposition
-$ compound statement
+. compound predicate
+. compound proposition
+. compound statement
 $ conditional expression
 $ conjunct
 $ conjunction
@@ -404,36 +404,36 @@ $ Orthogonal Design Principle, The
 $ overloading
 $ OWA
 
-$ parameter
-$ Peirce arrow
-$ persistence
-$ physical data independence
-$ physical database design
-$ PJ/NF
-$ placeholder
-$ pointer
-$ polymorphism
+. parameter
+. Peirce arrow
+. persistence
+. physical data independence
+. physical database design
+. PJ/NF
+. placeholder
+. pointer
+. polymorphism
 $ power set
 $ predicate
-$ predicate calculus
-$ predicate logic
-$ prenex normal form
+. predicate calculus
+. predicate logic
+. prenex normal form
 $ primary key
 $ primitive operator
 $ Principle of Identity of Indiscernibles, The
-$ Principle of Interchangeability, The
-$ Principle of Orthogonal Design, The
+. Principle of Interchangeability, The
+. Principle of Orthogonal Design, The
 $ product
-$ projection
-$ projection-join normal form
+* projection
+. projection-join normal form
 $ proper inclusion
 $ proper subset
 $ proper superkey
 $ proper superset
-$ property
+. property
 $ proposition
-$ propositional calculus
-$ propositional logic
+. propositional calculus
+. propositional logic
 $ pseudovariable reference
 
 $ QBE
