@@ -67,11 +67,24 @@ executable koshu-rdf
        , koshucode-baala-base     == 0.14.*
        , koshucode-baala-operator == 0.14.*
 
+executable koshu-syntax
+  main-is:
+        koshu-syntax.hs
+  other-modules:
+        Koshucode.Baala.Toolkit.Main.KoshuSyntax
+  build-depends:
+         base                     == 4.5.*
+       , rdf4h                    == 1.1.*
+       , text                     == 0.11.*
+       , koshucode-baala-base     == 0.14.*
+       , koshucode-baala-operator == 0.14.*
+
 library
   -- Modules exported by the library.
   exposed-modules:
         Koshucode.Baala.Toolkit.Main.KoshuMain
         Koshucode.Baala.Toolkit.Main.KoshuRdfMain
+        Koshucode.Baala.Toolkit.Main.KoshuSyntax
         Koshucode.Baala.Toolkit.Library.Exit
         Koshucode.Baala.Toolkit.Library.RDF
         Koshucode.Baala.Toolkit.Library.Version
