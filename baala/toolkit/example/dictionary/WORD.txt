@@ -51,27 +51,27 @@ $ attribute
 $ attribute constraint
 $ attribute extractor
 $ attribute FROM
-$ attribute renaming
-$ attribute type
-$ attribute value
-$ augmentation
+. attribute renaming
+. attribute type
+. attribute value
+. augmentation
 $ axiom
 
-$ bag
-$ base relation
-$ base relvar
-$ base table
-$ BCNF
-$ BI-IMPLIES
+. bag
+* base relation
+* base relvar
+. base table
+. BCNF
+. BI-IMPLIES
 $ bijection
-$ binary
+. binary
 $ body
 $ BOOLEAN
 $ boolean expression
 $ boolean value
-$ bound variable
+. bound variable
 $ Boyce/Codd normal form
-$ business rule
+. business rule
 
 . calculus
 . candidate key
@@ -482,20 +482,20 @@ $ relational DBMS
 $ relational expression
 $ relational model
 $ relational operator
-$ relationship
+. relationship
 $ relcon
 $ relvar
 $ relvar constraint
 $ relvar predicate
-$ renaming
+* renaming
 $ repeating group
-$ restriction
-$ reversible decomposition
-$ RM/T
-$ RM/V1
-$ RM/V2
-$ row
-$ row ID
+* restriction
+. reversible decomposition
+. RM/T
+. RM/V1
+. RM/V2
+. row
+. row ID
 $ RVA
 
 $ scalar
