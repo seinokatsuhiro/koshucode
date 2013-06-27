@@ -4,9 +4,13 @@
 {-| Intermidiate structure between 'String' and 'Section'. -}
 
 module Koshucode.Baala.Base.Section.Clause
-( -- * Documentation
+( -- * Datatype
   -- $Documentation
   Clause (..)
+, clauseTypeText
+
+  -- * Constructors
+, consPreclause
 , consClause
 , consSection
 ) where
@@ -38,26 +42,39 @@ data Clause
     | CUnknown [SourceLine]       -- ^ Unknown clause
       deriving (Show, Data, Typeable)
 
+clauseTypeText :: Clause -> String
+clauseTypeText (CSection _ _)    = "Section"
+clauseTypeText (CImport _ _ _)   = "Import"
+clauseTypeText (CExport _ _)     = "Export"
+clauseTypeText (CRelmap _ _ _)   = "Relmap"
+clauseTypeText (TRelmap _ _ _)   = "Relmap"
+clauseTypeText (CAssert _ _ _ _) = "Assert"
+clauseTypeText (TAssert _ _ _ _) = "Assert"
+clauseTypeText (CJudge _ _ _ _)  = "Judge"
+clauseTypeText (CUnknown _)      = "Unknown"
 
 
--- ----------------------  Half construction
 
-{-| Construct 'Clause' list from 'Token' list.
-    This is a first step of constructing 'Section'. -}
-consClause
-    :: RelmapHalfCons  -- ^ Relmap half constructor
-    -> [Token]         -- ^ Source tokens
-    -> [Clause]        -- ^ Result clauses
-consClause half = clauseHalf half . concatMap clause . clausify
+-- ----------------------  Preconstruction
 
-clauseHalf :: RelmapHalfCons -> [Clause] -> [Clause]
-clauseHalf half = map f where
-    f (TRelmap src n ts)   = CRelmap src n   $ half src ts
-    f (TAssert src q s ts) = CAssert src q s $ half src ts
-    f x = x
+{-| Convert token list into clause list.
+    Result clause list does not contain
+    'CRelmap' and 'CAssert'. Instead of them,
+    'TRelmap' and 'TAssert' are contained.
+    This function does not depend on 'RelmapHalfCons'.
 
-clause :: [Token] -> [Clause]
-clause toks = cl toks' where
+    >>> consPreclause $ tokens "a : source A /x /y"
+    [TRelmap [SourceLine 1 "a : source A /x /y"]
+             "a" [TreeL (Word 0 "source"),
+                  TreeL (Word 0 "A"),
+                  TreeL (TermN ["/x"]),
+                  TreeL (TermN ["/y"])]]
+    -}
+consPreclause :: [Token] -> [Clause]
+consPreclause = concatMap consPreclause' . clausify
+
+consPreclause' :: [Token] -> [Clause]
+consPreclause' toks = cl toks' where
     toks' = sweepToken toks
     src   = sourceLines toks
 
@@ -96,13 +113,32 @@ clause toks = cl toks' where
     ass q (Word _ s : xs) = [TAssert src q s $ tokenTrees xs]
     ass _ _ = unk
 
--- e1 = mapM_ print . clause . tokens
+-- e1 = mapM_ print . consPreclause . tokens
 -- e2 = e1 "section 'http://example.com/'"
 -- e3 = e1 "import 'http://example.com/'"
 -- e4 = e1 "export aa"
 -- e5 = e1 "|-- A /x 0 /y 0"
 -- e6 = e1 "a : source A /x /y"
 -- e7 = e1 "a : @a"
+
+
+
+-- ----------------------  Half construction
+
+{-| Construct 'Clause' list from 'Token' list.
+    This is a first step of constructing 'Section'. -}
+consClause
+    :: RelmapHalfCons  -- ^ Relmap half constructor
+    -> [Token]         -- ^ Source tokens
+    -> [Clause]        -- ^ Result clauses
+consClause half = clauseHalf half . consPreclause
+
+clauseHalf :: RelmapHalfCons -> [Clause] -> [Clause]
+clauseHalf half = map f where
+    f (TRelmap src n ts)   = CRelmap src n   $ half src ts
+    f (TAssert src q s ts) = CAssert src q s $ half src ts
+    f x = x
+
 
 
 
@@ -195,14 +231,14 @@ terms (x : _)        = Left $ AbortMalformedTerms [] (show x) -- ???
 --   Relmap clause
 --
 -- [@affirm@ relsign relmap]
---   Assertion clause
+--   Affirmative assertion clause
 --
 -- [@deny@ relsign relmap]
---   Assertion clause
+--   Denial assertion clause
 --
 -- [@|--@ relsign \/name content ...]
---   Judgement clause
+--   Affirmative judgement clause
 --
 -- [@|-X@ relsign \/name content ...]
---   Judgement clause
+--   Denial judgement clause
 

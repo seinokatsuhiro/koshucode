@@ -81,18 +81,19 @@ relv    = Relv
 nov     :: Val
 nov     = Nov
 
-escape :: String -> String
+escape :: Map String
 escape (x:xs)
     | x == '\'' = "@(char.q)" ++ escape xs
     | x == '"'  = "@(char.qq)" ++ escape xs
     | x == '@'  = "@(char.at)" ++ escape xs
-    | x == '\n' = "@(char.nl)" ++ escape xs
+    | x == '\n' = "@(char.lf)" ++ escape xs
+    | x == '\r' = "@(char.cr)" ++ escape xs
     | otherwise = x : escape xs
 escape [] = []
 
 -- ----------------------  
 
-binv :: (Int -> Int -> Int) -> Val -> Val -> Val
+binv :: (Int -> Int -> Int) -> Val -> Map Val
 binv op (Intv x) (Intv y) = Intv $ op x y
 binv _ _ _ = Nov
 

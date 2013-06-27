@@ -8,13 +8,17 @@ module Koshucode.Baala.Base.Syntax.Token
   -- * Token type
   -- $TokenType
   Token (..)
-, isBlank
+, tokenTypeText
+
+  -- * Predicates
+, isBlankToken
 , isLineToken
-, isTerm
+, isTermToken
 
   -- * Tokenizer
 , tokens
 , untokens
+, untoken
 
   -- * Othre functions
 , sweepToken
@@ -31,7 +35,7 @@ data Token
     | TermP   [Int]     -- ^ Term position
     | Open    String    -- ^ Open paren
     | Close   String    -- ^ Close paren
-    | Space   Int       -- ^ N space chars
+    | Space   Int       -- ^ /N/ space characters
     | Comment String    -- ^ Comment text
     | Line SourceLine   -- ^ Source infomation
       deriving (Show, Eq, Ord, Data, Typeable)
@@ -44,23 +48,47 @@ instance Name Token where
     name (Comment s) = s
     name x = error $ "unknown name: " ++ show x
 
--- | Test the token is blank, i.e.,
---   'Comment', 'Line', or 'Space'.
-isBlank :: Token -> Bool
-isBlank (Space _)    = True
-isBlank (Comment _)  = True
-isBlank (Line _)     = True
-isBlank _            = False
+{-| Text of token type, one of
+    @\"Word\"@, @\"TermN\"@, @\"TermP\"@, @\"Open\"@, @\"Close\"@,
+    @\"Space\"@, @\"Comment\"@, or @\"Line@\".
 
+    >>> tokenTypeText $ Word 0 "flower"
+    "Word"
+    -}
+tokenTypeText :: Token -> String
+tokenTypeText (Word _ _)  = "Word"
+tokenTypeText (TermN _)   = "TermN"
+tokenTypeText (TermP _)   = "TermP"
+tokenTypeText (Open _)    = "Open"
+tokenTypeText (Close _)   = "Close"
+tokenTypeText (Space _)   = "Space"
+tokenTypeText (Comment _) = "Comment"
+tokenTypeText (Line _)    = "Line"
+
+
+
+-- ----------------------  Predicate
+
+{-| Test the token is blank, i.e.,
+    'Comment', 'Line', or 'Space'. -}
+isBlankToken :: Token -> Bool
+isBlankToken (Space _)    = True
+isBlankToken (Comment _)  = True
+isBlankToken (Line _)     = True
+isBlankToken _            = False
+
+{-| Test the token is a term,
+    i.e., 'TermN' or 'TermP'. -}
+isTermToken :: Token -> Bool
+isTermToken (TermN _)     = True
+isTermToken (TermP _)     = True
+isTermToken _             = False
+
+{-| Test the token is a line,
+    i.e., 'Line'. -}
 isLineToken :: Token -> Bool
-isLineToken (Line _)   = True
-isLineToken _          = False
-
--- | Test the token is a term, i.e., 'TermN' or 'TermP'
-isTerm :: Token -> Bool
-isTerm (TermN _)     = True
-isTerm (TermP _)     = True
-isTerm _             = False
+isLineToken (Line _)      = True
+isLineToken _             = False
 
 
 
@@ -71,13 +99,14 @@ data SrcLine
     | MidLine String        -- ^ Subline
       deriving (Show, Eq)
 
--- | Split string into list of tokens
--- 
---   >>> tokens "|-- R  /a A0 /b 31"
---   [Line 1 "|-- R  /a A0 /b 31",
---    Word 0 "|--", Space 1, Word 0 "R", Space 2,
---    TermN ["/a"], Space 1, Word 0 "A0", Space 1,
---    TermN ["/b"], Space 1, Word 0 "31"]
+{-| Split string into list of tokens
+
+    >>> tokens "|-- R  /a A0 /b 31"
+    [Line 1 "|-- R  /a A0 /b 31",
+     Word 0 "|--", Space 1, Word 0 "R", Space 2,
+     TermN ["/a"], Space 1, Word 0 "A0", Space 1,
+     TermN ["/b"], Space 1, Word 0 "31"]
+  -}
 
 tokens :: String -> [Token]
 tokens = gather token . numbering . lines where
@@ -187,7 +216,7 @@ maybeWord c  = C.isAlphaNum c
 
 -- ----------------------  Untokenizer
 
--- | Convert back a token list to a source string
+{-| Convert back a token list to a source string. -}
 untokens :: [Token] -> String
 untokens (Open a : xs) = a ++ untokens xs
 untokens (x : Close a : xs) = untoken x ++ untokens (Close a : xs)
@@ -211,14 +240,14 @@ untoken (Line (SourceLine _ s)) = s
 
 -- ---------------------- Other functions
 
--- | Remove blank tokens.
-sweepToken :: [Token] -> [Token]
-sweepToken = filter (not . isBlank)
+{-| Remove blank tokens. -}
+sweepToken :: Map [Token]
+sweepToken = filter (not . isBlankToken)
 
--- | Skip leading blank tokens.
-sweepLeft :: [Token] -> [Token]
+{-| Skip leading blank tokens. -}
+sweepLeft :: Map [Token]
 sweepLeft [] = []
-sweepLeft xxs@(x:xs) | isBlank x = sweepLeft xs
+sweepLeft xxs@(x:xs) | isBlankToken x = sweepLeft xs
                      | otherwise = xxs
 
 

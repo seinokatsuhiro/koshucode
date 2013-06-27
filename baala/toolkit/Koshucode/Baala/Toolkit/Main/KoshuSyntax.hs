@@ -12,6 +12,7 @@ module Koshucode.Baala.Toolkit.Main.KoshuSyntax
 import Koshucode.Baala.Base.Syntax as Syn
 import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Data
+import Koshucode.Baala.Base.Section as Sec
 import Koshucode.Baala.Toolkit.Library.Version
 import Koshucode.Baala.Toolkit.Library.Exit
 import Koshucode.Baala.Vanilla
@@ -71,16 +72,16 @@ koshuSyntaxMain' (_, argv) =
       (_, _, errs) -> putFailure $ concat errs
 
 run :: [FilePath] -> IO ()
-run paths = do
-  mapM_ dumpTokenList paths
+run paths = mapM_ dump paths
 
-dumpTokenList :: FilePath -> IO ()
-dumpTokenList path = 
+dump :: FilePath -> IO ()
+dump path = 
     do code <- readFile path
        let ts = Syn.tokens code
-           xs = zip [1 ..] ts
+           cs = Sec.consPreclause ts
        putStr $ unlines h
-       mapM_ putToken xs
+       mapM_ putToken  $ zip [1 ..] ts
+       mapM_ putClause $ zip [1 ..] cs
     where
       h = [ "***"
           , "***  DESCRIPTION"
@@ -112,19 +113,27 @@ putToken x = print $ doc $ tokenJudge x
 
 tokenJudge :: (Int, Token) -> Judge Val
 tokenJudge (n, t) = Judge True "TOKEN" args where
-    args = [ ("/seq"   , intv n)
-           , ("/type"  , stringv $ tokenType t)
-           , ("/token" , stringv $ show t) ]
+    args = [ ("/token-seq"    , intv n)
+           , ("/token-type"   , stringv $ tokenTypeText t)
+           , ("/token-content", stringv $ tokenContent t) ]
 
-tokenType :: Token -> String
-tokenType (Word _ _)  = "Word"
-tokenType (TermN _)   = "TermN"
-tokenType (TermP _)   = "TermP"
-tokenType (Open _)    = "Open"
-tokenType (Close _)   = "Close"
-tokenType (Space _)   = "Space"
-tokenType (Comment _) = "Comment"
-tokenType (Line _)    = "Line"
+putClause :: (Int, Clause) -> IO ()
+putClause p = print $ doc $ clauseJudge p
+
+clauseJudge :: (Int, Clause) -> Judge Val
+clauseJudge (n, c) = Judge True "CLAUSE" args where
+    args = [ ("/caluse-seq"  , intv n)
+           , ("/caluse-type" , stringv $ clauseTypeText c)]
+
+tokenContent :: Token -> String
+tokenContent (Word _ s)  = s
+tokenContent (TermN s)   = concat s
+tokenContent (TermP _)   = "#TermP"
+tokenContent (Open s)    = s
+tokenContent (Close s)   = s
+tokenContent (Space n)   = replicate n ' '
+tokenContent (Comment s) = s
+tokenContent (Line (SourceLine _ s)) = s
 
 
 
