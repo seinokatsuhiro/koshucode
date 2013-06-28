@@ -18,6 +18,7 @@ module Koshucode.Baala.Base.Kit.WithName
 
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
+import Koshucode.Baala.Base.Section
 import Koshucode.Baala.Base.Syntax
 
 type WithTerms  v = ([String] -> RelmapFun v) -> String -> RelmapFun v

@@ -2,7 +2,7 @@
 
 -- | Syntax utilities
 
-module Koshucode.Baala.Base.Syntax.Utility
+module Koshucode.Baala.Base.Section.Utility
 ( -- * Term
   termNames
 , termNamePairs
@@ -119,7 +119,7 @@ clausifySplit2 i ln xs = ln `cons1` mid xs where
     beg xxs     = ([], xxs)                   -- non indented line
 
 zeroLine :: SourceLine
-zeroLine = SourceLine 0 ""
+zeroLine = SourceLine 0 "" []
 
 sourceLines :: [Token] -> [SourceLine]
 sourceLines xs = Maybe.mapMaybe sourceLine xs

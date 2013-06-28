@@ -9,9 +9,12 @@ module Koshucode.Baala.Base.Abort.Utility
   addAbort,
   abortIO
 ) where
+
 import qualified System.Exit as Sys
 import qualified Data.Char   as Char
 import Koshucode.Baala.Base.Prelude.Pretty
+import Koshucode.Baala.Base.Syntax
+
 import Koshucode.Baala.Base.Abort.Source
 import Koshucode.Baala.Base.Abort.Symbol
 
@@ -52,7 +55,7 @@ messageDoc a =
 
 src :: [SourceLine] -> Doc
 src = docv . map d where
-    d (SourceLine n line) = (text $ label $ show n) <> text line
+    d (SourceLine n line _) = (text $ label $ show n) <> text line
 
 label :: String -> String
 label = rpad 12

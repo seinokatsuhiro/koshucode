@@ -7,6 +7,7 @@ module Koshucode.Baala.Base.Section.Clause
 ( -- * Datatype
   -- $Documentation
   Clause (..)
+, ClauseSource (..)
 , clauseTypeText
 
   -- * Constructors
@@ -20,11 +21,11 @@ import Prelude hiding (exp, mod)
 
 import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Base.Prelude as Prelude
 import Koshucode.Baala.Base.Relmap
 import Koshucode.Baala.Base.Syntax
 
 import Koshucode.Baala.Base.Section.Section
+import Koshucode.Baala.Base.Section.Utility
 
 -- Synthesis process
 --
@@ -34,16 +35,21 @@ import Koshucode.Baala.Base.Section.Section
 --   make full relmap  :: HalfRelmap    -> Relmap v
 
 data Clause
-    = CSection [SourceLine] (Maybe String)          -- ^ Section name
-    | CImport  [SourceLine] [Token] (Maybe Clause)  -- ^ Importing section name
-    | CExport  [SourceLine] String                  -- ^ Exporting relmap name
-    | CRelmap  [SourceLine] String HalfRelmap       -- ^ Relmap and its name
-    | TRelmap  [SourceLine] String [TokenTree]      -- ^ Not include HalfRelmap
-    | CAssert  [SourceLine] Bool String HalfRelmap  -- ^ Assertions of relmaps
-    | TAssert  [SourceLine] Bool String [TokenTree] -- ^ Not include HalfRelmap
-    | CJudge   [SourceLine] Bool String [Token]     -- ^ Here data
-    | CUnknown [SourceLine]       -- ^ Unknown clause
+    = CSection ClauseSource (Maybe String)          -- ^ Section name
+    | CImport  ClauseSource [Token] (Maybe Clause)  -- ^ Importing section name
+    | CExport  ClauseSource String                  -- ^ Exporting relmap name
+    | CRelmap  ClauseSource String HalfRelmap       -- ^ Relmap and its name
+    | TRelmap  ClauseSource String [TokenTree]      -- ^ Not include HalfRelmap
+    | CAssert  ClauseSource Bool String HalfRelmap  -- ^ Assertions of relmaps
+    | TAssert  ClauseSource Bool String [TokenTree] -- ^ Not include HalfRelmap
+    | CJudge   ClauseSource Bool String [Token]     -- ^ Here data
+    | CUnknown ClauseSource       -- ^ Unknown clause
       deriving (Show, Data, Typeable)
+
+data ClauseSource = ClauseSource
+    { clauseTokens :: [Token]       -- ^ Source tokens of clause
+    , clauseLines  :: [SourceLine]  -- ^ Source lines of clause
+    } deriving (Show, Data, Typeable)
 
 clauseTypeText :: Clause -> String
 clauseTypeText (CSection _ _)    = "Section"
@@ -79,7 +85,7 @@ consPreclause = concatMap consPreclause' . clausify
 consPreclause' :: [Token] -> [Clause]
 consPreclause' toks = cl toks' where
     toks' = sweepToken toks
-    src   = sourceLines toks
+    src   = ClauseSource toks (sourceLines toks)
 
     cl :: [Token] -> [Clause]
     cl (Word 0 n : Word 0 ":" : xs) = rel n xs
@@ -138,8 +144,8 @@ consClause half = clauseHalf half . consPreclause
 
 clauseHalf :: RelmapHalfCons -> [Clause] -> [Clause]
 clauseHalf half = map f where
-    f (TRelmap src n ts)   = CRelmap src n   $ half src ts
-    f (TAssert src q s ts) = CAssert src q s $ half src ts
+    f (TRelmap src n ts)   = CRelmap src n   $ half (clauseLines src) ts
+    f (TAssert src q s ts) = CAssert src q s $ half (clauseLines src) ts
     f x = x
 
 
@@ -198,7 +204,7 @@ consSection whole xs = do
       ass (_ : xs2) = ass xs2
       ass [] = Right []
 
-      unk (CUnknown src : _) = Left $ AbortUnknownClause src
+      unk (CUnknown src : _) = Left $ AbortUnknownClause $ clauseLines src
       unk (_ : xs2) = unk xs2
       unk [] = Right []
 

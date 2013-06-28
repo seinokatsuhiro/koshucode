@@ -9,7 +9,6 @@ module Koshucode.Baala.Toolkit.Main.KoshuSyntax
 -- $koshu-syntax.hs
 ) where
 
-import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Section as Sec
@@ -104,7 +103,7 @@ dump path =
           , "***" ]
 
 putToken :: (Int, Token) -> IO ()
-putToken x@(_, Line (SourceLine n s)) =
+putToken x@(_, Line (SourceLine n s _)) =
     do putStrLn ""
        putStr "*** ["
        putStr $ show n
@@ -135,7 +134,7 @@ tokenContent (Open s)    = s
 tokenContent (Close s)   = s
 tokenContent (Space n)   = replicate n ' '
 tokenContent (Comment s) = s
-tokenContent (Line (SourceLine _ s)) = s
+tokenContent (Line (SourceLine _ s _)) = s
 
 
 

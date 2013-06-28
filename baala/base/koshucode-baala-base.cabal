@@ -83,13 +83,13 @@ library
         Koshucode.Baala.Base.Section.Section
         Koshucode.Baala.Base.Section.SectionIO
         Koshucode.Baala.Base.Section.SectionUnion
+        Koshucode.Baala.Base.Section.Utility
 
         Koshucode.Baala.Base.Syntax
         Koshucode.Baala.Base.Syntax.Binary
         Koshucode.Baala.Base.Syntax.Token
         Koshucode.Baala.Base.Syntax.TokenTree
         Koshucode.Baala.Base.Syntax.Tree
-        Koshucode.Baala.Base.Syntax.Utility
 
   -- Modules included in this library but not exported.
   --other-modules:       

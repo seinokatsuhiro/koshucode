@@ -23,6 +23,7 @@ module Koshucode.Baala.Base.Section
 , module Koshucode.Baala.Base.Section.Quoter
 , module Koshucode.Baala.Base.Section.SectionIO
 , module Koshucode.Baala.Base.Section.SectionUnion
+, module Koshucode.Baala.Base.Section.Utility
 ) where
 
 import Koshucode.Baala.Base.Section.Section
@@ -30,4 +31,5 @@ import Koshucode.Baala.Base.Section.Clause
 import Koshucode.Baala.Base.Section.Quoter
 import Koshucode.Baala.Base.Section.SectionIO
 import Koshucode.Baala.Base.Section.SectionUnion
+import Koshucode.Baala.Base.Section.Utility
 

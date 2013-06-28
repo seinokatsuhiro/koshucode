@@ -21,7 +21,6 @@ module Koshucode.Baala.Minimal.Relmap.Get
 ) where
 
 import Koshucode.Baala.Minimal.OpKit as Kit
-import Koshucode.Baala.Base.Syntax
 
 {-| Abortable 'head' -}
 getHead :: [a] -> AbortOr a

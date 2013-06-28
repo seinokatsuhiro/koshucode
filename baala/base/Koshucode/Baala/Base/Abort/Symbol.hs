@@ -6,8 +6,11 @@ module Koshucode.Baala.Base.Abort.Symbol
 ( AbortOr
 , Abort (..)
 ) where
+
 import Koshucode.Baala.Base.Prelude.Pretty
 import Koshucode.Baala.Base.Prelude.Utility
+import Koshucode.Baala.Base.Syntax
+
 import Koshucode.Baala.Base.Abort.Source
 
 {- | Abortable type -}

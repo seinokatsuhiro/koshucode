@@ -8,6 +8,7 @@ module Koshucode.Baala.Base.Syntax.Token
   -- * Token type
   -- $TokenType
   Token (..)
+, SourceLine (..)
 , tokenTypeText
 
   -- * Predicates
@@ -27,7 +28,6 @@ module Koshucode.Baala.Base.Syntax.Token
 
 import Data.Generics (Data, Typeable)
 import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Base.Abort
 import qualified Data.Char as C
 
 data Token
@@ -65,6 +65,18 @@ tokenTypeText (Close _)   = "Close"
 tokenTypeText (Space _)   = "Space"
 tokenTypeText (Comment _) = "Comment"
 tokenTypeText (Line _)    = "Line"
+
+
+
+-- ----------------------  Source line
+
+{-| Line number and content in source code -}
+data SourceLine
+    = SourceLine Int String [Token]
+      deriving (Show, Eq, Ord, Data, Typeable)
+
+instance Pretty SourceLine where
+    doc (SourceLine _ line _) = text line
 
 
 
@@ -114,14 +126,14 @@ tokens = gather token . numbering . lines where
     numbering = zipWith SrcLine [1..]
 
 token :: [SrcLine] -> (Token, [SrcLine])
-token (SrcLine n line : ls) = tokenLines ls (Line $ SourceLine n line, line)
+token (SrcLine n line : ls) = tokenLines ls (lineToken, line)
+    where lineToken = Line $ SourceLine n line []
 token (MidLine   line : ls) = tokenLines ls (tokenInLine line)
 token [] = error "token for empty list"
 
 tokenLines :: [SrcLine] -> (Token, String) -> (Token, [SrcLine])
-tokenLines ls (tk, line)
-    | line == ""  = (tk, ls)
-    | otherwise   = (tk, MidLine line : ls)
+tokenLines ls (tk, "")   = (tk, ls)
+tokenLines ls (tk, line) = (tk, MidLine line : ls)
 
 tokenInLine :: String -> (Token, String)
 tokenInLine ccs =
@@ -235,7 +247,7 @@ untoken (Open   s)   = s
 untoken (Close  s)   = s
 untoken (Space  n)   = replicate n ' '
 untoken (Comment s)  = s
-untoken (Line (SourceLine _ s)) = s
+untoken (Line (SourceLine _ s _)) = s
 
 
 

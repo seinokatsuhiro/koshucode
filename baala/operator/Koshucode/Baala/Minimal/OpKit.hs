@@ -68,20 +68,22 @@ module Koshucode.Baala.Minimal.OpKit
 , Relmap.relmapSource
 
   -- * Section
+, Section.Calc
 , Section.QuasiQuoter
+, Section.Ripen
+, Section.crop
 , Section.koshuQuoter
+, Section.operandGroup
+, Section.termNamePairs
+, Section.termNames
+, Section.termTreePairs
 
   -- * Syntax
-, Syntax.Calc
-, Syntax.Ripen
 , Syntax.Token (..)
 , Syntax.TokenTree
 , Syntax.Tree (..)
 , Syntax.binaryTree
-, Syntax.crop
 , Syntax.heightTable
-, Syntax.operandGroup
-, Syntax.termTreePairs
 
   -- * WithName
 , WithName.withN1
