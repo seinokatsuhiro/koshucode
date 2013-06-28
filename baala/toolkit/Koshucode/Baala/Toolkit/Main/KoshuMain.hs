@@ -9,15 +9,17 @@ module Koshucode.Baala.Toolkit.Main.KoshuMain
 -- $koshu.hs
 ) where
 
-import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Toolkit.Library.Version
-import Koshucode.Baala.Toolkit.Library.Exit
 import System.Console.GetOpt
 import Data.Monoid
-import qualified Koshucode.Baala.Minimal.OpKit as Kit
-import qualified Koshucode.Baala.Base.Section as Kit
+
+import Koshucode.Baala.Base.Abort
+import Koshucode.Baala.Base.Data
+import Koshucode.Baala.Toolkit.Library.Exit
+import Koshucode.Baala.Toolkit.Library.Version
 import qualified Koshucode.Baala.Base.Prelude.Pretty as Pretty
+import qualified Koshucode.Baala.Base.Section as Kit
+import qualified Koshucode.Baala.Minimal.OpKit as Kit
+
 
 -- Flow
 --

@@ -11,12 +11,14 @@ module Koshucode.Baala.Base.Section.SectionIO
 , runSectionIO
 ) where
 
+import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Data
+import Koshucode.Baala.Base.Prelude as Prelude
 import Koshucode.Baala.Base.Relmap
+import Koshucode.Baala.Base.Syntax
+
 import Koshucode.Baala.Base.Section.Section
 import Koshucode.Baala.Base.Section.Clause
-import Koshucode.Baala.Base.Syntax
-import Koshucode.Baala.Base.Prelude as Prelude
 
 
 

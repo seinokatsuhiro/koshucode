@@ -20,6 +20,7 @@ module Koshucode.Baala.Base.Syntax.Utility
 ) where
 
 import Koshucode.Baala.Base.Syntax.TokenTree
+import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Prelude
 import qualified Data.Maybe as Maybe
 

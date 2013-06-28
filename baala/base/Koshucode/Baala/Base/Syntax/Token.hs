@@ -27,6 +27,7 @@ module Koshucode.Baala.Base.Syntax.Token
 
 import Data.Generics (Data, Typeable)
 import Koshucode.Baala.Base.Prelude
+import Koshucode.Baala.Base.Abort
 import qualified Data.Char as C
 
 data Token

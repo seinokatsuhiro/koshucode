@@ -2,13 +2,13 @@
 
 {- | Abort symbol -}
 
-module Koshucode.Baala.Base.Prelude.Abort.Symbol
+module Koshucode.Baala.Base.Abort.Symbol
 ( AbortOr
 , Abort (..)
 ) where
 import Koshucode.Baala.Base.Prelude.Pretty
 import Koshucode.Baala.Base.Prelude.Utility
-import Koshucode.Baala.Base.Prelude.Abort.Source
+import Koshucode.Baala.Base.Abort.Source
 
 {- | Abortable type -}
 type AbortOr a = Either Abort a

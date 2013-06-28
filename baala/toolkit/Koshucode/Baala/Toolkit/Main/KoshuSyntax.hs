@@ -9,13 +9,15 @@ module Koshucode.Baala.Toolkit.Main.KoshuSyntax
 -- $koshu-syntax.hs
 ) where
 
-import Koshucode.Baala.Base.Syntax as Syn
-import Koshucode.Baala.Base.Prelude
+import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Data
+import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Section as Sec
-import Koshucode.Baala.Toolkit.Library.Version
+import Koshucode.Baala.Base.Syntax as Syn
 import Koshucode.Baala.Toolkit.Library.Exit
+import Koshucode.Baala.Toolkit.Library.Version
 import Koshucode.Baala.Vanilla
+
 import System.Console.GetOpt
 
 

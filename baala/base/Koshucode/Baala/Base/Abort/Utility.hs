@@ -2,7 +2,7 @@
 
 {-| Abort utility -}
 
-module Koshucode.Baala.Base.Prelude.Abort.Utility
+module Koshucode.Baala.Base.Abort.Utility
 ( (<!!>),
   bug,
   abort,
@@ -12,8 +12,8 @@ module Koshucode.Baala.Base.Prelude.Abort.Utility
 import qualified System.Exit as Sys
 import qualified Data.Char   as Char
 import Koshucode.Baala.Base.Prelude.Pretty
-import Koshucode.Baala.Base.Prelude.Abort.Source
-import Koshucode.Baala.Base.Prelude.Abort.Symbol
+import Koshucode.Baala.Base.Abort.Source
+import Koshucode.Baala.Base.Abort.Symbol
 
 {-| Stop program execution abnormally. -}
 abort :: (AbortSymbol a) => a -> IO ()

@@ -12,11 +12,13 @@ module Koshucode.Baala.Base.Relmap.Construct
   -- $ConstructionProcess
 ) where
 
+import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Prelude hiding (cat)
+import Koshucode.Baala.Base.Syntax
+
 import Koshucode.Baala.Base.Relmap.HalfRelmap
 import Koshucode.Baala.Base.Relmap.Implement
 import Koshucode.Baala.Base.Relmap.Relmap
-import Koshucode.Baala.Base.Syntax
 
 
 

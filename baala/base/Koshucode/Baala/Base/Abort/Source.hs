@@ -3,7 +3,7 @@
 
 {-| Source information -}
 
-module Koshucode.Baala.Base.Prelude.Abort.Source
+module Koshucode.Baala.Base.Abort.Source
 ( SourceLine (..)
 , AbortSymbol (..)
 ) where

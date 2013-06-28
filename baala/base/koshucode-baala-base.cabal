@@ -48,6 +48,11 @@ library
   exposed-modules:
         Koshucode.Baala.Base
 
+        Koshucode.Baala.Base.Abort
+        Koshucode.Baala.Base.Abort.Source
+        Koshucode.Baala.Base.Abort.Symbol
+        Koshucode.Baala.Base.Abort.Utility
+
         Koshucode.Baala.Base.Data
         Koshucode.Baala.Base.Data.Dataset
         Koshucode.Baala.Base.Data.Judge
@@ -60,10 +65,6 @@ library
         Koshucode.Baala.Base.Kit.WithName
 
         Koshucode.Baala.Base.Prelude
-        Koshucode.Baala.Base.Prelude.Abort
-        Koshucode.Baala.Base.Prelude.Abort.Source
-        Koshucode.Baala.Base.Prelude.Abort.Symbol
-        Koshucode.Baala.Base.Prelude.Abort.Utility
         Koshucode.Baala.Base.Prelude.Position
         Koshucode.Baala.Base.Prelude.Pretty
         Koshucode.Baala.Base.Prelude.Utility

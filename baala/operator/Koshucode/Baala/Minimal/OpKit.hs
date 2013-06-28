@@ -94,7 +94,7 @@ import Koshucode.Baala.Base.Data           as Data
 import Koshucode.Baala.Base.Kit.Order      as Order
 import Koshucode.Baala.Base.Kit.WithName   as WithName
 import Koshucode.Baala.Base.Prelude        as Prelude
-import Koshucode.Baala.Base.Prelude.Abort  as Abort
+import Koshucode.Baala.Base.Abort          as Abort
 import Koshucode.Baala.Base.Relmap         as Relmap
 import Koshucode.Baala.Base.Section        as Section
 import Koshucode.Baala.Base.Syntax         as Syntax

@@ -19,11 +19,13 @@ module Koshucode.Baala.Base.Relmap.Implement
 
 ) where
 
+import Koshucode.Baala.Base.Abort
+import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
+import Koshucode.Baala.Base.Syntax
+
 import Koshucode.Baala.Base.Relmap.Relmap
 import Koshucode.Baala.Base.Relmap.HalfRelmap
-import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Base.Syntax
 
 
 
