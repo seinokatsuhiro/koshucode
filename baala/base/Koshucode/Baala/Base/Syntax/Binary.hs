@@ -11,6 +11,7 @@ module Koshucode.Baala.Base.Syntax.Binary
 
 import qualified Data.Map   as Map
 import qualified Data.Maybe as Maybe
+
 import Koshucode.Baala.Base.Syntax.Tree
 
 -- | Direction and height for binary splitting.

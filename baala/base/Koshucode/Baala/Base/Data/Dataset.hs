@@ -17,6 +17,7 @@ module Koshucode.Baala.Base.Data.Dataset
 import qualified Data.Map   as Map
 import qualified Data.Maybe as Maybe
 import Koshucode.Baala.Base.Prelude
+
 import Koshucode.Baala.Base.Data.Rel
 import Koshucode.Baala.Base.Data.Judge
 import Koshucode.Baala.Base.Data.ValueClass

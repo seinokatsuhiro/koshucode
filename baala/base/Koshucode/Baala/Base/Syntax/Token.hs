@@ -27,8 +27,9 @@ module Koshucode.Baala.Base.Syntax.Token
 ) where
 
 import Data.Generics (Data, Typeable)
-import Koshucode.Baala.Base.Prelude
 import qualified Data.Char as C
+
+import Koshucode.Baala.Base.Prelude
 
 data Token
     = Word Int String   -- ^ Text
@@ -107,9 +108,8 @@ isLineToken _             = False
 
 -- ----------------------  Tokenizer
 
-data SrcLine
-    = SrcLine Int String    -- ^ Line number and contents
-    | MidLine String        -- ^ Subline
+{-| Line number and contents. -}
+data LineText = LineText Int String
       deriving (Show, Eq)
 
 {-| Split string into list of tokens
@@ -120,32 +120,23 @@ data SrcLine
      TermN ["/a"], Space 1, Word 0 "A0", Space 1,
      TermN ["/b"], Space 1, Word 0 "31"]
   -}
-
 tokens :: String -> [Token]
-tokens = gather token . numbering . lines where
-    numbering = zipWith SrcLine [1..]
+tokens = concat . gather token . numbering . lines where
+    numbering = zipWith LineText [1..]
 
-token :: [SrcLine] -> (Token, [SrcLine])
-token (SrcLine n line : ls) = tokenLines ls (lineToken, line)
-    where lineToken = Line $ SourceLine n line []
-token (MidLine   line : ls) = tokenLines ls (tokenInLine line)
+token :: [LineText] -> ([Token], [LineText])
+token (LineText n line : ls) = (lineToken : toks, ls)
+    where lineToken = Line $ SourceLine n line toks
+          toks = gather tokenInLine line
 token [] = error "token for empty list"
-
-tokenLines :: [SrcLine] -> (Token, String) -> (Token, [SrcLine])
-tokenLines ls (tk, "")   = (tk, ls)
-tokenLines ls (tk, line) = (tk, MidLine line : ls)
 
 tokenInLine :: String -> (Token, String)
 tokenInLine ccs =
     case ccs of
-      ('*' : '*' : c : _)
-        | c == '-'     -> commB c ccs []
-        | c == '='     -> commB c ccs []
-        | otherwise    -> commL ccs [] 
       ('*' : '*' : _)  -> commL ccs []
       ('#' : '!' : _)  -> commL ccs []
       ('(' : ')' : cs) -> (Word 0 "()", cs) -- nil
-      (c:cs)
+      (c : cs)
         | isOpen    c  -> (Open   [c] , cs)
         | isClose   c  -> (Close  [c] , cs)
         | isSingle  c  -> (Word 0 [c] , cs)
@@ -161,12 +152,6 @@ tokenInLine ccs =
       -- line comment
       commL (c:cs) xs | isMidline c  = commL cs (c:xs)
       commL ccs2 xs                  = tk Comment xs $ ccs2
-
-      -- block comment
-      commB _ [] xs                  = tk Comment xs $ []
-      commB q (c : '*' : '*' : cs) xs
-          | c == q                   = tk Comment ('*' : '*' : c : xs) $ cs
-      commB q (c:cs) xs              = commB q cs (c:xs)
 
       word (c:cs) xs | isWord c      = word cs (c:xs)
       word ccs2 xs                   = tk (Word 0) xs $ ccs2
@@ -282,7 +267,6 @@ sweepLeft xxs@(x:xs) | isBlankToken x = sweepLeft xs
 --
 -- [Comment]
 -- Text from @**@ to end of line is single line comment.
--- Text from @**-@ to @-**@, or from @**=@ to @=**@ is multiline comment.
 --
 -- [Space]
 -- Space characters.

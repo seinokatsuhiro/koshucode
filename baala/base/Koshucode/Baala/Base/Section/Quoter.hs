@@ -6,11 +6,13 @@ module Koshucode.Baala.Base.Section.Quoter
 ( koshuQuoter, QuasiQuoter
 ) where
 import Data.Generics
-import Koshucode.Baala.Base.Relmap
-import Koshucode.Baala.Base.Syntax
-import Koshucode.Baala.Base.Section.Clause
 import Language.Haskell.TH hiding (Clause)
 import Language.Haskell.TH.Quote
+
+import Koshucode.Baala.Base.Relmap
+import Koshucode.Baala.Base.Syntax
+
+import Koshucode.Baala.Base.Section.Clause
 
 {-| Make quasiquoter for @[koshu| ... |]@. -}
 koshuQuoter

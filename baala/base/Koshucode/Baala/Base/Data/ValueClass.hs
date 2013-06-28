@@ -10,8 +10,9 @@ module Koshucode.Baala.Base.Data.ValueClass
 , Value ()
 ) where
 
-import Koshucode.Baala.Base.Data.Rel
 import Koshucode.Baala.Base.Prelude
+
+import Koshucode.Baala.Base.Data.Rel
 
 
 -- ----------------------  Built-in data

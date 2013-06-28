@@ -16,9 +16,10 @@ module Koshucode.Baala.Base.Data.Rel.Relhead
 , module Koshucode.Baala.Base.Data.Rel.Relterm
 ) where
 import Data.Monoid
-import Koshucode.Baala.Base.Data.Rel.Relterm
 import Koshucode.Baala.Base.Prelude.Position as Pos
 import Koshucode.Baala.Base.Prelude
+
+import Koshucode.Baala.Base.Data.Rel.Relterm
 
 -- | Heading of relation as a list of terms
 data Relhead = Relhead {

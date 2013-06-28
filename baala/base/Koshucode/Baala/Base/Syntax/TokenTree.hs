@@ -9,6 +9,7 @@ module Koshucode.Baala.Base.Syntax.TokenTree
 , module Koshucode.Baala.Base.Syntax.Token
 , module Koshucode.Baala.Base.Syntax.Tree
 ) where
+
 import Koshucode.Baala.Base.Syntax.Token
 import Koshucode.Baala.Base.Syntax.Tree
 

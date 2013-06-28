@@ -9,8 +9,9 @@ module Koshucode.Baala.Base.Data.Rel
 , module Koshucode.Baala.Base.Data.Rel.Relhead
 ) where
 
-import Koshucode.Baala.Base.Data.Rel.Relhead
 import Koshucode.Baala.Base.Prelude
+
+import Koshucode.Baala.Base.Data.Rel.Relhead
 
 -- ----------------------  Data
 

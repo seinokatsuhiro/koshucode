@@ -19,10 +19,11 @@ module Koshucode.Baala.Base.Section.Utility
 , crop
 ) where
 
-import Koshucode.Baala.Base.Syntax.TokenTree
+import qualified Data.Maybe as Maybe
+
 import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Prelude
-import qualified Data.Maybe as Maybe
+import Koshucode.Baala.Base.Syntax.TokenTree
 
 
 

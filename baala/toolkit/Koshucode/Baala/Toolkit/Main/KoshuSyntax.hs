@@ -9,6 +9,8 @@ module Koshucode.Baala.Toolkit.Main.KoshuSyntax
 -- $koshu-syntax.hs
 ) where
 
+import Control.Monad
+
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Section as Sec
@@ -81,50 +83,47 @@ dump path =
        let ts = Syn.tokens code
            cs = Sec.consPreclause ts
        putStr $ unlines h
-       mapM_ putToken  $ zip [1 ..] ts
        mapM_ putClause $ zip [1 ..] cs
     where
       h = [ "***"
           , "***  DESCRIPTION"
-          , "***    Tokens from " ++ show path
-          , "***"
-          , "***  SUMMARY"
-          , "***    Word     0"
-          , "***    TermN    0"
-          , "***    Open     0"
-          , "***    Close    0"
-          , "***    Space    0"
-          , "***    Comment  0"
-          , "***    Line     0"
+          , "***    Clauses and tokens from " ++ show path
           , "***"
           , "***  LEGEND"
-          , "***    *** [line number] line content"
-          , "***    |-- TOKEN /seq /type /token"
+          , "***    *** [C0] clause type"
+          , "***    *** [C0] L0 line content"
+          , "***    |-- CLAUSE /clause-seq /clause-type"
+          , "***    |-- TOKEN /token-seq /token-type /token-content"
           , "***" ]
 
-putToken :: (Int, Token) -> IO ()
-putToken x@(_, Line (SourceLine n s _)) =
-    do putStrLn ""
-       putStr "*** ["
-       putStr $ show n
-       putStr "] "
-       putStrLn $ show s
-       print $ doc $ tokenJudge x
-putToken x = print $ doc $ tokenJudge x
-
-tokenJudge :: (Int, Token) -> Judge Val
-tokenJudge (n, t) = Judge True "TOKEN" args where
-    args = [ ("/token-seq"    , intv n)
-           , ("/token-type"   , stringv $ tokenTypeText t)
-           , ("/token-content", stringv $ tokenContent t) ]
-
 putClause :: (Int, Clause) -> IO ()
-putClause p = print $ doc $ clauseJudge p
+putClause p@(cn, c) =
+  do putStrLn ""
+     putStrLn $ "*** [C" ++ show cn ++ "] " ++ clauseTypeText c
+
+     print $ doc $ clauseJudge p
+     let src = clauseSource c
+         ls  = clauseLines src
+     foldM_ (putToken cn) 1 ls
 
 clauseJudge :: (Int, Clause) -> Judge Val
-clauseJudge (n, c) = Judge True "CLAUSE" args where
-    args = [ ("/caluse-seq"  , intv n)
-           , ("/caluse-type" , stringv $ clauseTypeText c)]
+clauseJudge (cn, c) = Judge True "CLAUSE" args where
+    args = [ ("/clause-seq"  , intv cn)
+           , ("/clause-type" , stringv $ clauseTypeText c)]
+
+putToken :: Int -> Int -> SourceLine -> IO (Int)
+putToken cn tn (SourceLine ln line toks) =
+  do putStrLn ""
+     putStrLn $ "*** [C" ++ show cn ++ "] L" ++ show ln ++ " " ++ show line
+     print $ docv $ map (tokenJudge cn) $ zip [tn..] toks
+     return $ tn + length toks
+
+tokenJudge :: Int -> (Int, Token) -> Judge Val
+tokenJudge cn (n, t) = Judge True "TOKEN" args where
+    args = [ ("/clause-seq"   , intv cn)
+           , ("/token-seq"    , intv n)
+           , ("/token-type"   , stringv $ tokenTypeText t)
+           , ("/token-content", stringv $ tokenContent t) ]
 
 tokenContent :: Token -> String
 tokenContent (Word _ s)  = s

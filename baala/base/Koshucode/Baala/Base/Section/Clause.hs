@@ -9,6 +9,7 @@ module Koshucode.Baala.Base.Section.Clause
   Clause (..)
 , ClauseSource (..)
 , clauseTypeText
+, clauseSource
 
   -- * Constructors
 , consPreclause
@@ -61,6 +62,17 @@ clauseTypeText (CAssert _ _ _ _) = "Assert"
 clauseTypeText (TAssert _ _ _ _) = "Assert"
 clauseTypeText (CJudge _ _ _ _)  = "Judge"
 clauseTypeText (CUnknown _)      = "Unknown"
+
+clauseSource :: Clause -> ClauseSource
+clauseSource (CSection s _)     = s
+clauseSource (CImport  s _ _)   = s
+clauseSource (CExport  s _)     = s
+clauseSource (CRelmap  s _ _)   = s
+clauseSource (TRelmap  s _ _)   = s
+clauseSource (CAssert  s _ _ _) = s
+clauseSource (TAssert  s _ _ _) = s
+clauseSource (CJudge   s _ _ _) = s
+clauseSource (CUnknown s)       = s
 
 
 
