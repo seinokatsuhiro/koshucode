@@ -13,14 +13,57 @@ from GitHub.
 This implementation is an open-source software
 under the BSD3 license.
 
+`koshucode-master.zip` contains source files
+in a directry tree like the following.
+Files `*.cabal` are Cabal files for building software.
+Files `*.hs` are Haskell source files.
+Files `*.k` are data itself and calculation in Koshucode.
+
+```
+/ koshucode-master
+   / baala
+      / base
+         * koshucode-baala-base.cabal
+         / Koshucode
+            / Baala
+               / Base
+  
+      / operator
+         * koshucode-baala-operator.cabal
+         / Koshucode
+            / Baala
+               / Minimal
+               / Vannila
+  
+      / processor
+         * koshucode-baala-processor.cabal
+         * koshu.hs
+         / Koshucode
+            / Baala
+               / Toolkit
+         / example
+            / dictionary
+               * DATA.k
+               * natural-join.k
+  
+      / toolkit
+         * koshucode-baala-toolkit.cabal
+         * koshu-rdf.hs
+         * koshu-syntax.hs
+         / Koshucode
+            / Baala
+               / Toolkit
+```
+
 
 Install Haskell
 ---------------------------------
 
-Before building koshucode libraries and commands,
+Before building koshucode libraries and executables,
 please install the [Haskell Platform](http://www.haskell.org/platform/).
 This software is written in Haskell,
 and built with the Cabal packaging system.
+
 
 
 Install koshu command
@@ -31,7 +74,7 @@ Type `cabal install` under the `base` directory.
 This package contains `Koshucode.Baala.Base` module.
 
 ``` sh
-$ cd baala/base
+$ cd koshucode-master/baala/base
 $ cabal install
 ```
 
@@ -40,16 +83,26 @@ This package contains `Koshucode.Baala.Minimall`
 and `Koshucode.Baala.Vanilla` modules.
 
 ``` sh
-$ cd baala/operator
+$ cd koshucode-master/baala/operator
 $ cabal install
 ```
 
-Install `koshucode-baala-toolkit` package.
+Install `koshucode-baala-processor` package.
 This package contains `koshu` command
 and `Koshucode.Baala.Toolkit` module.
 
 ``` sh
-$ cd baala/toolkit
+$ cd koshucode-master/baala/processor
+$ cabal install
+```
+
+Optionally,
+you can install `koshucode-baala-toolkit` package.
+This package contains additional commands,
+e.g., `koshu-syntax` and `koshu-rdf`.
+
+``` sh
+$ cd koshucode-master/baala/toolkit
 $ cabal install
 ```
 
@@ -64,7 +117,7 @@ The Order of files is not significant.
 You can type also `koshu natural-join.k DATA.k`.
 
 ``` sh
-$ cd koshucode/baala/toolkit/example/dictionary
+$ cd koshucode-master/baala/toolkit/example/dictionary
 $ koshu DATA.k natural-join.k
 ```
 
