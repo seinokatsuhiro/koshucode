@@ -33,7 +33,7 @@ Files `*.k` are data itself and calculation in Koshucode.
          / Koshucode
             / Baala
                / Minimal
-               / Vannila
+               / Vanilla
   
       / processor
          * koshucode-baala-processor.cabal
@@ -79,7 +79,7 @@ $ cabal install
 ```
 
 Install `koshucode-baala-operator` package.
-This package contains `Koshucode.Baala.Minimall`
+This package contains `Koshucode.Baala.Minimal`
 and `Koshucode.Baala.Vanilla` modules.
 
 ``` sh
@@ -102,6 +102,7 @@ This package contains additional commands,
 e.g., `koshu-syntax` and `koshu-rdf`.
 
 ``` sh
+# optional
 $ cd koshucode-master/baala/toolkit
 $ cabal install
 ```
@@ -117,7 +118,7 @@ The Order of files is not significant.
 You can type also `koshu natural-join.k DATA.k`.
 
 ``` sh
-$ cd koshucode-master/baala/toolkit/example/dictionary
+$ cd koshucode-master/baala/processor/example/dictionary
 $ koshu DATA.k natural-join.k
 ```
 
