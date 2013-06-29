@@ -182,15 +182,15 @@ $ duplicate elimination
 $ dyadic
 $ D_UNION
 
-$ E/R
-$ E/R diagram
-$ E/R model
-$ E/R modeling
-$ element
-$ empty
-$ empty foreign key
-$ empty heading
-$ empty key
+. E/R
+. E/R diagram
+. E/R model
+. E/R modeling
+. element
+* empty
+. empty foreign key
+* empty heading
+. empty key
 $ empty relation
 $ empty relvar
 $ empty restriction
@@ -198,29 +198,29 @@ $ empty set
 $ empty tuple
 $ empty type
 $ encapsulated
-$ entity
-$ entity integrity
-$ entity/relationship diagram
-$ entity/relationship model
-$ entity/relationship modeling
+. entity
+. entity integrity
+. entity/relationship diagram
+. entity/relationship model
+. entity/relationship modeling
 $ equality
 $ equijoin
 $ EQUIV
 $ equivalence
-$ essentiality
+. essentiality
 $ EXCEPT
 $ exclusive OR
 $ existential quantifier
 $ EXISTS
-$ expanded cartesian product
+. expanded cartesian product
 $ expressible relation
 $ expression
 $ expression transformation
-$ EXTEND
-$ extended cartesian product
-$ Extensible Markup Language
-$ extension
-$ external predicate
+. EXTEND
+. extended cartesian product
+. Extensible Markup Language
+* extension
+. external predicate
 
 $ FALSE
 $ FD
