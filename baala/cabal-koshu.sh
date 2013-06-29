@@ -18,6 +18,7 @@ usage () {
     echo ""
     echo "  $0 base        ** cabal for base directory"
     echo "  $0 operator    ** cabal for operator directory"
+    echo "  $0 processor   ** cabal for processor directory"
     echo "  $0 toolkit     ** cabal for toolkit directory"
     echo ""
     fi
@@ -35,7 +36,7 @@ main () {
             sym_link "$0" cabal-install
             exit ;;
 
-        '' | base* | operator* | toolkit*)
+        '' | base* | operator* | processor* | toolkit*)
             cabal_for `directories "$1"` ;;
 
         *)
@@ -66,8 +67,9 @@ directories () {
     case `basename "$1"` in
         base)       echo base ;;
         operator)   echo operator ;;
+        processor)  echo processor ;;
         toolkit)    echo toolkit ;;
-        '')         echo base operator toolkit ;;
+        '')         echo base operator processor toolkit ;;
     esac
 }
 

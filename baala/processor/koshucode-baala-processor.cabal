@@ -1,5 +1,5 @@
 -- The name of the package.
-name:                koshucode-baala-operator
+name:                koshucode-baala-processor
 
 -- The package version.  See the Haskell package versioning policy (PVP) 
 -- for standards guiding when and how versions should be incremented.
@@ -10,10 +10,10 @@ name:                koshucode-baala-operator
 version:             0.15.0.0
 
 -- A short (one-line) description of the package.
-synopsis:            Relational operators in Koshucode
+synopsis:            A relational data processor
 
 -- A longer description of the package.
-description:         This is a library for processing relational data.
+description:         This is a relational data processor.
                      Relational expressions are written in Koshucode.
                      Koshucode is a notation for both of
                      descriptions and calculations of data.
@@ -43,36 +43,31 @@ cabal-version:       >= 1.8
 
 extra-source-files:
 
+executable koshu
+  main-is:
+        koshu.hs
+  other-modules:
+  build-depends:
+         base                     == 4.5.*
+       , koshucode-baala-base     == 0.15.*
+       , koshucode-baala-operator == 0.15.*
+
 library
   -- Modules exported by the library.
   exposed-modules:
-        Koshucode.Baala.Minimal
-        Koshucode.Baala.Minimal.OpKit
-        Koshucode.Baala.Minimal.Relmap.Get
-        Koshucode.Baala.Minimal.Relmap.Implement
-        Koshucode.Baala.Minimal.Relmap.Operand
-        Koshucode.Baala.Minimal.Relmap.Pattern
-        Koshucode.Baala.Minimal.Relmap.Restrict
-        Koshucode.Baala.Minimal.Relmap.Tropashko
-        Koshucode.Baala.Minimal.Relmap.Unary
-
-        Koshucode.Baala.Vanilla
-        Koshucode.Baala.Vanilla.Calc
-        Koshucode.Baala.Vanilla.Calc.Ripen
-        Koshucode.Baala.Vanilla.Quoter
-        Koshucode.Baala.Vanilla.Relmap.Calc
-        Koshucode.Baala.Vanilla.Relmap.Implement
-        Koshucode.Baala.Vanilla.Relmap.Naming
-        Koshucode.Baala.Vanilla.Relmap.Operand
-        Koshucode.Baala.Vanilla.Value.Relval
-        Koshucode.Baala.Vanilla.Value.Val
+        Koshucode.Baala.Toolkit.Main.KoshuMain
+        Koshucode.Baala.Toolkit.Library.Exit
+        Koshucode.Baala.Toolkit.Library.Version
 
   -- Modules included in this library but not exported.
-  --other-modules:       
+  other-modules:       
+        Paths_koshucode_baala_processor
   
   -- Other library packages from which modules are imported.
   build-depends:
-         base                  == 4.5.*
-       , containers            == 0.4.*
-       , koshucode-baala-base  == 0.15.*
+         base                     == 4.5.*
+       , rdf4h                    == 1.1.*
+       , text                     == 0.11.*
+       , koshucode-baala-base     == 0.15.*
+       , koshucode-baala-operator == 0.15.*
 

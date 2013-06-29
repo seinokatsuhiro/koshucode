@@ -7,16 +7,17 @@ name:                koshucode-baala-toolkit
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:             0.14.0.0
+version:             0.15.0.0
 
 -- A short (one-line) description of the package.
-synopsis:            A relational data processor
+synopsis:            Toolkit for Koshucode
 
 -- A longer description of the package.
-description:         This is a relational data processor.
-                     Relational expressions are written in Koshucode.
-                     Koshucode is a notation for both of
-                     descriptions and calculations of data.
+description:         Toolkit for handling koshucode data.
+                     This package contains executables
+                     except for @koshu@ command.
+                     Please check package @koshucode-baala-processor@
+                     for @koshu@ command.
 
 -- The license under which the package is released.
 license:             BSD3
@@ -43,17 +44,18 @@ cabal-version:       >= 1.8
 
 extra-source-files:
 
-executable koshu
+executable koshu-syntax
   main-is:
-        koshu.hs
+        koshu-syntax.hs
   other-modules:
-        Koshucode.Baala.Toolkit.Main.KoshuMain
-        Koshucode.Baala.Toolkit.Library.Version
-        Paths_koshucode_baala_toolkit
+        Koshucode.Baala.Toolkit.Main.KoshuSyntax
   build-depends:
-         base                     == 4.5.*
-       , koshucode-baala-base     == 0.14.*
-       , koshucode-baala-operator == 0.14.*
+         base                      == 4.5.*
+       , rdf4h                     == 1.1.*
+       , text                      == 0.11.*
+       , koshucode-baala-base      == 0.15.*
+       , koshucode-baala-operator  == 0.15.*
+       , koshucode-baala-processor == 0.15.*
 
 executable koshu-rdf
   main-is:
@@ -61,42 +63,29 @@ executable koshu-rdf
   other-modules:
         Koshucode.Baala.Toolkit.Main.KoshuRdfMain
   build-depends:
-         base                     == 4.5.*
-       , rdf4h                    == 1.1.*
-       , text                     == 0.11.*
-       , koshucode-baala-base     == 0.14.*
-       , koshucode-baala-operator == 0.14.*
-
-executable koshu-syntax
-  main-is:
-        koshu-syntax.hs
-  other-modules:
-        Koshucode.Baala.Toolkit.Main.KoshuSyntax
-  build-depends:
-         base                     == 4.5.*
-       , rdf4h                    == 1.1.*
-       , text                     == 0.11.*
-       , koshucode-baala-base     == 0.14.*
-       , koshucode-baala-operator == 0.14.*
+         base                      == 4.5.*
+       , rdf4h                     == 1.1.*
+       , text                      == 0.11.*
+       , koshucode-baala-base      == 0.15.*
+       , koshucode-baala-operator  == 0.15.*
+       , koshucode-baala-processor == 0.15.*
 
 library
   -- Modules exported by the library.
   exposed-modules:
-        Koshucode.Baala.Toolkit.Main.KoshuMain
         Koshucode.Baala.Toolkit.Main.KoshuRdfMain
         Koshucode.Baala.Toolkit.Main.KoshuSyntax
-        Koshucode.Baala.Toolkit.Library.Exit
         Koshucode.Baala.Toolkit.Library.RDF
-        Koshucode.Baala.Toolkit.Library.Version
 
   -- Modules included in this library but not exported.
   --other-modules:       
   
   -- Other library packages from which modules are imported.
   build-depends:
-         base                     == 4.5.*
-       , rdf4h                    == 1.1.*
-       , text                     == 0.11.*
-       , koshucode-baala-base     == 0.14.*
-       , koshucode-baala-operator == 0.14.*
+         base                      == 4.5.*
+       , rdf4h                     == 1.1.*
+       , text                      == 0.11.*
+       , koshucode-baala-base      == 0.15.*
+       , koshucode-baala-operator  == 0.15.*
+       , koshucode-baala-processor == 0.15.*
 
