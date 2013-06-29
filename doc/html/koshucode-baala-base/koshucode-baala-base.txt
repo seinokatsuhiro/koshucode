@@ -8,7 +8,37 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.13.0.0
+@version 0.16.0.0
+
+
+-- | Position in list.
+module Koshucode.Baala.Base.Prelude.Position
+ap :: ((Int -> v) -> [v] -> a) -> [v] -> a
+like :: [Int] -> [Char] -> Bool
+
+-- | Indices of shared elements.
+--   
+--   <pre>
+--   &gt;&gt;&gt; "bdk" `sharedIndex` "abcdefg"
+--   [1,3]
+--   </pre>
+sharedIndex :: Eq a => [a] -> [a] -> [Int]
+
+-- | Pick indexed elements.
+--   
+--   <pre>
+--   &gt;&gt;&gt; indexPick [1,3] "abcdefg"
+--   "bd"
+--   </pre>
+indexPick :: [Int] -> [a] -> [a]
+
+-- | Cut indexed elements
+--   
+--   <pre>
+--   &gt;&gt;&gt; indexCut [1,3] "abcdefg"
+--   "acefg"
+--   </pre>
+indexCut :: [Int] -> [a] -> [a]
 
 
 -- | General utilities
@@ -45,36 +75,6 @@ names :: Name a => [a] -> [String]
 type Map a = a -> a
 type Listmap a = forall a. Map [a]
 
-
--- | Position in list.
-module Koshucode.Baala.Base.Prelude.Position
-ap :: ((Int -> v) -> [v] -> a) -> [v] -> a
-like :: [Int] -> [Char] -> Bool
-
--- | Indices of shared elements.
---   
---   <pre>
---   &gt;&gt;&gt; "bdk" `sharedIndex` "abcdefg"
---   [1,3]
---   </pre>
-sharedIndex :: Eq a => [a] -> [a] -> [Int]
-
--- | Pick indexed elements.
---   
---   <pre>
---   &gt;&gt;&gt; indexPick [1,3] "abcdefg"
---   "bd"
---   </pre>
-indexPick :: [Int] -> [a] -> [a]
-
--- | Cut indexed elements
---   
---   <pre>
---   &gt;&gt;&gt; indexCut [1,3] "abcdefg"
---   "acefg"
---   </pre>
-indexCut :: [Int] -> [a] -> [a]
-
 module Koshucode.Baala.Base.Prelude.Pretty
 class Pretty a where docv = vcat . map doc doch = hsep . map doc
 doc :: Pretty a => a -> Doc
@@ -89,67 +89,34 @@ docComment :: Doc -> Doc
 instance Pretty Doc
 
 
--- | Source information
-module Koshucode.Baala.Base.Prelude.Abort.Source
+-- | Judgements: a symbolic representations of affirmed or denied
+--   statements.
+module Koshucode.Baala.Base.Data.Judge
 
--- | Line number and content in source code
-data SourceLine
-SourceLine :: Int -> String -> SourceLine
+-- | Judgement on type <tt>v</tt>.
+--   
+--   Judgement (or judge for short) is divided into three parts: logical
+--   quality, sign of relation, and argument. <a>Bool</a> value of logical
+--   quality corresponds to affirmed or denied judge. <a>String</a> value
+--   of sign represents certain sentence pattern that gives intepretation
+--   of data. Sentence pattern has placeholders filled by (<a>String</a>,
+--   <tt>v</tt>) values of argument.
+data Judge v
+Judge :: Bool -> Relsign -> (Relarg v) -> Judge v
 
--- | Class that represents abort reason.
-class AbortSymbol a where abortSub _ = empty
-abortSymbol :: AbortSymbol a => a -> String
-abortTitle :: AbortSymbol a => a -> String
-abortMain :: AbortSymbol a => a -> Doc
-abortSub :: AbortSymbol a => a -> Doc
-abortLines :: AbortSymbol a => a -> [SourceLine]
-instance Typeable SourceLine
-instance Show SourceLine
-instance Eq SourceLine
-instance Ord SourceLine
-instance Data SourceLine
-instance Pretty SourceLine
+-- | Sign of relation, or relation name.
+type Relsign = String
 
+-- | List of terms.
+type Relarg v = [(String, v)]
 
--- | Abort symbol
-module Koshucode.Baala.Base.Prelude.Abort.Symbol
-
--- | Abortable type
-type AbortOr a = Either Abort a
-
--- | Abort symbols
-data Abort
-AbortLookup :: [SourceLine] -> String -> Abort
-AbortMalformedOperand :: [SourceLine] -> String -> Abort
-AbortMalformedTerms :: [SourceLine] -> String -> Abort
-AbortMissingTermName :: [SourceLine] -> String -> Abort
-AbortUnknownClause :: [SourceLine] -> Abort
-AbortUnknownRelmap :: [SourceLine] -> String -> Abort
-AbortUsage :: [SourceLine] -> [String] -> Abort
-instance Show Abort
-instance Eq Abort
-instance Ord Abort
-instance AbortSymbol Abort
-instance Name Abort
-
-
--- | Abort utility
-module Koshucode.Baala.Base.Prelude.Abort.Utility
-
--- | Lookup association list. This function may abort on AbortLookup.
-(<!!>) :: [(String, a)] -> String -> AbortOr a
-
--- | Stop on error ''bug in koshucode''
-bug :: a
-
--- | Stop program execution abnormally.
-abort :: AbortSymbol a => a -> IO ()
-addAbort :: AbortSymbol a => a -> Either a b -> Either a b
-abortIO :: AbortSymbol a => (b -> IO ()) -> Either a b -> IO ()
-
-
--- | Abort symbols
-module Koshucode.Baala.Base.Prelude.Abort
+-- | Sort terms in alphabetical order.
+abcJudge :: Ord v => Judge v -> Judge v
+instance Show v => Show (Judge v)
+instance Eq v => Eq (Judge v)
+instance Ord v => Ord (Judge v)
+instance (Ord v, Pretty v) => Pretty (Judge v)
+instance Functor Judge
 
 module Koshucode.Baala.Base.Prelude
 
@@ -227,6 +194,81 @@ instance Ord TermPos
 instance Name TermPos
 instance Pretty Relhead
 instance Monoid Relhead
+
+
+-- | Type for relations
+module Koshucode.Baala.Base.Data.Rel
+
+-- | Relations on type v. Heading of relation and body of relation as a
+--   list of tuples.
+data Rel v
+Rel :: Relhead -> (Relbody v) -> Rel v
+
+-- | List of positional args
+type Relbody v = [[v]]
+
+-- | Relation-to-relation mapping
+type RelmapFun v = Rel v -> Rel v
+
+-- | Relational constant that has no terms and no tuples
+reldum :: Rel v
+
+-- | Relational constant that has no terms and the empty tuple
+reldee :: Rel v
+instance Show v => Show (Rel v)
+instance Eq v => Eq (Rel v)
+instance Ord v => Ord (Rel v)
+instance Pretty v => Pretty (Rel v)
+
+module Koshucode.Baala.Base.Data.ValueClass
+class BoolValue v
+boolValue :: BoolValue v => Bool -> v
+isBoolValue :: BoolValue v => v -> Bool
+class IntValue v
+intValue :: IntValue v => Int -> v
+isIntValue :: IntValue v => v -> Bool
+class StringValue v
+stringValue :: StringValue v => String -> v
+isStringValue :: StringValue v => v -> Bool
+class ListValue v
+listValue :: ListValue v => [v] -> v
+isListValue :: ListValue v => v -> Bool
+class RelValue v
+relValue :: RelValue v => Rel v -> v
+isRelValue :: RelValue v => v -> Bool
+
+-- | Types that can be nil
+class Nil v
+nil :: Nil v => v
+isNil :: Nil v => v -> Bool
+class (Ord v, Pretty v, Nil v, StringValue v) => Value v
+
+
+-- | Dataset as a set of judges.
+--   
+--   Dataset is like a bridge of judges and relations. We can get a
+--   relation from a dataset, that dataset is build from judges.
+module Koshucode.Baala.Base.Data.Dataset
+
+-- | Dataset is a set of judges.
+data Dataset v
+
+-- | Dataset that has no judges
+emptyDataset :: Dataset v
+
+-- | Gather judges into a dataset
+dataset :: [Judge v] -> Dataset v
+
+-- | Add judges to dataset.
+addJudges :: [Judge v] -> Dataset v -> Dataset v
+
+-- | Select relation from dataset. If a giving term is not in judges,
+--   <a>Nil</a> sign is used.
+selectRelation :: (Ord v, Nil v) => Dataset v -> Relsign -> [String] -> Rel v
+
+
+-- | Data on value type <tt>v</tt>
+module Koshucode.Baala.Base.Data
 
 module Koshucode.Baala.Base.Kit.Order
 data OrderCap v
@@ -349,7 +391,7 @@ Open :: String -> Token
 -- | Close paren
 Close :: String -> Token
 
--- | N space chars
+-- | <i>N</i> space characters
 Space :: Int -> Token
 
 -- | Comment text
@@ -358,13 +400,29 @@ Comment :: String -> Token
 -- | Source infomation
 Line :: SourceLine -> Token
 
+-- | Line number and content in source code
+data SourceLine
+SourceLine :: Int -> String -> [Token] -> SourceLine
+
+-- | Text of token type, one of <tt>"Word"</tt>, <tt>"TermN"</tt>,
+--   <tt>"TermP"</tt>, <tt>"Open"</tt>, <tt>"Close"</tt>, <tt>"Space"</tt>,
+--   <tt>"Comment"</tt>, or <tt>"Line</tt>".
+--   
+--   <pre>
+--   &gt;&gt;&gt; tokenTypeText $ Word 0 "flower"
+--   "Word"
+--   </pre>
+tokenTypeText :: Token -> String
+
 -- | Test the token is blank, i.e., <a>Comment</a>, <a>Line</a>, or
 --   <a>Space</a>.
-isBlank :: Token -> Bool
+isBlankToken :: Token -> Bool
+
+-- | Test the token is a line, i.e., <a>Line</a>.
 isLineToken :: Token -> Bool
 
--- | Test the token is a term, i.e., <a>TermN</a> or <a>TermP</a>
-isTerm :: Token -> Bool
+-- | Test the token is a term, i.e., <a>TermN</a> or <a>TermP</a>.
+isTermToken :: Token -> Bool
 
 -- | Split string into list of tokens
 --   
@@ -377,21 +435,28 @@ isTerm :: Token -> Bool
 --   </pre>
 tokens :: String -> [Token]
 
--- | Convert back a token list to a source string
+-- | Convert back a token list to a source string.
 untokens :: [Token] -> String
+untoken :: Token -> String
 
 -- | Remove blank tokens.
-sweepToken :: [Token] -> [Token]
+sweepToken :: Map [Token]
 
 -- | Skip leading blank tokens.
-sweepLeft :: [Token] -> [Token]
+sweepLeft :: Map [Token]
+instance Typeable SourceLine
 instance Typeable Token
+instance Show SourceLine
+instance Eq SourceLine
+instance Ord SourceLine
+instance Data SourceLine
 instance Show Token
 instance Eq Token
 instance Ord Token
 instance Data Token
-instance Show SrcLine
-instance Eq SrcLine
+instance Show LineText
+instance Eq LineText
+instance Pretty SourceLine
 instance Name Token
 
 
@@ -417,58 +482,6 @@ tokenTrees :: [Token] -> [TokenTree]
 
 -- | Convert back tree to source string
 tokenTreesSource :: [TokenTree] -> String
-
-
--- | Syntax utilities
-module Koshucode.Baala.Base.Syntax.Utility
-
--- | Extract a list of term names.
---   
---   <pre>
---   &gt;&gt;&gt; termNames $ tokenTrees $ tokens "/a /b /c"
---   Right ["/a","/b","/c"]
---   </pre>
-termNames :: [TokenTree] -> AbortOr [String]
-
--- | Extract a list of name-and-name pairs.
---   
---   <pre>
---   &gt;&gt;&gt; termNamePairs $ tokenTrees $ tokens "/a /x /b /y"
---   Right [("/a","/x"), ("/b","/y")]
---   </pre>
-termNamePairs :: [TokenTree] -> AbortOr [(String, String)]
-
--- | Extract a list of name-and-tree pairs.
---   
---   <pre>
---   &gt;&gt;&gt; termTreePairs $ tokenTrees $ tokens "/a 'A3' /b 10"
---   Right [("/a", TreeL (Word 1 "A3")), ("/b", TreeL (Word 0 "10"))]
---   </pre>
-termTreePairs :: [TokenTree] -> AbortOr [(String, TokenTree)]
-
--- | Convert token list into list of token clauses
-clausify :: [Token] -> [[Token]]
-sourceLines :: [Token] -> [SourceLine]
-
--- | Split operand into named group. Non quoted words beginning with
---   hyphen, e.g., <tt>-x</tt>, are name of group.
---   
---   <pre>
---   &gt;&gt;&gt; operandGroup $ tokenTrees $ tokens "a b -x c 'd' -y e"
---   [("",   [TreeL (Word 0 "a"), TreeL (Word 0 "b")]),
---    ("-x", [TreeL (Word 0 "c"), TreeL (Word 1 "d")]),
---    ("-y", [TreeL (Word 0 "e")])]
---   </pre>
-operandGroup :: [TokenTree] -> [Named [TokenTree]]
-
--- | Calculator combining values into a single value
-type Calc v = [v] -> v
-
--- | Set of operators
-type Ripen x v = x -> [v] -> Calc v
-
--- | Calculate a value of tree
-crop :: Ripen x v -> Tree x -> Calc v
 
 
 -- | Modules on syntax
@@ -503,160 +516,150 @@ instance Data HalfRelmap
 instance Pretty HalfRelmap
 
 
--- | Type for relations
-module Koshucode.Baala.Base.Data.Rel
-
--- | Relations on type v. Heading of relation and body of relation as a
---   list of tuples.
-data Rel v
-Rel :: Relhead -> (Relbody v) -> Rel v
-
--- | List of positional args
-type Relbody v = [[v]]
-
--- | Relation-to-relation mapping
-type RelmapFun v = Rel v -> Rel v
-
--- | Relational constant that has no terms and no tuples
-reldum :: Rel v
-
--- | Relational constant that has no terms and the empty tuple
-reldee :: Rel v
-instance Show v => Show (Rel v)
-instance Eq v => Eq (Rel v)
-instance Ord v => Ord (Rel v)
-instance Pretty v => Pretty (Rel v)
-
-module Koshucode.Baala.Base.Data.ValueClass
-class BoolValue v
-boolValue :: BoolValue v => Bool -> v
-isBoolValue :: BoolValue v => v -> Bool
-class IntValue v
-intValue :: IntValue v => Int -> v
-isIntValue :: IntValue v => v -> Bool
-class StringValue v
-stringValue :: StringValue v => String -> v
-isStringValue :: StringValue v => v -> Bool
-class ListValue v
-listValue :: ListValue v => [v] -> v
-isListValue :: ListValue v => v -> Bool
-class RelValue v
-relValue :: RelValue v => Rel v -> v
-isRelValue :: RelValue v => v -> Bool
-
--- | Types that can be nil
-class Nil v
-nil :: Nil v => v
-isNil :: Nil v => v -> Bool
-class (Ord v, Pretty v, Nil v, StringValue v) => Value v
-
-
--- | Judgements: a symbolic representations of affirmed or denied
---   statements.
-module Koshucode.Baala.Base.Data.Judge
-
--- | Judgement on type <tt>v</tt>.
---   
---   Judgement (or judge for short) is divided into three parts: logical
---   quality, sign of relation, and argument. <a>Bool</a> value of logical
---   quality corresponds to affirmed or denied judge. <a>String</a> value
---   of sign represents certain sentence pattern that gives intepretation
---   of data. Sentence pattern has placeholders filled by (<a>String</a>,
---   <tt>v</tt>) values of argument.
-data Judge v
-Judge :: Bool -> Relsign -> (Relarg v) -> Judge v
-
--- | Sign of relation, or relation name.
-type Relsign = String
-
--- | List of terms.
-type Relarg v = [(String, v)]
-
--- | Sort terms in alphabetical order.
-abcJudge :: Ord v => Judge v -> Judge v
-instance Show v => Show (Judge v)
-instance Eq v => Eq (Judge v)
-instance Ord v => Ord (Judge v)
-instance (Ord v, Pretty v) => Pretty (Judge v)
-instance Functor Judge
-
-
--- | Dataset as a set of judges.
---   
---   Dataset is like a bridge of judges and relations. We can get a
---   relation from a dataset, that dataset is build from judges.
-module Koshucode.Baala.Base.Data.Dataset
-
--- | Dataset is a set of judges.
-data Dataset v
-
--- | Dataset that has no judges
-emptyDataset :: Dataset v
-
--- | Gather judges into a dataset
-dataset :: [Judge v] -> Dataset v
-
--- | Add judges to dataset.
-addJudges :: [Judge v] -> Dataset v -> Dataset v
-
--- | Select relation from dataset. If a giving term is not in judges,
---   <a>Nil</a> sign is used.
-selectRelation :: (Ord v, Nil v) => Dataset v -> Relsign -> [String] -> Rel v
-
-
--- | Data on value type <tt>v</tt>
-module Koshucode.Baala.Base.Data
-
-module Koshucode.Baala.Base.Kit.WithName
-
--- | Call a relmap function with present term names.
-withP :: WithTerms v
-
--- | Call a relconfl function with present term names.
-withP2 :: ([String] -> [Rel v] -> RelmapFun v) -> String -> [Rel v] -> RelmapFun v
-
--- | Call a relmap function with new-and-present term names.
-withNP :: WithTerms2 v
-
--- | Call a relmap function with new term names.
-withN1 :: WithTerms v
-type WithTerms v = ([String] -> RelmapFun v) -> String -> RelmapFun v
-type WithTerms2 v = ([(String, String)] -> RelmapFun v) -> String -> RelmapFun v
-
-
 -- | Data structures for relation-to-relation mappings
 module Koshucode.Baala.Base.Relmap.Relmap
 
 -- | Relation-to-relation mapping. A <a>Relmap</a> is correspond to a use
---   of relational operator, that is pair of operator and its operand.
+--   of relational operator.
 data Relmap v
 
--- | Relmap that retrieves a relation from a dataset
+-- | Retrieve a relation from a dataset
 RelmapSource :: HalfRelmap -> String -> [String] -> Relmap v
 
--- | Relmap that has a constant relation
+-- | Constant relation
 RelmapConst :: HalfRelmap -> String -> (Rel v) -> Relmap v
 
--- | Relmap that has equavalent relmap
+-- | Equavalent relmap
 RelmapAlias :: HalfRelmap -> (Relmap v) -> Relmap v
 
 -- | Relmap that maps relations to a relation
 RelmapCalc :: HalfRelmap -> String -> (RelmapSub v) -> [Relmap v] -> Relmap v
 
--- | Relmap that joints two relmaps
+-- | Connect two relmaps
 RelmapAppend :: (Relmap v) -> (Relmap v) -> Relmap v
 
 -- | Relmap reference
 RelmapName :: HalfRelmap -> String -> Relmap v
 
--- | Function of relmap
-type RelmapSub v = [Rel v] -> Map (Rel v)
+-- | Function of relmap.
+type RelmapSub v = [Rel v] -> Rel v -> Rel v
 
 -- | List of <a>RelmapSource</a>
 relmapSourceList :: Relmap v -> [Relmap v]
 
+-- | List of name in <a>RelmapName</a>
+relmapNameList :: Relmap v -> [String]
+
 -- | Expand <a>RelmapAppend</a> to list of <a>Relmap</a>
 relmapAppendList :: Relmap v -> [Relmap v]
+
+-- | Link relmaps by its name.
+relmapLinker :: [Named (Relmap v)] -> Relmap v -> Relmap v
+instance Pretty (Relmap v)
+instance Name (Relmap v)
+instance Monoid (Relmap v)
+instance Show (Relmap v)
+
+
+-- | Data structure for mapping relation to judges
+module Koshucode.Baala.Base.Relmap.Assert
+
+-- | Assertion of affirming or denying relation. It consists of logical
+--   quality, relsign, and relmap.
+--   
+--   See also <a>Judge</a>
+data Assert v
+Assert :: Bool -> Relsign -> Relmap v -> Assert v
+
+-- | Logical quality
+assertQuality :: Assert v -> Bool
+
+-- | Sign of relation
+assertRelsign :: Assert v -> Relsign
+
+-- | Relmap
+assertRelmap :: Assert v -> Relmap v
+
+-- | Apply function to relamp in assert.
+assertMap :: Map (Relmap v) -> Map (Assert v)
+
+-- | Make affirmed assertion.
+affirm :: Relsign -> Relmap v -> Assert v
+
+-- | Make denied assertion.
+deny :: Relsign -> Relmap v -> Assert v
+instance Show (Assert v)
+instance Pretty (Assert v)
+
+
+-- | Source information
+module Koshucode.Baala.Base.Abort.Source
+
+-- | Class that represents abort reason.
+class AbortSymbol a where abortSub _ = empty
+abortSymbol :: AbortSymbol a => a -> String
+abortTitle :: AbortSymbol a => a -> String
+abortMain :: AbortSymbol a => a -> Doc
+abortSub :: AbortSymbol a => a -> Doc
+abortLines :: AbortSymbol a => a -> [SourceLine]
+
+
+-- | Abort symbol
+module Koshucode.Baala.Base.Abort.Symbol
+
+-- | Abortable type
+type AbortOr a = Either Abort a
+
+-- | Abort symbols
+data Abort
+AbortLookup :: [SourceLine] -> String -> Abort
+AbortMalformedOperand :: [SourceLine] -> String -> Abort
+AbortMalformedTerms :: [SourceLine] -> String -> Abort
+AbortMissingTermName :: [SourceLine] -> String -> Abort
+AbortUnknownClause :: [SourceLine] -> Abort
+AbortUnknownRelmap :: [SourceLine] -> String -> Abort
+AbortUsage :: [SourceLine] -> [String] -> Abort
+instance Show Abort
+instance Eq Abort
+instance Ord Abort
+instance AbortSymbol Abort
+instance Name Abort
+
+
+-- | Abort utility
+module Koshucode.Baala.Base.Abort.Utility
+
+-- | Lookup association list. This function may abort on AbortLookup.
+(<!!>) :: [(String, a)] -> String -> AbortOr a
+
+-- | Stop on error ''bug in koshucode''
+bug :: a
+
+-- | Stop program execution abnormally.
+abort :: AbortSymbol a => a -> IO ()
+addAbort :: AbortSymbol a => a -> Either a b -> Either a b
+abortIO :: AbortSymbol a => (b -> IO ()) -> Either a b -> IO ()
+
+
+-- | Abort symbols
+module Koshucode.Baala.Base.Abort
+
+module Koshucode.Baala.Base.Relmap.Implement
+
+-- | Implementation of relmap operator. It consists of (1) operator name,
+--   (2) operand parser, (3) constructor of operator, and (4) usage of
+--   operator.
+data OpImplement v
+OpImplement :: String -> OpParser -> (OpCons v) -> [String] -> OpImplement v
+
+-- | Parser for operand of relational operator. This parsers docompose
+--   operand trees, and give a name to suboperand.
+type OpParser = [TokenTree] -> [Named [TokenTree]]
+type OpParser' = [Named [TokenTree]] -> [Named [TokenTree]]
+
+-- | Constructor of relational operator <a>Relmap</a>. <a>Relmap</a> is
+--   constructed from <a>HalfRelmap</a> and subrelmaps in it.
+type OpCons v = OpUse v -> AbortOr (Relmap v)
 
 -- | Use of operator
 data OpUse v
@@ -682,47 +685,10 @@ relmapCalc :: OpUse v -> String -> RelmapSub v -> Relmap v
 
 -- | Make a confluent relmap.
 relmapConfl :: OpUse v -> String -> RelmapSub v -> [Relmap v] -> Relmap v
-relmapLink :: Map [Named (Relmap v)]
-relmapLinker :: [Named (Relmap v)] -> Map (Relmap v)
 instance Show (OpUse v)
-instance Pretty (Relmap v)
-instance Name (Relmap v)
-instance Monoid (Relmap v)
-instance Show (Relmap v)
-
-module Koshucode.Baala.Base.Relmap.Implement
-
--- | Implementation of relmap operator. It consists of (1) operator name,
---   (2) operand parser, (3) constructor of operator, and (4) usage of
---   operator.
-data OpImplement v
-OpImplement :: String -> OpParser -> (OpCons v) -> [String] -> OpImplement v
-
--- | Parser for operand of relational operator. This parsers docompose
---   operand trees, and give a name to suboperand.
-type OpParser = [TokenTree] -> [Named [TokenTree]]
-type OpParser' = [Named [TokenTree]] -> [Named [TokenTree]]
-
--- | Constructor of relational operator <a>Relmap</a>. <a>Relmap</a> is
---   constructed from <tt>HalfRelmap</tt> and subrelmaps in it.
-type OpCons v = OpUse v -> AbortOr (Relmap v)
 
 
 -- | <a>Relmap</a> construction.
---   
---   Construction process of half relmaps from source trees.
---   
---   <ul>
---   <li><i><tt>[TokenTree] -&gt; [[TokenTree]]</tt></i> Divide list of
---   <a>TokenTree</a> by vertical bar (<tt>|</tt>).</li>
---   <li><i><tt>[[TokenTree]] -&gt; [HalfRelmap]</tt></i> Construct each
---   <a>HalfRelmap</a> from lists of <a>TokenTree</a>. When there are
---   subrelmaps in token trees, constructs <a>HalfRelmap</a>
---   recursively.</li>
---   <li><i><tt>[HalfRelmap] -&gt; HalfRelmap</tt></i> Wrap list of
---   <a>HalfRelmap</a> into one <a>HalfRelmap</a> that has these relmaps in
---   <a>halfSubmap</a>.</li>
---   </ul>
 module Koshucode.Baala.Base.Relmap.Construct
 
 -- | Make half and full relmap constructors.
@@ -742,32 +708,6 @@ type RelmapHalfCons = [SourceLine] -> [TokenTree] -> HalfRelmap
 --   of <a>HalfRelmap</a>.
 type RelmapFullCons v = HalfRelmap -> AbortOr (Relmap v)
 instance Show (RelmapCons v)
-
-
--- | Data structure for mapping relation to judges
-module Koshucode.Baala.Base.Relmap.Assert
-
--- | Assertion of affirming or denying relation. It consists of logical
---   quality, relsign, and relmap.
-data Assert v
-Assert :: Bool -> Relsign -> Relmap v -> Assert v
-
--- | Logical quality
-assertQuality :: Assert v -> Bool
-
--- | Sign of relation
-assertRelsign :: Assert v -> Relsign
-
--- | Relmap
-assertRelmap :: Assert v -> Relmap v
-
--- | Make affirmed assertion.
-affirm :: Relsign -> Relmap v -> Assert v
-
--- | Make denied assertion.
-deny :: Relsign -> Relmap v -> Assert v
-instance Show (Assert v)
-instance Pretty (Assert v)
 
 
 -- | Running relational calculation.
@@ -834,36 +774,113 @@ sectionUse :: Section v -> Section v -> Section v
 instance Monoid (Section v)
 
 
+-- | Syntax utilities
+module Koshucode.Baala.Base.Section.Utility
+
+-- | Extract a list of term names.
+--   
+--   <pre>
+--   &gt;&gt;&gt; termNames $ tokenTrees $ tokens "/a /b /c"
+--   Right ["/a","/b","/c"]
+--   </pre>
+termNames :: [TokenTree] -> AbortOr [String]
+
+-- | Extract a list of name-and-name pairs.
+--   
+--   <pre>
+--   &gt;&gt;&gt; termNamePairs $ tokenTrees $ tokens "/a /x /b /y"
+--   Right [("/a","/x"), ("/b","/y")]
+--   </pre>
+termNamePairs :: [TokenTree] -> AbortOr [(String, String)]
+
+-- | Extract a list of name-and-tree pairs.
+--   
+--   <pre>
+--   &gt;&gt;&gt; termTreePairs $ tokenTrees $ tokens "/a 'A3' /b 10"
+--   Right [("/a", TreeL (Word 1 "A3")), ("/b", TreeL (Word 0 "10"))]
+--   </pre>
+termTreePairs :: [TokenTree] -> AbortOr [(String, TokenTree)]
+
+-- | Convert token list into list of token clauses
+clausify :: [Token] -> [[Token]]
+sourceLines :: [Token] -> [SourceLine]
+
+-- | Split operand into named group. Non quoted words beginning with
+--   hyphen, e.g., <tt>-x</tt>, are name of group.
+--   
+--   <pre>
+--   &gt;&gt;&gt; operandGroup $ tokenTrees $ tokens "a b -x c 'd' -y e"
+--   [("",   [TreeL (Word 0 "a"), TreeL (Word 0 "b")]),
+--    ("-x", [TreeL (Word 0 "c"), TreeL (Word 1 "d")]),
+--    ("-y", [TreeL (Word 0 "e")])]
+--   </pre>
+operandGroup :: [TokenTree] -> [Named [TokenTree]]
+
+-- | Calculator combining values into a single value
+type Calc v = [v] -> v
+
+-- | Set of operators
+type Ripen x v = x -> [v] -> Calc v
+
+-- | Calculate a value of tree
+crop :: Ripen x v -> Tree x -> Calc v
+
+
 -- | Intermidiate structure between <a>String</a> and <a>Section</a>.
 module Koshucode.Baala.Base.Section.Clause
 data Clause
 
 -- | Section name
-CSection :: [SourceLine] -> (Maybe String) -> Clause
+CSection :: ClauseSource -> (Maybe String) -> Clause
 
 -- | Importing section name
-CImport :: [SourceLine] -> [Token] -> (Maybe Clause) -> Clause
+CImport :: ClauseSource -> [Token] -> (Maybe Clause) -> Clause
 
 -- | Exporting relmap name
-CExport :: [SourceLine] -> String -> Clause
+CExport :: ClauseSource -> String -> Clause
 
 -- | Relmap and its name
-CRelmap :: [SourceLine] -> String -> HalfRelmap -> Clause
+CRelmap :: ClauseSource -> String -> HalfRelmap -> Clause
 
 -- | Not include HalfRelmap
-TRelmap :: [SourceLine] -> String -> [TokenTree] -> Clause
+TRelmap :: ClauseSource -> String -> [TokenTree] -> Clause
 
 -- | Assertions of relmaps
-CAssert :: [SourceLine] -> Bool -> String -> HalfRelmap -> Clause
+CAssert :: ClauseSource -> Bool -> String -> HalfRelmap -> Clause
 
 -- | Not include HalfRelmap
-TAssert :: [SourceLine] -> Bool -> String -> [TokenTree] -> Clause
+TAssert :: ClauseSource -> Bool -> String -> [TokenTree] -> Clause
 
 -- | Here data
-CJudge :: [SourceLine] -> Bool -> String -> [Token] -> Clause
+CJudge :: ClauseSource -> Bool -> String -> [Token] -> Clause
 
 -- | Unknown clause
-CUnknown :: [SourceLine] -> Clause
+CUnknown :: ClauseSource -> Clause
+data ClauseSource
+ClauseSource :: [Token] -> [SourceLine] -> ClauseSource
+
+-- | Source tokens of clause
+clauseTokens :: ClauseSource -> [Token]
+
+-- | Source lines of clause
+clauseLines :: ClauseSource -> [SourceLine]
+clauseTypeText :: Clause -> String
+clauseSource :: Clause -> ClauseSource
+
+-- | Convert token list into clause list. Result clause list does not
+--   contain <a>CRelmap</a> and <a>CAssert</a>. Instead of them,
+--   <a>TRelmap</a> and <a>TAssert</a> are contained. This function does
+--   not depend on <a>RelmapHalfCons</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; consPreclause $ tokens "a : source A /x /y"
+--   [TRelmap [SourceLine 1 "a : source A /x /y"]
+--            "a" [TreeL (Word 0 "source"),
+--                 TreeL (Word 0 "A"),
+--                 TreeL (TermN ["/x"]),
+--                 TreeL (TermN ["/y"])]]
+--   </pre>
+consPreclause :: [Token] -> [Clause]
 
 -- | Construct <a>Clause</a> list from <a>Token</a> list. This is a first
 --   step of constructing <a>Section</a>.
@@ -871,7 +888,10 @@ consClause :: RelmapHalfCons -> [Token] -> [Clause]
 
 -- | Second step of constructing <a>Section</a>.
 consSection :: StringValue v => RelmapFullCons v -> [Clause] -> AbortOr (Section v)
+instance Typeable ClauseSource
 instance Typeable Clause
+instance Show ClauseSource
+instance Data ClauseSource
 instance Show Clause
 instance Data Clause
 
@@ -909,5 +929,21 @@ runSectionIO :: Value v => Section v -> IO ()
 --   <a>Token</a>.</li>
 --   </ul>
 module Koshucode.Baala.Base.Section
+
+module Koshucode.Baala.Base.Kit.WithName
+
+-- | Call a relmap function with present term names.
+withP :: WithTerms v
+
+-- | Call a relconfl function with present term names.
+withP2 :: ([String] -> [Rel v] -> RelmapFun v) -> String -> [Rel v] -> RelmapFun v
+
+-- | Call a relmap function with new-and-present term names.
+withNP :: WithTerms2 v
+
+-- | Call a relmap function with new term names.
+withN1 :: WithTerms v
+type WithTerms v = ([String] -> RelmapFun v) -> String -> RelmapFun v
+type WithTerms2 v = ([(String, String)] -> RelmapFun v) -> String -> RelmapFun v
 
 module Koshucode.Baala.Base

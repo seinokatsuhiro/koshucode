@@ -19,41 +19,42 @@
 <a name="line-10"></a><span class='hs-layout'>,</span> <span class='hs-conid'>Value</span> <span class='hs-conid'>()</span>
 <a name="line-11"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
 <a name="line-12"></a>
-<a name="line-13"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Rel</span>
-<a name="line-14"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Prelude</span>
-<a name="line-15"></a>
+<a name="line-13"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Prelude</span>
+<a name="line-14"></a>
+<a name="line-15"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Rel</span>
 <a name="line-16"></a>
-<a name="line-17"></a><span class='hs-comment'>-- ----------------------  Built-in data</span>
-<a name="line-18"></a>
-<a name="line-19"></a><a name="Value"></a><span class='hs-keyword'>class</span> <span class='hs-conid'>BoolValue</span> <span class='hs-varid'>v</span> <span class='hs-keyword'>where</span>
-<a name="line-20"></a>    <span class='hs-varid'>boolValue</span>   <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Bool</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>v</span>
-<a name="line-21"></a>    <span class='hs-varid'>isBoolValue</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
-<a name="line-22"></a>
-<a name="line-23"></a><a name="Value"></a><span class='hs-keyword'>class</span> <span class='hs-conid'>IntValue</span> <span class='hs-varid'>v</span> <span class='hs-keyword'>where</span>
-<a name="line-24"></a>    <span class='hs-varid'>intValue</span>   <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>v</span>
-<a name="line-25"></a>    <span class='hs-varid'>isIntValue</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
-<a name="line-26"></a>
-<a name="line-27"></a><a name="Value"></a><span class='hs-keyword'>class</span> <span class='hs-conid'>StringValue</span> <span class='hs-varid'>v</span> <span class='hs-keyword'>where</span>
-<a name="line-28"></a>    <span class='hs-varid'>stringValue</span>   <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>v</span>
-<a name="line-29"></a>    <span class='hs-varid'>isStringValue</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
-<a name="line-30"></a>
-<a name="line-31"></a><a name="Value"></a><span class='hs-keyword'>class</span> <span class='hs-conid'>ListValue</span> <span class='hs-varid'>v</span> <span class='hs-keyword'>where</span>
-<a name="line-32"></a>    <span class='hs-varid'>listValue</span>   <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>v</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>v</span>
-<a name="line-33"></a>    <span class='hs-varid'>isListValue</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
-<a name="line-34"></a>
+<a name="line-17"></a>
+<a name="line-18"></a><span class='hs-comment'>-- ----------------------  Built-in data</span>
+<a name="line-19"></a>
+<a name="line-20"></a><a name="Value"></a><span class='hs-keyword'>class</span> <span class='hs-conid'>BoolValue</span> <span class='hs-varid'>v</span> <span class='hs-keyword'>where</span>
+<a name="line-21"></a>    <span class='hs-varid'>boolValue</span>   <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Bool</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>v</span>
+<a name="line-22"></a>    <span class='hs-varid'>isBoolValue</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
+<a name="line-23"></a>
+<a name="line-24"></a><a name="Value"></a><span class='hs-keyword'>class</span> <span class='hs-conid'>IntValue</span> <span class='hs-varid'>v</span> <span class='hs-keyword'>where</span>
+<a name="line-25"></a>    <span class='hs-varid'>intValue</span>   <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>v</span>
+<a name="line-26"></a>    <span class='hs-varid'>isIntValue</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
+<a name="line-27"></a>
+<a name="line-28"></a><a name="Value"></a><span class='hs-keyword'>class</span> <span class='hs-conid'>StringValue</span> <span class='hs-varid'>v</span> <span class='hs-keyword'>where</span>
+<a name="line-29"></a>    <span class='hs-varid'>stringValue</span>   <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>v</span>
+<a name="line-30"></a>    <span class='hs-varid'>isStringValue</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
+<a name="line-31"></a>
+<a name="line-32"></a><a name="Value"></a><span class='hs-keyword'>class</span> <span class='hs-conid'>ListValue</span> <span class='hs-varid'>v</span> <span class='hs-keyword'>where</span>
+<a name="line-33"></a>    <span class='hs-varid'>listValue</span>   <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>v</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>v</span>
+<a name="line-34"></a>    <span class='hs-varid'>isListValue</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
 <a name="line-35"></a>
-<a name="line-36"></a><span class='hs-comment'>-- ----------------------  Data in koshucode</span>
-<a name="line-37"></a>
-<a name="line-38"></a><a name="Value"></a><span class='hs-keyword'>class</span> <span class='hs-conid'>RelValue</span> <span class='hs-varid'>v</span> <span class='hs-keyword'>where</span>
-<a name="line-39"></a>    <span class='hs-varid'>relValue</span>   <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>v</span>
-<a name="line-40"></a>    <span class='hs-varid'>isRelValue</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
-<a name="line-41"></a>
-<a name="line-42"></a><a name="Value"></a><span class='hs-comment'>-- | Types that can be nil</span>
-<a name="line-43"></a><a name="Value"></a><span class='hs-keyword'>class</span> <span class='hs-conid'>Nil</span> <span class='hs-varid'>v</span> <span class='hs-keyword'>where</span>
-<a name="line-44"></a>    <span class='hs-varid'>nil</span>   <span class='hs-keyglyph'>::</span> <span class='hs-varid'>v</span>
-<a name="line-45"></a>    <span class='hs-varid'>isNil</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
-<a name="line-46"></a>
-<a name="line-47"></a><a name="Value"></a><span class='hs-keyword'>class</span> <span class='hs-layout'>(</span><span class='hs-conid'>Ord</span> <span class='hs-varid'>v</span><span class='hs-layout'>,</span> <span class='hs-conid'>Pretty</span> <span class='hs-varid'>v</span><span class='hs-layout'>,</span> <span class='hs-conid'>Nil</span> <span class='hs-varid'>v</span><span class='hs-layout'>,</span> <span class='hs-conid'>StringValue</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>Value</span> <span class='hs-varid'>v</span>
-<a name="line-48"></a>
+<a name="line-36"></a>
+<a name="line-37"></a><span class='hs-comment'>-- ----------------------  Data in koshucode</span>
+<a name="line-38"></a>
+<a name="line-39"></a><a name="Value"></a><span class='hs-keyword'>class</span> <span class='hs-conid'>RelValue</span> <span class='hs-varid'>v</span> <span class='hs-keyword'>where</span>
+<a name="line-40"></a>    <span class='hs-varid'>relValue</span>   <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>v</span>
+<a name="line-41"></a>    <span class='hs-varid'>isRelValue</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
+<a name="line-42"></a>
+<a name="line-43"></a><a name="Value"></a><span class='hs-comment'>-- | Types that can be nil</span>
+<a name="line-44"></a><a name="Value"></a><span class='hs-keyword'>class</span> <span class='hs-conid'>Nil</span> <span class='hs-varid'>v</span> <span class='hs-keyword'>where</span>
+<a name="line-45"></a>    <span class='hs-varid'>nil</span>   <span class='hs-keyglyph'>::</span> <span class='hs-varid'>v</span>
+<a name="line-46"></a>    <span class='hs-varid'>isNil</span> <span class='hs-keyglyph'>::</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
+<a name="line-47"></a>
+<a name="line-48"></a><a name="Value"></a><span class='hs-keyword'>class</span> <span class='hs-layout'>(</span><span class='hs-conid'>Ord</span> <span class='hs-varid'>v</span><span class='hs-layout'>,</span> <span class='hs-conid'>Pretty</span> <span class='hs-varid'>v</span><span class='hs-layout'>,</span> <span class='hs-conid'>Nil</span> <span class='hs-varid'>v</span><span class='hs-layout'>,</span> <span class='hs-conid'>StringValue</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>Value</span> <span class='hs-varid'>v</span>
+<a name="line-49"></a>
 </pre></body>
 </html>

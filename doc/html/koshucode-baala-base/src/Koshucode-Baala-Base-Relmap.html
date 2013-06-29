@@ -41,17 +41,17 @@
 <a name="line-32"></a><span class='hs-comment'>--</span>
 <a name="line-33"></a><span class='hs-comment'>-- Dependencies of significant datatypes.</span>
 <a name="line-34"></a><span class='hs-comment'>-- </span>
-<a name="line-35"></a><span class='hs-comment'>-- * Data 'HalfRelmap' has</span>
-<a name="line-36"></a><span class='hs-comment'>--   'HalfRelmap',</span>
-<a name="line-37"></a><span class='hs-comment'>--   'Koshucode.Baala.Base.Prelude.Abort.SourceLine' and</span>
-<a name="line-38"></a><span class='hs-comment'>--   'Koshucode.Baala.Base.Syntax.TokenTree.TokenTree'.</span>
-<a name="line-39"></a><span class='hs-comment'>-- </span>
-<a name="line-40"></a><span class='hs-comment'>-- * Data 'Relmap' has</span>
-<a name="line-41"></a><span class='hs-comment'>--   'Relmap',</span>
-<a name="line-42"></a><span class='hs-comment'>--   'Koshucode.Baala.Base.Data.Rel.Rel', and</span>
-<a name="line-43"></a><span class='hs-comment'>--   'HalfRelmap'.</span>
-<a name="line-44"></a><span class='hs-comment'>-- </span>
-<a name="line-45"></a><span class='hs-comment'>-- * Data 'Assert' has 'Relmap'.</span>
+<a name="line-35"></a><span class='hs-comment'>-- * Data 'Assert' has 'Relmap'.</span>
+<a name="line-36"></a><span class='hs-comment'>-- </span>
+<a name="line-37"></a><span class='hs-comment'>-- * Data 'Relmap' has</span>
+<a name="line-38"></a><span class='hs-comment'>--   'Relmap',</span>
+<a name="line-39"></a><span class='hs-comment'>--   'Koshucode.Baala.Base.Data.Rel.Rel', and</span>
+<a name="line-40"></a><span class='hs-comment'>--   'HalfRelmap'.</span>
+<a name="line-41"></a><span class='hs-comment'>-- </span>
+<a name="line-42"></a><span class='hs-comment'>-- * Data 'HalfRelmap' has</span>
+<a name="line-43"></a><span class='hs-comment'>--   'HalfRelmap',</span>
+<a name="line-44"></a><span class='hs-comment'>--   'Koshucode.Baala.Base.Abort.SourceLine' and</span>
+<a name="line-45"></a><span class='hs-comment'>--   'Koshucode.Baala.Base.Syntax.TokenTree.TokenTree'.</span>
 <a name="line-46"></a><span class='hs-comment'>-- </span>
 <a name="line-47"></a><span class='hs-comment'>-- Datatypes for implementing 'Relmap' operators.</span>
 <a name="line-48"></a><span class='hs-comment'>--</span>
@@ -66,21 +66,25 @@
 <a name="line-57"></a><span class='hs-comment'>--   'OpUse' and</span>
 <a name="line-58"></a><span class='hs-comment'>--   'Relmap'.</span>
 <a name="line-59"></a><span class='hs-comment'>--</span>
-<a name="line-60"></a><span class='hs-comment'>-- Datatypes for constructing 'Relmap'.</span>
-<a name="line-61"></a><span class='hs-comment'>--    </span>
-<a name="line-62"></a><span class='hs-comment'>-- * Type 'RelmapHalfCons' has</span>
-<a name="line-63"></a><span class='hs-comment'>--   'HalfRelmap',</span>
-<a name="line-64"></a><span class='hs-comment'>--   'Koshucode.Baala.Base.Prelude.Abort.SourceLine' and</span>
-<a name="line-65"></a><span class='hs-comment'>--   'Koshucode.Baala.Base.Syntax.TokenTree.TokenTree'.</span>
-<a name="line-66"></a><span class='hs-comment'>-- </span>
-<a name="line-67"></a><span class='hs-comment'>-- * Type 'RelmapFullCons' has</span>
-<a name="line-68"></a><span class='hs-comment'>--   'HalfRelmap' and</span>
-<a name="line-69"></a><span class='hs-comment'>--   'Relmap'.</span>
-<a name="line-70"></a><span class='hs-comment'>-- </span>
-<a name="line-71"></a><span class='hs-comment'>-- * Data 'RelmapCons' has</span>
-<a name="line-72"></a><span class='hs-comment'>--   'RelmapHalfCons' and</span>
-<a name="line-73"></a><span class='hs-comment'>--   'RelmapFullCons'.</span>
-<a name="line-74"></a><span class='hs-comment'>--</span>
-<a name="line-75"></a>
+<a name="line-60"></a><span class='hs-comment'>-- * Data 'OpUse' has</span>
+<a name="line-61"></a><span class='hs-comment'>--   'HalfRelmap' and</span>
+<a name="line-62"></a><span class='hs-comment'>--   'Relmap'.</span>
+<a name="line-63"></a><span class='hs-comment'>--</span>
+<a name="line-64"></a><span class='hs-comment'>-- Datatypes for constructing 'Relmap'.</span>
+<a name="line-65"></a><span class='hs-comment'>-- </span>
+<a name="line-66"></a><span class='hs-comment'>-- * Data 'RelmapCons' has</span>
+<a name="line-67"></a><span class='hs-comment'>--   'RelmapHalfCons' and</span>
+<a name="line-68"></a><span class='hs-comment'>--   'RelmapFullCons'.</span>
+<a name="line-69"></a><span class='hs-comment'>--    </span>
+<a name="line-70"></a><span class='hs-comment'>-- * Type 'RelmapHalfCons' has</span>
+<a name="line-71"></a><span class='hs-comment'>--   'HalfRelmap',</span>
+<a name="line-72"></a><span class='hs-comment'>--   'Koshucode.Baala.Base.Abort.SourceLine' and</span>
+<a name="line-73"></a><span class='hs-comment'>--   'Koshucode.Baala.Base.Syntax.TokenTree.TokenTree'.</span>
+<a name="line-74"></a><span class='hs-comment'>-- </span>
+<a name="line-75"></a><span class='hs-comment'>-- * Type 'RelmapFullCons' has</span>
+<a name="line-76"></a><span class='hs-comment'>--   'HalfRelmap' and</span>
+<a name="line-77"></a><span class='hs-comment'>--   'Relmap'.</span>
+<a name="line-78"></a><span class='hs-comment'>--</span>
+<a name="line-79"></a>
 </pre></body>
 </html>
