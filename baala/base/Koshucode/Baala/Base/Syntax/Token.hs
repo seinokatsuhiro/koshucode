@@ -104,9 +104,11 @@ isLineToken _             = False
 {-| Source line information.
     It consists of (1) line number,
     (2) line content, and (3) tokens from line. -}
-data SourceLine
-    = SourceLine Int String [Token]
-      deriving (Show, Eq, Ord, Data, Typeable)
+data SourceLine = SourceLine
+    { sourceLineNumber  :: Int
+    , sourceLineContent :: String
+    , sourceLineTokens  :: [Token]
+    } deriving (Show, Eq, Ord, Data, Typeable)
 
 instance Pretty SourceLine where
     doc (SourceLine _ line _) = text line

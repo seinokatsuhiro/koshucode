@@ -5,6 +5,7 @@
 **
 **  USAGE
 **    $ koshu-syntax token.k
+**    $ koshu-syntax token.k -t
 **
 
 **  Word

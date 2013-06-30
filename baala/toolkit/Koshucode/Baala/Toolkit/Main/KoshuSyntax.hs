@@ -10,16 +10,16 @@ module Koshucode.Baala.Toolkit.Main.KoshuSyntax
 ) where
 
 import Control.Monad
+import System.Console.GetOpt
 
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Section as Sec
-import Koshucode.Baala.Base.Syntax as Syn
-import Koshucode.Baala.Toolkit.Library.Exit
-import Koshucode.Baala.Toolkit.Library.Version
+import Koshucode.Baala.Base.Syntax  as Syn
 import Koshucode.Baala.Vanilla
 
-import System.Console.GetOpt
+import Koshucode.Baala.Toolkit.Library.Exit
+import Koshucode.Baala.Toolkit.Library.Version
 
 
 
@@ -31,6 +31,7 @@ data Option
     | OptShowEncoding
     | OptRun
     | OptStdin
+    | OptOnlyToken
       deriving (Show, Eq, Ord, Enum, Bounded)
 
 koshuOptions :: [OptDescr Option]
@@ -40,6 +41,7 @@ koshuOptions =
     , Option ""  ["run"]      (NoArg OptRun)     "Run section."
     , Option ""  ["show-encoding"] (NoArg OptShowEncoding) "Show character encoding."
     , Option "i" ["stdin"]    (NoArg OptStdin)  "Read from stdin."
+    , Option "t" ["token"]    (NoArg OptOnlyToken) "Show only tokens."
     ]
 
 version :: String
@@ -70,15 +72,17 @@ koshuSyntaxMain' (_, argv) =
           | has OptHelp         -> putSuccess usage
           | has OptVersion      -> putSuccess $ version ++ "\n"
           | has OptShowEncoding -> putSuccess =<< currentEncodings
-          | otherwise           -> run files
+          | has OptOnlyToken    -> mapM_ dumpToken files
+          | otherwise           -> mapM_ dumpClauseAndToken files
           where has = (`elem` opts)
       (_, _, errs) -> putFailure $ concat errs
 
-run :: [FilePath] -> IO ()
-run paths = mapM_ dump paths
 
-dump :: FilePath -> IO ()
-dump path = 
+
+-- ----------------------  Dump clauses and tokens
+
+dumpClauseAndToken :: FilePath -> IO ()
+dumpClauseAndToken path = 
     do code <- readFile path
        let ts = Syn.tokens code
            cs = Sec.consPreclause ts
@@ -134,6 +138,33 @@ tokenContent (Close s)   = s
 tokenContent (Space n)   = replicate n ' '
 tokenContent (Comment s) = s
 tokenContent (Line (SourceLine _ s _)) = s
+
+
+
+-- ----------------------  Dump only tokens, not clauses
+
+dumpToken :: FilePath -> IO ()
+dumpToken path =
+    do code <- readFile path
+       let ts = Syn.tokens code
+           ls = concatMap dumpTokenText $ zip [1 ..] ts
+       putStr $ unlines ls
+
+dumpTokenText :: (Int, Token) -> [String]
+dumpTokenText p =
+    case p of
+      (_, Line src) -> ["", line src, judge ]
+      _ -> [ judge ]
+    where
+      judge    = show $ doc $ dumpTokenJudge p
+      line src = "**  L" ++ (show $ Syn.sourceLineNumber src) ++
+                 " "     ++ (show $ Syn.sourceLineContent src)
+
+dumpTokenJudge :: (Int, Token) -> Judge Val
+dumpTokenJudge (n, t) = Judge True "TOKEN" args where
+    args = [ ("/token-seq"    , intv n)
+           , ("/token-type"   , stringv $ tokenTypeText t)
+           , ("/token-content", stringv $ tokenContent t) ]
 
 
 
