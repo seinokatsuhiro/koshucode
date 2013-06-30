@@ -43,7 +43,8 @@ data Clause
     | TRelmap  ClauseSource String [TokenTree]      -- ^ Not include HalfRelmap
     | CAssert  ClauseSource Bool String HalfRelmap  -- ^ Assertions of relmaps
     | TAssert  ClauseSource Bool String [TokenTree] -- ^ Not include HalfRelmap
-    | CJudge   ClauseSource Bool String [Token]     -- ^ Here data
+    | CJudge   ClauseSource Bool String [Token]     -- ^ Judge
+    | CComment ClauseSource       -- ^ Caluse comment
     | CUnknown ClauseSource       -- ^ Unknown clause
       deriving (Show, Data, Typeable)
 
@@ -53,26 +54,32 @@ data ClauseSource = ClauseSource
     } deriving (Show, Data, Typeable)
 
 clauseTypeText :: Clause -> String
-clauseTypeText (CSection _ _)    = "Section"
-clauseTypeText (CImport _ _ _)   = "Import"
-clauseTypeText (CExport _ _)     = "Export"
-clauseTypeText (CRelmap _ _ _)   = "Relmap"
-clauseTypeText (TRelmap _ _ _)   = "Relmap"
-clauseTypeText (CAssert _ _ _ _) = "Assert"
-clauseTypeText (TAssert _ _ _ _) = "Assert"
-clauseTypeText (CJudge _ _ _ _)  = "Judge"
-clauseTypeText (CUnknown _)      = "Unknown"
+clauseTypeText c =
+    case c of
+      CSection _ _      -> "Section"
+      CImport  _ _ _    -> "Import"
+      CExport  _ _      -> "Export"
+      CRelmap  _ _ _    -> "Relmap"
+      TRelmap  _ _ _    -> "Relmap"
+      CAssert  _ _ _ _  -> "Assert"
+      TAssert  _ _ _ _  -> "Assert"
+      CJudge   _ _ _ _  -> "Judge"
+      CComment _        -> "Comment"
+      CUnknown _        -> "Unknown"
 
 clauseSource :: Clause -> ClauseSource
-clauseSource (CSection s _)     = s
-clauseSource (CImport  s _ _)   = s
-clauseSource (CExport  s _)     = s
-clauseSource (CRelmap  s _ _)   = s
-clauseSource (TRelmap  s _ _)   = s
-clauseSource (CAssert  s _ _ _) = s
-clauseSource (TAssert  s _ _ _) = s
-clauseSource (CJudge   s _ _ _) = s
-clauseSource (CUnknown s)       = s
+clauseSource c =
+    case c of
+      CSection s _      -> s
+      CImport  s _ _    -> s
+      CExport  s _      -> s
+      CRelmap  s _ _    -> s
+      TRelmap  s _ _    -> s
+      CAssert  s _ _ _  -> s
+      TAssert  s _ _ _  -> s
+      CJudge   s _ _ _  -> s
+      CComment s        -> s
+      CUnknown s        -> s
 
 
 
@@ -111,6 +118,7 @@ consPreclause' toks = cl toks' where
         | k == "|-"       = jud True  xs
         | k == "|-X"      = jud False xs
         | k == "|-x"      = jud False xs
+        | k == "****"     = [CComment src]
     cl []                 = []
     cl _                  = unk
 
@@ -244,7 +252,7 @@ terms (x : _)        = Left $ AbortMalformedTerms [] (show x) -- ???
 -- ----------------------
 -- $Documentation
 --
--- There are five types of 'Clause'.
+-- There are six types of 'Clause'.
 -- Textual representation of 'Section' is a list of clauses.
 -- 'consClause' constructs clause list from section text.
 --
@@ -262,4 +270,7 @@ terms (x : _)        = Left $ AbortMalformedTerms [] (show x) -- ???
 --
 -- [@|-X@ relsign \/name content ...]
 --   Denial judgement clause
+--
+-- [@****@ ...]
+--   Comment clause
 

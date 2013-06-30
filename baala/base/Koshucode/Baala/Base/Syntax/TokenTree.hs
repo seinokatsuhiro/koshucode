@@ -7,10 +7,12 @@ module Koshucode.Baala.Base.Syntax.TokenTree
 , tokenTrees
 , tokenTreesSource
 , module Koshucode.Baala.Base.Syntax.Token
+, module Koshucode.Baala.Base.Syntax.Tokenizer
 , module Koshucode.Baala.Base.Syntax.Tree
 ) where
 
 import Koshucode.Baala.Base.Syntax.Token
+import Koshucode.Baala.Base.Syntax.Tokenizer
 import Koshucode.Baala.Base.Syntax.Tree
 
 -- | Tree of tokens
