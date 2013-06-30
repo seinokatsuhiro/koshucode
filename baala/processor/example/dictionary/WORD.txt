@@ -117,70 +117,70 @@ $ cover
 $ cross join / cross product
 $ CWA
 
+. D_UNION
 $ data definition operator
-$ data independence
+. data independence
 $ data manipulation operator
 $ data model
-$ data sublanguage
-$ Data Sublanguage ALPHA
-$ data type
-$ database
+. data sublanguage
+. Data Sublanguage ALPHA
+. data type
+. database
 $ database constraint
-$ database design
-$ database management system
-$ database programming language
+. database design
+. database management system
+. database programming language
 $ database value
 $ database variable
-$ DBMS
+. DBMS
 $ dbvar
-$ DCO
+. DCO
 $ De Morgan's Laws
-$ decidability
+. decidability
 $ declared type
-$ decomposition
-$ DEE
-$ deferred checking
-$ deferred constraint
+. decomposition
+. DEE
+. deferred checking
+. deferred constraint
 $ degree
 * DELETE
-$ DELETE rule
+. DELETE rule
 $ denormalization
-$ dependency
-$ dependency theory
-$ dependent
-$ dereferencing
+. dependency
+. dependency theory
+. dependent
+. dereferencing
 $ derived relation
 $ derived relvar
-$ determinant
+. determinant
 $ difference
 $ difference (set theory)
-$ direct image
-$ directed relationship
+. direct image
+. directed relationship
 $ disjoint
 $ disjoint union
 $ disjunct
 $ disjunction
-$ disjunctive normal form
+. disjunctive normal form
 $ distributive
-$ DIVIDEBY
+. DIVIDEBY
 $ division
-$ DK/NF
-$ DNF
-$ domain
+. DK/NF
+. DNF
+. domain
 $ domain calculus
-$ domain check override
-$ domain relational calculus
-$ domain-key normal form
+. domain check override
+. domain-key normal form
+. domain relational calculus
 $ dot qualification
-$ double arrow
+. double arrow
 $ double underlining
-$ DRC
+. DRC
 $ dual mode principle
-$ DUM
+. DUM
 $ duplicate
-$ duplicate elimination
-$ dyadic
-$ D_UNION
+. duplicate elimination
+. dyadic
 
 . E/R
 . E/R diagram
@@ -223,39 +223,39 @@ $ expression transformation
 . external predicate
 
 $ FALSE
-$ FD
-$ FD implied by a superkey
+. FD
+. FD implied by a superkey
 $ FD preservation
 $ fifth normal form
 $ first normal form
-$ first order logic
-$ flat relation
-$ FORALL
+. first order logic
+. flat relation
+. FORALL
 $ foreign key
-$ foreign key constraint
-$ foreign key rule
-$ formal system
-$ formula
+. foreign key constraint
+. foreign key rule
+. formal system
+. formula
 $ fourth normal form
 $ free variable
-$ full FD
-$ fully dependent
-$ fully normalized
+. full FD
+. fully dependent
+. fully normalized
 $ function
 $ functional dependency
-$ functionally dependent
-$ functionally determines
+. functionally dependent
+. functionally determines
 
-$ generated type
-$ Golden Rule, The
+. generated type
+. Golden Rule, The
 $ greater-than join
-$ GROUP
+. GROUP
 $ grouping
 
-$ hash
+. hash
 $ heading
 $ Heath's theorem
-$ host language
+. host language
 
 $ idempotent
 $ identity

@@ -6,47 +6,54 @@ module Koshucode.Baala.Base.Syntax.TokenTree
 ( TokenTree
 , tokenTrees
 , tokenTreesSource
-, module Koshucode.Baala.Base.Syntax.Token
-, module Koshucode.Baala.Base.Syntax.Tokenizer
-, module Koshucode.Baala.Base.Syntax.Tree
 ) where
 
 import Koshucode.Baala.Base.Syntax.Token
 import Koshucode.Baala.Base.Syntax.Tokenizer
 import Koshucode.Baala.Base.Syntax.Tree
 
--- | Tree of tokens
+{-| Tree of tokens. -}
 type TokenTree = Tree Token
 
--- | Parse tokens into parened trees.
---   Blank tokens are excluded.
--- 
---   >>> tokenTrees $ tokens $ "meet (R | pick /a /b)"
---   [TreeL (Word 0 "meet"),
---    TreeB 1 [
---      TreeL (Word 0 "R"),
---      TreeL (Word 0 "|"),
---      TreeL (Word 0 "pick"),
---      TreeL (TermN ["/a"]),
---      TreeL (TermN ["/b"])]]
+{-| Parse tokens into parened trees.
+    Blank tokens are excluded.
 
+    >>> tokenTrees $ tokens $ "meet (R | pick /a /b)"
+    [TreeL (Word 0 "meet"),
+     TreeB 1 [
+       TreeL (Word 0 "R"),
+       TreeL (Word 0 "|"),
+       TreeL (Word 0 "pick"),
+       TreeL (TermN ["/a"]),
+       TreeL (TermN ["/b"])]]
+
+    There are three types of parens -- 1, 2, or 3.
+    Paren type is in 'TreeB' /type/ /subtrees/.
+
+    1. Round parens @()@
+
+    2. Squared brackets @[]@
+
+    3. Curely braces @{}@
+  -}
 tokenTrees :: [Token] -> [TokenTree]
 tokenTrees = trees parenType . sweepToken
 
 parenType :: ParenType Token
 typeParen :: TypeParen Token
 (parenType, typeParen) = parenTable
-      [ (1, Open "(", Close ")"),
-        (2, Open "[", Close "]"),
-        (3, Open "{", Close "}") ]
+      [ (1, Open "(", Close ")")
+      , (2, Open "[", Close "]")
+      , (3, Open "{", Close "}")
+      ]
 
--- | Convert back tree to list of tokens
-tokenUntrees :: [TokenTree] -> [Token]
-tokenUntrees = untrees typeParen
-
--- | Convert back tree to source string
+{-| Convert back tree into source string. -}
 tokenTreesSource :: [TokenTree] -> String
 tokenTreesSource = untokens . tokenUntrees
+
+{-| Convert back tree into list of tokens. -}
+tokenUntrees :: [TokenTree] -> [Token]
+tokenUntrees = untrees typeParen
 
 -- e1 = tokenTreesSource . tokenTrees . tokens
 -- e2 = e1 ""

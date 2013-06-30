@@ -23,7 +23,7 @@ import qualified Data.Maybe as Maybe
 
 import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Base.Syntax.TokenTree
+import Koshucode.Baala.Base.Syntax
 
 
 
