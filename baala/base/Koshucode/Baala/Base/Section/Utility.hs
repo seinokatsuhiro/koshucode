@@ -95,32 +95,28 @@ termTreePairs = loop where
 -- ---------------------- Clausify
 
 {-| Convert token list into list of token clauses -}
-clausify :: [Token] -> [[Token]]
-clausify = gather clausifySplit
+clausify :: [SourceLine] -> [[Token]]
+clausify = gather clausifySplit1 where
 
-{-| Split into first clause and rest tokens -}
-clausifySplit :: [Token] -> ([Token], [Token])
-clausifySplit = loop zero where
-    zero = Line zeroLine
-    loop _  (ln@(Line _) : xs)  = loop ln xs
-    loop ln ((Comment _) : xs)  = loop ln xs
-    loop ln (Space i : xs) = clausifySplit2 i ln xs -- initial indent is 'i' spaces
-    loop ln xs             = clausifySplit2 0 ln xs -- no indent
+clausifySplit1 :: [SourceLine] -> ([Token], [SourceLine])
+clausifySplit1 = loop where
+    loop (SourceLine _ _ [Comment _] : ls)
+        = loop ls
+    loop (src@(SourceLine _ _ (Space i : xs)) : ls)
+        = Line src `cons1` (xs `append1` clausifySplit2 i ls)
+    loop (src@(SourceLine _ _ xs@(Word _ _ : _)) : ls)
+        = Line src `cons1` (xs `append1` clausifySplit2 0 ls)
+    loop (_ : ls) = ([], ls)
+    loop [] = ([], [])
 
-clausifySplit2 :: Int -> Token -> [Token] -> ([Token], [Token])
-clausifySplit2 i ln xs = ln `cons1` mid xs where
-    -- middle of line
-    mid xxs@(Line _ : _)    = beg xxs   -- next line
-    mid (x : xs2)           = x `cons1` mid xs2
-    mid xxs                 = ([], xxs)
+clausifySplit2 :: Int -> [SourceLine] -> ([Token], [SourceLine])
+clausifySplit2 i = loop where
+    loop (src@(SourceLine _ _ (Space n : xs)) : ls)
+        | n > i  = Line src `cons1` (xs `append1` loop ls)
+    loop ls      = ([], ls)
 
-    -- beginning of line
-    beg (x1@(Line _) : x2@(Space n) : xs2)
-        | n > i = x1 `cons1` (x2 `cons1` mid xs2) -- indented line
-    beg xxs     = ([], xxs)                   -- non indented line
-
-zeroLine :: SourceLine
-zeroLine = SourceLine 0 "" []
+append1 :: [a] -> ([a], b) -> ([a], b)
+append1 x1 (x2, y) = (x1 ++ x2, y)
 
 tokenSourceLines :: [Token] -> [SourceLine]
 tokenSourceLines xs = Maybe.mapMaybe tokenSourceLine xs
@@ -129,7 +125,7 @@ tokenSourceLine :: Token -> Maybe SourceLine
 tokenSourceLine (Line src) = Just src
 tokenSourceLine _ = Nothing
 
--- e1 = mapM_ print . clausify . tokens
+-- e1 = mapM_ print . clausify . sourceLines
 -- e2 = e1 "a\nb\nc\n\n"
 -- e3 = e1 "a\n b\nc\n"
 -- e4 = e1 " a\n b\nc\n"

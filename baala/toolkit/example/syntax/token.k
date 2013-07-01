@@ -1,10 +1,9 @@
-#!/usr/bin/env koshu-syntax --run
+#!/usr/bin/env koshu-syntax --token
 **
 **  DESCRIPTION
 **    Examples of all types of tokens.
 **
 **  USAGE
-**    $ koshu-syntax token.k
 **    $ koshu-syntax token.k -t
 **
 

@@ -98,7 +98,7 @@ clauseSource c =
                   TreeL (TermN ["/x"]),
                   TreeL (TermN ["/y"])]]
     -}
-consPreclause :: [Token] -> [Clause]
+consPreclause :: [SourceLine] -> [Clause]
 consPreclause = concatMap consPreclause' . clausify
 
 consPreclause' :: [Token] -> [Clause]
@@ -158,7 +158,7 @@ consPreclause' toks = cl toks' where
     This is a first step of constructing 'Section'. -}
 consClause
     :: RelmapHalfCons  -- ^ Relmap half constructor
-    -> [Token]         -- ^ Source tokens
+    -> [SourceLine]    -- ^ Source tokens
     -> [Clause]        -- ^ Result clauses
 consClause half = clauseHalf half . consPreclause
 

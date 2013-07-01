@@ -32,7 +32,7 @@ sectionRead
     -> AbortOr (Section v)  -- ^ Result section from source text
 sectionRead root src = sec where
     (RelmapCons half full) = sectionCons root
-    sec = consSection full $ consClause half $ tokens src
+    sec = consSection full $ consClause half $ sourceLines src
 
 {-| Read section from file. -}
 sectionFile

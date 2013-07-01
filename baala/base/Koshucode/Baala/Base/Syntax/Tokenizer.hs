@@ -9,6 +9,7 @@ module Koshucode.Baala.Base.Syntax.Tokenizer
 , untokens
 , untoken
 , sourceLines
+, tokensFromSourceLines
 
 -- * Asterisks
 -- $Asterisks
@@ -49,7 +50,10 @@ import Koshucode.Baala.Base.Syntax.Token
 tokens
     :: String   -- ^ Input text in koshucode
     -> [Token]  -- ^ Token list from the input
-tokens = concatMap (expand) . sourceLines where
+tokens = tokensFromSourceLines . sourceLines
+
+tokensFromSourceLines :: [SourceLine] -> [Token]
+tokensFromSourceLines = concatMap (expand) where
     expand :: SourceLine -> [Token]
     expand s = Line s : sourceLineTokens s
 

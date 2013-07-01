@@ -24,12 +24,10 @@ koshuQuoter
 koshuQuoter half fullQ = QuasiQuoter { quoteExp = koshuQ half fullQ }
 
 koshuQ :: RelmapHalfCons -> ExpQ -> String -> ExpQ
-koshuQ half fullQ = dispatch . tokens where
-    dispatch toks = case sweepLeft toks of
-                    (Word 0 "section" : _) -> sectionQ toks
-                    _                      -> relmapQ toks
+koshuQ half fullQ = dispatch . sourceLines where
+    dispatch src = sectionQ src -- relmapQ src
     sectionQ = consSectionQ fullQ . consClause half
-    relmapQ  = consFullRelmapQ fullQ . half [] . tokenTrees
+    --relmapQ  = consFullRelmapQ fullQ . half [] . tokenTrees
 
 {- Construct ExpQ of Section
    Tokens like @name in section context and relmap context

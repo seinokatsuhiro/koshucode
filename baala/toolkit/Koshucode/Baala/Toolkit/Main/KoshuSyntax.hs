@@ -84,7 +84,7 @@ koshuSyntaxMain' (_, argv) =
 dumpClauseAndToken :: FilePath -> IO ()
 dumpClauseAndToken path = 
     do code <- readFile path
-       let ts = Syn.tokens code
+       let ts = Syn.sourceLines code
            cs = Sec.consPreclause ts
        putStr $ unlines h
        mapM_ putClause $ zip [1 ..] cs
@@ -136,22 +136,20 @@ tokenJudge cn (n, t) = Judge True "TOKEN" xs where
 dumpToken :: FilePath -> IO ()
 dumpToken path =
     do code <- readFile path
-       let ts = Syn.tokens code
-           ls = concatMap dumpTokenText $ zip [1 ..] ts
+       let xs = Syn.sourceLines code
+           (_, ls) = foldl dumpTokenText (0, []) xs
        putStr $ unlines ls
 
-dumpTokenText :: (Int, Token) -> [String]
-dumpTokenText p = ls p where
-      ls (_, Line s) = ["", line s, judge ]
-      ls _           = [ judge ]
-      line s         = let ln = Syn.sourceLineNumber  s
-                           lc = Syn.sourceLineContent s
-                       in "**  L" ++ show ln ++ " " ++ show lc
-      judge          = show $ doc $ dumpTokenJudge p
+dumpTokenText :: (Int, [String]) -> SourceLine -> (Int, [String])
+dumpTokenText (n, ys) (SourceLine l line ts) = (n + length ts, ys ++ xs) where
+    h  = ["", "**  L" ++ show l ++ " " ++ show line]
+    xs = h ++ (map dump $ zip [n..] ts)
+    dump p = show $ doc $ dumpTokenJudge l p
 
-dumpTokenJudge :: (Int, Token) -> Judge Val
-dumpTokenJudge (n, t) = Judge True "TOKEN" xs where
-    xs = [ ("/token-seq"    , intv n)
+dumpTokenJudge :: Int -> (Int, Token) -> Judge Val
+dumpTokenJudge l (n, t) = Judge True "TOKEN" xs where
+    xs = [ ("/line"         , intv l)
+         , ("/token-seq"    , intv n)
          , ("/token-type"   , stringv $ Syn.tokenTypeText t)
          , ("/token-content", stringv $ Syn.tokenContent  t) ]
 
