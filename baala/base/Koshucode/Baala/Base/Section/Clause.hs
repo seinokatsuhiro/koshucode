@@ -104,7 +104,7 @@ consPreclause = concatMap consPreclause' . clausify
 consPreclause' :: [Token] -> [Clause]
 consPreclause' toks = cl toks' where
     toks' = sweepToken toks
-    src   = ClauseSource toks (sourceLines toks)
+    src   = ClauseSource toks (tokenSourceLines toks)
 
     cl :: [Token] -> [Clause]
     cl (Word 0 n : Word 0 ":" : xs) = rel n xs

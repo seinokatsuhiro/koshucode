@@ -10,7 +10,7 @@ module Koshucode.Baala.Base.Section.Utility
 
   -- * Lines
 , clausify
-, sourceLines
+, tokenSourceLines
 , operandGroup
 
   -- * Calculation
@@ -122,12 +122,12 @@ clausifySplit2 i ln xs = ln `cons1` mid xs where
 zeroLine :: SourceLine
 zeroLine = SourceLine 0 "" []
 
-sourceLines :: [Token] -> [SourceLine]
-sourceLines xs = Maybe.mapMaybe sourceLine xs
+tokenSourceLines :: [Token] -> [SourceLine]
+tokenSourceLines xs = Maybe.mapMaybe tokenSourceLine xs
 
-sourceLine :: Token -> Maybe SourceLine
-sourceLine (Line src) = Just src
-sourceLine _ = Nothing
+tokenSourceLine :: Token -> Maybe SourceLine
+tokenSourceLine (Line src) = Just src
+tokenSourceLine _ = Nothing
 
 -- e1 = mapM_ print . clausify . tokens
 -- e2 = e1 "a\nb\nc\n\n"

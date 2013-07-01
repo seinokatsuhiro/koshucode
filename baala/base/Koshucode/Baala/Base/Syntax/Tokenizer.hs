@@ -8,6 +8,7 @@ module Koshucode.Baala.Base.Syntax.Tokenizer
   tokens
 , untokens
 , untoken
+, sourceLines
 
 -- * Asterisks
 -- $Asterisks
@@ -48,16 +49,20 @@ import Koshucode.Baala.Base.Syntax.Token
 tokens
     :: String   -- ^ Input text in koshucode
     -> [Token]  -- ^ Token list from the input
-tokens = concatMap (expand . sourceLine) . linesNumbered where
+tokens = concatMap (expand) . sourceLines where
     expand :: SourceLine -> [Token]
     expand s = Line s : sourceLineTokens s
+
+{-| Split source text into 'SourceLine' list. -}
+sourceLines :: String -> [SourceLine]
+sourceLines = map sourceLine . linesNumbered
+
+sourceLine :: (Int, String) -> SourceLine
+sourceLine (n, ln) = SourceLine n ln $ gather nextToken ln
 
 {-| Line number and contents. -}
 linesNumbered :: String -> [(Int, String)]
 linesNumbered = zip [1..] . linesCrLf
-
-sourceLine :: (Int, String) -> SourceLine
-sourceLine (n, ln) = SourceLine n ln $ gather nextToken ln
 
 {-| Split a next token from source text. -}
 nextToken :: String -> (Token, String)
