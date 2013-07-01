@@ -13,7 +13,6 @@ module Koshucode.Baala.Base.Syntax.Token
 
   -- * Predicates
 , isBlankToken
-, isLineToken
 , isTermToken
 
   -- * Source lines
@@ -46,7 +45,6 @@ data Token
     | Close   String    -- ^ Close paren
     | Space   Int       -- ^ /N/ space characters
     | Comment String    -- ^ Comment text
-    | Line SourceLine   -- ^ Source infomation
       deriving (Show, Eq, Ord, Data, Typeable)
 
 instance Name Token where
@@ -72,7 +70,6 @@ tokenTypeText (Open _)    = "Open"
 tokenTypeText (Close _)   = "Close"
 tokenTypeText (Space _)   = "Space"
 tokenTypeText (Comment _) = "Comment"
-tokenTypeText (Line _)    = "Line"
 
 tokenContent :: Token -> String
 tokenContent (Word _ s)  = s
@@ -82,8 +79,6 @@ tokenContent (Open s)    = s
 tokenContent (Close s)   = s
 tokenContent (Space n)   = replicate n ' '
 tokenContent (Comment s) = s
-tokenContent (Line (SourceLine _ s _)) = s
-
 
 
 
@@ -94,7 +89,6 @@ tokenContent (Line (SourceLine _ s _)) = s
 isBlankToken :: Token -> Bool
 isBlankToken (Space _)    = True
 isBlankToken (Comment _)  = True
-isBlankToken (Line _)     = True
 isBlankToken _            = False
 
 {-| Test the token is a term,
@@ -103,12 +97,6 @@ isTermToken :: Token -> Bool
 isTermToken (TermN _)     = True
 isTermToken (TermP _)     = True
 isTermToken _             = False
-
-{-| Test the token is a line,
-    i.e., 'Line'. -}
-isLineToken :: Token -> Bool
-isLineToken (Line _)      = True
-isLineToken _             = False
 
 
 
@@ -180,7 +168,3 @@ linesCrLf s = ln : nextLine s2 where
 -- [Comment]
 --  Text from double asterisks (@**@) to
 --  end of line is a comment.
---
--- [Line]
---  Source line.
-

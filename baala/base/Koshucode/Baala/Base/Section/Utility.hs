@@ -8,21 +8,13 @@ module Koshucode.Baala.Base.Section.Utility
 , termNamePairs
 , termTreePairs
 
-  -- * Lines
-, clausify
-, tokenSourceLines
-, operandGroup
-
   -- * Calculation
 , Calc
 , Ripen
 , crop
 ) where
 
-import qualified Data.Maybe as Maybe
-
 import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Syntax
 
 
@@ -89,82 +81,6 @@ termTreePairs = loop where
 -- e3 = e1 "/a /x"
 -- e4 = e1 "/a (/x + 1) /b /y"
 -- e5 = e1 "/a (/x + 1) /b"
-
-
-
--- ---------------------- Clausify
-
-{-| Convert token list into list of token clauses -}
-clausify :: [SourceLine] -> [[Token]]
-clausify = gather clausifySplit1 where
-
-clausifySplit1 :: [SourceLine] -> ([Token], [SourceLine])
-clausifySplit1 = loop where
-    loop (SourceLine _ _ [Comment _] : ls)
-        = loop ls
-    loop (src@(SourceLine _ _ (Space i : xs)) : ls)
-        = Line src `cons1` (xs `append1` clausifySplit2 i ls)
-    loop (src@(SourceLine _ _ xs@(Word _ _ : _)) : ls)
-        = Line src `cons1` (xs `append1` clausifySplit2 0 ls)
-    loop (_ : ls) = ([], ls)
-    loop [] = ([], [])
-
-clausifySplit2 :: Int -> [SourceLine] -> ([Token], [SourceLine])
-clausifySplit2 i = loop where
-    loop (src@(SourceLine _ _ (Space n : xs)) : ls)
-        | n > i  = Line src `cons1` (xs `append1` loop ls)
-    loop ls      = ([], ls)
-
-append1 :: [a] -> ([a], b) -> ([a], b)
-append1 x1 (x2, y) = (x1 ++ x2, y)
-
-tokenSourceLines :: [Token] -> [SourceLine]
-tokenSourceLines xs = Maybe.mapMaybe tokenSourceLine xs
-
-tokenSourceLine :: Token -> Maybe SourceLine
-tokenSourceLine (Line src) = Just src
-tokenSourceLine _ = Nothing
-
--- e1 = mapM_ print . clausify . sourceLines
--- e2 = e1 "a\nb\nc\n\n"
--- e3 = e1 "a\n b\nc\n"
--- e4 = e1 " a\n b\nc\n"
--- e5 = e1 " a\n  b\nc\n"
--- e6 = e1 " a\nb\nc\n"
--- e7 = e1 "\na\nb\n"
--- e8 = e1 "a\n\n b\nc\n"
--- e9 = e1 "a\n  \n b\nc\n"
-
--- | Split operand into named group.
---   Non quoted words beginning with hyphen, e.g., @-x@,
---   are name of group.
--- 
---   >>> operandGroup $ tokenTrees $ tokens "a b -x c 'd' -y e"
---   [("",   [TreeL (Word 0 "a"), TreeL (Word 0 "b")]),
---    ("-x", [TreeL (Word 0 "c"), TreeL (Word 1 "d")]),
---    ("-y", [TreeL (Word 0 "e")])]
-
-operandGroup :: [TokenTree] -> [Named [TokenTree]]
-operandGroup = nil . (gather $ anon []) where
-    -- add empty operand
-    nil xs = case lookup "" xs of
-               Nothing -> ("", []) : xs
-               Just _  -> xs
-
-    -- anonymous group
-    anon ys xs@(TreeL (Word 0 n@('-' : _)) : xs2)
-        | ys == []     = named n [] xs2  -- no anonymous group
-        | otherwise    = group "" ys xs
-    anon ys []         = group "" ys []
-    anon ys (x:xs)     = anon (x:ys) xs
-
-    -- named group
-    named n ys xs@(TreeL (Word 0 ('-' : _)) : _) = group n ys xs
-    named n ys []      = group n ys []
-    named n ys (x:xs)  = named n (x:ys) xs
-
-    -- operand group named 'n'
-    group n ys xs = ((n, reverse ys), xs)
 
 
 

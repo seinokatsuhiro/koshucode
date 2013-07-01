@@ -15,11 +15,13 @@
     * 'Clause' uses
       'Clause',
       'Koshucode.Baala.Base.Relmap.HalfRelmap', and
-      'Koshucode.Baala.Base.Syntax.Token.Token'.      -}
+      'Koshucode.Baala.Base.Syntax.Token.Token'.
+  -}
 
 module Koshucode.Baala.Base.Section
 ( module Koshucode.Baala.Base.Section.Section
 , module Koshucode.Baala.Base.Section.Clause
+, module Koshucode.Baala.Base.Section.Clausify
 , module Koshucode.Baala.Base.Section.Quoter
 , module Koshucode.Baala.Base.Section.SectionIO
 , module Koshucode.Baala.Base.Section.SectionUnion
@@ -28,6 +30,7 @@ module Koshucode.Baala.Base.Section
 
 import Koshucode.Baala.Base.Section.Section
 import Koshucode.Baala.Base.Section.Clause
+import Koshucode.Baala.Base.Section.Clausify
 import Koshucode.Baala.Base.Section.Quoter
 import Koshucode.Baala.Base.Section.SectionIO
 import Koshucode.Baala.Base.Section.SectionUnion

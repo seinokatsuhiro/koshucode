@@ -7,7 +7,6 @@ module Koshucode.Baala.Base.Section.Clause
 ( -- * Datatype
   -- $Documentation
   Clause (..)
-, ClauseSource (..)
 , clauseTypeText
 , clauseSource
 
@@ -25,6 +24,7 @@ import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Relmap
 import Koshucode.Baala.Base.Syntax
 
+import Koshucode.Baala.Base.Section.Clausify
 import Koshucode.Baala.Base.Section.Section
 import Koshucode.Baala.Base.Section.Utility
 
@@ -47,11 +47,6 @@ data Clause
     | CComment ClauseSource       -- ^ Caluse comment
     | CUnknown ClauseSource       -- ^ Unknown clause
       deriving (Show, Data, Typeable)
-
-data ClauseSource = ClauseSource
-    { clauseTokens :: [Token]       -- ^ Source tokens of clause
-    , clauseLines  :: [SourceLine]  -- ^ Source lines of clause
-    } deriving (Show, Data, Typeable)
 
 clauseTypeText :: Clause -> String
 clauseTypeText c =
@@ -101,10 +96,9 @@ clauseSource c =
 consPreclause :: [SourceLine] -> [Clause]
 consPreclause = concatMap consPreclause' . clausify
 
-consPreclause' :: [Token] -> [Clause]
-consPreclause' toks = cl toks' where
+consPreclause' :: ClauseSource -> [Clause]
+consPreclause' src@(ClauseSource toks _) = cl toks' where
     toks' = sweepToken toks
-    src   = ClauseSource toks (tokenSourceLines toks)
 
     cl :: [Token] -> [Clause]
     cl (Word 0 n : Word 0 ":" : xs) = rel n xs

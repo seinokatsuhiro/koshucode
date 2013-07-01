@@ -79,6 +79,7 @@ library
 
         Koshucode.Baala.Base.Section
         Koshucode.Baala.Base.Section.Clause
+        Koshucode.Baala.Base.Section.Clausify
         Koshucode.Baala.Base.Section.Quoter
         Koshucode.Baala.Base.Section.Section
         Koshucode.Baala.Base.Section.SectionIO
