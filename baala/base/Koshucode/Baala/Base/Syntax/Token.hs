@@ -9,6 +9,7 @@ module Koshucode.Baala.Base.Syntax.Token
   -- $TokenType
   Token (..)
 , tokenTypeText
+, tokenContent
 
   -- * Predicates
 , isBlankToken
@@ -40,6 +41,7 @@ data Token
                         --   2 for double-quoted.
     | TermN   [String]  -- ^ Term name
     | TermP   [Int]     -- ^ Term position in particular relation.
+                        --   This is translate from 'TermN'.
     | Open    String    -- ^ Open paren
     | Close   String    -- ^ Close paren
     | Space   Int       -- ^ /N/ space characters
@@ -71,6 +73,17 @@ tokenTypeText (Close _)   = "Close"
 tokenTypeText (Space _)   = "Space"
 tokenTypeText (Comment _) = "Comment"
 tokenTypeText (Line _)    = "Line"
+
+tokenContent :: Token -> String
+tokenContent (Word _ s)  = s
+tokenContent (TermN s)   = concat s
+tokenContent (TermP _)   = "#TermP"
+tokenContent (Open s)    = s
+tokenContent (Close s)   = s
+tokenContent (Space n)   = replicate n ' '
+tokenContent (Comment s) = s
+tokenContent (Line (SourceLine _ s _)) = s
+
 
 
 

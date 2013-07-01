@@ -123,21 +123,11 @@ putToken cn tn (SourceLine ln line toks) =
      return $ tn + length toks
 
 tokenJudge :: Int -> (Int, Token) -> Judge Val
-tokenJudge cn (n, t) = Judge True "TOKEN" args where
-    args = [ ("/clause-seq"   , intv cn)
-           , ("/token-seq"    , intv n)
-           , ("/token-type"   , stringv $ tokenTypeText t)
-           , ("/token-content", stringv $ tokenContent t) ]
-
-tokenContent :: Token -> String
-tokenContent (Word _ s)  = s
-tokenContent (TermN s)   = concat s
-tokenContent (TermP _)   = "#TermP"
-tokenContent (Open s)    = s
-tokenContent (Close s)   = s
-tokenContent (Space n)   = replicate n ' '
-tokenContent (Comment s) = s
-tokenContent (Line (SourceLine _ s _)) = s
+tokenJudge cn (n, t) = Judge True "TOKEN" xs where
+    xs = [ ("/clause-seq"   , intv cn)
+         , ("/token-seq"    , intv n)
+         , ("/token-type"   , stringv $ Syn.tokenTypeText t)
+         , ("/token-content", stringv $ Syn.tokenContent t) ]
 
 
 
@@ -151,20 +141,19 @@ dumpToken path =
        putStr $ unlines ls
 
 dumpTokenText :: (Int, Token) -> [String]
-dumpTokenText p =
-    case p of
-      (_, Line src) -> ["", line src, judge ]
-      _ -> [ judge ]
-    where
-      judge    = show $ doc $ dumpTokenJudge p
-      line src = "**  L" ++ (show $ Syn.sourceLineNumber src) ++
-                 " "     ++ (show $ Syn.sourceLineContent src)
+dumpTokenText p = ls p where
+      ls (_, Line s) = ["", line s, judge ]
+      ls _           = [ judge ]
+      line s         = let ln = Syn.sourceLineNumber  s
+                           lc = Syn.sourceLineContent s
+                       in "**  L" ++ show ln ++ " " ++ show lc
+      judge          = show $ doc $ dumpTokenJudge p
 
 dumpTokenJudge :: (Int, Token) -> Judge Val
-dumpTokenJudge (n, t) = Judge True "TOKEN" args where
-    args = [ ("/token-seq"    , intv n)
-           , ("/token-type"   , stringv $ tokenTypeText t)
-           , ("/token-content", stringv $ tokenContent t) ]
+dumpTokenJudge (n, t) = Judge True "TOKEN" xs where
+    xs = [ ("/token-seq"    , intv n)
+         , ("/token-type"   , stringv $ Syn.tokenTypeText t)
+         , ("/token-content", stringv $ Syn.tokenContent  t) ]
 
 
 
