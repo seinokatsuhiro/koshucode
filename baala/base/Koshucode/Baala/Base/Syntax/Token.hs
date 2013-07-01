@@ -8,20 +8,16 @@ module Koshucode.Baala.Base.Syntax.Token
   -- * Token type
   -- $TokenType
   Token (..)
-, tokenTypeText
-, tokenContent
 
   -- * Predicates
 , isBlankToken
 , isTermToken
 
-  -- * Source lines
-, SourceLine (..)
-
-  -- * Othre functions
+  -- * Other functions
+, tokenTypeText
+, tokenContent
 , sweepToken
 , sweepLeft
-, linesCrLf
 ) where
 
 import Data.Generics (Data, Typeable)
@@ -40,7 +36,7 @@ data Token
                          --   2 for double-quoted.
     | TTermN   [String]  -- ^ Term name
     | TTermP   [Int]     -- ^ Term position in particular relation.
-                         --   This is translate from 'TermN'.
+                         --   This is translate from 'TTermN'.
     | TOpen    String    -- ^ Open paren
     | TClose   String    -- ^ Close paren
     | TSpace   Int       -- ^ /N/ space characters
@@ -55,11 +51,33 @@ instance Name Token where
     name (TComment s) = s
     name x = error $ "unknown name: " ++ show x
 
+
+
+-- ----------------------  Predicate
+
+{-| Test the token is blank,
+    i.e., 'TComment' or 'TSpace'. -}
+isBlankToken :: Token -> Bool
+isBlankToken (TSpace _)    = True
+isBlankToken (TComment _)  = True
+isBlankToken _             = False
+
+{-| Test the token is a term,
+    i.e., 'TTermN' or 'TTermP'. -}
+isTermToken :: Token -> Bool
+isTermToken (TTermN _)     = True
+isTermToken (TTermP _)     = True
+isTermToken _              = False
+
+
+
+-- ---------------------- Other functions
+
 {-| Text of token type, one of
     @\"Word\"@, @\"TermN\"@, @\"TermP\"@, @\"Open\"@, @\"Close\"@,
     @\"Space\"@, @\"Comment\"@, or @\"Line@\".
 
-    >>> tokenTypeText $ Word 0 "flower"
+    >>> tokenTypeText $ TWord 0 "flower"
     "Word"
     -}
 tokenTypeText :: Token -> String
@@ -80,44 +98,6 @@ tokenContent (TClose s)    = s
 tokenContent (TSpace n)    = replicate n ' '
 tokenContent (TComment s)  = s
 
-
-
--- ----------------------  Predicate
-
-{-| Test the token is blank, i.e.,
-    'Comment', 'Line', or 'Space'. -}
-isBlankToken :: Token -> Bool
-isBlankToken (TSpace _)    = True
-isBlankToken (TComment _)  = True
-isBlankToken _             = False
-
-{-| Test the token is a term,
-    i.e., 'TermN' or 'TermP'. -}
-isTermToken :: Token -> Bool
-isTermToken (TTermN _)     = True
-isTermToken (TTermP _)     = True
-isTermToken _              = False
-
-
-
--- ----------------------  Source line
-
-{-| Source line information.
-    It consists of (1) line number,
-    (2) line content, and (3) tokens from line. -}
-data SourceLine = SourceLine
-    { sourceLineNumber  :: Int
-    , sourceLineContent :: String
-    , sourceLineTokens  :: [Token]
-    } deriving (Show, Eq, Ord, Data, Typeable)
-
-instance Pretty SourceLine where
-    doc (SourceLine _ line _) = text line
-
-
-
--- ---------------------- Other functions
-
 {-| Remove blank tokens. -}
 sweepToken :: Map [Token]
 sweepToken = filter (not . isBlankToken)
@@ -128,17 +108,6 @@ sweepLeft [] = []
 sweepLeft xxs@(x:xs) | isBlankToken x = sweepLeft xs
                      | otherwise = xxs
 
-{-| Split string into lines.
-    The result strings do not contain
-    carriage returns (@\\r@)
-    and line feeds (@\\n@). -}
-linesCrLf :: String -> [String]
-linesCrLf "" = []
-linesCrLf s = ln : nextLine s2 where
-    (ln, s2) = break (`elem` "\r\n") s
-    nextLine ('\r' : s3) = nextLine s3
-    nextLine ('\n' : s3) = nextLine s3
-    nextLine s3 = linesCrLf s3
 
 
 -- ----------------------
@@ -166,6 +135,8 @@ linesCrLf s = ln : nextLine s2 where
 --  Space characters.
 --
 -- [Comment]
---  Text from double asterisks (@**@) to
---  end of line is a comment.
+--  Texts from double asterisks (@**@) to
+--  end of line are comments.
+--  Quadruple asterisks (@****@) comments are
+--  treated in 'Koshucode.Baala.Base.Section.Clause.CComment'.
 

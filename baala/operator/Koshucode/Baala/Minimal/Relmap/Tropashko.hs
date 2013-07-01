@@ -31,8 +31,8 @@ import Koshucode.Baala.Minimal.OpKit as Kit
 {-| Meet two relations. -}
 relmapMeet :: (Ord v)
     => Kit.OpUse v      -- ^ Source infomation
-    -> Kit.Relmap v     -- ^ Subrelmap of join operator
-    -> Kit.Relmap v     -- ^ Relmap of join operator
+    -> Kit.Relmap v     -- ^ Subrelmap of meet operator
+    -> Kit.Relmap v     -- ^ Relmap of meet operator
 relmapMeet use m = Kit.relmapConfl use "meet" sub [m] where
     sub [r2] r1 = relMeet r1 r2
     sub _ _ = undefined

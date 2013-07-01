@@ -1,27 +1,79 @@
+{-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Tokenizer of koshucode.
 
 module Koshucode.Baala.Base.Syntax.Tokenizer
 (
+-- * Source lines
+  SourceLine (..)
+, sourceLines
+
 -- * Tokenizer
-  tokens
+, tokens
 , untokens
 , untoken
-, sourceLines
 
 -- * Asterisks
 -- $Asterisks
-
--- * Process
--- $Process
 ) where
 
+import Data.Generics (Data, Typeable)
 import qualified Data.Char as C
 
 import Koshucode.Baala.Base.Prelude
 
 import Koshucode.Baala.Base.Syntax.Token
+
+
+
+-- ----------------------  Source line
+
+data SourceLine = SourceLine
+    { sourceLineNumber  :: Int     -- ^ Line number, from 1.
+    , sourceLineContent :: String  -- ^ Line content without newline.
+    , sourceLineTokens  :: [Token] -- ^ Tokens from line.
+    } deriving (Show, Eq, Ord, Data, Typeable)
+
+instance Pretty SourceLine where
+    doc (SourceLine _ line _) = text line
+
+{-| Split source text into 'SourceLine' list.
+
+    1. Split source code into lines by line delimiters
+       (carriage return @\\r@ or line feed @\\n@)
+
+   2. Numbering line numbers.
+      Internally, this is represented as
+      a list of pairs (/line#/, /content/).
+
+   3. Tokenize each lines.
+      This is represented as a list of
+      'SourceLine' /line#/ /content/ /tokens/.
+  -}
+sourceLines
+    :: String        -- ^ Source text in Koshucode.
+    -> [SourceLine]  -- ^ Token list per lines.
+sourceLines = map sourceLine . linesNumbered
+
+sourceLine :: (Int, String) -> SourceLine
+sourceLine (n, ln) = SourceLine n ln $ gather nextToken ln
+
+{-| Line number and contents. -}
+linesNumbered :: String -> [(Int, String)]
+linesNumbered = zip [1..] . linesCrLf
+
+{-| Split string into lines.
+    The result strings do not contain
+    carriage returns (@\\r@)
+    and line feeds (@\\n@). -}
+linesCrLf :: String -> [String]
+linesCrLf "" = []
+linesCrLf s = ln : nextLine s2 where
+    (ln, s2) = break (`elem` "\r\n") s
+    nextLine ('\r' : s3) = nextLine s3
+    nextLine ('\n' : s3) = nextLine s3
+    nextLine s3 = linesCrLf s3
 
 
 
@@ -50,17 +102,6 @@ tokens
     :: String   -- ^ Input text in koshucode
     -> [Token]  -- ^ Token list from the input
 tokens = concatMap sourceLineTokens . sourceLines
-
-{-| Split source text into 'SourceLine' list. -}
-sourceLines :: String -> [SourceLine]
-sourceLines = map sourceLine . linesNumbered
-
-sourceLine :: (Int, String) -> SourceLine
-sourceLine (n, ln) = SourceLine n ln $ gather nextToken ln
-
-{-| Line number and contents. -}
-linesNumbered :: String -> [(Int, String)]
-linesNumbered = zip [1..] . linesCrLf
 
 {-| Split a next token from source text. -}
 nextToken :: String -> (Token, String)
@@ -200,25 +241,4 @@ untoken (TComment s)  = s
 -- @
 --
 -- You can type @****@ on top of a clause to hide it.
-
-
-
--- ----------------------
--- $Process
---
--- 1. Split source code into lines by line delimiters
---    (carriage return @\\r@ or line feed @\\n@)
---
--- 2. Numbering line numbers.
---    Internally, this is represented as
---    a list of pairs (/line#/, /content/).
---
--- 3. Tokenize each lines.
---    This is represented as a list of
---    'SourceLine' /line#/ /content/ /tokens/.
---
--- 4. Wrap 'SourceLine' into 'Line' token.
---
--- 5. Extract tokens from 'SourceLine',
---    and concat it like 'Line', /token/ ..., 'Line', /token/ ...
 
