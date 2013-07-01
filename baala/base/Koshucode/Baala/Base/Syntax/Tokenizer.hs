@@ -66,14 +66,14 @@ linesNumbered = zip [1..] . linesCrLf
 nextToken :: String -> (Token, String)
 nextToken ccs =
     case ccs of
-      ('*' : '*' : '*' : '*' : cs) -> (Word 0 "****", cs)
-      ('*' : '*' : _)   ->  (Comment ccs, "")
-      ('#' : '!' : _)   ->  (Comment ccs, "")
-      ('(' : ')' : cs)  ->  (Word 0 "()", cs) -- nil
+      ('*' : '*' : '*' : '*' : cs) -> (TWord 0 "****", cs)
+      ('*' : '*' : _)   ->  (TComment ccs, "")
+      ('#' : '!' : _)   ->  (TComment ccs, "")
+      ('(' : ')' : cs)  ->  (TWord 0 "()", cs) -- nil
       (c : cs)
-        | isOpen    c   ->  (Open   [c] , cs)
-        | isClose   c   ->  (Close  [c] , cs)
-        | isSingle  c   ->  (Word 0 [c] , cs)
+        | isOpen    c   ->  (TOpen   [c] , cs)
+        | isClose   c   ->  (TClose  [c] , cs)
+        | isSingle  c   ->  (TWord 0 [c] , cs)
         | isTerm    c   ->  term cs [c]  []
         | isQuote   c   ->  quote   c cs []
         | isWord    c   ->  word    ccs  []
@@ -83,24 +83,24 @@ nextToken ccs =
       tok cons xs cs = (cons $ reverse xs, cs)
 
       word (c:cs) xs | isWord c      = word cs (c:xs)
-      word ccs2 xs                   = tok (Word 0) xs $ ccs2
+      word ccs2 xs                   = tok (TWord 0) xs $ ccs2
 
       quote q [] xs                  = tok (wordQ q) xs $ []
       quote q (c:cs) xs
           | c == q                   = tok (wordQ q) xs $ cs
           | otherwise                = quote q cs (c:xs)
 
-      wordQ '\'' = Word 1
-      wordQ '"'  = Word 2
-      wordQ _    = Word 0
+      wordQ '\'' = TWord 1
+      wordQ '"'  = TWord 2
+      wordQ _    = TWord 0
 
       term (c:cs) xs ns | isTerm c   = term cs [c] $ t xs ns
                         | isWord c   = term cs (c:xs) ns
-      term ccs2 xs ns                = tok TermN (t xs ns) $ ccs2
+      term ccs2 xs ns                = tok TTermN (t xs ns) $ ccs2
       t xs = (reverse xs :)
 
       white n (c:cs)    | isSpace c  = white (n + 1) cs
-      white n ccs2                   = (Space n, ccs2)
+      white n ccs2                   = (TSpace n, ccs2)
 
 -- word
 -- e1 = tokens "aa bb"
@@ -144,22 +144,22 @@ maybeWord c  =  C.isAlphaNum c
 
 {-| Convert back a token list to a source string. -}
 untokens :: [Token] -> String
-untokens (Open a : xs) = a ++ untokens xs
-untokens (x : Close a : xs) = untoken x ++ untokens (Close a : xs)
-untokens [x] = untoken x
+untokens (TOpen a : xs)      = a ++ untokens xs
+untokens (x : TClose a : xs) = untoken x ++ untokens (TClose a : xs)
+untokens [x]    = untoken x
 untokens (x:xs) = untoken x ++ untokens xs
-untokens [] = []
+untokens []     = []
 
 untoken :: Token -> String
-untoken (Word 1 s)   = "'" ++ s ++ "'"
-untoken (Word 2 s)   = "\"" ++ s ++ "\""
-untoken (Word _ s)   = s
-untoken (TermN  ns)  = concat ns
-untoken (TermP  ns)  = concatMap show ns
-untoken (Open   s)   = s
-untoken (Close  s)   = s
-untoken (Space  n)   = replicate n ' '
-untoken (Comment s)  = s
+untoken (TWord 1 s)   = "'" ++ s ++ "'"
+untoken (TWord 2 s)   = "\"" ++ s ++ "\""
+untoken (TWord _ s)   = s
+untoken (TTermN  ns)  = concat ns
+untoken (TTermP  ns)  = concatMap show ns
+untoken (TOpen   s)   = s
+untoken (TClose  s)   = s
+untoken (TSpace  n)   = replicate n ' '
+untoken (TComment s)  = s
 
 
 

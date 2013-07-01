@@ -33,9 +33,9 @@ clausifySplit :: [SourceLine] -> (ClauseSource, [SourceLine])
 clausifySplit = loop where
     loop (SourceLine _ _ xs : ls)
         | white xs = loop ls
-    loop (src@(SourceLine _ _ (Space i : xs)) : ls)
+    loop (src@(SourceLine _ _ (TSpace i : xs)) : ls)
         = cons xs src $ clausifySplitWith i ls
-    loop (src@(SourceLine _ _ xs@(Word _ _ : _)) : ls)
+    loop (src@(SourceLine _ _ xs@(TWord _ _ : _)) : ls)
         = cons xs src $ clausifySplitWith 0 ls
     loop (_ : ls) = (emptyClauseSource, ls)
     loop []       = (emptyClauseSource, [])
@@ -44,7 +44,7 @@ clausifySplitWith :: Int -> [SourceLine] -> (ClauseSource, [SourceLine])
 clausifySplitWith i = loop where
     loop ((SourceLine _ _ xs) : ls)
         | white xs = loop ls
-    loop (src@(SourceLine _ _ (Space n : xs)) : ls)
+    loop (src@(SourceLine _ _ (TSpace n : xs)) : ls)
         | n > i    = cons xs src $ loop ls
     loop ls        = (emptyClauseSource, ls)
 
@@ -83,14 +83,14 @@ operandGroup = nil . (gather $ anon []) where
                Just _  -> xs
 
     -- anonymous group
-    anon ys xs@(TreeL (Word 0 n@('-' : _)) : xs2)
+    anon ys xs@(TreeL (TWord 0 n@('-' : _)) : xs2)
         | ys == []     = named n [] xs2  -- no anonymous group
         | otherwise    = group "" ys xs
     anon ys []         = group "" ys []
     anon ys (x:xs)     = anon (x:ys) xs
 
     -- named group
-    named n ys xs@(TreeL (Word 0 ('-' : _)) : _) = group n ys xs
+    named n ys xs@(TreeL (TWord 0 ('-' : _)) : _) = group n ys xs
     named n ys []      = group n ys []
     named n ys (x:xs)  = named n (x:ys) xs
 

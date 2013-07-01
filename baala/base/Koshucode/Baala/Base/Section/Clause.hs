@@ -26,7 +26,6 @@ import Koshucode.Baala.Base.Syntax
 
 import Koshucode.Baala.Base.Section.Clausify
 import Koshucode.Baala.Base.Section.Section
-import Koshucode.Baala.Base.Section.Utility
 
 -- Synthesis process
 --
@@ -101,8 +100,8 @@ consPreclause' src@(ClauseSource toks _) = cl toks' where
     toks' = sweepToken toks
 
     cl :: [Token] -> [Clause]
-    cl (Word 0 n : Word 0 ":" : xs) = rel n xs
-    cl (Word 0 k : xs)
+    cl (TWord 0 n : TWord 0 ":" : xs) = rel n xs
+    cl (TWord 0 k : xs)
         | k == "section"  = mod xs
         | k == "import"   = imp xs
         | k == "export"   = exp xs
@@ -118,22 +117,22 @@ consPreclause' src@(ClauseSource toks _) = cl toks' where
 
     unk                   = [CUnknown src]
 
-    mod [Word _ n]        = [CSection src $ Just n]
+    mod [TWord _ n]        = [CSection src $ Just n]
     mod []                = [CSection src Nothing]
     mod _                 = unk
 
-    exp [Word _ n]        = [CExport src n]
-    exp (Word _ n : Word _ ":" : xs) = CExport src n : rel n xs
+    exp [TWord _ n]        = [CExport src n]
+    exp (TWord _ n : TWord _ ":" : xs) = CExport src n : rel n xs
     exp _                 = unk
 
     imp _                 = [CImport src toks Nothing]
 
     rel n xs              = [TRelmap src n $ tokenTrees xs]
 
-    jud q (Word _ s : xs) = [CJudge src q s xs]
+    jud q (TWord _ s : xs) = [CJudge src q s xs]
     jud _ _ = unk
 
-    ass q (Word _ s : xs) = [TAssert src q s $ tokenTrees xs]
+    ass q (TWord _ s : xs) = [TAssert src q s $ tokenTrees xs]
     ass _ _ = unk
 
 -- e1 = mapM_ print . consPreclause . tokens
@@ -233,13 +232,13 @@ judge q s xs = do
 
 -- Collect term name and content
 terms :: (StringValue v) => [Token] -> AbortOr [(String, v)]
-terms (TermN [n] : Word _ w : xs) = do
-  xs' <- terms xs
-  Right $ (n, stringValue w) : xs'
+terms (TTermN [n] : TWord _ w : xs) =
+    do xs' <- terms xs
+       Right $ (n, stringValue w) : xs'
 terms [] = Right []
-terms (TermN ns : _) = Left $ AbortMalformedTerms [] (show ns) -- no content
-terms (Word _ c : _) = Left $ AbortMalformedTerms [] (show c) -- no name
-terms (x : _)        = Left $ AbortMalformedTerms [] (show x) -- ???
+terms (TTermN ns : _) = Left $ AbortMalformedTerms [] (show ns) -- no content
+terms (TWord _ c : _) = Left $ AbortMalformedTerms [] (show c) -- no name
+terms (x : _)         = Left $ AbortMalformedTerms [] (show x) -- ???
 
 
 

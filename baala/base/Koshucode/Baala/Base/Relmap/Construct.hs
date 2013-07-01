@@ -76,7 +76,7 @@ consHalfRelmap bundle src = cons where
     cons' x = cons [x]
 
     bar :: [TokenTree] -> [[TokenTree]]
-    bar = divideBy $ TreeL (Word 0 "|") -- non-quoted vertical bar
+    bar = divideBy $ TreeL (TWord 0 "|") -- non-quoted vertical bar
 
     cat :: [HalfRelmap] -> HalfRelmap
     cat = HalfRelmap ["RELMAP | RELMAP"] src "|" []
@@ -84,7 +84,7 @@ consHalfRelmap bundle src = cons where
     -- half relmap from tokens
     one :: [TokenTree] -> HalfRelmap
     one [TreeB _ xs] = cons xs
-    one (TreeL (Word 0 op) : opd) = submap $ bundle op src opd
+    one (TreeL (TWord 0 op) : opd) = submap $ bundle op src opd
     one opd = HalfRelmap [] src "?" [("operand", opd)] [] -- no operator
 
     -- collect subrelmaps

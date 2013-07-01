@@ -33,26 +33,26 @@ import Koshucode.Baala.Base.Prelude
 -- ----------------------  Token type
 
 data Token
-    = Word Int String   -- ^ Word.
-                        --   @Int@ represents quotation level, e.g.,
-                        --   0 for non-quoted,
-                        --   1 for single-quoted,
-                        --   2 for double-quoted.
-    | TermN   [String]  -- ^ Term name
-    | TermP   [Int]     -- ^ Term position in particular relation.
-                        --   This is translate from 'TermN'.
-    | Open    String    -- ^ Open paren
-    | Close   String    -- ^ Close paren
-    | Space   Int       -- ^ /N/ space characters
-    | Comment String    -- ^ Comment text
+    = TWord Int String   -- ^ Word.
+                         --   @Int@ represents quotation level, e.g.,
+                         --   0 for non-quoted,
+                         --   1 for single-quoted,
+                         --   2 for double-quoted.
+    | TTermN   [String]  -- ^ Term name
+    | TTermP   [Int]     -- ^ Term position in particular relation.
+                         --   This is translate from 'TermN'.
+    | TOpen    String    -- ^ Open paren
+    | TClose   String    -- ^ Close paren
+    | TSpace   Int       -- ^ /N/ space characters
+    | TComment String    -- ^ Comment text
       deriving (Show, Eq, Ord, Data, Typeable)
 
 instance Name Token where
-    name (TermN  ns) = concat ns
-    name (Word  _ s) = s
-    name (Open    s) = s
-    name (Close   s) = s
-    name (Comment s) = s
+    name (TTermN  ns) = concat ns
+    name (TWord  _ s) = s
+    name (TOpen    s) = s
+    name (TClose   s) = s
+    name (TComment s) = s
     name x = error $ "unknown name: " ++ show x
 
 {-| Text of token type, one of
@@ -63,22 +63,22 @@ instance Name Token where
     "Word"
     -}
 tokenTypeText :: Token -> String
-tokenTypeText (Word _ _)  = "Word"
-tokenTypeText (TermN _)   = "TermN"
-tokenTypeText (TermP _)   = "TermP"
-tokenTypeText (Open _)    = "Open"
-tokenTypeText (Close _)   = "Close"
-tokenTypeText (Space _)   = "Space"
-tokenTypeText (Comment _) = "Comment"
+tokenTypeText (TWord _ _)  = "Word"
+tokenTypeText (TTermN _)   = "TermN"
+tokenTypeText (TTermP _)   = "TermP"
+tokenTypeText (TOpen _)    = "Open"
+tokenTypeText (TClose _)   = "Close"
+tokenTypeText (TSpace _)   = "Space"
+tokenTypeText (TComment _) = "Comment"
 
 tokenContent :: Token -> String
-tokenContent (Word _ s)  = s
-tokenContent (TermN s)   = concat s
-tokenContent (TermP _)   = "#TermP"
-tokenContent (Open s)    = s
-tokenContent (Close s)   = s
-tokenContent (Space n)   = replicate n ' '
-tokenContent (Comment s) = s
+tokenContent (TWord _ s)   = s
+tokenContent (TTermN s)    = concat s
+tokenContent (TTermP _)    = "#TermP"
+tokenContent (TOpen s)     = s
+tokenContent (TClose s)    = s
+tokenContent (TSpace n)    = replicate n ' '
+tokenContent (TComment s)  = s
 
 
 
@@ -87,16 +87,16 @@ tokenContent (Comment s) = s
 {-| Test the token is blank, i.e.,
     'Comment', 'Line', or 'Space'. -}
 isBlankToken :: Token -> Bool
-isBlankToken (Space _)    = True
-isBlankToken (Comment _)  = True
-isBlankToken _            = False
+isBlankToken (TSpace _)    = True
+isBlankToken (TComment _)  = True
+isBlankToken _             = False
 
 {-| Test the token is a term,
     i.e., 'TermN' or 'TermP'. -}
 isTermToken :: Token -> Bool
-isTermToken (TermN _)     = True
-isTermToken (TermP _)     = True
-isTermToken _             = False
+isTermToken (TTermN _)     = True
+isTermToken (TTermP _)     = True
+isTermToken _              = False
 
 
 
@@ -168,3 +168,4 @@ linesCrLf s = ln : nextLine s2 where
 -- [Comment]
 --  Text from double asterisks (@**@) to
 --  end of line is a comment.
+
