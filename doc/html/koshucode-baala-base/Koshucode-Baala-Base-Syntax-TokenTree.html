@@ -1,17 +1,201 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Koshucode.Baala.Base.Syntax.TokenTree</title><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean" /><script src="haddock-util.js" type="text/javascript"></script><script type="text/javascript">//<![CDATA[
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Base.Syntax.TokenTree</title
+    ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
 window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-Syntax-TokenTree.html");};
 //]]>
-</script></head><body><div id="package-header"><ul class="links" id="page-menu"><li><a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html">Source</a></li><li><a href="index.html">Contents</a></li><li><a href="doc-index.html">Index</a></li></ul><p class="caption">koshucode-baala-base-0.16.0.0: A notational system for relational data</p></div><div id="content"><div id="module-header"><table class="info"><tr><th>Safe Haskell</th><td>None</td></tr></table><p class="caption">Koshucode.Baala.Base.Syntax.TokenTree</p></div><div id="description"><p class="caption">Description</p><div class="doc"><p>Parened tree of tokens
-</p></div></div><div id="synopsis"><p id="control.syn" class="caption expander" onclick="toggleSection('syn')">Synopsis</p><ul id="section.syn" class="hide" onclick="toggleSection('syn')"><li class="src short"><span class="keyword">type</span> <a href="#t:TokenTree">TokenTree</a> = <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree">Tree</a> <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token">Token</a></li><li class="src short"><a href="#v:tokenTrees">tokenTrees</a> :: [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token">Token</a>] -&gt; [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree">TokenTree</a>]</li><li class="src short"><a href="#v:tokenTreesSource">tokenTreesSource</a> :: [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree">TokenTree</a>] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String">String</a></li><li class="src short">module <a href="Koshucode-Baala-Base-Syntax-Token.html">Koshucode.Baala.Base.Syntax.Token</a></li><li class="src short">module <a href="Koshucode-Baala-Base-Syntax-Tree.html">Koshucode.Baala.Base.Syntax.Tree</a></li></ul></div><div id="interface"><h1>Documentation</h1><div class="top"><p class="src"><span class="keyword">type</span> <a name="t:TokenTree" class="def">TokenTree</a> = <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree">Tree</a> <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token">Token</a><a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#TokenTree" class="link">Source</a></p><div class="doc"><p>Tree of tokens
-</p></div></div><div class="top"><p class="src"><a name="v:tokenTrees" class="def">tokenTrees</a> :: [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token">Token</a>] -&gt; [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree">TokenTree</a>]<a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#tokenTrees" class="link">Source</a></p><div class="doc"><p>Parse tokens into parened trees.
-   Blank tokens are excluded.
-</p><pre class="screen"><code class="prompt">&gt;&gt;&gt; </code><strong class="userinput"><code>tokenTrees $ tokens $ &quot;meet (R | pick /a /b)&quot;
-</code></strong>[TreeL (Word 0 &quot;meet&quot;),
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-base-0.17.0.0: A notational system for relational data</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Base.Syntax.TokenTree</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Parened tree of tokens
+</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:TokenTree"
+	    >TokenTree</a
+	    > = <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree"
+	    >Tree</a
+	    > <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:tokenTrees"
+	    >tokenTrees</a
+	    > :: [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    >] -&gt; [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:tokenTreesSource"
+	    >tokenTreesSource</a
+	    > :: [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:TokenTree" class="def"
+	    >TokenTree</a
+	    > = <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree"
+	    >Tree</a
+	    > <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    ><a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#TokenTree" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Tree of tokens. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:tokenTrees" class="def"
+	    >tokenTrees</a
+	    > :: [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    >] -&gt; [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >]<a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#tokenTrees" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Parse tokens into parened trees.
+    Blank tokens are excluded.
+</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>tokenTrees $ tokens $ &quot;meet (R | pick /a /b)&quot;
+</code
+		></strong
+	      >[TreeL (Word 0 &quot;meet&quot;),
  TreeB 1 [
    TreeL (Word 0 &quot;R&quot;),
    TreeL (Word 0 &quot;|&quot;),
    TreeL (Word 0 &quot;pick&quot;),
    TreeL (TermN [&quot;/a&quot;]),
    TreeL (TermN [&quot;/b&quot;])]]
-</pre></div></div><div class="top"><p class="src"><a name="v:tokenTreesSource" class="def">tokenTreesSource</a> :: [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree">TokenTree</a>] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String">String</a><a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#tokenTreesSource" class="link">Source</a></p><div class="doc"><p>Convert back tree to source string
-</p></div></div><div class="top"><p class="src">module <a href="Koshucode-Baala-Base-Syntax-Token.html">Koshucode.Baala.Base.Syntax.Token</a></p></div><div class="top"><p class="src">module <a href="Koshucode-Baala-Base-Syntax-Tree.html">Koshucode.Baala.Base.Syntax.Tree</a></p></div></div></div><div id="footer"><p>Produced by <a href="http://www.haskell.org/haddock/">Haddock</a> version 2.11.0</p></div></body></html>
+</pre
+	    ><p
+	    >There are three types of parens -- 1, 2, or 3.
+    Paren type is in <code
+	      ><a href="Koshucode-Baala-Base-Syntax-Tree.html#v:TreeB"
+		>TreeB</a
+		></code
+	      > <em
+	      >type</em
+	      > <em
+	      >subtrees</em
+	      >.
+</p
+	    ><ol
+	    ><li
+	      > Round parens <code
+		>()</code
+		>
+</li
+	      ><li
+	      > Squared brackets <code
+		>[]</code
+		>
+</li
+	      ><li
+	      > Curely braces <code
+		>{}</code
+		>
+</li
+	      ></ol
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:tokenTreesSource" class="def"
+	    >tokenTreesSource</a
+	    > :: [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ><a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#tokenTreesSource" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert back tree into source string. 
+</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.11.0</p
+      ></div
+    ></body
+  ></html
+>

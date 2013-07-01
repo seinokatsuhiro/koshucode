@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.16.0.0
+@version 0.17.0.0
 
 
 -- | Position in list.
@@ -278,12 +278,160 @@ instance Show v => Show (OrderCap v)
 instance Eq v => Eq (OrderCap v)
 instance Ord v => Ord (OrderCap v)
 
+
+-- | Tokens in Koshucode
+module Koshucode.Baala.Base.Syntax.Token
+data Token
+
+-- | Word. <tt>Int</tt> represents quotation level, e.g., 0 for non-quoted,
+--   1 for single-quoted, 2 for double-quoted.
+TWord :: Int -> String -> Token
+
+-- | Term name
+TTermN :: [String] -> Token
+
+-- | Term position in particular relation. This is translate from
+--   <a>TTermN</a>.
+TTermP :: [Int] -> Token
+
+-- | Open paren
+TOpen :: String -> Token
+
+-- | Close paren
+TClose :: String -> Token
+
+-- | <i>N</i> space characters
+TSpace :: Int -> Token
+
+-- | Comment text
+TComment :: String -> Token
+
+-- | Test the token is blank, i.e., <a>TComment</a> or <a>TSpace</a>.
+isBlankToken :: Token -> Bool
+
+-- | Test the token is a term, i.e., <a>TTermN</a> or <a>TTermP</a>.
+isTermToken :: Token -> Bool
+
+-- | Text of token type, one of <tt>"Word"</tt>, <tt>"TermN"</tt>,
+--   <tt>"TermP"</tt>, <tt>"Open"</tt>, <tt>"Close"</tt>, <tt>"Space"</tt>,
+--   <tt>"Comment"</tt>, or <tt>"Line</tt>".
+--   
+--   <pre>
+--   &gt;&gt;&gt; tokenTypeText $ TWord 0 "flower"
+--   "Word"
+--   </pre>
+tokenTypeText :: Token -> String
+tokenContent :: Token -> String
+
+-- | Remove blank tokens.
+sweepToken :: Map [Token]
+
+-- | Skip leading blank tokens.
+sweepLeft :: Map [Token]
+instance Typeable Token
+instance Show Token
+instance Eq Token
+instance Ord Token
+instance Data Token
+instance Name Token
+
+
+-- | Tokenizer of koshucode.
+module Koshucode.Baala.Base.Syntax.Tokenizer
+data SourceLine
+SourceLine :: Int -> String -> [Token] -> SourceLine
+
+-- | Line number, from 1.
+sourceLineNumber :: SourceLine -> Int
+
+-- | Line content without newline.
+sourceLineContent :: SourceLine -> String
+
+-- | Tokens from line.
+sourceLineTokens :: SourceLine -> [Token]
+
+-- | Split source text into <a>SourceLine</a> list.
+--   
+--   <ol>
+--   <li>Split source code into lines by line delimiters (carriage return
+--   <tt>\r</tt> or line feed <tt>\n</tt>)</li>
+--   <li>Numbering line numbers. Internally, this is represented as a list
+--   of pairs (<i>line#</i>, <i>content</i>).</li>
+--   <li>Tokenize each lines. This is represented as a list of
+--   <a>SourceLine</a> <i>line#</i> <i>content</i> <i>tokens</i>.</li>
+--   </ol>
+sourceLines :: String -> [SourceLine]
+
+-- | Split string into list of tokens.
+--   
+--   Result token list does not contain newline characters. Insead of
+--   newlines, <tt>Line</tt> tokens are there at the start of each lines.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tokens "aa\n'bb'\n\"cc\""
+--   [Line (SourceLine 1 "aa"     [Word 0 "aa"]), Word 0 "aa",
+--    Line (SourceLine 2 "'bb'"   [Word 1 "bb"]), Word 1 "bb",
+--    Line (SourceLine 3 "\"cc\"" [Word 2 "cc"]), Word 2 "cc"]
+--   </pre>
+--   
+--   Example includes <tt>Line</tt>, <tt>Word</tt>, <tt>TermN</tt> and
+--   <tt>Space</tt> tokens.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tokens "|-- R  /a A0 /b 31"
+--   [Line (SourceLine 1 "|-- R  /a A0 /b 31", [Word 0 "|--", ...]),
+--    Word 0 "|--", Space 1, Word 0 "R", Space 2,
+--    TermN ["/a"], Space 1, Word 0 "A0", Space 1,
+--    TermN ["/b"], Space 1, Word 0 "31"]
+--   </pre>
+tokens :: String -> [Token]
+
+-- | Convert back a token list to a source string.
+untokens :: [Token] -> String
+untoken :: Token -> String
+instance Typeable SourceLine
+instance Show SourceLine
+instance Eq SourceLine
+instance Ord SourceLine
+instance Data SourceLine
+instance Pretty SourceLine
+
 module Koshucode.Baala.Base.Syntax.Tree
 
--- | Get a paren type
+-- | Tree of leaf and branch
+data Tree a
+
+-- | Leaf. Terminal of tree.
+TreeL :: a -> Tree a
+
+-- | Branch. Paren-type and subtrees.
+TreeB :: Int -> [Tree a] -> Tree a
+
+-- | Convert a list of elements to a single tree.
+tree :: Show a => ParenType a -> [a] -> Tree a
+
+-- | Convert a list of elements to trees.
+trees :: Show a => ParenType a -> [a] -> [Tree a]
+
+-- | Convert tree to list of tokens.
+untree :: TypeParen a -> Tree a -> [a]
+
+-- | Convert tree to list of tokens.
+untrees :: TypeParen a -> [Tree a] -> [a]
+
+-- | Simplify tree by removing double parens, like <tt>((a))</tt> to
+--   <tt>(a)</tt>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; undouble $ TreeB 0 [Tree 0 [TreeL "A", TreeL "B"]]
+--   Tree 0 [TreeL "A", TreeL "B"]
+--   </pre>
+undouble :: Map (Tree a)
+
+-- | Get a paren type.
 type ParenType a = a -> Int
 
--- | Get paren from type
+-- | Get parens from a type.
 type TypeParen a = Int -> (a, a)
 
 -- | Make <a>ParenType</a> and <a>TypeParen</a> functions from a
@@ -310,31 +458,6 @@ type TypeParen a = Int -> (a, a)
 --   ('[', ']')
 --   </pre>
 parenTable :: Eq a => [(Int, a, a)] -> (ParenType a, TypeParen a)
-
--- | Tree of leaf and branch
-data Tree a
-
--- | Terminal of a tree
-TreeL :: a -> Tree a
-
--- | Paren-type and subtrees
-TreeB :: Int -> [Tree a] -> Tree a
-
--- | Convert a list of elements to a single tree
-tree :: Show a => ParenType a -> [a] -> Tree a
-
--- | Convert a list of elements to trees
-trees :: Show a => ParenType a -> [a] -> [Tree a]
-
--- | Convert tree to list of tokens
-untree :: TypeParen a -> Tree a -> [a]
-
--- | Convert tree to list of tokens
-untrees :: TypeParen a -> [Tree a] -> [a]
-
--- | Simplify tree by removing double parens, like <tt>((a))</tt> to
---   <tt>(a)</tt>.
-undouble :: Tree a -> Tree a
 instance Typeable1 Tree
 instance Show a => Show (Tree a)
 instance Eq a => Eq (Tree a)
@@ -372,98 +495,10 @@ binaryTree :: Show a => (a -> BinaryHeight) -> Tree a -> Tree a
 heightTable :: Ord a => [(BinaryHeight, [a])] -> (a -> BinaryHeight)
 
 
--- | Tokens in Koshucode
-module Koshucode.Baala.Base.Syntax.Token
-data Token
-
--- | Text
-Word :: Int -> String -> Token
-
--- | Term name
-TermN :: [String] -> Token
-
--- | Term position
-TermP :: [Int] -> Token
-
--- | Open paren
-Open :: String -> Token
-
--- | Close paren
-Close :: String -> Token
-
--- | <i>N</i> space characters
-Space :: Int -> Token
-
--- | Comment text
-Comment :: String -> Token
-
--- | Source infomation
-Line :: SourceLine -> Token
-
--- | Line number and content in source code
-data SourceLine
-SourceLine :: Int -> String -> [Token] -> SourceLine
-
--- | Text of token type, one of <tt>"Word"</tt>, <tt>"TermN"</tt>,
---   <tt>"TermP"</tt>, <tt>"Open"</tt>, <tt>"Close"</tt>, <tt>"Space"</tt>,
---   <tt>"Comment"</tt>, or <tt>"Line</tt>".
---   
---   <pre>
---   &gt;&gt;&gt; tokenTypeText $ Word 0 "flower"
---   "Word"
---   </pre>
-tokenTypeText :: Token -> String
-
--- | Test the token is blank, i.e., <a>Comment</a>, <a>Line</a>, or
---   <a>Space</a>.
-isBlankToken :: Token -> Bool
-
--- | Test the token is a line, i.e., <a>Line</a>.
-isLineToken :: Token -> Bool
-
--- | Test the token is a term, i.e., <a>TermN</a> or <a>TermP</a>.
-isTermToken :: Token -> Bool
-
--- | Split string into list of tokens
---   
---   <pre>
---   &gt;&gt;&gt; tokens "|-- R  /a A0 /b 31"
---   [Line 1 "|-- R  /a A0 /b 31",
---    Word 0 "|--", Space 1, Word 0 "R", Space 2,
---    TermN ["/a"], Space 1, Word 0 "A0", Space 1,
---    TermN ["/b"], Space 1, Word 0 "31"]
---   </pre>
-tokens :: String -> [Token]
-
--- | Convert back a token list to a source string.
-untokens :: [Token] -> String
-untoken :: Token -> String
-
--- | Remove blank tokens.
-sweepToken :: Map [Token]
-
--- | Skip leading blank tokens.
-sweepLeft :: Map [Token]
-instance Typeable SourceLine
-instance Typeable Token
-instance Show SourceLine
-instance Eq SourceLine
-instance Ord SourceLine
-instance Data SourceLine
-instance Show Token
-instance Eq Token
-instance Ord Token
-instance Data Token
-instance Show LineText
-instance Eq LineText
-instance Pretty SourceLine
-instance Name Token
-
-
 -- | Parened tree of tokens
 module Koshucode.Baala.Base.Syntax.TokenTree
 
--- | Tree of tokens
+-- | Tree of tokens.
 type TokenTree = Tree Token
 
 -- | Parse tokens into parened trees. Blank tokens are excluded.
@@ -478,13 +513,22 @@ type TokenTree = Tree Token
 --      TreeL (TermN ["/a"]),
 --      TreeL (TermN ["/b"])]]
 --   </pre>
+--   
+--   There are three types of parens -- 1, 2, or 3. Paren type is in
+--   <a>TreeB</a> <i>type</i> <i>subtrees</i>.
+--   
+--   <ol>
+--   <li>Round parens <tt>()</tt></li>
+--   <li>Squared brackets <tt>[]</tt></li>
+--   <li>Curely braces <tt>{}</tt></li>
+--   </ol>
 tokenTrees :: [Token] -> [TokenTree]
 
--- | Convert back tree to source string
+-- | Convert back tree into source string.
 tokenTreesSource :: [TokenTree] -> String
 
 
--- | Modules on syntax
+-- | Syntactic functions
 module Koshucode.Baala.Base.Syntax
 
 module Koshucode.Baala.Base.Relmap.HalfRelmap
@@ -590,6 +634,33 @@ affirm :: Relsign -> Relmap v -> Assert v
 deny :: Relsign -> Relmap v -> Assert v
 instance Show (Assert v)
 instance Pretty (Assert v)
+
+module Koshucode.Baala.Base.Section.Clausify
+data ClauseSource
+ClauseSource :: [Token] -> [SourceLine] -> ClauseSource
+
+-- | Source tokens of clause
+clauseTokens :: ClauseSource -> [Token]
+
+-- | Source lines of clause
+clauseLines :: ClauseSource -> [SourceLine]
+
+-- | Convert token list into list of token clauses
+clausify :: [SourceLine] -> [ClauseSource]
+
+-- | Split operand into named group. Non quoted words beginning with
+--   hyphen, e.g., <tt>-x</tt>, are name of group.
+--   
+--   <pre>
+--   &gt;&gt;&gt; operandGroup $ tokenTrees $ tokens "a b -x c 'd' -y e"
+--   [("",   [TreeL (Word 0 "a"), TreeL (Word 0 "b")]),
+--    ("-x", [TreeL (Word 0 "c"), TreeL (Word 1 "d")]),
+--    ("-y", [TreeL (Word 0 "e")])]
+--   </pre>
+operandGroup :: [TokenTree] -> [Named [TokenTree]]
+instance Typeable ClauseSource
+instance Show ClauseSource
+instance Data ClauseSource
 
 
 -- | Source information
@@ -774,6 +845,89 @@ sectionUse :: Section v -> Section v -> Section v
 instance Monoid (Section v)
 
 
+-- | Intermidiate structure between <a>String</a> and <a>Section</a>.
+module Koshucode.Baala.Base.Section.Clause
+data Clause
+
+-- | Section name
+CSection :: ClauseSource -> (Maybe String) -> Clause
+
+-- | Importing section name
+CImport :: ClauseSource -> [Token] -> (Maybe Clause) -> Clause
+
+-- | Exporting relmap name
+CExport :: ClauseSource -> String -> Clause
+
+-- | Relmap and its name
+CRelmap :: ClauseSource -> String -> HalfRelmap -> Clause
+
+-- | Not include HalfRelmap
+TRelmap :: ClauseSource -> String -> [TokenTree] -> Clause
+
+-- | Assertions of relmaps
+CAssert :: ClauseSource -> Bool -> String -> HalfRelmap -> Clause
+
+-- | Not include HalfRelmap
+TAssert :: ClauseSource -> Bool -> String -> [TokenTree] -> Clause
+
+-- | Judge
+CJudge :: ClauseSource -> Bool -> String -> [Token] -> Clause
+
+-- | Caluse comment
+CComment :: ClauseSource -> Clause
+
+-- | Unknown clause
+CUnknown :: ClauseSource -> Clause
+clauseTypeText :: Clause -> String
+clauseSource :: Clause -> ClauseSource
+
+-- | Convert token list into clause list. Result clause list does not
+--   contain <a>CRelmap</a> and <a>CAssert</a>. Instead of them,
+--   <a>TRelmap</a> and <a>TAssert</a> are contained. This function does
+--   not depend on <a>RelmapHalfCons</a>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; consPreclause $ tokens "a : source A /x /y"
+--   [TRelmap [SourceLine 1 "a : source A /x /y"]
+--            "a" [TreeL (Word 0 "source"),
+--                 TreeL (Word 0 "A"),
+--                 TreeL (TermN ["/x"]),
+--                 TreeL (TermN ["/y"])]]
+--   </pre>
+consPreclause :: [SourceLine] -> [Clause]
+
+-- | Construct <a>Clause</a> list from <a>Token</a> list. This is a first
+--   step of constructing <a>Section</a>.
+consClause :: RelmapHalfCons -> [SourceLine] -> [Clause]
+
+-- | Second step of constructing <a>Section</a>.
+consSection :: StringValue v => RelmapFullCons v -> [Clause] -> AbortOr (Section v)
+instance Typeable Clause
+instance Show Clause
+instance Data Clause
+
+module Koshucode.Baala.Base.Section.Quoter
+
+-- | Make quasiquoter for <tt>[koshu| ... |]</tt>.
+koshuQuoter :: RelmapHalfCons -> ExpQ -> QuasiQuoter
+data QuasiQuoter :: *
+
+module Koshucode.Baala.Base.Section.SectionIO
+
+-- | Read section from text.
+sectionRead :: StringValue v => Section v -> String -> AbortOr (Section v)
+
+-- | Read section from file.
+sectionFile :: StringValue v => Section v -> FilePath -> IO (AbortOr (Section v))
+
+-- | Run section. Output section has judges calculated from assertions in
+--   input section.
+runSection :: Value v => Section v -> AbortOr (Section v)
+
+-- | Run section and output judges.
+runSectionIO :: Value v => Section v -> IO ()
+
+
 -- | Syntax utilities
 module Koshucode.Baala.Base.Section.Utility
 
@@ -801,21 +955,6 @@ termNamePairs :: [TokenTree] -> AbortOr [(String, String)]
 --   </pre>
 termTreePairs :: [TokenTree] -> AbortOr [(String, TokenTree)]
 
--- | Convert token list into list of token clauses
-clausify :: [Token] -> [[Token]]
-sourceLines :: [Token] -> [SourceLine]
-
--- | Split operand into named group. Non quoted words beginning with
---   hyphen, e.g., <tt>-x</tt>, are name of group.
---   
---   <pre>
---   &gt;&gt;&gt; operandGroup $ tokenTrees $ tokens "a b -x c 'd' -y e"
---   [("",   [TreeL (Word 0 "a"), TreeL (Word 0 "b")]),
---    ("-x", [TreeL (Word 0 "c"), TreeL (Word 1 "d")]),
---    ("-y", [TreeL (Word 0 "e")])]
---   </pre>
-operandGroup :: [TokenTree] -> [Named [TokenTree]]
-
 -- | Calculator combining values into a single value
 type Calc v = [v] -> v
 
@@ -824,97 +963,6 @@ type Ripen x v = x -> [v] -> Calc v
 
 -- | Calculate a value of tree
 crop :: Ripen x v -> Tree x -> Calc v
-
-
--- | Intermidiate structure between <a>String</a> and <a>Section</a>.
-module Koshucode.Baala.Base.Section.Clause
-data Clause
-
--- | Section name
-CSection :: ClauseSource -> (Maybe String) -> Clause
-
--- | Importing section name
-CImport :: ClauseSource -> [Token] -> (Maybe Clause) -> Clause
-
--- | Exporting relmap name
-CExport :: ClauseSource -> String -> Clause
-
--- | Relmap and its name
-CRelmap :: ClauseSource -> String -> HalfRelmap -> Clause
-
--- | Not include HalfRelmap
-TRelmap :: ClauseSource -> String -> [TokenTree] -> Clause
-
--- | Assertions of relmaps
-CAssert :: ClauseSource -> Bool -> String -> HalfRelmap -> Clause
-
--- | Not include HalfRelmap
-TAssert :: ClauseSource -> Bool -> String -> [TokenTree] -> Clause
-
--- | Here data
-CJudge :: ClauseSource -> Bool -> String -> [Token] -> Clause
-
--- | Unknown clause
-CUnknown :: ClauseSource -> Clause
-data ClauseSource
-ClauseSource :: [Token] -> [SourceLine] -> ClauseSource
-
--- | Source tokens of clause
-clauseTokens :: ClauseSource -> [Token]
-
--- | Source lines of clause
-clauseLines :: ClauseSource -> [SourceLine]
-clauseTypeText :: Clause -> String
-clauseSource :: Clause -> ClauseSource
-
--- | Convert token list into clause list. Result clause list does not
---   contain <a>CRelmap</a> and <a>CAssert</a>. Instead of them,
---   <a>TRelmap</a> and <a>TAssert</a> are contained. This function does
---   not depend on <a>RelmapHalfCons</a>.
---   
---   <pre>
---   &gt;&gt;&gt; consPreclause $ tokens "a : source A /x /y"
---   [TRelmap [SourceLine 1 "a : source A /x /y"]
---            "a" [TreeL (Word 0 "source"),
---                 TreeL (Word 0 "A"),
---                 TreeL (TermN ["/x"]),
---                 TreeL (TermN ["/y"])]]
---   </pre>
-consPreclause :: [Token] -> [Clause]
-
--- | Construct <a>Clause</a> list from <a>Token</a> list. This is a first
---   step of constructing <a>Section</a>.
-consClause :: RelmapHalfCons -> [Token] -> [Clause]
-
--- | Second step of constructing <a>Section</a>.
-consSection :: StringValue v => RelmapFullCons v -> [Clause] -> AbortOr (Section v)
-instance Typeable ClauseSource
-instance Typeable Clause
-instance Show ClauseSource
-instance Data ClauseSource
-instance Show Clause
-instance Data Clause
-
-module Koshucode.Baala.Base.Section.Quoter
-
--- | Make quasiquoter for <tt>[koshu| ... |]</tt>.
-koshuQuoter :: RelmapHalfCons -> ExpQ -> QuasiQuoter
-data QuasiQuoter :: *
-
-module Koshucode.Baala.Base.Section.SectionIO
-
--- | Read section from text.
-sectionRead :: StringValue v => Section v -> String -> AbortOr (Section v)
-
--- | Read section from file.
-sectionFile :: StringValue v => Section v -> FilePath -> IO (AbortOr (Section v))
-
--- | Run section. Output section has judges calculated from assertions in
---   input section.
-runSection :: Value v => Section v -> AbortOr (Section v)
-
--- | Run section and output judges.
-runSectionIO :: Value v => Section v -> IO ()
 
 
 -- | Runtime structure for calculations written in Koshucode.

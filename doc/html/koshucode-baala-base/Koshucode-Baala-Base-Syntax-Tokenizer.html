@@ -1,0 +1,568 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Base.Syntax.Tokenizer</title
+    ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-Syntax-Tokenizer.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-base-0.17.0.0: A notational system for relational data</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Base.Syntax.Tokenizer</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Source lines
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Tokenizer
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Asterisks
+</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Tokenizer of koshucode.
+</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a href="#t:SourceLine"
+	    >SourceLine</a
+	    >  = <a href="#v:SourceLine"
+	    >SourceLine</a
+	    > {<ul class="subs"
+	    ><li
+	      ><a href="#v:sourceLineNumber"
+		>sourceLineNumber</a
+		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+		>Int</a
+		></li
+	      ><li
+	      ><a href="#v:sourceLineContent"
+		>sourceLineContent</a
+		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		></li
+	      ><li
+	      ><a href="#v:sourceLineTokens"
+		>sourceLineTokens</a
+		> :: [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+		>Token</a
+		>]</li
+	      ></ul
+	    >}</li
+	  ><li class="src short"
+	  ><a href="#v:sourceLines"
+	    >sourceLines</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
+	    >SourceLine</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:tokens"
+	    >tokens</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:untokens"
+	    >untokens</a
+	    > :: [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:untoken"
+	    >untoken</a
+	    > :: <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Source lines
+</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a name="t:SourceLine" class="def"
+	    >SourceLine</a
+	    >  <a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html#SourceLine" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:SourceLine" class="def"
+		  >SourceLine</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td colspan="2"
+		><div class="subs fields"
+		  ><p class="caption"
+		    >Fields</p
+		    ><dl
+		    ><dt class="src"
+		      ><a name="v:sourceLineNumber" class="def"
+			>sourceLineNumber</a
+			> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+			>Int</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Line number, from 1.
+</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:sourceLineContent" class="def"
+			>sourceLineContent</a
+			> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+			>String</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Line content without newline.
+</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:sourceLineTokens" class="def"
+			>sourceLineTokens</a
+			> :: [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+			>Token</a
+			>]</dt
+		      ><dd class="doc"
+		      ><p
+			>Tokens from line.
+</p
+			></dd
+		      ></dl
+		    ><div class="clear"
+		    ></div
+		    ></div
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:SourceLine" class="caption collapser" onclick="toggleSection('i:SourceLine')"
+	    >Instances</p
+	    ><div id="section.i:SourceLine" class="show"
+	    ><table
+	      ><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		    >Eq</a
+		    > <a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
+		    >SourceLine</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
+		    >Data</a
+		    > <a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
+		    >SourceLine</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		    >Ord</a
+		    > <a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
+		    >SourceLine</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		    >Show</a
+		    > <a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
+		    >SourceLine</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
+		    >Typeable</a
+		    > <a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
+		    >SourceLine</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
+		    >Pretty</a
+		    > <a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
+		    >SourceLine</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:sourceLines" class="def"
+	    >sourceLines</a
+	    ><a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html#sourceLines" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs arguments"
+	  ><p class="caption"
+	    >Arguments</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		>:: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Source text in Koshucode.
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; [<a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
+		  >SourceLine</a
+		  >]</td
+		><td class="doc"
+		><p
+		  >Token list per lines.
+</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="doc"
+	  ><p
+	    >Split source text into <code
+	      ><a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
+		>SourceLine</a
+		></code
+	      > list.
+</p
+	    ><ol
+	    ><li
+	      > Split source code into lines by line delimiters
+       (carriage return <code
+		>\r</code
+		> or line feed <code
+		>\n</code
+		>)
+</li
+	      ><li
+	      > Numbering line numbers.
+      Internally, this is represented as
+      a list of pairs (<em
+		>line#</em
+		>, <em
+		>content</em
+		>).
+</li
+	      ><li
+	      > Tokenize each lines.
+      This is represented as a list of
+      <code
+		><a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
+		  >SourceLine</a
+		  ></code
+		> <em
+		>line#</em
+		> <em
+		>content</em
+		> <em
+		>tokens</em
+		>.
+</li
+	      ></ol
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Tokenizer
+</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:tokens" class="def"
+	    >tokens</a
+	    ><a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html#tokens" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs arguments"
+	  ><p class="caption"
+	    >Arguments</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		>:: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Input text in koshucode
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+		  >Token</a
+		  >]</td
+		><td class="doc"
+		><p
+		  >Token list from the input
+</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="doc"
+	  ><p
+	    >Split string into list of tokens.
+</p
+	    ><p
+	    >Result token list does not contain newline characters.
+    Insead of newlines, <code
+	      >Line</code
+	      > tokens are there
+    at the start of each lines.
+</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>tokens &quot;aa\n'bb'\n\&quot;cc\&quot;&quot;
+</code
+		></strong
+	      >[Line (SourceLine 1 &quot;aa&quot;     [Word 0 &quot;aa&quot;]), Word 0 &quot;aa&quot;,
+ Line (SourceLine 2 &quot;'bb'&quot;   [Word 1 &quot;bb&quot;]), Word 1 &quot;bb&quot;,
+ Line (SourceLine 3 &quot;\&quot;cc\&quot;&quot; [Word 2 &quot;cc&quot;]), Word 2 &quot;cc&quot;]
+</pre
+	    ><p
+	    >Example includes <code
+	      >Line</code
+	      >, <code
+	      >Word</code
+	      >, <code
+	      >TermN</code
+	      > and <code
+	      >Space</code
+	      > tokens.
+</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>tokens &quot;|-- R  /a A0 /b 31&quot;
+</code
+		></strong
+	      >[Line (SourceLine 1 &quot;|-- R  /a A0 /b 31&quot;, [Word 0 &quot;|--&quot;, ...]),
+ Word 0 &quot;|--&quot;, Space 1, Word 0 &quot;R&quot;, Space 2,
+ TermN [&quot;/a&quot;], Space 1, Word 0 &quot;A0&quot;, Space 1,
+ TermN [&quot;/b&quot;], Space 1, Word 0 &quot;31&quot;]
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:untokens" class="def"
+	    >untokens</a
+	    > :: [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ><a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html#untokens" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert back a token list to a source string. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:untoken" class="def"
+	    >untoken</a
+	    > :: <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ><a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html#untoken" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:3"
+	>Asterisks
+</h1
+	><div class="doc"
+	><p
+	  >There are three uses of asterisks (<code
+	    >*</code
+	    >) in koshucode,
+</p
+	  ><dl
+	  ><dt
+	    ><code
+	      >*</code
+	      ></dt
+	    ><dd
+	    >
+  Single asterisk means multiplication,
+  e.g., <code
+	      >3 * 4</code
+	      > (three times four).
+</dd
+	    ><dt
+	    ><code
+	      >**</code
+	      ></dt
+	    ><dd
+	    >
+  Double asterisk leads line comment.
+  Textx from <code
+	      >**</code
+	      > to end of line are ignored.
+</dd
+	    ><dt
+	    ><code
+	      >****</code
+	      ></dt
+	    ><dd
+	    >
+  Quadruple asterisk (fourfold asterisk) leads caluse comment.
+  Texts from <code
+	      >****</code
+	      > to end of clause are ignored.
+  In other words, line staring with <code
+	      >****</code
+	      >
+  and following indented lines are ignored.
+</dd
+	    ></dl
+	  ><p
+	  >Triple asterisk <code
+	    >***</code
+	    > is double and rest of text.
+ Quintuple (fivefold) asterisk <code
+	    >*****</code
+	    > is quadruple and rest of text.
+</p
+	  ><p
+	  >Line comments like this:
+</p
+	  ><pre
+	  >
+ ** aaa bbbbb cc
+</pre
+	  ><p
+	  >Clause comments like this:
+</p
+	  ><pre
+	  >
+ **** aaa bbb
+      ccccc dddddd
+      ee fffff
+</pre
+	  ><p
+	  >You can type <code
+	    >****</code
+	    > on top of a clause to hide it.
+</p
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.11.0</p
+      ></div
+    ></body
+  ></html
+>
