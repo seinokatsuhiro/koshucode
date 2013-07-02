@@ -54,10 +54,13 @@ instance Pretty SourceLine where
 sourceLines
     :: String        -- ^ Source text in Koshucode.
     -> [SourceLine]  -- ^ Token list per lines.
-sourceLines = map sourceLine . linesNumbered
+sourceLines = concatMap sourceLine . linesNumbered
 
-sourceLine :: (Int, String) -> SourceLine
-sourceLine (n, ln) = SourceLine n ln $ gather nextToken ln
+sourceLine :: (Int, String) -> [SourceLine]
+sourceLine (n, ln) = map src ls where
+    toks = gather nextToken ln
+    ls   = divideBy (TWord 0 "||") toks
+    src  = SourceLine n ln
 
 {-| Line number and contents. -}
 linesNumbered :: String -> [(Int, String)]
@@ -98,9 +101,7 @@ linesCrLf s = ln : nextLine s2 where
      TermN ["/a"], Space 1, Word 0 "A0", Space 1,
      TermN ["/b"], Space 1, Word 0 "31"]
   -}
-tokens
-    :: String   -- ^ Input text in koshucode
-    -> [Token]  -- ^ Token list from the input
+tokens :: String -> [Token]
 tokens = concatMap sourceLineTokens . sourceLines
 
 {-| Split a next token from source text. -}
@@ -111,6 +112,7 @@ nextToken ccs =
       ('*' : '*' : _)   ->  (TComment ccs, "")
       ('#' : '!' : _)   ->  (TComment ccs, "")
       ('(' : ')' : cs)  ->  (TWord 0 "()", cs) -- nil
+      ('|' : '|' : cs)  ->  (TWord 0 "||", dropSpaces cs) -- newline
       (c : cs)
         | isOpen    c   ->  (TOpen   [c] , cs)
         | isClose   c   ->  (TClose  [c] , cs)
@@ -121,6 +123,7 @@ nextToken ccs =
         | isSpace   c   ->  white 1 cs
       _                 ->  error $ "unknown token type: " ++ ccs
     where
+      dropSpaces     = dropWhile isSpace
       tok cons xs cs = (cons $ reverse xs, cs)
 
       word (c:cs) xs | isWord c      = word cs (c:xs)

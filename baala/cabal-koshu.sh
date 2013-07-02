@@ -107,6 +107,7 @@ cabal_sdist () {
     cabal haddock \
         --hyperlink-source \
         --hscolour-css=../hscolour.css \
+        --haddock-option=--pretty-html \
         --haddock-option=`if_file base` \
         --haddock-option=`if_file operator` \
         --html-location=$URL

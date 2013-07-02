@@ -47,7 +47,8 @@ data Option
     | OptRun
     | OptPretty
     | OptStdin
-      deriving (Show, Eq, Ord, Enum, Bounded)
+    | OptSection String
+      deriving (Show, Eq)
 
 koshuOptions :: [OptDescr Option]
 koshuOptions =
@@ -55,8 +56,9 @@ koshuOptions =
     , Option "V" ["version"]  (NoArg OptVersion) "Print version number."
     , Option ""  ["run"]      (NoArg OptRun)     "Run section."
     , Option ""  ["show-encoding"] (NoArg OptShowEncoding) "Show character encoding."
-    , Option ""  ["pretty"]   (NoArg OptPretty) "Pretty print section."
-    , Option "i" ["stdin"]    (NoArg OptStdin)  "Read from stdin."
+    , Option ""  ["pretty"]   (NoArg OptPretty)  "Pretty print section."
+    , Option "i" ["stdin"]    (NoArg OptStdin)   "Read from stdin."
+    , Option "s" ["section"]  (ReqArg OptSection "SEC") "One line section"
     ]
 
 version :: String
@@ -101,23 +103,29 @@ koshuMain' root (_, argv) =
           | has OptVersion      -> putSuccess $ version ++ "\n"
           | has OptShowEncoding -> putSuccess =<< currentEncodings
           | has OptPretty       -> prettySection root files
-          | has OptStdin        -> runStdin root files
-          | otherwise           -> run root files
+          | has OptStdin        -> runStdin opts root files
+          | otherwise           -> run opts root files
           where has = (`elem` opts)
       (_, _, errs) -> putFailure $ concat errs
 
 {-| Read and union sections from files, and run the section. -}
-run :: (Value v) => Kit.Section v -> [FilePath] -> IO ()
-run root files = do
-  sects <- mapM (Kit.sectionFile root) files
-  abortIO Kit.runSectionIO $ concatMM sects
+run :: (Value v) => [Option] -> Kit.Section v -> [FilePath] -> IO ()
+run opts root files =
+    do let sec = concatMap (oneLiner root) opts
+       sects <- mapM (Kit.sectionFile root) files
+       abortIO Kit.runSectionIO $ concatMM $ sec ++ sects
 
-runStdin :: (Value v) => Kit.Section v -> [FilePath] -> IO ()
-runStdin root files = do
+runStdin :: (Value v) => [Option] -> Kit.Section v -> [FilePath] -> IO ()
+runStdin opts root files = do
   input <- getContents
-  let sect = Kit.sectionRead root input
+  let sec1 = Kit.sectionRead root input
+      sec2 = concatMap (oneLiner root) opts
   sects <- mapM (Kit.sectionFile root) files
-  abortIO Kit.runSectionIO $ concatMM (sect : sects)
+  abortIO Kit.runSectionIO $ concatMM (sec1 : sec2 ++ sects)
+
+oneLiner :: (Value v) => Kit.Section v -> Option -> [(AbortOr (Kit.Section v))]
+oneLiner root (OptSection sec) = [Kit.sectionRead root sec]
+oneLiner _ _ = []
 
 concatMM :: (Monad m, Monoid a) => [m a] -> m a
 concatMM [] = return mempty
