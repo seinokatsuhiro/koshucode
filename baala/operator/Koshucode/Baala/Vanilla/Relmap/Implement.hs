@@ -33,6 +33,7 @@ vanillaOperators' = Mini.operators
     , o "maybe-both"     LikeMeet          consMaybeBoth
     , o "prefix"         LikePrefix        consPrefix
     , o "prefix-change"  LikePrefixChange  consPrefixChange
+    , o "range"          LikeSize          consRange
     , o "rdf"            LikeSource        consRdf
     , o "size"           LikeSize          consSize
     , o "unhold"         LikeHold          consUnhold
@@ -71,6 +72,13 @@ consVal use = do
       opd = Kit.halfOperand h
   term <- opd <!!> "-term"
   Right $ Kit.relmapCalc use "val" (valBody term)
+
+consRange :: Kit.OpCons Val
+consRange use = do
+  term <- Mini.getTerm use "-term"
+  low  <- Mini.getInt  use "-from"
+  high <- Mini.getInt  use "-to"
+  Right $ relmapRange use term low high
 
 
 

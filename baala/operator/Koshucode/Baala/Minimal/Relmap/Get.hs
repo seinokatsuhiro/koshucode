@@ -9,6 +9,7 @@ module Koshucode.Baala.Minimal.Relmap.Get
   -- * Get from OpUse
   OpGet,
   getWord,
+  getInt,
 
   -- * Term from OpUse
   getTerm,
@@ -45,6 +46,14 @@ getWord use n = do
   sign <- opd <!!> n
   case sign of
     [TreeL (TWord _ s)] -> Right s
+    _ -> Left $ AbortLookup [] n
+
+getInt :: OpGet v Int
+getInt use n = do
+  let opd = halfOperand $ opHalf use
+  sign <- opd <!!> n
+  case sign of
+    [TreeL (TWord _ i)] -> Right (read i :: Int)
     _ -> Left $ AbortLookup [] n
 
 {-| Get a term name from named operand. -}

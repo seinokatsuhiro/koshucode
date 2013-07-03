@@ -6,7 +6,7 @@ module Koshucode.Baala.Vanilla.Relmap.Calc
 ( holdBody
 , valBody
 , limit
---, divide, range
+, relmapRange
 ) where
 
 import Koshucode.Baala.Minimal.OpKit as Kit
@@ -51,23 +51,18 @@ limit2 c ns _ (Rel h1 b1) = Rel h1 b2 where
 
 -- ----------------------  Special calculations
 
+relmapRange :: (IntValue v) => OpUse v -> String -> Int -> Int -> Relmap v
+relmapRange use n low high = Kit.relmapCalc use "range" sub where
+    sub _ r1 = relRange n low high r1
+
+relRange :: (IntValue v) => String -> Int -> Int -> Map (Rel v)
+relRange n low high (Rel h1 b1) = Rel h2 b2 where
+    h2   = Kit.mappend (Kit.headFrom [n]) h1
+    b2   = concatMap g b1
+    ys   = map intValue [low .. high]
+    g xs = map (: xs) ys
+
 {-
-range :: String -> Kit.Relmap Val
-range ns2 = Kit.flow "range" $ Kit.withP range2 ns2
-
-range2 :: [String] -> Rel Val -> Rel Val
-range2 ns2 (Rel h1 b1) = Rel h2 b2 where
-    --h2  = unionUpTerm ns2 h1
-    h2  = Kit.mappend (Kit.headFrom ns2) h1
-    b2  = concatMap sel b1
-
-    pos = ns2 `Kit.look` names (headTerms h1)
-    sel | pos `Kit.like` "-vv"  = Kit.ap f
-        | otherwise           = const []
-
-    [_,from,to] = pos
-    f the arg = map (: arg) $ valRangeMinMax (the from) (the to)
-
 divide :: String -> Kit.Relmap Val
 divide ns2 = Kit.flow "divide" $ Kit.withP divide2 ns2
 

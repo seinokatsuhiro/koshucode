@@ -81,10 +81,6 @@ module Koshucode.Baala.Minimal.OpKit
 , Syntax.binaryTree
 , Syntax.heightTable
 
-  -- * WithName
-, WithName.withN1
-, WithName.withP
-, WithName.withP2
 ) where
 
 import Data.Monoid                         as Monoid
@@ -95,6 +91,4 @@ import Koshucode.Baala.Base.Prelude        as Prelude
 import Koshucode.Baala.Base.Relmap         as Relmap
 import Koshucode.Baala.Base.Section        as Section
 import Koshucode.Baala.Base.Syntax         as Syntax
-
-import Koshucode.Baala.Minimal.WithName    as WithName
 
