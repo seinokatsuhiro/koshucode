@@ -11,8 +11,8 @@
 **  Supplier
 
 |-- S /sno S1 /sname Smith /status 20 /city London
-|-- S /sno S2 /sname Jones /status 10 /city Pairs
-|-- S /sno S3 /sname Blake /status 30 /city Pairs
+|-- S /sno S2 /sname Jones /status 10 /city Paris
+|-- S /sno S3 /sname Blake /status 30 /city Paris
 |-- S /sno S4 /sname Clark /status 20 /city London
 |-- S /sno S5 /sname Adams /status 30 /city Athens
 

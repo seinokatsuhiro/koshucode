@@ -259,48 +259,48 @@ $ Heath's theorem
 
 $ idempotent
 $ identity
-$ identity projection
-$ identity restriction
-$ identity value
+* identity projection
+* identity restriction
+. identity value
 $ IF ... THEN ...
 $ IF AND ONLY IF
 $ IFF
-$ image
-$ immediate checking
-$ immediate constraint
-$ implementation
+. image
+. immediate checking
+. immediate constraint
+. implementation
 $ implication
-$ implied by FDs
-$ implied by superkey(s)
-$ IMPLIES
-$ inclusion
-$ inclusion dependency
-$ IND
-$ independent projection
-$ index
-$ inference rule
-$ information equivalent
-$ Information Principle, The
-$ inheritance
-$ injection
-$ inner join
+. implied by FDs
+. implied by superkey(s)
+. IMPLIES
+. inclusion
+. inclusion dependency
+. IND
+. independent projection
+. index
+. inference rule
+. information equivalent
+. Information Principle, The
+. inheritance
+. injection
+. inner join
 $ INSERT
-$ instantiation
-$ integrity
-$ integrity constraint
-$ intelligent key
-$ intended interpretation
-$ intension
-$ Interchangeability Principle, The
-$ internal predicate
-$ INTERSECT
-$ intersection
-$ intersection (set theory)
-$ irreducible
+. instantiation
+. integrity
+. integrity constraint
+. intelligent key
+. intended interpretation
+. intension
+. Interchangeability Principle, The
+. internal predicate
+. INTERSECT
+* intersection
+. intersection (set theory)
+. irreducible
 $ irreducibly dependent
-$ irreducibly equivalent
-$ isomorphism
+. irreducibly equivalent
 $ IS_EMPTY
+$ isomorphism
 
 $ JD
 $ JD implied by superkeys
