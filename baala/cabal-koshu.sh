@@ -3,11 +3,11 @@
 #  Cabal for each directories
 #
 #  [1] ./cabal-koshu.sh link
-#      Make symbolic links 'cabal-install', etc.
-#  [2] ./cabal-install base
-#      Build and install base package.
-#  [3] ./cabal-install
-#      Build and install all packages.
+#        Make symbolic links 'install.link', etc.
+#  [2] ./install.link base
+#        Build and install base package.
+#  [3] ./install.link
+#        Build and install all packages.
 #
 
 usage () {
@@ -27,17 +27,17 @@ usage () {
 }
 
 main () {
-    decide_program `basename $0`
-
     case "$1" in
         link)
-            sym_link "$0" cabal-sdist
-            sym_link "$0" cabal-haddock
-            sym_link "$0" cabal-install
+            sym_link "$0" sdist.link
+            sym_link "$0" haddock.link
+            sym_link "$0" install.link
             exit ;;
 
         '' | base* | operator* | processor* | toolkit*)
-            cabal_for `directories "$1"` ;;
+            decide_program `basename $0`
+            cabal_for `directories "$1"`
+            exit ;;
 
         *)
             usage
@@ -47,19 +47,19 @@ main () {
 
 decide_program () {
     case "$1" in
-        cabal-sdist)
+        sdist.link)
             cabal=cabal_sdist
             echo "sdist ** generate a source distribution file" ;;
-        cabal-haddock)
+        haddock.link)
             cabal=cabal_haddock
             echo "haddock ** generate Haddock HTML documentation" ;;
-        cabal-install)
+        install.link)
             cabal=cabal_install
             echo "install ** installs packages" ;;
         *)
             cabal=
             usage
-            exit 0 ;;
+            exit 1 ;;
     esac
 }
 
