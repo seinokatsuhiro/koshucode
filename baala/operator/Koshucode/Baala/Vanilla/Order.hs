@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Kit.Order
+module Koshucode.Baala.Vanilla.Order
 ( OrderCap
 , orders
 , sortByName

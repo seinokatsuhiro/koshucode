@@ -48,6 +48,7 @@ library
   exposed-modules:
         Koshucode.Baala.Minimal
         Koshucode.Baala.Minimal.OpKit
+        Koshucode.Baala.Minimal.WithName
         Koshucode.Baala.Minimal.Relmap.Get
         Koshucode.Baala.Minimal.Relmap.Implement
         Koshucode.Baala.Minimal.Relmap.Operand
@@ -59,6 +60,7 @@ library
         Koshucode.Baala.Vanilla
         Koshucode.Baala.Vanilla.Calc
         Koshucode.Baala.Vanilla.Calc.Ripen
+        Koshucode.Baala.Vanilla.Order
         Koshucode.Baala.Vanilla.Quoter
         Koshucode.Baala.Vanilla.Relmap.Calc
         Koshucode.Baala.Vanilla.Relmap.Implement

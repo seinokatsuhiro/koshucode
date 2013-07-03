@@ -12,6 +12,7 @@ module Koshucode.Baala.Vanilla.Relmap.Calc
 import Koshucode.Baala.Minimal.OpKit as Kit
 import Koshucode.Baala.Vanilla.Value.Relval
 import Koshucode.Baala.Vanilla.Calc as Calc
+import Koshucode.Baala.Vanilla.Order as Kit
 import qualified Data.List as List
 
 

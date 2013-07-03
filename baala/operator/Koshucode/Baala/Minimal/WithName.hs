@@ -7,7 +7,7 @@
 --  V   value itself        | val    /N E ...
 --  RM  relmap              | meet-share RM /P /P ...
 
-module Koshucode.Baala.Base.Kit.WithName
+module Koshucode.Baala.Minimal.WithName
 ( withP
 , withP2
 , withNP

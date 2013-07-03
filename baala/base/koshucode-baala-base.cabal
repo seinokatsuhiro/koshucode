@@ -61,9 +61,6 @@ library
         Koshucode.Baala.Base.Data.Rel.Relterm
         Koshucode.Baala.Base.Data.ValueClass
 
-        Koshucode.Baala.Base.Kit.Order
-        Koshucode.Baala.Base.Kit.WithName
-
         Koshucode.Baala.Base.Prelude
         Koshucode.Baala.Base.Prelude.Position
         Koshucode.Baala.Base.Prelude.Pretty
