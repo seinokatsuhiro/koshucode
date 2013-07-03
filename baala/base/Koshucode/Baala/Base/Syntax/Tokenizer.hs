@@ -5,17 +5,30 @@
 
 module Koshucode.Baala.Base.Syntax.Tokenizer
 (
--- * Source lines
+-- * Library
+
+  -- ** Source lines
   SourceLine (..)
 , sourceLines
 
--- * Tokenizer
+  -- ** Tokenizer
 , tokens
 , untokens
 , untoken
 
--- * Asterisks
--- $Asterisks
+-- * Document
+
+  -- ** Special characters
+  -- $SpecialCharacters
+
+  -- ** Asterisks
+  -- $Asterisks
+
+  -- ** Escape sequences
+  -- $EscapeSequences
+
+  -- ** Syntactic content type
+  -- $SyntacticContentType
 ) where
 
 import Data.Generics (Data, Typeable)
@@ -83,23 +96,17 @@ linesCrLf s = ln : nextLine s2 where
 -- ----------------------  Tokenizer
 
 {-| Split string into list of tokens.
-
     Result token list does not contain newline characters.
-    Insead of newlines, 'Line' tokens are there
-    at the start of each lines.
 
     >>> tokens "aa\n'bb'\n\"cc\""
-    [Line (SourceLine 1 "aa"     [Word 0 "aa"]), Word 0 "aa",
-     Line (SourceLine 2 "'bb'"   [Word 1 "bb"]), Word 1 "bb",
-     Line (SourceLine 3 "\"cc\"" [Word 2 "cc"]), Word 2 "cc"]
+    [TWord 0 "aa", TWord 1 "bb", TWord 2 "cc"]
 
-    Example includes 'Line', 'Word', 'TermN' and 'Space' tokens.
+    Example includes 'TWord', 'TTermN' and 'TSpace' tokens.
 
     >>> tokens "|-- R  /a A0 /b 31"
-    [Line (SourceLine 1 "|-- R  /a A0 /b 31", [Word 0 "|--", ...]),
-     Word 0 "|--", Space 1, Word 0 "R", Space 2,
-     TermN ["/a"], Space 1, Word 0 "A0", Space 1,
-     TermN ["/b"], Space 1, Word 0 "31"]
+    [TWord 0 "|--", TSpace 1, TWord 0 "R", TSpace 2,
+     TTermN ["/a"], TSpace 1, TWord 0 "A0", TSpace 1,
+     TTermN ["/b"], TSpace 1, TWord 0 "31"]
   -}
 tokens :: String -> [Token]
 tokens = concatMap sourceLineTokens . sourceLines
@@ -208,6 +215,11 @@ untoken (TComment s)  = s
 
 
 -- ----------------------
+-- $SpecialCharacters
+
+
+
+-- ----------------------
 -- $Asterisks
 --
 -- There are three uses of asterisks (@*@) in koshucode,
@@ -231,17 +243,72 @@ untoken (TComment s)  = s
 --
 -- Line comments like this:
 --
--- @
--- ** aaa bbbbb cc
--- @
+-- > ** aaa bbbbb cc
 --
 -- Clause comments like this:
 --
--- @
--- **** aaa bbb
---      ccccc dddddd
---      ee fffff
--- @
+-- > **** aaa bbb
+-- >      ccccc dddddd
+-- >      ee fffff
 --
 -- You can type @****@ on top of a clause to hide it.
+
+
+
+-- ----------------------
+-- $EscapeSequences
+--
+-- (Not implemented)
+--
+-- [@\[*q\]@]
+--  Single quote.
+--
+-- [@\[*qq\]@]
+--  Double quote.
+--
+-- [@\[*cr\]@]
+--  Carriage return (@\\r@).
+--
+-- [@\[*lf\]@]
+--  Line feed (@\\n@).
+--
+-- [@\[*tab\]@]
+--  Tab (@\\t@).
+--
+-- [@\[*spc\]@]
+--  Space.
+
+
+
+-- ----------------------
+-- $SyntacticContentType
+--
+-- (Not implemented)
+--
+-- Tokenizer recognizes five types of content.
+--
+-- [Word]
+--  Simple sequence of characters,
+--  e.g., @abc@, @123@.
+--  Numbers are represented as words.
+--
+-- [Code]
+--  Code are like tagged word,
+--  e.g., @(color \'blue\')@.
+--
+-- [List]
+--  Orderd sequence of contents.
+--  Lists are enclosed in square brackets,
+--  e.g., @[ ab cd 0 1 ]@
+--
+-- [Tuple]
+--  Set of pairs of term name and content.
+--  Tuples are enclosed in round-bar parens,
+--  e.g., @(| \/a 10 \/b 20 |)@.
+--
+-- [Relation]
+--  Set of uniform-typed tuples.
+--  Relations are enclosed in square-bar brackets,
+--  and enveloped tuples are divided by vertical bar,
+--  e.g., @[| \/a \/b | 10 20 | 10 30 |]@.
 
