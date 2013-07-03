@@ -34,6 +34,13 @@ main () {
             sym_link "$0" install.link
             exit ;;
 
+        unreg)
+            unregister toolkit
+            unregister processor
+            unregister operator
+            unregister base
+            exit ;;
+
         '' | base* | operator* | processor* | toolkit*)
             decide_program `basename $0`
             cabal_for `directories "$1"`
@@ -43,6 +50,11 @@ main () {
             usage
             exit ;;
     esac
+}
+
+unregister () {
+    echo "Unregistering $1"
+    ghc-pkg unregister koshucode-baala-$1
 }
 
 decide_program () {
@@ -103,6 +115,9 @@ cabal_sdist () {
     cabal clean
     cabal configure
 
+    section hoogle
+    cabal haddock --hoogle
+
     section haddock
     cabal haddock \
         --hyperlink-source \
@@ -110,20 +125,21 @@ cabal_sdist () {
         --haddock-option=--pretty-html \
         --haddock-option=`if_file base` \
         --haddock-option=`if_file operator` \
+        --haddock-option=`if_file processor` \
         --html-location=$URL
         # --executable \
-
-    section hoogle
-    cabal haddock --hoogle
 
     section sdist
     cabal sdist
 }
 
+# interface file
 if_file () {
     package=koshucode-baala-$1
     haddock=../$1/dist/doc/html/$package/$package.haddock
-    if [ -e $haddock ]; then
+    if [ `basename $PWD` = $1 ]; then
+        echo --html
+    elif [ -e $haddock ]; then
         echo --read-interface=$GITHUB_DOC/$package/,$haddock
     else
         echo --html
