@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.17.0.0: A notational system for relational data</p
+      >koshucode-baala-base-0.19.0.0: A notational system for relational data</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -45,6 +45,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	><p class="caption"
 	>Koshucode.Baala.Base.Section</p
 	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Modules
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Module dependencies
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Data dependencies
+</a
+	    ></li
+	  ></ul
+	></div
       ><div id="description"
       ><p class="caption"
 	>Description</p
@@ -55,72 +76,48 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    ><a href="Koshucode-Baala-Base-Section-Section.html#t:Section"
 	      >Section</a
 	      ></code
-	    > is bundle of calculation stuff.
+	    > is bundle of calculation stuff.  
 </p
-	  ><p
-	  >Dependencies of significant data types.
-</p
-	  ><ul
-	  ><li
-	    > <code
-	      ><a href="Koshucode-Baala-Base-Section-Section.html#t:Section"
-		>Section</a
-		></code
-	      > uses
-      <code
-	      ><a href="Koshucode-Baala-Base-Section-Section.html#t:Section"
-		>Section</a
-		></code
-	      >,
-      <code
-	      ><a href="Koshucode-Baala-Base-Relmap.html#t:Assert"
-		>Assert</a
-		></code
-	      >,
-      <code
-	      ><a href="Koshucode-Baala-Base-Relmap.html#t:Relmap"
-		>Relmap</a
-		></code
-	      >,
-      <code
-	      ><a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
-		>Judge</a
-		></code
-	      > and
-      <code
-	      ><a href="Koshucode-Baala-Base-Relmap.html#t:Construct"
-		>Construct</a
-		></code
-	      >.
-</li
-	    ><li
-	    > <code
-	      ><a href="Koshucode-Baala-Base-Section-Clause.html#t:Clause"
-		>Clause</a
-		></code
-	      > uses
-      <code
-	      ><a href="Koshucode-Baala-Base-Section-Clause.html#t:Clause"
-		>Clause</a
-		></code
-	      >,
-      <code
-	      ><a href="Koshucode-Baala-Base-Relmap.html#t:HalfRelmap"
-		>HalfRelmap</a
-		></code
-	      >, and
-      <code
-	      ><a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
-		>Token</a
-		></code
-	      >.
-</li
-	    ></ul
 	  ></div
 	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  >module <a href="Koshucode-Baala-Base-Section-Section.html"
+	    >Koshucode.Baala.Base.Section.Section</a
+	    ></li
+	  ><li class="src short"
+	  >module <a href="Koshucode-Baala-Base-Section-Clause.html"
+	    >Koshucode.Baala.Base.Section.Clause</a
+	    ></li
+	  ><li class="src short"
+	  >module <a href="Koshucode-Baala-Base-Section-Clausify.html"
+	    >Koshucode.Baala.Base.Section.Clausify</a
+	    ></li
+	  ><li class="src short"
+	  >module <a href="Koshucode-Baala-Base-Section-Quoter.html"
+	    >Koshucode.Baala.Base.Section.Quoter</a
+	    ></li
+	  ><li class="src short"
+	  >module <a href="Koshucode-Baala-Base-Section-SectionIO.html"
+	    >Koshucode.Baala.Base.Section.SectionIO</a
+	    ></li
+	  ><li class="src short"
+	  >module <a href="Koshucode-Baala-Base-Section-SectionUnion.html"
+	    >Koshucode.Baala.Base.Section.SectionUnion</a
+	    ></li
+	  ><li class="src short"
+	  >module <a href="Koshucode-Baala-Base-Section-Utility.html"
+	    >Koshucode.Baala.Base.Section.Utility</a
+	    ></li
+	  ></ul
+	></div
       ><div id="interface"
-      ><h1
-	>Documentation</h1
+      ><h1 id="g:1"
+	>Modules
+</h1
 	><div class="top"
 	><p class="src"
 	  >module <a href="Koshucode-Baala-Base-Section-Section.html"
@@ -162,6 +159,164 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  >module <a href="Koshucode-Baala-Base-Section-Utility.html"
 	    >Koshucode.Baala.Base.Section.Utility</a
 	    ></p
+	  ></div
+	><h1 id="g:2"
+	>Module dependencies
+</h1
+	><div class="doc"
+	><ul
+	  ><li
+	    > <code
+	      >Section</code
+	      > module uses
+   <code
+	      >Relmap</code
+	      >,
+   <code
+	      >Data</code
+	      >,
+   <code
+	      >Abort</code
+	      >,
+   <code
+	      >Syntax</code
+	      >, and
+   <code
+	      >Prelude</code
+	      > modules.
+</li
+	    ><li
+	    > <code
+	      >Relmap</code
+	      > module uses
+   <code
+	      >Data</code
+	      >,
+   <code
+	      >Abort</code
+	      >,
+   <code
+	      >Syntax</code
+	      >, and
+   <code
+	      >Prelude</code
+	      > modules.
+</li
+	    ><li
+	    > <code
+	      >Abort</code
+	      > module uses
+   <code
+	      >Syntax</code
+	      > and
+   <code
+	      >Prelude</code
+	      > modules.
+</li
+	    ><li
+	    > <code
+	      >Syntax</code
+	      > module uses
+   <code
+	      >Prelude</code
+	      > module.
+</li
+	    ><li
+	    > <code
+	      >Data</code
+	      > module uses
+   <code
+	      >Prelude</code
+	      > module.
+</li
+	    ><li
+	    > <code
+	      >Prelude</code
+	      > module uses
+   no modules in <code
+	      >Koshucode</code
+	      >.
+</li
+	    ></ul
+	  ><p
+	  >Following picture shows reduced dependencies.
+</p
+	  ><pre
+	  >
+       Section
+         |
+       Relmap
+      /      \
+   Data     Abort
+     \        |
+      \     Syntax
+       \     /
+       Prelude
+</pre
+	  ></div
+	><h1 id="g:3"
+	>Data dependencies
+</h1
+	><div class="doc"
+	><p
+	  >Dependencies of significant data types.
+</p
+	  ><ul
+	  ><li
+	    > <code
+	      ><a href="Koshucode-Baala-Base-Section-Section.html#t:Section"
+		>Section</a
+		></code
+	      > uses
+   <code
+	      ><a href="Koshucode-Baala-Base-Section-Section.html#t:Section"
+		>Section</a
+		></code
+	      >,
+   <code
+	      ><a href="Koshucode-Baala-Base-Relmap.html#t:Assert"
+		>Assert</a
+		></code
+	      >,
+   <code
+	      ><a href="Koshucode-Baala-Base-Relmap.html#t:Relmap"
+		>Relmap</a
+		></code
+	      >,
+   <code
+	      ><a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+		>Judge</a
+		></code
+	      > and
+   <code
+	      ><a href="Koshucode-Baala-Base-Relmap.html#t:Construct"
+		>Construct</a
+		></code
+	      >.
+</li
+	    ><li
+	    > <code
+	      ><a href="Koshucode-Baala-Base-Section-Clause.html#t:Clause"
+		>Clause</a
+		></code
+	      > uses
+   <code
+	      ><a href="Koshucode-Baala-Base-Section-Clause.html#t:Clause"
+		>Clause</a
+		></code
+	      >,
+   <code
+	      ><a href="Koshucode-Baala-Base-Relmap.html#t:HalfRelmap"
+		>HalfRelmap</a
+		></code
+	      >, and
+   <code
+	      ><a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+		>Token</a
+		></code
+	      >.
+</li
+	    ></ul
 	  ></div
 	></div
       ></div

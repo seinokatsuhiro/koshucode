@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.17.0.0: A notational system for relational data</p
+      >koshucode-baala-base-0.19.0.0: A notational system for relational data</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -51,18 +51,47 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Source lines
+	    >Library
 </a
+	    ><ul
+	    ><li
+	      ><a href="#g:2"
+		>Source lines
+</a
+		></li
+	      ><li
+	      ><a href="#g:3"
+		>Tokenizer
+</a
+		></li
+	      ></ul
 	    ></li
 	  ><li
-	  ><a href="#g:2"
-	    >Tokenizer
+	  ><a href="#g:4"
+	    >Document
 </a
-	    ></li
-	  ><li
-	  ><a href="#g:3"
-	    >Asterisks
+	    ><ul
+	    ><li
+	      ><a href="#g:5"
+		>Special characters
 </a
+		></li
+	      ><li
+	      ><a href="#g:6"
+		>Asterisks
+</a
+		></li
+	      ><li
+	      ><a href="#g:7"
+		>Escape sequences
+</a
+		></li
+	      ><li
+	      ><a href="#g:8"
+		>Syntactic content type
+</a
+		></li
+	      ></ul
 	    ></li
 	  ></ul
 	></div
@@ -143,8 +172,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Source lines
+	>Library
 </h1
+	><h2 id="g:2"
+	>Source lines
+</h2
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -361,54 +393,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ></ol
 	    ></div
 	  ></div
-	><h1 id="g:2"
+	><h2 id="g:3"
 	>Tokenizer
-</h1
+</h2
 	><div class="top"
 	><p class="src"
 	  ><a name="v:tokens" class="def"
 	    >tokens</a
-	    ><a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html#tokens" class="link"
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    >]<a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html#tokens" class="link"
 	    >Source</a
 	    ></p
-	  ><div class="subs arguments"
-	  ><p class="caption"
-	    >Arguments</p
-	    ><table
-	    ><tr
-	      ><td class="src"
-		>:: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Input text in koshucode
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		>-&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
-		  >Token</a
-		  >]</td
-		><td class="doc"
-		><p
-		  >Token list from the input
-</p
-		  ></td
-		></tr
-	      ></table
-	    ></div
 	  ><div class="doc"
 	  ><p
 	    >Split string into list of tokens.
-</p
-	    ><p
-	    >Result token list does not contain newline characters.
-    Insead of newlines, <code
-	      >Line</code
-	      > tokens are there
-    at the start of each lines.
+    Result token list does not contain newline characters.
 </p
 	    ><pre class="screen"
 	    ><code class="prompt"
@@ -418,19 +420,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 		>tokens &quot;aa\n'bb'\n\&quot;cc\&quot;&quot;
 </code
 		></strong
-	      >[Line (SourceLine 1 &quot;aa&quot;     [Word 0 &quot;aa&quot;]), Word 0 &quot;aa&quot;,
- Line (SourceLine 2 &quot;'bb'&quot;   [Word 1 &quot;bb&quot;]), Word 1 &quot;bb&quot;,
- Line (SourceLine 3 &quot;\&quot;cc\&quot;&quot; [Word 2 &quot;cc&quot;]), Word 2 &quot;cc&quot;]
+	      >[TWord 0 &quot;aa&quot;, TWord 1 &quot;bb&quot;, TWord 2 &quot;cc&quot;]
 </pre
 	    ><p
 	    >Example includes <code
-	      >Line</code
+	      ><a href="Koshucode-Baala-Base-Syntax-Token.html#v:TWord"
+		>TWord</a
+		></code
 	      >, <code
-	      >Word</code
-	      >, <code
-	      >TermN</code
+	      ><a href="Koshucode-Baala-Base-Syntax-Token.html#v:TTermN"
+		>TTermN</a
+		></code
 	      > and <code
-	      >Space</code
+	      ><a href="Koshucode-Baala-Base-Syntax-Token.html#v:TSpace"
+		>TSpace</a
+		></code
 	      > tokens.
 </p
 	    ><pre class="screen"
@@ -441,10 +445,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 		>tokens &quot;|-- R  /a A0 /b 31&quot;
 </code
 		></strong
-	      >[Line (SourceLine 1 &quot;|-- R  /a A0 /b 31&quot;, [Word 0 &quot;|--&quot;, ...]),
- Word 0 &quot;|--&quot;, Space 1, Word 0 &quot;R&quot;, Space 2,
- TermN [&quot;/a&quot;], Space 1, Word 0 &quot;A0&quot;, Space 1,
- TermN [&quot;/b&quot;], Space 1, Word 0 &quot;31&quot;]
+	      >[TWord 0 &quot;|--&quot;, TSpace 1, TWord 0 &quot;R&quot;, TSpace 2,
+ TTermN [&quot;/a&quot;], TSpace 1, TWord 0 &quot;A0&quot;, TSpace 1,
+ TTermN [&quot;/b&quot;], TSpace 1, TWord 0 &quot;31&quot;]
 </pre
 	    ></div
 	  ></div
@@ -477,9 +480,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >Source</a
 	    ></p
 	  ></div
-	><h1 id="g:3"
-	>Asterisks
+	><h1 id="g:4"
+	>Document
 </h1
+	><h2 id="g:5"
+	>Special characters
+</h2
+	><div class="doc empty"
+	>&nbsp;</div
+	><h2 id="g:6"
+	>Asterisks
+</h2
 	><div class="doc"
 	><p
 	  >There are three uses of asterisks (<code
@@ -537,15 +548,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  >Line comments like this:
 </p
 	  ><pre
-	  >
- ** aaa bbbbb cc
+	  > ** aaa bbbbb cc
 </pre
 	  ><p
 	  >Clause comments like this:
 </p
 	  ><pre
-	  >
- **** aaa bbb
+	  > **** aaa bbb
       ccccc dddddd
       ee fffff
 </pre
@@ -554,6 +563,135 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >****</code
 	    > on top of a clause to hide it.
 </p
+	  ></div
+	><h2 id="g:7"
+	>Escape sequences
+</h2
+	><div class="doc"
+	><p
+	  >(Not implemented)
+</p
+	  ><dl
+	  ><dt
+	    ><code
+	      >[*q]</code
+	      ></dt
+	    ><dd
+	    >
+  Single quote.
+</dd
+	    ><dt
+	    ><code
+	      >[*qq]</code
+	      ></dt
+	    ><dd
+	    >
+  Double quote.
+</dd
+	    ><dt
+	    ><code
+	      >[*cr]</code
+	      ></dt
+	    ><dd
+	    >
+  Carriage return (<code
+	      >\r</code
+	      >).
+</dd
+	    ><dt
+	    ><code
+	      >[*lf]</code
+	      ></dt
+	    ><dd
+	    >
+  Line feed (<code
+	      >\n</code
+	      >).
+</dd
+	    ><dt
+	    ><code
+	      >[*tab]</code
+	      ></dt
+	    ><dd
+	    >
+  Tab (<code
+	      >\t</code
+	      >).
+</dd
+	    ><dt
+	    ><code
+	      >[*spc]</code
+	      ></dt
+	    ><dd
+	    >
+  Space.
+</dd
+	    ></dl
+	  ></div
+	><h2 id="g:8"
+	>Syntactic content type
+</h2
+	><div class="doc"
+	><p
+	  >(Not implemented)
+</p
+	  ><p
+	  >Tokenizer recognizes five types of content.
+</p
+	  ><dl
+	  ><dt
+	    >Word</dt
+	    ><dd
+	    >
+  Simple sequence of characters,
+  e.g., <code
+	      >abc</code
+	      >, <code
+	      >123</code
+	      >.
+  Numbers are represented as words.
+</dd
+	    ><dt
+	    >Code</dt
+	    ><dd
+	    >
+  Code are like tagged word,
+  e.g., <code
+	      >(color 'blue')</code
+	      >.
+</dd
+	    ><dt
+	    >List</dt
+	    ><dd
+	    >
+  Orderd sequence of contents.
+  Lists are enclosed in square brackets,
+  e.g., <code
+	      >[ ab cd 0 1 ]</code
+	      >
+</dd
+	    ><dt
+	    >Tuple</dt
+	    ><dd
+	    >
+  Set of pairs of term name and content.
+  Tuples are enclosed in round-bar parens,
+  e.g., <code
+	      >(| /a 10 /b 20 |)</code
+	      >.
+</dd
+	    ><dt
+	    >Relation</dt
+	    ><dd
+	    >
+  Set of uniform-typed tuples.
+  Relations are enclosed in square-bar brackets,
+  and enveloped tuples are divided by vertical bar,
+  e.g., <code
+	      >[| /a /b | 10 20 | 10 30 |]</code
+	      >.
+</dd
+	    ></dl
 	  ></div
 	></div
       ></div

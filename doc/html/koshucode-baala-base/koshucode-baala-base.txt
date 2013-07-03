@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.17.0.0
+@version 0.19.0.0
 
 
 -- | Position in list.
@@ -270,14 +270,6 @@ selectRelation :: (Ord v, Nil v) => Dataset v -> Relsign -> [String] -> Rel v
 -- | Data on value type <tt>v</tt>
 module Koshucode.Baala.Base.Data
 
-module Koshucode.Baala.Base.Kit.Order
-data OrderCap v
-orders :: String -> [OrderCap [Char]]
-sortByName :: (Ord v, Eq n) => [OrderCap n] -> [n] -> [[v]] -> [[v]]
-instance Show v => Show (OrderCap v)
-instance Eq v => Eq (OrderCap v)
-instance Ord v => Ord (OrderCap v)
-
 
 -- | Tokens in Koshucode
 module Koshucode.Baala.Base.Syntax.Token
@@ -362,27 +354,21 @@ sourceLineTokens :: SourceLine -> [Token]
 --   </ol>
 sourceLines :: String -> [SourceLine]
 
--- | Split string into list of tokens.
---   
---   Result token list does not contain newline characters. Insead of
---   newlines, <tt>Line</tt> tokens are there at the start of each lines.
+-- | Split string into list of tokens. Result token list does not contain
+--   newline characters.
 --   
 --   <pre>
 --   &gt;&gt;&gt; tokens "aa\n'bb'\n\"cc\""
---   [Line (SourceLine 1 "aa"     [Word 0 "aa"]), Word 0 "aa",
---    Line (SourceLine 2 "'bb'"   [Word 1 "bb"]), Word 1 "bb",
---    Line (SourceLine 3 "\"cc\"" [Word 2 "cc"]), Word 2 "cc"]
+--   [TWord 0 "aa", TWord 1 "bb", TWord 2 "cc"]
 --   </pre>
 --   
---   Example includes <tt>Line</tt>, <tt>Word</tt>, <tt>TermN</tt> and
---   <tt>Space</tt> tokens.
+--   Example includes <a>TWord</a>, <a>TTermN</a> and <a>TSpace</a> tokens.
 --   
 --   <pre>
 --   &gt;&gt;&gt; tokens "|-- R  /a A0 /b 31"
---   [Line (SourceLine 1 "|-- R  /a A0 /b 31", [Word 0 "|--", ...]),
---    Word 0 "|--", Space 1, Word 0 "R", Space 2,
---    TermN ["/a"], Space 1, Word 0 "A0", Space 1,
---    TermN ["/b"], Space 1, Word 0 "31"]
+--   [TWord 0 "|--", TSpace 1, TWord 0 "R", TSpace 2,
+--    TTermN ["/a"], TSpace 1, TWord 0 "A0", TSpace 1,
+--    TTermN ["/b"], TSpace 1, TWord 0 "31"]
 --   </pre>
 tokens :: String -> [Token]
 
@@ -967,31 +953,4 @@ crop :: Ripen x v -> Tree x -> Calc v
 
 -- | Runtime structure for calculations written in Koshucode.
 --   <a>Section</a> is bundle of calculation stuff.
---   
---   Dependencies of significant data types.
---   
---   <ul>
---   <li><a>Section</a> uses <a>Section</a>, <a>Assert</a>, <a>Relmap</a>,
---   <a>Judge</a> and <a>Construct</a>.</li>
---   <li><a>Clause</a> uses <a>Clause</a>, <a>HalfRelmap</a>, and
---   <a>Token</a>.</li>
---   </ul>
 module Koshucode.Baala.Base.Section
-
-module Koshucode.Baala.Base.Kit.WithName
-
--- | Call a relmap function with present term names.
-withP :: WithTerms v
-
--- | Call a relconfl function with present term names.
-withP2 :: ([String] -> [Rel v] -> RelmapFun v) -> String -> [Rel v] -> RelmapFun v
-
--- | Call a relmap function with new-and-present term names.
-withNP :: WithTerms2 v
-
--- | Call a relmap function with new term names.
-withN1 :: WithTerms v
-type WithTerms v = ([String] -> RelmapFun v) -> String -> RelmapFun v
-type WithTerms2 v = ([(String, String)] -> RelmapFun v) -> String -> RelmapFun v
-
-module Koshucode.Baala.Base
