@@ -5,7 +5,7 @@ INSTALL
 Download
 ---------------------------------
 
-Implementation of a Koshu processor
+Implementation of a koshu processor
 has not released as a software package.
 Please download zipped repository file
 [`koshucode-master.zip`](https://github.com/seinokatsuhiro/koshucode/archive/master.zip)
@@ -17,7 +17,7 @@ under the BSD3 license.
 in a directry tree like the following.
 Files `*.cabal` are Cabal files for building software.
 Files `*.hs` are Haskell source files.
-Files `*.k` are data itself and calculation in Koshucode.
+Files `*.k` are data itself and calculation in koshucode.
 
 ```
 / koshucode-master
@@ -74,8 +74,8 @@ Type `cabal install` under the `base` directory.
 This package contains `Koshucode.Baala.Base` module.
 
 ``` sh
-$ cd koshucode-master/baala/base
-$ cabal install
+cd koshucode-master/baala/base
+cabal install
 ```
 
 Install `koshucode-baala-operator` package.
@@ -83,8 +83,8 @@ This package contains `Koshucode.Baala.Minimal`
 and `Koshucode.Baala.Vanilla` modules.
 
 ``` sh
-$ cd koshucode-master/baala/operator
-$ cabal install
+cd koshucode-master/baala/operator
+cabal install
 ```
 
 Install `koshucode-baala-processor` package.
@@ -92,8 +92,8 @@ This package contains `koshu` command
 and `Koshucode.Baala.Toolkit` module.
 
 ``` sh
-$ cd koshucode-master/baala/processor
-$ cabal install
+cd koshucode-master/baala/processor
+cabal install
 ```
 
 Optionally,
@@ -103,8 +103,8 @@ e.g., `koshu-syntax` and `koshu-rdf`.
 
 ``` sh
 # optional
-$ cd koshucode-master/baala/toolkit
-$ cabal install
+cd koshucode-master/baala/toolkit
+cabal install
 ```
 
 
@@ -113,24 +113,26 @@ Invoke koshu command
 
 `koshu` command is a relational data processor.
 This processor reads calculations and data in koshucode,
-and writes a result of calculation.
-The Order of files is not significant.
+and writes results of the calculations.
+The order of files is not significant.
 You can type also `koshu natural-join.k DATA.k`.
 
 ``` sh
-$ cd koshucode-master/baala/processor/example/dictionary
-$ koshu DATA.k natural-join.k
+cd koshucode-master/baala/processor/example/dictionary
+koshu DATA.k natural-join.k
 ```
 
 With the `-i` option, `koshu` reads data file
 from the standard input.
 
 ``` sh
-$ koshu -i natural-join.k < DATA.k
+koshu -i natural-join.k < DATA.k
 ```
 
-These commands calculates `natural-join.k` for input `DATA.k`,
-and writes a following output data.
+These commands calculates
+[`natural-join.k`](https://github.com/seinokatsuhiro/koshucode/blob/master/baala/processor/example/dictionary/natural-join.k)
+for input [`DATA.k`](https://github.com/seinokatsuhiro/koshucode/blob/master/baala/processor/example/dictionary/DATA.k),
+and writes the following output data.
 
 ```
 |-- SSP /pno 'P6' /qty '100' /sno 'S1' /sname 'Smith' /status '20' /city 'London'
@@ -139,9 +141,9 @@ and writes a following output data.
 |-- SSP /pno 'P3' /qty '400' /sno 'S1' /sname 'Smith' /status '20' /city 'London'
 |-- SSP /pno 'P2' /qty '200' /sno 'S1' /sname 'Smith' /status '20' /city 'London'
 |-- SSP /pno 'P1' /qty '300' /sno 'S1' /sname 'Smith' /status '20' /city 'London'
-|-- SSP /pno 'P2' /qty '400' /sno 'S2' /sname 'Jones' /status '10' /city 'Pairs'
-|-- SSP /pno 'P1' /qty '300' /sno 'S2' /sname 'Jones' /status '10' /city 'Pairs'
-|-- SSP /pno 'P2' /qty '200' /sno 'S3' /sname 'Blake' /status '30' /city 'Pairs'
+|-- SSP /pno 'P2' /qty '400' /sno 'S2' /sname 'Jones' /status '10' /city 'Paris'
+|-- SSP /pno 'P1' /qty '300' /sno 'S2' /sname 'Jones' /status '10' /city 'Paris'
+|-- SSP /pno 'P2' /qty '200' /sno 'S3' /sname 'Blake' /status '30' /city 'Paris'
 |-- SSP /pno 'P5' /qty '400' /sno 'S4' /sname 'Clark' /status '20' /city 'London'
 |-- SSP /pno 'P4' /qty '300' /sno 'S4' /sname 'Clark' /status '20' /city 'London'
 |-- SSP /pno 'P2' /qty '200' /sno 'S4' /sname 'Clark' /status '20' /city 'London'
