@@ -48,6 +48,7 @@ Files `*.k` are data itself and calculation in koshucode.
   
       / toolkit
          * koshucode-baala-toolkit.cabal
+         * koshu-change.hs
          * koshu-rdf.hs
          * koshu-syntax.hs
          / Koshucode
@@ -99,7 +100,7 @@ cabal install
 Optionally,
 you can install `koshucode-baala-toolkit` package.
 This package contains additional commands,
-e.g., `koshu-syntax` and `koshu-rdf`.
+e.g., `koshu-change`, `koshu-syntax` and `koshu-rdf`.
 
 ``` sh
 # optional

@@ -1,8 +1,8 @@
 
 Calculate changeset
-[`CHANGE.k`](https://github.com/seinokatsuhiro/koshucode/blob/master/baala/toolkit/example/change/C.k)
-= [`ALTERED.k`](https://github.com/seinokatsuhiro/koshucode/blob/master/baala/toolkit/example/change/A.k)
-- [`BASE.k`](https://github.com/seinokatsuhiro/koshucode/blob/master/baala/toolkit/example/change/B.k).
+[`CHANGE.k`](https://github.com/seinokatsuhiro/koshucode/blob/master/baala/toolkit/example/change/CHANGE.k) =
+[`ALTERED.k`](https://github.com/seinokatsuhiro/koshucode/blob/master/baala/toolkit/example/change/ALTERED.k) -
+[`BASE.k`](https://github.com/seinokatsuhiro/koshucode/blob/master/baala/toolkit/example/change/BASE.k).
 
 ``` sh
 koshu-change ALTERED.k --minus BASE.k > CHANGE.k
