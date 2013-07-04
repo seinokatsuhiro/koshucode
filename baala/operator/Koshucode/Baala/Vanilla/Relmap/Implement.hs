@@ -46,17 +46,15 @@ vanillaOperators' = Mini.operators
 -- ----------------------  Constructors
 
 consHold :: Kit.OpCons Val
-consHold = consHoldFor "hold" (==)
+consHold = consHoldFor (==)
 
 consUnhold :: Kit.OpCons Val
-consUnhold = consHoldFor "unhold" (/=)
+consUnhold = consHoldFor (/=)
 
-consHoldFor :: String -> (Val -> Val -> Bool) -> Kit.OpCons Val
-consHoldFor op test use = do
-  let h = Kit.opHalf use
-      opd = Kit.halfOperand h
-  term <- opd <!!> "-term"
-  Right $ Kit.relmapCalc use op (holdBody test $ TreeB 0 term)
+consHoldFor :: (Val -> Val -> Bool) -> Kit.OpCons Val
+consHoldFor test use = do
+  tree <- Mini.getTree use "-term"
+  Right $ relmapHold use test tree
 
 consRdf :: Kit.OpCons Val
 consRdf use = do
@@ -68,10 +66,8 @@ consRdf use = do
 
 consVal :: Kit.OpCons Val
 consVal use = do
-  let h = Kit.opHalf use
-      opd = Kit.halfOperand h
-  term <- opd <!!> "-term"
-  Right $ Kit.relmapCalc use "val" (valBody term)
+  trees <- Mini.getTrees use "-term"
+  Right $ relmapVal use trees
 
 consRange :: Kit.OpCons Val
 consRange use = do

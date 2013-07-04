@@ -8,6 +8,8 @@ module Koshucode.Baala.Minimal.Relmap.Get
 
   -- * Get from OpUse
   OpGet,
+  getTree,
+  getTrees,
   getWord,
   getInt,
 
@@ -32,6 +34,18 @@ type OpGet v a
     = OpUse v      -- ^ Operator use
     -> String      -- ^ Lookup key
     -> AbortOr a   -- ^ Suboperand
+
+getTree :: OpGet v TokenTree
+getTree use n = do
+  let opd = halfOperand $ opHalf use
+  xs <- opd <!!> n
+  Right $ TreeB 0 xs
+
+getTrees :: OpGet v [TokenTree]
+getTrees use n = do
+  let opd = halfOperand $ opHalf use
+  xs <- opd <!!> n
+  Right xs
 
 {-| Get word from named operand.
 

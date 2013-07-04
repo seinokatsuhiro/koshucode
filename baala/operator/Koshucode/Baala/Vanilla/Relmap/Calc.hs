@@ -3,10 +3,10 @@
 -- | Relational mappers
 
 module Koshucode.Baala.Vanilla.Relmap.Calc
-( holdBody
-, valBody
-, limit
+( relmapHold, relHold
+, relmapVal,  relVal
 , relmapRange
+, limit
 ) where
 
 import Koshucode.Baala.Minimal.OpKit as Kit
@@ -19,16 +19,26 @@ import qualified Data.List as List
 
 -- ----------------------  General calculations
 
--- | Make relmap function for @hold@ operator.
-holdBody :: (Val -> Val -> Bool) -> TokenTree -> a -> RelmapFun Val
-holdBody is e _ (Rel h1 b1) = Rel h1 b2 where
+--  Right $ Kit.relmapCalc use op (holdBody test $ TreeB 0 term)
+
+{-| Make relmap function for @hold@ operator. -}
+relmapHold :: OpUse Val -> (Val -> Val -> Bool) -> TokenTree -> Relmap Val
+relmapHold use is e = Kit.relmapCalc use "hold" sub where
+    sub _ r1 = relHold is e r1
+
+relHold :: (Val -> Val -> Bool) -> TokenTree -> Map (Rel Val)
+relHold is e (Rel h1 b1) = Rel h1 b2 where
     b2      = filter f b1
     f arg   = calc arg `is` boolValue True
     calc    = Calc.makeCalc h1 e
 
--- | Make relmap function for @val@ operator.
-valBody :: [TokenTree] -> a -> RelmapFun Val
-valBody e _ (Rel h1 b1) = Rel h3 b3 where
+{-| Make relmap function for @val@ operator. -}
+relmapVal :: OpUse Val -> [TokenTree] -> Relmap Val
+relmapVal use e = Kit.relmapCalc use "val" sub where
+    sub _ r1 = relVal e r1
+
+relVal :: [TokenTree] -> Map (Rel Val)
+relVal e (Rel h1 b1) = Rel h3 b3 where
     h3      = Kit.mappend h2 h1
     b3      = map f b1
     f arg   = map ($ arg) f2 ++ arg   -- todo: shared term
