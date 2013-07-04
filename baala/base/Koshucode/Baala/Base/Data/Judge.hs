@@ -5,11 +5,15 @@
 module Koshucode.Baala.Base.Data.Judge
 ( Judge (Judge)
 , Relsign, Relarg
+, affirmJudge
+, denyJudge
+, isAffirmed
+, isDenied
 , abcJudge
 ) where
 
 import qualified Data.List as List
-import Koshucode.Baala.Base.Prelude.Pretty
+import Koshucode.Baala.Base.Prelude
 
 -- | Judgement on type 'v'.
 -- 
@@ -51,7 +55,21 @@ instance (Ord v, Pretty v) => Pretty (Judge v) where
           arg ((n,v) : a2) = text n <+> doc v <+> arg a2
           arg [] = empty
 
--- | Sort terms in alphabetical order.
+{-| Affirm judge, i.e., change logical quality to 'True'. -}
+affirmJudge :: Map (Judge v)
+affirmJudge (Judge _ s xs) = Judge True  s xs
+
+{-| Deny judge, i.e., change logical quality to 'False'. -}
+denyJudge :: Map (Judge v)
+denyJudge (Judge _ s xs) = Judge False s xs
+
+isAffirmed :: Judge t -> Bool
+isAffirmed (Judge q _ _) = q
+
+isDenied :: Judge t -> Bool
+isDenied (Judge q _ _) = not q
+
+{-| Sort terms in alphabetical order. -}
 abcJudge :: (Ord v) => Judge v -> Judge v
 abcJudge (Judge q s a) = Judge q s $ List.sort a
 

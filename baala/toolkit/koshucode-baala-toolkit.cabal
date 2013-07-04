@@ -44,15 +44,14 @@ cabal-version:       >= 1.8
 
 extra-source-files:
 
-executable koshu-syntax
+executable koshu-change
   main-is:
-        koshu-syntax.hs
+        koshu-change.hs
   other-modules:
-        Koshucode.Baala.Toolkit.Main.KoshuSyntax
+        Koshucode.Baala.Toolkit.Main.KoshuChange
   build-depends:
          base                      == 4.5.*
-       , rdf4h                     == 1.1.*
-       , text                      == 0.11.*
+       , containers                == 0.4.*
        , koshucode-baala-base      == 0.19.*
        , koshucode-baala-operator  == 0.19.*
        , koshucode-baala-processor == 0.19.*
@@ -70,9 +69,22 @@ executable koshu-rdf
        , koshucode-baala-operator  == 0.19.*
        , koshucode-baala-processor == 0.19.*
 
+executable koshu-syntax
+  main-is:
+        koshu-syntax.hs
+  other-modules:
+        Koshucode.Baala.Toolkit.Main.KoshuSyntax
+  build-depends:
+         base                      == 4.5.*
+       , koshucode-baala-base      == 0.19.*
+       , koshucode-baala-operator  == 0.19.*
+       , koshucode-baala-processor == 0.19.*
+
+
 library
   -- Modules exported by the library.
   exposed-modules:
+        Koshucode.Baala.Toolkit.Main.KoshuChange
         Koshucode.Baala.Toolkit.Main.KoshuRdfMain
         Koshucode.Baala.Toolkit.Main.KoshuSyntax
         Koshucode.Baala.Toolkit.Library.RDF
@@ -83,6 +95,7 @@ library
   -- Other library packages from which modules are imported.
   build-depends:
          base                      == 4.5.*
+       , containers                == 0.4.*
        , rdf4h                     == 1.1.*
        , text                      == 0.11.*
        , koshucode-baala-base      == 0.19.*

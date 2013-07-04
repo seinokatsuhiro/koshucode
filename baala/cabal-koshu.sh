@@ -23,6 +23,7 @@ usage () {
     echo ""
     fi
     echo "  $0 link        ** make symbolic-linked commands"
+    echo "  $0 unreg       ** unregister koshucode packages"
     echo ""
 }
 
