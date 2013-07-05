@@ -1,5 +1,5 @@
 -- The name of the package.
-name:                koshucode-baala-processor
+name:                koshucode-baala-calculator
 
 -- The package version.  See the Haskell package versioning policy (PVP) 
 -- for standards guiding when and how versions should be incremented.
@@ -10,13 +10,15 @@ name:                koshucode-baala-processor
 version:             0.21.0.0
 
 -- A short (one-line) description of the package.
-synopsis:            A relational data processor
+synopsis:            A portable relational calculator
 
 -- A longer description of the package.
-description:         This is a relational data processor.
-                     Relational expressions are written in Koshucode.
-                     Koshucode is a notation for both of
-                     descriptions and calculations of data.
+description:         This is a portable relational calculator.
+                     Relational data and calculations
+                     are written in koshucode.
+                     This packages contains 'koshu' command.
+                     'koshu' reads koshucode data,
+                     calculates it, and writes the result.
 
 -- The license under which the package is released.
 license:             BSD3

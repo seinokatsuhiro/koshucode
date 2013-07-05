@@ -14,16 +14,16 @@ usage () {
     echo "cabal for each directories"
     echo ""
     if [ ! -z $cabal ]; then
-    echo "  $0             ** cabal for all directories"
+    echo "  $0                cabal for all directories"
     echo ""
-    echo "  $0 base        ** cabal for base directory"
-    echo "  $0 operator    ** cabal for operator directory"
-    echo "  $0 processor   ** cabal for processor directory"
-    echo "  $0 toolkit     ** cabal for toolkit directory"
+    echo "  $0 base           cabal for base directory"
+    echo "  $0 operator       cabal for operator directory"
+    echo "  $0 calculator     cabal for calculator directory"
+    echo "  $0 toolkit        cabal for toolkit directory"
     echo ""
     fi
-    echo "  $0 link        ** make symbolic-linked commands"
-    echo "  $0 unreg       ** unregister koshucode packages"
+    echo "  $0 link           make symbolic-linked commands"
+    echo "  $0 unreg          unregister koshucode packages"
     echo ""
 }
 
@@ -37,12 +37,12 @@ main () {
 
         unreg)
             unregister toolkit
-            unregister processor
+            unregister calculator
             unregister operator
             unregister base
             exit ;;
 
-        '' | base* | operator* | processor* | toolkit*)
+        '' | base* | operator* | calculator* | toolkit*)
             decide_program `basename $0`
             cabal_for `directories "$1"`
             exit ;;
@@ -78,11 +78,11 @@ decide_program () {
 
 directories () {
     case `basename "$1"` in
-        base)       echo base ;;
-        operator)   echo operator ;;
-        processor)  echo processor ;;
-        toolkit)    echo toolkit ;;
-        '')         echo base operator processor toolkit ;;
+        base)        echo base ;;
+        operator)    echo operator ;;
+        calculator)  echo calculator ;;
+        toolkit)     echo toolkit ;;
+        '')          echo base operator calculator toolkit ;;
     esac
 }
 
@@ -126,7 +126,7 @@ cabal_sdist () {
         --haddock-option=--pretty-html \
         --haddock-option=`if_file base` \
         --haddock-option=`if_file operator` \
-        --haddock-option=`if_file processor` \
+        --haddock-option=`if_file calculator` \
         --html-location=$URL
         # --executable \
 
