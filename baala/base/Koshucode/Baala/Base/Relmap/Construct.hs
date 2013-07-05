@@ -108,7 +108,7 @@ type RelmapFullCons v
     -> AbortOr (Relmap v) -- ^ Result relmap
 
 {-| Construct (full) relmap. -}
-fullBundle :: [Named (OpCons v)] -> RelmapFullCons v
+fullBundle :: [Named (Relop v)] -> RelmapFullCons v
 fullBundle fulls = full where
     full h@(HalfRelmap u src op _ hs) =
         case lookup op fulls of

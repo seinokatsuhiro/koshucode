@@ -4,18 +4,22 @@
 
 module Koshucode.Baala.Minimal.Relmap.Restrict
 ( -- * some
-  relmapSome
-, relSome
-
+  relopSome, relmapSome, relSome,
   -- * minus
-, relmapMinus
-, relMinus
+  relopMinus, relmapMinus, relMinus
 ) where
 
 import Koshucode.Baala.Minimal.OpKit as Kit
+import Koshucode.Baala.Minimal.Relmap.Get
 
 
--- Some
+
+-- ----------------------  Some
+
+relopSome :: (Ord v) => Relop v
+relopSome use = do
+  m <- getRelmap use
+  Right $ relmapSome use m
 
 relmapSome :: (Ord v) => OpUse v -> Map (Relmap v)
 relmapSome use m = Kit.relmapConfl use "minus" sub [m] where
@@ -28,7 +32,14 @@ relSome
     -> Map (Rel v)  -- ^ Relation to relation
 relSome  = relSemi True
 
--- Minus
+
+
+-- ----------------------  Minus
+
+relopMinus :: (Ord v) => Relop v
+relopMinus use = do
+  m <- getRelmap use
+  Right $ relmapMinus use m
 
 relmapMinus :: (Ord v) => OpUse v -> Map (Relmap v)
 relmapMinus use m = Kit.relmapConfl use "minus" sub [m] where
@@ -41,7 +52,9 @@ relMinus
     -> Map (Rel v)  -- ^ Relation to relation
 relMinus = relSemi False
 
--- Semi
+
+
+-- ----------------------  Semi
 
 relSemi :: (Ord v) => Bool -> Rel v -> Map (Rel v)
 relSemi which r2 r1 = Rel h3 b3 where

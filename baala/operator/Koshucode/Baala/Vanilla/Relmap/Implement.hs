@@ -18,70 +18,47 @@ import qualified Koshucode.Baala.Minimal as Mini
 
 -- ----------------------  Operators
 
--- | Implementation of relational operators.
+{-| Implementation of relational operators. -}
 vanillaOperators :: [Kit.OpImplement Val]
 vanillaOperators = vanillaOperators' ++ Mini.minimalOperators
 
 vanillaOperators' :: [Kit.OpImplement Val]
 vanillaOperators' = Mini.operators
     -- Relmap operators in alphabetical order
-    [ o "conf"           LikeSize          consConf
-    , o "enclose"        LikeSize          consEnclose
-    , o "hang"           LikeMeet          consHang
-    , o "hold"           LikeHold          consHold
-    , o "maybe"          LikeMeet          consMaybe
-    , o "maybe-both"     LikeMeet          consMaybeBoth
-    , o "prefix"         LikePrefix        consPrefix
-    , o "prefix-change"  LikePrefixChange  consPrefixChange
-    , o "range"          LikeSize          consRange
-    , o "rdf"            LikeSource        consRdf
-    , o "size"           LikeSize          consSize
-    , o "unhold"         LikeHold          consUnhold
-    , o "unprefix"       LikeUnprefix      consUnprefix
-    , o "val"            LikeVal           consVal
+    [ o "conf"           LikeSize          relopConf
+    , o "enclose"        LikeSize          relopEnclose
+    , o "hang"           LikeMeet          relopHang
+    , o "hold"           LikeHold          relopHold
+    , o "maybe"          LikeMeet          relopMaybe
+    , o "maybe-both"     LikeMeet          relopMaybeBoth
+    , o "prefix"         LikePrefix        relopPrefix
+    , o "prefix-change"  LikePrefixChange  relopPrefixChange
+    , o "range"          LikeSize          relopRange
+    , o "rdf"            LikeSource        relopRdf
+    , o "size"           LikeSize          relopSize
+    , o "unhold"         LikeHold          relopUnhold
+    , o "unprefix"       LikeUnprefix      relopUnprefix
+    , o "val"            LikeVal           relopVal
     ] where o = (,,)
 
 
 
 -- ----------------------  Constructors
 
-consHold :: Kit.OpCons Val
-consHold = consHoldFor (==)
-
-consUnhold :: Kit.OpCons Val
-consUnhold = consHoldFor (/=)
-
-consHoldFor :: (Val -> Val -> Bool) -> Kit.OpCons Val
-consHoldFor test use = do
-  tree <- Mini.getTree use "-term"
-  Right $ relmapHold use test tree
-
-consRdf :: Kit.OpCons Val
-consRdf use = do
+relopRdf :: Kit.Relop Val
+relopRdf use = do
   sign  <- Mini.getWord  use "-sign"
   [s,o] <- Mini.getTerms use "-term"
   Right $ Kit.relmapAlias use $
         Kit.relmapSource use sign ["/s", "/o"] `mappend`
         Mini.relmapRename use [(s,"/s"), (o,"/o")]
 
-consVal :: Kit.OpCons Val
-consVal use = do
-  trees <- Mini.getTrees use "-term"
-  Right $ relmapVal use trees
-
-consRange :: Kit.OpCons Val
-consRange use = do
-  term <- Mini.getTerm use "-term"
-  low  <- Mini.getInt  use "-from"
-  high <- Mini.getInt  use "-to"
-  Right $ relmapRange use term low high
-
 
 
 -- ----------------------  maybe
 
-consMaybe :: Kit.OpCons Val
-consMaybe use = Right $ relmapMaybe use
+relopMaybe :: Kit.Relop Val
+relopMaybe use = Right $ relmapMaybe use
 
 relmapMaybe :: (Ord v, Nil v) => Kit.OpUse v -> Kit.Relmap v
 relmapMaybe use = Kit.relmapConfl use "maybe" sub ms where
@@ -115,8 +92,8 @@ relMaybe r1 r2 = Rel h3 b3 where
 
 -- ----------------------  maybe-both
 
-consMaybeBoth :: Kit.OpCons Val
-consMaybeBoth use = Right $ relmapMaybeBoth use
+relopMaybeBoth :: Kit.Relop Val
+relopMaybeBoth use = Right $ relmapMaybeBoth use
 
 -- | like SQL's full join
 relmapMaybeBoth :: (Ord v, Nil v) => Kit.OpUse v -> Kit.Relmap v
@@ -129,8 +106,8 @@ relmapMaybeBoth use = Kit.relmapConfl use "mmaybe" sub ms where
 
 -- ----------------------  Nested relation
 
-consHang :: Kit.OpCons Val
-consHang use = do
+relopHang :: Kit.Relop Val
+relopHang use = do
   n <- Mini.getTerm use "-term"
   Right $ relmapHang use n
 
@@ -162,31 +139,10 @@ relHang n r2 r1 = Rel h3 b3 where
 
 
 
--- ----------------------  Naming
-
-consPrefix :: Kit.OpCons Val
-consPrefix use = do
-  pre <- Mini.getTerm use "-prefix"
-  ns  <- Mini.getTerms use "-term"
-  Right $ relmapPrefix use pre ns
-
-consUnprefix :: Kit.OpCons Val
-consUnprefix use = do
-  pre <- Mini.getTerm use "-prefix"
-  Right $ relmapUnprefix use pre
-
-consPrefixChange :: Kit.OpCons Val
-consPrefixChange use = do
-  new <- Mini.getTerm use "-new"
-  old <- Mini.getTerm use "-old"
-  Right $ relmapPrefixChange use new old
-
-
-
 -- ----------------------  size
 
-consSize :: Kit.OpCons Val
-consSize use = do
+relopSize :: Kit.Relop Val
+relopSize use = do
   n <- Mini.getTerm use "-term"
   Right $ relmapSize use n
 
@@ -207,8 +163,8 @@ relSize n (Rel _ b1) = Rel h2 b2 where
 
 -- ----------------------  conf
 
-consConf :: Kit.OpCons Val
-consConf use = do
+relopConf :: Kit.Relop Val
+relopConf use = do
   n <- Mini.getTerm use "-term"
   Right $ relmapConf use n
 
@@ -230,8 +186,8 @@ relConf n (Rel h1 _) = Rel h2 b2 where
 
 -- ----------------------  enclose
 
-consEnclose :: Kit.OpCons Val
-consEnclose use = do
+relopEnclose :: Kit.Relop Val
+relopEnclose use = do
   n <- Mini.getTerm use "-term"
   Right $ relmapEnclose use n
 

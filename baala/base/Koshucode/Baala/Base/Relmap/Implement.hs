@@ -7,7 +7,7 @@ module Koshucode.Baala.Base.Relmap.Implement
 , OpParser'
 
   -- * Constructor
-, OpCons
+, Relop
 , OpUse (..)
 
   -- * Relmap basis
@@ -38,7 +38,7 @@ import Koshucode.Baala.Base.Relmap.HalfRelmap
     (3) constructor of operator, and
     (4) usage of operator. -}
 data OpImplement v =
-    OpImplement String OpParser (OpCons v) [String]
+    OpImplement String OpParser (Relop v) [String]
     
 {-| Parser for operand of relational operator.
     This parsers docompose operand trees,
@@ -53,7 +53,7 @@ type OpParser' = [Named [TokenTree]] -> [Named [TokenTree]]
 
 {-| Constructor of relational operator 'Relmap'.
     'Relmap' is constructed from 'HalfRelmap' and subrelmaps in it. -}
-type OpCons v = OpUse v -> AbortOr (Relmap v)
+type Relop v = OpUse v -> AbortOr (Relmap v)
 
 {-| Use of operator -}
 data OpUse v = OpUse {

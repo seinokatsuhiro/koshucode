@@ -14,19 +14,22 @@ module Koshucode.Baala.Minimal.Relmap.Tropashko
   -- $FundamentalOperators
 
   -- * Meet (Natural join)
-  relmapMeet,
-  relMeet,
+  relopMeet, relmapMeet, relMeet,
 
   -- * Join (Inner union)
-  relmapJoin,
-  relJoin
+  relopJoin, relmapJoin, relJoin
 ) where
 
 import Koshucode.Baala.Minimal.OpKit as Kit
-
+import Koshucode.Baala.Minimal.Relmap.Get
 
 
 -- ----------------------  Meet
+
+relopMeet :: (Ord v) => Relop v
+relopMeet use = do
+  m <- getRelmap use
+  Right $ relmapMeet use m
 
 {-| Meet two relations. -}
 relmapMeet :: (Ord v)
@@ -72,6 +75,11 @@ relmapJoin
 relmapJoin use m = Kit.relmapConfl use "join" sub [m] where
     sub [r2] r1 = relJoin r1 r2
     sub _ _ = undefined
+
+relopJoin :: (Ord v) => Relop v
+relopJoin use = do
+  m <- getRelmap use
+  Right $ relmapJoin use m
 
 {-| Join two relations. -}
 relJoin :: (Ord v)

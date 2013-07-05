@@ -5,24 +5,18 @@
 
 module Koshucode.Baala.Minimal.Relmap.Unary
 ( -- * empty
-  relmapEmpty
-, relEmpty
-
+  relopEmpty, relmapEmpty, relEmpty
   -- * cut
-, relmapCut
-, relCut
-
+, relopCut, relmapCut, relCut
   -- * pick
-, relmapPick
-, relPick
-
+, relopPick, relmapPick, relPick
   -- * rename
-, relmapRename
-, relRename
+, relopRename, relmapRename, relRename
 ) where
 
 import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Minimal.OpKit as Kit
+import Koshucode.Baala.Minimal.Relmap.Get
 import qualified Data.List  as List
 import qualified Data.Maybe as Maybe
 import qualified Data.Tuple as Tuple
@@ -30,6 +24,9 @@ import qualified Data.Tuple as Tuple
 
 
 -- ----------------------  empty
+
+relopEmpty :: Relop v
+relopEmpty use = Right $ relmapEmpty use
 
 relmapEmpty :: OpUse v -> Relmap v
 relmapEmpty use = Kit.relmapCalc use "empty" sub where
@@ -39,7 +36,14 @@ relmapEmpty use = Kit.relmapCalc use "empty" sub where
 relEmpty :: Map (Rel v)  -- ^ Any relation to empty relation
 relEmpty (Rel h1 _) = Rel h1 []
 
+
+
 -- ----------------------  cut & pick
+
+relopCut :: (Ord v) => Relop v
+relopCut use = do
+  ns <- getTerms use "-term"
+  Right $ relmapCut use ns
 
 relmapCut :: (Ord v) => OpUse v -> [String] -> Relmap v
 relmapCut use ns = Kit.relmapCalc use "cut" sub where
@@ -50,6 +54,11 @@ relCut
     => [String]      -- ^ Term names
     -> Map (Rel v)   -- ^ Mapping relation to relation
 relCut = project indexCut
+
+relopPick :: (Ord v) => Relop v
+relopPick use = do
+  ns <- getTerms use "-term"
+  Right $ relmapPick use ns
 
 relmapPick :: (Ord v) => OpUse v -> [String] -> Relmap v
 relmapPick use ns = Kit.relmapCalc use "pick" sub where
@@ -68,7 +77,14 @@ project f ns (Rel h1 b1) = Rel h2 b2 where
     h2  = Kit.rehead pj h1
     b2  = unique $ map pj b1
 
+
+
 -- ----------------------  rename
+
+relopRename :: Relop v
+relopRename use = do
+  np <- getTermPairs use "-term"
+  Right $ relmapRename use np
 
 relmapRename :: OpUse v -> [(String, String)] -> Relmap v
 relmapRename use np = Kit.relmapCalc use "rename" sub where

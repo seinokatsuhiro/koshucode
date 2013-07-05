@@ -3,9 +3,10 @@
 -- | Relational mappers
 
 module Koshucode.Baala.Vanilla.Relmap.Calc
-( relmapHold, relHold
-, relmapVal,  relVal
-, relmapRange
+( relopHold, relmapHold, relHold
+, relopUnhold
+, relopVal, relmapVal,  relVal
+, relopRange, relmapRange
 , limit
 ) where
 
@@ -13,6 +14,7 @@ import Koshucode.Baala.Minimal.OpKit as Kit
 import Koshucode.Baala.Vanilla.Value.Relval
 import Koshucode.Baala.Vanilla.Calc as Calc
 import Koshucode.Baala.Vanilla.Order as Kit
+import qualified Koshucode.Baala.Minimal as Mini
 import qualified Data.List as List
 
 
@@ -20,6 +22,17 @@ import qualified Data.List as List
 -- ----------------------  General calculations
 
 --  Right $ Kit.relmapCalc use op (holdBody test $ TreeB 0 term)
+
+relopHold :: Kit.Relop Val
+relopHold = relopHoldFor (==)
+
+relopUnhold :: Kit.Relop Val
+relopUnhold = relopHoldFor (/=)
+
+relopHoldFor :: (Val -> Val -> Bool) -> Kit.Relop Val
+relopHoldFor test use = do
+  tree <- Mini.getTree use "-term"
+  Right $ relmapHold use test tree
 
 {-| Make relmap function for @hold@ operator. -}
 relmapHold :: OpUse Val -> (Val -> Val -> Bool) -> TokenTree -> Relmap Val
@@ -31,6 +44,15 @@ relHold is e (Rel h1 b1) = Rel h1 b2 where
     b2      = filter f b1
     f arg   = calc arg `is` boolValue True
     calc    = Calc.makeCalc h1 e
+
+
+
+-- ----------------------  Val
+
+relopVal :: Kit.Relop Val
+relopVal use = do
+  trees <- Mini.getTrees use "-term"
+  Right $ relmapVal use trees
 
 {-| Make relmap function for @val@ operator. -}
 relmapVal :: OpUse Val -> [TokenTree] -> Relmap Val
@@ -60,6 +82,13 @@ limit2 c ns _ (Rel h1 b1) = Rel h1 b2 where
 
 
 -- ----------------------  Special calculations
+
+relopRange :: Kit.Relop Val
+relopRange use = do
+  term <- Mini.getTerm use "-term"
+  low  <- Mini.getInt  use "-from"
+  high <- Mini.getInt  use "-to"
+  Right $ relmapRange use term low high
 
 relmapRange :: (IntValue v) => OpUse v -> String -> Int -> Int -> Relmap v
 relmapRange use n low high = Kit.relmapCalc use "range" sub where

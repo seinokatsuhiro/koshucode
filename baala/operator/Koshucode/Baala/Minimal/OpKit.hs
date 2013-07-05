@@ -46,7 +46,7 @@ module Koshucode.Baala.Minimal.OpKit
 , Prelude.unique
 
   -- * Relmap
-, Relmap.OpCons
+, Relmap.Relop
 , Relmap.OpImplement (..)
 , Relmap.OpParser
 , Relmap.OpParser'

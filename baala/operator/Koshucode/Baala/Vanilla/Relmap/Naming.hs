@@ -2,24 +2,29 @@
 
 module Koshucode.Baala.Vanilla.Relmap.Naming
 ( -- * prefix
-  relmapPrefix
-, relPrefix
+  relopPrefix, relmapPrefix, relPrefix
 
   -- * unprefix
-, relmapUnprefix
-, relUnprefix
+, relopUnprefix, relmapUnprefix, relUnprefix
 
   -- * prefix-change
-, relmapPrefixChange
-, relPrefixChange
+, relopPrefixChange, relmapPrefixChange, relPrefixChange
 ) where
 
 import Koshucode.Baala.Minimal.OpKit as Kit
+import Koshucode.Baala.Vanilla.Value.Relval
+import qualified Koshucode.Baala.Minimal as Mini
 import qualified Data.List as List
 
 
 
 -- ----------------------  prefix
+
+relopPrefix :: Kit.Relop Val
+relopPrefix use = do
+  pre <- Mini.getTerm use "-prefix"
+  ns  <- Mini.getTerms use "-term"
+  Right $ relmapPrefix use pre ns
 
 relmapPrefix :: OpUse v -> String -> [String] -> Relmap v
 relmapPrefix use pre ns = Kit.relmapCalc use "prefix" sub where
@@ -43,6 +48,11 @@ prefixName _ _ = undefined
 
 -- ----------------------  unprefix
 
+relopUnprefix :: Kit.Relop Val
+relopUnprefix use = do
+  pre <- Mini.getTerm use "-prefix"
+  Right $ relmapUnprefix use pre
+
 relmapUnprefix :: OpUse v -> String -> Relmap v
 relmapUnprefix use pre = Kit.relmapCalc use "unprefix" sub where
     sub _ r1 = relUnprefix pre r1
@@ -63,6 +73,12 @@ unprefixName pre n =
 
 
 -- ----------------------  prefix-change
+
+relopPrefixChange :: Kit.Relop Val
+relopPrefixChange use = do
+  new <- Mini.getTerm use "-new"
+  old <- Mini.getTerm use "-old"
+  Right $ relmapPrefixChange use new old
 
 relmapPrefixChange :: OpUse v -> String -> String -> Relmap v
 relmapPrefixChange use new old =

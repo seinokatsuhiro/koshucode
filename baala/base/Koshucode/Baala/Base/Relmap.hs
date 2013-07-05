@@ -48,12 +48,12 @@ import Koshucode.Baala.Base.Relmap.Run
 --
 -- * Data 'OpImplement' has
 --   'OpParser' and
---   'OpCons'.
+--   'Relop'.
 --
 -- * Data 'OpParser' has
 --   'Koshucode.Baala.Base.Syntax.TokenTree.TokenTree'.
 --
--- * Data 'OpCons' has
+-- * Data 'Relop' has
 --   'OpUse' and
 --   'Relmap'.
 --

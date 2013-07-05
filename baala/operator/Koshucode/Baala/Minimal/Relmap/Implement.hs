@@ -25,86 +25,47 @@ import Koshucode.Baala.Minimal.Relmap.Unary
 builtinOperators :: (Ord v) => [OpImplement v]
 builtinOperators = operators [ ("|", LikeEmpty, consConcat) ]
 
-consConcat :: OpCons v
+consConcat :: Relop v
 consConcat = Right . mconcat . opSubmap
 
 -- | Minimal implementations of relmaps
 minimalOperators :: (Ord v) => [OpImplement v]
 minimalOperators = builtinOperators ++ operators
     -- Relmap operators in alphabetical order
-    [ o "cut"     LikePick    consCut
-    , o "empty"   LikeEmpty   consEmpty
-    , o "join"    LikeMeet    consJoin
-    , o "meet"    LikeMeet    consMeet
-    , o "minus"   LikeMeet    consMinus
-    , o "pick"    LikePick    consPick
-    , o "reldee"  LikeEmpty   consReldee
-    , o "reldum"  LikeEmpty   consReldum
-    , o "rename"  LikeRename  consRename
-    , o "some"    LikeMeet    consSome
-    , o "source"  LikeSource  consSource
+    [ o "cut"     LikePick    relopCut
+    , o "empty"   LikeEmpty   relopEmpty
+    , o "join"    LikeMeet    relopJoin
+    , o "meet"    LikeMeet    relopMeet
+    , o "minus"   LikeMeet    relopMinus
+    , o "pick"    LikePick    relopPick
+    , o "reldee"  LikeEmpty   relopReldee
+    , o "reldum"  LikeEmpty   relopReldum
+    , o "rename"  LikeRename  relopRename
+    , o "some"    LikeMeet    relopSome
+    , o "source"  LikeSource  relopSource
     ] where o = (,,)
 
 
 
 -- ----------------------  Constructors
 
-consEmpty :: OpCons v
-consEmpty use = Right $ relmapEmpty use
-
-consRename :: OpCons v
-consRename use = do
-  np <- getTermPairs use "-term"
-  Right $ relmapRename use np
-
-consSource :: OpCons v
-consSource use = do
+relopSource :: Relop v
+relopSource use = do
   sign <- getWord  use "-sign"
   ns   <- getTerms use "-term"
   Right $ relmapSource use sign ns
 
 -- Constant
 
-consReldee, consReldum :: OpCons v
-consReldee = consRelcon "reldee" reldee
-consReldum = consRelcon "reldee" reldum
+relopReldee, relopReldum :: Relop v
+relopReldee = consRelcon "reldee" reldee
+relopReldum = consRelcon "reldee" reldum
 
-consRelcon :: String -> Rel v -> OpCons v
+consRelcon :: String -> Rel v -> Relop v
 consRelcon op r use = Right $ relmapConst use op r
 
 -- Project
 
-consCut :: (Ord v) => OpCons v
-consCut use = do
-  ns <- getTerms use "-term"
-  Right $ relmapCut use ns
-
-consPick :: (Ord v) => OpCons v
-consPick use = do
-  ns <- getTerms use "-term"
-  Right $ relmapPick use ns
-
--- Binary operation
-
-consJoin :: (Ord v) => OpCons v
-consJoin use = do
-  m <- getRelmap use
-  Right $ relmapJoin use m
-
-consMeet :: (Ord v) => OpCons v
-consMeet use = do
-  m <- getRelmap use
-  Right $ relmapMeet use m
-
-consSome :: (Ord v) => OpCons v
-consSome use = do
-  m <- getRelmap use
-  Right $ relmapSome use m
-
-consMinus :: (Ord v) => OpCons v
-consMinus use = do
-  m <- getRelmap use
-  Right $ relmapMinus use m
 
 
 
