@@ -3,13 +3,20 @@
 -- | Judgements: a symbolic representations of affirmed or denied statements.
 
 module Koshucode.Baala.Base.Data.Judge
-( Judge (Judge)
+(
+-- * Datatype
+ Judge (Judge)
 , Relsign, Relarg
+
+-- * Writer
+, putJudges
+, abcJudge
+
+-- * Logical quality
 , affirmJudge
 , denyJudge
 , isAffirmed
 , isDenied
-, abcJudge
 ) where
 
 import qualified Data.List as List
@@ -33,7 +40,7 @@ data Judge v = Judge Bool Relsign (Relarg v)
 type Relsign = String
 
 -- | List of terms.
-type Relarg v = [(String, v)]
+type Relarg v = [Named v]
 
 -- Apply function to each values
 instance Functor Judge where
@@ -55,6 +62,10 @@ instance (Ord v, Pretty v) => Pretty (Judge v) where
           arg ((n,v) : a2) = text n <+> doc v <+> arg a2
           arg [] = empty
 
+
+
+-- ----------------------  Logical quality
+
 {-| Affirm judge, i.e., change logical quality to 'True'. -}
 affirmJudge :: Map (Judge v)
 affirmJudge (Judge _ s xs) = Judge True  s xs
@@ -68,6 +79,25 @@ isAffirmed (Judge q _ _) = q
 
 isDenied :: Judge t -> Bool
 isDenied (Judge q _ _) = not q
+
+
+
+-- ----------------------  Writer
+
+putJudges :: (Ord v, Pretty v) => [Judge v] -> IO ()
+putJudges = putStr . unlines . showJudges
+
+showJudges :: (Ord v, Pretty v) => [Judge v] -> [String]
+showJudges js = concatMap str js2 where
+    js2 = zip [(1 :: Int)..] js
+    str (n, j)
+        | n `mod` 20 == 0
+            = let count = "*** " ++ show n ++ " judges"
+              in [show $ doc j, count, ""]
+        | n `mod` 5 == 0
+            = [show $ doc j, ""]
+        | otherwise
+            = [show $ doc j]
 
 {-| Sort terms in alphabetical order. -}
 abcJudge :: (Ord v) => Judge v -> Judge v

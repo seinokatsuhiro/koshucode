@@ -136,9 +136,6 @@ readJudge s =
 
 -- ----------------------  Output
 
-putJudgeList :: (Ord v, Pretty v) => [Judge v] -> IO ()
-putJudgeList = print . docv
-
 putCommentLines :: [String] -> IO ()
 putCommentLines = putStr . unlines . comment
 
@@ -155,7 +152,7 @@ minus :: Input -> Input -> IO ()
 minus inputA inputB =
     do [textA, textB] <- readInputs [inputA, inputB]
        putCommentLines h
-       putJudgeList $ readJudge textA `minusJudge` readJudge textB
+       putJudges $ readJudge textA `minusJudge` readJudge textB
     where
       h = [ "DATASETS"
           , "  There are changes C when altering dataset B into A."
@@ -184,7 +181,7 @@ update :: Input -> Input -> IO ()
 update inputB inputC =
     do [textB, textC] <- readInputs [inputB, inputC]
        putCommentLines h
-       putJudgeList $ readJudge textB `updateJudge` readJudge textC
+       putJudges $ readJudge textB `updateJudge` readJudge textC
     where
       h = [ "DATASETS"
           , "  Updating dataset B by C, altered dataset A is obtained."

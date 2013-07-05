@@ -13,7 +13,6 @@ module Koshucode.Baala.Base.Section.SectionIO
 
 import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Base.Prelude as Prelude
 import Koshucode.Baala.Base.Relmap
 import Koshucode.Baala.Base.Syntax
 
@@ -63,6 +62,5 @@ runSection sec =
 
 {-| Run section and output judges. -}
 runSectionIO :: (Value v) => Section v -> IO ()
-runSectionIO = abortIO printJudge . runSection where
-    printJudge = print . docv . sectionJudge
+runSectionIO = abortIO (putJudges . sectionJudge) . runSection
 
