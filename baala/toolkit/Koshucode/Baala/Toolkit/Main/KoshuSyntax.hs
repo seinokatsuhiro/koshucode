@@ -119,13 +119,13 @@ putToken :: Int -> Int -> SourceLine -> IO (Int)
 putToken cn tn (SourceLine ln line toks) =
   do putStrLn ""
      putStrLn $ "*** [C" ++ show cn ++ "] L" ++ show ln ++ " " ++ show line
-     print $ docv $ map (tokenJudge cn) $ zip [tn..] toks
+     print $ docv $ map (tokenJudge cn) toks
      return $ tn + length toks
 
-tokenJudge :: Int -> (Int, Token) -> Judge Val
-tokenJudge cn (n, t) = Judge True "TOKEN" xs where
+tokenJudge :: Int -> Token -> Judge Val
+tokenJudge cn t = Judge True "TOKEN" xs where
     xs = [ ("/clause-seq"   , intv cn)
-         , ("/token-seq"    , intv n)
+         , ("/token-seq"    , intv    $ Syn.tokenNumber t)
          , ("/token-type"   , stringv $ Syn.tokenTypeText t)
          , ("/token-content", stringv $ Syn.tokenContent t) ]
 
@@ -143,13 +143,13 @@ dumpToken path =
 dumpTokenText :: (Int, [String]) -> SourceLine -> (Int, [String])
 dumpTokenText (n, ys) (SourceLine l line ts) = (n + length ts, ys ++ xs) where
     h  = ["", "**  L" ++ show l ++ " " ++ show line]
-    xs = h ++ (map dump $ zip [n..] ts)
+    xs = h ++ (map dump ts)
     dump p = show $ doc $ dumpTokenJudge l p
 
-dumpTokenJudge :: Int -> (Int, Token) -> Judge Val
-dumpTokenJudge l (n, t) = Judge True "TOKEN" xs where
+dumpTokenJudge :: Int -> Token -> Judge Val
+dumpTokenJudge l t = Judge True "TOKEN" xs where
     xs = [ ("/line"         , intv l)
-         , ("/token-seq"    , intv n)
+         , ("/token-seq"    , intv    $ Syn.tokenNumber t)
          , ("/token-type"   , stringv $ Syn.tokenTypeText t)
          , ("/token-content", stringv $ Syn.tokenContent  t) ]
 

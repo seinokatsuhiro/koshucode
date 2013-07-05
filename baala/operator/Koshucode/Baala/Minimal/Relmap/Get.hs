@@ -59,7 +59,7 @@ getWord use n = do
   let opd = halfOperand $ opHalf use
   sign <- opd <!!> n
   case sign of
-    [TreeL (TWord _ s)] -> Right s
+    [TreeL (TWord _ _ s)] -> Right s
     _ -> Left $ AbortLookup [] n
 
 getInt :: OpGet v Int
@@ -67,7 +67,7 @@ getInt use n = do
   let opd = halfOperand $ opHalf use
   sign <- opd <!!> n
   case sign of
-    [TreeL (TWord _ i)] -> Right (read i :: Int)
+    [TreeL (TWord _ _ i)] -> Right (read i :: Int)
     _ -> Left $ AbortLookup [] n
 
 {-| Get a term name from named operand. -}

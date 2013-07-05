@@ -7,7 +7,8 @@ module Koshucode.Baala.Base.Syntax.Token
 (
   -- * Token type
   -- $TokenType
-  Token (..)
+  TNumber
+, Token (..)
 
   -- * Predicates
 , isBlankToken
@@ -16,6 +17,7 @@ module Koshucode.Baala.Base.Syntax.Token
   -- * Other functions
 , tokenTypeText
 , tokenContent
+, tokenNumber
 , sweepToken
 , sweepLeft
 ) where
@@ -28,27 +30,30 @@ import Koshucode.Baala.Base.Prelude
 
 -- ----------------------  Token type
 
+{-| Token number. -}
+type TNumber = Int
+
 data Token
-    = TWord Int String   -- ^ Word.
-                         --   @Int@ represents quotation level, e.g.,
-                         --   0 for non-quoted,
-                         --   1 for single-quoted,
-                         --   2 for double-quoted.
-    | TTermN   [String]  -- ^ Term name
-    | TTermP   [Int]     -- ^ Term position in particular relation.
-                         --   This is translate from 'TTermN'.
-    | TOpen    String    -- ^ Open paren
-    | TClose   String    -- ^ Close paren
-    | TSpace   Int       -- ^ /N/ space characters
-    | TComment String    -- ^ Comment text
+    = TWord    TNumber Int String  -- ^ Word.
+                                   --   @Int@ represents quotation level, e.g.,
+                                   --   0 for non-quoted,
+                                   --   1 for single-quoted,
+                                   --   2 for double-quoted.
+    | TTermN   TNumber [String]    -- ^ Term name
+    | TTermP   TNumber [Int]       -- ^ Term position in particular relation.
+                                   --   This is translate from 'TTermN'.
+    | TOpen    TNumber String      -- ^ Open paren
+    | TClose   TNumber String      -- ^ Close paren
+    | TSpace   TNumber Int         -- ^ /N/ space characters
+    | TComment TNumber String      -- ^ Comment text
       deriving (Show, Eq, Ord, Data, Typeable)
 
 instance Name Token where
-    name (TTermN  ns) = concat ns
-    name (TWord  _ s) = s
-    name (TOpen    s) = s
-    name (TClose   s) = s
-    name (TComment s) = s
+    name (TTermN  _ ns) = concat ns
+    name (TWord  _ _ s) = s
+    name (TOpen    _ s) = s
+    name (TClose   _ s) = s
+    name (TComment _ s) = s
     name x = error $ "unknown name: " ++ show x
 
 
@@ -58,16 +63,16 @@ instance Name Token where
 {-| Test the token is blank,
     i.e., 'TComment' or 'TSpace'. -}
 isBlankToken :: Token -> Bool
-isBlankToken (TSpace _)    = True
-isBlankToken (TComment _)  = True
-isBlankToken _             = False
+isBlankToken (TSpace _ _)    = True
+isBlankToken (TComment _ _)  = True
+isBlankToken _               = False
 
 {-| Test the token is a term,
     i.e., 'TTermN' or 'TTermP'. -}
 isTermToken :: Token -> Bool
-isTermToken (TTermN _)     = True
-isTermToken (TTermP _)     = True
-isTermToken _              = False
+isTermToken (TTermN _ _)     = True
+isTermToken (TTermP _ _)     = True
+isTermToken _                = False
 
 
 
@@ -75,28 +80,37 @@ isTermToken _              = False
 
 {-| Text of token type, one of
     @\"Word\"@, @\"TermN\"@, @\"TermP\"@, @\"Open\"@, @\"Close\"@,
-    @\"Space\"@, @\"Comment\"@, or @\"Line@\".
+    @\"Space\"@, or @\"Comment\"@.
 
-    >>> tokenTypeText $ TWord 0 "flower"
+    >>> tokenTypeText $ TWord 1 0 "flower"
     "Word"
     -}
 tokenTypeText :: Token -> String
-tokenTypeText (TWord _ _)  = "Word"
-tokenTypeText (TTermN _)   = "TermN"
-tokenTypeText (TTermP _)   = "TermP"
-tokenTypeText (TOpen _)    = "Open"
-tokenTypeText (TClose _)   = "Close"
-tokenTypeText (TSpace _)   = "Space"
-tokenTypeText (TComment _) = "Comment"
+tokenTypeText (TWord _ _ _)  = "Word"
+tokenTypeText (TTermN _ _)   = "TermN"
+tokenTypeText (TTermP _ _)   = "TermP"
+tokenTypeText (TOpen _ _)    = "Open"
+tokenTypeText (TClose _ _)   = "Close"
+tokenTypeText (TSpace _ _)   = "Space"
+tokenTypeText (TComment _ _) = "Comment"
 
 tokenContent :: Token -> String
-tokenContent (TWord _ s)   = s
-tokenContent (TTermN s)    = concat s
-tokenContent (TTermP _)    = "#TermP"
-tokenContent (TOpen s)     = s
-tokenContent (TClose s)    = s
-tokenContent (TSpace n)    = replicate n ' '
-tokenContent (TComment s)  = s
+tokenContent (TWord _ _ s)   = s
+tokenContent (TTermN _ s)    = concat s
+tokenContent (TTermP _ _)    = "#TermP"
+tokenContent (TOpen _ s)     = s
+tokenContent (TClose _ s)    = s
+tokenContent (TSpace _ n)    = replicate n ' '
+tokenContent (TComment _ s)  = s
+
+tokenNumber :: Token -> TNumber
+tokenNumber (TWord    n _ _) = n
+tokenNumber (TTermN   n _)   = n
+tokenNumber (TTermP   n _)   = n
+tokenNumber (TOpen    n _)   = n
+tokenNumber (TClose   n _)   = n
+tokenNumber (TSpace   n _)   = n
+tokenNumber (TComment n _)   = n
 
 {-| Remove blank tokens. -}
 sweepToken :: Map [Token]

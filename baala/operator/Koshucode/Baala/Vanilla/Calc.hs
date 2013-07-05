@@ -46,6 +46,6 @@ calc h = crop calcRipen . mapPosition h
 
 mapPosition :: Relhead -> TokenTree -> TokenTree
 mapPosition h = fmap p where
-    p (TTermN ns) = TTermP $ termLook1 ns (headTerms h)
+    p (TTermN n ns) = TTermP n $ termLook1 ns (headTerms h)
     p x = x
 

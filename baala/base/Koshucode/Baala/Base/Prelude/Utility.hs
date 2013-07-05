@@ -19,9 +19,11 @@ module Koshucode.Baala.Base.Prelude.Utility
 , unionUp
 , singleton
 , divideBy
+, divideByP
 
 -- * Collection
 , gather
+, gatherWith
 , gatherToMap
 , lookupMap
 
@@ -77,6 +79,13 @@ gather one = loop where
     loop xs = let (y, xs2) = one xs
               in y : loop xs2
 
+gatherWith :: (c -> [a] -> (b, [a])) -> [c] -> [a] -> [b]
+gatherWith f = loop where
+    loop [] _ = []
+    loop _ [] = []
+    loop (c:cs) as = let (b, as') = f c as
+                     in b : loop cs as'
+
 {-| Gather (key,value) to a Map key [value] -}
 gatherToMap :: (Ord k) => [(k,v)] -> Map.Map k [v]
 gatherToMap xs = loop xs Map.empty where
@@ -96,6 +105,12 @@ singleton x = [x]
 divideBy :: (Eq a) => a -> [a] -> [[a]]
 divideBy dv = loop where
     loop xs = case break (== dv) xs of
+                (x, _ : xs2) -> x : loop xs2
+                (x, [])      -> [x]
+
+divideByP :: (Eq a) => (a -> Bool) -> [a] -> [[a]]
+divideByP p = loop where
+    loop xs = case break p xs of
                 (x, _ : xs2) -> x : loop xs2
                 (x, [])      -> [x]
 

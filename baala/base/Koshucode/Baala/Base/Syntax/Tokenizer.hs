@@ -67,13 +67,20 @@ instance Pretty SourceLine where
 sourceLines
     :: String        -- ^ Source text in Koshucode.
     -> [SourceLine]  -- ^ Token list per lines.
-sourceLines = concatMap sourceLine . linesNumbered
+sourceLines = loop 1 . linesNumbered where
+    loop _ [] = []
+    loop tok (p : ps) =
+        case sourceLine tok p of
+          (tok', src) -> src ++ loop tok' ps
 
-sourceLine :: (Int, String) -> [SourceLine]
-sourceLine (n, ln) = map src ls where
-    toks = gather nextToken ln
-    ls   = divideBy (TWord 0 "||") toks
+sourceLine :: Int -> (Int, String) -> (Int, [SourceLine])
+sourceLine tok (n, ln) = (tok + length toks, map src ls) where
+    toks = gatherWith nextToken [tok ..] ln
+    ls   = divideByP isDoubleBar toks
     src  = SourceLine n ln
+
+    isDoubleBar (TWord _ 0 "||") = True
+    isDoubleBar _                = False
 
 {-| Line number and contents. -}
 linesNumbered :: String -> [(Int, String)]
@@ -112,18 +119,18 @@ tokens :: String -> [Token]
 tokens = concatMap sourceLineTokens . sourceLines
 
 {-| Split a next token from source text. -}
-nextToken :: String -> (Token, String)
-nextToken ccs =
+nextToken :: Int -> String -> (Token, String)
+nextToken n ccs =
     case ccs of
-      ('*' : '*' : '*' : '*' : cs) -> (TWord 0 "****", cs)
-      ('*' : '*' : _)   ->  (TComment ccs, "")
-      ('#' : '!' : _)   ->  (TComment ccs, "")
-      ('(' : ')' : cs)  ->  (TWord 0 "()", cs) -- nil
-      ('|' : '|' : cs)  ->  (TWord 0 "||", dropSpaces cs) -- newline
+      ('*' : '*' : '*' : '*' : cs) -> tokD cs (TWord n 0 "****")
+      ('*' : '*' : _)   ->  tokD "" (TComment n ccs)
+      ('#' : '!' : _)   ->  tokD "" (TComment n ccs)
+      ('(' : ')' : cs)  ->  tokD cs (TWord n 0 "()") -- nil
+      ('|' : '|' : cs)  ->  tokD (dropSpaces cs) (TWord n 0 "||") -- newline
       (c : cs)
-        | isOpen    c   ->  (TOpen   [c] , cs)
-        | isClose   c   ->  (TClose  [c] , cs)
-        | isSingle  c   ->  (TWord 0 [c] , cs)
+        | isOpen    c   ->  tokD cs (TOpen   n [c])
+        | isClose   c   ->  tokD cs (TClose  n [c])
+        | isSingle  c   ->  tokD cs (TWord n 0 [c])
         | isTerm    c   ->  term cs [c]  []
         | isQuote   c   ->  quote   c cs []
         | isWord    c   ->  word    ccs  []
@@ -131,27 +138,28 @@ nextToken ccs =
       _                 ->  error $ "unknown token type: " ++ ccs
     where
       dropSpaces     = dropWhile isSpace
-      tok cons xs cs = (cons $ reverse xs, cs)
+      tokD cs x = (x, cs)
+      tokR cs cons xs = (cons $ reverse xs, cs)
 
       word (c:cs) xs | isWord c      = word cs (c:xs)
-      word ccs2 xs                   = tok (TWord 0) xs $ ccs2
+      word ccs2 xs                   = tokR ccs2 (TWord n 0) xs
 
-      quote q [] xs                  = tok (wordQ q) xs $ []
+      quote q [] xs                  = tokR [] (wordQ q) xs
       quote q (c:cs) xs
-          | c == q                   = tok (wordQ q) xs $ cs
+          | c == q                   = tokR cs (wordQ q) xs
           | otherwise                = quote q cs (c:xs)
 
-      wordQ '\'' = TWord 1
-      wordQ '"'  = TWord 2
-      wordQ _    = TWord 0
+      wordQ '\'' = (TWord n 1)
+      wordQ '"'  = (TWord n 2)
+      wordQ _    = (TWord n 0)
 
       term (c:cs) xs ns | isTerm c   = term cs [c] $ t xs ns
                         | isWord c   = term cs (c:xs) ns
-      term ccs2 xs ns                = tok TTermN (t xs ns) $ ccs2
+      term ccs2 xs ns                = tokR ccs2 (TTermN n) (t xs ns)
       t xs = (reverse xs :)
 
-      white n (c:cs)    | isSpace c  = white (n + 1) cs
-      white n ccs2                   = (TSpace n, ccs2)
+      white i (c:cs)    | isSpace c  = white (i + 1) cs
+      white i ccs2                   = tokD ccs2 (TSpace n i)
 
 -- word
 -- e1 = tokens "aa bb"
@@ -195,22 +203,22 @@ maybeWord c  =  C.isAlphaNum c
 
 {-| Convert back a token list to a source string. -}
 untokens :: [Token] -> String
-untokens (TOpen a : xs)      = a ++ untokens xs
-untokens (x : TClose a : xs) = untoken x ++ untokens (TClose a : xs)
+untokens (TOpen _ a : xs)      = a ++ untokens xs
+untokens (x : TClose n a : xs) = untoken x ++ untokens (TClose n a : xs)
 untokens [x]    = untoken x
 untokens (x:xs) = untoken x ++ untokens xs
 untokens []     = []
 
 untoken :: Token -> String
-untoken (TWord 1 s)   = "'" ++ s ++ "'"
-untoken (TWord 2 s)   = "\"" ++ s ++ "\""
-untoken (TWord _ s)   = s
-untoken (TTermN  ns)  = concat ns
-untoken (TTermP  ns)  = concatMap show ns
-untoken (TOpen   s)   = s
-untoken (TClose  s)   = s
-untoken (TSpace  n)   = replicate n ' '
-untoken (TComment s)  = s
+untoken (TWord _ 1 s)   = "'" ++ s ++ "'"
+untoken (TWord _ 2 s)   = "\"" ++ s ++ "\""
+untoken (TWord _ _ s)   = s
+untoken (TTermN  _ ns)  = concat ns
+untoken (TTermP  _ ns)  = concatMap show ns
+untoken (TOpen   _ s)   = s
+untoken (TClose  _ s)   = s
+untoken (TSpace  _ n)   = replicate n ' '
+untoken (TComment _ s)  = s
 
 
 

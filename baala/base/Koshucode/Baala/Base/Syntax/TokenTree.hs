@@ -42,9 +42,9 @@ tokenTrees = trees parenType . sweepToken
 parenType :: ParenType Token
 typeParen :: TypeParen Token
 (parenType, typeParen) = parenTable
-      [ (1, TOpen "(", TClose ")")
-      , (2, TOpen "[", TClose "]")
-      , (3, TOpen "{", TClose "}")
+      [ (1, TOpen 0 "(", TClose 0 ")")
+      , (2, TOpen 0 "[", TClose 0 "]")
+      , (3, TOpen 0 "{", TClose 0 "}")
       ]
 
 {-| Convert back tree into source string. -}

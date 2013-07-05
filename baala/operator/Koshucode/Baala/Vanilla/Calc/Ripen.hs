@@ -11,12 +11,12 @@ import qualified Data.List as List
 import qualified Data.Map  as Map
 
 calcRipen :: Ripen Token Val
-calcRipen (TWord q n) xs arg
+calcRipen (TWord _ q n) xs arg
     | q > 0     = stringValue n
     | otherwise = case Map.lookup n operators of
                     Just g  -> g xs arg
                     Nothing -> stringValue n
-calcRipen (TTermP ps) _ arg = termRef ps arg
+calcRipen (TTermP _ ps) _ arg = termRef ps arg
 calcRipen f xs _ = error $ "unknown token: "
                      ++ show f ++ " " ++ show xs
 
@@ -86,7 +86,7 @@ operators = Map.fromList
 -- | Convert infix form to prefix form
 calcBinary :: TokenTree -> TokenTree
 calcBinary = binaryTree ht where
-    op = map (TWord 0) . words
+    op = map (TWord 0 0) . words
     ht = heightTable [
           (Right 8, op "or"),
           (Right 7, op "and"),
