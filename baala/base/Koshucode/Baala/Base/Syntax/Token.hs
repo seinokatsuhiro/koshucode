@@ -13,6 +13,8 @@ module Koshucode.Baala.Base.Syntax.Token
   -- * Predicates
 , isBlankToken
 , isTermToken
+, isOpenTokenOf
+, isCloseTokenOf
 
   -- * Other functions
 , tokenTypeText
@@ -73,6 +75,14 @@ isTermToken :: Token -> Bool
 isTermToken (TTermN _ _)     = True
 isTermToken (TTermP _ _)     = True
 isTermToken _                = False
+
+isOpenTokenOf :: String -> Token -> Bool
+isOpenTokenOf p1 (TOpen _ p2) = p1 == p2
+isOpenTokenOf _ _             = False
+
+isCloseTokenOf :: String -> Token -> Bool
+isCloseTokenOf p1 (TClose _ p2) = p1 == p2
+isCloseTokenOf _ _              = False
 
 
 

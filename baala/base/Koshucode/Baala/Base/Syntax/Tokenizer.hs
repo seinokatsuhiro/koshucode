@@ -7,14 +7,14 @@ module Koshucode.Baala.Base.Syntax.Tokenizer
 (
 -- * Library
 
-  -- ** Source lines
-  SourceLine (..)
-, sourceLines
-
   -- ** Tokenizer
-, tokens
-, untokens
-, untoken
+  tokens,
+  untokens,
+  untoken,
+
+  -- ** Source lines
+  SourceLine (..),
+  sourceLines
 
 -- * Document
 
@@ -29,6 +29,9 @@ module Koshucode.Baala.Base.Syntax.Tokenizer
 
   -- ** Syntactic content type
   -- $SyntacticContentType
+
+-- * Examples
+-- $Examples
 ) where
 
 import Data.Generics (Data, Typeable)
@@ -40,81 +43,10 @@ import Koshucode.Baala.Base.Syntax.Token
 
 
 
--- ----------------------  Source line
-
-data SourceLine = SourceLine
-    { sourceLineNumber  :: Int     -- ^ Line number, from 1.
-    , sourceLineContent :: String  -- ^ Line content without newline.
-    , sourceLineTokens  :: [Token] -- ^ Tokens from line.
-    } deriving (Show, Eq, Ord, Data, Typeable)
-
-instance Pretty SourceLine where
-    doc (SourceLine _ line _) = text line
-
-{-| Split source text into 'SourceLine' list.
-
-    1. Split source code into lines by line delimiters
-       (carriage return @\\r@ or line feed @\\n@)
-
-   2. Numbering line numbers.
-      Internally, this is represented as
-      a list of pairs (/line#/, /content/).
-
-   3. Tokenize each lines.
-      This is represented as a list of
-      'SourceLine' /line#/ /content/ /tokens/.
-  -}
-sourceLines
-    :: String        -- ^ Source text in Koshucode.
-    -> [SourceLine]  -- ^ Token list per lines.
-sourceLines = loop 1 . linesNumbered where
-    loop _ [] = []
-    loop tok (p : ps) =
-        case sourceLine tok p of
-          (tok', src) -> src ++ loop tok' ps
-
-sourceLine :: Int -> (Int, String) -> (Int, [SourceLine])
-sourceLine tok (n, ln) = (tok + length toks, map src ls) where
-    toks = gatherWith nextToken [tok ..] ln
-    ls   = divideByP isDoubleBar toks
-    src  = SourceLine n ln
-
-    isDoubleBar (TWord _ 0 "||") = True
-    isDoubleBar _                = False
-
-{-| Line number and contents. -}
-linesNumbered :: String -> [(Int, String)]
-linesNumbered = zip [1..] . linesCrLf
-
-{-| Split string into lines.
-    The result strings do not contain
-    carriage returns (@\\r@)
-    and line feeds (@\\n@). -}
-linesCrLf :: String -> [String]
-linesCrLf "" = []
-linesCrLf s = ln : nextLine s2 where
-    (ln, s2) = break (`elem` "\r\n") s
-    nextLine ('\r' : s3) = nextLine s3
-    nextLine ('\n' : s3) = nextLine s3
-    nextLine s3 = linesCrLf s3
-
-
-
 -- ----------------------  Tokenizer
 
 {-| Split string into list of tokens.
-    Result token list does not contain newline characters.
-
-    >>> tokens "aa\n'bb'\n\"cc\""
-    [TWord 0 "aa", TWord 1 "bb", TWord 2 "cc"]
-
-    Example includes 'TWord', 'TTermN' and 'TSpace' tokens.
-
-    >>> tokens "|-- R  /a A0 /b 31"
-    [TWord 0 "|--", TSpace 1, TWord 0 "R", TSpace 2,
-     TTermN ["/a"], TSpace 1, TWord 0 "A0", TSpace 1,
-     TTermN ["/b"], TSpace 1, TWord 0 "31"]
-  -}
+    Result token list does not contain newline characters. -}
 tokens :: String -> [Token]
 tokens = concatMap sourceLineTokens . sourceLines
 
@@ -222,101 +154,198 @@ untoken (TComment _ s)  = s
 
 
 
+-- ----------------------  Source line
+
+data SourceLine = SourceLine
+    { sourceLineNumber  :: Int     -- ^ Line number, from 1.
+    , sourceLineContent :: String  -- ^ Line content without newline.
+    , sourceLineTokens  :: [Token] -- ^ Tokens from line.
+    } deriving (Show, Eq, Ord, Data, Typeable)
+
+instance Pretty SourceLine where
+    doc (SourceLine _ line _) = text line
+
+{-| Split source text into 'SourceLine' list.
+
+    1. Split source code into lines by line delimiters
+       (carriage return @\\r@ or line feed @\\n@)
+
+   2. Numbering line numbers.
+      Internally, this is represented as
+      a list of pairs (/line#/, /content/).
+
+   3. Tokenize each lines.
+      This is represented as a list of
+      'SourceLine' /line#/ /content/ /tokens/.
+  -}
+sourceLines
+    :: String        -- ^ Source text in Koshucode.
+    -> [SourceLine]  -- ^ Token list per lines.
+sourceLines = loop 1 . linesNumbered where
+    loop _ [] = []
+    loop tok (p : ps) =
+        case sourceLine tok p of
+          (tok', src) -> src ++ loop tok' ps
+
+sourceLine :: Int -> (Int, String) -> (Int, [SourceLine])
+sourceLine tok (n, ln) = (tok + length toks, map src ls) where
+    toks = gatherWith nextToken [tok ..] ln
+    ls   = divideByP isDoubleBar toks
+    src  = SourceLine n ln
+
+    isDoubleBar (TWord _ 0 "||") = True
+    isDoubleBar _                = False
+
+{-| Line number and contents. -}
+linesNumbered :: String -> [(Int, String)]
+linesNumbered = zip [1..] . linesCrLf
+
+{-| Split string into lines.
+    The result strings do not contain
+    carriage returns (@\\r@)
+    and line feeds (@\\n@). -}
+linesCrLf :: String -> [String]
+linesCrLf "" = []
+linesCrLf s = ln : nextLine s2 where
+    (ln, s2) = break (`elem` "\r\n") s
+    nextLine ('\r' : s3) = nextLine s3
+    nextLine ('\n' : s3) = nextLine s3
+    nextLine s3 = linesCrLf s3
+
+
+
 -- ----------------------
 -- $SpecialCharacters
 
 
 
 -- ----------------------
--- $Asterisks
---
--- There are three uses of asterisks (@*@) in koshucode,
--- 
--- [@*@]
---  Single asterisk means multiplication,
---  e.g., @3 * 4@ (three times four).
---
--- [@**@]
---  Double asterisk leads line comment.
---  Textx from @**@ to end of line are ignored.
---
--- [@****@]
---  Quadruple asterisk (fourfold asterisk) leads caluse comment.
---  Texts from @****@ to end of clause are ignored.
---  In other words, line staring with @****@
---  and following indented lines are ignored.
---
--- Triple asterisk @***@ is double and rest of text.
--- Quintuple (fivefold) asterisk @*****@ is quadruple and rest of text.
---
--- Line comments like this:
---
--- > ** aaa bbbbb cc
---
--- Clause comments like this:
---
--- > **** aaa bbb
--- >      ccccc dddddd
--- >      ee fffff
---
--- You can type @****@ on top of a clause to hide it.
+{- $Asterisks
+
+   There are three uses of asterisks (@*@) in koshucode,
+   
+   [@*@]
+    Single asterisk means multiplication,
+    e.g., @3 * 4@ (three times four).
+   
+   [@**@]
+    Double asterisk leads line comment.
+    Textx from @**@ to end of line are ignored.
+   
+   [@****@]
+    Quadruple asterisk (fourfold asterisk) leads caluse comment.
+    Texts from @****@ to end of clause are ignored.
+    In other words, line staring with @****@
+    and following indented lines are ignored.
+   
+   Triple asterisk @***@ is double and rest of text.
+   Quintuple (fivefold) asterisk @*****@ is quadruple and rest of text.
+   
+   Line comments like this:
+   
+   > ** aaa bbbbb cc
+   
+   Clause comments like this:
+   
+   > **** aaa bbb
+   >      ccccc dddddd
+   >      ee fffff
+   
+   You can type @****@ on top of a clause to hide it.
+   -}
 
 
 
 -- ----------------------
--- $EscapeSequences
---
--- (Not implemented)
---
--- [@\[*q\]@]
---  Single quote.
---
--- [@\[*qq\]@]
---  Double quote.
---
--- [@\[*cr\]@]
---  Carriage return (@\\r@).
---
--- [@\[*lf\]@]
---  Line feed (@\\n@).
---
--- [@\[*tab\]@]
---  Tab (@\\t@).
---
--- [@\[*spc\]@]
---  Space.
+{- $EscapeSequences
+
+   (Not implemented)
+   
+   [@\[*q\]@]
+    Single quote.
+   
+   [@\[*qq\]@]
+    Double quote.
+   
+   [@\[*cr\]@]
+    Carriage return (@\\r@).
+   
+   [@\[*lf\]@]
+    Line feed (@\\n@).
+   
+   [@\[*tab\]@]
+    Tab (@\\t@).
+   
+   [@\[*spc\]@]
+    Space.
+   -}
 
 
 
 -- ----------------------
--- $SyntacticContentType
---
--- (Not implemented)
---
--- Tokenizer recognizes five types of content.
---
--- [Word]
---  Simple sequence of characters,
---  e.g., @abc@, @123@.
---  Numbers are represented as words.
---
--- [Code]
---  Code are like tagged word,
---  e.g., @(color \'blue\')@.
---
--- [List]
---  Orderd sequence of contents.
---  Lists are enclosed in square brackets,
---  e.g., @[ ab cd 0 1 ]@
---
--- [Tuple]
---  Set of pairs of term name and content.
---  Tuples are enclosed in round-bar parens,
---  e.g., @(| \/a 10 \/b 20 |)@.
---
--- [Relation]
---  Set of uniform-typed tuples.
---  Relations are enclosed in square-bar brackets,
---  and enveloped tuples are divided by vertical bar,
---  e.g., @[| \/a \/b | 10 20 | 10 30 |]@.
+{- $SyntacticContentType
+
+   (Not implemented)
+   
+   Tokenizer recognizes five types of content.
+   
+   [Word]
+    Simple sequence of characters,
+    e.g., @abc@, @123@.
+    Numbers are represented as words.
+   
+   [Code]
+    Code are like tagged word,
+    e.g., @(color \'blue\')@.
+   
+   [List]
+    Orderd sequence of contents.
+    Lists are enclosed in square brackets,
+    e.g., @[ ab cd 0 1 ]@
+   
+   [Tuple]
+    Set of pairs of term name and content.
+    Tuples are enclosed in curely braces,
+    e.g., @{ \/a 10 \/b 20 }@.
+   
+   [Relation]
+    Set of uniform-typed tuples.
+    Relations are enclosed in curely-bar braces,
+    and enveloped tuples are divided by vertical bar,
+    e.g., @{| \/a \/b | 10 20 | 10 30 |}@.
+
+   -}
+
+
+
+-- ----------------------
+{- $Examples
+
+   Words and quotations.
+
+   >>> tokens "aa\n'bb'\n\"cc\""
+   [TWord 0 "aa", TWord 1 "bb", TWord 2 "cc"]
+   
+   Example includes 'TWord', 'TTermN' and 'TSpace' tokens.
+   
+   >>> tokens "|-- R  /a A0 /b 31"
+   [TWord 0 "|--", TSpace 1, TWord 0 "R", TSpace 2,
+    TTermN ["/a"], TSpace 1, TWord 0 "A0", TSpace 1,
+    TTermN ["/b"], TSpace 1, TWord 0 "31"]
+
+   Parens.
+
+   >>> tokens "aa (bb x y (z))"
+   [TWord 1 0 "aa", TSpace 2 1,
+    TOpen 3 "(", TWord 4 0 "bb", TSpace 5 1,
+      TWord 6 0 "x", TSpace 7 1, TWord 8 0 "y", TSpace 9 1,
+      TOpen 10 "(", TWord 11 0 "z", TClose 12 ")", TClose 13 ")"]
+
+   A comment.
+
+   >>> tokens "abc ** this is a comment\ndef\n"
+   [TWord 1 0 "abc", TSpace 2 1, TComment 3 "** this is a comment",
+    TWord 4 0 "def"]
+
+-}
 
