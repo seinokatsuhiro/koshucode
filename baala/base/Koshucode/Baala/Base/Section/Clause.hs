@@ -25,6 +25,7 @@ import Koshucode.Baala.Base.Relmap
 import Koshucode.Baala.Base.Syntax
 
 import Koshucode.Baala.Base.Section.Clausify
+import Koshucode.Baala.Base.Section.ConsJudge
 import Koshucode.Baala.Base.Section.Section
 
 -- Synthesis process
@@ -168,7 +169,7 @@ clauseHalf half = map f where
 
 {-| Second step of constructing 'Section'. -}
 consSection
-    :: (StringValue v)
+    :: (Value v)
     => RelmapFullCons v    -- ^ Relmap full constructor
     -> [Clause]            -- ^ Output of 'consClause'
     -> AbortOr (Section v) -- ^ Result section
@@ -200,7 +201,8 @@ consSection whole xs = do
       exp (CExport _ n : xs2) = n : exp xs2
       exp xs2 = skip exp xs2
 
-      jud (CJudge _ q s xs2 : xs3) = judge q s xs2 : jud xs3
+      jud (CJudge src q s xs2 : xs3) =
+          consJudge src q s (tokenTrees xs2) : jud xs3
       jud xs2 = skip jud xs2
 
       rel (CRelmap _ n r : xs2) =
@@ -224,21 +226,6 @@ consSection whole xs = do
 skip :: ([a] -> [b]) -> [a] -> [b]
 skip loop (_ : xs) = loop xs
 skip _ [] = []
-
-judge :: (StringValue v) => Bool -> Relsign -> [Token] -> AbortOr (Judge v)
-judge q s xs = do
-  xs' <- terms xs
-  Right $ Judge q s xs'
-
--- Collect term name and content
-terms :: (StringValue v) => [Token] -> AbortOr [(String, v)]
-terms (TTermN _ [n] : TWord _ _ w : xs) =
-    do xs' <- terms xs
-       Right $ (n, stringValue w) : xs'
-terms [] = Right []
-terms (TTermN _ ns : _) = Left $ AbortMalformedTerms [] (show ns) -- no content
-terms (TWord _ _ c : _) = Left $ AbortMalformedTerms [] (show c) -- no name
-terms (x : _)         = Left $ AbortMalformedTerms [] (show x) -- ???
 
 
 

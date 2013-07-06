@@ -40,6 +40,8 @@ parenType = parenTable
       , (3, isOpenTokenOf "{", isCloseTokenOf "}")
       ]
 
+
+
 -- ----------------------
 {- $Example
 

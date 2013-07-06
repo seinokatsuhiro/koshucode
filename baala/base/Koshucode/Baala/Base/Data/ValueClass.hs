@@ -1,12 +1,19 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Data.ValueClass
-( BoolValue (..)
+(
+-- * Haskell data
+  BoolValue (..)
 , IntValue (..)
 , StringValue (..)
 , ListValue (..)
+
+-- * Koshucode data
 , RelValue (..)
+, TermsetValue (..)
 , Nil (..)
+
+-- * Convinient class
 , Value ()
 ) where
 
@@ -15,7 +22,8 @@ import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Data.Rel
 
 
--- ----------------------  Built-in data
+
+-- ----------------------  Haskell built-in data
 
 class BoolValue v where
     boolValue   :: Bool -> v
@@ -34,16 +42,27 @@ class ListValue v where
     isListValue :: v -> Bool
 
 
+
 -- ----------------------  Data in koshucode
 
 class RelValue v where
     relValue   :: Rel v -> v
     isRelValue :: v -> Bool
 
+class TermsetValue v where
+    termsetValue   :: [Named v] -> v
+    isTermsetValue :: v -> Bool
+
 -- | Types that can be nil
 class Nil v where
     nil   :: v
     isNil :: v -> Bool
 
-class (Ord v, Pretty v, Nil v, StringValue v) => Value v
+
+
+-- ----------------------  Convinient class
+
+class (Ord v, Pretty v, Nil v,
+       BoolValue v, StringValue v,
+       ListValue v, TermsetValue v) => Value v
 

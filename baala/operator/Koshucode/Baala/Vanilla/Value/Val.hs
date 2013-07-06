@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Term values
+{-| Term values -}
 
 module Koshucode.Baala.Vanilla.Value.Val
 ( Val (..)
@@ -13,15 +13,16 @@ module Koshucode.Baala.Vanilla.Value.Val
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
 
--- | Type for values
+{-| Type for values. -}
 
 data Val
-    = Stringv String     -- ^ String value
-    | Intv    Int        -- ^ Integer value
-    | Boolv   Bool       -- ^ Boolean value
-    | Listv   [Val]      -- ^ List of values
-    | Relv    (Rel Val)  -- ^ Relational value
-    | Nov                -- ^ Sign of no ordinary values
+    = Stringv  String      -- ^ String value
+    | Intv     Int         -- ^ Integer value
+    | Boolv    Bool        -- ^ Boolean value
+    | Listv    [Val]       -- ^ List of values
+    | Termsetv [Named Val] -- ^ List of values
+    | Relv     (Rel Val)   -- ^ Relational value
+    | Nov                  -- ^ Sign of no ordinary values
       deriving (Show, Eq, Ord)
 
 instance BoolValue Val where
@@ -44,6 +45,11 @@ instance ListValue Val where
     isListValue (Listv _) = True
     isListValue _         = False
 
+instance TermsetValue Val where
+    termsetValue = Termsetv
+    isTermsetValue (Termsetv _) = True
+    isTermsetValue _            = False
+
 instance RelValue Val where
     relValue = Relv
     isRelValue (Relv _) = True
@@ -55,14 +61,18 @@ instance Nil Val where
     isNil _   = False
 
 instance Pretty Val where
-    doc (Stringv s) = docQuote $ text $ escape s
-    doc (Intv n)    = int n
-    doc (Boolv n)
-        | n         = text "true"
-        | otherwise = text "false"
-    doc (Nov)       = text "()"
-    doc (Listv xs)  = text "(list" <+> hsep (map doc xs) <> text ")"
-    doc (Relv r)    = doc r
+    doc (Stringv s)   = docQuote $ text $ escape s
+    doc (Intv n)      = int n
+    doc (Boolv b)
+        | b           = text "#true"
+        | otherwise   = text "#false"
+    doc (Nov)         = text "()"
+    doc (Listv xs)    = text "[" <+> hsep (map doc xs) <+> text "]"
+    doc (Termsetv xs) = text "{" <+> hsep (map docTerms xs) <+> text "}"
+    doc (Relv r)      = doc r
+
+docTerms :: (Pretty a) => Named a -> Doc
+docTerms (n, x) = text n <+> doc x
 
 instance Value Val
 

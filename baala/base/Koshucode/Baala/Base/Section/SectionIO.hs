@@ -25,7 +25,7 @@ import Koshucode.Baala.Base.Section.Clause
 
 {-| Read section from text. -}
 sectionRead
-    :: (StringValue v)
+    :: (Value v)
     => Section v   -- ^ Section that is same type to result section
     -> String      -- ^ Source text
     -> AbortOr (Section v)  -- ^ Result section from source text
@@ -35,7 +35,7 @@ sectionRead root src = sec where
 
 {-| Read section from file. -}
 sectionFile
-    :: (StringValue v)
+    :: (Value v)
     => Section v    -- ^ Root section
     -> FilePath     -- ^ Path of section file
     -> IO (AbortOr (Section v)) -- ^ Result section
