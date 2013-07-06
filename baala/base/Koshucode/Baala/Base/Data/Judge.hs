@@ -88,16 +88,18 @@ putJudges :: (Ord v, Pretty v) => [Judge v] -> IO ()
 putJudges = putStr . unlines . showJudges
 
 showJudges :: (Ord v, Pretty v) => [Judge v] -> [String]
-showJudges js = concatMap str js2 where
-    js2 = zip [(1 :: Int)..] js
-    str (n, j)
-        | n `mod` 20 == 0
-            = let count = "*** " ++ show n ++ " judges"
-              in [show $ doc j, count, ""]
-        | n `mod` 5 == 0
-            = [show $ doc j, ""]
-        | otherwise
-            = [show $ doc j]
+showJudges = loop (1 :: Int) where
+    count 0 = "*** (no judges)"
+    count 1 = "*** (1 judge)"
+    count n = "*** (" ++ show n ++ " judges)"
+
+    loop n [] = [count $ n - 1, ""]
+    loop n (j : js)
+        | n `mod` 20 == 0  = s : count n : "" : ss
+        | n `mod`  5 == 0  = s : "" : ss
+        | otherwise        = s : ss
+        where s  = show $ doc j
+              ss = loop (n + 1) js
 
 {-| Sort terms in alphabetical order. -}
 abcJudge :: (Ord v) => Judge v -> Judge v

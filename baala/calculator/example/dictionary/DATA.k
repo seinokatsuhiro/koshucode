@@ -1,11 +1,17 @@
+#!/usr/bin/env koshu --run
 ** -*- koshu -*-
 **
-**  Suppliers-and-parts dataset in Koshucode
+**  DESCRIPTION
+**    Suppliers-and-parts dataset in Koshucode
 **
-**  This dataset is excerpt from Date's books,
-**  e.g., "The Relational Database Dictionary"
-**  or "An Introduction to Database Systems",
-**  and translates into Koshucode.
+**    This dataset is excerpt from Date's books,
+**    e.g., "The Relational Database Dictionary"
+**    or "An Introduction to Database Systems",
+**    and translates into Koshucode.
+**
+**  USAGE
+**    $ koshu DATA.k natural-join.k
+**    $ ./DATA.k natural-join.k
 **
 
 **  Supplier

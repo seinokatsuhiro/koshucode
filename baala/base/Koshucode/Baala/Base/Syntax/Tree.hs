@@ -119,21 +119,41 @@ type TypeParen a = Int -> (a, a)
 
 parenTable
     :: (Eq a)
-    => [(Int, a, a)]               -- ^ List of (/type/, /opne/, /close/)
-    -> (ParenType a, TypeParen a)  -- ^ Paren functions.
-parenTable xs = (parenType, typeParen) where
+    => [(Int, a -> Bool, a -> Bool)]  -- ^ List of (/type/, /opne/, /close/)
+    -> ParenType a
+parenTable xs = parenType where
     parenTypeTable = map parenOpen xs ++ map parenClose xs
-    parenOpen  (n,o,_) = (o,n)
-    parenClose (n,_,c) = (c,-n)
-    parenType p =
-        case lookup p parenTypeTable of
+    parenOpen  (n, open, _)  = (open,   n)
+    parenClose (n, _, close) = (close, -n)
+    parenType a =
+        case satisfy a parenTypeTable of
           Just n  -> n
           Nothing -> 0
 
-    typeParenTable = map typeOpenClose xs
-    typeOpenClose (n,o,c) = (n,(o,c))
-    typeParen n =
-        case lookup n typeParenTable of
-          Just p  -> p
-          Nothing -> error $ "unknown paren type: " ++ show n
+satisfy :: a -> [(a -> Bool, b)] -> Maybe b
+satisfy x = loop where
+    loop [] = Nothing
+    loop ((p,v):ps)
+        | p x = Just v
+        | otherwise = loop ps
+
+-- parenTable2
+--     :: (Eq a)
+--     => [(Int, a, a)]               -- ^ List of (/type/, /opne/, /close/)
+--     -> (ParenType a, TypeParen a)  -- ^ Paren functions.
+-- parenTable2 xs = (parenType, typeParen) where
+--     parenTypeTable = map parenOpen xs ++ map parenClose xs
+--     parenOpen  (n,o,_) = (o,n)
+--     parenClose (n,_,c) = (c,-n)
+--     parenType p =
+--         case lookup p parenTypeTable of
+--           Just n  -> n
+--           Nothing -> 0
+
+--     typeParenTable = map typeOpenClose xs
+--     typeOpenClose (n,o,c) = (n,(o,c))
+--     typeParen n =
+--         case lookup n typeParenTable of
+--           Just p  -> p
+--           Nothing -> error $ "unknown paren type: " ++ show n
 

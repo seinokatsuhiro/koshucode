@@ -24,7 +24,7 @@ Yamanashi Prefecture.
 The first character is "甲" (kō),
 and the second is "州" (shū).
 *Koshucode* corresponds to the Japanese word
-"甲州記法" (Kōshū Kihō).
+"甲州記法" (kōshū kihō).
 
 
 
@@ -41,4 +41,11 @@ or Haddock documentations at
 * [koshucode-baala-base](http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/)
 * [koshucode-baala-operator](http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/)
 * [koshucode-baala-toolkit](http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-toolkit/)
+
+
+
+BUGS
+----------------------
+
+There are many bugs and potentials.
 

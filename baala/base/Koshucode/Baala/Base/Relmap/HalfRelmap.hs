@@ -26,5 +26,5 @@ instance Pretty HalfRelmap where
     doc HalfRelmap { halfOperator = op, halfOperand = opd } =
         case lookup "operand" opd of
           Nothing -> text op <+> text "..."
-          Just xs -> text op <+> text (tokenTreesSource xs)
+          Just xs -> text op <+> text (show xs)
 

@@ -24,7 +24,7 @@ data Abort
     | AbortMissingTermName  [SourceLine] String
     | AbortUnknownClause    [SourceLine]
     | AbortUnknownRelmap    [SourceLine] String
-    | AbortUsage            [SourceLine] [String]
+    | AbortUsage            [SourceLine] String [String]
       deriving (Show, Eq, Ord)
 
 instance Name Abort where
@@ -40,7 +40,7 @@ instance AbortSymbol Abort where
         (AbortMissingTermName _ _)    -> "項目名ではない記号"
         (AbortUnknownClause _)        -> "未知の構文"
         (AbortUnknownRelmap _ _)      -> "未知の演算子"
-        (AbortUsage _ _)              -> "使用法の間違い"
+        (AbortUsage _ _ _)            -> "使用法の間違い"
 
     abortMain a = case a of
         (AbortLookup _ s)             -> par s
@@ -49,16 +49,16 @@ instance AbortSymbol Abort where
         (AbortMissingTermName _ s)    -> par s
         (AbortUnknownClause _)        -> empty
         (AbortUnknownRelmap _ s)      -> par s
-        (AbortUsage _ ss)             -> docv $ map par ss
+        (AbortUsage _ _ usage)       -> docv $ map par usage
 
     abortLines a = case a of
-        (AbortLookup ln _)            -> ln
-        (AbortMalformedOperand ln _)  -> ln
-        (AbortMalformedTerms ln _)    -> ln
-        (AbortMissingTermName ln _)   -> ln
-        (AbortUnknownClause ln)       -> ln
-        (AbortUnknownRelmap ln _)     -> ln
-        (AbortUsage ln _)             -> ln
+        (AbortLookup           ln _)   -> ln
+        (AbortMalformedOperand ln _)   -> ln
+        (AbortMalformedTerms   ln _)   -> ln
+        (AbortMissingTermName  ln _)   -> ln
+        (AbortUnknownClause    ln)     -> ln
+        (AbortUnknownRelmap    ln _)   -> ln
+        (AbortUsage            ln _ _) -> ln
 
 par :: String -> Doc
 par = fsep . map text . words

@@ -43,9 +43,13 @@ data OpImplement v =
 {-| Parser for operand of relational operator.
     This parsers docompose operand trees,
     and give a name to suboperand. -}
-type OpParser = [TokenTree] -> [Named [TokenTree]]
+type OpParser
+    =  [TokenTree]          -- ^ Unparsed operand
+    -> [Named [TokenTree]]  -- ^ Parsed operand
 
-type OpParser' = [Named [TokenTree]] -> [Named [TokenTree]]
+type OpParser'
+    =  [Named [TokenTree]]  -- ^ Partially parsed operand
+    -> [Named [TokenTree]]  -- ^ Full parsed operand
 
 
 

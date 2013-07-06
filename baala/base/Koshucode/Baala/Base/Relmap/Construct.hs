@@ -79,7 +79,7 @@ consHalfRelmap bundle src = cons where
     bar = divideByP isBar  -- non-quoted vertical bar
 
     isBar (TreeL (TWord _ 0 "|")) = True
-    isBar _ = False
+    isBar _                       = False
 
     cat :: [HalfRelmap] -> HalfRelmap
     cat = HalfRelmap ["RELMAP | RELMAP"] src "|" []
@@ -114,8 +114,10 @@ fullBundle fulls = full where
         case lookup op fulls of
           Nothing   -> Right $ RelmapName h op
           Just cons -> do ms <- mapM full hs
-                          addAbort (AbortUsage src u)
+                          addAbort (AbortUsage src op u)
                              $ cons $ OpUse h ms
+
+
 
 -- ----------------------
 -- $ConstructionProcess
