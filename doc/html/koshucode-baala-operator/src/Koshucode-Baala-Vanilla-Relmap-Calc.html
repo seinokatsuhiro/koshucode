@@ -12,88 +12,123 @@
 <a name="line-3"></a><span class='hs-comment'>-- | Relational mappers</span>
 <a name="line-4"></a>
 <a name="line-5"></a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Vanilla</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span><span class='hs-varop'>.</span><span class='hs-conid'>Calc</span>
-<a name="line-6"></a><span class='hs-layout'>(</span> <span class='hs-varid'>holdBody</span>
-<a name="line-7"></a><span class='hs-layout'>,</span> <span class='hs-varid'>valBody</span>
-<a name="line-8"></a><span class='hs-layout'>,</span> <span class='hs-varid'>limit</span>
-<a name="line-9"></a><span class='hs-comment'>--, divide, range</span>
-<a name="line-10"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
-<a name="line-11"></a>
-<a name="line-12"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Minimal</span><span class='hs-varop'>.</span><span class='hs-conid'>OpKit</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>Kit</span>
-<a name="line-13"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Vanilla</span><span class='hs-varop'>.</span><span class='hs-conid'>Value</span><span class='hs-varop'>.</span><span class='hs-conid'>Relval</span>
-<a name="line-14"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Vanilla</span><span class='hs-varop'>.</span><span class='hs-conid'>Calc</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>Calc</span>
-<a name="line-15"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>List</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>List</span>
-<a name="line-16"></a>
-<a name="line-17"></a>
-<a name="line-18"></a>
-<a name="line-19"></a><span class='hs-comment'>-- ----------------------  General calculations</span>
+<a name="line-6"></a><span class='hs-layout'>(</span> <span class='hs-varid'>relopHold</span><span class='hs-layout'>,</span> <span class='hs-varid'>relmapHold</span><span class='hs-layout'>,</span> <span class='hs-varid'>relHold</span>
+<a name="line-7"></a><span class='hs-layout'>,</span> <span class='hs-varid'>relopUnhold</span>
+<a name="line-8"></a><span class='hs-layout'>,</span> <span class='hs-varid'>relopVal</span><span class='hs-layout'>,</span> <span class='hs-varid'>relmapVal</span><span class='hs-layout'>,</span>  <span class='hs-varid'>relVal</span>
+<a name="line-9"></a><span class='hs-layout'>,</span> <span class='hs-varid'>relopRange</span><span class='hs-layout'>,</span> <span class='hs-varid'>relmapRange</span>
+<a name="line-10"></a><span class='hs-layout'>,</span> <span class='hs-varid'>limit</span>
+<a name="line-11"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a name="line-12"></a>
+<a name="line-13"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Minimal</span><span class='hs-varop'>.</span><span class='hs-conid'>OpKit</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>Kit</span>
+<a name="line-14"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Vanilla</span><span class='hs-varop'>.</span><span class='hs-conid'>Value</span><span class='hs-varop'>.</span><span class='hs-conid'>Relval</span>
+<a name="line-15"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Vanilla</span><span class='hs-varop'>.</span><span class='hs-conid'>Calc</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>Calc</span>
+<a name="line-16"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Vanilla</span><span class='hs-varop'>.</span><span class='hs-conid'>Order</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>Kit</span>
+<a name="line-17"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Minimal</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>Mini</span>
+<a name="line-18"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>List</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>List</span>
+<a name="line-19"></a>
 <a name="line-20"></a>
-<a name="line-21"></a><a name="holdBody"></a><span class='hs-comment'>-- | Make relmap function for @hold@ operator.</span>
-<a name="line-22"></a><span class='hs-definition'>holdBody</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Val</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Val</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>TokenTree</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>RelmapFun</span> <span class='hs-conid'>Val</span>
-<a name="line-23"></a><span class='hs-definition'>holdBody</span> <span class='hs-varid'>is</span> <span class='hs-varid'>e</span> <span class='hs-keyword'>_</span> <span class='hs-layout'>(</span><span class='hs-conid'>Rel</span> <span class='hs-varid'>h1</span> <span class='hs-varid'>b1</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>h1</span> <span class='hs-varid'>b2</span> <span class='hs-keyword'>where</span>
-<a name="line-24"></a>    <span class='hs-varid'>b2</span>      <span class='hs-keyglyph'>=</span> <span class='hs-varid'>filter</span> <span class='hs-varid'>f</span> <span class='hs-varid'>b1</span>
-<a name="line-25"></a>    <span class='hs-varid'>f</span> <span class='hs-varid'>arg</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>calc</span> <span class='hs-varid'>arg</span> <span class='hs-varop'>`is`</span> <span class='hs-varid'>boolValue</span> <span class='hs-conid'>True</span>
-<a name="line-26"></a>    <span class='hs-varid'>calc</span>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Calc</span><span class='hs-varop'>.</span><span class='hs-varid'>makeCalc</span> <span class='hs-varid'>h1</span> <span class='hs-varid'>e</span>
-<a name="line-27"></a>
-<a name="line-28"></a><a name="valBody"></a><span class='hs-comment'>-- | Make relmap function for @val@ operator.</span>
-<a name="line-29"></a><span class='hs-definition'>valBody</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>RelmapFun</span> <span class='hs-conid'>Val</span>
-<a name="line-30"></a><span class='hs-definition'>valBody</span> <span class='hs-varid'>e</span> <span class='hs-keyword'>_</span> <span class='hs-layout'>(</span><span class='hs-conid'>Rel</span> <span class='hs-varid'>h1</span> <span class='hs-varid'>b1</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>h3</span> <span class='hs-varid'>b3</span> <span class='hs-keyword'>where</span>
-<a name="line-31"></a>    <span class='hs-varid'>h3</span>      <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>mappend</span> <span class='hs-varid'>h2</span> <span class='hs-varid'>h1</span>
-<a name="line-32"></a>    <span class='hs-varid'>b3</span>      <span class='hs-keyglyph'>=</span> <span class='hs-varid'>map</span> <span class='hs-varid'>f</span> <span class='hs-varid'>b1</span>
-<a name="line-33"></a>    <span class='hs-varid'>f</span> <span class='hs-varid'>arg</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>map</span> <span class='hs-layout'>(</span><span class='hs-varop'>$</span> <span class='hs-varid'>arg</span><span class='hs-layout'>)</span> <span class='hs-varid'>f2</span> <span class='hs-varop'>++</span> <span class='hs-varid'>arg</span>   <span class='hs-comment'>-- todo: shared term</span>
-<a name="line-34"></a>    <span class='hs-layout'>(</span><span class='hs-varid'>h2</span><span class='hs-layout'>,</span><span class='hs-varid'>f2</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Calc</span><span class='hs-varop'>.</span><span class='hs-varid'>makeHeadCalcs</span> <span class='hs-varid'>h1</span> <span class='hs-varid'>e</span>
-<a name="line-35"></a>
+<a name="line-21"></a>
+<a name="line-22"></a><span class='hs-comment'>-- ----------------------  General calculations</span>
+<a name="line-23"></a>
+<a name="line-24"></a><span class='hs-comment'>--  Right $ Kit.relmapCalc use op (holdBody test $ TreeB 0 term)</span>
+<a name="line-25"></a>
+<a name="line-26"></a><a name="relopHold"></a><span class='hs-definition'>relopHold</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>Relop</span> <span class='hs-conid'>Val</span>
+<a name="line-27"></a><span class='hs-definition'>relopHold</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>relopHoldFor</span> <span class='hs-layout'>(</span><span class='hs-varop'>==</span><span class='hs-layout'>)</span>
+<a name="line-28"></a>
+<a name="line-29"></a><a name="relopUnhold"></a><span class='hs-definition'>relopUnhold</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>Relop</span> <span class='hs-conid'>Val</span>
+<a name="line-30"></a><span class='hs-definition'>relopUnhold</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>relopHoldFor</span> <span class='hs-layout'>(</span><span class='hs-varop'>/=</span><span class='hs-layout'>)</span>
+<a name="line-31"></a>
+<a name="line-32"></a><a name="relopHoldFor"></a><span class='hs-definition'>relopHoldFor</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Val</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Val</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>Relop</span> <span class='hs-conid'>Val</span>
+<a name="line-33"></a><span class='hs-definition'>relopHoldFor</span> <span class='hs-varid'>test</span> <span class='hs-varid'>use</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
+<a name="line-34"></a>  <span class='hs-varid'>tree</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Mini</span><span class='hs-varop'>.</span><span class='hs-varid'>getTree</span> <span class='hs-varid'>use</span> <span class='hs-str'>"-term"</span>
+<a name="line-35"></a>  <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-varid'>relmapHold</span> <span class='hs-varid'>use</span> <span class='hs-varid'>test</span> <span class='hs-varid'>tree</span>
 <a name="line-36"></a>
-<a name="line-37"></a>
-<a name="line-38"></a><span class='hs-comment'>-- ----------------------  Restriction</span>
-<a name="line-39"></a>
-<a name="line-40"></a><a name="limit"></a><span class='hs-comment'>-- | Keep leading tuples.</span>
-<a name="line-41"></a><span class='hs-definition'>limit</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Ord</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>OpUse</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span> <span class='hs-varid'>v</span>
-<a name="line-42"></a><span class='hs-definition'>limit</span> <span class='hs-varid'>use</span> <span class='hs-varid'>c</span> <span class='hs-varid'>ns</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapCalc</span> <span class='hs-varid'>use</span> <span class='hs-str'>"limit"</span> <span class='hs-layout'>(</span><span class='hs-varid'>limit2</span> <span class='hs-varid'>c</span> <span class='hs-varid'>ns</span><span class='hs-layout'>)</span>
-<a name="line-43"></a>
-<a name="line-44"></a><a name="limit2"></a><span class='hs-definition'>limit2</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Ord</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>v</span>
-<a name="line-45"></a><span class='hs-definition'>limit2</span> <span class='hs-varid'>c</span> <span class='hs-varid'>ns</span> <span class='hs-keyword'>_</span> <span class='hs-layout'>(</span><span class='hs-conid'>Rel</span> <span class='hs-varid'>h1</span> <span class='hs-varid'>b1</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>h1</span> <span class='hs-varid'>b2</span> <span class='hs-keyword'>where</span>
-<a name="line-46"></a>    <span class='hs-varid'>b2</span>   <span class='hs-keyglyph'>=</span> <span class='hs-conid'>List</span><span class='hs-varop'>.</span><span class='hs-varid'>take</span> <span class='hs-varid'>c</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>sortByName</span> <span class='hs-varid'>ords</span> <span class='hs-layout'>(</span><span class='hs-varid'>headNames</span> <span class='hs-varid'>h1</span><span class='hs-layout'>)</span> <span class='hs-varid'>b1</span>
-<a name="line-47"></a>    <span class='hs-varid'>ords</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>orders</span> <span class='hs-varid'>ns</span>
+<a name="line-37"></a><a name="relmapHold"></a><span class='hs-comment'>{-| Make relmap function for @hold@ operator. -}</span>
+<a name="line-38"></a><span class='hs-definition'>relmapHold</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>OpUse</span> <span class='hs-conid'>Val</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-layout'>(</span><span class='hs-conid'>Val</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Val</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>TokenTree</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Relmap</span> <span class='hs-conid'>Val</span>
+<a name="line-39"></a><span class='hs-definition'>relmapHold</span> <span class='hs-varid'>use</span> <span class='hs-varid'>is</span> <span class='hs-varid'>e</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapCalc</span> <span class='hs-varid'>use</span> <span class='hs-str'>"hold"</span> <span class='hs-varid'>sub</span> <span class='hs-keyword'>where</span>
+<a name="line-40"></a>    <span class='hs-varid'>sub</span> <span class='hs-keyword'>_</span> <span class='hs-varid'>r1</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>relHold</span> <span class='hs-varid'>is</span> <span class='hs-varid'>e</span> <span class='hs-varid'>r1</span>
+<a name="line-41"></a>
+<a name="line-42"></a><a name="relHold"></a><span class='hs-definition'>relHold</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Val</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Val</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>TokenTree</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Map</span> <span class='hs-layout'>(</span><span class='hs-conid'>Rel</span> <span class='hs-conid'>Val</span><span class='hs-layout'>)</span>
+<a name="line-43"></a><span class='hs-definition'>relHold</span> <span class='hs-varid'>is</span> <span class='hs-varid'>e</span> <span class='hs-layout'>(</span><span class='hs-conid'>Rel</span> <span class='hs-varid'>h1</span> <span class='hs-varid'>b1</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>h1</span> <span class='hs-varid'>b2</span> <span class='hs-keyword'>where</span>
+<a name="line-44"></a>    <span class='hs-varid'>b2</span>      <span class='hs-keyglyph'>=</span> <span class='hs-varid'>filter</span> <span class='hs-varid'>f</span> <span class='hs-varid'>b1</span>
+<a name="line-45"></a>    <span class='hs-varid'>f</span> <span class='hs-varid'>arg</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>calc</span> <span class='hs-varid'>arg</span> <span class='hs-varop'>`is`</span> <span class='hs-varid'>boolValue</span> <span class='hs-conid'>True</span>
+<a name="line-46"></a>    <span class='hs-varid'>calc</span>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Calc</span><span class='hs-varop'>.</span><span class='hs-varid'>makeCalc</span> <span class='hs-varid'>h1</span> <span class='hs-varid'>e</span>
+<a name="line-47"></a>
 <a name="line-48"></a>
 <a name="line-49"></a>
-<a name="line-50"></a>
-<a name="line-51"></a><span class='hs-comment'>-- ----------------------  Special calculations</span>
-<a name="line-52"></a>
-<a name="line-53"></a><span class='hs-comment'>{-
-<a name="line-54"></a>range :: String -&gt; Kit.Relmap Val
-<a name="line-55"></a>range ns2 = Kit.flow "range" $ Kit.withP range2 ns2
+<a name="line-50"></a><span class='hs-comment'>-- ----------------------  Val</span>
+<a name="line-51"></a>
+<a name="line-52"></a><a name="relopVal"></a><span class='hs-definition'>relopVal</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>Relop</span> <span class='hs-conid'>Val</span>
+<a name="line-53"></a><span class='hs-definition'>relopVal</span> <span class='hs-varid'>use</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
+<a name="line-54"></a>  <span class='hs-varid'>trees</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Mini</span><span class='hs-varop'>.</span><span class='hs-varid'>getTrees</span> <span class='hs-varid'>use</span> <span class='hs-str'>"-term"</span>
+<a name="line-55"></a>  <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-varid'>relmapVal</span> <span class='hs-varid'>use</span> <span class='hs-varid'>trees</span>
 <a name="line-56"></a>
-<a name="line-57"></a>range2 :: [String] -&gt; Rel Val -&gt; Rel Val
-<a name="line-58"></a>range2 ns2 (Rel h1 b1) = Rel h2 b2 where
-<a name="line-59"></a>    --h2  = unionUpTerm ns2 h1
-<a name="line-60"></a>    h2  = Kit.mappend (Kit.headFrom ns2) h1
-<a name="line-61"></a>    b2  = concatMap sel b1
-<a name="line-62"></a>
-<a name="line-63"></a>    pos = ns2 `Kit.look` names (headTerms h1)
-<a name="line-64"></a>    sel | pos `Kit.like` "-vv"  = Kit.ap f
-<a name="line-65"></a>        | otherwise           = const []
-<a name="line-66"></a>
-<a name="line-67"></a>    [_,from,to] = pos
-<a name="line-68"></a>    f the arg = map (: arg) $ valRangeMinMax (the from) (the to)
+<a name="line-57"></a><a name="relmapVal"></a><span class='hs-comment'>{-| Make relmap function for @val@ operator. -}</span>
+<a name="line-58"></a><span class='hs-definition'>relmapVal</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>OpUse</span> <span class='hs-conid'>Val</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Relmap</span> <span class='hs-conid'>Val</span>
+<a name="line-59"></a><span class='hs-definition'>relmapVal</span> <span class='hs-varid'>use</span> <span class='hs-varid'>e</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapCalc</span> <span class='hs-varid'>use</span> <span class='hs-str'>"val"</span> <span class='hs-varid'>sub</span> <span class='hs-keyword'>where</span>
+<a name="line-60"></a>    <span class='hs-varid'>sub</span> <span class='hs-keyword'>_</span> <span class='hs-varid'>r1</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>relVal</span> <span class='hs-varid'>e</span> <span class='hs-varid'>r1</span>
+<a name="line-61"></a>
+<a name="line-62"></a><a name="relVal"></a><span class='hs-definition'>relVal</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Map</span> <span class='hs-layout'>(</span><span class='hs-conid'>Rel</span> <span class='hs-conid'>Val</span><span class='hs-layout'>)</span>
+<a name="line-63"></a><span class='hs-definition'>relVal</span> <span class='hs-varid'>e</span> <span class='hs-layout'>(</span><span class='hs-conid'>Rel</span> <span class='hs-varid'>h1</span> <span class='hs-varid'>b1</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>h3</span> <span class='hs-varid'>b3</span> <span class='hs-keyword'>where</span>
+<a name="line-64"></a>    <span class='hs-varid'>h3</span>      <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>mappend</span> <span class='hs-varid'>h2</span> <span class='hs-varid'>h1</span>
+<a name="line-65"></a>    <span class='hs-varid'>b3</span>      <span class='hs-keyglyph'>=</span> <span class='hs-varid'>map</span> <span class='hs-varid'>f</span> <span class='hs-varid'>b1</span>
+<a name="line-66"></a>    <span class='hs-varid'>f</span> <span class='hs-varid'>arg</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>map</span> <span class='hs-layout'>(</span><span class='hs-varop'>$</span> <span class='hs-varid'>arg</span><span class='hs-layout'>)</span> <span class='hs-varid'>f2</span> <span class='hs-varop'>++</span> <span class='hs-varid'>arg</span>   <span class='hs-comment'>-- todo: shared term</span>
+<a name="line-67"></a>    <span class='hs-layout'>(</span><span class='hs-varid'>h2</span><span class='hs-layout'>,</span><span class='hs-varid'>f2</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Calc</span><span class='hs-varop'>.</span><span class='hs-varid'>makeHeadCalcs</span> <span class='hs-varid'>h1</span> <span class='hs-varid'>e</span>
+<a name="line-68"></a>
 <a name="line-69"></a>
-<a name="line-70"></a>divide :: String -&gt; Kit.Relmap Val
-<a name="line-71"></a>divide ns2 = Kit.flow "divide" $ Kit.withP divide2 ns2
+<a name="line-70"></a>
+<a name="line-71"></a><span class='hs-comment'>-- ----------------------  Restriction</span>
 <a name="line-72"></a>
-<a name="line-73"></a>divide2 :: [String] -&gt; Rel Val -&gt; Rel Val
-<a name="line-74"></a>divide2 ns2 (Rel h1 b1) = Rel h2 b2 where
-<a name="line-75"></a>    h2  = Kit.mappend (Kit.headFrom ns2) h1
-<a name="line-76"></a>    b2  = concatMap g b1
-<a name="line-77"></a>
-<a name="line-78"></a>    p = ns2 `Kit.look` names (headTerms h1)
-<a name="line-79"></a>    g | p `Kit.like` "--vv"  = Kit.ap f
-<a name="line-80"></a>      | otherwise          = const []
+<a name="line-73"></a><a name="limit"></a><span class='hs-comment'>-- | Keep leading tuples.</span>
+<a name="line-74"></a><span class='hs-definition'>limit</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Ord</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>OpUse</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span> <span class='hs-varid'>v</span>
+<a name="line-75"></a><span class='hs-definition'>limit</span> <span class='hs-varid'>use</span> <span class='hs-varid'>c</span> <span class='hs-varid'>ns</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapCalc</span> <span class='hs-varid'>use</span> <span class='hs-str'>"limit"</span> <span class='hs-layout'>(</span><span class='hs-varid'>limit2</span> <span class='hs-varid'>c</span> <span class='hs-varid'>ns</span><span class='hs-layout'>)</span>
+<a name="line-76"></a>
+<a name="line-77"></a><a name="limit2"></a><span class='hs-definition'>limit2</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Ord</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>v</span>
+<a name="line-78"></a><span class='hs-definition'>limit2</span> <span class='hs-varid'>c</span> <span class='hs-varid'>ns</span> <span class='hs-keyword'>_</span> <span class='hs-layout'>(</span><span class='hs-conid'>Rel</span> <span class='hs-varid'>h1</span> <span class='hs-varid'>b1</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>h1</span> <span class='hs-varid'>b2</span> <span class='hs-keyword'>where</span>
+<a name="line-79"></a>    <span class='hs-varid'>b2</span>   <span class='hs-keyglyph'>=</span> <span class='hs-conid'>List</span><span class='hs-varop'>.</span><span class='hs-varid'>take</span> <span class='hs-varid'>c</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>sortByName</span> <span class='hs-varid'>ords</span> <span class='hs-layout'>(</span><span class='hs-varid'>headNames</span> <span class='hs-varid'>h1</span><span class='hs-layout'>)</span> <span class='hs-varid'>b1</span>
+<a name="line-80"></a>    <span class='hs-varid'>ords</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>orders</span> <span class='hs-varid'>ns</span>
 <a name="line-81"></a>
-<a name="line-82"></a>    [_,_,x,y] = p
-<a name="line-83"></a>    f the arg = if the y == intValue 0
-<a name="line-84"></a>                then []
-<a name="line-85"></a>                else [binv quot (the x) (the y) :
-<a name="line-86"></a>                      binv rem  (the x) (the y) : arg]
-<a name="line-87"></a>-}</span>
-<a name="line-88"></a>
+<a name="line-82"></a>
+<a name="line-83"></a>
+<a name="line-84"></a><span class='hs-comment'>-- ----------------------  Special calculations</span>
+<a name="line-85"></a>
+<a name="line-86"></a><a name="relopRange"></a><span class='hs-definition'>relopRange</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>Relop</span> <span class='hs-conid'>Val</span>
+<a name="line-87"></a><span class='hs-definition'>relopRange</span> <span class='hs-varid'>use</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
+<a name="line-88"></a>  <span class='hs-varid'>term</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Mini</span><span class='hs-varop'>.</span><span class='hs-varid'>getTerm</span> <span class='hs-varid'>use</span> <span class='hs-str'>"-term"</span>
+<a name="line-89"></a>  <span class='hs-varid'>low</span>  <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Mini</span><span class='hs-varop'>.</span><span class='hs-varid'>getInt</span>  <span class='hs-varid'>use</span> <span class='hs-str'>"-from"</span>
+<a name="line-90"></a>  <span class='hs-varid'>high</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Mini</span><span class='hs-varop'>.</span><span class='hs-varid'>getInt</span>  <span class='hs-varid'>use</span> <span class='hs-str'>"-to"</span>
+<a name="line-91"></a>  <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-varid'>relmapRange</span> <span class='hs-varid'>use</span> <span class='hs-varid'>term</span> <span class='hs-varid'>low</span> <span class='hs-varid'>high</span>
+<a name="line-92"></a>
+<a name="line-93"></a><a name="relmapRange"></a><span class='hs-definition'>relmapRange</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>IntValue</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>OpUse</span> <span class='hs-varid'>v</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Relmap</span> <span class='hs-varid'>v</span>
+<a name="line-94"></a><span class='hs-definition'>relmapRange</span> <span class='hs-varid'>use</span> <span class='hs-varid'>n</span> <span class='hs-varid'>low</span> <span class='hs-varid'>high</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapCalc</span> <span class='hs-varid'>use</span> <span class='hs-str'>"range"</span> <span class='hs-varid'>sub</span> <span class='hs-keyword'>where</span>
+<a name="line-95"></a>    <span class='hs-varid'>sub</span> <span class='hs-keyword'>_</span> <span class='hs-varid'>r1</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>relRange</span> <span class='hs-varid'>n</span> <span class='hs-varid'>low</span> <span class='hs-varid'>high</span> <span class='hs-varid'>r1</span>
+<a name="line-96"></a>
+<a name="line-97"></a><a name="relRange"></a><span class='hs-definition'>relRange</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>IntValue</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Map</span> <span class='hs-layout'>(</span><span class='hs-conid'>Rel</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span>
+<a name="line-98"></a><span class='hs-definition'>relRange</span> <span class='hs-varid'>n</span> <span class='hs-varid'>low</span> <span class='hs-varid'>high</span> <span class='hs-layout'>(</span><span class='hs-conid'>Rel</span> <span class='hs-varid'>h1</span> <span class='hs-varid'>b1</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Rel</span> <span class='hs-varid'>h2</span> <span class='hs-varid'>b2</span> <span class='hs-keyword'>where</span>
+<a name="line-99"></a>    <span class='hs-varid'>h2</span>   <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>mappend</span> <span class='hs-layout'>(</span><span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>headFrom</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>n</span><span class='hs-keyglyph'>]</span><span class='hs-layout'>)</span> <span class='hs-varid'>h1</span>
+<a name="line-100"></a>    <span class='hs-varid'>b2</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>concatMap</span> <span class='hs-varid'>g</span> <span class='hs-varid'>b1</span>
+<a name="line-101"></a>    <span class='hs-varid'>ys</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>map</span> <span class='hs-varid'>intValue</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>low</span> <span class='hs-keyglyph'>..</span> <span class='hs-varid'>high</span><span class='hs-keyglyph'>]</span>
+<a name="line-102"></a>    <span class='hs-varid'>g</span> <span class='hs-varid'>xs</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>map</span> <span class='hs-layout'>(</span><span class='hs-conop'>:</span> <span class='hs-varid'>xs</span><span class='hs-layout'>)</span> <span class='hs-varid'>ys</span>
+<a name="line-103"></a>
+<a name="line-104"></a><span class='hs-comment'>{-
+<a name="line-105"></a>divide :: String -&gt; Kit.Relmap Val
+<a name="line-106"></a>divide ns2 = Kit.flow "divide" $ Kit.withP divide2 ns2
+<a name="line-107"></a>
+<a name="line-108"></a>divide2 :: [String] -&gt; Rel Val -&gt; Rel Val
+<a name="line-109"></a>divide2 ns2 (Rel h1 b1) = Rel h2 b2 where
+<a name="line-110"></a>    h2  = Kit.mappend (Kit.headFrom ns2) h1
+<a name="line-111"></a>    b2  = concatMap g b1
+<a name="line-112"></a>
+<a name="line-113"></a>    p = ns2 `Kit.look` names (headTerms h1)
+<a name="line-114"></a>    g | p `Kit.like` "--vv"  = Kit.ap f
+<a name="line-115"></a>      | otherwise          = const []
+<a name="line-116"></a>
+<a name="line-117"></a>    [_,_,x,y] = p
+<a name="line-118"></a>    f the arg = if the y == intValue 0
+<a name="line-119"></a>                then []
+<a name="line-120"></a>                else [binv quot (the x) (the y) :
+<a name="line-121"></a>                      binv rem  (the x) (the y) : arg]
+<a name="line-122"></a>-}</span>
+<a name="line-123"></a>
 </pre></body>
 </html>
