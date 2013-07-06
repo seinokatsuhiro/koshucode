@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Koshucode relational data processor. -}
+{-| A portable relational calculator. -}
 
 module Koshucode.Baala.Toolkit.Main.KoshuMain
 ( koshuMain

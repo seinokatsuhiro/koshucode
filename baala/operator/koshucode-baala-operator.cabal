@@ -13,10 +13,10 @@ version:             0.21.0.0
 synopsis:            Relational operators in Koshucode
 
 -- A longer description of the package.
-description:         This is a library for processing relational data.
-                     Relational expressions are written in Koshucode.
-                     Koshucode is a notation for both of
-                     descriptions and calculations of data.
+description:         An impelemntion of relational operators.
+                     Operators are used in the @koshu@ calculator
+                     that is contained in the
+                     @koshucode-baala-calculator@ package.
 
 -- The license under which the package is released.
 license:             BSD3
@@ -61,10 +61,12 @@ library
         Koshucode.Baala.Vanilla.Calc.Ripen
         Koshucode.Baala.Vanilla.Order
         Koshucode.Baala.Vanilla.Quoter
+        Koshucode.Baala.Vanilla.Relmap.Binary
         Koshucode.Baala.Vanilla.Relmap.Calc
         Koshucode.Baala.Vanilla.Relmap.Implement
         Koshucode.Baala.Vanilla.Relmap.Naming
         Koshucode.Baala.Vanilla.Relmap.Operand
+        Koshucode.Baala.Vanilla.Relmap.Unary
         Koshucode.Baala.Vanilla.Value.Relval
         Koshucode.Baala.Vanilla.Value.Val
 

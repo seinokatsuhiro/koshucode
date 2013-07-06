@@ -7,7 +7,7 @@ module Koshucode.Baala.Toolkit.Library.Version
 ) where
 
 import qualified Data.Version as Version
-import qualified Paths_koshucode_baala_processor as Version
+import qualified Paths_koshucode_baala_calculator as Version
 
 versionString :: String
 versionString = Version.showVersion Version.version
