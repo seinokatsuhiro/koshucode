@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.19.0.0: A notational system for relational data</p
+      >koshucode-baala-base-0.22.0.0: A notational system for relational data</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -44,6 +44,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ></table
 	><p class="caption"
 	>Koshucode.Baala.Base.Data.ValueClass</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Haskell data
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Koshucode data
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Convinient class
+</a
+	    ></li
+	  ></ul
 	></div
       ><div id="synopsis"
       ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
@@ -160,6 +181,28 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >class</span
+	    >  <a href="#t:TermsetValue"
+	    >TermsetValue</a
+	    > v  <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:termsetValue"
+		>termsetValue</a
+		> :: [<a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
+		>Named</a
+		> v] -&gt; v</li
+	      ><li
+	      ><a href="#v:isTermsetValue"
+		>isTermsetValue</a
+		> :: v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
 	    >  <a href="#t:Nil"
 	    >Nil</a
 	    > v  <span class="keyword"
@@ -186,16 +229,25 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Pretty</a
 	    > v, <a href="Koshucode-Baala-Base-Data-ValueClass.html#t:Nil"
 	    >Nil</a
+	    > v, <a href="Koshucode-Baala-Base-Data-ValueClass.html#t:BoolValue"
+	    >BoolValue</a
 	    > v, <a href="Koshucode-Baala-Base-Data-ValueClass.html#t:StringValue"
 	    >StringValue</a
+	    > v, <a href="Koshucode-Baala-Base-Data-ValueClass.html#t:ListValue"
+	    >ListValue</a
+	    > v, <a href="Koshucode-Baala-Base-Data-ValueClass.html#t:TermsetValue"
+	    >TermsetValue</a
+	    > v, <a href="Koshucode-Baala-Base-Data-ValueClass.html#t:RelValue"
+	    >RelValue</a
 	    > v) =&gt; <a href="#t:Value"
 	    >Value</a
 	    > v </li
 	  ></ul
 	></div
       ><div id="interface"
-      ><h1
-	>Documentation</h1
+      ><h1 id="g:1"
+	>Haskell data
+</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -322,6 +374,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	      ></p
 	    ></div
 	  ></div
+	><h1 id="g:2"
+	>Koshucode data
+</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -350,6 +405,38 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	      > :: v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	      >Bool</a
 	      ><a href="src/Koshucode-Baala-Base-Data-ValueClass.html#isRelValue" class="link"
+	      >Source</a
+	      ></p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    >  <a name="t:TermsetValue" class="def"
+	    >TermsetValue</a
+	    > v  <span class="keyword"
+	    >where</span
+	    ><a href="src/Koshucode-Baala-Base-Data-ValueClass.html#TermsetValue" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:termsetValue" class="def"
+	      >termsetValue</a
+	      > :: [<a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
+	      >Named</a
+	      > v] -&gt; v<a href="src/Koshucode-Baala-Base-Data-ValueClass.html#termsetValue" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:isTermsetValue" class="def"
+	      >isTermsetValue</a
+	      > :: v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	      >Bool</a
+	      ><a href="src/Koshucode-Baala-Base-Data-ValueClass.html#isTermsetValue" class="link"
 	      >Source</a
 	      ></p
 	    ></div
@@ -389,6 +476,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	      ></p
 	    ></div
 	  ></div
+	><h1 id="g:3"
+	>Convinient class
+</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -399,8 +489,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Pretty</a
 	    > v, <a href="Koshucode-Baala-Base-Data-ValueClass.html#t:Nil"
 	    >Nil</a
+	    > v, <a href="Koshucode-Baala-Base-Data-ValueClass.html#t:BoolValue"
+	    >BoolValue</a
 	    > v, <a href="Koshucode-Baala-Base-Data-ValueClass.html#t:StringValue"
 	    >StringValue</a
+	    > v, <a href="Koshucode-Baala-Base-Data-ValueClass.html#t:ListValue"
+	    >ListValue</a
+	    > v, <a href="Koshucode-Baala-Base-Data-ValueClass.html#t:TermsetValue"
+	    >TermsetValue</a
+	    > v, <a href="Koshucode-Baala-Base-Data-ValueClass.html#t:RelValue"
+	    >RelValue</a
 	    > v) =&gt; <a name="t:Value" class="def"
 	    >Value</a
 	    > v <a href="src/Koshucode-Baala-Base-Data-ValueClass.html#Value" class="link"

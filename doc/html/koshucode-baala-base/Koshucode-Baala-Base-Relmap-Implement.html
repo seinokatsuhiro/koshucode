@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.19.0.0: A notational system for relational data</p
+      >koshucode-baala-base-0.22.0.0: A notational system for relational data</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -81,8 +81,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-R
 	    >String</a
 	    > <a href="Koshucode-Baala-Base-Relmap-Implement.html#t:OpParser"
 	    >OpParser</a
-	    > (<a href="Koshucode-Baala-Base-Relmap-Implement.html#t:OpCons"
-	    >OpCons</a
+	    > (<a href="Koshucode-Baala-Base-Relmap-Implement.html#t:Relop"
+	    >Relop</a
 	    > v) [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    >]</li
@@ -115,8 +115,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-R
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:OpCons"
-	    >OpCons</a
+	    > <a href="#t:Relop"
+	    >Relop</a
 	    > v = <a href="Koshucode-Baala-Base-Relmap-Implement.html#t:OpUse"
 	    >OpUse</a
 	    > v -&gt; <a href="Koshucode-Baala-Base-Abort-Symbol.html#t:AbortOr"
@@ -243,8 +243,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-R
 		  >String</a
 		  > <a href="Koshucode-Baala-Base-Relmap-Implement.html#t:OpParser"
 		  >OpParser</a
-		  > (<a href="Koshucode-Baala-Base-Relmap-Implement.html#t:OpCons"
-		  >OpCons</a
+		  > (<a href="Koshucode-Baala-Base-Relmap-Implement.html#t:Relop"
+		  >Relop</a
 		  > v) [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
 		  >]</td
@@ -260,15 +260,39 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-R
 	    >type</span
 	    > <a name="t:OpParser" class="def"
 	    >OpParser</a
-	    > = [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >] -&gt; [<a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
-	    >Named</a
-	    > [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >]]<a href="src/Koshucode-Baala-Base-Relmap-Implement.html#OpParser" class="link"
+	    ><a href="src/Koshucode-Baala-Base-Relmap-Implement.html#OpParser" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="subs arguments"
+	  ><p class="caption"
+	    >Arguments</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		>&nbsp;= [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+		  >TokenTree</a
+		  >]</td
+		><td class="doc"
+		><p
+		  >Unparsed operand
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; [<a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
+		  >Named</a
+		  > [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+		  >TokenTree</a
+		  >]]</td
+		><td class="doc"
+		><p
+		  >Parsed operand
+</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
 	  ><div class="doc"
 	  ><p
 	    >Parser for operand of relational operator.
@@ -283,17 +307,41 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-R
 	    >type</span
 	    > <a name="t:OpParser-39-" class="def"
 	    >OpParser'</a
-	    > = [<a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
-	    >Named</a
-	    > [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >]] -&gt; [<a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
-	    >Named</a
-	    > [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >]]<a href="src/Koshucode-Baala-Base-Relmap-Implement.html#OpParser%27" class="link"
+	    ><a href="src/Koshucode-Baala-Base-Relmap-Implement.html#OpParser%27" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="subs arguments"
+	  ><p class="caption"
+	    >Arguments</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		>&nbsp;= [<a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
+		  >Named</a
+		  > [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+		  >TokenTree</a
+		  >]]</td
+		><td class="doc"
+		><p
+		  >Partially parsed operand
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; [<a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
+		  >Named</a
+		  > [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+		  >TokenTree</a
+		  >]]</td
+		><td class="doc"
+		><p
+		  >Full parsed operand
+</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
 	  ></div
 	><h1 id="g:2"
 	>Constructor
@@ -302,15 +350,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-R
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:OpCons" class="def"
-	    >OpCons</a
+	    > <a name="t:Relop" class="def"
+	    >Relop</a
 	    > v = <a href="Koshucode-Baala-Base-Relmap-Implement.html#t:OpUse"
 	    >OpUse</a
 	    > v -&gt; <a href="Koshucode-Baala-Base-Abort-Symbol.html#t:AbortOr"
 	    >AbortOr</a
 	    > (<a href="Koshucode-Baala-Base-Relmap-Relmap.html#t:Relmap"
 	    >Relmap</a
-	    > v)<a href="src/Koshucode-Baala-Base-Relmap-Implement.html#OpCons" class="link"
+	    > v)<a href="src/Koshucode-Baala-Base-Relmap-Implement.html#Relop" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"

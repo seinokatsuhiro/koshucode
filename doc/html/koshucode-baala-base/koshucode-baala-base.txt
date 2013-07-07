@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.19.0.0
+@version 0.22.0.0
 
 
 -- | Position in list.
@@ -60,9 +60,11 @@ unionUp :: Eq a => [a] -> [a] -> [a]
 -- | Singleton list
 singleton :: a -> [a]
 divideBy :: Eq a => a -> [a] -> [[a]]
+divideByP :: Eq a => (a -> Bool) -> [a] -> [[a]]
 
 -- | Gather what is gotten by splitter.
 gather :: ([a] -> (b, [a])) -> [a] -> [b]
+gatherWith :: (c -> [a] -> (b, [a])) -> [c] -> [a] -> [b]
 
 -- | Gather (key,value) to a Map key [value]
 gatherToMap :: Ord k => [(k, v)] -> Map k [v]
@@ -88,6 +90,8 @@ docQuote :: Doc -> Doc
 docComment :: Doc -> Doc
 instance Pretty Doc
 
+module Koshucode.Baala.Base.Prelude
+
 
 -- | Judgements: a symbolic representations of affirmed or denied
 --   statements.
@@ -108,17 +112,24 @@ Judge :: Bool -> Relsign -> (Relarg v) -> Judge v
 type Relsign = String
 
 -- | List of terms.
-type Relarg v = [(String, v)]
+type Relarg v = [Named v]
+putJudges :: (Ord v, Pretty v) => [Judge v] -> IO ()
 
 -- | Sort terms in alphabetical order.
 abcJudge :: Ord v => Judge v -> Judge v
+
+-- | Affirm judge, i.e., change logical quality to <a>True</a>.
+affirmJudge :: Map (Judge v)
+
+-- | Deny judge, i.e., change logical quality to <a>False</a>.
+denyJudge :: Map (Judge v)
+isAffirmed :: Judge t -> Bool
+isDenied :: Judge t -> Bool
 instance Show v => Show (Judge v)
 instance Eq v => Eq (Judge v)
 instance Ord v => Ord (Judge v)
 instance (Ord v, Pretty v) => Pretty (Judge v)
 instance Functor Judge
-
-module Koshucode.Baala.Base.Prelude
 
 
 -- | Terms in heading of relation
@@ -236,12 +247,15 @@ isListValue :: ListValue v => v -> Bool
 class RelValue v
 relValue :: RelValue v => Rel v -> v
 isRelValue :: RelValue v => v -> Bool
+class TermsetValue v
+termsetValue :: TermsetValue v => [Named v] -> v
+isTermsetValue :: TermsetValue v => v -> Bool
 
 -- | Types that can be nil
 class Nil v
 nil :: Nil v => v
 isNil :: Nil v => v -> Bool
-class (Ord v, Pretty v, Nil v, StringValue v) => Value v
+class (Ord v, Pretty v, Nil v, BoolValue v, StringValue v, ListValue v, TermsetValue v, RelValue v) => Value v
 
 
 -- | Dataset as a set of judges.
@@ -273,47 +287,53 @@ module Koshucode.Baala.Base.Data
 
 -- | Tokens in Koshucode
 module Koshucode.Baala.Base.Syntax.Token
+
+-- | Token number.
+type TNumber = Int
 data Token
 
 -- | Word. <tt>Int</tt> represents quotation level, e.g., 0 for non-quoted,
 --   1 for single-quoted, 2 for double-quoted.
-TWord :: Int -> String -> Token
+TWord :: TNumber -> Int -> String -> Token
 
 -- | Term name
-TTermN :: [String] -> Token
+TTermN :: TNumber -> [String] -> Token
 
 -- | Term position in particular relation. This is translate from
 --   <a>TTermN</a>.
-TTermP :: [Int] -> Token
+TTermP :: TNumber -> [Int] -> Token
 
 -- | Open paren
-TOpen :: String -> Token
+TOpen :: TNumber -> String -> Token
 
 -- | Close paren
-TClose :: String -> Token
+TClose :: TNumber -> String -> Token
 
 -- | <i>N</i> space characters
-TSpace :: Int -> Token
+TSpace :: TNumber -> Int -> Token
 
 -- | Comment text
-TComment :: String -> Token
+TComment :: TNumber -> String -> Token
 
 -- | Test the token is blank, i.e., <a>TComment</a> or <a>TSpace</a>.
 isBlankToken :: Token -> Bool
 
 -- | Test the token is a term, i.e., <a>TTermN</a> or <a>TTermP</a>.
 isTermToken :: Token -> Bool
+isOpenTokenOf :: String -> Token -> Bool
+isCloseTokenOf :: String -> Token -> Bool
 
 -- | Text of token type, one of <tt>"Word"</tt>, <tt>"TermN"</tt>,
 --   <tt>"TermP"</tt>, <tt>"Open"</tt>, <tt>"Close"</tt>, <tt>"Space"</tt>,
---   <tt>"Comment"</tt>, or <tt>"Line</tt>".
+--   or <tt>"Comment"</tt>.
 --   
 --   <pre>
---   &gt;&gt;&gt; tokenTypeText $ TWord 0 "flower"
+--   &gt;&gt;&gt; tokenTypeText $ TWord 1 0 "flower"
 --   "Word"
 --   </pre>
 tokenTypeText :: Token -> String
 tokenContent :: Token -> String
+tokenNumber :: Token -> TNumber
 
 -- | Remove blank tokens.
 sweepToken :: Map [Token]
@@ -330,6 +350,15 @@ instance Name Token
 
 -- | Tokenizer of koshucode.
 module Koshucode.Baala.Base.Syntax.Tokenizer
+
+-- | Split string into list of tokens. Result token list does not contain
+--   newline characters.
+tokens :: String -> [Token]
+
+-- | Convert back a token list to a source string.
+untokens :: [Token] -> String
+untoken :: Token -> String
+divideByToken :: String -> [Token] -> [[Token]]
 data SourceLine
 SourceLine :: Int -> String -> [Token] -> SourceLine
 
@@ -353,28 +382,6 @@ sourceLineTokens :: SourceLine -> [Token]
 --   <a>SourceLine</a> <i>line#</i> <i>content</i> <i>tokens</i>.</li>
 --   </ol>
 sourceLines :: String -> [SourceLine]
-
--- | Split string into list of tokens. Result token list does not contain
---   newline characters.
---   
---   <pre>
---   &gt;&gt;&gt; tokens "aa\n'bb'\n\"cc\""
---   [TWord 0 "aa", TWord 1 "bb", TWord 2 "cc"]
---   </pre>
---   
---   Example includes <a>TWord</a>, <a>TTermN</a> and <a>TSpace</a> tokens.
---   
---   <pre>
---   &gt;&gt;&gt; tokens "|-- R  /a A0 /b 31"
---   [TWord 0 "|--", TSpace 1, TWord 0 "R", TSpace 2,
---    TTermN ["/a"], TSpace 1, TWord 0 "A0", TSpace 1,
---    TTermN ["/b"], TSpace 1, TWord 0 "31"]
---   </pre>
-tokens :: String -> [Token]
-
--- | Convert back a token list to a source string.
-untokens :: [Token] -> String
-untoken :: Token -> String
 instance Typeable SourceLine
 instance Show SourceLine
 instance Eq SourceLine
@@ -443,7 +450,7 @@ type TypeParen a = Int -> (a, a)
 --   &gt;&gt;&gt; tp 2
 --   ('[', ']')
 --   </pre>
-parenTable :: Eq a => [(Int, a, a)] -> (ParenType a, TypeParen a)
+parenTable :: Eq a => [(Int, a -> Bool, a -> Bool)] -> ParenType a
 instance Typeable1 Tree
 instance Show a => Show (Tree a)
 instance Eq a => Eq (Tree a)
@@ -487,31 +494,20 @@ module Koshucode.Baala.Base.Syntax.TokenTree
 -- | Tree of tokens.
 type TokenTree = Tree Token
 
--- | Parse tokens into parened trees. Blank tokens are excluded.
+-- | Parse tokens into parened trees. Blank tokens and comments are
+--   excluded.
 --   
---   <pre>
---   &gt;&gt;&gt; tokenTrees $ tokens $ "meet (R | pick /a /b)"
---   [TreeL (Word 0 "meet"),
---    TreeB 1 [
---      TreeL (Word 0 "R"),
---      TreeL (Word 0 "|"),
---      TreeL (Word 0 "pick"),
---      TreeL (TermN ["/a"]),
---      TreeL (TermN ["/b"])]]
---   </pre>
---   
---   There are three types of parens -- 1, 2, or 3. Paren type is in
+--   There are four types of parens -- 1, 2, 3, or 4. Paren type is in
 --   <a>TreeB</a> <i>type</i> <i>subtrees</i>.
 --   
 --   <ol>
---   <li>Round parens <tt>()</tt></li>
---   <li>Squared brackets <tt>[]</tt></li>
---   <li>Curely braces <tt>{}</tt></li>
+--   <li>Round parens <tt>( .. )</tt> for grouping.</li>
+--   <li>Squared brackets <tt>[ .. ]</tt> for list.</li>
+--   <li>Curely braces <tt>{ .. }</tt> for termset.</li>
+--   <li>Curely-bar braces <tt>{| .. |}</tt> for relation.</li>
 --   </ol>
 tokenTrees :: [Token] -> [TokenTree]
-
--- | Convert back tree into source string.
-tokenTreesSource :: [TokenTree] -> String
+divideByTokenTree :: String -> [TokenTree] -> [[TokenTree]]
 
 
 -- | Syntactic functions
@@ -675,7 +671,7 @@ AbortMalformedTerms :: [SourceLine] -> String -> Abort
 AbortMissingTermName :: [SourceLine] -> String -> Abort
 AbortUnknownClause :: [SourceLine] -> Abort
 AbortUnknownRelmap :: [SourceLine] -> String -> Abort
-AbortUsage :: [SourceLine] -> [String] -> Abort
+AbortUsage :: [SourceLine] -> String -> [String] -> Abort
 instance Show Abort
 instance Eq Abort
 instance Ord Abort
@@ -707,7 +703,7 @@ module Koshucode.Baala.Base.Relmap.Implement
 --   (2) operand parser, (3) constructor of operator, and (4) usage of
 --   operator.
 data OpImplement v
-OpImplement :: String -> OpParser -> (OpCons v) -> [String] -> OpImplement v
+OpImplement :: String -> OpParser -> (Relop v) -> [String] -> OpImplement v
 
 -- | Parser for operand of relational operator. This parsers docompose
 --   operand trees, and give a name to suboperand.
@@ -716,7 +712,7 @@ type OpParser' = [Named [TokenTree]] -> [Named [TokenTree]]
 
 -- | Constructor of relational operator <a>Relmap</a>. <a>Relmap</a> is
 --   constructed from <a>HalfRelmap</a> and subrelmaps in it.
-type OpCons v = OpUse v -> AbortOr (Relmap v)
+type Relop v = OpUse v -> AbortOr (Relmap v)
 
 -- | Use of operator
 data OpUse v
@@ -831,6 +827,59 @@ sectionUse :: Section v -> Section v -> Section v
 instance Monoid (Section v)
 
 
+-- | Syntax utilities
+module Koshucode.Baala.Base.Section.Utility
+
+-- | Extract a list of term names.
+--   
+--   <pre>
+--   &gt;&gt;&gt; termNames $ tokenTrees $ tokens "/a /b /c"
+--   Right ["/a","/b","/c"]
+--   </pre>
+termNames :: [TokenTree] -> AbortOr [String]
+
+-- | Extract a list of name-and-name pairs.
+--   
+--   <pre>
+--   &gt;&gt;&gt; termNamePairs $ tokenTrees $ tokens "/a /x /b /y"
+--   Right [("/a","/x"), ("/b","/y")]
+--   </pre>
+termNamePairs :: [TokenTree] -> AbortOr [(String, String)]
+
+-- | Extract a list of name-and-tree pairs.
+--   
+--   <pre>
+--   &gt;&gt;&gt; termTreePairs $ tokenTrees $ tokens "/a 'A3' /b 10"
+--   Right [("/a", TreeL (Word 1 "A3")), ("/b", TreeL (Word 0 "10"))]
+--   </pre>
+termTreePairs :: [TokenTree] -> AbortOr [(String, TokenTree)]
+
+-- | Calculator combining values into a single value
+type Calc v = [v] -> v
+
+-- | Set of operators
+type Ripen x v = x -> [v] -> Calc v
+
+-- | Calculate a value of tree
+crop :: Ripen x v -> Tree x -> Calc v
+
+
+-- | Construct judge from tokens
+module Koshucode.Baala.Base.Section.ConsJudge
+
+-- | Construct judge from token trees.
+consJudge :: Value v => ClauseSource -> Bool -> Relsign -> [TokenTree] -> AbortOr (Judge v)
+
+-- | Collect term name and content.
+consTerms :: Value v => ClauseSource -> [TokenTree] -> AbortOr [Named v]
+
+-- | Construct term content.
+consContent :: Value v => ClauseSource -> TokenTree -> AbortOr v
+
+-- | Construct list of term contents.
+consContents :: Value v => ClauseSource -> [TokenTree] -> AbortOr [v]
+
+
 -- | Intermidiate structure between <a>String</a> and <a>Section</a>.
 module Koshucode.Baala.Base.Section.Clause
 data Clause
@@ -887,7 +936,7 @@ consPreclause :: [SourceLine] -> [Clause]
 consClause :: RelmapHalfCons -> [SourceLine] -> [Clause]
 
 -- | Second step of constructing <a>Section</a>.
-consSection :: StringValue v => RelmapFullCons v -> [Clause] -> AbortOr (Section v)
+consSection :: Value v => RelmapFullCons v -> [Clause] -> AbortOr (Section v)
 instance Typeable Clause
 instance Show Clause
 instance Data Clause
@@ -901,10 +950,10 @@ data QuasiQuoter :: *
 module Koshucode.Baala.Base.Section.SectionIO
 
 -- | Read section from text.
-sectionRead :: StringValue v => Section v -> String -> AbortOr (Section v)
+sectionRead :: Value v => Section v -> String -> AbortOr (Section v)
 
 -- | Read section from file.
-sectionFile :: StringValue v => Section v -> FilePath -> IO (AbortOr (Section v))
+sectionFile :: Value v => Section v -> FilePath -> IO (AbortOr (Section v))
 
 -- | Run section. Output section has judges calculated from assertions in
 --   input section.
@@ -912,43 +961,6 @@ runSection :: Value v => Section v -> AbortOr (Section v)
 
 -- | Run section and output judges.
 runSectionIO :: Value v => Section v -> IO ()
-
-
--- | Syntax utilities
-module Koshucode.Baala.Base.Section.Utility
-
--- | Extract a list of term names.
---   
---   <pre>
---   &gt;&gt;&gt; termNames $ tokenTrees $ tokens "/a /b /c"
---   Right ["/a","/b","/c"]
---   </pre>
-termNames :: [TokenTree] -> AbortOr [String]
-
--- | Extract a list of name-and-name pairs.
---   
---   <pre>
---   &gt;&gt;&gt; termNamePairs $ tokenTrees $ tokens "/a /x /b /y"
---   Right [("/a","/x"), ("/b","/y")]
---   </pre>
-termNamePairs :: [TokenTree] -> AbortOr [(String, String)]
-
--- | Extract a list of name-and-tree pairs.
---   
---   <pre>
---   &gt;&gt;&gt; termTreePairs $ tokenTrees $ tokens "/a 'A3' /b 10"
---   Right [("/a", TreeL (Word 1 "A3")), ("/b", TreeL (Word 0 "10"))]
---   </pre>
-termTreePairs :: [TokenTree] -> AbortOr [(String, TokenTree)]
-
--- | Calculator combining values into a single value
-type Calc v = [v] -> v
-
--- | Set of operators
-type Ripen x v = x -> [v] -> Calc v
-
--- | Calculate a value of tree
-crop :: Ripen x v -> Tree x -> Calc v
 
 
 -- | Runtime structure for calculations written in Koshucode.

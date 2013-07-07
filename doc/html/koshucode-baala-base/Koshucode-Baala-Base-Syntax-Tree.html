@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.19.0.0: A notational system for relational data</p
+      >koshucode-baala-base-0.22.0.0: A notational system for relational data</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -157,11 +157,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >Eq</a
 	    > a =&gt; [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    >, a, a)] -&gt; (<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:ParenType"
+	    >, a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    >, a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    >)] -&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:ParenType"
 	    >ParenType</a
-	    > a, <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:TypeParen"
-	    >TypeParen</a
-	    > a)</li
+	    > a</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -458,7 +460,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ><td class="src"
 		>=&gt; [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 		  >Int</a
-		  >, a, a)]</td
+		  >, a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		  >Bool</a
+		  >, a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		  >Bool</a
+		  >)]</td
 		><td class="doc"
 		><p
 		  >List of (<em
@@ -473,16 +479,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; (<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:ParenType"
+		>-&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:ParenType"
 		  >ParenType</a
-		  > a, <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:TypeParen"
-		  >TypeParen</a
-		  > a)</td
-		><td class="doc"
-		><p
-		  >Paren functions.
-</p
-		  ></td
+		  > a</td
+		><td class="doc empty"
+		>&nbsp;</td
 		></tr
 	      ></table
 	    ></div

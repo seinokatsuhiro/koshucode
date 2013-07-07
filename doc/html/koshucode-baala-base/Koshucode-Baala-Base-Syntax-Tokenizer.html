@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.19.0.0: A notational system for relational data</p
+      >koshucode-baala-base-0.22.0.0: A notational system for relational data</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -56,12 +56,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    ><ul
 	    ><li
 	      ><a href="#g:2"
-		>Source lines
+		>Tokenizer
 </a
 		></li
 	      ><li
 	      ><a href="#g:3"
-		>Tokenizer
+		>Source lines
 </a
 		></li
 	      ></ul
@@ -93,6 +93,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 		></li
 	      ></ul
 	    ></li
+	  ><li
+	  ><a href="#g:9"
+	    >Examples
+</a
+	    ></li
 	  ></ul
 	></div
       ><div id="description"
@@ -109,6 +114,40 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
+	  ><a href="#v:tokens"
+	    >tokens</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:untokens"
+	    >untokens</a
+	    > :: [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:untoken"
+	    >untoken</a
+	    > :: <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:divideByToken"
+	    >divideByToken</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    >] -&gt; [[<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    >]]</li
+	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
 	    >  <a href="#t:SourceLine"
@@ -144,30 +183,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
 	    >SourceLine</a
 	    >]</li
-	  ><li class="src short"
-	  ><a href="#v:tokens"
-	    >tokens</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
-	    >Token</a
-	    >]</li
-	  ><li class="src short"
-	  ><a href="#v:untokens"
-	    >untokens</a
-	    > :: [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
-	    >Token</a
-	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:untoken"
-	    >untoken</a
-	    > :: <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
-	    >Token</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    ></li
 	  ></ul
 	></div
       ><div id="interface"
@@ -175,6 +190,70 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	>Library
 </h1
 	><h2 id="g:2"
+	>Tokenizer
+</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:tokens" class="def"
+	    >tokens</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    >]<a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html#tokens" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Split string into list of tokens.
+    Result token list does not contain newline characters. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:untokens" class="def"
+	    >untokens</a
+	    > :: [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ><a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html#untokens" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert back a token list to a source string. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:untoken" class="def"
+	    >untoken</a
+	    > :: <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ><a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html#untoken" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:divideByToken" class="def"
+	    >divideByToken</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    >] -&gt; [[<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    >]]<a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html#divideByToken" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h2 id="g:3"
 	>Source lines
 </h2
 	><div class="top"
@@ -393,93 +472,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ></ol
 	    ></div
 	  ></div
-	><h2 id="g:3"
-	>Tokenizer
-</h2
-	><div class="top"
-	><p class="src"
-	  ><a name="v:tokens" class="def"
-	    >tokens</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
-	    >Token</a
-	    >]<a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html#tokens" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Split string into list of tokens.
-    Result token list does not contain newline characters.
-</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>tokens &quot;aa\n'bb'\n\&quot;cc\&quot;&quot;
-</code
-		></strong
-	      >[TWord 0 &quot;aa&quot;, TWord 1 &quot;bb&quot;, TWord 2 &quot;cc&quot;]
-</pre
-	    ><p
-	    >Example includes <code
-	      ><a href="Koshucode-Baala-Base-Syntax-Token.html#v:TWord"
-		>TWord</a
-		></code
-	      >, <code
-	      ><a href="Koshucode-Baala-Base-Syntax-Token.html#v:TTermN"
-		>TTermN</a
-		></code
-	      > and <code
-	      ><a href="Koshucode-Baala-Base-Syntax-Token.html#v:TSpace"
-		>TSpace</a
-		></code
-	      > tokens.
-</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>tokens &quot;|-- R  /a A0 /b 31&quot;
-</code
-		></strong
-	      >[TWord 0 &quot;|--&quot;, TSpace 1, TWord 0 &quot;R&quot;, TSpace 2,
- TTermN [&quot;/a&quot;], TSpace 1, TWord 0 &quot;A0&quot;, TSpace 1,
- TTermN [&quot;/b&quot;], TSpace 1, TWord 0 &quot;31&quot;]
-</pre
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:untokens" class="def"
-	    >untokens</a
-	    > :: [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
-	    >Token</a
-	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    ><a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html#untokens" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Convert back a token list to a source string. 
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:untoken" class="def"
-	    >untoken</a
-	    > :: <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
-	    >Token</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    ><a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html#untoken" class="link"
-	    >Source</a
-	    ></p
-	  ></div
 	><h1 id="g:4"
 	>Document
 </h1
@@ -504,8 +496,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ></dt
 	    ><dd
 	    >
-  Single asterisk means multiplication,
-  e.g., <code
+    Single asterisk means multiplication,
+    e.g., <code
 	      >3 * 4</code
 	      > (three times four).
 </dd
@@ -515,8 +507,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ></dt
 	    ><dd
 	    >
-  Double asterisk leads line comment.
-  Textx from <code
+    Double asterisk leads line comment.
+    Textx from <code
 	      >**</code
 	      > to end of line are ignored.
 </dd
@@ -526,21 +518,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ></dt
 	    ><dd
 	    >
-  Quadruple asterisk (fourfold asterisk) leads caluse comment.
-  Texts from <code
+    Quadruple asterisk (fourfold asterisk) leads caluse comment.
+    Texts from <code
 	      >****</code
 	      > to end of clause are ignored.
-  In other words, line staring with <code
+    In other words, line staring with <code
 	      >****</code
 	      >
-  and following indented lines are ignored.
+    and following indented lines are ignored.
 </dd
 	    ></dl
 	  ><p
 	  >Triple asterisk <code
 	    >***</code
 	    > is double and rest of text.
- Quintuple (fivefold) asterisk <code
+   Quintuple (fivefold) asterisk <code
 	    >*****</code
 	    > is quadruple and rest of text.
 </p
@@ -578,7 +570,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ></dt
 	    ><dd
 	    >
-  Single quote.
+    Single quote.
 </dd
 	    ><dt
 	    ><code
@@ -586,7 +578,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ></dt
 	    ><dd
 	    >
-  Double quote.
+    Double quote.
 </dd
 	    ><dt
 	    ><code
@@ -594,7 +586,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ></dt
 	    ><dd
 	    >
-  Carriage return (<code
+    Carriage return (<code
 	      >\r</code
 	      >).
 </dd
@@ -604,7 +596,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ></dt
 	    ><dd
 	    >
-  Line feed (<code
+    Line feed (<code
 	      >\n</code
 	      >).
 </dd
@@ -614,7 +606,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ></dt
 	    ><dd
 	    >
-  Tab (<code
+    Tab (<code
 	      >\t</code
 	      >).
 </dd
@@ -624,7 +616,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ></dt
 	    ><dd
 	    >
-  Space.
+    Space.
 </dd
 	    ></dl
 	  ></div
@@ -643,20 +635,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >Word</dt
 	    ><dd
 	    >
-  Simple sequence of characters,
-  e.g., <code
+    Simple sequence of characters,
+    e.g., <code
 	      >abc</code
 	      >, <code
 	      >123</code
 	      >.
-  Numbers are represented as words.
+    Numbers are represented as words.
 </dd
 	    ><dt
 	    >Code</dt
 	    ><dd
 	    >
-  Code are like tagged word,
-  e.g., <code
+    Code are like tagged word,
+    e.g., <code
 	      >(color 'blue')</code
 	      >.
 </dd
@@ -664,9 +656,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >List</dt
 	    ><dd
 	    >
-  Orderd sequence of contents.
-  Lists are enclosed in square brackets,
-  e.g., <code
+    Orderd sequence of contents.
+    Lists are enclosed in square brackets,
+    e.g., <code
 	      >[ ab cd 0 1 ]</code
 	      >
 </dd
@@ -674,24 +666,99 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >Tuple</dt
 	    ><dd
 	    >
-  Set of pairs of term name and content.
-  Tuples are enclosed in round-bar parens,
-  e.g., <code
-	      >(| /a 10 /b 20 |)</code
+    Set of pairs of term name and content.
+    Tuples are enclosed in curely braces,
+    e.g., <code
+	      >{ /a 10 /b 20 }</code
 	      >.
 </dd
 	    ><dt
 	    >Relation</dt
 	    ><dd
 	    >
-  Set of uniform-typed tuples.
-  Relations are enclosed in square-bar brackets,
-  and enveloped tuples are divided by vertical bar,
-  e.g., <code
-	      >[| /a /b | 10 20 | 10 30 |]</code
+    Set of uniform-typed tuples.
+    Relations are enclosed in curely-bar braces,
+    and enveloped tuples are divided by vertical bar,
+    e.g., <code
+	      >{| /a /b | 10 20 | 10 30 |}</code
 	      >.
 </dd
 	    ></dl
+	  ></div
+	><h1 id="g:9"
+	>Examples
+</h1
+	><div class="doc"
+	><p
+	  >Words and quotations.
+</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >tokens &quot;aa\n'bb'\n\&quot;cc\&quot;&quot;
+</code
+	      ></strong
+	    >[TWord 0 &quot;aa&quot;, TWord 1 &quot;bb&quot;, TWord 2 &quot;cc&quot;]
+</pre
+	  ><p
+	  >Example includes <code
+	    ><a href="Koshucode-Baala-Base-Syntax-Token.html#v:TWord"
+	      >TWord</a
+	      ></code
+	    >, <code
+	    ><a href="Koshucode-Baala-Base-Syntax-Token.html#v:TTermN"
+	      >TTermN</a
+	      ></code
+	    > and <code
+	    ><a href="Koshucode-Baala-Base-Syntax-Token.html#v:TSpace"
+	      >TSpace</a
+	      ></code
+	    > tokens.
+</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >tokens &quot;|-- R  /a A0 /b 31&quot;
+</code
+	      ></strong
+	    >[TWord 0 &quot;|--&quot;, TSpace 1, TWord 0 &quot;R&quot;, TSpace 2,
+ TTermN [&quot;/a&quot;], TSpace 1, TWord 0 &quot;A0&quot;, TSpace 1,
+ TTermN [&quot;/b&quot;], TSpace 1, TWord 0 &quot;31&quot;]
+</pre
+	  ><p
+	  >Parens.
+</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >tokens &quot;aa (bb x y (z))&quot;
+</code
+	      ></strong
+	    >[TWord 1 0 &quot;aa&quot;, TSpace 2 1,
+ TOpen 3 &quot;(&quot;, TWord 4 0 &quot;bb&quot;, TSpace 5 1,
+   TWord 6 0 &quot;x&quot;, TSpace 7 1, TWord 8 0 &quot;y&quot;, TSpace 9 1,
+   TOpen 10 &quot;(&quot;, TWord 11 0 &quot;z&quot;, TClose 12 &quot;)&quot;, TClose 13 &quot;)&quot;]
+</pre
+	  ><p
+	  >A comment.
+</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >tokens &quot;abc ** this is a comment\ndef\n&quot;
+</code
+	      ></strong
+	    >[TWord 1 0 &quot;abc&quot;, TSpace 2 1, TComment 3 &quot;** this is a comment&quot;,
+ TWord 4 0 &quot;def&quot;]
+</pre
 	  ></div
 	></div
       ></div

@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.19.0.0: A notational system for relational data</p
+      >koshucode-baala-base-0.22.0.0: A notational system for relational data</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -141,9 +141,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >Eq</a
 	    > a =&gt; a -&gt; [a] -&gt; [[a]]</li
 	  ><li class="src short"
+	  ><a href="#v:divideByP"
+	    >divideByP</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    >) -&gt; [a] -&gt; [[a]]</li
+	  ><li class="src short"
 	  ><a href="#v:gather"
 	    >gather</a
 	    > ::  ([a] -&gt; (b, [a])) -&gt; [a] -&gt; [b]</li
+	  ><li class="src short"
+	  ><a href="#v:gatherWith"
+	    >gatherWith</a
+	    > ::  (c -&gt; [a] -&gt; (b, [a])) -&gt; [c] -&gt; [a] -&gt; [b]</li
 	  ><li class="src short"
 	  ><a href="#v:gatherToMap"
 	    >gatherToMap</a
@@ -324,6 +336,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >Source</a
 	    ></p
 	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:divideByP" class="def"
+	    >divideByP</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    >) -&gt; [a] -&gt; [[a]]<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#divideByP" class="link"
+	    >Source</a
+	    ></p
+	  ></div
 	><h1 id="g:3"
 	>Collection
 </h1
@@ -339,6 +363,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >Gather what is gotten by splitter. 
 </p
 	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:gatherWith" class="def"
+	    >gatherWith</a
+	    > ::  (c -&gt; [a] -&gt; (b, [a])) -&gt; [c] -&gt; [a] -&gt; [b]<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#gatherWith" class="link"
+	    >Source</a
+	    ></p
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -419,6 +451,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		><td class="src"
 		  ><a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Name"
 		    >Name</a
+		    > <a href="Koshucode-Baala-Base-Data-Rel-Relterm.html#t:Relterm"
+		    >Relterm</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Name"
+		    >Name</a
 		    > <a href="Koshucode-Baala-Base-Data-Rel-Relhead.html#t:TermPos"
 		    >TermPos</a
 		    ></td
@@ -441,16 +483,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		    >Name</a
 		    > <a href="Koshucode-Baala-Base-Abort-Symbol.html#t:Abort"
 		    >Abort</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Name"
-		    >Name</a
-		    > <a href="Koshucode-Baala-Base-Data-Rel-Relterm.html#t:Relterm"
-		    >Relterm</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
