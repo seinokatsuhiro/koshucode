@@ -52,17 +52,18 @@ consName1 src x = Left $ AbortMalformedTerms (clauseLines src) (show x)
 consContent :: (Value v) => ClauseSource -> TokenTree -> AbortOr v
 consContent src = cons where
     cons (TreeL (TWord _ 0 k))
-        | k == "()"     = Right $ nil
-        | k == "#true"  = Right $ boolValue True
-        | k == "#false" = Right $ boolValue False
-    cons (TreeL (TWord _ _ w))
-        = Right $ stringValue w
-    cons (TreeB 2 cs)
-        = do cs' <- consContents src cs
-             Right $ listValue cs'
-    cons (TreeB 3 cs)
-        = do cs' <- consTerms src cs
-             Right $ termsetValue cs'
+        | k == "()"            =  Right $ nil
+        | k == "#true"         =  Right $ boolValue True
+        | k == "#false"        =  Right $ boolValue False
+    cons (TreeL (TWord _ _ w)) =  Right $ stringValue w
+    cons (TreeB level cs)
+         | level == 2          =  do cs' <- consContents src cs
+                                     Right $ listValue cs'
+         | level == 3          =  do cs' <- consTerms src cs
+                                     Right $ termsetValue cs'
+         | level == 4          =  do cs' <- consRel src cs
+                                     Right $ relValue cs'
+    -- unknown content
     cons x = Left $ AbortMalformedTerms (clauseLines src) (show x)
 
 {-| Construct list of term contents. -}
@@ -74,6 +75,16 @@ consContents src = loop where
            xs' <- loop xs
            Right $ x' : xs'
 
+consRel :: (Value v) => ClauseSource -> [TokenTree] -> AbortOr (Rel v)
+consRel src cs =
+    do let (h1 : b1) = divideByTokenTree "|" cs
+       h2 <- mapM (consName1 src) h1
+       b2 <- mapM (consContents src) b1
+       Right $ Rel (headFrom h2) b2
+
+
+
+-- ----------------------
 {- $Examples
 
    >>> :m +Koshucode.Baala.Vanilla.Value.Val
@@ -109,5 +120,14 @@ consContents src = loop where
    Right [Termsetv [
             ("/a", Stringv "0"),
             ("/b", Listv [Stringv "a", Stringv "1"])]]
+
+   Relation.
+
+   >>> cons "{| /a /b | 10 20 | 30 40 |}"
+   Right [Relv (Rel
+     (Relhead [Term "/a", Term "/b"])
+     [[Stringv "10", Stringv "20"],
+      [Stringv "30", Stringv "40"]])]
+
 -}
 

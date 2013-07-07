@@ -1,3 +1,4 @@
+
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Data.ValueClass
@@ -64,5 +65,5 @@ class Nil v where
 
 class (Ord v, Pretty v, Nil v,
        BoolValue v, StringValue v,
-       ListValue v, TermsetValue v) => Value v
+       ListValue v, TermsetValue v, RelValue v) => Value v
 

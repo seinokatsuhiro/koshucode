@@ -7,38 +7,51 @@ module Koshucode.Baala.Base.Syntax.TokenTree
 -- * Library
   TokenTree
 , tokenTrees
+, divideByTokenTree
 
 -- * Examples
 -- $Example
 ) where
 
+import Koshucode.Baala.Base.Prelude
+
 import Koshucode.Baala.Base.Syntax.Token
 import Koshucode.Baala.Base.Syntax.Tree
+
+-- ----------------------
 
 {-| Tree of tokens. -}
 type TokenTree = Tree Token
 
 {-| Parse tokens into parened trees.
-    Blank tokens are excluded.
+    Blank tokens and comments are excluded.
 
-    There are three types of parens -- 1, 2, or 3.
+    There are four types of parens -- 1, 2, 3, or 4.
     Paren type is in 'TreeB' /type/ /subtrees/.
 
-    1. Round parens @()@
+    1. Round parens @( .. )@ for grouping.
 
-    2. Squared brackets @[]@
+    2. Squared brackets @[ .. ]@ for list.
 
-    3. Curely braces @{}@
+    3. Curely braces @{ .. }@ for termset.
+
+    4. Curely-bar braces @{| .. |}@ for relation.
   -}
 tokenTrees :: [Token] -> [TokenTree]
 tokenTrees = trees parenType . sweepToken
 
 parenType :: ParenType Token
 parenType = parenTable
-      [ (1, isOpenTokenOf "(", isCloseTokenOf ")")
-      , (2, isOpenTokenOf "[", isCloseTokenOf "]")
-      , (3, isOpenTokenOf "{", isCloseTokenOf "}")
-      ]
+    [ (1, isOpenTokenOf "("  , isCloseTokenOf ")")  -- grouping
+    , (2, isOpenTokenOf "["  , isCloseTokenOf "]")  -- list
+    , (3, isOpenTokenOf "{"  , isCloseTokenOf "}")  -- termset
+    , (4, isOpenTokenOf "{|" , isCloseTokenOf "|}") -- relation
+    ]
+
+divideByTokenTree :: String -> [TokenTree] -> [[TokenTree]]
+divideByTokenTree w = divideByP p where
+    p (TreeL (TWord _ 0 x)) | w == x = True
+    p _ = False
 
 
 
@@ -59,14 +72,6 @@ parenType = parenTable
     TreeL (TWord 7 0 "0"),
     TreeL (TTermN 9 ["/y"]),
     TreeL (TWord 11 0 "1")]
-
-   List.
-
-   >>> tokenTrees . tokens $ "[ 0 1 2 ]"
-   [TreeB 2 [
-     TreeL (TWord 3 0 "0"),
-     TreeL (TWord 5 0 "1"),
-     TreeL (TWord 7 0 "2")]]
 
    Relmap.
 
@@ -98,5 +103,25 @@ parenType = parenTable
         TreeB 1 [
           TreeL (TWord 6 0 "b"),
           TreeL (TWord 8 0 "c")]]]]
+
+   List.
+
+   >>> tokenTrees . tokens $ "[ 0 1 2 ]"
+   [TreeB 2 [
+     TreeL (TWord 3 0 "0"),
+     TreeL (TWord 5 0 "1"),
+     TreeL (TWord 7 0 "2")]]
+
+   Relation.
+
+   >>> tokenTrees . tokens $ "{| /a /b | 10 20 | 30 40 |}"
+   [TreeB 4 [
+      TreeL (TTermN 3 ["/a"]), TreeL (TTermN 5 ["/b"]),
+      TreeL (TWord 7 0 "|"),
+      TreeL (TWord 9 0 "10"), TreeL (TWord 11 0 "20"),
+      TreeL (TWord 13 0 "|"),
+      TreeL (TWord 15 0 "30"), TreeL (TWord 17 0 "40")]]
+      
+
 -}
 

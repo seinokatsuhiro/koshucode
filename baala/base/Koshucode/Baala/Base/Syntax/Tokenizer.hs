@@ -11,6 +11,7 @@ module Koshucode.Baala.Base.Syntax.Tokenizer
   tokens,
   untokens,
   untoken,
+  divideByToken,
 
   -- ** Source lines
   SourceLine (..),
@@ -52,29 +53,32 @@ tokens = concatMap sourceLineTokens . sourceLines
 
 {-| Split a next token from source text. -}
 nextToken :: Int -> String -> (Token, String)
-nextToken n ccs =
-    case ccs of
-      ('*' : '*' : '*' : '*' : cs) -> tokD cs (TWord n 0 "****")
-      ('*' : '*' : _)   ->  tokD "" (TComment n ccs)
-      ('#' : '!' : _)   ->  tokD "" (TComment n ccs)
-      ('(' : ')' : cs)  ->  tokD cs (TWord n 0 "()") -- nil
-      ('|' : '|' : cs)  ->  tokD (dropSpaces cs) (TWord n 0 "||") -- newline
+nextToken n txt =
+    case txt of
+      ('*' : '*' : '*' : '*' : cs) -> tokD cs (word0 "****")
+      ('*' : '*' : _)   ->  tokD "" (TComment n txt)
+      ('#' : '!' : _)   ->  tokD "" (TComment n txt)
+      ('(' : ')' : cs)  ->  tokD cs (word0 "()") -- nil
+      ('|' : '|' : cs)  ->  tokD (trim cs) (word0 "||") -- newline
+      ('{' : '|' : cs)  ->  tokD cs (TOpen  n "{|") -- open relation
+      ('|' : '}' : cs)  ->  tokD cs (TClose n "|}") -- close relation
       (c : cs)
         | isOpen    c   ->  tokD cs (TOpen   n [c])
         | isClose   c   ->  tokD cs (TClose  n [c])
-        | isSingle  c   ->  tokD cs (TWord n 0 [c])
+        | isSingle  c   ->  tokD cs (word0 [c])
         | isTerm    c   ->  term cs [c]  []
         | isQuote   c   ->  quote   c cs []
-        | isWord    c   ->  word    ccs  []
+        | isWord    c   ->  word    txt  []
         | isSpace   c   ->  white 1 cs
-      _                 ->  error $ "unknown token type: " ++ ccs
+      _                 ->  error $ "unknown token type: " ++ txt
     where
-      dropSpaces     = dropWhile isSpace
-      tokD cs x = (x, cs)
-      tokR cs cons xs = (cons $ reverse xs, cs)
+      word0             =   TWord n 0
+      trim              =   dropWhile isSpace
+      tokD cs x         =   (x, cs)
+      tokR cs cons xs   =   (cons $ reverse xs, cs)
 
       word (c:cs) xs | isWord c      = word cs (c:xs)
-      word ccs2 xs                   = tokR ccs2 (TWord n 0) xs
+      word ccs xs                    = tokR ccs word0 xs
 
       quote q [] xs                  = tokR [] (wordQ q) xs
       quote q (c:cs) xs
@@ -87,11 +91,11 @@ nextToken n ccs =
 
       term (c:cs) xs ns | isTerm c   = term cs [c] $ t xs ns
                         | isWord c   = term cs (c:xs) ns
-      term ccs2 xs ns                = tokR ccs2 (TTermN n) (t xs ns)
+      term ccs xs ns                 = tokR ccs (TTermN n) (t xs ns)
       t xs = (reverse xs :)
 
       white i (c:cs)    | isSpace c  = white (i + 1) cs
-      white i ccs2                   = tokD ccs2 (TSpace n i)
+      white i ccs                    = tokD ccs (TSpace n i)
 
 -- word
 -- e1 = tokens "aa bb"
@@ -190,11 +194,13 @@ sourceLines = loop 1 . linesNumbered where
 sourceLine :: Int -> (Int, String) -> (Int, [SourceLine])
 sourceLine tok (n, ln) = (tok + length toks, map src ls) where
     toks = gatherWith nextToken [tok ..] ln
-    ls   = divideByP isDoubleBar toks
+    ls   = divideByToken "||" toks
     src  = SourceLine n ln
 
-    isDoubleBar (TWord _ 0 "||") = True
-    isDoubleBar _                = False
+divideByToken :: String -> [Token] -> [[Token]]
+divideByToken w = divideByP p where
+    p (TWord _ 0 x) | w == x = True
+    p _ = False
 
 {-| Line number and contents. -}
 linesNumbered :: String -> [(Int, String)]

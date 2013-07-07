@@ -43,11 +43,10 @@ instance (Pretty v) => Pretty (Rel v) where
     doc = docRelFull
 
 docRelFull :: (Pretty a) => Rel a -> Doc
-docRelFull (Rel h b) = docTag "rel" (comm <+> h2 <+> b2)
-    where comm  = docComment $ text "card:" <+> int (length b)
-          h2    = docParen (hsep $ map text (headNames h))
+docRelFull (Rel h b) = text "{|" <+> h2 <+> b2 <+> text "|}"
+    where h2    = hsep $ map text (headNames h)
           b2    = hsep $ map arg b
-          arg a = docParen (hsep $ map doc a)
+          arg a = text "|" <+> (hsep $ map doc a)
 
 -- docRelShort :: Rel a -> Doc
 -- docRelShort (Rel h b) = docTag "rel" (h2 <+> b2) where

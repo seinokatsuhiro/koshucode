@@ -28,6 +28,8 @@ usage () {
 }
 
 main () {
+    decide_program `basename $0`
+
     case "$1" in
         link)
             sym_link "$0" sdist.link
@@ -43,7 +45,6 @@ main () {
             exit ;;
 
         '' | base* | operator* | calculator* | toolkit*)
-            decide_program `basename $0`
             cabal_for `directories "$1"`
             exit ;;
 
@@ -69,10 +70,6 @@ decide_program () {
         install.link)
             cabal=cabal_install
             echo "install ** installs packages" ;;
-        *)
-            cabal=
-            usage
-            exit 1 ;;
     esac
 }
 
@@ -101,6 +98,11 @@ URL=http://hackage.haskell.org/packages/archive/base/latest/doc/html
 GITHUB_DOC=http://seinokatsuhiro.github.io/koshucode/doc/html
 
 cabal_for () {
+    if [ -z $cabal ]; then
+        usage
+        exit
+    fi
+
     for d in "$@"; do
         echo
         echo "================================= $d"
