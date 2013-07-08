@@ -9,8 +9,7 @@ module Koshucode.Baala.Toolkit.Library.RDF
 , RDFTupleType (..)
 ) where
 import Data.RDF
-import Koshucode.Baala.Base.Data.Judge
-import Koshucode.Baala.Base.Data.ValueClass
+import Koshucode.Baala.Base.Data
 import qualified Data.Text as T
 
 -- | Type of conversion

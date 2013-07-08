@@ -57,7 +57,7 @@ library
         Koshucode.Baala.Base.Data.Rel
         Koshucode.Baala.Base.Data.Rel.Relhead
         Koshucode.Baala.Base.Data.Rel.Relterm
-        Koshucode.Baala.Base.Data.ValueClass
+        Koshucode.Baala.Base.Data.ContentClass
 
         Koshucode.Baala.Base.Prelude
         Koshucode.Baala.Base.Prelude.Position

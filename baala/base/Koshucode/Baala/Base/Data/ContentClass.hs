@@ -1,7 +1,6 @@
-
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Data.ValueClass
+module Koshucode.Baala.Base.Data.ContentClass
 (
 -- * Haskell data
   BoolValue (..)

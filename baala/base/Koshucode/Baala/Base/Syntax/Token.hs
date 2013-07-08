@@ -22,6 +22,7 @@ module Koshucode.Baala.Base.Syntax.Token
 , tokenNumber
 , sweepToken
 , sweepLeft
+, hashText
 ) where
 
 import Data.Generics (Data, Typeable)
@@ -131,6 +132,19 @@ sweepLeft :: Map [Token]
 sweepLeft [] = []
 sweepLeft xxs@(x:xs) | isBlankToken x = sweepLeft xs
                      | otherwise = xxs
+
+hashText :: String -> Maybe String
+hashText w =
+    case w of
+      "q"     -> Just "'"
+      "qq"    -> Just "\""
+      "cr"    -> Just "\r"
+      "lf"    -> Just "\n"
+      "crlf"  -> Just "\r\n"
+      "tab"   -> Just "\t"
+      "spc"   -> Just " "
+      ""      -> Just "#"
+      _       -> Nothing
 
 
 

@@ -24,12 +24,13 @@ type AbortOr a = Either Abort a
 data Abort
     = AbortLookup           [SourceLine] String
     | AbortMalformedOperand [SourceLine] String
-    | AbortMalformedTerms   [SourceLine] String
     | AbortMissingTermName  [SourceLine] String
+    | AbortOddRelation      [SourceLine]
     | AbortRequireFlatname  [SourceLine] String
     | AbortUnknownClause    [SourceLine]
     | AbortUnknownContent   [SourceLine] String
     | AbortUnknownRelmap    [SourceLine] String
+    | AbortUnknownSymbol    [SourceLine] String
     | AbortUsage            [SourceLine] String [String]
       deriving (Show, Eq, Ord)
 
@@ -40,36 +41,39 @@ instance AbortSymbol Abort where
     abortSymbol = head . words . show
 
     abortTitle a = case a of
-        (AbortLookup _ _)             -> "項目がない"
+        (AbortLookup           _ _)   -> "項目がない"
         (AbortMalformedOperand _ _)   -> "演算子の引数がおかしい"
-        (AbortMalformedTerms _ _)     -> "項目名と項目内容の組がない"
-        (AbortMissingTermName _ _)    -> "項目名が必要"
-        (AbortRequireFlatname _ _)    -> "入れ子ではない項目名が必要"
-        (AbortUnknownClause _)        -> "未知の構文"
-        (AbortUnknownContent _ _)     -> "未知の項目内容"
-        (AbortUnknownRelmap _ _)      -> "未知の演算子"
-        (AbortUsage _ _ _)            -> "使用法の間違い"
+        (AbortMissingTermName  _ _)   -> "項目名が必要"
+        (AbortOddRelation        _)   -> "ふぞろいな関係"
+        (AbortRequireFlatname  _ _)   -> "入れ子ではない項目名が必要"
+        (AbortUnknownClause      _)   -> "未知の構文"
+        (AbortUnknownContent   _ _)   -> "未知の項目内容"
+        (AbortUnknownRelmap    _ _)   -> "未知の演算子"
+        (AbortUnknownSymbol   _ _)    -> "未知の記号"
+        (AbortUsage          _ _ _)   -> "使用法の間違い"
 
     abortMain a = case a of
         (AbortLookup _ s)             -> par s
         (AbortMalformedOperand _ s)   -> par s
-        (AbortMalformedTerms _ s)     -> par s
         (AbortMissingTermName _ s)    -> par s
+        (AbortOddRelation     _)      -> empty
         (AbortRequireFlatname _ s)    -> par s
         (AbortUnknownClause _)        -> empty
         (AbortUnknownContent _ s)     -> par s
         (AbortUnknownRelmap _ s)      -> par s
+        (AbortUnknownSymbol _ s)      -> par s
         (AbortUsage _ _ usage)        -> docv $ map par usage
 
     abortLines a = case a of
         (AbortLookup           ln _)   -> ln
         (AbortMalformedOperand ln _)   -> ln
-        (AbortMalformedTerms   ln _)   -> ln
         (AbortMissingTermName  ln _)   -> ln
+        (AbortOddRelation      ln)     -> ln
         (AbortRequireFlatname  ln _)   -> ln
         (AbortUnknownClause    ln)     -> ln
         (AbortUnknownContent   ln _)   -> ln
         (AbortUnknownRelmap    ln _)   -> ln
+        (AbortUnknownSymbol    ln _)   -> ln
         (AbortUsage            ln _ _) -> ln
 
 par :: String -> Doc

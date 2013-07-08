@@ -20,7 +20,7 @@ import Koshucode.Baala.Base.Prelude
 
 import Koshucode.Baala.Base.Data.Rel
 import Koshucode.Baala.Base.Data.Judge
-import Koshucode.Baala.Base.Data.ValueClass
+import Koshucode.Baala.Base.Data.ContentClass
 
 -- | Dataset is a set of judges.
 data Dataset v = Dataset (Map.Map Relsign [Relarg v])
