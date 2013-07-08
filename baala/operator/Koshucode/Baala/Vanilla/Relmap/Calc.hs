@@ -3,10 +3,15 @@
 -- | Relational mappers
 
 module Koshucode.Baala.Vanilla.Relmap.Calc
-( relopHold, relmapHold, relHold
+(
+-- * hold
+  relopHold, relmapHold, relHold
 , relopUnhold
+-- * val
 , relopVal, relmapVal,  relVal
+-- * range
 , relopRange, relmapRange
+-- * limit
 , limit
 ) where
 
@@ -36,13 +41,13 @@ relopHoldFor test use = do
 
 {-| Make relmap function for @hold@ operator. -}
 relmapHold :: OpUse Val -> (Val -> Val -> Bool) -> TokenTree -> Relmap Val
-relmapHold use is e = Kit.relmapCalc use "hold" sub where
-    sub _ r1 = relHold is e r1
+relmapHold use test e = Kit.relmapCalc use "hold" sub where
+    sub _ r1 = relHold test e r1
 
 relHold :: (Val -> Val -> Bool) -> TokenTree -> Map (Rel Val)
-relHold is e (Rel h1 b1) = Rel h1 b2 where
+relHold test e (Rel h1 b1) = Rel h1 b2 where
     b2      = filter f b1
-    f arg   = calc arg `is` boolValue True
+    f arg   = calc arg `test` boolValue True
     calc    = Calc.makeCalc h1 e
 
 

@@ -25,6 +25,7 @@ module Koshucode.Baala.Base.Prelude.Utility
 , gather
 , gatherWith
 , gatherToMap
+, lookupSatisfy
 , lookupMap
 
 -- * Class
@@ -94,6 +95,13 @@ gatherToMap xs = loop xs Map.empty where
         case Map.lookup k m of
           Just vs -> loop xs2 $ Map.insert k (v:vs) m
           Nothing -> loop xs2 $ Map.insert k [v] m
+
+lookupSatisfy :: a -> [(a -> Bool, b)] -> Maybe b
+lookupSatisfy x = loop where
+    loop [] = Nothing
+    loop ((p, v) : ps)
+        | p x = Just v
+        | otherwise = loop ps
 
 lookupMap :: (Ord k) => k -> Map.Map k a -> Maybe a
 lookupMap = Map.lookup

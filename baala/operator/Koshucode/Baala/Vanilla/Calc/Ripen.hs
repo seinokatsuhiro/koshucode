@@ -33,7 +33,7 @@ type OpSet v = Map.Map String ([v] -> Calc v)
 operators :: OpSet Val
 operators = Map.fromList
   [ ("=",     fbin (==)),
-    ("/=",    fbin (/=)),
+    ("<>",    fbin (/=)),
     ("<",     fbin (<)),
     (">",     fbin (>)),
     ("<=",    fbin (<=)),
@@ -83,15 +83,18 @@ operators = Map.fromList
     fmax   [Listv xs] _ = intValue (maximum $ map toInt xs)
     fmax   _ _ = undefined
 
--- | Convert infix form to prefix form
-calcBinary :: TokenTree -> TokenTree
+{-| Convert infix form to prefix form. -}
+calcBinary :: Map TokenTree
 calcBinary = binaryTree ht where
-    op = map (TWord 0 0) . words
-    ht = heightTable [
-          (Right 8, op "or"),
-          (Right 7, op "and"),
-          (Right 6, op "= <>"),
-          (Right 2, op "+ -"),
-          (Right 1, op "* /")
-         ]
+    ht = heightTableUnbox fromTWord0
+         [ right 8 "or"
+         , right 7 "and"
+         , right 6 "= <>"
+         , right 2 "+ -"
+         , right 1 "* /"
+         ] where right n ws = (Right n, words ws)
+
+fromTWord0 :: Token -> String
+fromTWord0 (TWord _ 0 w) = w
+fromTWord0 _ = ""
 

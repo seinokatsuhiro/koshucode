@@ -80,6 +80,7 @@ module Koshucode.Baala.Minimal.OpKit
 , Syntax.Tree (..)
 , Syntax.binaryTree
 , Syntax.heightTable
+, Syntax.heightTableUnbox
 
 ) where
 

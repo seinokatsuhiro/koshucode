@@ -126,16 +126,9 @@ parenTable xs = parenType where
     parenOpen  (n, open, _)  = (open,   n)
     parenClose (n, _, close) = (close, -n)
     parenType a =
-        case satisfy a parenTypeTable of
+        case lookupSatisfy a parenTypeTable of
           Just n  -> n
           Nothing -> 0
-
-satisfy :: a -> [(a -> Bool, b)] -> Maybe b
-satisfy x = loop where
-    loop [] = Nothing
-    loop ((p,v):ps)
-        | p x = Just v
-        | otherwise = loop ps
 
 -- parenTable2
 --     :: (Eq a)

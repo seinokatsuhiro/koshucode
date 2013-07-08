@@ -7,6 +7,7 @@ module Koshucode.Baala.Base.Syntax.Binary
 ( BinaryHeight
 , binaryTree
 , heightTable
+, heightTableUnbox
 ) where
 
 import qualified Data.Map   as Map
@@ -14,24 +15,24 @@ import qualified Data.Maybe as Maybe
 
 import Koshucode.Baala.Base.Syntax.Tree
 
--- | Direction and height for binary splitting.
--- 
---   [@Left@ /H/] Splits first the left-most operator,
---   and operator height is /H/.
---   For example, if the operator @:@ is of @Left 5@,
---   an expression @(a : b : c)@ is splitted into @(: a (b : c))@
---   and then @(: a (: b c))@.
--- 
---   [@Right@ /H/] Right-most splitting and height /H/.
---   For example, if the operator @.@ is of @Right 3@,
---   an expression @(a . b . c)@ is splitted into @(. (a . b) c)@
---   and then @(. (. a b) c)@.
---   An expression @(a . b : c)@ is into @(: (a . b) c)@,
---   and then @(: (. a b) c)@.
---   Symbols that is not a binary operator like @b@ are of height 0.
---   For that reason, heights of expression @(a . b : c)@
---   are @(0 3 0 5 0)@
--- 
+{-| Direction and height for binary splitting.
+ 
+    [@Left@ /H/] Splits first the left-most operator,
+    and operator height is /H/.
+    For example, if the operator @:@ is of @Left 5@,
+    an expression @(a : b : c)@ is splitted into @(: a (b : c))@
+    and then @(: a (: b c))@.
+ 
+    [@Right@ /H/] Right-most splitting and height /H/.
+    For example, if the operator @.@ is of @Right 3@,
+    an expression @(a . b . c)@ is splitted into @(. (a . b) c)@
+    and then @(. (. a b) c)@.
+    An expression @(a . b : c)@ is into @(: (a . b) c)@,
+    and then @(: (. a b) c)@.
+    Symbols that is not a binary operator like @b@ are of height 0.
+    For that reason, heights of expression @(a . b : c)@
+    are @(0 3 0 5 0)@
+ -}
 type BinaryHeight = Either Int Int
 
 height :: BinaryHeight -> Int
@@ -43,7 +44,7 @@ height (Right h) = h
 -- (0 R1 0 R1 0) -> (R1 (0 R1 0) 0) -> (R1 (R1 0 0) 0)
 -- (0 L1 0 R1 0) -> ambiguous
 
--- | Split branches in a given tree at infixed binary operators
+{-| Split branches in a given tree at infixed binary operators -}
 binaryTree :: (Show a)
     => (a -> BinaryHeight)  -- ^ Height function
     -> Tree a               -- ^ Infixed tree
@@ -101,7 +102,7 @@ binaryPos xs = f xs 0 (Left 0) (-1) where
 -- e6 = binaryPos [Left 0, Right 1, Left 0, Right 1, Left 0]
 -- e7 = binaryPos [Left 0, Left 1, Left 0, Right 1, Left 0]
 
--- | Make the height function from a height table of operators
+{-| Make the height function from a height table of operators. -}
 heightTable :: (Ord a)
     => [(BinaryHeight, [a])] -- ^ Height table
     -> (a -> BinaryHeight)   -- ^ Height function
@@ -114,6 +115,16 @@ heightFunction :: (Ord a) => [(a, BinaryHeight)] -> a -> BinaryHeight
 heightFunction xs a = ht where
     ht    = Maybe.fromMaybe (Left 0) $ Map.lookup a hmap
     hmap  = Map.fromList xs
+
+heightTableUnbox :: (Ord a)
+    => (b -> a)              -- ^ Unbox function
+    -> [(BinaryHeight, [a])] -- ^ Height table
+    -> (b -> BinaryHeight)   -- ^ Height function
+heightTableUnbox unbox = heightFunctionUnbox unbox . heightExpand
+
+heightFunctionUnbox
+    :: (Ord a) => (b -> a) -> [(a, BinaryHeight)] -> b -> BinaryHeight
+heightFunctionUnbox unbox xs b = heightFunction xs $ unbox b
 
 binaryHeightMap
     :: (Functor g, Functor f)
