@@ -202,7 +202,7 @@ consSection whole xs = do
       exp xs2 = skip exp xs2
 
       jud (CJudge src q s xs2 : xs3) =
-          consJudge src q s (tokenTrees xs2) : jud xs3
+          consJudge (clauseLines src) q s (tokenTrees xs2) : jud xs3
       jud xs2 = skip jud xs2
 
       rel (CRelmap _ n r : xs2) =

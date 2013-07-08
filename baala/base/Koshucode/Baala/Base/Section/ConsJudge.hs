@@ -19,13 +19,12 @@ import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Syntax
 
-import Koshucode.Baala.Base.Section.Clausify
 
 
 -- ----------------------  Judge
 
 {-| Construct judge from token trees. -}
-consJudge :: (Value v) => ClauseSource
+consJudge :: (Value v) => [SourceLine]
       -> Bool -> Relsign -> [TokenTree]
       -> AbortOr (Judge v)
 consJudge src q s xs =
@@ -33,41 +32,86 @@ consJudge src q s xs =
      Right $ Judge q s xs'
 
 {-| Collect term name and content. -}
-consTerms :: (Value v) => ClauseSource
+consTerms :: (Value v) => [SourceLine]
       -> [TokenTree] -> AbortOr [Named v]
-consTerms src = loop where
-    loop [] = Right []
-    loop (n : x : xs) =
-        do n'  <- consName1 src n
-           x'  <- consContent src x
-           xs' <- loop xs
-           Right $ (n', x') : xs'
-    loop (x : _) = Left $ AbortMalformedTerms (clauseLines src) (show x) -- ???
+consTerms src xs = mapM internal =<< divideByName src xs where
+    internal (n, c) =
+        do c' <- consContent src c
+           Right (n, c')
 
-consName1 :: ClauseSource -> TokenTree -> AbortOr String
-consName1 _ (TreeL (TTermN _ [n])) = Right n
-consName1 src x = Left $ AbortMalformedTerms (clauseLines src) (show x)
+divideByName :: [SourceLine] -> [TokenTree] -> AbortOr [Named TokenTree]
+divideByName src = nam where
+    nam [] = Right []
+    nam (x : xs) =
+        let (cs, xs2) = content xs
+        in do n    <- consName1 src x
+              xs2' <- nam xs2
+              Right $ (n, singleToken cs) : xs2'
 
-{-| Construct term content. -}
-consContent :: (Value v) => ClauseSource -> TokenTree -> AbortOr v
+    content :: [TokenTree] -> ([TokenTree], [TokenTree])
+    content xs@(TreeL (TTermN _ _) : _) = ([], xs)
+    content [] = ([], [])
+    content (x : xs) = cons1 x $ content xs
+
+{-| Get single term name.
+    If 'TokenTree' contains nested term name, this function failed. -}
+consName1 :: [SourceLine] -> TokenTree -> AbortOr String
+consName1 _   (TreeL (TTermN _ [n])) = Right n
+consName1 src (TreeL (TTermN _ ns))  = Left $ AbortRequireFlatname src (concat ns)
+consName1 src x = Left $ AbortMissingTermName src (show x)
+
+{-| Transform 'TokenTree' into
+    internal form of term content.
+    There are five types of contents.
+
+    [String]    Sequence of characters.
+                External forms: @abc@, @\'abc\'@, @\"abc def\"@.
+
+    [Boolean]   Boolean used for something is hold, or unhold.
+                External forms: @\#true@, @\#fasle@.
+
+    [Nil]       Nil means that there are no values.
+                i.e., universal negation on the term holds.
+                External form is the non-quoted parens: @()@.
+
+    [List]      List is a ordered list of contents.
+                External form is a sequence of contents
+                with brackets: @[ abc def ]@.
+
+    [Termset]   Termset is a set of terms,
+                i.e., a list of named contents.
+                External form is a sequence of terms
+                with braces: @{ \/a 10 \/b 20 }@.
+
+    [Relation]  Relation is a set of same-type tuples,
+                External form is a sequence of tuples enclosed in braces,
+                and tuples are delimited by vertical bar:
+                @{| \/a \/b | 10 20 | 30 40 |}@.
+ -}
+consContent :: (Value v) => [SourceLine] -> TokenTree -> AbortOr v
 consContent src = cons where
-    cons (TreeL (TWord _ 0 k))
-        | k == "()"            =  Right $ nil
-        | k == "#true"         =  Right $ boolValue True
-        | k == "#false"        =  Right $ boolValue False
-    cons (TreeL (TWord _ _ w)) =  Right $ stringValue w
-    cons (TreeB level cs)
-         | level == 2          =  do cs' <- consContents src cs
-                                     Right $ listValue cs'
-         | level == 3          =  do cs' <- consTerms src cs
-                                     Right $ termsetValue cs'
-         | level == 4          =  do cs' <- consRel src cs
-                                     Right $ relValue cs'
+    -- leaf
+    cons (TreeL (TWord _ q w))
+        | q >  0    =  Right . stringValue $ w
+        | q == 0    =  case w of
+          "()"      -> Right nil
+          "#true"   -> Right . boolValue   $ True
+          "#false"  -> Right . boolValue   $ False
+          _         -> Right . stringValue $ w
+
+    -- branch
+    cons (TreeB t xs) = case t of
+          1         ->  Right nil
+          2         ->  Right . listValue    =<< consContents src xs
+          3         ->  Right . termsetValue =<< consTerms src xs
+          4         ->  Right . relValue     =<< consRel src xs
+          _         ->  bug
+
     -- unknown content
-    cons x = Left $ AbortMalformedTerms (clauseLines src) (show x)
+    cons x          = Left $ AbortUnknownContent src (show x)
 
 {-| Construct list of term contents. -}
-consContents :: (Value v) => ClauseSource -> [TokenTree] -> AbortOr [v]
+consContents :: (Value v) => [SourceLine] -> [TokenTree] -> AbortOr [v]
 consContents src = loop where
     loop [] = Right []
     loop (x : xs) =
@@ -75,7 +119,7 @@ consContents src = loop where
            xs' <- loop xs
            Right $ x' : xs'
 
-consRel :: (Value v) => ClauseSource -> [TokenTree] -> AbortOr (Rel v)
+consRel :: (Value v) => [SourceLine] -> [TokenTree] -> AbortOr (Rel v)
 consRel src cs =
     do let (h1 : b1) = divideByTokenTree "|" cs
        h2 <- mapM (consName1 src) h1

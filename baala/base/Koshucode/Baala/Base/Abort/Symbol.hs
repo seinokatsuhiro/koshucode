@@ -13,16 +13,22 @@ import Koshucode.Baala.Base.Syntax
 
 import Koshucode.Baala.Base.Abort.Source
 
-{- | Abortable type -}
+
+
+-- ----------------------
+
+{-| Abortable type -}
 type AbortOr a = Either Abort a
 
-{- | Abort symbols -}
+{-| Abort symbols -}
 data Abort
     = AbortLookup           [SourceLine] String
     | AbortMalformedOperand [SourceLine] String
     | AbortMalformedTerms   [SourceLine] String
     | AbortMissingTermName  [SourceLine] String
+    | AbortRequireFlatname  [SourceLine] String
     | AbortUnknownClause    [SourceLine]
+    | AbortUnknownContent   [SourceLine] String
     | AbortUnknownRelmap    [SourceLine] String
     | AbortUsage            [SourceLine] String [String]
       deriving (Show, Eq, Ord)
@@ -36,9 +42,11 @@ instance AbortSymbol Abort where
     abortTitle a = case a of
         (AbortLookup _ _)             -> "項目がない"
         (AbortMalformedOperand _ _)   -> "演算子の引数がおかしい"
-        (AbortMalformedTerms _ _)     -> "項目名と項目内容の並びがおかしい"
-        (AbortMissingTermName _ _)    -> "項目名ではない記号"
+        (AbortMalformedTerms _ _)     -> "項目名と項目内容の組がない"
+        (AbortMissingTermName _ _)    -> "項目名が必要"
+        (AbortRequireFlatname _ _)    -> "入れ子ではない項目名が必要"
         (AbortUnknownClause _)        -> "未知の構文"
+        (AbortUnknownContent _ _)     -> "未知の項目内容"
         (AbortUnknownRelmap _ _)      -> "未知の演算子"
         (AbortUsage _ _ _)            -> "使用法の間違い"
 
@@ -47,16 +55,20 @@ instance AbortSymbol Abort where
         (AbortMalformedOperand _ s)   -> par s
         (AbortMalformedTerms _ s)     -> par s
         (AbortMissingTermName _ s)    -> par s
+        (AbortRequireFlatname _ s)    -> par s
         (AbortUnknownClause _)        -> empty
+        (AbortUnknownContent _ s)     -> par s
         (AbortUnknownRelmap _ s)      -> par s
-        (AbortUsage _ _ usage)       -> docv $ map par usage
+        (AbortUsage _ _ usage)        -> docv $ map par usage
 
     abortLines a = case a of
         (AbortLookup           ln _)   -> ln
         (AbortMalformedOperand ln _)   -> ln
         (AbortMalformedTerms   ln _)   -> ln
         (AbortMissingTermName  ln _)   -> ln
+        (AbortRequireFlatname  ln _)   -> ln
         (AbortUnknownClause    ln)     -> ln
+        (AbortUnknownContent   ln _)   -> ln
         (AbortUnknownRelmap    ln _)   -> ln
         (AbortUsage            ln _ _) -> ln
 
