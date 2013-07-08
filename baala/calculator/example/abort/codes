@@ -1,0 +1,13 @@
+**
+**  List of aborting calculations
+**
+
+abort symbol           code
+---------------------- ---------------------------------
+AbortMalformedTerms    |-- R /x 0 /y 1 /z
+AbortMissingTermName   |-- R /x 0 /y 1 1 /z 2
+AbortUnknownClause     judge R /x 0 /y 1 /z 2
+AbortUnknownContent    |-- R /x 0 /y /z 2
+AbortUnknownRelmap     affirm A src R /x /y
+AbortUsage             affirm A source R x y
+
