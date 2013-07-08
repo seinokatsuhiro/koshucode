@@ -24,12 +24,12 @@
 
 **  Part
 
-|-- P /pno P1 /pname Nut   /color Red   /weight 12.0 /city London
-|-- P /pno P2 /pname Bolt  /color Green /weight 17.0 /city Paris
-|-- P /pno P3 /pname Screw /color Blue  /weight 17.0 /city Oslo
-|-- P /pno P4 /pname Screw /color Red   /weight 14.0 /city London
-|-- P /pno P5 /pname Cam   /color Blue  /weight 12.0 /city Paris
-|-- P /pno P6 /pname Cog   /color Red   /weight 19.0 /city London
+|-- P /pno P1 /pname Nut   /color Red   /weight 12 /city London
+|-- P /pno P2 /pname Bolt  /color Green /weight 17 /city Paris
+|-- P /pno P3 /pname Screw /color Blue  /weight 17 /city Oslo
+|-- P /pno P4 /pname Screw /color Red   /weight 14 /city London
+|-- P /pno P5 /pname Cam   /color Blue  /weight 12 /city Paris
+|-- P /pno P6 /pname Cog   /color Red   /weight 19 /city London
 
 **  Shipment
 

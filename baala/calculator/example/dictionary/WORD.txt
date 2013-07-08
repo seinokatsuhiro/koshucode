@@ -302,28 +302,28 @@ $ irreducibly dependent
 $ IS_EMPTY
 $ isomorphism
 
-$ JD
-$ JD implied by superkeys
-$ JOIN
-$ join
+. JD
+. JD implied by superkeys
+. JOIN
+. join
 $ join dependency
 
-$ key
-$ key constraint
+. key
+. key constraint
 
 $ left-irreducible FD
-$ less-than join
-$ literal
-$ logic
-$ logic variable
-$ logical data independence
-$ logical database design
-$ logical expression
-$ logical implication
-$ logical operator
-$ logical system
-$ lossless decomposition
-$ lossy decomposition
+. less-than join
+* literal
+. logic
+. logic variable
+. logical data independence
+. logical database design
+. logical expression
+. logical implication
+. logical operator
+. logical system
+. lossless decomposition
+* lossy decomposition
 
 $ many-to-many correspondence
 $ many-to-one correspondence
