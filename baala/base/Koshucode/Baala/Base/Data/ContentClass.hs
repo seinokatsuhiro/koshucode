@@ -14,7 +14,7 @@ module Koshucode.Baala.Base.Data.ContentClass
 , Nil (..)
 
 -- * Convinient class
-, Value ()
+, Value (..)
 ) where
 
 import Koshucode.Baala.Base.Prelude
@@ -64,5 +64,8 @@ class Nil v where
 
 class (Ord v, Pretty v, Nil v,
        BoolValue v, StringValue v,
-       ListValue v, TermsetValue v, RelValue v) => Value v
+       ListValue v, TermsetValue v, RelValue v) => Value v where
+    appendContent :: v -> v -> v
+    joinContent :: [v] -> v
+    joinContent = foldr appendContent nil
 

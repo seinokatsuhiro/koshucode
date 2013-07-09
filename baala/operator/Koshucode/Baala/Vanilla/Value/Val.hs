@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Term values -}
+{-| Term values. -}
 
 module Koshucode.Baala.Vanilla.Value.Val
 ( Val (..)
@@ -10,8 +10,11 @@ module Koshucode.Baala.Vanilla.Value.Val
 , module Koshucode.Baala.Base.Data
 ) where
 
+import qualified Data.List as L
+
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
+import Koshucode.Baala.Base.Syntax
 
 {-| Type for values. -}
 
@@ -61,7 +64,7 @@ instance Nil Val where
     isNil _   = False
 
 instance Pretty Val where
-    doc (Stringv s)   = docQuote $ text $ escape s
+    doc (Stringv s)   = text $ escape s
     doc (Intv n)      = int n
     doc (Boolv b)
         | b           = text "#true"
@@ -74,7 +77,11 @@ instance Pretty Val where
 docTerms :: (Pretty a) => Named a -> Doc
 docTerms (n, x) = text n <+> doc x
 
-instance Value Val
+instance Value Val where
+    appendContent (Nov) x = x
+    appendContent x (Nov) = x
+    appendContent (Stringv s1) (Stringv s2) = Stringv $ s1 ++ s2
+    appendContent _ _ = nil
 
 stringv :: String -> Val
 stringv = Stringv
@@ -91,15 +98,14 @@ relv    = Relv
 nov     :: Val
 nov     = Nov
 
-escape :: Map String
-escape (x:xs)
-    | x == '\'' = "@(char.q)" ++ escape xs
-    | x == '"'  = "@(char.qq)" ++ escape xs
-    | x == '@'  = "@(char.at)" ++ escape xs
-    | x == '\n' = "@(char.lf)" ++ escape xs
-    | x == '\r' = "@(char.cr)" ++ escape xs
-    | otherwise = x : escape xs
-escape [] = []
+escape :: String -> String
+escape = join . hashSplit where
+    join :: [String] -> String
+    join [] = ""
+    join [x] = x
+    join xs = L.intercalate " " $ "text" : xs
+
+
 
 -- ----------------------  
 

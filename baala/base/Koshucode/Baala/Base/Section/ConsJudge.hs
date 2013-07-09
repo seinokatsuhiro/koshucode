@@ -32,13 +32,13 @@ consContent src = cons where
     cons (TreeL (TWord _ q w))
         | q >  0    =   Right . stringValue $ w
         | q == 0    =   case w of
-          '#' : cs  ->  hash src cs
+          '#' : w2  ->  hash src w2
           "()"      ->  Right nil
           _         ->  Right . stringValue $ w
 
     -- branch
     cons (TreeB t xs) = case t of
-          1         ->  Right nil
+          1         ->  paren src xs
           2         ->  Right . listValue    =<< consList    src xs
           3         ->  Right . termsetValue =<< consTermset src xs
           4         ->  Right . relValue     =<< consRel     src xs
@@ -52,9 +52,15 @@ hash src w =
     case w of
       "true"  -> Right . boolValue $ True
       "false" -> Right . boolValue $ False
-      _       -> case hashText w of
+      _       -> case hashWord w of
                    Just w2 -> Right . stringValue $ w2
                    Nothing -> Left $ AbortUnknownSymbol src ('#' : w)
+
+paren :: (Value v) => [SourceLine] -> [TokenTree] -> AbortOr v
+paren src (TreeL (TWord _ 0 "text") : xs) =
+    do xs' <- consList src xs
+       Right $ joinContent xs'
+paren src x = Left $ AbortUnknownSymbol src (show x)
 
 {-| Construct list of term contents. -}
 consList :: (Value v) => [SourceLine] -> [TokenTree] -> AbortOr [v]

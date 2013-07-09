@@ -25,9 +25,6 @@ module Koshucode.Baala.Base.Syntax.Tokenizer
   -- ** Asterisks
   -- $Asterisks
 
-  -- ** Escape sequences
-  -- $EscapeSequences
-
   -- ** Syntactic content type
   -- $SyntacticContentType
 
@@ -258,32 +255,6 @@ linesCrLf s = ln : nextLine s2 where
    >      ee fffff
    
    You can type @****@ on top of a clause to hide it.
-   -}
-
-
-
--- ----------------------
-{- $EscapeSequences
-
-   (Not implemented)
-   
-   [@\[*q\]@]
-    Single quote.
-   
-   [@\[*qq\]@]
-    Double quote.
-   
-   [@\[*cr\]@]
-    Carriage return (@\\r@).
-   
-   [@\[*lf\]@]
-    Line feed (@\\n@).
-   
-   [@\[*tab\]@]
-    Tab (@\\t@).
-   
-   [@\[*spc\]@]
-    Space.
    -}
 
 
