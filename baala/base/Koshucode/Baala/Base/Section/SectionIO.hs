@@ -9,7 +9,10 @@ module Koshucode.Baala.Base.Section.SectionIO
 -- * Running section
 , runSection
 , runSectionIO
+, hRunSectionIO
 ) where
+
+import qualified System.IO as IO
 
 import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Data
@@ -62,5 +65,8 @@ runSection sec =
 
 {-| Run section and output judges. -}
 runSectionIO :: (Value v) => Section v -> IO ()
-runSectionIO = abortIO (putJudges . sectionJudge) . runSection
+runSectionIO = hRunSectionIO IO.stdout
+
+hRunSectionIO :: (Value v) => IO.Handle -> Section v -> IO ()
+hRunSectionIO h = abortIO (hPutJudges h . sectionJudge) . runSection
 

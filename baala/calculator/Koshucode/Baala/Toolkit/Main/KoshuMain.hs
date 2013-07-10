@@ -9,8 +9,9 @@ module Koshucode.Baala.Toolkit.Main.KoshuMain
 -- $koshu.hs
 ) where
 
-import System.Console.GetOpt
 import Data.Monoid
+import System.Console.GetOpt
+import System.IO
 
 import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Data
@@ -18,6 +19,7 @@ import Koshucode.Baala.Toolkit.Library.Comment
 import Koshucode.Baala.Toolkit.Library.Exit
 import Koshucode.Baala.Toolkit.Library.Version
 import qualified Koshucode.Baala.Base.Prelude.Pretty as Pretty
+import qualified Koshucode.Baala.Base.Prelude as Kit
 import qualified Koshucode.Baala.Base.Section as Kit
 import qualified Koshucode.Baala.Base.Data    as Kit
 import qualified Koshucode.Baala.Minimal.OpKit as Kit
@@ -62,7 +64,7 @@ koshuOptions =
     , Option ""  ["pretty"]   (NoArg OptPretty)  "Pretty print section."
     , Option "i" ["stdin"]    (NoArg OptStdin)   "Read from stdin."
     , Option "s" ["section"]  (ReqArg OptSection "SEC") "One-line section"
-    , Option ""  ["calc"]     (NoArg OptCalc)    "Run by calculation list"
+    , Option ""  ["calc"]     (NoArg OptCalc)    "Run calculation list"
     ]
 
 version :: String
@@ -119,16 +121,20 @@ koshuMain' root (_, argv) =
 
 {-| Read and union sections from files, and run the section. -}
 runFiles :: (Value v) => [Option] -> Kit.Section v -> [FilePath] -> IO ()
-runFiles opts root files =
+runFiles = hRunFiles stdout
+
+hRunFiles :: (Value v) => Handle -> [Option] -> Kit.Section v -> [FilePath] -> IO ()
+hRunFiles h opts root files =
     do let sec = concatMap (oneLiner root) opts
        sects <- mapM (Kit.sectionFile root) files
        let union = concatMM $ sec ++ sects
            comm  = CommentDoc
                    [ CommentSec "INPUT" files]
-       putStrLn emacsModeComment
-       putStr $ unlines $ texts comm
-       putStrLn ""
-       abortIO Kit.runSectionIO union
+       hSetEncoding h utf8
+       hPutStrLn h emacsModeComment
+       hPutStr h $ unlines $ texts comm
+       hPutStrLn h ""
+       abortIO (Kit.hRunSectionIO h) union
 
 runStdin :: (Value v) => [Option] -> Kit.Section v -> [FilePath] -> IO ()
 runStdin opts root files = do
@@ -148,17 +154,6 @@ concatMM (s:ss) = do s'  <- s
                      ss' <- concatMM ss
                      return $ mappend s' ss'
 
-prettySection :: (Value v) => Kit.Section v -> [FilePath] -> IO ()
-prettySection root files =
-    case files of
-      [file] -> do md <- Kit.sectionFile root file
-                   prettyPrint md
-      []     -> do stdin <- getContents
-                   let md = Kit.sectionRead root stdin
-                   prettyPrint md
-      _      -> putSuccess usage
-    where prettyPrint md = abortIO (print . Pretty.doc) md
-
 
 
 -- ---------------------- Calculation list
@@ -168,20 +163,51 @@ runCalc opts root files =
     do let sec = concatMap (oneLiner root) opts
        sects <- mapM (Kit.sectionFile root) files
        let union = concatMM $ sec ++ sects
-       abortIO (runCalcBody opts root) union
+       abortIO (runCalcSec opts root) union
 
-runCalcBody :: (Value v) => [Option] -> Kit.Section v -> Kit.Section v -> IO ()
-runCalcBody opts root sec =
+runCalcSec :: (Value v) => [Option] -> Kit.Section v -> Kit.Section v -> IO ()
+runCalcSec opts root sec =
     do let js = Kit.sectionJudge sec
-       mapM_ (runCalcEach opts root) js
+       mapM_ (runCalcJudge opts root) js
        return ()
 
-runCalcEach :: (Value v) => [Option] -> Kit.Section v -> Judge v -> IO ()
-runCalcEach opts root (Judge True "KOSHU-CALC" xs) =
-    case lookup "/input" xs of
-      Just c  -> runFiles opts root (theStrings c)
-      Nothing -> return ()
-runCalcEach _ _ _ = return ()
+runCalcJudge :: (Value v) => [Option] -> Kit.Section v -> Judge v -> IO ()
+runCalcJudge opts root (Judge True "KOSHU-CALC" xs) =
+    case theContents ["/input", "/output"] xs of
+      Just [input, output] ->
+          do let inputFiles = theStrings input
+                 outputFile = Kit.theStringValue output
+             putStrLn $ "**  Output to " ++ outputFile
+             withFile outputFile WriteMode
+                          $ \ h -> hRunFiles h opts root inputFiles
+      Just _       -> return ()
+      Nothing      -> return ()
+runCalcJudge _ _ _ =  return ()
+
+
+
+-- ----------------------  Pretty printing
+
+prettySection :: (Value v) => Kit.Section v -> [FilePath] -> IO ()
+prettySection root files =
+    case files of
+      [file] -> do md <- Kit.sectionFile root file
+                   prettyPrint md
+      []     -> do s <- getContents
+                   let md = Kit.sectionRead root s
+                   prettyPrint md
+      _      -> putSuccess usage
+    where prettyPrint md = abortIO (print . Pretty.doc) md
+
+
+
+-- ----------------------  The
+
+theContent :: (Value c) => String -> [Kit.Named c] -> Maybe c
+theContent = lookup
+
+theContents :: (Value c) => [String] -> [Kit.Named c] -> Maybe [c]
+theContents ns termset = mapM (`theContent` termset) ns
 
 theStrings :: (Value c) => c -> [String]
 theStrings c | Kit.isStringValue c = [Kit.theStringValue c]

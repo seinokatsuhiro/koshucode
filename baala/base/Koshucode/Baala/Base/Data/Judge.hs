@@ -10,6 +10,7 @@ module Koshucode.Baala.Base.Data.Judge
 
 -- * Writer
 , putJudges
+, hPutJudges
 , abcJudge
 
 -- * Logical quality
@@ -20,6 +21,7 @@ module Koshucode.Baala.Base.Data.Judge
 ) where
 
 import qualified Data.List as List
+import qualified System.IO as IO
 import Koshucode.Baala.Base.Prelude
 
 -- | Judgement on type 'v'.
@@ -85,7 +87,10 @@ isDenied (Judge q _ _) = not q
 -- ----------------------  Writer
 
 putJudges :: (Ord v, Pretty v) => [Judge v] -> IO ()
-putJudges = putStr . unlines . showJudges
+putJudges = hPutJudges IO.stdout
+
+hPutJudges :: (Ord v, Pretty v) => IO.Handle -> [Judge v] -> IO ()
+hPutJudges h = IO.hPutStr h . unlines . showJudges
 
 showJudges :: (Ord v, Pretty v) => [Judge v] -> [String]
 showJudges = loop (1 :: Int) where

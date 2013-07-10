@@ -5,6 +5,7 @@
 #
 #  USAGE
 #    ./CALC.sh > CALC.k
+#    ./CALC.sh -u
 #
 
 comment () {
@@ -27,11 +28,20 @@ koshu_calc () {
 
 koshu_calc_list () {
     for k in [a-z]*.k; do
-        koshu_calc "[ DATA.k $k ]" "output-$k\n"
+        koshu_calc "[ DATA.k $k ]" "OUTPUT/$k"
     done
     echo
 }
 
-comment
-koshu_calc_list
+calc_list () {
+    comment
+    koshu_calc_list
+}
+
+if [ "$1" = "-u" ]; then
+    echo "output to CALC.k"
+    calc_list > CALC.k
+else
+    calc_list
+fi
 
