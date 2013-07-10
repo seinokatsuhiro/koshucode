@@ -122,16 +122,17 @@ Invoke koshu command
 ---------------------------------
 
 `koshu` command is a portable relational calculator.
-This calculator reads data and calculations in koshucode,
+This calculator reads data and calculating formula in koshucode,
 and writes results of the calculations.
-The order of files is not significant.
-You can type also `koshu natural-join.k DATA.k`.
+The results are also written in koshucode.
 
 ``` sh
 cd koshucode-master/baala/calculator/example/dictionary
 koshu DATA.k natural-join.k
 ```
 
+The order of files is not significant.
+You can type also `koshu natural-join.k DATA.k`.
 With the `-i` option, `koshu` reads data file
 from the standard input.
 
@@ -144,20 +145,28 @@ These commands calculates
 for input [`DATA.k`](https://github.com/seinokatsuhiro/koshucode/blob/master/baala/calculator/example/dictionary/DATA.k),
 and writes the following output data.
 
-```
-|-- SSP /pno 'P6' /qty '100' /sno 'S1' /sname 'Smith' /status '20' /city 'London'
-|-- SSP /pno 'P5' /qty '100' /sno 'S1' /sname 'Smith' /status '20' /city 'London'
-|-- SSP /pno 'P4' /qty '200' /sno 'S1' /sname 'Smith' /status '20' /city 'London'
-|-- SSP /pno 'P3' /qty '400' /sno 'S1' /sname 'Smith' /status '20' /city 'London'
-|-- SSP /pno 'P2' /qty '200' /sno 'S1' /sname 'Smith' /status '20' /city 'London'
+``` text
+** -*- koshu -*-
+**  
+**  INPUT
+**    DATA.k
+**    natural-join.k
+**    
 
-|-- SSP /pno 'P1' /qty '300' /sno 'S1' /sname 'Smith' /status '20' /city 'London'
-|-- SSP /pno 'P2' /qty '400' /sno 'S2' /sname 'Jones' /status '10' /city 'Paris'
-|-- SSP /pno 'P1' /qty '300' /sno 'S2' /sname 'Jones' /status '10' /city 'Paris'
-|-- SSP /pno 'P2' /qty '200' /sno 'S3' /sname 'Blake' /status '30' /city 'Paris'
-|-- SSP /pno 'P5' /qty '400' /sno 'S4' /sname 'Clark' /status '20' /city 'London'
+|-- SSP /pno P6 /qty 100 /sno S1 /sname Smith /status 20 /city London
+|-- SSP /pno P5 /qty 100 /sno S1 /sname Smith /status 20 /city London
+|-- SSP /pno P4 /qty 200 /sno S1 /sname Smith /status 20 /city London
+|-- SSP /pno P3 /qty 400 /sno S1 /sname Smith /status 20 /city London
+|-- SSP /pno P2 /qty 200 /sno S1 /sname Smith /status 20 /city London
 
-|-- SSP /pno 'P4' /qty '300' /sno 'S4' /sname 'Clark' /status '20' /city 'London'
-|-- SSP /pno 'P2' /qty '200' /sno 'S4' /sname 'Clark' /status '20' /city 'London'
+|-- SSP /pno P1 /qty 300 /sno S1 /sname Smith /status 20 /city London
+|-- SSP /pno P2 /qty 400 /sno S2 /sname Jones /status 10 /city Paris
+|-- SSP /pno P1 /qty 300 /sno S2 /sname Jones /status 10 /city Paris
+|-- SSP /pno P2 /qty 200 /sno S3 /sname Blake /status 30 /city Paris
+|-- SSP /pno P5 /qty 400 /sno S4 /sname Clark /status 20 /city London
+
+|-- SSP /pno P4 /qty 300 /sno S4 /sname Clark /status 20 /city London
+|-- SSP /pno P2 /qty 200 /sno S4 /sname Clark /status 20 /city London
+*** (12 judges)
 ```
 
