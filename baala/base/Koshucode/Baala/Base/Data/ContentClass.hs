@@ -34,12 +34,14 @@ class IntValue v where
     isIntValue :: v -> Bool
 
 class StringValue v where
-    stringValue   :: String -> v
-    isStringValue :: v -> Bool
+    stringValue    :: String -> v
+    isStringValue  :: v -> Bool
+    theStringValue :: v -> String
 
 class ListValue v where
-    listValue   :: [v] -> v
-    isListValue :: v -> Bool
+    listValue    :: [v] -> v
+    isListValue  :: v -> Bool
+    theListValue :: v -> [v]
 
 
 

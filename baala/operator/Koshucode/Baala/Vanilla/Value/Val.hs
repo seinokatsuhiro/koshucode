@@ -42,11 +42,15 @@ instance StringValue Val where
     stringValue = Stringv
     isStringValue (Stringv _) = True
     isStringValue _           = False
+    theStringValue (Stringv s) = s
+    theStringValue _           = ""
 
 instance ListValue Val where
     listValue = Listv
-    isListValue (Listv _) = True
-    isListValue _         = False
+    isListValue (Listv _)   = True
+    isListValue _           = False
+    theListValue (Listv xs) = xs
+    theListValue _          = []
 
 instance TermsetValue Val where
     termsetValue = Termsetv

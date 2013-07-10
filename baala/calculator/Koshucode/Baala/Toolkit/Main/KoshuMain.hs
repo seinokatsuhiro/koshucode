@@ -14,10 +14,12 @@ import Data.Monoid
 
 import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Data
+import Koshucode.Baala.Toolkit.Library.Comment
 import Koshucode.Baala.Toolkit.Library.Exit
 import Koshucode.Baala.Toolkit.Library.Version
 import qualified Koshucode.Baala.Base.Prelude.Pretty as Pretty
 import qualified Koshucode.Baala.Base.Section as Kit
+import qualified Koshucode.Baala.Base.Data    as Kit
 import qualified Koshucode.Baala.Minimal.OpKit as Kit
 
 
@@ -48,6 +50,7 @@ data Option
     | OptPretty
     | OptStdin
     | OptSection String
+    | OptCalc
       deriving (Show, Eq)
 
 koshuOptions :: [OptDescr Option]
@@ -58,7 +61,8 @@ koshuOptions =
     , Option ""  ["show-encoding"] (NoArg OptShowEncoding) "Show character encoding."
     , Option ""  ["pretty"]   (NoArg OptPretty)  "Pretty print section."
     , Option "i" ["stdin"]    (NoArg OptStdin)   "Read from stdin."
-    , Option "s" ["section"]  (ReqArg OptSection "SEC") "One line section"
+    , Option "s" ["section"]  (ReqArg OptSection "SEC") "One-line section"
+    , Option ""  ["calc"]     (NoArg OptCalc)    "Run by calculation list"
     ]
 
 version :: String
@@ -104,16 +108,27 @@ koshuMain' root (_, argv) =
           | has OptShowEncoding -> putSuccess =<< currentEncodings
           | has OptPretty       -> prettySection root files
           | has OptStdin        -> runStdin opts root files
-          | otherwise           -> run opts root files
+          | has OptCalc         -> runCalc  opts root files
+          | otherwise           -> runFiles opts root files
           where has = (`elem` opts)
       (_, _, errs) -> putFailure $ concat errs
 
+
+
+-- ----------------------  Run
+
 {-| Read and union sections from files, and run the section. -}
-run :: (Value v) => [Option] -> Kit.Section v -> [FilePath] -> IO ()
-run opts root files =
+runFiles :: (Value v) => [Option] -> Kit.Section v -> [FilePath] -> IO ()
+runFiles opts root files =
     do let sec = concatMap (oneLiner root) opts
        sects <- mapM (Kit.sectionFile root) files
-       abortIO Kit.runSectionIO $ concatMM $ sec ++ sects
+       let union = concatMM $ sec ++ sects
+           comm  = CommentDoc
+                   [ CommentSec "INPUT" files]
+       putStrLn emacsModeComment
+       putStr $ unlines $ texts comm
+       putStrLn ""
+       abortIO Kit.runSectionIO union
 
 runStdin :: (Value v) => [Option] -> Kit.Section v -> [FilePath] -> IO ()
 runStdin opts root files = do
@@ -143,6 +158,36 @@ prettySection root files =
                    prettyPrint md
       _      -> putSuccess usage
     where prettyPrint md = abortIO (print . Pretty.doc) md
+
+
+
+-- ---------------------- Calculation list
+
+runCalc :: (Value v) => [Option] -> Kit.Section v -> [FilePath] -> IO ()
+runCalc opts root files =
+    do let sec = concatMap (oneLiner root) opts
+       sects <- mapM (Kit.sectionFile root) files
+       let union = concatMM $ sec ++ sects
+       abortIO (runCalcBody opts root) union
+
+runCalcBody :: (Value v) => [Option] -> Kit.Section v -> Kit.Section v -> IO ()
+runCalcBody opts root sec =
+    do let js = Kit.sectionJudge sec
+       mapM_ (runCalcEach opts root) js
+       return ()
+
+runCalcEach :: (Value v) => [Option] -> Kit.Section v -> Judge v -> IO ()
+runCalcEach opts root (Judge True "KOSHU-CALC" xs) =
+    case lookup "/input" xs of
+      Just c  -> runFiles opts root (theStrings c)
+      Nothing -> return ()
+runCalcEach _ _ _ = return ()
+
+theStrings :: (Value c) => c -> [String]
+theStrings c | Kit.isStringValue c = [Kit.theStringValue c]
+theStrings c | Kit.isListValue c   = map Kit.theStringValue
+                                     $ Kit.theListValue c
+theStrings _ = []
 
 
 
