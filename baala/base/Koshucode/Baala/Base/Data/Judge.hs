@@ -61,7 +61,7 @@ instance (Ord v, Pretty v) => Pretty (Judge v) where
           sign | ':' `elem` s = docQuote $ text s
                | otherwise    = text s
           -- term name and term value
-          arg ((n,v) : a2) = text n <+> doc v <+> arg a2
+          arg ((n,v) : a2) = text " " <> text n <+> doc v <+> arg a2
           arg [] = empty
 
 
@@ -94,9 +94,9 @@ hPutJudges h = IO.hPutStr h . unlines . showJudges
 
 showJudges :: (Ord v, Pretty v) => [Judge v] -> [String]
 showJudges = loop (1 :: Int) where
-    count 0 = "*** (no judges)"
-    count 1 = "*** (1 judge)"
-    count n = "*** (" ++ show n ++ " judges)"
+    count 0 = "**  (no judges)"
+    count 1 = "**  (1 judge)"
+    count n = "**  (" ++ show n ++ " judges)"
 
     loop n [] = [count $ n - 1, ""]
     loop n (j : js)
