@@ -140,7 +140,7 @@ cabal_sdist () {
 if_file () {
     package=koshucode-baala-$1
     haddock=../$1/dist/doc/html/$package/$package.haddock
-    if [ `basename $PWD` = $1 ]; then
+    if [ `pwd_base` = $1 ]; then
         echo --html
     elif [ -e $haddock ]; then
         echo --read-interface=$GITHUB_DOC/$package/,$haddock
@@ -150,7 +150,15 @@ if_file () {
 }
 
 cabal_haddock () {
-    cabal haddock
+    if [ `pwd_base` = XXXcalculator ]; then
+        cabal haddock --executables
+    else
+        cabal haddock
+    fi
+}
+
+pwd_base () {
+    basename $PWD
 }
 
 cabal_install () {

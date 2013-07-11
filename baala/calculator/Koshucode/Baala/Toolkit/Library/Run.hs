@@ -1,12 +1,15 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Toolkit.Library.Run
-( runFiles
+( SectionSource (..)
+, runFiles
 , hRunFiles
-, runStdin
 , concatMM
 , runCalc
 , runCalcTo
+, theContent
+, readSec
+, mkdir
 ) where
 
 import Data.Monoid
@@ -22,39 +25,35 @@ import qualified Koshucode.Baala.Base.Section  as Kit
 import qualified Koshucode.Baala.Base.Data     as Kit
 
 
+data SectionSource c = SectionSource
+    { rootSection  :: Kit.Section c
+    , textSections :: [String]
+    , fileSections :: [FilePath]
+    } deriving (Show)
+      
 
 -- ----------------------
 
-runFiles :: (Value v) => Kit.Section v -> [String] -> [FilePath] -> IO ()
+runFiles :: (Value v) => SectionSource v -> IO ()
 runFiles = hRunFiles stdout
 
 {-| Read and union sections from files, and run the section. -}
 hRunFiles
     :: (Value v)
     => Handle          -- ^ File handle
-    -> Kit.Section v   -- ^ Root section
-    -> [String]        -- ^ Section source codes
-    -> [FilePath]      -- ^ Path of section files
+    -> SectionSource v -- ^ Section source code
     -> IO ()
-hRunFiles h root secs files =
-    do let sec = map (Kit.sectionRead root) secs
-       sects <- mapM (Kit.sectionFile root) files
+hRunFiles h (SectionSource root textSec files) =
+    do let sec = map (Kit.sectionRead root) $ textSec
+       sects <- mapM (Kit.sectionFile root) $ files
        let union = concatMM $ sec ++ sects
            comm  = CommentDoc
                    [ CommentSec "INPUT" files]
        hSetEncoding h utf8
-       hPutStrLn h emacsModeComment
-       hPutStr h $ unlines $ texts comm
-       hPutStrLn h ""
+       hPutStrLn    h emacsModeComment
+       hPutStr      h $ unlines $ texts comm
+       hPutStrLn    h ""
        abortIO (Kit.hRunSectionIO h) union
-
-runStdin :: (Value v) => Kit.Section v -> [String] -> [FilePath] -> IO ()
-runStdin root secs files = do
-  input <- getContents
-  let sec1 = Kit.sectionRead root input
-      sec2 = map (Kit.sectionRead root) secs
-  sects <- mapM (Kit.sectionFile root) files
-  abortIO Kit.runSectionIO $ concatMM (sec1 : sec2 ++ sects)
 
 concatMM :: (Monad m, Monoid a) => [m a] -> m a
 concatMM [] = return mempty
@@ -66,21 +65,17 @@ concatMM (s:ss) = do s'  <- s
 
 -- ---------------------- Calculation list
 
-runCalc :: (Value v) => Kit.Section v -> [String] -> [FilePath] -> IO ()
+runCalc :: (Value v) => SectionSource v -> IO ()
 runCalc = runCalcTo ""
 
 runCalcTo
     :: (Value v)
-    => String          -- ^ Output path prefix
-    -> Kit.Section v   -- ^ Root section
-    -> [String]        -- ^ Section source texts
-    -> [FilePath]      -- ^ Path of sections
-    -> IO ()           -- ^
-runCalcTo dir root secs files =
-    do let sec1 = map (Kit.sectionRead root) secs
-       sec2 <- mapM (Kit.sectionFile root) files
-       let union = concatMM $ sec1 ++ sec2
-       abortIO (runCalcSec dir root) union
+    => FilePath          -- ^ Output path prefix
+    -> SectionSource v   -- ^ Section
+    -> IO ()             -- ^
+runCalcTo dir sec =
+    do union <- readSec sec
+       abortIO (runCalcSec dir $ rootSection sec) union
 
 runCalcSec :: (Value v) => String -> Kit.Section v -> Kit.Section v -> IO ()
 runCalcSec dir root sec =
@@ -97,7 +92,8 @@ runCalcJudge dir root (Judge True "KOSHU-CALC" xs) =
              putStrLn $ "**  Output to " ++ outputFile
              mkdir outputFile
              withFile outputFile WriteMode
-                          $ \ h -> hRunFiles h root [] inputFiles
+                          $ \ h -> hRunFiles h
+                                   (SectionSource root [] inputFiles)
       Just _       -> return ()
       Nothing      -> return ()
 runCalcJudge _ _ _ =  return ()
@@ -122,4 +118,17 @@ theStrings c | Kit.isStringValue c = [Kit.theStringValue c]
 theStrings c | Kit.isListValue c   = map Kit.theStringValue
                                      $ Kit.theListValue c
 theStrings _ = []
+
+
+
+-- ----------------------  Read
+
+readSec
+    :: (Value v)
+    => SectionSource v               -- ^ Section
+    -> IO (AbortOr (Kit.Section v))  -- ^ Union of sections
+readSec sec =
+    do let sec1 = map (Kit.sectionRead $ rootSection sec) $ textSections sec
+       sec2   <- mapM (Kit.sectionFile $ rootSection sec) $ fileSections sec
+       return $ concatMM $ sec1 ++ sec2
 

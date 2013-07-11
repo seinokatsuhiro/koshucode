@@ -76,6 +76,7 @@ executable koshu-regress
         Koshucode.Baala.Toolkit.Main.KoshuRegress
   build-depends:
          base                       == 4.5.*
+       , containers                 == 0.4.*
        , directory                  == 1.2.*
        , koshucode-baala-base       == 0.24.*
        , koshucode-baala-operator   == 0.24.*
@@ -100,6 +101,7 @@ library
         Koshucode.Baala.Toolkit.Main.KoshuRdfMain
         Koshucode.Baala.Toolkit.Main.KoshuRegress
         Koshucode.Baala.Toolkit.Main.KoshuSyntax
+        Koshucode.Baala.Toolkit.Library.Change
         Koshucode.Baala.Toolkit.Library.RDF
 
   -- Modules included in this library but not exported.

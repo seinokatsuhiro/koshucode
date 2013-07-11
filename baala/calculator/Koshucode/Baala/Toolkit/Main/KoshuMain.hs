@@ -104,13 +104,19 @@ koshuMain' root (_, argv) =
           | has OptHelp         -> putSuccess usage
           | has OptVersion      -> putSuccess $ version ++ "\n"
           | has OptShowEncoding -> putSuccess =<< currentEncodings
-          | has OptPretty       -> prettySection root files
-          | has OptStdin        -> runStdin root secs files
-          | has OptCalc         -> runCalc  root secs files
-          | otherwise           -> runFiles root secs files
+          | has OptPretty       -> prettySection sec
+          | has OptStdin        -> runStdin sec
+          | has OptCalc         -> runCalc  sec
+          | otherwise           -> runFiles sec
           where has  = (`elem` opts)
-                secs = concatMap oneLiner opts
+                sec = SectionSource root text files
+                text = concatMap oneLiner opts
       (_, _, errs) -> putFailure $ concat errs
+
+runStdin :: Value c => SectionSource c -> IO ()
+runStdin sec =
+    do text <- getContents
+       runFiles sec { textSections = text : textSections sec }
 
 oneLiner :: Option -> [String]
 oneLiner (OptSection sec) = [sec]
@@ -121,8 +127,8 @@ oneLiner _ = []
 
 -- ----------------------  Pretty printing
 
-prettySection :: (Value v) => Kit.Section v -> [FilePath] -> IO ()
-prettySection root files =
+prettySection :: (Value v) => SectionSource v -> IO ()
+prettySection (SectionSource root _ files) =
     case files of
       [file] -> do md <- Kit.sectionFile root file
                    prettyPrint md
@@ -174,13 +180,9 @@ prettySection root files =
 --
 -- @koshu@ command is implemented using 'koshuMain'.
 --
--- @
--- import Koshucode.Baala.Toolkit.Main.KoshuMain
--- import Koshucode.Baala.Vanilla
--- @
---
--- @
--- main :: IO ()
--- main = koshuMain vanillaOperators
--- @
+-- > import Koshucode.Baala.Toolkit.Main.KoshuMain
+-- > import Koshucode.Baala.Vanilla
+-- > 
+-- > main :: IO ()
+-- > main = koshuMain vanillaOperators
 
