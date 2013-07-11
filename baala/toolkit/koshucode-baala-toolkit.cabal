@@ -7,7 +7,7 @@ name:                koshucode-baala-toolkit
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:             0.23.0.0
+version:             0.24.0.0
 
 -- A short (one-line) description of the package.
 synopsis:            Toolkit for Koshucode
@@ -52,9 +52,9 @@ executable koshu-change
   build-depends:
          base                       == 4.5.*
        , containers                 == 0.4.*
-       , koshucode-baala-base       == 0.23.*
-       , koshucode-baala-operator   == 0.23.*
-       , koshucode-baala-calculator == 0.23.*
+       , koshucode-baala-base       == 0.24.*
+       , koshucode-baala-operator   == 0.24.*
+       , koshucode-baala-calculator == 0.24.*
 
 executable koshu-rdf
   main-is:
@@ -65,9 +65,9 @@ executable koshu-rdf
          base                       == 4.5.*
        , rdf4h                      == 1.1.*
        , text                       == 0.11.*
-       , koshucode-baala-base       == 0.23.*
-       , koshucode-baala-operator   == 0.23.*
-       , koshucode-baala-calculator == 0.23.*
+       , koshucode-baala-base       == 0.24.*
+       , koshucode-baala-operator   == 0.24.*
+       , koshucode-baala-calculator == 0.24.*
 
 executable koshu-syntax
   main-is:
@@ -76,9 +76,9 @@ executable koshu-syntax
         Koshucode.Baala.Toolkit.Main.KoshuSyntax
   build-depends:
          base                       == 4.5.*
-       , koshucode-baala-base       == 0.23.*
-       , koshucode-baala-operator   == 0.23.*
-       , koshucode-baala-calculator == 0.23.*
+       , koshucode-baala-base       == 0.24.*
+       , koshucode-baala-operator   == 0.24.*
+       , koshucode-baala-calculator == 0.24.*
 
 
 library
@@ -98,7 +98,7 @@ library
        , containers                 == 0.4.*
        , rdf4h                      == 1.1.*
        , text                       == 0.11.*
-       , koshucode-baala-base       == 0.23.*
-       , koshucode-baala-operator   == 0.23.*
-       , koshucode-baala-calculator == 0.23.*
+       , koshucode-baala-base       == 0.24.*
+       , koshucode-baala-operator   == 0.24.*
+       , koshucode-baala-calculator == 0.24.*
 
