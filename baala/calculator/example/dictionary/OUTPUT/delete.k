@@ -5,6 +5,6 @@
 **    delete.k
 **    
 
-|-X S /sno S5 /city Athens
-*** (1 judge)
+|-X S  /sno S5  /city Athens
+**  (1 judge)
 

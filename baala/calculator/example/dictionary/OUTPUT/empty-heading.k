@@ -6,5 +6,5 @@
 **    
 
 |-- EMPTY-HEADING
-*** (1 judge)
+**  (1 judge)
 

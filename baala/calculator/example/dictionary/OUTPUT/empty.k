@@ -5,7 +5,7 @@
 **    empty.k
 **    
 
-|-- EMPTY-SIZE /size 5
-|-- EMPTY-ZERO /size 0
-*** (2 judges)
+|-- EMPTY-SIZE  /size int 5
+|-- EMPTY-ZERO  /size int 0
+**  (2 judges)
 
