@@ -89,7 +89,7 @@ calcBinary = binaryTree ht where
     ht = heightTableUnbox fromTWord0
          [ right 8 "or"
          , right 7 "and"
-         , right 6 "= <>"
+         , right 6 "= <> < > <= >="
          , right 2 "+ -"
          , right 1 "* /"
          ] where right n ws = (Right n, words ws)

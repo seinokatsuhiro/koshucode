@@ -327,10 +327,10 @@ $ left-irreducible FD
 
 $ many-to-many correspondence
 $ many-to-one correspondence
-$ mapping
-$ mark
-$ MATCHING
-$ material implication
+. mapping
+. mark
+. MATCHING
+. material implication
 $ materialization
 $ materialized view
 $ meaning
@@ -348,9 +348,9 @@ $ multidetermines
 $ multiple assignment
 $ multiset
 $ multivalued dependency
-$ mutator
-$ MVD
-$ MVD implied by a superkey
+. mutator
+. MVD
+. MVD implied by a superkey
 
 $ n-adic
 $ n-ary
@@ -381,17 +381,17 @@ $ nullary relation
 $ nullary tuple
 $ nullology
 
-$ object
-$ object ID
-$ object oriented / object orientation
-$ object/relational database
-$ object/relational DBMS
-$ observer
+. object
+. object ID
+. object oriented / object orientation
+. object/relational database
+. object/relational DBMS
+. observer
 $ one-to-many correspondence
 $ one-to-one correspondence
-$ OO
-$ open WFF
-$ Open World Assumption, The
+. OO
+. open WFF
+. Open World Assumption, The
 $ operation
 $ operator
 $ optimizer
@@ -549,23 +549,23 @@ $ surrogate key
 $ symmetric
 $ symmetric difference (set theory)
 
-$ table
-$ table alias
-$ tables and views / tables or views
+. table
+. table alias
+. tables and views / tables or views
 * TABLE_DEE and TABLE_DUM
 $ tautology
-$ TCLOSE
-$ temporal database
-$ theorem
-$ theta join
+. TCLOSE
+. temporal database
+. theorem
+* theta join
 $ third normal form
 $ three-valued logic
-$ time-varying relation
-$ TIMES
-$ total database constraint
-$ total relvar constraint
-$ transaction
-$ transition constraint
+. time-varying relation
+. TIMES
+. total database constraint
+. total relvar constraint
+. transaction
+. transition constraint
 $ transitive
 $ transitive closure
 $ transitive FD
@@ -635,18 +635,18 @@ $ UPDATE rule
 $ user
 
 $ value
-$ VAR
-$ variable
-$ variable reference
-$ view
-$ view updating
-$ virtual relvar
-$ well-formed formula
+. VAR
+. variable
+. variable reference
+* view
+. view updating
+. virtual relvar
 
-$ WFF
+. well-formed formula
+. WFF
 $ what if
-$ WITH
-$ WRAP
+* WITH
+. WRAP
 $ wrapping
 
 . XML

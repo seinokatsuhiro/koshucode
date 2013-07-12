@@ -27,5 +27,8 @@
 |-- KOSHU-CALC  /input [ DATA.k restriction.k ]            /output OUTPUT/restriction.k
 |-- KOSHU-CALC  /input [ DATA.k table-dee.k ]              /output OUTPUT/table-dee.k
 |-- KOSHU-CALC  /input [ DATA.k table-dum.k ]              /output OUTPUT/table-dum.k
+|-- KOSHU-CALC  /input [ DATA.k theta-join.k ]             /output OUTPUT/theta-join.k
 |-- KOSHU-CALC  /input [ DATA.k union.k ]                  /output OUTPUT/union.k
+|-- KOSHU-CALC  /input [ DATA.k view.k ]                   /output OUTPUT/view.k
+|-- KOSHU-CALC  /input [ DATA.k with.k ]                   /output OUTPUT/with.k
 
