@@ -57,8 +57,10 @@ nextToken n txt =
       ('#' : '!' : _)   ->  tokD "" (TComment n txt)
       ('(' : ')' : cs)  ->  tokD cs (word0 "()") -- nil
       ('|' : '|' : cs)  ->  tokD (trim cs) (word0 "||") -- newline
-      ('{' : '|' : cs)  ->  tokD cs (TOpen  n "{|") -- open relation
-      ('|' : '}' : cs)  ->  tokD cs (TClose n "|}") -- close relation
+      ('{' : '|' : cs)  ->  tokD cs (TOpen  n "{|") -- open termset
+      ('|' : '}' : cs)  ->  tokD cs (TClose n "|}") -- close termset
+      ('[' : '|' : cs)  ->  tokD cs (TOpen  n "[|") -- open relation
+      ('|' : ']' : cs)  ->  tokD cs (TClose n "|]") -- close relation
       (c : cs)
         | isOpen    c   ->  tokD cs (TOpen   n [c])
         | isClose   c   ->  tokD cs (TClose  n [c])

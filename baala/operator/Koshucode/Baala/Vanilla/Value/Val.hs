@@ -69,13 +69,13 @@ instance Nil Val where
 
 instance Pretty Val where
     doc (Stringv s)   = text $ escape s
-    doc (Intv n)      = int n
+    doc (Intv n)      = text "int" <+> int n
     doc (Boolv b)
         | b           = text "#true"
         | otherwise   = text "#false"
     doc (Nov)         = text "()"
     doc (Listv xs)    = text "[" <+> hsep (map doc xs) <+> text "]"
-    doc (Termsetv xs) = text "{" <+> hsep (map docTerms xs) <+> text "}"
+    doc (Termsetv xs) = text "{|" <+> hsep (map docTerms xs) <+> text "|}"
     doc (Relv r)      = doc r
 
 docTerms :: (Pretty a) => Named a -> Doc

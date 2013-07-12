@@ -43,7 +43,7 @@ instance (Pretty v) => Pretty (Rel v) where
     doc = docRelFull
 
 docRelFull :: (Pretty a) => Rel a -> Doc
-docRelFull (Rel h b) = text "{|" <+> h2 <+> b2 <+> text "|}"
+docRelFull (Rel h b) = text "[|" <+> h2 <+> b2 <+> text "|]"
     where h2    = hsep $ map text (headNames h)
           b2    = hsep $ map arg b
           arg a = text "|" <+> (hsep $ map doc a)

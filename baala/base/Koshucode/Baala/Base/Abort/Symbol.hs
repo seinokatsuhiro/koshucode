@@ -25,6 +25,7 @@ data Abort
     = AbortLookup           [SourceLine] String
     | AbortMalformedOperand [SourceLine] String
     | AbortMissingTermName  [SourceLine] String
+    | AbortNotNumber        [SourceLine] String
     | AbortOddRelation      [SourceLine]
     | AbortRequireFlatname  [SourceLine] String
     | AbortUnknownClause    [SourceLine]
@@ -44,6 +45,7 @@ instance AbortSymbol Abort where
         (AbortLookup           _ _)   -> "項目がない"
         (AbortMalformedOperand _ _)   -> "演算子の引数がおかしい"
         (AbortMissingTermName  _ _)   -> "項目名が必要"
+        (AbortNotNumber        _ _)   -> "数値として読めない"
         (AbortOddRelation        _)   -> "ふぞろいな関係"
         (AbortRequireFlatname  _ _)   -> "入れ子ではない項目名が必要"
         (AbortUnknownClause      _)   -> "未知の構文"
@@ -56,6 +58,7 @@ instance AbortSymbol Abort where
         (AbortLookup _ s)             -> par s
         (AbortMalformedOperand _ s)   -> par s
         (AbortMissingTermName _ s)    -> par s
+        (AbortNotNumber       _ s)    -> par s
         (AbortOddRelation     _)      -> empty
         (AbortRequireFlatname _ s)    -> par s
         (AbortUnknownClause _)        -> empty
@@ -68,6 +71,7 @@ instance AbortSymbol Abort where
         (AbortLookup           ln _)   -> ln
         (AbortMalformedOperand ln _)   -> ln
         (AbortMissingTermName  ln _)   -> ln
+        (AbortNotNumber        ln _)   -> ln
         (AbortOddRelation      ln)     -> ln
         (AbortRequireFlatname  ln _)   -> ln
         (AbortUnknownClause    ln)     -> ln

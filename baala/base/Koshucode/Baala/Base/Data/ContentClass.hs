@@ -65,7 +65,7 @@ class Nil v where
 -- ----------------------  Convinient class
 
 class (Ord v, Pretty v, Nil v,
-       BoolValue v, StringValue v,
+       BoolValue v, StringValue v, IntValue v,
        ListValue v, TermsetValue v, RelValue v) => Value v where
     appendContent :: v -> v -> v
     joinContent :: [v] -> v

@@ -40,8 +40,9 @@ consContent src = cons where
     cons (TreeB t xs) = case t of
           1         ->  paren src xs
           2         ->  Right . listValue    =<< consList    src xs
-          3         ->  Right . termsetValue =<< consTermset src xs
-          4         ->  Right . relValue     =<< consRel     src xs
+          3         ->  Right . listValue    =<< consList    src xs
+          4         ->  Right . termsetValue =<< consTermset src xs
+          5         ->  Right . relValue     =<< consRel     src xs
           _         ->  bug
 
     -- unknown content
@@ -57,10 +58,23 @@ hash src w =
                    Nothing -> Left $ AbortUnknownSymbol src ('#' : w)
 
 paren :: (Value v) => [SourceLine] -> [TokenTree] -> AbortOr v
-paren src (TreeL (TWord _ 0 "text") : xs) =
-    do xs' <- consList src xs
-       Right $ joinContent xs'
+paren src (TreeL (TWord _ 0 tag) : xs) =
+    case tag of
+      "text"  -> Right . joinContent =<< consList src xs
+      "int"   -> consInt src xs
+      _       -> Left $ AbortUnknownSymbol src (show xs)
 paren src x = Left $ AbortUnknownSymbol src (show x)
+
+consInt :: (IntValue v) => [SourceLine] -> [TokenTree] -> AbortOr v
+consInt src [TreeL (TWord _ 0 digits)] = 
+    Right . intValue =<< readInt src digits
+consInt src xs = Left $ AbortNotNumber src (show xs)
+
+readInt :: [SourceLine] -> String -> AbortOr Int
+readInt src s =
+    case reads s of
+      [(n, "")] -> Right n
+      _         -> Left $ AbortNotNumber src s
 
 {-| Construct list of term contents. -}
 consList :: (Value v) => [SourceLine] -> [TokenTree] -> AbortOr [v]

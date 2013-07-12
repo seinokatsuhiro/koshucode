@@ -222,8 +222,14 @@ reportUnmatch file js (add, del) =
        putStrLn $ "    **  " ++ reportCount add del
        let path = reportDir ++ file
        mkdir path
-       withFile path WriteMode (`hPutJudges` js)
+       writeJudgesToFile path js
        return False
+
+writeJudgesToFile :: (Ord v, Pretty v) => FilePath -> [Judge v] -> IO ()
+writeJudgesToFile path js =
+    withFile path WriteMode writer where
+    writer h = do hSetEncoding h utf8
+                  hPutJudges h js
 
 reportCount :: Int -> Int -> String
 reportCount = message where

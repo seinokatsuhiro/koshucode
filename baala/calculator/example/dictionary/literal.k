@@ -1,32 +1,32 @@
 ** -*- koshu -*-
 
-|-- INTEGER  /literal 4
-|-- INTEGER  /literal -5
+|-- INTEGER   /literal int 4
+|-- INTEGER   /literal int -5
 
-|-- CHAR     /literal 'ABC'
-|-- CHAR     /literal 'ABC DEF'
+|-- CHAR      /literal 'ABC'
+|-- CHAR      /literal 'ABC DEF'
 
-|-- BOOLEAN  /literal #true
-|-- BOOLEAN  /literal #false
+|-- BOOLEAN   /literal #true
+|-- BOOLEAN   /literal #false
 
-|-- TUPLE    /literal { /sno S1 /pno P1 /qty 300 }
-|-- TUPLE    /literal { /sno S1 /pno P2 /qty 200 }
-|-- TUPLE    /literal { /sno S1 }
-|-- TUPLE    /literal { }
+|-- TERMSET   /literal {| /sno S1 /pno P1 /qty 300 |}
+|-- TERMSET   /literal {| /sno S1 /pno P2 /qty 200 |}
+|-- TERMSET   /literal {| /sno S1 |}
+|-- TERMSET   /literal {| |}
 
-|-- RELATION /literal {| /sno /pno /qty
-                       | S1 P1 300
-                       | S1 P2 200
-                       |}
-|-- RELATION /literal {| /sno /pno /qty | S1 P1 300 |}
-|-- RELATION /literal {| /sno /pno /qty |}
-|-- RELATION /literal {| |}
-|-- RELATION /literal {| | |}
-|-- RELATION /literal {| | | |}
+|-- RELATION  /literal [| /sno /pno /qty
+                        | S1 P1 300
+                        | S1 P2 200
+                        |]
+|-- RELATION  /literal [| /sno /pno /qty | S1 P1 300 |]
+|-- RELATION  /literal [| /sno /pno /qty |]
+|-- RELATION  /literal [| |]        ** reldum
+|-- RELATION  /literal [| | |]      ** reldee
+|-- RELATION  /literal [| | | |]    ** reldee
 
-affirm INTEGER  source INTEGER  /literal
-affirm CHAR     source CHAR     /literal
-affirm BOOLEAN  source BOOLEAN  /literal
-affirm TUPLE    source TUPLE    /literal
-affirm RELATION source RELATION /literal
+affirm INTEGER   source INTEGER  /literal
+affirm CHAR      source CHAR     /literal
+affirm BOOLEAN   source BOOLEAN  /literal
+affirm TERMSET   source TERMSET  /literal
+affirm RELATION  source RELATION /literal
 

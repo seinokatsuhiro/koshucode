@@ -45,8 +45,9 @@ parenType :: ParenType Token
 parenType = parenTable
     [ (1, isOpenTokenOf "("  , isCloseTokenOf ")")  -- grouping
     , (2, isOpenTokenOf "["  , isCloseTokenOf "]")  -- list
-    , (3, isOpenTokenOf "{"  , isCloseTokenOf "}")  -- termset
-    , (4, isOpenTokenOf "{|" , isCloseTokenOf "|}") -- relation
+    , (3, isOpenTokenOf "{"  , isCloseTokenOf "}")  -- set
+    , (4, isOpenTokenOf "{|" , isCloseTokenOf "|}") -- termset
+    , (5, isOpenTokenOf "[|" , isCloseTokenOf "|]") -- relation
     ]
 
 singleToken :: [TokenTree] -> TokenTree
