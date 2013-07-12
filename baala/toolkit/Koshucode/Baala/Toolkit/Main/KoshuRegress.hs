@@ -25,6 +25,7 @@ import qualified Koshucode.Baala.Minimal.OpKit as Kit
 
 import Koshucode.Baala.Toolkit.Library.Change
 import Koshucode.Baala.Toolkit.Library.Exit
+import Koshucode.Baala.Toolkit.Library.Input
 import Koshucode.Baala.Toolkit.Library.Run
 import Koshucode.Baala.Toolkit.Library.Version
 
@@ -177,7 +178,8 @@ reportJudge xs = Judge True "KOSHU-REPORT" xs
 -- @koshu-regress@ command is implemented using 'koshuRegressMain'.
 --
 -- > import Koshucode.Baala.Toolkit.Main.KoshuRegress
+-- > import Koshucode.Baala.Vanilla as V
 -- > 
 -- > main :: IO ()
--- > main = koshuRegressMain
+-- > main = koshuRegressMain V.vanillaOperators
 

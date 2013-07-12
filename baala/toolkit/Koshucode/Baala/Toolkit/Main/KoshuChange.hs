@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Koshucode syntactic tool. -}
+{-| Changeset. -}
 
 module Koshucode.Baala.Toolkit.Main.KoshuChange
 ( koshuChangeMain
@@ -9,14 +9,12 @@ module Koshucode.Baala.Toolkit.Main.KoshuChange
 -- $main
 ) where
 
-import qualified Data.Set as S
 import System.Console.GetOpt
 
-import Koshucode.Baala.Base.Data
-
+import Koshucode.Baala.Toolkit.Library.Input
+import Koshucode.Baala.Toolkit.Library.Change
 import Koshucode.Baala.Toolkit.Library.Exit
 import Koshucode.Baala.Toolkit.Library.Version
-import Koshucode.Baala.Toolkit.Library.Change
 
 
 
@@ -96,37 +94,13 @@ koshuChangeMain' (_, argv) =
 
     where
       run opts left right
-          | has OptFrom    = left  `minusInput` right
-          | has OptTo      = right `minusInput` left
-          | has OptMinus   = left  `minusInput` right
-          | has OptUpdate  = left  `update`     right
+          | has OptFrom    = left  `minusInput`  right
+          | has OptTo      = right `minusInput`  left
+          | has OptMinus   = left  `minusInput`  right
+          | has OptUpdate  = left  `updateInput` right
           | otherwise      = putFailure usage
           where has = (`elem` opts)
 
-
-
--- ----------------------  Update
-
-update :: Input -> Input -> IO ()
-update inputB inputC =
-    do [textB, textC] <- readInputs [inputB, inputC]
-       putCommentLines h
-       putJudges $ readJudge textB `updateJudge` readJudge textC
-    where
-      h = [ "DATASETS"
-          , "  Updating dataset B by C, altered dataset A is obtained."
-          , ""
-          , "  B (base)    : " ++ inputText inputB
-          , "  C (change)  : " ++ inputText inputC
-          , "  A (altered) : B + C"
-          ]
-
-updateJudge :: (Ord v) => [Judge v] -> [Judge v] -> [Judge v]
-updateJudge judB judC = judgeA where
-    setB    = S.fromList $ judB
-    denC    = S.fromList $ map affirmJudge $ filter isDenied judC
-    affC    = S.fromList $ filter isAffirmed judC
-    judgeA = S.toList $ setB `S.difference` denC `S.union` affC
 
 
 

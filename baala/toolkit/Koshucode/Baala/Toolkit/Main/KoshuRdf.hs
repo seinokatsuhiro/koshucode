@@ -2,8 +2,11 @@
 
 -- | RDF-to-Koshucode converter.
 
-module Koshucode.Baala.Toolkit.Main.KoshuRdfMain
+module Koshucode.Baala.Toolkit.Main.KoshuRdf
 ( koshuRdfMain
+
+-- * koshu-rdf.hs
+-- $koshu-rdf.hs
 ) where
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Toolkit.Library.Exit
@@ -135,4 +138,17 @@ turtleParser = RDF.TurtleParser Nothing Nothing
 
 xmlParser :: (RDF.RDF g) => Text.Text -> Either RDF.ParseFailure g
 xmlParser = RDF.parseXmlRDF Nothing Nothing
+
+
+
+-- ----------------------
+{- $koshu-rdf.hs
+
+   @koshu-rdf@ command is implemented using 'koshuRdfMain'.
+
+   > import Koshucode.Baala.Toolkit.Main.KoshuRdf
+   > 
+   > main :: IO ()
+   > main = koshuRdfMain
+-}
 

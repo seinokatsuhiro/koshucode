@@ -1,23 +1,17 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | RDF-to-Koshucode conversion
+{-| Functions for changes between two datasets. -}
 
 module Koshucode.Baala.Toolkit.Library.Change
 (
--- * Input
-  Input (..)
-, inputText
-, readInput
-, readInputs
-, readJudge
-
--- * Output
-, putCommentLines
-
 -- * Minus
-, minusInput
-, minusInputJudge
-, minusJudge
+  minusInput,
+  minusInputJudge,
+  minusJudge,
+
+-- * Update
+  updateInput,
+  updateJudge
 
 -- * Changeset
 -- $Changeset
@@ -26,66 +20,25 @@ module Koshucode.Baala.Toolkit.Library.Change
 import qualified Data.Set as S
 
 import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Base.Section as Sec
 import Koshucode.Baala.Vanilla
 
-
--- ----------------------  Input
-
-data Input = Stdin | File FilePath
-             deriving (Show, Eq)
-
-inputText :: Input -> String
-inputText (Stdin)  = "<stdin>"
-inputText (File p) = p
-
-readInput :: Input -> IO String
-readInput (Stdin)  = getContents
-readInput (File p) = readFile p
-
-readInputs :: [Input] -> IO [String]
-readInputs = mapM readInput
-
-readJudge :: String -> [Judge Val]
-readJudge s =
-    let root = emptySection :: Section Val
-    in case sectionRead root s of
-         Right sec -> sectionJudge sec
-         Left _    -> []
-
-
-
--- ----------------------  Output
-
-putCommentLines :: [String] -> IO ()
-putCommentLines = putStr . unlines . comment
-
-comment :: Map [String]
-comment xs = xs3 where
-    xs3 = "** -*- koshu -*-" : xs2 ++ ["**", ""]
-    xs2 = map ("**  " ++) $ "" : xs
+import Koshucode.Baala.Toolkit.Library.Input
+import Koshucode.Baala.Toolkit.Library.Comment
 
 
 
 -- ----------------------  Minus
 
-minusInput :: Input -> Input -> IO ()
+{-| Calculate and write judges /B/ minus /A/.  -}
+minusInput
+    :: Input   -- ^ /B:/ Source of base section
+    -> Input   -- ^ /A:/ Source of altered section
+    -> IO ()
 minusInput inputA inputB =
-    do minus <- minusInputJudge inputA inputB
-       putCommentLines h
-       putJudges minus
-    where
-      h = [ "DATASETS"
-          , "  There are changes C when altering dataset B into A."
-          , ""
-          , "  B (base)    : " ++ inputText inputA
-          , "  A (altered) : " ++ inputText inputB
-          , "  C (change)  : A - B"
-          , ""
-          , "UPDATE"
-          , "  Dataset A is obtained by updating B by C."
-          , "  Please execute: koshu-change B -u C"
-          ]
+    do js <- minusInputJudge inputA inputB
+       putStr . unlines . texts $ minusHead inputA inputB
+       putStrLn ""
+       putJudges js
 
 minusInputJudge :: Input -> Input -> IO ([Judge Val])
 minusInputJudge inputA inputB =
@@ -93,25 +46,73 @@ minusInputJudge inputA inputB =
        return $ readJudge textA `minusJudge` readJudge textB
 
 minusJudge :: (Ord v) => [Judge v] -> [Judge v] -> [Judge v]
-minusJudge judA judB = map denyJudge judgeC ++ judgeD where
+minusJudge judA judB = map denyJudge judC ++ judD where
     setA = S.fromList judA
     setB = S.fromList judB
-    judgeC = S.toList $ setB `S.difference` setA
-    judgeD = S.toList $ setA `S.difference` setB
+    judC = S.toList $ setB `S.difference` setA
+    judD = S.toList $ setA `S.difference` setB
+
+minusHead :: Input -> Input -> CommentDoc
+minusHead inputA inputB =
+    CommentDoc
+    [ CommentSec "DATASETS"
+      [ "There are changes C when altering dataset B into A." 
+      , ""
+      , "  B (base)    : " ++ inputText inputA
+      , "  A (altered) : " ++ inputText inputB
+      , "  C (change)  : A - B" ]
+    , CommentSec "UPDATE"
+      [ "Dataset A is obtained by updating B by C."
+      , "Please execute: koshu-change B -u C" ]]
+
+
+
+-- ----------------------  Update
+
+{-| Calculate and write judges /B/ update by /C/.  -}
+updateInput
+    :: Input   -- ^ /B:/ Source of base section
+    -> Input   -- ^ /C:/ Source of change section
+    -> IO ()   -- ^ 
+updateInput inputB inputC =
+    do [textB, textC] <- readInputs [inputB, inputC]
+       putStr . unlines . texts $ updateHead inputB inputC
+       putStrLn ""
+       putJudges $ readJudge textB `updateJudge` readJudge textC
+
+updateJudge :: (Ord v) => [Judge v] -> [Judge v] -> [Judge v]
+updateJudge judB judC = judA where
+    setB = S.fromList $ judB
+    denC = S.fromList $ map affirmJudge $ filter isDenied judC
+    affC = S.fromList $ filter isAffirmed judC
+    judA = S.toList $ setB `S.difference` denC `S.union` affC
+
+updateHead :: Input -> Input -> CommentDoc
+updateHead inputB inputC =
+    CommentDoc
+    [ CommentSec "DATASETS"
+      [ "Updating dataset B by C, altered dataset A is obtained." 
+      , ""
+      , "  B (base)    : " ++ inputText inputB
+      , "  C (change)  : " ++ inputText inputC
+      , "  A (altered) : B + C" ]]
+
 
 
 -- ----------------------
 {- $Changeset
 
-Rules for calculating changeset C = A - B.
-Altering dataset B into A, changeset C
-is calculated by the following rules.
-
-* Affirmed judge is in C if and only if the judge is not in A, and is in B.
-
-* Denied judge is in C if and only if the judge is not in B, and is in A.
-
-* Judge is not in C otherwise.
+   Rules for calculating changeset C = A - B.
+   Altering dataset B into A, changeset C
+   is calculated by the following rules.
+   
+   * Affirmed judge is in C if and only if
+     the judge is not in A, and is in B.
+   
+   * Denied judge is in C if and only if
+     the judge is not in B, and is in A.
+   
+   * Judge is not in C otherwise.
 
 -}
 

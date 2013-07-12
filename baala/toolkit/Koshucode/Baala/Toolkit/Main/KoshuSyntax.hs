@@ -156,16 +156,13 @@ dumpTokenJudge l t = Judge True "TOKEN" xs where
 
 
 -- ----------------------
--- $koshu-syntax.hs
---
--- @koshu-syntax@ command is implemented using 'koshuSyntaxMain'.
---
--- @
--- import Koshucode.Baala.Toolkit.Main.KoshuSyntaxMain
--- @
---
--- @
--- main :: IO ()
--- main = koshuSyntaxMain
--- @
+{- $koshu-syntax.hs
+
+   @koshu-syntax@ command is implemented using 'koshuSyntaxMain'.
+
+   > import Koshucode.Baala.Toolkit.Main.KoshuSyntaxMain
+   > 
+   > main :: IO ()
+   > main = koshuSyntaxMain
+-}
 

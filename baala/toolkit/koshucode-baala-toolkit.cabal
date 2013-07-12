@@ -60,7 +60,7 @@ executable koshu-rdf
   main-is:
         koshu-rdf.hs
   other-modules:
-        Koshucode.Baala.Toolkit.Main.KoshuRdfMain
+        Koshucode.Baala.Toolkit.Main.KoshuRdf
   build-depends:
          base                       == 4.5.*
        , rdf4h                      == 1.1.*
@@ -98,10 +98,11 @@ library
   -- Modules exported by the library.
   exposed-modules:
         Koshucode.Baala.Toolkit.Main.KoshuChange
-        Koshucode.Baala.Toolkit.Main.KoshuRdfMain
+        Koshucode.Baala.Toolkit.Main.KoshuRdf
         Koshucode.Baala.Toolkit.Main.KoshuRegress
         Koshucode.Baala.Toolkit.Main.KoshuSyntax
         Koshucode.Baala.Toolkit.Library.Change
+        Koshucode.Baala.Toolkit.Library.Input
         Koshucode.Baala.Toolkit.Library.RDF
 
   -- Modules included in this library but not exported.
