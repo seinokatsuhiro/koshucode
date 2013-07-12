@@ -38,9 +38,9 @@ data Option
     | OptVersion
     | OptRun
     | OptShowEncoding
-    | OptSave
-    | OptClean
-    | OptReport
+    | OptSave            -- save the last result
+    | OptClean           -- clean all result
+    | OptReport          -- report changes between last and save
       deriving (Show, Eq, Ord, Enum, Bounded)
 
 koshuOptions :: [OptDescr Option]
@@ -66,7 +66,7 @@ header = unlines
     , "  Calculate changeset between two dataset."
     , ""
     , "USAGE"
-    , "  koshu-regress REGRESS.k"
+    , "  koshu-regress REGRESS.k [OPTION]"
     , ""
     ] ++ "OPTIONS"
 
@@ -97,47 +97,63 @@ koshuRegressMain relmaps =
       root = Kit.makeEmptySection cons
   in koshuRegressMain' root =<< prelude
 
-koshuRegressMain' :: (Value v) => Kit.Section v -> (String, [String]) -> IO ()
+koshuRegressMain'
+    :: (Value v) => Kit.Section v -> (String, [String]) -> IO ()
 koshuRegressMain' root (_, argv) =
     case getOpt Permute koshuOptions argv of
       (opts, files, [])
           | has OptHelp         -> putSuccess usage
           | has OptVersion      -> putSuccess $ version ++ "\n"
           | has OptShowEncoding -> putSuccess =<< currentEncodings
-          | has OptSave         -> save
-          | has OptClean        -> clean
-          | has OptReport       -> report    sec
-          | has OptRun          -> runReport sec
-          | otherwise           -> run       sec
+          | has OptSave         -> regSave
+          | has OptClean        -> regClean
+          | has OptReport       -> regReport sec
+          | has OptRun          -> regLastReport sec
+          | otherwise           -> regLast sec
           where has = (`elem` opts)
                 sec = SectionSource root [] files
       (_, _, errs) -> putFailure $ concat errs ++ usage
 
-run :: (Value v) => SectionSource v -> IO ()
-run sec = runCalcTo lastDir sec
+regLast :: (Value v) => SectionSource v -> IO ()
+regLast sec = runCalcTo lastDir sec
 
-runReport :: (Value v) => SectionSource v -> IO ()
-runReport sec =
-    do run    sec
-       report sec
+regLastReport :: (Value v) => SectionSource v -> IO ()
+regLastReport sec =
+    do regLast sec
+       regReport sec
 
-save :: IO ()
-save = do e <- Dir.doesDirectoryExist saveDir
-          when e $ Dir.removeDirectoryRecursive saveDir
-          Dir.renameDirectory lastDir saveDir
+-- mv last save
+regSave :: IO ()
+regSave =
+    do e <- Dir.doesDirectoryExist saveDir
+       when e $ Dir.removeDirectoryRecursive saveDir
+       Dir.renameDirectory lastDir saveDir
 
-clean :: IO ()
-clean = do e <- Dir.doesDirectoryExist regressDir
-           when e $ Dir.removeDirectoryRecursive regressDir
+-- rm -r REGRESS
+regClean :: IO ()
+regClean =
+    do e <- Dir.doesDirectoryExist regressDir
+       when e $ Dir.removeDirectoryRecursive regressDir
 
-report :: (Value v) => SectionSource v -> IO ()
-report sec =
+
+
+-- ----------------------  Reporting
+
+regReport :: (Value v) => SectionSource v -> IO ()
+regReport sec =
     do asec <- readSec sec
        case asec of
          Left _ -> putStrLn "error"
          Right sec2 -> do let js = Kit.sectionJudge sec2
                               fs = mapMaybe outputFile js
-                          mapM_ reportFile fs
+                          bs <- mapM reportFile fs
+                          print . doc $ summaryJudge
+                            [ ("/all"     , lengthValue fs)
+                            , ("/match"   , lengthValue $ filter id bs)
+                            , ("/unmatch" , lengthValue $ filter not bs) ]
+
+lengthValue :: (IntValue n) => [a] -> n
+lengthValue = intValue . length
 
 outputFile :: (Value v) => Judge v -> Maybe String
 outputFile (Judge True "KOSHU-CALC" xs) =
@@ -146,7 +162,7 @@ outputFile (Judge True "KOSHU-CALC" xs) =
       Just f  -> Just $ theStringValue f
 outputFile (Judge _ _ _) = Nothing
 
-reportFile :: String -> IO ()
+reportFile :: String -> IO (Bool)
 reportFile file =
     do let saveFile = File $ saveDir ++ file
            lastFile = File $ lastDir ++ file
@@ -156,6 +172,7 @@ reportFile file =
          0 -> do print . doc $ reportJudge
                       [ ("/result" , boolValue True)
                       , ("/file"   , stringValue file) ]
+                 return True
 
          n -> do putStrLn $ "**  Difference found."
                  print . doc $ reportJudge
@@ -168,18 +185,25 @@ reportFile file =
                  withFile path WriteMode
                       $ \ h -> hPutJudges h js
 
+                 return False
+
 reportJudge :: [Named Val] -> Judge Val
-reportJudge xs = Judge True "KOSHU-REPORT" xs
+reportJudge = Judge True "KOSHU-REGRESS-REPORT"
+
+summaryJudge :: [Named Val] -> Judge Val
+summaryJudge = Judge True "KOSHU-REGRESS-SUMMARY"
+
 
 
 -- ----------------------
--- $main
---
--- @koshu-regress@ command is implemented using 'koshuRegressMain'.
---
--- > import Koshucode.Baala.Toolkit.Main.KoshuRegress
--- > import Koshucode.Baala.Vanilla as V
--- > 
--- > main :: IO ()
--- > main = koshuRegressMain V.vanillaOperators
+{- $main
+
+   @koshu-regress@ command is implemented using 'koshuRegressMain'.
+
+   > import Koshucode.Baala.Toolkit.Main.KoshuRegress
+   > import Koshucode.Baala.Vanilla as V
+   > 
+   > main :: IO ()
+   > main = koshuRegressMain V.vanillaOperators
+-}
 
