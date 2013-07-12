@@ -23,6 +23,7 @@ import Koshucode.Baala.Vanilla.Value.Val
 import qualified Koshucode.Baala.Base.Section  as Kit
 import qualified Koshucode.Baala.Minimal.OpKit as Kit
 
+import Koshucode.Baala.Toolkit.Library.Comment
 import Koshucode.Baala.Toolkit.Library.Change
 import Koshucode.Baala.Toolkit.Library.Exit
 import Koshucode.Baala.Toolkit.Library.Input
@@ -45,13 +46,13 @@ data Option
 
 koshuOptions :: [OptDescr Option]
 koshuOptions =
-    [ Option "h" ["help"]     (NoArg OptHelp)    "Print help message."
-    , Option "V" ["version"]  (NoArg OptVersion) "Print version number."
-    , Option ""  ["run"]      (NoArg OptRun)     "Calculate and report"
-    , Option ""  ["show-encoding"] (NoArg OptShowEncoding) "Show character encoding."
-    , Option ""  ["save"]     (NoArg OptSave)    "Save result."
-    , Option ""  ["clean"]    (NoArg OptClean)   "Remove output directory."
-    , Option ""  ["report"]   (NoArg OptReport)  "Report last result."
+    [ Option "h"  ["help"]     (NoArg OptHelp)    "Print help message."
+    , Option "V"  ["version"]  (NoArg OptVersion) "Print version number."
+    , Option ""   ["run"]      (NoArg OptRun)     "Calculate and report"
+    , Option ""   ["show-encoding"] (NoArg OptShowEncoding) "Show character encoding."
+    , Option "s"  ["save"]     (NoArg OptSave)    "Save result."
+    , Option "r"  ["report"]   (NoArg OptReport)  "Report last result."
+    , Option "c"  ["clean"]    (NoArg OptClean)   "Remove output directory."
     ]
 
 version :: String
@@ -63,10 +64,13 @@ usage = usageInfo header koshuOptions
 header :: String
 header = unlines
     [ "DESCRIPTION"
-    , "  Calculate changeset between two dataset."
+    , "  Execute regression test."
     , ""
     , "USAGE"
-    , "  koshu-regress REGRESS.k [OPTION]"
+    , "  koshu-regress CALC.k [OPTION]"
+    , ""
+    , "  CALC.k contains KOSHU-CALC judges like"
+    , "  |-- KOSHU-CALC /input FILES /output FILE"
     , ""
     ] ++ "OPTIONS"
 
@@ -139,59 +143,120 @@ regClean =
 
 -- ----------------------  Reporting
 
-regReport :: (Value v) => SectionSource v -> IO ()
-regReport sec =
-    do asec <- readSec sec
-       case asec of
-         Left _ -> putStrLn "error"
-         Right sec2 -> do let js = Kit.sectionJudge sec2
-                              fs = mapMaybe outputFile js
-                          bs <- mapM reportFile fs
-                          print . doc $ summaryJudge
-                            [ ("/all"     , lengthValue fs)
-                            , ("/match"   , lengthValue $ filter id bs)
-                            , ("/unmatch" , lengthValue $ filter not bs) ]
-
-lengthValue :: (IntValue n) => [a] -> n
-lengthValue = intValue . length
-
-outputFile :: (Value v) => Judge v -> Maybe String
-outputFile (Judge True "KOSHU-CALC" xs) =
-    case theContent "/output" xs of
-      Nothing -> Nothing
-      Just f  -> Just $ theStringValue f
-outputFile (Judge _ _ _) = Nothing
-
-reportFile :: String -> IO (Bool)
-reportFile file =
-    do let saveFile = File $ saveDir ++ file
-           lastFile = File $ lastDir ++ file
-       js <- minusInputJudge saveFile lastFile
-
-       case length js of
-         0 -> do print . doc $ reportJudge
-                      [ ("/result" , boolValue True)
-                      , ("/file"   , stringValue file) ]
-                 return True
-
-         n -> do putStrLn $ "**  Difference found."
-                 print . doc $ reportJudge
-                      [ ("/result" , boolValue False)
-                      , ("/file"   , stringValue file)
-                      , ("/count"  , intValue n) ]
-
-                 let path = reportDir ++ file
-                 mkdir path
-                 withFile path WriteMode
-                      $ \ h -> hPutJudges h js
-
-                 return False
-
+-- report for each cases.
 reportJudge :: [Named Val] -> Judge Val
 reportJudge = Judge True "KOSHU-REGRESS-REPORT"
 
+-- report for all cases.
 summaryJudge :: [Named Val] -> Judge Val
 summaryJudge = Judge True "KOSHU-REGRESS-SUMMARY"
+
+reportHead :: CommentDoc
+reportHead =
+    CommentDoc
+    [ CommentSec "DESCRIPTOIN"
+      [ "Result of a regression test" ]]
+
+reportFoot :: String -> IO ()
+reportFoot msg = foot where
+    foot = putStr $ unlines [ "" , comm , comm ++ msg , comm ]
+    comm = "**  "
+
+regReport :: (Value v) => SectionSource v -> IO ()
+regReport sec =
+    do putStrLn emacsModeComment
+       putStr . unlines $ texts reportHead
+       putStrLn ""
+       asec <- readSec sec
+       case asec of
+         Left _     -> putStrLn "error"
+         Right sec2 -> regReportBody sec2
+
+regReportBody :: (Value v) => Kit.Section v -> IO ()
+regReportBody sec =
+    do let js = Kit.sectionJudge sec
+           fs = mapMaybe outputFile js
+       bs <- mapM reportFile fs
+       let match   = filter id  bs
+           unmatch = filter not bs
+       putStrLn ""
+       putDoc $ summaryJudge
+         [ ("/all"     , theLength fs)
+         , ("/match"   , theLength match)
+         , ("/unmatch" , theLength unmatch) ]
+
+       case unmatch of
+         [] -> reportFoot $ "Matched"
+         _  -> reportFoot $ "Please check report files in " ++ reportDir
+
+outputFile :: (Value v) => Judge v -> Maybe String
+outputFile jud =
+    do (Judge _ _ xs) <- judgeOf "KOSHU-CALC" jud
+       output <- theContent "/output" xs
+       Just $ theStringValue output
+
+reportFile :: String -> IO Bool
+reportFile file =
+    do let saveFile = File $ saveDir ++ file
+           lastFile = File $ lastDir ++ file
+       js <- lastFile `minusInputJudge` saveFile
+
+       case countAffirmDeny js of
+         (0, 0) -> reportMatch file
+         count  -> reportUnmatch file js count
+
+reportMatch :: String -> IO Bool
+reportMatch file =
+    do putDoc $ reportJudge
+         [ ("/result" , boolValue True)
+         , ("/output" , stringValue file) ]
+       return True
+
+reportUnmatch
+    :: (Ord v, Pretty v) =>
+       String -> [Judge v] -> (Int, Int) -> IO Bool
+reportUnmatch file js (add, del) =
+    do putDoc $ reportJudge
+         [ ("/result" , boolValue False)
+         , ("/output" , stringValue file) ]
+       putStrLn $ "    **  " ++ reportCount add del
+       let path = reportDir ++ file
+       mkdir path
+       withFile path WriteMode (`hPutJudges` js)
+       return False
+
+reportCount :: Int -> Int -> String
+reportCount = message where
+    message a 0  =  addition a
+    message 0 d  =  deletion d
+    message a d  =  addition a ++ ", " ++ deletion d
+
+    addition 1   =  "1 addition"
+    addition n   =  show n ++ " additions"
+
+    deletion 1   =  "1 deletion"
+    deletion n   =  show n ++ " deletions"
+
+
+
+-- ----------------------  Utility
+
+{-| Length of list as an integer content. -}
+theLength :: (IntValue c) => [a] -> c
+theLength = intValue . length
+
+putDoc :: (Pretty p) => p -> IO ()
+putDoc = print . doc
+
+judgeOf :: String -> Judge v -> Maybe (Judge v)
+judgeOf pat1 j@(Judge _ pat2 _)
+        | pat1 == pat2  =  Just j
+        | otherwise     =  Nothing
+
+countAffirmDeny :: [Judge v] -> (Int, Int)
+countAffirmDeny js =
+    ( length $ filter isAffirmed js
+    , length $ filter isDenied js )
 
 
 
