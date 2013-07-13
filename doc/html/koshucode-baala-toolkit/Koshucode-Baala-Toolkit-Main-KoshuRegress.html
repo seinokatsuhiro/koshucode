@@ -3,13 +3,13 @@
 ><head
   ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
      /><title
-    >Koshucode.Baala.Toolkit.Main.KoshuChange</title
+    >Koshucode.Baala.Toolkit.Main.KoshuRegress</title
     ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
      /><script src="haddock-util.js" type="text/javascript"
     ></script
     ><script type="text/javascript"
     >//<![CDATA[
-window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolkit-Main-KoshuChange.html");};
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolkit-Main-KoshuRegress.html");};
 //]]>
 </script
     ></head
@@ -17,7 +17,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
   ><div id="package-header"
     ><ul class="links" id="page-menu"
       ><li
-	><a href="src/Koshucode-Baala-Toolkit-Main-KoshuChange.html"
+	><a href="src/Koshucode-Baala-Toolkit-Main-KoshuRegress.html"
 	  >Source</a
 	  ></li
 	><li
@@ -43,7 +43,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	    ></tr
 	  ></table
 	><p class="caption"
-	>Koshucode.Baala.Toolkit.Main.KoshuChange</p
+	>Koshucode.Baala.Toolkit.Main.KoshuRegress</p
 	></div
       ><div id="table-of-contents"
       ><p class="caption"
@@ -51,7 +51,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >koshu-change.hs
+	    >koshu-regress.hs
 </a
 	    ></li
 	  ></ul
@@ -61,7 +61,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	>Description</p
 	><div class="doc"
 	><p
-	  >Changeset. 
+	  >Tool for doing regression tests. 
 </p
 	  ></div
 	></div
@@ -70,9 +70,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
-	  ><a href="#v:koshuChangeMain"
-	    >koshuChangeMain</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	  ><a href="#v:koshuRegressMain"
+	    >koshuRegressMain</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-ContentClass.html#t:Value"
+	    >Value</a
+	    > v =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-Implement.html#t:OpImplement"
+	    >OpImplement</a
+	    > v] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
 	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Tuple.html#t:-40--41-"
 	    >()</a
@@ -84,41 +88,46 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	>Documentation</h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:koshuChangeMain" class="def"
-	    >koshuChangeMain</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	  ><a name="v:koshuRegressMain" class="def"
+	    >koshuRegressMain</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-ContentClass.html#t:Value"
+	    >Value</a
+	    > v =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-Implement.html#t:OpImplement"
+	    >OpImplement</a
+	    > v] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
 	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Tuple.html#t:-40--41-"
 	    >()</a
-	    ><a href="src/Koshucode-Baala-Toolkit-Main-KoshuChange.html#koshuChangeMain" class="link"
+	    ><a href="src/Koshucode-Baala-Toolkit-Main-KoshuRegress.html#koshuRegressMain" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >The main function for <code
-	      >koshu-change</code
+	      >koshu-regress</code
 	      > command. 
 </p
 	    ></div
 	  ></div
 	><h1 id="g:1"
-	>koshu-change.hs
+	>koshu-regress.hs
 </h1
 	><div class="doc"
 	><p
 	  ><code
-	    >koshu-change</code
+	    >koshu-regress</code
 	    > command is implemented using <code
-	    ><a href="Koshucode-Baala-Toolkit-Main-KoshuChange.html#v:koshuChangeMain"
-	      >koshuChangeMain</a
+	    ><a href="Koshucode-Baala-Toolkit-Main-KoshuRegress.html#v:koshuRegressMain"
+	      >koshuRegressMain</a
 	      ></code
 	    >.
 </p
 	  ><pre
-	  > import Koshucode.Baala.Toolkit.Main.KoshuChange
+	  > import Koshucode.Baala.Toolkit.Main.KoshuRegress
+ import Koshucode.Baala.Vanilla as V
  
  main :: IO ()
- main = koshuChangeMain
+ main = koshuRegressMain V.vanillaOperators
 </pre
 	  ></div
 	></div

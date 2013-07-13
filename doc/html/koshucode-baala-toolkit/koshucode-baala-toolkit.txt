@@ -6,9 +6,9 @@
 --   
 --   Toolkit for handling koshucode data. This package contains executables
 --   except for <tt>koshu</tt> command. Please check package
---   <tt>koshucode-baala-processor</tt> for <tt>koshu</tt> command.
+--   <tt>koshucode-baala-calculator</tt> for <tt>koshu</tt> command.
 @package koshucode-baala-toolkit
-@version 0.19.0.0
+@version 0.25.0.0
 
 
 -- | Koshucode syntactic tool.
@@ -49,7 +49,7 @@ instance Bounded RDFTupleType
 
 
 -- | RDF-to-Koshucode converter.
-module Koshucode.Baala.Toolkit.Main.KoshuRdfMain
+module Koshucode.Baala.Toolkit.Main.KoshuRdf
 koshuRdfMain :: IO ()
 instance Show Option
 instance Eq Option
@@ -58,7 +58,45 @@ instance Enum Option
 instance Bounded Option
 
 
--- | Koshucode syntactic tool.
+-- | Input sources.
+module Koshucode.Baala.Toolkit.Library.Input
+data Input
+Stdin :: Input
+File :: FilePath -> Input
+inputText :: Input -> String
+readInput :: Input -> IO String
+readInputs :: [Input] -> IO [String]
+readJudge :: String -> [Judge Val]
+instance Show Input
+instance Eq Input
+
+
+-- | Functions for changes between two datasets.
+module Koshucode.Baala.Toolkit.Library.Change
+
+-- | Calculate and write judges <i>B</i> minus <i>A</i>.
+minusInput :: Input -> Input -> IO ()
+minusInputJudge :: Input -> Input -> IO ([Judge Val])
+minusJudge :: Ord v => [Judge v] -> [Judge v] -> [Judge v]
+
+-- | Calculate and write judges <i>B</i> update by <i>C</i>.
+updateInput :: Input -> Input -> IO ()
+updateJudge :: Ord v => [Judge v] -> [Judge v] -> [Judge v]
+
+
+-- | Tool for doing regression tests.
+module Koshucode.Baala.Toolkit.Main.KoshuRegress
+
+-- | The main function for <tt>koshu-regress</tt> command.
+koshuRegressMain :: Value v => [OpImplement v] -> IO ()
+instance Show Option
+instance Eq Option
+instance Ord Option
+instance Enum Option
+instance Bounded Option
+
+
+-- | Changeset.
 module Koshucode.Baala.Toolkit.Main.KoshuChange
 
 -- | The main function for <tt>koshu-change</tt> command.
@@ -68,5 +106,3 @@ instance Eq Option
 instance Ord Option
 instance Enum Option
 instance Bounded Option
-instance Show Input
-instance Eq Input
