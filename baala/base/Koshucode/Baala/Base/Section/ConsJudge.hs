@@ -132,29 +132,38 @@ consJudge src q s xs =
 
    'consContent' recognizes the following types.
 
-   [String]    Sequence of characters.
-               External forms: @abc@, @\'abc\'@, @\"abc def\"@.
-
    [Boolean]   Boolean used for something is hold or unhold.
                External forms: @\#true@, @\#fasle@.
+
+   [String]    Sequence of characters.
+               External forms: @abc@, @\'abc\'@, @\"abc def\"@,
+               @text abc def@.
+
+   [Number]    Number.
+               External forms: @int 100@, @dec 99.50@, @hex AF@.
 
    [Nil]       Nil means that there are no values.
                i.e., universal negation on the term holds.
                External form is the non-quoted parens: @()@.
 
-   [List]      List is a ordered list of contents.
+   [Set]       Set is an unordered collection of contents.
+               Duplication among contents are not significant.
+               External form is a sequence of contents
+               with braces: @{ a b c }@.
+
+   [List]      List is an ordered list of contents.
                External form is a sequence of contents
                with brackets: @[ abc def ]@.
 
    [Termset]   Termset is a set of terms,
                i.e., a list of named contents.
                External form is a sequence of terms
-               with braces: @{ \/a 10 \/b 20 }@.
+               with braces: @{| \/a 10 \/b 20 |}@.
 
    [Relation]  Relation is a set of same-type tuples,
                External form is a sequence of tuples enclosed in braces,
                and tuples are delimited by vertical bar:
-               @{| \/a \/b | 10 20 | 30 40 |}@.
+               @[| \/a \/b | 10 20 | 30 40 |]@.
 -}
 
 
