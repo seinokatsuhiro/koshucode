@@ -4,14 +4,16 @@
 {-| Unary relational operators. -}
 
 module Koshucode.Baala.Minimal.Relmap.Unary
-( -- * empty
-  relopEmpty, relmapEmpty, relEmpty
+( -- * id
+  relopId, relmapId, relId,
+  -- * empty
+  relopEmpty, relmapEmpty, relEmpty,
   -- * cut
-, relopCut, relmapCut, relCut
+  relopCut, relmapCut, relCut,
   -- * pick
-, relopPick, relmapPick, relPick
+  relopPick, relmapPick, relPick,
   -- * rename
-, relopRename, relmapRename, relRename
+  relopRename, relmapRename, relRename
 ) where
 
 import Koshucode.Baala.Base.Prelude
@@ -20,6 +22,21 @@ import Koshucode.Baala.Minimal.Relmap.Get
 import qualified Data.List  as List
 import qualified Data.Maybe as Maybe
 import qualified Data.Tuple as Tuple
+
+
+
+-- ----------------------  id
+
+relopId :: Relop v
+relopId use = Right $ relmapId use
+
+relmapId :: OpUse v -> Relmap v
+relmapId use = Kit.relmapCalc use "id" sub where
+    sub _ = relId
+
+{-| Identity mapping, i.e., do nothing. -}
+relId :: Map (Rel v)
+relId = id
 
 
 

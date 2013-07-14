@@ -34,6 +34,7 @@ minimalOperators = builtinOperators ++ operators
     -- Relmap operators in alphabetical order
     [ o "cut"     LikePick    relopCut
     , o "empty"   LikeEmpty   relopEmpty
+    , o "id"      LikeEmpty   relopId
     , o "join"    LikeMeet    relopJoin
     , o "meet"    LikeMeet    relopMeet
     , o "minus"   LikeMeet    relopMinus
