@@ -25,7 +25,7 @@ import Koshucode.Baala.Base.Relmap
 import Koshucode.Baala.Base.Syntax
 
 import Koshucode.Baala.Base.Section.Clausify
-import Koshucode.Baala.Base.Section.ConsJudge
+import Koshucode.Baala.Base.Section.Literalize
 import Koshucode.Baala.Base.Section.Section
 
 -- Synthesis process
@@ -202,7 +202,7 @@ consSection whole xs = do
       exp xs2 = skip exp xs2
 
       jud (CJudge src q s xs2 : xs3) =
-          consJudge (clauseLines src) q s (tokenTrees xs2) : jud xs3
+          litJudge q s (clauseLines src) (tokenTrees xs2) : jud xs3
       jud xs2 = skip jud xs2
 
       rel (CRelmap _ n r : xs2) =

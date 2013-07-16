@@ -2,19 +2,23 @@
 
 module Koshucode.Baala.Base.Data.ContentClass
 (
--- * Haskell data
-  BoolValue (..)
-, IntValue (..)
-, StringValue (..)
-, ListValue (..)
+-- * Primitive content
+  PrimitiveContent (),
 
--- * Koshucode data
-, RelValue (..)
-, TermsetValue (..)
-, Nil (..)
+-- * Haskell data
+  BoolValue (..),
+  IntValue (..),
+  StringValue (..),
+  ListValue (..),
+
+-- * Koshu data
+  Nil (..),
+  SetValue (..),
+  TermsetValue (..),
+  RelValue (..),
 
 -- * Convinient class
-, Value (..)
+  Value (..),
 ) where
 
 import Koshucode.Baala.Base.Prelude
@@ -23,22 +27,28 @@ import Koshucode.Baala.Base.Data.Rel
 
 
 
+-- ----------------------  Primitive content
+
+class PrimitiveContent a
+
+
+
 -- ----------------------  Haskell built-in data
 
-class BoolValue v where
+class (PrimitiveContent v) => BoolValue v where
     boolValue   :: Bool -> v
     isBoolValue :: v -> Bool
 
-class IntValue v where
+class (PrimitiveContent v) => IntValue v where
     intValue   :: Int -> v
     isIntValue :: v -> Bool
 
-class StringValue v where
+class (PrimitiveContent v) => StringValue v where
     stringValue    :: String -> v
     isStringValue  :: v -> Bool
     theStringValue :: v -> String
 
-class ListValue v where
+class (PrimitiveContent v) => ListValue v where
     listValue    :: [v] -> v
     isListValue  :: v -> Bool
     theListValue :: v -> [v]
@@ -47,18 +57,22 @@ class ListValue v where
 
 -- ----------------------  Data in koshucode
 
-class RelValue v where
-    relValue   :: Rel v -> v
-    isRelValue :: v -> Bool
+{-| Types that can be nil -}
+class (PrimitiveContent v) => Nil v where
+    nil   :: v
+    isNil :: v -> Bool
 
-class TermsetValue v where
+class (PrimitiveContent v) => SetValue v where
+    setValue   :: [v] -> v
+    isSetValue :: v -> Bool
+
+class (PrimitiveContent v) => TermsetValue v where
     termsetValue   :: [Named v] -> v
     isTermsetValue :: v -> Bool
 
--- | Types that can be nil
-class Nil v where
-    nil   :: v
-    isNil :: v -> Bool
+class (PrimitiveContent v) => RelValue v where
+    relValue   :: Rel v -> v
+    isRelValue :: v -> Bool
 
 
 
@@ -66,7 +80,8 @@ class Nil v where
 
 class (Ord v, Pretty v, Nil v,
        BoolValue v, StringValue v, IntValue v,
-       ListValue v, TermsetValue v, RelValue v) => Value v where
+       ListValue v, SetValue v, TermsetValue v,
+       RelValue v) => Value v where
     appendContent :: v -> v -> v
     joinContent :: [v] -> v
     joinContent = foldr appendContent nil

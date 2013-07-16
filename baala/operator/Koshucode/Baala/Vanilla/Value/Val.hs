@@ -23,6 +23,7 @@ data Val
     | Intv     Int         -- ^ Integer value
     | Boolv    Bool        -- ^ Boolean value
     | Listv    [Val]       -- ^ List of values
+    | Setv     [Val]       -- ^ Set of values
     | Termsetv [Named Val] -- ^ List of values
     | Relv     (Rel Val)   -- ^ Relational value
     | Nov                  -- ^ Sign of no ordinary values
@@ -32,6 +33,8 @@ instance BoolValue Val where
     boolValue = Boolv
     isBoolValue (Boolv _) = True
     isBoolValue _         = False
+
+instance PrimitiveContent Val where
 
 instance IntValue Val where
     intValue = Intv
@@ -51,6 +54,11 @@ instance ListValue Val where
     isListValue _           = False
     theListValue (Listv xs) = xs
     theListValue _          = []
+
+instance SetValue Val where
+    setValue = Setv . unique
+    isSetValue (Setv _)   = True
+    isSetValue _          = False
 
 instance TermsetValue Val where
     termsetValue = Termsetv
@@ -75,6 +83,7 @@ instance Pretty Val where
         | otherwise   = text "#false"
     doc (Nov)         = text "()"
     doc (Listv xs)    = text "[" <+> hsep (map doc xs) <+> text "]"
+    doc (Setv xs)     = text "{" <+> hsep (map doc xs) <+> text "}"
     doc (Termsetv xs) = text "{|" <+> hsep (map docTerms xs) <+> text "|}"
     doc (Relv r)      = doc r
 
