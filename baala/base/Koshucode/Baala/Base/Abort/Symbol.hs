@@ -3,8 +3,9 @@
 {- | Abort symbol -}
 
 module Koshucode.Baala.Base.Abort.Symbol
-( AbortOr
-, Abort (..)
+( AbortOr,
+  AbOr,
+  Abort (..),
 ) where
 
 import Koshucode.Baala.Base.Prelude.Pretty
@@ -19,6 +20,8 @@ import Koshucode.Baala.Base.Abort.Source
 
 {-| Abortable type -}
 type AbortOr a = Either Abort a
+
+type AbOr a = Either ([SourceLine] -> Abort) a
 
 {-| Abort symbols -}
 data Abort

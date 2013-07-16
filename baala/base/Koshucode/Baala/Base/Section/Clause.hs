@@ -20,12 +20,12 @@ import Data.Generics
 import Prelude hiding (exp, mod)
 
 import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Relmap
 import Koshucode.Baala.Base.Syntax
 
+import Koshucode.Baala.Base.Content.Class
+import Koshucode.Baala.Base.Content.Literalize
 import Koshucode.Baala.Base.Section.Clausify
-import Koshucode.Baala.Base.Section.Literalize
 import Koshucode.Baala.Base.Section.Section
 
 -- Synthesis process

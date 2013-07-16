@@ -17,7 +17,7 @@ import qualified System.Directory as Dir
 
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
-
+import Koshucode.Baala.Base.Content.Class
 import Koshucode.Baala.Vanilla.Value.Val
 
 import qualified Koshucode.Baala.Base.Section  as Kit

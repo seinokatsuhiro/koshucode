@@ -19,6 +19,7 @@ import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Relmap
 import Koshucode.Baala.Base.Syntax
 
+import Koshucode.Baala.Base.Content.Class
 import Koshucode.Baala.Base.Section.Section
 import Koshucode.Baala.Base.Section.Clause
 

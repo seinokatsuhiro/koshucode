@@ -2,7 +2,7 @@
 
 {-| Literalizer: Make literal contents from token tree. -}
 
-module Koshucode.Baala.Base.Section.Literalize
+module Koshucode.Baala.Base.Content.Literalize
 (
 -- * Library
 
@@ -33,6 +33,8 @@ import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Syntax
+
+import Koshucode.Baala.Base.Content.Class
 
 
 

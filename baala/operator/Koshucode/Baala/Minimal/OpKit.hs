@@ -14,27 +14,33 @@ module Koshucode.Baala.Minimal.OpKit
 , (Abort.<!!>)
 , bug
 
+  -- * Content
+, Content.IntValue
+, Content.Nil
+, Content.RelValue
+, Content.StringValue
+, Content.boolValue
+, Content.intValue
+, Content.listValue
+, Content.nil
+, Content.relValue
+, Content.stringValue
+
   -- * Data
-, Data.IntValue
 , Data.Rel (..)
-, Data.RelValue
 , Data.Relhead (..)
 , Data.RelmapFun
 , Data.Relterm (..)
-, Data.StringValue
 , Data.headFrom
 , Data.headPosh
 , Data.headPoss
-, Data.intValue
 , Data.posPoss
 , Data.possInner
 , Data.possOuter
 , Data.possPick
 , Data.rehead
-, Data.relValue
 , Data.reldee
 , Data.reldum
-, Data.stringValue
 
   -- * Prelude
 , Prelude.Map
@@ -92,4 +98,6 @@ import Koshucode.Baala.Base.Prelude        as Prelude
 import Koshucode.Baala.Base.Relmap         as Relmap
 import Koshucode.Baala.Base.Section        as Section
 import Koshucode.Baala.Base.Syntax         as Syntax
+
+import Koshucode.Baala.Base.Content.Class as Content
 

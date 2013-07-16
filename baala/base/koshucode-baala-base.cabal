@@ -51,13 +51,16 @@ library
         Koshucode.Baala.Base.Abort.Symbol
         Koshucode.Baala.Base.Abort.Utility
 
+        Koshucode.Baala.Base.Content.Class
+        Koshucode.Baala.Base.Content.Run
+        Koshucode.Baala.Base.Content.Literalize
+
         Koshucode.Baala.Base.Data
         Koshucode.Baala.Base.Data.Dataset
         Koshucode.Baala.Base.Data.Judge
         Koshucode.Baala.Base.Data.Rel
         Koshucode.Baala.Base.Data.Rel.Relhead
         Koshucode.Baala.Base.Data.Rel.Relterm
-        Koshucode.Baala.Base.Data.ContentClass
 
         Koshucode.Baala.Base.Prelude
         Koshucode.Baala.Base.Prelude.Position
@@ -75,7 +78,6 @@ library
         Koshucode.Baala.Base.Section
         Koshucode.Baala.Base.Section.Clause
         Koshucode.Baala.Base.Section.Clausify
-        Koshucode.Baala.Base.Section.Literalize
         Koshucode.Baala.Base.Section.Quoter
         Koshucode.Baala.Base.Section.Section
         Koshucode.Baala.Base.Section.SectionIO

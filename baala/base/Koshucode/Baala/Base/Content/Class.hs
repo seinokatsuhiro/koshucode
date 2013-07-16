@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Data.ContentClass
+module Koshucode.Baala.Base.Content.Class
 (
 -- * Primitive content
   PrimitiveContent (),

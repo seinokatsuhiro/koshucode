@@ -1,15 +1,17 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
--- | RDF-to-Koshucode conversion
+{-| RDF-to-Koshucode conversion -}
 
 module Koshucode.Baala.Toolkit.Library.RDF
-( judgesFromRdf
-, judgeFromTriple
-, RDFTupleType (..)
+( judgesFromRdf,
+  judgeFromTriple,
+  RDFTupleType (..),
 ) where
+
 import Data.RDF
 import Koshucode.Baala.Base.Data
+import Koshucode.Baala.Base.Content.Class
 import qualified Data.Text as T
 
 -- | Type of conversion

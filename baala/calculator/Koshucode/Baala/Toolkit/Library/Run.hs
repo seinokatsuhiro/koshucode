@@ -19,10 +19,11 @@ import qualified System.Directory as Dir
 
 import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Data
+import Koshucode.Baala.Base.Content.Class
 import Koshucode.Baala.Toolkit.Library.Comment
 import qualified Koshucode.Baala.Base.Prelude  as Kit
 import qualified Koshucode.Baala.Base.Section  as Kit
-import qualified Koshucode.Baala.Base.Data     as Kit
+import qualified Koshucode.Baala.Base.Content.Class as Kit
 
 
 data SectionSource c = SectionSource
