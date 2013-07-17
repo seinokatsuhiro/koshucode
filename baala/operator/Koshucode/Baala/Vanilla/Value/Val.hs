@@ -69,8 +69,10 @@ instance TermsetValue Val where
 
 instance RelValue Val where
     relValue = Relv
-    isRelValue (Relv _) = True
-    isRelValue _        = False
+    theRelValue (Relv r) = r
+    theRelValue _        = undefined
+    isRelValue  (Relv _) = True
+    isRelValue  _        = False
 
 instance Nil Val where
     nil = Nov

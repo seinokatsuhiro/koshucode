@@ -27,7 +27,8 @@ vanillaOperators = vanillaOperators' ++ Mini.minimalOperators
 vanillaOperators' :: [Kit.OpImplement Val]
 vanillaOperators' = Mini.operators
     -- Relmap operators in alphabetical order
-    [ o "conf"           LikeSize          relopConf
+    [ o "add"            LikeVal           relopAdd
+    , o "conf"           LikeSize          relopConf
     , o "enclose"        LikeSize          relopEnclose
     , o "hang"           LikeMeet          relopHang
     , o "hold"           LikeHold          relopHold
@@ -38,9 +39,7 @@ vanillaOperators' = Mini.operators
     , o "range"          LikeSize          relopRange
     , o "rdf"            LikeSource        relopRdf
     , o "size"           LikeSize          relopSize
-    , o "unhold"         LikeHold          relopUnhold
     , o "unprefix"       LikeUnprefix      relopUnprefix
-    , o "val"            LikeVal           relopVal
     ] where o = (,,)
 
 
@@ -59,6 +58,8 @@ relopRdf use = do
 
 -- ----------------------
 -- $Operators
+--
+-- [@add@]
 --
 -- [@conf@]
 --
@@ -84,5 +85,5 @@ relopRdf use = do
 --
 -- [@unprefix@]
 --
--- [@val@]
+
 

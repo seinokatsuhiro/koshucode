@@ -2,7 +2,6 @@
 
 module Koshucode.Baala.Vanilla.Calc.Ripen
 ( calcRipen
-, calcBinary
 ) where
 
 import Koshucode.Baala.Minimal.OpKit as Kit
@@ -83,18 +82,4 @@ operators = Map.fromList
     fmax   [Listv xs] _ = intValue (maximum $ map toInt xs)
     fmax   _ _ = undefined
 
-{-| Convert infix form to prefix form. -}
-calcBinary :: Map TokenTree
-calcBinary = binaryTree ht where
-    ht = heightTableUnbox fromTWord0
-         [ right 8 "or"
-         , right 7 "and"
-         , right 6 "= <> < > <= >="
-         , right 2 "+ -"
-         , right 1 "* /"
-         ] where right n ws = (Right n, words ws)
-
-fromTWord0 :: Token -> String
-fromTWord0 (TWord _ 0 w) = w
-fromTWord0 _ = ""
 

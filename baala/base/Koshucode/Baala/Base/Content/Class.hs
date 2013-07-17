@@ -71,8 +71,9 @@ class (PrimitiveContent v) => TermsetValue v where
     isTermsetValue :: v -> Bool
 
 class (PrimitiveContent v) => RelValue v where
-    relValue   :: Rel v -> v
-    isRelValue :: v -> Bool
+    relValue    :: Rel v -> v
+    theRelValue :: v -> Rel v
+    isRelValue  :: v -> Bool
 
 
 

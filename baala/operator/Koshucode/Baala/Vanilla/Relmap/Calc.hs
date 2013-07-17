@@ -5,75 +5,77 @@
 module Koshucode.Baala.Vanilla.Relmap.Calc
 (
 -- * hold
-  relopHold, relmapHold, relHold
-, relopUnhold
+  relopHold, relmapHold, relHold,
 -- * val
-, relopVal, relmapVal,  relVal
+  relopAdd, relmapAdd, relAdd,
 -- * range
-, relopRange, relmapRange
+  relopRange, relmapRange,
 -- * limit
-, limit
+  limit,
 ) where
 
+import Koshucode.Baala.Base.Content.Run
 import Koshucode.Baala.Minimal.OpKit as Kit
 import Koshucode.Baala.Vanilla.Value.Relval
-import Koshucode.Baala.Vanilla.Calc as Calc
 import Koshucode.Baala.Vanilla.Order as Kit
 import qualified Koshucode.Baala.Minimal as Mini
 import qualified Data.List as List
 
 
 
--- ----------------------  General calculations
+runContent2 :: Content Val -> [Val] -> Val
+runContent2 c arg =
+    case runContent c arg of
+      Right a  -> a
+      Left _   -> Nov
 
---  Right $ Kit.relmapCalc use op (holdBody test $ TreeB 0 term)
+
+-- ----------------------  hold
 
 relopHold :: Kit.Relop Val
-relopHold = relopHoldFor (==)
+relopHold = relopHoldFor2 (==)
 
-relopUnhold :: Kit.Relop Val
-relopUnhold = relopHoldFor (/=)
-
-relopHoldFor :: (Val -> Val -> Bool) -> Kit.Relop Val
-relopHoldFor test use = do
+relopHoldFor2 :: (Val -> Val -> Bool) -> Kit.Relop Val
+relopHoldFor2 test use = do
   tree <- Mini.getTree use "-term"
-  Right $ relmapHold use test tree
+  cont <- vanillaContent [] tree
+  Right $ relmapHold use test cont
 
-{-| Make relmap function for @hold@ operator. -}
-relmapHold :: OpUse Val -> (Val -> Val -> Bool) -> TokenTree -> Relmap Val
-relmapHold use test e = Kit.relmapCalc use "hold" sub where
-    sub _ r1 = relHold test e r1
+relmapHold :: OpUse Val -> (Val -> Val -> Bool) -> (Relhead -> Content Val) -> Relmap Val
+relmapHold use test cont = Kit.relmapCalc use "hold" sub where
+    sub _ r1 = relHold test cont r1
 
-relHold :: (Val -> Val -> Bool) -> TokenTree -> Map (Rel Val)
-relHold test e (Rel h1 b1) = Rel h1 b2 where
+relHold :: (Val -> Val -> Bool) -> (Relhead -> Content Val) -> Rel Val -> Rel Val
+relHold test cont (Rel h1 b1) = Rel h1 b2 where
     b2      = filter f b1
-    f arg   = calc arg `test` boolValue True
-    calc    = Calc.makeCalc h1 e
+    f arg   = runContent2 (cont h1) arg `test` boolValue True
 
 
 
--- ----------------------  Val
+-- ----------------------  add
 
-relopVal :: Kit.Relop Val
-relopVal use = do
-  trees <- Mini.getTrees use "-term"
-  Right $ relmapVal use trees
+relopAdd :: Kit.Relop Val
+relopAdd use =
+  do trees <- Mini.getTermTrees use "-term"
+     cs    <- mapM (vanillaNamedContent []) trees
+     Right $ relmapAdd use cs
 
-{-| Make relmap function for @val@ operator. -}
-relmapVal :: OpUse Val -> [TokenTree] -> Relmap Val
-relmapVal use e = Kit.relmapCalc use "val" sub where
-    sub _ r1 = relVal e r1
+relmapAdd :: OpUse Val -> [Named (Relhead -> Content Val)] -> Relmap Val
+relmapAdd use cs = Kit.relmapCalc use "add" sub where
+    sub _ r1 = relAdd cs r1
 
-relVal :: [TokenTree] -> Map (Rel Val)
-relVal e (Rel h1 b1) = Rel h3 b3 where
+relAdd :: [Named (Relhead -> Content Val)] -> Map (Rel Val)
+relAdd cs (Rel h1 b1) = Rel h3 b3 where
     h3      = Kit.mappend h2 h1
     b3      = map f b1
-    f arg   = map ($ arg) f2 ++ arg   -- todo: shared term
-    (h2,f2) = Calc.makeHeadCalcs h1 e
+    f arg   = map (`runContent2` arg) cs2 ++ arg   -- todo: shared term
+    cs2     = map g cs
+    g (_,c) = c h1
+    h2      = Kit.headFrom $ map fst cs
 
 
 
--- ----------------------  Restriction
+-- ----------------------  limit
 
 -- | Keep leading tuples.
 limit :: (Ord v) => Kit.OpUse v -> Int -> String -> Kit.Relmap v
@@ -86,7 +88,7 @@ limit2 c ns _ (Rel h1 b1) = Rel h1 b2 where
 
 
 
--- ----------------------  Special calculations
+-- ----------------------  range
 
 relopRange :: Kit.Relop Val
 relopRange use = do

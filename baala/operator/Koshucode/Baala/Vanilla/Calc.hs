@@ -27,7 +27,7 @@ makeCalc
     :: Relhead    -- ^ Heading of relation
     -> TokenTree  -- ^ Expression
     -> Calc Val   -- ^ Calculator
-makeCalc h = calc h . calcBinary
+makeCalc h = calc h . vanillaBinary
 
 -- | Prepare named calculators
 makeHeadCalcs
@@ -37,7 +37,7 @@ makeHeadCalcs
 makeHeadCalcs head1 tree1 = (Relhead head2, calc2) where
     u (Right ps)   = unzip ps
     u (Left _)     = error $ "expect name-expr pairs" ++ show tree1
-    (names2, trees2) = u (termTreePairs $ map calcBinary tree1)
+    (names2, trees2) = u (termTreePairs $ map vanillaBinary tree1)
     head2          = map Term names2
     calc2          = map (calc head1) trees2
 

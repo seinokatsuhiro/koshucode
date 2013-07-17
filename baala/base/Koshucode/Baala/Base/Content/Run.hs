@@ -4,31 +4,33 @@
 
 module Koshucode.Baala.Base.Content.Run
 (
--- * Library
-  Content (..),
+-- * Operator
   ContentOp (..),
+  CopLitF,
+  CopLazyF,
+  CopEagerF,
   namedLit,
   namedEager,
   namedLazy,
+
+-- * Content
+  Content (..),
   formContent,
+  posContent,
   runContent,
 ) where
 
 import Koshucode.Baala.Base.Abort
+import Koshucode.Baala.Base.Data
+import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Syntax
 
 import Koshucode.Baala.Base.Content.Class
 import Koshucode.Baala.Base.Content.Literalize
 
-data Content c
-    = ContLit c
-    | ContApp  (ContentOp c) [Content c]
-    | ContTerm [String] [Int]
-      deriving (Show)
 
 
-
--- ----------------------
+-- ----------------------  Operator
 
 type CopLitF   c = [TokenTree] -> AbOr c
 type CopLazyF  c = [Content c] -> AbOr c
@@ -55,7 +57,13 @@ namedLazy n f = (n, CopLazy n f)
 
 
 
--- ----------------------
+-- ----------------------  Content
+
+data Content c
+    = ContLit c
+    | ContApp  (ContentOp c) [Content c]
+    | ContTerm [String] [Int]
+      deriving (Show)
 
 formContent
     :: (Value c)
@@ -78,24 +86,40 @@ formContent op src = form where
     call xs (CopLit _ f) =
         case f xs of
           Right lit  ->  Right $ ContLit lit
-          Left  ab   ->  Left $ ab src
+          Left  ab   ->  Left  $ ab src
     call xs op' =
         do xs' <- mapM form xs
            Right $ ContApp op' xs'
 
-runContent :: Content c -> [c] -> AbOr c
-runContent cont xs = run cont where
+posContent :: Relhead -> Map (Content v)
+posContent h = loop where
+    loop (ContTerm ns _) = ContTerm ns $ termLook1 ns (headTerms h)
+    loop (ContApp f cs) = ContApp f $ map loop cs
+    loop c@(ContLit _) = c
+
+runContent :: (ListValue c, RelValue c) => Content c -> [c] -> AbOr c
+runContent cont arg = run cont where
     run (ContLit c)      =  Right c
-    run (ContTerm _ [n]) =  Right $ xs !! n
-    run (ContTerm _ _)   =  Left $ \src -> AbortLookup src ""
+    run (ContTerm _ [p]) =  Right $ arg !! p
+    run (ContTerm _ ps)  =  term ps arg
     run (ContApp op cs)  =
         case op of
           CopLazy  _ f   ->  f cs
           CopEager _ f   ->  f =<< mapM run cs
           CopLit   _ _   ->  Left $ \src -> AbortLookup src ""
 
-{-
+    term []     _ = Left $ \src -> AbortLookup src ""
+    term (-1:_) _ = Left $ \src -> AbortLookup src ""
+    term (p:ps) arg2 =
+        let c = arg2 !! p
+        in if isRelValue c
+           then rel ps $ theRelValue c
+           else Right c
 
+    rel ps (Rel _ args) = do args' <- mapM (term ps) args
+                             Right . listValue $ args'
+
+{-
 
 let op _ = Right $ CopEager "+" f where f xs = Right $ foldr (+) 0 xs
 formContent op [] $ singleToken . tokenTrees $ tokens "(+ (int 1) (int 2))"

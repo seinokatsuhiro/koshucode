@@ -17,12 +17,14 @@ module Koshucode.Baala.Minimal.Relmap.Get
   getTerm,
   getTerms,
   getTermPairs,
+  getTermTrees,
 
   -- * Relmap from OpUse
   getRelmap,
-  getRelmaps
+  getRelmaps,
 ) where
 
+import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Minimal.OpKit as Kit
 
 {-| Abortable 'head' -}
@@ -46,6 +48,12 @@ getTrees use n = do
   let opd = halfOperand $ opHalf use
   xs <- opd <!!> n
   Right xs
+
+getTermTrees :: OpGet v [Named TokenTree]
+getTermTrees use n = do
+  let opd = halfOperand $ opHalf use
+  xs <- opd <!!> n
+  termTreePairs xs
 
 {-| Get word from named operand.
 
@@ -86,7 +94,7 @@ getTerms use n = do
   termNames term
 
 {-| Get list of term-name pairs from named operand. -}
-getTermPairs :: OpGet v [(String, String)]
+getTermPairs :: OpGet v [Named String]
 getTermPairs use n = do
   let opd = halfOperand $ opHalf use
   term <- opd <!!> n
