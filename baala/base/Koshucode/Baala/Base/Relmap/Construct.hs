@@ -114,7 +114,7 @@ fullBundle fulls = full where
         case lookup op fulls of
           Nothing   -> Right $ RelmapName h op
           Just cons -> do ms <- mapM full hs
-                          addAbort (AbortUsage src op u)
+                          addAbort (AbortUsage op u, src)
                              $ cons $ OpUse h ms
 
 

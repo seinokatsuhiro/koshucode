@@ -3,43 +3,49 @@
 {-| Abort utility -}
 
 module Koshucode.Baala.Base.Abort.Utility
-( (<!!>),
-  bug,
+( bug,
   abort,
   addAbort,
-  abortIO
+  abortIO,
+  AbortP,
+  AbortOrP,
 ) where
 
 import qualified System.Exit as Sys
 import qualified Data.Char   as Char
-import Koshucode.Baala.Base.Prelude.Pretty
+
+import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Syntax
 
 import Koshucode.Baala.Base.Abort.Source
-import Koshucode.Baala.Base.Abort.Symbol
+
+
 
 {-| Stop program execution abnormally. -}
-abort :: (AbortSymbol a) => a -> IO ()
-abort a = do
-  putMessage a
-  putStrLn "(ステータス 1 で終了します)"
+abort :: (AbortSymbol a) => AbortP a -> IO ()
+abort (a, src) = do
+  putMessage (a, src)
+  putStrLn "**  (ステータス 1 で終了します)"
   Sys.exitWith $ Sys.ExitFailure 1
 
-addAbort :: (AbortSymbol a) => a -> Either a b -> Either a b
+type AbortP   a   = (a, [SourceLine])
+type AbortOrP a b = Either (AbortP a) b
+
+addAbort :: (AbortSymbol a) => AbortP a -> Map (AbortOrP a b)
 addAbort a2 (Left _) = Left a2
 addAbort _ x = x
 
-abortIO :: (AbortSymbol a) => (b -> IO ()) -> Either a b -> IO ()
-abortIO _ (Left a)  = abort a
+abortIO :: (AbortSymbol a) => (b -> IO ()) -> AbortOrP a b -> IO ()
+abortIO _ (Left (a, src))  = abort (a, src)
 abortIO f (Right output) = f output
 
-putMessage :: (AbortSymbol a) => a -> IO ()
+putMessage :: (AbortSymbol a) => AbortP a -> IO ()
 putMessage = putStr . vline . renderStyle sty . messageDoc where
     sty      = style { lineLength = 60 }
     vline    = unlines . map ("**  " ++) . lines
 
-messageDoc :: (AbortSymbol a) => a -> Doc
-messageDoc a =
+messageDoc :: (AbortSymbol a) => AbortP a -> Doc
+messageDoc (a, src) =
     docv [ text ""
          , text "処理を中断しました"
          , text ""
@@ -48,13 +54,13 @@ messageDoc a =
          , opt  (label "おもな情報") $ abortMain a
          , opt  (label "補助情報") $ abortSub a
          , text ""
-         , src $ abortLines a
+         , source src
          , text ""
          , text ""
          ]
 
-src :: [SourceLine] -> Doc
-src = docv . map d where
+source :: [SourceLine] -> Doc
+source = docv . map d where
     d (SourceLine n line _) = (text $ label $ show n) <> text line
 
 label :: String -> String
@@ -74,13 +80,4 @@ opt lbl x | isEmpty x = empty
 {-| Stop on error ''bug in koshucode'' -}
 bug :: a
 bug = error "bug in koshucode"
-
-{-| Lookup association list.
-    This function may abort on AbortLookup. -}
-
-(<!!>) :: [(String, a)] -> String -> AbortOr a
-(<!!>) assoc key = loop assoc where
-    loop [] = Left $ AbortLookup [] key
-    loop ((k,v) : kvs) | k == key  = Right v
-                       | otherwise = loop kvs
 

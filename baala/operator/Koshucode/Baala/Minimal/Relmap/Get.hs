@@ -24,13 +24,14 @@ module Koshucode.Baala.Minimal.Relmap.Get
   getRelmaps,
 ) where
 
+import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Minimal.OpKit as Kit
 
 {-| Abortable 'head' -}
 getHead :: [a] -> AbortOr a
 getHead (x:_) = Right x
-getHead _     = Left $ AbortLookup [] "head"
+getHead _     = Left (AbortLookup "head", [])
 
 type OpGet v a
     = OpUse v      -- ^ Operator use
@@ -68,7 +69,7 @@ getWord use n = do
   sign <- opd <!!> n
   case sign of
     [TreeL (TWord _ _ s)] -> Right s
-    _ -> Left $ AbortLookup [] n
+    _ -> Left (AbortLookup n, [])
 
 getInt :: OpGet v Int
 getInt use n = do
@@ -76,7 +77,7 @@ getInt use n = do
   sign <- opd <!!> n
   case sign of
     [TreeL (TWord _ _ i)] -> Right (read i :: Int)
-    _ -> Left $ AbortLookup [] n
+    _ -> Left (AbortLookup n, [])
 
 {-| Get a term name from named operand. -}
 getTerm :: OpGet v String
@@ -84,7 +85,7 @@ getTerm use n = do
   ts <- getTerms use n
   case ts of
     [t] -> Right t
-    _   -> Left $ AbortLookup [] n
+    _   -> Left (AbortLookup n, [])
 
 {-| Get list of term names from named operand. -}
 getTerms :: OpGet v [String]

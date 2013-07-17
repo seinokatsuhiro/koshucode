@@ -78,14 +78,14 @@ litContent src = lit where
           _        ->  bug
 
     -- unknown content
-    lit x          =   Left $ AbortUnknownContent src (show x)
+    lit x          =   Left (AbortUnknownContent (show x), src)
 
     -- hash word
     hash "true"    =   Right . boolValue $ True
     hash "false"   =   Right . boolValue $ False
     hash w         =   case hashWord w of
                          Just w2 -> Right . stringValue $ w2
-                         Nothing -> Left $ AbortUnknownSymbol src ('#' : w)
+                         Nothing -> Left (AbortUnknownSymbol ('#' : w), src)
 
     -- sequence of token trees
     paren (TreeL (TWord _ 0 tag) : xs) =
@@ -93,8 +93,8 @@ litContent src = lit where
           "text"  -> Right . joinContent =<< litList src xs
           "lines" -> Right . joinContent =<< litList src xs  -- todo
           "int"   -> litInt src xs
-          _       -> Left $ AbortUnknownSymbol src (show xs)
-    paren x = Left $ AbortUnknownSymbol src (show x)
+          _       -> Left (AbortUnknownSymbol (show xs), src)
+    paren x = Left (AbortUnknownSymbol (show x), src)
 
 
 
@@ -107,20 +107,20 @@ litContent src = lit where
 litInt :: (IntValue v) => Literalize v
 litInt src [TreeL (TWord _ 0 digits)] = 
     Right . intValue =<< readInt src digits
-litInt src xs = Left $ AbortNotNumber src (show xs)
+litInt src xs = Left (AbortNotNumber (show xs), src)
 
 readInt :: LiteralizeString Int
 readInt src s =
     case reads s of
       [(n, "")] -> Right n
-      _         -> Left $ AbortNotNumber src s
+      _         -> Left (AbortNotNumber s, src)
 
 {-| Get single term name.
     If 'TokenTree' contains nested term name, this function failed. -}
 litFlatname :: LiteralizeTree String
 litFlatname _   (TreeL (TTermN _ [n])) = Right n
-litFlatname src (TreeL (TTermN _ ns))  = Left $ AbortRequireFlatname src (concat ns)
-litFlatname src x = Left $ AbortMissingTermName src (show x)
+litFlatname src (TreeL (TTermN _ ns))  = Left (AbortRequireFlatname (concat ns), src)
+litFlatname src x = Left (AbortMissingTermName (show x), src)
 
 
 
@@ -143,7 +143,7 @@ litRel src cs =
        b2 <- mapM (litList src) b1
        let b3 = unique b2
        if any (length h2 /=) $ map length b3
-          then Left  $ AbortOddRelation src
+          then Left  (AbortOddRelation, src)
           else Right $ Rel (headFrom h2) b3
 
 divideByName :: [SourceLine] -> [TokenTree] -> AbortOr [Named TokenTree]

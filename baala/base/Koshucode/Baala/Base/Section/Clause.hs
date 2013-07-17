@@ -219,7 +219,7 @@ consSection whole xs = do
       ass (_ : xs2) = ass xs2
       ass [] = Right []
 
-      unk (CUnknown src : _) = Left $ AbortUnknownClause $ clauseLines src
+      unk (CUnknown src : _) = Left (AbortUnknownClause, clauseLines src)
       unk (_ : xs2) = unk xs2
       unk [] = Right []
 

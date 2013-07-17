@@ -42,7 +42,7 @@ runRelmapSelector select = (<$>) where
                                    Right $ f rs' r
     RelmapAppend m1 m2  <$> r = do r' <- m1 <$> r
                                    m2 <$> r'
-    RelmapName   h op   <$> _ = Left $ AbortUnknownRelmap (halfLines h) op
+    RelmapName   h op   <$> _ = Left (AbortUnknownRelmap op, halfLines h)
 
 
 

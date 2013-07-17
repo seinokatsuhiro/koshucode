@@ -24,7 +24,7 @@ import Koshucode.Baala.Base.Syntax
 -- | Extract a term name.
 termName :: TokenTree -> AbortOr String
 termName (TreeL (TTermN _ [n])) = Right n
-termName x = Left $ AbortMissingTermName [] (show x)
+termName x = Left (AbortMissingTermName (show x), [])
 
 -- | Extract a list of term names.
 -- 
@@ -53,7 +53,7 @@ termNamePairs = loop where
            xs' <- loop xs
            Right $ (a', b') : xs'
     loop [] = Right []
-    loop (a : _) = Left $ AbortMissingTermName [] (show a)
+    loop (a : _) = Left (AbortMissingTermName (show a), [])
 
 -- e1 = termPairs . tokenTrees . tokens
 -- e2 = e1 ""
@@ -74,7 +74,7 @@ termTreePairs = loop where
            xs' <- loop xs
            Right $ (a', b) : xs'
     loop [] = Right []
-    loop (a : _) = Left $ AbortMissingTermName [] (show a)
+    loop (a : _) = Left (AbortMissingTermName (show a), [])
 
 -- e1 = termTreePairs . tokenTrees . tokens
 -- e2 = e1 ""

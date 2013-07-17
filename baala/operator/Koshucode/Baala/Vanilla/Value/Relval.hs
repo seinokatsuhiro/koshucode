@@ -58,37 +58,40 @@ arithmetic =
  , namedLit    "int"  litInt
  ]
 
+abortReason :: AbortReason -> [SourceLine] -> Abort
+abortReason a src = (a, src)
+
 litInt :: [TokenTree] -> AbOr Val
 litInt [TreeL (TWord _ _ n)] = readIntVal n
-litInt xs = Left $ \src -> AbortNotNumber src (show xs)
+litInt xs = Left . abortReason $ AbortNotNumber (show xs)
 
 readIntVal :: String -> AbOr Val
 readIntVal s =
     case reads s of
       [(n, "")] -> Right $ Intv n
-      _         -> Left  $ \src -> AbortNotNumber src s
+      _         -> Left . abortReason $ AbortNotNumber s
 
 readInt :: String -> AbOr Int
 readInt s =
     case reads s of
       [(n, "")] -> Right $ n
-      _         -> Left  $ \src -> AbortNotNumber src s
+      _         -> Left . abortReason $ AbortNotNumber s
 
 eq :: [Val] -> AbOr Val
 eq [x, y] = Right . boolValue $ x == y
-eq _      = Left $ \src -> AbortLookup src ""
+eq _      = Left . abortReason $ AbortLookup ""
 
 neq :: [Val] -> AbOr Val
 neq [x, y] = Right . boolValue $ x /= y
-neq _      = Left $ \src -> AbortLookup src ""
+neq _      = Left . abortReason $ AbortLookup ""
 
 lt :: [Val] -> AbOr Val
 lt [x, y] = Right . boolValue $ x < y
-lt _      = Left $ \src -> AbortLookup src ""
+lt _      = Left . abortReason $ AbortLookup ""
 
 gt :: [Val] -> AbOr Val
 gt [x, y] = Right . boolValue $ x > y
-gt _      = Left $ \src -> AbortLookup src ""
+gt _      = Left . abortReason $ AbortLookup ""
 
 logiAnd :: [Val] -> AbOr Val
 logiAnd [Boolv True, Boolv True] = Right . boolValue $ True
@@ -102,7 +105,7 @@ plus xs = fmap Intv $ loop xs where
     loop (Stringv n : m) = do n' <- readInt n
                               m' <- loop m
                               Right $ n' + m'
-    loop _ = Left $ \src -> AbortLookup src ""
+    loop _ = Left . abortReason $ AbortLookup ""
 
 times :: [Val] -> AbOr Val
 times xs = fmap Intv $ loop xs where
@@ -112,7 +115,7 @@ times xs = fmap Intv $ loop xs where
     loop (Stringv n : m) = do n' <- readInt n
                               m' <- loop m
                               Right $ n' * m'
-    loop _ = Left $ \src -> AbortLookup src ""
+    loop _ = Left . abortReason $ AbortLookup ""
 
 -- let tree = singleToken . tokenTrees . tokens
 -- let Right e2 = vanillaContent [] $ tree "1 = 1 and 2 = 3"
