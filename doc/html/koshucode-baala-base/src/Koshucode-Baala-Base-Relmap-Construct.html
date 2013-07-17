@@ -123,7 +123,7 @@
 <a name="line-114"></a>        <span class='hs-keyword'>case</span> <span class='hs-varid'>lookup</span> <span class='hs-varid'>op</span> <span class='hs-varid'>fulls</span> <span class='hs-keyword'>of</span>
 <a name="line-115"></a>          <span class='hs-conid'>Nothing</span>   <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>RelmapName</span> <span class='hs-varid'>h</span> <span class='hs-varid'>op</span>
 <a name="line-116"></a>          <span class='hs-conid'>Just</span> <span class='hs-varid'>cons</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyword'>do</span> <span class='hs-varid'>ms</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>mapM</span> <span class='hs-varid'>full</span> <span class='hs-varid'>hs</span>
-<a name="line-117"></a>                          <span class='hs-varid'>addAbort</span> <span class='hs-layout'>(</span><span class='hs-conid'>AbortUsage</span> <span class='hs-varid'>src</span> <span class='hs-varid'>op</span> <span class='hs-varid'>u</span><span class='hs-layout'>)</span>
+<a name="line-117"></a>                          <span class='hs-varid'>addAbort</span> <span class='hs-layout'>(</span><span class='hs-conid'>AbortUsage</span> <span class='hs-varid'>op</span> <span class='hs-varid'>u</span><span class='hs-layout'>,</span> <span class='hs-varid'>src</span><span class='hs-layout'>)</span>
 <a name="line-118"></a>                             <span class='hs-varop'>$</span> <span class='hs-varid'>cons</span> <span class='hs-varop'>$</span> <span class='hs-conid'>OpUse</span> <span class='hs-varid'>h</span> <span class='hs-varid'>ms</span>
 <a name="line-119"></a>
 <a name="line-120"></a>

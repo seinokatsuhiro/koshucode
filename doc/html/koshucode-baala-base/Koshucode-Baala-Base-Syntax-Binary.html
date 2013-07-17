@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.22.0.0: A notational system for relational data</p
+      >koshucode-baala-base-0.26.0.0: A notational system for relational data</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -93,6 +93,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >, [a])] -&gt; a -&gt; <a href="Koshucode-Baala-Base-Syntax-Binary.html#t:BinaryHeight"
 	    >BinaryHeight</a
 	    ></li
+	  ><li class="src short"
+	  ><a href="#v:heightTableUnbox"
+	    >heightTableUnbox</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; (b -&gt; a) -&gt; [(<a href="Koshucode-Baala-Base-Syntax-Binary.html#t:BinaryHeight"
+	    >BinaryHeight</a
+	    >, [a])] -&gt; b -&gt; <a href="Koshucode-Baala-Base-Syntax-Binary.html#t:BinaryHeight"
+	    >BinaryHeight</a
+	    ></li
 	  ></ul
 	></div
       ><div id="interface"
@@ -126,20 +136,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 		></dt
 	      ><dd
 	      > Splits first the left-most operator,
-   and operator height is <em
+    and operator height is <em
 		>H</em
 		>.
-   For example, if the operator <code
+    For example, if the operator <code
 		>:</code
 		> is of <code
 		>Left 5</code
 		>,
-   an expression <code
+    an expression <code
 		>(a : b : c)</code
 		> is splitted into <code
 		>(: a (b : c))</code
 		>
-   and then <code
+    and then <code
 		>(: a (: b c))</code
 		>.
 </dd
@@ -153,34 +163,34 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      > Right-most splitting and height <em
 		>H</em
 		>.
-   For example, if the operator <code
+    For example, if the operator <code
 		>.</code
 		> is of <code
 		>Right 3</code
 		>,
-   an expression <code
+    an expression <code
 		>(a . b . c)</code
 		> is splitted into <code
 		>(. (a . b) c)</code
 		>
-   and then <code
+    and then <code
 		>(. (. a b) c)</code
 		>.
-   An expression <code
+    An expression <code
 		>(a . b : c)</code
 		> is into <code
 		>(: (a . b) c)</code
 		>,
-   and then <code
+    and then <code
 		>(: (. a b) c)</code
 		>.
-   Symbols that is not a binary operator like <code
+    Symbols that is not a binary operator like <code
 		>b</code
 		> are of height 0.
-   For that reason, heights of expression <code
+    For that reason, heights of expression <code
 		>(a . b : c)</code
 		>
-   are <code
+    are <code
 		>(0 3 0 5 0)</code
 		>
 </dd
@@ -243,7 +253,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    ></div
 	  ><div class="doc"
 	  ><p
-	    >Split branches in a given tree at infixed binary operators
+	    >Split branches in a given tree at infixed binary operators 
 </p
 	    ></div
 	  ></div
@@ -292,8 +302,61 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    ></div
 	  ><div class="doc"
 	  ><p
-	    >Make the height function from a height table of operators
+	    >Make the height function from a height table of operators. 
 </p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:heightTableUnbox" class="def"
+	    >heightTableUnbox</a
+	    ><a href="src/Koshucode-Baala-Base-Syntax-Binary.html#heightTableUnbox" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs arguments"
+	  ><p class="caption"
+	    >Arguments</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		>:: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		  >Ord</a
+		  > a</td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>=&gt; (b -&gt; a)</td
+		><td class="doc"
+		><p
+		  >Unbox function
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; [(<a href="Koshucode-Baala-Base-Syntax-Binary.html#t:BinaryHeight"
+		  >BinaryHeight</a
+		  >, [a])]</td
+		><td class="doc"
+		><p
+		  >Height table
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; b -&gt; <a href="Koshucode-Baala-Base-Syntax-Binary.html#t:BinaryHeight"
+		  >BinaryHeight</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Height function
+</p
+		  ></td
+		></tr
+	      ></table
 	    ></div
 	  ></div
 	></div

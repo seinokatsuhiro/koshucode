@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.22.0.0: A notational system for relational data</p
+      >koshucode-baala-base-0.26.0.0: A notational system for relational data</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -164,6 +164,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    > k =&gt; [(k, v)] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Map.html#t:Map"
 	    >Map</a
 	    > k [v]</li
+	  ><li class="src short"
+	  ><a href="#v:lookupSatisfy"
+	    >lookupSatisfy</a
+	    > ::  a -&gt; [(a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    >, b)] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > b</li
 	  ><li class="src short"
 	  ><a href="#v:lookupMap"
 	    >lookupMap</a
@@ -391,6 +399,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></div
 	><div class="top"
 	><p class="src"
+	  ><a name="v:lookupSatisfy" class="def"
+	    >lookupSatisfy</a
+	    > ::  a -&gt; [(a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    >, b)] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > b<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#lookupSatisfy" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
 	  ><a name="v:lookupMap" class="def"
 	    >lookupMap</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
@@ -451,16 +471,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		><td class="src"
 		  ><a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Name"
 		    >Name</a
-		    > <a href="Koshucode-Baala-Base-Data-Rel-Relterm.html#t:Relterm"
-		    >Relterm</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Name"
-		    >Name</a
 		    > <a href="Koshucode-Baala-Base-Data-Rel-Relhead.html#t:TermPos"
 		    >TermPos</a
 		    ></td
@@ -481,8 +491,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		><td class="src"
 		  ><a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Name"
 		    >Name</a
-		    > <a href="Koshucode-Baala-Base-Abort-Symbol.html#t:Abort"
-		    >Abort</a
+		    > <a href="Koshucode-Baala-Base-Data-Rel-Relterm.html#t:Relterm"
+		    >Relterm</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Name"
+		    >Name</a
+		    > <a href="Koshucode-Baala-Base-Abort-Symbol.html#t:AbortReason"
+		    >AbortReason</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td

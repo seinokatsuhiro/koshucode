@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.22.0.0: A notational system for relational data</p
+      >koshucode-baala-base-0.26.0.0: A notational system for relational data</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -45,6 +45,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><p class="caption"
 	>Koshucode.Baala.Base.Data</p
 	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Modules
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Glossary
+</a
+	    ></li
+	  ></ul
+	></div
       ><div id="description"
       ><p class="caption"
 	>Description</p
@@ -56,15 +72,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 </p
 	  ></div
 	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  >module <a href="Koshucode-Baala-Base-Data-Judge.html"
+	    >Koshucode.Baala.Base.Data.Judge</a
+	    ></li
+	  ><li class="src short"
+	  >module <a href="Koshucode-Baala-Base-Data-Rel.html"
+	    >Koshucode.Baala.Base.Data.Rel</a
+	    ></li
+	  ></ul
+	></div
       ><div id="interface"
-      ><h1
-	>Documentation</h1
-	><div class="top"
-	><p class="src"
-	  >module <a href="Koshucode-Baala-Base-Data-Dataset.html"
-	    >Koshucode.Baala.Base.Data.Dataset</a
-	    ></p
-	  ></div
+      ><h1 id="g:1"
+	>Modules
+</h1
 	><div class="top"
 	><p class="src"
 	  >module <a href="Koshucode-Baala-Base-Data-Judge.html"
@@ -77,11 +102,95 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Koshucode.Baala.Base.Data.Rel</a
 	    ></p
 	  ></div
-	><div class="top"
-	><p class="src"
-	  >module <a href="Koshucode-Baala-Base-Data-ValueClass.html"
-	    >Koshucode.Baala.Base.Data.ValueClass</a
-	    ></p
+	><h1 id="g:2"
+	>Glossary
+</h1
+	><div class="doc"
+	><dl
+	  ><dt
+	    >affirm</dt
+	    ><dd
+	    >    A kind of asserting judge.
+            The opposite of &quot;affirm&quot; is &quot;deny&quot;.
+</dd
+	    ><dt
+	    >assert</dt
+	    ><dd
+	    >    State that a sentence holds or not holds.
+            i.e., affirm sentence or deny sentence.
+</dd
+	    ><dt
+	    >body</dt
+	    ><dd
+	    >      Body part of relations.
+</dd
+	    ><dt
+	    >content</dt
+	    ><dd
+	    >   Content part of terms.
+</dd
+	    ><dt
+	    >deny</dt
+	    ><dd
+	    >      A kind of asserting judge.
+            The opposite of &quot;deny&quot; is &quot;affirm&quot;.
+</dd
+	    ><dt
+	    >heading</dt
+	    ><dd
+	    >   Heading part of relations.
+</dd
+	    ><dt
+	    >judge</dt
+	    ><dd
+	    >     Symbolic representation of asserted sentences.
+            Koshucode uses judges for describing information.
+</dd
+	    ><dt
+	    >name</dt
+	    ><dd
+	    >      Name part of terms.
+</dd
+	    ><dt
+	    >pattern</dt
+	    ><dd
+	    >   Pattern of judge, or name of the pattern.
+            It is a combination of a set of term names
+            and sentence of judge.
+</dd
+	    ><dt
+	    >quality</dt
+	    ><dd
+	    >   Logical quality of judges.
+            There are true and false.
+</dd
+	    ><dt
+	    >relation</dt
+	    ><dd
+	    >  Collection of uniform termsets.
+            Koshucode uses relations for calculating information.
+</dd
+	    ><dt
+	    >sentence</dt
+	    ><dd
+	    >  Description of a state of affairs
+            in the real or imaginary world.
+            Koshucode uses sentences for interpreting judges.
+</dd
+	    ><dt
+	    >term</dt
+	    ><dd
+	    >      Terms consist of name and content.
+            Term names are correspond to
+            placeholders in judge pattern.
+            Term contents are filled into the placeholders.
+</dd
+	    ><dt
+	    >termset</dt
+	    ><dd
+	    >   Set of terms.
+</dd
+	    ></dl
 	  ></div
 	></div
       ></div
