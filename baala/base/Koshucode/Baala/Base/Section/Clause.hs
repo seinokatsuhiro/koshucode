@@ -23,8 +23,7 @@ import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Relmap
 import Koshucode.Baala.Base.Syntax
 
-import Koshucode.Baala.Base.Content.Class
-import Koshucode.Baala.Base.Content.Literalize
+import Koshucode.Baala.Base.Content
 import Koshucode.Baala.Base.Section.Clausify
 import Koshucode.Baala.Base.Section.Section
 

@@ -13,8 +13,7 @@ module Koshucode.Baala.Vanilla.Value.Relval
 ) where
 
 import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Base.Content.Class
-import Koshucode.Baala.Base.Content.Run
+import Koshucode.Baala.Base.Content
 import Koshucode.Baala.Base.Prelude hiding ((<>), hang, empty, semi)
 import Koshucode.Baala.Base.Syntax
 

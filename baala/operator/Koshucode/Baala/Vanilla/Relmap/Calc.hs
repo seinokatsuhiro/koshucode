@@ -14,7 +14,7 @@ module Koshucode.Baala.Vanilla.Relmap.Calc
   limit,
 ) where
 
-import Koshucode.Baala.Base.Content.Run
+import Koshucode.Baala.Base.Content
 import Koshucode.Baala.Minimal.OpKit as Kit
 import Koshucode.Baala.Vanilla.Value.Relval
 import Koshucode.Baala.Vanilla.Order as Kit

@@ -19,7 +19,7 @@ import qualified Data.Maybe as Maybe
 
 import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Base.Content.Class
+import Koshucode.Baala.Base.Content
 
 -- | Dataset is a set of judges.
 data Dataset v = Dataset (Map.Map Relsign [Relarg v])

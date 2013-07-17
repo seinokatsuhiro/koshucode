@@ -9,7 +9,7 @@ module Koshucode.Baala.Base.Relmap.Run
 
 import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Base.Content.Class
+import Koshucode.Baala.Base.Content
 
 import Koshucode.Baala.Base.Relmap.Assert
 import Koshucode.Baala.Base.Relmap.Dataset

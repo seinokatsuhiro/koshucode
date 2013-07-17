@@ -22,8 +22,7 @@ module Koshucode.Baala.Base.Content.Class
 ) where
 
 import Koshucode.Baala.Base.Prelude
-
-import Koshucode.Baala.Base.Data.Rel
+import Koshucode.Baala.Base.Data
 
 
 

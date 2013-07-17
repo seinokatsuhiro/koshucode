@@ -39,6 +39,13 @@ import Koshucode.Baala.Base.Section.SectionUnion
   @Prelude@ modules.
 
 * @Relmap@ module uses
+  @Content@,
+  @Data@,
+  @Abort@,
+  @Syntax@, and
+  @Prelude@ modules.
+
+* @Content@ module uses
   @Data@,
   @Abort@,
   @Syntax@, and
@@ -63,6 +70,8 @@ Following picture shows reduced dependencies.
       Section
         |
       Relmap
+        |
+      Content
      /      \\
   Data     Abort
     \\        |
