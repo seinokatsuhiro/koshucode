@@ -6,7 +6,7 @@
 --   We can get a relation from a dataset,
 --   that dataset is build from judges.
 
-module Koshucode.Baala.Base.Data.Dataset
+module Koshucode.Baala.Base.Relmap.Dataset
 ( Dataset
 , emptyDataset
 , dataset
@@ -16,10 +16,9 @@ module Koshucode.Baala.Base.Data.Dataset
 
 import qualified Data.Map   as Map
 import qualified Data.Maybe as Maybe
-import Koshucode.Baala.Base.Prelude
 
-import Koshucode.Baala.Base.Data.Rel
-import Koshucode.Baala.Base.Data.Judge
+import Koshucode.Baala.Base.Prelude
+import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Content.Class
 
 -- | Dataset is a set of judges.

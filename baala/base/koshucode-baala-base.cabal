@@ -56,7 +56,6 @@ library
         Koshucode.Baala.Base.Content.Literalize
 
         Koshucode.Baala.Base.Data
-        Koshucode.Baala.Base.Data.Dataset
         Koshucode.Baala.Base.Data.Judge
         Koshucode.Baala.Base.Data.Rel
         Koshucode.Baala.Base.Data.Rel.Relhead
@@ -70,6 +69,7 @@ library
         Koshucode.Baala.Base.Relmap
         Koshucode.Baala.Base.Relmap.Assert
         Koshucode.Baala.Base.Relmap.Construct
+        Koshucode.Baala.Base.Relmap.Dataset
         Koshucode.Baala.Base.Relmap.HalfRelmap
         Koshucode.Baala.Base.Relmap.Implement
         Koshucode.Baala.Base.Relmap.Relmap

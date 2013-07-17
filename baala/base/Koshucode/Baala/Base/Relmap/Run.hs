@@ -12,6 +12,7 @@ import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Content.Class
 
 import Koshucode.Baala.Base.Relmap.Assert
+import Koshucode.Baala.Base.Relmap.Dataset
 import Koshucode.Baala.Base.Relmap.HalfRelmap
 import Koshucode.Baala.Base.Relmap.Relmap
 

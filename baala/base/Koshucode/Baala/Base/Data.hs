@@ -5,7 +5,6 @@
 module Koshucode.Baala.Base.Data
 (
 -- * Modules
-  module Koshucode.Baala.Base.Data.Dataset,
   module Koshucode.Baala.Base.Data.Judge,
   module Koshucode.Baala.Base.Data.Rel,
 
@@ -14,7 +13,6 @@ module Koshucode.Baala.Base.Data
 )
 where
 
-import Koshucode.Baala.Base.Data.Dataset
 import Koshucode.Baala.Base.Data.Judge
 import Koshucode.Baala.Base.Data.Rel
 
