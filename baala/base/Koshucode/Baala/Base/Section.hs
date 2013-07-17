@@ -13,7 +13,6 @@ module Koshucode.Baala.Base.Section
 , module Koshucode.Baala.Base.Section.Quoter
 , module Koshucode.Baala.Base.Section.SectionIO
 , module Koshucode.Baala.Base.Section.SectionUnion
-, module Koshucode.Baala.Base.Section.Utility
 
 -- * Module dependencies
 -- $ModuleDependency
@@ -28,7 +27,6 @@ import Koshucode.Baala.Base.Section.Clausify
 import Koshucode.Baala.Base.Section.Quoter
 import Koshucode.Baala.Base.Section.SectionIO
 import Koshucode.Baala.Base.Section.SectionUnion
-import Koshucode.Baala.Base.Section.Utility
 
 -- ----------------------
 {- $ModuleDependency

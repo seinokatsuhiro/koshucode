@@ -55,6 +55,7 @@ library
         Koshucode.Baala.Minimal.Relmap.Restrict
         Koshucode.Baala.Minimal.Relmap.Tropashko
         Koshucode.Baala.Minimal.Relmap.Unary
+        Koshucode.Baala.Minimal.Term
 
         Koshucode.Baala.Vanilla
         Koshucode.Baala.Vanilla.Order

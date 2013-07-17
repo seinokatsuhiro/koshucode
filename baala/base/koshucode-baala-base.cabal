@@ -82,7 +82,6 @@ library
         Koshucode.Baala.Base.Section.Section
         Koshucode.Baala.Base.Section.SectionIO
         Koshucode.Baala.Base.Section.SectionUnion
-        Koshucode.Baala.Base.Section.Utility
 
         Koshucode.Baala.Base.Syntax
         Koshucode.Baala.Base.Syntax.Binary

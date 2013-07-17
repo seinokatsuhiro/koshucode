@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Kit for implementing relational operators
+{-| Kit for implementing relational operators -}
 
 module Koshucode.Baala.Minimal.OpKit
 ( 
@@ -12,7 +12,7 @@ module Koshucode.Baala.Minimal.OpKit
   Abort.Abort,
   Abort.AbortOr,
   (Abort.<!!>),
-  bug,
+  Abort.bug,
 
   -- * Content
   Content.IntValue,
@@ -70,15 +70,9 @@ module Koshucode.Baala.Minimal.OpKit
   Relmap.relmapSource,
 
   -- * Section
-  Section.Calc,
   Section.QuasiQuoter,
-  Section.Ripen,
-  Section.crop,
   Section.koshuQuoter,
   Section.operandGroup,
-  Section.termNamePairs,
-  Section.termNames,
-  Section.termTreePairs,
 
   -- * Syntax
   Syntax.Token (..),
@@ -87,6 +81,11 @@ module Koshucode.Baala.Minimal.OpKit
   Syntax.binaryTree,
   Syntax.heightTable,
   Syntax.heightTableUnbox,
+
+  -- * Term
+  Term.termNamePairs,
+  Term.termNames,
+  Term.termTreePairs,
 
 ) where
 
@@ -99,5 +98,6 @@ import Koshucode.Baala.Base.Relmap         as Relmap
 import Koshucode.Baala.Base.Section        as Section
 import Koshucode.Baala.Base.Syntax         as Syntax
 
-import Koshucode.Baala.Base.Content.Class as Content
+import Koshucode.Baala.Base.Content.Class  as Content
+import Koshucode.Baala.Minimal.Term        as Term
 
