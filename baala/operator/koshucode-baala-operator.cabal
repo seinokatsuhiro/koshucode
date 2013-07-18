@@ -13,7 +13,7 @@ version:             0.26.0.0
 synopsis:            Relational operators in Koshucode
 
 -- A longer description of the package.
-description:         An impelemntion of relational operators.
+description:         An impelemntation of relational operators.
                      Operators are used in the @koshu@ calculator
                      that is contained in the
                      @koshucode-baala-calculator@ package.
@@ -63,6 +63,7 @@ library
 
         Koshucode.Baala.Vanilla.Cop
         Koshucode.Baala.Vanilla.Cop.Arith
+        Koshucode.Baala.Vanilla.Cop.List
         Koshucode.Baala.Vanilla.Cop.Logic
         Koshucode.Baala.Vanilla.Cop.Order
 

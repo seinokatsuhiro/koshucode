@@ -38,7 +38,7 @@ b  : source MATRIX /name /row /col /val
 
 c1 : a
    | meet b
-   | val /z ( /x * /y )
+   | add /z ( /x * /y )
    | cut /x /y
 
 c2 : c1
@@ -46,7 +46,7 @@ c2 : c1
 
 c3 : c2
    | hang -term /r -relmap c1
-   | val /z ( total /r/z )
+   | add /z ( total /r/z )
    | cut /r
 
 affirm C3 c3

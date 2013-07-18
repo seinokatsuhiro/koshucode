@@ -13,6 +13,7 @@ import Koshucode.Baala.Base.Prelude hiding ((<>), hang, empty, semi)
 import Koshucode.Baala.Base.Syntax
 
 import Koshucode.Baala.Vanilla.Cop.Arith
+import Koshucode.Baala.Vanilla.Cop.List
 import Koshucode.Baala.Vanilla.Cop.Logic
 import Koshucode.Baala.Vanilla.Cop.Order
 
@@ -23,7 +24,7 @@ import Koshucode.Baala.Vanilla.Value.Val
 -- ----------------------
 
 vanillaCop :: String -> Maybe (ContentOp Val)
-vanillaCop n = lookup n $ copOrder ++ copLogic ++ copArith
+vanillaCop n = lookup n $ concat [copOrder, copLogic, copArith, copList]
 
 vanillaContent
     :: [SourceLine]       -- ^ Source information

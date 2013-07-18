@@ -80,15 +80,15 @@ formContent op src = form where
     form (TreeL _)               = Left (AbortLookup "", src)
     form (TreeB _ (TreeL (TWord _ _ n) : xs)) =
         case op n of
-          Just op'  ->  call xs op'
-          Nothing   ->  Left (AbortLookup n, src)
-    form (TreeB _ [x]) = form x
-    form (TreeB _ _)   = Left (AbortLookup "", src)
+          Just op'     ->  call xs op'
+          Nothing      ->  Left (AbortUnkCop n, src)
+    form (TreeB _ [x]) =   form x
+    form (TreeB _ _)   =   Left (AbortLookup "", src)
 
     call xs (CopLit _ f) =
         case f xs of
-          Right lit  ->  Right $ ContLit lit
-          Left  ab   ->  Left  $ ab src
+          Right lit    ->  Right $ ContLit lit
+          Left  ab     ->  Left  $ ab src
     call xs op' =
         do xs' <- mapM form xs
            Right $ ContApp op' xs'

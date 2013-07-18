@@ -32,7 +32,7 @@ type AbortP   a   = (a, [SourceLine])
 type AbortOrP a b = Either (AbortP a) b
 
 addAbort :: (AbortSymbol a) => AbortP a -> Map (AbortOrP a b)
-addAbort a2 (Left _) = Left a2
+addAbort _ (Left a1) = Left a1
 addAbort _ x = x
 
 abortIO :: (AbortSymbol a) => (b -> IO ()) -> AbortOrP a b -> IO ()

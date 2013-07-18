@@ -17,6 +17,9 @@ module Koshucode.Baala.Vanilla.Relmap.Calc
 import qualified Data.List as List
 
 import Koshucode.Baala.Base.Content
+import Koshucode.Baala.Base.Relmap
+import Koshucode.Baala.Base.Syntax
+
 import Koshucode.Baala.Minimal.OpKit as Kit
 import Koshucode.Baala.Vanilla.Value.Relval
 import Koshucode.Baala.Vanilla.Cop
@@ -39,9 +42,9 @@ relopHold = relopHoldFor (==)
 
 relopHoldFor :: (Val -> Val -> Bool) -> Kit.Relop Val
 relopHoldFor test use = do
-  tree <- Mini.getTree use "-term"
-  cont <- vanillaContent [] tree
-  Right $ relmapHold use test cont
+  t <- Mini.getTree use "-term"
+  c <- vanillaContent (useSource use) t
+  Right $ relmapHold use test c
 
 relmapHold :: OpUse Val -> (Val -> Val -> Bool) -> (Relhead -> Content Val) -> Relmap Val
 relmapHold use test cont = Kit.relmapCalc use "hold" sub where
@@ -58,9 +61,12 @@ relHold test cont (Rel h1 b1) = Rel h1 b2 where
 
 relopAdd :: Kit.Relop Val
 relopAdd use =
-  do trees <- Mini.getTermTrees use "-term"
-     cs    <- mapM (vanillaNamedContent []) trees
+  do ts <- Mini.getTermTrees use "-term"
+     cs <- mapM (vanillaNamedContent $ useSource use) ts
      Right $ relmapAdd use cs
+
+useSource :: OpUse v -> [SourceLine]
+useSource = halfLines . opHalf
 
 relmapAdd :: OpUse Val -> [Named (Relhead -> Content Val)] -> Relmap Val
 relmapAdd use cs = Kit.relmapCalc use "add" sub where

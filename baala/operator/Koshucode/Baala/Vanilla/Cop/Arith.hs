@@ -45,6 +45,8 @@ copArith :: [Named (ContentOp Val)]
 copArith =
  [ namedEager  "+"    plus
  , namedEager  "*"    times
+ , namedEager  "-"    times
+ , namedEager  "abs"  times
  , namedLit    "int"  litInt
  ]
 

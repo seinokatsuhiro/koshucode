@@ -46,6 +46,7 @@ data AbortReason
     | AbortOddRelation      
     | AbortRequireFlatname  String
     | AbortUnknownClause    
+    | AbortUnkCop           String
     | AbortUnknownContent   String
     | AbortUnknownRelmap    String
     | AbortUnknownSymbol    String
@@ -67,6 +68,7 @@ instance AbortSymbol AbortReason where
         (AbortOddRelation       )   -> "ふぞろいな関係"
         (AbortRequireFlatname  _)   -> "入れ子ではない項目名が必要"
         (AbortUnknownClause     )   -> "未知の構文"
+        (AbortUnkCop           _)   -> "未知の項目演算子"
         (AbortUnknownContent   _)   -> "未知の項目内容"
         (AbortUnknownRelmap    _)   -> "未知の演算子"
         (AbortUnknownSymbol    _)   -> "未知の記号"
@@ -81,6 +83,7 @@ instance AbortSymbol AbortReason where
         (AbortOddRelation       )   -> empty
         (AbortRequireFlatname  s)   -> par s
         (AbortUnknownClause)        -> empty
+        (AbortUnkCop           s)   -> par s
         (AbortUnknownContent   s)   -> par s
         (AbortUnknownRelmap    s)   -> par s
         (AbortUnknownSymbol    s)   -> par s
