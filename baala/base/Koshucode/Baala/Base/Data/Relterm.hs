@@ -2,10 +2,10 @@
 
 -- | Terms in heading of relation
 
-module Koshucode.Baala.Base.Data.Rel.Relterm
-( Relterm (..)
-, termLook
-, termLook1
+module Koshucode.Baala.Base.Data.Relterm
+( Relterm (..),
+  termLook,
+  termLook1,
 )
 where
 

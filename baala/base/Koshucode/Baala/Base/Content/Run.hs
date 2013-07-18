@@ -15,6 +15,7 @@ module Koshucode.Baala.Base.Content.Run
 
 -- * Content
   Content (..),
+  PosContent,
   formContent,
   posContent,
   runContent,
@@ -22,7 +23,6 @@ module Koshucode.Baala.Base.Content.Run
 
 import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Syntax
 
 import Koshucode.Baala.Base.Content.Class
@@ -60,10 +60,12 @@ namedLazy n f = (n, CopLazy n f)
 -- ----------------------  Content
 
 data Content c
-    = ContLit c
-    | ContApp  (ContentOp c) [Content c]
-    | ContTerm [String] [Int]
+    = ContLit c                           -- ^ Literal content
+    | ContApp  (ContentOp c) [Content c]  -- ^ Operator invocation
+    | ContTerm [String] [Int]             -- ^ Term reference
       deriving (Show)
+
+type PosContent c = Relhead -> Content c
 
 formContent
     :: (Value c)
@@ -91,11 +93,12 @@ formContent op src = form where
         do xs' <- mapM form xs
            Right $ ContApp op' xs'
 
-posContent :: Relhead -> Map (Content v)
-posContent h = loop where
-    loop (ContTerm ns _) = ContTerm ns $ termLook1 ns (headTerms h)
-    loop (ContApp f cs) = ContApp f $ map loop cs
-    loop c@(ContLit _) = c
+{-| Put term positions for actural heading. -}
+posContent :: Content c -> PosContent c
+posContent cont h = pos cont where
+    pos (ContTerm ns _) = ContTerm ns $ termLook1 ns (headTerms h)
+    pos (ContApp f cs)  = ContApp f $ map pos cs
+    pos c@(ContLit _)   = c
 
 runContent :: (ListValue c, RelValue c) => Content c -> [c] -> AbOr c
 runContent cont arg = run cont where
@@ -120,11 +123,9 @@ runContent cont arg = run cont where
                              Right . listValue $ args'
 
 {-
-
 let op _ = Right $ CopEager "+" f where f xs = Right $ foldr (+) 0 xs
 formContent op [] $ singleToken . tokenTrees $ tokens "(+ (int 1) (int 2))"
 let e1 = ContApp plus [ContLit 1, ContLit 2, ContTerm ["/?"] [0]]
 runContent e1 [1,2,3]
-
 -}
 

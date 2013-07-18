@@ -94,7 +94,8 @@ litContent src = lit where
           "lines" -> Right . joinContent =<< litList src xs  -- todo
           "int"   -> litInt src xs
           _       -> Left (AbortUnknownSymbol (show xs), src)
-    paren x = Left (AbortUnknownSymbol (show x), src)
+    paren [] = Right nil
+    paren x  = Left (AbortUnknownSymbol (show x), src)
 
 
 

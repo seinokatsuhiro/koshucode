@@ -29,7 +29,6 @@ module Koshucode.Baala.Minimal.OpKit
   -- * Data
   Data.Rel (..),
   Data.Relhead (..),
-  Data.RelmapFun,
   Data.Relterm (..),
   Data.headFrom,
   Data.headPosh,

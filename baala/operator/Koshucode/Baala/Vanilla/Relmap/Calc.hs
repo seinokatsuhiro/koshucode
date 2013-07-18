@@ -14,12 +14,14 @@ module Koshucode.Baala.Vanilla.Relmap.Calc
   limit,
 ) where
 
+import qualified Data.List as List
+
 import Koshucode.Baala.Base.Content
 import Koshucode.Baala.Minimal.OpKit as Kit
 import Koshucode.Baala.Vanilla.Value.Relval
+import Koshucode.Baala.Vanilla.Cop
 import Koshucode.Baala.Vanilla.Order as Kit
 import qualified Koshucode.Baala.Minimal as Mini
-import qualified Data.List as List
 
 
 
@@ -33,10 +35,10 @@ runContent2 c arg =
 -- ----------------------  hold
 
 relopHold :: Kit.Relop Val
-relopHold = relopHoldFor2 (==)
+relopHold = relopHoldFor (==)
 
-relopHoldFor2 :: (Val -> Val -> Bool) -> Kit.Relop Val
-relopHoldFor2 test use = do
+relopHoldFor :: (Val -> Val -> Bool) -> Kit.Relop Val
+relopHoldFor test use = do
   tree <- Mini.getTree use "-term"
   cont <- vanillaContent [] tree
   Right $ relmapHold use test cont
@@ -75,7 +77,7 @@ relAdd cs (Rel h1 b1) = Rel h3 b3 where
 
 
 
--- ----------------------  limit
+-- ----------------------  limit (quota)
 
 -- | Keep leading tuples.
 limit :: (Ord v) => Kit.OpUse v -> Int -> String -> Kit.Relmap v

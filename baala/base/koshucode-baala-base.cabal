@@ -59,8 +59,8 @@ library
         Koshucode.Baala.Base.Data
         Koshucode.Baala.Base.Data.Judge
         Koshucode.Baala.Base.Data.Rel
-        Koshucode.Baala.Base.Data.Rel.Relhead
-        Koshucode.Baala.Base.Data.Rel.Relterm
+        Koshucode.Baala.Base.Data.Relhead
+        Koshucode.Baala.Base.Data.Relterm
 
         Koshucode.Baala.Base.Prelude
         Koshucode.Baala.Base.Prelude.Position

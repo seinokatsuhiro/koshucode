@@ -2,24 +2,24 @@
 
 -- | Heading of relations
 
-module Koshucode.Baala.Base.Data.Rel.Relhead
-( Relhead (..)
-, TermPos
-, mempty, mappend
-, headFrom
-, headDegree, headNames
-, rehead
-, headPoss, headPosh
-, posPoss
-, possPick
-, possInner, possOuter
-, module Koshucode.Baala.Base.Data.Rel.Relterm
+module Koshucode.Baala.Base.Data.Relhead
+( Relhead (..),
+  TermPos,
+  mempty, mappend,
+  headFrom,
+  headDegree, headNames,
+  rehead,
+  headPoss, headPosh,
+  posPoss,
+  possPick,
+  possInner, possOuter,
 ) where
+
 import Data.Monoid
 import Koshucode.Baala.Base.Prelude.Position as Pos
 import Koshucode.Baala.Base.Prelude
 
-import Koshucode.Baala.Base.Data.Rel.Relterm
+import Koshucode.Baala.Base.Data.Relterm
 
 -- | Heading of relation as a list of terms
 data Relhead = Relhead {
