@@ -436,12 +436,12 @@ $ proposition
 . propositional logic
 $ pseudovariable reference
 
-$ QBE
-$ quantifier
-$ QUEL
-$ query
-$ query rewrite
-$ quota query
+. QBE
+. quantifier
+. QUEL
+. query
+. query rewrite
+* quota query
 
 $ range
 $ range variable
@@ -498,55 +498,55 @@ $ repeating group
 . row ID
 $ RVA
 
-$ scalar
+. scalar
 $ second normal form
-$ second order logic
-$ selection
+. second order logic
+. selection
 $ selector
-$ self-referencing relvar
+. self-referencing relvar
 $ semantic optimization
-$ semidifference
-$ SEMIJOIN
-$ semijoin
-$ SEMIMINUS
-$ sentence
-$ SEQUEL
-$ set
-$ set function
-$ set inclusion
-$ set level
-$ set membership
-$ set theory
-$ Sheffer stroke
-$ simple attribute
-$ simple predicate
-$ simple proposition
+* semidifference
+. SEMIJOIN
+* semijoin
+. SEMIMINUS
+. sentence
+. SEQUEL
+* set
+. set function
+* set inclusion
+. set level
+* set membership
+. set theory
+. Sheffer stroke
+. simple attribute
+. simple predicate
+. simple proposition
 $ single-relvar constraint
-$ sixth normal form
-$ snapshot
-$ sort/merge
-$ soundness
-$ SQL
-$ star join
-$ state constraint
-$ statement
-$ subexpression
-$ subject to update
-$ subquery
-$ subset
+* sixth normal form
+. snapshot
+. sort/merge
+. soundness
+. SQL
+. star join
+. state constraint
+. statement
+* subexpression
+* subquery
+. subject to update
+* subset
 $ substitution
 $ subtables and supertables
 $ subtuple
 $ subtype
-$ summarization
-$ SUMMARIZE
+* summarization
+. SUMMARIZE
 $ summary
 $ superkey
 $ superset
 $ supertype
 $ surjection
 $ surrogate key
-$ symmetric
+* symmetric
 $ symmetric difference (set theory)
 
 . table

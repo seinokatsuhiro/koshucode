@@ -94,17 +94,22 @@ hPutJudges h = IO.hPutStr h . unlines . showJudges
 
 showJudges :: (Ord v, Pretty v) => [Judge v] -> [String]
 showJudges = loop (1 :: Int) where
-    count 0 = "**  (no judges)"
-    count 1 = "**  (1 judge)"
-    count n = "**  (" ++ show n ++ " judges)"
+    count 0            =  "**  (no judges)"
+    count 1            =  "**  (1 judge)"
+    count n            =  "**  (" ++ show n ++ " judges)"
 
-    loop n [] = [count $ n - 1, ""]
+    grad   n           =  n `mod` 20  == 0
+    gutter n           =  n `mod` 5   == 0
+
+    loop n []
+        | grad $ n - 1 =  []
+        | otherwise    =  (count $ n - 1) : [""]
     loop n (j : js)
-        | n `mod` 20 == 0  = s : count n : "" : ss
-        | n `mod`  5 == 0  = s : "" : ss
-        | otherwise        = s : ss
-        where s  = show $ doc j
-              ss = loop (n + 1) js
+        | grad n       =  s : count n : "" : ss
+        | gutter n     =  s : "" : ss
+        | otherwise    =  s : ss
+        where s        =  show $ doc j
+              ss       =  loop (n + 1) js
 
 {-| Sort terms in alphabetical order. -}
 abcJudge :: (Ord v) => Judge v -> Judge v
