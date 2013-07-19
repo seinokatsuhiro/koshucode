@@ -38,7 +38,7 @@ relopHold use = do
   Right $ relmapHold use True c
 
 relmapHold :: OpUse Val -> Bool -> (PosContent Val) -> Relmap Val
-relmapHold use b cont = Kit.relmapAbCalc use "hold" sub where
+relmapHold use b cont = Kit.relmapCalc use "hold" sub where
     sub _ r1 = relHold b cont r1
 
 relHold :: Bool -> (PosContent Val) -> Rel Val -> AbOr (Rel Val)
@@ -62,7 +62,7 @@ relopAdd use =
      Right $ relmapAdd use cs
 
 relmapAdd :: OpUse Val -> [Named (PosContent Val)] -> Relmap Val
-relmapAdd use cs = Kit.relmapAbCalc use "add" sub where
+relmapAdd use cs = Kit.relmapCalc use "add" sub where
     sub _ r1 = relAdd cs r1
 
 -- todo: shared term
@@ -85,8 +85,8 @@ relAdd cs (Rel h1 b1) =
 limit :: (Ord v) => Kit.OpUse v -> Int -> String -> Kit.Relmap v
 limit use c ns = Kit.relmapCalc use "limit" (limit2 c ns)
 
-limit2 :: (Ord v) => Int -> String -> a -> Rel v -> Rel v
-limit2 c ns _ (Rel h1 b1) = Rel h1 b2 where
+limit2 :: (Ord v) => Int -> String -> a -> AbMap (Rel v)
+limit2 c ns _ (Rel h1 b1) = Right $ Rel h1 b2 where
     b2   = List.take c $ Kit.sortByName ords (headNames h1) b1
     ords = Kit.orders ns
 
@@ -105,8 +105,8 @@ relmapRange :: (IntValue v) => OpUse v -> String -> Int -> Int -> Relmap v
 relmapRange use n low high = Kit.relmapCalc use "range" sub where
     sub _ r1 = relRange n low high r1
 
-relRange :: (IntValue v) => String -> Int -> Int -> Map (Rel v)
-relRange n low high (Rel h1 b1) = Rel h2 b2 where
+relRange :: (IntValue v) => String -> Int -> Int -> AbMap (Rel v)
+relRange n low high (Rel h1 b1) = Right $ Rel h2 b2 where
     h2   = Kit.mappend (Kit.headFrom [n]) h1
     b2   = concatMap g b1
     ys   = map intValue [low .. high]

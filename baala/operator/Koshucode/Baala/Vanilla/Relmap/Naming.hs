@@ -11,6 +11,7 @@ module Koshucode.Baala.Vanilla.Relmap.Naming
 , relopPrefixChange, relmapPrefixChange, relPrefixChange
 ) where
 
+import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Minimal.OpKit as Kit
 import Koshucode.Baala.Vanilla.Value.Relval
 import qualified Koshucode.Baala.Minimal as Mini
@@ -32,10 +33,10 @@ relmapPrefix use pre ns = Kit.relmapCalc use "prefix" sub where
 
 {-| Add prefix to terms. -}
 relPrefix
-    :: String       -- ^ Prefix text
-    -> [String]     -- ^ Changing term names
-    -> Map (Rel v)  -- ^ Relation to relation
-relPrefix pre ns (Rel h1 b1) = Rel h2 b1 where
+    :: String         -- ^ Prefix text
+    -> [String]       -- ^ Changing term names
+    -> AbMap (Rel v)  -- ^ Relation to relation
+relPrefix pre ns (Rel h1 b1) = Right $ Rel h2 b1 where
     h2 = Kit.rehead (map f) h1
     f n | n `elem` ns  = prefixName pre n
         | otherwise    = n
@@ -59,9 +60,9 @@ relmapUnprefix use pre = Kit.relmapCalc use "unprefix" sub where
 
 {-| Remove prefix -}
 relUnprefix
-    :: String       -- ^ Prefix text
-    -> Map (Rel v)  -- ^ Relation to relation
-relUnprefix pre (Rel h1 b1) = Rel h2 b1 where
+    :: String         -- ^ Prefix text
+    -> AbMap (Rel v)  -- ^ Relation to relation
+relUnprefix pre (Rel h1 b1) = Right $ Rel h2 b1 where
     h2 = Kit.rehead (map $ unprefixName pre) h1
 
 unprefixName :: String -> String -> String
@@ -87,10 +88,10 @@ relmapPrefixChange use new old =
 
 {-| Change prefix -}
 relPrefixChange
-    :: String      -- ^ New prefix
-    -> String      -- ^ Old prefix
-    -> Map (Rel v) -- ^ Relation to relation
-relPrefixChange new old (Rel h1 b1) = Rel h2 b1 where
+    :: String         -- ^ New prefix
+    -> String         -- ^ Old prefix
+    -> AbMap (Rel v)  -- ^ Relation to relation
+relPrefixChange new old (Rel h1 b1) = Right $ Rel h2 b1 where
     h2   = Kit.rehead (map f) h1
     new' = new ++ "-"
     old' = old ++ "-"

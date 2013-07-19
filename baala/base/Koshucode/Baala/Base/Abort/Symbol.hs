@@ -7,6 +7,7 @@ module Koshucode.Baala.Base.Abort.Symbol
   Abort,
   AbortOr,
   AbOr,
+  AbMap,
   AbortReason (..),
 ) where
 
@@ -35,6 +36,8 @@ type AbortOr b = AbortOrP AbortReason b
 
 {-| Abortable type. -}
 type AbOr b = Either AbortReason b
+
+type AbMap a = a -> AbOr a
 
 {-| Abort symbols -}
 data AbortReason

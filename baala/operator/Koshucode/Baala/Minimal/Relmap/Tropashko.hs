@@ -17,9 +17,10 @@ module Koshucode.Baala.Minimal.Relmap.Tropashko
   relopMeet, relmapMeet, relMeet,
 
   -- * Join (Inner union)
-  relopJoin, relmapJoin, relJoin
+  relopJoin, relmapJoin, relJoin,
 ) where
 
+import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Minimal.OpKit as Kit
 import Koshucode.Baala.Minimal.Relmap.Get
 
@@ -42,10 +43,10 @@ relmapMeet use m = Kit.relmapConfl use "meet" sub [m] where
 
 {-| Meet two relations. -}
 relMeet :: (Ord v)
-    => Rel v    -- ^ Input relation /R1/
-    -> Rel v    -- ^ Input relation /R2/
-    -> Rel v    -- ^ Meet of /R1/ and /R2/
-relMeet (Rel h1 b1) (Rel h2 b2) = Rel h3 b3 where
+    => Rel v         -- ^ Input relation /R1/
+    -> Rel v         -- ^ Input relation /R2/
+    -> AbOr (Rel v)  -- ^ Meet of /R1/ and /R2/
+relMeet (Rel h1 b1) (Rel h2 b2) = Right $ Rel h3 b3 where
     posh12 = Kit.headPosh h1 h2
     share1 = Kit.headPoss h1 $ Kit.possInner posh12
     share2 = Kit.headPoss h2 $ Kit.possInner posh12
@@ -83,10 +84,10 @@ relopJoin use = do
 
 {-| Join two relations. -}
 relJoin :: (Ord v)
-    => Rel v    -- ^ Input relation /R1/
-    -> Rel v    -- ^ Input relation /R2/
-    -> Rel v    -- ^ Join of /R1/ and /R2/
-relJoin (Rel h1 b1) (Rel h2 b2) = Rel h3 b3 where
+    => Rel v         -- ^ Input relation /R1/
+    -> Rel v         -- ^ Input relation /R2/
+    -> AbOr (Rel v)  -- ^ Join of /R1/ and /R2/
+relJoin (Rel h1 b1) (Rel h2 b2) = Right $ Rel h3 b3 where
     posh12 = Kit.possInner $ Kit.headPosh h1 h2
     pick1  = Kit.possPick  $ Kit.headPoss h1 posh12
     pick2  = Kit.possPick  $ Kit.headPoss h2 posh12

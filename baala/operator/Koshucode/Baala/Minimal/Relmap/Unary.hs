@@ -16,6 +16,7 @@ module Koshucode.Baala.Minimal.Relmap.Unary
   relopRename, relmapRename, relRename
 ) where
 
+import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Minimal.OpKit as Kit
 import Koshucode.Baala.Minimal.Relmap.Get
@@ -35,8 +36,8 @@ relmapId use = Kit.relmapCalc use "id" sub where
     sub _ = relId
 
 {-| Identity mapping, i.e., do nothing. -}
-relId :: Map (Rel v)
-relId = id
+relId :: AbMap (Rel v)
+relId = Right
 
 
 
@@ -50,8 +51,8 @@ relmapEmpty use = Kit.relmapCalc use "empty" sub where
     sub _ = relEmpty
 
 {-| Throw away all tuples in a relation. -}
-relEmpty :: Map (Rel v)  -- ^ Any relation to empty relation
-relEmpty (Rel h1 _) = Rel h1 []
+relEmpty :: AbMap (Rel v)  -- ^ Any relation to empty relation
+relEmpty (Rel h1 _) = Right $ Rel h1 []
 
 
 
@@ -68,9 +69,9 @@ relmapCut use ns = Kit.relmapCalc use "cut" sub where
 
 relCut
     :: (Ord v)
-    => [String]      -- ^ Term names
-    -> Map (Rel v)   -- ^ Mapping relation to relation
-relCut = project indexCut
+    => [String]        -- ^ Term names
+    -> AbMap (Rel v)   -- ^ Mapping relation to relation
+relCut ns r = Right $ project indexCut ns r
 
 relopPick :: (Ord v) => Relop v
 relopPick use = do
@@ -83,9 +84,9 @@ relmapPick use ns = Kit.relmapCalc use "pick" sub where
 
 relPick
     :: (Ord v)
-    => [String]      -- ^ Term names
-    -> Map (Rel v)   -- ^ Mapping relation to relation
-relPick = project indexPick
+    => [String]        -- ^ Term names
+    -> AbMap (Rel v)   -- ^ Mapping relation to relation
+relPick ns r = Right $ project indexPick ns r
 
 project :: (Ord v) => ([Int] -> Listmap v) -> [String] -> Map (Rel v)
 project f ns (Rel h1 b1) = Rel h2 b2 where
@@ -109,9 +110,9 @@ relmapRename use np = Kit.relmapCalc use "rename" sub where
 
 {-| Change terms names -}
 relRename
-    :: [(String, String)] -- ^ List of term name (/to/, /from/)
-    -> Map (Rel v)        -- ^ Relation to relation
-relRename np (Rel h1 b1) = Rel h2 b1 where
+    :: [(String, String)]   -- ^ List of term name (/to/, /from/)
+    -> AbMap (Rel v)        -- ^ Relation to relation
+relRename np (Rel h1 b1) = Right $ Rel h2 b1 where
     h2 = Kit.rehead (map re) h1
     pn = map Tuple.swap np
     re p = Maybe.fromMaybe p $ lookup p pn

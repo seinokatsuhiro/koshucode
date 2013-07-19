@@ -7,9 +7,10 @@ module Koshucode.Baala.Vanilla.Relmap.Binary
   -- * maybe-both
   relopMaybeBoth, relmapMaybeBoth,
   -- * hang
-  relopHang, relmapHang, relHang
+  relopHang, relmapHang, relHang,
 ) where
 
+import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Minimal.OpKit as Kit
 import Koshucode.Baala.Vanilla.Value.Relval
 import qualified Koshucode.Baala.Minimal as Mini
@@ -27,8 +28,8 @@ relmapMaybe use = Kit.relmapConfl use "maybe" sub ms where
     sub _ _     = undefined
 
 -- | like SQL's left join
-relMaybe :: (Ord v, Nil v) => Rel v -> Rel v -> Rel v
-relMaybe r1 r2 = Rel h3 b3 where
+relMaybe :: (Ord v, Nil v) => Rel v -> AbMap (Rel v)
+relMaybe r1 r2 = Right $ Rel h3 b3 where
     Rel h1 args1 = r1
     Rel h2 args2 = r2
 
@@ -59,7 +60,9 @@ relopMaybeBoth use = Right $ relmapMaybeBoth use
 relmapMaybeBoth :: (Ord v, Nil v) => Kit.OpUse v -> Kit.Relmap v
 relmapMaybeBoth use = Kit.relmapConfl use "mmaybe" sub ms where
     ms = Kit.opSubmap use
-    sub [r2] r1 = Mini.relJoin (relMaybe r1 r2) (relMaybe r2 r1)
+    sub [r2] r1 = do r12 <- relMaybe r1 r2
+                     r21 <- relMaybe r2 r1
+                     Mini.relJoin r12 r21
     sub _ _     = undefined
 
 
@@ -78,8 +81,8 @@ relmapHang use n = Kit.relmapConfl use "hang" sub ms where
     sub _ _     = undefined
 
 -- | Hanging relation, like grouping.
-relHang :: (Ord v, RelValue v) => String -> Rel v -> Map (Rel v)
-relHang n r2 r1 = Rel h3 b3 where
+relHang :: (Ord v, RelValue v) => String -> Rel v -> AbMap (Rel v)
+relHang n r2 r1 = Right $ Rel h3 b3 where
     Rel h1 args1 = r1
     Rel h2 args2 = r2
 

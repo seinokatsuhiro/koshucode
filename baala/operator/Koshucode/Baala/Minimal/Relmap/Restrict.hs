@@ -9,6 +9,7 @@ module Koshucode.Baala.Minimal.Relmap.Restrict
   relopMinus, relmapMinus, relMinus
 ) where
 
+import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Minimal.OpKit as Kit
 import Koshucode.Baala.Minimal.Relmap.Get
 
@@ -28,9 +29,9 @@ relmapSome use m = Kit.relmapConfl use "minus" sub [m] where
 
 relSome
     :: (Ord v)
-    => Rel v        -- ^ Matching relation
-    -> Map (Rel v)  -- ^ Relation to relation
-relSome  = relSemi True
+    => Rel v          -- ^ Matching relation
+    -> AbMap (Rel v)  -- ^ Relation to relation
+relSome r = relSemi True r
 
 
 
@@ -48,16 +49,16 @@ relmapMinus use m = Kit.relmapConfl use "minus" sub [m] where
 
 relMinus
     :: (Ord v)
-    => Rel v        -- ^ Unmatching relation
-    -> Map (Rel v)  -- ^ Relation to relation
+    => Rel v          -- ^ Unmatching relation
+    -> AbMap (Rel v)  -- ^ Relation to relation
 relMinus = relSemi False
 
 
 
 -- ----------------------  Semi
 
-relSemi :: (Ord v) => Bool -> Rel v -> Map (Rel v)
-relSemi which r2 r1 = Rel h3 b3 where
+relSemi :: (Ord v) => Bool -> Rel v -> AbMap (Rel v)
+relSemi which r2 r1 = Right $ Rel h3 b3 where
     Rel h1 args1 = r1
     Rel h2 args2 = r2
 

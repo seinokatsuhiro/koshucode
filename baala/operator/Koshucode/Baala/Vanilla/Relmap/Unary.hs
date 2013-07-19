@@ -10,6 +10,7 @@ module Koshucode.Baala.Vanilla.Relmap.Unary
   relopEnclose, relmapEnclose, relEnclose
 ) where
 
+import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Minimal.OpKit as Kit
 import Koshucode.Baala.Vanilla.Value.Relval
 import qualified Koshucode.Baala.Minimal as Mini
@@ -30,9 +31,9 @@ relmapSize use n = Kit.relmapCalc use "size" sub where
 {-| Change terms names -}
 relSize
     :: (IntValue v)
-    => String        -- ^ List of term name (/to/, /from/)
-    -> Map (Rel v)   -- ^ Relation to relation
-relSize n (Rel _ b1) = Rel h2 b2 where
+    => String          -- ^ List of term name (/to/, /from/)
+    -> AbMap (Rel v)   -- ^ Relation to relation
+relSize n (Rel _ b1) = Right $ Rel h2 b2 where
     h2 = Kit.headFrom [n]
     b2 = [[intValue $ length b1]]
 
@@ -52,9 +53,9 @@ relmapConf use n = Kit.relmapCalc use "conf" sub where
 {-| Change terms names -}
 relConf
     :: (StringValue v)
-    => String        -- ^ Term name
-    -> Map (Rel v)   -- ^ Relation to relation
-relConf n (Rel h1 _) = Rel h2 b2 where
+    => String          -- ^ Term name
+    -> AbMap (Rel v)   -- ^ Relation to relation
+relConf n (Rel h1 _) = Right $ Rel h2 b2 where
     h2 = Kit.headFrom [n]
     b2 = [[stringValue $ show s]]
     s  = show $ docParen $ doc h1
@@ -75,9 +76,9 @@ relmapEnclose use n = Kit.relmapCalc use "enclose" sub where
 {-| Enclose the current relation in a term. -}
 relEnclose
     :: (RelValue v)
-    => String        -- ^ Term name
-    -> Map (Rel v)   -- ^ Relation to relation
-relEnclose n r@(Rel h1 _) = Rel h2 b2 where
+    => String          -- ^ Term name
+    -> AbMap (Rel v)   -- ^ Relation to relation
+relEnclose n r@(Rel h1 _) = Right $ Rel h2 b2 where
     h2 = Relhead [Nest n $ headTerms h1]
     b2 = [[relValue r]]
 
