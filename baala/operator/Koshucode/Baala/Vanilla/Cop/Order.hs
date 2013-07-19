@@ -4,18 +4,31 @@
 
 module Koshucode.Baala.Vanilla.Cop.Order
 ( copOrder
+-- $Operators
 ) where
 
 import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Content
-import Koshucode.Baala.Base.Prelude hiding ((<>), hang, empty, semi)
+import Koshucode.Baala.Base.Prelude
 
 import Koshucode.Baala.Vanilla.Value.Val
 
+-- ----------------------
+{- $Operators
 
+ [@=@]     Equal.
 
+ [@\<\>@]  Not equal.
 
--- ----------------------  Order
+ [@<@]     Less than.
+
+ [@<=@]    Less than or equal.
+
+ [@>@]     Grater than.
+
+ [@>=@]    Grater than or equal.
+
+-}
 
 copOrder :: [Named (ContentOp Val)]
 copOrder =
@@ -48,4 +61,6 @@ ordGt   =  ordBy (>)
 
 ordGte  :: [Val] -> AbOr Val
 ordGte  =  ordBy (>=)
+
+
 

@@ -4,17 +4,32 @@
 
 module Koshucode.Baala.Vanilla.Cop.List
 ( copList
+-- $Operators
 ) where
 
 import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Content
-import Koshucode.Baala.Base.Prelude hiding ((<>), hang, empty, semi)
+import Koshucode.Baala.Base.Prelude
 
 import Koshucode.Baala.Vanilla.Value.Val
 
 
 
--- ----------------------  Order
+-- ----------------------
+{- $Operators
+
+ [@list@]    Construct list.
+
+ [@total@]   Calculate total amount of elements in list,
+             i.e., summation.
+
+ [@size@]    Number of elements.
+
+ [@min@]     Minimal element.
+
+ [@max@]     Maximal element.
+
+-}
 
 copList :: [Named (ContentOp Val)]
 copList =
@@ -45,5 +60,4 @@ listSize [Listv   xs]     = Right . intValue $ length xs
 listSize [Stringv xs]     = Right . intValue $ length xs
 listSize [Relv (Rel _ b)] = Right . intValue $ length b
 listSize xs = Left $ AbortLookup (show xs)
-
 

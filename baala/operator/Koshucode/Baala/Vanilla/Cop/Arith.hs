@@ -3,17 +3,13 @@
 {-| Content operators. -}
 
 module Koshucode.Baala.Vanilla.Cop.Arith
-(
--- * Library
-  copArith
-
--- * Document
+( copArith
 -- $Operators
 ) where
 
 import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Content
-import Koshucode.Baala.Base.Prelude hiding ((<>), hang, empty, semi)
+import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Syntax
 
 import Koshucode.Baala.Vanilla.Value.Val
@@ -41,7 +37,18 @@ readInt s =
 
 
 
--- ----------------------  Arithmetic
+-- ----------------------
+{- $Operators
+
+ [@+@]     Addition.
+
+ [@-@]     Subtruction.
+
+ [@*@]     Multipication.
+
+ [@abs@]   Absolute value.
+
+-}
 
 copArith :: [Named (ContentOp Val)]
 copArith =
@@ -96,18 +103,4 @@ arithAbs1 _ = Left $ AbortLookup ""
 -- let Right e2 = vanillaContent [] $ tree "1 + 2 + 3 + 4 + 5"
 -- let Right e3 = runContent (e2 $ Relhead []) []
 -- let Left  e3 = runContent e2 []
-
-
--- ----------------------
-{- $Operators
-
-  [@+@]     Addition.
-
-  [@-@]     Subtruction.
-
-  [@*@]     Multipication.
-
-  [@abs@]   Absolute value.
-
--}
 
