@@ -44,7 +44,7 @@ runRelmapSelector select = (<$>) where
     RelmapAbCalc h _ f ms <$> r = do rs' <- mapM (<$> reldee) ms
                                      case f rs' r of
                                        Right r' -> Right r'
-                                       Left a   -> Left $ a (halfLines h)
+                                       Left a   -> Left (a, halfLines h)
     RelmapAppend m1 m2    <$> r = do r' <- m1 <$> r
                                      m2 <$> r'
     RelmapName   h op     <$> _ = Left (AbortUnknownRelmap op, halfLines h)

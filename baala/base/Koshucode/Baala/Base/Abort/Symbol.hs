@@ -11,7 +11,6 @@ module Koshucode.Baala.Base.Abort.Symbol
 ) where
 
 import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Base.Syntax
 
 import Koshucode.Baala.Base.Abort.Source
 import Koshucode.Baala.Base.Abort.Utility
@@ -35,7 +34,7 @@ type Abort = AbortP AbortReason
 type AbortOr b = AbortOrP AbortReason b
 
 {-| Abortable type. -}
-type AbOr b = Either ([SourceLine] -> Abort) b
+type AbOr b = Either AbortReason b
 
 {-| Abort symbols -}
 data AbortReason

@@ -9,16 +9,9 @@ module Koshucode.Baala.Vanilla.Cop.Order
 import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Content
 import Koshucode.Baala.Base.Prelude hiding ((<>), hang, empty, semi)
-import Koshucode.Baala.Base.Syntax
 
 import Koshucode.Baala.Vanilla.Value.Val
 
-
-
--- ----------------------
-
-abortReason :: AbortReason -> [SourceLine] -> Abort
-abortReason a src = (a, src)
 
 
 
@@ -36,7 +29,7 @@ copOrder =
 
 ordBy :: (Val -> Val -> Bool) -> [Val] -> AbOr Val
 ordBy p [x, y] = Right . boolValue   $ x `p` y
-ordBy _ _      = Left  . abortReason $ AbortLookup ""
+ordBy _ _      = Left  $ AbortLookup ""
 
 ordEq   :: [Val] -> AbOr Val
 ordEq   =  ordBy (==)

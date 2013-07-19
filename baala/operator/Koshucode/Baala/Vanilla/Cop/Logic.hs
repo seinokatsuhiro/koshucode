@@ -9,16 +9,8 @@ module Koshucode.Baala.Vanilla.Cop.Logic
 import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Content
 import Koshucode.Baala.Base.Prelude hiding ((<>), hang, empty, semi)
-import Koshucode.Baala.Base.Syntax
 
 import Koshucode.Baala.Vanilla.Value.Val
-
-
-
--- ----------------------
-
-abortReason :: AbortReason -> [SourceLine] -> Abort
-abortReason a src = (a, src)
 
 
 
@@ -35,7 +27,7 @@ copLogic =
 
 logi :: (Bool -> Bool -> Bool) -> [Val] -> AbOr Val
 logi p [Boolv x, Boolv y] = Right . boolValue $ x `p` y
-logi _ _ = Left . abortReason $ AbortUndefined "not boolean"
+logi _ _ = Left $ AbortUndefined "not boolean"
 
 logiAnd :: [Val] -> AbOr Val
 logiAnd = logi (&&)
@@ -51,5 +43,5 @@ logiImply = logi $ \x y -> not x || y
 
 logiNot :: [Val] -> AbOr Val
 logiNot [Boolv x] = Right . boolValue $ not x
-logiNot _ = Left . abortReason $ AbortUndefined "not boolean"
+logiNot _ = Left $ AbortUndefined "not boolean"
 

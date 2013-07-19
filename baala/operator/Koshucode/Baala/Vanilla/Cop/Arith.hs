@@ -22,24 +22,21 @@ import Koshucode.Baala.Vanilla.Value.Val
 
 -- ----------------------
 
-abortReason :: AbortReason -> [SourceLine] -> Abort
-abortReason a src = (a, src)
-
 litInt :: [TokenTree] -> AbOr Val
 litInt [TreeL (TWord _ _ n)] = readIntVal n
-litInt xs = Left . abortReason $ AbortNotNumber (show xs)
+litInt xs = Left $ AbortNotNumber (show xs)
 
 readIntVal :: String -> AbOr Val
 readIntVal s =
     case reads s of
       [(n, "")] -> Right $ Intv n
-      _         -> Left . abortReason $ AbortNotNumber s
+      _         -> Left $ AbortNotNumber s
 
 readInt :: String -> AbOr Int
 readInt s =
     case reads s of
       [(n, "")] -> Right $ n
-      _         -> Left . abortReason $ AbortNotNumber s
+      _         -> Left $ AbortNotNumber s
 
 
 
@@ -58,7 +55,7 @@ copArith =
 arithInt :: Val -> AbOr Int
 arithInt (Intv    n) = Right n
 arithInt (Stringv n) = Right =<< readInt n
-arithInt x = Left . abortReason $ AbortNotNumber (show x)
+arithInt x = Left $ AbortNotNumber (show x)
 
 arithPlus :: [Val] -> AbOr Val
 arithPlus xs = fmap Intv $ loop xs where
@@ -80,17 +77,17 @@ arithMinus [a]    = do a' <- arithInt a
 arithMinus [a, b] = do a' <- arithInt a
                        b' <- arithInt b
                        Right . Intv $ a' - b'
-arithMinus x = Left . abortReason $ AbortMalformedOperand "-"
+arithMinus _ = Left $ AbortMalformedOperand "-"
 
 
 arithAbs :: [Val] -> AbOr Val
 arithAbs [Listv cs] = Right . Listv =<< mapM arithAbs1 cs
 arithAbs [c] = arithAbs1 c
-arithAbs _ = Left . abortReason $ AbortLookup ""
+arithAbs _ = Left $ AbortLookup ""
 
 arithAbs1 :: Val -> AbOr Val
 arithAbs1 (Intv n) = Right . Intv $ abs n
-arithAbs1 _ = Left . abortReason $ AbortLookup ""
+arithAbs1 _ = Left $ AbortLookup ""
 
 -- let tree = singleToken . tokenTrees . tokens
 -- let Right e2 = vanillaContent [] $ tree "1 = 1 and 2 = 3"

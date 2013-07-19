@@ -49,7 +49,7 @@ relHold b cont (Rel h1 b1) =
       f arg = do c <- runContent (cont h1) arg
                  case c of
                    Boolv b' -> Right $ b == b'
-                   _        -> Left $ \src -> (AbortReqBoolean $ show c, src)
+                   _        -> Left $ AbortReqBoolean (show c)
 
 
 

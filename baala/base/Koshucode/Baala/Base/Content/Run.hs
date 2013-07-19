@@ -80,15 +80,15 @@ formContent op src = form where
     form (TreeL _)               = Left (AbortLookup "", src)
     form (TreeB _ (TreeL (TWord _ _ n) : xs)) =
         case op n of
-          Just op'     ->  call xs op'
-          Nothing      ->  Left (AbortUnkCop n, src)
-    form (TreeB _ [x]) =   form x
-    form (TreeB _ _)   =   Left (AbortLookup "", src)
+          Just op'      ->  call xs op'
+          Nothing       ->  Left (AbortUnkCop n, src)
+    form (TreeB _ [x])  =   form x
+    form (TreeB _ _)    =   Left (AbortLookup "", src)
 
     call xs (CopLit _ f) =
         case f xs of
-          Right lit    ->  Right $ ContLit lit
-          Left  ab     ->  Left  $ ab src
+          Right lit     ->  Right $ ContLit lit
+          Left  a       ->  Left (a, src)
     call xs op' =
         do xs' <- mapM form xs
            Right $ ContApp op' xs'
@@ -102,17 +102,17 @@ posContent cont h = pos cont where
 
 runContent :: (ListValue c, RelValue c) => Content c -> [c] -> AbOr c
 runContent cont arg = run cont where
-    run (ContLit c)      =  Right c
-    run (ContTerm _ [p]) =  Right $ arg !! p
-    run (ContTerm _ ps)  =  term ps arg
+    run (ContLit c)      =   Right c
+    run (ContTerm _ [p]) =   Right $ arg !! p
+    run (ContTerm _ ps)  =   term ps arg
     run (ContApp op cs)  =
         case op of
           CopLazy  _ f   ->  f cs
           CopEager _ f   ->  f =<< mapM run cs
-          CopLit   _ _   ->  Left $ \src -> (AbortLookup "", src)
+          CopLit   _ _   ->  Left $ AbortLookup ""
 
-    term []     _ = Left $ \src -> (AbortLookup "", src)
-    term (-1:_) _ = Left $ \src -> (AbortLookup "", src)
+    term []     _ = Left $ AbortLookup ""
+    term (-1:_) _ = Left $ AbortLookup ""
     term (p:ps) arg2 =
         let c = arg2 !! p
         in if isRelValue c
