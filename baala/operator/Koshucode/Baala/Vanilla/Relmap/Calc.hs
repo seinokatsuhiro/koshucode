@@ -6,7 +6,7 @@ module Koshucode.Baala.Vanilla.Relmap.Calc
 (
 -- * hold
   relopHold, relmapHold, relHold,
--- * val
+-- * add
   relopAdd, relmapAdd, relAdd,
 -- * range
   relopRange, relmapRange,
@@ -15,10 +15,11 @@ module Koshucode.Baala.Vanilla.Relmap.Calc
 ) where
 
 import qualified Data.List as List
+import Control.Monad (filterM)
 
+import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Content
 import Koshucode.Baala.Base.Relmap
-import Koshucode.Baala.Base.Syntax
 
 import Koshucode.Baala.Minimal.OpKit as Kit
 import Koshucode.Baala.Vanilla.Value.Relval
@@ -28,32 +29,27 @@ import qualified Koshucode.Baala.Minimal as Mini
 
 
 
-runContent2 :: Content Val -> [Val] -> Val
-runContent2 c arg =
-    case runContent c arg of
-      Right a  -> a
-      Left _   -> Nov
-
-
 -- ----------------------  hold
 
 relopHold :: Kit.Relop Val
-relopHold = relopHoldFor (==)
-
-relopHoldFor :: (Val -> Val -> Bool) -> Kit.Relop Val
-relopHoldFor test use = do
+relopHold use = do
   t <- Mini.getTree use "-term"
-  c <- vanillaContent (useSource use) t
-  Right $ relmapHold use test c
+  c <- vanillaContent use t
+  Right $ relmapHold use True c
 
-relmapHold :: OpUse Val -> (Val -> Val -> Bool) -> (Relhead -> Content Val) -> Relmap Val
-relmapHold use test cont = Kit.relmapCalc use "hold" sub where
-    sub _ r1 = relHold test cont r1
+relmapHold :: OpUse Val -> Bool -> (PosContent Val) -> Relmap Val
+relmapHold use b cont = Kit.relmapAbCalc use "hold" sub where
+    sub _ r1 = relHold b cont r1
 
-relHold :: (Val -> Val -> Bool) -> (Relhead -> Content Val) -> Rel Val -> Rel Val
-relHold test cont (Rel h1 b1) = Rel h1 b2 where
-    b2      = filter f b1
-    f arg   = runContent2 (cont h1) arg `test` boolValue True
+relHold :: Bool -> (PosContent Val) -> Rel Val -> AbOr (Rel Val)
+relHold b cont (Rel h1 b1) =
+    do b2 <- filterM f b1
+       Right $ Rel h1 b2
+    where
+      f arg = do c <- runContent (cont h1) arg
+                 case c of
+                   Boolv b' -> Right $ b == b'
+                   _        -> Left $ \src -> (AbortReqBoolean $ show c, src)
 
 
 
@@ -62,24 +58,24 @@ relHold test cont (Rel h1 b1) = Rel h1 b2 where
 relopAdd :: Kit.Relop Val
 relopAdd use =
   do ts <- Mini.getTermTrees use "-term"
-     cs <- mapM (vanillaNamedContent $ useSource use) ts
+     cs <- vanillaNamedContents use ts
      Right $ relmapAdd use cs
 
-useSource :: OpUse v -> [SourceLine]
-useSource = halfLines . opHalf
-
-relmapAdd :: OpUse Val -> [Named (Relhead -> Content Val)] -> Relmap Val
-relmapAdd use cs = Kit.relmapCalc use "add" sub where
+relmapAdd :: OpUse Val -> [Named (PosContent Val)] -> Relmap Val
+relmapAdd use cs = Kit.relmapAbCalc use "add" sub where
     sub _ r1 = relAdd cs r1
 
-relAdd :: [Named (Relhead -> Content Val)] -> Map (Rel Val)
-relAdd cs (Rel h1 b1) = Rel h3 b3 where
-    h3      = Kit.mappend h2 h1
-    b3      = map f b1
-    f arg   = map (`runContent2` arg) cs2 ++ arg   -- todo: shared term
-    cs2     = map g cs
-    g (_,c) = c h1
-    h2      = Kit.headFrom $ map fst cs
+-- todo: shared term
+relAdd :: [Named (PosContent Val)] -> Rel Val -> AbOr (Rel Val)
+relAdd cs (Rel h1 b1) =
+    do let h2 = Kit.headFrom $ map fst cs
+           h3 = Kit.mappend h2 h1
+           cs2 = map g cs
+           g (_, c) = c h1
+           run arg = do cs2' <- mapM (`runContent` arg) cs2
+                        Right $ cs2' ++ arg
+       b3 <- mapM run b1
+       Right $ Rel h3 b3
 
 
 

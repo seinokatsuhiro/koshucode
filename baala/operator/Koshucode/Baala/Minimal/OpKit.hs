@@ -62,6 +62,7 @@ module Koshucode.Baala.Minimal.OpKit
   Relmap.RelmapHalfCons,
   Relmap.halfOperand,
   Relmap.relmapAlias,
+  Relmap.relmapAbCalc,
   Relmap.relmapCalc,
   Relmap.relmapConfl,
   Relmap.relmapCons,

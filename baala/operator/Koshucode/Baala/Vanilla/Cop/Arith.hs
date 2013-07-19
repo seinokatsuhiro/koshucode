@@ -3,7 +3,12 @@
 {-| Content operators. -}
 
 module Koshucode.Baala.Vanilla.Cop.Arith
-( copArith
+(
+-- * Library
+  copArith
+
+-- * Document
+-- $Operators
 ) where
 
 import Koshucode.Baala.Base.Abort
@@ -43,32 +48,49 @@ readInt s =
 
 copArith :: [Named (ContentOp Val)]
 copArith =
- [ namedEager  "+"    plus
- , namedEager  "*"    times
- , namedEager  "-"    times
- , namedEager  "abs"  times
+ [ namedEager  "+"    arithPlus
+ , namedEager  "*"    arithTimes
+ , namedEager  "-"    arithMinus
+ , namedEager  "abs"  arithAbs
  , namedLit    "int"  litInt
  ]
 
-plus :: [Val] -> AbOr Val
-plus xs = fmap Intv $ loop xs where
-    loop [] = Right 0
-    loop (Intv n : xs2) = do m <- loop xs2
-                             Right $ n + m
-    loop (Stringv n : m) = do n' <- readInt n
-                              m' <- loop m
-                              Right $ n' + m'
-    loop _ = Left . abortReason $ AbortLookup ""
+arithInt :: Val -> AbOr Int
+arithInt (Intv    n) = Right n
+arithInt (Stringv n) = Right =<< readInt n
+arithInt x = Left . abortReason $ AbortNotNumber (show x)
 
-times :: [Val] -> AbOr Val
-times xs = fmap Intv $ loop xs where
+arithPlus :: [Val] -> AbOr Val
+arithPlus xs = fmap Intv $ loop xs where
+    loop [] = Right 0
+    loop (n : m) = do n' <- arithInt n
+                      m' <- loop m
+                      Right $ n' + m'
+
+arithTimes :: [Val] -> AbOr Val
+arithTimes xs = fmap Intv $ loop xs where
     loop [] = Right 1
-    loop (Intv n : xs2) = do m <- loop xs2
-                             Right $ n * m
-    loop (Stringv n : m) = do n' <- readInt n
-                              m' <- loop m
-                              Right $ n' * m'
-    loop _ = Left . abortReason $ AbortLookup ""
+    loop (n : m) = do n' <- arithInt n
+                      m' <- loop m
+                      Right $ n' * m'
+
+arithMinus :: [Val] -> AbOr Val
+arithMinus [a]    = do a' <- arithInt a
+                       Right . Intv $ - a'
+arithMinus [a, b] = do a' <- arithInt a
+                       b' <- arithInt b
+                       Right . Intv $ a' - b'
+arithMinus x = Left . abortReason $ AbortMalformedOperand "-"
+
+
+arithAbs :: [Val] -> AbOr Val
+arithAbs [Listv cs] = Right . Listv =<< mapM arithAbs1 cs
+arithAbs [c] = arithAbs1 c
+arithAbs _ = Left . abortReason $ AbortLookup ""
+
+arithAbs1 :: Val -> AbOr Val
+arithAbs1 (Intv n) = Right . Intv $ abs n
+arithAbs1 _ = Left . abortReason $ AbortLookup ""
 
 -- let tree = singleToken . tokenTrees . tokens
 -- let Right e2 = vanillaContent [] $ tree "1 = 1 and 2 = 3"
@@ -77,3 +99,18 @@ times xs = fmap Intv $ loop xs where
 -- let Right e2 = vanillaContent [] $ tree "1 + 2 + 3 + 4 + 5"
 -- let Right e3 = runContent (e2 $ Relhead []) []
 -- let Left  e3 = runContent e2 []
+
+
+-- ----------------------
+{- $Operators
+
+  [@+@]     Addition.
+
+  [@-@]     Subtruction.
+
+  [@*@]     Multipication.
+
+  [@abs@]   Absolute value.
+
+-}
+

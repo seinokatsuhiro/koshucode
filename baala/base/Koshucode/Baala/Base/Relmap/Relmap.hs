@@ -5,22 +5,25 @@
 module Koshucode.Baala.Base.Relmap.Relmap
 ( 
   -- * Data
-  Relmap (..)
-, RelmapSub
+  Relmap (..),
+  RelmapSub,
+  RelmapAb,
 
   -- * Append relmaps
   -- $AppendRelmaps
 
   -- * Selectors
-, relmapSourceList
-, relmapNameList
-, relmapAppendList
+  relmapSourceList,
+  relmapNameList,
+  relmapAppendList,
 
   -- * Linker
-, relmapLinker
+  relmapLinker,
 ) where
 
 import Data.Monoid
+
+import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
 
@@ -41,6 +44,8 @@ data Relmap v
     | RelmapAlias  HalfRelmap (Relmap v)
     -- | Relmap that maps relations to a relation
     | RelmapCalc   HalfRelmap String (RelmapSub v) [Relmap v]
+    -- | Abortable 'RelmapCalc'
+    | RelmapAbCalc HalfRelmap String (RelmapAb v) [Relmap v]
     -- | Connect two relmaps
     | RelmapAppend (Relmap v) (Relmap v)
     -- | Relmap reference
@@ -51,6 +56,11 @@ type RelmapSub v
     = [Rel v]   -- ^ Relations in operand
     -> Rel v    -- ^ Main input relation
     -> Rel v    -- ^ Output relation
+
+type RelmapAb v
+    = [Rel v]
+    -> Rel v
+    -> AbOr (Rel v)
 
 
 
@@ -65,6 +75,7 @@ showRelmap = sh where
     sh (RelmapConst  _ n _)      = "RelmapConst "  ++ show n ++ " _"
     sh (RelmapAlias  _ m)        = "RelmapAlias "  ++ show m
     sh (RelmapCalc   _ n _ subs) = "RelmapCalc "   ++ show n ++ " _" ++ joinSubs subs
+    sh (RelmapAbCalc _ n _ subs) = "RelmapAbCalc " ++ show n ++ " _" ++ joinSubs subs
     sh (RelmapAppend m1 m2)      = "RelmapAppend"  ++ joinSubs [m1, m2]
     sh (RelmapName _ n)          = "RelmapName "   ++ show n
 
@@ -93,6 +104,7 @@ instance Pretty (Relmap v) where
     doc (RelmapConst  h _ _)   = doc h
     doc (RelmapAlias  h _)     = doc h
     doc (RelmapCalc   h _ _ _) = doc h -- hang (text $ name m) 2 (doch (map doc ms))
+    doc (RelmapAbCalc h _ _ _) = doc h -- hang (text $ name m) 2 (doch (map doc ms))
     doc (RelmapAppend m1 m2)   = hang (doc m1) 2 (docRelmapAppend m2)
     doc (RelmapName   _ n)     = text n
 

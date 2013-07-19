@@ -44,14 +44,15 @@ data AbortReason
     | AbortMissingTermName  String
     | AbortNotNumber        String
     | AbortOddRelation      
+    | AbortReqBoolean       String
     | AbortRequireFlatname  String
-    | AbortUnknownClause    
+    | AbortUndefined        String
     | AbortUnkCop           String
+    | AbortUnknownClause    
     | AbortUnknownContent   String
     | AbortUnknownRelmap    String
     | AbortUnknownSymbol    String
     | AbortUsage            String [String]
-    | AbortUndefined        String
       deriving (Show, Eq, Ord)
 
 instance Name AbortReason where
@@ -66,14 +67,15 @@ instance AbortSymbol AbortReason where
         (AbortMissingTermName  _)   -> "項目名が必要"
         (AbortNotNumber        _)   -> "数値として読めない"
         (AbortOddRelation       )   -> "ふぞろいな関係"
+        (AbortReqBoolean       _)   -> "真か偽が必要"
         (AbortRequireFlatname  _)   -> "入れ子ではない項目名が必要"
-        (AbortUnknownClause     )   -> "未知の構文"
+        (AbortUndefined        _)   -> "Undefined"
         (AbortUnkCop           _)   -> "未知の項目演算子"
+        (AbortUnknownClause     )   -> "未知の構文"
         (AbortUnknownContent   _)   -> "未知の項目内容"
         (AbortUnknownRelmap    _)   -> "未知の演算子"
         (AbortUnknownSymbol    _)   -> "未知の記号"
         (AbortUsage          _ _)   -> "使用法の間違い"
-        (AbortUndefined        _)   -> "Undefined"
 
     abortMain a = case a of
         (AbortLookup           s)   -> par s
@@ -81,9 +83,10 @@ instance AbortSymbol AbortReason where
         (AbortMissingTermName  s)   -> par s
         (AbortNotNumber        s)   -> par s
         (AbortOddRelation       )   -> empty
+        (AbortReqBoolean       s)   -> par s
         (AbortRequireFlatname  s)   -> par s
-        (AbortUnknownClause)        -> empty
         (AbortUnkCop           s)   -> par s
+        (AbortUnknownClause)        -> empty
         (AbortUnknownContent   s)   -> par s
         (AbortUnknownRelmap    s)   -> par s
         (AbortUnknownSymbol    s)   -> par s

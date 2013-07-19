@@ -36,14 +36,18 @@ runRelmapSelector
     -> Rel v             -- ^ Input relation
     -> AbortOr (Rel v)   -- ^ Output relation
 runRelmapSelector select = (<$>) where
-    RelmapSource _ s ns <$> _ = Right $ select s ns
-    RelmapConst  _ _ r  <$> _ = Right r
-    RelmapAlias  _ m    <$> r = m <$> r
-    RelmapCalc _ _ f ms <$> r = do rs' <- mapM (<$> reldee) ms
-                                   Right $ f rs' r
-    RelmapAppend m1 m2  <$> r = do r' <- m1 <$> r
-                                   m2 <$> r'
-    RelmapName   h op   <$> _ = Left (AbortUnknownRelmap op, halfLines h)
+    RelmapSource _ s ns   <$> _ = Right $ select s ns
+    RelmapConst  _ _ r    <$> _ = Right r
+    RelmapAlias  _ m      <$> r = m <$> r
+    RelmapCalc _ _ f ms   <$> r = do rs' <- mapM (<$> reldee) ms
+                                     Right $ f rs' r
+    RelmapAbCalc h _ f ms <$> r = do rs' <- mapM (<$> reldee) ms
+                                     case f rs' r of
+                                       Right r' -> Right r'
+                                       Left a   -> Left $ a (halfLines h)
+    RelmapAppend m1 m2    <$> r = do r' <- m1 <$> r
+                                     m2 <$> r'
+    RelmapName   h op     <$> _ = Left (AbortUnknownRelmap op, halfLines h)
 
 
 

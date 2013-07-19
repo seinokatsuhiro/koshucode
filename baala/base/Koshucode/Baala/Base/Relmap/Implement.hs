@@ -2,20 +2,21 @@
 
 module Koshucode.Baala.Base.Relmap.Implement
 ( -- * Implement
-  OpImplement (..)
-, OpParser
-, OpParser'
+  OpImplement (..),
+  OpParser,
+  OpParser',
 
   -- * Constructor
-, Relop
-, OpUse (..)
+  Relop,
+  OpUse (..),
 
   -- * Relmap basis
-, relmapSource
-, relmapConst
-, relmapAlias
-, relmapCalc
-, relmapConfl
+  relmapSource,
+  relmapConst,
+  relmapAlias,
+  relmapCalc,
+  relmapAbCalc,
+  relmapConfl,
 
 ) where
 
@@ -100,6 +101,14 @@ relmapCalc
     -> RelmapSub v  -- ^ Calculation of operation
     -> Relmap v     -- ^ Result relmap
 relmapCalc use op sub = relmapConfl use op sub []
+
+{-| Make a non-confluent relmap. -}
+relmapAbCalc
+    :: OpUse v      -- ^ Use of operator
+    -> String       -- ^ Operator name
+    -> RelmapAb v   -- ^ Calculation of operation
+    -> Relmap v     -- ^ Result relmap
+relmapAbCalc use op sub = RelmapAbCalc (opHalf use) op sub []
 
 {-| Make a confluent relmap. -}
 relmapConfl

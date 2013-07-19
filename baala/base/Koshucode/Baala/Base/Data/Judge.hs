@@ -101,11 +101,11 @@ showJudges = loop (1 :: Int) where
     grad   n           =  n `mod` 20  == 0
     gutter n           =  n `mod` 5   == 0
 
-    loop n []
-        | grad $ n - 1 =  []
-        | otherwise    =  (count $ n - 1) : [""]
+    loop _ []          =      count 0 : [""]
+    loop n [j]         =  s : count n : [""]
+        where s        =  show $ doc j
     loop n (j : js)
-        | grad n       =  s : count n : "" : ss
+        | grad   n     =  s : count n : "" : ss
         | gutter n     =  s : "" : ss
         | otherwise    =  s : ss
         where s        =  show $ doc j

@@ -5,12 +5,14 @@
 module Koshucode.Baala.Vanilla.Cop
 ( vanillaContent,
   vanillaNamedContent,
+  vanillaNamedContents,
 ) where
 
 import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Content
 import Koshucode.Baala.Base.Prelude hiding ((<>), hang, empty, semi)
 import Koshucode.Baala.Base.Syntax
+import Koshucode.Baala.Base.Relmap
 
 import Koshucode.Baala.Vanilla.Cop.Arith
 import Koshucode.Baala.Vanilla.Cop.List
@@ -27,20 +29,27 @@ vanillaCop :: String -> Maybe (ContentOp Val)
 vanillaCop n = lookup n $ concat [copOrder, copLogic, copArith, copList]
 
 vanillaContent
-    :: [SourceLine]       -- ^ Source information
-    -> TokenTree          -- ^ Token tree of content formula
+    :: OpUse Val         -- ^ Source information
+    -> TokenTree         -- ^ Token tree of content formula
     -> AbortOr (PosContent Val)  -- ^ Partial content formula
-vanillaContent src ts = 
-    do c <- formContent vanillaCop src $ vanillaBinary ts
+vanillaContent use ts = 
+    do let src = halfLines $ opHalf use
+       c <- formContent vanillaCop src $ vanillaBinary ts
        Right $ posContent c
 
 vanillaNamedContent
-  :: [SourceLine]         -- ^ Source information
-  -> Named TokenTree      -- ^ Token tree of content formula
-  -> AbortOr (Named (PosContent Val))  -- ^ Partial content formula
-vanillaNamedContent src (n, t) =
-    do c <- vanillaContent src t
+  :: OpUse Val
+  -> Named TokenTree
+  -> AbortOr (Named (PosContent Val))
+vanillaNamedContent use (n, t) =
+    do c <- vanillaContent use t
        Right (n, c)
+
+vanillaNamedContents
+  :: OpUse Val
+  -> [Named TokenTree]
+  -> AbortOr [Named (PosContent Val)]
+vanillaNamedContents use = mapM (vanillaNamedContent use)
 
 {-| Convert infix form to prefix form. -}
 vanillaBinary :: Map TokenTree
