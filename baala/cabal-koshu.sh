@@ -44,7 +44,7 @@ main () {
             unregister base
             exit ;;
 
-        '' | base* | operator* | calculator* | toolkit*)
+        '' | base* | operator* | calculator* | toolkit* | koshu )
             cabal_for `directories "$1"`
             exit ;;
 
@@ -79,6 +79,7 @@ directories () {
         operator)    echo operator ;;
         calculator)  echo calculator ;;
         toolkit)     echo toolkit ;;
+        koshu)       echo base operator calculator ;;
         '')          echo base operator calculator toolkit ;;
     esac
 }
