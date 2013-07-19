@@ -10,6 +10,5 @@
 |-- S3  /status 30  /city Paris  /sno S3  /sname Blake
 |-- S3  /status 20  /city London  /sno S4  /sname Clark
 |-- S3  /status 30  /city Athens  /sno S5  /sname Adams
-
 **  (5 judges)
 

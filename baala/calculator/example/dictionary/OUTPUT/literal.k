@@ -22,6 +22,5 @@
 |-- RELATION  /literal [| /sno /pno /qty |]
 |-- RELATION  /literal [| |]
 |-- RELATION  /literal [| | |]
-
 **  (15 judges)
 

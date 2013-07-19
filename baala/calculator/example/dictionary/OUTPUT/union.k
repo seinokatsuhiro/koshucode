@@ -5,9 +5,14 @@
 **    union.k
 **    
 
-|-- CITY  /city London
-|-- CITY  /city Paris
-|-- CITY  /city Athens
-|-- CITY  /city Oslo
-**  (4 judges)
+|-- CITY1  /city London
+|-- CITY1  /city Paris
+|-- CITY1  /city Athens
+|-- CITY1  /city Oslo
+|-- CITY2  /city London
+
+|-- CITY2  /city Paris
+|-- CITY2  /city Athens
+|-- CITY2  /city Oslo
+**  (8 judges)
 

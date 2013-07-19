@@ -352,14 +352,14 @@ $ multivalued dependency
 . MVD
 . MVD implied by a superkey
 
-$ n-adic
-$ n-ary
-$ n-place
-$ n-tuple
+. n-adic
+. n-ary
+. n-place
+. n-tuple
 $ NAND
 * natural join
-$ negation
-$ nested relation
+* negation
+. nested relation
 $ NF2
 $ niladic
 $ nonloss decomposition
@@ -443,52 +443,52 @@ $ pseudovariable reference
 . query rewrite
 * quota query
 
-$ range
-$ range variable
-$ RANK
-$ ranking
-$ read-only operator
-$ real relvar
+. range
+. range variable
+. RANK
+* ranking
+. read-only operator
+. real relvar
 $ recursive query
-$ redundancy
-$ referenced relvar
-$ referencing
-$ referencing relvar
-$ referential action
-$ referential constraint
-$ referential integrity
+. redundancy
+. referenced relvar
+. referencing
+. referencing relvar
+. referential action
+. referential constraint
+. referential integrity
 $ reflexive
-$ refresh
-$ relation
-$ relation assignment
-$ relation comparison
+. refresh
+. relation
+. relation assignment
+. relation comparison
 $ relation constant
 $ relation equality
-$ relation expression
+. relation expression
 $ relation predicate
 $ relation type
-$ relation type generator
-$ relation type inference
+. relation type generator
+. relation type inference
 $ relation value
-$ relation variable
-$ relation-valued attribute
-$ relational algebra
-$ relational assignment
-$ relational calculus
-$ relational comparison
-$ relational completeness
-$ relational database
-$ relational DBMS
-$ relational expression
-$ relational model
-$ relational operator
+* relation-valued attribute
+. relation variable
+. relational algebra
+. relational assignment
+. relational calculus
+* relational comparison
+. relational completeness
+. relational database
+. relational DBMS
+. relational expression
+. relational model
+. relational operator
 . relationship
-$ relcon
-$ relvar
+. relcon
+. relvar
 $ relvar constraint
 $ relvar predicate
 * renaming
-$ repeating group
+* repeating group
 * restriction
 . reversible decomposition
 . RM/T
@@ -496,7 +496,7 @@ $ repeating group
 . RM/V2
 . row
 . row ID
-$ RVA
+. RVA
 
 . scalar
 $ second normal form
@@ -613,26 +613,26 @@ $ type error
 $ type generator
 $ type inheritance
 
-$ unary
-$ UNGROUP
-$ ungrouping
-$ UNION
-$ union
-$ union (set theory)
-$ union compatibility
-$ unique index
+. unary
+. UNGROUP
+* ungrouping
+. UNION
+* union
+. union compatibility
+. union (set theory)
+. unique index
 $ universal quantifier
-$ universal relation
-$ universal relvar
-$ UNWRAP
+. universal relation
+. universal relvar
+. UNWRAP
 $ unwrapping
 $ UPDATE
-$ update
-$ update anomaly
-$ update operator
-$ update propagation
-$ UPDATE rule
-$ user
+. UPDATE rule
+. update
+. update anomaly
+. update operator
+. update propagation
+. user
 
 $ value
 . VAR

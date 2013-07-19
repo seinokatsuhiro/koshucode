@@ -2,7 +2,7 @@
 **  
 **  INPUT
 **    DATA.k
-**    rename.k
+**    renaming.k
 **    
 
 |-- P2  /pno P1  /pname Nut  /col Red  /wt 12  /city London

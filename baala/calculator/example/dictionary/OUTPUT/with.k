@@ -35,6 +35,5 @@
 |-- TXY  /sy S3  /sx S5
 |-- TXY  /sy S2  /sx S5
 |-- TXY  /sy S1  /sx S5
-
 **  (25 judges)
 
