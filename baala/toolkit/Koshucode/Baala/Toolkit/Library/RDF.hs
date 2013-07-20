@@ -21,18 +21,18 @@ data RDFTupleType
       deriving (Show, Eq, Ord, Enum, Bounded)
 
 -- | Convert RDF graph to list of judges.
-judgesFromRdf :: (RDF g, StringValue v) => RDFTupleType -> g -> [Judge v]
+judgesFromRdf :: (RDF g, CString v) => RDFTupleType -> g -> [Judge v]
 judgesFromRdf k g = map (judgeFromTriple k) $ triplesOf g
 
 -- | Convert RDF triple to affirmed judge.
-judgeFromTriple :: (StringValue v) => RDFTupleType -> Triple -> Judge v
+judgeFromTriple :: (CString v) => RDFTupleType -> Triple -> Judge v
 judgeFromTriple RDFTuple2 (Triple s p o) =
     Judge True (nodeString p) [("/s", the s), ("/o", the o)]
 judgeFromTriple RDFTuple3 (Triple s p o) =
     Judge True "RDF" [("/s", the s), ("/p", the p), ("/o", the o)]
 
-the :: (StringValue v) => Node -> v
-the = stringValue . nodeString
+the :: (CString v) => Node -> v
+the = putString . nodeString
 
 nodeString :: Node -> String
 nodeString = T.unpack . nodeText

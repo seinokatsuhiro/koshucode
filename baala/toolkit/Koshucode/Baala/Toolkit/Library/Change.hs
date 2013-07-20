@@ -40,7 +40,7 @@ minusInput inputA inputB =
        putStrLn ""
        putJudges js
 
-minusInputJudge :: Input -> Input -> IO ([Judge Val])
+minusInputJudge :: Input -> Input -> IO ([Judge VContent])
 minusInputJudge inputA inputB =
     do [textA, textB] <- readInputs [inputA, inputB]
        return $ readJudge textA `minusJudge` readJudge textB

@@ -11,7 +11,7 @@ import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Content
 import Koshucode.Baala.Base.Prelude
 
-import Koshucode.Baala.Vanilla.Value.Val
+import Koshucode.Baala.Vanilla.Value.Content
 
 
 
@@ -26,7 +26,7 @@ import Koshucode.Baala.Vanilla.Value.Val
 
 -}
 
-copLogic :: [Named (ContentOp Val)]
+copLogic :: [Named (ContentOp VContent)]
 copLogic =
  [ namedEager  "not"  logiNot
  , namedEager  "and"  logiAnd
@@ -35,23 +35,23 @@ copLogic =
  , namedEager  "<=="  logiIf
  ]
 
-logi :: (Bool -> Bool -> Bool) -> [Val] -> AbOr Val
-logi p [Boolv x, Boolv y] = Right . boolValue $ x `p` y
+logi :: (Bool -> Bool -> Bool) -> [VContent] -> AbOr VContent
+logi p [VBool x, VBool y] = Right . putBool $ x `p` y
 logi _ _ = Left $ AbortUndefined "not boolean"
 
-logiAnd :: [Val] -> AbOr Val
+logiAnd :: [VContent] -> AbOr VContent
 logiAnd = logi (&&)
 
-logiOr :: [Val] -> AbOr Val
+logiOr :: [VContent] -> AbOr VContent
 logiOr = logi (||)
 
-logiIf :: [Val] -> AbOr Val
+logiIf :: [VContent] -> AbOr VContent
 logiIf = logi $ \x y -> x || not y
 
-logiImply :: [Val] -> AbOr Val
+logiImply :: [VContent] -> AbOr VContent
 logiImply = logi $ \x y -> not x || y
 
-logiNot :: [Val] -> AbOr Val
-logiNot [Boolv x] = Right . boolValue $ not x
+logiNot :: [VContent] -> AbOr VContent
+logiNot [VBool x] = Right . putBool $ not x
 logiNot _ = Left $ AbortUndefined "not boolean"
 

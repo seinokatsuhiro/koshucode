@@ -18,17 +18,17 @@ import qualified Koshucode.Baala.Minimal as Mini
 
 -- ----------------------  maybe
 
-relopMaybe :: Kit.Relop Val
+relopMaybe :: Kit.Relop VContent
 relopMaybe use = Right $ relmapMaybe use
 
-relmapMaybe :: (Ord v, Nil v) => Kit.OpUse v -> Kit.Relmap v
+relmapMaybe :: (Ord v, CNil v) => Kit.OpUse v -> Kit.Relmap v
 relmapMaybe use = Kit.relmapConfl use "maybe" sub ms where
     ms = Kit.opSubmap use
     sub [r2] r1 = relMaybe r1 r2
     sub _ _     = undefined
 
 -- | like SQL's left join
-relMaybe :: (Ord v, Nil v) => Rel v -> AbMap (Rel v)
+relMaybe :: (Ord v, CNil v) => Rel v -> AbMap (Rel v)
 relMaybe r1 r2 = Right $ Rel h3 b3 where
     Rel h1 args1 = r1
     Rel h2 args2 = r2
@@ -53,11 +53,11 @@ relMaybe r1 r2 = Right $ Rel h3 b3 where
 
 -- ----------------------  maybe-both
 
-relopMaybeBoth :: Kit.Relop Val
+relopMaybeBoth :: Kit.Relop VContent
 relopMaybeBoth use = Right $ relmapMaybeBoth use
 
 -- | like SQL's full join
-relmapMaybeBoth :: (Ord v, Nil v) => Kit.OpUse v -> Kit.Relmap v
+relmapMaybeBoth :: (Ord v, CNil v) => Kit.OpUse v -> Kit.Relmap v
 relmapMaybeBoth use = Kit.relmapConfl use "mmaybe" sub ms where
     ms = Kit.opSubmap use
     sub [r2] r1 = do r12 <- relMaybe r1 r2
@@ -69,19 +69,19 @@ relmapMaybeBoth use = Kit.relmapConfl use "mmaybe" sub ms where
 
 -- ----------------------  hang
 
-relopHang :: Kit.Relop Val
+relopHang :: Kit.Relop VContent
 relopHang use = do
   n <- Mini.getTerm use "-term"
   Right $ relmapHang use n
 
-relmapHang :: (Ord v, RelValue v) => OpUse v -> String -> Relmap v
+relmapHang :: (Ord v, CRel v) => OpUse v -> String -> Relmap v
 relmapHang use n = Kit.relmapConfl use "hang" sub ms where
     ms = Kit.opSubmap use
     sub [r2] r1 = relHang n r2 r1
     sub _ _     = undefined
 
 -- | Hanging relation, like grouping.
-relHang :: (Ord v, RelValue v) => String -> Rel v -> AbMap (Rel v)
+relHang :: (Ord v, CRel v) => String -> Rel v -> AbMap (Rel v)
 relHang n r2 r1 = Right $ Rel h3 b3 where
     Rel h1 args1 = r1
     Rel h2 args2 = r2
@@ -97,6 +97,6 @@ relHang n r2 r1 = Right $ Rel h3 b3 where
     h3 = Relhead $ Nest n (headTerms h2) : (headTerms h1)
     b3 = map step args1
     step arg1 = case Kit.lookupMap (Kit.possPick share1 arg1) m2 of
-                  Just args2' -> (relValue $ Rel h2 args2') : arg1
+                  Just args2' -> (putRel $ Rel h2 args2') : arg1
                   Nothing     -> []
 

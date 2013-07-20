@@ -126,7 +126,7 @@ readXmlRdf path = do
   let rdf = xmlParser txt
   return $ RDF.fromEither rdf
 
-writeJudges :: [Judge Val] -> IO ()
+writeJudges :: [Judge VContent] -> IO ()
 writeJudges js = print $ docv js
 
 

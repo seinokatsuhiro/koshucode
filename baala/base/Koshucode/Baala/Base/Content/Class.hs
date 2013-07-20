@@ -2,23 +2,23 @@
 
 module Koshucode.Baala.Base.Content.Class
 (
--- * Primitive content
-  PrimitiveContent (),
+  -- * Primitive content
+  PrimContent (),
 
--- * Haskell data
-  BoolValue (..),
-  IntValue (..),
-  StringValue (..),
-  ListValue (..),
+  -- * Haskell data
+  CBool (..),
+  CInt (..),
+  CString (..),
+  CList (..),
 
--- * Koshu data
-  Nil (..),
-  SetValue (..),
-  TermsetValue (..),
-  RelValue (..),
+  -- * Koshu data
+  CNil (..),
+  CSet (..),
+  CTermset (..),
+  CRel (..),
 
--- * Convinient class
-  Value (..),
+  -- * Convinient class
+  CContent (..),
 ) where
 
 import Koshucode.Baala.Base.Prelude
@@ -28,60 +28,60 @@ import Koshucode.Baala.Base.Data
 
 -- ----------------------  Primitive content
 
-class PrimitiveContent a
+class PrimContent a
 
 
 
 -- ----------------------  Haskell built-in data
 
-class (PrimitiveContent v) => BoolValue v where
-    boolValue   :: Bool -> v
-    isBoolValue :: v -> Bool
+class (PrimContent v) => CBool v where
+    putBool    ::   Bool -> v
+    isBool     ::      v -> Bool
 
-class (PrimitiveContent v) => IntValue v where
-    intValue   :: Int -> v
-    isIntValue :: v -> Bool
+class (PrimContent v) => CInt v where
+    putInt     ::    Int -> v
+    isInt      ::      v -> Bool
 
-class (PrimitiveContent v) => StringValue v where
-    stringValue    :: String -> v
-    isStringValue  :: v -> Bool
-    theStringValue :: v -> String
+class (PrimContent v) => CString v where
+    putString  :: String -> v
+    isString   ::      v -> Bool
+    getString  ::      v -> String
 
-class (PrimitiveContent v) => ListValue v where
-    listValue    :: [v] -> v
-    isListValue  :: v -> Bool
-    theListValue :: v -> [v]
+class (PrimContent v) => CList v where
+    putList    ::    [v] -> v
+    isList     ::      v -> Bool
+    getList    ::      v -> [v]
 
 
 
 -- ----------------------  Data in koshucode
 
 {-| Types that can be nil -}
-class (PrimitiveContent v) => Nil v where
-    nil   :: v
-    isNil :: v -> Bool
+class (PrimContent v) => CNil v where
+    nil         ::          v
+    isNil       ::          v -> Bool
 
-class (PrimitiveContent v) => SetValue v where
-    setValue   :: [v] -> v
-    isSetValue :: v -> Bool
+class (PrimContent v) => CSet v where
+    putSet      ::        [v] -> v
+    isSet       ::          v -> Bool
 
-class (PrimitiveContent v) => TermsetValue v where
-    termsetValue   :: [Named v] -> v
-    isTermsetValue :: v -> Bool
+class (PrimContent v) => CTermset v where
+    putTermset  :: [Named v] -> v
+    isTermset   ::         v -> Bool
 
-class (PrimitiveContent v) => RelValue v where
-    relValue    :: Rel v -> v
-    theRelValue :: v -> Rel v
-    isRelValue  :: v -> Bool
+class (PrimContent v) => CRel v where
+    putRel      ::     Rel v -> v
+    getRel      ::         v -> Rel v
+    isRel       ::         v -> Bool
 
 
 
 -- ----------------------  Convinient class
 
-class (Ord v, Pretty v, Nil v,
-       BoolValue v, StringValue v, IntValue v,
-       ListValue v, SetValue v, TermsetValue v,
-       RelValue v) => Value v where
+class (Ord v, Pretty v, CNil v,
+       CBool v, CString v, CInt v,
+       CList v, CSet v, CTermset v,
+       CRel v) => CContent v where
     appendContent :: v -> v -> v
     joinContent :: [v] -> v
     joinContent = foldr appendContent nil

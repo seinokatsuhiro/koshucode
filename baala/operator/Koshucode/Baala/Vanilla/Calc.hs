@@ -26,14 +26,14 @@ import Koshucode.Baala.Minimal.OpKit as Kit
 makeCalc
     :: Relhead    -- ^ Heading of relation
     -> TokenTree  -- ^ Expression
-    -> Calc Val   -- ^ Calculator
+    -> Calc VContent   -- ^ Calculator
 makeCalc h = calc h . vanillaBinary
 
 -- | Prepare named calculators
 makeHeadCalcs
     :: Relhead                -- ^ Heading of relation
     -> [TokenTree]            -- ^ List of names and expressions
-    -> (Relhead, [Calc Val])  -- ^ Heading of expressions and its calculators
+    -> (Relhead, [Calc VContent])  -- ^ Heading of expressions and its calculators
 makeHeadCalcs head1 tree1 = (Relhead head2, calc2) where
     u (Right ps)   = unzip ps
     u (Left _)     = error $ "expect name-expr pairs" ++ show tree1
@@ -41,7 +41,7 @@ makeHeadCalcs head1 tree1 = (Relhead head2, calc2) where
     head2          = map Term names2
     calc2          = map (calc head1) trees2
 
-calc :: Relhead -> TokenTree -> Calc Val
+calc :: Relhead -> TokenTree -> Calc VContent
 calc h = crop calcRipen . mapPosition h
 
 mapPosition :: Relhead -> TokenTree -> TokenTree

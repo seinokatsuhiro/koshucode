@@ -22,7 +22,7 @@ import Koshucode.Baala.Base.Relmap.Relmap
 
 {-| Calculate 'Relmap' for 'Rel'. -}
 runRelmapDataset
-    :: (Ord v, Nil v)
+    :: (Ord v, CNil v)
     => Dataset v        -- ^ Judges read from @source@ operator
     -> Relmap v         -- ^ Mapping from 'Rel' to 'Rel'
     -> Rel v            -- ^ Input relation
@@ -30,7 +30,7 @@ runRelmapDataset
 runRelmapDataset ds = runRelmapSelector $ selectRelation ds
 
 runRelmapSelector
-    :: (Ord v, Nil v)
+    :: (Ord v, CNil v)
     => (Relsign -> [String] -> Rel v)  -- ^ Relation selector
     -> Relmap v          -- ^ Mapping from 'Rel' to 'Rel'
     -> Rel v             -- ^ Input relation
@@ -53,7 +53,7 @@ runRelmapSelector select = (<$>) where
 
 {-| Calculate assertion list. -}
 runAssertJudges
-    :: (Ord v, Nil v)
+    :: (Ord v, CNil v)
     => [Assert v]        -- ^ Assertion list
     -> [Judge v]         -- ^ Input judges
     -> AbortOr [Judge v] -- ^ Output judges
@@ -61,7 +61,7 @@ runAssertJudges as = runAssertDataset as . dataset
 
 {-| Calculate assertion list. -}
 runAssertDataset ::
-    (Ord v, Nil v) => [Assert v] -> Dataset v -> AbortOr [Judge v]
+    (Ord v, CNil v) => [Assert v] -> Dataset v -> AbortOr [Judge v]
 runAssertDataset as ds = judges where
     judges = do
       js <- mapM each as

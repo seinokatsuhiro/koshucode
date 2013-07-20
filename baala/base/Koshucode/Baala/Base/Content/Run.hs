@@ -68,7 +68,7 @@ data Content c
 type PosContent c = Relhead -> Content c
 
 formContent
-    :: (Value c)
+    :: (CContent c)
     => (String -> Maybe (ContentOp c))
     -> [SourceLine]
     -> TokenTree
@@ -100,7 +100,7 @@ posContent cont h = pos cont where
     pos (ContApp f cs)  = ContApp f $ map pos cs
     pos c@(ContLit _)   = c
 
-runContent :: (ListValue c, RelValue c) => Content c -> [c] -> AbOr c
+runContent :: (CList c, CRel c) => Content c -> [c] -> AbOr c
 runContent cont arg = run cont where
     run (ContLit c)      =   Right c
     run (ContTerm _ [p]) =   Right $ arg !! p
@@ -115,12 +115,12 @@ runContent cont arg = run cont where
     term (-1:_) _ = Left $ AbortLookup ""
     term (p:ps) arg2 =
         let c = arg2 !! p
-        in if isRelValue c
-           then rel ps $ theRelValue c
+        in if isRel c
+           then rel ps $ getRel c
            else Right c
 
     rel ps (Rel _ args) = do args' <- mapM (term ps) args
-                             Right . listValue $ args'
+                             Right . putList $ args'
 
 {-
 let op _ = Right $ CopEager "+" f where f xs = Right $ foldr (+) 0 xs

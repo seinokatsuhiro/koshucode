@@ -35,12 +35,12 @@ data SectionSource c = SectionSource
 
 -- ----------------------
 
-runFiles :: (Value v) => SectionSource v -> IO ()
+runFiles :: (CContent v) => SectionSource v -> IO ()
 runFiles = hRunFiles stdout
 
 {-| Read and union sections from files, and run the section. -}
 hRunFiles
-    :: (Value v)
+    :: (CContent v)
     => Handle          -- ^ File handle
     -> SectionSource v -- ^ Section source code
     -> IO ()
@@ -66,11 +66,11 @@ concatMM (s:ss) = do s'  <- s
 
 -- ---------------------- Calculation list
 
-runCalc :: (Value v) => SectionSource v -> IO ()
+runCalc :: (CContent v) => SectionSource v -> IO ()
 runCalc = runCalcTo ""
 
 runCalcTo
-    :: (Value v)
+    :: (CContent v)
     => FilePath          -- ^ Output path prefix
     -> SectionSource v   -- ^ Section
     -> IO ()             -- ^
@@ -78,18 +78,18 @@ runCalcTo dir sec =
     do union <- readSec sec
        abortIO (runCalcSec dir $ rootSection sec) union
 
-runCalcSec :: (Value v) => String -> Kit.Section v -> Kit.Section v -> IO ()
+runCalcSec :: (CContent v) => String -> Kit.Section v -> Kit.Section v -> IO ()
 runCalcSec dir root sec =
     do let js = Kit.sectionJudge sec
        mapM_ (runCalcJudge dir root) js
        return ()
 
-runCalcJudge :: (Value v) => String -> Kit.Section v -> Judge v -> IO ()
+runCalcJudge :: (CContent v) => String -> Kit.Section v -> Judge v -> IO ()
 runCalcJudge dir root (Judge True "KOSHU-CALC" xs) =
     case theContents ["/input", "/output"] xs of
       Just [input, output] ->
           do let inputFiles = theStrings input
-                 outputFile = dir ++ Kit.theStringValue output
+                 outputFile = dir ++ Kit.getString output
              putStrLn $ "**  Output to " ++ outputFile
              mkdir outputFile
              withFile outputFile WriteMode
@@ -108,16 +108,16 @@ mkdir path =
 
 -- ----------------------  The
 
-theContent :: (Value c) => String -> [Kit.Named c] -> Maybe c
+theContent :: (CContent c) => String -> [Kit.Named c] -> Maybe c
 theContent = lookup
 
-theContents :: (Value c) => [String] -> [Kit.Named c] -> Maybe [c]
+theContents :: (CContent c) => [String] -> [Kit.Named c] -> Maybe [c]
 theContents ns termset = mapM (`theContent` termset) ns
 
-theStrings :: (Value c) => c -> [String]
-theStrings c | Kit.isStringValue c = [Kit.theStringValue c]
-theStrings c | Kit.isListValue c   = map Kit.theStringValue
-                                     $ Kit.theListValue c
+theStrings :: (CContent c) => c -> [String]
+theStrings c | Kit.isString c = [Kit.getString c]
+theStrings c | Kit.isList   c = map Kit.getString
+                                $ Kit.getList c
 theStrings _ = []
 
 
@@ -125,7 +125,7 @@ theStrings _ = []
 -- ----------------------  Read
 
 readSec
-    :: (Value v)
+    :: (CContent v)
     => SectionSource v               -- ^ Section
     -> IO (AbortOr (Kit.Section v))  -- ^ Union of sections
 readSec sec =

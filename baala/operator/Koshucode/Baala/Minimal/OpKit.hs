@@ -15,16 +15,16 @@ module Koshucode.Baala.Minimal.OpKit
   Abort.bug,
 
   -- * Content
-  Content.IntValue,
-  Content.Nil,
-  Content.RelValue,
-  Content.StringValue,
-  Content.boolValue,
-  Content.intValue,
-  Content.listValue,
+  Content.CInt,
+  Content.CNil,
+  Content.CRel,
+  Content.CString,
   Content.nil,
-  Content.relValue,
-  Content.stringValue,
+  Content.putBool,
+  Content.putInt,
+  Content.putList,
+  Content.putRel,
+  Content.putString,
 
   -- * Data
   Data.Rel (..),

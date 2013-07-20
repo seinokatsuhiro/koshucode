@@ -17,8 +17,8 @@ import qualified System.Directory as Dir
 
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Base.Content.Class
-import Koshucode.Baala.Vanilla.Value.Val
+import Koshucode.Baala.Base.Content
+import Koshucode.Baala.Vanilla.Value.Content
 
 import qualified Koshucode.Baala.Base.Section  as Kit
 import qualified Koshucode.Baala.Minimal.OpKit as Kit
@@ -95,14 +95,14 @@ reportDir  = "REGRESS/report/"
 -- ----------------------  Main
 
 {-| The main function for @koshu-regress@ command. -}
-koshuRegressMain :: (Value v) => [Kit.OpImplement v] -> IO ()
+koshuRegressMain :: (CContent v) => [Kit.OpImplement v] -> IO ()
 koshuRegressMain relmaps =
   let cons = Kit.relmapCons relmaps
       root = Kit.makeEmptySection cons
   in koshuRegressMain' root =<< prelude
 
 koshuRegressMain'
-    :: (Value v) => Kit.Section v -> (String, [String]) -> IO ()
+    :: (CContent v) => Kit.Section v -> (String, [String]) -> IO ()
 koshuRegressMain' root (_, argv) =
     case getOpt Permute koshuOptions argv of
       (opts, files, [])
@@ -118,10 +118,10 @@ koshuRegressMain' root (_, argv) =
                 sec = SectionSource root [] files
       (_, _, errs) -> putFailure $ concat errs ++ usage
 
-regLast :: (Value v) => SectionSource v -> IO ()
+regLast :: (CContent v) => SectionSource v -> IO ()
 regLast sec = runCalcTo lastDir sec
 
-regLastReport :: (Value v) => SectionSource v -> IO ()
+regLastReport :: (CContent v) => SectionSource v -> IO ()
 regLastReport sec =
     do regLast sec
        regReport sec
@@ -144,11 +144,11 @@ regClean =
 -- ----------------------  Reporting
 
 -- report for each cases.
-reportJudge :: [Named Val] -> Judge Val
+reportJudge :: [Named VContent] -> Judge VContent
 reportJudge = Judge True "KOSHU-REGRESS-REPORT"
 
 -- report for all cases.
-summaryJudge :: [Named Val] -> Judge Val
+summaryJudge :: [Named VContent] -> Judge VContent
 summaryJudge = Judge True "KOSHU-REGRESS-SUMMARY"
 
 reportHead :: CommentDoc
@@ -162,7 +162,7 @@ reportFoot msg = foot where
     foot = putStr $ unlines [ "" , comm , comm ++ msg , comm ]
     comm = "**  "
 
-regReport :: (Value v) => SectionSource v -> IO ()
+regReport :: (CContent v) => SectionSource v -> IO ()
 regReport sec =
     do putStrLn emacsModeComment
        putStr . unlines $ texts reportHead
@@ -172,7 +172,7 @@ regReport sec =
          Left _     -> putStrLn "error"
          Right sec2 -> regReportBody sec2
 
-regReportBody :: (Value v) => Kit.Section v -> IO ()
+regReportBody :: (CContent v) => Kit.Section v -> IO ()
 regReportBody sec =
     do let js = Kit.sectionJudge sec
            fs = mapMaybe outputFile js
@@ -189,11 +189,11 @@ regReportBody sec =
          [] -> reportFoot $ "Matched"
          _  -> reportFoot $ "Please check report files in " ++ reportDir
 
-outputFile :: (Value v) => Judge v -> Maybe String
+outputFile :: (CContent v) => Judge v -> Maybe String
 outputFile jud =
     do (Judge _ _ xs) <- judgeOf "KOSHU-CALC" jud
        output <- theContent "/output" xs
-       Just $ theStringValue output
+       Just $ getString output
 
 reportFile :: String -> IO Bool
 reportFile file =
@@ -208,8 +208,8 @@ reportFile file =
 reportMatch :: String -> IO Bool
 reportMatch file =
     do putDoc $ reportJudge
-         [ ("/result" , boolValue True)
-         , ("/output" , stringValue file) ]
+         [ ("/result" , putBool True)
+         , ("/output" , putString file) ]
        return True
 
 reportUnmatch
@@ -217,8 +217,8 @@ reportUnmatch
        String -> [Judge v] -> (Int, Int) -> IO Bool
 reportUnmatch file js (add, del) =
     do putDoc $ reportJudge
-         [ ("/result" , boolValue False)
-         , ("/output" , stringValue file) ]
+         [ ("/result" , putBool False)
+         , ("/output" , putString file) ]
        putStrLn $ "    **  " ++ reportCount add del
        let path = reportDir ++ file
        mkdir path
@@ -248,8 +248,8 @@ reportCount = message where
 -- ----------------------  Utility
 
 {-| Length of list as an integer content. -}
-theLength :: (IntValue c) => [a] -> c
-theLength = intValue . length
+theLength :: (CInt c) => [a] -> c
+theLength = putInt . length
 
 putDoc :: (Pretty p) => p -> IO ()
 putDoc = print . doc

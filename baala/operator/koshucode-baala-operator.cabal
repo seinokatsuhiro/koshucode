@@ -74,8 +74,8 @@ library
         Koshucode.Baala.Vanilla.Relmap.Operand
         Koshucode.Baala.Vanilla.Relmap.Unary
 
+        Koshucode.Baala.Vanilla.Value.Content
         Koshucode.Baala.Vanilla.Value.Relval
-        Koshucode.Baala.Vanilla.Value.Val
 
   -- Modules included in this library but not exported.
   --other-modules:       

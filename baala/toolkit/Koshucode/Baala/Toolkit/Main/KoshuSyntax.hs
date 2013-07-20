@@ -14,6 +14,7 @@ import System.Console.GetOpt
 
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
+import Koshucode.Baala.Base.Content
 import Koshucode.Baala.Base.Section as Sec
 import Koshucode.Baala.Base.Syntax  as Syn
 import Koshucode.Baala.Vanilla
@@ -110,10 +111,10 @@ putClause p@(cn, c) =
          ls  = clauseLines src
      foldM_ (putToken cn) 1 ls
 
-clauseJudge :: (Int, Clause) -> Judge Val
+clauseJudge :: (Int, Clause) -> Judge VContent
 clauseJudge (cn, c) = Judge True "CLAUSE" args where
-    args = [ ("/clause-seq"  , intv cn)
-           , ("/clause-type" , stringv $ clauseTypeText c)]
+    args = [ ("/clause-seq"  , putInt cn)
+           , ("/clause-type" , putString $ clauseTypeText c)]
 
 putToken :: Int -> Int -> SourceLine -> IO (Int)
 putToken cn tn (SourceLine ln line toks) =
@@ -122,12 +123,12 @@ putToken cn tn (SourceLine ln line toks) =
      print $ docv $ map (tokenJudge cn) toks
      return $ tn + length toks
 
-tokenJudge :: Int -> Token -> Judge Val
+tokenJudge :: Int -> Token -> Judge VContent
 tokenJudge cn t = Judge True "TOKEN" xs where
-    xs = [ ("/clause-seq"   , intv cn)
-         , ("/token-seq"    , intv    $ Syn.tokenNumber t)
-         , ("/token-type"   , stringv $ Syn.tokenTypeText t)
-         , ("/token-content", stringv $ Syn.tokenContent t) ]
+    xs = [ ("/clause-seq"   , putInt cn)
+         , ("/token-seq"    , putInt    $ Syn.tokenNumber t)
+         , ("/token-type"   , putString $ Syn.tokenTypeText t)
+         , ("/token-content", putString $ Syn.tokenContent t) ]
 
 
 
@@ -146,12 +147,12 @@ dumpTokenText (n, ys) (SourceLine l line ts) = (n + length ts, ys ++ xs) where
     xs = h ++ (map dump ts)
     dump p = show $ doc $ dumpTokenJudge l p
 
-dumpTokenJudge :: Int -> Token -> Judge Val
+dumpTokenJudge :: Int -> Token -> Judge VContent
 dumpTokenJudge l t = Judge True "TOKEN" xs where
-    xs = [ ("/line"         , intv l)
-         , ("/token-seq"    , intv    $ Syn.tokenNumber t)
-         , ("/token-type"   , stringv $ Syn.tokenTypeText t)
-         , ("/token-content", stringv $ Syn.tokenContent  t) ]
+    xs = [ ("/line"         , putInt l)
+         , ("/token-seq"    , putInt    $ Syn.tokenNumber t)
+         , ("/token-type"   , putString $ Syn.tokenTypeText t)
+         , ("/token-content", putString $ Syn.tokenContent  t) ]
 
 
 

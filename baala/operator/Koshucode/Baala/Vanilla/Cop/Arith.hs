@@ -12,20 +12,20 @@ import Koshucode.Baala.Base.Content
 import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Syntax
 
-import Koshucode.Baala.Vanilla.Value.Val
+import Koshucode.Baala.Vanilla.Value.Content
 
 
 
 -- ----------------------
 
-litInt :: [TokenTree] -> AbOr Val
+litInt :: [TokenTree] -> AbOr VContent
 litInt [TreeL (TWord _ _ n)] = readIntVal n
 litInt xs = Left $ AbortNotNumber (show xs)
 
-readIntVal :: String -> AbOr Val
+readIntVal :: String -> AbOr VContent
 readIntVal s =
     case reads s of
-      [(n, "")] -> Right $ Intv n
+      [(n, "")] -> Right $ VInt n
       _         -> Left $ AbortNotNumber s
 
 readInt :: String -> AbOr Int
@@ -50,7 +50,7 @@ readInt s =
 
 -}
 
-copArith :: [Named (ContentOp Val)]
+copArith :: [Named (ContentOp VContent)]
 copArith =
  [ namedEager  "+"    arithPlus
  , namedEager  "*"    arithTimes
@@ -59,41 +59,41 @@ copArith =
  , namedLit    "int"  litInt
  ]
 
-arithInt :: Val -> AbOr Int
-arithInt (Intv    n) = Right n
-arithInt (Stringv n) = Right =<< readInt n
+arithInt :: VContent -> AbOr Int
+arithInt (VInt    n) = Right n
+arithInt (VString n) = Right =<< readInt n
 arithInt x = Left $ AbortNotNumber (show x)
 
-arithPlus :: [Val] -> AbOr Val
-arithPlus xs = fmap Intv $ loop xs where
+arithPlus :: [VContent] -> AbOr VContent
+arithPlus xs = fmap VInt $ loop xs where
     loop [] = Right 0
     loop (n : m) = do n' <- arithInt n
                       m' <- loop m
                       Right $ n' + m'
 
-arithTimes :: [Val] -> AbOr Val
-arithTimes xs = fmap Intv $ loop xs where
+arithTimes :: [VContent] -> AbOr VContent
+arithTimes xs = fmap VInt $ loop xs where
     loop [] = Right 1
     loop (n : m) = do n' <- arithInt n
                       m' <- loop m
                       Right $ n' * m'
 
-arithMinus :: [Val] -> AbOr Val
+arithMinus :: [VContent] -> AbOr VContent
 arithMinus [a]    = do a' <- arithInt a
-                       Right . Intv $ - a'
+                       Right . VInt $ - a'
 arithMinus [a, b] = do a' <- arithInt a
                        b' <- arithInt b
-                       Right . Intv $ a' - b'
+                       Right . VInt $ a' - b'
 arithMinus _ = Left $ AbortMalformedOperand "-"
 
 
-arithAbs :: [Val] -> AbOr Val
-arithAbs [Listv cs] = Right . Listv =<< mapM arithAbs1 cs
+arithAbs :: [VContent] -> AbOr VContent
+arithAbs [VList cs] = Right . VList =<< mapM arithAbs1 cs
 arithAbs [c] = arithAbs1 c
 arithAbs _ = Left $ AbortLookup ""
 
-arithAbs1 :: Val -> AbOr Val
-arithAbs1 (Intv n) = Right . Intv $ abs n
+arithAbs1 :: VContent -> AbOr VContent
+arithAbs1 (VInt n) = Right . VInt $ abs n
 arithAbs1 _ = Left $ AbortLookup ""
 
 -- let tree = singleToken . tokenTrees . tokens

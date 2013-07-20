@@ -33,9 +33,9 @@ readInput (File p) = readFile p
 readInputs :: [Input] -> IO [String]
 readInputs = mapM readInput
 
-readJudge :: String -> [Judge Val]
+readJudge :: String -> [Judge VContent]
 readJudge s =
-    let root = emptySection :: Section Val
+    let root = emptySection :: Section VContent
     in case sectionRead root s of
          Right sec -> sectionJudge sec
          Left _    -> []

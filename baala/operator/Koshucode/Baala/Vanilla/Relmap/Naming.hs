@@ -21,7 +21,7 @@ import qualified Data.List as List
 
 -- ----------------------  prefix
 
-relopPrefix :: Kit.Relop Val
+relopPrefix :: Kit.Relop VContent
 relopPrefix use = do
   pre <- Mini.getTerm use "-prefix"
   ns  <- Mini.getTerms use "-term"
@@ -49,7 +49,7 @@ prefixName _ _ = undefined
 
 -- ----------------------  unprefix
 
-relopUnprefix :: Kit.Relop Val
+relopUnprefix :: Kit.Relop VContent
 relopUnprefix use = do
   pre <- Mini.getTerm use "-prefix"
   Right $ relmapUnprefix use pre
@@ -75,7 +75,7 @@ unprefixName pre n =
 
 -- ----------------------  prefix-change
 
-relopPrefixChange :: Kit.Relop Val
+relopPrefixChange :: Kit.Relop VContent
 relopPrefixChange use = do
   new <- Mini.getTerm use "-new"
   old <- Mini.getTerm use "-old"

@@ -44,9 +44,9 @@ addJudge (Judge True sign xs) (Dataset ds1) = Dataset ds2 where
 addJudge (Judge False _ _) _ = undefined
 
 -- | Select relation from dataset.
---   If a giving term is not in judges, 'Nil' sign is used.
+--   If a giving term is not in judges, 'CNil' sign is used.
 selectRelation
-    :: (Ord v, Nil v)
+    :: (Ord v, CNil v)
     => Dataset v   -- ^ Dataset
     -> Relsign     -- ^ Relsign to select
     -> [String]    -- ^ List of term names
@@ -57,7 +57,7 @@ selectRelation (Dataset m) sign ns = Rel h1 b1 where
       Just args -> unique $ map (subarg ns) args
       Nothing   -> []
 
-subarg :: (Nil v) => [String] -> Relarg v -> [v]
+subarg :: (CNil v) => [String] -> Relarg v -> [v]
 subarg ns arg = map pick ns where
     pick n = Maybe.fromMaybe nil $ lookup n arg
 

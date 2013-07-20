@@ -58,33 +58,33 @@ type LiteralizeString a = LiteralizeFrom String a
 
 {-| Transform 'TokenTree' into
     internal form of term content. -}
-litContent :: (Value v) => LiteralizeTree v
+litContent :: (CContent v) => LiteralizeTree v
 litContent src = lit where
     -- leaf
     lit (TreeL (TWord _ q w))
-        | q >  0   =   Right . stringValue $ w  -- quoted text
+        | q >  0   =   Right . putString $ w  -- quoted text
         | q == 0   =   case w of
           '#' : w' ->  hash w'
           "()"     ->  Right nil
-          _        ->  Right . stringValue $ w
+          _        ->  Right . putString $ w
 
     -- branch
     lit (TreeB t xs) = case t of
           1        ->  paren xs
-          2        ->  Right . listValue    =<< litList    src xs
-          3        ->  Right . setValue     =<< litList    src xs
-          4        ->  Right . termsetValue =<< litTermset src xs
-          5        ->  Right . relValue     =<< litRel     src xs
+          2        ->  Right . putList    =<< litList    src xs
+          3        ->  Right . putSet     =<< litList    src xs
+          4        ->  Right . putTermset =<< litTermset src xs
+          5        ->  Right . putRel     =<< litRel     src xs
           _        ->  bug
 
     -- unknown content
     lit x          =   Left (AbortUnknownContent (show x), src)
 
     -- hash word
-    hash "true"    =   Right . boolValue $ True
-    hash "false"   =   Right . boolValue $ False
+    hash "true"    =   Right . putBool $ True
+    hash "false"   =   Right . putBool $ False
     hash w         =   case hashWord w of
-                         Just w2 -> Right . stringValue $ w2
+                         Just w2 -> Right . putString $ w2
                          Nothing -> Left (AbortUnknownSymbol ('#' : w), src)
 
     -- sequence of token trees
@@ -105,9 +105,9 @@ litContent src = lit where
 -- litString
 -- litNil
 
-litInt :: (IntValue v) => Literalize v
+litInt :: (CInt v) => Literalize v
 litInt src [TreeL (TWord _ 0 digits)] = 
-    Right . intValue =<< readInt src digits
+    Right . putInt =<< readInt src digits
 litInt src xs = Left (AbortNotNumber (show xs), src)
 
 readInt :: LiteralizeString Int
@@ -128,16 +128,16 @@ litFlatname src x = Left (AbortMissingTermName (show x), src)
 -- ----------------------  Complex data
 
 {-| Construct list of term contents. -}
-litList :: (Value v) => Literalize [v]
+litList :: (CContent v) => Literalize [v]
 litList src = mapM (litContent src)
 
 {-| Collect term name and content. -}
-litTermset :: (Value v) => Literalize [Named v]
+litTermset :: (CContent v) => Literalize [Named v]
 litTermset src xs = mapM lit =<< divideByName src xs where
     lit (n, c) = do c' <- litContent src c
                     Right (n, c')
 
-litRel :: (Value v) => Literalize (Rel v)
+litRel :: (CContent v) => Literalize (Rel v)
 litRel src cs =
     do let (h1 : b1) = divideByTokenTree "|" cs
        h2 <- mapM (litFlatname src) h1
@@ -168,7 +168,7 @@ divideByName src = nam where
 {-| Construct judge from token trees.
     Judges itself are not content type.
     It can be only used in the top-level of sections. -}
-litJudge :: (Value v) => Bool -> Relsign -> Literalize (Judge v)
+litJudge :: (CContent v) => Bool -> Relsign -> Literalize (Judge v)
 litJudge q s src xs =
   do xs' <- litTermset src xs
      Right $ Judge q s xs'

@@ -31,42 +31,42 @@ import qualified Koshucode.Baala.Minimal as Mini
 
 -- ----------------------  hold
 
-relopHold :: Kit.Relop Val
+relopHold :: Kit.Relop VContent
 relopHold use = do
   t <- Mini.getTree use "-term"
   c <- vanillaContent use t
   Right $ relmapHold use True c
 
-relmapHold :: OpUse Val -> Bool -> (PosContent Val) -> Relmap Val
+relmapHold :: OpUse VContent -> Bool -> (PosContent VContent) -> Relmap VContent
 relmapHold use b cont = Kit.relmapCalc use "hold" sub where
     sub _ r1 = relHold b cont r1
 
-relHold :: Bool -> (PosContent Val) -> Rel Val -> AbOr (Rel Val)
+relHold :: Bool -> (PosContent VContent) -> Rel VContent -> AbOr (Rel VContent)
 relHold b cont (Rel h1 b1) =
     do b2 <- filterM f b1
        Right $ Rel h1 b2
     where
       f arg = do c <- runContent (cont h1) arg
                  case c of
-                   Boolv b' -> Right $ b == b'
+                   VBool b' -> Right $ b == b'
                    _        -> Left $ AbortReqBoolean (show c)
 
 
 
 -- ----------------------  add
 
-relopAdd :: Kit.Relop Val
+relopAdd :: Kit.Relop VContent
 relopAdd use =
   do ts <- Mini.getTermTrees use "-term"
      cs <- vanillaNamedContents use ts
      Right $ relmapAdd use cs
 
-relmapAdd :: OpUse Val -> [Named (PosContent Val)] -> Relmap Val
+relmapAdd :: OpUse VContent -> [Named (PosContent VContent)] -> Relmap VContent
 relmapAdd use cs = Kit.relmapCalc use "add" sub where
     sub _ r1 = relAdd cs r1
 
 -- todo: shared term
-relAdd :: [Named (PosContent Val)] -> Rel Val -> AbOr (Rel Val)
+relAdd :: [Named (PosContent VContent)] -> Rel VContent -> AbOr (Rel VContent)
 relAdd cs (Rel h1 b1) =
     do let h2 = Kit.headFrom $ map fst cs
            h3 = Kit.mappend h2 h1
@@ -94,29 +94,29 @@ limit2 c ns _ (Rel h1 b1) = Right $ Rel h1 b2 where
 
 -- ----------------------  range
 
-relopRange :: Kit.Relop Val
+relopRange :: Kit.Relop VContent
 relopRange use = do
   term <- Mini.getTerm use "-term"
   low  <- Mini.getInt  use "-from"
   high <- Mini.getInt  use "-to"
   Right $ relmapRange use term low high
 
-relmapRange :: (IntValue v) => OpUse v -> String -> Int -> Int -> Relmap v
+relmapRange :: (CInt v) => OpUse v -> String -> Int -> Int -> Relmap v
 relmapRange use n low high = Kit.relmapCalc use "range" sub where
     sub _ r1 = relRange n low high r1
 
-relRange :: (IntValue v) => String -> Int -> Int -> AbMap (Rel v)
+relRange :: (CInt v) => String -> Int -> Int -> AbMap (Rel v)
 relRange n low high (Rel h1 b1) = Right $ Rel h2 b2 where
     h2   = Kit.mappend (Kit.headFrom [n]) h1
     b2   = concatMap g b1
-    ys   = map intValue [low .. high]
+    ys   = map putInt [low .. high]
     g xs = map (: xs) ys
 
 {-
-divide :: String -> Kit.Relmap Val
+divide :: String -> Kit.Relmap VContent
 divide ns2 = Kit.flow "divide" $ Kit.withP divide2 ns2
 
-divide2 :: [String] -> Rel Val -> Rel Val
+divide2 :: [String] -> Rel VContent -> Rel VContent
 divide2 ns2 (Rel h1 b1) = Rel h2 b2 where
     h2  = Kit.mappend (Kit.headFrom ns2) h1
     b2  = concatMap g b1
@@ -126,7 +126,7 @@ divide2 ns2 (Rel h1 b1) = Rel h2 b2 where
       | otherwise          = const []
 
     [_,_,x,y] = p
-    f the arg = if the y == intValue 0
+    f the arg = if the y == putInt 0
                 then []
                 else [binv quot (the x) (the y) :
                       binv rem  (the x) (the y) : arg]

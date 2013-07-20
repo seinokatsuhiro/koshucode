@@ -11,7 +11,7 @@ import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Content
 import Koshucode.Baala.Base.Prelude
 
-import Koshucode.Baala.Vanilla.Value.Val
+import Koshucode.Baala.Vanilla.Value.Content
 
 
 
@@ -31,7 +31,7 @@ import Koshucode.Baala.Vanilla.Value.Val
 
 -}
 
-copList :: [Named (ContentOp Val)]
+copList :: [Named (ContentOp VContent)]
 copList =
  [ namedEager  "list"     list
  , namedEager  "total"    listTotal
@@ -40,24 +40,24 @@ copList =
  , namedEager  "max"      listMax
  ]
 
-list :: [Val] -> AbOr Val
-list = Right . listValue
+list :: [VContent] -> AbOr VContent
+list = Right . putList
 
-listTotal :: [Val] -> AbOr Val
-listTotal [Listv xs] = Right . intValue $ sum (map toInt xs)
+listTotal :: [VContent] -> AbOr VContent
+listTotal [VList xs] = Right . putInt $ sum (map toInt xs)
 listTotal xs = Left $ AbortLookup (show xs)
 
-listMin :: [Val] -> AbOr Val
-listMin [Listv xs] = Right $ minimum xs
+listMin :: [VContent] -> AbOr VContent
+listMin [VList xs] = Right $ minimum xs
 listMin xs = Left $ AbortLookup (show xs)
 
-listMax :: [Val] -> AbOr Val
-listMax [Listv xs] = Right $ maximum xs
+listMax :: [VContent] -> AbOr VContent
+listMax [VList xs] = Right $ maximum xs
 listMax xs = Left $ AbortLookup (show xs)
 
-listSize :: [Val] -> AbOr Val
-listSize [Listv   xs]     = Right . intValue $ length xs
-listSize [Stringv xs]     = Right . intValue $ length xs
-listSize [Relv (Rel _ b)] = Right . intValue $ length b
+listSize :: [VContent] -> AbOr VContent
+listSize [VList   xs]     = Right . putInt $ length xs
+listSize [VString xs]     = Right . putInt $ length xs
+listSize [VRel (Rel _ b)] = Right . putInt $ length b
 listSize xs = Left $ AbortLookup (show xs)
 

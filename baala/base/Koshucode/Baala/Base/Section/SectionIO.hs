@@ -29,7 +29,7 @@ import Koshucode.Baala.Base.Section.Clause
 
 {-| Read section from text. -}
 sectionRead
-    :: (Value v)
+    :: (CContent v)
     => Section v   -- ^ Section that is same type to result section
     -> String      -- ^ Source text
     -> AbortOr (Section v)  -- ^ Result section from source text
@@ -39,7 +39,7 @@ sectionRead root src = sec where
 
 {-| Read section from file. -}
 sectionFile
-    :: (Value v)
+    :: (CContent v)
     => Section v    -- ^ Root section
     -> FilePath     -- ^ Path of section file
     -> IO (AbortOr (Section v)) -- ^ Result section
@@ -55,7 +55,7 @@ sectionFile root path =
     Output section has judges calculated
     from assertions in input section. -}
 runSection
-    :: (Value v)
+    :: (CContent v)
     => Section v           -- ^ Input section
     -> AbortOr (Section v) -- ^ Output section
 runSection sec =
@@ -65,9 +65,9 @@ runSection sec =
        Right $ sec { sectionJudge = output }
 
 {-| Run section and output judges. -}
-runSectionIO :: (Value v) => Section v -> IO ()
+runSectionIO :: (CContent v) => Section v -> IO ()
 runSectionIO = hRunSectionIO IO.stdout
 
-hRunSectionIO :: (Value v) => IO.Handle -> Section v -> IO ()
+hRunSectionIO :: (CContent v) => IO.Handle -> Section v -> IO ()
 hRunSectionIO h = abortIO (hPutJudges h . sectionJudge) . runSection
 

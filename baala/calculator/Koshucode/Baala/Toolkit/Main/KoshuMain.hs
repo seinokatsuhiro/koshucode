@@ -91,13 +91,13 @@ header = unlines
 {-| The main function for @koshu@ command.
     See 'Koshucode.Baala.Vanilla.Relmap.Implement.vanillaOperators'
     for default argument. -}
-koshuMain :: (Value v) => [Kit.OpImplement v] -> IO ()
+koshuMain :: (CContent v) => [Kit.OpImplement v] -> IO ()
 koshuMain relmaps =
   let cons = Kit.relmapCons relmaps
       root = Kit.makeEmptySection cons
   in koshuMain' root =<< prelude
 
-koshuMain' :: (Value v) => Kit.Section v -> (String, [String]) -> IO ()
+koshuMain' :: (CContent v) => Kit.Section v -> (String, [String]) -> IO ()
 koshuMain' root (_, argv) =
     case getOpt Permute koshuOptions argv of
       (opts, files, [])
@@ -113,7 +113,7 @@ koshuMain' root (_, argv) =
                 text = concatMap oneLiner opts
       (_, _, errs) -> putFailure $ concat errs
 
-runStdin :: Value c => SectionSource c -> IO ()
+runStdin :: CContent c => SectionSource c -> IO ()
 runStdin sec =
     do text <- getContents
        runFiles sec { textSections = text : textSections sec }
@@ -127,7 +127,7 @@ oneLiner _ = []
 
 -- ----------------------  Pretty printing
 
-prettySection :: (Value v) => SectionSource v -> IO ()
+prettySection :: (CContent v) => SectionSource v -> IO ()
 prettySection (SectionSource root _ files) =
     case files of
       [file] -> do md <- Kit.sectionFile root file
@@ -145,11 +145,11 @@ prettySection (SectionSource root _ files) =
 
 -- desc
 
--- desc :: (Value v) => [Kit.Assert v] -> IO ()
+-- desc :: (CContent v) => [Kit.Assert v] -> IO ()
 -- desc = putStrLn . fromJudges . concatMap info where
---     info :: (Value v) => Kit.Assert v -> [Judge v]
+--     info :: (CContent v) => Kit.Assert v -> [Judge v]
 --     info a = input a -- ++ output a
---     affirm s arg = fmap stringValue $ Judge True s arg
+--     affirm s arg = fmap putString $ Judge True s arg
 
 --     input (Kit.Assert _ _ r) = concatMap input2 $ Kit.relmapSourceList r
 --     input2 m = inputSign m : inputTerms m
@@ -166,7 +166,7 @@ prettySection (SectionSource root _ files) =
 --     outputHead k (Rel h _) = map (outputTerm k) (headTerms h)
 --     outputTerm k t = affirm "OUTPUT-TERM" [("/sign", k), ("/term", name t)]
 
--- fromJudges :: (Value v) => [Judge v] -> String
+-- fromJudges :: (CContent v) => [Judge v] -> String
 -- fromJudges = unlines . unique . map string where
 --     string = show . Pretty.doc
 

@@ -5,13 +5,13 @@
 module Koshucode.Baala.Vanilla.Value.Relval
 ( terms,
   unionUpTerm,
-  module Koshucode.Baala.Vanilla.Value.Val,
+  module Koshucode.Baala.Vanilla.Value.Content,
   module Koshucode.Baala.Base.Prelude,
 ) where
 
 import Koshucode.Baala.Base.Prelude hiding ((<>), hang, empty, semi)
 
-import Koshucode.Baala.Vanilla.Value.Val
+import Koshucode.Baala.Vanilla.Value.Content
 
 terms :: [String] -> [Relterm]
 terms = map Term

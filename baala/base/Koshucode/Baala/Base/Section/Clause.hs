@@ -168,7 +168,7 @@ clauseHalf half = map f where
 
 {-| Second step of constructing 'Section'. -}
 consSection
-    :: (Value v)
+    :: (CContent v)
     => RelmapFullCons v    -- ^ Relmap full constructor
     -> [Clause]            -- ^ Output of 'consClause'
     -> AbortOr (Section v) -- ^ Result section

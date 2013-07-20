@@ -11,7 +11,7 @@ import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Content
 import Koshucode.Baala.Base.Prelude
 
-import Koshucode.Baala.Vanilla.Value.Val
+import Koshucode.Baala.Vanilla.Value.Content
 
 -- ----------------------
 {- $Operators
@@ -30,7 +30,7 @@ import Koshucode.Baala.Vanilla.Value.Val
 
 -}
 
-copOrder :: [Named (ContentOp Val)]
+copOrder :: [Named (ContentOp VContent)]
 copOrder =
  [ namedEager  "="    ordEq
  , namedEager  "<>"   ordNeq
@@ -40,26 +40,26 @@ copOrder =
  , namedEager  ">="   ordGte
  ]
 
-ordBy :: (Val -> Val -> Bool) -> [Val] -> AbOr Val
-ordBy p [x, y] = Right . boolValue   $ x `p` y
+ordBy :: (VContent -> VContent -> Bool) -> [VContent] -> AbOr VContent
+ordBy p [x, y] = Right . putBool   $ x `p` y
 ordBy _ _      = Left  $ AbortLookup ""
 
-ordEq   :: [Val] -> AbOr Val
+ordEq   :: [VContent] -> AbOr VContent
 ordEq   =  ordBy (==)
 
-ordNeq  :: [Val] -> AbOr Val
+ordNeq  :: [VContent] -> AbOr VContent
 ordNeq  =  ordBy (/=)
 
-ordLt   :: [Val] -> AbOr Val
+ordLt   :: [VContent] -> AbOr VContent
 ordLt   =  ordBy (<)
 
-ordLte  :: [Val] -> AbOr Val
+ordLte  :: [VContent] -> AbOr VContent
 ordLte  =  ordBy (<=)
 
-ordGt   :: [Val] -> AbOr Val
+ordGt   :: [VContent] -> AbOr VContent
 ordGt   =  ordBy (>)
 
-ordGte  :: [Val] -> AbOr Val
+ordGte  :: [VContent] -> AbOr VContent
 ordGte  =  ordBy (>=)
 
 

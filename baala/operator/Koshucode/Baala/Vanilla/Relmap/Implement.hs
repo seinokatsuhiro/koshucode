@@ -21,10 +21,10 @@ import qualified Koshucode.Baala.Minimal as Mini
 -- ----------------------  Operators
 
 {-| Implementation of relational operators. -}
-vanillaOperators :: [Kit.OpImplement Val]
+vanillaOperators :: [Kit.OpImplement VContent]
 vanillaOperators = vanillaOperators' ++ Mini.minimalOperators
 
-vanillaOperators' :: [Kit.OpImplement Val]
+vanillaOperators' :: [Kit.OpImplement VContent]
 vanillaOperators' = Mini.operators
     -- Relmap operators in alphabetical order
     [ o "add"            LikeVal           relopAdd
@@ -46,7 +46,7 @@ vanillaOperators' = Mini.operators
 
 -- ----------------------  Constructors
 
-relopRdf :: Kit.Relop Val
+relopRdf :: Kit.Relop VContent
 relopRdf use = do
   sign  <- Mini.getWord  use "-sign"
   [s,o] <- Mini.getTerms use "-term"
