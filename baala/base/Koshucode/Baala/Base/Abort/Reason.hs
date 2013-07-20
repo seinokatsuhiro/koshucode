@@ -2,44 +2,55 @@
 
 {-| Abort symbol -}
 
-module Koshucode.Baala.Base.Abort.Symbol
-( (<!!>),
-  Abort,
-  AbortOr,
+module Koshucode.Baala.Base.Abort.Reason
+( -- * Datatype
   AbOr,
   AbMap,
+  Abort,
+  AbortOr,
+  (<!!>),
+
+  -- * Reason
   AbortReason (..),
 ) where
 
 import Koshucode.Baala.Base.Prelude
 
-import Koshucode.Baala.Base.Abort.Source
 import Koshucode.Baala.Base.Abort.Utility
 
 
 
--- ----------------------
+-- ---------------------- abort type
+
+{-| Either of (1) right result, or (2) abort reason
+    (without source code information). -}
+type AbOr b = Either AbortReason b
+
+{-| Abortable mapping. -}
+type AbMap b = b -> AbOr b
+
+{-| Abort reason and source information. -}
+type Abort = AbortType AbortReason
+
+{-| Either of (1) right result, or (2) abort reason with source. -}
+type AbortOr b = AbortOrType AbortReason b
+
+
+
+-- ---------------------- utility
 
 {-| Lookup association list.
     This function may abort on AbortLookup. -}
-(<!!>) :: [(String, a)] -> String -> AbortOr a
+(<!!>) :: [Named a] -> String -> AbortOr a
 (<!!>) assoc key = loop assoc where
     loop [] = Left (AbortLookup key, [])
     loop ((k,v) : kvs) | k == key  = Right v
                        | otherwise = loop kvs
 
-{-| Abort information. -}
-type Abort = AbortP AbortReason
 
-{-| Abortable type. -}
-type AbortOr b = AbortOrP AbortReason b
+-- ---------------------- abort reason
 
-{-| Abortable type. -}
-type AbOr b = Either AbortReason b
-
-type AbMap a = a -> AbOr a
-
-{-| Abort symbols -}
+{-| Abort reasons -}
 data AbortReason
     = AbortLookup           String
     | AbortMalformedOperand String
@@ -60,7 +71,7 @@ data AbortReason
 instance Name AbortReason where
     name = abortSymbol
 
-instance AbortSymbol AbortReason where
+instance AbortReasonClass AbortReason where
     abortSymbol = head . words . show
 
     abortTitle a = case a of

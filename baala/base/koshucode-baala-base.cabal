@@ -47,8 +47,7 @@ library
   -- Modules exported by the library.
   exposed-modules:
         Koshucode.Baala.Base.Abort
-        Koshucode.Baala.Base.Abort.Source
-        Koshucode.Baala.Base.Abort.Symbol
+        Koshucode.Baala.Base.Abort.Reason
         Koshucode.Baala.Base.Abort.Utility
 
         Koshucode.Baala.Base.Content

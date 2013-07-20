@@ -3,48 +3,66 @@
 {-| Abort utility -}
 
 module Koshucode.Baala.Base.Abort.Utility
-( bug,
+( -- * Class and datatype
+  AbortReasonClass (..),
+  AbortType,
+  AbortOrType,
+
+  -- * Function
   abort,
-  addAbort,
   abortIO,
-  AbortP,
-  AbortOrP,
+  addAbort,
+  bug,
 ) where
 
 import qualified System.Exit as Sys
-import qualified Data.Char   as Char
 
-import Koshucode.Baala.Base.Prelude
+import Koshucode.Baala.Base.Prelude as Doc
 import Koshucode.Baala.Base.Syntax
 
-import Koshucode.Baala.Base.Abort.Source
 
 
+-- ---------------------- Class and datatype
+
+{-| Class that represents abort reason. -}
+class AbortReasonClass a where
+    abortSymbol  :: a -> String
+    abortTitle   :: a -> String
+    abortMain    :: a -> Doc
+    abortSub     :: a -> Doc
+    abortSub _   = Doc.empty
+
+{-| Abort reason and source code information. -}
+type AbortType a = (a, [SourceLine])
+
+{-| Either of (1) right result or (2) abort information. -}
+type AbortOrType a b = Either (AbortType a) b
+
+
+
+-- ----------------------  Function
 
 {-| Stop program execution abnormally. -}
-abort :: (AbortSymbol a) => AbortP a -> IO ()
-abort (a, src) = do
-  putMessage (a, src)
-  putStrLn "**  (ステータス 1 で終了します)"
-  Sys.exitWith $ Sys.ExitFailure 1
+abort :: (AbortReasonClass a) => AbortType a -> IO ()
+abort a =
+  do putMessage a
+     putStrLn "**  (ステータス 1 で終了します)"
+     Sys.exitWith $ Sys.ExitFailure 1
 
-type AbortP   a   = (a, [SourceLine])
-type AbortOrP a b = Either (AbortP a) b
-
-addAbort :: (AbortSymbol a) => AbortP a -> Map (AbortOrP a b)
-addAbort _ (Left a1) = Left a1
-addAbort _ x = x
-
-abortIO :: (AbortSymbol a) => (b -> IO ()) -> AbortOrP a b -> IO ()
-abortIO _ (Left (a, src))  = abort (a, src)
+abortIO
+    :: (AbortReasonClass a)
+    => (b -> IO ())               -- ^ Function
+    -> AbortOrType a b            -- ^ Argument
+    -> IO ()
+abortIO _ (Left a)       = abort a
 abortIO f (Right output) = f output
 
-putMessage :: (AbortSymbol a) => AbortP a -> IO ()
+putMessage :: (AbortReasonClass a) => AbortType a -> IO ()
 putMessage = putStr . vline . renderStyle sty . messageDoc where
     sty      = style { lineLength = 60 }
     vline    = unlines . map ("**  " ++) . lines
 
-messageDoc :: (AbortSymbol a) => AbortP a -> Doc
+messageDoc :: (AbortReasonClass a) => AbortType a -> Doc
 messageDoc (a, src) =
     docv [ text ""
          , text "処理を中断しました"
@@ -59,23 +77,22 @@ messageDoc (a, src) =
          , text ""
          ]
 
-source :: [SourceLine] -> Doc
-source = docv . map d where
-    d (SourceLine n line _) = (text $ label $ show n) <> text line
+    where
+      opt :: String -> Map Doc
+      opt lbl x | isEmpty x = empty
+                | otherwise = text lbl <> x
 
-label :: String -> String
-label = rpad 12
+      source :: [SourceLine] -> Doc
+      source = docv . map d where
+          d (SourceLine n line _) =
+              (text $ label $ show n) <> text line
 
-rpad :: Int -> String -> String
-rpad n s = s ++ replicate rest ' ' where
-    rest = max 0 (n - len)
-    len  = sum $ map (size . Char.ord) s where
-    size c | c > 255   = 2
-           | otherwise = 1
+      label :: Map String
+      label = rpad 12
 
-opt :: String -> Doc -> Doc
-opt lbl x | isEmpty x = empty
-            | otherwise = text lbl <> x
+addAbort :: (AbortReasonClass a) => AbortType a -> Map (AbortOrType a b)
+addAbort _ (Left a1) = Left a1
+addAbort _ x = x
 
 {-| Stop on error ''bug in koshucode'' -}
 bug :: a

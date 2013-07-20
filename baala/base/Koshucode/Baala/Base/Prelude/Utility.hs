@@ -20,6 +20,7 @@ module Koshucode.Baala.Base.Prelude.Utility
 , singleton
 , divideBy
 , divideByP
+, rpad
 
 -- * Collection
 , gather
@@ -35,9 +36,14 @@ module Koshucode.Baala.Base.Prelude.Utility
 ) where
 
 import Control.Applicative
+import qualified Data.Char as Char
 import qualified Data.List as List
 import qualified Data.Map  as Map
 import qualified Data.Set  as Set
+
+
+
+-- ----------------------
 
 {-| Entry in association list. -}
 type Named a = (String, a)
@@ -61,6 +67,10 @@ maybePairs :: [a] -> Maybe [(a,a)]
 maybePairs (a:b:xs) = liftA ((a,b):) $ maybePairs xs
 maybePairs []       = Just []
 maybePairs _        = Nothing
+
+
+
+-- ----------------------
 
 {-| Remove duplicate elements. -}
 unique :: (Ord a) => [a] -> [a]
@@ -121,6 +131,16 @@ divideByP p = loop where
     loop xs = case break p xs of
                 (x, _ : xs2) -> x : loop xs2
                 (x, [])      -> [x]
+
+rpad :: Int -> Map String
+rpad n s = s ++ replicate rest ' ' where
+    rest = max 0 (n - len)
+    len  = sum $ map (size . Char.ord) s where
+    size c | c > 255   = 2
+           | otherwise = 1
+
+
+-- ----------------------
 
 -- | Types that has name
 class Name a where
