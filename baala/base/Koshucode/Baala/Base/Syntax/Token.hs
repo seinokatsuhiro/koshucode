@@ -41,9 +41,7 @@ data Token
                                    --   0 for non-quoted,
                                    --   1 for single-quoted,
                                    --   2 for double-quoted.
-    | TTermN   TNumber [String]    -- ^ Term name
-    | TTermP   TNumber [Int]       -- ^ Term position in particular relation.
-                                   --   This is translate from 'TTermN'.
+    | TTerm    TNumber [String]    -- ^ Term name
     | TOpen    TNumber String      -- ^ Open paren
     | TClose   TNumber String      -- ^ Close paren
     | TSpace   TNumber Int         -- ^ /N/ space characters
@@ -51,7 +49,7 @@ data Token
       deriving (Show, Eq, Ord, Data, Typeable)
 
 instance Name Token where
-    name (TTermN  _ ns) = concat ns
+    name (TTerm   _ ns) = concat ns
     name (TWord  _ _ s) = s
     name (TOpen    _ s) = s
     name (TClose   _ s) = s
@@ -69,12 +67,10 @@ isBlankToken (TSpace _ _)    = True
 isBlankToken (TComment _ _)  = True
 isBlankToken _               = False
 
-{-| Test the token is a term,
-    i.e., 'TTermN' or 'TTermP'. -}
+{-| Test the token is a term, i.e., 'TTerm'. -}
 isTermToken :: Token -> Bool
-isTermToken (TTermN _ _)     = True
-isTermToken (TTermP _ _)     = True
-isTermToken _                = False
+isTermToken (TTerm _ _)     = True
+isTermToken _               = False
 
 isOpenTokenOf :: String -> Token -> Bool
 isOpenTokenOf p1 (TOpen _ p2) = p1 == p2
@@ -89,38 +85,35 @@ isCloseTokenOf _ _              = False
 -- ---------------------- Other functions
 
 {-| Text of token type, one of
-    @\"Word\"@, @\"TermN\"@, @\"TermP\"@, @\"Open\"@, @\"Close\"@,
+    @\"Word\"@, @\"Term\"@, @\"Open\"@, @\"Close\"@,
     @\"Space\"@, or @\"Comment\"@.
 
     >>> tokenTypeText $ TWord 1 0 "flower"
     "Word"
     -}
 tokenTypeText :: Token -> String
-tokenTypeText (TWord _ _ _)  = "Word"
-tokenTypeText (TTermN _ _)   = "TermN"
-tokenTypeText (TTermP _ _)   = "TermP"
-tokenTypeText (TOpen _ _)    = "Open"
-tokenTypeText (TClose _ _)   = "Close"
-tokenTypeText (TSpace _ _)   = "Space"
-tokenTypeText (TComment _ _) = "Comment"
+tokenTypeText (TWord  _ _ _)  = "Word"
+tokenTypeText (TTerm    _ _)  = "TermN"
+tokenTypeText (TOpen    _ _)  = "Open"
+tokenTypeText (TClose   _ _)  = "Close"
+tokenTypeText (TSpace   _ _)  = "Space"
+tokenTypeText (TComment _ _)  = "Comment"
 
 tokenContent :: Token -> String
-tokenContent (TWord _ _ s)   = s
-tokenContent (TTermN _ s)    = concat s
-tokenContent (TTermP _ _)    = "#TermP"
-tokenContent (TOpen _ s)     = s
-tokenContent (TClose _ s)    = s
-tokenContent (TSpace _ n)    = replicate n ' '
-tokenContent (TComment _ s)  = s
+tokenContent (TWord  _ _ s)   = s
+tokenContent (TTerm    _ s)   = concat s
+tokenContent (TOpen    _ s)   = s
+tokenContent (TClose   _ s)   = s
+tokenContent (TSpace   _ n)   = replicate n ' '
+tokenContent (TComment _ s)   = s
 
 tokenNumber :: Token -> TNumber
-tokenNumber (TWord    n _ _) = n
-tokenNumber (TTermN   n _)   = n
-tokenNumber (TTermP   n _)   = n
-tokenNumber (TOpen    n _)   = n
-tokenNumber (TClose   n _)   = n
-tokenNumber (TSpace   n _)   = n
-tokenNumber (TComment n _)   = n
+tokenNumber (TWord    n _ _)  = n
+tokenNumber (TTerm    n _)    = n
+tokenNumber (TOpen    n _)    = n
+tokenNumber (TClose   n _)    = n
+tokenNumber (TSpace   n _)    = n
+tokenNumber (TComment n _)    = n
 
 {-| Remove blank tokens. -}
 sweepToken :: Map [Token]

@@ -37,6 +37,7 @@ vanillaOperators' = Mini.operators
     , o "prefix"         LikePrefix        relopPrefix
     , o "prefix-change"  LikePrefixChange  relopPrefixChange
     , o "range"          LikeSize          relopRange
+    , o "rank"           LikeId            relopRank
     , o "rdf"            LikeSource        relopRdf
     , o "size"           LikeSize          relopSize
     , o "unprefix"       LikeUnprefix      relopUnprefix

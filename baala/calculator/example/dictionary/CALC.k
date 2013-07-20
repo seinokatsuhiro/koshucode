@@ -24,6 +24,7 @@
 |-- KOSHU-CALC  /input [ DATA.k natural-join.k ]           /output OUTPUT/natural-join.k
 |-- KOSHU-CALC  /input [ DATA.k negation.k ]               /output OUTPUT/negation.k
 |-- KOSHU-CALC  /input [ DATA.k projection.k ]             /output OUTPUT/projection.k
+|-- KOSHU-CALC  /input [ DATA.k quota-query.k ]            /output OUTPUT/quota-query.k
 |-- KOSHU-CALC  /input [ DATA.k relation-valued-attribute.k ] /output OUTPUT/relation-valued-attribute.k
 |-- KOSHU-CALC  /input [ DATA.k renaming.k ]               /output OUTPUT/renaming.k
 |-- KOSHU-CALC  /input [ DATA.k repeating-group.k ]        /output OUTPUT/repeating-group.k

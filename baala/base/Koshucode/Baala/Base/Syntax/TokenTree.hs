@@ -74,9 +74,9 @@ divideByTokenTree w = divideByP p where
    >>> tokenTrees . tokens $ "|-- R /x 0 /y 1"
    [TreeL (TWord 1 0 "|--"),
     TreeL (TWord 3 0 "R"),
-    TreeL (TTermN 5 ["/x"]),
+    TreeL (TTerm 5 ["/x"]),
     TreeL (TWord 7 0 "0"),
-    TreeL (TTermN 9 ["/y"]),
+    TreeL (TTerm 9 ["/y"]),
     TreeL (TWord 11 0 "1")]
 
    Relmap.
@@ -86,8 +86,8 @@ divideByTokenTree w = divideByP p where
     TreeL (TWord 3 0 ":"),
     TreeL (TWord 5 0 "source"),
     TreeL (TWord 7 0 "R"),
-    TreeL (TTermN 9 ["/x"]),
-    TreeL (TTermN 11 ["/y"])]
+    TreeL (TTerm 9 ["/x"]),
+    TreeL (TTerm 11 ["/y"])]
 
    Nested relmap.
 
@@ -97,8 +97,8 @@ divideByTokenTree w = divideByP p where
       TreeL (TWord 4 0 "R"),
       TreeL (TWord 6 0 "|"),
       TreeL (TWord 8 0 "pick"),
-      TreeL (TTermN 10 ["/a"]),
-      TreeL (TTermN 12 ["/b"])]]
+      TreeL (TTerm 10 ["/a"]),
+      TreeL (TTerm 12 ["/b"])]]
 
    Double paren.
 
@@ -122,7 +122,7 @@ divideByTokenTree w = divideByP p where
 
    >>> tokenTrees . tokens $ "{| /a /b | 10 20 | 30 40 |}"
    [TreeB 4 [
-      TreeL (TTermN 3 ["/a"]), TreeL (TTermN 5 ["/b"]),
+      TreeL (TTerm 3 ["/a"]), TreeL (TTerm 5 ["/b"]),
       TreeL (TWord 7 0 "|"),
       TreeL (TWord 9 0 "10"), TreeL (TWord 11 0 "20"),
       TreeL (TWord 13 0 "|"),

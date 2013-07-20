@@ -119,8 +119,8 @@ readInt src s =
 {-| Get single term name.
     If 'TokenTree' contains nested term name, this function failed. -}
 litFlatname :: LiteralizeTree String
-litFlatname _   (TreeL (TTermN _ [n])) = Right n
-litFlatname src (TreeL (TTermN _ ns))  = Left (AbortRequireFlatname (concat ns), src)
+litFlatname _   (TreeL (TTerm _ [n])) = Right n
+litFlatname src (TreeL (TTerm _ ns))  = Left (AbortRequireFlatname (concat ns), src)
 litFlatname src x = Left (AbortMissingTermName (show x), src)
 
 
@@ -157,7 +157,7 @@ divideByName src = nam where
               Right $ (n, singleToken cs) : xs2'
 
     content :: [TokenTree] -> ([TokenTree], [TokenTree])
-    content xs@(TreeL (TTermN _ _) : _) = ([], xs)
+    content xs@(TreeL (TTerm _ _) : _) = ([], xs)
     content [] = ([], [])
     content (x : xs) = cons1 x $ content xs
 

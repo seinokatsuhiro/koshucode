@@ -1,9 +1,9 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Vanilla.Order
-( OrderCap
-, orders
-, sortByName
+( OrderCap (..),
+  orders,
+  sortByName,
 ) where
 
 import qualified Data.List as List
@@ -52,7 +52,7 @@ sortBy ords xs = xs3 where
     xs2 = mapmapFst (caps ords) xs
     xs3 = List.sort xs2
 
-sortByName :: (Ord v, Eq n) => [OrderCap n] -> [n] -> [[v]] -> [[v]]
+sortByName :: (Ord v, Eq n) => [OrderCap n] -> [n] -> Map [[v]]
 sortByName ords ns xs = xs3 where
     ords2 = map orderCap ords
     ns2   = uncaps ords

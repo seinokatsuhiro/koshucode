@@ -18,7 +18,7 @@ import Koshucode.Baala.Base.Syntax
 
 {-| Extract a term name. -}
 termName :: TokenTree -> AbortOr String
-termName (TreeL (TTermN _ [n])) = Right n
+termName (TreeL (TTerm _ [n])) = Right n
 termName x = Left (AbortMissingTermName (show x), [])
 
 {-| Extract a list of term names.

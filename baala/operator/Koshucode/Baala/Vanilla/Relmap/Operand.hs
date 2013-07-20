@@ -1,3 +1,4 @@
+
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Vanilla.Relmap.Operand
@@ -13,8 +14,10 @@ import qualified Koshucode.Baala.Minimal as Mini
 
 -- | 'Mini.OpPattern' for relational operations.
 data VanillaOperand
+    = LikeId
+
     {-| Boolean expression -}
-    = LikeHold
+    | LikeHold
 
     {-| List of new term and expression -}
     | LikeVal
@@ -44,6 +47,7 @@ data VanillaOperand
       deriving (Show, Eq, Enum)
 
 instance Mini.OpPattern VanillaOperand where
+    opParser' LikeId            = id
     opParser' LikeHold          = Mini.likePick
     opParser' LikeVal           = Mini.likePick
     opParser' LikeMeet          = Mini.likeMeet
@@ -53,6 +57,7 @@ instance Mini.OpPattern VanillaOperand where
     opParser' LikeSource        = Mini.likeMeet
     opParser' LikeSize          = likeSize
 
+    opPart    LikeId            = ["-add", "-term"]
     opPart    LikeHold          = ["-exp"]
     opPart    LikeVal           = ["-exp"]
     opPart    LikeMeet          = ["-relmap"]

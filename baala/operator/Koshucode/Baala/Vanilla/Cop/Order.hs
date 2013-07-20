@@ -41,7 +41,7 @@ copOrder =
  ]
 
 ordBy :: (VContent -> VContent -> Bool) -> [VContent] -> AbOr VContent
-ordBy p [x, y] = Right . putBool   $ x `p` y
+ordBy p [x, y] = Right . putBool $ x `p` y
 ordBy _ _      = Left  $ AbortLookup ""
 
 ordEq   :: [VContent] -> AbOr VContent

@@ -90,7 +90,7 @@ nextToken n txt =
 
       term (c:cs) xs ns | isTerm c   = term cs [c] $ t xs ns
                         | isWord c   = term cs (c:xs) ns
-      term ccs xs ns                 = tokR ccs (TTermN n) (t xs ns)
+      term ccs xs ns                 = tokR ccs (TTerm n) (t xs ns)
       t xs = (reverse xs :)
 
       white i (c:cs)    | isSpace c  = white (i + 1) cs
@@ -122,7 +122,7 @@ isSpace, isWord, isNonWord, maybeWord :: Char -> Bool
 isTerm    c  =  c == '/'
 isOpen    c  =  c `elem` "([{"
 isClose   c  =  c `elem` "}])"
-isSingle  c  =  c `elem` ":="
+isSingle  c  =  c `elem` ":"
 isQuote   c  =  c `elem` "'\""
 isSpace   c  =  C.isSpace c
 isWord    c  =  maybeWord c && not (isNonWord c)
@@ -145,11 +145,10 @@ untokens (x:xs) = untoken x ++ untokens xs
 untokens []     = []
 
 untoken :: Token -> String
-untoken (TWord _ 1 s)   = "'" ++ s ++ "'"
+untoken (TWord _ 1 s)   = "'"  ++ s ++ "'"
 untoken (TWord _ 2 s)   = "\"" ++ s ++ "\""
 untoken (TWord _ _ s)   = s
-untoken (TTermN  _ ns)  = concat ns
-untoken (TTermP  _ ns)  = concatMap show ns
+untoken (TTerm   _ ns)  = concat ns
 untoken (TOpen   _ s)   = s
 untoken (TClose  _ s)   = s
 untoken (TSpace  _ n)   = replicate n ' '
@@ -305,12 +304,12 @@ linesCrLf s = ln : nextLine s2 where
    >>> tokens "aa\n'bb'\n\"cc\""
    [TWord 0 "aa", TWord 1 "bb", TWord 2 "cc"]
    
-   Example includes 'TWord', 'TTermN' and 'TSpace' tokens.
+   Example includes 'TWord', 'TTerm' and 'TSpace' tokens.
    
    >>> tokens "|-- R  /a A0 /b 31"
    [TWord 0 "|--", TSpace 1, TWord 0 "R", TSpace 2,
-    TTermN ["/a"], TSpace 1, TWord 0 "A0", TSpace 1,
-    TTermN ["/b"], TSpace 1, TWord 0 "31"]
+    TTerm ["/a"], TSpace 1, TWord 0 "A0", TSpace 1,
+    TTerm ["/b"], TSpace 1, TWord 0 "31"]
 
    Parens.
 

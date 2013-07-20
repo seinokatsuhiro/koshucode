@@ -76,7 +76,7 @@ formContent
 formContent op src = form where
     form x@(TreeL (TWord _ _ _)) = do lit <- litContent src x
                                       Right $ ContLit lit
-    form (TreeL (TTermN _ ns))   = Right $ ContTerm ns []
+    form (TreeL (TTerm _ ns))    = Right $ ContTerm ns []
     form (TreeL _)               = Left (AbortLookup "", src)
     form (TreeB _ (TreeL (TWord _ _ n) : xs)) =
         case op n of
