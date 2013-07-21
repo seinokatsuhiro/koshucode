@@ -46,6 +46,8 @@ extra-source-files:
 library
   -- Modules exported by the library.
   exposed-modules:
+        Koshucode.Baala.Base
+
         Koshucode.Baala.Base.Abort
         Koshucode.Baala.Base.Abort.Reason
         Koshucode.Baala.Base.Abort.Utility
