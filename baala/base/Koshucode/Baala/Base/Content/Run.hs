@@ -88,8 +88,9 @@ formContent
     -> TokenTree           -- ^ Input token tree
     -> AbortOr (ContExp c) -- ^ Result content expression
 formContent op src = form where
-    form x@(TreeL (TWord _ _ _)) = do lit <- litContent src x
-                                      Right $ ContLit lit
+    form x@(TreeL (TWord _ _ _)) = case litContent x of
+                                     Right lit -> Right $ ContLit lit
+                                     Left  a   -> Left (a, src)
     form (TreeL (TTerm _ ns))    = Right $ ContTerm ns []
     form (TreeL _)               = Left (AbortLookup "", src)
     form (TreeB _ (TreeL (TWord _ _ n) : xs)) =

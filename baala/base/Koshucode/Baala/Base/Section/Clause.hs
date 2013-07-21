@@ -201,7 +201,10 @@ consSection whole xs = do
       exp xs2 = skip exp xs2
 
       jud (CJudge src q s xs2 : xs3) =
-          litJudge q s (clauseLines src) (tokenTrees xs2) : jud xs3
+          let j2 = case litJudge q s (tokenTrees xs2) of
+                     Right j -> Right j
+                     Left  a -> Left (a, clauseLines src)
+          in j2 : jud xs3
       jud xs2 = skip jud xs2
 
       rel (CRelmap _ n r : xs2) =

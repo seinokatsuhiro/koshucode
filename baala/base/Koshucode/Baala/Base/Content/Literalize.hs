@@ -4,29 +4,29 @@
 
 module Koshucode.Baala.Base.Content.Literalize
 (
--- * Library
+  -- * Library
 
--- ** Types
+  -- ** Types
   LiteralizeFrom,
-  Literalize,
+  LiteralizeTrees,
   LiteralizeTree,
   LiteralizeString,
 
--- ** Functions
+  -- ** Functions
   litContent,
   litList,
   litJudge,
 
--- * Document
+  -- * Document
 
--- ** Types
--- $Types
+  -- ** Types
+  -- $Types
 
--- ** Simple data
--- $SimpleData
+  -- ** Simple data
+  -- $SimpleData
 
--- ** Compound data
--- $CompoundData
+  -- ** Compound data
+  -- $CompoundData
 ) where
 
 import Koshucode.Baala.Base.Abort
@@ -41,10 +41,10 @@ import Koshucode.Baala.Base.Content.Class
 -- ----------------------  Literalize
 
 {-| Make @a@ from @b@. -}
-type LiteralizeFrom b a = [SourceLine] -> b -> AbortOr a
+type LiteralizeFrom b a = b -> AbOr a
 
 {-| Make @a@ from list of token trees. -}
-type Literalize       a = LiteralizeFrom [TokenTree] a
+type LiteralizeTrees  a = LiteralizeFrom [TokenTree] a
 
 {-| Make @a@ from a token tree. -}
 type LiteralizeTree   a = LiteralizeFrom TokenTree a
@@ -59,7 +59,7 @@ type LiteralizeString a = LiteralizeFrom String a
 {-| Transform 'TokenTree' into
     internal form of term content. -}
 litContent :: (CContent v) => LiteralizeTree v
-litContent src = lit where
+litContent = lit where
     -- leaf
     lit (TreeL (TWord _ q w))
         | q >  0   =   Right . putString $ w  -- quoted text
@@ -71,31 +71,31 @@ litContent src = lit where
     -- branch
     lit (TreeB t xs) = case t of
           1        ->  paren xs
-          2        ->  Right . putList    =<< litList    src xs
-          3        ->  Right . putSet     =<< litList    src xs
-          4        ->  Right . putTermset =<< litTermset src xs
-          5        ->  Right . putRel     =<< litRel     src xs
+          2        ->  Right . putList    =<< litList    xs
+          3        ->  Right . putSet     =<< litList    xs
+          4        ->  Right . putTermset =<< litTermset xs
+          5        ->  Right . putRel     =<< litRel     xs
           _        ->  bug
 
     -- unknown content
-    lit x          =   Left (AbortUnknownContent (show x), src)
+    lit x          =   Left $ AbortUnknownContent (show x)
 
     -- hash word
     hash "true"    =   Right . putBool $ True
     hash "false"   =   Right . putBool $ False
     hash w         =   case hashWord w of
                          Just w2 -> Right . putString $ w2
-                         Nothing -> Left (AbortUnknownSymbol ('#' : w), src)
+                         Nothing -> Left $ AbortUnknownSymbol ('#' : w)
 
     -- sequence of token trees
     paren (TreeL (TWord _ 0 tag) : xs) =
         case tag of
-          "text"  -> Right . joinContent =<< litList src xs
-          "lines" -> Right . joinContent =<< litList src xs  -- todo
-          "int"   -> litInt src xs
-          _       -> Left (AbortUnknownSymbol (show xs), src)
+          "text"  -> Right . joinContent =<< litList xs
+          "lines" -> Right . joinContent =<< litList xs  -- todo
+          "int"   -> litInt xs
+          _       -> Left $ AbortUnknownSymbol (show xs)
     paren [] = Right nil
-    paren x  = Left (AbortUnknownSymbol (show x), src)
+    paren x  = Left $ AbortUnknownSymbol (show x)
 
 
 
@@ -105,54 +105,54 @@ litContent src = lit where
 -- litString
 -- litNil
 
-litInt :: (CInt v) => Literalize v
-litInt src [TreeL (TWord _ 0 digits)] = 
-    Right . putInt =<< readInt src digits
-litInt src xs = Left (AbortNotNumber (show xs), src)
+litInt :: (CInt v) => LiteralizeTrees v
+litInt [TreeL (TWord _ 0 digits)] = 
+    Right . putInt =<< readInt digits
+litInt xs = Left $ AbortNotNumber (show xs)
 
 readInt :: LiteralizeString Int
-readInt src s =
+readInt s =
     case reads s of
       [(n, "")] -> Right n
-      _         -> Left (AbortNotNumber s, src)
+      _         -> Left $ AbortNotNumber s
 
 {-| Get single term name.
     If 'TokenTree' contains nested term name, this function failed. -}
 litFlatname :: LiteralizeTree String
-litFlatname _   (TreeL (TTerm _ [n])) = Right n
-litFlatname src (TreeL (TTerm _ ns))  = Left (AbortRequireFlatname (concat ns), src)
-litFlatname src x = Left (AbortMissingTermName (show x), src)
+litFlatname (TreeL (TTerm _ [n])) = Right n
+litFlatname (TreeL (TTerm _ ns))  = Left $ AbortRequireFlatname (concat ns)
+litFlatname x = Left $ AbortMissingTermName (show x)
 
 
 
 -- ----------------------  Complex data
 
 {-| Construct list of term contents. -}
-litList :: (CContent v) => Literalize [v]
-litList src = mapM (litContent src)
+litList :: (CContent v) => LiteralizeTrees [v]
+litList = mapM litContent
 
 {-| Collect term name and content. -}
-litTermset :: (CContent v) => Literalize [Named v]
-litTermset src xs = mapM lit =<< divideByName src xs where
-    lit (n, c) = do c' <- litContent src c
+litTermset :: (CContent v) => LiteralizeTrees [Named v]
+litTermset xs = mapM lit =<< divideByName xs where
+    lit (n, c) = do c' <- litContent c
                     Right (n, c')
 
-litRel :: (CContent v) => Literalize (Rel v)
-litRel src cs =
+litRel :: (CContent v) => LiteralizeTrees (Rel v)
+litRel cs =
     do let (h1 : b1) = divideByTokenTree "|" cs
-       h2 <- mapM (litFlatname src) h1
-       b2 <- mapM (litList src) b1
+       h2 <- mapM (litFlatname) h1
+       b2 <- mapM (litList) b1
        let b3 = unique b2
        if any (length h2 /=) $ map length b3
-          then Left  (AbortOddRelation, src)
+          then Left  $ AbortOddRelation
           else Right $ Rel (headFrom h2) b3
 
-divideByName :: [SourceLine] -> [TokenTree] -> AbortOr [Named TokenTree]
-divideByName src = nam where
+divideByName :: [TokenTree] -> AbOr [Named TokenTree]
+divideByName = nam where
     nam [] = Right []
     nam (x : xs) =
         let (cs, xs2) = content xs
-        in do n    <- litFlatname src x
+        in do n    <- litFlatname x
               xs2' <- nam xs2
               Right $ (n, singleTree cs) : xs2'
 
@@ -168,9 +168,9 @@ divideByName src = nam where
 {-| Construct judge from token trees.
     Judges itself are not content type.
     It can be only used in the top-level of sections. -}
-litJudge :: (CContent v) => Bool -> Relsign -> Literalize (Judge v)
-litJudge q s src xs =
-  do xs' <- litTermset src xs
+litJudge :: (CContent v) => Bool -> Relsign -> LiteralizeTrees (Judge v)
+litJudge q s xs =
+  do xs' <- litTermset xs
      Right $ Judge q s xs'
 
 
@@ -230,25 +230,25 @@ litJudge q s src xs =
    Boolean.
 
      >>> lit "#true #false"
-     Right [Boolv True, Boolv False]
+     Right [VBool True, VBool False]
 
    Words.
 
      >>> lit "a 'b c'"
-     Right [Stringv "a", Stringv "b c"]
+     Right [VString "a", VString "b c"]
 
      >>> lit "a 1"
-     Right [Stringv "a", Stringv "1"]
+     Right [VString "a", VString "1"]
 
    Integer.
 
      >>> lit "(int 12)"
-     Right [Intv 12]
+     Right [VInt 12]
 
    Nil as no value.
 
      >>> lit "()"
-     Right [Nov]
+     Right [VNil]
 
 -}
 
@@ -258,29 +258,28 @@ litJudge q s src xs =
    Set.
 
      >>> lit "{ b a a c a }"
-     Right [Setv [Stringv "b", Stringv "a", Stringv "c"]]
+     Right [VSet [VString "b",VString "a",VString "c"]]
 
    List.
 
      >>> lit "[ a 10 (int 20) ]"
-     Right [Listv [Stringv "a", Stringv "10", Intv 20]]
+     Right [VList [VString "a",VString "10",VInt 20]]
 
    Termset.
 
      >>> lit "{| /a 0 /b [ a 1 ] |}"
-     Right [Termsetv [
-         ("/a", Stringv "0"),
-         ("/b", Listv [Stringv "a", Stringv "1"])]]
+     Right [VTermset
+       [ ("/a", VString "0")
+       , ("/b", VList [VString "a", VString "1"]) ]]
 
    Relation.
 
      >>> lit "[| /a /x | A1 (int 20) | A3 (int 40) | A4 (int 60) |]"
-     Right [Relv (Rel
-        (Relhead [Term "/a", Term "/x"])
-        [ [Stringv "A1", Intv 20]
-        , [Stringv "A3", Intv 40]
-        , [Stringv "A4", Intv 60]
-        ])]
+     Right [ VRel (Rel
+       (Relhead [Term "/a", Term "/x"])
+       [ [VString "A1", VInt 20]
+       , [VString "A3", VInt 40]
+       , [VString "A4", VInt 60] ])]
 
 -}
 
