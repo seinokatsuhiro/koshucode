@@ -100,6 +100,6 @@ arithAbs1 _ = Left AbortUnmatchArity
 -- let Right e2 = vanillaContent [] $ tree "(+ (int 1) (int 2) (int 3))"
 -- let Right e2 = vanillaContent [] $ tree "(+ 1 2 (+ 3 4 5) 6 7 8 9)"
 -- let Right e2 = vanillaContent [] $ tree "1 + 2 + 3 + 4 + 5"
--- let Right e3 = runContent (e2 $ Relhead []) []
--- let Left  e3 = runContent e2 []
+-- let Right e3 = runCox (e2 $ Relhead []) []
+-- let Left  e3 = runCox e2 []
 

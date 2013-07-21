@@ -31,16 +31,17 @@ vanillaCop n = lookup n $ concat [copOrder, copLogic, copArith, copList]
 vanillaContent
     :: OpUse VContent    -- ^ Source information
     -> TokenTree         -- ^ Token tree of content expression
-    -> AbortOr (PosContent VContent)  -- ^ Partial content expression
+    -> AbortOr (PosCox VContent)  -- ^ Partial content expression
 vanillaContent use t =
     do let src = halfLines $ opHalf use
-       c <- formContent vanillaCop src $ vanillaBinary t
-       Right $ posContent c
+       case formCox vanillaCop $ vanillaBinary t of
+         Right c -> Right $ posCox c
+         Left a  -> Left (a, src)
 
 vanillaNamedContent
   :: OpUse VContent
   -> Named TokenTree
-  -> AbortOr (Named (PosContent VContent))
+  -> AbortOr (Named (PosCox VContent))
 vanillaNamedContent use (n, t) =
     do c <- vanillaContent use t
        Right (n, c)
@@ -48,7 +49,7 @@ vanillaNamedContent use (n, t) =
 vanillaNamedContents
   :: OpUse VContent
   -> [Named TokenTree]
-  -> AbortOr [Named (PosContent VContent)]
+  -> AbortOr [Named (PosCox VContent)]
 vanillaNamedContents use = mapM (vanillaNamedContent use)
 
 {-| Convert infix form to prefix form. -}
