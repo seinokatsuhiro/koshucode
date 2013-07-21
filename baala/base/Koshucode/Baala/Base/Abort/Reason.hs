@@ -65,6 +65,8 @@ data AbortReason
     | AbortUnknownContent   String
     | AbortUnknownRelmap    String
     | AbortUnknownSymbol    String
+    | AbortUnmatchArity
+    | AbortUnmatchType
     | AbortUsage            String [String]
       deriving (Show, Eq, Ord)
 
@@ -88,6 +90,8 @@ instance AbortReasonClass AbortReason where
         (AbortUnknownContent   _)   -> "未知の項目内容"
         (AbortUnknownRelmap    _)   -> "未知の演算子"
         (AbortUnknownSymbol    _)   -> "未知の記号"
+        (AbortUnmatchArity      )   -> "引数の数が合わない"
+        (AbortUnmatchType       )   -> "型が合わない"
         (AbortUsage          _ _)   -> "使用法の間違い"
 
     abortMain a = case a of
@@ -105,6 +109,8 @@ instance AbortReasonClass AbortReason where
         (AbortUnknownSymbol    s)   -> par s
         (AbortUsage      _ usage)   -> docv $ map par usage
         (AbortUndefined        s)   -> par s
+        (AbortUnmatchArity      )   -> empty
+        (AbortUnmatchType       )   -> empty
 
 par :: String -> Doc
 par = fsep . map text . words

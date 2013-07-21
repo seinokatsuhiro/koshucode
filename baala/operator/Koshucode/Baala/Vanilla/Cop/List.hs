@@ -23,7 +23,7 @@ import Koshucode.Baala.Vanilla.Value.Content
  [@total@]   Calculate total amount of elements in list,
              i.e., summation.
 
- [@size@]    Number of elements.
+ [@length@]  Number of elements.
 
  [@min@]     Minimal element.
 
@@ -35,7 +35,7 @@ copList :: [Named (ContentOp VContent)]
 copList =
  [ namedEager  "list"     list
  , namedEager  "total"    listTotal
- , namedEager  "size"     listSize
+ , namedEager  "length"   listLength
  , namedEager  "min"      listMin
  , namedEager  "max"      listMax
  ]
@@ -45,19 +45,19 @@ list = Right . putList
 
 listTotal :: [VContent] -> AbOr VContent
 listTotal [VList xs] = Right . putInt $ sum (map toInt xs)
-listTotal xs = Left $ AbortLookup (show xs)
+listTotal _ = Left AbortUnmatchType
 
 listMin :: [VContent] -> AbOr VContent
 listMin [VList xs] = Right $ minimum xs
-listMin xs = Left $ AbortLookup (show xs)
+listMin _ = Left AbortUnmatchType
 
 listMax :: [VContent] -> AbOr VContent
 listMax [VList xs] = Right $ maximum xs
-listMax xs = Left $ AbortLookup (show xs)
+listMax _ = Left AbortUnmatchType
 
-listSize :: [VContent] -> AbOr VContent
-listSize [VList   xs]     = Right . putInt $ length xs
-listSize [VString xs]     = Right . putInt $ length xs
-listSize [VRel (Rel _ b)] = Right . putInt $ length b
-listSize xs = Left $ AbortLookup (show xs)
+listLength :: [VContent] -> AbOr VContent
+listLength [VList   xs]     = Right . putInt $ length xs
+listLength [VString xs]     = Right . putInt $ length xs
+listLength [VRel (Rel _ b)] = Right . putInt $ length b
+listLength _ = Left AbortUnmatchType
 

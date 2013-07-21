@@ -11,6 +11,7 @@ module Koshucode.Baala.Vanilla.Value.Content
 
 import qualified Data.List as L
 
+import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Syntax
@@ -30,65 +31,79 @@ data VContent
     | VNil                      -- ^ Sign of no ordinary type
       deriving (Show, Eq, Ord)
 
-instance CBool VContent where
-    putBool = VBool
-    isBool (VBool _) = True
-    isBool _         = False
-
 instance PrimContent VContent where
 
+-- ----------------------  haskell data
+
+instance CBool VContent where
+    putBool                  =  VBool
+    getBool (VBool x)        =  x
+    getBool _                =  bug
+    isBool  (VBool _)        =  True
+    isBool  _                =  False
+
 instance CInt VContent where
-    putInt = VInt
-    isInt (VInt _) = True
-    isInt _        = False
+    putInt                   =  VInt
+    getInt (VInt x)          =  x
+    getInt _                 =  bug
+    isInt  (VInt _)          =  True
+    isInt  _                 =  False
 
 instance CString VContent where
-    putString = VString
-    isString (VString _) = True
-    isString _           = False
-    getString (VString s) = s
-    getString _           = ""
+    putString                = VString
+    getString (VString s)    =  s
+    getString _              =  bug
+    isString  (VString _)    =  True
+    isString  _              =  False
 
 instance CList VContent where
-    putList = VList
-    isList (VList _)   = True
-    isList _           = False
-    getList (VList xs) = xs
-    getList _          = []
+    putList                  =  VList
+    getList (VList xs)       =  xs
+    getList _                =  []
+    isList (VList _)         =  True
+    isList _                 =  False
 
-instance CSet VContent where
-    putSet = VSet . unique
-    isSet (VSet _)   = True
-    isSet _          = False
-
-instance CTermset VContent where
-    putTermset = VTermset
-    isTermset (VTermset _) = True
-    isTermset _            = False
-
-instance CRel VContent where
-    putRel = VRel
-    getRel (VRel r) = r
-    getRel _        = undefined
-    isRel  (VRel _) = True
-    isRel  _        = False
+-- ----------------------  koshu data
 
 instance CNil VContent where
-    nil = VNil
-    isNil VNil = True
-    isNil _   = False
+    nil                      = VNil
+    isNil VNil               = True
+    isNil _                  = False
+
+instance CSet VContent where
+    putSet                   =  VSet . unique
+    getSet (VSet x)          =  x
+    getSet _                 =  bug
+    isSet  (VSet _)          =  True
+    isSet  _                 =  False
+
+instance CTermset VContent where
+    putTermset               = VTermset
+    getTermset (VTermset x)  =  x
+    getTermset _             =  bug
+    isTermset  (VTermset _)  =  True
+    isTermset  _             =  False
+
+instance CRel VContent where
+    putRel                   = VRel
+    getRel (VRel r)          =  r
+    getRel _                 =  bug
+    isRel  (VRel _)          =  True
+    isRel  _                 =  False
+
+-- ----------------------
 
 instance Pretty VContent where
-    doc (VString s)   = text $ escape s
-    doc (VInt n)      = text "int" <+> int n
+    doc (VString s)     =  text $ escape s
+    doc (VInt n)        =  text "int" <+> int n
     doc (VBool b)
-        | b           = text "#true"
-        | otherwise   = text "#false"
-    doc (VNil)         = text "()"
-    doc (VList xs)    = text "[" <+> hsep (map doc xs) <+> text "]"
-    doc (VSet xs)     = text "{" <+> hsep (map doc xs) <+> text "}"
-    doc (VTermset xs) = text "{|" <+> hsep (map docTerms xs) <+> text "|}"
-    doc (VRel r)      = doc r
+        | b             =  text "#true"
+        | otherwise     =  text "#false"
+    doc (VNil)          =  text "()"
+    doc (VList xs)      =  text "[" <+> hsep (map doc xs) <+> text "]"
+    doc (VSet xs)       =  text "{" <+> hsep (map doc xs) <+> text "}"
+    doc (VTermset xs)   =  text "{|" <+> hsep (map docTerms xs) <+> text "|}"
+    doc (VRel r)        =  doc r
 
 docTerms :: (Pretty a) => Named a -> Doc
 docTerms (n, x) = text n <+> doc x

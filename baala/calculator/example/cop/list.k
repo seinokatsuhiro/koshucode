@@ -17,17 +17,17 @@ affirm INT int
 affirm TEXT text
 
 affirm A int
-  | add /size  ( size /a )
-        /min   ( min /a )
-        /max   ( max /a )
-        /total ( total /a )
+  | add /length  ( length /a )
+        /min     ( min /a )
+        /max     ( max /a )
+        /total   ( total /a )
 
 affirm B text
-  | add /size  ( size /a )
-        /min   ( min /a )
-        /max   ( max /a )
+  | add /length  ( length /a )
+        /min     ( min /a )
+        /max   (   max /a )
 
 affirm C reldee
-  | add /list  ( list a b c )
-        /size  ( size 'abc' )
+  | add /list    ( list a b c )
+        /length  ( length 'abc' )
 

@@ -35,23 +35,31 @@ copLogic =
  , namedEager  "<=="  logiIf
  ]
 
-logi :: (Bool -> Bool -> Bool) -> [VContent] -> AbOr VContent
-logi p [VBool x, VBool y] = Right . putBool $ x `p` y
-logi _ _ = Left $ AbortUndefined "not boolean"
+logiN :: Bool -> (Bool -> Bool -> Bool) -> [VContent] -> AbOr VContent
+logiN unit p = loop where
+    loop [] = Right . putBool $ unit
+    loop (VBool x : xs) =
+        do VBool xs' <- loop xs 
+           Right . putBool $ p x xs'
+    loop _ = Left AbortUnmatchType
 
-logiAnd :: [VContent] -> AbOr VContent
-logiAnd = logi (&&)
+logi2 :: (Bool -> Bool -> Bool) -> [VContent] -> AbOr VContent
+logi2 p [VBool x, VBool y] = Right . putBool $ p x y
+logi2 _ _ = Left AbortUnmatchType
 
-logiOr :: [VContent] -> AbOr VContent
-logiOr = logi (||)
+logiAnd    :: [VContent] -> AbOr VContent
+logiAnd    =  logiN True (&&)
 
-logiIf :: [VContent] -> AbOr VContent
-logiIf = logi $ \x y -> x || not y
+logiOr     :: [VContent] -> AbOr VContent
+logiOr     =  logiN False (||)
 
-logiImply :: [VContent] -> AbOr VContent
-logiImply = logi $ \x y -> not x || y
+logiIf     :: [VContent] -> AbOr VContent
+logiIf     =  logi2 $ \x y -> x || not y
+
+logiImply  :: [VContent] -> AbOr VContent
+logiImply  =  logi2 $ \x y -> not x || y
 
 logiNot :: [VContent] -> AbOr VContent
 logiNot [VBool x] = Right . putBool $ not x
-logiNot _ = Left $ AbortUndefined "not boolean"
+logiNot _ = Left AbortUnmatchType
 

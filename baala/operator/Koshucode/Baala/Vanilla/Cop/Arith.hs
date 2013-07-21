@@ -86,15 +86,14 @@ arithMinus [a, b] = do a' <- arithInt a
                        Right . VInt $ a' - b'
 arithMinus _ = Left $ AbortMalformedOperand "-"
 
-
 arithAbs :: [VContent] -> AbOr VContent
 arithAbs [VList cs] = Right . VList =<< mapM arithAbs1 cs
 arithAbs [c] = arithAbs1 c
-arithAbs _ = Left $ AbortLookup ""
+arithAbs _ = Left AbortUnmatchArity
 
 arithAbs1 :: VContent -> AbOr VContent
 arithAbs1 (VInt n) = Right . VInt $ abs n
-arithAbs1 _ = Left $ AbortLookup ""
+arithAbs1 _ = Left AbortUnmatchArity
 
 -- let tree = singleToken . tokenTrees . tokens
 -- let Right e2 = vanillaContent [] $ tree "1 = 1 and 2 = 3"
