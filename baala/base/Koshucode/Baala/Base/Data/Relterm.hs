@@ -11,10 +11,10 @@ where
 
 import Koshucode.Baala.Base.Prelude
 
--- | Term in heading of relation
+{-| Term in heading of relation -}
 data Relterm
-    = Term String
-    | Nest String [Relterm]
+    = Term String             -- ^ For non-relation
+    | Nest String [Relterm]   -- ^ For relation
       deriving (Show, Eq, Ord)
 
 instance Name Relterm where
@@ -36,8 +36,8 @@ instance Pretty Relterm where
     >>> termIndex ["/r", "/b"] [Nest "/r" [Term "/a", Term "/b"]]
     [0, 1]
 -}
-termIndex :: [String] -> [Relterm] -> [Int]
-termIndex path ts = loop ts path 0 where
+termIndex :: [Relterm] -> [String] -> [Int]
+termIndex ts p = loop ts p 0 where
     loop _ [] _ = []
     loop [] _ _ = [-1]
     loop (Term n1 : ts2) nns@(n2 : _) i
@@ -47,7 +47,6 @@ termIndex path ts = loop ts path 0 where
         | n1 == n2  = i : loop ts' ns 0
         | otherwise = loop ts2 nns (i + 1)
 
-termsIndex :: [[String]] -> [Relterm] -> [[Int]]
-termsIndex ns ts = map look1 ns where
-    look1 n = termIndex n ts
+termsIndex :: [Relterm] -> [[String]] -> [[Int]]
+termsIndex ts = map (termIndex ts)
 

@@ -84,10 +84,10 @@ headChange f (Relhead h) = headFrom $ f $ names h
 -- ----------------------  Index
 
 headIndex :: Relhead -> [[String]] -> [[Int]]
-headIndex h n = termsIndex n $ headTerms h
+headIndex h n = termsIndex (headTerms h) n
 
 headIndex1 :: Relhead -> [String] -> [Int]
-headIndex1 h n = termIndex n $ headTerms h
+headIndex1 h n = termIndex (headTerms h) n
 
 -- | Positions of given names in a head
 headPoss :: Relhead -> [[String]] -> [TermPos]

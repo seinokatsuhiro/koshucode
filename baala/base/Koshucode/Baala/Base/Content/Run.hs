@@ -16,11 +16,12 @@ module Koshucode.Baala.Base.Content.Run
 
   -- * Expression
   -- $Process
-  ContExp (..),
+  Cox (..),
   formContent,
   PosContent,
   posContent,
   runContent,
+  runContentUnder,
 ) where
 
 import Koshucode.Baala.Base.Abort
@@ -46,7 +47,7 @@ instance Show (Cop c) where
     show (CopLazy  n _) = "(CopLazy "  ++ show n ++ " _)"
 
 type CopLitF   c = [TokenTree] -> AbOr c
-type CopLazyF  c = [ContExp c] -> AbOr c
+type CopLazyF  c = [Cox c]     -> AbOr c
 type CopEagerF c = [c]         -> AbOr c
 
 {-| Type for finding term content operator. -}
@@ -65,12 +66,12 @@ namedLazy n f = (n, CopLazy n f)
 
 -- ----------------------  Content
 
-data ContExp c
+data Cox c
     {-| Literal content. -}
     = ContLit c
 
     {-| Operator invocation. -}
-    | ContApp  (Cop c) [ContExp c]
+    | ContApp  (Cop c) [Cox c]
 
     {-| Term reference.
         Term names @[String]@ and positions @[Int]@.
@@ -83,10 +84,10 @@ data ContExp c
 {-| Construct content expression. -}
 formContent
     :: (CContent c)
-    => FindCop c           -- ^ Collection of operators
-    -> [SourceLine]        -- ^ Source code information
-    -> TokenTree           -- ^ Input token tree
-    -> AbortOr (ContExp c) -- ^ Result content expression
+    => FindCop c        -- ^ Collection of operators
+    -> [SourceLine]     -- ^ Source code information
+    -> TokenTree        -- ^ Input token tree
+    -> AbortOr (Cox c)  -- ^ Result content expression
 formContent op src = form where
     form x@(TreeL (TWord _ _ _)) = case litContent x of
                                      Right lit -> Right $ ContLit lit
@@ -108,18 +109,30 @@ formContent op src = form where
         do xs' <- mapM form xs
            Right $ ContApp op' xs'
 
-type PosContent c = Relhead -> ContExp c
+type PosContent c = Relhead -> AbOr (Cox c)
 
 {-| Put term positions for actural heading. -}
-posContent :: ContExp c -> PosContent c
-posContent cont h = pos cont where
-    pos (ContTerm ns _) = ContTerm ns $ headIndex1 h ns
-    pos (ContApp f cs)  = ContApp  f  $ map pos cs
-    pos c = c
+posContent :: Cox c -> PosContent c
+posContent cox h = pos cox where
+    pos (ContApp f cs)  = Right . ContApp f =<< mapM pos cs
+    pos (ContTerm ns _) = let index = headIndex1 h ns
+                          in if all (>= 0) index
+                             then Right $ ContTerm ns index
+                             else Left  $ AbortNoTerm (concat ns)
+    pos c = Right c
+
+runContentUnder
+  :: (CRel c, CList c)
+  => Relhead           -- ^ Heading of relation
+  -> [c]               -- ^ Tuple in body of relation
+  -> (PosContent c)    -- ^ Content expression
+  -> AbOr c            -- ^ Calculated literal content
+runContentUnder h lits cox =
+    runContent lits =<< cox h
 
 {-| Calculate content expression. -}
-runContent :: (CList c, CRel c) => ContExp c -> [c] -> AbOr c
-runContent cont arg = run cont where
+runContent :: (CList c, CRel c) => [c] -> Cox c -> AbOr c
+runContent arg cox = run cox where
     run (ContLit c)      =   Right c
     run (ContTerm _ [p]) =   Right $ arg !! p
     run (ContTerm _ ps)  =   term ps arg
@@ -137,8 +150,8 @@ runContent cont arg = run cont where
            then rel ps $ getRel c
            else Right c
 
-    rel ps (Rel _ args) = do args' <- mapM (term ps) args
-                             Right . putList $ args'
+    rel ps (Rel _ args) =
+        Right . putList =<< mapM (term ps) args
 
 {-
 let op _ = Right $ CopEager "+" f where f xs = Right $ foldr (+) 0 xs
@@ -170,15 +183,15 @@ runContent e1 [1,2,3]
 
    Phase 2. From prefixed token tree to literal content.
 
-     [5. @Tree Token -> ContExp c@]
+     [5. @Tree Token -> Cox c@]
         Convert from token tree to content expression.
         See 'formContent'.
 
-     [6. @ContExp c -> (Relhead -> ContExp c)@]
+     [6. @Cox c -> (Relhead -> Cox c)@]
         Attach term positions using actural heading of relation.
         See 'posContent'.
 
-     [7. @ContExp c -> \[c\] -> c@]
+     [7. @Cox c -> \[c\] -> c@]
         Calculate content expression for each tuple of relation.
         See 'runContent'.
 

@@ -41,9 +41,8 @@ relAdd :: [Named (PosContent VContent)] -> Rel VContent -> AbOr (Rel VContent)
 relAdd cs (Rel h1 b1) =
     do let h2 = Kit.headFrom $ map fst cs
            h3 = Kit.mappend h2 h1
-           cs2 = map g cs
-           g (_, c) = c h1
-           run arg = do cs2' <- mapM (`runContent` arg) cs2
+           cs2 = map snd cs
+       let run arg = do cs2' <- mapM (runContentUnder h1 arg) cs2
                         Right $ cs2' ++ arg
        b3 <- mapM run b1
        Right $ Rel h3 b3
@@ -62,13 +61,14 @@ relmapHold :: OpUse VContent -> Bool -> (PosContent VContent) -> Relmap VContent
 relmapHold use b cont = Kit.relmapCalc use "hold" sub where
     sub _ r1 = relHold b cont r1
 
-relHold :: Bool -> (PosContent VContent) -> Rel VContent -> AbOr (Rel VContent)
-relHold b cont (Rel h1 b1) =
-    do b2 <- filterM f b1
-       Right $ Rel h1 b2
-    where
-      f arg = do c <- runContent (cont h1) arg
-                 case c of
-                   VBool b' -> Right $ b == b'
-                   _        -> Left $ AbortReqBoolean (show c)
+relHold
+    :: (CContent c, Show c)
+    => Bool            -- ^ Criterion
+    -> (PosContent c)  -- ^ Predicate
+    -> AbMap (Rel c)   -- ^ Relation-to-relation mapping
+relHold b cont (Rel h1 b1) = Right . Rel h1 =<< filterM f b1 where
+    f lits = do lit <- runContentUnder h1 lits cont
+                case lit of
+                  x | isBool x -> Right $ b == getBool x
+                  _            -> Left  $ AbortReqBoolean (show lit)
 

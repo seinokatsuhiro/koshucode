@@ -56,6 +56,7 @@ data AbortReason
     | AbortMalformedOperand String
     | AbortMissingTermName  String
     | AbortNotNumber        String
+    | AbortNoTerm           String
     | AbortOddRelation      
     | AbortReqBoolean       String
     | AbortRequireFlatname  String
@@ -81,6 +82,7 @@ instance AbortReasonClass AbortReason where
         (AbortMalformedOperand _)   -> "演算子の引数がおかしい"
         (AbortMissingTermName  _)   -> "項目名が必要"
         (AbortNotNumber        _)   -> "数値として読めない"
+        (AbortNoTerm           _)   -> "項目がない"
         (AbortOddRelation       )   -> "ふぞろいな関係"
         (AbortReqBoolean       _)   -> "真か偽が必要"
         (AbortRequireFlatname  _)   -> "入れ子ではない項目名が必要"
@@ -99,6 +101,7 @@ instance AbortReasonClass AbortReason where
         (AbortMalformedOperand s)   -> par s
         (AbortMissingTermName  s)   -> par s
         (AbortNotNumber        s)   -> par s
+        (AbortNoTerm           s)   -> par s
         (AbortOddRelation       )   -> empty
         (AbortReqBoolean       s)   -> par s
         (AbortRequireFlatname  s)   -> par s

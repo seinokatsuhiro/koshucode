@@ -29,12 +29,12 @@ vanillaCop :: FindCop VContent
 vanillaCop n = lookup n $ concat [copOrder, copLogic, copArith, copList]
 
 vanillaContent
-    :: OpUse VContent         -- ^ Source information
-    -> TokenTree         -- ^ Token tree of content formula
-    -> AbortOr (PosContent VContent)  -- ^ Partial content formula
-vanillaContent use ts =
+    :: OpUse VContent    -- ^ Source information
+    -> TokenTree         -- ^ Token tree of content expression
+    -> AbortOr (PosContent VContent)  -- ^ Partial content expression
+vanillaContent use t =
     do let src = halfLines $ opHalf use
-       c <- formContent vanillaCop src $ vanillaBinary ts
+       c <- formContent vanillaCop src $ vanillaBinary t
        Right $ posContent c
 
 vanillaNamedContent
