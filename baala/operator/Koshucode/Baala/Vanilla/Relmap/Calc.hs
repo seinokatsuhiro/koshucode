@@ -1,13 +1,13 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Relational mappers
+{-|  -}
 
 module Koshucode.Baala.Vanilla.Relmap.Calc
 (
-  -- * hold
-  relopHold, relmapHold, relHold,
   -- * add
   relopAdd, relmapAdd, relAdd,
+  -- * hold
+  relopHold, relmapHold, relHold,
 ) where
 
 import Control.Monad (filterM)
@@ -21,30 +21,6 @@ import qualified Koshucode.Baala.Minimal as Mini
 
 import Koshucode.Baala.Vanilla.Value.Relval
 import Koshucode.Baala.Vanilla.Cop
-
-
-
--- ----------------------  hold
-
-relopHold :: Kit.Relop VContent
-relopHold use = do
-  t <- Mini.getTree use "-term"
-  c <- vanillaContent use t
-  Right $ relmapHold use True c
-
-relmapHold :: OpUse VContent -> Bool -> (PosContent VContent) -> Relmap VContent
-relmapHold use b cont = Kit.relmapCalc use "hold" sub where
-    sub _ r1 = relHold b cont r1
-
-relHold :: Bool -> (PosContent VContent) -> Rel VContent -> AbOr (Rel VContent)
-relHold b cont (Rel h1 b1) =
-    do b2 <- filterM f b1
-       Right $ Rel h1 b2
-    where
-      f arg = do c <- runContent (cont h1) arg
-                 case c of
-                   VBool b' -> Right $ b == b'
-                   _        -> Left $ AbortReqBoolean (show c)
 
 
 
@@ -71,4 +47,28 @@ relAdd cs (Rel h1 b1) =
                         Right $ cs2' ++ arg
        b3 <- mapM run b1
        Right $ Rel h3 b3
+
+
+
+-- ----------------------  hold
+
+relopHold :: Kit.Relop VContent
+relopHold use = do
+  t <- Mini.getTree use "-term"
+  c <- vanillaContent use t
+  Right $ relmapHold use True c
+
+relmapHold :: OpUse VContent -> Bool -> (PosContent VContent) -> Relmap VContent
+relmapHold use b cont = Kit.relmapCalc use "hold" sub where
+    sub _ r1 = relHold b cont r1
+
+relHold :: Bool -> (PosContent VContent) -> Rel VContent -> AbOr (Rel VContent)
+relHold b cont (Rel h1 b1) =
+    do b2 <- filterM f b1
+       Right $ Rel h1 b2
+    where
+      f arg = do c <- runContent (cont h1) arg
+                 case c of
+                   VBool b' -> Right $ b == b'
+                   _        -> Left $ AbortReqBoolean (show c)
 

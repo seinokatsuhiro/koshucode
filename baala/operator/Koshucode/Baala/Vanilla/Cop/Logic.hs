@@ -26,7 +26,7 @@ import Koshucode.Baala.Vanilla.Value.Content
 
 -}
 
-copLogic :: [Named (ContentOp VContent)]
+copLogic :: [Named (Cop VContent)]
 copLogic =
  [ namedEager  "not"  logiNot
  , namedEager  "and"  logiAnd

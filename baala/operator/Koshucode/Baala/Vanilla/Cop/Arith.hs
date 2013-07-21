@@ -50,7 +50,7 @@ readInt s =
 
 -}
 
-copArith :: [Named (ContentOp VContent)]
+copArith :: [Named (Cop VContent)]
 copArith =
  [ namedEager  "+"    arithPlus
  , namedEager  "*"    arithTimes
@@ -95,7 +95,7 @@ arithAbs1 :: VContent -> AbOr VContent
 arithAbs1 (VInt n) = Right . VInt $ abs n
 arithAbs1 _ = Left AbortUnmatchArity
 
--- let tree = singleToken . tokenTrees . tokens
+-- let tree = singleTree . tokenTrees . tokens
 -- let Right e2 = vanillaContent [] $ tree "1 = 1 and 2 = 3"
 -- let Right e2 = vanillaContent [] $ tree "(+ (int 1) (int 2) (int 3))"
 -- let Right e2 = vanillaContent [] $ tree "(+ 1 2 (+ 3 4 5) 6 7 8 9)"

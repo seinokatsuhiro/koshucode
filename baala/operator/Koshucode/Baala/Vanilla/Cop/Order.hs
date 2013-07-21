@@ -30,7 +30,7 @@ import Koshucode.Baala.Vanilla.Value.Content
 
 -}
 
-copOrder :: [Named (ContentOp VContent)]
+copOrder :: [Named (Cop VContent)]
 copOrder =
  [ namedEager  "="    ordEq
  , namedEager  "<>"   ordNeq

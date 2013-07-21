@@ -7,7 +7,7 @@ module Koshucode.Baala.Base.Syntax.TokenTree
 -- * Library
   TokenTree
 , tokenTrees
-, singleToken
+, singleTree
 , divideByTokenTree
 
 -- * Examples
@@ -50,9 +50,9 @@ parenType = parenTable
     , (5, isOpenTokenOf "[|" , isCloseTokenOf "|]") -- relation
     ]
 
-singleToken :: [TokenTree] -> TokenTree
-singleToken [t] = t
-singleToken ts  = TreeB 1 ts
+singleTree :: [TokenTree] -> TokenTree
+singleTree [t] = t
+singleTree ts  = TreeB 1 ts
 
 divideByTokenTree :: String -> [TokenTree] -> [[TokenTree]]
 divideByTokenTree w = divideByP p where

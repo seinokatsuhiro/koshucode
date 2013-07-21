@@ -154,7 +154,7 @@ divideByName src = nam where
         let (cs, xs2) = content xs
         in do n    <- litFlatname src x
               xs2' <- nam xs2
-              Right $ (n, singleToken cs) : xs2'
+              Right $ (n, singleTree cs) : xs2'
 
     content :: [TokenTree] -> ([TokenTree], [TokenTree])
     content xs@(TreeL (TTerm _ _) : _) = ([], xs)

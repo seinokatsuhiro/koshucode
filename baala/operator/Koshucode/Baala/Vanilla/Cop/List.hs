@@ -31,7 +31,7 @@ import Koshucode.Baala.Vanilla.Value.Content
 
 -}
 
-copList :: [Named (ContentOp VContent)]
+copList :: [Named (Cop VContent)]
 copList =
  [ namedEager  "list"     list
  , namedEager  "total"    listTotal

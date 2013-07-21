@@ -25,14 +25,14 @@ import Koshucode.Baala.Vanilla.Value.Content
 
 -- ----------------------
 
-vanillaCop :: String -> Maybe (ContentOp VContent)
+vanillaCop :: FindCop VContent
 vanillaCop n = lookup n $ concat [copOrder, copLogic, copArith, copList]
 
 vanillaContent
     :: OpUse VContent         -- ^ Source information
     -> TokenTree         -- ^ Token tree of content formula
     -> AbortOr (PosContent VContent)  -- ^ Partial content formula
-vanillaContent use ts = 
+vanillaContent use ts =
     do let src = halfLines $ opHalf use
        c <- formContent vanillaCop src $ vanillaBinary ts
        Right $ posContent c
