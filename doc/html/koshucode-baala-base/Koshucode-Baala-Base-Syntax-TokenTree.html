@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.26.0.0: A notational system for relational data</p
+      >koshucode-baala-base-0.28.0.0: A notational system for relational data</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -93,8 +93,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >TokenTree</a
 	    >]</li
 	  ><li class="src short"
-	  ><a href="#v:singleToken"
-	    >singleToken</a
+	  ><a href="#v:singleTree"
+	    >singleTree</a
 	    > :: [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
@@ -189,13 +189,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:singleToken" class="def"
-	    >singleToken</a
+	  ><a name="v:singleTree" class="def"
+	    >singleTree</a
 	    > :: [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    ><a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#singleToken" class="link"
+	    ><a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#singleTree" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -247,9 +247,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ></strong
 	    >[TreeL (TWord 1 0 &quot;|--&quot;),
  TreeL (TWord 3 0 &quot;R&quot;),
- TreeL (TTermN 5 [&quot;/x&quot;]),
+ TreeL (TTerm 5 [&quot;/x&quot;]),
  TreeL (TWord 7 0 &quot;0&quot;),
- TreeL (TTermN 9 [&quot;/y&quot;]),
+ TreeL (TTerm 9 [&quot;/y&quot;]),
  TreeL (TWord 11 0 &quot;1&quot;)]
 </pre
 	  ><p
@@ -267,8 +267,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
  TreeL (TWord 3 0 &quot;:&quot;),
  TreeL (TWord 5 0 &quot;source&quot;),
  TreeL (TWord 7 0 &quot;R&quot;),
- TreeL (TTermN 9 [&quot;/x&quot;]),
- TreeL (TTermN 11 [&quot;/y&quot;])]
+ TreeL (TTerm 9 [&quot;/x&quot;]),
+ TreeL (TTerm 11 [&quot;/y&quot;])]
 </pre
 	  ><p
 	  >Nested relmap.
@@ -286,8 +286,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
    TreeL (TWord 4 0 &quot;R&quot;),
    TreeL (TWord 6 0 &quot;|&quot;),
    TreeL (TWord 8 0 &quot;pick&quot;),
-   TreeL (TTermN 10 [&quot;/a&quot;]),
-   TreeL (TTermN 12 [&quot;/b&quot;])]]
+   TreeL (TTerm 10 [&quot;/a&quot;]),
+   TreeL (TTerm 12 [&quot;/b&quot;])]]
 </pre
 	  ><p
 	  >Double paren.
@@ -335,7 +335,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 </code
 	      ></strong
 	    >[TreeB 4 [
-   TreeL (TTermN 3 [&quot;/a&quot;]), TreeL (TTermN 5 [&quot;/b&quot;]),
+   TreeL (TTerm 3 [&quot;/a&quot;]), TreeL (TTerm 5 [&quot;/b&quot;]),
    TreeL (TWord 7 0 &quot;|&quot;),
    TreeL (TWord 9 0 &quot;10&quot;), TreeL (TWord 11 0 &quot;20&quot;),
    TreeL (TWord 13 0 &quot;|&quot;),

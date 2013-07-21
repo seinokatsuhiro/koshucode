@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.26.0.0: A notational system for relational data</p
+      >koshucode-baala-base-0.28.0.0: A notational system for relational data</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -108,16 +108,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >type</span
 	    > <a href="#t:LiteralizeFrom"
 	    >LiteralizeFrom</a
-	    > b a = [<a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-	    >SourceLine</a
-	    >] -&gt; b -&gt; <a href="Koshucode-Baala-Base-Abort-Symbol.html#t:AbortOr"
-	    >AbortOr</a
+	    > b a = b -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
+	    >AbOr</a
 	    > a</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:Literalize"
-	    >Literalize</a
+	    > <a href="#t:LiteralizeTrees"
+	    >LiteralizeTrees</a
 	    > a = <a href="Koshucode-Baala-Base-Content-Literalize.html#t:LiteralizeFrom"
 	    >LiteralizeFrom</a
 	    > [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
@@ -146,30 +144,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	  ><li class="src short"
 	  ><a href="#v:litContent"
 	    >litContent</a
-	    > :: <a href="Koshucode-Baala-Base-Content-Class.html#t:Value"
-	    >Value</a
+	    > :: <a href="Koshucode-Baala-Base-Content-Class.html#t:CContent"
+	    >CContent</a
 	    > v =&gt; <a href="Koshucode-Baala-Base-Content-Literalize.html#t:LiteralizeTree"
 	    >LiteralizeTree</a
 	    > v</li
 	  ><li class="src short"
 	  ><a href="#v:litList"
 	    >litList</a
-	    > :: <a href="Koshucode-Baala-Base-Content-Class.html#t:Value"
-	    >Value</a
-	    > v =&gt; <a href="Koshucode-Baala-Base-Content-Literalize.html#t:Literalize"
-	    >Literalize</a
+	    > :: <a href="Koshucode-Baala-Base-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > v =&gt; <a href="Koshucode-Baala-Base-Content-Literalize.html#t:LiteralizeTrees"
+	    >LiteralizeTrees</a
 	    > [v]</li
 	  ><li class="src short"
 	  ><a href="#v:litJudge"
 	    >litJudge</a
-	    > :: <a href="Koshucode-Baala-Base-Content-Class.html#t:Value"
-	    >Value</a
+	    > :: <a href="Koshucode-Baala-Base-Content-Class.html#t:CContent"
+	    >CContent</a
 	    > v =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Data-Judge.html#t:Relsign"
 	    >Relsign</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Content-Literalize.html#t:Literalize"
-	    >Literalize</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Content-Literalize.html#t:LiteralizeTrees"
+	    >LiteralizeTrees</a
 	    > (<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
 	    > v)</li
@@ -188,10 +186,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >type</span
 	    > <a name="t:LiteralizeFrom" class="def"
 	    >LiteralizeFrom</a
-	    > b a = [<a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-	    >SourceLine</a
-	    >] -&gt; b -&gt; <a href="Koshucode-Baala-Base-Abort-Symbol.html#t:AbortOr"
-	    >AbortOr</a
+	    > b a = b -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
+	    >AbOr</a
 	    > a<a href="src/Koshucode-Baala-Base-Content-Literalize.html#LiteralizeFrom" class="link"
 	    >Source</a
 	    ></p
@@ -209,13 +205,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:Literalize" class="def"
-	    >Literalize</a
+	    > <a name="t:LiteralizeTrees" class="def"
+	    >LiteralizeTrees</a
 	    > a = <a href="Koshucode-Baala-Base-Content-Literalize.html#t:LiteralizeFrom"
 	    >LiteralizeFrom</a
 	    > [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    >] a<a href="src/Koshucode-Baala-Base-Content-Literalize.html#Literalize" class="link"
+	    >] a<a href="src/Koshucode-Baala-Base-Content-Literalize.html#LiteralizeTrees" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -275,8 +271,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	><p class="src"
 	  ><a name="v:litContent" class="def"
 	    >litContent</a
-	    > :: <a href="Koshucode-Baala-Base-Content-Class.html#t:Value"
-	    >Value</a
+	    > :: <a href="Koshucode-Baala-Base-Content-Class.html#t:CContent"
+	    >CContent</a
 	    > v =&gt; <a href="Koshucode-Baala-Base-Content-Literalize.html#t:LiteralizeTree"
 	    >LiteralizeTree</a
 	    > v<a href="src/Koshucode-Baala-Base-Content-Literalize.html#litContent" class="link"
@@ -297,10 +293,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	><p class="src"
 	  ><a name="v:litList" class="def"
 	    >litList</a
-	    > :: <a href="Koshucode-Baala-Base-Content-Class.html#t:Value"
-	    >Value</a
-	    > v =&gt; <a href="Koshucode-Baala-Base-Content-Literalize.html#t:Literalize"
-	    >Literalize</a
+	    > :: <a href="Koshucode-Baala-Base-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > v =&gt; <a href="Koshucode-Baala-Base-Content-Literalize.html#t:LiteralizeTrees"
+	    >LiteralizeTrees</a
 	    > [v]<a href="src/Koshucode-Baala-Base-Content-Literalize.html#litList" class="link"
 	    >Source</a
 	    ></p
@@ -314,14 +310,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	><p class="src"
 	  ><a name="v:litJudge" class="def"
 	    >litJudge</a
-	    > :: <a href="Koshucode-Baala-Base-Content-Class.html#t:Value"
-	    >Value</a
+	    > :: <a href="Koshucode-Baala-Base-Content-Class.html#t:CContent"
+	    >CContent</a
 	    > v =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Data-Judge.html#t:Relsign"
 	    >Relsign</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Content-Literalize.html#t:Literalize"
-	    >Literalize</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Content-Literalize.html#t:LiteralizeTrees"
+	    >LiteralizeTrees</a
 	    > (<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
 	    > v)<a href="src/Koshucode-Baala-Base-Content-Literalize.html#litJudge" class="link"
@@ -480,7 +476,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	      >lit &quot;#true #false&quot;
 </code
 	      ></strong
-	    >Right [Boolv True, Boolv False]
+	    >Right [VBool True, VBool False]
 </pre
 	  ><p
 	  >Words.
@@ -493,7 +489,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	      >lit &quot;a 'b c'&quot;
 </code
 	      ></strong
-	    >Right [Stringv &quot;a&quot;, Stringv &quot;b c&quot;]
+	    >Right [VString &quot;a&quot;, VString &quot;b c&quot;]
 </pre
 	  ><pre class="screen"
 	  ><code class="prompt"
@@ -503,7 +499,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	      >lit &quot;a 1&quot;
 </code
 	      ></strong
-	    >Right [Stringv &quot;a&quot;, Stringv &quot;1&quot;]
+	    >Right [VString &quot;a&quot;, VString &quot;1&quot;]
 </pre
 	  ><p
 	  >Integer.
@@ -516,7 +512,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	      >lit &quot;(int 12)&quot;
 </code
 	      ></strong
-	    >Right [Intv 12]
+	    >Right [VInt 12]
 </pre
 	  ><p
 	  >Nil as no value.
@@ -529,7 +525,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	      >lit &quot;()&quot;
 </code
 	      ></strong
-	    >Right [Nov]
+	    >Right [VNil]
 </pre
 	  ></div
 	><h2 id="g:7"
@@ -547,7 +543,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	      >lit &quot;{ b a a c a }&quot;
 </code
 	      ></strong
-	    >Right [Setv [Stringv &quot;b&quot;, Stringv &quot;a&quot;, Stringv &quot;c&quot;]]
+	    >Right [VSet [VString &quot;b&quot;,VString &quot;a&quot;,VString &quot;c&quot;]]
 </pre
 	  ><p
 	  >List.
@@ -560,7 +556,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	      >lit &quot;[ a 10 (int 20) ]&quot;
 </code
 	      ></strong
-	    >Right [Listv [Stringv &quot;a&quot;, Stringv &quot;10&quot;, Intv 20]]
+	    >Right [VList [VString &quot;a&quot;,VString &quot;10&quot;,VInt 20]]
 </pre
 	  ><p
 	  >Termset.
@@ -573,9 +569,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	      >lit &quot;{| /a 0 /b [ a 1 ] |}&quot;
 </code
 	      ></strong
-	    >Right [Termsetv [
-    (&quot;/a&quot;, Stringv &quot;0&quot;),
-    (&quot;/b&quot;, Listv [Stringv &quot;a&quot;, Stringv &quot;1&quot;])]]
+	    >Right [VTermset
+  [ (&quot;/a&quot;, VString &quot;0&quot;)
+  , (&quot;/b&quot;, VList [VString &quot;a&quot;, VString &quot;1&quot;]) ]]
 </pre
 	  ><p
 	  >Relation.
@@ -588,12 +584,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	      >lit &quot;[| /a /x | A1 (int 20) | A3 (int 40) | A4 (int 60) |]&quot;
 </code
 	      ></strong
-	    >Right [Relv (Rel
-   (Relhead [Term &quot;/a&quot;, Term &quot;/x&quot;])
-   [ [Stringv &quot;A1&quot;, Intv 20]
-   , [Stringv &quot;A3&quot;, Intv 40]
-   , [Stringv &quot;A4&quot;, Intv 60]
-   ])]
+	    >Right [ VRel (Rel
+  (Relhead [Term &quot;/a&quot;, Term &quot;/x&quot;])
+  [ [VString &quot;A1&quot;, VInt 20]
+  , [VString &quot;A3&quot;, VInt 40]
+  , [VString &quot;A4&quot;, VInt 60] ])]
 </pre
 	  ></div
 	></div

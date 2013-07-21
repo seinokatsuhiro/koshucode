@@ -16,7 +16,7 @@
 <a name="line-7"></a><span class='hs-comment'>-- * Library</span>
 <a name="line-8"></a>  <span class='hs-conid'>TokenTree</span>
 <a name="line-9"></a><span class='hs-layout'>,</span> <span class='hs-varid'>tokenTrees</span>
-<a name="line-10"></a><span class='hs-layout'>,</span> <span class='hs-varid'>singleToken</span>
+<a name="line-10"></a><span class='hs-layout'>,</span> <span class='hs-varid'>singleTree</span>
 <a name="line-11"></a><span class='hs-layout'>,</span> <span class='hs-varid'>divideByTokenTree</span>
 <a name="line-12"></a>
 <a name="line-13"></a><span class='hs-comment'>-- * Examples</span>
@@ -59,9 +59,9 @@
 <a name="line-50"></a>    <span class='hs-layout'>,</span> <span class='hs-layout'>(</span><span class='hs-num'>5</span><span class='hs-layout'>,</span> <span class='hs-varid'>isOpenTokenOf</span> <span class='hs-str'>"[|"</span> <span class='hs-layout'>,</span> <span class='hs-varid'>isCloseTokenOf</span> <span class='hs-str'>"|]"</span><span class='hs-layout'>)</span> <span class='hs-comment'>-- relation</span>
 <a name="line-51"></a>    <span class='hs-keyglyph'>]</span>
 <a name="line-52"></a>
-<a name="line-53"></a><a name="singleToken"></a><span class='hs-definition'>singleToken</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>TokenTree</span>
-<a name="line-54"></a><span class='hs-definition'>singleToken</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>t</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>t</span>
-<a name="line-55"></a><span class='hs-definition'>singleToken</span> <span class='hs-varid'>ts</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>TreeB</span> <span class='hs-num'>1</span> <span class='hs-varid'>ts</span>
+<a name="line-53"></a><a name="singleTree"></a><span class='hs-definition'>singleTree</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>TokenTree</span>
+<a name="line-54"></a><span class='hs-definition'>singleTree</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>t</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>t</span>
+<a name="line-55"></a><span class='hs-definition'>singleTree</span> <span class='hs-varid'>ts</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>TreeB</span> <span class='hs-num'>1</span> <span class='hs-varid'>ts</span>
 <a name="line-56"></a>
 <a name="line-57"></a><a name="divideByTokenTree"></a><span class='hs-definition'>divideByTokenTree</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span><span class='hs-keyglyph'>]</span>
 <a name="line-58"></a><span class='hs-definition'>divideByTokenTree</span> <span class='hs-varid'>w</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>divideByP</span> <span class='hs-varid'>p</span> <span class='hs-keyword'>where</span>
@@ -83,9 +83,9 @@
 <a name="line-74"></a>   &gt;&gt;&gt; tokenTrees . tokens $ "|-- R /x 0 /y 1"
 <a name="line-75"></a>   [TreeL (TWord 1 0 "|--"),
 <a name="line-76"></a>    TreeL (TWord 3 0 "R"),
-<a name="line-77"></a>    TreeL (TTermN 5 ["/x"]),
+<a name="line-77"></a>    TreeL (TTerm 5 ["/x"]),
 <a name="line-78"></a>    TreeL (TWord 7 0 "0"),
-<a name="line-79"></a>    TreeL (TTermN 9 ["/y"]),
+<a name="line-79"></a>    TreeL (TTerm 9 ["/y"]),
 <a name="line-80"></a>    TreeL (TWord 11 0 "1")]
 <a name="line-81"></a>
 <a name="line-82"></a>   Relmap.
@@ -95,8 +95,8 @@
 <a name="line-86"></a>    TreeL (TWord 3 0 ":"),
 <a name="line-87"></a>    TreeL (TWord 5 0 "source"),
 <a name="line-88"></a>    TreeL (TWord 7 0 "R"),
-<a name="line-89"></a>    TreeL (TTermN 9 ["/x"]),
-<a name="line-90"></a>    TreeL (TTermN 11 ["/y"])]
+<a name="line-89"></a>    TreeL (TTerm 9 ["/x"]),
+<a name="line-90"></a>    TreeL (TTerm 11 ["/y"])]
 <a name="line-91"></a>
 <a name="line-92"></a>   Nested relmap.
 <a name="line-93"></a>
@@ -106,8 +106,8 @@
 <a name="line-97"></a>      TreeL (TWord 4 0 "R"),
 <a name="line-98"></a>      TreeL (TWord 6 0 "|"),
 <a name="line-99"></a>      TreeL (TWord 8 0 "pick"),
-<a name="line-100"></a>      TreeL (TTermN 10 ["/a"]),
-<a name="line-101"></a>      TreeL (TTermN 12 ["/b"])]]
+<a name="line-100"></a>      TreeL (TTerm 10 ["/a"]),
+<a name="line-101"></a>      TreeL (TTerm 12 ["/b"])]]
 <a name="line-102"></a>
 <a name="line-103"></a>   Double paren.
 <a name="line-104"></a>
@@ -131,7 +131,7 @@
 <a name="line-122"></a>
 <a name="line-123"></a>   &gt;&gt;&gt; tokenTrees . tokens $ "{| /a /b | 10 20 | 30 40 |}"
 <a name="line-124"></a>   [TreeB 4 [
-<a name="line-125"></a>      TreeL (TTermN 3 ["/a"]), TreeL (TTermN 5 ["/b"]),
+<a name="line-125"></a>      TreeL (TTerm 3 ["/a"]), TreeL (TTerm 5 ["/b"]),
 <a name="line-126"></a>      TreeL (TWord 7 0 "|"),
 <a name="line-127"></a>      TreeL (TWord 9 0 "10"), TreeL (TWord 11 0 "20"),
 <a name="line-128"></a>      TreeL (TWord 13 0 "|"),

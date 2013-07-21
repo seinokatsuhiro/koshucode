@@ -99,7 +99,7 @@
 <a name="line-90"></a>
 <a name="line-91"></a>      <span class='hs-varid'>term</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>cs</span><span class='hs-layout'>)</span> <span class='hs-varid'>xs</span> <span class='hs-varid'>ns</span> <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isTerm</span> <span class='hs-varid'>c</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>term</span> <span class='hs-varid'>cs</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>c</span><span class='hs-keyglyph'>]</span> <span class='hs-varop'>$</span> <span class='hs-varid'>t</span> <span class='hs-varid'>xs</span> <span class='hs-varid'>ns</span>
 <a name="line-92"></a>                        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isWord</span> <span class='hs-varid'>c</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>term</span> <span class='hs-varid'>cs</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>xs</span><span class='hs-layout'>)</span> <span class='hs-varid'>ns</span>
-<a name="line-93"></a>      <span class='hs-varid'>term</span> <span class='hs-varid'>ccs</span> <span class='hs-varid'>xs</span> <span class='hs-varid'>ns</span>                 <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tokR</span> <span class='hs-varid'>ccs</span> <span class='hs-layout'>(</span><span class='hs-conid'>TTermN</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-layout'>(</span><span class='hs-varid'>t</span> <span class='hs-varid'>xs</span> <span class='hs-varid'>ns</span><span class='hs-layout'>)</span>
+<a name="line-93"></a>      <span class='hs-varid'>term</span> <span class='hs-varid'>ccs</span> <span class='hs-varid'>xs</span> <span class='hs-varid'>ns</span>                 <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tokR</span> <span class='hs-varid'>ccs</span> <span class='hs-layout'>(</span><span class='hs-conid'>TTerm</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-layout'>(</span><span class='hs-varid'>t</span> <span class='hs-varid'>xs</span> <span class='hs-varid'>ns</span><span class='hs-layout'>)</span>
 <a name="line-94"></a>      <span class='hs-varid'>t</span> <span class='hs-varid'>xs</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varid'>reverse</span> <span class='hs-varid'>xs</span> <span class='hs-conop'>:</span><span class='hs-layout'>)</span>
 <a name="line-95"></a>
 <a name="line-96"></a>      <span class='hs-varid'>white</span> <span class='hs-varid'>i</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>cs</span><span class='hs-layout'>)</span>    <span class='hs-keyglyph'>|</span> <span class='hs-varid'>isSpace</span> <span class='hs-varid'>c</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>white</span> <span class='hs-layout'>(</span><span class='hs-varid'>i</span> <span class='hs-varop'>+</span> <span class='hs-num'>1</span><span class='hs-layout'>)</span> <span class='hs-varid'>cs</span>
@@ -131,7 +131,7 @@
 <a name="line-122"></a><span class='hs-definition'>isTerm</span>    <span class='hs-varid'>c</span>  <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>c</span> <span class='hs-varop'>==</span> <span class='hs-chr'>'/'</span>
 <a name="line-123"></a><a name="isOpen"></a><span class='hs-definition'>isOpen</span>    <span class='hs-varid'>c</span>  <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>c</span> <span class='hs-varop'>`elem`</span> <span class='hs-str'>"([{"</span>
 <a name="line-124"></a><a name="isClose"></a><span class='hs-definition'>isClose</span>   <span class='hs-varid'>c</span>  <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>c</span> <span class='hs-varop'>`elem`</span> <span class='hs-str'>"}])"</span>
-<a name="line-125"></a><a name="isSingle"></a><span class='hs-definition'>isSingle</span>  <span class='hs-varid'>c</span>  <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>c</span> <span class='hs-varop'>`elem`</span> <span class='hs-str'>":="</span>
+<a name="line-125"></a><a name="isSingle"></a><span class='hs-definition'>isSingle</span>  <span class='hs-varid'>c</span>  <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>c</span> <span class='hs-varop'>`elem`</span> <span class='hs-str'>":"</span>
 <a name="line-126"></a><a name="isQuote"></a><span class='hs-definition'>isQuote</span>   <span class='hs-varid'>c</span>  <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>c</span> <span class='hs-varop'>`elem`</span> <span class='hs-str'>"'\""</span>
 <a name="line-127"></a><span class='hs-definition'>isSpace</span>   <span class='hs-varid'>c</span>  <span class='hs-keyglyph'>=</span>  <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>isSpace</span> <span class='hs-varid'>c</span>
 <a name="line-128"></a><a name="isWord"></a><span class='hs-definition'>isWord</span>    <span class='hs-varid'>c</span>  <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>maybeWord</span> <span class='hs-varid'>c</span> <span class='hs-varop'>&amp;&amp;</span> <span class='hs-varid'>not</span> <span class='hs-layout'>(</span><span class='hs-varid'>isNonWord</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span>
@@ -154,188 +154,187 @@
 <a name="line-145"></a><span class='hs-definition'>untokens</span> <span class='hs-conid'>[]</span>     <span class='hs-keyglyph'>=</span> <span class='hs-conid'>[]</span>
 <a name="line-146"></a>
 <a name="line-147"></a><a name="untoken"></a><span class='hs-definition'>untoken</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Token</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span>
-<a name="line-148"></a><span class='hs-definition'>untoken</span> <span class='hs-layout'>(</span><span class='hs-conid'>TWord</span> <span class='hs-keyword'>_</span> <span class='hs-num'>1</span> <span class='hs-varid'>s</span><span class='hs-layout'>)</span>   <span class='hs-keyglyph'>=</span> <span class='hs-str'>"'"</span> <span class='hs-varop'>++</span> <span class='hs-varid'>s</span> <span class='hs-varop'>++</span> <span class='hs-str'>"'"</span>
+<a name="line-148"></a><span class='hs-definition'>untoken</span> <span class='hs-layout'>(</span><span class='hs-conid'>TWord</span> <span class='hs-keyword'>_</span> <span class='hs-num'>1</span> <span class='hs-varid'>s</span><span class='hs-layout'>)</span>   <span class='hs-keyglyph'>=</span> <span class='hs-str'>"'"</span>  <span class='hs-varop'>++</span> <span class='hs-varid'>s</span> <span class='hs-varop'>++</span> <span class='hs-str'>"'"</span>
 <a name="line-149"></a><span class='hs-definition'>untoken</span> <span class='hs-layout'>(</span><span class='hs-conid'>TWord</span> <span class='hs-keyword'>_</span> <span class='hs-num'>2</span> <span class='hs-varid'>s</span><span class='hs-layout'>)</span>   <span class='hs-keyglyph'>=</span> <span class='hs-str'>"\""</span> <span class='hs-varop'>++</span> <span class='hs-varid'>s</span> <span class='hs-varop'>++</span> <span class='hs-str'>"\""</span>
 <a name="line-150"></a><span class='hs-definition'>untoken</span> <span class='hs-layout'>(</span><span class='hs-conid'>TWord</span> <span class='hs-keyword'>_</span> <span class='hs-keyword'>_</span> <span class='hs-varid'>s</span><span class='hs-layout'>)</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>s</span>
-<a name="line-151"></a><span class='hs-definition'>untoken</span> <span class='hs-layout'>(</span><span class='hs-conid'>TTermN</span>  <span class='hs-keyword'>_</span> <span class='hs-varid'>ns</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>concat</span> <span class='hs-varid'>ns</span>
-<a name="line-152"></a><span class='hs-definition'>untoken</span> <span class='hs-layout'>(</span><span class='hs-conid'>TTermP</span>  <span class='hs-keyword'>_</span> <span class='hs-varid'>ns</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>concatMap</span> <span class='hs-varid'>show</span> <span class='hs-varid'>ns</span>
-<a name="line-153"></a><span class='hs-definition'>untoken</span> <span class='hs-layout'>(</span><span class='hs-conid'>TOpen</span>   <span class='hs-keyword'>_</span> <span class='hs-varid'>s</span><span class='hs-layout'>)</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>s</span>
-<a name="line-154"></a><span class='hs-definition'>untoken</span> <span class='hs-layout'>(</span><span class='hs-conid'>TClose</span>  <span class='hs-keyword'>_</span> <span class='hs-varid'>s</span><span class='hs-layout'>)</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>s</span>
-<a name="line-155"></a><span class='hs-definition'>untoken</span> <span class='hs-layout'>(</span><span class='hs-conid'>TSpace</span>  <span class='hs-keyword'>_</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>replicate</span> <span class='hs-varid'>n</span> <span class='hs-chr'>' '</span>
-<a name="line-156"></a><span class='hs-definition'>untoken</span> <span class='hs-layout'>(</span><span class='hs-conid'>TComment</span> <span class='hs-keyword'>_</span> <span class='hs-varid'>s</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>s</span>
+<a name="line-151"></a><span class='hs-definition'>untoken</span> <span class='hs-layout'>(</span><span class='hs-conid'>TTerm</span>   <span class='hs-keyword'>_</span> <span class='hs-varid'>ns</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>concat</span> <span class='hs-varid'>ns</span>
+<a name="line-152"></a><span class='hs-definition'>untoken</span> <span class='hs-layout'>(</span><span class='hs-conid'>TOpen</span>   <span class='hs-keyword'>_</span> <span class='hs-varid'>s</span><span class='hs-layout'>)</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>s</span>
+<a name="line-153"></a><span class='hs-definition'>untoken</span> <span class='hs-layout'>(</span><span class='hs-conid'>TClose</span>  <span class='hs-keyword'>_</span> <span class='hs-varid'>s</span><span class='hs-layout'>)</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>s</span>
+<a name="line-154"></a><span class='hs-definition'>untoken</span> <span class='hs-layout'>(</span><span class='hs-conid'>TSpace</span>  <span class='hs-keyword'>_</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>replicate</span> <span class='hs-varid'>n</span> <span class='hs-chr'>' '</span>
+<a name="line-155"></a><span class='hs-definition'>untoken</span> <span class='hs-layout'>(</span><span class='hs-conid'>TComment</span> <span class='hs-keyword'>_</span> <span class='hs-varid'>s</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>s</span>
+<a name="line-156"></a>
 <a name="line-157"></a>
 <a name="line-158"></a>
-<a name="line-159"></a>
-<a name="line-160"></a><span class='hs-comment'>-- ----------------------  Source line</span>
-<a name="line-161"></a>
-<a name="line-162"></a><a name="SourceLine"></a><span class='hs-keyword'>data</span> <span class='hs-conid'>SourceLine</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>SourceLine</span>
-<a name="line-163"></a>    <span class='hs-layout'>{</span> <span class='hs-varid'>sourceLineNumber</span>  <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span>     <span class='hs-comment'>-- ^ Line number, from 1.</span>
-<a name="line-164"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>sourceLineContent</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span>  <span class='hs-comment'>-- ^ Line content without newline.</span>
-<a name="line-165"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>sourceLineTokens</span>  <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Token</span><span class='hs-keyglyph'>]</span> <span class='hs-comment'>-- ^ Tokens from line.</span>
-<a name="line-166"></a>    <span class='hs-layout'>}</span> <span class='hs-keyword'>deriving</span> <span class='hs-layout'>(</span><span class='hs-conid'>Show</span><span class='hs-layout'>,</span> <span class='hs-conid'>Eq</span><span class='hs-layout'>,</span> <span class='hs-conid'>Ord</span><span class='hs-layout'>,</span> <span class='hs-conid'>Data</span><span class='hs-layout'>,</span> <span class='hs-conid'>Typeable</span><span class='hs-layout'>)</span>
-<a name="line-167"></a>
-<a name="line-168"></a><a name="instance%20Pretty%20SourceLine"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>Pretty</span> <span class='hs-conid'>SourceLine</span> <span class='hs-keyword'>where</span>
-<a name="line-169"></a>    <span class='hs-varid'>doc</span> <span class='hs-layout'>(</span><span class='hs-conid'>SourceLine</span> <span class='hs-keyword'>_</span> <span class='hs-varid'>line</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>text</span> <span class='hs-varid'>line</span>
-<a name="line-170"></a>
-<a name="line-171"></a><a name="sourceLines"></a><span class='hs-comment'>{-| Split source text into 'SourceLine' list.
-<a name="line-172"></a>
-<a name="line-173"></a>    1. Split source code into lines by line delimiters
-<a name="line-174"></a>       (carriage return @\\r@ or line feed @\\n@)
-<a name="line-175"></a>
-<a name="line-176"></a>   2. Numbering line numbers.
-<a name="line-177"></a>      Internally, this is represented as
-<a name="line-178"></a>      a list of pairs (/line#/, /content/).
-<a name="line-179"></a>
-<a name="line-180"></a>   3. Tokenize each lines.
-<a name="line-181"></a>      This is represented as a list of
-<a name="line-182"></a>      'SourceLine' /line#/ /content/ /tokens/.
-<a name="line-183"></a>  -}</span>
-<a name="line-184"></a><span class='hs-definition'>sourceLines</span>
-<a name="line-185"></a>    <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span>        <span class='hs-comment'>-- ^ Source text in Koshucode.</span>
-<a name="line-186"></a>    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>SourceLine</span><span class='hs-keyglyph'>]</span>  <span class='hs-comment'>-- ^ Token list per lines.</span>
-<a name="line-187"></a><span class='hs-definition'>sourceLines</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-num'>1</span> <span class='hs-varop'>.</span> <span class='hs-varid'>linesNumbered</span> <span class='hs-keyword'>where</span>
-<a name="line-188"></a>    <span class='hs-varid'>loop</span> <span class='hs-keyword'>_</span> <span class='hs-conid'>[]</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>[]</span>
-<a name="line-189"></a>    <span class='hs-varid'>loop</span> <span class='hs-varid'>tok</span> <span class='hs-layout'>(</span><span class='hs-varid'>p</span> <span class='hs-conop'>:</span> <span class='hs-varid'>ps</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span>
-<a name="line-190"></a>        <span class='hs-keyword'>case</span> <span class='hs-varid'>sourceLine</span> <span class='hs-varid'>tok</span> <span class='hs-varid'>p</span> <span class='hs-keyword'>of</span>
-<a name="line-191"></a>          <span class='hs-layout'>(</span><span class='hs-varid'>tok'</span><span class='hs-layout'>,</span> <span class='hs-varid'>src</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>src</span> <span class='hs-varop'>++</span> <span class='hs-varid'>loop</span> <span class='hs-varid'>tok'</span> <span class='hs-varid'>ps</span>
-<a name="line-192"></a>
-<a name="line-193"></a><a name="sourceLine"></a><span class='hs-definition'>sourceLine</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-layout'>(</span><span class='hs-conid'>Int</span><span class='hs-layout'>,</span> <span class='hs-conid'>String</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-layout'>(</span><span class='hs-conid'>Int</span><span class='hs-layout'>,</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>SourceLine</span><span class='hs-keyglyph'>]</span><span class='hs-layout'>)</span>
-<a name="line-194"></a><span class='hs-definition'>sourceLine</span> <span class='hs-varid'>tok</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span><span class='hs-layout'>,</span> <span class='hs-varid'>ln</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varid'>tok</span> <span class='hs-varop'>+</span> <span class='hs-varid'>length</span> <span class='hs-varid'>toks</span><span class='hs-layout'>,</span> <span class='hs-varid'>map</span> <span class='hs-varid'>src</span> <span class='hs-varid'>ls</span><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
-<a name="line-195"></a>    <span class='hs-varid'>toks</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>gatherWith</span> <span class='hs-varid'>nextToken</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>tok</span> <span class='hs-keyglyph'>..</span><span class='hs-keyglyph'>]</span> <span class='hs-varid'>ln</span>
-<a name="line-196"></a>    <span class='hs-varid'>ls</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>divideByToken</span> <span class='hs-str'>"||"</span> <span class='hs-varid'>toks</span>
-<a name="line-197"></a>    <span class='hs-varid'>src</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>SourceLine</span> <span class='hs-varid'>n</span> <span class='hs-varid'>ln</span>
-<a name="line-198"></a>
-<a name="line-199"></a><a name="divideByToken"></a><span class='hs-definition'>divideByToken</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Token</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-keyglyph'>[</span><span class='hs-conid'>Token</span><span class='hs-keyglyph'>]</span><span class='hs-keyglyph'>]</span>
-<a name="line-200"></a><span class='hs-definition'>divideByToken</span> <span class='hs-varid'>w</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>divideByP</span> <span class='hs-varid'>p</span> <span class='hs-keyword'>where</span>
-<a name="line-201"></a>    <span class='hs-varid'>p</span> <span class='hs-layout'>(</span><span class='hs-conid'>TWord</span> <span class='hs-keyword'>_</span> <span class='hs-num'>0</span> <span class='hs-varid'>x</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>|</span> <span class='hs-varid'>w</span> <span class='hs-varop'>==</span> <span class='hs-varid'>x</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
-<a name="line-202"></a>    <span class='hs-varid'>p</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>False</span>
-<a name="line-203"></a>
-<a name="line-204"></a><a name="linesNumbered"></a><span class='hs-comment'>{-| Line number and contents. -}</span>
-<a name="line-205"></a><span class='hs-definition'>linesNumbered</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-layout'>(</span><span class='hs-conid'>Int</span><span class='hs-layout'>,</span> <span class='hs-conid'>String</span><span class='hs-layout'>)</span><span class='hs-keyglyph'>]</span>
-<a name="line-206"></a><span class='hs-definition'>linesNumbered</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>zip</span> <span class='hs-keyglyph'>[</span><span class='hs-num'>1</span><span class='hs-keyglyph'>..</span><span class='hs-keyglyph'>]</span> <span class='hs-varop'>.</span> <span class='hs-varid'>linesCrLf</span>
-<a name="line-207"></a>
-<a name="line-208"></a><a name="linesCrLf"></a><span class='hs-comment'>{-| Split string into lines.
-<a name="line-209"></a>    The result strings do not contain
-<a name="line-210"></a>    carriage returns (@\\r@)
-<a name="line-211"></a>    and line feeds (@\\n@). -}</span>
-<a name="line-212"></a><span class='hs-definition'>linesCrLf</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span>
-<a name="line-213"></a><span class='hs-definition'>linesCrLf</span> <span class='hs-str'>""</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>[]</span>
-<a name="line-214"></a><span class='hs-definition'>linesCrLf</span> <span class='hs-varid'>s</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>ln</span> <span class='hs-conop'>:</span> <span class='hs-varid'>nextLine</span> <span class='hs-varid'>s2</span> <span class='hs-keyword'>where</span>
-<a name="line-215"></a>    <span class='hs-layout'>(</span><span class='hs-varid'>ln</span><span class='hs-layout'>,</span> <span class='hs-varid'>s2</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>break</span> <span class='hs-layout'>(</span><span class='hs-varop'>`elem`</span> <span class='hs-str'>"\r\n"</span><span class='hs-layout'>)</span> <span class='hs-varid'>s</span>
-<a name="line-216"></a>    <span class='hs-varid'>nextLine</span> <span class='hs-layout'>(</span><span class='hs-chr'>'\r'</span> <span class='hs-conop'>:</span> <span class='hs-varid'>s3</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>nextLine</span> <span class='hs-varid'>s3</span>
-<a name="line-217"></a>    <span class='hs-varid'>nextLine</span> <span class='hs-layout'>(</span><span class='hs-chr'>'\n'</span> <span class='hs-conop'>:</span> <span class='hs-varid'>s3</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>nextLine</span> <span class='hs-varid'>s3</span>
-<a name="line-218"></a>    <span class='hs-varid'>nextLine</span> <span class='hs-varid'>s3</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>linesCrLf</span> <span class='hs-varid'>s3</span>
+<a name="line-159"></a><span class='hs-comment'>-- ----------------------  Source line</span>
+<a name="line-160"></a>
+<a name="line-161"></a><a name="SourceLine"></a><span class='hs-keyword'>data</span> <span class='hs-conid'>SourceLine</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>SourceLine</span>
+<a name="line-162"></a>    <span class='hs-layout'>{</span> <span class='hs-varid'>sourceLineNumber</span>  <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span>     <span class='hs-comment'>-- ^ Line number, from 1.</span>
+<a name="line-163"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>sourceLineContent</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span>  <span class='hs-comment'>-- ^ Line content without newline.</span>
+<a name="line-164"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>sourceLineTokens</span>  <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Token</span><span class='hs-keyglyph'>]</span> <span class='hs-comment'>-- ^ Tokens from line.</span>
+<a name="line-165"></a>    <span class='hs-layout'>}</span> <span class='hs-keyword'>deriving</span> <span class='hs-layout'>(</span><span class='hs-conid'>Show</span><span class='hs-layout'>,</span> <span class='hs-conid'>Eq</span><span class='hs-layout'>,</span> <span class='hs-conid'>Ord</span><span class='hs-layout'>,</span> <span class='hs-conid'>Data</span><span class='hs-layout'>,</span> <span class='hs-conid'>Typeable</span><span class='hs-layout'>)</span>
+<a name="line-166"></a>
+<a name="line-167"></a><a name="instance%20Pretty%20SourceLine"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>Pretty</span> <span class='hs-conid'>SourceLine</span> <span class='hs-keyword'>where</span>
+<a name="line-168"></a>    <span class='hs-varid'>doc</span> <span class='hs-layout'>(</span><span class='hs-conid'>SourceLine</span> <span class='hs-keyword'>_</span> <span class='hs-varid'>line</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>text</span> <span class='hs-varid'>line</span>
+<a name="line-169"></a>
+<a name="line-170"></a><a name="sourceLines"></a><span class='hs-comment'>{-| Split source text into 'SourceLine' list.
+<a name="line-171"></a>
+<a name="line-172"></a>    1. Split source code into lines by line delimiters
+<a name="line-173"></a>       (carriage return @\\r@ or line feed @\\n@)
+<a name="line-174"></a>
+<a name="line-175"></a>   2. Numbering line numbers.
+<a name="line-176"></a>      Internally, this is represented as
+<a name="line-177"></a>      a list of pairs (/line#/, /content/).
+<a name="line-178"></a>
+<a name="line-179"></a>   3. Tokenize each lines.
+<a name="line-180"></a>      This is represented as a list of
+<a name="line-181"></a>      'SourceLine' /line#/ /content/ /tokens/.
+<a name="line-182"></a>  -}</span>
+<a name="line-183"></a><span class='hs-definition'>sourceLines</span>
+<a name="line-184"></a>    <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span>        <span class='hs-comment'>-- ^ Source text in Koshucode.</span>
+<a name="line-185"></a>    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>SourceLine</span><span class='hs-keyglyph'>]</span>  <span class='hs-comment'>-- ^ Token list per lines.</span>
+<a name="line-186"></a><span class='hs-definition'>sourceLines</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-num'>1</span> <span class='hs-varop'>.</span> <span class='hs-varid'>linesNumbered</span> <span class='hs-keyword'>where</span>
+<a name="line-187"></a>    <span class='hs-varid'>loop</span> <span class='hs-keyword'>_</span> <span class='hs-conid'>[]</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>[]</span>
+<a name="line-188"></a>    <span class='hs-varid'>loop</span> <span class='hs-varid'>tok</span> <span class='hs-layout'>(</span><span class='hs-varid'>p</span> <span class='hs-conop'>:</span> <span class='hs-varid'>ps</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span>
+<a name="line-189"></a>        <span class='hs-keyword'>case</span> <span class='hs-varid'>sourceLine</span> <span class='hs-varid'>tok</span> <span class='hs-varid'>p</span> <span class='hs-keyword'>of</span>
+<a name="line-190"></a>          <span class='hs-layout'>(</span><span class='hs-varid'>tok'</span><span class='hs-layout'>,</span> <span class='hs-varid'>src</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>src</span> <span class='hs-varop'>++</span> <span class='hs-varid'>loop</span> <span class='hs-varid'>tok'</span> <span class='hs-varid'>ps</span>
+<a name="line-191"></a>
+<a name="line-192"></a><a name="sourceLine"></a><span class='hs-definition'>sourceLine</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-layout'>(</span><span class='hs-conid'>Int</span><span class='hs-layout'>,</span> <span class='hs-conid'>String</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-layout'>(</span><span class='hs-conid'>Int</span><span class='hs-layout'>,</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>SourceLine</span><span class='hs-keyglyph'>]</span><span class='hs-layout'>)</span>
+<a name="line-193"></a><span class='hs-definition'>sourceLine</span> <span class='hs-varid'>tok</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span><span class='hs-layout'>,</span> <span class='hs-varid'>ln</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varid'>tok</span> <span class='hs-varop'>+</span> <span class='hs-varid'>length</span> <span class='hs-varid'>toks</span><span class='hs-layout'>,</span> <span class='hs-varid'>map</span> <span class='hs-varid'>src</span> <span class='hs-varid'>ls</span><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a name="line-194"></a>    <span class='hs-varid'>toks</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>gatherWith</span> <span class='hs-varid'>nextToken</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>tok</span> <span class='hs-keyglyph'>..</span><span class='hs-keyglyph'>]</span> <span class='hs-varid'>ln</span>
+<a name="line-195"></a>    <span class='hs-varid'>ls</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>divideByToken</span> <span class='hs-str'>"||"</span> <span class='hs-varid'>toks</span>
+<a name="line-196"></a>    <span class='hs-varid'>src</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>SourceLine</span> <span class='hs-varid'>n</span> <span class='hs-varid'>ln</span>
+<a name="line-197"></a>
+<a name="line-198"></a><a name="divideByToken"></a><span class='hs-definition'>divideByToken</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Token</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-keyglyph'>[</span><span class='hs-conid'>Token</span><span class='hs-keyglyph'>]</span><span class='hs-keyglyph'>]</span>
+<a name="line-199"></a><span class='hs-definition'>divideByToken</span> <span class='hs-varid'>w</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>divideByP</span> <span class='hs-varid'>p</span> <span class='hs-keyword'>where</span>
+<a name="line-200"></a>    <span class='hs-varid'>p</span> <span class='hs-layout'>(</span><span class='hs-conid'>TWord</span> <span class='hs-keyword'>_</span> <span class='hs-num'>0</span> <span class='hs-varid'>x</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>|</span> <span class='hs-varid'>w</span> <span class='hs-varop'>==</span> <span class='hs-varid'>x</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
+<a name="line-201"></a>    <span class='hs-varid'>p</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>False</span>
+<a name="line-202"></a>
+<a name="line-203"></a><a name="linesNumbered"></a><span class='hs-comment'>{-| Line number and contents. -}</span>
+<a name="line-204"></a><span class='hs-definition'>linesNumbered</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-layout'>(</span><span class='hs-conid'>Int</span><span class='hs-layout'>,</span> <span class='hs-conid'>String</span><span class='hs-layout'>)</span><span class='hs-keyglyph'>]</span>
+<a name="line-205"></a><span class='hs-definition'>linesNumbered</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>zip</span> <span class='hs-keyglyph'>[</span><span class='hs-num'>1</span><span class='hs-keyglyph'>..</span><span class='hs-keyglyph'>]</span> <span class='hs-varop'>.</span> <span class='hs-varid'>linesCrLf</span>
+<a name="line-206"></a>
+<a name="line-207"></a><a name="linesCrLf"></a><span class='hs-comment'>{-| Split string into lines.
+<a name="line-208"></a>    The result strings do not contain
+<a name="line-209"></a>    carriage returns (@\\r@)
+<a name="line-210"></a>    and line feeds (@\\n@). -}</span>
+<a name="line-211"></a><span class='hs-definition'>linesCrLf</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>String</span><span class='hs-keyglyph'>]</span>
+<a name="line-212"></a><span class='hs-definition'>linesCrLf</span> <span class='hs-str'>""</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>[]</span>
+<a name="line-213"></a><span class='hs-definition'>linesCrLf</span> <span class='hs-varid'>s</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>ln</span> <span class='hs-conop'>:</span> <span class='hs-varid'>nextLine</span> <span class='hs-varid'>s2</span> <span class='hs-keyword'>where</span>
+<a name="line-214"></a>    <span class='hs-layout'>(</span><span class='hs-varid'>ln</span><span class='hs-layout'>,</span> <span class='hs-varid'>s2</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>break</span> <span class='hs-layout'>(</span><span class='hs-varop'>`elem`</span> <span class='hs-str'>"\r\n"</span><span class='hs-layout'>)</span> <span class='hs-varid'>s</span>
+<a name="line-215"></a>    <span class='hs-varid'>nextLine</span> <span class='hs-layout'>(</span><span class='hs-chr'>'\r'</span> <span class='hs-conop'>:</span> <span class='hs-varid'>s3</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>nextLine</span> <span class='hs-varid'>s3</span>
+<a name="line-216"></a>    <span class='hs-varid'>nextLine</span> <span class='hs-layout'>(</span><span class='hs-chr'>'\n'</span> <span class='hs-conop'>:</span> <span class='hs-varid'>s3</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>nextLine</span> <span class='hs-varid'>s3</span>
+<a name="line-217"></a>    <span class='hs-varid'>nextLine</span> <span class='hs-varid'>s3</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>linesCrLf</span> <span class='hs-varid'>s3</span>
+<a name="line-218"></a>
 <a name="line-219"></a>
 <a name="line-220"></a>
-<a name="line-221"></a>
-<a name="line-222"></a><span class='hs-comment'>-- ----------------------</span>
-<a name="line-223"></a><span class='hs-comment'>-- $SpecialCharacters</span>
+<a name="line-221"></a><span class='hs-comment'>-- ----------------------</span>
+<a name="line-222"></a><span class='hs-comment'>-- $SpecialCharacters</span>
+<a name="line-223"></a>
 <a name="line-224"></a>
 <a name="line-225"></a>
-<a name="line-226"></a>
-<a name="line-227"></a><span class='hs-comment'>-- ----------------------</span>
-<a name="line-228"></a><span class='hs-comment'>{- $Asterisks
-<a name="line-229"></a>
-<a name="line-230"></a>   There are three uses of asterisks (@*@) in koshucode,
-<a name="line-231"></a>   
-<a name="line-232"></a>   [@*@]
-<a name="line-233"></a>    Single asterisk means multiplication,
-<a name="line-234"></a>    e.g., @3 * 4@ (three times four).
-<a name="line-235"></a>   
-<a name="line-236"></a>   [@**@]
-<a name="line-237"></a>    Double asterisk leads line comment.
-<a name="line-238"></a>    Textx from @**@ to end of line are ignored.
-<a name="line-239"></a>   
-<a name="line-240"></a>   [@****@]
-<a name="line-241"></a>    Quadruple asterisk (fourfold asterisk) leads caluse comment.
-<a name="line-242"></a>    Texts from @****@ to end of clause are ignored.
-<a name="line-243"></a>    In other words, line staring with @****@
-<a name="line-244"></a>    and following indented lines are ignored.
-<a name="line-245"></a>   
-<a name="line-246"></a>   Triple asterisk @***@ is double and rest of text.
-<a name="line-247"></a>   Quintuple (fivefold) asterisk @*****@ is quadruple and rest of text.
-<a name="line-248"></a>   
-<a name="line-249"></a>   Line comments like this:
-<a name="line-250"></a>   
-<a name="line-251"></a>   &gt; ** aaa bbbbb cc
-<a name="line-252"></a>   
-<a name="line-253"></a>   Clause comments like this:
-<a name="line-254"></a>   
-<a name="line-255"></a>   &gt; **** aaa bbb
-<a name="line-256"></a>   &gt;      ccccc dddddd
-<a name="line-257"></a>   &gt;      ee fffff
-<a name="line-258"></a>   
-<a name="line-259"></a>   You can type @****@ on top of a clause to hide it.
-<a name="line-260"></a>   -}</span>
+<a name="line-226"></a><span class='hs-comment'>-- ----------------------</span>
+<a name="line-227"></a><span class='hs-comment'>{- $Asterisks
+<a name="line-228"></a>
+<a name="line-229"></a>   There are three uses of asterisks (@*@) in koshucode,
+<a name="line-230"></a>   
+<a name="line-231"></a>   [@*@]
+<a name="line-232"></a>    Single asterisk means multiplication,
+<a name="line-233"></a>    e.g., @3 * 4@ (three times four).
+<a name="line-234"></a>   
+<a name="line-235"></a>   [@**@]
+<a name="line-236"></a>    Double asterisk leads line comment.
+<a name="line-237"></a>    Textx from @**@ to end of line are ignored.
+<a name="line-238"></a>   
+<a name="line-239"></a>   [@****@]
+<a name="line-240"></a>    Quadruple asterisk (fourfold asterisk) leads caluse comment.
+<a name="line-241"></a>    Texts from @****@ to end of clause are ignored.
+<a name="line-242"></a>    In other words, line staring with @****@
+<a name="line-243"></a>    and following indented lines are ignored.
+<a name="line-244"></a>   
+<a name="line-245"></a>   Triple asterisk @***@ is double and rest of text.
+<a name="line-246"></a>   Quintuple (fivefold) asterisk @*****@ is quadruple and rest of text.
+<a name="line-247"></a>   
+<a name="line-248"></a>   Line comments like this:
+<a name="line-249"></a>   
+<a name="line-250"></a>   &gt; ** aaa bbbbb cc
+<a name="line-251"></a>   
+<a name="line-252"></a>   Clause comments like this:
+<a name="line-253"></a>   
+<a name="line-254"></a>   &gt; **** aaa bbb
+<a name="line-255"></a>   &gt;      ccccc dddddd
+<a name="line-256"></a>   &gt;      ee fffff
+<a name="line-257"></a>   
+<a name="line-258"></a>   You can type @****@ on top of a clause to hide it.
+<a name="line-259"></a>   -}</span>
+<a name="line-260"></a>
 <a name="line-261"></a>
 <a name="line-262"></a>
-<a name="line-263"></a>
-<a name="line-264"></a><span class='hs-comment'>-- ----------------------</span>
-<a name="line-265"></a><span class='hs-comment'>{- $SyntacticContentType
-<a name="line-266"></a>
-<a name="line-267"></a>   (Not implemented)
-<a name="line-268"></a>   
-<a name="line-269"></a>   Tokenizer recognizes five types of content.
-<a name="line-270"></a>   
-<a name="line-271"></a>   [Word]
-<a name="line-272"></a>    Simple sequence of characters,
-<a name="line-273"></a>    e.g., @abc@, @123@.
-<a name="line-274"></a>    Numbers are represented as words.
-<a name="line-275"></a>   
-<a name="line-276"></a>   [Code]
-<a name="line-277"></a>    Code are like tagged word,
-<a name="line-278"></a>    e.g., @(color \'blue\')@.
-<a name="line-279"></a>   
-<a name="line-280"></a>   [List]
-<a name="line-281"></a>    Orderd sequence of contents.
-<a name="line-282"></a>    Lists are enclosed in square brackets,
-<a name="line-283"></a>    e.g., @[ ab cd 0 1 ]@
-<a name="line-284"></a>   
-<a name="line-285"></a>   [Tuple]
-<a name="line-286"></a>    Set of pairs of term name and content.
-<a name="line-287"></a>    Tuples are enclosed in curely braces,
-<a name="line-288"></a>    e.g., @{ \/a 10 \/b 20 }@.
-<a name="line-289"></a>   
-<a name="line-290"></a>   [Relation]
-<a name="line-291"></a>    Set of uniform-typed tuples.
-<a name="line-292"></a>    Relations are enclosed in curely-bar braces,
-<a name="line-293"></a>    and enveloped tuples are divided by vertical bar,
-<a name="line-294"></a>    e.g., @{| \/a \/b | 10 20 | 10 30 |}@.
-<a name="line-295"></a>
-<a name="line-296"></a>   -}</span>
+<a name="line-263"></a><span class='hs-comment'>-- ----------------------</span>
+<a name="line-264"></a><span class='hs-comment'>{- $SyntacticContentType
+<a name="line-265"></a>
+<a name="line-266"></a>   (Not implemented)
+<a name="line-267"></a>   
+<a name="line-268"></a>   Tokenizer recognizes five types of content.
+<a name="line-269"></a>   
+<a name="line-270"></a>   [Word]
+<a name="line-271"></a>    Simple sequence of characters,
+<a name="line-272"></a>    e.g., @abc@, @123@.
+<a name="line-273"></a>    Numbers are represented as words.
+<a name="line-274"></a>   
+<a name="line-275"></a>   [Code]
+<a name="line-276"></a>    Code are like tagged word,
+<a name="line-277"></a>    e.g., @(color \'blue\')@.
+<a name="line-278"></a>   
+<a name="line-279"></a>   [List]
+<a name="line-280"></a>    Orderd sequence of contents.
+<a name="line-281"></a>    Lists are enclosed in square brackets,
+<a name="line-282"></a>    e.g., @[ ab cd 0 1 ]@
+<a name="line-283"></a>   
+<a name="line-284"></a>   [Tuple]
+<a name="line-285"></a>    Set of pairs of term name and content.
+<a name="line-286"></a>    Tuples are enclosed in curely braces,
+<a name="line-287"></a>    e.g., @{ \/a 10 \/b 20 }@.
+<a name="line-288"></a>   
+<a name="line-289"></a>   [Relation]
+<a name="line-290"></a>    Set of uniform-typed tuples.
+<a name="line-291"></a>    Relations are enclosed in curely-bar braces,
+<a name="line-292"></a>    and enveloped tuples are divided by vertical bar,
+<a name="line-293"></a>    e.g., @{| \/a \/b | 10 20 | 10 30 |}@.
+<a name="line-294"></a>
+<a name="line-295"></a>   -}</span>
+<a name="line-296"></a>
 <a name="line-297"></a>
 <a name="line-298"></a>
-<a name="line-299"></a>
-<a name="line-300"></a><span class='hs-comment'>-- ----------------------</span>
-<a name="line-301"></a><span class='hs-comment'>{- $Examples
-<a name="line-302"></a>
-<a name="line-303"></a>   Words and quotations.
-<a name="line-304"></a>
-<a name="line-305"></a>   &gt;&gt;&gt; tokens "aa\n'bb'\n\"cc\""
-<a name="line-306"></a>   [TWord 0 "aa", TWord 1 "bb", TWord 2 "cc"]
-<a name="line-307"></a>   
-<a name="line-308"></a>   Example includes 'TWord', 'TTermN' and 'TSpace' tokens.
-<a name="line-309"></a>   
-<a name="line-310"></a>   &gt;&gt;&gt; tokens "|-- R  /a A0 /b 31"
-<a name="line-311"></a>   [TWord 0 "|--", TSpace 1, TWord 0 "R", TSpace 2,
-<a name="line-312"></a>    TTermN ["/a"], TSpace 1, TWord 0 "A0", TSpace 1,
-<a name="line-313"></a>    TTermN ["/b"], TSpace 1, TWord 0 "31"]
-<a name="line-314"></a>
-<a name="line-315"></a>   Parens.
-<a name="line-316"></a>
-<a name="line-317"></a>   &gt;&gt;&gt; tokens "aa (bb x y (z))"
-<a name="line-318"></a>   [TWord 1 0 "aa", TSpace 2 1,
-<a name="line-319"></a>    TOpen 3 "(", TWord 4 0 "bb", TSpace 5 1,
-<a name="line-320"></a>      TWord 6 0 "x", TSpace 7 1, TWord 8 0 "y", TSpace 9 1,
-<a name="line-321"></a>      TOpen 10 "(", TWord 11 0 "z", TClose 12 ")", TClose 13 ")"]
-<a name="line-322"></a>
-<a name="line-323"></a>   A comment.
-<a name="line-324"></a>
-<a name="line-325"></a>   &gt;&gt;&gt; tokens "abc ** this is a comment\ndef\n"
-<a name="line-326"></a>   [TWord 1 0 "abc", TSpace 2 1, TComment 3 "** this is a comment",
-<a name="line-327"></a>    TWord 4 0 "def"]
-<a name="line-328"></a>
-<a name="line-329"></a>-}</span>
-<a name="line-330"></a>
+<a name="line-299"></a><span class='hs-comment'>-- ----------------------</span>
+<a name="line-300"></a><span class='hs-comment'>{- $Examples
+<a name="line-301"></a>
+<a name="line-302"></a>   Words and quotations.
+<a name="line-303"></a>
+<a name="line-304"></a>   &gt;&gt;&gt; tokens "aa\n'bb'\n\"cc\""
+<a name="line-305"></a>   [TWord 0 "aa", TWord 1 "bb", TWord 2 "cc"]
+<a name="line-306"></a>   
+<a name="line-307"></a>   Example includes 'TWord', 'TTerm' and 'TSpace' tokens.
+<a name="line-308"></a>   
+<a name="line-309"></a>   &gt;&gt;&gt; tokens "|-- R  /a A0 /b 31"
+<a name="line-310"></a>   [TWord 0 "|--", TSpace 1, TWord 0 "R", TSpace 2,
+<a name="line-311"></a>    TTerm ["/a"], TSpace 1, TWord 0 "A0", TSpace 1,
+<a name="line-312"></a>    TTerm ["/b"], TSpace 1, TWord 0 "31"]
+<a name="line-313"></a>
+<a name="line-314"></a>   Parens.
+<a name="line-315"></a>
+<a name="line-316"></a>   &gt;&gt;&gt; tokens "aa (bb x y (z))"
+<a name="line-317"></a>   [TWord 1 0 "aa", TSpace 2 1,
+<a name="line-318"></a>    TOpen 3 "(", TWord 4 0 "bb", TSpace 5 1,
+<a name="line-319"></a>      TWord 6 0 "x", TSpace 7 1, TWord 8 0 "y", TSpace 9 1,
+<a name="line-320"></a>      TOpen 10 "(", TWord 11 0 "z", TClose 12 ")", TClose 13 ")"]
+<a name="line-321"></a>
+<a name="line-322"></a>   A comment.
+<a name="line-323"></a>
+<a name="line-324"></a>   &gt;&gt;&gt; tokens "abc ** this is a comment\ndef\n"
+<a name="line-325"></a>   [TWord 1 0 "abc", TSpace 2 1, TComment 3 "** this is a comment",
+<a name="line-326"></a>    TWord 4 0 "def"]
+<a name="line-327"></a>
+<a name="line-328"></a>-}</span>
+<a name="line-329"></a>
 </pre></body>
 </html>

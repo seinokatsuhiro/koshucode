@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.26.0.0: A notational system for relational data</p
+      >koshucode-baala-base-0.28.0.0: A notational system for relational data</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -51,7 +51,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Primitive content
+	    >Generic content
 </a
 	    ></li
 	  ><li
@@ -64,11 +64,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >Koshu data
 </a
 	    ></li
-	  ><li
-	  ><a href="#g:4"
-	    >Convinient class
-</a
-	    ></li
 	  ></ul
 	></div
       ><div id="synopsis"
@@ -78,264 +73,334 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	><li class="src short"
 	  ><span class="keyword"
 	    >class</span
-	    >  <a href="#t:PrimitiveContent"
-	    >PrimitiveContent</a
-	    > a </li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >class</span
-	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimitiveContent"
-	    >PrimitiveContent</a
-	    > v =&gt; <a href="#t:BoolValue"
-	    >BoolValue</a
-	    > v  <span class="keyword"
-	    >where</span
-	    ><ul class="subs"
-	    ><li
-	      ><a href="#v:boolValue"
-		>boolValue</a
-		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-		>Bool</a
-		> -&gt; v</li
-	      ><li
-	      ><a href="#v:isBoolValue"
-		>isBoolValue</a
-		> :: v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-		>Bool</a
-		></li
-	      ></ul
-	    ></li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >class</span
-	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimitiveContent"
-	    >PrimitiveContent</a
-	    > v =&gt; <a href="#t:IntValue"
-	    >IntValue</a
-	    > v  <span class="keyword"
-	    >where</span
-	    ><ul class="subs"
-	    ><li
-	      ><a href="#v:intValue"
-		>intValue</a
-		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-		>Int</a
-		> -&gt; v</li
-	      ><li
-	      ><a href="#v:isIntValue"
-		>isIntValue</a
-		> :: v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-		>Bool</a
-		></li
-	      ></ul
-	    ></li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >class</span
-	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimitiveContent"
-	    >PrimitiveContent</a
-	    > v =&gt; <a href="#t:StringValue"
-	    >StringValue</a
-	    > v  <span class="keyword"
-	    >where</span
-	    ><ul class="subs"
-	    ><li
-	      ><a href="#v:stringValue"
-		>stringValue</a
-		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		> -&gt; v</li
-	      ><li
-	      ><a href="#v:isStringValue"
-		>isStringValue</a
-		> :: v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-		>Bool</a
-		></li
-	      ><li
-	      ><a href="#v:theStringValue"
-		>theStringValue</a
-		> :: v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		></li
-	      ></ul
-	    ></li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >class</span
-	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimitiveContent"
-	    >PrimitiveContent</a
-	    > v =&gt; <a href="#t:ListValue"
-	    >ListValue</a
-	    > v  <span class="keyword"
-	    >where</span
-	    ><ul class="subs"
-	    ><li
-	      ><a href="#v:listValue"
-		>listValue</a
-		> :: [v] -&gt; v</li
-	      ><li
-	      ><a href="#v:isListValue"
-		>isListValue</a
-		> :: v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-		>Bool</a
-		></li
-	      ><li
-	      ><a href="#v:theListValue"
-		>theListValue</a
-		> :: v -&gt; [v]</li
-	      ></ul
-	    ></li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >class</span
-	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimitiveContent"
-	    >PrimitiveContent</a
-	    > v =&gt; <a href="#t:Nil"
-	    >Nil</a
-	    > v  <span class="keyword"
-	    >where</span
-	    ><ul class="subs"
-	    ><li
-	      ><a href="#v:nil"
-		>nil</a
-		> :: v</li
-	      ><li
-	      ><a href="#v:isNil"
-		>isNil</a
-		> :: v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-		>Bool</a
-		></li
-	      ></ul
-	    ></li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >class</span
-	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimitiveContent"
-	    >PrimitiveContent</a
-	    > v =&gt; <a href="#t:SetValue"
-	    >SetValue</a
-	    > v  <span class="keyword"
-	    >where</span
-	    ><ul class="subs"
-	    ><li
-	      ><a href="#v:setValue"
-		>setValue</a
-		> :: [v] -&gt; v</li
-	      ><li
-	      ><a href="#v:isSetValue"
-		>isSetValue</a
-		> :: v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-		>Bool</a
-		></li
-	      ></ul
-	    ></li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >class</span
-	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimitiveContent"
-	    >PrimitiveContent</a
-	    > v =&gt; <a href="#t:TermsetValue"
-	    >TermsetValue</a
-	    > v  <span class="keyword"
-	    >where</span
-	    ><ul class="subs"
-	    ><li
-	      ><a href="#v:termsetValue"
-		>termsetValue</a
-		> :: [<a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
-		>Named</a
-		> v] -&gt; v</li
-	      ><li
-	      ><a href="#v:isTermsetValue"
-		>isTermsetValue</a
-		> :: v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-		>Bool</a
-		></li
-	      ></ul
-	    ></li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >class</span
-	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimitiveContent"
-	    >PrimitiveContent</a
-	    > v =&gt; <a href="#t:RelValue"
-	    >RelValue</a
-	    > v  <span class="keyword"
-	    >where</span
-	    ><ul class="subs"
-	    ><li
-	      ><a href="#v:relValue"
-		>relValue</a
-		> :: <a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
-		>Rel</a
-		> v -&gt; v</li
-	      ><li
-	      ><a href="#v:theRelValue"
-		>theRelValue</a
-		> :: v -&gt; <a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
-		>Rel</a
-		> v</li
-	      ><li
-	      ><a href="#v:isRelValue"
-		>isRelValue</a
-		> :: v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-		>Bool</a
-		></li
-	      ></ul
-	    ></li
+	    >  <a href="#t:PrimContent"
+	    >PrimContent</a
+	    > c </li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >class</span
 	    > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > v, <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
+	    > c, <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
 	    >Pretty</a
-	    > v, <a href="Koshucode-Baala-Base-Content-Class.html#t:Nil"
-	    >Nil</a
-	    > v, <a href="Koshucode-Baala-Base-Content-Class.html#t:BoolValue"
-	    >BoolValue</a
-	    > v, <a href="Koshucode-Baala-Base-Content-Class.html#t:StringValue"
-	    >StringValue</a
-	    > v, <a href="Koshucode-Baala-Base-Content-Class.html#t:IntValue"
-	    >IntValue</a
-	    > v, <a href="Koshucode-Baala-Base-Content-Class.html#t:ListValue"
-	    >ListValue</a
-	    > v, <a href="Koshucode-Baala-Base-Content-Class.html#t:SetValue"
-	    >SetValue</a
-	    > v, <a href="Koshucode-Baala-Base-Content-Class.html#t:TermsetValue"
-	    >TermsetValue</a
-	    > v, <a href="Koshucode-Baala-Base-Content-Class.html#t:RelValue"
-	    >RelValue</a
-	    > v) =&gt; <a href="#t:Value"
-	    >Value</a
-	    > v  <span class="keyword"
+	    > c, <a href="Koshucode-Baala-Base-Content-Class.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="Koshucode-Baala-Base-Content-Class.html#t:CString"
+	    >CString</a
+	    > c, <a href="Koshucode-Baala-Base-Content-Class.html#t:CInt"
+	    >CInt</a
+	    > c, <a href="Koshucode-Baala-Base-Content-Class.html#t:CList"
+	    >CList</a
+	    > c, <a href="Koshucode-Baala-Base-Content-Class.html#t:CNil"
+	    >CNil</a
+	    > c, <a href="Koshucode-Baala-Base-Content-Class.html#t:CSet"
+	    >CSet</a
+	    > c, <a href="Koshucode-Baala-Base-Content-Class.html#t:CTermset"
+	    >CTermset</a
+	    > c, <a href="Koshucode-Baala-Base-Content-Class.html#t:CRel"
+	    >CRel</a
+	    > c) =&gt; <a href="#t:CContent"
+	    >CContent</a
+	    > c  <span class="keyword"
 	    >where</span
 	    ><ul class="subs"
 	    ><li
 	      ><a href="#v:appendContent"
 		>appendContent</a
-		> :: v -&gt; v -&gt; v</li
+		> :: c -&gt; c -&gt; c</li
 	      ><li
 	      ><a href="#v:joinContent"
 		>joinContent</a
-		> :: [v] -&gt; v</li
+		> :: [c] -&gt; c</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a href="#t:CBool"
+	    >CBool</a
+	    > c  <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:putBool"
+		>putBool</a
+		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		>Bool</a
+		> -&gt; c</li
+	      ><li
+	      ><a href="#v:getBool"
+		>getBool</a
+		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
+	      ><li
+	      ><a href="#v:isBool"
+		>isBool</a
+		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a href="#t:CInt"
+	    >CInt</a
+	    > c  <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:putInt"
+		>putInt</a
+		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+		>Int</a
+		> -&gt; c</li
+	      ><li
+	      ><a href="#v:getInt"
+		>getInt</a
+		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+		>Int</a
+		></li
+	      ><li
+	      ><a href="#v:isInt"
+		>isInt</a
+		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a href="#t:CString"
+	    >CString</a
+	    > c  <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:putString"
+		>putString</a
+		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		> -&gt; c</li
+	      ><li
+	      ><a href="#v:getString"
+		>getString</a
+		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		></li
+	      ><li
+	      ><a href="#v:isString"
+		>isString</a
+		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a href="#t:CList"
+	    >CList</a
+	    > c  <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:putList"
+		>putList</a
+		> :: [c] -&gt; c</li
+	      ><li
+	      ><a href="#v:getList"
+		>getList</a
+		> :: c -&gt; [c]</li
+	      ><li
+	      ><a href="#v:isList"
+		>isList</a
+		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a href="#t:CNil"
+	    >CNil</a
+	    > c  <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:nil"
+		>nil</a
+		> :: c</li
+	      ><li
+	      ><a href="#v:isNil"
+		>isNil</a
+		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a href="#t:CSet"
+	    >CSet</a
+	    > c  <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:putSet"
+		>putSet</a
+		> :: [c] -&gt; c</li
+	      ><li
+	      ><a href="#v:getSet"
+		>getSet</a
+		> :: c -&gt; [c]</li
+	      ><li
+	      ><a href="#v:isSet"
+		>isSet</a
+		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a href="#t:CTermset"
+	    >CTermset</a
+	    > c  <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:putTermset"
+		>putTermset</a
+		> :: [<a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
+		>Named</a
+		> c] -&gt; c</li
+	      ><li
+	      ><a href="#v:getTermset"
+		>getTermset</a
+		> :: c -&gt; [<a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
+		>Named</a
+		> c]</li
+	      ><li
+	      ><a href="#v:isTermset"
+		>isTermset</a
+		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a href="#t:CRel"
+	    >CRel</a
+	    > c  <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:putRel"
+		>putRel</a
+		> :: <a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
+		>Rel</a
+		> c -&gt; c</li
+	      ><li
+	      ><a href="#v:getRel"
+		>getRel</a
+		> :: c -&gt; <a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
+		>Rel</a
+		> c</li
+	      ><li
+	      ><a href="#v:isRel"
+		>isRel</a
+		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
 	      ></ul
 	    ></li
 	  ></ul
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Primitive content
+	>Generic content
 </h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    >  <a name="t:PrimitiveContent" class="def"
-	    >PrimitiveContent</a
-	    > a <a href="src/Koshucode-Baala-Base-Content-Class.html#PrimitiveContent" class="link"
+	    >  <a name="t:PrimContent" class="def"
+	    >PrimContent</a
+	    > c <a href="src/Koshucode-Baala-Base-Content-Class.html#PrimContent" class="link"
 	    >Source</a
 	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
+	    >Pretty</a
+	    > c, <a href="Koshucode-Baala-Base-Content-Class.html#t:CBool"
+	    >CBool</a
+	    > c, <a href="Koshucode-Baala-Base-Content-Class.html#t:CString"
+	    >CString</a
+	    > c, <a href="Koshucode-Baala-Base-Content-Class.html#t:CInt"
+	    >CInt</a
+	    > c, <a href="Koshucode-Baala-Base-Content-Class.html#t:CList"
+	    >CList</a
+	    > c, <a href="Koshucode-Baala-Base-Content-Class.html#t:CNil"
+	    >CNil</a
+	    > c, <a href="Koshucode-Baala-Base-Content-Class.html#t:CSet"
+	    >CSet</a
+	    > c, <a href="Koshucode-Baala-Base-Content-Class.html#t:CTermset"
+	    >CTermset</a
+	    > c, <a href="Koshucode-Baala-Base-Content-Class.html#t:CRel"
+	    >CRel</a
+	    > c) =&gt; <a name="t:CContent" class="def"
+	    >CContent</a
+	    > c  <span class="keyword"
+	    >where</span
+	    ><a href="src/Koshucode-Baala-Base-Content-Class.html#CContent" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:appendContent" class="def"
+	      >appendContent</a
+	      > :: c -&gt; c -&gt; c<a href="src/Koshucode-Baala-Base-Content-Class.html#appendContent" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:joinContent" class="def"
+	      >joinContent</a
+	      > :: [c] -&gt; c<a href="src/Koshucode-Baala-Base-Content-Class.html#joinContent" class="link"
+	      >Source</a
+	      ></p
+	    ></div
 	  ></div
 	><h1 id="g:2"
 	>Haskell data
@@ -344,32 +409,40 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimitiveContent"
-	    >PrimitiveContent</a
-	    > v =&gt; <a name="t:BoolValue" class="def"
-	    >BoolValue</a
-	    > v  <span class="keyword"
+	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a name="t:CBool" class="def"
+	    >CBool</a
+	    > c  <span class="keyword"
 	    >where</span
-	    ><a href="src/Koshucode-Baala-Base-Content-Class.html#BoolValue" class="link"
+	    ><a href="src/Koshucode-Baala-Base-Content-Class.html#CBool" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs methods"
 	  ><p class="caption"
 	    >Methods</p
 	    ><p class="src"
-	    ><a name="v:boolValue" class="def"
-	      >boolValue</a
+	    ><a name="v:putBool" class="def"
+	      >putBool</a
 	      > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	      >Bool</a
-	      > -&gt; v<a href="src/Koshucode-Baala-Base-Content-Class.html#boolValue" class="link"
+	      > -&gt; c<a href="src/Koshucode-Baala-Base-Content-Class.html#putBool" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
-	    ><a name="v:isBoolValue" class="def"
-	      >isBoolValue</a
-	      > :: v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    ><a name="v:getBool" class="def"
+	      >getBool</a
+	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	      >Bool</a
-	      ><a href="src/Koshucode-Baala-Base-Content-Class.html#isBoolValue" class="link"
+	      ><a href="src/Koshucode-Baala-Base-Content-Class.html#getBool" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:isBool" class="def"
+	      >isBool</a
+	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	      >Bool</a
+	      ><a href="src/Koshucode-Baala-Base-Content-Class.html#isBool" class="link"
 	      >Source</a
 	      ></p
 	    ></div
@@ -378,32 +451,40 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimitiveContent"
-	    >PrimitiveContent</a
-	    > v =&gt; <a name="t:IntValue" class="def"
-	    >IntValue</a
-	    > v  <span class="keyword"
+	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a name="t:CInt" class="def"
+	    >CInt</a
+	    > c  <span class="keyword"
 	    >where</span
-	    ><a href="src/Koshucode-Baala-Base-Content-Class.html#IntValue" class="link"
+	    ><a href="src/Koshucode-Baala-Base-Content-Class.html#CInt" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs methods"
 	  ><p class="caption"
 	    >Methods</p
 	    ><p class="src"
-	    ><a name="v:intValue" class="def"
-	      >intValue</a
+	    ><a name="v:putInt" class="def"
+	      >putInt</a
 	      > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	      >Int</a
-	      > -&gt; v<a href="src/Koshucode-Baala-Base-Content-Class.html#intValue" class="link"
+	      > -&gt; c<a href="src/Koshucode-Baala-Base-Content-Class.html#putInt" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
-	    ><a name="v:isIntValue" class="def"
-	      >isIntValue</a
-	      > :: v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    ><a name="v:getInt" class="def"
+	      >getInt</a
+	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	      >Int</a
+	      ><a href="src/Koshucode-Baala-Base-Content-Class.html#getInt" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:isInt" class="def"
+	      >isInt</a
+	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	      >Bool</a
-	      ><a href="src/Koshucode-Baala-Base-Content-Class.html#isIntValue" class="link"
+	      ><a href="src/Koshucode-Baala-Base-Content-Class.html#isInt" class="link"
 	      >Source</a
 	      ></p
 	    ></div
@@ -412,40 +493,40 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimitiveContent"
-	    >PrimitiveContent</a
-	    > v =&gt; <a name="t:StringValue" class="def"
-	    >StringValue</a
-	    > v  <span class="keyword"
+	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a name="t:CString" class="def"
+	    >CString</a
+	    > c  <span class="keyword"
 	    >where</span
-	    ><a href="src/Koshucode-Baala-Base-Content-Class.html#StringValue" class="link"
+	    ><a href="src/Koshucode-Baala-Base-Content-Class.html#CString" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs methods"
 	  ><p class="caption"
 	    >Methods</p
 	    ><p class="src"
-	    ><a name="v:stringValue" class="def"
-	      >stringValue</a
+	    ><a name="v:putString" class="def"
+	      >putString</a
 	      > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	      >String</a
-	      > -&gt; v<a href="src/Koshucode-Baala-Base-Content-Class.html#stringValue" class="link"
+	      > -&gt; c<a href="src/Koshucode-Baala-Base-Content-Class.html#putString" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
-	    ><a name="v:isStringValue" class="def"
-	      >isStringValue</a
-	      > :: v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	      >Bool</a
-	      ><a href="src/Koshucode-Baala-Base-Content-Class.html#isStringValue" class="link"
-	      >Source</a
-	      ></p
-	    ><p class="src"
-	    ><a name="v:theStringValue" class="def"
-	      >theStringValue</a
-	      > :: v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    ><a name="v:getString" class="def"
+	      >getString</a
+	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	      >String</a
-	      ><a href="src/Koshucode-Baala-Base-Content-Class.html#theStringValue" class="link"
+	      ><a href="src/Koshucode-Baala-Base-Content-Class.html#getString" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:isString" class="def"
+	      >isString</a
+	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	      >Bool</a
+	      ><a href="src/Koshucode-Baala-Base-Content-Class.html#isString" class="link"
 	      >Source</a
 	      ></p
 	    ></div
@@ -454,36 +535,36 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimitiveContent"
-	    >PrimitiveContent</a
-	    > v =&gt; <a name="t:ListValue" class="def"
-	    >ListValue</a
-	    > v  <span class="keyword"
+	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a name="t:CList" class="def"
+	    >CList</a
+	    > c  <span class="keyword"
 	    >where</span
-	    ><a href="src/Koshucode-Baala-Base-Content-Class.html#ListValue" class="link"
+	    ><a href="src/Koshucode-Baala-Base-Content-Class.html#CList" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs methods"
 	  ><p class="caption"
 	    >Methods</p
 	    ><p class="src"
-	    ><a name="v:listValue" class="def"
-	      >listValue</a
-	      > :: [v] -&gt; v<a href="src/Koshucode-Baala-Base-Content-Class.html#listValue" class="link"
+	    ><a name="v:putList" class="def"
+	      >putList</a
+	      > :: [c] -&gt; c<a href="src/Koshucode-Baala-Base-Content-Class.html#putList" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
-	    ><a name="v:isListValue" class="def"
-	      >isListValue</a
-	      > :: v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    ><a name="v:getList" class="def"
+	      >getList</a
+	      > :: c -&gt; [c]<a href="src/Koshucode-Baala-Base-Content-Class.html#getList" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:isList" class="def"
+	      >isList</a
+	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	      >Bool</a
-	      ><a href="src/Koshucode-Baala-Base-Content-Class.html#isListValue" class="link"
-	      >Source</a
-	      ></p
-	    ><p class="src"
-	    ><a name="v:theListValue" class="def"
-	      >theListValue</a
-	      > :: v -&gt; [v]<a href="src/Koshucode-Baala-Base-Content-Class.html#theListValue" class="link"
+	      ><a href="src/Koshucode-Baala-Base-Content-Class.html#isList" class="link"
 	      >Source</a
 	      ></p
 	    ></div
@@ -495,13 +576,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimitiveContent"
-	    >PrimitiveContent</a
-	    > v =&gt; <a name="t:Nil" class="def"
-	    >Nil</a
-	    > v  <span class="keyword"
+	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a name="t:CNil" class="def"
+	    >CNil</a
+	    > c  <span class="keyword"
 	    >where</span
-	    ><a href="src/Koshucode-Baala-Base-Content-Class.html#Nil" class="link"
+	    ><a href="src/Koshucode-Baala-Base-Content-Class.html#CNil" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -515,13 +596,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    ><p class="src"
 	    ><a name="v:nil" class="def"
 	      >nil</a
-	      > :: v<a href="src/Koshucode-Baala-Base-Content-Class.html#nil" class="link"
+	      > :: c<a href="src/Koshucode-Baala-Base-Content-Class.html#nil" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
 	    ><a name="v:isNil" class="def"
 	      >isNil</a
-	      > :: v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	      >Bool</a
 	      ><a href="src/Koshucode-Baala-Base-Content-Class.html#isNil" class="link"
 	      >Source</a
@@ -532,30 +613,36 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimitiveContent"
-	    >PrimitiveContent</a
-	    > v =&gt; <a name="t:SetValue" class="def"
-	    >SetValue</a
-	    > v  <span class="keyword"
+	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a name="t:CSet" class="def"
+	    >CSet</a
+	    > c  <span class="keyword"
 	    >where</span
-	    ><a href="src/Koshucode-Baala-Base-Content-Class.html#SetValue" class="link"
+	    ><a href="src/Koshucode-Baala-Base-Content-Class.html#CSet" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs methods"
 	  ><p class="caption"
 	    >Methods</p
 	    ><p class="src"
-	    ><a name="v:setValue" class="def"
-	      >setValue</a
-	      > :: [v] -&gt; v<a href="src/Koshucode-Baala-Base-Content-Class.html#setValue" class="link"
+	    ><a name="v:putSet" class="def"
+	      >putSet</a
+	      > :: [c] -&gt; c<a href="src/Koshucode-Baala-Base-Content-Class.html#putSet" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
-	    ><a name="v:isSetValue" class="def"
-	      >isSetValue</a
-	      > :: v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    ><a name="v:getSet" class="def"
+	      >getSet</a
+	      > :: c -&gt; [c]<a href="src/Koshucode-Baala-Base-Content-Class.html#getSet" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:isSet" class="def"
+	      >isSet</a
+	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	      >Bool</a
-	      ><a href="src/Koshucode-Baala-Base-Content-Class.html#isSetValue" class="link"
+	      ><a href="src/Koshucode-Baala-Base-Content-Class.html#isSet" class="link"
 	      >Source</a
 	      ></p
 	    ></div
@@ -564,32 +651,40 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimitiveContent"
-	    >PrimitiveContent</a
-	    > v =&gt; <a name="t:TermsetValue" class="def"
-	    >TermsetValue</a
-	    > v  <span class="keyword"
+	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a name="t:CTermset" class="def"
+	    >CTermset</a
+	    > c  <span class="keyword"
 	    >where</span
-	    ><a href="src/Koshucode-Baala-Base-Content-Class.html#TermsetValue" class="link"
+	    ><a href="src/Koshucode-Baala-Base-Content-Class.html#CTermset" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs methods"
 	  ><p class="caption"
 	    >Methods</p
 	    ><p class="src"
-	    ><a name="v:termsetValue" class="def"
-	      >termsetValue</a
+	    ><a name="v:putTermset" class="def"
+	      >putTermset</a
 	      > :: [<a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
 	      >Named</a
-	      > v] -&gt; v<a href="src/Koshucode-Baala-Base-Content-Class.html#termsetValue" class="link"
+	      > c] -&gt; c<a href="src/Koshucode-Baala-Base-Content-Class.html#putTermset" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
-	    ><a name="v:isTermsetValue" class="def"
-	      >isTermsetValue</a
-	      > :: v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    ><a name="v:getTermset" class="def"
+	      >getTermset</a
+	      > :: c -&gt; [<a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
+	      >Named</a
+	      > c]<a href="src/Koshucode-Baala-Base-Content-Class.html#getTermset" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:isTermset" class="def"
+	      >isTermset</a
+	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	      >Bool</a
-	      ><a href="src/Koshucode-Baala-Base-Content-Class.html#isTermsetValue" class="link"
+	      ><a href="src/Koshucode-Baala-Base-Content-Class.html#isTermset" class="link"
 	      >Source</a
 	      ></p
 	    ></div
@@ -598,91 +693,40 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimitiveContent"
-	    >PrimitiveContent</a
-	    > v =&gt; <a name="t:RelValue" class="def"
-	    >RelValue</a
-	    > v  <span class="keyword"
+	    > <a href="Koshucode-Baala-Base-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a name="t:CRel" class="def"
+	    >CRel</a
+	    > c  <span class="keyword"
 	    >where</span
-	    ><a href="src/Koshucode-Baala-Base-Content-Class.html#RelValue" class="link"
+	    ><a href="src/Koshucode-Baala-Base-Content-Class.html#CRel" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs methods"
 	  ><p class="caption"
 	    >Methods</p
 	    ><p class="src"
-	    ><a name="v:relValue" class="def"
-	      >relValue</a
+	    ><a name="v:putRel" class="def"
+	      >putRel</a
 	      > :: <a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
 	      >Rel</a
-	      > v -&gt; v<a href="src/Koshucode-Baala-Base-Content-Class.html#relValue" class="link"
+	      > c -&gt; c<a href="src/Koshucode-Baala-Base-Content-Class.html#putRel" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
-	    ><a name="v:theRelValue" class="def"
-	      >theRelValue</a
-	      > :: v -&gt; <a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
+	    ><a name="v:getRel" class="def"
+	      >getRel</a
+	      > :: c -&gt; <a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
 	      >Rel</a
-	      > v<a href="src/Koshucode-Baala-Base-Content-Class.html#theRelValue" class="link"
+	      > c<a href="src/Koshucode-Baala-Base-Content-Class.html#getRel" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
-	    ><a name="v:isRelValue" class="def"
-	      >isRelValue</a
-	      > :: v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    ><a name="v:isRel" class="def"
+	      >isRel</a
+	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	      >Bool</a
-	      ><a href="src/Koshucode-Baala-Base-Content-Class.html#isRelValue" class="link"
-	      >Source</a
-	      ></p
-	    ></div
-	  ></div
-	><h1 id="g:4"
-	>Convinient class
-</h1
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >class</span
-	    > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > v, <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
-	    >Pretty</a
-	    > v, <a href="Koshucode-Baala-Base-Content-Class.html#t:Nil"
-	    >Nil</a
-	    > v, <a href="Koshucode-Baala-Base-Content-Class.html#t:BoolValue"
-	    >BoolValue</a
-	    > v, <a href="Koshucode-Baala-Base-Content-Class.html#t:StringValue"
-	    >StringValue</a
-	    > v, <a href="Koshucode-Baala-Base-Content-Class.html#t:IntValue"
-	    >IntValue</a
-	    > v, <a href="Koshucode-Baala-Base-Content-Class.html#t:ListValue"
-	    >ListValue</a
-	    > v, <a href="Koshucode-Baala-Base-Content-Class.html#t:SetValue"
-	    >SetValue</a
-	    > v, <a href="Koshucode-Baala-Base-Content-Class.html#t:TermsetValue"
-	    >TermsetValue</a
-	    > v, <a href="Koshucode-Baala-Base-Content-Class.html#t:RelValue"
-	    >RelValue</a
-	    > v) =&gt; <a name="t:Value" class="def"
-	    >Value</a
-	    > v  <span class="keyword"
-	    >where</span
-	    ><a href="src/Koshucode-Baala-Base-Content-Class.html#Value" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="subs methods"
-	  ><p class="caption"
-	    >Methods</p
-	    ><p class="src"
-	    ><a name="v:appendContent" class="def"
-	      >appendContent</a
-	      > :: v -&gt; v -&gt; v<a href="src/Koshucode-Baala-Base-Content-Class.html#appendContent" class="link"
-	      >Source</a
-	      ></p
-	    ><p class="src"
-	    ><a name="v:joinContent" class="def"
-	      >joinContent</a
-	      > :: [v] -&gt; v<a href="src/Koshucode-Baala-Base-Content-Class.html#joinContent" class="link"
+	      ><a href="src/Koshucode-Baala-Base-Content-Class.html#isRel" class="link"
 	      >Source</a
 	      ></p
 	    ></div

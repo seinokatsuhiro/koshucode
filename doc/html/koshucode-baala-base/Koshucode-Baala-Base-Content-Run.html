@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.26.0.0: A notational system for relational data</p
+      >koshucode-baala-base-0.28.0.0: A notational system for relational data</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -56,7 +56,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Content
+	    >Expression
 </a
 	    ></li
 	  ></ul
@@ -66,7 +66,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	>Description</p
 	><div class="doc"
 	><p
-	  >Literalizer: Make literal contents from token tree. 
+	  >Term calcutation. 
 </p
 	  ></div
 	></div
@@ -77,8 +77,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	><li class="src short"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a href="#t:ContentOp"
-	    >ContentOp</a
+	    >  <a href="#t:Cop"
+	    >Cop</a
 	    > c<ul class="subs"
 	    ><li
 	      >= <a href="#v:CopLit"
@@ -113,7 +113,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >CopLitF</a
 	    > c = [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    >] -&gt; <a href="Koshucode-Baala-Base-Abort-Symbol.html#t:AbOr"
+	    >] -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
 	    >AbOr</a
 	    > c</li
 	  ><li class="src short"
@@ -121,9 +121,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >type</span
 	    > <a href="#t:CopLazyF"
 	    >CopLazyF</a
-	    > c = [<a href="Koshucode-Baala-Base-Content-Run.html#t:Content"
-	    >Content</a
-	    > c] -&gt; <a href="Koshucode-Baala-Base-Abort-Symbol.html#t:AbOr"
+	    > c = [<a href="Koshucode-Baala-Base-Content-Run.html#t:ContExp"
+	    >ContExp</a
+	    > c] -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
 	    >AbOr</a
 	    > c</li
 	  ><li class="src short"
@@ -131,9 +131,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >type</span
 	    > <a href="#t:CopEagerF"
 	    >CopEagerF</a
-	    > c = [c] -&gt; <a href="Koshucode-Baala-Base-Abort-Symbol.html#t:AbOr"
+	    > c = [c] -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
 	    >AbOr</a
 	    > c</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:FindCop"
+	    >FindCop</a
+	    > c = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (<a href="Koshucode-Baala-Base-Content-Run.html#t:Cop"
+	    >Cop</a
+	    > c)</li
 	  ><li class="src short"
 	  ><a href="#v:namedLit"
 	    >namedLit</a
@@ -143,8 +155,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >CopLitF</a
 	    > c -&gt; (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >, <a href="Koshucode-Baala-Base-Content-Run.html#t:ContentOp"
-	    >ContentOp</a
+	    >, <a href="Koshucode-Baala-Base-Content-Run.html#t:Cop"
+	    >Cop</a
 	    > c)</li
 	  ><li class="src short"
 	  ><a href="#v:namedEager"
@@ -155,8 +167,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >CopEagerF</a
 	    > c -&gt; (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >, <a href="Koshucode-Baala-Base-Content-Run.html#t:ContentOp"
-	    >ContentOp</a
+	    >, <a href="Koshucode-Baala-Base-Content-Run.html#t:Cop"
+	    >Cop</a
 	    > c)</li
 	  ><li class="src short"
 	  ><a href="#v:namedLazy"
@@ -167,14 +179,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >CopLazyF</a
 	    > c -&gt; (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >, <a href="Koshucode-Baala-Base-Content-Run.html#t:ContentOp"
-	    >ContentOp</a
+	    >, <a href="Koshucode-Baala-Base-Content-Run.html#t:Cop"
+	    >Cop</a
 	    > c)</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a href="#t:Content"
-	    >Content</a
+	    >  <a href="#t:ContExp"
+	    >ContExp</a
 	    > c<ul class="subs"
 	    ><li
 	      >= <a href="#v:ContLit"
@@ -183,10 +195,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	      ><li
 	      >| <a href="#v:ContApp"
 		>ContApp</a
-		> (<a href="Koshucode-Baala-Base-Content-Run.html#t:ContentOp"
-		>ContentOp</a
-		> c) [<a href="Koshucode-Baala-Base-Content-Run.html#t:Content"
-		>Content</a
+		> (<a href="Koshucode-Baala-Base-Content-Run.html#t:Cop"
+		>Cop</a
+		> c) [<a href="Koshucode-Baala-Base-Content-Run.html#t:ContExp"
+		>ContExp</a
 		> c]  </li
 	      ><li
 	      >| <a href="#v:ContTerm"
@@ -201,43 +213,47 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	  ><li class="src short"
 	  ><a href="#v:formContent"
 	    >formContent</a
-	    > :: <a href="Koshucode-Baala-Base-Content-Class.html#t:Value"
-	    >Value</a
-	    > c =&gt; (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
-	    >Maybe</a
-	    > (<a href="Koshucode-Baala-Base-Content-Run.html#t:ContentOp"
-	    >ContentOp</a
-	    > c)) -&gt; [<a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
+	    > :: <a href="Koshucode-Baala-Base-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Base-Content-Run.html#t:FindCop"
+	    >FindCop</a
+	    > c -&gt; [<a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
 	    >SourceLine</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Symbol.html#t:AbortOr"
+	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
 	    >AbortOr</a
-	    > (<a href="Koshucode-Baala-Base-Content-Run.html#t:Content"
-	    >Content</a
+	    > (<a href="Koshucode-Baala-Base-Content-Run.html#t:ContExp"
+	    >ContExp</a
 	    > c)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:PosContent"
+	    >PosContent</a
+	    > c = <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Content-Run.html#t:ContExp"
+	    >ContExp</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:posContent"
 	    >posContent</a
-	    > ::  <a href="Koshucode-Baala-Base-Data-Rel-Relhead.html#t:Relhead"
-	    >Relhead</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Map"
-	    >Map</a
-	    > (<a href="Koshucode-Baala-Base-Content-Run.html#t:Content"
-	    >Content</a
-	    > v)</li
+	    > ::  <a href="Koshucode-Baala-Base-Content-Run.html#t:ContExp"
+	    >ContExp</a
+	    > c -&gt; <a href="Koshucode-Baala-Base-Content-Run.html#t:PosContent"
+	    >PosContent</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:runContent"
 	    >runContent</a
-	    > :: (<a href="Koshucode-Baala-Base-Content-Class.html#t:ListValue"
-	    >ListValue</a
-	    > c, <a href="Koshucode-Baala-Base-Content-Class.html#t:RelValue"
-	    >RelValue</a
-	    > c) =&gt; <a href="Koshucode-Baala-Base-Content-Run.html#t:Content"
-	    >Content</a
-	    > c -&gt; [c] -&gt; <a href="Koshucode-Baala-Base-Abort-Symbol.html#t:AbOr"
+	    > :: (<a href="Koshucode-Baala-Base-Content-Class.html#t:CList"
+	    >CList</a
+	    > c, <a href="Koshucode-Baala-Base-Content-Class.html#t:CRel"
+	    >CRel</a
+	    > c) =&gt; <a href="Koshucode-Baala-Base-Content-Run.html#t:ContExp"
+	    >ContExp</a
+	    > c -&gt; [c] -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
 	    >AbOr</a
 	    > c</li
 	  ></ul
@@ -250,11 +266,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	><p class="src"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a name="t:ContentOp" class="def"
-	    >ContentOp</a
-	    > c <a href="src/Koshucode-Baala-Base-Content-Run.html#ContentOp" class="link"
+	    >  <a name="t:Cop" class="def"
+	    >Cop</a
+	    > c <a href="src/Koshucode-Baala-Base-Content-Run.html#Cop" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Term content operator. 
+</p
+	    ></div
 	  ><div class="subs constructors"
 	  ><p class="caption"
 	    >Constructors</p
@@ -298,16 +319,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	      ></table
 	    ></div
 	  ><div class="subs instances"
-	  ><p id="control.i:ContentOp" class="caption collapser" onclick="toggleSection('i:ContentOp')"
+	  ><p id="control.i:Cop" class="caption collapser" onclick="toggleSection('i:Cop')"
 	    >Instances</p
-	    ><div id="section.i:ContentOp" class="show"
+	    ><div id="section.i:Cop" class="show"
 	    ><table
 	      ><tr
 		><td class="src"
 		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
 		    >Show</a
-		    > (<a href="Koshucode-Baala-Base-Content-Run.html#t:ContentOp"
-		    >ContentOp</a
+		    > (<a href="Koshucode-Baala-Base-Content-Run.html#t:Cop"
+		    >Cop</a
 		    > c)</td
 		  ><td class="doc empty"
 		  >&nbsp;</td
@@ -324,7 +345,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >CopLitF</a
 	    > c = [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    >] -&gt; <a href="Koshucode-Baala-Base-Abort-Symbol.html#t:AbOr"
+	    >] -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
 	    >AbOr</a
 	    > c<a href="src/Koshucode-Baala-Base-Content-Run.html#CopLitF" class="link"
 	    >Source</a
@@ -336,9 +357,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >type</span
 	    > <a name="t:CopLazyF" class="def"
 	    >CopLazyF</a
-	    > c = [<a href="Koshucode-Baala-Base-Content-Run.html#t:Content"
-	    >Content</a
-	    > c] -&gt; <a href="Koshucode-Baala-Base-Abort-Symbol.html#t:AbOr"
+	    > c = [<a href="Koshucode-Baala-Base-Content-Run.html#t:ContExp"
+	    >ContExp</a
+	    > c] -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
 	    >AbOr</a
 	    > c<a href="src/Koshucode-Baala-Base-Content-Run.html#CopLazyF" class="link"
 	    >Source</a
@@ -350,11 +371,32 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >type</span
 	    > <a name="t:CopEagerF" class="def"
 	    >CopEagerF</a
-	    > c = [c] -&gt; <a href="Koshucode-Baala-Base-Abort-Symbol.html#t:AbOr"
+	    > c = [c] -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
 	    >AbOr</a
 	    > c<a href="src/Koshucode-Baala-Base-Content-Run.html#CopEagerF" class="link"
 	    >Source</a
 	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:FindCop" class="def"
+	    >FindCop</a
+	    > c = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (<a href="Koshucode-Baala-Base-Content-Run.html#t:Cop"
+	    >Cop</a
+	    > c)<a href="src/Koshucode-Baala-Base-Content-Run.html#FindCop" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Type for finding term content operator. 
+</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -366,8 +408,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >CopLitF</a
 	    > c -&gt; (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >, <a href="Koshucode-Baala-Base-Content-Run.html#t:ContentOp"
-	    >ContentOp</a
+	    >, <a href="Koshucode-Baala-Base-Content-Run.html#t:Cop"
+	    >Cop</a
 	    > c)<a href="src/Koshucode-Baala-Base-Content-Run.html#namedLit" class="link"
 	    >Source</a
 	    ></p
@@ -382,8 +424,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >CopEagerF</a
 	    > c -&gt; (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >, <a href="Koshucode-Baala-Base-Content-Run.html#t:ContentOp"
-	    >ContentOp</a
+	    >, <a href="Koshucode-Baala-Base-Content-Run.html#t:Cop"
+	    >Cop</a
 	    > c)<a href="src/Koshucode-Baala-Base-Content-Run.html#namedEager" class="link"
 	    >Source</a
 	    ></p
@@ -398,22 +440,129 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	    >CopLazyF</a
 	    > c -&gt; (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >, <a href="Koshucode-Baala-Base-Content-Run.html#t:ContentOp"
-	    >ContentOp</a
+	    >, <a href="Koshucode-Baala-Base-Content-Run.html#t:Cop"
+	    >Cop</a
 	    > c)<a href="src/Koshucode-Baala-Base-Content-Run.html#namedLazy" class="link"
 	    >Source</a
 	    ></p
 	  ></div
 	><h1 id="g:2"
-	>Content
+	>Expression
 </h1
+	><div class="doc"
+	><p
+	  >Phase 1. From string to prefixed token tree.
+</p
+	  ><dl
+	  ><dt
+	    >1. <code
+	      >String -&gt; [Token]</code
+	      ></dt
+	    ><dd
+	    >
+        Parse input string into list of token.
+        See <code
+	      ><a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#v:tokens"
+		>tokens</a
+		></code
+	      >.
+</dd
+	    ><dt
+	    >2. <code
+	      >[Token] -&gt; [Tree Token]</code
+	      ></dt
+	    ><dd
+	    >
+        Analyze token list structure.
+        See <code
+	      ><a href="Koshucode-Baala-Base-Syntax-TokenTree.html#v:tokenTrees"
+		>tokenTrees</a
+		></code
+	      >
+</dd
+	    ><dt
+	    >3. <code
+	      >[Tree Token] -&gt; Tree Token</code
+	      ></dt
+	    ><dd
+	    >
+        Enclose list of token tree in <code
+	      ><a href="Koshucode-Baala-Base-Syntax-Tree.html#v:TreeB"
+		>TreeB</a
+		></code
+	      >.
+        See <code
+	      ><a href="Koshucode-Baala-Base-Syntax-TokenTree.html#v:singleTree"
+		>singleTree</a
+		></code
+	      >.
+</dd
+	    ><dt
+	    >4. <code
+	      >Tree Token -&gt; Tree Token</code
+	      ></dt
+	    ><dd
+	    >
+        Translate binary operators from infix to prefix.
+        See <code
+	      ><a href="Koshucode-Baala-Base-Syntax-Binary.html#v:binaryTree"
+		>binaryTree</a
+		></code
+	      >.
+</dd
+	    ></dl
+	  ><p
+	  >Phase 2. From prefixed token tree to literal content.
+</p
+	  ><dl
+	  ><dt
+	    >5. <code
+	      >Tree Token -&gt; ContExp c</code
+	      ></dt
+	    ><dd
+	    >
+        Convert from token tree to content expression.
+        See <code
+	      ><a href="Koshucode-Baala-Base-Content-Run.html#v:formContent"
+		>formContent</a
+		></code
+	      >.
+</dd
+	    ><dt
+	    >6. <code
+	      >ContExp c -&gt; (Relhead -&gt; ContExp c)</code
+	      ></dt
+	    ><dd
+	    >
+        Attach term positions using actural heading of relation.
+        See <code
+	      ><a href="Koshucode-Baala-Base-Content-Run.html#v:posContent"
+		>posContent</a
+		></code
+	      >.
+</dd
+	    ><dt
+	    >7. <code
+	      >ContExp c -&gt; [c] -&gt; c</code
+	      ></dt
+	    ><dd
+	    >
+        Calculate content expression for each tuple of relation.
+        See <code
+	      ><a href="Koshucode-Baala-Base-Content-Run.html#v:runContent"
+		>runContent</a
+		></code
+	      >.
+</dd
+	    ></dl
+	  ></div
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a name="t:Content" class="def"
-	    >Content</a
-	    > c <a href="src/Koshucode-Baala-Base-Content-Run.html#Content" class="link"
+	    >  <a name="t:ContExp" class="def"
+	    >ContExp</a
+	    > c <a href="src/Koshucode-Baala-Base-Content-Run.html#ContExp" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs constructors"
@@ -425,20 +574,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 		><a name="v:ContLit" class="def"
 		  >ContLit</a
 		  > c</td
-		><td class="doc empty"
-		>&nbsp;</td
+		><td class="doc"
+		><p
+		  >Literal content. 
+</p
+		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
 		><a name="v:ContApp" class="def"
 		  >ContApp</a
-		  > (<a href="Koshucode-Baala-Base-Content-Run.html#t:ContentOp"
-		  >ContentOp</a
-		  > c) [<a href="Koshucode-Baala-Base-Content-Run.html#t:Content"
-		  >Content</a
+		  > (<a href="Koshucode-Baala-Base-Content-Run.html#t:Cop"
+		  >Cop</a
+		  > c) [<a href="Koshucode-Baala-Base-Content-Run.html#t:ContExp"
+		  >ContExp</a
 		  > c]</td
-		><td class="doc empty"
-		>&nbsp;</td
+		><td class="doc"
+		><p
+		  >Operator invocation. 
+</p
+		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
@@ -449,15 +604,33 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 		  >] [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 		  >Int</a
 		  >]</td
-		><td class="doc empty"
-		>&nbsp;</td
+		><td class="doc"
+		><p
+		  >Term reference.
+        Term names <code
+		    >[String]</code
+		    > and positions <code
+		    >[Int]</code
+		    >.
+        <code
+		    ><a href="Koshucode-Baala-Base-Content-Run.html#v:formContent"
+		      >formContent</a
+		      ></code
+		    > makes positions empty,
+        <code
+		    ><a href="Koshucode-Baala-Base-Content-Run.html#v:posContent"
+		      >posContent</a
+		      ></code
+		    > fills it. 
+</p
+		  ></td
 		></tr
 	      ></table
 	    ></div
 	  ><div class="subs instances"
-	  ><p id="control.i:Content" class="caption collapser" onclick="toggleSection('i:Content')"
+	  ><p id="control.i:ContExp" class="caption collapser" onclick="toggleSection('i:ContExp')"
 	    >Instances</p
-	    ><div id="section.i:Content" class="show"
+	    ><div id="section.i:ContExp" class="show"
 	    ><table
 	      ><tr
 		><td class="src"
@@ -465,8 +638,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 		    >Show</a
 		    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
 		    >Show</a
-		    > (<a href="Koshucode-Baala-Base-Content-Run.html#t:Content"
-		    >Content</a
+		    > (<a href="Koshucode-Baala-Base-Content-Run.html#t:ContExp"
+		    >ContExp</a
 		    > c)</td
 		  ><td class="doc empty"
 		  >&nbsp;</td
@@ -479,23 +652,86 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	><p class="src"
 	  ><a name="v:formContent" class="def"
 	    >formContent</a
-	    > :: <a href="Koshucode-Baala-Base-Content-Class.html#t:Value"
-	    >Value</a
-	    > c =&gt; (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
-	    >Maybe</a
-	    > (<a href="Koshucode-Baala-Base-Content-Run.html#t:ContentOp"
-	    >ContentOp</a
-	    > c)) -&gt; [<a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-	    >SourceLine</a
-	    >] -&gt; <a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Symbol.html#t:AbortOr"
-	    >AbortOr</a
-	    > (<a href="Koshucode-Baala-Base-Content-Run.html#t:Content"
-	    >Content</a
-	    > c)<a href="src/Koshucode-Baala-Base-Content-Run.html#formContent" class="link"
+	    ><a href="src/Koshucode-Baala-Base-Content-Run.html#formContent" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs arguments"
+	  ><p class="caption"
+	    >Arguments</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		>:: <a href="Koshucode-Baala-Base-Content-Class.html#t:CContent"
+		  >CContent</a
+		  > c</td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>=&gt; <a href="Koshucode-Baala-Base-Content-Run.html#t:FindCop"
+		  >FindCop</a
+		  > c</td
+		><td class="doc"
+		><p
+		  >Collection of operators
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; [<a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
+		  >SourceLine</a
+		  >]</td
+		><td class="doc"
+		><p
+		  >Source code information
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+		  >TokenTree</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Input token tree
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
+		  >AbortOr</a
+		  > (<a href="Koshucode-Baala-Base-Content-Run.html#t:ContExp"
+		  >ContExp</a
+		  > c)</td
+		><td class="doc"
+		><p
+		  >Result content expression
+</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="doc"
+	  ><p
+	    >Construct content expression. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:PosContent" class="def"
+	    >PosContent</a
+	    > c = <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Content-Run.html#t:ContExp"
+	    >ContExp</a
+	    > c<a href="src/Koshucode-Baala-Base-Content-Run.html#PosContent" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -503,31 +739,39 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-C
 	><p class="src"
 	  ><a name="v:posContent" class="def"
 	    >posContent</a
-	    > ::  <a href="Koshucode-Baala-Base-Data-Rel-Relhead.html#t:Relhead"
-	    >Relhead</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Map"
-	    >Map</a
-	    > (<a href="Koshucode-Baala-Base-Content-Run.html#t:Content"
-	    >Content</a
-	    > v)<a href="src/Koshucode-Baala-Base-Content-Run.html#posContent" class="link"
+	    > ::  <a href="Koshucode-Baala-Base-Content-Run.html#t:ContExp"
+	    >ContExp</a
+	    > c -&gt; <a href="Koshucode-Baala-Base-Content-Run.html#t:PosContent"
+	    >PosContent</a
+	    > c<a href="src/Koshucode-Baala-Base-Content-Run.html#posContent" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Put term positions for actural heading. 
+</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:runContent" class="def"
 	    >runContent</a
-	    > :: (<a href="Koshucode-Baala-Base-Content-Class.html#t:ListValue"
-	    >ListValue</a
-	    > c, <a href="Koshucode-Baala-Base-Content-Class.html#t:RelValue"
-	    >RelValue</a
-	    > c) =&gt; <a href="Koshucode-Baala-Base-Content-Run.html#t:Content"
-	    >Content</a
-	    > c -&gt; [c] -&gt; <a href="Koshucode-Baala-Base-Abort-Symbol.html#t:AbOr"
+	    > :: (<a href="Koshucode-Baala-Base-Content-Class.html#t:CList"
+	    >CList</a
+	    > c, <a href="Koshucode-Baala-Base-Content-Class.html#t:CRel"
+	    >CRel</a
+	    > c) =&gt; <a href="Koshucode-Baala-Base-Content-Run.html#t:ContExp"
+	    >ContExp</a
+	    > c -&gt; [c] -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
 	    >AbOr</a
 	    > c<a href="src/Koshucode-Baala-Base-Content-Run.html#runContent" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Calculate content expression. 
+</p
+	    ></div
 	  ></div
 	></div
       ></div

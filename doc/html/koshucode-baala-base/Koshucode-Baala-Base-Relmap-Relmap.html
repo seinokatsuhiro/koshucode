@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.26.0.0: A notational system for relational data</p
+      >koshucode-baala-base-0.28.0.0: A notational system for relational data</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -76,7 +76,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-R
 	>Description</p
 	><div class="doc"
 	><p
-	  >Data structures for relation-to-relation mappings
+	  >Data structures for relation-to-relation mappings 
 </p
 	  ></div
 	></div
@@ -157,9 +157,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-R
 	    >Rel</a
 	    > v] -&gt; <a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
 	    >Rel</a
-	    > v -&gt; <a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
+	    > v -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
+	    >AbOr</a
+	    > (<a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
 	    >Rel</a
-	    > v</li
+	    > v)</li
 	  ><li class="src short"
 	  ><a href="#v:relmapSourceList"
 	    >relmapSourceList</a
@@ -352,8 +354,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-R
 		  ></tr
 		><tr
 		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
-		    >Pretty</a
+		  ><a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Name"
+		    >Name</a
 		    > (<a href="Koshucode-Baala-Base-Relmap-Relmap.html#t:Relmap"
 		    >Relmap</a
 		    > v)</td
@@ -362,8 +364,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-R
 		  ></tr
 		><tr
 		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Name"
-		    >Name</a
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
+		    >Pretty</a
 		    > (<a href="Koshucode-Baala-Base-Relmap-Relmap.html#t:Relmap"
 		    >Relmap</a
 		    > v)</td
@@ -411,9 +413,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-R
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; <a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
+		>-&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
+		  >AbOr</a
+		  > (<a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
 		  >Rel</a
-		  > v</td
+		  > v)</td
 		><td class="doc"
 		><p
 		  >Output relation
@@ -434,10 +438,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-R
 	><div class="doc"
 	><p
 	  >This picture represents calculation
- of mapping input relation to output relation.
+   of mapping input relation to output relation.
 </p
 	  ><pre
-	  > input -[ relmap ]- output</pre
+	  > input -[ relmap ]- output
+</pre
 	  ><p
 	  >Relmap <em
 	    >A</em
@@ -446,7 +451,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-R
 	    > to relation <em
 	    >R2</em
 	    >.
- Another relmap <em
+   Another relmap <em
 	    >B</em
 	    > maps <em
 	    >R2</em
@@ -456,22 +461,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-R
 </p
 	  ><pre
 	  > R1 -[ A ]- R2
- R2 -[ B ]- R3</pre
+ R2 -[ B ]- R3
+</pre
 	  ><p
 	  >Two relmaps <em
 	    >A</em
 	    > and <em
 	    >B</em
 	    > are jointed
- with intermidiate relation <em
+   with intermidiate relation <em
 	    >R2</em
 	    >.
 </p
 	  ><pre
-	  > R1 -[ A ]- R2 -[ B ]- R3</pre
+	  > R1 -[ A ]- R2 -[ B ]- R3
+</pre
 	  ><p
 	  >Or, we can draw a directly jointed picture.
- This whole structure is also <code
+   This whole structure is also <code
 	    ><a href="Koshucode-Baala-Base-Relmap-Relmap.html#v:RelmapAppend"
 	      >RelmapAppend</a
 	      ></code
@@ -480,7 +487,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-R
 	    >.
 </p
 	  ><pre
-	  > R1 -[ A ]--[ B ]- R3</pre
+	  > R1 -[ A ]--[ B ]- R3
+</pre
 	  ></div
 	><h1 id="g:3"
 	>Selectors

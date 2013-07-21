@@ -13,29 +13,29 @@
 <a name="line-4"></a>
 <a name="line-5"></a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Content</span><span class='hs-varop'>.</span><span class='hs-conid'>Literalize</span>
 <a name="line-6"></a><span class='hs-layout'>(</span>
-<a name="line-7"></a><span class='hs-comment'>-- * Library</span>
+<a name="line-7"></a>  <span class='hs-comment'>-- * Library</span>
 <a name="line-8"></a>
-<a name="line-9"></a><span class='hs-comment'>-- ** Types</span>
+<a name="line-9"></a>  <span class='hs-comment'>-- ** Types</span>
 <a name="line-10"></a>  <span class='hs-conid'>LiteralizeFrom</span><span class='hs-layout'>,</span>
-<a name="line-11"></a>  <span class='hs-conid'>Literalize</span><span class='hs-layout'>,</span>
+<a name="line-11"></a>  <span class='hs-conid'>LiteralizeTrees</span><span class='hs-layout'>,</span>
 <a name="line-12"></a>  <span class='hs-conid'>LiteralizeTree</span><span class='hs-layout'>,</span>
 <a name="line-13"></a>  <span class='hs-conid'>LiteralizeString</span><span class='hs-layout'>,</span>
 <a name="line-14"></a>
-<a name="line-15"></a><span class='hs-comment'>-- ** Functions</span>
+<a name="line-15"></a>  <span class='hs-comment'>-- ** Functions</span>
 <a name="line-16"></a>  <span class='hs-varid'>litContent</span><span class='hs-layout'>,</span>
 <a name="line-17"></a>  <span class='hs-varid'>litList</span><span class='hs-layout'>,</span>
 <a name="line-18"></a>  <span class='hs-varid'>litJudge</span><span class='hs-layout'>,</span>
 <a name="line-19"></a>
-<a name="line-20"></a><span class='hs-comment'>-- * Document</span>
+<a name="line-20"></a>  <span class='hs-comment'>-- * Document</span>
 <a name="line-21"></a>
-<a name="line-22"></a><span class='hs-comment'>-- ** Types</span>
-<a name="line-23"></a><span class='hs-comment'>-- $Types</span>
+<a name="line-22"></a>  <span class='hs-comment'>-- ** Types</span>
+<a name="line-23"></a>  <span class='hs-comment'>-- $Types</span>
 <a name="line-24"></a>
-<a name="line-25"></a><span class='hs-comment'>-- ** Simple data</span>
-<a name="line-26"></a><span class='hs-comment'>-- $SimpleData</span>
+<a name="line-25"></a>  <span class='hs-comment'>-- ** Simple data</span>
+<a name="line-26"></a>  <span class='hs-comment'>-- $SimpleData</span>
 <a name="line-27"></a>
-<a name="line-28"></a><span class='hs-comment'>-- ** Compound data</span>
-<a name="line-29"></a><span class='hs-comment'>-- $CompoundData</span>
+<a name="line-28"></a>  <span class='hs-comment'>-- ** Compound data</span>
+<a name="line-29"></a>  <span class='hs-comment'>-- $CompoundData</span>
 <a name="line-30"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
 <a name="line-31"></a>
 <a name="line-32"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Abort</span>
@@ -50,10 +50,10 @@
 <a name="line-41"></a><span class='hs-comment'>-- ----------------------  Literalize</span>
 <a name="line-42"></a>
 <a name="line-43"></a><a name="LiteralizeFrom"></a><span class='hs-comment'>{-| Make @a@ from @b@. -}</span>
-<a name="line-44"></a><a name="LiteralizeFrom"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>LiteralizeFrom</span> <span class='hs-varid'>b</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>SourceLine</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>b</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>AbortOr</span> <span class='hs-varid'>a</span>
+<a name="line-44"></a><a name="LiteralizeFrom"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>LiteralizeFrom</span> <span class='hs-varid'>b</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>b</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>AbOr</span> <span class='hs-varid'>a</span>
 <a name="line-45"></a>
-<a name="line-46"></a><a name="Literalize"></a><span class='hs-comment'>{-| Make @a@ from list of token trees. -}</span>
-<a name="line-47"></a><a name="Literalize"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>Literalize</span>       <span class='hs-varid'>a</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>LiteralizeFrom</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-varid'>a</span>
+<a name="line-46"></a><a name="LiteralizeTrees"></a><span class='hs-comment'>{-| Make @a@ from list of token trees. -}</span>
+<a name="line-47"></a><a name="LiteralizeTrees"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>LiteralizeTrees</span>  <span class='hs-varid'>a</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>LiteralizeFrom</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-varid'>a</span>
 <a name="line-48"></a>
 <a name="line-49"></a><a name="LiteralizeTree"></a><span class='hs-comment'>{-| Make @a@ from a token tree. -}</span>
 <a name="line-50"></a><a name="LiteralizeTree"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>LiteralizeTree</span>   <span class='hs-varid'>a</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>LiteralizeFrom</span> <span class='hs-conid'>TokenTree</span> <span class='hs-varid'>a</span>
@@ -67,228 +67,228 @@
 <a name="line-58"></a>
 <a name="line-59"></a><a name="litContent"></a><span class='hs-comment'>{-| Transform 'TokenTree' into
 <a name="line-60"></a>    internal form of term content. -}</span>
-<a name="line-61"></a><span class='hs-definition'>litContent</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Value</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>LiteralizeTree</span> <span class='hs-varid'>v</span>
-<a name="line-62"></a><span class='hs-definition'>litContent</span> <span class='hs-varid'>src</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>lit</span> <span class='hs-keyword'>where</span>
+<a name="line-61"></a><span class='hs-definition'>litContent</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>CContent</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>LiteralizeTree</span> <span class='hs-varid'>v</span>
+<a name="line-62"></a><span class='hs-definition'>litContent</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>lit</span> <span class='hs-keyword'>where</span>
 <a name="line-63"></a>    <span class='hs-comment'>-- leaf</span>
 <a name="line-64"></a>    <span class='hs-varid'>lit</span> <span class='hs-layout'>(</span><span class='hs-conid'>TreeL</span> <span class='hs-layout'>(</span><span class='hs-conid'>TWord</span> <span class='hs-keyword'>_</span> <span class='hs-varid'>q</span> <span class='hs-varid'>w</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>
-<a name="line-65"></a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>q</span> <span class='hs-varop'>&gt;</span>  <span class='hs-num'>0</span>   <span class='hs-keyglyph'>=</span>   <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-varid'>stringValue</span> <span class='hs-varop'>$</span> <span class='hs-varid'>w</span>  <span class='hs-comment'>-- quoted text</span>
+<a name="line-65"></a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>q</span> <span class='hs-varop'>&gt;</span>  <span class='hs-num'>0</span>   <span class='hs-keyglyph'>=</span>   <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-varid'>putString</span> <span class='hs-varop'>$</span> <span class='hs-varid'>w</span>  <span class='hs-comment'>-- quoted text</span>
 <a name="line-66"></a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>q</span> <span class='hs-varop'>==</span> <span class='hs-num'>0</span>   <span class='hs-keyglyph'>=</span>   <span class='hs-keyword'>case</span> <span class='hs-varid'>w</span> <span class='hs-keyword'>of</span>
 <a name="line-67"></a>          <span class='hs-chr'>'#'</span> <span class='hs-conop'>:</span> <span class='hs-varid'>w'</span> <span class='hs-keyglyph'>-&gt;</span>  <span class='hs-varid'>hash</span> <span class='hs-varid'>w'</span>
 <a name="line-68"></a>          <span class='hs-str'>"()"</span>     <span class='hs-keyglyph'>-&gt;</span>  <span class='hs-conid'>Right</span> <span class='hs-varid'>nil</span>
-<a name="line-69"></a>          <span class='hs-keyword'>_</span>        <span class='hs-keyglyph'>-&gt;</span>  <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-varid'>stringValue</span> <span class='hs-varop'>$</span> <span class='hs-varid'>w</span>
+<a name="line-69"></a>          <span class='hs-keyword'>_</span>        <span class='hs-keyglyph'>-&gt;</span>  <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-varid'>putString</span> <span class='hs-varop'>$</span> <span class='hs-varid'>w</span>
 <a name="line-70"></a>
 <a name="line-71"></a>    <span class='hs-comment'>-- branch</span>
 <a name="line-72"></a>    <span class='hs-varid'>lit</span> <span class='hs-layout'>(</span><span class='hs-conid'>TreeB</span> <span class='hs-varid'>t</span> <span class='hs-varid'>xs</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>case</span> <span class='hs-varid'>t</span> <span class='hs-keyword'>of</span>
 <a name="line-73"></a>          <span class='hs-num'>1</span>        <span class='hs-keyglyph'>-&gt;</span>  <span class='hs-varid'>paren</span> <span class='hs-varid'>xs</span>
-<a name="line-74"></a>          <span class='hs-num'>2</span>        <span class='hs-keyglyph'>-&gt;</span>  <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-varid'>listValue</span>    <span class='hs-varop'>=&lt;&lt;</span> <span class='hs-varid'>litList</span>    <span class='hs-varid'>src</span> <span class='hs-varid'>xs</span>
-<a name="line-75"></a>          <span class='hs-num'>3</span>        <span class='hs-keyglyph'>-&gt;</span>  <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-varid'>setValue</span>     <span class='hs-varop'>=&lt;&lt;</span> <span class='hs-varid'>litList</span>    <span class='hs-varid'>src</span> <span class='hs-varid'>xs</span>
-<a name="line-76"></a>          <span class='hs-num'>4</span>        <span class='hs-keyglyph'>-&gt;</span>  <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-varid'>termsetValue</span> <span class='hs-varop'>=&lt;&lt;</span> <span class='hs-varid'>litTermset</span> <span class='hs-varid'>src</span> <span class='hs-varid'>xs</span>
-<a name="line-77"></a>          <span class='hs-num'>5</span>        <span class='hs-keyglyph'>-&gt;</span>  <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-varid'>relValue</span>     <span class='hs-varop'>=&lt;&lt;</span> <span class='hs-varid'>litRel</span>     <span class='hs-varid'>src</span> <span class='hs-varid'>xs</span>
+<a name="line-74"></a>          <span class='hs-num'>2</span>        <span class='hs-keyglyph'>-&gt;</span>  <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-varid'>putList</span>    <span class='hs-varop'>=&lt;&lt;</span> <span class='hs-varid'>litList</span>    <span class='hs-varid'>xs</span>
+<a name="line-75"></a>          <span class='hs-num'>3</span>        <span class='hs-keyglyph'>-&gt;</span>  <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-varid'>putSet</span>     <span class='hs-varop'>=&lt;&lt;</span> <span class='hs-varid'>litList</span>    <span class='hs-varid'>xs</span>
+<a name="line-76"></a>          <span class='hs-num'>4</span>        <span class='hs-keyglyph'>-&gt;</span>  <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-varid'>putTermset</span> <span class='hs-varop'>=&lt;&lt;</span> <span class='hs-varid'>litTermset</span> <span class='hs-varid'>xs</span>
+<a name="line-77"></a>          <span class='hs-num'>5</span>        <span class='hs-keyglyph'>-&gt;</span>  <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-varid'>putRel</span>     <span class='hs-varop'>=&lt;&lt;</span> <span class='hs-varid'>litRel</span>     <span class='hs-varid'>xs</span>
 <a name="line-78"></a>          <span class='hs-keyword'>_</span>        <span class='hs-keyglyph'>-&gt;</span>  <span class='hs-varid'>bug</span>
 <a name="line-79"></a>
 <a name="line-80"></a>    <span class='hs-comment'>-- unknown content</span>
-<a name="line-81"></a>    <span class='hs-varid'>lit</span> <span class='hs-varid'>x</span>          <span class='hs-keyglyph'>=</span>   <span class='hs-conid'>Left</span> <span class='hs-layout'>(</span><span class='hs-conid'>AbortUnknownContent</span> <span class='hs-layout'>(</span><span class='hs-varid'>show</span> <span class='hs-varid'>x</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span> <span class='hs-varid'>src</span><span class='hs-layout'>)</span>
+<a name="line-81"></a>    <span class='hs-varid'>lit</span> <span class='hs-varid'>x</span>          <span class='hs-keyglyph'>=</span>   <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>AbortUnknownContent</span> <span class='hs-layout'>(</span><span class='hs-varid'>show</span> <span class='hs-varid'>x</span><span class='hs-layout'>)</span>
 <a name="line-82"></a>
 <a name="line-83"></a>    <span class='hs-comment'>-- hash word</span>
-<a name="line-84"></a>    <span class='hs-varid'>hash</span> <span class='hs-str'>"true"</span>    <span class='hs-keyglyph'>=</span>   <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-varid'>boolValue</span> <span class='hs-varop'>$</span> <span class='hs-conid'>True</span>
-<a name="line-85"></a>    <span class='hs-varid'>hash</span> <span class='hs-str'>"false"</span>   <span class='hs-keyglyph'>=</span>   <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-varid'>boolValue</span> <span class='hs-varop'>$</span> <span class='hs-conid'>False</span>
+<a name="line-84"></a>    <span class='hs-varid'>hash</span> <span class='hs-str'>"true"</span>    <span class='hs-keyglyph'>=</span>   <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-varid'>putBool</span> <span class='hs-varop'>$</span> <span class='hs-conid'>True</span>
+<a name="line-85"></a>    <span class='hs-varid'>hash</span> <span class='hs-str'>"false"</span>   <span class='hs-keyglyph'>=</span>   <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-varid'>putBool</span> <span class='hs-varop'>$</span> <span class='hs-conid'>False</span>
 <a name="line-86"></a>    <span class='hs-varid'>hash</span> <span class='hs-varid'>w</span>         <span class='hs-keyglyph'>=</span>   <span class='hs-keyword'>case</span> <span class='hs-varid'>hashWord</span> <span class='hs-varid'>w</span> <span class='hs-keyword'>of</span>
-<a name="line-87"></a>                         <span class='hs-conid'>Just</span> <span class='hs-varid'>w2</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-varid'>stringValue</span> <span class='hs-varop'>$</span> <span class='hs-varid'>w2</span>
-<a name="line-88"></a>                         <span class='hs-conid'>Nothing</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Left</span> <span class='hs-layout'>(</span><span class='hs-conid'>AbortUnknownSymbol</span> <span class='hs-layout'>(</span><span class='hs-chr'>'#'</span> <span class='hs-conop'>:</span> <span class='hs-varid'>w</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span> <span class='hs-varid'>src</span><span class='hs-layout'>)</span>
+<a name="line-87"></a>                         <span class='hs-conid'>Just</span> <span class='hs-varid'>w2</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-varid'>putString</span> <span class='hs-varop'>$</span> <span class='hs-varid'>w2</span>
+<a name="line-88"></a>                         <span class='hs-conid'>Nothing</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>AbortUnknownSymbol</span> <span class='hs-layout'>(</span><span class='hs-chr'>'#'</span> <span class='hs-conop'>:</span> <span class='hs-varid'>w</span><span class='hs-layout'>)</span>
 <a name="line-89"></a>
 <a name="line-90"></a>    <span class='hs-comment'>-- sequence of token trees</span>
 <a name="line-91"></a>    <span class='hs-varid'>paren</span> <span class='hs-layout'>(</span><span class='hs-conid'>TreeL</span> <span class='hs-layout'>(</span><span class='hs-conid'>TWord</span> <span class='hs-keyword'>_</span> <span class='hs-num'>0</span> <span class='hs-varid'>tag</span><span class='hs-layout'>)</span> <span class='hs-conop'>:</span> <span class='hs-varid'>xs</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span>
 <a name="line-92"></a>        <span class='hs-keyword'>case</span> <span class='hs-varid'>tag</span> <span class='hs-keyword'>of</span>
-<a name="line-93"></a>          <span class='hs-str'>"text"</span>  <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-varid'>joinContent</span> <span class='hs-varop'>=&lt;&lt;</span> <span class='hs-varid'>litList</span> <span class='hs-varid'>src</span> <span class='hs-varid'>xs</span>
-<a name="line-94"></a>          <span class='hs-str'>"lines"</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-varid'>joinContent</span> <span class='hs-varop'>=&lt;&lt;</span> <span class='hs-varid'>litList</span> <span class='hs-varid'>src</span> <span class='hs-varid'>xs</span>  <span class='hs-comment'>-- todo</span>
-<a name="line-95"></a>          <span class='hs-str'>"int"</span>   <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>litInt</span> <span class='hs-varid'>src</span> <span class='hs-varid'>xs</span>
-<a name="line-96"></a>          <span class='hs-keyword'>_</span>       <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Left</span> <span class='hs-layout'>(</span><span class='hs-conid'>AbortUnknownSymbol</span> <span class='hs-layout'>(</span><span class='hs-varid'>show</span> <span class='hs-varid'>xs</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span> <span class='hs-varid'>src</span><span class='hs-layout'>)</span>
-<a name="line-97"></a>    <span class='hs-varid'>paren</span> <span class='hs-varid'>x</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-layout'>(</span><span class='hs-conid'>AbortUnknownSymbol</span> <span class='hs-layout'>(</span><span class='hs-varid'>show</span> <span class='hs-varid'>x</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span> <span class='hs-varid'>src</span><span class='hs-layout'>)</span>
-<a name="line-98"></a>
+<a name="line-93"></a>          <span class='hs-str'>"text"</span>  <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-varid'>joinContent</span> <span class='hs-varop'>=&lt;&lt;</span> <span class='hs-varid'>litList</span> <span class='hs-varid'>xs</span>
+<a name="line-94"></a>          <span class='hs-str'>"lines"</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-varid'>joinContent</span> <span class='hs-varop'>=&lt;&lt;</span> <span class='hs-varid'>litList</span> <span class='hs-varid'>xs</span>  <span class='hs-comment'>-- todo</span>
+<a name="line-95"></a>          <span class='hs-str'>"int"</span>   <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>litInt</span> <span class='hs-varid'>xs</span>
+<a name="line-96"></a>          <span class='hs-keyword'>_</span>       <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>AbortUnknownSymbol</span> <span class='hs-layout'>(</span><span class='hs-varid'>show</span> <span class='hs-varid'>xs</span><span class='hs-layout'>)</span>
+<a name="line-97"></a>    <span class='hs-varid'>paren</span> <span class='hs-conid'>[]</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varid'>nil</span>
+<a name="line-98"></a>    <span class='hs-varid'>paren</span> <span class='hs-varid'>x</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>AbortUnknownSymbol</span> <span class='hs-layout'>(</span><span class='hs-varid'>show</span> <span class='hs-varid'>x</span><span class='hs-layout'>)</span>
 <a name="line-99"></a>
 <a name="line-100"></a>
-<a name="line-101"></a><span class='hs-comment'>-- ----------------------  Simple data</span>
-<a name="line-102"></a>
-<a name="line-103"></a><span class='hs-comment'>-- litBool</span>
-<a name="line-104"></a><span class='hs-comment'>-- litString</span>
-<a name="line-105"></a><span class='hs-comment'>-- litNil</span>
-<a name="line-106"></a>
-<a name="line-107"></a><a name="litInt"></a><span class='hs-definition'>litInt</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>IntValue</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>Literalize</span> <span class='hs-varid'>v</span>
-<a name="line-108"></a><span class='hs-definition'>litInt</span> <span class='hs-varid'>src</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TreeL</span> <span class='hs-layout'>(</span><span class='hs-conid'>TWord</span> <span class='hs-keyword'>_</span> <span class='hs-num'>0</span> <span class='hs-varid'>digits</span><span class='hs-layout'>)</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>=</span> 
-<a name="line-109"></a>    <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-varid'>intValue</span> <span class='hs-varop'>=&lt;&lt;</span> <span class='hs-varid'>readInt</span> <span class='hs-varid'>src</span> <span class='hs-varid'>digits</span>
-<a name="line-110"></a><span class='hs-definition'>litInt</span> <span class='hs-varid'>src</span> <span class='hs-varid'>xs</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-layout'>(</span><span class='hs-conid'>AbortNotNumber</span> <span class='hs-layout'>(</span><span class='hs-varid'>show</span> <span class='hs-varid'>xs</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span> <span class='hs-varid'>src</span><span class='hs-layout'>)</span>
-<a name="line-111"></a>
-<a name="line-112"></a><a name="readInt"></a><span class='hs-definition'>readInt</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>LiteralizeString</span> <span class='hs-conid'>Int</span>
-<a name="line-113"></a><span class='hs-definition'>readInt</span> <span class='hs-varid'>src</span> <span class='hs-varid'>s</span> <span class='hs-keyglyph'>=</span>
-<a name="line-114"></a>    <span class='hs-keyword'>case</span> <span class='hs-varid'>reads</span> <span class='hs-varid'>s</span> <span class='hs-keyword'>of</span>
-<a name="line-115"></a>      <span class='hs-keyglyph'>[</span><span class='hs-layout'>(</span><span class='hs-varid'>n</span><span class='hs-layout'>,</span> <span class='hs-str'>""</span><span class='hs-layout'>)</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Right</span> <span class='hs-varid'>n</span>
-<a name="line-116"></a>      <span class='hs-keyword'>_</span>         <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Left</span> <span class='hs-layout'>(</span><span class='hs-conid'>AbortNotNumber</span> <span class='hs-varid'>s</span><span class='hs-layout'>,</span> <span class='hs-varid'>src</span><span class='hs-layout'>)</span>
-<a name="line-117"></a>
-<a name="line-118"></a><a name="litFlatname"></a><span class='hs-comment'>{-| Get single term name.
-<a name="line-119"></a>    If 'TokenTree' contains nested term name, this function failed. -}</span>
-<a name="line-120"></a><span class='hs-definition'>litFlatname</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>LiteralizeTree</span> <span class='hs-conid'>String</span>
-<a name="line-121"></a><span class='hs-definition'>litFlatname</span> <span class='hs-keyword'>_</span>   <span class='hs-layout'>(</span><span class='hs-conid'>TreeL</span> <span class='hs-layout'>(</span><span class='hs-conid'>TTermN</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>n</span><span class='hs-keyglyph'>]</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varid'>n</span>
-<a name="line-122"></a><span class='hs-definition'>litFlatname</span> <span class='hs-varid'>src</span> <span class='hs-layout'>(</span><span class='hs-conid'>TreeL</span> <span class='hs-layout'>(</span><span class='hs-conid'>TTermN</span> <span class='hs-keyword'>_</span> <span class='hs-varid'>ns</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-layout'>(</span><span class='hs-conid'>AbortRequireFlatname</span> <span class='hs-layout'>(</span><span class='hs-varid'>concat</span> <span class='hs-varid'>ns</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span> <span class='hs-varid'>src</span><span class='hs-layout'>)</span>
-<a name="line-123"></a><span class='hs-definition'>litFlatname</span> <span class='hs-varid'>src</span> <span class='hs-varid'>x</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-layout'>(</span><span class='hs-conid'>AbortMissingTermName</span> <span class='hs-layout'>(</span><span class='hs-varid'>show</span> <span class='hs-varid'>x</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span> <span class='hs-varid'>src</span><span class='hs-layout'>)</span>
-<a name="line-124"></a>
+<a name="line-101"></a>
+<a name="line-102"></a><span class='hs-comment'>-- ----------------------  Simple data</span>
+<a name="line-103"></a>
+<a name="line-104"></a><span class='hs-comment'>-- litBool</span>
+<a name="line-105"></a><span class='hs-comment'>-- litString</span>
+<a name="line-106"></a><span class='hs-comment'>-- litNil</span>
+<a name="line-107"></a>
+<a name="line-108"></a><a name="litInt"></a><span class='hs-definition'>litInt</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>CInt</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>LiteralizeTrees</span> <span class='hs-varid'>v</span>
+<a name="line-109"></a><span class='hs-definition'>litInt</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TreeL</span> <span class='hs-layout'>(</span><span class='hs-conid'>TWord</span> <span class='hs-keyword'>_</span> <span class='hs-num'>0</span> <span class='hs-varid'>digits</span><span class='hs-layout'>)</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>=</span> 
+<a name="line-110"></a>    <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-varid'>putInt</span> <span class='hs-varop'>=&lt;&lt;</span> <span class='hs-varid'>readInt</span> <span class='hs-varid'>digits</span>
+<a name="line-111"></a><span class='hs-definition'>litInt</span> <span class='hs-varid'>xs</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>AbortNotNumber</span> <span class='hs-layout'>(</span><span class='hs-varid'>show</span> <span class='hs-varid'>xs</span><span class='hs-layout'>)</span>
+<a name="line-112"></a>
+<a name="line-113"></a><a name="readInt"></a><span class='hs-definition'>readInt</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>LiteralizeString</span> <span class='hs-conid'>Int</span>
+<a name="line-114"></a><span class='hs-definition'>readInt</span> <span class='hs-varid'>s</span> <span class='hs-keyglyph'>=</span>
+<a name="line-115"></a>    <span class='hs-keyword'>case</span> <span class='hs-varid'>reads</span> <span class='hs-varid'>s</span> <span class='hs-keyword'>of</span>
+<a name="line-116"></a>      <span class='hs-keyglyph'>[</span><span class='hs-layout'>(</span><span class='hs-varid'>n</span><span class='hs-layout'>,</span> <span class='hs-str'>""</span><span class='hs-layout'>)</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Right</span> <span class='hs-varid'>n</span>
+<a name="line-117"></a>      <span class='hs-keyword'>_</span>         <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>AbortNotNumber</span> <span class='hs-varid'>s</span>
+<a name="line-118"></a>
+<a name="line-119"></a><a name="litFlatname"></a><span class='hs-comment'>{-| Get single term name.
+<a name="line-120"></a>    If 'TokenTree' contains nested term name, this function failed. -}</span>
+<a name="line-121"></a><span class='hs-definition'>litFlatname</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>LiteralizeTree</span> <span class='hs-conid'>String</span>
+<a name="line-122"></a><span class='hs-definition'>litFlatname</span> <span class='hs-layout'>(</span><span class='hs-conid'>TreeL</span> <span class='hs-layout'>(</span><span class='hs-conid'>TTerm</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>n</span><span class='hs-keyglyph'>]</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varid'>n</span>
+<a name="line-123"></a><span class='hs-definition'>litFlatname</span> <span class='hs-layout'>(</span><span class='hs-conid'>TreeL</span> <span class='hs-layout'>(</span><span class='hs-conid'>TTerm</span> <span class='hs-keyword'>_</span> <span class='hs-varid'>ns</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>AbortRequireFlatname</span> <span class='hs-layout'>(</span><span class='hs-varid'>concat</span> <span class='hs-varid'>ns</span><span class='hs-layout'>)</span>
+<a name="line-124"></a><span class='hs-definition'>litFlatname</span> <span class='hs-varid'>x</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>AbortMissingTermName</span> <span class='hs-layout'>(</span><span class='hs-varid'>show</span> <span class='hs-varid'>x</span><span class='hs-layout'>)</span>
 <a name="line-125"></a>
 <a name="line-126"></a>
-<a name="line-127"></a><span class='hs-comment'>-- ----------------------  Complex data</span>
-<a name="line-128"></a>
-<a name="line-129"></a><a name="litList"></a><span class='hs-comment'>{-| Construct list of term contents. -}</span>
-<a name="line-130"></a><span class='hs-definition'>litList</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Value</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>Literalize</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>v</span><span class='hs-keyglyph'>]</span>
-<a name="line-131"></a><span class='hs-definition'>litList</span> <span class='hs-varid'>src</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mapM</span> <span class='hs-layout'>(</span><span class='hs-varid'>litContent</span> <span class='hs-varid'>src</span><span class='hs-layout'>)</span>
-<a name="line-132"></a>
-<a name="line-133"></a><a name="litTermset"></a><span class='hs-comment'>{-| Collect term name and content. -}</span>
-<a name="line-134"></a><span class='hs-definition'>litTermset</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Value</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>Literalize</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Named</span> <span class='hs-varid'>v</span><span class='hs-keyglyph'>]</span>
-<a name="line-135"></a><span class='hs-definition'>litTermset</span> <span class='hs-varid'>src</span> <span class='hs-varid'>xs</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mapM</span> <span class='hs-varid'>lit</span> <span class='hs-varop'>=&lt;&lt;</span> <span class='hs-varid'>divideByName</span> <span class='hs-varid'>src</span> <span class='hs-varid'>xs</span> <span class='hs-keyword'>where</span>
-<a name="line-136"></a>    <span class='hs-varid'>lit</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span><span class='hs-layout'>,</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span> <span class='hs-varid'>c'</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>litContent</span> <span class='hs-varid'>src</span> <span class='hs-varid'>c</span>
-<a name="line-137"></a>                    <span class='hs-conid'>Right</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span><span class='hs-layout'>,</span> <span class='hs-varid'>c'</span><span class='hs-layout'>)</span>
-<a name="line-138"></a>
-<a name="line-139"></a><a name="litRel"></a><span class='hs-definition'>litRel</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Value</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>Literalize</span> <span class='hs-layout'>(</span><span class='hs-conid'>Rel</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span>
-<a name="line-140"></a><span class='hs-definition'>litRel</span> <span class='hs-varid'>src</span> <span class='hs-varid'>cs</span> <span class='hs-keyglyph'>=</span>
-<a name="line-141"></a>    <span class='hs-keyword'>do</span> <span class='hs-keyword'>let</span> <span class='hs-layout'>(</span><span class='hs-varid'>h1</span> <span class='hs-conop'>:</span> <span class='hs-varid'>b1</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>divideByTokenTree</span> <span class='hs-str'>"|"</span> <span class='hs-varid'>cs</span>
-<a name="line-142"></a>       <span class='hs-varid'>h2</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>mapM</span> <span class='hs-layout'>(</span><span class='hs-varid'>litFlatname</span> <span class='hs-varid'>src</span><span class='hs-layout'>)</span> <span class='hs-varid'>h1</span>
-<a name="line-143"></a>       <span class='hs-varid'>b2</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>mapM</span> <span class='hs-layout'>(</span><span class='hs-varid'>litList</span> <span class='hs-varid'>src</span><span class='hs-layout'>)</span> <span class='hs-varid'>b1</span>
-<a name="line-144"></a>       <span class='hs-keyword'>let</span> <span class='hs-varid'>b3</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>unique</span> <span class='hs-varid'>b2</span>
-<a name="line-145"></a>       <span class='hs-keyword'>if</span> <span class='hs-varid'>any</span> <span class='hs-layout'>(</span><span class='hs-varid'>length</span> <span class='hs-varid'>h2</span> <span class='hs-varop'>/=</span><span class='hs-layout'>)</span> <span class='hs-varop'>$</span> <span class='hs-varid'>map</span> <span class='hs-varid'>length</span> <span class='hs-varid'>b3</span>
-<a name="line-146"></a>          <span class='hs-keyword'>then</span> <span class='hs-conid'>Left</span>  <span class='hs-layout'>(</span><span class='hs-conid'>AbortOddRelation</span><span class='hs-layout'>,</span> <span class='hs-varid'>src</span><span class='hs-layout'>)</span>
-<a name="line-147"></a>          <span class='hs-keyword'>else</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Rel</span> <span class='hs-layout'>(</span><span class='hs-varid'>headFrom</span> <span class='hs-varid'>h2</span><span class='hs-layout'>)</span> <span class='hs-varid'>b3</span>
-<a name="line-148"></a>
-<a name="line-149"></a><a name="divideByName"></a><span class='hs-definition'>divideByName</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>SourceLine</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>AbortOr</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Named</span> <span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span>
-<a name="line-150"></a><span class='hs-definition'>divideByName</span> <span class='hs-varid'>src</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>nam</span> <span class='hs-keyword'>where</span>
-<a name="line-151"></a>    <span class='hs-varid'>nam</span> <span class='hs-conid'>[]</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-conid'>[]</span>
-<a name="line-152"></a>    <span class='hs-varid'>nam</span> <span class='hs-layout'>(</span><span class='hs-varid'>x</span> <span class='hs-conop'>:</span> <span class='hs-varid'>xs</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span>
-<a name="line-153"></a>        <span class='hs-keyword'>let</span> <span class='hs-layout'>(</span><span class='hs-varid'>cs</span><span class='hs-layout'>,</span> <span class='hs-varid'>xs2</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>content</span> <span class='hs-varid'>xs</span>
-<a name="line-154"></a>        <span class='hs-keyword'>in</span> <span class='hs-keyword'>do</span> <span class='hs-varid'>n</span>    <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>litFlatname</span> <span class='hs-varid'>src</span> <span class='hs-varid'>x</span>
-<a name="line-155"></a>              <span class='hs-varid'>xs2'</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>nam</span> <span class='hs-varid'>xs2</span>
-<a name="line-156"></a>              <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span><span class='hs-layout'>,</span> <span class='hs-varid'>singleToken</span> <span class='hs-varid'>cs</span><span class='hs-layout'>)</span> <span class='hs-conop'>:</span> <span class='hs-varid'>xs2'</span>
-<a name="line-157"></a>
-<a name="line-158"></a>    <span class='hs-varid'>content</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span><span class='hs-layout'>,</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span><span class='hs-layout'>)</span>
-<a name="line-159"></a>    <span class='hs-varid'>content</span> <span class='hs-varid'>xs</span><span class='hs-keyglyph'>@</span><span class='hs-layout'>(</span><span class='hs-conid'>TreeL</span> <span class='hs-layout'>(</span><span class='hs-conid'>TTermN</span> <span class='hs-keyword'>_</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-conop'>:</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>[]</span><span class='hs-layout'>,</span> <span class='hs-varid'>xs</span><span class='hs-layout'>)</span>
-<a name="line-160"></a>    <span class='hs-varid'>content</span> <span class='hs-conid'>[]</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>[]</span><span class='hs-layout'>,</span> <span class='hs-conid'>[]</span><span class='hs-layout'>)</span>
-<a name="line-161"></a>    <span class='hs-varid'>content</span> <span class='hs-layout'>(</span><span class='hs-varid'>x</span> <span class='hs-conop'>:</span> <span class='hs-varid'>xs</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>cons1</span> <span class='hs-varid'>x</span> <span class='hs-varop'>$</span> <span class='hs-varid'>content</span> <span class='hs-varid'>xs</span>
-<a name="line-162"></a>
+<a name="line-127"></a>
+<a name="line-128"></a><span class='hs-comment'>-- ----------------------  Complex data</span>
+<a name="line-129"></a>
+<a name="line-130"></a><a name="litList"></a><span class='hs-comment'>{-| Construct list of term contents. -}</span>
+<a name="line-131"></a><span class='hs-definition'>litList</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>CContent</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>LiteralizeTrees</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>v</span><span class='hs-keyglyph'>]</span>
+<a name="line-132"></a><span class='hs-definition'>litList</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mapM</span> <span class='hs-varid'>litContent</span>
+<a name="line-133"></a>
+<a name="line-134"></a><a name="litTermset"></a><span class='hs-comment'>{-| Collect term name and content. -}</span>
+<a name="line-135"></a><span class='hs-definition'>litTermset</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>CContent</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>LiteralizeTrees</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Named</span> <span class='hs-varid'>v</span><span class='hs-keyglyph'>]</span>
+<a name="line-136"></a><span class='hs-definition'>litTermset</span> <span class='hs-varid'>xs</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mapM</span> <span class='hs-varid'>lit</span> <span class='hs-varop'>=&lt;&lt;</span> <span class='hs-varid'>divideByName</span> <span class='hs-varid'>xs</span> <span class='hs-keyword'>where</span>
+<a name="line-137"></a>    <span class='hs-varid'>lit</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span><span class='hs-layout'>,</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span> <span class='hs-varid'>c'</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>litContent</span> <span class='hs-varid'>c</span>
+<a name="line-138"></a>                    <span class='hs-conid'>Right</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span><span class='hs-layout'>,</span> <span class='hs-varid'>c'</span><span class='hs-layout'>)</span>
+<a name="line-139"></a>
+<a name="line-140"></a><a name="litRel"></a><span class='hs-definition'>litRel</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>CContent</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>LiteralizeTrees</span> <span class='hs-layout'>(</span><span class='hs-conid'>Rel</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span>
+<a name="line-141"></a><span class='hs-definition'>litRel</span> <span class='hs-varid'>cs</span> <span class='hs-keyglyph'>=</span>
+<a name="line-142"></a>    <span class='hs-keyword'>do</span> <span class='hs-keyword'>let</span> <span class='hs-layout'>(</span><span class='hs-varid'>h1</span> <span class='hs-conop'>:</span> <span class='hs-varid'>b1</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>divideByTokenTree</span> <span class='hs-str'>"|"</span> <span class='hs-varid'>cs</span>
+<a name="line-143"></a>       <span class='hs-varid'>h2</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>mapM</span> <span class='hs-layout'>(</span><span class='hs-varid'>litFlatname</span><span class='hs-layout'>)</span> <span class='hs-varid'>h1</span>
+<a name="line-144"></a>       <span class='hs-varid'>b2</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>mapM</span> <span class='hs-layout'>(</span><span class='hs-varid'>litList</span><span class='hs-layout'>)</span> <span class='hs-varid'>b1</span>
+<a name="line-145"></a>       <span class='hs-keyword'>let</span> <span class='hs-varid'>b3</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>unique</span> <span class='hs-varid'>b2</span>
+<a name="line-146"></a>       <span class='hs-keyword'>if</span> <span class='hs-varid'>any</span> <span class='hs-layout'>(</span><span class='hs-varid'>length</span> <span class='hs-varid'>h2</span> <span class='hs-varop'>/=</span><span class='hs-layout'>)</span> <span class='hs-varop'>$</span> <span class='hs-varid'>map</span> <span class='hs-varid'>length</span> <span class='hs-varid'>b3</span>
+<a name="line-147"></a>          <span class='hs-keyword'>then</span> <span class='hs-conid'>Left</span>  <span class='hs-varop'>$</span> <span class='hs-conid'>AbortOddRelation</span>
+<a name="line-148"></a>          <span class='hs-keyword'>else</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Rel</span> <span class='hs-layout'>(</span><span class='hs-varid'>headFrom</span> <span class='hs-varid'>h2</span><span class='hs-layout'>)</span> <span class='hs-varid'>b3</span>
+<a name="line-149"></a>
+<a name="line-150"></a><a name="divideByName"></a><span class='hs-definition'>divideByName</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>AbOr</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Named</span> <span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span>
+<a name="line-151"></a><span class='hs-definition'>divideByName</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>nam</span> <span class='hs-keyword'>where</span>
+<a name="line-152"></a>    <span class='hs-varid'>nam</span> <span class='hs-conid'>[]</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-conid'>[]</span>
+<a name="line-153"></a>    <span class='hs-varid'>nam</span> <span class='hs-layout'>(</span><span class='hs-varid'>x</span> <span class='hs-conop'>:</span> <span class='hs-varid'>xs</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span>
+<a name="line-154"></a>        <span class='hs-keyword'>let</span> <span class='hs-layout'>(</span><span class='hs-varid'>cs</span><span class='hs-layout'>,</span> <span class='hs-varid'>xs2</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>content</span> <span class='hs-varid'>xs</span>
+<a name="line-155"></a>        <span class='hs-keyword'>in</span> <span class='hs-keyword'>do</span> <span class='hs-varid'>n</span>    <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>litFlatname</span> <span class='hs-varid'>x</span>
+<a name="line-156"></a>              <span class='hs-varid'>xs2'</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>nam</span> <span class='hs-varid'>xs2</span>
+<a name="line-157"></a>              <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span><span class='hs-layout'>,</span> <span class='hs-varid'>singleTree</span> <span class='hs-varid'>cs</span><span class='hs-layout'>)</span> <span class='hs-conop'>:</span> <span class='hs-varid'>xs2'</span>
+<a name="line-158"></a>
+<a name="line-159"></a>    <span class='hs-varid'>content</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span><span class='hs-layout'>,</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span><span class='hs-layout'>)</span>
+<a name="line-160"></a>    <span class='hs-varid'>content</span> <span class='hs-varid'>xs</span><span class='hs-keyglyph'>@</span><span class='hs-layout'>(</span><span class='hs-conid'>TreeL</span> <span class='hs-layout'>(</span><span class='hs-conid'>TTerm</span> <span class='hs-keyword'>_</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-conop'>:</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>[]</span><span class='hs-layout'>,</span> <span class='hs-varid'>xs</span><span class='hs-layout'>)</span>
+<a name="line-161"></a>    <span class='hs-varid'>content</span> <span class='hs-conid'>[]</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>[]</span><span class='hs-layout'>,</span> <span class='hs-conid'>[]</span><span class='hs-layout'>)</span>
+<a name="line-162"></a>    <span class='hs-varid'>content</span> <span class='hs-layout'>(</span><span class='hs-varid'>x</span> <span class='hs-conop'>:</span> <span class='hs-varid'>xs</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>cons1</span> <span class='hs-varid'>x</span> <span class='hs-varop'>$</span> <span class='hs-varid'>content</span> <span class='hs-varid'>xs</span>
 <a name="line-163"></a>
 <a name="line-164"></a>
-<a name="line-165"></a><span class='hs-comment'>-- ----------------------  Judge</span>
-<a name="line-166"></a>
-<a name="line-167"></a><a name="litJudge"></a><span class='hs-comment'>{-| Construct judge from token trees.
-<a name="line-168"></a>    Judges itself are not content type.
-<a name="line-169"></a>    It can be only used in the top-level of sections. -}</span>
-<a name="line-170"></a><span class='hs-definition'>litJudge</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Value</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>Bool</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Relsign</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Literalize</span> <span class='hs-layout'>(</span><span class='hs-conid'>Judge</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span>
-<a name="line-171"></a><span class='hs-definition'>litJudge</span> <span class='hs-varid'>q</span> <span class='hs-varid'>s</span> <span class='hs-varid'>src</span> <span class='hs-varid'>xs</span> <span class='hs-keyglyph'>=</span>
-<a name="line-172"></a>  <span class='hs-keyword'>do</span> <span class='hs-varid'>xs'</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>litTermset</span> <span class='hs-varid'>src</span> <span class='hs-varid'>xs</span>
-<a name="line-173"></a>     <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Judge</span> <span class='hs-varid'>q</span> <span class='hs-varid'>s</span> <span class='hs-varid'>xs'</span>
-<a name="line-174"></a>
+<a name="line-165"></a>
+<a name="line-166"></a><span class='hs-comment'>-- ----------------------  Judge</span>
+<a name="line-167"></a>
+<a name="line-168"></a><a name="litJudge"></a><span class='hs-comment'>{-| Construct judge from token trees.
+<a name="line-169"></a>    Judges itself are not content type.
+<a name="line-170"></a>    It can be only used in the top-level of sections. -}</span>
+<a name="line-171"></a><span class='hs-definition'>litJudge</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>CContent</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>Bool</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Relsign</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>LiteralizeTrees</span> <span class='hs-layout'>(</span><span class='hs-conid'>Judge</span> <span class='hs-varid'>v</span><span class='hs-layout'>)</span>
+<a name="line-172"></a><span class='hs-definition'>litJudge</span> <span class='hs-varid'>q</span> <span class='hs-varid'>s</span> <span class='hs-varid'>xs</span> <span class='hs-keyglyph'>=</span>
+<a name="line-173"></a>  <span class='hs-keyword'>do</span> <span class='hs-varid'>xs'</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>litTermset</span> <span class='hs-varid'>xs</span>
+<a name="line-174"></a>     <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Judge</span> <span class='hs-varid'>q</span> <span class='hs-varid'>s</span> <span class='hs-varid'>xs'</span>
 <a name="line-175"></a>
 <a name="line-176"></a>
-<a name="line-177"></a><span class='hs-comment'>-- ----------------------  Document</span>
-<a name="line-178"></a><span class='hs-comment'>{- $Types
-<a name="line-179"></a>
-<a name="line-180"></a>   'litContent' recognizes the following types.
-<a name="line-181"></a>
-<a name="line-182"></a>   [Boolean]   Boolean used for something is hold or unhold.
-<a name="line-183"></a>               Textual forms: @\#true@, @\#fasle@.
-<a name="line-184"></a>
-<a name="line-185"></a>   [Nil]       Nil means that there are no values.
-<a name="line-186"></a>               i.e., universal negation on the term holds.
-<a name="line-187"></a>               Textual form is the non-quoted parens: @()@.
-<a name="line-188"></a>
-<a name="line-189"></a>   [String]    Sequence of characters.
-<a name="line-190"></a>               Textual forms: @abc@, @\'abc\'@, @\"abc def\"@,
-<a name="line-191"></a>               @text abc def@.
-<a name="line-192"></a>
-<a name="line-193"></a>   [Number]    Number.
-<a name="line-194"></a>               Textual forms: @int 100@, @dec 99.50@, @hex AF@.
-<a name="line-195"></a>
-<a name="line-196"></a>   [Set]       Set is an unordered collection of contents.
-<a name="line-197"></a>               Duplication among contents is not significant.
-<a name="line-198"></a>               Textual form is a sequence of contents
-<a name="line-199"></a>               with braces: @{ a b c }@.
-<a name="line-200"></a>
-<a name="line-201"></a>   [List]      List is an ordered list of contents.
-<a name="line-202"></a>               Textual form is a sequence of contents
-<a name="line-203"></a>               with square brackets: @[ abc def ]@.
-<a name="line-204"></a>
-<a name="line-205"></a>   [Termset]   Termset is a set of terms,
-<a name="line-206"></a>               i.e., a list of named contents.
-<a name="line-207"></a>               Textual form is a sequence of terms
-<a name="line-208"></a>               with bar-braces: @{| \/a 10 \/b 20 |}@.
-<a name="line-209"></a>
-<a name="line-210"></a>   [Relation]  Relation is a set of same-type tuples,
-<a name="line-211"></a>               Textual form is a sequence of tuples
-<a name="line-212"></a>               enclosed in bar-bracket.
-<a name="line-213"></a>               The first tuple is a heading of relation,
-<a name="line-214"></a>               and succeeding tuples are delimited by vertical bar:
-<a name="line-215"></a>               @[| \/a \/b | 10 20 | 30 40 |]@.
-<a name="line-216"></a>-}</span>
-<a name="line-217"></a>
+<a name="line-177"></a>
+<a name="line-178"></a><span class='hs-comment'>-- ----------------------  Document</span>
+<a name="line-179"></a><span class='hs-comment'>{- $Types
+<a name="line-180"></a>
+<a name="line-181"></a>   'litContent' recognizes the following types.
+<a name="line-182"></a>
+<a name="line-183"></a>   [Boolean]   Boolean used for something is hold or unhold.
+<a name="line-184"></a>               Textual forms: @\#true@, @\#fasle@.
+<a name="line-185"></a>
+<a name="line-186"></a>   [Nil]       Nil means that there are no values.
+<a name="line-187"></a>               i.e., universal negation on the term holds.
+<a name="line-188"></a>               Textual form is the non-quoted parens: @()@.
+<a name="line-189"></a>
+<a name="line-190"></a>   [String]    Sequence of characters.
+<a name="line-191"></a>               Textual forms: @abc@, @\'abc\'@, @\"abc def\"@,
+<a name="line-192"></a>               @text abc def@.
+<a name="line-193"></a>
+<a name="line-194"></a>   [Number]    Number.
+<a name="line-195"></a>               Textual forms: @int 100@, @dec 99.50@, @hex AF@.
+<a name="line-196"></a>
+<a name="line-197"></a>   [Set]       Set is an unordered collection of contents.
+<a name="line-198"></a>               Duplication among contents is not significant.
+<a name="line-199"></a>               Textual form is a sequence of contents
+<a name="line-200"></a>               with braces: @{ a b c }@.
+<a name="line-201"></a>
+<a name="line-202"></a>   [List]      List is an ordered list of contents.
+<a name="line-203"></a>               Textual form is a sequence of contents
+<a name="line-204"></a>               with square brackets: @[ abc def ]@.
+<a name="line-205"></a>
+<a name="line-206"></a>   [Termset]   Termset is a set of terms,
+<a name="line-207"></a>               i.e., a list of named contents.
+<a name="line-208"></a>               Textual form is a sequence of terms
+<a name="line-209"></a>               with bar-braces: @{| \/a 10 \/b 20 |}@.
+<a name="line-210"></a>
+<a name="line-211"></a>   [Relation]  Relation is a set of same-type tuples,
+<a name="line-212"></a>               Textual form is a sequence of tuples
+<a name="line-213"></a>               enclosed in bar-bracket.
+<a name="line-214"></a>               The first tuple is a heading of relation,
+<a name="line-215"></a>               and succeeding tuples are delimited by vertical bar:
+<a name="line-216"></a>               @[| \/a \/b | 10 20 | 30 40 |]@.
+<a name="line-217"></a>-}</span>
 <a name="line-218"></a>
 <a name="line-219"></a>
-<a name="line-220"></a><span class='hs-comment'>-- ----------------------</span>
-<a name="line-221"></a><span class='hs-comment'>{- $SimpleData
-<a name="line-222"></a>
-<a name="line-223"></a>   Prepere some definitions.
-<a name="line-224"></a>
-<a name="line-225"></a>   &gt;&gt;&gt; :m +Koshucode.Baala.Vanilla.Value.Val
-<a name="line-226"></a>   &gt;&gt;&gt; let trees = tokenTrees . tokens
-<a name="line-227"></a>   &gt;&gt;&gt; let lit  = litList [] . trees :: String -&gt; AbortOr [Val]
-<a name="line-228"></a>
-<a name="line-229"></a>   Boolean.
-<a name="line-230"></a>
-<a name="line-231"></a>     &gt;&gt;&gt; lit "#true #false"
-<a name="line-232"></a>     Right [Boolv True, Boolv False]
-<a name="line-233"></a>
-<a name="line-234"></a>   Words.
-<a name="line-235"></a>
-<a name="line-236"></a>     &gt;&gt;&gt; lit "a 'b c'"
-<a name="line-237"></a>     Right [Stringv "a", Stringv "b c"]
-<a name="line-238"></a>
-<a name="line-239"></a>     &gt;&gt;&gt; lit "a 1"
-<a name="line-240"></a>     Right [Stringv "a", Stringv "1"]
-<a name="line-241"></a>
-<a name="line-242"></a>   Integer.
-<a name="line-243"></a>
-<a name="line-244"></a>     &gt;&gt;&gt; lit "(int 12)"
-<a name="line-245"></a>     Right [Intv 12]
-<a name="line-246"></a>
-<a name="line-247"></a>   Nil as no value.
-<a name="line-248"></a>
-<a name="line-249"></a>     &gt;&gt;&gt; lit "()"
-<a name="line-250"></a>     Right [Nov]
-<a name="line-251"></a>
-<a name="line-252"></a>-}</span>
-<a name="line-253"></a>
-<a name="line-254"></a><span class='hs-comment'>-- ----------------------</span>
-<a name="line-255"></a><span class='hs-comment'>{- $CompoundData
-<a name="line-256"></a>
-<a name="line-257"></a>   Set.
-<a name="line-258"></a>
-<a name="line-259"></a>     &gt;&gt;&gt; lit "{ b a a c a }"
-<a name="line-260"></a>     Right [Setv [Stringv "b", Stringv "a", Stringv "c"]]
-<a name="line-261"></a>
-<a name="line-262"></a>   List.
-<a name="line-263"></a>
-<a name="line-264"></a>     &gt;&gt;&gt; lit "[ a 10 (int 20) ]"
-<a name="line-265"></a>     Right [Listv [Stringv "a", Stringv "10", Intv 20]]
-<a name="line-266"></a>
-<a name="line-267"></a>   Termset.
-<a name="line-268"></a>
-<a name="line-269"></a>     &gt;&gt;&gt; lit "{| /a 0 /b [ a 1 ] |}"
-<a name="line-270"></a>     Right [Termsetv [
-<a name="line-271"></a>         ("/a", Stringv "0"),
-<a name="line-272"></a>         ("/b", Listv [Stringv "a", Stringv "1"])]]
-<a name="line-273"></a>
-<a name="line-274"></a>   Relation.
-<a name="line-275"></a>
-<a name="line-276"></a>     &gt;&gt;&gt; lit "[| /a /x | A1 (int 20) | A3 (int 40) | A4 (int 60) |]"
-<a name="line-277"></a>     Right [Relv (Rel
-<a name="line-278"></a>        (Relhead [Term "/a", Term "/x"])
-<a name="line-279"></a>        [ [Stringv "A1", Intv 20]
-<a name="line-280"></a>        , [Stringv "A3", Intv 40]
-<a name="line-281"></a>        , [Stringv "A4", Intv 60]
-<a name="line-282"></a>        ])]
+<a name="line-220"></a>
+<a name="line-221"></a><span class='hs-comment'>-- ----------------------</span>
+<a name="line-222"></a><span class='hs-comment'>{- $SimpleData
+<a name="line-223"></a>
+<a name="line-224"></a>   Prepere some definitions.
+<a name="line-225"></a>
+<a name="line-226"></a>   &gt;&gt;&gt; :m +Koshucode.Baala.Vanilla.Value.Val
+<a name="line-227"></a>   &gt;&gt;&gt; let trees = tokenTrees . tokens
+<a name="line-228"></a>   &gt;&gt;&gt; let lit  = litList [] . trees :: String -&gt; AbortOr [Val]
+<a name="line-229"></a>
+<a name="line-230"></a>   Boolean.
+<a name="line-231"></a>
+<a name="line-232"></a>     &gt;&gt;&gt; lit "#true #false"
+<a name="line-233"></a>     Right [VBool True, VBool False]
+<a name="line-234"></a>
+<a name="line-235"></a>   Words.
+<a name="line-236"></a>
+<a name="line-237"></a>     &gt;&gt;&gt; lit "a 'b c'"
+<a name="line-238"></a>     Right [VString "a", VString "b c"]
+<a name="line-239"></a>
+<a name="line-240"></a>     &gt;&gt;&gt; lit "a 1"
+<a name="line-241"></a>     Right [VString "a", VString "1"]
+<a name="line-242"></a>
+<a name="line-243"></a>   Integer.
+<a name="line-244"></a>
+<a name="line-245"></a>     &gt;&gt;&gt; lit "(int 12)"
+<a name="line-246"></a>     Right [VInt 12]
+<a name="line-247"></a>
+<a name="line-248"></a>   Nil as no value.
+<a name="line-249"></a>
+<a name="line-250"></a>     &gt;&gt;&gt; lit "()"
+<a name="line-251"></a>     Right [VNil]
+<a name="line-252"></a>
+<a name="line-253"></a>-}</span>
+<a name="line-254"></a>
+<a name="line-255"></a><span class='hs-comment'>-- ----------------------</span>
+<a name="line-256"></a><span class='hs-comment'>{- $CompoundData
+<a name="line-257"></a>
+<a name="line-258"></a>   Set.
+<a name="line-259"></a>
+<a name="line-260"></a>     &gt;&gt;&gt; lit "{ b a a c a }"
+<a name="line-261"></a>     Right [VSet [VString "b",VString "a",VString "c"]]
+<a name="line-262"></a>
+<a name="line-263"></a>   List.
+<a name="line-264"></a>
+<a name="line-265"></a>     &gt;&gt;&gt; lit "[ a 10 (int 20) ]"
+<a name="line-266"></a>     Right [VList [VString "a",VString "10",VInt 20]]
+<a name="line-267"></a>
+<a name="line-268"></a>   Termset.
+<a name="line-269"></a>
+<a name="line-270"></a>     &gt;&gt;&gt; lit "{| /a 0 /b [ a 1 ] |}"
+<a name="line-271"></a>     Right [VTermset
+<a name="line-272"></a>       [ ("/a", VString "0")
+<a name="line-273"></a>       , ("/b", VList [VString "a", VString "1"]) ]]
+<a name="line-274"></a>
+<a name="line-275"></a>   Relation.
+<a name="line-276"></a>
+<a name="line-277"></a>     &gt;&gt;&gt; lit "[| /a /x | A1 (int 20) | A3 (int 40) | A4 (int 60) |]"
+<a name="line-278"></a>     Right [ VRel (Rel
+<a name="line-279"></a>       (Relhead [Term "/a", Term "/x"])
+<a name="line-280"></a>       [ [VString "A1", VInt 20]
+<a name="line-281"></a>       , [VString "A3", VInt 40]
+<a name="line-282"></a>       , [VString "A4", VInt 60] ])]
 <a name="line-283"></a>
 <a name="line-284"></a>-}</span>
 <a name="line-285"></a>

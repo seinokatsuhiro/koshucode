@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.26.0.0: A notational system for relational data</p
+      >koshucode-baala-base-0.28.0.0: A notational system for relational data</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -104,20 +104,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 		>String</a
 		>  </li
 	      ><li
-	      >| <a href="#v:TTermN"
-		>TTermN</a
+	      >| <a href="#v:TTerm"
+		>TTerm</a
 		> <a href="Koshucode-Baala-Base-Syntax-Token.html#t:TNumber"
 		>TNumber</a
 		> [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
-		>]  </li
-	      ><li
-	      >| <a href="#v:TTermP"
-		>TTermP</a
-		> <a href="Koshucode-Baala-Base-Syntax-Token.html#t:TNumber"
-		>TNumber</a
-		> [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-		>Int</a
 		>]  </li
 	      ><li
 	      >| <a href="#v:TOpen"
@@ -372,8 +364,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:TTermN" class="def"
-		  >TTermN</a
+		><a name="v:TTerm" class="def"
+		  >TTerm</a
 		  > <a href="Koshucode-Baala-Base-Syntax-Token.html#t:TNumber"
 		  >TNumber</a
 		  > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
@@ -382,26 +374,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 		><td class="doc"
 		><p
 		  >Term name
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:TTermP" class="def"
-		  >TTermP</a
-		  > <a href="Koshucode-Baala-Base-Syntax-Token.html#t:TNumber"
-		  >TNumber</a
-		  > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-		  >Int</a
-		  >]</td
-		><td class="doc"
-		><p
-		  >Term position in particular relation.
-   This is translate from <code
-		    ><a href="Koshucode-Baala-Base-Syntax-Token.html#v:TTermN"
-		      >TTermN</a
-		      ></code
-		    >.
 </p
 		  ></td
 		></tr
@@ -580,14 +552,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Test the token is a term,
-    i.e., <code
-	      ><a href="Koshucode-Baala-Base-Syntax-Token.html#v:TTermN"
-		>TTermN</a
-		></code
-	      > or <code
-	      ><a href="Koshucode-Baala-Base-Syntax-Token.html#v:TTermP"
-		>TTermP</a
+	    >Test the token is a term, i.e., <code
+	      ><a href="Koshucode-Baala-Base-Syntax-Token.html#v:TTerm"
+		>TTerm</a
 		></code
 	      >. 
 </p
@@ -641,9 +608,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
     <code
 	      >&quot;Word&quot;</code
 	      >, <code
-	      >&quot;TermN&quot;</code
-	      >, <code
-	      >&quot;TermP&quot;</code
+	      >&quot;Term&quot;</code
 	      >, <code
 	      >&quot;Open&quot;</code
 	      >, <code

@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.26.0.0
+@version 0.28.0.0
 
 module Koshucode.Baala.Base.Syntax.HashWord
 hashWordTable :: [(String, String)]
@@ -37,6 +37,7 @@ unionUp :: Eq a => [a] -> [a] -> [a]
 singleton :: a -> [a]
 divideBy :: Eq a => a -> [a] -> [[a]]
 divideByP :: Eq a => (a -> Bool) -> [a] -> [[a]]
+rpad :: Int -> Map String
 
 -- | Gather what is gotten by splitter.
 gather :: ([a] -> (b, [a])) -> [a] -> [b]
@@ -141,7 +142,7 @@ instance Functor Judge
 
 
 -- | Terms in heading of relation
-module Koshucode.Baala.Base.Data.Rel.Relterm
+module Koshucode.Baala.Base.Data.Relterm
 
 -- | Term in heading of relation
 data Relterm
@@ -159,7 +160,7 @@ instance Name Relterm
 
 
 -- | Heading of relations
-module Koshucode.Baala.Base.Data.Rel.Relhead
+module Koshucode.Baala.Base.Data.Relhead
 
 -- | Heading of relation as a list of terms
 data Relhead
@@ -226,9 +227,6 @@ Rel :: Relhead -> (Relbody v) -> Rel v
 -- | List of positional args
 type Relbody v = [[v]]
 
--- | Relation-to-relation mapping
-type RelmapFun v = Rel v -> Rel v
-
 -- | Relational constant that has no terms and no tuples
 reldum :: Rel v
 
@@ -238,45 +236,6 @@ instance Show v => Show (Rel v)
 instance Eq v => Eq (Rel v)
 instance Ord v => Ord (Rel v)
 instance Pretty v => Pretty (Rel v)
-
-
--- | Data on value type <tt>v</tt>
-module Koshucode.Baala.Base.Data
-
-module Koshucode.Baala.Base.Content.Class
-class PrimitiveContent a
-class PrimitiveContent v => BoolValue v
-boolValue :: BoolValue v => Bool -> v
-isBoolValue :: BoolValue v => v -> Bool
-class PrimitiveContent v => IntValue v
-intValue :: IntValue v => Int -> v
-isIntValue :: IntValue v => v -> Bool
-class PrimitiveContent v => StringValue v
-stringValue :: StringValue v => String -> v
-isStringValue :: StringValue v => v -> Bool
-theStringValue :: StringValue v => v -> String
-class PrimitiveContent v => ListValue v
-listValue :: ListValue v => [v] -> v
-isListValue :: ListValue v => v -> Bool
-theListValue :: ListValue v => v -> [v]
-
--- | Types that can be nil
-class PrimitiveContent v => Nil v
-nil :: Nil v => v
-isNil :: Nil v => v -> Bool
-class PrimitiveContent v => SetValue v
-setValue :: SetValue v => [v] -> v
-isSetValue :: SetValue v => v -> Bool
-class PrimitiveContent v => TermsetValue v
-termsetValue :: TermsetValue v => [Named v] -> v
-isTermsetValue :: TermsetValue v => v -> Bool
-class PrimitiveContent v => RelValue v
-relValue :: RelValue v => Rel v -> v
-theRelValue :: RelValue v => v -> Rel v
-isRelValue :: RelValue v => v -> Bool
-class (Ord v, Pretty v, Nil v, BoolValue v, StringValue v, IntValue v, ListValue v, SetValue v, TermsetValue v, RelValue v) => Value v where joinContent = foldr appendContent nil
-appendContent :: Value v => v -> v -> v
-joinContent :: Value v => [v] -> v
 
 
 -- | Tokens in Koshucode
@@ -291,11 +250,7 @@ data Token
 TWord :: TNumber -> Int -> String -> Token
 
 -- | Term name
-TTermN :: TNumber -> [String] -> Token
-
--- | Term position in particular relation. This is translate from
---   <a>TTermN</a>.
-TTermP :: TNumber -> [Int] -> Token
+TTerm :: TNumber -> [String] -> Token
 
 -- | Open paren
 TOpen :: TNumber -> String -> Token
@@ -312,14 +267,14 @@ TComment :: TNumber -> String -> Token
 -- | Test the token is blank, i.e., <a>TComment</a> or <a>TSpace</a>.
 isBlankToken :: Token -> Bool
 
--- | Test the token is a term, i.e., <a>TTermN</a> or <a>TTermP</a>.
+-- | Test the token is a term, i.e., <a>TTerm</a>.
 isTermToken :: Token -> Bool
 isOpenTokenOf :: String -> Token -> Bool
 isCloseTokenOf :: String -> Token -> Bool
 
--- | Text of token type, one of <tt>"Word"</tt>, <tt>"TermN"</tt>,
---   <tt>"TermP"</tt>, <tt>"Open"</tt>, <tt>"Close"</tt>, <tt>"Space"</tt>,
---   or <tt>"Comment"</tt>.
+-- | Text of token type, one of <tt>"Word"</tt>, <tt>"Term"</tt>,
+--   <tt>"Open"</tt>, <tt>"Close"</tt>, <tt>"Space"</tt>, or
+--   <tt>"Comment"</tt>.
 --   
 --   <pre>
 --   &gt;&gt;&gt; tokenTypeText $ TWord 1 0 "flower"
@@ -502,12 +457,81 @@ type TokenTree = Tree Token
 --   <li>Curely-bar braces <tt>{| .. |}</tt> for relation.</li>
 --   </ol>
 tokenTrees :: [Token] -> [TokenTree]
-singleToken :: [TokenTree] -> TokenTree
+singleTree :: [TokenTree] -> TokenTree
 divideByTokenTree :: String -> [TokenTree] -> [[TokenTree]]
 
 
 -- | Syntactic functions
 module Koshucode.Baala.Base.Syntax
+
+
+-- | Abort utility
+module Koshucode.Baala.Base.Abort.Utility
+
+-- | Class that represents abort reason.
+class AbortReasonClass a where abortSub _ = empty
+abortSymbol :: AbortReasonClass a => a -> String
+abortTitle :: AbortReasonClass a => a -> String
+abortMain :: AbortReasonClass a => a -> Doc
+abortSub :: AbortReasonClass a => a -> Doc
+
+-- | Abort reason and source code information.
+type AbortType a = (a, [SourceLine])
+
+-- | Either of (1) right result or (2) abort information.
+type AbortOrType a b = Either (AbortType a) b
+
+-- | Stop program execution abnormally.
+abort :: AbortReasonClass a => AbortType a -> IO ()
+abortIO :: AbortReasonClass a => (b -> IO ()) -> AbortOrType a b -> IO ()
+addAbort :: AbortReasonClass a => AbortType a -> Map (AbortOrType a b)
+
+-- | Stop on error ''bug in koshucode''
+bug :: a
+
+
+-- | Abort symbol
+module Koshucode.Baala.Base.Abort.Reason
+
+-- | Either of (1) right result, or (2) abort reason (without source code
+--   information).
+type AbOr b = Either AbortReason b
+
+-- | Abortable mapping.
+type AbMap b = b -> AbOr b
+
+-- | Abort reason and source information.
+type Abort = AbortType AbortReason
+
+-- | Either of (1) right result, or (2) abort reason with source.
+type AbortOr b = AbortOrType AbortReason b
+
+-- | Lookup association list. This function may abort on AbortLookup.
+(<!!>) :: [Named a] -> String -> AbortOr a
+
+-- | Abort reasons
+data AbortReason
+AbortLookup :: String -> AbortReason
+AbortMalformedOperand :: String -> AbortReason
+AbortMissingTermName :: String -> AbortReason
+AbortNotNumber :: String -> AbortReason
+AbortOddRelation :: AbortReason
+AbortReqBoolean :: String -> AbortReason
+AbortRequireFlatname :: String -> AbortReason
+AbortUndefined :: String -> AbortReason
+AbortUnkCop :: String -> AbortReason
+AbortUnknownClause :: AbortReason
+AbortUnknownContent :: String -> AbortReason
+AbortUnknownRelmap :: String -> AbortReason
+AbortUnknownSymbol :: String -> AbortReason
+AbortUnmatchArity :: AbortReason
+AbortUnmatchType :: AbortReason
+AbortUsage :: String -> [String] -> AbortReason
+instance Show AbortReason
+instance Eq AbortReason
+instance Ord AbortReason
+instance AbortReasonClass AbortReason
+instance Name AbortReason
 
 module Koshucode.Baala.Base.Relmap.HalfRelmap
 
@@ -537,6 +561,176 @@ instance Show HalfRelmap
 instance Data HalfRelmap
 instance Pretty HalfRelmap
 
+module Koshucode.Baala.Base.Section.Clausify
+data ClauseSource
+ClauseSource :: [Token] -> [SourceLine] -> ClauseSource
+
+-- | Source tokens of clause
+clauseTokens :: ClauseSource -> [Token]
+
+-- | Source lines of clause
+clauseLines :: ClauseSource -> [SourceLine]
+
+-- | Convert token list into list of token clauses
+clausify :: [SourceLine] -> [ClauseSource]
+
+-- | Split operand into named group. Non quoted words beginning with
+--   hyphen, e.g., <tt>-x</tt>, are name of group.
+--   
+--   <pre>
+--   &gt;&gt;&gt; operandGroup $ tokenTrees $ tokens "a b -x c 'd' -y e"
+--   [("",   [TreeL (Word 0 "a"), TreeL (Word 0 "b")]),
+--    ("-x", [TreeL (Word 0 "c"), TreeL (Word 1 "d")]),
+--    ("-y", [TreeL (Word 0 "e")])]
+--   </pre>
+operandGroup :: [TokenTree] -> [Named [TokenTree]]
+instance Typeable ClauseSource
+instance Show ClauseSource
+instance Data ClauseSource
+
+
+-- | Data on value type <tt>v</tt>
+module Koshucode.Baala.Base.Data
+
+module Koshucode.Baala.Base.Content.Class
+class PrimContent c
+class (Ord c, Pretty c, CBool c, CString c, CInt c, CList c, CNil c, CSet c, CTermset c, CRel c) => CContent c where joinContent = foldr appendContent nil
+appendContent :: CContent c => c -> c -> c
+joinContent :: CContent c => [c] -> c
+class PrimContent c => CBool c
+putBool :: CBool c => Bool -> c
+getBool :: CBool c => c -> Bool
+isBool :: CBool c => c -> Bool
+class PrimContent c => CInt c
+putInt :: CInt c => Int -> c
+getInt :: CInt c => c -> Int
+isInt :: CInt c => c -> Bool
+class PrimContent c => CString c
+putString :: CString c => String -> c
+getString :: CString c => c -> String
+isString :: CString c => c -> Bool
+class PrimContent c => CList c
+putList :: CList c => [c] -> c
+getList :: CList c => c -> [c]
+isList :: CList c => c -> Bool
+
+-- | Types that can be nil
+class PrimContent c => CNil c
+nil :: CNil c => c
+isNil :: CNil c => c -> Bool
+class PrimContent c => CSet c
+putSet :: CSet c => [c] -> c
+getSet :: CSet c => c -> [c]
+isSet :: CSet c => c -> Bool
+class PrimContent c => CTermset c
+putTermset :: CTermset c => [Named c] -> c
+getTermset :: CTermset c => c -> [Named c]
+isTermset :: CTermset c => c -> Bool
+class PrimContent c => CRel c
+putRel :: CRel c => Rel c -> c
+getRel :: CRel c => c -> Rel c
+isRel :: CRel c => c -> Bool
+
+
+-- | Abort symbols
+module Koshucode.Baala.Base.Abort
+
+
+-- | Literalizer: Make literal contents from token tree.
+module Koshucode.Baala.Base.Content.Literalize
+
+-- | Make <tt>a</tt> from <tt>b</tt>.
+type LiteralizeFrom b a = b -> AbOr a
+
+-- | Make <tt>a</tt> from list of token trees.
+type LiteralizeTrees a = LiteralizeFrom [TokenTree] a
+
+-- | Make <tt>a</tt> from a token tree.
+type LiteralizeTree a = LiteralizeFrom TokenTree a
+
+-- | Make <tt>a</tt> from a string.
+type LiteralizeString a = LiteralizeFrom String a
+
+-- | Transform <a>TokenTree</a> into internal form of term content.
+litContent :: CContent v => LiteralizeTree v
+
+-- | Construct list of term contents.
+litList :: CContent v => LiteralizeTrees [v]
+
+-- | Construct judge from token trees. Judges itself are not content type.
+--   It can be only used in the top-level of sections.
+litJudge :: CContent v => Bool -> Relsign -> LiteralizeTrees (Judge v)
+
+
+-- | Term calcutation.
+module Koshucode.Baala.Base.Content.Run
+
+-- | Term content operator.
+data Cop c
+CopLit :: String -> (CopLitF c) -> Cop c
+CopLazy :: String -> (CopLazyF c) -> Cop c
+CopEager :: String -> (CopEagerF c) -> Cop c
+type CopLitF c = [TokenTree] -> AbOr c
+type CopLazyF c = [ContExp c] -> AbOr c
+type CopEagerF c = [c] -> AbOr c
+
+-- | Type for finding term content operator.
+type FindCop c = String -> Maybe (Cop c)
+namedLit :: String -> CopLitF c -> (String, Cop c)
+namedEager :: String -> CopEagerF c -> (String, Cop c)
+namedLazy :: String -> CopLazyF c -> (String, Cop c)
+data ContExp c
+
+-- | Literal content.
+ContLit :: c -> ContExp c
+
+-- | Operator invocation.
+ContApp :: (Cop c) -> [ContExp c] -> ContExp c
+
+-- | Term reference. Term names <tt>[String]</tt> and positions
+--   <tt>[Int]</tt>. <a>formContent</a> makes positions empty,
+--   <a>posContent</a> fills it.
+ContTerm :: [String] -> [Int] -> ContExp c
+
+-- | Construct content expression.
+formContent :: CContent c => FindCop c -> [SourceLine] -> TokenTree -> AbortOr (ContExp c)
+type PosContent c = Relhead -> ContExp c
+
+-- | Put term positions for actural heading.
+posContent :: ContExp c -> PosContent c
+
+-- | Calculate content expression.
+runContent :: (CList c, CRel c) => ContExp c -> [c] -> AbOr c
+instance Show c => Show (ContExp c)
+instance Show (Cop c)
+
+
+-- | Content
+module Koshucode.Baala.Base.Content
+
+
+-- | Dataset as a set of judges.
+--   
+--   Dataset is like a bridge of judges and relations. We can get a
+--   relation from a dataset, that dataset is build from judges.
+module Koshucode.Baala.Base.Relmap.Dataset
+
+-- | Dataset is a set of judges.
+data Dataset v
+
+-- | Dataset that has no judges
+emptyDataset :: Dataset v
+
+-- | Gather judges into a dataset
+dataset :: [Judge v] -> Dataset v
+
+-- | Add judges to dataset.
+addJudges :: [Judge v] -> Dataset v -> Dataset v
+
+-- | Select relation from dataset. If a giving term is not in judges,
+--   <a>CNil</a> sign is used.
+selectRelation :: (Ord v, CNil v) => Dataset v -> Relsign -> [String] -> Rel v
+
 
 -- | Data structures for relation-to-relation mappings
 module Koshucode.Baala.Base.Relmap.Relmap
@@ -564,7 +758,7 @@ RelmapAppend :: (Relmap v) -> (Relmap v) -> Relmap v
 RelmapName :: HalfRelmap -> String -> Relmap v
 
 -- | Function of relmap.
-type RelmapSub v = [Rel v] -> Rel v -> Rel v
+type RelmapSub v = [Rel v] -> Rel v -> AbOr (Rel v)
 
 -- | List of <a>RelmapSource</a>
 relmapSourceList :: Relmap v -> [Relmap v]
@@ -612,174 +806,6 @@ affirm :: Relsign -> Relmap v -> Assert v
 deny :: Relsign -> Relmap v -> Assert v
 instance Show (Assert v)
 instance Pretty (Assert v)
-
-module Koshucode.Baala.Base.Section.Clausify
-data ClauseSource
-ClauseSource :: [Token] -> [SourceLine] -> ClauseSource
-
--- | Source tokens of clause
-clauseTokens :: ClauseSource -> [Token]
-
--- | Source lines of clause
-clauseLines :: ClauseSource -> [SourceLine]
-
--- | Convert token list into list of token clauses
-clausify :: [SourceLine] -> [ClauseSource]
-
--- | Split operand into named group. Non quoted words beginning with
---   hyphen, e.g., <tt>-x</tt>, are name of group.
---   
---   <pre>
---   &gt;&gt;&gt; operandGroup $ tokenTrees $ tokens "a b -x c 'd' -y e"
---   [("",   [TreeL (Word 0 "a"), TreeL (Word 0 "b")]),
---    ("-x", [TreeL (Word 0 "c"), TreeL (Word 1 "d")]),
---    ("-y", [TreeL (Word 0 "e")])]
---   </pre>
-operandGroup :: [TokenTree] -> [Named [TokenTree]]
-instance Typeable ClauseSource
-instance Show ClauseSource
-instance Data ClauseSource
-
-
--- | Source information
-module Koshucode.Baala.Base.Abort.Source
-
--- | Class that represents abort reason.
-class AbortSymbol a where abortSub _ = empty
-abortSymbol :: AbortSymbol a => a -> String
-abortTitle :: AbortSymbol a => a -> String
-abortMain :: AbortSymbol a => a -> Doc
-abortSub :: AbortSymbol a => a -> Doc
-
-
--- | Abort utility
-module Koshucode.Baala.Base.Abort.Utility
-
--- | Stop on error ''bug in koshucode''
-bug :: a
-
--- | Stop program execution abnormally.
-abort :: AbortSymbol a => AbortP a -> IO ()
-addAbort :: AbortSymbol a => AbortP a -> Map (AbortOrP a b)
-abortIO :: AbortSymbol a => (b -> IO ()) -> AbortOrP a b -> IO ()
-type AbortP a = (a, [SourceLine])
-type AbortOrP a b = Either (AbortP a) b
-
-
--- | Abort symbol
-module Koshucode.Baala.Base.Abort.Symbol
-
--- | Lookup association list. This function may abort on AbortLookup.
-(<!!>) :: [(String, a)] -> String -> AbortOr a
-
--- | Abort information.
-type Abort = AbortP AbortReason
-
--- | Abortable type.
-type AbortOr b = AbortOrP AbortReason b
-
--- | Abortable type.
-type AbOr b = Either ([SourceLine] -> Abort) b
-
--- | Abort symbols
-data AbortReason
-AbortLookup :: String -> AbortReason
-AbortMalformedOperand :: String -> AbortReason
-AbortMissingTermName :: String -> AbortReason
-AbortNotNumber :: String -> AbortReason
-AbortOddRelation :: AbortReason
-AbortRequireFlatname :: String -> AbortReason
-AbortUnknownClause :: AbortReason
-AbortUnknownContent :: String -> AbortReason
-AbortUnknownRelmap :: String -> AbortReason
-AbortUnknownSymbol :: String -> AbortReason
-AbortUsage :: String -> [String] -> AbortReason
-AbortUndefined :: String -> AbortReason
-instance Show AbortReason
-instance Eq AbortReason
-instance Ord AbortReason
-instance AbortSymbol AbortReason
-instance Name AbortReason
-
-
--- | Abort symbols
-module Koshucode.Baala.Base.Abort
-
-
--- | Literalizer: Make literal contents from token tree.
-module Koshucode.Baala.Base.Content.Literalize
-
--- | Make <tt>a</tt> from <tt>b</tt>.
-type LiteralizeFrom b a = [SourceLine] -> b -> AbortOr a
-
--- | Make <tt>a</tt> from list of token trees.
-type Literalize a = LiteralizeFrom [TokenTree] a
-
--- | Make <tt>a</tt> from a token tree.
-type LiteralizeTree a = LiteralizeFrom TokenTree a
-
--- | Make <tt>a</tt> from a string.
-type LiteralizeString a = LiteralizeFrom String a
-
--- | Transform <a>TokenTree</a> into internal form of term content.
-litContent :: Value v => LiteralizeTree v
-
--- | Construct list of term contents.
-litList :: Value v => Literalize [v]
-
--- | Construct judge from token trees. Judges itself are not content type.
---   It can be only used in the top-level of sections.
-litJudge :: Value v => Bool -> Relsign -> Literalize (Judge v)
-
-
--- | Literalizer: Make literal contents from token tree.
-module Koshucode.Baala.Base.Content.Run
-data ContentOp c
-CopLit :: String -> (CopLitF c) -> ContentOp c
-CopLazy :: String -> (CopLazyF c) -> ContentOp c
-CopEager :: String -> (CopEagerF c) -> ContentOp c
-type CopLitF c = [TokenTree] -> AbOr c
-type CopLazyF c = [Content c] -> AbOr c
-type CopEagerF c = [c] -> AbOr c
-namedLit :: String -> CopLitF c -> (String, ContentOp c)
-namedEager :: String -> CopEagerF c -> (String, ContentOp c)
-namedLazy :: String -> CopLazyF c -> (String, ContentOp c)
-data Content c
-ContLit :: c -> Content c
-ContApp :: (ContentOp c) -> [Content c] -> Content c
-ContTerm :: [String] -> [Int] -> Content c
-formContent :: Value c => (String -> Maybe (ContentOp c)) -> [SourceLine] -> TokenTree -> AbortOr (Content c)
-posContent :: Relhead -> Map (Content v)
-runContent :: (ListValue c, RelValue c) => Content c -> [c] -> AbOr c
-instance Show c => Show (Content c)
-instance Show (ContentOp c)
-
-
--- | Content
-module Koshucode.Baala.Base.Content
-
-
--- | Dataset as a set of judges.
---   
---   Dataset is like a bridge of judges and relations. We can get a
---   relation from a dataset, that dataset is build from judges.
-module Koshucode.Baala.Base.Relmap.Dataset
-
--- | Dataset is a set of judges.
-data Dataset v
-
--- | Dataset that has no judges
-emptyDataset :: Dataset v
-
--- | Gather judges into a dataset
-dataset :: [Judge v] -> Dataset v
-
--- | Add judges to dataset.
-addJudges :: [Judge v] -> Dataset v -> Dataset v
-
--- | Select relation from dataset. If a giving term is not in judges,
---   <a>Nil</a> sign is used.
-selectRelation :: (Ord v, Nil v) => Dataset v -> Relsign -> [String] -> Rel v
 
 module Koshucode.Baala.Base.Relmap.Implement
 
@@ -851,10 +877,10 @@ instance Show (RelmapCons v)
 module Koshucode.Baala.Base.Relmap.Run
 
 -- | Calculate assertion list.
-runAssertJudges :: (Ord v, Nil v) => [Assert v] -> [Judge v] -> AbortOr [Judge v]
+runAssertJudges :: (Ord v, CNil v) => [Assert v] -> [Judge v] -> AbortOr [Judge v]
 
 -- | Calculate assertion list.
-runAssertDataset :: (Ord v, Nil v) => [Assert v] -> Dataset v -> AbortOr [Judge v]
+runAssertDataset :: (Ord v, CNil v) => [Assert v] -> Dataset v -> AbortOr [Judge v]
 
 
 -- | Relation-to-relation mapping.
@@ -967,7 +993,7 @@ consPreclause :: [SourceLine] -> [Clause]
 consClause :: RelmapHalfCons -> [SourceLine] -> [Clause]
 
 -- | Second step of constructing <a>Section</a>.
-consSection :: Value v => RelmapFullCons v -> [Clause] -> AbortOr (Section v)
+consSection :: CContent v => RelmapFullCons v -> [Clause] -> AbortOr (Section v)
 instance Typeable Clause
 instance Show Clause
 instance Data Clause
@@ -981,20 +1007,22 @@ data QuasiQuoter :: *
 module Koshucode.Baala.Base.Section.SectionIO
 
 -- | Read section from text.
-sectionRead :: Value v => Section v -> String -> AbortOr (Section v)
+sectionRead :: CContent v => Section v -> String -> AbortOr (Section v)
 
 -- | Read section from file.
-sectionFile :: Value v => Section v -> FilePath -> IO (AbortOr (Section v))
+sectionFile :: CContent v => Section v -> FilePath -> IO (AbortOr (Section v))
 
 -- | Run section. Output section has judges calculated from assertions in
 --   input section.
-runSection :: Value v => Section v -> AbortOr (Section v)
+runSection :: CContent v => Section v -> AbortOr (Section v)
 
 -- | Run section and output judges.
-runSectionIO :: Value v => Section v -> IO ()
-hRunSectionIO :: Value v => Handle -> Section v -> IO ()
+runSectionIO :: CContent v => Section v -> IO ()
+hRunSectionIO :: CContent v => Handle -> Section v -> IO ()
 
 
 -- | Runtime structure for calculations written in Koshucode.
 --   <a>Section</a> is bundle of calculation stuff.
 module Koshucode.Baala.Base.Section
+
+module Koshucode.Baala.Base
