@@ -113,9 +113,9 @@ type PosContent c = Relhead -> ContExp c
 {-| Put term positions for actural heading. -}
 posContent :: ContExp c -> PosContent c
 posContent cont h = pos cont where
-    pos (ContTerm ns _) = ContTerm ns $ termLook1 ns (headTerms h)
-    pos (ContApp f cs)  = ContApp f $ map pos cs
-    pos c@(ContLit _)   = c
+    pos (ContTerm ns _) = ContTerm ns $ headIndex1 h ns
+    pos (ContApp f cs)  = ContApp  f  $ map pos cs
+    pos c = c
 
 {-| Calculate content expression. -}
 runContent :: (CList c, CRel c) => ContExp c -> [c] -> AbOr c

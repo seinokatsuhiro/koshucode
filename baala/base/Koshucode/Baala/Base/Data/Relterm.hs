@@ -4,8 +4,8 @@
 
 module Koshucode.Baala.Base.Data.Relterm
 ( Relterm (..),
-  termLook,
-  termLook1,
+  termsIndex,
+  termIndex,
 )
 where
 
@@ -25,9 +25,19 @@ instance Pretty Relterm where
     doc (Term n)    = text n
     doc (Nest n xs) = docParen (hsep $ text n : map doc xs)
 
--- | Term path to term position
-termLook1 :: [String] -> [Relterm] -> [Int]
-termLook1 path ts = loop ts path 0 where
+{-| Term path to term position
+
+    >>> termIndex ["/b"] [Term "/a", Term "/b", Term "/c"]
+    [1]
+
+    >>> termIndex ["/e"] [Term "/a", Term "/b", Term "/c"]
+    [-1]
+
+    >>> termIndex ["/r", "/b"] [Nest "/r" [Term "/a", Term "/b"]]
+    [0, 1]
+-}
+termIndex :: [String] -> [Relterm] -> [Int]
+termIndex path ts = loop ts path 0 where
     loop _ [] _ = []
     loop [] _ _ = [-1]
     loop (Term n1 : ts2) nns@(n2 : _) i
@@ -37,7 +47,7 @@ termLook1 path ts = loop ts path 0 where
         | n1 == n2  = i : loop ts' ns 0
         | otherwise = loop ts2 nns (i + 1)
 
-termLook :: [[String]] -> [Relterm] -> [[Int]]
-termLook ns ts = map look1 ns where
-    look1 n = termLook1 n ts
+termsIndex :: [[String]] -> [Relterm] -> [[Int]]
+termsIndex ns ts = map look1 ns where
+    look1 n = termIndex n ts
 

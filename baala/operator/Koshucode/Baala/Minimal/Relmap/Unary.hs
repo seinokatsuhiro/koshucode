@@ -92,7 +92,7 @@ project :: (Ord v) => ([Int] -> Listmap v) -> [String] -> Map (Rel v)
 project f ns (Rel h1 b1) = Rel h2 b2 where
     pos = List.sort $ Kit.headPoss h1 (map singleton ns)
     pj  = f $ Kit.posPoss pos
-    h2  = Kit.rehead pj h1
+    h2  = Kit.headChange pj h1
     b2  = unique $ map pj b1
 
 
@@ -113,7 +113,7 @@ relRename
     :: [(String, String)]   -- ^ List of term name (/to/, /from/)
     -> AbMap (Rel v)        -- ^ Relation to relation
 relRename np (Rel h1 b1) = Right $ Rel h2 b1 where
-    h2 = Kit.rehead (map re) h1
+    h2 = Kit.headChange (map re) h1
     pn = map Tuple.swap np
     re p = Maybe.fromMaybe p $ lookup p pn
 

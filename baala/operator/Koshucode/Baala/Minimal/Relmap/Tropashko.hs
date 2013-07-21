@@ -92,7 +92,7 @@ relJoin (Rel h1 b1) (Rel h2 b2) = Right $ Rel h3 b3 where
     pick1  = Kit.possPick  $ Kit.headPoss h1 posh12
     pick2  = Kit.possPick  $ Kit.headPoss h2 posh12
 
-    h3 = Kit.rehead pick1 h1
+    h3 = Kit.headChange pick1 h1
     b3 = unique $
          map pick1 b1 ++
          map pick2 b2
@@ -105,7 +105,7 @@ relJoin (Rel h1 b1) (Rel h2 b2) = Right $ Rel h3 b3 where
 -- e6 = Kit.headPoss h2 e4
 -- p7 = Kit.possPick e5
 -- p8 = Kit.possPick e6
--- h9 = Kit.rehead p7 h1
+-- h9 = Kit.headChange p7 h1
 
 
 

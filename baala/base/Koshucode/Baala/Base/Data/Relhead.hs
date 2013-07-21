@@ -3,23 +3,40 @@
 -- | Heading of relations
 
 module Koshucode.Baala.Base.Data.Relhead
-( Relhead (..),
-  TermPos,
-  mempty, mappend,
+( -- * Heading
+  Relhead (..),
   headFrom,
-  headDegree, headNames,
-  rehead,
-  headPoss, headPosh,
+  headNames,
+  headDegree,
+  headChange,
+
+  -- * Index
+  headIndex,
+  headIndex1,
+  headPoss,
+  headPosh,
+
+  -- * Position
+  TermPos (..),
   posPoss,
   possPick,
-  possInner, possOuter,
+  possInner,
+  possOuter,
+
+  -- * Monoid
+  mempty,
+  mappend,
 ) where
 
 import Data.Monoid
-import Koshucode.Baala.Base.Prelude.Position as Pos
+import Koshucode.Baala.Base.Prelude.Position
 import Koshucode.Baala.Base.Prelude
 
 import Koshucode.Baala.Base.Data.Relterm
+
+
+
+-- ---------------------- Heading
 
 -- | Heading of relation as a list of terms
 data Relhead = Relhead {
@@ -34,28 +51,43 @@ instance Monoid Relhead where
 instance Pretty Relhead where
     doc (Relhead ts) = doch $ map doc ts
 
--- | Make head from term names
+{-| Make head from term names.
+
+    >>> headFrom ["/a", "/b"]
+    Relhead [Term "/a", Term "/b"]
+-}
 headFrom :: [String] -> Relhead
 headFrom ns = Relhead $ map Term ns
 
--- | List of term names
+{-| List of term names.
+
+    >>> headNames $ headFrom ["/a", "/b"]
+    ["/a", "/b"]
+ -}
 headNames :: Relhead -> [String]
 headNames (Relhead ts) = names ts
 
--- | Number of terms
+{-| Number of terms.
+
+    >>> headDegree $ headFrom ["/a", "/b"]
+    2
+ -}
 headDegree :: Relhead -> Int
 headDegree = length . headTerms
 
--- | Reconstruct head
-rehead :: ([String] -> [String]) -> Relhead -> Relhead
-rehead f (Relhead h) = Relhead $ map Term $ f $ names h
+{-| Reconstruct head. -}
+headChange :: (Map [String]) -> Map Relhead
+headChange f (Relhead h) = headFrom $ f $ names h
 
 
 
 -- ----------------------  Index
 
 headIndex :: Relhead -> [[String]] -> [[Int]]
-headIndex h n = termLook n $ headTerms h
+headIndex h n = termsIndex n $ headTerms h
+
+headIndex1 :: Relhead -> [String] -> [Int]
+headIndex1 h n = termIndex n $ headTerms h
 
 -- | Positions of given names in a head
 headPoss :: Relhead -> [[String]] -> [TermPos]
@@ -111,5 +143,5 @@ outer (TermPos i _) = i < 0
 
 -- | Pick values
 possPick :: [TermPos] -> [v] -> [v]
-possPick ps = Pos.indexPick (map termPos ps)
+possPick ps = indexPick (map termPos ps)
 

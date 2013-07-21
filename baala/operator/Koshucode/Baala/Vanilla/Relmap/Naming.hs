@@ -37,7 +37,7 @@ relPrefix
     -> [String]       -- ^ Changing term names
     -> AbMap (Rel v)  -- ^ Relation to relation
 relPrefix pre ns (Rel h1 b1) = Right $ Rel h2 b1 where
-    h2 = Kit.rehead (map f) h1
+    h2 = Kit.headChange (map f) h1
     f n | n `elem` ns  = prefixName pre n
         | otherwise    = n
 
@@ -63,7 +63,7 @@ relUnprefix
     :: String         -- ^ Prefix text
     -> AbMap (Rel v)  -- ^ Relation to relation
 relUnprefix pre (Rel h1 b1) = Right $ Rel h2 b1 where
-    h2 = Kit.rehead (map $ unprefixName pre) h1
+    h2 = Kit.headChange (map $ unprefixName pre) h1
 
 unprefixName :: String -> String -> String
 unprefixName pre n =
@@ -92,7 +92,7 @@ relPrefixChange
     -> String         -- ^ Old prefix
     -> AbMap (Rel v)  -- ^ Relation to relation
 relPrefixChange new old (Rel h1 b1) = Right $ Rel h2 b1 where
-    h2   = Kit.rehead (map f) h1
+    h2   = Kit.headChange (map f) h1
     new' = new ++ "-"
     old' = old ++ "-"
     f n' = case List.stripPrefix old' n' of

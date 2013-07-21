@@ -30,6 +30,7 @@ module Koshucode.Baala.Minimal.OpKit
   Data.Rel (..),
   Data.Relhead (..),
   Data.Relterm (..),
+  Data.headChange,
   Data.headFrom,
   Data.headPosh,
   Data.headPoss,
@@ -37,7 +38,6 @@ module Koshucode.Baala.Minimal.OpKit
   Data.possInner,
   Data.possOuter,
   Data.possPick,
-  Data.rehead,
   Data.reldee,
   Data.reldum,
 
