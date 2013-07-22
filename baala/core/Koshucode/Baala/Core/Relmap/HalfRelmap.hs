@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Relmap.HalfRelmap
+module Koshucode.Baala.Core.Relmap.HalfRelmap
 ( HalfRelmap (..)
 ) where
 

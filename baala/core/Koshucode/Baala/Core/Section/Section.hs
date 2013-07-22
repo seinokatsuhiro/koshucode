@@ -25,7 +25,7 @@ module Koshucode.Baala.Core.Section.Section
 
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Base.Relmap
+import Koshucode.Baala.Core.Relmap
 
 data Section v = Section {
       sectionName   :: Maybe String       -- ^ Section name

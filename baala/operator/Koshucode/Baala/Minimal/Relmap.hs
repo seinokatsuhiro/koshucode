@@ -45,7 +45,7 @@ import Koshucode.Baala.Minimal.Relmap.Implement
 -- Functions from 'Relmap' to 'Relmap'.
 -- 
 -- [@consXxx@]
--- Functions of 'Koshucode.Baala.Base.Relmap.HalfRelmap.Relop'.
+-- Functions of 'Koshucode.Baala.Core.Relmap.HalfRelmap.Relop'.
 -- These functions construct 'Relmap' from operator usages,
 -- but constructions are failed if operators are misused.
 --

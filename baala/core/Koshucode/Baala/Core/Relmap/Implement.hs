@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Relmap.Implement
+module Koshucode.Baala.Core.Relmap.Implement
 ( -- * Implement
   OpImplement (..),
   OpParser,
@@ -24,8 +24,8 @@ import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Syntax
 
-import Koshucode.Baala.Base.Relmap.Relmap
-import Koshucode.Baala.Base.Relmap.HalfRelmap
+import Koshucode.Baala.Core.Relmap.Relmap
+import Koshucode.Baala.Core.Relmap.HalfRelmap
 
 
 

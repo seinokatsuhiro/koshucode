@@ -2,7 +2,7 @@
 
 -- | Running relational calculation.
 
-module Koshucode.Baala.Base.Relmap.Run
+module Koshucode.Baala.Core.Relmap.Run
 ( runAssertJudges
 , runAssertDataset
 ) where
@@ -11,10 +11,10 @@ import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Content
 
-import Koshucode.Baala.Base.Relmap.Assert
-import Koshucode.Baala.Base.Relmap.Dataset
-import Koshucode.Baala.Base.Relmap.HalfRelmap
-import Koshucode.Baala.Base.Relmap.Relmap
+import Koshucode.Baala.Core.Relmap.Assert
+import Koshucode.Baala.Core.Relmap.Dataset
+import Koshucode.Baala.Core.Relmap.HalfRelmap
+import Koshucode.Baala.Core.Relmap.Relmap
 
 
 

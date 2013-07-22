@@ -48,6 +48,15 @@ library
   exposed-modules:
         Koshucode.Baala.Core
 
+        Koshucode.Baala.Core.Relmap
+        Koshucode.Baala.Core.Relmap.Assert
+        Koshucode.Baala.Core.Relmap.Construct
+        Koshucode.Baala.Core.Relmap.Dataset
+        Koshucode.Baala.Core.Relmap.HalfRelmap
+        Koshucode.Baala.Core.Relmap.Implement
+        Koshucode.Baala.Core.Relmap.Relmap
+        Koshucode.Baala.Core.Relmap.Run
+
         Koshucode.Baala.Core.Section
         Koshucode.Baala.Core.Section.Clause
         Koshucode.Baala.Core.Section.Clausify
@@ -63,6 +72,7 @@ library
   build-depends:
          base                 == 4.5.*
        , containers           == 0.4.*
+       , pretty               == 1.1.*
        , syb                  == 0.3.*
        , template-haskell     == 2.7.*
        , koshucode-baala-base == 0.28.*

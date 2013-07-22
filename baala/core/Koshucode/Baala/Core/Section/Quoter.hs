@@ -9,8 +9,8 @@ import Data.Generics
 import Language.Haskell.TH hiding (Clause)
 import Language.Haskell.TH.Quote
 
-import Koshucode.Baala.Base.Relmap
 import Koshucode.Baala.Base.Syntax
+import Koshucode.Baala.Core.Relmap
 
 import Koshucode.Baala.Core.Section.Clause
 
@@ -20,7 +20,7 @@ koshuQuoter
     -> ExpQ           -- ^ Quotation expression of 'RelmapFullCons'
     -> QuasiQuoter    -- ^ Quoter that outputs
                       --  'Koshucode.Baala.Core.Section.Section' or
-                      --  'Koshucode.Baala.Base.Relmap.Relmap'
+                      --  'Koshucode.Baala.Core.Relmap.Relmap'
 koshuQuoter half fullQ = QuasiQuoter { quoteExp = koshuQ half fullQ }
 
 koshuQ :: RelmapHalfCons -> ExpQ -> String -> ExpQ

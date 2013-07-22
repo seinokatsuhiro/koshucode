@@ -2,7 +2,7 @@
 
 {-| 'Relmap' construction. -}
 
-module Koshucode.Baala.Base.Relmap.Construct
+module Koshucode.Baala.Core.Relmap.Construct
 ( relmapCons,
   RelmapCons (..),
   RelmapHalfCons,
@@ -16,9 +16,9 @@ import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Prelude hiding (cat)
 import Koshucode.Baala.Base.Syntax
 
-import Koshucode.Baala.Base.Relmap.HalfRelmap
-import Koshucode.Baala.Base.Relmap.Implement
-import Koshucode.Baala.Base.Relmap.Relmap
+import Koshucode.Baala.Core.Relmap.HalfRelmap
+import Koshucode.Baala.Core.Relmap.Implement
+import Koshucode.Baala.Core.Relmap.Relmap
 
 
 

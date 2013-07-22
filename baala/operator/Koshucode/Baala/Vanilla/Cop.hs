@@ -12,7 +12,7 @@ import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Content
 import Koshucode.Baala.Base.Prelude hiding ((<>), hang, empty, semi)
 import Koshucode.Baala.Base.Syntax
-import Koshucode.Baala.Base.Relmap
+import Koshucode.Baala.Core.Relmap
 
 import Koshucode.Baala.Vanilla.Cop.Arith
 import Koshucode.Baala.Vanilla.Cop.List

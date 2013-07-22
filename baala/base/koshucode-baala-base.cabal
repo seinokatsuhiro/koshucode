@@ -69,15 +69,6 @@ library
         Koshucode.Baala.Base.Prelude.Pretty
         Koshucode.Baala.Base.Prelude.Utility
 
-        Koshucode.Baala.Base.Relmap
-        Koshucode.Baala.Base.Relmap.Assert
-        Koshucode.Baala.Base.Relmap.Construct
-        Koshucode.Baala.Base.Relmap.Dataset
-        Koshucode.Baala.Base.Relmap.HalfRelmap
-        Koshucode.Baala.Base.Relmap.Implement
-        Koshucode.Baala.Base.Relmap.Relmap
-        Koshucode.Baala.Base.Relmap.Run
-
         Koshucode.Baala.Base.Syntax
         Koshucode.Baala.Base.Syntax.Binary
         Koshucode.Baala.Base.Syntax.HashWord

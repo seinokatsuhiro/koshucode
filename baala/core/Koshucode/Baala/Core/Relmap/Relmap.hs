@@ -2,7 +2,7 @@
 
 {-| Data structures for relation-to-relation mappings -}
 
-module Koshucode.Baala.Base.Relmap.Relmap
+module Koshucode.Baala.Core.Relmap.Relmap
 ( 
   -- * Data
   Relmap (..),
@@ -26,7 +26,7 @@ import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
 
-import Koshucode.Baala.Base.Relmap.HalfRelmap
+import Koshucode.Baala.Core.Relmap.HalfRelmap
 
 
 

@@ -2,28 +2,28 @@
 
 {-| Relation-to-relation mapping. -}
 
-module Koshucode.Baala.Base.Relmap
+module Koshucode.Baala.Core.Relmap
 ( -- * Datatypes
-  module Koshucode.Baala.Base.Relmap.HalfRelmap
-, module Koshucode.Baala.Base.Relmap.Relmap
-, module Koshucode.Baala.Base.Relmap.Assert
+  module Koshucode.Baala.Core.Relmap.HalfRelmap
+, module Koshucode.Baala.Core.Relmap.Relmap
+, module Koshucode.Baala.Core.Relmap.Assert
 
   -- * Processes
-, module Koshucode.Baala.Base.Relmap.Implement
-, module Koshucode.Baala.Base.Relmap.Construct
-, module Koshucode.Baala.Base.Relmap.Run
+, module Koshucode.Baala.Core.Relmap.Implement
+, module Koshucode.Baala.Core.Relmap.Construct
+, module Koshucode.Baala.Core.Relmap.Run
 
   -- * Datatypes
   -- $Dependencies
 ) where
 
-import Koshucode.Baala.Base.Relmap.HalfRelmap
-import Koshucode.Baala.Base.Relmap.Relmap
-import Koshucode.Baala.Base.Relmap.Assert
+import Koshucode.Baala.Core.Relmap.HalfRelmap
+import Koshucode.Baala.Core.Relmap.Relmap
+import Koshucode.Baala.Core.Relmap.Assert
 
-import Koshucode.Baala.Base.Relmap.Implement
-import Koshucode.Baala.Base.Relmap.Construct
-import Koshucode.Baala.Base.Relmap.Run
+import Koshucode.Baala.Core.Relmap.Implement
+import Koshucode.Baala.Core.Relmap.Construct
+import Koshucode.Baala.Core.Relmap.Run
 
 
 

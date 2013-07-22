@@ -14,7 +14,7 @@ import Control.Monad (filterM)
 
 import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Content
-import Koshucode.Baala.Base.Relmap
+import Koshucode.Baala.Core.Relmap
 
 import Koshucode.Baala.Minimal.OpKit as Kit
 import qualified Koshucode.Baala.Minimal as Mini

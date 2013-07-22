@@ -2,7 +2,7 @@
 
 -- | Data structure for mapping relation to judges
 
-module Koshucode.Baala.Base.Relmap.Assert
+module Koshucode.Baala.Core.Relmap.Assert
 ( -- * Datatype
   Assert (..)
 , assertMap
@@ -15,7 +15,7 @@ module Koshucode.Baala.Base.Relmap.Assert
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
 
-import Koshucode.Baala.Base.Relmap.Relmap
+import Koshucode.Baala.Core.Relmap.Relmap
 
 {-| Assertion of affirming or denying relation.
     It consists of logical quality, relsign, and relmap.
