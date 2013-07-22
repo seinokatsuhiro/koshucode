@@ -12,7 +12,7 @@ module Koshucode.Baala.Toolkit.Main.KoshuMain
 import System.Console.GetOpt
 
 import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Base.Content.Class
+import Koshucode.Baala.Core.Content.Class
 import Koshucode.Baala.Toolkit.Library.Exit
 import Koshucode.Baala.Toolkit.Library.Run
 import Koshucode.Baala.Toolkit.Library.Version

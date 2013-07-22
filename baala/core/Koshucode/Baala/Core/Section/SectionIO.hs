@@ -18,7 +18,7 @@ import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Syntax
 
-import Koshucode.Baala.Base.Content
+import Koshucode.Baala.Core.Content
 import Koshucode.Baala.Core.Relmap
 import Koshucode.Baala.Core.Section.Section
 import Koshucode.Baala.Core.Section.Clause

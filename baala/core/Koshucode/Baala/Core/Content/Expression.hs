@@ -2,7 +2,7 @@
 
 {-| Term calcutation. -}
 
-module Koshucode.Baala.Base.Content.Expression
+module Koshucode.Baala.Core.Content.Expression
 (
   -- $Process
   formCox,
@@ -16,9 +16,9 @@ import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Syntax
 
-import Koshucode.Baala.Base.Content.Class
-import Koshucode.Baala.Base.Content.Literalize
-import Koshucode.Baala.Base.Content.Operator
+import Koshucode.Baala.Core.Content.Class
+import Koshucode.Baala.Core.Content.Literalize
+import Koshucode.Baala.Core.Content.Operator
 
 
 

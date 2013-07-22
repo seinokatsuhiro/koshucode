@@ -2,7 +2,7 @@
 
 {-| Term calcutation. -}
 
-module Koshucode.Baala.Base.Content.Operator
+module Koshucode.Baala.Core.Content.Operator
 (
   Cox (..),
   Cop (..),

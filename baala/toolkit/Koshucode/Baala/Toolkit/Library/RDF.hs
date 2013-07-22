@@ -11,7 +11,7 @@ module Koshucode.Baala.Toolkit.Library.RDF
 
 import Data.RDF
 import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Base.Content.Class
+import Koshucode.Baala.Core.Content.Class
 import qualified Data.Text as T
 
 -- | Type of conversion

@@ -48,6 +48,12 @@ library
   exposed-modules:
         Koshucode.Baala.Core
 
+        Koshucode.Baala.Core.Content
+        Koshucode.Baala.Core.Content.Class
+        Koshucode.Baala.Core.Content.Expression
+        Koshucode.Baala.Core.Content.Literalize
+        Koshucode.Baala.Core.Content.Operator
+
         Koshucode.Baala.Core.Relmap
         Koshucode.Baala.Core.Relmap.Assert
         Koshucode.Baala.Core.Relmap.Construct

@@ -8,9 +8,9 @@ module Koshucode.Baala.Vanilla.Cop.Arith
 ) where
 
 import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Base.Content
 import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Syntax
+import Koshucode.Baala.Core.Content
 
 import Koshucode.Baala.Vanilla.Value.Content
 

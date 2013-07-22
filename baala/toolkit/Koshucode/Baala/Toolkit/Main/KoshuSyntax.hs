@@ -14,8 +14,8 @@ import System.Console.GetOpt
 
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Base.Content
 import Koshucode.Baala.Base.Syntax  as Syn
+import Koshucode.Baala.Core.Content
 import Koshucode.Baala.Core.Section as Sec
 import Koshucode.Baala.Vanilla
 

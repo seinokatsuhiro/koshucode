@@ -16,7 +16,7 @@ import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Syntax
 
-import Koshucode.Baala.Base.Content
+import Koshucode.Baala.Core.Content
 
 {-| Type for values. -}
 

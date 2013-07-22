@@ -22,7 +22,7 @@ import Prelude hiding (exp, mod)
 import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Syntax
 
-import Koshucode.Baala.Base.Content
+import Koshucode.Baala.Core.Content
 import Koshucode.Baala.Core.Relmap
 import Koshucode.Baala.Core.Section.Clausify
 import Koshucode.Baala.Core.Section.Section

@@ -9,9 +9,9 @@ module Koshucode.Baala.Vanilla.Cop
 ) where
 
 import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Base.Content
 import Koshucode.Baala.Base.Prelude hiding ((<>), hang, empty, semi)
 import Koshucode.Baala.Base.Syntax
+import Koshucode.Baala.Core.Content
 import Koshucode.Baala.Core.Relmap
 
 import Koshucode.Baala.Vanilla.Cop.Arith

@@ -52,12 +52,6 @@ library
         Koshucode.Baala.Base.Abort.Reason
         Koshucode.Baala.Base.Abort.Utility
 
-        Koshucode.Baala.Base.Content
-        Koshucode.Baala.Base.Content.Class
-        Koshucode.Baala.Base.Content.Expression
-        Koshucode.Baala.Base.Content.Literalize
-        Koshucode.Baala.Base.Content.Operator
-
         Koshucode.Baala.Base.Data
         Koshucode.Baala.Base.Data.Judge
         Koshucode.Baala.Base.Data.Rel

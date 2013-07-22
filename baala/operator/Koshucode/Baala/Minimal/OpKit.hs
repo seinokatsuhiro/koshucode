@@ -91,11 +91,11 @@ module Koshucode.Baala.Minimal.OpKit
 import Data.Monoid                         as Monoid
 
 import Koshucode.Baala.Base.Abort          as Abort
-import Koshucode.Baala.Base.Content        as Content
 import Koshucode.Baala.Base.Data           as Data
 import Koshucode.Baala.Base.Prelude        as Prelude
 import Koshucode.Baala.Base.Syntax         as Syntax
 
+import Koshucode.Baala.Core.Content        as Content
 import Koshucode.Baala.Core.Relmap         as Relmap
 import Koshucode.Baala.Core.Section        as Section
 
