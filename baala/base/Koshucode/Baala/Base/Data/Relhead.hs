@@ -1,4 +1,4 @@
-{-# OPTIONS_GHC #-}
+{-# OPTIONS_GHC -Wall #-}
 
 -- | Heading of relations
 
@@ -13,13 +13,14 @@ module Koshucode.Baala.Base.Data.Relhead
   -- * Index
   headIndex,
   headIndex1,
-  headPoss,
+  posOf,
   posFrom,
 
   -- * Position
   TermPos (..),
   posPoss,
-  possPick,
+  csPick,
+  csCut,
   termsInner,
   termsOuter,
 
@@ -90,12 +91,12 @@ headIndex1 :: Relhead -> [String] -> [Int]
 headIndex1 h n = termIndex (headTerms h) n
 
 {-| Positions of given names in a head -}
-headPoss :: Relhead -> [[String]] -> [TermPos]
-headPoss h1 ns = termPoss ns $ headIndex h1 ns
+posOf :: Relhead -> [[String]] -> [TermPos]
+posOf h1 ns = termPoss ns $ headIndex h1 ns
 
 {-| Positions of given (sub)head in a head -}
 posFrom :: Relhead -> Relhead -> [TermPos]
-posFrom h1 h2 = headPoss h1 n2 where
+posFrom h1 h2 = h1 `posOf` n2 where
     n2 = map singleton (headNames h2)
 
 termPoss :: [[String]] -> [[Int]] -> [TermPos]
@@ -109,8 +110,8 @@ termPoss ns ps = zipWith TermPos ns2 ps2 where
 
 {-| Term position -}
 data TermPos = TermPos
-    { termPosName :: String    -- ^ Term name
-    , termPos     :: Int       -- ^ Position
+    { posName   :: String    -- ^ Term name
+    , posIndex  :: Int       -- ^ Position
     } deriving (Show, Eq, Ord)
 
 instance Name TermPos where
@@ -118,7 +119,7 @@ instance Name TermPos where
 
 {-| Indicies -}
 posPoss  :: [TermPos] -> [Int]
-posPoss  = map termPos
+posPoss  = map posIndex
 
 {-| Pick an inner part. -}
 termsInner :: [TermPos] -> [[String]]
@@ -135,15 +136,11 @@ isInner, isOuter :: TermPos -> Bool
 isInner (TermPos _ i)  =  i >= 0
 isOuter (TermPos _ i)  =  i <  0
 
--- -- | Split positions into outer and inner parts
--- posSplit :: [TermPos] -> ([TermPos], [TermPos])
--- posSplit ps = loop ps where
---     loop [] = ([], [])
---     loop (p : ps)
---         | outer p   = mapFst (p:) $ loop ps
---         | otherwise = mapSnd (p:) $ loop ps
+{-| Pick contents by positions. -}
+csPick :: [TermPos] -> Map [c]
+csPick  =  indexPick . map posIndex
 
-{-| Pick values -}
-possPick :: [TermPos] -> [v] -> [v]
-possPick ps = indexPick (map termPos ps)
+{-| Cut contents by positions. -}
+csCut  :: [TermPos] -> Map [c]
+csCut   =  indexCut . map posIndex
 

@@ -63,16 +63,16 @@ relSemi which r2 r1 = Right $ Rel h3 b3 where
     Rel h2 args2 = r2
 
     posh12 = h1 `Kit.posFrom` h2
-    share1 = Kit.headPoss h1 $ Kit.termsInner posh12
-    share2 = Kit.headPoss h2 $ Kit.termsInner posh12
-    --side2  = Kit.headPoss h2 $ Kit.termsOuter posh12
+    share1 = Kit.posOf h1 $ Kit.termsInner posh12
+    share2 = Kit.posOf h2 $ Kit.termsInner posh12
+    --side2  = Kit.posOf h2 $ Kit.termsOuter posh12
 
     m2 = gatherToMap $ map pair args2
-    pair arg2 = (Kit.possPick share2 arg2, True)
+    pair arg2 = (Kit.csPick share2 arg2, True)
 
     h3 = Kit.mappend h2 h1
     b3 = filter step args1
-    step arg1 = case lookupMap (Kit.possPick share1 arg1) m2 of
+    step arg1 = case lookupMap (Kit.csPick share1 arg1) m2 of
                   Just _  -> which
                   Nothing -> not which
 

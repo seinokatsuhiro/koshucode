@@ -90,7 +90,7 @@ relPick ns r = Right $ project indexPick ns r
 
 project :: (Ord v) => ([Int] -> Listmap v) -> [String] -> Map (Rel v)
 project f ns (Rel h1 b1) = Rel h2 b2 where
-    pos = List.sort $ Kit.headPoss h1 (map singleton ns)
+    pos = List.sort $ Kit.posOf h1 (map singleton ns)
     pj  = f $ Kit.posPoss pos
     h2  = Kit.headChange pj h1
     b2  = unique $ map pj b1

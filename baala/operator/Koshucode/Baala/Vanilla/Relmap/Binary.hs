@@ -34,18 +34,18 @@ relMaybe r1 r2 = Right $ Rel h3 b3 where
     Rel h2 args2 = r2
 
     posh12 = h1 `Kit.posFrom` h2
-    share1 = Kit.headPoss h1 $ Kit.termsInner posh12
-    share2 = Kit.headPoss h2 $ Kit.termsInner posh12
-    side2  = Kit.headPoss h2 $ Kit.termsOuter posh12
+    share1 = Kit.posOf h1 $ Kit.termsInner posh12
+    share2 = Kit.posOf h2 $ Kit.termsInner posh12
+    side2  = Kit.posOf h2 $ Kit.termsOuter posh12
 
     m2 = Kit.gatherToMap $ map pair args2
-    pair arg2 = (Kit.possPick share2 arg2,
-                 Kit.possPick side2  arg2)
+    pair arg2 = (Kit.csPick share2 arg2,
+                 Kit.csPick side2  arg2)
 
     h3 = Kit.mappend h2 h1
     b3 = concatMap step args1
     nils = replicate (headDegree h3 - headDegree h1) nil
-    step arg1 = case Kit.lookupMap (Kit.possPick share1 arg1) m2 of
+    step arg1 = case Kit.lookupMap (Kit.csPick share1 arg1) m2 of
                   Just side -> map (++ arg1) side
                   Nothing   -> [nils ++ arg1]
 
@@ -87,16 +87,16 @@ relHang n r2 r1 = Right $ Rel h3 b3 where
     Rel h2 args2 = r2
 
     posh12 = h1 `Kit.posFrom` h2
-    share1 = Kit.headPoss h1 $ Kit.termsInner posh12
-    share2 = Kit.headPoss h2 $ Kit.termsInner posh12
-    --side2  = Kit.headPoss h2 $ Kit.termsOuter posh12
+    share1 = Kit.posOf h1 $ Kit.termsInner posh12
+    share2 = Kit.posOf h2 $ Kit.termsInner posh12
+    --side2  = Kit.posOf h2 $ Kit.termsOuter posh12
 
     m2 = Kit.gatherToMap $ map pair args2
-    pair arg2 = (Kit.possPick share2 arg2, arg2)
+    pair arg2 = (Kit.csPick share2 arg2, arg2)
 
     h3 = Relhead $ Nest n (headTerms h2) : (headTerms h1)
     b3 = map step args1
-    step arg1 = case Kit.lookupMap (Kit.possPick share1 arg1) m2 of
+    step arg1 = case Kit.lookupMap (Kit.csPick share1 arg1) m2 of
                   Just args2' -> (putRel $ Rel h2 args2') : arg1
                   Nothing     -> []
 
