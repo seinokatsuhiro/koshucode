@@ -1,0 +1,425 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Core.Content.Expression</title
+    ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-Content-Expression.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a href="src/Koshucode-Baala-Core-Content-Expression.html"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-core-0.29.0.0: A notational system for relational data</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Core.Content.Expression</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Term calcutation. 
+</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:formCox"
+	    >formCox</a
+	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Operator.html#t:FindCop"
+	    >FindCop</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
+	    >AbOr</a
+	    > (<a href="Koshucode-Baala-Core-Content-Operator.html#t:Cox"
+	    >Cox</a
+	    > c)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:PosCox"
+	    >PosCox</a
+	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
+	    >AbOr</a
+	    > (<a href="Koshucode-Baala-Core-Content-Operator.html#t:Cox"
+	    >Cox</a
+	    > c)</li
+	  ><li class="src short"
+	  ><a href="#v:posCox"
+	    >posCox</a
+	    > ::  <a href="Koshucode-Baala-Core-Content-Operator.html#t:Cox"
+	    >Cox</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Content-Expression.html#t:PosCox"
+	    >PosCox</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:runCox"
+	    >runCox</a
+	    > :: (<a href="Koshucode-Baala-Core-Content-Class.html#t:CList"
+	    >CList</a
+	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CRel"
+	    >CRel</a
+	    > c) =&gt; [c] -&gt; <a href="Koshucode-Baala-Core-Content-Operator.html#t:Cox"
+	    >Cox</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
+	    >AbOr</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:runCoxH"
+	    >runCoxH</a
+	    > :: (<a href="Koshucode-Baala-Core-Content-Class.html#t:CRel"
+	    >CRel</a
+	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CList"
+	    >CList</a
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; [c] -&gt; <a href="Koshucode-Baala-Core-Content-Expression.html#t:PosCox"
+	    >PosCox</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
+	    >AbOr</a
+	    > c</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="doc"
+	><p
+	  >Phase 1. From string to prefixed token tree.
+</p
+	  ><dl
+	  ><dt
+	    >1. <code
+	      >String -&gt; [Token]</code
+	      ></dt
+	    ><dd
+	    >
+        Parse input string into list of token.
+        See <code
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#v:tokens"
+		>tokens</a
+		></code
+	      >.
+</dd
+	    ><dt
+	    >2. <code
+	      >[Token] -&gt; [Tree Token]</code
+	      ></dt
+	    ><dd
+	    >
+        Analyze token list structure.
+        See <code
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#v:tokenTrees"
+		>tokenTrees</a
+		></code
+	      >
+</dd
+	    ><dt
+	    >3. <code
+	      >[Tree Token] -&gt; Tree Token</code
+	      ></dt
+	    ><dd
+	    >
+        Enclose list of token tree in <code
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tree.html#v:TreeB"
+		>TreeB</a
+		></code
+	      >.
+        See <code
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#v:singleTree"
+		>singleTree</a
+		></code
+	      >.
+</dd
+	    ><dt
+	    >4. <code
+	      >Tree Token -&gt; Tree Token</code
+	      ></dt
+	    ><dd
+	    >
+        Translate binary operators from infix to prefix.
+        See <code
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Binary.html#v:binaryTree"
+		>binaryTree</a
+		></code
+	      >.
+</dd
+	    ></dl
+	  ><p
+	  >Phase 2. From prefixed token tree to literal content.
+</p
+	  ><dl
+	  ><dt
+	    >5. <code
+	      >Tree Token -&gt; Cox c</code
+	      ></dt
+	    ><dd
+	    >
+        Convert from token tree to content expression.
+        See <code
+	      ><a href="Koshucode-Baala-Core-Content-Expression.html#v:formCox"
+		>formCox</a
+		></code
+	      >.
+</dd
+	    ><dt
+	    >6. <code
+	      >Cox c -&gt; (Relhead -&gt; Cox c)</code
+	      ></dt
+	    ><dd
+	    >
+        Attach term positions using actural heading of relation.
+        See <code
+	      ><a href="Koshucode-Baala-Core-Content-Expression.html#v:posCox"
+		>posCox</a
+		></code
+	      >.
+</dd
+	    ><dt
+	    >7. <code
+	      >Cox c -&gt; [c] -&gt; c</code
+	      ></dt
+	    ><dd
+	    >
+        Calculate content expression for each tuple of relation.
+        See <code
+	      ><a href="Koshucode-Baala-Core-Content-Expression.html#v:runCox"
+		>runCox</a
+		></code
+	      >.
+</dd
+	    ></dl
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:formCox" class="def"
+	    >formCox</a
+	    ><a href="src/Koshucode-Baala-Core-Content-Expression.html#formCox" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs arguments"
+	  ><p class="caption"
+	    >Arguments</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		>:: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
+		  >CContent</a
+		  > c</td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>=&gt; <a href="Koshucode-Baala-Core-Content-Operator.html#t:FindCop"
+		  >FindCop</a
+		  > c</td
+		><td class="doc"
+		><p
+		  >Collection of operators
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+		  >TokenTree</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Input token tree
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
+		  >AbOr</a
+		  > (<a href="Koshucode-Baala-Core-Content-Operator.html#t:Cox"
+		  >Cox</a
+		  > c)</td
+		><td class="doc"
+		><p
+		  >Result content expression
+</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="doc"
+	  ><p
+	    >Construct content expression. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:PosCox" class="def"
+	    >PosCox</a
+	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
+	    >AbOr</a
+	    > (<a href="Koshucode-Baala-Core-Content-Operator.html#t:Cox"
+	    >Cox</a
+	    > c)<a href="src/Koshucode-Baala-Core-Content-Expression.html#PosCox" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:posCox" class="def"
+	    >posCox</a
+	    > ::  <a href="Koshucode-Baala-Core-Content-Operator.html#t:Cox"
+	    >Cox</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Content-Expression.html#t:PosCox"
+	    >PosCox</a
+	    > c<a href="src/Koshucode-Baala-Core-Content-Expression.html#posCox" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Put term positions for actural heading. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:runCox" class="def"
+	    >runCox</a
+	    > :: (<a href="Koshucode-Baala-Core-Content-Class.html#t:CList"
+	    >CList</a
+	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CRel"
+	    >CRel</a
+	    > c) =&gt; [c] -&gt; <a href="Koshucode-Baala-Core-Content-Operator.html#t:Cox"
+	    >Cox</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
+	    >AbOr</a
+	    > c<a href="src/Koshucode-Baala-Core-Content-Expression.html#runCox" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Calculate content expression. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:runCoxH" class="def"
+	    >runCoxH</a
+	    ><a href="src/Koshucode-Baala-Core-Content-Expression.html#runCoxH" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs arguments"
+	  ><p class="caption"
+	    >Arguments</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		>:: (<a href="Koshucode-Baala-Core-Content-Class.html#t:CRel"
+		  >CRel</a
+		  > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CList"
+		  >CList</a
+		  > c)</td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>=&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+		  >Relhead</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Heading of relation
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; [c]</td
+		><td class="doc"
+		><p
+		  >Tuple in body of relation
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="Koshucode-Baala-Core-Content-Expression.html#t:PosCox"
+		  >PosCox</a
+		  > c</td
+		><td class="doc"
+		><p
+		  >Content expression
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
+		  >AbOr</a
+		  > c</td
+		><td class="doc"
+		><p
+		  >Calculated literal content
+</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.11.0</p
+      ></div
+    ></body
+  ></html
+>
