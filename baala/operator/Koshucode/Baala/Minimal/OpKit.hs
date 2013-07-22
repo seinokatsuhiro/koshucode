@@ -32,14 +32,14 @@ module Koshucode.Baala.Minimal.OpKit
   Data.Relterm (..),
   Data.headChange,
   Data.headFrom,
-  Data.headPosh,
   Data.headPoss,
+  Data.posFrom,
   Data.posPoss,
-  Data.possInner,
-  Data.possOuter,
   Data.possPick,
   Data.reldee,
   Data.reldum,
+  Data.termsInner,
+  Data.termsOuter,
 
   -- * Prelude
   Prelude.Map,

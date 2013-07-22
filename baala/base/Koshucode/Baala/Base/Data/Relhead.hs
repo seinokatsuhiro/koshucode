@@ -14,14 +14,14 @@ module Koshucode.Baala.Base.Data.Relhead
   headIndex,
   headIndex1,
   headPoss,
-  headPosh,
+  posFrom,
 
   -- * Position
   TermPos (..),
   posPoss,
   possPick,
-  possInner,
-  possOuter,
+  termsInner,
+  termsOuter,
 
   -- * Monoid
   mempty,
@@ -89,49 +89,51 @@ headIndex h n = termsIndex (headTerms h) n
 headIndex1 :: Relhead -> [String] -> [Int]
 headIndex1 h n = termIndex (headTerms h) n
 
--- | Positions of given names in a head
+{-| Positions of given names in a head -}
 headPoss :: Relhead -> [[String]] -> [TermPos]
 headPoss h1 ns = termPoss ns $ headIndex h1 ns
 
--- | Positions of given (sub)head in a head
-headPosh :: Relhead -> Relhead -> [TermPos]
-headPosh h1 h2 = headPoss h1 n2 where
+{-| Positions of given (sub)head in a head -}
+posFrom :: Relhead -> Relhead -> [TermPos]
+posFrom h1 h2 = headPoss h1 n2 where
     n2 = map singleton (headNames h2)
 
 termPoss :: [[String]] -> [[Int]] -> [TermPos]
-termPoss ns ps = zipWith pos ns2 ps2 where
+termPoss ns ps = zipWith TermPos ns2 ps2 where
     ns2 = map head ns
     ps2 = map head ps
-    pos n p = TermPos p n
 
 
 
 -- ----------------------  Term position
 
--- | Term position
-data TermPos = TermPos {
-      termPos     :: Int       -- ^ Position
-    , termPosName :: String    -- ^ Term name
+{-| Term position -}
+data TermPos = TermPos
+    { termPosName :: String    -- ^ Term name
+    , termPos     :: Int       -- ^ Position
     } deriving (Show, Eq, Ord)
 
 instance Name TermPos where
-    name (TermPos _ n) = n
+    name (TermPos n _) = n
 
--- | Indicies
+{-| Indicies -}
 posPoss  :: [TermPos] -> [Int]
 posPoss  = map termPos
 
--- | Pick an inner part.
-possInner :: [TermPos] -> [[String]]
-possInner ps = map (singleton . name) $ filter inner ps
+{-| Pick an inner part. -}
+termsInner :: [TermPos] -> [[String]]
+termsInner = termsFilter isInner
 
--- | Pick an outer part.
-possOuter :: [TermPos] -> [[String]]
-possOuter ps = map (singleton . name) $ filter outer ps
+{-| Pick an outer part. -}
+termsOuter :: [TermPos] -> [[String]]
+termsOuter = termsFilter isOuter
 
-inner, outer :: TermPos -> Bool
-inner (TermPos i _) = i >= 0
-outer (TermPos i _) = i < 0
+termsFilter :: (TermPos -> Bool) -> [TermPos] -> [[String]]
+termsFilter p = map (singleton . name) . filter p
+
+isInner, isOuter :: TermPos -> Bool
+isInner (TermPos _ i)  =  i >= 0
+isOuter (TermPos _ i)  =  i <  0
 
 -- -- | Split positions into outer and inner parts
 -- posSplit :: [TermPos] -> ([TermPos], [TermPos])
@@ -141,7 +143,7 @@ outer (TermPos i _) = i < 0
 --         | outer p   = mapFst (p:) $ loop ps
 --         | otherwise = mapSnd (p:) $ loop ps
 
--- | Pick values
+{-| Pick values -}
 possPick :: [TermPos] -> [v] -> [v]
 possPick ps = indexPick (map termPos ps)
 

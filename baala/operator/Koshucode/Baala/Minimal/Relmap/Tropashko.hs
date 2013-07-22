@@ -47,10 +47,10 @@ relMeet :: (Ord v)
     -> Rel v         -- ^ Input relation /R2/
     -> AbOr (Rel v)  -- ^ Meet of /R1/ and /R2/
 relMeet (Rel h1 b1) (Rel h2 b2) = Right $ Rel h3 b3 where
-    posh12 = Kit.headPosh h1 h2
-    share1 = Kit.headPoss h1 $ Kit.possInner posh12
-    share2 = Kit.headPoss h2 $ Kit.possInner posh12
-    side2  = Kit.headPoss h2 $ Kit.possOuter posh12
+    posh12 = h1 `Kit.posFrom` h2
+    share1 = Kit.headPoss h1 $ Kit.termsInner posh12
+    share2 = Kit.headPoss h2 $ Kit.termsInner posh12
+    side2  = Kit.headPoss h2 $ Kit.termsOuter posh12
 
     m2 = gatherToMap $ map pair b2
     pair arg2 = (Kit.possPick share2 arg2,
@@ -88,7 +88,7 @@ relJoin :: (Ord v)
     -> Rel v         -- ^ Input relation /R2/
     -> AbOr (Rel v)  -- ^ Join of /R1/ and /R2/
 relJoin (Rel h1 b1) (Rel h2 b2) = Right $ Rel h3 b3 where
-    posh12 = Kit.possInner $ Kit.headPosh h1 h2
+    posh12 = Kit.termsInner $ h1 `Kit.posFrom` h2
     pick1  = Kit.possPick  $ Kit.headPoss h1 posh12
     pick2  = Kit.possPick  $ Kit.headPoss h2 posh12
 
@@ -96,16 +96,6 @@ relJoin (Rel h1 b1) (Rel h2 b2) = Right $ Rel h3 b3 where
     b3 = unique $
          map pick1 b1 ++
          map pick2 b2
-
--- h1 = Kit.headFrom $ words "a b c"
--- h2 = Kit.headFrom $ words "c b a"
--- e3 = Kit.headPosh h1 h2
--- e4 = Kit.possInner e3
--- e5 = Kit.headPoss h1 e4
--- e6 = Kit.headPoss h2 e4
--- p7 = Kit.possPick e5
--- p8 = Kit.possPick e6
--- h9 = Kit.headChange p7 h1
 
 
 

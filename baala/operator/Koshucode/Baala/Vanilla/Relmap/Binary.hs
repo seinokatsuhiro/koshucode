@@ -33,10 +33,10 @@ relMaybe r1 r2 = Right $ Rel h3 b3 where
     Rel h1 args1 = r1
     Rel h2 args2 = r2
 
-    posh12 = Kit.headPosh h1 h2
-    share1 = Kit.headPoss h1 $ Kit.possInner posh12
-    share2 = Kit.headPoss h2 $ Kit.possInner posh12
-    side2  = Kit.headPoss h2 $ Kit.possOuter posh12
+    posh12 = h1 `Kit.posFrom` h2
+    share1 = Kit.headPoss h1 $ Kit.termsInner posh12
+    share2 = Kit.headPoss h2 $ Kit.termsInner posh12
+    side2  = Kit.headPoss h2 $ Kit.termsOuter posh12
 
     m2 = Kit.gatherToMap $ map pair args2
     pair arg2 = (Kit.possPick share2 arg2,
@@ -86,10 +86,10 @@ relHang n r2 r1 = Right $ Rel h3 b3 where
     Rel h1 args1 = r1
     Rel h2 args2 = r2
 
-    posh12 = Kit.headPosh h1 h2
-    share1 = Kit.headPoss h1 $ Kit.possInner posh12
-    share2 = Kit.headPoss h2 $ Kit.possInner posh12
-    --side2  = Kit.headPoss h2 $ Kit.possOuter posh12
+    posh12 = h1 `Kit.posFrom` h2
+    share1 = Kit.headPoss h1 $ Kit.termsInner posh12
+    share2 = Kit.headPoss h2 $ Kit.termsInner posh12
+    --side2  = Kit.headPoss h2 $ Kit.termsOuter posh12
 
     m2 = Kit.gatherToMap $ map pair args2
     pair arg2 = (Kit.possPick share2 arg2, arg2)
