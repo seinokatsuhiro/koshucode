@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.28.0.0: A notational system for relational data</p
+      >koshucode-baala-base-0.29.0.0: A notational system for relational data</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -81,22 +81,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	      ></ul
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:termLook"
-	    >termLook</a
-	    > :: [[<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >]] -&gt; [<a href="Koshucode-Baala-Base-Data-Relterm.html#t:Relterm"
+	  ><a href="#v:termsIndex"
+	    >termsIndex</a
+	    > :: [<a href="Koshucode-Baala-Base-Data-Relterm.html#t:Relterm"
 	    >Relterm</a
-	    >] -&gt; [[<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >] -&gt; [[<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >]] -&gt; [[<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
 	    >]]</li
 	  ><li class="src short"
-	  ><a href="#v:termLook1"
-	    >termLook1</a
-	    > :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >] -&gt; [<a href="Koshucode-Baala-Base-Data-Relterm.html#t:Relterm"
+	  ><a href="#v:termIndex"
+	    >termIndex</a
+	    > :: [<a href="Koshucode-Baala-Base-Data-Relterm.html#t:Relterm"
 	    >Relterm</a
+	    >] -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
 	    >] -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
 	    >]</li
@@ -116,7 +116,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Term in heading of relation
+	    >Term in heading of relation 
 </p
 	    ></div
 	  ><div class="subs constructors"
@@ -130,8 +130,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
 		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
+		><td class="doc"
+		><p
+		  >For non-relation
+</p
+		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
@@ -142,8 +145,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  > [<a href="Koshucode-Baala-Base-Data-Relterm.html#t:Relterm"
 		  >Relterm</a
 		  >]</td
-		><td class="doc empty"
-		>&nbsp;</td
+		><td class="doc"
+		><p
+		  >For relation
+</p
+		  ></td
 		></tr
 	      ></table
 	    ></div
@@ -208,35 +214,65 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:termLook" class="def"
-	    >termLook</a
-	    > :: [[<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >]] -&gt; [<a href="Koshucode-Baala-Base-Data-Relterm.html#t:Relterm"
+	  ><a name="v:termsIndex" class="def"
+	    >termsIndex</a
+	    > :: [<a href="Koshucode-Baala-Base-Data-Relterm.html#t:Relterm"
 	    >Relterm</a
-	    >] -&gt; [[<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >] -&gt; [[<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >]] -&gt; [[<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    >]]<a href="src/Koshucode-Baala-Base-Data-Relterm.html#termLook" class="link"
+	    >]]<a href="src/Koshucode-Baala-Base-Data-Relterm.html#termsIndex" class="link"
 	    >Source</a
 	    ></p
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:termLook1" class="def"
-	    >termLook1</a
-	    > :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >] -&gt; [<a href="Koshucode-Baala-Base-Data-Relterm.html#t:Relterm"
+	  ><a name="v:termIndex" class="def"
+	    >termIndex</a
+	    > :: [<a href="Koshucode-Baala-Base-Data-Relterm.html#t:Relterm"
 	    >Relterm</a
+	    >] -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
 	    >] -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    >]<a href="src/Koshucode-Baala-Base-Data-Relterm.html#termLook1" class="link"
+	    >]<a href="src/Koshucode-Baala-Base-Data-Relterm.html#termIndex" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Term path to term position
 </p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>termIndex [&quot;/b&quot;] [Term &quot;/a&quot;, Term &quot;/b&quot;, Term &quot;/c&quot;]
+</code
+		></strong
+	      >[1]
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>termIndex [&quot;/e&quot;] [Term &quot;/a&quot;, Term &quot;/b&quot;, Term &quot;/c&quot;]
+</code
+		></strong
+	      >[-1]
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>termIndex [&quot;/r&quot;, &quot;/b&quot;] [Nest &quot;/r&quot; [Term &quot;/a&quot;, Term &quot;/b&quot;]]
+</code
+		></strong
+	      >[0, 1]
+</pre
 	    ></div
 	  ></div
 	></div
