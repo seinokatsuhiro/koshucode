@@ -6,7 +6,7 @@
 --   (2) /library sections/ that make relmaps reusable,
 --   (3) /data sections/ that provide data.
 
-module Koshucode.Baala.Base.Section.Section
+module Koshucode.Baala.Core.Section.Section
 (
   -- * Process
   -- $Process

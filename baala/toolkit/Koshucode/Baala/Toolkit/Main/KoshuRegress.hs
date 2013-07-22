@@ -20,7 +20,7 @@ import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Content
 import Koshucode.Baala.Vanilla.Value.Content
 
-import qualified Koshucode.Baala.Base.Section  as Kit
+import qualified Koshucode.Baala.Core.Section  as Kit
 import qualified Koshucode.Baala.Minimal.OpKit as Kit
 
 import Koshucode.Baala.Toolkit.Library.Comment

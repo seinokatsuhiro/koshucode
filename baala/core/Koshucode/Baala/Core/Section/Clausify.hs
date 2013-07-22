@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Section.Clausify
+module Koshucode.Baala.Core.Section.Clausify
 ( ClauseSource (..)
 , clausify
 , operandGroup

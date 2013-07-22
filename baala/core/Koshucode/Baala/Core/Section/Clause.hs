@@ -3,7 +3,7 @@
 
 {-| Intermidiate structure between 'String' and 'Section'. -}
 
-module Koshucode.Baala.Base.Section.Clause
+module Koshucode.Baala.Core.Section.Clause
 ( -- * Datatype
   -- $Documentation
   Clause (..)
@@ -24,8 +24,8 @@ import Koshucode.Baala.Base.Relmap
 import Koshucode.Baala.Base.Syntax
 
 import Koshucode.Baala.Base.Content
-import Koshucode.Baala.Base.Section.Clausify
-import Koshucode.Baala.Base.Section.Section
+import Koshucode.Baala.Core.Section.Clausify
+import Koshucode.Baala.Core.Section.Section
 
 -- Synthesis process
 --

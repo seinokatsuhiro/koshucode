@@ -24,36 +24,35 @@ Files `*.k` are data itself and calculation in koshucode.
    / baala
       / base
          * koshucode-baala-base.cabal
-         / Koshucode
-            / Baala
-               / Base
-  
+         / Koshucode / Baala / Base
+
+      / core
+         * koshucode-baala-core.cabal
+         / Koshucode / Baala / Core
+
       / operator
          * koshucode-baala-operator.cabal
          / Koshucode
             / Baala
                / Minimal
                / Vanilla
-  
+
       / calculator
          * koshucode-baala-calculator.cabal
          * koshu.hs
-         / Koshucode
-            / Baala
-               / Toolkit
+         / Koshucode / Baala / Toolkit
          / example
             / dictionary
                * DATA.k
                * natural-join.k
-  
+
       / toolkit
          * koshucode-baala-toolkit.cabal
          * koshu-change.hs
          * koshu-rdf.hs
+         * koshu-regress.hs
          * koshu-syntax.hs
-         / Koshucode
-            / Baala
-               / Toolkit
+         / Koshucode / Baala / Toolkit
 ```
 
 
@@ -72,9 +71,10 @@ related libraries and tools like Cabal.
 Install koshu command
 ---------------------------------
 
-There are four Cabal packages.
+There are five Cabal packages.
 
 * `koshucode-baala-base`
+* `koshucode-baala-core`
 * `koshucode-baala-operator`
 * `koshucode-baala-calculator`
 * `koshucode-baala-toolkit` (optional)
@@ -88,9 +88,19 @@ cd koshucode-master/baala/base
 cabal install
 ```
 
+Install `koshucode-baala-core` package.
+This package contains `Koshucode.Baala.Core` module.
+`Core` module provides the central functionality of the language.
+
+``` sh
+cd koshucode-master/baala/core
+cabal install
+```
+
 Install `koshucode-baala-operator` package.
 This package contains `Koshucode.Baala.Minimal`
 and `Koshucode.Baala.Vanilla` modules.
+These packages provide relational operators.
 
 ``` sh
 cd koshucode-master/baala/operator
@@ -109,7 +119,8 @@ cabal install
 Optionally,
 you can install `koshucode-baala-toolkit` package.
 This package contains additional commands,
-e.g., `koshu-change`, `koshu-syntax` and `koshu-rdf`.
+e.g., `koshu-change`, `koshu-rdf`,
+`koshu-regress` and `koshu-syntax`.
 
 ``` sh
 # optional

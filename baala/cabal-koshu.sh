@@ -17,6 +17,7 @@ usage () {
     echo "  $0                cabal for all directories"
     echo ""
     echo "  $0 base           cabal for base directory"
+    echo "  $0 core           cabal for core directory"
     echo "  $0 operator       cabal for operator directory"
     echo "  $0 calculator     cabal for calculator directory"
     echo "  $0 toolkit        cabal for toolkit directory"
@@ -41,10 +42,11 @@ main () {
             unregister toolkit
             unregister calculator
             unregister operator
+            unregister core
             unregister base
             exit ;;
 
-        '' | base* | operator* | calculator* | toolkit* | koshu )
+        '' | base* | core* | operator* | calculator* | toolkit* | koshu )
             cabal_for `directories "$1"`
             exit ;;
 
@@ -76,11 +78,12 @@ decide_program () {
 directories () {
     case `basename "$1"` in
         base)        echo base ;;
+        core)        echo core ;;
         operator)    echo operator ;;
         calculator)  echo calculator ;;
         toolkit)     echo toolkit ;;
-        koshu)       echo base operator calculator ;;
-        '')          echo base operator calculator toolkit ;;
+        koshu)       echo base core operator calculator ;;
+        '')          echo base core operator calculator toolkit ;;
     esac
 }
 
@@ -128,6 +131,7 @@ cabal_sdist () {
         --hscolour-css=../hscolour.css \
         --haddock-option=--pretty-html \
         --haddock-option=`if_file base` \
+        --haddock-option=`if_file core` \
         --haddock-option=`if_file operator` \
         --haddock-option=`if_file calculator` \
         --html-location=$URL

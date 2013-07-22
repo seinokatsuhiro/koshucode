@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Section.SectionIO
+module Koshucode.Baala.Core.Section.SectionIO
 (
 -- * Reading section
   sectionRead
@@ -20,8 +20,8 @@ import Koshucode.Baala.Base.Relmap
 import Koshucode.Baala.Base.Syntax
 
 import Koshucode.Baala.Base.Content
-import Koshucode.Baala.Base.Section.Section
-import Koshucode.Baala.Base.Section.Clause
+import Koshucode.Baala.Core.Section.Section
+import Koshucode.Baala.Core.Section.Clause
 
 
 

@@ -17,7 +17,7 @@ import Koshucode.Baala.Toolkit.Library.Exit
 import Koshucode.Baala.Toolkit.Library.Run
 import Koshucode.Baala.Toolkit.Library.Version
 import qualified Koshucode.Baala.Base.Prelude.Pretty as Pretty
-import qualified Koshucode.Baala.Base.Section  as Kit
+import qualified Koshucode.Baala.Core.Section  as Kit
 import qualified Koshucode.Baala.Minimal.OpKit as Kit
 
 

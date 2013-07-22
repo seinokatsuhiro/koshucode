@@ -1,12 +1,12 @@
 {-# OPTIONS_GHC -Wall -fno-warn-orphans #-}
 
-module Koshucode.Baala.Base.Section.SectionUnion
+module Koshucode.Baala.Core.Section.SectionUnion
 ( sectionUnion
 , sectionUse
 ) where
 
 import Data.Monoid
-import Koshucode.Baala.Base.Section.Section
+import Koshucode.Baala.Core.Section.Section
 
 instance Monoid (Section v) where
     mempty  = emptySection

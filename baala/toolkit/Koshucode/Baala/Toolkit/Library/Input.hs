@@ -13,7 +13,7 @@ module Koshucode.Baala.Toolkit.Library.Input
 ) where
 
 import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Base.Section as Sec
+import Koshucode.Baala.Core.Section as Sec
 import Koshucode.Baala.Vanilla
 
 

@@ -85,4 +85,5 @@ library
          base                  == 4.5.*
        , containers            == 0.4.*
        , koshucode-baala-base  == 0.28.*
+       , koshucode-baala-core  == 0.28.*
 

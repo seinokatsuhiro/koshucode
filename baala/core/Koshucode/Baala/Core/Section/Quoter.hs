@@ -2,7 +2,7 @@
 {-# LANGUAGE QuasiQuotes #-}
 {-# OPTIONS_GHC -Wall -fth -fno-warn-missing-fields #-}
 
-module Koshucode.Baala.Base.Section.Quoter
+module Koshucode.Baala.Core.Section.Quoter
 ( koshuQuoter, QuasiQuoter
 ) where
 import Data.Generics
@@ -12,14 +12,14 @@ import Language.Haskell.TH.Quote
 import Koshucode.Baala.Base.Relmap
 import Koshucode.Baala.Base.Syntax
 
-import Koshucode.Baala.Base.Section.Clause
+import Koshucode.Baala.Core.Section.Clause
 
 {-| Make quasiquoter for @[koshu| ... |]@. -}
 koshuQuoter
     :: RelmapHalfCons -- ^ Relmap half constructor
     -> ExpQ           -- ^ Quotation expression of 'RelmapFullCons'
     -> QuasiQuoter    -- ^ Quoter that outputs
-                      --  'Koshucode.Baala.Base.Section.Section' or
+                      --  'Koshucode.Baala.Core.Section.Section' or
                       --  'Koshucode.Baala.Base.Relmap.Relmap'
 koshuQuoter half fullQ = QuasiQuoter { quoteExp = koshuQ half fullQ }
 

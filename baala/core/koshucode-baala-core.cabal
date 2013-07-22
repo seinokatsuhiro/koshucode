@@ -1,5 +1,5 @@
 -- The name of the package.
-name:                koshucode-baala-base
+name:                koshucode-baala-core
 
 -- The package version.  See the Haskell package versioning policy (PVP) 
 -- for standards guiding when and how versions should be incremented.
@@ -46,55 +46,25 @@ extra-source-files:
 library
   -- Modules exported by the library.
   exposed-modules:
-        Koshucode.Baala.Base
+        Koshucode.Baala.Core
 
-        Koshucode.Baala.Base.Abort
-        Koshucode.Baala.Base.Abort.Reason
-        Koshucode.Baala.Base.Abort.Utility
-
-        Koshucode.Baala.Base.Content
-        Koshucode.Baala.Base.Content.Class
-        Koshucode.Baala.Base.Content.Expression
-        Koshucode.Baala.Base.Content.Literalize
-        Koshucode.Baala.Base.Content.Operator
-
-        Koshucode.Baala.Base.Data
-        Koshucode.Baala.Base.Data.Judge
-        Koshucode.Baala.Base.Data.Rel
-        Koshucode.Baala.Base.Data.Relhead
-        Koshucode.Baala.Base.Data.Relterm
-
-        Koshucode.Baala.Base.Prelude
-        Koshucode.Baala.Base.Prelude.Position
-        Koshucode.Baala.Base.Prelude.Pretty
-        Koshucode.Baala.Base.Prelude.Utility
-
-        Koshucode.Baala.Base.Relmap
-        Koshucode.Baala.Base.Relmap.Assert
-        Koshucode.Baala.Base.Relmap.Construct
-        Koshucode.Baala.Base.Relmap.Dataset
-        Koshucode.Baala.Base.Relmap.HalfRelmap
-        Koshucode.Baala.Base.Relmap.Implement
-        Koshucode.Baala.Base.Relmap.Relmap
-        Koshucode.Baala.Base.Relmap.Run
-
-        Koshucode.Baala.Base.Syntax
-        Koshucode.Baala.Base.Syntax.Binary
-        Koshucode.Baala.Base.Syntax.HashWord
-        Koshucode.Baala.Base.Syntax.Token
-        Koshucode.Baala.Base.Syntax.Tokenizer
-        Koshucode.Baala.Base.Syntax.TokenTree
-        Koshucode.Baala.Base.Syntax.Tree
+        Koshucode.Baala.Core.Section
+        Koshucode.Baala.Core.Section.Clause
+        Koshucode.Baala.Core.Section.Clausify
+        Koshucode.Baala.Core.Section.Quoter
+        Koshucode.Baala.Core.Section.Section
+        Koshucode.Baala.Core.Section.SectionIO
+        Koshucode.Baala.Core.Section.SectionUnion
 
   -- Modules included in this library but not exported.
   --other-modules:       
   
   -- Other library packages from which modules are imported.
   build-depends:
-         base             == 4.5.*
-       , containers       == 0.4.*
-       , pretty           == 1.1.*
-       , syb              == 0.3.*
-       , template-haskell == 2.7.*
+         base                 == 4.5.*
+       , containers           == 0.4.*
+       , syb                  == 0.3.*
+       , template-haskell     == 2.7.*
+       , koshucode-baala-base == 0.28.*
 
   --ghc-options:         -Wall -fno-ignore-asserts
