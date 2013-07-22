@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE TupleSections #-}
 {-# OPTIONS_GHC -Wall #-}
 
 {-| Intermidiate structure between 'String' and 'Section'. -}
@@ -27,13 +28,6 @@ import Koshucode.Baala.Core.Relmap
 import Koshucode.Baala.Core.Section.Clausify
 import Koshucode.Baala.Core.Section.Section
 
--- Synthesis process
---
---   make half section :: [Token] -> [HalfSection]
---   make half relmap  :: [Token] -> [HalfRelmap]
---   make full section :: [HalfSection] -> Section v
---   make full relmap  :: HalfRelmap    -> Relmap v
-
 data Clause
     = CSection ClauseSource (Maybe String)          -- ^ Section name
     | CImport  ClauseSource [Token] (Maybe Clause)  -- ^ Importing section name
@@ -47,33 +41,59 @@ data Clause
     | CUnknown ClauseSource       -- ^ Unknown clause
       deriving (Show, Data, Typeable)
 
+{-| Name of clause type. e.g., @\"Relmap\"@, @\"Assert\"@. -}
 clauseTypeText :: Clause -> String
 clauseTypeText c =
     case c of
-      CSection _ _      -> "Section"
-      CImport  _ _ _    -> "Import"
-      CExport  _ _      -> "Export"
-      CRelmap  _ _ _    -> "Relmap"
-      TRelmap  _ _ _    -> "Relmap"
-      CAssert  _ _ _ _  -> "Assert"
-      TAssert  _ _ _ _  -> "Assert"
-      CJudge   _ _ _ _  -> "Judge"
-      CComment _        -> "Comment"
-      CUnknown _        -> "Unknown"
+      CSection _ _         ->  "Section"
+      CImport  _ _ _       ->  "Import"
+      CExport  _ _         ->  "Export"
+      CRelmap  _ _ _       ->  "Relmap"
+      TRelmap  _ _ _       ->  "Relmap"
+      CAssert  _ _ _ _     ->  "Assert"
+      TAssert  _ _ _ _     ->  "Assert"
+      CJudge   _ _ _ _     ->  "Judge"
+      CComment _           ->  "Comment"
+      CUnknown _           ->  "Unknown"
 
+{-| Source code information of clause. -}
 clauseSource :: Clause -> ClauseSource
 clauseSource c =
     case c of
-      CSection s _      -> s
-      CImport  s _ _    -> s
-      CExport  s _      -> s
-      CRelmap  s _ _    -> s
-      TRelmap  s _ _    -> s
-      CAssert  s _ _ _  -> s
-      TAssert  s _ _ _  -> s
-      CJudge   s _ _ _  -> s
-      CComment s        -> s
-      CUnknown s        -> s
+      CSection src _       ->  src
+      CImport  src _ _     ->  src
+      CExport  src _       ->  src
+      CRelmap  src _ _     ->  src
+      TRelmap  src _ _     ->  src
+      CAssert  src _ _ _   ->  src
+      TAssert  src _ _ _   ->  src
+      CJudge   src _ _ _   ->  src
+      CComment src         ->  src
+      CUnknown src         ->  src
+
+isCImport :: Clause -> Bool
+isCImport (CImport _ _ _)   = True
+isCImport _                 = False
+
+isCExport :: Clause -> Bool
+isCExport (CExport _ _)     = True
+isCExport _                 = False
+
+isCRelmap :: Clause -> Bool
+isCRelmap (CRelmap _ _ _)   = True
+isCRelmap _                 = False
+
+isCAssert :: Clause -> Bool
+isCAssert (CAssert _ _ _ _) = True
+isCAssert _                 = False
+
+isCJudge :: Clause -> Bool
+isCJudge (CJudge _ _ _ _)   = True
+isCJudge _                  = False
+
+isCUnknown :: Clause -> Bool
+isCUnknown (CUnknown _)     = True
+isCUnknown _                = False
 
 
 
@@ -135,14 +155,6 @@ consPreclause' src@(ClauseSource toks _) = cl toks' where
     ass q (TWord _ _ s : xs) = [TAssert src q s $ tokenTrees xs]
     ass _ _ = unk
 
--- e1 = mapM_ print . consPreclause . tokens
--- e2 = e1 "section 'http://example.com/'"
--- e3 = e1 "import 'http://example.com/'"
--- e4 = e1 "export aa"
--- e5 = e1 "|-- A /x 0 /y 0"
--- e6 = e1 "a : source A /x /y"
--- e7 = e1 "a : @a"
-
 
 
 -- ----------------------  Half construction
@@ -172,87 +184,77 @@ consSection
     => RelmapFullCons v    -- ^ Relmap full constructor
     -> [Clause]            -- ^ Output of 'consClause'
     -> AbortOr (Section v) -- ^ Result section
-consSection whole xs = do
-  _       <- unk xs
-  imports <- sequence $ imp xs
-  judges  <- sequence $ jud xs
-  relmaps <- rel xs
-  asserts <- ass xs
-  Right $ emptySection {
-              sectionName   = mod xs
-            , sectionImport = imports
-            , sectionExport = exp xs
-            , sectionAssert = asserts
-            , sectionRelmap = relmaps
-            , sectionJudge  = judges
-            }
+consSection whole xs =
+    do _        <-  mapMFor unk isCUnknown
+       imports  <-  mapMFor imp isCImport
+       judges   <-  mapMFor jud isCJudge 
+       relmaps  <-  mapMFor rel isCRelmap
+       asserts  <-  mapMFor ass isCAssert
+       Right $ emptySection
+           { sectionName    =  sec xs
+           , sectionImport  =  imports
+           , sectionExport  =  mapFor exp isCExport
+           , sectionAssert  =  asserts
+           , sectionRelmap  =  relmaps
+           , sectionJudge   =  judges }
     where
+      mapFor  f p = map  f $ filter p xs
+      mapMFor f p = mapM f $ filter p xs
       consSec = consSection whole
 
-      mod (CSection _ n : _) = n
-      mod (_ : xs2) = mod xs2
-      mod [] = Nothing
+      -- todo: multiple section name
+      sec (CSection _ n : _) = n
+      sec (_ : xs2) = sec xs2
+      sec [] = Nothing
 
-      imp (CImport _ _ (Nothing) : xs2) = Right emptySection : imp xs2
-      imp (CImport _ _ (Just e)  : xs2) = consSec [e] : imp xs2
-      imp xs2 = skip imp xs2
+      imp (CImport _ _ (Nothing)) = Right emptySection
+      imp (CImport _ _ (Just e))  = consSec [e]
+      imp _ = bug
 
-      exp (CExport _ n : xs2) = n : exp xs2
-      exp xs2 = skip exp xs2
+      exp (CExport _ n) = n
+      exp _ = bug
 
-      jud (CJudge src q s xs2 : xs3) =
-          let j2 = case litJudge q s (tokenTrees xs2) of
-                     Right j -> Right j
-                     Left  a -> Left (a, clauseLines src)
-          in j2 : jud xs3
-      jud xs2 = skip jud xs2
+      jud (CJudge src q p xs2) =
+          case litJudge q p (tokenTrees xs2) of
+            Right j -> Right j
+            Left  a -> Left (a, clauseLines src)
+      jud _ = bug
 
-      rel (CRelmap _ n r : xs2) =
-          do m  <- whole r
-             ms <- rel xs2
-             Right $ (n, m) : ms
-      rel (_ : xs2) = rel xs2
-      rel [] = Right []
+      rel (CRelmap _ n r) = Right . (n,) =<< whole r
+      rel _ = bug
 
-      ass (CAssert _ q s r : xs2) =
-          do a  <- whole r
-             as <- ass xs2
-             Right $ (Assert q s a) : as
-      ass (_ : xs2) = ass xs2
-      ass [] = Right []
+      ass (CAssert _ q p r) = Right . Assert q p =<< whole r
+      ass _ = bug
 
-      unk (CUnknown src : _) = Left (AbortUnknownClause, clauseLines src)
-      unk (_ : xs2) = unk xs2
-      unk [] = Right []
-
-skip :: ([a] -> [b]) -> [a] -> [b]
-skip loop (_ : xs) = loop xs
-skip _ [] = []
+      unk (CUnknown src) = Left (AbortUnknownClause, clauseLines src)
+      unk _ = bug
 
 
 
 -- ----------------------
--- $Documentation
---
--- There are six types of 'Clause'.
--- Textual representation of 'Section' is a list of clauses.
--- 'consClause' constructs clause list from section text.
---
--- [name @:@ relmap]
---   Relmap clause
---
--- [@affirm@ relsign relmap]
---   Affirmative assertion clause
---
--- [@deny@ relsign relmap]
---   Denial assertion clause
---
--- [@|--@ relsign \/name content ...]
---   Affirmative judgement clause
---
--- [@|-X@ relsign \/name content ...]
---   Denial judgement clause
---
--- [@****@ ...]
---   Comment clause
+{- $Documentation
+
+   There are six types of 'Clause'.
+   Textual representation of 'Section' is a list of clauses.
+   'consClause' constructs clause list from section text.
+
+   [name @:@ relmap]
+     Relmap clause
+
+   [@affirm@ pattern relmap]
+     Affirmative assertion clause
+
+   [@deny@ pattern relmap]
+     Denial assertion clause
+
+   [@|--@ pattern \/name content ...]
+     Affirmative judgement clause
+
+   [@|-X@ pattern \/name content ...]
+     Denial judgement clause
+
+   [@****@ blah blah blah ...]
+     Comment clause
+
+-}
 

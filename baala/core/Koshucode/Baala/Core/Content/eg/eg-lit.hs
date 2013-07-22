@@ -11,6 +11,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
 import Koshucode.Baala.Base
+import Koshucode.Baala.Core
 import Koshucode.Baala.Vanilla
 
 

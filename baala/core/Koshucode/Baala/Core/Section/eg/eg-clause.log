@@ -1,0 +1,13 @@
+section  .  .  .  .   [CSection (ClauseSource {clauseTokens = [TWord 1 0 "section",TSpace 2 1,TWord 3 1 "http://example.com/"], clauseLines = [SourceLine {sourceLineNumber = 1, sourceLineContent = "section 'http://example.com/'", sourceLineTokens = [TWord 1 0 "section",TSpace 2 1,TWord 3 1 "http://example.com/"]}]}) (Just "http://example.com/")]
+
+import  .  .  .  .  . [CImport (ClauseSource {clauseTokens = [TWord 1 0 "import",TSpace 2 1,TWord 3 1 "http://example.com/"], clauseLines = [SourceLine {sourceLineNumber = 1, sourceLineContent = "import 'http://example.com/'", sourceLineTokens = [TWord 1 0 "import",TSpace 2 1,TWord 3 1 "http://example.com/"]}]}) [TWord 1 0 "import",TSpace 2 1,TWord 3 1 "http://example.com/"] Nothing]
+
+export  .  .  .  .  . [CExport (ClauseSource {clauseTokens = [TWord 1 0 "export",TSpace 2 1,TWord 3 0 "aa"], clauseLines = [SourceLine {sourceLineNumber = 1, sourceLineContent = "export aa", sourceLineTokens = [TWord 1 0 "export",TSpace 2 1,TWord 3 0 "aa"]}]}) "aa"]
+
+judge  .  .  .  .  .  [CJudge (ClauseSource {clauseTokens = [TWord 1 0 "|--",TSpace 2 1,TWord 3 0 "A",TSpace 4 1,TTerm 5 ["/x"],TSpace 6 1,TWord 7 0 "0",TSpace 8 1,TTerm 9 ["/y"],TSpace 10 1,TWord 11 0 "0"], clauseLines = [SourceLine {sourceLineNumber = 1, sourceLineContent = "|-- A /x 0 /y 0", sourceLineTokens = [TWord 1 0 "|--",TSpace 2 1,TWord 3 0 "A",TSpace 4 1,TTerm 5 ["/x"],TSpace 6 1,TWord 7 0 "0",TSpace 8 1,TTerm 9 ["/y"],TSpace 10 1,TWord 11 0 "0"]}]}) True "A" [TTerm 5 ["/x"],TWord 7 0 "0",TTerm 9 ["/y"],TWord 11 0 "0"]]
+
+relmap  .  .  .  .  . [TRelmap (ClauseSource {clauseTokens = [TWord 1 0 "a",TSpace 2 1,TWord 3 0 ":",TSpace 4 1,TWord 5 0 "source",TSpace 6 1,TWord 7 0 "A",TSpace 8 1,TTerm 9 ["/x"],TSpace 10 1,TTerm 11 ["/y"]], clauseLines = [SourceLine {sourceLineNumber = 1, sourceLineContent = "a : source A /x /y", sourceLineTokens = [TWord 1 0 "a",TSpace 2 1,TWord 3 0 ":",TSpace 4 1,TWord 5 0 "source",TSpace 6 1,TWord 7 0 "A",TSpace 8 1,TTerm 9 ["/x"],TSpace 10 1,TTerm 11 ["/y"]]}]}) "a" [TreeL (TWord 5 0 "source"),TreeL (TWord 7 0 "A"),TreeL (TTerm 9 ["/x"]),TreeL (TTerm 11 ["/y"])]]
+
+relmap  .  .  .  .  . [TRelmap (ClauseSource {clauseTokens = [TWord 1 0 "a",TSpace 2 1,TWord 3 0 ":",TSpace 4 1,TWord 5 0 "@a"], clauseLines = [SourceLine {sourceLineNumber = 1, sourceLineContent = "a : @a", sourceLineTokens = [TWord 1 0 "a",TSpace 2 1,TWord 3 0 ":",TSpace 4 1,TWord 5 0 "@a"]}]}) "a" [TreeL (TWord 5 0 "@a")]]
+
+
