@@ -39,7 +39,7 @@ vanillaOperators' = Mini.operators
     , o "range"          LikeSize          relopRange
     , o "rank"           LikeId            relopRank
     , o "rdf"            LikeSource        relopRdf
-    , o "size"           LikeSize          relopSize
+    , o "typename"       LikeHold          relopTypename
     , o "unprefix"       LikeUnprefix      relopUnprefix
     ] where o = (,,)
 

@@ -4,6 +4,7 @@
 
 module Koshucode.Baala.Minimal.Term
 ( termNames,
+  termName2,
   termNamePairs,
   termTreePairs,
 ) where
@@ -20,6 +21,10 @@ import Koshucode.Baala.Base.Syntax
 termName :: TokenTree -> AbortOr String
 termName (TreeL (TTerm _ [n])) = Right n
 termName x = Left (AbortMissingTermName (show x), [])
+
+termName2 :: [TokenTree] -> AbortOr (String, String)
+termName2 [TreeL (TTerm _ [n1]), TreeL (TTerm _ [n2])] = Right (n1, n2)
+termName2 x = Left (AbortMissingTermName (show x), [])
 
 {-| Extract a list of term names.
  
@@ -59,27 +64,3 @@ termTreePairs = loop where
     loop [] = Right []
     loop (a : _) = Left (AbortMissingTermName (show a), [])
 
-
-
--- ----------------------  Calculation
-
--- -- | Calculator combining values into a single value
--- type Calc v = [v] -> v
-
--- -- | Set of operators
--- type Ripen x v = x -> [v] -> Calc v
-
--- --type TreeMap x y = Tree x -> Tree y
-
--- -- | Calculate a value of tree
--- crop
---   :: Ripen x v   -- ^ Set of Operators
---   -> Tree x      -- ^ Cropping target
---   -> Calc v      -- ^ Calculator
--- crop ripen tree1 arg = c tree1 [] where
---     c (TreeL x)        vs = ripen x vs arg
---     c (TreeB _ (x:xs)) vs = c x $ map (`c` vs) xs
---     c _ _ = undefined
-
--- gather a crop
--- harvest a crop

@@ -10,6 +10,8 @@ module Koshucode.Baala.Vanilla.Relmap.Unary
   relopEnclose, relmapEnclose, relEnclose,
   -- * rank
   relopRank, relmapRank, relRank, limit,
+  -- * typename
+  relopTypename, relmapTypename, relTypename,
   -- * range
   relopRange, relmapRange,
 ) where
@@ -17,6 +19,7 @@ module Koshucode.Baala.Vanilla.Relmap.Unary
 import qualified Data.List as List
 
 import Koshucode.Baala.Base.Abort
+import Koshucode.Baala.Core.Content
 import Koshucode.Baala.Minimal.OpKit as Kit
 import Koshucode.Baala.Vanilla.Value.Relval
 import qualified Koshucode.Baala.Minimal as Mini
@@ -119,6 +122,31 @@ limit2 c ns _ (Rel h1 b1) = Right $ Rel h1 b2 where
     b2   = List.take c $ Kit.sortByName ords (headNames h1) b1
     ords = Kit.orders ns
 
+
+
+-- ----------------------  typename
+
+relopTypename :: (CContent c) => Relop c
+relopTypename use = do
+  (n, p) <- Mini.getTermPair use "-term"
+  Right $ relmapTypename use n p
+
+relmapTypename :: (CContent c) => OpUse c -> String -> String -> Relmap c
+relmapTypename use n p = Kit.relmapCalc use "typename" sub where
+    sub _ = relTypename n p
+
+{-| Get typename. -}
+relTypename
+    :: (CContent c)
+    => String
+    -> String
+    -> AbMap (Rel c)
+relTypename n p (Rel h1 b1) = Right $ Rel h2 b2 where
+    h2 = Kit.headFrom [n] `mappend` h1
+    b2 = map f b1
+    pos = h1 `posOf` [[p]]
+    f cs1 = let [c] = csPick pos cs1
+            in putString (typename c) : cs1
 
 
 

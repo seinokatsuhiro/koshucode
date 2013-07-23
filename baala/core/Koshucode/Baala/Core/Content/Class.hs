@@ -24,7 +24,7 @@ import Koshucode.Baala.Base.Data
 
 
 
--- ----------------------  Primitive content
+-- ----------------------  Generic content
 
 class PrimContent c
 
@@ -32,11 +32,23 @@ class (Ord c, Pretty c,
        CBool c, CString c, CInt c, CList c,
        CNil c , CSet c, CTermset c, CRel c) =>
     CContent c where
+
     appendContent :: c -> c -> c
+
     joinContent :: [c] -> c
     joinContent = foldr appendContent nil
 
-
+    typename :: c -> String
+    typename c
+        | isBool    c  =  "boolean"
+        | isString  c  =  "string"
+        | isInt     c  =  "int"
+        | isList    c  =  "list"
+        | isNil     c  =  "nil"
+        | isSet     c  =  "set"
+        | isTermset c  =  "termset"
+        | isRel     c  =  "relation"
+        | otherwise    =  "unknown"
 
 -- ----------------------  Haskell built-in data
 

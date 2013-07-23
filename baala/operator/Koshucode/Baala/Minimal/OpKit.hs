@@ -85,6 +85,7 @@ module Koshucode.Baala.Minimal.OpKit
   -- * Term
   Term.termNamePairs,
   Term.termNames,
+  Term.termName2,
   Term.termTreePairs,
 
 ) where

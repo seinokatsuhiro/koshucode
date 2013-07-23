@@ -16,6 +16,7 @@ module Koshucode.Baala.Minimal.Relmap.Get
   -- * Term from OpUse
   getTerm,
   getTerms,
+  getTermPair,
   getTermPairs,
   getTermTrees,
 
@@ -101,6 +102,12 @@ getTermPairs use n = do
   term <- opd <!!> n
   termNamePairs term
 
+getTermPair :: OpGet v (Named String)
+getTermPair use n = do
+  let opd = halfOperand $ opHalf use
+  term <- opd <!!> n
+  termName2 term
+
 {-| Get a relmap from operator use.
 
     > consMeet :: (Ord v) => Relop v
@@ -108,7 +115,6 @@ getTermPairs use n = do
     >   m <- getRelmap use
     >   Right $ relmapMeet use m
     -}
-
 getRelmap :: OpUse v -> AbortOr (Relmap v)
 getRelmap use = getHead $ opSubmap use
 
