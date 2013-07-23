@@ -1,23 +1,23 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
--- | Tokenizer of koshucode.
+{-| Tokenizer of koshucode. -}
 
 module Koshucode.Baala.Base.Syntax.Tokenizer
 (
--- * Library
+  -- * Library
+
+  -- ** Source lines
+  SourceLine (..),
+  sourceLines,
+  divideByToken,
 
   -- ** Tokenizer
   tokens,
   untokens,
   untoken,
-  divideByToken,
 
-  -- ** Source lines
-  SourceLine (..),
-  sourceLines
-
--- * Document
+  -- * Document
 
   -- ** Special characters
   -- $SpecialCharacters
@@ -28,8 +28,8 @@ module Koshucode.Baala.Base.Syntax.Tokenizer
   -- ** Syntactic content type
   -- $SyntacticContentType
 
--- * Examples
--- $Examples
+  -- * Examples
+  -- $Examples
 ) where
 
 import Data.Generics (Data, Typeable)
@@ -41,76 +41,134 @@ import Koshucode.Baala.Base.Syntax.Token
 
 
 
--- ----------------------  Tokenizer
+-- ----------------------  Source line
 
-{-| Split string into list of tokens.
-    Result token list does not contain newline characters. -}
-tokens :: String -> [Token]
-tokens = concatMap sourceLineTokens . sourceLines
+data SourceLine = SourceLine
+    { sourceLineNumber  :: Int     -- ^ Line number, from 1.
+    , sourceLineContent :: String  -- ^ Line content without newline.
+    , sourceLineTokens  :: [Token] -- ^ Tokens in the line.
+    } deriving (Show, Eq, Ord, Data, Typeable)
+
+instance Pretty SourceLine where
+    doc (SourceLine _ line _) = text line
+
+{-| Split source text into 'SourceLine' list.
+
+    1. Split source code into lines by line delimiters
+       (carriage return @\\r@ or line feed @\\n@)
+
+    2. Numbering line numbers.
+       Internally, this is represented as
+       a list of pairs (/line#/, /string/).
+
+    3. Tokenize each lines.
+       This is represented as a list of
+       'SourceLine' /line#/ /string/ /tokens/.
+  -}
+sourceLines
+    :: String        -- ^ Source text in koshucode.
+    -> [SourceLine]  -- ^ Token list per lines.
+sourceLines = loop 1 . linesNumbered where
+    loop _ [] = []
+    loop tok (p : ps) =
+        case sourceLine tok p of
+          (tok', src) -> src ++ loop tok' ps
+
+sourceLine :: Int -> (Int, String) -> (Int, [SourceLine])
+sourceLine tok (n, ln) = (tok + length toks, map src ls) where
+    toks = gatherWith nextToken [tok ..] ln
+    ls   = divideByToken "||" toks
+    src  = SourceLine n ln
+
+divideByToken :: String -> [Token] -> [[Token]]
+divideByToken w = divideByP p where
+    p (TWord _ 0 x) | w == x = True
+    p _ = False
+
+
+
+-- ---------------------- lines
+
+{-| Line number and contents. -}
+linesNumbered :: String -> [(Int, String)]
+linesNumbered = zip [1..] . linesCrLf
+
+{-| Split string into lines.
+    The result strings do not contain
+    carriage returns (@\\r@)
+    and line feeds (@\\n@). -}
+linesCrLf :: String -> [String]
+linesCrLf "" = []
+linesCrLf s = ln : nextLine s2 where
+    (ln, s2) = break (`elem` "\r\n") s
+    nextLine ('\r' : s3) = nextLine s3
+    nextLine ('\n' : s3) = nextLine s3
+    nextLine s3 = linesCrLf s3
+
+
+
+-- ----------------------  Tokenizer
 
 {-| Split a next token from source text. -}
 nextToken :: Int -> String -> (Token, String)
 nextToken n txt =
     case txt of
       ('*' : '*' : '*' : '*' : cs) -> tokD cs (word0 "****")
-      ('*' : '*' : _)   ->  tokD "" (TComment n txt)
-      ('#' : '!' : _)   ->  tokD "" (TComment n txt)
-      ('(' : ')' : cs)  ->  tokD cs (word0 "()") -- nil
-      ('|' : '|' : cs)  ->  tokD (trim cs) (word0 "||") -- newline
-      ('{' : '|' : cs)  ->  tokD cs (TOpen  n "{|") -- open termset
-      ('|' : '}' : cs)  ->  tokD cs (TClose n "|}") -- close termset
-      ('[' : '|' : cs)  ->  tokD cs (TOpen  n "[|") -- open relation
-      ('|' : ']' : cs)  ->  tokD cs (TClose n "|]") -- close relation
+      ('*' : '*' : _)    ->  tokD "" (TComment n txt)
+      ('#' : '!' : _)    ->  tokD "" (TComment n txt)
+      ('(' : ')' : cs)   ->  tokD cs (word0 "()")     -- nil
+
+      (c : '|' : cs)
+          | c == '{'     ->  tokD cs (open "{|")   -- relation
+          | c == '<'     ->  tokD cs (open "<|")   -- tuple
+          | c == '['     ->  tokD cs (open "[|")   -- undefined
+          | c == '('     ->  tokD cs (open "(|")   -- undefined
+
+      ('|' : c : cs)
+          | c == '}'     ->  tokD cs (close "|}")  -- relation
+          | c == '>'     ->  tokD cs (close "|>")  -- tuple
+          | c == ']'     ->  tokD cs (close "|]")  -- undefined
+          | c == ')'     ->  tokD cs (close "|)")  -- undefined
+          | c == '|'     ->  tokD (trim cs) (word0 "||") -- newline
+
       (c : cs)
-        | isOpen    c   ->  tokD cs (TOpen   n [c])
-        | isClose   c   ->  tokD cs (TClose  n [c])
-        | isSingle  c   ->  tokD cs (word0 [c])
-        | isTerm    c   ->  term cs [c]  []
-        | isQuote   c   ->  quote   c cs []
-        | isWord    c   ->  word    txt  []
-        | isSpace   c   ->  white 1 cs
-      _                 ->  error $ "unknown token type: " ++ txt
+          | isOpen    c  ->  tokD cs (open  [c])
+          | isClose   c  ->  tokD cs (close [c])
+          | isSingle  c  ->  tokD cs (word0 [c])
+          | isTerm    c  ->  term cs [c]  []
+          | isQuote   c  ->  quote   c cs []
+          | isWord    c  ->  word    txt  []
+          | isSpace   c  ->  white 1 cs
+      _                  ->  error $ "unknown token type: " ++ txt
+
     where
-      word0             =   TWord n 0
-      trim              =   dropWhile isSpace
-      tokD cs x         =   (x, cs)
-      tokR cs cons xs   =   (cons $ reverse xs, cs)
+      open  w             =  TOpen  n w
+      close w             =  TClose n w
+      wordQ '"'           =  TWord  n 2
+      wordQ '\''          =  TWord  n 1
+      wordQ _             =  TWord  n 0
+      word0               =  TWord  n 0
 
-      word (c:cs) xs | isWord c      = word cs (c:xs)
-      word ccs xs                    = tokR ccs word0 xs
+      trim                =  dropWhile isSpace
+      tokD cs token       =  (token, cs)
+      tokR cs k xs        =  (k $ reverse xs, cs)
 
-      quote q [] xs                  = tokR [] (wordQ q) xs
+      word (c:cs) xs | isWord c   = word cs (c:xs)
+      word ccs xs                 = tokR ccs word0 xs
+
+      quote q [] xs               = tokR [] (wordQ q) xs
       quote q (c:cs) xs
-          | c == q                   = tokR cs (wordQ q) xs
-          | otherwise                = quote q cs (c:xs)
+          | c == q                = tokR cs (wordQ q) xs
+          | otherwise             = quote q cs (c:xs)
 
-      wordQ '\'' = (TWord n 1)
-      wordQ '"'  = (TWord n 2)
-      wordQ _    = (TWord n 0)
-
-      term (c:cs) xs ns | isTerm c   = term cs [c] $ t xs ns
-                        | isWord c   = term cs (c:xs) ns
-      term ccs xs ns                 = tokR ccs (TTerm n) (t xs ns)
+      term (c:cs) xs ns 
+          | isTerm c              = term cs [c] $ t xs ns
+          | isWord c              = term cs (c:xs) ns
+      term ccs xs ns              = tokR ccs (TTerm n) (t xs ns)
       t xs = (reverse xs :)
 
-      white i (c:cs)    | isSpace c  = white (i + 1) cs
-      white i ccs                    = tokD ccs (TSpace n i)
-
--- word
--- e1 = tokens "aa bb"
--- e2 = tokens "'aa' '' \"cc\""
--- e3 = tokens "aa (bb (cc))"
-
--- terms
--- e1 = tokens "|-- rel /a A0 /b 31"
--- e2 = tokens "count /r/x/t"
--- e3 = tokens "///x /r/"
-
--- comment
--- e0 = tokens . unlines
--- e1 = e0 ["www", "** ccc", "www"]
--- e2 = e0 ["www", "**-", "  ccc", "-**", "www"]
--- e3 = e0 ["www", "**=", "  ccc", "=**", "www"]
+      white i (c:cs) | isSpace c  = white (i + 1) cs
+      white i ccs                 = tokD ccs (TSpace n i)
 
 
 
@@ -136,6 +194,11 @@ maybeWord c  =  C.isAlphaNum c
 
 -- ----------------------  Untokenizer
 
+{-| Split string into list of tokens.
+    Result token list does not contain newline characters. -}
+tokens :: String -> [Token]
+tokens = concatMap sourceLineTokens . sourceLines
+
 {-| Convert back a token list to a source string. -}
 untokens :: [Token] -> String
 untokens (TOpen _ a : xs)      = a ++ untokens xs
@@ -156,68 +219,6 @@ untoken (TComment _ s)  = s
 
 
 
--- ----------------------  Source line
-
-data SourceLine = SourceLine
-    { sourceLineNumber  :: Int     -- ^ Line number, from 1.
-    , sourceLineContent :: String  -- ^ Line content without newline.
-    , sourceLineTokens  :: [Token] -- ^ Tokens from line.
-    } deriving (Show, Eq, Ord, Data, Typeable)
-
-instance Pretty SourceLine where
-    doc (SourceLine _ line _) = text line
-
-{-| Split source text into 'SourceLine' list.
-
-    1. Split source code into lines by line delimiters
-       (carriage return @\\r@ or line feed @\\n@)
-
-   2. Numbering line numbers.
-      Internally, this is represented as
-      a list of pairs (/line#/, /content/).
-
-   3. Tokenize each lines.
-      This is represented as a list of
-      'SourceLine' /line#/ /content/ /tokens/.
-  -}
-sourceLines
-    :: String        -- ^ Source text in Koshucode.
-    -> [SourceLine]  -- ^ Token list per lines.
-sourceLines = loop 1 . linesNumbered where
-    loop _ [] = []
-    loop tok (p : ps) =
-        case sourceLine tok p of
-          (tok', src) -> src ++ loop tok' ps
-
-sourceLine :: Int -> (Int, String) -> (Int, [SourceLine])
-sourceLine tok (n, ln) = (tok + length toks, map src ls) where
-    toks = gatherWith nextToken [tok ..] ln
-    ls   = divideByToken "||" toks
-    src  = SourceLine n ln
-
-divideByToken :: String -> [Token] -> [[Token]]
-divideByToken w = divideByP p where
-    p (TWord _ 0 x) | w == x = True
-    p _ = False
-
-{-| Line number and contents. -}
-linesNumbered :: String -> [(Int, String)]
-linesNumbered = zip [1..] . linesCrLf
-
-{-| Split string into lines.
-    The result strings do not contain
-    carriage returns (@\\r@)
-    and line feeds (@\\n@). -}
-linesCrLf :: String -> [String]
-linesCrLf "" = []
-linesCrLf s = ln : nextLine s2 where
-    (ln, s2) = break (`elem` "\r\n") s
-    nextLine ('\r' : s3) = nextLine s3
-    nextLine ('\n' : s3) = nextLine s3
-    nextLine s3 = linesCrLf s3
-
-
-
 -- ----------------------
 -- $SpecialCharacters
 
@@ -228,19 +229,16 @@ linesCrLf s = ln : nextLine s2 where
 
    There are three uses of asterisks (@*@) in koshucode,
    
-   [@*@]
-    Single asterisk means multiplication,
-    e.g., @3 * 4@ (three times four).
+   [@*@]     Single asterisk means multiplication,
+             e.g., @3 * 4@ (three times four).
    
-   [@**@]
-    Double asterisk leads line comment.
-    Textx from @**@ to end of line are ignored.
+   [@**@]    Double asterisk leads line comment.
+             Textx from @**@ to end of line are ignored.
    
-   [@****@]
-    Quadruple asterisk (fourfold asterisk) leads caluse comment.
-    Texts from @****@ to end of clause are ignored.
-    In other words, line staring with @****@
-    and following indented lines are ignored.
+   [@****@]  Quadruple asterisk (fourfold asterisk) leads caluse comment.
+             Texts from @****@ to end of clause are ignored.
+             In other words, line staring with @****@
+             and following indented lines are ignored.
    
    Triple asterisk @***@ is double and rest of text.
    Quintuple (fivefold) asterisk @*****@ is quadruple and rest of text.
@@ -267,30 +265,25 @@ linesCrLf s = ln : nextLine s2 where
    
    Tokenizer recognizes five types of content.
    
-   [Word]
-    Simple sequence of characters,
-    e.g., @abc@, @123@.
-    Numbers are represented as words.
+   [Word]      Simple sequence of characters,
+               e.g., @abc@, @123@.
+               Numbers are represented as words.
    
-   [Code]
-    Code are like tagged word,
-    e.g., @(color \'blue\')@.
+   [Code]      Code are like tagged word,
+               e.g., @(color \'blue\')@.
    
-   [List]
-    Orderd sequence of contents.
-    Lists are enclosed in square brackets,
-    e.g., @[ ab cd 0 1 ]@
+   [List]      Orderd sequence of contents.
+               Lists are enclosed in square brackets,
+               e.g., @[ ab cd 0 1 ]@
    
-   [Tuple]
-    Set of pairs of term name and content.
-    Tuples are enclosed in curely braces,
-    e.g., @{ \/a 10 \/b 20 }@.
+   [Tuple]     Set of pairs of term name and content.
+               Tuples are enclosed in curely braces,
+               e.g., @{ \/a 10 \/b 20 }@.
    
-   [Relation]
-    Set of uniform-typed tuples.
-    Relations are enclosed in curely-bar braces,
-    and enveloped tuples are divided by vertical bar,
-    e.g., @{| \/a \/b | 10 20 | 10 30 |}@.
+   [Relation]  Set of uniform-typed tuples.
+               Relations are enclosed in curely-bar braces,
+               and enveloped tuples are divided by vertical bar,
+               e.g., @{| \/a \/b | 10 20 | 10 30 |}@.
 
    -}
 
