@@ -9,20 +9,20 @@
 |-- BOOLEAN   /literal #true
 |-- BOOLEAN   /literal #false
 
-|-- TERMSET   /literal {| /sno S1 /pno P1 /qty 300 |}
-|-- TERMSET   /literal {| /sno S1 /pno P2 /qty 200 |}
-|-- TERMSET   /literal {| /sno S1 |}
-|-- TERMSET   /literal {| |}
+|-- TERMSET   /literal <| /sno S1 /pno P1 /qty 300 |>
+|-- TERMSET   /literal <| /sno S1 /pno P2 /qty 200 |>
+|-- TERMSET   /literal <| /sno S1 |>
+|-- TERMSET   /literal <| |>
 
-|-- RELATION  /literal [| /sno /pno /qty
+|-- RELATION  /literal {| /sno /pno /qty
                         | S1 P1 300
                         | S1 P2 200
-                        |]
-|-- RELATION  /literal [| /sno /pno /qty | S1 P1 300 |]
-|-- RELATION  /literal [| /sno /pno /qty |]
-|-- RELATION  /literal [| |]        ** reldum
-|-- RELATION  /literal [| | |]      ** reldee
-|-- RELATION  /literal [| | | |]    ** reldee
+                        |}
+|-- RELATION  /literal {| /sno /pno /qty | S1 P1 300 |}
+|-- RELATION  /literal {| /sno /pno /qty |}
+|-- RELATION  /literal {| |}        ** reldum
+|-- RELATION  /literal {| | |}      ** reldee
+|-- RELATION  /literal {| | | |}    ** reldee
 
 affirm INTEGER   source INTEGER  /literal
 affirm CHAR      source CHAR     /literal

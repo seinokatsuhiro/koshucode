@@ -102,7 +102,7 @@ instance Pretty VContent where
     doc (VNil)          =  text "()"
     doc (VList xs)      =  text "[" <+> hsep (map doc xs) <+> text "]"
     doc (VSet xs)       =  text "{" <+> hsep (map doc xs) <+> text "}"
-    doc (VTermset xs)   =  text "{|" <+> hsep (map docTerms xs) <+> text "|}"
+    doc (VTermset xs)   =  text "<|" <+> hsep (map docTerms xs) <+> text "|>"
     doc (VRel r)        =  doc r
 
 docTerms :: (Pretty a) => Named a -> Doc

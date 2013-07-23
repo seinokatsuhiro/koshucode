@@ -43,11 +43,12 @@ tokenTrees = trees parenType . sweepToken
 
 parenType :: ParenType Token
 parenType = parenTable
-    [ (1, isOpenTokenOf "("  , isCloseTokenOf ")")  -- grouping
-    , (2, isOpenTokenOf "["  , isCloseTokenOf "]")  -- list
-    , (3, isOpenTokenOf "{"  , isCloseTokenOf "}")  -- set
-    , (4, isOpenTokenOf "{|" , isCloseTokenOf "|}") -- termset
-    , (5, isOpenTokenOf "[|" , isCloseTokenOf "|]") -- relation
+    [ (1, isOpenTokenOf "("  , isCloseTokenOf ")")   -- grouping
+    , (2, isOpenTokenOf "["  , isCloseTokenOf "]")   -- list
+    , (3, isOpenTokenOf "{"  , isCloseTokenOf "}")   -- set
+    , (4, isOpenTokenOf "<|" , isCloseTokenOf "|>")  -- termset
+    , (5, isOpenTokenOf "{|" , isCloseTokenOf "|}")  -- relation
+    , (5, isOpenTokenOf "[|" , isCloseTokenOf "|]")  -- relation
     ]
 
 singleTree :: [TokenTree] -> TokenTree
