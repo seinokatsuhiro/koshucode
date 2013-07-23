@@ -1,0 +1,506 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Toolkit.Library.Run</title
+    ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolkit-Library-Run.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a href="src/Koshucode-Baala-Toolkit-Library-Run.html"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-calculator-0.29.0.0: A portable relational calculator</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Toolkit.Library.Run</p
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a href="#t:SectionSource"
+	    >SectionSource</a
+	    > c = <a href="#v:SectionSource"
+	    >SectionSource</a
+	    > {<ul class="subs"
+	    ><li
+	      ><a href="#v:rootSection"
+		>rootSection</a
+		> :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Section-Section.html#t:Section"
+		>Section</a
+		> c</li
+	      ><li
+	      ><a href="#v:textSections"
+		>textSections</a
+		> :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		>]</li
+	      ><li
+	      ><a href="#v:fileSections"
+		>fileSections</a
+		> :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:FilePath"
+		>FilePath</a
+		>]</li
+	      ></ul
+	    >}</li
+	  ><li class="src short"
+	  ><a href="#v:runFiles"
+	    >runFiles</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > v =&gt; <a href="Koshucode-Baala-Toolkit-Library-Run.html#t:SectionSource"
+	    >SectionSource</a
+	    > v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Tuple.html#t:-40--41-"
+	    >()</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:hRunFiles"
+	    >hRunFiles</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > v =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
+	    >Handle</a
+	    > -&gt; <a href="Koshucode-Baala-Toolkit-Library-Run.html#t:SectionSource"
+	    >SectionSource</a
+	    > v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Tuple.html#t:-40--41-"
+	    >()</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:concatMM"
+	    >concatMM</a
+	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
+	    >Monad</a
+	    > m, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Monoid.html#t:Monoid"
+	    >Monoid</a
+	    > a) =&gt; [m a] -&gt; m a</li
+	  ><li class="src short"
+	  ><a href="#v:runCalc"
+	    >runCalc</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > v =&gt; <a href="Koshucode-Baala-Toolkit-Library-Run.html#t:SectionSource"
+	    >SectionSource</a
+	    > v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Tuple.html#t:-40--41-"
+	    >()</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:runCalcTo"
+	    >runCalcTo</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > v =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:FilePath"
+	    >FilePath</a
+	    > -&gt; <a href="Koshucode-Baala-Toolkit-Library-Run.html#t:SectionSource"
+	    >SectionSource</a
+	    > v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Tuple.html#t:-40--41-"
+	    >()</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:theContent"
+	    >theContent</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
+	    >Named</a
+	    > c] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:readSec"
+	    >readSec</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > v =&gt; <a href="Koshucode-Baala-Toolkit-Library-Run.html#t:SectionSource"
+	    >SectionSource</a
+	    > v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
+	    >AbortOr</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Section-Section.html#t:Section"
+	    >Section</a
+	    > v))</li
+	  ><li class="src short"
+	  ><a href="#v:mkdir"
+	    >mkdir</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:FilePath"
+	    >FilePath</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Tuple.html#t:-40--41-"
+	    >()</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a name="t:SectionSource" class="def"
+	    >SectionSource</a
+	    > c <a href="src/Koshucode-Baala-Toolkit-Library-Run.html#SectionSource" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:SectionSource" class="def"
+		  >SectionSource</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td colspan="2"
+		><div class="subs fields"
+		  ><p class="caption"
+		    >Fields</p
+		    ><dl
+		    ><dt class="src"
+		      ><a name="v:rootSection" class="def"
+			>rootSection</a
+			> :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Section-Section.html#t:Section"
+			>Section</a
+			> c</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ><dt class="src"
+		      ><a name="v:textSections" class="def"
+			>textSections</a
+			> :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+			>String</a
+			>]</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ><dt class="src"
+		      ><a name="v:fileSections" class="def"
+			>fileSections</a
+			> :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:FilePath"
+			>FilePath</a
+			>]</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ></dl
+		    ><div class="clear"
+		    ></div
+		    ></div
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:SectionSource" class="caption collapser" onclick="toggleSection('i:SectionSource')"
+	    >Instances</p
+	    ><div id="section.i:SectionSource" class="show"
+	    ><table
+	      ><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		    >Show</a
+		    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		    >Show</a
+		    > (<a href="Koshucode-Baala-Toolkit-Library-Run.html#t:SectionSource"
+		    >SectionSource</a
+		    > c)</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:runFiles" class="def"
+	    >runFiles</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > v =&gt; <a href="Koshucode-Baala-Toolkit-Library-Run.html#t:SectionSource"
+	    >SectionSource</a
+	    > v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Tuple.html#t:-40--41-"
+	    >()</a
+	    ><a href="src/Koshucode-Baala-Toolkit-Library-Run.html#runFiles" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:hRunFiles" class="def"
+	    >hRunFiles</a
+	    ><a href="src/Koshucode-Baala-Toolkit-Library-Run.html#hRunFiles" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs arguments"
+	  ><p class="caption"
+	    >Arguments</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		>:: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
+		  >CContent</a
+		  > v</td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>=&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
+		  >Handle</a
+		  ></td
+		><td class="doc"
+		><p
+		  >File handle
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="Koshucode-Baala-Toolkit-Library-Run.html#t:SectionSource"
+		  >SectionSource</a
+		  > v</td
+		><td class="doc"
+		><p
+		  >Section source code
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+		  >IO</a
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Tuple.html#t:-40--41-"
+		  >()</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="doc"
+	  ><p
+	    >Read and union sections from files, and run the section. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:concatMM" class="def"
+	    >concatMM</a
+	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
+	    >Monad</a
+	    > m, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Monoid.html#t:Monoid"
+	    >Monoid</a
+	    > a) =&gt; [m a] -&gt; m a<a href="src/Koshucode-Baala-Toolkit-Library-Run.html#concatMM" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:runCalc" class="def"
+	    >runCalc</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > v =&gt; <a href="Koshucode-Baala-Toolkit-Library-Run.html#t:SectionSource"
+	    >SectionSource</a
+	    > v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Tuple.html#t:-40--41-"
+	    >()</a
+	    ><a href="src/Koshucode-Baala-Toolkit-Library-Run.html#runCalc" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:runCalcTo" class="def"
+	    >runCalcTo</a
+	    ><a href="src/Koshucode-Baala-Toolkit-Library-Run.html#runCalcTo" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs arguments"
+	  ><p class="caption"
+	    >Arguments</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		>:: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
+		  >CContent</a
+		  > v</td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>=&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:FilePath"
+		  >FilePath</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Output path prefix
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="Koshucode-Baala-Toolkit-Library-Run.html#t:SectionSource"
+		  >SectionSource</a
+		  > v</td
+		><td class="doc"
+		><p
+		  >Section
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+		  >IO</a
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Tuple.html#t:-40--41-"
+		  >()</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ></table
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:theContent" class="def"
+	    >theContent</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
+	    >Named</a
+	    > c] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > c<a href="src/Koshucode-Baala-Toolkit-Library-Run.html#theContent" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:readSec" class="def"
+	    >readSec</a
+	    ><a href="src/Koshucode-Baala-Toolkit-Library-Run.html#readSec" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs arguments"
+	  ><p class="caption"
+	    >Arguments</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		>:: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
+		  >CContent</a
+		  > v</td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>=&gt; <a href="Koshucode-Baala-Toolkit-Library-Run.html#t:SectionSource"
+		  >SectionSource</a
+		  > v</td
+		><td class="doc"
+		><p
+		  >Section
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+		  >IO</a
+		  > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
+		  >AbortOr</a
+		  > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Section-Section.html#t:Section"
+		  >Section</a
+		  > v))</td
+		><td class="doc"
+		><p
+		  >Union of sections
+</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:mkdir" class="def"
+	    >mkdir</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:FilePath"
+	    >FilePath</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Tuple.html#t:-40--41-"
+	    >()</a
+	    ><a href="src/Koshucode-Baala-Toolkit-Library-Run.html#mkdir" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.11.0</p
+      ></div
+    ></body
+  ></html
+>
