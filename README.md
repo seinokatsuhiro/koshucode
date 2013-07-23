@@ -39,7 +39,9 @@ See example directory
 or Haddock documentations at
 
 * [koshucode-baala-base](http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/)
+* [koshucode-baala-core](http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/)
 * [koshucode-baala-operator](http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/)
+* [koshucode-baala-calculator](http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-calculator/)
 * [koshucode-baala-toolkit](http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-toolkit/)
 
 
