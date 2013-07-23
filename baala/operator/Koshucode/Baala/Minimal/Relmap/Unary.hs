@@ -19,7 +19,6 @@ module Koshucode.Baala.Minimal.Relmap.Unary
 import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Minimal.OpKit as Kit
-import Koshucode.Baala.Minimal.Relmap.Get
 import qualified Data.List  as List
 import qualified Data.Maybe as Maybe
 import qualified Data.Tuple as Tuple

@@ -11,7 +11,6 @@ module Koshucode.Baala.Minimal.Relmap.Restrict
 
 import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Minimal.OpKit as Kit
-import Koshucode.Baala.Minimal.Relmap.Get
 
 
 

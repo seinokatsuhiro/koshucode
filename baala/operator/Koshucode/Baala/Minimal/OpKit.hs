@@ -82,11 +82,10 @@ module Koshucode.Baala.Minimal.OpKit
   Syntax.heightTable,
   Syntax.heightTableUnbox,
 
-  -- * Term
-  Term.termNamePairs,
-  Term.termNames,
-  Term.termName2,
-  Term.termTreePairs,
+  -- * OpKit
+  module Koshucode.Baala.Minimal.OpKit.Get,
+  module Koshucode.Baala.Minimal.OpKit.Pattern,
+  module Koshucode.Baala.Minimal.OpKit.Term,
 
 ) where
 
@@ -101,5 +100,7 @@ import Koshucode.Baala.Core.Content        as Content
 import Koshucode.Baala.Core.Relmap         as Relmap
 import Koshucode.Baala.Core.Section        as Section
 
-import Koshucode.Baala.Minimal.Term        as Term
+import Koshucode.Baala.Minimal.OpKit.Get
+import Koshucode.Baala.Minimal.OpKit.Term
+import Koshucode.Baala.Minimal.OpKit.Pattern
 

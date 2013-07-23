@@ -2,7 +2,7 @@
 
 -- | Extract suboperand
 
-module Koshucode.Baala.Minimal.Relmap.Get
+module Koshucode.Baala.Minimal.OpKit.Get
 ( -- * Generals
   getHead,
 
@@ -25,9 +25,9 @@ module Koshucode.Baala.Minimal.Relmap.Get
   getRelmaps,
 ) where
 
-import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Minimal.OpKit as Kit
+import Koshucode.Baala.Base
+import Koshucode.Baala.Core hiding (getInt)
+import Koshucode.Baala.Minimal.OpKit.Term
 
 {-| Abortable 'head' -}
 getHead :: [a] -> AbortOr a

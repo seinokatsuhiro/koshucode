@@ -2,7 +2,7 @@
 
 {-| Parsing list of terms. -}
 
-module Koshucode.Baala.Minimal.Term
+module Koshucode.Baala.Minimal.OpKit.Term
 ( termNames,
   termName2,
   termNamePairs,

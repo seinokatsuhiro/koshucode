@@ -14,7 +14,6 @@ module Koshucode.Baala.Vanilla.Relmap.Naming
 import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Minimal.OpKit as Kit
 import Koshucode.Baala.Vanilla.Value.Relval
-import qualified Koshucode.Baala.Minimal as Mini
 import qualified Data.List as List
 
 
@@ -23,8 +22,8 @@ import qualified Data.List as List
 
 relopPrefix :: Kit.Relop VContent
 relopPrefix use = do
-  pre <- Mini.getTerm use "-prefix"
-  ns  <- Mini.getTerms use "-term"
+  pre <- Kit.getTerm use "-prefix"
+  ns  <- Kit.getTerms use "-term"
   Right $ relmapPrefix use pre ns
 
 relmapPrefix :: OpUse v -> String -> [String] -> Relmap v
@@ -51,7 +50,7 @@ prefixName _ _ = undefined
 
 relopUnprefix :: Kit.Relop VContent
 relopUnprefix use = do
-  pre <- Mini.getTerm use "-prefix"
+  pre <- Kit.getTerm use "-prefix"
   Right $ relmapUnprefix use pre
 
 relmapUnprefix :: OpUse v -> String -> Relmap v
@@ -77,8 +76,8 @@ unprefixName pre n =
 
 relopPrefixChange :: Kit.Relop VContent
 relopPrefixChange use = do
-  new <- Mini.getTerm use "-new"
-  old <- Mini.getTerm use "-old"
+  new <- Kit.getTerm use "-new"
+  old <- Kit.getTerm use "-old"
   Right $ relmapPrefixChange use new old
 
 relmapPrefixChange :: OpUse v -> String -> String -> Relmap v

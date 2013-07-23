@@ -46,7 +46,7 @@ data VanillaOperand
 
       deriving (Show, Eq, Enum)
 
-instance Mini.OpPattern VanillaOperand where
+instance Kit.OpPattern VanillaOperand where
     opParser' LikeId            = id
     opParser' LikeHold          = Mini.likePick
     opParser' LikeVal           = Mini.likePick

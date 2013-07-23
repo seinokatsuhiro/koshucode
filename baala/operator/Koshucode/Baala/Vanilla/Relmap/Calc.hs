@@ -17,7 +17,6 @@ import Koshucode.Baala.Core.Content
 import Koshucode.Baala.Core.Relmap
 
 import Koshucode.Baala.Minimal.OpKit as Kit
-import qualified Koshucode.Baala.Minimal as Mini
 
 import Koshucode.Baala.Vanilla.Value.Relval
 import Koshucode.Baala.Vanilla.Cop
@@ -28,7 +27,7 @@ import Koshucode.Baala.Vanilla.Cop
 
 relopAdd :: Kit.Relop VContent
 relopAdd use =
-  do ts <- Mini.getTermTrees use "-term"
+  do ts <- Kit.getTermTrees use "-term"
      cs <- vanillaNamedContents use ts
      Right $ relmapAdd use cs
 
@@ -53,7 +52,7 @@ relAdd cs (Rel h1 b1) =
 
 relopHold :: Kit.Relop VContent
 relopHold use = do
-  t <- Mini.getTree use "-term"
+  t <- Kit.getTree use "-term"
   c <- vanillaContent use t
   Right $ relmapHold use True c
 

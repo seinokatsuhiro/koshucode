@@ -2,12 +2,12 @@
 
 -- | Class for operand patterns
 
-module Koshucode.Baala.Minimal.Relmap.Pattern
+module Koshucode.Baala.Minimal.OpKit.Pattern
 ( OpPattern (..)
 , operators
 ) where
 
-import Koshucode.Baala.Minimal.OpKit as Kit
+import Koshucode.Baala.Core
 
 {-| Class for operand pattern. -}
 class OpPattern p where

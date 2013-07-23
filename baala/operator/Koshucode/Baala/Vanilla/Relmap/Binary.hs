@@ -71,7 +71,7 @@ relmapMaybeBoth use = Kit.relmapConfl use "mmaybe" sub ms where
 
 relopHang :: Kit.Relop VContent
 relopHang use = do
-  n <- Mini.getTerm use "-term"
+  n <- Kit.getTerm use "-term"
   Right $ relmapHang use n
 
 relmapHang :: (Ord v, CRel v) => OpUse v -> String -> Relmap v

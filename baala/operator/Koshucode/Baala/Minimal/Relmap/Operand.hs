@@ -14,7 +14,6 @@ module Koshucode.Baala.Minimal.Relmap.Operand
 ) where
 
 import Koshucode.Baala.Minimal.OpKit as Kit
-import Koshucode.Baala.Minimal.Relmap.Pattern
 
 
 

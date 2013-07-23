@@ -22,7 +22,6 @@ import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Core.Content
 import Koshucode.Baala.Minimal.OpKit as Kit
 import Koshucode.Baala.Vanilla.Value.Relval
-import qualified Koshucode.Baala.Minimal as Mini
 import Koshucode.Baala.Vanilla.Order as Kit
 
 
@@ -31,7 +30,7 @@ import Koshucode.Baala.Vanilla.Order as Kit
 
 relopSize :: Kit.Relop VContent
 relopSize use = do
-  n <- Mini.getTerm use "-term"
+  n <- Kit.getTerm use "-term"
   Right $ relmapSize use n
 
 relmapSize :: (CInt v) => OpUse v -> String -> Relmap v
@@ -53,7 +52,7 @@ relSize n (Rel _ b1) = Right $ Rel h2 b2 where
 
 relopConf :: Kit.Relop VContent
 relopConf use = do
-  n <- Mini.getTerm use "-term"
+  n <- Kit.getTerm use "-term"
   Right $ relmapConf use n
 
 relmapConf :: (CString v) => OpUse v -> String -> Relmap v
@@ -76,7 +75,7 @@ relConf n (Rel h1 _) = Right $ Rel h2 b2 where
 
 relopEnclose :: Kit.Relop VContent
 relopEnclose use = do
-  n <- Mini.getTerm use "-term"
+  n <- Kit.getTerm use "-term"
   Right $ relmapEnclose use n
 
 relmapEnclose :: (CRel v) => OpUse v -> String -> Relmap v
@@ -98,8 +97,8 @@ relEnclose n r@(Rel h1 _) = Right $ Rel h2 b2 where
 
 relopRank :: Kit.Relop VContent
 relopRank use =
-    do n  <- Mini.getTerm  use "-add"
-       ns <- Mini.getTerms use "-order"
+    do n  <- Kit.getTerm  use "-add"
+       ns <- Kit.getTerms use "-order"
        Right $ relmapRank use n ns
 
 relmapRank :: (CInt c, Ord c) => OpUse c -> String -> [String] -> Relmap c
@@ -128,7 +127,7 @@ limit2 c ns _ (Rel h1 b1) = Right $ Rel h1 b2 where
 
 relopTypename :: (CContent c) => Relop c
 relopTypename use = do
-  (n, p) <- Mini.getTermPair use "-term"
+  (n, p) <- Kit.getTermPair use "-term"
   Right $ relmapTypename use n p
 
 relmapTypename :: (CContent c) => OpUse c -> String -> String -> Relmap c
@@ -154,9 +153,9 @@ relTypename n p (Rel h1 b1) = Right $ Rel h2 b2 where
 
 relopRange :: Kit.Relop VContent
 relopRange use = do
-  term <- Mini.getTerm use "-term"
-  low  <- Mini.getInt  use "-from"
-  high <- Mini.getInt  use "-to"
+  term <- Kit.getTerm use "-term"
+  low  <- Kit.getInt  use "-from"
+  high <- Kit.getInt  use "-to"
   Right $ relmapRange use term low high
 
 relmapRange :: (CInt v) => OpUse v -> String -> Int -> Int -> Relmap v

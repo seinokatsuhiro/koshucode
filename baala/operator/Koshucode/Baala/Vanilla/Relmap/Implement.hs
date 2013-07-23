@@ -25,7 +25,7 @@ vanillaOperators :: [Kit.OpImplement VContent]
 vanillaOperators = vanillaOperators' ++ Mini.minimalOperators
 
 vanillaOperators' :: [Kit.OpImplement VContent]
-vanillaOperators' = Mini.operators
+vanillaOperators' = Kit.operators
     -- Relmap operators in alphabetical order
     [ o "add"            LikeVal           relopAdd
     , o "conf"           LikeSize          relopConf
@@ -39,6 +39,7 @@ vanillaOperators' = Mini.operators
     , o "range"          LikeSize          relopRange
     , o "rank"           LikeId            relopRank
     , o "rdf"            LikeSource        relopRdf
+    , o "size"           LikeSize          relopSize
     , o "typename"       LikeHold          relopTypename
     , o "unprefix"       LikeUnprefix      relopUnprefix
     ] where o = (,,)
@@ -49,8 +50,8 @@ vanillaOperators' = Mini.operators
 
 relopRdf :: Kit.Relop VContent
 relopRdf use = do
-  sign  <- Mini.getWord  use "-sign"
-  [s,o] <- Mini.getTerms use "-term"
+  sign  <- Kit.getWord  use "-sign"
+  [s,o] <- Kit.getTerms use "-term"
   Right $ Kit.relmapAlias use $
         Kit.relmapSource use sign ["/s", "/o"] `mappend`
         Mini.relmapRename use [(s,"/s"), (o,"/o")]
