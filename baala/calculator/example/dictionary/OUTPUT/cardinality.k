@@ -5,8 +5,8 @@
 **    cardinality.k
 **    
 
-|-- CS  /card int 5
-|-- CP  /card int 6
-|-- CSP  /card int 12
+|-- CS  /card n 5
+|-- CP  /card n 6
+|-- CSP  /card n 12
 **  (3 judges)
 

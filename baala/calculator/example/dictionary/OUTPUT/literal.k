@@ -5,22 +5,24 @@
 **    literal.k
 **    
 
-|-- INTEGER  /literal int 4
-|-- INTEGER  /literal int -5
-|-- CHAR  /literal ABC
-|-- CHAR  /literal 'ABC DEF'
-|-- BOOLEAN  /literal #true
+|-- INTEGER  /lit n 4
+|-- INTEGER  /lit n -5
+|-- CHAR  /lit ABC
+|-- CHAR  /lit 'ABC DEF'
+|-- CHAR  /lit q  #qq 'I am double quoted.' #qq
 
-|-- BOOLEAN  /literal #false
-|-- TERMSET  /literal {| /sno S1 /pno P1 /qty 300 |}
-|-- TERMSET  /literal {| /sno S1 /pno P2 /qty 200 |}
-|-- TERMSET  /literal {| /sno S1 |}
-|-- TERMSET  /literal {| |}
+|-- BOOLEAN  /lit #true
+|-- BOOLEAN  /lit #false
+|-- TERMSET  /lit <| /sno S1 /pno P1 /qty n 300 |>
+|-- TERMSET  /lit <| /sno S1 /pno P2 /qty n 200 |>
+|-- TERMSET  /lit <| /sno S1 |>
 
-|-- RELATION  /literal [| /sno /pno /qty | S1 P1 300 | S1 P2 200 |]
-|-- RELATION  /literal [| /sno /pno /qty | S1 P1 300 |]
-|-- RELATION  /literal [| /sno /pno /qty |]
-|-- RELATION  /literal [| |]
-|-- RELATION  /literal [| | |]
-**  (15 judges)
+|-- TERMSET  /lit <| |>
+|-- RELATION  /lit {| /sno /pno /qty | S1 P1 300 | S1 P2 200 |}
+|-- RELATION  /lit {| /sno /pno /qty | S1 P1 300 |}
+|-- RELATION  /lit {| /sno /pno /qty |}
+|-- RELATION  /lit {| |}
+
+|-- RELATION  /lit {| | |}
+**  (16 judges)
 

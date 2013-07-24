@@ -5,10 +5,10 @@
 **    projection.k
 **    
 
-|-- SP  /status 20  /city London
-|-- SP  /status 10  /city Paris
-|-- SP  /status 30  /city Paris
-|-- SP  /status 30  /city Athens
+|-- SP  /city London  /status n 20
+|-- SP  /city Paris  /status n 10
+|-- SP  /city Paris  /status n 30
+|-- SP  /city Athens  /status n 30
 |-- SC  /sno S1  /sname Smith
 
 |-- SC  /sno S2  /sname Jones

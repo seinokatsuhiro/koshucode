@@ -9,8 +9,6 @@ module Koshucode.Baala.Vanilla.Value.Content
   module Koshucode.Baala.Base.Data,
 ) where
 
-import qualified Data.List as L
-
 import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Prelude
@@ -95,7 +93,7 @@ instance CRel VContent where
 
 instance Pretty VContent where
     doc (VString s)     =  text $ escape s
-    doc (VInt n)        =  text "int" <+> int n
+    doc (VInt n)        =  text "n" <+> int n
     doc (VBool b)
         | b             =  text "#true"
         | otherwise     =  text "#false"
@@ -117,9 +115,9 @@ instance CContent VContent where
 escape :: String -> String
 escape = join . hashSplit where
     join :: [String] -> String
-    join [] = ""
+    join []  = ""
     join [x] = x
-    join xs = L.intercalate " " $ "text" : xs
+    join xs  = "q " ++ unwords xs
 
 
 

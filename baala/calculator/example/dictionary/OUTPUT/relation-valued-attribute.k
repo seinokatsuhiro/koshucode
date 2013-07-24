@@ -5,7 +5,7 @@
 **    relation-valued-attribute.k
 **    
 
-|-- A  /size int 3
-|-- A  /size int 2
+|-- A  /size n 3
+|-- A  /size n 2
 **  (2 judges)
 
