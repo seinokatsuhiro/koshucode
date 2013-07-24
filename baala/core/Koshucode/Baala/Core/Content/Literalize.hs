@@ -7,15 +7,14 @@ module Koshucode.Baala.Core.Content.Literalize
   -- * Library
 
   -- ** Types
-  LiteralizeFrom,
-  LiteralizeTrees,
-  LiteralizeTree,
-  LiteralizeString,
+  LitTrees,
+  LitTree,
+  LitString,
+  LitOperators,
 
   -- ** Functions
-  litContent,
-  litList,
-  litJudge,
+  litContentBy,
+  litTermset,
 
   -- * Document
 
@@ -38,28 +37,30 @@ import Koshucode.Baala.Core.Content.Class
 
 
 
--- ----------------------  Literalize
-
-{-| Make @a@ from @b@. -}
-type LiteralizeFrom b a = b -> AbOr a
+-- ----------------------  Type
 
 {-| Make @a@ from list of token trees. -}
-type LiteralizeTrees  a = LiteralizeFrom [TokenTree] a
+type LitTrees  a = AbMap2 [TokenTree] a
 
 {-| Make @a@ from a token tree. -}
-type LiteralizeTree   a = LiteralizeFrom TokenTree a
+type LitTree   a = AbMap2 TokenTree a
 
 {-| Make @a@ from a string. -}
-type LiteralizeString a = LiteralizeFrom String a
+type LitString a = AbMap2 String a
 
 
 
 -- ----------------------  Content
 
+type LitOperators c = [Named (LitTree c -> LitTrees c)]
+
+-- litContent :: (CContent c) => LitTree c
+-- litContent = litContentBy litOperators
+
 {-| Transform 'TokenTree' into
     internal form of term content. -}
-litContent :: (CContent v) => LiteralizeTree v
-litContent = lit where
+litContentBy :: (CContent c) => LitOperators c -> LitTree c
+litContentBy ops = lit where
     -- leaf
     lit (TreeL (TWord _ q w))
         | q >  0   =   Right . putString $ w  -- quoted text
@@ -71,10 +72,10 @@ litContent = lit where
     -- branch
     lit (TreeB t xs) = case t of
           1        ->  paren xs
-          2        ->  Right . putList    =<< litList    xs
-          3        ->  Right . putSet     =<< litList    xs
-          4        ->  Right . putTermset =<< litTermset xs
-          5        ->  Right . putRel     =<< litRel     xs
+          2        ->  Right . putList    =<< mapM       lit xs
+          3        ->  Right . putSet     =<< mapM       lit xs
+          4        ->  Right . putTermset =<< litTermset lit xs
+          5        ->  Right . putRel     =<< litRel     lit xs
           _        ->  bug
 
     -- unknown content
@@ -89,66 +90,41 @@ litContent = lit where
 
     -- sequence of token trees
     paren (TreeL (TWord _ 0 tag) : xs) =
-        case tag of
-          "text"  -> Right . joinContent =<< litList xs
-          "lines" -> Right . joinContent =<< litList xs  -- todo
-          "int"   -> litInt xs
-          _       -> Left $ AbortUnknownSymbol (show xs)
+        case lookup tag ops of
+          Just f  -> f lit xs
+          Nothing -> Left $ AbortUnknownSymbol (show xs)
     paren [] = Right nil
     paren x  = Left $ AbortUnknownSymbol (show x)
 
 
 
--- ----------------------  Simple data
-
--- litBool
--- litString
--- litNil
-
-litInt :: (CInt v) => LiteralizeTrees v
-litInt [TreeL (TWord _ 0 digits)] = 
-    Right . putInt =<< readInt digits
-litInt xs = Left $ AbortNotNumber (show xs)
-
-readInt :: LiteralizeString Int
-readInt s =
-    case reads s of
-      [(n, "")] -> Right n
-      _         -> Left $ AbortNotNumber s
+-- ----------------------  Complex data
 
 {-| Get single term name.
     If 'TokenTree' contains nested term name, this function failed. -}
-litFlatname :: LiteralizeTree String
+litFlatname :: LitTree String
 litFlatname (TreeL (TTerm _ [n])) = Right n
 litFlatname (TreeL (TTerm _ ns))  = Left $ AbortRequireFlatname (concat ns)
 litFlatname x = Left $ AbortMissingTermName (show x)
 
-
-
--- ----------------------  Complex data
-
-{-| Construct list of term contents. -}
-litList :: (CContent v) => LiteralizeTrees [v]
-litList = mapM litContent
-
 {-| Collect term name and content. -}
-litTermset :: (CContent v) => LiteralizeTrees [Named v]
-litTermset xs = mapM lit =<< divideByName xs where
-    lit (n, c) = do c' <- litContent c
-                    Right (n, c')
+litTermset :: (CContent c) => LitTree c -> LitTrees [Named c]
+litTermset lit xs = mapM lit2 =<< divideByTermname xs where
+    lit2 (n, c) = do c' <- lit c
+                     Right (n, c')
 
-litRel :: (CContent v) => LiteralizeTrees (Rel v)
-litRel cs =
+litRel :: (CContent c) => LitTree c -> LitTrees (Rel c)
+litRel lit cs =
     do let (h1 : b1) = divideByTokenTree "|" cs
-       h2 <- mapM (litFlatname) h1
-       b2 <- mapM (litList) b1
+       h2 <- mapM litFlatname h1
+       b2 <- mapM (mapM lit) b1
        let b3 = unique b2
        if any (length h2 /=) $ map length b3
           then Left  $ AbortOddRelation
           else Right $ Rel (headFrom h2) b3
 
-divideByName :: [TokenTree] -> AbOr [Named TokenTree]
-divideByName = nam where
+divideByTermname :: LitTrees [Named TokenTree]
+divideByTermname = nam where
     nam [] = Right []
     nam (x : xs) =
         let (cs, xs2) = content xs
@@ -163,15 +139,6 @@ divideByName = nam where
 
 
 
--- ----------------------  Judge
-
-{-| Construct judge from token trees.
-    Judges itself are not content type.
-    It can be only used in the top-level of sections. -}
-litJudge :: (CContent v) => Bool -> Relsign -> LiteralizeTrees (Judge v)
-litJudge q s xs =
-  do xs' <- litTermset xs
-     Right $ Judge q s xs'
 
 
 
@@ -187,33 +154,36 @@ litJudge q s xs =
                i.e., universal negation on the term holds.
                Textual form is the non-quoted parens: @()@.
 
-   [String]    Sequence of characters.
-               Textual forms: @abc@, @\'abc\'@, @\"abc def\"@,
-               @text abc def@.
+   [Text]      Sequence of characters.
+               Textual forms is @q@-prefixed chars or
+               quoted chars: @q abc@, @\'abc\'@, @\"abc def\"@.
 
-   [Number]    Number.
-               Textual forms: @int 100@, @dec 99.50@, @hex AF@.
+   [Decimal]   Decimal number.
+               Textual forms is @n@-prefixed digits:
+               @n 100@, @n 99.50@, @hex AF@.
 
    [Set]       Set is an unordered collection of contents.
                Duplication among contents is not significant.
                Textual form is a sequence of contents
-               with braces: @{ a b c }@.
+               delimited by colon, enclosed in braces:
+               @{ 'a' : 'b' : 'c' }@.
 
    [List]      List is an ordered list of contents.
                Textual form is a sequence of contents
-               with square brackets: @[ abc def ]@.
+               delimited by colon, enclosed in square brackets:
+               @[ q abc : q def ]@.
 
    [Termset]   Termset is a set of terms,
                i.e., a list of named contents.
                Textual form is a sequence of terms
-               with bar-braces: @{| \/a 10 \/b 20 |}@.
+               with bar-angles: @\<| \/a n 10 \/b n 20 |\>@.
 
    [Relation]  Relation is a set of same-type tuples,
                Textual form is a sequence of tuples
-               enclosed in bar-bracket.
+               enclosed in bar-braces.
                The first tuple is a heading of relation,
                and succeeding tuples are delimited by vertical bar:
-               @[| \/a \/b | 10 20 | 30 40 |]@.
+               @{| \/a \/b | n 10 : n 20 | n 30 : n 40 |}@.
 -}
 
 

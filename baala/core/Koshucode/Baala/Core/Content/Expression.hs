@@ -17,7 +17,7 @@ import Koshucode.Baala.Base.Data
 import Koshucode.Baala.Base.Syntax
 
 import Koshucode.Baala.Core.Content.Class
-import Koshucode.Baala.Core.Content.Literalize
+import Koshucode.Baala.Core.Content.Extension
 import Koshucode.Baala.Core.Content.Operator
 
 

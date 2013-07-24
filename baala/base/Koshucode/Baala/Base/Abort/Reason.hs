@@ -6,6 +6,7 @@ module Koshucode.Baala.Base.Abort.Reason
 ( -- * Datatype
   AbOr,
   AbMap,
+  AbMap2,
   Abort,
   AbortOr,
   (<!!>),
@@ -28,6 +29,8 @@ type AbOr b = Either AbortReason b
 
 {-| Abortable mapping. -}
 type AbMap b = b -> AbOr b
+
+type AbMap2 b a = b -> AbOr a
 
 {-| Abort reason and source information. -}
 type Abort = AbortType AbortReason
