@@ -19,17 +19,19 @@ import Koshucode.Baala.Core.Content
 {-| Type for values. -}
 
 data VContent
-    = VString  String           -- ^ String type
-    | VInt     Int              -- ^ Integer type
-    | VBool    Bool             -- ^ Boolean type
-    | VList    [VContent]       -- ^ List type
-    | VSet     [VContent]       -- ^ Set type
-    | VTermset [Named VContent] -- ^ List of terms
-    | VRel     (Rel VContent)   -- ^ Relation type
-    | VNil                      -- ^ Sign of no ordinary type
+    = VString  String            -- ^ String type
+    | VInt     Int               -- ^ Integer type
+    | VBool    Bool              -- ^ Boolean type
+    | VList    [VContent]        -- ^ List type
+    | VSet     [VContent]        -- ^ Set type
+    | VTermset [Named VContent]  -- ^ List of terms
+    | VRel     (Rel VContent)    -- ^ Relation type
+    | VNil                       -- ^ Sign of no ordinary type
       deriving (Show, Eq, Ord)
 
 instance PrimContent VContent where
+
+
 
 -- ----------------------  haskell data
 
@@ -61,6 +63,8 @@ instance CList VContent where
     isList (VList _)         =  True
     isList _                 =  False
 
+
+
 -- ----------------------  koshu data
 
 instance CNil VContent where
@@ -69,7 +73,7 @@ instance CNil VContent where
     isNil _                  = False
 
 instance CSet VContent where
-    putSet                   =  VSet . unique
+    putSet                   =  VSet . nonNilFilter . unique
     getSet (VSet x)          =  x
     getSet _                 =  bug
     isSet  (VSet _)          =  True
@@ -89,18 +93,20 @@ instance CRel VContent where
     isRel  (VRel _)          =  True
     isRel  _                 =  False
 
+
+
 -- ----------------------
 
 instance Pretty VContent where
-    doc (VString s)     =  text $ escape s
-    doc (VInt n)        =  text "n" <+> int n
+    doc (VString s)     =  text $ "'" ++ hashString s
+    doc (VInt n)        =  int n
     doc (VBool b)
         | b             =  text "#true"
         | otherwise     =  text "#false"
     doc (VNil)          =  text "()"
-    doc (VList xs)      =  text "[" <+> hsep (map doc xs) <+> text "]"
-    doc (VSet xs)       =  text "{" <+> hsep (map doc xs) <+> text "}"
-    doc (VTermset xs)   =  text "<|" <+> hsep (map docTerms xs) <+> text "|>"
+    doc (VList xs)      =  docBracket  $ hsep (map doc xs)
+    doc (VSet xs)       =  docBrace    $ hsep (docColonList xs)
+    doc (VTermset xs)   =  docAngleBar $ hsep (map docTerms xs)
     doc (VRel r)        =  doc r
 
 docTerms :: (Pretty a) => Named a -> Doc
@@ -111,13 +117,6 @@ instance CContent VContent where
     appendContent x (VNil) = x
     appendContent (VString s1) (VString s2) = VString $ s1 ++ s2
     appendContent _ _ = nil
-
-escape :: String -> String
-escape = join . hashSplit where
-    join :: [String] -> String
-    join []  = ""
-    join [x] = x
-    join xs  = "q " ++ unwords xs
 
 
 

@@ -7,8 +7,7 @@ module Koshucode.Baala.Vanilla.Cop.Logic
 -- $Operators
 ) where
 
-import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Base.Prelude
+import Koshucode.Baala.Base
 import Koshucode.Baala.Core.Content
 
 import Koshucode.Baala.Vanilla.Value.Content
@@ -41,11 +40,11 @@ logiN unit p = loop where
     loop (VBool x : xs) =
         do VBool xs' <- loop xs 
            Right . putBool $ p x xs'
-    loop _ = Left AbortUnmatchType
+    loop xs = Left $ AbortUnmatchType (concatMap typename xs)
 
 logi2 :: (Bool -> Bool -> Bool) -> [VContent] -> AbOr VContent
 logi2 p [VBool x, VBool y] = Right . putBool $ p x y
-logi2 _ _ = Left AbortUnmatchType
+logi2 _ xs = Left $ AbortUnmatchType (concatMap typename xs)
 
 logiAnd    :: [VContent] -> AbOr VContent
 logiAnd    =  logiN True (&&)
@@ -61,5 +60,5 @@ logiImply  =  logi2 $ \x y -> not x || y
 
 logiNot :: [VContent] -> AbOr VContent
 logiNot [VBool x] = Right . putBool $ not x
-logiNot _ = Left AbortUnmatchType
+logiNot xs = Left $ AbortUnmatchType (concatMap typename xs)
 

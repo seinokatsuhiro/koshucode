@@ -1,14 +1,17 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Prelude.Pretty
-( Pretty (..)
-, docTag
-, docParen, docBracket, docBrace
-, docAngle, docQuote
-, docComment
-, module Text.PrettyPrint
+( Pretty (..),
+  docTag,
+  docParen, docBracket, docBrace,
+  docAngle, docAngleBar,
+  docColonList,
+  docQuote,
+  docComment,
+  module Text.PrettyPrint,
 ) where
 
+import qualified Data.List as L
 import Text.PrettyPrint
 
 class Pretty a where
@@ -26,11 +29,16 @@ docTag tag doc2 = docParen $ text tag <+> doc2
 docEnclose :: String -> String -> Doc -> Doc
 docEnclose open close doc2 = text open <> doc2 <> text close
 
-docParen, docBracket, docBrace, docAngle :: Doc -> Doc
-docParen   = docEnclose "(" ")"
-docBracket = docEnclose "[" "]"
-docBrace   = docEnclose "{" "}"
-docAngle   = docEnclose "<" ">"
+docColonList :: (Pretty a) => [a] -> [Doc]
+docColonList = L.intersperse (text ":") . map doc
+
+docParen, docBracket, docBrace :: Doc -> Doc
+docAngle, docAngleBar          :: Doc -> Doc
+docParen     =  docEnclose "(" ")"
+docBracket   =  docEnclose "[" "]"
+docBrace     =  docEnclose "{" "}"
+docAngle     =  docEnclose "<" ">"
+docAngleBar  =  docEnclose "<|" "|>"
 
 docQuote :: Doc -> Doc
 docQuote = docEnclose "'" "'"

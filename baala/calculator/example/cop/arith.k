@@ -7,8 +7,8 @@
 **    koshu arith.k
 **
 
-|-- INT   /a int 2
-|-- INT   /a int -3
+|-- INT   /a 2
+|-- INT   /a -3
 
 a : source INT /a
 
@@ -21,7 +21,7 @@ affirm B
             /abs   ( abs /a )
 
 affirm C
-    a | add /add ( + /a 1 /a 2 )
+    a | add /add ( + /a 1 /a 2)
 
 affirm D
     a | add /abs ( abs [ /a ] )

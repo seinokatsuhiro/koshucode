@@ -23,14 +23,14 @@
            0 1000
 
 a  : source MATRIX /name /row /col /val
-   | hold /name = a
+   | hold /name = 'a
    | cut /name
    | rename /a /row
             /b /col
             /x /val
 
 b  : source MATRIX /name /row /col /val
-   | hold /name = b
+   | hold /name = 'b
    | cut /name
    | rename /b /row
             /c /col

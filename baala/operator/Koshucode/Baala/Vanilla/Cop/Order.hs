@@ -7,8 +7,7 @@ module Koshucode.Baala.Vanilla.Cop.Order
 -- $Operators
 ) where
 
-import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Base.Prelude
+import Koshucode.Baala.Base
 import Koshucode.Baala.Core.Content
 
 import Koshucode.Baala.Vanilla.Value.Content

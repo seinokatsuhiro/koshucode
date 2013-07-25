@@ -24,13 +24,11 @@ litContent = litContentBy litOperators
 
 litOperators :: (CContent c) => LitOperators c
 litOperators =
-    [ o "q"          litText
+    [ o "'"          litText
+    , o "q"          litText
     , o "text"       litText
     , o "n"          litInt
     , o "int"        litInt
-    , o "<list>"     litInt
-    , o "<termset>"  litInt
-    , o "<relation>" litInt
     ] where o = (,)
 
 litText :: (CContent c) => LitTree c -> LitTrees c

@@ -28,7 +28,7 @@ koshu_calc () {
 
 koshu_calc_list () {
     for k in [a-z]*.k; do
-        koshu_calc "[ DATA.k $k ]" "OUTPUT/$k"
+        koshu_calc "[ 'DATA.k : '$k ]" "'OUTPUT/$k"
     done
     echo
 }

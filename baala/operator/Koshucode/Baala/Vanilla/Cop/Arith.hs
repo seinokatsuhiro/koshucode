@@ -7,9 +7,7 @@ module Koshucode.Baala.Vanilla.Cop.Arith
 -- $Operators
 ) where
 
-import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Base.Syntax
+import Koshucode.Baala.Base
 import Koshucode.Baala.Core.Content
 
 import Koshucode.Baala.Vanilla.Value.Content
@@ -52,12 +50,12 @@ readInt s =
 
 copArith :: [Named (Cop VContent)]
 copArith =
- [ namedEager  "+"    arithPlus
- , namedEager  "*"    arithTimes
- , namedEager  "-"    arithMinus
- , namedEager  "abs"  arithAbs
- , namedLit    "int"  litInt
- ]
+    [ namedEager  "+"    arithPlus
+    , namedEager  "*"    arithTimes
+    , namedEager  "-"    arithMinus
+    , namedEager  "abs"  arithAbs
+    , namedLit    "int"  litInt
+    ]
 
 arithInt :: VContent -> AbOr Int
 arithInt (VInt    n) = Right n

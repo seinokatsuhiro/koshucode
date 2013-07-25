@@ -9,9 +9,9 @@
 
 ** *********************************  Integer
 
-|-- INT  /a int 2   /b int 2
-|-- INT  /a int 0   /b int 5
-|-- INT  /a int 3   /b int 0
+|-- INT  /a 2   /b 2
+|-- INT  /a 0   /b 5
+|-- INT  /a 3   /b 0
 
 int : source INT /a /b
 
@@ -27,9 +27,9 @@ affirm INT-B
 
 ** *********************************  Text
 
-|-- TEXT  /a 'apple'   /b 'apple'
-|-- TEXT  /a 'apple'   /b 'banana'
-|-- TEXT  /a 'cocoa'   /b 'banana'
+|-- TEXT  /a 'apple   /b 'apple
+|-- TEXT  /a 'apple   /b 'banana
+|-- TEXT  /a 'cocoa   /b 'banana
 
 text : source TEXT /a /b
 

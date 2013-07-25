@@ -7,8 +7,8 @@
 **    koshu list.k
 **
 
-|-- INT   /a [ (int 1) (int 2) (int 3) ]
-|-- TEXT  /a [ 'a' 'b' 'c' ]
+|-- INT   /a [ 1 : 2 : 3 ]
+|-- TEXT  /a [ 'a : 'b : 'c ]
 
 int  : source INT /a
 text : source TEXT /a
@@ -25,9 +25,9 @@ affirm A int
 affirm B text
   | add /length  ( length /a )
         /min     ( min /a )
-        /max   (   max /a )
+        /max     ( max /a )
 
 affirm C reldee
-  | add /list    ( list a b c )
-        /length  ( length 'abc' )
+  | add /list    ( list ('a) ('b) ('c))
+        /length  ( length ('abc))
 

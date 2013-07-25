@@ -6,6 +6,9 @@ module Koshucode.Baala.Core.Content.Class
   PrimContent (),
   CContent (..),
 
+  nonNullFilter,
+  nonNilFilter,
+
   -- * Haskell data
   CBool (..),
   CInt (..),
@@ -50,11 +53,24 @@ class (Ord c, Pretty c,
         | isRel     c  =  "relation"
         | otherwise    =  "unknown"
 
+{-| Delete empty list ('null') from content list. -}
+nonNullFilter :: Map [[a]]
+nonNullFilter = filter (not . null)
+
+{-| Delete 'nil' from content list. -}
+nonNilFilter :: (CNil c) => Map [c]
+nonNilFilter = filter (not . isNil)
+
+
+
 -- ----------------------  Haskell built-in data
 
 class (PrimContent c) => CBool c where
+    {-| Put Boolean value into content @c@. -}
     putBool    ::   Bool -> c
+    {-| Get Boolean value from content @c@. -}
     getBool    ::      c -> Bool
+    {-| Test content @c@ has Boolean value. -}
     isBool     ::      c -> Bool
 
 class (PrimContent c) => CInt c where

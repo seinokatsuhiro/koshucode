@@ -2,17 +2,18 @@
 
 module Koshucode.Baala.Base.Syntax.HashWord
 (
--- * Library
-  hashWordTable
-, hashWord
-, hashWordInvert
-, hashSplit
+  -- * Library
+  hashWordTable,
+  hashWord,
+  hashWordInvert,
+  hashString,
+  hashSplit,
 
--- * Document
--- $HashWord
+  -- * Document
+  -- $HashWord
 
--- * Example
--- $HashSplit
+  -- * Example
+  -- $HashSplit
 ) where
 
 import qualified Data.Tuple as D
@@ -25,7 +26,13 @@ hashWordTable =
     , o  "lf"    "\n"
     , o  "crlf"  "\r\n"
     , o  "tab"   "\t"
-    , o  "spc"   " "
+    , o  "sp"    " "
+    , o  "("     "("
+    , o  ")"     ")"
+    , o  "{"     "{"
+    , o  "}"     "}"
+    , o  "["     "["
+    , o  "]"     "]"
     , o  ""      "#"
     ] where o = (,)
 
@@ -36,6 +43,9 @@ hashWord w = lookup w hashWordTable
 hashWordInvert :: String -> Maybe String
 hashWordInvert w = lookup w tab
     where tab = map D.swap hashWordTable
+
+hashString :: String -> String
+hashString = unwords . hashSplit
 
 hashSplit :: String -> [String]
 hashSplit = non False [] where

@@ -28,11 +28,7 @@ module Koshucode.Baala.Core.Content.Literalize
   -- $CompoundData
 ) where
 
-import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Base.Syntax
-
+import Koshucode.Baala.Base
 import Koshucode.Baala.Core.Content.Class
 
 
@@ -54,39 +50,45 @@ type LitString a = AbMap2 String a
 
 type LitOperators c = [Named (LitTree c -> LitTrees c)]
 
--- litContent :: (CContent c) => LitTree c
--- litContent = litContentBy litOperators
+readInt :: LitString Int
+readInt s =
+    case reads s of
+      [(n, "")] -> Right n
+      _         -> Left $ AbortNotNumber s
 
 {-| Transform 'TokenTree' into
     internal form of term content. -}
 litContentBy :: (CContent c) => LitOperators c -> LitTree c
 litContentBy ops = lit where
     -- leaf
+    lit (TreeL (TWord _ _ cs@(c:_)))
+        | c `elem` "0123456789+-"
+          = Right . putInt =<< readInt cs
     lit (TreeL (TWord _ q w))
-        | q >  0   =   Right . putString $ w  -- quoted text
-        | q == 0   =   case w of
-          '#' : w' ->  hash w'
-          "()"     ->  Right nil
-          _        ->  Right . putString $ w
+        | q >  0   =  Right . putString $ w  -- quoted text
+        | q == 0   =  case w of
+          '#' : s ->  hash s
+          "()"    ->  Right nil
+          _       ->  Right . putString $ w
 
     -- branch
     lit (TreeB t xs) = case t of
-          1        ->  paren xs
-          2        ->  Right . putList    =<< mapM       lit xs
-          3        ->  Right . putSet     =<< mapM       lit xs
-          4        ->  Right . putTermset =<< litTermset lit xs
-          5        ->  Right . putRel     =<< litRel     lit xs
-          _        ->  bug
+          1       ->  paren xs
+          2       ->  Right . putList    =<< litList    lit xs
+          3       ->  Right . putSet     =<< litList    lit xs
+          4       ->  Right . putTermset =<< litTermset lit xs
+          5       ->  Right . putRel     =<< litRel     lit xs
+          _       ->  bug
 
     -- unknown content
-    lit x          =   Left $ AbortUnknownContent (show x)
+    lit x          =  Left $ AbortUnknownContent (show x)
 
     -- hash word
-    hash "true"    =   Right . putBool $ True
-    hash "false"   =   Right . putBool $ False
-    hash w         =   case hashWord w of
-                         Just w2 -> Right . putString $ w2
-                         Nothing -> Left $ AbortUnknownSymbol ('#' : w)
+    hash "true"    =  Right . putBool $ True
+    hash "false"   =  Right . putBool $ False
+    hash w         =  case hashWord w of
+                        Just w2 -> Right . putString $ w2
+                        Nothing -> Left $ AbortUnknownSymbol ('#' : w)
 
     -- sequence of token trees
     paren (TreeL (TWord _ 0 tag) : xs) =
@@ -107,6 +109,12 @@ litFlatname (TreeL (TTerm _ [n])) = Right n
 litFlatname (TreeL (TTerm _ ns))  = Left $ AbortRequireFlatname (concat ns)
 litFlatname x = Left $ AbortMissingTermName (show x)
 
+litList :: (CContent c) => LitTree c -> LitTrees [c]
+litList lit cs = mapM lt $ divideByTokenTree ":" cs where
+    lt []  = Right nil
+    lt [x] = lit x
+    lt xs  = lit $ TreeB 1 xs
+
 {-| Collect term name and content. -}
 litTermset :: (CContent c) => LitTree c -> LitTrees [Named c]
 litTermset lit xs = mapM lit2 =<< divideByTermname xs where
@@ -117,7 +125,7 @@ litRel :: (CContent c) => LitTree c -> LitTrees (Rel c)
 litRel lit cs =
     do let (h1 : b1) = divideByTokenTree "|" cs
        h2 <- mapM litFlatname h1
-       b2 <- mapM (mapM lit) b1
+       b2 <- mapM (litList lit) b1
        let b3 = unique b2
        if any (length h2 /=) $ map length b3
           then Left  $ AbortOddRelation

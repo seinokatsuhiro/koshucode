@@ -180,7 +180,7 @@ isSpace, isWord, isNonWord, maybeWord :: Char -> Bool
 isTerm    c  =  c == '/'
 isOpen    c  =  c `elem` "([{"
 isClose   c  =  c `elem` "}])"
-isSingle  c  =  c `elem` ":"
+isSingle  c  =  c `elem` "':"
 isQuote   c  =  c `elem` "'\""
 isSpace   c  =  C.isSpace c
 isWord    c  =  maybeWord c && not (isNonWord c)

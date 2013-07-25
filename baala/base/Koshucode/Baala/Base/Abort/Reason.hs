@@ -59,6 +59,7 @@ data AbortReason
     | AbortMalformedOperand String
     | AbortMissingTermName  String
     | AbortNotNumber        String
+    | AbortNotText          String
     | AbortNoTerm           String
     | AbortOddRelation      
     | AbortReqBoolean       String
@@ -70,7 +71,7 @@ data AbortReason
     | AbortUnknownRelmap    String
     | AbortUnknownSymbol    String
     | AbortUnmatchArity
-    | AbortUnmatchType
+    | AbortUnmatchType      String
     | AbortUsage            String [String]
       deriving (Show, Eq, Ord)
 
@@ -85,6 +86,7 @@ instance AbortReasonClass AbortReason where
         (AbortMalformedOperand _)   -> "演算子の引数がおかしい"
         (AbortMissingTermName  _)   -> "項目名が必要"
         (AbortNotNumber        _)   -> "数値として読めない"
+        (AbortNotText          _)   -> "テキストではない"
         (AbortNoTerm           _)   -> "項目がない"
         (AbortOddRelation       )   -> "ふぞろいな関係"
         (AbortReqBoolean       _)   -> "真か偽が必要"
@@ -96,7 +98,7 @@ instance AbortReasonClass AbortReason where
         (AbortUnknownRelmap    _)   -> "未知の演算子"
         (AbortUnknownSymbol    _)   -> "未知の記号"
         (AbortUnmatchArity      )   -> "引数の数が合わない"
-        (AbortUnmatchType       )   -> "型が合わない"
+        (AbortUnmatchType      _)   -> "型が合わない"
         (AbortUsage          _ _)   -> "使用法の間違い"
 
     abortMain a = case a of
@@ -104,6 +106,7 @@ instance AbortReasonClass AbortReason where
         (AbortMalformedOperand s)   -> par s
         (AbortMissingTermName  s)   -> par s
         (AbortNotNumber        s)   -> par s
+        (AbortNotText          s)   -> par s
         (AbortNoTerm           s)   -> par s
         (AbortOddRelation       )   -> empty
         (AbortReqBoolean       s)   -> par s
@@ -116,7 +119,7 @@ instance AbortReasonClass AbortReason where
         (AbortUsage      _ usage)   -> docv $ map par usage
         (AbortUndefined        s)   -> par s
         (AbortUnmatchArity      )   -> empty
-        (AbortUnmatchType       )   -> empty
+        (AbortUnmatchType      s)   -> par s
 
 par :: String -> Doc
 par = fsep . map text . words
