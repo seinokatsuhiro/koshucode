@@ -48,23 +48,26 @@ hashString :: String -> String
 hashString = unwords . hashSplit
 
 hashSplit :: String -> [String]
-hashSplit = non False [] where
+hashSplit = non False "" where
+    non q s "" = [rev q s]
+    non _ s (' ' : cs) = non True (' ' : s) cs
+    non q s (c : cs) =
+        case hashWordInvert [c] of
+          Nothing -> non q (c : s) cs
+          Just h  -> let hashed = ('#' : h) : hash cs
+                     in if s == ""
+                        then hashed
+                        else rev q s : hashed
+
     hash [] = []
     hash (c : cs) =
         case hashWordInvert [c] of
           Nothing -> non False [c] cs
           Just h  -> ('#' : h) : hash cs
 
-    non q s [] = [rev q s]
-    non _ s (' ' : cs) = non True (' ' : s) cs
-    non q s (c : cs) =
-        case hashWordInvert [c] of
-          Nothing -> non q (c : s) cs
-          Just h  -> rev q s : ('#' : h) : hash cs
-
     rev :: Bool -> String -> String
     rev False s = reverse s
-    rev True  s = "'" ++ reverse s ++ "'"
+    rev True  s = reverse s
 
 
 

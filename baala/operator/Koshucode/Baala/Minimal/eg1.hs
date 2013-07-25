@@ -42,22 +42,22 @@ main =
 
 egTermNames :: IO ()
 egTermNames =
-    do "termNames"     >>> e ""
-       "termNames"     >>> e "/a /b /c"
-       "termNames"     >>> e "/a /b \n /c"
-       "termNames"     >>> e "/a bb /c"
+    do "termnames"     >>> e ""
+       "termnames"     >>> e "/a /b /c"
+       "termnames"     >>> e "/a /b \n /c"
+       "termnames"     >>> e "/a bb /c"
     where
-      e = termNames . Main.trees
+      e = termnames . Main.trees
 
 egTermNamePairs :: IO ()
 egTermNamePairs =
-    do "termNamePairs"     >>> e ""
-       "termNamePairs"     >>> e "/a /x"
-       "termNamePairs"     >>> e "/a /x  /b /y"
-       "termNamePairs"     >>> e "/a /x  /b /y  /c"
-       "termNamePairs"     >>> e "/a /x  (/b /y)"
+    do "termnamePairs"     >>> e ""
+       "termnamePairs"     >>> e "/a /x"
+       "termnamePairs"     >>> e "/a /x  /b /y"
+       "termnamePairs"     >>> e "/a /x  /b /y  /c"
+       "termnamePairs"     >>> e "/a /x  (/b /y)"
     where
-      e = termNamePairs . Main.trees
+      e = termnamePairs . Main.trees
 
 egTermTreePairs :: IO ()
 egTermTreePairs =

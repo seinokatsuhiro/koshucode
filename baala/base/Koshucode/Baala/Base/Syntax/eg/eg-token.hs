@@ -41,30 +41,30 @@ main =
 
 egWord :: IO ()
 egWord =
-  do "word"      >>> tokens "aa bb"
-     "word"      >>> tokens "'aa' '' \"cc\""
-     "word"      >>> tokens "aa (bb (cc))"
+    do "word"      >>> tokens "aa bb"
+       "word"      >>> tokens "'aa' '' \"cc\""
+       "word"      >>> tokens "aa (bb (cc))"
 
 egTerms :: IO ()
 egTerms =
-  do "terms"     >>> tokens "|-- rel /a A0 /b 31"
-     "terms"     >>> tokens "count /r/x/t"
-     "terms"     >>> tokens "///x /r/"
+    do "terms"     >>> tokens "|-- rel /a A0 /b 31"
+       "terms"     >>> tokens "count /r/x/t"
+       "terms"     >>> tokens "///x /r/"
 
 egComment :: IO ()
 egComment =
-  do "comment"   >>> fromLines ["www", "** ccc", "www"]
-     "comment"   >>> fromLines ["www", "**-", "  ccc", "-**", "www"]
-     "comment"   >>> fromLines ["www", "**=", "  ccc", "=**", "www"]
+    do "comment"   >>> fromLines ["www", "** ccc", "www"]
+       "comment"   >>> fromLines ["www", "**-", "  ccc", "-**", "www"]
+       "comment"   >>> fromLines ["www", "**=", "  ccc", "=**", "www"]
 
 egParen :: IO ()
 egParen =
-  do "paren"     >>> tokens "( a b )"    -- group
-     "paren"     >>> tokens "{ a b }"    -- set
-     "paren"     >>> tokens "[ a b ]"    -- list
-     "paren"     >>> tokens "< a b >"    -- not parens, just word
-     "paren"     >>> tokens "<| a b |>"  -- tuple
-     "paren"     >>> tokens "{| a b |}"  -- relation
-     "paren"     >>> tokens "[| a b |]"
-     "paren"     >>> tokens "(| a b |)"
+    do "paren"     >>> tokens "( a b )"    -- group
+       "paren"     >>> tokens "{ a b }"    -- set
+       "paren"     >>> tokens "[ a b ]"    -- list
+       "paren"     >>> tokens "< a b >"    -- not parens, just word
+       "paren"     >>> tokens "<| a b |>"  -- tuple
+       "paren"     >>> tokens "{| a b |}"  -- relation
+       "paren"     >>> tokens "[| a b |]"
+       "paren"     >>> tokens "(| a b |)"
 

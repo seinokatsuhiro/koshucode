@@ -93,20 +93,20 @@ getTerms :: OpGet v [String]
 getTerms use n = do
   let opd = halfOperand $ opHalf use
   term <- opd <!!> n
-  termNames term
+  termnames term
 
 {-| Get list of term-name pairs from named operand. -}
 getTermPairs :: OpGet v [Named String]
 getTermPairs use n = do
   let opd = halfOperand $ opHalf use
   term <- opd <!!> n
-  termNamePairs term
+  termnamePairs term
 
 getTermPair :: OpGet v (Named String)
 getTermPair use n = do
   let opd = halfOperand $ opHalf use
   term <- opd <!!> n
-  termName2 term
+  termname2 term
 
 {-| Get a relmap from operator use.
 

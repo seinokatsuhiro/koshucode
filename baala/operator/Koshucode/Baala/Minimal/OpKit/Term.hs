@@ -3,9 +3,9 @@
 {-| Parsing list of terms. -}
 
 module Koshucode.Baala.Minimal.OpKit.Term
-( termNames,
-  termName2,
-  termNamePairs,
+( termnames,
+  termname2,
+  termnamePairs,
   termTreePairs,
 ) where
 
@@ -18,36 +18,36 @@ import Koshucode.Baala.Base.Syntax
 -- ----------------------  Term
 
 {-| Extract a term name. -}
-termName :: TokenTree -> AbortOr String
-termName (TreeL (TTerm _ [n])) = Right n
-termName x = Left (AbortMissingTermName (show x), [])
+termname :: TokenTree -> AbortOr String
+termname (TreeL (TTerm _ [n])) = Right n
+termname x = Left (AbortMissingTermname (show x), [])
 
-termName2 :: [TokenTree] -> AbortOr (String, String)
-termName2 [TreeL (TTerm _ [n1]), TreeL (TTerm _ [n2])] = Right (n1, n2)
-termName2 x = Left (AbortMissingTermName (show x), [])
+termname2 :: [TokenTree] -> AbortOr (String, String)
+termname2 [TreeL (TTerm _ [n1]), TreeL (TTerm _ [n2])] = Right (n1, n2)
+termname2 x = Left (AbortMissingTermname (show x), [])
 
 {-| Extract a list of term names.
  
-    >>> termNames . tokenTrees . tokens $ "/a /b /c"
+    >>> termnames . tokenTrees . tokens $ "/a /b /c"
     Right ["/a", "/b", "/c"]
 -}
-termNames :: [TokenTree] -> AbortOr [String]
-termNames = mapM termName
+termnames :: [TokenTree] -> AbortOr [String]
+termnames = mapM termname
 
 {-| Extract a list of name-and-name pairs.
  
-    >>> termNamePairs . tokenTrees . tokens $ "/a /x /b /y"
+    >>> termnamePairs . tokenTrees . tokens $ "/a /x /b /y"
     Right [("/a", "/x"), ("/b", "/y")]
 -}
-termNamePairs :: [TokenTree] -> AbortOr [(String, String)]
-termNamePairs = loop where
+termnamePairs :: [TokenTree] -> AbortOr [(String, String)]
+termnamePairs = loop where
     loop (a : b : xs) =
-        do a'  <- termName a
-           b'  <- termName b
+        do a'  <- termname a
+           b'  <- termname b
            xs' <- loop xs
            Right $ (a', b') : xs'
     loop [] = Right []
-    loop (a : _) = Left (AbortMissingTermName (show a), [])
+    loop (a : _) = Left (AbortMissingTermname (show a), [])
 
 {-| Extract a list of name-and-tree pairs.
  
@@ -58,9 +58,9 @@ termNamePairs = loop where
 termTreePairs :: [TokenTree] -> AbortOr [Named TokenTree]
 termTreePairs = loop where
     loop (a : b : xs) =
-        do a'  <- termName a
+        do a'  <- termname a
            xs' <- loop xs
            Right $ (a', b) : xs'
     loop [] = Right []
-    loop (a : _) = Left (AbortMissingTermName (show a), [])
+    loop (a : _) = Left (AbortMissingTermname (show a), [])
 

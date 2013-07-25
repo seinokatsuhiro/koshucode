@@ -57,13 +57,14 @@ type AbortOr b = AbortOrType AbortReason b
 data AbortReason
     = AbortLookup           String
     | AbortMalformedOperand String
-    | AbortMissingTermName  String
+    | AbortMissingTermname  String
     | AbortNotNumber        String
     | AbortNotText          String
     | AbortNoTerm           String
     | AbortOddRelation      
     | AbortReqBoolean       String
-    | AbortRequireFlatname  String
+    | AbortReqFlatname      String
+    | AbortReqText          String
     | AbortUndefined        String
     | AbortUnkCop           String
     | AbortUnknownClause    
@@ -84,13 +85,14 @@ instance AbortReasonClass AbortReason where
     abortTitle a = case a of
         (AbortLookup           _)   -> "項目がない"
         (AbortMalformedOperand _)   -> "演算子の引数がおかしい"
-        (AbortMissingTermName  _)   -> "項目名が必要"
+        (AbortMissingTermname  _)   -> "項目名が必要"
         (AbortNotNumber        _)   -> "数値として読めない"
         (AbortNotText          _)   -> "テキストではない"
         (AbortNoTerm           _)   -> "項目がない"
         (AbortOddRelation       )   -> "ふぞろいな関係"
         (AbortReqBoolean       _)   -> "真か偽が必要"
-        (AbortRequireFlatname  _)   -> "入れ子ではない項目名が必要"
+        (AbortReqFlatname      _)   -> "入れ子ではない項目名が必要"
+        (AbortReqText          _)   -> "テキストが必要"
         (AbortUndefined        _)   -> "Undefined"
         (AbortUnkCop           _)   -> "未知の項目演算子"
         (AbortUnknownClause     )   -> "未知の構文"
@@ -104,13 +106,14 @@ instance AbortReasonClass AbortReason where
     abortMain a = case a of
         (AbortLookup           s)   -> par s
         (AbortMalformedOperand s)   -> par s
-        (AbortMissingTermName  s)   -> par s
+        (AbortMissingTermname  s)   -> par s
         (AbortNotNumber        s)   -> par s
         (AbortNotText          s)   -> par s
         (AbortNoTerm           s)   -> par s
         (AbortOddRelation       )   -> empty
         (AbortReqBoolean       s)   -> par s
-        (AbortRequireFlatname  s)   -> par s
+        (AbortReqFlatname      s)   -> par s
+        (AbortReqText          s)   -> par s
         (AbortUnkCop           s)   -> par s
         (AbortUnknownClause)        -> empty
         (AbortUnknownContent   s)   -> par s

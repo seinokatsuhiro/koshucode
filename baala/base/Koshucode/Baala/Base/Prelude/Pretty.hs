@@ -1,13 +1,15 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Prelude.Pretty
-( Pretty (..),
+( -- * Class
+  Pretty (..),
+
+  -- * Function
   docTag,
+  docColonList,
   docParen, docBracket, docBrace,
   docAngle, docAngleBar,
-  docColonList,
   docQuote,
-  docComment,
   module Text.PrettyPrint,
 ) where
 
@@ -26,23 +28,37 @@ instance Pretty Doc where
 docTag :: String -> Doc -> Doc
 docTag tag doc2 = docParen $ text tag <+> doc2
 
-docEnclose :: String -> String -> Doc -> Doc
-docEnclose open close doc2 = text open <> doc2 <> text close
-
 docColonList :: (Pretty a) => [a] -> [Doc]
 docColonList = L.intersperse (text ":") . map doc
 
-docParen, docBracket, docBrace :: Doc -> Doc
-docAngle, docAngleBar          :: Doc -> Doc
+
+
+-- ----------------------  Enclose
+
+docEnclose :: String -> String -> Doc -> Doc
+docEnclose open close doc2 = text open <+> doc2 <+> text close
+
+{-| Enclose document in @(@ and @)@. -}
+docParen     :: Doc -> Doc
 docParen     =  docEnclose "(" ")"
+
+{-| Enclose document in @[@ and @]@. -}
+docBracket   :: Doc -> Doc
 docBracket   =  docEnclose "[" "]"
+
+{-| Enclose document in @{@ and @}@. -}
+docBrace     :: Doc -> Doc
 docBrace     =  docEnclose "{" "}"
+
+{-| Enclose document in @\<@ and @\>@. -}
+docAngle     :: Doc -> Doc
 docAngle     =  docEnclose "<" ">"
+
+{-| Enclose document in @\<|@ and @|\>@. -}
+docAngleBar  :: Doc -> Doc
 docAngleBar  =  docEnclose "<|" "|>"
 
-docQuote :: Doc -> Doc
-docQuote = docEnclose "'" "'"
-
-docComment :: Doc -> Doc
-docComment = docEnclose "%{" "}%"
+{-| Enclose document in @\"@ and @\"@. -}
+docQuote     :: Doc -> Doc
+docQuote     = docEnclose "\"" "\""
 

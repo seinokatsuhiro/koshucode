@@ -104,7 +104,7 @@ instance Pretty VContent where
         | b             =  text "#true"
         | otherwise     =  text "#false"
     doc (VNil)          =  text "()"
-    doc (VList xs)      =  docBracket  $ hsep (map doc xs)
+    doc (VList xs)      =  docBracket  $ hsep (docColonList xs)
     doc (VSet xs)       =  docBrace    $ hsep (docColonList xs)
     doc (VTermset xs)   =  docAngleBar $ hsep (map docTerms xs)
     doc (VRel r)        =  doc r

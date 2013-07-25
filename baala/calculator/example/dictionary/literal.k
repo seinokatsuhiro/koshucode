@@ -32,10 +32,10 @@
                     | 'S1 : 'P1 : 300 |}
 |-- RELATION  /lit {| /sno /pno /qty |} ** empty relation
 |-- RELATION  /lit {| /sno /pno /qty | : : |} ** singleton relation
-|-- RELATION  /lit {| /sno | |}
+|-- RELATION  /lit {| /sno | () |}
 |-- RELATION  /lit {| |}        ** reldum
-**|-- RELATION  /lit {| | |}      ** reldee
-**|-- RELATION  /lit {| | | |}    ** reldee
+|-- RELATION  /lit {| | |}      ** reldee
+|-- RELATION  /lit {| | | |}    ** reldee
 
 affirm INTEGER   source INTEGER  /lit
 affirm CHAR      source CHAR     /lit

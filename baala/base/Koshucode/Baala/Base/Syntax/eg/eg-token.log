@@ -1,5 +1,5 @@
 word  .  .  .  .  .   [TWord 1 0 "aa",TSpace 2 1,TWord 3 0 "bb"]
-word  .  .  .  .  .   [TWord 1 1 "aa",TSpace 2 1,TWord 3 1 "",TSpace 4 1,TWord 5 2 "cc"]
+word  .  .  .  .  .   [TWord 1 0 "'",TWord 2 0 "aa",TWord 3 0 "'",TSpace 4 1,TWord 5 0 "'",TWord 6 0 "'",TSpace 7 1,TWord 8 2 "cc"]
 word  .  .  .  .  .   [TWord 1 0 "aa",TSpace 2 1,TOpen 3 "(",TWord 4 0 "bb",TSpace 5 1,TOpen 6 "(",TWord 7 0 "cc",TClose 8 ")",TClose 9 ")"]
 
 terms  .  .  .  .  .  [TWord 1 0 "|--",TSpace 2 1,TWord 3 0 "rel",TSpace 4 1,TTerm 5 ["/a"],TSpace 6 1,TWord 7 0 "A0",TSpace 8 1,TTerm 9 ["/b"],TSpace 10 1,TWord 11 0 "31"]
@@ -9,4 +9,13 @@ terms  .  .  .  .  .  [TTerm 1 ["/","/","/x"],TSpace 2 1,TTerm 3 ["/r","/"]]
 comment  .  .  .  .   [TWord 1 0 "www",TComment 2 "** ccc",TWord 3 0 "www"]
 comment  .  .  .  .   [TWord 1 0 "www",TComment 2 "**-",TSpace 3 2,TWord 4 0 "ccc",TWord 5 0 "-**",TWord 6 0 "www"]
 comment  .  .  .  .   [TWord 1 0 "www",TComment 2 "**=",TSpace 3 2,TWord 4 0 "ccc",TWord 5 0 "=**",TWord 6 0 "www"]
+
+paren  .  .  .  .  .  [TOpen 1 "(",TSpace 2 1,TWord 3 0 "a",TSpace 4 1,TWord 5 0 "b",TSpace 6 1,TClose 7 ")"]
+paren  .  .  .  .  .  [TOpen 1 "{",TSpace 2 1,TWord 3 0 "a",TSpace 4 1,TWord 5 0 "b",TSpace 6 1,TClose 7 "}"]
+paren  .  .  .  .  .  [TOpen 1 "[",TSpace 2 1,TWord 3 0 "a",TSpace 4 1,TWord 5 0 "b",TSpace 6 1,TClose 7 "]"]
+paren  .  .  .  .  .  [TWord 1 0 "<",TSpace 2 1,TWord 3 0 "a",TSpace 4 1,TWord 5 0 "b",TSpace 6 1,TWord 7 0 ">"]
+paren  .  .  .  .  .  [TOpen 1 "<|",TSpace 2 1,TWord 3 0 "a",TSpace 4 1,TWord 5 0 "b",TSpace 6 1,TClose 7 "|>"]
+paren  .  .  .  .  .  [TOpen 1 "{|",TSpace 2 1,TWord 3 0 "a",TSpace 4 1,TWord 5 0 "b",TSpace 6 1,TClose 7 "|}"]
+paren  .  .  .  .  .  [TOpen 1 "[|",TSpace 2 1,TWord 3 0 "a",TSpace 4 1,TWord 5 0 "b",TSpace 6 1,TClose 7 "|]"]
+paren  .  .  .  .  .  [TOpen 1 "(|",TSpace 2 1,TWord 3 0 "a",TSpace 4 1,TWord 5 0 "b",TSpace 6 1,TClose 7 "|)"]
 

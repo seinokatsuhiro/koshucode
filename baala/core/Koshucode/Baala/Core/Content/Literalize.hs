@@ -50,12 +50,6 @@ type LitString a = AbMap2 String a
 
 type LitOperators c = [Named (LitTree c -> LitTrees c)]
 
-readInt :: LitString Int
-readInt s =
-    case reads s of
-      [(n, "")] -> Right n
-      _         -> Left $ AbortNotNumber s
-
 {-| Transform 'TokenTree' into
     internal form of term content. -}
 litContentBy :: (CContent c) => LitOperators c -> LitTree c
@@ -86,9 +80,7 @@ litContentBy ops = lit where
     -- hash word
     hash "true"    =  Right . putBool $ True
     hash "false"   =  Right . putBool $ False
-    hash w         =  case hashWord w of
-                        Just w2 -> Right . putString $ w2
-                        Nothing -> Left $ AbortUnknownSymbol ('#' : w)
+    hash w         =  Left $ AbortUnknownSymbol ('#' : w)
 
     -- sequence of token trees
     paren (TreeL (TWord _ 0 tag) : xs) =
@@ -98,6 +90,12 @@ litContentBy ops = lit where
     paren [] = Right nil
     paren x  = Left $ AbortUnknownSymbol (show x)
 
+readInt :: LitString Int
+readInt s =
+    case reads s of
+      [(n, "")] -> Right n
+      _         -> Left $ AbortNotNumber s
+
 
 
 -- ----------------------  Complex data
@@ -106,10 +104,11 @@ litContentBy ops = lit where
     If 'TokenTree' contains nested term name, this function failed. -}
 litFlatname :: LitTree String
 litFlatname (TreeL (TTerm _ [n])) = Right n
-litFlatname (TreeL (TTerm _ ns))  = Left $ AbortRequireFlatname (concat ns)
-litFlatname x = Left $ AbortMissingTermName (show x)
+litFlatname (TreeL (TTerm _ ns))  = Left $ AbortReqFlatname (concat ns)
+litFlatname x = Left $ AbortMissingTermname (show x)
 
 litList :: (CContent c) => LitTree c -> LitTrees [c]
+litList _   [] = Right []
 litList lit cs = mapM lt $ divideByTokenTree ":" cs where
     lt []  = Right nil
     lt [x] = lit x
@@ -117,7 +116,7 @@ litList lit cs = mapM lt $ divideByTokenTree ":" cs where
 
 {-| Collect term name and content. -}
 litTermset :: (CContent c) => LitTree c -> LitTrees [Named c]
-litTermset lit xs = mapM lit2 =<< divideByTermname xs where
+litTermset lit xs = mapM lit2 =<< litNamedTrees xs where
     lit2 (n, c) = do c' <- lit c
                      Right (n, c')
 
@@ -131,13 +130,13 @@ litRel lit cs =
           then Left  $ AbortOddRelation
           else Right $ Rel (headFrom h2) b3
 
-divideByTermname :: LitTrees [Named TokenTree]
-divideByTermname = nam where
-    nam [] = Right []
-    nam (x : xs) =
+litNamedTrees :: LitTrees [Named TokenTree]
+litNamedTrees = termname where
+    termname [] = Right []
+    termname (x : xs) =
         let (cs, xs2) = content xs
         in do n    <- litFlatname x
-              xs2' <- nam xs2
+              xs2' <- termname xs2
               Right $ (n, singleTree cs) : xs2'
 
     content :: [TokenTree] -> ([TokenTree], [TokenTree])
@@ -153,7 +152,7 @@ divideByTermname = nam where
 -- ----------------------  Document
 {- $Types
 
-   'litContent' recognizes the following types.
+   'litContentBy' recognizes the following types.
 
    [Boolean]   Boolean used for something is hold or unhold.
                Textual forms: @\#true@, @\#fasle@.
@@ -163,35 +162,35 @@ divideByTermname = nam where
                Textual form is the non-quoted parens: @()@.
 
    [Text]      Sequence of characters.
-               Textual forms is @q@-prefixed chars or
-               quoted chars: @q abc@, @\'abc\'@, @\"abc def\"@.
+               Textual forms is chars with apostrophe or
+               double-quoted chars: @\'abc@, @\"abc def\"@.
 
    [Decimal]   Decimal number.
-               Textual forms is @n@-prefixed digits:
-               @n 100@, @n 99.50@, @hex AF@.
+               Textual forms is sequence of digits:
+               @100@, @99.50@, @hex AF@.
 
    [Set]       Set is an unordered collection of contents.
                Duplication among contents is not significant.
                Textual form is a sequence of contents
                delimited by colon, enclosed in braces:
-               @{ 'a' : 'b' : 'c' }@.
+               @{ \'a : \'b : \'c }@.
 
    [List]      List is an ordered list of contents.
                Textual form is a sequence of contents
                delimited by colon, enclosed in square brackets:
-               @[ q abc : q def ]@.
+               @[ \'abc : \'def ]@.
 
    [Termset]   Termset is a set of terms,
                i.e., a list of named contents.
                Textual form is a sequence of terms
-               with bar-angles: @\<| \/a n 10 \/b n 20 |\>@.
+               with bar-angles: @\<| \/a 10 \/b 20 |\>@.
 
    [Relation]  Relation is a set of same-type tuples,
                Textual form is a sequence of tuples
                enclosed in bar-braces.
                The first tuple is a heading of relation,
                and succeeding tuples are delimited by vertical bar:
-               @{| \/a \/b | n 10 : n 20 | n 30 : n 40 |}@.
+               @{| \/a \/b | \'A1 : 20 | \'A3 : 40 |}@.
 -}
 
 
