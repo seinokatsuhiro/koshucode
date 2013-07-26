@@ -16,6 +16,7 @@ import Koshucode.Baala.Core.Relmap
 
 import Koshucode.Baala.Vanilla.Cop.Arith
 import Koshucode.Baala.Vanilla.Cop.List
+import Koshucode.Baala.Vanilla.Cop.Literal
 import Koshucode.Baala.Vanilla.Cop.Logic
 import Koshucode.Baala.Vanilla.Cop.Order
 
@@ -26,7 +27,12 @@ import Koshucode.Baala.Vanilla.Value.Content
 -- ----------------------
 
 vanillaCop :: FindCop VContent
-vanillaCop n = lookup n $ concat [copOrder, copLogic, copArith, copList]
+vanillaCop n = lookup n ops where
+    ops = concat [ copArith
+                 , copLogic
+                 , copList
+                 , copLiteral
+                 , copOrder ]
 
 vanillaContent
     :: OpUse VContent    -- ^ Source information

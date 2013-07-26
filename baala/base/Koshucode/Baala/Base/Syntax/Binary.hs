@@ -50,7 +50,7 @@ binaryTree :: (Show a)
     -> Tree a               -- ^ Infixed tree
     -> Tree a               -- ^ Prefixed tree
 binaryTree ht tree1 = undouble $ binaryHeightMap loop ht tree1 where
-    loop tree2@(TreeL _)     = tree2
+    loop tree2@(TreeL _)    = tree2
     loop tree2@(TreeB n xs) =
         case binaryPos $ heightList tree2 of
           Right p | p <= 0 -> TreeB n $ map loop xs
@@ -78,7 +78,7 @@ binaryTree ht tree1 = undouble $ binaryHeightMap loop ht tree1 where
 heightList :: Tree (BinaryHeight, a) -> [BinaryHeight]
 heightList (TreeB _ xs) = map f xs where
     f (TreeL (ht, _)) = ht
-    f (TreeB _ _)    = Left 0
+    f (TreeB _ _)     = Left 0
 heightList _ = undefined
 
 binaryPos :: [BinaryHeight] -> Either (Int, Int) Int

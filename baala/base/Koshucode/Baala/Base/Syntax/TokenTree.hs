@@ -1,17 +1,17 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Parened tree of tokens
+{-| Parened tree of tokens -}
 
 module Koshucode.Baala.Base.Syntax.TokenTree
 (
--- * Library
-  TokenTree
-, tokenTrees
-, singleTree
-, divideByTokenTree
+  -- * Library
+  TokenTree,
+  tokenTrees,
+  singleTree,
+  divideByTokenTree,
 
--- * Examples
--- $Example
+  -- * Examples
+  -- $Example
 ) where
 
 import Koshucode.Baala.Base.Prelude
@@ -43,12 +43,11 @@ tokenTrees = trees parenType . sweepToken
 
 parenType :: ParenType Token
 parenType = parenTable
-    [ (1, isOpenTokenOf "("  , isCloseTokenOf ")")   -- grouping
-    , (2, isOpenTokenOf "["  , isCloseTokenOf "]")   -- list
-    , (3, isOpenTokenOf "{"  , isCloseTokenOf "}")   -- set
+    [ (1, isOpenTokenOf "("  , isCloseTokenOf  ")")  -- grouping
+    , (2, isOpenTokenOf "["  , isCloseTokenOf  "]")  -- list
+    , (3, isOpenTokenOf "{"  , isCloseTokenOf  "}")  -- set
     , (4, isOpenTokenOf "<|" , isCloseTokenOf "|>")  -- termset
     , (5, isOpenTokenOf "{|" , isCloseTokenOf "|}")  -- relation
-    , (5, isOpenTokenOf "[|" , isCloseTokenOf "|]")  -- relation
     ]
 
 singleTree :: [TokenTree] -> TokenTree

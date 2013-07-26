@@ -66,6 +66,7 @@ data AbortReason
     | AbortReqText          String
     | AbortUndefined        String
     | AbortUnkCop           String
+    | AbortUnkCox           String
     | AbortUnkWord          String
     | AbortUnknownClause    
     | AbortUnknownContent   String
@@ -95,7 +96,8 @@ instance AbortReasonClass AbortReason where
         (AbortReqText          _) -> "テキストが必要"
         (AbortUndefined        _) -> "Undefined"
         (AbortUnkCop           _) -> "未知の項目演算子"
-        (AbortUnkWord          _) -> "取り扱えない単語"
+        (AbortUnkCox           _) -> "扱い方がわからない式"
+        (AbortUnkWord          _) -> "扱い方がわからない単語"
         (AbortUnknownClause     ) -> "未知の構文"
         (AbortUnknownContent   _) -> "未知の項目内容"
         (AbortUnknownRelmap    _) -> "未知の演算子"
@@ -116,6 +118,7 @@ instance AbortReasonClass AbortReason where
         (AbortReqFlatname      s) -> par s
         (AbortReqText          s) -> par s
         (AbortUnkCop           s) -> par s
+        (AbortUnkCox           s) -> par s
         (AbortUnkWord          s) -> par s
         (AbortUnknownClause     ) -> empty
         (AbortUnknownContent   s) -> par s

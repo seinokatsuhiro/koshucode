@@ -28,19 +28,23 @@ formCox
     => FindCop c     -- ^ Collection of operators
     -> TokenTree     -- ^ Input token tree
     -> AbOr (Cox c)  -- ^ Result content expression
-formCox op = form where
-    form x@(TreeL (TWord _ _ _)) = fmap CoxLit $ litContent x
-    form (TreeL (TTerm _ ns))    = Right $ CoxTerm ns []
-    form (TreeL _)               = Left  $ AbortLookup ""
-    form (TreeB _ (TreeL (TWord _ _ n) : xs)) =
-        case op n of
-          Just op'      ->  call xs op'
-          Nothing       ->  Left $ AbortUnkCop n
-    form (TreeB _ [x])  =   form x
-    form (TreeB _ _)    =   Left $ AbortLookup ""
+formCox cops = form where
+    form x@(TreeL tok) = case tok of
+        TWord _ _ _  ->  fmap CoxLit $ litContent x
+        TTerm _ ns   ->  Right $ CoxTerm ns []
+        _            ->  bug
 
-    call xs (CopLit _ f) = fmap CoxLit $ f xs
-    call xs op' = Right . CoxApp op' =<< mapM form xs
+    -- parend unquoted word and its arguments
+    form (TreeB 1 (TreeL (TWord _ 0 w) : args)) =
+        case cops w of
+          Just cop   ->  call cop args
+          Nothing    ->  Left $ AbortUnkCop w
+    form x@(TreeB n _)
+        | n >  1      =  fmap CoxLit $ litContent x  -- literal composite
+    form x            =  Left $ AbortUnkCox (show x) -- unknown
+
+    call (CopLit _ f) = fmap CoxLit . f
+    call op'          = fmap (CoxApp op') . mapM form
 
 type PosCox c = Relhead -> AbOr (Cox c)
 
@@ -49,9 +53,9 @@ posCox :: Cox c -> PosCox c
 posCox cox h = pos cox where
     pos (CoxApp f cs)  = Right . CoxApp f =<< mapM pos cs
     pos (CoxTerm ns _) = let index = headIndex1 h ns
-                          in if all (>= 0) index
-                             then Right $ CoxTerm ns index
-                             else Left  $ AbortNoTerm (concat ns)
+                         in if all (>= 0) index
+                            then Right $ CoxTerm ns index
+                            else Left  $ AbortNoTerm (concat ns)
     pos c = Right c
 
 runCoxH

@@ -43,7 +43,7 @@ getTree :: OpGet v TokenTree
 getTree use n = do
   let opd = halfOperand $ opHalf use
   xs <- opd <!!> n
-  Right $ TreeB 0 xs
+  Right $ TreeB 1 xs
 
 getTrees :: OpGet v [TokenTree]
 getTrees use n = do

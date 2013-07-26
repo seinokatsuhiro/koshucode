@@ -23,19 +23,19 @@ import Koshucode.Baala.Base.Prelude
 
 -- ----------------------  Tree
 
--- | Tree of leaf and branch
+{-| Tree of leaf and branch. -}
 data Tree a
     = TreeL a             -- ^ Leaf. Terminal of tree.
     | TreeB Int [Tree a]  -- ^ Branch. Paren-type and subtrees.
       deriving (Show, Eq, Ord, Data, Typeable)
 
 instance Functor Tree where
-    fmap f (TreeL x)     = TreeL (f x)
+    fmap f (TreeL x)    = TreeL (f x)
     fmap f (TreeB n xs) = TreeB n $ map (fmap f) xs
 
 {-| Convert a list of elements to a single tree. -}
 tree :: (Show a) => ParenType a -> [a] -> Tree a
-tree p = TreeB 0 . trees p
+tree p = TreeB 1 . trees p
 
 {-| Convert a list of elements to trees. -}
 trees :: (Show a) => ParenType a -> [a] -> [Tree a]
@@ -129,24 +129,3 @@ parenTable xs = parenType where
         case lookupSatisfy a parenTypeTable of
           Just n  -> n
           Nothing -> 0
-
--- parenTable2
---     :: (Eq a)
---     => [(Int, a, a)]               -- ^ List of (/type/, /opne/, /close/)
---     -> (ParenType a, TypeParen a)  -- ^ Paren functions.
--- parenTable2 xs = (parenType, typeParen) where
---     parenTypeTable = map parenOpen xs ++ map parenClose xs
---     parenOpen  (n,o,_) = (o,n)
---     parenClose (n,_,c) = (c,-n)
---     parenType p =
---         case lookup p parenTypeTable of
---           Just n  -> n
---           Nothing -> 0
-
---     typeParenTable = map typeOpenClose xs
---     typeOpenClose (n,o,c) = (n,(o,c))
---     typeParen n =
---         case lookup n typeParenTable of
---           Just p  -> p
---           Nothing -> error $ "unknown paren type: " ++ show n
-

@@ -54,10 +54,10 @@ litContentBy :: (CContent c) => LitOperators c -> LitTree c
 litContentBy ops = lit where
     lit (TreeB t xs) = case t of
           1  ->  paren xs
-          2  ->  Right . putList    =<< litList    lit xs
-          3  ->  Right . putSet     =<< litList    lit xs
-          4  ->  Right . putTermset =<< litTermset lit xs
-          5  ->  Right . putRel     =<< litRel     lit xs
+          2  ->  fmap putList    $ litList    lit xs
+          3  ->  fmap putSet     $ litList    lit xs
+          4  ->  fmap putTermset $ litTermset lit xs
+          5  ->  fmap putRel     $ litRel     lit xs
           _  ->  bug
 
     lit (TreeL tok) = case tok of
