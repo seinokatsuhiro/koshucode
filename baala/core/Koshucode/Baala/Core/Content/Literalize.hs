@@ -1,3 +1,4 @@
+{-# LANGUAGE TupleSections #-}
 {-# OPTIONS_GHC -Wall #-}
 
 {-| Literalizer: Make literal contents from token tree. -}
@@ -9,7 +10,6 @@ module Koshucode.Baala.Core.Content.Literalize
   -- ** Types
   LitTrees,
   LitTree,
-  LitString,
   LitOperators,
 
   -- ** Functions
@@ -30,7 +30,7 @@ module Koshucode.Baala.Core.Content.Literalize
 
 import Koshucode.Baala.Base
 import Koshucode.Baala.Core.Content.Class
-
+import Koshucode.Baala.Core.Content.Decimal
 
 
 -- ----------------------  Type
@@ -41,8 +41,6 @@ type LitTrees  a = AbMap2 [TokenTree] a
 {-| Make @a@ from a token tree. -}
 type LitTree   a = AbMap2 TokenTree a
 
-{-| Make @a@ from a string. -}
-type LitString a = AbMap2 String a
 
 
 
@@ -54,48 +52,37 @@ type LitOperators c = [Named (LitTree c -> LitTrees c)]
     internal form of term content. -}
 litContentBy :: (CContent c) => LitOperators c -> LitTree c
 litContentBy ops = lit where
-    -- leaf
-    lit (TreeL (TWord _ _ cs@(c:_)))
-        | c `elem` "0123456789+-"
-          = Right . putInt =<< readInt cs
-    lit (TreeL (TWord _ q w))
-        | q >  0   =  Right . putText $ w  -- quoted text
-        | q == 0   =  case w of
-          '#' : s ->  hash s
-          "()"    ->  Right nil
-          _       ->  Right . putText $ w
-
-    -- branch
     lit (TreeB t xs) = case t of
-          1       ->  paren xs
-          2       ->  Right . putList    =<< litList    lit xs
-          3       ->  Right . putSet     =<< litList    lit xs
-          4       ->  Right . putTermset =<< litTermset lit xs
-          5       ->  Right . putRel     =<< litRel     lit xs
-          _       ->  bug
+          1  ->  paren xs
+          2  ->  Right . putList    =<< litList    lit xs
+          3  ->  Right . putSet     =<< litList    lit xs
+          4  ->  Right . putTermset =<< litTermset lit xs
+          5  ->  Right . putRel     =<< litRel     lit xs
+          _  ->  bug
 
-    -- unknown content
-    lit x          =  Left $ AbortUnknownContent (show x)
-
-    -- hash word
-    hash "true"    =  Right . putBool $ True
-    hash "false"   =  Right . putBool $ False
-    hash w         =  Left $ AbortUnknownSymbol ('#' : w)
+    lit (TreeL tok) = case tok of
+        TWord _ 0 cs@(c:_) | c `elem` "0123456789+-."
+                     ->  Right . putInt =<< readDecimal cs
+        TWord _ 0 w  ->  case w of
+            '#' : s  ->  litHash s
+            "()"     ->  Right nil
+            _        ->  Left $ AbortUnkWord w
+        TWord _ _ w  ->  Right . putText $ w  -- quoted text
+        _            ->  Left $ AbortUnknownContent (show tok)
 
     -- sequence of token trees
     paren (TreeL (TWord _ 0 tag) : xs) =
         case lookup tag ops of
           Just f  -> f lit xs
-          Nothing -> Left $ AbortUnknownSymbol (show xs)
+          Nothing -> Left $ AbortUnkCop tag
     paren [] = Right nil
     paren x  = Left $ AbortUnknownSymbol (show x)
 
-readInt :: LitString Int
-readInt s =
-    case reads s of
-      [(n, "")] -> Right n
-      _         -> Left $ AbortNotNumber s
-
+-- hash word
+litHash :: (CBool c) => LitString c
+litHash "true"    =  Right . putBool $ True
+litHash "false"   =  Right . putBool $ False
+litHash w         =  Left $ AbortUnkWord ('#' : w)
 
 
 -- ----------------------  Complex data
@@ -114,12 +101,6 @@ litList lit cs = mapM lt $ divideByTokenTree ":" cs where
     lt [x] = lit x
     lt xs  = lit $ TreeB 1 xs
 
-{-| Collect term name and content. -}
-litTermset :: (CContent c) => LitTree c -> LitTrees [Named c]
-litTermset lit xs = mapM lit2 =<< litNamedTrees xs where
-    lit2 (n, c) = do c' <- lit c
-                     Right (n, c')
-
 litRel :: (CContent c) => LitTree c -> LitTrees (Rel c)
 litRel lit cs =
     do let (h1 : b1) = divideByTokenTree "|" cs
@@ -129,6 +110,12 @@ litRel lit cs =
        if any (length h2 /=) $ map length b3
           then Left  $ AbortOddRelation
           else Right $ Rel (headFrom h2) b3
+
+{-| Collect term name and content. -}
+litTermset :: (CContent c) => LitTree c -> LitTrees [Named c]
+litTermset lit xs = namedC where
+    namedC   = mapM p       =<< litNamedTrees xs
+    p (n, c) = Right . (n,) =<< lit c
 
 litNamedTrees :: LitTrees [Named TokenTree]
 litNamedTrees = termname where
@@ -163,7 +150,7 @@ litNamedTrees = termname where
 
    [Text]      Sequence of characters.
                Textual forms is chars with apostrophe or
-               double-quoted chars: @\'abc@, @\"abc def\"@.
+               doubly-quoted line: @\'abc@, @\'\'abc def@.
 
    [Decimal]   Decimal number.
                Textual forms is sequence of digits:

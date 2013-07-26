@@ -2,5 +2,5 @@
 
 affirm LSV
   source S  /sno /sname /status /city
-     | hold /city = London
+     | hold /city = 'London
 

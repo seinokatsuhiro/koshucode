@@ -16,7 +16,6 @@ module Koshucode.Baala.Base.Abort.Reason
 ) where
 
 import Koshucode.Baala.Base.Prelude
-
 import Koshucode.Baala.Base.Abort.Utility
 
 
@@ -67,6 +66,7 @@ data AbortReason
     | AbortReqText          String
     | AbortUndefined        String
     | AbortUnkCop           String
+    | AbortUnkWord          String
     | AbortUnknownClause    
     | AbortUnknownContent   String
     | AbortUnknownRelmap    String
@@ -83,46 +83,53 @@ instance AbortReasonClass AbortReason where
     abortSymbol = head . words . show
 
     abortTitle a = case a of
-        (AbortLookup           _)   -> "項目がない"
-        (AbortMalformedOperand _)   -> "演算子の引数がおかしい"
-        (AbortMissingTermname  _)   -> "項目名が必要"
-        (AbortNotNumber        _)   -> "数値として読めない"
-        (AbortNotText          _)   -> "テキストではない"
-        (AbortNoTerm           _)   -> "項目がない"
-        (AbortOddRelation       )   -> "ふぞろいな関係"
-        (AbortReqBoolean       _)   -> "真か偽が必要"
-        (AbortReqFlatname      _)   -> "入れ子ではない項目名が必要"
-        (AbortReqText          _)   -> "テキストが必要"
-        (AbortUndefined        _)   -> "Undefined"
-        (AbortUnkCop           _)   -> "未知の項目演算子"
-        (AbortUnknownClause     )   -> "未知の構文"
-        (AbortUnknownContent   _)   -> "未知の項目内容"
-        (AbortUnknownRelmap    _)   -> "未知の演算子"
-        (AbortUnknownSymbol    _)   -> "未知の記号"
-        (AbortUnmatchArity      )   -> "引数の数が合わない"
-        (AbortUnmatchType      _)   -> "型が合わない"
-        (AbortUsage          _ _)   -> "使用法の間違い"
+        (AbortLookup           _) -> "項目がない"
+        (AbortMalformedOperand _) -> "演算子の引数がおかしい"
+        (AbortMissingTermname  _) -> "項目名が必要"
+        (AbortNotNumber        _) -> "数値として読めない"
+        (AbortNotText          _) -> "テキストではない"
+        (AbortNoTerm           _) -> "項目がない"
+        (AbortOddRelation       ) -> "ふぞろいな関係"
+        (AbortReqBoolean       _) -> "真か偽が必要"
+        (AbortReqFlatname      _) -> "入れ子ではない項目名が必要"
+        (AbortReqText          _) -> "テキストが必要"
+        (AbortUndefined        _) -> "Undefined"
+        (AbortUnkCop           _) -> "未知の項目演算子"
+        (AbortUnkWord          _) -> "取り扱えない単語"
+        (AbortUnknownClause     ) -> "未知の構文"
+        (AbortUnknownContent   _) -> "未知の項目内容"
+        (AbortUnknownRelmap    _) -> "未知の演算子"
+        (AbortUnknownSymbol    _) -> "未知の記号"
+        (AbortUnmatchArity      ) -> "引数の数が合わない"
+        (AbortUnmatchType      _) -> "型が合わない"
+        (AbortUsage          _ _) -> "使用法の間違い"
 
     abortMain a = case a of
-        (AbortLookup           s)   -> par s
-        (AbortMalformedOperand s)   -> par s
-        (AbortMissingTermname  s)   -> par s
-        (AbortNotNumber        s)   -> par s
-        (AbortNotText          s)   -> par s
-        (AbortNoTerm           s)   -> par s
-        (AbortOddRelation       )   -> empty
-        (AbortReqBoolean       s)   -> par s
-        (AbortReqFlatname      s)   -> par s
-        (AbortReqText          s)   -> par s
-        (AbortUnkCop           s)   -> par s
-        (AbortUnknownClause)        -> empty
-        (AbortUnknownContent   s)   -> par s
-        (AbortUnknownRelmap    s)   -> par s
-        (AbortUnknownSymbol    s)   -> par s
-        (AbortUsage      _ usage)   -> docv $ map par usage
-        (AbortUndefined        s)   -> par s
-        (AbortUnmatchArity      )   -> empty
-        (AbortUnmatchType      s)   -> par s
+        (AbortLookup           s) -> par s
+        (AbortMalformedOperand s) -> par s
+        (AbortMissingTermname  s) -> par s
+        (AbortNotNumber        s) -> par s
+        (AbortNotText          s) -> par s
+        (AbortNoTerm           s) -> par s
+        (AbortOddRelation       ) -> empty
+        (AbortReqBoolean       s) -> par s
+        (AbortReqFlatname      s) -> par s
+        (AbortReqText          s) -> par s
+        (AbortUnkCop           s) -> par s
+        (AbortUnkWord          s) -> par s
+        (AbortUnknownClause     ) -> empty
+        (AbortUnknownContent   s) -> par s
+        (AbortUnknownRelmap    s) -> par s
+        (AbortUnknownSymbol    s) -> par s
+        (AbortUsage      _ usage) -> docv $ map par usage
+        (AbortUndefined        s) -> par s
+        (AbortUnmatchArity      ) -> empty
+        (AbortUnmatchType      s) -> par s
+
+    abortSub a = case a of
+        (AbortUnkWord          _)
+            -> par "テキストは 'aaa のように書きます"
+        _   -> empty
 
 par :: String -> Doc
 par = fsep . map text . words
