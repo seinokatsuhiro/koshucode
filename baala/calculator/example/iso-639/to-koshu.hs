@@ -24,10 +24,10 @@ main =
 toJudge :: [String] -> Judge VContent
 toJudge [alpha3bib, alpha3term, alpha2, english, french] =
     Judge True "ISO-639-2"
-              [ ("/alpha3"  , putString alpha3bib)
-              , ("/alpha3t" , putString alpha3term)
-              , ("/alpha2"  , putString alpha2)
-              , ("/english" , putString english)
-              , ("/french"  , putString french) ]
+              [ ("/alpha3"  , putText alpha3bib)
+              , ("/alpha3t" , putText alpha3term)
+              , ("/alpha2"  , putText alpha2)
+              , ("/english" , putText english)
+              , ("/french"  , putText french) ]
 toJudge xs = error $ "FORMAT ERROR: " ++ show xs
 

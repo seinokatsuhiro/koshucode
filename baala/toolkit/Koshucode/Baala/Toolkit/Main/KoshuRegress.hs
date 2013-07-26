@@ -193,7 +193,7 @@ outputFile :: (CContent v) => Judge v -> Maybe String
 outputFile jud =
     do (Judge _ _ xs) <- judgeOf "KOSHU-CALC" jud
        output <- theContent "/output" xs
-       Just $ getString output
+       Just $ getText output
 
 reportFile :: String -> IO Bool
 reportFile file =
@@ -209,7 +209,7 @@ reportMatch :: String -> IO Bool
 reportMatch file =
     do putDoc $ reportJudge
          [ ("/result" , putBool True)
-         , ("/output" , putString file) ]
+         , ("/output" , putText file) ]
        return True
 
 reportUnmatch
@@ -218,7 +218,7 @@ reportUnmatch
 reportUnmatch file js (add, del) =
     do putDoc $ reportJudge
          [ ("/result" , putBool False)
-         , ("/output" , putString file) ]
+         , ("/output" , putText file) ]
        putStrLn $ "    **  " ++ reportCount add del
        let path = reportDir ++ file
        mkdir path

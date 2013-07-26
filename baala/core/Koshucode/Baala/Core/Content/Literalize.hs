@@ -59,11 +59,11 @@ litContentBy ops = lit where
         | c `elem` "0123456789+-"
           = Right . putInt =<< readInt cs
     lit (TreeL (TWord _ q w))
-        | q >  0   =  Right . putString $ w  -- quoted text
+        | q >  0   =  Right . putText $ w  -- quoted text
         | q == 0   =  case w of
           '#' : s ->  hash s
           "()"    ->  Right nil
-          _       ->  Right . putString $ w
+          _       ->  Right . putText $ w
 
     -- branch
     lit (TreeB t xs) = case t of
@@ -212,10 +212,10 @@ litNamedTrees = termname where
    Words.
 
      >>> lit "a 'b c'"
-     Right [VString "a", VString "b c"]
+     Right [VText "a", VText "b c"]
 
      >>> lit "a 1"
-     Right [VString "a", VString "1"]
+     Right [VText "a", VText "1"]
 
    Integer.
 
@@ -235,28 +235,28 @@ litNamedTrees = termname where
    Set.
 
      >>> lit "{ b a a c a }"
-     Right [VSet [VString "b",VString "a",VString "c"]]
+     Right [VSet [VText "b", VText "a", VText "c"]]
 
    List.
 
      >>> lit "[ a 10 (int 20) ]"
-     Right [VList [VString "a",VString "10",VInt 20]]
+     Right [VList [VText "a", VText "10", VInt 20]]
 
    Termset.
 
      >>> lit "{| /a 0 /b [ a 1 ] |}"
      Right [VTermset
-       [ ("/a", VString "0")
-       , ("/b", VList [VString "a", VString "1"]) ]]
+       [ ("/a", VText "0")
+       , ("/b", VList [VText "a", VText "1"]) ]]
 
    Relation.
 
      >>> lit "[| /a /x | A1 (int 20) | A3 (int 40) | A4 (int 60) |]"
      Right [ VRel (Rel
        (Relhead [Term "/a", Term "/x"])
-       [ [VString "A1", VInt 20]
-       , [VString "A3", VInt 40]
-       , [VString "A4", VInt 60] ])]
+       [ [VText "A1", VInt 20]
+       , [VText "A3", VInt 40]
+       , [VText "A4", VInt 60] ])]
 
 -}
 

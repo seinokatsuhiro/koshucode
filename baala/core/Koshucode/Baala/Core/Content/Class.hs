@@ -10,16 +10,16 @@ module Koshucode.Baala.Core.Content.Class
   nonNilFilter,
 
   -- * Haskell data
-  CBool (..),
-  CInt (..),
-  CString (..),
-  CList (..),
+  CBool    (..),
+  CInt     (..),
+  CText    (..),
+  CList    (..),
 
   -- * Koshu data
-  CNil (..),
-  CSet (..),
+  CNil     (..),
+  CSet     (..),
   CTermset (..),
-  CRel (..),
+  CRel     (..),
 ) where
 
 import Koshucode.Baala.Base.Prelude
@@ -32,7 +32,7 @@ import Koshucode.Baala.Base.Data
 class PrimContent c
 
 class (Ord c, Pretty c, 
-       CBool c, CString c, CInt c, CList c,
+       CBool c, CText c, CInt c, CList c,
        CNil c , CSet c, CTermset c, CRel c) =>
     CContent c where
 
@@ -44,7 +44,7 @@ class (Ord c, Pretty c,
     typename :: c -> String
     typename c
         | isBool    c  =  "boolean"
-        | isString  c  =  "string"
+        | isText    c  =  "text"
         | isInt     c  =  "int"
         | isList    c  =  "list"
         | isNil     c  =  "nil"
@@ -78,10 +78,10 @@ class (PrimContent c) => CInt c where
     getInt     ::      c -> Int
     isInt      ::      c -> Bool
 
-class (PrimContent c) => CString c where
-    putString  :: String -> c
-    getString  ::      c -> String
-    isString   ::      c -> Bool
+class (PrimContent c) => CText c where
+    putText    :: String -> c
+    getText    ::      c -> String
+    isText     ::      c -> Bool
 
 class (PrimContent c) => CList c where
     putList    ::    [c] -> c

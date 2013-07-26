@@ -18,13 +18,13 @@ module Koshucode.Baala.Minimal.OpKit
   Content.CInt,
   Content.CNil,
   Content.CRel,
-  Content.CString,
+  Content.CText,
   Content.nil,
   Content.putBool,
   Content.putInt,
   Content.putList,
   Content.putRel,
-  Content.putString,
+  Content.putText,
 
   -- * Data
   Data.Rel (..),

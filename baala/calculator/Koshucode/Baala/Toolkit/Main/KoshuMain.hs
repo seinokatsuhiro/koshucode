@@ -149,7 +149,7 @@ prettySection (SectionSource root _ files) =
 -- desc = putStrLn . fromJudges . concatMap info where
 --     info :: (CContent v) => Kit.Assert v -> [Judge v]
 --     info a = input a -- ++ output a
---     affirm s arg = fmap putString $ Judge True s arg
+--     affirm s arg = fmap putText $ Judge True s arg
 
 --     input (Kit.Assert _ _ r) = concatMap input2 $ Kit.relmapSourceList r
 --     input2 m = inputSign m : inputTerms m

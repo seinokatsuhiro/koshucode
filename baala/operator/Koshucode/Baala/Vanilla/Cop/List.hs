@@ -33,7 +33,7 @@ import Koshucode.Baala.Vanilla.Value.Content
 litText :: [TokenTree] -> AbOr VContent
 litText xs =
     do ss <- mapM litT xs
-       Right . putString $ concat ss
+       Right . putText $ concat ss
 
 litT :: TokenTree -> AbOr String
 litT (TreeL (TWord _ _ w)) = Right w
@@ -66,7 +66,7 @@ listMax xs = Left $ AbortUnmatchType (concatMap typename xs)
 
 listLength :: [VContent] -> AbOr VContent
 listLength [VList   xs]     = Right . putInt $ length xs
-listLength [VString xs]     = Right . putInt $ length xs
+listLength [VText xs]       = Right . putInt $ length xs
 listLength [VRel (Rel _ b)] = Right . putInt $ length b
 listLength xs = Left $ AbortUnmatchType (concatMap typename xs)
 

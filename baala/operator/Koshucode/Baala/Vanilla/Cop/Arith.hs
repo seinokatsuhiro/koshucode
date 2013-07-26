@@ -58,8 +58,8 @@ copArith =
     ]
 
 arithInt :: VContent -> AbOr Int
-arithInt (VInt    n) = Right n
-arithInt (VString n) = Right =<< readInt n
+arithInt (VInt  n) = Right n
+arithInt (VText n) = Right =<< readInt n
 arithInt x = Left $ AbortNotNumber (show x)
 
 arithPlus :: [VContent] -> AbOr VContent

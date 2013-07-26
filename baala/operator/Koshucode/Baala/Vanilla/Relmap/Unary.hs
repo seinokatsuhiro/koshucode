@@ -55,18 +55,18 @@ relopConf use = do
   n <- Kit.getTerm use "-term"
   Right $ relmapConf use n
 
-relmapConf :: (CString v) => OpUse v -> String -> Relmap v
+relmapConf :: (CText v) => OpUse v -> String -> Relmap v
 relmapConf use n = Kit.relmapCalc use "conf" sub where
     sub _ = relConf n
 
 {-| Change terms names -}
 relConf
-    :: (CString v)
+    :: (CText v)
     => String          -- ^ Term name
     -> AbMap (Rel v)   -- ^ Relation to relation
 relConf n (Rel h1 _) = Right $ Rel h2 b2 where
     h2 = Kit.headFrom [n]
-    b2 = [[putString $ show s]]
+    b2 = [[putText $ show s]]
     s  = show $ docParen $ doc h1
 
 
@@ -145,7 +145,7 @@ relTypename n p (Rel h1 b1) = Right $ Rel h2 b2 where
     b2 = map f b1
     pos = h1 `posOf` [[p]]
     f cs1 = let [c] = csPick pos cs1
-            in putString (typename c) : cs1
+            in putText (typename c) : cs1
 
 
 

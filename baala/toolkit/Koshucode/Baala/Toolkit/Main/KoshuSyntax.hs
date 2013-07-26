@@ -114,7 +114,7 @@ putClause p@(cn, c) =
 clauseJudge :: (Int, Clause) -> Judge VContent
 clauseJudge (cn, c) = Judge True "CLAUSE" args where
     args = [ ("/clause-seq"  , putInt cn)
-           , ("/clause-type" , putString $ clauseTypeText c)]
+           , ("/clause-type" , putText $ clauseTypeText c)]
 
 putToken :: Int -> Int -> SourceLine -> IO (Int)
 putToken cn tn (SourceLine ln line toks) =
@@ -126,9 +126,9 @@ putToken cn tn (SourceLine ln line toks) =
 tokenJudge :: Int -> Token -> Judge VContent
 tokenJudge cn t = Judge True "TOKEN" xs where
     xs = [ ("/clause-seq"   , putInt cn)
-         , ("/token-seq"    , putInt    $ Syn.tokenNumber t)
-         , ("/token-type"   , putString $ Syn.tokenTypeText t)
-         , ("/token-content", putString $ Syn.tokenContent t) ]
+         , ("/token-seq"    , putInt  $ Syn.tokenNumber t)
+         , ("/token-type"   , putText $ Syn.tokenTypeText t)
+         , ("/token-content", putText $ Syn.tokenContent t) ]
 
 
 
@@ -150,9 +150,9 @@ dumpTokenText (n, ys) (SourceLine l line ts) = (n + length ts, ys ++ xs) where
 dumpTokenJudge :: Int -> Token -> Judge VContent
 dumpTokenJudge l t = Judge True "TOKEN" xs where
     xs = [ ("/line"         , putInt l)
-         , ("/token-seq"    , putInt    $ Syn.tokenNumber t)
-         , ("/token-type"   , putString $ Syn.tokenTypeText t)
-         , ("/token-content", putString $ Syn.tokenContent  t) ]
+         , ("/token-seq"    , putInt  $ Syn.tokenNumber t)
+         , ("/token-type"   , putText $ Syn.tokenTypeText t)
+         , ("/token-content", putText $ Syn.tokenContent  t) ]
 
 
 

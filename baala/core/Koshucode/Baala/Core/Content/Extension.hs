@@ -34,7 +34,7 @@ litText :: (CContent c) => LitTree c -> LitTrees c
 litText _ xs =
     do ws <- litWords xs
        cs <- mapM loop ws
-       Right . putString $ concatMap unbox $ intersperseBy sp cs
+       Right . putText $ concatMap unbox $ intersperseBy sp cs
     where
       loop ('#' : w)
           = case hashWord w of
