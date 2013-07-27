@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-operator-0.25.0.0: Relational operators in Koshucode</p
+      >koshucode-baala-operator-0.30.0.0: Relational operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -61,27 +61,37 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >Data
+	    >Content
 </a
 	    ></li
 	  ><li
 	  ><a href="#g:4"
-	    >Prelude
+	    >Data
 </a
 	    ></li
 	  ><li
 	  ><a href="#g:5"
-	    >Relmap
+	    >Prelude
 </a
 	    ></li
 	  ><li
 	  ><a href="#g:6"
-	    >Section
+	    >Relmap
 </a
 	    ></li
 	  ><li
 	  ><a href="#g:7"
+	    >Section
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:8"
 	    >Syntax
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:9"
+	    >OpKit
 </a
 	    ></li
 	  ></ul
@@ -91,7 +101,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	>Description</p
 	><div class="doc"
 	><p
-	  >Kit for implementing relational operators
+	  >Kit for implementing relational operators 
 </p
 	  ></div
 	></div
@@ -113,114 +123,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    > a =&gt; [a] -&gt; a</li
 	  ><li class="src short"
 	  ><span class="keyword"
-	    >data</span
-	    >  <a href="#t:Abort"
+	    >type</span
+	    > <a href="#t:Abort"
 	    >Abort</a
-	    > <ul class="subs"
-	    ><li
-	      >= <a href="#v:AbortLookup"
-		>AbortLookup</a
-		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-		>SourceLine</a
-		>] <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortMalformedOperand"
-		>AbortMalformedOperand</a
-		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-		>SourceLine</a
-		>] <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortMissingTermName"
-		>AbortMissingTermName</a
-		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-		>SourceLine</a
-		>] <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortNotNumber"
-		>AbortNotNumber</a
-		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-		>SourceLine</a
-		>] <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortOddRelation"
-		>AbortOddRelation</a
-		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-		>SourceLine</a
-		>]  </li
-	      ><li
-	      >| <a href="#v:AbortRequireFlatname"
-		>AbortRequireFlatname</a
-		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-		>SourceLine</a
-		>] <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortUnknownClause"
-		>AbortUnknownClause</a
-		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-		>SourceLine</a
-		>]  </li
-	      ><li
-	      >| <a href="#v:AbortUnknownContent"
-		>AbortUnknownContent</a
-		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-		>SourceLine</a
-		>] <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortUnknownRelmap"
-		>AbortUnknownRelmap</a
-		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-		>SourceLine</a
-		>] <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortUnknownSymbol"
-		>AbortUnknownSymbol</a
-		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-		>SourceLine</a
-		>] <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortUsage"
-		>AbortUsage</a
-		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-		>SourceLine</a
-		>] <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		> [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>]  </li
-	      ></ul
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Utility.html#t:AbortType"
+	    >AbortType</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
+	    >AbortReason</a
 	    ></li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
 	    > <a href="#t:AbortOr"
 	    >AbortOr</a
-	    > a = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
-	    >Either</a
-	    > <a href="Koshucode-Baala-Minimal-OpKit.html#t:Abort"
-	    >Abort</a
-	    > a</li
+	    > b = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Utility.html#t:AbortOrType"
+	    >AbortOrType</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
+	    >AbortReason</a
+	    > b</li
 	  ><li class="src short"
 	  ><a href="#v:-60--33--33--62-"
 	    >(&lt;!!&gt;)</a
-	    > ::  [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >, a)] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    > ::  [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
+	    >Named</a
+	    > a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:AbortOr"
 	    >AbortOr</a
@@ -232,19 +158,117 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >class</span
-	    >  <a href="#t:IntValue"
-	    >IntValue</a
-	    > v  <span class="keyword"
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a href="#t:CInt"
+	    >CInt</a
+	    > c  <span class="keyword"
 	    >where</span
 	    ><ul class="subs"
 	    ><li
-	      ><a href="#v:intValue"
-		>intValue</a
+	      ><a href="#v:putInt"
+		>putInt</a
 		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 		>Int</a
-		> -&gt; v</li
+		> -&gt; c</li
 	      ></ul
 	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a href="#t:CNil"
+	    >CNil</a
+	    > c  <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:nil"
+		>nil</a
+		> :: c</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a href="#t:CRel"
+	    >CRel</a
+	    > c  <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:putRel"
+		>putRel</a
+		> :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
+		>Rel</a
+		> c -&gt; c</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a href="#t:CText"
+	    >CText</a
+	    > c  <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:putText"
+		>putText</a
+		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		> -&gt; c</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:nil"
+	    >nil</a
+	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:CNil"
+	    >CNil</a
+	    > c =&gt; c</li
+	  ><li class="src short"
+	  ><a href="#v:putBool"
+	    >putBool</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CBool"
+	    >CBool</a
+	    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > -&gt; c</li
+	  ><li class="src short"
+	  ><a href="#v:putInt"
+	    >putInt</a
+	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:CInt"
+	    >CInt</a
+	    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; c</li
+	  ><li class="src short"
+	  ><a href="#v:putList"
+	    >putList</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CList"
+	    >CList</a
+	    > c =&gt; [c] -&gt; c</li
+	  ><li class="src short"
+	  ><a href="#v:putRel"
+	    >putRel</a
+	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:CRel"
+	    >CRel</a
+	    > c =&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
+	    >Rel</a
+	    > c -&gt; c</li
+	  ><li class="src short"
+	  ><a href="#v:putText"
+	    >putText</a
+	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:CText"
+	    >CText</a
+	    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; c</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
@@ -257,22 +281,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Relbody"
 	    >Relbody</a
 	    > v)</li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >class</span
-	    >  <a href="#t:RelValue"
-	    >RelValue</a
-	    > v  <span class="keyword"
-	    >where</span
-	    ><ul class="subs"
-	    ><li
-	      ><a href="#v:relValue"
-		>relValue</a
-		> :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
-		>Rel</a
-		> v -&gt; v</li
-	      ></ul
-	    ></li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
@@ -289,16 +297,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		>]</li
 	      ></ul
 	    >}</li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:RelmapFun"
-	    >RelmapFun</a
-	    > v = <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
-	    >Rel</a
-	    > v -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
-	    >Rel</a
-	    > v</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
@@ -322,20 +320,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	      ></ul
 	    ></li
 	  ><li class="src short"
-	  ><span class="keyword"
-	    >class</span
-	    >  <a href="#t:StringValue"
-	    >StringValue</a
-	    > v  <span class="keyword"
-	    >where</span
-	    ><ul class="subs"
-	    ><li
-	      ><a href="#v:stringValue"
-		>stringValue</a
-		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		> -&gt; v</li
-	      ></ul
+	  ><a href="#v:headChange"
+	    >headChange</a
+	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:Map"
+	    >Map</a
+	    > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relhead"
+	    >Relhead</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:headFrom"
@@ -346,83 +340,49 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >Relhead</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:headPosh"
-	    >headPosh</a
-	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relhead"
-	    >Relhead</a
-	    > -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relhead"
-	    >Relhead</a
-	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel-Relhead.html#t:TermPos"
-	    >TermPos</a
-	    >]</li
-	  ><li class="src short"
-	  ><a href="#v:headPoss"
-	    >headPoss</a
+	  ><a href="#v:posOf"
+	    >posOf</a
 	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relhead"
 	    >Relhead</a
 	    > -&gt; [[<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >]] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel-Relhead.html#t:TermPos"
+	    >]] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:TermPos"
 	    >TermPos</a
 	    >]</li
 	  ><li class="src short"
-	  ><a href="#v:intValue"
-	    >intValue</a
-	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:IntValue"
-	    >IntValue</a
-	    > v =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-	    >Int</a
-	    > -&gt; v</li
+	  ><a href="#v:posFrom"
+	    >posFrom</a
+	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:TermPos"
+	    >TermPos</a
+	    >]</li
 	  ><li class="src short"
 	  ><a href="#v:posPoss"
 	    >posPoss</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel-Relhead.html#t:TermPos"
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:TermPos"
 	    >TermPos</a
 	    >] -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
 	    >]</li
 	  ><li class="src short"
-	  ><a href="#v:possInner"
-	    >possInner</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel-Relhead.html#t:TermPos"
+	  ><a href="#v:csPick"
+	    >csPick</a
+	    > ::  [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:TermPos"
 	    >TermPos</a
-	    >] -&gt; [[<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >]]</li
+	    >] -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Map"
+	    >Map</a
+	    > [c]</li
 	  ><li class="src short"
-	  ><a href="#v:possOuter"
-	    >possOuter</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel-Relhead.html#t:TermPos"
+	  ><a href="#v:csCut"
+	    >csCut</a
+	    > ::  [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:TermPos"
 	    >TermPos</a
-	    >] -&gt; [[<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >]]</li
-	  ><li class="src short"
-	  ><a href="#v:possPick"
-	    >possPick</a
-	    > ::  [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel-Relhead.html#t:TermPos"
-	    >TermPos</a
-	    >] -&gt; [v] -&gt; [v]</li
-	  ><li class="src short"
-	  ><a href="#v:rehead"
-	    >rehead</a
-	    > :: ([<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >] -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >]) -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relhead"
-	    >Relhead</a
-	    > -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relhead"
-	    >Relhead</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:relValue"
-	    >relValue</a
-	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:RelValue"
-	    >RelValue</a
-	    > v =&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
-	    >Rel</a
-	    > v -&gt; v</li
+	    >] -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Map"
+	    >Map</a
+	    > [c]</li
 	  ><li class="src short"
 	  ><a href="#v:reldee"
 	    >reldee</a
@@ -436,13 +396,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >Rel</a
 	    > v</li
 	  ><li class="src short"
-	  ><a href="#v:stringValue"
-	    >stringValue</a
-	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:StringValue"
-	    >StringValue</a
-	    > v =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	  ><a href="#v:termsInner"
+	    >termsInner</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:TermPos"
+	    >TermPos</a
+	    >] -&gt; [[<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; v</li
+	    >]]</li
+	  ><li class="src short"
+	  ><a href="#v:termsOuter"
+	    >termsOuter</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:TermPos"
+	    >TermPos</a
+	    >] -&gt; [[<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >]]</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
@@ -560,7 +528,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    ><li
 	      ><a href="#v:opHalf"
 		>opHalf</a
-		> :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-HalfRelmap.html#t:HalfRelmap"
+		> :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
 		>HalfRelmap</a
 		></li
 	      ><li
@@ -580,7 +548,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    ><li
 	      >= <a href="#v:RelmapSource"
 		>RelmapSource</a
-		> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-HalfRelmap.html#t:HalfRelmap"
+		> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
 		>HalfRelmap</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
@@ -590,7 +558,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	      ><li
 	      >| <a href="#v:RelmapConst"
 		>RelmapConst</a
-		> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-HalfRelmap.html#t:HalfRelmap"
+		> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
 		>HalfRelmap</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
@@ -600,7 +568,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	      ><li
 	      >| <a href="#v:RelmapAlias"
 		>RelmapAlias</a
-		> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-HalfRelmap.html#t:HalfRelmap"
+		> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
 		>HalfRelmap</a
 		> (<a href="Koshucode-Baala-Minimal-OpKit.html#t:Relmap"
 		>Relmap</a
@@ -608,11 +576,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	      ><li
 	      >| <a href="#v:RelmapCalc"
 		>RelmapCalc</a
-		> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-HalfRelmap.html#t:HalfRelmap"
+		> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
 		>HalfRelmap</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
-		> (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-Relmap.html#t:RelmapSub"
+		> (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relmap.html#t:RelmapSub"
 		>RelmapSub</a
 		> v) [<a href="Koshucode-Baala-Minimal-OpKit.html#t:Relmap"
 		>Relmap</a
@@ -628,7 +596,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	      ><li
 	      >| <a href="#v:RelmapName"
 		>RelmapName</a
-		> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-HalfRelmap.html#t:HalfRelmap"
+		> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
 		>HalfRelmap</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
@@ -662,7 +630,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >type</span
 	    > <a href="#t:RelmapFullCons"
 	    >RelmapFullCons</a
-	    > v = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-HalfRelmap.html#t:HalfRelmap"
+	    > v = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
 	    >HalfRelmap</a
 	    > -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:AbortOr"
 	    >AbortOr</a
@@ -678,13 +646,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >SourceLine</a
 	    >] -&gt; [<a href="Koshucode-Baala-Minimal-OpKit.html#t:TokenTree"
 	    >TokenTree</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-HalfRelmap.html#t:HalfRelmap"
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
 	    >HalfRelmap</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:halfOperand"
 	    >halfOperand</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-HalfRelmap.html#t:HalfRelmap"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
 	    >HalfRelmap</a
 	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
 	    >Named</a
@@ -708,7 +676,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >OpUse</a
 	    > v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-Relmap.html#t:RelmapSub"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relmap.html#t:RelmapSub"
 	    >RelmapSub</a
 	    > v -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relmap"
 	    >Relmap</a
@@ -720,7 +688,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >OpUse</a
 	    > v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-Relmap.html#t:RelmapSub"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relmap.html#t:RelmapSub"
 	    >RelmapSub</a
 	    > v -&gt; [<a href="Koshucode-Baala-Minimal-OpKit.html#t:Relmap"
 	    >Relmap</a
@@ -761,34 +729,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    > v</li
 	  ><li class="src short"
 	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:Calc"
-	    >Calc</a
-	    > v = [v] -&gt; v</li
-	  ><li class="src short"
-	  ><span class="keyword"
 	    >data</span
 	    >  <a href="#t:QuasiQuoter"
 	    >QuasiQuoter</a
 	    > </li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:Ripen"
-	    >Ripen</a
-	    > x v = x -&gt; [v] -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Calc"
-	    >Calc</a
-	    > v</li
-	  ><li class="src short"
-	  ><a href="#v:crop"
-	    >crop</a
-	    > ::  <a href="Koshucode-Baala-Minimal-OpKit.html#t:Ripen"
-	    >Ripen</a
-	    > x v -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Tree"
-	    >Tree</a
-	    > x -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Calc"
-	    >Calc</a
-	    > v</li
 	  ><li class="src short"
 	  ><a href="#v:koshuQuoter"
 	    >koshuQuoter</a
@@ -810,40 +754,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >TokenTree</a
 	    >]]</li
 	  ><li class="src short"
-	  ><a href="#v:termNamePairs"
-	    >termNamePairs</a
-	    > :: [<a href="Koshucode-Baala-Minimal-OpKit.html#t:TokenTree"
-	    >TokenTree</a
-	    >] -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:AbortOr"
-	    >AbortOr</a
-	    > [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >)]</li
-	  ><li class="src short"
-	  ><a href="#v:termNames"
-	    >termNames</a
-	    > :: [<a href="Koshucode-Baala-Minimal-OpKit.html#t:TokenTree"
-	    >TokenTree</a
-	    >] -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:AbortOr"
-	    >AbortOr</a
-	    > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >]</li
-	  ><li class="src short"
-	  ><a href="#v:termTreePairs"
-	    >termTreePairs</a
-	    > :: [<a href="Koshucode-Baala-Minimal-OpKit.html#t:TokenTree"
-	    >TokenTree</a
-	    >] -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:AbortOr"
-	    >AbortOr</a
-	    > [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >, <a href="Koshucode-Baala-Minimal-OpKit.html#t:TokenTree"
-	    >TokenTree</a
-	    >)]</li
-	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
 	    >  <a href="#t:Token"
@@ -860,20 +770,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		>String</a
 		>  </li
 	      ><li
-	      >| <a href="#v:TTermN"
-		>TTermN</a
+	      >| <a href="#v:TTerm"
+		>TTerm</a
 		> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Token.html#t:TNumber"
 		>TNumber</a
 		> [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
-		>]  </li
-	      ><li
-	      >| <a href="#v:TTermP"
-		>TTermP</a
-		> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Token.html#t:TNumber"
-		>TNumber</a
-		> [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-		>Int</a
 		>]  </li
 	      ><li
 	      >| <a href="#v:TOpen"
@@ -971,6 +873,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >, [a])] -&gt; b -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Binary.html#t:BinaryHeight"
 	    >BinaryHeight</a
 	    ></li
+	  ><li class="src short"
+	  >module <a href="Koshucode-Baala-Minimal-OpKit-Get.html"
+	    >Koshucode.Baala.Minimal.OpKit.Get</a
+	    ></li
+	  ><li class="src short"
+	  >module <a href="Koshucode-Baala-Minimal-OpKit-Pattern.html"
+	    >Koshucode.Baala.Minimal.OpKit.Pattern</a
+	    ></li
+	  ><li class="src short"
+	  >module <a href="Koshucode-Baala-Minimal-OpKit-Term.html"
+	    >Koshucode.Baala.Minimal.OpKit.Term</a
+	    ></li
 	  ></ul
 	></div
       ><div id="interface"
@@ -1016,208 +930,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
-	    >data</span
-	    >  <a name="t:Abort" class="def"
+	    >type</span
+	    > <a name="t:Abort" class="def"
 	    >Abort</a
-	    >  </p
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Utility.html#t:AbortType"
+	    >AbortType</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
+	    >AbortReason</a
+	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Abort symbols 
+	    >Abort reason and source information. 
 </p
-	    ></div
-	  ><div class="subs constructors"
-	  ><p class="caption"
-	    >Constructors</p
-	    ><table
-	    ><tr
-	      ><td class="src"
-		><a name="v:AbortLookup" class="def"
-		  >AbortLookup</a
-		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-		  >SourceLine</a
-		  >] <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortMalformedOperand" class="def"
-		  >AbortMalformedOperand</a
-		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-		  >SourceLine</a
-		  >] <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortMissingTermName" class="def"
-		  >AbortMissingTermName</a
-		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-		  >SourceLine</a
-		  >] <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortNotNumber" class="def"
-		  >AbortNotNumber</a
-		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-		  >SourceLine</a
-		  >] <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortOddRelation" class="def"
-		  >AbortOddRelation</a
-		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-		  >SourceLine</a
-		  >]</td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortRequireFlatname" class="def"
-		  >AbortRequireFlatname</a
-		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-		  >SourceLine</a
-		  >] <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortUnknownClause" class="def"
-		  >AbortUnknownClause</a
-		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-		  >SourceLine</a
-		  >]</td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortUnknownContent" class="def"
-		  >AbortUnknownContent</a
-		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-		  >SourceLine</a
-		  >] <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortUnknownRelmap" class="def"
-		  >AbortUnknownRelmap</a
-		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-		  >SourceLine</a
-		  >] <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortUnknownSymbol" class="def"
-		  >AbortUnknownSymbol</a
-		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-		  >SourceLine</a
-		  >] <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortUsage" class="def"
-		  >AbortUsage</a
-		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-		  >SourceLine</a
-		  >] <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  >]</td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ></table
-	    ></div
-	  ><div class="subs instances"
-	  ><p id="control.i:Abort" class="caption collapser" onclick="toggleSection('i:Abort')"
-	    >Instances</p
-	    ><div id="section.i:Abort" class="show"
-	    ><table
-	      ><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
-		    >Eq</a
-		    > <a href="Koshucode-Baala-Minimal-OpKit.html#t:Abort"
-		    >Abort</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-		    >Ord</a
-		    > <a href="Koshucode-Baala-Minimal-OpKit.html#t:Abort"
-		    >Abort</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
-		    >Show</a
-		    > <a href="Koshucode-Baala-Minimal-OpKit.html#t:Abort"
-		    >Abort</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Source.html#t:AbortSymbol"
-		    >AbortSymbol</a
-		    > <a href="Koshucode-Baala-Minimal-OpKit.html#t:Abort"
-		    >Abort</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Utility.html#t:Name"
-		    >Name</a
-		    > <a href="Koshucode-Baala-Minimal-OpKit.html#t:Abort"
-		    >Abort</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		></table
-	      ></div
 	    ></div
 	  ></div
 	><div class="top"
@@ -1226,14 +950,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >type</span
 	    > <a name="t:AbortOr" class="def"
 	    >AbortOr</a
-	    > a = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
-	    >Either</a
-	    > <a href="Koshucode-Baala-Minimal-OpKit.html#t:Abort"
-	    >Abort</a
-	    > a</p
+	    > b = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Utility.html#t:AbortOrType"
+	    >AbortOrType</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
+	    >AbortReason</a
+	    > b</p
 	  ><div class="doc"
 	  ><p
-	    >Abortable type 
+	    >Either of (1) right result, or (2) abort reason with source. 
 </p
 	    ></div
 	  ></div
@@ -1241,9 +965,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	><p class="src"
 	  ><a name="v:-60--33--33--62-" class="def"
 	    >(&lt;!!&gt;)</a
-	    > ::  [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >, a)] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    > ::  [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
+	    >Named</a
+	    > a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:AbortOr"
 	    >AbortOr</a
@@ -1267,38 +991,40 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    ></div
 	  ></div
 	><h1 id="g:3"
-	>Data
+	>Content
 </h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    >  <a name="t:IntValue" class="def"
-	    >IntValue</a
-	    > v  <span class="keyword"
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a name="t:CInt" class="def"
+	    >CInt</a
+	    > c  <span class="keyword"
 	    >where</span
 	    ></p
 	  ><div class="subs methods"
 	  ><p class="caption"
 	    >Methods</p
 	    ><p class="src"
-	    ><a name="v:intValue" class="def"
-	      >intValue</a
+	    ><a name="v:putInt" class="def"
+	      >putInt</a
 	      > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	      >Int</a
-	      > -&gt; v</p
+	      > -&gt; c</p
 	    ></div
 	  ><div class="subs instances"
-	  ><p id="control.i:IntValue" class="caption collapser" onclick="toggleSection('i:IntValue')"
+	  ><p id="control.i:CInt" class="caption collapser" onclick="toggleSection('i:CInt')"
 	    >Instances</p
-	    ><div id="section.i:IntValue" class="show"
+	    ><div id="section.i:CInt" class="show"
 	    ><table
 	      ><tr
 		><td class="src"
-		  ><a href="Koshucode-Baala-Minimal-OpKit.html#t:IntValue"
-		    >IntValue</a
-		    > <a href="Koshucode-Baala-Vanilla-Value-Val.html#t:Val"
-		    >Val</a
+		  ><a href="Koshucode-Baala-Minimal-OpKit.html#t:CInt"
+		    >CInt</a
+		    > <a href="Koshucode-Baala-Vanilla-Value-Content.html#t:VContent"
+		    >VContent</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
@@ -1310,6 +1036,195 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
+	    >class</span
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a name="t:CNil" class="def"
+	    >CNil</a
+	    > c  <span class="keyword"
+	    >where</span
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Types that can be nil 
+</p
+	    ></div
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:nil" class="def"
+	      >nil</a
+	      > :: c</p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:CNil" class="caption collapser" onclick="toggleSection('i:CNil')"
+	    >Instances</p
+	    ><div id="section.i:CNil" class="show"
+	    ><table
+	      ><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Minimal-OpKit.html#t:CNil"
+		    >CNil</a
+		    > <a href="Koshucode-Baala-Vanilla-Value-Content.html#t:VContent"
+		    >VContent</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a name="t:CRel" class="def"
+	    >CRel</a
+	    > c  <span class="keyword"
+	    >where</span
+	    ></p
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:putRel" class="def"
+	      >putRel</a
+	      > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
+	      >Rel</a
+	      > c -&gt; c</p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:CRel" class="caption collapser" onclick="toggleSection('i:CRel')"
+	    >Instances</p
+	    ><div id="section.i:CRel" class="show"
+	    ><table
+	      ><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Minimal-OpKit.html#t:CRel"
+		    >CRel</a
+		    > <a href="Koshucode-Baala-Vanilla-Value-Content.html#t:VContent"
+		    >VContent</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a name="t:CText" class="def"
+	    >CText</a
+	    > c  <span class="keyword"
+	    >where</span
+	    ></p
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:putText" class="def"
+	      >putText</a
+	      > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	      >String</a
+	      > -&gt; c</p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:CText" class="caption collapser" onclick="toggleSection('i:CText')"
+	    >Instances</p
+	    ><div id="section.i:CText" class="show"
+	    ><table
+	      ><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Minimal-OpKit.html#t:CText"
+		    >CText</a
+		    > <a href="Koshucode-Baala-Vanilla-Value-Content.html#t:VContent"
+		    >VContent</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:nil" class="def"
+	    >nil</a
+	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:CNil"
+	    >CNil</a
+	    > c =&gt; c</p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:putBool" class="def"
+	    >putBool</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CBool"
+	    >CBool</a
+	    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > -&gt; c</p
+	  ><div class="doc"
+	  ><p
+	    >Put Boolean value into content <code
+	      >c</code
+	      >. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:putInt" class="def"
+	    >putInt</a
+	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:CInt"
+	    >CInt</a
+	    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; c</p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:putList" class="def"
+	    >putList</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CList"
+	    >CList</a
+	    > c =&gt; [c] -&gt; c</p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:putRel" class="def"
+	    >putRel</a
+	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:CRel"
+	    >CRel</a
+	    > c =&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
+	    >Rel</a
+	    > c -&gt; c</p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:putText" class="def"
+	    >putText</a
+	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:CText"
+	    >CText</a
+	    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; c</p
+	  ></div
+	><h1 id="g:4"
+	>Data
+</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
 	    >data</span
 	    >  <a name="t:Rel" class="def"
 	    >Rel</a
@@ -1317,8 +1232,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	  ><div class="doc"
 	  ><p
 	    >Relations on type v.
-   Heading of relation and
-   body of relation as a list of tuples.
+    Heading of relation and
+    body of relation as a list of tuples. 
 </p
 	    ></div
 	  ><div class="subs constructors"
@@ -1389,44 +1304,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		    > (<a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
 		    >Rel</a
 		    > v)</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		></table
-	      ></div
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >class</span
-	    >  <a name="t:RelValue" class="def"
-	    >RelValue</a
-	    > v  <span class="keyword"
-	    >where</span
-	    ></p
-	  ><div class="subs methods"
-	  ><p class="caption"
-	    >Methods</p
-	    ><p class="src"
-	    ><a name="v:relValue" class="def"
-	      >relValue</a
-	      > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
-	      >Rel</a
-	      > v -&gt; v</p
-	    ></div
-	  ><div class="subs instances"
-	  ><p id="control.i:RelValue" class="caption collapser" onclick="toggleSection('i:RelValue')"
-	    >Instances</p
-	    ><div id="section.i:RelValue" class="show"
-	    ><table
-	      ><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Minimal-OpKit.html#t:RelValue"
-		    >RelValue</a
-		    > <a href="Koshucode-Baala-Vanilla-Value-Val.html#t:Val"
-		    >Val</a
-		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
@@ -1542,30 +1419,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:RelmapFun" class="def"
-	    >RelmapFun</a
-	    > v = <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
-	    >Rel</a
-	    > v -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
-	    >Rel</a
-	    > v</p
-	  ><div class="doc"
-	  ><p
-	    >Relation-to-relation mapping
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
 	    >data</span
 	    >  <a name="t:Relterm" class="def"
 	    >Relterm</a
 	    >  </p
 	  ><div class="doc"
 	  ><p
-	    >Term in heading of relation
+	    >Term in heading of relation 
 </p
 	    ></div
 	  ><div class="subs constructors"
@@ -1579,8 +1439,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
 		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
+		><td class="doc"
+		><p
+		  >For non-relation
+</p
+		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
@@ -1591,8 +1454,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		  > [<a href="Koshucode-Baala-Minimal-OpKit.html#t:Relterm"
 		  >Relterm</a
 		  >]</td
-		><td class="doc empty"
-		>&nbsp;</td
+		><td class="doc"
+		><p
+		  >For relation
+</p
+		  ></td
 		></tr
 	      ></table
 	    ></div
@@ -1657,40 +1523,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><span class="keyword"
-	    >class</span
-	    >  <a name="t:StringValue" class="def"
-	    >StringValue</a
-	    > v  <span class="keyword"
-	    >where</span
+	  ><a name="v:headChange" class="def"
+	    >headChange</a
+	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:Map"
+	    >Map</a
+	    > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relhead"
+	    >Relhead</a
 	    ></p
-	  ><div class="subs methods"
-	  ><p class="caption"
-	    >Methods</p
-	    ><p class="src"
-	    ><a name="v:stringValue" class="def"
-	      >stringValue</a
-	      > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	      >String</a
-	      > -&gt; v</p
-	    ></div
-	  ><div class="subs instances"
-	  ><p id="control.i:StringValue" class="caption collapser" onclick="toggleSection('i:StringValue')"
-	    >Instances</p
-	    ><div id="section.i:StringValue" class="show"
-	    ><table
-	      ><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Minimal-OpKit.html#t:StringValue"
-		    >StringValue</a
-		    > <a href="Koshucode-Baala-Vanilla-Value-Val.html#t:Val"
-		    >Val</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		></table
-	      ></div
+	  ><div class="doc"
+	  ><p
+	    >Reconstruct head. 
+</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -1704,140 +1551,98 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Make head from term names
+	    >Make head from term names.
 </p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>headFrom [&quot;/a&quot;, &quot;/b&quot;]
+</code
+		></strong
+	      >Relhead [Term &quot;/a&quot;, Term &quot;/b&quot;]
+</pre
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:headPosh" class="def"
-	    >headPosh</a
-	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relhead"
-	    >Relhead</a
-	    > -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relhead"
-	    >Relhead</a
-	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel-Relhead.html#t:TermPos"
-	    >TermPos</a
-	    >]</p
-	  ><div class="doc"
-	  ><p
-	    >Positions of given (sub)head in a head
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:headPoss" class="def"
-	    >headPoss</a
+	  ><a name="v:posOf" class="def"
+	    >posOf</a
 	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relhead"
 	    >Relhead</a
 	    > -&gt; [[<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >]] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel-Relhead.html#t:TermPos"
+	    >]] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:TermPos"
 	    >TermPos</a
 	    >]</p
 	  ><div class="doc"
 	  ><p
-	    >Positions of given names in a head
+	    >Positions of given names in a head 
 </p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:intValue" class="def"
-	    >intValue</a
-	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:IntValue"
-	    >IntValue</a
-	    > v =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-	    >Int</a
-	    > -&gt; v</p
+	  ><a name="v:posFrom" class="def"
+	    >posFrom</a
+	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:TermPos"
+	    >TermPos</a
+	    >]</p
+	  ><div class="doc"
+	  ><p
+	    >Positions of given (sub)head in a head 
+</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:posPoss" class="def"
 	    >posPoss</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel-Relhead.html#t:TermPos"
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:TermPos"
 	    >TermPos</a
 	    >] -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
 	    >]</p
 	  ><div class="doc"
 	  ><p
-	    >Indicies
+	    >Indicies 
 </p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:possInner" class="def"
-	    >possInner</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel-Relhead.html#t:TermPos"
+	  ><a name="v:csPick" class="def"
+	    >csPick</a
+	    > ::  [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:TermPos"
 	    >TermPos</a
-	    >] -&gt; [[<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >]]</p
+	    >] -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Map"
+	    >Map</a
+	    > [c]</p
 	  ><div class="doc"
 	  ><p
-	    >Pick an inner part.
+	    >Pick contents by positions. 
 </p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:possOuter" class="def"
-	    >possOuter</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel-Relhead.html#t:TermPos"
+	  ><a name="v:csCut" class="def"
+	    >csCut</a
+	    > ::  [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:TermPos"
 	    >TermPos</a
-	    >] -&gt; [[<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >]]</p
+	    >] -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Map"
+	    >Map</a
+	    > [c]</p
 	  ><div class="doc"
 	  ><p
-	    >Pick an outer part.
+	    >Cut contents by positions. 
 </p
 	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:possPick" class="def"
-	    >possPick</a
-	    > ::  [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel-Relhead.html#t:TermPos"
-	    >TermPos</a
-	    >] -&gt; [v] -&gt; [v]</p
-	  ><div class="doc"
-	  ><p
-	    >Pick values
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:rehead" class="def"
-	    >rehead</a
-	    > :: ([<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >] -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >]) -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relhead"
-	    >Relhead</a
-	    > -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relhead"
-	    >Relhead</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Reconstruct head
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:relValue" class="def"
-	    >relValue</a
-	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:RelValue"
-	    >RelValue</a
-	    > v =&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
-	    >Rel</a
-	    > v -&gt; v</p
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -1848,7 +1653,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    > v</p
 	  ><div class="doc"
 	  ><p
-	    >Relational constant that has no terms and the empty tuple
+	    >Relational constant that has no terms and the empty tuple. 
 </p
 	    ></div
 	  ></div
@@ -1861,21 +1666,41 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    > v</p
 	  ><div class="doc"
 	  ><p
-	    >Relational constant that has no terms and no tuples
+	    >Relational constant that has no terms and no tuples. 
 </p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:stringValue" class="def"
-	    >stringValue</a
-	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:StringValue"
-	    >StringValue</a
-	    > v =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	  ><a name="v:termsInner" class="def"
+	    >termsInner</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:TermPos"
+	    >TermPos</a
+	    >] -&gt; [[<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; v</p
+	    >]]</p
+	  ><div class="doc"
+	  ><p
+	    >Pick an inner part. 
+</p
+	    ></div
 	  ></div
-	><h1 id="g:4"
+	><div class="top"
+	><p class="src"
+	  ><a name="v:termsOuter" class="def"
+	    >termsOuter</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:TermPos"
+	    >TermPos</a
+	    >] -&gt; [[<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >]]</p
+	  ><div class="doc"
+	  ><p
+	    >Pick an outer part. 
+</p
+	    ></div
+	  ></div
+	><h1 id="g:5"
 	>Prelude
 </h1
 	><div class="top"
@@ -1984,7 +1809,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 </p
 	    ></div
 	  ></div
-	><h1 id="g:5"
+	><h1 id="g:6"
 	>Relmap
 </h1
 	><div class="top"
@@ -2012,7 +1837,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		>Relmap</a
 		></code
 	      > is constructed from <code
-	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-HalfRelmap.html#t:HalfRelmap"
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
 		>HalfRelmap</a
 		></code
 	      > and subrelmaps in it. 
@@ -2177,7 +2002,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		    ><dt class="src"
 		      ><a name="v:opHalf" class="def"
 			>opHalf</a
-			> :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-HalfRelmap.html#t:HalfRelmap"
+			> :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
 			>HalfRelmap</a
 			></dt
 		      ><dd class="doc"
@@ -2248,7 +2073,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	      ><td class="src"
 		><a name="v:RelmapSource" class="def"
 		  >RelmapSource</a
-		  > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-HalfRelmap.html#t:HalfRelmap"
+		  > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
 		  >HalfRelmap</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
@@ -2265,7 +2090,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	      ><td class="src"
 		><a name="v:RelmapConst" class="def"
 		  >RelmapConst</a
-		  > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-HalfRelmap.html#t:HalfRelmap"
+		  > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
 		  >HalfRelmap</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
@@ -2282,7 +2107,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	      ><td class="src"
 		><a name="v:RelmapAlias" class="def"
 		  >RelmapAlias</a
-		  > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-HalfRelmap.html#t:HalfRelmap"
+		  > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
 		  >HalfRelmap</a
 		  > (<a href="Koshucode-Baala-Minimal-OpKit.html#t:Relmap"
 		  >Relmap</a
@@ -2297,11 +2122,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	      ><td class="src"
 		><a name="v:RelmapCalc" class="def"
 		  >RelmapCalc</a
-		  > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-HalfRelmap.html#t:HalfRelmap"
+		  > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
 		  >HalfRelmap</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
-		  > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-Relmap.html#t:RelmapSub"
+		  > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relmap.html#t:RelmapSub"
 		  >RelmapSub</a
 		  > v) [<a href="Koshucode-Baala-Minimal-OpKit.html#t:Relmap"
 		  >Relmap</a
@@ -2331,7 +2156,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	      ><td class="src"
 		><a name="v:RelmapName" class="def"
 		  >RelmapName</a
-		  > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-HalfRelmap.html#t:HalfRelmap"
+		  > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
 		  >HalfRelmap</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
@@ -2479,7 +2304,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    ><table
 	    ><tr
 	      ><td class="src"
-		>&nbsp;= <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-HalfRelmap.html#t:HalfRelmap"
+		>&nbsp;= <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
 		  >HalfRelmap</a
 		  ></td
 		><td class="doc"
@@ -2515,7 +2340,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		>Relmap</a
 		></code
 	      > from contents of <code
-	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-HalfRelmap.html#t:HalfRelmap"
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
 		>HalfRelmap</a
 		></code
 	      >. 
@@ -2557,7 +2382,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-HalfRelmap.html#t:HalfRelmap"
+		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
 		  >HalfRelmap</a
 		  ></td
 		><td class="doc"
@@ -2572,7 +2397,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	  ><p
 	    >First step of constructing relmap,
     make <code
-	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-HalfRelmap.html#t:HalfRelmap"
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
 		>HalfRelmap</a
 		></code
 	      > from use of relational operator. 
@@ -2583,7 +2408,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	><p class="src"
 	  ><a name="v:halfOperand" class="def"
 	    >halfOperand</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-HalfRelmap.html#t:HalfRelmap"
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
 	    >HalfRelmap</a
 	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
 	    >Named</a
@@ -2676,7 +2501,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-Relmap.html#t:RelmapSub"
+		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relmap.html#t:RelmapSub"
 		  >RelmapSub</a
 		  > v</td
 		><td class="doc"
@@ -2737,7 +2562,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Relmap-Relmap.html#t:RelmapSub"
+		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relmap.html#t:RelmapSub"
 		  >RelmapSub</a
 		  > v</td
 		><td class="doc"
@@ -2937,22 +2762,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 </p
 	    ></div
 	  ></div
-	><h1 id="g:6"
+	><h1 id="g:7"
 	>Section
 </h1
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:Calc" class="def"
-	    >Calc</a
-	    > v = [v] -&gt; v</p
-	  ><div class="doc"
-	  ><p
-	    >Calculator combining values into a single value
-</p
-	    ></div
-	  ></div
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -2960,71 +2772,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >  <a name="t:QuasiQuoter" class="def"
 	    >QuasiQuoter</a
 	    >  </p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:Ripen" class="def"
-	    >Ripen</a
-	    > x v = x -&gt; [v] -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Calc"
-	    >Calc</a
-	    > v</p
-	  ><div class="doc"
-	  ><p
-	    >Set of operators
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:crop" class="def"
-	    >crop</a
-	    ></p
-	  ><div class="subs arguments"
-	  ><p class="caption"
-	    >Arguments</p
-	    ><table
-	    ><tr
-	      ><td class="src"
-		>:: <a href="Koshucode-Baala-Minimal-OpKit.html#t:Ripen"
-		  >Ripen</a
-		  > x v</td
-		><td class="doc"
-		><p
-		  >Set of Operators
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		>-&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Tree"
-		  >Tree</a
-		  > x</td
-		><td class="doc"
-		><p
-		  >Cropping target
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		>-&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Calc"
-		  >Calc</a
-		  > v</td
-		><td class="doc"
-		><p
-		  >Calculator
-</p
-		  ></td
-		></tr
-	      ></table
-	    ></div
-	  ><div class="doc"
-	  ><p
-	    >Calculate a value of tree
-</p
-	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -3070,7 +2817,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		><p
 		  >Quoter that outputs
   <code
-		    ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Section.html#t:Section"
+		    ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Section.html#t:Section"
 		      >Section</a
 		      ></code
 		    > or
@@ -3125,92 +2872,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 </pre
 	    ></div
 	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:termNamePairs" class="def"
-	    >termNamePairs</a
-	    > :: [<a href="Koshucode-Baala-Minimal-OpKit.html#t:TokenTree"
-	    >TokenTree</a
-	    >] -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:AbortOr"
-	    >AbortOr</a
-	    > [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >)]</p
-	  ><div class="doc"
-	  ><p
-	    >Extract a list of name-and-name pairs.
-</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>termNamePairs $ tokenTrees $ tokens &quot;/a /x /b /y&quot;
-</code
-		></strong
-	      >Right [(&quot;/a&quot;,&quot;/x&quot;), (&quot;/b&quot;,&quot;/y&quot;)]
-</pre
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:termNames" class="def"
-	    >termNames</a
-	    > :: [<a href="Koshucode-Baala-Minimal-OpKit.html#t:TokenTree"
-	    >TokenTree</a
-	    >] -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:AbortOr"
-	    >AbortOr</a
-	    > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >]</p
-	  ><div class="doc"
-	  ><p
-	    >Extract a list of term names.
-</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>termNames $ tokenTrees $ tokens &quot;/a /b /c&quot;
-</code
-		></strong
-	      >Right [&quot;/a&quot;,&quot;/b&quot;,&quot;/c&quot;]
-</pre
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:termTreePairs" class="def"
-	    >termTreePairs</a
-	    > :: [<a href="Koshucode-Baala-Minimal-OpKit.html#t:TokenTree"
-	    >TokenTree</a
-	    >] -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:AbortOr"
-	    >AbortOr</a
-	    > [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >, <a href="Koshucode-Baala-Minimal-OpKit.html#t:TokenTree"
-	    >TokenTree</a
-	    >)]</p
-	  ><div class="doc"
-	  ><p
-	    >Extract a list of name-and-tree pairs.
-</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>termTreePairs $ tokenTrees $ tokens &quot;/a 'A3' /b 10&quot;
-</code
-		></strong
-	      >Right [(&quot;/a&quot;, TreeL (Word 1 &quot;A3&quot;)), (&quot;/b&quot;, TreeL (Word 0 &quot;10&quot;))]
-</pre
-	    ></div
-	  ></div
-	><h1 id="g:7"
+	><h1 id="g:8"
 	>Syntax
 </h1
 	><div class="top"
@@ -3249,8 +2911,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:TTermN" class="def"
-		  >TTermN</a
+		><a name="v:TTerm" class="def"
+		  >TTerm</a
 		  > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Token.html#t:TNumber"
 		  >TNumber</a
 		  > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
@@ -3259,26 +2921,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		><td class="doc"
 		><p
 		  >Term name
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:TTermP" class="def"
-		  >TTermP</a
-		  > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Token.html#t:TNumber"
-		  >TNumber</a
-		  > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-		  >Int</a
-		  >]</td
-		><td class="doc"
-		><p
-		  >Term position in particular relation.
-   This is translate from <code
-		    ><a href="Koshucode-Baala-Minimal-OpKit.html#v:TTermN"
-		      >TTermN</a
-		      ></code
-		    >.
 </p
 		  ></td
 		></tr
@@ -3441,7 +3083,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    > a </p
 	  ><div class="doc"
 	  ><p
-	    >Tree of leaf and branch
+	    >Tree of leaf and branch. 
 </p
 	    ></div
 	  ><div class="subs constructors"
@@ -3720,6 +3362,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		></tr
 	      ></table
 	    ></div
+	  ></div
+	><h1 id="g:9"
+	>OpKit
+</h1
+	><div class="top"
+	><p class="src"
+	  >module <a href="Koshucode-Baala-Minimal-OpKit-Get.html"
+	    >Koshucode.Baala.Minimal.OpKit.Get</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  >module <a href="Koshucode-Baala-Minimal-OpKit-Pattern.html"
+	    >Koshucode.Baala.Minimal.OpKit.Pattern</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  >module <a href="Koshucode-Baala-Minimal-OpKit-Term.html"
+	    >Koshucode.Baala.Minimal.OpKit.Term</a
+	    ></p
 	  ></div
 	></div
       ></div

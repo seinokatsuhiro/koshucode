@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-operator-0.25.0.0: Relational operators in Koshucode</p
+      >koshucode-baala-operator-0.30.0.0: Relational operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -112,13 +112,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >relMeet</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > v =&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
+	    > c =&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
 	    >Rel</a
-	    > v -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
+	    > c -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
 	    >Rel</a
-	    > v -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
+	    >AbOr</a
+	    > (<a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
 	    >Rel</a
-	    > v</li
+	    > c)</li
 	  ><li class="src short"
 	  ><a href="#v:relopJoin"
 	    >relopJoin</a
@@ -148,9 +150,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >Rel</a
 	    > v -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
 	    >Rel</a
-	    > v -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
+	    > v -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
+	    >AbOr</a
+	    > (<a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
 	    >Rel</a
-	    > v</li
+	    > v)</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -169,42 +173,41 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	  ><dt
 	    >R1 ^ R2</dt
 	    ><dd
-	    >
- Meet of <em
+	    >  Meet of <em
 	      >R1</em
 	      > and <em
 	      >R2</em
 	      >.
- This operator is one of generalized intersection.
- ''Meet'' is same as ''natural join'' in SQL.
- <em
+              This operator is one of generalized intersection.
+              ''Meet'' is same as ''natural join'' in SQL.
+              <em
 	      >R1</em
 	      > tuple is meetable to <em
 	      >R2</em
 	      > tuple if and only if
- shared terms of <em
+              shared terms of <em
 	      >R1</em
 	      > tuple and <em
 	      >R2</em
-	      > tuple are same contents.
+	      > tuple
+              are same contents.
 </dd
 	    ><dt
 	    >R1 v R2</dt
 	    ><dd
-	    >
- Join of <em
+	    >  Join of <em
 	      >R1</em
 	      > and <em
 	      >R2</em
 	      >.
- This operator is one of generalized union.
- Toropashko calls it ''inner union''.
- Join of <em
+              This operator is one of generalized union.
+              Toropashko calls it ''inner union''.
+              Join of <em
 	      >R1</em
 	      > and <em
 	      >R2</em
 	      > is ordinary union of
- shared-term-projection tuples in <em
+              shared-term-projection tuples in <em
 	      >R1</em
 	      > and <em
 	      >R2</em
@@ -302,7 +305,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	      ><td class="src"
 		>:: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 		  >Ord</a
-		  > v</td
+		  > c</td
 		><td class="doc empty"
 		>&nbsp;</td
 		></tr
@@ -310,7 +313,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	      ><td class="src"
 		>=&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
 		  >Rel</a
-		  > v</td
+		  > c</td
 		><td class="doc"
 		><p
 		  >Input relation <em
@@ -323,7 +326,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	      ><td class="src"
 		>-&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
 		  >Rel</a
-		  > v</td
+		  > c</td
 		><td class="doc"
 		><p
 		  >Input relation <em
@@ -334,9 +337,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
+		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
+		  >AbOr</a
+		  > (<a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
 		  >Rel</a
-		  > v</td
+		  > c)</td
 		><td class="doc"
 		><p
 		  >Meet of <em
@@ -354,6 +359,122 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >Meet two relations. 
 </p
 	    ></div
+	  ></div
+	><div class="doc"
+	><p
+	  >Summary of calculating meet of relations like
+   <code
+	    >(/a /b /c)</code
+	    > meet <code
+	    >(/b /c /d)</code
+	    > = <code
+	    >(/d ++ /a /b /c)</code
+	    >.
+   In this case, shared terms are <code
+	    >/b</code
+	    > and <code
+	    >/c</code
+	    >,
+   left-sided term is <code
+	    >/a</code
+	    >, and right-sided term is <code
+	    >/d</code
+	    >.
+</p
+	  ><dl
+	  ><dt
+	    >Input</dt
+	    ><dd
+	    >    Relations <code
+	      >(Rel h1 b1)</code
+	      > and <code
+	      >(Rel h2 b2)</code
+	      >
+</dd
+	    ><dt
+	    >Output</dt
+	    ><dd
+	    >   Relation <code
+	      >(Rel h3 b3)</code
+	      >
+</dd
+	    ></dl
+	  ><ol
+	  ><li
+	    > Let <code
+	      >s1</code
+	      > be shared-term information of <code
+	      >h1</code
+	      >.
+</li
+	    ><li
+	    > Let <code
+	      >s2</code
+	      > be shared-term information of <code
+	      >h2</code
+	      >.
+</li
+	    ><li
+	    > Let <code
+	      >cs1</code
+	      > :: <code
+	      >[c]</code
+	      > be element of <code
+	      >b1</code
+	      >.
+</li
+	    ><li
+	    > Let <code
+	      >cs2</code
+	      > :: <code
+	      >[c]</code
+	      > be element of <code
+	      >b2</code
+	      >.
+</li
+	    ><li
+	    > Split each <code
+	      >cs2</code
+	      >, by <code
+	      >s2</code
+	      >,
+      into shared and sided terms :: <code
+	      >([c], [c])</code
+	      >.
+</li
+	    ><li
+	    > For each same shared terms, collect the sided terms.
+      Let it be <code
+	      >(share2, sides2)</code
+	      > :: <code
+	      >([c], [[c]])</code
+	      >.
+</li
+	    ><li
+	    > Pick shared terms <code
+	      >share1</code
+	      > :: <code
+	      >[c]</code
+	      >,
+      by <code
+	      >s1</code
+	      >, from each <code
+	      >cs1</code
+	      >.
+</li
+	    ><li
+	    > Concat <code
+	      >cs1</code
+	      > and each of <code
+	      >sides2</code
+	      >
+      where <code
+	      >share1</code
+	      > equals <code
+	      >share2</code
+	      >,
+</li
+	    ></ol
 	  ></div
 	><h1 id="g:3"
 	>Join (Inner union)
@@ -477,9 +598,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
+		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
+		  >AbOr</a
+		  > (<a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
 		  >Rel</a
-		  > v</td
+		  > v)</td
 		><td class="doc"
 		><p
 		  >Join of <em

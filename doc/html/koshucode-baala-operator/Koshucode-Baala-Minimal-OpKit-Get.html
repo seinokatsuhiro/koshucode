@@ -3,13 +3,13 @@
 ><head
   ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
      /><title
-    >Koshucode.Baala.Minimal.Relmap.Get</title
+    >Koshucode.Baala.Minimal.OpKit.Get</title
     ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
      /><script src="haddock-util.js" type="text/javascript"
     ></script
     ><script type="text/javascript"
     >//<![CDATA[
-window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minimal-Relmap-Get.html");};
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minimal-OpKit-Get.html");};
 //]]>
 </script
     ></head
@@ -17,7 +17,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
   ><div id="package-header"
     ><ul class="links" id="page-menu"
       ><li
-	><a href="src/Koshucode-Baala-Minimal-Relmap-Get.html"
+	><a href="src/Koshucode-Baala-Minimal-OpKit-Get.html"
 	  >Source</a
 	  ></li
 	><li
@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-operator-0.25.0.0: Relational operators in Koshucode</p
+      >koshucode-baala-operator-0.30.0.0: Relational operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -43,7 +43,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    ></tr
 	  ></table
 	><p class="caption"
-	>Koshucode.Baala.Minimal.Relmap.Get</p
+	>Koshucode.Baala.Minimal.OpKit.Get</p
 	></div
       ><div id="table-of-contents"
       ><p class="caption"
@@ -105,7 +105,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	  ><li class="src short"
 	  ><a href="#v:getTree"
 	    >getTree</a
-	    > ::  <a href="Koshucode-Baala-Minimal-Relmap-Get.html#t:OpGet"
+	    > ::  <a href="Koshucode-Baala-Minimal-OpKit-Get.html#t:OpGet"
 	    >OpGet</a
 	    > v <a href="Koshucode-Baala-Minimal-OpKit.html#t:TokenTree"
 	    >TokenTree</a
@@ -113,7 +113,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	  ><li class="src short"
 	  ><a href="#v:getTrees"
 	    >getTrees</a
-	    > ::  <a href="Koshucode-Baala-Minimal-Relmap-Get.html#t:OpGet"
+	    > ::  <a href="Koshucode-Baala-Minimal-OpKit-Get.html#t:OpGet"
 	    >OpGet</a
 	    > v [<a href="Koshucode-Baala-Minimal-OpKit.html#t:TokenTree"
 	    >TokenTree</a
@@ -121,7 +121,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	  ><li class="src short"
 	  ><a href="#v:getWord"
 	    >getWord</a
-	    > ::  <a href="Koshucode-Baala-Minimal-Relmap-Get.html#t:OpGet"
+	    > ::  <a href="Koshucode-Baala-Minimal-OpKit-Get.html#t:OpGet"
 	    >OpGet</a
 	    > v <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
@@ -129,7 +129,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	  ><li class="src short"
 	  ><a href="#v:getInt"
 	    >getInt</a
-	    > ::  <a href="Koshucode-Baala-Minimal-Relmap-Get.html#t:OpGet"
+	    > ::  <a href="Koshucode-Baala-Minimal-OpKit-Get.html#t:OpGet"
 	    >OpGet</a
 	    > v <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
@@ -137,7 +137,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	  ><li class="src short"
 	  ><a href="#v:getTerm"
 	    >getTerm</a
-	    > ::  <a href="Koshucode-Baala-Minimal-Relmap-Get.html#t:OpGet"
+	    > ::  <a href="Koshucode-Baala-Minimal-OpKit-Get.html#t:OpGet"
 	    >OpGet</a
 	    > v <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
@@ -145,21 +145,41 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	  ><li class="src short"
 	  ><a href="#v:getTerms"
 	    >getTerms</a
-	    > ::  <a href="Koshucode-Baala-Minimal-Relmap-Get.html#t:OpGet"
+	    > ::  <a href="Koshucode-Baala-Minimal-OpKit-Get.html#t:OpGet"
 	    >OpGet</a
 	    > v [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    >]</li
 	  ><li class="src short"
+	  ><a href="#v:getTermPair"
+	    >getTermPair</a
+	    > ::  <a href="Koshucode-Baala-Minimal-OpKit-Get.html#t:OpGet"
+	    >OpGet</a
+	    > v (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
+	    >Named</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >)</li
+	  ><li class="src short"
 	  ><a href="#v:getTermPairs"
 	    >getTermPairs</a
-	    > ::  <a href="Koshucode-Baala-Minimal-Relmap-Get.html#t:OpGet"
+	    > ::  <a href="Koshucode-Baala-Minimal-OpKit-Get.html#t:OpGet"
 	    >OpGet</a
-	    > v [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    > v [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
+	    >Named</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >)]</li
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:getTermTrees"
+	    >getTermTrees</a
+	    > ::  <a href="Koshucode-Baala-Minimal-OpKit-Get.html#t:OpGet"
+	    >OpGet</a
+	    > v [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
+	    >Named</a
+	    > <a href="Koshucode-Baala-Minimal-OpKit.html#t:TokenTree"
+	    >TokenTree</a
+	    >]</li
 	  ><li class="src short"
 	  ><a href="#v:getRelmap"
 	    >getRelmap</a
@@ -192,7 +212,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >getHead</a
 	    > ::  [a] -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:AbortOr"
 	    >AbortOr</a
-	    > a<a href="src/Koshucode-Baala-Minimal-Relmap-Get.html#getHead" class="link"
+	    > a<a href="src/Koshucode-Baala-Minimal-OpKit-Get.html#getHead" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -214,7 +234,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >type</span
 	    > <a name="t:OpGet" class="def"
 	    >OpGet</a
-	    > v a<a href="src/Koshucode-Baala-Minimal-Relmap-Get.html#OpGet" class="link"
+	    > v a<a href="src/Koshucode-Baala-Minimal-OpKit-Get.html#OpGet" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs arguments"
@@ -261,11 +281,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	><p class="src"
 	  ><a name="v:getTree" class="def"
 	    >getTree</a
-	    > ::  <a href="Koshucode-Baala-Minimal-Relmap-Get.html#t:OpGet"
+	    > ::  <a href="Koshucode-Baala-Minimal-OpKit-Get.html#t:OpGet"
 	    >OpGet</a
 	    > v <a href="Koshucode-Baala-Minimal-OpKit.html#t:TokenTree"
 	    >TokenTree</a
-	    ><a href="src/Koshucode-Baala-Minimal-Relmap-Get.html#getTree" class="link"
+	    ><a href="src/Koshucode-Baala-Minimal-OpKit-Get.html#getTree" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -273,11 +293,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	><p class="src"
 	  ><a name="v:getTrees" class="def"
 	    >getTrees</a
-	    > ::  <a href="Koshucode-Baala-Minimal-Relmap-Get.html#t:OpGet"
+	    > ::  <a href="Koshucode-Baala-Minimal-OpKit-Get.html#t:OpGet"
 	    >OpGet</a
 	    > v [<a href="Koshucode-Baala-Minimal-OpKit.html#t:TokenTree"
 	    >TokenTree</a
-	    >]<a href="src/Koshucode-Baala-Minimal-Relmap-Get.html#getTrees" class="link"
+	    >]<a href="src/Koshucode-Baala-Minimal-OpKit-Get.html#getTrees" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -285,11 +305,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	><p class="src"
 	  ><a name="v:getWord" class="def"
 	    >getWord</a
-	    > ::  <a href="Koshucode-Baala-Minimal-Relmap-Get.html#t:OpGet"
+	    > ::  <a href="Koshucode-Baala-Minimal-OpKit-Get.html#t:OpGet"
 	    >OpGet</a
 	    > v <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    ><a href="src/Koshucode-Baala-Minimal-Relmap-Get.html#getWord" class="link"
+	    ><a href="src/Koshucode-Baala-Minimal-OpKit-Get.html#getWord" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -308,11 +328,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	><p class="src"
 	  ><a name="v:getInt" class="def"
 	    >getInt</a
-	    > ::  <a href="Koshucode-Baala-Minimal-Relmap-Get.html#t:OpGet"
+	    > ::  <a href="Koshucode-Baala-Minimal-OpKit-Get.html#t:OpGet"
 	    >OpGet</a
 	    > v <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    ><a href="src/Koshucode-Baala-Minimal-Relmap-Get.html#getInt" class="link"
+	    ><a href="src/Koshucode-Baala-Minimal-OpKit-Get.html#getInt" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -323,11 +343,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	><p class="src"
 	  ><a name="v:getTerm" class="def"
 	    >getTerm</a
-	    > ::  <a href="Koshucode-Baala-Minimal-Relmap-Get.html#t:OpGet"
+	    > ::  <a href="Koshucode-Baala-Minimal-OpKit-Get.html#t:OpGet"
 	    >OpGet</a
 	    > v <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    ><a href="src/Koshucode-Baala-Minimal-Relmap-Get.html#getTerm" class="link"
+	    ><a href="src/Koshucode-Baala-Minimal-OpKit-Get.html#getTerm" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -340,11 +360,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	><p class="src"
 	  ><a name="v:getTerms" class="def"
 	    >getTerms</a
-	    > ::  <a href="Koshucode-Baala-Minimal-Relmap-Get.html#t:OpGet"
+	    > ::  <a href="Koshucode-Baala-Minimal-OpKit-Get.html#t:OpGet"
 	    >OpGet</a
 	    > v [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >]<a href="src/Koshucode-Baala-Minimal-Relmap-Get.html#getTerms" class="link"
+	    >]<a href="src/Koshucode-Baala-Minimal-OpKit-Get.html#getTerms" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -355,15 +375,29 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	  ></div
 	><div class="top"
 	><p class="src"
+	  ><a name="v:getTermPair" class="def"
+	    >getTermPair</a
+	    > ::  <a href="Koshucode-Baala-Minimal-OpKit-Get.html#t:OpGet"
+	    >OpGet</a
+	    > v (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
+	    >Named</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >)<a href="src/Koshucode-Baala-Minimal-OpKit-Get.html#getTermPair" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
 	  ><a name="v:getTermPairs" class="def"
 	    >getTermPairs</a
-	    > ::  <a href="Koshucode-Baala-Minimal-Relmap-Get.html#t:OpGet"
+	    > ::  <a href="Koshucode-Baala-Minimal-OpKit-Get.html#t:OpGet"
 	    >OpGet</a
-	    > v [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    > v [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
+	    >Named</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >)]<a href="src/Koshucode-Baala-Minimal-Relmap-Get.html#getTermPairs" class="link"
+	    >]<a href="src/Koshucode-Baala-Minimal-OpKit-Get.html#getTermPairs" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -371,6 +405,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >Get list of term-name pairs from named operand. 
 </p
 	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:getTermTrees" class="def"
+	    >getTermTrees</a
+	    > ::  <a href="Koshucode-Baala-Minimal-OpKit-Get.html#t:OpGet"
+	    >OpGet</a
+	    > v [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
+	    >Named</a
+	    > <a href="Koshucode-Baala-Minimal-OpKit.html#t:TokenTree"
+	    >TokenTree</a
+	    >]<a href="src/Koshucode-Baala-Minimal-OpKit-Get.html#getTermTrees" class="link"
+	    >Source</a
+	    ></p
 	  ></div
 	><h1 id="g:4"
 	>Relmap from OpUse
@@ -385,7 +433,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >AbortOr</a
 	    > (<a href="Koshucode-Baala-Minimal-OpKit.html#t:Relmap"
 	    >Relmap</a
-	    > v)<a href="src/Koshucode-Baala-Minimal-Relmap-Get.html#getRelmap" class="link"
+	    > v)<a href="src/Koshucode-Baala-Minimal-OpKit-Get.html#getRelmap" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -410,7 +458,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >AbortOr</a
 	    > [<a href="Koshucode-Baala-Minimal-OpKit.html#t:Relmap"
 	    >Relmap</a
-	    > v]<a href="src/Koshucode-Baala-Minimal-Relmap-Get.html#getRelmaps" class="link"
+	    > v]<a href="src/Koshucode-Baala-Minimal-OpKit-Get.html#getRelmaps" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"

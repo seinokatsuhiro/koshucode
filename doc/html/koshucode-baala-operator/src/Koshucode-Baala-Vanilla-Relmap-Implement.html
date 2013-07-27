@@ -30,70 +30,73 @@
 <a name="line-21"></a><span class='hs-comment'>-- ----------------------  Operators</span>
 <a name="line-22"></a>
 <a name="line-23"></a><a name="vanillaOperators"></a><span class='hs-comment'>{-| Implementation of relational operators. -}</span>
-<a name="line-24"></a><span class='hs-definition'>vanillaOperators</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>OpImplement</span> <span class='hs-conid'>Val</span><span class='hs-keyglyph'>]</span>
+<a name="line-24"></a><span class='hs-definition'>vanillaOperators</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>OpImplement</span> <span class='hs-conid'>VContent</span><span class='hs-keyglyph'>]</span>
 <a name="line-25"></a><span class='hs-definition'>vanillaOperators</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>vanillaOperators'</span> <span class='hs-varop'>++</span> <span class='hs-conid'>Mini</span><span class='hs-varop'>.</span><span class='hs-varid'>minimalOperators</span>
 <a name="line-26"></a>
-<a name="line-27"></a><a name="vanillaOperators'"></a><span class='hs-definition'>vanillaOperators'</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>OpImplement</span> <span class='hs-conid'>Val</span><span class='hs-keyglyph'>]</span>
-<a name="line-28"></a><span class='hs-definition'>vanillaOperators'</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Mini</span><span class='hs-varop'>.</span><span class='hs-varid'>operators</span>
+<a name="line-27"></a><a name="vanillaOperators'"></a><span class='hs-definition'>vanillaOperators'</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>OpImplement</span> <span class='hs-conid'>VContent</span><span class='hs-keyglyph'>]</span>
+<a name="line-28"></a><span class='hs-definition'>vanillaOperators'</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>operators</span>
 <a name="line-29"></a>    <span class='hs-comment'>-- Relmap operators in alphabetical order</span>
-<a name="line-30"></a>    <span class='hs-keyglyph'>[</span> <span class='hs-varid'>o</span> <span class='hs-str'>"conf"</span>           <span class='hs-conid'>LikeSize</span>          <span class='hs-varid'>relopConf</span>
-<a name="line-31"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"enclose"</span>        <span class='hs-conid'>LikeSize</span>          <span class='hs-varid'>relopEnclose</span>
-<a name="line-32"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"hang"</span>           <span class='hs-conid'>LikeMeet</span>          <span class='hs-varid'>relopHang</span>
-<a name="line-33"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"hold"</span>           <span class='hs-conid'>LikeHold</span>          <span class='hs-varid'>relopHold</span>
-<a name="line-34"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"maybe"</span>          <span class='hs-conid'>LikeMeet</span>          <span class='hs-varid'>relopMaybe</span>
-<a name="line-35"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"maybe-both"</span>     <span class='hs-conid'>LikeMeet</span>          <span class='hs-varid'>relopMaybeBoth</span>
-<a name="line-36"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"prefix"</span>         <span class='hs-conid'>LikePrefix</span>        <span class='hs-varid'>relopPrefix</span>
-<a name="line-37"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"prefix-change"</span>  <span class='hs-conid'>LikePrefixChange</span>  <span class='hs-varid'>relopPrefixChange</span>
-<a name="line-38"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"range"</span>          <span class='hs-conid'>LikeSize</span>          <span class='hs-varid'>relopRange</span>
-<a name="line-39"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"rdf"</span>            <span class='hs-conid'>LikeSource</span>        <span class='hs-varid'>relopRdf</span>
-<a name="line-40"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"size"</span>           <span class='hs-conid'>LikeSize</span>          <span class='hs-varid'>relopSize</span>
-<a name="line-41"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"unhold"</span>         <span class='hs-conid'>LikeHold</span>          <span class='hs-varid'>relopUnhold</span>
-<a name="line-42"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"unprefix"</span>       <span class='hs-conid'>LikeUnprefix</span>      <span class='hs-varid'>relopUnprefix</span>
-<a name="line-43"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"val"</span>            <span class='hs-conid'>LikeVal</span>           <span class='hs-varid'>relopVal</span>
-<a name="line-44"></a>    <span class='hs-keyglyph'>]</span> <span class='hs-keyword'>where</span> <span class='hs-varid'>o</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>(,,)</span>
-<a name="line-45"></a>
+<a name="line-30"></a>    <span class='hs-keyglyph'>[</span> <span class='hs-varid'>o</span> <span class='hs-str'>"add"</span>            <span class='hs-conid'>LikeVal</span>           <span class='hs-varid'>relopAdd</span>
+<a name="line-31"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"conf"</span>           <span class='hs-conid'>LikeSize</span>          <span class='hs-varid'>relopConf</span>
+<a name="line-32"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"enclose"</span>        <span class='hs-conid'>LikeSize</span>          <span class='hs-varid'>relopEnclose</span>
+<a name="line-33"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"hang"</span>           <span class='hs-conid'>LikeMeet</span>          <span class='hs-varid'>relopHang</span>
+<a name="line-34"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"hold"</span>           <span class='hs-conid'>LikeHold</span>          <span class='hs-varid'>relopHold</span>
+<a name="line-35"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"maybe"</span>          <span class='hs-conid'>LikeMeet</span>          <span class='hs-varid'>relopMaybe</span>
+<a name="line-36"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"maybe-both"</span>     <span class='hs-conid'>LikeMeet</span>          <span class='hs-varid'>relopMaybeBoth</span>
+<a name="line-37"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"prefix"</span>         <span class='hs-conid'>LikePrefix</span>        <span class='hs-varid'>relopPrefix</span>
+<a name="line-38"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"prefix-change"</span>  <span class='hs-conid'>LikePrefixChange</span>  <span class='hs-varid'>relopPrefixChange</span>
+<a name="line-39"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"range"</span>          <span class='hs-conid'>LikeSize</span>          <span class='hs-varid'>relopRange</span>
+<a name="line-40"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"rank"</span>           <span class='hs-conid'>LikeId</span>            <span class='hs-varid'>relopRank</span>
+<a name="line-41"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"rdf"</span>            <span class='hs-conid'>LikeSource</span>        <span class='hs-varid'>relopRdf</span>
+<a name="line-42"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"size"</span>           <span class='hs-conid'>LikeSize</span>          <span class='hs-varid'>relopSize</span>
+<a name="line-43"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"typename"</span>       <span class='hs-conid'>LikeHold</span>          <span class='hs-varid'>relopTypename</span>
+<a name="line-44"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-str'>"unprefix"</span>       <span class='hs-conid'>LikeUnprefix</span>      <span class='hs-varid'>relopUnprefix</span>
+<a name="line-45"></a>    <span class='hs-keyglyph'>]</span> <span class='hs-keyword'>where</span> <span class='hs-varid'>o</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>(,,)</span>
 <a name="line-46"></a>
 <a name="line-47"></a>
-<a name="line-48"></a><span class='hs-comment'>-- ----------------------  Constructors</span>
-<a name="line-49"></a>
-<a name="line-50"></a><a name="relopRdf"></a><span class='hs-definition'>relopRdf</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>Relop</span> <span class='hs-conid'>Val</span>
-<a name="line-51"></a><span class='hs-definition'>relopRdf</span> <span class='hs-varid'>use</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
-<a name="line-52"></a>  <span class='hs-varid'>sign</span>  <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Mini</span><span class='hs-varop'>.</span><span class='hs-varid'>getWord</span>  <span class='hs-varid'>use</span> <span class='hs-str'>"-sign"</span>
-<a name="line-53"></a>  <span class='hs-keyglyph'>[</span><span class='hs-varid'>s</span><span class='hs-layout'>,</span><span class='hs-varid'>o</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Mini</span><span class='hs-varop'>.</span><span class='hs-varid'>getTerms</span> <span class='hs-varid'>use</span> <span class='hs-str'>"-term"</span>
-<a name="line-54"></a>  <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapAlias</span> <span class='hs-varid'>use</span> <span class='hs-varop'>$</span>
-<a name="line-55"></a>        <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapSource</span> <span class='hs-varid'>use</span> <span class='hs-varid'>sign</span> <span class='hs-keyglyph'>[</span><span class='hs-str'>"/s"</span><span class='hs-layout'>,</span> <span class='hs-str'>"/o"</span><span class='hs-keyglyph'>]</span> <span class='hs-varop'>`mappend`</span>
-<a name="line-56"></a>        <span class='hs-conid'>Mini</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapRename</span> <span class='hs-varid'>use</span> <span class='hs-keyglyph'>[</span><span class='hs-layout'>(</span><span class='hs-varid'>s</span><span class='hs-layout'>,</span><span class='hs-str'>"/s"</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span> <span class='hs-layout'>(</span><span class='hs-varid'>o</span><span class='hs-layout'>,</span><span class='hs-str'>"/o"</span><span class='hs-layout'>)</span><span class='hs-keyglyph'>]</span>
-<a name="line-57"></a>
+<a name="line-48"></a>
+<a name="line-49"></a><span class='hs-comment'>-- ----------------------  Constructors</span>
+<a name="line-50"></a>
+<a name="line-51"></a><a name="relopRdf"></a><span class='hs-definition'>relopRdf</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-conid'>Relop</span> <span class='hs-conid'>VContent</span>
+<a name="line-52"></a><span class='hs-definition'>relopRdf</span> <span class='hs-varid'>use</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>do</span>
+<a name="line-53"></a>  <span class='hs-varid'>sign</span>  <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>getWord</span>  <span class='hs-varid'>use</span> <span class='hs-str'>"-sign"</span>
+<a name="line-54"></a>  <span class='hs-keyglyph'>[</span><span class='hs-varid'>s</span><span class='hs-layout'>,</span><span class='hs-varid'>o</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>getTerms</span> <span class='hs-varid'>use</span> <span class='hs-str'>"-term"</span>
+<a name="line-55"></a>  <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapAlias</span> <span class='hs-varid'>use</span> <span class='hs-varop'>$</span>
+<a name="line-56"></a>        <span class='hs-conid'>Kit</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapSource</span> <span class='hs-varid'>use</span> <span class='hs-varid'>sign</span> <span class='hs-keyglyph'>[</span><span class='hs-str'>"/s"</span><span class='hs-layout'>,</span> <span class='hs-str'>"/o"</span><span class='hs-keyglyph'>]</span> <span class='hs-varop'>`mappend`</span>
+<a name="line-57"></a>        <span class='hs-conid'>Mini</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapRename</span> <span class='hs-varid'>use</span> <span class='hs-keyglyph'>[</span><span class='hs-layout'>(</span><span class='hs-varid'>s</span><span class='hs-layout'>,</span><span class='hs-str'>"/s"</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span> <span class='hs-layout'>(</span><span class='hs-varid'>o</span><span class='hs-layout'>,</span><span class='hs-str'>"/o"</span><span class='hs-layout'>)</span><span class='hs-keyglyph'>]</span>
 <a name="line-58"></a>
 <a name="line-59"></a>
-<a name="line-60"></a><span class='hs-comment'>-- ----------------------</span>
-<a name="line-61"></a><span class='hs-comment'>-- $Operators</span>
-<a name="line-62"></a><span class='hs-comment'>--</span>
-<a name="line-63"></a><span class='hs-comment'>-- [@conf@]</span>
-<a name="line-64"></a><span class='hs-comment'>--</span>
-<a name="line-65"></a><span class='hs-comment'>-- [@enclose@]</span>
-<a name="line-66"></a><span class='hs-comment'>--</span>
-<a name="line-67"></a><span class='hs-comment'>-- [@hang@]</span>
-<a name="line-68"></a><span class='hs-comment'>--</span>
-<a name="line-69"></a><span class='hs-comment'>-- [@hold@]</span>
-<a name="line-70"></a><span class='hs-comment'>--</span>
-<a name="line-71"></a><span class='hs-comment'>-- [@maybe@]</span>
-<a name="line-72"></a><span class='hs-comment'>--</span>
-<a name="line-73"></a><span class='hs-comment'>-- [@maybe-both@]</span>
-<a name="line-74"></a><span class='hs-comment'>--</span>
-<a name="line-75"></a><span class='hs-comment'>-- [@prefix@]</span>
-<a name="line-76"></a><span class='hs-comment'>--</span>
-<a name="line-77"></a><span class='hs-comment'>-- [@prefix-change@]</span>
-<a name="line-78"></a><span class='hs-comment'>--</span>
-<a name="line-79"></a><span class='hs-comment'>-- [@rdf@]</span>
-<a name="line-80"></a><span class='hs-comment'>--</span>
-<a name="line-81"></a><span class='hs-comment'>-- [@size@]</span>
-<a name="line-82"></a><span class='hs-comment'>--</span>
-<a name="line-83"></a><span class='hs-comment'>-- [@unhold@]</span>
-<a name="line-84"></a><span class='hs-comment'>--</span>
-<a name="line-85"></a><span class='hs-comment'>-- [@unprefix@]</span>
-<a name="line-86"></a><span class='hs-comment'>--</span>
-<a name="line-87"></a><span class='hs-comment'>-- [@val@]</span>
-<a name="line-88"></a>
+<a name="line-60"></a>
+<a name="line-61"></a><span class='hs-comment'>-- ----------------------</span>
+<a name="line-62"></a><span class='hs-comment'>-- $Operators</span>
+<a name="line-63"></a><span class='hs-comment'>--</span>
+<a name="line-64"></a><span class='hs-comment'>-- [@add@]</span>
+<a name="line-65"></a><span class='hs-comment'>--</span>
+<a name="line-66"></a><span class='hs-comment'>-- [@conf@]</span>
+<a name="line-67"></a><span class='hs-comment'>--</span>
+<a name="line-68"></a><span class='hs-comment'>-- [@enclose@]</span>
+<a name="line-69"></a><span class='hs-comment'>--</span>
+<a name="line-70"></a><span class='hs-comment'>-- [@hang@]</span>
+<a name="line-71"></a><span class='hs-comment'>--</span>
+<a name="line-72"></a><span class='hs-comment'>-- [@hold@]</span>
+<a name="line-73"></a><span class='hs-comment'>--</span>
+<a name="line-74"></a><span class='hs-comment'>-- [@maybe@]</span>
+<a name="line-75"></a><span class='hs-comment'>--</span>
+<a name="line-76"></a><span class='hs-comment'>-- [@maybe-both@]</span>
+<a name="line-77"></a><span class='hs-comment'>--</span>
+<a name="line-78"></a><span class='hs-comment'>-- [@prefix@]</span>
+<a name="line-79"></a><span class='hs-comment'>--</span>
+<a name="line-80"></a><span class='hs-comment'>-- [@prefix-change@]</span>
+<a name="line-81"></a><span class='hs-comment'>--</span>
+<a name="line-82"></a><span class='hs-comment'>-- [@rdf@]</span>
+<a name="line-83"></a><span class='hs-comment'>--</span>
+<a name="line-84"></a><span class='hs-comment'>-- [@size@]</span>
+<a name="line-85"></a><span class='hs-comment'>--</span>
+<a name="line-86"></a><span class='hs-comment'>-- [@unhold@]</span>
+<a name="line-87"></a><span class='hs-comment'>--</span>
+<a name="line-88"></a><span class='hs-comment'>-- [@unprefix@]</span>
+<a name="line-89"></a><span class='hs-comment'>--</span>
+<a name="line-90"></a>
+<a name="line-91"></a>
 </pre></body>
 </html>

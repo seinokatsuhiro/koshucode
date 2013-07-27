@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-operator-0.25.0.0: Relational operators in Koshucode</p
+      >koshucode-baala-operator-0.30.0.0: Relational operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -75,16 +75,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 	    >relopMaybe</a
 	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relop"
 	    >Relop</a
-	    > <a href="Koshucode-Baala-Vanilla-Value-Val.html#t:Val"
-	    >Val</a
+	    > <a href="Koshucode-Baala-Vanilla-Value-Content.html#t:VContent"
+	    >VContent</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:relmapMaybe"
 	    >relmapMaybe</a
 	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > v, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-ContentClass.html#t:Nil"
-	    >Nil</a
+	    > v, <a href="Koshucode-Baala-Minimal-OpKit.html#t:CNil"
+	    >CNil</a
 	    > v) =&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:OpUse"
 	    >OpUse</a
 	    > v -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relmap"
@@ -95,30 +95,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 	    >relMaybe</a
 	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > v, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-ContentClass.html#t:Nil"
-	    >Nil</a
+	    > v, <a href="Koshucode-Baala-Minimal-OpKit.html#t:CNil"
+	    >CNil</a
 	    > v) =&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
 	    >Rel</a
-	    > v -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
+	    > v -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
+	    >AbMap</a
+	    > (<a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
 	    >Rel</a
-	    > v -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
-	    >Rel</a
-	    > v</li
+	    > v)</li
 	  ><li class="src short"
 	  ><a href="#v:relopMaybeBoth"
 	    >relopMaybeBoth</a
 	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relop"
 	    >Relop</a
-	    > <a href="Koshucode-Baala-Vanilla-Value-Val.html#t:Val"
-	    >Val</a
+	    > <a href="Koshucode-Baala-Vanilla-Value-Content.html#t:VContent"
+	    >VContent</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:relmapMaybeBoth"
 	    >relmapMaybeBoth</a
 	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > v, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-ContentClass.html#t:Nil"
-	    >Nil</a
+	    > v, <a href="Koshucode-Baala-Minimal-OpKit.html#t:CNil"
+	    >CNil</a
 	    > v) =&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:OpUse"
 	    >OpUse</a
 	    > v -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relmap"
@@ -129,16 +129,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 	    >relopHang</a
 	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relop"
 	    >Relop</a
-	    > <a href="Koshucode-Baala-Vanilla-Value-Val.html#t:Val"
-	    >Val</a
+	    > <a href="Koshucode-Baala-Vanilla-Value-Content.html#t:VContent"
+	    >VContent</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:relmapHang"
 	    >relmapHang</a
 	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > v, <a href="Koshucode-Baala-Minimal-OpKit.html#t:RelValue"
-	    >RelValue</a
+	    > v, <a href="Koshucode-Baala-Minimal-OpKit.html#t:CRel"
+	    >CRel</a
 	    > v) =&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:OpUse"
 	    >OpUse</a
 	    > v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
@@ -151,14 +151,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 	    >relHang</a
 	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > v, <a href="Koshucode-Baala-Minimal-OpKit.html#t:RelValue"
-	    >RelValue</a
+	    > v, <a href="Koshucode-Baala-Minimal-OpKit.html#t:CRel"
+	    >CRel</a
 	    > v) =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
 	    >Rel</a
-	    > v -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Map"
-	    >Map</a
+	    > v -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
+	    >AbMap</a
 	    > (<a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
 	    >Rel</a
 	    > v)</li
@@ -174,8 +174,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 	    >relopMaybe</a
 	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relop"
 	    >Relop</a
-	    > <a href="Koshucode-Baala-Vanilla-Value-Val.html#t:Val"
-	    >Val</a
+	    > <a href="Koshucode-Baala-Vanilla-Value-Content.html#t:VContent"
+	    >VContent</a
 	    ><a href="src/Koshucode-Baala-Vanilla-Relmap-Binary.html#relopMaybe" class="link"
 	    >Source</a
 	    ></p
@@ -186,8 +186,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 	    >relmapMaybe</a
 	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > v, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-ContentClass.html#t:Nil"
-	    >Nil</a
+	    > v, <a href="Koshucode-Baala-Minimal-OpKit.html#t:CNil"
+	    >CNil</a
 	    > v) =&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:OpUse"
 	    >OpUse</a
 	    > v -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relmap"
@@ -202,15 +202,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 	    >relMaybe</a
 	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > v, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-ContentClass.html#t:Nil"
-	    >Nil</a
+	    > v, <a href="Koshucode-Baala-Minimal-OpKit.html#t:CNil"
+	    >CNil</a
 	    > v) =&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
 	    >Rel</a
-	    > v -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
+	    > v -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
+	    >AbMap</a
+	    > (<a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
 	    >Rel</a
-	    > v -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
-	    >Rel</a
-	    > v<a href="src/Koshucode-Baala-Vanilla-Relmap-Binary.html#relMaybe" class="link"
+	    > v)<a href="src/Koshucode-Baala-Vanilla-Relmap-Binary.html#relMaybe" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -228,8 +228,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 	    >relopMaybeBoth</a
 	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relop"
 	    >Relop</a
-	    > <a href="Koshucode-Baala-Vanilla-Value-Val.html#t:Val"
-	    >Val</a
+	    > <a href="Koshucode-Baala-Vanilla-Value-Content.html#t:VContent"
+	    >VContent</a
 	    ><a href="src/Koshucode-Baala-Vanilla-Relmap-Binary.html#relopMaybeBoth" class="link"
 	    >Source</a
 	    ></p
@@ -240,8 +240,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 	    >relmapMaybeBoth</a
 	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > v, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-ContentClass.html#t:Nil"
-	    >Nil</a
+	    > v, <a href="Koshucode-Baala-Minimal-OpKit.html#t:CNil"
+	    >CNil</a
 	    > v) =&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:OpUse"
 	    >OpUse</a
 	    > v -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relmap"
@@ -264,8 +264,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 	    >relopHang</a
 	    > :: <a href="Koshucode-Baala-Minimal-OpKit.html#t:Relop"
 	    >Relop</a
-	    > <a href="Koshucode-Baala-Vanilla-Value-Val.html#t:Val"
-	    >Val</a
+	    > <a href="Koshucode-Baala-Vanilla-Value-Content.html#t:VContent"
+	    >VContent</a
 	    ><a href="src/Koshucode-Baala-Vanilla-Relmap-Binary.html#relopHang" class="link"
 	    >Source</a
 	    ></p
@@ -276,8 +276,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 	    >relmapHang</a
 	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > v, <a href="Koshucode-Baala-Minimal-OpKit.html#t:RelValue"
-	    >RelValue</a
+	    > v, <a href="Koshucode-Baala-Minimal-OpKit.html#t:CRel"
+	    >CRel</a
 	    > v) =&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:OpUse"
 	    >OpUse</a
 	    > v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
@@ -294,14 +294,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 	    >relHang</a
 	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > v, <a href="Koshucode-Baala-Minimal-OpKit.html#t:RelValue"
-	    >RelValue</a
+	    > v, <a href="Koshucode-Baala-Minimal-OpKit.html#t:CRel"
+	    >CRel</a
 	    > v) =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
 	    >Rel</a
-	    > v -&gt; <a href="Koshucode-Baala-Minimal-OpKit.html#t:Map"
-	    >Map</a
+	    > v -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
+	    >AbMap</a
 	    > (<a href="Koshucode-Baala-Minimal-OpKit.html#t:Rel"
 	    >Rel</a
 	    > v)<a href="src/Koshucode-Baala-Vanilla-Relmap-Binary.html#relHang" class="link"
