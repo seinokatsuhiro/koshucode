@@ -6,8 +6,7 @@ module Koshucode.Baala.Core.Relmap.HalfRelmap
 ) where
 
 import Data.Generics
-import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Base.Syntax
+import Koshucode.Baala.Base
 
 -- | Intermediate data that represents use of relational operator.
 -- 

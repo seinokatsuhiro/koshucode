@@ -23,8 +23,7 @@ module Koshucode.Baala.Core.Section.Section
 , dataSection
 ) where
 
-import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Base.Prelude
+import Koshucode.Baala.Base
 import Koshucode.Baala.Core.Relmap
 
 data Section v = Section {

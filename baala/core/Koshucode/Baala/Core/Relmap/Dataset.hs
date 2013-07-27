@@ -17,8 +17,7 @@ module Koshucode.Baala.Core.Relmap.Dataset
 import qualified Data.Map   as Map
 import qualified Data.Maybe as Maybe
 
-import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Base.Data
+import Koshucode.Baala.Base
 import Koshucode.Baala.Core.Content
 
 -- | Dataset is a set of judges.

@@ -22,10 +22,7 @@ module Koshucode.Baala.Core.Relmap.Relmap
 
 import Data.Monoid
 
-import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Base.Prelude
-
+import Koshucode.Baala.Base
 import Koshucode.Baala.Core.Relmap.HalfRelmap
 
 

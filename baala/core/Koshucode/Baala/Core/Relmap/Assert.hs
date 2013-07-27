@@ -12,9 +12,7 @@ module Koshucode.Baala.Core.Relmap.Assert
 , deny
 ) where
 
-import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Base.Prelude
-
+import Koshucode.Baala.Base
 import Koshucode.Baala.Core.Relmap.Relmap
 
 {-| Assertion of affirming or denying relation.

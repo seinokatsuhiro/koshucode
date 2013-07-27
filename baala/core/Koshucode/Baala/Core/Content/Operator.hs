@@ -16,9 +16,7 @@ module Koshucode.Baala.Core.Content.Operator
 
 ) where
 
-import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Base.Syntax
-
+import Koshucode.Baala.Base
 
 {-| Content expressions. -}
 data Cox c

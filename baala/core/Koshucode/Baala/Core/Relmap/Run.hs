@@ -7,10 +7,8 @@ module Koshucode.Baala.Core.Relmap.Run
 , runAssertDataset
 ) where
 
-import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Base.Data
+import Koshucode.Baala.Base
 import Koshucode.Baala.Core.Content
-
 import Koshucode.Baala.Core.Relmap.Assert
 import Koshucode.Baala.Core.Relmap.Dataset
 import Koshucode.Baala.Core.Relmap.HalfRelmap

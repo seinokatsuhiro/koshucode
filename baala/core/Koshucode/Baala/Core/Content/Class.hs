@@ -22,8 +22,7 @@ module Koshucode.Baala.Core.Content.Class
   CRel     (..),
 ) where
 
-import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Base.Data
+import Koshucode.Baala.Base
 
 
 

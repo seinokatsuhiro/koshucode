@@ -12,9 +12,7 @@ module Koshucode.Baala.Core.Content.Expression
   runCoxH,
 ) where
 
-import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Base.Syntax
+import Koshucode.Baala.Base
 
 import Koshucode.Baala.Core.Content.Class
 import Koshucode.Baala.Core.Content.Extension

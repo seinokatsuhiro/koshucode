@@ -14,10 +14,7 @@ module Koshucode.Baala.Core.Section.SectionIO
 
 import qualified System.IO as IO
 
-import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Base.Syntax
-
+import Koshucode.Baala.Base
 import Koshucode.Baala.Core.Content
 import Koshucode.Baala.Core.Relmap
 import Koshucode.Baala.Core.Section.Section

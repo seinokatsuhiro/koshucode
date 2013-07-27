@@ -9,9 +9,7 @@ module Koshucode.Baala.Core.Section.Clausify
 
 import Data.Generics
 
-import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Base.Syntax
-
+import Koshucode.Baala.Base
 
 
 

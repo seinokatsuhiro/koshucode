@@ -3,13 +3,15 @@
 {-# OPTIONS_GHC -Wall -fth -fno-warn-missing-fields #-}
 
 module Koshucode.Baala.Core.Section.Quoter
-( koshuQuoter, QuasiQuoter
+( koshuQuoter,
+  QuasiQuoter,
 ) where
+
 import Data.Generics
 import Language.Haskell.TH hiding (Clause)
 import Language.Haskell.TH.Quote
 
-import Koshucode.Baala.Base.Syntax
+import Koshucode.Baala.Base
 import Koshucode.Baala.Core.Relmap
 
 import Koshucode.Baala.Core.Section.Clause
