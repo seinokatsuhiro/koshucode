@@ -2,7 +2,7 @@
 
 {-| Kit for implementing relational operators -}
 
-module Koshucode.Baala.Minimal.OpKit
+module Koshucode.Baala.Builtin
 ( 
   -- * Monoid
   Monoid.mappend,
@@ -82,10 +82,13 @@ module Koshucode.Baala.Minimal.OpKit
   Syntax.heightTable,
   Syntax.heightTableUnbox,
 
-  -- * OpKit
-  module Koshucode.Baala.Minimal.OpKit.Get,
-  module Koshucode.Baala.Minimal.OpKit.Pattern,
-  module Koshucode.Baala.Minimal.OpKit.Term,
+  -- * Builtin
+  module Koshucode.Baala.Builtin.Get,
+  module Koshucode.Baala.Builtin.Pattern,
+  module Koshucode.Baala.Builtin.Term,
+
+  BuiltinOperand (..),
+  builtinOperators,
 
 ) where
 
@@ -100,7 +103,25 @@ import Koshucode.Baala.Core.Content        as Content
 import Koshucode.Baala.Core.Relmap         as Relmap
 import Koshucode.Baala.Core.Section        as Section
 
-import Koshucode.Baala.Minimal.OpKit.Get
-import Koshucode.Baala.Minimal.OpKit.Term
-import Koshucode.Baala.Minimal.OpKit.Pattern
+import Koshucode.Baala.Builtin.Get
+import Koshucode.Baala.Builtin.Term
+import Koshucode.Baala.Builtin.Pattern
+
+{-| 'OpPattern' for builtin operators. -}
+data BuiltinOperand
+    = LikeId      -- ^ no operand
+      deriving (Show, Eq, Enum)
+
+instance OpPattern BuiltinOperand where
+    opParser'  LikeId     = id
+
+    opPart     LikeId     = []
+
+    opUsage    LikeId     = [""]
+
+builtinOperators :: (Ord c) => [OpImplement c]
+builtinOperators = operators [ ("|", LikeId, consConcat) ]
+
+consConcat :: Relop c
+consConcat = Right . mconcat . opSubmap
 

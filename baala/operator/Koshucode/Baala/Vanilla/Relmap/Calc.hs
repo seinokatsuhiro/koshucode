@@ -16,7 +16,7 @@ import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Core.Content
 import Koshucode.Baala.Core.Relmap
 
-import Koshucode.Baala.Minimal.OpKit as Kit
+import Koshucode.Baala.Builtin as Kit
 
 import Koshucode.Baala.Vanilla.Value.Relval
 import Koshucode.Baala.Vanilla.Cop

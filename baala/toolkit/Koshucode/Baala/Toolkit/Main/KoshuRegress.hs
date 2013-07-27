@@ -21,7 +21,7 @@ import Koshucode.Baala.Core.Content
 import Koshucode.Baala.Vanilla.Value.Content
 
 import qualified Koshucode.Baala.Core.Section  as Kit
-import qualified Koshucode.Baala.Minimal.OpKit as Kit
+import qualified Koshucode.Baala.Builtin as Kit
 
 import Koshucode.Baala.Toolkit.Library.Comment
 import Koshucode.Baala.Toolkit.Library.Change

@@ -46,12 +46,12 @@ extra-source-files:
 library
   -- Modules exported by the library.
   exposed-modules:
-        Koshucode.Baala.Minimal
+        Koshucode.Baala.Builtin
+        Koshucode.Baala.Builtin.Get
+        Koshucode.Baala.Builtin.Pattern
+        Koshucode.Baala.Builtin.Term
 
-        Koshucode.Baala.Minimal.OpKit
-        Koshucode.Baala.Minimal.OpKit.Get
-        Koshucode.Baala.Minimal.OpKit.Pattern
-        Koshucode.Baala.Minimal.OpKit.Term
+        Koshucode.Baala.Minimal
 
         Koshucode.Baala.Minimal.Relmap.Implement
         Koshucode.Baala.Minimal.Relmap.Operand

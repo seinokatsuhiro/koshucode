@@ -2,7 +2,7 @@
 
 -- | Class for operand patterns
 
-module Koshucode.Baala.Minimal.OpKit.Pattern
+module Koshucode.Baala.Builtin.Pattern
 ( OpPattern (..)
 , operators
 ) where

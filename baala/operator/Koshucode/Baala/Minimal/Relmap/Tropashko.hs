@@ -26,7 +26,7 @@ module Koshucode.Baala.Minimal.Relmap.Tropashko
 ) where
 
 import Koshucode.Baala.Base
-import Koshucode.Baala.Minimal.OpKit as Kit
+import Koshucode.Baala.Builtin as Kit
 
 
 

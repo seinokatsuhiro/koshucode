@@ -12,7 +12,7 @@ module Koshucode.Baala.Vanilla.Relmap.Naming
 ) where
 
 import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Minimal.OpKit as Kit
+import Koshucode.Baala.Builtin as Kit
 import Koshucode.Baala.Vanilla.Value.Relval
 import qualified Data.List as List
 

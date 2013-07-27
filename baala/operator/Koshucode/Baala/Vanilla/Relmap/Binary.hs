@@ -11,7 +11,7 @@ module Koshucode.Baala.Vanilla.Relmap.Binary
 ) where
 
 import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Minimal.OpKit as Kit
+import Koshucode.Baala.Builtin as Kit
 import Koshucode.Baala.Vanilla.Value.Relval
 import qualified Koshucode.Baala.Minimal as Mini
 

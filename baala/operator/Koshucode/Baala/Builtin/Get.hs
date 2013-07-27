@@ -2,7 +2,7 @@
 
 -- | Extract suboperand
 
-module Koshucode.Baala.Minimal.OpKit.Get
+module Koshucode.Baala.Builtin.Get
 ( -- * Generals
   getHead,
 
@@ -27,7 +27,7 @@ module Koshucode.Baala.Minimal.OpKit.Get
 
 import Koshucode.Baala.Base
 import Koshucode.Baala.Core hiding (getInt)
-import Koshucode.Baala.Minimal.OpKit.Term
+import Koshucode.Baala.Builtin.Term
 
 {-| Abortable 'head' -}
 getHead :: [a] -> AbortOr a

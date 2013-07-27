@@ -9,7 +9,7 @@ module Koshucode.Baala.Vanilla.Relmap.Operand
 , likeSize
 ) where
 
-import Koshucode.Baala.Minimal.OpKit as Kit
+import qualified Koshucode.Baala.Builtin as Kit
 import qualified Koshucode.Baala.Minimal as Mini
 
 -- | 'Mini.OpPattern' for relational operations.
@@ -69,25 +69,25 @@ instance Kit.OpPattern VanillaOperand where
 
     opUsage   _ = []
 
-likePrefix :: OpParser'
+likePrefix :: Kit.OpParser'
 likePrefix xs =
     case lookup "" xs of
       Just (p:ns) -> [("-prefix", [p]), ("-term", ns)] ++ xs
       _ -> xs
 
-likeUnprefix :: OpParser'
+likeUnprefix :: Kit.OpParser'
 likeUnprefix xs =
     case lookup "" xs of
       Just [p] -> [("-prefix", [p])] ++ xs
       _ -> xs
 
-likePrefixChange :: OpParser'
+likePrefixChange :: Kit.OpParser'
 likePrefixChange xs =
     case lookup "" xs of
       Just [x,y] -> [("-new", [x]), ("-old", [y])] ++ xs
       _ -> xs
 
-likeSize :: OpParser'
+likeSize :: Kit.OpParser'
 likeSize xs =
     case lookup "" xs of
       Just [n] -> [("-term", [n])] ++ xs

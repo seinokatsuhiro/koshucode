@@ -6,7 +6,7 @@
 module Koshucode.Baala.Vanilla.Quoter
 ( koshu
 ) where
-import Koshucode.Baala.Minimal.OpKit as Kit
+import Koshucode.Baala.Builtin as Kit
 import Koshucode.Baala.Vanilla.Relmap.Implement
 import Koshucode.Baala.Vanilla.Value.Relval
 

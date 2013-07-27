@@ -10,7 +10,7 @@ module Koshucode.Baala.Minimal.Relmap.Restrict
 ) where
 
 import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Minimal.OpKit as Kit
+import Koshucode.Baala.Builtin as Kit
 
 
 

@@ -13,7 +13,7 @@ module Koshucode.Baala.Minimal.Relmap.Operand
 , likeSource
 ) where
 
-import Koshucode.Baala.Minimal.OpKit as Kit
+import qualified Koshucode.Baala.Builtin as Kit
 
 
 
@@ -21,27 +21,27 @@ import Koshucode.Baala.Minimal.OpKit as Kit
 
 -- | 'OpPattern' for minimal operators
 data MinimalOperand
-    = LikeEmpty   -- ^ no operand
+    = LikeId      -- ^ no operand
     | LikeMeet    -- ^ { @-relmap@ } relmap [ @-share@ \/name ... ]
     | LikePick    -- ^ { @-term@ } \/name ...
     | LikeRename  -- ^ { @-term@ } \/new \/old ...
     | LikeSource  -- ^ { @-sign@ } relsign { @-term@ } \/name ...
       deriving (Show, Eq, Enum)
 
-instance OpPattern MinimalOperand where
-    opParser'  LikeEmpty  = id
+instance Kit.OpPattern MinimalOperand where
+    opParser'  LikeId     = id
     opParser'  LikeMeet   = likeMeet
     opParser'  LikePick   = likePick
     opParser'  LikeRename = likeRename
     opParser'  LikeSource = likeSource
 
-    opPart     LikeEmpty  = []
+    opPart     LikeId     = []
     opPart     LikeMeet   = ["-relmap", "-share"]
     opPart     LikePick   = ["-term"]
     opPart     LikeRename = ["-term"]
     opPart     LikeSource = ["-sign", "-term"]
 
-    opUsage    LikeEmpty  = [""]
+    opUsage    LikeId     = [""]
     opUsage    LikeMeet   = ["RELMAP [-share /NAME ...]"]
     opUsage    LikePick   = ["/NAME ..."]
     opUsage    LikeRename = ["/NEW /OLD ..."]
@@ -51,25 +51,25 @@ instance OpPattern MinimalOperand where
 
 -- ----------------------  Opernd parsers
 
-likePick :: OpParser'
+likePick :: Kit.OpParser'
 likePick xs =
     case lookup "" xs of
       Just xs2 -> [("-term", xs2)] ++ xs
       _ -> xs
 
-likeMeet :: OpParser'
+likeMeet :: Kit.OpParser'
 likeMeet xs =
     case lookup "" xs of
       Just xs2@[_] -> [("-relmap", xs2)] ++ xs
       _ -> xs
 
-likeRename :: OpParser'
+likeRename :: Kit.OpParser'
 likeRename xs =
     case lookup "" xs of
       Just xs2 -> [("-term", xs2)] ++ xs
       _ -> xs
 
-likeSource :: OpParser'
+likeSource :: Kit.OpParser'
 likeSource xs =
     case lookup "" xs of
       Just (s:ns) -> [("-sign", [s]), ("-term", ns)] ++ xs

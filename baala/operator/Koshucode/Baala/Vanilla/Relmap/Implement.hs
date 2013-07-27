@@ -3,18 +3,19 @@
 module Koshucode.Baala.Vanilla.Relmap.Implement
 ( vanillaOperators
 
--- * Operators
--- $Operators
+  -- * Operators
+  -- $Operators
 ) where
 
-import Koshucode.Baala.Minimal.OpKit as Kit
+import qualified Koshucode.Baala.Builtin as Kit
+import qualified Koshucode.Baala.Minimal as Mini
+
 import Koshucode.Baala.Vanilla.Relmap.Calc
 import Koshucode.Baala.Vanilla.Relmap.Naming
 import Koshucode.Baala.Vanilla.Relmap.Operand
 import Koshucode.Baala.Vanilla.Relmap.Binary
 import Koshucode.Baala.Vanilla.Relmap.Unary
 import Koshucode.Baala.Vanilla.Value.Relval
-import qualified Koshucode.Baala.Minimal as Mini
 
 
 
