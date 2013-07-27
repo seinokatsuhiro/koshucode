@@ -5,7 +5,7 @@
 --
 --  USAGE
 --    chmod 755 eg-lit.hs
---    ./eg-lit.hs > eg-lit.log
+--    regress.sh eg-lit.hs -l
 --
 
 {-# OPTIONS_GHC -Wall #-}
@@ -29,7 +29,7 @@ eg f = do f
           putStrLn ""
 
 lit :: String -> AbOr [VContent]
-lit = litList . tokenTrees . tokens
+lit = mapM litContent . tokenTrees . tokens
 
 
 

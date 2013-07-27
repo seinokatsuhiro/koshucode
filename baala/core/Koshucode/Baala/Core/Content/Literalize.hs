@@ -62,7 +62,8 @@ litContentBy ops = lit where
 
     lit (TreeL tok) = case tok of
         TWord _ 0 cs@(c:_) | c `elem` "0123456789+-."
-                     ->  Right . putInt =<< readDecimal cs
+                     ->  do (n, _, _) <- litDecimal cs
+                            Right . putInt $ n
         TWord _ 0 w  ->  case w of
             '#' : s  ->  litHash s
             "()"     ->  Right nil
