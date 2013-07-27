@@ -36,7 +36,6 @@ import Data.Generics (Data, Typeable)
 import qualified Data.Char as C
 
 import Koshucode.Baala.Base.Prelude
-
 import Koshucode.Baala.Base.Syntax.Token
 
 
@@ -114,44 +113,39 @@ nextToken :: Int -> String -> (Token, String)
 nextToken n txt =
     case txt of
       ('*' : '*' : '*' : '*' : cs) -> tokD cs (word0 "****")
-      ('*' : '*' : _)    ->  tokD "" (TComment n txt)
-      ('#' : '!' : _)    ->  tokD "" (TComment n txt)
-      ('(' : ')' : cs)   ->  tokD cs (word0 "()")     -- nil
-
+      ('*' : '*' : _)         ->  tokD "" (TComment n txt)
+      ('\'' : '\'' : _)       ->  tokD "" (TWord n 1 txt)
+      ('(' : ')' : cs)        ->  tokD cs (word0 "()")  -- nil
+      ('#' : c : cs)
+          | c `elem` "()[]{}" ->  tokD cs $ word0 [c]
+          | c == '!'          ->  tokD "" (TComment n txt)
       (c : '|' : cs)
-          | c == '{'     ->  tokD cs (open "{|")   -- relation
-          | c == '<'     ->  tokD cs (open "<|")   -- tuple
-          | c == '['     ->  tokD cs (open "[|")   -- undefined
-          | c == '('     ->  tokD cs (open "(|")   -- undefined
-
+          | c `elem` "[{<("   ->  tokD cs $ open  [c, '|']
       ('|' : c : cs)
-          | c == '}'     ->  tokD cs (close "|}")  -- relation
-          | c == '>'     ->  tokD cs (close "|>")  -- tuple
-          | c == ']'     ->  tokD cs (close "|]")  -- undefined
-          | c == ')'     ->  tokD cs (close "|)")  -- undefined
-          | c == '|'     ->  tokD (trim cs) (word0 "||") -- newline
+          | c `elem` "]}>)"   ->  tokD cs $ close ['|', c]
+          | c == '|'          ->  tokD (trim cs) (word0 "||") -- newline
 
       (c : cs)
-          | isOpen    c  ->  tokD cs (open  [c])
-          | isClose   c  ->  tokD cs (close [c])
-          | isSingle  c  ->  tokD cs (word0 [c])
-          | isTerm    c  ->  term cs [c]  []
-          | isQuote   c  ->  quote   c cs []
-          | isWord    c  ->  word    txt  []
-          | isSpace   c  ->  white 1 cs
-      _                  ->  error $ "unknown token type: " ++ txt
+          | isOpen    c       ->  tokD cs $ open  [c]
+          | isClose   c       ->  tokD cs $ close [c]
+          | isSingle  c       ->  tokD cs $ word0 [c]
+          | isTerm    c       ->  term cs [c]  []
+          | isQuote   c       ->  quote   c cs []
+          | isWord    c       ->  word    txt  []
+          | isSpace   c       ->  white 1 cs
+      _                       ->  error $ "unknown token type: " ++ txt
 
     where
-      open  w             =  TOpen  n w
-      close w             =  TClose n w
-      wordQ '"'           =  TWord  n 2
-      wordQ '\''          =  TWord  n 1
-      wordQ _             =  TWord  n 0
-      word0               =  TWord  n 0
+      open  w                     =  TOpen  n w
+      close w                     =  TClose n w
+      wordQ '"'                   =  TWord  n 2
+      wordQ '\''                  =  TWord  n 1
+      wordQ _                     =  TWord  n 0
+      word0                       =  TWord  n 0
 
-      trim                =  dropWhile isSpace
-      tokD cs token       =  (token, cs)
-      tokR cs k xs        =  (k $ reverse xs, cs)
+      trim                        =  dropWhile isSpace
+      tokD cs token               =  (token, cs)
+      tokR cs k xs                =  (k $ reverse xs, cs)
 
       word (c:cs) xs | isWord c   = word cs (c:xs)
       word ccs xs                 = tokR ccs word0 xs
