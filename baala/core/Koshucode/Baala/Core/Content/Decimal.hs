@@ -2,6 +2,7 @@
 
 module Koshucode.Baala.Core.Content.Decimal
 ( LitString,
+  LitDecimal,
   litDecimal,  
 ) where
 
