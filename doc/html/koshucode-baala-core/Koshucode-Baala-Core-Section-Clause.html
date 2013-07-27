@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.29.0.0: A notational system for relational data</p
+      >koshucode-baala-core-0.30.0.0: A notational system for relational data</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -249,12 +249,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	      >Clause</a
 	      ></code
 	    >.
- Textual representation of <code
+   Textual representation of <code
 	    ><a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
 	      >Section</a
 	      ></code
 	    > is a list of clauses.
- <code
+   <code
 	    ><a href="Koshucode-Baala-Core-Section-Clause.html#v:consClause"
 	      >consClause</a
 	      ></code
@@ -267,47 +267,47 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	      > relmap</dt
 	    ><dd
 	    >
-   Relmap clause
+     Relmap clause
 </dd
 	    ><dt
 	    ><code
 	      >affirm</code
-	      > relsign relmap</dt
+	      > pattern relmap</dt
 	    ><dd
 	    >
-   Affirmative assertion clause
+     Affirmative assertion clause
 </dd
 	    ><dt
 	    ><code
 	      >deny</code
-	      > relsign relmap</dt
+	      > pattern relmap</dt
 	    ><dd
 	    >
-   Denial assertion clause
+     Denial assertion clause
 </dd
 	    ><dt
 	    ><code
 	      >|--</code
-	      > relsign /name content ...</dt
+	      > pattern /name content ...</dt
 	    ><dd
 	    >
-   Affirmative judgement clause
+     Affirmative judgement clause
 </dd
 	    ><dt
 	    ><code
 	      >|-X</code
-	      > relsign /name content ...</dt
+	      > pattern /name content ...</dt
 	    ><dd
 	    >
-   Denial judgement clause
+     Denial judgement clause
 </dd
 	    ><dt
 	    ><code
 	      >****</code
-	      > ...</dt
+	      > blah blah blah ...</dt
 	    ><dd
 	    >
-   Comment clause
+     Comment clause
 </dd
 	    ></dl
 	  ></div
@@ -544,6 +544,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	    ><a href="src/Koshucode-Baala-Core-Section-Clause.html#clauseTypeText" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Name of clause type. e.g., <code
+	      >&quot;Relmap&quot;</code
+	      >, <code
+	      >&quot;Assert&quot;</code
+	      >. 
+</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -556,6 +565,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	    ><a href="src/Koshucode-Baala-Core-Section-Clause.html#clauseSource" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Source code information of clause. 
+</p
+	    ></div
 	  ></div
 	><h1 id="g:2"
 	>Constructors

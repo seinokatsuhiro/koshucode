@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-core
-@version 0.29.0.0
+@version 0.30.0.0
 
 module Koshucode.Baala.Core.Section.Clausify
 data ClauseSource
@@ -241,11 +241,25 @@ namedLazy :: String -> CopLazyF c -> (String, Cop c)
 instance Show c => Show (Cox c)
 instance Show (Cop c)
 
+module Koshucode.Baala.Core.Content.Decimal
+
+-- | Make <tt>a</tt> from a string.
+type LitString a = AbMap2 String a
+type LitDecimal = LitString (Int, Int, Bool)
+litDecimal :: LitDecimal
+
 module Koshucode.Baala.Core.Content.Class
 class PrimContent c
-class (Ord c, Pretty c, CBool c, CString c, CInt c, CList c, CNil c, CSet c, CTermset c, CRel c) => CContent c where joinContent = foldr appendContent nil
+class (Ord c, Pretty c, CBool c, CText c, CInt c, CList c, CNil c, CSet c, CTermset c, CRel c) => CContent c where joinContent = foldr appendContent nil typename c | isBool c = "boolean" | isText c = "text" | isInt c = "int" | isList c = "list" | isNil c = "nil" | isSet c = "set" | isTermset c = "termset" | isRel c = "relation" | otherwise = "unknown"
 appendContent :: CContent c => c -> c -> c
 joinContent :: CContent c => [c] -> c
+typename :: CContent c => c -> String
+
+-- | Delete empty list (<a>null</a>) from content list.
+nonNullFilter :: Map [[a]]
+
+-- | Delete <a>nil</a> from content list.
+nonNilFilter :: CNil c => Map [c]
 class PrimContent c => CBool c
 putBool :: CBool c => Bool -> c
 getBool :: CBool c => c -> Bool
@@ -254,10 +268,10 @@ class PrimContent c => CInt c
 putInt :: CInt c => Int -> c
 getInt :: CInt c => c -> Int
 isInt :: CInt c => c -> Bool
-class PrimContent c => CString c
-putString :: CString c => String -> c
-getString :: CString c => c -> String
-isString :: CString c => c -> Bool
+class PrimContent c => CText c
+putText :: CText c => String -> c
+getText :: CText c => c -> String
+isText :: CText c => c -> Bool
 class PrimContent c => CList c
 putList :: CList c => [c] -> c
 getList :: CList c => c -> [c]
@@ -284,27 +298,25 @@ isRel :: CRel c => c -> Bool
 -- | Literalizer: Make literal contents from token tree.
 module Koshucode.Baala.Core.Content.Literalize
 
--- | Make <tt>a</tt> from <tt>b</tt>.
-type LiteralizeFrom b a = b -> AbOr a
-
 -- | Make <tt>a</tt> from list of token trees.
-type LiteralizeTrees a = LiteralizeFrom [TokenTree] a
+type LitTrees a = AbMap2 [TokenTree] a
 
 -- | Make <tt>a</tt> from a token tree.
-type LiteralizeTree a = LiteralizeFrom TokenTree a
-
--- | Make <tt>a</tt> from a string.
-type LiteralizeString a = LiteralizeFrom String a
+type LitTree a = AbMap2 TokenTree a
+type LitOperators c = [Named (LitTree c -> LitTrees c)]
 
 -- | Transform <a>TokenTree</a> into internal form of term content.
-litContent :: CContent v => LiteralizeTree v
+litContentBy :: CContent c => LitOperators c -> LitTree c
 
--- | Construct list of term contents.
-litList :: CContent v => LiteralizeTrees [v]
+-- | Collect term name and content.
+litTermset :: CContent c => LitTree c -> LitTrees [Named c]
 
--- | Construct judge from token trees. Judges itself are not content type.
---   It can be only used in the top-level of sections.
-litJudge :: CContent v => Bool -> Relsign -> LiteralizeTrees (Judge v)
+
+-- | Literalizer: Make literal contents from token tree.
+module Koshucode.Baala.Core.Content.Extension
+litContent :: CContent c => LitTree c
+litOperators :: CContent c => LitOperators c
+litJudge :: CContent c => Bool -> Relsign -> LitTrees (Judge c)
 
 
 -- | Term calcutation.
@@ -446,7 +458,11 @@ CComment :: ClauseSource -> Clause
 
 -- | Unknown clause
 CUnknown :: ClauseSource -> Clause
+
+-- | Name of clause type. e.g., <tt>"Relmap"</tt>, <tt>"Assert"</tt>.
 clauseTypeText :: Clause -> String
+
+-- | Source code information of clause.
 clauseSource :: Clause -> ClauseSource
 
 -- | Convert token list into clause list. Result clause list does not
