@@ -114,10 +114,10 @@ nextToken n txt =
     case txt of
       ('*' : '*' : '*' : '*' : cs) -> tokD cs (word0 "****")
       ('*' : '*' : _)         ->  tokD "" (TComment n txt)
-      ('\'' : '\'' : _)       ->  tokD "" (TWord n 1 txt)
+      ('\'' : '\'' : cs)      ->  tokD "" (TWord n 1 $ trim cs)
       ('(' : ')' : cs)        ->  tokD cs (word0 "()")  -- nil
       ('#' : c : cs)
-          | c `elem` "()[]{}" ->  tokD cs $ word0 [c]
+          | isSpecial c       ->  tokD cs $ word0 [c]
           | c == '!'          ->  tokD "" (TComment n txt)
       (c : '|' : cs)
           | c `elem` "[{<("   ->  tokD cs $ open  [c, '|']
@@ -169,13 +169,14 @@ nextToken n txt =
 -- ----------------------  Char category
 
 isTerm, isOpen, isClose, isSingle, isQuote :: Char -> Bool
-isSpace, isWord, isNonWord, maybeWord :: Char -> Bool
+isSpecial, isSpace, isWord, isNonWord, maybeWord :: Char -> Bool
 
 isTerm    c  =  c == '/'
 isOpen    c  =  c `elem` "([{"
 isClose   c  =  c `elem` "}])"
 isSingle  c  =  c `elem` "':"
 isQuote   c  =  c `elem` "'\""
+isSpecial c  =  isOpen c || isClose c || isSingle c || isTerm c
 isSpace   c  =  C.isSpace c
 isWord    c  =  maybeWord c && not (isNonWord c)
 isNonWord c  =  isOpen c || isClose c || isSingle c
