@@ -1,4 +1,4 @@
-{-# LANGUAGE Rank2Types #-}
+{-# LANGUAGE RankNTypes #-}
 {-# OPTIONS_GHC -Wall #-}
 
 {-| Unary relational operators. -}

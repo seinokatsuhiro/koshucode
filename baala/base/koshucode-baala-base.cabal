@@ -10,7 +10,7 @@ name:                koshucode-baala-base
 version:             0.30.0.0
 
 -- A short (one-line) description of the package.
-synopsis:            A notational system for relational data
+synopsis:            A notational system for relational model
 
 -- A longer description of the package.
 description:         Koshucode is a notation for people and computers
@@ -77,8 +77,8 @@ library
   
   -- Other library packages from which modules are imported.
   build-depends:
-         base             == 4.5.*
-       , containers       == 0.4.*
+         base             == 4.6.*
+       , containers       == 0.5.*
        , pretty           == 1.1.*
        , syb              == 0.3.*
 

@@ -50,8 +50,8 @@ executable koshu-change
   other-modules:
         Koshucode.Baala.Toolkit.Main.KoshuChange
   build-depends:
-         base                       == 4.5.*
-       , containers                 == 0.4.*
+         base                       == 4.6.*
+       , containers                 == 0.5.*
        , koshucode-baala-base       == 0.30.*
        , koshucode-baala-core       == 0.30.*
        , koshucode-baala-operator   == 0.30.*
@@ -63,7 +63,7 @@ executable koshu-rdf
   other-modules:
         Koshucode.Baala.Toolkit.Main.KoshuRdf
   build-depends:
-         base                       == 4.5.*
+         base                       == 4.6.*
        , rdf4h                      == 1.1.*
        , text                       == 0.11.*
        , koshucode-baala-base       == 0.30.*
@@ -77,8 +77,8 @@ executable koshu-regress
   other-modules:
         Koshucode.Baala.Toolkit.Main.KoshuRegress
   build-depends:
-         base                       == 4.5.*
-       , containers                 == 0.4.*
+         base                       == 4.6.*
+       , containers                 == 0.5.*
        , directory                  == 1.2.*
        , koshucode-baala-base       == 0.30.*
        , koshucode-baala-core       == 0.30.*
@@ -91,7 +91,7 @@ executable koshu-syntax
   other-modules:
         Koshucode.Baala.Toolkit.Main.KoshuSyntax
   build-depends:
-         base                       == 4.5.*
+         base                       == 4.6.*
        , koshucode-baala-base       == 0.30.*
        , koshucode-baala-core       == 0.30.*
        , koshucode-baala-operator   == 0.30.*
@@ -114,8 +114,8 @@ library
   
   -- Other library packages from which modules are imported.
   build-depends:
-         base                       == 4.5.*
-       , containers                 == 0.4.*
+         base                       == 4.6.*
+       , containers                 == 0.5.*
        , directory                  == 1.2.*
        , rdf4h                      == 1.1.*
        , text                       == 0.11.*
