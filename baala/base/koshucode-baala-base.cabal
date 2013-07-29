@@ -59,6 +59,7 @@ library
         Koshucode.Baala.Base.Data.Relterm
 
         Koshucode.Baala.Base.Prelude
+        Koshucode.Baala.Base.Prelude.Line
         Koshucode.Baala.Base.Prelude.Position
         Koshucode.Baala.Base.Prelude.Pretty
         Koshucode.Baala.Base.Prelude.Utility
@@ -67,8 +68,8 @@ library
         Koshucode.Baala.Base.Syntax.Binary
         Koshucode.Baala.Base.Syntax.HashWord
         Koshucode.Baala.Base.Syntax.Token
-        Koshucode.Baala.Base.Syntax.Tokenizer
         Koshucode.Baala.Base.Syntax.TokenTree
+        Koshucode.Baala.Base.Syntax.Tokenizer
         Koshucode.Baala.Base.Syntax.Tree
 
   -- Modules included in this library but not exported.

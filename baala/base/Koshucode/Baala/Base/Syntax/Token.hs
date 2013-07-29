@@ -1,27 +1,27 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
--- | Tokens in Koshucode
+{-| Tokens -}
 
 module Koshucode.Baala.Base.Syntax.Token
 (
   -- * Token type
   -- $TokenType
-  TNumber
-, Token (..)
+  TNumber,
+  Token (..),
 
   -- * Predicates
-, isBlankToken
-, isTermToken
-, isOpenTokenOf
-, isCloseTokenOf
+  isBlankToken,
+  isTermToken,
+  isOpenTokenOf,
+  isCloseTokenOf,
 
   -- * Other functions
-, tokenTypeText
-, tokenContent
-, tokenNumber
-, sweepToken
-, sweepLeft
+  tokenTypeText,
+  tokenContent,
+  tokenNumber,
+  sweepToken,
+  sweepLeft,
 ) where
 
 import Data.Generics (Data, Typeable)
@@ -46,6 +46,7 @@ data Token
     | TClose   TNumber String      -- ^ Close paren
     | TSpace   TNumber Int         -- ^ /N/ space characters
     | TComment TNumber String      -- ^ Comment text
+    | TUnknown TNumber String      -- ^ Unknown text
       deriving (Show, Eq, Ord, Data, Typeable)
 
 instance Name Token where
@@ -98,6 +99,7 @@ tokenTypeText (TOpen    _ _)  = "Open"
 tokenTypeText (TClose   _ _)  = "Close"
 tokenTypeText (TSpace   _ _)  = "Space"
 tokenTypeText (TComment _ _)  = "Comment"
+tokenTypeText (TUnknown _ _)  = "Unknown"
 
 tokenContent :: Token -> String
 tokenContent (TWord  _ _ s)   = s
@@ -106,6 +108,7 @@ tokenContent (TOpen    _ s)   = s
 tokenContent (TClose   _ s)   = s
 tokenContent (TSpace   _ n)   = replicate n ' '
 tokenContent (TComment _ s)   = s
+tokenContent (TUnknown _ s)   = s
 
 tokenNumber :: Token -> TNumber
 tokenNumber (TWord    n _ _)  = n
@@ -114,6 +117,7 @@ tokenNumber (TOpen    n _)    = n
 tokenNumber (TClose   n _)    = n
 tokenNumber (TSpace   n _)    = n
 tokenNumber (TComment n _)    = n
+tokenNumber (TUnknown n _)    = n
 
 {-| Remove blank tokens. -}
 sweepToken :: Map [Token]

@@ -11,22 +11,15 @@ module Koshucode.Baala.Base.Syntax.Tokenizer
   SourceLine (..),
   sourceLines,
   divideByToken,
-
-  -- ** Tokenizer
   tokens,
-  untokens,
-  untoken,
 
   -- * Document
 
-  -- ** Special characters
-  -- $SpecialCharacters
+  -- ** Token category
+  -- $TokenCategory
 
   -- ** Asterisks
   -- $Asterisks
-
-  -- ** Syntactic content type
-  -- $SyntacticContentType
 
   -- * Examples
   -- $Examples
@@ -43,9 +36,9 @@ import Koshucode.Baala.Base.Syntax.Token
 -- ----------------------  Source line
 
 data SourceLine = SourceLine
-    { sourceLineNumber  :: Int     -- ^ Line number, from 1.
-    , sourceLineContent :: String  -- ^ Line content without newline.
-    , sourceLineTokens  :: [Token] -- ^ Tokens in the line.
+    { sourceLineNumber  :: LineNumber -- ^ Line number, from 1.
+    , sourceLineContent :: String     -- ^ Line content without newline.
+    , sourceLineTokens  :: [Token]    -- ^ Tokens in the line.
     } deriving (Show, Eq, Ord, Data, Typeable)
 
 instance Pretty SourceLine where
@@ -67,49 +60,43 @@ instance Pretty SourceLine where
 sourceLines
     :: String        -- ^ Source text in koshucode.
     -> [SourceLine]  -- ^ Token list per lines.
-sourceLines = loop 1 . linesNumbered where
+sourceLines = sourceLinesBy sourceLine
+
+sourceLinesBy
+    :: (TNumber -> (LineNumber, String) -> (TNumber, [SourceLine]))
+    -> String -> [SourceLine]
+sourceLinesBy f = loop 1 . linesCrlfNumbered where
     loop _ [] = []
     loop tok (p : ps) =
-        case sourceLine tok p of
+        case f tok p of
           (tok', src) -> src ++ loop tok' ps
 
-sourceLine :: Int -> (Int, String) -> (Int, [SourceLine])
+sourceLine
+    :: TNumber                  -- ^ Token number
+    -> (LineNumber, String)     -- ^ Line number and content
+    -> (TNumber, [SourceLine])  -- ^ Token number and 'SourceLine'
 sourceLine tok (n, ln) = (tok + length toks, map src ls) where
     toks = gatherWith nextToken [tok ..] ln
     ls   = divideByToken "||" toks
     src  = SourceLine n ln
 
+{-| Divide token list by some word. -}
 divideByToken :: String -> [Token] -> [[Token]]
 divideByToken w = divideByP p where
     p (TWord _ 0 x) | w == x = True
     p _ = False
 
-
-
--- ---------------------- lines
-
-{-| Line number and contents. -}
-linesNumbered :: String -> [(Int, String)]
-linesNumbered = zip [1..] . linesCrLf
-
-{-| Split string into lines.
-    The result strings do not contain
-    carriage returns (@\\r@)
-    and line feeds (@\\n@). -}
-linesCrLf :: String -> [String]
-linesCrLf "" = []
-linesCrLf s = ln : nextLine s2 where
-    (ln, s2) = break (`elem` "\r\n") s
-    nextLine ('\r' : s3) = nextLine s3
-    nextLine ('\n' : s3) = nextLine s3
-    nextLine s3 = linesCrLf s3
+{-| Split string into list of tokens.
+    Result token list does not contain newline characters. -}
+tokens :: String -> [Token]
+tokens = concatMap sourceLineTokens . sourceLines
 
 
 
 -- ----------------------  Tokenizer
 
 {-| Split a next token from source text. -}
-nextToken :: Int -> String -> (Token, String)
+nextToken :: TNumber -> String -> (Token, String)
 nextToken n txt =
     case txt of
       ('*' : '*' : '*' : '*' : cs) -> tokD cs (word0 "****")
@@ -139,7 +126,6 @@ nextToken n txt =
       open  w                     =  TOpen  n w
       close w                     =  TClose n w
       wordQ '"'                   =  TWord  n 2
-      wordQ '\''                  =  TWord  n 1
       wordQ _                     =  TWord  n 0
       word0                       =  TWord  n 0
 
@@ -168,14 +154,15 @@ nextToken n txt =
 
 -- ----------------------  Char category
 
-isTerm, isOpen, isClose, isSingle, isQuote :: Char -> Bool
-isSpecial, isSpace, isWord, isNonWord, maybeWord :: Char -> Bool
+isTerm, isQuote, isOpen, isClose  :: Char -> Bool
+isSingle, isSpecial, isSpace      :: Char -> Bool
+isWord, isNonWord, maybeWord      :: Char -> Bool
 
 isTerm    c  =  c == '/'
+isQuote   c  =  c == '\"'
 isOpen    c  =  c `elem` "([{"
 isClose   c  =  c `elem` "}])"
 isSingle  c  =  c `elem` "':"
-isQuote   c  =  c `elem` "'\""
 isSpecial c  =  isOpen c || isClose c || isSingle c || isTerm c
 isSpace   c  =  C.isSpace c
 isWord    c  =  maybeWord c && not (isNonWord c)
@@ -187,35 +174,33 @@ maybeWord c  =  C.isAlphaNum c
 
 
 
--- ----------------------  Untokenizer
-
-{-| Split string into list of tokens.
-    Result token list does not contain newline characters. -}
-tokens :: String -> [Token]
-tokens = concatMap sourceLineTokens . sourceLines
-
-{-| Convert back a token list to a source string. -}
-untokens :: [Token] -> String
-untokens (TOpen _ a : xs)      = a ++ untokens xs
-untokens (x : TClose n a : xs) = untoken x ++ untokens (TClose n a : xs)
-untokens [x]    = untoken x
-untokens (x:xs) = untoken x ++ untokens xs
-untokens []     = []
-
-untoken :: Token -> String
-untoken (TWord _ 1 s)   = "'"  ++ s ++ "'"
-untoken (TWord _ 2 s)   = "\"" ++ s ++ "\""
-untoken (TWord _ _ s)   = s
-untoken (TTerm   _ ns)  = concat ns
-untoken (TOpen   _ s)   = s
-untoken (TClose  _ s)   = s
-untoken (TSpace  _ n)   = replicate n ' '
-untoken (TComment _ s)  = s
-
-
-
 -- ----------------------
--- $SpecialCharacters
+{- $TokenCategory
+
+   [Paren]            @(@ group @)@ ,
+                      @{@ set @}@ ,
+                      @[@ list @]@ ,
+                      @\<|@ termset @\|>@ ,
+                      @{|@ relation @|}@
+
+   [Term name]        @\/@xxx , @\/@rel@\/@xxx
+
+   [Word]             @abc@ , @123@ , @|@ ,
+                      @\#(@ , @\#)@ , @****@ ,
+                      @''@ all-letters-to-end-of-line
+
+   [One-letter word]  @:@ , @'@
+
+   [Comment]          @**@ all-letters-to-end-of-line ,
+                      @#!@ all-letters-to-end-of-line
+
+   [Space]            /space/ , @\\t@ (tab)
+
+   [Newline]          @\\r@ (carriage return) ,
+                      @\\n@ (line feed) ,
+                      @||@ (pseudo newline)
+
+-}
 
 
 
@@ -252,52 +237,21 @@ untoken (TComment _ s)  = s
    -}
 
 
-
--- ----------------------
-{- $SyntacticContentType
-
-   (Not implemented)
-   
-   Tokenizer recognizes five types of content.
-   
-   [Word]      Simple sequence of characters,
-               e.g., @abc@, @123@.
-               Numbers are represented as words.
-   
-   [Code]      Code are like tagged word,
-               e.g., @(color \'blue\')@.
-   
-   [List]      Orderd sequence of contents.
-               Lists are enclosed in square brackets,
-               e.g., @[ ab cd 0 1 ]@
-   
-   [Tuple]     Set of pairs of term name and content.
-               Tuples are enclosed in curely braces,
-               e.g., @{ \/a 10 \/b 20 }@.
-   
-   [Relation]  Set of uniform-typed tuples.
-               Relations are enclosed in curely-bar braces,
-               and enveloped tuples are divided by vertical bar,
-               e.g., @{| \/a \/b | 10 20 | 10 30 |}@.
-
-   -}
-
-
-
 -- ----------------------
 {- $Examples
 
    Words and quotations.
 
    >>> tokens "aa\n'bb'\n\"cc\""
-   [TWord 0 "aa", TWord 1 "bb", TWord 2 "cc"]
+   [TWord 1 0 "aa", TWord 2 0 "'", TWord 3 0 "bb",
+    TWord 4 0 "'", TWord 5 2 "cc"]
    
    Example includes 'TWord', 'TTerm' and 'TSpace' tokens.
    
    >>> tokens "|-- R  /a A0 /b 31"
-   [TWord 0 "|--", TSpace 1, TWord 0 "R", TSpace 2,
-    TTerm ["/a"], TSpace 1, TWord 0 "A0", TSpace 1,
-    TTerm ["/b"], TSpace 1, TWord 0 "31"]
+   [TWord 1 0 "|--", TSpace 2 1, TWord 3 0 "R",
+    TSpace 4 2, TTerm 5 ["/a"], TSpace 6 1, TWord 7 0 "A0",
+    TSpace 8 1, TTerm 9 ["/b"], TSpace 10 1, TWord 11 0 "31"]
 
    Parens.
 
