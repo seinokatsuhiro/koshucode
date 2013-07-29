@@ -62,6 +62,7 @@ library
         Koshucode.Baala.Base.Prelude.Line
         Koshucode.Baala.Base.Prelude.Position
         Koshucode.Baala.Base.Prelude.Pretty
+        Koshucode.Baala.Base.Prelude.Unicode
         Koshucode.Baala.Base.Prelude.Utility
 
         Koshucode.Baala.Base.Syntax

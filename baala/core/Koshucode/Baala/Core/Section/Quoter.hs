@@ -1,6 +1,7 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE QuasiQuotes #-}
-{-# OPTIONS_GHC -Wall -fth -fno-warn-missing-fields #-}
+{-# LANGUAGE TemplateHaskell #-}
+{-# OPTIONS_GHC -Wall -fno-warn-missing-fields #-}
 
 module Koshucode.Baala.Core.Section.Quoter
 ( koshuQuoter,

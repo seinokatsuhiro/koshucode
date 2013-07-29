@@ -118,9 +118,10 @@ nextToken n txt =
           | isSingle  c       ->  tokD cs $ word0 [c]
           | isTerm    c       ->  term cs [c]  []
           | isQuote   c       ->  quote   c cs []
-          | isWord    c       ->  word    txt  []
+          | isWord    c       ->  word    cs   [c]
           | isSpace   c       ->  white 1 cs
-      _                       ->  error $ "unknown token type: " ++ txt
+
+      _ -> tokD [] $ TUnknown n []
 
     where
       open  w                     =  TOpen  n w
@@ -154,23 +155,26 @@ nextToken n txt =
 
 -- ----------------------  Char category
 
-isTerm, isQuote, isOpen, isClose  :: Char -> Bool
-isSingle, isSpecial, isSpace      :: Char -> Bool
-isWord, isNonWord, maybeWord      :: Char -> Bool
+isTerm, isQuote, isOpen, isClose             :: Char -> Bool
+isSingle, isSpecial, isOCS, isSpace, isWord  :: Char -> Bool
 
-isTerm    c  =  c == '/'
-isQuote   c  =  c == '\"'
-isOpen    c  =  c `elem` "([{"
-isClose   c  =  c `elem` "}])"
-isSingle  c  =  c `elem` "':"
-isSpecial c  =  isOpen c || isClose c || isSingle c || isTerm c
-isSpace   c  =  C.isSpace c
-isWord    c  =  maybeWord c && not (isNonWord c)
-isNonWord c  =  isOpen c || isClose c || isSingle c
-maybeWord c  =  C.isAlphaNum c
-                 || C.isMark c
-                 || C.isSymbol c
-                 || C.isPunctuation c
+
+isTerm    c  =  c == '/'          -- UnicodePunctuation
+isQuote   c  =  c == '\"'         -- UnicodePunctuation
+isOpen    c  =  c `elem` "([{"    -- UnicodePunctuation
+isClose   c  =  c `elem` "}])"    -- UnicodePunctuation
+isSingle  c  =  c `elem` "':"     -- UnicodePunctuation
+isOCS     c  =  isOpen c || isClose c || isSingle c
+isSpecial c  =  isOCS c || isTerm c
+isSpace   c  =  C.isSpace c       -- UnicodeSeprator | UnicodeOther
+isWord    c  =  isw $ generalCategoryGroup c where
+    isw UnicodeLetter      =  True
+    isw UnicodeMark        =  True
+    isw UnicodeNumber      =  True
+    isw UnicodePunctuation =  not $ isOCS c
+    isw UnicodeSymbol      =  True
+    isw UnicodeSeperator   =  False
+    isw UnicodeOther       =  False
 
 
 
