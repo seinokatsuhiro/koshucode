@@ -41,7 +41,7 @@ import Koshucode.Baala.Core.Relmap.Run
 -- 
 -- * Data 'HalfRelmap' has
 --   'HalfRelmap',
---   'Koshucode.Baala.Base.Abort.SourceLine' and
+--   'Koshucode.Baala.Base.Abort.CodeLine' and
 --   'Koshucode.Baala.Base.Syntax.TokenTree.TokenTree'.
 -- 
 -- Datatypes for implementing 'Relmap' operators.
@@ -69,7 +69,7 @@ import Koshucode.Baala.Core.Relmap.Run
 --    
 -- * Type 'RelmapHalfCons' has
 --   'HalfRelmap',
---   'Koshucode.Baala.Base.Abort.SourceLine' and
+--   'Koshucode.Baala.Base.Abort.CodeLine' and
 --   'Koshucode.Baala.Base.Syntax.TokenTree.TokenTree'.
 -- 
 -- * Type 'RelmapFullCons' has

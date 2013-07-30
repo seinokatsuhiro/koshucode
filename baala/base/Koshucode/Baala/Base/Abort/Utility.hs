@@ -33,7 +33,7 @@ class AbortReasonClass a where
     abortSub _   = Doc.empty
 
 {-| Abort reason and source code information. -}
-type AbortType a = (a, [SourceLine])
+type AbortType a = (a, [CodeLine])
 
 {-| Either of (1) right result or (2) abort information. -}
 type AbortOrType a b = Either (AbortType a) b
@@ -82,9 +82,9 @@ messageDoc (a, src) =
       opt lbl x | isEmpty x = empty
                 | otherwise = text lbl <> x
 
-      source :: [SourceLine] -> Doc
+      source :: [CodeLine] -> Doc
       source = docv . map d where
-          d (SourceLine n line _) =
+          d (CodeLine n line _) =
               (text $ label $ show n) <> text line
 
       label :: Map String

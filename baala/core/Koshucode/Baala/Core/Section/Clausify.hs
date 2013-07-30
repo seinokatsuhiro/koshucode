@@ -16,40 +16,40 @@ import Koshucode.Baala.Base
 -- ---------------------- 
 
 data ClauseSource = ClauseSource
-    { clauseTokens :: [Token]       -- ^ Source tokens of clause
-    , clauseLines  :: [SourceLine]  -- ^ Source lines of clause
+    { clauseTokens :: [Token]     -- ^ Source tokens of clause
+    , clauseLines  :: [CodeLine]  -- ^ Source lines of clause
     } deriving (Show, Data, Typeable)
 
 emptyClauseSource :: ClauseSource
 emptyClauseSource = ClauseSource [] []
 
 {-| Convert token list into list of token clauses -}
-clausify :: [SourceLine] -> [ClauseSource]
+clausify :: [CodeLine] -> [ClauseSource]
 clausify = gather clausifySplit
 
-clausifySplit :: [SourceLine] -> (ClauseSource, [SourceLine])
+clausifySplit :: [CodeLine] -> (ClauseSource, [CodeLine])
 clausifySplit = loop where
-    loop (SourceLine _ _ xs : ls)
+    loop (CodeLine _ _ xs : ls)
         | white xs = loop ls
-    loop (src@(SourceLine _ _ (TSpace _ i : xs)) : ls)
+    loop (src@(CodeLine _ _ (TSpace _ i : xs)) : ls)
         = cons xs src $ clausifySplitWith i ls
-    loop (src@(SourceLine _ _ xs@(TWord _ _ _ : _)) : ls)
+    loop (src@(CodeLine _ _ xs@(TWord _ _ _ : _)) : ls)
         = cons xs src $ clausifySplitWith 0 ls
     loop (_ : ls) = (emptyClauseSource, ls)
     loop []       = (emptyClauseSource, [])
 
-clausifySplitWith :: Int -> [SourceLine] -> (ClauseSource, [SourceLine])
+clausifySplitWith :: Int -> [CodeLine] -> (ClauseSource, [CodeLine])
 clausifySplitWith i = loop where
-    loop ((SourceLine _ _ xs) : ls)
+    loop ((CodeLine _ _ xs) : ls)
         | white xs = loop ls
-    loop (src@(SourceLine _ _ (TSpace _ n : xs)) : ls)
+    loop (src@(CodeLine _ _ (TSpace _ n : xs)) : ls)
         | n > i    = cons xs src $ loop ls
     loop ls        = (emptyClauseSource, ls)
 
 white :: [Token] -> Bool
 white xs = (sweepToken xs == [])
 
-cons :: [Token] -> SourceLine -> Map (ClauseSource, [SourceLine])
+cons :: [Token] -> CodeLine -> Map (ClauseSource, [CodeLine])
 cons a1 b1 (ClauseSource a2 b2, c)
     = (ClauseSource (a1 ++ a2) (b1 : b2), c)
 

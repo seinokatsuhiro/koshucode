@@ -48,7 +48,7 @@ instance Show (RelmapCons v) where
 {-| First step of constructing relmap,
     make 'HalfRelmap' from use of relational operator. -}
 type RelmapHalfCons
-    =  [SourceLine]   -- ^ Source information
+    =  [CodeLine]     -- ^ Source information
     -> [TokenTree]    -- ^ Operand as source trees
     -> HalfRelmap     -- ^ Result half relmap
 

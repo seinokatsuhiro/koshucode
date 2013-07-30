@@ -105,13 +105,13 @@ isCUnknown _                = False
     This function does not depend on 'RelmapHalfCons'.
 
     >>> consPreclause $ tokens "a : source A /x /y"
-    [TRelmap [SourceLine 1 "a : source A /x /y"]
+    [TRelmap [CodeLine 1 "a : source A /x /y"]
              "a" [TreeL (Word 0 "source"),
                   TreeL (Word 0 "A"),
                   TreeL (TermN ["/x"]),
                   TreeL (TermN ["/y"])]]
     -}
-consPreclause :: [SourceLine] -> [Clause]
+consPreclause :: [CodeLine] -> [Clause]
 consPreclause = concatMap consPreclause' . clausify
 
 consPreclause' :: ClauseSource -> [Clause]
@@ -162,7 +162,7 @@ consPreclause' src@(ClauseSource toks _) = cl toks' where
     This is a first step of constructing 'Section'. -}
 consClause
     :: RelmapHalfCons  -- ^ Relmap half constructor
-    -> [SourceLine]    -- ^ Source tokens
+    -> [CodeLine]      -- ^ Source tokens
     -> [Clause]        -- ^ Result clauses
 consClause half = clauseHalf half . consPreclause
 

@@ -116,8 +116,8 @@ clauseJudge (cn, c) = Judge True "CLAUSE" args where
     args = [ ("/clause-seq"  , putInt cn)
            , ("/clause-type" , putText $ clauseTypeText c)]
 
-putToken :: Int -> Int -> SourceLine -> IO (Int)
-putToken cn tn (SourceLine ln line toks) =
+putToken :: Int -> Int -> CodeLine -> IO (Int)
+putToken cn tn (CodeLine ln line toks) =
   do putStrLn ""
      putStrLn $ "*** [C" ++ show cn ++ "] L" ++ show ln ++ " " ++ show line
      print $ docv $ map (tokenJudge cn) toks
@@ -141,8 +141,8 @@ dumpToken path =
            (_, ls) = foldl dumpTokenText (0, []) xs
        putStr $ unlines ls
 
-dumpTokenText :: (Int, [String]) -> SourceLine -> (Int, [String])
-dumpTokenText (n, ys) (SourceLine l line ts) = (n + length ts, ys ++ xs) where
+dumpTokenText :: (Int, [String]) -> CodeLine -> (Int, [String])
+dumpTokenText (n, ys) (CodeLine l line ts) = (n + length ts, ys ++ xs) where
     h  = ["", "**  L" ++ show l ++ " " ++ show line]
     xs = h ++ (map dump ts)
     dump p = show $ doc $ dumpTokenJudge l p

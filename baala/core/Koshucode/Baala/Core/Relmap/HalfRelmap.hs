@@ -15,7 +15,7 @@ import Koshucode.Baala.Base
 
 data HalfRelmap = HalfRelmap
     { halfUsage    :: [String]      -- ^ Usages description
-    , halfLines    :: [SourceLine]  -- ^ Source information
+    , halfLines    :: [CodeLine]    -- ^ Source information
     , halfOperator :: String        -- ^ Operator name of relmap operation
     , halfOperand  :: [Named [TokenTree]] -- ^ Operand of relmap operation
     , halfSubmap   :: [HalfRelmap]        -- ^ Subrelmaps in the operand

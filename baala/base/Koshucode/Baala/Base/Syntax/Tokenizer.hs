@@ -8,7 +8,7 @@ module Koshucode.Baala.Base.Syntax.Tokenizer
   -- * Library
 
   -- ** Source lines
-  SourceLine (..),
+  CodeLine (..),
   sourceLines,
   divideByToken,
   tokens,
@@ -35,16 +35,16 @@ import Koshucode.Baala.Base.Syntax.Token
 
 -- ----------------------  Source line
 
-data SourceLine = SourceLine
+data CodeLine = CodeLine
     { sourceLineNumber  :: LineNumber -- ^ Line number, from 1.
     , sourceLineContent :: String     -- ^ Line content without newline.
     , sourceLineTokens  :: [Token]    -- ^ Tokens in the line.
     } deriving (Show, Eq, Ord, Data, Typeable)
 
-instance Pretty SourceLine where
-    doc (SourceLine _ line _) = text line
+instance Pretty CodeLine where
+    doc (CodeLine _ line _) = text line
 
-{-| Split source text into 'SourceLine' list.
+{-| Split source text into 'CodeLine' list.
 
     1. Split source code into lines by line delimiters
        (carriage return @\\r@ or line feed @\\n@)
@@ -55,16 +55,16 @@ instance Pretty SourceLine where
 
     3. Tokenize each lines.
        This is represented as a list of
-       'SourceLine' /line#/ /string/ /tokens/.
+       'CodeLine' /line#/ /string/ /tokens/.
   -}
 sourceLines
-    :: String        -- ^ Source text in koshucode.
-    -> [SourceLine]  -- ^ Token list per lines.
+    :: String      -- ^ Source text in koshucode.
+    -> [CodeLine]  -- ^ Token list per lines.
 sourceLines = sourceLinesBy sourceLine
 
 sourceLinesBy
-    :: (TNumber -> (LineNumber, String) -> (TNumber, [SourceLine]))
-    -> String -> [SourceLine]
+    :: (TNumber -> (LineNumber, String) -> (TNumber, [CodeLine]))
+    -> String -> [CodeLine]
 sourceLinesBy f = loop 1 . linesCrlfNumbered where
     loop _ [] = []
     loop tok (p : ps) =
@@ -72,13 +72,13 @@ sourceLinesBy f = loop 1 . linesCrlfNumbered where
           (tok', src) -> src ++ loop tok' ps
 
 sourceLine
-    :: TNumber                  -- ^ Token number
-    -> (LineNumber, String)     -- ^ Line number and content
-    -> (TNumber, [SourceLine])  -- ^ Token number and 'SourceLine'
+    :: TNumber                -- ^ Token number
+    -> (LineNumber, String)   -- ^ Line number and content
+    -> (TNumber, [CodeLine])  -- ^ Token number and 'CodeLine'
 sourceLine tok (n, ln) = (tok + length toks, map src ls) where
     toks = gatherWith nextToken [tok ..] ln
     ls   = divideByToken "||" toks
-    src  = SourceLine n ln
+    src  = CodeLine n ln
 
 {-| Divide token list by some word. -}
 divideByToken :: String -> [Token] -> [[Token]]
