@@ -57,8 +57,10 @@ library
         Koshucode.Baala.Base.Data.Rel
         Koshucode.Baala.Base.Data.Relhead
         Koshucode.Baala.Base.Data.Relterm
+        Koshucode.Baala.Base.Data.TermPos
 
         Koshucode.Baala.Base.Prelude
+        Koshucode.Baala.Base.Prelude.Class
         Koshucode.Baala.Base.Prelude.Line
         Koshucode.Baala.Base.Prelude.Position
         Koshucode.Baala.Base.Prelude.Pretty

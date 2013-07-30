@@ -53,7 +53,7 @@ posCox cox h = pos cox where
     pos (CoxTerm ns _) = let index = headIndex1 h ns
                          in if all (>= 0) index
                             then Right $ CoxTerm ns index
-                            else Left  $ AbortNoTerm (concat ns)
+                            else Left  $ AbortNoTerms [concat ns]
     pos c = Right c
 
 runCoxH

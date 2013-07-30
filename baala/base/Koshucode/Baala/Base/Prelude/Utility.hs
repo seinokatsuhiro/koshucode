@@ -1,38 +1,33 @@
 {-# LANGUAGE Rank2Types #-}
 {-# OPTIONS_GHC #-}
 
--- | General utilities
+{-| General utilities -}
 
 module Koshucode.Baala.Base.Prelude.Utility
 (
--- * Pair
-  mapFst
-, mapSnd
-, cons1
-, mapmapFst
-, mapmapSnd
-, maybePairs
-, Named
+  -- * Pair
+  mapFst,
+  mapSnd,
+  cons1,
+  mapmapFst,
+  mapmapSnd,
+  maybePairs,
 
--- * List
-, unique
-, unionUp
-, singleton
-, divideBy
-, divideByP
-, rpad
+  -- * List
+  unique,
+  unionUp,
+  singleton,
+  divideBy,
+  divideByP,
+  rpad,
 
--- * Collection
-, gather
-, gatherWith
-, gatherToMap
-, lookupSatisfy
-, lookupMap
+  -- * Collection
+  gather,
+  gatherWith,
+  gatherToMap,
+  lookupSatisfy,
+  lookupMap,
 
--- * Class
-, Name (..)
-, Map
-, Listmap
 ) where
 
 import Control.Applicative
@@ -41,12 +36,11 @@ import qualified Data.List as List
 import qualified Data.Map  as Map
 import qualified Data.Set  as Set
 
+import Koshucode.Baala.Base.Prelude.Class
+
 
 
 -- ----------------------
-
-{-| Entry in association list. -}
-type Named a = (String, a)
 
 mapFst :: (a -> c) -> (a,b) -> (c,b)
 mapFst f (x,y) = (f x,y)
@@ -139,16 +133,4 @@ rpad n s = s ++ replicate rest ' ' where
     size c | c > 255   = 2
            | otherwise = 1
 
-
--- ----------------------
-
--- | Types that has name
-class Name a where
-    name :: a -> String
-    names :: [a] -> [String]
-    names = map name
-
-type Map a = a -> a
-
-type Listmap a = forall a. Map [a]
 

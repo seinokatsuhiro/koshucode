@@ -9,6 +9,10 @@ module Koshucode.Baala.Base.Data.Relhead
   headNames,
   headDegree,
   headChange,
+  headTermExist,
+  headTermCheck,
+  headExistTerms,
+  headNonExistTerms,
 
   -- * Index
   headIndex,
@@ -16,24 +20,16 @@ module Koshucode.Baala.Base.Data.Relhead
   posOf,
   posFrom,
 
-  -- * Position
-  TermPos (..),
-  posPoss,
-  csPick,
-  csCut,
-  termsInner,
-  termsOuter,
-
   -- * Monoid
   mempty,
   mappend,
 ) where
 
 import Data.Monoid
-import Koshucode.Baala.Base.Prelude.Position
 import Koshucode.Baala.Base.Prelude
 
 import Koshucode.Baala.Base.Data.Relterm
+import Koshucode.Baala.Base.Data.TermPos
 
 
 
@@ -78,7 +74,23 @@ headDegree = length . headTerms
 
 {-| Reconstruct head. -}
 headChange :: (Map [String]) -> Map Relhead
-headChange f (Relhead h) = headFrom $ f $ names h
+headChange f (Relhead ts) = headFrom $ f $ names ts
+
+headTermExist :: Relhead -> [String] -> Bool
+headTermExist h ns = headTermCheck h (map Yes ns)
+
+headTermCheck :: Relhead -> [YesNo String] -> Bool
+headTermCheck (Relhead ts) = all (termCheck1 ts)
+
+termCheck1 :: [Relterm] -> YesNo String -> Bool
+termCheck1 ts (Yes n) = let [i] = termIndex ts [n] in i >= 0
+termCheck1 ts (No  n) = let [i] = termIndex ts [n] in i == -1
+
+headNonExistTerms :: Relhead -> Map [String]
+headNonExistTerms (Relhead ts) = filter (termCheck1 ts . No)
+
+headExistTerms :: Relhead -> Map [String]
+headExistTerms (Relhead ts) = filter (termCheck1 ts . Yes)
 
 
 
@@ -103,44 +115,4 @@ termPoss :: [[String]] -> [[Int]] -> [TermPos]
 termPoss ns ps = zipWith TermPos ns2 ps2 where
     ns2 = map head ns
     ps2 = map head ps
-
-
-
--- ----------------------  Term position
-
-{-| Term position -}
-data TermPos = TermPos
-    { posName   :: String    -- ^ Term name
-    , posIndex  :: Int       -- ^ Position
-    } deriving (Show, Eq, Ord)
-
-instance Name TermPos where
-    name (TermPos n _) = n
-
-{-| Indicies -}
-posPoss  :: [TermPos] -> [Int]
-posPoss  = map posIndex
-
-{-| Pick an inner part. -}
-termsInner :: [TermPos] -> [[String]]
-termsInner = termsFilter isInner
-
-{-| Pick an outer part. -}
-termsOuter :: [TermPos] -> [[String]]
-termsOuter = termsFilter isOuter
-
-termsFilter :: (TermPos -> Bool) -> [TermPos] -> [[String]]
-termsFilter p = map (singleton . name) . filter p
-
-isInner, isOuter :: TermPos -> Bool
-isInner (TermPos _ i)  =  i >= 0
-isOuter (TermPos _ i)  =  i <  0
-
-{-| Pick contents by positions. -}
-csPick :: [TermPos] -> Map [c]
-csPick  =  indexPick . map posIndex
-
-{-| Cut contents by positions. -}
-csCut  :: [TermPos] -> Map [c]
-csCut   =  indexCut . map posIndex
 

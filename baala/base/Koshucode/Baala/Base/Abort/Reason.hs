@@ -59,10 +59,11 @@ data AbortReason
     | AbortMissingTermname  String
     | AbortNotNumber        String
     | AbortNotText          String
-    | AbortNoTerm           String
+    | AbortNoTerms          [String]
     | AbortOddRelation      
     | AbortReqBoolean       String
     | AbortReqFlatname      String
+    | AbortReqNewTerms      [String]
     | AbortReqText          String
     | AbortUndefined        String
     | AbortUnkCop           String
@@ -89,10 +90,11 @@ instance AbortReasonClass AbortReason where
         (AbortMissingTermname  _) -> "項目名が必要"
         (AbortNotNumber        _) -> "数値として読めない"
         (AbortNotText          _) -> "テキストではない"
-        (AbortNoTerm           _) -> "項目がない"
+        (AbortNoTerms          _) -> "項目がない"
         (AbortOddRelation       ) -> "ふぞろいな関係"
         (AbortReqBoolean       _) -> "真か偽が必要"
         (AbortReqFlatname      _) -> "入れ子ではない項目名が必要"
+        (AbortReqNewTerms      _) -> "新しい項目が必要"
         (AbortReqText          _) -> "テキストが必要"
         (AbortUndefined        _) -> "Undefined"
         (AbortUnkCop           _) -> "未知の項目演算子"
@@ -112,10 +114,11 @@ instance AbortReasonClass AbortReason where
         (AbortMissingTermname  s) -> par s
         (AbortNotNumber        s) -> par s
         (AbortNotText          s) -> par s
-        (AbortNoTerm           s) -> par s
+        (AbortNoTerms         ns) -> hsep $ map text ns
         (AbortOddRelation       ) -> empty
         (AbortReqBoolean       s) -> par s
         (AbortReqFlatname      s) -> par s
+        (AbortReqNewTerms     ns) -> hsep $ map text ns
         (AbortReqText          s) -> par s
         (AbortUnkCop           s) -> par s
         (AbortUnkCox           s) -> par s

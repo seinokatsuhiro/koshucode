@@ -4,14 +4,15 @@
 
 module Koshucode.Baala.Base.Data
 (
--- * Modules
+  -- * Modules
   module Koshucode.Baala.Base.Data.Judge,
   module Koshucode.Baala.Base.Data.Rel,
   module Koshucode.Baala.Base.Data.Relhead,
   module Koshucode.Baala.Base.Data.Relterm,
+  module Koshucode.Baala.Base.Data.TermPos,
 
--- * Glossary
--- $Glossay
+  -- * Glossary
+  -- $Glossay
 )
 where
 
@@ -19,6 +20,7 @@ import Koshucode.Baala.Base.Data.Judge
 import Koshucode.Baala.Base.Data.Rel
 import Koshucode.Baala.Base.Data.Relhead
 import Koshucode.Baala.Base.Data.Relterm
+import Koshucode.Baala.Base.Data.TermPos
 
 
 -- ----------------------
