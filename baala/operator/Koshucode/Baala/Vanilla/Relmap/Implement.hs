@@ -26,7 +26,7 @@ vanillaOperators :: [Kit.OpImplement VContent]
 vanillaOperators = vanillaOperators' ++ Mini.minimalOperators
 
 vanillaOperators' :: [Kit.OpImplement VContent]
-vanillaOperators' = Kit.operators
+vanillaOperators' = Kit.operators "vanilla"
     -- Relmap operators in alphabetical order
     [ o "add"            LikeVal           relopAdd
     , o "conf"           LikeSize          relopConf

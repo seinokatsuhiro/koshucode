@@ -4,7 +4,11 @@
 {-| Unary relational operators. -}
 
 module Koshucode.Baala.Minimal.Relmap.Unary
-( -- * id
+( -- * reldee & reldum
+  relopReldee, relopReldum,
+  -- * source
+  relopSource,
+  -- * id
   relopId, relmapId, relId,
   -- * empty
   relopEmpty, relmapEmpty, relEmpty,
@@ -22,6 +26,22 @@ import qualified Data.List  as List
 import qualified Data.Maybe as Maybe
 import qualified Data.Tuple as Tuple
 
+
+
+-- ----------------------  reldee & reldum
+
+relopReldee, relopReldum :: Relop c
+relopReldee use = Right $ relmapConst use "reldee" reldee
+relopReldum use = Right $ relmapConst use "reldum" reldum
+
+
+-- ----------------------  source
+
+relopSource :: Relop c
+relopSource use =
+  do sign <- Kit.getWord  use "-sign"
+     ns   <- Kit.getTerms use "-term"
+     Right $ relmapSource use sign ns
 
 
 -- ----------------------  id

@@ -33,8 +33,13 @@ import Koshucode.Baala.Core.Relmap.HalfRelmap
     (2) operand parser,
     (3) constructor of operator, and
     (4) usage of operator. -}
-data OpImplement v =
-    OpImplement String OpParser (Relop v) [String]
+data OpImplement c = OpImplement
+    { ropName   :: String
+    , ropGroup  :: String
+    , ropParser :: OpParser
+    , ropBody   :: Relop c
+    , ropUsage  :: [String]
+    }
     
 {-| Parser for operand of relational operator.
     This parsers docompose operand trees,

@@ -3,8 +3,8 @@
 -- | Class for operand patterns
 
 module Koshucode.Baala.Builtin.Pattern
-( OpPattern (..)
-, operators
+( OpPattern (..),
+  operators,
 ) where
 
 import Koshucode.Baala.Core
@@ -28,11 +28,12 @@ class OpPattern p where
 {-| Make implementations of relational operators. -}
 operators
     :: (OpPattern p)
-    => [(String, p, Relop v)] -- ^ Operator implementations
+    => String                 -- ^ Operator group
+    -> [(String, p, Relop v)] -- ^ Operator implementations
     -> [OpImplement v]        -- ^ Implementation list
-operators = map f where
+operators g = map f where
     f (op, pat, cons) =
         let parser  = opParser pat
             addOp u = op ++ " " ++ u
-        in OpImplement op parser cons (map addOp $ opUsage pat)
+        in OpImplement op g parser cons (map addOp $ opUsage pat)
 

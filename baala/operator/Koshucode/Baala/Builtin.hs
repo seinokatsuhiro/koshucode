@@ -120,7 +120,7 @@ instance OpPattern BuiltinOperand where
     opUsage    LikeId     = [""]
 
 builtinOperators :: (Ord c) => [OpImplement c]
-builtinOperators = operators [ ("|", LikeId, consConcat) ]
+builtinOperators = operators "builtin" [ ("|", LikeId, consConcat) ]
 
 consConcat :: Relop c
 consConcat = Right . mconcat . opSubmap

@@ -29,7 +29,7 @@ relmapCons
 relmapCons = make . unzip . map split where
     make (halfs, fulls) =
         RelmapCons (halfBundle halfs) (fullBundle fulls)
-    split (OpImplement n half full usage) =
+    split (OpImplement n _ half full usage) =
         ((n, (usage, half)), (n, full))
 
 {-| Half and full relmap constructor -}

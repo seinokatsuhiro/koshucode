@@ -10,10 +10,8 @@ module Koshucode.Baala.Minimal.Relmap.Implement
   -- $ListOfOperators
 ) where
 
-import Koshucode.Baala.Base
 import Koshucode.Baala.Core
 import qualified Koshucode.Baala.Builtin as Kit
-
 import Koshucode.Baala.Minimal.Relmap.Operand
 import Koshucode.Baala.Minimal.Relmap.Restrict
 import Koshucode.Baala.Minimal.Relmap.Tropashko
@@ -25,7 +23,7 @@ import Koshucode.Baala.Minimal.Relmap.Unary
 
 {-| Minimal implementations of relmaps. -}
 minimalOperators :: (Ord c) => [OpImplement c]
-minimalOperators = Kit.builtinOperators ++ Kit.operators
+minimalOperators = Kit.operators "minimal"
     -- Relmap operators in alphabetical order
     [ o "cut"      LikePick     relopCut
     , o "empty"    LikeId       relopEmpty
@@ -40,16 +38,6 @@ minimalOperators = Kit.builtinOperators ++ Kit.operators
     , o "some"     LikeMeet     relopSome
     , o "source"   LikeSource   relopSource
     ] where o = (,,)
-
-relopSource :: Relop c
-relopSource use =
-  do sign <- Kit.getWord  use "-sign"
-     ns   <- Kit.getTerms use "-term"
-     Right $ relmapSource use sign ns
-
-relopReldee, relopReldum :: Relop c
-relopReldee use = Right $ relmapConst use "reldee" reldee
-relopReldum use = Right $ relmapConst use "reldee" reldum
 
 
 

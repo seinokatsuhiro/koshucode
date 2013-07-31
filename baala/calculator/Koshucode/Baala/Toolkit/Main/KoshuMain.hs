@@ -11,13 +11,12 @@ module Koshucode.Baala.Toolkit.Main.KoshuMain
 
 import System.Console.GetOpt
 
-import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Core.Content.Class
+import Koshucode.Baala.Base hiding (text)
+import Koshucode.Baala.Core
 import Koshucode.Baala.Toolkit.Library.Exit
 import Koshucode.Baala.Toolkit.Library.Run
 import Koshucode.Baala.Toolkit.Library.Version
 import qualified Koshucode.Baala.Base.Prelude.Pretty as Pretty
-import qualified Koshucode.Baala.Core.Section  as Kit
 import qualified Koshucode.Baala.Builtin as Kit
 
 
@@ -49,6 +48,7 @@ data Option
     | OptStdin
     | OptSection String
     | OptCalc
+    | OptListRop
       deriving (Show, Eq)
 
 koshuOptions :: [OptDescr Option]
@@ -61,6 +61,7 @@ koshuOptions =
     , Option "i" ["stdin"]    (NoArg OptStdin)   "Read from stdin."
     , Option "s" ["section"]  (ReqArg OptSection "SEC") "One-line section"
     , Option ""  ["calc"]     (NoArg OptCalc)    "Run calculation list"
+    , Option ""  ["list-rop"] (NoArg OptListRop) "List relational operators"
     ]
 
 version :: String
@@ -91,14 +92,14 @@ header = unlines
 {-| The main function for @koshu@ command.
     See 'Koshucode.Baala.Vanilla.Relmap.Implement.vanillaOperators'
     for default argument. -}
-koshuMain :: (CContent v) => [Kit.OpImplement v] -> IO ()
-koshuMain relmaps =
-  let cons = Kit.relmapCons relmaps
-      root = Kit.makeEmptySection cons
-  in koshuMain' root =<< prelude
+koshuMain :: (CContent c) => [Kit.OpImplement c] -> IO ()
+koshuMain rops =
+  let cons = Kit.relmapCons rops
+      root = makeEmptySection cons
+  in koshuMain' rops root =<< prelude
 
-koshuMain' :: (CContent v) => Kit.Section v -> (String, [String]) -> IO ()
-koshuMain' root (_, argv) =
+koshuMain' :: (CContent c) => [Kit.OpImplement c] -> Section c -> (String, [String]) -> IO ()
+koshuMain' rops root (_, argv) =
     case getOpt Permute koshuOptions argv of
       (opts, files, [])
           | has OptHelp         -> putSuccess usage
@@ -107,11 +108,20 @@ koshuMain' root (_, argv) =
           | has OptPretty       -> prettySection sec
           | has OptStdin        -> runStdin sec
           | has OptCalc         -> runCalc  sec
+          | has OptListRop      -> putRop rops
           | otherwise           -> runFiles sec
           where has  = (`elem` opts)
                 sec = SectionSource root text files
                 text = concatMap oneLiner opts
       (_, _, errs) -> putFailure $ concat errs
+
+putRop :: (Ord c, Pretty c, CText c) => [OpImplement c] -> IO ()
+putRop rops = putJudges $ map f rops where
+    f :: (CText c) => Kit.OpImplement c -> Judge c
+    f Kit.OpImplement { ropName = n, ropGroup = g } =
+        Judge True "KOSHU-ROP"
+          [ ("/group" , putText g)
+          , ("/name"  , putText n) ]
 
 runStdin :: CContent c => SectionSource c -> IO ()
 runStdin sec =
@@ -127,13 +137,13 @@ oneLiner _ = []
 
 -- ----------------------  Pretty printing
 
-prettySection :: (CContent v) => SectionSource v -> IO ()
+prettySection :: (CContent c) => SectionSource c -> IO ()
 prettySection (SectionSource root _ files) =
     case files of
-      [file] -> do md <- Kit.sectionFile root file
+      [file] -> do md <- sectionFile root file
                    prettyPrint md
       []     -> do s <- getContents
-                   let md = Kit.sectionRead root s
+                   let md = sectionRead root s
                    prettyPrint md
       _      -> putSuccess usage
     where prettyPrint md = abortIO (print . Pretty.doc) md
@@ -176,13 +186,14 @@ prettySection (SectionSource root _ files) =
 -- flow = putStrLn . show . Pretty.docv . map Pretty.doc
 
 -- ----------------------
--- $koshu.hs
---
--- @koshu@ command is implemented using 'koshuMain'.
---
--- > import Koshucode.Baala.Toolkit.Main.KoshuMain
--- > import Koshucode.Baala.Vanilla
--- > 
--- > main :: IO ()
--- > main = koshuMain vanillaOperators
+{- $koshu.hs
+  
+   @koshu@ command is implemented using 'koshuMain'.
+  
+   > import Koshucode.Baala.Toolkit.Main.KoshuMain
+   > import Koshucode.Baala.Vanilla
+   > 
+   > main :: IO ()
+   > main = koshuMain vanillaOperators
+-}
 
