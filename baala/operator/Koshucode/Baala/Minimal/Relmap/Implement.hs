@@ -44,21 +44,21 @@ minimalOperators = Kit.operators "minimal"
 -- ----------------------
 {- $ListOfOperators
 
-   [@cut@] Project relation to unspecified terms
+   [@cut@]     Project relation to unspecified terms
 
-   [@join@] Calculate join of two relations.
+   [@join@]    Calculate join of two relations.
 
-   [@meet@] Calculate meet of two relations.
+   [@meet@]    Calculate meet of two relations.
 
-   [@pick@] Project relation to specified terms
+   [@pick@]    Project relation to specified terms
 
-   [@reldee@] Nullary fullset relation
+   [@reldee@]  Nullary fullset relation
 
-   [@reldum@] Nullary empty relation
+   [@reldum@]  Nullary empty relation
 
-   [@rename@] Change term name
+   [@rename@]  Change term name
 
-   [@source@] Read relation from data source
+   [@source@]  Read relation from data source
 
 -}
 

@@ -27,18 +27,13 @@ import Koshucode.Baala.Core.Relmap.HalfRelmap
 
 -- ----------------------  Implement
 
-{-| Implementation of relmap operator.
-    It consists of
-    (1) operator name,
-    (2) operand parser,
-    (3) constructor of operator, and
-    (4) usage of operator. -}
+{-| Implementation of relmap operator. -}
 data OpImplement c = OpImplement
-    { ropName   :: String
-    , ropGroup  :: String
-    , ropParser :: OpParser
-    , ropBody   :: Relop c
-    , ropUsage  :: [String]
+    { ropName   :: String     -- ^ Operator name
+    , ropGroup  :: String     -- ^ Operator group
+    , ropParser :: OpParser   -- ^ Operand parser
+    , ropBody   :: Relop c    -- ^ Constructor of operator
+    , ropUsage  :: [String]   -- ^ Usage of operator
     }
     
 {-| Parser for operand of relational operator.

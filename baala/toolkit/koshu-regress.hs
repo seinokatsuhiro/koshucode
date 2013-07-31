@@ -1,9 +1,15 @@
 #!/usr/bin/env runhaskell
 {-# OPTIONS_GHC -Wall #-}
 
-import Koshucode.Baala.Toolkit.Main.KoshuRegress
-import Koshucode.Baala.Vanilla as V
+import qualified Koshucode.Baala.Toolkit.Main.KoshuRegress as Main
+import qualified Koshucode.Baala.Builtin as Rop
+import qualified Koshucode.Baala.Minimal as Rop
+import qualified Koshucode.Baala.Vanilla as Rop
 
 main :: IO ()
-main = koshuRegressMain V.vanillaOperators
+main = Main.koshuRegressMain $
+       Rop.builtinOperators
+       ++ Rop.minimalOperators
+       ++ Rop.vanillaOperators
+
 

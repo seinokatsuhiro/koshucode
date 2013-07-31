@@ -4,13 +4,13 @@
 
 module Koshucode.Baala.Minimal.Relmap.Operand
 ( -- * Operand patterns
-  MinimalOperand (..)
+  MinimalOperand (..),
 
   -- * Operand parsers
-, likePick
-, likeMeet
-, likeRename
-, likeSource
+  likePick,
+  likeMeet,
+  likeRename,
+  likeSource,
 ) where
 
 import qualified Koshucode.Baala.Builtin as Kit

@@ -32,19 +32,19 @@ import Koshucode.Baala.Builtin as Kit
 
 -- ----------------------  Meet
 
-relopMeet :: (Ord v) => Relop v
-relopMeet use = do
-  m <- getRelmap use
-  Right $ relmapMeet use m
+relopMeet :: (Ord c) => Relop c
+relopMeet use =
+  do m <- getRelmap use
+     Right $ relmapMeet use m
 
 {-| Meet two relations. -}
-relmapMeet :: (Ord v)
-    => Kit.OpUse v      -- ^ Source infomation
-    -> Kit.Relmap v     -- ^ Subrelmap of meet operator
-    -> Kit.Relmap v     -- ^ Relmap of meet operator
+relmapMeet :: (Ord c)
+    => OpUse c      -- ^ Source infomation
+    -> Relmap c     -- ^ Subrelmap of meet operator
+    -> Relmap c     -- ^ Relmap of meet operator
 relmapMeet use m = Kit.relmapConfl use "meet" sub [m] where
     sub [r2] r1 = relMeet r1 r2
-    sub _ _ = undefined
+    sub _ _ = bug
 
 {-| Meet two relations. -}
 relMeet :: (Ord c)
@@ -75,26 +75,26 @@ relMeet (Rel h1 b1) (Rel h2 b2) = Right $ Rel h3 b3 where
 
 -- ----------------------  Join
 
+relopJoin :: (Ord c) => Relop c
+relopJoin use =
+    do m <- getRelmap use
+       Right $ relmapJoin use m
+
 {-| Join two relations. -}
 relmapJoin
-    :: (Ord v)
-    => Kit.OpUse v      -- ^ Source infomation
-    -> Kit.Relmap v     -- ^ Subrelmap of join operator
-    -> Kit.Relmap v     -- ^ Relmap of join operator
+    :: (Ord c)
+    => OpUse c      -- ^ Source infomation
+    -> Relmap c     -- ^ Subrelmap of join operator
+    -> Relmap c     -- ^ Relmap of join operator
 relmapJoin use m = Kit.relmapConfl use "join" sub [m] where
     sub [r2] r1 = relJoin r1 r2
-    sub _ _ = undefined
-
-relopJoin :: (Ord v) => Relop v
-relopJoin use = do
-  m <- getRelmap use
-  Right $ relmapJoin use m
+    sub _ _ = bug
 
 {-| Join two relations. -}
-relJoin :: (Ord v)
-    => Rel v         -- ^ Input relation /R1/
-    -> Rel v         -- ^ Input relation /R2/
-    -> AbOr (Rel v)  -- ^ Join of /R1/ and /R2/
+relJoin :: (Ord c)
+    => Rel c         -- ^ Input relation /R1/
+    -> Rel c         -- ^ Input relation /R2/
+    -> AbOr (Rel c)  -- ^ Join of /R1/ and /R2/
 relJoin (Rel h1 b1) (Rel h2 b2) = Right $ Rel h3 b3 where
     share1, share2 :: [TermPos]
     share1  =  h1 `Kit.posOf` shared
@@ -131,6 +131,8 @@ relJoin (Rel h1 b1) (Rel h2 b2) = Right $ Rel h3 b3 where
               shared-term-projection tuples in /R1/ and /R2/.
 
 -}
+
+
 
 -- ----------------------
 {- $MeetImplementation
