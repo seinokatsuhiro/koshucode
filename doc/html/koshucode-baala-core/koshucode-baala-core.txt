@@ -2,26 +2,26 @@
 -- See Hoogle, http://www.haskell.org/hoogle/
 
 
--- | A notational system for relational data
+-- | A notational system for relational model
 --   
 --   Koshucode is a notation for people and computers who read, write, and
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-core
-@version 0.30.0.0
+@version 0.32.0.0
 
 module Koshucode.Baala.Core.Section.Clausify
 data ClauseSource
-ClauseSource :: [Token] -> [SourceLine] -> ClauseSource
+ClauseSource :: [Token] -> [CodeLine] -> ClauseSource
 
 -- | Source tokens of clause
 clauseTokens :: ClauseSource -> [Token]
 
 -- | Source lines of clause
-clauseLines :: ClauseSource -> [SourceLine]
+clauseLines :: ClauseSource -> [CodeLine]
 
 -- | Convert token list into list of token clauses
-clausify :: [SourceLine] -> [ClauseSource]
+clausify :: [CodeLine] -> [ClauseSource]
 
 -- | Split operand into named group. Non quoted words beginning with
 --   hyphen, e.g., <tt>-x</tt>, are name of group.
@@ -44,13 +44,13 @@ module Koshucode.Baala.Core.Relmap.HalfRelmap
 --   <a>HalfRelmap</a> is constructed from list of <a>TokenTree</a>, and
 --   (full) <tt>Relmap</tt> is constructed from <a>HalfRelmap</a>.
 data HalfRelmap
-HalfRelmap :: [String] -> [SourceLine] -> String -> [Named [TokenTree]] -> [HalfRelmap] -> HalfRelmap
+HalfRelmap :: [String] -> [CodeLine] -> String -> [Named [TokenTree]] -> [HalfRelmap] -> HalfRelmap
 
 -- | Usages description
 halfUsage :: HalfRelmap -> [String]
 
 -- | Source information
-halfLines :: HalfRelmap -> [SourceLine]
+halfLines :: HalfRelmap -> [CodeLine]
 
 -- | Operator name of relmap operation
 halfOperator :: HalfRelmap -> String
@@ -143,68 +143,81 @@ instance Pretty (Assert v)
 
 module Koshucode.Baala.Core.Relmap.Implement
 
--- | Implementation of relmap operator. It consists of (1) operator name,
---   (2) operand parser, (3) constructor of operator, and (4) usage of
---   operator.
-data OpImplement v
-OpImplement :: String -> OpParser -> (Relop v) -> [String] -> OpImplement v
+-- | Implementation of relmap operator.
+data Rop c
+Rop :: String -> String -> RopParser -> RopCons c -> [String] -> Rop c
+
+-- | Operator name
+ropName :: Rop c -> String
+
+-- | Operator group
+ropGroup :: Rop c -> String
+
+-- | Operand parser
+ropParser :: Rop c -> RopParser
+
+-- | Constructor of operator
+ropCons :: Rop c -> RopCons c
+
+-- | Usage of operator
+ropUsage :: Rop c -> [String]
 
 -- | Parser for operand of relational operator. This parsers docompose
 --   operand trees, and give a name to suboperand.
-type OpParser = [TokenTree] -> [Named [TokenTree]]
-type OpParser' = [Named [TokenTree]] -> [Named [TokenTree]]
+type RopParser = [TokenTree] -> [Named [TokenTree]]
+type RopParser' = [Named [TokenTree]] -> [Named [TokenTree]]
 
 -- | Constructor of relational operator <a>Relmap</a>. <a>Relmap</a> is
 --   constructed from <a>HalfRelmap</a> and subrelmaps in it.
-type Relop v = OpUse v -> AbortOr (Relmap v)
+type RopCons c = RopUse c -> AbortOr (Relmap c)
 
 -- | Use of operator
-data OpUse v
-OpUse :: HalfRelmap -> [Relmap v] -> OpUse v
+data RopUse c
+RopUse :: HalfRelmap -> [Relmap c] -> RopUse c
 
 -- | Syntactic data of operator use
-opHalf :: OpUse v -> HalfRelmap
+ropHalf :: RopUse c -> HalfRelmap
 
 -- | Subrelmaps
-opSubmap :: OpUse v -> [Relmap v]
+ropSubmap :: RopUse c -> [Relmap c]
 
 -- | Retrieve relation from dataset.
-relmapSource :: OpUse v -> String -> [String] -> (Relmap v)
+relmapSource :: RopUse c -> String -> [String] -> (Relmap c)
 
 -- | Constant relmap.
-relmapConst :: OpUse v -> String -> Rel v -> Relmap v
+relmapConst :: RopUse c -> String -> Rel c -> Relmap c
 
 -- | Alias relmap.
-relmapAlias :: OpUse v -> Relmap v -> Relmap v
+relmapAlias :: RopUse c -> Relmap c -> Relmap c
 
 -- | Make a non-confluent relmap.
-relmapCalc :: OpUse v -> String -> RelmapSub v -> Relmap v
+relmapCalc :: RopUse c -> String -> RelmapSub c -> Relmap c
 
 -- | Make a confluent relmap.
-relmapConfl :: OpUse v -> String -> RelmapSub v -> [Relmap v] -> Relmap v
-instance Show (OpUse v)
+relmapConfl :: RopUse c -> String -> RelmapSub c -> [Relmap c] -> Relmap c
+instance Show (RopUse c)
 
 
 -- | <a>Relmap</a> construction.
 module Koshucode.Baala.Core.Relmap.Construct
 
 -- | Make half and full relmap constructors.
-relmapCons :: [OpImplement v] -> (RelmapCons v)
+relmapCons :: [Rop c] -> (RelmapCons c)
 
 -- | Half and full relmap constructor
-data RelmapCons v
-RelmapCons :: RelmapHalfCons -> RelmapFullCons v -> RelmapCons v
-consHalf :: RelmapCons v -> RelmapHalfCons
-consFull :: RelmapCons v -> RelmapFullCons v
+data RelmapCons c
+RelmapCons :: RelmapHalfCons -> RelmapFullCons c -> RelmapCons c
+consHalf :: RelmapCons c -> RelmapHalfCons
+consFull :: RelmapCons c -> RelmapFullCons c
 
 -- | First step of constructing relmap, make <a>HalfRelmap</a> from use of
 --   relational operator.
-type RelmapHalfCons = [SourceLine] -> [TokenTree] -> HalfRelmap
+type RelmapHalfCons = [CodeLine] -> [TokenTree] -> HalfRelmap
 
 -- | Second step of constructing relmap, make <a>Relmap</a> from contents
 --   of <a>HalfRelmap</a>.
-type RelmapFullCons v = HalfRelmap -> AbortOr (Relmap v)
-instance Show (RelmapCons v)
+type RelmapFullCons c = HalfRelmap -> AbortOr (Relmap c)
+instance Show (RelmapCons c)
 
 
 -- | Term calcutation.
@@ -472,17 +485,17 @@ clauseSource :: Clause -> ClauseSource
 --   
 --   <pre>
 --   &gt;&gt;&gt; consPreclause $ tokens "a : source A /x /y"
---   [TRelmap [SourceLine 1 "a : source A /x /y"]
+--   [TRelmap [CodeLine 1 "a : source A /x /y"]
 --            "a" [TreeL (Word 0 "source"),
 --                 TreeL (Word 0 "A"),
 --                 TreeL (TermN ["/x"]),
 --                 TreeL (TermN ["/y"])]]
 --   </pre>
-consPreclause :: [SourceLine] -> [Clause]
+consPreclause :: [CodeLine] -> [Clause]
 
 -- | Construct <a>Clause</a> list from <a>Token</a> list. This is a first
 --   step of constructing <a>Section</a>.
-consClause :: RelmapHalfCons -> [SourceLine] -> [Clause]
+consClause :: RelmapHalfCons -> [CodeLine] -> [Clause]
 
 -- | Second step of constructing <a>Section</a>.
 consSection :: CContent v => RelmapFullCons v -> [Clause] -> AbortOr (Section v)

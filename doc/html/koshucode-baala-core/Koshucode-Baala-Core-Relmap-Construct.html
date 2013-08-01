@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.30.0.0: A notational system for relational data</p
+      >koshucode-baala-core-0.32.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -76,17 +76,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><li class="src short"
 	  ><a href="#v:relmapCons"
 	    >relmapCons</a
-	    > ::  [<a href="Koshucode-Baala-Core-Relmap-Implement.html#t:OpImplement"
-	    >OpImplement</a
-	    > v] -&gt; <a href="Koshucode-Baala-Core-Relmap-Construct.html#t:RelmapCons"
+	    > ::  [<a href="Koshucode-Baala-Core-Relmap-Implement.html#t:Rop"
+	    >Rop</a
+	    > c] -&gt; <a href="Koshucode-Baala-Core-Relmap-Construct.html#t:RelmapCons"
 	    >RelmapCons</a
-	    > v</li
+	    > c</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
 	    >  <a href="#t:RelmapCons"
 	    >RelmapCons</a
-	    > v = <a href="#v:RelmapCons"
+	    > c = <a href="#v:RelmapCons"
 	    >RelmapCons</a
 	    > {<ul class="subs"
 	    ><li
@@ -100,7 +100,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		>consFull</a
 		> :: <a href="Koshucode-Baala-Core-Relmap-Construct.html#t:RelmapFullCons"
 		>RelmapFullCons</a
-		> v</li
+		> c</li
 	      ></ul
 	    >}</li
 	  ><li class="src short"
@@ -108,8 +108,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >type</span
 	    > <a href="#t:RelmapHalfCons"
 	    >RelmapHalfCons</a
-	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-	    >SourceLine</a
+	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:CodeLine"
+	    >CodeLine</a
 	    >] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
@@ -120,13 +120,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >type</span
 	    > <a href="#t:RelmapFullCons"
 	    >RelmapFullCons</a
-	    > v = <a href="Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
+	    > c = <a href="Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
 	    >HalfRelmap</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
 	    >AbortOr</a
 	    > (<a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap"
 	    >Relmap</a
-	    > v)</li
+	    > c)</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -145,9 +145,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ><table
 	    ><tr
 	      ><td class="src"
-		>:: [<a href="Koshucode-Baala-Core-Relmap-Implement.html#t:OpImplement"
-		  >OpImplement</a
-		  > v]</td
+		>:: [<a href="Koshucode-Baala-Core-Relmap-Implement.html#t:Rop"
+		  >Rop</a
+		  > c]</td
 		><td class="doc"
 		><p
 		  >Implementations of relational operators
@@ -158,7 +158,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      ><td class="src"
 		>-&gt; <a href="Koshucode-Baala-Core-Relmap-Construct.html#t:RelmapCons"
 		  >RelmapCons</a
-		  > v</td
+		  > c</td
 		><td class="doc"
 		><p
 		  >Relmap constructors
@@ -179,7 +179,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >data</span
 	    >  <a name="t:RelmapCons" class="def"
 	    >RelmapCons</a
-	    > v <a href="src/Koshucode-Baala-Core-Relmap-Construct.html#RelmapCons" class="link"
+	    > c <a href="src/Koshucode-Baala-Core-Relmap-Construct.html#RelmapCons" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -218,7 +218,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 			>consFull</a
 			> :: <a href="Koshucode-Baala-Core-Relmap-Construct.html#t:RelmapFullCons"
 			>RelmapFullCons</a
-			> v</dt
+			> c</dt
 		      ><dd class="doc empty"
 		      >&nbsp;</dd
 		      ></dl
@@ -240,7 +240,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		    >Show</a
 		    > (<a href="Koshucode-Baala-Core-Relmap-Construct.html#t:RelmapCons"
 		    >RelmapCons</a
-		    > v)</td
+		    > c)</td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
@@ -263,8 +263,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ><table
 	    ><tr
 	      ><td class="src"
-		>&nbsp;= [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-		  >SourceLine</a
+		>&nbsp;= [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:CodeLine"
+		  >CodeLine</a
 		  >]</td
 		><td class="doc"
 		><p
@@ -313,7 +313,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >type</span
 	    > <a name="t:RelmapFullCons" class="def"
 	    >RelmapFullCons</a
-	    > v<a href="src/Koshucode-Baala-Core-Relmap-Construct.html#RelmapFullCons" class="link"
+	    > c<a href="src/Koshucode-Baala-Core-Relmap-Construct.html#RelmapFullCons" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs arguments"
@@ -341,7 +341,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  >AbortOr</a
 		  > (<a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap"
 		  >Relmap</a
-		  > v)</td
+		  > c)</td
 		><td class="doc"
 		><p
 		  >Result relmap
@@ -379,7 +379,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      ></dt
 	    ><dd
 	    >
-    Divide list of <code
+    Dicide list of <code
 	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 		>TokenTree</a
 		></code
@@ -438,7 +438,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.11.0</p
+	> version 2.13.2</p
       ></div
     ></body
   ></html
