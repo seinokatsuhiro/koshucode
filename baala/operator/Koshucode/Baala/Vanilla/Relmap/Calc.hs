@@ -12,34 +12,31 @@ module Koshucode.Baala.Vanilla.Relmap.Calc
 
 import Control.Monad (filterM)
 
-import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Core.Content
-import Koshucode.Baala.Core.Relmap
-
-import Koshucode.Baala.Builtin as Kit
-
-import Koshucode.Baala.Vanilla.Value.Relval
+import Koshucode.Baala.Base
+import Koshucode.Baala.Core
+import Koshucode.Baala.Builtin
+import Koshucode.Baala.Vanilla.Type.Relval
 import Koshucode.Baala.Vanilla.Cop
 
 
 
 -- ----------------------  add
 
-relopAdd :: Kit.Relop VContent
+relopAdd :: RopCons VContent
 relopAdd use =
-  do ts <- Kit.getTermTrees use "-term"
+  do ts <- getTermTrees use "-term"
      cs <- vanillaNamedContents use ts
      Right $ relmapAdd use cs
 
 relmapAdd :: OpUse VContent -> [Named (PosCox VContent)] -> Relmap VContent
-relmapAdd use cs = Kit.relmapCalc use "add" sub where
+relmapAdd use cs = relmapCalc use "add" sub where
     sub _ r1 = relAdd cs r1
 
 -- todo: shared term
 relAdd :: [Named (PosCox VContent)] -> Rel VContent -> AbOr (Rel VContent)
 relAdd cs (Rel h1 b1) =
-    do let h2 = Kit.headFrom $ map fst cs
-           h3 = Kit.mappend h2 h1
+    do let h2 = headFrom $ map fst cs
+           h3 = mappend h2 h1
            cs2 = map snd cs
        let run arg = do cs2' <- mapM (runCoxH h1 arg) cs2
                         Right $ cs2' ++ arg
@@ -50,14 +47,14 @@ relAdd cs (Rel h1 b1) =
 
 -- ----------------------  hold
 
-relopHold :: Kit.Relop VContent
+relopHold :: RopCons VContent
 relopHold use = do
-  t <- Kit.getTree use "-term"
+  t <- getTree use "-term"
   c <- vanillaContent use t
   Right $ relmapHold use True c
 
 relmapHold :: OpUse VContent -> Bool -> (PosCox VContent) -> Relmap VContent
-relmapHold use b cont = Kit.relmapCalc use "hold" sub where
+relmapHold use b cont = relmapCalc use "hold" sub where
     sub _ r1 = relHold b cont r1
 
 relHold

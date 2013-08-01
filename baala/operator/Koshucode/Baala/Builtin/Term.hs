@@ -9,9 +9,7 @@ module Koshucode.Baala.Builtin.Term
   termTreePairs,
 ) where
 
-import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Base.Syntax
+import Koshucode.Baala.Base
 
 
 

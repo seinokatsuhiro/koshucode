@@ -10,8 +10,8 @@ module Koshucode.Baala.Toolkit.Library.RDF
 ) where
 
 import Data.RDF
-import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Core.Content.Class
+import Koshucode.Baala.Base
+import Koshucode.Baala.Core
 import qualified Data.Text as T
 
 -- | Type of conversion

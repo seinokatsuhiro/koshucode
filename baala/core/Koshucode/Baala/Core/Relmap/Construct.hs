@@ -24,12 +24,12 @@ import Koshucode.Baala.Core.Relmap.Relmap
 
 {-| Make half and full relmap constructors. -}
 relmapCons
-    :: [OpImplement v]   -- ^ Implementations of relational operators
+    :: [Rop v]   -- ^ Implementations of relational operators
     -> (RelmapCons v)     -- ^ Relmap constructors
 relmapCons = make . unzip . map split where
     make (halfs, fulls) =
         RelmapCons (halfBundle halfs) (fullBundle fulls)
-    split (OpImplement n _ half full usage) =
+    split (Rop n _ half full usage) =
         ((n, (usage, half)), (n, full))
 
 {-| Half and full relmap constructor -}
@@ -106,7 +106,7 @@ type RelmapFullCons v
     -> AbortOr (Relmap v) -- ^ Result relmap
 
 {-| Construct (full) relmap. -}
-fullBundle :: [Named (Relop v)] -> RelmapFullCons v
+fullBundle :: [Named (RopCons v)] -> RelmapFullCons v
 fullBundle fulls = full where
     full h@(HalfRelmap u src op _ hs) =
         case lookup op fulls of

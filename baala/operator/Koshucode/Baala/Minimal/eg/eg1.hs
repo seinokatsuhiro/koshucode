@@ -10,8 +10,8 @@
 
 {-# OPTIONS_GHC -Wall #-}
 
-import Koshucode.Baala.Base.Syntax
-import Koshucode.Baala.Minimal.Term
+import Koshucode.Baala.Base
+import Koshucode.Baala.Builtin
 
 
 

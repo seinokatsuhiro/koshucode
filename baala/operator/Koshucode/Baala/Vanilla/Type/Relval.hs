@@ -2,16 +2,14 @@
 
 -- | Relation on type 'Val'
 
-module Koshucode.Baala.Vanilla.Value.Relval
+module Koshucode.Baala.Vanilla.Type.Relval
 ( terms,
   unionUpTerm,
-  module Koshucode.Baala.Vanilla.Value.Content,
-  module Koshucode.Baala.Base.Prelude,
+  module Koshucode.Baala.Vanilla.Type.Content,
 ) where
 
-import Koshucode.Baala.Base.Prelude hiding ((<>), hang, empty, semi)
-
-import Koshucode.Baala.Vanilla.Value.Content
+import Koshucode.Baala.Base hiding ((<>), hang, empty, semi)
+import Koshucode.Baala.Vanilla.Type.Content
 
 terms :: [String] -> [Relterm]
 terms = map Term

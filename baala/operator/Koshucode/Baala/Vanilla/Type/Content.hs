@@ -2,19 +2,14 @@
 
 {-| Term content. -}
 
-module Koshucode.Baala.Vanilla.Value.Content
+module Koshucode.Baala.Vanilla.Type.Content
 ( VContent (..),
   binv, toInt, toString,
   valRangeMinMax,
-  module Koshucode.Baala.Base.Data,
 ) where
 
-import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Base.Syntax
-
-import Koshucode.Baala.Core.Content
+import Koshucode.Baala.Base
+import Koshucode.Baala.Core
 
 {-| Type for values. -}
 

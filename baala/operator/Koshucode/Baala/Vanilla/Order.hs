@@ -7,8 +7,8 @@ module Koshucode.Baala.Vanilla.Order
 ) where
 
 import qualified Data.List as List
-import Koshucode.Baala.Base.Prelude
-import qualified Koshucode.Baala.Base.Prelude.Position as Pos
+import Koshucode.Baala.Base
+import qualified Koshucode.Baala.Base as Pos
 
 -- ----------------------  Order
 

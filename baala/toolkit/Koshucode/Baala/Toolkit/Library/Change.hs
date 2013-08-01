@@ -19,7 +19,7 @@ module Koshucode.Baala.Toolkit.Library.Change
 
 import qualified Data.Set as S
 
-import Koshucode.Baala.Base.Data
+import Koshucode.Baala.Base
 import Koshucode.Baala.Vanilla
 
 import Koshucode.Baala.Toolkit.Library.Input

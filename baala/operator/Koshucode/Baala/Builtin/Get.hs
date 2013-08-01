@@ -59,7 +59,7 @@ getTermTrees use n = do
 
 {-| Get word from named operand.
 
-    > consXxx :: Relop v
+    > consXxx :: RopCons v
     > consXxx use = do
     >   sign <- getWord use "-sign"
     >   ...
@@ -110,7 +110,7 @@ getTermPair use n = do
 
 {-| Get a relmap from operator use.
 
-    > consMeet :: (Ord v) => Relop v
+    > consMeet :: (Ord v) => RopCons v
     > consMeet use = do
     >   m <- getRelmap use
     >   Right $ relmapMeet use m

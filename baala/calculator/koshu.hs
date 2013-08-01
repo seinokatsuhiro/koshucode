@@ -8,7 +8,7 @@ import qualified Koshucode.Baala.Vanilla as Rop
 
 main :: IO ()
 main = Main.koshuMain $
-       Rop.builtinOperators
-       ++ Rop.minimalOperators
-       ++ Rop.vanillaOperators
+       Rop.builtinRops
+       ++ Rop.minimalRops
+       ++ Rop.vanillaRops
 

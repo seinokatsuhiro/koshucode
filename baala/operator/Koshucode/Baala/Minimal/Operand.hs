@@ -2,7 +2,7 @@
 
 -- | Operand patterns
 
-module Koshucode.Baala.Minimal.Relmap.Operand
+module Koshucode.Baala.Minimal.Operand
 ( -- * Operand patterns
   MinimalOperand (..),
 
@@ -13,7 +13,8 @@ module Koshucode.Baala.Minimal.Relmap.Operand
   likeSource,
 ) where
 
-import qualified Koshucode.Baala.Builtin as Kit
+import Koshucode.Baala.Core
+import Koshucode.Baala.Builtin hiding (LikeId)
 
 
 
@@ -28,7 +29,7 @@ data MinimalOperand
     | LikeSource  -- ^ { @-sign@ } relsign { @-term@ } \/name ...
       deriving (Show, Eq, Enum)
 
-instance Kit.OpPattern MinimalOperand where
+instance OpPattern MinimalOperand where
     opParser'  LikeId     = id
     opParser'  LikeMeet   = likeMeet
     opParser'  LikePick   = likePick
@@ -51,25 +52,25 @@ instance Kit.OpPattern MinimalOperand where
 
 -- ----------------------  Opernd parsers
 
-likePick :: Kit.OpParser'
+likePick :: OpParser'
 likePick xs =
     case lookup "" xs of
       Just xs2 -> [("-term", xs2)] ++ xs
       _ -> xs
 
-likeMeet :: Kit.OpParser'
+likeMeet :: OpParser'
 likeMeet xs =
     case lookup "" xs of
       Just xs2@[_] -> [("-relmap", xs2)] ++ xs
       _ -> xs
 
-likeRename :: Kit.OpParser'
+likeRename :: OpParser'
 likeRename xs =
     case lookup "" xs of
       Just xs2 -> [("-term", xs2)] ++ xs
       _ -> xs
 
-likeSource :: Kit.OpParser'
+likeSource :: OpParser'
 likeSource xs =
     case lookup "" xs of
       Just (s:ns) -> [("-sign", [s]), ("-term", ns)] ++ xs

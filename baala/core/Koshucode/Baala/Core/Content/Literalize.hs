@@ -188,7 +188,7 @@ litNamedTrees = termname where
 
    Prepere some definitions.
 
-   >>> :m +Koshucode.Baala.Vanilla.Value.Val
+   >>> :m +Koshucode.Baala.Vanilla.Type.Val
    >>> let trees = tokenTrees . tokens
    >>> let lit  = litList [] . trees :: String -> AbortOr [Val]
 

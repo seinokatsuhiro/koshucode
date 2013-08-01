@@ -8,9 +8,8 @@ module Koshucode.Baala.Vanilla.Cop.Arith
 ) where
 
 import Koshucode.Baala.Base
-import Koshucode.Baala.Core.Content
-
-import Koshucode.Baala.Vanilla.Value.Content
+import Koshucode.Baala.Core
+import Koshucode.Baala.Vanilla.Type.Content
 
 
 

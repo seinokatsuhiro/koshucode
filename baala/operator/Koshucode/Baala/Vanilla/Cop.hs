@@ -8,11 +8,8 @@ module Koshucode.Baala.Vanilla.Cop
   vanillaNamedContents,
 ) where
 
-import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Base.Prelude hiding ((<>), hang, empty, semi)
-import Koshucode.Baala.Base.Syntax
-import Koshucode.Baala.Core.Content
-import Koshucode.Baala.Core.Relmap
+import Koshucode.Baala.Base hiding ((<>), hang, empty, semi)
+import Koshucode.Baala.Core
 
 import Koshucode.Baala.Vanilla.Cop.Arith
 import Koshucode.Baala.Vanilla.Cop.List
@@ -20,7 +17,7 @@ import Koshucode.Baala.Vanilla.Cop.Literal
 import Koshucode.Baala.Vanilla.Cop.Logic
 import Koshucode.Baala.Vanilla.Cop.Order
 
-import Koshucode.Baala.Vanilla.Value.Content
+import Koshucode.Baala.Vanilla.Type.Content
 
 
 

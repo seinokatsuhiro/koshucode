@@ -9,31 +9,32 @@
     The lattice has fundamental operators from which
     other operators are derived. -}
 
-module Koshucode.Baala.Minimal.Relmap.Tropashko
+module Koshucode.Baala.Minimal.Tropashko
 ( -- * Fundamental operators
   -- $FundamentalOperators
 
   -- * Meet (Natural join)
-  relopMeet,
+  ropConsMeet,
   relmapMeet,
   relMeet,
   -- $MeetImplementation
 
   -- * Join (Inner union)
-  relopJoin,
+  ropConsJoin,
   relmapJoin,
   relJoin,
 ) where
 
 import Koshucode.Baala.Base
-import Koshucode.Baala.Builtin as Kit
+import Koshucode.Baala.Core
+import Koshucode.Baala.Builtin
 
 
 
 -- ----------------------  Meet
 
-relopMeet :: (Ord c) => Relop c
-relopMeet use =
+ropConsMeet :: (Ord c) => RopCons c
+ropConsMeet use =
   do m <- getRelmap use
      Right $ relmapMeet use m
 
@@ -42,7 +43,7 @@ relmapMeet :: (Ord c)
     => OpUse c      -- ^ Source infomation
     -> Relmap c     -- ^ Subrelmap of meet operator
     -> Relmap c     -- ^ Relmap of meet operator
-relmapMeet use m = Kit.relmapConfl use "meet" sub [m] where
+relmapMeet use m = relmapConfl use "meet" sub [m] where
     sub [r2] r1 = relMeet r1 r2
     sub _ _ = bug
 
@@ -53,16 +54,16 @@ relMeet :: (Ord c)
     -> AbOr (Rel c)  -- ^ Meet of /R1/ and /R2/
 relMeet (Rel h1 b1) (Rel h2 b2) = Right $ Rel h3 b3 where
     share1, share2 :: [TermPos]
-    share1    =  h1 `Kit.posOf` shared
-    share2    =  h2 `Kit.posOf` shared
-    shared    =  Kit.termsInner $ h1 `Kit.posFrom` h2
+    share1    =  h1 `posOf` shared
+    share2    =  h2 `posOf` shared
+    shared    =  termsInner $ h1 `posFrom` h2
 
     pick1,  pick2 :: Map [c]
-    pick1     =  Kit.csPick share1
-    pick2     =  Kit.csPick share2
-    cut2      =  Kit.csCut  share2
+    pick1     =  csPick share1
+    pick2     =  csPick share2
+    cut2      =  csCut  share2
 
-    h3        =  Kit.mappend h2 h1
+    h3        =  mappend h2 h1
     b3        =  concatMap meet b1
     meet cs1  =  case lookupMap (pick1 cs1) m2 of
                    Just css2  ->  map (++ cs1) css2
@@ -75,8 +76,8 @@ relMeet (Rel h1 b1) (Rel h2 b2) = Right $ Rel h3 b3 where
 
 -- ----------------------  Join
 
-relopJoin :: (Ord c) => Relop c
-relopJoin use =
+ropConsJoin :: (Ord c) => RopCons c
+ropConsJoin use =
     do m <- getRelmap use
        Right $ relmapJoin use m
 
@@ -86,7 +87,7 @@ relmapJoin
     => OpUse c      -- ^ Source infomation
     -> Relmap c     -- ^ Subrelmap of join operator
     -> Relmap c     -- ^ Relmap of join operator
-relmapJoin use m = Kit.relmapConfl use "join" sub [m] where
+relmapJoin use m = relmapConfl use "join" sub [m] where
     sub [r2] r1 = relJoin r1 r2
     sub _ _ = bug
 
@@ -97,15 +98,15 @@ relJoin :: (Ord c)
     -> AbOr (Rel c)  -- ^ Join of /R1/ and /R2/
 relJoin (Rel h1 b1) (Rel h2 b2) = Right $ Rel h3 b3 where
     share1, share2 :: [TermPos]
-    share1  =  h1 `Kit.posOf` shared
-    share2  =  h2 `Kit.posOf` shared
-    shared  =  Kit.termsInner $ h1 `Kit.posFrom` h2
+    share1  =  h1 `posOf` shared
+    share2  =  h2 `posOf` shared
+    shared  =  termsInner $ h1 `posFrom` h2
 
     pick1,  pick2 :: Map [c]
-    pick1   =  Kit.csPick share1
-    pick2   =  Kit.csPick share2
+    pick1   =  csPick share1
+    pick2   =  csPick share2
 
-    h3      =  Kit.headChange pick1 h1
+    h3      =  headChange pick1 h1
     b3      =  unique $
                map pick1 b1 ++
                map pick2 b2

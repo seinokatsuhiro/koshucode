@@ -12,11 +12,8 @@ module Koshucode.Baala.Toolkit.Main.KoshuSyntax
 import Control.Monad
 import System.Console.GetOpt
 
-import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Base.Syntax  as Syn
-import Koshucode.Baala.Core.Content
-import Koshucode.Baala.Core.Section as Sec
+import Koshucode.Baala.Base
+import Koshucode.Baala.Core
 import Koshucode.Baala.Vanilla
 
 import Koshucode.Baala.Toolkit.Library.Exit
@@ -85,8 +82,8 @@ koshuSyntaxMain' (_, argv) =
 dumpClauseAndToken :: FilePath -> IO ()
 dumpClauseAndToken path = 
     do code <- readFile path
-       let ts = Syn.sourceLines code
-           cs = Sec.consPreclause ts
+       let ts = sourceLines code
+           cs = consPreclause ts
        putStr $ unlines h
        mapM_ putClause $ zip [1 ..] cs
     where
@@ -126,9 +123,9 @@ putToken cn tn (CodeLine ln line toks) =
 tokenJudge :: Int -> Token -> Judge VContent
 tokenJudge cn t = Judge True "TOKEN" xs where
     xs = [ ("/clause-seq"   , putInt cn)
-         , ("/token-seq"    , putInt  $ Syn.tokenNumber t)
-         , ("/token-type"   , putText $ Syn.tokenTypeText t)
-         , ("/token-content", putText $ Syn.tokenContent t) ]
+         , ("/token-seq"    , putInt  $ tokenNumber t)
+         , ("/token-type"   , putText $ tokenTypeText t)
+         , ("/token-content", putText $ tokenContent t) ]
 
 
 
@@ -137,7 +134,7 @@ tokenJudge cn t = Judge True "TOKEN" xs where
 dumpToken :: FilePath -> IO ()
 dumpToken path =
     do code <- readFile path
-       let xs = Syn.sourceLines code
+       let xs = sourceLines code
            (_, ls) = foldl dumpTokenText (0, []) xs
        putStr $ unlines ls
 
@@ -150,9 +147,9 @@ dumpTokenText (n, ys) (CodeLine l line ts) = (n + length ts, ys ++ xs) where
 dumpTokenJudge :: Int -> Token -> Judge VContent
 dumpTokenJudge l t = Judge True "TOKEN" xs where
     xs = [ ("/line"         , putInt l)
-         , ("/token-seq"    , putInt  $ Syn.tokenNumber t)
-         , ("/token-type"   , putText $ Syn.tokenTypeText t)
-         , ("/token-content", putText $ Syn.tokenContent  t) ]
+         , ("/token-seq"    , putInt  $ tokenNumber t)
+         , ("/token-type"   , putText $ tokenTypeText t)
+         , ("/token-content", putText $ tokenContent  t) ]
 
 
 

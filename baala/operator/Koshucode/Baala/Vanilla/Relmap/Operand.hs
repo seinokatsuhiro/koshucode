@@ -2,14 +2,15 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Vanilla.Relmap.Operand
-( VanillaOperand (..)
-, likePrefix
-, likeUnprefix
-, likePrefixChange
-, likeSize
+( VanillaOperand (..),
+  likePrefix,
+  likeUnprefix,
+  likePrefixChange,
+  likeSize,
 ) where
 
-import qualified Koshucode.Baala.Builtin as Kit
+import Koshucode.Baala.Core
+import Koshucode.Baala.Builtin hiding (LikeId)
 import qualified Koshucode.Baala.Minimal as Mini
 
 -- | 'Mini.OpPattern' for relational operations.
@@ -46,7 +47,7 @@ data VanillaOperand
 
       deriving (Show, Eq, Enum)
 
-instance Kit.OpPattern VanillaOperand where
+instance OpPattern VanillaOperand where
     opParser' LikeId            = id
     opParser' LikeHold          = Mini.likePick
     opParser' LikeVal           = Mini.likePick
@@ -69,25 +70,25 @@ instance Kit.OpPattern VanillaOperand where
 
     opUsage   _ = []
 
-likePrefix :: Kit.OpParser'
+likePrefix :: OpParser'
 likePrefix xs =
     case lookup "" xs of
       Just (p:ns) -> [("-prefix", [p]), ("-term", ns)] ++ xs
       _ -> xs
 
-likeUnprefix :: Kit.OpParser'
+likeUnprefix :: OpParser'
 likeUnprefix xs =
     case lookup "" xs of
       Just [p] -> [("-prefix", [p])] ++ xs
       _ -> xs
 
-likePrefixChange :: Kit.OpParser'
+likePrefixChange :: OpParser'
 likePrefixChange xs =
     case lookup "" xs of
       Just [x,y] -> [("-new", [x]), ("-old", [y])] ++ xs
       _ -> xs
 
-likeSize :: Kit.OpParser'
+likeSize :: OpParser'
 likeSize xs =
     case lookup "" xs of
       Just [n] -> [("-term", [n])] ++ xs

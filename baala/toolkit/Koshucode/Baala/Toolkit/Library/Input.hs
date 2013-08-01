@@ -12,8 +12,8 @@ module Koshucode.Baala.Toolkit.Library.Input
 , readJudge
 ) where
 
-import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Core.Section as Sec
+import Koshucode.Baala.Base
+import Koshucode.Baala.Core
 import Koshucode.Baala.Vanilla
 
 

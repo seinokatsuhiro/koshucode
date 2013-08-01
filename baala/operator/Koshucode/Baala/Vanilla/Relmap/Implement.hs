@@ -1,12 +1,14 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Vanilla.Relmap.Implement
-( vanillaOperators
+( vanillaRops
 
   -- * Operators
   -- $Operators
 ) where
 
+import Data.Monoid
+import Koshucode.Baala.Core
 import qualified Koshucode.Baala.Builtin as Kit
 import qualified Koshucode.Baala.Minimal as Mini
 
@@ -15,18 +17,15 @@ import Koshucode.Baala.Vanilla.Relmap.Naming
 import Koshucode.Baala.Vanilla.Relmap.Operand
 import Koshucode.Baala.Vanilla.Relmap.Binary
 import Koshucode.Baala.Vanilla.Relmap.Unary
-import Koshucode.Baala.Vanilla.Value.Relval
+import Koshucode.Baala.Vanilla.Type.Relval
 
 
 
 -- ----------------------  Operators
 
 {-| Implementation of relational operators. -}
-vanillaOperators :: [Kit.OpImplement VContent]
-vanillaOperators = vanillaOperators' ++ Mini.minimalOperators
-
-vanillaOperators' :: [Kit.OpImplement VContent]
-vanillaOperators' = Kit.operators "vanilla"
+vanillaRops :: [Rop VContent]
+vanillaRops = Kit.operators "vanilla"
     -- Relmap operators in alphabetical order
     [ o "add"            LikeVal           relopAdd
     , o "conf"           LikeSize          relopConf
@@ -49,12 +48,12 @@ vanillaOperators' = Kit.operators "vanilla"
 
 -- ----------------------  Constructors
 
-relopRdf :: Kit.Relop VContent
+relopRdf :: RopCons VContent
 relopRdf use = do
   sign  <- Kit.getWord  use "-sign"
   [s,o] <- Kit.getTerms use "-term"
-  Right $ Kit.relmapAlias use $
-        Kit.relmapSource use sign ["/s", "/o"] `mappend`
+  Right $ relmapAlias use $
+        relmapSource use sign ["/s", "/o"] `mappend`
         Mini.relmapRename use [(s,"/s"), (o,"/o")]
 
 

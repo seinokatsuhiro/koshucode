@@ -28,12 +28,12 @@ class OpPattern p where
 {-| Make implementations of relational operators. -}
 operators
     :: (OpPattern p)
-    => String                 -- ^ Operator group
-    -> [(String, p, Relop v)] -- ^ Operator implementations
-    -> [OpImplement v]        -- ^ Implementation list
+    => String                   -- ^ Operator group
+    -> [(String, p, RopCons v)] -- ^ Operator implementations
+    -> [Rop v]                  -- ^ Implementation list
 operators g = map f where
     f (op, pat, cons) =
         let parser  = opParser pat
             addOp u = op ++ " " ++ u
-        in OpImplement op g parser cons (map addOp $ opUsage pat)
+        in Rop op g parser cons (map addOp $ opUsage pat)
 

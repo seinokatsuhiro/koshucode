@@ -5,8 +5,8 @@
 module Koshucode.Baala.Toolkit.Main.KoshuRegress
 ( koshuRegressMain
 
--- * koshu-regress.hs
--- $main
+  -- * koshu-regress.hs
+  -- $main
 ) where
 
 import Control.Monad
@@ -15,13 +15,9 @@ import System.IO
 import Data.Maybe (mapMaybe)
 import qualified System.Directory as Dir
 
-import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Core.Content
-import Koshucode.Baala.Vanilla.Value.Content
-
-import qualified Koshucode.Baala.Core.Section  as Kit
-import qualified Koshucode.Baala.Builtin as Kit
+import Koshucode.Baala.Base
+import Koshucode.Baala.Core
+import Koshucode.Baala.Vanilla
 
 import Koshucode.Baala.Toolkit.Library.Comment
 import Koshucode.Baala.Toolkit.Library.Change
@@ -95,14 +91,14 @@ reportDir  = "REGRESS/report/"
 -- ----------------------  Main
 
 {-| The main function for @koshu-regress@ command. -}
-koshuRegressMain :: (CContent v) => [Kit.OpImplement v] -> IO ()
+koshuRegressMain :: (CContent v) => [Rop v] -> IO ()
 koshuRegressMain relmaps =
-  let cons = Kit.relmapCons relmaps
-      root = Kit.makeEmptySection cons
+  let cons = relmapCons relmaps
+      root = makeEmptySection cons
   in koshuRegressMain' root =<< prelude
 
 koshuRegressMain'
-    :: (CContent v) => Kit.Section v -> (String, [String]) -> IO ()
+    :: (CContent v) => Section v -> (String, [String]) -> IO ()
 koshuRegressMain' root (_, argv) =
     case getOpt Permute koshuOptions argv of
       (opts, files, [])
@@ -172,9 +168,9 @@ regReport sec =
          Left _     -> putStrLn "error"
          Right sec2 -> regReportBody sec2
 
-regReportBody :: (CContent v) => Kit.Section v -> IO ()
+regReportBody :: (CContent v) => Section v -> IO ()
 regReportBody sec =
-    do let js = Kit.sectionJudge sec
+    do let js = sectionJudge sec
            fs = mapMaybe outputFile js
        bs <- mapM reportFile fs
        let match   = filter id  bs
@@ -275,6 +271,6 @@ countAffirmDeny js =
    > import Koshucode.Baala.Vanilla as V
    > 
    > main :: IO ()
-   > main = koshuRegressMain V.vanillaOperators
+   > main = koshuRegressMain V.vanillaRops
 -}
 

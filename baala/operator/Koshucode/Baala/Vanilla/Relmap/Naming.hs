@@ -11,23 +11,24 @@ module Koshucode.Baala.Vanilla.Relmap.Naming
 , relopPrefixChange, relmapPrefixChange, relPrefixChange
 ) where
 
-import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Builtin as Kit
-import Koshucode.Baala.Vanilla.Value.Relval
 import qualified Data.List as List
+import Koshucode.Baala.Base
+import Koshucode.Baala.Core
+import Koshucode.Baala.Builtin
+import Koshucode.Baala.Vanilla.Type.Relval
 
 
 
 -- ----------------------  prefix
 
-relopPrefix :: Kit.Relop VContent
+relopPrefix :: RopCons VContent
 relopPrefix use = do
-  pre <- Kit.getTerm use "-prefix"
-  ns  <- Kit.getTerms use "-term"
+  pre <- getTerm use "-prefix"
+  ns  <- getTerms use "-term"
   Right $ relmapPrefix use pre ns
 
 relmapPrefix :: OpUse v -> String -> [String] -> Relmap v
-relmapPrefix use pre ns = Kit.relmapCalc use "prefix" sub where
+relmapPrefix use pre ns = relmapCalc use "prefix" sub where
     sub _ r1 = relPrefix pre ns r1
 
 {-| Add prefix to terms. -}
@@ -36,7 +37,7 @@ relPrefix
     -> [String]       -- ^ Changing term names
     -> AbMap (Rel v)  -- ^ Relation to relation
 relPrefix pre ns (Rel h1 b1) = Right $ Rel h2 b1 where
-    h2 = Kit.headChange (map f) h1
+    h2 = headChange (map f) h1
     f n | n `elem` ns  = prefixName pre n
         | otherwise    = n
 
@@ -48,13 +49,13 @@ prefixName _ _ = undefined
 
 -- ----------------------  unprefix
 
-relopUnprefix :: Kit.Relop VContent
+relopUnprefix :: RopCons VContent
 relopUnprefix use = do
-  pre <- Kit.getTerm use "-prefix"
+  pre <- getTerm use "-prefix"
   Right $ relmapUnprefix use pre
 
 relmapUnprefix :: OpUse v -> String -> Relmap v
-relmapUnprefix use pre = Kit.relmapCalc use "unprefix" sub where
+relmapUnprefix use pre = relmapCalc use "unprefix" sub where
     sub _ r1 = relUnprefix pre r1
 
 {-| Remove prefix -}
@@ -62,7 +63,7 @@ relUnprefix
     :: String         -- ^ Prefix text
     -> AbMap (Rel v)  -- ^ Relation to relation
 relUnprefix pre (Rel h1 b1) = Right $ Rel h2 b1 where
-    h2 = Kit.headChange (map $ unprefixName pre) h1
+    h2 = headChange (map $ unprefixName pre) h1
 
 unprefixName :: String -> String -> String
 unprefixName pre n =
@@ -74,15 +75,15 @@ unprefixName pre n =
 
 -- ----------------------  prefix-change
 
-relopPrefixChange :: Kit.Relop VContent
+relopPrefixChange :: RopCons VContent
 relopPrefixChange use = do
-  new <- Kit.getTerm use "-new"
-  old <- Kit.getTerm use "-old"
+  new <- getTerm use "-new"
+  old <- getTerm use "-old"
   Right $ relmapPrefixChange use new old
 
 relmapPrefixChange :: OpUse v -> String -> String -> Relmap v
 relmapPrefixChange use new old =
-    Kit.relmapCalc use "prefix-change" sub
+    relmapCalc use "prefix-change" sub
     where sub _ r1 = relPrefixChange new old r1
 
 {-| Change prefix -}
@@ -91,7 +92,7 @@ relPrefixChange
     -> String         -- ^ Old prefix
     -> AbMap (Rel v)  -- ^ Relation to relation
 relPrefixChange new old (Rel h1 b1) = Right $ Rel h2 b1 where
-    h2   = Kit.headChange (map f) h1
+    h2   = headChange (map f) h1
     new' = new ++ "-"
     old' = old ++ "-"
     f n' = case List.stripPrefix old' n' of

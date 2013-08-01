@@ -2,12 +2,12 @@
 
 module Koshucode.Baala.Core.Relmap.Implement
 ( -- * Implement
-  OpImplement (..),
+  Rop (..),
   OpParser,
   OpParser',
 
   -- * Constructor
-  Relop,
+  RopCons,
   OpUse (..),
 
   -- * Relmap basis
@@ -28,11 +28,11 @@ import Koshucode.Baala.Core.Relmap.HalfRelmap
 -- ----------------------  Implement
 
 {-| Implementation of relmap operator. -}
-data OpImplement c = OpImplement
+data Rop c = Rop
     { ropName   :: String     -- ^ Operator name
     , ropGroup  :: String     -- ^ Operator group
     , ropParser :: OpParser   -- ^ Operand parser
-    , ropBody   :: Relop c    -- ^ Constructor of operator
+    , ropCons   :: RopCons c  -- ^ Constructor of operator
     , ropUsage  :: [String]   -- ^ Usage of operator
     }
     
@@ -53,7 +53,7 @@ type OpParser'
 
 {-| Constructor of relational operator 'Relmap'.
     'Relmap' is constructed from 'HalfRelmap' and subrelmaps in it. -}
-type Relop v = OpUse v -> AbortOr (Relmap v)
+type RopCons v = OpUse v -> AbortOr (Relmap v)
 
 {-| Use of operator -}
 data OpUse v = OpUse {

@@ -10,42 +10,44 @@ module Koshucode.Baala.Vanilla.Relmap.Binary
   relopHang, relmapHang, relHang,
 ) where
 
-import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Builtin as Kit
-import Koshucode.Baala.Vanilla.Value.Relval
+import Koshucode.Baala.Base
+import Koshucode.Baala.Core
+import Koshucode.Baala.Builtin
+import Koshucode.Baala.Vanilla.Type.Relval
 import qualified Koshucode.Baala.Minimal as Mini
+
 
 
 -- ----------------------  maybe
 
-relopMaybe :: Kit.Relop VContent
+relopMaybe :: RopCons VContent
 relopMaybe use = Right $ relmapMaybe use
 
-relmapMaybe :: (Ord v, CNil v) => Kit.OpUse v -> Kit.Relmap v
-relmapMaybe use = Kit.relmapConfl use "maybe" sub ms where
-    ms = Kit.opSubmap use
+relmapMaybe :: (Ord c, CNil c) => OpUse c -> Relmap c
+relmapMaybe use = relmapConfl use "maybe" sub ms where
+    ms = opSubmap use
     sub [r2] r1 = relMaybe r1 r2
     sub _ _     = undefined
 
 -- | like SQL's left join
-relMaybe :: (Ord v, CNil v) => Rel v -> AbMap (Rel v)
+relMaybe :: (Ord c, CNil c) => Rel c -> AbMap (Rel c)
 relMaybe r1 r2 = Right $ Rel h3 b3 where
     Rel h1 args1 = r1
     Rel h2 args2 = r2
 
-    posh12 = h1 `Kit.posFrom` h2
-    share1 = Kit.posOf h1 $ Kit.termsInner posh12
-    share2 = Kit.posOf h2 $ Kit.termsInner posh12
-    side2  = Kit.posOf h2 $ Kit.termsOuter posh12
+    posh12 = h1 `posFrom` h2
+    share1 = posOf h1 $ termsInner posh12
+    share2 = posOf h2 $ termsInner posh12
+    side2  = posOf h2 $ termsOuter posh12
 
-    m2 = Kit.gatherToMap $ map pair args2
-    pair arg2 = (Kit.csPick share2 arg2,
-                 Kit.csPick side2  arg2)
+    m2 = gatherToMap $ map pair args2
+    pair arg2 = (csPick share2 arg2,
+                 csPick side2  arg2)
 
-    h3 = Kit.mappend h2 h1
+    h3 = mappend h2 h1
     b3 = concatMap step args1
     nils = replicate (headDegree h3 - headDegree h1) nil
-    step arg1 = case Kit.lookupMap (Kit.csPick share1 arg1) m2 of
+    step arg1 = case lookupMap (csPick share1 arg1) m2 of
                   Just side -> map (++ arg1) side
                   Nothing   -> [nils ++ arg1]
 
@@ -53,13 +55,13 @@ relMaybe r1 r2 = Right $ Rel h3 b3 where
 
 -- ----------------------  maybe-both
 
-relopMaybeBoth :: Kit.Relop VContent
+relopMaybeBoth :: RopCons VContent
 relopMaybeBoth use = Right $ relmapMaybeBoth use
 
 -- | like SQL's full join
-relmapMaybeBoth :: (Ord v, CNil v) => Kit.OpUse v -> Kit.Relmap v
-relmapMaybeBoth use = Kit.relmapConfl use "mmaybe" sub ms where
-    ms = Kit.opSubmap use
+relmapMaybeBoth :: (Ord c, CNil c) => OpUse c -> Relmap c
+relmapMaybeBoth use = relmapConfl use "mmaybe" sub ms where
+    ms = opSubmap use
     sub [r2] r1 = do r12 <- relMaybe r1 r2
                      r21 <- relMaybe r2 r1
                      Mini.relJoin r12 r21
@@ -69,34 +71,34 @@ relmapMaybeBoth use = Kit.relmapConfl use "mmaybe" sub ms where
 
 -- ----------------------  hang
 
-relopHang :: Kit.Relop VContent
+relopHang :: RopCons VContent
 relopHang use = do
-  n <- Kit.getTerm use "-term"
+  n <- getTerm use "-term"
   Right $ relmapHang use n
 
-relmapHang :: (Ord v, CRel v) => OpUse v -> String -> Relmap v
-relmapHang use n = Kit.relmapConfl use "hang" sub ms where
-    ms = Kit.opSubmap use
+relmapHang :: (Ord c, CRel c) => OpUse c -> String -> Relmap c
+relmapHang use n = relmapConfl use "hang" sub ms where
+    ms = opSubmap use
     sub [r2] r1 = relHang n r2 r1
     sub _ _     = undefined
 
 -- | Hanging relation, like grouping.
-relHang :: (Ord v, CRel v) => String -> Rel v -> AbMap (Rel v)
+relHang :: (Ord c, CRel c) => String -> Rel c -> AbMap (Rel c)
 relHang n r2 r1 = Right $ Rel h3 b3 where
     Rel h1 args1 = r1
     Rel h2 args2 = r2
 
-    posh12 = h1 `Kit.posFrom` h2
-    share1 = Kit.posOf h1 $ Kit.termsInner posh12
-    share2 = Kit.posOf h2 $ Kit.termsInner posh12
-    --side2  = Kit.posOf h2 $ Kit.termsOuter posh12
+    posh12 = h1 `posFrom` h2
+    share1 = posOf h1 $ termsInner posh12
+    share2 = posOf h2 $ termsInner posh12
+    --side2  = posOf h2 $ termsOuter posh12
 
-    m2 = Kit.gatherToMap $ map pair args2
-    pair arg2 = (Kit.csPick share2 arg2, arg2)
+    m2 = gatherToMap $ map pair args2
+    pair arg2 = (csPick share2 arg2, arg2)
 
     h3 = Relhead $ Nest n (headTerms h2) : (headTerms h1)
     b3 = map step args1
-    step arg1 = case Kit.lookupMap (Kit.csPick share1 arg1) m2 of
+    step arg1 = case lookupMap (csPick share1 arg1) m2 of
                   Just args2' -> (putRel $ Rel h2 args2') : arg1
                   Nothing     -> []
 

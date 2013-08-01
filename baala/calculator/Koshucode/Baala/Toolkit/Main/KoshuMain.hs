@@ -17,7 +17,7 @@ import Koshucode.Baala.Toolkit.Library.Exit
 import Koshucode.Baala.Toolkit.Library.Run
 import Koshucode.Baala.Toolkit.Library.Version
 import qualified Koshucode.Baala.Base.Prelude.Pretty as Pretty
-import qualified Koshucode.Baala.Builtin as Kit
+import Koshucode.Baala.Builtin
 
 
 -- Flow
@@ -90,15 +90,15 @@ header = unlines
 -- ----------------------  Main
 
 {-| The main function for @koshu@ command.
-    See 'Koshucode.Baala.Vanilla.Relmap.Implement.vanillaOperators'
+    See 'Koshucode.Baala.Vanilla.Relmap.Implement.vanillaRops'
     for default argument. -}
-koshuMain :: (CContent c) => [Kit.OpImplement c] -> IO ()
+koshuMain :: (CContent c) => [Rop c] -> IO ()
 koshuMain rops =
-  let cons = Kit.relmapCons rops
+  let cons = relmapCons rops
       root = makeEmptySection cons
   in koshuMain' rops root =<< prelude
 
-koshuMain' :: (CContent c) => [Kit.OpImplement c] -> Section c -> (String, [String]) -> IO ()
+koshuMain' :: (CContent c) => [Rop c] -> Section c -> (String, [String]) -> IO ()
 koshuMain' rops root (_, argv) =
     case getOpt Permute koshuOptions argv of
       (opts, files, [])
@@ -115,10 +115,10 @@ koshuMain' rops root (_, argv) =
                 text = concatMap oneLiner opts
       (_, _, errs) -> putFailure $ concat errs
 
-putRop :: (Ord c, Pretty c, CText c) => [OpImplement c] -> IO ()
+putRop :: (Ord c, Pretty c, CText c) => [Rop c] -> IO ()
 putRop rops = putJudges $ map f rops where
-    f :: (CText c) => Kit.OpImplement c -> Judge c
-    f Kit.OpImplement { ropName = n, ropGroup = g } =
+    f :: (CText c) => Rop c -> Judge c
+    f Rop { ropName = n, ropGroup = g } =
         Judge True "KOSHU-ROP"
           [ ("/group" , putText g)
           , ("/name"  , putText n) ]
@@ -155,24 +155,24 @@ prettySection (SectionSource root _ files) =
 
 -- desc
 
--- desc :: (CContent v) => [Kit.Assert v] -> IO ()
+-- desc :: (CContent v) => [Assert v] -> IO ()
 -- desc = putStrLn . fromJudges . concatMap info where
---     info :: (CContent v) => Kit.Assert v -> [Judge v]
+--     info :: (CContent v) => Assert v -> [Judge v]
 --     info a = input a -- ++ output a
 --     affirm s arg = fmap putText $ Judge True s arg
 
---     input (Kit.Assert _ _ r) = concatMap input2 $ Kit.relmapSourceList r
+--     input (Assert _ _ r) = concatMap input2 $ relmapSourceList r
 --     input2 m = inputSign m : inputTerms m
---     inputSign (Kit.RelmapSource k _) = affirm "INPUT-SIGN" [("/sign", k)]
+--     inputSign (RelmapSource k _) = affirm "INPUT-SIGN" [("/sign", k)]
 --     inputSign _ = undefined
---     inputTerms (Kit.RelmapSource k ns) = map (inputTerm k) ns
+--     inputTerms (RelmapSource k ns) = map (inputTerm k) ns
 --     inputTerms _ = undefined
 --     inputTerm k n = affirm "INPUT-TERM" [("/sign", k), ("/term", n)]
 
---     output (Kit.Assert _ s r) = output2 s r
+--     output (Assert _ s r) = output2 s r
 --     output2 k m = outputSign k : outputTerms k m
 --     outputSign k = affirm "OUTPUT-SIGN" [("/sign", k)]
---     outputTerms k m = outputHead k $ Kit.runRelmap emptyDataset m reldee
+--     outputTerms k m = outputHead k $ runRelmap emptyDataset m reldee
 --     outputHead k (Rel h _) = map (outputTerm k) (headTerms h)
 --     outputTerm k t = affirm "OUTPUT-TERM" [("/sign", k), ("/term", name t)]
 
@@ -182,7 +182,7 @@ prettySection (SectionSource root _ files) =
 
 -- flow
 
--- flow :: [Kit.Assert v] -> IO ()
+-- flow :: [Assert v] -> IO ()
 -- flow = putStrLn . show . Pretty.docv . map Pretty.doc
 
 -- ----------------------
@@ -194,6 +194,6 @@ prettySection (SectionSource root _ files) =
    > import Koshucode.Baala.Vanilla
    > 
    > main :: IO ()
-   > main = koshuMain vanillaOperators
+   > main = koshuMain vanillaRops
 -}
 

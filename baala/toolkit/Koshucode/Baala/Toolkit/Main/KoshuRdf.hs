@@ -8,17 +8,19 @@ module Koshucode.Baala.Toolkit.Main.KoshuRdf
 -- * koshu-rdf.hs
 -- $koshu-rdf.hs
 ) where
-import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Toolkit.Library.Exit
-import Koshucode.Baala.Toolkit.Library.RDF
-import Koshucode.Baala.Toolkit.Library.Version
-import Koshucode.Baala.Vanilla
-import System.Console.GetOpt
+
 import qualified Data.List                as List
 import qualified Data.RDF                 as RDF
 import qualified Data.Text                as Text
 import qualified Data.Text.IO             as Text
 import qualified Text.RDF.RDF4H.XmlParser as RDF
+import System.Console.GetOpt
+
+import Koshucode.Baala.Base
+import Koshucode.Baala.Vanilla
+import Koshucode.Baala.Toolkit.Library.Exit
+import Koshucode.Baala.Toolkit.Library.RDF
+import Koshucode.Baala.Toolkit.Library.Version
 
 
 

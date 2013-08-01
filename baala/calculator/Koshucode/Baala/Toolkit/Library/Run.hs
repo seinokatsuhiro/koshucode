@@ -1,15 +1,15 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Toolkit.Library.Run
-( SectionSource (..)
-, runFiles
-, hRunFiles
-, concatMM
-, runCalc
-, runCalcTo
-, theContent
-, readSec
-, mkdir
+( SectionSource (..),
+  runFiles,
+  hRunFiles,
+  concatMM,
+  runCalc,
+  runCalcTo,
+  theContent,
+  readSec,
+  mkdir,
 ) where
 
 import Data.Monoid
@@ -17,17 +17,13 @@ import System.IO
 import qualified System.FilePath as Path
 import qualified System.Directory as Dir
 
-import Koshucode.Baala.Base.Abort
-import Koshucode.Baala.Base.Data
-import Koshucode.Baala.Core.Content.Class
+import Koshucode.Baala.Base
+import Koshucode.Baala.Core
 import Koshucode.Baala.Toolkit.Library.Comment
-import qualified Koshucode.Baala.Base.Prelude  as Kit
-import qualified Koshucode.Baala.Core.Content.Class as Kit
-import qualified Koshucode.Baala.Core.Section  as Kit
 
 
 data SectionSource c = SectionSource
-    { rootSection  :: Kit.Section c
+    { rootSection  :: Section c
     , textSections :: [String]
     , fileSections :: [FilePath]
     } deriving (Show)
@@ -45,8 +41,8 @@ hRunFiles
     -> SectionSource v -- ^ Section source code
     -> IO ()
 hRunFiles h (SectionSource root textSec files) =
-    do let sec = map (Kit.sectionRead root) $ textSec
-       sects <- mapM (Kit.sectionFile root) $ files
+    do let sec = map (sectionRead root) $ textSec
+       sects <- mapM (sectionFile root) $ files
        let union = concatMM $ sec ++ sects
            comm  = CommentDoc
                    [ CommentSec "INPUT" files]
@@ -54,7 +50,7 @@ hRunFiles h (SectionSource root textSec files) =
        hPutStrLn    h emacsModeComment
        hPutStr      h $ unlines $ texts comm
        hPutStrLn    h ""
-       abortIO (Kit.hRunSectionIO h) union
+       abortIO (hRunSectionIO h) union
 
 concatMM :: (Monad m, Monoid a) => [m a] -> m a
 concatMM [] = return mempty
@@ -78,18 +74,18 @@ runCalcTo dir sec =
     do union <- readSec sec
        abortIO (runCalcSec dir $ rootSection sec) union
 
-runCalcSec :: (CContent v) => String -> Kit.Section v -> Kit.Section v -> IO ()
+runCalcSec :: (CContent v) => String -> Section v -> Section v -> IO ()
 runCalcSec dir root sec =
-    do let js = Kit.sectionJudge sec
+    do let js = sectionJudge sec
        mapM_ (runCalcJudge dir root) js
        return ()
 
-runCalcJudge :: (CContent v) => String -> Kit.Section v -> Judge v -> IO ()
+runCalcJudge :: (CContent v) => String -> Section v -> Judge v -> IO ()
 runCalcJudge dir root (Judge True "KOSHU-CALC" xs) =
     case theContents ["/input", "/output"] xs of
       Just [input, output] ->
           do let inputFiles = theStrings input
-                 outputFile = dir ++ Kit.getText output
+                 outputFile = dir ++ getText output
              putStrLn $ "**  Output to " ++ outputFile
              mkdir outputFile
              withFile outputFile WriteMode
@@ -108,15 +104,15 @@ mkdir path =
 
 -- ----------------------  The
 
-theContent :: (CContent c) => String -> [Kit.Named c] -> Maybe c
+theContent :: (CContent c) => String -> [Named c] -> Maybe c
 theContent = lookup
 
-theContents :: (CContent c) => [String] -> [Kit.Named c] -> Maybe [c]
+theContents :: (CContent c) => [String] -> [Named c] -> Maybe [c]
 theContents ns termset = mapM (`theContent` termset) ns
 
 theStrings :: (CContent c) => c -> [String]
-theStrings c | Kit.isText c = [Kit.getText c]
-theStrings c | Kit.isList c = map Kit.getText $ Kit.getList c
+theStrings c | isText c = [getText c]
+theStrings c | isList c = map getText $ getList c
 theStrings _ = []
 
 
@@ -126,9 +122,9 @@ theStrings _ = []
 readSec
     :: (CContent v)
     => SectionSource v               -- ^ Section
-    -> IO (AbortOr (Kit.Section v))  -- ^ Union of sections
+    -> IO (AbortOr (Section v))  -- ^ Union of sections
 readSec sec =
-    do let sec1 = map (Kit.sectionRead $ rootSection sec) $ textSections sec
-       sec2   <- mapM (Kit.sectionFile $ rootSection sec) $ fileSections sec
+    do let sec1 = map (sectionRead $ rootSection sec) $ textSections sec
+       sec2   <- mapM (sectionFile $ rootSection sec) $ fileSections sec
        return $ concatMM $ sec1 ++ sec2
 

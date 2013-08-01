@@ -53,11 +53,11 @@ library
 
         Koshucode.Baala.Minimal
 
-        Koshucode.Baala.Minimal.Relmap.Implement
-        Koshucode.Baala.Minimal.Relmap.Operand
-        Koshucode.Baala.Minimal.Relmap.Restrict
-        Koshucode.Baala.Minimal.Relmap.Tropashko
-        Koshucode.Baala.Minimal.Relmap.Unary
+        Koshucode.Baala.Minimal.Implement
+        Koshucode.Baala.Minimal.Operand
+        Koshucode.Baala.Minimal.Restrict
+        Koshucode.Baala.Minimal.Tropashko
+        Koshucode.Baala.Minimal.Unary
 
         Koshucode.Baala.Vanilla
         Koshucode.Baala.Vanilla.Order
@@ -77,8 +77,8 @@ library
         Koshucode.Baala.Vanilla.Relmap.Operand
         Koshucode.Baala.Vanilla.Relmap.Unary
 
-        Koshucode.Baala.Vanilla.Value.Content
-        Koshucode.Baala.Vanilla.Value.Relval
+        Koshucode.Baala.Vanilla.Type.Content
+        Koshucode.Baala.Vanilla.Type.Relval
 
   -- Modules included in this library but not exported.
   --other-modules:       
