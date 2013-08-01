@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.29.0.0: A notational system for relational data</p
+      >koshucode-baala-base-0.32.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -39,7 +39,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><th
 	    >Safe Haskell</th
 	    ><td
-	    >Safe-Infered</td
+	    >Safe-Inferred</td
 	    ></tr
 	  ></table
 	><p class="caption"
@@ -64,11 +64,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >Collection
 </a
 	    ></li
-	  ><li
-	  ><a href="#g:4"
-	    >Class
-</a
-	    ></li
 	  ></ul
 	></div
       ><div id="description"
@@ -76,7 +71,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	>Description</p
 	><div class="doc"
 	><p
-	  >General utilities
+	  >General utilities 
 </p
 	  ></div
 	></div
@@ -110,14 +105,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    > ::  [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > [(a, a)]</li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:Named"
-	    >Named</a
-	    > a = (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >, a)</li
 	  ><li class="src short"
 	  ><a href="#v:unique"
 	    >unique</a
@@ -153,7 +140,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >rpad</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Map"
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
 	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
@@ -171,7 +158,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >gatherToMap</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > k =&gt; [(k, v)] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Map.html#t:Map"
+	    > k =&gt; [(k, v)] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Map-Lazy.html#t:Map"
 	    >Map</a
 	    > k [v]</li
 	  ><li class="src short"
@@ -187,49 +174,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >lookupMap</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > k =&gt; k -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Map.html#t:Map"
+	    > k =&gt; k -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Map-Lazy.html#t:Map"
 	    >Map</a
 	    > k a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > a</li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >class</span
-	    >  <a href="#t:Name"
-	    >Name</a
-	    > a  <span class="keyword"
-	    >where</span
-	    ><ul class="subs"
-	    ><li
-	      ><a href="#v:name"
-		>name</a
-		> :: a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		></li
-	      ><li
-	      ><a href="#v:names"
-		>names</a
-		> :: [a] -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>]</li
-	      ></ul
-	    ></li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:Map"
-	    >Map</a
-	    > a = a -&gt; a</li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:Listmap"
-	    >Listmap</a
-	    > a = <span class="keyword"
-	    >forall</span
-	    > a.  <a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Map"
-	    >Map</a
-	    > [a]</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -285,23 +234,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    > [(a, a)]<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#maybePairs" class="link"
 	    >Source</a
 	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:Named" class="def"
-	    >Named</a
-	    > a = (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >, a)<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#Named" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Entry in association list. 
-</p
-	    ></div
 	  ></div
 	><h1 id="g:2"
 	>List
@@ -372,7 +304,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >rpad</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Map"
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
 	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
@@ -410,7 +342,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >gatherToMap</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > k =&gt; [(k, v)] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Map.html#t:Map"
+	    > k =&gt; [(k, v)] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Map-Lazy.html#t:Map"
 	    >Map</a
 	    > k [v]<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#gatherToMap" class="link"
 	    >Source</a
@@ -439,123 +371,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >lookupMap</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > k =&gt; k -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Map.html#t:Map"
+	    > k =&gt; k -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Map-Lazy.html#t:Map"
 	    >Map</a
 	    > k a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > a<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#lookupMap" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><h1 id="g:4"
-	>Class
-</h1
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >class</span
-	    >  <a name="t:Name" class="def"
-	    >Name</a
-	    > a  <span class="keyword"
-	    >where</span
-	    ><a href="src/Koshucode-Baala-Base-Prelude-Utility.html#Name" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Types that has name
-</p
-	    ></div
-	  ><div class="subs methods"
-	  ><p class="caption"
-	    >Methods</p
-	    ><p class="src"
-	    ><a name="v:name" class="def"
-	      >name</a
-	      > :: a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	      >String</a
-	      ><a href="src/Koshucode-Baala-Base-Prelude-Utility.html#name" class="link"
-	      >Source</a
-	      ></p
-	    ><p class="src"
-	    ><a name="v:names" class="def"
-	      >names</a
-	      > :: [a] -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	      >String</a
-	      >]<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#names" class="link"
-	      >Source</a
-	      ></p
-	    ></div
-	  ><div class="subs instances"
-	  ><p id="control.i:Name" class="caption collapser" onclick="toggleSection('i:Name')"
-	    >Instances</p
-	    ><div id="section.i:Name" class="show"
-	    ><table
-	      ><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Name"
-		    >Name</a
-		    > <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
-		    >Token</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Name"
-		    >Name</a
-		    > <a href="Koshucode-Baala-Base-Data-Relhead.html#t:TermPos"
-		    >TermPos</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Name"
-		    >Name</a
-		    > <a href="Koshucode-Baala-Base-Data-Relterm.html#t:Relterm"
-		    >Relterm</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Name"
-		    >Name</a
-		    > <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
-		    >AbortReason</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		></table
-	      ></div
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:Map" class="def"
-	    >Map</a
-	    > a = a -&gt; a<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#Map" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:Listmap" class="def"
-	    >Listmap</a
-	    > a = <span class="keyword"
-	    >forall</span
-	    > a.  <a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Map"
-	    >Map</a
-	    > [a]<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#Listmap" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -565,7 +385,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.11.0</p
+	> version 2.13.2</p
       ></div
     ></body
   ></html

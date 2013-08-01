@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.29.0.0: A notational system for relational data</p
+      >koshucode-baala-base-0.32.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -39,15 +39,132 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><th
 	    >Safe Haskell</th
 	    ><td
-	    >Safe-Infered</td
+	    >Safe-Inferred</td
 	    ></tr
 	  ></table
 	><p class="caption"
 	>Koshucode.Baala.Base.Prelude.Pretty</p
 	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Class
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Function
+</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    >  <a href="#t:Pretty"
+	    >Pretty</a
+	    > a  <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:doc"
+		>doc</a
+		> :: a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+		>Doc</a
+		></li
+	      ><li
+	      ><a href="#v:docv"
+		>docv</a
+		>, <a href="#v:doch"
+		>doch</a
+		> :: [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+		>Doc</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:docTag"
+	    >docTag</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	    >Doc</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	    >Doc</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:docColonList"
+	    >docColonList</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
+	    >Pretty</a
+	    > a =&gt; [a] -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	    >Doc</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:docParen"
+	    >docParen</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	    >Doc</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	    >Doc</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:docBracket"
+	    >docBracket</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	    >Doc</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	    >Doc</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:docBrace"
+	    >docBrace</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	    >Doc</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	    >Doc</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:docAngle"
+	    >docAngle</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	    >Doc</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	    >Doc</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:docAngleBar"
+	    >docAngleBar</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	    >Doc</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	    >Doc</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:docQuote"
+	    >docQuote</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	    >Doc</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	    >Doc</a
+	    ></li
+	  ><li class="src short"
+	  >module <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html"
+	    >Text.PrettyPrint</a
+	    ></li
+	  ></ul
+	></div
       ><div id="interface"
-      ><h1
-	>Documentation</h1
+      ><h1 id="g:1"
+	>Class
+</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -120,8 +237,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		><td class="src"
 		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
 		    >Pretty</a
-		    > <a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-		    >SourceLine</a
+		    > <a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:CodeLine"
+		    >CodeLine</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
@@ -156,6 +273,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	      ></div
 	    ></div
 	  ></div
+	><h1 id="g:2"
+	>Function
+</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:docTag" class="def"
@@ -172,6 +292,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></div
 	><div class="top"
 	><p class="src"
+	  ><a name="v:docColonList" class="def"
+	    >docColonList</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
+	    >Pretty</a
+	    > a =&gt; [a] -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	    >Doc</a
+	    >]<a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#docColonList" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
 	  ><a name="v:docParen" class="def"
 	    >docParen</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
@@ -181,6 +313,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ><a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#docParen" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Enclose document in <code
+	      >(</code
+	      > and <code
+	      >)</code
+	      >. 
+</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -193,6 +334,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ><a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#docBracket" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Enclose document in <code
+	      >[</code
+	      > and <code
+	      >]</code
+	      >. 
+</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -205,6 +355,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ><a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#docBrace" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Enclose document in <code
+	      >{</code
+	      > and <code
+	      >}</code
+	      >. 
+</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -217,6 +376,36 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ><a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#docAngle" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Enclose document in <code
+	      >&lt;</code
+	      > and <code
+	      >&gt;</code
+	      >. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:docAngleBar" class="def"
+	    >docAngleBar</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	    >Doc</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	    >Doc</a
+	    ><a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#docAngleBar" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Enclose document in <code
+	      >&lt;|</code
+	      > and <code
+	      >|&gt;</code
+	      >. 
+</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -229,18 +418,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ><a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#docQuote" class="link"
 	    >Source</a
 	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:docComment" class="def"
-	    >docComment</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
-	    >Doc</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
-	    >Doc</a
-	    ><a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#docComment" class="link"
-	    >Source</a
-	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Enclose document in <code
+	      >&quot;</code
+	      > and <code
+	      >&quot;</code
+	      >. 
+</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -254,7 +440,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.11.0</p
+	> version 2.13.2</p
       ></div
     ></body
   ></html

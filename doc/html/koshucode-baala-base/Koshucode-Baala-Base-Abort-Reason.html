@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.29.0.0: A notational system for relational data</p
+      >koshucode-baala-base-0.32.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -95,6 +95,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
+	    > <a href="#t:AbMap2"
+	    >AbMap2</a
+	    > b a = b -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
+	    >AbOr</a
+	    > a</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
 	    > <a href="#t:Abort"
 	    >Abort</a
 	    > = <a href="Koshucode-Baala-Base-Abort-Utility.html#t:AbortType"
@@ -115,7 +123,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	  ><li class="src short"
 	  ><a href="#v:-60--33--33--62-"
 	    >(&lt;!!&gt;)</a
-	    > ::  [<a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
+	    > ::  [<a href="Koshucode-Baala-Base-Prelude-Class.html#t:Named"
 	    >Named</a
 	    > a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
@@ -141,8 +149,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		>String</a
 		>  </li
 	      ><li
-	      >| <a href="#v:AbortMissingTermName"
-		>AbortMissingTermName</a
+	      >| <a href="#v:AbortMissingTermname"
+		>AbortMissingTermname</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
 		>  </li
@@ -153,11 +161,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		>String</a
 		>  </li
 	      ><li
-	      >| <a href="#v:AbortNoTerm"
-		>AbortNoTerm</a
+	      >| <a href="#v:AbortNotText"
+		>AbortNotText</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
 		>  </li
+	      ><li
+	      >| <a href="#v:AbortNoTerms"
+		>AbortNoTerms</a
+		> [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		>]  </li
 	      ><li
 	      >| <a href="#v:AbortOddRelation"
 		>AbortOddRelation</a
@@ -169,8 +183,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		>String</a
 		>  </li
 	      ><li
-	      >| <a href="#v:AbortRequireFlatname"
-		>AbortRequireFlatname</a
+	      >| <a href="#v:AbortReqFlatname"
+		>AbortReqFlatname</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		>  </li
+	      ><li
+	      >| <a href="#v:AbortReqNewTerms"
+		>AbortReqNewTerms</a
+		> [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		>]  </li
+	      ><li
+	      >| <a href="#v:AbortReqText"
+		>AbortReqText</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
 		>  </li
@@ -183,6 +209,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	      ><li
 	      >| <a href="#v:AbortUnkCop"
 		>AbortUnkCop</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		>  </li
+	      ><li
+	      >| <a href="#v:AbortUnkCox"
+		>AbortUnkCox</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		>  </li
+	      ><li
+	      >| <a href="#v:AbortUnkWord"
+		>AbortUnkWord</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
 		>  </li
@@ -215,6 +253,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	      ><li
 	      >| <a href="#v:AbortUnmatchType"
 		>AbortUnmatchType</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
 		>  </li
 	      ><li
 	      >| <a href="#v:AbortUsage"
@@ -273,6 +313,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
+	    > <a name="t:AbMap2" class="def"
+	    >AbMap2</a
+	    > b a = b -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
+	    >AbOr</a
+	    > a<a href="src/Koshucode-Baala-Base-Abort-Reason.html#AbMap2" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
 	    > <a name="t:Abort" class="def"
 	    >Abort</a
 	    > = <a href="Koshucode-Baala-Base-Abort-Utility.html#t:AbortType"
@@ -311,7 +363,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	><p class="src"
 	  ><a name="v:-60--33--33--62-" class="def"
 	    >(&lt;!!&gt;)</a
-	    > ::  [<a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Named"
+	    > ::  [<a href="Koshucode-Baala-Base-Prelude-Class.html#t:Named"
 	    >Named</a
 	    > a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
@@ -370,8 +422,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:AbortMissingTermName" class="def"
-		  >AbortMissingTermName</a
+		><a name="v:AbortMissingTermname" class="def"
+		  >AbortMissingTermname</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
 		  ></td
@@ -390,11 +442,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:AbortNoTerm" class="def"
-		  >AbortNoTerm</a
+		><a name="v:AbortNotText" class="def"
+		  >AbortNotText</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
 		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AbortNoTerms" class="def"
+		  >AbortNoTerms</a
+		  > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  >]</td
 		><td class="doc empty"
 		>&nbsp;</td
 		></tr
@@ -418,8 +480,28 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:AbortRequireFlatname" class="def"
-		  >AbortRequireFlatname</a
+		><a name="v:AbortReqFlatname" class="def"
+		  >AbortReqFlatname</a
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AbortReqNewTerms" class="def"
+		  >AbortReqNewTerms</a
+		  > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  >]</td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AbortReqText" class="def"
+		  >AbortReqText</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
 		  ></td
@@ -440,6 +522,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	      ><td class="src"
 		><a name="v:AbortUnkCop" class="def"
 		  >AbortUnkCop</a
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AbortUnkCox" class="def"
+		  >AbortUnkCox</a
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AbortUnkWord" class="def"
+		  >AbortUnkWord</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
 		  ></td
@@ -496,6 +598,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	      ><td class="src"
 		><a name="v:AbortUnmatchType" class="def"
 		  >AbortUnmatchType</a
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
 		  ></td
 		><td class="doc empty"
 		>&nbsp;</td
@@ -551,7 +655,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		  ></tr
 		><tr
 		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Name"
+		  ><a href="Koshucode-Baala-Base-Prelude-Class.html#t:Name"
 		    >Name</a
 		    > <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
 		    >AbortReason</a
@@ -579,7 +683,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.11.0</p
+	> version 2.13.2</p
       ></div
     ></body
   ></html

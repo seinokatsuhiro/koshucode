@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.29.0.0: A notational system for relational data</p
+      >koshucode-baala-base-0.32.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -113,8 +113,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    >type</span
 	    > <a href="#t:AbortType"
 	    >AbortType</a
-	    > a = (a, [<a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-	    >SourceLine</a
+	    > a = (a, [<a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:CodeLine"
+	    >CodeLine</a
 	    >])</li
 	  ><li class="src short"
 	  ><span class="keyword"
@@ -135,9 +135,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    >AbortType</a
 	    > a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Tuple.html#t:-40--41-"
-	    >()</a
-	    ></li
+	    > ()</li
 	  ><li class="src short"
 	  ><a href="#v:abortIO"
 	    >abortIO</a
@@ -145,15 +143,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    >AbortReasonClass</a
 	    > a =&gt; (b -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Tuple.html#t:-40--41-"
-	    >()</a
-	    >) -&gt; <a href="Koshucode-Baala-Base-Abort-Utility.html#t:AbortOrType"
+	    > ()) -&gt; <a href="Koshucode-Baala-Base-Abort-Utility.html#t:AbortOrType"
 	    >AbortOrType</a
 	    > a b -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Tuple.html#t:-40--41-"
-	    >()</a
-	    ></li
+	    > ()</li
 	  ><li class="src short"
 	  ><a href="#v:addAbort"
 	    >addAbort</a
@@ -161,7 +155,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    >AbortReasonClass</a
 	    > a =&gt; <a href="Koshucode-Baala-Base-Abort-Utility.html#t:AbortType"
 	    >AbortType</a
-	    > a -&gt; <a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Map"
+	    > a -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
 	    > (<a href="Koshucode-Baala-Base-Abort-Utility.html#t:AbortOrType"
 	    >AbortOrType</a
@@ -253,8 +247,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    >type</span
 	    > <a name="t:AbortType" class="def"
 	    >AbortType</a
-	    > a = (a, [<a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:SourceLine"
-	    >SourceLine</a
+	    > a = (a, [<a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:CodeLine"
+	    >CodeLine</a
 	    >])<a href="src/Koshucode-Baala-Base-Abort-Utility.html#AbortType" class="link"
 	    >Source</a
 	    ></p
@@ -296,9 +290,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    >AbortType</a
 	    > a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Tuple.html#t:-40--41-"
-	    >()</a
-	    ><a href="src/Koshucode-Baala-Base-Abort-Utility.html#abort" class="link"
+	    > ()<a href="src/Koshucode-Baala-Base-Abort-Utility.html#abort" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -330,9 +322,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	      ><td class="src"
 		>=&gt; (b -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 		  >IO</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Tuple.html#t:-40--41-"
-		  >()</a
-		  >)</td
+		  > ())</td
 		><td class="doc"
 		><p
 		  >Function
@@ -354,9 +344,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	      ><td class="src"
 		>-&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 		  >IO</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Tuple.html#t:-40--41-"
-		  >()</a
-		  ></td
+		  > ()</td
 		><td class="doc empty"
 		>&nbsp;</td
 		></tr
@@ -371,7 +359,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    >AbortReasonClass</a
 	    > a =&gt; <a href="Koshucode-Baala-Base-Abort-Utility.html#t:AbortType"
 	    >AbortType</a
-	    > a -&gt; <a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Map"
+	    > a -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
 	    > (<a href="Koshucode-Baala-Base-Abort-Utility.html#t:AbortOrType"
 	    >AbortOrType</a
@@ -398,7 +386,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.11.0</p
+	> version 2.13.2</p
       ></div
     ></body
   ></html
