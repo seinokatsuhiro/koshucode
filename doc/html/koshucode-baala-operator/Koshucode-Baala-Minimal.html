@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-operator-0.30.0.0: Relational operators in Koshucode</p
+      >koshucode-baala-operator-0.32.0.0: Relational operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -45,23 +45,175 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	><p class="caption"
 	>Koshucode.Baala.Minimal</p
 	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Relatoinal operators
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Naming conventions
+</a
+	    ></li
+	  ></ul
+	></div
       ><div id="description"
       ><p class="caption"
 	>Description</p
 	><div class="doc"
 	><p
-	  >Minimal relational operators
+	  >Minimal relational operators 
 </p
 	  ></div
 	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  >module <a href="Koshucode-Baala-Minimal-Implement.html"
+	    >Koshucode.Baala.Minimal.Implement</a
+	    ></li
+	  ><li class="src short"
+	  >module <a href="Koshucode-Baala-Minimal-Operand.html"
+	    >Koshucode.Baala.Minimal.Operand</a
+	    ></li
+	  ><li class="src short"
+	  >module <a href="Koshucode-Baala-Minimal-Restrict.html"
+	    >Koshucode.Baala.Minimal.Restrict</a
+	    ></li
+	  ><li class="src short"
+	  >module <a href="Koshucode-Baala-Minimal-Tropashko.html"
+	    >Koshucode.Baala.Minimal.Tropashko</a
+	    ></li
+	  ><li class="src short"
+	  >module <a href="Koshucode-Baala-Minimal-Unary.html"
+	    >Koshucode.Baala.Minimal.Unary</a
+	    ></li
+	  ></ul
+	></div
       ><div id="interface"
-      ><h1
-	>Documentation</h1
+      ><h1 id="g:1"
+	>Relatoinal operators
+</h1
 	><div class="top"
 	><p class="src"
-	  >module <a href="Koshucode-Baala-Minimal-Relmap.html"
-	    >Koshucode.Baala.Minimal.Relmap</a
+	  >module <a href="Koshucode-Baala-Minimal-Implement.html"
+	    >Koshucode.Baala.Minimal.Implement</a
 	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  >module <a href="Koshucode-Baala-Minimal-Operand.html"
+	    >Koshucode.Baala.Minimal.Operand</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  >module <a href="Koshucode-Baala-Minimal-Restrict.html"
+	    >Koshucode.Baala.Minimal.Restrict</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  >module <a href="Koshucode-Baala-Minimal-Tropashko.html"
+	    >Koshucode.Baala.Minimal.Tropashko</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  >module <a href="Koshucode-Baala-Minimal-Unary.html"
+	    >Koshucode.Baala.Minimal.Unary</a
+	    ></p
+	  ></div
+	><h1 id="g:2"
+	>Naming conventions
+</h1
+	><div class="doc"
+	><p
+	  >Functions for relational mapping are
+   named under some conventions.
+   Relational mapping is a kind of functions
+   that calculate relations from relations.
+</p
+	  ><dl
+	  ><dt
+	    ><code
+	      >xxx</code
+	      ></dt
+	    ><dd
+	    >        Name of relational operator.
+</dd
+	    ><dt
+	    ><code
+	      >ropConsXxx</code
+	      ></dt
+	    ><dd
+	    > Functions of <code
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopCons"
+		>RopCons</a
+		></code
+	      >.
+                  These functions construct <code
+	      ><a href="Koshucode-Baala-Base-Content-Relmap.html#t:Relmap"
+		>Relmap</a
+		></code
+	      >
+                  from operator usages, but constructions are failed
+                  if operators are misused.
+</dd
+	    ><dt
+	    ><code
+	      >relmapXxx</code
+	      ></dt
+	    ><dd
+	    >  Functions from <code
+	      ><a href="Koshucode-Baala-Base-Content-Relmap.html#t:Relmap"
+		>Relmap</a
+		></code
+	      >
+                  to <code
+	      ><a href="Koshucode-Baala-Base-Content-Relmap.html#t:Relmap"
+		>Relmap</a
+		></code
+	      >.
+</dd
+	    ><dt
+	    ><code
+	      >relXxx</code
+	      ></dt
+	    ><dd
+	    >     Functions from <code
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data.html#t:Rel"
+		>Rel</a
+		></code
+	      >
+                  to <code
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data.html#t:Rel"
+		>Rel</a
+		></code
+	      >.
+                  These are basic functions for relational operators.
+</dd
+	    ><dt
+	    ><code
+	      >likeXxx</code
+	      ></dt
+	    ><dd
+	    >    Operand parser.
+</dd
+	    ><dt
+	    ><code
+	      >LikeXxx</code
+	      ></dt
+	    ><dd
+	    >    Operand pattern.
+</dd
+	    ></dl
 	  ></div
 	></div
       ></div
@@ -69,7 +221,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.11.0</p
+	> version 2.13.2</p
       ></div
     ></body
   ></html

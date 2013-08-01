@@ -9,12 +9,55 @@
 <body>
 <pre><a name="line-1"></a><span class='hs-comment'>{-# OPTIONS_GHC -Wall #-}</span>
 <a name="line-2"></a>
-<a name="line-3"></a><span class='hs-comment'>-- | Minimal relational operators</span>
+<a name="line-3"></a><span class='hs-comment'>{-| Minimal relational operators -}</span>
 <a name="line-4"></a>
 <a name="line-5"></a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Minimal</span>
-<a name="line-6"></a><span class='hs-layout'>(</span> <span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Minimal</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span>
-<a name="line-7"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
-<a name="line-8"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Minimal</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span>
-<a name="line-9"></a>
+<a name="line-6"></a><span class='hs-layout'>(</span> <span class='hs-comment'>-- * Relatoinal operators</span>
+<a name="line-7"></a>  <span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Minimal</span><span class='hs-varop'>.</span><span class='hs-conid'>Implement</span><span class='hs-layout'>,</span>
+<a name="line-8"></a>  <span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Minimal</span><span class='hs-varop'>.</span><span class='hs-conid'>Operand</span><span class='hs-layout'>,</span>
+<a name="line-9"></a>  <span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Minimal</span><span class='hs-varop'>.</span><span class='hs-conid'>Restrict</span><span class='hs-layout'>,</span>
+<a name="line-10"></a>  <span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Minimal</span><span class='hs-varop'>.</span><span class='hs-conid'>Tropashko</span><span class='hs-layout'>,</span>
+<a name="line-11"></a>  <span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Minimal</span><span class='hs-varop'>.</span><span class='hs-conid'>Unary</span><span class='hs-layout'>,</span>
+<a name="line-12"></a>
+<a name="line-13"></a>  <span class='hs-comment'>-- * Naming conventions</span>
+<a name="line-14"></a>  <span class='hs-comment'>-- $NamingConventions</span>
+<a name="line-15"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a name="line-16"></a>
+<a name="line-17"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Minimal</span><span class='hs-varop'>.</span><span class='hs-conid'>Implement</span>
+<a name="line-18"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Minimal</span><span class='hs-varop'>.</span><span class='hs-conid'>Operand</span>
+<a name="line-19"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Minimal</span><span class='hs-varop'>.</span><span class='hs-conid'>Restrict</span>
+<a name="line-20"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Minimal</span><span class='hs-varop'>.</span><span class='hs-conid'>Tropashko</span>
+<a name="line-21"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Minimal</span><span class='hs-varop'>.</span><span class='hs-conid'>Unary</span>
+<a name="line-22"></a>
+<a name="line-23"></a>
+<a name="line-24"></a>
+<a name="line-25"></a><span class='hs-comment'>-- ----------------------</span>
+<a name="line-26"></a><span class='hs-comment'>{- $NamingConventions
+<a name="line-27"></a>
+<a name="line-28"></a>   Functions for relational mapping are
+<a name="line-29"></a>   named under some conventions.
+<a name="line-30"></a>   Relational mapping is a kind of functions
+<a name="line-31"></a>   that calculate relations from relations.
+<a name="line-32"></a>
+<a name="line-33"></a>   [@xxx@]        Name of relational operator.
+<a name="line-34"></a>
+<a name="line-35"></a>   [@ropConsXxx@] Functions of 'Koshucode.Baala.Core.Relmap.Implement.RopCons'.
+<a name="line-36"></a>                  These functions construct 'Koshucode.Baala.Base.Content.Relmap.Relmap'
+<a name="line-37"></a>                  from operator usages, but constructions are failed
+<a name="line-38"></a>                  if operators are misused.
+<a name="line-39"></a>
+<a name="line-40"></a>   [@relmapXxx@]  Functions from 'Koshucode.Baala.Base.Content.Relmap.Relmap'
+<a name="line-41"></a>                  to 'Koshucode.Baala.Base.Content.Relmap.Relmap'.
+<a name="line-42"></a>
+<a name="line-43"></a>   [@relXxx@]     Functions from 'Koshucode.Baala.Base.Data.Rel'
+<a name="line-44"></a>                  to 'Koshucode.Baala.Base.Data.Rel'.
+<a name="line-45"></a>                  These are basic functions for relational operators.
+<a name="line-46"></a>
+<a name="line-47"></a>   [@likeXxx@]    Operand parser.
+<a name="line-48"></a>
+<a name="line-49"></a>   [@LikeXxx@]    Operand pattern.
+<a name="line-50"></a>
+<a name="line-51"></a>-}</span>
+<a name="line-52"></a>
 </pre></body>
 </html>

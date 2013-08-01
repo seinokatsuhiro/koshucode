@@ -1,0 +1,297 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Builtin.Pattern</title
+    ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builtin-Pattern.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a href="src/Koshucode-Baala-Builtin-Pattern.html"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-operator-0.32.0.0: Relational operators in Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Builtin.Pattern</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Class for operand patterns
+</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    >  <a href="#t:OpPattern"
+	    >OpPattern</a
+	    > p  <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:opParser"
+		>opParser</a
+		> :: p -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopParser"
+		>RopParser</a
+		></li
+	      ><li
+	      ><a href="#v:opParser-39-"
+		>opParser'</a
+		> :: p -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopParser-39-"
+		>RopParser'</a
+		></li
+	      ><li
+	      ><a href="#v:opPart"
+		>opPart</a
+		> :: p -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		>]</li
+	      ><li
+	      ><a href="#v:opUsage"
+		>opUsage</a
+		> :: p -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		>]</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:operators"
+	    >operators</a
+	    > :: <a href="Koshucode-Baala-Builtin-Pattern.html#t:OpPattern"
+	    >OpPattern</a
+	    > p =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >, p, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopCons"
+	    >RopCons</a
+	    > v)] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:Rop"
+	    >Rop</a
+	    > v]</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    >  <a name="t:OpPattern" class="def"
+	    >OpPattern</a
+	    > p  <span class="keyword"
+	    >where</span
+	    ><a href="src/Koshucode-Baala-Builtin-Pattern.html#OpPattern" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Class for operand pattern. 
+</p
+	    ></div
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:opParser" class="def"
+	      >opParser</a
+	      > :: p -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopParser"
+	      >RopParser</a
+	      ><a href="src/Koshucode-Baala-Builtin-Pattern.html#opParser" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Operand parser. 
+</p
+	      ></div
+	    ><p class="src"
+	    ><a name="v:opParser-39-" class="def"
+	      >opParser'</a
+	      > :: p -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopParser-39-"
+	      >RopParser'</a
+	      ><a href="src/Koshucode-Baala-Builtin-Pattern.html#opParser%27" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Simplified operand parser. 
+</p
+	      ></div
+	    ><p class="src"
+	    ><a name="v:opPart" class="def"
+	      >opPart</a
+	      > :: p -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	      >String</a
+	      >]<a href="src/Koshucode-Baala-Builtin-Pattern.html#opPart" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Names of suboperands. 
+</p
+	      ></div
+	    ><p class="src"
+	    ><a name="v:opUsage" class="def"
+	      >opUsage</a
+	      > :: p -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	      >String</a
+	      >]<a href="src/Koshucode-Baala-Builtin-Pattern.html#opUsage" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Synopsis. 
+</p
+	      ></div
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:OpPattern" class="caption collapser" onclick="toggleSection('i:OpPattern')"
+	    >Instances</p
+	    ><div id="section.i:OpPattern" class="show"
+	    ><table
+	      ><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Builtin-Pattern.html#t:OpPattern"
+		    >OpPattern</a
+		    > <a href="Koshucode-Baala-Builtin.html#t:BuiltinOperand"
+		    >BuiltinOperand</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Builtin-Pattern.html#t:OpPattern"
+		    >OpPattern</a
+		    > <a href="Koshucode-Baala-Minimal-Operand.html#t:MinimalOperand"
+		    >MinimalOperand</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Builtin-Pattern.html#t:OpPattern"
+		    >OpPattern</a
+		    > <a href="Koshucode-Baala-Vanilla-Relmap-Operand.html#t:VanillaOperand"
+		    >VanillaOperand</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:operators" class="def"
+	    >operators</a
+	    ><a href="src/Koshucode-Baala-Builtin-Pattern.html#operators" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs arguments"
+	  ><p class="caption"
+	    >Arguments</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		>:: <a href="Koshucode-Baala-Builtin-Pattern.html#t:OpPattern"
+		  >OpPattern</a
+		  > p</td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>=&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Operator group
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  >, p, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopCons"
+		  >RopCons</a
+		  > v)]</td
+		><td class="doc"
+		><p
+		  >Operator implementations
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:Rop"
+		  >Rop</a
+		  > v]</td
+		><td class="doc"
+		><p
+		  >Implementation list
+</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="doc"
+	  ><p
+	    >Make implementations of relational operators. 
+</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.13.2</p
+      ></div
+    ></body
+  ></html
+>
