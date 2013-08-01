@@ -22,7 +22,7 @@ ropConsSome use =
     do m <- getRelmap use
        Right $ relmapSome use m
 
-relmapSome :: (Ord c) => OpUse c -> Map (Relmap c)
+relmapSome :: (Ord c) => RopUse c -> Map (Relmap c)
 relmapSome use m = relmapConfl use "minus" sub [m] where
     sub [r2] = relSome r2
     sub _    = bug
@@ -41,7 +41,7 @@ ropConsMinus use =
     do m <- getRelmap use
        Right $ relmapMinus use m
 
-relmapMinus :: (Ord c) => OpUse c -> Map (Relmap c)
+relmapMinus :: (Ord c) => RopUse c -> Map (Relmap c)
 relmapMinus use m = relmapConfl use "minus" sub [m] where
     sub [r2] = relMinus r2
     sub _    = bug

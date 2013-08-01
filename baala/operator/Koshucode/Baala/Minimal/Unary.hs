@@ -51,7 +51,7 @@ ropConsSource use =
 ropConsId :: RopCons c
 ropConsId use = Right $ relmapId use
 
-relmapId :: OpUse c -> Relmap c
+relmapId :: RopUse c -> Relmap c
 relmapId use = relmapCalc use "id" sub where
     sub _ = relId
 
@@ -66,7 +66,7 @@ relId = Right
 ropConsEmpty :: RopCons c
 ropConsEmpty use = Right $ relmapEmpty use
 
-relmapEmpty :: OpUse c -> Relmap c
+relmapEmpty :: RopUse c -> Relmap c
 relmapEmpty use = relmapCalc use "empty" sub where
     sub _ = relEmpty
 
@@ -83,7 +83,7 @@ ropConsPick use =
   do ns <- getTerms use "-term"
      Right $ relmapPick use ns
 
-relmapPick :: (Ord c) => OpUse c -> [String] -> Relmap c
+relmapPick :: (Ord c) => RopUse c -> [String] -> Relmap c
 relmapPick use ns = relmapCalc use "pick" sub where
     sub _ = relPick ns
 
@@ -113,7 +113,7 @@ ropConsCut use =
   do ns <- getTerms use "-term"
      Right $ relmapCut use ns
 
-relmapCut :: (Ord c) => OpUse c -> [String] -> Relmap c
+relmapCut :: (Ord c) => RopUse c -> [String] -> Relmap c
 relmapCut use ns = relmapCalc use "cut" sub where
     sub _ = relCut ns
 
@@ -132,7 +132,7 @@ ropConsRename use = do
   np <- getTermPairs use "-term"
   Right $ relmapRename use np
 
-relmapRename :: OpUse c -> [(String, String)] -> Relmap c
+relmapRename :: RopUse c -> [(String, String)] -> Relmap c
 relmapRename use np = relmapCalc use "rename" sub where
     sub _ = relRename np
 

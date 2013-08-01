@@ -32,15 +32,15 @@ relopSize use = do
   n <- getTerm use "-term"
   Right $ relmapSize use n
 
-relmapSize :: (CInt v) => OpUse v -> String -> Relmap v
+relmapSize :: (CInt c) => RopUse c -> String -> Relmap c
 relmapSize use n = relmapCalc use "size" sub where
     sub _ = relSize n
 
 {-| Change terms names -}
 relSize
-    :: (CInt v)
+    :: (CInt c)
     => String          -- ^ List of term name (/to/, /from/)
-    -> AbMap (Rel v)   -- ^ Relation to relation
+    -> AbMap (Rel c)   -- ^ Relation to relation
 relSize n (Rel _ b1) = Right $ Rel h2 b2 where
     h2 = headFrom [n]
     b2 = [[putInt $ length b1]]
@@ -54,15 +54,15 @@ relopConf use = do
   n <- getTerm use "-term"
   Right $ relmapConf use n
 
-relmapConf :: (CText v) => OpUse v -> String -> Relmap v
+relmapConf :: (CText c) => RopUse c -> String -> Relmap c
 relmapConf use n = relmapCalc use "conf" sub where
     sub _ = relConf n
 
 {-| Change terms names -}
 relConf
-    :: (CText v)
+    :: (CText c)
     => String          -- ^ Term name
-    -> AbMap (Rel v)   -- ^ Relation to relation
+    -> AbMap (Rel c)   -- ^ Relation to relation
 relConf n (Rel h1 _) = Right $ Rel h2 b2 where
     h2 = headFrom [n]
     b2 = [[putText $ show s]]
@@ -77,15 +77,15 @@ relopEnclose use = do
   n <- getTerm use "-term"
   Right $ relmapEnclose use n
 
-relmapEnclose :: (CRel v) => OpUse v -> String -> Relmap v
+relmapEnclose :: (CRel c) => RopUse c -> String -> Relmap c
 relmapEnclose use n = relmapCalc use "enclose" sub where
     sub _ = relEnclose n
 
 {-| Enclose the current relation in a term. -}
 relEnclose
-    :: (CRel v)
+    :: (CRel c)
     => String          -- ^ Term name
-    -> AbMap (Rel v)   -- ^ Relation to relation
+    -> AbMap (Rel c)   -- ^ Relation to relation
 relEnclose n r@(Rel h1 _) = Right $ Rel h2 b2 where
     h2 = Relhead [Nest n $ headTerms h1]
     b2 = [[putRel r]]
@@ -100,7 +100,7 @@ relopRank use =
        ns <- getTerms use "-order"
        Right $ relmapRank use n ns
 
-relmapRank :: (CInt c, Ord c) => OpUse c -> String -> [String] -> Relmap c
+relmapRank :: (CInt c, Ord c) => RopUse c -> String -> [String] -> Relmap c
 relmapRank use n ns = relmapCalc use "rank" sub where
     sub _ = relRank n ns
 
@@ -112,10 +112,10 @@ relRank n ns (Rel h1 b1) = Right $ Rel h2 b2 where
     ords = map Asc ns
 
 -- | Keep leading tuples.
-limit :: (Ord v) => OpUse v -> Int -> String -> Relmap v
+limit :: (Ord c) => RopUse c -> Int -> String -> Relmap c
 limit use c ns = relmapCalc use "limit" (limit2 c ns)
 
-limit2 :: (Ord v) => Int -> String -> a -> AbMap (Rel v)
+limit2 :: (Ord c) => Int -> String -> a -> AbMap (Rel c)
 limit2 c ns _ (Rel h1 b1) = Right $ Rel h1 b2 where
     b2   = List.take c $ sortByName ords (headNames h1) b1
     ords = orders ns
@@ -129,7 +129,7 @@ relopTypename use = do
   (n, p) <- getTermPair use "-term"
   Right $ relmapTypename use n p
 
-relmapTypename :: (CContent c) => OpUse c -> String -> String -> Relmap c
+relmapTypename :: (CContent c) => RopUse c -> String -> String -> Relmap c
 relmapTypename use n p = relmapCalc use "typename" sub where
     sub _ = relTypename n p
 
@@ -157,11 +157,11 @@ relopRange use = do
   high <- getInt  use "-to"
   Right $ relmapRange use term low high
 
-relmapRange :: (CInt v) => OpUse v -> String -> Int -> Int -> Relmap v
+relmapRange :: (CInt c) => RopUse c -> String -> Int -> Int -> Relmap c
 relmapRange use n low high = relmapCalc use "range" sub where
     sub _ r1 = relRange n low high r1
 
-relRange :: (CInt v) => String -> Int -> Int -> AbMap (Rel v)
+relRange :: (CInt c) => String -> Int -> Int -> AbMap (Rel c)
 relRange n low high (Rel h1 b1) = Right $ Rel h2 b2 where
     h2   = mappend (headFrom [n]) h1
     b2   = concatMap g b1

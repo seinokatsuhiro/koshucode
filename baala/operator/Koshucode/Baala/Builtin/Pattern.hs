@@ -12,11 +12,11 @@ import Koshucode.Baala.Core
 {-| Class for operand pattern. -}
 class OpPattern p where
     {-| Operand parser. -}
-    opParser :: p -> OpParser
+    opParser :: p -> RopParser
     opParser p = opParser' p . operandGroup
 
     {-| Simplified operand parser. -}
-    opParser' :: p -> OpParser'
+    opParser' :: p -> RopParser'
     opParser' _ = id
 
     {-| Names of suboperands. -}

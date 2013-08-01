@@ -24,8 +24,8 @@ import Koshucode.Baala.Core.Relmap.Relmap
 
 {-| Make half and full relmap constructors. -}
 relmapCons
-    :: [Rop v]   -- ^ Implementations of relational operators
-    -> (RelmapCons v)     -- ^ Relmap constructors
+    :: [Rop c]   -- ^ Implementations of relational operators
+    -> (RelmapCons c)     -- ^ Relmap constructors
 relmapCons = make . unzip . map split where
     make (halfs, fulls) =
         RelmapCons (halfBundle halfs) (fullBundle fulls)
@@ -33,12 +33,12 @@ relmapCons = make . unzip . map split where
         ((n, (usage, half)), (n, full))
 
 {-| Half and full relmap constructor -}
-data RelmapCons v = RelmapCons
+data RelmapCons c = RelmapCons
     { consHalf :: RelmapHalfCons
-    , consFull :: RelmapFullCons v
+    , consFull :: RelmapFullCons c
     }
 
-instance Show (RelmapCons v) where
+instance Show (RelmapCons c) where
     show _ = "RelmapCons <half> <full>"
 
 
@@ -52,7 +52,7 @@ type RelmapHalfCons
     -> [TokenTree]    -- ^ Operand as source trees
     -> HalfRelmap     -- ^ Result half relmap
 
-halfBundle :: [(String, ([String], OpParser))] -> RelmapHalfCons
+halfBundle :: [(String, ([String], RopParser))] -> RelmapHalfCons
 halfBundle halfs = consHalfRelmap bundle where
     bundle :: String -> RelmapHalfCons
     bundle op src opd = case lookup op halfs of
@@ -101,19 +101,19 @@ consHalfRelmap bundle src = cons where
 
 {-| Second step of constructing relmap,
     make 'Relmap' from contents of 'HalfRelmap'. -}
-type RelmapFullCons v
+type RelmapFullCons c
     = HalfRelmap          -- ^ Half relmap from 'RelmapHalfCons'
-    -> AbortOr (Relmap v) -- ^ Result relmap
+    -> AbortOr (Relmap c) -- ^ Result relmap
 
 {-| Construct (full) relmap. -}
-fullBundle :: [Named (RopCons v)] -> RelmapFullCons v
+fullBundle :: [Named (RopCons c)] -> RelmapFullCons c
 fullBundle fulls = full where
     full h@(HalfRelmap u src op _ hs) =
         case lookup op fulls of
           Nothing   -> Right $ RelmapName h op
           Just cons -> do ms <- mapM full hs
                           addAbort (AbortUsage op u, src)
-                             $ cons $ OpUse h ms
+                             $ cons $ RopUse h ms
 
 
 
@@ -123,7 +123,7 @@ fullBundle fulls = full where
 -- Construction process of half relmaps from source trees.
 --
 -- [@\[TokenTree\] -> \[\[TokenTree\]\]@]
---    Divide list of 'TokenTree' by vertical bar (@|@).
+--    Dicide list of 'TokenTree' by vertical bar (@|@).
 --
 -- [@\[\[TokenTree\]\] -> \[HalfRelmap\]@]
 --    Construct each 'HalfRelmap' from lists of 'TokenTree'.

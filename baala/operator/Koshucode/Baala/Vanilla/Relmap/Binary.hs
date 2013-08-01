@@ -23,9 +23,9 @@ import qualified Koshucode.Baala.Minimal as Mini
 relopMaybe :: RopCons VContent
 relopMaybe use = Right $ relmapMaybe use
 
-relmapMaybe :: (Ord c, CNil c) => OpUse c -> Relmap c
+relmapMaybe :: (Ord c, CNil c) => RopUse c -> Relmap c
 relmapMaybe use = relmapConfl use "maybe" sub ms where
-    ms = opSubmap use
+    ms = ropSubmap use
     sub [r2] r1 = relMaybe r1 r2
     sub _ _     = undefined
 
@@ -59,9 +59,9 @@ relopMaybeBoth :: RopCons VContent
 relopMaybeBoth use = Right $ relmapMaybeBoth use
 
 -- | like SQL's full join
-relmapMaybeBoth :: (Ord c, CNil c) => OpUse c -> Relmap c
+relmapMaybeBoth :: (Ord c, CNil c) => RopUse c -> Relmap c
 relmapMaybeBoth use = relmapConfl use "mmaybe" sub ms where
-    ms = opSubmap use
+    ms = ropSubmap use
     sub [r2] r1 = do r12 <- relMaybe r1 r2
                      r21 <- relMaybe r2 r1
                      Mini.relJoin r12 r21
@@ -72,13 +72,13 @@ relmapMaybeBoth use = relmapConfl use "mmaybe" sub ms where
 -- ----------------------  hang
 
 relopHang :: RopCons VContent
-relopHang use = do
-  n <- getTerm use "-term"
-  Right $ relmapHang use n
+relopHang use =
+  do n <- getTerm use "-term"
+     Right $ relmapHang use n
 
-relmapHang :: (Ord c, CRel c) => OpUse c -> String -> Relmap c
+relmapHang :: (Ord c, CRel c) => RopUse c -> String -> Relmap c
 relmapHang use n = relmapConfl use "hang" sub ms where
-    ms = opSubmap use
+    ms = ropSubmap use
     sub [r2] r1 = relHang n r2 r1
     sub _ _     = undefined
 

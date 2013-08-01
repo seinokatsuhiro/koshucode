@@ -17,7 +17,6 @@ import Koshucode.Baala.Toolkit.Library.Exit
 import Koshucode.Baala.Toolkit.Library.Run
 import Koshucode.Baala.Toolkit.Library.Version
 import qualified Koshucode.Baala.Base.Prelude.Pretty as Pretty
-import Koshucode.Baala.Builtin
 
 
 -- Flow

@@ -85,4 +85,5 @@ library
        , pretty           == 1.1.*
        , syb              == 0.3.*
 
-  --ghc-options:         -Wall -fno-ignore-asserts
+  ghc-options:         -Wall
+

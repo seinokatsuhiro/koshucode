@@ -28,7 +28,7 @@ relopAdd use =
      cs <- vanillaNamedContents use ts
      Right $ relmapAdd use cs
 
-relmapAdd :: OpUse VContent -> [Named (PosCox VContent)] -> Relmap VContent
+relmapAdd :: RopUse VContent -> [Named (PosCox VContent)] -> Relmap VContent
 relmapAdd use cs = relmapCalc use "add" sub where
     sub _ r1 = relAdd cs r1
 
@@ -53,7 +53,7 @@ relopHold use = do
   c <- vanillaContent use t
   Right $ relmapHold use True c
 
-relmapHold :: OpUse VContent -> Bool -> (PosCox VContent) -> Relmap VContent
+relmapHold :: RopUse VContent -> Bool -> (PosCox VContent) -> Relmap VContent
 relmapHold use b cont = relmapCalc use "hold" sub where
     sub _ r1 = relHold b cont r1
 

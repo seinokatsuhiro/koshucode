@@ -52,25 +52,25 @@ instance OpPattern MinimalOperand where
 
 -- ----------------------  Opernd parsers
 
-likePick :: OpParser'
+likePick :: RopParser'
 likePick xs =
     case lookup "" xs of
       Just xs2 -> [("-term", xs2)] ++ xs
       _ -> xs
 
-likeMeet :: OpParser'
+likeMeet :: RopParser'
 likeMeet xs =
     case lookup "" xs of
       Just xs2@[_] -> [("-relmap", xs2)] ++ xs
       _ -> xs
 
-likeRename :: OpParser'
+likeRename :: RopParser'
 likeRename xs =
     case lookup "" xs of
       Just xs2 -> [("-term", xs2)] ++ xs
       _ -> xs
 
-likeSource :: OpParser'
+likeSource :: RopParser'
 likeSource xs =
     case lookup "" xs of
       Just (s:ns) -> [("-sign", [s]), ("-term", ns)] ++ xs

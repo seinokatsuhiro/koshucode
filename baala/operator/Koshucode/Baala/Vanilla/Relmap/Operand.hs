@@ -70,25 +70,25 @@ instance OpPattern VanillaOperand where
 
     opUsage   _ = []
 
-likePrefix :: OpParser'
+likePrefix :: RopParser'
 likePrefix xs =
     case lookup "" xs of
       Just (p:ns) -> [("-prefix", [p]), ("-term", ns)] ++ xs
       _ -> xs
 
-likeUnprefix :: OpParser'
+likeUnprefix :: RopParser'
 likeUnprefix xs =
     case lookup "" xs of
       Just [p] -> [("-prefix", [p])] ++ xs
       _ -> xs
 
-likePrefixChange :: OpParser'
+likePrefixChange :: RopParser'
 likePrefixChange xs =
     case lookup "" xs of
       Just [x,y] -> [("-new", [x]), ("-old", [y])] ++ xs
       _ -> xs
 
-likeSize :: OpParser'
+likeSize :: RopParser'
 likeSize xs =
     case lookup "" xs of
       Just [n] -> [("-term", [n])] ++ xs

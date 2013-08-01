@@ -3,12 +3,12 @@
 module Koshucode.Baala.Core.Relmap.Implement
 ( -- * Implement
   Rop (..),
-  OpParser,
-  OpParser',
+  RopParser,
+  RopParser',
 
   -- * Constructor
   RopCons,
-  OpUse (..),
+  RopUse (..),
 
   -- * Relmap basis
   relmapSource,
@@ -31,7 +31,7 @@ import Koshucode.Baala.Core.Relmap.HalfRelmap
 data Rop c = Rop
     { ropName   :: String     -- ^ Operator name
     , ropGroup  :: String     -- ^ Operator group
-    , ropParser :: OpParser   -- ^ Operand parser
+    , ropParser :: RopParser  -- ^ Operand parser
     , ropCons   :: RopCons c  -- ^ Constructor of operator
     , ropUsage  :: [String]   -- ^ Usage of operator
     }
@@ -39,11 +39,11 @@ data Rop c = Rop
 {-| Parser for operand of relational operator.
     This parsers docompose operand trees,
     and give a name to suboperand. -}
-type OpParser
+type RopParser
     =  [TokenTree]          -- ^ Unparsed operand
     -> [Named [TokenTree]]  -- ^ Parsed operand
 
-type OpParser'
+type RopParser'
     =  [Named [TokenTree]]  -- ^ Partially parsed operand
     -> [Named [TokenTree]]  -- ^ Full parsed operand
 
@@ -53,12 +53,12 @@ type OpParser'
 
 {-| Constructor of relational operator 'Relmap'.
     'Relmap' is constructed from 'HalfRelmap' and subrelmaps in it. -}
-type RopCons v = OpUse v -> AbortOr (Relmap v)
+type RopCons c = RopUse c -> AbortOr (Relmap c)
 
 {-| Use of operator -}
-data OpUse v = OpUse {
-      opHalf    :: HalfRelmap   -- ^ Syntactic data of operator use
-    , opSubmap  :: [Relmap v]   -- ^ Subrelmaps
+data RopUse c = RopUse {
+      ropHalf   :: HalfRelmap   -- ^ Syntactic data of operator use
+    , ropSubmap :: [Relmap c]   -- ^ Subrelmaps
     } deriving (Show)
 
 
@@ -68,41 +68,41 @@ data OpUse v = OpUse {
 
 {-| Retrieve relation from dataset. -}
 relmapSource
-    :: OpUse v     -- ^ Use of operator
+    :: RopUse c    -- ^ Use of operator
     -> String      -- ^ Operator name
     -> [String]    -- ^ List of term names
-    -> (Relmap v)  -- ^ Result relmap
-relmapSource use = RelmapSource $ opHalf use
+    -> (Relmap c)  -- ^ Result relmap
+relmapSource use = RelmapSource $ ropHalf use
 
 {-| Constant relmap. -}
 relmapConst
-    :: OpUse v     -- ^ Use of operator
+    :: RopUse c    -- ^ Use of operator
     -> String      -- ^ Operator name
-    -> Rel v       -- ^ Constant relation
-    -> Relmap v    -- ^ Result relmap
-relmapConst use = RelmapConst $ opHalf use
+    -> Rel c       -- ^ Constant relation
+    -> Relmap c    -- ^ Result relmap
+relmapConst use = RelmapConst $ ropHalf use
 
 {-| Alias relmap. -}
 relmapAlias
-    :: OpUse v     -- ^ Use of operator
-    -> Relmap v    -- ^ 
-    -> Relmap v    -- ^ Result relmap
-relmapAlias use = RelmapAlias $ opHalf use
+    :: RopUse c    -- ^ Use of operator
+    -> Relmap c    -- ^ 
+    -> Relmap c    -- ^ Result relmap
+relmapAlias use = RelmapAlias $ ropHalf use
 
 {-| Make a non-confluent relmap. -}
 relmapCalc
-    :: OpUse v      -- ^ Use of operator
+    :: RopUse c     -- ^ Use of operator
     -> String       -- ^ Operator name
-    -> RelmapSub v  -- ^ Calculation of operation
-    -> Relmap v     -- ^ Result relmap
+    -> RelmapSub c  -- ^ Calculation of operation
+    -> Relmap c     -- ^ Result relmap
 relmapCalc use op sub = relmapConfl use op sub []
 
 {-| Make a confluent relmap. -}
 relmapConfl
-    :: OpUse v      -- ^ Use of operator
+    :: RopUse c     -- ^ Use of operator
     -> String       -- ^ Operator name
-    -> RelmapSub v  -- ^ Calculation of operation
-    -> [Relmap v]   -- ^ Subrelmaps
-    -> Relmap v     -- ^ Result relmap
-relmapConfl use = RelmapCalc $ opHalf use
+    -> RelmapSub c  -- ^ Calculation of operation
+    -> [Relmap c]   -- ^ Subrelmaps
+    -> Relmap c     -- ^ Result relmap
+relmapConfl use = RelmapCalc $ ropHalf use
 

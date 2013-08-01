@@ -27,7 +27,7 @@ relopPrefix use = do
   ns  <- getTerms use "-term"
   Right $ relmapPrefix use pre ns
 
-relmapPrefix :: OpUse v -> String -> [String] -> Relmap v
+relmapPrefix :: RopUse c -> String -> [String] -> Relmap c
 relmapPrefix use pre ns = relmapCalc use "prefix" sub where
     sub _ r1 = relPrefix pre ns r1
 
@@ -35,7 +35,7 @@ relmapPrefix use pre ns = relmapCalc use "prefix" sub where
 relPrefix
     :: String         -- ^ Prefix text
     -> [String]       -- ^ Changing term names
-    -> AbMap (Rel v)  -- ^ Relation to relation
+    -> AbMap (Rel c)  -- ^ Relation to relation
 relPrefix pre ns (Rel h1 b1) = Right $ Rel h2 b1 where
     h2 = headChange (map f) h1
     f n | n `elem` ns  = prefixName pre n
@@ -54,14 +54,14 @@ relopUnprefix use = do
   pre <- getTerm use "-prefix"
   Right $ relmapUnprefix use pre
 
-relmapUnprefix :: OpUse v -> String -> Relmap v
+relmapUnprefix :: RopUse c -> String -> Relmap c
 relmapUnprefix use pre = relmapCalc use "unprefix" sub where
     sub _ r1 = relUnprefix pre r1
 
 {-| Remove prefix -}
 relUnprefix
     :: String         -- ^ Prefix text
-    -> AbMap (Rel v)  -- ^ Relation to relation
+    -> AbMap (Rel c)  -- ^ Relation to relation
 relUnprefix pre (Rel h1 b1) = Right $ Rel h2 b1 where
     h2 = headChange (map $ unprefixName pre) h1
 
@@ -81,7 +81,7 @@ relopPrefixChange use = do
   old <- getTerm use "-old"
   Right $ relmapPrefixChange use new old
 
-relmapPrefixChange :: OpUse v -> String -> String -> Relmap v
+relmapPrefixChange :: RopUse c -> String -> String -> Relmap c
 relmapPrefixChange use new old =
     relmapCalc use "prefix-change" sub
     where sub _ r1 = relPrefixChange new old r1
@@ -90,7 +90,7 @@ relmapPrefixChange use new old =
 relPrefixChange
     :: String         -- ^ New prefix
     -> String         -- ^ Old prefix
-    -> AbMap (Rel v)  -- ^ Relation to relation
+    -> AbMap (Rel c)  -- ^ Relation to relation
 relPrefixChange new old (Rel h1 b1) = Right $ Rel h2 b1 where
     h2   = headChange (map f) h1
     new' = new ++ "-"

@@ -32,17 +32,17 @@ vanillaCop n = lookup n ops where
                  , copOrder ]
 
 vanillaContent
-    :: OpUse VContent    -- ^ Source information
+    :: RopUse VContent    -- ^ Source information
     -> TokenTree         -- ^ Token tree of content expression
     -> AbortOr (PosCox VContent)  -- ^ Partial content expression
 vanillaContent use t =
-    do let src = halfLines $ opHalf use
+    do let src = halfLines $ ropHalf use
        case formCox vanillaCop $ vanillaBinary t of
          Right c -> Right $ posCox c
          Left a  -> Left (a, src)
 
 vanillaNamedContent
-  :: OpUse VContent
+  :: RopUse VContent
   -> Named TokenTree
   -> AbortOr (Named (PosCox VContent))
 vanillaNamedContent use (n, t) =
@@ -50,7 +50,7 @@ vanillaNamedContent use (n, t) =
        Right (n, c)
 
 vanillaNamedContents
-  :: OpUse VContent
+  :: RopUse VContent
   -> [Named TokenTree]
   -> AbortOr [Named (PosCox VContent)]
 vanillaNamedContents use = mapM (vanillaNamedContent use)

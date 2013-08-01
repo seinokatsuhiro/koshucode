@@ -40,7 +40,7 @@ ropConsMeet use =
 
 {-| Meet two relations. -}
 relmapMeet :: (Ord c)
-    => OpUse c      -- ^ Source infomation
+    => RopUse c      -- ^ Source infomation
     -> Relmap c     -- ^ Subrelmap of meet operator
     -> Relmap c     -- ^ Relmap of meet operator
 relmapMeet use m = relmapConfl use "meet" sub [m] where
@@ -84,7 +84,7 @@ ropConsJoin use =
 {-| Join two relations. -}
 relmapJoin
     :: (Ord c)
-    => OpUse c      -- ^ Source infomation
+    => RopUse c     -- ^ Source infomation
     -> Relmap c     -- ^ Subrelmap of join operator
     -> Relmap c     -- ^ Relmap of join operator
 relmapJoin use m = relmapConfl use "join" sub [m] where

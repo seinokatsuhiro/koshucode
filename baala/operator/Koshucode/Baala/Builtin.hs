@@ -36,5 +36,5 @@ builtinRops :: (Ord c) => [Rop c]
 builtinRops = operators "builtin" [ ("|", LikeId, consConcat) ]
 
 consConcat :: RopCons c
-consConcat = Right . mconcat . opSubmap
+consConcat = Right . mconcat . ropSubmap
 

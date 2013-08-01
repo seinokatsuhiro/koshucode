@@ -47,17 +47,17 @@ import Koshucode.Baala.Core.Relmap.Run
 -- Datatypes for implementing 'Relmap' operators.
 --
 -- * Data 'Rop' has
---   'OpParser' and
+--   'RopParser' and
 --   'RopCons'.
 --
--- * Data 'OpParser' has
+-- * Data 'RopParser' has
 --   'Koshucode.Baala.Base.Syntax.TokenTree.TokenTree'.
 --
 -- * Data 'RopCons' has
---   'OpUse' and
+--   'RopUse' and
 --   'Relmap'.
 --
--- * Data 'OpUse' has
+-- * Data 'RopUse' has
 --   'HalfRelmap' and
 --   'Relmap'.
 --

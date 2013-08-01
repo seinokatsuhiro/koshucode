@@ -6,21 +6,21 @@ module Koshucode.Baala.Builtin.Get
 ( -- * Generals
   getHead,
 
-  -- * Get from OpUse
+  -- * Get from RopUse
   OpGet,
   getTree,
   getTrees,
   getWord,
   getInt,
 
-  -- * Term from OpUse
+  -- * Term from RopUse
   getTerm,
   getTerms,
   getTermPair,
   getTermPairs,
   getTermTrees,
 
-  -- * Relmap from OpUse
+  -- * Relmap from RopUse
   getRelmap,
   getRelmaps,
 ) where
@@ -35,25 +35,25 @@ getHead (x:_) = Right x
 getHead _     = Left (AbortLookup "head", [])
 
 type OpGet v a
-    = OpUse v      -- ^ Operator use
+    = RopUse v      -- ^ Operator use
     -> String      -- ^ Lookup key
     -> AbortOr a   -- ^ Suboperand
 
 getTree :: OpGet v TokenTree
 getTree use n = do
-  let opd = halfOperand $ opHalf use
+  let opd = halfOperand $ ropHalf use
   xs <- opd <!!> n
   Right $ TreeB 1 xs
 
 getTrees :: OpGet v [TokenTree]
 getTrees use n = do
-  let opd = halfOperand $ opHalf use
+  let opd = halfOperand $ ropHalf use
   xs <- opd <!!> n
   Right xs
 
 getTermTrees :: OpGet v [Named TokenTree]
 getTermTrees use n = do
-  let opd = halfOperand $ opHalf use
+  let opd = halfOperand $ ropHalf use
   xs <- opd <!!> n
   termTreePairs xs
 
@@ -66,7 +66,7 @@ getTermTrees use n = do
     -}
 getWord :: OpGet v String
 getWord use n = do
-  let opd = halfOperand $ opHalf use
+  let opd = halfOperand $ ropHalf use
   sign <- opd <!!> n
   case sign of
     [TreeL (TWord _ _ s)] -> Right s
@@ -74,7 +74,7 @@ getWord use n = do
 
 getInt :: OpGet v Int
 getInt use n = do
-  let opd = halfOperand $ opHalf use
+  let opd = halfOperand $ ropHalf use
   sign <- opd <!!> n
   case sign of
     [TreeL (TWord _ _ i)] -> Right (read i :: Int)
@@ -91,20 +91,20 @@ getTerm use n = do
 {-| Get list of term names from named operand. -}
 getTerms :: OpGet v [String]
 getTerms use n = do
-  let opd = halfOperand $ opHalf use
+  let opd = halfOperand $ ropHalf use
   term <- opd <!!> n
   termnames term
 
 {-| Get list of term-name pairs from named operand. -}
 getTermPairs :: OpGet v [Named String]
 getTermPairs use n = do
-  let opd = halfOperand $ opHalf use
+  let opd = halfOperand $ ropHalf use
   term <- opd <!!> n
   termnamePairs term
 
 getTermPair :: OpGet v (Named String)
 getTermPair use n = do
-  let opd = halfOperand $ opHalf use
+  let opd = halfOperand $ ropHalf use
   term <- opd <!!> n
   termname2 term
 
@@ -115,10 +115,10 @@ getTermPair use n = do
     >   m <- getRelmap use
     >   Right $ relmapMeet use m
     -}
-getRelmap :: OpUse v -> AbortOr (Relmap v)
-getRelmap use = getHead $ opSubmap use
+getRelmap :: RopUse v -> AbortOr (Relmap v)
+getRelmap use = getHead $ ropSubmap use
 
 {-| Get relmaps from operator use. -}
-getRelmaps :: OpUse v -> AbortOr [Relmap v]
-getRelmaps use = Right $ opSubmap use
+getRelmaps :: RopUse v -> AbortOr [Relmap v]
+getRelmaps use = Right $ ropSubmap use
 
