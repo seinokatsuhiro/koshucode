@@ -54,7 +54,8 @@ type AbortOr b = AbortOrType AbortReason b
 
 {-| Abort reasons -}
 data AbortReason
-    = AbortLookup           String
+    = AbortDecimal          String
+    | AbortLookup           String
     | AbortMalformedOperand String
     | AbortMissingTermname  String
     | AbortNotNumber        String
@@ -85,6 +86,7 @@ instance AbortReasonClass AbortReason where
     abortSymbol = head . words . show
 
     abortTitle a = case a of
+        (AbortDecimal          _) -> "おかしな小数"
         (AbortLookup           _) -> "項目がない"
         (AbortMalformedOperand _) -> "演算子の引数がおかしい"
         (AbortMissingTermname  _) -> "項目名が必要"
@@ -109,6 +111,7 @@ instance AbortReasonClass AbortReason where
         (AbortUsage          _ _) -> "使用法の間違い"
 
     abortMain a = case a of
+        (AbortDecimal          s) -> par s
         (AbortLookup           s) -> par s
         (AbortMalformedOperand s) -> par s
         (AbortMissingTermname  s) -> par s

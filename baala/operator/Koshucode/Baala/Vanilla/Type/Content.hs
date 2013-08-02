@@ -11,7 +11,7 @@ module Koshucode.Baala.Vanilla.Type.Content
 import Koshucode.Baala.Base
 import Koshucode.Baala.Core
 
-{-| Type for values. -}
+{-| Vanilla type -}
 
 data VContent
     = VText    String            -- ^ String type
@@ -24,7 +24,7 @@ data VContent
     | VNil                       -- ^ Sign of no ordinary type
       deriving (Show, Eq, Ord)
 
-instance PrimContent VContent where
+instance PrimContent VContent where        
 
 
 
