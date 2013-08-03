@@ -18,7 +18,7 @@ module Koshucode.Baala.Vanilla.Relmap.Unary
 
 import qualified Data.List as List
 import Koshucode.Baala.Base
-import Koshucode.Baala.Core hiding (getInt)
+import Koshucode.Baala.Core
 import Koshucode.Baala.Builtin
 import Koshucode.Baala.Vanilla.Type.Relval
 import Koshucode.Baala.Vanilla.Order
@@ -32,18 +32,18 @@ relopSize use = do
   n <- getTerm use "-term"
   Right $ relmapSize use n
 
-relmapSize :: (CInt c) => RopUse c -> String -> Relmap c
+relmapSize :: (CDec c) => RopUse c -> String -> Relmap c
 relmapSize use n = relmapCalc use "size" sub where
     sub _ = relSize n
 
 {-| Change terms names -}
 relSize
-    :: (CInt c)
+    :: (CDec c)
     => String          -- ^ List of term name (/to/, /from/)
     -> AbMap (Rel c)   -- ^ Relation to relation
 relSize n (Rel _ b1) = Right $ Rel h2 b2 where
     h2 = headFrom [n]
-    b2 = [[putInt $ length b1]]
+    b2 = [[putDecFromInt $ length b1]]
 
 
 
@@ -100,14 +100,14 @@ relopRank use =
        ns <- getTerms use "-order"
        Right $ relmapRank use n ns
 
-relmapRank :: (CInt c, Ord c) => RopUse c -> String -> [String] -> Relmap c
+relmapRank :: (CDec c, Ord c) => RopUse c -> String -> [String] -> Relmap c
 relmapRank use n ns = relmapCalc use "rank" sub where
     sub _ = relRank n ns
 
-relRank :: (CInt c, Ord c) => String -> [String] -> AbMap (Rel c)
+relRank :: (CDec c, Ord c) => String -> [String] -> AbMap (Rel c)
 relRank n ns (Rel h1 b1) = Right $ Rel h2 b2 where
     h2   = headFrom [n] `mappend` h1
-    b2   = zipWith (:) (map putInt [1..]) b1'
+    b2   = zipWith (:) (map putDecFromInt [1..]) b1'
     b1'  = sortByName ords (headNames h1) b1
     ords = map Asc ns
 
@@ -157,15 +157,15 @@ relopRange use = do
   high <- getInt  use "-to"
   Right $ relmapRange use term low high
 
-relmapRange :: (CInt c) => RopUse c -> String -> Int -> Int -> Relmap c
+relmapRange :: (CDec c) => RopUse c -> String -> Int -> Int -> Relmap c
 relmapRange use n low high = relmapCalc use "range" sub where
     sub _ r1 = relRange n low high r1
 
-relRange :: (CInt c) => String -> Int -> Int -> AbMap (Rel c)
+relRange :: (CDec c) => String -> Int -> Int -> AbMap (Rel c)
 relRange n low high (Rel h1 b1) = Right $ Rel h2 b2 where
     h2   = mappend (headFrom [n]) h1
     b2   = concatMap g b1
-    ys   = map putInt [low .. high]
+    ys   = map putDecFromInt [low .. high]
     g xs = map (: xs) ys
 
 {-
@@ -182,7 +182,7 @@ divide2 ns2 (Rel h1 b1) = Rel h2 b2 where
       | otherwise          = const []
 
     [_,_,x,y] = p
-    f the arg = if the y == putInt 0
+    f the arg = if the y == putDecFromInt 0
                 then []
                 else [binv quot (the x) (the y) :
                       binv rem  (the x) (the y) : arg]

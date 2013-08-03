@@ -26,7 +26,7 @@ module Koshucode.Baala.Builtin.Get
 ) where
 
 import Koshucode.Baala.Base
-import Koshucode.Baala.Core hiding (getInt)
+import Koshucode.Baala.Core
 import Koshucode.Baala.Builtin.Term
 
 {-| Abortable 'head' -}

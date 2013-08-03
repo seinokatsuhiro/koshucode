@@ -53,7 +53,7 @@ list :: [VContent] -> AbOr VContent
 list = Right . putList
 
 listTotal :: [VContent] -> AbOr VContent
-listTotal [VList xs] = Right . putInt $ sum (map toInt xs)
+listTotal [VList xs] = Right . putDec =<< decimalSum (map getDec xs)
 listTotal xs = Left $ AbortUnmatchType (concatMap typename xs)
 
 listMin :: [VContent] -> AbOr VContent
@@ -65,8 +65,8 @@ listMax [VList xs] = Right $ maximum xs
 listMax xs = Left $ AbortUnmatchType (concatMap typename xs)
 
 listLength :: [VContent] -> AbOr VContent
-listLength [VList   xs]     = Right . putInt $ length xs
-listLength [VText xs]       = Right . putInt $ length xs
-listLength [VRel (Rel _ b)] = Right . putInt $ length b
+listLength [VList   xs]     = Right . putDecFromInt $ length xs
+listLength [VText xs]       = Right . putDecFromInt $ length xs
+listLength [VRel (Rel _ b)] = Right . putDecFromInt $ length b
 listLength xs = Left $ AbortUnmatchType (concatMap typename xs)
 

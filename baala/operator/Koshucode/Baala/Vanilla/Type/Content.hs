@@ -4,8 +4,7 @@
 
 module Koshucode.Baala.Vanilla.Type.Content
 ( VContent (..),
-  binv, toInt, toString,
-  valRangeMinMax,
+  toString,
 ) where
 
 import Koshucode.Baala.Base
@@ -15,7 +14,7 @@ import Koshucode.Baala.Core
 
 data VContent
     = VText    String            -- ^ String type
-    | VInt     Int               -- ^ Integer type
+    | VDec     Decimal           -- ^ Decimal number type
     | VBool    Bool              -- ^ Boolean type
     | VList    [VContent]        -- ^ List type
     | VSet     [VContent]        -- ^ Set type
@@ -37,12 +36,12 @@ instance CBool VContent where
     isBool  (VBool _)        =  True
     isBool  _                =  False
 
-instance CInt VContent where
-    putInt                   =  VInt
-    getInt (VInt x)          =  x
-    getInt _                 =  bug
-    isInt  (VInt _)          =  True
-    isInt  _                 =  False
+instance CDec VContent where
+    putDec                   =  VDec
+    getDec (VDec x)          =  x
+    getDec _                 =  bug
+    isDec  (VDec _)          =  True
+    isDec  _                 =  False
 
 instance CText VContent where
     putText                  = VText
@@ -94,7 +93,7 @@ instance CRel VContent where
 
 instance Pretty VContent where
     doc (VText s)       =  text $ "'" ++ hashString s
-    doc (VInt n)        =  int n
+    doc (VDec n)        =  text $ decimalString n
     doc (VBool b)
         | b             =  text "#true"
         | otherwise     =  text "#false"
@@ -117,21 +116,22 @@ instance CContent VContent where
 
 -- ----------------------  
 
-binv :: (Int -> Int -> Int) -> VContent -> Map VContent
-binv op (VInt x) (VInt y) = VInt $ op x y
-binv _ _ _ = VNil
+-- binv :: (Int -> Int -> Int) -> VContent -> Map VContent
+-- binv op (VDec x) (VDec y) = VDec $ op x y
+-- binv _ _ _ = VNil
 
-valRangeMinMax :: VContent -> VContent -> [VContent]
-valRangeMinMax (VInt a) (VInt b) = map VInt [a .. b]
-valRangeMinMax _ _ = undefined
+-- valRangeMinMax :: VContent -> VContent -> [VContent]
+-- valRangeMinMax (VDec a) (VDec b) = map VDec [a .. b]
+-- valRangeMinMax _ _ = undefined
 
-toInt :: VContent -> Int
-toInt (VText x) = read x
-toInt (VInt  x) = x
-toInt x = error $ "not integer: " ++ show x
+-- toDec :: VContent -> Decimal
+-- toDec (VText x) = read x
+-- toDec (VDec  x) = x
+-- toDec x = error $ "not integer: " ++ show x
 
 toString :: VContent -> String
 toString (VText x) = x
-toString (VInt  x) = show x
+toString (VDec  x) = show x
 toString _ = undefined
+
 

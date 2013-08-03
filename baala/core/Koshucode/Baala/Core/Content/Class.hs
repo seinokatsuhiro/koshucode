@@ -11,18 +11,20 @@ module Koshucode.Baala.Core.Content.Class
 
   -- * Haskell data
   CBool    (..),
-  CInt     (..),
   CText    (..),
   CList    (..),
 
   -- * Koshu data
   CNil     (..),
+  CDec     (..),
+  putDecFromInt,
   CSet     (..),
   CTermset (..),
   CRel     (..),
 ) where
 
 import Koshucode.Baala.Base
+import Koshucode.Baala.Core.Content.Decimal
 
 
 
@@ -31,7 +33,7 @@ import Koshucode.Baala.Base
 class PrimContent c
 
 class (Ord c, Pretty c, 
-       CBool c, CText c, CInt c, CList c,
+       CBool c, CText c, CDec c, CList c,
        CNil c , CSet c, CTermset c, CRel c) =>
     CContent c where
 
@@ -44,7 +46,7 @@ class (Ord c, Pretty c,
     typename c
         | isBool    c  =  "boolean"
         | isText    c  =  "text"
-        | isInt     c  =  "int"
+        | isDec     c  =  "int"
         | isList    c  =  "list"
         | isNil     c  =  "nil"
         | isSet     c  =  "set"
@@ -66,26 +68,21 @@ nonNilFilter = filter (not . isNil)
 
 class (PrimContent c) => CBool c where
     {-| Put Boolean value into content @c@. -}
-    putBool    ::   Bool -> c
+    putBool    ::    Bool -> c
     {-| Get Boolean value from content @c@. -}
-    getBool    ::      c -> Bool
+    getBool    ::       c -> Bool
     {-| Test content @c@ has Boolean value. -}
-    isBool     ::      c -> Bool
-
-class (PrimContent c) => CInt c where
-    putInt     ::    Int -> c
-    getInt     ::      c -> Int
-    isInt      ::      c -> Bool
+    isBool     ::       c -> Bool
 
 class (PrimContent c) => CText c where
-    putText    :: String -> c
-    getText    ::      c -> String
-    isText     ::      c -> Bool
+    putText    ::  String -> c
+    getText    ::       c -> String
+    isText     ::       c -> Bool
 
 class (PrimContent c) => CList c where
-    putList    ::    [c] -> c
-    getList    ::      c -> [c]
-    isList     ::      c -> Bool
+    putList    ::     [c] -> c
+    getList    ::       c -> [c]
+    isList     ::       c -> Bool
 
 
 
@@ -95,6 +92,14 @@ class (PrimContent c) => CList c where
 class (PrimContent c) => CNil c where
     nil         ::          c
     isNil       ::          c -> Bool
+
+class (PrimContent c) => CDec c where
+    putDec     ::     Decimal -> c
+    getDec     ::           c -> Decimal
+    isDec      ::           c -> Bool
+
+putDecFromInt :: (CDec c) => Int -> c
+putDecFromInt = putDec . intDecimal
 
 class (PrimContent c) => CSet c where
     putSet      ::        [c] -> c

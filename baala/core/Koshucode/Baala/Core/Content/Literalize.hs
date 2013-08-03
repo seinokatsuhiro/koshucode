@@ -61,8 +61,8 @@ litContentBy ops = lit where
           _  ->  bug
 
     lit (TreeL tok) = case tok of
-        TWord _ 0 cs@(c:_) | c `elem` "0123456789+-."
-                     ->  Right . putInt . decimalNum =<< litDecimal cs
+        TWord _ 0 cs@(c:_) | isDecimal c
+                     ->  Right . putDec =<< litDecimal cs
         TWord _ 0 w  ->  case w of
             '#' : s  ->  litHash s
             "()"     ->  Right nil
@@ -71,18 +71,31 @@ litContentBy ops = lit where
         _            ->  Left $ AbortUnknownContent (show tok)
 
     -- sequence of token trees
-    paren (TreeL (TWord _ 0 tag) : xs) =
-        case lookup tag ops of
-          Just f  -> f lit xs
-          Nothing -> Left $ AbortUnkCop tag
+    paren (TreeL (TWord _ 0 tag@(c:_)) : xs)
+        | isDecimal c
+            = do xs' <- mapM litUnquoted xs
+                 Right . putDec =<< litDecimal (concat $ tag : xs')
+        | otherwise
+            = case lookup tag ops of
+                 Just f  -> f lit xs
+                 Nothing -> Left $ AbortUnkCop tag
     paren [] = Right nil
     paren x  = Left $ AbortUnknownSymbol (show x)
+
+    -- First letters of decimals
+    isDecimal = (`elem` "0123456789+-.")
+
+
 
 -- hash word
 litHash :: (CBool c) => LitString c
 litHash "true"    =  Right . putBool $ True
 litHash "false"   =  Right . putBool $ False
 litHash w         =  Left $ AbortUnkWord ('#' : w)
+
+litUnquoted :: LitTree String
+litUnquoted (TreeL (TWord _ 0 w)) = Right w
+litUnquoted x = Left $ AbortUnknownSymbol (show x)
 
 
 -- ----------------------  Complex data

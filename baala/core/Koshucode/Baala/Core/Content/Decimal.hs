@@ -4,7 +4,7 @@ module Koshucode.Baala.Core.Content.Decimal
 ( -- * Type
   Decimal (..),
   decimalNum,
-  fromInt,
+  intDecimal,
   decimalSetPoint,
   decimalDenom,
 
@@ -22,9 +22,15 @@ module Koshucode.Baala.Core.Content.Decimal
   decimalSub,
   decimalMul,
   decimalDiv,
+
+  decimalRevsign,
+  decimalRevratio,
+  decimalAbs,
+  decimalSum,
 ) where
 
 import Data.Char
+import Control.Monad
 import Koshucode.Baala.Base
 
 
@@ -46,8 +52,8 @@ decimalDenom = snd . decimalRatio
 type DecimalBinary =
     Decimal -> Decimal -> AbOr Decimal
 
-fromInt :: Int -> Decimal
-fromInt n = Decimal (n, 1) 0 False
+intDecimal :: Int -> Decimal
+intDecimal n = Decimal (n, 1) 0 False
 
 decimalSetPoint :: Int -> AbMap Decimal
 decimalSetPoint p2 (Decimal nd1 _ e1) =
@@ -173,9 +179,6 @@ decimalAdd d1@(Decimal (n1, den1) p1 a1)
 decimalSub :: DecimalBinary
 decimalSub d1 d2 = decimalAdd d1 $ decimalRevsign d2
 
-decimalRevsign :: Map Decimal
-decimalRevsign (Decimal (n, den) p a) = Decimal (- n, den) p a
-
 decimalMul :: DecimalBinary
 decimalMul (Decimal (n1, den1) p1 a1) (Decimal (n2, den2) p2 a2)
     = Right $ Decimal (n3, den3) p3 a3
@@ -190,6 +193,17 @@ decimalDiv :: DecimalBinary
 decimalDiv dec1 dec2
     = decimalMul dec1 $ decimalRevratio dec2
 
+-- ----------------------
+
+decimalRevsign :: Map Decimal
+decimalRevsign (Decimal (n, den) p a) = Decimal (- n, den) p a
+
 decimalRevratio :: Map Decimal
 decimalRevratio (Decimal (n, den) p a) = Decimal (den, n) p a
+
+decimalAbs :: Map Decimal
+decimalAbs (Decimal (n, den) p a) = Decimal (abs n, den) p a
+
+decimalSum :: [Decimal] -> AbOr Decimal
+decimalSum = foldM decimalAdd $ intDecimal 0
 

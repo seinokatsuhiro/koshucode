@@ -15,21 +15,11 @@ import Koshucode.Baala.Vanilla.Type.Content
 
 -- ----------------------
 
-litInt :: [TokenTree] -> AbOr VContent
-litInt [TreeL (TWord _ _ n)] = readIntVal n
-litInt xs = Left $ AbortNotNumber (show xs)
-
-readIntVal :: String -> AbOr VContent
-readIntVal s =
-    case reads s of
-      [(n, "")] -> Right $ VInt n
-      _         -> Left $ AbortNotNumber s
-
-readInt :: String -> AbOr Int
-readInt s =
-    case reads s of
-      [(n, "")] -> Right $ n
-      _         -> Left $ AbortNotNumber s
+-- readInt :: String -> AbOr Int
+-- readInt s =
+--     case reads s of
+--       [(n, "")] -> Right $ n
+--       _         -> Left $ AbortNotNumber s
 
 
 
@@ -53,34 +43,36 @@ copArith =
     , namedEager  "*"    arithTimes
     , namedEager  "-"    arithMinus
     , namedEager  "abs"  arithAbs
-    , namedLit    "int"  litInt
     ]
 
-arithInt :: VContent -> AbOr Int
-arithInt (VInt  n) = Right n
-arithInt (VText n) = Right =<< readInt n
-arithInt x = Left $ AbortNotNumber (show x)
+arithDec :: VContent -> AbOr Decimal
+arithDec (VDec  n) = Right n
+arithDec (VText n) = litDecimal n
+arithDec x = Left $ AbortNotNumber (show x)
 
 arithPlus :: [VContent] -> AbOr VContent
-arithPlus xs = fmap VInt $ loop xs where
-    loop [] = Right 0
-    loop (n : m) = do n' <- arithInt n
+arithPlus xs = fmap VDec $ loop xs where
+    loop [] = Right $ intDecimal 0
+    loop (n : m) = do n' <- arithDec n
                       m' <- loop m
-                      Right $ n' + m'
+                      decimalAdd n' m'
 
 arithTimes :: [VContent] -> AbOr VContent
-arithTimes xs = fmap VInt $ loop xs where
-    loop [] = Right 1
-    loop (n : m) = do n' <- arithInt n
+arithTimes xs = fmap VDec $ loop xs where
+    loop [] = Right $ intDecimal 1
+    loop (n : m) = do n' <- arithDec n
                       m' <- loop m
-                      Right $ n' * m'
+                      decimalMul n' m'
 
 arithMinus :: [VContent] -> AbOr VContent
-arithMinus [a]    = do a' <- arithInt a
-                       Right . VInt $ - a'
-arithMinus [a, b] = do a' <- arithInt a
-                       b' <- arithInt b
-                       Right . VInt $ a' - b'
+arithMinus [a] =
+    do a' <- arithDec a
+       Right . VDec $ decimalRevsign a'
+arithMinus [a, b] =
+    do a' <- arithDec a
+       b' <- arithDec b
+       c' <- decimalSub a' b'
+       Right . VDec $ c'
 arithMinus _ = Left $ AbortMalformedOperand "-"
 
 arithAbs :: [VContent] -> AbOr VContent
@@ -89,7 +81,7 @@ arithAbs [c] = arithAbs1 c
 arithAbs _ = Left AbortUnmatchArity
 
 arithAbs1 :: VContent -> AbOr VContent
-arithAbs1 (VInt n) = Right . VInt $ abs n
+arithAbs1 (VDec n) = Right . VDec $ decimalAbs n
 arithAbs1 _ = Left AbortUnmatchArity
 
 -- let tree = singleTree . tokenTrees . tokens

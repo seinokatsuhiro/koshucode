@@ -111,7 +111,7 @@ instance AbortReasonClass AbortReason where
         (AbortUsage          _ _) -> "使用法の間違い"
 
     abortMain a = case a of
-        (AbortHeteroDecimal  a b) -> text $ a ++ " : " ++ b
+        (AbortHeteroDecimal  x y) -> text $ x ++ " : " ++ y
         (AbortLookup           s) -> par s
         (AbortMalformedOperand s) -> par s
         (AbortMissingTermname  s) -> par s

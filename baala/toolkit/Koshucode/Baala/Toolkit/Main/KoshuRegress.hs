@@ -244,8 +244,8 @@ reportCount = message where
 -- ----------------------  Utility
 
 {-| Length of list as an integer content. -}
-theLength :: (CInt c) => [a] -> c
-theLength = putInt . length
+theLength :: (CDec c) => [a] -> c
+theLength = putDecFromInt . length
 
 putDoc :: (Pretty p) => p -> IO ()
 putDoc = print . doc

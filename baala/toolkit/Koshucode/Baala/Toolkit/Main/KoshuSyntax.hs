@@ -110,7 +110,7 @@ putClause p@(cn, c) =
 
 clauseJudge :: (Int, Clause) -> Judge VContent
 clauseJudge (cn, c) = Judge True "CLAUSE" args where
-    args = [ ("/clause-seq"  , putInt cn)
+    args = [ ("/clause-seq"  , putDecFromInt cn)
            , ("/clause-type" , putText $ clauseTypeText c)]
 
 putToken :: Int -> Int -> CodeLine -> IO (Int)
@@ -122,8 +122,8 @@ putToken cn tn (CodeLine ln line toks) =
 
 tokenJudge :: Int -> Token -> Judge VContent
 tokenJudge cn t = Judge True "TOKEN" xs where
-    xs = [ ("/clause-seq"   , putInt cn)
-         , ("/token-seq"    , putInt  $ tokenNumber t)
+    xs = [ ("/clause-seq"   , putDecFromInt cn)
+         , ("/token-seq"    , putDecFromInt $ tokenNumber t)
          , ("/token-type"   , putText $ tokenTypeText t)
          , ("/token-content", putText $ tokenContent t) ]
 
@@ -146,8 +146,8 @@ dumpTokenText (n, ys) (CodeLine l line ts) = (n + length ts, ys ++ xs) where
 
 dumpTokenJudge :: Int -> Token -> Judge VContent
 dumpTokenJudge l t = Judge True "TOKEN" xs where
-    xs = [ ("/line"         , putInt l)
-         , ("/token-seq"    , putInt  $ tokenNumber t)
+    xs = [ ("/line"         , putDecFromInt l)
+         , ("/token-seq"    , putDecFromInt $ tokenNumber t)
          , ("/token-type"   , putText $ tokenTypeText t)
          , ("/token-content", putText $ tokenContent  t) ]
 
