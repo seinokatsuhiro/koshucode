@@ -78,6 +78,7 @@ egArith =
      "mul"      >>> bin decimalMul "10.0   3.0"
      "mul"      >>> bin decimalMul "10.0   0.5"
      "mul"      >>> bin decimalMul " 5.0  10.5"
+     "mul"      >>> bin decimalMul "10    10.5"
 
                     -- 10 * 3 = 30            10:0 * 3:0 = 30:0
                     -- 10.0 * 3.0 = 30.0      100:1 * 30:1 = 3000:2
@@ -99,6 +100,6 @@ bin f xy =
        dx <- litDecimal x
        dy <- litDecimal y
        dz <- f dx dy
-       Right $ decimalText dz
+       Right $ decimalString dz
        --Right $ show dz
 

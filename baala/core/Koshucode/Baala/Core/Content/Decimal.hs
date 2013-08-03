@@ -14,9 +14,10 @@ module Koshucode.Baala.Core.Content.Decimal
   litDecimal,  
 
   -- * Writer
-  decimalText,
+  decimalString,
 
   -- * Arithmetic
+  DecimalBinary,
   decimalAdd,
   decimalSub,
   decimalMul,
@@ -85,14 +86,14 @@ litDecimal ccs = headPart id ccs where
         | otherwise  =  tailPart False sign (n, 0) (c:cs)
 
     decPart :: Map Int -> Int -> Int -> LitDecimal
-    decPart sign n p [] = Right $ Decimal (sign n, 1) p False
+    decPart sign n p [] = Right $ Decimal (sign n, 10 ^ p) p False
     decPart sign n p (c:cs)
         | isDigit c  =  decPart sign (10 * n + fromDigit c) (p + 1) cs
         | c == ' '   =  decPart sign n p cs
         | otherwise  =  tailPart False sign (n, p) (c:cs)
 
     tailPart :: Bool -> Map Int -> (Int, Int) -> LitDecimal
-    tailPart approx sign (n, p) [] = Right $ Decimal (sign n, 1) p approx
+    tailPart approx sign (n, p) [] = Right $ Decimal (sign n, 10 ^ p) p approx
     tailPart approx sign dec (c:cs) = case c of
         ' '  ->  tailPart approx sign  dec cs
         '-'  ->  tailPart approx minus dec cs
@@ -118,56 +119,77 @@ fromDigit _   = bug
 
 -- ----------------------  Writer
 
-decimalText :: Decimal -> String
-decimalText (Decimal (n, den) p _)
-    | p == 0    = show $ n `div` den
-    | p >  0    = point p (show $ n `div` den)
-    | otherwise = "()"
+decimalString :: Decimal -> String
+decimalString (Decimal (n, den) p a)
+    | n >= 0     =       digits
+    | otherwise  = '-' : digits
+    where digits = decimalDigits a p (abs n * 10 ^ p `div` den)
 
-point :: Int -> Map String
-point p ds = point2 (length ds - p) ds
+decimalDigits :: Bool -> Int -> Int -> String
+decimalDigits approx pt
+    | pt == 0   = zero . reverse . intPart pt
+    | otherwise = zero . reverse . decPart pt
+    where
+    decPart :: Int -> Int -> String
+    decPart 0 n = '.' : intPart 0 n
+    decPart p n = let (n', d) = quoteDigit n
+                  in d : decPart (p - 1) n'
 
-point2 :: Int -> Map String
-point2 p (d:ds)
-    | p == 1  =  d : '.' : point2 (p - 1) ds
-    | p >  0  =  d : point2 (p - 1) ds
-point2 0 ds = ds
-point2 _ _ = bug
+    intPart :: Int -> Int -> String
+    intPart _ 0 | approx    = " a"
+                | otherwise = ""
+    intPart 3 n = ' ' : intPart 0 n
+    intPart p n = let (n', d) = quoteDigit n
+                  in d : intPart (p + 1) n'
+
+    zero ""           = "0"
+    zero ds@('.' : _) = '0' : ds
+    zero ds           = ds
+
+quoteDigit :: Int -> (Int, Char)
+quoteDigit n = let (n', d) = quotRem n 10
+             in (n', chr $ d + ord '0')
+
+-- map quoteDigit [0..9]
+-- map quoteDigit [10..19]
+-- map quoteDigit [100..109]
 
 
 
 -- ----------------------  Arithmetic
 
 decimalAdd :: DecimalBinary
-decimalAdd (Decimal (n1, den1) p1 e1) (Decimal (n2, den2) _ e2)
-    | den1 == den2 = Right $ reduceDecimal (n1 + n2, den1) p1 e3
-    | otherwise    = Right $ reduceDecimal (n3, den3) p1 e3
+decimalAdd d1@(Decimal (n1, den1) p1 a1)
+           d2@(Decimal (n2, den2) p2 a2)
+    | p1 /= p2     = Left  $ AbortHeteroDecimal txt1 txt2
+    | den1 == den2 = Right $ reduceDecimal (n1 + n2, den1) p1 a3
+    | otherwise    = Right $ reduceDecimal (n3, den3) p1 a3
     where n3    =  (n1 * den2) + (n2 * den1)
           den3  =  den1 * den2
-          e3    =  e1 || e2
+          a3    =  a1 || a2
+          txt1  =  decimalString d1
+          txt2  =  decimalString d2
 
 decimalSub :: DecimalBinary
-decimalSub (Decimal (n1, den1) p1 e1) (Decimal (n2, den2) p2 e2)
-    | p1 == p2 =
-        if den1 == den2
-        then Right $ reduceDecimal (n1 - n2, den1) p1 e3
-        else Right $ reduceDecimal (n3, den3) p1 e3
-    | otherwise =  bug
-    where n3    =  (n1 * den2) - (n2 * den1)
-          den3  =  den1 * den2
-          e3    =  e1 || e2
+decimalSub d1 d2 = decimalAdd d1 $ decimalRevsign d2
+
+decimalRevsign :: Map Decimal
+decimalRevsign (Decimal (n, den) p a) = Decimal (- n, den) p a
 
 decimalMul :: DecimalBinary
-decimalMul (Decimal (n1, den1) p1 e1) (Decimal (n2, den2) p2 e2)
-    = Right $ Decimal (n3, den3) p3 e3
+decimalMul (Decimal (n1, den1) p1 a1) (Decimal (n2, den2) p2 a2)
+    = Right $ Decimal (n3, den3) p3 a3
     where n3    =  (n1   `div` g1) * (n2   `div` g2)
           den3  =  (den2 `div` g1) * (den1 `div` g2)
           g1    =  gcd n1 den2
           g2    =  gcd n2 den1
-          p3    =  p1 + p2
-          e3    =  e1 || e2
+          p3    =  max p1 p2
+          a3    =  a1 || a2
 
 decimalDiv :: DecimalBinary
-decimalDiv dec1 (Decimal (n2, den2) p2 e2)
-    = decimalMul dec1 (Decimal (den2, n2) (- p2) e2)
+decimalDiv dec1 dec2
+    = decimalMul dec1 $ decimalRevratio dec2
+
+decimalRevratio :: Map Decimal
+decimalRevratio (Decimal (n, den) p a) = Decimal (den, n) p a
 
