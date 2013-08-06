@@ -3,12 +3,12 @@
 {-| Content operators. -}
 
 module Koshucode.Baala.Vanilla.Cop.Logic
-( copLogic
--- $Operators
+( copsLogic
+  -- $Operators
 ) where
 
-import Koshucode.Baala.Base
-import Koshucode.Baala.Core
+import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.Core as C
 import Koshucode.Baala.Vanilla.Type.Content
 
 
@@ -24,40 +24,40 @@ import Koshucode.Baala.Vanilla.Type.Content
 
 -}
 
-copLogic :: [Named (Cop VContent)]
-copLogic =
- [ namedEager  "not"  logiNot
- , namedEager  "and"  logiAnd
- , namedEager  "or"   logiOr
- , namedEager  "==>"  logiImply
- , namedEager  "<=="  logiIf
+copsLogic :: [B.Named (C.Cop VContent)]
+copsLogic =
+ [ C.namedEager  "not"  copNot
+ , C.namedEager  "and"  copAnd
+ , C.namedEager  "or"   copOr
+ , C.namedEager  "==>"  copImply
+ , C.namedEager  "<=="  copIf
  ]
 
-logiN :: Bool -> (Bool -> Bool -> Bool) -> [VContent] -> AbOr VContent
-logiN unit p = loop where
-    loop [] = Right . putBool $ unit
+copN :: Bool -> (Bool -> Bool -> Bool) -> VCop
+copN unit p = loop where
+    loop [] = Right . C.putBool $ unit
     loop (VBool x : xs) =
         do VBool xs' <- loop xs 
-           Right . putBool $ p x xs'
-    loop xs = Left $ AbortUnmatchType (concatMap typename xs)
+           Right . C.putBool $ p x xs'
+    loop xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
 
-logi2 :: (Bool -> Bool -> Bool) -> [VContent] -> AbOr VContent
-logi2 p [VBool x, VBool y] = Right . putBool $ p x y
-logi2 _ xs = Left $ AbortUnmatchType (concatMap typename xs)
+cop2 :: (Bool -> Bool -> Bool) -> VCop
+cop2 p [VBool x, VBool y] = Right . C.putBool $ p x y
+cop2 _ xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
 
-logiAnd    :: [VContent] -> AbOr VContent
-logiAnd    =  logiN True (&&)
+copAnd    :: VCop
+copAnd    =  copN True (&&)
 
-logiOr     :: [VContent] -> AbOr VContent
-logiOr     =  logiN False (||)
+copOr     :: VCop
+copOr     =  copN False (||)
 
-logiIf     :: [VContent] -> AbOr VContent
-logiIf     =  logi2 $ \x y -> x || not y
+copIf     :: VCop
+copIf     =  cop2 $ \x y -> x || not y
 
-logiImply  :: [VContent] -> AbOr VContent
-logiImply  =  logi2 $ \x y -> not x || y
+copImply  :: VCop
+copImply  =  cop2 $ \x y -> not x || y
 
-logiNot :: [VContent] -> AbOr VContent
-logiNot [VBool x] = Right . putBool $ not x
-logiNot xs = Left $ AbortUnmatchType (concatMap typename xs)
+copNot :: VCop
+copNot [VBool x] = Right . C.putBool $ not x
+copNot xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
 

@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Vanilla.Type.Content
 ( VContent (..),
-  toString,
+  VCop,
 ) where
 
 import qualified Koshucode.Baala.Base as B
@@ -120,26 +120,8 @@ instance C.CContent VContent where
     appendContent (VText s1) (VText s2) = VText $ s1 ++ s2
     appendContent _ _ = C.nil
 
+type VCop = C.CopEagerF VContent
 
 
--- ----------------------  
-
--- binv :: (Int -> Int -> Int) -> VContent -> Map VContent
--- binv op (VDec x) (VDec y) = VDec $ op x y
--- binv _ _ _ = VNil
-
--- valRangeMinMax :: VContent -> VContent -> [VContent]
--- valRangeMinMax (VDec a) (VDec b) = map VDec [a .. b]
--- valRangeMinMax _ _ = undefined
-
--- toDec :: VContent -> Decimal
--- toDec (VText x) = read x
--- toDec (VDec  x) = x
--- toDec x = error $ "not integer: " ++ show x
-
-toString :: VContent -> String
-toString (VText x) = x
-toString (VDec  x) = show x
-toString _ = undefined
 
 

@@ -3,24 +3,13 @@
 {-| Content operators. -}
 
 module Koshucode.Baala.Vanilla.Cop.Arith
-( copArith
--- $Operators
+( copsArith
+  -- $Operators
 ) where
 
-import Koshucode.Baala.Base
-import Koshucode.Baala.Core
+import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.Core as C
 import Koshucode.Baala.Vanilla.Type.Content
-
-
-
--- ----------------------
-
--- readInt :: String -> AbOr Int
--- readInt s =
---     case reads s of
---       [(n, "")] -> Right $ n
---       _         -> Left $ AbortNotNumber s
-
 
 
 
@@ -37,52 +26,52 @@ import Koshucode.Baala.Vanilla.Type.Content
 
 -}
 
-copArith :: [Named (Cop VContent)]
-copArith =
-    [ namedEager  "+"    arithPlus
-    , namedEager  "*"    arithTimes
-    , namedEager  "-"    arithMinus
-    , namedEager  "abs"  arithAbs
+copsArith :: [B.Named (C.Cop VContent)]
+copsArith =
+    [ C.namedEager  "+"    copPlus
+    , C.namedEager  "*"    copTimes
+    , C.namedEager  "-"    copMinus
+    , C.namedEager  "abs"  copAbs
     ]
 
-arithDec :: VContent -> AbOr Decimal
-arithDec (VDec  n) = Right n
-arithDec (VText n) = litDecimal n
-arithDec x = Left $ AbortNotNumber (show x)
+copDec :: VContent -> B.AbOr C.Decimal
+copDec (VDec  n) = Right n
+copDec (VText n) = C.litDecimal n
+copDec x = Left $ B.AbortNotNumber (show x)
 
-arithPlus :: [VContent] -> AbOr VContent
-arithPlus xs = fmap VDec $ loop xs where
-    loop [] = Right $ intDecimal 0
-    loop (n : m) = do n' <- arithDec n
+copPlus :: VCop
+copPlus xs = fmap VDec $ loop xs where
+    loop [] = Right $ C.intDecimal 0
+    loop (n : m) = do n' <- copDec n
                       m' <- loop m
-                      decimalAdd n' m'
+                      C.decimalAdd n' m'
 
-arithTimes :: [VContent] -> AbOr VContent
-arithTimes xs = fmap VDec $ loop xs where
-    loop [] = Right $ intDecimal 1
-    loop (n : m) = do n' <- arithDec n
+copTimes :: VCop
+copTimes xs = fmap VDec $ loop xs where
+    loop [] = Right $ C.intDecimal 1
+    loop (n : m) = do n' <- copDec n
                       m' <- loop m
-                      decimalMul n' m'
+                      C.decimalMul n' m'
 
-arithMinus :: [VContent] -> AbOr VContent
-arithMinus [a] =
-    do a' <- arithDec a
-       Right . VDec $ decimalRevsign a'
-arithMinus [a, b] =
-    do a' <- arithDec a
-       b' <- arithDec b
-       c' <- decimalSub a' b'
+copMinus :: VCop
+copMinus [a] =
+    do a' <- copDec a
+       Right . VDec $ C.decimalRevsign a'
+copMinus [a, b] =
+    do a' <- copDec a
+       b' <- copDec b
+       c' <- C.decimalSub a' b'
        Right . VDec $ c'
-arithMinus _ = Left $ AbortMalformedOperand "-"
+copMinus _ = Left $ B.AbortMalformedOperand "-"
 
-arithAbs :: [VContent] -> AbOr VContent
-arithAbs [VList cs] = Right . VList =<< mapM arithAbs1 cs
-arithAbs [c] = arithAbs1 c
-arithAbs _ = Left AbortUnmatchArity
+copAbs :: VCop
+copAbs [VList cs] = Right . VList =<< mapM copAbs1 cs
+copAbs [c] = copAbs1 c
+copAbs _ = Left B.AbortUnmatchArity
 
-arithAbs1 :: VContent -> AbOr VContent
-arithAbs1 (VDec n) = Right . VDec $ decimalAbs n
-arithAbs1 _ = Left AbortUnmatchArity
+copAbs1 :: VContent -> B.AbOr VContent
+copAbs1 (VDec n) = Right . VDec $ C.decimalAbs n
+copAbs1 _ = Left B.AbortUnmatchArity
 
 -- let tree = singleTree . tokenTrees . tokens
 -- let Right e2 = vanillaContent [] $ tree "1 = 1 and 2 = 3"

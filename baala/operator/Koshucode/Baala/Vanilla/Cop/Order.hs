@@ -3,12 +3,12 @@
 {-| Content operators. -}
 
 module Koshucode.Baala.Vanilla.Cop.Order
-( copOrder
--- $Operators
+( copsOrder
+  -- $Operators
 ) where
 
-import Koshucode.Baala.Base
-import Koshucode.Baala.Core
+import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.Core as C
 import Koshucode.Baala.Vanilla.Type.Content
 
 -- ----------------------
@@ -28,37 +28,37 @@ import Koshucode.Baala.Vanilla.Type.Content
 
 -}
 
-copOrder :: [Named (Cop VContent)]
-copOrder =
- [ namedEager  "="    ordEq
- , namedEager  "<>"   ordNeq
- , namedEager  "<"    ordLt
- , namedEager  "<="   ordLte
- , namedEager  ">"    ordGt
- , namedEager  ">="   ordGte
+copsOrder :: [B.Named (C.Cop VContent)]
+copsOrder =
+ [ C.namedEager  "="    copEq
+ , C.namedEager  "<>"   copNeq
+ , C.namedEager  "<"    copLt
+ , C.namedEager  "<="   copLte
+ , C.namedEager  ">"    copGt
+ , C.namedEager  ">="   copGte
  ]
 
-ordBy :: (VContent -> VContent -> Bool) -> [VContent] -> AbOr VContent
-ordBy p [x, y] = Right . putBool $ x `p` y
-ordBy _ _      = Left  $ AbortLookup ""
+copBy :: (VContent -> VContent -> Bool) -> VCop
+copBy p [x, y] = Right . C.putBool $ x `p` y
+copBy _ _      = Left  $ B.AbortLookup ""
 
-ordEq   :: [VContent] -> AbOr VContent
-ordEq   =  ordBy (==)
+copEq   :: VCop
+copEq   =  copBy (==)
 
-ordNeq  :: [VContent] -> AbOr VContent
-ordNeq  =  ordBy (/=)
+copNeq  :: VCop
+copNeq  =  copBy (/=)
 
-ordLt   :: [VContent] -> AbOr VContent
-ordLt   =  ordBy (<)
+copLt   :: VCop
+copLt   =  copBy (<)
 
-ordLte  :: [VContent] -> AbOr VContent
-ordLte  =  ordBy (<=)
+copLte  :: VCop
+copLte  =  copBy (<=)
 
-ordGt   :: [VContent] -> AbOr VContent
-ordGt   =  ordBy (>)
+copGt   :: VCop
+copGt   =  copBy (>)
 
-ordGte  :: [VContent] -> AbOr VContent
-ordGte  =  ordBy (>=)
+copGte  :: VCop
+copGte  =  copBy (>=)
 
 
 

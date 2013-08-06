@@ -3,12 +3,12 @@
 {-| Content operators. -}
 
 module Koshucode.Baala.Vanilla.Cop.Literal
-( copLiteral
--- $Operators
+( copsLiteral
+  -- $Operators
 ) where
 
-import Koshucode.Baala.Base
-import Koshucode.Baala.Core
+import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.Core as C
 
 import Koshucode.Baala.Vanilla.Type.Content
 
@@ -21,17 +21,17 @@ import Koshucode.Baala.Vanilla.Type.Content
 
 -}
 
-litText :: [TokenTree] -> AbOr VContent
+litText :: [B.TokenTree] -> B.AbOr VContent
 litText xs =
     do ss <- mapM litT xs
-       Right . putText $ concat ss
+       Right . C.putText $ concat ss
 
-litT :: TokenTree -> AbOr String
-litT (TreeL (TWord _ _ w)) = Right w
-litT x = Left $ AbortNotText (show x)
+litT :: B.TokenTree -> B.AbOr String
+litT (B.TreeL (B.TWord _ _ w)) = Right w
+litT x = Left $ B.AbortNotText (show x)
 
-copLiteral :: [Named (Cop VContent)]
-copLiteral =
-    [ namedLit    "'"       litText
+copsLiteral :: [B.Named (C.Cop VContent)]
+copsLiteral =
+    [ C.namedLit    "'"       litText
     ]
 

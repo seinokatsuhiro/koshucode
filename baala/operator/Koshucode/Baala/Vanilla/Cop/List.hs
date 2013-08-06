@@ -51,8 +51,6 @@ copsList =
     , C.namedLit    "'"       litText
     ]
 
-type VCop = C.CopEagerF VContent
-
 copList :: VCop
 copList = Right . C.putList
 
