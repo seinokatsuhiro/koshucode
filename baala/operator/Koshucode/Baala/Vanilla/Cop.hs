@@ -27,7 +27,7 @@ vanillaCop :: FindCop VContent
 vanillaCop n = lookup n ops where
     ops = concat [ copArith
                  , copLogic
-                 , copList
+                 , copsList
                  , copLiteral
                  , copOrder ]
 
@@ -67,7 +67,7 @@ vanillaBinary = binaryTree ht where
          [ right 8 "or"
          , right 7 "and"
          , right 6 "= <> < > <= >="
-         , right 2 "+ -"
+         , right 2 "+ - ++"
          , right 1 "* /"
          ]
 

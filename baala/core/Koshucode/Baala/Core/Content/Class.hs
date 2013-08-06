@@ -3,36 +3,37 @@
 module Koshucode.Baala.Core.Content.Class
 (
   -- * Generic content
-  PrimContent (),
-  CContent (..),
+  PrimContent (..),
+  CContent    (..),
 
   nonNullFilter,
   nonNilFilter,
 
   -- * Haskell data
-  CBool    (..),
-  CText    (..),
-  CList    (..),
+  CBool       (..),
+  CText       (..),
+  CList       (..),
 
   -- * Koshu data
-  CNil     (..),
-  CDec     (..),
+  CNil        (..),
+  CDec        (..),
   putDecFromInt,
-  CSet     (..),
-  CTermset (..),
-  CRel     (..),
+  CSet        (..),
+  CTermset    (..),
+  CRel        (..),
 ) where
 
-import Koshucode.Baala.Base
+import qualified Koshucode.Baala.Base as B
 import Koshucode.Baala.Core.Content.Decimal
 
 
 
 -- ----------------------  Generic content
 
-class PrimContent c
+class (Show c) => PrimContent c where
+    typename :: c -> String
 
-class (Ord c, Pretty c, 
+class (Ord c, B.Pretty c, PrimContent c,
        CBool c, CText c, CDec c, CList c,
        CNil c , CSet c, CTermset c, CRel c) =>
     CContent c where
@@ -42,47 +43,49 @@ class (Ord c, Pretty c,
     joinContent :: [c] -> c
     joinContent = foldr appendContent nil
 
-    typename :: c -> String
-    typename c
-        | isBool    c  =  "boolean"
-        | isText    c  =  "text"
-        | isDec     c  =  "int"
-        | isList    c  =  "list"
-        | isNil     c  =  "nil"
-        | isSet     c  =  "set"
-        | isTermset c  =  "termset"
-        | isRel     c  =  "relation"
-        | otherwise    =  "unknown"
-
 {-| Delete empty list ('null') from content list. -}
-nonNullFilter :: Map [[a]]
+nonNullFilter :: B.Map [[a]]
 nonNullFilter = filter (not . null)
 
 {-| Delete 'nil' from content list. -}
-nonNilFilter :: (CNil c) => Map [c]
+nonNilFilter :: (CNil c) => B.Map [c]
 nonNilFilter = filter (not . isNil)
+
+need :: PrimContent c => (c -> Bool) -> (c -> b) -> c -> B.AbOr b
+need is get x
+    | is x = Right $ get x
+    | otherwise = Left $ B.AbortUnmatchType (typename x)
 
 
 
 -- ----------------------  Haskell built-in data
 
 class (PrimContent c) => CBool c where
+    {-| Test content @c@ has Boolean value. -}
+    isBool     ::       c -> Bool
     {-| Put Boolean value into content @c@. -}
     putBool    ::    Bool -> c
     {-| Get Boolean value from content @c@. -}
     getBool    ::       c -> Bool
-    {-| Test content @c@ has Boolean value. -}
-    isBool     ::       c -> Bool
+    {-| Get Boolean value from content @c@ if @c@ is @CBool@. -}
+    needBool   ::       c -> B.AbOr Bool
+    needBool = need isBool getBool
 
 class (PrimContent c) => CText c where
-    putText    ::  String -> c
-    getText    ::       c -> String
     isText     ::       c -> Bool
+    getText    ::       c -> String
+    putText    ::  String -> c
+
+    needText   ::       c -> B.AbOr String
+    needText = need isText getText
 
 class (PrimContent c) => CList c where
-    putList    ::     [c] -> c
-    getList    ::       c -> [c]
     isList     ::       c -> Bool
+    getList    ::       c -> [c]
+    putList    ::     [c] -> c
+
+    needList   ::       c -> B.AbOr [c]
+    needList = need isList getList
 
 
 
@@ -90,29 +93,41 @@ class (PrimContent c) => CList c where
 
 {-| Types that can be nil -}
 class (PrimContent c) => CNil c where
-    nil         ::          c
     isNil       ::          c -> Bool
+    nil         ::          c
 
 class (PrimContent c) => CDec c where
-    putDec     ::     Decimal -> c
-    getDec     ::           c -> Decimal
     isDec      ::           c -> Bool
+    getDec     ::           c -> Decimal
+    putDec     ::     Decimal -> c
+
+    needDec     ::          c -> B.AbOr Decimal
+    needDec = need isDec getDec
 
 putDecFromInt :: (CDec c) => Int -> c
 putDecFromInt = putDec . intDecimal
 
 class (PrimContent c) => CSet c where
-    putSet      ::        [c] -> c
-    getSet      ::          c -> [c]
     isSet       ::          c -> Bool
+    getSet      ::          c -> [c]
+    putSet      ::        [c] -> c
+
+    needSet     ::          c -> B.AbOr [c]
+    needSet = need isSet getSet
 
 class (PrimContent c) => CTermset c where
-    putTermset  :: [Named c] -> c
-    getTermset  ::         c -> [Named c]
-    isTermset   ::         c -> Bool
+    isTermset   ::           c -> Bool
+    getTermset  ::           c -> [B.Named c]
+    putTermset  :: [B.Named c] -> c
+
+    needTermset ::           c -> B.AbOr [B.Named c]
+    needTermset = need isTermset getTermset
 
 class (PrimContent c) => CRel c where
-    putRel      ::     Rel c -> c
-    getRel      ::         c -> Rel c
-    isRel       ::         c -> Bool
+    isRel       ::           c -> Bool
+    getRel      ::           c -> B.Rel c
+    putRel      ::     B.Rel c -> c
+
+    needRel     ::           c -> B.AbOr (B.Rel c)
+    needRel = need isRel getRel
 

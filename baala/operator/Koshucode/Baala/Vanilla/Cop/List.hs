@@ -3,13 +3,12 @@
 {-| Content operators. -}
 
 module Koshucode.Baala.Vanilla.Cop.List
-( copList
--- $Operators
+( copsList
+  -- $Operators
 ) where
 
-import Koshucode.Baala.Base
-import Koshucode.Baala.Core
-
+import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.Core as C
 import Koshucode.Baala.Vanilla.Type.Content
 
 
@@ -28,45 +27,62 @@ import Koshucode.Baala.Vanilla.Type.Content
 
  [@max@]     Maximal element.
 
+ [@++@]      Append lists.
+
 -}
 
-litText :: [TokenTree] -> AbOr VContent
+litText :: [B.TokenTree] -> B.AbOr VContent
 litText xs =
     do ss <- mapM litT xs
-       Right . putText $ concat ss
+       Right . C.putText $ concat ss
 
-litT :: TokenTree -> AbOr String
-litT (TreeL (TWord _ _ w)) = Right w
-litT x = Left $ AbortNotText (show x)
+litT :: B.TokenTree -> B.AbOr String
+litT (B.TreeL (B.TWord _ _ w)) = Right w
+litT x = Left $ B.AbortNotText (show x)
 
-copList :: [Named (Cop VContent)]
-copList =
-    [ namedEager  "list"    list
-    , namedEager  "total"   listTotal
-    , namedEager  "length"  listLength
-    , namedEager  "min"     listMin
-    , namedEager  "max"     listMax
-    , namedLit    "'"       litText
+copsList :: [B.Named (C.Cop VContent)]
+copsList =
+    [ C.namedEager  "list"    copList
+    , C.namedEager  "total"   copTotal
+    , C.namedEager  "length"  copLength
+    , C.namedEager  "min"     copMin
+    , C.namedEager  "max"     copMax
+    , C.namedEager  "++"      copAppend
+    , C.namedLit    "'"       litText
     ]
 
-list :: [VContent] -> AbOr VContent
-list = Right . putList
+type VCop = C.CopEagerF VContent
 
-listTotal :: [VContent] -> AbOr VContent
-listTotal [VList xs] = Right . putDec =<< decimalSum (map getDec xs)
-listTotal xs = Left $ AbortUnmatchType (concatMap typename xs)
+copList :: VCop
+copList = Right . C.putList
 
-listMin :: [VContent] -> AbOr VContent
-listMin [VList xs] = Right $ minimum xs
-listMin xs = Left $ AbortUnmatchType (concatMap typename xs)
+copTotal :: VCop
+copTotal = op where
+    op [VList xs] = Right . C.putDec =<< C.decimalSum (map C.getDec xs)
+    op xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
 
-listMax :: [VContent] -> AbOr VContent
-listMax [VList xs] = Right $ maximum xs
-listMax xs = Left $ AbortUnmatchType (concatMap typename xs)
+copMin :: VCop
+copMin = op where
+    op [VList xs] = Right $ minimum xs
+    op xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
 
-listLength :: [VContent] -> AbOr VContent
-listLength [VList   xs]     = Right . putDecFromInt $ length xs
-listLength [VText xs]       = Right . putDecFromInt $ length xs
-listLength [VRel (Rel _ b)] = Right . putDecFromInt $ length b
-listLength xs = Left $ AbortUnmatchType (concatMap typename xs)
+copMax :: VCop
+copMax = op where
+    op [VList xs] = Right $ maximum xs
+    op xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
+
+copLength :: VCop
+copLength = op where
+    op [VList xs]         = Right . C.putDecFromInt $ length xs
+    op [VText xs]         = Right . C.putDecFromInt $ length xs
+    op [VRel (B.Rel _ b)] = Right . C.putDecFromInt $ length b
+    op xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
+
+copAppend :: VCop
+copAppend [] = Right VNil
+copAppend xxs@(x : _) = op x where
+    op (VText _) = Right . C.putText . concat =<< mapM C.needText xxs
+    op (VList _) = Right . C.putList . concat =<< mapM C.needList xxs
+    op (VSet  _) = Right . C.putSet  . concat =<< mapM C.needSet  xxs
+    op _ = Left $ B.AbortUnmatchType (concatMap C.typename xxs)
 

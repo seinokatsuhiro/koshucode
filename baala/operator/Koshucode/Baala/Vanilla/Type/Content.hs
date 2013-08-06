@@ -7,50 +7,58 @@ module Koshucode.Baala.Vanilla.Type.Content
   toString,
 ) where
 
-import Koshucode.Baala.Base
-import Koshucode.Baala.Core
+import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.Core as C
 
 {-| Vanilla type -}
 
 data VContent
-    = VText    String            -- ^ String type
-    | VDec     Decimal           -- ^ Decimal number type
-    | VBool    Bool              -- ^ Boolean type
-    | VList    [VContent]        -- ^ List type
-    | VSet     [VContent]        -- ^ Set type
-    | VTermset [Named VContent]  -- ^ List of terms
-    | VRel     (Rel VContent)    -- ^ Relation type
-    | VNil                       -- ^ Sign of no ordinary type
+    = VBool    Bool               -- ^ Boolean type
+    | VText    String             -- ^ String type
+    | VDec     C.Decimal          -- ^ Decimal number type
+    | VNil                        -- ^ Sign of no ordinary type
+    | VList    [VContent]         -- ^ List type
+    | VSet     [VContent]         -- ^ Set type
+    | VTermset [B.Named VContent] -- ^ List of terms
+    | VRel     (B.Rel VContent)   -- ^ Relation type
       deriving (Show, Eq, Ord)
 
-instance PrimContent VContent where        
+instance C.PrimContent VContent where        
+    typename (VBool    _) = "boolean"
+    typename (VText    _) = "text"
+    typename (VDec     _) = "decimal"
+    typename (VNil)       = "nil"
+    typename (VList    _) = "list"
+    typename (VSet     _) = "set"
+    typename (VTermset _) = "termset"
+    typename (VRel     _) = "rel"
 
 
 
 -- ----------------------  haskell data
 
-instance CBool VContent where
+instance C.CBool VContent where
     putBool                  =  VBool
     getBool (VBool x)        =  x
-    getBool _                =  bug
+    getBool _                =  B.bug
     isBool  (VBool _)        =  True
     isBool  _                =  False
 
-instance CDec VContent where
+instance C.CDec VContent where
     putDec                   =  VDec
     getDec (VDec x)          =  x
-    getDec _                 =  bug
+    getDec _                 =  B.bug
     isDec  (VDec _)          =  True
     isDec  _                 =  False
 
-instance CText VContent where
+instance C.CText VContent where
     putText                  = VText
     getText (VText s)        =  s
-    getText _                =  bug
+    getText _                =  B.bug
     isText  (VText _)        =  True
     isText  _                =  False
 
-instance CList VContent where
+instance C.CList VContent where
     putList                  =  VList
     getList (VList xs)       =  xs
     getList _                =  []
@@ -61,29 +69,29 @@ instance CList VContent where
 
 -- ----------------------  koshu data
 
-instance CNil VContent where
+instance C.CNil VContent where
     nil                      = VNil
     isNil VNil               = True
     isNil _                  = False
 
-instance CSet VContent where
-    putSet                   =  VSet . nonNilFilter . unique
+instance C.CSet VContent where
+    putSet                   =  VSet . C.nonNilFilter . B.unique
     getSet (VSet x)          =  x
-    getSet _                 =  bug
+    getSet _                 =  B.bug
     isSet  (VSet _)          =  True
     isSet  _                 =  False
 
-instance CTermset VContent where
+instance C.CTermset VContent where
     putTermset               = VTermset
     getTermset (VTermset x)  =  x
-    getTermset _             =  bug
+    getTermset _             =  B.bug
     isTermset  (VTermset _)  =  True
     isTermset  _             =  False
 
-instance CRel VContent where
+instance C.CRel VContent where
     putRel                   = VRel
     getRel (VRel r)          =  r
-    getRel _                 =  bug
+    getRel _                 =  B.bug
     isRel  (VRel _)          =  True
     isRel  _                 =  False
 
@@ -91,26 +99,26 @@ instance CRel VContent where
 
 -- ----------------------
 
-instance Pretty VContent where
-    doc (VText s)       =  text $ "'" ++ hashString s
-    doc (VDec n)        =  text $ decimalString n
+instance B.Pretty VContent where
+    doc (VText s)       =  B.text $ "'" ++ B.hashString s
+    doc (VDec n)        =  B.text $ C.decimalString n
     doc (VBool b)
-        | b             =  text "#true"
-        | otherwise     =  text "#false"
-    doc (VNil)          =  text "()"
-    doc (VList xs)      =  docBracket  $ hsep (docColonList xs)
-    doc (VSet xs)       =  docBrace    $ hsep (docColonList xs)
-    doc (VTermset xs)   =  docAngleBar $ hsep (map docTerms xs)
-    doc (VRel r)        =  doc r
+        | b             =  B.text "#true"
+        | otherwise     =  B.text "#false"
+    doc (VNil)          =  B.text "()"
+    doc (VList xs)      =  B.docBracket  $ B.hsep (B.docColonList xs)
+    doc (VSet xs)       =  B.docBrace    $ B.hsep (B.docColonList xs)
+    doc (VTermset xs)   =  B.docAngleBar $ B.hsep (map docTerms xs)
+    doc (VRel r)        =  B.doc r
 
-docTerms :: (Pretty a) => Named a -> Doc
-docTerms (n, x) = text n <+> doc x
+docTerms :: (B.Pretty a) => B.Named a -> B.Doc
+docTerms (n, x) = B.text n B.<+> B.doc x
 
-instance CContent VContent where
+instance C.CContent VContent where
     appendContent (VNil) x = x
     appendContent x (VNil) = x
     appendContent (VText s1) (VText s2) = VText $ s1 ++ s2
-    appendContent _ _ = nil
+    appendContent _ _ = C.nil
 
 
 

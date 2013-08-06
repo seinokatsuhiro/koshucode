@@ -28,6 +28,16 @@ affirm B text
         /max     ( max /a )
 
 affirm C reldee
-  | add /list    ( list ('a) ('b) ('c))
-        /length  ( length ('abc))
+  | add /list    ( list ('a) ('b) ('c) )
+        /length  ( length ('abc) )
+
+affirm D reldee
+  | add /list    ( [ 1 : 2 ] ++ [ 2 : 3 : 4 ] )
+        /set     ( { 1 : 2 } ++ { 2 : 3 : 4 } )
+
+affirm E reldee
+  | add /a ('aa)
+        /b ('bb)
+        /c ('cc)
+  | add /d ( /a ++ /b ++ /c )
 
