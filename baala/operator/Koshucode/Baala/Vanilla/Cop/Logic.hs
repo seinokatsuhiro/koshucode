@@ -16,48 +16,58 @@ import Koshucode.Baala.Vanilla.Type.Content
 -- ----------------------
 {- $Operators
 
- [@not@]   Logical negation.
+ [@not@]    Logical negation.
 
- [@and@]   Logical conjunction.
+ [@and@]    Logical conjunction.
 
- [@or@]    Logical disjunction.
+ [@or@]     Logical disjunction.
+
+ [@then@]   Logical implication.
+
+ [@where@]  Inverse implication.
 
 -}
 
 copsLogic :: [B.Named (C.Cop VContent)]
 copsLogic =
- [ C.namedEager  "not"  copNot
- , C.namedEager  "and"  copAnd
- , C.namedEager  "or"   copOr
- , C.namedEager  "==>"  copImply
- , C.namedEager  "<=="  copIf
+ [ C.namedEager  "not"   copNot
+ , C.namedEager  "and"   copAnd
+ , C.namedEager  "or"    copOr
+ , C.namedEager  "then"  copImp
+ , C.namedEager  "where" copIf
  ]
 
 copN :: Bool -> (Bool -> Bool -> Bool) -> VCop
 copN unit p = loop where
     loop [] = Right . C.putBool $ unit
-    loop (VBool x : xs) =
-        do VBool xs' <- loop xs 
-           Right . C.putBool $ p x xs'
-    loop xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
+    loop (x : xs) =
+        do x' <- C.needBool x
+           VBool xs' <- loop xs 
+           Right . C.putBool $ p x' xs'
 
 cop2 :: (Bool -> Bool -> Bool) -> VCop
-cop2 p [VBool x, VBool y] = Right . C.putBool $ p x y
+cop2 p [x, y] = do x' <- C.needBool x
+                   y' <- C.needBool y
+                   Right . C.putBool $ p x' y'
 cop2 _ xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
 
-copAnd    :: VCop
-copAnd    =  copN True (&&)
+cop1 :: (Bool -> Bool) -> VCop
+cop1 p [x] = do x' <- C.needBool x
+                Right . C.putBool $ p x'
+cop1 _ xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
 
-copOr     :: VCop
-copOr     =  copN False (||)
+copAnd :: VCop
+copAnd =  copN True (&&)
 
-copIf     :: VCop
-copIf     =  cop2 $ \x y -> x || not y
+copOr  :: VCop
+copOr  =  copN False (||)
 
-copImply  :: VCop
-copImply  =  cop2 $ \x y -> not x || y
+copIf  :: VCop
+copIf  =  cop2 $ \x y -> x || not y
+
+copImp :: VCop
+copImp =  cop2 $ \x y -> not x || y
 
 copNot :: VCop
-copNot [VBool x] = Right . C.putBool $ not x
-copNot xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
+copNot = cop1 not
 

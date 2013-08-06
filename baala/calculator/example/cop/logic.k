@@ -24,7 +24,7 @@ affirm D
           /not ( not /a )
 
 affirm E
-  reldee | add /and0 ( and )
+  reldee | add ** /and0 ( and )
                /and1 ( and #true )
                /and2 ( and #true #true )
                /and3 ( and #true #true #true )
