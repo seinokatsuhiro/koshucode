@@ -1,30 +1,30 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Vanilla.Relmap.Implement
+{-| Content formula. -}
+
+module Koshucode.Baala.Vanilla.Relmap.Operator
 ( vanillaRops
 
   -- * Operators
   -- $Operators
 ) where
 
-import Data.Monoid
-import Koshucode.Baala.Core
+import qualified Koshucode.Baala.Core as C
 import qualified Koshucode.Baala.Builtin as Kit
-import qualified Koshucode.Baala.Minimal as Mini
 
 import Koshucode.Baala.Vanilla.Relmap.Calc
 import Koshucode.Baala.Vanilla.Relmap.Naming
 import Koshucode.Baala.Vanilla.Relmap.Operand
 import Koshucode.Baala.Vanilla.Relmap.Binary
 import Koshucode.Baala.Vanilla.Relmap.Unary
-import Koshucode.Baala.Vanilla.Type.Relval
+import Koshucode.Baala.Vanilla.Type
 
 
 
 -- ----------------------  Operators
 
 {-| Implementation of relational operators. -}
-vanillaRops :: [Rop VContent]
+vanillaRops :: [C.Rop VContent]
 vanillaRops = Kit.operators "vanilla"
     -- Relmap operators in alphabetical order
     [ o "add"            LikeVal           relopAdd
@@ -43,18 +43,6 @@ vanillaRops = Kit.operators "vanilla"
     , o "typename"       LikeHold          relopTypename
     , o "unprefix"       LikeUnprefix      relopUnprefix
     ] where o = (,,)
-
-
-
--- ----------------------  Constructors
-
-relopRdf :: RopCons VContent
-relopRdf use = do
-  sign  <- Kit.getWord  use "-sign"
-  [s,o] <- Kit.getTerms use "-term"
-  Right $ relmapAlias use $
-        relmapSource use sign ["/s", "/o"] `mappend`
-        Mini.relmapRename use [(s,"/s"), (o,"/o")]
 
 
 
@@ -87,5 +75,4 @@ relopRdf use = do
 --
 -- [@unprefix@]
 --
-
 

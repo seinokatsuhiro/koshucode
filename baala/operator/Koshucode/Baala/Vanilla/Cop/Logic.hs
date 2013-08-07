@@ -9,7 +9,7 @@ module Koshucode.Baala.Vanilla.Cop.Logic
 
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
-import Koshucode.Baala.Vanilla.Type.Content
+import Koshucode.Baala.Vanilla.Type
 
 
 
@@ -34,8 +34,22 @@ copsLogic =
  , C.namedEager  "and"   copAnd
  , C.namedEager  "or"    copOr
  , C.namedEager  "then"  copImp
- , C.namedEager  "where" copIf
+ , C.namedEager  "where" copWh
+ , C.namedEager  "if"    copIf
  ]
+
+cop1 :: (Bool -> Bool) -> VCop
+cop1 p [x] =
+    do x' <- C.needBool x
+       Right . C.putBool $ p x'
+cop1 _ xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
+
+cop2 :: (Bool -> Bool -> Bool) -> VCop
+cop2 p [x, y] =
+    do x' <- C.needBool x
+       y' <- C.needBool y
+       Right . C.putBool $ p x' y'
+cop2 _ xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
 
 copN :: Bool -> (Bool -> Bool -> Bool) -> VCop
 copN unit p = loop where
@@ -45,16 +59,14 @@ copN unit p = loop where
            VBool xs' <- loop xs 
            Right . C.putBool $ p x' xs'
 
-cop2 :: (Bool -> Bool -> Bool) -> VCop
-cop2 p [x, y] = do x' <- C.needBool x
-                   y' <- C.needBool y
-                   Right . C.putBool $ p x' y'
-cop2 _ xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
+copNot :: VCop
+copNot =  cop1 not
 
-cop1 :: (Bool -> Bool) -> VCop
-cop1 p [x] = do x' <- C.needBool x
-                Right . C.putBool $ p x'
-cop1 _ xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
+copWh  :: VCop
+copWh  =  cop2 $ \x y -> x || not y
+
+copImp :: VCop
+copImp =  cop2 $ \x y -> not x || y
 
 copAnd :: VCop
 copAnd =  copN True (&&)
@@ -63,11 +75,10 @@ copOr  :: VCop
 copOr  =  copN False (||)
 
 copIf  :: VCop
-copIf  =  cop2 $ \x y -> x || not y
-
-copImp :: VCop
-copImp =  cop2 $ \x y -> not x || y
-
-copNot :: VCop
-copNot = cop1 not
+copIf [test, a, b] =
+    do test' <- C.needBool test
+       case test' of
+         True  -> Right a
+         False -> Right b
+copIf xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
 

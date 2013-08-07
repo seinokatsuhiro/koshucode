@@ -15,7 +15,7 @@ import Control.Monad (filterM)
 import Koshucode.Baala.Base
 import Koshucode.Baala.Core
 import Koshucode.Baala.Builtin
-import Koshucode.Baala.Vanilla.Type.Relval
+import Koshucode.Baala.Vanilla.Type
 import Koshucode.Baala.Vanilla.Cop
 
 

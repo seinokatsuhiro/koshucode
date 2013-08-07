@@ -7,8 +7,8 @@ module Koshucode.Baala.Vanilla.Quoter
 ( koshu
 ) where
 import Koshucode.Baala.Core
-import Koshucode.Baala.Vanilla.Relmap.Implement
-import Koshucode.Baala.Vanilla.Type.Relval
+import Koshucode.Baala.Vanilla.Relmap
+import Koshucode.Baala.Vanilla.Type
 
 -- | Quasiquoter for @[koshu| ... |]@.
 koshu :: QuasiQuoter

@@ -16,7 +16,7 @@ import Koshucode.Baala.Vanilla.Cop.List
 import Koshucode.Baala.Vanilla.Cop.Literal
 import Koshucode.Baala.Vanilla.Cop.Logic
 import Koshucode.Baala.Vanilla.Cop.Order
-import Koshucode.Baala.Vanilla.Type.Content
+import Koshucode.Baala.Vanilla.Type
 
 
 

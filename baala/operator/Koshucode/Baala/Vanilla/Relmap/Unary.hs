@@ -14,14 +14,18 @@ module Koshucode.Baala.Vanilla.Relmap.Unary
   relopTypename, relmapTypename, relTypename,
   -- * range
   relopRange, relmapRange,
+  -- * RDF
+  relopRdf
 ) where
 
 import qualified Data.List as List
 import Koshucode.Baala.Base
 import Koshucode.Baala.Core
 import Koshucode.Baala.Builtin
-import Koshucode.Baala.Vanilla.Type.Relval
+import Koshucode.Baala.Vanilla.Type
 import Koshucode.Baala.Vanilla.Order
+import qualified Koshucode.Baala.Builtin as Kit
+import qualified Koshucode.Baala.Minimal as Mini
 
 
 
@@ -187,4 +191,15 @@ divide2 ns2 (Rel h1 b1) = Rel h2 b2 where
                 else [binv quot (the x) (the y) :
                       binv rem  (the x) (the y) : arg]
 -}
+
+
+-- ----------------------  RDF
+
+relopRdf :: RopCons VContent
+relopRdf use = do
+  sign  <- Kit.getWord  use "-sign"
+  [s,o] <- Kit.getTerms use "-term"
+  Right $ relmapAlias use $
+        relmapSource use sign ["/s", "/o"] `mappend`
+        Mini.relmapRename use [(s,"/s"), (o,"/o")]
 

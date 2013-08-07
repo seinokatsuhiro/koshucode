@@ -4,8 +4,8 @@
 
 module Koshucode.Baala.Minimal
 ( -- * Relatoinal operators
-  module Koshucode.Baala.Minimal.Implement,
   module Koshucode.Baala.Minimal.Operand,
+  module Koshucode.Baala.Minimal.Operator,
   module Koshucode.Baala.Minimal.Restrict,
   module Koshucode.Baala.Minimal.Tropashko,
   module Koshucode.Baala.Minimal.Unary,
@@ -14,8 +14,8 @@ module Koshucode.Baala.Minimal
   -- $NamingConventions
 ) where
 
-import Koshucode.Baala.Minimal.Implement
 import Koshucode.Baala.Minimal.Operand
+import Koshucode.Baala.Minimal.Operator
 import Koshucode.Baala.Minimal.Restrict
 import Koshucode.Baala.Minimal.Tropashko
 import Koshucode.Baala.Minimal.Unary

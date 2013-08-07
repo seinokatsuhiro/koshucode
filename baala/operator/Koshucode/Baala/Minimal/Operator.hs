@@ -2,7 +2,7 @@
 
 -- | Minimal implementations of relmaps
 
-module Koshucode.Baala.Minimal.Implement
+module Koshucode.Baala.Minimal.Operator
 ( -- * Implementation
   minimalRops
 

@@ -29,3 +29,6 @@ affirm E
                /and2 ( and #true #true )
                /and3 ( and #true #true #true )
 
+affirm G
+  bool | add /y ( if /x "yes" "no" )
+

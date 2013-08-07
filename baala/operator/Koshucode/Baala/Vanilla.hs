@@ -2,13 +2,11 @@
 
 module Koshucode.Baala.Vanilla
 ( module Koshucode.Baala.Vanilla.Quoter,
-  module Koshucode.Baala.Vanilla.Type.Content,
-  module Koshucode.Baala.Vanilla.Type.Relval,
-  module Koshucode.Baala.Vanilla.Relmap.Implement,
+  module Koshucode.Baala.Vanilla.Type,
+  module Koshucode.Baala.Vanilla.Relmap,
 ) where
 
 import Koshucode.Baala.Vanilla.Quoter
-import Koshucode.Baala.Vanilla.Type.Content
-import Koshucode.Baala.Vanilla.Type.Relval
-import Koshucode.Baala.Vanilla.Relmap.Implement
+import Koshucode.Baala.Vanilla.Type
+import Koshucode.Baala.Vanilla.Relmap
 

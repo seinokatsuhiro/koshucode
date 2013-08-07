@@ -1,14 +1,18 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Term content. -}
+{-| Content formula. -}
 
-module Koshucode.Baala.Vanilla.Type.Content
+module Koshucode.Baala.Vanilla.Type
 ( VContent (..),
   VCop,
 ) where
 
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
+
+
+
+-- ----------------------  vanilla type
 
 {-| Vanilla type -}
 
@@ -17,21 +21,44 @@ data VContent
     | VText    String             -- ^ String type
     | VDec     C.Decimal          -- ^ Decimal number type
     | VNil                        -- ^ Sign of no ordinary type
-    | VList    [VContent]         -- ^ List type
-    | VSet     [VContent]         -- ^ Set type
-    | VTermset [B.Named VContent] -- ^ List of terms
+    | VList    [VContent]         -- ^ List type (objective collection)
+    | VSet     [VContent]         -- ^ Set type (informative collection)
+    | VTermset [B.Named VContent] -- ^ Termset type (set of terms)
     | VRel     (B.Rel VContent)   -- ^ Relation type
       deriving (Show, Eq, Ord)
 
 instance C.PrimContent VContent where        
-    typename (VBool    _) = "boolean"
-    typename (VText    _) = "text"
-    typename (VDec     _) = "decimal"
-    typename (VNil)       = "nil"
-    typename (VList    _) = "list"
-    typename (VSet     _) = "set"
-    typename (VTermset _) = "termset"
-    typename (VRel     _) = "rel"
+    typename (VBool    _)  =  "boolean"
+    typename (VText    _)  =  "text"
+    typename (VDec     _)  =  "decimal"
+    typename (VNil)        =  "nil"
+    typename (VList    _)  =  "list"
+    typename (VSet     _)  =  "set"
+    typename (VTermset _)  =  "termset"
+    typename (VRel     _)  =  "rel"
+
+instance C.CContent VContent where
+    appendContent (VNil) x = x
+    appendContent x (VNil) = x
+    appendContent (VText s1) (VText s2) = VText $ s1 ++ s2
+    appendContent _ _ = C.nil
+
+instance B.Pretty VContent where
+    doc (VText s)       =  B.text $ "'" ++ B.hashString s
+    doc (VDec n)        =  B.text $ C.decimalString n
+    doc (VBool b)
+        | b             =  B.text "#true"
+        | otherwise     =  B.text "#false"
+    doc (VNil)          =  B.text "()"
+    doc (VList xs)      =  B.docBracket  $ B.hsep (B.docColonList xs)
+    doc (VSet xs)       =  B.docBrace    $ B.hsep (B.docColonList xs)
+    doc (VTermset xs)   =  B.docAngleBar $ B.hsep (map docTerms xs)
+    doc (VRel r)        =  B.doc r
+
+docTerms :: (B.Pretty a) => B.Named a -> B.Doc
+docTerms (n, x) = B.text n B.<+> B.doc x
+
+type VCop = C.CopEagerF VContent
 
 
 
@@ -52,7 +79,7 @@ instance C.CDec VContent where
     isDec  _                 =  False
 
 instance C.CText VContent where
-    putText                  = VText
+    putText                  =  VText
     getText (VText s)        =  s
     getText _                =  B.bug
     isText  (VText _)        =  True
@@ -70,9 +97,9 @@ instance C.CList VContent where
 -- ----------------------  koshu data
 
 instance C.CNil VContent where
-    nil                      = VNil
-    isNil VNil               = True
-    isNil _                  = False
+    nil                      =  VNil
+    isNil VNil               =  True
+    isNil _                  =  False
 
 instance C.CSet VContent where
     putSet                   =  VSet . C.nonNilFilter . B.unique
@@ -82,46 +109,16 @@ instance C.CSet VContent where
     isSet  _                 =  False
 
 instance C.CTermset VContent where
-    putTermset               = VTermset
+    putTermset               =  VTermset
     getTermset (VTermset x)  =  x
     getTermset _             =  B.bug
     isTermset  (VTermset _)  =  True
     isTermset  _             =  False
 
 instance C.CRel VContent where
-    putRel                   = VRel
+    putRel                   =  VRel
     getRel (VRel r)          =  r
     getRel _                 =  B.bug
     isRel  (VRel _)          =  True
     isRel  _                 =  False
-
-
-
--- ----------------------
-
-instance B.Pretty VContent where
-    doc (VText s)       =  B.text $ "'" ++ B.hashString s
-    doc (VDec n)        =  B.text $ C.decimalString n
-    doc (VBool b)
-        | b             =  B.text "#true"
-        | otherwise     =  B.text "#false"
-    doc (VNil)          =  B.text "()"
-    doc (VList xs)      =  B.docBracket  $ B.hsep (B.docColonList xs)
-    doc (VSet xs)       =  B.docBrace    $ B.hsep (B.docColonList xs)
-    doc (VTermset xs)   =  B.docAngleBar $ B.hsep (map docTerms xs)
-    doc (VRel r)        =  B.doc r
-
-docTerms :: (B.Pretty a) => B.Named a -> B.Doc
-docTerms (n, x) = B.text n B.<+> B.doc x
-
-instance C.CContent VContent where
-    appendContent (VNil) x = x
-    appendContent x (VNil) = x
-    appendContent (VText s1) (VText s2) = VText $ s1 ++ s2
-    appendContent _ _ = C.nil
-
-type VCop = C.CopEagerF VContent
-
-
-
 
