@@ -10,13 +10,12 @@ module Koshucode.Baala.Toolkit.Main.KoshuMain
 ) where
 
 import System.Console.GetOpt
-
-import Koshucode.Baala.Base hiding (text)
-import Koshucode.Baala.Core
-import Koshucode.Baala.Toolkit.Library.Exit
-import Koshucode.Baala.Toolkit.Library.Run
-import Koshucode.Baala.Toolkit.Library.Version
-import qualified Koshucode.Baala.Base.Prelude.Pretty as Pretty
+import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.Core as C
+import qualified Koshucode.Baala.Toolkit.Library.Element  as L
+import qualified Koshucode.Baala.Toolkit.Library.Exit     as L
+import qualified Koshucode.Baala.Toolkit.Library.Run      as L
+import qualified Koshucode.Baala.Toolkit.Library.Version  as L
 
 
 -- Flow
@@ -48,6 +47,7 @@ data Option
     | OptSection String
     | OptCalc
     | OptListRop
+    | OptElement
       deriving (Show, Eq)
 
 koshuOptions :: [OptDescr Option]
@@ -61,10 +61,11 @@ koshuOptions =
     , Option "s" ["section"]  (ReqArg OptSection "SEC") "One-line section"
     , Option ""  ["calc"]     (NoArg OptCalc)    "Run calculation list"
     , Option ""  ["list-rop"] (NoArg OptListRop) "List relational operators"
+    , Option ""  ["element"]  (NoArg OptElement) "Analize sections"
     ]
 
 version :: String
-version = "koshu-" ++ versionString
+version = "koshu-" ++ L.versionString
 
 usage :: String
 usage = usageInfo header koshuOptions
@@ -91,61 +92,67 @@ header = unlines
 {-| The main function for @koshu@ command.
     See 'Koshucode.Baala.Vanilla.Relmap.Implement.vanillaRops'
     for default argument. -}
-koshuMain :: (CContent c) => [Rop c] -> IO ()
+koshuMain :: (C.CContent c) => [C.Rop c] -> IO ()
 koshuMain rops =
-  let cons = relmapCons rops
-      root = makeEmptySection cons
-  in koshuMain' rops root =<< prelude
+  let cons = C.relmapCons rops
+      root = C.makeEmptySection cons
+  in koshuMain' rops root =<< L.prelude
 
-koshuMain' :: (CContent c) => [Rop c] -> Section c -> (String, [String]) -> IO ()
+koshuMain' :: (C.CContent c) => [C.Rop c] -> C.Section c -> (String, [String]) -> IO ()
 koshuMain' rops root (_, argv) =
     case getOpt Permute koshuOptions argv of
       (opts, files, [])
-          | has OptHelp         -> putSuccess usage
-          | has OptVersion      -> putSuccess $ version ++ "\n"
-          | has OptShowEncoding -> putSuccess =<< currentEncodings
+          | has OptHelp         -> L.putSuccess usage
+          | has OptVersion      -> L.putSuccess $ version ++ "\n"
+          | has OptShowEncoding -> L.putSuccess =<< L.currentEncodings
           | has OptPretty       -> prettySection sec
           | has OptStdin        -> runStdin sec
-          | has OptCalc         -> runCalc  sec
-          | has OptListRop      -> putRop rops
-          | otherwise           -> runFiles sec
+          | has OptCalc         -> L.runCalc  sec
+          | has OptListRop      -> putRop   rops
+          | has OptElement      -> putElems sec
+          | otherwise           -> L.runFiles sec
           where has  = (`elem` opts)
-                sec = SectionSource root text files
+                sec  = L.SectionSource root text files
                 text = concatMap oneLiner opts
-      (_, _, errs) -> putFailure $ concat errs
+      (_, _, errs) -> L.putFailure $ concat errs
 
-putRop :: (Ord c, Pretty c, CText c) => [Rop c] -> IO ()
-putRop rops = putJudges $ map f rops where
-    f :: (CText c) => Rop c -> Judge c
-    f Rop { ropName = n, ropGroup = g } =
-        Judge True "KOSHU-ROP"
-          [ ("/group" , putText g)
-          , ("/name"  , putText n) ]
+putRop :: (Ord c, B.Pretty c, C.CText c) => [C.Rop c] -> IO ()
+putRop rops = B.putJudges $ map f rops where
+    f :: (C.CText c) => C.Rop c -> B.Judge c
+    f C.Rop { C.ropName = n, C.ropGroup = g } =
+        B.Judge True "KOSHU-ROP"
+          [ ("/group" , C.putText g)
+          , ("/name"  , C.putText n) ]
 
-runStdin :: CContent c => SectionSource c -> IO ()
+runStdin :: (C.CContent c) => L.SectionSource c -> IO ()
 runStdin sec =
     do text <- getContents
-       runFiles sec { textSections = text : textSections sec }
+       L.runFiles sec { L.textSections = text : L.textSections sec }
 
 oneLiner :: Option -> [String]
 oneLiner (OptSection sec) = [sec]
 oneLiner _ = []
 
-
+putElems :: (C.CContent c) => L.SectionSource c -> IO ()
+putElems src =
+    do ass <- L.readSecList src
+       case ass of
+         Right ss -> B.putJudges $ concatMap L.sectionElem ss
+         Left  _  -> B.bug
 
 
 -- ----------------------  Pretty printing
 
-prettySection :: (CContent c) => SectionSource c -> IO ()
-prettySection (SectionSource root _ files) =
+prettySection :: (C.CContent c) => L.SectionSource c -> IO ()
+prettySection (L.SectionSource root _ files) =
     case files of
-      [file] -> do md <- sectionFile root file
+      [file] -> do md <- C.sectionFile root file
                    prettyPrint md
       []     -> do s <- getContents
-                   let md = sectionRead root s
+                   let md = C.sectionRead root "" s
                    prettyPrint md
-      _      -> putSuccess usage
-    where prettyPrint md = abortIO (print . Pretty.doc) md
+      _      -> L.putSuccess usage
+    where prettyPrint md = B.abortIO (print . B.doc) md
 
 
 
@@ -177,12 +184,12 @@ prettySection (SectionSource root _ files) =
 
 -- fromJudges :: (CContent v) => [Judge v] -> String
 -- fromJudges = unlines . unique . map string where
---     string = show . Pretty.doc
+--     string = show . B.doc
 
 -- flow
 
 -- flow :: [Assert v] -> IO ()
--- flow = putStrLn . show . Pretty.docv . map Pretty.doc
+-- flow = putStrLn . show . B.docv . map B.doc
 
 -- ----------------------
 {- $koshu.hs

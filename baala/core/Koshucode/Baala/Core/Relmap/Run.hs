@@ -20,19 +20,19 @@ import Koshucode.Baala.Core.Relmap.Relmap
 
 {-| Calculate 'Relmap' for 'Rel'. -}
 runRelmapDataset
-    :: (Ord v, CNil v)
-    => Dataset v        -- ^ Judges read from @source@ operator
-    -> Relmap v         -- ^ Mapping from 'Rel' to 'Rel'
-    -> Rel v            -- ^ Input relation
-    -> AbortOr (Rel v)  -- ^ Output relation
+    :: (Ord c, CNil c)
+    => Dataset c        -- ^ Judges read from @source@ operator
+    -> Relmap c         -- ^ Mapping from 'Rel' to 'Rel'
+    -> Rel c            -- ^ Input relation
+    -> AbortOr (Rel c)  -- ^ Output relation
 runRelmapDataset ds = runRelmapSelector $ selectRelation ds
 
 runRelmapSelector
-    :: (Ord v, CNil v)
-    => (Relsign -> [String] -> Rel v)  -- ^ Relation selector
-    -> Relmap v          -- ^ Mapping from 'Rel' to 'Rel'
-    -> Rel v             -- ^ Input relation
-    -> AbortOr (Rel v)   -- ^ Output relation
+    :: (Ord c, CNil c)
+    => (Relsign -> [String] -> Rel c)  -- ^ Relation selector
+    -> Relmap c          -- ^ Mapping from 'Rel' to 'Rel'
+    -> Rel c             -- ^ Input relation
+    -> AbortOr (Rel c)   -- ^ Output relation
 runRelmapSelector select = (<$>) where
     RelmapSource _ s ns   <$> _ = Right $ select s ns
     RelmapConst  _ _ r    <$> _ = Right r
@@ -51,15 +51,15 @@ runRelmapSelector select = (<$>) where
 
 {-| Calculate assertion list. -}
 runAssertJudges
-    :: (Ord v, CNil v)
-    => [Assert v]        -- ^ Assertion list
-    -> [Judge v]         -- ^ Input judges
-    -> AbortOr [Judge v] -- ^ Output judges
+    :: (Ord c, CNil c)
+    => [Assert c]        -- ^ Assertion list
+    -> [Judge c]         -- ^ Input judges
+    -> AbortOr [Judge c] -- ^ Output judges
 runAssertJudges as = runAssertDataset as . dataset
 
 {-| Calculate assertion list. -}
 runAssertDataset ::
-    (Ord v, CNil v) => [Assert v] -> Dataset v -> AbortOr [Judge v]
+    (Ord c, CNil c) => [Assert c] -> Dataset c -> AbortOr [Judge c]
 runAssertDataset as ds = judges where
     judges = do
       js <- mapM each as
@@ -69,7 +69,7 @@ runAssertDataset as ds = judges where
       return $ judgesFromRel q s r
 
 {-| Convert relation to list of judges -}
-judgesFromRel :: Bool -> Relsign -> Rel v -> [Judge v]
+judgesFromRel :: Bool -> Relsign -> Rel c -> [Judge c]
 judgesFromRel q s = judges where
     judges (Rel h b) = map (judge h) b
     judge h = Judge q s . zip (headNames h)

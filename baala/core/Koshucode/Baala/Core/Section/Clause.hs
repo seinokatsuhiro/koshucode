@@ -7,35 +7,34 @@
 module Koshucode.Baala.Core.Section.Clause
 ( -- * Datatype
   -- $Documentation
-  Clause (..)
-, clauseTypeText
-, clauseSource
+  Clause (..),
+  clauseTypeText,
+  clauseSource,
 
   -- * Constructors
-, consPreclause
-, consClause
-, consSection
+  consPreclause,
+  consClause,
+  consSection,
 ) where
 
 import Data.Generics
 import Prelude hiding (exp, mod)
 
-import Koshucode.Baala.Base
-
+import qualified Koshucode.Baala.Base as B
 import Koshucode.Baala.Core.Content
 import Koshucode.Baala.Core.Relmap
 import Koshucode.Baala.Core.Section.Clausify
 import Koshucode.Baala.Core.Section.Section
 
 data Clause
-    = CSection ClauseSource (Maybe String)          -- ^ Section name
-    | CImport  ClauseSource [Token] (Maybe Clause)  -- ^ Importing section name
-    | CExport  ClauseSource String                  -- ^ Exporting relmap name
-    | CRelmap  ClauseSource String HalfRelmap       -- ^ Relmap and its name
-    | TRelmap  ClauseSource String [TokenTree]      -- ^ Not include HalfRelmap
-    | CAssert  ClauseSource Bool String HalfRelmap  -- ^ Assertions of relmaps
-    | TAssert  ClauseSource Bool String [TokenTree] -- ^ Not include HalfRelmap
-    | CJudge   ClauseSource Bool String [Token]     -- ^ Judge
+    = CSection ClauseSource (Maybe String)            -- ^ Section name
+    | CImport  ClauseSource [B.Token] (Maybe Clause)  -- ^ Importing section name
+    | CExport  ClauseSource String                    -- ^ Exporting relmap name
+    | CRelmap  ClauseSource String HalfRelmap         -- ^ Relmap and its name
+    | TRelmap  ClauseSource String [B.TokenTree]      -- ^ Not include HalfRelmap
+    | CAssert  ClauseSource Bool String HalfRelmap    -- ^ Assertions of relmaps
+    | TAssert  ClauseSource Bool String [B.TokenTree] -- ^ Not include HalfRelmap
+    | CJudge   ClauseSource Bool String [B.Token]     -- ^ Judge
     | CComment ClauseSource       -- ^ Caluse comment
     | CUnknown ClauseSource       -- ^ Unknown clause
       deriving (Show, Data, Typeable)
@@ -111,16 +110,16 @@ isCUnknown _                = False
                   TreeL (TermN ["/x"]),
                   TreeL (TermN ["/y"])]]
     -}
-consPreclause :: [CodeLine] -> [Clause]
+consPreclause :: [B.CodeLine] -> [Clause]
 consPreclause = concatMap consPreclause' . clausify
 
 consPreclause' :: ClauseSource -> [Clause]
 consPreclause' src@(ClauseSource toks _) = cl toks' where
-    toks' = sweepToken toks
+    toks' = B.sweepToken toks
 
-    cl :: [Token] -> [Clause]
-    cl (TWord _ 0 n : TWord _ 0 ":" : xs) = rel n xs
-    cl (TWord _ 0 k : xs)
+    cl :: [B.Token] -> [Clause]
+    cl (B.TWord _ 0 n : B.TWord _ 0 ":" : xs) = rel n xs
+    cl (B.TWord _ 0 k : xs)
         | k == "section"  = mod xs
         | k == "import"   = imp xs
         | k == "export"   = exp xs
@@ -136,22 +135,22 @@ consPreclause' src@(ClauseSource toks _) = cl toks' where
 
     unk                   = [CUnknown src]
 
-    mod [TWord _ _ n]        = [CSection src $ Just n]
+    mod [B.TWord _ _ n]   = [CSection src $ Just n]
     mod []                = [CSection src Nothing]
     mod _                 = unk
 
-    exp [TWord _ _ n]        = [CExport src n]
-    exp (TWord _ _ n : TWord _ _ ":" : xs) = CExport src n : rel n xs
+    exp [B.TWord _ _ n]   = [CExport src n]
+    exp (B.TWord _ _ n : B.TWord _ _ ":" : xs) = CExport src n : rel n xs
     exp _                 = unk
 
     imp _                 = [CImport src toks Nothing]
 
-    rel n xs              = [TRelmap src n $ tokenTrees xs]
+    rel n xs              = [TRelmap src n $ B.tokenTrees xs]
 
-    jud q (TWord _ _ s : xs) = [CJudge src q s xs]
+    jud q (B.TWord _ _ s : xs) = [CJudge src q s xs]
     jud _ _ = unk
 
-    ass q (TWord _ _ s : xs) = [TAssert src q s $ tokenTrees xs]
+    ass q (B.TWord _ _ s : xs) = [TAssert src q s $ B.tokenTrees xs]
     ass _ _ = unk
 
 
@@ -162,7 +161,7 @@ consPreclause' src@(ClauseSource toks _) = cl toks' where
     This is a first step of constructing 'Section'. -}
 consClause
     :: RelmapHalfCons  -- ^ Relmap half constructor
-    -> [CodeLine]      -- ^ Source tokens
+    -> [B.CodeLine]    -- ^ Source tokens
     -> [Clause]        -- ^ Result clauses
 consClause half = clauseHalf half . consPreclause
 
@@ -179,27 +178,29 @@ clauseHalf half = map f where
 
 {-| Second step of constructing 'Section'. -}
 consSection
-    :: (CContent v)
-    => RelmapFullCons v    -- ^ Relmap full constructor
+    :: (CContent c)
+    => RelmapFullCons c    -- ^ Relmap full constructor
+    -> String              -- ^ Resource name
     -> [Clause]            -- ^ Output of 'consClause'
-    -> AbortOr (Section v) -- ^ Result section
-consSection whole xs =
+    -> B.AbortOr (Section c) -- ^ Result section
+consSection whole res xs =
     do _        <-  mapMFor unk isCUnknown
        imports  <-  mapMFor imp isCImport
        judges   <-  mapMFor jud isCJudge 
        relmaps  <-  mapMFor rel isCRelmap
        asserts  <-  mapMFor ass isCAssert
        Right $ emptySection
-           { sectionName    =  sec xs
-           , sectionImport  =  imports
-           , sectionExport  =  mapFor exp isCExport
-           , sectionAssert  =  asserts
-           , sectionRelmap  =  relmaps
-           , sectionJudge   =  judges }
+           { sectionName      =  sec xs
+           , sectionImport    =  imports
+           , sectionExport    =  mapFor exp isCExport
+           , sectionAssert    =  asserts
+           , sectionRelmap    =  relmaps
+           , sectionJudge     =  judges
+           , sectionResource  =  res }
     where
       mapFor  f p = map  f $ filter p xs
       mapMFor f p = mapM f $ filter p xs
-      consSec = consSection whole
+      consSec = consSection whole ""
 
       -- todo: multiple section name
       sec (CSection _ n : _) = n
@@ -208,25 +209,25 @@ consSection whole xs =
 
       imp (CImport _ _ (Nothing)) = Right emptySection
       imp (CImport _ _ (Just e))  = consSec [e]
-      imp _ = bug
+      imp _ = B.bug
 
       exp (CExport _ n) = n
-      exp _ = bug
+      exp _ = B.bug
 
       jud (CJudge src q p xs2) =
-          case litJudge q p (tokenTrees xs2) of
+          case litJudge q p (B.tokenTrees xs2) of
             Right j -> Right j
             Left  a -> Left (a, clauseLines src)
-      jud _ = bug
+      jud _ = B.bug
 
       rel (CRelmap _ n r) = Right . (n,) =<< whole r
-      rel _ = bug
+      rel _ = B.bug
 
       ass (CAssert _ q p r) = Right . Assert q p =<< whole r
-      ass _ = bug
+      ass _ = B.bug
 
-      unk (CUnknown src) = Left (AbortUnknownClause, clauseLines src)
-      unk _ = bug
+      unk (CUnknown src) = Left (B.AbortUnknownClause, clauseLines src)
+      unk _ = B.bug
 
 
 

@@ -41,7 +41,7 @@ consSectionQ
     -> ExpQ      -- ^ ExpQ of 'Section'
 consSectionQ fullQ xs =
     [| either consError id
-         (consSection $fullQ $(dataToExpQ plain xs)) |]
+         (consSection $fullQ "qq" $(dataToExpQ plain xs)) |]
 
 {- construction error -}
 consError :: a -> b

@@ -4,33 +4,32 @@
 
 module Koshucode.Baala.Base.Data.Rel
 (
--- * Datatype
+  -- * Datatype
   Rel (Rel),
   Relbody,
 
--- * Constant
+  -- * Constant
   reldum,
   reldee,
 ) where
 
 import Koshucode.Baala.Base.Prelude
-
 import Koshucode.Baala.Base.Data.Relhead
 
 
 
 -- ----------------------  Data
 
-{-| Relations on type v.
+{-| Relations on type c.
     Heading of relation and
     body of relation as a list of tuples. -}
-data Rel v = Rel Relhead (Relbody v)
+data Rel c = Rel Relhead (Relbody c)
              deriving (Show, Eq, Ord)
 
 {-| List of positional args. -}
-type Relbody v = [[v]]
+type Relbody c = [[c]]
 
-instance (Pretty v) => Pretty (Rel v) where
+instance (Pretty c) => Pretty (Rel c) where
     doc = docRelFull
 
 docRelFull :: (Pretty a) => Rel a -> Doc
@@ -44,10 +43,10 @@ docRelFull (Rel h b) = text "{|" <+> h2 <+> b2 <+> text "|}"
 -- ----------------------  Constant
 
 {-| Relational constant that has no terms and no tuples. -}
-reldum :: Rel v
+reldum :: Rel c
 reldum = Rel mempty []
 
 {-| Relational constant that has no terms and the empty tuple. -}
-reldee :: Rel v
+reldee :: Rel c
 reldee = Rel mempty [[]]
 

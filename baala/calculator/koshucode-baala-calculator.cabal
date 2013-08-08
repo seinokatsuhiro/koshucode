@@ -62,6 +62,7 @@ library
   exposed-modules:
         Koshucode.Baala.Toolkit.Main.KoshuMain
         Koshucode.Baala.Toolkit.Library.Comment
+        Koshucode.Baala.Toolkit.Library.Element
         Koshucode.Baala.Toolkit.Library.Exit
         Koshucode.Baala.Toolkit.Library.Run
         Koshucode.Baala.Toolkit.Library.Version

@@ -4,16 +4,16 @@
 
 module Koshucode.Baala.Toolkit.Library.Input
 (
--- * Input
-  Input (..)
-, inputText
-, readInput
-, readInputs
-, readJudge
+  -- * Input
+  Input (..),
+  inputText,
+  readInput,
+  readInputs,
+  readJudge,
 ) where
 
-import Koshucode.Baala.Base
-import Koshucode.Baala.Core
+import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.Core as C
 import Koshucode.Baala.Vanilla
 
 
@@ -33,10 +33,10 @@ readInput (File p) = readFile p
 readInputs :: [Input] -> IO [String]
 readInputs = mapM readInput
 
-readJudge :: String -> [Judge VContent]
-readJudge s =
-    let root = emptySection :: Section VContent
-    in case sectionRead root s of
-         Right sec -> sectionJudge sec
+readJudge :: String -> [B.Judge VContent]
+readJudge src =
+    let root = C.emptySection :: C.Section VContent
+    in case C.sectionRead root "" src of
+         Right sec -> C.sectionJudge sec
          Left _    -> []
 

@@ -2,19 +2,18 @@
 
 module Koshucode.Baala.Core.Section.SectionIO
 (
--- * Reading section
-  sectionRead
-, sectionFile
+  -- * Reading section
+  sectionRead,
+  sectionFile,
 
--- * Running section
-, runSection
-, runSectionIO
-, hRunSectionIO
+  -- * Running section
+  runSection,
+  runSectionIO,
+  hRunSectionIO,
 ) where
 
 import qualified System.IO as IO
-
-import Koshucode.Baala.Base
+import qualified Koshucode.Baala.Base as B
 import Koshucode.Baala.Core.Content
 import Koshucode.Baala.Core.Relmap
 import Koshucode.Baala.Core.Section.Section
@@ -26,23 +25,24 @@ import Koshucode.Baala.Core.Section.Clause
 
 {-| Read section from text. -}
 sectionRead
-    :: (CContent v)
-    => Section v   -- ^ Section that is same type to result section
+    :: (CContent c)
+    => Section c   -- ^ Section that is same type to result section
+    -> String      -- ^ Resource name
     -> String      -- ^ Source text
-    -> AbortOr (Section v)  -- ^ Result section from source text
-sectionRead root src = sec where
+    -> B.AbortOr (Section c)  -- ^ Result section from source text
+sectionRead root res src = sec where
     (RelmapCons half full) = sectionCons root
-    sec = consSection full $ consClause half $ sourceLines src
+    sec = consSection full res $ consClause half $ B.sourceLines src
 
 {-| Read section from file. -}
 sectionFile
-    :: (CContent v)
-    => Section v    -- ^ Root section
+    :: (CContent c)
+    => Section c    -- ^ Root section
     -> FilePath     -- ^ Path of section file
-    -> IO (AbortOr (Section v)) -- ^ Result section
+    -> IO (B.AbortOr (Section c)) -- ^ Result section
 sectionFile root path =
     do code <- readFile path
-       return $ sectionRead root code
+       return $ sectionRead root path code
 
 
 
@@ -52,9 +52,9 @@ sectionFile root path =
     Output section has judges calculated
     from assertions in input section. -}
 runSection
-    :: (CContent v)
-    => Section v           -- ^ Input section
-    -> AbortOr (Section v) -- ^ Output section
+    :: (CContent c)
+    => Section c             -- ^ Input section
+    -> B.AbortOr (Section c) -- ^ Output section
 runSection sec =
     do let calc  = sectionLinkedAssert sec
            input = sectionJudge sec
@@ -62,9 +62,9 @@ runSection sec =
        Right $ sec { sectionJudge = output }
 
 {-| Run section and output judges. -}
-runSectionIO :: (CContent v) => Section v -> IO ()
+runSectionIO :: (CContent c) => Section c -> IO ()
 runSectionIO = hRunSectionIO IO.stdout
 
-hRunSectionIO :: (CContent v) => IO.Handle -> Section v -> IO ()
-hRunSectionIO h = abortIO (hPutJudges h . sectionJudge) . runSection
+hRunSectionIO :: (CContent c) => IO.Handle -> Section c -> IO ()
+hRunSectionIO h = B.abortIO (B.hPutJudges h . sectionJudge) . runSection
 

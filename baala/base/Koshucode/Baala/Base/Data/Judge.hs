@@ -4,45 +4,45 @@
 
 module Koshucode.Baala.Base.Data.Judge
 (
--- * Datatype
- Judge (Judge)
-, Relsign, Relarg
+  -- * Datatype
+  Judge (Judge),
+  Relsign, Relarg,
 
--- * Writer
-, putJudges
-, hPutJudges
-, abcJudge
+  -- * Writer
+  putJudges,
+  hPutJudges,
+  abcJudge,
 
--- * Logical quality
-, affirmJudge
-, denyJudge
-, isAffirmed
-, isDenied
+  -- * Logical quality
+  affirmJudge,
+  denyJudge,
+  isAffirmed,
+  isDenied,
 ) where
 
 import qualified Data.List as List
 import qualified System.IO as IO
 import Koshucode.Baala.Base.Prelude
 
--- | Judgement on type 'v'.
--- 
---   Judgement (or judge for short) is divided into three parts:
---   logical quality, sign of relation, and argument.
---   'Bool' value of logical quality corresponds to
---   affirmed or denied judge.
---   'String' value of sign represents certain sentence pattern
---   that gives intepretation of data.
---   Sentence pattern has placeholders filled by
---   ('String', 'v') values of argument.
--- 
-data Judge v = Judge Bool Relsign (Relarg v)
+{-| Judgement on type 'v'.
+ 
+    Judgement (or judge for short) is divided into three parts:
+    logical quality, sign of relation, and argument.
+    'Bool' value of logical quality corresponds to
+    affirmed or denied judge.
+    'String' value of sign represents certain sentence pattern
+    that gives intepretation of data.
+    Sentence pattern has placeholders filled by
+    ('String', 'v') values of argument. --} 
+
+data Judge c = Judge Bool Relsign (Relarg c)
                deriving (Show, Eq, Ord)
 
 -- | Sign of relation, or relation name.
 type Relsign = String
 
 -- | List of terms.
-type Relarg v = [Named v]
+type Relarg c = [Named c]
 
 -- Apply function to each values
 instance Functor Judge where
@@ -50,7 +50,7 @@ instance Functor Judge where
         where g (n, v) = (n, f v)
 
 --  Pretty printing
-instance (Ord v, Pretty v) => Pretty (Judge v) where
+instance (Ord c, Pretty c) => Pretty (Judge c) where
     doc (Judge q s a) = quality q <+> sign <+> arg a
         where
           -- Frege's judgement stroke, content line,
@@ -69,11 +69,11 @@ instance (Ord v, Pretty v) => Pretty (Judge v) where
 -- ----------------------  Logical quality
 
 {-| Affirm judge, i.e., change logical quality to 'True'. -}
-affirmJudge :: Map (Judge v)
+affirmJudge :: Map (Judge c)
 affirmJudge (Judge _ s xs) = Judge True  s xs
 
 {-| Deny judge, i.e., change logical quality to 'False'. -}
-denyJudge :: Map (Judge v)
+denyJudge :: Map (Judge c)
 denyJudge (Judge _ s xs) = Judge False s xs
 
 isAffirmed :: Judge t -> Bool
@@ -86,13 +86,13 @@ isDenied (Judge q _ _) = not q
 
 -- ----------------------  Writer
 
-putJudges :: (Ord v, Pretty v) => [Judge v] -> IO ()
+putJudges :: (Ord c, Pretty c) => [Judge c] -> IO ()
 putJudges = hPutJudges IO.stdout
 
-hPutJudges :: (Ord v, Pretty v) => IO.Handle -> [Judge v] -> IO ()
+hPutJudges :: (Ord c, Pretty c) => IO.Handle -> [Judge c] -> IO ()
 hPutJudges h = IO.hPutStr h . unlines . showJudges
 
-showJudges :: (Ord v, Pretty v) => [Judge v] -> [String]
+showJudges :: (Ord c, Pretty c) => [Judge c] -> [String]
 showJudges = loop (1 :: Int) where
     count 0            =  "**  (no judges)"
     count 1            =  "**  (1 judge)"
@@ -112,6 +112,6 @@ showJudges = loop (1 :: Int) where
               ss       =  loop (n + 1) js
 
 {-| Sort terms in alphabetical order. -}
-abcJudge :: (Ord v) => Judge v -> Judge v
+abcJudge :: (Ord c) => Judge c -> Judge c
 abcJudge (Judge q s a) = Judge q s $ List.sort a
 

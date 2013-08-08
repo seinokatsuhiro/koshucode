@@ -9,21 +9,22 @@ module Koshucode.Baala.Toolkit.Library.Run
   runCalcTo,
   theContent,
   readSec,
+  readSecList,
   mkdir,
 ) where
 
 import Data.Monoid
-import System.IO
-import qualified System.FilePath as Path
+import qualified System.IO        as IO
+import qualified System.FilePath  as Path
 import qualified System.Directory as Dir
 
-import Koshucode.Baala.Base
-import Koshucode.Baala.Core
+import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.Core as C
 import Koshucode.Baala.Toolkit.Library.Comment
 
 
 data SectionSource c = SectionSource
-    { rootSection  :: Section c
+    { rootSection  :: C.Section c
     , textSections :: [String]
     , fileSections :: [FilePath]
     } deriving (Show)
@@ -31,26 +32,26 @@ data SectionSource c = SectionSource
 
 -- ----------------------
 
-runFiles :: (CContent v) => SectionSource v -> IO ()
-runFiles = hRunFiles stdout
+runFiles :: (C.CContent c) => SectionSource c -> IO ()
+runFiles = hRunFiles IO.stdout
 
 {-| Read and union sections from files, and run the section. -}
 hRunFiles
-    :: (CContent v)
-    => Handle          -- ^ File handle
-    -> SectionSource v -- ^ Section source code
+    :: (C.CContent c)
+    => IO.Handle       -- ^ File handle
+    -> SectionSource c -- ^ Section source code
     -> IO ()
 hRunFiles h (SectionSource root textSec files) =
-    do let sec = map (sectionRead root) $ textSec
-       sects <- mapM (sectionFile root) $ files
+    do let sec = map (C.sectionRead root "") $ textSec
+       sects <- mapM (C.sectionFile root) $ files
        let union = concatMM $ sec ++ sects
            comm  = CommentDoc
                    [ CommentSec "INPUT" files]
-       hSetEncoding h utf8
-       hPutStrLn    h emacsModeComment
-       hPutStr      h $ unlines $ texts comm
-       hPutStrLn    h ""
-       abortIO (hRunSectionIO h) union
+       IO.hSetEncoding h IO.utf8
+       IO.hPutStrLn    h emacsModeComment
+       IO.hPutStr      h $ unlines $ texts comm
+       IO.hPutStrLn    h ""
+       B.abortIO (C.hRunSectionIO h) union
 
 concatMM :: (Monad m, Monoid a) => [m a] -> m a
 concatMM [] = return mempty
@@ -62,33 +63,33 @@ concatMM (s:ss) = do s'  <- s
 
 -- ---------------------- Calculation list
 
-runCalc :: (CContent v) => SectionSource v -> IO ()
+runCalc :: (C.CContent c) => SectionSource c -> IO ()
 runCalc = runCalcTo ""
 
 runCalcTo
-    :: (CContent v)
+    :: (C.CContent c)
     => FilePath          -- ^ Output path prefix
-    -> SectionSource v   -- ^ Section
+    -> SectionSource c   -- ^ Section
     -> IO ()             -- ^
 runCalcTo dir sec =
     do union <- readSec sec
-       abortIO (runCalcSec dir $ rootSection sec) union
+       B.abortIO (runCalcSec dir $ rootSection sec) union
 
-runCalcSec :: (CContent v) => String -> Section v -> Section v -> IO ()
+runCalcSec :: (C.CContent c) => String -> C.Section c -> C.Section c -> IO ()
 runCalcSec dir root sec =
-    do let js = sectionJudge sec
+    do let js = C.sectionJudge sec
        mapM_ (runCalcJudge dir root) js
        return ()
 
-runCalcJudge :: (CContent v) => String -> Section v -> Judge v -> IO ()
-runCalcJudge dir root (Judge True "KOSHU-CALC" xs) =
+runCalcJudge :: (C.CContent c) => String -> C.Section c -> B.Judge c -> IO ()
+runCalcJudge dir root (B.Judge True "KOSHU-CALC" xs) =
     case theContents ["/input", "/output"] xs of
       Just [input, output] ->
           do let inputFiles = theStrings input
-                 outputFile = dir ++ getText output
+                 outputFile = dir ++ C.getText output
              putStrLn $ "**  Output to " ++ outputFile
              mkdir outputFile
-             withFile outputFile WriteMode
+             IO.withFile outputFile IO.WriteMode
                           $ \ h -> hRunFiles h
                                    (SectionSource root [] inputFiles)
       Just _       -> return ()
@@ -104,27 +105,38 @@ mkdir path =
 
 -- ----------------------  The
 
-theContent :: (CContent c) => String -> [Named c] -> Maybe c
+theContent :: (C.CContent c) => String -> [B.Named c] -> Maybe c
 theContent = lookup
 
-theContents :: (CContent c) => [String] -> [Named c] -> Maybe [c]
+theContents :: (C.CContent c) => [String] -> [B.Named c] -> Maybe [c]
 theContents ns termset = mapM (`theContent` termset) ns
 
-theStrings :: (CContent c) => c -> [String]
-theStrings c | isText c = [getText c]
-theStrings c | isList c = map getText $ getList c
-theStrings _ = []
+theStrings :: (C.CContent c) => c -> [String]
+theStrings c | C.isText c  =  [C.getText c]
+theStrings c | C.isList c  =  map C.getText $ C.getList c
+theStrings _               =  []
 
 
 
 -- ----------------------  Read
 
 readSec
-    :: (CContent v)
-    => SectionSource v               -- ^ Section
-    -> IO (AbortOr (Section v))  -- ^ Union of sections
-readSec sec =
-    do let sec1 = map (sectionRead $ rootSection sec) $ textSections sec
-       sec2   <- mapM (sectionFile $ rootSection sec) $ fileSections sec
+    :: (C.CContent c)
+    => SectionSource c               -- ^ Section
+    -> IO (B.AbortOr (C.Section c))  -- ^ Union of sections
+readSec src =
+    do let root = rootSection src
+           sec1 = map (C.sectionRead root "") $ textSections src
+       sec2   <- mapM (C.sectionFile root) $ fileSections src
        return $ concatMM $ sec1 ++ sec2
+
+readSecList
+    :: (C.CContent c)
+    => SectionSource c
+    -> IO (B.AbortOr [C.Section c])
+readSecList src =
+    do let root = rootSection src
+           sec1 = map (C.sectionRead root "") $ textSections src
+       sec2 <- mapM (C.sectionFile root) $ fileSections src
+       return $ sequence $ sec1 ++ sec2
 
