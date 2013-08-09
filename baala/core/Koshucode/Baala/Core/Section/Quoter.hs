@@ -12,9 +12,8 @@ import Data.Generics
 import Language.Haskell.TH hiding (Clause)
 import Language.Haskell.TH.Quote
 
-import Koshucode.Baala.Base
+import qualified Koshucode.Baala.Base as B
 import Koshucode.Baala.Core.Relmap
-
 import Koshucode.Baala.Core.Section.Clause
 
 {-| Make quasiquoter for @[koshu| ... |]@. -}
@@ -27,7 +26,7 @@ koshuQuoter
 koshuQuoter half fullQ = QuasiQuoter { quoteExp = koshuQ half fullQ }
 
 koshuQ :: RelmapHalfCons -> ExpQ -> String -> ExpQ
-koshuQ half fullQ = dispatch . sourceLines where
+koshuQ half fullQ = dispatch . B.tokenize where
     dispatch src = sectionQ src -- relmapQ src
     sectionQ = consSectionQ fullQ . consClause half
     --relmapQ  = consFullRelmapQ fullQ . half [] . tokenTrees

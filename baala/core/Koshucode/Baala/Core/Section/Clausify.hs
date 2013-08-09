@@ -2,58 +2,58 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Core.Section.Clausify
-( ClauseSource (..)
-, clausify
-, operandGroup
+( ClauseSource (..),
+  clausify,
+  operandGroup,
 ) where
 
 import Data.Generics
 
-import Koshucode.Baala.Base
+import qualified Koshucode.Baala.Base as B
 
 
 
 -- ---------------------- 
 
 data ClauseSource = ClauseSource
-    { clauseTokens :: [Token]     -- ^ Source tokens of clause
-    , clauseLines  :: [CodeLine]  -- ^ Source lines of clause
+    { clauseTokens :: [B.Token]     -- ^ Source tokens of clause
+    , clauseLines  :: [B.CodeLine]  -- ^ Source lines of clause
     } deriving (Show, Data, Typeable)
 
 emptyClauseSource :: ClauseSource
 emptyClauseSource = ClauseSource [] []
 
 {-| Convert token list into list of token clauses -}
-clausify :: [CodeLine] -> [ClauseSource]
-clausify = gather clausifySplit
+clausify :: [B.CodeLine] -> [ClauseSource]
+clausify = B.gather clausifySplit
 
-clausifySplit :: [CodeLine] -> (ClauseSource, [CodeLine])
+clausifySplit :: [B.CodeLine] -> (ClauseSource, [B.CodeLine])
 clausifySplit = loop where
-    loop (CodeLine _ _ xs : ls)
+    loop (B.CodeLine _ _ xs : ls)
         | white xs = loop ls
-    loop (src@(CodeLine _ _ (TSpace _ i : xs)) : ls)
+    loop (src@(B.CodeLine _ _ (B.TSpace _ i : xs)) : ls)
         = cons xs src $ clausifySplitWith i ls
-    loop (src@(CodeLine _ _ xs@(TWord _ _ _ : _)) : ls)
+    loop (src@(B.CodeLine _ _ xs@(B.TWord _ _ _ : _)) : ls)
         = cons xs src $ clausifySplitWith 0 ls
     loop (_ : ls) = (emptyClauseSource, ls)
     loop []       = (emptyClauseSource, [])
 
-clausifySplitWith :: Int -> [CodeLine] -> (ClauseSource, [CodeLine])
+clausifySplitWith :: Int -> [B.CodeLine] -> (ClauseSource, [B.CodeLine])
 clausifySplitWith i = loop where
-    loop ((CodeLine _ _ xs) : ls)
+    loop ((B.CodeLine _ _ xs) : ls)
         | white xs = loop ls
-    loop (src@(CodeLine _ _ (TSpace _ n : xs)) : ls)
+    loop (src@(B.CodeLine _ _ (B.TSpace _ n : xs)) : ls)
         | n > i    = cons xs src $ loop ls
     loop ls        = (emptyClauseSource, ls)
 
-white :: [Token] -> Bool
-white xs = (sweepToken xs == [])
+white :: [B.Token] -> Bool
+white xs = (B.sweepToken xs == [])
 
-cons :: [Token] -> CodeLine -> Map (ClauseSource, [CodeLine])
+cons :: [B.Token] -> B.CodeLine -> B.Map (ClauseSource, [B.CodeLine])
 cons a1 b1 (ClauseSource a2 b2, c)
     = (ClauseSource (a1 ++ a2) (b1 : b2), c)
 
--- e1 = mapM_ print . clausify . sourceLines
+-- e1 = mapM_ print . clausify . tokenize
 -- e2 = e1 "a\nb\nc\n\n"
 -- e3 = e1 "a\n b\nc\n"
 -- e4 = e1 " a\n b\nc\n"
@@ -73,22 +73,22 @@ cons a1 b1 (ClauseSource a2 b2, c)
      ("-y", [TreeL (Word 0 "e")])]
   -}
 
-operandGroup :: [TokenTree] -> [Named [TokenTree]]
-operandGroup = nil . (gather $ anon []) where
+operandGroup :: [B.TokenTree] -> [B.Named [B.TokenTree]]
+operandGroup = nil . (B.gather $ anon []) where
     -- add empty operand
     nil xs = case lookup "" xs of
                Nothing -> ("", []) : xs
                Just _  -> xs
 
     -- anonymous group
-    anon ys xs@(TreeL (TWord _ 0 n@('-' : _)) : xs2)
+    anon ys xs@(B.TreeL (B.TWord _ 0 n@('-' : _)) : xs2)
         | ys == []     = named n [] xs2  -- no anonymous group
         | otherwise    = group "" ys xs
     anon ys []         = group "" ys []
     anon ys (x:xs)     = anon (x:ys) xs
 
     -- named group
-    named n ys xs@(TreeL (TWord _ 0 ('-' : _)) : _) = group n ys xs
+    named n ys xs@(B.TreeL (B.TWord _ 0 ('-' : _)) : _) = group n ys xs
     named n ys []      = group n ys []
     named n ys (x:xs)  = named n (x:ys) xs
 

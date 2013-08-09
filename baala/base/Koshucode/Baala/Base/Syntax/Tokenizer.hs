@@ -6,11 +6,8 @@
 module Koshucode.Baala.Base.Syntax.Tokenizer
 (
   -- * Library
-
-  -- ** Source lines
-  CodeLine (..),
-  sourceLines,
-  divideByToken,
+  tokenize,
+  trimLeft,
   tokens,
 
   -- * Document
@@ -25,83 +22,33 @@ module Koshucode.Baala.Base.Syntax.Tokenizer
   -- $Examples
 ) where
 
-import Data.Generics (Data, Typeable)
 import qualified Data.Char as C
 
 import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Syntax.Token
-
-
-
--- ----------------------  Source line
-
-data CodeLine = CodeLine
-    { sourceLineNumber  :: LineNumber -- ^ Line number, from 1.
-    , sourceLineContent :: String     -- ^ Line content without newline.
-    , sourceLineTokens  :: [Token]    -- ^ Tokens in the line.
-    } deriving (Show, Eq, Ord, Data, Typeable)
-
-instance Pretty CodeLine where
-    doc (CodeLine _ line _) = text line
-
-{-| Split source text into 'CodeLine' list.
-
-    1. Split source code into lines by line delimiters
-       (carriage return @\\r@ or line feed @\\n@)
-
-    2. Numbering line numbers.
-       Internally, this is represented as
-       a list of pairs (/line#/, /string/).
-
-    3. Tokenize each lines.
-       This is represented as a list of
-       'CodeLine' /line#/ /string/ /tokens/.
-  -}
-sourceLines
-    :: String      -- ^ Source text in koshucode.
-    -> [CodeLine]  -- ^ Token list per lines.
-sourceLines = sourceLinesBy sourceLine
-
-sourceLinesBy
-    :: (TNumber -> (LineNumber, String) -> (TNumber, [CodeLine]))
-    -> String -> [CodeLine]
-sourceLinesBy f = loop 1 . linesCrlfNumbered where
-    loop _ [] = []
-    loop tok (p : ps) =
-        case f tok p of
-          (tok', src) -> src ++ loop tok' ps
-
-sourceLine
-    :: TNumber                -- ^ Token number
-    -> (LineNumber, String)   -- ^ Line number and content
-    -> (TNumber, [CodeLine])  -- ^ Token number and 'CodeLine'
-sourceLine tok (n, ln) = (tok + length toks, map src ls) where
-    toks = gatherWith nextToken [tok ..] ln
-    ls   = divideByToken "||" toks
-    src  = CodeLine n ln
-
-{-| Divide token list by some word. -}
-divideByToken :: String -> [Token] -> [[Token]]
-divideByToken w = divideByP p where
-    p (TWord _ 0 x) | w == x = True
-    p _ = False
-
-{-| Split string into list of tokens.
-    Result token list does not contain newline characters. -}
-tokens :: String -> [Token]
-tokens = concatMap sourceLineTokens . sourceLines
-
+import Koshucode.Baala.Base.Syntax.CodeLine
 
 
 -- ----------------------  Tokenizer
 
+tokenize :: String -> [CodeLine]
+tokenize = codeLines nextToken
+
+{-| Split string into list of tokens.
+    Result token list does not contain newline characters. -}
+tokens :: String -> [Token]
+tokens = concatMap codeLineTokens . tokenize
+
+trimLeft :: Map String
+trimLeft = dropWhile isSpace
+
 {-| Split a next token from source text. -}
-nextToken :: TNumber -> String -> (Token, String)
+nextToken :: NextToken
 nextToken n txt =
     case txt of
       ('*' : '*' : '*' : '*' : cs) -> tokD cs (word0 "****")
       ('*' : '*' : _)         ->  tokD "" (TComment n txt)
-      ('\'' : '\'' : cs)      ->  tokD "" (TWord n 1 $ trim cs)
+      ('\'' : '\'' : cs)      ->  tokD "" (TWord n 1 $ trimLeft cs)
       ('(' : ')' : cs)        ->  tokD cs (word0 "()")  -- nil
       ('#' : c : cs)
           | isSpecial c       ->  tokD cs $ word0 [c]
@@ -110,7 +57,7 @@ nextToken n txt =
           | c `elem` "[{<("   ->  tokD cs $ open  [c, '|']
       ('|' : c : cs)
           | c `elem` "]}>)"   ->  tokD cs $ close ['|', c]
-          | c == '|'          ->  tokD (trim cs) (word0 "||") -- newline
+          | c == '|'          ->  tokD (trimLeft cs) (word0 "||") -- newline
 
       (c : cs)
           | isOpen    c       ->  tokD cs $ open  [c]
@@ -130,7 +77,6 @@ nextToken n txt =
       wordQ _                     =  TWord  n 0
       word0                       =  TWord  n 0
 
-      trim                        =  dropWhile isSpace
       tokD cs token               =  (token, cs)
       tokR cs k xs                =  (k $ reverse xs, cs)
 

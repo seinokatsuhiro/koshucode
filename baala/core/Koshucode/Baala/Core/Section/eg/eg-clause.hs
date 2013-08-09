@@ -34,7 +34,7 @@ eg f = do f
           putStrLn ""
 
 clause :: String -> [Clause]
-clause = consPreclause . sourceLines
+clause = consPreclause . tokenize
 
 
 

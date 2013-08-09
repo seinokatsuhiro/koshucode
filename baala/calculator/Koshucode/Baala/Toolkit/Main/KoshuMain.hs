@@ -130,8 +130,15 @@ runStdin sec =
        L.runFiles sec { L.textSections = text : L.textSections sec }
 
 oneLiner :: Option -> [String]
-oneLiner (OptSection sec) = [sec]
+oneLiner (OptSection sec) = [oneLinerPreprocess sec]
 oneLiner _ = []
+
+-- replace "||" to "\n"
+oneLinerPreprocess :: B.Map String
+oneLinerPreprocess = loop where
+    loop [] = []
+    loop ('|' : '|' : xs) = '\n' : loop (B.trimLeft xs)
+    loop (x : xs) = x : loop xs
 
 putElems :: (C.CContent c) => L.SectionSource c -> IO ()
 putElems src =

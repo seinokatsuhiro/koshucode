@@ -32,7 +32,7 @@ sectionRead
     -> B.AbortOr (Section c)  -- ^ Result section from source text
 sectionRead root res src = sec where
     (RelmapCons half full) = sectionCons root
-    sec = consSection full res $ consClause half $ B.sourceLines src
+    sec = consSection full res $ consClause half $ B.tokenize src
 
 {-| Read section from file. -}
 sectionFile

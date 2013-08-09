@@ -22,6 +22,7 @@ module Koshucode.Baala.Base.Syntax.Token
   tokenNumber,
   sweepToken,
   sweepLeft,
+  divideByToken,
 ) where
 
 import Data.Generics (Data, Typeable)
@@ -128,6 +129,12 @@ sweepLeft :: Map [Token]
 sweepLeft [] = []
 sweepLeft xxs@(x:xs) | isBlankToken x = sweepLeft xs
                      | otherwise = xxs
+
+{-| Divide token list by some word. -}
+divideByToken :: String -> [Token] -> [[Token]]
+divideByToken w = divideByP p where
+    p (TWord _ 0 x) | w == x = True
+    p _ = False
 
 
 

@@ -5,16 +5,16 @@
 module Koshucode.Baala.Toolkit.Main.KoshuSyntax
 ( koshuSyntaxMain
 
--- * koshu-syntax.hs
--- $koshu-syntax.hs
+  -- * koshu-syntax.hs
+  -- $koshu-syntax.hs
 ) where
 
 import Control.Monad
 import System.Console.GetOpt
 
-import Koshucode.Baala.Base
-import Koshucode.Baala.Core
-import Koshucode.Baala.Vanilla
+import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.Core as C
+import qualified Koshucode.Baala.Vanilla as V
 
 import Koshucode.Baala.Toolkit.Library.Exit
 import Koshucode.Baala.Toolkit.Library.Version
@@ -82,8 +82,8 @@ koshuSyntaxMain' (_, argv) =
 dumpClauseAndToken :: FilePath -> IO ()
 dumpClauseAndToken path = 
     do code <- readFile path
-       let ts = sourceLines code
-           cs = consPreclause ts
+       let ts = B.tokenize code
+           cs = C.consPreclause ts
        putStr $ unlines h
        mapM_ putClause $ zip [1 ..] cs
     where
@@ -98,34 +98,34 @@ dumpClauseAndToken path =
           , "***    |-- TOKEN /token-seq /token-type /token-content"
           , "***" ]
 
-putClause :: (Int, Clause) -> IO ()
+putClause :: (Int, C.Clause) -> IO ()
 putClause p@(cn, c) =
   do putStrLn ""
-     putStrLn $ "*** [C" ++ show cn ++ "] " ++ clauseTypeText c
+     putStrLn $ "*** [C" ++ show cn ++ "] " ++ C.clauseTypeText c
 
-     print $ doc $ clauseJudge p
-     let src = clauseSource c
-         ls  = clauseLines src
+     print $ B.doc $ clauseJudge p
+     let src = C.clauseSource c
+         ls  = C.clauseLines src
      foldM_ (putToken cn) 1 ls
 
-clauseJudge :: (Int, Clause) -> Judge VContent
-clauseJudge (cn, c) = Judge True "CLAUSE" args where
-    args = [ ("/clause-seq"  , putDecFromInt cn)
-           , ("/clause-type" , putText $ clauseTypeText c)]
+clauseJudge :: (Int, C.Clause) -> B.Judge V.VContent
+clauseJudge (cn, c) = B.Judge True "CLAUSE" args where
+    args = [ ("/clause-seq"  , C.putDecFromInt cn)
+           , ("/clause-type" , C.putText $ C.clauseTypeText c)]
 
-putToken :: Int -> Int -> CodeLine -> IO (Int)
-putToken cn tn (CodeLine ln line toks) =
+putToken :: Int -> Int -> B.CodeLine -> IO (Int)
+putToken cn tn (B.CodeLine ln line toks) =
   do putStrLn ""
      putStrLn $ "*** [C" ++ show cn ++ "] L" ++ show ln ++ " " ++ show line
-     print $ docv $ map (tokenJudge cn) toks
+     print $ B.docv $ map (tokenJudge cn) toks
      return $ tn + length toks
 
-tokenJudge :: Int -> Token -> Judge VContent
-tokenJudge cn t = Judge True "TOKEN" xs where
-    xs = [ ("/clause-seq"   , putDecFromInt cn)
-         , ("/token-seq"    , putDecFromInt $ tokenNumber t)
-         , ("/token-type"   , putText $ tokenTypeText t)
-         , ("/token-content", putText $ tokenContent t) ]
+tokenJudge :: Int -> B.Token -> B.Judge V.VContent
+tokenJudge cn t = B.Judge True "TOKEN" xs where
+    xs = [ ("/clause-seq"   , C.putDecFromInt cn)
+         , ("/token-seq"    , C.putDecFromInt $ B.tokenNumber t)
+         , ("/token-type"   , C.putText $ B.tokenTypeText t)
+         , ("/token-content", C.putText $ B.tokenContent t) ]
 
 
 
@@ -134,22 +134,22 @@ tokenJudge cn t = Judge True "TOKEN" xs where
 dumpToken :: FilePath -> IO ()
 dumpToken path =
     do code <- readFile path
-       let xs = sourceLines code
+       let xs = B.tokenize code
            (_, ls) = foldl dumpTokenText (0, []) xs
        putStr $ unlines ls
 
-dumpTokenText :: (Int, [String]) -> CodeLine -> (Int, [String])
-dumpTokenText (n, ys) (CodeLine l line ts) = (n + length ts, ys ++ xs) where
+dumpTokenText :: (Int, [String]) -> B.CodeLine -> (Int, [String])
+dumpTokenText (n, ys) (B.CodeLine l line ts) = (n + length ts, ys ++ xs) where
     h  = ["", "**  L" ++ show l ++ " " ++ show line]
     xs = h ++ (map dump ts)
-    dump p = show $ doc $ dumpTokenJudge l p
+    dump p = show $ B.doc $ dumpTokenJudge l p
 
-dumpTokenJudge :: Int -> Token -> Judge VContent
-dumpTokenJudge l t = Judge True "TOKEN" xs where
-    xs = [ ("/line"         , putDecFromInt l)
-         , ("/token-seq"    , putDecFromInt $ tokenNumber t)
-         , ("/token-type"   , putText $ tokenTypeText t)
-         , ("/token-content", putText $ tokenContent  t) ]
+dumpTokenJudge :: Int -> B.Token -> B.Judge V.VContent
+dumpTokenJudge l t = B.Judge True "TOKEN" xs where
+    xs = [ ("/line"         , C.putDecFromInt l)
+         , ("/token-seq"    , C.putDecFromInt $ B.tokenNumber t)
+         , ("/token-type"   , C.putText $ B.tokenTypeText t)
+         , ("/token-content", C.putText $ B.tokenContent  t) ]
 
 
 
