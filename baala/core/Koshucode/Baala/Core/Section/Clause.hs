@@ -217,7 +217,7 @@ consSection whole res xs =
       jud (CJudge src q p xs2) =
           case litJudge q p (B.tokenTrees xs2) of
             Right j -> Right j
-            Left  a -> Left (a, clauseLines src)
+            Left  a -> Left (a, clauseLines src, [])
       jud _ = B.bug
 
       rel (CRelmap _ n r) = Right . (n,) =<< whole r
@@ -226,7 +226,7 @@ consSection whole res xs =
       ass (CAssert _ q p r) = Right . Assert q p =<< whole r
       ass _ = B.bug
 
-      unk (CUnknown src) = Left (B.AbortUnknownClause, clauseLines src)
+      unk (CUnknown src) = Left (B.AbortUnknownClause, clauseLines src, [])
       unk _ = B.bug
 
 

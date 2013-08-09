@@ -7,16 +7,16 @@ module Koshucode.Baala.Builtin.Pattern
   operators,
 ) where
 
-import Koshucode.Baala.Core
+import qualified Koshucode.Baala.Core as C
 
 {-| Class for operand pattern. -}
 class OpPattern p where
     {-| Operand parser. -}
-    opParser :: p -> RopParser
-    opParser p = opParser' p . operandGroup
+    opParser :: p -> C.RopParser
+    opParser p = opParser' p . C.operandGroup
 
     {-| Simplified operand parser. -}
-    opParser' :: p -> RopParser'
+    opParser' :: p -> C.RopParser'
     opParser' _ = id
 
     {-| Names of suboperands. -}
@@ -28,12 +28,12 @@ class OpPattern p where
 {-| Make implementations of relational operators. -}
 operators
     :: (OpPattern p)
-    => String                   -- ^ Operator group
-    -> [(String, p, RopCons v)] -- ^ Operator implementations
-    -> [Rop v]                  -- ^ Implementation list
+    => String                     -- ^ Operator group
+    -> [(String, p, C.RopCons v)] -- ^ Operator implementations
+    -> [C.Rop v]                  -- ^ Implementation list
 operators g = map f where
     f (op, pat, cons) =
         let parser  = opParser pat
             addOp u = op ++ " " ++ u
-        in Rop op g parser cons (map addOp $ opUsage pat)
+        in C.Rop op g parser cons (map addOp $ opUsage pat)
 

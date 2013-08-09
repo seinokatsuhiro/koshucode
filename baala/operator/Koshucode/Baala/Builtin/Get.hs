@@ -25,100 +25,103 @@ module Koshucode.Baala.Builtin.Get
   getRelmaps,
 ) where
 
-import Koshucode.Baala.Base
-import Koshucode.Baala.Core
+import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.Core as C
 import Koshucode.Baala.Builtin.Term
 
 {-| Abortable 'head' -}
-getHead :: [a] -> AbortOr a
+getHead :: [a] -> B.AbortOr a
 getHead (x:_) = Right x
-getHead _     = Left (AbortLookup "head", [])
+getHead _     = Left (B.AbortLookup "head", [], [])
 
-type OpGet v a
-    = RopUse v      -- ^ Operator use
-    -> String      -- ^ Lookup key
-    -> AbortOr a   -- ^ Suboperand
+type OpGet c a
+    = C.RopUse c     -- ^ Operator use
+    -> String        -- ^ Lookup key
+    -> B.AbortOr a   -- ^ Suboperand
 
-getTree :: OpGet v TokenTree
+getTree :: OpGet c B.TokenTree
 getTree use n = do
-  let opd = halfOperand $ ropHalf use
-  xs <- opd <!!> n
-  Right $ TreeB 1 xs
+  let opd = C.halfOperand $ C.ropHalf use
+  xs <- opd B.<!!> n
+  Right $ B.TreeB 1 xs
 
-getTrees :: OpGet v [TokenTree]
+getTrees :: OpGet c [B.TokenTree]
 getTrees use n = do
-  let opd = halfOperand $ ropHalf use
-  xs <- opd <!!> n
+  let opd = C.halfOperand $ C.ropHalf use
+  xs <- opd B.<!!> n
   Right xs
 
-getTermTrees :: OpGet v [Named TokenTree]
+getTermTrees :: OpGet c [B.Named B.TokenTree]
 getTermTrees use n = do
-  let opd = halfOperand $ ropHalf use
-  xs <- opd <!!> n
+  let opd = C.halfOperand $ C.ropHalf use
+  xs <- opd B.<!!> n
   termTreePairs xs
 
 {-| Get word from named operand.
 
-    > consXxx :: RopCons v
+    > consXxx :: RopCons c
     > consXxx use = do
     >   sign <- getWord use "-sign"
     >   ...
     -}
-getWord :: OpGet v String
+getWord :: OpGet c String
 getWord use n = do
-  let opd = halfOperand $ ropHalf use
-  sign <- opd <!!> n
-  case sign of
-    [TreeL (TWord _ _ s)] -> Right s
-    _ -> Left (AbortLookup n, [])
+  let opd = C.halfOperand $ C.ropHalf use
+  trees <- opd B.<!!> n
+  case trees of
+    [B.TreeL (B.TWord _ _ s)] -> Right s
+    _ -> Left (B.AbortLookup n, [], B.treesTokens trees)
 
-getInt :: OpGet v Int
+getInt :: OpGet c Int
 getInt use n = do
-  let opd = halfOperand $ ropHalf use
-  sign <- opd <!!> n
-  case sign of
-    [TreeL (TWord _ _ i)] -> Right (read i :: Int)
-    _ -> Left (AbortLookup n, [])
+  let opd = C.halfOperand $ C.ropHalf use
+  trees <- opd B.<!!> n
+  case trees of
+    [B.TreeL (B.TWord _ _ i)] -> Right (read i :: Int)
+    _ -> Left (B.AbortLookup n, [], B.treesTokens trees)
 
 {-| Get a term name from named operand. -}
-getTerm :: OpGet v String
+getTerm :: OpGet c String
 getTerm use n = do
   ts <- getTerms use n
   case ts of
     [t] -> Right t
-    _   -> Left (AbortLookup n, [])
+    _   -> Left (B.AbortLookup n, [], [])
 
 {-| Get list of term names from named operand. -}
-getTerms :: OpGet v [String]
+getTerms :: OpGet c [String]
 getTerms use n = do
-  let opd = halfOperand $ ropHalf use
-  term <- opd <!!> n
-  termnames term
+  let half = C.ropHalf use
+      opd  = C.halfOperand half
+  trees <- opd B.<!!> n
+  case termnames trees of
+    Right x         -> Right x
+    Left (a, _, xs) -> Left (a, C.halfLines half, xs)
 
 {-| Get list of term-name pairs from named operand. -}
-getTermPairs :: OpGet v [Named String]
+getTermPairs :: OpGet c [B.Named String]
 getTermPairs use n = do
-  let opd = halfOperand $ ropHalf use
-  term <- opd <!!> n
-  termnamePairs term
+  let opd = C.halfOperand $ C.ropHalf use
+  trees <- opd B.<!!> n
+  termnamePairs trees
 
-getTermPair :: OpGet v (Named String)
+getTermPair :: OpGet c (B.Named String)
 getTermPair use n = do
-  let opd = halfOperand $ ropHalf use
-  term <- opd <!!> n
-  termname2 term
+  let opd = C.halfOperand $ C.ropHalf use
+  trees <- opd B.<!!> n
+  termname2 trees
 
 {-| Get a relmap from operator use.
 
-    > consMeet :: (Ord v) => RopCons v
+    > consMeet :: (Ord c) => RopCons c
     > consMeet use = do
     >   m <- getRelmap use
     >   Right $ relmapMeet use m
     -}
-getRelmap :: RopUse v -> AbortOr (Relmap v)
-getRelmap use = getHead $ ropSubmap use
+getRelmap :: C.RopUse c -> B.AbortOr (C.Relmap c)
+getRelmap use = getHead $ C.ropSubmap use
 
 {-| Get relmaps from operator use. -}
-getRelmaps :: RopUse v -> AbortOr [Relmap v]
-getRelmaps use = Right $ ropSubmap use
+getRelmaps :: C.RopUse c -> B.AbortOr [C.Relmap c]
+getRelmaps use = Right $ C.ropSubmap use
 

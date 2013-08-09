@@ -33,7 +33,7 @@ class AbortReasonClass a where
     abortSub _   = Doc.empty
 
 {-| Abort reason and source code information. -}
-type AbortType a = (a, [CodeLine])
+type AbortType a = (a, [CodeLine], [Token])
 
 {-| Either of (1) right result or (2) abort information. -}
 type AbortOrType a b = Either (AbortType a) b
@@ -63,7 +63,7 @@ putMessage = putStr . vline . renderStyle sty . messageDoc where
     vline    = unlines . map ("**  " ++) . lines
 
 messageDoc :: (AbortReasonClass a) => AbortType a -> Doc
-messageDoc (a, src) =
+messageDoc (a, cline, toks) =
     docv [ text ""
          , text "処理を中断しました"
          , text ""
@@ -72,7 +72,9 @@ messageDoc (a, src) =
          , opt  (label "おもな情報") $ abortMain a
          , opt  (label "補助情報") $ abortSub a
          , text ""
-         , source src
+         , source cline
+         , text ""
+         , token toks
          , text ""
          , text ""
          ]
@@ -83,9 +85,15 @@ messageDoc (a, src) =
                 | otherwise = text lbl <> x
 
       source :: [CodeLine] -> Doc
-      source = docv . map d where
+      source [] = text "?" <> text "???"
+      source ls = docv $ map d $ ls where
           d (CodeLine n line _) =
               (text $ label $ show n) <> text line
+
+      token :: [Token] -> Doc
+      token = docv . map d where
+          d tok = (text $ label $ "  " ++ show (tokenNumber tok))
+                  <> text (tokenContent tok)
 
       label :: Map String
       label = rpad 12

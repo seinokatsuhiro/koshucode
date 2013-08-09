@@ -12,7 +12,7 @@ module Koshucode.Baala.Core.Relmap.Construct
   -- $ConstructionProcess
 ) where
 
-import Koshucode.Baala.Base hiding (cat)
+import qualified Koshucode.Baala.Base as B
 
 import Koshucode.Baala.Core.Relmap.HalfRelmap
 import Koshucode.Baala.Core.Relmap.Implement
@@ -48,8 +48,8 @@ instance Show (RelmapCons c) where
 {-| First step of constructing relmap,
     make 'HalfRelmap' from use of relational operator. -}
 type RelmapHalfCons
-    =  [CodeLine]     -- ^ Source information
-    -> [TokenTree]    -- ^ Operand as source trees
+    =  [B.CodeLine]   -- ^ Source information
+    -> [B.TokenTree]  -- ^ Operand as source trees
     -> HalfRelmap     -- ^ Result half relmap
 
 halfBundle :: [(String, ([String], RopParser))] -> RelmapHalfCons
@@ -60,32 +60,32 @@ halfBundle halfs = consHalfRelmap bundle where
                     in HalfRelmap u src op opd' []
       Nothing    -> HalfRelmap [] src op [("operand", opd)] []
 
-    addOperand :: a -> [Named a] -> [Named a]
+    addOperand :: a -> [B.Named a] -> [B.Named a]
     addOperand opd = (("operand", opd) :)
 
 consHalfRelmap :: (String -> RelmapHalfCons) -> RelmapHalfCons
 consHalfRelmap bundle src = cons where
-    cons :: [TokenTree] -> HalfRelmap
+    cons :: [B.TokenTree] -> HalfRelmap
     cons xs = case bar xs of
                 [x] -> one x
                 xs2 -> cat $ map cons xs2
 
-    cons' :: TokenTree -> HalfRelmap
+    cons' :: B.TokenTree -> HalfRelmap
     cons' x = cons [x]
 
-    bar :: [TokenTree] -> [[TokenTree]]
-    bar = divideByP isBar  -- non-quoted vertical bar
+    bar :: [B.TokenTree] -> [[B.TokenTree]]
+    bar = B.divideByP isBar  -- non-quoted vertical bar
 
-    isBar (TreeL (TWord _ 0 "|")) = True
-    isBar _                       = False
+    isBar (B.TreeL (B.TWord _ 0 "|")) = True
+    isBar _                           = False
 
     cat :: [HalfRelmap] -> HalfRelmap
     cat = HalfRelmap ["RELMAP | RELMAP"] src "|" []
 
     -- half relmap from tokens
-    one :: [TokenTree] -> HalfRelmap
-    one [TreeB _ xs] = cons xs
-    one (TreeL (TWord _ 0 op) : opd) = submap $ bundle op src opd
+    one :: [B.TokenTree] -> HalfRelmap
+    one [B.TreeB _ xs] = cons xs
+    one (B.TreeL (B.TWord _ 0 op) : opd) = submap $ bundle op src opd
     one opd = HalfRelmap [] src "?" [("operand", opd)] [] -- no operator
 
     -- collect subrelmaps
@@ -102,35 +102,36 @@ consHalfRelmap bundle src = cons where
 {-| Second step of constructing relmap,
     make 'Relmap' from contents of 'HalfRelmap'. -}
 type RelmapFullCons c
-    = HalfRelmap          -- ^ Half relmap from 'RelmapHalfCons'
-    -> AbortOr (Relmap c) -- ^ Result relmap
+    = HalfRelmap            -- ^ Half relmap from 'RelmapHalfCons'
+    -> B.AbortOr (Relmap c) -- ^ Result relmap
 
 {-| Construct (full) relmap. -}
-fullBundle :: [Named (RopCons c)] -> RelmapFullCons c
+fullBundle :: [B.Named (RopCons c)] -> RelmapFullCons c
 fullBundle fulls = full where
     full h@(HalfRelmap u src op _ hs) =
         case lookup op fulls of
           Nothing   -> Right $ RelmapName h op
           Just cons -> do ms <- mapM full hs
-                          addAbort (AbortUsage op u, src)
+                          B.addAbort (B.AbortUsage op u, src, [])
                              $ cons $ RopUse h ms
 
 
 
 -- ----------------------
--- $ConstructionProcess
---
--- Construction process of half relmaps from source trees.
---
--- [@\[TokenTree\] -> \[\[TokenTree\]\]@]
---    Dicide list of 'TokenTree' by vertical bar (@|@).
---
--- [@\[\[TokenTree\]\] -> \[HalfRelmap\]@]
---    Construct each 'HalfRelmap' from lists of 'TokenTree'.
---    When there are subrelmaps in token trees,
---    constructs 'HalfRelmap' recursively.
---
--- [@\[HalfRelmap\] -> HalfRelmap@]
---    Wrap list of 'HalfRelmap' into one 'HalfRelmap'
---    that has these relmaps in 'halfSubmap'.
+{- $ConstructionProcess
+  
+   Construction process of half relmaps from source trees.
+  
+   [@\[TokenTree\] -> \[\[TokenTree\]\]@]
+      Dicide list of 'TokenTree' by vertical bar (@|@).
+  
+   [@\[\[TokenTree\]\] -> \[HalfRelmap\]@]
+      Construct each 'HalfRelmap' from lists of 'TokenTree'.
+      When there are subrelmaps in token trees,
+      constructs 'HalfRelmap' recursively.
+  
+   [@\[HalfRelmap\] -> HalfRelmap@]
+      Wrap list of 'HalfRelmap' into one 'HalfRelmap'
+      that has these relmaps in 'halfSubmap'.
+-}
 

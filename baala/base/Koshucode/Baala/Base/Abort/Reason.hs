@@ -45,7 +45,7 @@ type AbortOr b = AbortOrType AbortReason b
     This function may abort on AbortLookup. -}
 (<!!>) :: [Named a] -> String -> AbortOr a
 (<!!>) assoc key = loop assoc where
-    loop [] = Left (AbortLookup key, [])
+    loop [] = Left (AbortLookup key, [], [])
     loop ((k,v) : kvs) | k == key  = Right v
                        | otherwise = loop kvs
 

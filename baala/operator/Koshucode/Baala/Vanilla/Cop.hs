@@ -38,7 +38,7 @@ vanillaContent use t =
     do let src = C.halfLines $ C.ropHalf use
        case C.formCox vanillaCop $ vanillaBinary t of
          Right c -> Right $ C.posCox c
-         Left a  -> Left (a, src)
+         Left a  -> Left (a, src, [])
 
 vanillaNamedContent
   :: C.RopUse VContent

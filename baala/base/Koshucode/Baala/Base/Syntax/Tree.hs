@@ -56,6 +56,8 @@ trees parenType xs = fst $ loop xs 0 where
 
         where px = parenType x
 
+
+
 -- ----------------------  Utility
 
 {-| Convert tree to list of tokens. -}

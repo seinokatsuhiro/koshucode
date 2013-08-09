@@ -7,6 +7,8 @@ module Koshucode.Baala.Base.Syntax.TokenTree
   -- * Library
   TokenTree,
   tokenTrees,
+  treeTokens,
+  treesTokens,
   singleTree,
   divideByTokenTree,
 
@@ -40,6 +42,20 @@ type TokenTree = Tree Token
   -}
 tokenTrees :: [Token] -> [TokenTree]
 tokenTrees = trees parenType . sweepToken
+
+treesTokens :: [TokenTree] -> [Token]
+treesTokens = untrees typeParen
+
+treeTokens :: TokenTree -> [Token]
+treeTokens = untree typeParen
+
+typeParen :: Int -> (Token, Token)
+typeParen 1 = ( TOpen 1 "("  , TOpen 1 ")"  )
+typeParen 2 = ( TOpen 2 "["  , TOpen 2 "]"  )
+typeParen 3 = ( TOpen 3 "{"  , TOpen 3 "}"  )
+typeParen 4 = ( TOpen 4 "<|" , TOpen 4 "|>" )
+typeParen 5 = ( TOpen 5 "{|" , TOpen 5 "|}" )
+typeParen _ = ( TOpen 0 "?"  , TOpen 0 "?"  )
 
 parenType :: ParenType Token
 parenType = parenTable
