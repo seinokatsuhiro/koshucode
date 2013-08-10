@@ -32,10 +32,20 @@ affirm C reldee
         /length  ( length ('abc) )
 
 affirm D reldee
-  | add /list    ( [ 1 : 2 ] ++ [ 2 : 3 : 4 ] )
-        /set     ( { 1 : 2 } ++ { 2 : 3 : 4 } )
+  | add /list-a  [ 1 : 2 ]
+        /list-b  [ 2 : 3 : 4 ]
+        /set-a   { 1 : 2 }
+        /set-b   { 2 : 3 : 4 }
+  | add /list-union      ( /list-a ++ /list-b )
+        /set-union       ( /set-a  ++ /set-b )
+        /list-intersect  ( /list-a intersect /list-b )
+        /set-intersect   ( /set-a  intersect /set-b )
+        /list-minus      ( /list-a  minus /list-b )
+        /set-minus       ( /set-a   minus /set-b )
+  | cut /list-a /list-b
+        /set-a  /set-b
 
-affirm E reldee
+affirm F reldee
   | add /a ('aa)
         /b ('bb)
         /c ('cc)
