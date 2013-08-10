@@ -22,9 +22,9 @@ import Koshucode.Baala.Core.Content.Operator
 {-| Construct content expression. -}
 formCox
     :: (CContent c)
-    => FindCop c       -- ^ Collection of operators
-    -> B.TokenTree     -- ^ Input token tree
-    -> B.AbOr (Cox c)  -- ^ Result content expression
+    => FindCop c      -- ^ Collection of operators
+    -> B.TokenTree    -- ^ Input token tree
+    -> B.Ab (Cox c)   -- ^ Result content expression
 formCox cops = form where
     form x@(B.TreeL tok) = case tok of
         B.TWord _ _ _  ->  fmap CoxLit $ litContent x
@@ -43,7 +43,7 @@ formCox cops = form where
     call (CopLit _ f) = fmap CoxLit . f
     call op'          = fmap (CoxApp op') . mapM form
 
-type PosCox c = B.Relhead -> B.AbOr (Cox c)
+type PosCox c = B.Relhead -> B.Ab (Cox c)
 
 {-| Put term positions for actural heading. -}
 posCox :: Cox c -> PosCox c
@@ -57,15 +57,15 @@ posCox cox h = pos cox where
 
 runCoxH
   :: (CRel c, CList c)
-  => B.Relhead     -- ^ Heading of relation
-  -> [c]           -- ^ Tuple in body of relation
-  -> (PosCox c)    -- ^ Content expression
-  -> B.AbOr c      -- ^ Calculated literal content
+  => B.Relhead    -- ^ Heading of relation
+  -> [c]          -- ^ Tuple in body of relation
+  -> (PosCox c)   -- ^ Content expression
+  -> B.Ab c       -- ^ Calculated literal content
 runCoxH h lits cox =
     runCox lits =<< cox h
 
 {-| Calculate content expression. -}
-runCox :: (CList c, CRel c) => [c] -> Cox c -> B.AbOr c
+runCox :: (CList c, CRel c) => [c] -> Cox c -> B.Ab c
 runCox arg cox = run cox where
     run (CoxLit c)      =   Right c
     run (CoxTerm _ [p]) =   Right $ arg !! p

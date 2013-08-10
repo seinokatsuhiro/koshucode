@@ -45,9 +45,9 @@ instance Show (Cop c) where
     show (CopEager n _) = "(CopEager " ++ show n ++ " _)"
     show (CopLazy  n _) = "(CopLazy "  ++ show n ++ " _)"
 
-type CopLitF   c = [B.TokenTree] -> B.AbOr c
-type CopLazyF  c = [Cox c]       -> B.AbOr c
-type CopEagerF c = [c]           -> B.AbOr c
+type CopLitF   c = [B.TokenTree] -> B.Ab c
+type CopLazyF  c = [Cox c]       -> B.Ab c
+type CopEagerF c = [c]           -> B.Ab c
 
 {-| Type for finding term content operator. -}
 type FindCop c = String -> Maybe (Cop c)

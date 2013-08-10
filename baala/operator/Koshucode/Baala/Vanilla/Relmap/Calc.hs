@@ -33,7 +33,7 @@ relmapAdd use cs = C.relmapCalc use "add" sub where
     sub _ r1 = relAdd cs r1
 
 -- todo: shared term
-relAdd :: [B.Named (C.PosCox VContent)] -> B.Rel VContent -> B.AbOr (B.Rel VContent)
+relAdd :: [B.Named (C.PosCox VContent)] -> B.Rel VContent -> B.Ab (B.Rel VContent)
 relAdd cs (B.Rel h1 b1) =
     do let h2 = B.headFrom $ map fst cs
            h3 = mappend h2 h1

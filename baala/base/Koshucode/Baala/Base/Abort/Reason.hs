@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Base.Abort.Reason
 ( -- * Datatype
-  AbOr,
+  Ab,
   AbMap,
   AbMap2,
   Abort,
@@ -28,12 +28,12 @@ type AbortTokens b = Either (AbortReason, [Token]) b
 
 {-| Either of (1) right result, or (2) abort reason
     (without source code information). -}
-type AbOr b = Either AbortReason b
+type Ab b = Either AbortReason b
 
 {-| Abortable mapping. -}
-type AbMap b = b -> AbOr b
+type AbMap b = b -> Ab b
 
-type AbMap2 b a = b -> AbOr a
+type AbMap2 b a = b -> Ab a
 
 {-| Abort reason and source information. -}
 type Abort = AbortType AbortReason
@@ -47,9 +47,9 @@ type AbortOr b = AbortOrType AbortReason b
 
 {-| Lookup association list.
     This function may abort on AbortLookup. -}
-(<!!>) :: [Named a] -> String -> AbortOr a
+(<!!>) :: [Named a] -> String -> AbortTokens a
 (<!!>) assoc key = loop assoc where
-    loop [] = Left (AbortLookup key, [], [])
+    loop [] = Left (AbortLookup key, [])
     loop ((k,v) : kvs) | k == key  = Right v
                        | otherwise = loop kvs
 

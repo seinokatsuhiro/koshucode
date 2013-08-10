@@ -51,7 +51,7 @@ nonNullFilter = filter (not . null)
 nonNilFilter :: (CNil c) => B.Map [c]
 nonNilFilter = filter (not . isNil)
 
-need :: PrimContent c => (c -> Bool) -> (c -> b) -> c -> B.AbOr b
+need :: PrimContent c => (c -> Bool) -> (c -> b) -> c -> B.Ab b
 need is get x
     | is x = Right $ get x
     | otherwise = Left $ B.AbortUnmatchType (typename x)
@@ -68,7 +68,7 @@ class (PrimContent c) => CBool c where
     {-| Get Boolean value from content @c@. -}
     getBool    ::       c -> Bool
     {-| Get Boolean value from content @c@ if @c@ is @CBool@. -}
-    needBool   ::       c -> B.AbOr Bool
+    needBool   ::       c -> B.Ab Bool
     needBool = need isBool getBool
 
 class (PrimContent c) => CText c where
@@ -76,7 +76,7 @@ class (PrimContent c) => CText c where
     getText    ::       c -> String
     putText    ::  String -> c
 
-    needText   ::       c -> B.AbOr String
+    needText   ::       c -> B.Ab String
     needText = need isText getText
 
 class (PrimContent c) => CList c where
@@ -84,7 +84,7 @@ class (PrimContent c) => CList c where
     getList    ::       c -> [c]
     putList    ::     [c] -> c
 
-    needList   ::       c -> B.AbOr [c]
+    needList   ::       c -> B.Ab [c]
     needList = need isList getList
 
 
@@ -101,7 +101,7 @@ class (PrimContent c) => CDec c where
     getDec     ::           c -> Decimal
     putDec     ::     Decimal -> c
 
-    needDec     ::          c -> B.AbOr Decimal
+    needDec     ::          c -> B.Ab Decimal
     needDec = need isDec getDec
 
 putDecFromInt :: (CDec c) => Int -> c
@@ -112,7 +112,7 @@ class (PrimContent c) => CSet c where
     getSet      ::          c -> [c]
     putSet      ::        [c] -> c
 
-    needSet     ::          c -> B.AbOr [c]
+    needSet     ::          c -> B.Ab [c]
     needSet = need isSet getSet
 
 class (PrimContent c) => CTermset c where
@@ -120,7 +120,7 @@ class (PrimContent c) => CTermset c where
     getTermset  ::           c -> [B.Named c]
     putTermset  :: [B.Named c] -> c
 
-    needTermset ::           c -> B.AbOr [B.Named c]
+    needTermset ::           c -> B.Ab [B.Named c]
     needTermset = need isTermset getTermset
 
 class (PrimContent c) => CRel c where
@@ -128,6 +128,6 @@ class (PrimContent c) => CRel c where
     getRel      ::           c -> B.Rel c
     putRel      ::     B.Rel c -> c
 
-    needRel     ::           c -> B.AbOr (B.Rel c)
+    needRel     ::           c -> B.Ab (B.Rel c)
     needRel = need isRel getRel
 

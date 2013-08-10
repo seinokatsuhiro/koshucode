@@ -53,7 +53,7 @@ type RopParser'
 
 {-| Constructor of relational operator 'Relmap'.
     'Relmap' is constructed from 'HalfRelmap' and subrelmaps in it. -}
-type RopCons c = RopUse c -> B.AbortOr (Relmap c)
+type RopCons c = RopUse c -> B.AbortTokens (Relmap c)
 
 {-| Use of operator -}
 data RopUse c = RopUse {

@@ -179,9 +179,9 @@ clauseHalf half = map f where
 {-| Second step of constructing 'Section'. -}
 consSection
     :: (CContent c)
-    => RelmapFullCons c    -- ^ Relmap full constructor
-    -> String              -- ^ Resource name
-    -> [Clause]            -- ^ Output of 'consClause'
+    => RelmapFullCons c      -- ^ Relmap full constructor
+    -> String                -- ^ Resource name
+    -> [Clause]              -- ^ Output of 'consClause'
     -> B.AbortOr (Section c) -- ^ Result section
 consSection whole res xs =
     do _        <-  mapMFor unk isCUnknown
@@ -220,13 +220,20 @@ consSection whole res xs =
             Left  a -> Left (a, [], clauseLines src)
       jud _ = B.bug
 
-      rel (CRelmap _ n r) = Right . (n,) =<< whole r
+      rel (CRelmap src n r) =
+          case whole r of
+            Right r'     -> Right (n, r')
+            Left (a, ts) -> Left (a, ts, clauseLines src)
       rel _ = B.bug
 
-      ass (CAssert _ q p r) = Right . Assert q p =<< whole r
+      ass (CAssert src q p r) =
+          case whole r of
+            Right r'     -> Right $ Assert q p r'
+            Left (a, ts) -> Left (a, ts, clauseLines src)
       ass _ = B.bug
 
-      unk (CUnknown src) = Left (B.AbortUnknownClause, [], clauseLines src)
+      unk (CUnknown src) = Left (B.AbortUnknownClause,
+                                 [], clauseLines src)
       unk _ = B.bug
 
 

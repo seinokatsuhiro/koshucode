@@ -49,9 +49,9 @@ relmapMeet use m = C.relmapConfl use "meet" sub [m] where
 
 {-| Meet two relations. -}
 relMeet :: (Ord c)
-    => B.Rel c           -- ^ Input relation /R1/
-    -> B.Rel c           -- ^ Input relation /R2/
-    -> B.AbOr (B.Rel c)  -- ^ Meet of /R1/ and /R2/
+    => B.Rel c         -- ^ Input relation /R1/
+    -> B.Rel c         -- ^ Input relation /R2/
+    -> B.Ab (B.Rel c)  -- ^ Meet of /R1/ and /R2/
 relMeet (B.Rel h1 b1) (B.Rel h2 b2) = Right $ B.Rel h3 b3 where
     share1, share2 :: [B.TermPos]
     share1    =  h1 `B.posOf` shared
@@ -93,9 +93,9 @@ relmapJoin use m = C.relmapConfl use "join" sub [m] where
 
 {-| Join two relations. -}
 relJoin :: (Ord c)
-    => B.Rel c           -- ^ Input relation /R1/
-    -> B.Rel c           -- ^ Input relation /R2/
-    -> B.AbOr (B.Rel c)  -- ^ Join of /R1/ and /R2/
+    => B.Rel c         -- ^ Input relation /R1/
+    -> B.Rel c         -- ^ Input relation /R2/
+    -> B.Ab (B.Rel c)  -- ^ Join of /R1/ and /R2/
 relJoin (B.Rel h1 b1) (B.Rel h2 b2) = Right $ B.Rel h3 b3 where
     share1, share2 :: [B.TermPos]
     share1  =  h1 `B.posOf` shared

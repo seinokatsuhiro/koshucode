@@ -31,12 +31,12 @@ import Koshucode.Baala.Vanilla.Type
 
 -}
 
-litText :: [B.TokenTree] -> B.AbOr VContent
+litText :: [B.TokenTree] -> B.Ab VContent
 litText xs =
     do ss <- mapM litT xs
        Right . C.putText $ concat ss
 
-litT :: B.TokenTree -> B.AbOr String
+litT :: B.TokenTree -> B.Ab String
 litT (B.TreeL (B.TWord _ _ w)) = Right w
 litT x = Left $ B.AbortNotText (show x)
 

@@ -47,9 +47,9 @@ data Relmap c
 
 {-| Function of relmap. -}
 type RelmapSub c
-    = [B.Rel c]          -- ^ Relations in operand
-    -> B.Rel c           -- ^ Main input relation
-    -> B.AbOr (B.Rel c)  -- ^ Output relation
+    = [B.Rel c]        -- ^ Relations in operand
+    -> B.Rel c         -- ^ Main input relation
+    -> B.Ab (B.Rel c)  -- ^ Output relation
 
 
 

@@ -102,18 +102,18 @@ consHalfRelmap bundle src = cons where
 {-| Second step of constructing relmap,
     make 'Relmap' from contents of 'HalfRelmap'. -}
 type RelmapFullCons c
-    = HalfRelmap            -- ^ Half relmap from 'RelmapHalfCons'
-    -> B.AbortOr (Relmap c) -- ^ Result relmap
+    = HalfRelmap                -- ^ Half relmap from 'RelmapHalfCons'
+    -> B.AbortTokens (Relmap c) -- ^ Result relmap
 
 {-| Construct (full) relmap. -}
 fullBundle :: [B.Named (RopCons c)] -> RelmapFullCons c
 fullBundle fulls = full where
-    full h@(HalfRelmap u src op _ hs) =
+    full h@(HalfRelmap _ _ op _ hs) =
         case lookup op fulls of
           Nothing   -> Right $ RelmapName h op
           Just cons -> do ms <- mapM full hs
-                          B.addAbort (B.AbortUsage op u, [], src)
-                             $ cons $ RopUse h ms
+                          --B.addAbort (B.AbortUsage op u, [], src)
+                          cons $ RopUse h ms
 
 
 

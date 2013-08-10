@@ -30,14 +30,14 @@ import qualified Koshucode.Baala.Core as C
 import Koshucode.Baala.Builtin.Term
 
 {-| Abortable 'head' -}
-getHead :: [a] -> B.AbortOr a
+getHead :: [a] -> B.AbortTokens a
 getHead (x:_) = Right x
-getHead _     = Left (B.AbortLookup "head", [], [])
+getHead _     = Left (B.AbortLookup "head", [])
 
 type OpGet c a
     = C.RopUse c     -- ^ Operator use
     -> String        -- ^ Lookup key
-    -> B.AbortOr a   -- ^ Suboperand
+    -> B.AbortTokens a   -- ^ Suboperand
 
 getTree :: OpGet c B.TokenTree
 getTree use n = do
@@ -55,9 +55,7 @@ getTermTrees :: OpGet c [B.Named B.TokenTree]
 getTermTrees use n = do
   let opd = C.halfOperand $ C.ropHalf use
   xs <- opd B.<!!> n
-  case termTreePairs xs of
-    Right x      -> Right x
-    Left (a, ts) -> Left (a, ts, [])
+  termTreePairs xs
 
 {-| Get word from named operand.
 
@@ -72,7 +70,7 @@ getWord use n = do
   trees <- opd B.<!!> n
   case trees of
     [B.TreeL (B.TWord _ _ s)] -> Right s
-    _ -> Left (B.AbortLookup n, B.treesTokens trees, [])
+    _ -> Left (B.AbortLookup n, B.treesTokens trees)
 
 getInt :: OpGet c Int
 getInt use n = do
@@ -80,7 +78,7 @@ getInt use n = do
   trees <- opd B.<!!> n
   case trees of
     [B.TreeL (B.TWord _ _ i)] -> Right (read i :: Int)
-    _ -> Left (B.AbortLookup n, B.treesTokens trees, [])
+    _ -> Left (B.AbortLookup n, B.treesTokens trees)
 
 {-| Get a term name from named operand. -}
 getTerm :: OpGet c String
@@ -88,34 +86,27 @@ getTerm use n = do
   ts <- getTerms use n
   case ts of
     [t] -> Right t
-    _   -> Left (B.AbortLookup n, [], [])
+    _   -> Left (B.AbortLookup n, [])
 
 {-| Get list of term names from named operand. -}
 getTerms :: OpGet c [String]
 getTerms use n = do
   let opd  = C.halfOperand $ C.ropHalf use
   trees <- opd B.<!!> n
-  case termnames trees of
-    Right x      -> Right x
-    Left (a, xs) -> Left (a, xs, [])
+  termnames trees
 
 {-| Get list of term-name pairs from named operand. -}
-getTermPairs :: OpGet c [B.Named String]
+getTermPairs :: OpGet c [(String, String)]
 getTermPairs use n = do
   let opd = C.halfOperand $ C.ropHalf use
   trees <- opd B.<!!> n
-  case termnamePairs trees of
-    Right x      -> Right x
-    Left (a, xs) -> Left (a, xs, [])
-  
+  termnamePairs trees
 
-getTermPair :: OpGet c (B.Named String)
+getTermPair :: OpGet c (String, String)
 getTermPair use n = do
   let opd = C.halfOperand $ C.ropHalf use
   trees <- opd B.<!!> n
-  case termname2 trees of
-    Right x      -> Right x
-    Left (a, xs) -> Left (a, xs, [])
+  termname2 trees
 
 {-| Get a relmap from operator use.
 
@@ -124,10 +115,10 @@ getTermPair use n = do
     >   m <- getRelmap use
     >   Right $ relmapMeet use m
     -}
-getRelmap :: C.RopUse c -> B.AbortOr (C.Relmap c)
+getRelmap :: C.RopUse c -> B.AbortTokens (C.Relmap c)
 getRelmap use = getHead $ C.ropSubmap use
 
 {-| Get relmaps from operator use. -}
-getRelmaps :: C.RopUse c -> B.AbortOr [C.Relmap c]
+getRelmaps :: C.RopUse c -> B.AbortTokens [C.Relmap c]
 getRelmaps use = Right $ C.ropSubmap use
 

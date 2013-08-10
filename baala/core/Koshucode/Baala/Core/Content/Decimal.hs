@@ -50,7 +50,7 @@ decimalDenom :: Decimal -> Int
 decimalDenom = snd . decimalRatio
 
 type DecimalBinary =
-    Decimal -> Decimal -> B.AbOr Decimal
+    Decimal -> Decimal -> B.Ab Decimal
 
 intDecimal :: Int -> Decimal
 intDecimal n = Decimal (n, 1) 0 False
@@ -204,6 +204,6 @@ decimalRevratio (Decimal (n, den) p a) = Decimal (den, n) p a
 decimalAbs :: B.Map Decimal
 decimalAbs (Decimal (n, den) p a) = Decimal (abs n, den) p a
 
-decimalSum :: [Decimal] -> B.AbOr Decimal
+decimalSum :: [Decimal] -> B.Ab Decimal
 decimalSum = foldM decimalAdd $ intDecimal 0
 

@@ -28,7 +28,7 @@ eg :: IO () -> IO ()
 eg f = do f
           putStrLn ""
 
-lit :: String -> AbOr [VContent]
+lit :: String -> Ab [VContent]
 lit = mapM litContent . tokenTrees . tokens
 
 

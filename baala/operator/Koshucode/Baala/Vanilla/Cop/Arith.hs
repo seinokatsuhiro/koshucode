@@ -34,7 +34,7 @@ copsArith =
     , C.namedEager  "abs"  copAbs
     ]
 
-copDec :: VContent -> B.AbOr C.Decimal
+copDec :: VContent -> B.Ab C.Decimal
 copDec (VDec  n) = Right n
 copDec (VText n) = C.litDecimal n
 copDec x = Left $ B.AbortNotNumber (show x)
@@ -69,7 +69,7 @@ copAbs [VList cs] = Right . VList =<< mapM copAbs1 cs
 copAbs [c] = copAbs1 c
 copAbs _ = Left B.AbortUnmatchArity
 
-copAbs1 :: VContent -> B.AbOr VContent
+copAbs1 :: VContent -> B.Ab VContent
 copAbs1 (VDec n) = Right . VDec $ C.decimalAbs n
 copAbs1 _ = Left B.AbortUnmatchArity
 
