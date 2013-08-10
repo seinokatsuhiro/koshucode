@@ -55,7 +55,9 @@ getTermTrees :: OpGet c [B.Named B.TokenTree]
 getTermTrees use n = do
   let opd = C.halfOperand $ C.ropHalf use
   xs <- opd B.<!!> n
-  termTreePairs xs
+  case termTreePairs xs of
+    Right x      -> Right x
+    Left (a, ts) -> Left (a, ts, [])
 
 {-| Get word from named operand.
 
@@ -70,7 +72,7 @@ getWord use n = do
   trees <- opd B.<!!> n
   case trees of
     [B.TreeL (B.TWord _ _ s)] -> Right s
-    _ -> Left (B.AbortLookup n, [], B.treesTokens trees)
+    _ -> Left (B.AbortLookup n, B.treesTokens trees, [])
 
 getInt :: OpGet c Int
 getInt use n = do
@@ -78,7 +80,7 @@ getInt use n = do
   trees <- opd B.<!!> n
   case trees of
     [B.TreeL (B.TWord _ _ i)] -> Right (read i :: Int)
-    _ -> Left (B.AbortLookup n, [], B.treesTokens trees)
+    _ -> Left (B.AbortLookup n, B.treesTokens trees, [])
 
 {-| Get a term name from named operand. -}
 getTerm :: OpGet c String
@@ -91,25 +93,29 @@ getTerm use n = do
 {-| Get list of term names from named operand. -}
 getTerms :: OpGet c [String]
 getTerms use n = do
-  let half = C.ropHalf use
-      opd  = C.halfOperand half
+  let opd  = C.halfOperand $ C.ropHalf use
   trees <- opd B.<!!> n
   case termnames trees of
-    Right x         -> Right x
-    Left (a, _, xs) -> Left (a, C.halfLines half, xs)
+    Right x      -> Right x
+    Left (a, xs) -> Left (a, xs, [])
 
 {-| Get list of term-name pairs from named operand. -}
 getTermPairs :: OpGet c [B.Named String]
 getTermPairs use n = do
   let opd = C.halfOperand $ C.ropHalf use
   trees <- opd B.<!!> n
-  termnamePairs trees
+  case termnamePairs trees of
+    Right x      -> Right x
+    Left (a, xs) -> Left (a, xs, [])
+  
 
 getTermPair :: OpGet c (B.Named String)
 getTermPair use n = do
   let opd = C.halfOperand $ C.ropHalf use
   trees <- opd B.<!!> n
-  termname2 trees
+  case termname2 trees of
+    Right x      -> Right x
+    Left (a, xs) -> Left (a, xs, [])
 
 {-| Get a relmap from operator use.
 

@@ -8,6 +8,7 @@ module Koshucode.Baala.Base.Abort.Reason
   AbMap,
   AbMap2,
   Abort,
+  AbortTokens,
   AbortOr,
   (<!!>),
 
@@ -16,11 +17,14 @@ module Koshucode.Baala.Base.Abort.Reason
 ) where
 
 import Koshucode.Baala.Base.Prelude
+import Koshucode.Baala.Base.Syntax
 import Koshucode.Baala.Base.Abort.Utility
 
 
 
 -- ---------------------- abort type
+
+type AbortTokens b = Either (AbortReason, [Token]) b
 
 {-| Either of (1) right result, or (2) abort reason
     (without source code information). -}

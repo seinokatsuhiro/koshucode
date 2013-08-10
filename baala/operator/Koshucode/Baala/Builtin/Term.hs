@@ -16,35 +16,35 @@ import qualified Koshucode.Baala.Base as B
 -- ----------------------  Term
 
 {-| Extract a term name. -}
-termname :: B.TokenTree -> B.AbortOr String
+termname :: B.TokenTree -> B.AbortTokens String
 termname (B.TreeL (B.TTerm _ [n])) = Right n
 termname tree = Left (B.AbortMissingTermname "",
-                      [], B.treeTokens tree)
+                      B.treeTokens tree)
 
-termname2 :: [B.TokenTree] -> B.AbortOr (String, String)
+termname2 :: [B.TokenTree] -> B.AbortTokens (String, String)
 termname2 [B.TreeL (B.TTerm _ [n1]), B.TreeL (B.TTerm _ [n2])] =
     Right (n1, n2)
 termname2 trees = Left (B.AbortMissingTermname "",
-                        [], B.treesTokens trees)
+                        B.treesTokens trees)
 
 {-| Extract a list of term names.
  
     >>> termnames . B.tokenTrees . B.tokens $ "/a /b /c"
     Right ["/a", "/b", "/c"]
 -}
-termnames :: [B.TokenTree] -> B.AbortOr [String]
+termnames :: [B.TokenTree] -> B.AbortTokens [String]
 termnames trees =
     case mapM termname trees of
       Right ns -> Right ns
       Left  _  -> Left (B.AbortMissingTermname "",
-                        [], B.treesTokens trees)
+                        B.treesTokens trees)
 
 {-| Extract a list of name-and-name pairs.
  
     >>> termnamePairs . tokenTrees . tokens $ "/a /x /b /y"
     Right [("/a", "/x"), ("/b", "/y")]
 -}
-termnamePairs :: [B.TokenTree] -> B.AbortOr [(String, String)]
+termnamePairs :: [B.TokenTree] -> B.AbortTokens [(String, String)]
 termnamePairs = loop where
     loop (a : b : xs) =
         do a'  <- termname a
@@ -53,7 +53,7 @@ termnamePairs = loop where
            Right $ (a', b') : xs'
     loop [] = Right []
     loop xs = Left (B.AbortMissingTermname "",
-                    [], B.treesTokens xs)
+                    B.treesTokens xs)
 
 {-| Extract a list of name-and-tree pairs.
  
@@ -61,7 +61,7 @@ termnamePairs = loop where
     Right [("/a", TreeL (TWord 3 1 "A3")),
            ("/b", TreeL (TWord 7 0 "10"))]
 -}
-termTreePairs :: [B.TokenTree] -> B.AbortOr [B.Named B.TokenTree]
+termTreePairs :: [B.TokenTree] -> B.AbortTokens [B.Named B.TokenTree]
 termTreePairs = loop where
     loop (a : b : xs) =
         do a'  <- termname a
@@ -69,5 +69,5 @@ termTreePairs = loop where
            Right $ (a', b) : xs'
     loop [] = Right []
     loop xs = Left (B.AbortMissingTermname "",
-                    [], B.treesTokens xs)
+                    B.treesTokens xs)
 

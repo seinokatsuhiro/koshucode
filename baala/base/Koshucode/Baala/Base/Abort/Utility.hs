@@ -33,7 +33,7 @@ class AbortReasonClass a where
     abortSub _   = Doc.empty
 
 {-| Abort reason and source code information. -}
-type AbortType a = (a, [CodeLine], [Token])
+type AbortType a = (a, [Token], [CodeLine])
 
 {-| Either of (1) right result or (2) abort information. -}
 type AbortOrType a b = Either (AbortType a) b
@@ -63,7 +63,7 @@ putMessage = putStr . vline . renderStyle sty . messageDoc where
     vline    = unlines . map ("**  " ++) . lines
 
 messageDoc :: (AbortReasonClass a) => AbortType a -> Doc
-messageDoc (a, cline, toks) =
+messageDoc (a, toks, cline) =
     docv [ text ""
          , text "処理を中断しました"
          , text ""

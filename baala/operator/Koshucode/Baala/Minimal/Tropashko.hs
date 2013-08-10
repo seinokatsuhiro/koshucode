@@ -102,7 +102,7 @@ relJoin (B.Rel h1 b1) (B.Rel h2 b2) = Right $ B.Rel h3 b3 where
     share2  =  h2 `B.posOf` shared
     shared  =  B.termsInner $ h1 `B.posFrom` h2
 
-    pick1,  pick2 :: B.Map [c]
+    pick1, pick2 :: B.Map [c]
     pick1   =  B.csPick share1
     pick2   =  B.csPick share2
 
