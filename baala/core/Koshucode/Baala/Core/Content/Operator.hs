@@ -16,7 +16,7 @@ module Koshucode.Baala.Core.Content.Operator
 
 ) where
 
-import Koshucode.Baala.Base
+import qualified Koshucode.Baala.Base as B
 
 {-| Content expressions. -}
 data Cox c
@@ -45,9 +45,9 @@ instance Show (Cop c) where
     show (CopEager n _) = "(CopEager " ++ show n ++ " _)"
     show (CopLazy  n _) = "(CopLazy "  ++ show n ++ " _)"
 
-type CopLitF   c = [TokenTree] -> AbOr c
-type CopLazyF  c = [Cox c]     -> AbOr c
-type CopEagerF c = [c]         -> AbOr c
+type CopLitF   c = [B.TokenTree] -> B.AbOr c
+type CopLazyF  c = [Cox c]       -> B.AbOr c
+type CopEagerF c = [c]           -> B.AbOr c
 
 {-| Type for finding term content operator. -}
 type FindCop c = String -> Maybe (Cop c)

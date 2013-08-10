@@ -15,7 +15,7 @@ module Koshucode.Baala.Builtin
 ) where
 
 import Data.Monoid
-import Koshucode.Baala.Core
+import qualified Koshucode.Baala.Core as C
 import Koshucode.Baala.Builtin.Get
 import Koshucode.Baala.Builtin.Term
 import Koshucode.Baala.Builtin.Pattern
@@ -32,9 +32,9 @@ instance OpPattern BuiltinOperand where
 
     opUsage    LikeId     = [""]
 
-builtinRops :: (Ord c) => [Rop c]
+builtinRops :: (Ord c) => [C.Rop c]
 builtinRops = operators "builtin" [ ("|", LikeId, consConcat) ]
 
-consConcat :: RopCons c
-consConcat = Right . mconcat . ropSubmap
+consConcat :: C.RopCons c
+consConcat = Right . mconcat . C.ropSubmap
 

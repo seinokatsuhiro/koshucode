@@ -19,8 +19,8 @@ module Koshucode.Baala.Vanilla.Relmap.Unary
 ) where
 
 import qualified Data.List as List
-import Koshucode.Baala.Base
-import Koshucode.Baala.Core
+import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.Core as C
 import Koshucode.Baala.Builtin
 import Koshucode.Baala.Vanilla.Type
 import Koshucode.Baala.Vanilla.Order
@@ -31,145 +31,145 @@ import qualified Koshucode.Baala.Minimal as Mini
 
 -- ----------------------  size
 
-relopSize :: RopCons VContent
+relopSize :: C.RopCons VContent
 relopSize use = do
   n <- getTerm use "-term"
   Right $ relmapSize use n
 
-relmapSize :: (CDec c) => RopUse c -> String -> Relmap c
-relmapSize use n = relmapCalc use "size" sub where
+relmapSize :: (C.CDec c) => C.RopUse c -> String -> C.Relmap c
+relmapSize use n = C.relmapCalc use "size" sub where
     sub _ = relSize n
 
 {-| Change terms names -}
 relSize
-    :: (CDec c)
-    => String          -- ^ List of term name (/to/, /from/)
-    -> AbMap (Rel c)   -- ^ Relation to relation
-relSize n (Rel _ b1) = Right $ Rel h2 b2 where
-    h2 = headFrom [n]
-    b2 = [[putDecFromInt $ length b1]]
+    :: (C.CDec c)
+    => String              -- ^ List of term name (/to/, /from/)
+    -> B.AbMap (B.Rel c)   -- ^ Relation to relation
+relSize n (B.Rel _ b1) = Right $ B.Rel h2 b2 where
+    h2 = B.headFrom [n]
+    b2 = [[C.putDecFromInt $ length b1]]
 
 
 
 -- ----------------------  conf
 
-relopConf :: RopCons VContent
+relopConf :: C.RopCons VContent
 relopConf use = do
   n <- getTerm use "-term"
   Right $ relmapConf use n
 
-relmapConf :: (CText c) => RopUse c -> String -> Relmap c
-relmapConf use n = relmapCalc use "conf" sub where
+relmapConf :: (C.CText c) => C.RopUse c -> String -> C.Relmap c
+relmapConf use n = C.relmapCalc use "conf" sub where
     sub _ = relConf n
 
 {-| Change terms names -}
 relConf
-    :: (CText c)
-    => String          -- ^ Term name
-    -> AbMap (Rel c)   -- ^ Relation to relation
-relConf n (Rel h1 _) = Right $ Rel h2 b2 where
-    h2 = headFrom [n]
-    b2 = [[putText $ show s]]
-    s  = show $ docParen $ doc h1
+    :: (C.CText c)
+    => String              -- ^ Term name
+    -> B.AbMap (B.Rel c)   -- ^ Relation to relation
+relConf n (B.Rel h1 _) = Right $ B.Rel h2 b2 where
+    h2 = B.headFrom [n]
+    b2 = [[C.putText $ show s]]
+    s  = show $ B.docParen $ B.doc h1
 
 
 
 -- ----------------------  enclose
 
-relopEnclose :: RopCons VContent
+relopEnclose :: C.RopCons VContent
 relopEnclose use = do
   n <- getTerm use "-term"
   Right $ relmapEnclose use n
 
-relmapEnclose :: (CRel c) => RopUse c -> String -> Relmap c
-relmapEnclose use n = relmapCalc use "enclose" sub where
+relmapEnclose :: (C.CRel c) => C.RopUse c -> String -> C.Relmap c
+relmapEnclose use n = C.relmapCalc use "enclose" sub where
     sub _ = relEnclose n
 
 {-| Enclose the current relation in a term. -}
 relEnclose
-    :: (CRel c)
-    => String          -- ^ Term name
-    -> AbMap (Rel c)   -- ^ Relation to relation
-relEnclose n r@(Rel h1 _) = Right $ Rel h2 b2 where
-    h2 = Relhead [Nest n $ headTerms h1]
-    b2 = [[putRel r]]
+    :: (C.CRel c)
+    => String              -- ^ Term name
+    -> B.AbMap (B.Rel c)   -- ^ Relation to relation
+relEnclose n r@(B.Rel h1 _) = Right $ B.Rel h2 b2 where
+    h2 = B.Relhead [B.Nest n $ B.headTerms h1]
+    b2 = [[C.putRel r]]
 
 
 
 -- ----------------------  rank
 
-relopRank :: RopCons VContent
+relopRank :: C.RopCons VContent
 relopRank use =
     do n  <- getTerm  use "-add"
        ns <- getTerms use "-order"
        Right $ relmapRank use n ns
 
-relmapRank :: (CDec c, Ord c) => RopUse c -> String -> [String] -> Relmap c
-relmapRank use n ns = relmapCalc use "rank" sub where
+relmapRank :: (C.CDec c, Ord c) => C.RopUse c -> String -> [String] -> C.Relmap c
+relmapRank use n ns = C.relmapCalc use "rank" sub where
     sub _ = relRank n ns
 
-relRank :: (CDec c, Ord c) => String -> [String] -> AbMap (Rel c)
-relRank n ns (Rel h1 b1) = Right $ Rel h2 b2 where
-    h2   = headFrom [n] `mappend` h1
-    b2   = zipWith (:) (map putDecFromInt [1..]) b1'
-    b1'  = sortByName ords (headNames h1) b1
+relRank :: (C.CDec c, Ord c) => String -> [String] -> B.AbMap (B.Rel c)
+relRank n ns (B.Rel h1 b1) = Right $ B.Rel h2 b2 where
+    h2   = B.headFrom [n] `mappend` h1
+    b2   = zipWith (:) (map C.putDecFromInt [1..]) b1'
+    b1'  = sortByName ords (B.headNames h1) b1
     ords = map Asc ns
 
 -- | Keep leading tuples.
-limit :: (Ord c) => RopUse c -> Int -> String -> Relmap c
-limit use c ns = relmapCalc use "limit" (limit2 c ns)
+limit :: (Ord c) => C.RopUse c -> Int -> String -> C.Relmap c
+limit use c ns = C.relmapCalc use "limit" (limit2 c ns)
 
-limit2 :: (Ord c) => Int -> String -> a -> AbMap (Rel c)
-limit2 c ns _ (Rel h1 b1) = Right $ Rel h1 b2 where
-    b2   = List.take c $ sortByName ords (headNames h1) b1
+limit2 :: (Ord c) => Int -> String -> a -> B.AbMap (B.Rel c)
+limit2 c ns _ (B.Rel h1 b1) = Right $ B.Rel h1 b2 where
+    b2   = List.take c $ sortByName ords (B.headNames h1) b1
     ords = orders ns
 
 
 
 -- ----------------------  typename
 
-relopTypename :: (CContent c) => RopCons c
+relopTypename :: (C.CContent c) => C.RopCons c
 relopTypename use = do
   (n, p) <- getTermPair use "-term"
   Right $ relmapTypename use n p
 
-relmapTypename :: (CContent c) => RopUse c -> String -> String -> Relmap c
-relmapTypename use n p = relmapCalc use "typename" sub where
+relmapTypename :: (C.CContent c) => C.RopUse c -> String -> String -> C.Relmap c
+relmapTypename use n p = C.relmapCalc use "typename" sub where
     sub _ = relTypename n p
 
 {-| Get typename. -}
 relTypename
-    :: (CContent c)
+    :: (C.CContent c)
     => String
     -> String
-    -> AbMap (Rel c)
-relTypename n p (Rel h1 b1) = Right $ Rel h2 b2 where
-    h2 = headFrom [n] `mappend` h1
+    -> B.AbMap (B.Rel c)
+relTypename n p (B.Rel h1 b1) = Right $ B.Rel h2 b2 where
+    h2 = B.headFrom [n] `mappend` h1
     b2 = map f b1
-    pos = h1 `posOf` [[p]]
-    f cs1 = let [c] = csPick pos cs1
-            in putText (typename c) : cs1
+    pos = h1 `B.posOf` [[p]]
+    f cs1 = let [c] = B.csPick pos cs1
+            in C.putText (C.typename c) : cs1
 
 
 
 -- ----------------------  range
 
-relopRange :: RopCons VContent
+relopRange :: C.RopCons VContent
 relopRange use = do
   term <- getTerm use "-term"
   low  <- getInt  use "-from"
   high <- getInt  use "-to"
   Right $ relmapRange use term low high
 
-relmapRange :: (CDec c) => RopUse c -> String -> Int -> Int -> Relmap c
-relmapRange use n low high = relmapCalc use "range" sub where
+relmapRange :: (C.CDec c) => C.RopUse c -> String -> Int -> Int -> C.Relmap c
+relmapRange use n low high = C.relmapCalc use "range" sub where
     sub _ r1 = relRange n low high r1
 
-relRange :: (CDec c) => String -> Int -> Int -> AbMap (Rel c)
-relRange n low high (Rel h1 b1) = Right $ Rel h2 b2 where
-    h2   = mappend (headFrom [n]) h1
+relRange :: (C.CDec c) => String -> Int -> Int -> B.AbMap (B.Rel c)
+relRange n low high (B.Rel h1 b1) = Right $ B.Rel h2 b2 where
+    h2   = mappend (B.headFrom [n]) h1
     b2   = concatMap g b1
-    ys   = map putDecFromInt [low .. high]
+    ys   = map C.putDecFromInt [low .. high]
     g xs = map (: xs) ys
 
 {-
@@ -195,11 +195,11 @@ divide2 ns2 (Rel h1 b1) = Rel h2 b2 where
 
 -- ----------------------  RDF
 
-relopRdf :: RopCons VContent
+relopRdf :: C.RopCons VContent
 relopRdf use = do
   sign  <- Kit.getWord  use "-sign"
   [s,o] <- Kit.getTerms use "-term"
-  Right $ relmapAlias use $
-        relmapSource use sign ["/s", "/o"] `mappend`
+  Right $ C.relmapAlias use $
+        C.relmapSource use sign ["/s", "/o"] `mappend`
         Mini.relmapRename use [(s,"/s"), (o,"/o")]
 

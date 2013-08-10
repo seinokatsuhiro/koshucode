@@ -5,8 +5,8 @@
 module Koshucode.Baala.Toolkit.Main.KoshuRdf
 ( koshuRdfMain
 
--- * koshu-rdf.hs
--- $koshu-rdf.hs
+  -- * koshu-rdf.hs
+  -- $koshu-rdf.hs
 ) where
 
 import qualified Data.List                as List
@@ -16,7 +16,7 @@ import qualified Data.Text.IO             as Text
 import qualified Text.RDF.RDF4H.XmlParser as RDF
 import System.Console.GetOpt
 
-import Koshucode.Baala.Base
+import qualified Koshucode.Baala.Base as B
 import Koshucode.Baala.Vanilla
 import Koshucode.Baala.Toolkit.Library.Exit
 import Koshucode.Baala.Toolkit.Library.RDF
@@ -128,8 +128,8 @@ readXmlRdf path = do
   let rdf = xmlParser txt
   return $ RDF.fromEither rdf
 
-writeJudges :: [Judge VContent] -> IO ()
-writeJudges js = print $ docv js
+writeJudges :: [B.Judge VContent] -> IO ()
+writeJudges js = print $ B.docv js
 
 
 

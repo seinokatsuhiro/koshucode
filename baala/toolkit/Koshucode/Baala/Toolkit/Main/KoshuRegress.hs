@@ -15,8 +15,8 @@ import System.IO
 import Data.Maybe (mapMaybe)
 import qualified System.Directory as Dir
 
-import Koshucode.Baala.Base
-import Koshucode.Baala.Core
+import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.Core as C
 import Koshucode.Baala.Vanilla
 
 import Koshucode.Baala.Toolkit.Library.Comment
@@ -91,14 +91,14 @@ reportDir  = "REGRESS/report/"
 -- ----------------------  Main
 
 {-| The main function for @koshu-regress@ command. -}
-koshuRegressMain :: (CContent v) => [Rop v] -> IO ()
+koshuRegressMain :: (C.CContent c) => [C.Rop c] -> IO ()
 koshuRegressMain relmaps =
-  let cons = relmapCons relmaps
-      root = makeEmptySection cons
+  let cons = C.relmapCons relmaps
+      root = C.makeEmptySection cons
   in koshuRegressMain' root =<< prelude
 
 koshuRegressMain'
-    :: (CContent v) => Section v -> (String, [String]) -> IO ()
+    :: (C.CContent c) => C.Section c -> (String, [String]) -> IO ()
 koshuRegressMain' root (_, argv) =
     case getOpt Permute koshuOptions argv of
       (opts, files, [])
@@ -114,10 +114,10 @@ koshuRegressMain' root (_, argv) =
                 sec = SectionSource root [] files
       (_, _, errs) -> putFailure $ concat errs ++ usage
 
-regLast :: (CContent v) => SectionSource v -> IO ()
+regLast :: (C.CContent c) => SectionSource c -> IO ()
 regLast sec = runCalcTo lastDir sec
 
-regLastReport :: (CContent v) => SectionSource v -> IO ()
+regLastReport :: (C.CContent c) => SectionSource c -> IO ()
 regLastReport sec =
     do regLast sec
        regReport sec
@@ -140,12 +140,12 @@ regClean =
 -- ----------------------  Reporting
 
 -- report for each cases.
-reportJudge :: [Named VContent] -> Judge VContent
-reportJudge = Judge True "KOSHU-REGRESS-REPORT"
+reportJudge :: [B.Named VContent] -> B.Judge VContent
+reportJudge = B.Judge True "KOSHU-REGRESS-REPORT"
 
 -- report for all cases.
-summaryJudge :: [Named VContent] -> Judge VContent
-summaryJudge = Judge True "KOSHU-REGRESS-SUMMARY"
+summaryJudge :: [B.Named VContent] -> B.Judge VContent
+summaryJudge = B.Judge True "KOSHU-REGRESS-SUMMARY"
 
 reportHead :: CommentDoc
 reportHead =
@@ -158,7 +158,7 @@ reportFoot msg = foot where
     foot = putStr $ unlines [ "" , comm , comm ++ msg , comm ]
     comm = "**  "
 
-regReport :: (CContent v) => SectionSource v -> IO ()
+regReport :: (C.CContent c) => SectionSource c -> IO ()
 regReport sec =
     do putStrLn emacsModeComment
        putStr . unlines $ texts reportHead
@@ -168,9 +168,9 @@ regReport sec =
          Left _     -> putStrLn "error"
          Right sec2 -> regReportBody sec2
 
-regReportBody :: (CContent v) => Section v -> IO ()
+regReportBody :: (C.CContent c) => C.Section c -> IO ()
 regReportBody sec =
-    do let js = sectionJudge sec
+    do let js = C.sectionJudge sec
            fs = mapMaybe outputFile js
        bs <- mapM reportFile fs
        let match   = filter id  bs
@@ -185,11 +185,11 @@ regReportBody sec =
          [] -> reportFoot $ "Matched"
          _  -> reportFoot $ "Please check report files in " ++ reportDir
 
-outputFile :: (CContent v) => Judge v -> Maybe String
+outputFile :: (C.CContent c) => B.Judge c -> Maybe String
 outputFile jud =
-    do (Judge _ _ xs) <- judgeOf "KOSHU-CALC" jud
+    do (B.Judge _ _ xs) <- judgeOf "KOSHU-CALC" jud
        output <- theContent "/output" xs
-       Just $ getText output
+       Just $ C.getText output
 
 reportFile :: String -> IO Bool
 reportFile file =
@@ -204,28 +204,28 @@ reportFile file =
 reportMatch :: String -> IO Bool
 reportMatch file =
     do putDoc $ reportJudge
-         [ ("/result" , putBool True)
-         , ("/output" , putText file) ]
+         [ ("/result" , C.putBool True)
+         , ("/output" , C.putText file) ]
        return True
 
 reportUnmatch
-    :: (Ord v, Pretty v) =>
-       String -> [Judge v] -> (Int, Int) -> IO Bool
+    :: (Ord c, B.Pretty c) =>
+       String -> [B.Judge c] -> (Int, Int) -> IO Bool
 reportUnmatch file js (add, del) =
     do putDoc $ reportJudge
-         [ ("/result" , putBool False)
-         , ("/output" , putText file) ]
+         [ ("/result" , C.putBool False)
+         , ("/output" , C.putText file) ]
        putStrLn $ "    **  " ++ reportCount add del
        let path = reportDir ++ file
        mkdir path
        writeJudgesToFile path js
        return False
 
-writeJudgesToFile :: (Ord v, Pretty v) => FilePath -> [Judge v] -> IO ()
+writeJudgesToFile :: (Ord c, B.Pretty c) => FilePath -> [B.Judge c] -> IO ()
 writeJudgesToFile path js =
     withFile path WriteMode writer where
     writer h = do hSetEncoding h utf8
-                  hPutJudges h js
+                  B.hPutJudges h js
 
 reportCount :: Int -> Int -> String
 reportCount = message where
@@ -244,21 +244,21 @@ reportCount = message where
 -- ----------------------  Utility
 
 {-| Length of list as an integer content. -}
-theLength :: (CDec c) => [a] -> c
-theLength = putDecFromInt . length
+theLength :: (C.CDec c) => [a] -> c
+theLength = C.putDecFromInt . length
 
-putDoc :: (Pretty p) => p -> IO ()
-putDoc = print . doc
+putDoc :: (B.Pretty p) => p -> IO ()
+putDoc = print . B.doc
 
-judgeOf :: String -> Judge v -> Maybe (Judge v)
-judgeOf pat1 j@(Judge _ pat2 _)
+judgeOf :: String -> B.Judge c -> Maybe (B.Judge c)
+judgeOf pat1 j@(B.Judge _ pat2 _)
         | pat1 == pat2  =  Just j
         | otherwise     =  Nothing
 
-countAffirmDeny :: [Judge v] -> (Int, Int)
+countAffirmDeny :: [B.Judge c] -> (Int, Int)
 countAffirmDeny js =
-    ( length $ filter isAffirmed js
-    , length $ filter isDenied js )
+    ( length $ filter B.isAffirmed js
+    , length $ filter B.isDenied js )
 
 
 

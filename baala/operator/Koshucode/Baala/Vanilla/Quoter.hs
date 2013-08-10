@@ -6,17 +6,17 @@
 module Koshucode.Baala.Vanilla.Quoter
 ( koshu
 ) where
-import Koshucode.Baala.Core
+import qualified Koshucode.Baala.Core as C
 import Koshucode.Baala.Vanilla.Relmap
 import Koshucode.Baala.Vanilla.Type
 
 -- | Quasiquoter for @[koshu| ... |]@.
-koshu :: QuasiQuoter
-koshu = koshuQuoter vanillaHalf [| vanillaFull |]
+koshu :: C.QuasiQuoter
+koshu = C.koshuQuoter vanillaHalf [| vanillaFull |]
 
 -- relmap constructors
-vanillaHalf :: RelmapHalfCons
-vanillaFull :: RelmapFullCons VContent
-(RelmapCons vanillaHalf vanillaFull)
-    = relmapCons vanillaRops
+vanillaHalf :: C.RelmapHalfCons
+vanillaFull :: C.RelmapFullCons VContent
+(C.RelmapCons vanillaHalf vanillaFull)
+    = C.relmapCons vanillaRops
 

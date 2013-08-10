@@ -31,7 +31,7 @@ module Koshucode.Baala.Core.Content.Decimal
 
 import Data.Char
 import Control.Monad
-import Koshucode.Baala.Base
+import qualified Koshucode.Baala.Base as B
 
 
 
@@ -50,12 +50,12 @@ decimalDenom :: Decimal -> Int
 decimalDenom = snd . decimalRatio
 
 type DecimalBinary =
-    Decimal -> Decimal -> AbOr Decimal
+    Decimal -> Decimal -> B.AbOr Decimal
 
 intDecimal :: Int -> Decimal
 intDecimal n = Decimal (n, 1) 0 False
 
-decimalSetPoint :: Int -> AbMap Decimal
+decimalSetPoint :: Int -> B.AbMap Decimal
 decimalSetPoint p2 (Decimal nd1 _ e1) =
     Right $ Decimal nd1 p2 e1
 
@@ -68,7 +68,7 @@ reduceDecimal (n, den) = Decimal (n `div` g, den `div` g) where
 -- ----------------------  Reader
 
 {-| Make @a@ from a string. -}
-type LitString a = AbMap2 String a
+type LitString a = B.AbMap2 String a
 
 type LitDecimal = LitString Decimal
 
@@ -83,7 +83,7 @@ litDecimal ccs = headPart id ccs where
         '+'  ->  headPart id    cs
         _    ->  intPart sign 0 (c:cs)
 
-    intPart :: Map Int -> Int -> LitDecimal
+    intPart :: B.Map Int -> Int -> LitDecimal
     intPart sign n [] = Right $ Decimal (sign n, 1) 0 False
     intPart sign n (c:cs)
         | isDigit c  =  intPart sign (10 * n + fromDigit c) cs
@@ -91,14 +91,14 @@ litDecimal ccs = headPart id ccs where
         | c == '.'   =  decPart sign n 0 cs
         | otherwise  =  tailPart False sign (n, 0) (c:cs)
 
-    decPart :: Map Int -> Int -> Int -> LitDecimal
+    decPart :: B.Map Int -> Int -> Int -> LitDecimal
     decPart sign n p [] = Right $ Decimal (sign n, 10 ^ p) p False
     decPart sign n p (c:cs)
         | isDigit c  =  decPart sign (10 * n + fromDigit c) (p + 1) cs
         | c == ' '   =  decPart sign n p cs
         | otherwise  =  tailPart False sign (n, p) (c:cs)
 
-    tailPart :: Bool -> Map Int -> (Int, Int) -> LitDecimal
+    tailPart :: Bool -> B.Map Int -> (Int, Int) -> LitDecimal
     tailPart approx sign (n, p) [] = Right $ Decimal (sign n, 10 ^ p) p approx
     tailPart approx sign dec (c:cs) = case c of
         ' '  ->  tailPart approx sign  dec cs
@@ -106,7 +106,7 @@ litDecimal ccs = headPart id ccs where
         '+'  ->  tailPart approx id    dec cs
         'a'  ->  tailPart True   sign  dec cs
         'A'  ->  tailPart True   sign  dec cs
-        _    ->  Left $ AbortNotNumber ccs
+        _    ->  Left $ B.AbortNotNumber ccs
 
 fromDigit :: Char -> Int
 fromDigit '0' = 0
@@ -119,7 +119,7 @@ fromDigit '6' = 6
 fromDigit '7' = 7
 fromDigit '8' = 8
 fromDigit '9' = 9
-fromDigit _   = bug
+fromDigit _   = B.bug
 
 
 
@@ -167,7 +167,7 @@ quoteDigit n = let (n', d) = quotRem n 10
 decimalAdd :: DecimalBinary
 decimalAdd d1@(Decimal (n1, den1) p1 a1)
            d2@(Decimal (n2, den2) p2 a2)
-    | p1 /= p2     = Left  $ AbortHeteroDecimal txt1 txt2
+    | p1 /= p2     = Left  $ B.AbortHeteroDecimal txt1 txt2
     | den1 == den2 = Right $ reduceDecimal (n1 + n2, den1) p1 a3
     | otherwise    = Right $ reduceDecimal (n3, den3) p1 a3
     where n3    =  (n1 * den2) + (n2 * den1)
@@ -195,15 +195,15 @@ decimalDiv dec1 dec2
 
 -- ----------------------
 
-decimalRevsign :: Map Decimal
+decimalRevsign :: B.Map Decimal
 decimalRevsign (Decimal (n, den) p a) = Decimal (- n, den) p a
 
-decimalRevratio :: Map Decimal
+decimalRevratio :: B.Map Decimal
 decimalRevratio (Decimal (n, den) p a) = Decimal (den, n) p a
 
-decimalAbs :: Map Decimal
+decimalAbs :: B.Map Decimal
 decimalAbs (Decimal (n, den) p a) = Decimal (abs n, den) p a
 
-decimalSum :: [Decimal] -> AbOr Decimal
+decimalSum :: [Decimal] -> B.AbOr Decimal
 decimalSum = foldM decimalAdd $ intDecimal 0
 

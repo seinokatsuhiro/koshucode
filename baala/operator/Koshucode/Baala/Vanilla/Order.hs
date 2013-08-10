@@ -7,8 +7,7 @@ module Koshucode.Baala.Vanilla.Order
 ) where
 
 import qualified Data.List as List
-import Koshucode.Baala.Base
-import qualified Koshucode.Baala.Base as Pos
+import qualified Koshucode.Baala.Base as B
 
 -- ----------------------  Order
 
@@ -49,20 +48,20 @@ sortBy
     -> [([a], b)]
     -> [([OrderCap a], b)]
 sortBy ords xs = xs3 where
-    xs2 = mapmapFst (caps ords) xs
+    xs2 = B.mapmapFst (caps ords) xs
     xs3 = List.sort xs2
 
-sortByName :: (Ord v, Eq n) => [OrderCap n] -> [n] -> Map [[v]]
+sortByName :: (Ord v, Eq n) => [OrderCap n] -> [n] -> B.Map [[v]]
 sortByName ords ns xs = xs3 where
     ords2 = map orderCap ords
     ns2   = uncaps ords
-    p     = ns2 `Pos.sharedIndex` ns
+    p     = ns2 `B.sharedIndex` ns
     xs2   = map f xs
-    f x   = (Pos.indexPick p x, x)
+    f x   = (B.indexPick p x, x)
     xs3   = map snd $ sortBy ords2 xs2
 
 -- pull :: [Int] -> [v] -> [v]
--- pull ns xs = Pos.indexPick ns xs ++ Pos.drop ns xs
+-- pull ns xs = B.indexPick ns xs ++ B.drop ns xs
 
 {-# ANN orders "HLint: ignore Use String" #-}
 orders :: String -> [OrderCap [Char]]

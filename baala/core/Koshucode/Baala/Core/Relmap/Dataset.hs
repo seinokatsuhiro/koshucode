@@ -17,46 +17,46 @@ module Koshucode.Baala.Core.Relmap.Dataset
 import qualified Data.Map   as Map
 import qualified Data.Maybe as Maybe
 
-import Koshucode.Baala.Base
+import qualified Koshucode.Baala.Base as B
 import Koshucode.Baala.Core.Content
 
 -- | Dataset is a set of judges.
-data Dataset v = Dataset (Map.Map Relsign [Relarg v])
+data Dataset c = Dataset (Map.Map B.Relsign [B.Relarg c])
 
 -- | Dataset that has no judges
-emptyDataset :: Dataset v
+emptyDataset :: Dataset c
 emptyDataset = Dataset Map.empty
 
 -- | Gather judges into a dataset
-dataset :: [Judge v] -> Dataset v
+dataset :: [B.Judge c] -> Dataset c
 dataset js = addJudges js emptyDataset
 
 -- | Add judges to dataset.
-addJudges :: [Judge v] -> Dataset v -> Dataset v
+addJudges :: [B.Judge c] -> Dataset c -> Dataset c
 addJudges js ds1 = foldr addJudge ds1 js
 
 -- | Add a judge to dataset.
-addJudge :: Judge v -> Dataset v -> Dataset v
-addJudge (Judge True sign xs) (Dataset ds1) = Dataset ds2 where
+addJudge :: B.Judge c -> Dataset c -> Dataset c
+addJudge (B.Judge True sign xs) (Dataset ds1) = Dataset ds2 where
     ds2 = Map.insertWith add sign [xs] ds1
     add new old = new ++ old
-addJudge (Judge False _ _) _ = undefined
+addJudge (B.Judge False _ _) _ = undefined
 
 -- | Select relation from dataset.
 --   If a giving term is not in judges, 'CNil' sign is used.
 selectRelation
-    :: (Ord v, CNil v)
-    => Dataset v   -- ^ Dataset
-    -> Relsign     -- ^ Relsign to select
+    :: (Ord c, CNil c)
+    => Dataset c   -- ^ Dataset
+    -> B.Relsign   -- ^ Relsign to select
     -> [String]    -- ^ List of term names
-    -> Rel v       -- ^ Selected relation
-selectRelation (Dataset m) sign ns = Rel h1 b1 where
-    h1 = Relhead $ map Term ns
+    -> B.Rel c     -- ^ Selected relation
+selectRelation (Dataset m) sign ns = B.Rel h1 b1 where
+    h1 = B.Relhead $ map B.Term ns
     b1 = case Map.lookup sign m of
-      Just args -> unique $ map (subarg ns) args
+      Just args -> B.unique $ map (subarg ns) args
       Nothing   -> []
 
-subarg :: (CNil v) => [String] -> Relarg v -> [v]
+subarg :: (CNil c) => [String] -> B.Relarg c -> [c]
 subarg ns arg = map pick ns where
     pick n = Maybe.fromMaybe nil $ lookup n arg
 

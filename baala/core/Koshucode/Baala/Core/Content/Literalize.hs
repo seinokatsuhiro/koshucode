@@ -28,7 +28,7 @@ module Koshucode.Baala.Core.Content.Literalize
   -- $CompoundData
 ) where
 
-import Koshucode.Baala.Base
+import qualified Koshucode.Baala.Base as B
 import Koshucode.Baala.Core.Content.Class
 import Koshucode.Baala.Core.Content.Decimal
 
@@ -36,51 +36,51 @@ import Koshucode.Baala.Core.Content.Decimal
 -- ----------------------  Type
 
 {-| Make @a@ from list of token trees. -}
-type LitTrees  a = AbMap2 [TokenTree] a
+type LitTrees  a = B.AbMap2 [B.TokenTree] a
 
 {-| Make @a@ from a token tree. -}
-type LitTree   a = AbMap2 TokenTree a
+type LitTree   a = B.AbMap2 B.TokenTree a
 
 
 
 
 -- ----------------------  Content
 
-type LitOperators c = [Named (LitTree c -> LitTrees c)]
+type LitOperators c = [B.Named (LitTree c -> LitTrees c)]
 
 {-| Transform 'TokenTree' into
     internal form of term content. -}
 litContentBy :: (CContent c) => LitOperators c -> LitTree c
 litContentBy ops = lit where
-    lit (TreeB t xs) = case t of
+    lit (B.TreeB t xs) = case t of
           1  ->  paren xs
           2  ->  fmap putList    $ litList    lit xs
           3  ->  fmap putSet     $ litList    lit xs
           4  ->  fmap putTermset $ litTermset lit xs
           5  ->  fmap putRel     $ litRel     lit xs
-          _  ->  bug
+          _  ->  B.bug
 
-    lit (TreeL tok) = case tok of
-        TWord _ 0 cs@(c:_) | isDecimal c
-                     ->  Right . putDec =<< litDecimal cs
-        TWord _ 0 w  ->  case w of
-            '#' : s  ->  litHash s
-            "()"     ->  Right nil
-            _        ->  Left $ AbortUnkWord w
-        TWord _ _ w  ->  Right . putText $ w  -- quoted text
-        _            ->  Left $ AbortUnknownContent (show tok)
+    lit (B.TreeL tok) = case tok of
+        B.TWord _ 0 cs@(c:_) | isDecimal c
+                       ->  Right . putDec =<< litDecimal cs
+        B.TWord _ 0 w  ->  case w of
+            '#' : s    ->  litHash s
+            "()"       ->  Right nil
+            _          ->  Left $ B.AbortUnkWord w
+        B.TWord _ _ w  ->  Right . putText $ w  -- quoted text
+        _              ->  Left $ B.AbortUnknownContent (show tok)
 
     -- sequence of token trees
-    paren (TreeL (TWord _ 0 tag@(c:_)) : xs)
+    paren (B.TreeL (B.TWord _ 0 tag@(c:_)) : xs)
         | isDecimal c
             = do xs' <- mapM litUnquoted xs
                  Right . putDec =<< litDecimal (concat $ tag : xs')
         | otherwise
             = case lookup tag ops of
                  Just f  -> f lit xs
-                 Nothing -> Left $ AbortUnkCop tag
+                 Nothing -> Left $ B.AbortUnkCop tag
     paren [] = Right nil
-    paren x  = Left $ AbortUnknownSymbol (show x)
+    paren x  = Left $ B.AbortUnknownSymbol (show x)
 
     -- First letters of decimals
     isDecimal = (`elem` "0123456789+-.")
@@ -91,11 +91,11 @@ litContentBy ops = lit where
 litHash :: (CBool c) => LitString c
 litHash "true"    =  Right . putBool $ True
 litHash "false"   =  Right . putBool $ False
-litHash w         =  Left $ AbortUnkWord ('#' : w)
+litHash w         =  Left $ B.AbortUnkWord ('#' : w)
 
 litUnquoted :: LitTree String
-litUnquoted (TreeL (TWord _ 0 w)) = Right w
-litUnquoted x = Left $ AbortUnknownSymbol (show x)
+litUnquoted (B.TreeL (B.TWord _ 0 w)) = Right w
+litUnquoted x = Left $ B.AbortUnknownSymbol (show x)
 
 
 -- ----------------------  Complex data
@@ -103,46 +103,46 @@ litUnquoted x = Left $ AbortUnknownSymbol (show x)
 {-| Get single term name.
     If 'TokenTree' contains nested term name, this function failed. -}
 litFlatname :: LitTree String
-litFlatname (TreeL (TTerm _ [n])) = Right n
-litFlatname (TreeL (TTerm _ ns))  = Left $ AbortReqFlatname (concat ns)
-litFlatname x = Left $ AbortMissingTermname (show x)
+litFlatname (B.TreeL (B.TTerm _ [n])) = Right n
+litFlatname (B.TreeL (B.TTerm _ ns))  = Left $ B.AbortReqFlatname (concat ns)
+litFlatname x = Left $ B.AbortMissingTermname (show x)
 
 litList :: (CContent c) => LitTree c -> LitTrees [c]
 litList _   [] = Right []
-litList lit cs = mapM lt $ divideByTokenTree ":" cs where
+litList lit cs = mapM lt $ B.divideByTokenTree ":" cs where
     lt []  = Right nil
     lt [x] = lit x
-    lt xs  = lit $ TreeB 1 xs
+    lt xs  = lit $ B.TreeB 1 xs
 
-litRel :: (CContent c) => LitTree c -> LitTrees (Rel c)
+litRel :: (CContent c) => LitTree c -> LitTrees (B.Rel c)
 litRel lit cs =
-    do let (h1 : b1) = divideByTokenTree "|" cs
+    do let (h1 : b1) = B.divideByTokenTree "|" cs
        h2 <- mapM litFlatname h1
        b2 <- mapM (litList lit) b1
-       let b3 = unique b2
+       let b3 = B.unique b2
        if any (length h2 /=) $ map length b3
-          then Left  $ AbortOddRelation
-          else Right $ Rel (headFrom h2) b3
+          then Left  $ B.AbortOddRelation
+          else Right $ B.Rel (B.headFrom h2) b3
 
 {-| Collect term name and content. -}
-litTermset :: (CContent c) => LitTree c -> LitTrees [Named c]
+litTermset :: (CContent c) => LitTree c -> LitTrees [B.Named c]
 litTermset lit xs = namedC where
     namedC   = mapM p       =<< litNamedTrees xs
     p (n, c) = Right . (n,) =<< lit c
 
-litNamedTrees :: LitTrees [Named TokenTree]
+litNamedTrees :: LitTrees [B.Named B.TokenTree]
 litNamedTrees = termname where
     termname [] = Right []
     termname (x : xs) =
         let (cs, xs2) = content xs
         in do n    <- litFlatname x
               xs2' <- termname xs2
-              Right $ (n, singleTree cs) : xs2'
+              Right $ (n, B.singleTree cs) : xs2'
 
-    content :: [TokenTree] -> ([TokenTree], [TokenTree])
-    content xs@(TreeL (TTerm _ _) : _) = ([], xs)
+    content :: [B.TokenTree] -> ([B.TokenTree], [B.TokenTree])
+    content xs@(B.TreeL (B.TTerm _ _) : _) = ([], xs)
     content [] = ([], [])
-    content (x : xs) = cons1 x $ content xs
+    content (x : xs) = B.cons1 x $ content xs
 
 
 

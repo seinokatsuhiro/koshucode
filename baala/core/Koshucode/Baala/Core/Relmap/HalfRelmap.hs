@@ -6,7 +6,7 @@ module Koshucode.Baala.Core.Relmap.HalfRelmap
 ) where
 
 import Data.Generics
-import Koshucode.Baala.Base
+import qualified Koshucode.Baala.Base as B
 
 -- | Intermediate data that represents use of relational operator.
 -- 
@@ -14,16 +14,16 @@ import Koshucode.Baala.Base
 --   and (full) 'Relmap' is constructed from 'HalfRelmap'.
 
 data HalfRelmap = HalfRelmap
-    { halfUsage    :: [String]      -- ^ Usages description
-    , halfLines    :: [CodeLine]    -- ^ Source information
-    , halfOperator :: String        -- ^ Operator name of relmap operation
-    , halfOperand  :: [Named [TokenTree]] -- ^ Operand of relmap operation
-    , halfSubmap   :: [HalfRelmap]        -- ^ Subrelmaps in the operand
+    { halfUsage    :: [String]        -- ^ Usages description
+    , halfLines    :: [B.CodeLine]    -- ^ Source information
+    , halfOperator :: String          -- ^ Operator name of relmap operation
+    , halfOperand  :: [B.Named [B.TokenTree]] -- ^ Operand of relmap operation
+    , halfSubmap   :: [HalfRelmap]            -- ^ Subrelmaps in the operand
     } deriving (Show, Data, Typeable)
 
-instance Pretty HalfRelmap where
+instance B.Pretty HalfRelmap where
     doc HalfRelmap { halfOperator = op, halfOperand = opd } =
         case lookup "operand" opd of
-          Nothing -> text op <+> text "..."
-          Just xs -> text op <+> text (show xs)
+          Nothing -> B.text op B.<+> B.text "..."
+          Just xs -> B.text op B.<+> B.text (show xs)
 

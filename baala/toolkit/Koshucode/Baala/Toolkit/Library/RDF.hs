@@ -10,8 +10,8 @@ module Koshucode.Baala.Toolkit.Library.RDF
 ) where
 
 import Data.RDF
-import Koshucode.Baala.Base
-import Koshucode.Baala.Core
+import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.Core as C
 import qualified Data.Text as T
 
 -- | Type of conversion
@@ -21,18 +21,18 @@ data RDFTupleType
       deriving (Show, Eq, Ord, Enum, Bounded)
 
 -- | Convert RDF graph to list of judges.
-judgesFromRdf :: (RDF g, CText v) => RDFTupleType -> g -> [Judge v]
+judgesFromRdf :: (RDF g, C.CText c) => RDFTupleType -> g -> [B.Judge c]
 judgesFromRdf k g = map (judgeFromTriple k) $ triplesOf g
 
 -- | Convert RDF triple to affirmed judge.
-judgeFromTriple :: (CText v) => RDFTupleType -> Triple -> Judge v
+judgeFromTriple :: (C.CText c) => RDFTupleType -> Triple -> B.Judge c
 judgeFromTriple RDFTuple2 (Triple s p o) =
-    Judge True (nodeString p) [("/s", the s), ("/o", the o)]
+    B.Judge True (nodeString p) [("/s", the s), ("/o", the o)]
 judgeFromTriple RDFTuple3 (Triple s p o) =
-    Judge True "RDF" [("/s", the s), ("/p", the p), ("/o", the o)]
+    B.Judge True "RDF" [("/s", the s), ("/p", the p), ("/o", the o)]
 
-the :: (CText v) => Node -> v
-the = putText . nodeString
+the :: (C.CText c) => Node -> c
+the = C.putText . nodeString
 
 nodeString :: Node -> String
 nodeString = T.unpack . nodeText
@@ -41,7 +41,7 @@ nodeText :: Node -> T.Text
 nodeText (UNode t)    = t
 nodeText (BNode t)    = t
 nodeText (BNodeGen _) = ""
-nodeText (LNode v)    = literalText v
+nodeText (LNode c)    = literalText c
 
 literalText :: LValue -> T.Text
 literalText (PlainL  t)   = t

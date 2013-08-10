@@ -25,50 +25,50 @@ module Koshucode.Baala.Minimal.Tropashko
   relJoin,
 ) where
 
-import Koshucode.Baala.Base
-import Koshucode.Baala.Core
+import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.Core as C
 import Koshucode.Baala.Builtin
 
 
 
 -- ----------------------  Meet
 
-ropConsMeet :: (Ord c) => RopCons c
+ropConsMeet :: (Ord c) => C.RopCons c
 ropConsMeet use =
   do m <- getRelmap use
      Right $ relmapMeet use m
 
 {-| Meet two relations. -}
 relmapMeet :: (Ord c)
-    => RopUse c      -- ^ Source infomation
-    -> Relmap c     -- ^ Subrelmap of meet operator
-    -> Relmap c     -- ^ Relmap of meet operator
-relmapMeet use m = relmapConfl use "meet" sub [m] where
+    => C.RopUse c     -- ^ Source infomation
+    -> C.Relmap c     -- ^ Subrelmap of meet operator
+    -> C.Relmap c     -- ^ Relmap of meet operator
+relmapMeet use m = C.relmapConfl use "meet" sub [m] where
     sub [r2] r1 = relMeet r1 r2
-    sub _ _ = bug
+    sub _ _ = B.bug
 
 {-| Meet two relations. -}
 relMeet :: (Ord c)
-    => Rel c         -- ^ Input relation /R1/
-    -> Rel c         -- ^ Input relation /R2/
-    -> AbOr (Rel c)  -- ^ Meet of /R1/ and /R2/
-relMeet (Rel h1 b1) (Rel h2 b2) = Right $ Rel h3 b3 where
-    share1, share2 :: [TermPos]
-    share1    =  h1 `posOf` shared
-    share2    =  h2 `posOf` shared
-    shared    =  termsInner $ h1 `posFrom` h2
+    => B.Rel c           -- ^ Input relation /R1/
+    -> B.Rel c           -- ^ Input relation /R2/
+    -> B.AbOr (B.Rel c)  -- ^ Meet of /R1/ and /R2/
+relMeet (B.Rel h1 b1) (B.Rel h2 b2) = Right $ B.Rel h3 b3 where
+    share1, share2 :: [B.TermPos]
+    share1    =  h1 `B.posOf` shared
+    share2    =  h2 `B.posOf` shared
+    shared    =  B.termsInner $ h1 `B.posFrom` h2
 
-    pick1,  pick2 :: Map [c]
-    pick1     =  csPick share1
-    pick2     =  csPick share2
-    cut2      =  csCut  share2
+    pick1,  pick2 :: B.Map [c]
+    pick1     =  B.csPick share1
+    pick2     =  B.csPick share2
+    cut2      =  B.csCut  share2
 
     h3        =  mappend h2 h1
     b3        =  concatMap meet b1
-    meet cs1  =  case lookupMap (pick1 cs1) m2 of
+    meet cs1  =  case B.lookupMap (pick1 cs1) m2 of
                    Just css2  ->  map (++ cs1) css2
                    Nothing    ->  []
-    m2        =  gatherToMap $ map kv b2
+    m2        =  B.gatherToMap $ map kv b2
     kv cs2    =  ( pick2 cs2,  -- key is shared cs
                    cut2  cs2 ) -- value is side cs
 
@@ -76,7 +76,7 @@ relMeet (Rel h1 b1) (Rel h2 b2) = Right $ Rel h3 b3 where
 
 -- ----------------------  Join
 
-ropConsJoin :: (Ord c) => RopCons c
+ropConsJoin :: (Ord c) => C.RopCons c
 ropConsJoin use =
     do m <- getRelmap use
        Right $ relmapJoin use m
@@ -84,30 +84,30 @@ ropConsJoin use =
 {-| Join two relations. -}
 relmapJoin
     :: (Ord c)
-    => RopUse c     -- ^ Source infomation
-    -> Relmap c     -- ^ Subrelmap of join operator
-    -> Relmap c     -- ^ Relmap of join operator
-relmapJoin use m = relmapConfl use "join" sub [m] where
+    => C.RopUse c     -- ^ Source infomation
+    -> C.Relmap c     -- ^ Subrelmap of join operator
+    -> C.Relmap c     -- ^ Relmap of join operator
+relmapJoin use m = C.relmapConfl use "join" sub [m] where
     sub [r2] r1 = relJoin r1 r2
-    sub _ _ = bug
+    sub _ _ = B.bug
 
 {-| Join two relations. -}
 relJoin :: (Ord c)
-    => Rel c         -- ^ Input relation /R1/
-    -> Rel c         -- ^ Input relation /R2/
-    -> AbOr (Rel c)  -- ^ Join of /R1/ and /R2/
-relJoin (Rel h1 b1) (Rel h2 b2) = Right $ Rel h3 b3 where
-    share1, share2 :: [TermPos]
-    share1  =  h1 `posOf` shared
-    share2  =  h2 `posOf` shared
-    shared  =  termsInner $ h1 `posFrom` h2
+    => B.Rel c           -- ^ Input relation /R1/
+    -> B.Rel c           -- ^ Input relation /R2/
+    -> B.AbOr (B.Rel c)  -- ^ Join of /R1/ and /R2/
+relJoin (B.Rel h1 b1) (B.Rel h2 b2) = Right $ B.Rel h3 b3 where
+    share1, share2 :: [B.TermPos]
+    share1  =  h1 `B.posOf` shared
+    share2  =  h2 `B.posOf` shared
+    shared  =  B.termsInner $ h1 `B.posFrom` h2
 
-    pick1,  pick2 :: Map [c]
-    pick1   =  csPick share1
-    pick2   =  csPick share2
+    pick1,  pick2 :: B.Map [c]
+    pick1   =  B.csPick share1
+    pick2   =  B.csPick share2
 
-    h3      =  headChange pick1 h1
-    b3      =  unique $
+    h3      =  B.headChange pick1 h1
+    b3      =  B.unique $
                map pick1 b1 ++
                map pick2 b2
 

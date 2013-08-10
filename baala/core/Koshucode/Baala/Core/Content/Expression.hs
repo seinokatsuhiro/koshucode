@@ -12,8 +12,7 @@ module Koshucode.Baala.Core.Content.Expression
   runCoxH,
 ) where
 
-import Koshucode.Baala.Base
-
+import qualified Koshucode.Baala.Base as B
 import Koshucode.Baala.Core.Content.Class
 import Koshucode.Baala.Core.Content.Extension
 import Koshucode.Baala.Core.Content.Operator
@@ -23,50 +22,50 @@ import Koshucode.Baala.Core.Content.Operator
 {-| Construct content expression. -}
 formCox
     :: (CContent c)
-    => FindCop c     -- ^ Collection of operators
-    -> TokenTree     -- ^ Input token tree
-    -> AbOr (Cox c)  -- ^ Result content expression
+    => FindCop c       -- ^ Collection of operators
+    -> B.TokenTree     -- ^ Input token tree
+    -> B.AbOr (Cox c)  -- ^ Result content expression
 formCox cops = form where
-    form x@(TreeL tok) = case tok of
-        TWord _ _ _  ->  fmap CoxLit $ litContent x
-        TTerm _ ns   ->  Right $ CoxTerm ns []
-        _            ->  bug
+    form x@(B.TreeL tok) = case tok of
+        B.TWord _ _ _  ->  fmap CoxLit $ litContent x
+        B.TTerm _ ns   ->  Right $ CoxTerm ns []
+        _              ->  B.bug
 
     -- parend unquoted word and its arguments
-    form (TreeB 1 (TreeL (TWord _ 0 w) : args)) =
+    form (B.TreeB 1 (B.TreeL (B.TWord _ 0 w) : args)) =
         case cops w of
           Just cop   ->  call cop args
-          Nothing    ->  Left $ AbortUnkCop w
-    form x@(TreeB n _)
+          Nothing    ->  Left $ B.AbortUnkCop w
+    form x@(B.TreeB n _)
         | n >  1      =  fmap CoxLit $ litContent x  -- literal composite
-    form x            =  Left $ AbortUnkCox (show x) -- unknown
+    form x            =  Left $ B.AbortUnkCox (show x) -- unknown
 
     call (CopLit _ f) = fmap CoxLit . f
     call op'          = fmap (CoxApp op') . mapM form
 
-type PosCox c = Relhead -> AbOr (Cox c)
+type PosCox c = B.Relhead -> B.AbOr (Cox c)
 
 {-| Put term positions for actural heading. -}
 posCox :: Cox c -> PosCox c
 posCox cox h = pos cox where
     pos (CoxApp f cs)  = Right . CoxApp f =<< mapM pos cs
-    pos (CoxTerm ns _) = let index = headIndex1 h ns
+    pos (CoxTerm ns _) = let index = B.headIndex1 h ns
                          in if all (>= 0) index
                             then Right $ CoxTerm ns index
-                            else Left  $ AbortNoTerms [concat ns]
+                            else Left  $ B.AbortNoTerms [concat ns]
     pos c = Right c
 
 runCoxH
   :: (CRel c, CList c)
-  => Relhead       -- ^ Heading of relation
+  => B.Relhead     -- ^ Heading of relation
   -> [c]           -- ^ Tuple in body of relation
   -> (PosCox c)    -- ^ Content expression
-  -> AbOr c        -- ^ Calculated literal content
+  -> B.AbOr c      -- ^ Calculated literal content
 runCoxH h lits cox =
     runCox lits =<< cox h
 
 {-| Calculate content expression. -}
-runCox :: (CList c, CRel c) => [c] -> Cox c -> AbOr c
+runCox :: (CList c, CRel c) => [c] -> Cox c -> B.AbOr c
 runCox arg cox = run cox where
     run (CoxLit c)      =   Right c
     run (CoxTerm _ [p]) =   Right $ arg !! p
@@ -75,17 +74,17 @@ runCox arg cox = run cox where
         case op of
           CopLazy  _ f   ->  f cs
           CopEager _ f   ->  f =<< mapM run cs
-          CopLit   _ _   ->  Left $ AbortLookup ""
+          CopLit   _ _   ->  Left $ B.AbortLookup ""
 
-    term []     _ = Left $ AbortLookup ""
-    term (-1:_) _ = Left $ AbortLookup ""
+    term []     _ = Left $ B.AbortLookup ""
+    term (-1:_) _ = Left $ B.AbortLookup ""
     term (p:ps) arg2 =
         let c = arg2 !! p
         in if isRel c
            then rel ps $ getRel c
            else Right c
 
-    rel ps (Rel _ args) =
+    rel ps (B.Rel _ args) =
         Right . putList =<< mapM (term ps) args
 
 {-

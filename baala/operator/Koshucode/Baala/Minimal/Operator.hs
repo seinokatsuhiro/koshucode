@@ -10,7 +10,7 @@ module Koshucode.Baala.Minimal.Operator
   -- $ListOfOperators
 ) where
 
-import Koshucode.Baala.Core
+import qualified Koshucode.Baala.Core as C
 import qualified Koshucode.Baala.Builtin as Kit
 import Koshucode.Baala.Minimal.Operand
 import Koshucode.Baala.Minimal.Restrict
@@ -22,7 +22,7 @@ import Koshucode.Baala.Minimal.Unary
 -- ----------------------  Operators
 
 {-| Minimal implementations of relmaps. -}
-minimalRops :: (Ord c) => [Rop c]
+minimalRops :: (Ord c) => [C.Rop c]
 minimalRops = Kit.operators "minimal"
     -- Relmap operators in alphabetical order
     [ o "cut"      LikePick     ropConsCut

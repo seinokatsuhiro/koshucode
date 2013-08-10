@@ -9,7 +9,7 @@ module Koshucode.Baala.Vanilla.Relmap.Operand
   likeSize,
 ) where
 
-import Koshucode.Baala.Core
+import qualified Koshucode.Baala.Core as C
 import Koshucode.Baala.Builtin hiding (LikeId)
 import qualified Koshucode.Baala.Minimal as Mini
 
@@ -70,25 +70,25 @@ instance OpPattern VanillaOperand where
 
     opUsage   _ = []
 
-likePrefix :: RopParser'
+likePrefix :: C.RopParser'
 likePrefix xs =
     case lookup "" xs of
       Just (p:ns) -> [("-prefix", [p]), ("-term", ns)] ++ xs
       _ -> xs
 
-likeUnprefix :: RopParser'
+likeUnprefix :: C.RopParser'
 likeUnprefix xs =
     case lookup "" xs of
       Just [p] -> [("-prefix", [p])] ++ xs
       _ -> xs
 
-likePrefixChange :: RopParser'
+likePrefixChange :: C.RopParser'
 likePrefixChange xs =
     case lookup "" xs of
       Just [x,y] -> [("-new", [x]), ("-old", [y])] ++ xs
       _ -> xs
 
-likeSize :: RopParser'
+likeSize :: C.RopParser'
 likeSize xs =
     case lookup "" xs of
       Just [n] -> [("-term", [n])] ++ xs

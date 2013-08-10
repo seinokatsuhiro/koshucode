@@ -13,7 +13,7 @@ module Koshucode.Baala.Minimal.Operand
   likeSource,
 ) where
 
-import Koshucode.Baala.Core
+import qualified Koshucode.Baala.Core as C
 import Koshucode.Baala.Builtin hiding (LikeId)
 
 
@@ -52,25 +52,25 @@ instance OpPattern MinimalOperand where
 
 -- ----------------------  Opernd parsers
 
-likePick :: RopParser'
+likePick :: C.RopParser'
 likePick xs =
     case lookup "" xs of
       Just xs2 -> [("-term", xs2)] ++ xs
       _ -> xs
 
-likeMeet :: RopParser'
+likeMeet :: C.RopParser'
 likeMeet xs =
     case lookup "" xs of
       Just xs2@[_] -> [("-relmap", xs2)] ++ xs
       _ -> xs
 
-likeRename :: RopParser'
+likeRename :: C.RopParser'
 likeRename xs =
     case lookup "" xs of
       Just xs2 -> [("-term", xs2)] ++ xs
       _ -> xs
 
-likeSource :: RopParser'
+likeSource :: C.RopParser'
 likeSource xs =
     case lookup "" xs of
       Just (s:ns) -> [("-sign", [s]), ("-term", ns)] ++ xs

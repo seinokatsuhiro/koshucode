@@ -19,7 +19,7 @@ module Koshucode.Baala.Core.Relmap.Implement
 
 ) where
 
-import Koshucode.Baala.Base
+import qualified Koshucode.Baala.Base as B
 import Koshucode.Baala.Core.Relmap.Relmap
 import Koshucode.Baala.Core.Relmap.HalfRelmap
 
@@ -40,12 +40,12 @@ data Rop c = Rop
     This parsers docompose operand trees,
     and give a name to suboperand. -}
 type RopParser
-    =  [TokenTree]          -- ^ Unparsed operand
-    -> [Named [TokenTree]]  -- ^ Parsed operand
+    =  [B.TokenTree]            -- ^ Unparsed operand
+    -> [B.Named [B.TokenTree]]  -- ^ Parsed operand
 
 type RopParser'
-    =  [Named [TokenTree]]  -- ^ Partially parsed operand
-    -> [Named [TokenTree]]  -- ^ Full parsed operand
+    =  [B.Named [B.TokenTree]]  -- ^ Partially parsed operand
+    -> [B.Named [B.TokenTree]]  -- ^ Full parsed operand
 
 
 
@@ -53,7 +53,7 @@ type RopParser'
 
 {-| Constructor of relational operator 'Relmap'.
     'Relmap' is constructed from 'HalfRelmap' and subrelmaps in it. -}
-type RopCons c = RopUse c -> AbortOr (Relmap c)
+type RopCons c = RopUse c -> B.AbortOr (Relmap c)
 
 {-| Use of operator -}
 data RopUse c = RopUse {
@@ -78,7 +78,7 @@ relmapSource use = RelmapSource $ ropHalf use
 relmapConst
     :: RopUse c    -- ^ Use of operator
     -> String      -- ^ Operator name
-    -> Rel c       -- ^ Constant relation
+    -> B.Rel c       -- ^ Constant relation
     -> Relmap c    -- ^ Result relmap
 relmapConst use = RelmapConst $ ropHalf use
 

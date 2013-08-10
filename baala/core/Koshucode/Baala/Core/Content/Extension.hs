@@ -10,8 +10,7 @@ module Koshucode.Baala.Core.Content.Extension
   litJudge,
 ) where
 
-import Koshucode.Baala.Base
-
+import qualified Koshucode.Baala.Base as B
 import Koshucode.Baala.Core.Content.Class
 import Koshucode.Baala.Core.Content.Literalize
 
@@ -37,9 +36,9 @@ litText _ xs =
        Right . putText $ concatMap unbox $ intersperseBy sp cs
     where
       loop ('#' : w)
-          = case hashWord w of
+          = case B.hashWord w of
               Just w2 -> Right (False, w2)
-              Nothing -> Left $ AbortUnknownSymbol ('#' : w)
+              Nothing -> Left $ B.AbortUnknownSymbol ('#' : w)
       loop w = Right (True, w)
 
       unbox (_, w) = w
@@ -50,8 +49,8 @@ litText _ xs =
 
 litWords :: LitTrees [String]
 litWords = mapM word where
-    word (TreeL (TWord _ _ w)) = Right w
-    word x = Left $ AbortReqText (show x)
+    word (B.TreeL (B.TWord _ _ w)) = Right w
+    word x = Left $ B.AbortReqText (show x)
 
 intersperseBy :: (a -> a -> Maybe a) -> [a] -> [a]
 intersperseBy f = loop where
@@ -68,9 +67,9 @@ intersperseBy f = loop where
 
 litJudge
     :: (CContent c)
-    => Bool                -- ^ Logical quality
-    -> Relsign             -- ^ Judgement pattern
-    -> LitTrees (Judge c)  -- ^ Convertor into judge
+    => Bool                  -- ^ Logical quality
+    -> B.Relsign             -- ^ Judgement pattern
+    -> LitTrees (B.Judge c)  -- ^ Convertor into judge
 litJudge = litJudgeBy litOperators
 
 {-| Construct judge from token trees.
@@ -78,12 +77,12 @@ litJudge = litJudgeBy litOperators
     It can be only used in the top-level of sections. -}
 litJudgeBy
     :: (CContent c)
-    => [Named (LitTree c -> LitTrees c)]
-    -> Bool                -- ^ Logical quality
-    -> Relsign             -- ^ Judgement pattern
-    -> LitTrees (Judge c)  -- ^ Convertor into judge
+    => [B.Named (LitTree c -> LitTrees c)]
+    -> Bool                  -- ^ Logical quality
+    -> B.Relsign             -- ^ Judgement pattern
+    -> LitTrees (B.Judge c)  -- ^ Convertor into judge
 litJudgeBy ops q p xs =
   do xs' <- litTermset (litContentBy ops) xs
-     Right $ Judge q p xs'
+     Right $ B.Judge q p xs'
 
 
