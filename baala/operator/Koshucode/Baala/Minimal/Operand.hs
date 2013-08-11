@@ -20,7 +20,7 @@ import Koshucode.Baala.Builtin hiding (LikeId)
 
 -- ----------------------  Opernd paterns
 
--- | 'OpPattern' for minimal operators
+-- | 'RopPattern' for minimal operators
 data MinimalOperand
     = LikeId      -- ^ no operand
     | LikeMeet    -- ^ { @-relmap@ } relmap [ @-share@ \/name ... ]
@@ -29,24 +29,24 @@ data MinimalOperand
     | LikeSource  -- ^ { @-sign@ } relsign { @-term@ } \/name ...
       deriving (Show, Eq, Enum)
 
-instance OpPattern MinimalOperand where
-    opParser'  LikeId     = id
-    opParser'  LikeMeet   = likeMeet
-    opParser'  LikePick   = likePick
-    opParser'  LikeRename = likeRename
-    opParser'  LikeSource = likeSource
+instance RopPattern MinimalOperand where
+    ropParser'  LikeId     = id
+    ropParser'  LikeMeet   = likeMeet
+    ropParser'  LikePick   = likePick
+    ropParser'  LikeRename = likeRename
+    ropParser'  LikeSource = likeSource
 
-    opPart     LikeId     = []
-    opPart     LikeMeet   = ["-relmap", "-share"]
-    opPart     LikePick   = ["-term"]
-    opPart     LikeRename = ["-term"]
-    opPart     LikeSource = ["-sign", "-term"]
+    ropPart     LikeId     = []
+    ropPart     LikeMeet   = ["-relmap", "-share"]
+    ropPart     LikePick   = ["-term"]
+    ropPart     LikeRename = ["-term"]
+    ropPart     LikeSource = ["-sign", "-term"]
 
-    opUsage    LikeId     = [""]
-    opUsage    LikeMeet   = ["RELMAP [-share /NAME ...]"]
-    opUsage    LikePick   = ["/NAME ..."]
-    opUsage    LikeRename = ["/NEW /OLD ..."]
-    opUsage    LikeSource = ["RELSIGN /NAME ..."]
+    ropUsage    LikeId     = [""]
+    ropUsage    LikeMeet   = ["RELMAP [-share /NAME ...]"]
+    ropUsage    LikePick   = ["/NAME ..."]
+    ropUsage    LikeRename = ["/NEW /OLD ..."]
+    ropUsage    LikeSource = ["RELSIGN /NAME ..."]
 
 
 

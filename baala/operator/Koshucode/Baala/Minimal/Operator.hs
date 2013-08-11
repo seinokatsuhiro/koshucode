@@ -23,7 +23,7 @@ import Koshucode.Baala.Minimal.Unary
 
 {-| Minimal implementations of relmaps. -}
 minimalRops :: (Ord c) => [C.Rop c]
-minimalRops = Kit.operators "minimal"
+minimalRops = Kit.ropGroup "minimal"
     -- Relmap operators in alphabetical order
     [ o "cut"      LikePick     ropConsCut
     , o "empty"    LikeId       ropConsEmpty

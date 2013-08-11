@@ -15,6 +15,7 @@ module Koshucode.Baala.Core.Content.Literalize
   -- ** Functions
   litContentBy,
   litTermset,
+  litNamedTrees,
 
   -- * Document
 
@@ -98,6 +99,7 @@ litUnquoted (B.TreeL (B.TWord _ 0 w)) = Right w
 litUnquoted x = Left $ B.AbortUnknownSymbol (show x)
 
 
+
 -- ----------------------  Complex data
 
 {-| Get single term name.
@@ -130,19 +132,24 @@ litTermset lit xs = namedC where
     namedC   = mapM p       =<< litNamedTrees xs
     p (n, c) = Right . (n,) =<< lit c
 
-litNamedTrees :: LitTrees [B.Named B.TokenTree]
-litNamedTrees = termname where
-    termname [] = Right []
-    termname (x : xs) =
-        let (cs, xs2) = content xs
-        in do n    <- litFlatname x
-              xs2' <- termname xs2
-              Right $ (n, B.singleTree cs) : xs2'
+{-| Read list of termname and its content.
 
-    content :: [B.TokenTree] -> ([B.TokenTree], [B.TokenTree])
-    content xs@(B.TreeL (B.TTerm _ _) : _) = ([], xs)
-    content [] = ([], [])
-    content (x : xs) = B.cons1 x $ content xs
+    >>> litNamedTrees . B.tokenTrees . B.tokens $ "/a 'A3 /b 10"
+    Right [("/a", TreeB 1 [TreeL (TWord 3 0 "'"), TreeL (TWord 4 0 "A3")]),
+           ("/b", TreeL (TWord 8 0 "10"))]
+   -}
+litNamedTrees :: LitTrees [B.Named B.TokenTree]
+litNamedTrees = name where
+    name [] = Right []
+    name (x : xs) = let (c, xs2) = cont xs
+                    in do n    <- litFlatname x
+                          xs2' <- name xs2
+                          Right $ (n, B.singleTree c) : xs2'
+
+    cont :: [B.TokenTree] -> ([B.TokenTree], [B.TokenTree])
+    cont xs@(B.TreeL (B.TTerm _ _) : _) = ([], xs)
+    cont [] = ([], [])
+    cont (x : xs) = B.cons1 x $ cont xs
 
 
 

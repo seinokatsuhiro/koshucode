@@ -7,7 +7,8 @@ module Koshucode.Baala.Base.Syntax.Token
 (
   -- * Token type
   -- $TokenType
-  TNumber,
+  Termname,
+  TokenNumber,
   Token (..),
 
   -- * Predicates
@@ -33,21 +34,24 @@ import Koshucode.Baala.Base.Prelude
 
 -- ----------------------  Token type
 
+{-| Termname. -}
+type Termname = String
+
 {-| Token number. -}
-type TNumber = Int
+type TokenNumber = Int
 
 data Token
-    = TWord    TNumber Int String  -- ^ Word.
-                                   --   @Int@ represents quotation level, e.g.,
-                                   --   0 for non-quoted,
-                                   --   1 for single-quoted,
-                                   --   2 for double-quoted.
-    | TTerm    TNumber [String]    -- ^ Term name
-    | TOpen    TNumber String      -- ^ Open paren
-    | TClose   TNumber String      -- ^ Close paren
-    | TSpace   TNumber Int         -- ^ /N/ space characters
-    | TComment TNumber String      -- ^ Comment text
-    | TUnknown TNumber String      -- ^ Unknown text
+    = TWord    TokenNumber Int String  -- ^ Word.
+                                       --   @Int@ represents quotation level, e.g.,
+                                       --   0 for non-quoted,
+                                       --   1 for single-quoted,
+                                       --   2 for double-quoted.
+    | TTerm    TokenNumber [Termname]  -- ^ Termname
+    | TOpen    TokenNumber String      -- ^ Open paren
+    | TClose   TokenNumber String      -- ^ Close paren
+    | TSpace   TokenNumber Int         -- ^ /N/ space characters
+    | TComment TokenNumber String      -- ^ Comment text
+    | TUnknown TokenNumber String      -- ^ Unknown text
       deriving (Show, Eq, Ord, Data, Typeable)
 
 instance Name Token where
@@ -111,7 +115,7 @@ tokenContent (TSpace   _ n)   = replicate n ' '
 tokenContent (TComment _ s)   = s
 tokenContent (TUnknown _ s)   = s
 
-tokenNumber :: Token -> TNumber
+tokenNumber :: Token -> TokenNumber
 tokenNumber (TWord    n _ _)  = n
 tokenNumber (TTerm    n _)    = n
 tokenNumber (TOpen    n _)    = n

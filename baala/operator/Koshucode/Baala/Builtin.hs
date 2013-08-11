@@ -20,20 +20,20 @@ import Koshucode.Baala.Builtin.Get
 import Koshucode.Baala.Builtin.Term
 import Koshucode.Baala.Builtin.Pattern
 
-{-| 'OpPattern' for builtin operators. -}
+{-| 'RopPattern' for builtin operators. -}
 data BuiltinOperand
     = LikeId      -- ^ no operand
       deriving (Show, Eq, Enum)
 
-instance OpPattern BuiltinOperand where
-    opParser'  LikeId     = id
+instance RopPattern BuiltinOperand where
+    ropParser'  LikeId     = id
 
-    opPart     LikeId     = []
+    ropPart     LikeId     = []
 
-    opUsage    LikeId     = [""]
+    ropUsage    LikeId     = [""]
 
 builtinRops :: (Ord c) => [C.Rop c]
-builtinRops = operators "builtin" [ ("|", LikeId, consConcat) ]
+builtinRops = ropGroup "builtin" [ ("|", LikeId, consConcat) ]
 
 consConcat :: C.RopCons c
 consConcat = Right . mconcat . C.ropSubmap

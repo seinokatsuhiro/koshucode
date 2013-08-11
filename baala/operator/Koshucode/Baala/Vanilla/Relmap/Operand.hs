@@ -13,7 +13,7 @@ import qualified Koshucode.Baala.Core as C
 import Koshucode.Baala.Builtin hiding (LikeId)
 import qualified Koshucode.Baala.Minimal as Mini
 
--- | 'Mini.OpPattern' for relational operations.
+-- | 'Mini.RopPattern' for relational operations.
 data VanillaOperand
     = LikeId
 
@@ -47,28 +47,28 @@ data VanillaOperand
 
       deriving (Show, Eq, Enum)
 
-instance OpPattern VanillaOperand where
-    opParser' LikeId            = id
-    opParser' LikeHold          = Mini.likePick
-    opParser' LikeVal           = Mini.likePick
-    opParser' LikeMeet          = Mini.likeMeet
-    opParser' LikePrefix        = likePrefix
-    opParser' LikePrefixChange  = likePrefixChange
-    opParser' LikeUnprefix      = likeUnprefix
-    opParser' LikeSource        = Mini.likeMeet
-    opParser' LikeSize          = likeSize
+instance RopPattern VanillaOperand where
+    ropParser' LikeId            = id
+    ropParser' LikeHold          = Mini.likePick
+    ropParser' LikeVal           = Mini.likePick
+    ropParser' LikeMeet          = Mini.likeMeet
+    ropParser' LikePrefix        = likePrefix
+    ropParser' LikePrefixChange  = likePrefixChange
+    ropParser' LikeUnprefix      = likeUnprefix
+    ropParser' LikeSource        = Mini.likeMeet
+    ropParser' LikeSize          = likeSize
 
-    opPart    LikeId            = ["-add", "-term"]
-    opPart    LikeHold          = ["-exp"]
-    opPart    LikeVal           = ["-exp"]
-    opPart    LikeMeet          = ["-relmap"]
-    opPart    LikePrefix        = ["-prefix", "-term"]
-    opPart    LikePrefixChange  = ["-new", "-old"]
-    opPart    LikeUnprefix      = ["-prefix"]
-    opPart    LikeSource        = ["-sign", "-term"]
-    opPart    LikeSize          = ["-term"]
+    ropPart    LikeId            = ["-add", "-term"]
+    ropPart    LikeHold          = ["-exp"]
+    ropPart    LikeVal           = ["-exp"]
+    ropPart    LikeMeet          = ["-relmap"]
+    ropPart    LikePrefix        = ["-prefix", "-term"]
+    ropPart    LikePrefixChange  = ["-new", "-old"]
+    ropPart    LikeUnprefix      = ["-prefix"]
+    ropPart    LikeSource        = ["-sign", "-term"]
+    ropPart    LikeSize          = ["-term"]
 
-    opUsage   _ = []
+    ropUsage   _ = []
 
 likePrefix :: C.RopParser'
 likePrefix xs =

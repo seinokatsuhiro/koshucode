@@ -2,30 +2,28 @@
 
 module Koshucode.Baala.Vanilla.Relmap.Naming
 ( -- * prefix
-  relopPrefix, relmapPrefix, relPrefix
-
+  ropConsPrefix, relmapPrefix, relPrefix,
   -- * unprefix
-, relopUnprefix, relmapUnprefix, relUnprefix
-
+  ropConsUnprefix, relmapUnprefix, relUnprefix,
   -- * prefix-change
-, relopPrefixChange, relmapPrefixChange, relPrefixChange
+  ropConsPrefixChange, relmapPrefixChange, relPrefixChange,
 ) where
 
 import qualified Data.List as List
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
-import Koshucode.Baala.Builtin
+import qualified Koshucode.Baala.Builtin as Kit
 import Koshucode.Baala.Vanilla.Type
 
 
 
 -- ----------------------  prefix
 
-relopPrefix :: C.RopCons VContent
-relopPrefix use = do
-  pre <- getTerm use "-prefix"
-  ns  <- getTerms use "-term"
-  Right $ relmapPrefix use pre ns
+ropConsPrefix :: C.RopCons VContent
+ropConsPrefix use =
+    do pre <- Kit.getTerm  use "-prefix"
+       ns  <- Kit.getTerms use "-term"
+       Right $ relmapPrefix use pre ns
 
 relmapPrefix :: C.RopUse c -> String -> [String] -> C.Relmap c
 relmapPrefix use pre ns = C.relmapCalc use "prefix" sub where
@@ -49,10 +47,10 @@ prefixName _ _ = undefined
 
 -- ----------------------  unprefix
 
-relopUnprefix :: C.RopCons VContent
-relopUnprefix use = do
-  pre <- getTerm use "-prefix"
-  Right $ relmapUnprefix use pre
+ropConsUnprefix :: C.RopCons VContent
+ropConsUnprefix use =
+    do pre <- Kit.getTerm use "-prefix"
+       Right $ relmapUnprefix use pre
 
 relmapUnprefix :: C.RopUse c -> String -> C.Relmap c
 relmapUnprefix use pre = C.relmapCalc use "unprefix" sub where
@@ -75,11 +73,11 @@ unprefixName pre n =
 
 -- ----------------------  prefix-change
 
-relopPrefixChange :: C.RopCons VContent
-relopPrefixChange use = do
-  new <- getTerm use "-new"
-  old <- getTerm use "-old"
-  Right $ relmapPrefixChange use new old
+ropConsPrefixChange :: C.RopCons VContent
+ropConsPrefixChange use =
+    do new <- Kit.getTerm use "-new"
+       old <- Kit.getTerm use "-old"
+       Right $ relmapPrefixChange use new old
 
 relmapPrefixChange :: C.RopUse c -> String -> String -> C.Relmap c
 relmapPrefixChange use new old =

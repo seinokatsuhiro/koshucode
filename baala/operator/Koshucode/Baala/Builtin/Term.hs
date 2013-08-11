@@ -4,35 +4,36 @@
 
 module Koshucode.Baala.Builtin.Term
 ( termnames,
-  termname2,
+  --termname2,
   termnamePairs,
   termTreePairs,
 ) where
 
 import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.Core as C
 
 
 
 -- ----------------------  Term
 
 {-| Extract a term name. -}
-termname :: B.TokenTree -> B.AbortTokens String
+termname :: B.TokenTree -> B.AbortTokens B.Termname
 termname (B.TreeL (B.TTerm _ [n])) = Right n
 termname tree = Left (B.AbortMissingTermname "",
                       B.treeTokens tree)
 
-termname2 :: [B.TokenTree] -> B.AbortTokens (String, String)
-termname2 [B.TreeL (B.TTerm _ [n1]), B.TreeL (B.TTerm _ [n2])] =
-    Right (n1, n2)
-termname2 trees = Left (B.AbortMissingTermname "",
-                        B.treesTokens trees)
+-- termname2 :: [B.TokenTree] -> B.AbortTokens (String, String)
+-- termname2 [B.TreeL (B.TTerm _ [n1]), B.TreeL (B.TTerm _ [n2])] =
+--     Right (n1, n2)
+-- termname2 trees = Left (B.AbortMissingTermname "",
+--                         B.treesTokens trees)
 
 {-| Extract a list of term names.
  
     >>> termnames . B.tokenTrees . B.tokens $ "/a /b /c"
     Right ["/a", "/b", "/c"]
 -}
-termnames :: [B.TokenTree] -> B.AbortTokens [String]
+termnames :: [B.TokenTree] -> B.AbortTokens [B.Termname]
 termnames trees =
     case mapM termname trees of
       Right ns -> Right ns
@@ -41,10 +42,10 @@ termnames trees =
 
 {-| Extract a list of name-and-name pairs.
  
-    >>> termnamePairs . tokenTrees . tokens $ "/a /x /b /y"
+    >>> termnamePairs . B.tokenTrees . B.tokens $ "/a /x /b /y"
     Right [("/a", "/x"), ("/b", "/y")]
 -}
-termnamePairs :: [B.TokenTree] -> B.AbortTokens [(String, String)]
+termnamePairs :: [B.TokenTree] -> B.AbortTokens [(B.Termname, B.Termname)]
 termnamePairs = loop where
     loop (a : b : xs) =
         do a'  <- termname a
@@ -57,17 +58,15 @@ termnamePairs = loop where
 
 {-| Extract a list of name-and-tree pairs.
  
-    >>> termTreePairs . tokenTrees . tokens $ "/a 'A3' /b 10"
-    Right [("/a", TreeL (TWord 3 1 "A3")),
-           ("/b", TreeL (TWord 7 0 "10"))]
--}
+    >>> termTreePairs . B.tokenTrees . B.tokens $ "/a 'A3 /b 10 /c"
+    Right [ ("/a", TreeB 1 [ TreeL (TWord 3 0 "'")
+                          , TreeL (TWord 4 0 "A3") ])
+          , ("/b", TreeL (TWord 8 0 "10"))
+          , ("/c", TreeB 1 []) ]
+  -}
 termTreePairs :: [B.TokenTree] -> B.AbortTokens [B.Named B.TokenTree]
-termTreePairs = loop where
-    loop (a : b : xs) =
-        do a'  <- termname a
-           xs' <- loop xs
-           Right $ (a', b) : xs'
-    loop [] = Right []
-    loop xs = Left (B.AbortMissingTermname "",
-                    B.treesTokens xs)
+termTreePairs xs =
+    case C.litNamedTrees xs of
+      Right x -> Right x
+      Left a  -> Left (a, B.treesTokens xs)
 

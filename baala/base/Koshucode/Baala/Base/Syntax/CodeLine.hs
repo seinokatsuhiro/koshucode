@@ -26,7 +26,7 @@ data CodeLine = CodeLine
 instance Pretty CodeLine where
     doc (CodeLine _ line _) = text line
 
-type NextToken = TNumber -> String -> (Token, String)
+type NextToken = TokenNumber -> String -> (Token, String)
 
 {-| Split source text into 'CodeLine' list.
 
@@ -48,7 +48,7 @@ codeLines
 codeLines next = codeLinesBy $ codeLine next
 
 codeLinesBy
-    :: (TNumber -> (LineNumber, String) -> CodeLine)
+    :: (TokenNumber -> (LineNumber, String) -> CodeLine)
     -> String -> [CodeLine]
 codeLinesBy f = loop 1 . linesCrlfNumbered where
     loop _ [] = []
@@ -59,7 +59,7 @@ codeLinesBy f = loop 1 . linesCrlfNumbered where
 
 codeLine
     :: NextToken             -- ^ Token splitter
-    -> TNumber               -- ^ Token number
+    -> TokenNumber           -- ^ Token number
     -> (LineNumber, String)  -- ^ Line number and content
     -> CodeLine              -- ^ Result 'CodeLine'
 codeLine next tno (lno, ln) = CodeLine lno ln toks where

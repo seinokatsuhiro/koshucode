@@ -25,23 +25,23 @@ import Koshucode.Baala.Vanilla.Type
 
 {-| Implementation of relational operators. -}
 vanillaRops :: [C.Rop VContent]
-vanillaRops = Kit.operators "vanilla"
+vanillaRops = Kit.ropGroup "vanilla"
     -- Relmap operators in alphabetical order
-    [ o "add"            LikeVal           relopAdd
-    , o "conf"           LikeSize          relopConf
-    , o "enclose"        LikeSize          relopEnclose
-    , o "hang"           LikeMeet          relopHang
-    , o "hold"           LikeHold          relopHold
-    , o "maybe"          LikeMeet          relopMaybe
-    , o "maybe-both"     LikeMeet          relopMaybeBoth
-    , o "prefix"         LikePrefix        relopPrefix
-    , o "prefix-change"  LikePrefixChange  relopPrefixChange
-    , o "range"          LikeSize          relopRange
-    , o "rank"           LikeId            relopRank
-    , o "rdf"            LikeSource        relopRdf
-    , o "size"           LikeSize          relopSize
-    , o "typename"       LikeHold          relopTypename
-    , o "unprefix"       LikeUnprefix      relopUnprefix
+    [ o "add"            LikeVal           ropConsAdd
+    , o "conf"           LikeSize          ropConsConf
+    , o "enclose"        LikeSize          ropConsEnclose
+    , o "hang"           LikeMeet          ropConsHang
+    , o "hold"           LikeHold          ropConsHold
+    , o "maybe"          LikeMeet          ropConsMaybe
+    , o "maybe-both"     LikeMeet          ropConsMaybeBoth
+    , o "prefix"         LikePrefix        ropConsPrefix
+    , o "prefix-change"  LikePrefixChange  ropConsPrefixChange
+    , o "range"          LikeSize          ropConsRange
+    , o "rank"           LikeId            ropConsRank
+    , o "rdf"            LikeSource        ropConsRdf
+    , o "size"           LikeSize          ropConsSize
+    , o "typename"       LikeHold          ropConsTypename
+    , o "unprefix"       LikeUnprefix      ropConsUnprefix
     ] where o = (,,)
 
 

@@ -46,8 +46,8 @@ affirm D reldee
         /set-a  /set-b
 
 affirm F reldee
-  | add /a ('aa)
-        /b ('bb)
-        /c ('cc)
+  | add /a 'aa
+        /b 'bb
+        /c 'cc
   | add /d ( /a ++ /b ++ /c )
 
