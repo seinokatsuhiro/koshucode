@@ -96,7 +96,7 @@ messageDoc (a, toks, cline) =
                   <> text (tokenContent tok)
 
       label :: Map String
-      label = rpad 12
+      label = padRight 12
 
 addAbort :: (AbortReasonClass a) => AbortType a -> Map (AbortOrType a b)
 addAbort _ (Left a1) = Left a1

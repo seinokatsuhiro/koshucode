@@ -1,10 +1,11 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Data on value type 'v'
+-- | Data on value type 'c'
 
 module Koshucode.Baala.Base.Data
 (
   -- * Modules
+  module Koshucode.Baala.Base.Data.Comment,
   module Koshucode.Baala.Base.Data.Judge,
   module Koshucode.Baala.Base.Data.Rel,
   module Koshucode.Baala.Base.Data.Relhead,
@@ -16,6 +17,7 @@ module Koshucode.Baala.Base.Data
 )
 where
 
+import Koshucode.Baala.Base.Data.Comment
 import Koshucode.Baala.Base.Data.Judge
 import Koshucode.Baala.Base.Data.Rel
 import Koshucode.Baala.Base.Data.Relhead

@@ -4,17 +4,17 @@
 
 module Koshucode.Baala.Toolkit.Library.Change
 (
--- * Minus
+  -- * Minus
   minusInput,
   minusInputJudge,
   minusJudge,
 
--- * Update
+  -- * Update
   updateInput,
   updateJudge
 
--- * Changeset
--- $Changeset
+  -- * Changeset
+  -- $Changeset
 ) where
 
 import qualified Data.Set as S
@@ -23,7 +23,6 @@ import qualified Koshucode.Baala.Base as B
 import Koshucode.Baala.Vanilla
 
 import Koshucode.Baala.Toolkit.Library.Input
-import Koshucode.Baala.Toolkit.Library.Comment
 
 
 
@@ -36,7 +35,7 @@ minusInput
     -> IO ()
 minusInput inputA inputB =
     do js <- minusInputJudge inputA inputB
-       putStr . unlines . texts $ minusHead inputA inputB
+       putStr . unlines . B.texts $ minusHead inputA inputB
        putStrLn ""
        B.putJudges js
 
@@ -52,16 +51,16 @@ minusJudge judA judB = map B.denyJudge judC ++ judD where
     judC = S.toList $ setB `S.difference` setA
     judD = S.toList $ setA `S.difference` setB
 
-minusHead :: Input -> Input -> CommentDoc
+minusHead :: Input -> Input -> B.CommentDoc
 minusHead inputA inputB =
-    CommentDoc
-    [ CommentSec "DATASETS"
+    B.CommentDoc
+    [ B.CommentSec "DATASETS"
       [ "There are changes C when altering dataset B into A." 
       , ""
       , "  B (base)    : " ++ inputText inputA
       , "  A (altered) : " ++ inputText inputB
       , "  C (change)  : A - B" ]
-    , CommentSec "UPDATE"
+    , B.CommentSec "UPDATE"
       [ "Dataset A is obtained by updating B by C."
       , "Please execute: koshu-change B -u C" ]]
 
@@ -76,7 +75,7 @@ updateInput
     -> IO ()   -- ^ 
 updateInput inputB inputC =
     do [textB, textC] <- readInputs [inputB, inputC]
-       putStr . unlines . texts $ updateHead inputB inputC
+       putStr . unlines . B.texts $ updateHead inputB inputC
        putStrLn ""
        B.putJudges $ readJudge textB `updateJudge` readJudge textC
 
@@ -87,10 +86,10 @@ updateJudge judB judC = judA where
     affC = S.fromList $ filter B.isAffirmed judC
     judA = S.toList $ setB `S.difference` denC `S.union` affC
 
-updateHead :: Input -> Input -> CommentDoc
+updateHead :: Input -> Input -> B.CommentDoc
 updateHead inputB inputC =
-    CommentDoc
-    [ CommentSec "DATASETS"
+    B.CommentDoc
+    [ B.CommentSec "DATASETS"
       [ "Updating dataset B by C, altered dataset A is obtained." 
       , ""
       , "  B (base)    : " ++ inputText inputB

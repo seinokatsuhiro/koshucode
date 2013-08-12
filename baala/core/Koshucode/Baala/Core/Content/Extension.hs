@@ -68,7 +68,7 @@ intersperseBy f = loop where
 litJudge
     :: (CContent c)
     => Bool                  -- ^ Logical quality
-    -> B.Relsign             -- ^ Judgement pattern
+    -> B.JudgePattern        -- ^ Judgement pattern
     -> LitTrees (B.Judge c)  -- ^ Convertor into judge
 litJudge = litJudgeBy litOperators
 
@@ -79,7 +79,7 @@ litJudgeBy
     :: (CContent c)
     => [B.Named (LitTree c -> LitTrees c)]
     -> Bool                  -- ^ Logical quality
-    -> B.Relsign             -- ^ Judgement pattern
+    -> B.JudgePattern        -- ^ Judgement pattern
     -> LitTrees (B.Judge c)  -- ^ Convertor into judge
 litJudgeBy ops q p xs =
   do xs' <- litTermset (litContentBy ops) xs

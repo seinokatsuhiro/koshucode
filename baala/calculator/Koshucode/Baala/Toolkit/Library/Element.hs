@@ -24,7 +24,7 @@ judgeElem = B.unique . concatMap f where
              , ("/name"    , C.putText n)
              , ("/content" , c) ]
 
-affirm :: B.Relsign -> B.Relarg c -> B.Judge c
+affirm :: B.JudgePattern -> [B.Named c] -> B.Judge c
 affirm = B.Judge True
 
 affirmElem :: (C.CContent c) => [C.Assert c] -> [B.Judge c]

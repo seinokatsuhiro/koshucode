@@ -19,7 +19,6 @@ import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 import Koshucode.Baala.Vanilla
 
-import Koshucode.Baala.Toolkit.Library.Comment
 import Koshucode.Baala.Toolkit.Library.Change
 import Koshucode.Baala.Toolkit.Library.Exit
 import Koshucode.Baala.Toolkit.Library.Input
@@ -147,10 +146,10 @@ reportJudge = B.Judge True "KOSHU-REGRESS-REPORT"
 summaryJudge :: [B.Named VContent] -> B.Judge VContent
 summaryJudge = B.Judge True "KOSHU-REGRESS-SUMMARY"
 
-reportHead :: CommentDoc
+reportHead :: B.CommentDoc
 reportHead =
-    CommentDoc
-    [ CommentSec "DESCRIPTOIN"
+    B.CommentDoc
+    [ B.CommentSec "DESCRIPTOIN"
       [ "Result of a regression test" ]]
 
 reportFoot :: String -> IO ()
@@ -160,8 +159,8 @@ reportFoot msg = foot where
 
 regReport :: (C.CContent c) => SectionSource c -> IO ()
 regReport sec =
-    do putStrLn emacsModeComment
-       putStr . unlines $ texts reportHead
+    do putStrLn B.emacsModeComment
+       putStr . unlines $ B.texts reportHead
        putStrLn ""
        asec <- readSec sec
        case asec of

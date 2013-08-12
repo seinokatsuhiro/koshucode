@@ -20,7 +20,6 @@ import qualified System.Directory as Dir
 
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
-import Koshucode.Baala.Toolkit.Library.Comment
 
 
 data SectionSource c = SectionSource
@@ -45,11 +44,11 @@ hRunFiles h (SectionSource root textSec files) =
     do let sec = map (C.sectionRead root "") $ textSec
        sects <- mapM (C.sectionFile root) $ files
        let union = concatMM $ sec ++ sects
-           comm  = CommentDoc
-                   [ CommentSec "INPUT" files]
+           comm  = B.CommentDoc
+                   [ B.CommentSec "INPUT" files]
        IO.hSetEncoding h IO.utf8
-       IO.hPutStrLn    h emacsModeComment
-       IO.hPutStr      h $ unlines $ texts comm
+       IO.hPutStrLn    h B.emacsModeComment
+       IO.hPutStr      h $ unlines $ B.texts comm
        IO.hPutStrLn    h ""
        B.abortIO (C.hRunSectionIO h) union
 

@@ -1,10 +1,10 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Toolkit.Library.Comment
-( CommentDoc (..)
-, CommentSec (..)
-, Texts (..)
-, emacsModeComment
+module Koshucode.Baala.Base.Data.Comment
+( CommentDoc (..),
+  CommentSec (..),
+  Texts (..),
+  emacsModeComment,
 ) where
 
 data CommentDoc =

@@ -19,7 +19,8 @@ module Koshucode.Baala.Base.Prelude.Utility
   singleton,
   divideBy,
   divideByP,
-  rpad,
+  padRight,
+  padLeft,
 
   -- * Collection
   gather,
@@ -126,11 +127,29 @@ divideByP p = loop where
                 (x, _ : xs2) -> x : loop xs2
                 (x, [])      -> [x]
 
-rpad :: Int -> Map String
-rpad n s = s ++ replicate rest ' ' where
-    rest = max 0 (n - len)
-    len  = sum $ map (size . Char.ord) s where
-    size c | c > 255   = 2
-           | otherwise = 1
+stringWidth :: String -> Int
+stringWidth = sum . map charWidth
 
+charWidth :: Char -> Int
+charWidth c
+    | Char.ord c >= 256 = 2
+    | otherwise         = 1
+
+{-| Add spaces.
+
+    >>> padRight 10 "abc"
+    "abc       "
+ -}
+padRight :: Int -> Map String
+padRight n s = s ++ replicate rest ' ' where
+    rest = max 0 (n - stringWidth s)
+
+{-| Add spaces.
+
+    >>> padLeft 10 "abc"
+    "       abc"
+ -}
+padLeft :: Int -> Map String
+padLeft n s = replicate rest ' ' ++ s where
+    rest = max 0 (n - stringWidth s)
 

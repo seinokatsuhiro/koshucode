@@ -53,6 +53,7 @@ library
         Koshucode.Baala.Base.Abort.Utility
 
         Koshucode.Baala.Base.Data
+        Koshucode.Baala.Base.Data.Comment
         Koshucode.Baala.Base.Data.Judge
         Koshucode.Baala.Base.Data.Rel
         Koshucode.Baala.Base.Data.Relhead

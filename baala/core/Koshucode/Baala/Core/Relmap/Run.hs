@@ -29,7 +29,7 @@ runRelmapDataset ds = runRelmapSelector $ selectRelation ds
 
 runRelmapSelector
     :: (Ord c, CNil c)
-    => (B.Relsign -> [String] -> B.Rel c)  -- ^ Relation selector
+    => (B.JudgePattern -> [String] -> B.Rel c)  -- ^ Relation selector
     -> Relmap c              -- ^ Mapping from 'Rel' to 'Rel'
     -> B.Rel c               -- ^ Input relation
     -> B.AbortOr (B.Rel c)   -- ^ Output relation
@@ -68,7 +68,7 @@ runAssertDataset as ds =
                  return $ judgesFromRel q s r
 
 {-| Convert relation to list of judges -}
-judgesFromRel :: Bool -> B.Relsign -> B.Rel c -> [B.Judge c]
+judgesFromRel :: Bool -> B.JudgePattern -> B.Rel c -> [B.Judge c]
 judgesFromRel q s = judges where
     judges (B.Rel h b) = map (judge h) b
     judge h = B.Judge q s . zip (B.headNames h)

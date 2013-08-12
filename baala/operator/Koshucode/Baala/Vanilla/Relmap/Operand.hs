@@ -30,7 +30,7 @@ data VanillaOperand
         @-prefix@, @-term@ -}
     | LikePrefix
 
-    {-| Relsign and list of terms -}
+    {-| JudgePattern and list of terms -}
     | LikeSource
 
     {-| Prefix.

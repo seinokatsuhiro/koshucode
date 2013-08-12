@@ -20,9 +20,9 @@ import Koshucode.Baala.Core.Relmap.Relmap
 
     See also 'Judge' -}
 data Assert v = Assert
-    { assertQuality :: Bool       -- ^ Logical quality
-    , assertRelsign :: B.Relsign  -- ^ Sign of relation
-    , assertRelmap  :: Relmap v   -- ^ Relmap
+    { assertQuality :: Bool            -- ^ Logical quality
+    , assertPattern :: B.JudgePattern  -- ^ Pattern of judgement
+    , assertRelmap  :: Relmap v        -- ^ Relmap
     } deriving (Show)
 
 instance B.Pretty (Assert v) where
@@ -39,10 +39,10 @@ assertMap :: B.Map (Relmap v) -> B.Map (Assert v)
 assertMap f (Assert q s r) = Assert q s $ f r
 
 {-| Make affirmed assertion. -}
-affirm :: B.Relsign -> Relmap v -> Assert v
+affirm :: B.JudgePattern -> Relmap v -> Assert v
 affirm = Assert True
 
 {-| Make denied assertion. -}
-deny :: B.Relsign -> Relmap v -> Assert v
+deny :: B.JudgePattern -> Relmap v -> Assert v
 deny = Assert False
 

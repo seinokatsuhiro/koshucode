@@ -1,30 +1,36 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Judgements: a symbolic representations of affirmed or denied statements.
+{-| Judgements: a symbolic representations of
+    affirmed or denied statements. -}
 
 module Koshucode.Baala.Base.Data.Judge
 (
   -- * Datatype
   Judge (Judge),
-  Relsign, Relarg,
-
-  -- * Writer
-  putJudges,
-  hPutJudges,
-  abcJudge,
+  JudgePattern,
 
   -- * Logical quality
   affirmJudge,
   denyJudge,
   isAffirmed,
   isDenied,
+
+  -- * Writer
+  putJudges,
+  hPutJudges,
+  abcJudge,
 ) where
 
 import qualified Data.List as List
+import qualified Data.Map  as Map
 import qualified System.IO as IO
 import Koshucode.Baala.Base.Prelude
+import Koshucode.Baala.Base.Data.Comment
 
-{-| Judgement on type 'v'.
+
+-- ----------------------  Datatype
+
+{-| Judgement on type 'c'.
  
     Judgement (or judge for short) is divided into three parts:
     logical quality, sign of relation, and argument.
@@ -33,16 +39,13 @@ import Koshucode.Baala.Base.Prelude
     'String' value of sign represents certain sentence pattern
     that gives intepretation of data.
     Sentence pattern has placeholders filled by
-    ('String', 'v') values of argument. --} 
+    ('String', 'c') values of argument. --} 
 
-data Judge c = Judge Bool Relsign (Relarg c)
+data Judge c = Judge Bool JudgePattern [Named c]
                deriving (Show, Eq, Ord)
 
--- | Sign of relation, or relation name.
-type Relsign = String
-
--- | List of terms.
-type Relarg c = [Named c]
+{-| Pattern of judgement. -}
+type JudgePattern = String
 
 -- Apply function to each values
 instance Functor Judge where
@@ -70,48 +73,68 @@ instance (Ord c, Pretty c) => Pretty (Judge c) where
 
 {-| Affirm judge, i.e., change logical quality to 'True'. -}
 affirmJudge :: Map (Judge c)
-affirmJudge (Judge _ s xs) = Judge True  s xs
+affirmJudge (Judge _ p xs) = Judge True p xs
 
 {-| Deny judge, i.e., change logical quality to 'False'. -}
-denyJudge :: Map (Judge c)
-denyJudge (Judge _ s xs) = Judge False s xs
+denyJudge   :: Map (Judge c)
+denyJudge   (Judge _ p xs) = Judge False p xs
 
-isAffirmed :: Judge t -> Bool
+isAffirmed :: Judge c -> Bool
 isAffirmed (Judge q _ _) = q
 
-isDenied :: Judge t -> Bool
-isDenied (Judge q _ _) = not q
+isDenied   :: Judge c -> Bool
+isDenied   (Judge q _ _) = not q
 
 
 
 -- ----------------------  Writer
 
+{-| Print judges. -}
 putJudges :: (Ord c, Pretty c) => [Judge c] -> IO ()
 putJudges = hPutJudges IO.stdout
 
 hPutJudges :: (Ord c, Pretty c) => IO.Handle -> [Judge c] -> IO ()
-hPutJudges h = IO.hPutStr h . unlines . showJudges
+hPutJudges h = IO.hPutStr h . unlines . judgeLines
 
-showJudges :: (Ord c, Pretty c) => [Judge c] -> [String]
-showJudges = loop (1 :: Int) where
-    count 0            =  "**  (no judges)"
-    count 1            =  "**  (1 judge)"
-    count n            =  "**  (" ++ show n ++ " judges)"
+{-| Convert judgements to lines. -}
+judgeLines :: (Ord c, Pretty c) => [Judge c] -> [String]
+judgeLines = loop zero Map.empty where
+    loop n c []        =  judgeSummary n $ Map.assocs c
+    loop n c (j : js)
+        | grad   n'    =  s : process n' : "" : ss
+        | gutter n'    =  s : "" : ss
+        | otherwise    =  s : ss
+        where s        =  show $ doc j
+              ss       =  loop n' (up c j) js
+              n'       =  n + 1
+
+    up c (Judge _ p _) =  Map.alter upAlter p c
+    upAlter Nothing    =  Just one
+    upAlter (Just n)   =  Just $ n + 1
 
     grad   n           =  n `mod` 20  == 0
     gutter n           =  n `mod` 5   == 0
 
-    loop _ []          =  count (0 :: Int) : [""]
-    loop n [j]         =  s : count n : [""]
-        where s        =  show $ doc j
-    loop n (j : js)
-        | grad   n     =  s : count n : "" : ss
-        | gutter n     =  s : "" : ss
-        | otherwise    =  s : ss
-        where s        =  show $ doc j
-              ss       =  loop (n + 1) js
+    process n          =  "**  (" ++ show n ++ " judges)"
+
+    zero               =  0 :: Int
+    one                =  1 :: Int
+
+-- >>> putStr . unlines $ judgeSummary 10 [("A", 3), ("B", 6), ("C", 1)]
+judgeSummary :: Int -> [(JudgePattern, Int)] -> [String]
+judgeSummary tt ns     =  "" : texts summaryDoc where
+    summaryDoc         =  CommentDoc [summary]
+    summary            =  CommentSec "SUMMARY" $ sumLines ++ [total tt]
+    sumLines           =  map sumLine ns
+    sumLine (p, n)     =  count n ++ " on " ++ p
+    total n            =  count n ++ " in total"
+
+    count 0            =  comment $ "no judges"
+    count 1            =  comment $ "1 judge "
+    count n            =  comment $ show n ++ " judges"
+    comment j          =  padLeft 11 j
 
 {-| Sort terms in alphabetical order. -}
-abcJudge :: (Ord c) => Judge c -> Judge c
-abcJudge (Judge q s a) = Judge q s $ List.sort a
+abcJudge :: (Ord c) => Map (Judge c)
+abcJudge (Judge q p a) = Judge q p $ List.sort a
 
