@@ -16,7 +16,7 @@ module Koshucode.Baala.Base.Syntax.Tree
   parenTable
 ) where
 
-import Data.Generics (Data, Typeable)
+import qualified Data.Generics as G
 import Koshucode.Baala.Base.Prelude
 
 
@@ -27,7 +27,7 @@ import Koshucode.Baala.Base.Prelude
 data Tree a
     = TreeL a             -- ^ Leaf. Terminal of tree.
     | TreeB Int [Tree a]  -- ^ Branch. Paren-type and subtrees.
-      deriving (Show, Eq, Ord, Data, Typeable)
+      deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance Functor Tree where
     fmap f (TreeL x)    = TreeL (f x)

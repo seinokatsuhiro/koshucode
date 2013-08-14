@@ -48,9 +48,9 @@ instance Show (RelmapCons c) where
 {-| First step of constructing relmap,
     make 'HalfRelmap' from use of relational operator. -}
 type RelmapHalfCons
-    =  [B.CodeLine]   -- ^ Source information
-    -> [B.TokenTree]  -- ^ Operand as source trees
-    -> HalfRelmap     -- ^ Result half relmap
+    =  [B.TokenLine]    -- ^ Source information
+    -> [B.TokenTree]    -- ^ Operand as source trees
+    -> HalfRelmap       -- ^ Result half relmap
 
 halfBundle :: [(String, ([String], RopParser))] -> RelmapHalfCons
 halfBundle halfs = consHalfRelmap bundle where

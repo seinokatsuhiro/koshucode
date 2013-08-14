@@ -6,6 +6,7 @@
 module Koshucode.Baala.Base.Syntax.Tokenizer
 (
   -- * Library
+  TokenLine,
   tokenize,
   trimLeft,
   tokens,
@@ -29,9 +30,12 @@ import Koshucode.Baala.Base.Syntax.Token
 import Koshucode.Baala.Base.Syntax.CodeLine
 
 
+
 -- ----------------------  Tokenizer
 
-tokenize :: String -> [CodeLine]
+type TokenLine = CodeLine Token
+
+tokenize :: String -> [CodeLine Token]
 tokenize = codeLines nextToken
 
 {-| Split string into list of tokens.
@@ -43,7 +47,7 @@ trimLeft :: Map String
 trimLeft = dropWhile isSpace
 
 {-| Split a next token from source text. -}
-nextToken :: NextToken
+nextToken :: NextToken Token
 nextToken n txt =
     case txt of
       ('*' : '*' : '*' : '*' : cs) -> tokD cs (word0 "****")
@@ -103,7 +107,6 @@ nextToken n txt =
 
 isTerm, isQuote, isOpen, isClose             :: Char -> Bool
 isSingle, isSpecial, isOCS, isSpace, isWord  :: Char -> Bool
-
 
 isTerm    c  =  c == '/'          -- UnicodePunctuation
 isQuote   c  =  c == '\"'         -- UnicodePunctuation
@@ -185,6 +188,7 @@ isWord    c  =  isw $ generalCategoryGroup c where
    
    You can type @****@ on top of a clause to hide it.
    -}
+
 
 
 -- ----------------------

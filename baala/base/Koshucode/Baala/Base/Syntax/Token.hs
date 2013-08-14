@@ -8,7 +8,6 @@ module Koshucode.Baala.Base.Syntax.Token
   -- * Token type
   -- $TokenType
   Termname,
-  TokenNumber,
   Token (..),
 
   -- * Predicates
@@ -29,6 +28,7 @@ module Koshucode.Baala.Base.Syntax.Token
 import Data.Generics (Data, Typeable)
 
 import Koshucode.Baala.Base.Prelude
+import Koshucode.Baala.Base.Syntax.CodeLine
 
 
 
@@ -36,9 +36,6 @@ import Koshucode.Baala.Base.Prelude
 
 {-| Termname. -}
 type Termname = String
-
-{-| Token number. -}
-type TokenNumber = Int
 
 data Token
     = TWord    TokenNumber Int String  -- ^ Word.

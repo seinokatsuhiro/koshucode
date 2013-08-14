@@ -110,7 +110,7 @@ isCUnknown _                = False
                   TreeL (TermN ["/x"]),
                   TreeL (TermN ["/y"])]]
     -}
-consPreclause :: [B.CodeLine] -> [Clause]
+consPreclause :: [B.TokenLine] -> [Clause]
 consPreclause = concatMap consPreclause' . clausify
 
 consPreclause' :: ClauseSource -> [Clause]
@@ -161,7 +161,7 @@ consPreclause' src@(ClauseSource toks _) = cl toks' where
     This is a first step of constructing 'Section'. -}
 consClause
     :: RelmapHalfCons  -- ^ Relmap half constructor
-    -> [B.CodeLine]    -- ^ Source tokens
+    -> [B.TokenLine]   -- ^ Source tokens
     -> [Clause]        -- ^ Result clauses
 consClause half = clauseHalf half . consPreclause
 

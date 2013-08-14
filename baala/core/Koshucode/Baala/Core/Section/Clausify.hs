@@ -17,17 +17,17 @@ import qualified Koshucode.Baala.Base as B
 
 data ClauseSource = ClauseSource
     { clauseTokens :: [B.Token]     -- ^ Source tokens of clause
-    , clauseLines  :: [B.CodeLine]  -- ^ Source lines of clause
+    , clauseLines  :: [B.TokenLine] -- ^ Source lines of clause
     } deriving (Show, Data, Typeable)
 
 emptyClauseSource :: ClauseSource
 emptyClauseSource = ClauseSource [] []
 
 {-| Convert token list into list of token clauses -}
-clausify :: [B.CodeLine] -> [ClauseSource]
+clausify :: [B.TokenLine] -> [ClauseSource]
 clausify = B.gather clausifySplit
 
-clausifySplit :: [B.CodeLine] -> (ClauseSource, [B.CodeLine])
+clausifySplit :: [B.TokenLine] -> (ClauseSource, [B.TokenLine])
 clausifySplit = loop where
     loop (B.CodeLine _ _ xs : ls)
         | white xs = loop ls
@@ -38,7 +38,7 @@ clausifySplit = loop where
     loop (_ : ls) = (emptyClauseSource, ls)
     loop []       = (emptyClauseSource, [])
 
-clausifySplitWith :: Int -> [B.CodeLine] -> (ClauseSource, [B.CodeLine])
+clausifySplitWith :: Int -> [B.TokenLine] -> (ClauseSource, [B.TokenLine])
 clausifySplitWith i = loop where
     loop ((B.CodeLine _ _ xs) : ls)
         | white xs = loop ls
@@ -49,7 +49,7 @@ clausifySplitWith i = loop where
 white :: [B.Token] -> Bool
 white xs = (B.sweepToken xs == [])
 
-cons :: [B.Token] -> B.CodeLine -> B.Map (ClauseSource, [B.CodeLine])
+cons :: [B.Token] -> B.TokenLine -> B.Map (ClauseSource, [B.TokenLine])
 cons a1 b1 (ClauseSource a2 b2, c)
     = (ClauseSource (a1 ++ a2) (b1 : b2), c)
 

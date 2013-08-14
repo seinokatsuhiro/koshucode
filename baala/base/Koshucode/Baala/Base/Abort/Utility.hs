@@ -33,7 +33,7 @@ class AbortReasonClass a where
     abortSub _   = Doc.empty
 
 {-| Abort reason and source code information. -}
-type AbortType a = (a, [Token], [CodeLine])
+type AbortType a = (a, [Token], [CodeLine Token])
 
 {-| Either of (1) right result or (2) abort information. -}
 type AbortOrType a b = Either (AbortType a) b
@@ -84,7 +84,7 @@ messageDoc (a, toks, cline) =
       opt lbl x | isEmpty x = empty
                 | otherwise = text lbl <> x
 
-      source :: [CodeLine] -> Doc
+      source :: [CodeLine Token] -> Doc
       source [] = text "?" <> text "???"
       source ls = docv $ map d $ ls where
           d (CodeLine n line _) =

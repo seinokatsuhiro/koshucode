@@ -14,9 +14,9 @@ import qualified Koshucode.Baala.Base as B
 --   and (full) 'Relmap' is constructed from 'HalfRelmap'.
 
 data HalfRelmap = HalfRelmap
-    { halfUsage    :: [String]        -- ^ Usages description
-    , halfLines    :: [B.CodeLine]    -- ^ Source information
-    , halfOperator :: String          -- ^ Operator name of relmap operation
+    { halfUsage    :: [String]              -- ^ Usages description
+    , halfLines    :: [B.TokenLine]         -- ^ Source information
+    , halfOperator :: String                -- ^ Operator name of relmap operation
     , halfOperand  :: [B.Named [B.TokenTree]] -- ^ Operand of relmap operation
     , halfSubmap   :: [HalfRelmap]            -- ^ Subrelmaps in the operand
     } deriving (Show, Data, Typeable)
