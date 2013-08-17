@@ -8,8 +8,8 @@ module Koshucode.Baala.Minimal.Operand
 
   -- * Operand parsers
   likePick,
-  likeMeet,
   likeRename,
+  likeMeet,
   likeSource,
 ) where
 
@@ -30,11 +30,11 @@ data MinimalOperand
       deriving (Show, Eq, Enum)
 
 instance RopPattern MinimalOperand where
-    ropParser'  LikeId     = id
-    ropParser'  LikeMeet   = likeMeet
-    ropParser'  LikePick   = likePick
-    ropParser'  LikeRename = likeRename
-    ropParser'  LikeSource = likeSource
+    ropSorter   LikeId     = id
+    ropSorter   LikeMeet   = likeMeet
+    ropSorter   LikePick   = likePick
+    ropSorter   LikeRename = likeRename
+    ropSorter   LikeSource = likeSource
 
     ropPart     LikeId     = []
     ropPart     LikeMeet   = ["-relmap", "-share"]
@@ -52,27 +52,17 @@ instance RopPattern MinimalOperand where
 
 -- ----------------------  Opernd parsers
 
-likePick :: C.RopParser'
-likePick xs =
-    case lookup "" xs of
-      Just xs2 -> [("-term", xs2)] ++ xs
-      _ -> xs
+likePick    :: C.RopSorter
+likePick    =  C.ropPartName "-term"
 
-likeMeet :: C.RopParser'
-likeMeet xs =
-    case lookup "" xs of
-      Just xs2@[_] -> [("-relmap", xs2)] ++ xs
-      _ -> xs
+likeRename  :: C.RopSorter
+likeRename  =  C.ropPartName "-term"
 
-likeRename :: C.RopParser'
-likeRename xs =
-    case lookup "" xs of
-      Just xs2 -> [("-term", xs2)] ++ xs
-      _ -> xs
+likeMeet    :: C.RopSorter
+likeMeet    =  C.ropPartName "-relmap"
 
-likeSource :: C.RopParser'
-likeSource xs =
-    case lookup "" xs of
-      Just (s:ns) -> [("-sign", [s]), ("-term", ns)] ++ xs
-      _ -> xs
+likeSource  :: C.RopSorter
+likeSource  =  C.ropPartNameBy f where
+    f (s:ns) = [("-sign", [s]), ("-term", ns)]
+    f _      = []
 

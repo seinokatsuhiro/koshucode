@@ -26,7 +26,7 @@ data BuiltinOperand
       deriving (Show, Eq, Enum)
 
 instance RopPattern BuiltinOperand where
-    ropParser'  LikeId     = id
+    ropSorter   LikeId     = id
 
     ropPart     LikeId     = []
 

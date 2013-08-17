@@ -1,15 +1,15 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Data structure for mapping relation to judges
+{-| Data structure for mapping relation to judges -}
 
 module Koshucode.Baala.Core.Relmap.Assert
 ( -- * Datatype
-  Assert (..)
-, assertMap
+  Assert (..),
+  assertMap,
 
   -- * Constructors
-, affirm
-, deny
+  affirm,
+  deny,
 ) where
 
 import qualified Koshucode.Baala.Base as B
@@ -19,13 +19,13 @@ import Koshucode.Baala.Core.Relmap.Relmap
     It consists of logical quality, relsign, and relmap.
 
     See also 'Judge' -}
-data Assert v = Assert
+data Assert c = Assert
     { assertQuality :: Bool            -- ^ Logical quality
     , assertPattern :: B.JudgePattern  -- ^ Pattern of judgement
-    , assertRelmap  :: Relmap v        -- ^ Relmap
+    , assertRelmap  :: Relmap c        -- ^ Relmap
     } deriving (Show)
 
-instance B.Pretty (Assert v) where
+instance B.Pretty (Assert c) where
     doc (Assert q s m) =
         let qs = B.text (verb q) B.<+> B.text s
         in B.hang qs 2 (B.doc m)
@@ -35,14 +35,14 @@ verb True  = "affirm"
 verb False = "deny"
 
 {-| Apply function to relamp in assert. -}
-assertMap :: B.Map (Relmap v) -> B.Map (Assert v)
+assertMap :: B.Map (Relmap c) -> B.Map (Assert c)
 assertMap f (Assert q s r) = Assert q s $ f r
 
 {-| Make affirmed assertion. -}
-affirm :: B.JudgePattern -> Relmap v -> Assert v
+affirm :: B.JudgePattern -> Relmap c -> Assert c
 affirm = Assert True
 
 {-| Make denied assertion. -}
-deny :: B.JudgePattern -> Relmap v -> Assert v
+deny :: B.JudgePattern -> Relmap c -> Assert c
 deny = Assert False
 

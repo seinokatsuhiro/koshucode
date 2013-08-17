@@ -3,8 +3,10 @@
 module Koshucode.Baala.Core.Relmap.Implement
 ( -- * Implement
   Rop (..),
-  RopParser,
-  RopParser',
+  RopFullSorter,
+  RopSorter,
+  ropPartNameBy,
+  ropPartName,
 
   -- * Constructor
   RopCons,
@@ -29,23 +31,34 @@ import Koshucode.Baala.Core.Relmap.HalfRelmap
 
 {-| Implementation of relmap operator. -}
 data Rop c = Rop
-    { ropName   :: String     -- ^ Operator name
-    , ropGroup  :: String     -- ^ Operator group
-    , ropParser :: RopParser  -- ^ Operand parser
-    , ropCons   :: RopCons c  -- ^ Constructor of operator
-    , ropUsage  :: [String]   -- ^ Usage of operator
+    { ropName       :: String         -- ^ Operator name
+    , ropGroup      :: String         -- ^ Operator group
+    , ropFullSorter :: RopFullSorter  -- ^ Operand sorter
+    , ropCons       :: RopCons c      -- ^ Constructor of operator
+    , ropUsage      :: [String]       -- ^ Usage of operator
     }
     
-{-| Parser for operand of relational operator.
-    This parsers docompose operand trees,
+{-| Sorter for operand of relational operator.
+    This soters docompose operand trees,
     and give a name to suboperand. -}
-type RopParser
-    =  [B.TokenTree]            -- ^ Unparsed operand
-    -> [B.Named [B.TokenTree]]  -- ^ Parsed operand
+type RopFullSorter
+    =  [B.TokenTree]            -- ^ Unsorted operand
+    -> [B.Named [B.TokenTree]]  -- ^ Fully sorted operand
 
-type RopParser'
-    =  [B.Named [B.TokenTree]]  -- ^ Partially parsed operand
-    -> [B.Named [B.TokenTree]]  -- ^ Full parsed operand
+type RopSorter
+    =  [B.Named [B.TokenTree]]  -- ^ Basically sorted operand
+    -> [B.Named [B.TokenTree]]  -- ^ Fully sorted operand
+
+{-| Give a name to unnamed operand. -}
+ropPartNameBy :: RopFullSorter -> RopSorter
+ropPartNameBy f xs =
+    case lookup "" xs of
+      Just x  -> f x ++ xs
+      Nothing -> xs
+
+ropPartName :: String -> RopSorter
+ropPartName name = ropPartNameBy f where
+    f x = [(name, x)]
 
 
 

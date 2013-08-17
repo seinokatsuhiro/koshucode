@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Class for operand patterns
+{-| Class for operand patterns -}
 
 module Koshucode.Baala.Builtin.Pattern
 ( RopPattern (..),
@@ -11,19 +11,16 @@ import qualified Koshucode.Baala.Core as C
 
 {-| Class for operand pattern. -}
 class RopPattern p where
-    {-| Operand parser. -}
-    ropParser :: p -> C.RopParser
-    ropParser p  = ropParser' p . C.operandGroup
 
-    {-| Simplified operand parser. -}
-    ropParser' :: p -> C.RopParser'
-    ropParser' _ = id
+    {-| Operand sorter. -}
+    ropSorter :: p -> C.RopSorter
+    ropSorter _ = id
 
     {-| Names of suboperands. -}
-    ropPart  :: p -> [String]
+    ropPart   :: p -> [String]
 
     {-| Synopsis. -}
-    ropUsage :: p -> [String]
+    ropUsage  :: p -> [String]
 
 {-| Make implementations of relational operators. -}
 ropGroup
@@ -33,7 +30,7 @@ ropGroup
     -> [C.Rop c]                  -- ^ Implementation list
 ropGroup g = map f where
     f (op, pat, cons) =
-        let parser  = ropParser pat
+        let sorter  = ropSorter pat . C.operandGroup
             addOp u = op ++ " " ++ u
-        in C.Rop op g parser cons (map addOp $ ropUsage pat)
+        in C.Rop op g sorter cons (map addOp $ ropUsage pat)
 

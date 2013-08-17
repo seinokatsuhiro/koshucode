@@ -10,7 +10,7 @@ module Koshucode.Baala.Vanilla.Relmap.Operand
 ) where
 
 import qualified Koshucode.Baala.Core as C
-import Koshucode.Baala.Builtin hiding (LikeId)
+import qualified Koshucode.Baala.Builtin as Builtin
 import qualified Koshucode.Baala.Minimal as Mini
 
 -- | 'Mini.RopPattern' for relational operations.
@@ -47,16 +47,16 @@ data VanillaOperand
 
       deriving (Show, Eq, Enum)
 
-instance RopPattern VanillaOperand where
-    ropParser' LikeId            = id
-    ropParser' LikeHold          = Mini.likePick
-    ropParser' LikeVal           = Mini.likePick
-    ropParser' LikeMeet          = Mini.likeMeet
-    ropParser' LikePrefix        = likePrefix
-    ropParser' LikePrefixChange  = likePrefixChange
-    ropParser' LikeUnprefix      = likeUnprefix
-    ropParser' LikeSource        = Mini.likeMeet
-    ropParser' LikeSize          = likeSize
+instance Builtin.RopPattern VanillaOperand where
+    ropSorter  LikeId            = id
+    ropSorter  LikeHold          = Mini.likePick
+    ropSorter  LikeVal           = Mini.likePick
+    ropSorter  LikeMeet          = Mini.likeMeet
+    ropSorter  LikePrefix        = likePrefix
+    ropSorter  LikePrefixChange  = likePrefixChange
+    ropSorter  LikeUnprefix      = likeUnprefix
+    ropSorter  LikeSource        = Mini.likeMeet
+    ropSorter  LikeSize          = likeSize
 
     ropPart    LikeId            = ["-add", "-term"]
     ropPart    LikeHold          = ["-exp"]
@@ -70,27 +70,19 @@ instance RopPattern VanillaOperand where
 
     ropUsage   _ = []
 
-likePrefix :: C.RopParser'
-likePrefix xs =
-    case lookup "" xs of
-      Just (p:ns) -> [("-prefix", [p]), ("-term", ns)] ++ xs
-      _ -> xs
+likePrefix  :: C.RopSorter
+likePrefix  =  C.ropPartNameBy f where
+    f (p:ns) = [("-prefix", [p]), ("-term", ns)]
+    f [] = []
 
-likeUnprefix :: C.RopParser'
-likeUnprefix xs =
-    case lookup "" xs of
-      Just [p] -> [("-prefix", [p])] ++ xs
-      _ -> xs
+likeUnprefix  :: C.RopSorter
+likeUnprefix  =  C.ropPartName "-prefix"
 
-likePrefixChange :: C.RopParser'
-likePrefixChange xs =
-    case lookup "" xs of
-      Just [x,y] -> [("-new", [x]), ("-old", [y])] ++ xs
-      _ -> xs
+likePrefixChange  :: C.RopSorter
+likePrefixChange  =  C.ropPartNameBy f where
+    f [x,y] = [("-new", [x]), ("-old", [y])]
+    f _ = []
 
-likeSize :: C.RopParser'
-likeSize xs =
-    case lookup "" xs of
-      Just [n] -> [("-term", [n])] ++ xs
-      _ -> xs
+likeSize :: C.RopSorter
+likeSize =  C.ropPartName "-term"
 

@@ -52,7 +52,7 @@ type RelmapHalfCons
     -> [B.TokenTree]    -- ^ Operand as source trees
     -> HalfRelmap       -- ^ Result half relmap
 
-halfBundle :: [(String, ([String], RopParser))] -> RelmapHalfCons
+halfBundle :: [(String, ([String], RopFullSorter))] -> RelmapHalfCons
 halfBundle halfs = consHalfRelmap bundle where
     bundle :: String -> RelmapHalfCons
     bundle op src opd = case lookup op halfs of

@@ -30,7 +30,7 @@ vanillaRops = Kit.ropGroup "vanilla"
     [ o "add"            LikeVal           ropConsAdd
     , o "conf"           LikeSize          ropConsConf
     , o "enclose"        LikeSize          ropConsEnclose
-    , o "hang"           LikeMeet          ropConsHang
+    , o "hang"           LikeId            ropConsHang
     , o "hold"           LikeHold          ropConsHold
     , o "maybe"          LikeMeet          ropConsMaybe
     , o "maybe-both"     LikeMeet          ropConsMaybeBoth
