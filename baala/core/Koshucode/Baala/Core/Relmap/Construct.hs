@@ -24,8 +24,8 @@ import Koshucode.Baala.Core.Relmap.Relmap
 
 {-| Make half and full relmap constructors. -}
 relmapCons
-    :: [Rop c]   -- ^ Implementations of relational operators
-    -> (RelmapCons c)     -- ^ Relmap constructors
+    :: [Rop c]          -- ^ Implementations of relational operators
+    -> (RelmapCons c)   -- ^ Relmap constructors
 relmapCons = make . unzip . map split where
     make (halfs, fulls) =
         RelmapCons (halfBundle halfs) (fullBundle fulls)
@@ -52,13 +52,13 @@ type RelmapHalfCons
     -> [B.TokenTree]    -- ^ Operand as source trees
     -> HalfRelmap       -- ^ Result half relmap
 
-halfBundle :: [(String, ([String], RopFullSorter))] -> RelmapHalfCons
+halfBundle :: [(String, (String, RopFullSorter))] -> RelmapHalfCons
 halfBundle halfs = consHalfRelmap bundle where
     bundle :: String -> RelmapHalfCons
     bundle op src opd = case lookup op halfs of
-      Just (u,p) -> let opd' = addOperand opd $ p opd
-                    in HalfRelmap u src op opd' []
-      Nothing    -> HalfRelmap [] src op [("operand", opd)] []
+      Just (u, p) -> let opd' = addOperand opd $ p opd
+                     in HalfRelmap u src op opd' []
+      Nothing     -> HalfRelmap [] src op [("operand", opd)] []
 
     addOperand :: a -> [B.Named a] -> [B.Named a]
     addOperand opd = (("operand", opd) :)
@@ -80,13 +80,13 @@ consHalfRelmap bundle src = cons where
     isBar _                           = False
 
     cat :: [HalfRelmap] -> HalfRelmap
-    cat = HalfRelmap ["RELMAP | RELMAP"] src "|" []
+    cat = HalfRelmap "R | R" src "|" []
 
     -- half relmap from tokens
     one :: [B.TokenTree] -> HalfRelmap
     one [B.TreeB _ xs] = cons xs
     one (B.TreeL (B.TWord _ 0 op) : opd) = submap $ bundle op src opd
-    one opd = HalfRelmap [] src "?" [("operand", opd)] [] -- no operator
+    one opd = HalfRelmap "" src "?" [("operand", opd)] [] -- no operator
 
     -- collect subrelmaps
     submap :: HalfRelmap -> HalfRelmap

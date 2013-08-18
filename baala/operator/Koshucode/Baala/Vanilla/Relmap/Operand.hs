@@ -1,88 +1,103 @@
-
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Vanilla.Relmap.Operand
-( VanillaOperand (..),
+( -- * Operand pattern
+  VanillaOperand (..),
+
+  -- * Operand sorter
+  likeGroup,
   likePrefix,
-  likeUnprefix,
   likePrefixChange,
   likeSize,
+  likeUnprefix,
 ) where
 
 import qualified Koshucode.Baala.Core as C
 import qualified Koshucode.Baala.Builtin as Builtin
 import qualified Koshucode.Baala.Minimal as Mini
 
--- | 'Mini.RopPattern' for relational operations.
+
+-- ---------------------- Operand patterns
+
+{-| 'Mini.RopPattern' for relational operations. -}
 data VanillaOperand
-    = LikeId
-
-    {-| Boolean expression -}
+    = LikeGroup        -- ^ 'likeGroup' sorter
     | LikeHold
-
-    {-| List of new term and expression -}
-    | LikeVal
-
-    {-| Relmap and maybe shared terms -}
-    | LikeMeet
-
-    {-| Prefix.
-        @-prefix@, @-term@ -}
-    | LikePrefix
-
-    {-| JudgePattern and list of terms -}
+    | LikeId
+    | LikeMeet         -- ^ 'Mini.likeMeet' sorter
+    | LikePrefix       -- ^ 'likePrefix' sorter
+    | LikePrefixChange -- ^ 'likePrefixChange' sorter
+    | LikeSize         -- ^ 'likeSize' sorter
     | LikeSource
-
-    {-| Prefix.
-        @-prefix@ -}
-    | LikeUnprefix
-
-    {-| Prefix.
-        @-new@, @-old@ -}
-    | LikePrefixChange
-
-    {-| Size.
-        @-term@ -}
-    | LikeSize
-
+    | LikeUnprefix     -- ^ 'likeUnprefix' sorter
+    | LikeVal
       deriving (Show, Eq, Enum)
 
 instance Builtin.RopPattern VanillaOperand where
-    ropSorter  LikeId            = id
-    ropSorter  LikeHold          = Mini.likePick
-    ropSorter  LikeVal           = Mini.likePick
-    ropSorter  LikeMeet          = Mini.likeMeet
-    ropSorter  LikePrefix        = likePrefix
-    ropSorter  LikePrefixChange  = likePrefixChange
-    ropSorter  LikeUnprefix      = likeUnprefix
-    ropSorter  LikeSource        = Mini.likeMeet
-    ropSorter  LikeSize          = likeSize
+    ropSorter  LikeGroup         =  likeGroup
+    ropSorter  LikeHold          =  Mini.likePick
+    ropSorter  LikeId            =  id
+    ropSorter  LikeMeet          =  Mini.likeMeet
+    ropSorter  LikePrefix        =  likePrefix
+    ropSorter  LikePrefixChange  =  likePrefixChange
+    ropSorter  LikeSize          =  likeSize
+    ropSorter  LikeSource        =  Mini.likeMeet
+    ropSorter  LikeUnprefix      =  likeUnprefix
+    ropSorter  LikeVal           =  Mini.likePick
 
-    ropPart    LikeId            = ["-add", "-term"]
-    ropPart    LikeHold          = ["-exp"]
-    ropPart    LikeVal           = ["-exp"]
-    ropPart    LikeMeet          = ["-relmap"]
-    ropPart    LikePrefix        = ["-prefix", "-term"]
-    ropPart    LikePrefixChange  = ["-new", "-old"]
-    ropPart    LikeUnprefix      = ["-prefix"]
-    ropPart    LikeSource        = ["-sign", "-term"]
-    ropPart    LikeSize          = ["-term"]
+    ropPart    LikeGroup         =  ["-term", "-relmap"]
+    ropPart    LikeHold          =  ["-exp"]
+    ropPart    LikeId            =  []
+    ropPart    LikeMeet          =  ["-relmap"]
+    ropPart    LikePrefix        =  ["-prefix", "-term"]
+    ropPart    LikePrefixChange  =  ["-new", "-old"]
+    ropPart    LikeSize          =  ["-term"]
+    ropPart    LikeSource        =  ["-sign", "-term"]
+    ropPart    LikeUnprefix      =  ["-prefix"]
+    ropPart    LikeVal           =  ["-exp"]
 
-    ropUsage   _ = []
 
-likePrefix  :: C.RopSorter
-likePrefix  =  C.ropPartNameBy f where
-    f (p:ns) = [("-prefix", [p]), ("-term", ns)]
-    f [] = []
 
-likeUnprefix  :: C.RopSorter
-likeUnprefix  =  C.ropPartName "-prefix"
+-- ----------------------  Operand sorter
 
-likePrefixChange  :: C.RopSorter
-likePrefixChange  =  C.ropPartNameBy f where
-    f [x,y] = [("-new", [x]), ("-old", [y])]
-    f _ = []
+{-| This sorter recognizes @-term@ and @-relamp@ operands.
 
-likeSize :: C.RopSorter
-likeSize =  C.ropPartName "-term"
+    > group /r a
+    > group -term /r -relmap a -}
+likeGroup          :: C.RopSorter
+likeGroup          =  C.ropPartNameBy f where
+    f [term, rel]  =  [("-term", [term]), ("-relmap", [rel])]
+    f _            =  []
+
+{-| This sorter recognizes @-prefix@ and @-term@ operands.
+
+    > prefix /x- /a /b /c
+    > prefix -prefix /x- -term /a /b /c -}
+likePrefix         :: C.RopSorter
+likePrefix         =  C.ropPartNameBy f where
+    f (pre : term) =  [("-prefix", [pre]), ("-term", term)]
+    f []           =  []
+
+{-| This sorter recognizes @-new@ and @-old@ operands.
+
+    > prefix-change /y- /x-
+    > prefix-change -new /y- -old /x- -}
+likePrefixChange   :: C.RopSorter
+likePrefixChange   =  C.ropPartNameBy f where
+    f [new, old]   =  [("-new", [new]), ("-old", [old])]
+    f _            =  []
+
+{-| This sorter recognizes @-term@ operand.
+
+    > size /s
+    > size -term /s -}
+likeSize           :: C.RopSorter
+likeSize           =  C.ropPartName "-term"
+
+{-| This sorter recognizes @-prefix@ operand.
+
+    > unprefix /x-
+    > unprefix -prefix /x- -}
+likeUnprefix       :: C.RopSorter
+likeUnprefix       =  C.ropPartName "-prefix"
 

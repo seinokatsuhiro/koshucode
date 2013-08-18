@@ -14,7 +14,7 @@ import Control.Monad (filterM)
 
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
-import qualified Koshucode.Baala.Builtin as Kit
+import qualified Koshucode.Baala.Builtin as Builtin
 import Koshucode.Baala.Vanilla.Type
 import Koshucode.Baala.Vanilla.Cop
 
@@ -24,7 +24,7 @@ import Koshucode.Baala.Vanilla.Cop
 
 ropConsAdd :: C.RopCons VContent
 ropConsAdd use =
-  do ts <- Kit.getTermTrees use "-term"
+  do ts <- Builtin.getTermTrees use "-term"
      cs <- vanillaNamedContents use ts
      Right $ relmapAdd use cs
 
@@ -36,7 +36,7 @@ relmapAdd use cs = C.relmapCalc use "add" sub where
 relAdd :: [B.Named (C.PosCox VContent)] -> B.Rel VContent -> B.Ab (B.Rel VContent)
 relAdd cs (B.Rel h1 b1) =
     do let h2 = B.headFrom $ map fst cs
-           h3 = Kit.mappend h2 h1
+           h3 = Builtin.mappend h2 h1
            cs2 = map snd cs
        let run arg = do cs2' <- mapM (C.runCoxH h1 arg) cs2
                         Right $ cs2' ++ arg
@@ -49,7 +49,7 @@ relAdd cs (B.Rel h1 b1) =
 
 ropConsHold :: C.RopCons VContent
 ropConsHold use = do
-  t <- Kit.getTree use "-term"
+  t <- Builtin.getTree use "-term"
   c <- vanillaContent use t
   Right $ relmapHold use True c
 

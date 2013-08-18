@@ -49,6 +49,7 @@ library
         Koshucode.Baala.Builtin
         Koshucode.Baala.Builtin.Get
         Koshucode.Baala.Builtin.Pattern
+        Koshucode.Baala.Builtin.Operator
         Koshucode.Baala.Builtin.Term
 
         Koshucode.Baala.Minimal

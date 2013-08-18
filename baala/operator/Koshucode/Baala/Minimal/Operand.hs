@@ -1,68 +1,67 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Operand patterns
+{-| Minimal operand patterns. -}
 
 module Koshucode.Baala.Minimal.Operand
-( -- * Operand patterns
+( -- * Operand pattern
   MinimalOperand (..),
 
-  -- * Operand parsers
+  -- * Operand sorter
   likePick,
-  likeRename,
   likeMeet,
   likeSource,
 ) where
 
 import qualified Koshucode.Baala.Core as C
-import Koshucode.Baala.Builtin hiding (LikeId)
+import qualified Koshucode.Baala.Builtin as Builtin
 
 
 
--- ----------------------  Opernd paterns
+-- ----------------------  Operand paterns
 
 -- | 'RopPattern' for minimal operators
 data MinimalOperand
-    = LikeId      -- ^ no operand
-    | LikeMeet    -- ^ { @-relmap@ } relmap [ @-share@ \/name ... ]
-    | LikePick    -- ^ { @-term@ } \/name ...
-    | LikeRename  -- ^ { @-term@ } \/new \/old ...
-    | LikeSource  -- ^ { @-sign@ } relsign { @-term@ } \/name ...
+    = LikeId
+    | LikeMeet      -- ^ 'likeMeet' sorter
+    | LikePick      -- ^ 'likePick' sorter
+    | LikeSource    -- ^ 'likeSource' sorter
       deriving (Show, Eq, Enum)
 
-instance RopPattern MinimalOperand where
+instance Builtin.RopPattern MinimalOperand where
     ropSorter   LikeId     = id
     ropSorter   LikeMeet   = likeMeet
     ropSorter   LikePick   = likePick
-    ropSorter   LikeRename = likeRename
     ropSorter   LikeSource = likeSource
 
     ropPart     LikeId     = []
     ropPart     LikeMeet   = ["-relmap", "-share"]
     ropPart     LikePick   = ["-term"]
-    ropPart     LikeRename = ["-term"]
     ropPart     LikeSource = ["-sign", "-term"]
 
-    ropUsage    LikeId     = [""]
-    ropUsage    LikeMeet   = ["RELMAP [-share /NAME ...]"]
-    ropUsage    LikePick   = ["/NAME ..."]
-    ropUsage    LikeRename = ["/NEW /OLD ..."]
-    ropUsage    LikeSource = ["RELSIGN /NAME ..."]
 
 
+-- ----------------------  Sorter
 
--- ----------------------  Opernd parsers
+{-| This sorter recognizes @-term@ operand.
 
-likePick    :: C.RopSorter
-likePick    =  C.ropPartName "-term"
+    > pick /a /b
+    > pick -term /a /b -}
+likePick            :: C.RopSorter
+likePick            =  C.ropPartName "-term"
 
-likeRename  :: C.RopSorter
-likeRename  =  C.ropPartName "-term"
+{-| This sorter recognizes @-relmap@ operand.
 
-likeMeet    :: C.RopSorter
-likeMeet    =  C.ropPartName "-relmap"
+    > meet a
+    > meet -relmap a -}
+likeMeet            :: C.RopSorter
+likeMeet            =  C.ropPartName "-relmap"
 
-likeSource  :: C.RopSorter
-likeSource  =  C.ropPartNameBy f where
-    f (s:ns) = [("-sign", [s]), ("-term", ns)]
-    f _      = []
+{-| This sorter recognizes @-sign@ and @-term@ operand.
+
+    > source A /a /b
+    > source -sign A -term /a /b -}
+likeSource          :: C.RopSorter
+likeSource          =  C.ropPartNameBy f where
+    f (sign : term) = [("-sign", [sign]), ("-term", term)]
+    f _             = []
 

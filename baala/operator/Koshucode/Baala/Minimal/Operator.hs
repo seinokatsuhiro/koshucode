@@ -11,7 +11,7 @@ module Koshucode.Baala.Minimal.Operator
 ) where
 
 import qualified Koshucode.Baala.Core as C
-import qualified Koshucode.Baala.Builtin as Kit
+import qualified Koshucode.Baala.Builtin as Builtin
 import Koshucode.Baala.Minimal.Operand
 import Koshucode.Baala.Minimal.Restrict
 import Koshucode.Baala.Minimal.Tropashko
@@ -23,20 +23,19 @@ import Koshucode.Baala.Minimal.Unary
 
 {-| Minimal implementations of relmaps. -}
 minimalRops :: (Ord c) => [C.Rop c]
-minimalRops = Kit.ropGroup "minimal"
-    -- Relmap operators in alphabetical order
-    [ o "cut"      LikePick     ropConsCut
-    , o "empty"    LikeId       ropConsEmpty
-    , o "id"       LikeId       ropConsId
-    , o "join"     LikeMeet     ropConsJoin
-    , o "meet"     LikeMeet     ropConsMeet
-    , o "minus"    LikeMeet     ropConsMinus
-    , o "pick"     LikePick     ropConsPick
-    , o "reldee"   LikeId       ropConsReldee
-    , o "reldum"   LikeId       ropConsReldum
-    , o "rename"   LikeRename   ropConsRename
-    , o "some"     LikeMeet     ropConsSome
-    , o "source"   LikeSource   ropConsSource
+minimalRops = Builtin.ropList "minimal"
+    [ o "cut /N ..."         LikePick     ropConsCut
+    , o "empty"              LikeId       ropConsEmpty
+    , o "id"                 LikeId       ropConsId
+    , o "join R"             LikeMeet     ropConsJoin
+    , o "meet R"             LikeMeet     ropConsMeet
+    , o "minus R"            LikeMeet     ropConsMinus
+    , o "pick /N ..."        LikePick     ropConsPick
+    , o "reldee"             LikeId       ropConsReldee
+    , o "reldum"             LikeId       ropConsReldum
+    , o "rename /N /N ..."   LikePick     ropConsRename
+    , o "some R"             LikeMeet     ropConsSome
+    , o "source P /N ..."    LikeSource   ropConsSource
     ] where o = (,,)
 
 

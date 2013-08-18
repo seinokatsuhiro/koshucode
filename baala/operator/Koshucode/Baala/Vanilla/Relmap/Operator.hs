@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Content formula. -}
+{-| Vanilla relational operators. -}
 
 module Koshucode.Baala.Vanilla.Relmap.Operator
 ( vanillaRops
@@ -10,7 +10,7 @@ module Koshucode.Baala.Vanilla.Relmap.Operator
 ) where
 
 import qualified Koshucode.Baala.Core as C
-import qualified Koshucode.Baala.Builtin as Kit
+import qualified Koshucode.Baala.Builtin as Builtin
 
 import Koshucode.Baala.Vanilla.Relmap.Calc
 import Koshucode.Baala.Vanilla.Relmap.Naming
@@ -25,54 +25,54 @@ import Koshucode.Baala.Vanilla.Type
 
 {-| Implementation of relational operators. -}
 vanillaRops :: [C.Rop VContent]
-vanillaRops = Kit.ropGroup "vanilla"
-    -- Relmap operators in alphabetical order
-    [ o "add"            LikeVal           ropConsAdd
-    , o "conf"           LikeSize          ropConsConf
-    , o "enclose"        LikeSize          ropConsEnclose
-    , o "hang"           LikeId            ropConsHang
-    , o "hold"           LikeHold          ropConsHold
-    , o "maybe"          LikeMeet          ropConsMaybe
-    , o "maybe-both"     LikeMeet          ropConsMaybeBoth
-    , o "prefix"         LikePrefix        ropConsPrefix
-    , o "prefix-change"  LikePrefixChange  ropConsPrefixChange
-    , o "range"          LikeSize          ropConsRange
-    , o "rank"           LikeId            ropConsRank
-    , o "rdf"            LikeSource        ropConsRdf
-    , o "size"           LikeSize          ropConsSize
-    , o "typename"       LikeHold          ropConsTypename
-    , o "unprefix"       LikeUnprefix      ropConsUnprefix
+vanillaRops = Builtin.ropList "vanilla"
+    [ o "add /N E ..."         LikeVal           ropConsAdd
+    , o "conf /N"              LikeSize          ropConsConf
+    , o "enclose /N"           LikeSize          ropConsEnclose
+    , o "group /N R"           LikeGroup         ropConsGroup
+    , o "hold E"               LikeHold          ropConsHold
+    , o "maybe R"              LikeMeet          ropConsMaybe
+    , o "maybe-both R"         LikeMeet          ropConsMaybeBoth
+    , o "prefix /P /N ..."     LikePrefix        ropConsPrefix
+    , o "prefix-change /P /Q"  LikePrefixChange  ropConsPrefixChange
+    , o "range"                LikeSize          ropConsRange
+    , o "rank"                 LikeId            ropConsRank
+    , o "rdf P /S /O"          LikeSource        ropConsRdf
+    , o "size /N"              LikeSize          ropConsSize
+    , o "typename"             LikeHold          ropConsTypename
+    , o "unprefix /P"          LikeUnprefix      ropConsUnprefix
     ] where o = (,,)
 
 
 
 -- ----------------------
--- $Operators
---
--- [@add@]
---
--- [@conf@]
---
--- [@enclose@]
---
--- [@hang@]
---
--- [@hold@]
---
--- [@maybe@]
---
--- [@maybe-both@]
---
--- [@prefix@]
---
--- [@prefix-change@]
---
--- [@rdf@]
---
--- [@size@]
---
--- [@unhold@]
---
--- [@unprefix@]
---
+{- $Operators
+
+   [@add@]
+  
+   [@conf@]
+  
+   [@enclose@]
+  
+   [@group@]
+  
+   [@hold@]
+  
+   [@maybe@]
+  
+   [@maybe-both@]
+  
+   [@prefix@]
+  
+   [@prefix-change@]
+  
+   [@rdf@]
+  
+   [@size@]
+  
+   [@unhold@]
+  
+   [@unprefix@]
+
+-}
 

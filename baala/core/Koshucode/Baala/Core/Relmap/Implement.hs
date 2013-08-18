@@ -35,7 +35,7 @@ data Rop c = Rop
     , ropGroup      :: String         -- ^ Operator group
     , ropFullSorter :: RopFullSorter  -- ^ Operand sorter
     , ropCons       :: RopCons c      -- ^ Constructor of operator
-    , ropUsage      :: [String]       -- ^ Usage of operator
+    , ropUsage      :: String         -- ^ Usage of operator
     }
     
 {-| Sorter for operand of relational operator.

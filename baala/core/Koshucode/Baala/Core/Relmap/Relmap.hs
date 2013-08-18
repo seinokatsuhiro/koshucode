@@ -75,7 +75,7 @@ instance Monoid (Relmap c) where
     mappend = RelmapAppend
 
 halfid :: HalfRelmap
-halfid = HalfRelmap ["id"] [] "id" [("operand", [])] []
+halfid = HalfRelmap "id" [] "id" [("operand", [])] []
 
 relid :: RelmapSub c
 relid _ = Right

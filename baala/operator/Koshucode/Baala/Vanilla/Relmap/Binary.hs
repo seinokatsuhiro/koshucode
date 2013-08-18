@@ -6,13 +6,13 @@ module Koshucode.Baala.Vanilla.Relmap.Binary
   ropConsMaybe, relmapMaybe, relMaybe,
   -- * maybe-both
   ropConsMaybeBoth, relmapMaybeBoth,
-  -- * hang
-  ropConsHang, relmapHang, relHang,
+  -- * group
+  ropConsGroup, relmapGroup, relGroup,
 ) where
 
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
-import qualified Koshucode.Baala.Builtin as Kit
+import qualified Koshucode.Baala.Builtin as Builtin
 import Koshucode.Baala.Vanilla.Type
 import qualified Koshucode.Baala.Minimal as Mini
 
@@ -22,7 +22,7 @@ import qualified Koshucode.Baala.Minimal as Mini
 
 ropConsMaybe :: C.RopCons VContent
 ropConsMaybe use =
-    do m <- Kit.getRelmap use
+    do m <- Builtin.getRelmap use
        Right $ relmapMaybe use m
 
 relmapMaybe :: (Ord c, C.CNil c) => C.RopUse c -> B.Map (C.Relmap c)
@@ -45,7 +45,7 @@ relMaybe r1 r2 = Right $ B.Rel h3 b3 where
     pair arg2 = (B.csPick share2 arg2,
                  B.csPick side2  arg2)
 
-    h3 = Kit.mappend h2 h1
+    h3 = Builtin.mappend h2 h1
     b3 = concatMap step args1
     nils = replicate (B.headDegree h3 - B.headDegree h1) C.nil
     step arg1 = case B.lookupMap (B.csPick share1 arg1) m2 of
@@ -58,7 +58,7 @@ relMaybe r1 r2 = Right $ B.Rel h3 b3 where
 
 ropConsMaybeBoth :: C.RopCons VContent
 ropConsMaybeBoth use =
-    do m <- Kit.getRelmap use
+    do m <- Builtin.getRelmap use
        Right $ relmapMaybeBoth use m
 
 -- | like SQL's full join
@@ -71,22 +71,22 @@ relmapMaybeBoth use m = C.relmapConfl use "mmaybe" sub [m] where
 
 
 
--- ----------------------  hang
+-- ----------------------  group
 
-ropConsHang :: C.RopCons VContent
-ropConsHang use =
-  do n <- Kit.getTerm   use "-term"
-     m <- Kit.getRelmap use
-     Right $ relmapHang use n m
+ropConsGroup :: C.RopCons VContent
+ropConsGroup use =
+  do n <- Builtin.getTerm   use "-term"
+     m <- Builtin.getRelmap use
+     Right $ relmapGroup use n m
 
-relmapHang :: (Ord c, C.CRel c) => C.RopUse c -> String -> B.Map (C.Relmap c)
-relmapHang use n m = C.relmapConfl use "hang" sub [m] where
-    sub [r2] r1 = relHang n r2 r1
+relmapGroup :: (Ord c, C.CRel c) => C.RopUse c -> String -> B.Map (C.Relmap c)
+relmapGroup use n m = C.relmapConfl use "group" sub [m] where
+    sub [r2] r1 = relGroup n r2 r1
     sub _ _     = B.bug
 
--- | Hanging relation, like grouping.
-relHang :: (Ord c, C.CRel c) => String -> B.Rel c -> B.AbMap (B.Rel c)
-relHang n r2 r1 = Right $ B.Rel h3 b3 where
+-- | Grouping relation.
+relGroup :: (Ord c, C.CRel c) => String -> B.Rel c -> B.AbMap (B.Rel c)
+relGroup n r2 r1 = Right $ B.Rel h3 b3 where
     B.Rel h1 args1 = r1
     B.Rel h2 args2 = r2
 
