@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.32.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.34.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -56,12 +56,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Writer
+	    >Logical quality
 </a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >Logical quality
+	    >Writer
 </a
 	    ></li
 	  ></ul
@@ -71,7 +71,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	>Description</p
 	><div class="doc"
 	><p
-	  >Judgements: a symbolic representations of affirmed or denied statements.
+	  >Judgements: a symbolic representations of
+    affirmed or denied statements. 
 </p
 	  ></div
 	></div
@@ -84,67 +85,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >data</span
 	    >  <a href="#t:Judge"
 	    >Judge</a
-	    > v = <a href="#v:Judge"
+	    > c = <a href="#v:Judge"
 	    >Judge</a
 	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
-	    > <a href="Koshucode-Baala-Base-Data-Judge.html#t:Relsign"
-	    >Relsign</a
-	    > (<a href="Koshucode-Baala-Base-Data-Judge.html#t:Relarg"
-	    >Relarg</a
-	    > v)</li
+	    > <a href="Koshucode-Baala-Base-Data-Judge.html#t:JudgePattern"
+	    >JudgePattern</a
+	    > [<a href="Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+	    >Named</a
+	    > c]</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:Relsign"
-	    >Relsign</a
+	    > <a href="#t:JudgePattern"
+	    >JudgePattern</a
 	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    ></li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:Relarg"
-	    >Relarg</a
-	    > v = [<a href="Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > v]</li
-	  ><li class="src short"
-	  ><a href="#v:putJudges"
-	    >putJudges</a
-	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > v, <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
-	    >Pretty</a
-	    > v) =&gt; [<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
-	    >Judge</a
-	    > v] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
-	    >IO</a
-	    > ()</li
-	  ><li class="src short"
-	  ><a href="#v:hPutJudges"
-	    >hPutJudges</a
-	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > v, <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
-	    >Pretty</a
-	    > v) =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
-	    >Handle</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
-	    >Judge</a
-	    > v] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
-	    >IO</a
-	    > ()</li
-	  ><li class="src short"
-	  ><a href="#v:abcJudge"
-	    >abcJudge</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > v =&gt; <a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
-	    >Judge</a
-	    > v -&gt; <a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
-	    >Judge</a
-	    > v</li
 	  ><li class="src short"
 	  ><a href="#v:affirmJudge"
 	    >affirmJudge</a
@@ -152,7 +109,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > (<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > v)</li
+	    > c)</li
 	  ><li class="src short"
 	  ><a href="#v:denyJudge"
 	    >denyJudge</a
@@ -160,13 +117,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > (<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > v)</li
+	    > c)</li
 	  ><li class="src short"
 	  ><a href="#v:isAffirmed"
 	    >isAffirmed</a
 	    > ::  <a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > t -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
 	    ></li
 	  ><li class="src short"
@@ -174,9 +131,45 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >isDenied</a
 	    > ::  <a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > t -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
 	    ></li
+	  ><li class="src short"
+	  ><a href="#v:putJudges"
+	    >putJudges</a
+	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
+	    >Pretty</a
+	    > c) =&gt; [<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    >Judge</a
+	    > c] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > ()</li
+	  ><li class="src short"
+	  ><a href="#v:hPutJudges"
+	    >hPutJudges</a
+	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
+	    >Pretty</a
+	    > c) =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
+	    >Handle</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    >Judge</a
+	    > c] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > ()</li
+	  ><li class="src short"
+	  ><a href="#v:abcJudge"
+	    >abcJudge</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    >Judge</a
+	    > c)</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -189,38 +182,38 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >data</span
 	    >  <a name="t:Judge" class="def"
 	    >Judge</a
-	    > v <a href="src/Koshucode-Baala-Base-Data-Judge.html#Judge" class="link"
+	    > c <a href="src/Koshucode-Baala-Base-Data-Judge.html#Judge" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Judgement on type <code
-	      >v</code
+	      >c</code
 	      >.
 </p
 	    ><p
 	    >Judgement (or judge for short) is divided into three parts:
-   logical quality, sign of relation, and argument.
-   <code
+    logical quality, sign of relation, and argument.
+    <code
 	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 		>Bool</a
 		></code
 	      > value of logical quality corresponds to
-   affirmed or denied judge.
-   <code
+    affirmed or denied judge.
+    <code
 	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
 		></code
 	      > value of sign represents certain sentence pattern
-   that gives intepretation of data.
-   Sentence pattern has placeholders filled by
-   (<code
+    that gives intepretation of data.
+    Sentence pattern has placeholders filled by
+    (<code
 	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
 		></code
 	      >, <code
-	      >v</code
-	      >) values of argument.
+	      >c</code
+	      >) values of argument. -
 </p
 	    ></div
 	  ><div class="subs constructors"
@@ -233,11 +226,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  >Judge</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 		  >Bool</a
-		  > <a href="Koshucode-Baala-Base-Data-Judge.html#t:Relsign"
-		  >Relsign</a
-		  > (<a href="Koshucode-Baala-Base-Data-Judge.html#t:Relarg"
-		  >Relarg</a
-		  > v)</td
+		  > <a href="Koshucode-Baala-Base-Data-Judge.html#t:JudgePattern"
+		  >JudgePattern</a
+		  > [<a href="Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+		  >Named</a
+		  > c]</td
 		><td class="doc empty"
 		>&nbsp;</td
 		></tr
@@ -262,11 +255,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		><td class="src"
 		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
 		    >Eq</a
-		    > v =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
 		    >Eq</a
 		    > (<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 		    >Judge</a
-		    > v)</td
+		    > c)</td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
@@ -274,11 +267,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		><td class="src"
 		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 		    >Ord</a
-		    > v =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 		    >Ord</a
 		    > (<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 		    >Judge</a
-		    > v)</td
+		    > c)</td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
@@ -286,11 +279,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		><td class="src"
 		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
 		    >Show</a
-		    > v =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
 		    >Show</a
 		    > (<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 		    >Judge</a
-		    > v)</td
+		    > c)</td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
@@ -298,13 +291,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		><td class="src"
 		  >(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 		    >Ord</a
-		    > v, <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
+		    > c, <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
 		    >Pretty</a
-		    > v) =&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
+		    > c) =&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
 		    >Pretty</a
 		    > (<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 		    >Judge</a
-		    > v)</td
+		    > c)</td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
@@ -316,93 +309,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:Relsign" class="def"
-	    >Relsign</a
+	    > <a name="t:JudgePattern" class="def"
+	    >JudgePattern</a
 	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Judge.html#Relsign" class="link"
+	    ><a href="src/Koshucode-Baala-Base-Data-Judge.html#JudgePattern" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Sign of relation, or relation name.
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:Relarg" class="def"
-	    >Relarg</a
-	    > v = [<a href="Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > v]<a href="src/Koshucode-Baala-Base-Data-Judge.html#Relarg" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >List of terms.
+	    >Pattern of judgement. 
 </p
 	    ></div
 	  ></div
 	><h1 id="g:2"
-	>Writer
-</h1
-	><div class="top"
-	><p class="src"
-	  ><a name="v:putJudges" class="def"
-	    >putJudges</a
-	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > v, <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
-	    >Pretty</a
-	    > v) =&gt; [<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
-	    >Judge</a
-	    > v] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
-	    >IO</a
-	    > ()<a href="src/Koshucode-Baala-Base-Data-Judge.html#putJudges" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:hPutJudges" class="def"
-	    >hPutJudges</a
-	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > v, <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
-	    >Pretty</a
-	    > v) =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
-	    >Handle</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
-	    >Judge</a
-	    > v] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
-	    >IO</a
-	    > ()<a href="src/Koshucode-Baala-Base-Data-Judge.html#hPutJudges" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:abcJudge" class="def"
-	    >abcJudge</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > v =&gt; <a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
-	    >Judge</a
-	    > v -&gt; <a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
-	    >Judge</a
-	    > v<a href="src/Koshucode-Baala-Base-Data-Judge.html#abcJudge" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Sort terms in alphabetical order. 
-</p
-	    ></div
-	  ></div
-	><h1 id="g:3"
 	>Logical quality
 </h1
 	><div class="top"
@@ -413,7 +333,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > (<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > v)<a href="src/Koshucode-Baala-Base-Data-Judge.html#affirmJudge" class="link"
+	    > c)<a href="src/Koshucode-Baala-Base-Data-Judge.html#affirmJudge" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -434,7 +354,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > (<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > v)<a href="src/Koshucode-Baala-Base-Data-Judge.html#denyJudge" class="link"
+	    > c)<a href="src/Koshucode-Baala-Base-Data-Judge.html#denyJudge" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -453,7 +373,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >isAffirmed</a
 	    > ::  <a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > t -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
 	    ><a href="src/Koshucode-Baala-Base-Data-Judge.html#isAffirmed" class="link"
 	    >Source</a
@@ -465,11 +385,72 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >isDenied</a
 	    > ::  <a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > t -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
 	    ><a href="src/Koshucode-Baala-Base-Data-Judge.html#isDenied" class="link"
 	    >Source</a
 	    ></p
+	  ></div
+	><h1 id="g:3"
+	>Writer
+</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:putJudges" class="def"
+	    >putJudges</a
+	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
+	    >Pretty</a
+	    > c) =&gt; [<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    >Judge</a
+	    > c] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > ()<a href="src/Koshucode-Baala-Base-Data-Judge.html#putJudges" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Print judges. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:hPutJudges" class="def"
+	    >hPutJudges</a
+	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c, <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
+	    >Pretty</a
+	    > c) =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
+	    >Handle</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    >Judge</a
+	    > c] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > ()<a href="src/Koshucode-Baala-Base-Data-Judge.html#hPutJudges" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:abcJudge" class="def"
+	    >abcJudge</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    >Judge</a
+	    > c)<a href="src/Koshucode-Baala-Base-Data-Judge.html#abcJudge" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Sort terms in alphabetical order. 
+</p
+	    ></div
 	  ></div
 	></div
       ></div

@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.32.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.34.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -53,33 +53,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ><a href="#g:1"
 	    >Library
 </a
-	    ><ul
-	    ><li
-	      ><a href="#g:2"
-		>Source lines
-</a
-		></li
-	      ></ul
 	    ></li
 	  ><li
-	  ><a href="#g:3"
+	  ><a href="#g:2"
 	    >Document
 </a
 	    ><ul
 	    ><li
-	      ><a href="#g:4"
+	      ><a href="#g:3"
 		>Token category
 </a
 		></li
 	      ><li
-	      ><a href="#g:5"
+	      ><a href="#g:4"
 		>Asterisks
 </a
 		></li
 	      ></ul
 	    ></li
 	  ><li
-	  ><a href="#g:6"
+	  ><a href="#g:5"
 	    >Examples
 </a
 	    ></li
@@ -100,50 +93,32 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
 	  ><span class="keyword"
-	    >data</span
-	    >  <a href="#t:CodeLine"
+	    >type</span
+	    > <a href="#t:TokenLine"
+	    >TokenLine</a
+	    > = <a href="Koshucode-Baala-Base-Syntax-CodeLine.html#t:CodeLine"
 	    >CodeLine</a
-	    >  = <a href="#v:CodeLine"
-	    >CodeLine</a
-	    > {<ul class="subs"
-	    ><li
-	      ><a href="#v:sourceLineNumber"
-		>sourceLineNumber</a
-		> :: <a href="Koshucode-Baala-Base-Prelude-Line.html#t:LineNumber"
-		>LineNumber</a
-		></li
-	      ><li
-	      ><a href="#v:sourceLineContent"
-		>sourceLineContent</a
-		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		></li
-	      ><li
-	      ><a href="#v:sourceLineTokens"
-		>sourceLineTokens</a
-		> :: [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
-		>Token</a
-		>]</li
-	      ></ul
-	    >}</li
+	    > <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    ></li
 	  ><li class="src short"
-	  ><a href="#v:sourceLines"
-	    >sourceLines</a
+	  ><a href="#v:tokenize"
+	    >tokenize</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:CodeLine"
+	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-CodeLine.html#t:CodeLine"
 	    >CodeLine</a
+	    > <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
 	    >]</li
 	  ><li class="src short"
-	  ><a href="#v:divideByToken"
-	    >divideByToken</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	  ><a href="#v:trimLeft"
+	    >trimLeft</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
-	    >Token</a
-	    >] -&gt; [[<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
-	    >Token</a
-	    >]]</li
+	    ></li
 	  ><li class="src short"
 	  ><a href="#v:tokens"
 	    >tokens</a
@@ -158,243 +133,45 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
       ><h1 id="g:1"
 	>Library
 </h1
-	><h2 id="g:2"
-	>Source lines
-</h2
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
-	    >data</span
-	    >  <a name="t:CodeLine" class="def"
+	    >type</span
+	    > <a name="t:TokenLine" class="def"
+	    >TokenLine</a
+	    > = <a href="Koshucode-Baala-Base-Syntax-CodeLine.html#t:CodeLine"
 	    >CodeLine</a
-	    >  <a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html#CodeLine" class="link"
+	    > <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    ><a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html#TokenLine" class="link"
 	    >Source</a
 	    ></p
-	  ><div class="subs constructors"
-	  ><p class="caption"
-	    >Constructors</p
-	    ><table
-	    ><tr
-	      ><td class="src"
-		><a name="v:CodeLine" class="def"
-		  >CodeLine</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td colspan="2"
-		><div class="subs fields"
-		  ><p class="caption"
-		    >Fields</p
-		    ><dl
-		    ><dt class="src"
-		      ><a name="v:sourceLineNumber" class="def"
-			>sourceLineNumber</a
-			> :: <a href="Koshucode-Baala-Base-Prelude-Line.html#t:LineNumber"
-			>LineNumber</a
-			></dt
-		      ><dd class="doc"
-		      ><p
-			>Line number, from 1.
-</p
-			></dd
-		      ><dt class="src"
-		      ><a name="v:sourceLineContent" class="def"
-			>sourceLineContent</a
-			> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-			>String</a
-			></dt
-		      ><dd class="doc"
-		      ><p
-			>Line content without newline.
-</p
-			></dd
-		      ><dt class="src"
-		      ><a name="v:sourceLineTokens" class="def"
-			>sourceLineTokens</a
-			> :: [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
-			>Token</a
-			>]</dt
-		      ><dd class="doc"
-		      ><p
-			>Tokens in the line.
-</p
-			></dd
-		      ></dl
-		    ><div class="clear"
-		    ></div
-		    ></div
-		  ></td
-		></tr
-	      ></table
-	    ></div
-	  ><div class="subs instances"
-	  ><p id="control.i:CodeLine" class="caption collapser" onclick="toggleSection('i:CodeLine')"
-	    >Instances</p
-	    ><div id="section.i:CodeLine" class="show"
-	    ><table
-	      ><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
-		    >Eq</a
-		    > <a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:CodeLine"
-		    >CodeLine</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
-		    >Data</a
-		    > <a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:CodeLine"
-		    >CodeLine</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-		    >Ord</a
-		    > <a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:CodeLine"
-		    >CodeLine</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
-		    >Show</a
-		    > <a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:CodeLine"
-		    >CodeLine</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
-		    >Typeable</a
-		    > <a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:CodeLine"
-		    >CodeLine</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
-		    >Pretty</a
-		    > <a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:CodeLine"
-		    >CodeLine</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		></table
-	      ></div
-	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:sourceLines" class="def"
-	    >sourceLines</a
-	    ><a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html#sourceLines" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="subs arguments"
-	  ><p class="caption"
-	    >Arguments</p
-	    ><table
-	    ><tr
-	      ><td class="src"
-		>:: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Source text in koshucode.
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		>-&gt; [<a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:CodeLine"
-		  >CodeLine</a
-		  >]</td
-		><td class="doc"
-		><p
-		  >Token list per lines.
-</p
-		  ></td
-		></tr
-	      ></table
-	    ></div
-	  ><div class="doc"
-	  ><p
-	    >Split source text into <code
-	      ><a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:CodeLine"
-		>CodeLine</a
-		></code
-	      > list.
-</p
-	    ><ol
-	    ><li
-	      > Split source code into lines by line delimiters
-       (carriage return <code
-		>\r</code
-		> or line feed <code
-		>\n</code
-		>)
-</li
-	      ><li
-	      > Numbering line numbers.
-       Internally, this is represented as
-       a list of pairs (<em
-		>line#</em
-		>, <em
-		>string</em
-		>).
-</li
-	      ><li
-	      > Tokenize each lines.
-       This is represented as a list of
-       <code
-		><a href="Koshucode-Baala-Base-Syntax-Tokenizer.html#t:CodeLine"
-		  >CodeLine</a
-		  ></code
-		> <em
-		>line#</em
-		> <em
-		>string</em
-		> <em
-		>tokens</em
-		>.
-</li
-	      ></ol
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:divideByToken" class="def"
-	    >divideByToken</a
+	  ><a name="v:tokenize" class="def"
+	    >tokenize</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-CodeLine.html#t:CodeLine"
+	    >CodeLine</a
+	    > <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
 	    >Token</a
-	    >] -&gt; [[<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
-	    >Token</a
-	    >]]<a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html#divideByToken" class="link"
+	    >]<a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html#tokenize" class="link"
 	    >Source</a
 	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Divide token list by some word. 
-</p
-	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:trimLeft" class="def"
+	    >trimLeft</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ><a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html#trimLeft" class="link"
+	    >Source</a
+	    ></p
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -414,10 +191,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 </p
 	    ></div
 	  ></div
-	><h1 id="g:3"
+	><h1 id="g:2"
 	>Document
 </h1
-	><h2 id="g:4"
+	><h2 id="g:3"
 	>Token category
 </h2
 	><div class="doc"
@@ -526,7 +303,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 </dd
 	    ></dl
 	  ></div
-	><h2 id="g:5"
+	><h2 id="g:4"
 	>Asterisks
 </h2
 	><div class="doc"
@@ -599,7 +376,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    > on top of a clause to hide it.
 </p
 	  ></div
-	><h1 id="g:6"
+	><h1 id="g:5"
 	>Examples
 </h1
 	><div class="doc"

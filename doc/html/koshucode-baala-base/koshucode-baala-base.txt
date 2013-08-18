@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.32.0.0
+@version 0.34.0.0
 
 module Koshucode.Baala.Base.Syntax.HashWord
 hashWordTable :: [(String, String)]
@@ -154,7 +154,22 @@ unionUp :: Eq a => [a] -> [a] -> [a]
 singleton :: a -> [a]
 divideBy :: Eq a => a -> [a] -> [[a]]
 divideByP :: Eq a => (a -> Bool) -> [a] -> [[a]]
-rpad :: Int -> Map String
+
+-- | Add spaces.
+--   
+--   <pre>
+--   &gt;&gt;&gt; padRight 10 "abc"
+--   "abc       "
+--   </pre>
+padRight :: Int -> Map String
+
+-- | Add spaces.
+--   
+--   <pre>
+--   &gt;&gt;&gt; padLeft 10 "abc"
+--   "       abc"
+--   </pre>
+padLeft :: Int -> Map String
 
 -- | Gather what is gotten by splitter.
 gather :: ([a] -> (b, [a])) -> [a] -> [b]
@@ -165,6 +180,23 @@ gatherToMap :: Ord k => [(k, v)] -> Map k [v]
 lookupSatisfy :: a -> [(a -> Bool, b)] -> Maybe b
 lookupMap :: Ord k => k -> Map k a -> Maybe a
 
+module Koshucode.Baala.Base.Data.Comment
+data CommentDoc
+CommentDoc :: [CommentSec] -> CommentDoc
+data CommentSec
+CommentSec :: String -> [String] -> CommentSec
+class Texts a
+texts :: Texts a => a -> [String]
+emacsModeComment :: String
+instance Show CommentSec
+instance Eq CommentSec
+instance Ord CommentSec
+instance Show CommentDoc
+instance Eq CommentDoc
+instance Ord CommentDoc
+instance Texts CommentSec
+instance Texts CommentDoc
+
 module Koshucode.Baala.Base.Prelude
 
 
@@ -172,39 +204,38 @@ module Koshucode.Baala.Base.Prelude
 --   statements.
 module Koshucode.Baala.Base.Data.Judge
 
--- | Judgement on type <tt>v</tt>.
+-- | Judgement on type <tt>c</tt>.
 --   
 --   Judgement (or judge for short) is divided into three parts: logical
 --   quality, sign of relation, and argument. <a>Bool</a> value of logical
 --   quality corresponds to affirmed or denied judge. <a>String</a> value
 --   of sign represents certain sentence pattern that gives intepretation
 --   of data. Sentence pattern has placeholders filled by (<a>String</a>,
---   <tt>v</tt>) values of argument.
-data Judge v
-Judge :: Bool -> Relsign -> (Relarg v) -> Judge v
+--   <tt>c</tt>) values of argument. -
+data Judge c
+Judge :: Bool -> JudgePattern -> [Named c] -> Judge c
 
--- | Sign of relation, or relation name.
-type Relsign = String
-
--- | List of terms.
-type Relarg v = [Named v]
-putJudges :: (Ord v, Pretty v) => [Judge v] -> IO ()
-hPutJudges :: (Ord v, Pretty v) => Handle -> [Judge v] -> IO ()
-
--- | Sort terms in alphabetical order.
-abcJudge :: Ord v => Judge v -> Judge v
+-- | Pattern of judgement.
+type JudgePattern = String
 
 -- | Affirm judge, i.e., change logical quality to <a>True</a>.
-affirmJudge :: Map (Judge v)
+affirmJudge :: Map (Judge c)
 
 -- | Deny judge, i.e., change logical quality to <a>False</a>.
-denyJudge :: Map (Judge v)
-isAffirmed :: Judge t -> Bool
-isDenied :: Judge t -> Bool
-instance Show v => Show (Judge v)
-instance Eq v => Eq (Judge v)
-instance Ord v => Ord (Judge v)
-instance (Ord v, Pretty v) => Pretty (Judge v)
+denyJudge :: Map (Judge c)
+isAffirmed :: Judge c -> Bool
+isDenied :: Judge c -> Bool
+
+-- | Print judges.
+putJudges :: (Ord c, Pretty c) => [Judge c] -> IO ()
+hPutJudges :: (Ord c, Pretty c) => Handle -> [Judge c] -> IO ()
+
+-- | Sort terms in alphabetical order.
+abcJudge :: Ord c => Map (Judge c)
+instance Show c => Show (Judge c)
+instance Eq c => Eq (Judge c)
+instance Ord c => Ord (Judge c)
+instance (Ord c, Pretty c) => Pretty (Judge c)
 instance Functor Judge
 
 
@@ -340,125 +371,69 @@ instance Monoid Relhead
 -- | Type for relations
 module Koshucode.Baala.Base.Data.Rel
 
--- | Relations on type v. Heading of relation and body of relation as a
+-- | Relations on type c. Heading of relation and body of relation as a
 --   list of tuples.
-data Rel v
-Rel :: Relhead -> (Relbody v) -> Rel v
+data Rel c
+Rel :: Relhead -> (Relbody c) -> Rel c
 
 -- | List of positional args.
-type Relbody v = [[v]]
+type Relbody c = [[c]]
 
 -- | Relational constant that has no terms and no tuples.
-reldum :: Rel v
+reldum :: Rel c
 
 -- | Relational constant that has no terms and the empty tuple.
-reldee :: Rel v
-instance Show v => Show (Rel v)
-instance Eq v => Eq (Rel v)
-instance Ord v => Ord (Rel v)
-instance Pretty v => Pretty (Rel v)
+reldee :: Rel c
+instance Show c => Show (Rel c)
+instance Eq c => Eq (Rel c)
+instance Ord c => Ord (Rel c)
+instance Pretty c => Pretty (Rel c)
 
 
--- | Tokens
-module Koshucode.Baala.Base.Syntax.Token
+-- | This module provides a container for tokens. No tokens in Koshucode
+--   are in a extent of multiple lines. <a>CodeLine</a> includes whole
+--   tokens in a line. You can represent tokenized source code as a list of
+--   <a>CodeLine</a>.
+module Koshucode.Baala.Base.Syntax.CodeLine
 
--- | Token number.
-type TNumber = Int
-data Token
-
--- | Word. <tt>Int</tt> represents quotation level, e.g., 0 for non-quoted,
---   1 for single-quoted, 2 for double-quoted.
-TWord :: TNumber -> Int -> String -> Token
-
--- | Term name
-TTerm :: TNumber -> [String] -> Token
-
--- | Open paren
-TOpen :: TNumber -> String -> Token
-
--- | Close paren
-TClose :: TNumber -> String -> Token
-
--- | <i>N</i> space characters
-TSpace :: TNumber -> Int -> Token
-
--- | Comment text
-TComment :: TNumber -> String -> Token
-
--- | Unknown text
-TUnknown :: TNumber -> String -> Token
-
--- | Test the token is blank, i.e., <a>TComment</a> or <a>TSpace</a>.
-isBlankToken :: Token -> Bool
-
--- | Test the token is a term, i.e., <a>TTerm</a>.
-isTermToken :: Token -> Bool
-isOpenTokenOf :: String -> Token -> Bool
-isCloseTokenOf :: String -> Token -> Bool
-
--- | Text of token type, one of <tt>"Word"</tt>, <tt>"Term"</tt>,
---   <tt>"Open"</tt>, <tt>"Close"</tt>, <tt>"Space"</tt>, or
---   <tt>"Comment"</tt>.
---   
---   <pre>
---   &gt;&gt;&gt; tokenTypeText $ TWord 1 0 "flower"
---   "Word"
---   </pre>
-tokenTypeText :: Token -> String
-tokenContent :: Token -> String
-tokenNumber :: Token -> TNumber
-
--- | Remove blank tokens.
-sweepToken :: Map [Token]
-
--- | Skip leading blank tokens.
-sweepLeft :: Map [Token]
-instance Typeable Token
-instance Show Token
-instance Eq Token
-instance Ord Token
-instance Data Token
-instance Name Token
-
-
--- | Tokenizer of koshucode.
-module Koshucode.Baala.Base.Syntax.Tokenizer
-data CodeLine
-CodeLine :: LineNumber -> String -> [Token] -> CodeLine
+-- | Tokens per line.
+data CodeLine a
+CodeLine :: LineNumber -> String -> [a] -> CodeLine a
 
 -- | Line number, from 1.
-sourceLineNumber :: CodeLine -> LineNumber
+codeLineNumber :: CodeLine a -> LineNumber
 
 -- | Line content without newline.
-sourceLineContent :: CodeLine -> String
+codeLineContent :: CodeLine a -> String
 
 -- | Tokens in the line.
-sourceLineTokens :: CodeLine -> [Token]
+codeLineTokens :: CodeLine a -> [a]
+
+-- | Type of function that splits a next token from string. Tokens can
+--   includes <a>TokenNumber</a>.
+type NextToken a = TokenNumber -> String -> (a, String)
+
+-- | Token number, from 1.
+type TokenNumber = Int
 
 -- | Split source text into <a>CodeLine</a> list.
 --   
 --   <ol>
---   <li>Split source code into lines by line delimiters (carriage return
---   <tt>\r</tt> or line feed <tt>\n</tt>)</li>
---   <li>Numbering line numbers. Internally, this is represented as a list
---   of pairs (<i>line#</i>, <i>string</i>).</li>
---   <li>Tokenize each lines. This is represented as a list of
---   <a>CodeLine</a> <i>line#</i> <i>string</i> <i>tokens</i>.</li>
+--   <li>Split source text into lines by line delimiters (carriage return
+--   <tt>\r</tt> or line feed <tt>\n</tt>).</li>
+--   <li>Numbering lines from 1. Internally, this is represented as a list
+--   of pairs <tt>(</tt><a>LineNumber</a><tt>,</tt>
+--   <a>String</a><tt>)</tt>.</li>
+--   <li>Tokenize each lines, and put tokens together in
+--   <a>CodeLine</a>.</li>
 --   </ol>
-sourceLines :: String -> [CodeLine]
-
--- | Divide token list by some word.
-divideByToken :: String -> [Token] -> [[Token]]
-
--- | Split string into list of tokens. Result token list does not contain
---   newline characters.
-tokens :: String -> [Token]
-instance Typeable CodeLine
-instance Show CodeLine
-instance Eq CodeLine
-instance Ord CodeLine
-instance Data CodeLine
-instance Pretty CodeLine
+codeLines :: NextToken a -> String -> [CodeLine a]
+instance Typeable1 CodeLine
+instance Show a => Show (CodeLine a)
+instance Eq a => Eq (CodeLine a)
+instance Ord a => Ord (CodeLine a)
+instance Data a => Data (CodeLine a)
+instance Pretty (CodeLine a)
 
 module Koshucode.Baala.Base.Syntax.Tree
 
@@ -560,6 +535,71 @@ heightTable :: Ord a => [(BinaryHeight, [a])] -> (a -> BinaryHeight)
 heightTableUnbox :: Ord a => (b -> a) -> [(BinaryHeight, [a])] -> (b -> BinaryHeight)
 
 
+-- | Tokens
+module Koshucode.Baala.Base.Syntax.Token
+
+-- | Termname.
+type Termname = String
+data Token
+
+-- | Word. <tt>Int</tt> represents quotation level, e.g., 0 for non-quoted,
+--   1 for single-quoted, 2 for double-quoted.
+TWord :: TokenNumber -> Int -> String -> Token
+
+-- | Termname
+TTerm :: TokenNumber -> [Termname] -> Token
+
+-- | Open paren
+TOpen :: TokenNumber -> String -> Token
+
+-- | Close paren
+TClose :: TokenNumber -> String -> Token
+
+-- | <i>N</i> space characters
+TSpace :: TokenNumber -> Int -> Token
+
+-- | Comment text
+TComment :: TokenNumber -> String -> Token
+
+-- | Unknown text
+TUnknown :: TokenNumber -> String -> Token
+
+-- | Test the token is blank, i.e., <a>TComment</a> or <a>TSpace</a>.
+isBlankToken :: Token -> Bool
+
+-- | Test the token is a term, i.e., <a>TTerm</a>.
+isTermToken :: Token -> Bool
+isOpenTokenOf :: String -> Token -> Bool
+isCloseTokenOf :: String -> Token -> Bool
+
+-- | Text of token type, one of <tt>"Word"</tt>, <tt>"Term"</tt>,
+--   <tt>"Open"</tt>, <tt>"Close"</tt>, <tt>"Space"</tt>, or
+--   <tt>"Comment"</tt>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tokenTypeText $ TWord 1 0 "flower"
+--   "Word"
+--   </pre>
+tokenTypeText :: Token -> String
+tokenContent :: Token -> String
+tokenNumber :: Token -> TokenNumber
+
+-- | Remove blank tokens.
+sweepToken :: Map [Token]
+
+-- | Skip leading blank tokens.
+sweepLeft :: Map [Token]
+
+-- | Divide token list by some word.
+divideByToken :: String -> [Token] -> [[Token]]
+instance Typeable Token
+instance Show Token
+instance Eq Token
+instance Ord Token
+instance Data Token
+instance Name Token
+
+
 -- | Parened tree of tokens
 module Koshucode.Baala.Base.Syntax.TokenTree
 
@@ -579,8 +619,21 @@ type TokenTree = Tree Token
 --   <li>Curely-bar braces <tt>{| .. |}</tt> for relation.</li>
 --   </ol>
 tokenTrees :: [Token] -> [TokenTree]
+treeTokens :: TokenTree -> [Token]
+treesTokens :: [TokenTree] -> [Token]
 singleTree :: [TokenTree] -> TokenTree
 divideByTokenTree :: String -> [TokenTree] -> [[TokenTree]]
+
+
+-- | Tokenizer of koshucode.
+module Koshucode.Baala.Base.Syntax.Tokenizer
+type TokenLine = CodeLine Token
+tokenize :: String -> [CodeLine Token]
+trimLeft :: Map String
+
+-- | Split string into list of tokens. Result token list does not contain
+--   newline characters.
+tokens :: String -> [Token]
 
 
 -- | Syntactic functions
@@ -598,7 +651,7 @@ abortMain :: AbortReasonClass a => a -> Doc
 abortSub :: AbortReasonClass a => a -> Doc
 
 -- | Abort reason and source code information.
-type AbortType a = (a, [CodeLine])
+type AbortType a = (a, [Token], [CodeLine Token])
 
 -- | Either of (1) right result or (2) abort information.
 type AbortOrType a b = Either (AbortType a) b
@@ -617,23 +670,25 @@ module Koshucode.Baala.Base.Abort.Reason
 
 -- | Either of (1) right result, or (2) abort reason (without source code
 --   information).
-type AbOr b = Either AbortReason b
+type Ab b = Either AbortReason b
 
 -- | Abortable mapping.
-type AbMap b = b -> AbOr b
-type AbMap2 b a = b -> AbOr a
+type AbMap b = b -> Ab b
+type AbMap2 b a = b -> Ab a
 
 -- | Abort reason and source information.
 type Abort = AbortType AbortReason
+type AbortTokens b = Either (AbortReason, [Token]) b
 
 -- | Either of (1) right result, or (2) abort reason with source.
 type AbortOr b = AbortOrType AbortReason b
 
 -- | Lookup association list. This function may abort on AbortLookup.
-(<!!>) :: [Named a] -> String -> AbortOr a
+(<!!>) :: [Named a] -> String -> AbortTokens a
 
 -- | Abort reasons
 data AbortReason
+AbortHeteroDecimal :: String -> String -> AbortReason
 AbortLookup :: String -> AbortReason
 AbortMalformedOperand :: String -> AbortReason
 AbortMissingTermname :: String -> AbortReason
@@ -663,7 +718,7 @@ instance AbortReasonClass AbortReason
 instance Name AbortReason
 
 
--- | Data on value type <tt>v</tt>
+-- | Data on value type <tt>c</tt>
 module Koshucode.Baala.Base.Data
 
 

@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.32.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.34.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -77,8 +77,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:AbOr"
-	    >AbOr</a
+	    > <a href="#t:Ab"
+	    >Ab</a
 	    > b = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
 	    >Either</a
 	    > <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
@@ -89,16 +89,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    >type</span
 	    > <a href="#t:AbMap"
 	    >AbMap</a
-	    > b = b -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
-	    >AbOr</a
+	    > b = b -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
 	    > b</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
 	    > <a href="#t:AbMap2"
 	    >AbMap2</a
-	    > b a = b -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
-	    >AbOr</a
+	    > b a = b -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
 	    > a</li
 	  ><li class="src short"
 	  ><span class="keyword"
@@ -110,6 +110,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    > <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
 	    >AbortReason</a
 	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:AbortTokens"
+	    >AbortTokens</a
+	    > b = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > (<a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
+	    >AbortReason</a
+	    >, [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    >]) b</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
@@ -127,8 +139,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    >Named</a
 	    > a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
-	    >AbortOr</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortTokens"
+	    >AbortTokens</a
 	    > a</li
 	  ><li class="src short"
 	  ><span class="keyword"
@@ -137,7 +149,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    >AbortReason</a
 	    > <ul class="subs"
 	    ><li
-	      >= <a href="#v:AbortLookup"
+	      >= <a href="#v:AbortHeteroDecimal"
+		>AbortHeteroDecimal</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		>  </li
+	      ><li
+	      >| <a href="#v:AbortLookup"
 		>AbortLookup</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
@@ -276,13 +296,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:AbOr" class="def"
-	    >AbOr</a
+	    > <a name="t:Ab" class="def"
+	    >Ab</a
 	    > b = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
 	    >Either</a
 	    > <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
 	    >AbortReason</a
-	    > b<a href="src/Koshucode-Baala-Base-Abort-Reason.html#AbOr" class="link"
+	    > b<a href="src/Koshucode-Baala-Base-Abort-Reason.html#Ab" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -298,8 +318,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    >type</span
 	    > <a name="t:AbMap" class="def"
 	    >AbMap</a
-	    > b = b -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
-	    >AbOr</a
+	    > b = b -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
 	    > b<a href="src/Koshucode-Baala-Base-Abort-Reason.html#AbMap" class="link"
 	    >Source</a
 	    ></p
@@ -315,8 +335,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    >type</span
 	    > <a name="t:AbMap2" class="def"
 	    >AbMap2</a
-	    > b a = b -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbOr"
-	    >AbOr</a
+	    > b a = b -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
 	    > a<a href="src/Koshucode-Baala-Base-Abort-Reason.html#AbMap2" class="link"
 	    >Source</a
 	    ></p
@@ -339,6 +359,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    >Abort reason and source information. 
 </p
 	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:AbortTokens" class="def"
+	    >AbortTokens</a
+	    > b = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > (<a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
+	    >AbortReason</a
+	    >, [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    >]) b<a href="src/Koshucode-Baala-Base-Abort-Reason.html#AbortTokens" class="link"
+	    >Source</a
+	    ></p
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -367,8 +403,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    >Named</a
 	    > a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
-	    >AbortOr</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortTokens"
+	    >AbortTokens</a
 	    > a<a href="src/Koshucode-Baala-Base-Abort-Reason.html#%3C%21%21%3E" class="link"
 	    >Source</a
 	    ></p
@@ -401,6 +437,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    >Constructors</p
 	    ><table
 	    ><tr
+	      ><td class="src"
+		><a name="v:AbortHeteroDecimal" class="def"
+		  >AbortHeteroDecimal</a
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
 	      ><td class="src"
 		><a name="v:AbortLookup" class="def"
 		  >AbortLookup</a

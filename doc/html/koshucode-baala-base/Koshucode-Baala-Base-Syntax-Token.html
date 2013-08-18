@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.32.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.34.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -82,10 +82,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:TNumber"
-	    >TNumber</a
-	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-	    >Int</a
+	    > <a href="#t:Termname"
+	    >Termname</a
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
 	    ></li
 	  ><li class="src short"
 	  ><span class="keyword"
@@ -96,8 +96,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    ><li
 	      >= <a href="#v:TWord"
 		>TWord</a
-		> <a href="Koshucode-Baala-Base-Syntax-Token.html#t:TNumber"
-		>TNumber</a
+		> <a href="Koshucode-Baala-Base-Syntax-CodeLine.html#t:TokenNumber"
+		>TokenNumber</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 		>Int</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
@@ -106,48 +106,48 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ><li
 	      >| <a href="#v:TTerm"
 		>TTerm</a
-		> <a href="Koshucode-Baala-Base-Syntax-Token.html#t:TNumber"
-		>TNumber</a
-		> [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
+		> <a href="Koshucode-Baala-Base-Syntax-CodeLine.html#t:TokenNumber"
+		>TokenNumber</a
+		> [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+		>Termname</a
 		>]  </li
 	      ><li
 	      >| <a href="#v:TOpen"
 		>TOpen</a
-		> <a href="Koshucode-Baala-Base-Syntax-Token.html#t:TNumber"
-		>TNumber</a
+		> <a href="Koshucode-Baala-Base-Syntax-CodeLine.html#t:TokenNumber"
+		>TokenNumber</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
 		>  </li
 	      ><li
 	      >| <a href="#v:TClose"
 		>TClose</a
-		> <a href="Koshucode-Baala-Base-Syntax-Token.html#t:TNumber"
-		>TNumber</a
+		> <a href="Koshucode-Baala-Base-Syntax-CodeLine.html#t:TokenNumber"
+		>TokenNumber</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
 		>  </li
 	      ><li
 	      >| <a href="#v:TSpace"
 		>TSpace</a
-		> <a href="Koshucode-Baala-Base-Syntax-Token.html#t:TNumber"
-		>TNumber</a
+		> <a href="Koshucode-Baala-Base-Syntax-CodeLine.html#t:TokenNumber"
+		>TokenNumber</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 		>Int</a
 		>  </li
 	      ><li
 	      >| <a href="#v:TComment"
 		>TComment</a
-		> <a href="Koshucode-Baala-Base-Syntax-Token.html#t:TNumber"
-		>TNumber</a
+		> <a href="Koshucode-Baala-Base-Syntax-CodeLine.html#t:TokenNumber"
+		>TokenNumber</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
 		>  </li
 	      ><li
 	      >| <a href="#v:TUnknown"
 		>TUnknown</a
-		> <a href="Koshucode-Baala-Base-Syntax-Token.html#t:TNumber"
-		>TNumber</a
+		> <a href="Koshucode-Baala-Base-Syntax-CodeLine.html#t:TokenNumber"
+		>TokenNumber</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
 		>  </li
@@ -210,8 +210,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >tokenNumber</a
 	    > :: <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
 	    >Token</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Syntax-Token.html#t:TNumber"
-	    >TNumber</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Syntax-CodeLine.html#t:TokenNumber"
+	    >TokenNumber</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:sweepToken"
@@ -229,6 +229,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    > [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
 	    >Token</a
 	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:divideByToken"
+	    >divideByToken</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    >] -&gt; [[<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    >]]</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -321,16 +331,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:TNumber" class="def"
-	    >TNumber</a
-	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-	    >Int</a
-	    ><a href="src/Koshucode-Baala-Base-Syntax-Token.html#TNumber" class="link"
+	    > <a name="t:Termname" class="def"
+	    >Termname</a
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ><a href="src/Koshucode-Baala-Base-Syntax-Token.html#Termname" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Token number. 
+	    >Termname. 
 </p
 	    ></div
 	  ></div
@@ -351,8 +361,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ><td class="src"
 		><a name="v:TWord" class="def"
 		  >TWord</a
-		  > <a href="Koshucode-Baala-Base-Syntax-Token.html#t:TNumber"
-		  >TNumber</a
+		  > <a href="Koshucode-Baala-Base-Syntax-CodeLine.html#t:TokenNumber"
+		  >TokenNumber</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 		  >Int</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
@@ -374,14 +384,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ><td class="src"
 		><a name="v:TTerm" class="def"
 		  >TTerm</a
-		  > <a href="Koshucode-Baala-Base-Syntax-Token.html#t:TNumber"
-		  >TNumber</a
-		  > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
+		  > <a href="Koshucode-Baala-Base-Syntax-CodeLine.html#t:TokenNumber"
+		  >TokenNumber</a
+		  > [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+		  >Termname</a
 		  >]</td
 		><td class="doc"
 		><p
-		  >Term name
+		  >Termname
 </p
 		  ></td
 		></tr
@@ -389,8 +399,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ><td class="src"
 		><a name="v:TOpen" class="def"
 		  >TOpen</a
-		  > <a href="Koshucode-Baala-Base-Syntax-Token.html#t:TNumber"
-		  >TNumber</a
+		  > <a href="Koshucode-Baala-Base-Syntax-CodeLine.html#t:TokenNumber"
+		  >TokenNumber</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
 		  ></td
@@ -404,8 +414,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ><td class="src"
 		><a name="v:TClose" class="def"
 		  >TClose</a
-		  > <a href="Koshucode-Baala-Base-Syntax-Token.html#t:TNumber"
-		  >TNumber</a
+		  > <a href="Koshucode-Baala-Base-Syntax-CodeLine.html#t:TokenNumber"
+		  >TokenNumber</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
 		  ></td
@@ -419,8 +429,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ><td class="src"
 		><a name="v:TSpace" class="def"
 		  >TSpace</a
-		  > <a href="Koshucode-Baala-Base-Syntax-Token.html#t:TNumber"
-		  >TNumber</a
+		  > <a href="Koshucode-Baala-Base-Syntax-CodeLine.html#t:TokenNumber"
+		  >TokenNumber</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 		  >Int</a
 		  ></td
@@ -436,8 +446,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ><td class="src"
 		><a name="v:TComment" class="def"
 		  >TComment</a
-		  > <a href="Koshucode-Baala-Base-Syntax-Token.html#t:TNumber"
-		  >TNumber</a
+		  > <a href="Koshucode-Baala-Base-Syntax-CodeLine.html#t:TokenNumber"
+		  >TokenNumber</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
 		  ></td
@@ -451,8 +461,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ><td class="src"
 		><a name="v:TUnknown" class="def"
 		  >TUnknown</a
-		  > <a href="Koshucode-Baala-Base-Syntax-Token.html#t:TNumber"
-		  >TNumber</a
+		  > <a href="Koshucode-Baala-Base-Syntax-CodeLine.html#t:TokenNumber"
+		  >TokenNumber</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
 		  ></td
@@ -673,8 +683,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >tokenNumber</a
 	    > :: <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
 	    >Token</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Syntax-Token.html#t:TNumber"
-	    >TNumber</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Syntax-CodeLine.html#t:TokenNumber"
+	    >TokenNumber</a
 	    ><a href="src/Koshucode-Baala-Base-Syntax-Token.html#tokenNumber" class="link"
 	    >Source</a
 	    ></p
@@ -710,6 +720,25 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ><div class="doc"
 	  ><p
 	    >Skip leading blank tokens. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:divideByToken" class="def"
+	    >divideByToken</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    >] -&gt; [[<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    >]]<a href="src/Koshucode-Baala-Base-Syntax-Token.html#divideByToken" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Divide token list by some word. 
 </p
 	    ></div
 	  ></div
