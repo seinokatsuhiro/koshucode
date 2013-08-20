@@ -42,7 +42,7 @@ instance (Ord c, B.Pretty c) => B.Pretty (Section c) where
     doc sec = dSection where
         dSection = B.docv [dRelmap, dAssert, dJudge]
         dRelmap  = B.docv $ map docRelmap $ sectionRelmap sec
-        docRelmap (n,m) = B.zeroWidthText (n ++ " :") B.<+> B.doc m B.$$ B.text ""
+        docRelmap (n,m) = B.docZero (n ++ " :") B.<+> B.doc m B.$$ B.doc ""
         dJudge   = B.docv $ sectionJudge sec
         dAssert  = B.docv $ sectionAssert sec
 

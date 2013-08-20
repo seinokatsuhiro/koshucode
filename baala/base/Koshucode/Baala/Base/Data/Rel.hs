@@ -3,10 +3,10 @@
 {-| Type for relations -}
 
 module Koshucode.Baala.Base.Data.Rel
-(
-  -- * Datatype
+( -- * Datatype
   Rel (Rel),
   Relbody,
+  rel,
 
   -- * Constant
   reldum,
@@ -29,14 +29,19 @@ data Rel c = Rel Relhead (Relbody c)
 {-| List of positional args. -}
 type Relbody c = [[c]]
 
+{-| >>> doc $ rel ["/a", "/b"] [[10, 20], [30, 40 :: Int]]
+    {| /a /b | 10 : 20 | 30 : 40 |}  -}
 instance (Pretty c) => Pretty (Rel c) where
-    doc = docRelFull
+    doc = docRel
 
-docRelFull :: (Pretty a) => Rel a -> Doc
-docRelFull (Rel h b) = text "{|" <+> h2 <+> b2 <+> text "|}"
-    where h2    = hsep $ map text (headNames h)
-          b2    = hsep $ map arg b
-          arg a = text "|" <+> (hsep $ map doc a)
+docRel :: (Pretty c) => Rel c -> Doc
+docRel (Rel h1 b1) = docWraps "{|" "|}" $ h2 <+> b2
+    where h2   = doc h1
+          b2   = doch $ map d b1
+          d xs = doc "|" <+> docColon xs
+
+rel :: [String] -> Relbody c -> Rel c
+rel = Rel . headFrom
 
 
 

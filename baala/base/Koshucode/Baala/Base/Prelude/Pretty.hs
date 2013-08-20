@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleInstances #-}
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Prelude.Pretty
@@ -5,60 +6,97 @@ module Koshucode.Baala.Base.Prelude.Pretty
   Pretty (..),
 
   -- * Function
-  docTag,
-  docColonList,
-  docParen, docBracket, docBrace,
-  docAngle, docAngleBar,
-  docQuote,
-  module Text.PrettyPrint,
+  docColon,
+  docWrap,
+  docWraps,
+
+  -- * Excerpt from PrettyPrint
+  D.Doc,
+  (D.<>), (D.<+>), (D.$$),
+  docEmpty,
+  docHang,
+  docZero,
 ) where
 
 import qualified Data.List as L
-import Text.PrettyPrint
+import qualified Text.PrettyPrint as D
 
+
+
+-- ----------------------  Class
+
+{-| Type that has a pretty printer. -}
 class Pretty a where
-    doc :: a -> Doc
-    docv, doch :: [a] -> Doc
-    docv = vcat . map doc
-    doch = hsep . map doc
+    {-| 'D.Doc' of @a@. -}
+    doc :: a -> D.Doc
 
-instance Pretty Doc where
+    {-| 'D.Doc' joined by 'vcat'. -}
+    docv :: [a] -> D.Doc
+    docv = D.vcat . map doc
+
+    {-| 'D.Doc' joined by 'hsep'. -}
+    doch :: [a] -> D.Doc
+    doch = D.hsep . map doc
+
+{-| 'D.Doc' itself. -}
+instance Pretty D.Doc where
     doc = id
 
-docTag :: String -> Doc -> Doc
-docTag tag doc2 = docParen $ text tag <+> doc2
+{-| Same as 'D.int'.  -}
+instance Pretty Int where
+    doc = D.int
 
-docColonList :: (Pretty a) => [a] -> [Doc]
-docColonList = L.intersperse (text ":") . map doc
+{-| Same as 'D.text'.  -}
+instance Pretty String where
+    doc = D.text
+
+{-| >>> doch [True, False]
+    #true #false  -}
+instance Pretty Bool where
+    doc True  = D.text "#true"
+    doc False = D.text "#false"
+
+{-| >>> doc ("/a", "xxx")
+    /a xxx  -}
+instance (Pretty a) => Pretty (String, a) where
+    doc (n, x) = D.text n D.<+> doc x
 
 
 
--- ----------------------  Enclose
+-- ----------------------  Function
 
-docEnclose :: String -> String -> Doc -> Doc
-docEnclose open close doc2 = text open <+> doc2 <+> text close
+docEmpty :: D.Doc
+docEmpty = D.empty
 
-{-| Enclose document in @(@ and @)@. -}
-docParen     :: Doc -> Doc
-docParen     =  docEnclose "(" ")"
+docHang :: D.Doc -> Int -> D.Doc -> D.Doc
+docHang = D.hang
 
-{-| Enclose document in @[@ and @]@. -}
-docBracket   :: Doc -> Doc
-docBracket   =  docEnclose "[" "]"
+docZero :: String -> D.Doc
+docZero = D.zeroWidthText
 
-{-| Enclose document in @{@ and @}@. -}
-docBrace     :: Doc -> Doc
-docBrace     =  docEnclose "{" "}"
+{-| Colon-seperated document.
 
-{-| Enclose document in @\<@ and @\>@. -}
-docAngle     :: Doc -> Doc
-docAngle     =  docEnclose "<" ">"
+    >>> docBracket $ docColon [True, False]
+    [ #true : #false ]  -}
+docColon :: (Pretty a) => [a] -> D.Doc
+docColon = D.hsep . docColons
 
-{-| Enclose document in @\<|@ and @|\>@. -}
-docAngleBar  :: Doc -> Doc
-docAngleBar  =  docEnclose "<|" "|>"
+{-| Colon-seperated list. -}
+docColons :: (Pretty a) => [a] -> [D.Doc]
+docColons = L.intersperse (D.text ":") . map doc
 
-{-| Enclose document in @\"@ and @\"@. -}
-docQuote     :: Doc -> Doc
-docQuote     = docEnclose "\"" "\""
+{-| Wrap in open and close brackets.
+    Put spaces between content and brackets.
+
+    >>> docWraps "(" ")" "abc"
+    ( abc )  -}
+docWraps :: (Pretty a) => String -> String -> a -> D.Doc
+docWraps open close a = D.text open D.<+> doc a D.<+> D.text close
+
+{-| Wrap in open and close brackets.
+
+    >>> docWrap "(" ")" "abc"
+    (abc)  -}
+docWrap :: (Pretty a) => String -> String -> a -> D.Doc
+docWrap open close a = D.text open D.<> doc a D.<> D.text close
 

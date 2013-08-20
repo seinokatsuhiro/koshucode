@@ -26,13 +26,13 @@ data Assert c = Assert
     } deriving (Show)
 
 instance B.Pretty (Assert c) where
-    doc (Assert q s m) =
-        let qs = B.text (verb q) B.<+> B.text s
-        in B.hang qs 2 (B.doc m)
+    doc (Assert q p r) =
+        let qs = B.doch [quality q, p]
+        in B.docHang qs 2 (B.doc r)
 
-verb :: Bool -> String
-verb True  = "affirm"
-verb False = "deny"
+quality :: Bool -> String
+quality True  = "affirm"
+quality False = "deny"
 
 {-| Apply function to relamp in assert. -}
 assertMap :: B.Map (Relmap c) -> B.Map (Assert c)

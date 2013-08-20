@@ -52,20 +52,21 @@ instance Functor Judge where
     fmap f (Judge q s a) = Judge q s $ map g a
         where g (n, v) = (n, f v)
 
---  Pretty printing
+{-| >>> doc $ Judge True "P" [("/a", 10), ("/b", 20 :: Int)]
+    |-- P  /a 10  /b 20 -}
 instance (Ord c, Pretty c) => Pretty (Judge c) where
     doc (Judge q s a) = quality q <+> sign <+> arg a
         where
           -- Frege's judgement stroke, content line,
           -- and logical quality
-          quality True  = text "|--"
-          quality False = text "|-X"
-          -- relsign
-          sign | ':' `elem` s = docQuote $ text s
-               | otherwise    = text s
+          quality True  = doc "|--"
+          quality False = doc "|-X"
+          -- pattern
+          sign | ':' `elem` s = docWrap "\"" "\"" s
+               | otherwise    = doc s
           -- term name and term value
-          arg ((n,v) : a2) = text " " <> text n <+> doc v <+> arg a2
-          arg [] = empty
+          arg ((n,v) : a2) = doc " " <> doc n <+> doc v <+> arg a2
+          arg [] = docEmpty
 
 
 

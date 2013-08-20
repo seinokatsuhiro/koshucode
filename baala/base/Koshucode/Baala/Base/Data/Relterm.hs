@@ -22,8 +22,8 @@ instance Name Relterm where
     name (Nest s _) = s
 
 instance Pretty Relterm where
-    doc (Term n)    = text n
-    doc (Nest n xs) = docParen (hsep $ text n : map doc xs)
+    doc (Term n)    = doc n
+    doc (Nest n xs) = docWraps "(" ")" (doch $ doc n : map doc xs)
 
 {-| Term path to term position
 

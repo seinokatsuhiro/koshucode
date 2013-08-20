@@ -17,8 +17,9 @@ module Koshucode.Baala.Base.Abort.Utility
 
 import qualified System.Exit as Sys
 
-import Koshucode.Baala.Base.Prelude as Doc
+import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Syntax
+import qualified Text.PrettyPrint as D
 
 
 
@@ -30,7 +31,7 @@ class AbortReasonClass a where
     abortTitle   :: a -> String
     abortMain    :: a -> Doc
     abortSub     :: a -> Doc
-    abortSub _   = Doc.empty
+    abortSub _   = docEmpty
 
 {-| Abort reason and source code information. -}
 type AbortType a = (a, [Token], [CodeLine Token])
@@ -58,42 +59,42 @@ abortIO _ (Left a)       = abort a
 abortIO f (Right output) = f output
 
 putMessage :: (AbortReasonClass a) => AbortType a -> IO ()
-putMessage = putStr . vline . renderStyle sty . messageDoc where
-    sty      = style { lineLength = 60 }
+putMessage = putStr . vline . D.renderStyle sty . messageDoc where
+    sty      = D.style { D.lineLength = 60 }
     vline    = unlines . map ("**  " ++) . lines
 
 messageDoc :: (AbortReasonClass a) => AbortType a -> Doc
 messageDoc (a, toks, cline) =
-    docv [ text ""
-         , text "処理を中断しました"
-         , text ""
-         , text (label "種類") <> text (abortSymbol a)
-         , text (label "概要") <> text (abortTitle a)
-         , opt  (label "おもな情報") $ abortMain a
-         , opt  (label "補助情報") $ abortSub a
-         , text ""
+    docv [ doc ""
+         , doc "処理を中断しました"
+         , doc ""
+         , doc (label "種類") <> doc (abortSymbol a)
+         , doc (label "概要") <> doc (abortTitle a)
+         , opt (label "おもな情報") $ abortMain a
+         , opt (label "補助情報")  $ abortSub a
+         , doc ""
          , source cline
-         , text ""
+         , doc ""
          , token toks
-         , text ""
-         , text ""
+         , doc ""
+         , doc ""
          ]
 
     where
       opt :: String -> Map Doc
-      opt lbl x | isEmpty x = empty
-                | otherwise = text lbl <> x
+      opt lbl x | D.isEmpty x = docEmpty
+                | otherwise = doc lbl <> x
 
       source :: [CodeLine Token] -> Doc
-      source [] = text "?" <> text "???"
+      source [] = doc "?" <> doc "???"
       source ls = docv $ map d $ ls where
           d (CodeLine n line _) =
-              (text $ label $ show n) <> text line
+              (doc $ label $ show n) <> doc line
 
       token :: [Token] -> Doc
       token = docv . map d where
-          d tok = (text $ label $ "  " ++ show (tokenNumber tok))
-                  <> text (tokenContent tok)
+          d tok = (doc $ label $ "  " ++ show (tokenNumber tok))
+                  <> doc (tokenContent tok)
 
       label :: Map String
       label = padRight 12

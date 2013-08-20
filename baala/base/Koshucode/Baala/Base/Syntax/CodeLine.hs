@@ -29,7 +29,7 @@ data CodeLine a = CodeLine
     } deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance Pretty (CodeLine a) where
-    doc (CodeLine _ line _) = text line
+    doc (CodeLine _ line _) = doc line
 
 {-| Type of function that splits a next token from string.
     Tokens can includes 'TokenNumber'. -}

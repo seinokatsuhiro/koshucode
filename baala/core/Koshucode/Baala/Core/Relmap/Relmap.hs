@@ -21,7 +21,6 @@ module Koshucode.Baala.Core.Relmap.Relmap
 ) where
 
 import Data.Monoid
-
 import qualified Koshucode.Baala.Base as B
 import Koshucode.Baala.Core.Relmap.HalfRelmap
 
@@ -92,12 +91,12 @@ instance B.Pretty (Relmap c) where
     doc (RelmapConst  h _ _)   = B.doc h
     doc (RelmapAlias  h _)     = B.doc h
     doc (RelmapCalc   h _ _ _) = B.doc h -- hang (text $ name m) 2 (doch (map doc ms))
-    doc (RelmapAppend m1 m2)   = B.hang (B.doc m1) 2 (docRelmapAppend m2)
-    doc (RelmapName   _ n)     = B.text n
+    doc (RelmapAppend m1 m2)   = B.docHang (B.doc m1) 2 (docRelmapAppend m2)
+    doc (RelmapName   _ n)     = B.doc n
 
 docRelmapAppend :: Relmap c -> B.Doc
 docRelmapAppend = B.docv . map pipe . relmapAppendList where
-    pipe m = B.text "|" B.<+> B.doc m
+    pipe m = B.doc "|" B.<+> B.doc m
 
 
 

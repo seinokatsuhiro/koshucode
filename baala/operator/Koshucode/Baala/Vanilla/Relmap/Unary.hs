@@ -69,7 +69,7 @@ relConf
 relConf n (B.Rel h1 _) = Right $ B.Rel h2 b2 where
     h2 = B.headFrom [n]
     b2 = [[C.putText $ show s]]
-    s  = show $ B.docParen $ B.doc h1
+    s  = show $ B.docWraps "(" ")" h1
 
 
 

@@ -45,8 +45,10 @@ instance Monoid Relhead where
     mappend (Relhead t1) (Relhead t2) =
         Relhead $ unionUp t1 t2
 
+{-| >>> doc $ headFrom ["/a", "/b"]
+    /a /b  -}
 instance Pretty Relhead where
-    doc (Relhead ts) = doch $ map doc ts
+    doc (Relhead ts) = doch ts
 
 {-| Make head from term names.
 

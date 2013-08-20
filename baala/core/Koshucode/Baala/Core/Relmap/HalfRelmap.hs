@@ -24,6 +24,6 @@ data HalfRelmap = HalfRelmap
 instance B.Pretty HalfRelmap where
     doc HalfRelmap { halfOperator = op, halfOperand = opd } =
         case lookup "operand" opd of
-          Nothing -> B.text op B.<+> B.text "..."
-          Just xs -> B.text op B.<+> B.text (show xs)
+          Nothing -> B.doch [op, "..."]
+          Just xs -> B.doch [op, show xs]
 

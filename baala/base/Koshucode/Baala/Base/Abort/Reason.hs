@@ -16,6 +16,7 @@ module Koshucode.Baala.Base.Abort.Reason
   AbortReason (..),
 ) where
 
+import qualified Text.PrettyPrint as D
 import Koshucode.Baala.Base.Prelude
 import Koshucode.Baala.Base.Syntax
 import Koshucode.Baala.Base.Abort.Utility
@@ -115,35 +116,35 @@ instance AbortReasonClass AbortReason where
         (AbortUsage          _ _) -> "使用法の間違い"
 
     abortMain a = case a of
-        (AbortHeteroDecimal  x y) -> text $ x ++ " : " ++ y
+        (AbortHeteroDecimal  x y) -> doc $ x ++ " : " ++ y
         (AbortLookup           s) -> par s
         (AbortMalformedOperand s) -> par s
         (AbortMissingTermname  s) -> par s
         (AbortNotNumber        s) -> par s
         (AbortNotText          s) -> par s
-        (AbortNoTerms         ns) -> hsep $ map text ns
-        (AbortOddRelation       ) -> empty
+        (AbortNoTerms         ns) -> doch ns
+        (AbortOddRelation       ) -> docEmpty
         (AbortReqBoolean       s) -> par s
         (AbortReqFlatname      s) -> par s
-        (AbortReqNewTerms     ns) -> hsep $ map text ns
+        (AbortReqNewTerms     ns) -> doch ns
         (AbortReqText          s) -> par s
         (AbortUnkCop           s) -> par s
         (AbortUnkCox           s) -> par s
         (AbortUnkWord          s) -> par s
-        (AbortUnknownClause     ) -> empty
+        (AbortUnknownClause     ) -> docEmpty
         (AbortUnknownContent   s) -> par s
         (AbortUnknownRelmap    s) -> par s
         (AbortUnknownSymbol    s) -> par s
         (AbortUsage      _ usage) -> docv $ map par usage
         (AbortUndefined        s) -> par s
-        (AbortUnmatchArity      ) -> empty
+        (AbortUnmatchArity      ) -> docEmpty
         (AbortUnmatchType      s) -> par s
 
     abortSub a = case a of
         (AbortUnkWord          _)
             -> par "テキストは 'aaa のように書きます"
-        _   -> empty
+        _   -> docEmpty
 
 par :: String -> Doc
-par = fsep . map text . words
+par = D.fsep . map doc . words
 

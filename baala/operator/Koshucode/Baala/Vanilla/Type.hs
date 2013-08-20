@@ -43,20 +43,17 @@ instance C.CContent VContent where
     appendContent (VText s1) (VText s2) = VText $ s1 ++ s2
     appendContent _ _ = C.nil
 
+{-| >>> B.doc $ VText "abc"
+    'abc  -}
 instance B.Pretty VContent where
-    doc (VText s)       =  B.text $ "'" ++ B.hashString s
-    doc (VDec n)        =  B.text $ C.decimalString n
-    doc (VBool b)
-        | b             =  B.text "#true"
-        | otherwise     =  B.text "#false"
-    doc (VNil)          =  B.text "()"
-    doc (VList xs)      =  B.docBracket  $ B.hsep (B.docColonList xs)
-    doc (VSet xs)       =  B.docBrace    $ B.hsep (B.docColonList xs)
-    doc (VTermset xs)   =  B.docAngleBar $ B.hsep (map docTerms xs)
+    doc (VText s)       =  B.doc $ "'" ++ B.hashString s
+    doc (VDec  n)       =  B.doc $ C.decimalString n
+    doc (VBool b)       =  B.doc b
+    doc (VNil)          =  B.doc "()"
+    doc (VList    xs)   =  B.docWraps "["   "]" $ B.docColon xs
+    doc (VSet     xs)   =  B.docWraps "{"   "}" $ B.docColon xs
+    doc (VTermset xs)   =  B.docWraps "<|" "|>" $ B.doch xs
     doc (VRel r)        =  B.doc r
-
-docTerms :: (B.Pretty a) => B.Named a -> B.Doc
-docTerms (n, x) = B.text n B.<+> B.doc x
 
 type VCop = C.CopEagerF VContent
 
