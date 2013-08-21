@@ -35,7 +35,7 @@ import Koshucode.Baala.Base.Data.TermPos
 
 -- ---------------------- Heading
 
--- | Heading of relation as a list of terms
+{-| Heading of relation as a list of terms -}
 data Relhead = Relhead {
       headTerms :: [Relterm]
     } deriving (Show, Eq, Ord)
@@ -46,31 +46,28 @@ instance Monoid Relhead where
         Relhead $ unionUp t1 t2
 
 {-| >>> doc $ headFrom ["/a", "/b"]
-    /a /b  -}
+    /a : /b  -}
 instance Pretty Relhead where
-    doc (Relhead ts) = doch ts
+    doc (Relhead ts) = docColon ts
 
 {-| Make head from term names.
 
     >>> headFrom ["/a", "/b"]
-    Relhead [Term "/a", Term "/b"]
--}
+    Relhead [Term "/a", Term "/b"] -}
 headFrom :: [String] -> Relhead
 headFrom ns = Relhead $ map Term ns
 
 {-| List of term names.
 
     >>> headNames $ headFrom ["/a", "/b"]
-    ["/a", "/b"]
- -}
+    ["/a", "/b"]  -}
 headNames :: Relhead -> [String]
 headNames (Relhead ts) = names ts
 
 {-| Number of terms.
 
     >>> headDegree $ headFrom ["/a", "/b"]
-    2
- -}
+    2  -}
 headDegree :: Relhead -> Int
 headDegree = length . headTerms
 

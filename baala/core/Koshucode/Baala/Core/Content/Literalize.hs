@@ -111,15 +111,15 @@ litFlatname x = Left $ B.AbortMissingTermname (show x)
 
 litList :: (CContent c) => LitTree c -> LitTrees [c]
 litList _   [] = Right []
-litList lit cs = mapM lt $ B.divideByTokenTree ":" cs where
+litList lit cs = mapM lt $ B.divideTreesByColon cs where
     lt []  = Right nil
     lt [x] = lit x
     lt xs  = lit $ B.TreeB 1 xs
 
 litRel :: (CContent c) => LitTree c -> LitTrees (B.Rel c)
 litRel lit cs =
-    do let (h1 : b1) = B.divideByTokenTree "|" cs
-       h2 <- mapM litFlatname h1
+    do let (h1 : b1) = B.divideTreesByBar cs
+       h2 <- mapM litFlatname $ concat $ B.divideTreesByColon h1
        b2 <- mapM (litList lit) b1
        let b3 = B.unique b2
        if any (length h2 /=) $ map length b3

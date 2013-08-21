@@ -111,16 +111,21 @@ lookupSatisfy x = loop where
 lookupMap :: (Ord k) => k -> Map.Map k a -> Maybe a
 lookupMap = Map.lookup
 
--- | Singleton list
+{-| Singleton list -}
 singleton :: a -> [a]
 singleton x = [x]
 
-divideBy :: (Eq a) => a -> [a] -> [[a]]
-divideBy dv = loop where
-    loop xs = case break (== dv) xs of
-                (x, _ : xs2) -> x : loop xs2
-                (x, [])      -> [x]
+{-| Divide list.
 
+    >>> divideBy '|' "a|bb||ccc|"
+    ["a", "bb", "", "ccc", ""]  -}
+divideBy :: (Eq a) => a -> [a] -> [[a]]
+divideBy dv = divideByP (== dv)
+
+{-| Divide list.
+
+    >>> divideByP (== '|') "a|bb||ccc|"
+    ["a", "bb", "", "ccc", ""]  -}
 divideByP :: (Eq a) => (a -> Bool) -> [a] -> [[a]]
 divideByP p = loop where
     loop xs = case break p xs of

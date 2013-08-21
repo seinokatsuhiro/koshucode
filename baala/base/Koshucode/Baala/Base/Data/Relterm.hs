@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Terms in heading of relation
+{-| Terms in heading of relation. -}
 
 module Koshucode.Baala.Base.Data.Relterm
 ( Relterm (..),
@@ -34,8 +34,7 @@ instance Pretty Relterm where
     [-1]
 
     >>> termIndex ["/r", "/b"] [Nest "/r" [Term "/a", Term "/b"]]
-    [0, 1]
--}
+    [0, 1]  -}
 termIndex :: [Relterm] -> [String] -> [Int]
 termIndex ts p = loop ts p 0 where
     loop _ [] _ = []

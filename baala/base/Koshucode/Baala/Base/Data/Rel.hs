@@ -32,13 +32,10 @@ type Relbody c = [[c]]
 {-| >>> doc $ rel ["/a", "/b"] [[10, 20], [30, 40 :: Int]]
     {| /a /b | 10 : 20 | 30 : 40 |}  -}
 instance (Pretty c) => Pretty (Rel c) where
-    doc = docRel
-
-docRel :: (Pretty c) => Rel c -> Doc
-docRel (Rel h1 b1) = docWraps "{|" "|}" $ h2 <+> b2
-    where h2   = doc h1
-          b2   = doch $ map d b1
-          d xs = doc "|" <+> docColon xs
+    doc (Rel h1 b1) = docWraps "{|" "|}" $ h2 <+> b2
+        where h2    = doc h1
+              b2    = doch $ map d b1
+              d xs  = doc "|" <+> docColon xs
 
 rel :: [String] -> Relbody c -> Rel c
 rel = Rel . headFrom

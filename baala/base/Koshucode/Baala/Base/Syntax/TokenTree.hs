@@ -10,14 +10,15 @@ module Koshucode.Baala.Base.Syntax.TokenTree
   treeTokens,
   treesTokens,
   singleTree,
-  divideByTokenTree,
+  divideTreesBy,
+  divideTreesByBar,
+  divideTreesByColon,
 
   -- * Examples
   -- $Example
 ) where
 
 import Koshucode.Baala.Base.Prelude
-
 import Koshucode.Baala.Base.Syntax.Token
 import Koshucode.Baala.Base.Syntax.Tree
 
@@ -50,30 +51,51 @@ treeTokens :: TokenTree -> [Token]
 treeTokens = untree typeParen
 
 typeParen :: Int -> (Token, Token)
-typeParen 1 = ( TOpen 1 "("  , TOpen 1 ")"  )
-typeParen 2 = ( TOpen 2 "["  , TOpen 2 "]"  )
-typeParen 3 = ( TOpen 3 "{"  , TOpen 3 "}"  )
-typeParen 4 = ( TOpen 4 "<|" , TOpen 4 "|>" )
-typeParen 5 = ( TOpen 5 "{|" , TOpen 5 "|}" )
-typeParen _ = ( TOpen 0 "?"  , TOpen 0 "?"  )
+typeParen = o where
+    o 1   =  p  "("  ")"
+    o 2   =  p  "["  "]"
+    o 3   =  p  "{"  "}"
+    o 4   =  p  "<|" "|>"
+    o 5   =  p  "{|" "|}"
+    o _   =  p  "?"  "?"
+    p a b =  ( TOpen 0 a, TClose 0 b )
 
 parenType :: ParenType Token
 parenType = parenTable
-    [ (1, isOpenTokenOf "("  , isCloseTokenOf  ")")  -- grouping
-    , (2, isOpenTokenOf "["  , isCloseTokenOf  "]")  -- list
-    , (3, isOpenTokenOf "{"  , isCloseTokenOf  "}")  -- set
-    , (4, isOpenTokenOf "<|" , isCloseTokenOf "|>")  -- termset
-    , (5, isOpenTokenOf "{|" , isCloseTokenOf "|}")  -- relation
-    ]
+    [ o 1  "("   ")"   -- grouping
+    , o 2  "["   "]"   -- list
+    , o 3  "{"   "}"   -- set
+    , o 4  "<|" "|>"   -- termset
+    , o 5  "{|" "|}"   -- relation
+    ] where o n a b = (n, isOpenTokenOf a, isCloseTokenOf b)
 
 singleTree :: [TokenTree] -> TokenTree
 singleTree [t] = t
 singleTree ts  = TreeB 1 ts
 
-divideByTokenTree :: String -> [TokenTree] -> [[TokenTree]]
-divideByTokenTree w = divideByP p where
-    p (TreeL (TWord _ 0 x)) | w == x = True
+divideTreesBy :: String -> [TokenTree] -> [[TokenTree]]
+divideTreesBy w = divideByP p where
+    p (TreeL (TWord _ 0 x)) = (w == x)
     p _ = False
+
+{-| Divide token trees by vertical bar @\"|\"@.
+
+    >>> divideTreesByBar . tokenTrees . tokens $ "a | b | c"
+    [ [TreeL (TWord 1 0 "a")]
+    , [TreeL (TWord 5 0 "b")]
+    , [TreeL (TWord 9 0 "c")] ]  -}
+divideTreesByBar :: [TokenTree] -> [[TokenTree]]
+divideTreesByBar = divideTreesBy "|"
+
+{-| Divide token trees by colon @\":\"@.
+
+    >>> divideTreesByColon . tokenTrees . tokens $ "a : b : c"
+    [ [TreeL (TWord 1 0 "a")]
+    , [TreeL (TWord 5 0 "b")]
+    , [TreeL (TWord 9 0 "c")] ]  -}
+divideTreesByColon :: [TokenTree] -> [[TokenTree]]
+divideTreesByColon = divideTreesBy ":"
+
 
 
 
@@ -143,7 +165,6 @@ divideByTokenTree w = divideByP p where
       TreeL (TWord 9 0 "10"), TreeL (TWord 11 0 "20"),
       TreeL (TWord 13 0 "|"),
       TreeL (TWord 15 0 "30"), TreeL (TWord 17 0 "40")]]
-      
 
 -}
 

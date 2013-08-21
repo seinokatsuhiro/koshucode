@@ -13,8 +13,8 @@ module Koshucode.Baala.Base.Syntax.Tokenizer
 
   -- * Document
 
-  -- ** Token category
-  -- $TokenCategory
+  -- ** Token type
+  -- $TokenType
 
   -- ** Asterisks
   -- $Asterisks
@@ -33,9 +33,10 @@ import Koshucode.Baala.Base.Syntax.CodeLine
 
 -- ----------------------  Tokenizer
 
+{-| Token list on a line. -}
 type TokenLine = CodeLine Token
 
-tokenize :: String -> [CodeLine Token]
+tokenize :: String -> [TokenLine]
 tokenize = codeLines nextToken
 
 {-| Split string into list of tokens.
@@ -128,30 +129,36 @@ isWord    c  =  isw $ generalCategoryGroup c where
 
 
 -- ----------------------
-{- $TokenCategory
+{- $TokenType
 
-   [Paren]            @(@ group @)@ ,
-                      @{@ set @}@ ,
-                      @[@ list @]@ ,
-                      @\<|@ termset @\|>@ ,
-                      @{|@ relation @|}@
+   [Paren]     Open and closed parens.
+               @(@ /group/ @)@ ,
+               @{@ /set/ @}@ ,
+               @[@ /list/ @]@ ,
+               @\<|@ /termset/ @\|>@ , and
+               @{|@ /relation/ @|}@
 
-   [Term name]        @\/@xxx , @\/@rel@\/@xxx
+   [Termname]  Words beginning with slash, e.g., @\/aa@.
+               Term name like @\/r\/x@ is used for nested relation,
+               that means term @\/x@ in the relation of term @\/r@.
 
-   [Word]             @abc@ , @123@ , @|@ ,
-                      @\#(@ , @\#)@ , @****@ ,
-                      @''@ all-letters-to-end-of-line
+   [Word]      Character sequence not including special characters,
+               e.g., @aa@, @r2d2@, @12.0@, etc.
+               Colon @:@ is a one-letter word.
+               There are four types of quotations.
+               (1) non-quoted word like @aa@,
+               (2) single-quoted word like @\'aa@,
+               (3) double-quoted word like @\"aa\"@,
+               (4) doubly single-quoted word like @\'\' all-letters-to-end-of-line@.
 
-   [One-letter word]  @:@ , @'@
+   [Comment]   Texts from double asterisks (@**@) or shebang (@#!@)
+               to end of line are comments.
+               Quadruple asterisks (@****@) comments are
+               treated in 'Koshucode.Baala.Core.Section.Clause.Clause'.
 
-   [Comment]          @**@ all-letters-to-end-of-line ,
-                      @#!@ all-letters-to-end-of-line
+   [Space]     /space/ , @\\t@ (tab)
 
-   [Space]            /space/ , @\\t@ (tab)
-
-   [Newline]          @\\r@ (carriage return) ,
-                      @\\n@ (line feed) ,
-                      @||@ (pseudo newline)
+   [Unknown]   Other than those above.
 
 -}
 
