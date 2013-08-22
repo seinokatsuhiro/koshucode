@@ -12,17 +12,18 @@
 
 a : source INT /a
 
-affirm A a
+affirm A
+  | a
 
 affirm B
-    a | add /add   ( /a + 10 )
+  | a | add /add   ( /a + 10 )
             /minus ( /a - 10 )
             /mult  ( /a * 3 )
             /abs   ( abs /a )
 
 affirm C
-    a | add /add ( + /a 1 /a 2)
+  | a | add /add ( + /a 1 /a 2)
 
 affirm D
-    a | add /abs ( abs [ /a ] )
+  | a | add /abs ( abs [ /a ] )
 

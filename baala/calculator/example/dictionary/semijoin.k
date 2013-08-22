@@ -5,5 +5,5 @@ sp   : source SP /sno /pno /qty
 
 ssp  : s | some sp
 
-affirm SSP ssp
+affirm SSP | ssp
 

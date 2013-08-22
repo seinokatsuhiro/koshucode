@@ -16,14 +16,16 @@
 int : source INT /a /b
 
 affirm INT-A
-  int | add /eq  ( /a = /b )
-            /gt  ( /a > /b )
-            /lt  ( /a < /b )
+  | int
+  | add /eq  ( /a = /b )
+        /gt  ( /a > /b )
+        /lt  ( /a < /b )
 
 affirm INT-B
-  int | add /neq  ( /a <> /b )
-            /lte  ( /a <= /b )
-            /gte  ( /a >= /b )
+  | int
+  | add /neq  ( /a <> /b )
+        /lte  ( /a <= /b )
+        /gte  ( /a >= /b )
 
 ** *********************************  Text
 
@@ -34,12 +36,14 @@ affirm INT-B
 text : source TEXT /a /b
 
 affirm TEXT-A
-  text | add /eq  ( /a = /b )
-             /gt  ( /a > /b )
-             /lt  ( /a < /b )
+  | text
+  | add /eq   ( /a = /b )
+        /gt   ( /a > /b )
+        /lt   ( /a < /b )
 
 affirm TEXT-B
-  text | add /neq  ( /a <> /b )
-             /lte  ( /a <= /b )
-             /gte  ( /a >= /b )
+  | text
+  | add /neq  ( /a <> /b )
+        /lte  ( /a <= /b )
+        /gte  ( /a >= /b )
 

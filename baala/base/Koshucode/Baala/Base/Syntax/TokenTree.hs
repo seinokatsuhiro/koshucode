@@ -10,6 +10,9 @@ module Koshucode.Baala.Base.Syntax.TokenTree
   treeTokens,
   treesTokens,
   singleTree,
+
+  -- * Divide trees
+  splitTokens,
   divideTreesBy,
   divideTreesByBar,
   divideTreesByColon,
@@ -73,8 +76,31 @@ singleTree :: [TokenTree] -> TokenTree
 singleTree [t] = t
 singleTree ts  = TreeB 1 ts
 
+{-| Split token list by unquoted word.
+    If token list contains the word,
+    pair of /before-list/, /the-word/ and /after-list/ is returned.
+    If does not contains the word,
+    original token list is returned.
+
+    >>> splitTokens "|" . tokens $ "b c"
+    Left [ TWord 1 0 "b", TSpace 2 1, TWord 3 0 "c" ]
+
+    >>> splitTokens "|" . tokens $ "a | b | c"
+    Right ( [ TWord 1 0 "a", TSpace 2 1 ]
+            , TWord 3 0 "|"
+            , [ TSpace 4 1, TWord 5 0 "b", TSpace 6 1
+              , TWord 7 0 "|", TSpace 8 1, TWord 9 0 "c" ] )  -}
+splitTokens
+    :: String   -- ^ Word
+    -> [Token]  -- ^ Tokens
+    -> Either [Token] ([Token], Token, [Token])
+       -- ^ Original-tokens or @(@before-list, the-word, after-list@)@
+splitTokens w = splitBy p where
+    p (TWord _ 0 x) = (w == x)
+    p _ = False
+
 divideTreesBy :: String -> [TokenTree] -> [[TokenTree]]
-divideTreesBy w = divideByP p where
+divideTreesBy w = divideBy p where
     p (TreeL (TWord _ 0 x)) = (w == x)
     p _ = False
 

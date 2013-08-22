@@ -66,18 +66,12 @@ halfBundle halfs = consHalfRelmap bundle where
 consHalfRelmap :: (String -> RelmapHalfCons) -> RelmapHalfCons
 consHalfRelmap bundle src = cons where
     cons :: [B.TokenTree] -> HalfRelmap
-    cons xs = case bar xs of
+    cons xs = case B.divideTreesByBar xs of
                 [x] -> one x
                 xs2 -> cat $ map cons xs2
 
     cons' :: B.TokenTree -> HalfRelmap
     cons' x = cons [x]
-
-    bar :: [B.TokenTree] -> [[B.TokenTree]]
-    bar = B.divideByP isBar  -- non-quoted vertical bar
-
-    isBar (B.TreeL (B.TWord _ 0 "|")) = True
-    isBar _                           = False
 
     cat :: [HalfRelmap] -> HalfRelmap
     cat = HalfRelmap "R | R" src "|" []

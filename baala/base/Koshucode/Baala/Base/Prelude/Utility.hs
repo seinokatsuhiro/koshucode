@@ -17,15 +17,20 @@ module Koshucode.Baala.Base.Prelude.Utility
   unique,
   unionUp,
   singleton,
+  splitBy,
+  divide,
   divideBy,
-  divideByP,
+
+  -- * String
   padRight,
   padLeft,
 
-  -- * Collection
+  -- * Gather
   gather,
   gatherWith,
   gatherToMap,
+
+  -- * Lookup
   lookupSatisfy,
   lookupMap,
 
@@ -41,7 +46,7 @@ import Koshucode.Baala.Base.Prelude.Class
 
 
 
--- ----------------------
+-- ----------------------  Pair
 
 mapFst :: (a -> c) -> (a,b) -> (c,b)
 mapFst f (x,y) = (f x,y)
@@ -65,7 +70,7 @@ maybePairs _        = Nothing
 
 
 
--- ----------------------
+-- ----------------------  List
 
 {-| Remove duplicate elements. -}
 unique :: (Ord a) => [a] -> [a]
@@ -75,8 +80,91 @@ unique xs = loop xs Set.empty where
         | Set.member x set = loop xs2 set
         | otherwise        = x : loop xs2 (Set.insert x set)
 
-unionUp :: (Eq a) => [a] -> [a] -> [a]
+{-| Union list to base list.
+
+    >>> unionUp "cde" "abc"
+    "deabc"
+
+    >>> List.union "cde" "abc"
+    "cdeab"  -}
+unionUp
+    :: (Eq a)
+    => [a]  -- ^ Append list
+    -> [a]  -- ^ Base list
+    -> [a]  -- ^ Result
 unionUp xs ys = (xs List.\\ ys) ++ ys
+
+{-| Make singleton list. -}
+singleton :: a -> [a]
+singleton x = [x]
+
+{-| Split list by predicate.
+    If list contains an element that satisfies the predicate,
+    @(/before-list/, /the-element/, /after-list/)@ is returned.
+    Otherwise, original list is returned.
+
+    >>> splitBy (== '|') "b c"
+    Left "b c"
+
+    >>> splitBy (== '|') "a | b | c"
+    Right ("a ", '|', " b | c")  -}
+splitBy
+    :: (a -> Bool)
+    -> [a]
+    -> Either [a] ([a], a, [a])
+splitBy p xs =
+    case break p xs of
+      (a, x : b) -> Right (a, x, b)
+      _          -> Left xs
+
+{-| Divide list.
+
+    >>> divide '|' "a|bb||ccc|"
+    ["a", "bb", "", "ccc", ""]  -}
+divide :: (Eq a) => a -> [a] -> [[a]]
+divide dv = divideBy (== dv)
+
+{-| Divide list.
+
+    >>> divideBy (== '|') "a|bb||ccc|"
+    ["a", "bb", "", "ccc", ""]  -}
+divideBy :: (a -> Bool) -> [a] -> [[a]]
+divideBy p = loop where
+    loop xs = case break p xs of
+                (x, _ : xs2) -> x : loop xs2
+                (x, [])      -> [x]
+
+stringWidth :: String -> Int
+stringWidth = sum . map charWidth
+
+charWidth :: Char -> Int
+charWidth c
+    | Char.ord c >= 256 = 2
+    | otherwise         = 1
+
+
+
+-- ----------------------  String
+
+{-| Add spaces to right.
+
+    >>> padRight 10 "abc"
+    "abc       "  -}
+padRight :: Int -> Map String
+padRight n s = s ++ replicate rest ' ' where
+    rest = max 0 (n - stringWidth s)
+
+{-| Add spaces to left.
+
+    >>> padLeft 10 "abc"
+    "       abc"  -}
+padLeft :: Int -> Map String
+padLeft n s = replicate rest ' ' ++ s where
+    rest = max 0 (n - stringWidth s)
+
+
+
+-- ----------------------  Gather
 
 {-| Gather what is gotten by splitter. -}
 gather :: ([a] -> (b, [a])) -> [a] -> [b]
@@ -92,7 +180,7 @@ gatherWith f = loop where
     loop (c:cs) as = let (b, as') = f c as
                      in b : loop cs as'
 
-{-| Gather (key,value) to a Map key [value] -}
+{-| Gather (/key/, /value/) to 'Map.Map' /key/ [/value/]. -}
 gatherToMap :: (Ord k) => [(k,v)] -> Map.Map k [v]
 gatherToMap xs = loop xs Map.empty where
     loop [] m = m
@@ -100,6 +188,10 @@ gatherToMap xs = loop xs Map.empty where
         case Map.lookup k m of
           Just vs -> loop xs2 $ Map.insert k (v:vs) m
           Nothing -> loop xs2 $ Map.insert k [v] m
+
+
+
+-- ----------------------  Lookup
 
 lookupSatisfy :: a -> [(a -> Bool, b)] -> Maybe b
 lookupSatisfy x = loop where
@@ -110,51 +202,4 @@ lookupSatisfy x = loop where
 
 lookupMap :: (Ord k) => k -> Map.Map k a -> Maybe a
 lookupMap = Map.lookup
-
-{-| Singleton list -}
-singleton :: a -> [a]
-singleton x = [x]
-
-{-| Divide list.
-
-    >>> divideBy '|' "a|bb||ccc|"
-    ["a", "bb", "", "ccc", ""]  -}
-divideBy :: (Eq a) => a -> [a] -> [[a]]
-divideBy dv = divideByP (== dv)
-
-{-| Divide list.
-
-    >>> divideByP (== '|') "a|bb||ccc|"
-    ["a", "bb", "", "ccc", ""]  -}
-divideByP :: (Eq a) => (a -> Bool) -> [a] -> [[a]]
-divideByP p = loop where
-    loop xs = case break p xs of
-                (x, _ : xs2) -> x : loop xs2
-                (x, [])      -> [x]
-
-stringWidth :: String -> Int
-stringWidth = sum . map charWidth
-
-charWidth :: Char -> Int
-charWidth c
-    | Char.ord c >= 256 = 2
-    | otherwise         = 1
-
-{-| Add spaces.
-
-    >>> padRight 10 "abc"
-    "abc       "
- -}
-padRight :: Int -> Map String
-padRight n s = s ++ replicate rest ' ' where
-    rest = max 0 (n - stringWidth s)
-
-{-| Add spaces.
-
-    >>> padLeft 10 "abc"
-    "       abc"
- -}
-padLeft :: Int -> Map String
-padLeft n s = replicate rest ' ' ++ s where
-    rest = max 0 (n - stringWidth s)
 

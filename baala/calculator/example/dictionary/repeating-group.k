@@ -11,5 +11,5 @@ pno  : sp
      | cut /r
      | meet p
 
-affirm P pno
+affirm P | pno
 

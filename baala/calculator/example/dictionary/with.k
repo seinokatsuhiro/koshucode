@@ -7,5 +7,5 @@ tx   : s | rename /sx /sno
 ty   : s | rename /sy /sno
 txy  : tx | meet ty
 
-affirm TXY txy
+affirm TXY | txy
 

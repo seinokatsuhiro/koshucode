@@ -49,5 +49,5 @@ c3 : c2
    | add /z ( total /r/z )
    | cut /r
 
-affirm C3 c3
+affirm C3 | c3
 

@@ -1,4 +1,4 @@
 ** -*- koshu -*-
 
-affirm EMPTY-HEADING reldee
+affirm EMPTY-HEADING | reldee
 

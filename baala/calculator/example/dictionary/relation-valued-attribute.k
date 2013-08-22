@@ -14,6 +14,6 @@
 a : source A /r
 
 affirm A
-  a | add /size ( length /r )
-    | cut /r
+  | a | add /size ( length /r )
+      | cut /r
 

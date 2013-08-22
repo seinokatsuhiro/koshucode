@@ -37,11 +37,11 @@
 |-- RELATION  /lit {| | |}      ** reldee
 |-- RELATION  /lit {| | | |}    ** reldee
 
-affirm INTEGER   source INTEGER  /lit
-affirm CHAR      source CHAR     /lit
-affirm BOOLEAN   source BOOLEAN  /lit
-affirm SET       source SET      /lit
-affirm LIST      source LIST     /lit
-affirm TERMSET   source TERMSET  /lit
-affirm RELATION  source RELATION /lit
+affirm INTEGER  | source INTEGER  /lit
+affirm CHAR     | source CHAR     /lit
+affirm BOOLEAN  | source BOOLEAN  /lit
+affirm SET      | source SET      /lit
+affirm LIST     | source LIST     /lit
+affirm TERMSET  | source TERMSET  /lit
+affirm RELATION | source RELATION /lit
 

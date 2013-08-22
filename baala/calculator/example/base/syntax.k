@@ -1,8 +1,8 @@
 ** -*- koshu -*-
 
-affirm WORD    source WORD /x    | add /n ( length /x )
-affirm SPECIAL source SPECIAL /x | add /n ( length /x )
-affirm UNICODE source UNICODE /項目名 | add /n ( length /項目名 )
+affirm WORD    | source WORD /x    | add /n ( length /x )
+affirm SPECIAL | source SPECIAL /x | add /n ( length /x )
+affirm UNICODE | source UNICODE /項目名 | add /n ( length /項目名 )
 
 ** word
 

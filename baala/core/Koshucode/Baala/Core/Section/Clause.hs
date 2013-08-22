@@ -103,7 +103,7 @@ isCUnknown _                = False
     'TRelmap' and 'TAssert' are contained.
     This function does not depend on 'RelmapHalfCons'.
 
-    >>> consPreclause $ tokens "a : source A /x /y"
+    >>> consPreclause . B.tokenize $ "a : source A /x /y"
     [TRelmap [CodeLine 1 "a : source A /x /y"]
              "a" [TreeL (Word 0 "source"),
                   TreeL (Word 0 "A"),
@@ -150,7 +150,11 @@ consPreclause' src@(ClauseSource toks _) = cl toks' where
     jud q (B.TWord _ _ s : xs) = [CJudge src q s xs]
     jud _ _ = unk
 
-    ass q (B.TWord _ _ s : xs) = [TAssert src q s $ B.tokenTrees xs]
+    ass q (B.TWord _ _ p : xs) =
+        case B.splitTokens "|" xs of
+          Right (_, _, relmap) -> assert relmap
+          Left  relmap         -> assert relmap
+        where assert relmap = [TAssert src q p $ B.tokenTrees relmap]
     ass _ _ = unk
 
 

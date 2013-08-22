@@ -15,17 +15,18 @@ day    : source DAY /d
 |-- DAY  /d 25
 
 affirm DATE
-  month | meet day
+  | month
+  | meet day
 
-    ** from 7.20 to 10.10
-    | add /start-m 7   /end-m 10
-          /start-d 20  /end-d 10
+  ** from 7.20 to 10.10
+  | add /start-m 7   /end-m 10
+        /start-d 20  /end-d 10
 
-    | hold and
-       ( /m >= /start-m  and  /m <= /end-m )
-       ( /d >= /start-d  where  /m = /start-m )
-       ( /d <= /end-d    where  /m = /end-m )
+  | hold and
+     ( /m >= /start-m  and  /m <= /end-m )
+     ( /d >= /start-d  where  /m = /start-m )
+     ( /d <= /end-d    where  /m = /end-m )
 
-    | cut /start-m /end-m
-          /start-d /end-d
+  | cut /start-m /end-m
+        /start-d /end-d
 

@@ -8,7 +8,7 @@ cs   : s  | size /card
 cp   : p  | size /card
 csp  : sp | size /card
 
-affirm CS  cs
-affirm CP  cp
-affirm CSP csp
+affirm CS  | cs
+affirm CP  | cp
+affirm CSP | csp
 

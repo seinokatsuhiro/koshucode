@@ -13,25 +13,29 @@
 int  : source INT /a
 text : source TEXT /a
 
-affirm INT int
-affirm TEXT text
+affirm INT  | int
+affirm TEXT | text
 
-affirm A int
+affirm A
+  | int
   | add /length  ( length /a )
         /min     ( min /a )
         /max     ( max /a )
         /total   ( total /a )
 
-affirm B text
+affirm B
+  | text
   | add /length  ( length /a )
         /min     ( min /a )
         /max     ( max /a )
 
-affirm C reldee
+affirm C
+  | reldee
   | add /list    ( list ('a) ('b) ('c) )
         /length  ( length ('abc) )
 
-affirm D reldee
+affirm D
+  | reldee
   | add /list-a  [ 1 : 2 ]
         /list-b  [ 2 : 3 : 4 ]
         /set-a   { 1 : 2 }
@@ -45,7 +49,8 @@ affirm D reldee
   | cut /list-a /list-b
         /set-a  /set-b
 
-affirm F reldee
+affirm F
+  | reldee
   | add /a 'aa
         /b 'bb
         /c 'cc
