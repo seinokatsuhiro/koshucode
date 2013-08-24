@@ -10,6 +10,7 @@ module Koshucode.Baala.Base.Syntax.TokenTree
   treeTokens,
   treesTokens,
   singleTree,
+  flatname,
 
   -- * Divide trees
   splitTokens,
@@ -76,6 +77,14 @@ singleTree :: [TokenTree] -> TokenTree
 singleTree [t] = t
 singleTree ts  = TreeB 1 ts
 
+flatname :: TokenTree -> Maybe String
+flatname (TreeL (TTerm _ [n])) = Just n
+flatname _ = Nothing
+
+
+
+-- ----------------------  Divide trees
+
 {-| Split token list by unquoted word.
     If token list contains the word,
     pair of /before-list/, /the-word/ and /after-list/ is returned.
@@ -121,7 +130,6 @@ divideTreesByBar = divideTreesBy "|"
     , [TreeL (TWord 9 0 "c")] ]  -}
 divideTreesByColon :: [TokenTree] -> [[TokenTree]]
 divideTreesByColon = divideTreesBy ":"
-
 
 
 

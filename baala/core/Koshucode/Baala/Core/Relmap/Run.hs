@@ -63,13 +63,62 @@ runAssertDataset ::
 runAssertDataset as ds =
     do js <- mapM each as
        return $ concat js
-    where each (Assert q s m) =
-              do r <- runRelmapDataset ds m B.reldee
-                 return $ judgesFromRel q s r
+    where each (Assert q pat opt r src) =
+              do r1 <- runRelmapDataset ds r B.reldee
+                 case assertOptionProcess q pat opt r1 of
+                   Right js -> Right js
+                   Left a   -> Left (a, [], src)
 
 {-| Convert relation to list of judges -}
 judgesFromRel :: Bool -> B.JudgePattern -> B.Rel c -> [B.Judge c]
-judgesFromRel q s = judges where
+judgesFromRel q pat = judges where
     judges (B.Rel h b) = map (judge h) b
-    judge h = B.Judge q s . zip (B.headNames h)
+    judge h = B.Judge q pat . zip (B.headNames h)
+
+optionUnkCheck :: [String] -> [B.Named [B.TokenTree]] -> B.Ab ()
+optionUnkCheck ns xs =
+    let rest = B.assocOmitAll ("" : ns) xs
+    in if null rest
+       then Right ()
+       else Left $ B.AbortUnknownSymbol (fst . head $ rest)
+
+flatnames :: [B.TokenTree] -> B.Ab [B.Termname]
+flatnames trees =
+    case mapM B.flatname trees of
+      Just ns -> Right ns
+      Nothing -> Left $ B.AbortMissingTermname ""
+
+
+
+-- ---------------------------------  Option
+
+assertOptionProcess :: (Ord c) => Bool -> B.JudgePattern -> AssertOption -> B.Rel c -> B.Ab [B.Judge c]
+assertOptionProcess q pat opt r1 =
+    do assertOptionCheck opt
+       r2 <- assertOptionRelmap opt r1
+       let js = judgesFromRel q pat r2
+       assertOptionJudges opt js
+
+assertOptionCheck :: AssertOption -> B.Ab ()
+assertOptionCheck = optionUnkCheck ["-fore", "-order", "-align", "-table"]
+
+assertOptionRelmap :: (Ord c) => AssertOption -> B.Rel c -> B.Ab (B.Rel c)
+assertOptionRelmap opt r1 =
+    Right r1  >>= call "-fore"  assertOptionFore
+              >>= call "-order" assertOptionOrder
+    where call name f r =
+              case lookup name opt of
+                Just opt2 -> f opt2 r
+                Nothing   -> Right r
+
+assertOptionFore :: (Ord c) => [B.TokenTree] -> B.AbMap (B.Rel c)
+assertOptionFore opt r1 =
+    do ns <- flatnames opt
+       B.arrangeRelRaw B.arrangeFore B.arrangeFore ns r1
+
+assertOptionOrder :: (Ord c) => [B.TokenTree] ->  B.AbMap (B.Rel c)
+assertOptionOrder _ r1 = Right r1
+
+assertOptionJudges :: AssertOption -> [B.Judge c] -> B.Ab [B.Judge c]
+assertOptionJudges _ js = Right js
 

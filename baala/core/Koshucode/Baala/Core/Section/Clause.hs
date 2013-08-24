@@ -32,8 +32,8 @@ data Clause
     | CExport  ClauseSource String                    -- ^ Exporting relmap name
     | CRelmap  ClauseSource String HalfRelmap         -- ^ Relmap and its name
     | TRelmap  ClauseSource String [B.TokenTree]      -- ^ Not include HalfRelmap
-    | CAssert  ClauseSource Bool String HalfRelmap    -- ^ Assertions of relmaps
-    | TAssert  ClauseSource Bool String [B.TokenTree] -- ^ Not include HalfRelmap
+    | CAssert  ClauseSource Bool String AssertOption HalfRelmap    -- ^ Assertions of relmaps
+    | TAssert  ClauseSource Bool String AssertOption [B.TokenTree] -- ^ Not include HalfRelmap
     | CJudge   ClauseSource Bool String [B.Token]     -- ^ Judge
     | CComment ClauseSource       -- ^ Caluse comment
     | CUnknown ClauseSource       -- ^ Unknown clause
@@ -43,55 +43,55 @@ data Clause
 clauseTypeText :: Clause -> String
 clauseTypeText c =
     case c of
-      CSection _ _         ->  "Section"
-      CImport  _ _ _       ->  "Import"
-      CExport  _ _         ->  "Export"
-      CRelmap  _ _ _       ->  "Relmap"
-      TRelmap  _ _ _       ->  "Relmap"
-      CAssert  _ _ _ _     ->  "Assert"
-      TAssert  _ _ _ _     ->  "Assert"
-      CJudge   _ _ _ _     ->  "Judge"
-      CComment _           ->  "Comment"
-      CUnknown _           ->  "Unknown"
+      CSection _ _          ->  "Section"
+      CImport  _ _ _        ->  "Import"
+      CExport  _ _          ->  "Export"
+      CRelmap  _ _ _        ->  "Relmap"
+      TRelmap  _ _ _        ->  "Relmap"
+      CAssert  _ _ _ _ _    ->  "Assert"
+      TAssert  _ _ _ _ _    ->  "Assert"
+      CJudge   _ _ _ _      ->  "Judge"
+      CComment _            ->  "Comment"
+      CUnknown _            ->  "Unknown"
 
 {-| Source code information of clause. -}
 clauseSource :: Clause -> ClauseSource
 clauseSource c =
     case c of
-      CSection src _       ->  src
-      CImport  src _ _     ->  src
-      CExport  src _       ->  src
-      CRelmap  src _ _     ->  src
-      TRelmap  src _ _     ->  src
-      CAssert  src _ _ _   ->  src
-      TAssert  src _ _ _   ->  src
-      CJudge   src _ _ _   ->  src
-      CComment src         ->  src
-      CUnknown src         ->  src
+      CSection src _        ->  src
+      CImport  src _ _      ->  src
+      CExport  src _        ->  src
+      CRelmap  src _ _      ->  src
+      TRelmap  src _ _      ->  src
+      CAssert  src _ _ _ _  ->  src
+      TAssert  src _ _ _ _  ->  src
+      CJudge   src _ _ _    ->  src
+      CComment src          ->  src
+      CUnknown src          ->  src
 
 isCImport :: Clause -> Bool
-isCImport (CImport _ _ _)   = True
-isCImport _                 = False
+isCImport (CImport _ _ _)     = True
+isCImport _                   = False
 
 isCExport :: Clause -> Bool
-isCExport (CExport _ _)     = True
-isCExport _                 = False
+isCExport (CExport _ _)       = True
+isCExport _                   = False
 
 isCRelmap :: Clause -> Bool
-isCRelmap (CRelmap _ _ _)   = True
-isCRelmap _                 = False
+isCRelmap (CRelmap _ _ _)     = True
+isCRelmap _                   = False
 
 isCAssert :: Clause -> Bool
-isCAssert (CAssert _ _ _ _) = True
-isCAssert _                 = False
+isCAssert (CAssert _ _ _ _ _) = True
+isCAssert _                   = False
 
 isCJudge :: Clause -> Bool
-isCJudge (CJudge _ _ _ _)   = True
-isCJudge _                  = False
+isCJudge (CJudge _ _ _ _)     = True
+isCJudge _                    = False
 
 isCUnknown :: Clause -> Bool
-isCUnknown (CUnknown _)     = True
-isCUnknown _                = False
+isCUnknown (CUnknown _)       = True
+isCUnknown _                  = False
 
 
 
@@ -152,9 +152,12 @@ consPreclause' src@(ClauseSource toks _) = cl toks' where
 
     ass q (B.TWord _ _ p : xs) =
         case B.splitTokens "|" xs of
-          Right (_, _, relmap) -> assert relmap
-          Left  relmap         -> assert relmap
-        where assert relmap = [TAssert src q p $ B.tokenTrees relmap]
+          Right (option, _, relmap)  ->  assert relmap option
+          Left  relmap               ->  assert relmap []
+        where assert relmap option =
+                  let opt  = B.tokenTrees option
+                      body = B.tokenTrees relmap
+                  in [TAssert src q p (sortOperand opt) body]
     ass _ _ = unk
 
 
@@ -169,10 +172,10 @@ consClause
     -> [Clause]        -- ^ Result clauses
 consClause half = clauseHalf half . consPreclause
 
-clauseHalf :: RelmapHalfCons -> [Clause] -> [Clause]
+clauseHalf :: RelmapHalfCons -> B.Map [Clause]
 clauseHalf half = map f where
-    f (TRelmap src n ts)   = CRelmap src n   $ half (clauseLines src) ts
-    f (TAssert src q s ts) = CAssert src q s $ half (clauseLines src) ts
+    f (TRelmap src n ts)       = CRelmap src n       $ half (clauseLines src) ts
+    f (TAssert src q p opt ts) = CAssert src q p opt $ half (clauseLines src) ts
     f x = x
 
 
@@ -230,10 +233,11 @@ consSection whole res xs =
             Left (a, ts) -> Left (a, ts, clauseLines src)
       rel _ = B.bug
 
-      ass (CAssert src q p r) =
-          case whole r of
-            Right r'     -> Right $ Assert q p r'
-            Left (a, ts) -> Left (a, ts, clauseLines src)
+      ass (CAssert src q pat opt r) =
+          let ls = clauseLines src
+          in case whole r of
+               Right r'     -> Right $ Assert q pat opt r' ls
+               Left (a, ts) -> Left (a, ts, clauseLines src)
       ass _ = B.bug
 
       unk (CUnknown src) = Left (B.AbortUnknownClause,

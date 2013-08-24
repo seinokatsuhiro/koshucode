@@ -52,8 +52,8 @@ egHead =
            from2  = head1 `posFrom` head2
            from1  = head2 `posFrom` head1
 
-           inner  = termsInner from2
-           outer  = termsOuter from2
+           inner  = posInner from2
+           outer  = posOuter from2
 
            inner1 = head1 `posOf` inner
            inner2 = head2 `posOf` inner
@@ -67,5 +67,5 @@ egHead =
        "inner1"    >>> inner1
        "inner2"    >>> inner2
 
-       "pick"      >>> headChange (csPick inner1) head1
+       "pick"      >>> headChange (posPick inner1) head1
 

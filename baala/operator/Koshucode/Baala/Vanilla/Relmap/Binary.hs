@@ -37,18 +37,18 @@ relMaybe r1 r2 = Right $ B.Rel h3 b3 where
     B.Rel h2 args2 = r2
 
     posh12  =  h1  `B.posFrom`  h2
-    share1  =  h1  `B.posOf`    B.termsInner posh12
-    share2  =  h2  `B.posOf`    B.termsInner posh12
-    side2   =  h2  `B.posOf`    B.termsOuter posh12
+    share1  =  h1  `B.posOf`    B.posInner posh12
+    share2  =  h2  `B.posOf`    B.posInner posh12
+    side2   =  h2  `B.posOf`    B.posOuter posh12
 
     m2 = B.gatherToMap $ map pair args2
-    pair arg2 = (B.csPick share2 arg2,
-                 B.csPick side2  arg2)
+    pair arg2 = (B.posPick share2 arg2,
+                 B.posPick side2  arg2)
 
     h3 = Builtin.mappend h2 h1
     b3 = concatMap step args1
     nils = replicate (B.headDegree h3 - B.headDegree h1) C.nil
-    step arg1 = case B.lookupMap (B.csPick share1 arg1) m2 of
+    step arg1 = case B.lookupMap (B.posPick share1 arg1) m2 of
                   Just side -> map (++ arg1) side
                   Nothing   -> [nils ++ arg1]
 
@@ -91,16 +91,16 @@ relGroup n r2 r1 = Right $ B.Rel h3 b3 where
     B.Rel h2 args2 = r2
 
     posh12  =  h1  `B.posFrom`  h2
-    share1  =  h1  `B.posOf`    B.termsInner posh12
-    share2  =  h2  `B.posOf`    B.termsInner posh12
-    --side2  = posOf h2 $ termsOuter posh12
+    share1  =  h1  `B.posOf`    B.posInner posh12
+    share2  =  h2  `B.posOf`    B.posInner posh12
+    --side2  = posOf h2 $ posOuter posh12
 
     m2 = B.gatherToMap $ map pair args2
-    pair arg2 = (B.csPick share2 arg2, arg2)
+    pair arg2 = (B.posPick share2 arg2, arg2)
 
     h3 = B.Relhead $ B.Nest n (B.headTerms h2) : (B.headTerms h1)
     b3 = map step args1
-    step arg1 = case B.lookupMap (B.csPick share1 arg1) m2 of
+    step arg1 = case B.lookupMap (B.posPick share1 arg1) m2 of
                   Just args2' -> (C.putRel $ B.Rel h2 args2') : arg1
                   Nothing     -> []
 

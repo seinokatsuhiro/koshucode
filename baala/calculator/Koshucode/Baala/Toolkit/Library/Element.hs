@@ -29,12 +29,12 @@ affirm = B.Judge True
 
 affirmElem :: (C.CContent c) => [C.Assert c] -> [B.Judge c]
 affirmElem = B.unique . concatMap f where
-    f (C.Assert q p r) =
-        affirm (pat q) [ ("/pat", C.putText p) ]
+    f (C.Assert q pat _ r _) =
+        affirm (name q) [ ("/pat", C.putText pat) ]
              : relmapElem r
 
-    pat True  = "KOSHU-AFFIRM"
-    pat False = "KOSHU-DENY"
+    name True  = "KOSHU-AFFIRM"
+    name False = "KOSHU-DENY"
 
 namedRelmapElem :: (C.CContent c) => [B.Named (C.Relmap c)] -> [B.Judge c]
 namedRelmapElem = B.unique . concatMap f where

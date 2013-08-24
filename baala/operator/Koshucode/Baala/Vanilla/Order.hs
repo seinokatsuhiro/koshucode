@@ -57,11 +57,11 @@ sortByName ords ns xs = xs3 where
     ns2   = uncaps ords
     p     = ns2 `B.sharedIndex` ns
     xs2   = map f xs
-    f x   = (B.indexPick p x, x)
+    f x   = (B.arrangePick p x, x)
     xs3   = map snd $ sortBy ords2 xs2
 
 -- pull :: [Int] -> [v] -> [v]
--- pull ns xs = B.indexPick ns xs ++ B.drop ns xs
+-- pull ns xs = B.arrangePick ns xs ++ B.drop ns xs
 
 {-# ANN orders "HLint: ignore Use String" #-}
 orders :: String -> [OrderCap [Char]]

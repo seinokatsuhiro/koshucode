@@ -7,6 +7,8 @@ module Koshucode.Baala.Base.Data.Rel
   Rel (Rel),
   Relbody,
   rel,
+  arrangeRel,
+  arrangeRelRaw,
 
   -- * Constant
   reldum,
@@ -14,7 +16,9 @@ module Koshucode.Baala.Base.Data.Rel
 ) where
 
 import Koshucode.Baala.Base.Prelude
+import Koshucode.Baala.Base.Abort
 import Koshucode.Baala.Base.Data.Relhead
+import Koshucode.Baala.Base.Data.TermPos
 
 
 
@@ -39,6 +43,46 @@ instance (Pretty c) => Pretty (Rel c) where
 
 rel :: [String] -> Relbody c -> Rel c
 rel = Rel . headFrom
+
+arrangeRel
+    :: (Ord c)
+    => Arrange String    -- ^ Arranger for termnames,
+                         --   e.g., 'arrangePick', 'arrangeCut', etc
+    -> Arrange c         -- ^ Arranger for term contents
+    -> [String]          -- ^ Names of terms
+    -> AbMap (Rel c)     -- ^ Relation-to-relation mapping
+arrangeRel = arrangeRelUsing posSortByIndex
+
+arrangeRelRaw
+    :: (Ord c)
+    => Arrange String    -- ^ Arranger for termnames,
+                         --   e.g., 'arrangePick', 'arrangeCut', etc
+    -> Arrange c         -- ^ Arranger for term contents
+    -> [String]          -- ^ Names of terms
+    -> AbMap (Rel c)     -- ^ Relation-to-relation mapping
+arrangeRelRaw = arrangeRelUsing id
+
+arrangeRelUsing
+    :: (Ord c)
+    => Map [TermPos]
+    -> Arrange String
+    -> Arrange c
+    -> [String]
+    -> AbMap (Rel c)
+arrangeRelUsing sort ha ba ns (Rel h1 b1)
+    | null non   = Right $ Rel h2 b2
+    | otherwise  = Left  $ AbortNoTerms non
+    where
+      non =  headNonExistTerms h1 ns
+
+      pos :: [TermPos]
+      pos =  sort $ posOf h1 (map singleton ns)
+
+      ind :: [Int]
+      ind =  map posIndex pos
+
+      h2  =  headChange (ha ind) h1
+      b2  =  unique $ map (ba ind) b1
 
 
 

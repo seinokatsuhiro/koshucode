@@ -61,9 +61,9 @@ library
         Koshucode.Baala.Base.Data.TermPos
 
         Koshucode.Baala.Base.Prelude
+        Koshucode.Baala.Base.Prelude.Arrange
         Koshucode.Baala.Base.Prelude.Class
         Koshucode.Baala.Base.Prelude.Line
-        Koshucode.Baala.Base.Prelude.Position
         Koshucode.Baala.Base.Prelude.Pretty
         Koshucode.Baala.Base.Prelude.Unicode
         Koshucode.Baala.Base.Prelude.Utility

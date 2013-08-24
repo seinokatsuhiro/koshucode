@@ -20,6 +20,8 @@ module Koshucode.Baala.Base.Prelude.Utility
   splitBy,
   divide,
   divideBy,
+  assocOmit,
+  assocOmitAll,
 
   -- * String
   padRight,
@@ -141,6 +143,21 @@ charWidth :: Char -> Int
 charWidth c
     | Char.ord c >= 256 = 2
     | otherwise         = 1
+
+{-| Omit association that has given key.
+
+    >>> assocOmit "b" [("a",1), ("b",2), ("c",3)]
+    [("a",1), ("c",3)]  -}
+assocOmit :: (Eq k) => k -> Map [(k, a)]
+assocOmit k1 = loop where
+    loop [] = []
+    loop (x@(k2, _) : xs)
+        | k1 == k2   =  xs
+        | otherwise  =  x : loop xs
+
+{-| Omit associations that have given keys. -}
+assocOmitAll :: (Eq k) => [k] -> Map [(k, a)]
+assocOmitAll ks xs = foldr assocOmit xs ks
 
 
 

@@ -21,6 +21,7 @@ module Koshucode.Baala.Base.Data.Judge
   abcJudge,
 ) where
 
+import qualified Data.Monoid as Monoid
 import qualified Data.List as List
 import qualified Data.Map  as Map
 import qualified System.IO as IO
@@ -42,9 +43,21 @@ import Koshucode.Baala.Base.Data.Comment
     ('String', 'c') values of argument. --} 
 
 data Judge c = Judge Bool JudgePattern [Named c]
-               deriving (Show, Eq, Ord)
+               deriving (Show)
 
-{-| Pattern of judgement. -}
+instance (Ord c) => Eq (Judge c) where
+    j1 == j2  =  compare j1 j2 == EQ
+    j1 /= j2  =  compare j1 j2 /= EQ
+
+instance (Ord c) => Ord (Judge c) where
+    compare j1 j2 =
+        let Judge q1 p1 xs1 = abcJudge j1
+            Judge q2 p2 xs2 = abcJudge j2
+        in compare p1 p2
+               `Monoid.mappend` compare q1 q2
+               `Monoid.mappend` compare xs1 xs2
+
+{-| Name of judgement pattern. -}
 type JudgePattern = String
 
 -- Apply function to each values

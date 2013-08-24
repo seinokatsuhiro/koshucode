@@ -56,12 +56,12 @@ relMeet (B.Rel h1 b1) (B.Rel h2 b2) = Right $ B.Rel h3 b3 where
     share1, share2 :: [B.TermPos]
     share1    =  h1 `B.posOf` shared
     share2    =  h2 `B.posOf` shared
-    shared    =  B.termsInner $ h1 `B.posFrom` h2
+    shared    =  B.posInner $ h1 `B.posFrom` h2
 
     pick1,  pick2 :: B.Map [c]
-    pick1     =  B.csPick share1
-    pick2     =  B.csPick share2
-    cut2      =  B.csCut  share2
+    pick1     =  B.posPick share1
+    pick2     =  B.posPick share2
+    cut2      =  B.posCut  share2
 
     h3        =  mappend h2 h1
     b3        =  concatMap meet b1
@@ -100,11 +100,11 @@ relJoin (B.Rel h1 b1) (B.Rel h2 b2) = Right $ B.Rel h3 b3 where
     share1, share2 :: [B.TermPos]
     share1  =  h1 `B.posOf` shared
     share2  =  h2 `B.posOf` shared
-    shared  =  B.termsInner $ h1 `B.posFrom` h2
+    shared  =  B.posInner $ h1 `B.posFrom` h2
 
     pick1, pick2 :: B.Map [c]
-    pick1   =  B.csPick share1
-    pick2   =  B.csPick share2
+    pick1   =  B.posPick share1
+    pick2   =  B.posPick share2
 
     h3      =  B.headChange pick1 h1
     b3      =  B.unique $

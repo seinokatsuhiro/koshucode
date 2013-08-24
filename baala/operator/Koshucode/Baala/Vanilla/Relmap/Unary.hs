@@ -146,7 +146,7 @@ relTypename n p (B.Rel h1 b1) = Right $ B.Rel h2 b2 where
     h2 = B.headFrom [n] `Builtin.mappend` h1
     b2 = map f b1
     pos = h1 `B.posOf` [[p]]
-    f cs1 = let [c] = B.csPick pos cs1
+    f cs1 = let [c] = B.posPick pos cs1
             in C.putText (C.typename c) : cs1
 
 
