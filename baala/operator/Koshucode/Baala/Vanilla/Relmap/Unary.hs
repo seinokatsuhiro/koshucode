@@ -14,6 +14,9 @@ module Koshucode.Baala.Vanilla.Relmap.Unary
   ropConsTypename, relmapTypename, relTypename,
   -- * range
   ropConsRange, relmapRange,
+  -- * member
+  -- $member
+  ropConsMember, relmapMember,
   -- * RDF
   ropConsRdf
 ) where
@@ -145,7 +148,7 @@ relTypename
 relTypename n p (B.Rel h1 b1) = Right $ B.Rel h2 b2 where
     h2 = B.headFrom [n] `Builtin.mappend` h1
     b2 = map f b1
-    pos = h1 `B.posOf` [[p]]
+    pos = h1 `B.posFlat` [p]
     f cs1 = let [c] = B.posPick pos cs1
             in C.putText (C.typename c) : cs1
 
@@ -171,25 +174,75 @@ relRange n low high (B.Rel h1 b1) = Right $ B.Rel h2 b2 where
     ys   = map C.putDecFromInt [low .. high]
     g xs = map (: xs) ys
 
-{-
-divide :: String -> Relmap VContent
-divide ns2 = flow "divide" $ withP divide2 ns2
 
-divide2 :: [String] -> Rel VContent -> Rel VContent
-divide2 ns2 (Rel h1 b1) = Rel h2 b2 where
-    h2  = mappend (headFrom ns2) h1
-    b2  = concatMap g b1
 
-    p = ns2 `look` names (headTerms h1)
-    g | p `like` "--vv"  = ap f
-      | otherwise          = const []
+-- ----------------------  member
 
-    [_,_,x,y] = p
-    f the arg = if the y == putDecFromInt 0
-                then []
-                else [binv quot (the x) (the y) :
-                      binv rem  (the x) (the y) : arg]
--}
+{- $member
+
+   Membership.
+   Relmap @member@ @\/x@ @\/xs@ means
+   @\/x@ is a member of @\/xs@.
+
+   - Input relation has both @\/x@ and @\/xs@,
+     check content of @\/x@ is acturally the member of @\/xs@.
+
+   - Input relation has @\/x@ and not @\/xs@,
+     add term @\/xs@ as set of content of @\/x@.
+
+   - Input relation has @\/xs@ and not @\/x@,
+     add term @\/x@ as member of @\/xs@.
+-}  
+
+ropConsMember :: C.RopCons VContent
+ropConsMember use =
+  do x  <- Builtin.getTerm use "-1"
+     xs <- Builtin.getTerm use "-2"
+     Right $ relmapMember use x xs
+
+relmapMember :: C.RopUse VContent -> String -> String -> C.Relmap VContent
+relmapMember use x xs = C.relmapCalc use "member" sub where
+    sub _ r = relMember x xs r
+
+relMember :: String -> String -> B.AbMap (B.Rel VContent)
+relMember x xs r1 = r2 where
+    r2 | xHere && xsHere     = relMemberCheck      xPos xsPos r1
+       | xHere && not xsHere = relMemberCollectAll xPos xs    r1
+       | not xHere && xsHere = relMemberUncollect  x    xsPos r1
+       | otherwise           = Left $ B.AbortNoTerms [x, xs]
+    ([xPos, xsPos], [xHere, xsHere])
+        = B.relHead r1 `B.posHere` [x, xs]
+
+relMemberCheck :: B.TermPos -> B.TermPos -> B.AbMap (B.Rel VContent)
+relMemberCheck xPos xsPos (B.Rel h1 b1) = Right $ B.Rel h1 b2 where
+    b2     = filter f b1
+    f cs   = let [xCont, xsCont] = B.posPick [xPos, xsPos] cs
+             in xCont `isMember` xsCont
+
+relMemberCollectAll :: B.TermPos -> String -> B.AbMap (B.Rel VContent)
+relMemberCollectAll xPos xs (B.Rel h1 b1) = Right $ B.Rel h2 b2 where
+    h2     = B.headCons xs h1
+    b2     = map (xsCont :) b1
+    xsCont = VSet . B.unique $ concatMap xPick b1
+    xPick  = B.posPick [xPos]
+
+-- relMemberCollectEach :: B.TermPos -> String -> B.AbMap (B.Rel VContent)
+-- relMemberCollectEach xPos xs (B.Rel h1 b1) = Right $ B.Rel h2 b2 where
+--     h2     = B.headCons xs h1
+--     b2     = map (xsCont :) b1
+--     xsCont = VSet . B.unique $ concatMap xPick b1
+--     xPick  = B.posPick [xPos]
+
+relMemberUncollect :: String -> B.TermPos -> B.AbMap (B.Rel VContent)
+relMemberUncollect x xsPos (B.Rel h1 b1) = Right $ B.Rel h2 b2 where
+    h2     = B.headCons x h1
+    b2     = concatMap f b1
+    f cs   = let [xsCont] = B.posPick [xsPos] cs
+             in case xsCont of
+                  VSet  xs  -> map (: cs) xs
+                  VList xs  -> map (: cs) xs
+                  _         -> [xsCont : cs]
+
 
 
 -- ----------------------  RDF

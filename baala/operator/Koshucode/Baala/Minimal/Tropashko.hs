@@ -54,8 +54,8 @@ relMeet :: (Ord c)
     -> B.Ab (B.Rel c)  -- ^ Meet of /R1/ and /R2/
 relMeet (B.Rel h1 b1) (B.Rel h2 b2) = Right $ B.Rel h3 b3 where
     share1, share2 :: [B.TermPos]
-    share1    =  h1 `B.posOf` shared
-    share2    =  h2 `B.posOf` shared
+    share1    =  h1 `B.posNest` shared
+    share2    =  h2 `B.posNest` shared
     shared    =  B.posInner $ h1 `B.posFrom` h2
 
     pick1,  pick2 :: B.Map [c]
@@ -98,8 +98,8 @@ relJoin :: (Ord c)
     -> B.Ab (B.Rel c)  -- ^ Join of /R1/ and /R2/
 relJoin (B.Rel h1 b1) (B.Rel h2 b2) = Right $ B.Rel h3 b3 where
     share1, share2 :: [B.TermPos]
-    share1  =  h1 `B.posOf` shared
-    share2  =  h2 `B.posOf` shared
+    share1  =  h1 `B.posNest` shared
+    share2  =  h2 `B.posNest` shared
     shared  =  B.posInner $ h1 `B.posFrom` h2
 
     pick1, pick2 :: B.Map [c]

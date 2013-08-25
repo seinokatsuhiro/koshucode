@@ -33,6 +33,7 @@ vanillaRops = Builtin.ropList "vanilla"
     , o "hold E"               LikeHold          ropConsHold
     , o "maybe R"              LikeMeet          ropConsMaybe
     , o "maybe-both R"         LikeMeet          ropConsMaybeBoth
+    , o "member /N /N"         LikePos           ropConsMember
     , o "prefix /P /N ..."     LikePrefix        ropConsPrefix
     , o "prefix-change /P /Q"  LikePrefixChange  ropConsPrefixChange
     , o "range"                LikeSize          ropConsRange

@@ -13,10 +13,17 @@ module Koshucode.Baala.Base.Data.TermPos
   posCut,
   posInner,
   posOuter,
+  posExist,
+
+  posNest,
+  posFlat,
+  posFrom,
+  posHere,
 ) where
 
 import qualified Data.List as List
 import Koshucode.Baala.Base.Prelude
+import Koshucode.Baala.Base.Data.Relhead
 
 
 
@@ -70,19 +77,42 @@ posCut   =  arrangeCut . map posIndex
     >>> posInner [TermPos "/a" (-1), TermPos "/b" 1, TermPos "/c" 2]
     [["/b"], ["/c"]]  -}
 posInner :: [TermPos] -> [[String]]
-posInner = posFilter isInner
+posInner = posFilter posExist
 
 {-| Pick outer part.
 
     >>> posOuter [TermPos "/a" (-1), TermPos "/b" 1, TermPos "/c" 2]
     [["/a"]]  -}
 posOuter :: [TermPos] -> [[String]]
-posOuter = posFilter isOuter
+posOuter = posFilter (not . posExist)
 
 posFilter :: (TermPos -> Bool) -> [TermPos] -> [[String]]
 posFilter p = map (singleton . posName) . filter p
 
-isInner, isOuter :: TermPos -> Bool
-isInner pos  =  posIndex pos >= 0
-isOuter pos  =  posIndex pos <  0
+posExist :: TermPos -> Bool
+posExist pos = posIndex pos >= 0
+
+--
+
+{-| Positions of given names in a head -}
+posNest :: Relhead -> [[String]] -> [TermPos]
+posNest h1 ns = termPoss ns $ headIndex h1 ns
+
+posFlat :: Relhead -> [String] -> [TermPos]
+posFlat h ns = h `posNest` map singleton ns
+
+{-| Positions of given (sub)head in a head -}
+posFrom :: Relhead -> Relhead -> [TermPos]
+posFrom h1 h2 = h1 `posNest` n2 where
+    n2 = map singleton (headNames h2)
+
+termPoss :: [[String]] -> [[Int]] -> [TermPos]
+termPoss ns ps = zipWith TermPos ns2 ps2 where
+    ns2 = map head ns
+    ps2 = map head ps
+
+posHere :: Relhead -> [String] -> ([TermPos], [Bool])
+posHere h ns = let ps = h `posFlat` ns
+                   hs = map posExist ps
+               in (ps, hs)
 

@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Base.Data.Rel
 ( -- * Datatype
-  Rel (Rel),
+  Rel (..),
   Relbody,
   rel,
   arrangeRel,
@@ -27,8 +27,10 @@ import Koshucode.Baala.Base.Data.TermPos
 {-| Relations on type c.
     Heading of relation and
     body of relation as a list of tuples. -}
-data Rel c = Rel Relhead (Relbody c)
-             deriving (Show, Eq, Ord)
+data Rel c = Rel
+    { relHead :: Relhead
+    , relBody :: Relbody c
+    } deriving (Show, Eq, Ord)
 
 {-| List of positional args. -}
 type Relbody c = [[c]]
@@ -76,7 +78,7 @@ arrangeRelUsing sort ha ba ns (Rel h1 b1)
       non =  headNonExistTerms h1 ns
 
       pos :: [TermPos]
-      pos =  sort $ posOf h1 (map singleton ns)
+      pos =  sort $ h1 `posFlat` ns
 
       ind :: [Int]
       ind =  map posIndex pos

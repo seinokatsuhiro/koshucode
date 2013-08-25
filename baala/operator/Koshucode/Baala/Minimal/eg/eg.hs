@@ -55,8 +55,8 @@ egHead =
            inner  = posInner from2
            outer  = posOuter from2
 
-           inner1 = head1 `posOf` inner
-           inner2 = head2 `posOf` inner
+           inner1 = head1 `posNest` inner
+           inner2 = head2 `posNest` inner
 
        "from2"     >>> from2
        "from1"     >>> from1

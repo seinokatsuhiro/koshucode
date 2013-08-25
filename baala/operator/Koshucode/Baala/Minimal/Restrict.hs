@@ -61,9 +61,9 @@ relSemi which r2 r1 = Right $ B.Rel h3 b3 where
     B.Rel h2 args2 = r2
 
     posh12 = h1 `B.posFrom` h2
-    share1 = B.posOf h1 $ B.posInner posh12
-    share2 = B.posOf h2 $ B.posInner posh12
-    --side2  = posOf h2 $ posOuter posh12
+    share1 = h1 `B.posNest` B.posInner posh12
+    share2 = h2 `B.posNest` B.posInner posh12
+    --side2  = posNest h2 $ posOuter posh12
 
     m2 = B.gatherToMap $ map pair args2
     pair arg2 = (B.posPick share2 arg2, True)

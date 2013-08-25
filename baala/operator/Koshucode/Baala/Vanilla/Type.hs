@@ -5,8 +5,10 @@
 module Koshucode.Baala.Vanilla.Type
 ( VContent (..),
   VCop,
+  isMember,
 ) where
 
+import qualified Data.Set as Set
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 
@@ -25,7 +27,33 @@ data VContent
     | VSet     [VContent]         -- ^ Set type (informative collection)
     | VTermset [B.Named VContent] -- ^ Termset type (set of terms)
     | VRel     (B.Rel VContent)   -- ^ Relation type
-      deriving (Show, Eq, Ord)
+      deriving (Show)
+
+instance Eq VContent where
+    x == y  =  compare x y == EQ
+    x /= y  =  compare x y /= EQ
+
+instance Ord VContent where
+    compare (VBool    x) (VBool    y)  =  compare x y
+    compare (VText    x) (VText    y)  =  compare x y
+    compare (VDec     x) (VDec     y)  =  compare x y
+    compare (VNil      ) (VNil      )  =  EQ
+    compare (VList    x) (VList    y)  =  compare x y
+    compare (VSet     x) (VSet     y)  =  compareAsSet x y
+    compare (VTermset x) (VTermset y)  =  compareAsSet x y
+    compare (VRel     x) (VRel     y)  =  compare x y
+
+    compare (VBool    _) _             =  LT
+    compare (VText    _) _             =  LT
+    compare (VDec     _) _             =  LT
+    compare (VNil      ) _             =  LT
+    compare (VList    _) _             =  LT
+    compare (VSet     _) _             =  LT
+    compare (VTermset _) _             =  LT
+    compare (VRel     _) _             =  LT
+
+compareAsSet :: (Ord a) => [a] -> [a] -> Ordering
+compareAsSet x y = compare (Set.fromList x) (Set.fromList y)
 
 instance C.PrimContent VContent where        
     typename (VBool    _)  =  "boolean"
@@ -118,4 +146,13 @@ instance C.CRel VContent where
     getRel _                 =  B.bug
     isRel  (VRel _)          =  True
     isRel  _                 =  False
+
+
+
+-- ----------------------
+
+isMember :: VContent -> VContent -> Bool
+isMember x (VSet  xs) = x `elem` xs
+isMember x (VList xs) = x `elem` xs
+isMember _ _ = False
 
