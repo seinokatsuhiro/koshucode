@@ -59,7 +59,8 @@ type AbortOr b = AbortOrType AbortReason b
 
 {-| Abort reasons -}
 data AbortReason
-    = AbortHeteroDecimal    String String
+    = AbortDivideByZero
+    | AbortHeteroDecimal    String String
     | AbortLookup           String
     | AbortMalformedOperand String
     | AbortMissingTermname  String
@@ -91,6 +92,7 @@ instance AbortReasonClass AbortReason where
     abortSymbol = head . words . show
 
     abortTitle a = case a of
+        (AbortDivideByZero      ) -> "ゼロで割れない"
         (AbortHeteroDecimal  _ _) -> "小数の桁数が合わない"
         (AbortLookup           _) -> "項目がない"
         (AbortMalformedOperand _) -> "演算子の引数がおかしい"
@@ -116,6 +118,7 @@ instance AbortReasonClass AbortReason where
         (AbortUsage          _ _) -> "使用法の間違い"
 
     abortMain a = case a of
+        (AbortDivideByZero      ) -> docEmpty
         (AbortHeteroDecimal  x y) -> doc $ x ++ " : " ++ y
         (AbortLookup           s) -> par s
         (AbortMalformedOperand s) -> par s

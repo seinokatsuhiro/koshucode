@@ -37,7 +37,7 @@ runRelmapSelector select = (<$>) where
     RelmapSource _ s ns  <$> _  =  Right $ select s ns
     RelmapConst  _ _ r   <$> _  =  Right r
     RelmapAlias  _ m     <$> r  =  m <$> r
-    RelmapCalc h _ f ms  <$> r  =  do rs' <- mapM (<$> B.reldee) ms
+    RelmapCalc h _ f ms  <$> r  =  do rs' <- mapM (<$> r) ms
                                       case f rs' r of
                                         Right r' -> Right r'
                                         Left a   -> Left (a, [], halfLines h)

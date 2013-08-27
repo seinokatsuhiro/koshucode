@@ -7,6 +7,7 @@ module Koshucode.Baala.Base.Data.Rel
   Rel (..),
   Relbody,
   rel,
+  relPosHere,
   arrangeRel,
   arrangeRelRaw,
 
@@ -45,6 +46,9 @@ instance (Pretty c) => Pretty (Rel c) where
 
 rel :: [String] -> Relbody c -> Rel c
 rel = Rel . headFrom
+
+relPosHere :: Rel c -> [String] -> ([TermPos], [Bool])
+relPosHere r = posHere $ relHead r
 
 arrangeRel
     :: (Ord c)

@@ -67,6 +67,6 @@ vanillaBinary = B.binaryTree ht where
          , right 7 "and"
          , right 6 "= <> < > <= >="
          , right 2 "+ - ++ intersect minus"
-         , right 1 "* /"
+         , right 1 "* / quo rem"
          ]
 

@@ -63,7 +63,7 @@ relMeet (B.Rel h1 b1) (B.Rel h2 b2) = Right $ B.Rel h3 b3 where
     pick2     =  B.posPick share2
     cut2      =  B.posCut  share2
 
-    h3        =  mappend h2 h1
+    h3        =  h2 `mappend` h1
     b3        =  concatMap meet b1
     meet cs1  =  case B.lookupMap (pick1 cs1) m2 of
                    Just css2  ->  map (++ cs1) css2

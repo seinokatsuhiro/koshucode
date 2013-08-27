@@ -7,6 +7,7 @@ module Koshucode.Baala.Core.Content.Decimal
   intDecimal,
   decimalSetPoint,
   decimalDenom,
+  isDecimalZero,
 
   -- * Reader
   LitString,
@@ -22,6 +23,8 @@ module Koshucode.Baala.Core.Content.Decimal
   decimalSub,
   decimalMul,
   decimalDiv,
+  decimalQuo,
+  decimalRem,
 
   decimalRevsign,
   decimalRevratio,
@@ -62,6 +65,9 @@ decimalSetPoint p2 (Decimal nd1 _ e1) =
 reduceDecimal :: (Int, Int) -> Int -> Bool -> Decimal
 reduceDecimal (n, den) = Decimal (n `div` g, den `div` g) where
     g = gcd n den
+
+isDecimalZero :: Decimal -> Bool
+isDecimalZero (Decimal (n, _) _ _)  =  n == 0
 
 
 
@@ -192,6 +198,24 @@ decimalMul (Decimal (n1, den1) p1 a1) (Decimal (n2, den2) p2 a2)
 decimalDiv :: DecimalBinary
 decimalDiv dec1 dec2
     = decimalMul dec1 $ decimalRevratio dec2
+
+decimalQuo :: DecimalBinary
+decimalQuo = decimalQR quot
+
+decimalRem :: DecimalBinary
+decimalRem = decimalQR rem
+
+decimalQR :: (Int -> Int -> Int) -> DecimalBinary
+decimalQR qr
+          d1@(Decimal (n1, den1) p1 a1)
+          d2@(Decimal (n2, den2) p2 a2)
+    | p1 /= p2     = Left  $ B.AbortHeteroDecimal txt1 txt2
+    | n2 == 0      = Left  $ B.AbortDivideByZero
+    | otherwise    = Right $ Decimal (n3, 1) p1 a3
+    where n3    =  (n1 * den2) `qr` (n2 * den1)
+          a3    =  a1 || a2
+          txt1  =  decimalString d1
+          txt2  =  decimalString d2
 
 -- ----------------------
 

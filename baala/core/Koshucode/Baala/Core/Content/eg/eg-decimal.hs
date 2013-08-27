@@ -90,6 +90,22 @@ egArith =
      "div"      >>> bin decimalDiv "10.0   0.5"
      "div"      >>> bin decimalDiv " 5.0  10.5"
 
+     "quo"      >>> bin decimalQuo "10   12"
+     "quo"      >>> bin decimalQuo "10   10"
+     "quo"      >>> bin decimalQuo "10    4"
+     "quo"      >>> bin decimalQuo "10    3"
+     "quo"      >>> bin decimalQuo "10    2"
+     "quo"      >>> bin decimalQuo "10    1"
+
+     "quo"      >>> bin decimalQuo "1.50   0.66"
+
+     "rem"      >>> bin decimalRem "10   12"
+     "rem"      >>> bin decimalRem "10   10"
+     "rem"      >>> bin decimalRem "10    4"
+     "rem"      >>> bin decimalRem "10    3"
+     "rem"      >>> bin decimalRem "10    2"
+     "rem"      >>> bin decimalRem "10    1"
+
                     -- 10 / 3 = 3             10:0 / 3:0 = 3:0
                     -- 10.0 / 3.0 = 30.0      100:1 / 30:1 = 3:0
                     -- 10.00 / 3.00 = 30.00   1000:2 / 300:2 = 3:0

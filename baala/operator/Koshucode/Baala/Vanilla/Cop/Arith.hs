@@ -31,6 +31,8 @@ copsArith =
     [ C.namedEager  "+"    copPlus
     , C.namedEager  "*"    copTimes
     , C.namedEager  "-"    copMinus
+    , C.namedEager  "quo"  copQuo
+    , C.namedEager  "rem"  copRem
     , C.namedEager  "abs"  copAbs
     ]
 
@@ -63,6 +65,22 @@ copMinus [a, b] =
        c' <- C.decimalSub a' b'
        Right . VDec $ c'
 copMinus _ = Left $ B.AbortMalformedOperand "-"
+
+copQuo :: VCop
+copQuo [a, b] =
+    do a' <- copDec a
+       b' <- copDec b
+       c' <- C.decimalQuo a' b'
+       Right . VDec $ c'
+copQuo _ = Left $ B.AbortMalformedOperand "quo"
+
+copRem :: VCop
+copRem [a, b] =
+    do a' <- copDec a
+       b' <- copDec b
+       c' <- C.decimalRem a' b'
+       Right . VDec $ c'
+copRem _ = Left $ B.AbortMalformedOperand "rem"
 
 copAbs :: VCop
 copAbs [VList cs] = Right . VList =<< mapM copAbs1 cs

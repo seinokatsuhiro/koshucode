@@ -6,18 +6,15 @@ module Koshucode.Baala.Base.Data.Relhead
 ( -- * Type
   Relhead (..),
   headFrom,
-  headCons,
+  headCons, headCons2,
   headChange,
   headNames,
   headDegree,
 
   -- * Other functions
-  headTermExist,
-  headTermCheck,
-  headExistTerms,
-  headNonExistTerms,
-  headIndex,
-  headIndex1,
+  headTermExist, headTermCheck,
+  headExistTerms, headNonExistTerms,
+  headIndex, headIndex1,
 
   -- * Monoid
   mempty,
@@ -60,6 +57,9 @@ headFrom ns = Relhead $ map Term ns
     Relhead [Term "/c", Term "/a", Term "/b"]  -}
 headCons :: String -> Map Relhead
 headCons n (Relhead ns) = Relhead $ Term n : ns
+
+headCons2 :: String -> String -> Map Relhead
+headCons2 n1 n2 (Relhead ns) = Relhead $ Term n1 : Term n2 : ns
 
 {-| Reconstruct head.
 

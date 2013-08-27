@@ -6,6 +6,7 @@ module Koshucode.Baala.Vanilla.Relmap.Operand
 
   -- * Operand sorter
   likeGroup,
+  likePos,
   likePrefix,
   likePrefixChange,
   likeSize,
