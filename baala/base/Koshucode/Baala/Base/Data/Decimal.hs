@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Core.Content.Decimal
+module Koshucode.Baala.Base.Data.Decimal
 ( -- * Type
   Decimal (..),
   decimalNum,
@@ -32,9 +32,10 @@ module Koshucode.Baala.Core.Content.Decimal
   decimalSum,
 ) where
 
-import Data.Char
+import qualified Data.Char as Ch
 import Control.Monad
-import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.Base.Abort   as B
+import qualified Koshucode.Baala.Base.Prelude as B
 
 
 
@@ -92,17 +93,17 @@ litDecimal ccs = headPart id ccs where
     intPart :: B.Map Int -> Int -> LitDecimal
     intPart sign n [] = Right $ Decimal (sign n, 1) 0 False
     intPart sign n (c:cs)
-        | isDigit c  =  intPart sign (10 * n + fromDigit c) cs
-        | c == ' '   =  intPart sign n cs
-        | c == '.'   =  decPart sign n 0 cs
-        | otherwise  =  tailPart False sign (n, 0) (c:cs)
+        | Ch.isDigit c =  intPart sign (10 * n + fromDigit c) cs
+        | c == ' '     =  intPart sign n cs
+        | c == '.'     =  decPart sign n 0 cs
+        | otherwise    =  tailPart False sign (n, 0) (c:cs)
 
     decPart :: B.Map Int -> Int -> Int -> LitDecimal
     decPart sign n p [] = Right $ Decimal (sign n, 10 ^ p) p False
     decPart sign n p (c:cs)
-        | isDigit c  =  decPart sign (10 * n + fromDigit c) (p + 1) cs
-        | c == ' '   =  decPart sign n p cs
-        | otherwise  =  tailPart False sign (n, p) (c:cs)
+        | Ch.isDigit c = decPart sign (10 * n + fromDigit c) (p + 1) cs
+        | c == ' '     =  decPart sign n p cs
+        | otherwise    =  tailPart False sign (n, p) (c:cs)
 
     tailPart :: Bool -> B.Map Int -> (Int, Int) -> LitDecimal
     tailPart approx sign (n, p) [] = Right $ Decimal (sign n, 10 ^ p) p approx
@@ -160,7 +161,7 @@ decimalDigits approx pt
 
 quoteDigit :: Int -> (Int, Char)
 quoteDigit n = let (n', d) = quotRem n 10
-             in (n', chr $ d + ord '0')
+             in (n', Ch.chr $ d + Ch.ord '0')
 
 -- map quoteDigit [0..9]
 -- map quoteDigit [10..19]

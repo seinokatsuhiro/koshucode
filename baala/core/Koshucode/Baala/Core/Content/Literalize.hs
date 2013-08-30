@@ -31,7 +31,6 @@ module Koshucode.Baala.Core.Content.Literalize
 
 import qualified Koshucode.Baala.Base as B
 import Koshucode.Baala.Core.Content.Class
-import Koshucode.Baala.Core.Content.Decimal
 
 
 -- ----------------------  Type
@@ -63,7 +62,7 @@ litContentBy ops = lit where
 
     lit (B.TreeL tok) = case tok of
         B.TWord _ 0 cs@(c:_) | isDecimal c
-                       ->  Right . putDec =<< litDecimal cs
+                       ->  Right . putDec =<< B.litDecimal cs
         B.TWord _ 0 w  ->  case w of
             '#' : s    ->  litHash s
             "()"       ->  Right nil
@@ -75,7 +74,7 @@ litContentBy ops = lit where
     paren (B.TreeL (B.TWord _ 0 tag@(c:_)) : xs)
         | isDecimal c
             = do xs' <- mapM litUnquoted xs
-                 Right . putDec =<< litDecimal (concat $ tag : xs')
+                 Right . putDec =<< B.litDecimal (concat $ tag : xs')
         | otherwise
             = case lookup tag ops of
                  Just f  -> f lit xs
@@ -89,7 +88,7 @@ litContentBy ops = lit where
 
 
 -- hash word
-litHash :: (CBool c) => LitString c
+litHash :: (CBool c) => B.LitString c
 litHash "true"    =  Right . putBool $ True
 litHash "false"   =  Right . putBool $ False
 litHash w         =  Left $ B.AbortUnkWord ('#' : w)

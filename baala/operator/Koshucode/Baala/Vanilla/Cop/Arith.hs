@@ -36,33 +36,33 @@ copsArith =
     , C.namedEager  "abs"  copAbs
     ]
 
-copDec :: VContent -> B.Ab C.Decimal
+copDec :: VContent -> B.Ab B.Decimal
 copDec (VDec  n) = Right n
-copDec (VText n) = C.litDecimal n
+copDec (VText n) = B.litDecimal n
 copDec x = Left $ B.AbortNotNumber (show x)
 
 copPlus :: VCop
 copPlus xs = fmap VDec $ loop xs where
-    loop [] = Right $ C.intDecimal 0
+    loop [] = Right $ B.intDecimal 0
     loop (n : m) = do n' <- copDec n
                       m' <- loop m
-                      C.decimalAdd n' m'
+                      B.decimalAdd n' m'
 
 copTimes :: VCop
 copTimes xs = fmap VDec $ loop xs where
-    loop [] = Right $ C.intDecimal 1
+    loop [] = Right $ B.intDecimal 1
     loop (n : m) = do n' <- copDec n
                       m' <- loop m
-                      C.decimalMul n' m'
+                      B.decimalMul n' m'
 
 copMinus :: VCop
 copMinus [a] =
     do a' <- copDec a
-       Right . VDec $ C.decimalRevsign a'
+       Right . VDec $ B.decimalRevsign a'
 copMinus [a, b] =
     do a' <- copDec a
        b' <- copDec b
-       c' <- C.decimalSub a' b'
+       c' <- B.decimalSub a' b'
        Right . VDec $ c'
 copMinus _ = Left $ B.AbortMalformedOperand "-"
 
@@ -70,7 +70,7 @@ copQuo :: VCop
 copQuo [a, b] =
     do a' <- copDec a
        b' <- copDec b
-       c' <- C.decimalQuo a' b'
+       c' <- B.decimalQuo a' b'
        Right . VDec $ c'
 copQuo _ = Left $ B.AbortMalformedOperand "quo"
 
@@ -78,7 +78,7 @@ copRem :: VCop
 copRem [a, b] =
     do a' <- copDec a
        b' <- copDec b
-       c' <- C.decimalRem a' b'
+       c' <- B.decimalRem a' b'
        Right . VDec $ c'
 copRem _ = Left $ B.AbortMalformedOperand "rem"
 
@@ -88,7 +88,7 @@ copAbs [c] = copAbs1 c
 copAbs _ = Left B.AbortUnmatchArity
 
 copAbs1 :: VContent -> B.Ab VContent
-copAbs1 (VDec n) = Right . VDec $ C.decimalAbs n
+copAbs1 (VDec n) = Right . VDec $ B.decimalAbs n
 copAbs1 _ = Left B.AbortUnmatchArity
 
 -- let tree = singleTree . tokenTrees . tokens

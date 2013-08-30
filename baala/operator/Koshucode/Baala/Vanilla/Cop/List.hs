@@ -67,7 +67,7 @@ copList = Right . C.putList
 
 copTotal :: VCop
 copTotal = op where
-    op [VList xs] = Right . C.putDec =<< C.decimalSum (map C.getDec xs)
+    op [VList xs] = Right . C.putDec =<< B.decimalSum (map C.getDec xs)
     op xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
 
 copMin :: VCop

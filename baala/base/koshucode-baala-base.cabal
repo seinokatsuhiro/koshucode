@@ -54,6 +54,7 @@ library
 
         Koshucode.Baala.Base.Data
         Koshucode.Baala.Base.Data.Comment
+        Koshucode.Baala.Base.Data.Decimal
         Koshucode.Baala.Base.Data.Judge
         Koshucode.Baala.Base.Data.Rel
         Koshucode.Baala.Base.Data.Relhead

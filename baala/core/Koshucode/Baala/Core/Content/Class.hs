@@ -24,7 +24,6 @@ module Koshucode.Baala.Core.Content.Class
 ) where
 
 import qualified Koshucode.Baala.Base as B
-import Koshucode.Baala.Core.Content.Decimal
 
 
 
@@ -98,14 +97,14 @@ class (PrimContent c) => CNil c where
 
 class (PrimContent c) => CDec c where
     isDec      ::           c -> Bool
-    getDec     ::           c -> Decimal
-    putDec     ::     Decimal -> c
+    getDec     ::           c -> B.Decimal
+    putDec     ::   B.Decimal -> c
 
-    needDec     ::          c -> B.Ab Decimal
+    needDec     ::          c -> B.Ab B.Decimal
     needDec = need isDec getDec
 
 putDecFromInt :: (CDec c) => Int -> c
-putDecFromInt = putDec . intDecimal
+putDecFromInt = putDec . B.intDecimal
 
 class (PrimContent c) => CSet c where
     isSet       ::          c -> Bool

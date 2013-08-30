@@ -21,7 +21,7 @@ import qualified Koshucode.Baala.Core as C
 data VContent
     = VBool    Bool               -- ^ Boolean type
     | VText    String             -- ^ String type
-    | VDec     C.Decimal          -- ^ Decimal number type
+    | VDec     B.Decimal          -- ^ Decimal number type
     | VNil                        -- ^ Sign of no ordinary type
     | VList    [VContent]         -- ^ List type (objective collection)
     | VSet     [VContent]         -- ^ Set type (informative collection)
@@ -75,7 +75,7 @@ instance C.CContent VContent where
     'abc  -}
 instance B.Pretty VContent where
     doc (VText s)       =  B.doc $ "'" ++ B.hashString s
-    doc (VDec  n)       =  B.doc $ C.decimalString n
+    doc (VDec  n)       =  B.doc $ B.decimalString n
     doc (VBool b)       =  B.doc b
     doc (VNil)          =  B.doc "()"
     doc (VList    xs)   =  B.docWraps "["   "]" $ B.docColon xs
