@@ -9,7 +9,7 @@ module Koshucode.Baala.Base.Data.Relterm
 )
 where
 
-import Koshucode.Baala.Base.Prelude
+import qualified Koshucode.Baala.Base.Prelude as B
 
 {-| Term in heading of relation -}
 data Relterm
@@ -17,13 +17,13 @@ data Relterm
     | Nest String [Relterm]   -- ^ For relation
       deriving (Show, Eq, Ord)
 
-instance Name Relterm where
+instance B.Name Relterm where
     name (Term s)   = s
     name (Nest s _) = s
 
-instance Pretty Relterm where
-    doc (Term n)    = doc n
-    doc (Nest n xs) = docWraps "(" ")" (doch $ doc n : map doc xs)
+instance B.Pretty Relterm where
+    doc (Term n)    = B.doc n
+    doc (Nest n xs) = B.docWraps "(" ")" (B.doch $ B.doc n : map B.doc xs)
 
 {-| Term path to term position
 

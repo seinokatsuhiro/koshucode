@@ -25,8 +25,8 @@ import qualified Data.Monoid as Monoid
 import qualified Data.List as List
 import qualified Data.Map  as Map
 import qualified System.IO as IO
-import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Base.Data.Comment
+import qualified Koshucode.Baala.Base.Prelude as B
+import qualified Koshucode.Baala.Base.Data.Comment as B
 
 
 -- ----------------------  Datatype
@@ -42,7 +42,7 @@ import Koshucode.Baala.Base.Data.Comment
     Sentence pattern has placeholders filled by
     ('String', 'c') values of argument. --} 
 
-data Judge c = Judge Bool JudgePattern [Named c]
+data Judge c = Judge Bool JudgePattern [B.Named c]
                deriving (Show)
 
 instance (Ord c) => Eq (Judge c) where
@@ -67,30 +67,31 @@ instance Functor Judge where
 
 {-| >>> doc $ Judge True "P" [("/a", 10), ("/b", 20 :: Int)]
     |-- P  /a 10  /b 20 -}
-instance (Ord c, Pretty c) => Pretty (Judge c) where
-    doc (Judge q s a) = quality q <+> sign <+> arg a
+instance (Ord c, B.Pretty c) => B.Pretty (Judge c) where
+    doc (Judge q s a) = quality q B.<+> sign B.<+> arg a
         where
           -- Frege's judgement stroke, content line,
           -- and logical quality
-          quality True  = doc "|--"
-          quality False = doc "|-X"
+          quality True  = B.doc "|--"
+          quality False = B.doc "|-X"
           -- pattern
-          sign | ':' `elem` s = docWrap "\"" "\"" s
-               | otherwise    = doc s
+          sign | ':' `elem` s = B.docWrap "\"" "\"" s
+               | otherwise    = B.doc s
           -- term name and term value
-          arg ((n,v) : a2) = doc " " <> doc n <+> doc v <+> arg a2
-          arg [] = docEmpty
+          arg ((n,v) : a2) = B.doc " " B.<> B.doc n
+                             B.<+> B.doc v B.<+> arg a2
+          arg [] = B.docEmpty
 
 
 
 -- ----------------------  Logical quality
 
 {-| Affirm judge, i.e., change logical quality to 'True'. -}
-affirmJudge :: Map (Judge c)
+affirmJudge :: B.Map (Judge c)
 affirmJudge (Judge _ p xs) = Judge True p xs
 
 {-| Deny judge, i.e., change logical quality to 'False'. -}
-denyJudge   :: Map (Judge c)
+denyJudge   :: B.Map (Judge c)
 denyJudge   (Judge _ p xs) = Judge False p xs
 
 isAffirmed :: Judge c -> Bool
@@ -104,41 +105,39 @@ isDenied   (Judge q _ _) = not q
 -- ----------------------  Writer
 
 {-| Print judges. -}
-putJudges :: (Ord c, Pretty c) => [Judge c] -> IO ()
+putJudges :: (Ord c, B.Pretty c) => [Judge c] -> IO ()
 putJudges = hPutJudges IO.stdout
 
-hPutJudges :: (Ord c, Pretty c) => IO.Handle -> [Judge c] -> IO ()
+hPutJudges :: (Ord c, B.Pretty c) => IO.Handle -> [Judge c] -> IO ()
 hPutJudges h = IO.hPutStr h . unlines . judgeLines
 
 {-| Convert judgements to lines. -}
-judgeLines :: (Ord c, Pretty c) => [Judge c] -> [String]
-judgeLines = loop zero Map.empty where
-    loop n c []        =  judgeSummary n $ Map.assocs c
+judgeLines :: (Ord c, B.Pretty c) => [Judge c] -> [String]
+judgeLines = loop 0 Map.empty where
+    loop n c []         =  judgeSummary n $ Map.assocs c
     loop n c (j : js)
-        | grad   n'    =  s : process n' : "" : ss
-        | gutter n'    =  s : "" : ss
-        | otherwise    =  s : ss
-        where s        =  show $ doc j
-              ss       =  loop n' (up c j) js
-              n'       =  n + 1
+        | by 20         =  s : count n' : gutter ss
+        | by 5          =  s : gutter ss
+        | otherwise     =  s : ss
+        where s         =  show $ B.doc j
+              ss        =  loop n' (up c j) js
+              by d      =  n' `mod` d == 0
+              n'        =  n + 1
 
-    up c (Judge _ p _) =  Map.alter upAlter p c
-    upAlter Nothing    =  Just one
-    upAlter (Just n)   =  Just $ n + 1
+    up c (Judge _ p _)  =  Map.alter alt p c
+    alt Nothing         =  Just 1
+    alt (Just n)        =  Just $ n + 1
 
-    grad   n           =  n `mod` 20  == 0
-    gutter n           =  n `mod` 5   == 0
+    count n             =  "**  (" ++ show n ++ " judges)"
 
-    process n          =  "**  (" ++ show n ++ " judges)"
-
-    zero               =  0 :: Int
-    one                =  1 :: Int
+    gutter ss@("" : _)  =  ss
+    gutter ss           =  "" : ss
 
 -- >>> putStr . unlines $ judgeSummary 10 [("A", 3), ("B", 6), ("C", 1)]
 judgeSummary :: Int -> [(JudgePattern, Int)] -> [String]
-judgeSummary tt ns     =  "" : texts summaryDoc where
-    summaryDoc         =  CommentDoc [summary]
-    summary            =  CommentSec "SUMMARY" $ sumLines ++ [total tt]
+judgeSummary tt ns     =  "" : B.texts summaryDoc where
+    summaryDoc         =  B.CommentDoc [summary]
+    summary            =  B.CommentSec "SUMMARY" $ sumLines ++ [total tt]
     sumLines           =  map sumLine ns
     sumLine (p, n)     =  count n ++ " on " ++ p
     total n            =  count n ++ " in total"
@@ -146,9 +145,9 @@ judgeSummary tt ns     =  "" : texts summaryDoc where
     count 0            =  comment $ "no judges"
     count 1            =  comment $ "1 judge "
     count n            =  comment $ show n ++ " judges"
-    comment j          =  padLeft 11 j
+    comment j          =  B.padLeft 11 j
 
 {-| Sort terms in alphabetical order. -}
-abcJudge :: (Ord c) => Map (Judge c)
+abcJudge :: (Ord c) => B.Map (Judge c)
 abcJudge (Judge q p a) = Judge q p $ List.sort a
 
