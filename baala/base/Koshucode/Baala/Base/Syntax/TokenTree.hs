@@ -46,7 +46,7 @@ type TokenTree = Tree Token
     4. Curely-bar braces @{| .. |}@ for relation.
   -}
 tokenTrees :: [Token] -> [TokenTree]
-tokenTrees = trees parenType . sweepToken
+tokenTrees = map (undouble (== 0)) . trees parenType . sweepToken
 
 treesTokens :: [TokenTree] -> [Token]
 treesTokens = untrees typeParen
@@ -54,7 +54,7 @@ treesTokens = untrees typeParen
 treeTokens :: TokenTree -> [Token]
 treeTokens = untree typeParen
 
-typeParen :: Int -> (Token, Token)
+typeParen :: ParenType -> (Token, Token)
 typeParen = o where
     o 1   =  p  "("  ")"
     o 2   =  p  "["  "]"
@@ -64,7 +64,7 @@ typeParen = o where
     o _   =  p  "?"  "?"
     p a b =  ( TOpen 0 a, TClose 0 b )
 
-parenType :: ParenType Token
+parenType :: GetParenType Token
 parenType = parenTable
     [ o 1  "("   ")"   -- grouping
     , o 2  "["   "]"   -- list

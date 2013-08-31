@@ -120,20 +120,37 @@ consPreclause' src@(ClauseSource toks _) = cl toks' where
     cl :: [B.Token] -> [Clause]
     cl (B.TWord _ 0 n : B.TWord _ 0 ":" : xs) = rel n xs
     cl (B.TWord _ 0 k : xs)
+        | k == "|"        = judge xs
+        | k == "affirm"   = assert True  xs
+        | k == "deny"     = assert False xs
         | k == "section"  = mod xs
         | k == "import"   = imp xs
         | k == "export"   = exp xs
-        | k == "affirm"   = ass True  xs
-        | k == "deny"     = ass False xs
-        | k == "|--"      = jud True  xs
-        | k == "|-"       = jud True  xs
-        | k == "|-X"      = jud False xs
-        | k == "|-x"      = jud False xs
         | k == "****"     = [CComment src]
     cl []                 = []
     cl _                  = unk
 
     unk                   = [CUnknown src]
+
+    judge (B.TWord _ 0 k : xs)
+        | k == "--"  =  jud True  xs
+        | k == "-"   =  jud True  xs
+        | k == "-X"  =  jud False xs
+        | k == "-x"  =  jud False xs
+    judge _ = unk
+
+    jud q (B.TWord _ _ s : xs) = [CJudge src q s xs]
+    jud _ _ = unk
+
+    assert q (B.TWord _ _ p : xs) =
+        case B.splitTokens "|" xs of
+          Right (option, _, relmap)  ->  ass relmap option
+          Left  relmap               ->  ass relmap []
+        where ass relmap option =
+                  let opt  = B.tokenTrees option
+                      body = B.tokenTrees relmap
+                  in [TAssert src q p (sortOperand opt) body]
+    assert _ _ = unk
 
     mod [B.TWord _ _ n]   = [CSection src $ Just n]
     mod []                = [CSection src Nothing]
@@ -146,19 +163,6 @@ consPreclause' src@(ClauseSource toks _) = cl toks' where
     imp _                 = [CImport src toks Nothing]
 
     rel n xs              = [TRelmap src n $ B.tokenTrees xs]
-
-    jud q (B.TWord _ _ s : xs) = [CJudge src q s xs]
-    jud _ _ = unk
-
-    ass q (B.TWord _ _ p : xs) =
-        case B.splitTokens "|" xs of
-          Right (option, _, relmap)  ->  assert relmap option
-          Left  relmap               ->  assert relmap []
-        where assert relmap option =
-                  let opt  = B.tokenTrees option
-                      body = B.tokenTrees relmap
-                  in [TAssert src q p (sortOperand opt) body]
-    ass _ _ = unk
 
 
 

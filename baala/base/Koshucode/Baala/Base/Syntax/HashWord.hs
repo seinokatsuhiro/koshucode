@@ -6,7 +6,6 @@ module Koshucode.Baala.Base.Syntax.HashWord
   hashWordTable,
   hashWord,
   hashWordInvert,
-  hashString,
   hashSplit,
 
   -- * Document
@@ -16,7 +15,8 @@ module Koshucode.Baala.Base.Syntax.HashWord
   -- $HashSplit
 ) where
 
-import qualified Data.Tuple as D
+import qualified Data.Char as Ch
+import qualified Koshucode.Baala.Base.Prelude as B
 
 hashWordTable :: [(String, String)]
 hashWordTable =
@@ -27,6 +27,7 @@ hashWordTable =
     , o  "crlf"  "\r\n"
     , o  "tab"   "\t"
     , o  "sp"    " "
+    , o  "empty" ""
     , o  "("     "("
     , o  ")"     ")"
     , o  "{"     "{"
@@ -41,34 +42,53 @@ hashWordTable =
 hashWord :: String -> Maybe String
 hashWord w = lookup w hashWordTable
 
-hashWordInvert :: String -> Maybe String
-hashWordInvert w = lookup w tab
-    where tab = map D.swap hashWordTable
+-- hashWordInvert :: String -> Maybe String
+-- hashWordInvert w = lookup w tab
+--     where tab = map D.swap hashWordTable
 
-hashString :: String -> String
-hashString = unwords . hashSplit
+hashWordInvert :: String -> Maybe (String, String)
+hashWordInvert [] =  Nothing
+hashWordInvert (c : cs)
+    = case B.generalCategoryGroup c of
+        B.UnicodePunctuation  -> punct c
+        B.UnicodeOther        -> other c
+        _                     -> Nothing
+      where
+        punct '\'' = Just ("#q", cs)
+        punct '"'  = Just ("#qq", cs)
+        punct _    = Nothing
+
+        other '\t' = Just ("#tab", cs)
+        other '\r' = case cs of
+                       ('\n' : cs2) -> Just ("#crlf", cs2)
+                       _ -> Just ("#cr", cs)
+        other '\n' = Just ("#lf", cs)
+        other _    = Just ("#n" ++ show code, cs)
+
+        code = Ch.ord c
 
 hashSplit :: String -> [String]
-hashSplit = non False "" where
-    non q s "" = [rev q s]
-    non _ s (' ' : cs) = non True (' ' : s) cs
-    non q s (c : cs) =
-        case hashWordInvert [c] of
-          Nothing -> non q (c : s) cs
-          Just h  -> let hashed = ('#' : h) : hash cs
-                     in if s == ""
-                        then hashed
-                        else rev q s : hashed
+hashSplit = non "" where
+    non s "" = [rev s]
+    non s (' ' : cs) = non (' ' : s) cs
+    non s ccs@(c : cs) =
+        case hashWordInvert ccs of
+          Nothing       -> non (c : s) cs
+          Just (h, cs2) -> let hashed = h : hash cs2
+                           in if s == ""
+                              then hashed
+                              else rev s : hashed
 
     hash [] = []
-    hash (c : cs) =
-        case hashWordInvert [c] of
-          Nothing -> non False [c] cs
-          Just h  -> ('#' : h) : hash cs
+    hash ccs@(c : cs) =
+        case hashWordInvert ccs of
+          Nothing       -> non [c] cs
+          Just (h, cs2) -> h : hash cs2
 
-    rev :: Bool -> String -> String
-    rev False s = reverse s
-    rev True  s = reverse s
+    rev :: String -> String
+    rev s  = qq : (reverse $ qq : s)
+
+    qq = '"'
 
 
 

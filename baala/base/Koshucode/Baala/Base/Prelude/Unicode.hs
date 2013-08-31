@@ -2,6 +2,7 @@
 
 module Koshucode.Baala.Base.Prelude.Unicode
 ( GeneralCategoryGroup (..),
+  generalCategoryLetter,
   generalCategoryGroup,
 ) where
 
@@ -16,6 +17,15 @@ data GeneralCategoryGroup
     | UnicodeSeperator       -- ^ Zs Zl Zp
     | UnicodeOther           -- ^ Cc Cf Cs Co Cn
       deriving (Show, Eq, Ord, Bounded)
+
+generalCategoryLetter :: GeneralCategoryGroup -> Char
+generalCategoryLetter UnicodeLetter      = 'L'
+generalCategoryLetter UnicodeMark        = 'M'
+generalCategoryLetter UnicodeNumber      = 'N'
+generalCategoryLetter UnicodePunctuation = 'P'
+generalCategoryLetter UnicodeSymbol      = 'S'
+generalCategoryLetter UnicodeSeperator   = 'Z'
+generalCategoryLetter UnicodeOther       = 'C'
 
 generalCategoryGroup :: Char -> GeneralCategoryGroup
 generalCategoryGroup c =

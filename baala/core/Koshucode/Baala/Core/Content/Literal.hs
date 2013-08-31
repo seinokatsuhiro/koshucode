@@ -3,7 +3,7 @@
 
 {-| Literalizer: Make literal contents from token tree. -}
 
-module Koshucode.Baala.Core.Content.Literalize
+module Koshucode.Baala.Core.Content.Literal
 (
   -- * Library
 
@@ -52,7 +52,7 @@ type LitOperators c = [B.Named (LitTree c -> LitTrees c)]
     internal form of term content. -}
 litContentBy :: (CContent c) => LitOperators c -> LitTree c
 litContentBy ops = lit where
-    lit (B.TreeB t xs) = case t of
+    lit (B.TreeB typ xs) = case typ of
           1  ->  paren xs
           2  ->  fmap putList    $ litList    lit xs
           3  ->  fmap putSet     $ litList    lit xs
@@ -60,42 +60,91 @@ litContentBy ops = lit where
           5  ->  fmap putRel     $ litRel     lit xs
           _  ->  B.bug
 
-    lit (B.TreeL tok) = case tok of
-        B.TWord _ 0 cs@(c:_) | isDecimal c
-                       ->  Right . putDec =<< B.litDecimal cs
-        B.TWord _ 0 w  ->  case w of
-            '#' : s    ->  litHash s
-            "()"       ->  Right nil
-            _          ->  Left $ B.AbortUnkWord w
-        B.TWord _ _ w  ->  Right . putText $ w  -- quoted text
-        _              ->  Left $ B.AbortUnknownContent (show tok)
+    lit x@(B.TreeL tok)
+        | isDecimal x = do dec <- B.litDecimal $ getWord tok
+                           Right . putDec $ dec
+        | otherwise   = case tok of
+              B.TWord _ 0 w -> word w
+              B.TWord _ _ w -> Right . putText $ w  -- quoted text
+              _             -> Left $ B.AbortUnknownContent (show tok)
 
-    -- sequence of token trees
-    paren (B.TreeL (B.TWord _ 0 tag@(c:_)) : xs)
-        | isDecimal c
-            = do xs' <- mapM litUnquoted xs
-                 Right . putDec =<< B.litDecimal (concat $ tag : xs')
+    word w = case w of
+          '#' : s  ->  litHash s
+          "()"     ->  Right nil
+          _        ->  Left $ B.AbortUnkWord w
+
+    paren xs@(x : _)
+        -- quoted sequence is text
+        | isQuotedOrHashed x =
+            do xs2 <- mapM litQuoted xs
+               Right . putText $ concat xs2
+        -- decimal
+        | isDecimal x =
+            do xs2 <- mapM litUnquoted xs
+               dec <- B.litDecimal $ concat xs2
+               Right . putDec $ dec
+
+    -- tagged sequence
+    paren (B.TreeL (B.TWord _ 0 tag) : xs)
         | otherwise
             = case lookup tag ops of
                  Just f  -> f lit xs
                  Nothing -> Left $ B.AbortUnkCop tag
+
+    -- empty sequence is nil
     paren [] = Right nil
+
+    -- unknown sequence
     paren x  = Left $ B.AbortUnknownSymbol (show x)
 
-    -- First letters of decimals
-    isDecimal = (`elem` "0123456789+-.")
+getWord :: B.Token -> String
+getWord (B.TWord _ _ w) = w
+getWord _ = B.bug
 
+-- First letters of decimals
+isDecimalChar :: Char -> Bool
+isDecimalChar = (`elem` "0123456789+-.")
 
+isDecimal :: B.TokenTree -> Bool
+isDecimal (B.TreeL (B.TWord _ 0 (c : _))) = isDecimalChar c
+isDecimal _ = False
 
--- hash word
-litHash :: (CBool c) => B.LitString c
-litHash "true"    =  Right . putBool $ True
-litHash "false"   =  Right . putBool $ False
-litHash w         =  Left $ B.AbortUnkWord ('#' : w)
+{-| Check token tree is a quoted word,
+    i.e., (1) token tree includes 'B.TWord' token,
+          (2) the quotation level is more than zero. -}
+isQuoted :: B.TokenTree -> Bool
+isQuoted (B.TreeL (B.TWord _ q _)) | q > 0 = True
+isQuoted _ = False
+
+{-| Check token tree is an hashed word.
+    i.e., (1) token tree includes 'B.TWord' token,
+          (2) the quotation level is zero,
+    and   (3) the first character is hashsign. -}
+isHashed :: B.TokenTree -> Bool
+isHashed (B.TreeL (B.TWord _ 0 ('#' : _))) = True
+isHashed _ = False
+
+isQuotedOrHashed :: B.TokenTree -> Bool
+isQuotedOrHashed x = isQuoted x || isHashed x
+
+litQuoted :: LitTree String
+litQuoted (B.TreeL (B.TWord _ 0 ('#' : h)))
+    = case B.hashWord h of
+        Just w  -> Right w
+        Nothing -> Left $ B.AbortUnknownSymbol h
+litQuoted (B.TreeL (B.TWord _ q w)) | q > 0 = Right w
+litQuoted x = Left $ B.AbortUnknownSymbol (show x)    
 
 litUnquoted :: LitTree String
-litUnquoted (B.TreeL (B.TWord _ 0 w)) = Right w
+litUnquoted x@(B.TreeL (B.TWord _ 0 w)) | not $ isHashed x = Right w
 litUnquoted x = Left $ B.AbortUnknownSymbol (show x)
+
+litHash :: (CContent c) => B.LitString c
+litHash "true"    =  Right . putBool $ True
+litHash "false"   =  Right . putBool $ False
+litHash hash      =  case B.hashWord hash of
+                       Just w  -> Right . putText $ w
+                       Nothing -> Left $ B.AbortUnkWord ('#' : hash)
 
 
 

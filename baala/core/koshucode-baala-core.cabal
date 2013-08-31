@@ -52,7 +52,7 @@ library
         Koshucode.Baala.Core.Content.Class
         Koshucode.Baala.Core.Content.Expression
         Koshucode.Baala.Core.Content.Extension
-        Koshucode.Baala.Core.Content.Literalize
+        Koshucode.Baala.Core.Content.Literal
         Koshucode.Baala.Core.Content.Operator
 
         Koshucode.Baala.Core.Relmap

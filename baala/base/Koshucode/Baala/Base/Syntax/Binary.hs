@@ -49,7 +49,7 @@ binaryTree :: (Show a)
     => (a -> BinaryHeight)  -- ^ Height function
     -> Tree a               -- ^ Infixed tree
     -> Tree a               -- ^ Prefixed tree
-binaryTree ht tree1 = undouble $ binaryHeightMap loop ht tree1 where
+binaryTree ht tree1 = undouble (== 1) $ binaryHeightMap loop ht tree1 where
     loop tree2@(TreeL _)    = tree2
     loop tree2@(TreeB n xs) =
         case binaryPos $ heightList tree2 of

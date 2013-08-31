@@ -4,8 +4,8 @@
 |-- INTEGER   /lit -5
 
 |-- CHAR      /lit 'ABC
-|-- CHAR      /lit 'ABC DEF
-|-- CHAR      /lit '#qq I am double quoted. #qq
+|-- CHAR      /lit "ABC DEF"
+|-- CHAR      /lit #qq "I am double quoted." #qq
 
 |-- BOOLEAN   /lit #true
 |-- BOOLEAN   /lit #false

@@ -12,12 +12,14 @@ module Koshucode.Baala.Base.Syntax.Tree
   undouble,
 
   -- * Paren table
-  ParenType, TypeParen,
+  ParenType,
+  GetParenType,
+  GetTypeParen,
   parenTable
 ) where
 
 import qualified Data.Generics as G
-import Koshucode.Baala.Base.Prelude
+import qualified Koshucode.Baala.Base.Prelude as B
 
 
 
@@ -25,8 +27,8 @@ import Koshucode.Baala.Base.Prelude
 
 {-| Tree of leaf and branch. -}
 data Tree a
-    = TreeL a             -- ^ Leaf. Terminal of tree.
-    | TreeB Int [Tree a]  -- ^ Branch. Paren-type and subtrees.
+    = TreeL a                  -- ^ Leaf. Terminal of tree.
+    | TreeB ParenType [Tree a] -- ^ Branch. Paren-type and subtrees.
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance Functor Tree where
@@ -34,13 +36,13 @@ instance Functor Tree where
     fmap f (TreeB n xs) = TreeB n $ map (fmap f) xs
 
 {-| Convert a list of elements to a single tree. -}
-tree :: (Show a) => ParenType a -> [a] -> Tree a
+tree :: (Show a) => GetParenType a -> [a] -> Tree a
 tree p = TreeB 1 . trees p
 
 {-| Convert a list of elements to trees. -}
-trees :: (Show a) => ParenType a -> [a] -> [Tree a]
+trees :: (Show a) => GetParenType a -> [a] -> [Tree a]
 trees parenType xs = fst $ loop xs 0 where
-    add a xs2 p = mapFst (a :) $ loop xs2 p
+    add a xs2 p = B.mapFst (a :) $ loop xs2 p
 
     loop [] _ = ([], [])
     loop (x : xs2) p
@@ -61,11 +63,11 @@ trees parenType xs = fst $ loop xs 0 where
 -- ----------------------  Utility
 
 {-| Convert tree to list of tokens. -}
-untrees :: TypeParen a -> [Tree a] -> [a]
+untrees :: GetTypeParen a -> [Tree a] -> [a]
 untrees typeParen = concatMap (untree typeParen)
 
 {-| Convert tree to list of tokens. -}
-untree :: TypeParen a -> Tree a -> [a]
+untree :: GetTypeParen a -> Tree a -> [a]
 untree typeParen = loop where
     loop (TreeL x) = [x]
     loop (TreeB n xs) =
@@ -75,15 +77,16 @@ untree typeParen = loop where
 {-| Simplify tree by removing double parens,
     like @((a))@ to @(a)@.
 
-    >>> undouble $ TreeB 0 [Tree 0 [TreeL "A", TreeL "B"]]
-    Tree 0 [TreeL "A", TreeL "B"]
+    >>> undouble (== 0) $ TreeB 0 [TreeB 0 [TreeL "A", TreeL "B"]]
+    TreeB 0 [TreeL "A", TreeL "B"]
   -}
-undouble :: Map (Tree a)
-undouble (TreeB n xs) =
-    case map undouble xs of
-      [x] -> x
-      xs2 -> TreeB n xs2
-undouble x = x
+undouble :: (ParenType -> Bool) -> B.Map (Tree a)
+undouble p = loop where
+    loop (TreeB n xs) | p n =
+        case map loop xs of
+          [x] -> x
+          xs2 -> TreeB n xs2
+    loop x = x
 
 -- e1 = TreeB 2 [TreeB 1 [TreeB 0 [TreeL 0]]]
 -- e2 = TreeB 2 [e1, TreeB 1 [TreeB 0 [TreeL 0]]]
@@ -93,13 +96,15 @@ undouble x = x
 
 -- ----------------------  Paren table
 
+type ParenType = Int
+
 {-| Get a paren type. -}
-type ParenType a = a -> Int
+type GetParenType a = a -> ParenType
 
 {-| Get parens from a type. -}
-type TypeParen a = Int -> (a, a)
+type GetTypeParen a = ParenType -> (a, a)
 
-{-| Make 'ParenType' and 'TypeParen' functions
+{-| Make 'GetParenType' and 'GetTypeParen' functions
     from a type-open-close table.
 
     Make paren/type functions from @()@ and @[]@.
@@ -121,13 +126,14 @@ type TypeParen a = Int -> (a, a)
 
 parenTable
     :: (Eq a)
-    => [(Int, a -> Bool, a -> Bool)]  -- ^ List of (/type/, /opne/, /close/)
-    -> ParenType a
+    => [(ParenType, a -> Bool, a -> Bool)] -- ^ List of (/type/, /opne/, /close/)
+    -> GetParenType a
 parenTable xs = parenType where
     parenTypeTable = map parenOpen xs ++ map parenClose xs
     parenOpen  (n, open, _)  = (open,   n)
     parenClose (n, _, close) = (close, -n)
     parenType a =
-        case lookupSatisfy a parenTypeTable of
+        case B.lookupSatisfy a parenTypeTable of
           Just n  -> n
           Nothing -> 0
+
