@@ -21,6 +21,9 @@ module Koshucode.Baala.Core.Content.Class
   CSet        (..),
   CTermset    (..),
   CRel        (..),
+
+  putTextList,
+  putTextSet,
 ) where
 
 import qualified Koshucode.Baala.Base as B
@@ -129,4 +132,10 @@ class (PrimContent c) => CRel c where
 
     needRel     ::           c -> B.Ab (B.Rel c)
     needRel = need isRel getRel
+
+putTextSet :: (CText c, CSet c) => [String] -> c
+putTextSet = putSet . map putText
+
+putTextList :: (CText c, CList c) => [String] -> c
+putTextList = putList . map putText
 

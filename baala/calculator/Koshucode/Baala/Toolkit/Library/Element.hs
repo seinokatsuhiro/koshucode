@@ -2,61 +2,97 @@
 
 module Koshucode.Baala.Toolkit.Library.Element
 ( sectionElem
+  -- $Pattern
 ) where
 
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 
+infixr 0 -:-
+(-:-) :: a -> b -> (a, b)
+(-:-) = (,)
+
+{-| Retrive constituents of sections. -}
 sectionElem :: (C.CContent c) => C.Section c -> [B.Judge c]
 sectionElem sec = map res js where
-    res = judgeCons ("/res", C.putText $ C.sectionResource sec)
-    js  = concat [ judgeElem       $ C.sectionJudge  sec
-                 , affirmElem      $ C.sectionAssert sec
-                 , namedRelmapElem $ C.sectionRelmap sec ]
+    res = judgeCons ("/res" -:- C.putText $ C.sectionResource sec)
+    js  = concat [ elemJudge       $ C.sectionJudge  sec
+                 , elemAssert      $ C.sectionAssert sec
+                 , elemNamedRelmap $ C.sectionRelmap sec ]
 
-judgeElem :: (C.CContent c) => B.Map [B.Judge c]
-judgeElem = B.unique . concatMap f where
+judgeCons :: B.Named c -> B.Map (B.Judge c)
+judgeCons x (B.Judge q p xs) = B.Judge q p $ x : xs
+
+elemJudge :: (C.CContent c) => B.Map [B.Judge c]
+elemJudge = B.unique . concatMap f where
     f (B.Judge _ p xs) = map (term p) xs
+    term p (n, c) = B.affirm "KOSHU-JUDGE-TERM"
+                    [ "/pat"     -:- C.putText p
+                    , "/name"    -:- C.putText n
+                    , "/content" -:- c ]
 
-    term p (n, c) =
-        affirm "KOSHU-JUDGE-TERM"
-             [ ("/pat"     , C.putText p)
-             , ("/name"    , C.putText n)
-             , ("/content" , c) ]
-
-affirm :: B.JudgePattern -> [B.Named c] -> B.Judge c
-affirm = B.Judge True
-
-affirmElem :: (C.CContent c) => [C.Assert c] -> [B.Judge c]
-affirmElem = B.unique . concatMap f where
+elemAssert :: (C.CContent c) => [C.Assert c] -> [B.Judge c]
+elemAssert = B.unique . concatMap f where
     f (C.Assert q pat _ r _) =
-        affirm (name q) [ ("/pat", C.putText pat) ]
-             : relmapElem r
+        B.affirm (name q) [ "/pat" -:- C.putText pat ]
+             : elemRelmap r
 
     name True  = "KOSHU-AFFIRM"
     name False = "KOSHU-DENY"
 
-namedRelmapElem :: (C.CContent c) => [B.Named (C.Relmap c)] -> [B.Judge c]
-namedRelmapElem = B.unique . concatMap f where
-    f (name, relmap) = map (judgeCons ("/name", C.putText name))
-                              $ relmapElem relmap
+elemNamedRelmap :: (C.CContent c) => [B.Named (C.Relmap c)] -> [B.Judge c]
+elemNamedRelmap = B.unique . concatMap f where
+    f (name, relmap) = map (judgeCons ("/name" -:- C.putText name))
+                       $ elemRelmap relmap
 
-relmapElem :: (C.CContent c) => C.Relmap c -> [B.Judge c]
-relmapElem relmap = aName : f relmap where
-    aName     = affirm "KOSHU-RELMAP-NAME" []
-    aRef n    = affirm "KOSHU-RELMAP-REF"  [ ("/ref"  , C.putText n) ]
-    aRop n    = affirm "KOSHU-RELMAP-ROP"  [ ("/rop"  , C.putText n) ]
-    aSrc p xs = affirm "KOSHU-RELMAP-SOURCE"
-                [ ("/pat"  , C.putText p)
-                , ("/terms", C.putList $ map C.putText xs) ]
+elemRelmap :: (C.CContent c) => C.Relmap c -> [B.Judge c]
+elemRelmap relmap = name : f relmap where
+    name     = B.affirm "KOSHU-RELMAP-NAME" []
+    ref n    = B.affirm "KOSHU-RELMAP-REF"  [ "/ref" -:- C.putText n ]
+    rop n    = B.affirm "KOSHU-RELMAP-ROP"  [ "/rop" -:- C.putText n ]
+    src p xs = B.affirm "KOSHU-RELMAP-SOURCE"
+               [ "/pat"   -:- C.putText p
+               , "/terms" -:- C.putTextSet xs ]
 
     f (C.RelmapAppend r1 r2)     =  f r1 ++ f r2
     f (C.RelmapAlias  _ r1)      =  f r1
-    f (C.RelmapSource _ p xs)    =  [ aSrc p xs ]
-    f (C.RelmapName   _ n)       =  [ aRef n ]
-    f (C.RelmapCalc   _ n _ rs)  =  aRop n : concatMap f rs
-    f (C.RelmapConst  _ n _)     =  [ aRop n ]
+    f (C.RelmapSource _ p xs)    =  [ rop "source", src p xs ]
+    f (C.RelmapName   _ n)       =  [ ref n ]
+    f (C.RelmapCalc   _ n _ rs)  =  rop n : concatMap f rs
+    f (C.RelmapConst  _ n _)     =  [ rop n ]
 
-judgeCons :: B.Named c -> B.Map (B.Judge c)
-judgeCons x (B.Judge q p xs) = B.Judge q p $ x : xs
+-- ------------------------------------------------------------------
+{- $Pattern
+
+'sectionElem' may output judges of the following patterns.
+
+[@KOSHU-AFFIRM@]
+  There is affirmed relmap for pattern @\/pat@
+  in the resource @\/res@.
+
+[@KOSHU-DENY@]
+  There is denied relmap for pattern @\/pat@
+  in the resource @\/res@.
+
+[@KOSHU-JUDGE-TERM@]
+  In the resource @\/res@,
+  there are judges of pattern @\/pat@
+  with term named @\/name@ having @\/content@.
+
+[@KOSHU-RELMAP-NAME@]
+  There is a relmap named @\/name@ in the resource @\/res@.
+
+[@KOSHU-RELMAP-REF@]
+  Relmap @\/name@ in the resource @\/res@
+  refers the other relmap @\/ref@.
+
+[@KOSHU-RELMAP-ROP@]
+  Relmap @\/name@ in the resource @\/res@
+  uses the relmap operator @\/rop@.
+
+[@KOSHU-RELMAP-SOURCE@]
+  Judges of pattern @\/pat@ with terms @\/terms@
+  are read from the resource @\/res@.
+
+-}
 

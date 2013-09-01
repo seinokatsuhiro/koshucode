@@ -10,10 +10,9 @@ module Koshucode.Baala.Base.Data.Judge
   JudgePattern,
 
   -- * Logical quality
-  affirmJudge,
-  denyJudge,
-  isAffirmed,
-  isDenied,
+  affirm, deny,
+  affirmJudge, denyJudge,
+  isAffirmed, isDenied,
 
   -- * Writer
   putJudges,
@@ -22,10 +21,10 @@ module Koshucode.Baala.Base.Data.Judge
 ) where
 
 import qualified Data.Monoid as Monoid
-import qualified Data.List as List
-import qualified Data.Map  as Map
-import qualified System.IO as IO
-import qualified Koshucode.Baala.Base.Prelude as B
+import qualified Data.List   as List
+import qualified Data.Map    as Map
+import qualified System.IO   as IO
+import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Data.Comment as B
 
 
@@ -85,6 +84,12 @@ instance (Ord c, B.Pretty c) => B.Pretty (Judge c) where
 
 
 -- ----------------------  Logical quality
+
+affirm :: JudgePattern -> [B.Named c] -> Judge c
+affirm = Judge True
+
+deny :: JudgePattern -> [B.Named c] -> Judge c
+deny = Judge False
 
 {-| Affirm judge, i.e., change logical quality to 'True'. -}
 affirmJudge :: B.Map (Judge c)
