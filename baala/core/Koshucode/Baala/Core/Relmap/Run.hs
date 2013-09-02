@@ -42,7 +42,7 @@ runRelmapSelector select = (<$>) where
                                         Right r' -> Right r'
                                         Left a   -> Left (a, [], halfLines h)
     RelmapAppend m1 m2   <$> r  =  (m1 <$> r) >>= (m2 <$>)
-    RelmapName   h op    <$> _  =  Left (B.AbortUnknownRelmap op,
+    RelmapName   h op    <$> _  =  Left (B.AbortUnkRelmap op,
                                          [], halfLines h)
 
 
@@ -80,7 +80,7 @@ optionUnkCheck ns xs =
     let rest = B.assocOmitAll ("" : ns) xs
     in if null rest
        then Right ()
-       else Left $ B.AbortUnknownSymbol (fst . head $ rest)
+       else Left $ B.AbortUnkSymbol (fst . head $ rest)
 
 flatnames :: [B.TokenTree] -> B.Ab [B.Termname]
 flatnames trees =

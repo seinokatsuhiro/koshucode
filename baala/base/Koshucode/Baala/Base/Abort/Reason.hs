@@ -76,10 +76,10 @@ data AbortReason
     | AbortUnkCop           String
     | AbortUnkCox           String
     | AbortUnkWord          String
-    | AbortUnknownClause    
-    | AbortUnknownContent   String
-    | AbortUnknownRelmap    String
-    | AbortUnknownSymbol    String
+    | AbortUnkClause    
+    | AbortUnkContent       String
+    | AbortUnkRelmap        String
+    | AbortUnkSymbol        String
     | AbortUnmatchArity
     | AbortUnmatchType      String
     | AbortUsage            String [String]
@@ -109,10 +109,10 @@ instance AbortReasonClass AbortReason where
         (AbortUnkCop           _) -> "未知の項目演算子"
         (AbortUnkCox           _) -> "扱い方がわからない式"
         (AbortUnkWord          _) -> "扱い方がわからない単語"
-        (AbortUnknownClause     ) -> "未知の構文"
-        (AbortUnknownContent   _) -> "未知の項目内容"
-        (AbortUnknownRelmap    _) -> "未知の演算子"
-        (AbortUnknownSymbol    _) -> "未知の記号"
+        (AbortUnkClause         ) -> "未知の構文"
+        (AbortUnkContent       _) -> "未知の項目内容"
+        (AbortUnkRelmap        _) -> "未知の演算子"
+        (AbortUnkSymbol        _) -> "未知の記号"
         (AbortUnmatchArity      ) -> "引数の数が合わない"
         (AbortUnmatchType      _) -> "型が合わない"
         (AbortUsage          _ _) -> "使用法の間違い"
@@ -134,10 +134,10 @@ instance AbortReasonClass AbortReason where
         (AbortUnkCop           s) -> par s
         (AbortUnkCox           s) -> par s
         (AbortUnkWord          s) -> par s
-        (AbortUnknownClause     ) -> docEmpty
-        (AbortUnknownContent   s) -> par s
-        (AbortUnknownRelmap    s) -> par s
-        (AbortUnknownSymbol    s) -> par s
+        (AbortUnkClause         ) -> docEmpty
+        (AbortUnkContent       s) -> par s
+        (AbortUnkRelmap        s) -> par s
+        (AbortUnkSymbol        s) -> par s
         (AbortUsage      _ usage) -> docv $ map par usage
         (AbortUndefined        s) -> par s
         (AbortUnmatchArity      ) -> docEmpty

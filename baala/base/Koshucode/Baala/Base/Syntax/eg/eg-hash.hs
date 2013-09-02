@@ -36,17 +36,14 @@ main =
 
 egHash :: IO ()
 egHash =
-    do "no hash char"   >>> hash "abc"
-       "single quote"   >>> hash "abc's"
-       "single quote"   >>> hash "'abc'"
-       "doule quote"    >>> hash "\"abc\""
-       "doule quote"    >>> hash "''abc''"
-       "empty string"   >>> hash ""
-       "newline"        >>> hash "abc\r\ndef"
-       "newline"        >>> hash "abc def"
-
-hash :: String -> [String]
-hash = hashSplit
+    do "no hash char"   >>> hashBack "abc"
+       "single quote"   >>> hashBack "abc's"
+       "single quote"   >>> hashBack "'abc'"
+       "doule quote"    >>> hashBack "\"abc\""
+       "doule quote"    >>> hashBack "''abc''"
+       "empty string"   >>> hashBack ""
+       "newline"        >>> hashBack "abc\r\ndef"
+       "newline"        >>> hashBack "abc def"
 
 -- hash :: String -> String
 -- hash = hashString

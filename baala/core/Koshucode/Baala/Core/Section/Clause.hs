@@ -244,7 +244,7 @@ consSection whole res xs =
                Left (a, ts) -> Left (a, ts, clauseLines src)
       ass _ = B.bug
 
-      unk (CUnknown src) = Left (B.AbortUnknownClause,
+      unk (CUnknown src) = Left (B.AbortUnkClause,
                                  [], clauseLines src)
       unk _ = B.bug
 

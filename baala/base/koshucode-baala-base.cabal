@@ -72,7 +72,6 @@ library
         Koshucode.Baala.Base.Syntax
         Koshucode.Baala.Base.Syntax.Binary
         Koshucode.Baala.Base.Syntax.CodeLine
-        Koshucode.Baala.Base.Syntax.HashWord
         Koshucode.Baala.Base.Syntax.Token
         Koshucode.Baala.Base.Syntax.TokenTree
         Koshucode.Baala.Base.Syntax.Tokenize

@@ -30,11 +30,12 @@ import Koshucode.Baala.Base.Syntax.CodeLine
 -- ----------------------  Token type
 
 data Token
-    = TWord    TokenNumber Int String  -- ^ Word.
-                                       --   @Int@ represents quotation level, e.g.,
-                                       --   0 for non-quoted,
-                                       --   1 for single-quoted,
-                                       --   2 for double-quoted.
+    = TWord    TokenNumber Int String
+               -- ^ Word.
+               --   'Int' represents quotation level, e.g.,
+               --   0 for non-quoted,
+               --   1 for single-quoted,
+               --   2 for double-quoted.
     | TTerm    TokenNumber [Termname]  -- ^ Termname
     | TOpen    TokenNumber String      -- ^ Open paren
     | TClose   TokenNumber String      -- ^ Close paren
@@ -59,6 +60,10 @@ type Termname = String
 
 -- ---------------------- Selector
 
+{-| Get the position of token.
+
+    >>> let tok = TWord 25 0 "abc" in tokenNumber tok
+    25  -}
 tokenNumber :: Token -> TokenNumber
 tokenNumber (TWord    n _ _)  = n
 tokenNumber (TTerm    n _)    = n
@@ -68,6 +73,10 @@ tokenNumber (TSpace   n _)    = n
 tokenNumber (TComment n _)    = n
 tokenNumber (TUnknown n _)    = n
 
+{-| Get the content of token.
+
+    >>> let tok = TTerm 20 ["/r", "/x"] in tokenContent tok
+    "/r/x"  -}
 tokenContent :: Token -> String
 tokenContent (TWord  _ _ s)   = s
 tokenContent (TTerm    _ s)   = concat s
@@ -77,13 +86,12 @@ tokenContent (TSpace   _ n)   = replicate n ' '
 tokenContent (TComment _ s)   = s
 tokenContent (TUnknown _ s)   = s
 
-{-| Text of token type, one of
+{-| Text of token type, i.e., one of
     @\"Word\"@, @\"Term\"@, @\"Open\"@, @\"Close\"@,
     @\"Space\"@, @\"Comment\"@, or @\"Unknown\"@.
 
-    >>> tokenTypeText $ TWord 1 0 "flower"
-    "Word"
-    -}
+    >>> tokenTypeText $ TWord 25 0 "flower"
+    "Word"  -}
 tokenTypeText :: Token -> String
 tokenTypeText (TWord  _ _ _)  = "Word"
 tokenTypeText (TTerm    _ _)  = "TermN"
@@ -109,10 +117,18 @@ isBlankToken _               = False
 -- isTermToken (TTerm _ _)     = True
 -- isTermToken _               = False
 
+{-| Check token is a 'TOpen' of the specific paren.
+
+    >>> let tok = TOpen 0 "(" in isOpenTokenOf "(" tok
+    True
+
+    >>> let tok = TOpen 0 "{" in isOpenTokenOf "(" tok
+    False -}
 isOpenTokenOf :: String -> Token -> Bool
 isOpenTokenOf p1 (TOpen _ p2) = p1 == p2
 isOpenTokenOf _ _             = False
 
+{-| Check token is a 'TClose' of the specific paren. -}
 isCloseTokenOf :: String -> Token -> Bool
 isCloseTokenOf p1 (TClose _ p2) = p1 == p2
 isCloseTokenOf _ _              = False

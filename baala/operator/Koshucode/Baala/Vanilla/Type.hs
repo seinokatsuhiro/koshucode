@@ -75,10 +75,10 @@ instance C.CContent VContent where
     'abc  -}
 instance B.Pretty VContent where
     doc (VText s)
-        | s == ""           =  B.doc  $ "#empty"
-        | B.isSimpleWord s  =  B.doc  $ '\'' : s
-        | otherwise         =  B.doch $ B.hashSplit s
-    doc (VDec  n)           =  B.doc  $ B.decimalString n
+        | s == ""           =  B.doc $ "#empty"
+        | B.isSimpleWord s  =  B.doc $ '\'' : s
+        | otherwise         =  B.doc $ C.hashWord s
+    doc (VDec  n)           =  B.doc $ B.decimalString n
     doc (VBool b)           =  B.doc b
     doc (VNil)              =  B.doc "()"
     doc (VList    xs)       =  B.docWraps "["   "]" $ B.docColon xs

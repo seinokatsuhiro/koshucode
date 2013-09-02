@@ -30,59 +30,59 @@ module Koshucode.Baala.Core.Content.Literal
 ) where
 
 import qualified Koshucode.Baala.Base as B
-import Koshucode.Baala.Core.Content.Class
+import qualified Koshucode.Baala.Core.Content.Class    as C
+import qualified Koshucode.Baala.Core.Content.HashWord as C
 
 
 -- ----------------------  Type
 
 {-| Make @a@ from list of token trees. -}
-type LitTrees  a = B.AbMap2 [B.TokenTree] a
+type LitTrees a = B.AbMap2 [B.TokenTree] a
 
 {-| Make @a@ from a token tree. -}
-type LitTree   a = B.AbMap2 B.TokenTree a
+type LitTree a = B.AbMap2 B.TokenTree a
 
+type LitOperators c = [B.Named (LitTree c -> LitTrees c)]
 
 
 
 -- ----------------------  Content
 
-type LitOperators c = [B.Named (LitTree c -> LitTrees c)]
-
 {-| Transform 'TokenTree' into
     internal form of term content. -}
-litContentBy :: (CContent c) => LitOperators c -> LitTree c
+litContentBy :: (C.CContent c) => LitOperators c -> LitTree c
 litContentBy ops = lit where
     lit (B.TreeB typ xs) = case typ of
           1  ->  paren xs
-          2  ->  fmap putList    $ litList    lit xs
-          3  ->  fmap putSet     $ litList    lit xs
-          4  ->  fmap putTermset $ litTermset lit xs
-          5  ->  fmap putRel     $ litRel     lit xs
+          2  ->  fmap C.putList    $ litList    lit xs
+          3  ->  fmap C.putSet     $ litList    lit xs
+          4  ->  fmap C.putTermset $ litTermset lit xs
+          5  ->  fmap C.putRel     $ litRel     lit xs
           _  ->  B.bug
 
     lit x@(B.TreeL tok)
         | isDecimal x = do dec <- B.litDecimal $ getWord tok
-                           Right . putDec $ dec
+                           Right . C.putDec $ dec
         | otherwise   = case tok of
               B.TWord _ 0 w -> word w
-              B.TWord _ _ w -> Right . putText $ w  -- quoted text
-              _             -> Left $ B.AbortUnknownContent (show tok)
+              B.TWord _ _ w -> Right . C.putText $ w  -- quoted text
+              _             -> Left $ B.AbortUnkContent (show tok)
 
     word w = case w of
           '#' : s  ->  litHash s
-          "()"     ->  Right nil
+          "()"     ->  Right C.nil
           _        ->  Left $ B.AbortUnkWord w
 
     paren xs@(x : _)
         -- quoted sequence is text
         | isQuotedOrHashed x =
-            do xs2 <- mapM litQuoted xs
-               Right . putText $ concat xs2
+            do xs2 <- mapM lit xs
+               Right $ C.joinContent xs2
         -- decimal
         | isDecimal x =
             do xs2 <- mapM litUnquoted xs
                dec <- B.litDecimal $ concat xs2
-               Right . putDec $ dec
+               Right . C.putDec $ dec
 
     -- tagged sequence
     paren (B.TreeL (B.TWord _ 0 tag) : xs)
@@ -92,10 +92,10 @@ litContentBy ops = lit where
                  Nothing -> Left $ B.AbortUnkCop tag
 
     -- empty sequence is nil
-    paren [] = Right nil
+    paren [] = Right C.nil
 
     -- unknown sequence
-    paren x  = Left $ B.AbortUnknownSymbol (show x)
+    paren x  = Left $ B.AbortUnkSymbol (show x)
 
 getWord :: B.Token -> String
 getWord (B.TWord _ _ w) = w
@@ -127,24 +127,22 @@ isHashed _ = False
 isQuotedOrHashed :: B.TokenTree -> Bool
 isQuotedOrHashed x = isQuoted x || isHashed x
 
-litQuoted :: LitTree String
-litQuoted (B.TreeL (B.TWord _ 0 ('#' : h)))
-    = case B.hashWord h of
-        Just w  -> Right w
-        Nothing -> Left $ B.AbortUnknownSymbol h
-litQuoted (B.TreeL (B.TWord _ q w)) | q > 0 = Right w
-litQuoted x = Left $ B.AbortUnknownSymbol (show x)    
-
 litUnquoted :: LitTree String
 litUnquoted x@(B.TreeL (B.TWord _ 0 w)) | not $ isHashed x = Right w
-litUnquoted x = Left $ B.AbortUnknownSymbol (show x)
+litUnquoted x = Left $ B.AbortUnkSymbol (show x)
 
-litHash :: (CContent c) => B.LitString c
-litHash "true"    =  Right . putBool $ True
-litHash "false"   =  Right . putBool $ False
-litHash hash      =  case B.hashWord hash of
-                       Just w  -> Right . putText $ w
-                       Nothing -> Left $ B.AbortUnkWord ('#' : hash)
+litHash :: (C.CContent c) => B.LitString c
+litHash key = case lookup key hashAssoc of
+                Just c  -> Right c
+                Nothing -> Left $ B.AbortUnkWord ('#' : key)
+
+hashAssoc :: (C.CContent c) => [B.Named c]
+hashAssoc =
+    [ ("true"  , C.putBool True)
+    , ("false" , C.putBool False)
+    , ("nil"   , C.nil)
+    ] ++ map f C.hashWordTable where
+    f (key, text) = (key, C.putText text)
 
 
 
@@ -157,14 +155,14 @@ litFlatname (B.TreeL (B.TTerm _ [n])) = Right n
 litFlatname (B.TreeL (B.TTerm _ ns))  = Left $ B.AbortReqFlatname (concat ns)
 litFlatname x = Left $ B.AbortMissingTermname (show x)
 
-litList :: (CContent c) => LitTree c -> LitTrees [c]
+litList :: (C.CContent c) => LitTree c -> LitTrees [c]
 litList _   [] = Right []
 litList lit cs = mapM lt $ B.divideTreesByColon cs where
-    lt []  = Right nil
+    lt []  = Right C.nil
     lt [x] = lit x
     lt xs  = lit $ B.TreeB 1 xs
 
-litRel :: (CContent c) => LitTree c -> LitTrees (B.Rel c)
+litRel :: (C.CContent c) => LitTree c -> LitTrees (B.Rel c)
 litRel lit cs =
     do let (h1 : b1) = B.divideTreesByBar cs
        h2 <- mapM litFlatname $ concat $ B.divideTreesByColon h1
@@ -175,7 +173,7 @@ litRel lit cs =
           else Right $ B.Rel (B.headFrom h2) b3
 
 {-| Collect term name and content. -}
-litTermset :: (CContent c) => LitTree c -> LitTrees [B.Named c]
+litTermset :: (C.CContent c) => LitTree c -> LitTrees [B.Named c]
 litTermset lit xs = namedC where
     namedC   = mapM p       =<< litNamedTrees xs
     p (n, c) = Right . (n,) =<< lit c
@@ -218,7 +216,7 @@ litNamedTrees = name where
 
    [Text]      Sequence of characters.
                Textual forms is chars with apostrophe or
-               doubly-quoted line: @\'abc@, @\'\'abc def@.
+               doubly-quoted line: @\'abc@, @\"abc def\"@.
 
    [Decimal]   Decimal number.
                Textual forms is sequence of digits:
@@ -245,7 +243,7 @@ litNamedTrees = name where
                enclosed in bar-braces.
                The first tuple is a heading of relation,
                and succeeding tuples are delimited by vertical bar:
-               @{| \/a \/b | \'A1 : 20 | \'A3 : 40 |}@.
+               @{| \/a : \/b | \'A1 : 20 | \'A3 : 40 |}@.
 -}
 
 

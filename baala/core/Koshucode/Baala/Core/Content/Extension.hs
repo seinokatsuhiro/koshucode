@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Literalizer: Make literal contents from token tree. -}
+{-| Extensions of literalizer -}
 
 module Koshucode.Baala.Core.Content.Extension
 (
@@ -11,19 +11,18 @@ module Koshucode.Baala.Core.Content.Extension
 ) where
 
 import qualified Koshucode.Baala.Base as B
-import Koshucode.Baala.Core.Content.Class
-import Koshucode.Baala.Core.Content.Literal
+import qualified Koshucode.Baala.Core.Content.Class   as C
+import qualified Koshucode.Baala.Core.Content.Literal as C
 
 
 
 -- ----------------------  Operator
 
-litContent :: (CContent c) => LitTree c
-litContent = litContentBy litOperators
+litContent :: (C.CContent c) => C.LitTree c
+litContent = C.litContentBy litOperators
 
-litOperators :: (CContent c) => LitOperators c
-litOperators =
-    [ ]
+litOperators :: (C.CContent c) => C.LitOperators c
+litOperators = [ ]
 
 -- litText :: (CContent c) => LitTree c -> LitTrees c
 -- litText lit xs = Right . joinContent =<< mapM lit xs
@@ -37,7 +36,7 @@ litOperators =
 --       loop ('#' : w)
 --           = case B.hashWord w of
 --               Just w2 -> Right (False, w2)
---               Nothing -> Left $ B.AbortUnknownSymbol ('#' : w)
+--               Nothing -> Left $ B.AbortUnkSymbol ('#' : w)
 --       loop w = Right (True, w)
 
 --       unbox (_, w) = w
@@ -65,23 +64,23 @@ litOperators =
 -- ----------------------  Judge
 
 litJudge
-    :: (CContent c)
+    :: (C.CContent c)
     => Bool                  -- ^ Logical quality
     -> B.JudgePattern        -- ^ Judgement pattern
-    -> LitTrees (B.Judge c)  -- ^ Convertor into judge
+    -> C.LitTrees (B.Judge c)  -- ^ Convertor into judge
 litJudge = litJudgeBy litOperators
 
 {-| Construct judge from token trees.
     Judges itself are not content type.
     It can be only used in the top-level of sections. -}
 litJudgeBy
-    :: (CContent c)
-    => [B.Named (LitTree c -> LitTrees c)]
-    -> Bool                  -- ^ Logical quality
-    -> B.JudgePattern        -- ^ Judgement pattern
-    -> LitTrees (B.Judge c)  -- ^ Convertor into judge
+    :: (C.CContent c)
+    => [B.Named (C.LitTree c -> C.LitTrees c)]
+    -> Bool                   -- ^ Logical quality
+    -> B.JudgePattern         -- ^ Judgement pattern
+    -> C.LitTrees (B.Judge c) -- ^ Convertor into judge
 litJudgeBy ops q p xs =
-  do xs' <- litTermset (litContentBy ops) xs
+  do xs' <- C.litTermset (C.litContentBy ops) xs
      Right $ B.Judge q p xs'
 
 
