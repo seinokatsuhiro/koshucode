@@ -13,10 +13,9 @@ module Koshucode.Baala.Core.Relmap.Construct
 ) where
 
 import qualified Koshucode.Baala.Base as B
-
-import Koshucode.Baala.Core.Relmap.HalfRelmap
-import Koshucode.Baala.Core.Relmap.Implement
-import Koshucode.Baala.Core.Relmap.Relmap
+import qualified Koshucode.Baala.Core.Relmap.HalfRelmap as C
+import qualified Koshucode.Baala.Core.Relmap.Implement  as C
+import qualified Koshucode.Baala.Core.Relmap.Relmap     as C
 
 
 
@@ -24,12 +23,12 @@ import Koshucode.Baala.Core.Relmap.Relmap
 
 {-| Make half and full relmap constructors. -}
 relmapCons
-    :: [Rop c]          -- ^ Implementations of relational operators
+    :: [C.Rop c]        -- ^ Implementations of relational operators
     -> (RelmapCons c)   -- ^ Relmap constructors
 relmapCons = make . unzip . map split where
     make (halfs, fulls) =
         RelmapCons (halfBundle halfs) (fullBundle fulls)
-    split (Rop n _ half full usage) =
+    split (C.Rop n _ half full usage) =
         ((n, (usage, half)), (n, full))
 
 {-| Half and full relmap constructor -}
@@ -50,43 +49,43 @@ instance Show (RelmapCons c) where
 type RelmapHalfCons
     =  [B.TokenLine]    -- ^ Source information
     -> [B.TokenTree]    -- ^ Operand as source trees
-    -> HalfRelmap       -- ^ Result half relmap
+    -> C.HalfRelmap     -- ^ Result half relmap
 
-halfBundle :: [(String, (String, RopFullSorter))] -> RelmapHalfCons
+halfBundle :: [(String, (String, C.RopFullSorter))] -> RelmapHalfCons
 halfBundle halfs = consHalfRelmap bundle where
     bundle :: String -> RelmapHalfCons
     bundle op src opd = case lookup op halfs of
       Just (u, p) -> let opd' = addOperand opd $ p opd
-                     in HalfRelmap u src op opd' []
-      Nothing     -> HalfRelmap [] src op [("operand", opd)] []
+                     in C.HalfRelmap u src op opd' []
+      Nothing     -> C.HalfRelmap [] src op [("operand", opd)] []
 
     addOperand :: a -> [B.Named a] -> [B.Named a]
     addOperand opd = (("operand", opd) :)
 
 consHalfRelmap :: (String -> RelmapHalfCons) -> RelmapHalfCons
 consHalfRelmap bundle src = cons where
-    cons :: [B.TokenTree] -> HalfRelmap
+    cons :: [B.TokenTree] -> C.HalfRelmap
     cons xs = case B.divideTreesByBar xs of
                 [x] -> one x
                 xs2 -> cat $ map cons xs2
 
-    cons' :: B.TokenTree -> HalfRelmap
+    cons' :: B.TokenTree -> C.HalfRelmap
     cons' x = cons [x]
 
-    cat :: [HalfRelmap] -> HalfRelmap
-    cat = HalfRelmap "R | R" src "|" []
+    cat :: [C.HalfRelmap] -> C.HalfRelmap
+    cat = C.HalfRelmap "R | R" src "|" []
 
     -- half relmap from tokens
-    one :: [B.TokenTree] -> HalfRelmap
+    one :: [B.TokenTree] -> C.HalfRelmap
     one [B.TreeB _ xs] = cons xs
     one (B.TreeL (B.TWord _ 0 op) : opd) = submap $ bundle op src opd
-    one opd = HalfRelmap "" src "?" [("operand", opd)] [] -- no operator
+    one opd = C.HalfRelmap "" src "?" [("operand", opd)] [] -- no operator
 
     -- collect subrelmaps
-    submap :: HalfRelmap -> HalfRelmap
-    submap h@(HalfRelmap u _ op opd _) =
+    submap :: B.Map C.HalfRelmap
+    submap h@(C.HalfRelmap u _ op opd _) =
         case lookup "-relmap" opd of
-          Just xs -> HalfRelmap u src op opd $ map cons' xs
+          Just xs -> C.HalfRelmap u src op opd $ map cons' xs
           Nothing -> h  -- no subrelmaps
 
 
@@ -96,18 +95,18 @@ consHalfRelmap bundle src = cons where
 {-| Second step of constructing relmap,
     make 'Relmap' from contents of 'HalfRelmap'. -}
 type RelmapFullCons c
-    = HalfRelmap                -- ^ Half relmap from 'RelmapHalfCons'
-    -> B.AbortTokens (Relmap c) -- ^ Result relmap
+    = C.HalfRelmap                -- ^ Half relmap from 'RelmapHalfCons'
+    -> B.AbortTokens (C.Relmap c) -- ^ Result relmap
 
 {-| Construct (full) relmap. -}
-fullBundle :: [B.Named (RopCons c)] -> RelmapFullCons c
+fullBundle :: [B.Named (C.RopCons c)] -> RelmapFullCons c
 fullBundle fulls = full where
-    full h@(HalfRelmap _ _ op _ hs) =
+    full h@(C.HalfRelmap _ _ op _ hs) =
         case lookup op fulls of
-          Nothing   -> Right $ RelmapName h op
+          Nothing   -> Right $ C.RelmapName h op
           Just cons -> do ms <- mapM full hs
                           --B.addAbort (B.AbortUsage op u, [], src)
-                          cons $ RopUse h ms
+                          cons $ C.RopUse h ms
 
 
 

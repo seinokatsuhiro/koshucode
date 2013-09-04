@@ -26,6 +26,7 @@ module Koshucode.Baala.Core.Content.Class
   putTextSet,
 ) where
 
+import qualified Control.Monad as Monad
 import qualified Koshucode.Baala.Base as B
 
 
@@ -40,10 +41,10 @@ class (Ord c, B.Pretty c, PrimContent c,
        CNil c , CSet c, CTermset c, CRel c) =>
     CContent c where
 
-    appendContent :: c -> c -> c
+    appendContent :: c -> c -> B.Ab c
 
-    joinContent :: [c] -> c
-    joinContent = foldr appendContent nil
+    joinContent :: [c] -> B.Ab c
+    joinContent = Monad.foldM appendContent nil
 
 {-| Delete empty list ('null') from content list. -}
 nonNullFilter :: B.Map [[a]]

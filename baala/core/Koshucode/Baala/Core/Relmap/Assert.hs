@@ -14,7 +14,7 @@ module Koshucode.Baala.Core.Relmap.Assert
 ) where
 
 import qualified Koshucode.Baala.Base as B
-import Koshucode.Baala.Core.Relmap.Relmap
+import qualified Koshucode.Baala.Core.Relmap.Relmap as C
 
 {-| Assertion of affirming or denying relation.
     It consists of logical quality, relsign, and relmap.
@@ -24,7 +24,7 @@ data Assert c = Assert
     { assertQuality :: Bool            -- ^ Logical quality
     , assertPattern :: B.JudgePattern  -- ^ Pattern of judgement
     , assertOption  :: AssertOption    -- ^ Assert option
-    , assertRelmap  :: Relmap c        -- ^ Relmap
+    , assertRelmap  :: C.Relmap c      -- ^ Relmap
     , assertSource  :: [B.TokenLine]   -- ^ Source code information
     } deriving (Show)
 
@@ -41,14 +41,14 @@ quality True  = "affirm"
 quality False = "deny"
 
 {-| Apply function to relamp in assert. -}
-assertMap :: B.Map (Relmap c) -> B.Map (Assert c)
+assertMap :: B.Map (C.Relmap c) -> B.Map (Assert c)
 assertMap f (Assert q pat opt r src) = Assert q pat opt (f r) src
 
 {-| Make affirmed assertion. -}
-affirm :: B.JudgePattern -> AssertOption -> Relmap c -> [B.TokenLine] -> Assert c
+affirm :: B.JudgePattern -> AssertOption -> C.Relmap c -> [B.TokenLine] -> Assert c
 affirm = Assert True
 
 {-| Make denied assertion. -}
-deny :: B.JudgePattern -> AssertOption -> Relmap c -> [B.TokenLine] -> Assert c
+deny :: B.JudgePattern -> AssertOption -> C.Relmap c -> [B.TokenLine] -> Assert c
 deny = Assert False
 

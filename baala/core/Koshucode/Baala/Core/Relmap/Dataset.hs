@@ -7,18 +7,18 @@
 --   that dataset is build from judges.
 
 module Koshucode.Baala.Core.Relmap.Dataset
-( Dataset
-, emptyDataset
-, dataset
-, addJudges
-, selectRelation
+( Dataset,
+  emptyDataset,
+  dataset,
+  addJudges,
+  selectRelation,
 ) where
 
 import qualified Data.Map   as Map
 import qualified Data.Maybe as Maybe
 
 import qualified Koshucode.Baala.Base as B
-import Koshucode.Baala.Core.Content
+import qualified Koshucode.Baala.Core.Content as C
 
 -- | Dataset is a set of judges.
 data Dataset c = Dataset (Map.Map B.JudgePattern [[B.Named c]])
@@ -45,7 +45,7 @@ addJudge (B.Judge False _ _) _ = undefined
 -- | Select relation from dataset.
 --   If a giving term is not in judges, 'CNil' sign is used.
 selectRelation
-    :: (Ord c, CNil c)
+    :: (Ord c, C.CNil c)
     => Dataset c       -- ^ Dataset
     -> B.JudgePattern  -- ^ JudgePattern to select
     -> [String]        -- ^ List of term names
@@ -56,7 +56,7 @@ selectRelation (Dataset m) sign ns = B.Rel h1 b1 where
       Just args -> B.unique $ map (subarg ns) args
       Nothing   -> []
 
-subarg :: (CNil c) => [String] -> [B.Named c] -> [c]
+subarg :: (C.CNil c) => [String] -> [B.Named c] -> [c]
 subarg ns arg = map pick ns where
-    pick n = Maybe.fromMaybe nil $ lookup n arg
+    pick n = Maybe.fromMaybe C.nil $ lookup n arg
 

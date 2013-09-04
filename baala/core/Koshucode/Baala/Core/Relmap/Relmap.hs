@@ -22,7 +22,7 @@ module Koshucode.Baala.Core.Relmap.Relmap
 
 import Data.Monoid
 import qualified Koshucode.Baala.Base as B
-import Koshucode.Baala.Core.Relmap.HalfRelmap
+import qualified Koshucode.Baala.Core.Relmap.HalfRelmap as C
 
 
 
@@ -32,17 +32,17 @@ import Koshucode.Baala.Core.Relmap.HalfRelmap
     A 'Relmap' is correspond to a use of relational operator. -}
 data Relmap c
     -- | Retrieve a relation from a dataset
-    = RelmapSource HalfRelmap String [String]
+    = RelmapSource C.HalfRelmap String [String]
     -- | Constant relation
-    | RelmapConst  HalfRelmap String (B.Rel c)
+    | RelmapConst  C.HalfRelmap String (B.Rel c)
     -- | Equavalent relmap
-    | RelmapAlias  HalfRelmap (Relmap c)
+    | RelmapAlias  C.HalfRelmap (Relmap c)
     -- | Relmap that maps relations to a relation
-    | RelmapCalc   HalfRelmap String (RelmapSub c) [Relmap c]
+    | RelmapCalc   C.HalfRelmap String (RelmapSub c) [Relmap c]
     -- | Connect two relmaps
     | RelmapAppend (Relmap c) (Relmap c)
     -- | Relmap reference
-    | RelmapName   HalfRelmap String
+    | RelmapName   C.HalfRelmap String
 
 {-| Function of relmap. -}
 type RelmapSub c
@@ -73,8 +73,8 @@ instance Monoid (Relmap c) where
     mempty  = RelmapCalc halfid "id" relid []
     mappend = RelmapAppend
 
-halfid :: HalfRelmap
-halfid = HalfRelmap "id" [] "id" [("operand", [])] []
+halfid :: C.HalfRelmap
+halfid = C.HalfRelmap "id" [] "id" [("operand", [])] []
 
 relid :: RelmapSub c
 relid _ = Right

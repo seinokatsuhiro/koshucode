@@ -66,10 +66,10 @@ instance C.PrimContent VContent where
     typename (VRel     _)  =  "rel"
 
 instance C.CContent VContent where
-    appendContent (VNil) x = x
-    appendContent x (VNil) = x
-    appendContent (VText s1) (VText s2) = VText $ s1 ++ s2
-    appendContent _ _ = C.nil
+    appendContent (VNil) x = Right x
+    appendContent x (VNil) = Right x
+    appendContent (VText x) (VText y) = Right . VText $ x ++ y
+    appendContent x y = Left $ B.AbortUnmatchType (show (x, y))
 
 {-| >>> B.doc $ VText "abc"
     'abc  -}

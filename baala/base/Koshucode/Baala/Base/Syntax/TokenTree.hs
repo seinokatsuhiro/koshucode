@@ -13,7 +13,7 @@ module Koshucode.Baala.Base.Syntax.TokenTree
   flatname,
 
   -- * Divide trees
-  splitTokens,
+  splitTokensBy,
   divideTreesBy,
   divideTreesByBar,
   divideTreesByColon,
@@ -91,22 +91,22 @@ flatname _ = Nothing
     If does not contains the word,
     original token list is returned.
 
-    >>> splitTokens "|" . tokens $ "b c"
+    >>> splitTokensBy (== "|") . tokens $ "b c"
     Left [ TWord 1 0 "b", TSpace 2 1, TWord 3 0 "c" ]
 
-    >>> splitTokens "|" . tokens $ "a | b | c"
+    >>> splitTokensBy (== "|") . tokens $ "a | b | c"
     Right ( [ TWord 1 0 "a", TSpace 2 1 ]
             , TWord 3 0 "|"
             , [ TSpace 4 1, TWord 5 0 "b", TSpace 6 1
               , TWord 7 0 "|", TSpace 8 1, TWord 9 0 "c" ] )  -}
-splitTokens
-    :: String   -- ^ Word
-    -> [Token]  -- ^ Tokens
+splitTokensBy
+    :: (String -> Bool)   -- ^ Predicate
+    -> [Token]            -- ^ Tokens
     -> Either [Token] ([Token], Token, [Token])
        -- ^ Original-tokens or @(@before-list, the-word, after-list@)@
-splitTokens w = splitBy p where
-    p (TWord _ 0 x) = (w == x)
-    p _ = False
+splitTokensBy p = splitBy p2 where
+    p2 (TWord _ 0 x) = p x
+    p2 _ = False
 
 divideTreesBy :: String -> [TokenTree] -> [[TokenTree]]
 divideTreesBy w = divideBy p where
@@ -139,7 +139,7 @@ divideTreesByColon = divideTreesBy ":"
    Before evaluating the following examples,
    please import @Tokenizer@ module to use the @tokens@ function.
    
-   >>> :m +Koshucode.Baala.Base.Syntax.Tokenizer
+   >>> :m +Koshucode.Baala.Base.Syntax.Tokenize
 
    Tuple.
 

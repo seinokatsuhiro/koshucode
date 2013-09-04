@@ -61,7 +61,7 @@ litContentBy ops = lit where
           _  ->  B.bug
 
     lit x@(B.TreeL tok)
-        | isDecimal x = do dec <- B.litDecimal $ getWord tok
+        | isDecimal x = do dec <- B.litDecimal $ B.tokenContent tok
                            Right . C.putDec $ dec
         | otherwise   = case tok of
               B.TWord _ 0 w -> word w
@@ -76,8 +76,7 @@ litContentBy ops = lit where
     paren xs@(x : _)
         -- quoted sequence is text
         | isQuotedOrHashed x =
-            do xs2 <- mapM lit xs
-               Right $ C.joinContent xs2
+            C.joinContent =<< mapM lit xs
         -- decimal
         | isDecimal x =
             do xs2 <- mapM litUnquoted xs
@@ -85,21 +84,16 @@ litContentBy ops = lit where
                Right . C.putDec $ dec
 
     -- tagged sequence
-    paren (B.TreeL (B.TWord _ 0 tag) : xs)
-        | otherwise
-            = case lookup tag ops of
-                 Just f  -> f lit xs
-                 Nothing -> Left $ B.AbortUnkCop tag
+    paren (B.TreeL (B.TWord _ 0 tag) : xs) =
+        case lookup tag ops of
+          Just f  -> f lit xs
+          Nothing -> Left $ B.AbortUnkCop tag
 
     -- empty sequence is nil
     paren [] = Right C.nil
 
     -- unknown sequence
     paren x  = Left $ B.AbortUnkSymbol (show x)
-
-getWord :: B.Token -> String
-getWord (B.TWord _ _ w) = w
-getWord _ = B.bug
 
 -- First letters of decimals
 isDecimalChar :: Char -> Bool
@@ -199,9 +193,6 @@ litNamedTrees = name where
 
 
 
-
-
-
 -- ----------------------  Document
 {- $Types
 
@@ -253,31 +244,29 @@ litNamedTrees = name where
 
    Prepere some definitions.
 
-   >>> :m +Koshucode.Baala.Vanilla.Type.Val
-   >>> let trees = tokenTrees . tokens
-   >>> let lit  = litList [] . trees :: String -> AbortOr [Val]
+   >>> :m +Koshucode.Baala.Vanilla.Type
+   >>> let trees = B.tokenTrees . B.tokens
+   >>> let lit  = litContentBy [] :: B.TokenTree -> B.Ab VContent
+   >>> let lits = litList lit . trees
 
    Boolean.
 
-     >>> lit "#true #false"
+     >>> lits "#true : #false"
      Right [VBool True, VBool False]
 
    Words.
 
-     >>> lit "a 'b c'"
+     >>> lits "'a : 'b #sp 'c"
      Right [VText "a", VText "b c"]
 
-     >>> lit "a 1"
-     Right [VText "a", VText "1"]
+   Decimal.
 
-   Integer.
+     >>> lits "12.0"
+     Right [VDec (Decimal (120, 10), 1, False)]
 
-     >>> lit "(int 12)"
-     Right [VInt 12]
+   Nil as no ordinary value.
 
-   Nil as no value.
-
-     >>> lit "()"
+     >>> lits "()"
      Right [VNil]
 
 -}
@@ -287,29 +276,29 @@ litNamedTrees = name where
 
    Set.
 
-     >>> lit "{ b a a c a }"
+     >>> lits "{ 'b : 'a : 'a : 'c : 'a }"
      Right [VSet [VText "b", VText "a", VText "c"]]
 
    List.
 
-     >>> lit "[ a 10 (int 20) ]"
-     Right [VList [VText "a", VText "10", VInt 20]]
+     >>> lits "[ 'a : '10 : 20 ]"
+     Right [VList [VText "a", VText "10", VDec (Decimal (20, 1), 0, False)]]
 
    Termset.
 
-     >>> lit "{| /a 0 /b [ a 1 ] |}"
+     >>> lits "<| /a 'x  /b { 'y : 'z } |>"
      Right [VTermset
-       [ ("/a", VText "0")
-       , ("/b", VList [VText "a", VText "1"]) ]]
+       [ ("/a", VText "x")
+       , ("/b", VSet [VText "y", VText "z"])]]
 
    Relation.
 
-     >>> lit "[| /a /x | A1 (int 20) | A3 (int 40) | A4 (int 60) |]"
-     Right [ VRel (Rel
-       (Relhead [Term "/a", Term "/x"])
-       [ [VText "A1", VInt 20]
-       , [VText "A3", VInt 40]
-       , [VText "A4", VInt 60] ])]
+     >>> lits "{| /a : /x | 'A1 : 20 | 'A3 : 40 | 'A4 : 60 |}"
+     Right [VRel (Rel
+       (Relhead [Term "/a", Term "/x"]),
+       [ [VText "A1", VDec (Decimal (20,1), 0, False)]
+       , [VText "A3", VDec (Decimal (40,1), 0, False)]
+       , [VText "A4", VDec (Decimal (60,1), 0, False)] ])]
 
 -}
 
