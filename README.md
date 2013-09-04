@@ -7,10 +7,10 @@
 現段階で試してみたい方のために、
 プレビュー版をこのページからダウンロードできます。
 
- - Windows 向けにビルド済みの [プログラム][preview]
+ - Windows 向けにビルド済みの [プログラム][preview] (zip)
    をダウンロードするか、
 
- - [ソースコード][master] をダウンロードして、
+ - [ソースコード][master] (zip) をダウンロードして、
    自身でビルドしてください。
 
 甲州計算機は、甲州記法という形式で書かれたデータを処理します。
@@ -19,5 +19,5 @@
 
 [master]: https://github.com/seinokatsuhiro/koshucode/archive/master.zip
 [preview]: https://github.com/seinokatsuhiro/koshucode/archive/preview.zip
-[abc]: https://github.com/seinokatsuhiro/abc-book-of-koshucode/tree/master/draft
+[abc]: https://github.com/seinokatsuhiro/abc-of-koshucode/tree/master/draft
 
