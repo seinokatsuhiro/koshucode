@@ -14,10 +14,11 @@
    自身でビルドしてください。
 
 甲州計算機は、甲州記法という形式で書かれたデータを処理します。
-[甲州記法の ABC][abc] という入門書に使い方が説明されています。
+[甲州記法の ABC][japanese] という入門書に使い方が説明されています。
 
 
-[master]: https://github.com/seinokatsuhiro/koshucode/archive/master.zip
-[preview]: https://github.com/seinokatsuhiro/koshucode/archive/preview.zip
-[abc]: https://github.com/seinokatsuhiro/abc-of-koshucode/tree/master/draft
+[master]:   https://github.com/seinokatsuhiro/koshucode/archive/master.zip
+[preview]:  https://github.com/seinokatsuhiro/koshucode/archive/preview.zip
+[japanese]: https://github.com/seinokatsuhiro/abc-of-koshucode/tree/master/draft/japanese
+[english]:  https://github.com/seinokatsuhiro/abc-of-koshucode/tree/master/draft/english
 
