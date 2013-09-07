@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.32.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.37.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -73,9 +73,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	><li class="src short"
 	  ><span class="keyword"
 	    >class</span
-	    >  <a href="#t:PrimContent"
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+	    >Show</a
+	    > c =&gt; <a href="#t:PrimContent"
 	    >PrimContent</a
-	    > c </li
+	    > c  <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:typename"
+		>typename</a
+		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		></li
+	      ></ul
+	    ></li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >class</span
@@ -83,12 +95,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >Ord</a
 	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
 	    >Pretty</a
+	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
 	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CBool"
 	    >CBool</a
 	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CText"
 	    >CText</a
-	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CInt"
-	    >CInt</a
+	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CDec"
+	    >CDec</a
 	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CList"
 	    >CList</a
 	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CNil"
@@ -107,17 +121,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    ><li
 	      ><a href="#v:appendContent"
 		>appendContent</a
-		> :: c -&gt; c -&gt; c</li
+		> :: c -&gt; c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+		>Ab</a
+		> c</li
 	      ><li
 	      ><a href="#v:joinContent"
 		>joinContent</a
-		> :: [c] -&gt; c</li
-	      ><li
-	      ><a href="#v:typename"
-		>typename</a
-		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		></li
+		> :: [c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+		>Ab</a
+		> c</li
 	      ></ul
 	    ></li
 	  ><li class="src short"
@@ -145,6 +157,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >where</span
 	    ><ul class="subs"
 	    ><li
+	      ><a href="#v:isBool"
+		>isBool</a
+		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
+	      ><li
 	      ><a href="#v:putBool"
 		>putBool</a
 		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
@@ -157,39 +175,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 		>Bool</a
 		></li
 	      ><li
-	      ><a href="#v:isBool"
-		>isBool</a
-		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-		>Bool</a
-		></li
-	      ></ul
-	    ></li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >class</span
-	    > <a href="Koshucode-Baala-Core-Content-Class.html#t:PrimContent"
-	    >PrimContent</a
-	    > c =&gt; <a href="#t:CInt"
-	    >CInt</a
-	    > c  <span class="keyword"
-	    >where</span
-	    ><ul class="subs"
-	    ><li
-	      ><a href="#v:putInt"
-		>putInt</a
-		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-		>Int</a
-		> -&gt; c</li
-	      ><li
-	      ><a href="#v:getInt"
-		>getInt</a
-		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-		>Int</a
-		></li
-	      ><li
-	      ><a href="#v:isInt"
-		>isInt</a
-		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	      ><a href="#v:needBool"
+		>needBool</a
+		> :: c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+		>Ab</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 		>Bool</a
 		></li
 	      ></ul
@@ -205,11 +195,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >where</span
 	    ><ul class="subs"
 	    ><li
-	      ><a href="#v:putText"
-		>putText</a
-		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		> -&gt; c</li
+	      ><a href="#v:isText"
+		>isText</a
+		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
 	      ><li
 	      ><a href="#v:getText"
 		>getText</a
@@ -217,10 +207,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 		>String</a
 		></li
 	      ><li
-	      ><a href="#v:isText"
-		>isText</a
-		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-		>Bool</a
+	      ><a href="#v:putText"
+		>putText</a
+		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		> -&gt; c</li
+	      ><li
+	      ><a href="#v:needText"
+		>needText</a
+		> :: c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+		>Ab</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
 		></li
 	      ></ul
 	    ></li
@@ -235,19 +233,25 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >where</span
 	    ><ul class="subs"
 	    ><li
-	      ><a href="#v:putList"
-		>putList</a
-		> :: [c] -&gt; c</li
-	      ><li
-	      ><a href="#v:getList"
-		>getList</a
-		> :: c -&gt; [c]</li
-	      ><li
 	      ><a href="#v:isList"
 		>isList</a
 		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 		>Bool</a
 		></li
+	      ><li
+	      ><a href="#v:getList"
+		>getList</a
+		> :: c -&gt; [c]</li
+	      ><li
+	      ><a href="#v:putList"
+		>putList</a
+		> :: [c] -&gt; c</li
+	      ><li
+	      ><a href="#v:needList"
+		>needList</a
+		> :: c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+		>Ab</a
+		> [c]</li
 	      ></ul
 	    ></li
 	  ><li class="src short"
@@ -261,17 +265,63 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >where</span
 	    ><ul class="subs"
 	    ><li
-	      ><a href="#v:nil"
-		>nil</a
-		> :: c</li
-	      ><li
 	      ><a href="#v:isNil"
 		>isNil</a
 		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 		>Bool</a
 		></li
+	      ><li
+	      ><a href="#v:nil"
+		>nil</a
+		> :: c</li
 	      ></ul
 	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="Koshucode-Baala-Core-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a href="#t:CDec"
+	    >CDec</a
+	    > c  <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:isDec"
+		>isDec</a
+		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
+	      ><li
+	      ><a href="#v:getDec"
+		>getDec</a
+		> :: c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Decimal.html#t:Decimal"
+		>Decimal</a
+		></li
+	      ><li
+	      ><a href="#v:putDec"
+		>putDec</a
+		> :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Decimal.html#t:Decimal"
+		>Decimal</a
+		> -&gt; c</li
+	      ><li
+	      ><a href="#v:needDec"
+		>needDec</a
+		> :: c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+		>Ab</a
+		> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Decimal.html#t:Decimal"
+		>Decimal</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:putDecFromInt"
+	    >putDecFromInt</a
+	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CDec"
+	    >CDec</a
+	    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; c</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >class</span
@@ -283,19 +333,25 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >where</span
 	    ><ul class="subs"
 	    ><li
-	      ><a href="#v:putSet"
-		>putSet</a
-		> :: [c] -&gt; c</li
-	      ><li
-	      ><a href="#v:getSet"
-		>getSet</a
-		> :: c -&gt; [c]</li
-	      ><li
 	      ><a href="#v:isSet"
 		>isSet</a
 		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 		>Bool</a
 		></li
+	      ><li
+	      ><a href="#v:getSet"
+		>getSet</a
+		> :: c -&gt; [c]</li
+	      ><li
+	      ><a href="#v:putSet"
+		>putSet</a
+		> :: [c] -&gt; c</li
+	      ><li
+	      ><a href="#v:needSet"
+		>needSet</a
+		> :: c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+		>Ab</a
+		> [c]</li
 	      ></ul
 	    ></li
 	  ><li class="src short"
@@ -309,11 +365,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >where</span
 	    ><ul class="subs"
 	    ><li
-	      ><a href="#v:putTermset"
-		>putTermset</a
-		> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-		>Named</a
-		> c] -&gt; c</li
+	      ><a href="#v:isTermset"
+		>isTermset</a
+		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
 	      ><li
 	      ><a href="#v:getTermset"
 		>getTermset</a
@@ -321,11 +377,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 		>Named</a
 		> c]</li
 	      ><li
-	      ><a href="#v:isTermset"
-		>isTermset</a
-		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-		>Bool</a
-		></li
+	      ><a href="#v:putTermset"
+		>putTermset</a
+		> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+		>Named</a
+		> c] -&gt; c</li
+	      ><li
+	      ><a href="#v:needTermset"
+		>needTermset</a
+		> :: c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+		>Ab</a
+		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+		>Named</a
+		> c]</li
 	      ></ul
 	    ></li
 	  ><li class="src short"
@@ -339,11 +403,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >where</span
 	    ><ul class="subs"
 	    ><li
-	      ><a href="#v:putRel"
-		>putRel</a
-		> :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
-		>Rel</a
-		> c -&gt; c</li
+	      ><a href="#v:isRel"
+		>isRel</a
+		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		>Bool</a
+		></li
 	      ><li
 	      ><a href="#v:getRel"
 		>getRel</a
@@ -351,13 +415,41 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 		>Rel</a
 		> c</li
 	      ><li
-	      ><a href="#v:isRel"
-		>isRel</a
-		> :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-		>Bool</a
-		></li
+	      ><a href="#v:putRel"
+		>putRel</a
+		> :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
+		>Rel</a
+		> c -&gt; c</li
+	      ><li
+	      ><a href="#v:needRel"
+		>needRel</a
+		> :: c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+		>Ab</a
+		> (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
+		>Rel</a
+		> c)</li
 	      ></ul
 	    ></li
+	  ><li class="src short"
+	  ><a href="#v:putTextList"
+	    >putTextList</a
+	    > :: (<a href="Koshucode-Baala-Core-Content-Class.html#t:CText"
+	    >CText</a
+	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CList"
+	    >CList</a
+	    > c) =&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; c</li
+	  ><li class="src short"
+	  ><a href="#v:putTextSet"
+	    >putTextSet</a
+	    > :: (<a href="Koshucode-Baala-Core-Content-Class.html#t:CText"
+	    >CText</a
+	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CSet"
+	    >CSet</a
+	    > c) =&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; c</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -368,11 +460,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    >  <a name="t:PrimContent" class="def"
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+	    >Show</a
+	    > c =&gt; <a name="t:PrimContent" class="def"
 	    >PrimContent</a
-	    > c <a href="src/Koshucode-Baala-Core-Content-Class.html#PrimContent" class="link"
+	    > c  <span class="keyword"
+	    >where</span
+	    ><a href="src/Koshucode-Baala-Core-Content-Class.html#PrimContent" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:typename" class="def"
+	      >typename</a
+	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	      >String</a
+	      ><a href="src/Koshucode-Baala-Core-Content-Class.html#typename" class="link"
+	      >Source</a
+	      ></p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -382,12 +490,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >Ord</a
 	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
 	    >Pretty</a
+	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
 	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CBool"
 	    >CBool</a
 	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CText"
 	    >CText</a
-	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CInt"
-	    >CInt</a
+	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CDec"
+	    >CDec</a
 	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CList"
 	    >CList</a
 	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CNil"
@@ -411,21 +521,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    ><p class="src"
 	    ><a name="v:appendContent" class="def"
 	      >appendContent</a
-	      > :: c -&gt; c -&gt; c<a href="src/Koshucode-Baala-Core-Content-Class.html#appendContent" class="link"
+	      > :: c -&gt; c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	      >Ab</a
+	      > c<a href="src/Koshucode-Baala-Core-Content-Class.html#appendContent" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
 	    ><a name="v:joinContent" class="def"
 	      >joinContent</a
-	      > :: [c] -&gt; c<a href="src/Koshucode-Baala-Core-Content-Class.html#joinContent" class="link"
-	      >Source</a
-	      ></p
-	    ><p class="src"
-	    ><a name="v:typename" class="def"
-	      >typename</a
-	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	      >String</a
-	      ><a href="src/Koshucode-Baala-Core-Content-Class.html#typename" class="link"
+	      > :: [c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	      >Ab</a
+	      > c<a href="src/Koshucode-Baala-Core-Content-Class.html#joinContent" class="link"
 	      >Source</a
 	      ></p
 	    ></div
@@ -490,6 +596,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	  ><p class="caption"
 	    >Methods</p
 	    ><p class="src"
+	    ><a name="v:isBool" class="def"
+	      >isBool</a
+	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	      >Bool</a
+	      ><a href="src/Koshucode-Baala-Core-Content-Class.html#isBool" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      >Test content <code
+		>c</code
+		> has Boolean value. 
+</p
+	      ></div
+	    ><p class="src"
 	    ><a name="v:putBool" class="def"
 	      >putBool</a
 	      > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
@@ -520,62 +641,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 </p
 	      ></div
 	    ><p class="src"
-	    ><a name="v:isBool" class="def"
-	      >isBool</a
-	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    ><a name="v:needBool" class="def"
+	      >needBool</a
+	      > :: c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	      >Ab</a
+	      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	      >Bool</a
-	      ><a href="src/Koshucode-Baala-Core-Content-Class.html#isBool" class="link"
+	      ><a href="src/Koshucode-Baala-Core-Content-Class.html#needBool" class="link"
 	      >Source</a
 	      ></p
 	    ><div class="doc"
 	    ><p
-	      >Test content <code
+	      >Get Boolean value from content <code
 		>c</code
-		> has Boolean value. 
+		> if <code
+		>c</code
+		> is <code
+		>CBool</code
+		>. 
 </p
 	      ></div
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >class</span
-	    > <a href="Koshucode-Baala-Core-Content-Class.html#t:PrimContent"
-	    >PrimContent</a
-	    > c =&gt; <a name="t:CInt" class="def"
-	    >CInt</a
-	    > c  <span class="keyword"
-	    >where</span
-	    ><a href="src/Koshucode-Baala-Core-Content-Class.html#CInt" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="subs methods"
-	  ><p class="caption"
-	    >Methods</p
-	    ><p class="src"
-	    ><a name="v:putInt" class="def"
-	      >putInt</a
-	      > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-	      >Int</a
-	      > -&gt; c<a href="src/Koshucode-Baala-Core-Content-Class.html#putInt" class="link"
-	      >Source</a
-	      ></p
-	    ><p class="src"
-	    ><a name="v:getInt" class="def"
-	      >getInt</a
-	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-	      >Int</a
-	      ><a href="src/Koshucode-Baala-Core-Content-Class.html#getInt" class="link"
-	      >Source</a
-	      ></p
-	    ><p class="src"
-	    ><a name="v:isInt" class="def"
-	      >isInt</a
-	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	      >Bool</a
-	      ><a href="src/Koshucode-Baala-Core-Content-Class.html#isInt" class="link"
-	      >Source</a
-	      ></p
 	    ></div
 	  ></div
 	><div class="top"
@@ -595,11 +680,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	  ><p class="caption"
 	    >Methods</p
 	    ><p class="src"
-	    ><a name="v:putText" class="def"
-	      >putText</a
-	      > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	      >String</a
-	      > -&gt; c<a href="src/Koshucode-Baala-Core-Content-Class.html#putText" class="link"
+	    ><a name="v:isText" class="def"
+	      >isText</a
+	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	      >Bool</a
+	      ><a href="src/Koshucode-Baala-Core-Content-Class.html#isText" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -611,11 +696,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	      >Source</a
 	      ></p
 	    ><p class="src"
-	    ><a name="v:isText" class="def"
-	      >isText</a
-	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	      >Bool</a
-	      ><a href="src/Koshucode-Baala-Core-Content-Class.html#isText" class="link"
+	    ><a name="v:putText" class="def"
+	      >putText</a
+	      > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	      >String</a
+	      > -&gt; c<a href="src/Koshucode-Baala-Core-Content-Class.html#putText" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:needText" class="def"
+	      >needText</a
+	      > :: c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	      >Ab</a
+	      > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	      >String</a
+	      ><a href="src/Koshucode-Baala-Core-Content-Class.html#needText" class="link"
 	      >Source</a
 	      ></p
 	    ></div
@@ -637,9 +732,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	  ><p class="caption"
 	    >Methods</p
 	    ><p class="src"
-	    ><a name="v:putList" class="def"
-	      >putList</a
-	      > :: [c] -&gt; c<a href="src/Koshucode-Baala-Core-Content-Class.html#putList" class="link"
+	    ><a name="v:isList" class="def"
+	      >isList</a
+	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	      >Bool</a
+	      ><a href="src/Koshucode-Baala-Core-Content-Class.html#isList" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -649,11 +746,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	      >Source</a
 	      ></p
 	    ><p class="src"
-	    ><a name="v:isList" class="def"
-	      >isList</a
-	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	      >Bool</a
-	      ><a href="src/Koshucode-Baala-Core-Content-Class.html#isList" class="link"
+	    ><a name="v:putList" class="def"
+	      >putList</a
+	      > :: [c] -&gt; c<a href="src/Koshucode-Baala-Core-Content-Class.html#putList" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:needList" class="def"
+	      >needList</a
+	      > :: c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	      >Ab</a
+	      > [c]<a href="src/Koshucode-Baala-Core-Content-Class.html#needList" class="link"
 	      >Source</a
 	      ></p
 	    ></div
@@ -683,12 +786,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	  ><p class="caption"
 	    >Methods</p
 	    ><p class="src"
-	    ><a name="v:nil" class="def"
-	      >nil</a
-	      > :: c<a href="src/Koshucode-Baala-Core-Content-Class.html#nil" class="link"
-	      >Source</a
-	      ></p
-	    ><p class="src"
 	    ><a name="v:isNil" class="def"
 	      >isNil</a
 	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
@@ -696,7 +793,77 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	      ><a href="src/Koshucode-Baala-Core-Content-Class.html#isNil" class="link"
 	      >Source</a
 	      ></p
+	    ><p class="src"
+	    ><a name="v:nil" class="def"
+	      >nil</a
+	      > :: c<a href="src/Koshucode-Baala-Core-Content-Class.html#nil" class="link"
+	      >Source</a
+	      ></p
 	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    > <a href="Koshucode-Baala-Core-Content-Class.html#t:PrimContent"
+	    >PrimContent</a
+	    > c =&gt; <a name="t:CDec" class="def"
+	    >CDec</a
+	    > c  <span class="keyword"
+	    >where</span
+	    ><a href="src/Koshucode-Baala-Core-Content-Class.html#CDec" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:isDec" class="def"
+	      >isDec</a
+	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	      >Bool</a
+	      ><a href="src/Koshucode-Baala-Core-Content-Class.html#isDec" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:getDec" class="def"
+	      >getDec</a
+	      > :: c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Decimal.html#t:Decimal"
+	      >Decimal</a
+	      ><a href="src/Koshucode-Baala-Core-Content-Class.html#getDec" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:putDec" class="def"
+	      >putDec</a
+	      > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Decimal.html#t:Decimal"
+	      >Decimal</a
+	      > -&gt; c<a href="src/Koshucode-Baala-Core-Content-Class.html#putDec" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:needDec" class="def"
+	      >needDec</a
+	      > :: c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	      >Ab</a
+	      > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Decimal.html#t:Decimal"
+	      >Decimal</a
+	      ><a href="src/Koshucode-Baala-Core-Content-Class.html#needDec" class="link"
+	      >Source</a
+	      ></p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:putDecFromInt" class="def"
+	    >putDecFromInt</a
+	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CDec"
+	    >CDec</a
+	    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; c<a href="src/Koshucode-Baala-Core-Content-Class.html#putDecFromInt" class="link"
+	    >Source</a
+	    ></p
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -715,9 +882,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	  ><p class="caption"
 	    >Methods</p
 	    ><p class="src"
-	    ><a name="v:putSet" class="def"
-	      >putSet</a
-	      > :: [c] -&gt; c<a href="src/Koshucode-Baala-Core-Content-Class.html#putSet" class="link"
+	    ><a name="v:isSet" class="def"
+	      >isSet</a
+	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	      >Bool</a
+	      ><a href="src/Koshucode-Baala-Core-Content-Class.html#isSet" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -727,11 +896,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	      >Source</a
 	      ></p
 	    ><p class="src"
-	    ><a name="v:isSet" class="def"
-	      >isSet</a
-	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	      >Bool</a
-	      ><a href="src/Koshucode-Baala-Core-Content-Class.html#isSet" class="link"
+	    ><a name="v:putSet" class="def"
+	      >putSet</a
+	      > :: [c] -&gt; c<a href="src/Koshucode-Baala-Core-Content-Class.html#putSet" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:needSet" class="def"
+	      >needSet</a
+	      > :: c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	      >Ab</a
+	      > [c]<a href="src/Koshucode-Baala-Core-Content-Class.html#needSet" class="link"
 	      >Source</a
 	      ></p
 	    ></div
@@ -753,11 +928,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	  ><p class="caption"
 	    >Methods</p
 	    ><p class="src"
-	    ><a name="v:putTermset" class="def"
-	      >putTermset</a
-	      > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	      >Named</a
-	      > c] -&gt; c<a href="src/Koshucode-Baala-Core-Content-Class.html#putTermset" class="link"
+	    ><a name="v:isTermset" class="def"
+	      >isTermset</a
+	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	      >Bool</a
+	      ><a href="src/Koshucode-Baala-Core-Content-Class.html#isTermset" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -769,11 +944,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	      >Source</a
 	      ></p
 	    ><p class="src"
-	    ><a name="v:isTermset" class="def"
-	      >isTermset</a
-	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	      >Bool</a
-	      ><a href="src/Koshucode-Baala-Core-Content-Class.html#isTermset" class="link"
+	    ><a name="v:putTermset" class="def"
+	      >putTermset</a
+	      > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+	      >Named</a
+	      > c] -&gt; c<a href="src/Koshucode-Baala-Core-Content-Class.html#putTermset" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:needTermset" class="def"
+	      >needTermset</a
+	      > :: c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	      >Ab</a
+	      > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+	      >Named</a
+	      > c]<a href="src/Koshucode-Baala-Core-Content-Class.html#needTermset" class="link"
 	      >Source</a
 	      ></p
 	    ></div
@@ -795,11 +980,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	  ><p class="caption"
 	    >Methods</p
 	    ><p class="src"
-	    ><a name="v:putRel" class="def"
-	      >putRel</a
-	      > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
-	      >Rel</a
-	      > c -&gt; c<a href="src/Koshucode-Baala-Core-Content-Class.html#putRel" class="link"
+	    ><a name="v:isRel" class="def"
+	      >isRel</a
+	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	      >Bool</a
+	      ><a href="src/Koshucode-Baala-Core-Content-Class.html#isRel" class="link"
 	      >Source</a
 	      ></p
 	    ><p class="src"
@@ -811,14 +996,52 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	      >Source</a
 	      ></p
 	    ><p class="src"
-	    ><a name="v:isRel" class="def"
-	      >isRel</a
-	      > :: c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	      >Bool</a
-	      ><a href="src/Koshucode-Baala-Core-Content-Class.html#isRel" class="link"
+	    ><a name="v:putRel" class="def"
+	      >putRel</a
+	      > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
+	      >Rel</a
+	      > c -&gt; c<a href="src/Koshucode-Baala-Core-Content-Class.html#putRel" class="link"
+	      >Source</a
+	      ></p
+	    ><p class="src"
+	    ><a name="v:needRel" class="def"
+	      >needRel</a
+	      > :: c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	      >Ab</a
+	      > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
+	      >Rel</a
+	      > c)<a href="src/Koshucode-Baala-Core-Content-Class.html#needRel" class="link"
 	      >Source</a
 	      ></p
 	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:putTextList" class="def"
+	    >putTextList</a
+	    > :: (<a href="Koshucode-Baala-Core-Content-Class.html#t:CText"
+	    >CText</a
+	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CList"
+	    >CList</a
+	    > c) =&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; c<a href="src/Koshucode-Baala-Core-Content-Class.html#putTextList" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:putTextSet" class="def"
+	    >putTextSet</a
+	    > :: (<a href="Koshucode-Baala-Core-Content-Class.html#t:CText"
+	    >CText</a
+	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CSet"
+	    >CSet</a
+	    > c) =&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; c<a href="src/Koshucode-Baala-Core-Content-Class.html#putTextSet" class="link"
+	    >Source</a
+	    ></p
 	  ></div
 	></div
       ></div

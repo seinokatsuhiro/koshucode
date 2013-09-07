@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.32.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.37.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -66,22 +66,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	      ><li
 	      ><a href="#v:clauseLines"
 		>clauseLines</a
-		> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:CodeLine"
-		>CodeLine</a
+		> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenize.html#t:TokenLine"
+		>TokenLine</a
 		>]</li
 	      ></ul
 	    >}</li
 	  ><li class="src short"
 	  ><a href="#v:clausify"
 	    >clausify</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:CodeLine"
-	    >CodeLine</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenize.html#t:TokenLine"
+	    >TokenLine</a
 	    >] -&gt; [<a href="Koshucode-Baala-Core-Section-Clausify.html#t:ClauseSource"
 	    >ClauseSource</a
 	    >]</li
 	  ><li class="src short"
-	  ><a href="#v:operandGroup"
-	    >operandGroup</a
+	  ><a href="#v:sortOperand"
+	    >sortOperand</a
 	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
@@ -135,8 +135,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 		      ><dt class="src"
 		      ><a name="v:clauseLines" class="def"
 			>clauseLines</a
-			> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:CodeLine"
-			>CodeLine</a
+			> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenize.html#t:TokenLine"
+			>TokenLine</a
 			>]</dt
 		      ><dd class="doc"
 		      ><p
@@ -194,8 +194,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	><p class="src"
 	  ><a name="v:clausify" class="def"
 	    >clausify</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:CodeLine"
-	    >CodeLine</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenize.html#t:TokenLine"
+	    >TokenLine</a
 	    >] -&gt; [<a href="Koshucode-Baala-Core-Section-Clausify.html#t:ClauseSource"
 	    >ClauseSource</a
 	    >]<a href="src/Koshucode-Baala-Core-Section-Clausify.html#clausify" class="link"
@@ -209,15 +209,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:operandGroup" class="def"
-	    >operandGroup</a
+	  ><a name="v:sortOperand" class="def"
+	    >sortOperand</a
 	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
 	    >Named</a
 	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    >]]<a href="src/Koshucode-Baala-Core-Section-Clausify.html#operandGroup" class="link"
+	    >]]<a href="src/Koshucode-Baala-Core-Section-Clausify.html#sortOperand" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -233,12 +233,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>operandGroup $ tokenTrees $ tokens &quot;a b -x c 'd' -y e&quot;
+		>sortOperand $ B.tokenTrees $ B.tokens &quot;a b -x /c 'd -y e&quot;
 </code
 		></strong
-	      >[(&quot;&quot;,   [TreeL (Word 0 &quot;a&quot;), TreeL (Word 0 &quot;b&quot;)]),
- (&quot;-x&quot;, [TreeL (Word 0 &quot;c&quot;), TreeL (Word 1 &quot;d&quot;)]),
- (&quot;-y&quot;, [TreeL (Word 0 &quot;e&quot;)])]
+	      >[ (&quot;&quot;,   [TreeL (TWord 1 0 &quot;a&quot;),TreeL (TWord 3 0 &quot;b&quot;)])
+, (&quot;-x&quot;, [TreeL (TTerm 7 [&quot;/c&quot;]), TreeL (TWord 9 0 &quot;'&quot;), TreeL (TWord 10 0 &quot;d&quot;)])
+, (&quot;-y&quot;, [TreeL (TWord 14 0 &quot;e&quot;)])]
 </pre
 	    ></div
 	  ></div

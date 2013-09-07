@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.32.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.37.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -62,9 +62,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><div class="doc"
 	><p
 	  ><code
-	    ><a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap"
-	      >Relmap</a
-	      ></code
+	    >Relmap</code
 	    > construction. 
 </p
 	  ></div
@@ -108,8 +106,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >type</span
 	    > <a href="#t:RelmapHalfCons"
 	    >RelmapHalfCons</a
-	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:CodeLine"
-	    >CodeLine</a
+	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenize.html#t:TokenLine"
+	    >TokenLine</a
 	    >] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
@@ -122,8 +120,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >RelmapFullCons</a
 	    > c = <a href="Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
 	    >HalfRelmap</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
-	    >AbortOr</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortTokens"
+	    >AbortTokens</a
 	    > (<a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap"
 	    >Relmap</a
 	    > c)</li
@@ -263,8 +261,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ><table
 	    ><tr
 	      ><td class="src"
-		>&nbsp;= [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenizer.html#t:CodeLine"
-		  >CodeLine</a
+		>&nbsp;= [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tokenize.html#t:TokenLine"
+		  >TokenLine</a
 		  >]</td
 		><td class="doc"
 		><p
@@ -300,9 +298,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ><p
 	    >First step of constructing relmap,
     make <code
-	      ><a href="Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
-		>HalfRelmap</a
-		></code
+	      >HalfRelmap</code
 	      > from use of relational operator. 
 </p
 	    ></div
@@ -337,8 +333,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
-		  >AbortOr</a
+		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortTokens"
+		  >AbortTokens</a
 		  > (<a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap"
 		  >Relmap</a
 		  > c)</td
@@ -354,13 +350,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ><p
 	    >Second step of constructing relmap,
     make <code
-	      ><a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap"
-		>Relmap</a
-		></code
+	      >Relmap</code
 	      > from contents of <code
-	      ><a href="Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
-		>HalfRelmap</a
-		></code
+	      >HalfRelmap</code
 	      >. 
 </p
 	    ></div
@@ -379,10 +371,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      ></dt
 	    ><dd
 	    >
-    Dicide list of <code
-	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
-		>TokenTree</a
-		></code
+      Dicide list of <code
+	      >TokenTree</code
 	      > by vertical bar (<code
 	      >|</code
 	      >).
@@ -393,20 +383,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      ></dt
 	    ><dd
 	    >
-    Construct each <code
-	      ><a href="Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
-		>HalfRelmap</a
-		></code
+      Construct each <code
+	      >HalfRelmap</code
 	      > from lists of <code
-	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
-		>TokenTree</a
-		></code
+	      >TokenTree</code
 	      >.
-    When there are subrelmaps in token trees,
-    constructs <code
-	      ><a href="Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
-		>HalfRelmap</a
-		></code
+      When there are subrelmaps in token trees,
+      constructs <code
+	      >HalfRelmap</code
 	      > recursively.
 </dd
 	    ><dt
@@ -415,19 +399,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      ></dt
 	    ><dd
 	    >
-    Wrap list of <code
-	      ><a href="Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
-		>HalfRelmap</a
-		></code
+      Wrap list of <code
+	      >HalfRelmap</code
 	      > into one <code
-	      ><a href="Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
-		>HalfRelmap</a
-		></code
+	      >HalfRelmap</code
 	      >
-    that has these relmaps in <code
-	      ><a href="Koshucode-Baala-Core-Relmap-HalfRelmap.html#v:halfSubmap"
-		>halfSubmap</a
-		></code
+      that has these relmaps in <code
+	      >halfSubmap</code
 	      >.
 </dd
 	    ></dl

@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.32.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.37.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -70,23 +70,25 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	    >sectionRead</a
 	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > v =&gt; <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
+	    > c =&gt; <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
 	    >Section</a
-	    > v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
 	    >AbortOr</a
 	    > (<a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
 	    >Section</a
-	    > v)</li
+	    > c)</li
 	  ><li class="src short"
 	  ><a href="#v:sectionFile"
 	    >sectionFile</a
 	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > v =&gt; <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
+	    > c =&gt; <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
 	    >Section</a
-	    > v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:FilePath"
+	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:FilePath"
 	    >FilePath</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
@@ -94,27 +96,39 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	    >AbortOr</a
 	    > (<a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
 	    >Section</a
-	    > v))</li
+	    > c))</li
+	  ><li class="src short"
+	  ><a href="#v:readJudges"
+	    >readJudges</a
+	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
+	    >AbortOr</a
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    >Judge</a
+	    > c]</li
 	  ><li class="src short"
 	  ><a href="#v:runSection"
 	    >runSection</a
 	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > v =&gt; <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
+	    > c =&gt; <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
 	    >Section</a
-	    > v -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
 	    >AbortOr</a
 	    > (<a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
 	    >Section</a
-	    > v)</li
+	    > c)</li
 	  ><li class="src short"
 	  ><a href="#v:runSectionIO"
 	    >runSectionIO</a
 	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > v =&gt; <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
+	    > c =&gt; <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
 	    >Section</a
-	    > v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
 	    > ()</li
 	  ><li class="src short"
@@ -122,11 +136,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	    >hRunSectionIO</a
 	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > v =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
+	    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
 	    >Handle</a
 	    > -&gt; <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
 	    >Section</a
-	    > v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
 	    > ()</li
 	  ></ul
@@ -150,7 +164,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	      ><td class="src"
 		>:: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
 		  >CContent</a
-		  > v</td
+		  > c</td
 		><td class="doc empty"
 		>&nbsp;</td
 		></tr
@@ -158,10 +172,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	      ><td class="src"
 		>=&gt; <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
 		  >Section</a
-		  > v</td
+		  > c</td
 		><td class="doc"
 		><p
 		  >Section that is same type to result section
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Resource name
 </p
 		  ></td
 		></tr
@@ -182,7 +207,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 		  >AbortOr</a
 		  > (<a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
 		  >Section</a
-		  > v)</td
+		  > c)</td
 		><td class="doc"
 		><p
 		  >Result section from source text
@@ -212,7 +237,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	      ><td class="src"
 		>:: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
 		  >CContent</a
-		  > v</td
+		  > c</td
 		><td class="doc empty"
 		>&nbsp;</td
 		></tr
@@ -220,7 +245,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	      ><td class="src"
 		>=&gt; <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
 		  >Section</a
-		  > v</td
+		  > c</td
 		><td class="doc"
 		><p
 		  >Root section
@@ -246,7 +271,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 		  >AbortOr</a
 		  > (<a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
 		  >Section</a
-		  > v))</td
+		  > c))</td
 		><td class="doc"
 		><p
 		  >Result section
@@ -260,6 +285,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	    >Read section from file. 
 </p
 	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:readJudges" class="def"
+	    >readJudges</a
+	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
+	    >AbortOr</a
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    >Judge</a
+	    > c]<a href="src/Koshucode-Baala-Core-Section-SectionIO.html#readJudges" class="link"
+	    >Source</a
+	    ></p
 	  ></div
 	><h1 id="g:2"
 	>Running section
@@ -279,7 +320,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	      ><td class="src"
 		>:: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
 		  >CContent</a
-		  > v</td
+		  > c</td
 		><td class="doc empty"
 		>&nbsp;</td
 		></tr
@@ -287,7 +328,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	      ><td class="src"
 		>=&gt; <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
 		  >Section</a
-		  > v</td
+		  > c</td
 		><td class="doc"
 		><p
 		  >Input section
@@ -300,7 +341,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 		  >AbortOr</a
 		  > (<a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
 		  >Section</a
-		  > v)</td
+		  > c)</td
 		><td class="doc"
 		><p
 		  >Output section
@@ -323,9 +364,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	    >runSectionIO</a
 	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > v =&gt; <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
+	    > c =&gt; <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
 	    >Section</a
-	    > v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
 	    > ()<a href="src/Koshucode-Baala-Core-Section-SectionIO.html#runSectionIO" class="link"
 	    >Source</a
@@ -342,11 +383,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	    >hRunSectionIO</a
 	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > v =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
+	    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
 	    >Handle</a
 	    > -&gt; <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
 	    >Section</a
-	    > v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
 	    > ()<a href="src/Koshucode-Baala-Core-Section-SectionIO.html#hRunSectionIO" class="link"
 	    >Source</a

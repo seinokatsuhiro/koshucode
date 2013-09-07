@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.32.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.37.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -61,7 +61,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	>Description</p
 	><div class="doc"
 	><p
-	  >Literalizer: Make literal contents from token tree. 
+	  >Extensions of literalizer 
 </p
 	  ></div
 	></div
@@ -74,15 +74,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >litContent</a
 	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literalize.html#t:LitTree"
-	    >LitTree</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:Literalize"
+	    >Literalize</a
 	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:litOperators"
 	    >litOperators</a
 	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literalize.html#t:LitOperators"
+	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:LitOperators"
 	    >LitOperators</a
 	    > c</li
 	  ><li class="src short"
@@ -92,9 +92,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >CContent</a
 	    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Relsign"
-	    >Relsign</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Content-Literalize.html#t:LitTrees"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgePattern"
+	    >JudgePattern</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:LitTrees"
 	    >LitTrees</a
 	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
@@ -111,8 +111,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >litContent</a
 	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literalize.html#t:LitTree"
-	    >LitTree</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:Literalize"
+	    >Literalize</a
 	    > c<a href="src/Koshucode-Baala-Core-Content-Extension.html#litContent" class="link"
 	    >Source</a
 	    ></p
@@ -123,7 +123,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >litOperators</a
 	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literalize.html#t:LitOperators"
+	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:LitOperators"
 	    >LitOperators</a
 	    > c<a href="src/Koshucode-Baala-Core-Content-Extension.html#litOperators" class="link"
 	    >Source</a
@@ -161,8 +161,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Relsign"
-		  >Relsign</a
+		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgePattern"
+		  >JudgePattern</a
 		  ></td
 		><td class="doc"
 		><p
@@ -172,7 +172,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; <a href="Koshucode-Baala-Core-Content-Literalize.html#t:LitTrees"
+		>-&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:LitTrees"
 		  >LitTrees</a
 		  > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 		  >Judge</a

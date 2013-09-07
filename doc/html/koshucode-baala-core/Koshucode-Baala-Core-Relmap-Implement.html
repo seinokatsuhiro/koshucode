@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.32.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.37.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -91,10 +91,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		>String</a
 		></li
 	      ><li
-	      ><a href="#v:ropParser"
-		>ropParser</a
-		> :: <a href="Koshucode-Baala-Core-Relmap-Implement.html#t:RopParser"
-		>RopParser</a
+	      ><a href="#v:ropFullSorter"
+		>ropFullSorter</a
+		> :: <a href="Koshucode-Baala-Core-Relmap-Implement.html#t:RopFullSorter"
+		>RopFullSorter</a
 		></li
 	      ><li
 	      ><a href="#v:ropCons"
@@ -105,16 +105,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      ><li
 	      ><a href="#v:ropUsage"
 		>ropUsage</a
-		> :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
-		>]</li
+		></li
 	      ></ul
 	    >}</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:RopParser"
-	    >RopParser</a
+	    > <a href="#t:RopFullSorter"
+	    >RopFullSorter</a
 	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
@@ -125,8 +125,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:RopParser-39-"
-	    >RopParser'</a
+	    > <a href="#t:RopSorter"
+	    >RopSorter</a
 	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
 	    >Named</a
 	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
@@ -137,14 +137,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >TokenTree</a
 	    >]]</li
 	  ><li class="src short"
+	  ><a href="#v:ropPartNameBy"
+	    >ropPartNameBy</a
+	    > :: <a href="Koshucode-Baala-Core-Relmap-Implement.html#t:RopFullSorter"
+	    >RopFullSorter</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relmap-Implement.html#t:RopSorter"
+	    >RopSorter</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:ropPartName"
+	    >ropPartName</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relmap-Implement.html#t:RopSorter"
+	    >RopSorter</a
+	    ></li
+	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
 	    > <a href="#t:RopCons"
 	    >RopCons</a
 	    > c = <a href="Koshucode-Baala-Core-Relmap-Implement.html#t:RopUse"
 	    >RopUse</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
-	    >AbortOr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortTokens"
+	    >AbortTokens</a
 	    > (<a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap"
 	    >Relmap</a
 	    > c)</li
@@ -291,14 +307,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 </p
 			></dd
 		      ><dt class="src"
-		      ><a name="v:ropParser" class="def"
-			>ropParser</a
-			> :: <a href="Koshucode-Baala-Core-Relmap-Implement.html#t:RopParser"
-			>RopParser</a
+		      ><a name="v:ropFullSorter" class="def"
+			>ropFullSorter</a
+			> :: <a href="Koshucode-Baala-Core-Relmap-Implement.html#t:RopFullSorter"
+			>RopFullSorter</a
 			></dt
 		      ><dd class="doc"
 		      ><p
-			>Operand parser
+			>Operand sorter
 </p
 			></dd
 		      ><dt class="src"
@@ -315,9 +331,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      ><dt class="src"
 		      ><a name="v:ropUsage" class="def"
 			>ropUsage</a
-			> :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+			> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 			>String</a
-			>]</dt
+			></dt
 		      ><dd class="doc"
 		      ><p
 			>Usage of operator
@@ -336,9 +352,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:RopParser" class="def"
-	    >RopParser</a
-	    ><a href="src/Koshucode-Baala-Core-Relmap-Implement.html#RopParser" class="link"
+	    > <a name="t:RopFullSorter" class="def"
+	    >RopFullSorter</a
+	    ><a href="src/Koshucode-Baala-Core-Relmap-Implement.html#RopFullSorter" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs arguments"
@@ -352,7 +368,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  >]</td
 		><td class="doc"
 		><p
-		  >Unparsed operand
+		  >Unsorted operand
 </p
 		  ></td
 		></tr
@@ -365,7 +381,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  >]]</td
 		><td class="doc"
 		><p
-		  >Parsed operand
+		  >Fully sorted operand
 </p
 		  ></td
 		></tr
@@ -373,8 +389,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ></div
 	  ><div class="doc"
 	  ><p
-	    >Parser for operand of relational operator.
-    This parsers docompose operand trees,
+	    >Sorter for operand of relational operator.
+    This soters docompose operand trees,
     and give a name to suboperand. 
 </p
 	    ></div
@@ -383,9 +399,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:RopParser-39-" class="def"
-	    >RopParser'</a
-	    ><a href="src/Koshucode-Baala-Core-Relmap-Implement.html#RopParser%27" class="link"
+	    > <a name="t:RopSorter" class="def"
+	    >RopSorter</a
+	    ><a href="src/Koshucode-Baala-Core-Relmap-Implement.html#RopSorter" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs arguments"
@@ -401,7 +417,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  >]]</td
 		><td class="doc"
 		><p
-		  >Partially parsed operand
+		  >Basically sorted operand
 </p
 		  ></td
 		></tr
@@ -414,12 +430,41 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  >]]</td
 		><td class="doc"
 		><p
-		  >Full parsed operand
+		  >Fully sorted operand
 </p
 		  ></td
 		></tr
 	      ></table
 	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ropPartNameBy" class="def"
+	    >ropPartNameBy</a
+	    > :: <a href="Koshucode-Baala-Core-Relmap-Implement.html#t:RopFullSorter"
+	    >RopFullSorter</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relmap-Implement.html#t:RopSorter"
+	    >RopSorter</a
+	    ><a href="src/Koshucode-Baala-Core-Relmap-Implement.html#ropPartNameBy" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Give a name to unnamed operand. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ropPartName" class="def"
+	    >ropPartName</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relmap-Implement.html#t:RopSorter"
+	    >RopSorter</a
+	    ><a href="src/Koshucode-Baala-Core-Relmap-Implement.html#ropPartName" class="link"
+	    >Source</a
+	    ></p
 	  ></div
 	><h1 id="g:2"
 	>Constructor
@@ -432,8 +477,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >RopCons</a
 	    > c = <a href="Koshucode-Baala-Core-Relmap-Implement.html#t:RopUse"
 	    >RopUse</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
-	    >AbortOr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortTokens"
+	    >AbortTokens</a
 	    > (<a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap"
 	    >Relmap</a
 	    > c)<a href="src/Koshucode-Baala-Core-Relmap-Implement.html#RopCons" class="link"
@@ -442,18 +487,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ><div class="doc"
 	  ><p
 	    >Constructor of relational operator <code
-	      ><a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap"
-		>Relmap</a
-		></code
+	      >Relmap</code
 	      >.
     <code
-	      ><a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap"
-		>Relmap</a
-		></code
+	      >Relmap</code
 	      > is constructed from <code
-	      ><a href="Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
-		>HalfRelmap</a
-		></code
+	      >HalfRelmap</code
 	      > and subrelmaps in it. 
 </p
 	    ></div

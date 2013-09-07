@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.32.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.37.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -63,33 +63,33 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >runAssertJudges</a
 	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > v, <a href="Koshucode-Baala-Core-Content-Class.html#t:CNil"
+	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CNil"
 	    >CNil</a
-	    > v) =&gt; [<a href="Koshucode-Baala-Core-Relmap-Assert.html#t:Assert"
+	    > c) =&gt; [<a href="Koshucode-Baala-Core-Relmap-Assert.html#t:Assert"
 	    >Assert</a
-	    > v] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    > c] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > v] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
+	    > c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
 	    >AbortOr</a
 	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > v]</li
+	    > c]</li
 	  ><li class="src short"
 	  ><a href="#v:runAssertDataset"
 	    >runAssertDataset</a
 	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > v, <a href="Koshucode-Baala-Core-Content-Class.html#t:CNil"
+	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CNil"
 	    >CNil</a
-	    > v) =&gt; [<a href="Koshucode-Baala-Core-Relmap-Assert.html#t:Assert"
+	    > c) =&gt; [<a href="Koshucode-Baala-Core-Relmap-Assert.html#t:Assert"
 	    >Assert</a
-	    > v] -&gt; <a href="Koshucode-Baala-Core-Relmap-Dataset.html#t:Dataset"
+	    > c] -&gt; <a href="Koshucode-Baala-Core-Relmap-Dataset.html#t:Dataset"
 	    >Dataset</a
-	    > v -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
 	    >AbortOr</a
 	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > v]</li
+	    > c]</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -110,9 +110,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      ><td class="src"
 		>:: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 		  >Ord</a
-		  > v, <a href="Koshucode-Baala-Core-Content-Class.html#t:CNil"
+		  > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CNil"
 		  >CNil</a
-		  > v)</td
+		  > c)</td
 		><td class="doc empty"
 		>&nbsp;</td
 		></tr
@@ -120,7 +120,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      ><td class="src"
 		>=&gt; [<a href="Koshucode-Baala-Core-Relmap-Assert.html#t:Assert"
 		  >Assert</a
-		  > v]</td
+		  > c]</td
 		><td class="doc"
 		><p
 		  >Assertion list
@@ -131,7 +131,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      ><td class="src"
 		>-&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 		  >Judge</a
-		  > v]</td
+		  > c]</td
 		><td class="doc"
 		><p
 		  >Input judges
@@ -144,7 +144,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  >AbortOr</a
 		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 		  >Judge</a
-		  > v]</td
+		  > c]</td
 		><td class="doc"
 		><p
 		  >Output judges
@@ -165,17 +165,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >runAssertDataset</a
 	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > v, <a href="Koshucode-Baala-Core-Content-Class.html#t:CNil"
+	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CNil"
 	    >CNil</a
-	    > v) =&gt; [<a href="Koshucode-Baala-Core-Relmap-Assert.html#t:Assert"
+	    > c) =&gt; [<a href="Koshucode-Baala-Core-Relmap-Assert.html#t:Assert"
 	    >Assert</a
-	    > v] -&gt; <a href="Koshucode-Baala-Core-Relmap-Dataset.html#t:Dataset"
+	    > c] -&gt; <a href="Koshucode-Baala-Core-Relmap-Dataset.html#t:Dataset"
 	    >Dataset</a
-	    > v -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
 	    >AbortOr</a
 	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > v]<a href="src/Koshucode-Baala-Core-Relmap-Run.html#runAssertDataset" class="link"
+	    > c]<a href="src/Koshucode-Baala-Core-Relmap-Run.html#runAssertDataset" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
