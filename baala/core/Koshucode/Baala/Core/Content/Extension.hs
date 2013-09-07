@@ -18,16 +18,16 @@ import qualified Koshucode.Baala.Core.Content.Literal as C
 
 -- ----------------------  Operator
 
-litContent :: (C.CContent c) => C.LitTree c
+litContent :: (C.CContent c) => C.Literalize c
 litContent = C.litContentBy litOperators
 
 litOperators :: (C.CContent c) => C.LitOperators c
 litOperators = [ ]
 
--- litText :: (CContent c) => LitTree c -> LitTrees c
+-- litText :: (CContent c) => Literalize c -> LitTrees c
 -- litText lit xs = Right . joinContent =<< mapM lit xs
 
--- litText :: (CContent c) => LitTree c -> LitTrees c
+-- litText :: (CContent c) => Literalize c -> LitTrees c
 -- litText _ xs =
 --     do ws <- litWords xs
 --        cs <- mapM loop ws
@@ -75,7 +75,7 @@ litJudge = litJudgeBy litOperators
     It can be only used in the top-level of sections. -}
 litJudgeBy
     :: (C.CContent c)
-    => [B.Named (C.LitTree c -> C.LitTrees c)]
+    => [B.Named (C.Literalize c -> C.LitTrees c)]
     -> Bool                   -- ^ Logical quality
     -> B.JudgePattern         -- ^ Judgement pattern
     -> C.LitTrees (B.Judge c) -- ^ Convertor into judge

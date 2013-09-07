@@ -44,7 +44,7 @@ import qualified Data.List as List
 import qualified Data.Map  as Map
 import qualified Data.Set  as Set
 
-import Koshucode.Baala.Base.Prelude.Class
+import qualified Koshucode.Baala.Base.Prelude.Class as B
 
 
 
@@ -148,7 +148,7 @@ charWidth c
 
     >>> assocOmit "b" [("a",1), ("b",2), ("c",3)]
     [("a",1), ("c",3)]  -}
-assocOmit :: (Eq k) => k -> Map [(k, a)]
+assocOmit :: (Eq k) => k -> B.Map [(k, a)]
 assocOmit k1 = loop where
     loop [] = []
     loop (x@(k2, _) : xs)
@@ -156,7 +156,7 @@ assocOmit k1 = loop where
         | otherwise  =  x : loop xs
 
 {-| Omit associations that have given keys. -}
-assocOmitAll :: (Eq k) => [k] -> Map [(k, a)]
+assocOmitAll :: (Eq k) => [k] -> B.Map [(k, a)]
 assocOmitAll ks xs = foldr assocOmit xs ks
 
 
@@ -167,7 +167,7 @@ assocOmitAll ks xs = foldr assocOmit xs ks
 
     >>> padRight 10 "abc"
     "abc       "  -}
-padRight :: Int -> Map String
+padRight :: Int -> B.Map String
 padRight n s = s ++ replicate rest ' ' where
     rest = max 0 (n - stringWidth s)
 
@@ -175,7 +175,7 @@ padRight n s = s ++ replicate rest ' ' where
 
     >>> padLeft 10 "abc"
     "       abc"  -}
-padLeft :: Int -> Map String
+padLeft :: Int -> B.Map String
 padLeft n s = replicate rest ' ' ++ s where
     rest = max 0 (n - stringWidth s)
 

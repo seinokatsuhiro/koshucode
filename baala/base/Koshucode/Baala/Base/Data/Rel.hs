@@ -16,8 +16,8 @@ module Koshucode.Baala.Base.Data.Rel
   reldee,
 ) where
 
-import qualified Koshucode.Baala.Base.Prelude as B
-import qualified Koshucode.Baala.Base.Abort   as B
+import qualified Koshucode.Baala.Base.Prelude      as B
+import qualified Koshucode.Baala.Base.Abort        as B
 import qualified Koshucode.Baala.Base.Data.Relhead as B
 import qualified Koshucode.Baala.Base.Data.TermPos as B
 

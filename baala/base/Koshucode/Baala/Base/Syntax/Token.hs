@@ -22,29 +22,29 @@ module Koshucode.Baala.Base.Syntax.Token
 ) where
 
 import Data.Generics (Data, Typeable)
-import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Base.Syntax.CodeLine
+import qualified Koshucode.Baala.Base.Prelude         as B
+import qualified Koshucode.Baala.Base.Syntax.CodeLine as B
 
 
 
 -- ----------------------  Token type
 
 data Token
-    = TWord    TokenNumber Int String
+    = TWord    B.TokenNumber Int String
                -- ^ Word.
                --   'Int' represents quotation level, e.g.,
                --   0 for non-quoted,
                --   1 for single-quoted,
                --   2 for double-quoted.
-    | TTerm    TokenNumber [Termname]  -- ^ Termname
-    | TOpen    TokenNumber String      -- ^ Open paren
-    | TClose   TokenNumber String      -- ^ Close paren
-    | TSpace   TokenNumber Int         -- ^ /N/ space characters
-    | TComment TokenNumber String      -- ^ Comment text
-    | TUnknown TokenNumber String      -- ^ Unknown text
+    | TTerm    B.TokenNumber [Termname]  -- ^ Termname
+    | TOpen    B.TokenNumber String      -- ^ Open paren
+    | TClose   B.TokenNumber String      -- ^ Close paren
+    | TSpace   B.TokenNumber Int         -- ^ /N/ space characters
+    | TComment B.TokenNumber String      -- ^ Comment text
+    | TUnknown B.TokenNumber String      -- ^ Unknown text
       deriving (Show, Eq, Ord, Data, Typeable)
 
-instance Name Token where
+instance B.Name Token where
     name (TTerm   _ ns) = concat ns
     name (TWord  _ _ s) = s
     name (TOpen    _ s) = s
@@ -64,7 +64,7 @@ type Termname = String
 
     >>> let tok = TWord 25 0 "abc" in tokenNumber tok
     25  -}
-tokenNumber :: Token -> TokenNumber
+tokenNumber :: Token -> B.TokenNumber
 tokenNumber (TWord    n _ _)  = n
 tokenNumber (TTerm    n _)    = n
 tokenNumber (TOpen    n _)    = n
@@ -107,7 +107,7 @@ tokenTypeText (TUnknown _ _)  = "Unknown"
 
 {-| Test the token is blank,
     i.e., 'TComment' or 'TSpace'. -}
-isBlankToken :: Token -> Bool
+isBlankToken :: B.Pred Token
 isBlankToken (TSpace _ _)    = True
 isBlankToken (TComment _ _)  = True
 isBlankToken _               = False
@@ -124,12 +124,12 @@ isBlankToken _               = False
 
     >>> let tok = TOpen 0 "{" in isOpenTokenOf "(" tok
     False -}
-isOpenTokenOf :: String -> Token -> Bool
+isOpenTokenOf :: String -> B.Pred Token
 isOpenTokenOf p1 (TOpen _ p2) = p1 == p2
 isOpenTokenOf _ _             = False
 
 {-| Check token is a 'TClose' of the specific paren. -}
-isCloseTokenOf :: String -> Token -> Bool
+isCloseTokenOf :: String -> B.Pred Token
 isCloseTokenOf p1 (TClose _ p2) = p1 == p2
 isCloseTokenOf _ _              = False
 
@@ -138,7 +138,7 @@ isCloseTokenOf _ _              = False
 -- ---------------------- Other functions
 
 {-| Remove blank tokens. -}
-sweepToken :: Map [Token]
+sweepToken :: B.Map [Token]
 sweepToken = filter (not . isBlankToken)
 
 -- {-| Skip leading blank tokens. -}

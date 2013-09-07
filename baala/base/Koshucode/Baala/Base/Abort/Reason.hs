@@ -17,15 +17,15 @@ module Koshucode.Baala.Base.Abort.Reason
 ) where
 
 import qualified Text.PrettyPrint as D
-import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Base.Syntax
-import Koshucode.Baala.Base.Abort.Utility
+import qualified Koshucode.Baala.Base.Prelude       as B
+import qualified Koshucode.Baala.Base.Syntax        as B
+import qualified Koshucode.Baala.Base.Abort.Utility as B
 
 
 
 -- ---------------------- abort type
 
-type AbortTokens b = Either (AbortReason, [Token]) b
+type AbortTokens b = Either (AbortReason, [B.Token]) b
 
 {-| Either of (1) right result, or (2) abort reason
     (without source code information). -}
@@ -37,10 +37,10 @@ type AbMap b = b -> Ab b
 type AbMap2 b a = b -> Ab a
 
 {-| Abort reason and source information. -}
-type Abort = AbortType AbortReason
+type Abort = B.AbortType AbortReason
 
 {-| Either of (1) right result, or (2) abort reason with source. -}
-type AbortOr b = AbortOrType AbortReason b
+type AbortOr b = B.AbortOrType AbortReason b
 
 
 
@@ -48,7 +48,7 @@ type AbortOr b = AbortOrType AbortReason b
 
 {-| Lookup association list.
     This function may abort on AbortLookup. -}
-(<!!>) :: [Named a] -> String -> AbortTokens a
+(<!!>) :: [B.Named a] -> String -> AbortTokens a
 (<!!>) assoc key = loop assoc where
     loop [] = Left (AbortLookup key, [])
     loop ((k,v) : kvs) | k == key  = Right v
@@ -85,10 +85,10 @@ data AbortReason
     | AbortUsage            String [String]
       deriving (Show, Eq, Ord)
 
-instance Name AbortReason where
-    name = abortSymbol
+instance B.Name AbortReason where
+    name = B.abortSymbol
 
-instance AbortReasonClass AbortReason where
+instance B.AbortReasonClass AbortReason where
     abortSymbol = head . words . show
 
     abortTitle a = case a of
@@ -118,36 +118,36 @@ instance AbortReasonClass AbortReason where
         (AbortUsage          _ _) -> "使用法の間違い"
 
     abortMain a = case a of
-        (AbortDivideByZero      ) -> docEmpty
-        (AbortHeteroDecimal  x y) -> doc $ x ++ " : " ++ y
+        (AbortDivideByZero      ) -> B.docEmpty
+        (AbortHeteroDecimal  x y) -> B.doc $ x ++ " : " ++ y
         (AbortLookup           s) -> par s
         (AbortMalformedOperand s) -> par s
         (AbortMissingTermname  s) -> par s
         (AbortNotNumber        s) -> par s
         (AbortNotText          s) -> par s
-        (AbortNoTerms         ns) -> doch ns
-        (AbortOddRelation       ) -> docEmpty
+        (AbortNoTerms         ns) -> B.doch ns
+        (AbortOddRelation       ) -> B.docEmpty
         (AbortReqBoolean       s) -> par s
         (AbortReqFlatname      s) -> par s
-        (AbortReqNewTerms     ns) -> doch ns
+        (AbortReqNewTerms     ns) -> B.doch ns
         (AbortReqText          s) -> par s
         (AbortUnkCop           s) -> par s
         (AbortUnkCox           s) -> par s
         (AbortUnkWord          s) -> par s
-        (AbortUnkClause         ) -> docEmpty
+        (AbortUnkClause         ) -> B.docEmpty
         (AbortUnkContent       s) -> par s
         (AbortUnkRelmap        s) -> par s
         (AbortUnkSymbol        s) -> par s
-        (AbortUsage      _ usage) -> docv $ map par usage
+        (AbortUsage      _ usage) -> B.docv $ map par usage
         (AbortUndefined        s) -> par s
-        (AbortUnmatchArity      ) -> docEmpty
+        (AbortUnmatchArity      ) -> B.docEmpty
         (AbortUnmatchType      s) -> par s
 
     abortSub a = case a of
         (AbortUnkWord          _)
             -> par "テキストは 'aaa のように書きます"
-        _   -> docEmpty
+        _   -> B.docEmpty
 
-par :: String -> Doc
-par = D.fsep . map doc . words
+par :: String -> B.Doc
+par = D.fsep . map B.doc . words
 

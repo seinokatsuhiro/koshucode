@@ -25,6 +25,12 @@ import qualified Koshucode.Baala.Base.Prelude as B
 
 -- ----------------------  Tree
 
+data Paren a
+    = ParenNon a
+    | ParenOpen a
+    | ParenClose a
+      deriving (Show, Eq, Ord, G.Data, G.Typeable)
+
 {-| Tree of leaf and branch. -}
 data Tree a
     = TreeL a                  -- ^ Leaf. Terminal of tree.
@@ -80,7 +86,7 @@ untree typeParen = loop where
     >>> undouble (== 0) $ TreeB 0 [TreeB 0 [TreeL "A", TreeL "B"]]
     TreeB 0 [TreeL "A", TreeL "B"]
   -}
-undouble :: (ParenType -> Bool) -> B.Map (Tree a)
+undouble :: B.Pred ParenType -> B.Map (Tree a)
 undouble p = loop where
     loop (TreeB n xs) | p n =
         case map loop xs of
@@ -104,34 +110,29 @@ type GetParenType a = a -> ParenType
 {-| Get parens from a type. -}
 type GetTypeParen a = ParenType -> (a, a)
 
-{-| Make 'GetParenType' and 'GetTypeParen' functions
+{-| Make 'GetParenType' functions
     from a type-open-close table.
 
     Make paren/type functions from @()@ and @[]@.
 
-    >>> let (pt, tp) = parenTable [(1,'(',')'), (2,'[',']')]
+    >>> let paren n [a, b] = (n, (== a), (== b))
+    >>> let pt = parenTable [ paren 1 "()", paren 2 "[]" ]
 
     Get paren types for each chars.
     Types of open parens are positive integer,
     and closes are negative.
 
     >>> map pt "ab(cd[ef])g"
-    [0,0,1,0,0,2,0,0,-2,-1,0]
-
-    Get an open-close pair of parens from its type.
-
-    >>> tp 2
-    ('[', ']')
+    [0, 0, 1, 0, 0, 2, 0, 0, -2, -1, 0]
  -}
-
 parenTable
     :: (Eq a)
-    => [(ParenType, a -> Bool, a -> Bool)] -- ^ List of (/type/, /opne/, /close/)
+    => [(ParenType, B.Pred a, B.Pred a)] -- ^ List of (/type/, /open/, /close/)
     -> GetParenType a
 parenTable xs = parenType where
     parenTypeTable = map parenOpen xs ++ map parenClose xs
-    parenOpen  (n, open, _)  = (open,   n)
-    parenClose (n, _, close) = (close, -n)
+    parenOpen  (n, isOpen, _)  = (isOpen,   n)
+    parenClose (n, _, isClose) = (isClose, -n)
     parenType a =
         case B.lookupSatisfy a parenTypeTable of
           Just n  -> n

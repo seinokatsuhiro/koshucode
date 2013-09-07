@@ -15,7 +15,7 @@ module Koshucode.Baala.Base.Syntax.CodeLine
 ) where
 
 import qualified Data.Generics as G
-import Koshucode.Baala.Base.Prelude
+import qualified Koshucode.Baala.Base.Prelude as B
 
 
 
@@ -23,13 +23,13 @@ import Koshucode.Baala.Base.Prelude
 
 {-| Tokens per line. -}
 data CodeLine a = CodeLine
-    { codeLineNumber  :: LineNumber -- ^ Line number, from 1.
-    , codeLineContent :: String     -- ^ Line content without newline.
-    , codeLineTokens  :: [a]        -- ^ Tokens in the line.
+    { codeLineNumber  :: B.LineNumber -- ^ Line number, from 1.
+    , codeLineContent :: String       -- ^ Line content without newline.
+    , codeLineTokens  :: [a]          -- ^ Tokens in the line.
     } deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
-instance Pretty (CodeLine a) where
-    doc (CodeLine _ line _) = doc line
+instance B.Pretty (CodeLine a) where
+    doc (CodeLine _ line _) = B.doc line
 
 {-| Type of function that splits a next token from string.
     Tokens can includes 'TokenNumber'. -}
@@ -60,9 +60,9 @@ codeLines
 codeLines next = codeLinesBy $ codeLine next
 
 codeLinesBy
-    :: (LineNumber -> TokenNumber -> String -> CodeLine a)
+    :: (B.LineNumber -> TokenNumber -> String -> CodeLine a)
     -> String -> [CodeLine a]
-codeLinesBy f = loop 1 . linesCrlfNumbered where
+codeLinesBy f = loop 1 . B.linesCrlfNumbered where
     loop _ [] = []
     loop tno ((lno, ln) : ps) =
         case f tno lno ln of
@@ -72,10 +72,10 @@ codeLinesBy f = loop 1 . linesCrlfNumbered where
 codeLine
     :: NextToken a    -- ^ Token splitter
     -> TokenNumber    -- ^ Token number
-    -> LineNumber     -- ^ Line number
+    -> B.LineNumber   -- ^ Line number
     -> String         -- ^ Line content
     -> CodeLine a     -- ^ Result 'CodeLine'
 codeLine next tno lno ln = CodeLine lno ln toks where
-    toks = gatherWith next [tno ..] ln
+    toks = B.gatherWith next [tno ..] ln
 
 

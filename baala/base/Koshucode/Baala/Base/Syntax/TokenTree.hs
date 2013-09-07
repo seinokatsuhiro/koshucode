@@ -22,14 +22,14 @@ module Koshucode.Baala.Base.Syntax.TokenTree
   -- $Example
 ) where
 
-import Koshucode.Baala.Base.Prelude
-import Koshucode.Baala.Base.Syntax.Token
-import Koshucode.Baala.Base.Syntax.Tree
+import qualified Koshucode.Baala.Base.Prelude      as B
+import qualified Koshucode.Baala.Base.Syntax.Token as B
+import qualified Koshucode.Baala.Base.Syntax.Tree  as B
 
 -- ----------------------
 
 {-| Tree of tokens. -}
-type TokenTree = Tree Token
+type TokenTree = B.Tree B.Token
 
 {-| Parse tokens into parened trees.
     Blank tokens and comments are excluded.
@@ -45,16 +45,16 @@ type TokenTree = Tree Token
 
     4. Curely-bar braces @{| .. |}@ for relation.
   -}
-tokenTrees :: [Token] -> [TokenTree]
-tokenTrees = map (undouble (== 0)) . trees parenType . sweepToken
+tokenTrees :: [B.Token] -> [TokenTree]
+tokenTrees = map (B.undouble (== 0)) . B.trees parenType . B.sweepToken
 
-treesTokens :: [TokenTree] -> [Token]
-treesTokens = untrees typeParen
+treesTokens :: [TokenTree] -> [B.Token]
+treesTokens = B.untrees typeParen
 
-treeTokens :: TokenTree -> [Token]
-treeTokens = untree typeParen
+treeTokens :: TokenTree -> [B.Token]
+treeTokens = B.untree typeParen
 
-typeParen :: ParenType -> (Token, Token)
+typeParen :: B.ParenType -> (B.Token, B.Token)
 typeParen = o where
     o 1   =  p  "("  ")"
     o 2   =  p  "["  "]"
@@ -62,23 +62,23 @@ typeParen = o where
     o 4   =  p  "<|" "|>"
     o 5   =  p  "{|" "|}"
     o _   =  p  "?"  "?"
-    p a b =  ( TOpen 0 a, TClose 0 b )
+    p a b =  ( B.TOpen 0 a, B.TClose 0 b )
 
-parenType :: GetParenType Token
-parenType = parenTable
+parenType :: B.GetParenType B.Token
+parenType = B.parenTable
     [ o 1  "("   ")"   -- grouping
     , o 2  "["   "]"   -- list
     , o 3  "{"   "}"   -- set
     , o 4  "<|" "|>"   -- termset
     , o 5  "{|" "|}"   -- relation
-    ] where o n a b = (n, isOpenTokenOf a, isCloseTokenOf b)
+    ] where o n a b = (n, B.isOpenTokenOf a, B.isCloseTokenOf b)
 
 singleTree :: [TokenTree] -> TokenTree
 singleTree [t] = t
-singleTree ts  = TreeB 1 ts
+singleTree ts  = B.TreeB 1 ts
 
 flatname :: TokenTree -> Maybe String
-flatname (TreeL (TTerm _ [n])) = Just n
+flatname (B.TreeL (B.TTerm _ [n])) = Just n
 flatname _ = Nothing
 
 
@@ -100,17 +100,17 @@ flatname _ = Nothing
             , [ TSpace 4 1, TWord 5 0 "b", TSpace 6 1
               , TWord 7 0 "|", TSpace 8 1, TWord 9 0 "c" ] )  -}
 splitTokensBy
-    :: (String -> Bool)   -- ^ Predicate
-    -> [Token]            -- ^ Tokens
-    -> Either [Token] ([Token], Token, [Token])
+    :: B.Pred String   -- ^ Predicate
+    -> [B.Token]       -- ^ Tokens
+    -> Either [B.Token] ([B.Token], B.Token, [B.Token])
        -- ^ Original-tokens or @(@before-list, the-word, after-list@)@
-splitTokensBy p = splitBy p2 where
-    p2 (TWord _ 0 x) = p x
+splitTokensBy p = B.splitBy p2 where
+    p2 (B.TWord _ 0 x) = p x
     p2 _ = False
 
 divideTreesBy :: String -> [TokenTree] -> [[TokenTree]]
-divideTreesBy w = divideBy p where
-    p (TreeL (TWord _ 0 x)) = (w == x)
+divideTreesBy w = B.divideBy p where
+    p (B.TreeL (B.TWord _ 0 x)) = (w == x)
     p _ = False
 
 {-| Divide token trees by vertical bar @\"|\"@.

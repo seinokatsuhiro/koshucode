@@ -11,9 +11,9 @@ module Koshucode.Baala.Base.Prelude.Arrange
 ) where
 
 import qualified Data.List as List
-import Koshucode.Baala.Base.Prelude.Class
+import qualified Koshucode.Baala.Base.Prelude.Class as B
 
-type Arrange a = [Int] -> Map [a]
+type Arrange a = [Int] -> B.Map [a]
 
 {-| Indices of shared elements.
 
@@ -51,7 +51,7 @@ arrangePick ps xs = loop ps xs 0 where
 
     >>> arrangeCut [1,3] "abcdefg"
     "acefg"  -}
-arrangeCut :: [Int] -> Map [a]
+arrangeCut :: [Int] -> B.Map [a]
 arrangeCut ps xs = loop 0 xs where
     loop _ [] = []
     loop p (x:xs2)
@@ -62,7 +62,7 @@ arrangeCut ps xs = loop 0 xs where
 
     >>> arrangeFore [1,3] "abcdefg"
     "bdacefg"  -}
-arrangeFore :: [Int] -> Map [a]
+arrangeFore :: [Int] -> B.Map [a]
 arrangeFore ps xs = arrangePick ps xs ++ arrangeCut ps xs
 
 -- grip :: [Int] -> [a] -> ([a], [a])

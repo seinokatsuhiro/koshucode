@@ -13,7 +13,7 @@ module Koshucode.Baala.Base.Syntax.Binary
 import qualified Data.Map   as Map
 import qualified Data.Maybe as Maybe
 
-import Koshucode.Baala.Base.Syntax.Tree
+import qualified Koshucode.Baala.Base.Syntax.Tree as B
 
 {-| Direction and height for binary splitting.
  
@@ -47,15 +47,15 @@ height (Right h) = h
 {-| Split branches in a given tree at infixed binary operators -}
 binaryTree :: (Show a)
     => (a -> BinaryHeight)  -- ^ Height function
-    -> Tree a               -- ^ Infixed tree
-    -> Tree a               -- ^ Prefixed tree
-binaryTree ht tree1 = undouble (== 1) $ binaryHeightMap loop ht tree1 where
-    loop tree2@(TreeL _)    = tree2
-    loop tree2@(TreeB n xs) =
+    -> B.Tree a             -- ^ Infixed tree
+    -> B.Tree a             -- ^ Prefixed tree
+binaryTree ht tree1 = B.undouble (== 1) $ binaryHeightMap loop ht tree1 where
+    loop tree2@(B.TreeL _)    = tree2
+    loop tree2@(B.TreeB n xs) =
         case binaryPos $ heightList tree2 of
-          Right p | p <= 0 -> TreeB n $ map loop xs
+          Right p | p <= 0 -> B.TreeB n $ map loop xs
           Right p -> let (left, r:ight) = splitAt p xs
-                     in  TreeB n $
+                     in  B.TreeB n $
                          if null ight
                          then [r, sub n left]
                          else [r, sub n left, sub n ight]
@@ -64,7 +64,7 @@ binaryTree ht tree1 = undouble (== 1) $ binaryHeightMap loop ht tree1 where
                          ++ show (xs !! q)
 
     sub _ [x] = loop x
-    sub n xs  = loop $ TreeB n xs
+    sub n xs  = loop $ B.TreeB n xs
 
 -- e0 = heightTable [(Left 5, "="), (Right 3, "+-"), (Left 3, "*/")]
 -- e1 = map TreeL
@@ -75,10 +75,10 @@ binaryTree ht tree1 = undouble (== 1) $ binaryHeightMap loop ht tree1 where
 -- e6 = e2 (TreeB 0 $ e1 "1+2-3")
 -- e7 = e2 (TreeB 0 $ e1 "1+2*3")
 
-heightList :: Tree (BinaryHeight, a) -> [BinaryHeight]
-heightList (TreeB _ xs) = map f xs where
-    f (TreeL (ht, _)) = ht
-    f (TreeB _ _)     = Left 0
+heightList :: B.Tree (BinaryHeight, a) -> [BinaryHeight]
+heightList (B.TreeB _ xs) = map f xs where
+    f (B.TreeL (ht, _)) = ht
+    f (B.TreeB _ _)     = Left 0
 heightList _ = undefined
 
 binaryPos :: [BinaryHeight] -> Either (Int, Int) Int

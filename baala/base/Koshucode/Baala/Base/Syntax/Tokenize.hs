@@ -112,7 +112,7 @@ nextToken n txt =
 --  O C O C O C S S Q Q H T
 
 -- Punctuations
-isOpen, isClose, isSingle, isQ, isQQ, isPunct :: Char -> Bool
+isOpen, isClose, isSingle, isQ, isQQ, isPunct :: B.Pred Char
 
 isOpen    =  (`elem` "([{")   -- UnicodePunctuation
 isClose   =  (`elem` "}])")   -- UnicodePunctuation
@@ -122,7 +122,7 @@ isQQ      =  (== '"')         -- UnicodePunctuation
 isPunct c =  isOpen c || isClose c || isSingle c ||
              isQ c || isQQ c || c == '#'
 
-isTerm, isSpace, isWord  :: Char -> Bool
+isTerm, isSpace, isWord  :: B.Pred Char
 
 isTerm     =  (== '/')        -- UnicodePunctuation
 isSpace c  =  Ch.isSpace c    -- UnicodeSeprator | UnicodeOther
@@ -135,10 +135,10 @@ isWord  c  =  test $ B.generalCategoryGroup c where
     test B.UnicodeSeperator   = False
     test B.UnicodeOther       = False
 
-isSimpleWord :: String -> Bool
+isSimpleWord :: B.Pred String
 isSimpleWord = all isSimpleChar
 
-isSimpleChar :: Char -> Bool
+isSimpleChar :: B.Pred Char
 isSimpleChar c =
     case B.generalCategoryGroup c of
       B.UnicodeLetter      -> True

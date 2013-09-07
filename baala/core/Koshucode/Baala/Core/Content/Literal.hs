@@ -8,8 +8,8 @@ module Koshucode.Baala.Core.Content.Literal
   -- * Library
 
   -- ** Types
+  Literalize,
   LitTrees,
-  LitTree,
   LitOperators,
 
   -- ** Functions
@@ -36,21 +36,21 @@ import qualified Koshucode.Baala.Core.Content.HashWord as C
 
 -- ----------------------  Type
 
-{-| Make @a@ from list of token trees. -}
-type LitTrees a = B.AbMap2 [B.TokenTree] a
+{-| Transform 'B.TokenTree' to something. -}
+type Literalize a = B.TokenTree -> B.Ab a
 
-{-| Make @a@ from a token tree. -}
-type LitTree a = B.AbMap2 B.TokenTree a
+{-| Transform list of 'B.TokenTree' to something. -}
+type LitTrees a = [B.TokenTree] -> B.Ab a
 
-type LitOperators c = [B.Named (LitTree c -> LitTrees c)]
+type LitOperators c = [B.Named (Literalize c -> LitTrees c)]
 
 
 
 -- ----------------------  Content
 
-{-| Transform 'TokenTree' into
-    internal form of term content. -}
-litContentBy :: (C.CContent c) => LitOperators c -> LitTree c
+{-| Transform 'B.TokenTree' into
+    internal form of content. -}
+litContentBy :: (C.CContent c) => LitOperators c -> Literalize c
 litContentBy ops = lit where
     lit (B.TreeB typ xs) = case typ of
           1  ->  paren xs
@@ -121,7 +121,7 @@ isHashed _ = False
 isQuotedOrHashed :: B.TokenTree -> Bool
 isQuotedOrHashed x = isQuoted x || isHashed x
 
-litUnquoted :: LitTree String
+litUnquoted :: Literalize String
 litUnquoted x@(B.TreeL (B.TWord _ 0 w)) | not $ isHashed x = Right w
 litUnquoted x = Left $ B.AbortUnkSymbol (show x)
 
@@ -144,19 +144,19 @@ hashAssoc =
 
 {-| Get single term name.
     If 'TokenTree' contains nested term name, this function failed. -}
-litFlatname :: LitTree String
+litFlatname :: Literalize String
 litFlatname (B.TreeL (B.TTerm _ [n])) = Right n
 litFlatname (B.TreeL (B.TTerm _ ns))  = Left $ B.AbortReqFlatname (concat ns)
 litFlatname x = Left $ B.AbortMissingTermname (show x)
 
-litList :: (C.CContent c) => LitTree c -> LitTrees [c]
+litList :: (C.CContent c) => Literalize c -> LitTrees [c]
 litList _   [] = Right []
 litList lit cs = mapM lt $ B.divideTreesByColon cs where
     lt []  = Right C.nil
     lt [x] = lit x
     lt xs  = lit $ B.TreeB 1 xs
 
-litRel :: (C.CContent c) => LitTree c -> LitTrees (B.Rel c)
+litRel :: (C.CContent c) => Literalize c -> LitTrees (B.Rel c)
 litRel lit cs =
     do let (h1 : b1) = B.divideTreesByBar cs
        h2 <- mapM litFlatname $ concat $ B.divideTreesByColon h1
@@ -167,7 +167,7 @@ litRel lit cs =
           else Right $ B.Rel (B.headFrom h2) b3
 
 {-| Collect term name and content. -}
-litTermset :: (C.CContent c) => LitTree c -> LitTrees [B.Named c]
+litTermset :: (C.CContent c) => Literalize c -> LitTrees [B.Named c]
 litTermset lit xs = namedC where
     namedC   = mapM p       =<< litNamedTrees xs
     p (n, c) = Right . (n,) =<< lit c
