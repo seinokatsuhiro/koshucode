@@ -5,6 +5,7 @@ module Koshucode.Baala.Core.Section.SectionIO
   -- * Reading section
   sectionRead,
   sectionFile,
+  readJudges,
 
   -- * Running section
   runSection,
@@ -12,12 +13,12 @@ module Koshucode.Baala.Core.Section.SectionIO
   hRunSectionIO,
 ) where
 
-import qualified System.IO as IO
-import qualified Koshucode.Baala.Base as B
-import Koshucode.Baala.Core.Content
-import Koshucode.Baala.Core.Relmap
-import Koshucode.Baala.Core.Section.Section
-import Koshucode.Baala.Core.Section.Clause
+import qualified System.IO                            as IO
+import qualified Koshucode.Baala.Base                 as B
+import qualified Koshucode.Baala.Core.Content         as C
+import qualified Koshucode.Baala.Core.Relmap          as C
+import qualified Koshucode.Baala.Core.Section.Section as C
+import qualified Koshucode.Baala.Core.Section.Clause  as C
 
 
 
@@ -25,25 +26,29 @@ import Koshucode.Baala.Core.Section.Clause
 
 {-| Read section from text. -}
 sectionRead
-    :: (CContent c)
-    => Section c   -- ^ Section that is same type to result section
-    -> String      -- ^ Resource name
-    -> String      -- ^ Source text
-    -> B.AbortOr (Section c)  -- ^ Result section from source text
+    :: (C.CContent c)
+    => C.Section c  -- ^ Section that is same type to result section
+    -> String       -- ^ Resource name
+    -> String       -- ^ Source text
+    -> B.AbortOr (C.Section c)  -- ^ Result section from source text
 sectionRead root res src = sec where
-    (RelmapCons half full) = sectionCons root
-    sec = consSection full res $ consClause half $ B.tokenize src
+    (C.RelmapCons half full) = C.sectionCons root
+    sec = C.consSection full res $ C.consClause half $ B.tokenize src
 
 {-| Read section from file. -}
 sectionFile
-    :: (CContent c)
-    => Section c    -- ^ Root section
-    -> FilePath     -- ^ Path of section file
-    -> IO (B.AbortOr (Section c)) -- ^ Result section
+    :: (C.CContent c)
+    => C.Section c   -- ^ Root section
+    -> FilePath      -- ^ Path of section file
+    -> IO (B.AbortOr (C.Section c)) -- ^ Result section
 sectionFile root path =
     do code <- readFile path
        return $ sectionRead root path code
 
+readJudges :: (C.CContent c) => String -> B.AbortOr [B.Judge c]
+readJudges code =
+    do sec <- sectionRead C.emptySection "text" code
+       Right $ C.sectionJudge sec
 
 
 -- ----------------------  Running section
@@ -52,19 +57,19 @@ sectionFile root path =
     Output section has judges calculated
     from assertions in input section. -}
 runSection
-    :: (CContent c)
-    => Section c             -- ^ Input section
-    -> B.AbortOr (Section c) -- ^ Output section
+    :: (C.CContent c)
+    => C.Section c             -- ^ Input section
+    -> B.AbortOr (C.Section c) -- ^ Output section
 runSection sec =
-    do let calc  = sectionLinkedAssert sec
-           input = sectionJudge sec
-       output <- runAssertJudges calc input
-       Right $ sec { sectionJudge = output }
+    do let calc  = C.sectionLinkedAssert sec
+           input = C.sectionJudge sec
+       output <- C.runAssertJudges calc input
+       Right $ sec { C.sectionJudge = output }
 
 {-| Run section and output judges. -}
-runSectionIO :: (CContent c) => Section c -> IO ()
+runSectionIO :: (C.CContent c) => C.Section c -> IO ()
 runSectionIO = hRunSectionIO IO.stdout
 
-hRunSectionIO :: (CContent c) => IO.Handle -> Section c -> IO ()
-hRunSectionIO h = B.abortIO (B.hPutJudges h . sectionJudge) . runSection
+hRunSectionIO :: (C.CContent c) => IO.Handle -> C.Section c -> IO ()
+hRunSectionIO h = B.abortIO (B.hPutJudges h . C.sectionJudge) . runSection
 

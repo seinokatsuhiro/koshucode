@@ -1,31 +1,31 @@
 {-# OPTIONS_GHC -Wall -fno-warn-orphans #-}
 
 module Koshucode.Baala.Core.Section.SectionUnion
-( sectionUnion
-, sectionUse
+( sectionUnion,
+  sectionUse
 ) where
 
 import Data.Monoid
-import Koshucode.Baala.Core.Section.Section
+import qualified Koshucode.Baala.Core.Section.Section as C
 
-instance Monoid (Section v) where
-    mempty  = emptySection
+instance Monoid (C.Section c) where
+    mempty  = C.emptySection
     mappend = sectionUnion
 
-sectionUnion :: Section v -> Section v -> Section v
+sectionUnion :: C.Section c -> C.Section c -> C.Section c
 sectionUnion s1 s2 =
-    s1 { sectionName   = Nothing
-       , sectionImport = []
-       , sectionExport = union sectionExport
-       , sectionAssert = union sectionAssert
-       , sectionRelmap = union sectionRelmap
-       , sectionJudge  = union sectionJudge
+    s1 { C.sectionName   = Nothing
+       , C.sectionImport = []
+       , C.sectionExport = union C.sectionExport
+       , C.sectionAssert = union C.sectionAssert
+       , C.sectionRelmap = union C.sectionRelmap
+       , C.sectionJudge  = union C.sectionJudge
        } where union f = f s1 ++ f s2
 
-sectionUse :: Section v -> Section v -> Section v
+sectionUse :: C.Section c -> C.Section c -> C.Section c
 sectionUse s1 s2 =
-    s1 { sectionName   = Nothing
-       , sectionImport = []
-       , sectionRelmap = union sectionRelmap
+    s1 { C.sectionName   = Nothing
+       , C.sectionImport = []
+       , C.sectionRelmap = union C.sectionRelmap
        } where union f = f s1 ++ f s2
 

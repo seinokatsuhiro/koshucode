@@ -24,19 +24,19 @@ import Koshucode.Baala.Vanilla.Type
 
  [@then@]   Logical implication.
 
- [@where@]  Inverse implication.
+ [@when@]   Inverse implication.
 
 -}
 
 copsLogic :: [B.Named (C.Cop VContent)]
 copsLogic =
- [ C.namedEager  "not"   copNot
- , C.namedEager  "and"   copAnd
- , C.namedEager  "or"    copOr
- , C.namedEager  "then"  copImp
- , C.namedEager  "where" copWh
- , C.namedEager  "if"    copIf
- ]
+    [ C.namedEager  "not"   copNot
+    , C.namedEager  "and"   copAnd
+    , C.namedEager  "or"    copOr
+    , C.namedEager  "then"  copImp
+    , C.namedEager  "when"  copWhen
+    , C.namedEager  "if"    copIf
+    ]
 
 cop1 :: (Bool -> Bool) -> VCop
 cop1 p [x] =
@@ -62,8 +62,8 @@ copN unit p = loop where
 copNot :: VCop
 copNot =  cop1 not
 
-copWh  :: VCop
-copWh  =  cop2 $ \x y -> x || not y
+copWhen  :: VCop
+copWhen  =  cop2 $ \x y -> x || not y
 
 copImp :: VCop
 copImp =  cop2 $ \x y -> not x || y

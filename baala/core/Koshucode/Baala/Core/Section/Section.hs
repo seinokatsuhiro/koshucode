@@ -25,17 +25,17 @@ module Koshucode.Baala.Core.Section.Section
 ) where
 
 import qualified Koshucode.Baala.Base as B
-import Koshucode.Baala.Core.Relmap
+import qualified Koshucode.Baala.Core.Relmap as C
 
 data Section c = Section {
-      sectionName     :: Maybe String         -- ^ Section name
-    , sectionImport   :: [Section c]          -- ^ Importing section
-    , sectionExport   :: [String]             -- ^ Exporting relmap names
-    , sectionAssert   :: [Assert c]           -- ^ Assertions of relmaps
-    , sectionRelmap   :: [B.Named (Relmap c)] -- ^ Relmaps and its name
-    , sectionJudge    :: [B.Judge c]          -- ^ Here data
-    , sectionResource :: String               -- ^ Resource name
-    , sectionCons     :: RelmapCons c         -- ^ Readers and writers for this section
+      sectionName     :: Maybe String           -- ^ Section name
+    , sectionImport   :: [Section c]            -- ^ Importing section
+    , sectionExport   :: [String]               -- ^ Exporting relmap names
+    , sectionAssert   :: [C.Assert c]           -- ^ Assertions of relmaps
+    , sectionRelmap   :: [B.Named (C.Relmap c)] -- ^ Relmaps and its name
+    , sectionJudge    :: [B.Judge c]            -- ^ Here data
+    , sectionResource :: String                 -- ^ Resource name
+    , sectionCons     :: C.RelmapCons c         -- ^ Readers and writers for this section
     } deriving (Show)
 
 instance (Ord c, B.Pretty c) => B.Pretty (Section c) where
@@ -53,22 +53,22 @@ instance (Ord c, B.Pretty c) => B.Pretty (Section c) where
 {-| Select assertions like 'sectionAssert'.
     It returns relmap-liked assertions.
     We can run these assertions using 'runAssertJudges'. -}
-sectionLinkedAssert :: Section c -> [Assert c]
+sectionLinkedAssert :: Section c -> [C.Assert c]
 sectionLinkedAssert Section{ sectionRelmap = ms, sectionAssert = ass }
     = map linker ass where
-      linker = assertMap $ relmapLinker ms
+      linker = C.assertMap $ C.relmapLinker ms
 
 
 
 -- ----------------------  Constructors
 
 {-| Section that has no contents. -}
-makeEmptySection :: RelmapCons c -> Section c
+makeEmptySection :: C.RelmapCons c -> Section c
 makeEmptySection = Section Nothing [] [] [] [] [] ""
 
 {-| Section that has no contents. -}
 emptySection :: Section c
-emptySection = makeEmptySection $ relmapCons []
+emptySection = makeEmptySection $ C.relmapCons []
 
 {-| Section that has only here data. -}
 dataSection :: [B.Judge c] -> Section c

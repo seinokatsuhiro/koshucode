@@ -133,16 +133,22 @@ consPreclause' src@(C.ClauseSource toks _) = cl toks' where
 
     unk                   = [CUnknown src]
 
-    judge "--" xs = jud True  xs
-    judge "-"  xs = jud True  xs
-    judge "-X" xs = jud False xs
-    judge "-x" xs = jud False xs
-    judge _ _     = unk
+    isDelim = (`elem` ["|", ":"])
+
+    judge "--" = jud True
+    judge "-"  = jud True
+    judge "-X" = jud False
+    judge "-x" = jud False
+
+    judge "==" = assert True
+    judge "="  = assert True
+    judge "=X" = assert False
+    judge "=x" = assert False
+
+    judge _ = const unk
 
     jud quo (B.TWord _ _ pat : xs) = [CJudge src quo pat xs]
     jud _ _ = unk
-
-    isDelim = (`elem` ["|", ":"])
 
     assert quo (B.TWord _ _ pat : xs) =
         case B.splitTokensBy isDelim xs of

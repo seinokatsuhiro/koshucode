@@ -62,7 +62,7 @@ vanillaBinary = B.binaryTree ht where
     right n ws = (Right n, words ws)
 
     ht = B.heightTableUnbox unbox
-         [ right 9 "then where"
+         [ right 9 "then when unless"
          , right 8 "or"
          , right 7 "and"
          , right 6 "= <> < > <= >="

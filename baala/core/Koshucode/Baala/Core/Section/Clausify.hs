@@ -8,7 +8,6 @@ module Koshucode.Baala.Core.Section.Clausify
 ) where
 
 import Data.Generics
-
 import qualified Koshucode.Baala.Base as B
 
 
