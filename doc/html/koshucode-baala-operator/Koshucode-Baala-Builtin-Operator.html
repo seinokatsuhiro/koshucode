@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Builtin.Operator</title
+    ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builtin-Operator.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a href="src/Koshucode-Baala-Builtin-Operator.html"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-operator-0.37.0.0: Relational operators in Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Builtin.Operator</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Operator
+</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a href="#t:BuiltinOperand"
+	    >BuiltinOperand</a
+	    >  = <a href="#v:LikeId"
+	    >LikeId</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:builtinRops"
+	    >builtinRops</a
+	    > ::  [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:Rop"
+	    >Rop</a
+	    > c]</li
+	  ><li class="src short"
+	  >module <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Monoid.html"
+	    >Data.Monoid</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a name="t:BuiltinOperand" class="def"
+	    >BuiltinOperand</a
+	    >  <a href="src/Koshucode-Baala-Builtin-Operator.html#BuiltinOperand" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    ><code
+	      ><a href="Koshucode-Baala-Builtin-Pattern.html#t:RopPattern"
+		>RopPattern</a
+		></code
+	      > for builtin operators. 
+</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:LikeId" class="def"
+		  >LikeId</a
+		  ></td
+		><td class="doc"
+		><p
+		  >no operand
+</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:BuiltinOperand" class="caption collapser" onclick="toggleSection('i:BuiltinOperand')"
+	    >Instances</p
+	    ><div id="section.i:BuiltinOperand" class="show"
+	    ><table
+	      ><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Enum"
+		    >Enum</a
+		    > <a href="Koshucode-Baala-Builtin-Operator.html#t:BuiltinOperand"
+		    >BuiltinOperand</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		    >Eq</a
+		    > <a href="Koshucode-Baala-Builtin-Operator.html#t:BuiltinOperand"
+		    >BuiltinOperand</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		    >Show</a
+		    > <a href="Koshucode-Baala-Builtin-Operator.html#t:BuiltinOperand"
+		    >BuiltinOperand</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Builtin-Pattern.html#t:RopPattern"
+		    >RopPattern</a
+		    > <a href="Koshucode-Baala-Builtin-Operator.html#t:BuiltinOperand"
+		    >BuiltinOperand</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:builtinRops" class="def"
+	    >builtinRops</a
+	    > ::  [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:Rop"
+	    >Rop</a
+	    > c]<a href="src/Koshucode-Baala-Builtin-Operator.html#builtinRops" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  >module <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Monoid.html"
+	    >Data.Monoid</a
+	    ></p
+	  ></div
+	><h1 id="g:1"
+	>Operator
+</h1
+	><div class="doc"
+	><dl
+	  ><dt
+	    ><em
+	      >r</em
+	      > <code
+	      >|</code
+	      > <em
+	      >s</em
+	      ></dt
+	    ><dd
+	    >   Append relmaps
+</dd
+	    ></dl
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.13.2</p
+      ></div
+    ></body
+  ></html
+>

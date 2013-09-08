@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-operator-0.32.0.0: Relational operators in Koshucode</p
+      >koshucode-baala-operator-0.37.0.0: Relational operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -51,12 +51,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Operand patterns
+	    >Operand pattern
 </a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Operand parsers
+	    >Operand sorter
 </a
 	    ></li
 	  ></ul
@@ -66,7 +66,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	>Description</p
 	><div class="doc"
 	><p
-	  >Operand patterns
+	  >Minimal operand patterns. 
 </p
 	  ></div
 	></div
@@ -93,10 +93,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		>LikePick</a
 		>  </li
 	      ><li
-	      >| <a href="#v:LikeRename"
-		>LikeRename</a
-		>  </li
-	      ><li
 	      >| <a href="#v:LikeSource"
 		>LikeSource</a
 		>  </li
@@ -105,32 +101,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	  ><li class="src short"
 	  ><a href="#v:likePick"
 	    >likePick</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopParser-39-"
-	    >RopParser'</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopSorter"
+	    >RopSorter</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:likeMeet"
 	    >likeMeet</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopParser-39-"
-	    >RopParser'</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:likeRename"
-	    >likeRename</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopParser-39-"
-	    >RopParser'</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopSorter"
+	    >RopSorter</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:likeSource"
 	    >likeSource</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopParser-39-"
-	    >RopParser'</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopSorter"
+	    >RopSorter</a
 	    ></li
 	  ></ul
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Operand patterns
+	>Operand pattern
 </h1
 	><div class="top"
 	><p class="src"
@@ -144,9 +134,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	  ><div class="doc"
 	  ><p
 	    ><code
-	      ><a href="Koshucode-Baala-Builtin-Pattern.html#t:OpPattern"
-		>OpPattern</a
-		></code
+	      >RopPattern</code
 	      > for minimal operators
 </p
 	    ></div
@@ -159,11 +147,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		><a name="v:LikeId" class="def"
 		  >LikeId</a
 		  ></td
-		><td class="doc"
-		><p
-		  >no operand
-</p
-		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
 		></tr
 	      ><tr
 	      ><td class="src"
@@ -172,11 +157,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		  ></td
 		><td class="doc"
 		><p
-		  >{ <code
-		    >-relmap</code
-		    > } relmap [ <code
-		    >-share</code
-		    > /name ... ]
+		  ><code
+		    ><a href="Koshucode-Baala-Minimal-Operand.html#v:likeMeet"
+		      >likeMeet</a
+		      ></code
+		    > sorter
 </p
 		  ></td
 		></tr
@@ -187,22 +172,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		  ></td
 		><td class="doc"
 		><p
-		  >{ <code
-		    >-term</code
-		    > } /name ...
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:LikeRename" class="def"
-		  >LikeRename</a
-		  ></td
-		><td class="doc"
-		><p
-		  >{ <code
-		    >-term</code
-		    > } /new /old ...
+		  ><code
+		    ><a href="Koshucode-Baala-Minimal-Operand.html#v:likePick"
+		      >likePick</a
+		      ></code
+		    > sorter
 </p
 		  ></td
 		></tr
@@ -213,11 +187,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		  ></td
 		><td class="doc"
 		><p
-		  >{ <code
-		    >-sign</code
-		    > } relsign { <code
-		    >-term</code
-		    > } /name ...
+		  ><code
+		    ><a href="Koshucode-Baala-Minimal-Operand.html#v:likeSource"
+		      >likeSource</a
+		      ></code
+		    > sorter
 </p
 		  ></td
 		></tr
@@ -260,8 +234,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		  ></tr
 		><tr
 		><td class="src"
-		  ><a href="Koshucode-Baala-Builtin-Pattern.html#t:OpPattern"
-		    >OpPattern</a
+		  ><a href="Koshucode-Baala-Builtin-Pattern.html#t:RopPattern"
+		    >RopPattern</a
 		    > <a href="Koshucode-Baala-Minimal-Operand.html#t:MinimalOperand"
 		    >MinimalOperand</a
 		    ></td
@@ -273,47 +247,72 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    ></div
 	  ></div
 	><h1 id="g:2"
-	>Operand parsers
+	>Operand sorter
 </h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:likePick" class="def"
 	    >likePick</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopParser-39-"
-	    >RopParser'</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopSorter"
+	    >RopSorter</a
 	    ><a href="src/Koshucode-Baala-Minimal-Operand.html#likePick" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >This sorter recognizes <code
+	      >-term</code
+	      > operand.
+</p
+	    ><pre
+	    > pick /a /b
+ pick -term /a /b 
+</pre
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:likeMeet" class="def"
 	    >likeMeet</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopParser-39-"
-	    >RopParser'</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopSorter"
+	    >RopSorter</a
 	    ><a href="src/Koshucode-Baala-Minimal-Operand.html#likeMeet" class="link"
 	    >Source</a
 	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:likeRename" class="def"
-	    >likeRename</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopParser-39-"
-	    >RopParser'</a
-	    ><a href="src/Koshucode-Baala-Minimal-Operand.html#likeRename" class="link"
-	    >Source</a
-	    ></p
+	  ><div class="doc"
+	  ><p
+	    >This sorter recognizes <code
+	      >-relmap</code
+	      > operand.
+</p
+	    ><pre
+	    > meet a
+ meet -relmap a 
+</pre
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:likeSource" class="def"
 	    >likeSource</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopParser-39-"
-	    >RopParser'</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopSorter"
+	    >RopSorter</a
 	    ><a href="src/Koshucode-Baala-Minimal-Operand.html#likeSource" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >This sorter recognizes <code
+	      >-sign</code
+	      > and <code
+	      >-term</code
+	      > operand.
+</p
+	    ><pre
+	    > source A /a /b
+ source -sign A -term /a /b 
+</pre
+	    ></div
 	  ></div
 	></div
       ></div

@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builti
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-operator-0.32.0.0: Relational operators in Koshucode</p
+      >koshucode-baala-operator-0.37.0.0: Relational operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -87,95 +87,101 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builti
 	><li class="src short"
 	  ><a href="#v:getHead"
 	    >getHead</a
-	    > ::  [a] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
-	    >AbortOr</a
+	    > ::  [a] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortTokens"
+	    >AbortTokens</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:getSingleton"
+	    >getSingleton</a
+	    > ::  [a] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortTokens"
+	    >AbortTokens</a
 	    > a</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:OpGet"
-	    >OpGet</a
-	    > v a = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopUse"
+	    > <a href="#t:RopGet"
+	    >RopGet</a
+	    > c b = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopUse"
 	    >RopUse</a
-	    > v -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
-	    >AbortOr</a
-	    > a</li
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortTokens"
+	    >AbortTokens</a
+	    > b</li
 	  ><li class="src short"
 	  ><a href="#v:getTree"
 	    >getTree</a
-	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:OpGet"
-	    >OpGet</a
-	    > v <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:getTrees"
 	    >getTrees</a
-	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:OpGet"
-	    >OpGet</a
-	    > v [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >]</li
 	  ><li class="src short"
 	  ><a href="#v:getWord"
 	    >getWord</a
-	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:OpGet"
-	    >OpGet</a
-	    > v <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:getInt"
 	    >getInt</a
-	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:OpGet"
-	    >OpGet</a
-	    > v <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:getTerm"
 	    >getTerm</a
-	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:OpGet"
-	    >OpGet</a
-	    > v <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
+	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    >Termname</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:getTerms"
 	    >getTerms</a
-	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:OpGet"
-	    >OpGet</a
-	    > v [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
+	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    >Termname</a
 	    >]</li
 	  ><li class="src short"
 	  ><a href="#v:getTermPair"
 	    >getTermPair</a
-	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:OpGet"
-	    >OpGet</a
-	    > v (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
+	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    >Termname</a
+	    >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    >Termname</a
 	    >)</li
 	  ><li class="src short"
 	  ><a href="#v:getTermPairs"
 	    >getTermPairs</a
-	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:OpGet"
-	    >OpGet</a
-	    > v [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >]</li
+	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c [(<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    >Termname</a
+	    >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    >Termname</a
+	    >)]</li
 	  ><li class="src short"
 	  ><a href="#v:getTermTrees"
 	    >getTermTrees</a
-	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:OpGet"
-	    >OpGet</a
-	    > v [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
 	    >Named</a
 	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
@@ -185,21 +191,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builti
 	    >getRelmap</a
 	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopUse"
 	    >RopUse</a
-	    > v -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
-	    >AbortOr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortTokens"
+	    >AbortTokens</a
 	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap"
 	    >Relmap</a
-	    > v)</li
+	    > c)</li
 	  ><li class="src short"
 	  ><a href="#v:getRelmaps"
 	    >getRelmaps</a
 	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopUse"
 	    >RopUse</a
-	    > v -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
-	    >AbortOr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortTokens"
+	    >AbortTokens</a
 	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap"
 	    >Relmap</a
-	    > v]</li
+	    > c]</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -210,8 +216,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builti
 	><p class="src"
 	  ><a name="v:getHead" class="def"
 	    >getHead</a
-	    > ::  [a] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
-	    >AbortOr</a
+	    > ::  [a] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortTokens"
+	    >AbortTokens</a
 	    > a<a href="src/Koshucode-Baala-Builtin-Get.html#getHead" class="link"
 	    >Source</a
 	    ></p
@@ -225,6 +231,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builti
 </p
 	    ></div
 	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:getSingleton" class="def"
+	    >getSingleton</a
+	    > ::  [a] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortTokens"
+	    >AbortTokens</a
+	    > a<a href="src/Koshucode-Baala-Builtin-Get.html#getSingleton" class="link"
+	    >Source</a
+	    ></p
+	  ></div
 	><h1 id="g:2"
 	>Get from RopUse
 </h1
@@ -232,9 +248,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builti
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:OpGet" class="def"
-	    >OpGet</a
-	    > v a<a href="src/Koshucode-Baala-Builtin-Get.html#OpGet" class="link"
+	    > <a name="t:RopGet" class="def"
+	    >RopGet</a
+	    > c b<a href="src/Koshucode-Baala-Builtin-Get.html#RopGet" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs arguments"
@@ -245,10 +261,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builti
 	      ><td class="src"
 		>&nbsp;= <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopUse"
 		  >RopUse</a
-		  > v</td
+		  > c</td
 		><td class="doc"
 		><p
-		  >Operator use
+		  >Use of relational operator
 </p
 		  ></td
 		></tr
@@ -265,9 +281,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builti
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
-		  >AbortOr</a
-		  > a</td
+		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortTokens"
+		  >AbortTokens</a
+		  > b</td
 		><td class="doc"
 		><p
 		  >Suboperand
@@ -281,9 +297,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builti
 	><p class="src"
 	  ><a name="v:getTree" class="def"
 	    >getTree</a
-	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:OpGet"
-	    >OpGet</a
-	    > v <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    ><a href="src/Koshucode-Baala-Builtin-Get.html#getTree" class="link"
 	    >Source</a
@@ -293,9 +309,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builti
 	><p class="src"
 	  ><a name="v:getTrees" class="def"
 	    >getTrees</a
-	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:OpGet"
-	    >OpGet</a
-	    > v [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >]<a href="src/Koshucode-Baala-Builtin-Get.html#getTrees" class="link"
 	    >Source</a
@@ -305,9 +321,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builti
 	><p class="src"
 	  ><a name="v:getWord" class="def"
 	    >getWord</a
-	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:OpGet"
-	    >OpGet</a
-	    > v <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    ><a href="src/Koshucode-Baala-Builtin-Get.html#getWord" class="link"
 	    >Source</a
@@ -317,7 +333,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builti
 	    >Get word from named operand.
 </p
 	    ><pre
-	    > consXxx :: RopCons v
+	    > consXxx :: RopCons c
  consXxx use = do
    sign &lt;- getWord use &quot;-sign&quot;
    ...
@@ -328,9 +344,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builti
 	><p class="src"
 	  ><a name="v:getInt" class="def"
 	    >getInt</a
-	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:OpGet"
-	    >OpGet</a
-	    > v <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
 	    ><a href="src/Koshucode-Baala-Builtin-Get.html#getInt" class="link"
 	    >Source</a
@@ -343,10 +359,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builti
 	><p class="src"
 	  ><a name="v:getTerm" class="def"
 	    >getTerm</a
-	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:OpGet"
-	    >OpGet</a
-	    > v <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
+	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    >Termname</a
 	    ><a href="src/Koshucode-Baala-Builtin-Get.html#getTerm" class="link"
 	    >Source</a
 	    ></p
@@ -360,10 +376,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builti
 	><p class="src"
 	  ><a name="v:getTerms" class="def"
 	    >getTerms</a
-	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:OpGet"
-	    >OpGet</a
-	    > v [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
+	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    >Termname</a
 	    >]<a href="src/Koshucode-Baala-Builtin-Get.html#getTerms" class="link"
 	    >Source</a
 	    ></p
@@ -377,12 +393,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builti
 	><p class="src"
 	  ><a name="v:getTermPair" class="def"
 	    >getTermPair</a
-	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:OpGet"
-	    >OpGet</a
-	    > v (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
+	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    >Termname</a
+	    >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    >Termname</a
 	    >)<a href="src/Koshucode-Baala-Builtin-Get.html#getTermPair" class="link"
 	    >Source</a
 	    ></p
@@ -391,13 +407,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builti
 	><p class="src"
 	  ><a name="v:getTermPairs" class="def"
 	    >getTermPairs</a
-	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:OpGet"
-	    >OpGet</a
-	    > v [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >]<a href="src/Koshucode-Baala-Builtin-Get.html#getTermPairs" class="link"
+	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c [(<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    >Termname</a
+	    >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    >Termname</a
+	    >)]<a href="src/Koshucode-Baala-Builtin-Get.html#getTermPairs" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -410,9 +426,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builti
 	><p class="src"
 	  ><a name="v:getTermTrees" class="def"
 	    >getTermTrees</a
-	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:OpGet"
-	    >OpGet</a
-	    > v [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+	    > ::  <a href="Koshucode-Baala-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
 	    >Named</a
 	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
@@ -429,11 +445,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builti
 	    >getRelmap</a
 	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopUse"
 	    >RopUse</a
-	    > v -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
-	    >AbortOr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortTokens"
+	    >AbortTokens</a
 	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap"
 	    >Relmap</a
-	    > v)<a href="src/Koshucode-Baala-Builtin-Get.html#getRelmap" class="link"
+	    > c)<a href="src/Koshucode-Baala-Builtin-Get.html#getRelmap" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -441,7 +457,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builti
 	    >Get a relmap from operator use.
 </p
 	    ><pre
-	    > consMeet :: (Ord v) =&gt; RopCons v
+	    > consMeet :: (Ord c) =&gt; RopCons c
  consMeet use = do
    m &lt;- getRelmap use
    Right $ relmapMeet use m
@@ -454,11 +470,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builti
 	    >getRelmaps</a
 	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopUse"
 	    >RopUse</a
-	    > v -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortOr"
-	    >AbortOr</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortTokens"
+	    >AbortTokens</a
 	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap"
 	    >Relmap</a
-	    > v]<a href="src/Koshucode-Baala-Builtin-Get.html#getRelmaps" class="link"
+	    > c]<a href="src/Koshucode-Baala-Builtin-Get.html#getRelmaps" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"

@@ -8,7 +8,7 @@
 --   <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-operator
-@version 0.32.0.0
+@version 0.37.0.0
 
 module Koshucode.Baala.Vanilla.Order
 data OrderCap v
@@ -21,91 +21,83 @@ instance Eq v => Eq (OrderCap v)
 instance Ord v => Ord (OrderCap v)
 
 
--- | Term content.
-module Koshucode.Baala.Vanilla.Type.Content
+-- | Content formula.
+module Koshucode.Baala.Vanilla.Type
 
--- | Type for values.
+-- | Vanilla type
 data VContent
-
--- | String type
-VText :: String -> VContent
-
--- | Integer type
-VInt :: Int -> VContent
 
 -- | Boolean type
 VBool :: Bool -> VContent
 
--- | List type
+-- | String type
+VText :: String -> VContent
+
+-- | Decimal number type
+VDec :: Decimal -> VContent
+
+-- | Sign of no ordinary type
+VNil :: VContent
+
+-- | List type (objective collection)
 VList :: [VContent] -> VContent
 
--- | Set type
+-- | Set type (informative collection)
 VSet :: [VContent] -> VContent
 
--- | List of terms
+-- | Termset type (set of terms)
 VTermset :: [Named VContent] -> VContent
 
 -- | Relation type
 VRel :: (Rel VContent) -> VContent
-
--- | Sign of no ordinary type
-VNil :: VContent
-binv :: (Int -> Int -> Int) -> VContent -> Map VContent
-toInt :: VContent -> Int
-toString :: VContent -> String
-valRangeMinMax :: VContent -> VContent -> [VContent]
+type VCop = CopEagerF VContent
+isMember :: VContent -> VContent -> Bool
 instance Show VContent
-instance Eq VContent
-instance Ord VContent
-instance CContent VContent
-instance Pretty VContent
 instance CRel VContent
 instance CTermset VContent
 instance CSet VContent
 instance CNil VContent
 instance CList VContent
 instance CText VContent
-instance CInt VContent
+instance CDec VContent
 instance CBool VContent
+instance Pretty VContent
+instance CContent VContent
 instance PrimContent VContent
-
-
--- | Relation on type <tt>Val</tt>
-module Koshucode.Baala.Vanilla.Type.Relval
-terms :: [String] -> [Relterm]
-unionUpTerm :: Name a => [String] -> [a] -> [Relterm]
+instance Ord VContent
+instance Eq VContent
 
 
 -- | Content operators.
 module Koshucode.Baala.Vanilla.Cop.Arith
-copArith :: [Named (Cop VContent)]
+copsArith :: [Named (Cop VContent)]
 
 
 -- | Content operators.
 module Koshucode.Baala.Vanilla.Cop.List
-copList :: [Named (Cop VContent)]
+copsList :: [Named (Cop VContent)]
 
 
 -- | Content operators.
 module Koshucode.Baala.Vanilla.Cop.Literal
-copLiteral :: [Named (Cop VContent)]
+copsLiteral :: [Named (Cop VContent)]
 
 
 -- | Content operators.
 module Koshucode.Baala.Vanilla.Cop.Logic
-copLogic :: [Named (Cop VContent)]
+copsLogic :: [Named (Cop VContent)]
 
 
 -- | Content operators.
 module Koshucode.Baala.Vanilla.Cop.Order
-copOrder :: [Named (Cop VContent)]
+copsOrder :: [Named (Cop VContent)]
 
 
 -- | Content formula.
 module Koshucode.Baala.Vanilla.Cop
-vanillaContent :: RopUse VContent -> TokenTree -> AbortOr (PosCox VContent)
-vanillaNamedContent :: RopUse VContent -> Named TokenTree -> AbortOr (Named (PosCox VContent))
-vanillaNamedContents :: RopUse VContent -> [Named TokenTree] -> AbortOr [Named (PosCox VContent)]
+vanillaContent :: RopUse VContent -> TokenTree -> AbortTokens (PosCox VContent)
+vanillaNamedContent :: RopUse VContent -> Named TokenTree -> AbortTokens (Named (PosCox VContent))
+vanillaNamedContents :: RopUse VContent -> [Named TokenTree] -> AbortTokens [Named (PosCox VContent)]
 
 
 -- | Parsing list of terms.
@@ -114,132 +106,149 @@ module Koshucode.Baala.Builtin.Term
 -- | Extract a list of term names.
 --   
 --   <pre>
---   &gt;&gt;&gt; termnames . tokenTrees . tokens $ "/a /b /c"
+--   &gt;&gt;&gt; termnames . B.tokenTrees . B.tokens $ "/a /b /c"
 --   Right ["/a", "/b", "/c"]
 --   </pre>
-termnames :: [TokenTree] -> AbortOr [String]
-termname2 :: [TokenTree] -> AbortOr (String, String)
+termnames :: [TokenTree] -> AbortTokens [Termname]
 
 -- | Extract a list of name-and-name pairs.
 --   
 --   <pre>
---   &gt;&gt;&gt; termnamePairs . tokenTrees . tokens $ "/a /x /b /y"
+--   &gt;&gt;&gt; termnamePairs . B.tokenTrees . B.tokens $ "/a /x /b /y"
 --   Right [("/a", "/x"), ("/b", "/y")]
 --   </pre>
-termnamePairs :: [TokenTree] -> AbortOr [(String, String)]
+termnamePairs :: [TokenTree] -> AbortTokens [(Termname, Termname)]
 
 -- | Extract a list of name-and-tree pairs.
 --   
 --   <pre>
---   &gt;&gt;&gt; termTreePairs . tokenTrees . tokens $ "/a 'A3' /b 10"
---   Right [("/a", TreeL (TWord 3 1 "A3")),
---          ("/b", TreeL (TWord 7 0 "10"))]
+--   &gt;&gt;&gt; termTreePairs . B.tokenTrees . B.tokens $ "/a 'A3 /b 10 /c"
+--   Right [ ("/a", TreeB 1 [ TreeL (TWord 3 0 "'")
+--                         , TreeL (TWord 4 0 "A3") ])
+--         , ("/b", TreeL (TWord 8 0 "10"))
+--         , ("/c", TreeB 1 []) ]
 --   </pre>
-termTreePairs :: [TokenTree] -> AbortOr [Named TokenTree]
+termTreePairs :: [TokenTree] -> AbortTokens [Named TokenTree]
 
 
 -- | Class for operand patterns
 module Koshucode.Baala.Builtin.Pattern
 
 -- | Class for operand pattern.
-class OpPattern p where opParser p = opParser' p . operandGroup opParser' _ = id
-opParser :: OpPattern p => p -> RopParser
-opParser' :: OpPattern p => p -> RopParser'
-opPart :: OpPattern p => p -> [String]
-opUsage :: OpPattern p => p -> [String]
+class RopPattern p where ropSorter _ = id
+ropSorter :: RopPattern p => p -> RopSorter
+ropPart :: RopPattern p => p -> [String]
 
 -- | Make implementations of relational operators.
-operators :: OpPattern p => String -> [(String, p, RopCons v)] -> [Rop v]
+ropList :: RopPattern p => String -> [(String, p, RopCons c)] -> [Rop c]
+
+module Koshucode.Baala.Builtin.Operator
+
+-- | <a>RopPattern</a> for builtin operators.
+data BuiltinOperand
+
+-- | no operand
+LikeId :: BuiltinOperand
+builtinRops :: [Rop c]
+instance Show BuiltinOperand
+instance Eq BuiltinOperand
+instance Enum BuiltinOperand
+instance RopPattern BuiltinOperand
 
 
 -- | Extract suboperand
 module Koshucode.Baala.Builtin.Get
 
 -- | Abortable <a>head</a>
-getHead :: [a] -> AbortOr a
-type OpGet v a = RopUse v -> String -> AbortOr a
-getTree :: OpGet v TokenTree
-getTrees :: OpGet v [TokenTree]
+getHead :: [a] -> AbortTokens a
+getSingleton :: [a] -> AbortTokens a
+type RopGet c b = RopUse c -> String -> AbortTokens b
+getTree :: RopGet c TokenTree
+getTrees :: RopGet c [TokenTree]
 
 -- | Get word from named operand.
 --   
 --   <pre>
---   consXxx :: RopCons v
+--   consXxx :: RopCons c
 --   consXxx use = do
 --     sign &lt;- getWord use "-sign"
 --     ...
 --   </pre>
-getWord :: OpGet v String
-getInt :: OpGet v Int
+getWord :: RopGet c String
+getInt :: RopGet c Int
 
 -- | Get a term name from named operand.
-getTerm :: OpGet v String
+getTerm :: RopGet c Termname
 
 -- | Get list of term names from named operand.
-getTerms :: OpGet v [String]
-getTermPair :: OpGet v (Named String)
+getTerms :: RopGet c [Termname]
+getTermPair :: RopGet c (Termname, Termname)
 
 -- | Get list of term-name pairs from named operand.
-getTermPairs :: OpGet v [Named String]
-getTermTrees :: OpGet v [Named TokenTree]
+getTermPairs :: RopGet c [(Termname, Termname)]
+getTermTrees :: RopGet c [Named TokenTree]
 
 -- | Get a relmap from operator use.
 --   
 --   <pre>
---   consMeet :: (Ord v) =&gt; RopCons v
+--   consMeet :: (Ord c) =&gt; RopCons c
 --   consMeet use = do
 --     m &lt;- getRelmap use
 --     Right $ relmapMeet use m
 --   </pre>
-getRelmap :: RopUse v -> AbortOr (Relmap v)
+getRelmap :: RopUse c -> AbortTokens (Relmap c)
 
 -- | Get relmaps from operator use.
-getRelmaps :: RopUse v -> AbortOr [Relmap v]
+getRelmaps :: RopUse c -> AbortTokens [Relmap c]
 
 
--- | Kit for implementing relational operators
+-- | Builtin relational operator.
 module Koshucode.Baala.Builtin
 
--- | <a>OpPattern</a> for builtin operators.
-data BuiltinOperand
 
--- | no operand
-LikeId :: BuiltinOperand
-builtinRops :: Ord c => [Rop c]
-instance Show BuiltinOperand
-instance Eq BuiltinOperand
-instance Enum BuiltinOperand
-instance OpPattern BuiltinOperand
-
-
--- | Operand patterns
+-- | Minimal operand patterns.
 module Koshucode.Baala.Minimal.Operand
 
--- | <a>OpPattern</a> for minimal operators
+-- | <tt>RopPattern</tt> for minimal operators
 data MinimalOperand
-
--- | no operand
 LikeId :: MinimalOperand
 
--- | { <tt>-relmap</tt> } relmap [ <tt>-share</tt> /name ... ]
+-- | <a>likeMeet</a> sorter
 LikeMeet :: MinimalOperand
 
--- | { <tt>-term</tt> } /name ...
+-- | <a>likePick</a> sorter
 LikePick :: MinimalOperand
 
--- | { <tt>-term</tt> } /new /old ...
-LikeRename :: MinimalOperand
-
--- | { <tt>-sign</tt> } relsign { <tt>-term</tt> } /name ...
+-- | <a>likeSource</a> sorter
 LikeSource :: MinimalOperand
-likePick :: RopParser'
-likeMeet :: RopParser'
-likeRename :: RopParser'
-likeSource :: RopParser'
+
+-- | This sorter recognizes <tt>-term</tt> operand.
+--   
+--   <pre>
+--   pick /a /b
+--   pick -term /a /b 
+--   </pre>
+likePick :: RopSorter
+
+-- | This sorter recognizes <tt>-relmap</tt> operand.
+--   
+--   <pre>
+--   meet a
+--   meet -relmap a 
+--   </pre>
+likeMeet :: RopSorter
+
+-- | This sorter recognizes <tt>-sign</tt> and <tt>-term</tt> operand.
+--   
+--   <pre>
+--   source A /a /b
+--   source -sign A -term /a /b 
+--   </pre>
+likeSource :: RopSorter
 instance Show MinimalOperand
 instance Eq MinimalOperand
 instance Enum MinimalOperand
-instance OpPattern MinimalOperand
+instance RopPattern MinimalOperand
 
 
 -- | Restrict by relation
@@ -266,14 +275,14 @@ ropConsMeet :: Ord c => RopCons c
 relmapMeet :: Ord c => RopUse c -> Relmap c -> Relmap c
 
 -- | Meet two relations.
-relMeet :: Ord c => Rel c -> Rel c -> AbOr (Rel c)
+relMeet :: Ord c => Rel c -> Rel c -> Ab (Rel c)
 ropConsJoin :: Ord c => RopCons c
 
 -- | Join two relations.
 relmapJoin :: Ord c => RopUse c -> Relmap c -> Relmap c
 
 -- | Join two relations.
-relJoin :: Ord c => Rel c -> Rel c -> AbOr (Rel c)
+relJoin :: Ord c => Rel c -> Rel c -> Ab (Rel c)
 
 
 -- | Unary relational operators.
@@ -291,12 +300,15 @@ relmapEmpty :: RopUse c -> Relmap c
 
 -- | Throw away all tuples in a relation.
 relEmpty :: AbMap (Rel c)
-ropConsCut :: Ord c => RopCons c
-relmapCut :: Ord c => RopUse c -> [String] -> Relmap c
-relCut :: Ord c => [String] -> AbMap (Rel c)
 ropConsPick :: Ord c => RopCons c
 relmapPick :: Ord c => RopUse c -> [String] -> Relmap c
 relPick :: Ord c => [String] -> AbMap (Rel c)
+ropConsCut :: Ord c => RopCons c
+relmapCut :: Ord c => RopUse c -> [String] -> Relmap c
+relCut :: Ord c => [String] -> AbMap (Rel c)
+ropConsFront :: Ord c => RopCons c
+relmapFront :: Ord c => RopUse c -> [String] -> Relmap c
+relFront :: Ord c => [String] -> AbMap (Rel c)
 ropConsRename :: RopCons c
 relmapRename :: RopUse c -> [(String, String)] -> Relmap c
 
@@ -305,7 +317,7 @@ relRename :: [(String, String)] -> AbMap (Rel c)
 
 
 -- | Minimal implementations of relmaps
-module Koshucode.Baala.Minimal.Implement
+module Koshucode.Baala.Minimal.Operator
 
 -- | Minimal implementations of relmaps.
 minimalRops :: Ord c => [Rop c]
@@ -314,43 +326,27 @@ minimalRops :: Ord c => [Rop c]
 -- | Minimal relational operators
 module Koshucode.Baala.Minimal
 
-module Koshucode.Baala.Vanilla.Relmap.Binary
-relopMaybe :: RopCons VContent
-relmapMaybe :: (Ord c, CNil c) => RopUse c -> Relmap c
-
--- | like SQL's left join
-relMaybe :: (Ord c, CNil c) => Rel c -> AbMap (Rel c)
-relopMaybeBoth :: RopCons VContent
-
--- | like SQL's full join
-relmapMaybeBoth :: (Ord c, CNil c) => RopUse c -> Relmap c
-relopHang :: RopCons VContent
-relmapHang :: (Ord c, CRel c) => RopUse c -> String -> Relmap c
-
--- | Hanging relation, like grouping.
-relHang :: (Ord c, CRel c) => String -> Rel c -> AbMap (Rel c)
-
 
 module Koshucode.Baala.Vanilla.Relmap.Calc
-relopAdd :: RopCons VContent
+ropConsAdd :: RopCons VContent
 relmapAdd :: RopUse VContent -> [Named (PosCox VContent)] -> Relmap VContent
-relAdd :: [Named (PosCox VContent)] -> Rel VContent -> AbOr (Rel VContent)
-relopHold :: RopCons VContent
+relAdd :: [Named (PosCox VContent)] -> Rel VContent -> Ab (Rel VContent)
+ropConsHold :: RopCons VContent
 relmapHold :: RopUse VContent -> Bool -> (PosCox VContent) -> Relmap VContent
 relHold :: (CContent c, Show c) => Bool -> (PosCox c) -> AbMap (Rel c)
 
 module Koshucode.Baala.Vanilla.Relmap.Naming
-relopPrefix :: RopCons VContent
+ropConsPrefix :: RopCons VContent
 relmapPrefix :: RopUse c -> String -> [String] -> Relmap c
 
 -- | Add prefix to terms.
 relPrefix :: String -> [String] -> AbMap (Rel c)
-relopUnprefix :: RopCons VContent
+ropConsUnprefix :: RopCons VContent
 relmapUnprefix :: RopUse c -> String -> Relmap c
 
 -- | Remove prefix
 relUnprefix :: String -> AbMap (Rel c)
-relopPrefixChange :: RopCons VContent
+ropConsPrefixChange :: RopCons VContent
 relmapPrefixChange :: RopUse c -> String -> String -> Relmap c
 
 -- | Change prefix
@@ -358,76 +354,146 @@ relPrefixChange :: String -> String -> AbMap (Rel c)
 
 module Koshucode.Baala.Vanilla.Relmap.Operand
 
--- | <a>OpPattern</a> for relational operations.
+-- | <a>RopPattern</a> for relational operations.
 data VanillaOperand
+
+-- | <a>likeGroup</a> sorter
+LikeGroup :: VanillaOperand
+LikeHold :: VanillaOperand
 LikeId :: VanillaOperand
 
--- | Boolean expression
-LikeHold :: VanillaOperand
-
--- | List of new term and expression
-LikeVal :: VanillaOperand
-
--- | Relmap and maybe shared terms
+-- | <a>likeMeet</a> sorter
 LikeMeet :: VanillaOperand
 
--- | Prefix. <tt>-prefix</tt>, <tt>-term</tt>
+-- | <a>likePos</a> sorter
+LikePos :: VanillaOperand
+
+-- | <a>likePrefix</a> sorter
 LikePrefix :: VanillaOperand
 
--- | Relsign and list of terms
-LikeSource :: VanillaOperand
-
--- | Prefix. <tt>-prefix</tt>
-LikeUnprefix :: VanillaOperand
-
--- | Prefix. <tt>-new</tt>, <tt>-old</tt>
+-- | <a>likePrefixChange</a> sorter
 LikePrefixChange :: VanillaOperand
 
--- | Size. <tt>-term</tt>
+-- | <a>likeSize</a> sorter
 LikeSize :: VanillaOperand
-likePrefix :: RopParser'
-likeUnprefix :: RopParser'
-likePrefixChange :: RopParser'
-likeSize :: RopParser'
+LikeSource :: VanillaOperand
+
+-- | <a>likeUnprefix</a> sorter
+LikeUnprefix :: VanillaOperand
+LikeVal :: VanillaOperand
+
+-- | This sorter recognizes <tt>-term</tt> and <tt>-relamp</tt> operands.
+--   
+--   <pre>
+--   group /r a
+--   group -term /r -relmap a  
+--   </pre>
+likeGroup :: RopSorter
+
+-- | This sorter recognizes <tt>-1</tt> and <tt>-2</tt> operands.
+--   
+--   <pre>
+--   elem /x /xs
+--   elem -1 /x -2 /xs  
+--   </pre>
+likePos :: RopSorter
+
+-- | This sorter recognizes <tt>-prefix</tt> and <tt>-term</tt> operands.
+--   
+--   <pre>
+--   prefix /x- /a /b /c
+--   prefix -prefix /x- -term /a /b /c  
+--   </pre>
+likePrefix :: RopSorter
+
+-- | This sorter recognizes <tt>-new</tt> and <tt>-old</tt> operands.
+--   
+--   <pre>
+--   prefix-change /y- /x-
+--   prefix-change -new /y- -old /x-  
+--   </pre>
+likePrefixChange :: RopSorter
+
+-- | This sorter recognizes <tt>-term</tt> operand.
+--   
+--   <pre>
+--   size /s
+--   size -term /s  
+--   </pre>
+likeSize :: RopSorter
+
+-- | This sorter recognizes <tt>-prefix</tt> operand.
+--   
+--   <pre>
+--   unprefix /x-
+--   unprefix -prefix /x-  
+--   </pre>
+likeUnprefix :: RopSorter
 instance Show VanillaOperand
 instance Eq VanillaOperand
 instance Enum VanillaOperand
-instance OpPattern VanillaOperand
+instance RopPattern VanillaOperand
+
+module Koshucode.Baala.Vanilla.Relmap.Binary
+ropConsMaybe :: RopCons VContent
+relmapMaybe :: (Ord c, CNil c) => RopUse c -> Map (Relmap c)
+
+-- | like SQL's left join
+relMaybe :: (Ord c, CNil c) => Rel c -> AbMap (Rel c)
+ropConsMaybeBoth :: RopCons VContent
+
+-- | like SQL's full join
+relmapMaybeBoth :: (Ord c, CNil c) => RopUse c -> Map (Relmap c)
+ropConsGroup :: RopCons VContent
+relmapGroup :: (Ord c, CRel c) => RopUse c -> String -> Map (Relmap c)
+
+-- | Grouping relation.
+relGroup :: (Ord c, CRel c) => String -> Rel c -> AbMap (Rel c)
 
 module Koshucode.Baala.Vanilla.Relmap.Unary
-relopSize :: RopCons VContent
-relmapSize :: CInt c => RopUse c -> String -> Relmap c
+ropConsSize :: RopCons VContent
+relmapSize :: CDec c => RopUse c -> String -> Relmap c
 
 -- | Change terms names
-relSize :: CInt c => String -> AbMap (Rel c)
-relopConf :: RopCons VContent
+relSize :: CDec c => String -> AbMap (Rel c)
+ropConsConf :: RopCons VContent
 relmapConf :: CText c => RopUse c -> String -> Relmap c
 
 -- | Change terms names
 relConf :: CText c => String -> AbMap (Rel c)
-relopEnclose :: RopCons VContent
+ropConsEnclose :: RopCons VContent
 relmapEnclose :: CRel c => RopUse c -> String -> Relmap c
 
 -- | Enclose the current relation in a term.
 relEnclose :: CRel c => String -> AbMap (Rel c)
-relopRank :: RopCons VContent
-relmapRank :: (CInt c, Ord c) => RopUse c -> String -> [String] -> Relmap c
-relRank :: (CInt c, Ord c) => String -> [String] -> AbMap (Rel c)
+ropConsRank :: RopCons VContent
+relmapRank :: (CDec c, Ord c) => RopUse c -> String -> [String] -> Relmap c
+relRank :: (CDec c, Ord c) => String -> [String] -> AbMap (Rel c)
 
 -- | Keep leading tuples.
 limit :: Ord c => RopUse c -> Int -> String -> Relmap c
-relopTypename :: CContent c => RopCons c
+ropConsTypename :: CContent c => RopCons c
 relmapTypename :: CContent c => RopUse c -> String -> String -> Relmap c
 
 -- | Get typename.
 relTypename :: CContent c => String -> String -> AbMap (Rel c)
-relopRange :: RopCons VContent
-relmapRange :: CInt c => RopUse c -> String -> Int -> Int -> Relmap c
+ropConsRange :: RopCons VContent
+relmapRange :: CDec c => RopUse c -> String -> Int -> Int -> Relmap c
+ropConsMember :: RopCons VContent
+relmapMember :: RopUse VContent -> String -> String -> Relmap VContent
+relMember :: String -> String -> AbMap (Rel VContent)
+ropConsRdf :: RopCons VContent
 
-module Koshucode.Baala.Vanilla.Relmap.Implement
+
+-- | Vanilla relational operators.
+module Koshucode.Baala.Vanilla.Relmap.Operator
 
 -- | Implementation of relational operators.
 vanillaRops :: [Rop VContent]
+
+
+-- | Content formula.
+module Koshucode.Baala.Vanilla.Relmap
 
 
 -- | Quasiquoter of Koshucode

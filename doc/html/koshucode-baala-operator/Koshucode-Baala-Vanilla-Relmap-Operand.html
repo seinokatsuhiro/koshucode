@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-operator-0.32.0.0: Relational operators in Koshucode</p
+      >koshucode-baala-operator-0.37.0.0: Relational operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -45,6 +45,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 	><p class="caption"
 	>Koshucode.Baala.Vanilla.Relmap.Operand</p
 	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Operand pattern
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Operand sorter
+</a
+	    ></li
+	  ></ul
+	></div
       ><div id="synopsis"
       ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
 	>Synopsis</p
@@ -56,24 +72,36 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 	    >VanillaOperand</a
 	    > <ul class="subs"
 	    ><li
-	      >= <a href="#v:LikeId"
-		>LikeId</a
+	      >= <a href="#v:LikeGroup"
+		>LikeGroup</a
 		>  </li
 	      ><li
 	      >| <a href="#v:LikeHold"
 		>LikeHold</a
 		>  </li
 	      ><li
-	      >| <a href="#v:LikeVal"
-		>LikeVal</a
+	      >| <a href="#v:LikeId"
+		>LikeId</a
 		>  </li
 	      ><li
 	      >| <a href="#v:LikeMeet"
 		>LikeMeet</a
 		>  </li
 	      ><li
+	      >| <a href="#v:LikePos"
+		>LikePos</a
+		>  </li
+	      ><li
 	      >| <a href="#v:LikePrefix"
 		>LikePrefix</a
+		>  </li
+	      ><li
+	      >| <a href="#v:LikePrefixChange"
+		>LikePrefixChange</a
+		>  </li
+	      ><li
+	      >| <a href="#v:LikeSize"
+		>LikeSize</a
 		>  </li
 	      ><li
 	      >| <a href="#v:LikeSource"
@@ -84,44 +112,53 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 		>LikeUnprefix</a
 		>  </li
 	      ><li
-	      >| <a href="#v:LikePrefixChange"
-		>LikePrefixChange</a
-		>  </li
-	      ><li
-	      >| <a href="#v:LikeSize"
-		>LikeSize</a
+	      >| <a href="#v:LikeVal"
+		>LikeVal</a
 		>  </li
 	      ></ul
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:likePrefix"
-	    >likePrefix</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopParser-39-"
-	    >RopParser'</a
+	  ><a href="#v:likeGroup"
+	    >likeGroup</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopSorter"
+	    >RopSorter</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:likeUnprefix"
-	    >likeUnprefix</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopParser-39-"
-	    >RopParser'</a
+	  ><a href="#v:likePos"
+	    >likePos</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopSorter"
+	    >RopSorter</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:likePrefix"
+	    >likePrefix</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopSorter"
+	    >RopSorter</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:likePrefixChange"
 	    >likePrefixChange</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopParser-39-"
-	    >RopParser'</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopSorter"
+	    >RopSorter</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:likeSize"
 	    >likeSize</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopParser-39-"
-	    >RopParser'</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopSorter"
+	    >RopSorter</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:likeUnprefix"
+	    >likeUnprefix</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopSorter"
+	    >RopSorter</a
 	    ></li
 	  ></ul
 	></div
       ><div id="interface"
-      ><h1
-	>Documentation</h1
+      ><h1 id="g:1"
+	>Operand pattern
+</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -134,10 +171,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 	  ><div class="doc"
 	  ><p
 	    ><code
-	      ><a href="Mini.html#t:OpPattern"
-		>OpPattern</a
+	      ><a href="Mini.html#t:RopPattern"
+		>RopPattern</a
 		></code
-	      > for relational operations.
+	      > for relational operations. 
 </p
 	    ></div
 	  ><div class="subs constructors"
@@ -145,6 +182,29 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 	    >Constructors</p
 	    ><table
 	    ><tr
+	      ><td class="src"
+		><a name="v:LikeGroup" class="def"
+		  >LikeGroup</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><code
+		    ><a href="Koshucode-Baala-Vanilla-Relmap-Operand.html#v:likeGroup"
+		      >likeGroup</a
+		      ></code
+		    > sorter
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:LikeHold" class="def"
+		  >LikeHold</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
 	      ><td class="src"
 		><a name="v:LikeId" class="def"
 		  >LikeId</a
@@ -154,34 +214,31 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:LikeHold" class="def"
-		  >LikeHold</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Boolean expression 
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:LikeVal" class="def"
-		  >LikeVal</a
-		  ></td
-		><td class="doc"
-		><p
-		  >List of new term and expression 
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
 		><a name="v:LikeMeet" class="def"
 		  >LikeMeet</a
 		  ></td
 		><td class="doc"
 		><p
-		  >Relmap and maybe shared terms 
+		  ><code
+		    ><a href="Koshucode-Baala-Minimal-Operand.html#v:likeMeet"
+		      >likeMeet</a
+		      ></code
+		    > sorter
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:LikePos" class="def"
+		  >LikePos</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><code
+		    ><a href="Koshucode-Baala-Vanilla-Relmap-Operand.html#v:likePos"
+		      >likePos</a
+		      ></code
+		    > sorter
 </p
 		  ></td
 		></tr
@@ -192,37 +249,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 		  ></td
 		><td class="doc"
 		><p
-		  >Prefix.
-        <code
-		    >-prefix</code
-		    >, <code
-		    >-term</code
-		    > 
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:LikeSource" class="def"
-		  >LikeSource</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Relsign and list of terms 
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:LikeUnprefix" class="def"
-		  >LikeUnprefix</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Prefix.
-        <code
-		    >-prefix</code
-		    > 
+		  ><code
+		    ><a href="Koshucode-Baala-Vanilla-Relmap-Operand.html#v:likePrefix"
+		      >likePrefix</a
+		      ></code
+		    > sorter
 </p
 		  ></td
 		></tr
@@ -233,12 +264,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 		  ></td
 		><td class="doc"
 		><p
-		  >Prefix.
-        <code
-		    >-new</code
-		    >, <code
-		    >-old</code
-		    > 
+		  ><code
+		    ><a href="Koshucode-Baala-Vanilla-Relmap-Operand.html#v:likePrefixChange"
+		      >likePrefixChange</a
+		      ></code
+		    > sorter
 </p
 		  ></td
 		></tr
@@ -249,12 +279,44 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 		  ></td
 		><td class="doc"
 		><p
-		  >Size.
-        <code
-		    >-term</code
-		    > 
+		  ><code
+		    ><a href="Koshucode-Baala-Vanilla-Relmap-Operand.html#v:likeSize"
+		      >likeSize</a
+		      ></code
+		    > sorter
 </p
 		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:LikeSource" class="def"
+		  >LikeSource</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:LikeUnprefix" class="def"
+		  >LikeUnprefix</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><code
+		    ><a href="Koshucode-Baala-Vanilla-Relmap-Operand.html#v:likeUnprefix"
+		      >likeUnprefix</a
+		      ></code
+		    > sorter
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:LikeVal" class="def"
+		  >LikeVal</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
 		></tr
 	      ></table
 	    ></div
@@ -295,8 +357,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 		  ></tr
 		><tr
 		><td class="src"
-		  ><a href="Koshucode-Baala-Builtin-Pattern.html#t:OpPattern"
-		    >OpPattern</a
+		  ><a href="Koshucode-Baala-Builtin-Pattern.html#t:RopPattern"
+		    >RopPattern</a
 		    > <a href="Koshucode-Baala-Vanilla-Relmap-Operand.html#t:VanillaOperand"
 		    >VanillaOperand</a
 		    ></td
@@ -307,45 +369,142 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 	      ></div
 	    ></div
 	  ></div
+	><h1 id="g:2"
+	>Operand sorter
+</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:likeGroup" class="def"
+	    >likeGroup</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopSorter"
+	    >RopSorter</a
+	    ><a href="src/Koshucode-Baala-Vanilla-Relmap-Operand.html#likeGroup" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >This sorter recognizes <code
+	      >-term</code
+	      > and <code
+	      >-relamp</code
+	      > operands.
+</p
+	    ><pre
+	    > group /r a
+ group -term /r -relmap a  
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:likePos" class="def"
+	    >likePos</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopSorter"
+	    >RopSorter</a
+	    ><a href="src/Koshucode-Baala-Vanilla-Relmap-Operand.html#likePos" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >This sorter recognizes <code
+	      >-1</code
+	      > and <code
+	      >-2</code
+	      > operands.
+</p
+	    ><pre
+	    > elem /x /xs
+ elem -1 /x -2 /xs  
+</pre
+	    ></div
+	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:likePrefix" class="def"
 	    >likePrefix</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopParser-39-"
-	    >RopParser'</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopSorter"
+	    >RopSorter</a
 	    ><a href="src/Koshucode-Baala-Vanilla-Relmap-Operand.html#likePrefix" class="link"
 	    >Source</a
 	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:likeUnprefix" class="def"
-	    >likeUnprefix</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopParser-39-"
-	    >RopParser'</a
-	    ><a href="src/Koshucode-Baala-Vanilla-Relmap-Operand.html#likeUnprefix" class="link"
-	    >Source</a
-	    ></p
+	  ><div class="doc"
+	  ><p
+	    >This sorter recognizes <code
+	      >-prefix</code
+	      > and <code
+	      >-term</code
+	      > operands.
+</p
+	    ><pre
+	    > prefix /x- /a /b /c
+ prefix -prefix /x- -term /a /b /c  
+</pre
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:likePrefixChange" class="def"
 	    >likePrefixChange</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopParser-39-"
-	    >RopParser'</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopSorter"
+	    >RopSorter</a
 	    ><a href="src/Koshucode-Baala-Vanilla-Relmap-Operand.html#likePrefixChange" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >This sorter recognizes <code
+	      >-new</code
+	      > and <code
+	      >-old</code
+	      > operands.
+</p
+	    ><pre
+	    > prefix-change /y- /x-
+ prefix-change -new /y- -old /x-  
+</pre
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:likeSize" class="def"
 	    >likeSize</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopParser-39-"
-	    >RopParser'</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopSorter"
+	    >RopSorter</a
 	    ><a href="src/Koshucode-Baala-Vanilla-Relmap-Operand.html#likeSize" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >This sorter recognizes <code
+	      >-term</code
+	      > operand.
+</p
+	    ><pre
+	    > size /s
+ size -term /s  
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:likeUnprefix" class="def"
+	    >likeUnprefix</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopSorter"
+	    >RopSorter</a
+	    ><a href="src/Koshucode-Baala-Vanilla-Relmap-Operand.html#likeUnprefix" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >This sorter recognizes <code
+	      >-prefix</code
+	      > operand.
+</p
+	    ><pre
+	    > unprefix /x-
+ unprefix -prefix /x-  
+</pre
+	    ></div
 	  ></div
 	></div
       ></div
