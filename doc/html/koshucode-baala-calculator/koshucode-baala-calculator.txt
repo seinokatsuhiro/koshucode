@@ -9,24 +9,7 @@
 --   <a>koshu</a> command. <a>koshu</a> reads koshucode data, calculates
 --   it, and writes the result.
 @package koshucode-baala-calculator
-@version 0.29.0.0
-
-module Koshucode.Baala.Toolkit.Library.Comment
-data CommentDoc
-CommentDoc :: [CommentSec] -> CommentDoc
-data CommentSec
-CommentSec :: String -> [String] -> CommentSec
-class Texts a
-texts :: Texts a => a -> [String]
-emacsModeComment :: String
-instance Show CommentSec
-instance Eq CommentSec
-instance Ord CommentSec
-instance Show CommentDoc
-instance Eq CommentDoc
-instance Ord CommentDoc
-instance Texts CommentSec
-instance Texts CommentDoc
+@version 0.37.0.0
 
 module Koshucode.Baala.Toolkit.Library.Version
 versionString :: String
@@ -37,15 +20,16 @@ SectionSource :: Section c -> [String] -> [FilePath] -> SectionSource c
 rootSection :: SectionSource c -> Section c
 textSections :: SectionSource c -> [String]
 fileSections :: SectionSource c -> [FilePath]
-runFiles :: CContent v => SectionSource v -> IO ()
+runFiles :: CContent c => SectionSource c -> IO ()
 
 -- | Read and union sections from files, and run the section.
-hRunFiles :: CContent v => Handle -> SectionSource v -> IO ()
+hRunFiles :: CContent c => Handle -> SectionSource c -> IO ()
 concatMM :: (Monad m, Monoid a) => [m a] -> m a
-runCalc :: CContent v => SectionSource v -> IO ()
-runCalcTo :: CContent v => FilePath -> SectionSource v -> IO ()
+runCalc :: CContent c => SectionSource c -> IO ()
+runCalcTo :: CContent c => FilePath -> SectionSource c -> IO ()
 theContent :: CContent c => String -> [Named c] -> Maybe c
-readSec :: CContent v => SectionSource v -> IO (AbortOr (Section v))
+readSec :: CContent c => SectionSource c -> IO (AbortOr (Section c))
+readSecList :: CContent c => SectionSource c -> IO (AbortOr [Section c])
 mkdir :: FilePath -> IO ()
 instance Show c => Show (SectionSource c)
 
@@ -59,12 +43,17 @@ putSuccess :: String -> IO a
 putFailure :: String -> IO a
 currentEncodings :: IO (String)
 
+module Koshucode.Baala.Toolkit.Library.Element
+
+-- | Retrive constituents of sections.
+sectionElem :: CContent c => Section c -> [Judge c]
+
 
 -- | A portable relational calculator.
 module Koshucode.Baala.Toolkit.Main.KoshuMain
 
--- | The main function for <tt>koshu</tt> command. See
---   <a>vanillaOperators</a> for default argument.
-koshuMain :: CContent v => [OpImplement v] -> IO ()
+-- | The main function for <tt>koshu</tt> command. See <a>vanillaRops</a>
+--   for default argument.
+koshuMain :: CContent c => [Rop c] -> IO ()
 instance Show Option
 instance Eq Option
