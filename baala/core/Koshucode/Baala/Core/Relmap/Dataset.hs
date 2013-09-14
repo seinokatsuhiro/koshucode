@@ -1,13 +1,14 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Dataset as a set of judges.
---
---   Dataset is like a bridge of judges and relations.
---   We can get a relation from a dataset,
---   that dataset is build from judges.
+{-| Dataset as a set of judges.
+
+    Dataset is like a bridge of judges and relations.
+    We can get a relation from a dataset,
+    that dataset is build from judges.  -}
 
 module Koshucode.Baala.Core.Relmap.Dataset
 ( Dataset,
+  RelSelect,
   emptyDataset,
   dataset,
   addJudges,
@@ -16,40 +17,40 @@ module Koshucode.Baala.Core.Relmap.Dataset
 
 import qualified Data.Map   as Map
 import qualified Data.Maybe as Maybe
-
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core.Content as C
 
--- | Dataset is a set of judges.
+{-| Dataset is a set of judges. -}
 data Dataset c = Dataset (Map.Map B.JudgePattern [[B.Named c]])
 
--- | Dataset that has no judges
+{-| Relation selector -}
+type RelSelect c = B.JudgePattern -> [String] -> B.Rel c
+
+{-| Dataset that has no judges -}
 emptyDataset :: Dataset c
 emptyDataset = Dataset Map.empty
 
--- | Gather judges into a dataset
+{-| Gather judges into a dataset -}
 dataset :: [B.Judge c] -> Dataset c
 dataset js = addJudges js emptyDataset
 
--- | Add judges to dataset.
+{-| Add judges to dataset. -}
 addJudges :: [B.Judge c] -> Dataset c -> Dataset c
 addJudges js ds1 = foldr addJudge ds1 js
 
--- | Add a judge to dataset.
+{-| Add a judge to dataset. -}
 addJudge :: B.Judge c -> Dataset c -> Dataset c
 addJudge (B.Judge True sign xs) (Dataset ds1) = Dataset ds2 where
     ds2 = Map.insertWith add sign [xs] ds1
     add new old = new ++ old
 addJudge (B.Judge False _ _) _ = undefined
 
--- | Select relation from dataset.
---   If a giving term is not in judges, 'CNil' sign is used.
+{-| Select relation from dataset.
+    If a giving term is not in judges, 'CNil' sign is used. -}
 selectRelation
     :: (Ord c, C.CNil c)
-    => Dataset c       -- ^ Dataset
-    -> B.JudgePattern  -- ^ JudgePattern to select
-    -> [String]        -- ^ List of term names
-    -> B.Rel c         -- ^ Selected relation
+    => Dataset c     -- ^ Dataset
+    -> RelSelect c   -- ^ Relation selector
 selectRelation (Dataset m) sign ns = B.Rel h1 b1 where
     h1 = B.Relhead $ map B.Term ns
     b1 = case Map.lookup sign m of

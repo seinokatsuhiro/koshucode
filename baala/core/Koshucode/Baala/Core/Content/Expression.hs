@@ -89,7 +89,7 @@ runCox arg cox = run cox where
 
 {-
 let op _ = Right $ CopEager "+" f where f xs = Right $ foldr (+) 0 xs
-formCox op [] $ singleTree . tokenTrees $ tokens "(+ (int 1) (int 2))"
+formCox op [] $ treeG . tokenTrees $ tokens "(+ (int 1) (int 2))"
 let e1 = CoxApp plus [CoxLit 1, CoxLit 2, CoxTerm ["/?"] [0]]
 runCox e1 [1,2,3]
 -}
@@ -101,19 +101,19 @@ runCox e1 [1,2,3]
 
      [1. @String -> \[Token\]@]
         Parse input string into list of token.
-        See 'tokens'.
+        See 'B.tokens'.
 
      [2. @\[Token\] -> \[Tree Token\]@]
         Analyze token list structure.
-        See 'tokenTrees'
+        See 'B.tokenTrees'
 
      [3. @\[Tree Token\] -> Tree Token@]
-        Enclose list of token tree in 'TreeB'.
-        See 'singleTree'.
+        Enclose list of token tree in 'B.TreeB'.
+        See 'B.treeG'.
 
      [4. @Tree Token -> Tree Token@]
         Translate binary operators from infix to prefix.
-        See 'binaryTree'.
+        See 'B.binaryTree'.
 
    Phase 2. From prefixed token tree to literal content.
 

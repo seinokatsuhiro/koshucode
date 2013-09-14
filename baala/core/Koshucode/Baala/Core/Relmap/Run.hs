@@ -3,8 +3,8 @@
 -- | Running relational calculation.
 
 module Koshucode.Baala.Core.Relmap.Run
-( runAssertJudges
-, runAssertDataset
+( runAssertJudges,
+  runAssertDataset,
 ) where
 
 import qualified Koshucode.Baala.Base as B
@@ -29,22 +29,23 @@ runRelmapDataset ds = runRelmapSelector $ C.selectRelation ds
 
 runRelmapSelector
     :: (Ord c, C.CNil c)
-    => (B.JudgePattern -> [String] -> B.Rel c)  -- ^ Relation selector
-    -> C.Relmap c              -- ^ Mapping from 'Rel' to 'Rel'
-    -> B.Rel c                 -- ^ Input relation
-    -> B.AbortOr (B.Rel c)     -- ^ Output relation
-runRelmapSelector select = (<$>) where
-    C.RelmapSource _ s ns <$> _  =  Right $ select s ns
+    => C.RelSelect c       -- ^ Relation selector
+    -> C.Relmap c          -- ^ Mapping from 'Rel' to 'Rel'
+    -> B.Rel c             -- ^ Input relation
+    -> B.AbortOr (B.Rel c) -- ^ Output relation
+runRelmapSelector sel = (<$>) where
+    C.RelmapSource _ p ns <$> _  =  Right $ sel p ns
     C.RelmapConst  _ _ r  <$> _  =  Right r
     C.RelmapAlias  _ m    <$> r  =  m <$> r
     C.RelmapAppend m1 m2  <$> r  =  (m1 <$> r) >>= (m2 <$>)
-    C.RelmapName   h op   <$> _  =  Left (B.AbortUnkRelmap op,
-                                           [], C.halfLines h)
-    C.RelmapCalc h _ f ms <$> r  =
-        do rs' <- mapM (<$> r) ms
+    C.RelmapName   h op   <$> _  =  left h $ B.AbortUnkRelmap op
+    C.RelmapCalc h _ f _ ms <$> r  =
+        do rs' <- (<$> r) `mapM` ms  -- subrelmaps gets r
            case f rs' r of
              Right r' -> Right r'
-             Left a   -> Left (a, [], C.halfLines h)
+             Left a   -> left h a
+
+    left h a = Left (a, [], C.halfLines h)
 
 
 

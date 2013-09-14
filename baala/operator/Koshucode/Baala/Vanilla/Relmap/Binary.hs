@@ -26,9 +26,10 @@ ropConsMaybe use =
        Right $ relmapMaybe use m
 
 relmapMaybe :: (Ord c, C.CNil c) => C.RopUse c -> B.Map (C.Relmap c)
-relmapMaybe use m = C.relmapConfl use "maybe" sub [m] where
+relmapMaybe use m = C.relmapConfl use "maybe" sub tmap [m] where
     sub [r2] r1 = relMaybe r1 r2
     sub _ _     = B.bug
+    tmap = C.tmapId
 
 -- | like SQL's left join
 relMaybe :: (Ord c, C.CNil c) => B.Rel c -> B.AbMap (B.Rel c)
@@ -63,11 +64,12 @@ ropConsMaybeBoth use =
 
 -- | like SQL's full join
 relmapMaybeBoth :: (Ord c, C.CNil c) => C.RopUse c -> B.Map (C.Relmap c)
-relmapMaybeBoth use m = C.relmapConfl use "mmaybe" sub [m] where
+relmapMaybeBoth use m = C.relmapConfl use "mmaybe" sub tmap [m] where
     sub [r2] r1 = do r12 <- relMaybe r1 r2
                      r21 <- relMaybe r2 r1
                      Mini.relJoin r12 r21
     sub _ _     = B.bug
+    tmap = C.tmapId
 
 
 
@@ -80,9 +82,10 @@ ropConsGroup use =
      Right $ relmapGroup use n m
 
 relmapGroup :: (Ord c, C.CRel c) => C.RopUse c -> String -> B.Map (C.Relmap c)
-relmapGroup use n m = C.relmapConfl use "group" sub [m] where
+relmapGroup use n m = C.relmapConfl use "group" sub tmap [m] where
     sub [r2] r1 = relGroup n r2 r1
     sub _ _     = B.bug
+    tmap = C.tmapId
 
 -- | Grouping relation.
 relGroup :: (Ord c, C.CRel c) => String -> B.Rel c -> B.AbMap (B.Rel c)

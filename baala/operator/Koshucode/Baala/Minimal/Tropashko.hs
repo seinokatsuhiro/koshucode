@@ -43,9 +43,10 @@ relmapMeet :: (Ord c)
     => C.RopUse c     -- ^ Source infomation
     -> C.Relmap c     -- ^ Subrelmap of meet operator
     -> C.Relmap c     -- ^ Relmap of meet operator
-relmapMeet use m = C.relmapConfl use "meet" sub [m] where
+relmapMeet use m = C.relmapConfl use "meet" sub tmap [m] where
     sub [r2] r1 = relMeet r1 r2
     sub _ _ = B.bug
+    tmap     = C.tmapId
 
 {-| Meet two relations. -}
 relMeet :: (Ord c)
@@ -87,9 +88,10 @@ relmapJoin
     => C.RopUse c     -- ^ Source infomation
     -> C.Relmap c     -- ^ Subrelmap of join operator
     -> C.Relmap c     -- ^ Relmap of join operator
-relmapJoin use m = C.relmapConfl use "join" sub [m] where
+relmapJoin use m = C.relmapConfl use "join" sub tmap [m] where
     sub [r2] r1 = relJoin r1 r2
     sub _ _ = B.bug
+    tmap     = C.tmapId
 
 {-| Join two relations. -}
 relJoin :: (Ord c)

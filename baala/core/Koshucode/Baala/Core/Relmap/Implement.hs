@@ -108,13 +108,14 @@ relmapCalc
     -> String         -- ^ Operator name
     -> C.RelmapSub c  -- ^ Calculation of operation
     -> C.Relmap c     -- ^ Result relmap
-relmapCalc use op sub = relmapConfl use op sub []
+relmapCalc use op sub = relmapConfl use op sub C.tmapId []
 
 {-| Make a confluent relmap. -}
 relmapConfl
     :: RopUse c       -- ^ Use of operator
     -> String         -- ^ Operator name
     -> C.RelmapSub c  -- ^ Calculation of operation
+    -> C.RelmapTupleMap c  -- ^ Calculation of operation
     -> [C.Relmap c]   -- ^ Subrelmaps
     -> C.Relmap c     -- ^ Result relmap
 relmapConfl use = C.RelmapCalc $ ropHalf use

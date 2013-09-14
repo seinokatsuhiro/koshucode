@@ -184,7 +184,7 @@ litNamedTrees = name where
     name (x : xs) = let (c, xs2) = cont xs
                     in do n    <- litFlatname x
                           xs2' <- name xs2
-                          Right $ (n, B.singleTree c) : xs2'
+                          Right $ (n, B.treeG c) : xs2'
 
     cont :: [B.TokenTree] -> ([B.TokenTree], [B.TokenTree])
     cont xs@(B.TreeL (B.TTerm _ _) : _) = ([], xs)

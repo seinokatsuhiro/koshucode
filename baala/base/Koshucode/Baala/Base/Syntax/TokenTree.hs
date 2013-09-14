@@ -9,7 +9,6 @@ module Koshucode.Baala.Base.Syntax.TokenTree
   tokenTrees,
   treeTokens,
   treesTokens,
-  singleTree,
   flatname,
 
   -- * Divide trees
@@ -72,10 +71,6 @@ parenType = B.parenTable
     , o 4  "<|" "|>"   -- termset
     , o 5  "{|" "|}"   -- relation
     ] where o n a b = (n, B.isOpenTokenOf a, B.isCloseTokenOf b)
-
-singleTree :: [TokenTree] -> TokenTree
-singleTree [t] = t
-singleTree ts  = B.TreeB 1 ts
 
 flatname :: TokenTree -> Maybe String
 flatname (B.TreeL (B.TTerm _ [n])) = Just n

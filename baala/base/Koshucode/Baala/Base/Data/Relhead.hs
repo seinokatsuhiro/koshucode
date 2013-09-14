@@ -17,11 +17,11 @@ module Koshucode.Baala.Base.Data.Relhead
   headIndex, headIndex1,
 
   -- * Monoid
-  mempty,
-  mappend,
+  M.mempty,
+  M.mappend,
 ) where
 
-import Data.Monoid
+import qualified Data.Monoid as M
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Data.Relterm as B
 
@@ -34,7 +34,7 @@ data Relhead = Relhead {
       headTerms :: [B.Relterm]
     } deriving (Show, Eq, Ord)
 
-instance Monoid Relhead where
+instance M.Monoid Relhead where
     mempty = Relhead []
     mappend (Relhead t1) (Relhead t2) =
         Relhead $ B.unionUp t1 t2

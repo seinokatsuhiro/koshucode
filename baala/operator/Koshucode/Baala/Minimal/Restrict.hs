@@ -23,9 +23,10 @@ ropConsSome use =
        Right $ relmapSome use m
 
 relmapSome :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
-relmapSome use m = C.relmapConfl use "minus" sub [m] where
+relmapSome use m = C.relmapConfl use "minus" sub tmap [m] where
     sub [r2] = relSome r2
     sub _    = B.bug
+    tmap     = C.tmapId
 
 relSome :: (Ord c)
     => B.Rel c            -- ^ Matching relation
@@ -42,9 +43,10 @@ ropConsMinus use =
        Right $ relmapMinus use m
 
 relmapMinus :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
-relmapMinus use m = C.relmapConfl use "minus" sub [m] where
+relmapMinus use m = C.relmapConfl use "minus" sub tmap [m] where
     sub [r2] = relMinus r2
     sub _    = B.bug
+    tmap     = C.tmapId
 
 relMinus :: (Ord c)
     => B.Rel c            -- ^ Unmatching relation

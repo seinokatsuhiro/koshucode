@@ -91,7 +91,7 @@ copAbs1 :: VContent -> B.Ab VContent
 copAbs1 (VDec n) = Right . VDec $ B.decimalAbs n
 copAbs1 _ = Left B.AbortUnmatchArity
 
--- let tree = singleTree . tokenTrees . tokens
+-- let tree = treeG . tokenTrees . tokens
 -- let Right e2 = vanillaContent [] $ tree "1 = 1 and 2 = 3"
 -- let Right e2 = vanillaContent [] $ tree "(+ (int 1) (int 2) (int 3))"
 -- let Right e2 = vanillaContent [] $ tree "(+ 1 2 (+ 3 4 5) 6 7 8 9)"
