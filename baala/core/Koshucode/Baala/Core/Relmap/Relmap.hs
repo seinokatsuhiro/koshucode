@@ -7,12 +7,6 @@ module Koshucode.Baala.Core.Relmap.Relmap
   -- * Data
   Relmap (..),
   RelmapSub,
-  RelmapTupleMap,
-
-  TupleMap (..),
-  makeTmap,
-  runTmap,
-  runRelmapViaTmap,
 
   -- * Append relmaps
   -- $AppendRelmaps
@@ -21,16 +15,15 @@ module Koshucode.Baala.Core.Relmap.Relmap
   relmapSourceList,
   relmapNameList,
   relmapAppendList,
-  tmapId,
 
   -- * Linker
   relmapLinker,
 ) where
 
-import Data.Monoid
+import qualified Data.Monoid as M
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core.Relmap.HalfRelmap as C
-import qualified Koshucode.Baala.Core.Relmap.Dataset    as C
+import qualified Koshucode.Baala.Core.Relmap.Relgen     as C
 
 
 
@@ -46,74 +39,17 @@ data Relmap c
     -- | Equavalent relmap
     | RelmapAlias  C.HalfRelmap (Relmap c)
     -- | Relmap that maps relations to a relation
-    | RelmapCalc   C.HalfRelmap String (RelmapSub c) (RelmapTupleMap c) [Relmap c]
+    | RelmapCalc   C.HalfRelmap String (RelmapSub c) (C.RelgenCon c) [Relmap c]
     -- | Connect two relmaps
     | RelmapAppend (Relmap c) (Relmap c)
     -- | Relmap reference
     | RelmapName   C.HalfRelmap String
-
--- Relmap are compiled to TupleMap
-data TupleMap c
-    = TmapOneToMany ( [c] -> B.Ab [[c]] )
-    | TmapOneToOne  ( [c] -> B.Ab [c] )
-    | TmapMany      [[c]]
-    | TmapAppend    (TupleMap c) (TupleMap c)
-
-type RelmapTupleMap c
-    =  [(TupleMap c, B.Relhead)]    -- ^ Tmaps for subrelmaps
-    -> B.Relhead                    -- ^ Input head
-    -> B.Ab (TupleMap c, B.Relhead) -- ^ Tuple mapping and output head
 
 {-| Function of relmap. -}
 type RelmapSub c
     = [B.Rel c]        -- ^ Relations in operand
     -> B.Rel c         -- ^ Main input relation
     -> B.Ab (B.Rel c)  -- ^ Output relation
-
-
--- ----------------------
-
-makeTmap
-    :: C.RelSelect c
-    -> Relmap c
-    -> B.Relhead
-    -> B.AbortOr (TupleMap c, B.Relhead)
-makeTmap sel = (<$>) where
-    RelmapSource _ p ns    <$> _  = relcon $ sel p ns
-    RelmapConst  _ _ r     <$> _  = relcon r
-    RelmapAlias  _ m       <$> h1 = m <$> h1
-    RelmapAppend m1 m2     <$> h1 = do (t1, h2) <- m1 <$> h1
-                                       (t2, h3) <- m2 <$> h2
-                                       Right (TmapAppend t1 t2, h3)
-    RelmapName h op        <$> _  = left h $ B.AbortUnkRelmap op
-    RelmapCalc h _ _ sub ms <$> h1 =
-        do ts <- (<$> h1) `mapM` ms
-           case sub ts h1 of
-             Right (t1, h2) -> Right (t1, h2)
-             Left a -> left h a
-
-    relcon (B.Rel h b) = Right (TmapMany b, h)
-    left h a = Left (a, [], C.halfLines h)
-
-runTmap :: TupleMap c -> [c] -> B.Ab [[c]]
-runTmap = (<$>) where
-    TmapOneToMany f <$> cs = f cs
-    TmapOneToOne  f <$> cs = fmap B.singleton $ f cs
-    TmapMany css    <$> _  = Right css
-    TmapAppend f g  <$> cs = do cs2 <- f <$> cs
-                                cs3 <- (g <$>) `mapM` cs2
-                                Right $ concat cs3
-
-runRelmapViaTmap
-    :: C.RelSelect c
-    -> Relmap c
-    -> B.Rel c
-    -> B.AbortOr (B.Rel c)
-runRelmapViaTmap sel m (B.Rel h1 b1) =
-    do (tmap, h2) <- makeTmap sel m h1
-       case runTmap tmap `mapM` b1 of
-         Right b2s -> Right $ B.Rel h2 (concat b2s)
-         Left a   -> Left (a, [], [])
 
 
 
@@ -134,8 +70,8 @@ showRelmap = sh where
     joinSubs = concatMap sub
     sub m = " (" ++ sh m ++ ")"
 
-instance Monoid (Relmap c) where
-    mempty  = RelmapCalc halfid "id" relid tmapId []
+instance M.Monoid (Relmap c) where
+    mempty  = RelmapCalc halfid "id" relid C.relgenId []
     mappend = RelmapAppend
 
 halfid :: C.HalfRelmap
@@ -143,10 +79,6 @@ halfid = C.HalfRelmap "id" [] "id" [("operand", [])] []
 
 relid :: RelmapSub c
 relid _ = Right
-
-tmapId :: RelmapTupleMap c
-tmapId _ h = Right (TmapOneToOne f, h) where
-    f cs = Right cs
 
 instance B.Name (Relmap c) where
     name (RelmapSource _ _ _)   = "source"

@@ -29,8 +29,19 @@ ropConsAdd use =
      Right $ relmapAdd use cs
 
 relmapAdd :: C.RopUse VContent -> [B.Named (C.PosCox VContent)] -> C.Relmap VContent
-relmapAdd use cs = C.relmapCalc use "add" sub where
+relmapAdd use cs = C.relmapCalc use "add" sub gen where
     sub _ r1 = relAdd cs r1
+    gen _ = relgenAdd cs
+
+relgenAdd :: [B.Named (C.PosCox VContent)]
+          -> B.Relhead
+          -> B.Ab (C.Relgen VContent)
+relgenAdd cs h1 = Right $ C.Relgen h3 (C.RelgenOneToAbOne run) where
+    h2 = B.headFrom $ map fst cs
+    h3 = Builtin.mappend h2 h1
+    cs2 = map snd cs
+    run arg = do cs2' <- mapM (C.runCoxH h1 arg) cs2
+                 Right $ cs2' ++ arg
 
 -- todo: shared term
 relAdd :: [B.Named (C.PosCox VContent)] -> B.Rel VContent -> B.Ab (B.Rel VContent)
@@ -54,8 +65,21 @@ ropConsHold use = do
   Right $ relmapHold use True c
 
 relmapHold :: C.RopUse VContent -> Bool -> (C.PosCox VContent) -> C.Relmap VContent
-relmapHold use b cont = C.relmapCalc use "hold" sub where
+relmapHold use b cont = C.relmapCalc use "hold" sub gen where
     sub _ r1 = relHold b cont r1
+    gen _ = relgenHold b cont
+
+relgenHold
+    :: (C.CContent c, Show c)
+    => Bool               -- ^ Criterion
+    -> (C.PosCox c)       -- ^ Predicate
+    -> B.Relhead          -- ^ Heading of input relation
+    -> B.Ab (C.Relgen c)  -- ^ Relation-to-relation mapping
+relgenHold b cont h1 = Right $ C.Relgen h1 (C.RelgenAbPred p) where
+    p lits = do lit <- C.runCoxH h1 lits cont
+                case lit of
+                  x | C.isBool x -> Right $ b == C.getBool x
+                  _ -> Left $ B.AbortReqBoolean (show lit)
 
 relHold
     :: (C.CContent c, Show c)

@@ -29,7 +29,7 @@ minimalRops = Builtin.ropList "minimal"
     , o "id"                 LikeId       ropConsId
     , o "join R"             LikeMeet     ropConsJoin
     , o "meet R"             LikeMeet     ropConsMeet
-    , o "minus R"            LikeMeet     ropConsMinus
+    , o "none R"             LikeMeet     ropConsNone
     , o "pick /N ..."        LikePick     ropConsPick
     , o "reldee"             LikeId       ropConsReldee
     , o "reldum"             LikeId       ropConsReldum

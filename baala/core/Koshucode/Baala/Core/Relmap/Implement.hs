@@ -24,6 +24,7 @@ module Koshucode.Baala.Core.Relmap.Implement
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core.Relmap.Relmap     as C
 import qualified Koshucode.Baala.Core.Relmap.HalfRelmap as C
+import qualified Koshucode.Baala.Core.Relmap.Relgen     as C
 
 
 
@@ -102,21 +103,29 @@ relmapAlias
     -> C.Relmap c    -- ^ Result relmap
 relmapAlias use = C.RelmapAlias $ ropHalf use
 
-{-| Make a non-confluent relmap. -}
+-- {-| Make a non-confluent relmap. -}
+-- relmapCalc1
+--     :: RopUse c       -- ^ Use of operator
+--     -> String         -- ^ Operator name
+--     -> C.RelmapSub c  -- ^ Calculation of operation
+--     -> C.Relmap c     -- ^ Result relmap
+-- relmapCalc1 use op sub = relmapConfl use op sub C.relgenId []
+
 relmapCalc
-    :: RopUse c       -- ^ Use of operator
-    -> String         -- ^ Operator name
-    -> C.RelmapSub c  -- ^ Calculation of operation
-    -> C.Relmap c     -- ^ Result relmap
-relmapCalc use op sub = relmapConfl use op sub C.tmapId []
+    :: RopUse c        -- ^ Use of operator
+    -> String          -- ^ Operator name
+    -> C.RelmapSub c   -- ^ Calculation of operation
+    -> C.RelgenCon c   -- ^ Calculation of operation
+    -> C.Relmap c      -- ^ Result relmap
+relmapCalc use op sub relgen = relmapConfl use op sub relgen []
 
 {-| Make a confluent relmap. -}
 relmapConfl
-    :: RopUse c       -- ^ Use of operator
-    -> String         -- ^ Operator name
-    -> C.RelmapSub c  -- ^ Calculation of operation
-    -> C.RelmapTupleMap c  -- ^ Calculation of operation
-    -> [C.Relmap c]   -- ^ Subrelmaps
-    -> C.Relmap c     -- ^ Result relmap
+    :: RopUse c        -- ^ Use of operator
+    -> String          -- ^ Operator name
+    -> C.RelmapSub c   -- ^ Calculation of operation
+    -> C.RelgenCon c   -- ^ Calculation of operation
+    -> [C.Relmap c]    -- ^ Subrelmaps
+    -> C.Relmap c      -- ^ Result relmap
 relmapConfl use = C.RelmapCalc $ ropHalf use
 

@@ -7,12 +7,14 @@ module Koshucode.Baala.Core.Relmap.Run
   runAssertDataset,
 ) where
 
+import qualified Data.Monoid as M
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core.Content           as C
 import qualified Koshucode.Baala.Core.Relmap.Assert     as C
 import qualified Koshucode.Baala.Core.Relmap.Dataset    as C
 import qualified Koshucode.Baala.Core.Relmap.HalfRelmap as C
 import qualified Koshucode.Baala.Core.Relmap.Relmap     as C
+import qualified Koshucode.Baala.Core.Relmap.Relgen     as C
 
 
 
@@ -25,7 +27,42 @@ runRelmapDataset
     -> C.Relmap c           -- ^ Mapping from 'Rel' to 'Rel'
     -> B.Rel c              -- ^ Input relation
     -> B.AbortOr (B.Rel c)  -- ^ Output relation
-runRelmapDataset ds = runRelmapSelector $ C.selectRelation ds
+runRelmapDataset ds = runRelmapViaRelgen $ C.selectRelation ds
+--runRelmapDataset ds = runRelmapSelector $ C.selectRelation ds
+
+runRelmapViaRelgen
+    ::  (Ord c)
+    => C.RelSelect c
+    -> C.Relmap c
+    -> B.Rel c
+    -> B.AbortOr (B.Rel c)
+runRelmapViaRelgen sel m (B.Rel h1 b1) =
+    do C.Relgen h2 gen <- relmapRelgen sel m h1
+       case C.runRelgen gen b1 of
+         Right b2 -> Right $ B.Rel h2 b2
+         Left a   -> Left (a, [], [])
+
+relmapRelgen
+    :: C.RelSelect c
+    -> C.Relmap c
+    -> B.Relhead
+    -> B.AbortOr (C.Relgen c)
+relmapRelgen sel = (<$>) where
+    C.RelmapSource _ p ns <$> _  = Right $ C.relgenConst (sel p ns)
+    C.RelmapConst  _ _ r  <$> _  = Right $ C.relgenConst r
+    C.RelmapAlias  _ m    <$> h1 = m <$> h1
+    C.RelmapName h op     <$> _  = left h $ B.AbortUnkRelmap op
+    C.RelmapAppend m1 m2  <$> h1 =
+        do rgen2 <- m1 <$> h1
+           rgen3 <- m2 <$> C.relgenHead rgen2
+           Right $ rgen2 `M.mappend` rgen3
+    C.RelmapCalc h _ _ sub ms <$> h1 =
+        do ts <- (<$> h1) `mapM` ms
+           case sub ts h1 of
+             Right tsub -> Right tsub
+             Left a -> left h a
+
+    left h a = Left (a, [], C.halfLines h)
 
 runRelmapSelector
     :: (Ord c, C.CNil c)
@@ -60,8 +97,11 @@ runAssertJudges
 runAssertJudges as = runAssertDataset as . C.dataset
 
 {-| Calculate assertion list. -}
-runAssertDataset ::
-    (Ord c, C.CNil c) => [C.Assert c] -> C.Dataset c -> B.AbortOr [B.Judge c]
+runAssertDataset
+    :: (Ord c, C.CNil c)
+    => [C.Assert c]
+    -> C.Dataset c
+    -> B.AbortOr [B.Judge c]
 runAssertDataset as ds =
     do js <- mapM each as
        return $ concat js

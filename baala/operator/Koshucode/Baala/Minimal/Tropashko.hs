@@ -43,10 +43,36 @@ relmapMeet :: (Ord c)
     => C.RopUse c     -- ^ Source infomation
     -> C.Relmap c     -- ^ Subrelmap of meet operator
     -> C.Relmap c     -- ^ Relmap of meet operator
-relmapMeet use m = C.relmapConfl use "meet" sub tmap [m] where
+relmapMeet use m = C.relmapConfl use "meet" sub gen [m] where
     sub [r2] r1 = relMeet r1 r2
     sub _ _ = B.bug
-    tmap     = C.tmapId
+    gen [submap] h1 = relgenMeet h1 submap
+    gen _ _         = B.bug
+
+relgenMeet :: (Ord c) => B.Relhead -> C.Relgen c -> B.Ab (C.Relgen c)
+relgenMeet h1 (C.Relgen h2 gen2) = Right (C.Relgen h3 gen3) where
+    share1, share2 :: [B.TermPos]
+    share1    =  h1 `B.posNest` shared
+    share2    =  h2 `B.posNest` shared
+    shared    =  B.posInner $ h1 `B.posFrom` h2
+
+    pick1, pick2, cut2 :: B.Map [c]
+    pick1     =  B.posPick share1
+    pick2     =  B.posPick share2
+    cut2      =  B.posCut  share2
+
+    h3        =  h2 `mappend` h1
+    gen3      =  case gen2 of
+                   C.RelgenConst b2 -> C.RelgenOneToAbMany (meet2 b2)
+                   _                -> C.RelgenOneToAbMany meet
+    meet cs1  =  do b2sub <- C.runRelgen gen2 [cs1]
+                    meet2 b2sub cs1
+    meet2 b2 cs1 =  let m2 = B.gatherToMap $ map kv b2
+                    in case B.lookupMap (pick1 cs1) m2 of
+                         Just b2side -> Right $ map (++ cs1) b2side
+                         Nothing -> Right $ []
+    kv cs2    =  ( pick2 cs2,  -- key is shared cs
+                   cut2  cs2 ) -- value is side cs
 
 {-| Meet two relations. -}
 relMeet :: (Ord c)
@@ -59,7 +85,7 @@ relMeet (B.Rel h1 b1) (B.Rel h2 b2) = Right $ B.Rel h3 b3 where
     share2    =  h2 `B.posNest` shared
     shared    =  B.posInner $ h1 `B.posFrom` h2
 
-    pick1,  pick2 :: B.Map [c]
+    pick1,  pick2, cut2 :: B.Map [c]
     pick1     =  B.posPick share1
     pick2     =  B.posPick share2
     cut2      =  B.posCut  share2
@@ -88,11 +114,28 @@ relmapJoin
     => C.RopUse c     -- ^ Source infomation
     -> C.Relmap c     -- ^ Subrelmap of join operator
     -> C.Relmap c     -- ^ Relmap of join operator
-relmapJoin use m = C.relmapConfl use "join" sub tmap [m] where
+relmapJoin use m = C.relmapConfl use "join" sub gen [m] where
     sub [r2] r1 = relJoin r1 r2
     sub _ _ = B.bug
-    tmap     = C.tmapId
+    gen [submap] h1 = relgenJoin h1 submap
+    gen _ _         = B.bug
 
+relgenJoin :: B.Relhead -> C.Relgen c -> B.Ab (C.Relgen c)
+relgenJoin h1 (C.Relgen h2 gen2) = Right (C.Relgen h3 gen3) where
+    share1, share2 :: [B.TermPos]
+    share1  =  h1 `B.posNest` shared
+    share2  =  h2 `B.posNest` shared
+    shared  =  B.posInner $ h1 `B.posFrom` h2
+
+    pick1, pick2 :: B.Map [c]
+    pick1   =  B.posPick share1
+    pick2   =  B.posPick share2
+
+    h3      =  B.headChange pick1 h1
+    gen3    =  C.RelgenUnion
+                  [ C.RelgenOneToOne pick1
+                  , C.RelgenAppend gen2 (C.RelgenOneToOne pick2) ]
+               
 {-| Join two relations. -}
 relJoin :: (Ord c)
     => B.Rel c         -- ^ Input relation /R1/

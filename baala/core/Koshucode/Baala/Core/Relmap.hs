@@ -4,22 +4,24 @@
 
 module Koshucode.Baala.Core.Relmap
 ( -- * Datatypes
-  module Koshucode.Baala.Core.Relmap.HalfRelmap
-, module Koshucode.Baala.Core.Relmap.Relmap
-, module Koshucode.Baala.Core.Relmap.Assert
+  module Koshucode.Baala.Core.Relmap.Assert,
+  module Koshucode.Baala.Core.Relmap.HalfRelmap,
+  module Koshucode.Baala.Core.Relmap.Relmap,
+  module Koshucode.Baala.Core.Relmap.Relgen,
 
   -- * Processes
-, module Koshucode.Baala.Core.Relmap.Implement
-, module Koshucode.Baala.Core.Relmap.Construct
-, module Koshucode.Baala.Core.Relmap.Run
+  module Koshucode.Baala.Core.Relmap.Implement,
+  module Koshucode.Baala.Core.Relmap.Construct,
+  module Koshucode.Baala.Core.Relmap.Run,
 
   -- * Datatypes
   -- $Dependencies
 ) where
 
+import Koshucode.Baala.Core.Relmap.Assert
 import Koshucode.Baala.Core.Relmap.HalfRelmap
 import Koshucode.Baala.Core.Relmap.Relmap
-import Koshucode.Baala.Core.Relmap.Assert
+import Koshucode.Baala.Core.Relmap.Relgen
 
 import Koshucode.Baala.Core.Relmap.Implement
 import Koshucode.Baala.Core.Relmap.Construct

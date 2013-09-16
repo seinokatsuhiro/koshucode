@@ -5,8 +5,8 @@
 module Koshucode.Baala.Minimal.Restrict
 ( -- * some
   ropConsSome, relmapSome, relSome,
-  -- * minus
-  ropConsMinus, relmapMinus, relMinus
+  -- * none
+  ropConsNone, relmapNone, relNone
 ) where
 
 import qualified Koshucode.Baala.Base as B
@@ -23,10 +23,16 @@ ropConsSome use =
        Right $ relmapSome use m
 
 relmapSome :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
-relmapSome use m = C.relmapConfl use "minus" sub tmap [m] where
+relmapSome use m = C.relmapConfl use "some" sub gen [m] where
     sub [r2] = relSome r2
     sub _    = B.bug
-    tmap     = C.tmapId
+    gen [r2] = relgenSome r2
+    gen _    = B.bug
+
+relgenSome :: (Ord c) => C.Relgen c -> B.Relhead -> B.Ab (C.Relgen c)
+relgenSome (C.Relgen _ g2) h1 = Right $ C.Relgen h1 (C.RelgenAbPred p) where
+    p a1 = do b2 <- C.runRelgen g2 [a1]
+              Right $ not $ null b2
 
 relSome :: (Ord c)
     => B.Rel c            -- ^ Matching relation
@@ -35,23 +41,29 @@ relSome r = relSemi True r
 
 
 
--- ----------------------  minus
+-- ----------------------  none
 
-ropConsMinus :: (Ord c) => C.RopCons c
-ropConsMinus use =
+ropConsNone :: (Ord c) => C.RopCons c
+ropConsNone use =
     do m <- getRelmap use
-       Right $ relmapMinus use m
+       Right $ relmapNone use m
 
-relmapMinus :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
-relmapMinus use m = C.relmapConfl use "minus" sub tmap [m] where
-    sub [r2] = relMinus r2
+relmapNone :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
+relmapNone use m = C.relmapConfl use "none" sub gen [m] where
+    sub [r2] = relNone r2
     sub _    = B.bug
-    tmap     = C.tmapId
+    gen [r2] = relgenNone r2
+    gen _    = B.bug
 
-relMinus :: (Ord c)
+relgenNone :: (Ord c) => C.Relgen c -> B.Relhead -> B.Ab (C.Relgen c)
+relgenNone (C.Relgen _ g2) h1 = Right $ C.Relgen h1 (C.RelgenAbPred p) where
+    p a1 = do b2 <- C.runRelgen g2 [a1]
+              Right $ null b2
+
+relNone :: (Ord c)
     => B.Rel c            -- ^ Unmatching relation
     -> B.AbMap (B.Rel c)  -- ^ Relation to relation
-relMinus = relSemi False
+relNone = relSemi False
 
 
 

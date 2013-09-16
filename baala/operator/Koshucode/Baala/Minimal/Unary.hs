@@ -16,15 +16,13 @@ module Koshucode.Baala.Minimal.Unary
   ropConsPick, relmapPick, relPick,
   -- * cut
   ropConsCut, relmapCut, relCut,
-  -- * front
-  ropConsFront, relmapFront, relFront,
   -- * rename
   ropConsRename, relmapRename, relRename
 ) where
 
+import qualified Data.List  as List
 import qualified Data.Maybe as Maybe
 import qualified Data.Tuple as Tuple
-
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 import Koshucode.Baala.Builtin
@@ -53,7 +51,7 @@ ropConsId :: C.RopCons c
 ropConsId use = Right $ relmapId use
 
 relmapId :: C.RopUse c -> C.Relmap c
-relmapId use = C.relmapCalc use "id" sub where
+relmapId use = C.relmapCalc use "id" sub C.relgenId where
     sub _ = relId
 
 {-| Identity mapping, i.e., do nothing. -}
@@ -68,8 +66,12 @@ ropConsEmpty :: C.RopCons c
 ropConsEmpty use = Right $ relmapEmpty use
 
 relmapEmpty :: C.RopUse c -> C.Relmap c
-relmapEmpty use = C.relmapCalc use "empty" sub where
+relmapEmpty use = C.relmapCalc use "empty" sub gen where
     sub _ = relEmpty
+    gen _ = relgenEmpty
+
+relgenEmpty :: B.Relhead -> B.Ab (C.Relgen c)
+relgenEmpty h = Right $ C.Relgen h (C.RelgenConst [])
 
 {-| Throw away all tuples in a relation. -}
 relEmpty :: B.AbMap (B.Rel c)  -- ^ Any relation to empty relation
@@ -85,8 +87,12 @@ ropConsPick use =
      Right $ relmapPick use ns
 
 relmapPick :: (Ord c) => C.RopUse c -> [String] -> C.Relmap c
-relmapPick use ns = C.relmapCalc use "pick" sub where
+relmapPick use ns = C.relmapCalc use "pick" sub gen where
     sub _ = relPick ns
+    gen _ = relgenPick ns
+
+relgenPick :: [String] -> B.Relhead -> B.Ab (C.Relgen c)
+relgenPick ns h = relgenArrange B.arrangePick B.arrangePick ns h
 
 relPick
     :: (Ord c)
@@ -104,8 +110,12 @@ ropConsCut use =
      Right $ relmapCut use ns
 
 relmapCut :: (Ord c) => C.RopUse c -> [String] -> C.Relmap c
-relmapCut use ns = C.relmapCalc use "cut" sub where
+relmapCut use ns = C.relmapCalc use "cut" sub gen where
     sub _ = relCut ns
+    gen _ = relgenCut ns
+
+relgenCut :: [String] -> B.Relhead -> B.Ab (C.Relgen c)
+relgenCut ns h = relgenArrange B.arrangeCut B.arrangeCut ns h
 
 relCut
     :: (Ord c)
@@ -114,23 +124,24 @@ relCut
 relCut ns r = B.arrangeRel B.arrangeCut B.arrangeCut ns r
 
 
+relgenArrange
+    :: B.Arrange String
+    -> B.Arrange c
+    -> [String]
+    -> B.Relhead
+    -> B.Ab (C.Relgen c)
+relgenArrange ha ba ns h1
+    | null non  = Right $ C.Relgen h2 (C.RelgenOneToOne $ ba ind)
+    | otherwise = Left  $ B.AbortNoTerms non
+    where
+    non =  B.headNonExistTerms h1 ns
+    pos :: [B.TermPos]
+    pos =  List.sort $ h1 `B.posFlat` ns
 
--- ----------------------  front
+    ind :: [Int]
+    ind =  map B.posIndex pos
 
-ropConsFront :: (Ord c) => C.RopCons c
-ropConsFront use =
-  do ns <- getTerms use "-term"
-     Right $ relmapFront use ns
-
-relmapFront :: (Ord c) => C.RopUse c -> [String] -> C.Relmap c
-relmapFront use ns = C.relmapCalc use "front" sub where
-    sub _ = relFront ns
-
-relFront
-    :: (Ord c)
-    => [String]            -- ^ Term names
-    -> B.AbMap (B.Rel c)   -- ^ Mapping relation to relation
-relFront ns r = B.arrangeRel B.arrangeFore B.arrangeFore ns r
+    h2  =  B.headChange (ha ind) h1
 
 
 
@@ -142,8 +153,23 @@ ropConsRename use = do
   Right $ relmapRename use np
 
 relmapRename :: C.RopUse c -> [(String, String)] -> C.Relmap c
-relmapRename use np = C.relmapCalc use "rename" sub where
+relmapRename use np = C.relmapCalc use "rename" sub gen where
     sub _ = relRename np
+    gen _ = relgenRename np
+
+relgenRename :: [(String, String)] -> B.Relhead -> B.Ab (C.Relgen c)
+relgenRename np h1
+    | nsCheck /= [] = Left  $ B.AbortReqNewTerms nsCheck
+    | psCheck /= [] = Left  $ B.AbortNoTerms psCheck
+    | otherwise     = Right $ C.Relgen h2 (C.RelgenOneToOne id)
+    where
+      (ns, ps) = unzip np
+      nsCheck  = B.headExistTerms    h1 ns
+      psCheck  = B.headNonExistTerms h1 ps
+      h2 = B.headChange (map re) h1
+      pn = map Tuple.swap np
+      re p = Maybe.fromMaybe p $ lookup p pn
+
 
 {-| Change terms names -}
 relRename

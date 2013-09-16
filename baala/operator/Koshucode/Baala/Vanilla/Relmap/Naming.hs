@@ -26,8 +26,15 @@ ropConsPrefix use =
        Right $ relmapPrefix use pre ns
 
 relmapPrefix :: C.RopUse c -> String -> [String] -> C.Relmap c
-relmapPrefix use pre ns = C.relmapCalc use "prefix" sub where
+relmapPrefix use pre ns = C.relmapCalc use "prefix" sub gen where
     sub _ r1 = relPrefix pre ns r1
+    gen _ = relgenPrefix pre ns
+
+relgenPrefix :: String -> [String] -> B.Relhead -> B.Ab (C.Relgen c)
+relgenPrefix pre ns h1 = Right $ C.Relgen h2 (C.RelgenOneToOne id) where
+    h2 = B.headChange (map f) h1
+    f n | n `elem` ns  = prefixName pre n
+        | otherwise    = n
 
 {-| Add prefix to terms. -}
 relPrefix
@@ -53,8 +60,13 @@ ropConsUnprefix use =
        Right $ relmapUnprefix use pre
 
 relmapUnprefix :: C.RopUse c -> String -> C.Relmap c
-relmapUnprefix use pre = C.relmapCalc use "unprefix" sub where
+relmapUnprefix use pre = C.relmapCalc use "unprefix" sub gen where
     sub _ r1 = relUnprefix pre r1
+    gen _ = relgenUnprefix pre
+
+relgenUnprefix :: String -> B.Relhead -> B.Ab (C.Relgen c)
+relgenUnprefix pre h1 = Right $ C.Relgen h2 (C.RelgenOneToOne id) where
+    h2 = B.headChange (map $ unprefixName pre) h1
 
 {-| Remove prefix -}
 relUnprefix
@@ -81,8 +93,18 @@ ropConsPrefixChange use =
 
 relmapPrefixChange :: C.RopUse c -> String -> String -> C.Relmap c
 relmapPrefixChange use new old =
-    C.relmapCalc use "prefix-change" sub
-    where sub _ r1 = relPrefixChange new old r1
+    C.relmapCalc use "prefix-change" sub gen
+     where sub _ r1 = relPrefixChange new old r1
+           gen _ = relgenPrefixChange new old
+
+relgenPrefixChange :: String -> String -> B.Relhead -> B.Ab (C.Relgen c)
+relgenPrefixChange new old h1 = Right $ C.Relgen h2 (C.RelgenOneToOne id) where
+    h2   = B.headChange (map f) h1
+    new' = new ++ "-"
+    old' = old ++ "-"
+    f n' = case List.stripPrefix old' n' of
+             Just n2 -> new' ++ n2
+             Nothing -> n'
 
 {-| Change prefix -}
 relPrefixChange

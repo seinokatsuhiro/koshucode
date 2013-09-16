@@ -27,7 +27,6 @@ import Koshucode.Baala.Vanilla.Type
 vanillaRops :: [C.Rop VContent]
 vanillaRops = Builtin.ropList "vanilla"
     [ o "add /N E ..."         LikeVal           ropConsAdd
-    , o "conf /N"              LikeSize          ropConsConf
     , o "enclose /N"           LikeSize          ropConsEnclose
     , o "group /N R"           LikeGroup         ropConsGroup
     , o "hold E"               LikeHold          ropConsHold

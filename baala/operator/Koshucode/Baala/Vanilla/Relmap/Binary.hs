@@ -26,10 +26,31 @@ ropConsMaybe use =
        Right $ relmapMaybe use m
 
 relmapMaybe :: (Ord c, C.CNil c) => C.RopUse c -> B.Map (C.Relmap c)
-relmapMaybe use m = C.relmapConfl use "maybe" sub tmap [m] where
+relmapMaybe use m = C.relmapConfl use "maybe" sub gen [m] where
     sub [r2] r1 = relMaybe r1 r2
     sub _ _     = B.bug
-    tmap = C.tmapId
+    gen [r2] = relgenMaybe r2
+    gen _    = B.bug
+
+relgenMaybe :: (Ord c, C.CNil c) => C.Relgen c -> B.Relhead -> B.Ab (C.Relgen c)
+relgenMaybe (C.Relgen h2 g2) h1 = Right $ C.Relgen h3 (C.RelgenAbBody g3) where
+    posh12  =  h1 `B.posFrom` h2
+    share1  =  h1 `B.posNest` B.posInner posh12
+    share2  =  h2 `B.posNest` B.posInner posh12
+    side2   =  h2 `B.posNest` B.posOuter posh12
+
+    m2 b1 = do b2 <- C.runRelgen g2 b1
+               Right $ B.gatherToMap $ map pair b2
+    pair arg2 = ( B.posPick share2 arg2,
+                  B.posPick side2  arg2 )
+
+    h3 = Builtin.mappend h2 h1
+    g3 b1 = do m <- m2 b1
+               Right $ concatMap (step m) b1
+    nils = replicate (B.headDegree h3 - B.headDegree h1) C.nil
+    step m arg1 = case B.lookupMap (B.posPick share1 arg1) m of
+                    Just side -> map (++ arg1) side
+                    Nothing   -> [nils ++ arg1]
 
 -- | like SQL's left join
 relMaybe :: (Ord c, C.CNil c) => B.Rel c -> B.AbMap (B.Rel c)
@@ -64,12 +85,12 @@ ropConsMaybeBoth use =
 
 -- | like SQL's full join
 relmapMaybeBoth :: (Ord c, C.CNil c) => C.RopUse c -> B.Map (C.Relmap c)
-relmapMaybeBoth use m = C.relmapConfl use "mmaybe" sub tmap [m] where
+relmapMaybeBoth use m = C.relmapConfl use "mmaybe" sub gen [m] where
     sub [r2] r1 = do r12 <- relMaybe r1 r2
                      r21 <- relMaybe r2 r1
                      Mini.relJoin r12 r21
-    sub _ _     = B.bug
-    tmap = C.tmapId
+    sub _ _ = B.bug
+    gen _ _ = B.bug
 
 
 
@@ -82,10 +103,29 @@ ropConsGroup use =
      Right $ relmapGroup use n m
 
 relmapGroup :: (Ord c, C.CRel c) => C.RopUse c -> String -> B.Map (C.Relmap c)
-relmapGroup use n m = C.relmapConfl use "group" sub tmap [m] where
+relmapGroup use n m = C.relmapConfl use "group" sub gen [m] where
     sub [r2] r1 = relGroup n r2 r1
     sub _ _     = B.bug
-    tmap = C.tmapId
+    gen [r2] = relgenGroup n r2
+    gen _    = B.bug
+
+relgenGroup :: (Ord c, C.CRel c) => String -> C.Relgen c -> B.Relhead -> B.Ab (C.Relgen c)
+relgenGroup n (C.Relgen h2 g2) h1 = Right $ C.Relgen h3 (C.RelgenAbBody g3) where
+    posh12    =  h1 `B.posFrom` h2
+    share1    =  h1 `B.posNest` B.posInner posh12
+    share2    =  h2 `B.posNest` B.posInner posh12
+    --side2  = posNest h2 $ posOuter posh12
+
+    m2 b1     = do b2 <- C.runRelgen g2 b1
+                   Right $ B.gatherToMap $ map pair b2
+    pair arg2 = (B.posPick share2 arg2, arg2)
+
+    h3        = B.Relhead $ B.Nest n (B.headTerms h2) : (B.headTerms h1)
+    g3 b1     = do m <- m2 b1
+                   Right $ map (step m) b1
+    step m arg1 = case B.lookupMap (B.posPick share1 arg1) m of
+                    Just args2' -> (C.putRel $ B.Rel h2 args2') : arg1
+                    Nothing     -> []
 
 -- | Grouping relation.
 relGroup :: (Ord c, C.CRel c) => String -> B.Rel c -> B.AbMap (B.Rel c)
