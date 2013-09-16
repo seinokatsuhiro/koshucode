@@ -37,8 +37,8 @@ runRelmapViaRelgen
     -> B.Rel c
     -> B.AbortOr (B.Rel c)
 runRelmapViaRelgen sel m (B.Rel h1 b1) =
-    do C.Relgen h2 gen <- relmapRelgen sel m h1
-       case C.runRelgen gen b1 of
+    do C.Relgen h2 g2 <- relmapRelgen sel m h1
+       case C.runRelgenBody g2 b1 of
          Right b2 -> Right $ B.Rel h2 b2
          Left a   -> Left (a, [], [])
 
@@ -56,7 +56,7 @@ relmapRelgen sel = (<$>) where
         do rgen2 <- m1 <$> h1
            rgen3 <- m2 <$> C.relgenHead rgen2
            Right $ rgen2 `M.mappend` rgen3
-    C.RelmapCalc h _ _ sub ms <$> h1 =
+    C.RelmapCalc h _ sub ms <$> h1 =
         do ts <- (<$> h1) `mapM` ms
            case sub ts h1 of
              Right tsub -> Right tsub
@@ -64,25 +64,25 @@ relmapRelgen sel = (<$>) where
 
     left h a = Left (a, [], C.halfLines h)
 
-runRelmapSelector
-    :: (Ord c, C.CNil c)
-    => C.RelSelect c       -- ^ Relation selector
-    -> C.Relmap c          -- ^ Mapping from 'Rel' to 'Rel'
-    -> B.Rel c             -- ^ Input relation
-    -> B.AbortOr (B.Rel c) -- ^ Output relation
-runRelmapSelector sel = (<$>) where
-    C.RelmapSource _ p ns <$> _  =  Right $ sel p ns
-    C.RelmapConst  _ _ r  <$> _  =  Right r
-    C.RelmapAlias  _ m    <$> r  =  m <$> r
-    C.RelmapAppend m1 m2  <$> r  =  (m1 <$> r) >>= (m2 <$>)
-    C.RelmapName   h op   <$> _  =  left h $ B.AbortUnkRelmap op
-    C.RelmapCalc h _ f _ ms <$> r  =
-        do rs' <- (<$> r) `mapM` ms  -- subrelmaps gets r
-           case f rs' r of
-             Right r' -> Right r'
-             Left a   -> left h a
+-- runRelmapSelector
+--     :: (Ord c, C.CNil c)
+--     => C.RelSelect c       -- ^ Relation selector
+--     -> C.Relmap c          -- ^ Mapping from 'Rel' to 'Rel'
+--     -> B.Rel c             -- ^ Input relation
+--     -> B.AbortOr (B.Rel c) -- ^ Output relation
+-- runRelmapSelector sel = (<$>) where
+--     C.RelmapSource _ p ns <$> _  =  Right $ sel p ns
+--     C.RelmapConst  _ _ r  <$> _  =  Right r
+--     C.RelmapAlias  _ m    <$> r  =  m <$> r
+--     C.RelmapAppend m1 m2  <$> r  =  (m1 <$> r) >>= (m2 <$>)
+--     C.RelmapName   h op   <$> _  =  left h $ B.AbortUnkRelmap op
+--     C.RelmapCalc h _ f _ ms <$> r  =
+--         do rs' <- (<$> r) `mapM` ms  -- subrelmaps gets r
+--            case f rs' r of
+--              Right r' -> Right r'
+--              Left a   -> left h a
 
-    left h a = Left (a, [], C.halfLines h)
+--     left h a = Left (a, [], C.halfLines h)
 
 
 

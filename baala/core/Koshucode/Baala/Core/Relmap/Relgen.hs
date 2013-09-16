@@ -7,7 +7,7 @@ module Koshucode.Baala.Core.Relmap.Relgen
   RelgenCon,
   relgenConst,
   relgenId,
-  runRelgen,
+  runRelgenBody,
 ) where
 
 import qualified Control.Monad as Monad
@@ -31,7 +31,7 @@ data RelgenBody c
     | RelgenOneToAbOne   ( [c] -> B.Ab [c] )
     | RelgenOneToOne     ( [c] -> [c] )
     | RelgenAbBody       ( [[c]] -> B.Ab [[c]] )
-    | RelgenBody         ( [[c]] -> [[c]] )
+    | RelgenFull         ( [[c]] -> [[c]] )
     | RelgenAbPred       ( [c] -> B.Ab Bool )
     | RelgenConst        [[c]]
     | RelgenAppend       (RelgenBody c) (RelgenBody c)
@@ -44,7 +44,7 @@ instance Show (RelgenBody c) where
     show (RelgenOneToOne    _) = "RelgenOneToOne"
     show (RelgenAbPred      _) = "RelgenAbPred"
     show (RelgenAbBody      _) = "RelgenAbBody"
-    show (RelgenBody        _) = "RelgenBody"
+    show (RelgenFull        _) = "RelgenFull"
     show (RelgenConst       _) = "RelgenConst"
     show (RelgenAppend    x y) = "RelgenAppend (" ++ show x ++ ") (" ++ show y ++")"
     show (RelgenUnion      xs) = "RelgenUnion " ++ show xs
@@ -64,8 +64,8 @@ relgenConst (B.Rel h b) = Relgen h (RelgenConst b)
 relgenId :: RelgenCon c
 relgenId _ h = Right (Relgen h (RelgenOneToOne id))
 
-runRelgen :: (Ord c) => RelgenBody c -> [[c]] -> B.Ab [[c]]
-runRelgen = (<$>) where
+runRelgenBody :: (Ord c) => RelgenBody c -> [[c]] -> B.Ab [[c]]
+runRelgenBody = (<$>) where
     RelgenOneToAbMany f <$> b1 = do b2 <- f `mapM` b1
                                     Right $ concat b2
     RelgenOneToAbOne  f <$> b1 = f `mapM` b1
@@ -74,7 +74,7 @@ runRelgen = (<$>) where
     RelgenOneToOne    f <$> b1 = Right $ B.unique $ f `map` b1
     RelgenAbPred      f <$> b1 = Monad.filterM f b1
     RelgenAbBody      f <$> b1 = f b1
-    RelgenBody        f <$> b1 = Right $ f b1
+    RelgenFull        f <$> b1 = Right $ f b1
     RelgenConst  css    <$> _  = Right css
     RelgenUnion ts      <$> b1 = do b2 <- (<$> b1) `mapM` ts
                                     Right $ B.unique $ concat b2

@@ -2,11 +2,11 @@
 
 module Koshucode.Baala.Vanilla.Relmap.Naming
 ( -- * prefix
-  ropConsPrefix, relmapPrefix, relPrefix,
+  ropConsPrefix, relmapPrefix, relgenPrefix,
   -- * unprefix
-  ropConsUnprefix, relmapUnprefix, relUnprefix,
+  ropConsUnprefix, relmapUnprefix, relgenUnprefix,
   -- * prefix-change
-  ropConsPrefixChange, relmapPrefixChange, relPrefixChange,
+  ropConsPrefixChange, relmapPrefixChange, relgenPrefixChange,
 ) where
 
 import qualified Data.List as List
@@ -26,22 +26,16 @@ ropConsPrefix use =
        Right $ relmapPrefix use pre ns
 
 relmapPrefix :: C.RopUse c -> String -> [String] -> C.Relmap c
-relmapPrefix use pre ns = C.relmapCalc use "prefix" sub gen where
-    sub _ r1 = relPrefix pre ns r1
+relmapPrefix use pre ns = C.relmapCalc use "prefix" gen where
     gen _ = relgenPrefix pre ns
 
-relgenPrefix :: String -> [String] -> B.Relhead -> B.Ab (C.Relgen c)
+{-| Add prefix to specified terms. -}
+relgenPrefix
+    :: String              -- ^ Prefix text (except for hyphen)
+    -> [String]            -- ^ Changing termnames
+    -> B.Relhead           -- ^ Heading of input relation
+    -> B.Ab (C.Relgen c)   -- ^ Generator for output relation
 relgenPrefix pre ns h1 = Right $ C.Relgen h2 (C.RelgenOneToOne id) where
-    h2 = B.headChange (map f) h1
-    f n | n `elem` ns  = prefixName pre n
-        | otherwise    = n
-
-{-| Add prefix to terms. -}
-relPrefix
-    :: String             -- ^ Prefix text
-    -> [String]           -- ^ Changing term names
-    -> B.AbMap (B.Rel c)  -- ^ Relation to relation
-relPrefix pre ns (B.Rel h1 b1) = Right $ B.Rel h2 b1 where
     h2 = B.headChange (map f) h1
     f n | n `elem` ns  = prefixName pre n
         | otherwise    = n
@@ -60,19 +54,15 @@ ropConsUnprefix use =
        Right $ relmapUnprefix use pre
 
 relmapUnprefix :: C.RopUse c -> String -> C.Relmap c
-relmapUnprefix use pre = C.relmapCalc use "unprefix" sub gen where
-    sub _ r1 = relUnprefix pre r1
+relmapUnprefix use pre = C.relmapCalc use "unprefix" gen where
     gen _ = relgenUnprefix pre
 
-relgenUnprefix :: String -> B.Relhead -> B.Ab (C.Relgen c)
-relgenUnprefix pre h1 = Right $ C.Relgen h2 (C.RelgenOneToOne id) where
-    h2 = B.headChange (map $ unprefixName pre) h1
-
 {-| Remove prefix -}
-relUnprefix
-    :: String             -- ^ Prefix text
-    -> B.AbMap (B.Rel c)  -- ^ Relation to relation
-relUnprefix pre (B.Rel h1 b1) = Right $ B.Rel h2 b1 where
+relgenUnprefix
+    :: String             -- ^ Prefix text (except for hyphen)
+    -> B.Relhead          -- ^ Heading of input relation
+    -> B.Ab (C.Relgen c)  -- ^ Generator for output relation
+relgenUnprefix pre h1 = Right $ C.Relgen h2 (C.RelgenOneToOne id) where
     h2 = B.headChange (map $ unprefixName pre) h1
 
 unprefixName :: String -> String -> String
@@ -93,25 +83,16 @@ ropConsPrefixChange use =
 
 relmapPrefixChange :: C.RopUse c -> String -> String -> C.Relmap c
 relmapPrefixChange use new old =
-    C.relmapCalc use "prefix-change" sub gen
-     where sub _ r1 = relPrefixChange new old r1
-           gen _ = relgenPrefixChange new old
-
-relgenPrefixChange :: String -> String -> B.Relhead -> B.Ab (C.Relgen c)
-relgenPrefixChange new old h1 = Right $ C.Relgen h2 (C.RelgenOneToOne id) where
-    h2   = B.headChange (map f) h1
-    new' = new ++ "-"
-    old' = old ++ "-"
-    f n' = case List.stripPrefix old' n' of
-             Just n2 -> new' ++ n2
-             Nothing -> n'
+    C.relmapCalc use "prefix-change" gen
+     where gen _ = relgenPrefixChange new old
 
 {-| Change prefix -}
-relPrefixChange
-    :: String           -- ^ New prefix
-    -> String           -- ^ Old prefix
-    -> B.AbMap (B.Rel c)  -- ^ Relation to relation
-relPrefixChange new old (B.Rel h1 b1) = Right $ B.Rel h2 b1 where
+relgenPrefixChange
+    :: String             -- ^ New prefix text (except for hyphen)
+    -> String             -- ^ Old prefix text (except for hyphen)
+    -> B.Relhead          -- ^ Heading of input relation
+    -> B.Ab (C.Relgen c)  -- ^ Generator for output relation
+relgenPrefixChange new old h1 = Right $ C.Relgen h2 (C.RelgenOneToOne id) where
     h2   = B.headChange (map f) h1
     new' = new ++ "-"
     old' = old ++ "-"

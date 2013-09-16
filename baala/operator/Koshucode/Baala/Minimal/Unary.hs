@@ -11,13 +11,13 @@ module Koshucode.Baala.Minimal.Unary
   -- * id
   ropConsId, relmapId, relId,
   -- * empty
-  ropConsEmpty, relmapEmpty, relEmpty,
+  ropConsEmpty, relmapEmpty, relgenEmpty,
   -- * pick
-  ropConsPick, relmapPick, relPick,
+  ropConsPick, relmapPick, relgenPick,
   -- * cut
-  ropConsCut, relmapCut, relCut,
+  ropConsCut, relmapCut, relgenCut,
   -- * rename
-  ropConsRename, relmapRename, relRename
+  ropConsRename, relmapRename, relgenRename
 ) where
 
 import qualified Data.List  as List
@@ -51,8 +51,7 @@ ropConsId :: C.RopCons c
 ropConsId use = Right $ relmapId use
 
 relmapId :: C.RopUse c -> C.Relmap c
-relmapId use = C.relmapCalc use "id" sub C.relgenId where
-    sub _ = relId
+relmapId use = C.relmapCalc use "id" C.relgenId where
 
 {-| Identity mapping, i.e., do nothing. -}
 relId :: B.AbMap (B.Rel c)
@@ -66,16 +65,12 @@ ropConsEmpty :: C.RopCons c
 ropConsEmpty use = Right $ relmapEmpty use
 
 relmapEmpty :: C.RopUse c -> C.Relmap c
-relmapEmpty use = C.relmapCalc use "empty" sub gen where
-    sub _ = relEmpty
+relmapEmpty use = C.relmapCalc use "empty" gen where
     gen _ = relgenEmpty
 
+{-| Throw away all tuples in a relation. -}
 relgenEmpty :: B.Relhead -> B.Ab (C.Relgen c)
 relgenEmpty h = Right $ C.Relgen h (C.RelgenConst [])
-
-{-| Throw away all tuples in a relation. -}
-relEmpty :: B.AbMap (B.Rel c)  -- ^ Any relation to empty relation
-relEmpty (B.Rel h1 _) = Right $ B.Rel h1 []
 
 
 
@@ -87,18 +82,14 @@ ropConsPick use =
      Right $ relmapPick use ns
 
 relmapPick :: (Ord c) => C.RopUse c -> [String] -> C.Relmap c
-relmapPick use ns = C.relmapCalc use "pick" sub gen where
-    sub _ = relPick ns
+relmapPick use ns = C.relmapCalc use "pick" gen where
     gen _ = relgenPick ns
 
-relgenPick :: [String] -> B.Relhead -> B.Ab (C.Relgen c)
+relgenPick
+    :: [String]            -- ^ Names of picking terms
+    -> B.Relhead           -- ^ Heading of input relation
+    -> B.Ab (C.Relgen c)   -- ^ Generator for output relation
 relgenPick ns h = relgenArrange B.arrangePick B.arrangePick ns h
-
-relPick
-    :: (Ord c)
-    => [String]            -- ^ Term names
-    -> B.AbMap (B.Rel c)   -- ^ Mapping relation to relation
-relPick ns r = B.arrangeRel B.arrangePick B.arrangePick ns r
 
 
 
@@ -110,19 +101,14 @@ ropConsCut use =
      Right $ relmapCut use ns
 
 relmapCut :: (Ord c) => C.RopUse c -> [String] -> C.Relmap c
-relmapCut use ns = C.relmapCalc use "cut" sub gen where
-    sub _ = relCut ns
+relmapCut use ns = C.relmapCalc use "cut" gen where
     gen _ = relgenCut ns
 
-relgenCut :: [String] -> B.Relhead -> B.Ab (C.Relgen c)
+relgenCut
+    :: [String]            -- ^ Names of cutting terms
+    -> B.Relhead           -- ^ Heading of input relation
+    -> B.Ab (C.Relgen c)   -- ^ Generator for output relation
 relgenCut ns h = relgenArrange B.arrangeCut B.arrangeCut ns h
-
-relCut
-    :: (Ord c)
-    => [String]            -- ^ Term names
-    -> B.AbMap (B.Rel c)   -- ^ Mapping relation to relation
-relCut ns r = B.arrangeRel B.arrangeCut B.arrangeCut ns r
-
 
 relgenArrange
     :: B.Arrange String
@@ -153,32 +139,18 @@ ropConsRename use = do
   Right $ relmapRename use np
 
 relmapRename :: C.RopUse c -> [(String, String)] -> C.Relmap c
-relmapRename use np = C.relmapCalc use "rename" sub gen where
-    sub _ = relRename np
+relmapRename use np = C.relmapCalc use "rename" gen where
     gen _ = relgenRename np
 
-relgenRename :: [(String, String)] -> B.Relhead -> B.Ab (C.Relgen c)
+{-| Change terms names -}
+relgenRename
+    :: [(String, String)]   -- ^ List of termnames (/to/, /from/)
+    -> B.Relhead            -- ^ Heading of input relation
+    -> B.Ab (C.Relgen c)    -- ^ Generator for output relation
 relgenRename np h1
     | nsCheck /= [] = Left  $ B.AbortReqNewTerms nsCheck
     | psCheck /= [] = Left  $ B.AbortNoTerms psCheck
     | otherwise     = Right $ C.Relgen h2 (C.RelgenOneToOne id)
-    where
-      (ns, ps) = unzip np
-      nsCheck  = B.headExistTerms    h1 ns
-      psCheck  = B.headNonExistTerms h1 ps
-      h2 = B.headChange (map re) h1
-      pn = map Tuple.swap np
-      re p = Maybe.fromMaybe p $ lookup p pn
-
-
-{-| Change terms names -}
-relRename
-    :: [(String, String)]   -- ^ List of term name (/to/, /from/)
-    -> B.AbMap (B.Rel c)    -- ^ Relation to relation
-relRename np (B.Rel h1 b1)
-    | nsCheck /= []  =  Left  $ B.AbortReqNewTerms nsCheck
-    | psCheck /= []  =  Left  $ B.AbortNoTerms psCheck
-    | otherwise      =  Right $ B.Rel h2 b1
     where
       (ns, ps) = unzip np
       nsCheck  = B.headExistTerms    h1 ns

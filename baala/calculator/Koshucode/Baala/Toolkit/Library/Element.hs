@@ -58,7 +58,7 @@ elemRelmap relmap = name : f relmap where
     f (C.RelmapAlias  _ r1)      =  f r1
     f (C.RelmapSource _ p xs)    =  [ rop "source", src p xs ]
     f (C.RelmapName   _ n)       =  [ ref n ]
-    f (C.RelmapCalc   _ n _ _ rs)  =  rop n : concatMap f rs
+    f (C.RelmapCalc   _ n _ rs)  =  rop n : concatMap f rs
     f (C.RelmapConst  _ n _)     =  [ rop n ]
 
 -- ------------------------------------------------------------------
