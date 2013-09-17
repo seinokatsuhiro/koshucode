@@ -14,7 +14,7 @@ import qualified Koshucode.Baala.Core.Relmap.Assert     as C
 import qualified Koshucode.Baala.Core.Relmap.Dataset    as C
 import qualified Koshucode.Baala.Core.Relmap.HalfRelmap as C
 import qualified Koshucode.Baala.Core.Relmap.Relmap     as C
-import qualified Koshucode.Baala.Core.Relmap.Relgen     as C
+import qualified Koshucode.Baala.Core.Relmap.Relfy     as C
 
 
 
@@ -27,62 +27,43 @@ runRelmapDataset
     -> C.Relmap c           -- ^ Mapping from 'Rel' to 'Rel'
     -> B.Rel c              -- ^ Input relation
     -> B.AbortOr (B.Rel c)  -- ^ Output relation
-runRelmapDataset ds = runRelmapViaRelgen $ C.selectRelation ds
---runRelmapDataset ds = runRelmapSelector $ C.selectRelation ds
+runRelmapDataset = runRelmapViaRelfy . C.selectRelation
 
-runRelmapViaRelgen
+runRelmapViaRelfy
     ::  (Ord c)
     => C.RelSelect c
     -> C.Relmap c
     -> B.Rel c
     -> B.AbortOr (B.Rel c)
-runRelmapViaRelgen sel m (B.Rel h1 b1) =
-    do C.Relgen h2 g2 <- relmapRelgen sel m h1
-       case C.runRelgenBody g2 b1 of
+runRelmapViaRelfy sel m (B.Rel h1 b1) =
+    do C.Relfy h2 f2 <- relmapRelfy sel m h1
+       case C.relfy f2 b1 of
          Right b2 -> Right $ B.Rel h2 b2
          Left a   -> Left (a, [], [])
 
-relmapRelgen
+relmapRelfy
     :: C.RelSelect c
     -> C.Relmap c
     -> B.Relhead
-    -> B.AbortOr (C.Relgen c)
-relmapRelgen sel = (<$>) where
-    C.RelmapSource _ p ns <$> _  = Right $ C.relgenConst (sel p ns)
-    C.RelmapConst  _ _ r  <$> _  = Right $ C.relgenConst r
-    C.RelmapAlias  _ m    <$> h1 = m <$> h1
-    C.RelmapName h op     <$> _  = left h $ B.AbortUnkRelmap op
-    C.RelmapAppend m1 m2  <$> h1 =
-        do rgen2 <- m1 <$> h1
-           rgen3 <- m2 <$> C.relgenHead rgen2
-           Right $ rgen2 `M.mappend` rgen3
-    C.RelmapCalc h _ sub ms <$> h1 =
-        do ts <- (<$> h1) `mapM` ms
-           case sub ts h1 of
-             Right tsub -> Right tsub
-             Left a -> left h a
+    -> B.AbortOr (C.Relfy c)
+relmapRelfy sel = (<$>) where
+    C.RelmapSource _ p ns  <$> _  = Right $ C.relfyConst (sel p ns)
+    C.RelmapConst  _ _ r   <$> _  = Right $ C.relfyConst r
+    C.RelmapAlias  _ m     <$> h1 = m <$> h1
+    C.RelmapName h op      <$> _  = left h $ B.AbortUnkRelmap op
+
+    C.RelmapAppend m1 m2   <$> h1 =
+        do relfy2 <- m1 <$> h1
+           relfy3 <- m2 <$> C.relfyHead relfy2
+           Right $ M.mappend relfy2 relfy3
+
+    C.RelmapCalc h _ mk ms <$> h1 =
+        do subrelfy <- (<$> h1) `mapM` ms
+           case mk subrelfy h1 of
+             Right relfy2 -> Right relfy2
+             Left a       -> left h a
 
     left h a = Left (a, [], C.halfLines h)
-
--- runRelmapSelector
---     :: (Ord c, C.CNil c)
---     => C.RelSelect c       -- ^ Relation selector
---     -> C.Relmap c          -- ^ Mapping from 'Rel' to 'Rel'
---     -> B.Rel c             -- ^ Input relation
---     -> B.AbortOr (B.Rel c) -- ^ Output relation
--- runRelmapSelector sel = (<$>) where
---     C.RelmapSource _ p ns <$> _  =  Right $ sel p ns
---     C.RelmapConst  _ _ r  <$> _  =  Right r
---     C.RelmapAlias  _ m    <$> r  =  m <$> r
---     C.RelmapAppend m1 m2  <$> r  =  (m1 <$> r) >>= (m2 <$>)
---     C.RelmapName   h op   <$> _  =  left h $ B.AbortUnkRelmap op
---     C.RelmapCalc h _ f _ ms <$> r  =
---         do rs' <- (<$> r) `mapM` ms  -- subrelmaps gets r
---            case f rs' r of
---              Right r' -> Right r'
---              Left a   -> left h a
-
---     left h a = Left (a, [], C.halfLines h)
 
 
 

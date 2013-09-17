@@ -5,9 +5,9 @@
 module Koshucode.Baala.Vanilla.Relmap.Calc
 (
   -- * add
-  ropConsAdd, relmapAdd, relgenAdd,
+  ropConsAdd, relmapAdd, relfyAdd,
   -- * hold
-  ropConsHold, relmapHold, relgenHold,
+  ropConsHold, relmapHold, relfyHold,
 ) where
 
 import qualified Koshucode.Baala.Base as B
@@ -27,19 +27,20 @@ ropConsAdd use =
      Right $ relmapAdd use cs
 
 relmapAdd :: C.RopUse VContent -> [B.Named (C.PosCox VContent)] -> C.Relmap VContent
-relmapAdd use cs = C.relmapCalc use "add" gen where
-    gen _ = relgenAdd cs
+relmapAdd use cs = C.relmapCalc use "add" fy where
+    fy _ = relfyAdd cs
 
 -- todo: shared term
-relgenAdd :: [B.Named (C.PosCox VContent)]
-          -> B.Relhead
-          -> B.Ab (C.Relgen VContent)
-relgenAdd cs h1 = Right $ C.Relgen h3 (C.RelgenOneToAbOne run) where
-    h2 = B.headFrom $ map fst cs
-    h3 = Builtin.mappend h2 h1
-    cs2 = map snd cs
-    run arg = do cs2' <- mapM (C.runCoxH h1 arg) cs2
-                 Right $ cs2' ++ arg
+relfyAdd
+    :: [B.Named (C.PosCox VContent)]
+    -> B.Relhead
+    -> B.Ab (C.Relfy VContent)
+relfyAdd xs h1 = Right $ C.Relfy h2 (C.RelfyOneToAbOne f) where
+    ns    = map fst xs  -- term names
+    es    = map snd xs  -- term expressions
+    h2    = Builtin.mappend (B.headFrom ns) h1
+    f cs1 = do cs2 <- mapM (C.runCoxH h1 cs1) es
+               Right $ cs2 ++ cs1
 
 
 
@@ -51,19 +52,20 @@ ropConsHold use = do
   c <- vanillaContent use t
   Right $ relmapHold use True c
 
-relmapHold :: C.RopUse VContent -> Bool -> (C.PosCox VContent) -> C.Relmap VContent
-relmapHold use b cont = C.relmapCalc use "hold" gen where
-    gen _ = relgenHold b cont
+relmapHold :: C.RopUse VContent -> Bool
+           -> (C.PosCox VContent) -> C.Relmap VContent
+relmapHold use b cont = C.relmapCalc use "hold" fy where
+    fy _ = relfyHold b cont
 
-relgenHold
+relfyHold
     :: (C.CContent c, Show c)
-    => Bool               -- ^ Criterion
-    -> (C.PosCox c)       -- ^ Predicate
-    -> B.Relhead          -- ^ Heading of input relation
-    -> B.Ab (C.Relgen c)  -- ^ Generator for output Relation
-relgenHold b cont h1 = Right $ C.Relgen h1 (C.RelgenAbPred p) where
-    p lits = do lit <- C.runCoxH h1 lits cont
-                case lit of
-                  x | C.isBool x -> Right $ b == C.getBool x
-                  _ -> Left $ B.AbortReqBoolean (show lit)
+    => Bool              -- ^ Criterion
+    -> (C.PosCox c)      -- ^ Predicate
+    -> B.Relhead         -- ^ Heading of input relation
+    -> B.Ab (C.Relfy c)  -- ^ Relfier for output relation
+relfyHold b cox h1 = Right $ C.Relfy h1 (C.RelfyAbPred p) where
+    p cs = do c <- C.runCoxH h1 cs cox
+              case c of
+                x | C.isBool x -> Right $ b == C.getBool x
+                _ -> Left $ B.AbortReqBoolean (show c)
 

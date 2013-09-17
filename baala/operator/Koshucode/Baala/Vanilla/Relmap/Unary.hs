@@ -3,18 +3,18 @@
 module Koshucode.Baala.Vanilla.Relmap.Unary
 ( 
   -- * size
-  ropConsSize, relmapSize, relgenSize,
+  ropConsSize, relmapSize, relfySize,
   -- * enclose
-  ropConsEnclose, relmapEnclose, relgenEnclose,
+  ropConsEnclose, relmapEnclose, relfyEnclose,
   -- * rank
-  ropConsRank, relmapRank, relgenRank, -- limit,
+  ropConsRank, relmapRank, relfyRank, -- limit,
   -- * typename
-  ropConsTypename, relmapTypename, relgenTypename,
+  ropConsTypename, relmapTypename, relfyTypename,
   -- * range
   ropConsRange, relmapRange,
   -- * member
   -- $member
-  ropConsMember, relmapMember, relgenMember,
+  ropConsMember, relmapMember, relfyMember,
   -- * RDF
   ropConsRdf
 ) where
@@ -36,16 +36,16 @@ ropConsSize use =
      Right $ relmapSize use n
 
 relmapSize :: (C.CDec c) => C.RopUse c -> String -> C.Relmap c
-relmapSize use n = C.relmapCalc use "size" gen where
-    gen _ _ = relgenSize n
+relmapSize use n = C.relmapCalc use "size" fy where
+    fy _ _ = relfySize n
 
 {-| Cardinality -}
-relgenSize
+relfySize
     :: (C.CDec c)
-    => String              -- ^ Name of new term
-    -> B.Ab (C.Relgen c)   -- ^ Generator of output relation
-relgenSize n = Right $ C.Relgen h2 (C.RelgenFull f) where
-    h2 = B.headFrom [n]
+    => String             -- ^ Name of new term
+    -> B.Ab (C.Relfy c)   -- ^ Relfier for output relation
+relfySize n = Right $ C.Relfy h2 (C.RelfyFull f) where
+    h2   = B.headFrom [n]
     f b1 = [[C.putDecFromInt $ length b1]]
 
 
@@ -58,16 +58,16 @@ ropConsEnclose use =
      Right $ relmapEnclose use n
 
 relmapEnclose :: (C.CRel c) => C.RopUse c -> String -> C.Relmap c
-relmapEnclose use n = C.relmapCalc use "enclose" gen where
-    gen _ = relgenEnclose n
+relmapEnclose use n = C.relmapCalc use "enclose" fy where
+    fy _ = relfyEnclose n
 
 {-| Enclose the current relation in a term. -}
-relgenEnclose
+relfyEnclose
     :: (C.CRel c)
-    => String              -- ^ Termname of enclosed relation
-    -> B.Relhead           -- ^ Header of input relation
-    -> B.Ab (C.Relgen c)   -- ^ Generator of output relation
-relgenEnclose n h1 = Right $ C.Relgen h2 (C.RelgenFull f) where
+    => String             -- ^ Termname of enclosed relation
+    -> B.Relhead          -- ^ Header of input relation
+    -> B.Ab (C.Relfy c)   -- ^ Relfier for output relation
+relfyEnclose n h1 = Right $ C.Relfy h2 (C.RelfyFull f) where
     h2 = B.Relhead [B.Nest n $ B.headTerms h1]
     f b1 = [[C.putRel $ B.Rel h1 b1]]
 
@@ -82,18 +82,18 @@ ropConsRank use =
        Right $ relmapRank use n ns
 
 relmapRank :: (C.CDec c, Ord c) => C.RopUse c -> String -> [String] -> C.Relmap c
-relmapRank use n ns = C.relmapCalc use "rank" gen where
-    gen _ = relgenRank n ns
+relmapRank use n ns = C.relmapCalc use "rank" fy where
+    fy _ = relfyRank n ns
 
-relgenRank
+relfyRank
     :: (Ord c, C.CDec c)
     => String              -- ^ Name of rank term
     -> [String]            -- ^ Termnames for order
     -> B.Relhead           -- ^ Header of input relation
-    -> B.Ab (C.Relgen c)   -- ^ Generator for output relation
-relgenRank n ns h1 = Right $ C.Relgen h2 $ C.RelgenFull g2 where
-    h2    = n `B.headCons` h1
-    g2 b1 = let b1' = sortByName ords (B.headNames h1) b1
+    -> B.Ab (C.Relfy c)   -- ^ Generator for output relation
+relfyRank n ns h1 = Right $ C.Relfy h2 (C.RelfyFull f2) where
+    h2    = B.headCons n h1
+    f2 b1 = let b1' = sortByName ords (B.headNames h1) b1
             in zipWith (:) (map C.putDecFromInt [1..]) b1'
     ords  = map Asc ns
 
@@ -116,16 +116,15 @@ ropConsTypename use = do
   Right $ relmapTypename use n p
 
 relmapTypename :: (C.CContent c) => C.RopUse c -> String -> String -> C.Relmap c
-relmapTypename use n p = C.relmapCalc use "typename" gen where
-    gen _ = relgenTypename n p
+relmapTypename use n p = C.relmapCalc use "typename" fy where
+    fy _ = relfyTypename n p
 
 {-| Get typename. -}
-relgenTypename
+relfyTypename
   :: (C.CText c) =>
-     String -> String -> B.Relhead -> B.Ab (C.Relgen c)
-relgenTypename n p h1 = Right $ C.Relgen h2 (C.RelgenFull g2) where
-    h2    = n `B.headCons` h1
-    g2 b1 = map f b1
+     String -> String -> B.Relhead -> B.Ab (C.Relfy c)
+relfyTypename n p h1 = Right $ C.Relfy h2 (C.RelfyOneToOne f) where
+    h2    = B.headCons n h1
     pos   = h1 `B.posFlat` [p]
     f cs1 = let [c] = B.posPick pos cs1
             in C.putText (C.typename c) : cs1
@@ -142,17 +141,16 @@ ropConsRange use =
      Right $ relmapRange use term low high
 
 relmapRange :: (C.CDec c) => C.RopUse c -> String -> Int -> Int -> C.Relmap c
-relmapRange use term low high = C.relmapCalc use "range" gen where
-    gen _ = relgenRange term low high
+relmapRange use term low high = C.relmapCalc use "range" fy where
+    fy _ = relfyRange term low high
 
-relgenRange
+relfyRange
   :: (C.CDec c) =>
-     String -> Int -> Int -> B.Relhead -> B.Ab (C.Relgen c)
-relgenRange term low high h1 = Right $ C.Relgen h2 (C.RelgenFull g2) where
-    h2    = term `B.headCons` h1
-    g2 b1 = concatMap g b1
-    ys    = map C.putDecFromInt [low .. high]
-    g xs  = map (: xs) ys
+     String -> Int -> Int -> B.Relhead -> B.Ab (C.Relfy c)
+relfyRange n low high h1 = Right $ C.Relfy h2 (C.RelfyOneToMany f) where
+    h2    = B.headCons n h1
+    decs  = map C.putDecFromInt [low .. high]
+    f cs  = map (: cs) decs
 
 
 
@@ -178,27 +176,25 @@ ropConsMember use =
      Right $ relmapMember use x xs
 
 relmapMember :: C.RopUse VContent -> String -> String -> C.Relmap VContent
-relmapMember use x xs = C.relmapCalc use "member" gen where
-    gen _ = relgenMember x xs
+relmapMember use x xs = C.relmapCalc use "member" fy where
+    fy _ = relfyMember x xs
 
-relgenMember :: String -> String -> B.Relhead -> B.Ab (C.Relgen VContent)
-relgenMember x xs h1 = r2 where
-    r2 | xHere && xsHere     = relgenMemberCheck  xPos xsPos h1
-       | not xHere && xsHere = relgenMemberExpand x    xsPos h1
+relfyMember :: String -> String -> B.Relhead -> B.Ab (C.Relfy VContent)
+relfyMember x xs h1 = r2 where
+    r2 | xHere && xsHere     = relfyMemberCheck  xPos xsPos h1
+       | not xHere && xsHere = relfyMemberExpand x    xsPos h1
        | otherwise           = Left $ B.AbortNoTerms [x, xs]
     ([xPos, xsPos], [xHere, xsHere])
         = h1 `B.posHere` [x, xs]
 
-relgenMemberCheck :: B.TermPos -> B.TermPos -> B.Relhead -> B.Ab (C.Relgen VContent)
-relgenMemberCheck xPos xsPos h1 = Right $ C.Relgen h1 (C.RelgenFull g2) where
-    g2 b1  =  filter f b1
-    f cs   =  let [xCont, xsCont] = B.posPick [xPos, xsPos] cs
-              in xCont `isMember` xsCont
+relfyMemberCheck :: B.TermPos -> B.TermPos -> B.Relhead -> B.Ab (C.Relfy VContent)
+relfyMemberCheck xPos xsPos h1 = Right $ C.Relfy h1 (C.RelfyPred f) where
+    f cs = let [xCont, xsCont] = B.posPick [xPos, xsPos] cs
+           in xCont `isMember` xsCont
 
-relgenMemberExpand :: String -> B.TermPos -> B.Relhead -> B.Ab (C.Relgen VContent)
-relgenMemberExpand x xsPos h1 = Right $ C.Relgen h2 (C.RelgenFull g2) where
+relfyMemberExpand :: String -> B.TermPos -> B.Relhead -> B.Ab (C.Relfy VContent)
+relfyMemberExpand x xsPos h1 = Right $ C.Relfy h2 (C.RelfyOneToMany f) where
     h2     =  B.headCons x h1
-    g2 b1  =  concatMap f b1
     f cs   =  let [xsCont] = B.posPick [xsPos] cs
               in case xsCont of
                    VSet  xs  -> map (: cs) xs

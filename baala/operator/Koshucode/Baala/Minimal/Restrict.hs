@@ -4,9 +4,9 @@
 
 module Koshucode.Baala.Minimal.Restrict
 ( -- * some
-  ropConsSome, relmapSome, relgenSome,
+  ropConsSome, relmapSome, relfySome,
   -- * none
-  ropConsNone, relmapNone, relgenNone
+  ropConsNone, relmapNone, relfyNone
 ) where
 
 import qualified Koshucode.Baala.Base as B
@@ -23,16 +23,16 @@ ropConsSome use =
        Right $ relmapSome use m
 
 relmapSome :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
-relmapSome use m = C.relmapConfl use "some" gen [m] where
-    gen [r2] = relgenSome r2
-    gen _    = B.bug
+relmapSome use m = C.relmapConfl use "some" fy [m] where
+    fy [r2] = relfySome r2
+    fy _    = B.bug
 
-relgenSome
+relfySome
     :: (Ord c)
-    => C.Relgen c          -- ^ Generator of subrelmap
+    => C.Relfy c          -- ^ Generator of subrelmap
     -> B.Relhead           -- ^ Heading of input relation
-    -> B.Ab (C.Relgen c)   -- ^ Generator for output relation
-relgenSome = relgenSemi False
+    -> B.Ab (C.Relfy c)   -- ^ Generator for output relation
+relfySome = relfySemi False
 
 
 
@@ -44,20 +44,21 @@ ropConsNone use =
        Right $ relmapNone use m
 
 relmapNone :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
-relmapNone use m = C.relmapConfl use "none" gen [m] where
-    gen [r2] = relgenNone r2
-    gen _    = B.bug
+relmapNone use m = C.relmapConfl use "none" fy [m] where
+    fy [r2] = relfyNone r2
+    fy _    = B.bug
 
-relgenNone :: (Ord c) => C.Relgen c -> B.Relhead -> B.Ab (C.Relgen c)
-relgenNone = relgenSemi True
+relfyNone :: (Ord c) => C.Relfy c -> B.Relhead -> B.Ab (C.Relfy c)
+relfyNone = relfySemi True
 
-relgenSemi
+relfySemi
     :: (Ord c)
     => Bool
-    -> C.Relgen c          -- ^ Generator of subrelmap
-    -> B.Relhead           -- ^ Heading of input relation
-    -> B.Ab (C.Relgen c)   -- ^ Generator for output relation
-relgenSemi b (C.Relgen _ g2) h1 = Right $ C.Relgen h1 (C.RelgenAbPred p) where
-    p a1 = do b2 <- C.runRelgenBody g2 [a1]
-              Right $ null b2 == b
+    -> C.Relfy c          -- ^ Generator of subrelmap
+    -> B.Relhead          -- ^ Heading of input relation
+    -> B.Ab (C.Relfy c)   -- ^ Generator for output relation
+relfySemi b (C.Relfy _ f2) h1 =
+    Right $ C.Relfy h1 (C.RelfyAbPred p)
+    where p cs = do b2 <- C.relfy f2 [cs]
+                    Right $ null b2 == b
 

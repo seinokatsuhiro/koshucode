@@ -16,13 +16,13 @@ module Koshucode.Baala.Minimal.Tropashko
   -- * Meet (Natural join)
   ropConsMeet,
   relmapMeet,
-  relgenMeet,
+  relfyMeet,
   -- $MeetImplementation
 
   -- * Join (Inner union)
   ropConsJoin,
   relmapJoin,
-  relgenJoin,
+  relfyJoin,
 ) where
 
 import qualified Koshucode.Baala.Base as B
@@ -43,17 +43,17 @@ relmapMeet :: (Ord c)
     => C.RopUse c     -- ^ Source infomation
     -> C.Relmap c     -- ^ Subrelmap of meet operator
     -> C.Relmap c     -- ^ Relmap of meet operator
-relmapMeet use m = C.relmapConfl use "meet" gen [m] where
-    gen [r2] = relgenMeet r2
-    gen _    = B.bug
+relmapMeet use m = C.relmapConfl use "meet" fy [m] where
+    fy [r2] = relfyMeet r2
+    fy _    = B.bug
 
 {-| Meet two relations. -}
-relgenMeet
+relfyMeet
     :: (Ord c)
-    => C.Relgen c          -- ^ Generator of subrelation
+    => C.Relfy c          -- ^ Generator of subrelation
     -> B.Relhead           -- ^ Heading of input relation
-    -> B.Ab (C.Relgen c)   -- ^ Generator for output relation
-relgenMeet (C.Relgen h2 g2) h1 = Right (C.Relgen h3 gen3) where
+    -> B.Ab (C.Relfy c)   -- ^ Generator for output relation
+relfyMeet (C.Relfy h2 f2) h1 = Right (C.Relfy h3 f3) where
     share1, share2 :: [B.TermPos]
     share1    =  h1 `B.posNest` shared
     share2    =  h2 `B.posNest` shared
@@ -65,10 +65,10 @@ relgenMeet (C.Relgen h2 g2) h1 = Right (C.Relgen h3 gen3) where
     cut2      =  B.posCut  share2
 
     h3        =  h2 `mappend` h1
-    gen3      =  case g2 of
-                   C.RelgenConst b2 -> C.RelgenOneToAbMany (meet2 b2)
-                   _                -> C.RelgenOneToAbMany meet
-    meet cs1  =  do b2sub <- C.runRelgenBody g2 [cs1]
+    f3        =  case f2 of
+                   C.RelfyConst b2 -> C.RelfyOneToAbMany (meet2 b2)
+                   _               -> C.RelfyOneToAbMany meet
+    meet cs1  =  do b2sub <- C.relfy f2 [cs1]
                     meet2 b2sub cs1
     meet2 b2 cs1 =  let m2 = B.gatherToMap $ map kv b2
                     in case B.lookupMap (pick1 cs1) m2 of
@@ -92,16 +92,16 @@ relmapJoin
     => C.RopUse c     -- ^ Source infomation
     -> C.Relmap c     -- ^ Subrelmap of join operator
     -> C.Relmap c     -- ^ Relmap of join operator
-relmapJoin use m = C.relmapConfl use "join" gen [m] where
-    gen [r2] = relgenJoin r2
-    gen _    = B.bug
+relmapJoin use m = C.relmapConfl use "join" fy [m] where
+    fy [r2] = relfyJoin r2
+    fy _    = B.bug
 
 {-| Join two relations. -}
-relgenJoin
-    :: C.Relgen c          -- ^ Generator of subrelation
+relfyJoin
+    :: C.Relfy c          -- ^ Generator of subrelation
     -> B.Relhead           -- ^ Heading of input relation
-    -> B.Ab (C.Relgen c)   -- ^ Generator for output relation
-relgenJoin (C.Relgen h2 gen2) h1 = Right (C.Relgen h3 gen3) where
+    -> B.Ab (C.Relfy c)   -- ^ Generator for output relation
+relfyJoin (C.Relfy h2 f2) h1 = Right (C.Relfy h3 f3) where
     share1, share2 :: [B.TermPos]
     share1  =  h1 `B.posNest` shared
     share2  =  h2 `B.posNest` shared
@@ -112,9 +112,9 @@ relgenJoin (C.Relgen h2 gen2) h1 = Right (C.Relgen h3 gen3) where
     pick2   =  B.posPick share2
 
     h3      =  B.headChange pick1 h1
-    gen3    =  C.RelgenUnion
-                  [ C.RelgenOneToOne pick1
-                  , C.RelgenAppend gen2 (C.RelgenOneToOne pick2) ]
+    f3      =  C.RelfyUnion
+                  [ C.RelfyOneToOne pick1
+                  , C.RelfyAppend f2 (C.RelfyOneToOne pick2) ]
 
 
 

@@ -22,7 +22,7 @@ module Koshucode.Baala.Core.Relmap.Relmap
 import qualified Data.Monoid as M
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core.Relmap.HalfRelmap as C
-import qualified Koshucode.Baala.Core.Relmap.Relgen     as C
+import qualified Koshucode.Baala.Core.Relmap.Relfy     as C
 
 
 
@@ -38,7 +38,7 @@ data Relmap c
     -- | Equavalent relmap
     | RelmapAlias  C.HalfRelmap (Relmap c)
     -- | Relmap that maps relations to a relation
-    | RelmapCalc   C.HalfRelmap String (C.RelgenCon c) [Relmap c]
+    | RelmapCalc   C.HalfRelmap String (C.RelmapRelfy c) [Relmap c]
     -- | Connect two relmaps
     | RelmapAppend (Relmap c) (Relmap c)
     -- | Relmap reference
@@ -70,7 +70,7 @@ showRelmap = sh where
     sub m = " (" ++ sh m ++ ")"
 
 instance M.Monoid (Relmap c) where
-    mempty  = RelmapCalc halfid "id" C.relgenId []
+    mempty  = RelmapCalc halfid "id" C.relfyId []
     mappend = RelmapAppend
 
 halfid :: C.HalfRelmap
