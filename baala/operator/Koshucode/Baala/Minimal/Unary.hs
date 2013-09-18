@@ -114,7 +114,7 @@ relfyArrange
     -> B.Relhead
     -> B.Ab (C.Relfy c)
 relfyArrange ha ba ns h1
-    | null non  = Right $ C.Relfy h2 (C.RelfyOneToOne $ ba ind)
+    | null non  = Right $ C.Relfy h2 (C.RelfyOneToOne True $ ba ind)
     | otherwise = Left  $ B.AbortNoTerms non
     where
       non =  B.headNonExistTerms h1 ns

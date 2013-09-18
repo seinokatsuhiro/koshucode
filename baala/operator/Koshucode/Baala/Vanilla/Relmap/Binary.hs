@@ -4,8 +4,8 @@ module Koshucode.Baala.Vanilla.Relmap.Binary
 ( 
   -- * maybe
   ropConsMaybe, relmapMaybe, relfyMaybe,
-  -- * maybe-both
-  ropConsMaybeBoth, relmapMaybeBoth,
+  -- * full
+  ropConsFull, relmapFull, relfyFull,
   -- * group
   ropConsGroup, relmapGroup, relfyGroup,
 ) where
@@ -13,6 +13,7 @@ module Koshucode.Baala.Vanilla.Relmap.Binary
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 import qualified Koshucode.Baala.Builtin as Builtin
+import qualified Koshucode.Baala.Minimal as ROP
 import Koshucode.Baala.Vanilla.Type
 
 
@@ -31,7 +32,7 @@ relmapMaybe use m = C.relmapConfl use "maybe" fy [m] where
 
 relfyMaybe :: (Ord c, C.CNil c) => C.Relfy c -> B.Relhead -> B.Ab (C.Relfy c)
 relfyMaybe (C.Relfy h2 f2) h1 =
-    Right $ C.Relfy h3 (C.RelfyAbFull f3)
+    Right $ C.Relfy h3 (C.RelfyAbFull False f3)
     where
       posh12  =  h1 `B.posFrom` h2
       share1  =  h1 `B.posNest` B.posInner posh12
@@ -53,21 +54,34 @@ relfyMaybe (C.Relfy h2 f2) h1 =
 
 
 
--- ----------------------  maybe-both
+-- ----------------------  full
 
-ropConsMaybeBoth :: C.RopCons VContent
-ropConsMaybeBoth use =
-    do m <- Builtin.getRelmap use
-       Right $ relmapMaybeBoth use m
+ropConsFull :: C.RopCons VContent
+ropConsFull use =
+    do [m1, m2] <- Builtin.getRelmaps use
+       Right $ relmapFull use m1 m2
 
 {-| like SQL's full join -}
-relmapMaybeBoth :: (Ord c, C.CNil c) => C.RopUse c -> B.Map (C.Relmap c)
-relmapMaybeBoth use m = C.relmapConfl use "maybe-both" fy [m] where
---     sub [r2] r1 = do r12 <- relMaybe r1 r2
---                      r21 <- relMaybe r2 r1
---                      Mini.relJoin r12 r21
---    sub _ _ = B.bug
-    fy _ _ = B.bug
+relmapFull :: (Ord c, C.CNil c) => C.RopUse c
+           -> C.Relmap c -> C.Relmap c -> C.Relmap c
+relmapFull use m1 m2 = C.relmapConfl use "full" fy [m1, m2] where
+    fy [r1, r2] = relfyFull r1 r2
+    fy _ = B.bug
+
+relfyFull
+    :: (Ord c, C.CNil c)
+    => C.Relfy c -> C.Relfy c
+    -> B.Relhead -> B.Ab (C.Relfy c)
+relfyFull (C.Relfy h1 f1) (C.Relfy h2 f2) _ = 
+    do C.Relfy h3 f3 <- relfyMaybe (C.Relfy h2 f2) h1
+       C.Relfy h4 f4 <- relfyMaybe (C.Relfy h1 f1) h2
+       b1 <- C.relfy f1 []
+       b2 <- C.relfy f2 []
+       b3 <- C.relfy f3 b1
+       b4 <- C.relfy f4 b2
+       C.Relfy h5 f5 <- ROP.relfyJoin (C.Relfy h4 $ C.RelfyConst b4) h3
+       b5 <- C.relfy f5 b3
+       Right $ C.Relfy h5 (C.RelfyConst b5)
 
 
 
@@ -87,7 +101,7 @@ relmapGroup use n m = C.relmapConfl use "group" fy [m] where
 {-| Grouping relation. -}
 relfyGroup :: (Ord c, C.CRel c) => String -> C.Relfy c -> B.Relhead -> B.Ab (C.Relfy c)
 relfyGroup n (C.Relfy h2 f2) h1 =
-    Right $ C.Relfy h3 (C.RelfyAbFull f3)
+    Right $ C.Relfy h3 (C.RelfyAbFull False f3)
     where
       posh12    =  h1 `B.posFrom` h2
       share1    =  h1 `B.posNest` B.posInner posh12

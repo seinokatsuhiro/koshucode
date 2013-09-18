@@ -26,35 +26,39 @@ instance M.Monoid (Relfy c) where
 
 -- Relmap are compiled to Relg
 data RelfyBody c
-    = RelfyOneToAbMany  (  [c]  -> B.Ab [[c]] )
-    | RelfyOneToMany    (  [c]  ->      [[c]] )
-    | RelfyOneToAbOne   (  [c]  -> B.Ab  [c]  )
-    | RelfyOneToOne     (  [c]  ->       [c]  )
-    | RelfyAbFull       ( [[c]] -> B.Ab [[c]] )
-    | RelfyFull         ( [[c]] ->      [[c]] )
-    | RelfyConst                        [[c]]
-    | RelfyAbPred       (  [c]  -> B.Ab Bool  )
-    | RelfyPred         (  [c]  ->      Bool  )
+    = RelfyOneToMany    Bool (  [c]  ->      [[c]] )
+    | RelfyOneToOne     Bool (  [c]  ->       [c]  )
+    | RelfyFull         Bool ( [[c]] ->      [[c]] )
+    | RelfyPred              (  [c]  ->      Bool  )
+
+    | RelfyOneToAbMany  Bool (  [c]  -> B.Ab [[c]] )
+    | RelfyOneToAbOne   Bool (  [c]  -> B.Ab  [c]  )
+    | RelfyAbFull       Bool ( [[c]] -> B.Ab [[c]] )
+    | RelfyAbPred            (  [c]  -> B.Ab Bool  )
+
+    | RelfyConst               [[c]]
     | RelfyId
     | RelfyAppend       (RelfyBody c) (RelfyBody c)
-    | RelfyUnion        [RelfyBody c]
+    | RelfyUnion        Bool [RelfyBody c]
 
 instance Show (RelfyBody c) where
-    show (RelfyOneToAbMany _)  =  "RelfyOneToAbMany"
-    show (RelfyOneToAbOne  _)  =  "RelfyOneToAbOne"
-    show (RelfyOneToMany   _)  =  "RelfyOneToMany"
-    show (RelfyOneToOne    _)  =  "RelfyOneToOne"
-    show (RelfyAbFull      _)  =  "RelfyAbFull"
-    show (RelfyFull        _)  =  "RelfyFull"
-    show (RelfyAbPred      _)  =  "RelfyAbPred"
-    show (RelfyPred        _)  =  "RelfyPred"
-    show (RelfyConst       _)  =  "RelfyConst"
-    show (RelfyId           )  =  "RelfyId"
-    show (RelfyAppend    x y)  =  "RelfyAppend " ++ show [x,y]
-    show (RelfyUnion      xs)  =  "RelfyUnion " ++ show xs
+    show (RelfyOneToMany   _ _)  =  "RelfyOneToMany"
+    show (RelfyOneToOne    _ _)  =  "RelfyOneToOne"
+    show (RelfyFull        _ _)  =  "RelfyFull"
+    show (RelfyPred          _)  =  "RelfyPred"
+
+    show (RelfyOneToAbMany _ _)  =  "RelfyOneToAbMany"
+    show (RelfyOneToAbOne  _ _)  =  "RelfyOneToAbOne"
+    show (RelfyAbFull      _ _)  =  "RelfyAbFull"
+    show (RelfyAbPred        _)  =  "RelfyAbPred"
+
+    show (RelfyConst         _)  =  "RelfyConst"
+    show (RelfyId             )  =  "RelfyId"
+    show (RelfyAppend      x y)  =  "RelfyAppend " ++ show [x,y]
+    show (RelfyUnion      _ xs)  =  "RelfyUnion " ++ show xs
 
 instance M.Monoid (RelfyBody c) where
-    mempty      = RelfyOneToOne id
+    mempty      = relfyBodyId
     mappend x y = RelfyAppend x y
 
 type RelmapRelfy c
@@ -66,25 +70,40 @@ relfyConst :: B.Rel c -> Relfy c
 relfyConst (B.Rel h b) = Relfy h (RelfyConst b)
 
 relfyId :: RelmapRelfy c
-relfyId _ h = Right (Relfy h (RelfyOneToOne id))
+relfyId _ h = Right (Relfy h relfyBodyId)
+
+relfyBodyId :: RelfyBody c
+relfyBodyId = RelfyOneToOne False id
 
 relfy :: (Ord c) => RelfyBody c -> B.AbMap [[c]]
 relfy = (<$>) where
-    RelfyOneToAbMany f <$> b1  =  do b2 <- f `mapM` b1
-                                     Right $ concat b2
-    RelfyOneToAbOne  f <$> b1  =  f `mapM` b1
-    RelfyOneToMany   f <$> b1  =  let b2 = f `map` b1
-                                  in Right $ concat b2
-    RelfyOneToOne    f <$> b1  =  Right $ B.unique $ f `map` b1
-    RelfyAbPred      f <$> b1  =  Monad.filterM f b1
-    RelfyPred        f <$> b1  =  Right $ filter f b1
-    RelfyAbFull      f <$> b1  =  f b1
-    RelfyFull        f <$> b1  =  Right $ f b1
-    RelfyConst       b <$> _   =  Right b
-    RelfyId            <$> b1  =  Right b1
-    RelfyUnion      ts <$> b1  =  do b2 <- (<$> b1) `mapM` ts
-                                     Right $ B.unique $ concat b2
-    RelfyAppend  g1 g2 <$> b1  =  do b2 <- g1 <$> b1
-                                     g2 <$> b2
+    RelfyOneToAbMany u f <$> b1  =  do b2 <- f `mapM` b1
+                                       uniqueRt u $ concat b2
+    RelfyOneToAbOne  u f <$> b1  =  uniqueAb u $ f `mapM` b1
+    RelfyOneToMany   u f <$> b1  =  uniqueRt u $ f `concatMap` b1
+    RelfyOneToOne    u f <$> b1  =  uniqueRt u $ f `map` b1
+    RelfyAbFull      u f <$> b1  =  uniqueAb u $ f b1
+    RelfyFull        u f <$> b1  =  uniqueRt u $ f b1
 
+    RelfyAbPred        f <$> b1  =  Monad.filterM f b1
+    RelfyPred          f <$> b1  =  Right $ filter f b1
+    RelfyConst        bc <$> _   =  Right bc
+    RelfyId              <$> b1  =  Right b1
+
+    RelfyUnion      u rs <$> b1  =  do b2 <- (<$> b1) `mapM` rs
+                                       uniqueRt u $ concat b2
+    RelfyAppend    g1 g2 <$> b1  =  do b2 <- g1 <$> b1
+                                       g2 <$> b2
+
+
+uniqueIf :: (Ord c) => Bool -> [c] -> [c]
+uniqueIf True  = B.unique
+uniqueIf False = id
+
+uniqueRt :: (Ord c) => Bool -> [c] -> B.Ab [c]
+uniqueRt u xs = Right $ uniqueIf u xs
+
+uniqueAb :: (Ord c) => Bool -> B.Ab [c] -> B.Ab [c]
+uniqueAb u xs = do xs' <- xs
+                   Right $ uniqueIf u xs'
 

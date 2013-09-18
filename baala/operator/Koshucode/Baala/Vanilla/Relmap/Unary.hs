@@ -44,7 +44,7 @@ relfySize
     :: (C.CDec c)
     => String             -- ^ Name of new term
     -> B.Ab (C.Relfy c)   -- ^ Relfier for output relation
-relfySize n = Right $ C.Relfy h2 (C.RelfyFull f) where
+relfySize n = Right $ C.Relfy h2 (C.RelfyFull False f) where
     h2   = B.headFrom [n]
     f b1 = [[C.putDecFromInt $ length b1]]
 
@@ -67,7 +67,7 @@ relfyEnclose
     => String             -- ^ Termname of enclosed relation
     -> B.Relhead          -- ^ Header of input relation
     -> B.Ab (C.Relfy c)   -- ^ Relfier for output relation
-relfyEnclose n h1 = Right $ C.Relfy h2 (C.RelfyFull f) where
+relfyEnclose n h1 = Right $ C.Relfy h2 (C.RelfyFull False f) where
     h2 = B.Relhead [B.Nest n $ B.headTerms h1]
     f b1 = [[C.putRel $ B.Rel h1 b1]]
 
@@ -91,7 +91,7 @@ relfyRank
     -> [String]            -- ^ Termnames for order
     -> B.Relhead           -- ^ Header of input relation
     -> B.Ab (C.Relfy c)   -- ^ Generator for output relation
-relfyRank n ns h1 = Right $ C.Relfy h2 (C.RelfyFull f2) where
+relfyRank n ns h1 = Right $ C.Relfy h2 (C.RelfyFull False f2) where
     h2    = B.headCons n h1
     f2 b1 = let b1' = sortByName ords (B.headNames h1) b1
             in zipWith (:) (map C.putDecFromInt [1..]) b1'
@@ -123,7 +123,7 @@ relmapTypename use n p = C.relmapCalc use "typename" fy where
 relfyTypename
   :: (C.CText c) =>
      String -> String -> B.Relhead -> B.Ab (C.Relfy c)
-relfyTypename n p h1 = Right $ C.Relfy h2 (C.RelfyOneToOne f) where
+relfyTypename n p h1 = Right $ C.Relfy h2 (C.RelfyOneToOne False f) where
     h2    = B.headCons n h1
     pos   = h1 `B.posFlat` [p]
     f cs1 = let [c] = B.posPick pos cs1
@@ -147,7 +147,7 @@ relmapRange use term low high = C.relmapCalc use "range" fy where
 relfyRange
   :: (C.CDec c) =>
      String -> Int -> Int -> B.Relhead -> B.Ab (C.Relfy c)
-relfyRange n low high h1 = Right $ C.Relfy h2 (C.RelfyOneToMany f) where
+relfyRange n low high h1 = Right $ C.Relfy h2 (C.RelfyOneToMany False f) where
     h2    = B.headCons n h1
     decs  = map C.putDecFromInt [low .. high]
     f cs  = map (: cs) decs
@@ -193,12 +193,12 @@ relfyMemberCheck xPos xsPos h1 = Right $ C.Relfy h1 (C.RelfyPred f) where
            in xCont `isMember` xsCont
 
 relfyMemberExpand :: String -> B.TermPos -> B.Relhead -> B.Ab (C.Relfy VContent)
-relfyMemberExpand x xsPos h1 = Right $ C.Relfy h2 (C.RelfyOneToMany f) where
+relfyMemberExpand x xsPos h1 = Right $ C.Relfy h2 (C.RelfyOneToMany False f) where
     h2     =  B.headCons x h1
     f cs   =  let [xsCont] = B.posPick [xsPos] cs
               in case xsCont of
                    VSet  xs  -> map (: cs) xs
-                   VList xs  -> map (: cs) xs
+                   VList xs  -> map (: cs) $ B.unique xs
                    _         -> [xsCont : cs]
 
 

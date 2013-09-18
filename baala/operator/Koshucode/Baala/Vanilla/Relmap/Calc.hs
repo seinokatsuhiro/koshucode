@@ -35,7 +35,7 @@ relfyAdd
     :: [B.Named (C.PosCox VContent)]
     -> B.Relhead
     -> B.Ab (C.Relfy VContent)
-relfyAdd xs h1 = Right $ C.Relfy h2 (C.RelfyOneToAbOne f) where
+relfyAdd xs h1 = Right $ C.Relfy h2 (C.RelfyOneToAbOne False f) where
     ns    = map fst xs  -- term names
     es    = map snd xs  -- term expressions
     h2    = Builtin.mappend (B.headFrom ns) h1

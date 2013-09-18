@@ -28,10 +28,10 @@ vanillaRops :: [C.Rop VContent]
 vanillaRops = Builtin.ropList "vanilla"
     [ o "add /N E ..."         LikeVal           ropConsAdd
     , o "enclose /N"           LikeSize          ropConsEnclose
+    , o "full R ..."           LikeMeet          ropConsFull
     , o "group /N R"           LikeGroup         ropConsGroup
     , o "hold E"               LikeHold          ropConsHold
     , o "maybe R"              LikeMeet          ropConsMaybe
-    , o "maybe-both R"         LikeMeet          ropConsMaybeBoth
     , o "member /N /N"         LikePos           ropConsMember
     , o "prefix /P /N ..."     LikePrefix        ropConsPrefix
     , o "prefix-change /P /Q"  LikePrefixChange  ropConsPrefixChange
