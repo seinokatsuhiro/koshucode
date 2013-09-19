@@ -12,6 +12,9 @@ module Koshucode.Baala.Vanilla.Relmap.Unary
   ropConsTypename, relmapTypename, relfyTypename,
   -- * range
   ropConsRange, relmapRange,
+  -- * duplicate
+  -- $duplicate
+  ropConsDuplicate, relmapDuplicate,
   -- * member
   -- $member
   ropConsMember, relmapMember, relfyMember,
@@ -19,6 +22,7 @@ module Koshucode.Baala.Vanilla.Relmap.Unary
   ropConsRdf
 ) where
 
+import qualified Data.Map as Map
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 import qualified Koshucode.Baala.Builtin as Builtin
@@ -87,10 +91,10 @@ relmapRank use n ns = C.relmapCalc use "rank" fy where
 
 relfyRank
     :: (Ord c, C.CDec c)
-    => String              -- ^ Name of rank term
-    -> [String]            -- ^ Termnames for order
-    -> B.Relhead           -- ^ Header of input relation
-    -> B.Ab (C.Relfy c)   -- ^ Generator for output relation
+    => String             -- ^ Name of rank term
+    -> [String]           -- ^ Termnames for order
+    -> B.Relhead          -- ^ Heading of input relation
+    -> B.Ab (C.Relfy c)   -- ^ Relfier for output relation
 relfyRank n ns h1 = Right $ C.Relfy h2 (C.RelfyFull False f2) where
     h2    = B.headCons n h1
     f2 b1 = let b1' = sortByName ords (B.headNames h1) b1
@@ -151,6 +155,45 @@ relfyRange n low high h1 = Right $ C.Relfy h2 (C.RelfyOneToMany False f) where
     h2    = B.headCons n h1
     decs  = map C.putDecFromInt [low .. high]
     f cs  = map (: cs) decs
+
+
+
+-- ----------------------  duplicate
+
+{- $duplicate
+
+   Output tuples of which key is duplicated.
+   Relmap @duplicate@ @\/x@ @\/y@ means
+   if set of terms @\/x@ and @\/y@ is a key of relation,
+   there are another tuples that has the same key.
+
+-}  
+
+ropConsDuplicate :: (Ord c) => C.RopCons c
+ropConsDuplicate use =
+  do ns <- Builtin.getTerms use "-term"
+     Right $ relmapDuplicate use ns
+
+relmapDuplicate :: (Ord c) => C.RopUse c -> [String] -> C.Relmap c
+relmapDuplicate use ns = C.relmapCalc use "duplicate" fy where
+    fy _ = relfyDuplicate ns
+
+relfyDuplicate
+  :: (Ord c) => [String] -> B.Relhead -> B.Ab (C.Relfy c)
+relfyDuplicate ns h1
+    | null non  = Right $ C.Relfy h1 (C.RelfyFull False f)
+    | otherwise = Left  $ B.AbortNoTerms non
+    where
+      non = B.headNonExistTerms h1 ns
+
+      ind :: [Int]
+      ind = map B.posIndex $ B.posFlat h1 ns
+
+      f :: (Ord c) => [[c]] -> [[c]]
+      f b1   = let m = B.gatherToMap $ map kv b1
+               in concat $ Map.elems $ Map.filter dup m
+      kv cs1 = ( B.arrangePick ind cs1, cs1 )
+      dup v  = length v > 1
 
 
 
