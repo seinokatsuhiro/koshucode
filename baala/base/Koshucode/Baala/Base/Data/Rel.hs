@@ -16,8 +16,9 @@ module Koshucode.Baala.Base.Data.Rel
   reldee,
 ) where
 
-import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Abort        as B
+import qualified Koshucode.Baala.Base.Prelude      as B
+import qualified Koshucode.Baala.Base.Syntax       as B
 import qualified Koshucode.Baala.Base.Data.Relhead as B
 import qualified Koshucode.Baala.Base.Data.TermPos as B
 
@@ -33,7 +34,8 @@ data Rel c = Rel
     , relBody :: Relbody c
     } deriving (Show, Eq, Ord)
 
-{-| List of positional args. -}
+{-| Body of relation, i.e., a list of tuples.
+    Tuple is list of contents. -}
 type Relbody c = [[c]]
 
 {-| >>> doc $ rel ["/a", "/b"] [[10, 20], [30, 40 :: Int]]
@@ -44,10 +46,10 @@ instance (B.Pretty c) => B.Pretty (Rel c) where
               b2    = B.doch $ map d b1
               d xs  = B.doc "|" B.<+> B.docColon xs
 
-rel :: [String] -> Relbody c -> Rel c
+rel :: [B.Termname] -> Relbody c -> Rel c
 rel = Rel . B.headFrom
 
-relPosHere :: Rel c -> [String] -> ([B.TermPos], [Bool])
+relPosHere :: Rel c -> [B.Termname] -> ([B.TermPos], [Bool])
 relPosHere r = B.posHere $ relHead r
 
 arrangeRel
@@ -82,7 +84,7 @@ arrangeRelUsing sort ha ba ns (Rel h1 b1)
       non =  B.headNonExistTerms h1 ns
 
       pos :: [B.TermPos]
-      pos =  sort $ h1 `B.posFlat` ns
+      pos =  sort $ h1 `B.posFor` ns
 
       ind :: [Int]
       ind =  map B.posIndex pos

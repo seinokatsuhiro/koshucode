@@ -17,6 +17,7 @@ module Koshucode.Baala.Base.Prelude.Utility
   unique,
   unionUp,
   singleton,
+  isSingleton,
   splitBy,
   divide,
   divideBy,
@@ -99,6 +100,10 @@ unionUp xs ys = (xs List.\\ ys) ++ ys
 {-| Make singleton list. -}
 singleton :: a -> [a]
 singleton x = [x]
+
+isSingleton :: [a] -> Bool
+isSingleton [_] = True
+isSingleton  _  = False
 
 {-| Split list by predicate.
     If list contains an element that satisfies the predicate,

@@ -6,14 +6,14 @@ module Koshucode.Baala.Base.Data.Relhead
 ( -- * Type
   Relhead (..),
   headFrom,
-  headCons, headCons2,
+  headCons, headCons2, headCons3,
   headChange,
   headNames,
   headDegree,
 
   -- * Other functions
-  headTermExist, headTermCheck,
-  headExistTerms, headNonExistTerms,
+  headExistTerms,
+  headNonExistTerms,
   headIndex, headIndex1,
 
   -- * Monoid
@@ -23,11 +23,12 @@ module Koshucode.Baala.Base.Data.Relhead
 
 import qualified Data.Monoid as M
 import qualified Koshucode.Baala.Base.Prelude      as B
+import qualified Koshucode.Baala.Base.Syntax       as B
 import qualified Koshucode.Baala.Base.Data.Relterm as B
 
 
 
--- ---------------------- Heading
+-- ---------------------- Type
 
 {-| Heading of relation as a list of terms -}
 data Relhead = Relhead {
@@ -48,32 +49,38 @@ instance B.Pretty Relhead where
 
     >>> headFrom ["/a", "/b"]
     Relhead [Term "/a", Term "/b"]  -}
-headFrom :: [String] -> Relhead
-headFrom ns = Relhead $ map B.Term ns
+headFrom :: [B.Termname] -> Relhead
+headFrom = Relhead . map B.Term
 
 {-| Add term to head.
 
     >>> let h = headFrom ["/a", "/b"] in headCons "/c" h
     Relhead [Term "/c", Term "/a", Term "/b"]  -}
-headCons :: String -> B.Map Relhead
-headCons n (Relhead ns) = Relhead $ B.Term n : ns
+headCons :: B.Termname -> B.Map Relhead
+headCons n1 (Relhead ns) =
+    Relhead $ B.Term n1 : ns
 
-headCons2 :: String -> String -> B.Map Relhead
-headCons2 n1 n2 (Relhead ns) = Relhead $ B.Term n1 : B.Term n2 : ns
+headCons2 :: B.Termname -> B.Termname -> B.Map Relhead
+headCons2 n1 n2 (Relhead ns) =
+    Relhead $ B.Term n1 : B.Term n2 : ns
+
+headCons3 :: B.Termname -> B.Termname -> B.Termname -> B.Map Relhead
+headCons3 n1 n2 n3 (Relhead ns) =
+    Relhead $ B.Term n1 : B.Term n2 : B.Term n3 : ns
 
 {-| Reconstruct head.
 
     >>> let h = headFrom ["/a", "/b"] in headChange reverse h
     Relhead [Term "/b", Term "/a"]  -}
-headChange :: (B.Map [String]) -> B.Map Relhead
-headChange f (Relhead ts) = headFrom $ f $ B.names ts
+headChange :: (B.Map [B.Termname]) -> B.Map Relhead
+headChange f = headFrom . f . headNames
 
 {-| List of term names.
 
     >>> let h = headFrom ["/a", "/b"] in headNames h
     ["/a", "/b"]  -}
-headNames :: Relhead -> [String]
-headNames (Relhead ts) = B.names ts
+headNames :: Relhead -> [B.Termname]
+headNames = B.names . headTerms
 
 {-| Number of terms.
 
@@ -83,51 +90,37 @@ headDegree :: Relhead -> Int
 headDegree = length . headTerms
 
 
+
 -- ----------------------  Other functions
-
-
-headTermExist :: Relhead -> [String] -> Bool
-headTermExist h ns = headTermCheck h (map B.Yes ns)
-
-{-| Check term existences.
-
-    >>> let h = headFrom ["/a", "/b"] in headTermCheck h [Yes "/a", No "/c"]
-    True
-
-    >>> let h = headFrom ["/a", "/b"] in headTermCheck h [Yes "/a", No "/b"]
-    False  -}
-headTermCheck :: Relhead -> [B.YesNo String] -> Bool
-headTermCheck (Relhead ts) = all (termCheck1 ts)
-
-termCheck1 :: [B.Relterm] -> B.YesNo String -> Bool
-termCheck1 ts (B.Yes n) = let [i] = B.termIndex ts [n] in i >= 0
-termCheck1 ts (B.No  n) = let [i] = B.termIndex ts [n] in i == -1
 
 {-| Filter keeping terms that exist in head.
 
     >>> let h = headFrom ["/a", "/b"] in headExistTerms h ["/a", "/c"]
     ["/a"]  -}
-headExistTerms :: Relhead -> B.Map [String]
-headExistTerms (Relhead ts) = filter (termCheck1 ts . B.Yes)
+headExistTerms :: Relhead -> B.Map [B.Termname]
+headExistTerms (Relhead ts) = filter $ nameExist ts
 
 {-| Filter dropping terms that exist in head.
 
     >>> let h = headFrom ["/a", "/b"] in headNonExistTerms h ["/a", "/c"]
     ["/c"]  -}
-headNonExistTerms :: Relhead -> B.Map [String]
-headNonExistTerms (Relhead ts) = filter (termCheck1 ts . B.No)
+headNonExistTerms :: Relhead -> B.Map [B.Termname]
+headNonExistTerms (Relhead ts) = filter $ not . nameExist ts
+
+nameExist :: [B.Relterm] -> B.Termname -> Bool
+nameExist ts n = B.termExist ts [n]
 
 {-| Index of terms.
 
     >>> let h = headFrom ["/a", "/b"] in headIndex h [["/a"], ["/b"], ["/c"]]
     [[0], [1], [-1]]  -}
-headIndex :: Relhead -> [[String]] -> [[Int]]
-headIndex (Relhead ts) n = B.termsIndex ts n
+headIndex :: Relhead -> [B.Termpath] -> [[Int]]
+headIndex = B.termsIndex . headTerms
 
-{-| Index of terms.
+{-| Index of a term.
 
     >>> let h = headFrom ["/a", "/b"] in headIndex1 h ["/a"]
     [0]  -}
-headIndex1 :: Relhead -> [String] -> [Int]
-headIndex1 (Relhead ts) n = B.termIndex ts n
+headIndex1 :: Relhead -> B.Termpath -> [Int]
+headIndex1 = B.termIndex . headTerms
 

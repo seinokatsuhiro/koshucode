@@ -34,10 +34,17 @@ relfyMaybe :: (Ord c, C.CNil c) => C.Relfy c -> B.Relhead -> B.Ab (C.Relfy c)
 relfyMaybe (C.Relfy h2 f2) h1 =
     Right $ C.Relfy h3 (C.RelfyAbFull False f3)
     where
-      posh12  =  h1 `B.posFrom` h2
-      share1  =  h1 `B.posNest` B.posInner posh12
-      share2  =  h2 `B.posNest` B.posInner posh12
-      side2   =  h2 `B.posNest` B.posOuter posh12
+      pos     :: [B.TermPos]
+      pos     =  h1 `B.posFrom` h2
+
+      shared, sided :: [B.Termname]
+      shared  =  B.posInnerNames pos
+      sided   =  B.posOuterNames pos
+
+      share1, share2, side2 :: [B.TermPos]
+      share1  =  h1 `B.posFor` shared
+      share2  =  h2 `B.posFor` shared
+      side2   =  h2 `B.posFor` sided
 
       m2 b1   = do b2 <- C.relfy f2 b1
                    Right $ B.gatherToMap $ map kv b2
@@ -103,10 +110,12 @@ relfyGroup :: (Ord c, C.CRel c) => String -> C.Relfy c -> B.Relhead -> B.Ab (C.R
 relfyGroup n (C.Relfy h2 f2) h1 =
     Right $ C.Relfy h3 (C.RelfyAbFull False f3)
     where
-      posh12    =  h1 `B.posFrom` h2
-      share1    =  h1 `B.posNest` B.posInner posh12
-      share2    =  h2 `B.posNest` B.posInner posh12
-      --side2  = posNest h2 $ posOuter posh12
+      shared    :: [B.Termname]
+      shared    =  B.posInnerNames $ h1 `B.posFrom` h2
+
+      share1, share2 :: [B.TermPos]
+      share1    =  h1 `B.posFor` shared
+      share2    =  h2 `B.posFor` shared
 
       m2 b1     = do b2 <- C.relfy f2 b1
                      Right $ B.gatherToMap $ map kv b2

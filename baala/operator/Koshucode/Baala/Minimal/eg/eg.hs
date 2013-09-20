@@ -52,11 +52,11 @@ egHead =
            from2  = head1 `posFrom` head2
            from1  = head2 `posFrom` head1
 
-           inner  = posInner from2
-           outer  = posOuter from2
+           inner  = posInnerNames from2
+           outer  = posOuterNames from2
 
-           inner1 = head1 `posNest` inner
-           inner2 = head2 `posNest` inner
+           inner1 = head1 `posFor` inner
+           inner2 = head2 `posFor` inner
 
        "from2"     >>> from2
        "from1"     >>> from1

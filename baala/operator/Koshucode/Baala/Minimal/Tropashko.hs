@@ -54,10 +54,12 @@ relfyMeet
     -> B.Relhead           -- ^ Heading of input relation
     -> B.Ab (C.Relfy c)   -- ^ Generator for output relation
 relfyMeet (C.Relfy h2 f2) h1 = Right (C.Relfy h3 f3) where
+    shared    :: [B.Termname]
+    shared    =  B.posInnerNames $ h1 `B.posFrom` h2
+
     share1, share2 :: [B.TermPos]
-    share1    =  h1 `B.posNest` shared
-    share2    =  h2 `B.posNest` shared
-    shared    =  B.posInner $ h1 `B.posFrom` h2
+    share1    =  h1 `B.posFor` shared
+    share2    =  h2 `B.posFor` shared
 
     pick1, pick2, cut2 :: B.Map [c]
     pick1     =  B.posPick share1
@@ -102,10 +104,12 @@ relfyJoin
     -> B.Relhead           -- ^ Heading of input relation
     -> B.Ab (C.Relfy c)   -- ^ Generator for output relation
 relfyJoin (C.Relfy h2 f2) h1 = Right (C.Relfy h3 f3) where
+    shared  :: [B.Termname]
+    shared  =  B.posInnerNames $ h1 `B.posFrom` h2
+
     share1, share2 :: [B.TermPos]
-    share1  =  h1 `B.posNest` shared
-    share2  =  h2 `B.posNest` shared
-    shared  =  B.posInner $ h1 `B.posFrom` h2
+    share1  =  h1 `B.posFor` shared
+    share2  =  h2 `B.posFor` shared
 
     pick1, pick2 :: B.Map [c]
     pick1   =  B.posPick share1

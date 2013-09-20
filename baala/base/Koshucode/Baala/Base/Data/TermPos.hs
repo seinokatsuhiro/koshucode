@@ -3,36 +3,40 @@
 {-| Functions for term position -}
 
 module Koshucode.Baala.Base.Data.TermPos
-( -- * Type
+( -- * Datatype
   TermPos (..),
 
-  -- * Functions
+  -- * Construction
+  posHere,
+  posFor,
+  posFrom,
+  posTo,
+
+  -- * Selection
+  posExist,
+  posInnerNames,
+  posOuterNames,
+
+  -- * Other functions
   posSortByName,
   posSortByIndex,
   posPick,
   posCut,
-  posInner,
-  posOuter,
-  posExist,
-
-  posNest,
-  posFlat,
-  posFrom,
-  posHere,
 ) where
 
 import qualified Data.List as List
 import qualified Koshucode.Baala.Base.Prelude      as B
+import qualified Koshucode.Baala.Base.Syntax       as B
 import qualified Koshucode.Baala.Base.Data.Relhead as B
 
 
 
 -- ----------------------  Type
 
-{-| Term position -}
+{-| Position of flat term -}
 data TermPos = TermPos
-    { posName   :: String    -- ^ Termname
-    , posIndex  :: Int       -- ^ Position
+    { posName   :: B.Termname  -- ^ Name of term
+    , posIndex  :: Int         -- ^ Position
     } deriving (Show, Eq, Ord)
 
 instance B.Name TermPos where
@@ -40,7 +44,56 @@ instance B.Name TermPos where
 
 
 
+-- ----------------------  Construction
+
+posHere :: B.Relhead -> [B.Termname] -> ([TermPos], [Bool])
+posHere h ns = (ps, bs) where
+    ps = h `posFor` ns
+    bs = map posExist ps
+
+{-| Positions of given names in a head
+
+    >>> B.headFrom ["/a", "/b", "/c"] `posFor` ["/b", "/c", "/d"]
+    [TermPos "/b" 1, TermPos "/c" 2, TermPos "/d" (-1)]  -}
+posFor :: B.Relhead -> [B.Termname] -> [TermPos]
+posFor h ns = zipWith TermPos ns $ flatIndex ns where
+    flatIndex = withSingleton $ B.headIndex h
+    withSingleton f = map head . f . map B.singleton
+
+{-| Positions of given (sub)head in a head
+
+    >>> B.headFrom ["/a", "/b", "/c"] `posFrom` B.headFrom ["/b", "/c", "/d"]
+    [TermPos "/b" 1, TermPos "/c" 2, TermPos "/d" (-1)]  -}
+posFrom :: B.Relhead -> B.Relhead -> [TermPos]
+posFrom h1 h2 = h1 `posFor` B.headNames h2
+
+{-| /h1/ @\`posTo\`@ /h2/ @==@ /h2/ @\`posFrom\`@ /h1/ -}
+posTo :: B.Relhead -> B.Relhead -> [TermPos]
+posTo h1 h2 = posFrom h2 h1
+
+
+
 -- ----------------------  Functions
+
+posExist :: TermPos -> Bool
+posExist pos = posIndex pos >= 0
+
+{-| Pick inner part.
+
+    >>> posInnerNames [TermPos "/a" (-1), TermPos "/b" 1, TermPos "/c" 2]
+    ["/b", "/c"]  -}
+posInnerNames :: [TermPos] -> [B.Termname]
+posInnerNames = posFilterNames posExist
+
+{-| Pick outer part.
+
+    >>> posOuterNames [TermPos "/a" (-1), TermPos "/b" 1, TermPos "/c" 2]
+    ["/a"]  -}
+posOuterNames :: [TermPos] -> [B.Termname]
+posOuterNames = posFilterNames (not . posExist)
+
+posFilterNames :: (TermPos -> Bool) -> [TermPos] -> [B.Termname]
+posFilterNames p = map posName . filter p
 
 {-| Sort list of 'TermPos' by the name.
 
@@ -62,57 +115,13 @@ posSortByIndex = List.sortBy ord where
 
     >>> posPick [TermPos "/b" 1, TermPos "/c" 2] "abcd"
     "bc"  -}
-posPick  :: [TermPos] -> B.Map [c]
-posPick  =  B.arrangePick . map posIndex
+posPick :: [TermPos] -> B.Map [c]
+posPick = B.arrangePick . map posIndex
 
 {-| Cut contents by positions.
 
     >>> posCut [TermPos "/b" 1, TermPos "/c" 2] "abcd"
     "ad"  -}
-posCut   :: [TermPos] -> B.Map [c]
-posCut   =  B.arrangeCut . map posIndex
-
-{-| Pick inner part.
-
-    >>> posInner [TermPos "/a" (-1), TermPos "/b" 1, TermPos "/c" 2]
-    [["/b"], ["/c"]]  -}
-posInner :: [TermPos] -> [[String]]
-posInner = posFilter posExist
-
-{-| Pick outer part.
-
-    >>> posOuter [TermPos "/a" (-1), TermPos "/b" 1, TermPos "/c" 2]
-    [["/a"]]  -}
-posOuter :: [TermPos] -> [[String]]
-posOuter = posFilter (not . posExist)
-
-posFilter :: (TermPos -> Bool) -> [TermPos] -> [[String]]
-posFilter p = map (B.singleton . posName) . filter p
-
-posExist :: TermPos -> Bool
-posExist pos = posIndex pos >= 0
-
---
-
-{-| Positions of given names in a head -}
-posNest :: B.Relhead -> [[String]] -> [TermPos]
-posNest h1 ns = termPoss ns $ B.headIndex h1 ns
-
-posFlat :: B.Relhead -> [String] -> [TermPos]
-posFlat h ns = h `posNest` map B.singleton ns
-
-{-| Positions of given (sub)head in a head -}
-posFrom :: B.Relhead -> B.Relhead -> [TermPos]
-posFrom h1 h2 = h1 `posNest` n2 where
-    n2 = map B.singleton (B.headNames h2)
-
-termPoss :: [[String]] -> [[Int]] -> [TermPos]
-termPoss ns ps = zipWith TermPos ns2 ps2 where
-    ns2 = map head ns
-    ps2 = map head ps
-
-posHere :: B.Relhead -> [String] -> ([TermPos], [Bool])
-posHere h ns = let ps = h `posFlat` ns
-                   hs = map posExist ps
-               in (ps, hs)
+posCut :: [TermPos] -> B.Map [c]
+posCut = B.arrangeCut . map posIndex
 

@@ -119,7 +119,7 @@ relfyArrange ha ba ns h1
     where
       non =  B.headNonExistTerms h1 ns
       pos :: [B.TermPos]
-      pos =  List.sort $ h1 `B.posFlat` ns
+      pos =  List.sort $ h1 `B.posFor` ns
 
       ind :: [Int]
       ind =  map B.posIndex pos

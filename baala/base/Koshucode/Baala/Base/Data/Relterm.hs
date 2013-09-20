@@ -4,17 +4,24 @@
 
 module Koshucode.Baala.Base.Data.Relterm
 ( Relterm (..),
+  Termpath,
   termsIndex,
   termIndex,
+  termExist,
 )
 where
 
 import qualified Koshucode.Baala.Base.Prelude as B
+import qualified Koshucode.Baala.Base.Syntax as B
+
+{-| Path of term,
+    e.g., term @\/r\/x@ is correspond to path @["\/r", "\/x"]@. -}
+type Termpath = [B.Termname]
 
 {-| Term in heading of relation -}
 data Relterm
-    = Term String             -- ^ For non-relation
-    | Nest String [Relterm]   -- ^ For relation
+    = Term B.Termname             -- ^ For non-relation
+    | Nest B.Termname [Relterm]   -- ^ For relation
       deriving (Show, Eq, Ord)
 
 instance B.Name Relterm where
@@ -27,15 +34,15 @@ instance B.Pretty Relterm where
 
 {-| Term path to term position
 
-    >>> termIndex ["/b"] [Term "/a", Term "/b", Term "/c"]
+    >>> termIndex [Term "/a", Term "/b", Term "/c"] ["/b"]
     [1]
 
-    >>> termIndex ["/e"] [Term "/a", Term "/b", Term "/c"]
+    >>> termIndex [Term "/a", Term "/b", Term "/c"] ["/e"]
     [-1]
 
-    >>> termIndex ["/r", "/b"] [Nest "/r" [Term "/a", Term "/b"]]
+    >>> termIndex [Nest "/r" [Term "/a", Term "/b"]] ["/r", "/b"]
     [0, 1]  -}
-termIndex :: [Relterm] -> [String] -> [Int]
+termIndex :: [Relterm] -> Termpath -> [Int]
 termIndex ts p = loop ts p 0 where
     loop _ [] _ = []
     loop [] _ _ = [-1]
@@ -46,6 +53,9 @@ termIndex ts p = loop ts p 0 where
         | n1 == n2  = i : loop ts' ns 0
         | otherwise = loop ts2 nns (i + 1)
 
-termsIndex :: [Relterm] -> [[String]] -> [[Int]]
-termsIndex ts = map (termIndex ts)
+termsIndex :: [Relterm] -> [Termpath] -> [[Int]]
+termsIndex = map . termIndex
+
+termExist :: [Relterm] -> Termpath -> Bool
+termExist ts p = all (>= 0) $ termIndex ts p
 
