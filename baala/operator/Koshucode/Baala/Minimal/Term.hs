@@ -1,18 +1,8 @@
 {-# LANGUAGE RankNTypes #-}
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Unary relational operators. -}
-
-module Koshucode.Baala.Minimal.Unary
-( -- * reldee & reldum
-  ropConsReldee, ropConsReldum,
-  -- * source
-  ropConsSource,
-  -- * id
-  ropConsId, relmapId,
-  -- * empty
-  ropConsEmpty, relmapEmpty, relfyEmpty,
-  -- * pick
+module Koshucode.Baala.Minimal.Term
+( -- * pick
   ropConsPick, relmapPick, relfyPick,
   -- * cut
   ropConsCut, relmapCut, relfyCut,
@@ -26,48 +16,6 @@ import qualified Data.Tuple as Tuple
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 import Koshucode.Baala.Builtin
-
-
-
--- ----------------------  reldee & reldum
-
-ropConsReldee, ropConsReldum :: C.RopCons c
-ropConsReldee use = Right $ C.relmapConst use "reldee" B.reldee
-ropConsReldum use = Right $ C.relmapConst use "reldum" B.reldum
-
-
--- ----------------------  source
-
-ropConsSource :: C.RopCons c
-ropConsSource use =
-  do sign <- getWord  use "-sign"
-     ns   <- getTerms use "-term"
-     Right $ C.relmapSource use sign ns
-
-
--- ----------------------  id
-
-ropConsId :: C.RopCons c
-ropConsId use = Right $ relmapId use
-
-{-| Identity mapping, i.e., do nothing. -}
-relmapId :: C.RopUse c -> C.Relmap c
-relmapId use = C.relmapCalc use "id" C.relfyId where
-
-
-
--- ----------------------  empty
-
-ropConsEmpty :: C.RopCons c
-ropConsEmpty use = Right $ relmapEmpty use
-
-relmapEmpty :: C.RopUse c -> C.Relmap c
-relmapEmpty use = C.relmapCalc use "empty" fy where
-    fy _ = relfyEmpty
-
-{-| Throw away all tuples in a relation. -}
-relfyEmpty :: B.Relhead -> B.Ab (C.Relfy c)
-relfyEmpty h1 = Right $ C.Relfy h1 (C.RelfyConst [])
 
 
 

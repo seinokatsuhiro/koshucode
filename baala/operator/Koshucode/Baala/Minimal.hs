@@ -6,9 +6,10 @@ module Koshucode.Baala.Minimal
 ( -- * Relatoinal operators
   module Koshucode.Baala.Minimal.Operand,
   module Koshucode.Baala.Minimal.Operator,
+  module Koshucode.Baala.Minimal.Origin,
   module Koshucode.Baala.Minimal.Restrict,
+  module Koshucode.Baala.Minimal.Term,
   module Koshucode.Baala.Minimal.Tropashko,
-  module Koshucode.Baala.Minimal.Unary,
 
   -- * Naming conventions
   -- $NamingConventions
@@ -16,9 +17,10 @@ module Koshucode.Baala.Minimal
 
 import Koshucode.Baala.Minimal.Operand
 import Koshucode.Baala.Minimal.Operator
+import Koshucode.Baala.Minimal.Origin
 import Koshucode.Baala.Minimal.Restrict
+import Koshucode.Baala.Minimal.Term
 import Koshucode.Baala.Minimal.Tropashko
-import Koshucode.Baala.Minimal.Unary
 
 
 

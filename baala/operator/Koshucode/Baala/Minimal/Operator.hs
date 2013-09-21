@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Minimal implementations of relmaps
+{-| Minimal implementations of relmaps -}
 
 module Koshucode.Baala.Minimal.Operator
 ( -- * Implementation
@@ -10,12 +10,13 @@ module Koshucode.Baala.Minimal.Operator
   -- $ListOfOperators
 ) where
 
-import qualified Koshucode.Baala.Core as C
+import qualified Koshucode.Baala.Core    as C
 import qualified Koshucode.Baala.Builtin as Builtin
-import Koshucode.Baala.Minimal.Operand
-import Koshucode.Baala.Minimal.Restrict
-import Koshucode.Baala.Minimal.Tropashko
-import Koshucode.Baala.Minimal.Unary
+import qualified Koshucode.Baala.Minimal.Operand   as Mini
+import qualified Koshucode.Baala.Minimal.Origin    as Mini
+import qualified Koshucode.Baala.Minimal.Restrict  as Mini
+import qualified Koshucode.Baala.Minimal.Term      as Mini
+import qualified Koshucode.Baala.Minimal.Tropashko as Mini
 
 
 
@@ -24,18 +25,19 @@ import Koshucode.Baala.Minimal.Unary
 {-| Minimal implementations of relmaps. -}
 minimalRops :: (Ord c) => [C.Rop c]
 minimalRops = Builtin.ropList "minimal"
-    [ o "cut /N ..."         LikePick     ropConsCut
-    , o "empty"              LikeId       ropConsEmpty
-    , o "id"                 LikeId       ropConsId
-    , o "join R"             LikeMeet     ropConsJoin
-    , o "meet R"             LikeMeet     ropConsMeet
-    , o "none R"             LikeMeet     ropConsNone
-    , o "pick /N ..."        LikePick     ropConsPick
-    , o "reldee"             LikeId       ropConsReldee
-    , o "reldum"             LikeId       ropConsReldum
-    , o "rename /N /N ..."   LikePick     ropConsRename
-    , o "some R"             LikeMeet     ropConsSome
-    , o "source P /N ..."    LikeSource   ropConsSource
+    [ o "contents /N"        Mini.LikePick     Mini.ropConsContents
+    , o "cut /N ..."         Mini.LikePick     Mini.ropConsCut
+    , o "empty"              Mini.LikeId       Mini.ropConsEmpty
+    , o "id"                 Mini.LikeId       Mini.ropConsId
+    , o "join R"             Mini.LikeMeet     Mini.ropConsJoin
+    , o "meet R"             Mini.LikeMeet     Mini.ropConsMeet
+    , o "none R"             Mini.LikeMeet     Mini.ropConsNone
+    , o "pick /N ..."        Mini.LikePick     Mini.ropConsPick
+    , o "reldee"             Mini.LikeId       Mini.ropConsReldee
+    , o "reldum"             Mini.LikeId       Mini.ropConsReldum
+    , o "rename /N /N ..."   Mini.LikePick     Mini.ropConsRename
+    , o "some R"             Mini.LikeMeet     Mini.ropConsSome
+    , o "source P /N ..."    Mini.LikeSource   Mini.ropConsSource
     ] where o = (,,)
 
 

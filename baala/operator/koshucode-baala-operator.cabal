@@ -53,12 +53,12 @@ library
         Koshucode.Baala.Builtin.Term
 
         Koshucode.Baala.Minimal
-
-        Koshucode.Baala.Minimal.Operator
         Koshucode.Baala.Minimal.Operand
+        Koshucode.Baala.Minimal.Operator
+        Koshucode.Baala.Minimal.Origin
         Koshucode.Baala.Minimal.Restrict
+        Koshucode.Baala.Minimal.Term
         Koshucode.Baala.Minimal.Tropashko
-        Koshucode.Baala.Minimal.Unary
 
         Koshucode.Baala.Vanilla
         Koshucode.Baala.Vanilla.Order
