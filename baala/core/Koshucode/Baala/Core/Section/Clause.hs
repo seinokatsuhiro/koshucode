@@ -2,7 +2,7 @@
 {-# LANGUAGE TupleSections #-}
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Intermidiate structure between 'String' and 'Section'. -}
+{-| Intermidiate structure between 'String' and 'C.Section'. -}
 
 module Koshucode.Baala.Core.Section.Clause
 ( -- * Datatype
@@ -101,83 +101,82 @@ isCUnknown _                  = False
     Result clause list does not contain
     'CRelmap' and 'CAssert'. Instead of them,
     'TRelmap' and 'TAssert' are contained.
-    This function does not depend on 'RelmapHalfCons'.
+    This function does not depend on 'C.RelmapHalfCons'.
 
     >>> consPreclause . B.tokenize $ "a : source A /x /y"
-    [TRelmap [CodeLine 1 "a : source A /x /y"]
-             "a" [TreeL (Word 0 "source"),
-                  TreeL (Word 0 "A"),
-                  TreeL (TermN ["/x"]),
-                  TreeL (TermN ["/y"])]]
+    [TRelmap (ClauseSource
+                 [TWord 1 0 "a", TSpace 2 1, ..., TTerm 11 ["/y"]]
+                 [CodeLine 1 "a : source A /x /y" [TWord 1 0 "a", ...]])
+             "a" [ TreeL (TWord 5 0 "source")
+                 , TreeL (TWord 7 0 "A")
+                 , TreeL (TTerm 9  ["/x"])
+                 , TreeL (TTerm 11 ["/y"]) ]]
     -}
 consPreclause :: [B.TokenLine] -> [Clause]
 consPreclause = concatMap consPreclause' . C.clausify
 
 consPreclause' :: C.ClauseSource -> [Clause]
-consPreclause' src@(C.ClauseSource toks _) = cl toks' where
-    toks' = B.sweepToken toks
+consPreclause' src@(C.ClauseSource toks _) = clause $ B.sweepToken toks where
+    clause :: [B.Token] -> [Clause]
+    clause (B.TWord _ 0 "|" : B.TWord _ 0 k : xs) = frege k xs
+    clause (B.TWord _ 0 n   : B.TWord _ 0 k : xs)
+        | isDelim k       =  rel n xs
+    clause (B.TWord _ 0 k : xs)
+        | k == "section"  =  sec xs
+        | k == "import"   =  imp xs
+        | k == "export"   =  exp xs
+        | k == "****"     =  [CComment src]
+    clause []             =  []
+    clause _              =  unk
 
-    cl :: [B.Token] -> [Clause]
-    cl (B.TWord _ 0 "|" : B.TWord _ 0 k : xs) = judge k xs
-    cl (B.TWord _ 0 n   : B.TWord _ 0 k : xs)
-        | isDelim k       = rel n xs
-    cl (B.TWord _ 0 k : xs)
-        | k == "affirm"   = assert True  xs
-        | k == "deny"     = assert False xs
-        | k == "section"  = mod xs
-        | k == "import"   = imp xs
-        | k == "export"   = exp xs
-        | k == "****"     = [CComment src]
-    cl []                 = []
-    cl _                  = unk
+    unk                   =  [CUnknown src]
 
-    unk                   = [CUnknown src]
+    isDelim     =  (`elem` ["|", ":"])
 
-    isDelim = (`elem` ["|", ":"])
+    frege "--"  =  jud True
+    frege "-"   =  jud True
+    frege "-X"  =  jud False
+    frege "-x"  =  jud False
 
-    judge "--" = jud True
-    judge "-"  = jud True
-    judge "-X" = jud False
-    judge "-x" = jud False
+    frege "=="  =  ass True
+    frege "="   =  ass True
+    frege "=X"  =  ass False
+    frege "=x"  =  ass False
 
-    judge "==" = assert True
-    judge "="  = assert True
-    judge "=X" = assert False
-    judge "=x" = assert False
+    frege _     =  const unk
 
-    judge _ = const unk
+    jud q (B.TWord _ _ p : xs) = [CJudge src q p xs]
+    jud _ _     =  unk
 
-    jud quo (B.TWord _ _ pat : xs) = [CJudge src quo pat xs]
-    jud _ _ = unk
-
-    assert quo (B.TWord _ _ pat : xs) =
+    ass q (B.TWord _ _ p : xs) =
         case B.splitTokensBy isDelim xs of
-          Right (option, _, relmap)  ->  ass relmap option
-          Left  relmap               ->  ass relmap []
-        where ass relmap option =
-                  let opt  = B.tokenTrees option
-                      body = B.tokenTrees relmap
-                  in [TAssert src quo pat (C.sortOperand opt) body]
-    assert _ _ = unk
+          Right (opt, _, expr)  ->  a expr opt
+          Left  expr            ->  a expr []
+        where a expr opt =
+                  let opt'  = C.sortOperand $ B.tokenTrees opt
+                      expr' = B.tokenTrees expr
+                  in [TAssert src q p opt' expr']
+    ass _ _               =  unk
 
-    mod [B.TWord _ _ n]   = [CSection src $ Just n]
-    mod []                = [CSection src Nothing]
-    mod _                 = unk
+    rel n expr            =  let expr' = B.tokenTrees expr
+                             in [TRelmap src n expr']
 
-    exp [B.TWord _ _ n]   = [CExport src n]
+    sec [B.TWord _ _ n]   =  [CSection src $ Just n]
+    sec []                =  [CSection src Nothing]
+    sec _                 =  unk
+
     exp (B.TWord _ _ n : B.TWord _ _ ":" : xs) = CExport src n : rel n xs
-    exp _                 = unk
+    exp [B.TWord _ _ n]   =  [CExport src n]
+    exp _                 =  unk
 
-    imp _                 = [CImport src toks Nothing]
-
-    rel n xs              = [TRelmap src n $ B.tokenTrees xs]
+    imp _                 =  [CImport src toks Nothing]
 
 
 
 -- ----------------------  Half construction
 
-{-| Construct 'Clause' list from 'Token' list.
-    This is a first step of constructing 'Section'. -}
+{-| Construct 'Clause' list from 'B.Token' list.
+    This is a first step of constructing 'C.Section'. -}
 consClause
     :: C.RelmapHalfCons  -- ^ Relmap half constructor
     -> [B.TokenLine]     -- ^ Source tokens
@@ -186,23 +185,23 @@ consClause half = clauseHalf half . consPreclause
 
 clauseHalf :: C.RelmapHalfCons -> B.Map [Clause]
 clauseHalf half = map f where
-    f (TRelmap src n ts)       = CRelmap src n       $ half (C.clauseLines src) ts
-    f (TAssert src q p opt ts) = CAssert src q p opt $ half (C.clauseLines src) ts
+    f (TRelmap src n ts)       = CRelmap src n       $ h src ts
+    f (TAssert src q p opt ts) = CAssert src q p opt $ h src ts
     f x = x
-
+    h src = half (C.clauseLines src)
 
 
 
 -- ----------------------  Full construction
 
-{-| Second step of constructing 'Section'. -}
+{-| Second step of constructing 'C.Section'. -}
 consSection
     :: (C.CContent c)
     => C.RelmapFullCons c      -- ^ Relmap full constructor
     -> String                  -- ^ Resource name
     -> [Clause]                -- ^ Output of 'consClause'
     -> B.AbortOr (C.Section c) -- ^ Result section
-consSection whole res xs =
+consSection whole resource xs =
     do _        <-  mapMFor unk isCUnknown
        imports  <-  mapMFor imp isCImport
        judges   <-  mapMFor jud isCJudge 
@@ -215,7 +214,7 @@ consSection whole res xs =
            , C.sectionAssert    =  asserts
            , C.sectionRelmap    =  relmaps
            , C.sectionJudge     =  judges
-           , C.sectionResource  =  res }
+           , C.sectionResource  =  resource }
     where
       mapFor  f p = map  f $ filter p xs
       mapMFor f p = mapM f $ filter p xs
@@ -245,15 +244,15 @@ consSection whole res xs =
             Left (a, ts) -> Left (a, ts, C.clauseLines src)
       rel _ = B.bug
 
-      ass (CAssert src q pat opt r) =
+      ass (CAssert src q p opt r) =
           let ls = C.clauseLines src
           in case whole r of
-               Right r'     -> Right $ C.Assert q pat opt r' ls
+               Right r'     -> Right $ C.Assert q p opt r' ls
                Left (a, ts) -> Left (a, ts, C.clauseLines src)
       ass _ = B.bug
 
-      unk (CUnknown src) = Left (B.AbortUnkClause,
-                                 [], C.clauseLines src)
+      unk (CUnknown src) =
+          Left (B.AbortUnkClause, [], C.clauseLines src)
       unk _ = B.bug
 
 
@@ -262,23 +261,23 @@ consSection whole res xs =
 {- $Documentation
 
    There are six types of 'Clause'.
-   Textual representation of 'Section' is a list of clauses.
+   Textual representation of 'C.Section' is a list of clauses.
    'consClause' constructs clause list from section text.
-
-   [name @:@ relmap]
-     Relmap clause
-
-   [@affirm@ pattern relmap]
-     Affirmative assertion clause
-
-   [@deny@ pattern relmap]
-     Denial assertion clause
 
    [@|--@ pattern \/name content ...]
      Affirmative judgement clause
 
    [@|-X@ pattern \/name content ...]
      Denial judgement clause
+
+   [name @:@ relmap]
+     Relmap clause
+
+   [@|==@ pattern @:@ relmap]
+     Affirmative assertion clause
+
+   [@|=X@ pattern @:@ relmap]
+     Denial assertion clause
 
    [@****@ blah blah blah ...]
      Comment clause
