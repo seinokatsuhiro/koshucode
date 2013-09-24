@@ -14,7 +14,7 @@ import qualified Koshucode.Baala.Core.Relmap.Assert     as C
 import qualified Koshucode.Baala.Core.Relmap.Dataset    as C
 import qualified Koshucode.Baala.Core.Relmap.HalfRelmap as C
 import qualified Koshucode.Baala.Core.Relmap.Relmap     as C
-import qualified Koshucode.Baala.Core.Relmap.Relfy     as C
+import qualified Koshucode.Baala.Core.Relmap.Relfy      as C
 
 
 
@@ -137,11 +137,42 @@ assertOptionRelmap opt r1 =
 assertOptionFore :: (Ord c) => [B.TokenTree] -> B.AbMap (B.Rel c)
 assertOptionFore opt r1 =
     do ns <- flatnames opt
-       B.arrangeRelRaw B.arrangeFore B.arrangeFore ns r1
+       arrangeRelRaw B.arrangeFore B.arrangeFore ns r1
 
 assertOptionOrder :: (Ord c) => [B.TokenTree] ->  B.AbMap (B.Rel c)
 assertOptionOrder _ r1 = Right r1
 
 assertOptionJudges :: C.AssertOption -> [B.Judge c] -> B.Ab [B.Judge c]
 assertOptionJudges _ js = Right js
+
+arrangeRelRaw
+    :: (Ord c)
+    => B.Arrange B.Termname  -- ^ Arranger for termnames,
+                             --   e.g., 'B.arrangePick', 'B.arrangeCut', etc
+    -> B.Arrange c           -- ^ Arranger for term contents
+    -> [B.Termname]          -- ^ Names of terms
+    -> B.AbMap (B.Rel c)     -- ^ Relation-to-relation mapping
+arrangeRelRaw = arrangeRelUsing id
+
+arrangeRelUsing
+    :: (Ord c)
+    => B.Map [B.TermPos]
+    -> B.Arrange B.Termname
+    -> B.Arrange c
+    -> [B.Termname]
+    -> B.AbMap (B.Rel c)
+arrangeRelUsing sort ha ba ns (B.Rel h1 b1)
+    | null non   = Right $ B.Rel h2 b2
+    | otherwise  = Left  $ B.AbortNoTerms non
+    where
+      non  =  B.headNonExistTerms h1 ns
+
+      pos  :: [B.TermPos]
+      pos  =  sort $ h1 `B.posFor` ns
+
+      ind  :: [Int]
+      ind  =  map B.posIndex pos
+
+      h2   =  B.headChange   (ha ind) h1
+      b2   =  B.unique $ map (ba ind) b1
 

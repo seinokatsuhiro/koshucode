@@ -1,43 +1,37 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Minimal implementations of relmaps -}
+{-| Minimal implementations of relmap operators. -}
 
 module Koshucode.Baala.Minimal.Operator
-( -- * Implementation
-  minimalRops
-
-  -- * Operators
+( minimalRops
   -- $ListOfOperators
 ) where
 
 import qualified Koshucode.Baala.Core    as C
 import qualified Koshucode.Baala.Builtin as Builtin
-import qualified Koshucode.Baala.Minimal.Operand   as Mini
-import qualified Koshucode.Baala.Minimal.Origin    as Mini
-import qualified Koshucode.Baala.Minimal.Restrict  as Mini
-import qualified Koshucode.Baala.Minimal.Term      as Mini
-import qualified Koshucode.Baala.Minimal.Tropashko as Mini
+import qualified Koshucode.Baala.Minimal.Operand   as Rop
+import qualified Koshucode.Baala.Minimal.Origin    as Rop
+import qualified Koshucode.Baala.Minimal.Restrict  as Rop
+import qualified Koshucode.Baala.Minimal.Term      as Rop
+import qualified Koshucode.Baala.Minimal.Tropashko as Rop
 
-
-
--- ----------------------  Operators
-
-{-| Minimal implementations of relmaps. -}
+{-| Minimal implementations of relmap operators. -}
 minimalRops :: (Ord c) => [C.Rop c]
-minimalRops = Builtin.ropList "minimal"
-    [ o "contents /N"        Mini.LikePick     Mini.ropConsContents
-    , o "cut /N ..."         Mini.LikePick     Mini.ropConsCut
-    , o "empty"              Mini.LikeId       Mini.ropConsEmpty
-    , o "id"                 Mini.LikeId       Mini.ropConsId
-    , o "join R"             Mini.LikeMeet     Mini.ropConsJoin
-    , o "meet R"             Mini.LikeMeet     Mini.ropConsMeet
-    , o "none R"             Mini.LikeMeet     Mini.ropConsNone
-    , o "pick /N ..."        Mini.LikePick     Mini.ropConsPick
-    , o "reldee"             Mini.LikeId       Mini.ropConsReldee
-    , o "reldum"             Mini.LikeId       Mini.ropConsReldum
-    , o "rename /N /N ..."   Mini.LikePick     Mini.ropConsRename
-    , o "some R"             Mini.LikeMeet     Mini.ropConsSome
-    , o "source P /N ..."    Mini.LikeSource   Mini.ropConsSource
+minimalRops = Builtin.ropList "minimal"  -- GROUP
+    [ o "contents /N"        Rop.LikePick     Rop.ropConsContents
+    , o "cut /N ..."         Rop.LikePick     Rop.ropConsCut
+    , o "empty"              Rop.LikeId       Rop.ropConsEmpty
+    , o "id"                 Rop.LikeId       Rop.ropConsId
+    , o "join R"             Rop.LikeMeet     Rop.ropConsJoin
+    , o "meet R"             Rop.LikeMeet     Rop.ropConsMeet
+    , o "none R"             Rop.LikeMeet     Rop.ropConsNone
+    , o "pick /N ..."        Rop.LikePick     Rop.ropConsPick
+    , o "reldee"             Rop.LikeId       Rop.ropConsReldee
+    , o "reldum"             Rop.LikeId       Rop.ropConsReldum
+    , o "rename /N /N ..."   Rop.LikePick     Rop.ropConsRename
+    , o "some R"             Rop.LikeMeet     Rop.ropConsSome
+    , o "source P /N ..."    Rop.LikeSource   Rop.ropConsSource
+    --   SYNOPSIS            OPERAND          CONSTRUCTOR
     ] where o = (,,)
 
 
@@ -45,21 +39,29 @@ minimalRops = Builtin.ropList "minimal"
 -- ----------------------
 {- $ListOfOperators
 
-   [@cut@]     Project relation to unspecified terms
+   [@cut@]       Project relation to unspecified terms.
 
-   [@join@]    Calculate join of two relations.
+   [@contents@]  Make nary relation of all contetnts.
 
-   [@meet@]    Calculate meet of two relations.
+   [@id@]        Identity relmap.
 
-   [@pick@]    Project relation to specified terms
+   [@join@]      Calculate join of two relations.
 
-   [@reldee@]  Nullary fullset relation
+   [@meet@]      Calculate meet of two relations.
 
-   [@reldum@]  Nullary empty relation
+   [@none@]      Restriction by relmaps.
 
-   [@rename@]  Change term name
+   [@pick@]      Project relation to specified terms.
 
-   [@source@]  Read relation from data source
+   [@reldee@]    Nullary full relation.
+
+   [@reldum@]    Nullary empty relation.
+
+   [@rename@]    Change term name.
+
+   [@some@]      Restriction by relmaps.
+
+   [@source@]    Read relation from data source.
 
 -}
 

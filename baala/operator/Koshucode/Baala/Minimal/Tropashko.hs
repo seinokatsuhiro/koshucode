@@ -7,19 +7,19 @@
     In constrast to Codd's original relational algebra,
     Tropashko lattice is in more conventional and strict ways.
     The lattice has fundamental operators from which
-    other operators are derived. -}
+    other operators are derived.  -}
 
 module Koshucode.Baala.Minimal.Tropashko
 ( -- * Fundamental operators
   -- $FundamentalOperators
 
-  -- * Meet (Natural join)
+  -- * meet (natural join)
   ropConsMeet,
   relmapMeet,
   relfyMeet,
   -- $MeetImplementation
 
-  -- * Join (Inner union)
+  -- * join (inner union)
   ropConsJoin,
   relmapJoin,
   relfyJoin,
@@ -27,7 +27,7 @@ module Koshucode.Baala.Minimal.Tropashko
 
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
-import Koshucode.Baala.Builtin
+import qualified Koshucode.Baala.Builtin as Rop
 
 
 
@@ -35,7 +35,7 @@ import Koshucode.Baala.Builtin
 
 ropConsMeet :: (Ord c) => C.RopCons c
 ropConsMeet use =
-  do m <- getRelmap use
+  do m <- Rop.getRelmap use
      Right $ relmapMeet use m
 
 {-| Meet two relations. -}
@@ -66,7 +66,7 @@ relfyMeet (C.Relfy h2 f2) h1 = Right (C.Relfy h3 f3) where
     pick2     =  B.posPick share2
     cut2      =  B.posCut  share2
 
-    h3        =  h2 `mappend` h1
+    h3        =  h2 `B.mappend` h1
     f3        =  case f2 of
                    C.RelfyConst b2 -> C.RelfyOneToAbMany False (meet2 b2)
                    _               -> C.RelfyOneToAbMany False meet
@@ -85,7 +85,7 @@ relfyMeet (C.Relfy h2 f2) h1 = Right (C.Relfy h3 f3) where
 
 ropConsJoin :: (Ord c) => C.RopCons c
 ropConsJoin use =
-    do m <- getRelmap use
+    do m <- Rop.getRelmap use
        Right $ relmapJoin use m
 
 {-| Join two relations. -}

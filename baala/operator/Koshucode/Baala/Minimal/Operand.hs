@@ -19,7 +19,7 @@ import qualified Koshucode.Baala.Builtin as Builtin
 
 -- ----------------------  Operand paterns
 
--- | 'RopPattern' for minimal operators
+{- | 'Builtin.RopPattern' for minimal operators -}
 data MinimalOperand
     = LikeId
     | LikeMeet      -- ^ 'likeMeet' sorter
@@ -45,23 +45,23 @@ instance Builtin.RopPattern MinimalOperand where
 {-| This sorter recognizes @-term@ operand.
 
     > pick /a /b
-    > pick -term /a /b -}
-likePick            :: C.RopSorter
-likePick            =  C.ropPartName "-term"
+    > pick -term /a /b  -}
+likePick       :: C.RopSorter
+likePick       =  C.ropPartName "-term"
 
 {-| This sorter recognizes @-relmap@ operand.
 
     > meet a
-    > meet -relmap a -}
-likeMeet            :: C.RopSorter
-likeMeet            =  C.ropPartName "-relmap"
+    > meet -relmap a  -}
+likeMeet       :: C.RopSorter
+likeMeet       =  C.ropPartName "-relmap"
 
 {-| This sorter recognizes @-sign@ and @-term@ operand.
 
     > source A /a /b
-    > source -sign A -term /a /b -}
-likeSource          :: C.RopSorter
-likeSource          =  C.ropPartNameBy f where
-    f (sign : term) = [("-sign", [sign]), ("-term", term)]
-    f _             = []
+    > source -sign A -term /a /b  -}
+likeSource     :: C.RopSorter
+likeSource     =  C.ropPartNameBy f where
+    f (s : ts) = [ ("-sign", [s]), ("-term", ts) ]
+    f _        = []
 

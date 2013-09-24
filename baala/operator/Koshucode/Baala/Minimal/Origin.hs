@@ -7,16 +7,16 @@ module Koshucode.Baala.Minimal.Origin
   -- * id
   ropConsId, relmapId,
   -- * empty
-  ropConsEmpty, relmapEmpty, relfyEmpty,
+  ropConsEmpty, relmapEmpty,
   -- * contents
-  ropConsContents, relmapContents, relfyContents,
+  ropConsContents, relmapContents,
   -- * reldee & reldum
   ropConsReldee, ropConsReldum,
 ) where
 
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
-import Koshucode.Baala.Builtin
+import qualified Koshucode.Baala.Builtin as Rop
 
 
 
@@ -24,8 +24,8 @@ import Koshucode.Baala.Builtin
 
 ropConsSource :: C.RopCons c
 ropConsSource use =
-  do sign <- getWord  use "-sign"
-     ns   <- getTerms use "-term"
+  do sign <- Rop.getWord  use "-sign"
+     ns   <- Rop.getTerms use "-term"
      Right $ C.relmapSource use sign ns
 
 
@@ -59,7 +59,7 @@ relfyEmpty h1 = Right $ C.Relfy h1 (C.RelfyConst [])
 
 ropConsContents :: C.RopCons c
 ropConsContents use =
-    do n <- getTerm use "-term"
+    do n <- Rop.getTerm use "-term"
        Right $ relmapContents use n
 
 relmapContents :: C.RopUse c -> B.Termname -> C.Relmap c

@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Extract suboperand
+{-| Extract suboperand -}
 
 module Koshucode.Baala.Builtin.Get
 ( -- * Generals

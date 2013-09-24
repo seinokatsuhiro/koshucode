@@ -1,22 +1,18 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Type for relations -}
+{-| Relation type -}
 
 module Koshucode.Baala.Base.Data.Rel
 ( -- * Datatype
   Rel (..),
   Relbody,
-  rel,
   relPosHere,
-  arrangeRel,
-  arrangeRelRaw,
 
   -- * Constant
   reldum,
   reldee,
 ) where
 
-import qualified Koshucode.Baala.Base.Abort        as B
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Syntax       as B
 import qualified Koshucode.Baala.Base.Data.Relhead as B
@@ -26,12 +22,13 @@ import qualified Koshucode.Baala.Base.Data.TermPos as B
 
 -- ----------------------  Data
 
-{-| Relations on type c.
-    Heading of relation and
-    body of relation as a list of tuples. -}
+{-| Relations on type `c`.
+    Relation is consist of heading and body.
+    Body is thoretically a set of tuples,
+    but implemented using list of list.  -}
 data Rel c = Rel
-    { relHead :: B.Relhead
-    , relBody :: Relbody c
+    { relHead :: B.Relhead    -- ^ Heading of relation
+    , relBody :: Relbody c    -- ^ Body of relbody
     } deriving (Show, Eq, Ord)
 
 {-| Body of relation, i.e., a list of tuples.
@@ -46,61 +43,29 @@ instance (B.Pretty c) => B.Pretty (Rel c) where
               b2    = B.doch $ map d b1
               d xs  = B.doc "|" B.<+> B.docColon xs
 
-rel :: [B.Termname] -> Relbody c -> Rel c
-rel = Rel . B.headFrom
-
+{-| Relational version of `B.posHere`. -}
 relPosHere :: Rel c -> [B.Termname] -> ([B.TermPos], [Bool])
 relPosHere r = B.posHere $ relHead r
-
-arrangeRel
-    :: (Ord c)
-    => B.Arrange String    -- ^ Arranger for termnames,
-                           --   e.g., 'arrangePick', 'arrangeCut', etc
-    -> B.Arrange c         -- ^ Arranger for term contents
-    -> [String]            -- ^ Names of terms
-    -> B.AbMap (Rel c)     -- ^ Relation-to-relation mapping
-arrangeRel = arrangeRelUsing B.posSortByIndex
-
-arrangeRelRaw
-    :: (Ord c)
-    => B.Arrange String    -- ^ Arranger for termnames,
-                           --   e.g., 'arrangePick', 'arrangeCut', etc
-    -> B.Arrange c         -- ^ Arranger for term contents
-    -> [String]            -- ^ Names of terms
-    -> B.AbMap (Rel c)     -- ^ Relation-to-relation mapping
-arrangeRelRaw = arrangeRelUsing id
-
-arrangeRelUsing
-    :: (Ord c)
-    => B.Map [B.TermPos]
-    -> B.Arrange String
-    -> B.Arrange c
-    -> [String]
-    -> B.AbMap (Rel c)
-arrangeRelUsing sort ha ba ns (Rel h1 b1)
-    | null non   = Right $ Rel h2 b2
-    | otherwise  = Left  $ B.AbortNoTerms non
-    where
-      non =  B.headNonExistTerms h1 ns
-
-      pos :: [B.TermPos]
-      pos =  sort $ h1 `B.posFor` ns
-
-      ind :: [Int]
-      ind =  map B.posIndex pos
-
-      h2  =  B.headChange (ha ind) h1
-      b2  =  B.unique $ map (ba ind) b1
 
 
 
 -- ----------------------  Constant
 
-{-| Relational constant that has no terms and no tuples. -}
+{-| The nullary empty relation.
+    In other words, relational constant
+    that has no terms and no tuples.
+
+    >>> B.doc (reldum :: Rel Bool)
+    {| |}  -}
 reldum :: Rel c
 reldum = Rel B.mempty []
 
-{-| Relational constant that has no terms and the empty tuple. -}
+{-| The nullary full relation.
+    In other words, relational constant
+    that has no terms and the empty tuple.
+
+    >>> B.doc (reldee :: Rel Bool)
+    {| | |}  -}
 reldee :: Rel c
 reldee = Rel B.mempty [[]]
 

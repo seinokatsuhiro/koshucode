@@ -10,6 +10,7 @@ module Koshucode.Baala.Base.Syntax.TokenTree
   treeTokens,
   treesTokens,
   flatname,
+  tt,
 
   -- * Divide trees
   splitTokensBy,
@@ -21,9 +22,10 @@ module Koshucode.Baala.Base.Syntax.TokenTree
   -- $Example
 ) where
 
-import qualified Koshucode.Baala.Base.Prelude      as B
-import qualified Koshucode.Baala.Base.Syntax.Token as B
-import qualified Koshucode.Baala.Base.Syntax.Tree  as B
+import qualified Koshucode.Baala.Base.Prelude         as B
+import qualified Koshucode.Baala.Base.Syntax.Token    as B
+import qualified Koshucode.Baala.Base.Syntax.Tokenize as B
+import qualified Koshucode.Baala.Base.Syntax.Tree     as B
 
 -- ----------------------
 
@@ -75,6 +77,9 @@ parenType = B.parenTable
 flatname :: TokenTree -> Maybe String
 flatname (B.TreeL (B.TTerm _ [n])) = Just n
 flatname _ = Nothing
+
+tt :: String -> [TokenTree]
+tt = tokenTrees . B.tokens
 
 
 

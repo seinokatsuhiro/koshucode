@@ -22,12 +22,6 @@ termname (B.TreeL (B.TTerm _ [n])) = Right n
 termname tree = Left (B.AbortMissingTermname "",
                       B.treeTokens tree)
 
--- termname2 :: [B.TokenTree] -> B.AbortTokens (String, String)
--- termname2 [B.TreeL (B.TTerm _ [n1]), B.TreeL (B.TTerm _ [n2])] =
---     Right (n1, n2)
--- termname2 trees = Left (B.AbortMissingTermname "",
---                         B.treesTokens trees)
-
 {-| Extract a list of term names.
  
     >>> termnames . B.tokenTrees . B.tokens $ "/a /b /c"

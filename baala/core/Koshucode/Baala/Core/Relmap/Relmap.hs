@@ -22,7 +22,7 @@ module Koshucode.Baala.Core.Relmap.Relmap
 import qualified Data.Monoid as M
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core.Relmap.HalfRelmap as C
-import qualified Koshucode.Baala.Core.Relmap.Relfy     as C
+import qualified Koshucode.Baala.Core.Relmap.Relfy      as C
 
 
 

@@ -29,8 +29,6 @@ import Koshucode.Baala.Minimal.Tropashko
 
    Functions for relational mapping are
    named under some conventions.
-   Relational mapping is a kind of functions
-   that calculate relations from relations.
 
    [@xxx@]        Name of relational operator.
 
@@ -42,9 +40,7 @@ import Koshucode.Baala.Minimal.Tropashko
    [@relmapXxx@]  Functions from 'Koshucode.Baala.Base.Content.Relmap.Relmap'
                   to 'Koshucode.Baala.Base.Content.Relmap.Relmap'.
 
-   [@relXxx@]     Functions from 'Koshucode.Baala.Base.Data.Rel'
-                  to 'Koshucode.Baala.Base.Data.Rel'.
-                  These are basic functions for relational operators.
+   [@relfyXxx@]   Functions that make 'Koshucode.Baala.Core.Relmap.Relfy'.
 
    [@likeXxx@]    Operand parser.
 
