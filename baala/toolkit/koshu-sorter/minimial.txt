@@ -1,0 +1,16 @@
+**
+**  USAGE
+**    ./koshu-sorter.hs < minimal.txt
+**
+
+minimal meet a
+minimal meet a b
+minimal meet (source A /x /y)
+
+minimal pick
+minimal pick /a /b
+minimal pick A
+
+minimal source A /x /y
+minimal source /x /y
+
