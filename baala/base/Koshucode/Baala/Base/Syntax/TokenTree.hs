@@ -11,6 +11,7 @@ module Koshucode.Baala.Base.Syntax.TokenTree
   treesTokens,
   flatname,
   tt,
+  ttDoc,
 
   -- * Divide trees
   splitTokensBy,
@@ -22,6 +23,7 @@ module Koshucode.Baala.Base.Syntax.TokenTree
   -- $Example
 ) where
 
+import qualified Text.PrettyPrint as P
 import qualified Koshucode.Baala.Base.Prelude         as B
 import qualified Koshucode.Baala.Base.Syntax.Token    as B
 import qualified Koshucode.Baala.Base.Syntax.Tokenize as B
@@ -81,6 +83,13 @@ flatname _ = Nothing
 tt :: String -> [TokenTree]
 tt = tokenTrees . B.tokens
 
+ttDoc :: [TokenTree] -> B.Doc
+ttDoc = dv where
+    dv = B.docv . map d
+    d (B.TreeL x)     = B.doc "TreeL :" B.<+> B.doc x
+    d (B.TreeB p xs2) = let treeB = (B.doch ["TreeB", show p])
+                        in P.hang treeB 2 (dv xs2)
+
 
 
 -- ----------------------  Divide trees
@@ -136,14 +145,9 @@ divideTreesByColon = divideTreesBy ":"
 -- ----------------------
 {- $Example
 
-   Before evaluating the following examples,
-   please import @Tokenizer@ module to use the @tokens@ function.
-   
-   >>> :m +Koshucode.Baala.Base.Syntax.Tokenize
+   Judgement
 
-   Tuple.
-
-   >>> tokenTrees . tokens $ "|-- R /x 0 /y 1"
+   >>> tt "|-- R /x 0 /y 1"
    [TreeL (TWord 1 0 "|--"),
     TreeL (TWord 3 0 "R"),
     TreeL (TTerm 5 ["/x"]),
@@ -151,9 +155,9 @@ divideTreesByColon = divideTreesBy ":"
     TreeL (TTerm 9 ["/y"]),
     TreeL (TWord 11 0 "1")]
 
-   Relmap.
+   Relmap
 
-   >>> tokenTrees . tokens $ "r : source R /x /y"
+   >>> tt "r : source R /x /y"
    [TreeL (TWord 1 0 "r"),
     TreeL (TWord 3 0 ":"),
     TreeL (TWord 5 0 "source"),
@@ -161,9 +165,9 @@ divideTreesByColon = divideTreesBy ":"
     TreeL (TTerm 9 ["/x"]),
     TreeL (TTerm 11 ["/y"])]
 
-   Nested relmap.
+   Nested relmap
 
-   >>> tokenTrees . tokens $ "meet (R | pick /a /b)"
+   >>> tt "meet (R | pick /a /b)"
    [TreeL (TWord 1 0 "meet"),
     TreeB 1 [
       TreeL (TWord 4 0 "R"),
@@ -172,9 +176,9 @@ divideTreesByColon = divideTreesBy ":"
       TreeL (TTerm 10 ["/a"]),
       TreeL (TTerm 12 ["/b"])]]
 
-   Double paren.
+   Double paren
 
-   >>> tokenTrees . tokens $ "(a ((b c)))"
+   >>> tt "(a ((b c)))"
    [TreeB 1 [
       TreeL (TWord 2 0 "a"),
       TreeB 1 [
@@ -182,17 +186,17 @@ divideTreesByColon = divideTreesBy ":"
           TreeL (TWord 6 0 "b"),
           TreeL (TWord 8 0 "c")]]]]
 
-   List.
+   List
 
-   >>> tokenTrees . tokens $ "[ 0 1 2 ]"
+   >>> tt "[ 0 1 2 ]"
    [TreeB 2 [
      TreeL (TWord 3 0 "0"),
      TreeL (TWord 5 0 "1"),
      TreeL (TWord 7 0 "2")]]
 
-   Relation.
+   Relation
 
-   >>> tokenTrees . tokens $ "{| /a /b | 10 20 | 30 40 |}"
+   >>> tt "{| /a /b | 10 20 | 30 40 |}"
    [TreeB 4 [
       TreeL (TTerm 3 ["/a"]), TreeL (TTerm 5 ["/b"]),
       TreeL (TWord 7 0 "|"),

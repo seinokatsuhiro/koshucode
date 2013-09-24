@@ -44,6 +44,10 @@ data Token
     | TUnknown B.TokenNumber String      -- ^ Unknown text
       deriving (Show, Eq, Ord, Data, Typeable)
 
+{-| Name of term,
+    e.g., @\"\/file\"@ for the term @\/file@. -}
+type Termname = String
+
 instance B.Name Token where
     name (TTerm   _ ns) = concat ns
     name (TWord  _ _ s) = s
@@ -52,9 +56,16 @@ instance B.Name Token where
     name (TComment _ s) = s
     name x = error $ "unknown name: " ++ show x
 
-{-| Name of term,
-    e.g., @\"\/file\"@ for the term @\/file@. -}
-type Termname = String
+instance B.Pretty Token where
+    doc = d where
+        d (TWord n q w)  = pretty "TWord"    n [show q, show w]
+        d (TTerm n ns)   = pretty "TTerm"    n [show ns]
+        d (TOpen n p)    = pretty "TOpen"    n [show p]
+        d (TClose n p)   = pretty "TClose"   n [show p]
+        d (TSpace n c)   = pretty "TSpace"   n [show c]
+        d (TComment n s) = pretty "TComment" n [show s]
+        d (TUnknown n s) = pretty "TUnknown" n [show s]
+        pretty k n xs = B.doch $ k : ('#' : show n) : xs
 
 
 
