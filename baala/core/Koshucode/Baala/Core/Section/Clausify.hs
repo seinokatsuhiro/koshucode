@@ -5,6 +5,7 @@ module Koshucode.Baala.Core.Section.Clausify
 ( ClauseSource (..),
   clausify,
   sortOperand,
+  sortUpOperand,
 ) where
 
 import Data.Generics
@@ -62,6 +63,8 @@ cons a1 b1 (ClauseSource a2 b2, c)
 -- e8 = e1 "a\n\n b\nc\n"
 -- e9 = e1 "a\n  \n b\nc\n"
 
+-- ----------------------
+
 {-| Split operand into named group.
     Non quoted words beginning with hyphen, e.g., @-x@,
     are name of group.
@@ -73,24 +76,15 @@ cons a1 b1 (ClauseSource a2 b2, c)
   -}
 
 sortOperand :: [B.TokenTree] -> [B.Named [B.TokenTree]]
-sortOperand = nil . (B.gather $ anon []) where
+sortOperand = {-nil .-} B.assocBy opt "" where
     -- add empty operand
     nil xs = case lookup "" xs of
                Nothing -> ("", []) : xs
                Just _  -> xs
 
-    -- anonymous group
-    anon ys xs@(B.TreeL (B.TWord _ 0 n@('-' : _)) : xs2)
-        | ys == []     = named n [] xs2  -- no anonymous group
-        | otherwise    = group "" ys xs
-    anon ys []         = group "" ys []
-    anon ys (x:xs)     = anon (x:ys) xs
+    opt (B.TreeL (B.TWord _ 0 n@('-' : _))) = Just n
+    opt _ = Nothing
 
-    -- named group
-    named n ys xs@(B.TreeL (B.TWord _ 0 ('-' : _)) : _) = group n ys xs
-    named n ys []      = group n ys []
-    named n ys (x:xs)  = named n (x:ys) xs
-
-    -- operand group named 'n'
-    group n ys xs = ((n, reverse ys), xs)
+sortUpOperand :: [B.TokenTree] -> [B.Named (B.OnceMore [B.TokenTree])]
+sortUpOperand = B.assocGather . sortOperand
 

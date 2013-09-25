@@ -62,6 +62,7 @@ library
         Koshucode.Baala.Base.Data.TermPos
 
         Koshucode.Baala.Base.Prelude
+        Koshucode.Baala.Base.Prelude.Assoc
         Koshucode.Baala.Base.Prelude.Arrange
         Koshucode.Baala.Base.Prelude.Class
         Koshucode.Baala.Base.Prelude.Line

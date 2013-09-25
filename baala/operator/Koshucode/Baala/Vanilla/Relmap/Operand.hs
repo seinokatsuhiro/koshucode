@@ -71,13 +71,13 @@ instance Builtin.RopPattern VanillaOperand where
     > group -term /r -relmap a  -}
 likeGroup          :: C.RopSorter
 likeGroup          =  C.ropPartNameBy f where
-    f [term, rel]  =  [("-term", [term]), ("-relmap", [rel])]
+    f [term, rel]  =  [ ("-term", [term]), ("-relmap", [rel]) ]
     f _            =  []
 
 {-| This sorter recognizes @-1@ and @-2@ operands.
 
-    > elem /x /xs
-    > elem -1 /x -2 /xs  -}
+    > member /x /xs
+    > member -1 /x -2 /xs  -}
 likePos            :: C.RopSorter
 likePos            =  C.ropPartNameBy f where
     f xs           =  zip posNames $ map B.singleton xs
@@ -91,7 +91,7 @@ posNames = map (('-' :) . show) [1 :: Int ..]
     > prefix -prefix /x- -term /a /b /c  -}
 likePrefix         :: C.RopSorter
 likePrefix         =  C.ropPartNameBy f where
-    f (pre : term) =  [("-prefix", [pre]), ("-term", term)]
+    f (pre : term) =  [ ("-prefix", [pre]), ("-term", term) ]
     f []           =  []
 
 {-| This sorter recognizes @-new@ and @-old@ operands.
@@ -100,7 +100,7 @@ likePrefix         =  C.ropPartNameBy f where
     > prefix-change -new /y- -old /x-  -}
 likePrefixChange   :: C.RopSorter
 likePrefixChange   =  C.ropPartNameBy f where
-    f [new, old]   =  [("-new", [new]), ("-old", [old])]
+    f [new, old]   =  [ ("-new", [new]), ("-old", [old]) ]
     f _            =  []
 
 {-| This sorter recognizes @-term@ operand.
