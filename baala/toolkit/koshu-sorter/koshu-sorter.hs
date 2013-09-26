@@ -3,14 +3,28 @@
 -- ------------------------------------------------------------------
 --
 --  DESCRIPTION
---    Display results of operand sorters
+--    Display results of operand sorters.
+--    Display tokens or token trees.
 --
 --  USAGE
 --    chmod 755 koshu-sorter.hs
 --    echo "minimal source A /x /y" | ./koshu-sorter.hs
+--    echo "token a b (c [d e])" | ./koshu-sorter.hs
+--    echo "tree a b (c [d e])" | ./koshu-sorter.hs
+--
+--  SYNTAX
+--    minimal SORTER OPERAND ...
+--      Show result of operand sorter defined in Minimal module
+--    vanilla SORTER OPERAND ...
+--      Show result of operand sorter defined in Vanilla module
+--    tree INPUT ...
+--      Show token trees of input
+--    token INPUT ...
+--      Show tokens of input
 --
 -- ------------------------------------------------------------------
 
+import qualified Data.Char                as C
 import qualified Text.PrettyPrint         as P
 import qualified Koshucode.Baala.Base     as B
 import qualified Koshucode.Baala.Core     as C
@@ -19,40 +33,42 @@ import qualified Koshucode.Baala.Vanilla  as Vanilla
 
 
 main :: IO ()
-main = interact translate where
-    translate :: String -> String
-    translate = unlines . concatMap applySorter . lines
+main = interact f where
+    f :: String -> String
+    f = unlines . concatMap g . B.linesCrlf
 
-    applySorter :: String -> [String]
-    applySorter ('*' : _) = []
-    applySorter ""        = []
-    applySorter line      = [show $ lineDoc line, ""]
+    g :: String -> [String]
+    g ('*' : _) = []
+    g ""        = []
+    g line      = [show $ lineDoc line, ""]
 
 lineDoc :: String -> B.Doc
-lineDoc line = B.doc line P.$$ body where
-    body = P.nest 2 (uncons $ B.tt line)
+lineDoc line = B.doc line P.$$ P.nest 2 body where
+    (g, xs)   = unconsWord line
+    (n, xs2)  = unconsWord xs
+    toks      = B.tokens xs
+    tt        = B.tt xs2
+    body | g == "tree"  = B.ttDoc tt
+         | g == "token" = B.docv toks
+         | otherwise    = case lookup g allSorters of
+                            Just s  -> sorterDoc s line n tt
+                            Nothing -> unk line
 
-    uncons (B.TreeL (B.TWord _ _ k) : xs) = group k xs
-    uncons _ = skip line
-
-    group k xs =
-        case lookup k allSorters of
-          Just s  -> sorterDoc s line xs
-          Nothing -> unk line
+sorterDoc :: [B.Named C.RopSorter]
+          -> String -> String -> [B.TokenTree] -> B.Doc
+sorterDoc sorters line name tt =
+    case lookup name sorters of
+      Just s  -> namedTtDoc . s . C.sortOperand $ tt
+      Nothing -> unk line
 
 skip, unk :: String -> B.Doc
 skip line = B.doc $ "** SKIP: "    ++ line
 unk  line = B.doc $ "** UNKNOWN: " ++ line
 
-sorterDoc :: [B.Named C.RopSorter] -> String -> [B.TokenTree] -> B.Doc
-sorterDoc sorters line = uncons where
-    uncons (B.TreeL (B.TWord _ _ k) : xs) =
-        case lookup k sorters of
-          Just s  -> sdoc s xs
-          Nothing -> unk line
-    uncons _ = skip line
-
-    sdoc sorter = namedTtDoc . sorter . C.sortOperand
+unconsWord :: String -> (String, String)
+unconsWord xs = (word, rest') where
+    (word, rest) = span (not . C.isSpace) xs
+    rest'        = dropWhile C.isSpace rest
 
 namedTtDoc :: [B.Named [B.TokenTree]] -> B.Doc
 namedTtDoc = B.docv . map d where
