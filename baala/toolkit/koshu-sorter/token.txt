@@ -1,0 +1,26 @@
+**
+**  USAGE
+**    ./koshu-sorter.hs < token.txt
+**
+
+** word
+token abc 'abc "abc"
+
+** word
+token abc-def abc/def abc:def
+
+** abbr
+token a.www ab.www 00.www
+
+** word (single char)
+token :;|.,
+
+** term
+token /a /a/b /a//c
+
+** open and close
+token () [] {} <||> {||} <>
+
+** comment
+token **** ** comment
+
