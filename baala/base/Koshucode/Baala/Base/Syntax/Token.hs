@@ -36,6 +36,7 @@ data Token
                --   0 for non-quoted,
                --   1 for single-quoted,
                --   2 for double-quoted.
+    | TAbbr    B.TokenNumber String String  -- ^ Abbreviated word
     | TTerm    B.TokenNumber [Termname]  -- ^ Termname
     | TOpen    B.TokenNumber String      -- ^ Open paren
     | TClose   B.TokenNumber String      -- ^ Close paren
@@ -59,6 +60,7 @@ instance B.Name Token where
 instance B.Pretty Token where
     doc = d where
         d (TWord n q w)  = pretty "TWord"    n [show q, show w]
+        d (TAbbr n a w)  = pretty "TAbbr"    n [show a, show w]
         d (TTerm n ns)   = pretty "TTerm"    n [show ns]
         d (TOpen n p)    = pretty "TOpen"    n [show p]
         d (TClose n p)   = pretty "TClose"   n [show p]
@@ -77,6 +79,7 @@ instance B.Pretty Token where
     25  -}
 tokenNumber :: Token -> B.TokenNumber
 tokenNumber (TWord    n _ _)  = n
+tokenNumber (TAbbr    n _ _)  = n
 tokenNumber (TTerm    n _)    = n
 tokenNumber (TOpen    n _)    = n
 tokenNumber (TClose   n _)    = n
@@ -90,6 +93,7 @@ tokenNumber (TUnknown n _)    = n
     "/r/x"  -}
 tokenContent :: Token -> String
 tokenContent (TWord  _ _ s)   = s
+tokenContent (TAbbr  _ a s)   = a ++ "." ++ s
 tokenContent (TTerm    _ s)   = concat s
 tokenContent (TOpen    _ s)   = s
 tokenContent (TClose   _ s)   = s
@@ -105,6 +109,7 @@ tokenContent (TUnknown _ s)   = s
     "Word"  -}
 tokenTypeText :: Token -> String
 tokenTypeText (TWord  _ _ _)  = "Word"
+tokenTypeText (TAbbr  _ _ _)  = "Abbr"
 tokenTypeText (TTerm    _ _)  = "TermN"
 tokenTypeText (TOpen    _ _)  = "Open"
 tokenTypeText (TClose   _ _)  = "Close"

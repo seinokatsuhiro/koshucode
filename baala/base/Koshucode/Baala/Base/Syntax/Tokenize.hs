@@ -53,49 +53,49 @@ trimLeft = dropWhile isSpace
 nextToken :: B.NextToken B.Token
 nextToken n txt =
     case txt of
-      ('*' : '*' : '*' : '*' : cs) -> tokD cs (wordQ 0 "****")
-      ('*' : '*' : _)         ->  tokD "" $ comment txt
-      ('\'' : '\'' : cs)      ->  tokD "" $ wordQ 1 (trimLeft cs)
-      ('(' : ')' : cs)        ->  tokD cs $ wordQ 0 "()"  -- nil
+      ('*' : '*' : '*' : '*' : cs) -> tokD cs (B.TWord n 0 "****")
+      ('*' : '*' : _)         ->  tokD "" $ B.TComment n txt
+      ('\'' : '\'' : cs)      ->  tokD "" $ B.TWord n 1 (trimLeft cs)
+      ('(' : ')' : cs)        ->  tokD cs $ B.TWord n 0 "()"  -- nil
       ('#' : c : cs)
-          | c == '!'          ->  tokD "" $ comment txt
-          | isWord c          ->  word 0 cs [c, '#']
-          | otherwise         ->  tokD cs $ wordQ 1 [c]
+          | c == '!'          ->  tokD "" $ B.TComment n txt
+          | isWord c          ->  word cs [c, '#'] $ B.TWord n 0
+          | otherwise         ->  tokD cs $ B.TWord n 1 [c]
       (c : '|' : cs)
-          | c `elem` "[{<("   ->  tokD cs $ open  [c, '|']
+          | c `elem` "[{<("   ->  tokD cs $ B.TOpen n [c, '|']
       ('|' : c : cs)
-          | c `elem` "]}>)"   ->  tokD cs $ close ['|', c]
-          | c == '|'          ->  tokD (trimLeft cs) (wordQ 0 "||") -- newline
+          | c `elem` "]}>)"   ->  tokD cs $ B.TClose n ['|', c]
+          | c == '|'          ->  tokD (trimLeft cs) $ B.TWord n 0 "||" -- newline
 
       (c : cs)
-          | isOpen    c       ->  tokD cs $ open    [c]
-          | isClose   c       ->  tokD cs $ close   [c]
-          | isSingle  c       ->  tokD cs $ wordQ 0 [c]
+          | isOpen    c       ->  tokD cs $ B.TOpen  n [c]
+          | isClose   c       ->  tokD cs $ B.TClose n [c]
+          | isSingle  c       ->  tokD cs $ B.TWord  n 0 [c]
           | isTerm    c       ->  term cs [c] []
-          | isQQ      c       ->  qq    2 cs  []
-          | isQ       c       ->  word  1 cs  []
-          | isWord    c       ->  word  0 cs  [c]
+          | isQQ      c       ->  qq   cs []
+          | isQ       c       ->  word cs []  $ B.TWord n 1
+          | isAbbr    c       ->  abbr cs [c]
+          | isWord    c       ->  word cs [c] $ B.TWord n 0
           | isSpace   c       ->  space 1 cs
 
       _ -> tokD [] $ B.TUnknown n []
 
     where
       -- function value
-      tokD cs token                   =  (token, cs)
-      tokR cs k xs                    =  (k $ reverse xs, cs)
+      tokD cs token                   = (token, cs)
+      tokR cs k xs                    = (k $ reverse xs, cs)
 
-      -- Token
-      open                            =  B.TOpen    n
-      close                           =  B.TClose   n
-      wordQ                           =  B.TWord    n
-      comment                         =  B.TComment n
+      -- content
+      abbr (c:cs) xs | c == '.'       = word cs [] (B.TAbbr n $ reverse xs)
+                     | isAbbr c       = abbr cs (c:xs)
+      abbr ccs xs                     = word ccs xs (B.TWord n 0)
 
-      word q (c:cs) xs | isWord c     = word q cs (c:xs)
-      word q ccs xs                   = tokR ccs (wordQ q) xs
+      word (c:cs) xs k | isWord c     = word cs (c:xs) k
+      word ccs xs k                   = tokR ccs k xs
 
-      qq q [] xs                      = tokR [] (wordQ q) xs
-      qq q (c:cs) xs | isQQ c         = tokR cs (wordQ q) xs
-                     | otherwise      = qq q cs (c:xs)
+      qq [] xs                        = tokR [] (B.TWord n 2) xs
+      qq (c:cs) xs | isQQ c           = tokR cs (B.TWord n 2) xs
+                   | otherwise        = qq cs (c:xs)
 
       term (c:cs) xs ns | isTerm c    = term cs [c] $ t xs ns
                         | isWord c    = term cs (c:xs) ns
@@ -147,7 +147,8 @@ isSimpleChar c =
       B.UnicodePunctuation -> c `elem` "-_.,!?"
       _                    -> False
 
-
+isAbbr :: Char -> Bool
+isAbbr = Ch.isAlpha
 
 -- ----------------------
 {- $TokenType
