@@ -31,6 +31,7 @@ data Section c = Section {
       sectionName     :: Maybe String           -- ^ Section name
     , sectionImport   :: [Section c]            -- ^ Importing section
     , sectionExport   :: [String]               -- ^ Exporting relmap names
+    , sectionShort    :: [B.Named String]       -- ^ Prefix for short signs
     , sectionAssert   :: [C.Assert c]           -- ^ Assertions of relmaps
     , sectionRelmap   :: [B.Named (C.Relmap c)] -- ^ Relmaps and its name
     , sectionJudge    :: [B.Judge c]            -- ^ Here data
@@ -64,7 +65,7 @@ sectionLinkedAssert Section { sectionRelmap = ms, sectionAssert = ass }
 
 {-| Section that has no contents. -}
 makeEmptySection :: C.RelmapCons c -> Section c
-makeEmptySection = Section Nothing [] [] [] [] [] ""
+makeEmptySection = Section Nothing [] [] [] [] [] [] ""
 
 {-| Section that has no contents. -}
 emptySection :: Section c

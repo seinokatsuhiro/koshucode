@@ -74,7 +74,7 @@ nextToken n txt =
           | isTerm    c       ->  term cs [c] []
           | isQQ      c       ->  qq   cs []
           | isQ       c       ->  word cs []  $ B.TWord n 1
-          | isAbbr    c       ->  abbr cs [c]
+          | isShort   c       ->  short cs [c]
           | isWord    c       ->  word cs [c] $ B.TWord n 0
           | isSpace   c       ->  space 1 cs
 
@@ -86,9 +86,9 @@ nextToken n txt =
       tokR cs k xs                    = (k $ reverse xs, cs)
 
       -- content
-      abbr (c:cs) xs | c == '.'       = word cs [] (B.TAbbr n $ reverse xs)
-                     | isAbbr c       = abbr cs (c:xs)
-      abbr ccs xs                     = word ccs xs (B.TWord n 0)
+      short (c:cs) xs | c == '.'      = word cs [] (B.TShort n $ reverse xs)
+                      | isShort c     = short cs (c:xs)
+      short ccs xs                    = word ccs xs (B.TWord n 0)
 
       word (c:cs) xs k | isWord c     = word cs (c:xs) k
       word ccs xs k                   = tokR ccs k xs
@@ -147,8 +147,8 @@ isSimpleChar c =
       B.UnicodePunctuation -> c `elem` "-_.,!?"
       _                    -> False
 
-isAbbr :: Char -> Bool
-isAbbr = Ch.isAlpha
+isShort :: Char -> Bool
+isShort = Ch.isAlpha
 
 -- ----------------------
 {- $TokenType
