@@ -36,8 +36,9 @@ data Clause
     | CAssert  C.ClauseSource Bool String C.AssertOption C.HalfRelmap  -- ^ Assertions of relmaps
     | TAssert  C.ClauseSource Bool String C.AssertOption [B.Token] -- ^ Not include HalfRelmap
     | CJudge   C.ClauseSource Bool String [B.Token]     -- ^ Judge
-    | CComment C.ClauseSource       -- ^ Caluse comment
-    | CUnknown C.ClauseSource       -- ^ Unknown clause
+    | CComment C.ClauseSource           -- ^ Caluse comment
+    | CUnknown C.ClauseSource           -- ^ Unknown clause
+    | CUnres   C.ClauseSource [B.Token] -- ^ Unresolved short sign
       deriving (Show, Data, Typeable)
 
 {-| Name of clause type. e.g., @\"Relmap\"@, @\"Assert\"@. -}
@@ -55,6 +56,7 @@ clauseTypeText c =
       CJudge   _ _ _ _      ->  "Judge"
       CComment _            ->  "Comment"
       CUnknown _            ->  "Unknown"
+      CUnres   _ _          ->  "Unres"
 
 {-| Source code information of clause. -}
 clauseSource :: Clause -> C.ClauseSource
@@ -71,6 +73,7 @@ clauseSource c =
       CJudge   src _ _ _    ->  src
       CComment src          ->  src
       CUnknown src          ->  src
+      CUnres   src _        ->  src
 
 isCImport :: Clause -> Bool
 isCImport (CImport _ _ _)     = True
@@ -83,6 +86,10 @@ isCExport _                   = False
 isCShort :: Clause -> Bool
 isCShort (CShort _ _)         = True
 isCShort _                    = False
+
+isTShort :: B.Token -> Bool
+isTShort (B.TShort _ _ _) = True
+isTShort _                = False
 
 isCRelmap :: Clause -> Bool
 isCRelmap (CRelmap _ _ _)     = True
@@ -100,6 +107,9 @@ isCUnknown :: Clause -> Bool
 isCUnknown (CUnknown _)       = True
 isCUnknown _                  = False
 
+isCUnres :: Clause -> Bool
+isCUnres (CUnres _ _)         = True
+isCUnres _                    = False
 
 
 -- ----------------------  Preconstruction
@@ -199,13 +209,26 @@ clauseHalf :: C.RelmapHalfCons -> B.Map [Clause]
 clauseHalf half xs = map f xs2 where
     f (TRelmap src n ts)       = CRelmap src n       $ h src ts
     f (TAssert src q p opt ts) = CAssert src q p opt $ h src ts
-    f x = x
+    f clause = clause
     h src ts = half (C.clauseLines src) (B.tokenTrees ts)
 
-    xs2 = map resolve xs
+    xs2 = concatMap resolve xs
     resolve = resolveClause $ concatMap short xs
     short (CShort _ p) = [p]
     short _ = []
+
+resolveClause :: [B.Named String] -> Clause -> [Clause]
+resolveClause shorts = f where
+    f (CJudge  src q p xs)     = resolve src xs $ CJudge  src q p
+    f (TAssert src q p opt xs) = resolve src xs $ TAssert src q p opt
+    f (TRelmap src n xs)       = resolve src xs $ TRelmap src n
+    f clause                   = [clause]
+
+    resolve src xs k = let xs2 = map (resolveShort shorts) xs
+                       in k xs2 : unres src xs2
+    unres src xs2    = case filter isTShort xs2 of
+                         []  -> []
+                         xs3 -> [CUnres src xs3]
 
 resolveShort :: [B.Named String] -> B.Map B.Token
 resolveShort shorts = f where
@@ -215,14 +238,6 @@ resolveShort shorts = f where
           Nothing -> token
     f token = token
 
-resolveClause :: [B.Named String] -> B.Map Clause
-resolveClause shorts = f where
-    f (CJudge  src q p xs)     = CJudge  src q p     $ resolve xs
-    f (TAssert src q p opt xs) = TAssert src q p opt $ resolve xs
-    f (TRelmap src n xs)       = TRelmap src n       $ resolve xs
-    f clause = clause
-
-    resolve = map $ resolveShort shorts
 
 
 -- ----------------------  Full construction
@@ -236,6 +251,7 @@ consSection
     -> B.AbortOr (C.Section c) -- ^ Result section
 consSection whole resource xs =
     do _        <-  mapMFor unk    isCUnknown
+       _        <-  mapMFor unres  isCUnres
        imports  <-  mapMFor imp    isCImport
        judges   <-  mapMFor judge  isCJudge 
        relmaps  <-  mapMFor relmap isCRelmap
@@ -243,8 +259,8 @@ consSection whole resource xs =
        Right $ C.emptySection
            { C.sectionName      =  section xs
            , C.sectionImport    =  imports
-           , C.sectionExport    =  mapFor exp isCExport
-           , C.sectionShort     =  shorts
+           , C.sectionExport    =  mapFor exp   isCExport
+           , C.sectionShort     =  mapFor short isCShort
            , C.sectionAssert    =  asserts
            , C.sectionRelmap    =  relmaps
            , C.sectionJudge     =  judges
@@ -261,38 +277,40 @@ consSection whole resource xs =
 
       imp (CImport _ _ (Nothing)) = Right C.emptySection
       imp (CImport _ _ (Just e))  = consSec [e]
-      imp _ = B.bug
+      imp _                       = B.bug
 
-      exp (CExport _ n) = n
-      exp _ = B.bug
+      exp (CExport _ n)   = n
+      exp _               = B.bug
 
-      shorts  = mapFor short isCShort
-
-      short (CShort _ p) = p
-      short _ = B.bug
+      short (CShort _ p)  = p
+      short _             = B.bug
 
       judge (CJudge src q p xs2) =
           case C.litJudge q p (B.tokenTrees xs2) of
             Right j -> Right j
-            Left  a -> Left (a, [], C.clauseLines src)
+            Left  a -> abort a [] src
       judge _ = B.bug
 
       relmap (CRelmap src n r) =
           case whole r of
             Right r'     -> Right (n, r')
-            Left (a, ts) -> Left (a, ts, C.clauseLines src)
+            Left (a, ts) -> abort a ts src
       relmap _ = B.bug
 
       assert (CAssert src q p opt r) =
           let ls = C.clauseLines src
           in case whole r of
                Right r'     -> Right $ C.Assert q p opt r' ls
-               Left (a, ts) -> Left (a, ts, C.clauseLines src)
+               Left (a, ts) -> abort a ts src
       assert _ = B.bug
 
-      unk (CUnknown src) =
-          Left (B.AbortUnkClause, [], C.clauseLines src)
+      unk (CUnknown src) = abort B.AbortUnkClause [] src
       unk _ = B.bug
+
+      unres (CUnres src ts) = abort B.AbortUnresToken ts src
+      unres _ = B.bug
+
+      abort a ts src = Left (a, ts, C.clauseLines src)
 
 
 

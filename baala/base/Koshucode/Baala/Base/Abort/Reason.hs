@@ -80,6 +80,7 @@ data AbortReason
     | AbortUnkContent       String
     | AbortUnkRelmap        String
     | AbortUnkSymbol        String
+    | AbortUnresToken
     | AbortUnmatchArity
     | AbortUnmatchType      String
     | AbortUsage            String [String]
@@ -113,6 +114,7 @@ instance B.AbortReasonClass AbortReason where
         (AbortUnkContent       _) -> "未知の項目内容"
         (AbortUnkRelmap        _) -> "未知の演算子"
         (AbortUnkSymbol        _) -> "未知の記号"
+        (AbortUnresToken        ) -> "未知の略号"
         (AbortUnmatchArity      ) -> "引数の数が合わない"
         (AbortUnmatchType      _) -> "型が合わない"
         (AbortUsage          _ _) -> "使用法の間違い"
@@ -138,6 +140,7 @@ instance B.AbortReasonClass AbortReason where
         (AbortUnkContent       s) -> par s
         (AbortUnkRelmap        s) -> par s
         (AbortUnkSymbol        s) -> par s
+        (AbortUnresToken        ) -> B.docEmpty
         (AbortUsage      _ usage) -> B.docv $ map par usage
         (AbortUndefined        s) -> par s
         (AbortUnmatchArity      ) -> B.docEmpty
