@@ -19,7 +19,7 @@ data BuiltinOperand
       deriving (Show, Eq, Enum)
 
 instance RopPattern BuiltinOperand where
-    ropSorter   LikeId     = id
+    ropSorter   LikeId     = ( \x -> Right x )
     ropPart     LikeId     = []
 
 builtinRops :: [C.Rop c]

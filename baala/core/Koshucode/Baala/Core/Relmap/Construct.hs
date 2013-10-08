@@ -47,46 +47,47 @@ instance Show (RelmapCons c) where
 {-| First step of constructing relmap,
     make 'HalfRelmap' from use of relational operator. -}
 type RelmapHalfCons
-    =  [B.TokenLine]    -- ^ Source information
-    -> [B.TokenTree]    -- ^ Operand as source trees
-    -> C.HalfRelmap     -- ^ Result half relmap
+    =  [B.TokenLine]      -- ^ Source information
+    -> [B.TokenTree]      -- ^ Operand as source trees
+    -> B.Ab C.HalfRelmap  -- ^ Result half relmap
 
 halfBundle :: [(String, (String, C.RopFullSorter))] -> RelmapHalfCons
 halfBundle halfs = consHalfRelmap bundle where
     bundle :: String -> RelmapHalfCons
     bundle op src opd = case lookup op halfs of
-      Just (u, p) -> let opd' = addOperand opd $ p opd
-                     in C.HalfRelmap u src op opd' []
-      Nothing     -> C.HalfRelmap [] src op [("operand", opd)] []
+      Nothing     -> Right $ C.HalfRelmap [] src op [("operand", opd)] []
+      Just (u, p) -> do sorted <- p opd
+                        let opd' = addOperand opd sorted
+                        Right $ C.HalfRelmap u src op opd' []
 
     addOperand :: a -> [B.Named a] -> [B.Named a]
     addOperand opd = (("operand", opd) :)
 
 consHalfRelmap :: (String -> RelmapHalfCons) -> RelmapHalfCons
 consHalfRelmap bundle src = cons where
-    cons :: [B.TokenTree] -> C.HalfRelmap
+    cons :: [B.TokenTree] -> B.Ab C.HalfRelmap
     cons xs = case B.divideTreesByBar xs of
                 [x] -> one x
-                xs2 -> cat $ map cons xs2
+                xs2 -> cat =<< mapM cons xs2
 
-    cons' :: B.TokenTree -> C.HalfRelmap
+    cons' :: B.TokenTree -> B.Ab C.HalfRelmap
     cons' x = cons [x]
 
-    cat :: [C.HalfRelmap] -> C.HalfRelmap
-    cat = C.HalfRelmap "R | R" src "|" []
+    cat :: [C.HalfRelmap] -> B.Ab C.HalfRelmap
+    cat = Right . C.HalfRelmap "R | R" src "|" []
 
     -- half relmap from tokens
-    one :: [B.TokenTree] -> C.HalfRelmap
+    one :: [B.TokenTree] -> B.Ab C.HalfRelmap
     one [B.TreeB _ xs] = cons xs
-    one (B.TreeL (B.TWord _ 0 op) : opd) = submap $ bundle op src opd
-    one opd = C.HalfRelmap "" src "?" [("operand", opd)] [] -- no operator
+    one (B.TreeL (B.TWord _ 0 op) : opd) = submap =<< bundle op src opd
+    one opd = Right $ C.HalfRelmap "" src "?" [("operand", opd)] [] -- no operator
 
     -- collect subrelmaps
-    submap :: B.Map C.HalfRelmap
+    submap :: B.AbMap C.HalfRelmap
     submap h@(C.HalfRelmap u _ op opd _) =
         case lookup "-relmap" opd of
-          Just xs -> C.HalfRelmap u src op opd $ map cons' xs
-          Nothing -> h  -- no subrelmaps
+          Just xs -> Right . C.HalfRelmap u src op opd =<< mapM cons' xs
+          Nothing -> Right $ h  -- no subrelmaps
 
 
 
@@ -105,7 +106,6 @@ fullBundle fulls = full where
         case lookup op fulls of
           Nothing   -> Right $ C.RelmapName h op
           Just cons -> do ms <- mapM full hs
-                          --B.addAbort (B.AbortUsage op u, [], src)
                           cons $ C.RopUse h ms
 
 

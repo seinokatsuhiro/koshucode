@@ -14,7 +14,7 @@ class RopPattern p where
 
     {-| Operand sorter. -}
     ropSorter :: p -> C.RopSorter
-    ropSorter _ = id
+    ropSorter _ x = Right x
 
     {-| Names of suboperands. -}
     ropPart   :: p -> [String]

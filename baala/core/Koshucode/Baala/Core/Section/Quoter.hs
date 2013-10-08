@@ -28,7 +28,7 @@ koshuQuoter half fullQ = TH.QuasiQuoter { TH.quoteExp = koshuQ half fullQ }
 koshuQ :: C.RelmapHalfCons -> TH.ExpQ -> String -> TH.ExpQ
 koshuQ half fullQ = dispatch . B.tokenize where
     dispatch src = sectionQ src -- relmapQ src
-    sectionQ = consSectionQ fullQ . C.consClause half
+    sectionQ = consSectionQ fullQ . {- C.consClause half -} undefined
     --relmapQ  = consFullRelmapQ fullQ . half [] . tokenTrees
 
 {- Construct ExpQ of Section

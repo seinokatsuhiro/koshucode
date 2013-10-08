@@ -31,9 +31,11 @@ sectionRead
     -> String       -- ^ Resource name
     -> String       -- ^ Source text
     -> B.AbortOr (C.Section c)  -- ^ Result section from source text
-sectionRead root res src = sec where
-    (C.RelmapCons half full) = C.sectionCons root
-    sec = C.consSection full res $ C.consClause half $ B.tokenize src
+sectionRead root res src =
+    let (C.RelmapCons half full) = C.sectionCons root
+    in case C.consClause half $ B.tokenize src of
+         Right cs -> C.consSection full res cs
+         Left a   -> Left (a, [], [])
 
 {-| Read section from file. -}
 sectionFile

@@ -5,8 +5,15 @@ module Koshucode.Baala.Core.Relmap.Rop
   Rop (..),
   RopFullSorter,
   RopSorter,
-  ropPartNameBy,
-  ropPartName,
+
+  -- * Associator
+  trunkId,
+  trunkBy,
+  trunkEnum,
+  trunkElems,
+  trunkUnary,
+  trunkBinary,
+  trunkUncons,
 
   -- * Constructor
   RopCons,
@@ -43,23 +50,49 @@ data Rop c = Rop
     This soters docompose operand trees,
     and give a name to suboperand. -}
 type RopFullSorter
-    =  [B.TokenTree]            -- ^ Unsorted operand
-    -> [B.Named [B.TokenTree]]  -- ^ Fully sorted operand
+    =  [B.TokenTree]                 -- ^ Unsorted operand
+    -> B.Ab [B.Named [B.TokenTree]]  -- ^ Fully sorted operand
 
 type RopSorter
-    =  [B.Named [B.TokenTree]]  -- ^ Basically sorted operand
-    -> [B.Named [B.TokenTree]]  -- ^ Fully sorted operand
+    =  [B.Named [B.TokenTree]]       -- ^ Basically sorted operand
+    -> B.Ab [B.Named [B.TokenTree]]  -- ^ Fully sorted operand
+
+
+
+-- ----------------------  Trunk associators
+
+trunkId :: RopSorter
+trunkId x = Right x
 
 {-| Give a name to unnamed operand. -}
-ropPartNameBy :: RopFullSorter -> RopSorter
-ropPartNameBy f xs =
-    case lookup "" xs of
-      Just x  -> f x ++ xs
-      Nothing -> xs
+trunkBy :: RopFullSorter -> RopSorter
+trunkBy f xs = case lookup "" xs of
+                 Just x  -> Right . (++ xs) =<< f x
+                 Nothing -> Right xs
 
-ropPartName :: String -> RopSorter
-ropPartName name = ropPartNameBy f where
-    f x = [(name, x)]
+trunkEnum :: RopSorter
+trunkEnum       = trunkBy f where
+    f xs        =  Right $ zip ns $ map B.singleton xs
+    ns          =  map (('-' :) . show) [1 :: Int ..]
+
+trunkElems :: String -> RopSorter
+trunkElems a    = trunkBy f where
+    f xs        = Right [ (a, xs) ]
+
+trunkUnary :: String -> RopSorter
+trunkUnary a    = trunkBy f where
+    f [x]       = Right [ (a, [x]) ]
+    f _         = Left $ B.AbortUndefined "unary"
+
+trunkBinary :: String -> String -> RopSorter
+trunkBinary a b = trunkBy f where
+    f [x, y]    = Right [ (a, [x]), (b, [y]) ]
+    f _         = Left $ B.AbortUndefined "binary"
+
+trunkUncons :: String -> String -> RopSorter
+trunkUncons a b = trunkBy f where
+    f (x:xs)    = Right [ (a, [x]), (b, xs) ]
+    f _         = Left $ B.AbortUndefined "uncons"
 
 
 

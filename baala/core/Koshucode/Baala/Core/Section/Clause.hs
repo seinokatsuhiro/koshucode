@@ -200,14 +200,14 @@ consPreclause' src@(C.ClauseSource toks _) = clause $ B.sweepToken toks where
 consClause
     :: C.RelmapHalfCons  -- ^ Relmap half constructor
     -> [B.TokenLine]     -- ^ Source tokens
-    -> [Clause]          -- ^ Result clauses
+    -> B.Ab [Clause]     -- ^ Result clauses
 consClause half = clauseHalf half . consPreclause
 
-clauseHalf :: C.RelmapHalfCons -> B.Map [Clause]
-clauseHalf half xs = map f xs2 where
-    f (TRelmap src n ts)       = CRelmap src n       $ h src ts
-    f (TAssert src q p opt ts) = CAssert src q p opt $ h src ts
-    f clause = clause
+clauseHalf :: C.RelmapHalfCons -> B.AbMap [Clause]
+clauseHalf half xs = mapM f xs2 where
+    f (TRelmap src n ts)       = Right . CRelmap src n       =<< h src ts
+    f (TAssert src q p opt ts) = Right . CAssert src q p opt =<< h src ts
+    f clause = Right clause
     h src ts = half (C.clauseLines src) (B.tokenTrees ts)
 
     xs2 = concatMap resolve xs
