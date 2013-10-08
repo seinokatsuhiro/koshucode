@@ -44,12 +44,6 @@ data Relmap c
     -- | Relmap reference
     | RelmapName   C.HalfRelmap String
 
--- {-| Function of relmap. -}
--- type RelmapSub c
---     = [B.Rel c]        -- ^ Relations in operand
---     -> B.Rel c         -- ^ Main input relation
---     -> B.Ab (B.Rel c)  -- ^ Output relation
-
 
 
 -- ----------------------  Instances

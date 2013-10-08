@@ -10,8 +10,10 @@ module Koshucode.Baala.Base.Prelude.Assoc
   assocBy,
   assocOnce,
   assocMore,
+  assocExist,
 ) where
 
+import qualified Data.Maybe as Maybe
 import qualified Koshucode.Baala.Base.Prelude.Class as B
 
 data OnceMore a
@@ -40,14 +42,10 @@ assocGather [] = []
 assocGather ((k, a) : xs) = assocPush k a $ assocGather xs
 
 -- assocBy (`lookup` [('a', "A")]) "-" "apple banana cocoa"
+-- assocBy (`lookup` [('a', "A")]) "-" "bbbac"
+-- assocBy (`lookup` [('a', "A")]) "-" ""
 assocBy :: (a -> Maybe k) -> k -> [a] -> [(k, [a])]
-assocBy p k0 = margin where
-    margin [] = []
-    margin (x : xs) =
-        case p x of
-          Just k2 -> loop k2 [] xs
-          Nothing -> loop k0 [x] xs
-
+assocBy p k0 = loop k0 [] where
     loop k1 ys [] = [(k1, reverse ys)]
     loop k1 ys (x : xs) =
         case p x of
@@ -65,4 +63,7 @@ assocMore = loop where
     loop [] = []
     loop ((k, More x) : xs) = (k, x) : loop xs
     loop (_           : xs) =          loop xs
+
+assocExist :: (Eq k) => k -> [(k, a)] -> Bool
+assocExist k a = Maybe.isJust $ lookup k a
 

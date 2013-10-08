@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Core.Relmap.Implement
+module Koshucode.Baala.Core.Relmap.Rop
 ( -- * Implement
   Rop (..),
   RopFullSorter,
@@ -24,7 +24,7 @@ module Koshucode.Baala.Core.Relmap.Implement
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core.Relmap.Relmap     as C
 import qualified Koshucode.Baala.Core.Relmap.HalfRelmap as C
-import qualified Koshucode.Baala.Core.Relmap.Relfy     as C
+import qualified Koshucode.Baala.Core.Relmap.Relfy      as C
 
 
 

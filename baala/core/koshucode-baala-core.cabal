@@ -61,7 +61,7 @@ library
         Koshucode.Baala.Core.Relmap.Construct
         Koshucode.Baala.Core.Relmap.Dataset
         Koshucode.Baala.Core.Relmap.HalfRelmap
-        Koshucode.Baala.Core.Relmap.Implement
+        Koshucode.Baala.Core.Relmap.Rop
         Koshucode.Baala.Core.Relmap.Relfy
         Koshucode.Baala.Core.Relmap.Relmap
         Koshucode.Baala.Core.Relmap.Run

@@ -34,7 +34,7 @@ data Clause
     | CRelmap  C.ClauseSource String C.HalfRelmap       -- ^ Relmap and its name
     | TRelmap  C.ClauseSource String [B.Token]          -- ^ Not include HalfRelmap
     | CAssert  C.ClauseSource Bool String C.AssertOption C.HalfRelmap  -- ^ Assertions of relmaps
-    | TAssert  C.ClauseSource Bool String C.AssertOption [B.Token] -- ^ Not include HalfRelmap
+    | TAssert  C.ClauseSource Bool String C.AssertOption [B.Token]     -- ^ Not include HalfRelmap
     | CJudge   C.ClauseSource Bool String [B.Token]     -- ^ Judge
     | CComment C.ClauseSource           -- ^ Caluse comment
     | CUnknown C.ClauseSource           -- ^ Unknown clause
@@ -135,7 +135,8 @@ consPreclause = concatMap consPreclause' . C.clausify
 consPreclause' :: C.ClauseSource -> [Clause]
 consPreclause' src@(C.ClauseSource toks _) = clause $ B.sweepToken toks where
     clause :: [B.Token] -> [Clause]
-    clause (B.TWord _ 0 "|" : B.TWord _ 0 k : xs) = frege k xs
+    clause (B.TWord _ 0 "|" : B.TWord _ 0 k : xs) =
+        frege k xs  -- frege's judgement stroke
     clause (B.TWord _ 0 n   : B.TWord _ 0 k : xs)
         | isDelim k       =  rel n xs
     clause (B.TWord _ 0 k : xs)
@@ -172,13 +173,10 @@ consPreclause' src@(C.ClauseSource toks _) = clause $ B.sweepToken toks where
           Left  expr            ->  a expr []
         where a expr opt =
                   let opt'  = C.sortOperand $ B.tokenTrees opt
-                      --expr' = B.tokenTrees expr
                   in [TAssert src q p opt' expr]
     ass _ _               =  unk
 
     rel n expr            =  [TRelmap src n expr]
-                             --let expr' = B.tokenTrees expr
-                             --in [TRelmap src n expr']
 
     sec [B.TWord _ _ n]   =  [CSection src $ Just n]
     sec []                =  [CSection src Nothing]

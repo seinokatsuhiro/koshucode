@@ -76,14 +76,9 @@ cons a1 b1 (ClauseSource a2 b2, c)
   -}
 
 sortOperand :: [B.TokenTree] -> [B.Named [B.TokenTree]]
-sortOperand = {-nil .-} B.assocBy opt "" where
-    -- add empty operand
-    nil xs = case lookup "" xs of
-               Nothing -> ("", []) : xs
-               Just _  -> xs
-
-    opt (B.TreeL (B.TWord _ 0 n@('-' : _))) = Just n
-    opt _ = Nothing
+sortOperand = B.assocBy maybeBranch "" where
+    maybeBranch (B.TreeL (B.TWord _ 0 n@('-' : _))) = Just n
+    maybeBranch _ = Nothing
 
 sortUpOperand :: [B.TokenTree] -> [B.Named (B.OnceMore [B.TokenTree])]
 sortUpOperand = B.assocGather . sortOperand

@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Running relational calculation.
+{-| Running relational calculation. -}
 
 module Koshucode.Baala.Core.Relmap.Run
 ( runAssertJudges,

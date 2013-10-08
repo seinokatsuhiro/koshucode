@@ -10,7 +10,7 @@ module Koshucode.Baala.Core.Relmap
   module Koshucode.Baala.Core.Relmap.Relfy,
 
   -- * Processes
-  module Koshucode.Baala.Core.Relmap.Implement,
+  module Koshucode.Baala.Core.Relmap.Rop,
   module Koshucode.Baala.Core.Relmap.Construct,
   module Koshucode.Baala.Core.Relmap.Run,
 
@@ -23,7 +23,7 @@ import Koshucode.Baala.Core.Relmap.HalfRelmap
 import Koshucode.Baala.Core.Relmap.Relfy
 import Koshucode.Baala.Core.Relmap.Relmap
 
-import Koshucode.Baala.Core.Relmap.Implement
+import Koshucode.Baala.Core.Relmap.Rop
 import Koshucode.Baala.Core.Relmap.Construct
 import Koshucode.Baala.Core.Relmap.Run
 
