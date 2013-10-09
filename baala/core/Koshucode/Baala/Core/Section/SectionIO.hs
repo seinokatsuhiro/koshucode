@@ -35,7 +35,7 @@ sectionRead root res src =
     let (C.RelmapCons half full) = C.sectionCons root
     in case C.consClause half $ B.tokenize src of
          Right cs -> C.consSection full res cs
-         Left a   -> Left (a, [], [])
+         Left a   -> Left a
 
 {-| Read section from file. -}
 sectionFile

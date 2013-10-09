@@ -55,10 +55,11 @@ halfBundle :: [(String, (String, C.RopFullSorter))] -> RelmapHalfCons
 halfBundle halfs = consHalfRelmap bundle where
     bundle :: String -> RelmapHalfCons
     bundle op src opd = case lookup op halfs of
-      Nothing     -> Right $ C.HalfRelmap [] src op [("operand", opd)] []
-      Just (u, p) -> do sorted <- p opd
-                        let opd' = addOperand opd sorted
-                        Right $ C.HalfRelmap u src op opd' []
+      Nothing -> Right $ C.HalfRelmap [] src op [("operand", opd)] []
+      Just (use, sorter) ->
+          do sorted <- sorter opd
+             let opd' = addOperand opd sorted
+             Right $ C.HalfRelmap use src op opd' []
 
     addOperand :: a -> [B.Named a] -> [B.Named a]
     addOperand opd = (("operand", opd) :)

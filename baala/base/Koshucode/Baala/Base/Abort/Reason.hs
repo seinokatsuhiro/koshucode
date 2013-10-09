@@ -68,6 +68,9 @@ data AbortReason
     | AbortNotText          String
     | AbortNoTerms          [String]
     | AbortOddRelation      
+    | AbortOpeandDuplicate  [String]
+    | AbortOpeandUnknown    [String]
+    | AbortOpeandUnmatch    String
     | AbortReqBoolean       String
     | AbortReqFlatname      String
     | AbortReqNewTerms      [String]
@@ -102,6 +105,9 @@ instance B.AbortReasonClass AbortReason where
         (AbortNotText          _) -> "テキストではない"
         (AbortNoTerms          _) -> "項目がない"
         (AbortOddRelation       ) -> "ふぞろいな関係"
+        (AbortOpeandDuplicate  _) -> "同名の引数が重複"
+        (AbortOpeandUnknown    _) -> "未知の引数"
+        (AbortOpeandUnmatch    _) -> "引数が不一致"
         (AbortReqBoolean       _) -> "真か偽が必要"
         (AbortReqFlatname      _) -> "入れ子ではない項目名が必要"
         (AbortReqNewTerms      _) -> "新しい項目が必要"
@@ -129,6 +135,9 @@ instance B.AbortReasonClass AbortReason where
         (AbortNotText          s) -> par s
         (AbortNoTerms         ns) -> B.doch ns
         (AbortOddRelation       ) -> B.docEmpty
+        (AbortOpeandDuplicate ns) -> B.doch ns
+        (AbortOpeandUnknown   ns) -> B.doch ns
+        (AbortOpeandUnmatch    s) -> par s
         (AbortReqBoolean       s) -> par s
         (AbortReqFlatname      s) -> par s
         (AbortReqNewTerms     ns) -> B.doch ns

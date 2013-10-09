@@ -4,7 +4,6 @@
 
 module Koshucode.Baala.Builtin.Term
 ( termnames,
-  --termname2,
   termnamePairs,
   termTreePairs,
 ) where
@@ -24,7 +23,7 @@ termname tree = Left (B.AbortMissingTermname "",
 
 {-| Extract a list of term names.
  
-    >>> termnames . B.tokenTrees . B.tokens $ "/a /b /c"
+    >>> termnames . B.tt $ "/a /b /c"
     Right ["/a", "/b", "/c"]
 -}
 termnames :: [B.TokenTree] -> B.AbortTokens [B.Termname]
@@ -36,7 +35,7 @@ termnames trees =
 
 {-| Extract a list of name-and-name pairs.
  
-    >>> termnamePairs . B.tokenTrees . B.tokens $ "/a /x /b /y"
+    >>> termnamePairs . B.tt $ "/a /x /b /y"
     Right [("/a", "/x"), ("/b", "/y")]
 -}
 termnamePairs :: [B.TokenTree] -> B.AbortTokens [(B.Termname, B.Termname)]
@@ -52,10 +51,9 @@ termnamePairs = loop where
 
 {-| Extract a list of name-and-tree pairs.
  
-    >>> termTreePairs . B.tokenTrees . B.tokens $ "/a 'A3 /b 10 /c"
-    Right [ ("/a", TreeB 1 [ TreeL (TWord 3 0 "'")
-                          , TreeL (TWord 4 0 "A3") ])
-          , ("/b", TreeL (TWord 8 0 "10"))
+    >>> termTreePairs . B.tt $ "/a 'A3 /b 10 /c"
+    Right [ ("/a", TreeL (TWord 3 1 "A3"))
+          , ("/b", TreeL (TWord 7 0 "10"))
           , ("/c", TreeB 1 []) ]
   -}
 termTreePairs :: [B.TokenTree] -> B.AbortTokens [B.Named B.TokenTree]

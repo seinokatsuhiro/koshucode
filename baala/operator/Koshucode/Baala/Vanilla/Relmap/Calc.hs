@@ -38,7 +38,7 @@ relfyAdd
 relfyAdd xs h1 = Right $ C.Relfy h2 (C.RelfyOneToAbOne False f) where
     ns    = map fst xs  -- term names
     es    = map snd xs  -- term expressions
-    h2    = Builtin.mappend (B.headFrom ns) h1
+    h2    = B.mappend (B.headFrom ns) h1
     f cs1 = do cs2 <- mapM (C.runCoxH h1 cs1) es
                Right $ cs2 ++ cs1
 

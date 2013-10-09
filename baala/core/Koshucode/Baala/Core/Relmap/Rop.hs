@@ -1,23 +1,21 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Core.Relmap.Rop
-( -- * Implement
+( -- * Datatype
   Rop (..),
   RopFullSorter,
   RopSorter,
-
-  -- * Associator
-  trunkId,
-  trunkBy,
-  trunkEnum,
-  trunkElems,
-  trunkUnary,
-  trunkBinary,
-  trunkUncons,
-
-  -- * Constructor
   RopCons,
   RopUse (..),
+  RopOperand,
+
+  -- * Sorter
+  operandNone,
+  operandEnum,
+  operandElems,
+  operandUnary,
+  operandBinary,
+  operandUncons,
 
   -- * Relmap basis
   relmapSource,
@@ -35,7 +33,7 @@ import qualified Koshucode.Baala.Core.Relmap.Relfy      as C
 
 
 
--- ----------------------  Implement
+-- ----------------------  Datatype
 
 {-| Implementation of relmap operator. -}
 data Rop c = Rop
@@ -57,49 +55,8 @@ type RopSorter
     =  [B.Named [B.TokenTree]]       -- ^ Basically sorted operand
     -> B.Ab [B.Named [B.TokenTree]]  -- ^ Fully sorted operand
 
-
-
--- ----------------------  Trunk associators
-
-trunkId :: RopSorter
-trunkId x = Right x
-
-{-| Give a name to unnamed operand. -}
-trunkBy :: RopFullSorter -> RopSorter
-trunkBy f xs = case lookup "" xs of
-                 Just x  -> Right . (++ xs) =<< f x
-                 Nothing -> Right xs
-
-trunkEnum :: RopSorter
-trunkEnum       = trunkBy f where
-    f xs        =  Right $ zip ns $ map B.singleton xs
-    ns          =  map (('-' :) . show) [1 :: Int ..]
-
-trunkElems :: String -> RopSorter
-trunkElems a    = trunkBy f where
-    f xs        = Right [ (a, xs) ]
-
-trunkUnary :: String -> RopSorter
-trunkUnary a    = trunkBy f where
-    f [x]       = Right [ (a, [x]) ]
-    f _         = Left $ B.AbortUndefined "unary"
-
-trunkBinary :: String -> String -> RopSorter
-trunkBinary a b = trunkBy f where
-    f [x, y]    = Right [ (a, [x]), (b, [y]) ]
-    f _         = Left $ B.AbortUndefined "binary"
-
-trunkUncons :: String -> String -> RopSorter
-trunkUncons a b = trunkBy f where
-    f (x:xs)    = Right [ (a, [x]), (b, xs) ]
-    f _         = Left $ B.AbortUndefined "uncons"
-
-
-
--- ----------------------  Constructor
-
-{-| Constructor of relational operator 'Relmap'.
-    'Relmap' is constructed from 'HalfRelmap' and subrelmaps in it. -}
+{-| Constructor of relational operator 'C.Relmap'.
+    'C.Relmap' is constructed from 'C.HalfRelmap' and subrelmaps in it. -}
 type RopCons c = RopUse c -> B.AbortTokens (C.Relmap c)
 
 {-| Use of operator -}
@@ -108,6 +65,44 @@ data RopUse c = RopUse {
     , ropSubmap :: [C.Relmap c]   -- ^ Subrelmaps
     } deriving (Show)
 
+
+
+-- ----------------------  Trunk sorters
+
+type RopOperand = (RopSorter, [B.Termname], [B.Termname])
+
+operandNone :: RopOperand
+operandNone = (Right, [], [])
+
+operandEnum :: [B.Termname] -> [B.Termname] -> RopOperand
+operandEnum ks ns = (trunkBy f, ks, ns) where
+    f xs          = Right $ zip names $ map B.singleton xs
+    names         = map (('-' :) . show) [1 :: Int ..]
+
+operandElems :: B.Termname -> [B.Termname] -> RopOperand
+operandElems a ns = (trunkBy f, [a], ns) where
+    f xs          = Right [ (a, xs) ]
+
+operandUnary :: B.Termname -> [B.Termname] -> RopOperand
+operandUnary a ns = (trunkBy f, [a], ns) where
+    f [x]         = Right [ (a, [x]) ]
+    f _           = Left $ B.AbortOpeandUnmatch "unary"
+
+operandBinary :: B.Termname -> B.Termname -> [B.Termname] -> RopOperand
+operandBinary a b ns = (trunkBy f, [a,b], ns) where
+    f [x, y]         = Right [ (a, [x]), (b, [y]) ]
+    f _              = Left $ B.AbortOpeandUnmatch "binary"
+
+operandUncons :: B.Termname -> B.Termname -> [B.Termname] -> RopOperand
+operandUncons a b ns = (trunkBy f, [a,b], ns) where
+    f (x:xs)         = Right [ (a, [x]), (b, xs) ]
+    f _              = Left $ B.AbortOpeandUnmatch "uncons"
+
+{-| Give a name to unnamed operand. -}
+trunkBy :: RopFullSorter -> RopSorter
+trunkBy f xs = case lookup "" xs of
+                 Just x  -> Right . (++ xs) =<< f x
+                 Nothing -> Right xs
 
 
 

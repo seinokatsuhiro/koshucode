@@ -69,10 +69,10 @@ cons a1 b1 (ClauseSource a2 b2, c)
     Non quoted words beginning with hyphen, e.g., @-x@,
     are name of group.
   
-    >>> sortOperand $ B.tokenTrees $ B.tokens "a b -x /c 'd -y e"
-    [ ("",   [TreeL (TWord 1 0 "a"),TreeL (TWord 3 0 "b")])
-    , ("-x", [TreeL (TTerm 7 ["/c"]), TreeL (TWord 9 0 "'"), TreeL (TWord 10 0 "d")])
-    , ("-y", [TreeL (TWord 14 0 "e")])]
+    >>> sortOperand $ B.tt "a b -x /c 'd -y e"
+    [ ("",   [TreeL (TWord 1 0 "a"), TreeL (TWord 3 0 "b")])
+    , ("-x", [TreeL (TTerm 7 ["/c"]), TreeL (TWord 9 1 "d")])
+    , ("-y", [TreeL (TWord 14 0 "e")]) ]
   -}
 
 sortOperand :: [B.TokenTree] -> [B.Named [B.TokenTree]]

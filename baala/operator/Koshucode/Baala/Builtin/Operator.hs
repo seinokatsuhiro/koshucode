@@ -1,32 +1,51 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Builtin.Operator
-( BuiltinOperand (..),
+( ropList,
   builtinRops,
-  module Data.Monoid,
 
-  -- * Operator
   -- $ListOfOperator
 ) where
 
-import Data.Monoid
+import qualified Data.List as List
+import qualified Data.Monoid as M
+import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
-import Koshucode.Baala.Builtin.Pattern
 
-{-| 'RopPattern' for builtin operators. -}
-data BuiltinOperand
-    = LikeId      -- ^ no operand
-      deriving (Show, Eq, Enum)
+{-| Make implementations of relation-mapping operators. -}
+ropList
+    :: String      -- ^ Operator group
+    -> [(String, C.RopCons c, C.RopOperand)]
+                   -- ^ Synopsis, constructor, and operand sorter
+    -> [C.Rop c]   -- ^ List of relation-mapping operators
+ropList group = map rop where
+    rop (synopsis, cons, opd) =
+        let slist  = words synopsis
+            name   = head slist
+            sorter = operandSorter opd
+        in C.Rop name group sorter cons synopsis
 
-instance RopPattern BuiltinOperand where
-    ropSorter   LikeId     = ( \x -> Right x )
-    ropPart     LikeId     = []
+operandSorter :: C.RopOperand -> C.RopFullSorter
+operandSorter (trunkSorter, trunkTerms, branchTerms) xs = xs3 where
+    allTerms = trunkTerms ++ branchTerms
+    xs2  = C.sortOperand xs
+    ns2  = map fst xs2
 
+    more = B.assocMore $ B.assocGather xs2
+    unk  = ns2  List.\\  ("" : allTerms)
+    wrap = ns2 `List.intersect` trunkTerms
+
+    xs3  | not (null more) = Left $ B.AbortOpeandDuplicate (map fst more)
+         | not (null unk)  = Left $ B.AbortOpeandUnknown unk
+         | not (null wrap) = Right xs2
+         | otherwise       = trunkSorter xs2
+
+{-| Built-in relation-mapping operator. -}
 builtinRops :: [C.Rop c]
-builtinRops = ropList "builtin" [ ("|", LikeId, ropConsConcat) ]
+builtinRops = ropList "builtin" [ ("|", ropConsConcat, C.operandElems "--" []) ]
 
 ropConsConcat :: C.RopCons c
-ropConsConcat = Right . mconcat . C.ropSubmap
+ropConsConcat = Right . M.mconcat . C.ropSubmap
 
 -- ----------------------
 {- $ListOfOperator

@@ -254,6 +254,6 @@ ropConsRdf use =
     do sign  <- Builtin.getWord  use "-sign"
        [s,o] <- Builtin.getTerms use "-term"
        Right $ C.relmapAlias use $
-             C.relmapSource use sign ["/s", "/o"] `Builtin.mappend`
+             C.relmapSource use sign ["/s", "/o"] `B.mappend`
              Mini.relmapRename use [(s,"/s"), (o,"/o")]
 

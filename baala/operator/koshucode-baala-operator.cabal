@@ -48,12 +48,10 @@ library
   exposed-modules:
         Koshucode.Baala.Builtin
         Koshucode.Baala.Builtin.Get
-        Koshucode.Baala.Builtin.Pattern
         Koshucode.Baala.Builtin.Operator
         Koshucode.Baala.Builtin.Term
 
         Koshucode.Baala.Minimal
-        Koshucode.Baala.Minimal.Operand
         Koshucode.Baala.Minimal.Operator
         Koshucode.Baala.Minimal.Origin
         Koshucode.Baala.Minimal.Restrict
@@ -75,7 +73,6 @@ library
         Koshucode.Baala.Vanilla.Relmap.Binary
         Koshucode.Baala.Vanilla.Relmap.Calc
         Koshucode.Baala.Vanilla.Relmap.Naming
-        Koshucode.Baala.Vanilla.Relmap.Operand
         Koshucode.Baala.Vanilla.Relmap.Operator
         Koshucode.Baala.Vanilla.Relmap.Unary
 

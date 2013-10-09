@@ -172,7 +172,7 @@ consPreclause' src@(C.ClauseSource toks _) = clause $ B.sweepToken toks where
           Right (opt, _, expr)  ->  a expr opt
           Left  expr            ->  a expr []
         where a expr opt =
-                  let opt'  = C.sortOperand $ B.tokenTrees opt
+                  let opt' = C.sortOperand $ B.tokenTrees opt
                   in [TAssert src q p opt' expr]
     ass _ _               =  unk
 
@@ -198,17 +198,21 @@ consPreclause' src@(C.ClauseSource toks _) = clause $ B.sweepToken toks where
 {-| Construct 'Clause' list from 'B.Token' list.
     This is a first step of constructing 'C.Section'. -}
 consClause
-    :: C.RelmapHalfCons  -- ^ Relmap half constructor
-    -> [B.TokenLine]     -- ^ Source tokens
-    -> B.Ab [Clause]     -- ^ Result clauses
+    :: C.RelmapHalfCons    -- ^ Relmap half constructor
+    -> [B.TokenLine]       -- ^ Source tokens
+    -> B.AbortOr [Clause]  -- ^ Result clauses
 consClause half = clauseHalf half . consPreclause
 
-clauseHalf :: C.RelmapHalfCons -> B.AbMap [Clause]
+clauseHalf :: C.RelmapHalfCons -> [Clause] -> B.AbortOr [Clause]
 clauseHalf half xs = mapM f xs2 where
     f (TRelmap src n ts)       = Right . CRelmap src n       =<< h src ts
     f (TAssert src q p opt ts) = Right . CAssert src q p opt =<< h src ts
-    f clause = Right clause
-    h src ts = half (C.clauseLines src) (B.tokenTrees ts)
+    f clause                   = Right clause
+
+    h src ts = let ls = C.clauseLines src
+               in case half ls (B.tokenTrees ts) of
+                    Right r -> Right r
+                    Left  a -> Left (a, ts, ls)
 
     xs2 = concatMap resolve xs
     resolve = resolveClause $ concatMap short xs

@@ -51,7 +51,7 @@ relfyMaybe (C.Relfy h2 f2) h1 =
       kv cs2  = ( B.posPick share2 cs2,
                   B.posPick side2  cs2 )
 
-      h3 = Builtin.mappend h2 h1
+      h3 = B.mappend h2 h1
       f3 b1 = do m <- m2 b1
                  Right $ concatMap (step m) b1
       nils = replicate (B.headDegree h3 - B.headDegree h1) C.nil

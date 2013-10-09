@@ -3,9 +3,7 @@
 {-| Vanilla relational operators. -}
 
 module Koshucode.Baala.Vanilla.Relmap.Operator
-( vanillaRops
-
-  -- * Operators
+( vanillaRops,
   -- $Operators
 ) where
 
@@ -14,37 +12,31 @@ import qualified Koshucode.Baala.Builtin as Builtin
 
 import Koshucode.Baala.Vanilla.Relmap.Calc
 import Koshucode.Baala.Vanilla.Relmap.Naming
-import Koshucode.Baala.Vanilla.Relmap.Operand
 import Koshucode.Baala.Vanilla.Relmap.Binary
 import Koshucode.Baala.Vanilla.Relmap.Unary
 import Koshucode.Baala.Vanilla.Type
 
-
-
--- ----------------------  Operators
-
 {-| Implementation of relational operators. -}
 vanillaRops :: [C.Rop VContent]
 vanillaRops = Builtin.ropList "vanilla"
-    [ o "add /N E ..."         LikeVal           ropConsAdd
-    , o "duplicate /N ..."     LikeHold          ropConsDuplicate
-    , o "enclose /N"           LikeSize          ropConsEnclose
-    , o "full R ..."           LikeMeet          ropConsFull
-    , o "group /N R"           LikeGroup         ropConsGroup
-    , o "hold E"               LikeHold          ropConsHold
-    , o "maybe R"              LikeMeet          ropConsMaybe
-    , o "member /N /N"         LikePos           ropConsMember
-    , o "prefix /P /N ..."     LikePrefix        ropConsPrefix
-    , o "prefix-change /P /Q"  LikePrefixChange  ropConsPrefixChange
-    , o "range"                LikeSize          ropConsRange
-    , o "rank"                 LikeId            ropConsRank
-    , o "rdf P /S /O"          LikeSource        ropConsRdf
-    , o "size /N"              LikeSize          ropConsSize
-    , o "typename"             LikeHold          ropConsTypename
-    , o "unprefix /P"          LikeUnprefix      ropConsUnprefix
-    ] where o = (,,)
-
-
+    [ ( "add /N E ..."         , ropConsAdd           , C.operandElems  "-term"   [])
+    , ( "duplicate /N ..."     , ropConsDuplicate     , C.operandElems  "-term"   [])
+    , ( "enclose /N"           , ropConsEnclose       , C.operandUnary  "-term"   [])
+    , ( "full R ..."           , ropConsFull          , C.operandUnary  "-relmap" [])
+    , ( "group /N R"           , ropConsGroup         , C.operandBinary "-term" "-relmap" [])
+    , ( "hold E"               , ropConsHold          , C.operandElems  "-term"   [])
+    , ( "maybe R"              , ropConsMaybe         , C.operandUnary  "-relmap" [])
+    , ( "member /N /N"         , ropConsMember        , C.operandEnum   ["-1", "-2"] [])
+    , ( "prefix /P /N ..."     , ropConsPrefix        , C.operandUncons "-prefix" "-term" [])
+    , ( "prefix-change /P /Q"  , ropConsPrefixChange  , C.operandBinary "-new" "-old" [])
+    , ( "range"                , ropConsRange         , C.operandUnary  "-term"   [])
+    , ( "rank"                 , ropConsRank          , C.operandUnary  "-add"    ["-order"])
+    , ( "rdf P /S /O"          , ropConsRdf           , C.operandUncons "-sign" "-term" [])
+    , ( "size /N"              , ropConsSize          , C.operandUnary  "-term"   [])
+    , ( "typename"             , ropConsTypename      , C.operandElems  "-term"   [])
+    , ( "unprefix /P"          , ropConsUnprefix      , C.operandUnary  "-prefix" [])
+    --  SYNOPSIS                 CONSTRUCTOR            OPERAND
+    ]
 
 -- ----------------------
 {- $Operators
