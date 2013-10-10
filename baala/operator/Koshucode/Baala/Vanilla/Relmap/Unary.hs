@@ -251,7 +251,7 @@ relfyMemberExpand x xsPos h1 = Right $ C.Relfy h2 (C.RelfyOneToMany False f) whe
 
 ropConsRdf :: C.RopCons VContent
 ropConsRdf use =
-    do sign  <- Builtin.getWord  use "-sign"
+    do sign  <- Builtin.getWord  use "-pattern"
        [s,o] <- Builtin.getTerms use "-term"
        Right $ C.relmapAlias use $
              C.relmapSource use sign ["/s", "/o"] `B.mappend`

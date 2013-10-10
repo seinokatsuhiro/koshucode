@@ -17,20 +17,20 @@ import qualified Koshucode.Baala.Minimal.Tropashko as Rop
 {-| Minimal implementations of relmap operators. -}
 minimalRops :: (Ord c) => [C.Rop c]
 minimalRops = Builtin.ropList "minimal"  -- GROUP
-    [ ( "contents /N"       , Rop.ropConsContents  , C.operandElems "-term" [])
-    , ( "cut /N ..."        , Rop.ropConsCut       , C.operandElems "-term" [])
-    , ( "empty"             , Rop.ropConsEmpty     , C.operandNone)
-    , ( "id"                , Rop.ropConsId        , C.operandNone)
-    , ( "join R"            , Rop.ropConsJoin      , C.operandUnary "-relmap" [])
-    , ( "meet R"            , Rop.ropConsMeet      , C.operandUnary "-relmap" [])
-    , ( "none R"            , Rop.ropConsNone      , C.operandUnary "-relmap" [])
-    , ( "pick /N ..."       , Rop.ropConsPick      , C.operandElems "-term" [])
-    , ( "reldee"            , Rop.ropConsReldee    , C.operandNone)
-    , ( "reldum"            , Rop.ropConsReldum    , C.operandNone)
-    , ( "rename /N /N ..."  , Rop.ropConsRename    , C.operandElems "-term" [])
-    , ( "some R"            , Rop.ropConsSome      , C.operandUnary "-relmap" [])
-    , ( "source P /N ..."   , Rop.ropConsSource    , C.operandUncons "-sign" "-term" [])
-    --   SYNOPSIS             CONSTRUCTOR            OPERAND
+    [ ( "contents /N"      , Rop.ropConsContents , C.operandList "-term" [] )
+    , ( "cut /N ..."       , Rop.ropConsCut      , C.operandList "-term" [] )
+    , ( "empty"            , Rop.ropConsEmpty    , C.operandNone [] )
+    , ( "id"               , Rop.ropConsId       , C.operandNone [] )
+    , ( "join R"           , Rop.ropConsJoin     , C.operandOne  "-relmap" [] )
+    , ( "meet R"           , Rop.ropConsMeet     , C.operandOne  "-relmap" [] )
+    , ( "none R"           , Rop.ropConsNone     , C.operandOne  "-relmap" [] )
+    , ( "pick /N ..."      , Rop.ropConsPick     , C.operandList "-term"   [] )
+    , ( "reldee"           , Rop.ropConsReldee   , C.operandNone [] )
+    , ( "reldum"           , Rop.ropConsReldum   , C.operandNone [] )
+    , ( "rename /N /N ..." , Rop.ropConsRename   , C.operandList "-term"   [] )
+    , ( "some R"           , Rop.ropConsSome     , C.operandOne  "-relmap" [] )
+    , ( "source P /N ..."  , Rop.ropConsSource   , C.operandOneList "-pattern" "-term" [] )
+    --   SYNOPSIS            CONSTRUCTOR           OPERAND
     ]
 
 -- ----------------------

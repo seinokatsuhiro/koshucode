@@ -18,16 +18,13 @@ import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 import qualified Koshucode.Baala.Builtin as Rop
 
-
-
 -- ----------------------  source
 
 ropConsSource :: C.RopCons c
 ropConsSource use =
-  do sign <- Rop.getWord  use "-sign"
-     ns   <- Rop.getTerms use "-term"
-     Right $ C.relmapSource use sign ns
-
+  do pattern  <- Rop.getWord  use "-pattern"
+     terms    <- Rop.getTerms use "-term"
+     Right $ C.relmapSource use pattern terms
 
 -- ----------------------  id
 
@@ -37,8 +34,6 @@ ropConsId use = Right $ relmapId use
 {-| Identity mapping, i.e., do nothing. -}
 relmapId :: C.RopUse c -> C.Relmap c
 relmapId use = C.relmapCalc use "id" C.relfyId where
-
-
 
 -- ----------------------  empty
 
@@ -52,8 +47,6 @@ relmapEmpty use = C.relmapCalc use "empty" fy where
 {-| Throw away all tuples in a relation. -}
 relfyEmpty :: B.Relhead -> B.Ab (C.Relfy c)
 relfyEmpty h1 = Right $ C.Relfy h1 (C.RelfyConst [])
-
-
 
 -- ----------------------  contents
 
@@ -70,8 +63,6 @@ relfyContents :: B.Termname -> B.Relhead -> B.Ab (C.Relfy c)
 relfyContents n _ = Right $ C.Relfy h2 (C.RelfyFull True f) where
     h2   = B.headFrom [n]
     f b1 = map B.singleton $ concat b1
-
-
 
 -- ----------------------  reldee & reldum
 
