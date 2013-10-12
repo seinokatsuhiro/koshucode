@@ -42,7 +42,7 @@ operandSorter (trunkSorter, trunkTerms, branchTerms) xs = xs3 where
 
 {-| Built-in relation-mapping operator. -}
 builtinRops :: [C.Rop c]
-builtinRops = ropList "builtin" [ ("|", ropConsConcat, C.operandList "--" []) ]
+builtinRops = ropList "builtin" [ ("|", ropConsConcat, C.operandList "-relmap" []) ]
 
 ropConsConcat :: C.RopCons c
 ropConsConcat = Right . M.mconcat . C.ropSubmap

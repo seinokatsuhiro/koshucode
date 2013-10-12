@@ -9,6 +9,7 @@ module Koshucode.Baala.Base.Syntax.Tree
   -- * Parsing
   tree, trees,
   treeG,
+  treeWrap,
   untree, untrees,
   undouble,
 
@@ -73,6 +74,10 @@ trees parenType xs = fst $ loop xs 0 where
 
 
 -- ----------------------  Utility
+
+treeWrap :: [Tree a] -> Tree a
+treeWrap [x] = x
+treeWrap xs  = TreeB 1 xs
 
 {-| Convert tree to list of tokens. -}
 untrees :: GetTypeParen a -> [Tree a] -> [a]

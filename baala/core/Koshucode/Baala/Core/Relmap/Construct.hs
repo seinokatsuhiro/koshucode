@@ -26,11 +26,12 @@ import qualified Koshucode.Baala.Core.Relmap.Operand    as C
 relmapCons
     :: [C.Rop c]        -- ^ Implementations of relational operators
     -> (RelmapCons c)   -- ^ Relmap constructors
-relmapCons = make . unzip . map split where
+relmapCons = make . unzip . map pair where
     make (halfs, fulls) =
         RelmapCons (halfBundle halfs) (fullBundle fulls)
-    split (C.Rop n _ half full usage) =
-        ((n, (usage, half)), (n, full))
+    pair (C.Rop op _ sorter cons synopsis) =
+        ((op, (synopsis, sorter)),
+         (op, cons))
 
 {-| Half and full relmap constructor -}
 data RelmapCons c = RelmapCons
@@ -52,44 +53,33 @@ type RelmapHalfCons
     -> [B.TokenTree]      -- ^ Operand as source trees
     -> B.Ab C.HalfRelmap  -- ^ Result half relmap
 
-halfBundle :: [(String, (String, C.RopFullSorter))] -> RelmapHalfCons
-halfBundle halfs = consHalfRelmap bundle where
-    bundle :: String -> RelmapHalfCons
-    bundle op src opd = case lookup op halfs of
-      Nothing -> Right $ C.HalfRelmap [] src op [("operand", opd)] []
-      Just (use, sorter) ->
-          do sorted <- sorter opd
-             let opd' = addOperand opd sorted
-             Right $ C.HalfRelmap use src op opd' []
-
-    addOperand :: a -> [B.Named a] -> [B.Named a]
-    addOperand opd = (("operand", opd) :)
-
-consHalfRelmap :: (String -> RelmapHalfCons) -> RelmapHalfCons
-consHalfRelmap bundle src = cons where
+halfBundle :: [B.Named (String, C.RopFullSorter)] -> RelmapHalfCons
+halfBundle operators src = cons where
     cons :: [B.TokenTree] -> B.Ab C.HalfRelmap
-    cons xs = case B.divideTreesByBar xs of
-                [x] -> one x
-                xs2 -> cat =<< mapM cons xs2
+    cons xs =
+        case B.divideTreesByBar xs of
+          [(B.TreeL (B.TWord _ 0 op) : opd)] -> find op opd
+          [[B.TreeB 1 xs2]] -> cons xs2
+          [[B.TreeB _ _]]   -> Left $ B.AbortUndefined "bracket"
+          [_]               -> Left $ B.AbortUnkRelmap "?"
+          xs2               -> find "|" $ map B.treeWrap xs2
 
-    cons' :: B.TokenTree -> B.Ab C.HalfRelmap
-    cons' x = cons [x]
+    find :: String -> [B.TokenTree] -> B.Ab C.HalfRelmap
+    find op opd =
+        case lookup op operators of
+          Nothing -> Right $ half "" op opd []
+          Just (u, sorter) ->
+              do sorted <- sorter opd
+                 submap $ half u op opd sorted
 
-    cat :: [C.HalfRelmap] -> B.Ab C.HalfRelmap
-    cat = Right . C.HalfRelmap "R | R" src "|" []
+    half u op orig opd =
+        C.HalfRelmap u src op (("operand", orig) : opd) []
 
-    -- half relmap from tokens
-    one :: [B.TokenTree] -> B.Ab C.HalfRelmap
-    one [B.TreeB _ xs] = cons xs
-    one (B.TreeL (B.TWord _ 0 op) : opd) = submap =<< bundle op src opd
-    one opd = Right $ C.HalfRelmap "" src "?" [("operand", opd)] [] -- no operator
-
-    -- collect subrelmaps
-    submap :: B.AbMap C.HalfRelmap
-    submap h@(C.HalfRelmap u _ op opd _) =
+    submap h@C.HalfRelmap { C.halfOperand = opd } =
         case lookup "-relmap" opd of
-          Just xs -> Right . C.HalfRelmap u src op opd =<< mapM cons' xs
-          Nothing -> Right $ h  -- no subrelmaps
+          Nothing -> Right h   -- no subrelmaps
+          Just xs -> do subs <- mapM (cons . B.singleton) xs
+                        Right $ h { C.halfSubmap = subs }
 
 
 
@@ -103,12 +93,12 @@ type RelmapFullCons c
 
 {-| Construct (full) relmap. -}
 fullBundle :: [B.Named (C.RopCons c)] -> RelmapFullCons c
-fullBundle fulls = full where
-    full h@(C.HalfRelmap _ _ op _ hs) =
-        case lookup op fulls of
-          Nothing   -> Right $ C.RelmapName h op
-          Just cons -> do ms <- mapM full hs
-                          cons $ C.RopUse h ms
+fullBundle assoc = c where
+    c half@C.HalfRelmap { C.halfOperator = op, C.halfSubmap = hs } =
+        case lookup op assoc of
+          Nothing   -> Right $ C.RelmapName half op
+          Just cons -> do submaps <- mapM c hs
+                          cons $ C.RopUse half submaps
 
 
 
