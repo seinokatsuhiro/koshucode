@@ -6,6 +6,7 @@ module Koshucode.Baala.Base.Data.Relhead
 ( -- * Type
   Relhead (..),
   headFrom,
+  headConsTerm,
   headCons, headCons2, headCons3,
   headChange,
   headNames,
@@ -51,6 +52,9 @@ instance B.Pretty Relhead where
     Relhead [Term "/a", Term "/b"]  -}
 headFrom :: [B.Termname] -> Relhead
 headFrom = Relhead . map B.Term
+
+headConsTerm :: B.Relterm -> B.Map Relhead
+headConsTerm t1 (Relhead ns) = Relhead $ t1 : ns
 
 {-| Add term to head.
 

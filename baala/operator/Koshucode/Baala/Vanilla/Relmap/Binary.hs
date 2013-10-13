@@ -111,20 +111,21 @@ relfyGroup n (C.Relfy h2 f2) h1 =
     Right $ C.Relfy h3 (C.RelfyAbFull False f3)
     where
       shared    :: [B.Termname]
-      shared    =  B.posInnerNames $ h1 `B.posFrom` h2
+      shared    = B.posInnerNames $ h1 `B.posFrom` h2
 
       share1, share2 :: [B.TermPos]
-      share1    =  h1 `B.posFor` shared
-      share2    =  h2 `B.posFor` shared
+      share1    = h1 `B.posFor` shared
+      share2    = h2 `B.posFor` shared
 
-      m2 b1     = do b2 <- C.relfy f2 b1
+      toMap2 b1 = do b2 <- C.relfy f2 b1
                      Right $ B.gatherToMap $ map kv b2
       kv cs2    = ( B.posPick share2 cs2, cs2 )
 
-      h3        = B.Relhead $ B.Nest n (B.headTerms h2) : (B.headTerms h1)
-      f3 b1     = do m <- m2 b1
-                     Right $ map (step m) b1
-      step m cs1 = case B.lookupMap (B.posPick share1 cs1) m of
-                     Just cs2' -> (C.putRel $ B.Rel h2 cs2') : cs1
-                     Nothing     -> []
+      h3        = B.Nest n (B.headTerms h2) `B.headConsTerm` h1
+      f3 b1     = do map2 <- toMap2 b1
+                     Right $ map (add map2) b1
+      add map2 cs1 =
+          let b2maybe = B.lookupMap (B.posPick share1 cs1) map2
+              b2sub   = maybe [] id b2maybe
+          in C.putRel (B.Rel h2 b2sub) : cs1
 
