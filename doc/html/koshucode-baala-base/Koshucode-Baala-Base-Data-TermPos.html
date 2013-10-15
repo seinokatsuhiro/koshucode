@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.34.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.39.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -39,7 +39,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ><th
 	    >Safe Haskell</th
 	    ><td
-	    >Safe-Inferred</td
+	    >None</td
 	    ></tr
 	  ></table
 	><p class="caption"
@@ -51,7 +51,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Position
+	    >Datatype
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Construction
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Selection
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:4"
+	    >Other functions
 </a
 	    ></li
 	  ></ul
@@ -61,7 +76,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	>Description</p
 	><div class="doc"
 	><p
-	  >Heading of relations
+	  >Functions for term position 
 </p
 	  ></div
 	></div
@@ -80,8 +95,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    ><li
 	      ><a href="#v:posName"
 		>posName</a
-		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
+		> :: <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+		>Termname</a
 		></li
 	      ><li
 	      ><a href="#v:posIndex"
@@ -92,50 +107,108 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	      ></ul
 	    >}</li
 	  ><li class="src short"
-	  ><a href="#v:posPoss"
-	    >posPoss</a
-	    > :: [<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
+	  ><a href="#v:posHere"
+	    >posHere</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    >Termname</a
+	    >] -&gt; ([<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
 	    >TermPos</a
-	    >] -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-	    >Int</a
+	    >], [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    >])</li
+	  ><li class="src short"
+	  ><a href="#v:posFor"
+	    >posFor</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    >Termname</a
+	    >] -&gt; [<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
+	    >TermPos</a
 	    >]</li
 	  ><li class="src short"
-	  ><a href="#v:csPick"
-	    >csPick</a
+	  ><a href="#v:posFrom"
+	    >posFrom</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
+	    >TermPos</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:posTo"
+	    >posTo</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
+	    >TermPos</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:posExist"
+	    >posExist</a
+	    > :: <a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
+	    >TermPos</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:posInnerNames"
+	    >posInnerNames</a
+	    > :: [<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
+	    >TermPos</a
+	    >] -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    >Termname</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:posOuterNames"
+	    >posOuterNames</a
+	    > :: [<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
+	    >TermPos</a
+	    >] -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    >Termname</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:posSortByName"
+	    >posSortByName</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > [<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
+	    >TermPos</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:posSortByIndex"
+	    >posSortByIndex</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > [<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
+	    >TermPos</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:posPick"
+	    >posPick</a
 	    > ::  [<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
 	    >TermPos</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
 	    > [c]</li
 	  ><li class="src short"
-	  ><a href="#v:csCut"
-	    >csCut</a
+	  ><a href="#v:posCut"
+	    >posCut</a
 	    > ::  [<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
 	    >TermPos</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
 	    > [c]</li
-	  ><li class="src short"
-	  ><a href="#v:termsInner"
-	    >termsInner</a
-	    > :: [<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
-	    >TermPos</a
-	    >] -&gt; [[<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >]]</li
-	  ><li class="src short"
-	  ><a href="#v:termsOuter"
-	    >termsOuter</a
-	    > :: [<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
-	    >TermPos</a
-	    >] -&gt; [[<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >]]</li
 	  ></ul
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Position
+	>Datatype
 </h1
 	><div class="top"
 	><p class="src"
@@ -148,7 +221,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Term position 
+	    >Position of flat term 
 </p
 	    ></div
 	  ><div class="subs constructors"
@@ -172,12 +245,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		    ><dt class="src"
 		      ><a name="v:posName" class="def"
 			>posName</a
-			> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-			>String</a
+			> :: <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+			>Termname</a
 			></dt
 		      ><dd class="doc"
 		      ><p
-			>Term name
+			>Name of term
 </p
 			></dd
 		      ><dt class="src"
@@ -248,89 +321,302 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	      ></div
 	    ></div
 	  ></div
+	><h1 id="g:2"
+	>Construction
+</h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:posPoss" class="def"
-	    >posPoss</a
-	    > :: [<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
+	  ><a name="v:posHere" class="def"
+	    >posHere</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    >Termname</a
+	    >] -&gt; ([<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
 	    >TermPos</a
-	    >] -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-	    >Int</a
-	    >]<a href="src/Koshucode-Baala-Base-Data-TermPos.html#posPoss" class="link"
+	    >], [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    >])<a href="src/Koshucode-Baala-Base-Data-TermPos.html#posHere" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:posFor" class="def"
+	    >posFor</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    >Termname</a
+	    >] -&gt; [<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
+	    >TermPos</a
+	    >]<a href="src/Koshucode-Baala-Base-Data-TermPos.html#posFor" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Indicies 
+	    >Positions of given names in a head
 </p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>B.headFrom [&quot;/a&quot;, &quot;/b&quot;, &quot;/c&quot;] `posFor` [&quot;/b&quot;, &quot;/c&quot;, &quot;/d&quot;]
+</code
+		></strong
+	      >[TermPos &quot;/b&quot; 1, TermPos &quot;/c&quot; 2, TermPos &quot;/d&quot; (-1)]  
+</pre
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:csPick" class="def"
-	    >csPick</a
+	  ><a name="v:posFrom" class="def"
+	    >posFrom</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
+	    >TermPos</a
+	    >]<a href="src/Koshucode-Baala-Base-Data-TermPos.html#posFrom" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Positions of given (sub)head in a head
+</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>B.headFrom [&quot;/a&quot;, &quot;/b&quot;, &quot;/c&quot;] `posFrom` B.headFrom [&quot;/b&quot;, &quot;/c&quot;, &quot;/d&quot;]
+</code
+		></strong
+	      >[TermPos &quot;/b&quot; 1, TermPos &quot;/c&quot; 2, TermPos &quot;/d&quot; (-1)]  
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:posTo" class="def"
+	    >posTo</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
+	    >TermPos</a
+	    >]<a href="src/Koshucode-Baala-Base-Data-TermPos.html#posTo" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    ><em
+	      >h1</em
+	      > <code
+	      >`posTo`</code
+	      > <em
+	      >h2</em
+	      > <code
+	      >==</code
+	      > <em
+	      >h2</em
+	      > <code
+	      >`posFrom`</code
+	      > <em
+	      >h1</em
+	      > 
+</p
+	    ></div
+	  ></div
+	><h1 id="g:3"
+	>Selection
+</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:posExist" class="def"
+	    >posExist</a
+	    > :: <a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
+	    >TermPos</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ><a href="src/Koshucode-Baala-Base-Data-TermPos.html#posExist" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:posInnerNames" class="def"
+	    >posInnerNames</a
+	    > :: [<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
+	    >TermPos</a
+	    >] -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    >Termname</a
+	    >]<a href="src/Koshucode-Baala-Base-Data-TermPos.html#posInnerNames" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Pick inner part.
+</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>posInnerNames [TermPos &quot;/a&quot; (-1), TermPos &quot;/b&quot; 1, TermPos &quot;/c&quot; 2]
+</code
+		></strong
+	      >[&quot;/b&quot;, &quot;/c&quot;]  
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:posOuterNames" class="def"
+	    >posOuterNames</a
+	    > :: [<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
+	    >TermPos</a
+	    >] -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    >Termname</a
+	    >]<a href="src/Koshucode-Baala-Base-Data-TermPos.html#posOuterNames" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Pick outer part.
+</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>posOuterNames [TermPos &quot;/a&quot; (-1), TermPos &quot;/b&quot; 1, TermPos &quot;/c&quot; 2]
+</code
+		></strong
+	      >[&quot;/a&quot;]  
+</pre
+	    ></div
+	  ></div
+	><h1 id="g:4"
+	>Other functions
+</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:posSortByName" class="def"
+	    >posSortByName</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > [<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
+	    >TermPos</a
+	    >]<a href="src/Koshucode-Baala-Base-Data-TermPos.html#posSortByName" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Sort list of <code
+	      ><a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
+		>TermPos</a
+		></code
+	      > by the name.
+</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>posSortByName [TermPos &quot;/y&quot; 2, TermPos &quot;/x&quot; 0, TermPos &quot;/z&quot; 1]
+</code
+		></strong
+	      >[TermPos &quot;/x&quot; 0, TermPos &quot;/y&quot; 2, TermPos &quot;/z&quot; 1]  
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:posSortByIndex" class="def"
+	    >posSortByIndex</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > [<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
+	    >TermPos</a
+	    >]<a href="src/Koshucode-Baala-Base-Data-TermPos.html#posSortByIndex" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Sort list of <code
+	      ><a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
+		>TermPos</a
+		></code
+	      > by the index.
+</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>posSortByIndex [TermPos &quot;/y&quot; 2, TermPos &quot;/x&quot; 0, TermPos &quot;/z&quot; 1]
+</code
+		></strong
+	      >[TermPos &quot;/x&quot; 0, TermPos &quot;/z&quot; 1, TermPos &quot;/y&quot; 2]  
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:posPick" class="def"
+	    >posPick</a
 	    > ::  [<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
 	    >TermPos</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > [c]<a href="src/Koshucode-Baala-Base-Data-TermPos.html#csPick" class="link"
+	    > [c]<a href="src/Koshucode-Baala-Base-Data-TermPos.html#posPick" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Pick contents by positions. 
+	    >Pick contents by positions.
 </p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>posPick [TermPos &quot;/b&quot; 1, TermPos &quot;/c&quot; 2] &quot;abcd&quot;
+</code
+		></strong
+	      >&quot;bc&quot;  
+</pre
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:csCut" class="def"
-	    >csCut</a
+	  ><a name="v:posCut" class="def"
+	    >posCut</a
 	    > ::  [<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
 	    >TermPos</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > [c]<a href="src/Koshucode-Baala-Base-Data-TermPos.html#csCut" class="link"
+	    > [c]<a href="src/Koshucode-Baala-Base-Data-TermPos.html#posCut" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Cut contents by positions. 
+	    >Cut contents by positions.
 </p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:termsInner" class="def"
-	    >termsInner</a
-	    > :: [<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
-	    >TermPos</a
-	    >] -&gt; [[<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >]]<a href="src/Koshucode-Baala-Base-Data-TermPos.html#termsInner" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Pick an inner part. 
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:termsOuter" class="def"
-	    >termsOuter</a
-	    > :: [<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
-	    >TermPos</a
-	    >] -&gt; [[<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >]]<a href="src/Koshucode-Baala-Base-Data-TermPos.html#termsOuter" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Pick an outer part. 
-</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>posCut [TermPos &quot;/b&quot; 1, TermPos &quot;/c&quot; 2] &quot;abcd&quot;
+</code
+		></strong
+	      >&quot;ad&quot;  
+</pre
 	    ></div
 	  ></div
 	></div

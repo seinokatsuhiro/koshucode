@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.34.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.39.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -45,9 +45,116 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><p class="caption"
 	>Koshucode.Baala.Base.Data.Comment</p
 	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    >  <a href="#t:Texts"
+	    >Texts</a
+	    > a  <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:texts"
+		>texts</a
+		> :: a -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		>]</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a href="#t:CommentDoc"
+	    >CommentDoc</a
+	    >  = <a href="#v:CommentDoc"
+	    >CommentDoc</a
+	    > [<a href="Koshucode-Baala-Base-Data-Comment.html#t:CommentSec"
+	    >CommentSec</a
+	    >]</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a href="#t:CommentSec"
+	    >CommentSec</a
+	    >  = <a href="#v:CommentSec"
+	    >CommentSec</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:emacsModeComment"
+	    >emacsModeComment</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ></ul
+	></div
       ><div id="interface"
       ><h1
 	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    >  <a name="t:Texts" class="def"
+	    >Texts</a
+	    > a  <span class="keyword"
+	    >where</span
+	    ><a href="src/Koshucode-Baala-Base-Data-Comment.html#Texts" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Something that can become a string list. 
+</p
+	    ></div
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:texts" class="def"
+	      >texts</a
+	      > :: a -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	      >String</a
+	      >]<a href="src/Koshucode-Baala-Base-Data-Comment.html#texts" class="link"
+	      >Source</a
+	      ></p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Texts" class="caption collapser" onclick="toggleSection('i:Texts')"
+	    >Instances</p
+	    ><div id="section.i:Texts" class="show"
+	    ><table
+	      ><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Data-Comment.html#t:Texts"
+		    >Texts</a
+		    > <a href="Koshucode-Baala-Base-Data-Comment.html#t:CommentSec"
+		    >CommentSec</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Data-Comment.html#t:Texts"
+		    >Texts</a
+		    > <a href="Koshucode-Baala-Base-Data-Comment.html#t:CommentDoc"
+		    >CommentDoc</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -57,6 +164,25 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >  <a href="src/Koshucode-Baala-Base-Data-Comment.html#CommentDoc" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Simple document in comment.
+</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>texts $ CommentDoc [CommentSec &quot;SAMPLE&quot; [&quot;This is a sample section.&quot;]]
+</code
+		></strong
+	      >[ &quot;**&quot;
+, &quot;**  SAMPLE&quot;
+, &quot;**    This is a sample section.&quot;
+, &quot;**&quot;
+]
+</pre
+	    ></div
 	  ><div class="subs constructors"
 	  ><p class="caption"
 	    >Constructors</p
@@ -131,6 +257,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >  <a href="src/Koshucode-Baala-Base-Data-Comment.html#CommentSec" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Section title and its contents. 
+</p
+	    ></div
 	  ><div class="subs constructors"
 	  ><p class="caption"
 	    >Constructors</p
@@ -190,58 +321,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		    >Texts</a
 		    > <a href="Koshucode-Baala-Base-Data-Comment.html#t:CommentSec"
 		    >CommentSec</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		></table
-	      ></div
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >class</span
-	    >  <a name="t:Texts" class="def"
-	    >Texts</a
-	    > a  <span class="keyword"
-	    >where</span
-	    ><a href="src/Koshucode-Baala-Base-Data-Comment.html#Texts" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="subs methods"
-	  ><p class="caption"
-	    >Methods</p
-	    ><p class="src"
-	    ><a name="v:texts" class="def"
-	      >texts</a
-	      > :: a -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	      >String</a
-	      >]<a href="src/Koshucode-Baala-Base-Data-Comment.html#texts" class="link"
-	      >Source</a
-	      ></p
-	    ></div
-	  ><div class="subs instances"
-	  ><p id="control.i:Texts" class="caption collapser" onclick="toggleSection('i:Texts')"
-	    >Instances</p
-	    ><div id="section.i:Texts" class="show"
-	    ><table
-	      ><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Data-Comment.html#t:Texts"
-		    >Texts</a
-		    > <a href="Koshucode-Baala-Base-Data-Comment.html#t:CommentSec"
-		    >CommentSec</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Data-Comment.html#t:Texts"
-		    >Texts</a
-		    > <a href="Koshucode-Baala-Base-Data-Comment.html#t:CommentDoc"
-		    >CommentDoc</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td

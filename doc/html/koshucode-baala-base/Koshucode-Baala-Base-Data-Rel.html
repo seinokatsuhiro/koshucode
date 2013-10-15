@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.34.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.39.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -39,7 +39,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ><th
 	    >Safe Haskell</th
 	    ><td
-	    >Safe-Inferred</td
+	    >None</td
 	    ></tr
 	  ></table
 	><p class="caption"
@@ -66,7 +66,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	>Description</p
 	><div class="doc"
 	><p
-	  >Type for relations 
+	  >Relation type 
 </p
 	  ></div
 	></div
@@ -81,17 +81,39 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Rel</a
 	    > c = <a href="#v:Rel"
 	    >Rel</a
-	    > <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
-	    >Relhead</a
-	    > (<a href="Koshucode-Baala-Base-Data-Rel.html#t:Relbody"
-	    >Relbody</a
-	    > c)</li
+	    > {<ul class="subs"
+	    ><li
+	      ><a href="#v:relHead"
+		>relHead</a
+		> :: <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+		>Relhead</a
+		></li
+	      ><li
+	      ><a href="#v:relBody"
+		>relBody</a
+		> :: <a href="Koshucode-Baala-Base-Data-Rel.html#t:Relbody"
+		>Relbody</a
+		> c</li
+	      ></ul
+	    >}</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
 	    > <a href="#t:Relbody"
 	    >Relbody</a
 	    > c = [[c]]</li
+	  ><li class="src short"
+	  ><a href="#v:relPosHere"
+	    >relPosHere</a
+	    > ::  <a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
+	    >Rel</a
+	    > c -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    >Termname</a
+	    >] -&gt; ([<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
+	    >TermPos</a
+	    >], [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    >])</li
 	  ><li class="src short"
 	  ><a href="#v:reldum"
 	    >reldum</a
@@ -121,9 +143,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Relations on type c.
-    Heading of relation and
-    body of relation as a list of tuples. 
+	    >Relations on type <code
+	      >c</code
+	      >.
+    Relation is consist of heading and body.
+    Body is thoretically a set of tuples,
+    but implemented using list of list.  
 </p
 	    ></div
 	  ><div class="subs constructors"
@@ -134,13 +159,43 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	      ><td class="src"
 		><a name="v:Rel" class="def"
 		  >Rel</a
-		  > <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
-		  >Relhead</a
-		  > (<a href="Koshucode-Baala-Base-Data-Rel.html#t:Relbody"
-		  >Relbody</a
-		  > c)</td
+		  ></td
 		><td class="doc empty"
 		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td colspan="2"
+		><div class="subs fields"
+		  ><p class="caption"
+		    >Fields</p
+		    ><dl
+		    ><dt class="src"
+		      ><a name="v:relHead" class="def"
+			>relHead</a
+			> :: <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+			>Relhead</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Heading of relation
+</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:relBody" class="def"
+			>relBody</a
+			> :: <a href="Koshucode-Baala-Base-Data-Rel.html#t:Relbody"
+			>Relbody</a
+			> c</dt
+		      ><dd class="doc"
+		      ><p
+			>Body of relbody
+</p
+			></dd
+		      ></dl
+		    ><div class="clear"
+		    ></div
+		    ></div
+		  ></td
 		></tr
 	      ></table
 	    ></div
@@ -194,8 +249,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		    > (<a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
 		    >Rel</a
 		    > c)</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
+		  ><td class="doc"
+		  ><pre class="screen"
+		    ><code class="prompt"
+		      >&gt;&gt;&gt; </code
+		      ><strong class="userinput"
+		      ><code
+			>doc $ rel [&quot;/a&quot;, &quot;/b&quot;] [[10, 20], [30, 40 :: Int]]
+</code
+			></strong
+		      >   {| /a /b | 10 : 20 | 30 : 40 |}  
+</pre
+		    ></td
 		  ></tr
 		></table
 	      ></div
@@ -212,7 +277,33 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >List of positional args. 
+	    >Body of relation, i.e., a list of tuples.
+    Tuple is list of contents. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relPosHere" class="def"
+	    >relPosHere</a
+	    > ::  <a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
+	    >Rel</a
+	    > c -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    >Termname</a
+	    >] -&gt; ([<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
+	    >TermPos</a
+	    >], [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    >])<a href="src/Koshucode-Baala-Base-Data-Rel.html#relPosHere" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Relational version of <code
+	      ><a href="Koshucode-Baala-Base-Data-TermPos.html#v:posHere"
+		>posHere</a
+		></code
+	      >. 
 </p
 	    ></div
 	  ></div
@@ -230,8 +321,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Relational constant that has no terms and no tuples. 
+	    >The nullary empty relation.
+    In other words, relational constant
+    that has no terms and no tuples.
 </p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>B.doc (reldum :: Rel Bool)
+</code
+		></strong
+	      >{| |}  
+</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -245,8 +348,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Relational constant that has no terms and the empty tuple. 
+	    >The nullary full relation.
+    In other words, relational constant
+    that has no terms and the empty tuple.
 </p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>B.doc (reldee :: Rel Bool)
+</code
+		></strong
+	      >{| | |}  
+</pre
 	    ></div
 	  ></div
 	></div

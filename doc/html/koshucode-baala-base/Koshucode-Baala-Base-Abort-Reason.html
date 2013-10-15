@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.34.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.39.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -149,7 +149,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    >AbortReason</a
 	    > <ul class="subs"
 	    ><li
-	      >= <a href="#v:AbortHeteroDecimal"
+	      >= <a href="#v:AbortDivideByZero"
+		>AbortDivideByZero</a
+		>  </li
+	      ><li
+	      >| <a href="#v:AbortHeteroDecimal"
 		>AbortHeteroDecimal</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
@@ -195,6 +199,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	      ><li
 	      >| <a href="#v:AbortOddRelation"
 		>AbortOddRelation</a
+		>  </li
+	      ><li
+	      >| <a href="#v:AbortOpeandDuplicate"
+		>AbortOpeandDuplicate</a
+		> [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		>]  </li
+	      ><li
+	      >| <a href="#v:AbortOpeandUnknown"
+		>AbortOpeandUnknown</a
+		> [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		>]  </li
+	      ><li
+	      >| <a href="#v:AbortOpeandUnmatch"
+		>AbortOpeandUnmatch</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
 		>  </li
 	      ><li
 	      >| <a href="#v:AbortReqBoolean"
@@ -245,26 +267,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		>String</a
 		>  </li
 	      ><li
-	      >| <a href="#v:AbortUnknownClause"
-		>AbortUnknownClause</a
+	      >| <a href="#v:AbortUnkClause"
+		>AbortUnkClause</a
 		>  </li
 	      ><li
-	      >| <a href="#v:AbortUnknownContent"
-		>AbortUnknownContent</a
+	      >| <a href="#v:AbortUnkContent"
+		>AbortUnkContent</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
 		>  </li
 	      ><li
-	      >| <a href="#v:AbortUnknownRelmap"
-		>AbortUnknownRelmap</a
+	      >| <a href="#v:AbortUnkRelmap"
+		>AbortUnkRelmap</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
 		>  </li
 	      ><li
-	      >| <a href="#v:AbortUnknownSymbol"
-		>AbortUnknownSymbol</a
+	      >| <a href="#v:AbortUnkSymbol"
+		>AbortUnkSymbol</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
+		>  </li
+	      ><li
+	      >| <a href="#v:AbortUnresToken"
+		>AbortUnresToken</a
 		>  </li
 	      ><li
 	      >| <a href="#v:AbortUnmatchArity"
@@ -438,6 +464,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    ><table
 	    ><tr
 	      ><td class="src"
+		><a name="v:AbortDivideByZero" class="def"
+		  >AbortDivideByZero</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
 		><a name="v:AbortHeteroDecimal" class="def"
 		  >AbortHeteroDecimal</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
@@ -512,6 +546,36 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	      ><td class="src"
 		><a name="v:AbortOddRelation" class="def"
 		  >AbortOddRelation</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AbortOpeandDuplicate" class="def"
+		  >AbortOpeandDuplicate</a
+		  > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  >]</td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AbortOpeandUnknown" class="def"
+		  >AbortOpeandUnknown</a
+		  > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  >]</td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AbortOpeandUnmatch" class="def"
+		  >AbortOpeandUnmatch</a
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
 		  ></td
 		><td class="doc empty"
 		>&nbsp;</td
@@ -598,16 +662,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:AbortUnknownClause" class="def"
-		  >AbortUnknownClause</a
+		><a name="v:AbortUnkClause" class="def"
+		  >AbortUnkClause</a
 		  ></td
 		><td class="doc empty"
 		>&nbsp;</td
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:AbortUnknownContent" class="def"
-		  >AbortUnknownContent</a
+		><a name="v:AbortUnkContent" class="def"
+		  >AbortUnkContent</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
 		  ></td
@@ -616,8 +680,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:AbortUnknownRelmap" class="def"
-		  >AbortUnknownRelmap</a
+		><a name="v:AbortUnkRelmap" class="def"
+		  >AbortUnkRelmap</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
 		  ></td
@@ -626,10 +690,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:AbortUnknownSymbol" class="def"
-		  >AbortUnknownSymbol</a
+		><a name="v:AbortUnkSymbol" class="def"
+		  >AbortUnkSymbol</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AbortUnresToken" class="def"
+		  >AbortUnresToken</a
 		  ></td
 		><td class="doc empty"
 		>&nbsp;</td

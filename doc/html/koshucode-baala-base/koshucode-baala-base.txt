@@ -8,14 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.34.0.0
-
-module Koshucode.Baala.Base.Syntax.HashWord
-hashWordTable :: [(String, String)]
-hashWord :: String -> Maybe String
-hashWordInvert :: String -> Maybe String
-hashString :: String -> String
-hashSplit :: String -> [String]
+@version 0.39.0.0
 
 module Koshucode.Baala.Base.Prelude.Unicode
 data GeneralCategoryGroup
@@ -40,6 +33,7 @@ UnicodeSeperator :: GeneralCategoryGroup
 
 -- | Cc Cf Cs Co Cn
 UnicodeOther :: GeneralCategoryGroup
+generalCategoryLetter :: GeneralCategoryGroup -> Char
 generalCategoryGroup :: Char -> GeneralCategoryGroup
 instance Show GeneralCategoryGroup
 instance Eq GeneralCategoryGroup
@@ -47,60 +41,87 @@ instance Ord GeneralCategoryGroup
 instance Bounded GeneralCategoryGroup
 
 module Koshucode.Baala.Base.Prelude.Pretty
+
+-- | Type that has a pretty printer.
 class Pretty a where docv = vcat . map doc doch = hsep . map doc
 doc :: Pretty a => a -> Doc
-docv, doch :: Pretty a => [a] -> Doc
-docTag :: String -> Doc -> Doc
-docColonList :: Pretty a => [a] -> [Doc]
+docv :: Pretty a => [a] -> Doc
+doch :: Pretty a => [a] -> Doc
 
--- | Enclose document in <tt>(</tt> and <tt>)</tt>.
-docParen :: Doc -> Doc
+-- | Colon-seperated document.
+--   
+--   <pre>
+--   &gt;&gt;&gt; docBracket $ docColon [True, False]
+--   [ #true : #false ]  
+--   </pre>
+docColon :: Pretty a => [a] -> Doc
 
--- | Enclose document in <tt>[</tt> and <tt>]</tt>.
-docBracket :: Doc -> Doc
+-- | Wrap in open and close brackets.
+--   
+--   <pre>
+--   &gt;&gt;&gt; docWrap "(" ")" "abc"
+--   (abc)  
+--   </pre>
+docWrap :: Pretty a => String -> String -> a -> Doc
 
--- | Enclose document in <tt>{</tt> and <tt>}</tt>.
-docBrace :: Doc -> Doc
+-- | Wrap in open and close brackets. Put spaces between content and
+--   brackets.
+--   
+--   <pre>
+--   &gt;&gt;&gt; docWraps "(" ")" "abc"
+--   ( abc )  
+--   </pre>
+docWraps :: Pretty a => String -> String -> a -> Doc
 
--- | Enclose document in <tt>&lt;</tt> and <tt>&gt;</tt>.
-docAngle :: Doc -> Doc
+-- | The abstract type of documents. A Doc represents a *set* of layouts. A
+--   Doc with no occurrences of Union or NoDoc represents just one layout.
+data Doc :: *
 
--- | Enclose document in <tt>&lt;|</tt> and <tt>|&gt;</tt>.
-docAngleBar :: Doc -> Doc
+-- | Beside. <a>&lt;&gt;</a> is associative, with identity <a>empty</a>.
+(<>) :: Doc -> Doc -> Doc
 
--- | Enclose document in <tt>"</tt> and <tt>"</tt>.
-docQuote :: Doc -> Doc
+-- | Beside, separated by space, unless one of the arguments is
+--   <a>empty</a>. <a>&lt;+&gt;</a> is associative, with identity
+--   <a>empty</a>.
+(<+>) :: Doc -> Doc -> Doc
+
+-- | Above, except that if the last line of the first argument stops at
+--   least one position before the first line of the second begins, these
+--   two lines are overlapped. For example:
+--   
+--   <pre>
+--   text "hi" $$ nest 5 (text "there")
+--   </pre>
+--   
+--   lays out as
+--   
+--   <pre>
+--   hi   there
+--   </pre>
+--   
+--   rather than
+--   
+--   <pre>
+--   hi
+--        there
+--   </pre>
+--   
+--   <a>$$</a> is associative, with identity <a>empty</a>, and also
+--   satisfies
+--   
+--   <ul>
+--   <li><tt>(x <a>$$</a> y) <a>&lt;&gt;</a> z = x <a>$$</a> (y
+--   <a>&lt;&gt;</a> z)</tt>, if <tt>y</tt> non-empty.</li>
+--   </ul>
+($$) :: Doc -> Doc -> Doc
+docEmpty :: Doc
+docHang :: Doc -> Int -> Doc -> Doc
+docZero :: String -> Doc
+instance Pretty a => Pretty (String, a)
+instance Pretty Bool
+instance Pretty String
+instance Pretty Int
 instance Pretty Doc
-
-
--- | Position in list.
-module Koshucode.Baala.Base.Prelude.Position
-ap :: ((Int -> v) -> [v] -> a) -> [v] -> a
-like :: [Int] -> [Char] -> Bool
-
--- | Indices of shared elements.
---   
---   <pre>
---   &gt;&gt;&gt; "bdk" `sharedIndex` "abcdefg"
---   [1,3]
---   </pre>
-sharedIndex :: Eq a => [a] -> [a] -> [Int]
-
--- | Pick indexed elements.
---   
---   <pre>
---   &gt;&gt;&gt; indexPick [1,3] "abcdefg"
---   "bd"
---   </pre>
-indexPick :: [Int] -> [a] -> [a]
-
--- | Cut indexed elements
---   
---   <pre>
---   &gt;&gt;&gt; indexCut [1,3] "abcdefg"
---   "acefg"
---   </pre>
-indexCut :: [Int] -> [a] -> [a]
 
 
 -- | Lines.
@@ -115,6 +136,7 @@ linesCrlfNumbered :: String -> [(LineNumber, String)]
 -- | Split string into lines. The result strings do not contain carriage
 --   returns (<tt>\r</tt>) and line feeds (<tt>\n</tt>).
 linesCrlf :: String -> [String]
+putLines :: [String] -> IO ()
 
 
 -- | General utilities
@@ -128,7 +150,7 @@ names :: Name a => [a] -> [String]
 -- | Entry in association list.
 type Named a = (String, a)
 type Map a = a -> a
-type Listmap a = forall b. Map [b]
+type Pred a = a -> Bool
 data YesNo a
 Yes :: a -> YesNo a
 No :: a -> YesNo a
@@ -148,26 +170,80 @@ maybePairs :: [a] -> Maybe [(a, a)]
 
 -- | Remove duplicate elements.
 unique :: Ord a => [a] -> [a]
+
+-- | Union list to base list.
+--   
+--   <pre>
+--   &gt;&gt;&gt; unionUp "cde" "abc"
+--   "deabc"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; List.union "cde" "abc"
+--   "cdeab"  
+--   </pre>
 unionUp :: Eq a => [a] -> [a] -> [a]
 
--- | Singleton list
+-- | Make singleton list.
 singleton :: a -> [a]
-divideBy :: Eq a => a -> [a] -> [[a]]
-divideByP :: Eq a => (a -> Bool) -> [a] -> [[a]]
+isSingleton :: [a] -> Bool
 
--- | Add spaces.
+-- | Split list by predicate. If list contains an element that satisfies
+--   the predicate, <tt>(<i>before-list</i>, <i>the-element</i>,
+--   <i>after-list</i>)</tt> is returned. Otherwise, original list is
+--   returned.
+--   
+--   <pre>
+--   &gt;&gt;&gt; splitBy (== '|') "b c"
+--   Left "b c"
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; splitBy (== '|') "a | b | c"
+--   Right ("a ", '|', " b | c")  
+--   </pre>
+splitBy :: (a -> Bool) -> [a] -> Either [a] ([a], a, [a])
+
+-- | Divide list.
+--   
+--   <pre>
+--   &gt;&gt;&gt; divide '|' "a|bb||ccc|"
+--   ["a", "bb", "", "ccc", ""]  
+--   </pre>
+divide :: Eq a => a -> [a] -> [[a]]
+
+-- | Divide list.
+--   
+--   <pre>
+--   &gt;&gt;&gt; divideBy (== '|') "a|bb||ccc|"
+--   ["a", "bb", "", "ccc", ""]  
+--   </pre>
+divideBy :: (a -> Bool) -> [a] -> [[a]]
+
+-- | Omit association that has given key.
+--   
+--   <pre>
+--   &gt;&gt;&gt; assocOmit "b" [("a",1), ("b",2), ("c",3)]
+--   [("a",1), ("c",3)]  
+--   </pre>
+assocOmit :: Eq k => k -> Map [(k, a)]
+
+-- | Omit associations that have given keys.
+assocOmitAll :: Eq k => [k] -> Map [(k, a)]
+
+-- | Add spaces to right.
 --   
 --   <pre>
 --   &gt;&gt;&gt; padRight 10 "abc"
---   "abc       "
+--   "abc       "  
 --   </pre>
 padRight :: Int -> Map String
 
--- | Add spaces.
+-- | Add spaces to left.
 --   
 --   <pre>
 --   &gt;&gt;&gt; padLeft 10 "abc"
---   "       abc"
+--   "       abc"  
 --   </pre>
 padLeft :: Int -> Map String
 
@@ -175,18 +251,88 @@ padLeft :: Int -> Map String
 gather :: ([a] -> (b, [a])) -> [a] -> [b]
 gatherWith :: (c -> [a] -> (b, [a])) -> [c] -> [a] -> [b]
 
--- | Gather (key,value) to a Map key [value]
+-- | Gather (<i>key</i>, <i>value</i>) to <a>Map</a> <i>key</i>
+--   [<i>value</i>].
 gatherToMap :: Ord k => [(k, v)] -> Map k [v]
 lookupSatisfy :: a -> [(a -> Bool, b)] -> Maybe b
 lookupMap :: Ord k => k -> Map k a -> Maybe a
 
+
+-- | Utilities for association lists.
+module Koshucode.Baala.Base.Prelude.Assoc
+data OnceMore a
+Once :: a -> OnceMore a
+More :: [a] -> OnceMore a
+assocRename :: Eq k => k -> k -> Map [(k, a)]
+assocPush :: Eq k => k -> a -> Map [(k, OnceMore a)]
+assocGather :: Eq k => [(k, a)] -> [(k, OnceMore a)]
+assocBy :: (a -> Maybe k) -> k -> [a] -> [(k, [a])]
+assocOnce :: [(k, OnceMore a)] -> [(k, a)]
+assocMore :: [(k, OnceMore a)] -> [(k, [a])]
+assocExist :: Eq k => k -> [(k, a)] -> Bool
+instance Show a => Show (OnceMore a)
+instance Eq a => Eq (OnceMore a)
+instance Ord a => Ord (OnceMore a)
+
+
+-- | Arrangement of lists.
+module Koshucode.Baala.Base.Prelude.Arrange
+type Arrange a = [Int] -> Map [a]
+
+-- | Indices of shared elements.
+--   
+--   <pre>
+--   &gt;&gt;&gt; "bdk" `sharedIndex` "abcdefg"
+--   [1,3]  
+--   </pre>
+sharedIndex :: Eq a => [a] -> [a] -> [Int]
+
+-- | Pick indexed elements.
+--   
+--   <pre>
+--   &gt;&gt;&gt; arrangePick [1,3] "abcdefg"
+--   "bd"  
+--   </pre>
+arrangePick :: Arrange a
+
+-- | Cut indexed elements
+--   
+--   <pre>
+--   &gt;&gt;&gt; arrangeCut [1,3] "abcdefg"
+--   "acefg"  
+--   </pre>
+arrangeCut :: [Int] -> Map [a]
+
+-- | Move indexed elements to the front.
+--   
+--   <pre>
+--   &gt;&gt;&gt; arrangeFore [1,3] "abcdefg"
+--   "bdacefg"  
+--   </pre>
+arrangeFore :: [Int] -> Map [a]
+
 module Koshucode.Baala.Base.Data.Comment
-data CommentDoc
-CommentDoc :: [CommentSec] -> CommentDoc
-data CommentSec
-CommentSec :: String -> [String] -> CommentSec
+
+-- | Something that can become a string list.
 class Texts a
 texts :: Texts a => a -> [String]
+
+-- | Simple document in comment.
+--   
+--   <pre>
+--   &gt;&gt;&gt; texts $ CommentDoc [CommentSec "SAMPLE" ["This is a sample section."]]
+--   [ "**"
+--   , "**  SAMPLE"
+--   , "**    This is a sample section."
+--   , "**"
+--   ]
+--   </pre>
+data CommentDoc
+CommentDoc :: [CommentSec] -> CommentDoc
+
+-- | Section title and its contents.
+data CommentSec
+CommentSec :: String -> [String] -> CommentSec
 emacsModeComment :: String
 instance Show CommentSec
 instance Eq CommentSec
@@ -207,187 +353,56 @@ module Koshucode.Baala.Base.Data.Judge
 -- | Judgement on type <tt>c</tt>.
 --   
 --   Judgement (or judge for short) is divided into three parts: logical
---   quality, sign of relation, and argument. <a>Bool</a> value of logical
---   quality corresponds to affirmed or denied judge. <a>String</a> value
---   of sign represents certain sentence pattern that gives intepretation
---   of data. Sentence pattern has placeholders filled by (<a>String</a>,
---   <tt>c</tt>) values of argument. -
+--   quality, name of pattern, and argument. Boolean values <a>True</a> or
+--   <a>False</a> of logical quality corresponds to affirmed or denied
+--   judge. A name of judgement pattern represents certain sentence pattern
+--   that gives intepretation of data. Sentence pattern has placeholders
+--   filled by <a>Named</a> <tt>c</tt> in argument.
 data Judge c
 Judge :: Bool -> JudgePattern -> [Named c] -> Judge c
 
--- | Pattern of judgement.
+-- | Name of judgement pattern.
 type JudgePattern = String
-
--- | Affirm judge, i.e., change logical quality to <a>True</a>.
-affirmJudge :: Map (Judge c)
-
--- | Deny judge, i.e., change logical quality to <a>False</a>.
-denyJudge :: Map (Judge c)
-isAffirmed :: Judge c -> Bool
-isDenied :: Judge c -> Bool
-
--- | Print judges.
-putJudges :: (Ord c, Pretty c) => [Judge c] -> IO ()
-hPutJudges :: (Ord c, Pretty c) => Handle -> [Judge c] -> IO ()
 
 -- | Sort terms in alphabetical order.
 abcJudge :: Ord c => Map (Judge c)
+
+-- | Construct affirmed judgement.
+affirm :: JudgePattern -> [Named c] -> Judge c
+
+-- | Construct denied judgement.
+deny :: JudgePattern -> [Named c] -> Judge c
+
+-- | Affirm judgement, i.e., change logical quality to <a>True</a>.
+affirmJudge :: Map (Judge c)
+
+-- | Deny judgement, i.e., change logical quality to <a>False</a>.
+denyJudge :: Map (Judge c)
+
+-- | Test that judgement is affirmd.
+isAffirmed :: Judge c -> Bool
+
+-- | Test that judgement is denied.
+--   
+--   <pre>
+--   &gt;&gt;&gt; isDenied $ Judge True "A" []
+--   False  
+--   </pre>
+isDenied :: Judge c -> Bool
+
+-- | Print judges to <a>stdout</a>.
+putJudges :: (Ord c, Pretty c) => [Judge c] -> IO ()
+
+-- | Print judges.
+hPutJudges :: (Ord c, Pretty c) => Handle -> [Judge c] -> IO ()
+
+-- | Convert judgements to lines.
+judgeLines :: (Ord c, Pretty c) => [Judge c] -> [String]
 instance Show c => Show (Judge c)
-instance Eq c => Eq (Judge c)
-instance Ord c => Ord (Judge c)
 instance (Ord c, Pretty c) => Pretty (Judge c)
 instance Functor Judge
-
-
--- | Terms in heading of relation
-module Koshucode.Baala.Base.Data.Relterm
-
--- | Term in heading of relation
-data Relterm
-
--- | For non-relation
-Term :: String -> Relterm
-
--- | For relation
-Nest :: String -> [Relterm] -> Relterm
-termsIndex :: [Relterm] -> [[String]] -> [[Int]]
-
--- | Term path to term position
---   
---   <pre>
---   &gt;&gt;&gt; termIndex ["/b"] [Term "/a", Term "/b", Term "/c"]
---   [1]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; termIndex ["/e"] [Term "/a", Term "/b", Term "/c"]
---   [-1]
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; termIndex ["/r", "/b"] [Nest "/r" [Term "/a", Term "/b"]]
---   [0, 1]
---   </pre>
-termIndex :: [Relterm] -> [String] -> [Int]
-instance Show Relterm
-instance Eq Relterm
-instance Ord Relterm
-instance Pretty Relterm
-instance Name Relterm
-
-
--- | Heading of relations
-module Koshucode.Baala.Base.Data.TermPos
-
--- | Term position
-data TermPos
-TermPos :: String -> Int -> TermPos
-
--- | Term name
-posName :: TermPos -> String
-
--- | Position
-posIndex :: TermPos -> Int
-
--- | Indicies
-posPoss :: [TermPos] -> [Int]
-
--- | Pick contents by positions.
-csPick :: [TermPos] -> Map [c]
-
--- | Cut contents by positions.
-csCut :: [TermPos] -> Map [c]
-
--- | Pick an inner part.
-termsInner :: [TermPos] -> [[String]]
-
--- | Pick an outer part.
-termsOuter :: [TermPos] -> [[String]]
-instance Show TermPos
-instance Eq TermPos
-instance Ord TermPos
-instance Name TermPos
-
-
--- | Heading of relations
-module Koshucode.Baala.Base.Data.Relhead
-
--- | Heading of relation as a list of terms
-data Relhead
-Relhead :: [Relterm] -> Relhead
-headTerms :: Relhead -> [Relterm]
-
--- | Make head from term names.
---   
---   <pre>
---   &gt;&gt;&gt; headFrom ["/a", "/b"]
---   Relhead [Term "/a", Term "/b"]
---   </pre>
-headFrom :: [String] -> Relhead
-
--- | List of term names.
---   
---   <pre>
---   &gt;&gt;&gt; headNames $ headFrom ["/a", "/b"]
---   ["/a", "/b"]
---   </pre>
-headNames :: Relhead -> [String]
-
--- | Number of terms.
---   
---   <pre>
---   &gt;&gt;&gt; headDegree $ headFrom ["/a", "/b"]
---   2
---   </pre>
-headDegree :: Relhead -> Int
-
--- | Reconstruct head.
-headChange :: (Map [String]) -> Map Relhead
-headTermExist :: Relhead -> [String] -> Bool
-headTermCheck :: Relhead -> [YesNo String] -> Bool
-headExistTerms :: Relhead -> Map [String]
-headNonExistTerms :: Relhead -> Map [String]
-headIndex :: Relhead -> [[String]] -> [[Int]]
-headIndex1 :: Relhead -> [String] -> [Int]
-
--- | Positions of given names in a head
-posOf :: Relhead -> [[String]] -> [TermPos]
-
--- | Positions of given (sub)head in a head
-posFrom :: Relhead -> Relhead -> [TermPos]
-
--- | Identity of <a>mappend</a>
-mempty :: Monoid a => a
-
--- | An associative operation
-mappend :: Monoid a => a -> a -> a
-instance Show Relhead
-instance Eq Relhead
-instance Ord Relhead
-instance Pretty Relhead
-instance Monoid Relhead
-
-
--- | Type for relations
-module Koshucode.Baala.Base.Data.Rel
-
--- | Relations on type c. Heading of relation and body of relation as a
---   list of tuples.
-data Rel c
-Rel :: Relhead -> (Relbody c) -> Rel c
-
--- | List of positional args.
-type Relbody c = [[c]]
-
--- | Relational constant that has no terms and no tuples.
-reldum :: Rel c
-
--- | Relational constant that has no terms and the empty tuple.
-reldee :: Rel c
-instance Show c => Show (Rel c)
-instance Eq c => Eq (Rel c)
-instance Ord c => Ord (Rel c)
-instance Pretty c => Pretty (Rel c)
+instance Ord c => Ord (Judge c)
+instance Ord c => Eq (Judge c)
 
 
 -- | This module provides a container for tokens. No tokens in Koshucode
@@ -422,7 +437,7 @@ type TokenNumber = Int
 --   <li>Split source text into lines by line delimiters (carriage return
 --   <tt>\r</tt> or line feed <tt>\n</tt>).</li>
 --   <li>Numbering lines from 1. Internally, this is represented as a list
---   of pairs <tt>(</tt><a>LineNumber</a><tt>,</tt>
+--   of pairs <tt>(</tt><tt>LineNumber</tt><tt>,</tt>
 --   <a>String</a><tt>)</tt>.</li>
 --   <li>Tokenize each lines, and put tokens together in
 --   <a>CodeLine</a>.</li>
@@ -444,42 +459,46 @@ data Tree a
 TreeL :: a -> Tree a
 
 -- | Branch. Paren-type and subtrees.
-TreeB :: Int -> [Tree a] -> Tree a
+TreeB :: ParenType -> [Tree a] -> Tree a
 
 -- | Convert a list of elements to a single tree.
-tree :: Show a => ParenType a -> [a] -> Tree a
+tree :: Show a => GetParenType a -> [a] -> Tree a
 
 -- | Convert a list of elements to trees.
-trees :: Show a => ParenType a -> [a] -> [Tree a]
+trees :: Show a => GetParenType a -> [a] -> [Tree a]
+treeG :: [Tree a] -> Tree a
+treeWrap :: [Tree a] -> Tree a
 
 -- | Convert tree to list of tokens.
-untree :: TypeParen a -> Tree a -> [a]
+untree :: GetTypeParen a -> Tree a -> [a]
 
 -- | Convert tree to list of tokens.
-untrees :: TypeParen a -> [Tree a] -> [a]
+untrees :: GetTypeParen a -> [Tree a] -> [a]
 
 -- | Simplify tree by removing double parens, like <tt>((a))</tt> to
 --   <tt>(a)</tt>.
 --   
 --   <pre>
---   &gt;&gt;&gt; undouble $ TreeB 0 [Tree 0 [TreeL "A", TreeL "B"]]
---   Tree 0 [TreeL "A", TreeL "B"]
+--   &gt;&gt;&gt; undouble (== 0) $ TreeB 0 [TreeB 0 [TreeL "A", TreeL "B"]]
+--   TreeB 0 [TreeL "A", TreeL "B"]
 --   </pre>
-undouble :: Map (Tree a)
+undouble :: Pred ParenType -> Map (Tree a)
+type ParenType = Int
 
 -- | Get a paren type.
-type ParenType a = a -> Int
+type GetParenType a = a -> ParenType
 
 -- | Get parens from a type.
-type TypeParen a = Int -> (a, a)
+type GetTypeParen a = ParenType -> (a, a)
 
--- | Make <a>ParenType</a> and <a>TypeParen</a> functions from a
---   type-open-close table.
+-- | Make <a>GetParenType</a> functions from a type-open-close table.
 --   
 --   Make paren/type functions from <tt>()</tt> and <tt>[]</tt>.
 --   
 --   <pre>
---   &gt;&gt;&gt; let (pt, tp) = parenTable [(1,'(',')'), (2,'[',']')]
+--   &gt;&gt;&gt; let paren n [a, b] = (n, (== a), (== b))
+--   
+--   &gt;&gt;&gt; let pt = parenTable [ paren 1 "()", paren 2 "[]" ]
 --   </pre>
 --   
 --   Get paren types for each chars. Types of open parens are positive
@@ -487,17 +506,15 @@ type TypeParen a = Int -> (a, a)
 --   
 --   <pre>
 --   &gt;&gt;&gt; map pt "ab(cd[ef])g"
---   [0,0,1,0,0,2,0,0,-2,-1,0]
+--   [0, 0, 1, 0, 0, 2, 0, 0, -2, -1, 0]
 --   </pre>
---   
---   Get an open-close pair of parens from its type.
---   
---   <pre>
---   &gt;&gt;&gt; tp 2
---   ('[', ']')
---   </pre>
-parenTable :: Eq a => [(Int, a -> Bool, a -> Bool)] -> ParenType a
+parenTable :: Eq a => [(ParenType, Pred a, Pred a)] -> GetParenType a
+instance Typeable1 Paren
 instance Typeable1 Tree
+instance Show a => Show (Paren a)
+instance Eq a => Eq (Paren a)
+instance Ord a => Ord (Paren a)
+instance Data a => Data (Paren a)
 instance Show a => Show (Tree a)
 instance Eq a => Eq (Tree a)
 instance Ord a => Ord (Tree a)
@@ -534,17 +551,15 @@ binaryTree :: Show a => (a -> BinaryHeight) -> Tree a -> Tree a
 heightTable :: Ord a => [(BinaryHeight, [a])] -> (a -> BinaryHeight)
 heightTableUnbox :: Ord a => (b -> a) -> [(BinaryHeight, [a])] -> (b -> BinaryHeight)
 
-
--- | Tokens
 module Koshucode.Baala.Base.Syntax.Token
-
--- | Termname.
-type Termname = String
 data Token
 
--- | Word. <tt>Int</tt> represents quotation level, e.g., 0 for non-quoted,
---   1 for single-quoted, 2 for double-quoted.
+-- | Word. <a>Int</a> represents quotation level, e.g., 0 for non-quoted, 1
+--   for single-quoted, 2 for double-quoted.
 TWord :: TokenNumber -> Int -> String -> Token
+
+-- | Abbreviated word
+TShort :: TokenNumber -> String -> String -> Token
 
 -- | Termname
 TTerm :: TokenNumber -> [Termname] -> Token
@@ -564,40 +579,78 @@ TComment :: TokenNumber -> String -> Token
 -- | Unknown text
 TUnknown :: TokenNumber -> String -> Token
 
--- | Test the token is blank, i.e., <a>TComment</a> or <a>TSpace</a>.
-isBlankToken :: Token -> Bool
+-- | Name of term, e.g., <tt>"/file"</tt> for the term <tt>/file</tt>.
+type Termname = String
 
--- | Test the token is a term, i.e., <a>TTerm</a>.
-isTermToken :: Token -> Bool
-isOpenTokenOf :: String -> Token -> Bool
-isCloseTokenOf :: String -> Token -> Bool
-
--- | Text of token type, one of <tt>"Word"</tt>, <tt>"Term"</tt>,
---   <tt>"Open"</tt>, <tt>"Close"</tt>, <tt>"Space"</tt>, or
---   <tt>"Comment"</tt>.
+-- | Get the position of token.
 --   
 --   <pre>
---   &gt;&gt;&gt; tokenTypeText $ TWord 1 0 "flower"
---   "Word"
+--   &gt;&gt;&gt; let tok = TWord 25 0 "abc" in tokenNumber tok
+--   25  
+--   </pre>
+tokenNumber :: Token -> TokenNumber
+
+-- | Get the content of token.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let tok = TTerm 20 ["/r", "/x"] in tokenContent tok
+--   "/r/x"  
+--   </pre>
+tokenContent :: Token -> String
+
+-- | Text of token type, i.e., one of <tt>"Word"</tt>, <tt>"Term"</tt>,
+--   <tt>"Open"</tt>, <tt>"Close"</tt>, <tt>"Space"</tt>,
+--   <tt>"Comment"</tt>, or <tt>"Unknown"</tt>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; tokenTypeText $ TWord 25 0 "flower"
+--   "Word"  
 --   </pre>
 tokenTypeText :: Token -> String
-tokenContent :: Token -> String
-tokenNumber :: Token -> TokenNumber
+
+-- | Test the token is blank, i.e., <a>TComment</a> or <a>TSpace</a>.
+isBlankToken :: Pred Token
+
+-- | Check token is a <a>TOpen</a> of the specific paren.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let tok = TOpen 0 "(" in isOpenTokenOf "(" tok
+--   True
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; let tok = TOpen 0 "{" in isOpenTokenOf "(" tok
+--   False 
+--   </pre>
+isOpenTokenOf :: String -> Pred Token
+
+-- | Check token is a <a>TClose</a> of the specific paren.
+isCloseTokenOf :: String -> Pred Token
 
 -- | Remove blank tokens.
 sweepToken :: Map [Token]
-
--- | Skip leading blank tokens.
-sweepLeft :: Map [Token]
-
--- | Divide token list by some word.
-divideByToken :: String -> [Token] -> [[Token]]
 instance Typeable Token
 instance Show Token
 instance Eq Token
 instance Ord Token
 instance Data Token
+instance Pretty Token
 instance Name Token
+
+
+-- | Tokenizer of koshucode.
+module Koshucode.Baala.Base.Syntax.Tokenize
+
+-- | Token list on a line.
+type TokenLine = CodeLine Token
+tokenize :: String -> [TokenLine]
+trimLeft :: Map String
+
+-- | Split string into list of tokens. Result token list does not contain
+--   newline characters.
+tokens :: String -> [Token]
+isSimpleWord :: Pred String
+isSimpleChar :: Pred Char
 
 
 -- | Parened tree of tokens
@@ -610,7 +663,7 @@ type TokenTree = Tree Token
 --   excluded.
 --   
 --   There are four types of parens -- 1, 2, 3, or 4. Paren type is in
---   <a>TreeB</a> <i>type</i> <i>subtrees</i>.
+--   <tt>TreeB</tt> <i>type</i> <i>subtrees</i>.
 --   
 --   <ol>
 --   <li>Round parens <tt>( .. )</tt> for grouping.</li>
@@ -621,19 +674,49 @@ type TokenTree = Tree Token
 tokenTrees :: [Token] -> [TokenTree]
 treeTokens :: TokenTree -> [Token]
 treesTokens :: [TokenTree] -> [Token]
-singleTree :: [TokenTree] -> TokenTree
-divideByTokenTree :: String -> [TokenTree] -> [[TokenTree]]
+flatname :: TokenTree -> Maybe String
+tt :: String -> [TokenTree]
+ttDoc :: [TokenTree] -> Doc
 
+-- | Split token list by unquoted word. If token list contains the word,
+--   pair of <i>before-list</i>, <i>the-word</i> and <i>after-list</i> is
+--   returned. If does not contains the word, original token list is
+--   returned.
+--   
+--   <pre>
+--   &gt;&gt;&gt; splitTokensBy (== "|") . tokens $ "b c"
+--   Left [ TWord 1 0 "b", TSpace 2 1, TWord 3 0 "c" ]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; splitTokensBy (== "|") . tokens $ "a | b | c"
+--   Right ( [ TWord 1 0 "a", TSpace 2 1 ]
+--           , TWord 3 0 "|"
+--           , [ TSpace 4 1, TWord 5 0 "b", TSpace 6 1
+--             , TWord 7 0 "|", TSpace 8 1, TWord 9 0 "c" ] )  
+--   </pre>
+splitTokensBy :: Pred String -> [Token] -> Either [Token] ([Token], Token, [Token])
+divideTreesBy :: String -> [TokenTree] -> [[TokenTree]]
 
--- | Tokenizer of koshucode.
-module Koshucode.Baala.Base.Syntax.Tokenizer
-type TokenLine = CodeLine Token
-tokenize :: String -> [CodeLine Token]
-trimLeft :: Map String
+-- | Divide token trees by vertical bar <tt>"|"</tt>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; divideTreesByBar . tokenTrees . tokens $ "a | b | c"
+--   [ [TreeL (TWord 1 0 "a")]
+--   , [TreeL (TWord 5 0 "b")]
+--   , [TreeL (TWord 9 0 "c")] ]  
+--   </pre>
+divideTreesByBar :: [TokenTree] -> [[TokenTree]]
 
--- | Split string into list of tokens. Result token list does not contain
---   newline characters.
-tokens :: String -> [Token]
+-- | Divide token trees by colon <tt>":"</tt>.
+--   
+--   <pre>
+--   &gt;&gt;&gt; divideTreesByColon . tokenTrees . tokens $ "a : b : c"
+--   [ [TreeL (TWord 1 0 "a")]
+--   , [TreeL (TWord 5 0 "b")]
+--   , [TreeL (TWord 9 0 "c")] ]  
+--   </pre>
+divideTreesByColon :: [TokenTree] -> [[TokenTree]]
 
 
 -- | Syntactic functions
@@ -644,7 +727,7 @@ module Koshucode.Baala.Base.Syntax
 module Koshucode.Baala.Base.Abort.Utility
 
 -- | Class that represents abort reason.
-class AbortReasonClass a where abortSub _ = empty
+class AbortReasonClass a where abortSub _ = docEmpty
 abortSymbol :: AbortReasonClass a => a -> String
 abortTitle :: AbortReasonClass a => a -> String
 abortMain :: AbortReasonClass a => a -> Doc
@@ -688,6 +771,7 @@ type AbortOr b = AbortOrType AbortReason b
 
 -- | Abort reasons
 data AbortReason
+AbortDivideByZero :: AbortReason
 AbortHeteroDecimal :: String -> String -> AbortReason
 AbortLookup :: String -> AbortReason
 AbortMalformedOperand :: String -> AbortReason
@@ -696,6 +780,9 @@ AbortNotNumber :: String -> AbortReason
 AbortNotText :: String -> AbortReason
 AbortNoTerms :: [String] -> AbortReason
 AbortOddRelation :: AbortReason
+AbortOpeandDuplicate :: [String] -> AbortReason
+AbortOpeandUnknown :: [String] -> AbortReason
+AbortOpeandUnmatch :: String -> AbortReason
 AbortReqBoolean :: String -> AbortReason
 AbortReqFlatname :: String -> AbortReason
 AbortReqNewTerms :: [String] -> AbortReason
@@ -704,10 +791,11 @@ AbortUndefined :: String -> AbortReason
 AbortUnkCop :: String -> AbortReason
 AbortUnkCox :: String -> AbortReason
 AbortUnkWord :: String -> AbortReason
-AbortUnknownClause :: AbortReason
-AbortUnknownContent :: String -> AbortReason
-AbortUnknownRelmap :: String -> AbortReason
-AbortUnknownSymbol :: String -> AbortReason
+AbortUnkClause :: AbortReason
+AbortUnkContent :: String -> AbortReason
+AbortUnkRelmap :: String -> AbortReason
+AbortUnkSymbol :: String -> AbortReason
+AbortUnresToken :: AbortReason
 AbortUnmatchArity :: AbortReason
 AbortUnmatchType :: String -> AbortReason
 AbortUsage :: String -> [String] -> AbortReason
@@ -718,11 +806,312 @@ instance AbortReasonClass AbortReason
 instance Name AbortReason
 
 
--- | Data on value type <tt>c</tt>
-module Koshucode.Baala.Base.Data
+-- | Terms in heading of relation.
+module Koshucode.Baala.Base.Data.Relterm
+
+-- | Term in heading of relation
+data Relterm
+
+-- | For non-relation
+Term :: Termname -> Relterm
+
+-- | For relation
+Nest :: Termname -> [Relterm] -> Relterm
+
+-- | Path of term, e.g., term <tt>/r/x</tt> is correspond to path
+--   <tt>[<a>/r</a>, <a>/x</a>]</tt>.
+type Termpath = [Termname]
+termsIndex :: [Relterm] -> [Termpath] -> [[Int]]
+
+-- | Term path to term position
+--   
+--   <pre>
+--   &gt;&gt;&gt; termIndex [Term "/a", Term "/b", Term "/c"] ["/b"]
+--   [1]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; termIndex [Term "/a", Term "/b", Term "/c"] ["/e"]
+--   [-1]
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; termIndex [Nest "/r" [Term "/a", Term "/b"]] ["/r", "/b"]
+--   [0, 1]  
+--   </pre>
+termIndex :: [Relterm] -> Termpath -> [Int]
+termExist :: [Relterm] -> Termpath -> Bool
+instance Show Relterm
+instance Eq Relterm
+instance Ord Relterm
+instance Pretty Relterm
+instance Name Relterm
+
+
+-- | Heading of relations
+module Koshucode.Baala.Base.Data.Relhead
+
+-- | Heading of relation as a list of terms
+data Relhead
+Relhead :: [Relterm] -> Relhead
+headTerms :: Relhead -> [Relterm]
+
+-- | Make head from termnames.
+--   
+--   <pre>
+--   &gt;&gt;&gt; headFrom ["/a", "/b"]
+--   Relhead [Term "/a", Term "/b"]  
+--   </pre>
+headFrom :: [Termname] -> Relhead
+headConsTerm :: Relterm -> Map Relhead
+
+-- | Add term to head.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let h = headFrom ["/a", "/b"] in headCons "/c" h
+--   Relhead [Term "/c", Term "/a", Term "/b"]  
+--   </pre>
+headCons :: Termname -> Map Relhead
+headCons2 :: Termname -> Termname -> Map Relhead
+headCons3 :: Termname -> Termname -> Termname -> Map Relhead
+
+-- | Reconstruct head.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let h = headFrom ["/a", "/b"] in headChange reverse h
+--   Relhead [Term "/b", Term "/a"]  
+--   </pre>
+headChange :: (Map [Termname]) -> Map Relhead
+
+-- | List of term names.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let h = headFrom ["/a", "/b"] in headNames h
+--   ["/a", "/b"]  
+--   </pre>
+headNames :: Relhead -> [Termname]
+
+-- | Number of terms.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let h = headFrom ["/a", "/b"] in headDegree h
+--   2  
+--   </pre>
+headDegree :: Relhead -> Int
+
+-- | Filter keeping terms that exist in head.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let h = headFrom ["/a", "/b"] in headExistTerms h ["/a", "/c"]
+--   ["/a"]  
+--   </pre>
+headExistTerms :: Relhead -> Map [Termname]
+
+-- | Filter dropping terms that exist in head.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let h = headFrom ["/a", "/b"] in headNonExistTerms h ["/a", "/c"]
+--   ["/c"]  
+--   </pre>
+headNonExistTerms :: Relhead -> Map [Termname]
+
+-- | Index of terms.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let h = headFrom ["/a", "/b"] in headIndex h [["/a"], ["/b"], ["/c"]]
+--   [[0], [1], [-1]]  
+--   </pre>
+headIndex :: Relhead -> [Termpath] -> [[Int]]
+
+-- | Index of a term.
+--   
+--   <pre>
+--   &gt;&gt;&gt; let h = headFrom ["/a", "/b"] in headIndex1 h ["/a"]
+--   [0]  
+--   </pre>
+headIndex1 :: Relhead -> Termpath -> [Int]
+
+-- | Identity of <a>mappend</a>
+mempty :: Monoid a => a
+
+-- | An associative operation
+mappend :: Monoid a => a -> a -> a
+instance Show Relhead
+instance Eq Relhead
+instance Ord Relhead
+instance Pretty Relhead
+instance Monoid Relhead
+
+
+-- | Functions for term position
+module Koshucode.Baala.Base.Data.TermPos
+
+-- | Position of flat term
+data TermPos
+TermPos :: Termname -> Int -> TermPos
+
+-- | Name of term
+posName :: TermPos -> Termname
+
+-- | Position
+posIndex :: TermPos -> Int
+posHere :: Relhead -> [Termname] -> ([TermPos], [Bool])
+
+-- | Positions of given names in a head
+--   
+--   <pre>
+--   &gt;&gt;&gt; B.headFrom ["/a", "/b", "/c"] `posFor` ["/b", "/c", "/d"]
+--   [TermPos "/b" 1, TermPos "/c" 2, TermPos "/d" (-1)]  
+--   </pre>
+posFor :: Relhead -> [Termname] -> [TermPos]
+
+-- | Positions of given (sub)head in a head
+--   
+--   <pre>
+--   &gt;&gt;&gt; B.headFrom ["/a", "/b", "/c"] `posFrom` B.headFrom ["/b", "/c", "/d"]
+--   [TermPos "/b" 1, TermPos "/c" 2, TermPos "/d" (-1)]  
+--   </pre>
+posFrom :: Relhead -> Relhead -> [TermPos]
+
+-- | <i>h1</i> <tt>`posTo`</tt> <i>h2</i> <tt>==</tt> <i>h2</i>
+--   <tt>`posFrom`</tt> <i>h1</i>
+posTo :: Relhead -> Relhead -> [TermPos]
+posExist :: TermPos -> Bool
+
+-- | Pick inner part.
+--   
+--   <pre>
+--   &gt;&gt;&gt; posInnerNames [TermPos "/a" (-1), TermPos "/b" 1, TermPos "/c" 2]
+--   ["/b", "/c"]  
+--   </pre>
+posInnerNames :: [TermPos] -> [Termname]
+
+-- | Pick outer part.
+--   
+--   <pre>
+--   &gt;&gt;&gt; posOuterNames [TermPos "/a" (-1), TermPos "/b" 1, TermPos "/c" 2]
+--   ["/a"]  
+--   </pre>
+posOuterNames :: [TermPos] -> [Termname]
+
+-- | Sort list of <a>TermPos</a> by the name.
+--   
+--   <pre>
+--   &gt;&gt;&gt; posSortByName [TermPos "/y" 2, TermPos "/x" 0, TermPos "/z" 1]
+--   [TermPos "/x" 0, TermPos "/y" 2, TermPos "/z" 1]  
+--   </pre>
+posSortByName :: Map [TermPos]
+
+-- | Sort list of <a>TermPos</a> by the index.
+--   
+--   <pre>
+--   &gt;&gt;&gt; posSortByIndex [TermPos "/y" 2, TermPos "/x" 0, TermPos "/z" 1]
+--   [TermPos "/x" 0, TermPos "/z" 1, TermPos "/y" 2]  
+--   </pre>
+posSortByIndex :: Map [TermPos]
+
+-- | Pick contents by positions.
+--   
+--   <pre>
+--   &gt;&gt;&gt; posPick [TermPos "/b" 1, TermPos "/c" 2] "abcd"
+--   "bc"  
+--   </pre>
+posPick :: [TermPos] -> Map [c]
+
+-- | Cut contents by positions.
+--   
+--   <pre>
+--   &gt;&gt;&gt; posCut [TermPos "/b" 1, TermPos "/c" 2] "abcd"
+--   "ad"  
+--   </pre>
+posCut :: [TermPos] -> Map [c]
+instance Show TermPos
+instance Eq TermPos
+instance Ord TermPos
+instance Name TermPos
+
+
+-- | Relation type
+module Koshucode.Baala.Base.Data.Rel
+
+-- | Relations on type <tt>c</tt>. Relation is consist of heading and body.
+--   Body is thoretically a set of tuples, but implemented using list of
+--   list.
+data Rel c
+Rel :: Relhead -> Relbody c -> Rel c
+
+-- | Heading of relation
+relHead :: Rel c -> Relhead
+
+-- | Body of relbody
+relBody :: Rel c -> Relbody c
+
+-- | Body of relation, i.e., a list of tuples. Tuple is list of contents.
+type Relbody c = [[c]]
+
+-- | Relational version of <a>posHere</a>.
+relPosHere :: Rel c -> [Termname] -> ([TermPos], [Bool])
+
+-- | The nullary empty relation. In other words, relational constant that
+--   has no terms and no tuples.
+--   
+--   <pre>
+--   &gt;&gt;&gt; B.doc (reldum :: Rel Bool)
+--   {| |}  
+--   </pre>
+reldum :: Rel c
+
+-- | The nullary full relation. In other words, relational constant that
+--   has no terms and the empty tuple.
+--   
+--   <pre>
+--   &gt;&gt;&gt; B.doc (reldee :: Rel Bool)
+--   {| | |}  
+--   </pre>
+reldee :: Rel c
+instance Show c => Show (Rel c)
+instance Eq c => Eq (Rel c)
+instance Ord c => Ord (Rel c)
+instance Pretty c => Pretty (Rel c)
 
 
 -- | Abort symbols
 module Koshucode.Baala.Base.Abort
+
+module Koshucode.Baala.Base.Data.Decimal
+data Decimal
+Decimal :: (Int, Int) -> Int -> Bool -> Decimal
+decimalRatio :: Decimal -> (Int, Int)
+decimalLength :: Decimal -> Int
+decimalApprox :: Decimal -> Bool
+decimalNum :: Decimal -> Int
+intDecimal :: Int -> Decimal
+decimalSetPoint :: Int -> AbMap Decimal
+decimalDenom :: Decimal -> Int
+isDecimalZero :: Decimal -> Bool
+
+-- | Make <tt>a</tt> from a string.
+type LitString a = AbMap2 String a
+type LitDecimal = LitString Decimal
+litDecimal :: LitDecimal
+decimalString :: Decimal -> String
+type DecimalBinary = Decimal -> Decimal -> Ab Decimal
+decimalAdd :: DecimalBinary
+decimalSub :: DecimalBinary
+decimalMul :: DecimalBinary
+decimalDiv :: DecimalBinary
+decimalQuo :: DecimalBinary
+decimalRem :: DecimalBinary
+decimalRevsign :: Map Decimal
+decimalRevratio :: Map Decimal
+decimalAbs :: Map Decimal
+decimalSum :: [Decimal] -> Ab Decimal
+instance Show Decimal
+instance Eq Decimal
+instance Ord Decimal
+
+
+-- | Data on value type <tt>c</tt>
+module Koshucode.Baala.Base.Data
 
 module Koshucode.Baala.Base

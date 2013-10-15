@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.34.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.39.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -59,6 +59,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >Function
 </a
 	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Excerpt from PrettyPrint
+</a
+	    ></li
 	  ></ul
 	></div
       ><div id="synopsis"
@@ -76,88 +81,116 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ><li
 	      ><a href="#v:doc"
 		>doc</a
-		> :: a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+		> :: a -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
 		>Doc</a
 		></li
 	      ><li
 	      ><a href="#v:docv"
 		>docv</a
-		>, <a href="#v:doch"
+		> :: [a] -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+		>Doc</a
+		></li
+	      ><li
+	      ><a href="#v:doch"
 		>doch</a
-		> :: [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+		> :: [a] -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
 		>Doc</a
 		></li
 	      ></ul
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:docTag"
-	    >docTag</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
-	    >Doc</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
-	    >Doc</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:docColonList"
-	    >docColonList</a
+	  ><a href="#v:docColon"
+	    >docColon</a
 	    > :: <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
 	    >Pretty</a
-	    > a =&gt; [a] -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
-	    >Doc</a
-	    >]</li
-	  ><li class="src short"
-	  ><a href="#v:docParen"
-	    >docParen</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
-	    >Doc</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	    > a =&gt; [a] -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
 	    >Doc</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:docBracket"
-	    >docBracket</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
-	    >Doc</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
-	    >Doc</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:docBrace"
-	    >docBrace</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
-	    >Doc</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	  ><a href="#v:docWrap"
+	    >docWrap</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
+	    >Pretty</a
+	    > a =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; a -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
 	    >Doc</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:docAngle"
-	    >docAngle</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
-	    >Doc</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
-	    >Doc</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:docAngleBar"
-	    >docAngleBar</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
-	    >Doc</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	  ><a href="#v:docWraps"
+	    >docWraps</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
+	    >Pretty</a
+	    > a =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; a -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
 	    >Doc</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:docQuote"
-	    >docQuote</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a href="#t:Doc"
 	    >Doc</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	    > </li
+	  ><li class="src short"
+	  ><a href="#v:-60--62-"
+	    >(&lt;&gt;)</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
 	    >Doc</a
 	    ></li
 	  ><li class="src short"
-	  >module <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html"
-	    >Text.PrettyPrint</a
+	  ><a href="#v:-60--43--62-"
+	    >(&lt;+&gt;)</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:-36--36-"
+	    >($$)</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:docEmpty"
+	    >docEmpty</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:docHang"
+	    >docHang</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:docZero"
+	    >docZero</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
 	    ></li
 	  ></ul
 	></div
@@ -176,27 +209,71 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ><a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#Pretty" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Type that has a pretty printer. 
+</p
+	    ></div
 	  ><div class="subs methods"
 	  ><p class="caption"
 	    >Methods</p
 	    ><p class="src"
 	    ><a name="v:doc" class="def"
 	      >doc</a
-	      > :: a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	      > :: a -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
 	      >Doc</a
 	      ><a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#doc" class="link"
 	      >Source</a
 	      ></p
+	    ><div class="doc"
+	    ><p
+	      ><code
+		><a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+		  >Doc</a
+		  ></code
+		> of <code
+		>a</code
+		>. 
+</p
+	      ></div
 	    ><p class="src"
 	    ><a name="v:docv" class="def"
 	      >docv</a
-	      >, <a name="v:doch" class="def"
-	      >doch</a
-	      > :: [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	      > :: [a] -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
 	      >Doc</a
 	      ><a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#docv" class="link"
 	      >Source</a
 	      ></p
+	    ><div class="doc"
+	    ><p
+	      ><code
+		><a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+		  >Doc</a
+		  ></code
+		> joined by <code
+		>vcat</code
+		>. 
+</p
+	      ></div
+	    ><p class="src"
+	    ><a name="v:doch" class="def"
+	      >doch</a
+	      > :: [a] -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	      >Doc</a
+	      ><a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#doch" class="link"
+	      >Source</a
+	      ></p
+	    ><div class="doc"
+	    ><p
+	      ><code
+		><a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+		  >Doc</a
+		  ></code
+		> joined by <code
+		>hsep</code
+		>. 
+</p
+	      ></div
 	    ></div
 	  ><div class="subs instances"
 	  ><p id="control.i:Pretty" class="caption collapser" onclick="toggleSection('i:Pretty')"
@@ -207,8 +284,79 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		><td class="src"
 		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
 		    >Pretty</a
-		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		    >Bool</a
+		    ></td
+		  ><td class="doc"
+		  ><pre class="screen"
+		    ><code class="prompt"
+		      >&gt;&gt;&gt; </code
+		      ><strong class="userinput"
+		      ><code
+			>doch [True, False]
+</code
+			></strong
+		      >   #true #false  
+</pre
+		    ></td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
+		    >Pretty</a
+		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+		    >Int</a
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    >Same as <code
+		      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#v:int"
+			>int</a
+			></code
+		      >.  
+</p
+		    ></td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
+		    >Pretty</a
+		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		    >String</a
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    >Same as <code
+		      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#v:text"
+			>text</a
+			></code
+		      >.  
+</p
+		    ></td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
+		    >Pretty</a
+		    > <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
 		    >Doc</a
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    ><code
+		      ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+			>Doc</a
+			></code
+		      > itself. 
+</p
+		    ></td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
+		    >Pretty</a
+		    > <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+		    >Token</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
@@ -230,8 +378,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		    > <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
 		    >Relhead</a
 		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
+		  ><td class="doc"
+		  ><pre class="screen"
+		    ><code class="prompt"
+		      >&gt;&gt;&gt; </code
+		      ><strong class="userinput"
+		      ><code
+			>doc $ headFrom [&quot;/a&quot;, &quot;/b&quot;]
+</code
+			></strong
+		      >   /a : /b  
+</pre
+		    ></td
 		  ></tr
 		><tr
 		><td class="src"
@@ -244,6 +402,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		    > (<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 		    >Judge</a
 		    > c)</td
+		  ><td class="doc"
+		  ><pre class="screen"
+		    ><code class="prompt"
+		      >&gt;&gt;&gt; </code
+		      ><strong class="userinput"
+		      ><code
+			>doc $ Judge True &quot;P&quot; [(&quot;/a&quot;, 10), (&quot;/b&quot;, 20 :: Int)]
+</code
+			></strong
+		      >   |-- P  /a 10  /b 20 
+</pre
+		    ></td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
+		    >Pretty</a
+		    > (<a href="Koshucode-Baala-Base-Syntax-CodeLine.html#t:CodeLine"
+		    >CodeLine</a
+		    > a)</td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
@@ -256,18 +434,40 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		    > (<a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
 		    >Rel</a
 		    > c)</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
+		  ><td class="doc"
+		  ><pre class="screen"
+		    ><code class="prompt"
+		      >&gt;&gt;&gt; </code
+		      ><strong class="userinput"
+		      ><code
+			>doc $ rel [&quot;/a&quot;, &quot;/b&quot;] [[10, 20], [30, 40 :: Int]]
+</code
+			></strong
+		      >   {| /a /b | 10 : 20 | 30 : 40 |}  
+</pre
+		    ></td
 		  ></tr
 		><tr
 		><td class="src"
 		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
 		    >Pretty</a
-		    > (<a href="Koshucode-Baala-Base-Syntax-CodeLine.html#t:CodeLine"
-		    >CodeLine</a
-		    > a)</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
+		    > a =&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
+		    >Pretty</a
+		    > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		    >String</a
+		    >, a)</td
+		  ><td class="doc"
+		  ><pre class="screen"
+		    ><code class="prompt"
+		      >&gt;&gt;&gt; </code
+		      ><strong class="userinput"
+		      ><code
+			>doc (&quot;/a&quot;, &quot;xxx&quot;)
+</code
+			></strong
+		      >   /a xxx  
+</pre
+		    ></td
 		  ></tr
 		></table
 	      ></div
@@ -278,160 +478,330 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 </h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:docTag" class="def"
-	    >docTag</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
-	    >Doc</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
-	    >Doc</a
-	    ><a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#docTag" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:docColonList" class="def"
-	    >docColonList</a
+	  ><a name="v:docColon" class="def"
+	    >docColon</a
 	    > :: <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
 	    >Pretty</a
-	    > a =&gt; [a] -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	    > a =&gt; [a] -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
 	    >Doc</a
-	    >]<a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#docColonList" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:docParen" class="def"
-	    >docParen</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
-	    >Doc</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
-	    >Doc</a
-	    ><a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#docParen" class="link"
+	    ><a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#docColon" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Enclose document in <code
-	      >(</code
-	      > and <code
-	      >)</code
-	      >. 
+	    >Colon-seperated document.
+</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>docBracket $ docColon [True, False]
+</code
+		></strong
+	      >[ #true : #false ]  
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:docWrap" class="def"
+	    >docWrap</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
+	    >Pretty</a
+	    > a =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; a -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
+	    ><a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#docWrap" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Wrap in open and close brackets.
+</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>docWrap &quot;(&quot; &quot;)&quot; &quot;abc&quot;
+</code
+		></strong
+	      >(abc)  
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:docWraps" class="def"
+	    >docWraps</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
+	    >Pretty</a
+	    > a =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; a -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
+	    ><a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#docWraps" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Wrap in open and close brackets.
+    Put spaces between content and brackets.
+</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>docWraps &quot;(&quot; &quot;)&quot; &quot;abc&quot;
+</code
+		></strong
+	      >( abc )  
+</pre
+	    ></div
+	  ></div
+	><h1 id="g:3"
+	>Excerpt from PrettyPrint
+</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a name="t:Doc" class="def"
+	    >Doc</a
+	    >  </p
+	  ><div class="doc"
+	  ><p
+	    >The abstract type of documents.
+ A Doc represents a *set* of layouts. A Doc with
+ no occurrences of Union or NoDoc represents just one layout.
+</p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Doc" class="caption collapser" onclick="toggleSection('i:Doc')"
+	    >Instances</p
+	    ><div id="section.i:Doc" class="show"
+	    ><table
+	      ><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		    >Show</a
+		    > <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+		    >Doc</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:IsString"
+		    >IsString</a
+		    > <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+		    >Doc</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Monoid.html#t:Monoid"
+		    >Monoid</a
+		    > <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+		    >Doc</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
+		    >Pretty</a
+		    > <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+		    >Doc</a
+		    ></td
+		  ><td class="doc"
+		  ><p
+		    ><code
+		      ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+			>Doc</a
+			></code
+		      > itself. 
+</p
+		    ></td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:-60--62-" class="def"
+	    >(&lt;&gt;)</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Beside.
+ <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:-60--62-"
+		>&lt;&gt;</a
+		></code
+	      > is associative, with identity <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#v:empty"
+		>empty</a
+		></code
+	      >.
 </p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:docBracket" class="def"
-	    >docBracket</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	  ><a name="v:-60--43--62-" class="def"
+	    >(&lt;+&gt;)</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
 	    >Doc</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
 	    >Doc</a
-	    ><a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#docBracket" class="link"
-	    >Source</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Enclose document in <code
-	      >[</code
-	      > and <code
-	      >]</code
-	      >. 
+	    >Beside, separated by space, unless one of the arguments is <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#v:empty"
+		>empty</a
+		></code
+	      >.
+ <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:-60--43--62-"
+		>&lt;+&gt;</a
+		></code
+	      > is associative, with identity <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#v:empty"
+		>empty</a
+		></code
+	      >.
 </p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:docBrace" class="def"
-	    >docBrace</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	  ><a name="v:-36--36-" class="def"
+	    >($$)</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
 	    >Doc</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
 	    >Doc</a
-	    ><a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#docBrace" class="link"
-	    >Source</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Enclose document in <code
-	      >{</code
-	      > and <code
-	      >}</code
-	      >. 
+	    >Above, except that if the last line of the first argument stops
+ at least one position before the first line of the second begins,
+ these two lines are overlapped.  For example:
 </p
+	    ><pre
+	    >    text &quot;hi&quot; $$ nest 5 (text &quot;there&quot;)
+</pre
+	    ><p
+	    >lays out as
+</p
+	    ><pre
+	    >    hi   there
+</pre
+	    ><p
+	    >rather than
+</p
+	    ><pre
+	    >    hi
+         there
+</pre
+	    ><p
+	    ><code
+	      ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:-36--36-"
+		>$$</a
+		></code
+	      > is associative, with identity <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#v:empty"
+		>empty</a
+		></code
+	      >, and also satisfies
+</p
+	    ><ul
+	    ><li
+	      > <code
+		>(x <code
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:-36--36-"
+		    >$$</a
+		    ></code
+		  > y) <code
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:-60--62-"
+		    >&lt;&gt;</a
+		    ></code
+		  > z = x <code
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:-36--36-"
+		    >$$</a
+		    ></code
+		  > (y <code
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:-60--62-"
+		    >&lt;&gt;</a
+		    ></code
+		  > z)</code
+		>, if <code
+		>y</code
+		> non-empty.
+</li
+	      ></ul
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:docAngle" class="def"
-	    >docAngle</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	  ><a name="v:docEmpty" class="def"
+	    >docEmpty</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
 	    >Doc</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
-	    >Doc</a
-	    ><a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#docAngle" class="link"
+	    ><a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#docEmpty" class="link"
 	    >Source</a
 	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Enclose document in <code
-	      >&lt;</code
-	      > and <code
-	      >&gt;</code
-	      >. 
-</p
-	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:docAngleBar" class="def"
-	    >docAngleBar</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	  ><a name="v:docHang" class="def"
+	    >docHang</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
 	    >Doc</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
 	    >Doc</a
-	    ><a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#docAngleBar" class="link"
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
+	    ><a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#docHang" class="link"
 	    >Source</a
 	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Enclose document in <code
-	      >&lt;|</code
-	      > and <code
-	      >|&gt;</code
-	      >. 
-</p
-	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:docQuote" class="def"
-	    >docQuote</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
+	  ><a name="v:docZero" class="def"
+	    >docZero</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
 	    >Doc</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#t:Doc"
-	    >Doc</a
-	    ><a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#docQuote" class="link"
+	    ><a href="src/Koshucode-Baala-Base-Prelude-Pretty.html#docZero" class="link"
 	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Enclose document in <code
-	      >&quot;</code
-	      > and <code
-	      >&quot;</code
-	      >. 
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  >module <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html"
-	    >Text.PrettyPrint</a
 	    ></p
 	  ></div
 	></div

@@ -3,13 +3,13 @@
 ><head
   ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
      /><title
-    >Koshucode.Baala.Base.Syntax.Tokenizer</title
+    >Koshucode.Baala.Base.Syntax.Tokenize</title
     ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
      /><script src="haddock-util.js" type="text/javascript"
     ></script
     ><script type="text/javascript"
     >//<![CDATA[
-window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-Syntax-Tokenizer.html");};
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-Syntax-Tokenize.html");};
 //]]>
 </script
     ></head
@@ -17,7 +17,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
   ><div id="package-header"
     ><ul class="links" id="page-menu"
       ><li
-	><a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html"
+	><a href="src/Koshucode-Baala-Base-Syntax-Tokenize.html"
 	  >Source</a
 	  ></li
 	><li
@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.34.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.39.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -43,7 +43,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    ></tr
 	  ></table
 	><p class="caption"
-	>Koshucode.Baala.Base.Syntax.Tokenizer</p
+	>Koshucode.Baala.Base.Syntax.Tokenize</p
 	></div
       ><div id="table-of-contents"
       ><p class="caption"
@@ -61,7 +61,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    ><ul
 	    ><li
 	      ><a href="#g:3"
-		>Token category
+		>Token type
 </a
 		></li
 	      ><li
@@ -106,10 +106,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >tokenize</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-CodeLine.html#t:CodeLine"
-	    >CodeLine</a
-	    > <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
-	    >Token</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Tokenize.html#t:TokenLine"
+	    >TokenLine</a
 	    >]</li
 	  ><li class="src short"
 	  ><a href="#v:trimLeft"
@@ -127,6 +125,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
 	    >Token</a
 	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:isSimpleWord"
+	    >isSimpleWord</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isSimpleChar"
+	    >isSimpleChar</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
+	    >Char</a
+	    ></li
 	  ></ul
 	></div
       ><div id="interface"
@@ -143,9 +157,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >CodeLine</a
 	    > <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
 	    >Token</a
-	    ><a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html#TokenLine" class="link"
+	    ><a href="src/Koshucode-Baala-Base-Syntax-Tokenize.html#TokenLine" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Token list on a line. 
+</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -153,11 +172,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >tokenize</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-CodeLine.html#t:CodeLine"
-	    >CodeLine</a
-	    > <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
-	    >Token</a
-	    >]<a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html#tokenize" class="link"
+	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Tokenize.html#t:TokenLine"
+	    >TokenLine</a
+	    >]<a href="src/Koshucode-Baala-Base-Syntax-Tokenize.html#tokenize" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -169,7 +186,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >Map</a
 	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    ><a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html#trimLeft" class="link"
+	    ><a href="src/Koshucode-Baala-Base-Syntax-Tokenize.html#trimLeft" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -181,7 +198,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >String</a
 	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
 	    >Token</a
-	    >]<a href="src/Koshucode-Baala-Base-Syntax-Tokenizer.html#tokens" class="link"
+	    >]<a href="src/Koshucode-Baala-Base-Syntax-Tokenize.html#tokens" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -191,115 +208,152 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 </p
 	    ></div
 	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isSimpleWord" class="def"
+	    >isSimpleWord</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ><a href="src/Koshucode-Baala-Base-Syntax-Tokenize.html#isSimpleWord" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isSimpleChar" class="def"
+	    >isSimpleChar</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
+	    >Char</a
+	    ><a href="src/Koshucode-Baala-Base-Syntax-Tokenize.html#isSimpleChar" class="link"
+	    >Source</a
+	    ></p
+	  ></div
 	><h1 id="g:2"
 	>Document
 </h1
 	><h2 id="g:3"
-	>Token category
+	>Token type
 </h2
 	><div class="doc"
 	><dl
 	  ><dt
 	    >Paren</dt
 	    ><dd
-	    >            <code
+	    >     Open and closed parens.
+               <code
 	      >(</code
-	      > group <code
+	      > <em
+	      >group</em
+	      > <code
 	      >)</code
 	      > ,
-                      <code
+               <code
 	      >{</code
-	      > set <code
+	      > <em
+	      >set</em
+	      > <code
 	      >}</code
 	      > ,
-                      <code
+               <code
 	      >[</code
-	      > list <code
+	      > <em
+	      >list</em
+	      > <code
 	      >]</code
 	      > ,
-                      <code
+               <code
 	      >&lt;|</code
-	      > termset <code
+	      > <em
+	      >termset</em
+	      > <code
 	      >|&gt;</code
-	      > ,
-                      <code
+	      > , and
+               <code
 	      >{|</code
-	      > relation <code
+	      > <em
+	      >relation</em
+	      > <code
 	      >|}</code
 	      >
 </dd
 	    ><dt
-	    >Term name</dt
+	    >Termname</dt
 	    ><dd
-	    >        <code
-	      >/</code
-	      >xxx , <code
-	      >/</code
-	      >rel<code
-	      >/</code
-	      >xxx
+	    >  Words beginning with slash, e.g., <code
+	      >/aa</code
+	      >.
+               Term name like <code
+	      >/r/x</code
+	      > is used for nested relation,
+               that means term <code
+	      >/x</code
+	      > in the relation of term <code
+	      >/r</code
+	      >.
 </dd
 	    ><dt
 	    >Word</dt
 	    ><dd
-	    >             <code
-	      >abc</code
-	      > , <code
-	      >123</code
-	      > , <code
-	      >|</code
-	      > ,
-                      <code
-	      >#(</code
-	      > , <code
-	      >#)</code
-	      > , <code
-	      >****</code
-	      > ,
-                      <code
-	      >''</code
-	      > all-letters-to-end-of-line
-</dd
-	    ><dt
-	    >One-letter word</dt
-	    ><dd
-	    >  <code
+	    >      Character sequence not including special characters,
+               e.g., <code
+	      >aa</code
+	      >, <code
+	      >r2d2</code
+	      >, <code
+	      >12.0</code
+	      >, etc.
+               Colon <code
 	      >:</code
-	      > , <code
-	      >'</code
-	      >
+	      > is a one-letter word.
+               There are four types of quotations.
+               (1) non-quoted word like <code
+	      >aa</code
+	      >,
+               (2) single-quoted word like <code
+	      >'aa</code
+	      >,
+               (3) double-quoted word like <code
+	      >&quot;aa&quot;</code
+	      >,
+               (4) doubly single-quoted word like <code
+	      >'' all-letters-to-end-of-line</code
+	      >.
 </dd
 	    ><dt
 	    >Comment</dt
 	    ><dd
-	    >          <code
+	    >   Texts from double asterisks (<code
 	      >**</code
-	      > all-letters-to-end-of-line ,
-                      <code
+	      >) or shebang (<code
 	      >#!</code
-	      > all-letters-to-end-of-line
+	      >)
+               to end of line are comments.
+               Quadruple asterisks (<code
+	      >****</code
+	      >) comments are
+               treated in <code
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Section-Clause.html#t:Clause"
+		>Clause</a
+		></code
+	      >.
 </dd
 	    ><dt
 	    >Space</dt
 	    ><dd
-	    >            <em
+	    >     <em
 	      >space</em
 	      > , <code
 	      >\t</code
 	      > (tab)
 </dd
 	    ><dt
-	    >Newline</dt
+	    >Unknown</dt
 	    ><dd
-	    >          <code
-	      >\r</code
-	      > (carriage return) ,
-                      <code
-	      >\n</code
-	      > (line feed) ,
-                      <code
-	      >||</code
-	      > (pseudo newline)
+	    >   Other than those above.
 </dd
 	    ></dl
 	  ></div
@@ -391,23 +445,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      >tokens &quot;aa\n'bb'\n\&quot;cc\&quot;&quot;
 </code
 	      ></strong
-	    >[TWord 1 0 &quot;aa&quot;, TWord 2 0 &quot;'&quot;, TWord 3 0 &quot;bb&quot;,
- TWord 4 0 &quot;'&quot;, TWord 5 2 &quot;cc&quot;]
+	    >[ TWord 1 0 &quot;aa&quot;, TWord 2 1 &quot;bb&quot;, TWord 3 1 &quot;&quot;, TWord 4 2 &quot;cc&quot; ]
 </pre
 	  ><p
-	  >Example includes <code
-	    ><a href="Koshucode-Baala-Base-Syntax-Token.html#v:TWord"
-	      >TWord</a
-	      ></code
-	    >, <code
-	    ><a href="Koshucode-Baala-Base-Syntax-Token.html#v:TTerm"
-	      >TTerm</a
-	      ></code
-	    > and <code
-	    ><a href="Koshucode-Baala-Base-Syntax-Token.html#v:TSpace"
-	      >TSpace</a
-	      ></code
-	    > tokens.
+	  >Judgement.
 </p
 	  ><pre class="screen"
 	  ><code class="prompt"
@@ -417,9 +458,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      >tokens &quot;|-- R  /a A0 /b 31&quot;
 </code
 	      ></strong
-	    >[TWord 1 0 &quot;|--&quot;, TSpace 2 1, TWord 3 0 &quot;R&quot;,
- TSpace 4 2, TTerm 5 [&quot;/a&quot;], TSpace 6 1, TWord 7 0 &quot;A0&quot;,
- TSpace 8 1, TTerm 9 [&quot;/b&quot;], TSpace 10 1, TWord 11 0 &quot;31&quot;]
+	    >[ TWord 1 0 &quot;|&quot;, TWord 2 0 &quot;--&quot;, TSpace 3 1, TWord 4 0 &quot;R&quot;
+, TSpace 5 2, TTerm 6 [&quot;/a&quot;], TSpace 7 1, TWord 8 0 &quot;A0&quot;
+, TSpace 9 1, TTerm 10 [&quot;/b&quot;], TSpace 11 1, TWord 12 0 &quot;31&quot; ]
 </pre
 	  ><p
 	  >Parens.
@@ -432,10 +473,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      >tokens &quot;aa (bb x y (z))&quot;
 </code
 	      ></strong
-	    >[TWord 1 0 &quot;aa&quot;, TSpace 2 1,
- TOpen 3 &quot;(&quot;, TWord 4 0 &quot;bb&quot;, TSpace 5 1,
-   TWord 6 0 &quot;x&quot;, TSpace 7 1, TWord 8 0 &quot;y&quot;, TSpace 9 1,
-   TOpen 10 &quot;(&quot;, TWord 11 0 &quot;z&quot;, TClose 12 &quot;)&quot;, TClose 13 &quot;)&quot;]
+	    >[ TWord 1 0 &quot;aa&quot;, TSpace 2 1
+, TOpen 3 &quot;(&quot;, TWord 4 0 &quot;bb&quot;, TSpace 5 1
+   , TWord 6 0 &quot;x&quot;, TSpace 7 1, TWord 8 0 &quot;y&quot;, TSpace 9 1
+   , TOpen 10 &quot;(&quot;, TWord 11 0 &quot;z&quot;, TClose 12 &quot;)&quot;, TClose 13 &quot;)&quot; ]
 </pre
 	  ><p
 	  >A comment.
@@ -448,8 +489,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      >tokens &quot;abc ** this is a comment\ndef\n&quot;
 </code
 	      ></strong
-	    >[TWord 1 0 &quot;abc&quot;, TSpace 2 1, TComment 3 &quot;** this is a comment&quot;,
- TWord 4 0 &quot;def&quot;]
+	    >[ TWord 1 0 &quot;abc&quot;, TSpace 2 1, TComment 3 &quot;** this is a comment&quot;
+, TWord 4 0 &quot;def&quot;]
 </pre
 	  ></div
 	></div

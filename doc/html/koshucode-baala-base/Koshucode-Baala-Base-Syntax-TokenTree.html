@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.34.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.39.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -56,6 +56,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    ></li
 	  ><li
 	  ><a href="#g:2"
+	    >Divide trees
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
 	    >Examples
 </a
 	    ></li
@@ -109,19 +114,73 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >Token</a
 	    >]</li
 	  ><li class="src short"
-	  ><a href="#v:singleTree"
-	    >singleTree</a
-	    > :: [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	  ><a href="#v:flatname"
+	    >flatname</a
+	    > :: <a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    >] -&gt; <a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:divideByTokenTree"
-	    >divideByTokenTree</a
+	  ><a href="#v:tt"
+	    >tt</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:ttDoc"
+	    >ttDoc</a
+	    > :: [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >] -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:splitTokensBy"
+	    >splitTokensBy</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    >] ([<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    >], <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    >, [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >Token</a
+	    >])</li
+	  ><li class="src short"
+	  ><a href="#v:divideTreesBy"
+	    >divideTreesBy</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >] -&gt; [[<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >]]</li
+	  ><li class="src short"
+	  ><a href="#v:divideTreesByBar"
+	    >divideTreesByBar</a
+	    > :: [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >] -&gt; [[<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >]]</li
+	  ><li class="src short"
+	  ><a href="#v:divideTreesByColon"
+	    >divideTreesByColon</a
+	    > :: [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >] -&gt; [[<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
@@ -170,9 +229,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    ><p
 	    >There are four types of parens -- 1, 2, 3, or 4.
     Paren type is in <code
-	      ><a href="Koshucode-Baala-Base-Syntax-Tree.html#v:TreeB"
-		>TreeB</a
-		></code
+	      >TreeB</code
 	      > <em
 	      >type</em
 	      > <em
@@ -229,60 +286,233 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:singleTree" class="def"
-	    >singleTree</a
-	    > :: [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	  ><a name="v:flatname" class="def"
+	    >flatname</a
+	    > :: <a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    >] -&gt; <a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    ><a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#singleTree" class="link"
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ><a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#flatname" class="link"
 	    >Source</a
 	    ></p
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:divideByTokenTree" class="def"
-	    >divideByTokenTree</a
+	  ><a name="v:tt" class="def"
+	    >tt</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >]<a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#tt" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ttDoc" class="def"
+	    >ttDoc</a
+	    > :: [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >] -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
+	    ><a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#ttDoc" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:2"
+	>Divide trees
+</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:splitTokensBy" class="def"
+	    >splitTokensBy</a
+	    ><a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#splitTokensBy" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs arguments"
+	  ><p class="caption"
+	    >Arguments</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		>:: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+		  >Pred</a
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Predicate
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+		  >Token</a
+		  >]</td
+		><td class="doc"
+		><p
+		  >Tokens
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		>-&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+		  >Either</a
+		  > [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+		  >Token</a
+		  >] ([<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+		  >Token</a
+		  >], <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+		  >Token</a
+		  >, [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+		  >Token</a
+		  >])</td
+		><td class="doc"
+		><p
+		  >Original-tokens or <code
+		    >(</code
+		    >before-list, the-word, after-list<code
+		    >)</code
+		    >
+</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="doc"
+	  ><p
+	    >Split token list by unquoted word.
+    If token list contains the word,
+    pair of <em
+	      >before-list</em
+	      >, <em
+	      >the-word</em
+	      > and <em
+	      >after-list</em
+	      > is returned.
+    If does not contains the word,
+    original token list is returned.
+</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>splitTokensBy (== &quot;|&quot;) . tokens $ &quot;b c&quot;
+</code
+		></strong
+	      >Left [ TWord 1 0 &quot;b&quot;, TSpace 2 1, TWord 3 0 &quot;c&quot; ]
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>splitTokensBy (== &quot;|&quot;) . tokens $ &quot;a | b | c&quot;
+</code
+		></strong
+	      >Right ( [ TWord 1 0 &quot;a&quot;, TSpace 2 1 ]
+        , TWord 3 0 &quot;|&quot;
+        , [ TSpace 4 1, TWord 5 0 &quot;b&quot;, TSpace 6 1
+          , TWord 7 0 &quot;|&quot;, TSpace 8 1, TWord 9 0 &quot;c&quot; ] )  
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:divideTreesBy" class="def"
+	    >divideTreesBy</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >] -&gt; [[<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    >]]<a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#divideByTokenTree" class="link"
+	    >]]<a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#divideTreesBy" class="link"
 	    >Source</a
 	    ></p
 	  ></div
-	><h1 id="g:2"
+	><div class="top"
+	><p class="src"
+	  ><a name="v:divideTreesByBar" class="def"
+	    >divideTreesByBar</a
+	    > :: [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >] -&gt; [[<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >]]<a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#divideTreesByBar" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Divide token trees by vertical bar <code
+	      >&quot;|&quot;</code
+	      >.
+</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>divideTreesByBar . tokenTrees . tokens $ &quot;a | b | c&quot;
+</code
+		></strong
+	      >[ [TreeL (TWord 1 0 &quot;a&quot;)]
+, [TreeL (TWord 5 0 &quot;b&quot;)]
+, [TreeL (TWord 9 0 &quot;c&quot;)] ]  
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:divideTreesByColon" class="def"
+	    >divideTreesByColon</a
+	    > :: [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >] -&gt; [[<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >]]<a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#divideTreesByColon" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Divide token trees by colon <code
+	      >&quot;:&quot;</code
+	      >.
+</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>divideTreesByColon . tokenTrees . tokens $ &quot;a : b : c&quot;
+</code
+		></strong
+	      >[ [TreeL (TWord 1 0 &quot;a&quot;)]
+, [TreeL (TWord 5 0 &quot;b&quot;)]
+, [TreeL (TWord 9 0 &quot;c&quot;)] ]  
+</pre
+	    ></div
+	  ></div
+	><h1 id="g:3"
 	>Examples
 </h1
 	><div class="doc"
 	><p
-	  >Before evaluating the following examples,
-   please import <code
-	    >Tokenizer</code
-	    > module to use the <code
-	    >tokens</code
-	    > function.
+	  >Judgement
 </p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
 	    ><strong class="userinput"
 	    ><code
-	      >:m +Koshucode.Baala.Base.Syntax.Tokenizer
-</code
-	      ></strong
-	    ></pre
-	  ><p
-	  >Tuple.
-</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >tokenTrees . tokens $ &quot;|-- R /x 0 /y 1&quot;
+	      >tt &quot;|-- R /x 0 /y 1&quot;
 </code
 	      ></strong
 	    >[TreeL (TWord 1 0 &quot;|--&quot;),
@@ -293,14 +523,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
  TreeL (TWord 11 0 &quot;1&quot;)]
 </pre
 	  ><p
-	  >Relmap.
+	  >Relmap
 </p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
 	    ><strong class="userinput"
 	    ><code
-	      >tokenTrees . tokens $ &quot;r : source R /x /y&quot;
+	      >tt &quot;r : source R /x /y&quot;
 </code
 	      ></strong
 	    >[TreeL (TWord 1 0 &quot;r&quot;),
@@ -311,14 +541,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
  TreeL (TTerm 11 [&quot;/y&quot;])]
 </pre
 	  ><p
-	  >Nested relmap.
+	  >Nested relmap
 </p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
 	    ><strong class="userinput"
 	    ><code
-	      >tokenTrees . tokens $ &quot;meet (R | pick /a /b)&quot;
+	      >tt &quot;meet (R | pick /a /b)&quot;
 </code
 	      ></strong
 	    >[TreeL (TWord 1 0 &quot;meet&quot;),
@@ -330,14 +560,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
    TreeL (TTerm 12 [&quot;/b&quot;])]]
 </pre
 	  ><p
-	  >Double paren.
+	  >Double paren
 </p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
 	    ><strong class="userinput"
 	    ><code
-	      >tokenTrees . tokens $ &quot;(a ((b c)))&quot;
+	      >tt &quot;(a ((b c)))&quot;
 </code
 	      ></strong
 	    >[TreeB 1 [
@@ -348,14 +578,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
        TreeL (TWord 8 0 &quot;c&quot;)]]]]
 </pre
 	  ><p
-	  >List.
+	  >List
 </p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
 	    ><strong class="userinput"
 	    ><code
-	      >tokenTrees . tokens $ &quot;[ 0 1 2 ]&quot;
+	      >tt &quot;[ 0 1 2 ]&quot;
 </code
 	      ></strong
 	    >[TreeB 2 [
@@ -364,14 +594,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
   TreeL (TWord 7 0 &quot;2&quot;)]]
 </pre
 	  ><p
-	  >Relation.
+	  >Relation
 </p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
 	    ><strong class="userinput"
 	    ><code
-	      >tokenTrees . tokens $ &quot;{| /a /b | 10 20 | 30 40 |}&quot;
+	      >tt &quot;{| /a /b | 10 20 | 30 40 |}&quot;
 </code
 	      ></strong
 	    >[TreeB 4 [

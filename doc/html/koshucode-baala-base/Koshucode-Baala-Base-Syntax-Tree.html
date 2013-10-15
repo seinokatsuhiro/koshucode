@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.34.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.39.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -83,8 +83,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ><li
 	      >| <a href="#v:TreeB"
 		>TreeB</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-		>Int</a
+		> <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:ParenType"
+		>ParenType</a
 		> [<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree"
 		>Tree</a
 		> a]  </li
@@ -95,8 +95,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >tree</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
 	    >Show</a
-	    > a =&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:ParenType"
-	    >ParenType</a
+	    > a =&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:GetParenType"
+	    >GetParenType</a
 	    > a -&gt; [a] -&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree"
 	    >Tree</a
 	    > a</li
@@ -105,31 +105,51 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >trees</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
 	    >Show</a
-	    > a =&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:ParenType"
-	    >ParenType</a
+	    > a =&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:GetParenType"
+	    >GetParenType</a
 	    > a -&gt; [a] -&gt; [<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree"
 	    >Tree</a
 	    > a]</li
 	  ><li class="src short"
+	  ><a href="#v:treeG"
+	    >treeG</a
+	    > ::  [<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree"
+	    >Tree</a
+	    > a] -&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree"
+	    >Tree</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:treeWrap"
+	    >treeWrap</a
+	    > ::  [<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree"
+	    >Tree</a
+	    > a] -&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree"
+	    >Tree</a
+	    > a</li
+	  ><li class="src short"
 	  ><a href="#v:untree"
 	    >untree</a
-	    > ::  <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:TypeParen"
-	    >TypeParen</a
+	    > ::  <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:GetTypeParen"
+	    >GetTypeParen</a
 	    > a -&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree"
 	    >Tree</a
 	    > a -&gt; [a]</li
 	  ><li class="src short"
 	  ><a href="#v:untrees"
 	    >untrees</a
-	    > ::  <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:TypeParen"
-	    >TypeParen</a
+	    > ::  <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:GetTypeParen"
+	    >GetTypeParen</a
 	    > a -&gt; [<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree"
 	    >Tree</a
 	    > a] -&gt; [a]</li
 	  ><li class="src short"
 	  ><a href="#v:undouble"
 	    >undouble</a
-	    > ::  <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    > ::  <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:ParenType"
+	    >ParenType</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
 	    > (<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree"
 	    >Tree</a
@@ -139,30 +159,38 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >type</span
 	    > <a href="#t:ParenType"
 	    >ParenType</a
-	    > a = a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
 	    ></li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:TypeParen"
-	    >TypeParen</a
-	    > a = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-	    >Int</a
+	    > <a href="#t:GetParenType"
+	    >GetParenType</a
+	    > a = a -&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:ParenType"
+	    >ParenType</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:GetTypeParen"
+	    >GetTypeParen</a
+	    > a = <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:ParenType"
+	    >ParenType</a
 	    > -&gt; (a, a)</li
 	  ><li class="src short"
 	  ><a href="#v:parenTable"
 	    >parenTable</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
 	    >Eq</a
-	    > a =&gt; [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-	    >Int</a
-	    >, a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    >, a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    >)] -&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:ParenType"
+	    > a =&gt; [(<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:ParenType"
 	    >ParenType</a
+	    >, <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > a, <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > a)] -&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:GetParenType"
+	    >GetParenType</a
 	    > a</li
 	  ></ul
 	></div
@@ -203,8 +231,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ><td class="src"
 		><a name="v:TreeB" class="def"
 		  >TreeB</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-		  >Int</a
+		  > <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:ParenType"
+		  >ParenType</a
 		  > [<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree"
 		  >Tree</a
 		  > a]</td
@@ -302,8 +330,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >tree</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
 	    >Show</a
-	    > a =&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:ParenType"
-	    >ParenType</a
+	    > a =&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:GetParenType"
+	    >GetParenType</a
 	    > a -&gt; [a] -&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree"
 	    >Tree</a
 	    > a<a href="src/Koshucode-Baala-Base-Syntax-Tree.html#tree" class="link"
@@ -321,8 +349,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >trees</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
 	    >Show</a
-	    > a =&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:ParenType"
-	    >ParenType</a
+	    > a =&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:GetParenType"
+	    >GetParenType</a
 	    > a -&gt; [a] -&gt; [<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree"
 	    >Tree</a
 	    > a]<a href="src/Koshucode-Baala-Base-Syntax-Tree.html#trees" class="link"
@@ -336,10 +364,34 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ></div
 	><div class="top"
 	><p class="src"
+	  ><a name="v:treeG" class="def"
+	    >treeG</a
+	    > ::  [<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree"
+	    >Tree</a
+	    > a] -&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree"
+	    >Tree</a
+	    > a<a href="src/Koshucode-Baala-Base-Syntax-Tree.html#treeG" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:treeWrap" class="def"
+	    >treeWrap</a
+	    > ::  [<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree"
+	    >Tree</a
+	    > a] -&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree"
+	    >Tree</a
+	    > a<a href="src/Koshucode-Baala-Base-Syntax-Tree.html#treeWrap" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
 	  ><a name="v:untree" class="def"
 	    >untree</a
-	    > ::  <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:TypeParen"
-	    >TypeParen</a
+	    > ::  <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:GetTypeParen"
+	    >GetTypeParen</a
 	    > a -&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree"
 	    >Tree</a
 	    > a -&gt; [a]<a href="src/Koshucode-Baala-Base-Syntax-Tree.html#untree" class="link"
@@ -355,8 +407,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	><p class="src"
 	  ><a name="v:untrees" class="def"
 	    >untrees</a
-	    > ::  <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:TypeParen"
-	    >TypeParen</a
+	    > ::  <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:GetTypeParen"
+	    >GetTypeParen</a
 	    > a -&gt; [<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree"
 	    >Tree</a
 	    > a] -&gt; [a]<a href="src/Koshucode-Baala-Base-Syntax-Tree.html#untrees" class="link"
@@ -372,7 +424,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	><p class="src"
 	  ><a name="v:undouble" class="def"
 	    >undouble</a
-	    > ::  <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    > ::  <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:ParenType"
+	    >ParenType</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
 	    > (<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree"
 	    >Tree</a
@@ -393,10 +449,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>undouble $ TreeB 0 [Tree 0 [TreeL &quot;A&quot;, TreeL &quot;B&quot;]]
+		>undouble (== 0) $ TreeB 0 [TreeB 0 [TreeL &quot;A&quot;, TreeL &quot;B&quot;]]
 </code
 		></strong
-	      >Tree 0 [TreeL &quot;A&quot;, TreeL &quot;B&quot;]
+	      >TreeB 0 [TreeL &quot;A&quot;, TreeL &quot;B&quot;]
 </pre
 	    ></div
 	  ></div
@@ -409,9 +465,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >type</span
 	    > <a name="t:ParenType" class="def"
 	    >ParenType</a
-	    > a = a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
 	    ><a href="src/Koshucode-Baala-Base-Syntax-Tree.html#ParenType" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:GetParenType" class="def"
+	    >GetParenType</a
+	    > a = a -&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:ParenType"
+	    >ParenType</a
+	    ><a href="src/Koshucode-Baala-Base-Syntax-Tree.html#GetParenType" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -424,11 +492,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:TypeParen" class="def"
-	    >TypeParen</a
-	    > a = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-	    >Int</a
-	    > -&gt; (a, a)<a href="src/Koshucode-Baala-Base-Syntax-Tree.html#TypeParen" class="link"
+	    > <a name="t:GetTypeParen" class="def"
+	    >GetTypeParen</a
+	    > a = <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:ParenType"
+	    >ParenType</a
+	    > -&gt; (a, a)<a href="src/Koshucode-Baala-Base-Syntax-Tree.html#GetTypeParen" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -458,19 +526,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 		></tr
 	      ><tr
 	      ><td class="src"
-		>=&gt; [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-		  >Int</a
-		  >, a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-		  >Bool</a
-		  >, a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-		  >Bool</a
-		  >)]</td
+		>=&gt; [(<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:ParenType"
+		  >ParenType</a
+		  >, <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+		  >Pred</a
+		  > a, <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+		  >Pred</a
+		  > a)]</td
 		><td class="doc"
 		><p
 		  >List of (<em
 		    >type</em
 		    >, <em
-		    >opne</em
+		    >open</em
 		    >, <em
 		    >close</em
 		    >)
@@ -479,8 +547,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:ParenType"
-		  >ParenType</a
+		>-&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:GetParenType"
+		  >GetParenType</a
 		  > a</td
 		><td class="doc empty"
 		>&nbsp;</td
@@ -490,12 +558,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ><div class="doc"
 	  ><p
 	    >Make <code
-	      ><a href="Koshucode-Baala-Base-Syntax-Tree.html#t:ParenType"
-		>ParenType</a
-		></code
-	      > and <code
-	      ><a href="Koshucode-Baala-Base-Syntax-Tree.html#t:TypeParen"
-		>TypeParen</a
+	      ><a href="Koshucode-Baala-Base-Syntax-Tree.html#t:GetParenType"
+		>GetParenType</a
 		></code
 	      > functions
     from a type-open-close table.
@@ -512,7 +576,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>let (pt, tp) = parenTable [(1,'(',')'), (2,'[',']')]
+		>let paren n [a, b] = (n, (== a), (== b))
+</code
+		></strong
+	      ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>let pt = parenTable [ paren 1 &quot;()&quot;, paren 2 &quot;[]&quot; ]
 </code
 		></strong
 	      ></pre
@@ -529,20 +600,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 		>map pt &quot;ab(cd[ef])g&quot;
 </code
 		></strong
-	      >[0,0,1,0,0,2,0,0,-2,-1,0]
-</pre
-	    ><p
-	    >Get an open-close pair of parens from its type.
-</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>tp 2
-</code
-		></strong
-	      >('[', ']')
+	      >[0, 0, 1, 0, 0, 2, 0, 0, -2, -1, 0]
 </pre
 	    ></div
 	  ></div

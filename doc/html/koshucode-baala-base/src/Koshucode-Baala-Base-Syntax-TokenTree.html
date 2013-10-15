@@ -18,143 +18,202 @@
 <a name="line-9"></a>  <span class='hs-varid'>tokenTrees</span><span class='hs-layout'>,</span>
 <a name="line-10"></a>  <span class='hs-varid'>treeTokens</span><span class='hs-layout'>,</span>
 <a name="line-11"></a>  <span class='hs-varid'>treesTokens</span><span class='hs-layout'>,</span>
-<a name="line-12"></a>  <span class='hs-varid'>singleTree</span><span class='hs-layout'>,</span>
-<a name="line-13"></a>  <span class='hs-varid'>divideByTokenTree</span><span class='hs-layout'>,</span>
-<a name="line-14"></a>
-<a name="line-15"></a>  <span class='hs-comment'>-- * Examples</span>
-<a name="line-16"></a>  <span class='hs-comment'>-- $Example</span>
-<a name="line-17"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
-<a name="line-18"></a>
-<a name="line-19"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Prelude</span>
-<a name="line-20"></a>
-<a name="line-21"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Syntax</span><span class='hs-varop'>.</span><span class='hs-conid'>Token</span>
-<a name="line-22"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Syntax</span><span class='hs-varop'>.</span><span class='hs-conid'>Tree</span>
-<a name="line-23"></a>
-<a name="line-24"></a><span class='hs-comment'>-- ----------------------</span>
+<a name="line-12"></a>  <span class='hs-varid'>flatname</span><span class='hs-layout'>,</span>
+<a name="line-13"></a>  <span class='hs-varid'>tt</span><span class='hs-layout'>,</span>
+<a name="line-14"></a>  <span class='hs-varid'>ttDoc</span><span class='hs-layout'>,</span>
+<a name="line-15"></a>
+<a name="line-16"></a>  <span class='hs-comment'>-- * Divide trees</span>
+<a name="line-17"></a>  <span class='hs-varid'>splitTokensBy</span><span class='hs-layout'>,</span>
+<a name="line-18"></a>  <span class='hs-varid'>divideTreesBy</span><span class='hs-layout'>,</span>
+<a name="line-19"></a>  <span class='hs-varid'>divideTreesByBar</span><span class='hs-layout'>,</span>
+<a name="line-20"></a>  <span class='hs-varid'>divideTreesByColon</span><span class='hs-layout'>,</span>
+<a name="line-21"></a>
+<a name="line-22"></a>  <span class='hs-comment'>-- * Examples</span>
+<a name="line-23"></a>  <span class='hs-comment'>-- $Example</span>
+<a name="line-24"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
 <a name="line-25"></a>
-<a name="line-26"></a><a name="TokenTree"></a><span class='hs-comment'>{-| Tree of tokens. -}</span>
-<a name="line-27"></a><a name="TokenTree"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>TokenTree</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Tree</span> <span class='hs-conid'>Token</span>
-<a name="line-28"></a>
-<a name="line-29"></a><a name="tokenTrees"></a><span class='hs-comment'>{-| Parse tokens into parened trees.
-<a name="line-30"></a>    Blank tokens and comments are excluded.
+<a name="line-26"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>PrettyPrint</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>P</span>
+<a name="line-27"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Prelude</span>         <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
+<a name="line-28"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Syntax</span><span class='hs-varop'>.</span><span class='hs-conid'>Token</span>    <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
+<a name="line-29"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Syntax</span><span class='hs-varop'>.</span><span class='hs-conid'>Tokenize</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
+<a name="line-30"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Syntax</span><span class='hs-varop'>.</span><span class='hs-conid'>Tree</span>     <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
 <a name="line-31"></a>
-<a name="line-32"></a>    There are four types of parens -- 1, 2, 3, or 4.
-<a name="line-33"></a>    Paren type is in 'TreeB' /type/ /subtrees/.
-<a name="line-34"></a>
-<a name="line-35"></a>    1. Round parens @( .. )@ for grouping.
+<a name="line-32"></a><span class='hs-comment'>-- ----------------------</span>
+<a name="line-33"></a>
+<a name="line-34"></a><a name="TokenTree"></a><span class='hs-comment'>{-| Tree of tokens. -}</span>
+<a name="line-35"></a><a name="TokenTree"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>TokenTree</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Tree</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Token</span>
 <a name="line-36"></a>
-<a name="line-37"></a>    2. Squared brackets @[ .. ]@ for list.
-<a name="line-38"></a>
-<a name="line-39"></a>    3. Curely braces @{ .. }@ for termset.
-<a name="line-40"></a>
-<a name="line-41"></a>    4. Curely-bar braces @{| .. |}@ for relation.
-<a name="line-42"></a>  -}</span>
-<a name="line-43"></a><span class='hs-definition'>tokenTrees</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Token</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span>
-<a name="line-44"></a><span class='hs-definition'>tokenTrees</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>trees</span> <span class='hs-varid'>parenType</span> <span class='hs-varop'>.</span> <span class='hs-varid'>sweepToken</span>
-<a name="line-45"></a>
-<a name="line-46"></a><a name="treesTokens"></a><span class='hs-definition'>treesTokens</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Token</span><span class='hs-keyglyph'>]</span>
-<a name="line-47"></a><span class='hs-definition'>treesTokens</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>untrees</span> <span class='hs-varid'>typeParen</span>
+<a name="line-37"></a><a name="tokenTrees"></a><span class='hs-comment'>{-| Parse tokens into parened trees.
+<a name="line-38"></a>    Blank tokens and comments are excluded.
+<a name="line-39"></a>
+<a name="line-40"></a>    There are four types of parens -- 1, 2, 3, or 4.
+<a name="line-41"></a>    Paren type is in 'TreeB' /type/ /subtrees/.
+<a name="line-42"></a>
+<a name="line-43"></a>    1. Round parens @( .. )@ for grouping.
+<a name="line-44"></a>
+<a name="line-45"></a>    2. Squared brackets @[ .. ]@ for list.
+<a name="line-46"></a>
+<a name="line-47"></a>    3. Curely braces @{ .. }@ for termset.
 <a name="line-48"></a>
-<a name="line-49"></a><a name="treeTokens"></a><span class='hs-definition'>treeTokens</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>TokenTree</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Token</span><span class='hs-keyglyph'>]</span>
-<a name="line-50"></a><span class='hs-definition'>treeTokens</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>untree</span> <span class='hs-varid'>typeParen</span>
-<a name="line-51"></a>
-<a name="line-52"></a><a name="typeParen"></a><span class='hs-definition'>typeParen</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Int</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-layout'>(</span><span class='hs-conid'>Token</span><span class='hs-layout'>,</span> <span class='hs-conid'>Token</span><span class='hs-layout'>)</span>
-<a name="line-53"></a><span class='hs-definition'>typeParen</span> <span class='hs-num'>1</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span> <span class='hs-conid'>TOpen</span> <span class='hs-num'>1</span> <span class='hs-str'>"("</span>  <span class='hs-layout'>,</span> <span class='hs-conid'>TOpen</span> <span class='hs-num'>1</span> <span class='hs-str'>")"</span>  <span class='hs-layout'>)</span>
-<a name="line-54"></a><span class='hs-definition'>typeParen</span> <span class='hs-num'>2</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span> <span class='hs-conid'>TOpen</span> <span class='hs-num'>2</span> <span class='hs-str'>"["</span>  <span class='hs-layout'>,</span> <span class='hs-conid'>TOpen</span> <span class='hs-num'>2</span> <span class='hs-str'>"]"</span>  <span class='hs-layout'>)</span>
-<a name="line-55"></a><span class='hs-definition'>typeParen</span> <span class='hs-num'>3</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span> <span class='hs-conid'>TOpen</span> <span class='hs-num'>3</span> <span class='hs-str'>"{"</span>  <span class='hs-layout'>,</span> <span class='hs-conid'>TOpen</span> <span class='hs-num'>3</span> <span class='hs-str'>"}"</span>  <span class='hs-layout'>)</span>
-<a name="line-56"></a><span class='hs-definition'>typeParen</span> <span class='hs-num'>4</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span> <span class='hs-conid'>TOpen</span> <span class='hs-num'>4</span> <span class='hs-str'>"&lt;|"</span> <span class='hs-layout'>,</span> <span class='hs-conid'>TOpen</span> <span class='hs-num'>4</span> <span class='hs-str'>"|&gt;"</span> <span class='hs-layout'>)</span>
-<a name="line-57"></a><span class='hs-definition'>typeParen</span> <span class='hs-num'>5</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span> <span class='hs-conid'>TOpen</span> <span class='hs-num'>5</span> <span class='hs-str'>"{|"</span> <span class='hs-layout'>,</span> <span class='hs-conid'>TOpen</span> <span class='hs-num'>5</span> <span class='hs-str'>"|}"</span> <span class='hs-layout'>)</span>
-<a name="line-58"></a><span class='hs-definition'>typeParen</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span> <span class='hs-conid'>TOpen</span> <span class='hs-num'>0</span> <span class='hs-str'>"?"</span>  <span class='hs-layout'>,</span> <span class='hs-conid'>TOpen</span> <span class='hs-num'>0</span> <span class='hs-str'>"?"</span>  <span class='hs-layout'>)</span>
+<a name="line-49"></a>    4. Curely-bar braces @{| .. |}@ for relation.
+<a name="line-50"></a>  -}</span>
+<a name="line-51"></a><span class='hs-definition'>tokenTrees</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Token</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span>
+<a name="line-52"></a><span class='hs-definition'>tokenTrees</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>map</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>undouble</span> <span class='hs-layout'>(</span><span class='hs-varop'>==</span> <span class='hs-num'>0</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-varop'>.</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>trees</span> <span class='hs-varid'>parenType</span> <span class='hs-varop'>.</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>sweepToken</span>
+<a name="line-53"></a>
+<a name="line-54"></a><a name="treesTokens"></a><span class='hs-definition'>treesTokens</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Token</span><span class='hs-keyglyph'>]</span>
+<a name="line-55"></a><span class='hs-definition'>treesTokens</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>untrees</span> <span class='hs-varid'>typeParen</span>
+<a name="line-56"></a>
+<a name="line-57"></a><a name="treeTokens"></a><span class='hs-definition'>treeTokens</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>TokenTree</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Token</span><span class='hs-keyglyph'>]</span>
+<a name="line-58"></a><span class='hs-definition'>treeTokens</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>untree</span> <span class='hs-varid'>typeParen</span>
 <a name="line-59"></a>
-<a name="line-60"></a><a name="parenType"></a><span class='hs-definition'>parenType</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>ParenType</span> <span class='hs-conid'>Token</span>
-<a name="line-61"></a><span class='hs-definition'>parenType</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>parenTable</span>
-<a name="line-62"></a>    <span class='hs-keyglyph'>[</span> <span class='hs-layout'>(</span><span class='hs-num'>1</span><span class='hs-layout'>,</span> <span class='hs-varid'>isOpenTokenOf</span> <span class='hs-str'>"("</span>  <span class='hs-layout'>,</span> <span class='hs-varid'>isCloseTokenOf</span>  <span class='hs-str'>")"</span><span class='hs-layout'>)</span>  <span class='hs-comment'>-- grouping</span>
-<a name="line-63"></a>    <span class='hs-layout'>,</span> <span class='hs-layout'>(</span><span class='hs-num'>2</span><span class='hs-layout'>,</span> <span class='hs-varid'>isOpenTokenOf</span> <span class='hs-str'>"["</span>  <span class='hs-layout'>,</span> <span class='hs-varid'>isCloseTokenOf</span>  <span class='hs-str'>"]"</span><span class='hs-layout'>)</span>  <span class='hs-comment'>-- list</span>
-<a name="line-64"></a>    <span class='hs-layout'>,</span> <span class='hs-layout'>(</span><span class='hs-num'>3</span><span class='hs-layout'>,</span> <span class='hs-varid'>isOpenTokenOf</span> <span class='hs-str'>"{"</span>  <span class='hs-layout'>,</span> <span class='hs-varid'>isCloseTokenOf</span>  <span class='hs-str'>"}"</span><span class='hs-layout'>)</span>  <span class='hs-comment'>-- set</span>
-<a name="line-65"></a>    <span class='hs-layout'>,</span> <span class='hs-layout'>(</span><span class='hs-num'>4</span><span class='hs-layout'>,</span> <span class='hs-varid'>isOpenTokenOf</span> <span class='hs-str'>"&lt;|"</span> <span class='hs-layout'>,</span> <span class='hs-varid'>isCloseTokenOf</span> <span class='hs-str'>"|&gt;"</span><span class='hs-layout'>)</span>  <span class='hs-comment'>-- termset</span>
-<a name="line-66"></a>    <span class='hs-layout'>,</span> <span class='hs-layout'>(</span><span class='hs-num'>5</span><span class='hs-layout'>,</span> <span class='hs-varid'>isOpenTokenOf</span> <span class='hs-str'>"{|"</span> <span class='hs-layout'>,</span> <span class='hs-varid'>isCloseTokenOf</span> <span class='hs-str'>"|}"</span><span class='hs-layout'>)</span>  <span class='hs-comment'>-- relation</span>
-<a name="line-67"></a>    <span class='hs-keyglyph'>]</span>
-<a name="line-68"></a>
-<a name="line-69"></a><a name="singleTree"></a><span class='hs-definition'>singleTree</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>TokenTree</span>
-<a name="line-70"></a><span class='hs-definition'>singleTree</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>t</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>t</span>
-<a name="line-71"></a><span class='hs-definition'>singleTree</span> <span class='hs-varid'>ts</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>TreeB</span> <span class='hs-num'>1</span> <span class='hs-varid'>ts</span>
-<a name="line-72"></a>
-<a name="line-73"></a><a name="divideByTokenTree"></a><span class='hs-definition'>divideByTokenTree</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span><span class='hs-keyglyph'>]</span>
-<a name="line-74"></a><span class='hs-definition'>divideByTokenTree</span> <span class='hs-varid'>w</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>divideByP</span> <span class='hs-varid'>p</span> <span class='hs-keyword'>where</span>
-<a name="line-75"></a>    <span class='hs-varid'>p</span> <span class='hs-layout'>(</span><span class='hs-conid'>TreeL</span> <span class='hs-layout'>(</span><span class='hs-conid'>TWord</span> <span class='hs-keyword'>_</span> <span class='hs-num'>0</span> <span class='hs-varid'>x</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>|</span> <span class='hs-varid'>w</span> <span class='hs-varop'>==</span> <span class='hs-varid'>x</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
-<a name="line-76"></a>    <span class='hs-varid'>p</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>False</span>
-<a name="line-77"></a>
+<a name="line-60"></a><a name="typeParen"></a><span class='hs-definition'>typeParen</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>ParenType</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Token</span><span class='hs-layout'>,</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Token</span><span class='hs-layout'>)</span>
+<a name="line-61"></a><span class='hs-definition'>typeParen</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>o</span> <span class='hs-keyword'>where</span>
+<a name="line-62"></a>    <span class='hs-varid'>o</span> <span class='hs-num'>1</span>   <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>p</span>  <span class='hs-str'>"("</span>  <span class='hs-str'>")"</span>
+<a name="line-63"></a>    <span class='hs-varid'>o</span> <span class='hs-num'>2</span>   <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>p</span>  <span class='hs-str'>"["</span>  <span class='hs-str'>"]"</span>
+<a name="line-64"></a>    <span class='hs-varid'>o</span> <span class='hs-num'>3</span>   <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>p</span>  <span class='hs-str'>"{"</span>  <span class='hs-str'>"}"</span>
+<a name="line-65"></a>    <span class='hs-varid'>o</span> <span class='hs-num'>4</span>   <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>p</span>  <span class='hs-str'>"&lt;|"</span> <span class='hs-str'>"|&gt;"</span>
+<a name="line-66"></a>    <span class='hs-varid'>o</span> <span class='hs-num'>5</span>   <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>p</span>  <span class='hs-str'>"{|"</span> <span class='hs-str'>"|}"</span>
+<a name="line-67"></a>    <span class='hs-varid'>o</span> <span class='hs-keyword'>_</span>   <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>p</span>  <span class='hs-str'>"?"</span>  <span class='hs-str'>"?"</span>
+<a name="line-68"></a>    <span class='hs-varid'>p</span> <span class='hs-varid'>a</span> <span class='hs-varid'>b</span> <span class='hs-keyglyph'>=</span>  <span class='hs-layout'>(</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TOpen</span> <span class='hs-num'>0</span> <span class='hs-varid'>a</span><span class='hs-layout'>,</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TClose</span> <span class='hs-num'>0</span> <span class='hs-varid'>b</span> <span class='hs-layout'>)</span>
+<a name="line-69"></a>
+<a name="line-70"></a><a name="parenType"></a><span class='hs-definition'>parenType</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>GetParenType</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Token</span>
+<a name="line-71"></a><span class='hs-definition'>parenType</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>parenTable</span>
+<a name="line-72"></a>    <span class='hs-keyglyph'>[</span> <span class='hs-varid'>o</span> <span class='hs-num'>1</span>  <span class='hs-str'>"("</span>   <span class='hs-str'>")"</span>   <span class='hs-comment'>-- grouping</span>
+<a name="line-73"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-num'>2</span>  <span class='hs-str'>"["</span>   <span class='hs-str'>"]"</span>   <span class='hs-comment'>-- list</span>
+<a name="line-74"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-num'>3</span>  <span class='hs-str'>"{"</span>   <span class='hs-str'>"}"</span>   <span class='hs-comment'>-- set</span>
+<a name="line-75"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-num'>4</span>  <span class='hs-str'>"&lt;|"</span> <span class='hs-str'>"|&gt;"</span>   <span class='hs-comment'>-- termset</span>
+<a name="line-76"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>o</span> <span class='hs-num'>5</span>  <span class='hs-str'>"{|"</span> <span class='hs-str'>"|}"</span>   <span class='hs-comment'>-- relation</span>
+<a name="line-77"></a>    <span class='hs-keyglyph'>]</span> <span class='hs-keyword'>where</span> <span class='hs-varid'>o</span> <span class='hs-varid'>n</span> <span class='hs-varid'>a</span> <span class='hs-varid'>b</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varid'>n</span><span class='hs-layout'>,</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>isOpenTokenOf</span> <span class='hs-varid'>a</span><span class='hs-layout'>,</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>isCloseTokenOf</span> <span class='hs-varid'>b</span><span class='hs-layout'>)</span>
 <a name="line-78"></a>
-<a name="line-79"></a>
-<a name="line-80"></a><span class='hs-comment'>-- ----------------------</span>
-<a name="line-81"></a><span class='hs-comment'>{- $Example
+<a name="line-79"></a><a name="flatname"></a><span class='hs-definition'>flatname</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>TokenTree</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Maybe</span> <span class='hs-conid'>String</span>
+<a name="line-80"></a><span class='hs-definition'>flatname</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TreeL</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TTerm</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>n</span><span class='hs-keyglyph'>]</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Just</span> <span class='hs-varid'>n</span>
+<a name="line-81"></a><span class='hs-definition'>flatname</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Nothing</span>
 <a name="line-82"></a>
-<a name="line-83"></a>   Before evaluating the following examples,
-<a name="line-84"></a>   please import @Tokenizer@ module to use the @tokens@ function.
-<a name="line-85"></a>   
-<a name="line-86"></a>   &gt;&gt;&gt; :m +Koshucode.Baala.Base.Syntax.Tokenizer
-<a name="line-87"></a>
-<a name="line-88"></a>   Tuple.
-<a name="line-89"></a>
-<a name="line-90"></a>   &gt;&gt;&gt; tokenTrees . tokens $ "|-- R /x 0 /y 1"
-<a name="line-91"></a>   [TreeL (TWord 1 0 "|--"),
-<a name="line-92"></a>    TreeL (TWord 3 0 "R"),
-<a name="line-93"></a>    TreeL (TTerm 5 ["/x"]),
-<a name="line-94"></a>    TreeL (TWord 7 0 "0"),
-<a name="line-95"></a>    TreeL (TTerm 9 ["/y"]),
-<a name="line-96"></a>    TreeL (TWord 11 0 "1")]
-<a name="line-97"></a>
-<a name="line-98"></a>   Relmap.
-<a name="line-99"></a>
-<a name="line-100"></a>   &gt;&gt;&gt; tokenTrees . tokens $ "r : source R /x /y"
-<a name="line-101"></a>   [TreeL (TWord 1 0 "r"),
-<a name="line-102"></a>    TreeL (TWord 3 0 ":"),
-<a name="line-103"></a>    TreeL (TWord 5 0 "source"),
-<a name="line-104"></a>    TreeL (TWord 7 0 "R"),
-<a name="line-105"></a>    TreeL (TTerm 9 ["/x"]),
-<a name="line-106"></a>    TreeL (TTerm 11 ["/y"])]
-<a name="line-107"></a>
-<a name="line-108"></a>   Nested relmap.
-<a name="line-109"></a>
-<a name="line-110"></a>   &gt;&gt;&gt; tokenTrees . tokens $ "meet (R | pick /a /b)"
-<a name="line-111"></a>   [TreeL (TWord 1 0 "meet"),
-<a name="line-112"></a>    TreeB 1 [
-<a name="line-113"></a>      TreeL (TWord 4 0 "R"),
-<a name="line-114"></a>      TreeL (TWord 6 0 "|"),
-<a name="line-115"></a>      TreeL (TWord 8 0 "pick"),
-<a name="line-116"></a>      TreeL (TTerm 10 ["/a"]),
-<a name="line-117"></a>      TreeL (TTerm 12 ["/b"])]]
-<a name="line-118"></a>
-<a name="line-119"></a>   Double paren.
-<a name="line-120"></a>
-<a name="line-121"></a>   &gt;&gt;&gt; tokenTrees . tokens $ "(a ((b c)))"
-<a name="line-122"></a>   [TreeB 1 [
-<a name="line-123"></a>      TreeL (TWord 2 0 "a"),
-<a name="line-124"></a>      TreeB 1 [
-<a name="line-125"></a>        TreeB 1 [
-<a name="line-126"></a>          TreeL (TWord 6 0 "b"),
-<a name="line-127"></a>          TreeL (TWord 8 0 "c")]]]]
-<a name="line-128"></a>
-<a name="line-129"></a>   List.
-<a name="line-130"></a>
-<a name="line-131"></a>   &gt;&gt;&gt; tokenTrees . tokens $ "[ 0 1 2 ]"
-<a name="line-132"></a>   [TreeB 2 [
-<a name="line-133"></a>     TreeL (TWord 3 0 "0"),
-<a name="line-134"></a>     TreeL (TWord 5 0 "1"),
-<a name="line-135"></a>     TreeL (TWord 7 0 "2")]]
-<a name="line-136"></a>
-<a name="line-137"></a>   Relation.
-<a name="line-138"></a>
-<a name="line-139"></a>   &gt;&gt;&gt; tokenTrees . tokens $ "{| /a /b | 10 20 | 30 40 |}"
-<a name="line-140"></a>   [TreeB 4 [
-<a name="line-141"></a>      TreeL (TTerm 3 ["/a"]), TreeL (TTerm 5 ["/b"]),
-<a name="line-142"></a>      TreeL (TWord 7 0 "|"),
-<a name="line-143"></a>      TreeL (TWord 9 0 "10"), TreeL (TWord 11 0 "20"),
-<a name="line-144"></a>      TreeL (TWord 13 0 "|"),
-<a name="line-145"></a>      TreeL (TWord 15 0 "30"), TreeL (TWord 17 0 "40")]]
-<a name="line-146"></a>      
+<a name="line-83"></a><a name="tt"></a><span class='hs-definition'>tt</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span>
+<a name="line-84"></a><span class='hs-definition'>tt</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>tokenTrees</span> <span class='hs-varop'>.</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>tokens</span>
+<a name="line-85"></a>
+<a name="line-86"></a><a name="ttDoc"></a><span class='hs-definition'>ttDoc</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Doc</span>
+<a name="line-87"></a><span class='hs-definition'>ttDoc</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>dv</span> <span class='hs-keyword'>where</span>
+<a name="line-88"></a>    <span class='hs-varid'>dv</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>docv</span> <span class='hs-varop'>.</span> <span class='hs-varid'>map</span> <span class='hs-varid'>d</span>
+<a name="line-89"></a>    <span class='hs-varid'>d</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TreeL</span> <span class='hs-varid'>x</span><span class='hs-layout'>)</span>     <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>doc</span> <span class='hs-str'>"TreeL :"</span> <span class='hs-conid'>B</span><span class='hs-varop'>.&lt;+&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>doc</span> <span class='hs-varid'>x</span>
+<a name="line-90"></a>    <span class='hs-varid'>d</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TreeB</span> <span class='hs-varid'>p</span> <span class='hs-varid'>xs2</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>let</span> <span class='hs-varid'>treeB</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>doch</span> <span class='hs-keyglyph'>[</span><span class='hs-str'>"TreeB"</span><span class='hs-layout'>,</span> <span class='hs-varid'>show</span> <span class='hs-varid'>p</span><span class='hs-keyglyph'>]</span><span class='hs-layout'>)</span>
+<a name="line-91"></a>                        <span class='hs-keyword'>in</span> <span class='hs-conid'>P</span><span class='hs-varop'>.</span><span class='hs-varid'>hang</span> <span class='hs-varid'>treeB</span> <span class='hs-num'>2</span> <span class='hs-layout'>(</span><span class='hs-varid'>dv</span> <span class='hs-varid'>xs2</span><span class='hs-layout'>)</span>
+<a name="line-92"></a>
+<a name="line-93"></a>
+<a name="line-94"></a>
+<a name="line-95"></a><span class='hs-comment'>-- ----------------------  Divide trees</span>
+<a name="line-96"></a>
+<a name="line-97"></a><a name="splitTokensBy"></a><span class='hs-comment'>{-| Split token list by unquoted word.
+<a name="line-98"></a>    If token list contains the word,
+<a name="line-99"></a>    pair of /before-list/, /the-word/ and /after-list/ is returned.
+<a name="line-100"></a>    If does not contains the word,
+<a name="line-101"></a>    original token list is returned.
+<a name="line-102"></a>
+<a name="line-103"></a>    &gt;&gt;&gt; splitTokensBy (== "|") . tokens $ "b c"
+<a name="line-104"></a>    Left [ TWord 1 0 "b", TSpace 2 1, TWord 3 0 "c" ]
+<a name="line-105"></a>
+<a name="line-106"></a>    &gt;&gt;&gt; splitTokensBy (== "|") . tokens $ "a | b | c"
+<a name="line-107"></a>    Right ( [ TWord 1 0 "a", TSpace 2 1 ]
+<a name="line-108"></a>            , TWord 3 0 "|"
+<a name="line-109"></a>            , [ TSpace 4 1, TWord 5 0 "b", TSpace 6 1
+<a name="line-110"></a>              , TWord 7 0 "|", TSpace 8 1, TWord 9 0 "c" ] )  -}</span>
+<a name="line-111"></a><span class='hs-definition'>splitTokensBy</span>
+<a name="line-112"></a>    <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Pred</span> <span class='hs-conid'>String</span>   <span class='hs-comment'>-- ^ Predicate</span>
+<a name="line-113"></a>    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Token</span><span class='hs-keyglyph'>]</span>       <span class='hs-comment'>-- ^ Tokens</span>
+<a name="line-114"></a>    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Either</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Token</span><span class='hs-keyglyph'>]</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Token</span><span class='hs-keyglyph'>]</span><span class='hs-layout'>,</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Token</span><span class='hs-layout'>,</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Token</span><span class='hs-keyglyph'>]</span><span class='hs-layout'>)</span>
+<a name="line-115"></a>       <span class='hs-comment'>-- ^ Original-tokens or @(@before-list, the-word, after-list@)@</span>
+<a name="line-116"></a><span class='hs-definition'>splitTokensBy</span> <span class='hs-varid'>p</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>splitBy</span> <span class='hs-varid'>p2</span> <span class='hs-keyword'>where</span>
+<a name="line-117"></a>    <span class='hs-varid'>p2</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TWord</span> <span class='hs-keyword'>_</span> <span class='hs-num'>0</span> <span class='hs-varid'>x</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>p</span> <span class='hs-varid'>x</span>
+<a name="line-118"></a>    <span class='hs-varid'>p2</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>False</span>
+<a name="line-119"></a>
+<a name="line-120"></a><a name="divideTreesBy"></a><span class='hs-definition'>divideTreesBy</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span><span class='hs-keyglyph'>]</span>
+<a name="line-121"></a><span class='hs-definition'>divideTreesBy</span> <span class='hs-varid'>w</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>divideBy</span> <span class='hs-varid'>p</span> <span class='hs-keyword'>where</span>
+<a name="line-122"></a>    <span class='hs-varid'>p</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TreeL</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TWord</span> <span class='hs-keyword'>_</span> <span class='hs-num'>0</span> <span class='hs-varid'>x</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varid'>w</span> <span class='hs-varop'>==</span> <span class='hs-varid'>x</span><span class='hs-layout'>)</span>
+<a name="line-123"></a>    <span class='hs-varid'>p</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>False</span>
+<a name="line-124"></a>
+<a name="line-125"></a><a name="divideTreesByBar"></a><span class='hs-comment'>{-| Divide token trees by vertical bar @\"|\"@.
+<a name="line-126"></a>
+<a name="line-127"></a>    &gt;&gt;&gt; divideTreesByBar . tokenTrees . tokens $ "a | b | c"
+<a name="line-128"></a>    [ [TreeL (TWord 1 0 "a")]
+<a name="line-129"></a>    , [TreeL (TWord 5 0 "b")]
+<a name="line-130"></a>    , [TreeL (TWord 9 0 "c")] ]  -}</span>
+<a name="line-131"></a><span class='hs-definition'>divideTreesByBar</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span><span class='hs-keyglyph'>]</span>
+<a name="line-132"></a><span class='hs-definition'>divideTreesByBar</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>divideTreesBy</span> <span class='hs-str'>"|"</span>
+<a name="line-133"></a>
+<a name="line-134"></a><a name="divideTreesByColon"></a><span class='hs-comment'>{-| Divide token trees by colon @\":\"@.
+<a name="line-135"></a>
+<a name="line-136"></a>    &gt;&gt;&gt; divideTreesByColon . tokenTrees . tokens $ "a : b : c"
+<a name="line-137"></a>    [ [TreeL (TWord 1 0 "a")]
+<a name="line-138"></a>    , [TreeL (TWord 5 0 "b")]
+<a name="line-139"></a>    , [TreeL (TWord 9 0 "c")] ]  -}</span>
+<a name="line-140"></a><span class='hs-definition'>divideTreesByColon</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-keyglyph'>[</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span><span class='hs-keyglyph'>]</span>
+<a name="line-141"></a><span class='hs-definition'>divideTreesByColon</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>divideTreesBy</span> <span class='hs-str'>":"</span>
+<a name="line-142"></a>
+<a name="line-143"></a>
+<a name="line-144"></a>
+<a name="line-145"></a><span class='hs-comment'>-- ----------------------</span>
+<a name="line-146"></a><span class='hs-comment'>{- $Example
 <a name="line-147"></a>
-<a name="line-148"></a>-}</span>
+<a name="line-148"></a>   Judgement
 <a name="line-149"></a>
+<a name="line-150"></a>   &gt;&gt;&gt; tt "|-- R /x 0 /y 1"
+<a name="line-151"></a>   [TreeL (TWord 1 0 "|--"),
+<a name="line-152"></a>    TreeL (TWord 3 0 "R"),
+<a name="line-153"></a>    TreeL (TTerm 5 ["/x"]),
+<a name="line-154"></a>    TreeL (TWord 7 0 "0"),
+<a name="line-155"></a>    TreeL (TTerm 9 ["/y"]),
+<a name="line-156"></a>    TreeL (TWord 11 0 "1")]
+<a name="line-157"></a>
+<a name="line-158"></a>   Relmap
+<a name="line-159"></a>
+<a name="line-160"></a>   &gt;&gt;&gt; tt "r : source R /x /y"
+<a name="line-161"></a>   [TreeL (TWord 1 0 "r"),
+<a name="line-162"></a>    TreeL (TWord 3 0 ":"),
+<a name="line-163"></a>    TreeL (TWord 5 0 "source"),
+<a name="line-164"></a>    TreeL (TWord 7 0 "R"),
+<a name="line-165"></a>    TreeL (TTerm 9 ["/x"]),
+<a name="line-166"></a>    TreeL (TTerm 11 ["/y"])]
+<a name="line-167"></a>
+<a name="line-168"></a>   Nested relmap
+<a name="line-169"></a>
+<a name="line-170"></a>   &gt;&gt;&gt; tt "meet (R | pick /a /b)"
+<a name="line-171"></a>   [TreeL (TWord 1 0 "meet"),
+<a name="line-172"></a>    TreeB 1 [
+<a name="line-173"></a>      TreeL (TWord 4 0 "R"),
+<a name="line-174"></a>      TreeL (TWord 6 0 "|"),
+<a name="line-175"></a>      TreeL (TWord 8 0 "pick"),
+<a name="line-176"></a>      TreeL (TTerm 10 ["/a"]),
+<a name="line-177"></a>      TreeL (TTerm 12 ["/b"])]]
+<a name="line-178"></a>
+<a name="line-179"></a>   Double paren
+<a name="line-180"></a>
+<a name="line-181"></a>   &gt;&gt;&gt; tt "(a ((b c)))"
+<a name="line-182"></a>   [TreeB 1 [
+<a name="line-183"></a>      TreeL (TWord 2 0 "a"),
+<a name="line-184"></a>      TreeB 1 [
+<a name="line-185"></a>        TreeB 1 [
+<a name="line-186"></a>          TreeL (TWord 6 0 "b"),
+<a name="line-187"></a>          TreeL (TWord 8 0 "c")]]]]
+<a name="line-188"></a>
+<a name="line-189"></a>   List
+<a name="line-190"></a>
+<a name="line-191"></a>   &gt;&gt;&gt; tt "[ 0 1 2 ]"
+<a name="line-192"></a>   [TreeB 2 [
+<a name="line-193"></a>     TreeL (TWord 3 0 "0"),
+<a name="line-194"></a>     TreeL (TWord 5 0 "1"),
+<a name="line-195"></a>     TreeL (TWord 7 0 "2")]]
+<a name="line-196"></a>
+<a name="line-197"></a>   Relation
+<a name="line-198"></a>
+<a name="line-199"></a>   &gt;&gt;&gt; tt "{| /a /b | 10 20 | 30 40 |}"
+<a name="line-200"></a>   [TreeB 4 [
+<a name="line-201"></a>      TreeL (TTerm 3 ["/a"]), TreeL (TTerm 5 ["/b"]),
+<a name="line-202"></a>      TreeL (TWord 7 0 "|"),
+<a name="line-203"></a>      TreeL (TWord 9 0 "10"), TreeL (TWord 11 0 "20"),
+<a name="line-204"></a>      TreeL (TWord 13 0 "|"),
+<a name="line-205"></a>      TreeL (TWord 15 0 "30"), TreeL (TWord 17 0 "40")]]
+<a name="line-206"></a>
+<a name="line-207"></a>-}</span>
+<a name="line-208"></a>
 </pre></body>
 </html>
