@@ -5,6 +5,9 @@ module Koshucode.Baala.Core.Relmap.Operand
   RopOperand,
   RopSorter,
   RopFullSorter,
+  RopAssoc,
+  sortOperand,
+  sortUpOperand,
 
   -- * Sorter
   operandNone,
@@ -23,12 +26,34 @@ type RopOperand = (RopSorter, [String], [String])
     This soters docompose operand trees,
     and give a name to suboperand. -}
 type RopFullSorter
-    =  [B.TokenTree]                 -- ^ Unsorted operand
-    -> B.Ab [B.Named [B.TokenTree]]  -- ^ Fully sorted operand
+    =  [B.TokenTree]   -- ^ Unsorted operand
+    -> B.Ab RopAssoc   -- ^ Fully sorted operand
 
 type RopSorter
-    =  [B.Named [B.TokenTree]]       -- ^ Basically sorted operand
-    -> B.Ab [B.Named [B.TokenTree]]  -- ^ Fully sorted operand
+    =  RopAssoc        -- ^ Basically sorted operand
+    -> B.Ab RopAssoc   -- ^ Fully sorted operand
+
+type RopAssoc = [B.Named [B.TokenTree]]
+
+{-| Split operand into named group.
+    Non quoted words beginning with hyphen, e.g., @-x@,
+    are name of group.
+  
+    >>> sortOperand $ B.tt "a b -x /c 'd -y e"
+    [ ("",   [TreeL (TWord 1 0 "a"), TreeL (TWord 3 0 "b")])
+    , ("-x", [TreeL (TTerm 7 ["/c"]), TreeL (TWord 9 1 "d")])
+    , ("-y", [TreeL (TWord 14 0 "e")]) ]
+  -}
+
+sortOperand :: [B.TokenTree] -> RopAssoc
+sortOperand = B.assocBy maybeBranch "" where
+    maybeBranch (B.TreeL (B.TWord _ 0 n@('-' : _))) = Just n
+    maybeBranch _ = Nothing
+
+sortUpOperand :: [B.TokenTree] -> [B.Named (B.OnceMore [B.TokenTree])]
+sortUpOperand = B.assocGather . sortOperand
+
+-- ----------------------
 
 {-| No-element trunk.
 

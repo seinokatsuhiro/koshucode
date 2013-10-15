@@ -10,8 +10,8 @@ module Koshucode.Baala.Core.Relmap.Relfy
   relfy,
 ) where
 
-import qualified Control.Monad as Monad
-import qualified Data.Monoid as M
+import qualified Control.Monad        as Monad
+import qualified Data.Monoid          as Monoid
 import qualified Koshucode.Baala.Base as B
 
 data Relfy c = Relfy
@@ -19,7 +19,7 @@ data Relfy c = Relfy
     , relfyBody :: RelfyBody c
     }
 
-instance M.Monoid (Relfy c) where
+instance Monoid.Monoid (Relfy c) where
     mempty = relfyConst B.reldee
     mappend (Relfy _ b1) (Relfy h2 b2) =
         Relfy h2 $ RelfyAppend b1 b2
@@ -57,7 +57,7 @@ instance Show (RelfyBody c) where
     show (RelfyAppend      x y)  =  "RelfyAppend " ++ show [x,y]
     show (RelfyUnion      _ xs)  =  "RelfyUnion " ++ show xs
 
-instance M.Monoid (RelfyBody c) where
+instance Monoid.Monoid (RelfyBody c) where
     mempty      = relfyBodyId
     mappend x y = RelfyAppend x y
 
@@ -94,7 +94,6 @@ relfy = (<$>) where
                                        uniqueRt u $ concat b2
     RelfyAppend    g1 g2 <$> b1  =  do b2 <- g1 <$> b1
                                        g2 <$> b2
-
 
 uniqueIf :: (Ord c) => Bool -> [c] -> [c]
 uniqueIf True  = B.unique

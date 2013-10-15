@@ -4,21 +4,15 @@
 module Koshucode.Baala.Core.Section.Clausify
 ( ClauseSource (..),
   clausify,
-  sortOperand,
-  sortUpOperand,
 ) where
 
-import Data.Generics
+import qualified Data.Generics as G
 import qualified Koshucode.Baala.Base as B
-
-
-
--- ---------------------- 
 
 data ClauseSource = ClauseSource
     { clauseTokens :: [B.Token]     -- ^ Source tokens of clause
     , clauseLines  :: [B.TokenLine] -- ^ Source lines of clause
-    } deriving (Show, Data, Typeable)
+    } deriving (Show, G.Data, G.Typeable)
 
 emptyClauseSource :: ClauseSource
 emptyClauseSource = ClauseSource [] []
@@ -62,24 +56,3 @@ cons a1 b1 (ClauseSource a2 b2, c)
 -- e7 = e1 "\na\nb\n"
 -- e8 = e1 "a\n\n b\nc\n"
 -- e9 = e1 "a\n  \n b\nc\n"
-
--- ----------------------
-
-{-| Split operand into named group.
-    Non quoted words beginning with hyphen, e.g., @-x@,
-    are name of group.
-  
-    >>> sortOperand $ B.tt "a b -x /c 'd -y e"
-    [ ("",   [TreeL (TWord 1 0 "a"), TreeL (TWord 3 0 "b")])
-    , ("-x", [TreeL (TTerm 7 ["/c"]), TreeL (TWord 9 1 "d")])
-    , ("-y", [TreeL (TWord 14 0 "e")]) ]
-  -}
-
-sortOperand :: [B.TokenTree] -> [B.Named [B.TokenTree]]
-sortOperand = B.assocBy maybeBranch "" where
-    maybeBranch (B.TreeL (B.TWord _ 0 n@('-' : _))) = Just n
-    maybeBranch _ = Nothing
-
-sortUpOperand :: [B.TokenTree] -> [B.Named (B.OnceMore [B.TokenTree])]
-sortUpOperand = B.assocGather . sortOperand
-

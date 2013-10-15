@@ -23,6 +23,7 @@ import Prelude hiding (exp, mod)
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core.Content          as C
 import qualified Koshucode.Baala.Core.Relmap           as C
+import qualified Koshucode.Baala.Core.Assert           as C
 import qualified Koshucode.Baala.Core.Section.Clausify as C
 import qualified Koshucode.Baala.Core.Section.Section  as C
 

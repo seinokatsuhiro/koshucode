@@ -48,6 +48,11 @@ library
   exposed-modules:
         Koshucode.Baala.Core
 
+        Koshucode.Baala.Core.Assert
+        Koshucode.Baala.Core.Assert.Assert
+        Koshucode.Baala.Core.Assert.Dataset
+        Koshucode.Baala.Core.Assert.Run
+
         Koshucode.Baala.Core.Content
         Koshucode.Baala.Core.Content.Class
         Koshucode.Baala.Core.Content.Expression
@@ -57,15 +62,12 @@ library
         Koshucode.Baala.Core.Content.Operator
 
         Koshucode.Baala.Core.Relmap
-        Koshucode.Baala.Core.Relmap.Assert
         Koshucode.Baala.Core.Relmap.Construct
-        Koshucode.Baala.Core.Relmap.Dataset
         Koshucode.Baala.Core.Relmap.HalfRelmap
         Koshucode.Baala.Core.Relmap.Operand
         Koshucode.Baala.Core.Relmap.Relfy
         Koshucode.Baala.Core.Relmap.Relmap
         Koshucode.Baala.Core.Relmap.Rop
-        Koshucode.Baala.Core.Relmap.Run
 
         Koshucode.Baala.Core.Section
         Koshucode.Baala.Core.Section.Clause

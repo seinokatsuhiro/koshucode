@@ -2,7 +2,7 @@
 
 {-| Data structure for mapping relation to judges -}
 
-module Koshucode.Baala.Core.Relmap.Assert
+module Koshucode.Baala.Core.Assert.Assert
 ( -- * Datatype
   Assert (..),
   AssertOption,
@@ -14,7 +14,7 @@ module Koshucode.Baala.Core.Relmap.Assert
 ) where
 
 import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Core.Relmap.Relmap as C
+import qualified Koshucode.Baala.Core.Relmap as C
 
 {-| Assertion of affirming or denying relation.
     It consists of logical quality, relsign, and relmap.
@@ -44,11 +44,12 @@ quality False = "deny"
 assertMap :: B.Map (C.Relmap c) -> B.Map (Assert c)
 assertMap f (Assert q pat opt r src) = Assert q pat opt (f r) src
 
+affirm, deny :: B.JudgePattern -> AssertOption
+             -> C.Relmap c -> [B.TokenLine] -> Assert c
+
 {-| Make affirmed assertion. -}
-affirm :: B.JudgePattern -> AssertOption -> C.Relmap c -> [B.TokenLine] -> Assert c
 affirm = Assert True
 
 {-| Make denied assertion. -}
-deny :: B.JudgePattern -> AssertOption -> C.Relmap c -> [B.TokenLine] -> Assert c
 deny = Assert False
 

@@ -26,6 +26,7 @@ module Koshucode.Baala.Core.Section.Section
 
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core.Relmap as C
+import qualified Koshucode.Baala.Core.Assert as C
 
 data Section c = Section {
       sectionName     :: Maybe String           -- ^ Section name

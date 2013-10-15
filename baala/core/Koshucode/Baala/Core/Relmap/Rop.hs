@@ -16,10 +16,10 @@ module Koshucode.Baala.Core.Relmap.Rop
 ) where
 
 import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Core.Relmap.Relmap     as C
 import qualified Koshucode.Baala.Core.Relmap.HalfRelmap as C
-import qualified Koshucode.Baala.Core.Relmap.Relfy      as C
 import qualified Koshucode.Baala.Core.Relmap.Operand    as C
+import qualified Koshucode.Baala.Core.Relmap.Relfy      as C
+import qualified Koshucode.Baala.Core.Relmap.Relmap     as C
 
 
 

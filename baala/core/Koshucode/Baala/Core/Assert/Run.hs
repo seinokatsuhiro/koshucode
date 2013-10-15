@@ -2,19 +2,17 @@
 
 {-| Running relational calculation. -}
 
-module Koshucode.Baala.Core.Relmap.Run
+module Koshucode.Baala.Core.Assert.Run
 ( runAssertJudges,
   runAssertDataset,
 ) where
 
 import qualified Data.Monoid as M
 import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Core.Content           as C
-import qualified Koshucode.Baala.Core.Relmap.Assert     as C
-import qualified Koshucode.Baala.Core.Relmap.Dataset    as C
-import qualified Koshucode.Baala.Core.Relmap.HalfRelmap as C
-import qualified Koshucode.Baala.Core.Relmap.Relmap     as C
-import qualified Koshucode.Baala.Core.Relmap.Relfy      as C
+import qualified Koshucode.Baala.Core.Content        as C
+import qualified Koshucode.Baala.Core.Relmap         as C
+import qualified Koshucode.Baala.Core.Assert.Assert  as C
+import qualified Koshucode.Baala.Core.Assert.Dataset as C
 
 
 

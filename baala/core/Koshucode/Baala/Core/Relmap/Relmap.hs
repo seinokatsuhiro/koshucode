@@ -19,8 +19,8 @@ module Koshucode.Baala.Core.Relmap.Relmap
   relmapLinker,
 ) where
 
-import qualified Data.Monoid as M
-import qualified Koshucode.Baala.Base as B
+import qualified Data.Monoid                            as Monoid
+import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Core.Relmap.HalfRelmap as C
 import qualified Koshucode.Baala.Core.Relmap.Relfy      as C
 
@@ -32,7 +32,7 @@ import qualified Koshucode.Baala.Core.Relmap.Relfy      as C
     A 'Relmap' is correspond to a use of relational operator. -}
 data Relmap c
     -- | Retrieve a relation from a dataset
-    = RelmapSource C.HalfRelmap String [String]
+    = RelmapSource C.HalfRelmap B.JudgePattern [B.Termname]
     -- | Constant relation
     | RelmapConst  C.HalfRelmap String (B.Rel c)
     -- | Equavalent relmap
@@ -63,7 +63,7 @@ showRelmap = sh where
     joinSubs = concatMap sub
     sub m = " (" ++ sh m ++ ")"
 
-instance M.Monoid (Relmap c) where
+instance Monoid.Monoid (Relmap c) where
     mempty  = RelmapCalc halfid "id" C.relfyId []
     mappend = RelmapAppend
 

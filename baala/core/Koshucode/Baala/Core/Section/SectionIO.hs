@@ -17,6 +17,7 @@ import qualified System.IO                            as IO
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Core.Content         as C
 import qualified Koshucode.Baala.Core.Relmap          as C
+import qualified Koshucode.Baala.Core.Assert          as C
 import qualified Koshucode.Baala.Core.Section.Section as C
 import qualified Koshucode.Baala.Core.Section.Clause  as C
 
@@ -32,10 +33,9 @@ sectionRead
     -> String       -- ^ Source text
     -> B.AbortOr (C.Section c)  -- ^ Result section from source text
 sectionRead root res src =
-    let (C.RelmapCons half full) = C.sectionCons root
-    in case C.consClause half $ B.tokenize src of
-         Right cs -> C.consSection full res cs
-         Left a   -> Left a
+    do let (C.RelmapCons half full) = C.sectionCons root
+       cs <- C.consClause half $ B.tokenize src
+       C.consSection full res cs
 
 {-| Read section from file. -}
 sectionFile
