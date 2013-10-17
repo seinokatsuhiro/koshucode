@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-toolkit-0.25.0.0: Toolkit for Koshucode</p
+      >koshucode-baala-toolkit-0.39.0.0: Toolkit for Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -88,9 +88,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	    >Input</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Tuple.html#t:-40--41-"
-	    >()</a
-	    ></li
+	    > ()</li
 	  ><li class="src short"
 	  ><a href="#v:minusInputJudge"
 	    >minusInputJudge</a
@@ -102,21 +100,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	    >IO</a
 	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Vanilla-Value-Val.html#t:Val"
-	    >Val</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Vanilla-Type.html#t:VContent"
+	    >VContent</a
 	    >]</li
 	  ><li class="src short"
 	  ><a href="#v:minusJudge"
 	    >minusJudge</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > v =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > v] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    > c] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > v] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    > c] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > v]</li
+	    > c]</li
 	  ><li class="src short"
 	  ><a href="#v:updateInput"
 	    >updateInput</a
@@ -126,21 +124,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	    >Input</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Tuple.html#t:-40--41-"
-	    >()</a
-	    ></li
+	    > ()</li
 	  ><li class="src short"
 	  ><a href="#v:updateJudge"
 	    >updateJudge</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > v =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > v] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    > c] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > v] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    > c] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > v]</li
+	    > c]</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -188,9 +184,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	      ><td class="src"
 		>-&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 		  >IO</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Tuple.html#t:-40--41-"
-		  >()</a
-		  ></td
+		  > ()</td
 		><td class="doc empty"
 		>&nbsp;</td
 		></tr
@@ -218,8 +212,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	    >IO</a
 	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Vanilla-Value-Val.html#t:Val"
-	    >Val</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Vanilla-Type.html#t:VContent"
+	    >VContent</a
 	    >]<a href="src/Koshucode-Baala-Toolkit-Library-Change.html#minusInputJudge" class="link"
 	    >Source</a
 	    ></p
@@ -230,13 +224,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	    >minusJudge</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > v =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > v] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    > c] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > v] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    > c] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > v]<a href="src/Koshucode-Baala-Toolkit-Library-Change.html#minusJudge" class="link"
+	    > c]<a href="src/Koshucode-Baala-Toolkit-Library-Change.html#minusJudge" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -284,9 +278,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	      ><td class="src"
 		>-&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 		  >IO</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Tuple.html#t:-40--41-"
-		  >()</a
-		  ></td
+		  > ()</td
 		><td class="doc empty"
 		>&nbsp;</td
 		></tr
@@ -308,13 +300,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	    >updateJudge</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > v =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > v] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    > c] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > v] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+	    > c] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > v]<a href="src/Koshucode-Baala-Toolkit-Library-Change.html#updateJudge" class="link"
+	    > c]<a href="src/Koshucode-Baala-Toolkit-Library-Change.html#updateJudge" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -347,7 +339,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.11.0</p
+	> version 2.13.2</p
       ></div
     ></body
   ></html
