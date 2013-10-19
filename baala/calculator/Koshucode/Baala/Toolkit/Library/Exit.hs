@@ -1,11 +1,13 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Toolkit.Library.Exit
-( prelude
-, putSuccess
-, putFailure
-, currentEncodings
+( prelude,
+  putSuccess,
+  putFailure,
+  currentEncodings,
+  exit,
 ) where
+
 import qualified GHC.IO.Encoding    as IO
 import qualified System.Environment as Sys
 import qualified System.Exit        as Sys
@@ -45,4 +47,11 @@ currentEncodings = do
   file   <- IO.getFileSystemEncoding
   return $ unlines [ "contents of file : " ++ show locale
                    , "name of file     : " ++ show file ]
+
+exit :: Int -> IO a
+exit = Sys.exitWith . exitStatus
+
+exitStatus :: Int -> Sys.ExitCode
+exitStatus 0 = Sys.ExitSuccess
+exitStatus n = Sys.ExitFailure n
 

@@ -63,15 +63,25 @@ runSection
     => C.Section c             -- ^ Input section
     -> B.AbortOr (C.Section c) -- ^ Output section
 runSection sec =
-    do let calc  = C.sectionLinkedAssert sec
-           input = C.sectionJudge sec
-       output <- C.runAssertJudges calc input
-       Right $ sec { C.sectionJudge = output }
+    do let assert      = C.sectionLinkedAssert sec
+           input       = C.sectionJudge sec
+           vioFilter p = filter (p C.AssertViolate . C.assertType) assert
+           assViolate  = vioFilter (==)
+           assOutput   = vioFilter (/=)
+       violate <- C.runAssertJudges assViolate input
+       output  <- C.runAssertJudges assOutput  input
+       Right $ sec { C.sectionViolate = violate
+                   , C.sectionJudge   = output }
 
 {-| Run section and output judges. -}
-runSectionIO :: (C.CContent c) => C.Section c -> IO ()
+runSectionIO :: (C.CContent c) => C.Section c -> IO Int
 runSectionIO = hRunSectionIO IO.stdout
 
-hRunSectionIO :: (C.CContent c) => IO.Handle -> C.Section c -> IO ()
-hRunSectionIO h = B.abortIO (B.hPutJudges h . C.sectionJudge) . runSection
+hRunSectionIO :: (C.CContent c) => IO.Handle -> C.Section c -> IO Int
+hRunSectionIO h = B.abortIO f . runSection where
+    f C.Section { C.sectionViolate = violate
+                , C.sectionJudge   = judge }
+        = if null violate
+          then B.hPutJudges h 0 judge
+          else B.hPutJudges h 1 violate
 

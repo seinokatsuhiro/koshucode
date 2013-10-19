@@ -122,17 +122,22 @@ isDenied   (Judge q _ _) = not q
 -- ----------------------  Writer
 
 {-| Print judges to `IO.stdout`. -}
-putJudges :: (Ord c, B.Pretty c) => [Judge c] -> IO ()
+putJudges :: (Ord c, B.Pretty c) => Int -> [Judge c] -> IO Int
 putJudges = hPutJudges IO.stdout
 
 {-| Print judges. -}
-hPutJudges :: (Ord c, B.Pretty c) => IO.Handle -> [Judge c] -> IO ()
-hPutJudges h = IO.hPutStr h . unlines . judgeLines
+hPutJudges :: (Ord c, B.Pretty c) => IO.Handle -> Int -> [Judge c] -> IO Int
+hPutJudges h status js =
+    do IO.hPutStr h $ unlines $ judgeLines label js
+       return status
+    where
+      label | status == 0 = "SUMMARY"
+            | otherwise   = "SUMMARY (VIOLATED)"
 
 {-| Convert judgements to lines. -}
-judgeLines :: (Ord c, B.Pretty c) => [Judge c] -> [String]
-judgeLines = loop 0 Map.empty where
-    loop n c []         =  judgeSummary n $ Map.assocs c
+judgeLines :: (Ord c, B.Pretty c) => String -> [Judge c] -> [String]
+judgeLines label = loop 0 Map.empty where
+    loop n c []         =  judgeSummary label n $ Map.assocs c
     loop n c (j : js)
         | by 20         =  s : count n' : gutter ss
         | by 5          =  s : gutter ss
@@ -152,10 +157,10 @@ judgeLines = loop 0 Map.empty where
     gutter ss           =  "" : ss
 
 -- >>> putStr . unlines $ judgeSummary 10 [("A", 3), ("B", 6), ("C", 1)]
-judgeSummary :: Int -> [(JudgePattern, Int)] -> [String]
-judgeSummary tt ns     =  "" : B.texts summaryDoc where
+judgeSummary :: String -> Int -> [(JudgePattern, Int)] -> [String]
+judgeSummary label tt ns     =  "" : B.texts summaryDoc where
     summaryDoc         =  B.CommentDoc [summary]
-    summary            =  B.CommentSec "SUMMARY" $ sumLines ++ [total tt]
+    summary            =  B.CommentSec label $ sumLines ++ [total tt]
     sumLines           =  map sumLine ns
     sumLine (p, n)     =  count n ++ " on " ++ p
     total n            =  count n ++ " in total"

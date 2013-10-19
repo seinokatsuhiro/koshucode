@@ -17,13 +17,13 @@ import qualified System.Directory as Dir
 
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
-import Koshucode.Baala.Vanilla
+import qualified Koshucode.Baala.Vanilla as Rop
 
-import Koshucode.Baala.Toolkit.Library.Change
-import Koshucode.Baala.Toolkit.Library.Exit
-import Koshucode.Baala.Toolkit.Library.Input
-import Koshucode.Baala.Toolkit.Library.Run
-import Koshucode.Baala.Toolkit.Library.Version
+import qualified Koshucode.Baala.Toolkit.Library.Change   as L
+import qualified Koshucode.Baala.Toolkit.Library.Exit     as L
+import qualified Koshucode.Baala.Toolkit.Library.Input    as L
+import qualified Koshucode.Baala.Toolkit.Library.Run      as L
+import qualified Koshucode.Baala.Toolkit.Library.Version  as L
 
 
 
@@ -51,7 +51,7 @@ koshuOptions =
     ]
 
 version :: String
-version = "koshu-regress-" ++ versionString
+version = "koshu-regress-" ++ L.versionString
 
 usage :: String
 usage = usageInfo header koshuOptions
@@ -90,60 +90,62 @@ reportDir  = "REGRESS/report/"
 -- ----------------------  Main
 
 {-| The main function for @koshu-regress@ command. -}
-koshuRegressMain :: (C.CContent c) => [C.Rop c] -> IO ()
+koshuRegressMain :: (C.CContent c) => [C.Rop c] -> IO Int
 koshuRegressMain relmaps =
   let cons = C.relmapCons relmaps
       root = C.makeEmptySection cons
-  in koshuRegressMain' root =<< prelude
+  in koshuRegressMain' root =<< L.prelude
 
 koshuRegressMain'
-    :: (C.CContent c) => C.Section c -> (String, [String]) -> IO ()
+    :: (C.CContent c) => C.Section c -> (String, [String]) -> IO Int
 koshuRegressMain' root (_, argv) =
     case getOpt Permute koshuOptions argv of
       (opts, files, [])
-          | has OptHelp         -> putSuccess usage
-          | has OptVersion      -> putSuccess $ version ++ "\n"
-          | has OptShowEncoding -> putSuccess =<< currentEncodings
+          | has OptHelp         -> L.putSuccess usage
+          | has OptVersion      -> L.putSuccess $ version ++ "\n"
+          | has OptShowEncoding -> L.putSuccess =<< L.currentEncodings
           | has OptSave         -> regSave
           | has OptClean        -> regClean
           | has OptReport       -> regReport sec
           | has OptRun          -> regLastReport sec
           | otherwise           -> regLast sec
           where has = (`elem` opts)
-                sec = SectionSource root [] files
-      (_, _, errs) -> putFailure $ concat errs ++ usage
+                sec = L.SectionSource root [] files
+      (_, _, errs) -> L.putFailure $ concat errs ++ usage
 
-regLast :: (C.CContent c) => SectionSource c -> IO ()
-regLast sec = runCalcTo lastDir sec
+regLast :: (C.CContent c) => L.SectionSource c -> IO Int
+regLast sec = L.runCalcTo lastDir sec
 
-regLastReport :: (C.CContent c) => SectionSource c -> IO ()
+regLastReport :: (C.CContent c) => L.SectionSource c -> IO Int
 regLastReport sec =
-    do regLast sec
+    do _ <- regLast sec
        regReport sec
 
 -- mv last save
-regSave :: IO ()
+regSave :: IO Int
 regSave =
     do e <- Dir.doesDirectoryExist saveDir
        when e $ Dir.removeDirectoryRecursive saveDir
        Dir.renameDirectory lastDir saveDir
+       return 0
 
 -- rm -r REGRESS
-regClean :: IO ()
+regClean :: IO Int
 regClean =
     do e <- Dir.doesDirectoryExist regressDir
        when e $ Dir.removeDirectoryRecursive regressDir
+       return 0
 
 
 
 -- ----------------------  Reporting
 
 -- report for each cases.
-reportJudge :: [B.Named VContent] -> B.Judge VContent
+reportJudge :: [B.Named Rop.VContent] -> B.Judge Rop.VContent
 reportJudge = B.Judge True "KOSHU-REGRESS-REPORT"
 
 -- report for all cases.
-summaryJudge :: [B.Named VContent] -> B.Judge VContent
+summaryJudge :: [B.Named Rop.VContent] -> B.Judge Rop.VContent
 summaryJudge = B.Judge True "KOSHU-REGRESS-SUMMARY"
 
 reportHead :: B.CommentDoc
@@ -157,15 +159,16 @@ reportFoot msg = foot where
     foot = putStr $ unlines [ "" , comm , comm ++ msg , comm ]
     comm = "**  "
 
-regReport :: (C.CContent c) => SectionSource c -> IO ()
+regReport :: (C.CContent c) => L.SectionSource c -> IO Int
 regReport sec =
     do putStrLn B.emacsModeComment
        putStr . unlines $ B.texts reportHead
        putStrLn ""
-       asec <- readSec sec
+       asec <- L.readSec sec
        case asec of
          Left _     -> putStrLn "error"
          Right sec2 -> regReportBody sec2
+       return 0
 
 regReportBody :: (C.CContent c) => C.Section c -> IO ()
 regReportBody sec =
@@ -187,14 +190,14 @@ regReportBody sec =
 outputFile :: (C.CContent c) => B.Judge c -> Maybe String
 outputFile jud =
     do (B.Judge _ _ xs) <- judgeOf "KOSHU-CALC" jud
-       output <- theContent "/output" xs
+       output <- L.theContent "/output" xs
        Just $ C.getText output
 
 reportFile :: String -> IO Bool
 reportFile file =
-    do let saveFile = File $ saveDir ++ file
-           lastFile = File $ lastDir ++ file
-       js <- lastFile `minusInputJudge` saveFile
+    do let saveFile = L.File $ saveDir ++ file
+           lastFile = L.File $ lastDir ++ file
+       js <- lastFile `L.minusInputJudge` saveFile
 
        case countAffirmDeny js of
          (0, 0) -> reportMatch file
@@ -216,15 +219,15 @@ reportUnmatch file js (add, del) =
          , ("/output" , C.putText file) ]
        putStrLn $ "    **  " ++ reportCount add del
        let path = reportDir ++ file
-       mkdir path
-       writeJudgesToFile path js
+       L.mkdir path
+       _ <- writeJudgesToFile path js
        return False
 
-writeJudgesToFile :: (Ord c, B.Pretty c) => FilePath -> [B.Judge c] -> IO ()
+writeJudgesToFile :: (Ord c, B.Pretty c) => FilePath -> [B.Judge c] -> IO Int
 writeJudgesToFile path js =
     withFile path WriteMode writer where
     writer h = do hSetEncoding h utf8
-                  B.hPutJudges h js
+                  B.hPutJudges h 0 js
 
 reportCount :: Int -> Int -> String
 reportCount = message where

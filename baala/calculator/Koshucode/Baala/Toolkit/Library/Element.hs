@@ -33,8 +33,8 @@ elemJudge = B.unique . concatMap f where
 
 elemAssert :: (C.CContent c) => [C.Assert c] -> [B.Judge c]
 elemAssert = B.unique . concatMap f where
-    f (C.Assert q pat _ r _) =
-        B.affirm (name q) [ "/pat" -:- C.putText pat ]
+    f (C.Assert t pat _ r _) =
+        B.affirm (name $ C.assertQuality t) [ "/pat" -:- C.putText pat ]
              : elemRelmap r
 
     name True  = "KOSHU-AFFIRM"

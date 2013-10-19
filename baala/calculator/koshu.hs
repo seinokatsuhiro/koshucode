@@ -2,13 +2,17 @@
 {-# OPTIONS_GHC -Wall #-}
 
 import qualified Koshucode.Baala.Toolkit.Main.KoshuMain as Main
+import qualified Koshucode.Baala.Toolkit.Library.Exit   as Main
 import qualified Koshucode.Baala.Builtin as Rop
 import qualified Koshucode.Baala.Minimal as Rop
 import qualified Koshucode.Baala.Vanilla as Rop
 
 main :: IO ()
-main = Main.koshuMain $
-       Rop.builtinRops
-       ++ Rop.minimalRops
-       ++ Rop.vanillaRops
-
+main =
+    do status <- Main.koshuMain rops
+       Main.exit status
+    where
+      rops = concat [ Rop.builtinRops
+                    , Rop.minimalRops
+                    , Rop.vanillaRops ]
+                                

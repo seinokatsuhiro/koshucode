@@ -70,10 +70,10 @@ header = unlines
 -- ----------------------  Main
 
 {-| The main function for @koshu-change@ command. -}
-koshuChangeMain :: IO ()
+koshuChangeMain :: IO Int
 koshuChangeMain = koshuChangeMain' =<< prelude
 
-koshuChangeMain' :: (String, [String]) -> IO ()
+koshuChangeMain' :: (String, [String]) -> IO Int
 koshuChangeMain' (_, argv) =
     case getOpt Permute koshuOptions argv of
       (opts, [p1, p2], [])

@@ -44,17 +44,17 @@ type AbortOrType a b = Either (AbortType a) b
 -- ----------------------  Function
 
 {-| Stop program execution abnormally. -}
-abort :: (AbortReasonClass a) => AbortType a -> IO ()
+abort :: (AbortReasonClass a) => AbortType a -> IO c
 abort a =
   do putMessage a
-     putStrLn "**  (ステータス 1 で終了します)"
-     Sys.exitWith $ Sys.ExitFailure 1
+     putStrLn "**  (ステータス 2 で終了します)"
+     Sys.exitWith $ Sys.ExitFailure 2
 
 abortIO
     :: (AbortReasonClass a)
-    => (b -> IO ())               -- ^ Function
-    -> AbortOrType a b            -- ^ Argument
-    -> IO ()
+    => (b -> IO c)          -- ^ Function
+    -> AbortOrType a b      -- ^ Argument
+    -> IO c
 abortIO _ (Left a)       = abort a
 abortIO f (Right output) = f output
 

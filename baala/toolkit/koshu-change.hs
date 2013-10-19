@@ -1,8 +1,10 @@
 #!/usr/bin/env runhaskell
 {-# OPTIONS_GHC -Wall #-}
 
-import Koshucode.Baala.Toolkit.Main.KoshuChange
+import qualified Koshucode.Baala.Toolkit.Main.KoshuChange as K
+import qualified Koshucode.Baala.Toolkit.Library.Exit     as K
 
 main :: IO ()
-main = koshuChangeMain
+main = do status <- K.koshuChangeMain
+          K.exit status
 

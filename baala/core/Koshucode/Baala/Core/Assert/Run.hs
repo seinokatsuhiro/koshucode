@@ -84,8 +84,9 @@ runAssertDataset
 runAssertDataset as ds =
     do js <- mapM each as
        return $ concat js
-    where each (C.Assert q pat opt r src) =
+    where each (C.Assert t pat opt r src) =
               do r1 <- runRelmapDataset ds r B.reldee
+                 let q = C.assertQuality t
                  case assertOptionProcess q pat opt r1 of
                    Right js -> Right js
                    Left a   -> Left (a, [], src)

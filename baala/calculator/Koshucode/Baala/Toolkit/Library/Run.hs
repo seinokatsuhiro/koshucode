@@ -31,7 +31,7 @@ data SectionSource c = SectionSource
 
 -- ----------------------
 
-runFiles :: (C.CContent c) => SectionSource c -> IO ()
+runFiles :: (C.CContent c) => SectionSource c -> IO Int
 runFiles = hRunFiles IO.stdout
 
 {-| Read and union sections from files, and run the section. -}
@@ -39,13 +39,12 @@ hRunFiles
     :: (C.CContent c)
     => IO.Handle       -- ^ File handle
     -> SectionSource c -- ^ Section source code
-    -> IO ()
+    -> IO Int
 hRunFiles h (SectionSource root textSec files) =
-    do let sec = map (C.sectionRead root "") $ textSec
-       sects <- mapM (C.sectionFile root) $ files
+    do let sec = map (C.sectionRead root "") textSec
+       sects <- mapM (C.sectionFile root) files
        let union = concatMM $ sec ++ sects
-           comm  = B.CommentDoc
-                   [ B.CommentSec "INPUT" files]
+           comm  = B.CommentDoc [ B.CommentSec "INPUT" files ]
        IO.hSetEncoding h IO.utf8
        IO.hPutStrLn    h B.emacsModeComment
        IO.hPutStr      h $ unlines $ B.texts comm
@@ -62,25 +61,25 @@ concatMM (s:ss) = do s'  <- s
 
 -- ---------------------- Calculation list
 
-runCalc :: (C.CContent c) => SectionSource c -> IO ()
+runCalc :: (C.CContent c) => SectionSource c -> IO Int
 runCalc = runCalcTo ""
 
 runCalcTo
     :: (C.CContent c)
     => FilePath          -- ^ Output path prefix
     -> SectionSource c   -- ^ Section
-    -> IO ()             -- ^
+    -> IO Int            -- ^
 runCalcTo dir sec =
     do union <- readSec sec
        B.abortIO (runCalcSec dir $ rootSection sec) union
 
-runCalcSec :: (C.CContent c) => String -> C.Section c -> C.Section c -> IO ()
+runCalcSec :: (C.CContent c) => String -> C.Section c -> C.Section c -> IO Int
 runCalcSec dir root sec =
     do let js = C.sectionJudge sec
        mapM_ (runCalcJudge dir root) js
-       return ()
+       return 0
 
-runCalcJudge :: (C.CContent c) => String -> C.Section c -> B.Judge c -> IO ()
+runCalcJudge :: (C.CContent c) => String -> C.Section c -> B.Judge c -> IO Int
 runCalcJudge dir root (B.Judge True "KOSHU-CALC" xs) =
     case theContents ["/input", "/output"] xs of
       Just [input, output] ->
@@ -91,9 +90,9 @@ runCalcJudge dir root (B.Judge True "KOSHU-CALC" xs) =
              IO.withFile outputFile IO.WriteMode
                           $ \ h -> hRunFiles h
                                    (SectionSource root [] inputFiles)
-      Just _       -> return ()
-      Nothing      -> return ()
-runCalcJudge _ _ _ =  return ()
+      Just _       -> return 0
+      Nothing      -> return 0
+runCalcJudge _ _ _ =  return 0
 
 mkdir :: FilePath -> IO ()
 mkdir path = 

@@ -17,8 +17,8 @@ module Koshucode.Baala.Core.Section.Clause
   consSection,
 ) where
 
-import Data.Generics
 import Prelude hiding (exp, mod)
+import qualified Data.Generics as G
 
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core.Content          as C
@@ -28,19 +28,19 @@ import qualified Koshucode.Baala.Core.Section.Clausify as C
 import qualified Koshucode.Baala.Core.Section.Section  as C
 
 data Clause
-    = CSection C.ClauseSource (Maybe String)            -- ^ Section name
-    | CImport  C.ClauseSource [B.Token] (Maybe Clause)  -- ^ Importing section name
-    | CExport  C.ClauseSource String                    -- ^ Exporting relmap name
-    | CShort   C.ClauseSource (B.Named String)          -- ^ Short signs
-    | CRelmap  C.ClauseSource String C.HalfRelmap       -- ^ Relmap and its name
-    | TRelmap  C.ClauseSource String [B.Token]          -- ^ Not include HalfRelmap
-    | CAssert  C.ClauseSource Bool String C.AssertOption C.HalfRelmap  -- ^ Assertions of relmaps
-    | TAssert  C.ClauseSource Bool String C.AssertOption [B.Token]     -- ^ Not include HalfRelmap
-    | CJudge   C.ClauseSource Bool String [B.Token]     -- ^ Judge
-    | CComment C.ClauseSource           -- ^ Caluse comment
-    | CUnknown C.ClauseSource           -- ^ Unknown clause
-    | CUnres   C.ClauseSource [B.Token] -- ^ Unresolved short sign
-      deriving (Show, Data, Typeable)
+    = CSection  C.ClauseSource (Maybe String)            -- ^ Section name
+    | CImport   C.ClauseSource [B.Token] (Maybe Clause)  -- ^ Importing section name
+    | CExport   C.ClauseSource String                    -- ^ Exporting relmap name
+    | CShort    C.ClauseSource (B.Named String)          -- ^ Short signs
+    | CRelmap   C.ClauseSource String C.HalfRelmap       -- ^ Relmap and its name
+    | TRelmap   C.ClauseSource String [B.Token]          -- ^ Not include HalfRelmap
+    | CAssert   C.ClauseSource C.AssertType B.JudgePattern C.AssertOption C.HalfRelmap  -- ^ Assertions of relmaps
+    | TAssert   C.ClauseSource C.AssertType B.JudgePattern C.AssertOption [B.Token]     -- ^ Not include HalfRelmap
+    | CJudge    C.ClauseSource Bool B.JudgePattern [B.Token]     -- ^ Judge
+    | CComment  C.ClauseSource           -- ^ Clause comment
+    | CUnknown  C.ClauseSource           -- ^ Unknown clause
+    | CUnres    C.ClauseSource [B.Token] -- ^ Unresolved short sign
+      deriving (Show, G.Data, G.Typeable)
 
 {-| Name of clause type. e.g., @\"Relmap\"@, @\"Assert\"@. -}
 clauseTypeText :: Clause -> String
@@ -89,8 +89,8 @@ isCShort (CShort _ _)         = True
 isCShort _                    = False
 
 isTShort :: B.Token -> Bool
-isTShort (B.TShort _ _ _) = True
-isTShort _                = False
+isTShort (B.TShort _ _ _)     = True
+isTShort _                    = False
 
 isCRelmap :: Clause -> Bool
 isCRelmap (CRelmap _ _ _)     = True
@@ -158,23 +158,25 @@ consPreclause' src@(C.ClauseSource toks _) = clause $ B.sweepToken toks where
     frege "-X"  =  jud False
     frege "-x"  =  jud False
 
-    frege "=="  =  ass True
-    frege "="   =  ass True
-    frege "=X"  =  ass False
-    frege "=x"  =  ass False
+    frege "=="  =  ass C.AssertAffirm
+    frege "="   =  ass C.AssertAffirm
+    frege "=X"  =  ass C.AssertDeny
+    frege "=x"  =  ass C.AssertDeny
+    frege "=V"  =  ass C.AssertViolate
+    frege "=v"  =  ass C.AssertViolate
 
     frege _     =  const unk
 
     jud q (B.TWord _ _ p : xs) = [CJudge src q p xs]
     jud _ _     =  unk
 
-    ass q (B.TWord _ _ p : xs) =
+    ass t (B.TWord _ _ p : xs) =
         case B.splitTokensBy isDelim xs of
           Right (opt, _, expr)  ->  a expr opt
           Left  expr            ->  a expr []
         where a expr opt =
                   let opt' = C.sortOperand $ B.tokenTrees opt
-                  in [TAssert src q p opt' expr]
+                  in [TAssert src t p opt' expr]
     ass _ _               =  unk
 
     rel n expr            =  [TRelmap src n expr]
@@ -252,7 +254,7 @@ consSection
     -> String                  -- ^ Resource name
     -> [Clause]                -- ^ Output of 'consClause'
     -> B.AbortOr (C.Section c) -- ^ Result section
-consSection whole resource xs =
+consSection full resource xs =
     do _        <-  mapMFor unk    isCUnknown
        _        <-  mapMFor unres  isCUnres
        imports  <-  mapMFor imp    isCImport
@@ -271,7 +273,7 @@ consSection whole resource xs =
     where
       mapFor  f p = map  f $ filter p xs
       mapMFor f p = mapM f $ filter p xs
-      consSec = consSection whole ""
+      consSec = consSection full ""
 
       -- todo: multiple section name
       section (CSection _ n : _) = n
@@ -295,15 +297,15 @@ consSection whole resource xs =
       judge _ = B.bug
 
       relmap (CRelmap src n r) =
-          case whole r of
+          case full r of
             Right r'     -> Right (n, r')
             Left (a, ts) -> abort a ts src
       relmap _ = B.bug
 
-      assert (CAssert src q p opt r) =
+      assert (CAssert src t p opt r) =
           let ls = C.clauseLines src
-          in case whole r of
-               Right r'     -> Right $ C.Assert q p opt r' ls
+          in case full r of
+               Right r'     -> Right $ C.Assert t p opt r' ls
                Left (a, ts) -> abort a ts src
       assert _ = B.bug
 
