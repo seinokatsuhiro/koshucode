@@ -3,13 +3,13 @@
 ><head
   ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
      /><title
-    >Koshucode.Baala.Core.Relmap.Dataset</title
+    >Koshucode.Baala.Core.Assert.Dataset</title
     ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
      /><script src="haddock-util.js" type="text/javascript"
     ></script
     ><script type="text/javascript"
     >//<![CDATA[
-window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-Relmap-Dataset.html");};
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-Assert-Dataset.html");};
 //]]>
 </script
     ></head
@@ -17,7 +17,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
   ><div id="package-header"
     ><ul class="links" id="page-menu"
       ><li
-	><a href="src/Koshucode-Baala-Core-Relmap-Dataset.html"
+	><a href="src/Koshucode-Baala-Core-Assert-Dataset.html"
 	  >Source</a
 	  ></li
 	><li
@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.37.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.39.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -43,7 +43,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ></tr
 	  ></table
 	><p class="caption"
-	>Koshucode.Baala.Core.Relmap.Dataset</p
+	>Koshucode.Baala.Core.Assert.Dataset</p
 	></div
       ><div id="description"
       ><p class="caption"
@@ -54,8 +54,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 </p
 	  ><p
 	  >Dataset is like a bridge of judges and relations.
-   We can get a relation from a dataset,
-   that dataset is build from judges.
+    We can get a relation from a dataset,
+    that dataset is build from judges.  
 </p
 	  ></div
 	></div
@@ -70,9 +70,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >Dataset</a
 	    > c</li
 	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:RelSelect"
+	    >RelSelect</a
+	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgePattern"
+	    >JudgePattern</a
+	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
+	    >Rel</a
+	    > c</li
+	  ><li class="src short"
 	  ><a href="#v:emptyDataset"
 	    >emptyDataset</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Dataset.html#t:Dataset"
+	    > ::  <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
 	    >Dataset</a
 	    > c</li
 	  ><li class="src short"
@@ -80,7 +92,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >dataset</a
 	    > ::  [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > c] -&gt; <a href="Koshucode-Baala-Core-Relmap-Dataset.html#t:Dataset"
+	    > c] -&gt; <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
 	    >Dataset</a
 	    > c</li
 	  ><li class="src short"
@@ -88,9 +100,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >addJudges</a
 	    > ::  [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > c] -&gt; <a href="Koshucode-Baala-Core-Relmap-Dataset.html#t:Dataset"
+	    > c] -&gt; <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
 	    >Dataset</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Dataset.html#t:Dataset"
+	    > c -&gt; <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
 	    >Dataset</a
 	    > c</li
 	  ><li class="src short"
@@ -100,14 +112,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >Ord</a
 	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CNil"
 	    >CNil</a
-	    > c) =&gt; <a href="Koshucode-Baala-Core-Relmap-Dataset.html#t:Dataset"
+	    > c) =&gt; <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
 	    >Dataset</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgePattern"
-	    >JudgePattern</a
-	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
-	    >Rel</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:RelSelect"
+	    >RelSelect</a
 	    > c</li
 	  ></ul
 	></div
@@ -120,12 +128,33 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >data</span
 	    >  <a name="t:Dataset" class="def"
 	    >Dataset</a
-	    > c <a href="src/Koshucode-Baala-Core-Relmap-Dataset.html#Dataset" class="link"
+	    > c <a href="src/Koshucode-Baala-Core-Assert-Dataset.html#Dataset" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Dataset is a set of judges.
+	    >Dataset is a set of judges. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:RelSelect" class="def"
+	    >RelSelect</a
+	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgePattern"
+	    >JudgePattern</a
+	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
+	    >Rel</a
+	    > c<a href="src/Koshucode-Baala-Core-Assert-Dataset.html#RelSelect" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Relation selector 
 </p
 	    ></div
 	  ></div
@@ -133,14 +162,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><p class="src"
 	  ><a name="v:emptyDataset" class="def"
 	    >emptyDataset</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Dataset.html#t:Dataset"
+	    > ::  <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
 	    >Dataset</a
-	    > c<a href="src/Koshucode-Baala-Core-Relmap-Dataset.html#emptyDataset" class="link"
+	    > c<a href="src/Koshucode-Baala-Core-Assert-Dataset.html#emptyDataset" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Dataset that has no judges
+	    >Dataset that has no judges 
 </p
 	    ></div
 	  ></div
@@ -150,14 +179,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >dataset</a
 	    > ::  [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > c] -&gt; <a href="Koshucode-Baala-Core-Relmap-Dataset.html#t:Dataset"
+	    > c] -&gt; <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
 	    >Dataset</a
-	    > c<a href="src/Koshucode-Baala-Core-Relmap-Dataset.html#dataset" class="link"
+	    > c<a href="src/Koshucode-Baala-Core-Assert-Dataset.html#dataset" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Gather judges into a dataset
+	    >Gather judges into a dataset 
 </p
 	    ></div
 	  ></div
@@ -167,16 +196,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >addJudges</a
 	    > ::  [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > c] -&gt; <a href="Koshucode-Baala-Core-Relmap-Dataset.html#t:Dataset"
+	    > c] -&gt; <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
 	    >Dataset</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Dataset.html#t:Dataset"
+	    > c -&gt; <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
 	    >Dataset</a
-	    > c<a href="src/Koshucode-Baala-Core-Relmap-Dataset.html#addJudges" class="link"
+	    > c<a href="src/Koshucode-Baala-Core-Assert-Dataset.html#addJudges" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Add judges to dataset.
+	    >Add judges to dataset. 
 </p
 	    ></div
 	  ></div
@@ -184,7 +213,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><p class="src"
 	  ><a name="v:selectRelation" class="def"
 	    >selectRelation</a
-	    ><a href="src/Koshucode-Baala-Core-Relmap-Dataset.html#selectRelation" class="link"
+	    ><a href="src/Koshucode-Baala-Core-Assert-Dataset.html#selectRelation" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs arguments"
@@ -203,7 +232,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		></tr
 	      ><tr
 	      ><td class="src"
-		>=&gt; <a href="Koshucode-Baala-Core-Relmap-Dataset.html#t:Dataset"
+		>=&gt; <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
 		  >Dataset</a
 		  > c</td
 		><td class="doc"
@@ -214,34 +243,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgePattern"
-		  >JudgePattern</a
-		  ></td
-		><td class="doc"
-		><p
-		  >JudgePattern to select
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		>-&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  >]</td
-		><td class="doc"
-		><p
-		  >List of term names
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
-		  >Rel</a
+		>-&gt; <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:RelSelect"
+		  >RelSelect</a
 		  > c</td
 		><td class="doc"
 		><p
-		  >Selected relation
+		  >Relation selector
 </p
 		  ></td
 		></tr
@@ -250,9 +257,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ><div class="doc"
 	  ><p
 	    >Select relation from dataset.
-   If a giving term is not in judges, <code
+    If a giving term is not in judges, <code
 	      >CNil</code
-	      > sign is used.
+	      > sign is used. 
 </p
 	    ></div
 	  ></div

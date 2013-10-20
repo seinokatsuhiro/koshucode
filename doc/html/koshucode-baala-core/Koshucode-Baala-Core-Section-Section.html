@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.37.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.39.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -123,9 +123,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 		>String</a
 		>]</li
 	      ><li
+	      ><a href="#v:sectionShort"
+		>sectionShort</a
+		> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+		>Named</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		>]</li
+	      ><li
 	      ><a href="#v:sectionAssert"
 		>sectionAssert</a
-		> :: [<a href="Koshucode-Baala-Core-Relmap-Assert.html#t:Assert"
+		> :: [<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
 		>Assert</a
 		> c]</li
 	      ><li
@@ -139,6 +147,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	      ><li
 	      ><a href="#v:sectionJudge"
 		>sectionJudge</a
+		> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+		>Judge</a
+		> c]</li
+	      ><li
+	      ><a href="#v:sectionViolate"
+		>sectionViolate</a
 		> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 		>Judge</a
 		> c]</li
@@ -161,7 +175,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	    >sectionLinkedAssert</a
 	    > ::  <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
 	    >Section</a
-	    > c -&gt; [<a href="Koshucode-Baala-Core-Relmap-Assert.html#t:Assert"
+	    > c -&gt; [<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
 	    >Assert</a
 	    > c]</li
 	  ><li class="src short"
@@ -313,9 +327,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 </p
 			></dd
 		      ><dt class="src"
+		      ><a name="v:sectionShort" class="def"
+			>sectionShort</a
+			> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+			>Named</a
+			> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+			>String</a
+			>]</dt
+		      ><dd class="doc"
+		      ><p
+			>Prefix for short signs
+</p
+			></dd
+		      ><dt class="src"
 		      ><a name="v:sectionAssert" class="def"
 			>sectionAssert</a
-			> :: [<a href="Koshucode-Baala-Core-Relmap-Assert.html#t:Assert"
+			> :: [<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
 			>Assert</a
 			> c]</dt
 		      ><dd class="doc"
@@ -344,7 +371,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 			> c]</dt
 		      ><dd class="doc"
 		      ><p
-			>Here data
+			>Affirmative or denial judgements
+</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:sectionViolate" class="def"
+			>sectionViolate</a
+			> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
+			>Judge</a
+			> c]</dt
+		      ><dd class="doc"
+		      ><p
+			>Violated judgements, i.e., result of <code
+			  >|=V</code
+			  >
 </p
 			></dd
 		      ><dt class="src"
@@ -366,7 +406,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 			> c</dt
 		      ><dd class="doc"
 		      ><p
-			>Readers and writers for this section
+			>Relmap constructor for this section
 </p
 			></dd
 		      ></dl
@@ -431,7 +471,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	    >sectionLinkedAssert</a
 	    > ::  <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
 	    >Section</a
-	    > c -&gt; [<a href="Koshucode-Baala-Core-Relmap-Assert.html#t:Assert"
+	    > c -&gt; [<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
 	    >Assert</a
 	    > c]<a href="src/Koshucode-Baala-Core-Section-Section.html#sectionLinkedAssert" class="link"
 	    >Source</a
@@ -445,7 +485,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	      >.
     It returns relmap-liked assertions.
     We can run these assertions using <code
-	      >runAssertJudges</code
+	      ><a href="Koshucode-Baala-Core-Assert-Run.html#v:runAssertJudges"
+		>runAssertJudges</a
+		></code
 	      >. 
 </p
 	    ></div
@@ -466,7 +508,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Section that has no contents. 
+	    >Make empty section that has a given constructor. 
 </p
 	    ></div
 	  ></div
@@ -498,7 +540,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Section that has only here data. 
+	    >Section that has only judgements. 
 </p
 	    ></div
 	  ></div

@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-core
-@version 0.37.0.0
+@version 0.39.0.0
 
 module Koshucode.Baala.Core.Section.Clausify
 data ClauseSource
@@ -22,20 +22,98 @@ clauseLines :: ClauseSource -> [TokenLine]
 
 -- | Convert token list into list of token clauses
 clausify :: [TokenLine] -> [ClauseSource]
+instance Typeable ClauseSource
+instance Show ClauseSource
+instance Data ClauseSource
+
+module Koshucode.Baala.Core.Relmap.Operand
+type RopOperand = (RopSorter, [String], [String])
+type RopSorter = RopAssoc -> Ab RopAssoc
+
+-- | Sorter for operand of relational operator. This soters docompose
+--   operand trees, and give a name to suboperand.
+type RopFullSorter = [TokenTree] -> Ab RopAssoc
+type RopAssoc = [Named [TokenTree]]
 
 -- | Split operand into named group. Non quoted words beginning with
 --   hyphen, e.g., <tt>-x</tt>, are name of group.
 --   
 --   <pre>
---   &gt;&gt;&gt; sortOperand $ B.tokenTrees $ B.tokens "a b -x /c 'd -y e"
---   [ ("",   [TreeL (TWord 1 0 "a"),TreeL (TWord 3 0 "b")])
---   , ("-x", [TreeL (TTerm 7 ["/c"]), TreeL (TWord 9 0 "'"), TreeL (TWord 10 0 "d")])
---   , ("-y", [TreeL (TWord 14 0 "e")])]
+--   &gt;&gt;&gt; sortOperand $ B.tt "a b -x /c 'd -y e"
+--   [ ("",   [TreeL (TWord 1 0 "a"), TreeL (TWord 3 0 "b")])
+--   , ("-x", [TreeL (TTerm 7 ["/c"]), TreeL (TWord 9 1 "d")])
+--   , ("-y", [TreeL (TWord 14 0 "e")]) ]
 --   </pre>
-sortOperand :: [TokenTree] -> [Named [TokenTree]]
-instance Typeable ClauseSource
-instance Show ClauseSource
-instance Data ClauseSource
+sortOperand :: [TokenTree] -> RopAssoc
+sortUpOperand :: [TokenTree] -> [Named (OnceMore [TokenTree])]
+
+-- | No-element trunk.
+--   
+--   <pre>
+--   &gt;&gt;&gt; operandNone []
+--   </pre>
+operandNone :: [String] -> RopOperand
+
+-- | Enumerating trunk.
+--   
+--   <pre>
+--   &gt;&gt;&gt; operandEnum ["-1", "-2"] []
+--   </pre>
+operandEnum :: [String] -> [String] -> RopOperand
+
+-- | Multiple-element trunk.
+--   
+--   <pre>
+--   &gt;&gt;&gt; operandList "-term" []
+--   </pre>
+operandList :: String -> [String] -> RopOperand
+
+-- | One-element trunk.
+--   
+--   <pre>
+--   &gt;&gt;&gt; operandOne "-relmap" []
+--   </pre>
+operandOne :: String -> [String] -> RopOperand
+
+-- | Two-element trunk.
+--   
+--   <pre>
+--   &gt;&gt;&gt; operandTwo "-term" "-relmap" []
+--   </pre>
+operandTwo :: String -> String -> [String] -> RopOperand
+
+-- | One-and-multiple-element trunk.
+--   
+--   <pre>
+--   &gt;&gt;&gt; operandOneList "-pattern" "-term" []
+--   </pre>
+operandOneList :: String -> String -> [String] -> RopOperand
+
+module Koshucode.Baala.Core.Relmap.Relfy
+data Relfy c
+Relfy :: Relhead -> RelfyBody c -> Relfy c
+relfyHead :: Relfy c -> Relhead
+relfyBody :: Relfy c -> RelfyBody c
+data RelfyBody c
+RelfyOneToMany :: Bool -> ([c] -> [[c]]) -> RelfyBody c
+RelfyOneToOne :: Bool -> ([c] -> [c]) -> RelfyBody c
+RelfyFull :: Bool -> ([[c]] -> [[c]]) -> RelfyBody c
+RelfyPred :: ([c] -> Bool) -> RelfyBody c
+RelfyOneToAbMany :: Bool -> ([c] -> Ab [[c]]) -> RelfyBody c
+RelfyOneToAbOne :: Bool -> ([c] -> Ab [c]) -> RelfyBody c
+RelfyAbFull :: Bool -> ([[c]] -> Ab [[c]]) -> RelfyBody c
+RelfyAbPred :: ([c] -> Ab Bool) -> RelfyBody c
+RelfyConst :: [[c]] -> RelfyBody c
+RelfyId :: RelfyBody c
+RelfyAppend :: (RelfyBody c) -> (RelfyBody c) -> RelfyBody c
+RelfyUnion :: Bool -> [RelfyBody c] -> RelfyBody c
+type RelmapRelfy c = [(Relfy c)] -> Relhead -> Ab (Relfy c)
+relfyConst :: Rel c -> Relfy c
+relfyId :: RelmapRelfy c
+relfy :: Ord c => RelfyBody c -> AbMap [[c]]
+instance Monoid (RelfyBody c)
+instance Show (RelfyBody c)
+instance Monoid (Relfy c)
 
 module Koshucode.Baala.Core.Relmap.HalfRelmap
 
@@ -44,7 +122,7 @@ module Koshucode.Baala.Core.Relmap.HalfRelmap
 --   <a>HalfRelmap</a> is constructed from list of <tt>TokenTree</tt>, and
 --   (full) <tt>Relmap</tt> is constructed from <a>HalfRelmap</a>.
 data HalfRelmap
-HalfRelmap :: String -> [TokenLine] -> String -> [Named [TokenTree]] -> [HalfRelmap] -> HalfRelmap
+HalfRelmap :: String -> [TokenLine] -> String -> RopAssoc -> [HalfRelmap] -> HalfRelmap
 
 -- | Usages description
 halfUsage :: HalfRelmap -> String
@@ -56,7 +134,7 @@ halfLines :: HalfRelmap -> [TokenLine]
 halfOperator :: HalfRelmap -> String
 
 -- | Operand of relmap operation
-halfOperand :: HalfRelmap -> [Named [TokenTree]]
+halfOperand :: HalfRelmap -> RopAssoc
 
 -- | Subrelmaps in the operand
 halfSubmap :: HalfRelmap -> [HalfRelmap]
@@ -74,7 +152,7 @@ module Koshucode.Baala.Core.Relmap.Relmap
 data Relmap c
 
 -- | Retrieve a relation from a dataset
-RelmapSource :: HalfRelmap -> String -> [String] -> Relmap c
+RelmapSource :: HalfRelmap -> JudgePattern -> [Termname] -> Relmap c
 
 -- | Constant relation
 RelmapConst :: HalfRelmap -> String -> (Rel c) -> Relmap c
@@ -83,16 +161,13 @@ RelmapConst :: HalfRelmap -> String -> (Rel c) -> Relmap c
 RelmapAlias :: HalfRelmap -> (Relmap c) -> Relmap c
 
 -- | Relmap that maps relations to a relation
-RelmapCalc :: HalfRelmap -> String -> (RelmapSub c) -> [Relmap c] -> Relmap c
+RelmapCalc :: HalfRelmap -> String -> (RelmapRelfy c) -> [Relmap c] -> Relmap c
 
 -- | Connect two relmaps
 RelmapAppend :: (Relmap c) -> (Relmap c) -> Relmap c
 
 -- | Relmap reference
 RelmapName :: HalfRelmap -> String -> Relmap c
-
--- | Function of relmap.
-type RelmapSub c = [Rel c] -> Rel c -> Ab (Rel c)
 
 -- | List of <a>RelmapSource</a>
 relmapSourceList :: Relmap c -> [Relmap c]
@@ -110,47 +185,7 @@ instance Name (Relmap c)
 instance Monoid (Relmap c)
 instance Show (Relmap c)
 
-
--- | Data structure for mapping relation to judges
-module Koshucode.Baala.Core.Relmap.Assert
-
--- | Assertion of affirming or denying relation. It consists of logical
---   quality, relsign, and relmap.
---   
---   See also <tt>Judge</tt>
-data Assert c
-Assert :: Bool -> JudgePattern -> AssertOption -> Relmap c -> [TokenLine] -> Assert c
-
--- | Logical quality
-assertQuality :: Assert c -> Bool
-
--- | Pattern of judgement
-assertPattern :: Assert c -> JudgePattern
-
--- | Assert option
-assertOption :: Assert c -> AssertOption
-
--- | Relmap
-assertRelmap :: Assert c -> Relmap c
-
--- | Source code information
-assertSource :: Assert c -> [TokenLine]
-
--- | Option for <tt>affirm</tt> or <tt>deny</tt>.
-type AssertOption = [Named [TokenTree]]
-
--- | Apply function to relamp in assert.
-assertMap :: Map (Relmap c) -> Map (Assert c)
-
--- | Make affirmed assertion.
-affirm :: JudgePattern -> AssertOption -> Relmap c -> [TokenLine] -> Assert c
-
--- | Make denied assertion.
-deny :: JudgePattern -> AssertOption -> Relmap c -> [TokenLine] -> Assert c
-instance Show (Assert c)
-instance Pretty (Assert c)
-
-module Koshucode.Baala.Core.Relmap.Implement
+module Koshucode.Baala.Core.Relmap.Rop
 
 -- | Implementation of relmap operator.
 data Rop c
@@ -171,17 +206,8 @@ ropCons :: Rop c -> RopCons c
 -- | Usage of operator
 ropUsage :: Rop c -> String
 
--- | Sorter for operand of relational operator. This soters docompose
---   operand trees, and give a name to suboperand.
-type RopFullSorter = [TokenTree] -> [Named [TokenTree]]
-type RopSorter = [Named [TokenTree]] -> [Named [TokenTree]]
-
--- | Give a name to unnamed operand.
-ropPartNameBy :: RopFullSorter -> RopSorter
-ropPartName :: String -> RopSorter
-
--- | Constructor of relational operator <tt>Relmap</tt>. <tt>Relmap</tt> is
---   constructed from <tt>HalfRelmap</tt> and subrelmaps in it.
+-- | Constructor of relational operator <a>Relmap</a>. <a>Relmap</a> is
+--   constructed from <a>HalfRelmap</a> and subrelmaps in it.
 type RopCons c = RopUse c -> AbortTokens (Relmap c)
 
 -- | Use of operator
@@ -204,10 +230,10 @@ relmapConst :: RopUse c -> String -> Rel c -> Relmap c
 relmapAlias :: RopUse c -> Relmap c -> Relmap c
 
 -- | Make a non-confluent relmap.
-relmapCalc :: RopUse c -> String -> RelmapSub c -> Relmap c
+relmapCalc :: RopUse c -> String -> RelmapRelfy c -> Relmap c
 
 -- | Make a confluent relmap.
-relmapConfl :: RopUse c -> String -> RelmapSub c -> [Relmap c] -> Relmap c
+relmapConfl :: RopUse c -> String -> RelmapRelfy c -> [Relmap c] -> Relmap c
 instance Show (RopUse c)
 
 
@@ -225,7 +251,7 @@ consFull :: RelmapCons c -> RelmapFullCons c
 
 -- | First step of constructing relmap, make <tt>HalfRelmap</tt> from use
 --   of relational operator.
-type RelmapHalfCons = [TokenLine] -> [TokenTree] -> HalfRelmap
+type RelmapHalfCons = [TokenLine] -> [TokenTree] -> Ab HalfRelmap
 
 -- | Second step of constructing relmap, make <tt>Relmap</tt> from contents
 --   of <tt>HalfRelmap</tt>.
@@ -395,6 +421,66 @@ runCox :: (CList c, CRel c) => [c] -> Cox c -> Ab c
 runCoxH :: (CRel c, CList c) => Relhead -> [c] -> (PosCox c) -> Ab c
 
 
+-- | Relation-to-relation mapping.
+module Koshucode.Baala.Core.Relmap
+
+
+-- | Data structure for mapping relation to judges
+module Koshucode.Baala.Core.Assert.Assert
+
+-- | Assertion of affirming or denying relation. It consists of logical
+--   quality, relsign, and relmap.
+--   
+--   See also <a>Judge</a>
+data Assert c
+Assert :: AssertType -> JudgePattern -> AssertOption -> Relmap c -> [TokenLine] -> Assert c
+
+-- | Logical quality
+assertType :: Assert c -> AssertType
+
+-- | Pattern of judgement
+assertPattern :: Assert c -> JudgePattern
+
+-- | Assert option
+assertOption :: Assert c -> AssertOption
+
+-- | Relmap
+assertRelmap :: Assert c -> Relmap c
+
+-- | Source code information
+assertSource :: Assert c -> [TokenLine]
+
+-- | Option for assertions.
+type AssertOption = [Named [TokenTree]]
+
+-- | Apply function to relamp in assert.
+assertMap :: Map (Relmap c) -> Map (Assert c)
+data AssertType
+
+-- | <tt>|==</tt> <i>pattern</i> <tt>:</tt> <i>relmap</i>
+AssertAffirm :: AssertType
+
+-- | <tt>|=X</tt> <i>pattern</i> <tt>:</tt> <i>relmap</i>
+AssertDeny :: AssertType
+
+-- | <tt>|=V</tt> <i>pattern</i> <tt>:</tt> <i>relmap</i>
+AssertViolate :: AssertType
+assertQuality :: AssertType -> Bool
+
+-- | Make affirmed assertion.
+affirm :: JudgePattern -> AssertOption -> Relmap c -> [TokenLine] -> Assert c
+
+-- | Make denied assertion.
+deny :: JudgePattern -> AssertOption -> Relmap c -> [TokenLine] -> Assert c
+instance Typeable AssertType
+instance Show AssertType
+instance Eq AssertType
+instance Ord AssertType
+instance Data AssertType
+instance Show (Assert c)
+instance Pretty (Assert c)
+
+
 -- | Content
 module Koshucode.Baala.Core.Content
 
@@ -403,10 +489,13 @@ module Koshucode.Baala.Core.Content
 --   
 --   Dataset is like a bridge of judges and relations. We can get a
 --   relation from a dataset, that dataset is build from judges.
-module Koshucode.Baala.Core.Relmap.Dataset
+module Koshucode.Baala.Core.Assert.Dataset
 
 -- | Dataset is a set of judges.
 data Dataset c
+
+-- | Relation selector
+type RelSelect c = JudgePattern -> [String] -> Rel c
 
 -- | Dataset that has no judges
 emptyDataset :: Dataset c
@@ -419,11 +508,11 @@ addJudges :: [Judge c] -> Dataset c -> Dataset c
 
 -- | Select relation from dataset. If a giving term is not in judges,
 --   <tt>CNil</tt> sign is used.
-selectRelation :: (Ord c, CNil c) => Dataset c -> JudgePattern -> [String] -> Rel c
+selectRelation :: (Ord c, CNil c) => Dataset c -> RelSelect c
 
 
 -- | Running relational calculation.
-module Koshucode.Baala.Core.Relmap.Run
+module Koshucode.Baala.Core.Assert.Run
 
 -- | Calculate assertion list.
 runAssertJudges :: (Ord c, CNil c) => [Assert c] -> [Judge c] -> AbortOr [Judge c]
@@ -433,7 +522,7 @@ runAssertDataset :: (Ord c, CNil c) => [Assert c] -> Dataset c -> AbortOr [Judge
 
 
 -- | Relation-to-relation mapping.
-module Koshucode.Baala.Core.Relmap
+module Koshucode.Baala.Core.Assert
 
 
 -- | Data structure for relational calculations. There are three types of
@@ -442,7 +531,7 @@ module Koshucode.Baala.Core.Relmap
 --   <i>data sections</i> that provide data.
 module Koshucode.Baala.Core.Section.Section
 data Section c
-Section :: Maybe String -> [Section c] -> [String] -> [Assert c] -> [Named (Relmap c)] -> [Judge c] -> String -> RelmapCons c -> Section c
+Section :: Maybe String -> [Section c] -> [String] -> [Named String] -> [Assert c] -> [Named (Relmap c)] -> [Judge c] -> [Judge c] -> String -> RelmapCons c -> Section c
 
 -- | Section name
 sectionName :: Section c -> Maybe String
@@ -453,33 +542,38 @@ sectionImport :: Section c -> [Section c]
 -- | Exporting relmap names
 sectionExport :: Section c -> [String]
 
+-- | Prefix for short signs
+sectionShort :: Section c -> [Named String]
+
 -- | Assertions of relmaps
 sectionAssert :: Section c -> [Assert c]
 
 -- | Relmaps and its name
 sectionRelmap :: Section c -> [Named (Relmap c)]
 
--- | Here data
+-- | Affirmative or denial judgements
 sectionJudge :: Section c -> [Judge c]
+
+-- | Violated judgements, i.e., result of <tt>|=V</tt>
+sectionViolate :: Section c -> [Judge c]
 
 -- | Resource name
 sectionResource :: Section c -> String
 
--- | Readers and writers for this section
+-- | Relmap constructor for this section
 sectionCons :: Section c -> RelmapCons c
 
 -- | Select assertions like <a>sectionAssert</a>. It returns relmap-liked
---   assertions. We can run these assertions using
---   <tt>runAssertJudges</tt>.
+--   assertions. We can run these assertions using <a>runAssertJudges</a>.
 sectionLinkedAssert :: Section c -> [Assert c]
 
--- | Section that has no contents.
+-- | Make empty section that has a given constructor.
 makeEmptySection :: RelmapCons c -> Section c
 
 -- | Section that has no contents.
 emptySection :: Section c
 
--- | Section that has only here data.
+-- | Section that has only judgements.
 dataSection :: [Judge c] -> Section c
 instance Show c => Show (Section c)
 instance (Ord c, Pretty c) => Pretty (Section c)
@@ -490,7 +584,7 @@ sectionUse :: Section c -> Section c -> Section c
 instance Monoid (Section c)
 
 
--- | Intermidiate structure between <a>String</a> and <tt>Section</tt>.
+-- | Intermidiate structure between <a>String</a> and <a>Section</a>.
 module Koshucode.Baala.Core.Section.Clause
 data Clause
 
@@ -503,26 +597,32 @@ CImport :: ClauseSource -> [Token] -> (Maybe Clause) -> Clause
 -- | Exporting relmap name
 CExport :: ClauseSource -> String -> Clause
 
+-- | Short signs
+CShort :: ClauseSource -> (Named String) -> Clause
+
 -- | Relmap and its name
 CRelmap :: ClauseSource -> String -> HalfRelmap -> Clause
 
 -- | Not include HalfRelmap
-TRelmap :: ClauseSource -> String -> [TokenTree] -> Clause
+TRelmap :: ClauseSource -> String -> [Token] -> Clause
 
 -- | Assertions of relmaps
-CAssert :: ClauseSource -> Bool -> String -> AssertOption -> HalfRelmap -> Clause
+CAssert :: ClauseSource -> AssertType -> JudgePattern -> AssertOption -> HalfRelmap -> Clause
 
 -- | Not include HalfRelmap
-TAssert :: ClauseSource -> Bool -> String -> AssertOption -> [TokenTree] -> Clause
+TAssert :: ClauseSource -> AssertType -> JudgePattern -> AssertOption -> [Token] -> Clause
 
 -- | Judge
-CJudge :: ClauseSource -> Bool -> String -> [Token] -> Clause
+CJudge :: ClauseSource -> Bool -> JudgePattern -> [Token] -> Clause
 
--- | Caluse comment
+-- | Clause comment
 CComment :: ClauseSource -> Clause
 
 -- | Unknown clause
 CUnknown :: ClauseSource -> Clause
+
+-- | Unresolved short sign
+CUnres :: ClauseSource -> [Token] -> Clause
 
 -- | Name of clause type. e.g., <tt>"Relmap"</tt>, <tt>"Assert"</tt>.
 clauseTypeText :: Clause -> String
@@ -533,23 +633,25 @@ clauseSource :: Clause -> ClauseSource
 -- | Convert token list into clause list. Result clause list does not
 --   contain <a>CRelmap</a> and <a>CAssert</a>. Instead of them,
 --   <a>TRelmap</a> and <a>TAssert</a> are contained. This function does
---   not depend on <tt>RelmapHalfCons</tt>.
+--   not depend on <a>RelmapHalfCons</a>.
 --   
 --   <pre>
 --   &gt;&gt;&gt; consPreclause . B.tokenize $ "a : source A /x /y"
---   [TRelmap [CodeLine 1 "a : source A /x /y"]
---            "a" [TreeL (Word 0 "source"),
---                 TreeL (Word 0 "A"),
---                 TreeL (TermN ["/x"]),
---                 TreeL (TermN ["/y"])]]
+--   [TRelmap (ClauseSource
+--                [TWord 1 0 "a", TSpace 2 1, ..., TTerm 11 ["/y"]]
+--                [CodeLine 1 "a : source A /x /y" [TWord 1 0 "a", ...]])
+--            "a" [ TreeL (TWord 5 0 "source")
+--                , TreeL (TWord 7 0 "A")
+--                , TreeL (TTerm 9  ["/x"])
+--                , TreeL (TTerm 11 ["/y"]) ]]
 --   </pre>
 consPreclause :: [TokenLine] -> [Clause]
 
--- | Construct <a>Clause</a> list from <tt>Token</tt> list. This is a first
---   step of constructing <tt>Section</tt>.
-consClause :: RelmapHalfCons -> [TokenLine] -> [Clause]
+-- | Construct <a>Clause</a> list from <a>Token</a> list. This is a first
+--   step of constructing <a>Section</a>.
+consClause :: RelmapHalfCons -> [TokenLine] -> AbortOr [Clause]
 
--- | Second step of constructing <tt>Section</tt>.
+-- | Second step of constructing <a>Section</a>.
 consSection :: CContent c => RelmapFullCons c -> String -> [Clause] -> AbortOr (Section c)
 instance Typeable Clause
 instance Show Clause
@@ -575,8 +677,8 @@ readJudges :: CContent c => String -> AbortOr [Judge c]
 runSection :: CContent c => Section c -> AbortOr (Section c)
 
 -- | Run section and output judges.
-runSectionIO :: CContent c => Section c -> IO ()
-hRunSectionIO :: CContent c => Handle -> Section c -> IO ()
+runSectionIO :: CContent c => Section c -> IO Int
+hRunSectionIO :: CContent c => Handle -> Section c -> IO Int
 
 
 -- | Runtime structure for calculations written in Koshucode.

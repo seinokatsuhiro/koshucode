@@ -98,7 +98,7 @@
 <a name="line-89"></a>
 <a name="line-90"></a><span class='hs-comment'>{-
 <a name="line-91"></a>let op _ = Right $ CopEager "+" f where f xs = Right $ foldr (+) 0 xs
-<a name="line-92"></a>formCox op [] $ singleTree . tokenTrees $ tokens "(+ (int 1) (int 2))"
+<a name="line-92"></a>formCox op [] $ treeG . tokenTrees $ tokens "(+ (int 1) (int 2))"
 <a name="line-93"></a>let e1 = CoxApp plus [CoxLit 1, CoxLit 2, CoxTerm ["/?"] [0]]
 <a name="line-94"></a>runCox e1 [1,2,3]
 <a name="line-95"></a>-}</span>
@@ -110,19 +110,19 @@
 <a name="line-101"></a>
 <a name="line-102"></a>     [1. @String -&gt; \[Token\]@]
 <a name="line-103"></a>        Parse input string into list of token.
-<a name="line-104"></a>        See 'tokens'.
+<a name="line-104"></a>        See 'B.tokens'.
 <a name="line-105"></a>
 <a name="line-106"></a>     [2. @\[Token\] -&gt; \[Tree Token\]@]
 <a name="line-107"></a>        Analyze token list structure.
-<a name="line-108"></a>        See 'tokenTrees'
+<a name="line-108"></a>        See 'B.tokenTrees'
 <a name="line-109"></a>
 <a name="line-110"></a>     [3. @\[Tree Token\] -&gt; Tree Token@]
-<a name="line-111"></a>        Enclose list of token tree in 'TreeB'.
-<a name="line-112"></a>        See 'singleTree'.
+<a name="line-111"></a>        Enclose list of token tree in 'B.TreeB'.
+<a name="line-112"></a>        See 'B.treeG'.
 <a name="line-113"></a>
 <a name="line-114"></a>     [4. @Tree Token -&gt; Tree Token@]
 <a name="line-115"></a>        Translate binary operators from infix to prefix.
-<a name="line-116"></a>        See 'binaryTree'.
+<a name="line-116"></a>        See 'B.binaryTree'.
 <a name="line-117"></a>
 <a name="line-118"></a>   Phase 2. From prefixed token tree to literal content.
 <a name="line-119"></a>

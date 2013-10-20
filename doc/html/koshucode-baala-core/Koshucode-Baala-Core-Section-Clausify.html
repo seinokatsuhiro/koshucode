@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.37.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.39.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -79,16 +79,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	    >] -&gt; [<a href="Koshucode-Baala-Core-Section-Clausify.html#t:ClauseSource"
 	    >ClauseSource</a
 	    >]</li
-	  ><li class="src short"
-	  ><a href="#v:sortOperand"
-	    >sortOperand</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >]]</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -205,41 +195,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	  ><p
 	    >Convert token list into list of token clauses 
 </p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:sortOperand" class="def"
-	    >sortOperand</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >]]<a href="src/Koshucode-Baala-Core-Section-Clausify.html#sortOperand" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Split operand into named group.
-    Non quoted words beginning with hyphen, e.g., <code
-	      >-x</code
-	      >,
-    are name of group.
-</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>sortOperand $ B.tokenTrees $ B.tokens &quot;a b -x /c 'd -y e&quot;
-</code
-		></strong
-	      >[ (&quot;&quot;,   [TreeL (TWord 1 0 &quot;a&quot;),TreeL (TWord 3 0 &quot;b&quot;)])
-, (&quot;-x&quot;, [TreeL (TTerm 7 [&quot;/c&quot;]), TreeL (TWord 9 0 &quot;'&quot;), TreeL (TWord 10 0 &quot;d&quot;)])
-, (&quot;-y&quot;, [TreeL (TWord 14 0 &quot;e&quot;)])]
-</pre
 	    ></div
 	  ></div
 	></div
