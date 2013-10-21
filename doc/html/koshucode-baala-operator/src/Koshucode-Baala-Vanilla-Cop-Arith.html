@@ -100,7 +100,7 @@
 <a name="line-91"></a><span class='hs-definition'>copAbs1</span> <span class='hs-layout'>(</span><span class='hs-conid'>VDec</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-conid'>VDec</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>decimalAbs</span> <span class='hs-varid'>n</span>
 <a name="line-92"></a><span class='hs-definition'>copAbs1</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>AbortUnmatchArity</span>
 <a name="line-93"></a>
-<a name="line-94"></a><span class='hs-comment'>-- let tree = singleTree . tokenTrees . tokens</span>
+<a name="line-94"></a><span class='hs-comment'>-- let tree = treeG . tokenTrees . tokens</span>
 <a name="line-95"></a><span class='hs-comment'>-- let Right e2 = vanillaContent [] $ tree "1 = 1 and 2 = 3"</span>
 <a name="line-96"></a><span class='hs-comment'>-- let Right e2 = vanillaContent [] $ tree "(+ (int 1) (int 2) (int 3))"</span>
 <a name="line-97"></a><span class='hs-comment'>-- let Right e2 = vanillaContent [] $ tree "(+ 1 2 (+ 3 4 5) 6 7 8 9)"</span>

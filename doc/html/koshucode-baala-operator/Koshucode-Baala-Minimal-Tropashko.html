@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-operator-0.37.0.0: Relational operators in Koshucode</p
+      >koshucode-baala-operator-0.39.0.0: Relational operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -56,12 +56,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Meet (Natural join)
+	    >meet (natural join)
 </a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >Join (Inner union)
+	    >join (inner union)
 </a
 	    ></li
 	  ></ul
@@ -79,7 +79,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
     In constrast to Codd's original relational algebra,
     Tropashko lattice is in more conventional and strict ways.
     The lattice has fundamental operators from which
-    other operators are derived. 
+    other operators are derived.  
 </p
 	  ></div
 	></div
@@ -92,7 +92,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >ropConsMeet</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopCons"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopCons"
 	    >RopCons</a
 	    > c</li
 	  ><li class="src short"
@@ -100,7 +100,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >relmapMeet</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopUse"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse"
 	    >RopUse</a
 	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap"
 	    >Relmap</a
@@ -108,25 +108,25 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >Relmap</a
 	    > c</li
 	  ><li class="src short"
-	  ><a href="#v:relMeet"
-	    >relMeet</a
+	  ><a href="#v:relfyMeet"
+	    >relfyMeet</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
-	    >Rel</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
-	    >Rel</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relfy.html#t:Relfy"
+	    >Relfy</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
-	    >Rel</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relfy.html#t:Relfy"
+	    >Relfy</a
 	    > c)</li
 	  ><li class="src short"
 	  ><a href="#v:ropConsJoin"
 	    >ropConsJoin</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopCons"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopCons"
 	    >RopCons</a
 	    > c</li
 	  ><li class="src short"
@@ -134,7 +134,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >relmapJoin</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopUse"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse"
 	    >RopUse</a
 	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap"
 	    >Relmap</a
@@ -142,18 +142,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >Relmap</a
 	    > c</li
 	  ><li class="src short"
-	  ><a href="#v:relJoin"
-	    >relJoin</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
-	    >Rel</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
-	    >Rel</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	  ><a href="#v:relfyJoin"
+	    >relfyJoin</a
+	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relfy.html#t:Relfy"
+	    >Relfy</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
-	    >Rel</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relfy.html#t:Relfy"
+	    >Relfy</a
 	    > c)</li
 	  ></ul
 	></div
@@ -216,7 +214,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    ></dl
 	  ></div
 	><h1 id="g:2"
-	>Meet (Natural join)
+	>meet (natural join)
 </h1
 	><div class="top"
 	><p class="src"
@@ -224,7 +222,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >ropConsMeet</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopCons"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopCons"
 	    >RopCons</a
 	    > c<a href="src/Koshucode-Baala-Minimal-Tropashko.html#ropConsMeet" class="link"
 	    >Source</a
@@ -251,7 +249,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		></tr
 	      ><tr
 	      ><td class="src"
-		>=&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopUse"
+		>=&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse"
 		  >RopUse</a
 		  > c</td
 		><td class="doc"
@@ -292,9 +290,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:relMeet" class="def"
-	    >relMeet</a
-	    ><a href="src/Koshucode-Baala-Minimal-Tropashko.html#relMeet" class="link"
+	  ><a name="v:relfyMeet" class="def"
+	    >relfyMeet</a
+	    ><a href="src/Koshucode-Baala-Minimal-Tropashko.html#relfyMeet" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs arguments"
@@ -311,27 +309,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		></tr
 	      ><tr
 	      ><td class="src"
-		>=&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
-		  >Rel</a
+		>=&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relfy.html#t:Relfy"
+		  >Relfy</a
 		  > c</td
 		><td class="doc"
 		><p
-		  >Input relation <em
-		    >R1</em
-		    >
+		  >Generator of subrelation
 </p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
-		  >Rel</a
-		  > c</td
+		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+		  >Relhead</a
+		  ></td
 		><td class="doc"
 		><p
-		  >Input relation <em
-		    >R2</em
-		    >
+		  >Heading of input relation
 </p
 		  ></td
 		></tr
@@ -339,16 +333,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	      ><td class="src"
 		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 		  >Ab</a
-		  > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
-		  >Rel</a
+		  > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relfy.html#t:Relfy"
+		  >Relfy</a
 		  > c)</td
 		><td class="doc"
 		><p
-		  >Meet of <em
-		    >R1</em
-		    > and <em
-		    >R2</em
-		    >
+		  >Generator for output relation
 </p
 		  ></td
 		></tr
@@ -477,7 +467,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    ></ol
 	  ></div
 	><h1 id="g:3"
-	>Join (Inner union)
+	>join (inner union)
 </h1
 	><div class="top"
 	><p class="src"
@@ -485,7 +475,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >ropConsJoin</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopCons"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopCons"
 	    >RopCons</a
 	    > c<a href="src/Koshucode-Baala-Minimal-Tropashko.html#ropConsJoin" class="link"
 	    >Source</a
@@ -512,7 +502,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 		></tr
 	      ><tr
 	      ><td class="src"
-		>=&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:RopUse"
+		>=&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse"
 		  >RopUse</a
 		  > c</td
 		><td class="doc"
@@ -553,9 +543,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:relJoin" class="def"
-	    >relJoin</a
-	    ><a href="src/Koshucode-Baala-Minimal-Tropashko.html#relJoin" class="link"
+	  ><a name="v:relfyJoin" class="def"
+	    >relfyJoin</a
+	    ><a href="src/Koshucode-Baala-Minimal-Tropashko.html#relfyJoin" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs arguments"
@@ -564,35 +554,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    ><table
 	    ><tr
 	      ><td class="src"
-		>:: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-		  >Ord</a
-		  > c</td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		>=&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
-		  >Rel</a
+		>:: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relfy.html#t:Relfy"
+		  >Relfy</a
 		  > c</td
 		><td class="doc"
 		><p
-		  >Input relation <em
-		    >R1</em
-		    >
+		  >Generator of subrelation
 </p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
-		  >Rel</a
-		  > c</td
+		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+		  >Relhead</a
+		  ></td
 		><td class="doc"
 		><p
-		  >Input relation <em
-		    >R2</em
-		    >
+		  >Heading of input relation
 </p
 		  ></td
 		></tr
@@ -600,16 +578,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	      ><td class="src"
 		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 		  >Ab</a
-		  > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
-		  >Rel</a
+		  > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relfy.html#t:Relfy"
+		  >Relfy</a
 		  > c)</td
 		><td class="doc"
 		><p
-		  >Join of <em
-		    >R1</em
-		    > and <em
-		    >R2</em
-		    >
+		  >Generator for output relation
 </p
 		  ></td
 		></tr

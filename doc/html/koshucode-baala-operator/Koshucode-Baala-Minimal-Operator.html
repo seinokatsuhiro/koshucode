@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-operator-0.37.0.0: Relational operators in Koshucode</p
+      >koshucode-baala-operator-0.39.0.0: Relational operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -45,28 +45,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	><p class="caption"
 	>Koshucode.Baala.Minimal.Operator</p
 	></div
-      ><div id="table-of-contents"
-      ><p class="caption"
-	>Contents</p
-	><ul
-	><li
-	  ><a href="#g:1"
-	    >Implementation
-</a
-	    ></li
-	  ><li
-	  ><a href="#g:2"
-	    >Operators
-</a
-	    ></li
-	  ></ul
-	></div
       ><div id="description"
       ><p class="caption"
 	>Description</p
 	><div class="doc"
 	><p
-	  >Minimal implementations of relmaps
+	  >Minimal implementations of relmap operators. 
 </p
 	  ></div
 	></div
@@ -79,35 +63,31 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	    >minimalRops</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:Rop"
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:Rop"
 	    >Rop</a
 	    > c]</li
 	  ></ul
 	></div
       ><div id="interface"
-      ><h1 id="g:1"
-	>Implementation
-</h1
+      ><h1
+	>Documentation</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:minimalRops" class="def"
 	    >minimalRops</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Implement.html#t:Rop"
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:Rop"
 	    >Rop</a
 	    > c]<a href="src/Koshucode-Baala-Minimal-Operator.html#minimalRops" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Minimal implementations of relmaps. 
+	    >Minimal implementations of relmap operators. 
 </p
 	    ></div
 	  ></div
-	><h1 id="g:2"
-	>Operators
-</h1
 	><div class="doc"
 	><dl
 	  ><dt
@@ -115,56 +95,84 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Minima
 	      >cut</code
 	      ></dt
 	    ><dd
-	    >     Project relation to unspecified terms
+	    >       Project relation to unspecified terms.
+</dd
+	    ><dt
+	    ><code
+	      >contents</code
+	      ></dt
+	    ><dd
+	    >  Make nary relation of all contetnts.
+</dd
+	    ><dt
+	    ><code
+	      >id</code
+	      ></dt
+	    ><dd
+	    >        Identity relmap.
 </dd
 	    ><dt
 	    ><code
 	      >join</code
 	      ></dt
 	    ><dd
-	    >    Calculate join of two relations.
+	    >      Calculate join of two relations.
 </dd
 	    ><dt
 	    ><code
 	      >meet</code
 	      ></dt
 	    ><dd
-	    >    Calculate meet of two relations.
+	    >      Calculate meet of two relations.
+</dd
+	    ><dt
+	    ><code
+	      >none</code
+	      ></dt
+	    ><dd
+	    >      Restriction by relmaps.
 </dd
 	    ><dt
 	    ><code
 	      >pick</code
 	      ></dt
 	    ><dd
-	    >    Project relation to specified terms
+	    >      Project relation to specified terms.
 </dd
 	    ><dt
 	    ><code
 	      >reldee</code
 	      ></dt
 	    ><dd
-	    >  Nullary fullset relation
+	    >    Nullary full relation.
 </dd
 	    ><dt
 	    ><code
 	      >reldum</code
 	      ></dt
 	    ><dd
-	    >  Nullary empty relation
+	    >    Nullary empty relation.
 </dd
 	    ><dt
 	    ><code
 	      >rename</code
 	      ></dt
 	    ><dd
-	    >  Change term name
+	    >    Change term name.
+</dd
+	    ><dt
+	    ><code
+	      >some</code
+	      ></dt
+	    ><dd
+	    >      Restriction by relmaps.
 </dd
 	    ><dt
 	    ><code
 	      >source</code
 	      ></dt
 	    ><dd
-	    >  Read relation from data source
+	    >    Read relation from data source.
 </dd
 	    ></dl
 	  ></div

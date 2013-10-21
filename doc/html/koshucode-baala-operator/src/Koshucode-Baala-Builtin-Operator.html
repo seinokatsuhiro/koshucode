@@ -10,39 +10,58 @@
 <pre><a name="line-1"></a><span class='hs-comment'>{-# OPTIONS_GHC -Wall #-}</span>
 <a name="line-2"></a>
 <a name="line-3"></a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Builtin</span><span class='hs-varop'>.</span><span class='hs-conid'>Operator</span>
-<a name="line-4"></a><span class='hs-layout'>(</span> <span class='hs-conid'>BuiltinOperand</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
+<a name="line-4"></a><span class='hs-layout'>(</span> <span class='hs-varid'>ropList</span><span class='hs-layout'>,</span>
 <a name="line-5"></a>  <span class='hs-varid'>builtinRops</span><span class='hs-layout'>,</span>
-<a name="line-6"></a>  <span class='hs-keyword'>module</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Monoid</span><span class='hs-layout'>,</span>
-<a name="line-7"></a>
-<a name="line-8"></a>  <span class='hs-comment'>-- * Operator</span>
-<a name="line-9"></a>  <span class='hs-comment'>-- $ListOfOperator</span>
-<a name="line-10"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
-<a name="line-11"></a>
-<a name="line-12"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Monoid</span>
+<a name="line-6"></a>
+<a name="line-7"></a>  <span class='hs-comment'>-- $ListOfOperator</span>
+<a name="line-8"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a name="line-9"></a>
+<a name="line-10"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>List</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>List</span>
+<a name="line-11"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Monoid</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>M</span>
+<a name="line-12"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
 <a name="line-13"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>C</span>
-<a name="line-14"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Builtin</span><span class='hs-varop'>.</span><span class='hs-conid'>Pattern</span>
-<a name="line-15"></a>
-<a name="line-16"></a><a name="BuiltinOperand"></a><span class='hs-comment'>{-| 'RopPattern' for builtin operators. -}</span>
-<a name="line-17"></a><a name="BuiltinOperand"></a><span class='hs-keyword'>data</span> <span class='hs-conid'>BuiltinOperand</span>
-<a name="line-18"></a>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>LikeId</span>      <span class='hs-comment'>-- ^ no operand</span>
-<a name="line-19"></a>      <span class='hs-keyword'>deriving</span> <span class='hs-layout'>(</span><span class='hs-conid'>Show</span><span class='hs-layout'>,</span> <span class='hs-conid'>Eq</span><span class='hs-layout'>,</span> <span class='hs-conid'>Enum</span><span class='hs-layout'>)</span>
-<a name="line-20"></a>
-<a name="line-21"></a><a name="instance%20RopPattern%20BuiltinOperand"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>RopPattern</span> <span class='hs-conid'>BuiltinOperand</span> <span class='hs-keyword'>where</span>
-<a name="line-22"></a>    <span class='hs-varid'>ropSorter</span>   <span class='hs-conid'>LikeId</span>     <span class='hs-keyglyph'>=</span> <span class='hs-varid'>id</span>
-<a name="line-23"></a>    <span class='hs-varid'>ropPart</span>     <span class='hs-conid'>LikeId</span>     <span class='hs-keyglyph'>=</span> <span class='hs-conid'>[]</span>
-<a name="line-24"></a>
-<a name="line-25"></a><a name="builtinRops"></a><span class='hs-definition'>builtinRops</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Rop</span> <span class='hs-varid'>c</span><span class='hs-keyglyph'>]</span>
-<a name="line-26"></a><span class='hs-definition'>builtinRops</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>ropList</span> <span class='hs-str'>"builtin"</span> <span class='hs-keyglyph'>[</span> <span class='hs-layout'>(</span><span class='hs-str'>"|"</span><span class='hs-layout'>,</span> <span class='hs-conid'>LikeId</span><span class='hs-layout'>,</span> <span class='hs-varid'>ropConsConcat</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>]</span>
+<a name="line-14"></a>
+<a name="line-15"></a><a name="ropList"></a><span class='hs-comment'>{-| Make implementations of relation-mapping operators. -}</span>
+<a name="line-16"></a><span class='hs-definition'>ropList</span>
+<a name="line-17"></a>    <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span>      <span class='hs-comment'>-- ^ Operator group</span>
+<a name="line-18"></a>    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-layout'>(</span><span class='hs-conid'>String</span><span class='hs-layout'>,</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RopCons</span> <span class='hs-varid'>c</span><span class='hs-layout'>,</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RopOperand</span><span class='hs-layout'>)</span><span class='hs-keyglyph'>]</span>
+<a name="line-19"></a>                   <span class='hs-comment'>-- ^ Synopsis, constructor, and operand sorter</span>
+<a name="line-20"></a>    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Rop</span> <span class='hs-varid'>c</span><span class='hs-keyglyph'>]</span>   <span class='hs-comment'>-- ^ List of relation-mapping operators</span>
+<a name="line-21"></a><span class='hs-definition'>ropList</span> <span class='hs-varid'>group</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>map</span> <span class='hs-varid'>rop</span> <span class='hs-keyword'>where</span>
+<a name="line-22"></a>    <span class='hs-varid'>rop</span> <span class='hs-layout'>(</span><span class='hs-varid'>synopsis</span><span class='hs-layout'>,</span> <span class='hs-varid'>cons</span><span class='hs-layout'>,</span> <span class='hs-varid'>opd</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span>
+<a name="line-23"></a>        <span class='hs-keyword'>let</span> <span class='hs-varid'>slist</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>words</span> <span class='hs-varid'>synopsis</span>
+<a name="line-24"></a>            <span class='hs-varid'>name</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>head</span> <span class='hs-varid'>slist</span>
+<a name="line-25"></a>            <span class='hs-varid'>sorter</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>operandSorter</span> <span class='hs-varid'>opd</span>
+<a name="line-26"></a>        <span class='hs-keyword'>in</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Rop</span> <span class='hs-varid'>name</span> <span class='hs-varid'>group</span> <span class='hs-varid'>sorter</span> <span class='hs-varid'>cons</span> <span class='hs-varid'>synopsis</span>
 <a name="line-27"></a>
-<a name="line-28"></a><a name="ropConsConcat"></a><span class='hs-definition'>ropConsConcat</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RopCons</span> <span class='hs-varid'>c</span>
-<a name="line-29"></a><span class='hs-definition'>ropConsConcat</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-varid'>mconcat</span> <span class='hs-varop'>.</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>ropSubmap</span>
-<a name="line-30"></a>
-<a name="line-31"></a><span class='hs-comment'>-- ----------------------</span>
-<a name="line-32"></a><span class='hs-comment'>{- $ListOfOperator
+<a name="line-28"></a><a name="operandSorter"></a><span class='hs-definition'>operandSorter</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RopOperand</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RopFullSorter</span>
+<a name="line-29"></a><span class='hs-definition'>operandSorter</span> <span class='hs-layout'>(</span><span class='hs-varid'>trunkSorter</span><span class='hs-layout'>,</span> <span class='hs-varid'>trunkTerms</span><span class='hs-layout'>,</span> <span class='hs-varid'>branchTerms</span><span class='hs-layout'>)</span> <span class='hs-varid'>xs</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>xs3</span> <span class='hs-keyword'>where</span>
+<a name="line-30"></a>    <span class='hs-varid'>allTerms</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>trunkTerms</span> <span class='hs-varop'>++</span> <span class='hs-varid'>branchTerms</span>
+<a name="line-31"></a>    <span class='hs-varid'>xs2</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>sortOperand</span> <span class='hs-varid'>xs</span>
+<a name="line-32"></a>    <span class='hs-varid'>ns2</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>map</span> <span class='hs-varid'>fst</span> <span class='hs-varid'>xs2</span>
 <a name="line-33"></a>
-<a name="line-34"></a>   [/r/ @|@ /s/]   Append relmaps
-<a name="line-35"></a>
-<a name="line-36"></a>-}</span>
+<a name="line-34"></a>    <span class='hs-varid'>more</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>assocMore</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>assocGather</span> <span class='hs-varid'>xs2</span>
+<a name="line-35"></a>    <span class='hs-varid'>unk</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>ns2</span>  <span class='hs-conid'>List</span><span class='hs-varop'>.\\</span>  <span class='hs-layout'>(</span><span class='hs-str'>""</span> <span class='hs-conop'>:</span> <span class='hs-varid'>allTerms</span><span class='hs-layout'>)</span>
+<a name="line-36"></a>    <span class='hs-varid'>wrap</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>ns2</span> <span class='hs-varop'>`</span><span class='hs-conid'>List</span><span class='hs-varop'>.</span><span class='hs-varid'>intersect</span><span class='hs-varop'>`</span> <span class='hs-varid'>trunkTerms</span>
 <a name="line-37"></a>
+<a name="line-38"></a>    <span class='hs-varid'>xs3</span>  <span class='hs-keyglyph'>|</span> <span class='hs-varid'>not</span> <span class='hs-layout'>(</span><span class='hs-varid'>null</span> <span class='hs-varid'>more</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>AbortOpeandDuplicate</span> <span class='hs-layout'>(</span><span class='hs-varid'>map</span> <span class='hs-varid'>fst</span> <span class='hs-varid'>more</span><span class='hs-layout'>)</span>
+<a name="line-39"></a>         <span class='hs-keyglyph'>|</span> <span class='hs-varid'>not</span> <span class='hs-layout'>(</span><span class='hs-varid'>null</span> <span class='hs-varid'>unk</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>AbortOpeandUnknown</span> <span class='hs-varid'>unk</span>
+<a name="line-40"></a>         <span class='hs-keyglyph'>|</span> <span class='hs-varid'>not</span> <span class='hs-layout'>(</span><span class='hs-varid'>null</span> <span class='hs-varid'>wrap</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varid'>xs2</span>
+<a name="line-41"></a>         <span class='hs-keyglyph'>|</span> <span class='hs-varid'>otherwise</span>       <span class='hs-keyglyph'>=</span> <span class='hs-varid'>trunkSorter</span> <span class='hs-varid'>xs2</span>
+<a name="line-42"></a>
+<a name="line-43"></a><a name="builtinRops"></a><span class='hs-comment'>{-| Built-in relation-mapping operator. -}</span>
+<a name="line-44"></a><span class='hs-definition'>builtinRops</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Rop</span> <span class='hs-varid'>c</span><span class='hs-keyglyph'>]</span>
+<a name="line-45"></a><span class='hs-definition'>builtinRops</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>ropList</span> <span class='hs-str'>"builtin"</span> <span class='hs-keyglyph'>[</span> <span class='hs-layout'>(</span><span class='hs-str'>"|"</span><span class='hs-layout'>,</span> <span class='hs-varid'>ropConsConcat</span><span class='hs-layout'>,</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>operandList</span> <span class='hs-str'>"-relmap"</span> <span class='hs-conid'>[]</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>]</span>
+<a name="line-46"></a>
+<a name="line-47"></a><a name="ropConsConcat"></a><span class='hs-definition'>ropConsConcat</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RopCons</span> <span class='hs-varid'>c</span>
+<a name="line-48"></a><span class='hs-definition'>ropConsConcat</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-conid'>M</span><span class='hs-varop'>.</span><span class='hs-varid'>mconcat</span> <span class='hs-varop'>.</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>ropSubmap</span>
+<a name="line-49"></a>
+<a name="line-50"></a><span class='hs-comment'>-- ----------------------</span>
+<a name="line-51"></a><span class='hs-comment'>{- $ListOfOperator
+<a name="line-52"></a>
+<a name="line-53"></a>   [/r/ @|@ /s/]   Append relmaps
+<a name="line-54"></a>
+<a name="line-55"></a>-}</span>
+<a name="line-56"></a>
 </pre></body>
 </html>

@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builti
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-operator-0.37.0.0: Relational operators in Koshucode</p
+      >koshucode-baala-operator-0.39.0.0: Relational operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -119,7 +119,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builti
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>termnames . B.tokenTrees . B.tokens $ &quot;/a /b /c&quot;
+		>termnames . B.tt $ &quot;/a /b /c&quot;
 </code
 		></strong
 	      >Right [&quot;/a&quot;, &quot;/b&quot;, &quot;/c&quot;]
@@ -150,7 +150,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builti
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>termnamePairs . B.tokenTrees . B.tokens $ &quot;/a /x /b /y&quot;
+		>termnamePairs . B.tt $ &quot;/a /x /b /y&quot;
 </code
 		></strong
 	      >Right [(&quot;/a&quot;, &quot;/x&quot;), (&quot;/b&quot;, &quot;/y&quot;)]
@@ -181,12 +181,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Builti
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>termTreePairs . B.tokenTrees . B.tokens $ &quot;/a 'A3 /b 10 /c&quot;
+		>termTreePairs . B.tt $ &quot;/a 'A3 /b 10 /c&quot;
 </code
 		></strong
-	      >Right [ (&quot;/a&quot;, TreeB 1 [ TreeL (TWord 3 0 &quot;'&quot;)
-                      , TreeL (TWord 4 0 &quot;A3&quot;) ])
-      , (&quot;/b&quot;, TreeL (TWord 8 0 &quot;10&quot;))
+	      >Right [ (&quot;/a&quot;, TreeL (TWord 3 1 &quot;A3&quot;))
+      , (&quot;/b&quot;, TreeL (TWord 7 0 &quot;10&quot;))
       , (&quot;/c&quot;, TreeB 1 []) ]
 </pre
 	    ></div
