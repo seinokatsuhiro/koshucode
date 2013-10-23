@@ -72,10 +72,9 @@ library
         Koshucode.Baala.Core.Section
         Koshucode.Baala.Core.Section.Clause
         Koshucode.Baala.Core.Section.Clausify
+        Koshucode.Baala.Core.Section.Process
         Koshucode.Baala.Core.Section.Quoter
         Koshucode.Baala.Core.Section.Section
-        Koshucode.Baala.Core.Section.SectionIO
-        Koshucode.Baala.Core.Section.SectionUnion
 
   -- Modules included in this library but not exported.
   --other-modules:       

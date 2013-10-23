@@ -7,80 +7,21 @@
 module Koshucode.Baala.Core.Section
 (
 -- * Modules
- module Koshucode.Baala.Core.Section.Section
-, module Koshucode.Baala.Core.Section.Clause
-, module Koshucode.Baala.Core.Section.Clausify
-, module Koshucode.Baala.Core.Section.Quoter
-, module Koshucode.Baala.Core.Section.SectionIO
-, module Koshucode.Baala.Core.Section.SectionUnion
-
--- * Module dependencies
--- $ModuleDependency
+module Koshucode.Baala.Core.Section.Clause,
+module Koshucode.Baala.Core.Section.Clausify,
+module Koshucode.Baala.Core.Section.Process,
+module Koshucode.Baala.Core.Section.Quoter,
+module Koshucode.Baala.Core.Section.Section,
 
 -- * Data dependencies
 -- $DataDependency
 ) where
 
-import Koshucode.Baala.Core.Section.Section
 import Koshucode.Baala.Core.Section.Clause
 import Koshucode.Baala.Core.Section.Clausify
+import Koshucode.Baala.Core.Section.Process
 import Koshucode.Baala.Core.Section.Quoter
-import Koshucode.Baala.Core.Section.SectionIO
-import Koshucode.Baala.Core.Section.SectionUnion
-
--- ----------------------
-{- $ModuleDependency
-
-* @Section@ module uses
-  @Relmap@,
-  @Data@,
-  @Abort@,
-  @Syntax@, and
-  @Prelude@ modules.
-
-* @Relmap@ module uses
-  @Content@,
-  @Data@,
-  @Abort@,
-  @Syntax@, and
-  @Prelude@ modules.
-
-* @Content@ module uses
-  @Data@,
-  @Abort@,
-  @Syntax@, and
-  @Prelude@ modules.
-
-* @Abort@ module uses
-  @Syntax@ and
-  @Prelude@ modules.
-
-* @Syntax@ module uses
-  @Prelude@ module.
-
-* @Data@ module uses
-  @Prelude@ module.
-
-* @Prelude@ module uses
-  no modules in @Koshucode@.
-
-Following picture shows reduced dependencies.
-
-@
-      Section
-        |
-      Relmap
-        |
-      Content
-     /      \\
-  Data     Abort
-    \\        |
-     \\     Syntax
-      \\     /
-      Prelude
-@
--}
-
+import Koshucode.Baala.Core.Section.Section
 
 
 -- ----------------------

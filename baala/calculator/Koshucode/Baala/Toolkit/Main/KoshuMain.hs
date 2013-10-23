@@ -155,11 +155,11 @@ putElems src =
 prettySection :: (C.CContent c) => L.SectionSource c -> IO Int
 prettySection (L.SectionSource root _ files) =
     case files of
-      [file] -> do md <- C.sectionFile root file
+      [file] -> do md <- C.readSectionFile root file
                    prettyPrint md
                    return 0
       []     -> do s <- getContents
-                   let md = C.sectionRead root "" s
+                   let md = C.readSectionCode root "" s
                    prettyPrint md
                    return 0
       _      -> L.putSuccess usage

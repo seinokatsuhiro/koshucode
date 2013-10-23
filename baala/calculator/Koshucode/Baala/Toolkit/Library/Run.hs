@@ -41,21 +41,24 @@ hRunFiles
     -> SectionSource c -- ^ Section source code
     -> IO Int
 hRunFiles h (SectionSource root textSec files) =
-    do let sec = map (C.sectionRead root "") textSec
-       sects <- mapM (C.sectionFile root) files
+    do let sec = map (C.readSectionCode root "") textSec
+       sects <- mapM (C.readSectionFile root) files
        let union = concatMM $ sec ++ sects
            comm  = B.CommentDoc [ B.CommentSec "INPUT" files ]
+
        IO.hSetEncoding h IO.utf8
        IO.hPutStrLn    h B.emacsModeComment
        IO.hPutStr      h $ unlines $ B.texts comm
        IO.hPutStrLn    h ""
-       B.abortIO (C.hRunSectionIO h) union
+
+       B.abortIO (C.hPutSection h) $ C.runSection =<< union
 
 concatMM :: (Monad m, Monoid a) => [m a] -> m a
 concatMM [] = return mempty
-concatMM (s:ss) = do s'  <- s
-                     ss' <- concatMM ss
-                     return $ mappend s' ss'
+concatMM (s:ss) =
+    do s'  <- s
+       ss' <- concatMM ss
+       return $ mappend s' ss'
 
 
 
@@ -124,8 +127,8 @@ readSec
     -> IO (B.AbortOr (C.Section c))  -- ^ Union of sections
 readSec src =
     do let root = rootSection src
-           sec1 = map (C.sectionRead root "") $ textSections src
-       sec2   <- mapM (C.sectionFile root) $ fileSections src
+           sec1 = map (C.readSectionCode root "") $ textSections src
+       sec2   <- mapM (C.readSectionFile root) $ fileSections src
        return $ concatMM $ sec1 ++ sec2
 
 readSecList
@@ -134,7 +137,7 @@ readSecList
     -> IO (B.AbortOr [C.Section c])
 readSecList src =
     do let root = rootSection src
-           sec1 = map (C.sectionRead root "") $ textSections src
-       sec2 <- mapM (C.sectionFile root) $ fileSections src
+           sec1 = map (C.readSectionCode root "") $ textSections src
+       sec2 <- mapM (C.readSectionFile root) $ fileSections src
        return $ sequence $ sec1 ++ sec2
 

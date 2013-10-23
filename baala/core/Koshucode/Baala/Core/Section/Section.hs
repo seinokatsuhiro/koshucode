@@ -15,15 +15,13 @@ module Koshucode.Baala.Core.Section.Section
   -- * Section
   Section (..),
 
-  -- * Selectors
-  sectionLinkedAssert,
-
   -- * Constructors
   makeEmptySection,
   emptySection,
   dataSection,
 ) where
 
+import qualified Data.Monoid                 as M
 import qualified Koshucode.Baala.Base        as B
 import qualified Koshucode.Baala.Core.Relmap as C
 import qualified Koshucode.Baala.Core.Assert as C
@@ -49,17 +47,19 @@ instance (Ord c, B.Pretty c) => B.Pretty (Section c) where
         dJudge   = B.docv $ sectionJudge sec
         dAssert  = B.docv $ sectionAssert sec
 
+instance M.Monoid (Section c) where
+    mempty  = emptySection
+    mappend = sectionUnion
 
-
--- ----------------------  Selectors
-
-{-| Select assertions like 'sectionAssert'.
-    It returns relmap-liked assertions.
-    We can run these assertions using 'C.runAssertJudges'. -}
-sectionLinkedAssert :: Section c -> [C.Assert c]
-sectionLinkedAssert Section { sectionRelmap = ms, sectionAssert = ass }
-    = map linker ass where
-      linker = C.assertMap $ C.relmapLinker ms
+sectionUnion :: Section c -> Section c -> Section c
+sectionUnion s1 s2 =
+    s1 { sectionName   = Nothing
+       , sectionImport = []
+       , sectionExport = union sectionExport
+       , sectionAssert = union sectionAssert
+       , sectionRelmap = union sectionRelmap
+       , sectionJudge  = union sectionJudge
+       } where union f = f s1 ++ f s2
 
 
 

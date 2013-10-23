@@ -36,7 +36,7 @@ readInputs = mapM readInput
 readJudge :: String -> [B.Judge VContent]
 readJudge src =
     let root = C.emptySection :: C.Section VContent
-    in case C.sectionRead root "" src of
+    in case C.readSectionCode root "" src of
          Right sec -> C.sectionJudge sec
          Left _    -> []
 

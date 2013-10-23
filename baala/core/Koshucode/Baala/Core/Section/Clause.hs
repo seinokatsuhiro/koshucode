@@ -122,13 +122,14 @@ isCUnres _                    = False
     This function does not depend on 'C.RelmapHalfCons'.
 
     >>> consPreclause . B.tokenize $ "a : source A /x /y"
-    [TRelmap (ClauseSource
+    [ TRelmap ( ClauseSource
                  [TWord 1 0 "a", TSpace 2 1, ..., TTerm 11 ["/y"]]
-                 [CodeLine 1 "a : source A /x /y" [TWord 1 0 "a", ...]])
-             "a" [ TreeL (TWord 5 0 "source")
-                 , TreeL (TWord 7 0 "A")
-                 , TreeL (TTerm 9  ["/x"])
-                 , TreeL (TTerm 11 ["/y"]) ]]
+                 [CodeLine 1 "a : source A /x /y" [TWord 1 0 "a", ...]] )
+             "a" [ TWord 5 0 "source"
+                 , TWord 7 0 "A"
+                 , TTerm 9 ["/x"]
+                 , TTerm 11 ["/y"]
+                 ]]
     -}
 consPreclause :: [B.TokenLine] -> [Clause]
 consPreclause = concatMap consPreclause' . C.clausify
@@ -322,7 +323,7 @@ consSection full resource xs =
 -- ----------------------
 {- $Documentation
 
-   There are six types of 'Clause'.
+   There are seven types of 'Clause'.
    Textual representation of 'C.Section' is a list of clauses.
    'consClause' constructs clause list from section text.
 
@@ -340,6 +341,9 @@ consSection full resource xs =
 
    [@|=X@ pattern @:@ relmap]
      Denial assertion clause
+
+   [@|=V@ pattern @:@ relmap]
+     Violated assertion clause
 
    [@****@ blah blah blah ...]
      Comment clause
