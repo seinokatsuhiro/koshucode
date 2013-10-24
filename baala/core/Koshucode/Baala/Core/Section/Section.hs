@@ -1,4 +1,4 @@
-{-# OPTIONS_GHC -Wall #-}
+{-# OPTIONS_GHC -Wall -fno-warn-incomplete-patterns #-}
 
 {-| Data structure for relational calculations.
     There are three types of section:
@@ -18,13 +18,16 @@ module Koshucode.Baala.Core.Section.Section
   -- * Constructors
   makeEmptySection,
   emptySection,
-  dataSection,
+  consSection,
 ) where
 
-import qualified Data.Monoid                 as M
-import qualified Koshucode.Baala.Base        as B
-import qualified Koshucode.Baala.Core.Relmap as C
-import qualified Koshucode.Baala.Core.Assert as C
+import qualified Data.Monoid                           as M
+import qualified Koshucode.Baala.Base                  as B
+import qualified Koshucode.Baala.Core.Content          as C
+import qualified Koshucode.Baala.Core.Relmap           as C
+import qualified Koshucode.Baala.Core.Assert           as C
+import qualified Koshucode.Baala.Core.Section.Clausify as C
+import qualified Koshucode.Baala.Core.Section.Clause   as C
 
 data Section c = Section {
       sectionName     :: Maybe String           -- ^ Section name
@@ -53,17 +56,14 @@ instance M.Monoid (Section c) where
 
 sectionUnion :: Section c -> Section c -> Section c
 sectionUnion s1 s2 =
-    s1 { sectionName   = Nothing
-       , sectionImport = []
-       , sectionExport = union sectionExport
-       , sectionAssert = union sectionAssert
-       , sectionRelmap = union sectionRelmap
-       , sectionJudge  = union sectionJudge
-       } where union f = f s1 ++ f s2
-
-
-
--- ----------------------  Constructors
+    s1 { sectionName    = Nothing
+       , sectionImport  = []
+       , sectionExport  = union sectionExport
+       , sectionAssert  = union sectionAssert
+       , sectionRelmap  = union sectionRelmap
+       , sectionJudge   = union sectionJudge
+       , sectionViolate = union sectionViolate
+       } where union f  = f s1 ++ f s2
 
 {-| Make empty section that has a given constructor. -}
 makeEmptySection :: C.RelmapCons c -> Section c
@@ -73,9 +73,101 @@ makeEmptySection = Section Nothing [] [] [] [] [] [] [] ""
 emptySection :: Section c
 emptySection = makeEmptySection $ C.relmapCons []
 
-{-| Section that has only judgements. -}
-dataSection :: [B.Judge c] -> Section c
-dataSection js = emptySection { sectionJudge = js }
+-- {-| Section that has only judgements. -}
+-- dataSection :: [B.Judge c] -> Section c
+-- dataSection js = emptySection { sectionJudge = js }
+
+
+
+-- ----------------------  Full construction
+
+{-| Second step of constructing 'Section'. -}
+consSection
+    :: (C.CContent c)
+    => C.RelmapFullCons c      -- ^ Relmap full constructor
+    -> String                  -- ^ Resource name
+    -> [C.Clause]              -- ^ Output of 'C.consClause'
+    -> B.AbortOr (Section c)   -- ^ Result section
+consSection full resource xs =
+    do _        <-  mapMFor unk    isCUnknown
+       _        <-  mapMFor unres  isCUnres
+       imports  <-  mapMFor impt   isCImport
+       judges   <-  mapMFor judge  isCJudge 
+       relmaps  <-  mapMFor relmap isCRelmap
+       asserts  <-  mapMFor assert isCAssert
+
+       Right $ emptySection
+           { sectionName      =  section xs
+           , sectionImport    =  imports
+           , sectionExport    =  mapFor expt  isCExport
+           , sectionShort     =  mapFor short isCShort
+           , sectionAssert    =  asserts
+           , sectionRelmap    =  relmaps
+           , sectionJudge     =  judges
+           , sectionResource  =  resource }
+    where
+      mapFor  f p = pass f `map`  filter (p . C.clauseBody) xs
+      mapMFor f p = pass f `mapM` filter (p . C.clauseBody) xs
+      pass f (C.Clause src body) = f (C.clauseLines src) body
+      consSec = consSection full ""
+
+      -- todo: multiple section name
+      section ((C.Clause _ (C.CSection n)) : _) = n
+      section (_ : xs2) = section xs2
+      section [] = Nothing
+
+      expt  _ (C.CExport n) = n
+      short _ (C.CShort p)  = p
+
+      impt _ (C.CImport _ (Nothing)) = Right emptySection
+      impt _ (C.CImport _ (Just e))  = consSec [e]
+
+      judge ls (C.CJudge q p xs2) =
+          case C.litJudge q p (B.tokenTrees xs2) of
+            Right j -> Right j
+            Left  a -> abort a [] ls
+
+      relmap ls (C.CRelmap n r) =
+          case full r of
+            Right r'       -> Right (n, r')
+            Left (a, toks) -> abort a toks ls
+
+      assert ls (C.CAssert t p opt r) =
+          case full r of
+            Right r'       -> Right $ C.Assert t p opt r' ls
+            Left (a, toks) -> abort a toks ls
+
+      unk   ls (C.CUnknown)    = abort B.AbortUnkClause [] ls
+      unres ls (C.CUnres toks) = abort B.AbortUnresToken toks ls
+      abort a toks ls = Left (a, toks, ls)
+
+isCImport, isCExport, isCShort,
+  isCRelmap, isCAssert, isCJudge,
+  isCUnknown, isCUnres :: C.ClauseBody -> Bool
+
+isCImport (C.CImport _ _)      = True
+isCImport _                    = False
+
+isCExport (C.CExport _)        = True
+isCExport _                    = False
+
+isCShort (C.CShort _)          = True
+isCShort _                     = False
+
+isCRelmap (C.CRelmap _ _)      = True
+isCRelmap _                    = False
+
+isCAssert (C.CAssert _ _ _ _)  = True
+isCAssert _                    = False
+
+isCJudge (C.CJudge _ _ _)      = True
+isCJudge _                     = False
+
+isCUnknown (C.CUnknown)        = True
+isCUnknown _                   = False
+
+isCUnres (C.CUnres _)          = True
+isCUnres _                     = False
 
 
 
@@ -103,3 +195,4 @@ dataSection js = emptySection { sectionJudge = js }
        Make section from list of clauses.
 
 -}
+

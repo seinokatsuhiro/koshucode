@@ -47,12 +47,3 @@ cons :: [B.Token] -> B.TokenLine -> B.Map (ClauseSource, [B.TokenLine])
 cons a1 b1 (ClauseSource a2 b2, c)
     = (ClauseSource (a1 ++ a2) (b1 : b2), c)
 
--- e1 = mapM_ print . clausify . tokenize
--- e2 = e1 "a\nb\nc\n\n"
--- e3 = e1 "a\n b\nc\n"
--- e4 = e1 " a\n b\nc\n"
--- e5 = e1 " a\n  b\nc\n"
--- e6 = e1 " a\nb\nc\n"
--- e7 = e1 "\na\nb\n"
--- e8 = e1 "a\n\n b\nc\n"
--- e9 = e1 "a\n  \n b\nc\n"
