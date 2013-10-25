@@ -18,13 +18,12 @@ module Koshucode.Baala.Core.Section.Clause
 
 import qualified Data.Generics as G
 
-import qualified Koshucode.Baala.Base                  as B
-import qualified Koshucode.Baala.Core.Relmap           as C
-import qualified Koshucode.Baala.Core.Assert           as C
-import qualified Koshucode.Baala.Core.Section.Clausify as C
+import qualified Koshucode.Baala.Base         as B
+import qualified Koshucode.Baala.Core.Relmap  as C
+import qualified Koshucode.Baala.Core.Assert  as C
 
 data Clause =
-    Clause { clauseSource :: C.TokenClause
+    Clause { clauseSource :: B.TokenClause
            , clauseBody   :: ClauseBody
            } deriving (Show, G.Data, G.Typeable)
 
@@ -81,10 +80,10 @@ clauseTypeText (Clause _ body) =
                  ]]
     -}
 consPreclause :: [B.TokenLine] -> [Clause]
-consPreclause = concatMap consPreclause' . C.clausify
+consPreclause = concatMap consPreclause' . B.clausify
 
-consPreclause' :: C.TokenClause -> [Clause]
-consPreclause' src@(C.TokenClause toks _) = clause $ B.sweepToken toks where
+consPreclause' :: B.TokenClause -> [Clause]
+consPreclause' src@(B.TokenClause toks _) = clause $ B.sweepToken toks where
     clause :: [B.Token] -> [Clause]
     clause (B.TWord _ 0 "|" : B.TWord _ 0 k : xs) =
         frege k xs  -- frege's judgement stroke
@@ -166,7 +165,7 @@ clauseHalf half xs = mapM f xs2 where
     g src (TAssert q p opt ts) = Right . CAssert q p opt =<< h src ts
     g _   body                 = Right body
 
-    h src ts = let ls = C.clauseLines src
+    h src ts = let ls = B.tokenLines src
                in case half ls (B.tokenTrees ts) of
                     Right r -> Right r
                     Left  a -> Left (a, ts, ls)

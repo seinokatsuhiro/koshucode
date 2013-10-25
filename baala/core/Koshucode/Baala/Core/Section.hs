@@ -8,7 +8,6 @@ module Koshucode.Baala.Core.Section
 (
 -- * Modules
 module Koshucode.Baala.Core.Section.Clause,
-module Koshucode.Baala.Core.Section.Clausify,
 module Koshucode.Baala.Core.Section.Process,
 module Koshucode.Baala.Core.Section.Quoter,
 module Koshucode.Baala.Core.Section.Section,
@@ -18,7 +17,6 @@ module Koshucode.Baala.Core.Section.Section,
 ) where
 
 import Koshucode.Baala.Core.Section.Clause
-import Koshucode.Baala.Core.Section.Clausify
 import Koshucode.Baala.Core.Section.Process
 import Koshucode.Baala.Core.Section.Quoter
 import Koshucode.Baala.Core.Section.Section

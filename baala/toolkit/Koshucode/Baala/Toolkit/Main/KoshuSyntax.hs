@@ -16,8 +16,8 @@ import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 import qualified Koshucode.Baala.Vanilla as V
 
-import Koshucode.Baala.Toolkit.Library.Exit
-import Koshucode.Baala.Toolkit.Library.Version
+import qualified Koshucode.Baala.Toolkit.Library.Exit    as L
+import qualified Koshucode.Baala.Toolkit.Library.Version as L
 
 
 
@@ -43,7 +43,7 @@ koshuOptions =
     ]
 
 version :: String
-version = "koshu-syntax-" ++ versionString
+version = "koshu-syntax-" ++ L.versionString
 
 usage :: String
 usage = usageInfo header koshuOptions
@@ -61,19 +61,19 @@ header = unlines
 
 {-| The main function for @koshu-syntax@ command. -}
 koshuSyntaxMain :: IO ()
-koshuSyntaxMain = koshuSyntaxMain' =<< prelude
+koshuSyntaxMain = koshuSyntaxMain' =<< L.prelude
 
 koshuSyntaxMain' :: (String, [String]) -> IO ()
 koshuSyntaxMain' (_, argv) =
     case getOpt Permute koshuOptions argv of
       (opts, files, [])
-          | has OptHelp         -> putSuccess usage
-          | has OptVersion      -> putSuccess $ version ++ "\n"
-          | has OptShowEncoding -> putSuccess =<< currentEncodings
+          | has OptHelp         -> L.putSuccess usage
+          | has OptVersion      -> L.putSuccess $ version ++ "\n"
+          | has OptShowEncoding -> L.putSuccess =<< L.currentEncodings
           | has OptOnlyToken    -> mapM_ dumpToken files
           | otherwise           -> mapM_ dumpClauseAndToken files
           where has = (`elem` opts)
-      (_, _, errs) -> putFailure $ concat errs
+      (_, _, errs) -> L.putFailure $ concat errs
 
 
 
@@ -105,7 +105,7 @@ putClause p@(cn, c) =
 
      print $ B.doc $ clauseJudge p
      let src = C.clauseSource c
-         ls  = C.clauseLines src
+         ls  = B.tokenLines src
      foldM_ (putToken cn) 1 ls
 
 clauseJudge :: (Int, C.Clause) -> B.Judge V.VContent

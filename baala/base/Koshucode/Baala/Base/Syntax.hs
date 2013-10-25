@@ -3,15 +3,17 @@
 {-| Syntactic functions -}
 
 module Koshucode.Baala.Base.Syntax
-( -- * General modules
-  module Koshucode.Baala.Base.Syntax.Binary,
-  module Koshucode.Baala.Base.Syntax.CodeLine,
-  module Koshucode.Baala.Base.Syntax.Tree,
+(
+-- * General modules
+module Koshucode.Baala.Base.Syntax.Binary,
+module Koshucode.Baala.Base.Syntax.CodeLine,
+module Koshucode.Baala.Base.Syntax.Tree,
 
-  -- * Koshu syntax modules
-  module Koshucode.Baala.Base.Syntax.Token,
-  module Koshucode.Baala.Base.Syntax.TokenTree,
-  module Koshucode.Baala.Base.Syntax.Tokenize,
+-- * Koshu syntax modules
+module Koshucode.Baala.Base.Syntax.Token,
+module Koshucode.Baala.Base.Syntax.TokenClause,
+module Koshucode.Baala.Base.Syntax.TokenTree,
+module Koshucode.Baala.Base.Syntax.Tokenize,
 ) where
 
 import Koshucode.Baala.Base.Syntax.Binary
@@ -19,6 +21,7 @@ import Koshucode.Baala.Base.Syntax.CodeLine
 import Koshucode.Baala.Base.Syntax.Tree
 
 import Koshucode.Baala.Base.Syntax.Token
+import Koshucode.Baala.Base.Syntax.TokenClause
 import Koshucode.Baala.Base.Syntax.TokenTree
 import Koshucode.Baala.Base.Syntax.Tokenize
 

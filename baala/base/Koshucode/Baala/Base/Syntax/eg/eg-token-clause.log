@@ -1,0 +1,144 @@
+0
+
+1 TokenClause
+    [TokenLine] 1 elements a x
+    [Token] 3 elements
+      TWord #1 0 "a"
+      TSpace #2 1
+      TWord #3 0 "x"
+  TokenClause
+    [TokenLine] 1 elements b y
+    [Token] 3 elements
+      TWord #4 0 "b"
+      TSpace #5 1
+      TWord #6 0 "y"
+  TokenClause
+    [TokenLine] 1 elements c z
+    [Token] 3 elements
+      TWord #7 0 "c"
+      TSpace #8 1
+      TWord #9 0 "z"
+
+2 TokenClause
+    [TokenLine] 2 elements
+      a x
+       b y
+    [Token] 6 elements
+      TWord #1 0 "a"
+      TSpace #2 1
+      TWord #3 0 "x"
+      TWord #5 0 "b"
+      TSpace #6 1
+      TWord #7 0 "y"
+  TokenClause
+    [TokenLine] 1 elements c z
+    [Token] 3 elements
+      TWord #8 0 "c"
+      TSpace #9 1
+      TWord #10 0 "z"
+
+3 TokenClause
+    [TokenLine] 3 elements
+      a x
+       b y
+       c z
+    [Token] 9 elements
+      TWord #1 0 "a"
+      TSpace #2 1
+      TWord #3 0 "x"
+      TWord #5 0 "b"
+      TSpace #6 1
+      TWord #7 0 "y"
+      TWord #9 0 "c"
+      TSpace #10 1
+      TWord #11 0 "z"
+
+4 TokenClause
+    [TokenLine] 3 elements
+      a x
+        b y
+       c z
+    [Token] 9 elements
+      TWord #1 0 "a"
+      TSpace #2 1
+      TWord #3 0 "x"
+      TWord #5 0 "b"
+      TSpace #6 1
+      TWord #7 0 "y"
+      TWord #9 0 "c"
+      TSpace #10 1
+      TWord #11 0 "z"
+
+5 TokenClause
+    [TokenLine] 1 elements  a x
+    [Token] 3 elements
+      TWord #2 0 "a"
+      TSpace #3 1
+      TWord #4 0 "x"
+  TokenClause
+    [TokenLine] 1 elements  b y
+    [Token] 3 elements
+      TWord #6 0 "b"
+      TSpace #7 1
+      TWord #8 0 "y"
+  TokenClause
+    [TokenLine] 1 elements c z
+    [Token] 3 elements
+      TWord #9 0 "c"
+      TSpace #10 1
+      TWord #11 0 "z"
+
+6 TokenClause
+    [TokenLine] 2 elements
+       a x
+        b y
+    [Token] 6 elements
+      TWord #2 0 "a"
+      TSpace #3 1
+      TWord #4 0 "x"
+      TWord #6 0 "b"
+      TSpace #7 1
+      TWord #8 0 "y"
+  TokenClause
+    [TokenLine] 1 elements c z
+    [Token] 3 elements
+      TWord #9 0 "c"
+      TSpace #10 1
+      TWord #11 0 "z"
+
+7 TokenClause
+    [TokenLine] 2 elements
+      a x
+       b y
+    [Token] 6 elements
+      TWord #1 0 "a"
+      TSpace #2 1
+      TWord #3 0 "x"
+      TWord #5 0 "b"
+      TSpace #6 1
+      TWord #7 0 "y"
+  TokenClause
+    [TokenLine] 1 elements c z
+    [Token] 3 elements
+      TWord #8 0 "c"
+      TSpace #9 1
+      TWord #10 0 "z"
+
+8 TokenClause
+    [TokenLine] 2 elements
+      a x
+       b y
+    [Token] 6 elements
+      TWord #1 0 "a"
+      TSpace #2 1
+      TWord #3 0 "x"
+      TWord #6 0 "b"
+      TSpace #7 1
+      TWord #8 0 "y"
+  TokenClause
+    [TokenLine] 1 elements c z
+    [Token] 3 elements
+      TWord #9 0 "c"
+      TSpace #10 1
+      TWord #11 0 "z"
+

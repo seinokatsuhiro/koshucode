@@ -1,20 +1,23 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Core.Section.Clausify
+module Koshucode.Baala.Base.Syntax.TokenClause
 ( TokenClause (..),
   clausify,
 ) where
 
 import qualified Data.Generics as G
-import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.Base.Prelude         as B
+import qualified Koshucode.Baala.Base.Syntax.CodeLine as B
+import qualified Koshucode.Baala.Base.Syntax.Token    as B
+import qualified Koshucode.Baala.Base.Syntax.Tokenize as B
 
 
 -- ----------------------  Datatype
 
 data TokenClause = TokenClause
-    { clauseTokens :: [B.Token]     -- ^ Source tokens of clause
-    , clauseLines  :: [B.TokenLine] -- ^ Source lines of clause
+    { tokenList :: [B.Token]       -- ^ Source tokens of clause
+    , tokenLines  :: [B.TokenLine] -- ^ Source lines of clause
     } deriving (Show, G.Data, G.Typeable)
 
 instance B.Pretty TokenClause where

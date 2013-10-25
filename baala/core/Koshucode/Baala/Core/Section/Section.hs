@@ -21,13 +21,12 @@ module Koshucode.Baala.Core.Section.Section
   consSection,
 ) where
 
-import qualified Data.Monoid                           as M
-import qualified Koshucode.Baala.Base                  as B
-import qualified Koshucode.Baala.Core.Content          as C
-import qualified Koshucode.Baala.Core.Relmap           as C
-import qualified Koshucode.Baala.Core.Assert           as C
-import qualified Koshucode.Baala.Core.Section.Clausify as C
-import qualified Koshucode.Baala.Core.Section.Clause   as C
+import qualified Data.Monoid                          as M
+import qualified Koshucode.Baala.Base                 as B
+import qualified Koshucode.Baala.Core.Content         as C
+import qualified Koshucode.Baala.Core.Relmap          as C
+import qualified Koshucode.Baala.Core.Assert          as C
+import qualified Koshucode.Baala.Core.Section.Clause  as C
 
 data Section c = Section {
       sectionName     :: Maybe String           -- ^ Section name
@@ -108,7 +107,7 @@ consSection full resource xs =
     where
       mapFor  f p = pass f `map`  filter (p . C.clauseBody) xs
       mapMFor f p = pass f `mapM` filter (p . C.clauseBody) xs
-      pass f (C.Clause src body) = f (C.clauseLines src) body
+      pass f (C.Clause src body) = f (B.tokenLines src) body
       consSec = consSection full ""
 
       -- todo: multiple section name
