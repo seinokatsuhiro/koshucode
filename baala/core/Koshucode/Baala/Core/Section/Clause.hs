@@ -24,7 +24,7 @@ import qualified Koshucode.Baala.Core.Assert           as C
 import qualified Koshucode.Baala.Core.Section.Clausify as C
 
 data Clause =
-    Clause { clauseSource :: C.ClauseSource
+    Clause { clauseSource :: C.TokenClause
            , clauseBody   :: ClauseBody
            } deriving (Show, G.Data, G.Typeable)
 
@@ -71,7 +71,7 @@ clauseTypeText (Clause _ body) =
     This function does not depend on 'C.RelmapHalfCons'.
 
     >>> consPreclause . B.tokenize $ "a : source A /x /y"
-    [ TRelmap ( ClauseSource
+    [ TRelmap ( TokenClause
                  [TWord 1 0 "a", TSpace 2 1, ..., TTerm 11 ["/y"]]
                  [CodeLine 1 "a : source A /x /y" [TWord 1 0 "a", ...]] )
              "a" [ TWord 5 0 "source"
@@ -83,8 +83,8 @@ clauseTypeText (Clause _ body) =
 consPreclause :: [B.TokenLine] -> [Clause]
 consPreclause = concatMap consPreclause' . C.clausify
 
-consPreclause' :: C.ClauseSource -> [Clause]
-consPreclause' src@(C.ClauseSource toks _) = clause $ B.sweepToken toks where
+consPreclause' :: C.TokenClause -> [Clause]
+consPreclause' src@(C.TokenClause toks _) = clause $ B.sweepToken toks where
     clause :: [B.Token] -> [Clause]
     clause (B.TWord _ 0 "|" : B.TWord _ 0 k : xs) =
         frege k xs  -- frege's judgement stroke

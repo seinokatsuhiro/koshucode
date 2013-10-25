@@ -1,4 +1,6 @@
 #!/usr/bin/env runhaskell
+{-# OPTIONS_GHC -Wall #-}
+-- --------------------------------------------
 --
 --  DESCRIPTION
 --    Examples of clauses
@@ -7,12 +9,10 @@
 --    chmod 755 eg-clause.hs
 --    ./eg-clause.hs > eg-clause.log
 --
+-- --------------------------------------------
 
-{-# OPTIONS_GHC -Wall #-}
-
-import Koshucode.Baala.Base
-import Koshucode.Baala.Core
-
+import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.Core as C
 
 
 -- ----------------------  Utility
@@ -33,9 +33,8 @@ eg :: IO () -> IO ()
 eg f = do f
           putStrLn ""
 
-clause :: String -> [Clause]
-clause = consPreclause . tokenize
-
+clause :: String -> [C.Clause]
+clause = C.consPreclause . B.tokenize
 
 
 -- ----------------------  Main
@@ -50,6 +49,9 @@ egClause =
      "import"      >>>> clause "import 'http://example.com/'"
      "export"      >>>> clause "export aa"
      "judge"       >>>> clause "|-- A /x 0 /y 0"
+     "judge"       >>>> clause "|-X A /x 0 /y 0"
      "relmap"      >>>> clause "a : source A /x /y"
      "relmap"      >>>> clause "a : @a"
+     "assert"      >>>> clause "|== A : a"
+     "assert"      >>>> clause "|=V A : a"
 

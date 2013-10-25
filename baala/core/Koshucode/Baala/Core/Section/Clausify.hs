@@ -2,48 +2,68 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Core.Section.Clausify
-( ClauseSource (..),
+( TokenClause (..),
   clausify,
 ) where
 
 import qualified Data.Generics as G
 import qualified Koshucode.Baala.Base as B
 
-data ClauseSource = ClauseSource
+
+-- ----------------------  Datatype
+
+data TokenClause = TokenClause
     { clauseTokens :: [B.Token]     -- ^ Source tokens of clause
     , clauseLines  :: [B.TokenLine] -- ^ Source lines of clause
     } deriving (Show, G.Data, G.Typeable)
 
-emptyClauseSource :: ClauseSource
-emptyClauseSource = ClauseSource [] []
+instance B.Pretty TokenClause where
+    doc = docTokenClause
 
-{-| Convert token list into list of token clauses -}
-clausify :: [B.TokenLine] -> [ClauseSource]
-clausify = B.gather clausifySplit
+docTokenClause :: TokenClause -> B.Doc
+docTokenClause (TokenClause toks ls) = d where
+    d      = B.docHang k 2 $ B.docv [dls, dtoks]
+    k      = B.doc "TokenClause"
+    dtoks  = labeled toks "[Token]"
+    dls    = labeled ls   "[TokenLine]"
+    labeled xs name = B.docHang (label xs name) 2 $ B.docv xs
+    label   xs name = B.doch [ B.doc name
+                             , B.doc $ length xs, B.doc "elements" ]
 
-clausifySplit :: [B.TokenLine] -> (ClauseSource, [B.TokenLine])
-clausifySplit = loop where
+
+-- ----------------------  Function
+
+{-| Convert token lines into list of token clauses -}
+clausify :: [B.TokenLine] -> [TokenClause]
+clausify = B.gather split
+
+split :: [B.TokenLine] -> (TokenClause, [B.TokenLine])
+split = loop where
     loop (B.CodeLine _ _ xs : ls)
         | white xs = loop ls
     loop (src@(B.CodeLine _ _ (B.TSpace _ i : xs)) : ls)
-        = cons xs src $ clausifySplitWith i ls
+        = cons xs src $ splitWith i ls
     loop (src@(B.CodeLine _ _ xs@(B.TWord _ _ _ : _)) : ls)
-        = cons xs src $ clausifySplitWith 0 ls
-    loop (_ : ls) = (emptyClauseSource, ls)
-    loop []       = (emptyClauseSource, [])
+        = cons xs src $ splitWith 0 ls
+    loop (_ : ls) = (empty, ls)
+    loop []       = (empty, [])
 
-clausifySplitWith :: Int -> [B.TokenLine] -> (ClauseSource, [B.TokenLine])
-clausifySplitWith i = loop where
-    loop ((B.CodeLine _ _ xs) : ls)
-        | white xs = loop ls
-    loop (src@(B.CodeLine _ _ (B.TSpace _ n : xs)) : ls)
-        | n > i    = cons xs src $ loop ls
-    loop ls        = (emptyClauseSource, ls)
+splitWith :: Int -> [B.TokenLine] -> (TokenClause, [B.TokenLine])
+splitWith i = loop where
+    loop ((B.CodeLine _ _ toks) : ls)
+        | white toks = loop ls
+    loop (src@(B.CodeLine _ _ (B.TSpace _ n : toks)) : ls)
+        | n > i    = cons toks src $ loop ls
+    loop ls        = (empty, ls)
 
+empty :: TokenClause
+empty = TokenClause [] []
+
+-- test white line
 white :: [B.Token] -> Bool
 white xs = (B.sweepToken xs == [])
 
-cons :: [B.Token] -> B.TokenLine -> B.Map (ClauseSource, [B.TokenLine])
-cons a1 b1 (ClauseSource a2 b2, c)
-    = (ClauseSource (a1 ++ a2) (b1 : b2), c)
+cons :: [B.Token] -> B.TokenLine -> B.Map (TokenClause, [B.TokenLine])
+cons a1 b1 (TokenClause a2 b2, c)
+    = (TokenClause (a1 ++ a2) (b1 : b2), c)
 
