@@ -1,12 +1,14 @@
 #!/bin/sh
 #
-#  Cabal for each directories
+#  DESCRIPTION
+#    Cabal for each packages
 #
-#  [1] ./cabal-koshu.sh link
-#        Make symbolic links 'install.link', etc.
-#  [2] ./install.link base
-#        Build and install base package.
-#  [3] ./install.link
+#  USAGE
+#    [1] ./cabal-koshu.sh link
+#          Make symbolic links 'install.link', etc.
+#    [2] ./install.link base
+#          Build and install base package.
+#    [3] ./install.link
 #        Build and install all packages.
 #
 
@@ -14,16 +16,17 @@ usage () {
     echo "cabal for each directories"
     echo ""
     if [ ! -z $cabal ]; then
-    echo "  $0                cabal for all directories"
+    echo "  $0                cabal for all packages"
     echo ""
-    echo "  $0 base           cabal for base directory"
-    echo "  $0 core           cabal for core directory"
-    echo "  $0 operator       cabal for operator directory"
-    echo "  $0 calculator     cabal for calculator directory"
-    echo "  $0 toolkit        cabal for toolkit directory"
+    echo "  $0 base           cabal for base package"
+    echo "  $0 core           cabal for core package"
+    echo "  $0 operator       cabal for operator package"
+    echo "  $0 calculator     cabal for calculator package"
+    echo "  $0 toolkit        cabal for toolkit package"
     echo ""
     fi
     echo "  $0 link           make symbolic-linked commands"
+    echo "  $0 clean          cleaning directories"
     echo "  $0 unreg          unregister koshucode packages"
     echo ""
 }
@@ -46,6 +49,14 @@ main () {
             unregister base
             exit ;;
 
+        clean)
+            cabal_clean toolkit
+            cabal_clean calculator
+            cabal_clean operator
+            cabal_clean core
+            cabal_clean base
+            exit ;;
+
         '' | base* | core* | operator* | calculator* | toolkit* | koshu )
             cabal_for `directories "$1"`
             exit ;;
@@ -59,6 +70,10 @@ main () {
 unregister () {
     echo "Unregistering $1"
     ghc-pkg unregister koshucode-baala-$1
+}
+
+cabal_clean () {
+    (cd "$1"; cabal_cmd clean)
 }
 
 decide_program () {
@@ -98,8 +113,15 @@ sym_link () {
 
 # ======================  cabal command
 
-URL=http://hackage.haskell.org/packages/archive/base/latest/doc/html
+CABAL_DEV=$HOME/cabal-dev
 GITHUB_DOC=http://seinokatsuhiro.github.io/koshucode/doc/html
+URL=http://hackage.haskell.org/packages/archive/base/latest/doc/html
+
+cabal_cmd () {
+    echo "# $@"
+    cabal-dev --sandbox=$CABAL_DEV/koshucode "$@"
+    #cabal "$@"
+}
 
 cabal_for () {
     if [ -z $cabal ]; then
@@ -119,14 +141,14 @@ section () {
 }
 
 cabal_sdist () {
-    cabal clean
-    cabal configure
+    cabal_cmd clean
+    cabal_cmd configure
 
     section hoogle
-    cabal haddock --hoogle
+    cabal_cmd haddock --hoogle
 
     section haddock
-    cabal haddock \
+    cabal_cmd haddock \
         --hyperlink-source \
         --hscolour-css=../hscolour.css \
         --haddock-option=--pretty-html \
@@ -138,7 +160,7 @@ cabal_sdist () {
         # --executable \
 
     section sdist
-    cabal sdist
+    cabal_cmd sdist
 }
 
 # interface file
@@ -156,9 +178,9 @@ if_file () {
 
 cabal_haddock () {
     if [ `pwd_base` = XXXcalculator ]; then
-        cabal haddock --executables
+        cabal_cmd haddock --executables
     else
-        cabal haddock
+        cabal_cmd haddock
     fi
 }
 
@@ -167,7 +189,7 @@ pwd_base () {
 }
 
 cabal_install () {
-    cabal install \
+    cabal_cmd install \
         --force-reinstalls \
         --disable-documentation \
         --disable-optimization
