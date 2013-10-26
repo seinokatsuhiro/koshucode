@@ -7,7 +7,7 @@ name:                koshucode-baala-operator
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:             0.39.0.0
+version:             0.40.0.0
 
 -- A short (one-line) description of the package.
 synopsis:            Relational operators in Koshucode
@@ -85,6 +85,6 @@ library
   build-depends:
          base                  == 4.6.*
        , containers            == 0.5.*
-       , koshucode-baala-base  == 0.39.*
-       , koshucode-baala-core  == 0.39.*
+       , koshucode-baala-base  == 0.40.*
+       , koshucode-baala-core  == 0.40.*
 
