@@ -105,7 +105,7 @@ putClause p@(cn, c) =
 
      print $ B.doc $ clauseJudge p
      let src = C.clauseSource c
-         ls  = B.tokenLines src
+         ls  = B.clauseLines src
      foldM_ (putToken cn) 1 ls
 
 clauseJudge :: (Int, C.Clause) -> B.Judge V.VContent

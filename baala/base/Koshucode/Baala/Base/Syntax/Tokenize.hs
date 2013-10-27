@@ -44,7 +44,7 @@ tokenize = B.codeLines nextToken
 {-| Split string into list of tokens.
     Result token list does not contain newline characters. -}
 tokens :: String -> [B.Token]
-tokens = concatMap B.codeLineTokens . tokenize
+tokens = concatMap B.lineTokens . tokenize
 
 trimLeft :: B.Map String
 trimLeft = dropWhile isSpace

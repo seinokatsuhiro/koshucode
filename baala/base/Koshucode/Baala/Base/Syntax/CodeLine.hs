@@ -9,6 +9,7 @@
 
 module Koshucode.Baala.Base.Syntax.CodeLine
 ( CodeLine (..),
+  CodeClause (..),
   NextToken,
   TokenNumber,
   codeLines,
@@ -19,14 +20,20 @@ import qualified Koshucode.Baala.Base.Prelude as B
 
 
 
--- ----------------------  Codeline
+-- ----------------------  CodeLine
 
-{-| Tokens per line. -}
+{-| Tokens in line. -}
 data CodeLine a = CodeLine
-    { codeLineNumber  :: B.LineNumber -- ^ Line number, from 1.
-    , codeLineContent :: String       -- ^ Line content without newline.
-    , codeLineTokens  :: [a]          -- ^ Tokens in the line.
+    { lineNumber  :: B.LineNumber  -- ^ Line number, from 1.
+    , lineContent :: String        -- ^ Line content without newline.
+    , lineTokens  :: [a]           -- ^ Tokens in the line.
     } deriving (Show, Eq, Ord, G.Data, G.Typeable)
+
+{-| Tokens in clause. -}
+data CodeClause a = CodeClause
+    { clauseTokens    :: [a]           -- ^ Source tokens of clause
+    , clauseLines     :: [CodeLine a]  -- ^ Source lines of clause
+    } deriving (Show, G.Data, G.Typeable)
 
 instance B.Pretty (CodeLine a) where
     doc (CodeLine _ line _) = B.doc line
@@ -66,7 +73,7 @@ codeLinesBy f = loop 1 . B.linesCrlfNumbered where
     loop _ [] = []
     loop tno ((lno, ln) : ps) =
         case f tno lno ln of
-          cline -> let delta = length $ codeLineTokens cline
+          cline -> let delta = length $ lineTokens cline
                    in cline : loop (tno + delta) ps
 
 codeLine

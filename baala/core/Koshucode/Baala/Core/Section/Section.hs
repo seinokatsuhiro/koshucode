@@ -107,7 +107,7 @@ consSection full resource xs =
     where
       mapFor  f p = pass f `map`  filter (p . C.clauseBody) xs
       mapMFor f p = pass f `mapM` filter (p . C.clauseBody) xs
-      pass f (C.Clause src body) = f (B.tokenLines src) body
+      pass f (C.Clause src body) = f (B.clauseLines src) body
       consSec = consSection full ""
 
       -- todo: multiple section name

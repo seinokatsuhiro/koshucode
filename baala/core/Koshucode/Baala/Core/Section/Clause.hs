@@ -83,7 +83,7 @@ consPreclause :: [B.TokenLine] -> [Clause]
 consPreclause = concatMap consPreclause' . B.clausify
 
 consPreclause' :: B.TokenClause -> [Clause]
-consPreclause' src@(B.TokenClause toks _) = clause $ B.sweepToken toks where
+consPreclause' src@(B.CodeClause toks _) = clause $ B.sweepToken toks where
     clause :: [B.Token] -> [Clause]
     clause (B.TWord _ 0 "|" : B.TWord _ 0 k : xs) =
         frege k xs  -- frege's judgement stroke
@@ -165,7 +165,7 @@ clauseHalf half xs = mapM f xs2 where
     g src (TAssert q p opt ts) = Right . CAssert q p opt =<< h src ts
     g _   body                 = Right body
 
-    h src ts = let ls = B.tokenLines src
+    h src ts = let ls = B.clauseLines src
                in case half ls (B.tokenTrees ts) of
                     Right r -> Right r
                     Left  a -> Left (a, ts, ls)

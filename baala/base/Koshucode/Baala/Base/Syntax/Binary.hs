@@ -4,15 +4,14 @@
 --   into prefixed-operator trees
 
 module Koshucode.Baala.Base.Syntax.Binary
-( BinaryHeight
-, binaryTree
-, heightTable
-, heightTableUnbox
+( BinaryHeight,
+  binaryTree,
+  heightTable,
+  heightTableUnbox,
 ) where
 
 import qualified Data.Map   as Map
 import qualified Data.Maybe as Maybe
-
 import qualified Koshucode.Baala.Base.Syntax.Tree as B
 
 {-| Direction and height for binary splitting.
