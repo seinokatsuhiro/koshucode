@@ -1,4 +1,5 @@
 #!/bin/sh
+# ------------------------------------------------------------------
 #
 #  DESCRIPTION
 #    Cabal for each packages
@@ -9,26 +10,30 @@
 #    [2] ./install.link base
 #          Build and install base package.
 #    [3] ./install.link
-#        Build and install all packages.
+#          Build and install all packages.
 #
+# ------------------------------------------------------------------
 
 usage () {
-    echo "cabal for each directories"
+    echo "cabal for each packages"
     echo ""
-    if [ ! -z $cabal ]; then
-    echo "  $0                cabal for all packages"
-    echo ""
-    echo "  $0 base           cabal for base package"
-    echo "  $0 core           cabal for core package"
-    echo "  $0 operator       cabal for operator package"
-    echo "  $0 calculator     cabal for calculator package"
-    echo "  $0 toolkit        cabal for toolkit package"
-    echo ""
+
+    if [ -z $cabal ]; then
+        echo "  $0 link           make symbolic-linked commands"
+        echo "  $0 clean          cleaning directories"
+        echo "  $0 unreg          unregister koshucode packages"
+        echo ""
+    else
+        echo "  $0                cabal for all packages"
+        echo "  $0 koshu          cabal to install koshu program"
+        echo ""
+        echo "  $0 base           cabal for base package"
+        echo "  $0 core           cabal for core package"
+        echo "  $0 operator       cabal for operator package"
+        echo "  $0 calculator     cabal for calculator package"
+        echo "  $0 toolkit        cabal for toolkit package"
+        echo ""
     fi
-    echo "  $0 link           make symbolic-linked commands"
-    echo "  $0 clean          cleaning directories"
-    echo "  $0 unreg          unregister koshucode packages"
-    echo ""
 }
 
 main () {
@@ -36,9 +41,10 @@ main () {
 
     case "$1" in
         link)
-            sym_link "$0" sdist.link
             sym_link "$0" haddock.link
+            sym_link "$0" html.link
             sym_link "$0" install.link
+            sym_link "$0" sdist.link
             exit ;;
 
         unreg)
@@ -50,11 +56,8 @@ main () {
             exit ;;
 
         clean)
-            cabal_clean toolkit
-            cabal_clean calculator
-            cabal_clean operator
-            cabal_clean core
-            cabal_clean base
+            cabal=cabal_clean
+            cabal_for base core operator calculator toolkit
             exit ;;
 
         '' | base* | core* | operator* | calculator* | toolkit* | koshu )
@@ -67,27 +70,38 @@ main () {
     esac
 }
 
-unregister () {
-    echo "Unregistering $1"
-    ghc-pkg unregister koshucode-baala-$1
-}
-
-cabal_clean () {
-    (cd "$1"; cabal_cmd clean)
-}
-
 decide_program () {
     case "$1" in
         sdist.link)
             cabal=cabal_sdist
-            echo "sdist ** generate a source distribution file" ;;
+            echo "sdist -- generate a source distribution file" ;;
+
         haddock.link)
             cabal=cabal_haddock
-            echo "haddock ** generate Haddock HTML documentation" ;;
+            echo "haddock -- generate Haddock HTML documentation" ;;
+
         install.link)
             cabal=cabal_install
-            echo "install ** installs packages" ;;
+            echo "install -- installs packages" ;;
+
+        html.link)
+            cabal=cabal_html
+            echo "html -- open html documents" ;;
     esac
+}
+
+sym_link () {
+    if [ -e "$2" ]; then
+        echo "already exists: $2"
+    else
+        echo "making $2"
+        ln -s "$1" "$2"
+    fi
+}
+
+unregister () {
+    echo "Unregistering $1"
+    ghc-pkg unregister koshucode-baala-$1
 }
 
 directories () {
@@ -102,14 +116,7 @@ directories () {
     esac
 }
 
-sym_link () {
-    if [ -e "$2" ]; then
-        echo "already exists: $2"
-    else
-        echo "making $2"
-        ln -s "$1" "$2"
-    fi
-}
+
 
 # ======================  cabal command
 
@@ -138,6 +145,10 @@ cabal_for () {
 
 section () {
     echo "----------------------  $*"
+}
+
+cabal_clean () {
+    cabal_cmd clean
 }
 
 cabal_sdist () {
@@ -193,6 +204,10 @@ cabal_install () {
         --force-reinstalls \
         --disable-documentation \
         --disable-optimization
+}
+
+cabal_html () {
+    open dist/doc/html/koshucode-baala-*/index.html
 }
 
 main "$1"
