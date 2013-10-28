@@ -7,11 +7,11 @@ module Koshucode.Baala.Base.Token
 module Koshucode.Baala.Base.Token.Token,
 module Koshucode.Baala.Base.Token.TokenClause,
 module Koshucode.Baala.Base.Token.TokenTree,
-module Koshucode.Baala.Base.Token.Tokenize,
+module Koshucode.Baala.Base.Token.TokenLine,
 ) where
 
 import Koshucode.Baala.Base.Token.Token
 import Koshucode.Baala.Base.Token.TokenClause
 import Koshucode.Baala.Base.Token.TokenTree
-import Koshucode.Baala.Base.Token.Tokenize
+import Koshucode.Baala.Base.Token.TokenLine
 

@@ -27,12 +27,12 @@ import qualified Text.PrettyPrint as P
 import qualified Koshucode.Baala.Base.Prelude         as B
 import qualified Koshucode.Baala.Base.Syntax          as B
 import qualified Koshucode.Baala.Base.Token.Token     as B
-import qualified Koshucode.Baala.Base.Token.Tokenize  as B
+import qualified Koshucode.Baala.Base.Token.TokenLine as B
 
 -- ----------------------
 
 {-| Tree of tokens. -}
-type TokenTree = B.Tree B.Token
+type TokenTree = B.CodeTree B.Token
 
 {-| Parse tokens into parened trees.
     Blank tokens and comments are excluded.

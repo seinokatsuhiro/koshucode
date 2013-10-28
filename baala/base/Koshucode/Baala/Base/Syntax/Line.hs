@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Lines. -}
+{-| Text lines delimited by carriage returns or line feeds. -}
 
 module Koshucode.Baala.Base.Syntax.Line
 ( LineNumber,

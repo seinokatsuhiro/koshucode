@@ -46,8 +46,8 @@ height (Right h) = h
 {-| Split branches in a given tree at infixed binary operators -}
 binaryTree :: (Show a)
     => (a -> BinaryHeight)  -- ^ Height function
-    -> B.Tree a             -- ^ Infixed tree
-    -> B.Tree a             -- ^ Prefixed tree
+    -> B.CodeTree a         -- ^ Infixed tree
+    -> B.CodeTree a         -- ^ Prefixed tree
 binaryTree ht tree1 = B.undouble (== 1) $ binaryHeightMap loop ht tree1 where
     loop tree2@(B.TreeL _)    = tree2
     loop tree2@(B.TreeB n xs) =
@@ -74,7 +74,7 @@ binaryTree ht tree1 = B.undouble (== 1) $ binaryHeightMap loop ht tree1 where
 -- e6 = e2 (TreeB 0 $ e1 "1+2-3")
 -- e7 = e2 (TreeB 0 $ e1 "1+2*3")
 
-heightList :: B.Tree (BinaryHeight, a) -> [BinaryHeight]
+heightList :: B.CodeTree (BinaryHeight, a) -> [BinaryHeight]
 heightList (B.TreeB _ xs) = map f xs where
     f (B.TreeL (ht, _)) = ht
     f (B.TreeB _ _)     = Left 0

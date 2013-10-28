@@ -4,7 +4,7 @@
 module Koshucode.Baala.Base.Syntax.Tree
 ( 
   -- * Data type
-  Tree (..),
+  CodeTree (..),
 
   -- * Parsing
   tree, trees,
@@ -34,26 +34,26 @@ data Paren a
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 {-| Tree of leaf and branch. -}
-data Tree a
+data CodeTree a
     = TreeL a                  -- ^ Leaf. Terminal of tree.
-    | TreeB ParenType [Tree a] -- ^ Branch. Paren-type and subtrees.
+    | TreeB ParenType [CodeTree a] -- ^ Branch. Paren-type and subtrees.
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
-instance Functor Tree where
+instance Functor CodeTree where
     fmap f (TreeL x)    = TreeL (f x)
     fmap f (TreeB n xs) = TreeB n $ map (fmap f) xs
 
-treeG :: [Tree a] -> Tree a
+treeG :: [CodeTree a] -> CodeTree a
 treeG [TreeB 1 xs] = treeG xs
 treeG [x] = x
 treeG xs = TreeB 1 xs
 
 {-| Convert a list of elements to a single tree. -}
-tree :: (Show a) => GetParenType a -> [a] -> Tree a
+tree :: (Show a) => GetParenType a -> [a] -> CodeTree a
 tree p = treeG . trees p
 
 {-| Convert a list of elements to trees. -}
-trees :: (Show a) => GetParenType a -> [a] -> [Tree a]
+trees :: (Show a) => GetParenType a -> [a] -> [CodeTree a]
 trees parenType xs = fst $ loop xs 0 where
     add a xs2 p = B.mapFst (a :) $ loop xs2 p
 
@@ -75,16 +75,16 @@ trees parenType xs = fst $ loop xs 0 where
 
 -- ----------------------  Utility
 
-treeWrap :: [Tree a] -> Tree a
+treeWrap :: [CodeTree a] -> CodeTree a
 treeWrap [x] = x
 treeWrap xs  = TreeB 1 xs
 
 {-| Convert tree to list of tokens. -}
-untrees :: GetTypeParen a -> [Tree a] -> [a]
+untrees :: GetTypeParen a -> [CodeTree a] -> [a]
 untrees typeParen = concatMap (untree typeParen)
 
 {-| Convert tree to list of tokens. -}
-untree :: GetTypeParen a -> Tree a -> [a]
+untree :: GetTypeParen a -> CodeTree a -> [a]
 untree typeParen = loop where
     loop (TreeL x) = [x]
     loop (TreeB n xs) =
@@ -97,7 +97,7 @@ untree typeParen = loop where
     >>> undouble (== 0) $ TreeB 0 [TreeB 0 [TreeL "A", TreeL "B"]]
     TreeB 0 [TreeL "A", TreeL "B"]
   -}
-undouble :: B.Pred ParenType -> B.Map (Tree a)
+undouble :: B.Pred ParenType -> B.Map (CodeTree a)
 undouble p = loop where
     loop (TreeB n xs) | p n =
         case map loop xs of
