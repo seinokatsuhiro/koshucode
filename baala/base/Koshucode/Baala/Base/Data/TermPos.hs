@@ -26,7 +26,7 @@ module Koshucode.Baala.Base.Data.TermPos
 
 import qualified Data.List as List
 import qualified Koshucode.Baala.Base.Prelude      as B
-import qualified Koshucode.Baala.Base.Syntax       as B
+import qualified Koshucode.Baala.Base.Token        as B
 import qualified Koshucode.Baala.Base.Data.Relhead as B
 
 

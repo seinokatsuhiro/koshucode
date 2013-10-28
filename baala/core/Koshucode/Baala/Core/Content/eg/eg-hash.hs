@@ -1,4 +1,4 @@
-#!/usr/bin/env runhaskell
+#!/usr/bin/env koshu-env.sh runhaskell
 --
 --  DESCRIPTION
 --    Examples of hash words
@@ -10,7 +10,7 @@
 
 {-# OPTIONS_GHC -Wall #-}
 
-import Koshucode.Baala.Base
+import qualified Koshucode.Baala.Core as C
 
 
 
@@ -36,14 +36,14 @@ main =
 
 egHash :: IO ()
 egHash =
-    do "no hash char"   >>> hashBack "abc"
-       "single quote"   >>> hashBack "abc's"
-       "single quote"   >>> hashBack "'abc'"
-       "doule quote"    >>> hashBack "\"abc\""
-       "doule quote"    >>> hashBack "''abc''"
-       "empty string"   >>> hashBack ""
-       "newline"        >>> hashBack "abc\r\ndef"
-       "newline"        >>> hashBack "abc def"
+    do "no hash char"   >>> C.hashWord "abc"
+       "single quote"   >>> C.hashWord "abc's"
+       "single quote"   >>> C.hashWord "'abc'"
+       "doule quote"    >>> C.hashWord "\"abc\""
+       "doule quote"    >>> C.hashWord "''abc''"
+       "empty string"   >>> C.hashWord ""
+       "newline"        >>> C.hashWord "abc\r\ndef"
+       "newline"        >>> C.hashWord "abc def"
 
 -- hash :: String -> String
 -- hash = hashString

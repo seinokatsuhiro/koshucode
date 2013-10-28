@@ -12,7 +12,7 @@ module Koshucode.Baala.Base.Data.Relterm
 where
 
 import qualified Koshucode.Baala.Base.Prelude as B
-import qualified Koshucode.Baala.Base.Syntax as B
+import qualified Koshucode.Baala.Base.Token   as B
 
 {-| Path of term,
     e.g., term @\/r\/x@ is correspond to path @["\/r", "\/x"]@. -}

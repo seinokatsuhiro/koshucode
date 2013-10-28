@@ -2,7 +2,7 @@
 
 {-| Lines. -}
 
-module Koshucode.Baala.Base.Prelude.Line
+module Koshucode.Baala.Base.Syntax.Line
 ( LineNumber,
   linesCrlfNumbered,
   linesCrlf,

@@ -1,15 +1,15 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# OPTIONS_GHC -Wall -fno-warn-orphans #-}
 
-module Koshucode.Baala.Base.Syntax.TokenClause
+module Koshucode.Baala.Base.Token.TokenClause
 ( TokenClause,
   clausify,
 ) where
 
 import qualified Koshucode.Baala.Base.Prelude         as B
-import qualified Koshucode.Baala.Base.Syntax.CodeLine as B
-import qualified Koshucode.Baala.Base.Syntax.Token    as B
-import qualified Koshucode.Baala.Base.Syntax.Tokenize as B
+import qualified Koshucode.Baala.Base.Syntax          as B
+import qualified Koshucode.Baala.Base.Token.Token     as B
+import qualified Koshucode.Baala.Base.Token.Tokenize  as B
 
 
 -- ----------------------  Datatype

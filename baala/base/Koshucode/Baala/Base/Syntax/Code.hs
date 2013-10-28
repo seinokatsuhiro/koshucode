@@ -7,7 +7,7 @@
     You can represent tokenized source code
     as a list of 'CodeLine'. -}
 
-module Koshucode.Baala.Base.Syntax.CodeLine
+module Koshucode.Baala.Base.Syntax.Code
 ( CodeLine (..),
   CodeClause (..),
   NextToken,
@@ -16,7 +16,8 @@ module Koshucode.Baala.Base.Syntax.CodeLine
 ) where
 
 import qualified Data.Generics as G
-import qualified Koshucode.Baala.Base.Prelude as B
+import qualified Koshucode.Baala.Base.Prelude     as B
+import qualified Koshucode.Baala.Base.Syntax.Line as B
 
 
 

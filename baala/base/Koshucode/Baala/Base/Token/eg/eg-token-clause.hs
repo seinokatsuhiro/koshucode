@@ -1,4 +1,4 @@
-#!/usr/bin/env runhaskell
+#!/usr/bin/env koshu-env.sh runhaskell
 {-# OPTIONS_GHC -Wall #-}
 -- --------------------------------------------
 --

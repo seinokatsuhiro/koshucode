@@ -24,7 +24,7 @@ module Koshucode.Baala.Base.Data.Relhead
 
 import qualified Data.Monoid as M
 import qualified Koshucode.Baala.Base.Prelude      as B
-import qualified Koshucode.Baala.Base.Syntax       as B
+import qualified Koshucode.Baala.Base.Token        as B
 import qualified Koshucode.Baala.Base.Data.Relterm as B
 
 

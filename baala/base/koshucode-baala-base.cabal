@@ -65,19 +65,21 @@ library
         Koshucode.Baala.Base.Prelude.Assoc
         Koshucode.Baala.Base.Prelude.Arrange
         Koshucode.Baala.Base.Prelude.Class
-        Koshucode.Baala.Base.Prelude.Line
         Koshucode.Baala.Base.Prelude.Pretty
         Koshucode.Baala.Base.Prelude.Unicode
         Koshucode.Baala.Base.Prelude.Utility
 
         Koshucode.Baala.Base.Syntax
         Koshucode.Baala.Base.Syntax.Binary
-        Koshucode.Baala.Base.Syntax.CodeLine
-        Koshucode.Baala.Base.Syntax.Token
-        Koshucode.Baala.Base.Syntax.TokenClause
-        Koshucode.Baala.Base.Syntax.TokenTree
-        Koshucode.Baala.Base.Syntax.Tokenize
+        Koshucode.Baala.Base.Syntax.Code
+        Koshucode.Baala.Base.Syntax.Line
         Koshucode.Baala.Base.Syntax.Tree
+
+        Koshucode.Baala.Base.Token
+        Koshucode.Baala.Base.Token.Token
+        Koshucode.Baala.Base.Token.TokenClause
+        Koshucode.Baala.Base.Token.TokenTree
+        Koshucode.Baala.Base.Token.Tokenize
 
   -- Modules included in this library but not exported.
   --other-modules:       

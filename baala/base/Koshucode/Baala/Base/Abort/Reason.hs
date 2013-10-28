@@ -18,7 +18,7 @@ module Koshucode.Baala.Base.Abort.Reason
 
 import qualified Text.PrettyPrint as D
 import qualified Koshucode.Baala.Base.Prelude       as B
-import qualified Koshucode.Baala.Base.Syntax        as B
+import qualified Koshucode.Baala.Base.Token         as B
 import qualified Koshucode.Baala.Base.Abort.Utility as B
 
 

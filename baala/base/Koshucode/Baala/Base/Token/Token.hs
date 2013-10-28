@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Syntax.Token
+module Koshucode.Baala.Base.Token.Token
 (
   -- * Token type
   Token (..),
@@ -22,24 +22,25 @@ module Koshucode.Baala.Base.Syntax.Token
 ) where
 
 import Data.Generics (Data, Typeable)
-import qualified Koshucode.Baala.Base.Prelude         as B
-import qualified Koshucode.Baala.Base.Syntax.CodeLine as B
+import qualified Koshucode.Baala.Base.Prelude  as B
+import qualified Koshucode.Baala.Base.Syntax   as B
 
 
 
 -- ----------------------  Token type
 
+{-| There are eight types of tokens. -}
 data Token
     = TWord    B.TokenNumber Int String
                -- ^ Word.
-               --   'Int' represents quotation level, e.g.,
+               --   'Int' represents quotation level, i.e.,
                --   0 for non-quoted,
                --   1 for single-quoted,
                --   2 for double-quoted.
     | TShort   B.TokenNumber String String  -- ^ Abbreviated word
     | TTerm    B.TokenNumber [Termname]  -- ^ Termname
-    | TOpen    B.TokenNumber String      -- ^ Open paren
-    | TClose   B.TokenNumber String      -- ^ Close paren
+    | TOpen    B.TokenNumber String      -- ^ Opening paren
+    | TClose   B.TokenNumber String      -- ^ Closing paren
     | TSpace   B.TokenNumber Int         -- ^ /N/ space characters
     | TComment B.TokenNumber String      -- ^ Comment text
     | TUnknown B.TokenNumber String      -- ^ Unknown text

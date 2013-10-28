@@ -1,9 +1,0 @@
-no hash char  .  .  . ["abc"]
-single quote  .  .  . ["abc","#q","s"]
-single quote  .  .  . ["#q","abc","#q"]
-doule quote  .  .  .  ["#qq","abc","#qq"]
-doule quote  .  .  .  ["#q","#q","abc","#q","#q"]
-empty string  .  .  . [""]
-newline  .  .  .  .   ["abc","#cr","#lf","def"]
-newline  .  .  .  .   ["abc def"]
-

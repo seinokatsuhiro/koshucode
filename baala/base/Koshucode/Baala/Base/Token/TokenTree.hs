@@ -2,7 +2,7 @@
 
 {-| Parened tree of tokens -}
 
-module Koshucode.Baala.Base.Syntax.TokenTree
+module Koshucode.Baala.Base.Token.TokenTree
 (
   -- * Library
   TokenTree,
@@ -25,9 +25,9 @@ module Koshucode.Baala.Base.Syntax.TokenTree
 
 import qualified Text.PrettyPrint as P
 import qualified Koshucode.Baala.Base.Prelude         as B
-import qualified Koshucode.Baala.Base.Syntax.Token    as B
-import qualified Koshucode.Baala.Base.Syntax.Tokenize as B
-import qualified Koshucode.Baala.Base.Syntax.Tree     as B
+import qualified Koshucode.Baala.Base.Syntax          as B
+import qualified Koshucode.Baala.Base.Token.Token     as B
+import qualified Koshucode.Baala.Base.Token.Tokenize  as B
 
 -- ----------------------
 

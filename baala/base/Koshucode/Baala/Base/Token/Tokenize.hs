@@ -3,7 +3,7 @@
 
 {-| Tokenizer of koshucode. -}
 
-module Koshucode.Baala.Base.Syntax.Tokenize
+module Koshucode.Baala.Base.Token.Tokenize
 (
   -- * Library
   TokenLine,
@@ -27,9 +27,9 @@ module Koshucode.Baala.Base.Syntax.Tokenize
 
 import qualified Data.Char as Ch
 
-import qualified Koshucode.Baala.Base.Prelude         as B
-import qualified Koshucode.Baala.Base.Syntax.Token    as B
-import qualified Koshucode.Baala.Base.Syntax.CodeLine as B
+import qualified Koshucode.Baala.Base.Prelude      as B
+import qualified Koshucode.Baala.Base.Syntax       as B
+import qualified Koshucode.Baala.Base.Token.Token  as B
 
 
 
