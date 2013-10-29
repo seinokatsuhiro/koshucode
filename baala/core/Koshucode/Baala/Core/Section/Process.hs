@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -Wall #-}
+{-# LANGUAGE DoAndIfThenElse #-}
 
 {-| Read, run, and write sections. -}
 module Koshucode.Baala.Core.Section.Process
@@ -16,6 +17,7 @@ module Koshucode.Baala.Core.Section.Process
 ) where
 
 import qualified System.IO                            as IO
+import qualified System.Directory                     as Dir
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Core.Content         as C
 import qualified Koshucode.Baala.Core.Relmap          as C
@@ -42,8 +44,11 @@ readSectionFile
     -> FilePath      -- ^ Path of section file
     -> IO (B.AbortOr (C.Section c)) -- ^ Resulting section
 readSectionFile root path =
-    do code <- readFile path
-       return $ readSectionCode root path code
+    do exist <- Dir.doesFileExist path
+       case exist of
+         False -> return $ Left (B.AbortNoFile path, [], [])
+         True  -> do code <- readFile path
+                     return $ readSectionCode root path code
 
 {-| Read judges from text. -}
 readJudges :: (C.CContent c) => String -> B.AbortOr [B.Judge c]

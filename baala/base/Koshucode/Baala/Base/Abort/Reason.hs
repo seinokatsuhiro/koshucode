@@ -66,6 +66,7 @@ data AbortReason
     | AbortMissingTermname  String
     | AbortNotNumber        String
     | AbortNotText          String
+    | AbortNoFile           String
     | AbortNoTerms          [String]
     | AbortOddRelation      
     | AbortOpeandDuplicate  [String]
@@ -103,6 +104,7 @@ instance B.AbortReasonClass AbortReason where
         (AbortMissingTermname  _) -> "項目名が必要"
         (AbortNotNumber        _) -> "数値として読めない"
         (AbortNotText          _) -> "テキストではない"
+        (AbortNoFile           _) -> "ファイルがない"
         (AbortNoTerms          _) -> "項目がない"
         (AbortOddRelation       ) -> "ふぞろいな関係"
         (AbortOpeandDuplicate  _) -> "同名の引数が重複"
@@ -133,6 +135,7 @@ instance B.AbortReasonClass AbortReason where
         (AbortMissingTermname  s) -> par s
         (AbortNotNumber        s) -> par s
         (AbortNotText          s) -> par s
+        (AbortNoFile           s) -> par s
         (AbortNoTerms         ns) -> B.doch ns
         (AbortOddRelation       ) -> B.docEmpty
         (AbortOpeandDuplicate ns) -> B.doch ns
