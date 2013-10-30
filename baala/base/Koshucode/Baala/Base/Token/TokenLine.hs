@@ -7,7 +7,7 @@ module Koshucode.Baala.Base.Token.TokenLine
 (
   -- * Library
   TokenLine,
-  tokenize,
+  tokenLines,
   trimLeft,
   tokens,
   isSimpleWord,
@@ -38,13 +38,14 @@ import qualified Koshucode.Baala.Base.Token.Token  as B
 {-| Token list on a line. -}
 type TokenLine = B.CodeLine B.Token
 
-tokenize :: String -> [TokenLine]
-tokenize = B.codeLines nextToken
+{-| Tokenize text. -}
+tokenLines :: String -> [TokenLine]
+tokenLines = B.codeLines nextToken
 
 {-| Split string into list of tokens.
     Result token list does not contain newline characters. -}
 tokens :: String -> [B.Token]
-tokens = concatMap B.lineTokens . tokenize
+tokens = concatMap B.lineTokens . tokenLines
 
 trimLeft :: B.Map String
 trimLeft = dropWhile isSpace

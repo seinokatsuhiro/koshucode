@@ -104,9 +104,14 @@ optionUnkCheck ns xs =
        then Right ()
        else Left $ B.AbortUnkSymbol (fst . head $ rest)
 
+{-| Get term name as string only if term is flat. -}
+flatname :: B.TokenTree -> Maybe B.Termname
+flatname (B.TreeL (B.TTerm _ [n])) = Just n
+flatname _ = Nothing
+
 flatnames :: [B.TokenTree] -> B.Ab [B.Termname]
 flatnames trees =
-    case mapM B.flatname trees of
+    case mapM flatname trees of
       Just ns -> Right ns
       Nothing -> Left $ B.AbortMissingTermname ""
 

@@ -80,7 +80,7 @@ clauseTypeText (Clause _ body) =
                  ]]
     -}
 consPreclause :: [B.TokenLine] -> [Clause]
-consPreclause = concatMap consPreclause' . B.clausify
+consPreclause = concatMap consPreclause' . B.tokenClauses
 
 consPreclause' :: B.TokenClause -> [Clause]
 consPreclause' src@(B.CodeClause toks _) = clause $ B.sweepToken toks where

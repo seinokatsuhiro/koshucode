@@ -82,7 +82,7 @@ koshuSyntaxMain' (_, argv) =
 dumpClauseAndToken :: FilePath -> IO ()
 dumpClauseAndToken path = 
     do code <- readFile path
-       let ts = B.tokenize code
+       let ts = B.tokenLines code
            cs = C.consPreclause ts
        putStr $ unlines h
        mapM_ putClause $ zip [1 ..] cs
@@ -134,7 +134,7 @@ tokenJudge cn t = B.Judge True "TOKEN" xs where
 dumpToken :: FilePath -> IO ()
 dumpToken path =
     do code <- readFile path
-       let xs = B.tokenize code
+       let xs = B.tokenLines code
            (_, ls) = foldl dumpTokenText (0, []) xs
        putStr $ unlines ls
 

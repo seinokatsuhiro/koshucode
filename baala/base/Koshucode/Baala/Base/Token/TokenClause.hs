@@ -3,7 +3,7 @@
 
 module Koshucode.Baala.Base.Token.TokenClause
 ( TokenClause,
-  clausify,
+  tokenClauses,
 ) where
 
 import qualified Koshucode.Baala.Base.Prelude         as B
@@ -33,8 +33,8 @@ docTokenClause (B.CodeClause toks ls) = d where
 -- ----------------------  Function
 
 {-| Convert token lines into list of token clauses -}
-clausify :: [B.TokenLine] -> [TokenClause]
-clausify = B.gather split
+tokenClauses :: [B.TokenLine] -> [TokenClause]
+tokenClauses = B.gather split
 
 split :: [B.TokenLine] -> (TokenClause, [B.TokenLine])
 split = loop where

@@ -27,7 +27,7 @@ egClausify xs = mapM put xs >> return ()
 
 put :: (Int, String) -> IO ()
 put (n, line) =
-    do let dline = B.docv . B.clausify . B.tokenize $ line
+    do let dline = B.docv . B.tokenClauses . B.tokenLines $ line
        putStrLn $ show $ B.docHang (B.doc n) 2 dline
        putStrLn ""
 

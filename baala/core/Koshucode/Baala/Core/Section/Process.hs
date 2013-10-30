@@ -34,7 +34,7 @@ readSectionCode
     -> B.AbortOr (C.Section c)  -- ^ Resulting section
 readSectionCode root res code =
     do let (C.RelmapCons half full) = C.sectionCons root
-       clauses <- C.consClause half $ B.tokenize code
+       clauses <- C.consClause half $ B.tokenLines code
        C.consSection full res clauses
 
 {-| Read section from file. -}

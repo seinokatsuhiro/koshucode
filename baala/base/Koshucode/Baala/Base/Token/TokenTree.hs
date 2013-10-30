@@ -9,7 +9,6 @@ module Koshucode.Baala.Base.Token.TokenTree
   tokenTrees,
   treeTokens,
   treesTokens,
-  flatname,
   tt,
   ttDoc,
 
@@ -76,13 +75,11 @@ parenType = B.parenTable
     , o 5  "{|" "|}"   -- relation
     ] where o n a b = (n, B.isOpenTokenOf a, B.isCloseTokenOf b)
 
-flatname :: TokenTree -> Maybe String
-flatname (B.TreeL (B.TTerm _ [n])) = Just n
-flatname _ = Nothing
-
+{-| Convert text to token trees. -}
 tt :: String -> [TokenTree]
 tt = tokenTrees . B.tokens
 
+{-| Get 'B.Doc' value of token trees for pretty printing. -}
 ttDoc :: [TokenTree] -> B.Doc
 ttDoc = dv where
     dv = B.docv . map d
