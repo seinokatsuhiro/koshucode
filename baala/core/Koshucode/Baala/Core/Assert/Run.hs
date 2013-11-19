@@ -169,7 +169,7 @@ arrangeRelUsing sort ha ba ns (B.Rel h1 b1)
     | null non   = Right $ B.Rel h2 b2
     | otherwise  = Left  $ B.AbortNoTerms non
     where
-      non  =  B.headNonExistTerms h1 ns
+      non  =  B.headDropTerms h1 ns
 
       pos  :: [B.TermPos]
       pos  =  sort $ h1 `B.posFor` ns

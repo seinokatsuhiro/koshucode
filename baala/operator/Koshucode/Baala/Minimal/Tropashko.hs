@@ -51,7 +51,7 @@ relmapMeet use m = C.relmapConfl use "meet" fy [m] where
 relfyMeet
     :: (Ord c)
     => C.Relfy c          -- ^ Generator of subrelation
-    -> B.Relhead           -- ^ Heading of input relation
+    -> B.Relhead          -- ^ Heading of input relation
     -> B.Ab (C.Relfy c)   -- ^ Generator for output relation
 relfyMeet (C.Relfy h2 f2) h1 = Right (C.Relfy h3 f3) where
     shared    :: [B.Termname]

@@ -30,6 +30,7 @@ minimalRops = Builtin.ropList "minimal"  -- GROUP
     , ( "rename /N /N ..." , Rop.ropConsRename   , C.operandList "-term"   [] )
     , ( "some R"           , Rop.ropConsSome     , C.operandOne  "-relmap" [] )
     , ( "source P /N ..."  , Rop.ropConsSource   , C.operandOneList "-pattern" "-term" [] )
+    , ( "sub R"            , Rop.ropConsSub      , C.operandOne  "-relmap" [] )
     --   SYNOPSIS            CONSTRUCTOR           OPERAND
     ]
 

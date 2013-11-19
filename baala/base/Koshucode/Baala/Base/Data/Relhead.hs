@@ -13,8 +13,8 @@ module Koshucode.Baala.Base.Data.Relhead
   headDegree,
 
   -- * Other functions
-  headExistTerms,
-  headNonExistTerms,
+  headKeepTerms,
+  headDropTerms,
   headIndex, headIndex1,
 
   -- * Monoid
@@ -97,19 +97,19 @@ headDegree = length . headTerms
 
 -- ----------------------  Other functions
 
-{-| Filter keeping terms that exist in head.
+{-| Keep terms that exist in head.
 
-    >>> let h = headFrom ["/a", "/b"] in headExistTerms h ["/a", "/c"]
-    ["/a"]  -}
-headExistTerms :: Relhead -> B.Map [B.Termname]
-headExistTerms (Relhead ts) = filter $ nameExist ts
+    >>> let h = headFrom ["/b"] in headKeepTerms h ["/a", "/b", "/c"]
+    ["/b"]  -}
+headKeepTerms :: Relhead -> B.Map [B.Termname]
+headKeepTerms (Relhead ts) = filter $ nameExist ts
 
-{-| Filter dropping terms that exist in head.
+{-| Drop terms that exist in head.
 
-    >>> let h = headFrom ["/a", "/b"] in headNonExistTerms h ["/a", "/c"]
-    ["/c"]  -}
-headNonExistTerms :: Relhead -> B.Map [B.Termname]
-headNonExistTerms (Relhead ts) = filter $ not . nameExist ts
+    >>> let h = headFrom ["/b"] in headDropTerms h ["/a", "/b", "/c"]
+    ["/a","/c"]  -}
+headDropTerms :: Relhead -> B.Map [B.Termname]
+headDropTerms (Relhead ts) = filter $ not . nameExist ts
 
 nameExist :: [B.Relterm] -> B.Termname -> Bool
 nameExist ts n = B.termExist ts [n]

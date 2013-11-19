@@ -65,7 +65,7 @@ relfyArrange ha ba ns h1
     | null non  = Right $ C.Relfy h2 (C.RelfyOneToOne True $ ba ind)
     | otherwise = Left  $ B.AbortNoTerms non
     where
-      non =  B.headNonExistTerms h1 ns
+      non =  B.headDropTerms h1 ns
       pos :: [B.TermPos]
       pos =  List.sort $ h1 `B.posFor` ns
 
@@ -98,8 +98,8 @@ relfyRename np h1
     | otherwise     = Right $ C.Relfy h2 C.RelfyId
     where
       (ns, ps) = unzip np
-      nsCheck  = B.headExistTerms    h1 ns
-      psCheck  = B.headNonExistTerms h1 ps
+      nsCheck  = B.headKeepTerms h1 ns
+      psCheck  = B.headDropTerms h1 ps
       h2       = B.headChange (map rename) h1
       pn       = map Tuple.swap np
       rename p = Maybe.fromMaybe p $ lookup p pn

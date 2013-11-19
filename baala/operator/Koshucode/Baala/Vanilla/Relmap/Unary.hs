@@ -185,7 +185,7 @@ relfyDuplicate ns h1
     | otherwise = Left  $ B.AbortNoTerms non
     where
       non :: [B.Termname]
-      non = B.headNonExistTerms h1 ns
+      non = B.headDropTerms h1 ns
 
       pos :: [B.TermPos]
       pos = h1 `B.posFor` ns
