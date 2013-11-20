@@ -82,12 +82,10 @@ relfySub
     -> B.Relhead
     -> B.Ab (C.Relfy c)
 relfySub r2@(C.Relfy h2 _) h1
-    | null rest  = sub
+    | B.isSuperhead h1 h2 = sub
     | otherwise = Right $ C.Relfy h1 (C.RelfyConst [])
     where
-      ns2  = B.headNames h2
-      rest = B.headDropTerms h1 ns2   -- check h1 is superset of h2
-      sub  = do r3 <- Rop.relfyMeet r2 h1
-                f3 <- relfySome r3 h1
-                Right f3
+      sub = do r3 <- Rop.relfyMeet r2 h1
+               f3 <- relfySome r3 h1
+               Right f3
 
