@@ -1,9 +1,9 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Minimal relational operators -}
+{-| Minimal relation-mapping operators -}
 
 module Koshucode.Baala.Minimal
-( -- * Relatoinal operators
+( -- * Relation-mapping operators
   module Koshucode.Baala.Minimal.Operator,
   module Koshucode.Baala.Minimal.Origin,
   module Koshucode.Baala.Minimal.Restrict,
@@ -25,24 +25,19 @@ import Koshucode.Baala.Minimal.Tropashko
 -- ----------------------
 {- $NamingConventions
 
-   Functions for relational mapping are
+   Functions for relation-mapping operators are
    named under some conventions.
 
-   [@xxx@]        Name of relational operator.
+   [@xxx@]         Name of relation-mapping operator.
 
-   [@ropConsXxx@] Functions of 'Koshucode.Baala.Core.Relmap.Implement.RopCons'.
-                  These functions construct 'Koshucode.Baala.Base.Content.Relmap.Relmap'
-                  from operator usages, but constructions are failed
-                  if operators are misused.
+   [@ropConsXxx@]  Functions of 'Koshucode.Baala.Core.Relmap.Rop.RopCons'.
+                   These functions make 'Koshucode.Baala.Core.Relmap.Relmap.Relmap'
+                   from operator usages.
 
-   [@relmapXxx@]  Functions from 'Koshucode.Baala.Base.Content.Relmap.Relmap'
-                  to 'Koshucode.Baala.Base.Content.Relmap.Relmap'.
+   [@relmapXxx@]   Functions from 'Koshucode.Baala.Core.Relmap.Relmap.Relmap'
+                   to 'Koshucode.Baala.Core.Relmap.Relmap.Relmap'.
 
-   [@relfyXxx@]   Functions that make 'Koshucode.Baala.Core.Relmap.Relfy'.
-
-   [@likeXxx@]    Operand parser.
-
-   [@LikeXxx@]    Operand pattern.
+   [@relfyXxx@]    Functions that make 'Koshucode.Baala.Core.Relmap.Relfy.Relfy'.
 
 -}
 

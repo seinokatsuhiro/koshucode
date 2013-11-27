@@ -37,15 +37,15 @@ minimalRops = Builtin.ropList "minimal"  -- GROUP
 -- ----------------------
 {- $ListOfOperators
 
-   [@cut@]       Project relation to unspecified terms.
-
    [@contents@]  Make nary relation of all contetnts.
+
+   [@cut@]       Project relation to unspecified terms.
 
    [@id@]        Identity relmap.
 
-   [@join@]      Calculate join of two relations.
+   [@join@]      Join two relations.
 
-   [@meet@]      Calculate meet of two relations.
+   [@meet@]      Meet two relations.
 
    [@none@]      Restriction by relmaps.
 
@@ -60,6 +60,8 @@ minimalRops = Builtin.ropList "minimal"  -- GROUP
    [@some@]      Restriction by relmaps.
 
    [@source@]    Read relation from data source.
+
+   [@sub@]       Restriction to subrelation.
 
 -}
 
