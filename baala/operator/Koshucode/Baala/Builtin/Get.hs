@@ -11,6 +11,7 @@ module Koshucode.Baala.Builtin.Get
   RopGet,
   getTree,
   getTrees,
+  getMaybe,
   getWord,
   getInt,
 
@@ -52,15 +53,20 @@ type RopGet c b
     -> String           -- ^ Lookup key
     -> B.AbortTokens b  -- ^ Suboperand
 
-getTree :: RopGet c B.TokenTree
-getTree use n =
-    do trees <- getTrees use n
-       Right $ B.TreeB 1 trees
+operand :: C.RopUse c -> C.RopAssoc
+operand = C.halfOperand . C.ropHalf
+
+getMaybe :: RopGet c b -> RopGet c (Maybe b)
+getMaybe get use n =
+    case lookup n $ operand use of
+      Nothing -> Right Nothing
+      Just _  -> Right . Just =<< get use n
 
 getTrees :: RopGet c [B.TokenTree]
-getTrees use n =
-    do let operand = C.halfOperand $ C.ropHalf use
-       operand B.<!!> n
+getTrees use = (operand use B.<!!>)
+
+getTree :: RopGet c B.TokenTree
+getTree use n = Right . B.TreeB 1 =<< getTrees use n
 
 getTermTrees :: RopGet c [B.Named B.TokenTree]
 getTermTrees use n = getTrees use n >>= termTreePairs

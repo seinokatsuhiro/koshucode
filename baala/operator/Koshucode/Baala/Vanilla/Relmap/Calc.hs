@@ -10,9 +10,9 @@ module Koshucode.Baala.Vanilla.Relmap.Calc
   ropConsHold, relmapHold, relfyHold,
 ) where
 
-import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Core as C
-import qualified Koshucode.Baala.Builtin as Builtin
+import qualified Koshucode.Baala.Base    as B
+import qualified Koshucode.Baala.Core    as C
+import qualified Koshucode.Baala.Builtin as Rop
 import Koshucode.Baala.Vanilla.Type
 import Koshucode.Baala.Vanilla.Cop
 
@@ -22,7 +22,7 @@ import Koshucode.Baala.Vanilla.Cop
 
 ropConsAdd :: C.RopCons VContent
 ropConsAdd use =
-  do ts <- Builtin.getTermTrees use "-term"
+  do ts <- Rop.getTermTrees use "-term"
      cs <- vanillaNamedContents use ts
      Right $ relmapAdd use cs
 
@@ -48,7 +48,7 @@ relfyAdd xs h1 = Right $ C.Relfy h2 (C.RelfyOneToAbOne False f) where
 
 ropConsHold :: C.RopCons VContent
 ropConsHold use = do
-  t <- Builtin.getTree use "-term"
+  t <- Rop.getTree use "-term"
   c <- vanillaContent use t
   Right $ relmapHold use True c
 

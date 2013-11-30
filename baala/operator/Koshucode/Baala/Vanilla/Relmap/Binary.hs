@@ -10,10 +10,10 @@ module Koshucode.Baala.Vanilla.Relmap.Binary
   ropConsGroup, relmapGroup, relfyGroup,
 ) where
 
-import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Core as C
-import qualified Koshucode.Baala.Builtin as Builtin
-import qualified Koshucode.Baala.Minimal as ROP
+import qualified Koshucode.Baala.Base    as B
+import qualified Koshucode.Baala.Core    as C
+import qualified Koshucode.Baala.Builtin as Rop
+import qualified Koshucode.Baala.Minimal as Rop
 import Koshucode.Baala.Vanilla.Type
 
 
@@ -22,7 +22,7 @@ import Koshucode.Baala.Vanilla.Type
 
 ropConsMaybe :: C.RopCons VContent
 ropConsMaybe use =
-    do m <- Builtin.getRelmap use
+    do m <- Rop.getRelmap use
        Right $ relmapMaybe use m
 
 relmapMaybe :: (Ord c, C.CNil c) => C.RopUse c -> B.Map (C.Relmap c)
@@ -65,7 +65,7 @@ relfyMaybe (C.Relfy h2 f2) h1 =
 
 ropConsFull :: C.RopCons VContent
 ropConsFull use =
-    do [m1, m2] <- Builtin.getRelmaps use
+    do [m1, m2] <- Rop.getRelmaps use
        Right $ relmapFull use m1 m2
 
 {-| like SQL's full join -}
@@ -86,7 +86,7 @@ relfyFull (C.Relfy h1 f1) (C.Relfy h2 f2) _ =
        b2 <- C.relfy f2 []
        b3 <- C.relfy f3 b1
        b4 <- C.relfy f4 b2
-       C.Relfy h5 f5 <- ROP.relfyJoin (C.Relfy h4 $ C.RelfyConst b4) h3
+       C.Relfy h5 f5 <- Rop.relfyJoin (C.Relfy h4 $ C.RelfyConst b4) h3
        b5 <- C.relfy f5 b3
        Right $ C.Relfy h5 (C.RelfyConst b5)
 
@@ -96,8 +96,8 @@ relfyFull (C.Relfy h1 f1) (C.Relfy h2 f2) _ =
 
 ropConsGroup :: C.RopCons VContent
 ropConsGroup use =
-  do n <- Builtin.getTerm   use "-term"
-     m <- Builtin.getRelmap use
+  do n <- Rop.getTerm   use "-term"
+     m <- Rop.getRelmap use
      Right $ relmapGroup use n m
 
 relmapGroup :: (Ord c, C.CRel c) => C.RopUse c -> String -> B.Map (C.Relmap c)

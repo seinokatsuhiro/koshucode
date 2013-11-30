@@ -7,8 +7,8 @@ module Koshucode.Baala.Vanilla.Relmap.Operator
   -- $Operators
 ) where
 
-import qualified Koshucode.Baala.Core as C
-import qualified Koshucode.Baala.Builtin as Builtin
+import qualified Koshucode.Baala.Core    as C
+import qualified Koshucode.Baala.Builtin as Rop
 
 import qualified Koshucode.Baala.Vanilla.Relmap.Calc    as Rop
 import qualified Koshucode.Baala.Vanilla.Relmap.Naming  as Rop
@@ -18,8 +18,9 @@ import Koshucode.Baala.Vanilla.Type
 
 {-| Implementation of relational operators. -}
 vanillaRops :: [C.Rop VContent]
-vanillaRops = Builtin.ropList "vanilla"
+vanillaRops = Rop.ropList "vanilla"
     [ ( "add /N E ..."         , Rop.ropConsAdd           , C.operandList    "-term"   [] )
+    , ( "check-term /N ..."    , Rop.ropConsCheckTerm     , C.operandList    "-term"   ["-just", "-has", "-but"] )
     , ( "duplicate /N ..."     , Rop.ropConsDuplicate     , C.operandList    "-term"   [] )
     , ( "enclose /N"           , Rop.ropConsEnclose       , C.operandOne     "-term"   [] )
     , ( "full R ..."           , Rop.ropConsFull          , C.operandOne     "-relmap" [] )

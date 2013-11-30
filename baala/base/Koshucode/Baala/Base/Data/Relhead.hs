@@ -16,7 +16,7 @@ module Koshucode.Baala.Base.Data.Relhead
   headKeepTerms,
   headDropTerms,
   headIndex, headIndex1,
-  isSubhead, isSuperhead,
+  isSubhead, isSuperhead, isEqvHead,
 
   -- * Monoid
   M.mempty,
@@ -129,6 +129,12 @@ headIndex = B.termsIndex . headTerms
 headIndex1 :: Relhead -> B.Termpath -> [Int]
 headIndex1 = B.termIndex . headTerms
 
+{-| >>> headFrom ["/a", "/b"] `isSubhead` headFrom ["/a", "/b", "/c"]
+    True
+
+    >>> headFrom ["/a", "/d"] `isSubhead` headFrom ["/a", "/b", "/c"]
+    False
+  -}
 isSubhead :: Relhead -> Relhead -> Bool
 isSubhead h1 h2 = null rest where
     ns1  = headNames h1
@@ -136,5 +142,8 @@ isSubhead h1 h2 = null rest where
 
 isSuperhead :: Relhead -> Relhead -> Bool
 isSuperhead h1 h2 = isSubhead h2 h1
+
+isEqvHead :: Relhead -> Relhead -> Bool
+isEqvHead h1 h2 = isSubhead h1 h2 && isSubhead h2 h1
 
 

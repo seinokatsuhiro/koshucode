@@ -11,6 +11,7 @@ module Koshucode.Baala.Core.Relmap.Rop
   relmapConst,
   relmapAlias,
   relmapCalc,
+  relmapRelfy,
   relmapConfl,
 
 ) where
@@ -78,6 +79,9 @@ relmapCalc
     -> C.RelmapRelfy c   -- ^ Calculation of operation
     -> C.Relmap c        -- ^ Result relmap
 relmapCalc use op relfy = relmapConfl use op relfy []
+
+relmapRelfy :: RopUse c -> String -> (B.Relhead -> B.Ab (C.Relfy c)) -> C.Relmap c
+relmapRelfy use name f = relmapCalc use name $ const f
 
 {-| Make a confluent relmap. -}
 relmapConfl

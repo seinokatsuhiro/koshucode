@@ -10,9 +10,9 @@ module Koshucode.Baala.Vanilla.Relmap.Naming
 ) where
 
 import qualified Data.List as List
-import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Core as C
-import qualified Koshucode.Baala.Builtin as Builtin
+import qualified Koshucode.Baala.Base    as B
+import qualified Koshucode.Baala.Core    as C
+import qualified Koshucode.Baala.Builtin as Rop
 import Koshucode.Baala.Vanilla.Type
 
 
@@ -21,8 +21,8 @@ import Koshucode.Baala.Vanilla.Type
 
 ropConsPrefix :: C.RopCons VContent
 ropConsPrefix use =
-    do pre <- Builtin.getTerm  use "-prefix"
-       ns  <- Builtin.getTerms use "-term"
+    do pre <- Rop.getTerm  use "-prefix"
+       ns  <- Rop.getTerms use "-term"
        Right $ relmapPrefix use pre ns
 
 relmapPrefix :: C.RopUse c -> String -> [String] -> C.Relmap c
@@ -50,7 +50,7 @@ prefixName _ _ = undefined
 
 ropConsUnprefix :: C.RopCons VContent
 ropConsUnprefix use =
-    do pre <- Builtin.getTerm use "-prefix"
+    do pre <- Rop.getTerm use "-prefix"
        Right $ relmapUnprefix use pre
 
 relmapUnprefix :: C.RopUse c -> String -> C.Relmap c
@@ -77,8 +77,8 @@ unprefixName pre n =
 
 ropConsPrefixChange :: C.RopCons VContent
 ropConsPrefixChange use =
-    do new <- Builtin.getTerm use "-new"
-       old <- Builtin.getTerm use "-old"
+    do new <- Rop.getTerm use "-new"
+       old <- Rop.getTerm use "-old"
        Right $ relmapPrefixChange use new old
 
 relmapPrefixChange :: C.RopUse c -> String -> String -> C.Relmap c
