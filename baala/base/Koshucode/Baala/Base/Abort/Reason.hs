@@ -16,7 +16,6 @@ module Koshucode.Baala.Base.Abort.Reason
   AbortReason (..),
 ) where
 
-import qualified Text.PrettyPrint as D
 import qualified Koshucode.Baala.Base.Prelude       as B
 import qualified Koshucode.Baala.Base.Token         as B
 import qualified Koshucode.Baala.Base.Abort.Utility as B
@@ -130,42 +129,42 @@ instance B.AbortReasonClass AbortReason where
         (AbortUsage          _ _) -> "使用法の間違い"
 
     abortMain a = case a of
-        (AbortCheckTerms      ns) -> B.doch ns
-        (AbortDivideByZero      ) -> B.docEmpty
-        (AbortHeteroDecimal  x y) -> B.doc $ x ++ " : " ++ y
+        (AbortCheckTerms      ns) -> [unwords ns]
+        (AbortDivideByZero      ) -> []
+        (AbortHeteroDecimal  x y) -> [x ++ " : " ++ y]
         (AbortLookup           s) -> par s
         (AbortMalformedOperand s) -> par s
         (AbortMissingTermname  s) -> par s
         (AbortNotNumber        s) -> par s
         (AbortNotText          s) -> par s
         (AbortNoFile           s) -> par s
-        (AbortNoTerms         ns) -> B.doch ns
-        (AbortOddRelation       ) -> B.docEmpty
-        (AbortOpeandDuplicate ns) -> B.doch ns
-        (AbortOpeandUnknown   ns) -> B.doch ns
+        (AbortNoTerms         ns) -> [unwords ns]
+        (AbortOddRelation       ) -> []
+        (AbortOpeandDuplicate ns) -> [unwords ns]
+        (AbortOpeandUnknown   ns) -> [unwords ns]
         (AbortOpeandUnmatch    s) -> par s
         (AbortReqBoolean       s) -> par s
         (AbortReqFlatname      s) -> par s
-        (AbortReqNewTerms     ns) -> B.doch ns
+        (AbortReqNewTerms     ns) -> [unwords ns]
         (AbortReqText          s) -> par s
         (AbortUnkCop           s) -> par s
         (AbortUnkCox           s) -> par s
         (AbortUnkWord          s) -> par s
-        (AbortUnkClause         ) -> B.docEmpty
+        (AbortUnkClause         ) -> []
         (AbortUnkContent       s) -> par s
         (AbortUnkRelmap        s) -> par s
         (AbortUnkSymbol        s) -> par s
-        (AbortUnresToken        ) -> B.docEmpty
-        (AbortUsage      _ usage) -> B.docv $ map par usage
+        (AbortUnresToken        ) -> []
+        (AbortUsage      _ usage) -> usage
         (AbortUndefined        s) -> par s
-        (AbortUnmatchArity      ) -> B.docEmpty
+        (AbortUnmatchArity      ) -> []
         (AbortUnmatchType      s) -> par s
 
     abortSub a = case a of
         (AbortUnkWord          _)
             -> par "テキストは 'aaa のように書きます"
-        _   -> B.docEmpty
+        _   -> []
 
-par :: String -> B.Doc
-par = D.fsep . map B.doc . words
+par :: String -> [String]
+par s = [s]
 

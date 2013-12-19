@@ -66,6 +66,7 @@ library
         Koshucode.Baala.Base.Prelude.Arrange
         Koshucode.Baala.Base.Prelude.Class
         Koshucode.Baala.Base.Prelude.Pretty
+        Koshucode.Baala.Base.Prelude.TextTable
         Koshucode.Baala.Base.Prelude.Unicode
         Koshucode.Baala.Base.Prelude.Utility
 

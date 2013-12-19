@@ -16,11 +16,9 @@ module Koshucode.Baala.Base.Abort.Utility
 ) where
 
 import qualified System.Exit as Sys
-
 import qualified Koshucode.Baala.Base.Prelude as B
 import qualified Koshucode.Baala.Base.Syntax  as B
 import qualified Koshucode.Baala.Base.Token   as B
-import qualified Text.PrettyPrint as D
 
 
 
@@ -30,9 +28,9 @@ import qualified Text.PrettyPrint as D
 class AbortReasonClass a where
     abortSymbol  :: a -> String
     abortTitle   :: a -> String
-    abortMain    :: a -> B.Doc
-    abortSub     :: a -> B.Doc
-    abortSub _   = B.docEmpty
+    abortMain    :: a -> [String]
+    abortSub     :: a -> [String]
+    abortSub _   = []
 
 {-| Abort reason and source code information. -}
 type AbortType a = (a, [B.Token], [B.CodeLine B.Token])
@@ -47,7 +45,7 @@ type AbortOrType a b = Either (AbortType a) b
 {-| Stop program execution abnormally. -}
 abort :: (AbortReasonClass a) => AbortType a -> IO c
 abort a =
-  do putMessage a
+  do putStr $ message a
      putStrLn "**  (ステータス 2 で終了します)"
      Sys.exitWith $ Sys.ExitFailure 2
 
@@ -59,46 +57,33 @@ abortIO
 abortIO _ (Left a)       = abort a
 abortIO f (Right output) = f output
 
-putMessage :: (AbortReasonClass a) => AbortType a -> IO ()
-putMessage = putStr . vline . D.renderStyle sty . messageDoc where
-    sty      = D.style { D.lineLength = 60 }
-    vline    = unlines . map ("**  " ++) . lines
+message :: (AbortReasonClass a) => AbortType a -> String
+message = vline . messageLines where
+    vline = unlines . map ("**  " ++)
 
-messageDoc :: (AbortReasonClass a) => AbortType a -> B.Doc
-messageDoc (a, toks, cline) =
-    B.docv [ B.doc ""
-           , B.doc "処理を中断しました"
-           , B.doc ""
-           , B.doc (label "種類") B.<> B.doc (abortSymbol a)
-           , B.doc (label "概要") B.<> B.doc (abortTitle a)
-           , opt (label "おもな情報") $ abortMain a
-           , opt (label "補助情報")  $ abortSub a
-           , B.doc ""
-           , source cline
-           , B.doc ""
-           , token toks
-           , B.doc ""
-           , B.doc ""
-           ]
+messageLines :: (AbortReasonClass a) => AbortType a -> [String]
+messageLines a = ["", "処理を中断しました", ""] ++ xs ++ [""] where
+    xs   = B.renderTable " " $ B.alignTable $ [rule, rule] : rows
+    rule = B.textRuleCell '-'
+    rows = concatMap row $ messageAssoc a
+    row (_, []) = []
+    row (name, content)
+        = [[ B.textCell B.Front name
+           , B.textBlockCell B.Front content ]]
 
+messageAssoc :: (AbortReasonClass a) => AbortType a -> [(String, [String])]
+messageAssoc (a, _, cline) =
+    [ ("種類", [abortSymbol a])
+    , ("概要", [abortTitle a])
+    , ("おもな情報", abortMain a)
+    , ("補助情報",   abortSub a)
+    , ("ソース", source cline) ]
     where
-      opt :: String -> B.Map B.Doc
-      opt lbl x | D.isEmpty x = B.docEmpty
-                | otherwise   = B.doc lbl B.<> x
-
-      source :: [B.CodeLine B.Token] -> B.Doc
-      source [] = B.doc "?" B.<> B.doc "???"
-      source ls = B.docv $ map d $ ls where
+      source :: [B.CodeLine B.Token] -> [String]
+      source [] = []
+      source ls = map d ls where
           d (B.CodeLine n line _) =
-              (B.doc $ label $ show n) B.<> B.doc line
-
-      token :: [B.Token] -> B.Doc
-      token = B.docv . map d where
-          d tok = (B.doc $ label $ "  " ++ show (B.tokenNumber tok))
-                  B.<> B.doc (B.tokenContent tok)
-
-      label :: B.Map String
-      label = B.padRight 12
+              "(" ++ show n ++ ") " ++ line
 
 addAbort :: (AbortReasonClass a) => AbortType a -> B.Map (AbortOrType a b)
 addAbort _ (Left a1) = Left a1
