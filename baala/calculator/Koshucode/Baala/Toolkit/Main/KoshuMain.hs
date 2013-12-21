@@ -163,7 +163,7 @@ prettySection (L.SectionSource root _ files) =
                    prettyPrint md
                    return 0
       _      -> L.putSuccess usage
-    where prettyPrint md = B.abortIO (print . B.doc) md
+    where prettyPrint md = B.abortMap (print . B.doc) md
 
 
 

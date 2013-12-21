@@ -88,8 +88,8 @@ halfBundle operators src = cons where
 {-| Second step of constructing relmap,
     make 'Relmap' from contents of 'HalfRelmap'. -}
 type RelmapFullCons c
-    = C.HalfRelmap                -- ^ Half relmap from 'RelmapHalfCons'
-    -> B.AbortTokens (C.Relmap c) -- ^ Result relmap
+    = C.HalfRelmap        -- ^ Half relmap from 'RelmapHalfCons'
+    -> B.Ab (C.Relmap c)  -- ^ Result relmap
 
 {-| Construct (full) relmap. -}
 fullBundle :: [B.Named (C.RopCons c)] -> RelmapFullCons c

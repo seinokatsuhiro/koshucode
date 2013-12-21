@@ -12,6 +12,8 @@ module Koshucode.Baala.Base.Token.TokenLine
   tokens,
   isSimpleWord,
   isSimpleChar,
+  commentLine,
+  putCommentLines,
 
   -- * Document
 
@@ -150,6 +152,13 @@ isSimpleChar c =
 
 isShort :: Char -> Bool
 isShort = Ch.isAlpha
+
+commentLine :: String -> String
+commentLine = ("**  " ++)
+
+putCommentLines :: [String] -> IO ()
+putCommentLines = putStr . unlines . map commentLine
+
 
 -- ----------------------
 {- $TokenType

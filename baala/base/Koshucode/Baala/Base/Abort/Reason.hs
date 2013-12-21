@@ -8,7 +8,6 @@ module Koshucode.Baala.Base.Abort.Reason
   AbMap,
   AbMap2,
   Abort,
-  AbortTokens,
   AbortOr,
   (<!!>),
 
@@ -17,14 +16,11 @@ module Koshucode.Baala.Base.Abort.Reason
 ) where
 
 import qualified Koshucode.Baala.Base.Prelude       as B
-import qualified Koshucode.Baala.Base.Token         as B
 import qualified Koshucode.Baala.Base.Abort.Utility as B
 
 
 
 -- ---------------------- abort type
-
-type AbortTokens b = Either (AbortReason, [B.Token]) b
 
 {-| Either of (1) right result, or (2) abort reason
     (without source code information). -}
@@ -47,9 +43,9 @@ type AbortOr b = B.AbortOrType AbortReason b
 
 {-| Lookup association list.
     This function may abort on AbortLookup. -}
-(<!!>) :: [B.Named a] -> String -> AbortTokens a
+(<!!>) :: [B.Named a] -> String -> Ab a
 (<!!>) assoc key = loop assoc where
-    loop [] = Left (AbortLookup key, [])
+    loop [] = Left (AbortLookup key)
     loop ((k,v) : kvs) | k == key  = Right v
                        | otherwise = loop kvs
 
@@ -94,9 +90,9 @@ instance B.Name AbortReason where
     name = B.abortSymbol
 
 instance B.AbortReasonClass AbortReason where
-    abortSymbol = head . words . show
+    abortClass _ = "GENERAL"
 
-    abortTitle a = case a of
+    abortReason a = case a of
         (AbortCheckTerms       _) -> "項目の過不足"
         (AbortDivideByZero      ) -> "ゼロで割れない"
         (AbortHeteroDecimal  _ _) -> "小数の桁数が合わない"
@@ -128,7 +124,7 @@ instance B.AbortReasonClass AbortReason where
         (AbortUnmatchType      _) -> "型が合わない"
         (AbortUsage          _ _) -> "使用法の間違い"
 
-    abortMain a = case a of
+    abortDetail a = case a of
         (AbortCheckTerms      ns) -> [unwords ns]
         (AbortDivideByZero      ) -> []
         (AbortHeteroDecimal  x y) -> [x ++ " : " ++ y]
@@ -159,11 +155,6 @@ instance B.AbortReasonClass AbortReason where
         (AbortUndefined        s) -> par s
         (AbortUnmatchArity      ) -> []
         (AbortUnmatchType      s) -> par s
-
-    abortSub a = case a of
-        (AbortUnkWord          _)
-            -> par "テキストは 'aaa のように書きます"
-        _   -> []
 
 par :: String -> [String]
 par s = [s]

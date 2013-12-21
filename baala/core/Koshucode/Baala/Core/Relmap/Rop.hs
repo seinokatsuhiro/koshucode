@@ -37,7 +37,7 @@ data Rop c = Rop
 
 {-| Constructor of relational operator 'C.Relmap'.
     'C.Relmap' is constructed from 'C.HalfRelmap' and subrelmaps in it. -}
-type RopCons c = RopUse c -> B.AbortTokens (C.Relmap c)
+type RopCons c = RopUse c -> B.Ab (C.Relmap c)
 
 {-| Use of operator -}
 data RopUse c = RopUse {

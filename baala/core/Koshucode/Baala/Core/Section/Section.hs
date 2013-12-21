@@ -121,24 +121,24 @@ consSection full resource xs =
       impt _ (C.CImport _ (Nothing)) = Right emptySection
       impt _ (C.CImport _ (Just e))  = consSec [e]
 
-      judge ls (C.CJudge q p xs2) =
+      judge _ (C.CJudge q p xs2) =
           case C.litJudge q p (B.tokenTrees xs2) of
             Right j -> Right j
-            Left  a -> abort a [] ls
+            Left  a -> abort a []
 
-      relmap ls (C.CRelmap n r) =
+      relmap _ (C.CRelmap n r) =
           case full r of
-            Right r'       -> Right (n, r')
-            Left (a, toks) -> abort a toks ls
+            Right r'  -> Right (n, r')
+            Left a    -> abort a []
 
       assert ls (C.CAssert t p opt r) =
           case full r of
-            Right r'       -> Right $ C.Assert t p opt r' ls
-            Left (a, toks) -> abort a toks ls
+            Right r'  -> Right $ C.Assert t p opt r' ls
+            Left a    -> abort a []
 
-      unk   ls (C.CUnknown)    = abort B.AbortUnkClause [] ls
-      unres ls (C.CUnres toks) = abort B.AbortUnresToken toks ls
-      abort a toks ls = Left (a, toks, ls)
+      unk   ls (C.CUnknown) = abort B.AbortUnkClause  ls
+      unres ls (C.CUnres _) = abort B.AbortUnresToken ls
+      abort a ls = Left (a, ls)
 
 isCImport, isCExport, isCShort,
   isCRelmap, isCAssert, isCJudge,

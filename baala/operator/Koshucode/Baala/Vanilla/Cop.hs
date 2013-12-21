@@ -33,16 +33,16 @@ vanillaCop n = lookup n ops where
 vanillaContent
     :: C.RopUse VContent    -- ^ Source information
     -> B.TokenTree          -- ^ Token tree of content expression
-    -> B.AbortTokens (C.PosCox VContent) -- ^ Partial content expression
+    -> B.Ab (C.PosCox VContent) -- ^ Partial content expression
 vanillaContent _ t =
     case C.formCox vanillaCop $ vanillaBinary t of
       Right c -> Right $ C.posCox c
-      Left a  -> Left (a, [])
+      Left a  -> Left a
 
 vanillaNamedContent
   :: C.RopUse VContent
   -> B.Named B.TokenTree
-  -> B.AbortTokens (B.Named (C.PosCox VContent))
+  -> B.Ab (B.Named (C.PosCox VContent))
 vanillaNamedContent use (n, t) =
     do c <- vanillaContent use t
        Right (n, c)
@@ -50,7 +50,7 @@ vanillaNamedContent use (n, t) =
 vanillaNamedContents
   :: C.RopUse VContent
   -> [B.Named B.TokenTree]
-  -> B.AbortTokens [B.Named (C.PosCox VContent)]
+  -> B.Ab [B.Named (C.PosCox VContent)]
 vanillaNamedContents use = mapM (vanillaNamedContent use)
 
 {-| Convert infix form to prefix form. -}

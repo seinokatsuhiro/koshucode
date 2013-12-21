@@ -255,7 +255,7 @@ ropConsCheckTerm use =
        (Just ns, Nothing, Nothing) -> Right $ relmapCheckTermJust use ns
        (Nothing, Just ns, Nothing) -> Right $ relmapCheckTermHas  use ns
        (Nothing, Nothing, Just ns) -> Right $ relmapCheckTermBut  use ns
-       _ -> Left (B.AbortOpeandUnmatch "require one of -just / -has / -but", [])
+       _ -> Left $ B.AbortOpeandUnmatch "require one of -just / -has / -but"
 
 relmapCheckTermJust :: C.RopUse c -> [B.Termname] -> C.Relmap c
 relmapCheckTermHas  :: C.RopUse c -> [B.Termname] -> C.Relmap c

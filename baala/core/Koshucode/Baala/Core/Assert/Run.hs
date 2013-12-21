@@ -37,7 +37,7 @@ runRelmapViaRelfy sel m (B.Rel h1 b1) =
     do C.Relfy h2 f2 <- relmapRelfy sel m h1
        case C.relfy f2 b1 of
          Right b2 -> Right $ B.Rel h2 b2
-         Left a   -> Left (a, [], [])
+         Left a   -> Left (a, [])
 
 relmapRelfy
     :: C.RelSelect c
@@ -61,7 +61,7 @@ relmapRelfy sel = (<$>) where
              Right relfy2 -> Right relfy2
              Left a       -> left h a
 
-    left h a = Left (a, [], C.halfLines h)
+    left h a = Left (a, C.halfLines h)
 
 
 
@@ -89,7 +89,7 @@ runAssertDataset as ds =
                  let q = C.assertQuality t
                  case assertOptionProcess q pat opt r1 of
                    Right js -> Right js
-                   Left a   -> Left (a, [], src)
+                   Left a   -> Left (a, src)
 
 {-| Convert relation to list of judges -}
 judgesFromRel :: Bool -> B.JudgePattern -> B.Rel c -> [B.Judge c]

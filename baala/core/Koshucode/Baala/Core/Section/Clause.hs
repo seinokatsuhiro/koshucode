@@ -168,7 +168,7 @@ clauseHalf half xs = mapM f xs2 where
     h src ts = let ls = B.clauseLines src
                in case half ls (B.tokenTrees ts) of
                     Right r -> Right r
-                    Left  a -> Left (a, ts, ls)
+                    Left  a -> Left (a, ls)
 
     xs2 = concatMap resolve xs
     resolve = resolveClause $ concatMap short xs

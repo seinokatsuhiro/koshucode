@@ -16,29 +16,27 @@ import qualified Koshucode.Baala.Core as C
 -- ----------------------  Term
 
 {-| Extract a term name. -}
-termname :: B.TokenTree -> B.AbortTokens B.Termname
+termname :: B.TokenTree -> B.Ab B.Termname
 termname (B.TreeL (B.TTerm _ [n])) = Right n
-termname tree = Left (B.AbortMissingTermname "",
-                      B.treeTokens tree)
+termname _ = Left $ B.AbortMissingTermname ""
 
 {-| Extract a list of term names.
  
     >>> termnames . B.tt $ "/a /b /c"
     Right ["/a", "/b", "/c"]
 -}
-termnames :: [B.TokenTree] -> B.AbortTokens [B.Termname]
+termnames :: [B.TokenTree] -> B.Ab [B.Termname]
 termnames trees =
     case mapM termname trees of
       Right ns -> Right ns
-      Left  _  -> Left (B.AbortMissingTermname "",
-                        B.treesTokens trees)
+      Left  _  -> Left $ B.AbortMissingTermname ""
 
 {-| Extract a list of name-and-name pairs.
  
     >>> termnamePairs . B.tt $ "/a /x /b /y"
     Right [("/a", "/x"), ("/b", "/y")]
 -}
-termnamePairs :: [B.TokenTree] -> B.AbortTokens [(B.Termname, B.Termname)]
+termnamePairs :: [B.TokenTree] -> B.Ab [(B.Termname, B.Termname)]
 termnamePairs = loop where
     loop (a : b : xs) =
         do a'  <- termname a
@@ -46,8 +44,7 @@ termnamePairs = loop where
            xs' <- loop xs
            Right $ (a', b') : xs'
     loop [] = Right []
-    loop xs = Left (B.AbortMissingTermname "",
-                    B.treesTokens xs)
+    loop _ = Left $ B.AbortMissingTermname ""
 
 {-| Extract a list of name-and-tree pairs.
  
@@ -56,9 +53,6 @@ termnamePairs = loop where
           , ("/b", TreeL (TWord 7 0 "10"))
           , ("/c", TreeB 1 []) ]
   -}
-termTreePairs :: [B.TokenTree] -> B.AbortTokens [B.Named B.TokenTree]
-termTreePairs xs =
-    case C.litNamedTrees xs of
-      Right x -> Right x
-      Left a  -> Left (a, B.treesTokens xs)
+termTreePairs :: [B.TokenTree] -> B.Ab [B.Named B.TokenTree]
+termTreePairs xs = C.litNamedTrees xs
 

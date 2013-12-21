@@ -36,22 +36,22 @@ import Koshucode.Baala.Builtin.Term
 -- ---------------------- Generals
 
 {-| Abortable 'head' -}
-getHead               :: [a] -> B.AbortTokens a
+getHead               :: [a] -> B.Ab a
 getHead (x : _)       = Right x
-getHead _             = Left (B.AbortLookup "head", [])
+getHead _             = Left $ B.AbortLookup "head"
 
-getSingleton          :: [a] -> B.AbortTokens a
+getSingleton          :: [a] -> B.Ab a
 getSingleton [x]      = Right x
-getSingleton _        = Left (B.AbortLookup "singleton", [])
+getSingleton _        = Left $ B.AbortLookup "singleton"
 
 
 
 -- ----------------------
 
 type RopGet c b
-    = C.RopUse c        -- ^ Use of relational operator
-    -> String           -- ^ Lookup key
-    -> B.AbortTokens b  -- ^ Suboperand
+    = C.RopUse c    -- ^ Use of relational operator
+    -> String       -- ^ Lookup key
+    -> B.Ab b       -- ^ Suboperand
 
 operand :: C.RopUse c -> C.RopAssoc
 operand = C.halfOperand . C.ropHalf
@@ -83,14 +83,14 @@ getWord use n =
     do trees <- getTrees use n
        case trees of
          [B.TreeL (B.TWord _ _ s)] -> Right s
-         _ -> Left (B.AbortLookup n, B.treesTokens trees)
+         _ -> Left $ B.AbortLookup n
 
 getInt :: RopGet c Int
 getInt use n =
     do trees <- getTrees use n
        case trees of
          [B.TreeL (B.TWord _ _ i)] -> Right (read i :: Int)
-         _ -> Left (B.AbortLookup n, B.treesTokens trees)
+         _ -> Left $ B.AbortLookup n
 
 
 
@@ -122,10 +122,10 @@ getTermPairs  use n = getTrees use n >>= termnamePairs
     >   m <- getRelmap use
     >   Right $ relmapMeet use m
     -}
-getRelmap :: C.RopUse c -> B.AbortTokens (C.Relmap c)
+getRelmap :: C.RopUse c -> B.Ab (C.Relmap c)
 getRelmap  use = getHead $ C.ropSubmap use
 
 {-| Get relmaps from operator use. -}
-getRelmaps :: C.RopUse c -> B.AbortTokens [C.Relmap c]
+getRelmaps :: C.RopUse c -> B.Ab [C.Relmap c]
 getRelmaps use = Right $ C.ropSubmap use
 

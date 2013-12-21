@@ -51,7 +51,7 @@ hRunFiles h (SectionSource root textSec files) =
        IO.hPutStr      h $ unlines $ B.texts comm
        IO.hPutStrLn    h ""
 
-       B.abortIO (C.hPutSection h) $ C.runSection =<< union
+       B.abortMap (C.hPutSection h) $ C.runSection =<< union
 
 concatMM :: (Monad m, Monoid a) => [m a] -> m a
 concatMM [] = return mempty
@@ -74,7 +74,7 @@ runCalcTo
     -> IO Int            -- ^
 runCalcTo dir sec =
     do union <- readSec sec
-       B.abortIO (runCalcSec dir $ rootSection sec) union
+       B.abortMap (runCalcSec dir $ rootSection sec) union
 
 runCalcSec :: (C.CContent c) => String -> C.Section c -> C.Section c -> IO Int
 runCalcSec dir root sec =
