@@ -60,8 +60,8 @@ halfBundle operators src = cons where
         case B.divideTreesByBar xs of
           [(B.TreeL (B.TWord _ 0 op) : opd)] -> find op opd
           [[B.TreeB 1 xs2]] -> cons xs2
-          [[B.TreeB _ _]]   -> Left $ B.AbortUndefined "bracket"
-          [_]               -> Left $ B.AbortUnkRelmap "?"
+          [[B.TreeB _ _]]   -> Left $ B.AbortAnalysis [] $ B.AAUndefined "bracket"
+          [_]               -> Left $ B.AbortAnalysis [] $ B.AAUnkRelmap "?"
           xs2               -> find "|" $ map B.treeWrap xs2
 
     find :: String -> [B.TokenTree] -> B.Ab C.HalfRelmap
@@ -72,9 +72,11 @@ halfBundle operators src = cons where
               do sorted <- sorter opd
                  submap $ half u op opd sorted
 
-    half u op orig opd =
-        C.HalfRelmap u src op (("operand", orig) : opd) []
+    half :: String -> String -> [B.TokenTree] -> [B.Named [B.TokenTree]] -> C.HalfRelmap
+    half usage op orig opd =
+        C.HalfRelmap usage src op (("operand", orig) : opd) []
 
+    submap :: C.HalfRelmap -> B.Ab C.HalfRelmap
     submap h@C.HalfRelmap { C.halfOperand = opd } =
         case lookup "-relmap" opd of
           Nothing -> Right h   -- no subrelmaps

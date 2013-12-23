@@ -181,7 +181,7 @@ relfyDuplicate
   :: (Ord c) => [B.Termname] -> B.Relhead -> B.Ab (C.Relfy c)
 relfyDuplicate ns h1
     | null non  = Right $ C.Relfy h1 (C.RelfyFull False f)
-    | otherwise = Left  $ B.AbortNoTerms non
+    | otherwise = Left  $ B.AbortAnalysis [] (B.AANoTerms non)
     where
       non :: [B.Termname]
       non = B.headDropTerms h1 ns
@@ -225,7 +225,7 @@ relfyMember :: B.Termname -> B.Termname -> B.Relhead -> B.Ab (C.Relfy Rop.VConte
 relfyMember x xs h1 = r2 where
     r2 | xHere && xsHere     = relfyMemberCheck  xPos xsPos h1
        | not xHere && xsHere = relfyMemberExpand x    xsPos h1
-       | otherwise           = Left $ B.AbortNoTerms [x, xs]
+       | otherwise           = Left $ B.AbortAnalysis [] (B.AANoTerms [x, xs])
     ([xPos, xsPos], [xHere, xsHere])
         = h1 `B.posHere` [x, xs]
 
@@ -255,7 +255,7 @@ ropConsCheckTerm use =
        (Just ns, Nothing, Nothing) -> Right $ relmapCheckTermJust use ns
        (Nothing, Just ns, Nothing) -> Right $ relmapCheckTermHas  use ns
        (Nothing, Nothing, Just ns) -> Right $ relmapCheckTermBut  use ns
-       _ -> Left $ B.AbortOpeandUnmatch "require one of -just / -has / -but"
+       _ -> Left $ B.AbortAnalysis [] $ B.AAMalformedOperand "require one of -just / -has / -but"
 
 relmapCheckTermJust :: C.RopUse c -> [B.Termname] -> C.Relmap c
 relmapCheckTermHas  :: C.RopUse c -> [B.Termname] -> C.Relmap c
@@ -275,7 +275,7 @@ relfyCheckTermBy :: ([String] -> B.Relhead -> Bool)
                  -> [String] -> B.Relhead -> B.Ab (C.Relfy c)
 relfyCheckTermBy f ns h1
     | f ns h1 = Right $ C.Relfy h1 C.RelfyId
-    | otherwise = Left $ B.AbortCheckTerms $ B.headNames h1
+    | otherwise = Left $ B.AbortAnalysis [] (B.AACheckTerms $ B.headNames h1)
 
 
 -- ----------------------  RDF

@@ -66,12 +66,12 @@ litContentBy ops = lit where
         | otherwise   = case tok of
               B.TWord _ 0 w -> word w
               B.TWord _ _ w -> Right . C.putText $ w  -- quoted text
-              _             -> Left $ B.AbortUnkContent (show tok)
+              _             -> Left $ B.AbortSyntax [] $ B.ASUnkWord (show tok)
 
     word w = case w of
           '#' : s  ->  litHash s
           "()"     ->  Right C.nil
-          _        ->  Left $ B.AbortUnkWord w
+          _        ->  Left $ B.AbortSyntax [] $ B.ASUnkWord w
 
     paren xs@(x : _)
         -- quoted sequence is text
@@ -87,13 +87,13 @@ litContentBy ops = lit where
     paren (B.TreeL (B.TWord _ 0 tag) : xs) =
         case lookup tag ops of
           Just f  -> f lit xs
-          Nothing -> Left $ B.AbortUnkCop tag
+          Nothing -> Left $ B.AbortAnalysis [] $ B.AAUnkCop tag
 
     -- empty sequence is nil
     paren [] = Right C.nil
 
     -- unknown sequence
-    paren x  = Left $ B.AbortUnkSymbol (show x)
+    paren x  = Left $ B.AbortSyntax [] $ B.ASUnkWord (show x)
 
 -- First letters of decimals
 isDecimalChar :: Char -> Bool
@@ -123,12 +123,13 @@ isQuotedOrHashed x = isQuoted x || isHashed x
 
 litUnquoted :: Literalize String
 litUnquoted x@(B.TreeL (B.TWord _ 0 w)) | not $ isHashed x = Right w
-litUnquoted x = Left $ B.AbortUnkSymbol (show x)
+litUnquoted x = Left $ B.AbortSyntax [] $ B.ASUnkWord (show x)
 
 litHash :: (C.CContent c) => B.LitString c
-litHash key = case lookup key hashAssoc of
-                Just c  -> Right c
-                Nothing -> Left $ B.AbortUnkWord ('#' : key)
+litHash key =
+    case lookup key hashAssoc of
+      Just c  -> Right c
+      Nothing -> Left $ B.AbortSyntax [] $ B.ASUnkWord ('#' : key)
 
 hashAssoc :: (C.CContent c) => [B.Named c]
 hashAssoc =
@@ -146,8 +147,8 @@ hashAssoc =
     If 'TokenTree' contains nested term name, this function failed. -}
 litFlatname :: Literalize String
 litFlatname (B.TreeL (B.TTerm _ [n])) = Right n
-litFlatname (B.TreeL (B.TTerm _ ns))  = Left $ B.AbortReqFlatname (concat ns)
-litFlatname x = Left $ B.AbortMissingTermname (show x)
+litFlatname (B.TreeL (B.TTerm _ ns))  = Left $ B.AbortAnalysis [] $ B.AAReqFlatname (concat ns)
+litFlatname x = Left $ B.AbortAnalysis [] $ B.AAMissingTermname (show x)
 
 litList :: (C.CContent c) => Literalize c -> LitTrees [c]
 litList _   [] = Right []
@@ -163,7 +164,7 @@ litRel lit cs =
        b2 <- mapM (litList lit) b1
        let b3 = B.unique b2
        if any (length h2 /=) $ map length b3
-          then Left  $ B.AbortOddRelation
+          then Left  $ B.AbortSyntax [] $ B.ASOddRelation
           else Right $ B.Rel (B.headFrom h2) b3
 
 {-| Collect term name and content. -}

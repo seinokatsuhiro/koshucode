@@ -82,7 +82,7 @@ operandList a ns = (trunkBy f, [a], ns) where
 operandOne :: String -> [String] -> RopOperand
 operandOne a ns = (trunkBy f, [a], ns) where
     f [x]       = Right [ (a, [x]) ]
-    f _         = Left $ B.AbortOpeandUnmatch "unary"
+    f _         = Left $ B.abortMalformedOperand "unary"
 
 {-| Two-element trunk.
 
@@ -90,7 +90,7 @@ operandOne a ns = (trunkBy f, [a], ns) where
 operandTwo :: String -> String -> [String] -> RopOperand
 operandTwo a b ns = (trunkBy f, [a,b], ns) where
     f [x, y]      = Right [ (a, [x]), (b, [y]) ]
-    f _           = Left $ B.AbortOpeandUnmatch "binary"
+    f _           = Left $ B.abortMalformedOperand "binary"
 
 {-| One-and-multiple-element trunk.
 
@@ -98,7 +98,7 @@ operandTwo a b ns = (trunkBy f, [a,b], ns) where
 operandOneList :: String -> String -> [String] -> RopOperand
 operandOneList a b ns = (trunkBy f, [a,b], ns) where
     f (x:xs)          = Right [ (a, [x]), (b, xs) ]
-    f _               = Left $ B.AbortOpeandUnmatch "uncons"
+    f _               = Left $ B.abortMalformedOperand "uncons"
 
 {-| Give a name to unnamed operand. -}
 trunkBy :: RopFullSorter -> RopSorter

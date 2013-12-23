@@ -35,10 +35,10 @@ formCox cops = form where
     form (B.TreeB 1 (B.TreeL (B.TWord _ 0 w) : args)) =
         case cops w of
           Just cop   ->  call cop args
-          Nothing    ->  Left $ B.AbortUnkCop w
+          Nothing    ->  Left $ B.AbortAnalysis [] $ B.AAUnkCop w
     form x@(B.TreeB n _)
         | n >  1      =  fmap C.CoxLit $ C.litContent x  -- literal composite
-    form x            =  Left $ B.AbortUnkCox (show x) -- unknown
+    form x            =  Left $ B.AbortSyntax [] $ B.ASUnkCox (show x) -- unknown
 
     call (C.CopLit _ f) = fmap C.CoxLit . f
     call op'            = fmap (C.CoxApp op') . mapM form
@@ -52,7 +52,7 @@ posCox cox h = pos cox where
     pos (C.CoxTerm ns _) = let index = B.headIndex1 h ns
                          in if all (>= 0) index
                             then Right $ C.CoxTerm ns index
-                            else Left  $ B.AbortNoTerms [concat ns]
+                            else Left  $ B.AbortAnalysis [] (B.AANoTerms [concat ns])
     pos c = Right c
 
 runCoxH
@@ -74,10 +74,10 @@ runCox arg cox = run cox where
         case op of
           C.CopLazy  _ f   ->  f cs
           C.CopEager _ f   ->  f =<< mapM run cs
-          C.CopLit   _ _   ->  Left $ B.AbortLookup ""
+          C.CopLit   _ _   ->  Left $ B.abortNotFound ""
 
-    term []     _ = Left $ B.AbortLookup ""
-    term (-1:_) _ = Left $ B.AbortLookup ""
+    term []     _ = Left $ B.abortNotFound ""
+    term (-1:_) _ = Left $ B.abortNotFound ""
     term (p:ps) arg2 =
         let c = arg2 !! p
         in if C.isRel c

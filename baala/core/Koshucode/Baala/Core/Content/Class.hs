@@ -57,7 +57,7 @@ nonNilFilter = filter (not . isNil)
 need :: PrimContent c => (c -> Bool) -> (c -> b) -> c -> B.Ab b
 need is get x
     | is x = Right $ get x
-    | otherwise = Left $ B.AbortUnmatchType (typename x)
+    | otherwise = Left $ B.AbortCalc [] $ B.ACUnmatchType (typename x)
 
 
 

@@ -30,17 +30,17 @@ import Koshucode.Baala.Vanilla.Type
 
 copsOrder :: [B.Named (C.Cop VContent)]
 copsOrder =
- [ C.namedEager  "="    copEq
- , C.namedEager  "<>"   copNeq
- , C.namedEager  "<"    copLt
- , C.namedEager  "<="   copLte
- , C.namedEager  ">"    copGt
- , C.namedEager  ">="   copGte
- ]
+    [ C.namedEager  "="    copEq
+    , C.namedEager  "<>"   copNeq
+    , C.namedEager  "<"    copLt
+    , C.namedEager  "<="   copLte
+    , C.namedEager  ">"    copGt
+    , C.namedEager  ">="   copGte
+    ]
 
 copBy :: (VContent -> VContent -> Bool) -> VCop
 copBy p [x, y] = Right . C.putBool $ x `p` y
-copBy _ _      = Left  $ B.AbortLookup ""
+copBy _ _      = Left  $ B.abortNotFound ""
 
 copEq   :: VCop
 copEq   =  copBy (==)
@@ -59,6 +59,4 @@ copGt   =  copBy (>)
 
 copGte  :: VCop
 copGte  =  copBy (>=)
-
-
 

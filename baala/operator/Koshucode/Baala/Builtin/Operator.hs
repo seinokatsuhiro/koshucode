@@ -35,8 +35,8 @@ operandSorter (trunkSorter, trunkTerms, branchTerms) xs = xs3 where
     unk  = ns2  List.\\  ("" : allTerms)
     wrap = ns2 `List.intersect` trunkTerms
 
-    xs3  | not (null more) = Left $ B.AbortOpeandDuplicate (map fst more)
-         | not (null unk)  = Left $ B.AbortOpeandUnknown unk
+    xs3  | not (null more) = Left $ B.AbortAnalysis [] $ B.AAOpeandDuplicate (map fst more)
+         | not (null unk)  = Left $ B.AbortAnalysis [] $ B.AAOpeandUnknown unk
          | not (null wrap) = Right xs2
          | otherwise       = trunkSorter xs2
 

@@ -43,7 +43,7 @@ litText xs =
 
 litT :: B.TokenTree -> B.Ab String
 litT (B.TreeL (B.TWord _ _ w)) = Right w
-litT x = Left $ B.AbortNotText (show x)
+litT x = Left $ B.AbortSyntax [] $ B.ASNotText (show x)
 
 copsList :: [B.Named (C.Cop V.VContent)]
 copsList =
@@ -71,24 +71,27 @@ copList = Right . C.putList
 copTotal :: V.VCop
 copTotal = op where
     op [V.VList xs] = Right . C.putDec =<< B.decimalSum (map C.getDec xs)
-    op xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
+    op xs = typeUnmatch xs
 
 copMin :: V.VCop
 copMin = op where
     op [V.VList xs] = Right $ minimum xs
-    op xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
+    op xs = typeUnmatch xs
 
 copMax :: V.VCop
 copMax = op where
     op [V.VList xs] = Right $ maximum xs
-    op xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
+    op xs = typeUnmatch xs
 
 copLength :: V.VCop
 copLength = op where
     op [V.VList xs]         = Right . C.putDecFromInt $ length xs
     op [V.VText xs]         = Right . C.putDecFromInt $ length xs
     op [V.VRel (B.Rel _ b)] = Right . C.putDecFromInt $ length b
-    op xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
+    op xs = typeUnmatch xs
+
+typeUnmatch :: C.PrimContent a => [a] -> Either B.AbortReason b
+typeUnmatch xs = Left $ B.AbortCalc [] $ B.ACUnmatchType (concatMap C.typename xs)
 
 
 
@@ -100,20 +103,20 @@ copAppend xs@(x : _) = op x where
     op (V.VText _) = Right . C.putText . concat =<< mapM C.needText xs
     op (V.VSet  _) = Right . C.putSet  . concat =<< mapM C.needSet  xs
     op (V.VList _) = Right . C.putList . concat =<< mapM C.needList xs
-    op _ = Left $ B.AbortUnmatchType (concatMap C.typename xs)
+    op _ = typeUnmatch xs
 
 copIntersect :: V.VCop
 copIntersect [] = Right V.VNil
 copIntersect xs@(x : _) = op x where
     op (V.VSet  _) = Right . C.putSet  . intersectLists =<< mapM C.needSet  xs
     op (V.VList _) = Right . C.putList . intersectLists =<< mapM C.needList xs
-    op _ = Left $ B.AbortUnmatchType (concatMap C.typename xs)
+    op _ = typeUnmatch xs
 
 copMinus :: V.VCop
 copMinus = op where
     op [V.VSet a,  V.VSet b]  = Right $ V.VSet  (a L.\\ b)
     op [V.VList a, V.VList b] = Right $ V.VList (a L.\\ b)
-    op xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
+    op xs = typeUnmatch xs
 
 intersectLists :: (Eq a) => [[a]] -> [a]
 intersectLists [] = []
@@ -128,19 +131,19 @@ copReverse :: V.VCop
 copReverse = op where
     op [V.VText xs] = Right . V.VText $ reverse xs
     op [V.VList xs] = Right . V.VList $ reverse xs
-    op xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
+    op xs = typeUnmatch xs
 
 copSubIndex :: V.VCop
 copSubIndex = op where
     op [V.VText xs, V.VDec from, V.VDec to] =
         Right $ V.VText (subIndexDecimal from to xs)
-    op xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
+    op xs = typeUnmatch xs
 
 copSubLength :: V.VCop
 copSubLength = op where
     op [V.VText xs, V.VDec from, V.VDec to] =
         Right $ V.VText (subLengthDecimal from to xs)
-    op xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
+    op xs = typeUnmatch xs
 
 subIndexDecimal :: B.Decimal -> B.Decimal -> [a] -> [a]
 subIndexDecimal from to = subIndex intFrom intTo where

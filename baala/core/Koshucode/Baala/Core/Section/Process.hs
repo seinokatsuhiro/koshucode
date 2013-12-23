@@ -46,7 +46,7 @@ readSectionFile
 readSectionFile root path =
     do exist <- Dir.doesFileExist path
        case exist of
-         False -> return $ Left (B.AbortNoFile path, [])
+         False -> return $ Left (B.AbortIO (B.AIONoFile path), [])
          True  -> do code <- readFile path
                      return $ readSectionCode root path code
 

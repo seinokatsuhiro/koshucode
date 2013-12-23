@@ -63,7 +63,7 @@ relfyArrange
     -> B.Ab (C.Relfy c)
 relfyArrange ha ba ns h1
     | null non  = Right $ C.Relfy h2 (C.RelfyOneToOne True $ ba ind)
-    | otherwise = Left  $ B.AbortNoTerms non
+    | otherwise = Left $ B.AbortAnalysis [] $ B.AANoTerms non
     where
       non =  B.headDropTerms h1 ns
       pos :: [B.TermPos]
@@ -79,22 +79,23 @@ relfyArrange ha ba ns h1
 -- ----------------------  rename
 
 ropConsRename :: C.RopCons c
-ropConsRename use = do
-  np <- Rop.getTermPairs use "-term"
-  Right $ relmapRename use np
+ropConsRename use =
+  do np <- Rop.getTermPairs use "-term"
+     Right $ relmapRename use np
 
 relmapRename :: C.RopUse c -> [(B.Termname, B.Termname)] -> C.Relmap c
 relmapRename use np = C.relmapCalc use "rename" fy where
-    fy _ = relfyRename np
+    fy _ = relfyRename (C.ropSource use) np
 
 {-| Change terms names -}
 relfyRename
-    :: [(B.Termname, B.Termname)]  -- ^ List of termnames (/to/, /from/)
+    :: [B.TokenLine]
+    -> [(B.Termname, B.Termname)]  -- ^ List of termnames (/to/, /from/)
     -> B.Relhead                   -- ^ Heading of input relation
     -> B.Ab (C.Relfy c)            -- ^ Relfier for output relation
-relfyRename np h1
-    | nsCheck /= [] = Left  $ B.AbortReqNewTerms nsCheck
-    | psCheck /= [] = Left  $ B.AbortNoTerms psCheck
+relfyRename src np h1
+    | nsCheck /= [] = Left  $ B.AbortAnalysis src $ B.AAReqNewTerms nsCheck
+    | psCheck /= [] = Left  $ B.AbortAnalysis src $ B.AANoTerms psCheck
     | otherwise     = Right $ C.Relfy h2 C.RelfyId
     where
       (ns, ps) = unzip np

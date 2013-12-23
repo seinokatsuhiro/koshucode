@@ -39,7 +39,7 @@ copsArith =
 copDec :: VContent -> B.Ab B.Decimal
 copDec (VDec  n) = Right n
 copDec (VText n) = B.litDecimal n
-copDec x = Left $ B.AbortNotNumber (show x)
+copDec x = Left $ B.AbortSyntax [] $ B.ASNotNumber (show x)
 
 copPlus :: VCop
 copPlus xs = fmap VDec $ loop xs where
@@ -64,7 +64,7 @@ copMinus [a, b] =
        b' <- copDec b
        c' <- B.decimalSub a' b'
        Right . VDec $ c'
-copMinus _ = Left $ B.AbortMalformedOperand "-"
+copMinus _ = Left $ B.abortMalformedOperand "-"
 
 copQuo :: VCop
 copQuo [a, b] =
@@ -72,7 +72,7 @@ copQuo [a, b] =
        b' <- copDec b
        c' <- B.decimalQuo a' b'
        Right . VDec $ c'
-copQuo _ = Left $ B.AbortMalformedOperand "quo"
+copQuo _ = Left $ B.abortMalformedOperand "quo"
 
 copRem :: VCop
 copRem [a, b] =
@@ -80,16 +80,16 @@ copRem [a, b] =
        b' <- copDec b
        c' <- B.decimalRem a' b'
        Right . VDec $ c'
-copRem _ = Left $ B.AbortMalformedOperand "rem"
+copRem _ = Left $ B.abortMalformedOperand "rem"
 
 copAbs :: VCop
 copAbs [VList cs] = Right . VList =<< mapM copAbs1 cs
 copAbs [c] = copAbs1 c
-copAbs _ = Left B.AbortUnmatchArity
+copAbs _ = Left $ B.abortMalformedOperand "abs"
 
 copAbs1 :: VContent -> B.Ab VContent
 copAbs1 (VDec n) = Right . VDec $ B.decimalAbs n
-copAbs1 _ = Left B.AbortUnmatchArity
+copAbs1 _ = Left $ B.abortMalformedOperand "abc"
 
 -- let tree = treeG . tokenTrees . tokens
 -- let Right e2 = vanillaContent [] $ tree "1 = 1 and 2 = 3"

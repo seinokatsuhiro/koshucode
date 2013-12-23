@@ -42,14 +42,14 @@ cop1 :: (Bool -> Bool) -> VCop
 cop1 p [x] =
     do x' <- C.needBool x
        Right . C.putBool $ p x'
-cop1 _ xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
+cop1 _ xs = typeUnmatch xs
 
 cop2 :: (Bool -> Bool -> Bool) -> VCop
 cop2 p [x, y] =
     do x' <- C.needBool x
        y' <- C.needBool y
        Right . C.putBool $ p x' y'
-cop2 _ xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
+cop2 _ xs = typeUnmatch xs
 
 copN :: Bool -> (Bool -> Bool -> Bool) -> VCop
 copN unit p = loop where
@@ -80,5 +80,8 @@ copIf [test, a, b] =
        case test' of
          True  -> Right a
          False -> Right b
-copIf xs = Left $ B.AbortUnmatchType (concatMap C.typename xs)
+copIf xs = typeUnmatch xs
+
+typeUnmatch :: C.PrimContent a => [a] -> Either B.AbortReason b
+typeUnmatch xs = Left $ B.AbortCalc [] $ B.ACUnmatchType (concatMap C.typename xs)
 

@@ -9,6 +9,7 @@
 
 module Koshucode.Baala.Base.Syntax.Code
 ( CodeLine (..),
+  lineNumberContent,
   CodeClause (..),
   NextToken,
   TokenNumber,
@@ -29,6 +30,9 @@ data CodeLine a = CodeLine
     , lineContent :: String        -- ^ Line content without newline.
     , lineTokens  :: [a]           -- ^ Tokens in the line.
     } deriving (Show, Eq, Ord, G.Data, G.Typeable)
+
+lineNumberContent :: CodeLine a -> String
+lineNumberContent c = show (lineNumber c) ++ " " ++ (lineContent c)
 
 {-| Tokens in clause. -}
 data CodeClause a = CodeClause

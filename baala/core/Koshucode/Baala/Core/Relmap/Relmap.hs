@@ -11,6 +11,8 @@ module Koshucode.Baala.Core.Relmap.Relmap
   -- $AppendRelmaps
 
   -- * Selectors
+  relmapHalf,
+  relmapLines,
   relmapSourceList,
   relmapNameList,
   relmapAppendList,
@@ -95,6 +97,20 @@ docRelmapAppend = B.docv . map pipe . relmapAppendList where
 
 
 -- ----------------------  Selector
+
+relmapHalf :: Relmap c -> Maybe C.HalfRelmap
+relmapHalf = half where
+    half (RelmapSource h _ _)   = Just h
+    half (RelmapConst  h _ _)   = Just h
+    half (RelmapAlias  h _)     = Just h
+    half (RelmapCalc   h _ _ _) = Just h
+    half (RelmapAppend m1 _)    = relmapHalf m1
+    half _                      = Nothing
+
+relmapLines :: Relmap c -> [B.TokenLine]
+relmapLines = f . relmapHalf where
+    f (Nothing) = []
+    f (Just h) = C.halfLines h
 
 {-| List of 'RelmapSource' -}
 relmapSourceList :: Relmap c -> [Relmap c]

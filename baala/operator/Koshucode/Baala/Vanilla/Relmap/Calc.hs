@@ -67,5 +67,5 @@ relfyHold b cox h1 = Right $ C.Relfy h1 (C.RelfyAbPred p) where
     p cs = do c <- C.runCoxH h1 cs cox
               case c of
                 x | C.isBool x -> Right $ b == C.getBool x
-                _ -> Left $ B.AbortReqBoolean (show c)
+                _ -> Left $ B.AbortAnalysis [] $ B.AAReqBoolean (show c)
 

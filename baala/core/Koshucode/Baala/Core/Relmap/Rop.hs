@@ -3,6 +3,7 @@
 module Koshucode.Baala.Core.Relmap.Rop
 ( -- * Datatype
   Rop (..),
+  ropSource,
   RopCons,
   RopUse (..),
 
@@ -45,6 +46,8 @@ data RopUse c = RopUse {
     , ropSubmap :: [C.Relmap c]   -- ^ Subrelmaps
     } deriving (Show)
 
+ropSource :: RopUse c -> [B.TokenLine]
+ropSource = C.halfLines . ropHalf
 
 
 -- ----------------------  Relmap

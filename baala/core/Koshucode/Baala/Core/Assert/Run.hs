@@ -37,7 +37,8 @@ runRelmapViaRelfy sel m (B.Rel h1 b1) =
     do C.Relfy h2 f2 <- relmapRelfy sel m h1
        case C.relfy f2 b1 of
          Right b2 -> Right $ B.Rel h2 b2
-         Left a   -> Left (a, [])
+         Left (B.AbortCalc _ a) -> Left (B.AbortCalc (C.relmapLines m) a, [])
+         Left a -> Left (a, [])
 
 relmapRelfy
     :: C.RelSelect c
@@ -48,7 +49,7 @@ relmapRelfy sel = (<$>) where
     C.RelmapSource _ p ns  <$> _  = Right $ C.relfyConst (sel p ns)
     C.RelmapConst  _ _ r   <$> _  = Right $ C.relfyConst r
     C.RelmapAlias  _ m     <$> h1 = m <$> h1
-    C.RelmapName h op      <$> _  = left h $ B.AbortUnkRelmap op
+    C.RelmapName h op      <$> _  = left h $ B.AbortAnalysis [] $ B.AAUnkRelmap op
 
     C.RelmapAppend m1 m2   <$> h1 =
         do relfy2 <- m1 <$> h1
@@ -61,6 +62,8 @@ relmapRelfy sel = (<$>) where
              Right relfy2 -> Right relfy2
              Left a       -> left h a
 
+    left h (B.AbortAnalysis [] a) = Left (B.AbortAnalysis (C.halfLines h) a, [])
+    left _ (B.AbortAnalysis src a) = Left (B.AbortAnalysis src a, [])
     left h a = Left (a, C.halfLines h)
 
 
@@ -102,7 +105,7 @@ optionUnkCheck ns xs =
     let rest = B.assocOmitAll ("" : ns) xs
     in if null rest
        then Right ()
-       else Left $ B.AbortUnkSymbol (fst . head $ rest)
+       else Left $ B.AbortSyntax [] $ B.ASUnkWord (fst . head $ rest)
 
 {-| Get term name as string only if term is flat. -}
 flatname :: B.TokenTree -> Maybe B.Termname
@@ -113,7 +116,7 @@ flatnames :: [B.TokenTree] -> B.Ab [B.Termname]
 flatnames trees =
     case mapM flatname trees of
       Just ns -> Right ns
-      Nothing -> Left $ B.AbortMissingTermname ""
+      Nothing -> Left $ B.AbortAnalysis [] $ B.AAMissingTermname ""
 
 
 
@@ -167,7 +170,7 @@ arrangeRelUsing
     -> B.AbMap (B.Rel c)
 arrangeRelUsing sort ha ba ns (B.Rel h1 b1)
     | null non   = Right $ B.Rel h2 b2
-    | otherwise  = Left  $ B.AbortNoTerms non
+    | otherwise  = Left  $ B.AbortAnalysis [] (B.AANoTerms non)
     where
       non  =  B.headDropTerms h1 ns
 

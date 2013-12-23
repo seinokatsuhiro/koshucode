@@ -32,6 +32,7 @@ class (Show a) => AbortReasonClass a where
     abortSymbol  = head . words . show
 
     abortReason  :: a -> String
+    abortReason _ = ""
 
     abortDetail  :: a -> [String]
     abortDetail _ = []
@@ -74,11 +75,11 @@ sandwich :: a -> [a] -> [a]
 sandwich x xs = x : xs ++ [x]
 
 messageLines :: (AbortReasonClass a) => AbortType a -> [String]
-messageLines a = sandwich "" xs where
-    xs    = B.renderTable " " $ B.alignTable $ [title] : [rule, rule] : rows
-    title = B.textCell B.Front "ABORTED  "
+messageLines (a, ls) = sandwich "" $ title : xs where
+    xs    = B.renderTable " " $ B.alignTable $ [rule, rule] : rows
+    title = "ABORTED (" ++ abortSymbol a ++ ")"
     rule  = B.textRuleCell '-'
-    rows  = concatMap row $ messageAssoc a
+    rows  = concatMap row $ messageAssoc (a, ls)
     row (_, []) = []
     row (name, content)
         = [[ B.textCell B.Front name
@@ -86,13 +87,13 @@ messageLines a = sandwich "" xs where
 
 messageAssoc :: (AbortReasonClass a) => AbortType a -> [(String, [String])]
 messageAssoc (a, ls) =
-    [ ("Class"  , [abortClass a])
-    , ("Reason" , [abortSymbol a, abortReason a])
-    , ("Detail" , abortDetail a)
-    , ("Expr"   , abortExpr a)
-    , ("Relmap" , abortRelmap a)
-    , ("Clause" , abortClause a)
-    , ("Source" , map source ls) ]
+    [ ("Class    " , [abortClass a])
+    , ("Reason"    , [abortReason a])
+    , ("Detail"    , abortDetail a)
+    , ("Expr"      , abortExpr a)
+    , ("Relmap"    , abortRelmap a)
+    , ("Clause"    , abortClause a)
+    , ("Source"    , map source ls) ]
     where
       source (B.CodeLine n line _) = show n ++ " " ++ line
 

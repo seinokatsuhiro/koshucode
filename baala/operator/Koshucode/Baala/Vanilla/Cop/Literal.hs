@@ -27,7 +27,7 @@ litText xs =
 
 litT :: B.TokenTree -> B.Ab String
 litT (B.TreeL (B.TWord _ _ w)) = Right w
-litT x = Left $ B.AbortNotText (show x)
+litT x = Left $ B.AbortSyntax [] $ B.ASNotText (show x)
 
 copsLiteral :: [B.Named (C.Cop VContent)]
 copsLiteral =
