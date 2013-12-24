@@ -31,6 +31,9 @@ data CodeLine a = CodeLine
     , lineTokens  :: [a]           -- ^ Tokens in the line.
     } deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
+lineTokensCount :: CodeLine a -> Int
+lineTokensCount = length . lineTokens
+
 lineNumberContent :: CodeLine a -> String
 lineNumberContent c = show (lineNumber c) ++ " " ++ (lineContent c)
 
@@ -46,7 +49,8 @@ instance B.Pretty (CodeLine a) where
 {-| Type of function that splits a next token from string.
     Tokens can includes 'TokenNumber'. -}
 type NextToken a
-    =  TokenNumber   -- ^ Token number, from 1
+    =  B.NumberedLine
+    -> TokenNumber   -- ^ Token number, from 1
     -> String        -- ^ Source text
     -> (a, String)   -- ^ Token and rest of text
 
@@ -69,25 +73,20 @@ codeLines
     :: NextToken a     -- ^ Token splitter
     -> String          -- ^ Source text
     -> [CodeLine a]    -- ^ Token list per lines
-codeLines next = codeLinesBy $ codeLine next
+codeLines nextToken = codeLinesBy $ codeLine nextToken
 
-codeLinesBy
-    :: (B.LineNumber -> TokenNumber -> String -> CodeLine a)
-    -> String -> [CodeLine a]
-codeLinesBy f = loop 1 . B.linesCrlfNumbered where
+type MakeCodeLine a
+    = TokenNumber -> B.NumberedLine -> CodeLine a
+
+codeLinesBy :: MakeCodeLine a -> String -> [CodeLine a]
+codeLinesBy mkCline = loop 1 . B.linesCrlfNumbered where
     loop _ [] = []
-    loop tno ((lno, ln) : ps) =
-        case f tno lno ln of
-          cline -> let delta = length $ lineTokens cline
-                   in cline : loop (tno + delta) ps
+    loop tno (line : rest) =
+        case mkCline tno line of
+          cline -> let delta = lineTokensCount cline
+                   in cline : loop (tno + delta) rest
 
-codeLine
-    :: NextToken a    -- ^ Token splitter
-    -> TokenNumber    -- ^ Token number
-    -> B.LineNumber   -- ^ Line number
-    -> String         -- ^ Line content
-    -> CodeLine a     -- ^ Result 'CodeLine'
-codeLine next tno lno ln = CodeLine lno ln toks where
-    toks = B.gatherWith next [tno ..] ln
-
+codeLine :: NextToken a -> MakeCodeLine a
+codeLine nextToken tno line@(lno, text) = CodeLine lno text toks where
+    toks = B.gatherWith (nextToken line) [tno ..] text
 

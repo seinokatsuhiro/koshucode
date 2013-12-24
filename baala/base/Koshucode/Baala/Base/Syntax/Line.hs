@@ -4,6 +4,7 @@
 
 module Koshucode.Baala.Base.Syntax.Line
 ( LineNumber,
+  NumberedLine,
   linesCrlfNumbered,
   linesCrlf,
   putLines,
@@ -11,9 +12,10 @@ module Koshucode.Baala.Base.Syntax.Line
 
 {-| Line number. -}
 type LineNumber = Int
+type NumberedLine = (LineNumber, String)
 
 {-| Line number and its content. -}
-linesCrlfNumbered :: String -> [(LineNumber, String)]
+linesCrlfNumbered :: String -> [NumberedLine]
 linesCrlfNumbered = zip [1..] . linesCrlf
 
 {-| Split string into lines.

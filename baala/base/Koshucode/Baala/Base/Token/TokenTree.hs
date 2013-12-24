@@ -58,13 +58,13 @@ treeTokens = B.untree typeParen
 
 typeParen :: B.ParenType -> (B.Token, B.Token)
 typeParen = o where
-    o 1   =  p  "("  ")"
-    o 2   =  p  "["  "]"
-    o 3   =  p  "{"  "}"
-    o 4   =  p  "<|" "|>"
-    o 5   =  p  "{|" "|}"
-    o _   =  p  "?"  "?"
-    p a b =  ( B.TOpen 0 a, B.TClose 0 b )
+    o 1   =  p  "("   ")"
+    o 2   =  p  "["   "]"
+    o 3   =  p  "{"   "}"
+    o 4   =  p  "<|"  "|>"
+    o 5   =  p  "{|"  "|}"
+    o _   =  p  "?"   "?"
+    p a b =  ( B.TOpen B.tokenPosZero a, B.TClose B.tokenPosZero b )
 
 parenType :: B.GetParenType B.Token
 parenType = B.parenTable
