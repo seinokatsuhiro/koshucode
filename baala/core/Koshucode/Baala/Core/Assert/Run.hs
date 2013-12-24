@@ -37,7 +37,7 @@ runRelmapViaRelfy sel m (B.Rel h1 b1) =
     do C.Relfy h2 f2 <- relmapRelfy sel m h1
        case C.relfy f2 b1 of
          Right b2 -> Right $ B.Rel h2 b2
-         Left (B.AbortCalc _ a) -> Left (B.AbortCalc (C.relmapLines m) a, [])
+         Left (B.AbortCalc _ a) -> Left (B.AbortCalc [C.relmapOpToken m] a, [])
          Left a -> Left (a, [])
 
 relmapRelfy
@@ -62,7 +62,7 @@ relmapRelfy sel = (<$>) where
              Right relfy2 -> Right relfy2
              Left a       -> left h a
 
-    left h (B.AbortAnalysis [] a) = Left (B.AbortAnalysis (C.halfLines h) a, [])
+    left h (B.AbortAnalysis [] a)  = Left (B.AbortAnalysis [C.halfOperator h] a, [])
     left _ (B.AbortAnalysis src a) = Left (B.AbortAnalysis src a, [])
     left h a = Left (a, C.halfLines h)
 

@@ -27,8 +27,8 @@ linesCrlf "" = []
 linesCrlf s = ln : next s2 where
     (ln, s2) = break (`elem` "\r\n") s
     next ('\r' : s3) = next s3
-    next ('\n' : s3) = next s3
-    next s3 = linesCrlf s3
+    next ('\n' : s3) = linesCrlf s3
+    next s3          = linesCrlf s3
 
 putLines :: [String] -> IO ()
 putLines = putStr . unlines

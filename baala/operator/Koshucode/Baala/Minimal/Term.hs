@@ -85,17 +85,16 @@ ropConsRename use =
 
 relmapRename :: C.RopUse c -> [(B.Termname, B.Termname)] -> C.Relmap c
 relmapRename use np = C.relmapCalc use "rename" fy where
-    fy _ = relfyRename (C.ropSource use) np
+    fy _ = relfyRename np
 
 {-| Change terms names -}
 relfyRename
-    :: [B.TokenLine]
-    -> [(B.Termname, B.Termname)]  -- ^ List of termnames (/to/, /from/)
+    :: [(B.Termname, B.Termname)]  -- ^ List of termnames (/to/, /from/)
     -> B.Relhead                   -- ^ Heading of input relation
     -> B.Ab (C.Relfy c)            -- ^ Relfier for output relation
-relfyRename src np h1
-    | nsCheck /= [] = Left  $ B.AbortAnalysis src $ B.AAReqNewTerms nsCheck
-    | psCheck /= [] = Left  $ B.AbortAnalysis src $ B.AANoTerms psCheck
+relfyRename np h1
+    | nsCheck /= [] = Left  $ B.AbortAnalysis [] $ B.AAReqNewTerms nsCheck
+    | psCheck /= [] = Left  $ B.AbortAnalysis [] $ B.AANoTerms psCheck
     | otherwise     = Right $ C.Relfy h2 C.RelfyId
     where
       (ns, ps) = unzip np

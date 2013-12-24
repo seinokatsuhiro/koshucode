@@ -13,6 +13,7 @@ module Koshucode.Baala.Core.Relmap.Relmap
   -- * Selectors
   relmapHalf,
   relmapLines,
+  relmapOpToken,
   relmapSourceList,
   relmapNameList,
   relmapAppendList,
@@ -70,7 +71,7 @@ instance Monoid.Monoid (Relmap c) where
     mappend = RelmapAppend
 
 halfid :: C.HalfRelmap
-halfid = C.HalfRelmap "id" [] "id" [("operand", [])] []
+halfid = C.HalfRelmap "id" [] (B.tokenWord "id") [("operand", [])] []
 
 -- relid :: RelmapSub c
 -- relid _ = Right
@@ -111,6 +112,11 @@ relmapLines :: Relmap c -> [B.TokenLine]
 relmapLines = f . relmapHalf where
     f (Nothing) = []
     f (Just h) = C.halfLines h
+
+relmapOpToken :: Relmap c -> B.Token
+relmapOpToken = f . relmapHalf where
+    f (Nothing) = B.tokenWord "?"
+    f (Just h)  = C.halfOperator h
 
 {-| List of 'RelmapSource' -}
 relmapSourceList :: Relmap c -> [Relmap c]

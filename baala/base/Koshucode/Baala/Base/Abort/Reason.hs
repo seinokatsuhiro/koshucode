@@ -52,8 +52,8 @@ type AbortOr b = B.AbortOrType AbortReason b
 data AbortReason
     = AbortIO                     AbortIO
     | AbortSyntax   [B.TokenLine] AbortSyntax
-    | AbortAnalysis [B.TokenLine] AbortAnalysis
-    | AbortCalc     [B.TokenLine] AbortCalc
+    | AbortAnalysis [B.Token]     AbortAnalysis
+    | AbortCalc     [B.Token]     AbortCalc
       deriving (Show, Eq, Ord)
 
 instance B.Name AbortReason where
@@ -73,8 +73,8 @@ instance B.AbortReasonClass AbortReason where
     abortClause (AbortSyntax   src _) = map B.lineNumberContent src
     abortClause _ = []
 
-    abortRelmap (AbortAnalysis src _) = map B.lineNumberContent src
-    abortRelmap (AbortCalc     src _) = map B.lineNumberContent src
+    abortRelmap (AbortAnalysis ts _) = map (B.tokenPosDisplay . B.tokenPos) ts
+    abortRelmap (AbortCalc     ts _) = map (B.tokenPosDisplay . B.tokenPos) ts
     abortRelmap _ = []
 
     abortReason a = case a of

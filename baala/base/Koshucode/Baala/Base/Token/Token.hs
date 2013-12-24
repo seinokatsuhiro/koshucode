@@ -6,14 +6,10 @@ module Koshucode.Baala.Base.Token.Token
   -- * Token type
   Token (..),
   Termname,
-
-  -- * Token position
-  TokenPos (..),
-  tokenPosLineNumber,
-  tokenPosLineText,
-  tokenPosZero,
+  tokenWord,
 
   -- * Selectors
+  tokenPos,
   tokenNumber,
   tokenContent,
   tokenTypeText,
@@ -28,9 +24,9 @@ module Koshucode.Baala.Base.Token.Token
 ) where
 
 import Data.Generics (Data, Typeable)
-import qualified Data.Monoid  as M
 import qualified Koshucode.Baala.Base.Prelude  as B
 import qualified Koshucode.Baala.Base.Syntax   as B
+import qualified Koshucode.Baala.Base.Token.TokenPos as B
 
 
 
@@ -38,19 +34,19 @@ import qualified Koshucode.Baala.Base.Syntax   as B
 
 {-| There are eight types of tokens. -}
 data Token
-    = TWord    TokenPos Int String
+    = TWord    B.TokenPos Int String
                -- ^ Word.
                --   'Int' represents quotation level, i.e.,
                --   0 for non-quoted,
                --   1 for single-quoted,
                --   2 for double-quoted.
-    | TShort   TokenPos String String  -- ^ Abbreviated word
-    | TTerm    TokenPos [Termname]  -- ^ Termname
-    | TOpen    TokenPos String      -- ^ Opening paren
-    | TClose   TokenPos String      -- ^ Closing paren
-    | TSpace   TokenPos Int         -- ^ /N/ space characters
-    | TComment TokenPos String      -- ^ Comment text
-    | TUnknown TokenPos String      -- ^ Unknown text
+    | TShort   B.TokenPos String String  -- ^ Abbreviated word
+    | TTerm    B.TokenPos [Termname]  -- ^ Termname
+    | TOpen    B.TokenPos String      -- ^ Opening paren
+    | TClose   B.TokenPos String      -- ^ Closing paren
+    | TSpace   B.TokenPos Int         -- ^ /N/ space characters
+    | TComment B.TokenPos String      -- ^ Comment text
+    | TUnknown B.TokenPos String      -- ^ Unknown text
       deriving (Show, Eq, Ord, Data, Typeable)
 
 {-| Name of term,
@@ -77,50 +73,28 @@ instance B.Pretty Token where
         d (TUnknown n s) = pretty "TUnknown" n [show s]
         pretty k n xs = B.doch $ k : ('#' : show n) : xs
 
-
-
--- ---------------------- Token position
-
-data TokenPos = TokenPos
-      { tokenPosLine    :: B.NumberedLine    -- ^ Line number and content
-      , tokenPosText    :: String            -- ^ Text at which begins token
-      , tokenPosNumber  :: B.TokenNumber
-      } deriving (Show, Eq, Data, Typeable)
-
-instance Ord TokenPos where
-    compare p1 p2
-        = (tokenPosLineNumber p1 `compare` tokenPosLineNumber p2)
-          `M.mappend` (tokenPosTextLength p2 `compare` tokenPosTextLength p1)
-
-tokenPosLineNumber :: TokenPos -> Int
-tokenPosLineNumber = fst . tokenPosLine
-
-tokenPosLineText   :: TokenPos -> String
-tokenPosLineText   = snd . tokenPosLine
-
-tokenPosTextLength :: TokenPos -> Int
-tokenPosTextLength = length . tokenPosText
-
-tokenPosZero :: TokenPos
-tokenPosZero = TokenPos (0, "") "" 0
-
+tokenWord :: String -> Token
+tokenWord = TWord B.tokenPosZero 0
 
 
 -- ---------------------- Selector
+
+tokenPos :: Token -> B.TokenPos
+tokenPos (TWord    p _ _)  = p
+tokenPos (TShort   p _ _)  = p
+tokenPos (TTerm    p _)    = p
+tokenPos (TOpen    p _)    = p
+tokenPos (TClose   p _)    = p
+tokenPos (TSpace   p _)    = p
+tokenPos (TComment p _)    = p
+tokenPos (TUnknown p _)    = p
 
 {-| Get the position of token.
 
     >>> let tok = TWord 25 0 "abc" in tokenNumber tok
     25  -}
 tokenNumber :: Token -> B.TokenNumber
-tokenNumber (TWord    p _ _)  = tokenPosNumber p
-tokenNumber (TShort   p _ _)  = tokenPosNumber p
-tokenNumber (TTerm    p _)    = tokenPosNumber p
-tokenNumber (TOpen    p _)    = tokenPosNumber p
-tokenNumber (TClose   p _)    = tokenPosNumber p
-tokenNumber (TSpace   p _)    = tokenPosNumber p
-tokenNumber (TComment p _)    = tokenPosNumber p
-tokenNumber (TUnknown p _)    = tokenPosNumber p
+tokenNumber = B.tokenPosNumber . tokenPos
 
 {-| Get the content of token.
 

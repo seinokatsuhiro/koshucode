@@ -9,7 +9,7 @@ module Koshucode.Baala.Vanilla.Cop.Arith
 
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
-import Koshucode.Baala.Vanilla.Type
+import qualified Koshucode.Baala.Vanilla.Type as Rop
 
 
 
@@ -26,7 +26,7 @@ import Koshucode.Baala.Vanilla.Type
 
 -}
 
-copsArith :: [B.Named (C.Cop VContent)]
+copsArith :: [B.Named (C.Cop Rop.VContent)]
 copsArith =
     [ C.namedEager  "+"    copPlus
     , C.namedEager  "*"    copTimes
@@ -36,59 +36,59 @@ copsArith =
     , C.namedEager  "abs"  copAbs
     ]
 
-copDec :: VContent -> B.Ab B.Decimal
-copDec (VDec  n) = Right n
-copDec (VText n) = B.litDecimal n
+copDec :: Rop.VContent -> B.Ab B.Decimal
+copDec (Rop.VDec  n) = Right n
+copDec (Rop.VText n) = B.litDecimal n
 copDec x = Left $ B.AbortSyntax [] $ B.ASNotNumber (show x)
 
-copPlus :: VCop
-copPlus xs = fmap VDec $ loop xs where
+copPlus :: Rop.VCop
+copPlus xs = fmap Rop.VDec $ loop xs where
     loop [] = Right $ B.intDecimal 0
     loop (n : m) = do n' <- copDec n
                       m' <- loop m
                       B.decimalAdd n' m'
 
-copTimes :: VCop
-copTimes xs = fmap VDec $ loop xs where
+copTimes :: Rop.VCop
+copTimes xs = fmap Rop.VDec $ loop xs where
     loop [] = Right $ B.intDecimal 1
     loop (n : m) = do n' <- copDec n
                       m' <- loop m
                       B.decimalMul n' m'
 
-copMinus :: VCop
+copMinus :: Rop.VCop
 copMinus [a] =
     do a' <- copDec a
-       Right . VDec $ B.decimalRevsign a'
+       Right . Rop.VDec $ B.decimalRevsign a'
 copMinus [a, b] =
     do a' <- copDec a
        b' <- copDec b
        c' <- B.decimalSub a' b'
-       Right . VDec $ c'
+       Right . Rop.VDec $ c'
 copMinus _ = Left $ B.abortMalformedOperand "-"
 
-copQuo :: VCop
+copQuo :: Rop.VCop
 copQuo [a, b] =
     do a' <- copDec a
        b' <- copDec b
        c' <- B.decimalQuo a' b'
-       Right . VDec $ c'
+       Right . Rop.VDec $ c'
 copQuo _ = Left $ B.abortMalformedOperand "quo"
 
-copRem :: VCop
+copRem :: Rop.VCop
 copRem [a, b] =
     do a' <- copDec a
        b' <- copDec b
        c' <- B.decimalRem a' b'
-       Right . VDec $ c'
+       Right . Rop.VDec $ c'
 copRem _ = Left $ B.abortMalformedOperand "rem"
 
-copAbs :: VCop
-copAbs [VList cs] = Right . VList =<< mapM copAbs1 cs
+copAbs :: Rop.VCop
+copAbs [Rop.VList cs] = Right . Rop.VList =<< mapM copAbs1 cs
 copAbs [c] = copAbs1 c
 copAbs _ = Left $ B.abortMalformedOperand "abs"
 
-copAbs1 :: VContent -> B.Ab VContent
-copAbs1 (VDec n) = Right . VDec $ B.decimalAbs n
+copAbs1 :: Rop.VContent -> B.Ab Rop.VContent
+copAbs1 (Rop.VDec n) = Right . Rop.VDec $ B.decimalAbs n
 copAbs1 _ = Left $ B.abortMalformedOperand "abc"
 
 -- let tree = treeG . tokenTrees . tokens

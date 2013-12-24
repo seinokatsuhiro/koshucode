@@ -27,6 +27,7 @@ import qualified Koshucode.Baala.Base.Prelude         as B
 import qualified Koshucode.Baala.Base.Syntax          as B
 import qualified Koshucode.Baala.Base.Token.Token     as B
 import qualified Koshucode.Baala.Base.Token.TokenLine as B
+import qualified Koshucode.Baala.Base.Token.TokenPos  as B
 
 -- ----------------------
 

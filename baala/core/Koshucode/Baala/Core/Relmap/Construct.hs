@@ -58,23 +58,23 @@ halfBundle operators src = cons where
     cons :: [B.TokenTree] -> B.Ab C.HalfRelmap
     cons xs =
         case B.divideTreesByBar xs of
-          [(B.TreeL (B.TWord _ 0 op) : opd)] -> find op opd
+          [(B.TreeL tok@(B.TWord _ 0 op) : opd)] -> find op tok opd
           [[B.TreeB 1 xs2]] -> cons xs2
           [[B.TreeB _ _]]   -> Left $ B.AbortAnalysis [] $ B.AAUndefined "bracket"
           [_]               -> Left $ B.AbortAnalysis [] $ B.AAUnkRelmap "?"
-          xs2               -> find "|" $ map B.treeWrap xs2
+          xs2               -> find "|" (B.tokenWord "|") $ map B.treeWrap xs2
 
-    find :: String -> [B.TokenTree] -> B.Ab C.HalfRelmap
-    find op opd =
+    find :: String -> B.Token -> [B.TokenTree] -> B.Ab C.HalfRelmap
+    find op tok opd =
         case lookup op operators of
-          Nothing -> Right $ half "" op opd []
+          Nothing -> Right $ half "" tok opd []
           Just (u, sorter) ->
               do sorted <- sorter opd
-                 submap $ half u op opd sorted
+                 submap $ half u tok opd sorted
 
-    half :: String -> String -> [B.TokenTree] -> [B.Named [B.TokenTree]] -> C.HalfRelmap
-    half usage op orig opd =
-        C.HalfRelmap usage src op (("operand", orig) : opd) []
+    half :: String -> B.Token -> [B.TokenTree] -> [B.Named [B.TokenTree]] -> C.HalfRelmap
+    half usage tok orig opd =
+        C.HalfRelmap usage src tok (("operand", orig) : opd) []
 
     submap :: C.HalfRelmap -> B.Ab C.HalfRelmap
     submap h@C.HalfRelmap { C.halfOperand = opd } =
@@ -82,7 +82,6 @@ halfBundle operators src = cons where
           Nothing -> Right h   -- no subrelmaps
           Just xs -> do subs <- mapM (cons . B.singleton) xs
                         Right $ h { C.halfSubmap = subs }
-
 
 
 -- ----------------------  Full construction
@@ -96,11 +95,12 @@ type RelmapFullCons c
 {-| Construct (full) relmap. -}
 fullBundle :: [B.Named (C.RopCons c)] -> RelmapFullCons c
 fullBundle assoc = c where
-    c half@C.HalfRelmap { C.halfOperator = op, C.halfSubmap = hs } =
-        case lookup op assoc of
-          Nothing   -> Right $ C.RelmapName half op
-          Just cons -> do submaps <- mapM c hs
-                          cons $ C.RopUse half submaps
+    c half@C.HalfRelmap { C.halfOperator = tok, C.halfSubmap = hs } =
+        let op = B.tokenContent tok
+        in case lookup op assoc of
+             Nothing   -> Right $ C.RelmapName half op
+             Just cons -> do submaps <- mapM c hs
+                             cons $ C.RopUse half submaps
 
 
 

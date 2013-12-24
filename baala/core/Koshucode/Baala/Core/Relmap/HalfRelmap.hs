@@ -17,14 +17,15 @@ import qualified Koshucode.Baala.Core.Relmap.Operand as C
 data HalfRelmap = HalfRelmap
     { halfUsage    :: String          -- ^ Usages description
     , halfLines    :: [B.TokenLine]   -- ^ Source information
-    , halfOperator :: String          -- ^ Operator name of relmap operation
+    , halfOperator :: B.Token         -- ^ Operator name of relmap operation
     , halfOperand  :: C.RopAssoc      -- ^ Operand of relmap operation
     , halfSubmap   :: [HalfRelmap]    -- ^ Subrelmaps in the operand
     } deriving (Show, G.Data, G.Typeable)
 
 instance B.Pretty HalfRelmap where
-    doc HalfRelmap { halfOperator = op, halfOperand = opd } =
+    doc HalfRelmap { halfOperator = opTok, halfOperand = opd } =
         case lookup "operand" opd of
           Nothing -> B.doch [op, "..."]
           Just xs -> B.doch [op, show xs]
+        where op = B.tokenContent opTok
 

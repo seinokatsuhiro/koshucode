@@ -58,7 +58,7 @@ consFullRelmapQ
     -> TH.ExpQ        -- ^ ExpQ of 'Relmap' v
 consFullRelmapQ fullQ = make where
     make = TH.dataToExpQ (plain `extQ` custom)
-    custom (C.HalfRelmap _ _ ('@':op) _ _) =
+    custom (C.HalfRelmap _ _ (B.TWord _ 0 ('@':op)) _ _) =
         Just $ TH.varE $ TH.mkName op
     custom h@(C.HalfRelmap _ _ op opd subs) =
         Just $ [| either consError id

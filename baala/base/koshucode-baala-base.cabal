@@ -79,8 +79,9 @@ library
         Koshucode.Baala.Base.Token
         Koshucode.Baala.Base.Token.Token
         Koshucode.Baala.Base.Token.TokenClause
-        Koshucode.Baala.Base.Token.TokenTree
         Koshucode.Baala.Base.Token.TokenLine
+        Koshucode.Baala.Base.Token.TokenPos
+        Koshucode.Baala.Base.Token.TokenTree
 
   -- Modules included in this library but not exported.
   --other-modules:       
