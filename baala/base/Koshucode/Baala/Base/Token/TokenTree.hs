@@ -78,7 +78,7 @@ parenType = B.parenTable
 
 {-| Convert text to token trees. -}
 tt :: String -> [TokenTree]
-tt = tokenTrees . B.tokens
+tt s = tokenTrees $ B.tokens (B.ResourceText s) s
 
 {-| Get 'B.Doc' value of token trees for pretty printing. -}
 ttDoc :: [TokenTree] -> B.Doc

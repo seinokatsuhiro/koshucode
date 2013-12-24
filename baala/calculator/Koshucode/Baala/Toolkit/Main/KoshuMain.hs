@@ -159,7 +159,7 @@ prettySection (L.SectionSource root _ files) =
                    prettyPrint md
                    return 0
       []     -> do s <- getContents
-                   let md = C.readSectionCode root "" s
+                   let md = C.readSectionText root s
                    prettyPrint md
                    return 0
       _      -> L.putSuccess usage

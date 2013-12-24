@@ -82,7 +82,7 @@ koshuSyntaxMain' (_, argv) =
 dumpClauseAndToken :: FilePath -> IO ()
 dumpClauseAndToken path = 
     do code <- readFile path
-       let ts = B.tokenLines code
+       let ts = B.tokenLines (B.ResourceFile path) code
            cs = C.consPreclause ts
        putStr $ unlines h
        mapM_ putClause $ zip [1 ..] cs
@@ -123,7 +123,6 @@ putToken cn tn (B.CodeLine ln line toks) =
 tokenJudge :: Int -> B.Token -> B.Judge V.VContent
 tokenJudge cn t = B.Judge True "TOKEN" xs where
     xs = [ ("/clause-seq"   , C.putDecFromInt cn)
-         , ("/token-seq"    , C.putDecFromInt $ B.tokenNumber t)
          , ("/token-type"   , C.putText $ B.tokenTypeText t)
          , ("/token-content", C.putText $ B.tokenContent t) ]
 
@@ -134,7 +133,7 @@ tokenJudge cn t = B.Judge True "TOKEN" xs where
 dumpToken :: FilePath -> IO ()
 dumpToken path =
     do code <- readFile path
-       let xs = B.tokenLines code
+       let xs = B.tokenLines (B.ResourceFile path) code
            (_, ls) = foldl dumpTokenText (0, []) xs
        putStr $ unlines ls
 
@@ -147,7 +146,6 @@ dumpTokenText (n, ys) (B.CodeLine l line ts) = (n + length ts, ys ++ xs) where
 dumpTokenJudge :: Int -> B.Token -> B.Judge V.VContent
 dumpTokenJudge l t = B.Judge True "TOKEN" xs where
     xs = [ ("/line"         , C.putDecFromInt l)
-         , ("/token-seq"    , C.putDecFromInt $ B.tokenNumber t)
          , ("/token-type"   , C.putText $ B.tokenTypeText t)
          , ("/token-content", C.putText $ B.tokenContent  t) ]
 

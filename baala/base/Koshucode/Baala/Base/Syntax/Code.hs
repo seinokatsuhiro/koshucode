@@ -12,7 +12,6 @@ module Koshucode.Baala.Base.Syntax.Code
   lineNumberContent,
   CodeClause (..),
   NextToken,
-  TokenNumber,
   codeLines,
 ) where
 
@@ -31,9 +30,6 @@ data CodeLine a = CodeLine
     , lineTokens  :: [a]           -- ^ Tokens in the line.
     } deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
-lineTokensCount :: CodeLine a -> Int
-lineTokensCount = length . lineTokens
-
 lineNumberContent :: CodeLine a -> String
 lineNumberContent c = show (lineNumber c) ++ " " ++ (lineContent c)
 
@@ -50,12 +46,8 @@ instance B.Pretty (CodeLine a) where
     Tokens can includes 'TokenNumber'. -}
 type NextToken a
     =  B.NumberedLine
-    -> TokenNumber   -- ^ Token number, from 1
     -> String        -- ^ Source text
     -> (a, String)   -- ^ Token and rest of text
-
-{-| Token number, from 1. -}
-type TokenNumber = Int
 
 {-| Split source text into 'CodeLine' list.
 
@@ -75,18 +67,15 @@ codeLines
     -> [CodeLine a]    -- ^ Token list per lines
 codeLines nextToken = codeLinesBy $ codeLine nextToken
 
-type MakeCodeLine a
-    = TokenNumber -> B.NumberedLine -> CodeLine a
+type MakeCodeLine a = B.NumberedLine -> CodeLine a
 
 codeLinesBy :: MakeCodeLine a -> String -> [CodeLine a]
-codeLinesBy mkCline = loop 1 . B.linesCrlfNumbered where
-    loop _ [] = []
-    loop tno (line : rest) =
-        case mkCline tno line of
-          cline -> let delta = lineTokensCount cline
-                   in cline : loop (tno + delta) rest
+codeLinesBy mkCline = loop . B.linesCrlfNumbered where
+    loop [] = []
+    loop (line : rest) = mkCline line : loop rest
 
 codeLine :: NextToken a -> MakeCodeLine a
-codeLine nextToken tno line@(lno, text) = CodeLine lno text toks where
-    toks = B.gatherWith (nextToken line) [tno ..] text
+codeLine nextToken line@(lno, text) =
+    let toks = B.gather (nextToken line) text
+    in CodeLine lno text toks
 

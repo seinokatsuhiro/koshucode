@@ -10,6 +10,11 @@ module Koshucode.Baala.Base.Token.TokenPos
   tokenPosColumn,
   tokenPosDisplay,
   tokenPosZero,
+
+  -- * Resource
+  Resource (..),
+  resourceType,
+  resourceName,
 ) where
 
 import Data.Generics (Data, Typeable)
@@ -17,10 +22,12 @@ import qualified Data.Monoid                   as M
 import qualified Koshucode.Baala.Base.Syntax   as B
 
 
+-- ----------------------  TokenPos
+
 data TokenPos = TokenPos
-      { tokenPosLine    :: B.NumberedLine    -- ^ Line number and content
-      , tokenPosText    :: String            -- ^ Text at which begins token
-      , tokenPosNumber  :: B.TokenNumber
+      { tokenPosResource :: Resource
+      , tokenPosLine     :: B.NumberedLine  -- ^ Line number and content
+      , tokenPosText     :: String          -- ^ Text at which begins token
       } deriving (Show, Eq, Data, Typeable)
 
 instance Ord TokenPos where
@@ -41,13 +48,34 @@ tokenPosColumn :: TokenPos -> Int
 tokenPosColumn TokenPos { tokenPosLine = (_, line), tokenPosText = subline }
     = length line - length subline
 
-tokenPosDisplay :: TokenPos -> String
-tokenPosDisplay p = show lno ++ " " ++ show cno ++ " " ++ text where
-    lno  = tokenPosLineNumber p
-    cno  = tokenPosColumn p
-    text = tokenPosText p
+tokenPosDisplay :: TokenPos -> [String]
+tokenPosDisplay p = [pos, "> " ++ text] where
+    pos   = show lno ++ " " ++ show cno ++ " " ++ res
+    lno   = tokenPosLineNumber p
+    cno   = tokenPosColumn p
+    res   = resourceName $ tokenPosResource p
+    text  = tokenPosText p
 
 tokenPosZero :: TokenPos
-tokenPosZero = TokenPos (0, "") "" 0
+tokenPosZero = TokenPos (ResourceText "") (0, "") ""
+
+
+-- ----------------------  Resource
+
+data Resource
+    = ResourceFile String
+    | ResourceText String
+    | ResourceURL  String
+      deriving (Show, Eq, Ord, Data, Typeable)
+
+resourceType :: Resource -> String
+resourceType (ResourceFile _) = "file"
+resourceType (ResourceText _) = "text"
+resourceType (ResourceURL _)  = "url"
+
+resourceName :: Resource -> String
+resourceName (ResourceFile path) = path
+resourceName (ResourceText text) = text
+resourceName (ResourceURL url)   = url
 
 

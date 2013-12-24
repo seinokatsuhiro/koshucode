@@ -37,7 +37,7 @@ data Section c = Section {
     , sectionRelmap   :: [B.Named (C.Relmap c)] -- ^ Relmaps and its name
     , sectionJudge    :: [B.Judge c]            -- ^ Affirmative or denial judgements
     , sectionViolate  :: [B.Judge c]            -- ^ Violated judgements, i.e., result of @|=V@
-    , sectionResource :: String                 -- ^ Resource name
+    , sectionResource :: B.Resource             -- ^ Resource name
     , sectionCons     :: C.RelmapCons c         -- ^ Relmap constructor for this section
     } deriving (Show)
 
@@ -66,7 +66,7 @@ sectionUnion s1 s2 =
 
 {-| Make empty section that has a given constructor. -}
 makeEmptySection :: C.RelmapCons c -> Section c
-makeEmptySection = Section Nothing [] [] [] [] [] [] [] ""
+makeEmptySection = Section Nothing [] [] [] [] [] [] [] (B.ResourceText "")
 
 {-| Section that has no contents. -}
 emptySection :: Section c
@@ -84,7 +84,7 @@ emptySection = makeEmptySection $ C.relmapCons []
 consSection
     :: (C.CContent c)
     => C.RelmapFullCons c      -- ^ Relmap full constructor
-    -> String                  -- ^ Resource name
+    -> B.Resource              -- ^ Resource name
     -> [C.Clause]              -- ^ Output of 'C.consClause'
     -> B.AbortOr (Section c)   -- ^ Result section
 consSection full resource xs =
@@ -108,7 +108,7 @@ consSection full resource xs =
       mapFor  f p = pass f `map`  filter (p . C.clauseBody) xs
       mapMFor f p = pass f `mapM` filter (p . C.clauseBody) xs
       pass f (C.Clause src body) = f (B.clauseLines src) body
-      consSec = consSection full ""
+      consSec = consSection full (B.ResourceText "")
 
       -- todo: multiple section name
       section ((C.Clause _ (C.CSection n)) : _) = n

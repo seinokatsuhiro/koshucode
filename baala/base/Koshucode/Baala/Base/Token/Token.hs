@@ -10,7 +10,6 @@ module Koshucode.Baala.Base.Token.Token
 
   -- * Selectors
   tokenPos,
-  tokenNumber,
   tokenContent,
   tokenTypeText,
 
@@ -25,7 +24,6 @@ module Koshucode.Baala.Base.Token.Token
 
 import Data.Generics (Data, Typeable)
 import qualified Koshucode.Baala.Base.Prelude  as B
-import qualified Koshucode.Baala.Base.Syntax   as B
 import qualified Koshucode.Baala.Base.Token.TokenPos as B
 
 
@@ -88,13 +86,6 @@ tokenPos (TClose   p _)    = p
 tokenPos (TSpace   p _)    = p
 tokenPos (TComment p _)    = p
 tokenPos (TUnknown p _)    = p
-
-{-| Get the position of token.
-
-    >>> let tok = TWord 25 0 "abc" in tokenNumber tok
-    25  -}
-tokenNumber :: Token -> B.TokenNumber
-tokenNumber = B.tokenPosNumber . tokenPos
 
 {-| Get the content of token.
 

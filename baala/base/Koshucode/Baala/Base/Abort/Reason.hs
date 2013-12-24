@@ -73,8 +73,8 @@ instance B.AbortReasonClass AbortReason where
     abortClause (AbortSyntax   src _) = map B.lineNumberContent src
     abortClause _ = []
 
-    abortRelmap (AbortAnalysis ts _) = map (B.tokenPosDisplay . B.tokenPos) ts
-    abortRelmap (AbortCalc     ts _) = map (B.tokenPosDisplay . B.tokenPos) ts
+    abortRelmap (AbortAnalysis ts _) = concatMap tokenSource ts
+    abortRelmap (AbortCalc     ts _) = concatMap tokenSource ts
     abortRelmap _ = []
 
     abortReason a = case a of
@@ -89,6 +89,8 @@ instance B.AbortReasonClass AbortReason where
         (AbortAnalysis      _ a2) -> B.abortDetail a2
         (AbortCalc          _ a2) -> B.abortDetail a2
 
+tokenSource :: B.Token -> [String]
+tokenSource = B.tokenPosDisplay . B.tokenPos
 
 -- ----------------------  I/O Error
 

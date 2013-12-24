@@ -41,7 +41,7 @@ hRunFiles
     -> SectionSource c -- ^ Section source code
     -> IO Int
 hRunFiles h (SectionSource root textSec files) =
-    do let sec = map (C.readSectionCode root "") textSec
+    do let sec = map (C.readSectionText root) textSec
        sects <- mapM (C.readSectionFile root) files
        let union = concatMM $ sec ++ sects
            comm  = B.CommentDoc [ B.CommentSec "INPUT" files ]
@@ -127,7 +127,7 @@ readSec
     -> IO (B.AbortOr (C.Section c))  -- ^ Union of sections
 readSec src =
     do let root = rootSection src
-           sec1 = map (C.readSectionCode root "") $ textSections src
+           sec1 = map (C.readSectionText root) $ textSections src
        sec2   <- mapM (C.readSectionFile root) $ fileSections src
        return $ concatMM $ sec1 ++ sec2
 
@@ -137,7 +137,7 @@ readSecList
     -> IO (B.AbortOr [C.Section c])
 readSecList src =
     do let root = rootSection src
-           sec1 = map (C.readSectionCode root "") $ textSections src
+           sec1 = map (C.readSectionText root) $ textSections src
        sec2 <- mapM (C.readSectionFile root) $ fileSections src
        return $ sequence $ sec1 ++ sec2
 

@@ -27,10 +27,12 @@ koshuQuoter
 koshuQuoter half fullQ = TH.QuasiQuoter { TH.quoteExp = koshuQ half fullQ }
 
 koshuQ :: C.RelmapHalfCons -> TH.ExpQ -> String -> TH.ExpQ
-koshuQ half fullQ = dispatch . B.tokenLines where
-    dispatch src = sectionQ src -- relmapQ src
-    sectionQ = consSectionQ fullQ . {- C.consClause half -} undefined
-    --relmapQ  = consFullRelmapQ fullQ . half [] . tokenTrees
+koshuQ half fullQ text =
+    dispatch $ B.tokenLines (B.ResourceText text) text
+    where
+      dispatch src = sectionQ src -- relmapQ src
+      sectionQ = consSectionQ fullQ . {- C.consClause half -} undefined
+      --relmapQ  = consFullRelmapQ fullQ . half [] . tokenTrees
 
 {- Construct ExpQ of Section
    Tokens like @name in section context and relmap context
@@ -41,7 +43,8 @@ consSectionQ
     -> TH.ExpQ      -- ^ ExpQ of 'Section'
 consSectionQ fullQ xs =
     [| either consError id
-         (C.consSection $fullQ "qq" $(TH.dataToExpQ plain xs)) |]
+         (C.consSection $fullQ (B.ResourceText "qq")
+               $(TH.dataToExpQ plain xs)) |]
 
 {- construction error -}
 consError :: a -> b

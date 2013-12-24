@@ -6,7 +6,9 @@ module Koshucode.Baala.Core.Section.Process
 (
   -- * Read
   readSectionCode,
+  readSectionText,
   readSectionFile,
+
   readJudges,
 
   -- * Run
@@ -29,13 +31,21 @@ import qualified Koshucode.Baala.Core.Section.Clause  as C
 readSectionCode
     :: (C.CContent c)
     => C.Section c  -- ^ Root section
-    -> String       -- ^ Resource name
+    -> B.Resource   -- ^ Resource name
     -> String       -- ^ Source text
     -> B.AbortOr (C.Section c)  -- ^ Resulting section
 readSectionCode root res code =
     do let (C.RelmapCons half full) = C.sectionCons root
-       clauses <- C.consClause half $ B.tokenLines code
+       clauses <- C.consClause half $ B.tokenLines res code
        C.consSection full res clauses
+
+readSectionText
+    :: (C.CContent c)
+    => C.Section c  -- ^ Root section
+    -> String       -- ^ Source text
+    -> B.AbortOr (C.Section c)  -- ^ Resulting section
+readSectionText root code =
+    readSectionCode root (B.ResourceText code) code
 
 {-| Read section from file. -}
 readSectionFile
@@ -46,14 +56,14 @@ readSectionFile
 readSectionFile root path =
     do exist <- Dir.doesFileExist path
        case exist of
-         False -> return $ Left (B.AbortIO (B.AIONoFile path), [])
+         False -> return $ Left (B.AbortIO $ B.AIONoFile path, [])
          True  -> do code <- readFile path
-                     return $ readSectionCode root path code
+                     return $ readSectionCode root (B.ResourceFile path) code
 
 {-| Read judges from text. -}
 readJudges :: (C.CContent c) => String -> B.AbortOr [B.Judge c]
 readJudges code =
-    do sec <- readSectionCode C.emptySection "text" code
+    do sec <- readSectionText C.emptySection code
        Right $ C.sectionJudge sec
 
 {-| Run section.
