@@ -86,7 +86,7 @@ consSection
     => C.RelmapFullCons c      -- ^ Relmap full constructor
     -> B.Resource              -- ^ Resource name
     -> [C.Clause]              -- ^ Output of 'C.consClause'
-    -> B.AbortOr (Section c)   -- ^ Result section
+    -> B.Ab (Section c)   -- ^ Result section
 consSection full resource xs =
     do _        <-  mapMFor unk    isCUnknown
        _        <-  mapMFor unres  isCUnres
@@ -138,8 +138,8 @@ consSection full resource xs =
 
       unk   ls (C.CUnknown) = abort [] $ B.AbortSyntax ls B.ASUnkClause
       unres ls (C.CUnres _) = abort [] $ B.AbortSyntax ls B.ASUnresToken
-      abort ls (B.AbortSyntax _ a) = Left (B.AbortSyntax ls a, [])
-      abort ls a = Left (a, ls)
+      abort ls (B.AbortSyntax _ a) = Left $ B.AbortSyntax ls a
+      abort _ a = Left a
 
 isCImport, isCExport, isCShort,
   isCRelmap, isCAssert, isCJudge,

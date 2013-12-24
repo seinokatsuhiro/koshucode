@@ -6,16 +6,21 @@ module Koshucode.Baala.Base.Abort.Reason
 ( -- * Datatype
   Ab,
   AbMap,
-  AbMap2,
-  Abort,
-  AbortOr,
 
-  -- * Reason
+  -- * Abort reason
   AbortReason (..),
+
+  -- ** I/O
   AbortIO (..),
+
+  -- ** Syntax
   AbortSyntax (..),
+
+  -- ** Analysis
   AbortAnalysis (..),
   abortMalformedOperand,
+
+  -- ** Calculation
   AbortCalc (..),
   abortNotFound,
   (<!!>),
@@ -30,20 +35,11 @@ import qualified Koshucode.Baala.Base.Abort.Utility as B
 
 -- ----------------------  Abort type
 
-{-| Either of (1) right result, or (2) abort reason
-    (without source code information). -}
+{-| Either of (1) right result, or (2) abort reason. -}
 type Ab b = Either AbortReason b
 
 {-| Abortable mapping. -}
 type AbMap b = b -> Ab b
-
-type AbMap2 b a = b -> Ab a
-
-{-| Abort reason and source information. -}
-type Abort = B.AbortType AbortReason
-
-{-| Either of (1) right result, or (2) abort reason with source. -}
-type AbortOr b = B.AbortOrType AbortReason b
 
 
 -- ----------------------  Abort reason
@@ -60,15 +56,25 @@ instance B.Name AbortReason where
     name = B.abortSymbol
 
 instance B.AbortReasonClass AbortReason where
-    abortClass (AbortIO         a) = B.abortClass a
-    abortClass (AbortSyntax   _ a) = B.abortClass a
-    abortClass (AbortAnalysis _ a) = B.abortClass a
-    abortClass (AbortCalc     _ a) = B.abortClass a
+    abortClass  (AbortIO         a)  =  B.abortClass a
+    abortClass  (AbortSyntax   _ a)  =  B.abortClass a
+    abortClass  (AbortAnalysis _ a)  =  B.abortClass a
+    abortClass  (AbortCalc     _ a)  =  B.abortClass a
 
-    abortSymbol (AbortIO         a) = B.abortSymbol a
-    abortSymbol (AbortSyntax   _ a) = B.abortSymbol a
-    abortSymbol (AbortAnalysis _ a) = B.abortSymbol a
-    abortSymbol (AbortCalc     _ a) = B.abortSymbol a
+    abortSymbol (AbortIO         a)  =  B.abortSymbol a
+    abortSymbol (AbortSyntax   _ a)  =  B.abortSymbol a
+    abortSymbol (AbortAnalysis _ a)  =  B.abortSymbol a
+    abortSymbol (AbortCalc     _ a)  =  B.abortSymbol a
+
+    abortReason (AbortIO         a)  =  B.abortReason a
+    abortReason (AbortSyntax   _ a)  =  B.abortReason a
+    abortReason (AbortAnalysis _ a)  =  B.abortReason a
+    abortReason (AbortCalc     _ a)  =  B.abortReason a
+
+    abortDetail (AbortIO         a)  =  B.abortDetail a
+    abortDetail (AbortSyntax   _ a)  =  B.abortDetail a
+    abortDetail (AbortAnalysis _ a)  =  B.abortDetail a
+    abortDetail (AbortCalc     _ a)  =  B.abortDetail a
 
     abortClause (AbortSyntax   src _) = map B.lineNumberContent src
     abortClause _ = []
@@ -77,20 +83,9 @@ instance B.AbortReasonClass AbortReason where
     abortRelmap (AbortCalc     ts _) = concatMap tokenSource ts
     abortRelmap _ = []
 
-    abortReason a = case a of
-        (AbortIO              a2) -> B.abortReason a2
-        (AbortSyntax        _ a2) -> B.abortReason a2
-        (AbortAnalysis      _ a2) -> B.abortReason a2
-        (AbortCalc          _ a2) -> B.abortReason a2
-
-    abortDetail a = case a of
-        (AbortIO              a2) -> B.abortDetail a2
-        (AbortSyntax        _ a2) -> B.abortDetail a2
-        (AbortAnalysis      _ a2) -> B.abortDetail a2
-        (AbortCalc          _ a2) -> B.abortDetail a2
-
 tokenSource :: B.Token -> [String]
 tokenSource = B.tokenPosDisplay . B.tokenPos
+
 
 -- ----------------------  I/O Error
 

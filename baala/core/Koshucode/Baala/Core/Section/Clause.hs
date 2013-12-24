@@ -154,10 +154,10 @@ consPreclause' src@(B.CodeClause toks _) = clause $ B.sweepToken toks where
 consClause
     :: C.RelmapHalfCons    -- ^ Relmap half constructor
     -> [B.TokenLine]       -- ^ Source tokens
-    -> B.AbortOr [Clause]  -- ^ Result clauses
+    -> B.Ab [Clause]  -- ^ Result clauses
 consClause half = clauseHalf half . consPreclause
 
-clauseHalf :: C.RelmapHalfCons -> [Clause] -> B.AbortOr [Clause]
+clauseHalf :: C.RelmapHalfCons -> [Clause] -> B.Ab [Clause]
 clauseHalf half xs = mapM f xs2 where
     f (Clause src body)        = Right . Clause src =<< g src body
 
@@ -167,9 +167,7 @@ clauseHalf half xs = mapM f xs2 where
 
     h src ts =
         let ls = B.clauseLines src
-        in case half ls (B.tokenTrees ts) of
-             Right r -> Right r
-             Left  a -> Left (a, ls)
+        in half ls (B.tokenTrees ts)
 
     xs2 = concatMap resolve xs
     resolve = resolveClause $ concatMap short xs

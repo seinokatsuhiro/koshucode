@@ -124,7 +124,7 @@ theStrings _               =  []
 readSec
     :: (C.CContent c)
     => SectionSource c               -- ^ Section
-    -> IO (B.AbortOr (C.Section c))  -- ^ Union of sections
+    -> IO (B.Ab (C.Section c))  -- ^ Union of sections
 readSec src =
     do let root = rootSection src
            sec1 = map (C.readSectionText root) $ textSections src
@@ -134,7 +134,7 @@ readSec src =
 readSecList
     :: (C.CContent c)
     => SectionSource c
-    -> IO (B.AbortOr [C.Section c])
+    -> IO (B.Ab [C.Section c])
 readSecList src =
     do let root = rootSection src
            sec1 = map (C.readSectionText root) $ textSections src

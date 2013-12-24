@@ -5,8 +5,6 @@
 module Koshucode.Baala.Base.Abort.Utility
 ( -- * Class and datatype
   AbortReasonClass (..),
-  AbortType,
-  AbortOrType,
 
   -- * Function
   abort,
@@ -17,7 +15,6 @@ module Koshucode.Baala.Base.Abort.Utility
 
 import qualified System.Exit as Sys
 import qualified Koshucode.Baala.Base.Prelude as B
-import qualified Koshucode.Baala.Base.Syntax  as B
 import qualified Koshucode.Baala.Base.Token   as B
 
 
@@ -46,26 +43,20 @@ class (Show a) => AbortReasonClass a where
     abortClause  :: a -> [String]
     abortClause _ = []
 
-{-| Abort reason and source code information. -}
-type AbortType a = (a, [B.TokenLine])
-
-{-| Either of (1) right result or (2) abort information. -}
-type AbortOrType a b = Either (AbortType a) b
-
 
 
 -- ----------------------  Function
 
 abortMap
     :: (AbortReasonClass a)
-    => (b -> IO c)       -- ^ Function
-    -> AbortOrType a b   -- ^ Argument
-    -> IO c              -- ^ Value
+    => (b -> IO c)    -- ^ Function
+    -> Either a b     -- ^ Argument
+    -> IO c           -- ^ Value
 abortMap _ (Left  a) = abort a
 abortMap f (Right b) = f b
 
 {-| Stop program execution abnormally. -}
-abort :: (AbortReasonClass a) => AbortType a -> IO c
+abort :: (AbortReasonClass a) => a -> IO c
 abort a =
   do B.putCommentLines $ messageLines a
      B.putCommentLines ["Exit with status 2", ""]
@@ -74,30 +65,27 @@ abort a =
 sandwich :: a -> [a] -> [a]
 sandwich x xs = x : xs ++ [x]
 
-messageLines :: (AbortReasonClass a) => AbortType a -> [String]
-messageLines (a, ls) = sandwich "" $ title : xs where
+messageLines :: (AbortReasonClass a) => a -> [String]
+messageLines a = sandwich "" $ title : xs where
     xs    = B.renderTable " " $ B.alignTable $ [rule, rule] : rows
     title = "ABORTED (" ++ abortSymbol a ++ ")"
     rule  = B.textRuleCell '-'
-    rows  = concatMap row $ messageAssoc (a, ls)
+    rows  = concatMap row $ messageAssoc a
     row (_, []) = []
     row (name, content)
         = [[ B.textCell B.Front name
            , B.textBlockCell B.Front content ]]
 
-messageAssoc :: (AbortReasonClass a) => AbortType a -> [(String, [String])]
-messageAssoc (a, ls) =
+messageAssoc :: (AbortReasonClass a) => a -> [(String, [String])]
+messageAssoc a =
     [ ("Class    " , [abortClass a])
     , ("Reason"    , [abortReason a])
     , ("Detail"    , abortDetail a)
     , ("Expr"      , abortExpr a)
     , ("Relmap"    , abortRelmap a)
-    , ("Clause"    , abortClause a)
-    , ("Source"    , map source ls) ]
-    where
-      source (B.CodeLine n line _) = show n ++ " " ++ line
+    , ("Clause"    , abortClause a) ]
 
-addAbort :: (AbortReasonClass a) => AbortType a -> B.Map (AbortOrType a b)
+addAbort :: (AbortReasonClass a) => a -> B.Map (Either a b)
 addAbort _ (Left a) = Left a
 addAbort _ x = x
 

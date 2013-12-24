@@ -33,7 +33,7 @@ readSectionCode
     => C.Section c  -- ^ Root section
     -> B.Resource   -- ^ Resource name
     -> String       -- ^ Source text
-    -> B.AbortOr (C.Section c)  -- ^ Resulting section
+    -> B.Ab (C.Section c)  -- ^ Resulting section
 readSectionCode root res code =
     do let (C.RelmapCons half full) = C.sectionCons root
        clauses <- C.consClause half $ B.tokenLines res code
@@ -43,7 +43,7 @@ readSectionText
     :: (C.CContent c)
     => C.Section c  -- ^ Root section
     -> String       -- ^ Source text
-    -> B.AbortOr (C.Section c)  -- ^ Resulting section
+    -> B.Ab (C.Section c)  -- ^ Resulting section
 readSectionText root code =
     readSectionCode root (B.ResourceText code) code
 
@@ -52,16 +52,16 @@ readSectionFile
     :: (C.CContent c)
     => C.Section c   -- ^ Root section
     -> FilePath      -- ^ Path of section file
-    -> IO (B.AbortOr (C.Section c)) -- ^ Resulting section
+    -> IO (B.Ab (C.Section c)) -- ^ Resulting section
 readSectionFile root path =
     do exist <- Dir.doesFileExist path
        case exist of
-         False -> return $ Left (B.AbortIO $ B.AIONoFile path, [])
+         False -> return $ Left $ B.AbortIO $ B.AIONoFile path
          True  -> do code <- readFile path
                      return $ readSectionCode root (B.ResourceFile path) code
 
 {-| Read judges from text. -}
-readJudges :: (C.CContent c) => String -> B.AbortOr [B.Judge c]
+readJudges :: (C.CContent c) => String -> B.Ab [B.Judge c]
 readJudges code =
     do sec <- readSectionText C.emptySection code
        Right $ C.sectionJudge sec
@@ -72,7 +72,7 @@ readJudges code =
 runSection
     :: (C.CContent c)
     => C.Section c              -- ^ Input section
-    -> B.AbortOr (C.Section c)  -- ^ Output section
+    -> B.Ab (C.Section c)  -- ^ Output section
 runSection sec =
     do let input       = C.sectionJudge sec
            allAsserts  = sectionLinkedAssert sec

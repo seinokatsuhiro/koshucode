@@ -75,7 +75,7 @@ isDecimalZero (Decimal (n, _) _ _)  =  n == 0
 -- ----------------------  Reader
 
 {-| Make @a@ from a string. -}
-type LitString a = B.AbMap2 String a
+type LitString a = String -> B.Ab a
 
 type LitDecimal = LitString Decimal
 

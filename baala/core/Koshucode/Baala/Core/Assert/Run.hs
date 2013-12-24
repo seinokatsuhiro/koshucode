@@ -24,7 +24,7 @@ runRelmapDataset
     => C.Dataset c          -- ^ Judges read from @source@ operator
     -> C.Relmap c           -- ^ Mapping from 'Rel' to 'Rel'
     -> B.Rel c              -- ^ Input relation
-    -> B.AbortOr (B.Rel c)  -- ^ Output relation
+    -> B.Ab (B.Rel c)  -- ^ Output relation
 runRelmapDataset = runRelmapViaRelfy . C.selectRelation
 
 runRelmapViaRelfy
@@ -32,19 +32,19 @@ runRelmapViaRelfy
     => C.RelSelect c
     -> C.Relmap c
     -> B.Rel c
-    -> B.AbortOr (B.Rel c)
+    -> B.Ab (B.Rel c)
 runRelmapViaRelfy sel m (B.Rel h1 b1) =
     do C.Relfy h2 f2 <- relmapRelfy sel m h1
        case C.relfy f2 b1 of
          Right b2 -> Right $ B.Rel h2 b2
-         Left (B.AbortCalc _ a) -> Left (B.AbortCalc [C.relmapOpToken m] a, [])
-         Left a -> Left (a, [])
+         Left (B.AbortCalc _ a) -> Left $ B.AbortCalc [C.relmapOpToken m] a
+         Left a -> Left a
 
 relmapRelfy
     :: C.RelSelect c
     -> C.Relmap c
     -> B.Relhead
-    -> B.AbortOr (C.Relfy c)
+    -> B.Ab (C.Relfy c)
 relmapRelfy sel = (<$>) where
     C.RelmapSource _ p ns  <$> _  = Right $ C.relfyConst (sel p ns)
     C.RelmapConst  _ _ r   <$> _  = Right $ C.relfyConst r
@@ -62,9 +62,9 @@ relmapRelfy sel = (<$>) where
              Right relfy2 -> Right relfy2
              Left a       -> left h a
 
-    left h (B.AbortAnalysis [] a)  = Left (B.AbortAnalysis [C.halfOperator h] a, [])
-    left _ (B.AbortAnalysis src a) = Left (B.AbortAnalysis src a, [])
-    left h a = Left (a, C.halfLines h)
+    left h (B.AbortAnalysis [] a)  = Left $ B.AbortAnalysis [C.halfOperator h] a
+    left _ (B.AbortAnalysis src a) = Left $ B.AbortAnalysis src a
+    left _ a = Left a
 
 
 
@@ -75,7 +75,7 @@ runAssertJudges
     :: (Ord c, C.CNil c)
     => [C.Assert c]          -- ^ Assertion list
     -> [B.Judge c]           -- ^ Input judges
-    -> B.AbortOr [B.Judge c] -- ^ Output judges
+    -> B.Ab [B.Judge c] -- ^ Output judges
 runAssertJudges as = runAssertDataset as . C.dataset
 
 {-| Calculate assertion list. -}
@@ -83,16 +83,14 @@ runAssertDataset
     :: (Ord c, C.CNil c)
     => [C.Assert c]
     -> C.Dataset c
-    -> B.AbortOr [B.Judge c]
+    -> B.Ab [B.Judge c]
 runAssertDataset as ds =
     do js <- mapM each as
        return $ concat js
-    where each (C.Assert t pat opt r src) =
+    where each (C.Assert t pat opt r _) =
               do r1 <- runRelmapDataset ds r B.reldee
                  let q = C.assertQuality t
-                 case assertOptionProcess q pat opt r1 of
-                   Right js -> Right js
-                   Left a   -> Left (a, src)
+                 assertOptionProcess q pat opt r1
 
 {-| Convert relation to list of judges -}
 judgesFromRel :: Bool -> B.JudgePattern -> B.Rel c -> [B.Judge c]
