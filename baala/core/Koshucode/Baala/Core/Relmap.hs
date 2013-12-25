@@ -58,15 +58,15 @@ import Koshucode.Baala.Core.Relmap.Rop
  Datatypes for constructing 'Relmap'.
  
  * Data 'RelmapCons' has
-   'RelmapHalfCons' and
-   'RelmapFullCons'.
+   'RelmapConsHalf' and
+   'RelmapConsFull'.
     
- * Type 'RelmapHalfCons' has
+ * Type 'RelmapConsHalf' has
    'HalfRelmap',
    'Koshucode.Baala.Base.Syntax.Tokenize.TokenLine' and
    'Koshucode.Baala.Base.Syntax.TokenTree.TokenTree'.
  
- * Type 'RelmapFullCons' has
+ * Type 'RelmapConsFull' has
    'HalfRelmap' and
    'Relmap'.
 -}

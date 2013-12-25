@@ -15,8 +15,8 @@ koshu :: C.QuasiQuoter
 koshu = C.koshuQuoter vanillaHalf [| vanillaFull |]
 
 -- relmap constructors
-vanillaHalf :: C.RelmapHalfCons
-vanillaFull :: C.RelmapFullCons VContent
+vanillaHalf :: C.RelmapConsHalf
+vanillaFull :: C.RelmapConsFull VContent
 (C.RelmapCons vanillaHalf vanillaFull)
     = C.relmapCons vanillaRops
 

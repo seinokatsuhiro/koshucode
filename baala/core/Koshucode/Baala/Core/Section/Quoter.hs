@@ -19,14 +19,14 @@ import qualified Koshucode.Baala.Core.Section.Section as C
 
 {-| Make quasiquoter for @[koshu| ... |]@. -}
 koshuQuoter
-    :: C.RelmapHalfCons -- ^ Relmap half constructor
-    -> TH.ExpQ          -- ^ Quotation expression of 'RelmapFullCons'
+    :: C.RelmapConsHalf -- ^ Relmap half constructor
+    -> TH.ExpQ          -- ^ Quotation expression of 'RelmapConsFull'
     -> TH.QuasiQuoter   -- ^ Quoter that outputs
                         --  'Koshucode.Baala.Core.Section.Section' or
                         --  'Koshucode.Baala.Core.Relmap.Relmap'
 koshuQuoter half fullQ = TH.QuasiQuoter { TH.quoteExp = koshuQ half fullQ }
 
-koshuQ :: C.RelmapHalfCons -> TH.ExpQ -> String -> TH.ExpQ
+koshuQ :: C.RelmapConsHalf -> TH.ExpQ -> String -> TH.ExpQ
 koshuQ half fullQ text =
     dispatch $ B.tokenLines (B.ResourceText text) text
     where
@@ -38,7 +38,7 @@ koshuQ half fullQ text =
    Tokens like @name in section context and relmap context
    are Haskell variables. -}
 consSectionQ
-    :: TH.ExpQ      -- ^ Quotation expression of 'RelmapFullCons'
+    :: TH.ExpQ      -- ^ Quotation expression of 'RelmapConsFull'
     -> [C.Clause]   -- ^ Materials of section
     -> TH.ExpQ      -- ^ ExpQ of 'Section'
 consSectionQ fullQ xs =
@@ -56,14 +56,14 @@ plain _ = Nothing
 {- Construct ExpQ of Relmap
    Tokens like @name in relmap context are Haskell variables. -}
 consFullRelmapQ
-    :: TH.ExpQ        -- ^ Quotation expression of 'RelmapFullCons'
+    :: TH.ExpQ        -- ^ Quotation expression of 'RelmapConsFull'
     -> C.HalfRelmap   -- ^ Target relmap operator
     -> TH.ExpQ        -- ^ ExpQ of 'Relmap' v
 consFullRelmapQ fullQ = make where
     make = TH.dataToExpQ (plain `extQ` custom)
-    custom (C.HalfRelmap _ _ (B.TWord _ 0 ('@':op)) _ _) =
+    custom (C.HalfRelmap _ (B.TWord _ 0 ('@':op)) _ _) =
         Just $ TH.varE $ TH.mkName op
-    custom h@(C.HalfRelmap _ _ op opd subs) =
+    custom h@(C.HalfRelmap _ op opd subs) =
         Just $ [| either consError id
                     ($fullQ $(TH.dataToExpQ plain h))
 --                     $(dataToExpQ plain opd)   -- [Relmap v]

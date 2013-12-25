@@ -17,7 +17,7 @@ module Koshucode.Baala.Base.Token.TokenPos
   resourceName,
 ) where
 
-import Data.Generics (Data, Typeable)
+import qualified Data.Generics                 as G
 import qualified Data.Monoid                   as M
 import qualified Koshucode.Baala.Base.Syntax   as B
 
@@ -28,7 +28,7 @@ data TokenPos = TokenPos
       { tokenPosResource :: Resource
       , tokenPosLine     :: B.NumberedLine  -- ^ Line number and content
       , tokenPosText     :: String          -- ^ Text at which begins token
-      } deriving (Show, Eq, Data, Typeable)
+      } deriving (Show, Eq, G.Data, G.Typeable)
 
 instance Ord TokenPos where
     compare p1 p2
@@ -66,7 +66,7 @@ data Resource
     = ResourceFile String
     | ResourceText String
     | ResourceURL  String
-      deriving (Show, Eq, Ord, Data, Typeable)
+      deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 resourceType :: Resource -> String
 resourceType (ResourceFile _) = "file"

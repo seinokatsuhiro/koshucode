@@ -123,9 +123,9 @@ getTermPairs  use n = getTrees use n >>= termnamePairs
     >   Right $ relmapMeet use m
     -}
 getRelmap :: C.RopUse c -> B.Ab (C.Relmap c)
-getRelmap  use = getHead $ C.ropSubmap use
+getRelmap  use = getHead $ C.ropSubrelmap use
 
 {-| Get relmaps from operator use. -}
 getRelmaps :: C.RopUse c -> B.Ab [C.Relmap c]
-getRelmaps use = Right $ C.ropSubmap use
+getRelmaps use = Right $ C.ropSubrelmap use
 

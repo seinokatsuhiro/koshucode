@@ -83,7 +83,7 @@ emptySection = makeEmptySection $ C.relmapCons []
 {-| Second step of constructing 'Section'. -}
 consSection
     :: (C.CContent c)
-    => C.RelmapFullCons c      -- ^ Relmap full constructor
+    => C.RelmapConsFull c      -- ^ Relmap full constructor
     -> B.Resource              -- ^ Resource name
     -> [C.Clause]              -- ^ Output of 'C.consClause'
     -> B.Ab (Section c)   -- ^ Result section

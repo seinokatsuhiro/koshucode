@@ -2,7 +2,8 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Core.Relmap.HalfRelmap
-( HalfRelmap (..)
+( HalfRelmap (..),
+  halfOpText,
 ) where
 
 import qualified Data.Generics        as G
@@ -15,17 +16,19 @@ import qualified Koshucode.Baala.Core.Relmap.Operand as C
     and (full) 'Relmap' is constructed from 'HalfRelmap'. -}
 
 data HalfRelmap = HalfRelmap
-    { halfUsage    :: String          -- ^ Usages description
-    , halfLines    :: [B.TokenLine]   -- ^ Source information
-    , halfOperator :: B.Token         -- ^ Operator name of relmap operation
-    , halfOperand  :: C.RopAssoc      -- ^ Operand of relmap operation
-    , halfSubmap   :: [HalfRelmap]    -- ^ Subrelmaps in the operand
+    { halfUsage     :: String        -- ^ Usages description
+    , halfOpToken   :: B.Token       -- ^ Operator name
+    , halfOperand   :: C.RopAssoc    -- ^ Operand of relmap operation
+    , halfSubrelmap :: [HalfRelmap]  -- ^ Subrelmaps in the operand
     } deriving (Show, G.Data, G.Typeable)
 
 instance B.Pretty HalfRelmap where
-    doc HalfRelmap { halfOperator = opTok, halfOperand = opd } =
+    doc HalfRelmap { halfOpToken = opTok, halfOperand = opd } =
         case lookup "operand" opd of
           Nothing -> B.doch [op, "..."]
           Just xs -> B.doch [op, show xs]
         where op = B.tokenContent opTok
+
+halfOpText :: HalfRelmap -> String
+halfOpText = B.tokenContent . halfOpToken
 

@@ -45,7 +45,7 @@ builtinRops :: [C.Rop c]
 builtinRops = ropList "builtin" [ ("|", ropConsConcat, C.operandList "-relmap" []) ]
 
 ropConsConcat :: C.RopCons c
-ropConsConcat = Right . M.mconcat . C.ropSubmap
+ropConsConcat = Right . M.mconcat . C.ropSubrelmap
 
 -- ----------------------
 {- $ListOfOperator

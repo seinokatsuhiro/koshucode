@@ -62,7 +62,7 @@ relmapRelfy sel = (<$>) where
              Right relfy2 -> Right relfy2
              Left a       -> left h a
 
-    left h (B.AbortAnalysis [] a)  = Left $ B.AbortAnalysis [C.halfOperator h] a
+    left h (B.AbortAnalysis [] a)  = Left $ B.AbortAnalysis [C.halfOpToken h] a
     left _ (B.AbortAnalysis src a) = Left $ B.AbortAnalysis src a
     left _ a = Left a
 

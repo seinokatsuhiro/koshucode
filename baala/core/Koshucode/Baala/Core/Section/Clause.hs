@@ -67,7 +67,7 @@ clauseTypeText (Clause _ body) =
     Result clause list does not contain
     'CRelmap' and 'CAssert'. Instead of them,
     'TRelmap' and 'TAssert' are contained.
-    This function does not depend on 'C.RelmapHalfCons'.
+    This function does not depend on 'C.RelmapConsHalf'.
 
     >>> consPreclause . B.tokenize $ "a : source A /x /y"
     [ TRelmap ( TokenClause
@@ -152,22 +152,20 @@ consPreclause' src@(B.CodeClause toks _) = clause $ B.sweepToken toks where
 {-| Construct 'Clause' list from 'B.Token' list.
     This is a first step of constructing 'Section'. -}
 consClause
-    :: C.RelmapHalfCons    -- ^ Relmap half constructor
+    :: C.RelmapConsHalf    -- ^ Relmap half constructor
     -> [B.TokenLine]       -- ^ Source tokens
     -> B.Ab [Clause]  -- ^ Result clauses
 consClause half = clauseHalf half . consPreclause
 
-clauseHalf :: C.RelmapHalfCons -> [Clause] -> B.Ab [Clause]
+clauseHalf :: C.RelmapConsHalf -> [Clause] -> B.Ab [Clause]
 clauseHalf half xs = mapM f xs2 where
-    f (Clause src body)        = Right . Clause src =<< g src body
+    f (Clause src body)        = Right . Clause src =<< g body
 
-    g src (TRelmap n ts)       = Right . CRelmap n       =<< h src ts
-    g src (TAssert q p opt ts) = Right . CAssert q p opt =<< h src ts
-    g _   body                 = Right body
+    g (TRelmap n ts)       = Right . CRelmap n       =<< h ts
+    g (TAssert q p opt ts) = Right . CAssert q p opt =<< h ts
+    g body                 = Right body
 
-    h src ts =
-        let ls = B.clauseLines src
-        in half ls (B.tokenTrees ts)
+    h ts = half (B.tokenTrees ts)
 
     xs2 = concatMap resolve xs
     resolve = resolveClause $ concatMap short xs

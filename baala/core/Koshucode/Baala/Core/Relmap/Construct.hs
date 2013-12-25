@@ -5,8 +5,8 @@
 module Koshucode.Baala.Core.Relmap.Construct
 ( relmapCons,
   RelmapCons (..),
-  RelmapHalfCons,
-  RelmapFullCons
+  RelmapConsHalf,
+  RelmapConsFull,
 
   -- * Construction process
   -- $ConstructionProcess
@@ -19,89 +19,84 @@ import qualified Koshucode.Baala.Core.Relmap.Relmap     as C
 import qualified Koshucode.Baala.Core.Relmap.Rop        as C
 
 
-
 -- ----------------------  Constructions
 
 {-| Make half and full relmap constructors. -}
 relmapCons
-    :: [C.Rop c]        -- ^ Implementations of relational operators
-    -> (RelmapCons c)   -- ^ Relmap constructors
+    :: [C.Rop c]      -- ^ Implementations of relmap operators
+    -> (RelmapCons c) -- ^ Relmap constructors
 relmapCons = make . unzip . map pair where
     make (halfs, fulls) =
-        RelmapCons (halfBundle halfs) (fullBundle fulls)
+        RelmapCons (makeConsHalf halfs) (makeConsFull fulls)
     pair (C.Rop op _ sorter cons synopsis) =
-        ((op, (synopsis, sorter)),
-         (op, cons))
+        let half = (op, (synopsis, sorter))
+            full = (op, cons)
+        in (half, full)
 
 {-| Half and full relmap constructor -}
-data RelmapCons c = RelmapCons
-    { consHalf :: RelmapHalfCons
-    , consFull :: RelmapFullCons c
-    }
+data RelmapCons c = RelmapCons RelmapConsHalf (RelmapConsFull c)
 
 instance Show (RelmapCons c) where
     show _ = "RelmapCons <half> <full>"
 
 
-
 -- ----------------------  Half construction
 
 {-| First step of constructing relmap,
-    make 'HalfRelmap' from use of relational operator. -}
-type RelmapHalfCons
-    =  [B.TokenLine]      -- ^ Source information
-    -> [B.TokenTree]      -- ^ Operand as source trees
+    make 'C.HalfRelmap' from use of relmap operator. -}
+type RelmapConsHalf
+    =  [B.TokenTree]      -- ^ Source of relmap operator
     -> B.Ab C.HalfRelmap  -- ^ Result half relmap
 
-halfBundle :: [B.Named (String, C.RopFullSorter)] -> RelmapHalfCons
-halfBundle operators src = cons where
-    cons :: [B.TokenTree] -> B.Ab C.HalfRelmap
-    cons xs =
-        case B.divideTreesByBar xs of
-          [(B.TreeL tok@(B.TWord _ 0 op) : opd)] -> find op tok opd
-          [[B.TreeB 1 xs2]] -> cons xs2
-          [[B.TreeB _ _]]   -> Left $ B.AbortAnalysis [] $ B.AAUndefined "bracket"
-          [_]               -> Left $ B.AbortAnalysis [] $ B.AAUnkRelmap "?"
-          xs2               -> find "|" (B.tokenWord "|") $ map B.treeWrap xs2
+makeConsHalf :: [B.Named (String, C.RopFullSorter)] -> RelmapConsHalf
+makeConsHalf halfs = consHalf where
+    consHalf :: RelmapConsHalf
+    consHalf tree =
+        case B.divideTreesByBar tree of
+          [(B.TreeL tok@(B.TWord _ 0 _) : opd)] -> find tok opd
+          [[B.TreeB 1 tree2]] -> consHalf tree2
+          [[B.TreeB _ _]]     -> Left $ B.AbortAnalysis [] $ B.AAUndefined "bracket"
+          [_]                 -> Left $ B.AbortAnalysis [] $ B.AAUnkRelmap "?"
+          tree2               -> find (B.tokenWord "|") $ map B.treeWrap tree2
 
-    find :: String -> B.Token -> [B.TokenTree] -> B.Ab C.HalfRelmap
-    find op tok opd =
-        case lookup op operators of
+    find :: B.Token -> [B.TokenTree] -> B.Ab C.HalfRelmap
+    find tok opd =
+        case lookup (B.tokenContent tok) halfs of
           Nothing -> Right $ half "" tok opd []
-          Just (u, sorter) ->
+          Just (usage, sorter) ->
               do sorted <- sorter opd
-                 submap $ half u tok opd sorted
+                 subrelmap $ half usage tok opd sorted
 
     half :: String -> B.Token -> [B.TokenTree] -> [B.Named [B.TokenTree]] -> C.HalfRelmap
-    half usage tok orig opd =
-        C.HalfRelmap usage src tok (("operand", orig) : opd) []
+    half usage tok opd sorted =
+        C.HalfRelmap usage tok (("operand", opd) : sorted) []
 
-    submap :: C.HalfRelmap -> B.Ab C.HalfRelmap
-    submap h@C.HalfRelmap { C.halfOperand = opd } =
+    subrelmap :: B.AbMap C.HalfRelmap
+    subrelmap h@C.HalfRelmap { C.halfOperand = opd } =
         case lookup "-relmap" opd of
-          Nothing -> Right h   -- no subrelmaps
-          Just xs -> do subs <- mapM (cons . B.singleton) xs
-                        Right $ h { C.halfSubmap = subs }
+          Nothing    -> Right h   -- no subrelmaps
+          Just trees -> do subHs <- mapM (consHalf . B.singleton) trees
+                           Right $ h { C.halfSubrelmap = subHs }
 
 
 -- ----------------------  Full construction
 
 {-| Second step of constructing relmap,
-    make 'Relmap' from contents of 'HalfRelmap'. -}
-type RelmapFullCons c
-    = C.HalfRelmap        -- ^ Half relmap from 'RelmapHalfCons'
-    -> B.Ab (C.Relmap c)  -- ^ Result relmap
+    make 'C.Relmap' from contents of 'C.HalfRelmap'. -}
+type RelmapConsFull c
+    = C.HalfRelmap        -- ^ Half relmap
+    -> B.Ab (C.Relmap c)  -- ^ Result full relmap
 
 {-| Construct (full) relmap. -}
-fullBundle :: [B.Named (C.RopCons c)] -> RelmapFullCons c
-fullBundle assoc = c where
-    c half@C.HalfRelmap { C.halfOperator = tok, C.halfSubmap = hs } =
-        let op = B.tokenContent tok
-        in case lookup op assoc of
+makeConsFull :: [B.Named (C.RopCons c)] -> RelmapConsFull c
+makeConsFull fulls = consFull where
+    consFull half =
+        let op    = C.halfOpText    half
+            subHs = C.halfSubrelmap half
+        in case lookup op fulls of
              Nothing   -> Right $ C.RelmapName half op
-             Just cons -> do submaps <- mapM c hs
-                             cons $ C.RopUse half submaps
-
+             Just cons -> do subFs <- mapM consFull subHs
+                             cons $ C.RopUse half subFs
 
 
 -- ----------------------
@@ -110,15 +105,15 @@ fullBundle assoc = c where
    Construction process of half relmaps from source trees.
   
    [@\[TokenTree\] -> \[\[TokenTree\]\]@]
-      Dicide list of 'TokenTree' by vertical bar (@|@).
+      Dicide list of 'B.TokenTree' by vertical bar (@|@).
   
    [@\[\[TokenTree\]\] -> \[HalfRelmap\]@]
-      Construct each 'HalfRelmap' from lists of 'TokenTree'.
+      Construct each 'C.HalfRelmap' from lists of 'B.TokenTree'.
       When there are subrelmaps in token trees,
-      constructs 'HalfRelmap' recursively.
+      constructs 'C.HalfRelmap' recursively.
   
    [@\[HalfRelmap\] -> HalfRelmap@]
-      Wrap list of 'HalfRelmap' into one 'HalfRelmap'
-      that has these relmaps in 'halfSubmap'.
+      Wrap list of 'C.HalfRelmap' into one 'C.HalfRelmap'
+      that has these relmaps in 'C.halfSubrelmap'.
 -}
 

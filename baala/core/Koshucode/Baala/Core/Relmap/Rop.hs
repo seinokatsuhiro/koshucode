@@ -1,11 +1,12 @@
 {-# OPTIONS_GHC -Wall #-}
 
+{-| Implementation of relmap operators. -}
+
 module Koshucode.Baala.Core.Relmap.Rop
 ( -- * Datatype
   Rop (..),
-  ropSource,
-  RopCons,
   RopUse (..),
+  RopCons,
 
   -- * Relmap basis
   relmapSource,
@@ -36,18 +37,15 @@ data Rop c = Rop
     , ropUsage      :: String           -- ^ Usage of operator
     }
 
-{-| Constructor of relational operator 'C.Relmap'.
-    'C.Relmap' is constructed from 'C.HalfRelmap' and subrelmaps in it. -}
-type RopCons c = RopUse c -> B.Ab (C.Relmap c)
-
-{-| Use of operator -}
+{-| Use of relmap operator -}
 data RopUse c = RopUse {
-      ropHalf   :: C.HalfRelmap   -- ^ Syntactic data of operator use
-    , ropSubmap :: [C.Relmap c]   -- ^ Subrelmaps
+      ropHalf      :: C.HalfRelmap   -- ^ Syntactic data of operator use
+    , ropSubrelmap :: [C.Relmap c]   -- ^ Subrelmaps
     } deriving (Show)
 
-ropSource :: RopUse c -> [B.TokenLine]
-ropSource = C.halfLines . ropHalf
+{-| Constructor of relmap operator 'C.Relmap'. -}
+type RopCons c = RopUse c -> B.Ab (C.Relmap c)
+
 
 
 -- ----------------------  Relmap
@@ -69,10 +67,7 @@ relmapConst
 relmapConst use = C.RelmapConst $ ropHalf use
 
 {-| Alias relmap. -}
-relmapAlias
-    :: RopUse c      -- ^ Use of operator
-    -> C.Relmap c    -- ^ 
-    -> C.Relmap c    -- ^ Result relmap
+relmapAlias :: RopUse c -> C.Relmap c -> C.Relmap c
 relmapAlias use = C.RelmapAlias $ ropHalf use
 
 {-| Make a non-confluent relmap. -}
