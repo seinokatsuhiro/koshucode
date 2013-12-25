@@ -44,7 +44,7 @@ ropConsSize use =
      Right $ relmapSize use n
 
 relmapSize :: (C.CDec c) => C.RopUse c -> B.Termname -> C.Relmap c
-relmapSize use n = C.relmapRelfy use "size" $ relfySize n
+relmapSize use n = C.relmapCalc use $ relfySize n
 
 {-| Cardinality -}
 relfySize
@@ -66,7 +66,7 @@ ropConsEnclose use =
      Right $ relmapEnclose use n
 
 relmapEnclose :: (C.CRel c) => C.RopUse c -> B.Termname -> C.Relmap c
-relmapEnclose use n = C.relmapRelfy use "enclose" $ relfyEnclose n
+relmapEnclose use n = C.relmapCalc use $ relfyEnclose n
 
 {-| Enclose the current relation in a term. -}
 relfyEnclose
@@ -89,7 +89,7 @@ ropConsRank use =
        Right $ relmapRank use n ns
 
 relmapRank :: (C.CDec c, Ord c) => C.RopUse c -> B.Termname -> [B.Termname] -> C.Relmap c
-relmapRank use n ns = C.relmapRelfy use "rank" $ relfyRank n ns
+relmapRank use n ns = C.relmapCalc use $ relfyRank n ns
 
 relfyRank
     :: (Ord c, C.CDec c)
@@ -105,7 +105,7 @@ relfyRank n ns h1 = Right $ C.Relfy h2 (C.RelfyFull False f2) where
 
 -- -- | Keep leading tuples.
 -- limit :: (Ord c) => C.RopUse c -> Int -> String -> C.Relmap c
--- limit use c ns = C.relmapCalc use "limit" (limit2 c ns)
+-- limit use c ns = C.relmapCalc use $ limit2 c ns
 
 -- limit2 :: (Ord c) => Int -> String -> a -> B.AbMap (B.Rel c)
 -- limit2 c ns _ (B.Rel h1 b1) = Right $ B.Rel h1 b2 where
@@ -122,7 +122,7 @@ ropConsTypename use = do
   Right $ relmapTypename use n p
 
 relmapTypename :: (C.CContent c) => C.RopUse c -> B.Termname -> B.Termname -> C.Relmap c
-relmapTypename use n p = C.relmapRelfy use "typename" $ relfyTypename n p
+relmapTypename use n p = C.relmapCalc use $ relfyTypename n p
 
 {-| Get typename. -}
 relfyTypename
@@ -146,7 +146,7 @@ ropConsRange use =
      Right $ relmapRange use term low high
 
 relmapRange :: (C.CDec c) => C.RopUse c -> B.Termname -> Int -> Int -> C.Relmap c
-relmapRange use term low high = C.relmapRelfy use "range" $ relfyRange term low high
+relmapRange use term low high = C.relmapCalc use $ relfyRange term low high
 
 relfyRange
   :: (C.CDec c) =>
@@ -175,7 +175,7 @@ ropConsDuplicate use =
      Right $ relmapDuplicate use ns
 
 relmapDuplicate :: (Ord c) => C.RopUse c -> [B.Termname] -> C.Relmap c
-relmapDuplicate use ns = C.relmapRelfy use "duplicate" $ relfyDuplicate ns
+relmapDuplicate use ns = C.relmapCalc use $ relfyDuplicate ns
 
 relfyDuplicate
   :: (Ord c) => [B.Termname] -> B.Relhead -> B.Ab (C.Relfy c)
@@ -219,7 +219,7 @@ ropConsMember use =
      Right $ relmapMember use x xs
 
 relmapMember :: C.RopUse Rop.VContent -> B.Termname -> B.Termname -> C.Relmap Rop.VContent
-relmapMember use x xs = C.relmapRelfy use "member" $ relfyMember x xs
+relmapMember use x xs = C.relmapCalc use $ relfyMember x xs
 
 relfyMember :: B.Termname -> B.Termname -> B.Relhead -> B.Ab (C.Relfy Rop.VContent)
 relfyMember x xs h1 = r2 where
@@ -260,9 +260,9 @@ ropConsCheckTerm use =
 relmapCheckTermJust :: C.RopUse c -> [B.Termname] -> C.Relmap c
 relmapCheckTermHas  :: C.RopUse c -> [B.Termname] -> C.Relmap c
 relmapCheckTermBut  :: C.RopUse c -> [B.Termname] -> C.Relmap c
-relmapCheckTermJust use = C.relmapRelfy use "check-term (-just)" . relfyCheckTermJust
-relmapCheckTermHas  use = C.relmapRelfy use "check-term (-has)"  . relfyCheckTermHas
-relmapCheckTermBut  use = C.relmapRelfy use "check-term (-but)"  . relfyCheckTermBut
+relmapCheckTermJust use = C.relmapCalc use . relfyCheckTermJust
+relmapCheckTermHas  use = C.relmapCalc use . relfyCheckTermHas
+relmapCheckTermBut  use = C.relmapCalc use . relfyCheckTermBut
 
 relfyCheckTermJust :: [B.Termname] -> B.Relhead -> B.Ab (C.Relfy c)
 relfyCheckTermHas  :: [B.Termname] -> B.Relhead -> B.Ab (C.Relfy c)

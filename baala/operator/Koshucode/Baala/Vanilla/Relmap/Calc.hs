@@ -27,8 +27,7 @@ ropConsAdd use =
      Right $ relmapAdd use cs
 
 relmapAdd :: C.RopUse VContent -> [B.Named (C.PosCox VContent)] -> C.Relmap VContent
-relmapAdd use cs = C.relmapCalc use "add" fy where
-    fy _ = relfyAdd cs
+relmapAdd use cs = C.relmapCalc use $ relfyAdd cs
 
 -- todo: shared term
 relfyAdd
@@ -54,8 +53,7 @@ ropConsHold use = do
 
 relmapHold :: C.RopUse VContent -> Bool
            -> (C.PosCox VContent) -> C.Relmap VContent
-relmapHold use b cont = C.relmapCalc use "hold" fy where
-    fy _ = relfyHold b cont
+relmapHold use b cont = C.relmapCalc use $ relfyHold b cont
 
 relfyHold
     :: (C.CContent c, Show c)

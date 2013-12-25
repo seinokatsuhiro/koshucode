@@ -3,17 +3,16 @@
 {-| Implementation of relmap operators. -}
 
 module Koshucode.Baala.Core.Relmap.Rop
-( -- * Datatype
+( -- * Datatypes
   Rop (..),
   RopUse (..),
   RopCons,
 
-  -- * Relmap basis
+  -- * Basic constructors
   relmapSource,
   relmapConst,
   relmapAlias,
   relmapCalc,
-  relmapRelfy,
   relmapConfl,
 
 ) where
@@ -28,7 +27,7 @@ import qualified Koshucode.Baala.Core.Relmap.Relmap     as C
 
 -- ----------------------  Datatype
 
-{-| Implementation of relmap operator. -}
+{-| Implementation of relmap operator -}
 data Rop c = Rop
     { ropName       :: String           -- ^ Operator name
     , ropGroup      :: String           -- ^ Operator group
@@ -43,7 +42,7 @@ data RopUse c = RopUse {
     , ropSubrelmap :: [C.Relmap c]   -- ^ Subrelmaps
     } deriving (Show)
 
-{-| Constructor of relmap operator 'C.Relmap'. -}
+{-| Constructor of relmap operator -}
 type RopCons c = RopUse c -> B.Ab (C.Relmap c)
 
 
@@ -51,42 +50,22 @@ type RopCons c = RopUse c -> B.Ab (C.Relmap c)
 -- ----------------------  Relmap
 
 {-| Retrieve relation from dataset. -}
-relmapSource
-    :: RopUse c      -- ^ Use of operator
-    -> String        -- ^ Operator name
-    -> [String]      -- ^ List of term names
-    -> (C.Relmap c)  -- ^ Result relmap
-relmapSource use = C.RelmapSource $ ropHalf use
+relmapSource :: RopUse c -> B.JudgePattern -> [B.Termname] -> (C.Relmap c)
+relmapSource = C.RelmapSource . ropHalf
 
 {-| Constant relmap. -}
-relmapConst
-    :: RopUse c      -- ^ Use of operator
-    -> String        -- ^ Operator name
-    -> B.Rel c       -- ^ Constant relation
-    -> C.Relmap c    -- ^ Result relmap
-relmapConst use = C.RelmapConst $ ropHalf use
+relmapConst :: RopUse c -> B.Rel c -> C.Relmap c
+relmapConst = C.RelmapConst . ropHalf
 
-{-| Alias relmap. -}
+{-| Alias for relmap. -}
 relmapAlias :: RopUse c -> C.Relmap c -> C.Relmap c
-relmapAlias use = C.RelmapAlias $ ropHalf use
+relmapAlias = C.RelmapAlias . ropHalf
 
 {-| Make a non-confluent relmap. -}
-relmapCalc
-    :: RopUse c          -- ^ Use of operator
-    -> String            -- ^ Operator name
-    -> C.RelmapRelfy c   -- ^ Calculation of operation
-    -> C.Relmap c        -- ^ Result relmap
-relmapCalc use op relfy = relmapConfl use op relfy []
-
-relmapRelfy :: RopUse c -> String -> (B.Relhead -> B.Ab (C.Relfy c)) -> C.Relmap c
-relmapRelfy use name f = relmapCalc use name $ const f
+relmapCalc :: RopUse c -> C.RelmapCalcRelfy c -> C.Relmap c
+relmapCalc use relfy = relmapConfl use (const relfy) []
 
 {-| Make a confluent relmap. -}
-relmapConfl
-    :: RopUse c          -- ^ Use of operator
-    -> String            -- ^ Operator name
-    -> C.RelmapRelfy c   -- ^ Calculation of operation
-    -> [C.Relmap c]      -- ^ Subrelmaps
-    -> C.Relmap c        -- ^ Result relmap
-relmapConfl use = C.RelmapCalc $ ropHalf use
+relmapConfl :: RopUse c -> C.RelmapConflRelfy c -> [C.Relmap c] -> C.Relmap c
+relmapConfl = C.RelmapCalc . ropHalf
 

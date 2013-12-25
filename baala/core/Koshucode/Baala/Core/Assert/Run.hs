@@ -34,29 +34,29 @@ runRelmapViaRelfy
     -> B.Rel c
     -> B.Ab (B.Rel c)
 runRelmapViaRelfy sel m (B.Rel h1 b1) =
-    do C.Relfy h2 f2 <- relmapRelfy sel m h1
+    do C.Relfy h2 f2 <- specialize sel m h1
        case C.relfy f2 b1 of
          Right b2 -> Right $ B.Rel h2 b2
          Left (B.AbortCalc _ a) -> Left $ B.AbortCalc [C.relmapOpToken m] a
          Left a -> Left a
 
-relmapRelfy
+specialize
     :: C.RelSelect c
     -> C.Relmap c
     -> B.Relhead
     -> B.Ab (C.Relfy c)
-relmapRelfy sel = (<$>) where
-    C.RelmapSource _ p ns  <$> _  = Right $ C.relfyConst (sel p ns)
-    C.RelmapConst  _ _ r   <$> _  = Right $ C.relfyConst r
-    C.RelmapAlias  _ m     <$> h1 = m <$> h1
-    C.RelmapName h op      <$> _  = left h $ B.AbortAnalysis [] $ B.AAUnkRelmap op
+specialize sel = (<$>) where
+    C.RelmapSource _ p ns <$> _  = Right $ C.relfyConst (sel p ns)
+    C.RelmapConst  _ r    <$> _  = Right $ C.relfyConst r
+    C.RelmapAlias  _ m    <$> h1 = m <$> h1
+    C.RelmapName h op     <$> _  = left h $ B.AbortAnalysis [] $ B.AAUnkRelmap op
 
-    C.RelmapAppend m1 m2   <$> h1 =
+    C.RelmapAppend m1 m2  <$> h1 =
         do relfy2 <- m1 <$> h1
            relfy3 <- m2 <$> C.relfyHead relfy2
            Right $ M.mappend relfy2 relfy3
 
-    C.RelmapCalc h _ mk ms <$> h1 =
+    C.RelmapCalc h mk ms <$> h1 =
         do subrelfy <- (<$> h1) `mapM` ms
            case mk subrelfy h1 of
              Right relfy2 -> Right relfy2

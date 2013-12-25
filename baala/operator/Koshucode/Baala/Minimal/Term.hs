@@ -27,8 +27,7 @@ ropConsPick use =
      Right $ relmapPick use ns
 
 relmapPick :: (Ord c) => C.RopUse c -> [B.Termname] -> C.Relmap c
-relmapPick use ns = C.relmapCalc use "pick" fy where
-    fy _ = relfyPick ns
+relmapPick use ns = C.relmapCalc use $ relfyPick ns
 
 relfyPick
     :: [B.Termname]        -- ^ Names of picking terms
@@ -46,8 +45,7 @@ ropConsCut use =
      Right $ relmapCut use ns
 
 relmapCut :: (Ord c) => C.RopUse c -> [B.Termname] -> C.Relmap c
-relmapCut use ns = C.relmapCalc use "cut" fy where
-    fy _ = relfyCut ns
+relmapCut use ns = C.relmapCalc use $ relfyCut ns
 
 relfyCut
     :: [B.Termname]        -- ^ Names of cutting terms
@@ -84,8 +82,7 @@ ropConsRename use =
      Right $ relmapRename use np
 
 relmapRename :: C.RopUse c -> [(B.Termname, B.Termname)] -> C.Relmap c
-relmapRename use np = C.relmapCalc use "rename" fy where
-    fy _ = relfyRename np
+relmapRename use np = C.relmapCalc use $ relfyRename np
 
 {-| Change terms names -}
 relfyRename

@@ -33,7 +33,7 @@ ropConsId use = Right $ relmapId use
 
 {-| Identity mapping, i.e., do nothing. -}
 relmapId :: C.RopUse c -> C.Relmap c
-relmapId use = C.relmapCalc use "id" C.relfyId where
+relmapId use = C.relmapCalc use C.relfyId
 
 -- ----------------------  empty
 
@@ -41,8 +41,7 @@ ropConsEmpty :: C.RopCons c
 ropConsEmpty use = Right $ relmapEmpty use
 
 relmapEmpty :: C.RopUse c -> C.Relmap c
-relmapEmpty use = C.relmapCalc use "empty" fy where
-    fy _ = relfyEmpty
+relmapEmpty use = C.relmapCalc use relfyEmpty
 
 {-| Throw away all tuples in a relation. -}
 relfyEmpty :: B.Relhead -> B.Ab (C.Relfy c)
@@ -56,8 +55,7 @@ ropConsContents use =
        Right $ relmapContents use n
 
 relmapContents :: C.RopUse c -> B.Termname -> C.Relmap c
-relmapContents use n = C.relmapCalc use "contents" fy where
-    fy _ = relfyContents n
+relmapContents use n = C.relmapCalc use $ relfyContents n
 
 relfyContents :: B.Termname -> B.Relhead -> B.Ab (C.Relfy c)
 relfyContents n _ = Right $ C.Relfy h2 (C.RelfyFull True f) where
@@ -67,7 +65,7 @@ relfyContents n _ = Right $ C.Relfy h2 (C.RelfyFull True f) where
 -- ----------------------  reldee & reldum
 
 ropConsReldee, ropConsReldum :: C.RopCons c
-ropConsReldee use = Right $ C.relmapConst use "reldee" B.reldee
-ropConsReldum use = Right $ C.relmapConst use "reldum" B.reldum
+ropConsReldee use = Right $ C.relmapConst use B.reldee
+ropConsReldum use = Right $ C.relmapConst use B.reldum
 
 

@@ -4,7 +4,8 @@ module Koshucode.Baala.Core.Relmap.Relfy
 ( 
   Relfy (..),
   RelfyBody (..),
-  RelmapRelfy,
+  RelmapCalcRelfy,
+  RelmapConflRelfy,
   relfyConst,
   relfyId,
   relfy,
@@ -61,16 +62,19 @@ instance Monoid.Monoid (RelfyBody c) where
     mempty      = relfyBodyId
     mappend x y = RelfyAppend x y
 
-type RelmapRelfy c
+type RelmapConflRelfy c
     =  [(Relfy c)]      -- ^ Relfiers of subrelmaps
-    -> B.Relhead        -- ^ Heading of input relation
+    -> RelmapCalcRelfy c
+
+type RelmapCalcRelfy c
+    =  B.Relhead        -- ^ Heading of input relation
     -> B.Ab (Relfy c)   -- ^ Relfier for output relation
 
 relfyConst :: B.Rel c -> Relfy c
 relfyConst (B.Rel h b) = Relfy h (RelfyConst b)
 
-relfyId :: RelmapRelfy c
-relfyId _ h = Right (Relfy h relfyBodyId)
+relfyId :: RelmapCalcRelfy c
+relfyId h = Right (Relfy h relfyBodyId)
 
 relfyBodyId :: RelfyBody c
 relfyBodyId = RelfyOneToOne False id

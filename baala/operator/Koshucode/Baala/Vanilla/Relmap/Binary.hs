@@ -26,7 +26,7 @@ ropConsMaybe use =
        Right $ relmapMaybe use m
 
 relmapMaybe :: (Ord c, C.CNil c) => C.RopUse c -> B.Map (C.Relmap c)
-relmapMaybe use m = C.relmapConfl use "maybe" fy [m] where
+relmapMaybe use m = C.relmapConfl use fy [m] where
     fy [r2] = relfyMaybe r2
     fy _    = B.bug
 
@@ -71,7 +71,7 @@ ropConsFull use =
 {-| like SQL's full join -}
 relmapFull :: (Ord c, C.CNil c) => C.RopUse c
            -> C.Relmap c -> C.Relmap c -> C.Relmap c
-relmapFull use m1 m2 = C.relmapConfl use "full" fy [m1, m2] where
+relmapFull use m1 m2 = C.relmapConfl use fy [m1, m2] where
     fy [r1, r2] = relfyFull r1 r2
     fy _ = B.bug
 
@@ -101,7 +101,7 @@ ropConsGroup use =
      Right $ relmapGroup use n m
 
 relmapGroup :: (Ord c, C.CRel c) => C.RopUse c -> String -> B.Map (C.Relmap c)
-relmapGroup use n m = C.relmapConfl use "group" fy [m] where
+relmapGroup use n m = C.relmapConfl use fy [m] where
     fy [r2] = relfyGroup n r2
     fy _    = B.bug
 

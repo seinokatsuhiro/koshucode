@@ -36,11 +36,11 @@ data Relmap c
     -- | Retrieve a relation from a dataset
     = RelmapSource C.HalfRelmap B.JudgePattern [B.Termname]
     -- | Constant relation
-    | RelmapConst  C.HalfRelmap String (B.Rel c)
+    | RelmapConst  C.HalfRelmap (B.Rel c)
     -- | Equavalent relmap
     | RelmapAlias  C.HalfRelmap (Relmap c)
     -- | Relmap that maps relations to a relation
-    | RelmapCalc   C.HalfRelmap String (C.RelmapRelfy c) [Relmap c]
+    | RelmapCalc   C.HalfRelmap (C.RelmapConflRelfy c) [Relmap c]
     -- | Connect two relmaps
     | RelmapAppend (Relmap c) (Relmap c)
     -- | Relmap reference
@@ -54,39 +54,36 @@ instance Show (Relmap c) where
     show = showRelmap
 
 showRelmap :: Relmap c -> String
-showRelmap = sh where
-    sh (RelmapSource _ n xs)     = "RelmapSource " ++ show n ++ " " ++ show xs
-    sh (RelmapConst  _ n _)      = "RelmapConst "  ++ show n ++ " _"
-    sh (RelmapAlias  _ m)        = "RelmapAlias "  ++ show m
-    sh (RelmapCalc   _ n _ subs) = "RelmapCalc "   ++ show n ++ " _" ++ joinSubs subs
-    sh (RelmapAppend m1 m2)      = "RelmapAppend"  ++ joinSubs [m1, m2]
-    sh (RelmapName _ n)          = "RelmapName "   ++ show n
+showRelmap r = sh r where
+    sh (RelmapSource _ p xs)  = "RelmapSource " ++ show p ++ " " ++ show xs
+    sh (RelmapConst  _ _)     = "RelmapConst "  ++ show (B.name r) ++ " _"
+    sh (RelmapAlias  _ r2)    = "RelmapAlias "  ++ show r2
+    sh (RelmapCalc  _ _ rs)   = "RelmapCalc "   ++ show (B.name r) ++ " _" ++ joinSubs rs
+    sh (RelmapAppend r1 r2)   = "RelmapAppend"  ++ joinSubs [r1, r2]
+    sh (RelmapName _ n)       = "RelmapName "   ++ show n
 
     joinSubs = concatMap sub
-    sub m = " (" ++ sh m ++ ")"
+    sub r2 = " (" ++ sh r2 ++ ")"
 
 instance Monoid.Monoid (Relmap c) where
-    mempty  = RelmapCalc halfid "id" C.relfyId []
+    mempty  = RelmapCalc halfid (const C.relfyId) []
     mappend = RelmapAppend
 
 halfid :: C.HalfRelmap
 halfid = C.HalfRelmap "id" (B.tokenWord "id") [("operand", [])] []
 
--- relid :: RelmapSub c
--- relid _ = Right
-
 instance B.Name (Relmap c) where
     name (RelmapSource _ _ _)   = "source"
-    name (RelmapConst  _ n _)   = n
-    name (RelmapCalc   _ n _ _) = n
+    name (RelmapConst  h _)     = C.halfOpText h
+    name (RelmapCalc   h _ _)   = C.halfOpText h
     name (RelmapAppend _ _)     = "append"
     name _ = undefined
 
 instance B.Pretty (Relmap c) where
     doc (RelmapSource h _ _)   = B.doc h
-    doc (RelmapConst  h _ _)   = B.doc h
+    doc (RelmapConst  h _)     = B.doc h
     doc (RelmapAlias  h _)     = B.doc h
-    doc (RelmapCalc   h _ _ _) = B.doc h -- hang (text $ name m) 2 (doch (map doc ms))
+    doc (RelmapCalc   h _ _)   = B.doc h -- hang (text $ name m) 2 (doch (map doc ms))
     doc (RelmapAppend m1 m2)   = B.docHang (B.doc m1) 2 (docRelmapAppend m2)
     doc (RelmapName   _ n)     = B.doc n
 
@@ -101,9 +98,9 @@ docRelmapAppend = B.docv . map pipe . relmapAppendList where
 relmapHalf :: Relmap c -> Maybe C.HalfRelmap
 relmapHalf = half where
     half (RelmapSource h _ _)   = Just h
-    half (RelmapConst  h _ _)   = Just h
+    half (RelmapConst  h _)     = Just h
     half (RelmapAlias  h _)     = Just h
-    half (RelmapCalc   h _ _ _) = Just h
+    half (RelmapCalc   h _ _)   = Just h
     half (RelmapAppend m1 _)    = relmapHalf m1
     half _                      = Nothing
 
@@ -126,9 +123,9 @@ relmapNameList = relmapList f where
 
 relmapList :: B.Map (Relmap c -> [a])
 relmapList f = loop where
-    loop (RelmapAlias _ m1)     = loop m1
-    loop (RelmapAppend m1 m2)   = loop m1 ++ loop m2
-    loop (RelmapCalc _ _ _ ms)  = concatMap loop ms
+    loop (RelmapAlias _ m1)   = loop m1
+    loop (RelmapAppend m1 m2) = loop m1 ++ loop m2
+    loop (RelmapCalc _ _ ms)  = concatMap loop ms
     loop m = f m
 
 {-| Expand 'RelmapAppend' to list of 'Relmap' -}
@@ -152,7 +149,7 @@ relmapLinker' :: [B.Named (Relmap c)] -> B.Map (Relmap c)
 relmapLinker' ms' = link where
     link (RelmapAlias h m)     = RelmapAlias h (link m)
     link (RelmapAppend m1 m2)  = RelmapAppend (link m1) (link m2)
-    link (RelmapCalc h n g ms) = RelmapCalc h n g $ map link ms
+    link (RelmapCalc h g ms) = RelmapCalc h g $ map link ms
     link m@(RelmapName _ n)    = case lookup n ms' of
                                    Just m' -> m'
                                    Nothing -> m

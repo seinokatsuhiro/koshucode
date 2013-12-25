@@ -26,7 +26,7 @@ ropConsSome use =
        Right $ relmapSome use m
 
 relmapSome :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
-relmapSome use m = C.relmapConfl use "some" fy [m] where
+relmapSome use m = C.relmapConfl use fy [m] where
     fy [r2] = relfySome r2
     fy _    = B.bug
 
@@ -42,7 +42,7 @@ ropConsNone use =
        Right $ relmapNone use m
 
 relmapNone :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
-relmapNone use m = C.relmapConfl use "none" fy [m] where
+relmapNone use m = C.relmapConfl use fy [m] where
     fy [r2] = relfyNone r2
     fy _    = B.bug
 
@@ -72,7 +72,7 @@ ropConsSub use =
        Right $ relmapSub use m
 
 relmapSub :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
-relmapSub use m = C.relmapConfl use "sub" fy [m] where
+relmapSub use m = C.relmapConfl use fy [m] where
     fy [r2] = relfySub r2
     fy _    = B.bug
 

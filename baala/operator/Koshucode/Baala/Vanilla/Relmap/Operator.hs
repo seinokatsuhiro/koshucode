@@ -30,7 +30,7 @@ vanillaRops = Rop.ropList "vanilla"
     , ( "member /N /N"         , Rop.ropConsMember        , C.operandEnum    ["-1", "-2"] [] )
     , ( "prefix /P /N ..."     , Rop.ropConsPrefix        , C.operandOneList "-prefix" "-term" [] )
     , ( "prefix-change /P /Q"  , Rop.ropConsPrefixChange  , C.operandTwo     "-new" "-old" [] )
-    , ( "range"                , Rop.ropConsRange         , C.operandOne     "-term"   [] )
+    , ( "range"                , Rop.ropConsRange         , C.operandOne     "-term"   ["-from", "-to"] )
     , ( "rank"                 , Rop.ropConsRank          , C.operandOne     "-add"    ["-order"] )
     , ( "rdf P /S /O"          , Rop.ropConsRdf           , C.operandOneList "-pattern" "-term" [] )
     , ( "size /N"              , Rop.ropConsSize          , C.operandOne     "-term"   [] )

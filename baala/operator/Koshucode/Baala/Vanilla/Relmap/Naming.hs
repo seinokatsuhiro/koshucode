@@ -26,8 +26,7 @@ ropConsPrefix use =
        Right $ relmapPrefix use pre ns
 
 relmapPrefix :: C.RopUse c -> String -> [String] -> C.Relmap c
-relmapPrefix use pre ns = C.relmapCalc use "prefix" fy where
-    fy _ = relfyPrefix pre ns
+relmapPrefix use pre ns = C.relmapCalc use $ relfyPrefix pre ns
 
 {-| Add prefix to specified terms. -}
 relfyPrefix
@@ -54,8 +53,7 @@ ropConsUnprefix use =
        Right $ relmapUnprefix use pre
 
 relmapUnprefix :: C.RopUse c -> String -> C.Relmap c
-relmapUnprefix use pre = C.relmapCalc use "unprefix" fy where
-    fy _ = relfyUnprefix pre
+relmapUnprefix use pre = C.relmapCalc use $ relfyUnprefix pre
 
 {-| Remove prefix -}
 relfyUnprefix
@@ -82,9 +80,7 @@ ropConsPrefixChange use =
        Right $ relmapPrefixChange use new old
 
 relmapPrefixChange :: C.RopUse c -> String -> String -> C.Relmap c
-relmapPrefixChange use new old =
-    C.relmapCalc use "prefix-change" fy
-     where fy _ = relfyPrefixChange new old
+relmapPrefixChange use new old = C.relmapCalc use $ relfyPrefixChange new old
 
 {-| Change prefix -}
 relfyPrefixChange

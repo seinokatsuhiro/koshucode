@@ -54,12 +54,12 @@ elemRelmap relmap = name : f relmap where
                [ "/pat"   -:- C.putText p
                , "/terms" -:- C.putTextSet xs ]
 
-    f (C.RelmapAppend r1 r2)     =  f r1 ++ f r2
-    f (C.RelmapAlias  _ r1)      =  f r1
-    f (C.RelmapSource _ p xs)    =  [ rop "source", src p xs ]
-    f (C.RelmapName   _ n)       =  [ ref n ]
-    f (C.RelmapCalc   _ n _ rs)  =  rop n : concatMap f rs
-    f (C.RelmapConst  _ n _)     =  [ rop n ]
+    f (C.RelmapAppend r1 r2)   =  f r1 ++ f r2
+    f (C.RelmapAlias  _ r1)    =  f r1
+    f (C.RelmapSource _ p xs)  =  [ rop "source", src p xs ]
+    f (C.RelmapName   _ n)     =  [ ref n ]
+    f (C.RelmapCalc   _ _ rs)  =  rop (B.name relmap) : concatMap f rs
+    f (C.RelmapConst  _ _)     =  [ rop (B.name relmap) ]
 
 -- ------------------------------------------------------------------
 {- $Pattern
