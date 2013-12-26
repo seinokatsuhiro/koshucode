@@ -52,7 +52,7 @@ type LitOperators c = [B.Named (Literalize c -> LitTrees c)]
     internal form of content. -}
 litContentBy :: (C.CContent c) => LitOperators c -> Literalize c
 litContentBy ops = lit where
-    lit (B.TreeB typ xs) = case typ of
+    lit (B.TreeB typ _ xs) = case typ of
           1  ->  paren xs
           2  ->  fmap C.putList    $ litList    lit xs
           3  ->  fmap C.putSet     $ litList    lit xs
@@ -155,7 +155,7 @@ litList _   [] = Right []
 litList lit cs = mapM lt $ B.divideTreesByColon cs where
     lt []  = Right C.nil
     lt [x] = lit x
-    lt xs  = lit $ B.TreeB 1 xs
+    lt xs  = lit $ B.TreeB 1 Nothing xs
 
 litRel :: (C.CContent c) => Literalize c -> LitTrees (B.Rel c)
 litRel lit cs =

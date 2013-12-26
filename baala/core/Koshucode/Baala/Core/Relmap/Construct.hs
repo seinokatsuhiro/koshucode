@@ -51,13 +51,14 @@ type RelmapConsHalf
 makeConsHalf :: [B.Named (String, C.RopFullSorter)] -> RelmapConsHalf
 makeConsHalf halfs = consHalf where
     consHalf :: RelmapConsHalf
-    consHalf tree =
-        case B.divideTreesByBar tree of
-          [(B.TreeL tok@(B.TWord _ 0 _) : opd)] -> find tok opd
-          [[B.TreeB 1 tree2]] -> consHalf tree2
-          [[B.TreeB _ _]]     -> Left $ B.AbortAnalysis [] $ B.AAUndefined "bracket"
-          [_]                 -> Left $ B.AbortAnalysis [] $ B.AAUnkRelmap "?"
-          tree2               -> find (B.tokenWord "|") $ map B.treeWrap tree2
+    consHalf trees =
+        let toks = B.front $ B.untrees trees
+        in case B.divideTreesByBar trees of
+             [(B.TreeL tok@(B.TWord _ 0 _) : opd)] -> find tok opd
+             [[B.TreeB 1 _ xs]] -> consHalf xs
+             [[B.TreeB _ _ _]]  -> Left $ B.AbortAnalysis toks $ B.AAUndefined "bracket"
+             [_]                -> Left $ B.AbortAnalysis toks $ B.AAUnkRelmap "?"
+             tree2              -> find (B.tokenWord "|") $ map B.treeWrap tree2
 
     find :: B.Token -> [B.TokenTree] -> B.Ab C.HalfRelmap
     find tok opd =

@@ -38,7 +38,7 @@ type TokenTree = B.CodeTree B.Token
     Blank tokens and comments are excluded.
 
     There are four types of parens -- 1, 2, 3, or 4.
-    Paren type is in 'TreeB' /type/ /subtrees/.
+    Paren type is in 'TreeB' /type/ /parens/ /subtrees/.
 
     1. Round parens @( .. )@ for grouping.
 
@@ -52,20 +52,20 @@ tokenTrees :: [B.Token] -> [TokenTree]
 tokenTrees = map (B.undouble (== 0)) . B.trees parenType . B.sweepToken
 
 treesTokens :: [TokenTree] -> [B.Token]
-treesTokens = B.untrees typeParen
+treesTokens = B.untrees
 
 treeTokens :: TokenTree -> [B.Token]
-treeTokens = B.untree typeParen
+treeTokens = B.untree
 
-typeParen :: B.ParenType -> (B.Token, B.Token)
-typeParen = o where
-    o 1   =  p  "("   ")"
-    o 2   =  p  "["   "]"
-    o 3   =  p  "{"   "}"
-    o 4   =  p  "<|"  "|>"
-    o 5   =  p  "{|"  "|}"
-    o _   =  p  "?"   "?"
-    p a b =  ( B.TOpen B.tokenPosZero a, B.TClose B.tokenPosZero b )
+-- typeParen :: B.ParenType -> (B.Token, B.Token)
+-- typeParen = o where
+--     o 1   =  p  "("   ")"
+--     o 2   =  p  "["   "]"
+--     o 3   =  p  "{"   "}"
+--     o 4   =  p  "<|"  "|>"
+--     o 5   =  p  "{|"  "|}"
+--     o _   =  p  "?"   "?"
+--     p a b =  ( B.TOpen B.tokenPosZero a, B.TClose B.tokenPosZero b )
 
 parenType :: B.GetParenType B.Token
 parenType = B.parenTable
@@ -84,9 +84,9 @@ tt s = tokenTrees $ B.tokens (B.ResourceText s) s
 ttDoc :: [TokenTree] -> B.Doc
 ttDoc = dv where
     dv = B.docv . map d
-    d (B.TreeL x)     = B.doc "TreeL :" B.<+> B.doc x
-    d (B.TreeB p xs2) = let treeB = (B.doch ["TreeB", show p])
-                        in P.hang treeB 2 (dv xs2)
+    d (B.TreeL x)       = B.doc "TreeL :" B.<+> B.doc x
+    d (B.TreeB p _ xs2) = let treeB = (B.doch ["TreeB", show p])
+                          in P.hang treeB 2 (dv xs2)
 
 
 

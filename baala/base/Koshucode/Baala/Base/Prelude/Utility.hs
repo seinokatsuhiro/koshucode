@@ -14,6 +14,7 @@ module Koshucode.Baala.Base.Prelude.Utility
   maybePairs,
 
   -- * List
+  front,
   unique,
   unionUp,
   singleton,
@@ -74,6 +75,10 @@ maybePairs _        = Nothing
 
 
 -- ----------------------  List
+
+front :: [a] -> [a]
+front [] = []
+front (x : _) = [x]
 
 {-| Remove duplicate elements. -}
 unique :: (Ord a) => [a] -> [a]

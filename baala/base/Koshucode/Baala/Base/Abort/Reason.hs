@@ -27,7 +27,6 @@ module Koshucode.Baala.Base.Abort.Reason
 ) where
 
 import qualified Koshucode.Baala.Base.Prelude       as B
-import qualified Koshucode.Baala.Base.Syntax        as B
 import qualified Koshucode.Baala.Base.Token         as B
 import qualified Koshucode.Baala.Base.Abort.Utility as B
 
@@ -46,10 +45,10 @@ type AbMap b = b -> Ab b
 
 {-| Abort reasons -}
 data AbortReason
-    = AbortIO                     AbortIO
-    | AbortSyntax   [B.TokenLine] AbortSyntax
-    | AbortAnalysis [B.Token]     AbortAnalysis
-    | AbortCalc     [B.Token]     AbortCalc
+    = AbortIO                 AbortIO
+    | AbortSyntax   [B.Token] AbortSyntax
+    | AbortAnalysis [B.Token] AbortAnalysis
+    | AbortCalc     [B.Token] AbortCalc
       deriving (Show, Eq, Ord)
 
 instance B.Name AbortReason where
@@ -76,7 +75,7 @@ instance B.AbortReasonClass AbortReason where
     abortDetail (AbortAnalysis _ a)  =  B.abortDetail a
     abortDetail (AbortCalc     _ a)  =  B.abortDetail a
 
-    abortClause (AbortSyntax   src _) = map B.lineNumberContent src
+    abortClause (AbortSyntax   src _) = concatMap tokenSource src
     abortClause _ = []
 
     abortRelmap (AbortAnalysis ts _) = concatMap tokenSource ts

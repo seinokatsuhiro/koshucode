@@ -66,7 +66,7 @@ getTrees :: RopGet c [B.TokenTree]
 getTrees use = (operand use B.<!!>)
 
 getTree :: RopGet c B.TokenTree
-getTree use n = Right . B.TreeB 1 =<< getTrees use n
+getTree use n = Right . B.TreeB 1 Nothing =<< getTrees use n
 
 getTermTrees :: RopGet c [B.Named B.TokenTree]
 getTermTrees use n = getTrees use n >>= termTreePairs

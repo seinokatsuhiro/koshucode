@@ -50,11 +50,11 @@ binaryTree :: (Show a)
     -> B.CodeTree a         -- ^ Prefixed tree
 binaryTree ht tree1 = B.undouble (== 1) $ binaryHeightMap loop ht tree1 where
     loop tree2@(B.TreeL _)    = tree2
-    loop tree2@(B.TreeB n xs) =
+    loop tree2@(B.TreeB n pp xs) =
         case binaryPos $ heightList tree2 of
-          Right p | p <= 0 -> B.TreeB n $ map loop xs
+          Right p | p <= 0 -> B.TreeB n pp $ map loop xs
           Right p -> let (left, r:ight) = splitAt p xs
-                     in  B.TreeB n $
+                     in  B.TreeB n pp $
                          if null ight
                          then [r, sub n left]
                          else [r, sub n left, sub n ight]
@@ -63,7 +63,7 @@ binaryTree ht tree1 = B.undouble (== 1) $ binaryHeightMap loop ht tree1 where
                          ++ show (xs !! q)
 
     sub _ [x] = loop x
-    sub n xs  = loop $ B.TreeB n xs
+    sub n xs  = loop $ B.TreeB n Nothing xs
 
 -- e0 = heightTable [(Left 5, "="), (Right 3, "+-"), (Left 3, "*/")]
 -- e1 = map TreeL
@@ -75,9 +75,9 @@ binaryTree ht tree1 = B.undouble (== 1) $ binaryHeightMap loop ht tree1 where
 -- e7 = e2 (TreeB 0 $ e1 "1+2*3")
 
 heightList :: B.CodeTree (BinaryHeight, a) -> [BinaryHeight]
-heightList (B.TreeB _ xs) = map f xs where
+heightList (B.TreeB _ _ xs) = map f xs where
     f (B.TreeL (ht, _)) = ht
-    f (B.TreeB _ _)     = Left 0
+    f (B.TreeB _ _ _)   = Left 0
 heightList _ = undefined
 
 binaryPos :: [BinaryHeight] -> Either (Int, Int) Int

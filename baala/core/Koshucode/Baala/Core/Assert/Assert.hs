@@ -35,7 +35,7 @@ data Assert c = Assert
     , assertPattern :: B.JudgePattern  -- ^ Pattern of judgement
     , assertOption  :: AssertOption    -- ^ Assert option
     , assertRelmap  :: C.Relmap c      -- ^ Relmap
-    , assertSource  :: [B.TokenLine]   -- ^ Source code information
+    , assertSource  :: [B.Token]       -- ^ Source code information
     } deriving (Show)
 
 {-| Option for assertions. -}
@@ -75,7 +75,7 @@ assertText AssertViolate  = "violate"
 -- ----------------------  Constructor
 
 affirm, deny :: B.JudgePattern -> AssertOption
-             -> C.Relmap c -> [B.TokenLine] -> Assert c
+             -> C.Relmap c -> [B.Token] -> Assert c
 
 {-| Make affirmed assertion. -}
 affirm = Assert AssertAffirm

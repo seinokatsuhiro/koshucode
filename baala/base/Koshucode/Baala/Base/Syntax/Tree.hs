@@ -16,7 +16,6 @@ module Koshucode.Baala.Base.Syntax.Tree
   -- * Paren table
   ParenType,
   GetParenType,
-  GetTypeParen,
   parenTable
 ) where
 
@@ -35,18 +34,19 @@ data Paren a
 
 {-| Tree of leaf and branch. -}
 data CodeTree a
-    = TreeL a                  -- ^ Leaf. Terminal of tree.
-    | TreeB ParenType [CodeTree a] -- ^ Branch. Paren-type and subtrees.
+    = TreeL a       -- ^ Leaf. Terminal of tree.
+    | TreeB ParenType (Maybe (a, a)) [CodeTree a] -- ^ Branch. Paren-type and subtrees.
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance Functor CodeTree where
-    fmap f (TreeL x)    = TreeL (f x)
-    fmap f (TreeB n xs) = TreeB n $ map (fmap f) xs
+    fmap f (TreeL x)       = TreeL (f x)
+    fmap f (TreeB n Nothing xs) = TreeB n Nothing $ map (fmap f) xs
+    fmap f (TreeB n (Just (x, y)) xs) = TreeB n (Just (f x, f y)) $ map (fmap f) xs
 
 treeG :: [CodeTree a] -> CodeTree a
-treeG [TreeB 1 xs] = treeG xs
+treeG [TreeB 1 _ xs] = treeG xs
 treeG [x] = x
-treeG xs = TreeB 1 xs
+treeG xs = TreeB 1 Nothing xs
 
 {-| Convert a list of elements to a single tree. -}
 tree :: (Show a) => GetParenType a -> [a] -> CodeTree a
@@ -62,10 +62,10 @@ trees parenType xs = fst $ loop xs 0 where
         -- non paren
         | px == 0  = add (TreeL x) xs2 p
         -- open paren
-        | px > 0   = let (trees2, xs3) = loop xs2 px
-                     in  add (TreeB px trees2) xs3 p
+        | px > 0   = let (trees2, c : xs3) = loop xs2 px
+                     in  add (TreeB px (Just (x, c)) trees2) xs3 p
         -- close paren
-        | px < 0 && px == -p = ([], xs2)
+        | px < 0 && px == -p = ([], x : xs2)
         -- unknown token
         | otherwise = error $ "mismatched paren: " ++ show x
 
@@ -77,32 +77,33 @@ trees parenType xs = fst $ loop xs 0 where
 
 treeWrap :: [CodeTree a] -> CodeTree a
 treeWrap [x] = x
-treeWrap xs  = TreeB 1 xs
+treeWrap xs  = TreeB 1 Nothing xs
 
 {-| Convert tree to list of tokens. -}
-untrees :: GetTypeParen a -> [CodeTree a] -> [a]
-untrees typeParen = concatMap (untree typeParen)
+untrees :: [CodeTree a] -> [a]
+untrees = concatMap untree
 
 {-| Convert tree to list of tokens. -}
-untree :: GetTypeParen a -> CodeTree a -> [a]
-untree typeParen = loop where
+untree :: CodeTree a -> [a]
+untree = loop where
     loop (TreeL x) = [x]
-    loop (TreeB n xs) =
-        let (open, close) = typeParen n
-        in [open] ++ concatMap loop xs ++ [close]
+    loop (TreeB _ Nothing xs) =
+        concatMap loop xs
+    loop (TreeB _ (Just (open, close)) xs) =
+        open : concatMap loop xs ++ [close]
 
 {-| Simplify tree by removing double parens,
     like @((a))@ to @(a)@.
 
-    >>> undouble (== 0) $ TreeB 0 [TreeB 0 [TreeL "A", TreeL "B"]]
-    TreeB 0 [TreeL "A", TreeL "B"]
+    >>> undouble (== 0) $ TreeB 0 Nothing [TreeB 0 Nothing [TreeL "A", TreeL "B"]]
+    TreeB 0 Nothing [TreeL "A", TreeL "B"]
   -}
 undouble :: B.Pred ParenType -> B.Map (CodeTree a)
 undouble p = loop where
-    loop (TreeB n xs) | p n =
+    loop (TreeB n pp xs) | p n =
         case map loop xs of
           [x] -> x
-          xs2 -> TreeB n xs2
+          xs2 -> TreeB n pp xs2
     loop x = x
 
 -- e1 = TreeB 2 [TreeB 1 [TreeB 0 [TreeL 0]]]
@@ -117,9 +118,6 @@ type ParenType = Int
 
 {-| Get a paren type. -}
 type GetParenType a = a -> ParenType
-
-{-| Get parens from a type. -}
-type GetTypeParen a = ParenType -> (a, a)
 
 {-| Make 'GetParenType' functions
     from a type-open-close table.

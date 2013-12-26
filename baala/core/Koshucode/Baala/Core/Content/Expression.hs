@@ -32,11 +32,11 @@ formCox cops = form where
         _              ->  B.bug
 
     -- parend unquoted word and its arguments
-    form (B.TreeB 1 (B.TreeL (B.TWord _ 0 w) : args)) =
+    form (B.TreeB 1 _ (B.TreeL (B.TWord _ 0 w) : args)) =
         case cops w of
           Just cop   ->  call cop args
           Nothing    ->  Left $ B.AbortAnalysis [] $ B.AAUnkCop w
-    form x@(B.TreeB n _)
+    form x@(B.TreeB n _ _)
         | n >  1      =  fmap C.CoxLit $ C.litContent x  -- literal composite
     form x            =  Left $ B.AbortSyntax [] $ B.ASUnkCox (show x) -- unknown
 
