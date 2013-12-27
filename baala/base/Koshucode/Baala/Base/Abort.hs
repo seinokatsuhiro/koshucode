@@ -4,9 +4,11 @@
 
 module Koshucode.Baala.Base.Abort
 ( module Koshucode.Baala.Base.Abort.Reason,
+  module Koshucode.Baala.Base.Abort.EachReason,
   module Koshucode.Baala.Base.Abort.Utility,
 ) where
 
 import Koshucode.Baala.Base.Abort.Reason
+import Koshucode.Baala.Base.Abort.EachReason
 import Koshucode.Baala.Base.Abort.Utility
 

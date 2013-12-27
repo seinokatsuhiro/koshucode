@@ -12,7 +12,6 @@ module Koshucode.Baala.Core.Relmap.Relmap
 
   -- * Selectors
   relmapHalf,
-  relmapOpToken,
   relmapSourceList,
   relmapNameList,
   relmapAppendList,
@@ -91,6 +90,11 @@ docRelmapAppend :: Relmap c -> B.Doc
 docRelmapAppend = B.docv . map pipe . relmapAppendList where
     pipe m = B.doc "|" B.<+> B.doc m
 
+instance B.TokenListing (Relmap c) where
+    tokenListing r = case relmapHalf r of
+                       Nothing -> []
+                       Just h  -> B.tokenListing h
+
 
 
 -- ----------------------  Selector
@@ -103,11 +107,6 @@ relmapHalf = half where
     half (RelmapCalc   h _ _)   = Just h
     half (RelmapAppend m1 _)    = relmapHalf m1
     half _                      = Nothing
-
-relmapOpToken :: Relmap c -> B.Token
-relmapOpToken = f . relmapHalf where
-    f (Nothing) = B.tokenWord "?"
-    f (Just h)  = C.halfOpToken h
 
 {-| List of 'RelmapSource' -}
 relmapSourceList :: Relmap c -> [Relmap c]

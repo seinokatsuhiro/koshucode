@@ -37,8 +37,7 @@ runRelmapViaRelfy sel m (B.Rel h1 b1) =
     do C.Relfy h2 f2 <- specialize sel m h1
        case C.relfy f2 b1 of
          Right b2 -> Right $ B.Rel h2 b2
-         Left (B.AbortCalc _ a) -> Left $ B.AbortCalc [C.relmapOpToken m] a
-         Left a -> Left a
+         Left a   -> Left $ B.abortPushTokenFrom m a
 
 specialize
     :: C.RelSelect c
@@ -62,9 +61,7 @@ specialize sel = (<$>) where
              Right relfy2 -> Right relfy2
              Left a       -> left h a
 
-    left h (B.AbortAnalysis [] a)  = Left $ B.AbortAnalysis [C.halfOpToken h] a
-    left _ (B.AbortAnalysis src a) = Left $ B.AbortAnalysis src a
-    left _ a = Left a
+    left h a = Left $ B.abortPushTokenFrom h a
 
 
 

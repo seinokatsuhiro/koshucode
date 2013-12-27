@@ -34,14 +34,8 @@ class (Show a) => AbortReasonClass a where
     abortDetail  :: a -> [String]
     abortDetail _ = []
 
-    abortExpr    :: a -> [String]
-    abortExpr _   = []
-
-    abortRelmap  :: a -> [String]
-    abortRelmap _ = []
-
-    abortClause  :: a -> [String]
-    abortClause _ = []
+    abortSource  :: a -> [String]
+    abortSource _ = []
 
 
 
@@ -62,13 +56,16 @@ abort a =
      B.putCommentLines ["Exit with status 2", ""]
      Sys.exitWith $ Sys.ExitFailure 2
 
-sandwich :: a -> [a] -> [a]
-sandwich x xs = x : xs ++ [x]
+sandwich :: a -> a -> B.Map [a]
+sandwich open close xs = open : xs ++ [close]
+
+bracket :: B.Map String
+bracket = sandwich '[' ']'
 
 messageLines :: (AbortReasonClass a) => a -> [String]
-messageLines a = sandwich "" $ title : xs where
-    xs    = B.renderTable " " $ B.alignTable $ [rule, rule] : rows
-    title = "ABORTED (" ++ abortSymbol a ++ ")"
+messageLines a = sandwich "" "" xs where
+    xs    = B.renderTable " " $ B.alignTable $ title : [rule, rule] : rows
+    title = [ B.textCell B.Front "ABORTED    ", B.textCell B.Front $ bracket $ abortSymbol a ]
     rule  = B.textRuleCell '-'
     rows  = concatMap row $ messageAssoc a
     row (_, []) = []
@@ -78,12 +75,11 @@ messageLines a = sandwich "" $ title : xs where
 
 messageAssoc :: (AbortReasonClass a) => a -> [(String, [String])]
 messageAssoc a =
-    [ ("Class    " , [abortClass a])
-    , ("Reason"    , [abortReason a])
-    , ("Detail"    , abortDetail a)
-    , ("Expr"      , abortExpr a)
-    , ("Relmap"    , abortRelmap a)
-    , ("Clause"    , abortClause a) ]
+    [ ("Class"    , [abortClass a])
+    , ("Reason"   , [abortReason a])
+    , ("Detail"   , abortDetail a)
+    , ("Source"   , abortSource a)
+    , ("Command"  , []) ]
 
 addAbort :: (AbortReasonClass a) => a -> B.Map (Either a b)
 addAbort _ (Left a) = Left a

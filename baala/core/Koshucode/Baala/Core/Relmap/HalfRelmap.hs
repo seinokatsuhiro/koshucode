@@ -29,6 +29,9 @@ instance B.Pretty HalfRelmap where
           Just xs -> B.doch [op, show xs]
         where op = B.tokenContent opTok
 
+instance B.TokenListing HalfRelmap where
+    tokenListing HalfRelmap { halfOpToken = op } = [op]
+
 halfOpText :: HalfRelmap -> String
 halfOpText = B.tokenContent . halfOpToken
 

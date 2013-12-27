@@ -5,6 +5,7 @@ module Koshucode.Baala.Base.Token.Token
 (
   -- * Token type
   Token (..),
+  TokenListing (..),
   Termname,
   tokenWord,
 
@@ -74,6 +75,8 @@ instance B.Pretty Token where
 tokenWord :: String -> Token
 tokenWord = TWord B.tokenPosZero 0
 
+class TokenListing a where
+    tokenListing :: a -> [Token]
 
 -- ---------------------- Selector
 
