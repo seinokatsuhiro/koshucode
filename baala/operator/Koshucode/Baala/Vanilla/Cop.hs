@@ -3,55 +3,37 @@
 {-| Content formula. -}
 
 module Koshucode.Baala.Vanilla.Cop
-( vanillaContent,
-  vanillaNamedContent,
-  vanillaNamedContents,
+( vanillaCox,
+  vanillaNamedCox,
 ) where
 
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 
-import Koshucode.Baala.Vanilla.Cop.Arith
-import Koshucode.Baala.Vanilla.Cop.List
-import Koshucode.Baala.Vanilla.Cop.Literal
-import Koshucode.Baala.Vanilla.Cop.Logic
-import Koshucode.Baala.Vanilla.Cop.Order
-import Koshucode.Baala.Vanilla.Type
+import qualified Koshucode.Baala.Vanilla.Cop.Arith    as V
+import qualified Koshucode.Baala.Vanilla.Cop.List     as V
+import qualified Koshucode.Baala.Vanilla.Cop.Literal  as V
+import qualified Koshucode.Baala.Vanilla.Cop.Logic    as V
+import qualified Koshucode.Baala.Vanilla.Cop.Order    as V
+import qualified Koshucode.Baala.Vanilla.Type         as V
 
-
-
--- ----------------------
-
-vanillaCop :: C.FindCop VContent
+vanillaCop :: C.FindCop V.VContent
 vanillaCop n = lookup n ops where
-    ops = concat [ copsArith
-                 , copsLogic
-                 , copsList
-                 , copsLiteral
-                 , copsOrder ]
+    ops = concat [ V.copsArith
+                 , V.copsLogic
+                 , V.copsList
+                 , V.copsLiteral
+                 , V.copsOrder ]
 
-vanillaContent
-    :: C.RopUse VContent    -- ^ Source information
-    -> B.TokenTree          -- ^ Token tree of content expression
-    -> B.Ab (C.PosCox VContent) -- ^ Partial content expression
-vanillaContent _ t =
-    case C.formCox vanillaCop $ vanillaBinary t of
-      Right c -> Right $ C.posCox c
-      Left a  -> Left a
+vanillaCox
+    :: B.TokenTree                -- ^ Token tree of content expression
+    -> B.Ab (C.CoxPos V.VContent) -- ^ Partial content expression
+vanillaCox = C.coxPos vanillaCop . vanillaBinary
 
-vanillaNamedContent
-  :: C.RopUse VContent
-  -> B.Named B.TokenTree
-  -> B.Ab (B.Named (C.PosCox VContent))
-vanillaNamedContent use (n, t) =
-    do c <- vanillaContent use t
-       Right (n, c)
-
-vanillaNamedContents
-  :: C.RopUse VContent
-  -> [B.Named B.TokenTree]
-  -> B.Ab [B.Named (C.PosCox VContent)]
-vanillaNamedContents use = mapM (vanillaNamedContent use)
+vanillaNamedCox :: B.Named B.TokenTree -> B.Ab (B.Named (C.CoxPos V.VContent))
+vanillaNamedCox (name, tree) =
+    do cox <- vanillaCox tree
+       Right (name, cox)
 
 {-| Convert infix form to prefix form. -}
 vanillaBinary :: B.Map B.TokenTree

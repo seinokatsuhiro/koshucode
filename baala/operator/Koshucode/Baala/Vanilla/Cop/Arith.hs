@@ -91,11 +91,3 @@ copAbs1 :: Rop.VContent -> B.Ab Rop.VContent
 copAbs1 (Rop.VDec n) = Right . Rop.VDec $ B.decimalAbs n
 copAbs1 _ = Left $ B.abortMalformedOperand "abc"
 
--- let tree = treeG . tokenTrees . tokens
--- let Right e2 = vanillaContent [] $ tree "1 = 1 and 2 = 3"
--- let Right e2 = vanillaContent [] $ tree "(+ (int 1) (int 2) (int 3))"
--- let Right e2 = vanillaContent [] $ tree "(+ 1 2 (+ 3 4 5) 6 7 8 9)"
--- let Right e2 = vanillaContent [] $ tree "1 + 2 + 3 + 4 + 5"
--- let Right e3 = runCox (e2 $ Relhead []) []
--- let Left  e3 = runCox e2 []
-

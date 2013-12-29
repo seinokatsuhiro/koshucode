@@ -4,7 +4,8 @@
 
 module Koshucode.Baala.Core.Content.Operator
 (
-  Cox (..),
+  Cox,
+  CoxCore (..),
   Cop (..),
   CopLitF,
   CopLazyF,
@@ -18,18 +19,20 @@ module Koshucode.Baala.Core.Content.Operator
 
 import qualified Koshucode.Baala.Base as B
 
+type Cox c = B.Sourced (CoxCore c)
+
 {-| Content expressions. -}
-data Cox c
+data CoxCore c
     {-| Literal content. -}
     = CoxLit c
 
     {-| Operator invocation. -}
-    | CoxApp  (Cop c) [Cox c]
+    | CoxApp (Cop c) [Cox c]
 
     {-| Term reference.
         Term names @[String]@ and positions @[Int]@.
-        'formCox' makes positions empty,
-        'posCox' fills it. -}
+        'coxCons' makes positions empty,
+        'coxPos' fills it. -}
     | CoxTerm [String] [Int]
 
     deriving (Show)

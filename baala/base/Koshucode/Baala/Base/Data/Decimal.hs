@@ -211,7 +211,7 @@ decimalQR qr
           d1@(Decimal (n1, den1) p1 a1)
           d2@(Decimal (n2, den2) p2 a2)
     | p1 /= p2     = Left  $ B.AbortCalc [] $ B.ACHeteroDecimal txt1 txt2
-    | n2 == 0      = Left  $ (B.AbortCalc [] B.ACDivideByZero)
+    | n2 == 0      = Left  $ B.AbortCalc [] B.ACDivideByZero
     | otherwise    = Right $ Decimal (n3, 1) p1 a3
     where n3    =  (n1 * den2) `qr` (n2 * den1)
           a3    =  a1 || a2

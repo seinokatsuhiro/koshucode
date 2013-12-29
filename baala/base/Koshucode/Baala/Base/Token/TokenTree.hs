@@ -5,6 +5,7 @@
 module Koshucode.Baala.Base.Token.TokenTree
 (
   -- * Library
+  Sourced (..),
   TokenTree,
   tokenTrees,
   treeTokens,
@@ -30,6 +31,14 @@ import qualified Koshucode.Baala.Base.Token.TokenLine as B
 import qualified Koshucode.Baala.Base.Token.TokenPos  as B
 
 -- ----------------------
+
+data Sourced a =
+    Sourced [B.Token] a
+    deriving (Show, Eq, Ord)
+
+instance Functor Sourced where
+    fmap f (Sourced src x) = Sourced src $ f x
+
 
 {-| Tree of tokens. -}
 type TokenTree = B.CodeTree B.Token

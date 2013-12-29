@@ -89,14 +89,14 @@ abortPushTokenFrom = abortPushToken . B.tokenListing
 abortMalformedOperand :: String -> AbortReason
 abortMalformedOperand s = AbortAnalysis [] $ B.AAMalformedOperand s
 
-abortNotFound :: String -> AbortReason
-abortNotFound key = AbortCalc [] $ B.ACNotFound key
+abortNotFound :: [B.Token] -> String -> AbortReason
+abortNotFound src key = AbortCalc src $ B.ACNotFound key
 
 {-| Lookup association list.
     This function may abort on AbortLookup. -}
 (<!!>) :: [B.Named a] -> String -> Ab a
 (<!!>) assoc key = loop assoc where
-    loop [] = Left $ abortNotFound key
+    loop [] = Left $ abortNotFound [] key
     loop ((k,v) : kvs) | k == key  = Right v
                        | otherwise = loop kvs
 

@@ -22,23 +22,23 @@ import Koshucode.Baala.Vanilla.Cop
 
 ropConsAdd :: C.RopCons VContent
 ropConsAdd use =
-  do ts <- Rop.getTermTrees use "-term"
-     cs <- vanillaNamedContents use ts
-     Right $ relmapAdd use cs
+  do trees <- Rop.getTermTrees use "-term"
+     coxes <- mapM vanillaNamedCox trees
+     Right $ relmapAdd use coxes
 
-relmapAdd :: C.RopUse VContent -> [B.Named (C.PosCox VContent)] -> C.Relmap VContent
+relmapAdd :: C.RopUse VContent -> [B.Named (C.CoxPos VContent)] -> C.Relmap VContent
 relmapAdd use cs = C.relmapCalc use $ relfyAdd cs
 
 -- todo: shared term
 relfyAdd
-    :: [B.Named (C.PosCox VContent)]
+    :: [B.Named (C.CoxPos VContent)]
     -> B.Relhead
     -> B.Ab (C.Relfy VContent)
 relfyAdd xs h1 = Right $ C.Relfy h2 (C.RelfyOneToAbOne False f) where
     ns    = map fst xs  -- term names
     es    = map snd xs  -- term expressions
     h2    = B.mappend (B.headFrom ns) h1
-    f cs1 = do cs2 <- mapM (C.runCoxH h1 cs1) es
+    f cs1 = do cs2 <- mapM (C.coxRun h1 cs1) es
                Right $ cs2 ++ cs1
 
 
@@ -47,22 +47,21 @@ relfyAdd xs h1 = Right $ C.Relfy h2 (C.RelfyOneToAbOne False f) where
 
 ropConsHold :: C.RopCons VContent
 ropConsHold use = do
-  t <- Rop.getTree use "-term"
-  c <- vanillaContent use t
-  Right $ relmapHold use True c
+  tree <- Rop.getTree use "-term"
+  cox  <- vanillaCox tree
+  Right $ relmapHold use True cox
 
-relmapHold :: C.RopUse VContent -> Bool
-           -> (C.PosCox VContent) -> C.Relmap VContent
-relmapHold use b cont = C.relmapCalc use $ relfyHold b cont
+relmapHold :: C.RopUse VContent -> Bool -> (C.CoxPos VContent) -> C.Relmap VContent
+relmapHold use b cox = C.relmapCalc use $ relfyHold b cox
 
 relfyHold
     :: (C.CContent c, Show c)
     => Bool              -- ^ Criterion
-    -> (C.PosCox c)      -- ^ Predicate
+    -> (C.CoxPos c)      -- ^ Predicate
     -> B.Relhead         -- ^ Heading of input relation
     -> B.Ab (C.Relfy c)  -- ^ Relfier for output relation
 relfyHold b cox h1 = Right $ C.Relfy h1 (C.RelfyAbPred p) where
-    p cs = do c <- C.runCoxH h1 cs cox
+    p cs = do c <- C.coxRun h1 cs cox
               case c of
                 x | C.isBool x -> Right $ b == C.getBool x
                 _ -> Left $ B.AbortAnalysis [] $ B.AAReqBoolean (show c)

@@ -40,7 +40,7 @@ copsOrder =
 
 copBy :: (VContent -> VContent -> Bool) -> VCop
 copBy p [x, y] = Right . C.putBool $ x `p` y
-copBy _ _      = Left  $ B.abortNotFound ""
+copBy _ _      = Left  $ B.abortNotFound [] ""
 
 copEq   :: VCop
 copEq   =  copBy (==)
