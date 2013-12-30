@@ -2,17 +2,14 @@
 
 {-| Term calcutation. -}
 
-module Koshucode.Baala.Core.Content.Construct
+module Koshucode.Baala.Core.Content.Cox.Construct
 ( coxPos,
-  --coxCons,
   CoxPos,
-  --coxPos,
 ) where
 
 import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Core.Content.Class     as C
-import qualified Koshucode.Baala.Core.Content.Extension as C
-import qualified Koshucode.Baala.Core.Content.Operator  as C
+import qualified Koshucode.Baala.Core.Content.Literal      as C
+import qualified Koshucode.Baala.Core.Content.Cox.Operator as C
 
 
 {-| Construct content expression. -}

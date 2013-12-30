@@ -54,13 +54,15 @@ library
         Koshucode.Baala.Core.Assert.Run
 
         Koshucode.Baala.Core.Content
-        Koshucode.Baala.Core.Content.Class
-        Koshucode.Baala.Core.Content.Construct
-        Koshucode.Baala.Core.Content.Extension
-        Koshucode.Baala.Core.Content.HashWord
+        Koshucode.Baala.Core.Content.Cox
+        Koshucode.Baala.Core.Content.Cox.Construct
+        Koshucode.Baala.Core.Content.Cox.Operator
+        Koshucode.Baala.Core.Content.Cox.Run
         Koshucode.Baala.Core.Content.Literal
-        Koshucode.Baala.Core.Content.Operator
-        Koshucode.Baala.Core.Content.Run
+        Koshucode.Baala.Core.Content.Literal.Class
+        Koshucode.Baala.Core.Content.Literal.Extension
+        Koshucode.Baala.Core.Content.Literal.HashWord
+        Koshucode.Baala.Core.Content.Literal.Literal
 
         Koshucode.Baala.Core.Relmap
         Koshucode.Baala.Core.Relmap.Construct

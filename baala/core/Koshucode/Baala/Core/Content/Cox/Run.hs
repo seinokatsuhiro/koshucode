@@ -2,15 +2,16 @@
 
 {-| Term calcutation. -}
 
-module Koshucode.Baala.Core.Content.Run
+module Koshucode.Baala.Core.Content.Cox.Run
 ( -- $Process
   coxRun,
 ) where
 
 import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Core.Content.Class     as C
-import qualified Koshucode.Baala.Core.Content.Operator  as C
-import qualified Koshucode.Baala.Core.Content.Construct as C
+import qualified Koshucode.Baala.Core.Content.Literal       as C
+import qualified Koshucode.Baala.Core.Content.Cox.Operator  as C
+import qualified Koshucode.Baala.Core.Content.Cox.Construct as C
+
 
 {-| Calculate content expression. -}
 coxRun
