@@ -21,73 +21,51 @@ import qualified Koshucode.Baala.Core.Assert.Dataset as C
 {-| Calculate 'Relmap' for 'Rel'. -}
 runRelmapDataset
     :: (Ord c, C.CNil c)
-    => C.Dataset c          -- ^ Judges read from @source@ operator
-    -> C.Relmap c           -- ^ Mapping from 'Rel' to 'Rel'
-    -> B.Rel c              -- ^ Input relation
+    => C.Dataset c     -- ^ Judges read from @source@ operator
+    -> C.Relmap c      -- ^ Mapping from 'Rel' to 'Rel'
+    -> B.Rel c         -- ^ Input relation
     -> B.Ab (B.Rel c)  -- ^ Output relation
 runRelmapDataset = runRelmapViaRelfy . C.selectRelation
 
-runRelmapViaRelfy
-    ::  (Ord c)
-    => C.RelSelect c
-    -> C.Relmap c
-    -> B.Rel c
-    -> B.Ab (B.Rel c)
-runRelmapViaRelfy sel m (B.Rel h1 b1) =
-    do C.Relfy h2 f2 <- specialize sel m h1
-       case C.relfy f2 b1 of
-         Right b2 -> Right $ B.Rel h2 b2
-         Left a   -> Left $ B.abortPushTokenFrom m a
+runRelmapViaRelfy :: (Ord c) => C.RelSelect c -> C.Relmap c -> B.AbMap (B.Rel c)
+runRelmapViaRelfy sel r (B.Rel h1 b1) =
+    do C.Relfy h2 f2 <- specialize sel r h1
+       b2 <- C.relfy f2 b1
+       Right $ B.Rel h2 b2
 
-specialize
-    :: C.RelSelect c
-    -> C.Relmap c
-    -> B.Relhead
-    -> B.Ab (C.Relfy c)
+specialize :: C.RelSelect c -> C.Relmap c -> B.Relhead -> B.Ab (C.Relfy c)
 specialize sel = (<$>) where
-    C.RelmapSource _ p ns <$> _  = Right $ C.relfyConst (sel p ns)
+    C.RelmapSource _ p ns <$> _  = Right $ C.relfyConst $ sel p ns
     C.RelmapConst  _ r    <$> _  = Right $ C.relfyConst r
-    C.RelmapAlias  _ m    <$> h1 = m <$> h1
-    C.RelmapName h op     <$> _  = left h $ B.AbortAnalysis [] $ B.AAUnkRelmap op
+    C.RelmapAlias  _ r    <$> h1 = r <$> h1
+    C.RelmapName h op     <$> _  = B.abFrom h $ Left $ B.AbortAnalysis [] $ B.AAUnkRelmap op
 
-    C.RelmapAppend m1 m2  <$> h1 =
-        do relfy2 <- m1 <$> h1
-           relfy3 <- m2 <$> C.relfyHead relfy2
+    C.RelmapAppend r1 r2  <$> h1 =
+        do relfy2 <- r1 <$> h1
+           relfy3 <- r2 <$> C.relfyHead relfy2
            Right $ M.mappend relfy2 relfy3
 
-    C.RelmapCalc h mk ms <$> h1 =
-        do subrelfy <- (<$> h1) `mapM` ms
-           case mk subrelfy h1 of
-             Right relfy2 -> Right relfy2
-             Left a       -> left h a
-
-    left h a = Left $ B.abortPushTokenFrom h a
+    C.RelmapCalc h mk rs <$> h1 =
+        B.abFrom h $ do
+          subrelfy <- (<$> h1) `mapM` rs
+          mk subrelfy h1
 
 
 
 -- ----------------------  Assert
 
 {-| Calculate assertion list. -}
-runAssertJudges
-    :: (Ord c, C.CNil c)
-    => [C.Assert c]          -- ^ Assertion list
-    -> [B.Judge c]           -- ^ Input judges
-    -> B.Ab [B.Judge c] -- ^ Output judges
-runAssertJudges as = runAssertDataset as . C.dataset
+runAssertJudges :: (Ord c, C.CNil c) => [C.Assert c] -> B.AbMap [B.Judge c]
+runAssertJudges asserts = runAssertDataset asserts . C.dataset
 
 {-| Calculate assertion list. -}
-runAssertDataset
-    :: (Ord c, C.CNil c)
-    => [C.Assert c]
-    -> C.Dataset c
-    -> B.Ab [B.Judge c]
-runAssertDataset as ds =
-    do js <- mapM each as
-       return $ concat js
-    where each (C.Assert t pat opt r _) =
-              do r1 <- runRelmapDataset ds r B.reldee
-                 let q = C.assertQuality t
-                 assertOptionProcess q pat opt r1
+runAssertDataset :: (Ord c, C.CNil c) => [C.Assert c] -> C.Dataset c -> B.Ab [B.Judge c]
+runAssertDataset asserts dataset = Right . concat =<< mapM each asserts where
+    each (C.Assert t pat opt r src) =
+        B.ab src $ do
+          r1 <- runRelmapDataset dataset r B.reldee
+          let q = C.assertQuality t
+          assertOptionProcess q pat opt r1
 
 {-| Convert relation to list of judges -}
 judgesFromRel :: Bool -> B.JudgePattern -> B.Rel c -> [B.Judge c]

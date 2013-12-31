@@ -99,7 +99,7 @@ koshuMain rops =
   in koshuMain' rops root =<< L.prelude
 
 koshuMain' :: (C.CContent c) => [C.Rop c] -> C.Section c -> (String, [String]) -> IO Int
-koshuMain' rops root (_, argv) =
+koshuMain' rops root (cmd, argv) =
     case getOpt Permute koshuOptions argv of
       (opts, files, [])
           | has OptHelp         -> L.putSuccess usage
@@ -110,7 +110,7 @@ koshuMain' rops root (_, argv) =
           | has OptCalc         -> L.runCalc  sec
           | has OptListRop      -> putRop   rops
           | has OptElement      -> putElems sec
-          | otherwise           -> L.runFiles sec
+          | otherwise           -> L.runFiles (cmd : argv) sec
           where has  = (`elem` opts)
                 sec  = L.SectionSource root text files
                 text = concatMap oneLiner opts
@@ -129,7 +129,7 @@ putRop rops =
 runStdin :: (C.CContent c) => L.SectionSource c -> IO Int
 runStdin sec =
     do text <- getContents
-       L.runFiles sec { L.textSections = text : L.textSections sec }
+       L.runFiles [] sec { L.textSections = text : L.textSections sec }
 
 oneLiner :: Option -> [String]
 oneLiner (OptSection sec) = [oneLinerPreprocess sec]
@@ -163,7 +163,7 @@ prettySection (L.SectionSource root _ files) =
                    prettyPrint md
                    return 0
       _      -> L.putSuccess usage
-    where prettyPrint md = B.abortMap (print . B.doc) md
+    where prettyPrint md = B.abortMap [] (print . B.doc) md
 
 
 

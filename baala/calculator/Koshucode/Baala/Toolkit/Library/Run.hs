@@ -13,11 +13,10 @@ module Koshucode.Baala.Toolkit.Library.Run
   mkdir,
 ) where
 
-import Data.Monoid
-import qualified System.IO        as IO
-import qualified System.FilePath  as Path
-import qualified System.Directory as Dir
-
+import qualified Data.Monoid          as M
+import qualified System.IO            as IO
+import qualified System.FilePath      as Path
+import qualified System.Directory     as Dir
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 
@@ -31,16 +30,17 @@ data SectionSource c = SectionSource
 
 -- ----------------------
 
-runFiles :: (C.CContent c) => SectionSource c -> IO Int
+runFiles :: (C.CContent c) => B.CommandLine -> SectionSource c -> IO Int
 runFiles = hRunFiles IO.stdout
 
 {-| Read and union sections from files, and run the section. -}
 hRunFiles
     :: (C.CContent c)
-    => IO.Handle       -- ^ File handle
-    -> SectionSource c -- ^ Section source code
+    => IO.Handle        -- ^ File handle
+    -> B.CommandLine    -- ^ Command line
+    -> SectionSource c  -- ^ Section source code
     -> IO Int
-hRunFiles h (SectionSource root textSec files) =
+hRunFiles h args (SectionSource root textSec files) =
     do let sec = map (C.readSectionText root) textSec
        sects <- mapM (C.readSectionFile root) files
        let union = concatMM $ sec ++ sects
@@ -51,14 +51,14 @@ hRunFiles h (SectionSource root textSec files) =
        IO.hPutStr      h $ unlines $ B.texts comm
        IO.hPutStrLn    h ""
 
-       B.abortMap (C.hPutSection h) $ C.runSection =<< union
+       B.abortMap args (C.hPutSection h) $ C.runSection =<< union
 
-concatMM :: (Monad m, Monoid a) => [m a] -> m a
-concatMM [] = return mempty
+concatMM :: (Monad m, M.Monoid a) => [m a] -> m a
+concatMM [] = return M.mempty
 concatMM (s:ss) =
     do s'  <- s
        ss' <- concatMM ss
-       return $ mappend s' ss'
+       return $ M.mappend s' ss'
 
 
 
@@ -74,7 +74,7 @@ runCalcTo
     -> IO Int            -- ^
 runCalcTo dir sec =
     do union <- readSec sec
-       B.abortMap (runCalcSec dir $ rootSection sec) union
+       B.abortMap [] (runCalcSec dir $ rootSection sec) union
 
 runCalcSec :: (C.CContent c) => String -> C.Section c -> C.Section c -> IO Int
 runCalcSec dir root sec =
@@ -91,7 +91,7 @@ runCalcJudge dir root (B.Judge True "KOSHU-CALC" xs) =
              putStrLn $ "**  Output to " ++ outputFile
              mkdir outputFile
              IO.withFile outputFile IO.WriteMode
-                          $ \ h -> hRunFiles h
+                          $ \ h -> hRunFiles h []
                                    (SectionSource root [] inputFiles)
       Just _       -> return 0
       Nothing      -> return 0

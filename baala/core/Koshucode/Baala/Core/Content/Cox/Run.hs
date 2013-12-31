@@ -21,7 +21,7 @@ coxRun
   -> (C.CoxPos c)  -- ^ Content expression
   -> B.Ab c        -- ^ Calculated literal content
 coxRun h arg coxPos = run =<< coxPos h where
-    run (B.Sourced src cox) =
+    run (B.Sourced src cox) = B.ab src $
         case cox of
           C.CoxLit c      -> Right c
           C.CoxTerm _ [p] -> Right $ arg !! p
@@ -41,6 +41,7 @@ coxRun h arg coxPos = run =<< coxPos h where
            else Right c
 
     rel ps (B.Rel _ args) = Right . C.putList =<< mapM (term ps) args
+
 
 
 -- ----------------------

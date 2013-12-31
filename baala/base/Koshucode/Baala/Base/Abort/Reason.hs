@@ -9,6 +9,8 @@ module Koshucode.Baala.Base.Abort.Reason
 
   -- * Abort reason
   AbortReason (..),
+  ab,
+  abFrom,
   abortPushToken,
   abortPushTokenFrom,
   abortMalformedOperand,
@@ -30,6 +32,7 @@ type Ab b = Either AbortReason b
 
 {-| Abortable mapping. -}
 type AbMap b = b -> Ab b
+
 
 
 -- ----------------------  Abort reason
@@ -66,9 +69,9 @@ instance B.AbortReasonClass AbortReason where
     abortDetail (AbortAnalysis _ a)  =  B.abortDetail a
     abortDetail (AbortCalc     _ a)  =  B.abortDetail a
 
-    abortSource (AbortSyntax   ts _) = source ts
-    abortSource (AbortAnalysis ts _) = source ts
-    abortSource (AbortCalc     ts _) = source ts
+    abortSource (AbortSyntax   src _) = source src
+    abortSource (AbortAnalysis src _) = source src
+    abortSource (AbortCalc     src _) = source src
     abortSource _ = []
 
 source :: [B.Token] -> [String]
@@ -76,6 +79,12 @@ source = concatMap tokenSource . reverse
 
 tokenSource :: B.Token -> [String]
 tokenSource = B.tokenPosDisplay . B.tokenPos
+
+ab :: [B.Token] -> B.Map (Ab b)
+ab src = either (Left . abortPushToken src) Right
+
+abFrom :: (B.TokenListing a) => a -> B.Map (Ab b)
+abFrom src = either (Left . abortPushTokenFrom src) Right
 
 abortPushToken :: [B.Token] -> B.Map AbortReason
 abortPushToken t1 (AbortSyntax   t2 a) = AbortSyntax   (t1 ++ t2) a
