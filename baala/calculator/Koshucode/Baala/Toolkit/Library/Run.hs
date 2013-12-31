@@ -40,7 +40,7 @@ hRunFiles
     -> B.CommandLine    -- ^ Command line
     -> SectionSource c  -- ^ Section source code
     -> IO Int
-hRunFiles h args (SectionSource root textSec files) =
+hRunFiles h cmd (SectionSource root textSec files) =
     do let sec = map (C.readSectionText root) textSec
        sects <- mapM (C.readSectionFile root) files
        let union = concatMM $ sec ++ sects
@@ -51,7 +51,7 @@ hRunFiles h args (SectionSource root textSec files) =
        IO.hPutStr      h $ unlines $ B.texts comm
        IO.hPutStrLn    h ""
 
-       B.abortMap args (C.hPutSection h) $ C.runSection =<< union
+       B.abortableIO cmd (C.hPutSection h) $ C.runSection =<< union
 
 concatMM :: (Monad m, M.Monoid a) => [m a] -> m a
 concatMM [] = return M.mempty
@@ -64,17 +64,18 @@ concatMM (s:ss) =
 
 -- ---------------------- Calculation list
 
-runCalc :: (C.CContent c) => SectionSource c -> IO Int
+runCalc :: (C.CContent c) => B.CommandLine -> SectionSource c -> IO Int
 runCalc = runCalcTo ""
 
 runCalcTo
     :: (C.CContent c)
     => FilePath          -- ^ Output path prefix
+    -> B.CommandLine
     -> SectionSource c   -- ^ Section
-    -> IO Int            -- ^
-runCalcTo dir sec =
+    -> IO Int
+runCalcTo dir cmd sec =
     do union <- readSec sec
-       B.abortMap [] (runCalcSec dir $ rootSection sec) union
+       B.abortableIO cmd (runCalcSec dir $ rootSection sec) union
 
 runCalcSec :: (C.CContent c) => String -> C.Section c -> C.Section c -> IO Int
 runCalcSec dir root sec =

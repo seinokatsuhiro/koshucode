@@ -1,12 +1,11 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Abort utilities -}
+{-| Class for abort reasons -}
 
-module Koshucode.Baala.Base.Abort.Utility
+module Koshucode.Baala.Base.Abort.Class
 ( AbortReasonClass (..),
   CommandLine,
-  abortMap,
-  bug,
+  abortableIO,
 ) where
 
 import qualified System.Exit as Sys
@@ -14,8 +13,6 @@ import qualified Koshucode.Baala.Base.Prelude as B
 import qualified Koshucode.Baala.Base.Token   as B
 
 
-
--- ---------------------- Class and datatype
 
 {-| Class that represents abort reason. -}
 class (Show a) => AbortReasonClass a where
@@ -33,19 +30,17 @@ class (Show a) => AbortReasonClass a where
     abortSource  :: a -> [String]
     abortSource _ = []
 
-
-
--- ----------------------  Function
-
+{-| Command name and its arguments. -}
 type CommandLine = [String]
 
-abortMap
+{-| Abortable process. -}
+abortableIO
     :: (AbortReasonClass a)
-    => CommandLine    -- ^ Command line
-    -> (b -> IO c)    -- ^ Function
-    -> Either a b     -- ^ Argument
-    -> IO c           -- ^ Value
-abortMap = either . abort
+    => CommandLine  -- ^ Command line
+    -> (b -> IO c)  -- ^ I/O function
+    -> Either a b   -- ^ Argument of the function
+    -> IO c         -- ^ Result of the function
+abortableIO = either . abort
 
 {-| Stop program execution abnormally. -}
 abort :: (AbortReasonClass a) => CommandLine -> a -> IO c
@@ -78,8 +73,4 @@ sandwich open close xs = open : xs ++ [close]
 
 bracket :: B.Map String
 bracket = sandwich '[' ']'
-
-{-| Stop on error @'bug in koshucode'@ -}
-bug :: a
-bug = error "bug in koshucode"
 

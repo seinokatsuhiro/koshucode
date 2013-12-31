@@ -63,7 +63,7 @@ coxConsPos scox h = sourceAbMap pos scox where
 
 sourceAbMap :: (a -> B.Ab b) -> B.Sourced a -> B.Ab (B.Sourced b)
 sourceAbMap f (B.Sourced src x) =
-    case f x of
-      Right y -> Right $ B.Sourced src y
-      Left a  -> Left  $ B.abortPushToken src a
+    B.ab src $ do
+      y <- f x
+      Right $ B.Sourced src y
 

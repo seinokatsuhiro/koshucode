@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Abort symbol -}
+{-| Abort reasons -}
 
 module Koshucode.Baala.Base.Abort.EachReason
 ( -- * I/O
@@ -13,7 +13,7 @@ module Koshucode.Baala.Base.Abort.EachReason
   AbortCalc (..),
 ) where
 
-import qualified Koshucode.Baala.Base.Abort.Utility as B
+import qualified Koshucode.Baala.Base.Abort.Class as B
 
 
 

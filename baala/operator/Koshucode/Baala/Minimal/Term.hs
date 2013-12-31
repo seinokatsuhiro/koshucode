@@ -60,7 +60,7 @@ relfyArrange
     -> B.Relhead
     -> B.Ab (C.Relfy c)
 relfyArrange ha ba ns h1
-    | null non  = Right $ C.Relfy h2 (C.RelfyOneToOne True $ ba ind)
+    | null non  = Right $ C.relfy h2 (C.RelfyOneToOne True $ ba ind)
     | otherwise = Left $ B.AbortAnalysis [] $ B.AANoTerms non
     where
       non =  B.headDropTerms h1 ns
@@ -92,7 +92,7 @@ relfyRename
 relfyRename np h1
     | nsCheck /= [] = Left  $ B.AbortAnalysis [] $ B.AAReqNewTerms nsCheck
     | psCheck /= [] = Left  $ B.AbortAnalysis [] $ B.AANoTerms psCheck
-    | otherwise     = Right $ C.Relfy h2 C.RelfyId
+    | otherwise     = Right $ C.relfy h2 C.RelfyId
     where
       (ns, ps) = unzip np
       nsCheck  = B.headKeepTerms h1 ns

@@ -49,9 +49,9 @@ library
         Koshucode.Baala.Base
 
         Koshucode.Baala.Base.Abort
-        Koshucode.Baala.Base.Abort.Reason
+        Koshucode.Baala.Base.Abort.Class
         Koshucode.Baala.Base.Abort.EachReason
-        Koshucode.Baala.Base.Abort.Utility
+        Koshucode.Baala.Base.Abort.Reason
 
         Koshucode.Baala.Base.Data
         Koshucode.Baala.Base.Data.Comment

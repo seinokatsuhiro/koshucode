@@ -30,10 +30,10 @@ coxRun h arg coxPos = run =<< coxPos h where
               case cop of
                 C.CopLazy  _ f -> f cs
                 C.CopEager _ f -> f =<< mapM run cs
-                C.CopLit   _ _ -> Left $ B.abortNotFound src ""
+                C.CopLit   _ _ -> Left $ B.abortNotFound ""
 
-    term []       _ = Left $ B.abortNotFound [] ""
-    term (-1 : _) _ = Left $ B.abortNotFound [] ""
+    term []       _ = Left $ B.abortNotFound ""
+    term (-1 : _) _ = Left $ B.abortNotFound ""
     term (p : ps) arg2 =
         let c = arg2 !! p
         in if C.isRel c

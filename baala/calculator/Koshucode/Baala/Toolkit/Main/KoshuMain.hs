@@ -99,21 +99,22 @@ koshuMain rops =
   in koshuMain' rops root =<< L.prelude
 
 koshuMain' :: (C.CContent c) => [C.Rop c] -> C.Section c -> (String, [String]) -> IO Int
-koshuMain' rops root (cmd, argv) =
+koshuMain' rops root (prog, argv) =
     case getOpt Permute koshuOptions argv of
       (opts, files, [])
           | has OptHelp         -> L.putSuccess usage
           | has OptVersion      -> L.putSuccess $ version ++ "\n"
           | has OptShowEncoding -> L.putSuccess =<< L.currentEncodings
           | has OptPretty       -> prettySection sec
-          | has OptStdin        -> runStdin sec
-          | has OptCalc         -> L.runCalc  sec
-          | has OptListRop      -> putRop   rops
-          | has OptElement      -> putElems sec
-          | otherwise           -> L.runFiles (cmd : argv) sec
+          | has OptStdin        -> runStdin   sec
+          | has OptListRop      -> putRop     rops
+          | has OptElement      -> putElems   sec
+          | has OptCalc         -> L.runCalc  cmd sec
+          | otherwise           -> L.runFiles cmd sec
           where has  = (`elem` opts)
                 sec  = L.SectionSource root text files
                 text = concatMap oneLiner opts
+                cmd  = prog : argv
       (_, _, errs) -> L.putFailure $ concat errs
 
 putRop :: (Ord c, B.Pretty c, C.CText c) => [C.Rop c] -> IO Int
@@ -163,7 +164,7 @@ prettySection (L.SectionSource root _ files) =
                    prettyPrint md
                    return 0
       _      -> L.putSuccess usage
-    where prettyPrint md = B.abortMap [] (print . B.doc) md
+    where prettyPrint md = B.abortableIO [] (print . B.doc) md
 
 
 

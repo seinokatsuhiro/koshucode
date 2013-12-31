@@ -1,43 +1,25 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Abort symbol -}
+{-| Bundle of abort reasons -}
 
 module Koshucode.Baala.Base.Abort.Reason
-( -- * Datatype
-  Ab,
-  AbMap,
-
-  -- * Abort reason
-  AbortReason (..),
-  ab,
-  abFrom,
-  abortPushToken,
-  abortPushTokenFrom,
+( AbortReason (..),
+  Ab, AbMap,
+  ab, abFrom,
+  (<!!>),
   abortMalformedOperand,
   abortNotFound,
-  (<!!>),
+  bug,
 ) where
 
 import qualified Koshucode.Baala.Base.Prelude          as B
 import qualified Koshucode.Baala.Base.Token            as B
-import qualified Koshucode.Baala.Base.Abort.Utility    as B
+import qualified Koshucode.Baala.Base.Abort.Class      as B
 import qualified Koshucode.Baala.Base.Abort.EachReason as B
 
 
 
--- ----------------------  Abort type
-
-{-| Either of (1) right result, or (2) abort reason. -}
-type Ab b = Either AbortReason b
-
-{-| Abortable mapping. -}
-type AbMap b = b -> Ab b
-
-
-
--- ----------------------  Abort reason
-
-{-| Abort reasons -}
+{-| Bundle of abort reasons. -}
 data AbortReason
     = AbortIO                 B.AbortIO
     | AbortSyntax   [B.Token] B.AbortSyntax
@@ -49,15 +31,15 @@ instance B.Name AbortReason where
     name = B.abortSymbol
 
 instance B.AbortReasonClass AbortReason where
-    abortClass  (AbortIO         a)  =  B.abortClass a
-    abortClass  (AbortSyntax   _ a)  =  B.abortClass a
-    abortClass  (AbortAnalysis _ a)  =  B.abortClass a
-    abortClass  (AbortCalc     _ a)  =  B.abortClass a
-
     abortSymbol (AbortIO         a)  =  B.abortSymbol a
     abortSymbol (AbortSyntax   _ a)  =  B.abortSymbol a
     abortSymbol (AbortAnalysis _ a)  =  B.abortSymbol a
     abortSymbol (AbortCalc     _ a)  =  B.abortSymbol a
+
+    abortClass  (AbortIO         a)  =  B.abortClass a
+    abortClass  (AbortSyntax   _ a)  =  B.abortClass a
+    abortClass  (AbortAnalysis _ a)  =  B.abortClass a
+    abortClass  (AbortCalc     _ a)  =  B.abortClass a
 
     abortReason (AbortIO         a)  =  B.abortReason a
     abortReason (AbortSyntax   _ a)  =  B.abortReason a
@@ -74,38 +56,52 @@ instance B.AbortReasonClass AbortReason where
     abortSource (AbortCalc     src _) = source src
     abortSource _ = []
 
+{-| Abortable result, i.e., either of right result or abort reason. -}
+type Ab b = Either AbortReason b
+
+{-| Abortable mapping. -}
+type AbMap b = b -> Ab b
+
 source :: [B.Token] -> [String]
-source = concatMap tokenSource . reverse
+source = concatMap f . reverse where
+    f :: B.Token -> [String]
+    f = B.tokenPosDisplay . B.tokenPos
 
-tokenSource :: B.Token -> [String]
-tokenSource = B.tokenPosDisplay . B.tokenPos
+{-| Push source information when process is aborted.
 
+    @ B.ab src $ do ... @
+    -}
 ab :: [B.Token] -> B.Map (Ab b)
-ab src = either (Left . abortPushToken src) Right
+ab src = either (Left . pushSource src) Right
 
-abFrom :: (B.TokenListing a) => a -> B.Map (Ab b)
-abFrom src = either (Left . abortPushTokenFrom src) Right
+{-| Same as 'ab' except for using 'B.TokenListing'
+    instead of list of 'B.Token'. -}
+abFrom :: (B.TokenListing src) => src -> B.Map (Ab b)
+abFrom src = either (Left . pushSourceFrom src) Right
 
-abortPushToken :: [B.Token] -> B.Map AbortReason
-abortPushToken t1 (AbortSyntax   t2 a) = AbortSyntax   (t1 ++ t2) a
-abortPushToken t1 (AbortAnalysis t2 a) = AbortAnalysis (t1 ++ t2) a
-abortPushToken t1 (AbortCalc     t2 a) = AbortCalc     (t1 ++ t2) a
-abortPushToken _ a = a
+pushSource :: [B.Token] -> B.Map AbortReason
+pushSource src1 (AbortSyntax   src2 a) = AbortSyntax   (src1 ++ src2) a
+pushSource src1 (AbortAnalysis src2 a) = AbortAnalysis (src1 ++ src2) a
+pushSource src1 (AbortCalc     src2 a) = AbortCalc     (src1 ++ src2) a
+pushSource _ a = a
 
-abortPushTokenFrom :: (B.TokenListing a) => a -> B.Map AbortReason
-abortPushTokenFrom = abortPushToken . B.tokenListing
+pushSourceFrom :: (B.TokenListing a) => a -> B.Map AbortReason
+pushSourceFrom = pushSource . B.tokenListing
 
-abortMalformedOperand :: String -> AbortReason
-abortMalformedOperand s = AbortAnalysis [] $ B.AAMalformedOperand s
-
-abortNotFound :: [B.Token] -> String -> AbortReason
-abortNotFound src key = AbortCalc src $ B.ACNotFound key
-
-{-| Lookup association list.
-    This function may abort on AbortLookup. -}
-(<!!>) :: [B.Named a] -> String -> Ab a
+{-| Lookup association list. This function may abort. -}
+(<!!>) :: [B.Named b] -> String -> Ab b
 (<!!>) assoc key = loop assoc where
-    loop [] = Left $ abortNotFound [] key
+    loop [] = Left $ abortNotFound key
     loop ((k,v) : kvs) | k == key  = Right v
                        | otherwise = loop kvs
+
+abortMalformedOperand :: String -> AbortReason
+abortMalformedOperand = AbortAnalysis [] . B.AAMalformedOperand
+
+abortNotFound :: String -> AbortReason
+abortNotFound = AbortCalc [] . B.ACNotFound
+
+{-| Stop on error @'bug in koshucode'@ -}
+bug :: a
+bug = error "bug in koshucode"
 

@@ -34,7 +34,7 @@ relfyAdd
     :: [B.Named (C.CoxPos VContent)]
     -> B.Relhead
     -> B.Ab (C.Relfy VContent)
-relfyAdd xs h1 = Right $ C.Relfy h2 (C.RelfyOneToAbOne False f) where
+relfyAdd xs h1 = Right $ C.relfy h2 (C.RelfyOneToAbOne False f) where
     ns    = map fst xs  -- term names
     es    = map snd xs  -- term expressions
     h2    = B.mappend (B.headFrom ns) h1
@@ -60,7 +60,7 @@ relfyHold
     -> (C.CoxPos c)      -- ^ Predicate
     -> B.Relhead         -- ^ Heading of input relation
     -> B.Ab (C.Relfy c)  -- ^ Relfier for output relation
-relfyHold b cox h1 = Right $ C.Relfy h1 (C.RelfyAbPred p) where
+relfyHold b cox h1 = Right $ C.relfy h1 (C.RelfyAbPred p) where
     p cs = do c <- C.coxRun h1 cs cox
               case c of
                 x | C.isBool x -> Right $ b == C.getBool x

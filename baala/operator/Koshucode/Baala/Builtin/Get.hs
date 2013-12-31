@@ -38,11 +38,11 @@ import Koshucode.Baala.Builtin.Term
 {-| Abortable 'head' -}
 getHead               :: [a] -> B.Ab a
 getHead (x : _)       = Right x
-getHead _             = Left $ B.abortNotFound [] "head"
+getHead _             = Left $ B.abortNotFound "head"
 
 getSingleton          :: [a] -> B.Ab a
 getSingleton [x]      = Right x
-getSingleton _        = Left $ B.abortNotFound [] "singleton"
+getSingleton _        = Left $ B.abortNotFound "singleton"
 
 
 
@@ -83,14 +83,14 @@ getWord use n =
     do trees <- getTrees use n
        case trees of
          [B.TreeL (B.TWord _ _ s)] -> Right s
-         _ -> Left $ B.abortNotFound [] n
+         _ -> Left $ B.abortNotFound n
 
 getInt :: RopGet c Int
 getInt use n =
     do trees <- getTrees use n
        case trees of
          [B.TreeL (B.TWord _ _ i)] -> Right (read i :: Int)
-         _ -> Left $ B.abortNotFound (B.front $ B.untrees trees) n
+         _ -> Left $ B.abortNotFound n
 
 
 

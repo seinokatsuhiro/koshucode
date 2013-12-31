@@ -98,7 +98,7 @@ koshuRegressMain relmaps =
 
 koshuRegressMain'
     :: (C.CContent c) => C.Section c -> (String, [String]) -> IO Int
-koshuRegressMain' root (_, argv) =
+koshuRegressMain' root (prog, argv) =
     case getOpt Permute koshuOptions argv of
       (opts, files, [])
           | has OptHelp         -> L.putSuccess usage
@@ -108,17 +108,18 @@ koshuRegressMain' root (_, argv) =
           | has OptClean        -> regClean
           | has OptReport       -> regReport sec
           | has OptRun          -> regLastReport sec
-          | otherwise           -> regLast sec
+          | otherwise           -> regLast cmd sec
           where has = (`elem` opts)
                 sec = L.SectionSource root [] files
+                cmd = prog : argv
       (_, _, errs) -> L.putFailure $ concat errs ++ usage
 
-regLast :: (C.CContent c) => L.SectionSource c -> IO Int
-regLast sec = L.runCalcTo lastDir sec
+regLast :: (C.CContent c) => B.CommandLine -> L.SectionSource c -> IO Int
+regLast cmd sec = L.runCalcTo lastDir cmd sec
 
 regLastReport :: (C.CContent c) => L.SectionSource c -> IO Int
 regLastReport sec =
-    do _ <- regLast sec
+    do _ <- regLast [] sec
        regReport sec
 
 -- mv last save

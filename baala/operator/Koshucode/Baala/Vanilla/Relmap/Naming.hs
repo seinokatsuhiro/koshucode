@@ -34,7 +34,7 @@ relfyPrefix
     -> [String]           -- ^ Changing termnames
     -> B.Relhead          -- ^ Heading of input relation
     -> B.Ab (C.Relfy c)   -- ^ Relfier for output relation
-relfyPrefix pre ns h1 = Right $ C.Relfy h2 C.RelfyId where
+relfyPrefix pre ns h1 = Right $ C.relfy h2 C.RelfyId where
     h2 = B.headChange (map f) h1
     f n | n `elem` ns  = prefixName pre n
         | otherwise    = n
@@ -60,7 +60,7 @@ relfyUnprefix
     :: String             -- ^ Prefix text (except for hyphen)
     -> B.Relhead          -- ^ Heading of input relation
     -> B.Ab (C.Relfy c)  -- ^ Generator for output relation
-relfyUnprefix pre h1 = Right $ C.Relfy h2 C.RelfyId where
+relfyUnprefix pre h1 = Right $ C.relfy h2 C.RelfyId where
     h2 = B.headChange (map $ unprefixName pre) h1
 
 unprefixName :: String -> String -> String
@@ -88,7 +88,7 @@ relfyPrefixChange
     -> String             -- ^ Old prefix text (except for hyphen)
     -> B.Relhead          -- ^ Heading of input relation
     -> B.Ab (C.Relfy c)  -- ^ Generator for output relation
-relfyPrefixChange new old h1 = Right $ C.Relfy h2 C.RelfyId where
+relfyPrefixChange new old h1 = Right $ C.relfy h2 C.RelfyId where
     h2   = B.headChange (map f) h1
     new' = new ++ "-"
     old' = old ++ "-"

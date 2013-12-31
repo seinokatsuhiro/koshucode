@@ -30,7 +30,7 @@ runRelmapDataset = runRelmapViaRelfy . C.selectRelation
 runRelmapViaRelfy :: (Ord c) => C.RelSelect c -> C.Relmap c -> B.AbMap (B.Rel c)
 runRelmapViaRelfy sel r (B.Rel h1 b1) =
     do C.Relfy h2 f2 <- specialize sel r h1
-       b2 <- C.relfy f2 b1
+       b2 <- C.relfyRun f2 b1
        Right $ B.Rel h2 b2
 
 specialize :: C.RelSelect c -> C.Relmap c -> B.Relhead -> B.Ab (C.Relfy c)
@@ -38,17 +38,19 @@ specialize sel = (<$>) where
     C.RelmapSource _ p ns <$> _  = Right $ C.relfyConst $ sel p ns
     C.RelmapConst  _ r    <$> _  = Right $ C.relfyConst r
     C.RelmapAlias  _ r    <$> h1 = r <$> h1
-    C.RelmapName h op     <$> _  = B.abFrom h $ Left $ B.AbortAnalysis [] $ B.AAUnkRelmap op
+    C.RelmapName h op     <$> _  = B.abFrom h $ unk op
 
     C.RelmapAppend r1 r2  <$> h1 =
         do relfy2 <- r1 <$> h1
            relfy3 <- r2 <$> C.relfyHead relfy2
            Right $ M.mappend relfy2 relfy3
 
-    C.RelmapCalc h mk rs <$> h1 =
-        B.abFrom h $ do
+    C.RelmapCalc half mk rs <$> h1 =
+        B.abFrom half $ do
           subrelfy <- (<$> h1) `mapM` rs
-          mk subrelfy h1
+          C.relfySetSource half `fmap` mk subrelfy h1
+
+    unk op = Left $ B.AbortAnalysis [] $ B.AAUnkRelmap op
 
 
 

@@ -32,7 +32,7 @@ relmapMaybe use m = C.relmapConfl use fy [m] where
 
 relfyMaybe :: (Ord c, C.CNil c) => C.Relfy c -> B.Relhead -> B.Ab (C.Relfy c)
 relfyMaybe (C.Relfy h2 f2) h1 =
-    Right $ C.Relfy h3 (C.RelfyAbFull False f3)
+    Right $ C.relfy h3 (C.RelfyAbFull False f3)
     where
       pos     :: [B.TermPos]
       pos     =  h1 `B.posFrom` h2
@@ -46,7 +46,7 @@ relfyMaybe (C.Relfy h2 f2) h1 =
       share2  =  h2 `B.posFor` shared
       side2   =  h2 `B.posFor` sided
 
-      m2 b1   = do b2 <- C.relfy f2 b1
+      m2 b1   = do b2 <- C.relfyRun f2 b1
                    Right $ B.gatherToMap $ map kv b2
       kv cs2  = ( B.posPick share2 cs2,
                   B.posPick side2  cs2 )
@@ -82,13 +82,13 @@ relfyFull
 relfyFull (C.Relfy h1 f1) (C.Relfy h2 f2) _ = 
     do C.Relfy h3 f3 <- relfyMaybe (C.Relfy h2 f2) h1
        C.Relfy h4 f4 <- relfyMaybe (C.Relfy h1 f1) h2
-       b1 <- C.relfy f1 []
-       b2 <- C.relfy f2 []
-       b3 <- C.relfy f3 b1
-       b4 <- C.relfy f4 b2
-       C.Relfy h5 f5 <- Rop.relfyJoin (C.Relfy h4 $ C.RelfyConst b4) h3
-       b5 <- C.relfy f5 b3
-       Right $ C.Relfy h5 (C.RelfyConst b5)
+       b1 <- C.relfyRun f1 []
+       b2 <- C.relfyRun f2 []
+       b3 <- C.relfyRun f3 b1
+       b4 <- C.relfyRun f4 b2
+       C.Relfy h5 f5 <- Rop.relfyJoin (C.relfy h4 $ C.RelfyConst b4) h3
+       b5 <- C.relfyRun f5 b3
+       Right $ C.relfy h5 (C.RelfyConst b5)
 
 
 
@@ -108,7 +108,7 @@ relmapGroup use n m = C.relmapConfl use fy [m] where
 {-| Grouping relation. -}
 relfyGroup :: (Ord c, C.CRel c) => String -> C.Relfy c -> B.Relhead -> B.Ab (C.Relfy c)
 relfyGroup n (C.Relfy h2 f2) h1 =
-    Right $ C.Relfy h3 (C.RelfyAbFull False f3)
+    Right $ C.relfy h3 (C.RelfyAbFull False f3)
     where
       shared    :: [B.Termname]
       shared    = B.posInnerNames $ h1 `B.posFrom` h2
@@ -117,7 +117,7 @@ relfyGroup n (C.Relfy h2 f2) h1 =
       share1    = h1 `B.posFor` shared
       share2    = h2 `B.posFor` shared
 
-      toMap2 b1 = do b2 <- C.relfy f2 b1
+      toMap2 b1 = do b2 <- C.relfyRun f2 b1
                      Right $ B.gatherToMap $ map kv b2
       kv cs2    = ( B.posPick share2 cs2, cs2 )
 

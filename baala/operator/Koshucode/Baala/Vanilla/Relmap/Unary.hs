@@ -52,7 +52,7 @@ relfySize
     => B.Termname         -- ^ Name of new term
     -> B.Relhead
     -> B.Ab (C.Relfy c)   -- ^ Relfier for output relation
-relfySize n _ = Right $ C.Relfy h2 (C.RelfyFull False f) where
+relfySize n _ = Right $ C.relfy h2 (C.RelfyFull False f) where
     h2   = B.headFrom [n]
     f b1 = [[C.putDecFromInt $ length b1]]
 
@@ -74,7 +74,7 @@ relfyEnclose
     => B.Termname         -- ^ Termname of enclosed relation
     -> B.Relhead          -- ^ Header of input relation
     -> B.Ab (C.Relfy c)   -- ^ Relfier for output relation
-relfyEnclose n h1 = Right $ C.Relfy h2 (C.RelfyFull False f) where
+relfyEnclose n h1 = Right $ C.relfy h2 (C.RelfyFull False f) where
     h2 = B.Relhead [B.Nest n $ B.headTerms h1]
     f b1 = [[C.putRel $ B.Rel h1 b1]]
 
@@ -97,7 +97,7 @@ relfyRank
     -> [B.Termname]       -- ^ Termnames for order
     -> B.Relhead          -- ^ Heading of input relation
     -> B.Ab (C.Relfy c)   -- ^ Relfier for output relation
-relfyRank n ns h1 = Right $ C.Relfy h2 (C.RelfyFull False f2) where
+relfyRank n ns h1 = Right $ C.relfy h2 (C.RelfyFull False f2) where
     h2    = B.headCons n h1
     f2 b1 = let b1' = Rop.sortByName ords (B.headNames h1) b1
             in zipWith (:) (map C.putDecFromInt [1..]) b1'
@@ -128,7 +128,7 @@ relmapTypename use n p = C.relmapCalc use $ relfyTypename n p
 relfyTypename
   :: (C.CText c) =>
      B.Termname -> B.Termname -> B.Relhead -> B.Ab (C.Relfy c)
-relfyTypename n p h1 = Right $ C.Relfy h2 (C.RelfyOneToOne False f) where
+relfyTypename n p h1 = Right $ C.relfy h2 (C.RelfyOneToOne False f) where
     h2    = B.headCons n h1
     pos   = h1 `B.posFor` [p]
     f cs1 = let [c] = B.posPick pos cs1
@@ -151,7 +151,7 @@ relmapRange use term low high = C.relmapCalc use $ relfyRange term low high
 relfyRange
   :: (C.CDec c) =>
      B.Termname -> Int -> Int -> B.Relhead -> B.Ab (C.Relfy c)
-relfyRange n low high h1 = Right $ C.Relfy h2 (C.RelfyOneToMany False f) where
+relfyRange n low high h1 = Right $ C.relfy h2 (C.RelfyOneToMany False f) where
     h2    = B.headCons n h1
     decs  = map C.putDecFromInt [low .. high]
     f cs  = map (: cs) decs
@@ -180,7 +180,7 @@ relmapDuplicate use ns = C.relmapCalc use $ relfyDuplicate ns
 relfyDuplicate
   :: (Ord c) => [B.Termname] -> B.Relhead -> B.Ab (C.Relfy c)
 relfyDuplicate ns h1
-    | null non  = Right $ C.Relfy h1 (C.RelfyFull False f)
+    | null non  = Right $ C.relfy h1 (C.RelfyFull False f)
     | otherwise = Left  $ B.AbortAnalysis [] (B.AANoTerms non)
     where
       non :: [B.Termname]
@@ -230,12 +230,12 @@ relfyMember x xs h1 = r2 where
         = h1 `B.posHere` [x, xs]
 
 relfyMemberCheck :: B.TermPos -> B.TermPos -> B.Relhead -> B.Ab (C.Relfy Rop.VContent)
-relfyMemberCheck xPos xsPos h1 = Right $ C.Relfy h1 (C.RelfyPred f) where
+relfyMemberCheck xPos xsPos h1 = Right $ C.relfy h1 (C.RelfyPred f) where
     f cs = let [xCont, xsCont] = B.posPick [xPos, xsPos] cs
            in xCont `Rop.isMember` xsCont
 
 relfyMemberExpand :: B.Termname -> B.TermPos -> B.Relhead -> B.Ab (C.Relfy Rop.VContent)
-relfyMemberExpand x xsPos h1 = Right $ C.Relfy h2 (C.RelfyOneToMany False f) where
+relfyMemberExpand x xsPos h1 = Right $ C.relfy h2 (C.RelfyOneToMany False f) where
     h2     =  B.headCons x h1
     f cs   =  let [xsCont] = B.posPick [xsPos] cs
               in case xsCont of
@@ -274,7 +274,7 @@ relfyCheckTermBut  = relfyCheckTermBy (\ns h1 -> null $ B.headKeepTerms h1 ns)
 relfyCheckTermBy :: ([String] -> B.Relhead -> Bool)
                  -> [String] -> B.Relhead -> B.Ab (C.Relfy c)
 relfyCheckTermBy f ns h1
-    | f ns h1 = Right $ C.Relfy h1 C.RelfyId
+    | f ns h1 = Right $ C.relfy h1 C.RelfyId
     | otherwise = Left $ B.AbortAnalysis [] (B.AACheckTerms $ B.headNames h1)
 
 

@@ -68,9 +68,9 @@ relfyMeet (C.Relfy h2 f2) h1 = Right (C.Relfy h3 f3) where
 
     h3        =  h2 `B.mappend` h1
     f3        =  case f2 of
-                   C.RelfyConst b2 -> C.RelfyOneToAbMany False (meet2 b2)
-                   _               -> C.RelfyOneToAbMany False meet
-    meet cs1  =  do b2sub <- C.relfy f2 [cs1]
+                   (B.Sourced _ (C.RelfyConst b2)) -> B.Sourced [] $ C.RelfyOneToAbMany False (meet2 b2)
+                   _  -> B.Sourced [] $ C.RelfyOneToAbMany False meet
+    meet cs1  =  do b2sub <- C.relfyRun f2 [cs1]
                     meet2 b2sub cs1
     meet2 b2 cs1 =  let m2 = B.gatherToMap $ map kv b2
                     in case B.lookupMap (pick1 cs1) m2 of
@@ -116,9 +116,9 @@ relfyJoin (C.Relfy h2 f2) h1 = Right (C.Relfy h3 f3) where
     pick2   =  B.posPick share2
 
     h3      =  B.headChange pick1 h1
-    f3      =  C.RelfyUnion True
-                  [ C.RelfyOneToOne True pick1
-                  , C.RelfyAppend f2 (C.RelfyOneToOne True pick2) ]
+    f3      =  B.Sourced [] $ C.RelfyUnion True
+                  [ B.Sourced [] $ C.RelfyOneToOne True pick1
+                  , B.Sourced [] $ C.RelfyAppend f2 (B.Sourced [] $ C.RelfyOneToOne True pick2) ]
 
 
 

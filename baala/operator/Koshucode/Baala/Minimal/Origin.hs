@@ -45,7 +45,7 @@ relmapEmpty use = C.relmapCalc use relfyEmpty
 
 {-| Throw away all tuples in a relation. -}
 relfyEmpty :: B.Relhead -> B.Ab (C.Relfy c)
-relfyEmpty h1 = Right $ C.Relfy h1 (C.RelfyConst [])
+relfyEmpty h1 = Right $ C.relfy h1 (C.RelfyConst [])
 
 -- ----------------------  contents
 
@@ -58,7 +58,7 @@ relmapContents :: C.RopUse c -> B.Termname -> C.Relmap c
 relmapContents use n = C.relmapCalc use $ relfyContents n
 
 relfyContents :: B.Termname -> B.Relhead -> B.Ab (C.Relfy c)
-relfyContents n _ = Right $ C.Relfy h2 (C.RelfyFull True f) where
+relfyContents n _ = Right $ C.relfy h2 (C.RelfyFull True f) where
     h2   = B.headFrom [n]
     f b1 = map B.singleton $ concat b1
 

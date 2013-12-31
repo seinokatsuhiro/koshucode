@@ -59,8 +59,8 @@ relfySemi
     -> B.Relhead          -- ^ Heading of input relation
     -> B.Ab (C.Relfy c)   -- ^ Relfier for output relation
 relfySemi isNull (C.Relfy _ f2) h1 =
-    Right $ C.Relfy h1 (C.RelfyAbPred p)
-    where p cs = do b2 <- C.relfy f2 [cs]
+    Right $ C.relfy h1 (C.RelfyAbPred p)
+    where p cs = do b2 <- C.relfyRun f2 [cs]
                     Right $ null b2 == isNull
 
 
@@ -83,7 +83,7 @@ relfySub
     -> B.Ab (C.Relfy c)
 relfySub r2@(C.Relfy h2 _) h1
     | B.isSuperhead h1 h2 = sub
-    | otherwise = Right $ C.Relfy h1 (C.RelfyConst [])
+    | otherwise = Right $ C.relfy h1 (C.RelfyConst [])
     where
       sub = do r3 <- Rop.relfyMeet r2 h1
                f3 <- relfySome r3 h1
