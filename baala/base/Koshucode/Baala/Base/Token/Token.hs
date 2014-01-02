@@ -21,10 +21,11 @@ module Koshucode.Baala.Base.Token.Token
 
   -- * Other function
   sweepToken,
+  tokenIndent,
 ) where
 
-import Data.Generics (Data, Typeable)
-import qualified Koshucode.Baala.Base.Prelude  as B
+import qualified Data.Generics                       as G
+import qualified Koshucode.Baala.Base.Prelude        as B
 import qualified Koshucode.Baala.Base.Token.TokenPos as B
 
 
@@ -46,10 +47,9 @@ data Token
     | TSpace   B.TokenPos Int         -- ^ /N/ space characters
     | TComment B.TokenPos String      -- ^ Comment text
     | TUnknown B.TokenPos String      -- ^ Unknown text
-      deriving (Show, Eq, Ord, Data, Typeable)
+      deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
-{-| Name of term,
-    e.g., @\"\/file\"@ for the term @\/file@. -}
+{-| Name of term, e.g., @\"\/file\"@ for the term @\/file@. -}
 type Termname = String
 
 instance B.Name Token where
@@ -160,10 +160,7 @@ isCloseTokenOf _ _              = False
 sweepToken :: B.Map [Token]
 sweepToken = filter (not . isBlankToken)
 
--- {-| Skip leading blank tokens. -}
--- sweepTokenLeft :: Map [Token]
--- sweepTokenLeft [] = []
--- sweepTokenLeft xxs@(x:xs)
---     | isBlankToken x = sweepTokenLeft xs
---     | otherwise = xxs
+tokenIndent :: Token -> Int
+tokenIndent (TSpace _ n) = n
+tokenIndent _ = 0
 

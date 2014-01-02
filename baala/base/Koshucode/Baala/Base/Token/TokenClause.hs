@@ -12,7 +12,6 @@ import qualified Koshucode.Baala.Base.Token.Token     as B
 import qualified Koshucode.Baala.Base.Token.TokenLine as B
 
 
--- ----------------------  Datatype
 
 type TokenClause = B.CodeClause B.Token
 
@@ -20,7 +19,7 @@ instance B.Pretty TokenClause where
     doc = docTokenClause
 
 docTokenClause :: TokenClause -> B.Doc
-docTokenClause (B.CodeClause toks ls) = d where
+docTokenClause (B.CodeClause ls toks) = d where
     d      = B.docHang k 2 $ B.docv [dls, dtoks]
     k      = B.doc "TokenClause"
     dtoks  = labeled toks "[Token]"
@@ -29,39 +28,20 @@ docTokenClause (B.CodeClause toks ls) = d where
     label   xs name = B.doch [ B.doc name
                              , B.doc $ length xs, B.doc "elements" ]
 
-
--- ----------------------  Function
-
-{-| Convert token lines into list of token clauses -}
+{-| Convert token lines into token clauses -}
 tokenClauses :: [B.TokenLine] -> [TokenClause]
-tokenClauses = B.gather split
+tokenClauses = map clause . split where
+    clause ls = B.CodeClause ls $ concatMap B.lineTokens ls
 
-split :: [B.TokenLine] -> (TokenClause, [B.TokenLine])
-split = loop where
-    loop (B.CodeLine _ _ xs : ls) | white xs = loop ls
-    loop (src@(B.CodeLine _ _ (B.TSpace _ i : xs)) : ls)
-        = cons xs src $ splitWith i ls
-    loop (src@(B.CodeLine _ _ xs@(B.TWord _ _ _ : _)) : ls)
-        = cons xs src $ splitWith 0 ls
-    loop (_ : ls) = (empty, ls)
-    loop []       = (empty, [])
+    split :: [B.TokenLine] -> [[B.TokenLine]]
+    split = B.gather B.splitClause . map indentLine . sweep
 
-splitWith :: Int -> [B.TokenLine] -> (TokenClause, [B.TokenLine])
-splitWith i = loop where
-    loop ((B.CodeLine _ _ toks) : ls)
-        | white toks = loop ls
-    loop (src@(B.CodeLine _ _ (B.TSpace _ n : toks)) : ls)
-        | n > i      = cons toks src $ loop ls
-    loop ls          = (empty, ls)
+    sweep :: B.Map [B.TokenLine]
+    sweep = filter (not . isBlankLine)
 
-empty :: TokenClause
-empty = B.CodeClause [] []
+indentLine :: B.TokenLine -> (Int, B.TokenLine)
+indentLine = B.indentLineBy B.tokenIndent
 
--- test white line
-white :: [B.Token] -> Bool
-white = null . B.sweepToken
-
-cons :: [B.Token] -> B.TokenLine -> B.Map (TokenClause, [B.TokenLine])
-cons a1 b1 (B.CodeClause a2 b2, c)
-    = (B.CodeClause (a1 ++ a2) (b1 : b2), c)
+isBlankLine :: B.TokenLine -> Bool
+isBlankLine = all B.isBlankToken . B.lineTokens
 

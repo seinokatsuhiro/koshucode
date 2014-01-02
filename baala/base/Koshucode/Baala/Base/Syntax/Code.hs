@@ -11,6 +11,8 @@ module Koshucode.Baala.Base.Syntax.Code
 ( CodeLine (..),
   lineNumberContent,
   CodeClause (..),
+  indentLineBy,
+  splitClause,
   NextToken,
   codeLines,
 ) where
@@ -35,12 +37,23 @@ lineNumberContent c = show (lineNumber c) ++ " " ++ (lineContent c)
 
 {-| Tokens in clause. -}
 data CodeClause a = CodeClause
-    { clauseTokens    :: [a]           -- ^ Source tokens of clause
-    , clauseLines     :: [CodeLine a]  -- ^ Source lines of clause
+    { clauseLines     :: [CodeLine a]  -- ^ Source lines of clause
+    , clauseTokens    :: [a]           -- ^ Source tokens of clause
     } deriving (Show, G.Data, G.Typeable)
 
 instance B.Pretty (CodeLine a) where
     doc (CodeLine _ line _) = B.doc line
+
+indentLineBy :: (a -> Int) -> CodeLine a -> (Int, CodeLine a)
+indentLineBy ind ln@(CodeLine _ _ (tk : _)) = (ind tk, ln)
+indentLineBy _   ln@(CodeLine _ _ [])       = (0, ln)
+
+splitClause :: [(Int, a)] -> ([a], [(Int, a)])
+splitClause = first where
+    first    ((i, x) : xs)            = B.cons1 x $ continue i xs
+    first    []                       = ([], [])
+    continue i ((n, x) : xs) | n > i  = B.cons1 x $ continue i xs
+    continue _ xs                     = ([], xs)
 
 {-| Type of function that splits a next token from string.
     Tokens can includes 'TokenNumber'. -}

@@ -52,23 +52,23 @@ import qualified Koshucode.Baala.Base.Prelude.Class as B
 
 -- ----------------------  Pair
 
-mapFst :: (a -> c) -> (a,b) -> (c,b)
-mapFst f (x,y) = (f x,y)
+mapFst :: (a -> c) -> (a, b) -> (c, b)
+mapFst f (x, y) = (f x, y)
 
-mapSnd :: (b -> c) -> (a,b) -> (a,c)
-mapSnd f (x,y) = (x,f y)
+mapSnd :: (b -> c) -> (a, b) -> (a, c)
+mapSnd f (x, y) = (x, f y)
 
 cons1 :: a -> ([a], b) -> ([a], b)
-cons1 x xs = mapFst (x:) xs
+cons1 x = mapFst (x:)
 
-mapmapFst :: (a -> c) -> [(a,b)] -> [(c,b)]
+mapmapFst :: (a -> c) -> [(a, b)] -> [(c, b)]
 mapmapFst = map . mapFst
 
-mapmapSnd :: (b -> c) -> [(a,b)] -> [(a,c)]
+mapmapSnd :: (b -> c) -> [(a, b)] -> [(a, c)]
 mapmapSnd = map . mapSnd
 
-maybePairs :: [a] -> Maybe [(a,a)]
-maybePairs (a:b:xs) = liftA ((a,b):) $ maybePairs xs
+maybePairs :: [a] -> Maybe [(a, a)]
+maybePairs (a:b:xs) = liftA ((a, b):) $ maybePairs xs
 maybePairs []       = Just []
 maybePairs _        = Nothing
 

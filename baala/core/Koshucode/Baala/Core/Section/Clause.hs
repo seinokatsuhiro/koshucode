@@ -83,7 +83,9 @@ consPreclause :: [B.TokenLine] -> [Clause]
 consPreclause = concatMap consPreclause' . B.tokenClauses
 
 consPreclause' :: B.TokenClause -> [Clause]
-consPreclause' src@(B.CodeClause toks _) = clause $ B.sweepToken toks where
+consPreclause' code = clause $ B.sweepToken toks where
+    toks = B.clauseTokens code
+
     clause :: [B.Token] -> [Clause]
     clause (B.TWord _ 0 "|" : B.TWord _ 0 k : xs) =
         frege k xs  -- frege's judgement stroke
@@ -99,7 +101,7 @@ consPreclause' src@(B.CodeClause toks _) = clause $ B.sweepToken toks where
     clause _              =  unk
 
     unk                   =  c1 CUnknown
-    c0                    =  Clause src
+    c0                    =  Clause code
     c1                    =  B.singleton . c0
 
     isDelim     =  (`elem` ["|", ":"])
