@@ -7,6 +7,7 @@
 module Koshucode.Baala.Core.Section
 (
 -- * Modules
+module Koshucode.Baala.Core.Section.Bundle,
 module Koshucode.Baala.Core.Section.Clause,
 module Koshucode.Baala.Core.Section.Process,
 module Koshucode.Baala.Core.Section.Quoter,
@@ -16,6 +17,7 @@ module Koshucode.Baala.Core.Section.Section,
 -- $DataDependency
 ) where
 
+import Koshucode.Baala.Core.Section.Bundle
 import Koshucode.Baala.Core.Section.Clause
 import Koshucode.Baala.Core.Section.Process
 import Koshucode.Baala.Core.Section.Quoter

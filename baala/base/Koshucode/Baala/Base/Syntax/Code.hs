@@ -48,7 +48,7 @@ indentLineBy :: (a -> Int) -> CodeLine a -> (Int, CodeLine a)
 indentLineBy ind ln@(CodeLine _ _ (tk : _)) = (ind tk, ln)
 indentLineBy _   ln@(CodeLine _ _ [])       = (0, ln)
 
-splitClause :: [(Int, a)] -> ([a], [(Int, a)])
+splitClause :: B.Gather [(Int, a)] [a]
 splitClause = first where
     first    ((i, x) : xs)            = B.cons1 x $ continue i xs
     first    []                       = ([], [])
@@ -57,10 +57,7 @@ splitClause = first where
 
 {-| Type of function that splits a next token from string.
     Tokens can includes 'TokenNumber'. -}
-type NextToken a
-    =  B.NumberedLine
-    -> String        -- ^ Source text
-    -> (a, String)   -- ^ Token and rest of text
+type NextToken a = B.NumberedLine -> B.Gather String a
 
 {-| Split source text into 'CodeLine' list.
 

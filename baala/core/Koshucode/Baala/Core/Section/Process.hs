@@ -1,13 +1,10 @@
 {-# OPTIONS_GHC -Wall #-}
-{-# LANGUAGE DoAndIfThenElse #-}
 
 {-| Read, run, and write sections. -}
 module Koshucode.Baala.Core.Section.Process
-(
-  -- * Read
-  readSectionCode,
+( -- * Read
+  readSection,
   readSectionText,
-  readSectionFile,
 
   readJudges,
 
@@ -27,7 +24,26 @@ import qualified Koshucode.Baala.Core.Assert          as C
 import qualified Koshucode.Baala.Core.Section.Section as C
 import qualified Koshucode.Baala.Core.Section.Clause  as C
 
-{-| Read section from text. -}
+
+
+-- --------------------------------------------  Read
+
+{-| Read section from certain resource. -}
+readSection :: (C.CContent c) => C.Section c -> B.Resource -> IO (B.Ab (C.Section c))
+readSection root res = dispatch res where
+    dispatch (B.ResourceFile path)
+        = do exist <- Dir.doesFileExist path
+             case exist of
+               False -> return $ Left $ B.AbortIO $ B.AIONoFile path
+               True  -> do code <- readFile path
+                           return $ readSectionCode root res code
+
+    dispatch (B.ResourceText code)
+        = return $ readSectionCode root res code
+
+    dispatch (B.ResourceURL _)
+        = error "Not implemented read from URL"
+
 readSectionCode
     :: (C.CContent c)
     => C.Section c  -- ^ Root section
@@ -39,26 +55,10 @@ readSectionCode root res code =
        clauses <- C.consClause half $ B.tokenLines res code
        C.consSection full res clauses
 
-readSectionText
-    :: (C.CContent c)
-    => C.Section c  -- ^ Root section
-    -> String       -- ^ Source text
-    -> B.Ab (C.Section c)  -- ^ Resulting section
+{-| Read section from text. -}
+readSectionText :: (C.CContent c) => C.Section c -> String -> B.Ab (C.Section c)
 readSectionText root code =
     readSectionCode root (B.ResourceText code) code
-
-{-| Read section from file. -}
-readSectionFile
-    :: (C.CContent c)
-    => C.Section c   -- ^ Root section
-    -> FilePath      -- ^ Path of section file
-    -> IO (B.Ab (C.Section c)) -- ^ Resulting section
-readSectionFile root path =
-    do exist <- Dir.doesFileExist path
-       case exist of
-         False -> return $ Left $ B.AbortIO $ B.AIONoFile path
-         True  -> do code <- readFile path
-                     return $ readSectionCode root (B.ResourceFile path) code
 
 {-| Read judges from text. -}
 readJudges :: (C.CContent c) => String -> B.Ab [B.Judge c]
@@ -66,12 +66,15 @@ readJudges code =
     do sec <- readSectionText C.emptySection code
        Right $ C.sectionJudge sec
 
+
+-- --------------------------------------------  Run
+
 {-| Run section.
     Output section has judges calculated
     from assertions in input section. -}
 runSection
     :: (C.CContent c)
-    => C.Section c              -- ^ Input section
+    => C.Section c         -- ^ Input section
     -> B.Ab (C.Section c)  -- ^ Output section
 runSection sec =
     do let input       = C.sectionJudge sec
@@ -91,6 +94,9 @@ sectionLinkedAssert C.Section { C.sectionRelmap = ms
                               , C.sectionAssert = ass }
     = map linker ass where
       linker = C.assertMap $ C.relmapLinker ms
+
+
+-- --------------------------------------------  Write
 
 {-| Output judges in section.
     If violated judges are found, output they.

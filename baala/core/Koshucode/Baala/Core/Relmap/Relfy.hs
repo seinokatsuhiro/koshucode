@@ -42,7 +42,7 @@ data RelfyCore c
     | RelfyAbFull       Bool ( [[c]] -> B.Ab [[c]] )
     | RelfyAbPred            (  [c]  -> B.Ab Bool  )
 
-    | RelfyConst               [[c]]
+    | RelfyConst                             [[c]]
     | RelfyId
     | RelfyAppend       (RelfyBody c) (RelfyBody c)
     | RelfyUnion        Bool [RelfyBody c]
@@ -63,10 +63,6 @@ instance Show (RelfyCore c) where
     show (RelfyAppend      x y)  =  "RelfyAppend " ++ show [x,y]
     show (RelfyUnion      _ xs)  =  "RelfyUnion " ++ show xs
 
--- instance Monoid.Monoid (RelfyCore c) where
---     mempty      = RelfyOneToOne False id
---     mappend x y = RelfyAppend x y
-
 type RelmapConflRelfy c
     =  [(Relfy c)]      -- ^ Relfiers of subrelmaps
     -> RelmapCalcRelfy c
@@ -79,44 +75,41 @@ relfyConst :: B.Rel c -> Relfy c
 relfyConst (B.Rel h b) = Relfy h (B.Sourced [] $ RelfyConst b)
 
 relfyId :: RelmapCalcRelfy c
-relfyId h = Right (Relfy h relfyBodyId)
-
-relfyBodyId :: RelfyBody c
-relfyBodyId = B.Sourced [] $ RelfyOneToOne False id
+relfyId h = Right (Relfy h $ B.Sourced [] RelfyId)
 
 relfyRun :: (Ord c) => RelfyBody c -> B.AbMap [[c]]
-relfyRun = (<$>) where
-    (B.Sourced src r) <$> b1 =
-      B.ab src $
-        case r of
-          RelfyOneToAbMany u f  ->  do b2 <- f `mapM` b1
-                                       uniqueRt u $ concat b2
-          RelfyOneToAbOne  u f  ->  uniqueAb u $ f `mapM` b1
-          RelfyOneToMany   u f  ->  uniqueRt u $ f `concatMap` b1
-          RelfyOneToOne    u f  ->  uniqueRt u $ f `map` b1
-          RelfyAbFull      u f  ->  uniqueAb u $ f b1
-          RelfyFull        u f  ->  uniqueRt u $ f b1
+relfyRun (B.Sourced src r) b1 =
+    B.ab src $
+     case r of
+       RelfyOneToAbMany u f  ->  do b2 <- f `mapM` b1
+                                    uniqueR u $ concat b2
+       RelfyOneToAbOne  u f  ->  uniqueA u $ f `mapM` b1
+       RelfyOneToMany   u f  ->  uniqueR u $ f `concatMap` b1
+       RelfyOneToOne    u f  ->  uniqueR u $ f `map` b1
+       RelfyAbFull      u f  ->  uniqueA u $ f b1
+       RelfyFull        u f  ->  uniqueR u $ f b1
 
-          RelfyAbPred        f  ->  Monad.filterM f b1
-          RelfyPred          f  ->  Right $ filter f b1
-          RelfyConst        bc  ->  Right bc
-          RelfyId               ->  Right b1
+       RelfyAbPred        f  ->  Monad.filterM f b1
+       RelfyPred          f  ->  Right $ filter f b1
+       RelfyConst         b  ->  Right b
+       RelfyId               ->  Right b1
 
-          RelfyUnion      u rs  ->  do b2 <- (<$> b1) `mapM` rs
-                                       uniqueRt u $ concat b2
-          RelfyAppend    g1 g2  ->  do b2 <- g1 <$> b1
-                                       g2 <$> b2
+       RelfyUnion      u rs  ->  do b2 <- mapM (`relfyRun` b1) rs
+                                    uniqueR u $ concat b2
+
+       RelfyAppend r1@(B.Sourced src1 _) r2
+           -> do b2       <- r1 `relfyRun` b1
+                 B.ab src1 $ r2 `relfyRun` b2
+
+uniqueR :: (Ord c) => Bool -> [c] -> B.Ab [c]
+uniqueR u = Right . uniqueIf u
+
+uniqueA :: (Ord c) => Bool -> B.Ab [c] -> B.Ab [c]
+uniqueA u = (Right . uniqueIf u =<<)
 
 uniqueIf :: (Ord c) => Bool -> [c] -> [c]
 uniqueIf True  = B.unique
 uniqueIf False = id
-
-uniqueRt :: (Ord c) => Bool -> [c] -> B.Ab [c]
-uniqueRt u xs = Right $ uniqueIf u xs
-
-uniqueAb :: (Ord c) => Bool -> B.Ab [c] -> B.Ab [c]
-uniqueAb u xs = do xs' <- xs
-                   Right $ uniqueIf u xs'
 
 relfy :: B.Relhead -> RelfyCore c -> Relfy c
 relfy h f = Relfy h $ B.Sourced [] f

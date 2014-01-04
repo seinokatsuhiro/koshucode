@@ -35,22 +35,24 @@ runRelmapViaRelfy sel r (B.Rel h1 b1) =
 
 specialize :: C.RelSelect c -> C.Relmap c -> B.Relhead -> B.Ab (C.Relfy c)
 specialize sel = (<$>) where
-    C.RelmapSource _ p ns <$> _  = Right $ C.relfyConst $ sel p ns
-    C.RelmapConst  _ r    <$> _  = Right $ C.relfyConst r
-    C.RelmapAlias  _ r    <$> h1 = r <$> h1
-    C.RelmapName h op     <$> _  = B.abFrom h $ unk op
+    C.RelmapSource half p ns <$> _  = right half (C.relfyConst $ sel p ns)
+    C.RelmapConst  half rel  <$> _  = right half (C.relfyConst rel)
+    C.RelmapAlias  _ relmap  <$> h1 = relmap <$> h1
+    C.RelmapName   half name <$> _  =
+        B.abFrom half $ Left $ B.AbortAnalysis [] $ B.AAUnkRelmap name
 
-    C.RelmapAppend r1 r2  <$> h1 =
-        do relfy2 <- r1 <$> h1
-           relfy3 <- r2 <$> C.relfyHead relfy2
+    C.RelmapAppend relmap1 relmap2 <$> h1 =
+        do relfy2 <- relmap1 <$> h1
+           relfy3 <- relmap2 <$> C.relfyHead relfy2
            Right $ M.mappend relfy2 relfy3
 
-    C.RelmapCalc half mk rs <$> h1 =
+    C.RelmapCalc half mk relmaps <$> h1 =
         B.abFrom half $ do
-          subrelfy <- (<$> h1) `mapM` rs
-          C.relfySetSource half `fmap` mk subrelfy h1
+          subrelfy <- (<$> h1) `mapM` relmaps
+          relfy    <- mk subrelfy h1
+          right half relfy
 
-    unk op = Left $ B.AbortAnalysis [] $ B.AAUnkRelmap op
+    right half r = Right $ C.relfySetSource half $ r
 
 
 

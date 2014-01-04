@@ -1,8 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Toolkit.Library.Run
-( SectionSource (..),
-  runFiles,
+( runFiles,
   hRunFiles,
   concatMM,
   runCalc,
@@ -21,16 +20,10 @@ import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 
 
-data SectionSource c = SectionSource
-    { rootSection  :: C.Section c
-    , textSections :: [String]
-    , fileSections :: [FilePath]
-    } deriving (Show)
-      
 
 -- ----------------------
 
-runFiles :: (C.CContent c) => B.CommandLine -> SectionSource c -> IO Int
+runFiles :: (C.CContent c) => B.CommandLine -> C.SectionBundle c -> IO Int
 runFiles = hRunFiles IO.stdout
 
 {-| Read and union sections from files, and run the section. -}
@@ -38,12 +31,12 @@ hRunFiles
     :: (C.CContent c)
     => IO.Handle        -- ^ File handle
     -> B.CommandLine    -- ^ Command line
-    -> SectionSource c  -- ^ Section source code
+    -> C.SectionBundle c  -- ^ Section source code
     -> IO Int
-hRunFiles h cmd (SectionSource root textSec files) =
-    do let sec = map (C.readSectionText root) textSec
-       sects <- mapM (C.readSectionFile root) files
-       let union = concatMM $ sec ++ sects
+hRunFiles h cmd src =
+    do sects <- C.readSectionBundle src
+       let union = concatMM sects
+           files = C.bundleFiles src
            comm  = B.CommentDoc [ B.CommentSec "INPUT" files ]
 
        IO.hSetEncoding h IO.utf8
@@ -64,18 +57,18 @@ concatMM (s:ss) =
 
 -- ---------------------- Calculation list
 
-runCalc :: (C.CContent c) => B.CommandLine -> SectionSource c -> IO Int
+runCalc :: (C.CContent c) => B.CommandLine -> C.SectionBundle c -> IO Int
 runCalc = runCalcTo ""
 
 runCalcTo
     :: (C.CContent c)
     => FilePath          -- ^ Output path prefix
     -> B.CommandLine
-    -> SectionSource c   -- ^ Section
+    -> C.SectionBundle c   -- ^ Section
     -> IO Int
 runCalcTo dir cmd sec =
     do union <- readSec sec
-       B.abortableIO cmd (runCalcSec dir $ rootSection sec) union
+       B.abortableIO cmd (runCalcSec dir $ C.bundleRoot sec) union
 
 runCalcSec :: (C.CContent c) => String -> C.Section c -> C.Section c -> IO Int
 runCalcSec dir root sec =
@@ -93,7 +86,7 @@ runCalcJudge dir root (B.Judge True "KOSHU-CALC" xs) =
              mkdir outputFile
              IO.withFile outputFile IO.WriteMode
                           $ \ h -> hRunFiles h []
-                                   (SectionSource root [] inputFiles)
+                                   (C.SectionBundle root [] inputFiles [])
       Just _       -> return 0
       Nothing      -> return 0
 runCalcJudge _ _ _ =  return 0
@@ -122,23 +115,13 @@ theStrings _               =  []
 
 -- ----------------------  Read
 
-readSec
-    :: (C.CContent c)
-    => SectionSource c               -- ^ Section
-    -> IO (B.Ab (C.Section c))  -- ^ Union of sections
+readSec :: (C.CContent c) => C.SectionBundle c -> IO (B.Ab (C.Section c))
 readSec src =
-    do let root = rootSection src
-           sec1 = map (C.readSectionText root) $ textSections src
-       sec2   <- mapM (C.readSectionFile root) $ fileSections src
-       return $ concatMM $ sec1 ++ sec2
+    do sects <- C.readSectionBundle src
+       return $ concatMM $ sects
 
-readSecList
-    :: (C.CContent c)
-    => SectionSource c
-    -> IO (B.Ab [C.Section c])
+readSecList :: (C.CContent c) => C.SectionBundle c -> IO (B.Ab [C.Section c])
 readSecList src =
-    do let root = rootSection src
-           sec1 = map (C.readSectionText root) $ textSections src
-       sec2 <- mapM (C.readSectionFile root) $ fileSections src
-       return $ sequence $ sec1 ++ sec2
+    do sects <- C.readSectionBundle src
+       return $ sequence $ sects
 

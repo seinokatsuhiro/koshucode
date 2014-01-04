@@ -30,6 +30,7 @@ module Koshucode.Baala.Base.Prelude.Utility
   padLeft,
 
   -- * Gather
+  Gather,
   gather,
   gatherWith,
   gatherToMap,
@@ -193,14 +194,16 @@ padLeft n s = replicate rest ' ' ++ s where
 
 -- ----------------------  Gather
 
+type Gather a b = a -> (b, a)
+
 {-| Gather what is gotten by splitter. -}
-gather :: ([a] -> (b, [a])) -> [a] -> [b]
+gather :: Gather [a] b -> [a] -> [b]
 gather one = loop where
     loop [] = []
     loop xs = let (y, xs2) = one xs
               in y : loop xs2
 
-gatherWith :: (c -> [a] -> (b, [a])) -> [c] -> [a] -> [b]
+gatherWith :: (c -> Gather [a] b) -> [c] -> [a] -> [b]
 gatherWith f = loop where
     loop [] _ = []
     loop _ [] = []

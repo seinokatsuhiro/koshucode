@@ -112,7 +112,7 @@ koshuMain' rops root (prog, argv) =
           | has OptCalc         -> L.runCalc  cmd sec
           | otherwise           -> L.runFiles cmd sec
           where has  = (`elem` opts)
-                sec  = L.SectionSource root text files
+                sec  = C.SectionBundle root text files []
                 text = concatMap oneLiner opts
                 cmd  = prog : argv
       (_, _, errs) -> L.putFailure $ concat errs
@@ -127,10 +127,10 @@ putRop rops =
                [ ("/group" , C.putText g)
                , ("/name"  , C.putText n) ]
 
-runStdin :: (C.CContent c) => L.SectionSource c -> IO Int
+runStdin :: (C.CContent c) => C.SectionBundle c -> IO Int
 runStdin sec =
     do text <- getContents
-       L.runFiles [] sec { L.textSections = text : L.textSections sec }
+       L.runFiles [] sec { C.bundleTexts = text : C.bundleTexts sec }
 
 oneLiner :: Option -> [String]
 oneLiner (OptSection sec) = [oneLinerPreprocess sec]
@@ -143,7 +143,7 @@ oneLinerPreprocess = loop where
     loop ('|' : '|' : xs) = '\n' : loop (B.trimLeft xs)
     loop (x : xs) = x : loop xs
 
-putElems :: (C.CContent c) => L.SectionSource c -> IO Int
+putElems :: (C.CContent c) => C.SectionBundle c -> IO Int
 putElems src =
     do ass <- L.readSecList src
        case ass of
@@ -153,14 +153,14 @@ putElems src =
 
 -- ----------------------  Pretty printing
 
-prettySection :: (C.CContent c) => L.SectionSource c -> IO Int
-prettySection (L.SectionSource root _ files) =
+prettySection :: (C.CContent c) => C.SectionBundle c -> IO Int
+prettySection (C.SectionBundle root _ files _) =
     case files of
-      [file] -> do md <- C.readSectionFile root file
+      [file] -> do md <- C.readSection root (B.ResourceFile file)
                    prettyPrint md
                    return 0
-      []     -> do s <- getContents
-                   let md = C.readSectionText root s
+      []     -> do text <- getContents
+                   md <- C.readSection root (B.ResourceText text)
                    prettyPrint md
                    return 0
       _      -> L.putSuccess usage

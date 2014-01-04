@@ -58,23 +58,13 @@ type TokenTree = B.CodeTree B.Token
     4. Curely-bar braces @{| .. |}@ for relation.
   -}
 tokenTrees :: [B.Token] -> [TokenTree]
-tokenTrees = map (B.undouble (== 0)) . B.trees parenType . B.sweepToken
+tokenTrees = map (B.undouble (== 0)) . B.trees parenType
 
 treesTokens :: [TokenTree] -> [B.Token]
 treesTokens = B.untrees
 
 treeTokens :: TokenTree -> [B.Token]
 treeTokens = B.untree
-
--- typeParen :: B.ParenType -> (B.Token, B.Token)
--- typeParen = o where
---     o 1   =  p  "("   ")"
---     o 2   =  p  "["   "]"
---     o 3   =  p  "{"   "}"
---     o 4   =  p  "<|"  "|>"
---     o 5   =  p  "{|"  "|}"
---     o _   =  p  "?"   "?"
---     p a b =  ( B.TOpen B.tokenPosZero a, B.TClose B.tokenPosZero b )
 
 parenType :: B.GetParenType B.Token
 parenType = B.parenTable

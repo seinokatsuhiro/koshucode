@@ -31,17 +31,18 @@ docTokenClause (B.CodeClause ls toks) = d where
 {-| Convert token lines into token clauses -}
 tokenClauses :: [B.TokenLine] -> [TokenClause]
 tokenClauses = map clause . split where
-    clause ls = B.CodeClause ls $ concatMap B.lineTokens ls
+    clause ls = B.CodeClause ls $ tokens ls
+    tokens ls = concatMap (B.sweepToken . B.lineTokens) ls
 
     split :: [B.TokenLine] -> [[B.TokenLine]]
-    split = B.gather B.splitClause . map indentLine . sweep
+    split = B.gather B.splitClause . map indent . sweep
 
     sweep :: B.Map [B.TokenLine]
-    sweep = filter (not . isBlankLine)
+    sweep = filter (not . blank)
 
-indentLine :: B.TokenLine -> (Int, B.TokenLine)
-indentLine = B.indentLineBy B.tokenIndent
+    blank :: B.TokenLine -> Bool
+    blank = all B.isBlankToken . B.lineTokens
 
-isBlankLine :: B.TokenLine -> Bool
-isBlankLine = all B.isBlankToken . B.lineTokens
+    indent :: B.TokenLine -> (Int, B.TokenLine)
+    indent = B.indentLineBy B.tokenIndent
 

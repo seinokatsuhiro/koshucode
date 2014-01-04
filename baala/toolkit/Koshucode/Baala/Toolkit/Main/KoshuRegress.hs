@@ -110,14 +110,14 @@ koshuRegressMain' root (prog, argv) =
           | has OptRun          -> regLastReport sec
           | otherwise           -> regLast cmd sec
           where has = (`elem` opts)
-                sec = L.SectionSource root [] files
+                sec = C.SectionBundle root [] files []
                 cmd = prog : argv
       (_, _, errs) -> L.putFailure $ concat errs ++ usage
 
-regLast :: (C.CContent c) => B.CommandLine -> L.SectionSource c -> IO Int
+regLast :: (C.CContent c) => B.CommandLine -> C.SectionBundle c -> IO Int
 regLast cmd sec = L.runCalcTo lastDir cmd sec
 
-regLastReport :: (C.CContent c) => L.SectionSource c -> IO Int
+regLastReport :: (C.CContent c) => C.SectionBundle c -> IO Int
 regLastReport sec =
     do _ <- regLast [] sec
        regReport sec
@@ -160,7 +160,7 @@ reportFoot msg = foot where
     foot = putStr $ unlines [ "" , comm , comm ++ msg , comm ]
     comm = "**  "
 
-regReport :: (C.CContent c) => L.SectionSource c -> IO Int
+regReport :: (C.CContent c) => C.SectionBundle c -> IO Int
 regReport sec =
     do putStrLn B.emacsModeComment
        putStr . unlines $ B.texts reportHead
