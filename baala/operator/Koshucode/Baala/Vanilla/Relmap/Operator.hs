@@ -26,6 +26,7 @@ vanillaRops = Rop.ropList "vanilla"
     , ( "full R ..."           , Rop.ropConsFull          , C.operandOne     "-relmap" [] )
     , ( "group /N R"           , Rop.ropConsGroup         , C.operandTwo     "-term" "-relmap" [] )
     , ( "hold E"               , Rop.ropConsHold          , C.operandList    "-term"   [] )
+    , ( "koshu-rop /N"         , Rop.ropConsKoshuRop      , C.operandList    "-name"   [] )
     , ( "maybe R"              , Rop.ropConsMaybe         , C.operandOne     "-relmap" [] )
     , ( "member /N /N"         , Rop.ropConsMember        , C.operandEnum    ["-1", "-2"] [] )
     , ( "prefix /P /N ..."     , Rop.ropConsPrefix        , C.operandOneList "-prefix" "-term" [] )

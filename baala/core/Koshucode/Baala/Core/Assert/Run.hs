@@ -21,20 +21,24 @@ import qualified Koshucode.Baala.Core.Assert.Dataset as C
 {-| Calculate 'Relmap' for 'Rel'. -}
 runRelmapDataset
     :: (Ord c, C.CNil c)
-    => C.Dataset c     -- ^ Judges read from @source@ operator
+    => C.Global c
+    -> C.Dataset c     -- ^ Judges read from @source@ operator
     -> C.Relmap c      -- ^ Mapping from 'Rel' to 'Rel'
     -> B.Rel c         -- ^ Input relation
     -> B.Ab (B.Rel c)  -- ^ Output relation
-runRelmapDataset = runRelmapViaRelfy . C.selectRelation
+runRelmapDataset global dataset = runRelmapViaRelfy g2 where
+    g2 = global { C.globalSelect = C.selectRelation dataset }
 
-runRelmapViaRelfy :: (Ord c) => C.RelSelect c -> C.Relmap c -> B.AbMap (B.Rel c)
-runRelmapViaRelfy sel r (B.Rel h1 b1) =
-    do C.Relfy h2 f2 <- specialize sel r h1
+runRelmapViaRelfy :: (Ord c) => C.Global c -> C.Relmap c -> B.AbMap (B.Rel c)
+runRelmapViaRelfy global r (B.Rel h1 b1) =
+    do C.Relfy h2 f2 <- specialize global r h1
        b2 <- C.relfyRun f2 b1
        Right $ B.Rel h2 b2
 
-specialize :: C.RelSelect c -> C.Relmap c -> B.Relhead -> B.Ab (C.Relfy c)
-specialize sel = (<$>) where
+specialize :: C.Global c -> C.Relmap c -> B.Relhead -> B.Ab (C.Relfy c)
+specialize global = (<$>) where
+    sel = C.globalSelect global
+
     C.RelmapSource half p ns <$> _  = right half (C.relfyConst $ sel p ns)
     C.RelmapConst  half rel  <$> _  = right half (C.relfyConst rel)
     C.RelmapAlias  _ relmap  <$> h1 = relmap <$> h1
@@ -52,6 +56,11 @@ specialize sel = (<$>) where
           relfy    <- mk subrelfy h1
           right half relfy
 
+    C.RelmapGlobal half mk <$> h1 =
+        B.abFrom half $ do
+          relfy <- mk global h1
+          right half relfy
+
     right half r = Right $ C.relfySetSource half $ r
 
 
@@ -59,15 +68,16 @@ specialize sel = (<$>) where
 -- ----------------------  Assert
 
 {-| Calculate assertion list. -}
-runAssertJudges :: (Ord c, C.CNil c) => [C.Assert c] -> B.AbMap [B.Judge c]
-runAssertJudges asserts = runAssertDataset asserts . C.dataset
+runAssertJudges :: (Ord c, C.CNil c) => C.Global c -> [C.Assert c] -> B.Ab [B.Judge c]
+runAssertJudges global asserts =
+    runAssertDataset global asserts $ C.dataset $ C.globalJudges global
 
 {-| Calculate assertion list. -}
-runAssertDataset :: (Ord c, C.CNil c) => [C.Assert c] -> C.Dataset c -> B.Ab [B.Judge c]
-runAssertDataset asserts dataset = Right . concat =<< mapM each asserts where
+runAssertDataset :: (Ord c, C.CNil c) => C.Global c -> [C.Assert c] -> C.Dataset c -> B.Ab [B.Judge c]
+runAssertDataset global asserts dataset = Right . concat =<< mapM each asserts where
     each (C.Assert t pat opt r src) =
         B.ab src $ do
-          r1 <- runRelmapDataset dataset r B.reldee
+          r1 <- runRelmapDataset global dataset r B.reldee
           let q = C.assertQuality t
           assertOptionProcess q pat opt r1
 

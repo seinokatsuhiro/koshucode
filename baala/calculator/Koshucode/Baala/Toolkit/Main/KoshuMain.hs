@@ -110,11 +110,14 @@ koshuMain' rops root (prog, argv) =
           | has OptListRop      -> putRop     rops
           | has OptElement      -> putElems   sec
           | has OptCalc         -> L.runCalc  cmd sec
-          | otherwise           -> L.runFiles cmd sec
+          | otherwise           -> L.runFiles g2 sec
           where has  = (`elem` opts)
                 sec  = C.SectionBundle root text files []
                 text = concatMap oneLiner opts
                 cmd  = prog : argv
+                g2   = C.global { C.globalRops    = rops
+                                , C.globalProgram = prog
+                                , C.globalArgs    = argv }
       (_, _, errs) -> L.putFailure $ concat errs
 
 putRop :: (Ord c, B.Pretty c, C.CText c) => [C.Rop c] -> IO Int
@@ -130,7 +133,7 @@ putRop rops =
 runStdin :: (C.CContent c) => C.SectionBundle c -> IO Int
 runStdin sec =
     do text <- getContents
-       L.runFiles [] sec { C.bundleTexts = text : C.bundleTexts sec }
+       L.runFiles C.global sec { C.bundleTexts = text : C.bundleTexts sec }
 
 oneLiner :: Option -> [String]
 oneLiner (OptSection sec) = [oneLinerPreprocess sec]

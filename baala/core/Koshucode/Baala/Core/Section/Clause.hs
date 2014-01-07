@@ -1,5 +1,4 @@
 {-# LANGUAGE DeriveDataTypeable #-}
-{-# LANGUAGE TupleSections #-}
 {-# OPTIONS_GHC -Wall #-}
 
 {-| Intermidiate structure between 'String' and 'Section'. -}
@@ -83,25 +82,24 @@ consPreclause :: [B.TokenLine] -> [Clause]
 consPreclause = concatMap consPreclause' . B.tokenClauses
 
 consPreclause' :: B.TokenClause -> [Clause]
-consPreclause' code = clause $ B.sweepToken toks where
-    toks = B.clauseTokens code
+consPreclause' src = dispatch $ B.clauseTokens src where
 
-    clause :: [B.Token] -> [Clause]
-    clause (B.TWord _ 0 "|" : B.TWord _ 0 k : xs) =
+    dispatch :: [B.Token] -> [Clause]
+    dispatch (B.TWord _ 0 "|" : B.TWord _ 0 k : xs) =
         frege k xs  -- frege's judgement stroke
-    clause (B.TWord _ 0 n   : B.TWord _ 0 k : xs)
-        | isDelim k       =  rel n xs
-    clause (B.TWord _ 0 k : xs)
+    dispatch (B.TWord _ 0 name : B.TWord _ 0 colon : xs)
+        | isDelim colon   =  rel name xs
+    dispatch (B.TWord _ 0 k : xs)
         | k == "section"  =  sec xs
         | k == "import"   =  impt xs
         | k == "export"   =  expt xs
         | k == "short"    =  short xs
         | k == "****"     =  c1 CComment
-    clause []             =  []
-    clause _              =  unk
+    dispatch []           =  []
+    dispatch _            =  unk
 
     unk                   =  c1 CUnknown
-    c0                    =  Clause code
+    c0                    =  Clause src
     c1                    =  B.singleton . c0
 
     isDelim     =  (`elem` ["|", ":"])
@@ -142,7 +140,7 @@ consPreclause' code = clause $ B.sweepToken toks where
     expt [B.TWord _ _ n]   =  c1 $ CExport n
     expt _                 =  unk
 
-    impt _                 =  c1 $ CImport toks Nothing
+    impt xs                =  c1 $ CImport xs Nothing
 
     short [B.TWord _ _ a, B.TWord _ _ b] = c1 $ CShort (a, b)
     short _               =  unk

@@ -23,17 +23,17 @@ import qualified Koshucode.Baala.Core as C
 
 -- ----------------------
 
-runFiles :: (C.CContent c) => B.CommandLine -> C.SectionBundle c -> IO Int
+runFiles :: (C.CContent c) => C.Global c -> C.SectionBundle c -> IO Int
 runFiles = hRunFiles IO.stdout
 
 {-| Read and union sections from files, and run the section. -}
 hRunFiles
     :: (C.CContent c)
-    => IO.Handle        -- ^ File handle
-    -> B.CommandLine    -- ^ Command line
+    => IO.Handle          -- ^ File handle
+    -> C.Global c         -- ^ Global parameters
     -> C.SectionBundle c  -- ^ Section source code
     -> IO Int
-hRunFiles h cmd src =
+hRunFiles h global src =
     do sects <- C.readSectionBundle src
        let union = concatMM sects
            files = C.bundleFiles src
@@ -44,7 +44,8 @@ hRunFiles h cmd src =
        IO.hPutStr      h $ unlines $ B.texts comm
        IO.hPutStrLn    h ""
 
-       B.abortableIO cmd (C.hPutSection h) $ C.runSection =<< union
+       let cmd = C.globalCommandLine global
+       B.abortableIO cmd (C.hPutSection h) $ C.runSection global =<< union
 
 concatMM :: (Monad m, M.Monoid a) => [m a] -> m a
 concatMM [] = return M.mempty
@@ -85,7 +86,7 @@ runCalcJudge dir root (B.Judge True "KOSHU-CALC" xs) =
              putStrLn $ "**  Output to " ++ outputFile
              mkdir outputFile
              IO.withFile outputFile IO.WriteMode
-                          $ \ h -> hRunFiles h []
+                          $ \ h -> hRunFiles h C.global
                                    (C.SectionBundle root [] inputFiles [])
       Just _       -> return 0
       Nothing      -> return 0

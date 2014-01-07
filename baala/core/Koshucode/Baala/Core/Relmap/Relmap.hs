@@ -4,134 +4,77 @@
 
 module Koshucode.Baala.Core.Relmap.Relmap
 ( 
-  -- * Data
-  Relmap (..),
-
   -- * Append relmaps
   -- $AppendRelmaps
 
+  -- * Constructors
+  relmapSource,
+  relmapConst,
+  relmapAlias,
+  relmapCalc,
+  relmapConfl,
+  relmapGlobal,
+
   -- * Selectors
-  relmapHalf,
   relmapSourceList,
   relmapNameList,
-  relmapAppendList,
 
   -- * Linker
   relmapLinker,
 ) where
 
-import qualified Data.Monoid                            as Monoid
-import qualified Koshucode.Baala.Base                   as B
-import qualified Koshucode.Baala.Core.Relmap.HalfRelmap as C
-import qualified Koshucode.Baala.Core.Relmap.Relfy      as C
+import qualified Koshucode.Baala.Base              as B
+import qualified Koshucode.Baala.Core.Relmap.Rop   as C
+import qualified Koshucode.Baala.Core.Relmap.Relfy as C
 
 
 
--- ----------------------  Data
+-- ----------------------  Constructors
 
-{-| Relation-to-relation mapping.
-    A 'Relmap' is correspond to a use of relational operator. -}
-data Relmap c
-    -- | Retrieve a relation from a dataset
-    = RelmapSource C.HalfRelmap B.JudgePattern [B.Termname]
-    -- | Constant relation
-    | RelmapConst  C.HalfRelmap (B.Rel c)
-    -- | Equavalent relmap
-    | RelmapAlias  C.HalfRelmap (Relmap c)
-    -- | Relmap that maps relations to a relation
-    | RelmapCalc   C.HalfRelmap (C.RelmapConflRelfy c) [Relmap c]
-    -- | Connect two relmaps
-    | RelmapAppend (Relmap c) (Relmap c)
-    -- | Relmap reference
-    | RelmapName   C.HalfRelmap String
+{-| Retrieve relation from dataset. -}
+relmapSource :: C.RopUse c -> B.JudgePattern -> [B.Termname] -> (C.Relmap c)
+relmapSource = C.RelmapSource . C.ropHalf
 
+{-| Constant relmap. -}
+relmapConst :: C.RopUse c -> B.Rel c -> C.Relmap c
+relmapConst = C.RelmapConst . C.ropHalf
 
+{-| Alias for relmap. -}
+relmapAlias :: C.RopUse c -> C.Relmap c -> C.Relmap c
+relmapAlias = C.RelmapAlias . C.ropHalf
 
--- ----------------------  Instances
+{-| Make a non-confluent relmap. -}
+relmapCalc :: C.RopUse c -> C.RelmapCalcRelfy c -> C.Relmap c
+relmapCalc use relfy = relmapConfl use (const relfy) []
 
-instance Show (Relmap c) where
-    show = showRelmap
+{-| Make a confluent relmap. -}
+relmapConfl :: C.RopUse c -> C.RelmapConflRelfy c -> [C.Relmap c] -> C.Relmap c
+relmapConfl = C.RelmapCalc . C.ropHalf
 
-showRelmap :: Relmap c -> String
-showRelmap r = sh r where
-    sh (RelmapSource _ p xs)  = "RelmapSource " ++ show p ++ " " ++ show xs
-    sh (RelmapConst  _ _)     = "RelmapConst "  ++ show (B.name r) ++ " _"
-    sh (RelmapAlias  _ r2)    = "RelmapAlias "  ++ show r2
-    sh (RelmapCalc  _ _ rs)   = "RelmapCalc "   ++ show (B.name r) ++ " _" ++ joinSubs rs
-    sh (RelmapAppend r1 r2)   = "RelmapAppend"  ++ joinSubs [r1, r2]
-    sh (RelmapName _ n)       = "RelmapName "   ++ show n
-
-    joinSubs = concatMap sub
-    sub r2 = " (" ++ sh r2 ++ ")"
-
-instance Monoid.Monoid (Relmap c) where
-    mempty  = RelmapCalc halfid (const C.relfyId) []
-    mappend = RelmapAppend
-
-halfid :: C.HalfRelmap
-halfid = C.HalfRelmap "id" (B.tokenWord "id") [("operand", [])] []
-
-instance B.Name (Relmap c) where
-    name (RelmapSource _ _ _)   = "source"
-    name (RelmapConst  h _)     = C.halfOpText h
-    name (RelmapCalc   h _ _)   = C.halfOpText h
-    name (RelmapAppend _ _)     = "append"
-    name _ = undefined
-
-instance B.Pretty (Relmap c) where
-    doc (RelmapSource h _ _)   = B.doc h
-    doc (RelmapConst  h _)     = B.doc h
-    doc (RelmapAlias  h _)     = B.doc h
-    doc (RelmapCalc   h _ _)   = B.doc h -- hang (text $ name m) 2 (doch (map doc ms))
-    doc (RelmapAppend m1 m2)   = B.docHang (B.doc m1) 2 (docRelmapAppend m2)
-    doc (RelmapName   _ n)     = B.doc n
-
-docRelmapAppend :: Relmap c -> B.Doc
-docRelmapAppend = B.docv . map pipe . relmapAppendList where
-    pipe m = B.doc "|" B.<+> B.doc m
-
-instance B.TokenListing (Relmap c) where
-    tokenListing r = case relmapHalf r of
-                       Nothing -> []
-                       Just h  -> B.tokenListing h
-
+relmapGlobal :: C.RopUse c -> (C.Global c -> C.RelmapCalcRelfy c) -> C.Relmap c
+relmapGlobal = C.RelmapGlobal . C.ropHalf
 
 
 -- ----------------------  Selector
 
-relmapHalf :: Relmap c -> Maybe C.HalfRelmap
-relmapHalf = half where
-    half (RelmapSource h _ _)   = Just h
-    half (RelmapConst  h _)     = Just h
-    half (RelmapAlias  h _)     = Just h
-    half (RelmapCalc   h _ _)   = Just h
-    half (RelmapAppend m1 _)    = relmapHalf m1
-    half _                      = Nothing
-
 {-| List of 'RelmapSource' -}
-relmapSourceList :: Relmap c -> [Relmap c]
+relmapSourceList :: C.Relmap c -> [C.Relmap c]
 relmapSourceList = relmapList f where
-    f m@(RelmapSource _ _ _) = [m]
+    f m@(C.RelmapSource _ _ _) = [m]
     f _ = []
 
 {-| List of name in 'RelmapName' -}
-relmapNameList :: Relmap c -> [String]
+relmapNameList :: C.Relmap c -> [String]
 relmapNameList = relmapList f where
-    f (RelmapName _ n) = [n]
+    f (C.RelmapName _ n) = [n]
     f _ = []
 
-relmapList :: B.Map (Relmap c -> [a])
+relmapList :: B.Map (C.Relmap c -> [a])
 relmapList f = loop where
-    loop (RelmapAlias _ m1)   = loop m1
-    loop (RelmapAppend m1 m2) = loop m1 ++ loop m2
-    loop (RelmapCalc _ _ ms)  = concatMap loop ms
+    loop (C.RelmapAlias _ m1)   = loop m1
+    loop (C.RelmapAppend m1 m2) = loop m1 ++ loop m2
+    loop (C.RelmapCalc _ _ ms)  = concatMap loop ms
     loop m = f m
-
-{-| Expand 'RelmapAppend' to list of 'Relmap' -}
-relmapAppendList :: Relmap c -> [Relmap c]
-relmapAppendList = loop where
-    loop (RelmapAppend m1 m2) = loop m1 ++ loop m2
-    loop m = [m]
 
 
 
@@ -139,22 +82,22 @@ relmapAppendList = loop where
 
 {-| Link relmaps by its name. -}
 relmapLinker
-    :: [B.Named (Relmap c)]  -- ^ Relmap and its linking name
-    -> Relmap c              -- ^ Relmap before linking
-    -> Relmap c              -- ^ Linked relmap
+    :: [B.Named (C.Relmap c)]  -- ^ Relmap and its linking name
+    -> C.Relmap c              -- ^ Relmap before linking
+    -> C.Relmap c              -- ^ Linked relmap
 relmapLinker = relmapLinker' . relmapLink
 
-relmapLinker' :: [B.Named (Relmap c)] -> B.Map (Relmap c)
+relmapLinker' :: [B.Named (C.Relmap c)] -> B.Map (C.Relmap c)
 relmapLinker' ms' = link where
-    link (RelmapAlias h m)     = RelmapAlias h (link m)
-    link (RelmapAppend m1 m2)  = RelmapAppend (link m1) (link m2)
-    link (RelmapCalc h g ms) = RelmapCalc h g $ map link ms
-    link m@(RelmapName _ n)    = case lookup n ms' of
+    link (C.RelmapAlias h m)     = C.RelmapAlias h (link m)
+    link (C.RelmapAppend m1 m2)  = C.RelmapAppend (link m1) (link m2)
+    link (C.RelmapCalc h g ms)   = C.RelmapCalc h g $ map link ms
+    link m@(C.RelmapName _ n)    = case lookup n ms' of
                                    Just m' -> m'
                                    Nothing -> m
     link m                     = m
 
-relmapLink :: B.Map [B.Named (Relmap c)]
+relmapLink :: B.Map [B.Named (C.Relmap c)]
 relmapLink ms = ms' where
     ms'         = map link ms  -- make linked relmaps
     link (n, m) = (n, linker m)

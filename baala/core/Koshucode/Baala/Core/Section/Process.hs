@@ -72,15 +72,12 @@ readJudges code =
 {-| Run section.
     Output section has judges calculated
     from assertions in input section. -}
-runSection
-    :: (C.CContent c)
-    => C.Section c         -- ^ Input section
-    -> B.Ab (C.Section c)  -- ^ Output section
-runSection sec =
-    do let input       = C.sectionJudge sec
+runSection :: (C.CContent c) => C.Global c -> B.AbMap (C.Section c)
+runSection global sec =
+    do let g2          = global { C.globalJudges = C.sectionJudge sec }
            allAsserts  = sectionLinkedAssert sec
            asserts p   = filter (p . C.assertType) allAsserts
-           judges p    = C.runAssertJudges (asserts p) input
+           judges p    = C.runAssertJudges g2 (asserts p)
        violate <- judges (== C.AssertViolate)
        output  <- judges (/= C.AssertViolate)
        Right $ sec { C.sectionJudge   = output

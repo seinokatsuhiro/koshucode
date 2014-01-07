@@ -78,6 +78,10 @@ tokenWord = TWord B.tokenPosZero 0
 class TokenListing a where
     tokenListing :: a -> [Token]
 
+instance (TokenListing a) => TokenListing (Maybe a) where
+    tokenListing (Nothing) = []
+    tokenListing (Just a)  = tokenListing a
+
 -- ---------------------- Selector
 
 tokenPos :: Token -> B.TokenPos

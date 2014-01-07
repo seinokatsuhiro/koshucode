@@ -8,7 +8,6 @@
 
 module Koshucode.Baala.Core.Assert.Dataset
 ( Dataset,
-  RelSelect,
   emptyDataset,
   dataset,
   addJudges,
@@ -19,12 +18,11 @@ import qualified Data.Map   as Map
 import qualified Data.Maybe as Maybe
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core.Content as C
+import qualified Koshucode.Baala.Core.Relmap  as C
+
 
 {-| Dataset is a set of judges. -}
 data Dataset c = Dataset (Map.Map B.JudgePattern [[B.Named c]])
-
-{-| Relation selector -}
-type RelSelect c = B.JudgePattern -> [String] -> B.Rel c
 
 {-| Dataset that has no judges -}
 emptyDataset :: Dataset c
@@ -49,8 +47,8 @@ addJudge (B.Judge False _ _) _ = undefined
     If a giving term is not in judges, 'CNil' sign is used. -}
 selectRelation
     :: (Ord c, C.CNil c)
-    => Dataset c     -- ^ Dataset
-    -> RelSelect c   -- ^ Relation selector
+    => Dataset c       -- ^ Dataset
+    -> C.RelSelect c   -- ^ Relation selector
 selectRelation (Dataset m) sign ns = B.Rel h1 b1 where
     h1 = B.Relhead $ map B.Term ns
     b1 = case Map.lookup sign m of
