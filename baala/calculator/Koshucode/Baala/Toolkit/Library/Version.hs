@@ -3,12 +3,16 @@
 -- When you use ghci, please :set -idist/build/autogen
 
 module Koshucode.Baala.Toolkit.Library.Version
-( versionString
+( version,
+  versionString,
 ) where
 
-import qualified Data.Version as Version
-import qualified Paths_koshucode_baala_calculator as Version
+import qualified Data.Version as V
+import qualified Paths_koshucode_baala_calculator as V
+
+version :: V.Version
+version = V.version
 
 versionString :: String
-versionString = Version.showVersion Version.version
+versionString = V.showVersion V.version
 

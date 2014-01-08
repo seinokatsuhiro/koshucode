@@ -18,8 +18,10 @@ module Koshucode.Baala.Core.Relmap.Rop
   Relmap (..),
 ) where
 
-import qualified Data.Monoid                            as M
+import qualified Data.Monoid                            as D
+import qualified Data.Version                           as D
 import qualified Koshucode.Baala.Base                   as B
+import qualified Koshucode.Baala.Core.Content           as C
 import qualified Koshucode.Baala.Core.Relmap.HalfRelmap as C
 import qualified Koshucode.Baala.Core.Relmap.Operand    as C
 import qualified Koshucode.Baala.Core.Relmap.Relfy      as C
@@ -28,7 +30,9 @@ import qualified Koshucode.Baala.Core.Relmap.Relfy      as C
 -- ----------------------  Global
 
 data Global c = Global
-      { globalRops    :: [Rop c]
+      { globalVersion :: D.Version
+      , globalRops    :: [Rop c]
+      , globalCops    :: [C.Cop c]
       , globalProgram :: String
       , globalArgs    :: [String]
       , globalJudges  :: [B.Judge c]
@@ -43,13 +47,13 @@ globalCommandLine Global { globalProgram = prog, globalArgs = args }
     = prog : args
 
 global :: Global c
-global = Global { globalRops    = []
+global = Global { globalVersion = D.Version [] []
+                , globalRops    = []
+                , globalCops    = []
                 , globalProgram = ""
                 , globalArgs    = []
                 , globalJudges  = []
-                , globalSelect  = sel }
-    where
-      sel _ _ = B.reldee
+                , globalSelect  = \_ _ -> B.reldee }
 
 
 
@@ -110,7 +114,7 @@ showRelmap r = sh r where
     joinSubs = concatMap sub
     sub r2 = " (" ++ sh r2 ++ ")"
 
-instance M.Monoid (Relmap c) where
+instance D.Monoid (Relmap c) where
     mempty  = RelmapCalc halfid (const C.relfyId) []
     mappend = RelmapAppend
 

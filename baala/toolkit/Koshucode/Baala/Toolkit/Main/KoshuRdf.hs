@@ -16,11 +16,11 @@ import qualified Data.Text.IO             as Text
 import qualified Text.RDF.RDF4H.XmlParser as RDF
 import System.Console.GetOpt
 
-import qualified Koshucode.Baala.Base as B
-import Koshucode.Baala.Vanilla
-import Koshucode.Baala.Toolkit.Library.Exit
-import Koshucode.Baala.Toolkit.Library.RDF
-import Koshucode.Baala.Toolkit.Library.Version
+import qualified Koshucode.Baala.Base    as B
+import qualified Koshucode.Baala.Vanilla as V
+import qualified Koshucode.Baala.Toolkit.Library.Exit    as L
+import qualified Koshucode.Baala.Toolkit.Library.RDF     as L
+import qualified Koshucode.Baala.Toolkit.Library.Version as L
 
 
 
@@ -28,7 +28,7 @@ import Koshucode.Baala.Toolkit.Library.Version
 
 koshuRdfMain :: IO ()
 koshuRdfMain = do
-  (opts, files) <- parseCommand =<< prelude
+  (opts, files) <- parseCommand =<< L.prelude
   checkOptions opts
   mapM_ (convert opts) files
 
@@ -54,9 +54,9 @@ options =
 
 checkOptions :: [Option] -> IO ()
 checkOptions opts | more opts [OptTurtle, OptXml] =
-  putFailure "choose one of -n -t -x"
+  L.putFailure "choose one of -n -t -x"
 checkOptions opts | more opts [Opt2, Opt3] =
-  putFailure "choose one of -2 -3"
+  L.putFailure "choose one of -2 -3"
 checkOptions _ = return ()
 
 more :: (Eq a) => [a] -> [a] -> Bool
@@ -71,13 +71,13 @@ parseCommand :: (String, [String]) -> IO ([Option], [String])
 parseCommand (prog, argv) =
     case getOpt Permute options argv of
       (opts, _, [])
-          | has OptHelp    -> putSuccess usage
-          | has OptVersion -> putSuccess version
+          | has OptHelp    -> L.putSuccess usage
+          | has OptVersion -> L.putSuccess version
           where has = (`elem` opts)
-                version = "koshu-rdf-" ++ versionString
+                version = "koshu-rdf-" ++ L.versionString
       (opts, [], [])       -> return (opts, ["-"])
       (opts, files, [])    -> return (opts, files)
-      (_, _, errs)         -> putFailure $ concat errs
+      (_, _, errs)         -> L.putFailure $ concat errs
     where
       usage  = usageInfo header options
       header = unlines
@@ -101,13 +101,13 @@ type Graph = RDF.MGraph
 writeRdf :: [Option] -> IO Graph -> IO ()
 writeRdf opts graph = do
   g <- graph
-  let js = judgesFromRdf (tupleType opts) g
+  let js = L.judgesFromRdf (tupleType opts) g
   writeJudges js
 
-tupleType :: [Option] -> RDFTupleType
+tupleType :: [Option] -> L.RDFTupleType
 tupleType opts
-    | Opt3 `elem` opts = RDFTuple3
-    | otherwise        = RDFTuple2
+    | Opt3 `elem` opts = L.RDFTuple3
+    | otherwise        = L.RDFTuple2
 
 readRdfGraph :: (RDF.RdfParser p) => p -> String -> IO Graph
 readRdfGraph parser "-" = do
@@ -128,7 +128,7 @@ readXmlRdf path = do
   let rdf = xmlParser txt
   return $ RDF.fromEither rdf
 
-writeJudges :: [B.Judge VContent] -> IO ()
+writeJudges :: [B.Judge V.VContent] -> IO ()
 writeJudges js = print $ B.docv js
 
 

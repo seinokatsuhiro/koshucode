@@ -14,7 +14,7 @@ import System.Console.GetOpt
 import Koshucode.Baala.Toolkit.Library.Input
 import Koshucode.Baala.Toolkit.Library.Change
 import Koshucode.Baala.Toolkit.Library.Exit
-import Koshucode.Baala.Toolkit.Library.Version
+import qualified Koshucode.Baala.Toolkit.Library.Version as V
 
 
 
@@ -48,7 +48,7 @@ koshuOptions =
     ]
 
 version :: String
-version = "koshu-change-" ++ versionString
+version = "koshu-change-" ++ V.versionString
 
 usage :: String
 usage = usageInfo header koshuOptions

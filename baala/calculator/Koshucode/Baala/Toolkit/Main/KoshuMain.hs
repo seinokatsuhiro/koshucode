@@ -92,14 +92,15 @@ header = unlines
 {-| The main function for @koshu@ command.
     See 'Koshucode.Baala.Vanilla.Relmap.Implement.vanillaRops'
     for default argument. -}
-koshuMain :: (C.CContent c) => [C.Rop c] -> IO Int
-koshuMain rops =
-  let cons = C.relmapCons rops
-      root = C.makeEmptySection cons
-  in koshuMain' rops root =<< L.prelude
+koshuMain :: (C.CContent c) => C.Global c -> IO Int
+koshuMain global =
+    let rops = C.globalRops global
+        cons = C.relmapCons rops
+        root = C.makeEmptySection cons
+    in koshuMain' global root =<< L.prelude
 
-koshuMain' :: (C.CContent c) => [C.Rop c] -> C.Section c -> (String, [String]) -> IO Int
-koshuMain' rops root (prog, argv) =
+koshuMain' :: (C.CContent c) => C.Global c -> C.Section c -> (String, [String]) -> IO Int
+koshuMain' global root (prog, argv) =
     case getOpt Permute koshuOptions argv of
       (opts, files, [])
           | has OptHelp         -> L.putSuccess usage
@@ -107,7 +108,7 @@ koshuMain' rops root (prog, argv) =
           | has OptShowEncoding -> L.putSuccess =<< L.currentEncodings
           | has OptPretty       -> prettySection sec
           | has OptStdin        -> runStdin   sec
-          | has OptListRop      -> putRop     rops
+          | has OptListRop      -> putRop     $ C.globalRops global
           | has OptElement      -> putElems   sec
           | has OptCalc         -> L.runCalc  cmd sec
           | otherwise           -> L.runFiles g2 sec
@@ -115,9 +116,9 @@ koshuMain' rops root (prog, argv) =
                 sec  = C.SectionBundle root text files []
                 text = concatMap oneLiner opts
                 cmd  = prog : argv
-                g2   = C.global { C.globalRops    = rops
-                                , C.globalProgram = prog
-                                , C.globalArgs    = argv }
+                g2   = global { C.globalVersion = L.version
+                              , C.globalProgram = prog
+                              , C.globalArgs    = argv }
       (_, _, errs) -> L.putFailure $ concat errs
 
 putRop :: (Ord c, B.Pretty c, C.CText c) => [C.Rop c] -> IO Int

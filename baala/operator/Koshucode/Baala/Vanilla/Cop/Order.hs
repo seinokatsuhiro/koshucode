@@ -30,12 +30,12 @@ import Koshucode.Baala.Vanilla.Type
 
 copsOrder :: [B.Named (C.Cop VContent)]
 copsOrder =
-    [ C.namedEager  "="    copEq
-    , C.namedEager  "<>"   copNeq
-    , C.namedEager  "<"    copLt
-    , C.namedEager  "<="   copLte
-    , C.namedEager  ">"    copGt
-    , C.namedEager  ">="   copGte
+    [ C.copFun  "="    copEq
+    , C.copFun  "<>"   copNeq
+    , C.copFun  "<"    copLt
+    , C.copFun  "<="   copLte
+    , C.copFun  ">"    copGt
+    , C.copFun  ">="   copGte
     ]
 
 copBy :: (VContent -> VContent -> Bool) -> VCop

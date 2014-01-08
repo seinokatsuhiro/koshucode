@@ -30,12 +30,12 @@ import Koshucode.Baala.Vanilla.Type
 
 copsLogic :: [B.Named (C.Cop VContent)]
 copsLogic =
-    [ C.namedEager  "not"   copNot
-    , C.namedEager  "and"   copAnd
-    , C.namedEager  "or"    copOr
-    , C.namedEager  "then"  copImp
-    , C.namedEager  "when"  copWhen
-    , C.namedEager  "if"    copIf
+    [ C.copFun  "not"   copNot
+    , C.copFun  "and"   copAnd
+    , C.copFun  "or"    copOr
+    , C.copFun  "then"  copImp
+    , C.copFun  "when"  copWhen
+    , C.copFun  "if"    copIf
     ]
 
 cop1 :: (Bool -> Bool) -> VCop

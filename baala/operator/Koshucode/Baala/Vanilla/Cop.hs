@@ -3,7 +3,8 @@
 {-| Content formula. -}
 
 module Koshucode.Baala.Vanilla.Cop
-( vanillaCox,
+( vanillaCops,
+  vanillaCox,
   vanillaNamedCox,
 ) where
 
@@ -17,18 +18,20 @@ import qualified Koshucode.Baala.Vanilla.Cop.Logic    as V
 import qualified Koshucode.Baala.Vanilla.Cop.Order    as V
 import qualified Koshucode.Baala.Vanilla.Type         as V
 
-vanillaCop :: C.FindCop V.VContent
-vanillaCop n = lookup n ops where
-    ops = concat [ V.copsArith
-                 , V.copsLogic
-                 , V.copsList
-                 , V.copsLiteral
-                 , V.copsOrder ]
+lookupCop :: C.FindCop V.VContent
+lookupCop n = lookup n vanillaCops
+
+vanillaCops :: [B.Named (C.Cop V.VContent)]
+vanillaCops = concat [ V.copsArith
+                     , V.copsLogic
+                     , V.copsList
+                     , V.copsLiteral
+                     , V.copsOrder ]
 
 vanillaCox
     :: B.TokenTree                -- ^ Token tree of content expression
     -> B.Ab (C.CoxPos V.VContent) -- ^ Partial content expression
-vanillaCox = C.coxPos vanillaCop . vanillaBinary
+vanillaCox = C.coxPos lookupCop . vanillaBinary
 
 vanillaNamedCox :: B.Named B.TokenTree -> B.Ab (B.Named (C.CoxPos V.VContent))
 vanillaNamedCox (name, tree) =

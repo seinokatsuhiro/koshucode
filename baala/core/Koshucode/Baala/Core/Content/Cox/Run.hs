@@ -26,11 +26,9 @@ coxRun h arg coxPos = run =<< coxPos h where
           C.CoxLit c      -> Right c
           C.CoxTerm _ [p] -> Right $ arg !! p
           C.CoxTerm _ ps  -> term ps arg
-          C.CoxApp cop cs ->
-              case cop of
-                C.CopLazy  _ f -> f cs
-                C.CopEager _ f -> f =<< mapM run cs
-                C.CopLit   _ _ -> Left $ B.abortNotFound ""
+          C.CoxApp (C.CopFun   _ f) cs -> f   =<< mapM run cs
+          C.CoxApp (C.CopMacro _ f) cs -> run =<< f cs
+          C.CoxApp (C.CopLit   _ _) _  -> Left $ B.abortNotFound ""
 
     term []       _ = Left $ B.abortNotFound ""
     term (-1 : _) _ = Left $ B.abortNotFound ""

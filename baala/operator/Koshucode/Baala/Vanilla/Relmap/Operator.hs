@@ -10,9 +10,10 @@ module Koshucode.Baala.Vanilla.Relmap.Operator
 import qualified Koshucode.Baala.Core    as C
 import qualified Koshucode.Baala.Builtin as Rop
 
-import qualified Koshucode.Baala.Vanilla.Relmap.Calc    as Rop
-import qualified Koshucode.Baala.Vanilla.Relmap.Naming  as Rop
 import qualified Koshucode.Baala.Vanilla.Relmap.Binary  as Rop
+import qualified Koshucode.Baala.Vanilla.Relmap.Calc    as Rop
+import qualified Koshucode.Baala.Vanilla.Relmap.Global  as Rop
+import qualified Koshucode.Baala.Vanilla.Relmap.Naming  as Rop
 import qualified Koshucode.Baala.Vanilla.Relmap.Unary   as Rop
 import Koshucode.Baala.Vanilla.Type
 
@@ -26,6 +27,7 @@ vanillaRops = Rop.ropList "vanilla"
     , ( "full R ..."           , Rop.ropConsFull          , C.operandOne     "-relmap" [] )
     , ( "group /N R"           , Rop.ropConsGroup         , C.operandTwo     "-term" "-relmap" [] )
     , ( "hold E"               , Rop.ropConsHold          , C.operandList    "-term"   [] )
+    , ( "koshu-cop /N"         , Rop.ropConsKoshuCop      , C.operandList    "-name"   [] )
     , ( "koshu-rop /N"         , Rop.ropConsKoshuRop      , C.operandList    "-name"   [] )
     , ( "maybe R"              , Rop.ropConsMaybe         , C.operandOne     "-relmap" [] )
     , ( "member /N /N"         , Rop.ropConsMember        , C.operandEnum    ["-1", "-2"] [] )

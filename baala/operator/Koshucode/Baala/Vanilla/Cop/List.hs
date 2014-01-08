@@ -47,18 +47,18 @@ litT x = Left $ B.AbortSyntax [] $ B.ASNotText (show x)
 
 copsList :: [B.Named (C.Cop V.VContent)]
 copsList =
-    [ C.namedEager  "++"          copAppend
-    , C.namedEager  "intersect"   copIntersect
-    , C.namedEager  "length"      copLength
-    , C.namedEager  "list"        copList
-    , C.namedEager  "max"         copMax
-    , C.namedEager  "min"         copMin
-    , C.namedEager  "minus"       copMinus
-    , C.namedEager  "reverse"     copReverse
-    , C.namedEager  "total"       copTotal
-    , C.namedEager  "sub-index"   copSubIndex
-    , C.namedEager  "sub-length"  copSubLength
-    , C.namedLit    "'"           litText
+    [ C.copFun  "++"          copAppend
+    , C.copFun  "intersect"   copIntersect
+    , C.copFun  "length"      copLength
+    , C.copFun  "list"        copList
+    , C.copFun  "max"         copMax
+    , C.copFun  "min"         copMin
+    , C.copFun  "minus"       copMinus
+    , C.copFun  "reverse"     copReverse
+    , C.copFun  "total"       copTotal
+    , C.copFun  "sub-index"   copSubIndex
+    , C.copFun  "sub-length"  copSubLength
+    , C.coxLit  "'"           litText
     ]
 
 copList :: V.VCop

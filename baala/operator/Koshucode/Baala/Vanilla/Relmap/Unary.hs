@@ -22,8 +22,6 @@ module Koshucode.Baala.Vanilla.Relmap.Unary
   ropConsCheckTerm,
   relmapCheckTermJust, relmapCheckTermHas, relmapCheckTermBut,
   relfyCheckTermJust, relfyCheckTermHas, relfyCheckTermBut,
-  -- * koshu-rop
-  ropConsKoshuRop,
   -- * RDF
   ropConsRdf,
 ) where
@@ -278,23 +276,6 @@ relfyCheckTermBy :: ([String] -> B.Relhead -> Bool)
 relfyCheckTermBy f ns h1
     | f ns h1 = Right $ C.relfy h1 C.RelfyId
     | otherwise = Left $ B.AbortAnalysis [] (B.AACheckTerms $ B.headNames h1)
-
-
--- ----------------------  koshu-rop
-
-ropConsKoshuRop :: C.RopCons Rop.VContent
-ropConsKoshuRop use =
-  do name <- Rop.getTerm use "-name"
-     Right $ relmapKoshuRop use name
-
-relmapKoshuRop :: (C.CContent c) => C.RopUse c -> B.Termname -> C.Relmap c
-relmapKoshuRop use name = C.relmapGlobal use $ relfyKoshuRop name
-
-relfyKoshuRop :: (C.CContent c) => B.Termname -> C.Global c -> B.Relhead -> B.Ab (C.Relfy c)
-relfyKoshuRop name C.Global { C.globalRops = rops } _ = r2 where
-    r2 = Right $ C.relfy h2 $ C.RelfyConst names
-    h2 = B.headFrom [name]
-    names = map (B.singleton . C.putText . C.ropName) rops
 
 
 -- ----------------------  RDF

@@ -28,12 +28,12 @@ import qualified Koshucode.Baala.Vanilla.Type as Rop
 
 copsArith :: [B.Named (C.Cop Rop.VContent)]
 copsArith =
-    [ C.namedEager  "+"    copPlus
-    , C.namedEager  "*"    copTimes
-    , C.namedEager  "-"    copMinus
-    , C.namedEager  "quo"  copQuo
-    , C.namedEager  "rem"  copRem
-    , C.namedEager  "abs"  copAbs
+    [ C.copFun  "+"    copPlus
+    , C.copFun  "*"    copTimes
+    , C.copFun  "-"    copMinus
+    , C.copFun  "quo"  copQuo
+    , C.copFun  "rem"  copRem
+    , C.copFun  "abs"  copAbs
     ]
 
 copDec :: Rop.VContent -> B.Ab B.Decimal

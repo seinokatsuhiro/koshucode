@@ -31,6 +31,6 @@ litT x = Left $ B.AbortSyntax [] $ B.ASNotText (show x)
 
 copsLiteral :: [B.Named (C.Cop VContent)]
 copsLiteral =
-    [ C.namedLit    "'"       litText
+    [ C.coxLit    "'"       litText
     ]
 

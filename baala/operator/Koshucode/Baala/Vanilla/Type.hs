@@ -86,7 +86,7 @@ instance B.Pretty VContent where
     doc (VTermset xs)       =  B.docWraps "<|" "|>" $ B.doch xs
     doc (VRel r)            =  B.doc r
 
-type VCop = C.CopEagerF VContent
+type VCop = C.CopFunF VContent
 
 
 

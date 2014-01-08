@@ -6,6 +6,7 @@ module Koshucode.Baala.Base.Abort.Reason
 ( AbortReason (..),
   Ab, AbMap,
   ab, abFrom,
+  sourcedAbMap,
   (<!!>),
   abortMalformedOperand,
   abortNotFound,
@@ -87,6 +88,12 @@ pushSource _ a = a
 
 pushSourceFrom :: (B.TokenListing a) => a -> B.Map AbortReason
 pushSourceFrom = pushSource . B.tokenListing
+
+sourcedAbMap :: (a -> Ab b) -> B.Sourced a -> Ab (B.Sourced b)
+sourcedAbMap f (B.Sourced src x) =
+    ab src $ do
+      y <- f x
+      Right $ B.Sourced src y
 
 {-| Lookup association list. This function may abort. -}
 (<!!>) :: [B.Named b] -> String -> Ab b
