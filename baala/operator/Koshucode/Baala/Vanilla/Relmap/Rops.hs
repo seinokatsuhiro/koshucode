@@ -2,7 +2,7 @@
 
 {-| Vanilla relational operators. -}
 
-module Koshucode.Baala.Vanilla.Relmap.Operator
+module Koshucode.Baala.Vanilla.Relmap.Rops
 ( vanillaRops,
   -- $Operators
 ) where
@@ -10,15 +10,15 @@ module Koshucode.Baala.Vanilla.Relmap.Operator
 import qualified Koshucode.Baala.Core    as C
 import qualified Koshucode.Baala.Builtin as Rop
 
-import qualified Koshucode.Baala.Vanilla.Relmap.Binary  as Rop
 import qualified Koshucode.Baala.Vanilla.Relmap.Calc    as Rop
+import qualified Koshucode.Baala.Vanilla.Relmap.Confl   as Rop
+import qualified Koshucode.Baala.Vanilla.Relmap.Cox     as Rop
 import qualified Koshucode.Baala.Vanilla.Relmap.Global  as Rop
 import qualified Koshucode.Baala.Vanilla.Relmap.Naming  as Rop
-import qualified Koshucode.Baala.Vanilla.Relmap.Unary   as Rop
-import Koshucode.Baala.Vanilla.Type
+import qualified Koshucode.Baala.Vanilla.Type           as Rop
 
 {-| Implementation of relational operators. -}
-vanillaRops :: [C.Rop VContent]
+vanillaRops :: [C.Rop Rop.VContent]
 vanillaRops = Rop.ropList "vanilla"
     [ ( "add /N E ..."         , Rop.ropConsAdd           , C.operandList    "-term"   [] )
     , ( "check-term /N ..."    , Rop.ropConsCheckTerm     , C.operandList    "-term"   ["-just", "-has", "-but"] )

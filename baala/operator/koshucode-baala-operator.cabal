@@ -70,12 +70,12 @@ library
         Koshucode.Baala.Vanilla.Cop.Order
 
         Koshucode.Baala.Vanilla.Relmap
-        Koshucode.Baala.Vanilla.Relmap.Binary
         Koshucode.Baala.Vanilla.Relmap.Calc
+        Koshucode.Baala.Vanilla.Relmap.Confl
+        Koshucode.Baala.Vanilla.Relmap.Cox
         Koshucode.Baala.Vanilla.Relmap.Global
         Koshucode.Baala.Vanilla.Relmap.Naming
-        Koshucode.Baala.Vanilla.Relmap.Operator
-        Koshucode.Baala.Vanilla.Relmap.Unary
+        Koshucode.Baala.Vanilla.Relmap.Rops
 
         Koshucode.Baala.Vanilla.Type
 

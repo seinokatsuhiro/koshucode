@@ -5,7 +5,7 @@
 module Koshucode.Baala.Vanilla.Cop
 ( vanillaCops,
   vanillaCox,
-  vanillaNamedCox,
+  vanillaCoxNamed,
 ) where
 
 import qualified Koshucode.Baala.Base as B
@@ -18,9 +18,6 @@ import qualified Koshucode.Baala.Vanilla.Cop.Logic    as V
 import qualified Koshucode.Baala.Vanilla.Cop.Order    as V
 import qualified Koshucode.Baala.Vanilla.Type         as V
 
-lookupCop :: C.FindCop V.VContent
-lookupCop n = lookup n vanillaCops
-
 vanillaCops :: [B.Named (C.Cop V.VContent)]
 vanillaCops = concat [ V.copsArith
                      , V.copsLogic
@@ -28,13 +25,11 @@ vanillaCops = concat [ V.copsArith
                      , V.copsLiteral
                      , V.copsOrder ]
 
-vanillaCox
-    :: B.TokenTree                -- ^ Token tree of content expression
-    -> B.Ab (C.CoxPos V.VContent) -- ^ Partial content expression
-vanillaCox = C.coxPos lookupCop . vanillaBinary
+vanillaCox :: B.TokenTree -> B.Ab (C.CoxCons V.VContent)
+vanillaCox = C.coxCons (`lookup` vanillaCops) . vanillaBinary
 
-vanillaNamedCox :: B.Named B.TokenTree -> B.Ab (B.Named (C.CoxPos V.VContent))
-vanillaNamedCox (name, tree) =
+vanillaCoxNamed :: B.Named B.TokenTree -> B.Ab (B.Named (C.CoxCons V.VContent))
+vanillaCoxNamed (name, tree) =
     do cox <- vanillaCox tree
        Right (name, cox)
 

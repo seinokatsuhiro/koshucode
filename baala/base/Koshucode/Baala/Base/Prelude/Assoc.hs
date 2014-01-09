@@ -3,7 +3,8 @@
 {-| Utilities for association lists. -}
 
 module Koshucode.Baala.Base.Prelude.Assoc
-( OnceMore (..),
+( Lookup,
+  OnceMore (..),
   assocRename,
   assocPush,
   assocGather,
@@ -15,6 +16,8 @@ module Koshucode.Baala.Base.Prelude.Assoc
 
 import qualified Data.Maybe as Maybe
 import qualified Koshucode.Baala.Base.Prelude.Class as B
+
+type Lookup a = String -> Maybe a
 
 data OnceMore a
     = Once a
@@ -44,6 +47,7 @@ assocGather ((k, a) : xs) = assocPush k a $ assocGather xs
 -- assocBy (`lookup` [('a', "A")]) "-" "apple banana cocoa"
 -- assocBy (`lookup` [('a', "A")]) "-" "bbbac"
 -- assocBy (`lookup` [('a', "A")]) "-" ""
+
 assocBy :: (a -> Maybe k) -> k -> [a] -> [(k, [a])]
 assocBy p k0 = loop k0 [] where
     loop k1 ys [] = [(k1, reverse ys)]

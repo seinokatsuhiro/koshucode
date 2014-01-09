@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Vanilla.Relmap.Binary
+module Koshucode.Baala.Vanilla.Relmap.Confl
 ( 
   -- * maybe
   ropConsMaybe, relmapMaybe, relfyMaybe,
