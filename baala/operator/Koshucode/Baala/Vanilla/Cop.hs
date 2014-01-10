@@ -5,33 +5,28 @@
 module Koshucode.Baala.Vanilla.Cop
 ( vanillaCops,
   vanillaCox,
-  vanillaCoxNamed,
 ) where
 
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 
-import qualified Koshucode.Baala.Vanilla.Cop.Arith    as V
-import qualified Koshucode.Baala.Vanilla.Cop.List     as V
-import qualified Koshucode.Baala.Vanilla.Cop.Literal  as V
-import qualified Koshucode.Baala.Vanilla.Cop.Logic    as V
-import qualified Koshucode.Baala.Vanilla.Cop.Order    as V
-import qualified Koshucode.Baala.Vanilla.Type         as V
+import qualified Koshucode.Baala.Vanilla.Type         as Rop
+import qualified Koshucode.Baala.Vanilla.Cop.Arith    as Cop
+import qualified Koshucode.Baala.Vanilla.Cop.List     as Cop
+import qualified Koshucode.Baala.Vanilla.Cop.Logic    as Cop
+import qualified Koshucode.Baala.Vanilla.Cop.Order    as Cop
 
-vanillaCops :: [B.Named (C.Cop V.VContent)]
-vanillaCops = concat [ V.copsArith
-                     , V.copsLogic
-                     , V.copsList
-                     , V.copsLiteral
-                     , V.copsOrder ]
+{-| List of term-content operators. -}
+vanillaCops :: [C.Cop Rop.VContent]
+vanillaCops = concat ops where
+    ops = [ Cop.copsArith
+          , Cop.copsLogic
+          , Cop.copsList
+          , Cop.copsOrder ]
 
-vanillaCox :: B.TokenTree -> B.Ab (C.CoxCons V.VContent)
-vanillaCox = C.coxCons (`lookup` vanillaCops) . vanillaBinary
-
-vanillaCoxNamed :: B.Named B.TokenTree -> B.Ab (B.Named (C.CoxCons V.VContent))
-vanillaCoxNamed (name, tree) =
-    do cox <- vanillaCox tree
-       Right (name, cox)
+vanillaCox :: B.TokenTree -> B.Ab (C.CoxCons Rop.VContent)
+vanillaCox = C.coxCons (`lookup` assoc) . vanillaBinary where
+    assoc = map B.named vanillaCops
 
 {-| Convert infix form to prefix form. -}
 vanillaBinary :: B.Map B.TokenTree

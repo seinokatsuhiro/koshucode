@@ -7,7 +7,7 @@ module Koshucode.Baala.Vanilla.Quoter
 ( koshu
 ) where
 import qualified Koshucode.Baala.Core as C
-import Koshucode.Baala.Vanilla.Relmap
+import Koshucode.Baala.Vanilla.Rop
 import Koshucode.Baala.Vanilla.Type
 
 -- | Quasiquoter for @[koshu| ... |]@.

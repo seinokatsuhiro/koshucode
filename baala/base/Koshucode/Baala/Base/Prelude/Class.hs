@@ -5,6 +5,7 @@
 module Koshucode.Baala.Base.Prelude.Class
 ( Name (..),
   Named,
+  named,
   Map,
   Pred,
   YesNo (..),
@@ -18,6 +19,9 @@ class Name a where
 
 {-| Entry in association list. -}
 type Named a = (String, a)
+
+named :: (Name a) => a -> Named a
+named a = (name a, a)
 
 type Map a = a -> a
 

@@ -9,7 +9,7 @@ module Koshucode.Baala.Vanilla.Cop.Order
 
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
-import Koshucode.Baala.Vanilla.Type
+import qualified Koshucode.Baala.Vanilla.Type as V
 
 -- ----------------------
 {- $Operators
@@ -28,35 +28,35 @@ import Koshucode.Baala.Vanilla.Type
 
 -}
 
-copsOrder :: [B.Named (C.Cop VContent)]
+copsOrder :: [C.Cop V.VContent]
 copsOrder =
-    [ C.copFun  "="    copEq
-    , C.copFun  "<>"   copNeq
-    , C.copFun  "<"    copLt
-    , C.copFun  "<="   copLte
-    , C.copFun  ">"    copGt
-    , C.copFun  ">="   copGte
+    [ C.CopFun  "="    copEq
+    , C.CopFun  "<>"   copNeq
+    , C.CopFun  "<"    copLt
+    , C.CopFun  "<="   copLte
+    , C.CopFun  ">"    copGt
+    , C.CopFun  ">="   copGte
     ]
 
-copBy :: (VContent -> VContent -> Bool) -> VCop
+copBy :: (V.VContent -> V.VContent -> Bool) -> V.VCop
 copBy p [x, y] = Right . C.putBool $ x `p` y
 copBy _ _      = Left  $ B.abortNotFound ""
 
-copEq   :: VCop
+copEq   :: V.VCop
 copEq   =  copBy (==)
 
-copNeq  :: VCop
+copNeq  :: V.VCop
 copNeq  =  copBy (/=)
 
-copLt   :: VCop
+copLt   :: V.VCop
 copLt   =  copBy (<)
 
-copLte  :: VCop
+copLte  :: V.VCop
 copLte  =  copBy (<=)
 
-copGt   :: VCop
+copGt   :: V.VCop
 copGt   =  copBy (>)
 
-copGte  :: VCop
+copGte  :: V.VCop
 copGte  =  copBy (>=)
 

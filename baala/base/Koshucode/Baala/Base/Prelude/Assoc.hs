@@ -12,6 +12,7 @@ module Koshucode.Baala.Base.Prelude.Assoc
   assocOnce,
   assocMore,
   assocExist,
+  namedMapM,
 ) where
 
 import qualified Data.Maybe as Maybe
@@ -70,4 +71,9 @@ assocMore = loop where
 
 assocExist :: (Eq k) => k -> [(k, a)] -> Bool
 assocExist k a = Maybe.isJust $ lookup k a
+
+namedMapM :: (Monad m) => (b -> m c) -> (a, b) -> m (a, c)
+namedMapM f (a, b) =
+    do c <- f b
+       return (a, c)
 

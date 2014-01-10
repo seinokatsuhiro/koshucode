@@ -9,7 +9,7 @@ module Koshucode.Baala.Vanilla.Cop.Logic
 
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
-import Koshucode.Baala.Vanilla.Type
+import qualified Koshucode.Baala.Vanilla.Type as V
 
 
 
@@ -28,53 +28,53 @@ import Koshucode.Baala.Vanilla.Type
 
 -}
 
-copsLogic :: [B.Named (C.Cop VContent)]
+copsLogic :: [C.Cop V.VContent]
 copsLogic =
-    [ C.copFun  "not"   copNot
-    , C.copFun  "and"   copAnd
-    , C.copFun  "or"    copOr
-    , C.copFun  "then"  copImp
-    , C.copFun  "when"  copWhen
-    , C.copFun  "if"    copIf
+    [ C.CopFun  "not"   copNot
+    , C.CopFun  "and"   copAnd
+    , C.CopFun  "or"    copOr
+    , C.CopFun  "then"  copImp
+    , C.CopFun  "when"  copWhen
+    , C.CopFun  "if"    copIf
     ]
 
-cop1 :: (Bool -> Bool) -> VCop
+cop1 :: (Bool -> Bool) -> V.VCop
 cop1 p [x] =
     do x' <- C.needBool x
        Right . C.putBool $ p x'
 cop1 _ xs = typeUnmatch xs
 
-cop2 :: (Bool -> Bool -> Bool) -> VCop
+cop2 :: (Bool -> Bool -> Bool) -> V.VCop
 cop2 p [x, y] =
     do x' <- C.needBool x
        y' <- C.needBool y
        Right . C.putBool $ p x' y'
 cop2 _ xs = typeUnmatch xs
 
-copN :: Bool -> (Bool -> Bool -> Bool) -> VCop
+copN :: Bool -> (Bool -> Bool -> Bool) -> V.VCop
 copN unit p = loop where
     loop [] = Right . C.putBool $ unit
     loop (x : xs) =
         do x' <- C.needBool x
-           VBool xs' <- loop xs 
+           V.VBool xs' <- loop xs 
            Right . C.putBool $ p x' xs'
 
-copNot :: VCop
+copNot :: V.VCop
 copNot =  cop1 not
 
-copWhen  :: VCop
+copWhen  :: V.VCop
 copWhen  =  cop2 $ \x y -> x || not y
 
-copImp :: VCop
+copImp :: V.VCop
 copImp =  cop2 $ \x y -> not x || y
 
-copAnd :: VCop
+copAnd :: V.VCop
 copAnd =  copN True (&&)
 
-copOr  :: VCop
+copOr  :: V.VCop
 copOr  =  copN False (||)
 
-copIf  :: VCop
+copIf  :: V.VCop
 copIf [test, a, b] =
     do test' <- C.needBool test
        case test' of

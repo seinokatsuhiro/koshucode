@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Vanilla.Relmap.Global
+module Koshucode.Baala.Vanilla.Rop.Global
 ( 
   -- * koshu-cop
   ropConsKoshuCop,
@@ -17,7 +17,7 @@ import qualified Koshucode.Baala.Vanilla.Type  as Rop
 
 -- ----------------------  koshu-cop
 
-ropConsKoshuCop :: C.RopCons Rop.VContent
+ropConsKoshuCop :: Rop.VRopCons
 ropConsKoshuCop use =
   do name <- Rop.getTerm use "-name"
      Right $ relmapKoshuCop use name
@@ -34,7 +34,7 @@ relfyKoshuCop name C.Global { C.globalCops = cops } _ = r2 where
 
 -- ----------------------  koshu-rop
 
-ropConsKoshuRop :: C.RopCons Rop.VContent
+ropConsKoshuRop :: Rop.VRopCons
 ropConsKoshuRop use =
   do name <- Rop.getTerm use "-name"
      Right $ relmapKoshuRop use name

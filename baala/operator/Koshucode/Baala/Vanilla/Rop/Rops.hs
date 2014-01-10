@@ -2,7 +2,7 @@
 
 {-| Vanilla relational operators. -}
 
-module Koshucode.Baala.Vanilla.Relmap.Rops
+module Koshucode.Baala.Vanilla.Rop.Rops
 ( vanillaRops,
   -- $Operators
 ) where
@@ -10,12 +10,12 @@ module Koshucode.Baala.Vanilla.Relmap.Rops
 import qualified Koshucode.Baala.Core    as C
 import qualified Koshucode.Baala.Builtin as Rop
 
-import qualified Koshucode.Baala.Vanilla.Relmap.Calc    as Rop
-import qualified Koshucode.Baala.Vanilla.Relmap.Confl   as Rop
-import qualified Koshucode.Baala.Vanilla.Relmap.Cox     as Rop
-import qualified Koshucode.Baala.Vanilla.Relmap.Global  as Rop
-import qualified Koshucode.Baala.Vanilla.Relmap.Naming  as Rop
-import qualified Koshucode.Baala.Vanilla.Type           as Rop
+import qualified Koshucode.Baala.Vanilla.Rop.Calc    as Rop
+import qualified Koshucode.Baala.Vanilla.Rop.Confl   as Rop
+import qualified Koshucode.Baala.Vanilla.Rop.Cox     as Rop
+import qualified Koshucode.Baala.Vanilla.Rop.Global  as Rop
+import qualified Koshucode.Baala.Vanilla.Rop.Naming  as Rop
+import qualified Koshucode.Baala.Vanilla.Type        as Rop
 
 {-| Implementation of relational operators. -}
 vanillaRops :: [C.Rop Rop.VContent]

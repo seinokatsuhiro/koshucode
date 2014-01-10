@@ -5,6 +5,7 @@
 module Koshucode.Baala.Vanilla.Type
 ( VContent (..),
   VCop,
+  VRopCons,
   isMember,
 ) where
 
@@ -86,7 +87,8 @@ instance B.Pretty VContent where
     doc (VTermset xs)       =  B.docWraps "<|" "|>" $ B.doch xs
     doc (VRel r)            =  B.doc r
 
-type VCop = C.CopFunF VContent
+type VCop = C.CopFun VContent
+type VRopCons = C.RopCons VContent
 
 
 

@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Vanilla.Relmap.Naming
+module Koshucode.Baala.Vanilla.Rop.Naming
 ( -- * prefix
   ropConsPrefix, relmapPrefix, relfyPrefix,
   -- * unprefix
@@ -13,13 +13,13 @@ import qualified Data.List as List
 import qualified Koshucode.Baala.Base    as B
 import qualified Koshucode.Baala.Core    as C
 import qualified Koshucode.Baala.Builtin as Rop
-import Koshucode.Baala.Vanilla.Type
+import qualified Koshucode.Baala.Vanilla.Type as Rop
 
 
 
 -- ----------------------  prefix
 
-ropConsPrefix :: C.RopCons VContent
+ropConsPrefix :: Rop.VRopCons
 ropConsPrefix use =
     do pre <- Rop.getTerm  use "-prefix"
        ns  <- Rop.getTerms use "-term"
@@ -47,7 +47,7 @@ prefixName _ _ = undefined
 
 -- ----------------------  unprefix
 
-ropConsUnprefix :: C.RopCons VContent
+ropConsUnprefix :: Rop.VRopCons
 ropConsUnprefix use =
     do pre <- Rop.getTerm use "-prefix"
        Right $ relmapUnprefix use pre
@@ -73,7 +73,7 @@ unprefixName pre n =
 
 -- ----------------------  prefix-change
 
-ropConsPrefixChange :: C.RopCons VContent
+ropConsPrefixChange :: Rop.VRopCons
 ropConsPrefixChange use =
     do new <- Rop.getTerm use "-new"
        old <- Rop.getTerm use "-old"

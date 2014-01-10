@@ -10,8 +10,7 @@ module Koshucode.Baala.Core.Content.Cox
 
   -- * Operator
   Cop (..),
-  CopLitF, CopFunF, CopMacroF,
-  coxLit, copFun, copMacro,
+  CopLit, CopFun, CopMacro,
 
   -- * Construction
   CoxCons,
@@ -43,9 +42,9 @@ data CoxCore c
 
 {-| Term-content operator. -}
 data Cop c
-    = CopLit   String (CopLitF   c)
-    | CopMacro String (CopMacroF c)
-    | CopFun   String (CopFunF   c)
+    = CopLit   String (CopLit   c)
+    | CopMacro String (CopMacro c)
+    | CopFun   String (CopFun   c)
 
 instance Show (Cop c) where
     show (CopLit n _)   = "(CopLit "   ++ show n ++ " _)"
@@ -57,18 +56,18 @@ instance B.Name (Cop c) where
     name (CopFun n _)    = n
     name (CopMacro  n _) = n
 
-type CopLitF   c = [B.TokenTree] -> B.Ab c
-type CopFunF   c = [c]           -> B.Ab c
-type CopMacroF c = [Cox c]       -> B.Ab (Cox c)
+type CopLit   c = [B.TokenTree] -> B.Ab c
+type CopFun   c = [c]           -> B.Ab c
+type CopMacro c = [Cox c]       -> B.Ab (Cox c)
 
-coxLit :: String -> CopLitF c -> (String, Cop c)
-coxLit n f = (n, CopLit n f)
+-- coxLit :: String -> CopLitF c -> (String, Cop c)
+-- coxLit n f = (n, CopLit n f)
 
-copFun :: String -> CopFunF c -> (String, Cop c)
-copFun n f = (n, CopFun n f)
+-- copFun :: String -> CopFunF c -> (String, Cop c)
+-- copFun n f = (n, CopFun n f)
 
-copMacro :: String -> CopMacroF c -> (String, Cop c)
-copMacro n f = (n, CopMacro n f)
+-- copMacro :: String -> CopMacroF c -> (String, Cop c)
+-- copMacro n f = (n, CopMacro n f)
 
 
 -- ----------------------  Construction

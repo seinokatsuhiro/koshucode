@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Vanilla.Relmap.Confl
+module Koshucode.Baala.Vanilla.Rop.Confl
 ( 
   -- * maybe
   ropConsMaybe, relmapMaybe, relfyMaybe,
@@ -14,13 +14,13 @@ import qualified Koshucode.Baala.Base    as B
 import qualified Koshucode.Baala.Core    as C
 import qualified Koshucode.Baala.Builtin as Rop
 import qualified Koshucode.Baala.Minimal as Rop
-import Koshucode.Baala.Vanilla.Type
+import qualified Koshucode.Baala.Vanilla.Type as Rop
 
 
 
 -- ----------------------  maybe
 
-ropConsMaybe :: C.RopCons VContent
+ropConsMaybe :: Rop.VRopCons
 ropConsMaybe use =
     do m <- Rop.getRelmap use
        Right $ relmapMaybe use m
@@ -63,7 +63,7 @@ relfyMaybe (C.Relfy h2 f2) h1 =
 
 -- ----------------------  full
 
-ropConsFull :: C.RopCons VContent
+ropConsFull :: Rop.VRopCons
 ropConsFull use =
     do [m1, m2] <- Rop.getRelmaps use
        Right $ relmapFull use m1 m2
@@ -94,7 +94,7 @@ relfyFull (C.Relfy h1 f1) (C.Relfy h2 f2) _ =
 
 -- ----------------------  group
 
-ropConsGroup :: C.RopCons VContent
+ropConsGroup :: Rop.VRopCons
 ropConsGroup use =
   do n <- Rop.getTerm   use "-term"
      m <- Rop.getRelmap use

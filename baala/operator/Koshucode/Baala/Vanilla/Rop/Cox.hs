@@ -1,8 +1,8 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-|  -}
+{-| Relmap operators using term-content expressions. -}
 
-module Koshucode.Baala.Vanilla.Relmap.Cox
+module Koshucode.Baala.Vanilla.Rop.Cox
 (
   -- * add
   ropConsAdd, relmapAdd, relfyAdd,
@@ -20,10 +20,10 @@ import qualified Koshucode.Baala.Vanilla.Cop  as Rop
 
 -- ----------------------  add
 
-ropConsAdd :: C.RopCons Rop.VContent
+ropConsAdd :: Rop.VRopCons
 ropConsAdd use =
   do trees <- Rop.getTermTrees use "-term"
-     coxes <- mapM Rop.vanillaCoxNamed trees
+     coxes <- mapM (B.namedMapM Rop.vanillaCox) trees
      Right $ relmapAdd use coxes
 
 relmapAdd :: (C.CRel c, C.CList c) => C.RopUse c -> [B.Named (C.CoxCons c)] -> C.Relmap c
@@ -42,7 +42,7 @@ relfyAdd coxes h1 = Right $ C.relfy h2 (C.RelfyOneToAbOne False f) where
 
 -- ----------------------  hold
 
-ropConsHold :: C.RopCons Rop.VContent
+ropConsHold :: Rop.VRopCons
 ropConsHold use = do
   tree <- Rop.getTree use "-term"
   cox  <- Rop.vanillaCox tree

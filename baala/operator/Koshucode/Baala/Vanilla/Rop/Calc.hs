@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Vanilla.Relmap.Calc
+module Koshucode.Baala.Vanilla.Rop.Calc
 ( 
   -- * size
   ropConsSize, relmapSize, relfySize,
@@ -38,7 +38,7 @@ import qualified Koshucode.Baala.Vanilla.Order as Rop
 
 -- ----------------------  size
 
-ropConsSize :: C.RopCons Rop.VContent
+ropConsSize :: Rop.VRopCons
 ropConsSize use =
   do n <- Rop.getTerm use "-term"
      Right $ relmapSize use n
@@ -60,7 +60,7 @@ relfySize n _ = Right $ C.relfy h2 (C.RelfyFull False f) where
 
 -- ----------------------  enclose
 
-ropConsEnclose :: C.RopCons Rop.VContent
+ropConsEnclose :: Rop.VRopCons
 ropConsEnclose use =
   do n <- Rop.getTerm use "-term"
      Right $ relmapEnclose use n
@@ -82,7 +82,7 @@ relfyEnclose n h1 = Right $ C.relfy h2 (C.RelfyFull False f) where
 
 -- ----------------------  rank
 
-ropConsRank :: C.RopCons Rop.VContent
+ropConsRank :: Rop.VRopCons
 ropConsRank use =
     do n  <- Rop.getTerm  use "-add"
        ns <- Rop.getTerms use "-order"
@@ -138,7 +138,7 @@ relfyTypename n p h1 = Right $ C.relfy h2 (C.RelfyOneToOne False f) where
 
 -- ----------------------  range
 
-ropConsRange :: C.RopCons Rop.VContent
+ropConsRange :: Rop.VRopCons
 ropConsRange use =
   do term <- Rop.getTerm use "-term"
      low  <- Rop.getInt  use "-from"
@@ -212,7 +212,7 @@ relfyDuplicate ns h1
      add term @\/x@ as member of @\/xs@.
 -}  
 
-ropConsMember :: C.RopCons Rop.VContent
+ropConsMember :: Rop.VRopCons
 ropConsMember use =
   do x    <- Rop.getTerm use "-1"
      xs   <- Rop.getTerm use "-2"
@@ -280,7 +280,7 @@ relfyCheckTermBy f ns h1
 
 -- ----------------------  RDF
 
-ropConsRdf :: C.RopCons Rop.VContent
+ropConsRdf :: Rop.VRopCons
 ropConsRdf use =
     do sign  <- Rop.getWord  use "-pattern"
        [s,o] <- Rop.getTerms use "-term"

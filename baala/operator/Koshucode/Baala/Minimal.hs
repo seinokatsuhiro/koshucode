@@ -4,9 +4,9 @@
 
 module Koshucode.Baala.Minimal
 ( -- * Relation-mapping operators
-  module Koshucode.Baala.Minimal.Operator,
   module Koshucode.Baala.Minimal.Origin,
   module Koshucode.Baala.Minimal.Restrict,
+  module Koshucode.Baala.Minimal.Rop,
   module Koshucode.Baala.Minimal.Term,
   module Koshucode.Baala.Minimal.Tropashko,
 
@@ -14,9 +14,9 @@ module Koshucode.Baala.Minimal
   -- $NamingConventions
 ) where
 
-import Koshucode.Baala.Minimal.Operator
 import Koshucode.Baala.Minimal.Origin
 import Koshucode.Baala.Minimal.Restrict
+import Koshucode.Baala.Minimal.Rop
 import Koshucode.Baala.Minimal.Term
 import Koshucode.Baala.Minimal.Tropashko
 

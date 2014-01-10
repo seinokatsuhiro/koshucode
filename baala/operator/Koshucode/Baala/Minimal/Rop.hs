@@ -2,7 +2,7 @@
 
 {-| Minimal implementations of relmap operators. -}
 
-module Koshucode.Baala.Minimal.Operator
+module Koshucode.Baala.Minimal.Rop
 ( minimalRops,
   -- $ListOfOperators
 ) where

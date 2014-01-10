@@ -14,7 +14,7 @@ main =
        Main.exit status
     where
       g = C.global { C.globalRops = rops
-                   , C.globalCops = map snd Rop.vanillaCops }
+                   , C.globalCops = Rop.vanillaCops }
       rops = concat [ Rop.builtinRops
                     , Rop.minimalRops
                     , Rop.vanillaRops ]

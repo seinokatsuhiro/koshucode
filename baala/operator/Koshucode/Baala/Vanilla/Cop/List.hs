@@ -7,7 +7,7 @@ module Koshucode.Baala.Vanilla.Cop.List
   -- $Operators
 ) where
 
-import qualified Data.List as L
+import qualified Data.List as List
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 import qualified Koshucode.Baala.Vanilla.Type as V
@@ -36,34 +36,23 @@ import qualified Koshucode.Baala.Vanilla.Type as V
 
 -}
 
-litText :: [B.TokenTree] -> B.Ab V.VContent
-litText xs =
-    do ss <- mapM litT xs
-       Right . C.putText $ concat ss
-
-litT :: B.TokenTree -> B.Ab String
-litT (B.TreeL (B.TWord _ _ w)) = Right w
-litT x = Left $ B.AbortSyntax [] $ B.ASNotText (show x)
-
-copsList :: [B.Named (C.Cop V.VContent)]
+copsList :: [C.Cop V.VContent]
 copsList =
-    [ C.copFun  "++"          copAppend
-    , C.copFun  "intersect"   copIntersect
-    , C.copFun  "length"      copLength
-    , C.copFun  "list"        copList
-    , C.copFun  "max"         copMax
-    , C.copFun  "min"         copMin
-    , C.copFun  "minus"       copMinus
-    , C.copFun  "reverse"     copReverse
-    , C.copFun  "total"       copTotal
-    , C.copFun  "sub-index"   copSubIndex
-    , C.copFun  "sub-length"  copSubLength
-    , C.coxLit  "'"           litText
+    [ C.CopFun  "++"          copAppend
+    , C.CopFun  "intersect"   copIntersect
+    , C.CopFun  "length"      copLength
+    , C.CopFun  "list"        copList
+    , C.CopFun  "max"         copMax
+    , C.CopFun  "min"         copMin
+    , C.CopFun  "minus"       copMinus
+    , C.CopFun  "reverse"     copReverse
+    , C.CopFun  "total"       copTotal
+    , C.CopFun  "sub-index"   copSubIndex
+    , C.CopFun  "sub-length"  copSubLength
     ]
 
 copList :: V.VCop
 copList = Right . C.putList
-
 
 
 -- ----------------------  aggregation
@@ -114,14 +103,14 @@ copIntersect xs@(x : _) = op x where
 
 copMinus :: V.VCop
 copMinus = op where
-    op [V.VSet a,  V.VSet b]  = Right $ V.VSet  (a L.\\ b)
-    op [V.VList a, V.VList b] = Right $ V.VList (a L.\\ b)
+    op [V.VSet a,  V.VSet b]  = Right $ V.VSet  (a List.\\ b)
+    op [V.VList a, V.VList b] = Right $ V.VList (a List.\\ b)
     op xs = typeUnmatch xs
 
 intersectLists :: (Eq a) => [[a]] -> [a]
 intersectLists [] = []
 intersectLists [a] = a
-intersectLists (a : b : xs) = intersectLists $ L.intersect a b : xs
+intersectLists (a : b : xs) = intersectLists $ List.intersect a b : xs
 
 
 
