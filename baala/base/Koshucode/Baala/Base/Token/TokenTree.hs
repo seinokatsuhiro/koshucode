@@ -10,7 +10,10 @@ module Koshucode.Baala.Base.Token.TokenTree
   tokenTrees,
   treeTokens,
   treesTokens,
+
+  -- * Abbreviation
   tt,
+  tt1,
   ttDoc,
 
   -- * Divide trees
@@ -75,9 +78,15 @@ parenType = B.parenTable
     , o 5  "{|" "|}"   -- relation
     ] where o n a b = (n, B.isOpenTokenOf a, B.isCloseTokenOf b)
 
+
+-- ----------------------  Abbreviation
+
 {-| Convert text to token trees. -}
 tt :: String -> [TokenTree]
 tt s = tokenTrees $ B.tokens (B.ResourceText s) s
+
+tt1 :: String -> TokenTree
+tt1 = B.treeWrap . tt
 
 {-| Get 'B.Doc' value of token trees for pretty printing. -}
 ttDoc :: [TokenTree] -> B.Doc

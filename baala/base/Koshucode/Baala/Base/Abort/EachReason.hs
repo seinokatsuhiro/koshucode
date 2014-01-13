@@ -36,7 +36,8 @@ instance B.AbortReasonClass AbortIO where
 -- ----------------------  Syntax Error
 
 data AbortSyntax
-    = ASNotNumber  String       -- ^ Can't read as number
+    = ASAmbInfixes [String]     -- ^ Ambiguous infix operators
+    | ASNotNumber  String       -- ^ Can't read as number
     | ASNotText    String       -- ^ Can't read as text
     | ASOddRelation             -- ^ Odd relation literal
     | ASUnkClause               -- ^ Unknown clause
@@ -49,22 +50,24 @@ instance B.AbortReasonClass AbortSyntax where
     abortClass _ = "SYNTAX ERROR"
 
     abortReason a = case a of
-        (ASNotNumber _) -> "Can't read as number"
-        (ASNotText _)   -> "Can't read as text"
-        (ASOddRelation) -> "Odd relation literal"
-        (ASUnkClause)   -> "Unknown clause"
-        (ASUnkCox _)    -> "Unknown expression"
-        (ASUnkWord _)   -> "Unknown word"
-        (ASUnresToken)  -> "Unresolved prefix"
+        (ASAmbInfixes _)     -> "Ambiguous infix operators"
+        (ASNotNumber _)      -> "Can't read as number"
+        (ASNotText _)        -> "Can't read as text"
+        (ASOddRelation)      -> "Odd relation literal"
+        (ASUnkClause)        -> "Unknown clause"
+        (ASUnkCox _)         -> "Unknown expression"
+        (ASUnkWord _)        -> "Unknown word"
+        (ASUnresToken)       -> "Unresolved prefix"
 
     abortDetail a = case a of
-        (ASNotNumber s) -> [s]
-        (ASNotText s)   -> [s]
-        (ASUnkClause)   -> []
-        (ASUnkCox s)    -> [s]
-        (ASUnkWord s)   -> [s]
-        (ASUnresToken)  -> []
-        (ASOddRelation) -> []
+        (ASAmbInfixes ops)   -> ops
+        (ASNotNumber s)      -> [s]
+        (ASNotText s)        -> [s]
+        (ASOddRelation)      -> []
+        (ASUnkClause)        -> []
+        (ASUnkCox s)         -> [s]
+        (ASUnkWord s)        -> [s]
+        (ASUnresToken)       -> []
 
 
 -- ----------------------  Analysis Error

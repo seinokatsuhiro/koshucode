@@ -17,7 +17,6 @@ import qualified Koshucode.Baala.Vanilla.Type as Type
 import qualified Koshucode.Baala.Vanilla.Cop  as Cop
 
 
-
 -- ----------------------  add
 
 ropConsAdd :: Type.VRopCons
@@ -44,14 +43,20 @@ vanillaCox = vanillaCoxFrom Cop.vanillaCops Cop.vanillaHeightTable
 vanillaCoxFrom
   :: (C.CContent c) => [C.Cop c] -> [B.Named B.InfixHeight]
   -> B.TokenTree -> B.Ab (C.CoxCons c)
-vanillaCoxFrom cops ht = C.coxCons cops . bin where
-    bin :: B.Map B.TokenTree
-    bin = B.infixToPrefix $ B.infixHeight text ht
+vanillaCoxFrom cops htab tree =
+    case B.infixToPrefix ht tree of
+      Right tree2 -> C.coxCons cops $ B.undouble (== 1) tree2
+      Left  xs    -> Left $ B.AbortSyntax (map snd xs)
+                          $ B.ASAmbInfixes $ map detail xs
+    where
+      ht = B.infixHeight text htab
 
-    text :: B.Token -> String
-    text (B.TWord _ 0 w) = w
-    text _ = ""
+      text (B.TWord _ 0 w) = Just w
+      text _ = Nothing
 
+      detail (Right n, tok) = detailText tok "right" n
+      detail (Left  n, tok) = detailText tok "left"  n
+      detailText tok dir n = B.tokenContent tok ++ " : " ++ dir ++ " " ++ show n
 
 
 -- ----------------------  hold

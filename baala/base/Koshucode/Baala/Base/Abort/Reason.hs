@@ -64,9 +64,13 @@ type Ab b = Either AbortReason b
 type AbMap b = b -> Ab b
 
 source :: [B.Token] -> [String]
-source = concatMap f . reverse where
+source = map shorten . concatMap f . reverse where
     f :: B.Token -> [String]
     f = B.tokenPosDisplay . B.tokenPos
+
+shorten :: B.Map String
+shorten s | length s > 53 = take 50 s ++ "..."
+          | otherwise     = s
 
 {-| Push source information when process is aborted.
 

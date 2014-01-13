@@ -51,7 +51,9 @@ vanillaHeightTable =
     , 1 ! "/"
     , 1 ! "quo"
     , 1 ! "rem"
+
+    , ("<left-1>"  , Left 1)
+    , ("<right-1>" , Right 1)
     ]
     where h ! name = (name, Right h)
     
-

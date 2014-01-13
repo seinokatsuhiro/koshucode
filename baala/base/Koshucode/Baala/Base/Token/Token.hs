@@ -62,15 +62,17 @@ instance B.Name Token where
 
 instance B.Pretty Token where
     doc = d where
-        d (TWord n q w)  = pretty "TWord"    n [show q, show w]
-        d (TShort n a b) = pretty "TShort"   n [show a, show b]
-        d (TTerm n ns)   = pretty "TTerm"    n [show ns]
-        d (TOpen n p)    = pretty "TOpen"    n [show p]
-        d (TClose n p)   = pretty "TClose"   n [show p]
-        d (TSpace n c)   = pretty "TSpace"   n [show c]
-        d (TComment n s) = pretty "TComment" n [show s]
-        d (TUnknown n s) = pretty "TUnknown" n [show s]
-        pretty k n xs = B.doch $ k : ('#' : show n) : xs
+        d (TWord    pos q w) = pretty "TWord"    pos [show q, show w]
+        d (TShort   pos a b) = pretty "TShort"   pos [show a, show b]
+        d (TTerm    pos ns)  = pretty "TTerm"    pos [show ns]
+        d (TOpen    pos p)   = pretty "TOpen"    pos [show p]
+        d (TClose   pos p)   = pretty "TClose"   pos [show p]
+        d (TSpace   pos c)   = pretty "TSpace"   pos [show c]
+        d (TComment pos s)   = pretty "TComment" pos [show s]
+        d (TUnknown pos s)   = pretty "TUnknown" pos [show s]
+        pretty k pos xs = B.doch $ k : lineCol pos : xs
+        lineCol pos = (show $ B.tokenPosLineNumber pos)
+                      ++ ":" ++ (show $ B.tokenPosColumn pos)
 
 tokenWord :: String -> Token
 tokenWord = TWord B.tokenPosZero 0

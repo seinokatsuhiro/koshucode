@@ -11,7 +11,6 @@ module Koshucode.Baala.Base.Syntax.Infix
 
 import qualified Data.Map   as Map
 import qualified Data.Maybe as Maybe
-import qualified Koshucode.Baala.Base.Prelude     as B
 import qualified Koshucode.Baala.Base.Syntax.Tree as B
 
 
@@ -42,31 +41,40 @@ heightValue (Left  h) = h
 heightValue (Right h) = h
 
 {-| Make the height function from a height table of operators. -}
-infixHeight :: (Ord b) => (a -> b) -> [(b, InfixHeight)] -> a -> InfixHeight
+infixHeight :: (Ord b) => (a -> Maybe b) -> [(b, InfixHeight)] -> a -> InfixHeight
 infixHeight extract htab a = Maybe.fromMaybe (Left 0) ht where
-    ht   = Map.lookup (extract a) hmap
     hmap = Map.fromList htab
+    ht   = case extract a of
+             Nothing  -> Nothing
+             Just key -> Map.lookup key hmap
 
 
 -- ----------------------  Conversion
 
 {-| Split branches in a given tree at infixed binary operators -}
-infixToPrefix :: (Show a) => (a -> InfixHeight) -> B.Map (B.CodeTree a)
-infixToPrefix ht = B.undouble (== 1) . withHeight f ht where
-    f x@(B.TreeL _) = x
-    f   (B.TreeB n pp xs) =
-        case infixPos $ map treeHeight xs of
-          Right xi | xi <= 0 -> B.TreeB n pp $ map f xs
-          Right xi -> let (left, r:ight) = splitAt xi xs
-                      in B.TreeB n pp $ subtrees n left r ight
-          Left (xi, yi) -> error $ "ambiguous operator group: "
-                           ++ show (xs !! xi) ++ " and "
-                           ++ show (xs !! yi)
+infixToPrefix :: (a -> InfixHeight) -> B.CodeTree a -> Either [(InfixHeight, a)] (B.CodeTree a)
+infixToPrefix ht tree =
+    do tree2 <- toPrefix $ fmap height tree
+       Right $ fmap snd tree2
+    where
+      height x = (ht x, x)
 
-    subtrees n left r ight | null ight = [r, sub n left]
-                           | otherwise = [r, sub n left, sub n ight]
-    sub _ [x] = f x
-    sub n xs  = f $ B.TreeB n Nothing xs
+      toPrefix x@(B.TreeL _) = Right x
+      toPrefix   (B.TreeB n pp xs) =
+          case infixPos $ map treeHeight xs of
+            Right xi | xi <= 0 -> Right . B.TreeB n pp =<< mapM toPrefix xs
+            Right xi -> do let (left, r:ight) = splitAt xi xs
+                           s <- subtrees n left r ight
+                           Right $ B.TreeB n pp s
+            Left xi -> Left $ B.untrees $ map (xs !!) xi
+
+      subtrees n left r ight | null ight = do lt <- sub n left
+                                              Right [r, lt]
+                             | otherwise = do lt <- sub n left
+                                              rt <- sub n ight
+                                              Right [r, lt, rt]
+      sub _ [x] = toPrefix x
+      sub n xs  = toPrefix $ B.TreeB n Nothing xs
 
 type HeightTree a = B.CodeTree (InfixHeight, a)
 
@@ -74,11 +82,7 @@ treeHeight :: HeightTree a -> InfixHeight
 treeHeight (B.TreeL (ht, _)) = ht
 treeHeight (B.TreeB _ _ _)   = Left 0
 
-withHeight :: B.Map (HeightTree a) -> (a -> InfixHeight) -> B.Map (B.CodeTree a)
-withHeight f ht = fmap snd . f . fmap height where
-    height x = (ht x, x)
-
-infixPos :: [InfixHeight] -> Either (Int, Int) Int
+infixPos :: [InfixHeight] -> Either [Int] Int
 infixPos = pos (Right (-1)) (Left 0) . zip [0 ..] where
     pos res _ [] = res
 
@@ -95,6 +99,6 @@ infixPos = pos (Right (-1)) (Left 0) . zip [0 ..] where
     pos res y@(Left  _) ((_ ,   (Left  _)) : xs) = pos res y xs        -- remains y
 
     -- ambiguous: same height, different direction
-    pos (Right yi)      y ((xi, _) : xs) = pos (Left (yi, xi)) y xs
-    pos (Left (yi, xi)) y (_       : xs) = pos (Left (yi, xi)) y xs
+    pos (Right yi) y ((xi, _) : xs) = pos (Left [xi, yi]) y xs
+    pos (Left ps)  y ((xi, _) : xs) = pos (Left $ xi : ps) y xs
 
