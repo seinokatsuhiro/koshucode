@@ -13,17 +13,17 @@ module Koshucode.Baala.Vanilla.Rop.Cox
 import qualified Koshucode.Baala.Base         as B
 import qualified Koshucode.Baala.Core         as C
 import qualified Koshucode.Baala.Builtin      as Rop
-import qualified Koshucode.Baala.Vanilla.Type as Rop
-import qualified Koshucode.Baala.Vanilla.Cop  as Rop
+import qualified Koshucode.Baala.Vanilla.Type as Type
+import qualified Koshucode.Baala.Vanilla.Cop  as Cop
 
 
 
 -- ----------------------  add
 
-ropConsAdd :: Rop.VRopCons
+ropConsAdd :: Type.VRopCons
 ropConsAdd use =
   do trees <- Rop.getTermTrees use "-term"
-     coxes <- mapM (B.namedMapM Rop.vanillaCox) trees
+     coxes <- mapM (B.namedMapM vanillaCox) trees
      Right $ relmapAdd use coxes
 
 relmapAdd :: (C.CRel c, C.CList c) => C.RopUse c -> [B.Named (C.CoxCons c)] -> C.Relmap c
@@ -38,14 +38,28 @@ relfyAdd coxes h1 = Right $ C.relfy h2 (C.RelfyOneToAbOne False f) where
     f cs1 = do cs2 <- mapM (C.coxRun h1 cs1) es
                Right $ cs2 ++ cs1
 
+vanillaCox :: B.TokenTree -> B.Ab (C.CoxCons Type.VContent)
+vanillaCox = vanillaCoxFrom Cop.vanillaCops Cop.vanillaHeightTable
+
+vanillaCoxFrom
+  :: (C.CContent c) => [C.Cop c] -> [B.Named B.InfixHeight]
+  -> B.TokenTree -> B.Ab (C.CoxCons c)
+vanillaCoxFrom cops ht = C.coxCons cops . bin where
+    bin :: B.Map B.TokenTree
+    bin = B.infixToPrefix $ B.infixHeight text ht
+
+    text :: B.Token -> String
+    text (B.TWord _ 0 w) = w
+    text _ = ""
+
 
 
 -- ----------------------  hold
 
-ropConsHold :: Rop.VRopCons
+ropConsHold :: Type.VRopCons
 ropConsHold use = do
   tree <- Rop.getTree use "-term"
-  cox  <- Rop.vanillaCox tree
+  cox  <- vanillaCox tree
   Right $ relmapHold use True cox
 
 relmapHold :: (C.CContent c) => C.RopUse c -> Bool -> C.CoxCons c -> C.Relmap c

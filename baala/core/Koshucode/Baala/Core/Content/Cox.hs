@@ -75,24 +75,11 @@ type CopMacro c = [Cox c]       -> B.Ab (Cox c)
 type CoxCons c = B.Relhead -> B.Ab (Cox c)
 
 {-| Construct content expression. -}
-coxCons :: (C.CContent c) => B.Lookup (Cop c) -> B.TokenTree -> B.Ab (CoxCons c)
-coxCons findCop tree = positioning `fmap` construct findCop tree
+coxCons :: (C.CContent c) => [Cop c] -> B.TokenTree -> B.Ab (CoxCons c)
+coxCons cops = fmap positioning . construct cops
 
-{-| Put term positions for actural heading. -}
-positioning :: Cox c -> CoxCons c
-positioning scox h = spos scox where
-    spos = B.sourcedAbMap pos
-    pos (CoxLit c)     = Right . CoxLit $ c
-    pos (CoxApp f cs)  = Right . CoxApp f =<< mapM spos cs
-    pos (CoxTerm ns _) =
-        let index = B.headIndex1 h ns
-        in if all (>= 0) index
-           then Right $ CoxTerm ns index
-           else Left  $ B.AbortAnalysis [] (B.AANoTerms ns)
-
-{-| Construct content expression. -}
-construct :: (C.CContent c) => B.Lookup (Cop c) -> B.TokenTree -> B.Ab (Cox c)
-construct findCop = cons where
+construct :: (C.CContent c) => [Cop c] -> B.TokenTree -> B.Ab (Cox c)
+construct cops = cons where
     cons tree = Right . B.Sourced src =<< cox where
        src = B.front $ B.untree tree
        cox = case tree of
@@ -104,7 +91,7 @@ construct findCop = cons where
 
             -- parend unquoted word and its arguments
             B.TreeB 1 _ (B.TreeL (B.TWord _ 0 name) : args) ->
-                case findCop name of
+                case lookup name $ map B.named cops of
                   Just cop   ->  call cop args
                   Nothing    ->  Left $ B.AbortAnalysis src $ B.AAUnkCop name
 
@@ -115,6 +102,18 @@ construct findCop = cons where
 
     call (CopLit _ f) = fmap CoxLit . f
     call cop          = fmap (CoxApp cop) . mapM cons
+
+-- Put term positions for actural heading.
+positioning :: Cox c -> CoxCons c
+positioning scox h = spos scox where
+    spos = B.sourcedAbMap pos
+    pos (CoxLit c)     = Right . CoxLit $ c
+    pos (CoxApp f cs)  = Right . CoxApp f =<< mapM spos cs
+    pos (CoxTerm ns _) =
+        let index = B.headIndex1 h ns
+        in if all (>= 0) index
+           then Right $ CoxTerm ns index
+           else Left  $ B.AbortAnalysis [] (B.AANoTerms ns)
 
 
 
@@ -148,7 +147,6 @@ coxRun h arg pcox = run =<< pcox h where
     rel ps (B.Rel _ args) = Right . C.putList =<< mapM (term ps) args
 
 
-
 -- ----------------------
 {- $Process
 
@@ -168,7 +166,7 @@ coxRun h arg pcox = run =<< pcox h where
 
      [4. @Tree Token -> Tree Token@]
         Translate binary operators from infix to prefix.
-        See 'B.binaryTree'.
+        See 'B.infixToPrefix'.
 
    Phase 2. From prefixed token tree to literal content.
 

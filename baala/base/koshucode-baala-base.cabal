@@ -72,8 +72,8 @@ library
         Koshucode.Baala.Base.Prelude.Utility
 
         Koshucode.Baala.Base.Syntax
-        Koshucode.Baala.Base.Syntax.Binary
         Koshucode.Baala.Base.Syntax.Code
+        Koshucode.Baala.Base.Syntax.Infix
         Koshucode.Baala.Base.Syntax.Line
         Koshucode.Baala.Base.Syntax.Tree
 
