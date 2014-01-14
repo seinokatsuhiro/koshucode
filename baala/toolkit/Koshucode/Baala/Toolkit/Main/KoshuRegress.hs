@@ -92,7 +92,7 @@ reportDir  = "REGRESS/report/"
 {-| The main function for @koshu-regress@ command. -}
 koshuRegressMain :: (C.CContent c) => [C.Rop c] -> IO Int
 koshuRegressMain relmaps =
-  let cons = C.relmapCons relmaps
+  let cons = C.relmapCons $ C.global { C.globalRops = relmaps }
       root = C.makeEmptySection cons
   in koshuRegressMain' root =<< L.prelude
 

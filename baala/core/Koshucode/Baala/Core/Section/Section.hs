@@ -70,7 +70,7 @@ makeEmptySection = Section Nothing [] [] [] [] [] [] [] (B.ResourceText "")
 
 {-| Section that has no contents. -}
 emptySection :: Section c
-emptySection = makeEmptySection $ C.relmapCons []
+emptySection = makeEmptySection $ C.relmapCons C.global
 
 -- {-| Section that has only judgements. -}
 -- dataSection :: [B.Judge c] -> Section c

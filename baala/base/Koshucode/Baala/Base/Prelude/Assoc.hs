@@ -12,9 +12,13 @@ module Koshucode.Baala.Base.Prelude.Assoc
   assocOnce,
   assocMore,
   assocExist,
+
   namedMapM,
+  lookupSatisfy,
+  lookupMap,
 ) where
 
+import qualified Data.Map   as Map
 import qualified Data.Maybe as Maybe
 import qualified Koshucode.Baala.Base.Prelude.Class as B
 
@@ -76,4 +80,14 @@ namedMapM :: (Monad m) => (b -> m c) -> (a, b) -> m (a, c)
 namedMapM f (a, b) =
     do c <- f b
        return (a, c)
+
+lookupSatisfy :: a -> [(a -> Bool, b)] -> Maybe b
+lookupSatisfy x = loop where
+    loop [] = Nothing
+    loop ((p, v) : ps)
+        | p x = Just v
+        | otherwise = loop ps
+
+lookupMap :: (Ord k) => k -> Map.Map k a -> Maybe a
+lookupMap = Map.lookup
 

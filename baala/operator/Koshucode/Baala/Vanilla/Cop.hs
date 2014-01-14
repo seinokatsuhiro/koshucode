@@ -1,10 +1,9 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Content formula. -}
+{-| Term-content operators. -}
 
 module Koshucode.Baala.Vanilla.Cop
 ( vanillaCops,
-  vanillaHeightTable,
 ) where
 
 import qualified Koshucode.Baala.Base as B
@@ -16,44 +15,45 @@ import qualified Koshucode.Baala.Vanilla.Cop.List  as Cop
 import qualified Koshucode.Baala.Vanilla.Cop.Logic as Cop
 import qualified Koshucode.Baala.Vanilla.Cop.Order as Cop
 
-{-| List of term-content operators. -}
-vanillaCops :: [C.Cop Type.VContent]
-vanillaCops = concat ops where
-    ops = [ Cop.copsArith
-          , Cop.copsLogic
-          , Cop.copsList
-          , Cop.copsOrder ]
+{-| Term-content operators and its height table. -}
+vanillaCops :: ([C.Cop Type.VContent], [B.Named B.InfixHeight])
+vanillaCops = (concat cops, htab) where
 
-vanillaHeightTable :: [B.Named B.InfixHeight]
-vanillaHeightTable =
-    [ 9 ! "then"
-    , 9 ! "when"
-    , 9 ! "unless"
+    cops = [ Cop.copsArith
+           , Cop.copsLogic
+           , Cop.copsList
+           , Cop.copsOrder ]
 
-    , 8 ! "or"
+    h ! name = (name, Right h)
 
-    , 7 ! "and"
+    htab =
+        [ 9 ! "then"
+        , 9 ! "when"
+        , 9 ! "unless"
 
-    , 6 ! "="
-    , 6 ! "<>"
-    , 6 ! "<"
-    , 6 ! ">"
-    , 6 ! "<="
-    , 6 ! ">="
+        , 8 ! "or"
 
-    , 2 ! "+"
-    , 2 ! "-"
-    , 2 ! "++"
-    , 2 ! "intersect"
-    , 2 ! "minus"
+        , 7 ! "and"
 
-    , 1 ! "*"
-    , 1 ! "/"
-    , 1 ! "quo"
-    , 1 ! "rem"
+        , 6 ! "="
+        , 6 ! "<>"
+        , 6 ! "<"
+        , 6 ! ">"
+        , 6 ! "<="
+        , 6 ! ">="
 
-    , ("<left-1>"  , Left 1)
-    , ("<right-1>" , Right 1)
-    ]
-    where h ! name = (name, Right h)
+        , 2 ! "+"
+        , 2 ! "-"
+        , 2 ! "++"
+        , 2 ! "intersect"
+        , 2 ! "minus"
+
+        , 1 ! "*"
+        , 1 ! "/"
+        , 1 ! "quo"
+        , 1 ! "rem"
+
+        , ("<left-1>"  , Left 1)
+        , ("<right-1>" , Right 1)
+        ]
     

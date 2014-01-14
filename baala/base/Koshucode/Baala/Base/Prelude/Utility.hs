@@ -35,10 +35,10 @@ module Koshucode.Baala.Base.Prelude.Utility
   gatherWith,
   gatherToMap,
 
-  -- * Lookup
-  lookupSatisfy,
-  lookupMap,
-
+  -- * I/O
+  putShow,
+  putShowLn,
+  putLines,
 ) where
 
 import Control.Applicative
@@ -223,13 +223,12 @@ gatherToMap xs = loop xs Map.empty where
 
 -- ----------------------  Lookup
 
-lookupSatisfy :: a -> [(a -> Bool, b)] -> Maybe b
-lookupSatisfy x = loop where
-    loop [] = Nothing
-    loop ((p, v) : ps)
-        | p x = Just v
-        | otherwise = loop ps
+putShow :: (Show a) => a -> IO ()
+putShow = putStr . show
 
-lookupMap :: (Ord k) => k -> Map.Map k a -> Maybe a
-lookupMap = Map.lookup
+putShowLn :: (Show a) => a -> IO ()
+putShowLn = putStrLn . show
+
+putLines :: [String] -> IO ()
+putLines = putStr . unlines
 

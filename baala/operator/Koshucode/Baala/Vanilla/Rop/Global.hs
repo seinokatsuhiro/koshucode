@@ -26,7 +26,7 @@ relmapKoshuCop :: (C.CContent c) => C.RopUse c -> B.Termname -> C.Relmap c
 relmapKoshuCop use name = C.relmapGlobal use $ relfyKoshuCop name
 
 relfyKoshuCop :: (C.CContent c) => B.Termname -> C.Global c -> B.Relhead -> B.Ab (C.Relfy c)
-relfyKoshuCop name C.Global { C.globalCops = cops } _ = r2 where
+relfyKoshuCop name C.Global { C.globalCops = (cops, _) } _ = r2 where
     r2 = Right $ C.relfy h2 $ C.RelfyConst names
     h2 = B.headFrom [name]
     names = map (B.singleton . C.putText . B.name) cops

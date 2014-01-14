@@ -7,7 +7,6 @@ module Koshucode.Baala.Base.Syntax.Line
   NumberedLine,
   linesCrlfNumbered,
   linesCrlf,
-  putLines,
 ) where
 
 {-| Line number. -}
@@ -29,7 +28,4 @@ linesCrlf s = ln : next s2 where
     next ('\r' : s3) = next s3
     next ('\n' : s3) = linesCrlf s3
     next s3          = linesCrlf s3
-
-putLines :: [String] -> IO ()
-putLines = putStr . unlines
 

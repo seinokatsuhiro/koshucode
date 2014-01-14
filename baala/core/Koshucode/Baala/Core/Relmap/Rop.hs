@@ -32,12 +32,18 @@ import qualified Koshucode.Baala.Core.Relmap.Relfy      as C
 data Global c = Global
       { globalVersion :: D.Version
       , globalRops    :: [Rop c]
-      , globalCops    :: [C.Cop c]
+      , globalCops    :: ([C.Cop c], [B.Named B.InfixHeight])
       , globalProgram :: String
       , globalArgs    :: [String]
       , globalJudges  :: [B.Judge c]
       , globalSelect  :: RelSelect c
       }
+
+instance Show (Global c) where
+    show Global { globalRops = rops, globalCops = (cops, _) }
+        = let nr = length rops
+              nc = length cops
+          in "Global (" ++ show nr ++ " rops, " ++ show nc ++ " cops)"
 
 {-| Relation selector -}
 type RelSelect c = B.JudgePattern -> [String] -> B.Rel c
@@ -49,7 +55,7 @@ globalCommandLine Global { globalProgram = prog, globalArgs = args }
 global :: Global c
 global = Global { globalVersion = D.Version [] []
                 , globalRops    = []
-                , globalCops    = []
+                , globalCops    = ([], [])
                 , globalProgram = ""
                 , globalArgs    = []
                 , globalJudges  = []
@@ -68,12 +74,17 @@ data Rop c = Rop
     , ropUsage      :: String           -- ^ Usage of operator
     }
 
+instance Show (Rop c) where
+    show Rop { ropName = name, ropGroup = group }
+        = "Rop (" ++ group ++ "/" ++ name ++ ")"
+
 {-| Constructor of relmap operator -}
 type RopCons c = RopUse c -> B.Ab (Relmap c)
 
 {-| Use of relmap operator -}
-data RopUse c = RopUse {
-      ropHalf      :: C.HalfRelmap   -- ^ Syntactic data of operator use
+data RopUse c = RopUse
+    { ropGlobal    :: Global c
+    , ropHalf      :: C.HalfRelmap   -- ^ Syntactic data of operator use
     , ropSubrelmap :: [Relmap c]     -- ^ Subrelmaps
     } deriving (Show)
 

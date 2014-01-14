@@ -83,7 +83,7 @@ parenType = B.parenTable
 
 {-| Convert text to token trees. -}
 tt :: String -> [TokenTree]
-tt s = tokenTrees $ B.tokens (B.ResourceText s) s
+tt s = tokenTrees $ B.sweepToken $ B.tokens (B.ResourceText s) s
 
 tt1 :: String -> TokenTree
 tt1 = B.treeWrap . tt
@@ -92,10 +92,12 @@ tt1 = B.treeWrap . tt
 ttDoc :: [TokenTree] -> B.Doc
 ttDoc = dv where
     dv = B.docv . map d
-    d (B.TreeL x)       = B.doc "TreeL :" B.<+> B.doc x
-    d (B.TreeB p _ xs2) = let treeB = (B.doch ["TreeB", show p])
-                          in P.hang treeB 2 (dv xs2)
-
+    d (B.TreeL x) = B.doc "TreeL :" B.<+> B.doc x
+    d (B.TreeB n pp xs) =
+        let treeB = B.doch ["TreeB", show n] B.<+> parens pp
+        in P.hang treeB 2 (dv xs)
+    parens Nothing = B.doc "- -"
+    parens (Just (open, close)) = B.doch [open, close]
 
 
 -- ----------------------  Divide trees

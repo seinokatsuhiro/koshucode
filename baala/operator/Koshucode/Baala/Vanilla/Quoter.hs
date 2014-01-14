@@ -18,5 +18,5 @@ koshu = C.koshuQuoter vanillaHalf [| vanillaFull |]
 vanillaHalf :: C.RelmapConsHalf
 vanillaFull :: C.RelmapConsFull VContent
 (C.RelmapCons vanillaHalf vanillaFull)
-    = C.relmapCons vanillaRops
+    = C.relmapCons $ C.global { C.globalRops = vanillaRops }
 

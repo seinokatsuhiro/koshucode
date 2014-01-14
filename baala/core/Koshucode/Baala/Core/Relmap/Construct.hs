@@ -21,15 +21,13 @@ import qualified Koshucode.Baala.Core.Relmap.Rop        as C
 -- ----------------------  Constructions
 
 {-| Make half and full relmap constructors. -}
-relmapCons
-    :: [C.Rop c]      -- ^ Implementations of relmap operators
-    -> (RelmapCons c) -- ^ Relmap constructors
-relmapCons = make . unzip . map pair where
+relmapCons :: C.Global c -> (RelmapCons c)
+relmapCons global = make $ unzip $ map pair $ C.globalRops global where
     make (halfs, fulls) =
-        RelmapCons (makeConsHalf halfs) (makeConsFull fulls)
-    pair (C.Rop op _ sorter cons synopsis) =
-        let half = (op, (synopsis, sorter))
-            full = (op, cons)
+        RelmapCons (relmapConsHalf halfs) (relmapConsFull global fulls)
+    pair (C.Rop name _ sorter cons synopsis) =
+        let half = (name, (synopsis, sorter))
+            full = (name, cons)
         in (half, full)
 
 {-| Half and full relmap constructor -}
@@ -47,8 +45,8 @@ type RelmapConsHalf
     =  [B.TokenTree]      -- ^ Source of relmap operator
     -> B.Ab C.HalfRelmap  -- ^ Result half relmap
 
-makeConsHalf :: [B.Named (String, C.RopFullSorter)] -> RelmapConsHalf
-makeConsHalf halfs = consHalf where
+relmapConsHalf :: [B.Named (String, C.RopFullSorter)] -> RelmapConsHalf
+relmapConsHalf halfs = consHalf where
     consHalf :: RelmapConsHalf
     consHalf trees =
         let toks = B.front $ B.untrees trees
@@ -88,15 +86,15 @@ type RelmapConsFull c
     -> B.Ab (C.Relmap c)  -- ^ Result full relmap
 
 {-| Construct (full) relmap. -}
-makeConsFull :: [B.Named (C.RopCons c)] -> RelmapConsFull c
-makeConsFull fulls = consFull where
+relmapConsFull :: C.Global c -> [B.Named (C.RopCons c)] -> RelmapConsFull c
+relmapConsFull global fulls = consFull where
     consFull half =
         let op    = C.halfOpText    half
             subHs = C.halfSubrelmap half
         in case lookup op fulls of
              Nothing   -> Right $ C.RelmapName half op
              Just cons -> do subFs <- mapM consFull subHs
-                             cons $ C.RopUse half subFs
+                             cons $ C.RopUse global half subFs
 
 
 -- ----------------------

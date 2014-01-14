@@ -14,7 +14,6 @@ import qualified Koshucode.Baala.Base         as B
 import qualified Koshucode.Baala.Core         as C
 import qualified Koshucode.Baala.Builtin      as Rop
 import qualified Koshucode.Baala.Vanilla.Type as Type
-import qualified Koshucode.Baala.Vanilla.Cop  as Cop
 
 
 -- ----------------------  add
@@ -22,7 +21,7 @@ import qualified Koshucode.Baala.Vanilla.Cop  as Cop
 ropConsAdd :: Type.VRopCons
 ropConsAdd use =
   do trees <- Rop.getTermTrees use "-term"
-     coxes <- mapM (B.namedMapM vanillaCox) trees
+     coxes <- mapM (B.namedMapM $ vanillaCox use) trees
      Right $ relmapAdd use coxes
 
 relmapAdd :: (C.CRel c, C.CList c) => C.RopUse c -> [B.Named (C.CoxCons c)] -> C.Relmap c
@@ -37,13 +36,13 @@ relfyAdd coxes h1 = Right $ C.relfy h2 (C.RelfyOneToAbOne False f) where
     f cs1 = do cs2 <- mapM (C.coxRun h1 cs1) es
                Right $ cs2 ++ cs1
 
-vanillaCox :: B.TokenTree -> B.Ab (C.CoxCons Type.VContent)
-vanillaCox = vanillaCoxFrom Cop.vanillaCops Cop.vanillaHeightTable
+vanillaCox :: C.RopUse Type.VContent -> B.TokenTree -> B.Ab (C.CoxCons Type.VContent)
+vanillaCox = vanillaCoxFrom . C.globalCops . C.ropGlobal
 
 vanillaCoxFrom
-  :: (C.CContent c) => [C.Cop c] -> [B.Named B.InfixHeight]
+  :: (C.CContent c) => ([C.Cop c], [B.Named B.InfixHeight])
   -> B.TokenTree -> B.Ab (C.CoxCons c)
-vanillaCoxFrom cops htab tree =
+vanillaCoxFrom (cops, htab) tree =
     case B.infixToPrefix ht tree of
       Right tree2 -> C.coxCons cops $ B.undouble (== 1) tree2
       Left  xs    -> Left $ B.AbortSyntax (map snd xs)
@@ -64,7 +63,7 @@ vanillaCoxFrom cops htab tree =
 ropConsHold :: Type.VRopCons
 ropConsHold use = do
   tree <- Rop.getTree use "-term"
-  cox  <- vanillaCox tree
+  cox  <- vanillaCox use tree
   Right $ relmapHold use True cox
 
 relmapHold :: (C.CContent c) => C.RopUse c -> Bool -> C.CoxCons c -> C.Relmap c

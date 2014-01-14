@@ -94,8 +94,7 @@ header = unlines
     for default argument. -}
 koshuMain :: (C.CContent c) => C.Global c -> IO Int
 koshuMain global =
-    let rops = C.globalRops global
-        cons = C.relmapCons rops
+    let cons = C.relmapCons global
         root = C.makeEmptySection cons
     in koshuMain' global root =<< L.prelude
 
