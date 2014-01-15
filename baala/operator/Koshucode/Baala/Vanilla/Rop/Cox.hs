@@ -10,18 +10,17 @@ module Koshucode.Baala.Vanilla.Rop.Cox
   ropConsHold, relmapHold, relfyHold,
 ) where
 
-import qualified Koshucode.Baala.Base         as B
-import qualified Koshucode.Baala.Core         as C
-import qualified Koshucode.Baala.Builtin      as Rop
-import qualified Koshucode.Baala.Vanilla.Type as Type
+import qualified Koshucode.Baala.Base    as B
+import qualified Koshucode.Baala.Core    as C
+import qualified Koshucode.Baala.Builtin as Rop
 
 
 -- ----------------------  add
 
-ropConsAdd :: Type.VRopCons
+ropConsAdd :: (C.CRel c, C.CList c) => C.RopUse c -> B.Ab (C.Relmap c)
 ropConsAdd use =
   do trees <- Rop.getTermTrees use "-term"
-     coxes <- mapM (B.namedMapM $ vanillaCox use) trees
+     coxes <- mapM (B.namedMapM $ ropCoxCons use) trees
      Right $ relmapAdd use coxes
 
 relmapAdd :: (C.CRel c, C.CList c) => C.RopUse c -> [B.Named (C.CoxCons c)] -> C.Relmap c
@@ -36,34 +35,16 @@ relfyAdd coxes h1 = Right $ C.relfy h2 (C.RelfyOneToAbOne False f) where
     f cs1 = do cs2 <- mapM (C.coxRun h1 cs1) es
                Right $ cs2 ++ cs1
 
-vanillaCox :: C.RopUse Type.VContent -> B.TokenTree -> B.Ab (C.CoxCons Type.VContent)
-vanillaCox = vanillaCoxFrom . C.globalCops . C.ropGlobal
-
-vanillaCoxFrom
-  :: (C.CContent c) => ([C.Cop c], [B.Named B.InfixHeight])
-  -> B.TokenTree -> B.Ab (C.CoxCons c)
-vanillaCoxFrom (cops, htab) tree =
-    case B.infixToPrefix ht tree of
-      Right tree2 -> C.coxCons cops $ B.undouble (== 1) tree2
-      Left  xs    -> Left $ B.AbortSyntax (map snd xs)
-                          $ B.ASAmbInfixes $ map detail xs
-    where
-      ht = B.infixHeight text htab
-
-      text (B.TWord _ 0 w) = Just w
-      text _ = Nothing
-
-      detail (Right n, tok) = detailText tok "right" n
-      detail (Left  n, tok) = detailText tok "left"  n
-      detailText tok dir n = B.tokenContent tok ++ " : " ++ dir ++ " " ++ show n
+ropCoxCons :: C.RopUse c -> B.TokenTree -> B.Ab (C.CoxCons c)
+ropCoxCons = C.globalCoxCons . C.ropGlobal
 
 
 -- ----------------------  hold
 
-ropConsHold :: Type.VRopCons
+ropConsHold :: (C.CContent c) => C.RopUse c -> B.Ab (C.Relmap c)
 ropConsHold use = do
   tree <- Rop.getTree use "-term"
-  cox  <- vanillaCox use tree
+  cox  <- ropCoxCons use tree
   Right $ relmapHold use True cox
 
 relmapHold :: (C.CContent c) => C.RopUse c -> Bool -> C.CoxCons c -> C.Relmap c

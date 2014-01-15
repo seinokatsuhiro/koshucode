@@ -60,14 +60,6 @@ type CopLit   c = [B.TokenTree] -> B.Ab c
 type CopFun   c = [c]           -> B.Ab c
 type CopMacro c = [Cox c]       -> B.Ab (Cox c)
 
--- coxLit :: String -> CopLitF c -> (String, Cop c)
--- coxLit n f = (n, CopLit n f)
-
--- copFun :: String -> CopFunF c -> (String, Cop c)
--- copFun n f = (n, CopFun n f)
-
--- copMacro :: String -> CopMacroF c -> (String, Cop c)
--- copMacro n f = (n, CopMacro n f)
 
 
 -- ----------------------  Construction
@@ -75,8 +67,21 @@ type CopMacro c = [Cox c]       -> B.Ab (Cox c)
 type CoxCons c = B.Relhead -> B.Ab (Cox c)
 
 {-| Construct content expression. -}
-coxCons :: (C.CContent c) => [Cop c] -> B.TokenTree -> B.Ab (CoxCons c)
-coxCons cops = fmap positioning . construct cops
+coxCons :: (C.CContent c) => ([Cop c], [B.Named B.InfixHeight]) -> B.TokenTree -> B.Ab (CoxCons c)
+coxCons (cops, htab) tree =
+    case B.infixToPrefix ht tree of
+      Right tree2 -> fmap positioning . construct cops $ B.undouble (== 1) tree2
+      Left  xs    -> Left $ B.AbortSyntax (map snd xs)
+                          $ B.ASAmbInfixes $ map detail xs
+    where
+      ht = B.infixHeight text htab
+
+      text (B.TWord _ 0 w) = Just w
+      text _ = Nothing
+
+      detail (Right n, tok) = detailText tok "right" n
+      detail (Left  n, tok) = detailText tok "left"  n
+      detailText tok dir n = B.tokenContent tok ++ " : " ++ dir ++ " " ++ show n
 
 construct :: (C.CContent c) => [Cop c] -> B.TokenTree -> B.Ab (Cox c)
 construct cops = cons where

@@ -7,6 +7,7 @@ module Koshucode.Baala.Core.Relmap.Rop
   Global (..),
   RelSelect,
   globalCommandLine,
+  globalFill,
   global,
 
   -- * Rop
@@ -33,6 +34,7 @@ data Global c = Global
       { globalVersion :: D.Version
       , globalRops    :: [Rop c]
       , globalCops    :: ([C.Cop c], [B.Named B.InfixHeight])
+      , globalCoxCons :: B.TokenTree -> B.Ab (C.CoxCons c)
       , globalProgram :: String
       , globalArgs    :: [String]
       , globalJudges  :: [B.Judge c]
@@ -52,15 +54,18 @@ globalCommandLine :: Global c -> [String]
 globalCommandLine Global { globalProgram = prog, globalArgs = args }
     = prog : args
 
+globalFill :: (C.CContent c) => B.Map (Global c)
+globalFill g = g { globalCoxCons = C.coxCons $ globalCops g }
+
 global :: Global c
 global = Global { globalVersion = D.Version [] []
                 , globalRops    = []
                 , globalCops    = ([], [])
+                , globalCoxCons = undefined
                 , globalProgram = ""
                 , globalArgs    = []
                 , globalJudges  = []
                 , globalSelect  = \_ _ -> B.reldee }
-
 
 
 -- ----------------------  Rop
