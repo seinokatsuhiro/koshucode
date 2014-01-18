@@ -24,6 +24,7 @@ module Koshucode.Baala.Base.Prelude.Utility
   divideBy,
   assocOmit,
   assocOmitAll,
+  maybeEmpty,
 
   -- * String
   padRight,
@@ -170,6 +171,8 @@ assocOmit k1 = loop where
 assocOmitAll :: (Eq k) => [k] -> B.Map [(k, a)]
 assocOmitAll ks xs = foldr assocOmit xs ks
 
+maybeEmpty :: Maybe a -> (a -> [b]) -> [b]
+maybeEmpty m f = maybe [] f m
 
 
 -- ----------------------  String

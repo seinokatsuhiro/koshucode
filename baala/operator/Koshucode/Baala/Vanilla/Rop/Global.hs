@@ -4,6 +4,8 @@ module Koshucode.Baala.Vanilla.Rop.Global
 ( 
   -- * koshu-cop
   ropConsKoshuCop,
+  -- * koshu-cop-infix
+  ropConsKoshuCopInfix,
   -- * koshu-rop
   ropConsKoshuRop,
 ) where
@@ -30,6 +32,34 @@ relfyKoshuCop name C.Global { C.globalCops = (cops, _) } _ = r2 where
     r2 = Right $ C.relfy h2 $ C.RelfyConst names
     h2 = B.headFrom [name]
     names = map (B.singleton . C.putText . B.name) cops
+
+
+-- ----------------------  koshu-cop-infix
+
+ropConsKoshuCopInfix :: Rop.VRopCons
+ropConsKoshuCopInfix use =
+  do name   <- Rop.getTerm use "-name"
+     height <- Rop.getMaybe Rop.getTerm use "-height"
+     dir    <- Rop.getMaybe Rop.getTerm use "-dir"
+     Right $ relmapKoshuCopInfix use (name, height, dir)
+
+relmapKoshuCopInfix :: (C.CContent c) => C.RopUse c -> (B.Termname, Maybe B.Termname, Maybe B.Termname) -> C.Relmap c
+relmapKoshuCopInfix use terms = C.relmapGlobal use $ relfyKoshuCopInfix terms
+
+relfyKoshuCopInfix :: (C.CContent c) => (B.Termname, Maybe B.Termname, Maybe B.Termname) -> C.Global c -> B.Relhead -> B.Ab (C.Relfy c)
+relfyKoshuCopInfix (name, height, dir) C.Global { C.globalCops = (_, htab) } _ = r2 where
+    r2 = Right $ C.relfy h2 $ C.RelfyConst (map put htab)
+    h2 = B.headFrom $   [name] ++ heightMaybe B.singleton     ++ dirMaybe B.singleton
+    put (n,ih) = [C.putText n] ++ heightMaybe (heightTerm ih) ++ dirMaybe (dirTerm ih)
+
+    heightMaybe = B.maybeEmpty height
+    dirMaybe    = B.maybeEmpty dir
+
+    heightTerm (Left  h) _ = [C.putDecFromInt h]
+    heightTerm (Right h) _ = [C.putDecFromInt h]
+
+    dirTerm    (Left  _) _ = [C.putText "left"]
+    dirTerm    (Right _) _ = [C.putText "right"]
 
 
 -- ----------------------  koshu-rop

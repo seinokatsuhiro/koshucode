@@ -29,7 +29,7 @@ module Koshucode.Baala.Builtin.Get
 
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
-import Koshucode.Baala.Builtin.Term
+import qualified Koshucode.Baala.Builtin.Term as Op
 
 
 
@@ -69,7 +69,7 @@ getTree :: RopGet c B.TokenTree
 getTree use n = Right . B.TreeB 1 Nothing =<< getTrees use n
 
 getTermTrees :: RopGet c [B.Named B.TokenTree]
-getTermTrees use n = getTrees use n >>= termTreePairs
+getTermTrees use n = getTrees use n >>= Op.termTreePairs
 
 {-| Get word from named operand.
 
@@ -102,14 +102,14 @@ getTerm       use n = getTerms use n >>= getHead
 
 {-| Get list of term names from named operand. -}
 getTerms      :: RopGet c [B.Termname]
-getTerms      use n = getTrees use n >>= termnames
+getTerms      use n = getTrees use n >>= Op.termnames
 
 getTermPair   :: RopGet c (B.Termname, B.Termname)
 getTermPair   use n = getTermPairs use n >>= getSingleton
 
 {-| Get list of term-name pairs from named operand. -}
 getTermPairs  :: RopGet c [(B.Termname, B.Termname)]
-getTermPairs  use n = getTrees use n >>= termnamePairs
+getTermPairs  use n = getTrees use n >>= Op.termnamePairs
 
 
 

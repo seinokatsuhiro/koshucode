@@ -7,6 +7,8 @@ module Koshucode.Baala.Base.Token.Token
   Token (..),
   TokenListing (..),
   Termname,
+  Termname2,
+  Termname3,
   tokenWord,
 
   -- * Selectors
@@ -50,7 +52,9 @@ data Token
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 {-| Name of term, e.g., @\"\/file\"@ for the term @\/file@. -}
-type Termname = String
+type Termname  = String
+type Termname2 = (String, String)
+type Termname3 = (String, String, String)
 
 instance B.Name Token where
     name (TTerm   _ ns) = concat ns

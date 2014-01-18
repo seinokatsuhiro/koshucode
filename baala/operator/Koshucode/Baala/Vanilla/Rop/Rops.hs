@@ -20,56 +20,101 @@ import qualified Koshucode.Baala.Vanilla.Type        as Rop
 {-| Implementation of relational operators. -}
 vanillaRops :: [C.Rop Rop.VContent]
 vanillaRops = Rop.ropList "vanilla"
-    [ ( "add /N E ..."         , Rop.ropConsAdd           , C.operandList    "-term"   [] )
-    , ( "check-term /N ..."    , Rop.ropConsCheckTerm     , C.operandList    "-term"   ["-just", "-has", "-but"] )
-    , ( "duplicate /N ..."     , Rop.ropConsDuplicate     , C.operandList    "-term"   [] )
-    , ( "enclose /N"           , Rop.ropConsEnclose       , C.operandOne     "-term"   [] )
-    , ( "full R ..."           , Rop.ropConsFull          , C.operandOne     "-relmap" [] )
-    , ( "group /N R"           , Rop.ropConsGroup         , C.operandTwo     "-term" "-relmap" [] )
-    , ( "hold E"               , Rop.ropConsHold          , C.operandList    "-term"   [] )
-    , ( "koshu-cop /N"         , Rop.ropConsKoshuCop      , C.operandList    "-name"   [] )
-    , ( "koshu-rop /N"         , Rop.ropConsKoshuRop      , C.operandList    "-name"   [] )
-    , ( "maybe R"              , Rop.ropConsMaybe         , C.operandOne     "-relmap" [] )
-    , ( "member /N /N"         , Rop.ropConsMember        , C.operandEnum    ["-1", "-2"] [] )
-    , ( "prefix /P /N ..."     , Rop.ropConsPrefix        , C.operandOneList "-prefix" "-term" [] )
-    , ( "prefix-change /P /Q"  , Rop.ropConsPrefixChange  , C.operandTwo     "-new" "-old" [] )
-    , ( "range"                , Rop.ropConsRange         , C.operandOne     "-term"   ["-from", "-to"] )
-    , ( "rank"                 , Rop.ropConsRank          , C.operandOne     "-add"    ["-order"] )
-    , ( "rdf P /S /O"          , Rop.ropConsRdf           , C.operandOneList "-pattern" "-term" [] )
-    , ( "size /N"              , Rop.ropConsSize          , C.operandOne     "-term"   [] )
-    , ( "typename"             , Rop.ropConsTypename      , C.operandList    "-term"   [] )
-    , ( "unprefix /P"          , Rop.ropConsUnprefix      , C.operandOne     "-prefix" [] )
-    --  SYNOPSIS                 CONSTRUCTOR                OPERAND
+    --  SYNOPSIS,
+    --  CONSTRUCTOR, OPERAND
+    [ ( "add /N E ...",
+        Rop.ropConsAdd, C.operandList "-term" [] )
+    , ( "check-term [ -just /N ... | -has /N ... | -but /N ... ]",
+        Rop.ropConsCheckTerm, C.operandNone ["-just", "-has", "-but"] )
+    , ( "duplicate /N ...",
+        Rop.ropConsDuplicate, C.operandList "-term" [] )
+    , ( "enclose /N",
+        Rop.ropConsEnclose, C.operandOne "-term" [] )
+    , ( "full R ...",
+        Rop.ropConsFull, C.operandOne "-relmap" [] )
+    , ( "group /N R",
+        Rop.ropConsGroup, C.operandTwo "-term" "-relmap" [] )
+    , ( "hold E",
+        Rop.ropConsHold, C.operandList "-term" [] )
+    , ( "koshu-cop /N",
+        Rop.ropConsKoshuCop, C.operandList "-name" [] )
+    , ( "koshu-cop-infix /N [ -height /N ][ -dir /N ]",
+        Rop.ropConsKoshuCopInfix, C.operandOne "-name" ["-height", "-dir"] )
+    , ( "koshu-rop /N",
+        Rop.ropConsKoshuRop, C.operandList "-name" [] )
+    , ( "maybe R",
+        Rop.ropConsMaybe, C.operandOne "-relmap" [] )
+    , ( "member /N /N",
+        Rop.ropConsMember, C.operandEnum ["-1", "-2"] [] )
+    , ( "prefix /P /N ...",
+        Rop.ropConsPrefix, C.operandOneList "-prefix" "-term" [] )
+    , ( "prefix-change /P /Q",
+        Rop.ropConsPrefixChange, C.operandTwo "-new" "-old" [] )
+    , ( "range /N -from E -to E",
+        Rop.ropConsRange, C.operandOne "-term" ["-from", "-to"] )
+    , ( "rank /N -order /N ...",
+        Rop.ropConsRank, C.operandOne "-add" ["-order"] )
+    , ( "rdf P /S /O",
+        Rop.ropConsRdf, C.operandOneList "-pattern" "-term" [] )
+    , ( "size /N",
+        Rop.ropConsSize, C.operandOne "-term" [] )
+    , ( "typename /N",
+        Rop.ropConsTypename, C.operandList "-term" [] )
+    , ( "unprefix /P",
+        Rop.ropConsUnprefix, C.operandOne "-prefix" [] )
     ]
 
 -- ----------------------
 {- $Operators
 
-   [@add@]
+   [@add \/N E ...@]
+     Add terms of name @\/N@ and content @E@ ...
+
+   [@check-term \[ -just \/N ... | -has \/N ... | -but \/N ... \]@]
+     Check occurences of terms for input relation.
+
+   [@duplicate \/N ...@]
+     Pass duplicate tuples on @\/N@ ...
+
+   [@enclose \/N@]
+     Enclose input relation in a term.
+
+   [@group \/N R@]
+     Group tuples in @R@ by input relation.
+
+   [@hold E@]
+     Keep tuples @E@ equals true.
   
-   [@conf@]
+   [@koshu-cop \/N@]
+     Retrieve list of content operators.
   
-   [@enclose@]
+   [@koshu-cop-infix \/N \[ -height \/N \]\[ -dir \/N \]@]
+     Retrieve list of infix specifications.
   
-   [@group@]
+   [@koshu-rop /N@]
+     Retrieve list of relmap operators.
   
-   [@hold@]
+   [@maybe R@]
+     Meet input and given relation.
+     It keeps input tuples of which counterparts are totally negated.
   
-   [@maybe@]
+   [@member \/N \/N@]
+     Membership of set or list.
   
-   [@maybe-both@]
+   [@prefix \/P \/N ...@]
+     Add prefix @\/P@ to terms @\/N@ ...
   
-   [@prefix@]
+   [@prefix-change \/P \/Q@]
+     Change prefix from @\/P@ to @\/Q@.
   
-   [@prefix-change@]
+   [@rdf P \/S \/O@]
+     Retrieve relation from RDF-like judgements.
   
-   [@rdf@]
+   [@size \/N@]
+     Calculate cardinality of input relation.
   
-   [@size@]
-  
-   [@unhold@]
-  
-   [@unprefix@]
+   [@unprefix \/P@]
+     Remove prefix @\/P@ from term name.
 
 -}
 

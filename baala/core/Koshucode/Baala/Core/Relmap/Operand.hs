@@ -15,6 +15,7 @@ module Koshucode.Baala.Core.Relmap.Operand
   operandList,
   operandOne,
   operandTwo,
+  operandThree,
   operandOneList,
 ) where
 
@@ -90,6 +91,11 @@ operandOne a ns = (trunkBy f, [a], ns) where
 operandTwo :: String -> String -> [String] -> RopOperand
 operandTwo a b ns = (trunkBy f, [a,b], ns) where
     f [x, y]      = Right [ (a, [x]), (b, [y]) ]
+    f _           = Left $ B.abortMalformedOperand "binary"
+
+operandThree :: String -> String -> String -> [String] -> RopOperand
+operandThree a b c ns = (trunkBy f, [a,b,c], ns) where
+    f [x,y,z]     = Right [ (a, [x]), (b, [y]), (c, [z]) ]
     f _           = Left $ B.abortMalformedOperand "binary"
 
 {-| One-and-multiple-element trunk.
