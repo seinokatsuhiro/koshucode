@@ -6,8 +6,6 @@ module Koshucode.Baala.Vanilla.Rop.Calc
   ropConsSize, relmapSize, relfySize,
   -- * enclose
   ropConsEnclose, relmapEnclose, relfyEnclose,
-  -- * rank
-  ropConsRank, relmapRank, relfyRank, -- limit,
   -- * typename
   ropConsTypename, relmapTypename, relfyTypename,
   -- * range
@@ -32,7 +30,6 @@ import qualified Koshucode.Baala.Core          as C
 import qualified Koshucode.Baala.Builtin       as Rop
 import qualified Koshucode.Baala.Minimal       as Rop
 import qualified Koshucode.Baala.Vanilla.Type  as Rop
-import qualified Koshucode.Baala.Vanilla.Order as Rop
 
 
 
@@ -77,40 +74,6 @@ relfyEnclose
 relfyEnclose n h1 = Right $ C.relfy h2 (C.RelfyFull False f) where
     h2 = B.Relhead [B.Nest n $ B.headTerms h1]
     f b1 = [[C.putRel $ B.Rel h1 b1]]
-
-
-
--- ----------------------  rank
-
-ropConsRank :: Rop.VRopCons
-ropConsRank use =
-    do n  <- Rop.getTerm  use "-add"
-       ns <- Rop.getTerms use "-order"
-       Right $ relmapRank use n ns
-
-relmapRank :: (C.CDec c, Ord c) => C.RopUse c -> B.Termname -> [B.Termname] -> C.Relmap c
-relmapRank use n ns = C.relmapCalc use $ relfyRank n ns
-
-relfyRank
-    :: (Ord c, C.CDec c)
-    => B.Termname         -- ^ Name of rank term
-    -> [B.Termname]       -- ^ Termnames for order
-    -> B.Relhead          -- ^ Heading of input relation
-    -> B.Ab (C.Relfy c)   -- ^ Relfier for output relation
-relfyRank n ns h1 = Right $ C.relfy h2 (C.RelfyFull False f2) where
-    h2    = B.headCons n h1
-    f2 b1 = let b1' = Rop.sortByName ords (B.headNames h1) b1
-            in zipWith (:) (map C.putDecFromInt [1..]) b1'
-    ords  = map Rop.Asc ns
-
--- -- | Keep leading tuples.
--- limit :: (Ord c) => C.RopUse c -> Int -> String -> C.Relmap c
--- limit use c ns = C.relmapCalc use $ limit2 c ns
-
--- limit2 :: (Ord c) => Int -> String -> a -> B.AbMap (B.Rel c)
--- limit2 c ns _ (B.Rel h1 b1) = Right $ B.Rel h1 b2 where
---     b2   = List.take c $ sortByName ords (B.headNames h1) b1
---     ords = orders ns
 
 
 

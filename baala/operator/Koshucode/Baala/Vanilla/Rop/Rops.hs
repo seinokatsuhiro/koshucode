@@ -14,6 +14,7 @@ import qualified Koshucode.Baala.Vanilla.Rop.Calc    as Rop
 import qualified Koshucode.Baala.Vanilla.Rop.Confl   as Rop
 import qualified Koshucode.Baala.Vanilla.Rop.Cox     as Rop
 import qualified Koshucode.Baala.Vanilla.Rop.Global  as Rop
+import qualified Koshucode.Baala.Vanilla.Rop.Order   as Rop
 import qualified Koshucode.Baala.Vanilla.Rop.Naming  as Rop
 import qualified Koshucode.Baala.Vanilla.Type        as Rop
 
@@ -46,14 +47,16 @@ vanillaRops = Rop.ropList "vanilla"
         Rop.ropConsMaybe, C.operandOne "-relmap" [] )
     , ( "member /N /N",
         Rop.ropConsMember, C.operandEnum ["-1", "-2"] [] )
+    , ( "number /N -order /N ...",
+        Rop.ropConsNumber, C.operandOne "-term" ["-order"] )
     , ( "prefix /P /N ...",
         Rop.ropConsPrefix, C.operandOneList "-prefix" "-term" [] )
     , ( "prefix-change /P /Q",
         Rop.ropConsPrefixChange, C.operandTwo "-new" "-old" [] )
+    , ( "rank /N -order /N ...",
+        Rop.ropConsRank, C.operandOne "-term" ["-order", "-dense"] )
     , ( "range /N -from E -to E",
         Rop.ropConsRange, C.operandOne "-term" ["-from", "-to"] )
-    , ( "rank /N -order /N ...",
-        Rop.ropConsRank, C.operandOne "-add" ["-order"] )
     , ( "rdf P /S /O",
         Rop.ropConsRdf, C.operandOneList "-pattern" "-term" [] )
     , ( "size /N",
@@ -98,6 +101,9 @@ vanillaRops = Rop.ropList "vanilla"
      Meet input and given relation.
      It keeps input tuples of which counterparts are totally negated.
   
+   [@number \/N \[ -order \/P ... \]@]
+     Add numbering term @\/N@ ordered by @\/P@ ...
+
    [@member \/N \/N@]
      Membership of set or list.
   
@@ -107,6 +113,9 @@ vanillaRops = Rop.ropList "vanilla"
    [@prefix-change \/P \/Q@]
      Change prefix from @\/P@ to @\/Q@.
   
+   [@rank \/N -order \/P ... \[ -dense \]@]
+     Add term @\/N@ for ranking ordered by @\/P@ ...
+
    [@rdf P \/S \/O@]
      Retrieve relation from RDF-like judgements.
   

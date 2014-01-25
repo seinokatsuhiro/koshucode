@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Content formula. -}
+{-| Vanilla relmap operators. -}
 
 module Koshucode.Baala.Vanilla.Rop
 (

@@ -59,7 +59,6 @@ library
         Koshucode.Baala.Minimal.Tropashko
 
         Koshucode.Baala.Vanilla
-        Koshucode.Baala.Vanilla.Order
         Koshucode.Baala.Vanilla.Quoter
 
         Koshucode.Baala.Vanilla.Cop
@@ -75,6 +74,7 @@ library
         Koshucode.Baala.Vanilla.Rop.Cox
         Koshucode.Baala.Vanilla.Rop.Global
         Koshucode.Baala.Vanilla.Rop.Naming
+        Koshucode.Baala.Vanilla.Rop.Order
         Koshucode.Baala.Vanilla.Rop.Rops
 
         Koshucode.Baala.Vanilla.Type

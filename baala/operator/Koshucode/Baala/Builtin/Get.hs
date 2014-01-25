@@ -12,6 +12,8 @@ module Koshucode.Baala.Builtin.Get
   getTree,
   getTrees,
   getMaybe,
+  getOption,
+  getSwitch,
   getWord,
   getInt,
 
@@ -61,6 +63,21 @@ getMaybe get use n =
     case lookup n $ operand use of
       Nothing -> Right Nothing
       Just _  -> Right . Just =<< get use n
+
+getOption :: b -> RopGet c b -> RopGet c b
+getOption y get use n =
+    do m <- getMaybe get use n
+       case m of
+         Just x  -> Right x
+         Nothing -> Right y
+
+getSwitch :: C.RopUse c -> String -> B.Ab Bool
+getSwitch use n =
+    do xs <- getMaybe getTrees use n
+       case xs of
+         Nothing -> Right False
+         Just [] -> Right True
+         _       -> Left $ B.abortNotFound n
 
 getTrees :: RopGet c [B.TokenTree]
 getTrees use = (operand use B.<!!>)
