@@ -13,13 +13,12 @@ module Koshucode.Baala.Vanilla.Rop.Order
 import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Core          as C
 import qualified Koshucode.Baala.Builtin       as Rop
-import qualified Koshucode.Baala.Vanilla.Type  as Rop
 
 
 
 -- ----------------------  number
 
-ropConsNumber :: Rop.VRopCons
+ropConsNumber :: (Ord c, C.CDec c) => C.RopCons c
 ropConsNumber use =
     do n  <- Rop.getTerm use "-term"
        ns <- Rop.getOption [] Rop.getTerms use "-order"
@@ -45,7 +44,7 @@ relfyRanking ranking n ns h1 = Right $ C.relfy h2 (C.RelfyFull False f2) where
 
 -- ----------------------  rank
 
-ropConsRank :: Rop.VRopCons
+ropConsRank :: (Ord c, C.CDec c) => C.RopCons c
 ropConsRank use =
     do n     <- Rop.getTerm   use "-term"
        ns    <- Rop.getTerms  use "-order"

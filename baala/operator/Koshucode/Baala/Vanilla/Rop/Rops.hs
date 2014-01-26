@@ -11,6 +11,7 @@ import qualified Koshucode.Baala.Core    as C
 import qualified Koshucode.Baala.Builtin as Rop
 
 import qualified Koshucode.Baala.Vanilla.Rop.Calc    as Rop
+import qualified Koshucode.Baala.Vanilla.Rop.Check   as Rop
 import qualified Koshucode.Baala.Vanilla.Rop.Confl   as Rop
 import qualified Koshucode.Baala.Vanilla.Rop.Cox     as Rop
 import qualified Koshucode.Baala.Vanilla.Rop.Global  as Rop
@@ -61,7 +62,7 @@ vanillaRops = Rop.ropList "vanilla"
         Rop.ropConsRdf, C.operandOneList "-pattern" "-term" [] )
     , ( "size /N",
         Rop.ropConsSize, C.operandOne "-term" [] )
-    , ( "typename /N",
+    , ( "typename /N /P ...",
         Rop.ropConsTypename, C.operandList "-term" [] )
     , ( "unprefix /P",
         Rop.ropConsUnprefix, C.operandOne "-prefix" [] )
@@ -73,11 +74,11 @@ vanillaRops = Rop.ropList "vanilla"
    [@add \/N E ...@]
      Add terms of name @\/N@ and content @E@ ...
 
-   [@check-term \[ -just \/N ... | -has \/N ... | -but \/N ... \]@]
+   [@check-term \[ -just \/P ... | -has \/P ... | -but \/N ... \]@]
      Check occurences of terms for input relation.
 
-   [@duplicate \/N ...@]
-     Pass duplicate tuples on @\/N@ ...
+   [@duplicate \/P ...@]
+     Pass duplicate tuples on @\/P@ ...
 
    [@enclose \/N@]
      Enclose input relation in a term.

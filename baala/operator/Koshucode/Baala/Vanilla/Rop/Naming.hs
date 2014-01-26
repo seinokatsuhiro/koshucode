@@ -13,13 +13,12 @@ import qualified Data.List as List
 import qualified Koshucode.Baala.Base    as B
 import qualified Koshucode.Baala.Core    as C
 import qualified Koshucode.Baala.Builtin as Rop
-import qualified Koshucode.Baala.Vanilla.Type as Rop
 
 
 
 -- ----------------------  prefix
 
-ropConsPrefix :: Rop.VRopCons
+ropConsPrefix :: C.RopCons c
 ropConsPrefix use =
     do pre <- Rop.getTerm  use "-prefix"
        ns  <- Rop.getTerms use "-term"
@@ -47,7 +46,7 @@ prefixName _ _ = undefined
 
 -- ----------------------  unprefix
 
-ropConsUnprefix :: Rop.VRopCons
+ropConsUnprefix :: C.RopCons c
 ropConsUnprefix use =
     do pre <- Rop.getTerm use "-prefix"
        Right $ relmapUnprefix use pre
@@ -73,7 +72,7 @@ unprefixName pre n =
 
 -- ----------------------  prefix-change
 
-ropConsPrefixChange :: Rop.VRopCons
+ropConsPrefixChange :: C.RopCons c
 ropConsPrefixChange use =
     do new <- Rop.getTerm use "-new"
        old <- Rop.getTerm use "-old"

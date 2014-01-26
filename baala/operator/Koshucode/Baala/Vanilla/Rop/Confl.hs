@@ -14,13 +14,12 @@ import qualified Koshucode.Baala.Base    as B
 import qualified Koshucode.Baala.Core    as C
 import qualified Koshucode.Baala.Builtin as Rop
 import qualified Koshucode.Baala.Minimal as Rop
-import qualified Koshucode.Baala.Vanilla.Type as Rop
 
 
 
 -- ----------------------  maybe
 
-ropConsMaybe :: Rop.VRopCons
+ropConsMaybe :: (Ord c, C.CNil c) => C.RopCons c
 ropConsMaybe use =
     do m <- Rop.getRelmap use
        Right $ relmapMaybe use m
@@ -63,7 +62,7 @@ relfyMaybe (C.Relfy h2 f2) h1 =
 
 -- ----------------------  full
 
-ropConsFull :: Rop.VRopCons
+ropConsFull :: (Ord c, C.CNil c) => C.RopCons c
 ropConsFull use =
     do [m1, m2] <- Rop.getRelmaps use
        Right $ relmapFull use m1 m2
@@ -94,7 +93,7 @@ relfyFull (C.Relfy h1 f1) (C.Relfy h2 f2) _ =
 
 -- ----------------------  group
 
-ropConsGroup :: Rop.VRopCons
+ropConsGroup :: (Ord c, C.CRel c) => C.RopCons c
 ropConsGroup use =
   do n <- Rop.getTerm   use "-term"
      m <- Rop.getRelmap use

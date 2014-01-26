@@ -13,13 +13,12 @@ module Koshucode.Baala.Vanilla.Rop.Global
 import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Core          as C
 import qualified Koshucode.Baala.Builtin       as Rop
-import qualified Koshucode.Baala.Vanilla.Type  as Rop
 
 
 
 -- ----------------------  koshu-cop
 
-ropConsKoshuCop :: Rop.VRopCons
+ropConsKoshuCop :: C.CContent c => C.RopCons c
 ropConsKoshuCop use =
   do name <- Rop.getTerm use "-name"
      Right $ relmapKoshuCop use name
@@ -36,7 +35,7 @@ relfyKoshuCop name C.Global { C.globalCops = (cops, _) } _ = r2 where
 
 -- ----------------------  koshu-cop-infix
 
-ropConsKoshuCopInfix :: Rop.VRopCons
+ropConsKoshuCopInfix :: (C.CContent c) => C.RopCons c
 ropConsKoshuCopInfix use =
   do name   <- Rop.getTerm use "-name"
      height <- Rop.getMaybe Rop.getTerm use "-height"
@@ -64,7 +63,7 @@ relfyKoshuCopInfix (name, height, dir) C.Global { C.globalCops = (_, htab) } _ =
 
 -- ----------------------  koshu-rop
 
-ropConsKoshuRop :: Rop.VRopCons
+ropConsKoshuRop :: (C.CContent c) => C.RopCons c
 ropConsKoshuRop use =
   do name <- Rop.getTerm use "-name"
      Right $ relmapKoshuRop use name

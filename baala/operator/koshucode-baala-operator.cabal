@@ -70,6 +70,7 @@ library
 
         Koshucode.Baala.Vanilla.Rop
         Koshucode.Baala.Vanilla.Rop.Calc
+        Koshucode.Baala.Vanilla.Rop.Check
         Koshucode.Baala.Vanilla.Rop.Confl
         Koshucode.Baala.Vanilla.Rop.Cox
         Koshucode.Baala.Vanilla.Rop.Global
