@@ -44,6 +44,8 @@ vanillaRops = Rop.ropList "vanilla"
         Rop.ropConsKoshuCopInfix, C.operandOne "-name" ["-height", "-dir"] )
     , ( "koshu-rop /N",
         Rop.ropConsKoshuRop, C.operandList "-name" [] )
+    , ( "koshu-version /N",
+        Rop.ropConsKoshuVersion, C.operandOneList "-term" "-version" [] )
     , ( "maybe R",
         Rop.ropConsMaybe, C.operandOne "-relmap" [] )
     , ( "member /N /N",
@@ -97,6 +99,9 @@ vanillaRops = Rop.ropList "vanilla"
   
    [@koshu-rop /N@]
      Retrieve list of relmap operators.
+  
+   [@koshu-version /N@]
+     Get version number of the koshu calculator.
   
    [@maybe R@]
      Meet input and given relation.

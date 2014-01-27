@@ -5,17 +5,15 @@ import qualified Koshucode.Baala.Core    as C
 import qualified Koshucode.Baala.Builtin as Rop
 import qualified Koshucode.Baala.Minimal as Rop
 import qualified Koshucode.Baala.Vanilla as Rop
-import qualified Koshucode.Baala.Toolkit.Main.KoshuMain as Main
-import qualified Koshucode.Baala.Toolkit.Library.Exit   as Main
+import qualified Koshucode.Baala.Toolkit.Main.KoshuMain   as Main
+import qualified Koshucode.Baala.Toolkit.Library.Exit     as Main
+import qualified Koshucode.Baala.Toolkit.Library.Version  as Main
 
 main :: IO ()
-main =
-    do status <- Main.koshuMain g
-       Main.exit status
-    where
-      g = C.global { C.globalRops = rops
-                   , C.globalCops = Rop.vanillaCops }
-      rops = concat [ Rop.builtinRops
-                    , Rop.minimalRops
-                    , Rop.vanillaRops ]
-                                
+main = Main.exit =<< Main.koshuMain g where
+    g = C.global { C.globalVersion = Main.version
+                 , C.globalCops    = Rop.vanillaCops
+                 , C.globalRops    = Rop.builtinRops ++
+                                     Rop.minimalRops ++
+                                     Rop.vanillaRops }
+

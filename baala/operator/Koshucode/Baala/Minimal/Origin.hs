@@ -33,7 +33,7 @@ ropConsId use = Right $ relmapId use
 
 {-| Identity mapping, i.e., do nothing. -}
 relmapId :: C.RopUse c -> C.Relmap c
-relmapId use = C.relmapCalc use C.relfyId
+relmapId use = C.relmapCalc use $ Right . C.relfyId
 
 -- ----------------------  empty
 

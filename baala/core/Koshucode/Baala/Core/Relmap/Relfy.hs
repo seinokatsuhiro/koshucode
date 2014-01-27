@@ -2,21 +2,33 @@
 
 module Koshucode.Baala.Core.Relmap.Relfy
 ( 
+  -- * Datatype
   Relfy (..),
   RelfyBody,
   RelfyCore (..),
   RelmapCalcRelfy,
   RelmapConflRelfy,
+
+  -- * Constructor
   relfy,
-  relfyConst,
   relfyId,
-  relfyRun,
+  relfyConst,
+  relfyConstEmpty,
+  relfyConstSingleton,
+  relfyConstBody,
   relfySetSource,
+
+  -- * Run
+  relfyRun,
 ) where
 
 import qualified Control.Monad        as Monad
 import qualified Data.Monoid          as Monoid
 import qualified Koshucode.Baala.Base as B
+
+
+
+-- ----------------------  Datatype
 
 data Relfy c = Relfy
     { relfyHead :: B.Relhead
@@ -71,11 +83,37 @@ type RelmapCalcRelfy c
     =  B.Relhead        -- ^ Heading of input relation
     -> B.Ab (Relfy c)   -- ^ Relfier for output relation
 
-relfyConst :: B.Rel c -> Relfy c
-relfyConst (B.Rel h b) = Relfy h (B.Sourced [] $ RelfyConst b)
 
-relfyId :: RelmapCalcRelfy c
-relfyId h = Right (Relfy h $ B.Sourced [] RelfyId)
+
+-- ----------------------  Constructor
+
+relfy :: B.Relhead -> RelfyCore c -> Relfy c
+relfy h f = Relfy h $ B.Sourced [] f
+
+relfyId :: B.Relhead -> Relfy c
+relfyId h = (relfy h RelfyId)
+
+relfyConst :: B.Rel c -> Relfy c
+relfyConst (B.Rel h b) = relfy h $ RelfyConst b
+
+relfyConstEmpty :: [B.Termname] -> Relfy c
+relfyConstEmpty ns = relfyConstBody ns []
+
+relfyConstSingleton :: [B.Termname] -> [c] -> Relfy c
+relfyConstSingleton ns tuple = relfyConstBody ns [tuple]
+
+relfyConstBody :: [B.Termname] -> [[c]] -> Relfy c
+relfyConstBody ns body = r where
+    r = relfy h $ RelfyConst body
+    h = B.headFrom ns
+
+relfySetSource :: (B.TokenListing a) => a -> B.Map (Relfy c)
+relfySetSource src (Relfy h (B.Sourced _ f)) =
+    Relfy h $ B.Sourced (B.tokenListing src) f
+
+
+
+-- ----------------------  Run
 
 relfyRun :: (Ord c) => RelfyBody c -> B.AbMap [[c]]
 relfyRun (B.Sourced src r) b1 =
@@ -110,11 +148,4 @@ uniqueA u = (Right . uniqueIf u =<<)
 uniqueIf :: (Ord c) => Bool -> [c] -> [c]
 uniqueIf True  = B.unique
 uniqueIf False = id
-
-relfy :: B.Relhead -> RelfyCore c -> Relfy c
-relfy h f = Relfy h $ B.Sourced [] f
-
-relfySetSource :: (B.TokenListing a) => a -> B.Map (Relfy c)
-relfySetSource src (Relfy h (B.Sourced _ f)) =
-    Relfy h $ B.Sourced (B.tokenListing src) f
 

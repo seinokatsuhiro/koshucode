@@ -131,7 +131,7 @@ showRelmap r = sh r where
     sub r2 = " (" ++ sh r2 ++ ")"
 
 instance D.Monoid (Relmap c) where
-    mempty  = RelmapCalc halfid (const C.relfyId) []
+    mempty  = RelmapCalc halfid (const $ Right . C.relfyId) []
     mappend = RelmapAppend
 
 halfid :: C.HalfRelmap
