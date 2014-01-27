@@ -19,9 +19,10 @@ usage () {
     echo ""
 
     if [ -z $cabal ]; then
-        echo "  $0 link           make symbolic-linked commands"
         echo "  $0 clean          cleaning directories"
+        echo "  $0 link           make symbolic-linked commands"
         echo "  $0 unreg          unregister koshucode packages"
+        echo "  $0 update         update cabal packages"
         echo ""
     else
         echo "  $0                cabal for all packages"
@@ -40,6 +41,11 @@ main () {
     decide_program `basename $0`
 
     case "$1" in
+        clean)
+            cabal=cabal_clean
+            cabal_for base core operator calculator toolkit
+            exit ;;
+
         link)
             sym_link "$0" haddock.link
             sym_link "$0" html.link
@@ -55,9 +61,8 @@ main () {
             unregister base
             exit ;;
 
-        clean)
-            cabal=cabal_clean
-            cabal_for base core operator calculator toolkit
+        update)
+            cabal_cmd update
             exit ;;
 
         '' | base* | core* | operator* | calculator* | toolkit* | koshu )
