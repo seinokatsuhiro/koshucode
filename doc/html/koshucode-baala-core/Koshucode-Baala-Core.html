@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.39.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.42.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -45,9 +45,48 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	><p class="caption"
 	>Koshucode.Baala.Core</p
 	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Modules
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Dependencies
+</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  >module <a href="Koshucode-Baala-Core-Assert.html"
+	    >Koshucode.Baala.Core.Assert</a
+	    ></li
+	  ><li class="src short"
+	  >module <a href="Koshucode-Baala-Core-Content.html"
+	    >Koshucode.Baala.Core.Content</a
+	    ></li
+	  ><li class="src short"
+	  >module <a href="Koshucode-Baala-Core-Relmap.html"
+	    >Koshucode.Baala.Core.Relmap</a
+	    ></li
+	  ><li class="src short"
+	  >module <a href="Koshucode-Baala-Core-Section.html"
+	    >Koshucode.Baala.Core.Section</a
+	    ></li
+	  ></ul
+	></div
       ><div id="interface"
-      ><h1
-	>Documentation</h1
+      ><h1 id="g:1"
+	>Modules
+</h1
 	><div class="top"
 	><p class="src"
 	  >module <a href="Koshucode-Baala-Core-Assert.html"
@@ -71,6 +110,150 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	  >module <a href="Koshucode-Baala-Core-Section.html"
 	    >Koshucode.Baala.Core.Section</a
 	    ></p
+	  ></div
+	><h1 id="g:2"
+	>Dependencies
+</h1
+	><div class="doc"
+	><ul
+	  ><li
+	    > <code
+	      >[Core]</code
+	      > module is a union of
+  <code
+	      >Section</code
+	      >,
+  <code
+	      >Assert</code
+	      >,
+  <code
+	      >Relmap</code
+	      >, and
+  <code
+	      >Content</code
+	      > modules.
+</li
+	    ><li
+	    > <code
+	      >Section</code
+	      > module uses
+  <code
+	      >Assert</code
+	      >,
+  <code
+	      >Relmap</code
+	      >,
+  <code
+	      >Content</code
+	      >, and
+  <code
+	      >[Base]</code
+	      > modules.
+</li
+	    ><li
+	    > <code
+	      >Assert</code
+	      > module uses
+  <code
+	      >Relmap</code
+	      >,
+  <code
+	      >Content</code
+	      >, and
+  <code
+	      >[Base]</code
+	      > modules.
+</li
+	    ><li
+	    > <code
+	      >Relmap</code
+	      > module uses
+  <code
+	      >Content</code
+	      >, and
+  <code
+	      >[Base]</code
+	      > modules.
+</li
+	    ><li
+	    > <code
+	      >Content</code
+	      > module uses
+  <code
+	      >Data</code
+	      >, and
+  <code
+	      >[Base]</code
+	      > modules.
+</li
+	    ><li
+	    > <code
+	      >[Base]</code
+	      > module is a union of
+  <code
+	      >Data</code
+	      >,
+  <code
+	      >Abort</code
+	      >,
+  <code
+	      >Syntax</code
+	      >, and
+  <code
+	      >Prelude</code
+	      > modules.
+</li
+	    ><li
+	    > <code
+	      >Abort</code
+	      > module uses
+  <code
+	      >Syntax</code
+	      > and
+  <code
+	      >Prelude</code
+	      > modules.
+</li
+	    ><li
+	    > <code
+	      >Syntax</code
+	      > module uses
+  <code
+	      >Prelude</code
+	      > module.
+</li
+	    ><li
+	    > <code
+	      >Data</code
+	      > module uses
+  <code
+	      >Prelude</code
+	      > module.
+</li
+	    ><li
+	    > <code
+	      >Prelude</code
+	      > module uses
+  no modules in Koshucode.
+</li
+	    ></ul
+	  ><p
+	  >Following picture shows reduced dependencies.
+</p
+	  ><pre
+	  >
+      [Core]             [Base]
+        |               /     \
+      Section        Data     Abort
+        |              \        |
+      Assert            \     Syntax
+        |                \     /
+      Relmap             Prelude
+        |
+      Content
+        |
+      [Base]
+</pre
 	  ></div
 	></div
       ></div

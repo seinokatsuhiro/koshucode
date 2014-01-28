@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Core.Section.Bundle</title
+    ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-Section-Bundle.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a href="src/Koshucode-Baala-Core-Section-Bundle.html"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-core-0.42.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Core.Section.Bundle</p
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a href="#t:SectionBundle"
+	    >SectionBundle</a
+	    > c = <a href="#v:SectionBundle"
+	    >SectionBundle</a
+	    > {<ul class="subs"
+	    ><li
+	      ><a href="#v:bundleRoot"
+		>bundleRoot</a
+		> :: <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
+		>Section</a
+		> c</li
+	      ><li
+	      ><a href="#v:bundleTexts"
+		>bundleTexts</a
+		> :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		>]</li
+	      ><li
+	      ><a href="#v:bundleFiles"
+		>bundleFiles</a
+		> :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:FilePath"
+		>FilePath</a
+		>]</li
+	      ><li
+	      ><a href="#v:bundleURLs"
+		>bundleURLs</a
+		> :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		>]</li
+	      ></ul
+	    >}</li
+	  ><li class="src short"
+	  ><a href="#v:readSectionBundle"
+	    >readSectionBundle</a
+	    > :: <a href="Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Section-Bundle.html#t:SectionBundle"
+	    >SectionBundle</a
+	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
+	    >Section</a
+	    > c)]</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a name="t:SectionBundle" class="def"
+	    >SectionBundle</a
+	    > c <a href="src/Koshucode-Baala-Core-Section-Bundle.html#SectionBundle" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Bundle of section resources. 
+</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:SectionBundle" class="def"
+		  >SectionBundle</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td colspan="2"
+		><div class="subs fields"
+		  ><p class="caption"
+		    >Fields</p
+		    ><dl
+		    ><dt class="src"
+		      ><a name="v:bundleRoot" class="def"
+			>bundleRoot</a
+			> :: <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
+			>Section</a
+			> c</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ><dt class="src"
+		      ><a name="v:bundleTexts" class="def"
+			>bundleTexts</a
+			> :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+			>String</a
+			>]</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ><dt class="src"
+		      ><a name="v:bundleFiles" class="def"
+			>bundleFiles</a
+			> :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:FilePath"
+			>FilePath</a
+			>]</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ><dt class="src"
+		      ><a name="v:bundleURLs" class="def"
+			>bundleURLs</a
+			> :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+			>String</a
+			>]</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ></dl
+		    ><div class="clear"
+		    ></div
+		    ></div
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:SectionBundle" class="caption collapser" onclick="toggleSection('i:SectionBundle')"
+	    >Instances</p
+	    ><div id="section.i:SectionBundle" class="show"
+	    ><table
+	      ><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		    >Show</a
+		    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		    >Show</a
+		    > (<a href="Koshucode-Baala-Core-Section-Bundle.html#t:SectionBundle"
+		    >SectionBundle</a
+		    > c)</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:readSectionBundle" class="def"
+	    >readSectionBundle</a
+	    > :: <a href="Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Section-Bundle.html#t:SectionBundle"
+	    >SectionBundle</a
+	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
+	    >Section</a
+	    > c)]<a href="src/Koshucode-Baala-Core-Section-Bundle.html#readSectionBundle" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.13.2</p
+      ></div
+    ></body
+  ></html
+>

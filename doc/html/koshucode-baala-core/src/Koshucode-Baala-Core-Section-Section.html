@@ -7,7 +7,7 @@
 <link type='text/css' rel='stylesheet' href='hscolour.css' />
 </head>
 <body>
-<pre><a name="line-1"></a><span class='hs-comment'>{-# OPTIONS_GHC -Wall #-}</span>
+<pre><a name="line-1"></a><span class='hs-comment'>{-# OPTIONS_GHC -Wall -fno-warn-incomplete-patterns #-}</span>
 <a name="line-2"></a>
 <a name="line-3"></a><span class='hs-comment'>{-| Data structure for relational calculations.
 <a name="line-4"></a>    There are three types of section:
@@ -24,18 +24,18 @@
 <a name="line-15"></a>  <span class='hs-comment'>-- * Section</span>
 <a name="line-16"></a>  <span class='hs-conid'>Section</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
 <a name="line-17"></a>
-<a name="line-18"></a>  <span class='hs-comment'>-- * Selectors</span>
-<a name="line-19"></a>  <span class='hs-varid'>sectionLinkedAssert</span><span class='hs-layout'>,</span>
-<a name="line-20"></a>
-<a name="line-21"></a>  <span class='hs-comment'>-- * Constructors</span>
-<a name="line-22"></a>  <span class='hs-varid'>makeEmptySection</span><span class='hs-layout'>,</span>
-<a name="line-23"></a>  <span class='hs-varid'>emptySection</span><span class='hs-layout'>,</span>
-<a name="line-24"></a>  <span class='hs-varid'>dataSection</span><span class='hs-layout'>,</span>
-<a name="line-25"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
-<a name="line-26"></a>
-<a name="line-27"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span>        <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
-<a name="line-28"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>C</span>
-<a name="line-29"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Assert</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>C</span>
+<a name="line-18"></a>  <span class='hs-comment'>-- * Constructors</span>
+<a name="line-19"></a>  <span class='hs-varid'>makeEmptySection</span><span class='hs-layout'>,</span>
+<a name="line-20"></a>  <span class='hs-varid'>emptySection</span><span class='hs-layout'>,</span>
+<a name="line-21"></a>  <span class='hs-varid'>consSection</span><span class='hs-layout'>,</span>
+<a name="line-22"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a name="line-23"></a>
+<a name="line-24"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Monoid</span>                          <span class='hs-keyword'>as</span> <span class='hs-conid'>M</span>
+<a name="line-25"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span>                 <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
+<a name="line-26"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Content</span>         <span class='hs-keyword'>as</span> <span class='hs-conid'>C</span>
+<a name="line-27"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span>          <span class='hs-keyword'>as</span> <span class='hs-conid'>C</span>
+<a name="line-28"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Assert</span>          <span class='hs-keyword'>as</span> <span class='hs-conid'>C</span>
+<a name="line-29"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Section</span><span class='hs-varop'>.</span><span class='hs-conid'>Clause</span>  <span class='hs-keyword'>as</span> <span class='hs-conid'>C</span>
 <a name="line-30"></a>
 <a name="line-31"></a><a name="Section"></a><span class='hs-keyword'>data</span> <span class='hs-conid'>Section</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Section</span> <span class='hs-layout'>{</span>
 <a name="line-32"></a>      <span class='hs-varid'>sectionName</span>     <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Maybe</span> <span class='hs-conid'>String</span>           <span class='hs-comment'>-- ^ Section name</span>
@@ -46,7 +46,7 @@
 <a name="line-37"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>sectionRelmap</span>   <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Named</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span><span class='hs-keyglyph'>]</span> <span class='hs-comment'>-- ^ Relmaps and its name</span>
 <a name="line-38"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>sectionJudge</span>    <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Judge</span> <span class='hs-varid'>c</span><span class='hs-keyglyph'>]</span>            <span class='hs-comment'>-- ^ Affirmative or denial judgements</span>
 <a name="line-39"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>sectionViolate</span>  <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Judge</span> <span class='hs-varid'>c</span><span class='hs-keyglyph'>]</span>            <span class='hs-comment'>-- ^ Violated judgements, i.e., result of @|=V@</span>
-<a name="line-40"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>sectionResource</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span>                 <span class='hs-comment'>-- ^ Resource name</span>
+<a name="line-40"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>sectionResource</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Resource</span>             <span class='hs-comment'>-- ^ Resource name</span>
 <a name="line-41"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>sectionCons</span>     <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RelmapCons</span> <span class='hs-varid'>c</span>         <span class='hs-comment'>-- ^ Relmap constructor for this section</span>
 <a name="line-42"></a>    <span class='hs-layout'>}</span> <span class='hs-keyword'>deriving</span> <span class='hs-layout'>(</span><span class='hs-conid'>Show</span><span class='hs-layout'>)</span>
 <a name="line-43"></a>
@@ -58,59 +58,152 @@
 <a name="line-49"></a>        <span class='hs-varid'>dJudge</span>   <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>docv</span> <span class='hs-varop'>$</span> <span class='hs-varid'>sectionJudge</span> <span class='hs-varid'>sec</span>
 <a name="line-50"></a>        <span class='hs-varid'>dAssert</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>docv</span> <span class='hs-varop'>$</span> <span class='hs-varid'>sectionAssert</span> <span class='hs-varid'>sec</span>
 <a name="line-51"></a>
-<a name="line-52"></a>
-<a name="line-53"></a>
-<a name="line-54"></a><span class='hs-comment'>-- ----------------------  Selectors</span>
+<a name="line-52"></a><a name="instance%20M.Monoid%20(Section%20c)"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>M</span><span class='hs-varop'>.</span><span class='hs-conid'>Monoid</span> <span class='hs-layout'>(</span><span class='hs-conid'>Section</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a name="line-53"></a>    <span class='hs-varid'>mempty</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>emptySection</span>
+<a name="line-54"></a>    <span class='hs-varid'>mappend</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>sectionUnion</span>
 <a name="line-55"></a>
-<a name="line-56"></a><a name="sectionLinkedAssert"></a><span class='hs-comment'>{-| Select assertions like 'sectionAssert'.
-<a name="line-57"></a>    It returns relmap-liked assertions.
-<a name="line-58"></a>    We can run these assertions using 'C.runAssertJudges'. -}</span>
-<a name="line-59"></a><span class='hs-definition'>sectionLinkedAssert</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Section</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Assert</span> <span class='hs-varid'>c</span><span class='hs-keyglyph'>]</span>
-<a name="line-60"></a><span class='hs-definition'>sectionLinkedAssert</span> <span class='hs-conid'>Section</span> <span class='hs-layout'>{</span> <span class='hs-varid'>sectionRelmap</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>ms</span><span class='hs-layout'>,</span> <span class='hs-varid'>sectionAssert</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>ass</span> <span class='hs-layout'>}</span>
-<a name="line-61"></a>    <span class='hs-keyglyph'>=</span> <span class='hs-varid'>map</span> <span class='hs-varid'>linker</span> <span class='hs-varid'>ass</span> <span class='hs-keyword'>where</span>
-<a name="line-62"></a>      <span class='hs-varid'>linker</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>assertMap</span> <span class='hs-varop'>$</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapLinker</span> <span class='hs-varid'>ms</span>
-<a name="line-63"></a>
-<a name="line-64"></a>
-<a name="line-65"></a>
-<a name="line-66"></a><span class='hs-comment'>-- ----------------------  Constructors</span>
-<a name="line-67"></a>
-<a name="line-68"></a><a name="makeEmptySection"></a><span class='hs-comment'>{-| Make empty section that has a given constructor. -}</span>
-<a name="line-69"></a><span class='hs-definition'>makeEmptySection</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RelmapCons</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Section</span> <span class='hs-varid'>c</span>
-<a name="line-70"></a><span class='hs-definition'>makeEmptySection</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Section</span> <span class='hs-conid'>Nothing</span> <span class='hs-conid'>[]</span> <span class='hs-conid'>[]</span> <span class='hs-conid'>[]</span> <span class='hs-conid'>[]</span> <span class='hs-conid'>[]</span> <span class='hs-conid'>[]</span> <span class='hs-conid'>[]</span> <span class='hs-str'>""</span>
-<a name="line-71"></a>
-<a name="line-72"></a><a name="emptySection"></a><span class='hs-comment'>{-| Section that has no contents. -}</span>
-<a name="line-73"></a><span class='hs-definition'>emptySection</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Section</span> <span class='hs-varid'>c</span>
-<a name="line-74"></a><span class='hs-definition'>emptySection</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>makeEmptySection</span> <span class='hs-varop'>$</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapCons</span> <span class='hs-conid'>[]</span>
-<a name="line-75"></a>
-<a name="line-76"></a><a name="dataSection"></a><span class='hs-comment'>{-| Section that has only judgements. -}</span>
-<a name="line-77"></a><span class='hs-definition'>dataSection</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Judge</span> <span class='hs-varid'>c</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Section</span> <span class='hs-varid'>c</span>
-<a name="line-78"></a><span class='hs-definition'>dataSection</span> <span class='hs-varid'>js</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>emptySection</span> <span class='hs-layout'>{</span> <span class='hs-varid'>sectionJudge</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>js</span> <span class='hs-layout'>}</span>
+<a name="line-56"></a><a name="sectionUnion"></a><span class='hs-definition'>sectionUnion</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Section</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Section</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Section</span> <span class='hs-varid'>c</span>
+<a name="line-57"></a><span class='hs-definition'>sectionUnion</span> <span class='hs-varid'>s1</span> <span class='hs-varid'>s2</span> <span class='hs-keyglyph'>=</span>
+<a name="line-58"></a>    <span class='hs-varid'>s1</span> <span class='hs-layout'>{</span> <span class='hs-varid'>sectionName</span>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Nothing</span>
+<a name="line-59"></a>       <span class='hs-layout'>,</span> <span class='hs-varid'>sectionImport</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>[]</span>
+<a name="line-60"></a>       <span class='hs-layout'>,</span> <span class='hs-varid'>sectionExport</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>union</span> <span class='hs-varid'>sectionExport</span>
+<a name="line-61"></a>       <span class='hs-layout'>,</span> <span class='hs-varid'>sectionAssert</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>union</span> <span class='hs-varid'>sectionAssert</span>
+<a name="line-62"></a>       <span class='hs-layout'>,</span> <span class='hs-varid'>sectionRelmap</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>union</span> <span class='hs-varid'>sectionRelmap</span>
+<a name="line-63"></a>       <span class='hs-layout'>,</span> <span class='hs-varid'>sectionJudge</span>   <span class='hs-keyglyph'>=</span> <span class='hs-varid'>union</span> <span class='hs-varid'>sectionJudge</span>
+<a name="line-64"></a>       <span class='hs-layout'>,</span> <span class='hs-varid'>sectionViolate</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>union</span> <span class='hs-varid'>sectionViolate</span>
+<a name="line-65"></a>       <span class='hs-layout'>}</span> <span class='hs-keyword'>where</span> <span class='hs-varid'>union</span> <span class='hs-varid'>f</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>f</span> <span class='hs-varid'>s1</span> <span class='hs-varop'>++</span> <span class='hs-varid'>f</span> <span class='hs-varid'>s2</span>
+<a name="line-66"></a>
+<a name="line-67"></a><a name="makeEmptySection"></a><span class='hs-comment'>{-| Make empty section that has a given constructor. -}</span>
+<a name="line-68"></a><span class='hs-definition'>makeEmptySection</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RelmapCons</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Section</span> <span class='hs-varid'>c</span>
+<a name="line-69"></a><span class='hs-definition'>makeEmptySection</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Section</span> <span class='hs-conid'>Nothing</span> <span class='hs-conid'>[]</span> <span class='hs-conid'>[]</span> <span class='hs-conid'>[]</span> <span class='hs-conid'>[]</span> <span class='hs-conid'>[]</span> <span class='hs-conid'>[]</span> <span class='hs-conid'>[]</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>ResourceText</span> <span class='hs-str'>""</span><span class='hs-layout'>)</span>
+<a name="line-70"></a>
+<a name="line-71"></a><a name="emptySection"></a><span class='hs-comment'>{-| Section that has no contents. -}</span>
+<a name="line-72"></a><span class='hs-definition'>emptySection</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Section</span> <span class='hs-varid'>c</span>
+<a name="line-73"></a><span class='hs-definition'>emptySection</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>makeEmptySection</span> <span class='hs-varop'>$</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapCons</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>global</span>
+<a name="line-74"></a>
+<a name="line-75"></a><span class='hs-comment'>-- {-| Section that has only judgements. -}</span>
+<a name="line-76"></a><span class='hs-comment'>-- dataSection :: [B.Judge c] -&gt; Section c</span>
+<a name="line-77"></a><span class='hs-comment'>-- dataSection js = emptySection { sectionJudge = js }</span>
+<a name="line-78"></a>
 <a name="line-79"></a>
 <a name="line-80"></a>
-<a name="line-81"></a>
-<a name="line-82"></a><span class='hs-comment'>-- ----------------------</span>
-<a name="line-83"></a><span class='hs-comment'>{- $Process
-<a name="line-84"></a>  
-<a name="line-85"></a>   Section is constructed using following steps.
-<a name="line-86"></a>   
-<a name="line-87"></a>   [1. @??? -&gt; String@]
-<a name="line-88"></a>       Get string from something.
-<a name="line-89"></a>   
-<a name="line-90"></a>   [2. @String -&gt; \[String\]@]
-<a name="line-91"></a>       Split string into lines.
-<a name="line-92"></a>   
-<a name="line-93"></a>   [3. @\[String\] -&gt; \[Token\]@]
-<a name="line-94"></a>       Split line-breaked strings into tokens.
-<a name="line-95"></a>  
-<a name="line-96"></a>   [4. @\[Token\] -&gt; \[\[Token\]\]@]
-<a name="line-97"></a>       Collect tokens for clauses.
-<a name="line-98"></a>  
-<a name="line-99"></a>   [5. @\[\[Token\]\] -&gt; \[Clause\]@]
-<a name="line-100"></a>       Classify tokens.
-<a name="line-101"></a>  
-<a name="line-102"></a>   [6. @\[Clause\] -&gt; Section a@]
-<a name="line-103"></a>       Make section from list of clauses.
-<a name="line-104"></a>
-<a name="line-105"></a>-}</span>
+<a name="line-81"></a><span class='hs-comment'>-- ----------------------  Full construction</span>
+<a name="line-82"></a>
+<a name="line-83"></a><a name="consSection"></a><span class='hs-comment'>{-| Second step of constructing 'Section'. -}</span>
+<a name="line-84"></a><span class='hs-definition'>consSection</span>
+<a name="line-85"></a>    <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CContent</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span>
+<a name="line-86"></a>    <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RelmapConsFull</span> <span class='hs-varid'>c</span>   <span class='hs-comment'>-- ^ Relmap full constructor</span>
+<a name="line-87"></a>    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Resource</span>           <span class='hs-comment'>-- ^ Resource name</span>
+<a name="line-88"></a>    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Clause</span><span class='hs-keyglyph'>]</span>           <span class='hs-comment'>-- ^ Output of 'C.consClause'</span>
+<a name="line-89"></a>    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-layout'>(</span><span class='hs-conid'>Section</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span>      <span class='hs-comment'>-- ^ Result section</span>
+<a name="line-90"></a><span class='hs-definition'>consSection</span> <span class='hs-varid'>consFull</span> <span class='hs-varid'>resource</span> <span class='hs-varid'>xs</span> <span class='hs-keyglyph'>=</span>
+<a name="line-91"></a>    <span class='hs-keyword'>do</span> <span class='hs-keyword'>_</span>        <span class='hs-keyglyph'>&lt;-</span>  <span class='hs-varid'>mapMFor</span> <span class='hs-varid'>unk</span>    <span class='hs-varid'>isCUnknown</span>
+<a name="line-92"></a>       <span class='hs-keyword'>_</span>        <span class='hs-keyglyph'>&lt;-</span>  <span class='hs-varid'>mapMFor</span> <span class='hs-varid'>unres</span>  <span class='hs-varid'>isCUnres</span>
+<a name="line-93"></a>       <span class='hs-varid'>imports</span>  <span class='hs-keyglyph'>&lt;-</span>  <span class='hs-varid'>mapMFor</span> <span class='hs-varid'>impt</span>   <span class='hs-varid'>isCImport</span>
+<a name="line-94"></a>       <span class='hs-varid'>judges</span>   <span class='hs-keyglyph'>&lt;-</span>  <span class='hs-varid'>mapMFor</span> <span class='hs-varid'>judge</span>  <span class='hs-varid'>isCJudge</span> 
+<a name="line-95"></a>       <span class='hs-varid'>relmaps</span>  <span class='hs-keyglyph'>&lt;-</span>  <span class='hs-varid'>mapMFor</span> <span class='hs-varid'>relmap</span> <span class='hs-varid'>isCRelmap</span>
+<a name="line-96"></a>       <span class='hs-varid'>asserts</span>  <span class='hs-keyglyph'>&lt;-</span>  <span class='hs-varid'>mapMFor</span> <span class='hs-varid'>assert</span> <span class='hs-varid'>isCAssert</span>
+<a name="line-97"></a>
+<a name="line-98"></a>       <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-varid'>emptySection</span>
+<a name="line-99"></a>           <span class='hs-layout'>{</span> <span class='hs-varid'>sectionName</span>      <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>section</span> <span class='hs-varid'>xs</span>
+<a name="line-100"></a>           <span class='hs-layout'>,</span> <span class='hs-varid'>sectionImport</span>    <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>imports</span>
+<a name="line-101"></a>           <span class='hs-layout'>,</span> <span class='hs-varid'>sectionExport</span>    <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>mapFor</span> <span class='hs-varid'>expt</span>  <span class='hs-varid'>isCExport</span>
+<a name="line-102"></a>           <span class='hs-layout'>,</span> <span class='hs-varid'>sectionShort</span>     <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>mapFor</span> <span class='hs-varid'>short</span> <span class='hs-varid'>isCShort</span>
+<a name="line-103"></a>           <span class='hs-layout'>,</span> <span class='hs-varid'>sectionAssert</span>    <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>asserts</span>
+<a name="line-104"></a>           <span class='hs-layout'>,</span> <span class='hs-varid'>sectionRelmap</span>    <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>relmaps</span>
+<a name="line-105"></a>           <span class='hs-layout'>,</span> <span class='hs-varid'>sectionJudge</span>     <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>judges</span>
+<a name="line-106"></a>           <span class='hs-layout'>,</span> <span class='hs-varid'>sectionResource</span>  <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>resource</span> <span class='hs-layout'>}</span>
+<a name="line-107"></a>    <span class='hs-keyword'>where</span>
+<a name="line-108"></a>      <span class='hs-varid'>mapFor</span>  <span class='hs-varid'>f</span> <span class='hs-varid'>p</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>pass</span> <span class='hs-varid'>f</span> <span class='hs-varop'>`map`</span>  <span class='hs-varid'>filter</span> <span class='hs-layout'>(</span><span class='hs-varid'>p</span> <span class='hs-varop'>.</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>clauseBody</span><span class='hs-layout'>)</span> <span class='hs-varid'>xs</span>
+<a name="line-109"></a>      <span class='hs-varid'>mapMFor</span> <span class='hs-varid'>f</span> <span class='hs-varid'>p</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>pass</span> <span class='hs-varid'>f</span> <span class='hs-varop'>`mapM`</span> <span class='hs-varid'>filter</span> <span class='hs-layout'>(</span><span class='hs-varid'>p</span> <span class='hs-varop'>.</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>clauseBody</span><span class='hs-layout'>)</span> <span class='hs-varid'>xs</span>
+<a name="line-110"></a>      <span class='hs-varid'>pass</span> <span class='hs-varid'>f</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Clause</span> <span class='hs-varid'>src</span> <span class='hs-varid'>body</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>f</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>front</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>clauseTokens</span> <span class='hs-varid'>src</span><span class='hs-layout'>)</span> <span class='hs-varid'>body</span>
+<a name="line-111"></a>      <span class='hs-varid'>consSec</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>consSection</span> <span class='hs-varid'>consFull</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>ResourceText</span> <span class='hs-str'>""</span><span class='hs-layout'>)</span>
+<a name="line-112"></a>
+<a name="line-113"></a>      <span class='hs-comment'>-- todo: multiple section name</span>
+<a name="line-114"></a>      <span class='hs-varid'>section</span> <span class='hs-layout'>(</span><span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Clause</span> <span class='hs-keyword'>_</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CSection</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-conop'>:</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>n</span>
+<a name="line-115"></a>      <span class='hs-varid'>section</span> <span class='hs-layout'>(</span><span class='hs-keyword'>_</span> <span class='hs-conop'>:</span> <span class='hs-varid'>xs2</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>section</span> <span class='hs-varid'>xs2</span>
+<a name="line-116"></a>      <span class='hs-varid'>section</span> <span class='hs-conid'>[]</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Nothing</span>
+<a name="line-117"></a>
+<a name="line-118"></a>      <span class='hs-varid'>expt</span>  <span class='hs-keyword'>_</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CExport</span> <span class='hs-varid'>n</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>n</span>
+<a name="line-119"></a>      <span class='hs-varid'>short</span> <span class='hs-keyword'>_</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CShort</span> <span class='hs-varid'>p</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>p</span>
+<a name="line-120"></a>
+<a name="line-121"></a>      <span class='hs-varid'>impt</span> <span class='hs-keyword'>_</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CImport</span> <span class='hs-keyword'>_</span> <span class='hs-layout'>(</span><span class='hs-conid'>Nothing</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varid'>emptySection</span>
+<a name="line-122"></a>      <span class='hs-varid'>impt</span> <span class='hs-keyword'>_</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CImport</span> <span class='hs-keyword'>_</span> <span class='hs-layout'>(</span><span class='hs-conid'>Just</span> <span class='hs-varid'>e</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-varid'>consSec</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>e</span><span class='hs-keyglyph'>]</span>
+<a name="line-123"></a>
+<a name="line-124"></a>      <span class='hs-varid'>judge</span> <span class='hs-varid'>toks</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CJudge</span> <span class='hs-varid'>q</span> <span class='hs-varid'>pat</span> <span class='hs-varid'>xs2</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span>
+<a name="line-125"></a>          <span class='hs-keyword'>case</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>litJudge</span> <span class='hs-varid'>q</span> <span class='hs-varid'>pat</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>tokenTrees</span> <span class='hs-varid'>xs2</span><span class='hs-layout'>)</span> <span class='hs-keyword'>of</span>
+<a name="line-126"></a>            <span class='hs-conid'>Right</span> <span class='hs-varid'>j</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Right</span> <span class='hs-varid'>j</span>
+<a name="line-127"></a>            <span class='hs-conid'>Left</span>  <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>abort</span> <span class='hs-varid'>toks</span> <span class='hs-varid'>a</span>
+<a name="line-128"></a>
+<a name="line-129"></a>      <span class='hs-varid'>relmap</span> <span class='hs-varid'>toks</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CRelmap</span> <span class='hs-varid'>name</span> <span class='hs-varid'>half</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span>
+<a name="line-130"></a>          <span class='hs-keyword'>case</span> <span class='hs-varid'>consFull</span> <span class='hs-varid'>half</span> <span class='hs-keyword'>of</span>
+<a name="line-131"></a>            <span class='hs-conid'>Right</span> <span class='hs-varid'>full</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Right</span> <span class='hs-layout'>(</span><span class='hs-varid'>name</span><span class='hs-layout'>,</span> <span class='hs-varid'>full</span><span class='hs-layout'>)</span>
+<a name="line-132"></a>            <span class='hs-conid'>Left</span> <span class='hs-varid'>a</span>     <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>abort</span> <span class='hs-varid'>toks</span> <span class='hs-varid'>a</span>
+<a name="line-133"></a>
+<a name="line-134"></a>      <span class='hs-varid'>assert</span> <span class='hs-varid'>toks</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CAssert</span> <span class='hs-varid'>typ</span> <span class='hs-varid'>pat</span> <span class='hs-varid'>opt</span> <span class='hs-varid'>half</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span>
+<a name="line-135"></a>          <span class='hs-keyword'>case</span> <span class='hs-varid'>consFull</span> <span class='hs-varid'>half</span> <span class='hs-keyword'>of</span>
+<a name="line-136"></a>            <span class='hs-conid'>Right</span> <span class='hs-varid'>full</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Assert</span> <span class='hs-varid'>typ</span> <span class='hs-varid'>pat</span> <span class='hs-varid'>opt</span> <span class='hs-varid'>full</span> <span class='hs-varid'>toks</span>
+<a name="line-137"></a>            <span class='hs-conid'>Left</span> <span class='hs-varid'>a</span>     <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>abort</span> <span class='hs-varid'>toks</span> <span class='hs-varid'>a</span>
+<a name="line-138"></a>
+<a name="line-139"></a>      <span class='hs-varid'>unk</span>   <span class='hs-varid'>ls</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CUnknown</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>AbortSyntax</span> <span class='hs-varid'>ls</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>ASUnkClause</span>
+<a name="line-140"></a>      <span class='hs-varid'>unres</span> <span class='hs-keyword'>_</span>  <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CUnres</span> <span class='hs-varid'>ts</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>AbortSyntax</span> <span class='hs-varid'>ts</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>ASUnresToken</span>
+<a name="line-141"></a>      <span class='hs-varid'>abort</span> <span class='hs-varid'>ls</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>AbortSyntax</span> <span class='hs-varid'>ts</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>AbortSyntax</span> <span class='hs-layout'>(</span><span class='hs-varid'>ts</span> <span class='hs-varop'>++</span> <span class='hs-varid'>ls</span><span class='hs-layout'>)</span> <span class='hs-varid'>a</span>
+<a name="line-142"></a>      <span class='hs-varid'>abort</span> <span class='hs-keyword'>_</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varid'>a</span>
+<a name="line-143"></a>
+<a name="line-144"></a><a name="isCImport"></a><span class='hs-definition'>isCImport</span><span class='hs-layout'>,</span> <span class='hs-varid'>isCExport</span><span class='hs-layout'>,</span> <span class='hs-varid'>isCShort</span><span class='hs-layout'>,</span>
+<a name="line-145"></a>  <span class='hs-varid'>isCRelmap</span><span class='hs-layout'>,</span> <span class='hs-varid'>isCAssert</span><span class='hs-layout'>,</span> <span class='hs-varid'>isCJudge</span><span class='hs-layout'>,</span>
+<a name="line-146"></a>  <span class='hs-varid'>isCUnknown</span><span class='hs-layout'>,</span> <span class='hs-varid'>isCUnres</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>ClauseBody</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
+<a name="line-147"></a>
+<a name="line-148"></a><span class='hs-definition'>isCImport</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CImport</span> <span class='hs-keyword'>_</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span>      <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
+<a name="line-149"></a><span class='hs-definition'>isCImport</span> <span class='hs-keyword'>_</span>                    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>False</span>
+<a name="line-150"></a>
+<a name="line-151"></a><a name="isCExport"></a><span class='hs-definition'>isCExport</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CExport</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span>        <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
+<a name="line-152"></a><span class='hs-definition'>isCExport</span> <span class='hs-keyword'>_</span>                    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>False</span>
+<a name="line-153"></a>
+<a name="line-154"></a><a name="isCShort"></a><span class='hs-definition'>isCShort</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CShort</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span>          <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
+<a name="line-155"></a><span class='hs-definition'>isCShort</span> <span class='hs-keyword'>_</span>                     <span class='hs-keyglyph'>=</span> <span class='hs-conid'>False</span>
+<a name="line-156"></a>
+<a name="line-157"></a><a name="isCRelmap"></a><span class='hs-definition'>isCRelmap</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CRelmap</span> <span class='hs-keyword'>_</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span>      <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
+<a name="line-158"></a><span class='hs-definition'>isCRelmap</span> <span class='hs-keyword'>_</span>                    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>False</span>
+<a name="line-159"></a>
+<a name="line-160"></a><a name="isCAssert"></a><span class='hs-definition'>isCAssert</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CAssert</span> <span class='hs-keyword'>_</span> <span class='hs-keyword'>_</span> <span class='hs-keyword'>_</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
+<a name="line-161"></a><span class='hs-definition'>isCAssert</span> <span class='hs-keyword'>_</span>                    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>False</span>
+<a name="line-162"></a>
+<a name="line-163"></a><a name="isCJudge"></a><span class='hs-definition'>isCJudge</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CJudge</span> <span class='hs-keyword'>_</span> <span class='hs-keyword'>_</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span>      <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
+<a name="line-164"></a><span class='hs-definition'>isCJudge</span> <span class='hs-keyword'>_</span>                     <span class='hs-keyglyph'>=</span> <span class='hs-conid'>False</span>
+<a name="line-165"></a>
+<a name="line-166"></a><a name="isCUnknown"></a><span class='hs-definition'>isCUnknown</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CUnknown</span><span class='hs-layout'>)</span>        <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
+<a name="line-167"></a><span class='hs-definition'>isCUnknown</span> <span class='hs-keyword'>_</span>                   <span class='hs-keyglyph'>=</span> <span class='hs-conid'>False</span>
+<a name="line-168"></a>
+<a name="line-169"></a><a name="isCUnres"></a><span class='hs-definition'>isCUnres</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CUnres</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span>          <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
+<a name="line-170"></a><span class='hs-definition'>isCUnres</span> <span class='hs-keyword'>_</span>                     <span class='hs-keyglyph'>=</span> <span class='hs-conid'>False</span>
+<a name="line-171"></a>
+<a name="line-172"></a>
+<a name="line-173"></a>
+<a name="line-174"></a><span class='hs-comment'>-- ----------------------</span>
+<a name="line-175"></a><span class='hs-comment'>{- $Process
+<a name="line-176"></a>  
+<a name="line-177"></a>   Section is constructed using following steps.
+<a name="line-178"></a>   
+<a name="line-179"></a>   [1. @??? -&gt; String@]
+<a name="line-180"></a>       Get string from something.
+<a name="line-181"></a>   
+<a name="line-182"></a>   [2. @String -&gt; \[String\]@]
+<a name="line-183"></a>       Split string into lines.
+<a name="line-184"></a>   
+<a name="line-185"></a>   [3. @\[String\] -&gt; \[Token\]@]
+<a name="line-186"></a>       Split line-breaked strings into tokens.
+<a name="line-187"></a>  
+<a name="line-188"></a>   [4. @\[Token\] -&gt; \[\[Token\]\]@]
+<a name="line-189"></a>       Collect tokens for clauses.
+<a name="line-190"></a>  
+<a name="line-191"></a>   [5. @\[\[Token\]\] -&gt; \[Clause\]@]
+<a name="line-192"></a>       Classify tokens.
+<a name="line-193"></a>  
+<a name="line-194"></a>   [6. @\[Clause\] -&gt; Section a@]
+<a name="line-195"></a>       Make section from list of clauses.
+<a name="line-196"></a>
+<a name="line-197"></a>-}</span>
+<a name="line-198"></a>
 </pre></body>
 </html>

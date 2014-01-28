@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.39.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.42.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -94,7 +94,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >type</span
 	    > <a href="#t:RopFullSorter"
 	    >RopFullSorter</a
-	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
@@ -108,13 +108,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >RopAssoc</a
 	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
 	    >Named</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >]]</li
 	  ><li class="src short"
 	  ><a href="#v:sortOperand"
 	    >sortOperand</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopAssoc"
 	    >RopAssoc</a
@@ -122,13 +122,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ><li class="src short"
 	  ><a href="#v:sortUpOperand"
 	    >sortUpOperand</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
 	    >Named</a
 	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Assoc.html#t:OnceMore"
 	    >OnceMore</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >])]</li
 	  ><li class="src short"
@@ -173,6 +173,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ><a href="#v:operandTwo"
 	    >operandTwo</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperand"
+	    >RopOperand</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:operandThree"
+	    >operandThree</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
@@ -270,7 +284,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ><table
 	    ><tr
 	      ><td class="src"
-		>&nbsp;= [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+		>&nbsp;= [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 		  >TokenTree</a
 		  >]</td
 		><td class="doc"
@@ -310,7 +324,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >RopAssoc</a
 	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
 	    >Named</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >]]<a href="src/Koshucode-Baala-Core-Relmap-Operand.html#RopAssoc" class="link"
 	    >Source</a
@@ -320,7 +334,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><p class="src"
 	  ><a name="v:sortOperand" class="def"
 	    >sortOperand</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopAssoc"
 	    >RopAssoc</a
@@ -353,13 +367,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><p class="src"
 	  ><a name="v:sortUpOperand" class="def"
 	    >sortUpOperand</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
 	    >Named</a
 	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Assoc.html#t:OnceMore"
 	    >OnceMore</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >])]<a href="src/Koshucode-Baala-Core-Relmap-Operand.html#sortUpOperand" class="link"
 	    >Source</a
@@ -507,6 +521,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		></strong
 	      ></pre
 	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:operandThree" class="def"
+	    >operandThree</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperand"
+	    >RopOperand</a
+	    ><a href="src/Koshucode-Baala-Core-Relmap-Operand.html#operandThree" class="link"
+	    >Source</a
+	    ></p
 	  ></div
 	><div class="top"
 	><p class="src"

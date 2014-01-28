@@ -1,0 +1,585 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Core.Content.Literal.Literal</title
+    ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-Content-Literal-Literal.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a href="src/Koshucode-Baala-Core-Content-Literal-Literal.html"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-core-0.42.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Core.Content.Literal.Literal</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Library
+</a
+	    ><ul
+	    ><li
+	      ><a href="#g:2"
+		>Types
+</a
+		></li
+	      ><li
+	      ><a href="#g:3"
+		>Functions
+</a
+		></li
+	      ></ul
+	    ></li
+	  ><li
+	  ><a href="#g:4"
+	    >Document
+</a
+	    ><ul
+	    ><li
+	      ><a href="#g:5"
+		>Types
+</a
+		></li
+	      ><li
+	      ><a href="#g:6"
+		>Simple data
+</a
+		></li
+	      ><li
+	      ><a href="#g:7"
+		>Compound data
+</a
+		></li
+	      ></ul
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Literalizer: Make literal contents from token tree. 
+</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:Literalize"
+	    >Literalize</a
+	    > a = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:LitTrees"
+	    >LitTrees</a
+	    > a = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:LitOperators"
+	    >LitOperators</a
+	    > c = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+	    >Named</a
+	    > (<a href="Koshucode-Baala-Core-Content-Literal-Literal.html#t:Literalize"
+	    >Literalize</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Content-Literal-Literal.html#t:LitTrees"
+	    >LitTrees</a
+	    > c)]</li
+	  ><li class="src short"
+	  ><a href="#v:litContentBy"
+	    >litContentBy</a
+	    > :: <a href="Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal-Literal.html#t:LitOperators"
+	    >LitOperators</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Content-Literal-Literal.html#t:Literalize"
+	    >Literalize</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:litTermset"
+	    >litTermset</a
+	    > :: <a href="Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal-Literal.html#t:Literalize"
+	    >Literalize</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Content-Literal-Literal.html#t:LitTrees"
+	    >LitTrees</a
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+	    >Named</a
+	    > c]</li
+	  ><li class="src short"
+	  ><a href="#v:litNamedTrees"
+	    >litNamedTrees</a
+	    > :: <a href="Koshucode-Baala-Core-Content-Literal-Literal.html#t:LitTrees"
+	    >LitTrees</a
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+	    >Named</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >]</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Library
+</h1
+	><h2 id="g:2"
+	>Types
+</h2
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:Literalize" class="def"
+	    >Literalize</a
+	    > a = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a<a href="src/Koshucode-Baala-Core-Content-Literal-Literal.html#Literalize" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Transform <code
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+		>TokenTree</a
+		></code
+	      > to something. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:LitTrees" class="def"
+	    >LitTrees</a
+	    > a = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a<a href="src/Koshucode-Baala-Core-Content-Literal-Literal.html#LitTrees" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Transform list of <code
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+		>TokenTree</a
+		></code
+	      > to something. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:LitOperators" class="def"
+	    >LitOperators</a
+	    > c = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+	    >Named</a
+	    > (<a href="Koshucode-Baala-Core-Content-Literal-Literal.html#t:Literalize"
+	    >Literalize</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Content-Literal-Literal.html#t:LitTrees"
+	    >LitTrees</a
+	    > c)]<a href="src/Koshucode-Baala-Core-Content-Literal-Literal.html#LitOperators" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h2 id="g:3"
+	>Functions
+</h2
+	><div class="top"
+	><p class="src"
+	  ><a name="v:litContentBy" class="def"
+	    >litContentBy</a
+	    > :: <a href="Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal-Literal.html#t:LitOperators"
+	    >LitOperators</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Content-Literal-Literal.html#t:Literalize"
+	    >Literalize</a
+	    > c<a href="src/Koshucode-Baala-Core-Content-Literal-Literal.html#litContentBy" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Transform <code
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+		>TokenTree</a
+		></code
+	      > into
+    internal form of content. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:litTermset" class="def"
+	    >litTermset</a
+	    > :: <a href="Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal-Literal.html#t:Literalize"
+	    >Literalize</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Content-Literal-Literal.html#t:LitTrees"
+	    >LitTrees</a
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+	    >Named</a
+	    > c]<a href="src/Koshucode-Baala-Core-Content-Literal-Literal.html#litTermset" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Collect term name and content. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:litNamedTrees" class="def"
+	    >litNamedTrees</a
+	    > :: <a href="Koshucode-Baala-Core-Content-Literal-Literal.html#t:LitTrees"
+	    >LitTrees</a
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+	    >Named</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >]<a href="src/Koshucode-Baala-Core-Content-Literal-Literal.html#litNamedTrees" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Read list of termname and its content.
+</p
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>litNamedTrees . B.tokenTrees . B.tokens $ &quot;/a 'A3 /b 10&quot;
+</code
+		></strong
+	      >Right [(&quot;/a&quot;, TreeB 1 [TreeL (TWord 3 0 &quot;'&quot;), TreeL (TWord 4 0 &quot;A3&quot;)]),
+       (&quot;/b&quot;, TreeL (TWord 8 0 &quot;10&quot;))]
+</pre
+	    ></div
+	  ></div
+	><h1 id="g:4"
+	>Document
+</h1
+	><h2 id="g:5"
+	>Types
+</h2
+	><div class="doc"
+	><p
+	  ><code
+	    ><a href="Koshucode-Baala-Core-Content-Literal-Literal.html#v:litContentBy"
+	      >litContentBy</a
+	      ></code
+	    > recognizes the following types.
+</p
+	  ><dl
+	  ><dt
+	    >Boolean</dt
+	    ><dd
+	    >   Boolean used for something is hold or unhold.
+               Textual forms: <code
+	      >#true</code
+	      >, <code
+	      >#fasle</code
+	      >.
+</dd
+	    ><dt
+	    >Nil</dt
+	    ><dd
+	    >       Nil means that there are no values.
+               i.e., universal negation on the term holds.
+               Textual form is the non-quoted parens: <code
+	      >()</code
+	      >.
+</dd
+	    ><dt
+	    >Text</dt
+	    ><dd
+	    >      Sequence of characters.
+               Textual forms is chars with apostrophe or
+               doubly-quoted line: <code
+	      >'abc</code
+	      >, <code
+	      >&quot;abc def&quot;</code
+	      >.
+</dd
+	    ><dt
+	    >Decimal</dt
+	    ><dd
+	    >   Decimal number.
+               Textual forms is sequence of digits:
+               <code
+	      >100</code
+	      >, <code
+	      >99.50</code
+	      >, <code
+	      >hex AF</code
+	      >.
+</dd
+	    ><dt
+	    >Set</dt
+	    ><dd
+	    >       Set is an unordered collection of contents.
+               Duplication among contents is not significant.
+               Textual form is a sequence of contents
+               delimited by colon, enclosed in braces:
+               <code
+	      >{ 'a : 'b : 'c }</code
+	      >.
+</dd
+	    ><dt
+	    >List</dt
+	    ><dd
+	    >      List is an ordered list of contents.
+               Textual form is a sequence of contents
+               delimited by colon, enclosed in square brackets:
+               <code
+	      >[ 'abc : 'def ]</code
+	      >.
+</dd
+	    ><dt
+	    >Termset</dt
+	    ><dd
+	    >   Termset is a set of terms,
+               i.e., a list of named contents.
+               Textual form is a sequence of terms
+               with bar-angles: <code
+	      >&lt;| /a 10 /b 20 |&gt;</code
+	      >.
+</dd
+	    ><dt
+	    >Relation</dt
+	    ><dd
+	    >  Relation is a set of same-type tuples,
+               Textual form is a sequence of tuples
+               enclosed in bar-braces.
+               The first tuple is a heading of relation,
+               and succeeding tuples are delimited by vertical bar:
+               <code
+	      >{| /a : /b | 'A1 : 20 | 'A3 : 40 |}</code
+	      >.
+</dd
+	    ></dl
+	  ></div
+	><h2 id="g:6"
+	>Simple data
+</h2
+	><div class="doc"
+	><p
+	  >Prepere some definitions.
+</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >:m +Koshucode.Baala.Vanilla.Type
+</code
+	      ></strong
+	    ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >let trees = B.tokenTrees . B.tokens
+</code
+	      ></strong
+	    ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >let lit  = litContentBy [] :: B.TokenTree -&gt; B.Ab VContent
+</code
+	      ></strong
+	    ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >let lits = litList lit . trees
+</code
+	      ></strong
+	    ></pre
+	  ><p
+	  >Boolean.
+</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >lits &quot;#true : #false&quot;
+</code
+	      ></strong
+	    >Right [VBool True, VBool False]
+</pre
+	  ><p
+	  >Words.
+</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >lits &quot;'a : 'b #sp 'c&quot;
+</code
+	      ></strong
+	    >Right [VText &quot;a&quot;, VText &quot;b c&quot;]
+</pre
+	  ><p
+	  >Decimal.
+</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >lits &quot;12.0&quot;
+</code
+	      ></strong
+	    >Right [VDec (Decimal (120, 10), 1, False)]
+</pre
+	  ><p
+	  >Nil as no ordinary value.
+</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >lits &quot;()&quot;
+</code
+	      ></strong
+	    >Right [VNil]
+</pre
+	  ></div
+	><h2 id="g:7"
+	>Compound data
+</h2
+	><div class="doc"
+	><p
+	  >Set.
+</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >lits &quot;{ 'b : 'a : 'a : 'c : 'a }&quot;
+</code
+	      ></strong
+	    >Right [VSet [VText &quot;b&quot;, VText &quot;a&quot;, VText &quot;c&quot;]]
+</pre
+	  ><p
+	  >List.
+</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >lits &quot;[ 'a : '10 : 20 ]&quot;
+</code
+	      ></strong
+	    >Right [VList [VText &quot;a&quot;, VText &quot;10&quot;, VDec (Decimal (20, 1), 0, False)]]
+</pre
+	  ><p
+	  >Termset.
+</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >lits &quot;&lt;| /a 'x  /b { 'y : 'z } |&gt;&quot;
+</code
+	      ></strong
+	    >Right [VTermset
+  [ (&quot;/a&quot;, VText &quot;x&quot;)
+  , (&quot;/b&quot;, VSet [VText &quot;y&quot;, VText &quot;z&quot;])]]
+</pre
+	  ><p
+	  >Relation.
+</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >lits &quot;{| /a : /x | 'A1 : 20 | 'A3 : 40 | 'A4 : 60 |}&quot;
+</code
+	      ></strong
+	    >Right [VRel (Rel
+  (Relhead [Term &quot;/a&quot;, Term &quot;/x&quot;]),
+  [ [VText &quot;A1&quot;, VDec (Decimal (20,1), 0, False)]
+  , [VText &quot;A3&quot;, VDec (Decimal (40,1), 0, False)]
+  , [VText &quot;A4&quot;, VDec (Decimal (60,1), 0, False)] ])]
+</pre
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.13.2</p
+      ></div
+    ></body
+  ></html
+>
