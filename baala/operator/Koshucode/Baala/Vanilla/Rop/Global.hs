@@ -27,11 +27,11 @@ ropConsKoshuCop use =
      Right $ relmapKoshuCop use name
 
 relmapKoshuCop :: (C.CContent c) => C.RopUse c -> B.Termname -> C.Relmap c
-relmapKoshuCop use name = C.relmapGlobal use $ relfyKoshuCop name
+relmapKoshuCop use name = C.relmapGlobal use $ relkitKoshuCop name
 
-relfyKoshuCop :: (C.CContent c) => B.Termname -> C.Global c -> B.Relhead -> B.Ab (C.Relfy c)
-relfyKoshuCop name C.Global { C.globalCops = (cops, _) } _ =
-    Right $C.relfyConstBody [name] $ map (B.singleton . C.putText . B.name) cops
+relkitKoshuCop :: (C.CContent c) => B.Termname -> C.Global c -> B.Relhead -> B.Ab (C.Relkit c)
+relkitKoshuCop name C.Global { C.globalCops = (cops, _) } _ =
+    Right $C.relkitConstBody [name] $ map (B.singleton . C.putText . B.name) cops
 
 
 
@@ -45,11 +45,11 @@ ropConsKoshuCopInfix use =
      Right $ relmapKoshuCopInfix use (name, height, dir)
 
 relmapKoshuCopInfix :: (C.CContent c) => C.RopUse c -> (B.Termname, Maybe B.Termname, Maybe B.Termname) -> C.Relmap c
-relmapKoshuCopInfix use terms = C.relmapGlobal use $ relfyKoshuCopInfix terms
+relmapKoshuCopInfix use terms = C.relmapGlobal use $ relkitKoshuCopInfix terms
 
-relfyKoshuCopInfix :: (C.CContent c) => (B.Termname, Maybe B.Termname, Maybe B.Termname) -> C.Global c -> B.Relhead -> B.Ab (C.Relfy c)
-relfyKoshuCopInfix (name, height, dir) C.Global { C.globalCops = (_, htab) } _ = r2 where
-    r2 = Right $ C.relfy h2 $ C.RelfyConst (map put htab)
+relkitKoshuCopInfix :: (C.CContent c) => (B.Termname, Maybe B.Termname, Maybe B.Termname) -> C.Global c -> B.Relhead -> B.Ab (C.Relkit c)
+relkitKoshuCopInfix (name, height, dir) C.Global { C.globalCops = (_, htab) } _ = r2 where
+    r2 = Right $ C.relkit h2 $ C.RelkitConst (map put htab)
     h2 = B.headFrom $   [name] ++ heightMaybe B.singleton     ++ dirMaybe B.singleton
     put (n,ih) = [C.putText n] ++ heightMaybe (heightTerm ih) ++ dirMaybe (dirTerm ih)
 
@@ -71,11 +71,11 @@ ropConsKoshuRop use =
      Right $ relmapKoshuRop use name
 
 relmapKoshuRop :: (C.CContent c) => C.RopUse c -> B.Termname -> C.Relmap c
-relmapKoshuRop use name = C.relmapGlobal use $ relfyKoshuRop name
+relmapKoshuRop use name = C.relmapGlobal use $ relkitKoshuRop name
 
-relfyKoshuRop :: (C.CContent c) => B.Termname -> C.Global c -> B.Relhead -> B.Ab (C.Relfy c)
-relfyKoshuRop name C.Global { C.globalRops = rops } _ =
-    Right $C.relfyConstBody [name] $ map (B.singleton . C.putText . C.ropName) rops
+relkitKoshuRop :: (C.CContent c) => B.Termname -> C.Global c -> B.Relhead -> B.Ab (C.Relkit c)
+relkitKoshuRop name C.Global { C.globalRops = rops } _ =
+    Right $C.relkitConstBody [name] $ map (B.singleton . C.putText . C.ropName) rops
 
 -- ----------------------  koshu-version
 
@@ -88,7 +88,7 @@ ropConsKoshuVersion use =
   do n   <- Rop.getTerm  use "-term"
      ver <- Rop.getTrees use "-version"
      case ver of
-       []      -> Right $ C.relmapGlobal use $ relfyKoshuVersion n
+       []      -> Right $ C.relmapGlobal use $ relkitKoshuVersion n
        [f]     -> check n f f
        [f, t]  -> check n f t
        _       -> Left $ B.AbortAnalysis [] $ B.AAMalformedOperand ""
@@ -96,16 +96,16 @@ ropConsKoshuVersion use =
     check n f t = do
       from <- C.litContent f
       to   <- C.litContent t
-      Right $ C.relmapGlobal use $ relfyKoshuVersionCheck (from, to) n
+      Right $ C.relmapGlobal use $ relkitKoshuVersionCheck (from, to) n
 
-relfyKoshuVersion :: (C.CContent c) => B.Termname -> C.Global c -> B.Relhead -> B.Ab (C.Relfy c)
-relfyKoshuVersion n C.Global { C.globalVersion = ver } _ =
-    Right $ C.relfyConstSingleton [n] [ C.putList $ map C.putDecFromInt $ apiVersion ver ]
+relkitKoshuVersion :: (C.CContent c) => B.Termname -> C.Global c -> B.Relhead -> B.Ab (C.Relkit c)
+relkitKoshuVersion n C.Global { C.globalVersion = ver } _ =
+    Right $ C.relkitConstSingleton [n] [ C.putList $ map C.putDecFromInt $ apiVersion ver ]
 
-relfyKoshuVersionCheck :: (C.CContent c) => (c, c) -> B.Termname -> C.Global c -> B.Relhead -> B.Ab (C.Relfy c)
-relfyKoshuVersionCheck (from, to) n C.Global { C.globalVersion = ver } _
-    | version >= from && version <= to  = Right $ C.relfyConstSingleton [n] [version] -- todo
-    | otherwise = Right $ C.relfyConstEmpty [n]
+relkitKoshuVersionCheck :: (C.CContent c) => (c, c) -> B.Termname -> C.Global c -> B.Relhead -> B.Ab (C.Relkit c)
+relkitKoshuVersionCheck (from, to) n C.Global { C.globalVersion = ver } _
+    | version >= from && version <= to  = Right $ C.relkitConstSingleton [n] [version] -- todo
+    | otherwise = Right $ C.relkitConstEmpty [n]
     where version = C.putList $ map C.putDecFromInt $ apiVersion ver
 
 apiVersion :: V.Version -> [Int]

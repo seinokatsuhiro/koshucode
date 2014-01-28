@@ -2,11 +2,11 @@
 
 module Koshucode.Baala.Vanilla.Rop.Naming
 ( -- * prefix
-  ropConsPrefix, relmapPrefix, relfyPrefix,
+  ropConsPrefix, relmapPrefix, relkitPrefix,
   -- * unprefix
-  ropConsUnprefix, relmapUnprefix, relfyUnprefix,
+  ropConsUnprefix, relmapUnprefix, relkitUnprefix,
   -- * prefix-change
-  ropConsPrefixChange, relmapPrefixChange, relfyPrefixChange,
+  ropConsPrefixChange, relmapPrefixChange, relkitPrefixChange,
 ) where
 
 import qualified Data.List as List
@@ -25,15 +25,15 @@ ropConsPrefix use =
        Right $ relmapPrefix use pre ns
 
 relmapPrefix :: C.RopUse c -> String -> [String] -> C.Relmap c
-relmapPrefix use pre ns = C.relmapCalc use $ relfyPrefix pre ns
+relmapPrefix use pre ns = C.relmapCalc use $ relkitPrefix pre ns
 
 {-| Add prefix to specified terms. -}
-relfyPrefix
+relkitPrefix
     :: String             -- ^ Prefix text (except for hyphen)
     -> [String]           -- ^ Changing termnames
     -> B.Relhead          -- ^ Heading of input relation
-    -> B.Ab (C.Relfy c)   -- ^ Relfier for output relation
-relfyPrefix pre ns h1 = Right $ C.relfy h2 C.RelfyId where
+    -> B.Ab (C.Relkit c)   -- ^ Relfier for output relation
+relkitPrefix pre ns h1 = Right $ C.relkit h2 C.RelkitId where
     h2 = B.headChange (map f) h1
     f n | n `elem` ns  = prefixName pre n
         | otherwise    = n
@@ -52,14 +52,14 @@ ropConsUnprefix use =
        Right $ relmapUnprefix use pre
 
 relmapUnprefix :: C.RopUse c -> String -> C.Relmap c
-relmapUnprefix use pre = C.relmapCalc use $ relfyUnprefix pre
+relmapUnprefix use pre = C.relmapCalc use $ relkitUnprefix pre
 
 {-| Remove prefix -}
-relfyUnprefix
+relkitUnprefix
     :: String             -- ^ Prefix text (except for hyphen)
     -> B.Relhead          -- ^ Heading of input relation
-    -> B.Ab (C.Relfy c)  -- ^ Generator for output relation
-relfyUnprefix pre h1 = Right $ C.relfy h2 C.RelfyId where
+    -> B.Ab (C.Relkit c)  -- ^ Generator for output relation
+relkitUnprefix pre h1 = Right $ C.relkit h2 C.RelkitId where
     h2 = B.headChange (map $ unprefixName pre) h1
 
 unprefixName :: String -> String -> String
@@ -79,15 +79,15 @@ ropConsPrefixChange use =
        Right $ relmapPrefixChange use new old
 
 relmapPrefixChange :: C.RopUse c -> String -> String -> C.Relmap c
-relmapPrefixChange use new old = C.relmapCalc use $ relfyPrefixChange new old
+relmapPrefixChange use new old = C.relmapCalc use $ relkitPrefixChange new old
 
 {-| Change prefix -}
-relfyPrefixChange
+relkitPrefixChange
     :: String             -- ^ New prefix text (except for hyphen)
     -> String             -- ^ Old prefix text (except for hyphen)
     -> B.Relhead          -- ^ Heading of input relation
-    -> B.Ab (C.Relfy c)  -- ^ Generator for output relation
-relfyPrefixChange new old h1 = Right $ C.relfy h2 C.RelfyId where
+    -> B.Ab (C.Relkit c)  -- ^ Generator for output relation
+relkitPrefixChange new old h1 = Right $ C.relkit h2 C.RelkitId where
     h2   = B.headChange (map f) h1
     new' = new ++ "-"
     old' = old ++ "-"

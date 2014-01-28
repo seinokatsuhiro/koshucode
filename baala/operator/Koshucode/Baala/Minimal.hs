@@ -37,7 +37,7 @@ import Koshucode.Baala.Minimal.Tropashko
    [@relmapXxx@]   Functions from 'Koshucode.Baala.Core.Relmap.Relmap.Relmap'
                    to 'Koshucode.Baala.Core.Relmap.Relmap.Relmap'.
 
-   [@relfyXxx@]    Functions that make 'Koshucode.Baala.Core.Relmap.Relfy.Relfy'.
+   [@relkitXxx@]   Functions that make 'Koshucode.Baala.Core.Relmap.Relkit.Relkit'.
 
 -}
 

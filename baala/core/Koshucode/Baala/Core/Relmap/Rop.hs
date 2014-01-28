@@ -25,7 +25,7 @@ import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Core.Content           as C
 import qualified Koshucode.Baala.Core.Relmap.HalfRelmap as C
 import qualified Koshucode.Baala.Core.Relmap.Operand    as C
-import qualified Koshucode.Baala.Core.Relmap.Relfy      as C
+import qualified Koshucode.Baala.Core.Relmap.Relkit     as C
 
 
 -- ----------------------  Global
@@ -106,9 +106,9 @@ data Relmap c
     -- | Equavalent relmap
     | RelmapAlias  C.HalfRelmap (Relmap c)
     -- | Relmap that maps relations to a relation
-    | RelmapCalc   C.HalfRelmap (C.RelmapConflRelfy c) [Relmap c]
+    | RelmapCalc   C.HalfRelmap (C.RelmapConflRelkit c) [Relmap c]
     -- | Relmap that maps relations to a relation
-    | RelmapGlobal C.HalfRelmap (Global c -> C.RelmapCalcRelfy c)
+    | RelmapGlobal C.HalfRelmap (Global c -> C.RelmapCalcRelkit c)
     -- | Connect two relmaps
     | RelmapAppend (Relmap c) (Relmap c)
     -- | Relmap reference
@@ -131,7 +131,7 @@ showRelmap r = sh r where
     sub r2 = " (" ++ sh r2 ++ ")"
 
 instance D.Monoid (Relmap c) where
-    mempty  = RelmapCalc halfid (const $ Right . C.relfyId) []
+    mempty  = RelmapCalc halfid (const $ Right . C.relkitId) []
     mappend = RelmapAppend
 
 halfid :: C.HalfRelmap

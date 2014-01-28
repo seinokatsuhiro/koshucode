@@ -62,8 +62,9 @@ relmapConsHalf halfs = consHalf where
         case lookup (B.tokenContent tok) halfs of
           Nothing -> Right $ half "" tok opd []
           Just (usage, sorter) ->
-              do sorted <- sorter opd
-                 subrelmap $ half usage tok opd sorted
+              B.ab [tok] $ do
+                sorted <- sorter opd
+                subrelmap $ half usage tok opd sorted
 
     half :: String -> B.Token -> [B.TokenTree] -> [B.Named [B.TokenTree]] -> C.HalfRelmap
     half usage tok opd sorted =
@@ -93,8 +94,9 @@ relmapConsFull global fulls = consFull where
             subHs = C.halfSubrelmap half
         in case lookup op fulls of
              Nothing   -> Right $ C.RelmapName half op
-             Just cons -> do subFs <- mapM consFull subHs
-                             cons $ C.RopUse global half subFs
+             Just cons -> B.abFrom half $ do
+                            subFs <- mapM consFull subHs
+                            cons $ C.RopUse global half subFs
 
 
 -- ----------------------

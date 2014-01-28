@@ -26,42 +26,42 @@ runRelmapDataset
     -> C.Relmap c      -- ^ Mapping from 'Rel' to 'Rel'
     -> B.Rel c         -- ^ Input relation
     -> B.Ab (B.Rel c)  -- ^ Output relation
-runRelmapDataset global dataset = runRelmapViaRelfy g2 where
+runRelmapDataset global dataset = runRelmapViaRelkit g2 where
     g2 = global { C.globalSelect = C.selectRelation dataset }
 
-runRelmapViaRelfy :: (Ord c) => C.Global c -> C.Relmap c -> B.AbMap (B.Rel c)
-runRelmapViaRelfy global r (B.Rel h1 b1) =
-    do C.Relfy h2 f2 <- specialize global r h1
-       b2 <- C.relfyRun f2 b1
+runRelmapViaRelkit :: (Ord c) => C.Global c -> C.Relmap c -> B.AbMap (B.Rel c)
+runRelmapViaRelkit global r (B.Rel h1 b1) =
+    do C.Relkit h2 f2 <- specialize global r h1
+       b2 <- C.relkitRun f2 b1
        Right $ B.Rel h2 b2
 
-specialize :: C.Global c -> C.Relmap c -> B.Relhead -> B.Ab (C.Relfy c)
+specialize :: C.Global c -> C.Relmap c -> B.Relhead -> B.Ab (C.Relkit c)
 specialize global = (<$>) where
     sel = C.globalSelect global
 
-    C.RelmapSource half p ns <$> _  = right half (C.relfyConst $ sel p ns)
-    C.RelmapConst  half rel  <$> _  = right half (C.relfyConst rel)
+    C.RelmapSource half p ns <$> _  = right half (C.relkitConst $ sel p ns)
+    C.RelmapConst  half rel  <$> _  = right half (C.relkitConst rel)
     C.RelmapAlias  _ relmap  <$> h1 = relmap <$> h1
     C.RelmapName   half name <$> _  =
         B.abFrom half $ Left $ B.AbortAnalysis [] $ B.AAUnkRelmap name
 
     C.RelmapAppend relmap1 relmap2 <$> h1 =
-        do relfy2 <- relmap1 <$> h1
-           relfy3 <- relmap2 <$> C.relfyHead relfy2
-           Right $ M.mappend relfy2 relfy3
+        do relkit2 <- relmap1 <$> h1
+           relkit3 <- relmap2 <$> C.relkitHead relkit2
+           Right $ M.mappend relkit2 relkit3
 
     C.RelmapCalc half mk relmaps <$> h1 =
         B.abFrom half $ do
-          subrelfy <- (<$> h1) `mapM` relmaps
-          relfy    <- mk subrelfy h1
-          right half relfy
+          subrelkit <- (<$> h1) `mapM` relmaps
+          relkit    <- mk subrelkit h1
+          right half relkit
 
     C.RelmapGlobal half mk <$> h1 =
         B.abFrom half $ do
-          relfy <- mk global h1
-          right half relfy
+          relkit <- mk global h1
+          right half relkit
 
-    right half r = Right $ C.relfySetSource half $ r
+    right half r = Right $ C.relkitSetSource half $ r
 
 
 

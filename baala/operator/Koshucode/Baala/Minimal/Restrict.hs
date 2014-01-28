@@ -4,11 +4,11 @@
 
 module Koshucode.Baala.Minimal.Restrict
 ( -- * some
-  ropConsSome, relmapSome, relfySome,
+  ropConsSome, relmapSome, relkitSome,
   -- * none
-  ropConsNone, relmapNone, relfyNone,
+  ropConsNone, relmapNone, relkitNone,
   -- * sub
-  ropConsSub, relmapSub, relfySub,
+  ropConsSub, relmapSub, relkitSub,
 ) where
 
 import qualified Koshucode.Baala.Base as B
@@ -27,11 +27,11 @@ ropConsSome use =
 
 relmapSome :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
 relmapSome use m = C.relmapConfl use fy [m] where
-    fy [r2] = relfySome r2
+    fy [r2] = relkitSome r2
     fy _    = B.bug
 
-relfySome :: (Ord c) => C.Relfy c -> B.Relhead -> B.Ab (C.Relfy c)
-relfySome = relfySemi False
+relkitSome :: (Ord c) => C.Relkit c -> B.Relhead -> B.Ab (C.Relkit c)
+relkitSome = relkitSemi False
 
 
 -- ----------------------  none
@@ -43,24 +43,24 @@ ropConsNone use =
 
 relmapNone :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
 relmapNone use m = C.relmapConfl use fy [m] where
-    fy [r2] = relfyNone r2
+    fy [r2] = relkitNone r2
     fy _    = B.bug
 
-relfyNone :: (Ord c) => C.Relfy c -> B.Relhead -> B.Ab (C.Relfy c)
-relfyNone = relfySemi True
+relkitNone :: (Ord c) => C.Relkit c -> B.Relhead -> B.Ab (C.Relkit c)
+relkitNone = relkitSemi True
 
 
 -- ----------------------  semi
 
-relfySemi
+relkitSemi
     :: (Ord c)
-    => Bool               -- ^ Is null
-    -> C.Relfy c          -- ^ Relfier of subrelmap
-    -> B.Relhead          -- ^ Heading of input relation
-    -> B.Ab (C.Relfy c)   -- ^ Relfier for output relation
-relfySemi isNull (C.Relfy _ f2) h1 =
-    Right $ C.relfy h1 (C.RelfyAbPred p)
-    where p cs = do b2 <- C.relfyRun f2 [cs]
+    => Bool                -- ^ Is null
+    -> C.Relkit c          -- ^ Relfier of subrelmap
+    -> B.Relhead           -- ^ Heading of input relation
+    -> B.Ab (C.Relkit c)   -- ^ Relfier for output relation
+relkitSemi isNull (C.Relkit _ f2) h1 =
+    Right $ C.relkit h1 (C.RelkitAbPred p)
+    where p cs = do b2 <- C.relkitRun f2 [cs]
                     Right $ null b2 == isNull
 
 
@@ -73,19 +73,19 @@ ropConsSub use =
 
 relmapSub :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
 relmapSub use m = C.relmapConfl use fy [m] where
-    fy [r2] = relfySub r2
+    fy [r2] = relkitSub r2
     fy _    = B.bug
 
-relfySub
+relkitSub
     :: (Ord c)
-    => C.Relfy c
+    => C.Relkit c
     -> B.Relhead
-    -> B.Ab (C.Relfy c)
-relfySub r2@(C.Relfy h2 _) h1
+    -> B.Ab (C.Relkit c)
+relkitSub r2@(C.Relkit h2 _) h1
     | B.isSuperhead h1 h2 = sub
-    | otherwise = Right $ C.relfy h1 (C.RelfyConst [])
+    | otherwise = Right $ C.relkit h1 (C.RelkitConst [])
     where
-      sub = do r3 <- Rop.relfyMeet r2 h1
-               f3 <- relfySome r3 h1
+      sub = do r3 <- Rop.relkitMeet r2 h1
+               f3 <- relkitSome r3 h1
                Right f3
 

@@ -3,11 +3,11 @@
 module Koshucode.Baala.Vanilla.Rop.Order
 ( 
   -- * number
-  ropConsNumber, relmapNumber, relfyNumber,
+  ropConsNumber, relmapNumber, relkitNumber,
   -- * rank
   ropConsRank,
-  relmapGapRank, relfyGapRank,
-  relmapDenseRank, relfyDenseRank,
+  relmapGapRank, relkitGapRank,
+  relmapDenseRank, relkitDenseRank,
 ) where
 
 import qualified Koshucode.Baala.Base          as B
@@ -25,16 +25,16 @@ ropConsNumber use =
        Right $ relmapNumber use n ns
 
 relmapNumber :: (C.CDec c, Ord c) => C.RopUse c -> B.Termname -> [B.Termname] -> C.Relmap c
-relmapNumber use n ns = C.relmapCalc use $ relfyNumber n ns
+relmapNumber use n ns = C.relmapCalc use $ relkitNumber n ns
 
-relfyNumber :: (Ord c, C.CDec c) => B.Termname -> [B.Termname] -> B.Relhead -> B.Ab (C.Relfy c)
-relfyNumber = relfyRanking B.sortByNameNumbering
+relkitNumber :: (Ord c, C.CDec c) => B.Termname -> [B.Termname] -> B.Relhead -> B.Ab (C.Relkit c)
+relkitNumber = relkitRanking B.sortByNameNumbering
 
-relfyRanking
+relkitRanking
     :: (Ord c, C.CDec c)
     => B.Ranking B.Termname c
-    -> B.Termname -> [B.Termname] -> B.Relhead -> B.Ab (C.Relfy c)
-relfyRanking ranking n ns h1 = Right $ C.relfy h2 (C.RelfyFull False f2) where
+    -> B.Termname -> [B.Termname] -> B.Relhead -> B.Ab (C.Relkit c)
+relkitRanking ranking n ns h1 = Right $ C.relkit h2 (C.RelkitFull False f2) where
     h2    = B.headCons n h1
     f2 b1 = let (rank, b2) = ranking 0 ords (B.headNames h1) b1
             in zipWith (:) (map C.putDecFromInt rank) b2
@@ -56,19 +56,19 @@ ropConsRank use =
 
 relmapDenseRank :: (C.CDec c, Ord c) =>
    C.RopUse c -> B.Termname -> [B.Termname] -> C.Relmap c
-relmapDenseRank use n ns = C.relmapCalc use $ relfyDenseRank n ns
+relmapDenseRank use n ns = C.relmapCalc use $ relkitDenseRank n ns
 
-relfyDenseRank :: (Ord c, C.CDec c) =>
-   B.Termname -> [B.Termname] -> B.Relhead -> B.Ab (C.Relfy c)
-relfyDenseRank = relfyRanking B.sortByNameDenseRank
+relkitDenseRank :: (Ord c, C.CDec c) =>
+   B.Termname -> [B.Termname] -> B.Relhead -> B.Ab (C.Relkit c)
+relkitDenseRank = relkitRanking B.sortByNameDenseRank
 
 relmapGapRank :: (C.CDec c, Ord c) =>
    C.RopUse c -> B.Termname -> [B.Termname] -> C.Relmap c
-relmapGapRank use n ns = C.relmapCalc use $ relfyGapRank n ns
+relmapGapRank use n ns = C.relmapCalc use $ relkitGapRank n ns
 
-relfyGapRank :: (Ord c, C.CDec c) =>
-   B.Termname -> [B.Termname] -> B.Relhead -> B.Ab (C.Relfy c)
-relfyGapRank = relfyRanking B.sortByNameGapRank
+relkitGapRank :: (Ord c, C.CDec c) =>
+   B.Termname -> [B.Termname] -> B.Relhead -> B.Ab (C.Relkit c)
+relkitGapRank = relkitRanking B.sortByNameGapRank
 
 
 -- -- | Keep leading tuples.

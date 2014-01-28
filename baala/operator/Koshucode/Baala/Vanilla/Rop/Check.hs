@@ -5,7 +5,7 @@ module Koshucode.Baala.Vanilla.Rop.Check
   -- * check-term
   ropConsCheckTerm,
   relmapCheckTermJust, relmapCheckTermHas, relmapCheckTermBut,
-  relfyCheckTermJust, relfyCheckTermHas, relfyCheckTermBut,
+  relkitCheckTermJust, relkitCheckTermHas, relkitCheckTermBut,
 
   -- * duplicate
   -- $duplicate
@@ -38,21 +38,21 @@ ropConsCheckTerm use =
 relmapCheckTermJust :: C.RopUse c -> [B.Termname] -> C.Relmap c
 relmapCheckTermHas  :: C.RopUse c -> [B.Termname] -> C.Relmap c
 relmapCheckTermBut  :: C.RopUse c -> [B.Termname] -> C.Relmap c
-relmapCheckTermJust use = C.relmapCalc use . relfyCheckTermJust
-relmapCheckTermHas  use = C.relmapCalc use . relfyCheckTermHas
-relmapCheckTermBut  use = C.relmapCalc use . relfyCheckTermBut
+relmapCheckTermJust use = C.relmapCalc use . relkitCheckTermJust
+relmapCheckTermHas  use = C.relmapCalc use . relkitCheckTermHas
+relmapCheckTermBut  use = C.relmapCalc use . relkitCheckTermBut
 
-relfyCheckTermJust :: [B.Termname] -> B.Relhead -> B.Ab (C.Relfy c)
-relfyCheckTermHas  :: [B.Termname] -> B.Relhead -> B.Ab (C.Relfy c)
-relfyCheckTermBut  :: [B.Termname] -> B.Relhead -> B.Ab (C.Relfy c)
-relfyCheckTermJust = relfyCheckTermBy (\ns h1 -> B.headFrom ns `B.isEqvHead` h1)
-relfyCheckTermHas  = relfyCheckTermBy (\ns h1 -> B.headFrom ns `B.isSubhead` h1)
-relfyCheckTermBut  = relfyCheckTermBy (\ns h1 -> null $ B.headKeepTerms h1 ns)
+relkitCheckTermJust :: [B.Termname] -> B.Relhead -> B.Ab (C.Relkit c)
+relkitCheckTermHas  :: [B.Termname] -> B.Relhead -> B.Ab (C.Relkit c)
+relkitCheckTermBut  :: [B.Termname] -> B.Relhead -> B.Ab (C.Relkit c)
+relkitCheckTermJust = relkitCheckTermBy (\ns h1 -> B.headFrom ns `B.isEqvHead` h1)
+relkitCheckTermHas  = relkitCheckTermBy (\ns h1 -> B.headFrom ns `B.isSubhead` h1)
+relkitCheckTermBut  = relkitCheckTermBy (\ns h1 -> null $ B.headKeepTerms h1 ns)
 
-relfyCheckTermBy :: ([String] -> B.Relhead -> Bool)
-                 -> [String] -> B.Relhead -> B.Ab (C.Relfy c)
-relfyCheckTermBy f ns h1
-    | f ns h1 = Right $ C.relfy h1 C.RelfyId
+relkitCheckTermBy :: ([String] -> B.Relhead -> Bool)
+                 -> [String] -> B.Relhead -> B.Ab (C.Relkit c)
+relkitCheckTermBy f ns h1
+    | f ns h1 = Right $ C.relkit h1 C.RelkitId
     | otherwise = Left $ B.AbortAnalysis [] (B.AACheckTerms $ B.headNames h1)
 
 
@@ -74,12 +74,12 @@ ropConsDuplicate use =
      Right $ relmapDuplicate use ns
 
 relmapDuplicate :: (Ord c) => C.RopUse c -> [B.Termname] -> C.Relmap c
-relmapDuplicate use ns = C.relmapCalc use $ relfyDuplicate ns
+relmapDuplicate use ns = C.relmapCalc use $ relkitDuplicate ns
 
-relfyDuplicate
-  :: (Ord c) => [B.Termname] -> B.Relhead -> B.Ab (C.Relfy c)
-relfyDuplicate ns h1
-    | null non  = Right $ C.relfy h1 (C.RelfyFull False f)
+relkitDuplicate
+  :: (Ord c) => [B.Termname] -> B.Relhead -> B.Ab (C.Relkit c)
+relkitDuplicate ns h1
+    | null non  = Right $ C.relkit h1 (C.RelkitFull False f)
     | otherwise = Left  $ B.AbortAnalysis [] (B.AANoTerms non)
     where
       non :: [B.Termname]
@@ -102,11 +102,11 @@ relfyDuplicate ns h1
 ropConsTypename :: (C.CContent c) => C.RopCons c
 ropConsTypename use =
   do (n, p) <- Rop.getTermPair use "-term"
-     Right $ C.relmapCalc use $ relfyTypename (n, p)
+     Right $ C.relmapCalc use $ relkitTypename (n, p)
 
-relfyTypename
-  :: (C.CText c) => (B.Termname, B.Termname) -> B.Relhead -> B.Ab (C.Relfy c)
-relfyTypename (n, p) h1 = Right $ C.relfy h2 (C.RelfyOneToOne False f) where
+relkitTypename
+  :: (C.CText c) => (B.Termname, B.Termname) -> B.Relhead -> B.Ab (C.Relkit c)
+relkitTypename (n, p) h1 = Right $ C.relkit h2 (C.RelkitOneToOne False f) where
     h2    = B.headCons n h1
     pos   = h1 `B.posFor` [p]
     f cs1 = let [c] = B.posPick pos cs1

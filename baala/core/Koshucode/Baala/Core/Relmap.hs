@@ -5,7 +5,7 @@
 module Koshucode.Baala.Core.Relmap
 ( module Koshucode.Baala.Core.Relmap.HalfRelmap,
   module Koshucode.Baala.Core.Relmap.Relmap,
-  module Koshucode.Baala.Core.Relmap.Relfy,
+  module Koshucode.Baala.Core.Relmap.Relkit,
   module Koshucode.Baala.Core.Relmap.Construct,
   module Koshucode.Baala.Core.Relmap.Operand,
   module Koshucode.Baala.Core.Relmap.Rop,
@@ -15,7 +15,7 @@ module Koshucode.Baala.Core.Relmap
 ) where
 
 import Koshucode.Baala.Core.Relmap.HalfRelmap
-import Koshucode.Baala.Core.Relmap.Relfy
+import Koshucode.Baala.Core.Relmap.Relkit
 import Koshucode.Baala.Core.Relmap.Relmap
 import Koshucode.Baala.Core.Relmap.Construct
 import Koshucode.Baala.Core.Relmap.Operand

@@ -23,9 +23,9 @@ module Koshucode.Baala.Core.Relmap.Relmap
   relmapLinker,
 ) where
 
-import qualified Koshucode.Baala.Base              as B
-import qualified Koshucode.Baala.Core.Relmap.Rop   as C
-import qualified Koshucode.Baala.Core.Relmap.Relfy as C
+import qualified Koshucode.Baala.Base               as B
+import qualified Koshucode.Baala.Core.Relmap.Rop    as C
+import qualified Koshucode.Baala.Core.Relmap.Relkit as C
 
 
 
@@ -44,14 +44,14 @@ relmapAlias :: C.RopUse c -> C.Relmap c -> C.Relmap c
 relmapAlias = C.RelmapAlias . C.ropHalf
 
 {-| Make a non-confluent relmap. -}
-relmapCalc :: C.RopUse c -> C.RelmapCalcRelfy c -> C.Relmap c
-relmapCalc use relfy = relmapConfl use (const relfy) []
+relmapCalc :: C.RopUse c -> C.RelmapCalcRelkit c -> C.Relmap c
+relmapCalc use relkit = relmapConfl use (const relkit) []
 
 {-| Make a confluent relmap. -}
-relmapConfl :: C.RopUse c -> C.RelmapConflRelfy c -> [C.Relmap c] -> C.Relmap c
+relmapConfl :: C.RopUse c -> C.RelmapConflRelkit c -> [C.Relmap c] -> C.Relmap c
 relmapConfl = C.RelmapCalc . C.ropHalf
 
-relmapGlobal :: C.RopUse c -> (C.Global c -> C.RelmapCalcRelfy c) -> C.Relmap c
+relmapGlobal :: C.RopUse c -> (C.Global c -> C.RelmapCalcRelkit c) -> C.Relmap c
 relmapGlobal = C.RelmapGlobal . C.ropHalf
 
 

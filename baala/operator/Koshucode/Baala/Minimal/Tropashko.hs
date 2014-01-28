@@ -16,13 +16,13 @@ module Koshucode.Baala.Minimal.Tropashko
   -- * meet (natural join)
   ropConsMeet,
   relmapMeet,
-  relfyMeet,
+  relkitMeet,
   -- $MeetImplementation
 
   -- * join (inner union)
   ropConsJoin,
   relmapJoin,
-  relfyJoin,
+  relkitJoin,
 ) where
 
 import qualified Koshucode.Baala.Base as B
@@ -44,16 +44,16 @@ relmapMeet :: (Ord c)
     -> C.Relmap c     -- ^ Subrelmap of meet operator
     -> C.Relmap c     -- ^ Relmap of meet operator
 relmapMeet use m = C.relmapConfl use fy [m] where
-    fy [r2] = relfyMeet r2
+    fy [r2] = relkitMeet r2
     fy _    = B.bug
 
 {-| Meet two relations. -}
-relfyMeet
+relkitMeet
     :: (Ord c)
-    => C.Relfy c          -- ^ Generator of subrelation
-    -> B.Relhead          -- ^ Heading of input relation
-    -> B.Ab (C.Relfy c)   -- ^ Generator for output relation
-relfyMeet (C.Relfy h2 f2) h1 = Right (C.Relfy h3 f3) where
+    => C.Relkit c          -- ^ Generator of subrelation
+    -> B.Relhead           -- ^ Heading of input relation
+    -> B.Ab (C.Relkit c)   -- ^ Generator for output relation
+relkitMeet (C.Relkit h2 f2) h1 = Right (C.Relkit h3 f3) where
     shared    :: [B.Termname]
     shared    =  B.posInnerNames $ h1 `B.posFrom` h2
 
@@ -68,9 +68,9 @@ relfyMeet (C.Relfy h2 f2) h1 = Right (C.Relfy h3 f3) where
 
     h3        =  h2 `B.mappend` h1
     f3        =  case f2 of
-                   (B.Sourced _ (C.RelfyConst b2)) -> B.Sourced [] $ C.RelfyOneToAbMany False (meet2 b2)
-                   _  -> B.Sourced [] $ C.RelfyOneToAbMany False meet
-    meet cs1  =  do b2sub <- C.relfyRun f2 [cs1]
+                   (B.Sourced _ (C.RelkitConst b2)) -> B.Sourced [] $ C.RelkitOneToAbMany False (meet2 b2)
+                   _  -> B.Sourced [] $ C.RelkitOneToAbMany False meet
+    meet cs1  =  do b2sub <- C.relkitRun f2 [cs1]
                     meet2 b2sub cs1
     meet2 b2 cs1 =  let m2 = B.gatherToMap $ map kv b2
                     in case B.lookupMap (pick1 cs1) m2 of
@@ -95,15 +95,15 @@ relmapJoin
     -> C.Relmap c     -- ^ Subrelmap of join operator
     -> C.Relmap c     -- ^ Relmap of join operator
 relmapJoin use m = C.relmapConfl use fy [m] where
-    fy [r2] = relfyJoin r2
+    fy [r2] = relkitJoin r2
     fy _    = B.bug
 
 {-| Join two relations. -}
-relfyJoin
-    :: C.Relfy c          -- ^ Generator of subrelation
+relkitJoin
+    :: C.Relkit c          -- ^ Generator of subrelation
     -> B.Relhead           -- ^ Heading of input relation
-    -> B.Ab (C.Relfy c)   -- ^ Generator for output relation
-relfyJoin (C.Relfy h2 f2) h1 = Right (C.Relfy h3 f3) where
+    -> B.Ab (C.Relkit c)   -- ^ Generator for output relation
+relkitJoin (C.Relkit h2 f2) h1 = Right (C.Relkit h3 f3) where
     shared  :: [B.Termname]
     shared  =  B.posInnerNames $ h1 `B.posFrom` h2
 
@@ -116,9 +116,9 @@ relfyJoin (C.Relfy h2 f2) h1 = Right (C.Relfy h3 f3) where
     pick2   =  B.posPick share2
 
     h3      =  B.headChange pick1 h1
-    f3      =  B.Sourced [] $ C.RelfyUnion True
-                  [ B.Sourced [] $ C.RelfyOneToOne True pick1
-                  , B.Sourced [] $ C.RelfyAppend f2 (B.Sourced [] $ C.RelfyOneToOne True pick2) ]
+    f3      =  B.Sourced [] $ C.RelkitUnion True
+                  [ B.Sourced [] $ C.RelkitOneToOne True pick1
+                  , B.Sourced [] $ C.RelkitAppend f2 (B.Sourced [] $ C.RelkitOneToOne True pick2) ]
 
 
 

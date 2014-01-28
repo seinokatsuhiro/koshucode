@@ -3,11 +3,11 @@
 module Koshucode.Baala.Vanilla.Rop.Confl
 ( 
   -- * maybe
-  ropConsMaybe, relmapMaybe, relfyMaybe,
+  ropConsMaybe, relmapMaybe, relkitMaybe,
   -- * full
-  ropConsFull, relmapFull, relfyFull,
+  ropConsFull, relmapFull, relkitFull,
   -- * group
-  ropConsGroup, relmapGroup, relfyGroup,
+  ropConsGroup, relmapGroup, relkitGroup,
 ) where
 
 import qualified Koshucode.Baala.Base    as B
@@ -26,12 +26,12 @@ ropConsMaybe use =
 
 relmapMaybe :: (Ord c, C.CNil c) => C.RopUse c -> B.Map (C.Relmap c)
 relmapMaybe use m = C.relmapConfl use fy [m] where
-    fy [r2] = relfyMaybe r2
+    fy [r2] = relkitMaybe r2
     fy _    = B.bug
 
-relfyMaybe :: (Ord c, C.CNil c) => C.Relfy c -> B.Relhead -> B.Ab (C.Relfy c)
-relfyMaybe (C.Relfy h2 f2) h1 =
-    Right $ C.relfy h3 (C.RelfyAbFull False f3)
+relkitMaybe :: (Ord c, C.CNil c) => C.Relkit c -> B.Relhead -> B.Ab (C.Relkit c)
+relkitMaybe (C.Relkit h2 f2) h1 =
+    Right $ C.relkit h3 (C.RelkitAbFull False f3)
     where
       pos     :: [B.TermPos]
       pos     =  h1 `B.posFrom` h2
@@ -45,7 +45,7 @@ relfyMaybe (C.Relfy h2 f2) h1 =
       share2  =  h2 `B.posFor` shared
       side2   =  h2 `B.posFor` sided
 
-      m2 b1   = do b2 <- C.relfyRun f2 b1
+      m2 b1   = do b2 <- C.relkitRun f2 b1
                    Right $ B.gatherToMap $ map kv b2
       kv cs2  = ( B.posPick share2 cs2,
                   B.posPick side2  cs2 )
@@ -71,23 +71,23 @@ ropConsFull use =
 relmapFull :: (Ord c, C.CNil c) => C.RopUse c
            -> C.Relmap c -> C.Relmap c -> C.Relmap c
 relmapFull use m1 m2 = C.relmapConfl use fy [m1, m2] where
-    fy [r1, r2] = relfyFull r1 r2
+    fy [r1, r2] = relkitFull r1 r2
     fy _ = B.bug
 
-relfyFull
+relkitFull
     :: (Ord c, C.CNil c)
-    => C.Relfy c -> C.Relfy c
-    -> B.Relhead -> B.Ab (C.Relfy c)
-relfyFull (C.Relfy h1 f1) (C.Relfy h2 f2) _ = 
-    do C.Relfy h3 f3 <- relfyMaybe (C.Relfy h2 f2) h1
-       C.Relfy h4 f4 <- relfyMaybe (C.Relfy h1 f1) h2
-       b1 <- C.relfyRun f1 []
-       b2 <- C.relfyRun f2 []
-       b3 <- C.relfyRun f3 b1
-       b4 <- C.relfyRun f4 b2
-       C.Relfy h5 f5 <- Rop.relfyJoin (C.relfy h4 $ C.RelfyConst b4) h3
-       b5 <- C.relfyRun f5 b3
-       Right $ C.relfy h5 (C.RelfyConst b5)
+    => C.Relkit c -> C.Relkit c
+    -> B.Relhead -> B.Ab (C.Relkit c)
+relkitFull (C.Relkit h1 f1) (C.Relkit h2 f2) _ = 
+    do C.Relkit h3 f3 <- relkitMaybe (C.Relkit h2 f2) h1
+       C.Relkit h4 f4 <- relkitMaybe (C.Relkit h1 f1) h2
+       b1 <- C.relkitRun f1 []
+       b2 <- C.relkitRun f2 []
+       b3 <- C.relkitRun f3 b1
+       b4 <- C.relkitRun f4 b2
+       C.Relkit h5 f5 <- Rop.relkitJoin (C.relkit h4 $ C.RelkitConst b4) h3
+       b5 <- C.relkitRun f5 b3
+       Right $ C.relkit h5 (C.RelkitConst b5)
 
 
 
@@ -101,13 +101,13 @@ ropConsGroup use =
 
 relmapGroup :: (Ord c, C.CRel c) => C.RopUse c -> String -> B.Map (C.Relmap c)
 relmapGroup use n m = C.relmapConfl use fy [m] where
-    fy [r2] = relfyGroup n r2
+    fy [r2] = relkitGroup n r2
     fy _    = B.bug
 
 {-| Grouping relation. -}
-relfyGroup :: (Ord c, C.CRel c) => String -> C.Relfy c -> B.Relhead -> B.Ab (C.Relfy c)
-relfyGroup n (C.Relfy h2 f2) h1 =
-    Right $ C.relfy h3 (C.RelfyAbFull False f3)
+relkitGroup :: (Ord c, C.CRel c) => String -> C.Relkit c -> B.Relhead -> B.Ab (C.Relkit c)
+relkitGroup n (C.Relkit h2 f2) h1 =
+    Right $ C.relkit h3 (C.RelkitAbFull False f3)
     where
       shared    :: [B.Termname]
       shared    = B.posInnerNames $ h1 `B.posFrom` h2
@@ -116,7 +116,7 @@ relfyGroup n (C.Relfy h2 f2) h1 =
       share1    = h1 `B.posFor` shared
       share2    = h2 `B.posFor` shared
 
-      toMap2 b1 = do b2 <- C.relfyRun f2 b1
+      toMap2 b1 = do b2 <- C.relkitRun f2 b1
                      Right $ B.gatherToMap $ map kv b2
       kv cs2    = ( B.posPick share2 cs2, cs2 )
 
