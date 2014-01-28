@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.39.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.42.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -98,7 +98,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ><li class="src short"
 	  ><a href="#v:headFrom"
 	    >headFrom</a
-	    > :: [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    > :: [<a href="Koshucode-Baala-Base-Token-Token.html#t:Termname"
 	    >Termname</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
 	    >Relhead</a
@@ -116,7 +116,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ><li class="src short"
 	  ><a href="#v:headCons"
 	    >headCons</a
-	    > :: <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    > :: <a href="Koshucode-Baala-Base-Token-Token.html#t:Termname"
 	    >Termname</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -126,9 +126,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ><li class="src short"
 	  ><a href="#v:headCons2"
 	    >headCons2</a
-	    > :: <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    > :: <a href="Koshucode-Baala-Base-Token-Token.html#t:Termname"
 	    >Termname</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    > -&gt; <a href="Koshucode-Baala-Base-Token-Token.html#t:Termname"
 	    >Termname</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -138,11 +138,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ><li class="src short"
 	  ><a href="#v:headCons3"
 	    >headCons3</a
-	    > :: <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    > :: <a href="Koshucode-Baala-Base-Token-Token.html#t:Termname"
 	    >Termname</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    > -&gt; <a href="Koshucode-Baala-Base-Token-Token.html#t:Termname"
 	    >Termname</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    > -&gt; <a href="Koshucode-Baala-Base-Token-Token.html#t:Termname"
 	    >Termname</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -154,7 +154,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >headChange</a
 	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    > [<a href="Koshucode-Baala-Base-Token-Token.html#t:Termname"
 	    >Termname</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -166,7 +166,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >headNames</a
 	    > :: <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
 	    >Relhead</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    > -&gt; [<a href="Koshucode-Baala-Base-Token-Token.html#t:Termname"
 	    >Termname</a
 	    >]</li
 	  ><li class="src short"
@@ -178,23 +178,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Int</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:headExistTerms"
-	    >headExistTerms</a
+	  ><a href="#v:headKeepTerms"
+	    >headKeepTerms</a
 	    > :: <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
 	    >Relhead</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    > [<a href="Koshucode-Baala-Base-Token-Token.html#t:Termname"
 	    >Termname</a
 	    >]</li
 	  ><li class="src short"
-	  ><a href="#v:headNonExistTerms"
-	    >headNonExistTerms</a
+	  ><a href="#v:headDropTerms"
+	    >headDropTerms</a
 	    > :: <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
 	    >Relhead</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    > [<a href="Koshucode-Baala-Base-Token-Token.html#t:Termname"
 	    >Termname</a
 	    >]</li
 	  ><li class="src short"
@@ -217,6 +217,36 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
 	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:isSubhead"
+	    >isSubhead</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isSuperhead"
+	    >isSuperhead</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isEqvHead"
+	    >isEqvHead</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
 	  ><li class="src short"
 	  ><a href="#v:mempty"
 	    >mempty</a
@@ -356,7 +386,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><p class="src"
 	  ><a name="v:headFrom" class="def"
 	    >headFrom</a
-	    > :: [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    > :: [<a href="Koshucode-Baala-Base-Token-Token.html#t:Termname"
 	    >Termname</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
 	    >Relhead</a
@@ -397,7 +427,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><p class="src"
 	  ><a name="v:headCons" class="def"
 	    >headCons</a
-	    > :: <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    > :: <a href="Koshucode-Baala-Base-Token-Token.html#t:Termname"
 	    >Termname</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -426,9 +456,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><p class="src"
 	  ><a name="v:headCons2" class="def"
 	    >headCons2</a
-	    > :: <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    > :: <a href="Koshucode-Baala-Base-Token-Token.html#t:Termname"
 	    >Termname</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    > -&gt; <a href="Koshucode-Baala-Base-Token-Token.html#t:Termname"
 	    >Termname</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -442,11 +472,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><p class="src"
 	  ><a name="v:headCons3" class="def"
 	    >headCons3</a
-	    > :: <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    > :: <a href="Koshucode-Baala-Base-Token-Token.html#t:Termname"
 	    >Termname</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    > -&gt; <a href="Koshucode-Baala-Base-Token-Token.html#t:Termname"
 	    >Termname</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    > -&gt; <a href="Koshucode-Baala-Base-Token-Token.html#t:Termname"
 	    >Termname</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -462,7 +492,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >headChange</a
 	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    > [<a href="Koshucode-Baala-Base-Token-Token.html#t:Termname"
 	    >Termname</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -493,7 +523,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >headNames</a
 	    > :: <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
 	    >Relhead</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    > -&gt; [<a href="Koshucode-Baala-Base-Token-Token.html#t:Termname"
 	    >Termname</a
 	    >]<a href="src/Koshucode-Baala-Base-Data-Relhead.html#headNames" class="link"
 	    >Source</a
@@ -546,59 +576,59 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 </h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:headExistTerms" class="def"
-	    >headExistTerms</a
+	  ><a name="v:headKeepTerms" class="def"
+	    >headKeepTerms</a
 	    > :: <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
 	    >Relhead</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    > [<a href="Koshucode-Baala-Base-Token-Token.html#t:Termname"
 	    >Termname</a
-	    >]<a href="src/Koshucode-Baala-Base-Data-Relhead.html#headExistTerms" class="link"
+	    >]<a href="src/Koshucode-Baala-Base-Data-Relhead.html#headKeepTerms" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Filter keeping terms that exist in head.
+	    >Keep terms that exist in head.
 </p
 	    ><pre class="screen"
 	    ><code class="prompt"
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>let h = headFrom [&quot;/a&quot;, &quot;/b&quot;] in headExistTerms h [&quot;/a&quot;, &quot;/c&quot;]
+		>let h = headFrom [&quot;/b&quot;] in headKeepTerms h [&quot;/a&quot;, &quot;/b&quot;, &quot;/c&quot;]
 </code
 		></strong
-	      >[&quot;/a&quot;]  
+	      >[&quot;/b&quot;]  
 </pre
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:headNonExistTerms" class="def"
-	    >headNonExistTerms</a
+	  ><a name="v:headDropTerms" class="def"
+	    >headDropTerms</a
 	    > :: <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
 	    >Relhead</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Termname"
+	    > [<a href="Koshucode-Baala-Base-Token-Token.html#t:Termname"
 	    >Termname</a
-	    >]<a href="src/Koshucode-Baala-Base-Data-Relhead.html#headNonExistTerms" class="link"
+	    >]<a href="src/Koshucode-Baala-Base-Data-Relhead.html#headDropTerms" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Filter dropping terms that exist in head.
+	    >Drop terms that exist in head.
 </p
 	    ><pre class="screen"
 	    ><code class="prompt"
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>let h = headFrom [&quot;/a&quot;, &quot;/b&quot;] in headNonExistTerms h [&quot;/a&quot;, &quot;/c&quot;]
+		>let h = headFrom [&quot;/b&quot;] in headDropTerms h [&quot;/a&quot;, &quot;/b&quot;, &quot;/c&quot;]
 </code
 		></strong
-	      >[&quot;/c&quot;]  
+	      >[&quot;/a&quot;,&quot;/c&quot;]  
 </pre
 	    ></div
 	  ></div
@@ -659,6 +689,70 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	      >[0]  
 </pre
 	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isSubhead" class="def"
+	    >isSubhead</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ><a href="src/Koshucode-Baala-Base-Data-Relhead.html#isSubhead" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>headFrom [&quot;/a&quot;, &quot;/b&quot;] `isSubhead` headFrom [&quot;/a&quot;, &quot;/b&quot;, &quot;/c&quot;]
+</code
+		></strong
+	      >   True
+</pre
+	    ><pre class="screen"
+	    ><code class="prompt"
+	      >&gt;&gt;&gt; </code
+	      ><strong class="userinput"
+	      ><code
+		>headFrom [&quot;/a&quot;, &quot;/d&quot;] `isSubhead` headFrom [&quot;/a&quot;, &quot;/b&quot;, &quot;/c&quot;]
+</code
+		></strong
+	      >False
+</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isSuperhead" class="def"
+	    >isSuperhead</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ><a href="src/Koshucode-Baala-Base-Data-Relhead.html#isSuperhead" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isEqvHead" class="def"
+	    >isEqvHead</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ><a href="src/Koshucode-Baala-Base-Data-Relhead.html#isEqvHead" class="link"
+	    >Source</a
+	    ></p
 	  ></div
 	><h1 id="g:3"
 	>Monoid

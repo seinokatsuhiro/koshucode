@@ -3,13 +3,13 @@
 ><head
   ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
      /><title
-    >Koshucode.Baala.Base.Syntax.TokenTree</title
+    >Koshucode.Baala.Base.Token.TokenTree</title
     ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
      /><script src="haddock-util.js" type="text/javascript"
     ></script
     ><script type="text/javascript"
     >//<![CDATA[
-window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-Syntax-TokenTree.html");};
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-Token-TokenTree.html");};
 //]]>
 </script
     ></head
@@ -17,7 +17,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
   ><div id="package-header"
     ><ul class="links" id="page-menu"
       ><li
-	><a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html"
+	><a href="src/Koshucode-Baala-Base-Token-TokenTree.html"
 	  >Source</a
 	  ></li
 	><li
@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.39.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.42.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -43,7 +43,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    ></tr
 	  ></table
 	><p class="caption"
-	>Koshucode.Baala.Base.Syntax.TokenTree</p
+	>Koshucode.Baala.Base.Token.TokenTree</p
 	></div
       ><div id="table-of-contents"
       ><p class="caption"
@@ -56,11 +56,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Divide trees
+	    >Abbreviation
 </a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
+	    >Divide trees
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:4"
 	    >Examples
 </a
 	    ></li
@@ -81,60 +86,68 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
 	  ><span class="keyword"
+	    >data</span
+	    >  <a href="#t:Sourced"
+	    >Sourced</a
+	    > a = <a href="#v:Sourced"
+	    >Sourced</a
+	    > [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    >] a</li
+	  ><li class="src short"
+	  ><span class="keyword"
 	    >type</span
 	    > <a href="#t:TokenTree"
 	    >TokenTree</a
-	    > = <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree"
-	    >Tree</a
-	    > <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    > = <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:tokenTrees"
 	    >tokenTrees</a
-	    > :: [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    > :: [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
-	    >] -&gt; [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    >] -&gt; [<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >]</li
 	  ><li class="src short"
 	  ><a href="#v:treeTokens"
 	    >treeTokens</a
-	    > :: <a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > :: <a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    > -&gt; [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
 	    >]</li
 	  ><li class="src short"
 	  ><a href="#v:treesTokens"
 	    >treesTokens</a
-	    > :: [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > :: [<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    >] -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >] -&gt; [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
 	    >]</li
-	  ><li class="src short"
-	  ><a href="#v:flatname"
-	    >flatname</a
-	    > :: <a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
-	    >Maybe</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    ></li
 	  ><li class="src short"
 	  ><a href="#v:tt"
 	    >tt</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > -&gt; [<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >]</li
 	  ><li class="src short"
+	  ><a href="#v:tt1"
+	    >tt1</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    ></li
+	  ><li class="src short"
 	  ><a href="#v:ttDoc"
 	    >ttDoc</a
-	    > :: [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > :: [<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
 	    >Doc</a
@@ -146,17 +159,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >Pred</a
 	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    > -&gt; [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
 	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
 	    >Either</a
-	    > [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    > [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
-	    >] ([<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >] ([<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
-	    >], <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >], <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
-	    >, [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >, [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
 	    >])</li
 	  ><li class="src short"
@@ -164,25 +177,25 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >divideTreesBy</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > -&gt; [<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    >] -&gt; [[<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    >] -&gt; [[<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >]]</li
 	  ><li class="src short"
 	  ><a href="#v:divideTreesByBar"
 	    >divideTreesByBar</a
-	    > :: [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > :: [<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    >] -&gt; [[<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    >] -&gt; [[<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >]]</li
 	  ><li class="src short"
 	  ><a href="#v:divideTreesByColon"
 	    >divideTreesByColon</a
-	    > :: [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > :: [<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    >] -&gt; [[<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    >] -&gt; [[<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >]]</li
 	  ></ul
@@ -194,14 +207,94 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
+	    >data</span
+	    >  <a name="t:Sourced" class="def"
+	    >Sourced</a
+	    > a <a href="src/Koshucode-Baala-Base-Token-TokenTree.html#Sourced" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:Sourced" class="def"
+		  >Sourced</a
+		  > [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+		  >Token</a
+		  >] a</td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Sourced" class="caption collapser" onclick="toggleSection('i:Sourced')"
+	    >Instances</p
+	    ><div id="section.i:Sourced" class="show"
+	    ><table
+	      ><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Functor"
+		    >Functor</a
+		    > <a href="Koshucode-Baala-Base-Token-TokenTree.html#t:Sourced"
+		    >Sourced</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		    >Eq</a
+		    > a =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		    >Eq</a
+		    > (<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:Sourced"
+		    >Sourced</a
+		    > a)</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		    >Ord</a
+		    > a =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		    >Ord</a
+		    > (<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:Sourced"
+		    >Sourced</a
+		    > a)</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		    >Show</a
+		    > a =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		    >Show</a
+		    > (<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:Sourced"
+		    >Sourced</a
+		    > a)</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
 	    >type</span
 	    > <a name="t:TokenTree" class="def"
 	    >TokenTree</a
-	    > = <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Tree"
-	    >Tree</a
-	    > <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    > = <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
+	    >CodeTree</a
+	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
-	    ><a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#TokenTree" class="link"
+	    ><a href="src/Koshucode-Baala-Base-Token-TokenTree.html#TokenTree" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -214,11 +307,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	><p class="src"
 	  ><a name="v:tokenTrees" class="def"
 	    >tokenTrees</a
-	    > :: [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    > :: [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
-	    >] -&gt; [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    >] -&gt; [<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    >]<a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#tokenTrees" class="link"
+	    >]<a href="src/Koshucode-Baala-Base-Token-TokenTree.html#tokenTrees" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -232,6 +325,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      >TreeB</code
 	      > <em
 	      >type</em
+	      > <em
+	      >parens</em
 	      > <em
 	      >subtrees</em
 	      >.
@@ -264,11 +359,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	><p class="src"
 	  ><a name="v:treeTokens" class="def"
 	    >treeTokens</a
-	    > :: <a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > :: <a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    > -&gt; [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
-	    >]<a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#treeTokens" class="link"
+	    >]<a href="src/Koshucode-Baala-Base-Token-TokenTree.html#treeTokens" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -276,37 +371,43 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	><p class="src"
 	  ><a name="v:treesTokens" class="def"
 	    >treesTokens</a
-	    > :: [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > :: [<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    >] -&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	    >] -&gt; [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
-	    >]<a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#treesTokens" class="link"
+	    >]<a href="src/Koshucode-Baala-Base-Token-TokenTree.html#treesTokens" class="link"
 	    >Source</a
 	    ></p
 	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:flatname" class="def"
-	    >flatname</a
-	    > :: <a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
-	    >Maybe</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    ><a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#flatname" class="link"
-	    >Source</a
-	    ></p
-	  ></div
+	><h1 id="g:2"
+	>Abbreviation
+</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:tt" class="def"
 	    >tt</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > -&gt; [<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    >]<a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#tt" class="link"
+	    >]<a href="src/Koshucode-Baala-Base-Token-TokenTree.html#tt" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert text to token trees. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:tt1" class="def"
+	    >tt1</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    ><a href="src/Koshucode-Baala-Base-Token-TokenTree.html#tt1" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -314,22 +415,31 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	><p class="src"
 	  ><a name="v:ttDoc" class="def"
 	    >ttDoc</a
-	    > :: [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > :: [<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
 	    >Doc</a
-	    ><a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#ttDoc" class="link"
+	    ><a href="src/Koshucode-Baala-Base-Token-TokenTree.html#ttDoc" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Get <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+		>Doc</a
+		></code
+	      > value of token trees for pretty printing. 
+</p
+	    ></div
 	  ></div
-	><h1 id="g:2"
+	><h1 id="g:3"
 	>Divide trees
 </h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:splitTokensBy" class="def"
 	    >splitTokensBy</a
-	    ><a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#splitTokensBy" class="link"
+	    ><a href="src/Koshucode-Baala-Base-Token-TokenTree.html#splitTokensBy" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs arguments"
@@ -351,7 +461,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+		>-&gt; [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 		  >Token</a
 		  >]</td
 		><td class="doc"
@@ -364,13 +474,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ><td class="src"
 		>-&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
 		  >Either</a
-		  > [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+		  > [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 		  >Token</a
-		  >] ([<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+		  >] ([<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 		  >Token</a
-		  >], <a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+		  >], <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 		  >Token</a
-		  >, [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+		  >, [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 		  >Token</a
 		  >])</td
 		><td class="doc"
@@ -430,11 +540,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >divideTreesBy</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > -&gt; [<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    >] -&gt; [[<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    >] -&gt; [[<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    >]]<a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#divideTreesBy" class="link"
+	    >]]<a href="src/Koshucode-Baala-Base-Token-TokenTree.html#divideTreesBy" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -442,11 +552,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	><p class="src"
 	  ><a name="v:divideTreesByBar" class="def"
 	    >divideTreesByBar</a
-	    > :: [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > :: [<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    >] -&gt; [[<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    >] -&gt; [[<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    >]]<a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#divideTreesByBar" class="link"
+	    >]]<a href="src/Koshucode-Baala-Base-Token-TokenTree.html#divideTreesByBar" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -473,11 +583,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	><p class="src"
 	  ><a name="v:divideTreesByColon" class="def"
 	    >divideTreesByColon</a
-	    > :: [<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    > :: [<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    >] -&gt; [[<a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
+	    >] -&gt; [[<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    >]]<a href="src/Koshucode-Baala-Base-Syntax-TokenTree.html#divideTreesByColon" class="link"
+	    >]]<a href="src/Koshucode-Baala-Base-Token-TokenTree.html#divideTreesByColon" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -500,7 +610,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 </pre
 	    ></div
 	  ></div
-	><h1 id="g:3"
+	><h1 id="g:4"
 	>Examples
 </h1
 	><div class="doc"

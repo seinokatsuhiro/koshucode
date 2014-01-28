@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.39.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.42.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -45,28 +45,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	><p class="caption"
 	>Koshucode.Baala.Base.Abort.Reason</p
 	></div
-      ><div id="table-of-contents"
-      ><p class="caption"
-	>Contents</p
-	><ul
-	><li
-	  ><a href="#g:1"
-	    >Datatype
-</a
-	    ></li
-	  ><li
-	  ><a href="#g:2"
-	    >Reason
-</a
-	    ></li
-	  ></ul
-	></div
       ><div id="description"
       ><p class="caption"
 	>Description</p
 	><div class="doc"
 	><p
-	  >Abort symbol 
+	  >Bundle of abort reasons 
 </p
 	  ></div
 	></div
@@ -75,6 +59,44 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a href="#t:AbortReason"
+	    >AbortReason</a
+	    > <ul class="subs"
+	    ><li
+	      >= <a href="#v:AbortIO"
+		>AbortIO</a
+		> <a href="Koshucode-Baala-Base-Abort-EachReason.html#t:AbortIO"
+		>AbortIO</a
+		>  </li
+	      ><li
+	      >| <a href="#v:AbortSyntax"
+		>AbortSyntax</a
+		> [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+		>Token</a
+		>] <a href="Koshucode-Baala-Base-Abort-EachReason.html#t:AbortSyntax"
+		>AbortSyntax</a
+		>  </li
+	      ><li
+	      >| <a href="#v:AbortAnalysis"
+		>AbortAnalysis</a
+		> [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+		>Token</a
+		>] <a href="Koshucode-Baala-Base-Abort-EachReason.html#t:AbortAnalysis"
+		>AbortAnalysis</a
+		>  </li
+	      ><li
+	      >| <a href="#v:AbortCalc"
+		>AbortCalc</a
+		> [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+		>Token</a
+		>] <a href="Koshucode-Baala-Base-Abort-EachReason.html#t:AbortCalc"
+		>AbortCalc</a
+		>  </li
+	      ></ul
+	    ></li
+	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
 	    > <a href="#t:Ab"
@@ -93,357 +115,72 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    >Ab</a
 	    > b</li
 	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:AbMap2"
-	    >AbMap2</a
-	    > b a = b -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > a</li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:Abort"
-	    >Abort</a
-	    > = <a href="Koshucode-Baala-Base-Abort-Utility.html#t:AbortType"
-	    >AbortType</a
-	    > <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
-	    >AbortReason</a
-	    ></li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:AbortTokens"
-	    >AbortTokens</a
-	    > b = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
-	    >Either</a
-	    > (<a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
-	    >AbortReason</a
-	    >, [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
+	  ><a href="#v:ab"
+	    >ab</a
+	    > ::  [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
-	    >]) b</li
+	    >] -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > b)</li
 	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:AbortOr"
-	    >AbortOr</a
-	    > b = <a href="Koshucode-Baala-Base-Abort-Utility.html#t:AbortOrType"
-	    >AbortOrType</a
-	    > <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
-	    >AbortReason</a
-	    > b</li
+	  ><a href="#v:abFrom"
+	    >abFrom</a
+	    > :: <a href="Koshucode-Baala-Base-Token-Token.html#t:TokenListing"
+	    >TokenListing</a
+	    > src =&gt; src -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > b)</li
+	  ><li class="src short"
+	  ><a href="#v:sourcedAbMap"
+	    >sourcedAbMap</a
+	    > ::  (a -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > b) -&gt; <a href="Koshucode-Baala-Base-Token-TokenTree.html#t:Sourced"
+	    >Sourced</a
+	    > a -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:Sourced"
+	    >Sourced</a
+	    > b)</li
 	  ><li class="src short"
 	  ><a href="#v:-60--33--33--62-"
 	    >(&lt;!!&gt;)</a
 	    > ::  [<a href="Koshucode-Baala-Base-Prelude-Class.html#t:Named"
 	    >Named</a
-	    > a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    > b] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortTokens"
-	    >AbortTokens</a
-	    > a</li
+	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > b</li
 	  ><li class="src short"
-	  ><span class="keyword"
-	    >data</span
-	    >  <a href="#t:AbortReason"
+	  ><a href="#v:abortMalformedOperand"
+	    >abortMalformedOperand</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
 	    >AbortReason</a
-	    > <ul class="subs"
-	    ><li
-	      >= <a href="#v:AbortDivideByZero"
-		>AbortDivideByZero</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortHeteroDecimal"
-		>AbortHeteroDecimal</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortLookup"
-		>AbortLookup</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortMalformedOperand"
-		>AbortMalformedOperand</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortMissingTermname"
-		>AbortMissingTermname</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortNotNumber"
-		>AbortNotNumber</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortNotText"
-		>AbortNotText</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortNoTerms"
-		>AbortNoTerms</a
-		> [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>]  </li
-	      ><li
-	      >| <a href="#v:AbortOddRelation"
-		>AbortOddRelation</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortOpeandDuplicate"
-		>AbortOpeandDuplicate</a
-		> [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>]  </li
-	      ><li
-	      >| <a href="#v:AbortOpeandUnknown"
-		>AbortOpeandUnknown</a
-		> [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>]  </li
-	      ><li
-	      >| <a href="#v:AbortOpeandUnmatch"
-		>AbortOpeandUnmatch</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortReqBoolean"
-		>AbortReqBoolean</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortReqFlatname"
-		>AbortReqFlatname</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortReqNewTerms"
-		>AbortReqNewTerms</a
-		> [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>]  </li
-	      ><li
-	      >| <a href="#v:AbortReqText"
-		>AbortReqText</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortUndefined"
-		>AbortUndefined</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortUnkCop"
-		>AbortUnkCop</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortUnkCox"
-		>AbortUnkCox</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortUnkWord"
-		>AbortUnkWord</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortUnkClause"
-		>AbortUnkClause</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortUnkContent"
-		>AbortUnkContent</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortUnkRelmap"
-		>AbortUnkRelmap</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortUnkSymbol"
-		>AbortUnkSymbol</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortUnresToken"
-		>AbortUnresToken</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortUnmatchArity"
-		>AbortUnmatchArity</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortUnmatchType"
-		>AbortUnmatchType</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:AbortUsage"
-		>AbortUsage</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		> [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>]  </li
-	      ></ul
 	    ></li
+	  ><li class="src short"
+	  ><a href="#v:abortNotFound"
+	    >abortNotFound</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
+	    >AbortReason</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:bug"
+	    >bug</a
+	    > ::  a</li
 	  ></ul
 	></div
       ><div id="interface"
-      ><h1 id="g:1"
-	>Datatype
-</h1
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:Ab" class="def"
-	    >Ab</a
-	    > b = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
-	    >Either</a
-	    > <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
-	    >AbortReason</a
-	    > b<a href="src/Koshucode-Baala-Base-Abort-Reason.html#Ab" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Either of (1) right result, or (2) abort reason
-    (without source code information). 
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:AbMap" class="def"
-	    >AbMap</a
-	    > b = b -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > b<a href="src/Koshucode-Baala-Base-Abort-Reason.html#AbMap" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Abortable mapping. 
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:AbMap2" class="def"
-	    >AbMap2</a
-	    > b a = b -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > a<a href="src/Koshucode-Baala-Base-Abort-Reason.html#AbMap2" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:Abort" class="def"
-	    >Abort</a
-	    > = <a href="Koshucode-Baala-Base-Abort-Utility.html#t:AbortType"
-	    >AbortType</a
-	    > <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
-	    >AbortReason</a
-	    ><a href="src/Koshucode-Baala-Base-Abort-Reason.html#Abort" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Abort reason and source information. 
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:AbortTokens" class="def"
-	    >AbortTokens</a
-	    > b = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
-	    >Either</a
-	    > (<a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
-	    >AbortReason</a
-	    >, [<a href="Koshucode-Baala-Base-Syntax-Token.html#t:Token"
-	    >Token</a
-	    >]) b<a href="src/Koshucode-Baala-Base-Abort-Reason.html#AbortTokens" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:AbortOr" class="def"
-	    >AbortOr</a
-	    > b = <a href="Koshucode-Baala-Base-Abort-Utility.html#t:AbortOrType"
-	    >AbortOrType</a
-	    > <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
-	    >AbortReason</a
-	    > b<a href="src/Koshucode-Baala-Base-Abort-Reason.html#AbortOr" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Either of (1) right result, or (2) abort reason with source. 
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:-60--33--33--62-" class="def"
-	    >(&lt;!!&gt;)</a
-	    > ::  [<a href="Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortTokens"
-	    >AbortTokens</a
-	    > a<a href="src/Koshucode-Baala-Base-Abort-Reason.html#%3C%21%21%3E" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Lookup association list.
-    This function may abort on AbortLookup. 
-</p
-	    ></div
-	  ></div
-	><h1 id="g:2"
-	>Reason
-</h1
+      ><h1
+	>Documentation</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -455,7 +192,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Abort reasons 
+	    >Bundle of abort reasons. 
 </p
 	    ></div
 	  ><div class="subs constructors"
@@ -464,275 +201,47 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    ><table
 	    ><tr
 	      ><td class="src"
-		><a name="v:AbortDivideByZero" class="def"
-		  >AbortDivideByZero</a
+		><a name="v:AbortIO" class="def"
+		  >AbortIO</a
+		  > <a href="Koshucode-Baala-Base-Abort-EachReason.html#t:AbortIO"
+		  >AbortIO</a
 		  ></td
 		><td class="doc empty"
 		>&nbsp;</td
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:AbortHeteroDecimal" class="def"
-		  >AbortHeteroDecimal</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
+		><a name="v:AbortSyntax" class="def"
+		  >AbortSyntax</a
+		  > [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+		  >Token</a
+		  >] <a href="Koshucode-Baala-Base-Abort-EachReason.html#t:AbortSyntax"
+		  >AbortSyntax</a
 		  ></td
 		><td class="doc empty"
 		>&nbsp;</td
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:AbortLookup" class="def"
-		  >AbortLookup</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
+		><a name="v:AbortAnalysis" class="def"
+		  >AbortAnalysis</a
+		  > [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+		  >Token</a
+		  >] <a href="Koshucode-Baala-Base-Abort-EachReason.html#t:AbortAnalysis"
+		  >AbortAnalysis</a
 		  ></td
 		><td class="doc empty"
 		>&nbsp;</td
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:AbortMalformedOperand" class="def"
-		  >AbortMalformedOperand</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
+		><a name="v:AbortCalc" class="def"
+		  >AbortCalc</a
+		  > [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+		  >Token</a
+		  >] <a href="Koshucode-Baala-Base-Abort-EachReason.html#t:AbortCalc"
+		  >AbortCalc</a
 		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortMissingTermname" class="def"
-		  >AbortMissingTermname</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortNotNumber" class="def"
-		  >AbortNotNumber</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortNotText" class="def"
-		  >AbortNotText</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortNoTerms" class="def"
-		  >AbortNoTerms</a
-		  > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  >]</td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortOddRelation" class="def"
-		  >AbortOddRelation</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortOpeandDuplicate" class="def"
-		  >AbortOpeandDuplicate</a
-		  > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  >]</td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortOpeandUnknown" class="def"
-		  >AbortOpeandUnknown</a
-		  > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  >]</td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortOpeandUnmatch" class="def"
-		  >AbortOpeandUnmatch</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortReqBoolean" class="def"
-		  >AbortReqBoolean</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortReqFlatname" class="def"
-		  >AbortReqFlatname</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortReqNewTerms" class="def"
-		  >AbortReqNewTerms</a
-		  > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  >]</td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortReqText" class="def"
-		  >AbortReqText</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortUndefined" class="def"
-		  >AbortUndefined</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortUnkCop" class="def"
-		  >AbortUnkCop</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortUnkCox" class="def"
-		  >AbortUnkCox</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortUnkWord" class="def"
-		  >AbortUnkWord</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortUnkClause" class="def"
-		  >AbortUnkClause</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortUnkContent" class="def"
-		  >AbortUnkContent</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortUnkRelmap" class="def"
-		  >AbortUnkRelmap</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortUnkSymbol" class="def"
-		  >AbortUnkSymbol</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortUnresToken" class="def"
-		  >AbortUnresToken</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortUnmatchArity" class="def"
-		  >AbortUnmatchArity</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortUnmatchType" class="def"
-		  >AbortUnmatchType</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AbortUsage" class="def"
-		  >AbortUsage</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  >]</td
 		><td class="doc empty"
 		>&nbsp;</td
 		></tr
@@ -785,7 +294,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		  ></tr
 		><tr
 		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Abort-Utility.html#t:AbortReasonClass"
+		  ><a href="Koshucode-Baala-Base-Abort-Class.html#t:AbortReasonClass"
 		    >AbortReasonClass</a
 		    > <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
 		    >AbortReason</a
@@ -795,6 +304,169 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		  ></tr
 		></table
 	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:Ab" class="def"
+	    >Ab</a
+	    > b = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Either.html#t:Either"
+	    >Either</a
+	    > <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
+	    >AbortReason</a
+	    > b<a href="src/Koshucode-Baala-Base-Abort-Reason.html#Ab" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Abortable result, i.e., either of right result or abort reason. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:AbMap" class="def"
+	    >AbMap</a
+	    > b = b -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > b<a href="src/Koshucode-Baala-Base-Abort-Reason.html#AbMap" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Abortable mapping. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ab" class="def"
+	    >ab</a
+	    > ::  [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    >] -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > b)<a href="src/Koshucode-Baala-Base-Abort-Reason.html#ab" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Push source information when process is aborted.
+</p
+	    ><pre
+	    > B.ab src $ do ...</pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:abFrom" class="def"
+	    >abFrom</a
+	    > :: <a href="Koshucode-Baala-Base-Token-Token.html#t:TokenListing"
+	    >TokenListing</a
+	    > src =&gt; src -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > b)<a href="src/Koshucode-Baala-Base-Abort-Reason.html#abFrom" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Same as <code
+	      ><a href="Koshucode-Baala-Base-Abort-Reason.html#v:ab"
+		>ab</a
+		></code
+	      > except for using <code
+	      ><a href="Koshucode-Baala-Base-Token-Token.html#t:TokenListing"
+		>TokenListing</a
+		></code
+	      >
+    instead of list of <code
+	      ><a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+		>Token</a
+		></code
+	      >. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:sourcedAbMap" class="def"
+	    >sourcedAbMap</a
+	    > ::  (a -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > b) -&gt; <a href="Koshucode-Baala-Base-Token-TokenTree.html#t:Sourced"
+	    >Sourced</a
+	    > a -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="Koshucode-Baala-Base-Token-TokenTree.html#t:Sourced"
+	    >Sourced</a
+	    > b)<a href="src/Koshucode-Baala-Base-Abort-Reason.html#sourcedAbMap" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:-60--33--33--62-" class="def"
+	    >(&lt;!!&gt;)</a
+	    > ::  [<a href="Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+	    >Named</a
+	    > b] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > b<a href="src/Koshucode-Baala-Base-Abort-Reason.html#%3C%21%21%3E" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Lookup association list. This function may abort. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:abortMalformedOperand" class="def"
+	    >abortMalformedOperand</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
+	    >AbortReason</a
+	    ><a href="src/Koshucode-Baala-Base-Abort-Reason.html#abortMalformedOperand" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:abortNotFound" class="def"
+	    >abortNotFound</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbortReason"
+	    >AbortReason</a
+	    ><a href="src/Koshucode-Baala-Base-Abort-Reason.html#abortNotFound" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:bug" class="def"
+	    >bug</a
+	    > ::  a<a href="src/Koshucode-Baala-Base-Abort-Reason.html#bug" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Stop on error <code
+	      >'bug in koshucode'</code
+	      > 
+</p
 	    ></div
 	  ></div
 	></div

@@ -8,7 +8,22 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.39.0.0
+@version 0.42.0.0
+
+
+-- | Text lines delimited by carriage returns or line feeds.
+module Koshucode.Baala.Base.Syntax.Line
+
+-- | Line number.
+type LineNumber = Int
+type NumberedLine = (LineNumber, String)
+
+-- | Line number and its content.
+linesCrlfNumbered :: String -> [NumberedLine]
+
+-- | Split string into lines. The result strings do not contain carriage
+--   returns (<tt>\r</tt>) and line feeds (<tt>\n</tt>).
+linesCrlf :: String -> [String]
 
 module Koshucode.Baala.Base.Prelude.Unicode
 data GeneralCategoryGroup
@@ -39,6 +54,36 @@ instance Show GeneralCategoryGroup
 instance Eq GeneralCategoryGroup
 instance Ord GeneralCategoryGroup
 instance Bounded GeneralCategoryGroup
+
+
+-- | Text table
+module Koshucode.Baala.Base.Prelude.TextTable
+data Position
+Front :: Position
+Middle :: Position
+Rear :: Position
+textPos :: String -> [Position]
+data Cell
+Cell :: [String] -> Int -> Int -> Position -> Char -> Cell
+cellText :: Cell -> [String]
+cellWidth :: Cell -> Int
+cellHeight :: Cell -> Int
+cellPos :: Cell -> Position
+cellPad :: Cell -> Char
+textTable :: [Position] -> [[String]] -> [[Cell]]
+textTableWithHead :: [Position] -> Char -> [String] -> [[String]] -> [[Cell]]
+textCell :: Position -> String -> Cell
+textRuleCell :: Char -> Cell
+textBlockCell :: Position -> [String] -> Cell
+textBlockCellPlus :: Int -> Position -> [String] -> Cell
+alignTable :: [[Cell]] -> [[Cell]]
+renderTable :: String -> [[Cell]] -> [String]
+instance Show Position
+instance Eq Position
+instance Ord Position
+instance Show Cell
+instance Eq Cell
+instance Ord Cell
 
 module Koshucode.Baala.Base.Prelude.Pretty
 
@@ -124,21 +169,6 @@ instance Pretty Int
 instance Pretty Doc
 
 
--- | Lines.
-module Koshucode.Baala.Base.Prelude.Line
-
--- | Line number.
-type LineNumber = Int
-
--- | Line number and its content.
-linesCrlfNumbered :: String -> [(LineNumber, String)]
-
--- | Split string into lines. The result strings do not contain carriage
---   returns (<tt>\r</tt>) and line feeds (<tt>\n</tt>).
-linesCrlf :: String -> [String]
-putLines :: [String] -> IO ()
-
-
 -- | General utilities
 module Koshucode.Baala.Base.Prelude.Class
 
@@ -149,6 +179,7 @@ names :: Name a => [a] -> [String]
 
 -- | Entry in association list.
 type Named a = (String, a)
+named :: Name a => a -> Named a
 type Map a = a -> a
 type Pred a = a -> Bool
 data YesNo a
@@ -167,6 +198,7 @@ cons1 :: a -> ([a], b) -> ([a], b)
 mapmapFst :: (a -> c) -> [(a, b)] -> [(c, b)]
 mapmapSnd :: (b -> c) -> [(a, b)] -> [(a, c)]
 maybePairs :: [a] -> Maybe [(a, a)]
+front :: [a] -> [a]
 
 -- | Remove duplicate elements.
 unique :: Ord a => [a] -> [a]
@@ -230,6 +262,7 @@ assocOmit :: Eq k => k -> Map [(k, a)]
 
 -- | Omit associations that have given keys.
 assocOmitAll :: Eq k => [k] -> Map [(k, a)]
+maybeEmpty :: Maybe a -> (a -> [b]) -> [b]
 
 -- | Add spaces to right.
 --   
@@ -246,20 +279,23 @@ padRight :: Int -> Map String
 --   "       abc"  
 --   </pre>
 padLeft :: Int -> Map String
+type Gather a b = a -> (b, a)
 
 -- | Gather what is gotten by splitter.
-gather :: ([a] -> (b, [a])) -> [a] -> [b]
-gatherWith :: (c -> [a] -> (b, [a])) -> [c] -> [a] -> [b]
+gather :: Gather [a] b -> [a] -> [b]
+gatherWith :: (c -> Gather [a] b) -> [c] -> [a] -> [b]
 
 -- | Gather (<i>key</i>, <i>value</i>) to <a>Map</a> <i>key</i>
 --   [<i>value</i>].
 gatherToMap :: Ord k => [(k, v)] -> Map k [v]
-lookupSatisfy :: a -> [(a -> Bool, b)] -> Maybe b
-lookupMap :: Ord k => k -> Map k a -> Maybe a
+putShow :: Show a => a -> IO ()
+putShowLn :: Show a => a -> IO ()
+putLines :: [String] -> IO ()
 
 
 -- | Utilities for association lists.
 module Koshucode.Baala.Base.Prelude.Assoc
+type Lookup a = String -> Maybe a
 data OnceMore a
 Once :: a -> OnceMore a
 More :: [a] -> OnceMore a
@@ -270,6 +306,9 @@ assocBy :: (a -> Maybe k) -> k -> [a] -> [(k, [a])]
 assocOnce :: [(k, OnceMore a)] -> [(k, a)]
 assocMore :: [(k, OnceMore a)] -> [(k, [a])]
 assocExist :: Eq k => k -> [(k, a)] -> Bool
+namedMapM :: Monad m => (b -> m c) -> (a, b) -> m (a, c)
+lookupSatisfy :: a -> [(a -> Bool, b)] -> Maybe b
+lookupMap :: Ord k => k -> Map k a -> Maybe a
 instance Show a => Show (OnceMore a)
 instance Eq a => Eq (OnceMore a)
 instance Ord a => Ord (OnceMore a)
@@ -310,6 +349,21 @@ arrangeCut :: [Int] -> Map [a]
 --   "bdacefg"  
 --   </pre>
 arrangeFore :: [Int] -> Map [a]
+
+module Koshucode.Baala.Base.Prelude.Order
+data OrderCap a
+Asc :: a -> OrderCap a
+Desc :: a -> OrderCap a
+type Ranking n a = Int -> [OrderCap n] -> [n] -> [[a]] -> ([Int], [[a]])
+sortByName :: (Ord a, Eq n) => [OrderCap n] -> [n] -> Map [[a]]
+sortByNameDenseRank :: (Ord a, Eq n) => Ranking n a
+sortByNameGapRank :: (Ord a, Eq n) => Ranking n a
+sortByNameNumbering :: (Ord a, Eq n) => Ranking n a
+denseRankFrom :: (Ord a, Integral r) => r -> [a] -> [r]
+gapRankFrom :: (Ord a, Integral r) => r -> [a] -> [r]
+instance Show a => Show (OrderCap a)
+instance Eq a => Eq (OrderCap a)
+instance Ord a => Ord (OrderCap a)
 
 module Koshucode.Baala.Base.Data.Comment
 
@@ -391,13 +445,13 @@ isAffirmed :: Judge c -> Bool
 isDenied :: Judge c -> Bool
 
 -- | Print judges to <a>stdout</a>.
-putJudges :: (Ord c, Pretty c) => [Judge c] -> IO ()
+putJudges :: (Ord c, Pretty c) => Int -> [Judge c] -> IO Int
 
 -- | Print judges.
-hPutJudges :: (Ord c, Pretty c) => Handle -> [Judge c] -> IO ()
+hPutJudges :: (Ord c, Pretty c) => Handle -> Int -> [Judge c] -> IO Int
 
 -- | Convert judgements to lines.
-judgeLines :: (Ord c, Pretty c) => [Judge c] -> [String]
+judgeLines :: (Ord c, Pretty c) => String -> [Judge c] -> [String]
 instance Show c => Show (Judge c)
 instance (Ord c, Pretty c) => Pretty (Judge c)
 instance Functor Judge
@@ -409,27 +463,37 @@ instance Ord c => Eq (Judge c)
 --   are in a extent of multiple lines. <a>CodeLine</a> includes whole
 --   tokens in a line. You can represent tokenized source code as a list of
 --   <a>CodeLine</a>.
-module Koshucode.Baala.Base.Syntax.CodeLine
+module Koshucode.Baala.Base.Syntax.Code
 
--- | Tokens per line.
+-- | Tokens in line.
 data CodeLine a
 CodeLine :: LineNumber -> String -> [a] -> CodeLine a
 
 -- | Line number, from 1.
-codeLineNumber :: CodeLine a -> LineNumber
+lineNumber :: CodeLine a -> LineNumber
 
 -- | Line content without newline.
-codeLineContent :: CodeLine a -> String
+lineContent :: CodeLine a -> String
 
 -- | Tokens in the line.
-codeLineTokens :: CodeLine a -> [a]
+lineTokens :: CodeLine a -> [a]
+lineNumberContent :: CodeLine a -> String
+
+-- | Tokens in clause.
+data CodeClause a
+CodeClause :: [CodeLine a] -> [a] -> CodeClause a
+
+-- | Source lines of clause
+clauseLines :: CodeClause a -> [CodeLine a]
+
+-- | Source tokens of clause
+clauseTokens :: CodeClause a -> [a]
+indentLineBy :: (a -> Int) -> CodeLine a -> (Int, CodeLine a)
+splitClause :: Gather [(Int, a)] [a]
 
 -- | Type of function that splits a next token from string. Tokens can
---   includes <a>TokenNumber</a>.
-type NextToken a = TokenNumber -> String -> (a, String)
-
--- | Token number, from 1.
-type TokenNumber = Int
+--   includes <tt>TokenNumber</tt>.
+type NextToken a = NumberedLine -> Gather String a
 
 -- | Split source text into <a>CodeLine</a> list.
 --   
@@ -444,52 +508,52 @@ type TokenNumber = Int
 --   </ol>
 codeLines :: NextToken a -> String -> [CodeLine a]
 instance Typeable1 CodeLine
+instance Typeable1 CodeClause
 instance Show a => Show (CodeLine a)
 instance Eq a => Eq (CodeLine a)
 instance Ord a => Ord (CodeLine a)
 instance Data a => Data (CodeLine a)
+instance Show a => Show (CodeClause a)
+instance Data a => Data (CodeClause a)
 instance Pretty (CodeLine a)
 
 module Koshucode.Baala.Base.Syntax.Tree
 
 -- | Tree of leaf and branch.
-data Tree a
+data CodeTree a
 
 -- | Leaf. Terminal of tree.
-TreeL :: a -> Tree a
+TreeL :: a -> CodeTree a
 
 -- | Branch. Paren-type and subtrees.
-TreeB :: ParenType -> [Tree a] -> Tree a
+TreeB :: ParenType -> (Maybe (a, a)) -> [CodeTree a] -> CodeTree a
 
 -- | Convert a list of elements to a single tree.
-tree :: Show a => GetParenType a -> [a] -> Tree a
+tree :: Show a => GetParenType a -> [a] -> CodeTree a
 
 -- | Convert a list of elements to trees.
-trees :: Show a => GetParenType a -> [a] -> [Tree a]
-treeG :: [Tree a] -> Tree a
-treeWrap :: [Tree a] -> Tree a
+trees :: Show a => GetParenType a -> [a] -> [CodeTree a]
+treeG :: [CodeTree a] -> CodeTree a
+treeWrap :: [CodeTree a] -> CodeTree a
 
 -- | Convert tree to list of tokens.
-untree :: GetTypeParen a -> Tree a -> [a]
+untree :: CodeTree a -> [a]
 
 -- | Convert tree to list of tokens.
-untrees :: GetTypeParen a -> [Tree a] -> [a]
+untrees :: [CodeTree a] -> [a]
 
 -- | Simplify tree by removing double parens, like <tt>((a))</tt> to
 --   <tt>(a)</tt>.
 --   
 --   <pre>
---   &gt;&gt;&gt; undouble (== 0) $ TreeB 0 [TreeB 0 [TreeL "A", TreeL "B"]]
---   TreeB 0 [TreeL "A", TreeL "B"]
+--   &gt;&gt;&gt; undouble (== 0) $ TreeB 0 Nothing [TreeB 0 Nothing [TreeL "A", TreeL "B"]]
+--   TreeB 0 Nothing [TreeL "A", TreeL "B"]
 --   </pre>
-undouble :: Pred ParenType -> Map (Tree a)
+undouble :: Pred ParenType -> Map (CodeTree a)
 type ParenType = Int
 
 -- | Get a paren type.
 type GetParenType a = a -> ParenType
-
--- | Get parens from a type.
-type GetTypeParen a = ParenType -> (a, a)
 
 -- | Make <a>GetParenType</a> functions from a type-open-close table.
 --   
@@ -510,20 +574,20 @@ type GetTypeParen a = ParenType -> (a, a)
 --   </pre>
 parenTable :: Eq a => [(ParenType, Pred a, Pred a)] -> GetParenType a
 instance Typeable1 Paren
-instance Typeable1 Tree
+instance Typeable1 CodeTree
 instance Show a => Show (Paren a)
 instance Eq a => Eq (Paren a)
 instance Ord a => Ord (Paren a)
 instance Data a => Data (Paren a)
-instance Show a => Show (Tree a)
-instance Eq a => Eq (Tree a)
-instance Ord a => Ord (Tree a)
-instance Data a => Data (Tree a)
-instance Functor Tree
+instance Show a => Show (CodeTree a)
+instance Eq a => Eq (CodeTree a)
+instance Ord a => Ord (CodeTree a)
+instance Data a => Data (CodeTree a)
+instance Functor CodeTree
 
 
 -- | Convert infixed-operator trees into prefixed-operator trees
-module Koshucode.Baala.Base.Syntax.Binary
+module Koshucode.Baala.Base.Syntax.Infix
 
 -- | Direction and height for binary splitting.
 --   
@@ -542,53 +606,88 @@ module Koshucode.Baala.Base.Syntax.Binary
 --   height 0. For that reason, heights of expression <tt>(a . b : c)</tt>
 --   are <tt>(0 3 0 5 0)</tt></li>
 --   </ul>
-type BinaryHeight = Either Int Int
-
--- | Split branches in a given tree at infixed binary operators
-binaryTree :: Show a => (a -> BinaryHeight) -> Tree a -> Tree a
+type InfixHeight = Either Int Int
 
 -- | Make the height function from a height table of operators.
-heightTable :: Ord a => [(BinaryHeight, [a])] -> (a -> BinaryHeight)
-heightTableUnbox :: Ord a => (b -> a) -> [(BinaryHeight, [a])] -> (b -> BinaryHeight)
+infixHeight :: Ord b => (a -> Maybe b) -> [(b, InfixHeight)] -> a -> InfixHeight
 
-module Koshucode.Baala.Base.Syntax.Token
+-- | Split branches in a given tree at infixed binary operators
+infixToPrefix :: (a -> InfixHeight) -> CodeTree a -> Either [(InfixHeight, a)] (CodeTree a)
+
+
+-- | Syntactic functions.
+module Koshucode.Baala.Base.Syntax
+
+module Koshucode.Baala.Base.Token.TokenPos
+data TokenPos
+TokenPos :: Resource -> NumberedLine -> String -> TokenPos
+tokenPosResource :: TokenPos -> Resource
+
+-- | Line number and content
+tokenPosLine :: TokenPos -> NumberedLine
+
+-- | Text at which begins token
+tokenPosText :: TokenPos -> String
+tokenPosLineNumber :: TokenPos -> Int
+tokenPosLineText :: TokenPos -> String
+tokenPosColumn :: TokenPos -> Int
+tokenPosDisplay :: TokenPos -> [String]
+tokenPosZero :: TokenPos
+data Resource
+ResourceFile :: String -> Resource
+ResourceText :: String -> Resource
+ResourceURL :: String -> Resource
+resourceType :: Resource -> String
+resourceName :: Resource -> String
+instance Typeable Resource
+instance Typeable TokenPos
+instance Show Resource
+instance Eq Resource
+instance Ord Resource
+instance Data Resource
+instance Show TokenPos
+instance Eq TokenPos
+instance Data TokenPos
+instance Ord TokenPos
+
+module Koshucode.Baala.Base.Token.Token
+
+-- | There are eight types of tokens.
 data Token
 
--- | Word. <a>Int</a> represents quotation level, e.g., 0 for non-quoted, 1
+-- | Word. <a>Int</a> represents quotation level, i.e., 0 for non-quoted, 1
 --   for single-quoted, 2 for double-quoted.
-TWord :: TokenNumber -> Int -> String -> Token
+TWord :: TokenPos -> Int -> String -> Token
 
 -- | Abbreviated word
-TShort :: TokenNumber -> String -> String -> Token
+TShort :: TokenPos -> String -> String -> Token
 
 -- | Termname
-TTerm :: TokenNumber -> [Termname] -> Token
+TTerm :: TokenPos -> [Termname] -> Token
 
--- | Open paren
-TOpen :: TokenNumber -> String -> Token
+-- | Opening paren
+TOpen :: TokenPos -> String -> Token
 
--- | Close paren
-TClose :: TokenNumber -> String -> Token
+-- | Closing paren
+TClose :: TokenPos -> String -> Token
 
 -- | <i>N</i> space characters
-TSpace :: TokenNumber -> Int -> Token
+TSpace :: TokenPos -> Int -> Token
 
 -- | Comment text
-TComment :: TokenNumber -> String -> Token
+TComment :: TokenPos -> String -> Token
 
 -- | Unknown text
-TUnknown :: TokenNumber -> String -> Token
+TUnknown :: TokenPos -> String -> Token
+class TokenListing a
+tokenListing :: TokenListing a => a -> [Token]
 
 -- | Name of term, e.g., <tt>"/file"</tt> for the term <tt>/file</tt>.
 type Termname = String
-
--- | Get the position of token.
---   
---   <pre>
---   &gt;&gt;&gt; let tok = TWord 25 0 "abc" in tokenNumber tok
---   25  
---   </pre>
-tokenNumber :: Token -> TokenNumber
+type Termname2 = (String, String)
+type Termname3 = (String, String, String)
+tokenWord :: String -> Token
+tokenPos :: Token -> TokenPos
 
 -- | Get the content of token.
 --   
@@ -629,41 +728,56 @@ isCloseTokenOf :: String -> Pred Token
 
 -- | Remove blank tokens.
 sweepToken :: Map [Token]
+tokenIndent :: Token -> Int
 instance Typeable Token
 instance Show Token
 instance Eq Token
 instance Ord Token
 instance Data Token
+instance TokenListing a => TokenListing (Maybe a)
 instance Pretty Token
 instance Name Token
 
 
 -- | Tokenizer of koshucode.
-module Koshucode.Baala.Base.Syntax.Tokenize
+module Koshucode.Baala.Base.Token.TokenLine
 
 -- | Token list on a line.
 type TokenLine = CodeLine Token
-tokenize :: String -> [TokenLine]
+
+-- | Tokenize text.
+tokenLines :: Resource -> String -> [TokenLine]
 trimLeft :: Map String
 
 -- | Split string into list of tokens. Result token list does not contain
 --   newline characters.
-tokens :: String -> [Token]
+tokens :: Resource -> String -> [Token]
 isSimpleWord :: Pred String
 isSimpleChar :: Pred Char
+commentLine :: String -> String
+putCommentLines :: [String] -> IO ()
+
+module Koshucode.Baala.Base.Token.TokenClause
+type TokenClause = CodeClause Token
+
+-- | Convert token lines into token clauses
+tokenClauses :: [TokenLine] -> [TokenClause]
+instance Pretty TokenClause
 
 
 -- | Parened tree of tokens
-module Koshucode.Baala.Base.Syntax.TokenTree
+module Koshucode.Baala.Base.Token.TokenTree
+data Sourced a
+Sourced :: [Token] -> a -> Sourced a
 
 -- | Tree of tokens.
-type TokenTree = Tree Token
+type TokenTree = CodeTree Token
 
 -- | Parse tokens into parened trees. Blank tokens and comments are
 --   excluded.
 --   
 --   There are four types of parens -- 1, 2, 3, or 4. Paren type is in
---   <tt>TreeB</tt> <i>type</i> <i>subtrees</i>.
+--   <tt>TreeB</tt> <i>type</i> <i>parens</i> <i>subtrees</i>.
 --   
 --   <ol>
 --   <li>Round parens <tt>( .. )</tt> for grouping.</li>
@@ -674,8 +788,12 @@ type TokenTree = Tree Token
 tokenTrees :: [Token] -> [TokenTree]
 treeTokens :: TokenTree -> [Token]
 treesTokens :: [TokenTree] -> [Token]
-flatname :: TokenTree -> Maybe String
+
+-- | Convert text to token trees.
 tt :: String -> [TokenTree]
+tt1 :: String -> TokenTree
+
+-- | Get <a>Doc</a> value of token trees for pretty printing.
 ttDoc :: [TokenTree] -> Doc
 
 -- | Split token list by unquoted word. If token list contains the word,
@@ -717,88 +835,134 @@ divideTreesByBar :: [TokenTree] -> [[TokenTree]]
 --   , [TreeL (TWord 9 0 "c")] ]  
 --   </pre>
 divideTreesByColon :: [TokenTree] -> [[TokenTree]]
+instance Show a => Show (Sourced a)
+instance Eq a => Eq (Sourced a)
+instance Ord a => Ord (Sourced a)
+instance Functor Sourced
 
 
--- | Syntactic functions
-module Koshucode.Baala.Base.Syntax
+-- | Tokens in Koshucode.
+module Koshucode.Baala.Base.Token
 
 
--- | Abort utility
-module Koshucode.Baala.Base.Abort.Utility
+-- | Class for abort reasons
+module Koshucode.Baala.Base.Abort.Class
 
 -- | Class that represents abort reason.
-class AbortReasonClass a where abortSub _ = docEmpty
+class Show a => AbortReasonClass a where abortSymbol = head . words . show abortReason _ = "" abortDetail _ = [] abortSource _ = []
+abortClass :: AbortReasonClass a => a -> String
 abortSymbol :: AbortReasonClass a => a -> String
-abortTitle :: AbortReasonClass a => a -> String
-abortMain :: AbortReasonClass a => a -> Doc
-abortSub :: AbortReasonClass a => a -> Doc
+abortReason :: AbortReasonClass a => a -> String
+abortDetail :: AbortReasonClass a => a -> [String]
+abortSource :: AbortReasonClass a => a -> [String]
 
--- | Abort reason and source code information.
-type AbortType a = (a, [Token], [CodeLine Token])
+-- | Command name and its arguments.
+type CommandLine = [String]
 
--- | Either of (1) right result or (2) abort information.
-type AbortOrType a b = Either (AbortType a) b
-
--- | Stop program execution abnormally.
-abort :: AbortReasonClass a => AbortType a -> IO ()
-abortIO :: AbortReasonClass a => (b -> IO ()) -> AbortOrType a b -> IO ()
-addAbort :: AbortReasonClass a => AbortType a -> Map (AbortOrType a b)
-
--- | Stop on error ''bug in koshucode''
-bug :: a
+-- | Abortable process.
+abortableIO :: AbortReasonClass a => CommandLine -> (b -> IO c) -> Either a b -> IO c
 
 
--- | Abort symbol
+-- | Abort reasons
+module Koshucode.Baala.Base.Abort.EachReason
+data AbortIO
+AIONoFile :: String -> AbortIO
+data AbortSyntax
+
+-- | Ambiguous infix operators
+ASAmbInfixes :: [String] -> AbortSyntax
+
+-- | Can't read as number
+ASNotNumber :: String -> AbortSyntax
+
+-- | Can't read as text
+ASNotText :: String -> AbortSyntax
+
+-- | Odd relation literal
+ASOddRelation :: AbortSyntax
+
+-- | Unknown clause
+ASUnkClause :: AbortSyntax
+
+-- | Unknown expression
+ASUnkCox :: String -> AbortSyntax
+
+-- | Unknown word
+ASUnkWord :: String -> AbortSyntax
+
+-- | Unresolved prefix
+ASUnresToken :: AbortSyntax
+data AbortAnalysis
+AACheckTerms :: [String] -> AbortAnalysis
+AAMalformedOperand :: String -> AbortAnalysis
+AAMissingTermname :: String -> AbortAnalysis
+AANoTerms :: [String] -> AbortAnalysis
+AAOpeandDuplicate :: [String] -> AbortAnalysis
+AAOpeandUnknown :: [String] -> AbortAnalysis
+AAReqBoolean :: String -> AbortAnalysis
+AAReqFlatname :: String -> AbortAnalysis
+AAReqNewTerms :: [String] -> AbortAnalysis
+AAUndefined :: String -> AbortAnalysis
+AAUnkCop :: String -> AbortAnalysis
+AAUnkRelmap :: String -> AbortAnalysis
+data AbortCalc
+ACDivideByZero :: AbortCalc
+ACUnmatchType :: String -> AbortCalc
+ACHeteroDecimal :: String -> String -> AbortCalc
+ACNotFound :: String -> AbortCalc
+instance Show AbortIO
+instance Eq AbortIO
+instance Ord AbortIO
+instance Show AbortSyntax
+instance Eq AbortSyntax
+instance Ord AbortSyntax
+instance Show AbortAnalysis
+instance Eq AbortAnalysis
+instance Ord AbortAnalysis
+instance Show AbortCalc
+instance Eq AbortCalc
+instance Ord AbortCalc
+instance AbortReasonClass AbortCalc
+instance AbortReasonClass AbortAnalysis
+instance AbortReasonClass AbortSyntax
+instance AbortReasonClass AbortIO
+
+
+-- | Bundle of abort reasons
 module Koshucode.Baala.Base.Abort.Reason
 
--- | Either of (1) right result, or (2) abort reason (without source code
---   information).
+-- | Bundle of abort reasons.
+data AbortReason
+AbortIO :: AbortIO -> AbortReason
+AbortSyntax :: [Token] -> AbortSyntax -> AbortReason
+AbortAnalysis :: [Token] -> AbortAnalysis -> AbortReason
+AbortCalc :: [Token] -> AbortCalc -> AbortReason
+
+-- | Abortable result, i.e., either of right result or abort reason.
 type Ab b = Either AbortReason b
 
 -- | Abortable mapping.
 type AbMap b = b -> Ab b
-type AbMap2 b a = b -> Ab a
 
--- | Abort reason and source information.
-type Abort = AbortType AbortReason
-type AbortTokens b = Either (AbortReason, [Token]) b
+-- | Push source information when process is aborted.
+--   
+--   <pre>
+--   B.ab src $ do ...
+--   </pre>
+ab :: [Token] -> Map (Ab b)
 
--- | Either of (1) right result, or (2) abort reason with source.
-type AbortOr b = AbortOrType AbortReason b
+-- | Same as <a>ab</a> except for using <a>TokenListing</a> instead of list
+--   of <a>Token</a>.
+abFrom :: TokenListing src => src -> Map (Ab b)
+sourcedAbMap :: (a -> Ab b) -> Sourced a -> Ab (Sourced b)
 
--- | Lookup association list. This function may abort on AbortLookup.
-(<!!>) :: [Named a] -> String -> AbortTokens a
+-- | Lookup association list. This function may abort.
+(<!!>) :: [Named b] -> String -> Ab b
+abortMalformedOperand :: String -> AbortReason
+abortNotFound :: String -> AbortReason
 
--- | Abort reasons
-data AbortReason
-AbortDivideByZero :: AbortReason
-AbortHeteroDecimal :: String -> String -> AbortReason
-AbortLookup :: String -> AbortReason
-AbortMalformedOperand :: String -> AbortReason
-AbortMissingTermname :: String -> AbortReason
-AbortNotNumber :: String -> AbortReason
-AbortNotText :: String -> AbortReason
-AbortNoTerms :: [String] -> AbortReason
-AbortOddRelation :: AbortReason
-AbortOpeandDuplicate :: [String] -> AbortReason
-AbortOpeandUnknown :: [String] -> AbortReason
-AbortOpeandUnmatch :: String -> AbortReason
-AbortReqBoolean :: String -> AbortReason
-AbortReqFlatname :: String -> AbortReason
-AbortReqNewTerms :: [String] -> AbortReason
-AbortReqText :: String -> AbortReason
-AbortUndefined :: String -> AbortReason
-AbortUnkCop :: String -> AbortReason
-AbortUnkCox :: String -> AbortReason
-AbortUnkWord :: String -> AbortReason
-AbortUnkClause :: AbortReason
-AbortUnkContent :: String -> AbortReason
-AbortUnkRelmap :: String -> AbortReason
-AbortUnkSymbol :: String -> AbortReason
-AbortUnresToken :: AbortReason
-AbortUnmatchArity :: AbortReason
-AbortUnmatchType :: String -> AbortReason
-AbortUsage :: String -> [String] -> AbortReason
+-- | Stop on error <tt>'bug in koshucode'</tt>
+bug :: a
 instance Show AbortReason
 instance Eq AbortReason
 instance Ord AbortReason
@@ -899,21 +1063,21 @@ headNames :: Relhead -> [Termname]
 --   </pre>
 headDegree :: Relhead -> Int
 
--- | Filter keeping terms that exist in head.
+-- | Keep terms that exist in head.
 --   
 --   <pre>
---   &gt;&gt;&gt; let h = headFrom ["/a", "/b"] in headExistTerms h ["/a", "/c"]
---   ["/a"]  
+--   &gt;&gt;&gt; let h = headFrom ["/b"] in headKeepTerms h ["/a", "/b", "/c"]
+--   ["/b"]  
 --   </pre>
-headExistTerms :: Relhead -> Map [Termname]
+headKeepTerms :: Relhead -> Map [Termname]
 
--- | Filter dropping terms that exist in head.
+-- | Drop terms that exist in head.
 --   
 --   <pre>
---   &gt;&gt;&gt; let h = headFrom ["/a", "/b"] in headNonExistTerms h ["/a", "/c"]
---   ["/c"]  
+--   &gt;&gt;&gt; let h = headFrom ["/b"] in headDropTerms h ["/a", "/b", "/c"]
+--   ["/a","/c"]  
 --   </pre>
-headNonExistTerms :: Relhead -> Map [Termname]
+headDropTerms :: Relhead -> Map [Termname]
 
 -- | Index of terms.
 --   
@@ -930,6 +1094,19 @@ headIndex :: Relhead -> [Termpath] -> [[Int]]
 --   [0]  
 --   </pre>
 headIndex1 :: Relhead -> Termpath -> [Int]
+
+-- | <pre>
+--   &gt;&gt;&gt; headFrom ["/a", "/b"] `isSubhead` headFrom ["/a", "/b", "/c"]
+--      True
+--   </pre>
+--   
+--   <pre>
+--   &gt;&gt;&gt; headFrom ["/a", "/d"] `isSubhead` headFrom ["/a", "/b", "/c"]
+--   False
+--   </pre>
+isSubhead :: Relhead -> Relhead -> Bool
+isSuperhead :: Relhead -> Relhead -> Bool
+isEqvHead :: Relhead -> Relhead -> Bool
 
 -- | Identity of <a>mappend</a>
 mempty :: Monoid a => a
@@ -1091,7 +1268,7 @@ decimalDenom :: Decimal -> Int
 isDecimalZero :: Decimal -> Bool
 
 -- | Make <tt>a</tt> from a string.
-type LitString a = AbMap2 String a
+type LitString a = String -> Ab a
 type LitDecimal = LitString Decimal
 litDecimal :: LitDecimal
 decimalString :: Decimal -> String

@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.39.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.42.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -71,7 +71,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ></li
 	  ><li
 	  ><a href="#g:5"
-	    >Lookup
+	    >I/O
 </a
 	    ></li
 	  ></ul
@@ -115,6 +115,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    > ::  [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > [(a, a)]</li
+	  ><li class="src short"
+	  ><a href="#v:front"
+	    >front</a
+	    > ::  [a] -&gt; [a]</li
 	  ><li class="src short"
 	  ><a href="#v:unique"
 	    >unique</a
@@ -174,6 +178,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >Map</a
 	    > [(k, a)]</li
 	  ><li class="src short"
+	  ><a href="#v:maybeEmpty"
+	    >maybeEmpty</a
+	    > ::  <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > a -&gt; (a -&gt; [b]) -&gt; [b]</li
+	  ><li class="src short"
 	  ><a href="#v:padRight"
 	    >padRight</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
@@ -194,13 +204,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >String</a
 	    ></li
 	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:Gather"
+	    >Gather</a
+	    > a b = a -&gt; (b, a)</li
+	  ><li class="src short"
 	  ><a href="#v:gather"
 	    >gather</a
-	    > ::  ([a] -&gt; (b, [a])) -&gt; [a] -&gt; [b]</li
+	    > ::  <a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Gather"
+	    >Gather</a
+	    > [a] b -&gt; [a] -&gt; [b]</li
 	  ><li class="src short"
 	  ><a href="#v:gatherWith"
 	    >gatherWith</a
-	    > ::  (c -&gt; [a] -&gt; (b, [a])) -&gt; [c] -&gt; [a] -&gt; [b]</li
+	    > ::  (c -&gt; <a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Gather"
+	    >Gather</a
+	    > [a] b) -&gt; [c] -&gt; [a] -&gt; [b]</li
 	  ><li class="src short"
 	  ><a href="#v:gatherToMap"
 	    >gatherToMap</a
@@ -210,23 +230,29 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >Map</a
 	    > k [v]</li
 	  ><li class="src short"
-	  ><a href="#v:lookupSatisfy"
-	    >lookupSatisfy</a
-	    > ::  a -&gt; [(a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    >, b)] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
-	    >Maybe</a
-	    > b</li
+	  ><a href="#v:putShow"
+	    >putShow</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+	    >Show</a
+	    > a =&gt; a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > ()</li
 	  ><li class="src short"
-	  ><a href="#v:lookupMap"
-	    >lookupMap</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > k =&gt; k -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Map-Lazy.html#t:Map"
-	    >Map</a
-	    > k a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
-	    >Maybe</a
-	    > a</li
+	  ><a href="#v:putShowLn"
+	    >putShowLn</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+	    >Show</a
+	    > a =&gt; a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > ()</li
+	  ><li class="src short"
+	  ><a href="#v:putLines"
+	    >putLines</a
+	    > :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > ()</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -286,6 +312,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	><h1 id="g:2"
 	>List
 </h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:front" class="def"
+	    >front</a
+	    > ::  [a] -&gt; [a]<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#front" class="link"
+	    >Source</a
+	    ></p
+	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:unique" class="def"
@@ -540,6 +574,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 </p
 	    ></div
 	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:maybeEmpty" class="def"
+	    >maybeEmpty</a
+	    > ::  <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > a -&gt; (a -&gt; [b]) -&gt; [b]<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#maybeEmpty" class="link"
+	    >Source</a
+	    ></p
+	  ></div
 	><h1 id="g:3"
 	>String
 </h1
@@ -606,9 +650,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 </h1
 	><div class="top"
 	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:Gather" class="def"
+	    >Gather</a
+	    > a b = a -&gt; (b, a)<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#Gather" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
 	  ><a name="v:gather" class="def"
 	    >gather</a
-	    > ::  ([a] -&gt; (b, [a])) -&gt; [a] -&gt; [b]<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#gather" class="link"
+	    > ::  <a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Gather"
+	    >Gather</a
+	    > [a] b -&gt; [a] -&gt; [b]<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#gather" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -621,7 +677,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	><p class="src"
 	  ><a name="v:gatherWith" class="def"
 	    >gatherWith</a
-	    > ::  (c -&gt; [a] -&gt; (b, [a])) -&gt; [c] -&gt; [a] -&gt; [b]<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#gatherWith" class="link"
+	    > ::  (c -&gt; <a href="Koshucode-Baala-Base-Prelude-Utility.html#t:Gather"
+	    >Gather</a
+	    > [a] b) -&gt; [c] -&gt; [a] -&gt; [b]<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#gatherWith" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -655,31 +713,41 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ></div
 	  ></div
 	><h1 id="g:5"
-	>Lookup
+	>I/O
 </h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:lookupSatisfy" class="def"
-	    >lookupSatisfy</a
-	    > ::  a -&gt; [(a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    >, b)] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
-	    >Maybe</a
-	    > b<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#lookupSatisfy" class="link"
+	  ><a name="v:putShow" class="def"
+	    >putShow</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+	    >Show</a
+	    > a =&gt; a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > ()<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#putShow" class="link"
 	    >Source</a
 	    ></p
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:lookupMap" class="def"
-	    >lookupMap</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > k =&gt; k -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Map-Lazy.html#t:Map"
-	    >Map</a
-	    > k a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
-	    >Maybe</a
-	    > a<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#lookupMap" class="link"
+	  ><a name="v:putShowLn" class="def"
+	    >putShowLn</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+	    >Show</a
+	    > a =&gt; a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > ()<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#putShowLn" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:putLines" class="def"
+	    >putLines</a
+	    > :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > ()<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#putLines" class="link"
 	    >Source</a
 	    ></p
 	  ></div
