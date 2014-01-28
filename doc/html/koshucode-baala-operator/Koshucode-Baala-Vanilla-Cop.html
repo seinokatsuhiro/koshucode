@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-operator-0.39.0.0: Relational operators in Koshucode</p
+      >koshucode-baala-operator-0.42.0.0: Relational operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -50,113 +50,51 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 	>Description</p
 	><div class="doc"
 	><p
-	  >Content formula. 
+	  >Term-content operators. 
 </p
 	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:vanillaCops"
+	    >vanillaCops</a
+	    > :: ([<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:Cop"
+	    >Cop</a
+	    > <a href="Koshucode-Baala-Vanilla-Type.html#t:VContent"
+	    >VContent</a
+	    >], [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+	    >Named</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Infix.html#t:InfixHeight"
+	    >InfixHeight</a
+	    >])</li
+	  ></ul
 	></div
       ><div id="interface"
       ><h1
 	>Documentation</h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:vanillaContent" class="def"
-	    >vanillaContent</a
-	    ><a href="src/Koshucode-Baala-Vanilla-Cop.html#vanillaContent" class="link"
+	  ><a name="v:vanillaCops" class="def"
+	    >vanillaCops</a
+	    > :: ([<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:Cop"
+	    >Cop</a
+	    > <a href="Koshucode-Baala-Vanilla-Type.html#t:VContent"
+	    >VContent</a
+	    >], [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+	    >Named</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Infix.html#t:InfixHeight"
+	    >InfixHeight</a
+	    >])<a href="src/Koshucode-Baala-Vanilla-Cop.html#vanillaCops" class="link"
 	    >Source</a
 	    ></p
-	  ><div class="subs arguments"
-	  ><p class="caption"
-	    >Arguments</p
-	    ><table
-	    ><tr
-	      ><td class="src"
-		>:: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse"
-		  >RopUse</a
-		  > <a href="Koshucode-Baala-Vanilla-Type.html#t:VContent"
-		  >VContent</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Source information
+	  ><div class="doc"
+	  ><p
+	    >Term-content operators and its height table. 
 </p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
-		  >TokenTree</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Token tree of content expression
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortTokens"
-		  >AbortTokens</a
-		  > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Expression.html#t:PosCox"
-		  >PosCox</a
-		  > <a href="Koshucode-Baala-Vanilla-Type.html#t:VContent"
-		  >VContent</a
-		  >)</td
-		><td class="doc"
-		><p
-		  >Partial content expression
-</p
-		  ></td
-		></tr
-	      ></table
 	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:vanillaNamedContent" class="def"
-	    >vanillaNamedContent</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse"
-	    >RopUse</a
-	    > <a href="Koshucode-Baala-Vanilla-Type.html#t:VContent"
-	    >VContent</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortTokens"
-	    >AbortTokens</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Expression.html#t:PosCox"
-	    >PosCox</a
-	    > <a href="Koshucode-Baala-Vanilla-Type.html#t:VContent"
-	    >VContent</a
-	    >))<a href="src/Koshucode-Baala-Vanilla-Cop.html#vanillaNamedContent" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:vanillaNamedContents" class="def"
-	    >vanillaNamedContents</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse"
-	    >RopUse</a
-	    > <a href="Koshucode-Baala-Vanilla-Type.html#t:VContent"
-	    >VContent</a
-	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbortTokens"
-	    >AbortTokens</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Expression.html#t:PosCox"
-	    >PosCox</a
-	    > <a href="Koshucode-Baala-Vanilla-Type.html#t:VContent"
-	    >VContent</a
-	    >)]<a href="src/Koshucode-Baala-Vanilla-Cop.html#vanillaNamedContents" class="link"
-	    >Source</a
-	    ></p
 	  ></div
 	></div
       ></div

@@ -16,7 +16,7 @@
 <a name="line-7"></a><span class='hs-layout'>(</span> <span class='hs-varid'>koshu</span>
 <a name="line-8"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
 <a name="line-9"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>C</span>
-<a name="line-10"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Vanilla</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span>
+<a name="line-10"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Vanilla</span><span class='hs-varop'>.</span><span class='hs-conid'>Rop</span>
 <a name="line-11"></a><span class='hs-keyword'>import</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Vanilla</span><span class='hs-varop'>.</span><span class='hs-conid'>Type</span>
 <a name="line-12"></a>
 <a name="line-13"></a><a name="koshu"></a><span class='hs-comment'>-- | Quasiquoter for @[koshu| ... |]@.</span>
@@ -24,10 +24,10 @@
 <a name="line-15"></a><span class='hs-definition'>koshu</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>koshuQuoter</span> <span class='hs-varid'>vanillaHalf</span> <span class='hs-keyglyph'>[</span><span class='hs-keyglyph'>|</span> <span class='hs-varid'>vanillaFull</span> <span class='hs-keyglyph'>|</span><span class='hs-keyglyph'>]</span>
 <a name="line-16"></a>
 <a name="line-17"></a><a name="vanillaHalf"></a><span class='hs-comment'>-- relmap constructors</span>
-<a name="line-18"></a><span class='hs-definition'>vanillaHalf</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RelmapHalfCons</span>
-<a name="line-19"></a><a name="vanillaFull"></a><span class='hs-definition'>vanillaFull</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RelmapFullCons</span> <span class='hs-conid'>VContent</span>
+<a name="line-18"></a><span class='hs-definition'>vanillaHalf</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RelmapConsHalf</span>
+<a name="line-19"></a><a name="vanillaFull"></a><span class='hs-definition'>vanillaFull</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RelmapConsFull</span> <span class='hs-conid'>VContent</span>
 <a name="line-20"></a><span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RelmapCons</span> <span class='hs-varid'>vanillaHalf</span> <span class='hs-varid'>vanillaFull</span><span class='hs-layout'>)</span>
-<a name="line-21"></a>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapCons</span> <span class='hs-varid'>vanillaRops</span>
+<a name="line-21"></a>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapCons</span> <span class='hs-varop'>$</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>global</span> <span class='hs-layout'>{</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>globalRops</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>vanillaRops</span> <span class='hs-layout'>}</span>
 <a name="line-22"></a>
 </pre></body>
 </html>
