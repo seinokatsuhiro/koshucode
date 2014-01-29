@@ -148,7 +148,7 @@ hashAssoc =
 litFlatname :: Literalize String
 litFlatname (B.TreeL (B.TTerm _ [n])) = Right n
 litFlatname (B.TreeL (B.TTerm _ ns))  = Left $ B.AbortAnalysis [] $ B.AAReqFlatname (concat ns)
-litFlatname x = Left $ B.AbortAnalysis [] $ B.AAMissingTermname (show x)
+litFlatname _ = Left $ B.AbortAnalysis [] $ B.AAMissingTermname
 
 litList :: (C.CContent c) => Literalize c -> LitTrees [c]
 litList _   [] = Right []

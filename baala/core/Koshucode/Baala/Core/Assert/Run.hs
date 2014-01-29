@@ -43,7 +43,7 @@ specialize global = (<$>) where
     C.RelmapConst  half rel  <$> _  = right half (C.relkitConst rel)
     C.RelmapAlias  _ relmap  <$> h1 = relmap <$> h1
     C.RelmapName   half name <$> _  =
-        B.abFrom half $ Left $ B.AbortAnalysis [] $ B.AAUnkRelmap name
+        B.abortableFrom "spec" half $ Left $ B.AbortAnalysis [] $ B.AAUnkRelmap name
 
     C.RelmapAppend relmap1 relmap2 <$> h1 =
         do relkit2 <- relmap1 <$> h1
@@ -51,13 +51,13 @@ specialize global = (<$>) where
            Right $ M.mappend relkit2 relkit3
 
     C.RelmapCalc half mk relmaps <$> h1 =
-        B.abFrom half $ do
+        B.abortableFrom "spec" half $ do
           subrelkit <- (<$> h1) `mapM` relmaps
           relkit    <- mk subrelkit h1
           right half relkit
 
     C.RelmapGlobal half mk <$> h1 =
-        B.abFrom half $ do
+        B.abortableFrom "spec" half $ do
           relkit <- mk global h1
           right half relkit
 
@@ -76,7 +76,7 @@ runAssertJudges global asserts =
 runAssertDataset :: (Ord c, C.CNil c) => C.Global c -> [C.Assert c] -> C.Dataset c -> B.Ab [B.Judge c]
 runAssertDataset global asserts dataset = Right . concat =<< mapM each asserts where
     each (C.Assert t pat opt r src) =
-        B.ab src $ do
+        B.abortable "run" src $ do
           r1 <- runRelmapDataset global dataset r B.reldee
           let q = C.assertQuality t
           assertOptionProcess q pat opt r1
@@ -103,7 +103,7 @@ flatnames :: [B.TokenTree] -> B.Ab [B.Termname]
 flatnames trees =
     case mapM flatname trees of
       Just ns -> Right ns
-      Nothing -> Left $ B.AbortAnalysis [] $ B.AAMissingTermname ""
+      Nothing -> Left $ B.AbortAnalysis [] $ B.AAMissingTermname
 
 
 

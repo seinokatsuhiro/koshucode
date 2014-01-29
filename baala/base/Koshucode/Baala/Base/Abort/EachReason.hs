@@ -75,7 +75,7 @@ instance B.AbortReasonClass AbortSyntax where
 data AbortAnalysis
     = AACheckTerms       [String]
     | AAMalformedOperand  String
-    | AAMissingTermname   String
+    | AAMissingTermname
     | AANoTerms          [String]
     | AAOpeandDuplicate  [String]
     | AAOpeandUnknown    [String]
@@ -93,7 +93,7 @@ instance B.AbortReasonClass AbortAnalysis where
     abortReason a = case a of
         (AACheckTerms _)        -> "check-term failed"
         (AAMalformedOperand _)  -> "Malformed operand"
-        (AAMissingTermname _)   -> "Require termname"
+        (AAMissingTermname)     -> "Require termname"
         (AANoTerms _)           -> "Input relation does not given terms"
         (AAOpeandDuplicate _)   -> "Dulicate operands"
         (AAOpeandUnknown _)     -> "Unknown operand"
@@ -107,7 +107,6 @@ instance B.AbortReasonClass AbortAnalysis where
     abortDetail a = case a of
         (AACheckTerms ns)       -> [unwords ns]
         (AAMalformedOperand s)  -> [s]
-        (AAMissingTermname s)   -> [s]
         (AANoTerms ns)          -> [unwords ns]
         (AAOpeandDuplicate ns)  -> [unwords ns]
         (AAOpeandUnknown ns)    -> [unwords ns]
@@ -117,6 +116,7 @@ instance B.AbortReasonClass AbortAnalysis where
         (AAUndefined x)         -> [x]
         (AAUnkCop op)           -> [op]
         (AAUnkRelmap op)        -> [op]
+        _                       -> []
 
 
 -- ----------------------  Calc Error

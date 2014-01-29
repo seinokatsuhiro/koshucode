@@ -18,7 +18,7 @@ import qualified Koshucode.Baala.Core as C
 {-| Extract a term name. -}
 termname :: B.TokenTree -> B.Ab B.Termname
 termname (B.TreeL (B.TTerm _ [n])) = Right n
-termname _ = Left $ B.AbortAnalysis [] $ B.AAMissingTermname ""
+termname _ = Left $ B.AbortAnalysis [] $ B.AAMissingTermname
 
 {-| Extract a list of term names.
  
@@ -29,7 +29,7 @@ termnames :: [B.TokenTree] -> B.Ab [B.Termname]
 termnames trees =
     case mapM termname trees of
       Right ns -> Right ns
-      Left  _  -> Left $B.AbortAnalysis [] $ B.AAMissingTermname ""
+      Left  _  -> Left $B.AbortAnalysis [] $ B.AAMissingTermname
 
 {-| Extract a list of name-and-name pairs.
  
@@ -44,7 +44,7 @@ termnamePairs = loop where
            xs' <- loop xs
            Right $ (a', b') : xs'
     loop [] = Right []
-    loop _ = Left $ B.AbortAnalysis [] $ B.AAMissingTermname ""
+    loop _ = Left $ B.AbortAnalysis [] $ B.AAMissingTermname
 
 {-| Extract a list of name-and-tree pairs.
  

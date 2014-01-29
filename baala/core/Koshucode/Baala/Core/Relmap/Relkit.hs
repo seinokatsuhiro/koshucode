@@ -117,7 +117,7 @@ relkitSetSource src (Relkit h (B.Sourced _ f)) =
 
 relkitRun :: (Ord c) => RelkitBody c -> B.AbMap [[c]]
 relkitRun (B.Sourced src r) b1 =
-    B.ab src $
+    B.abortable "run" src $
      case r of
        RelkitOneToAbMany u f  ->  do b2 <- f `mapM` b1
                                      uniqueR u $ concat b2
@@ -136,8 +136,8 @@ relkitRun (B.Sourced src r) b1 =
                                      uniqueR u $ concat b2
 
        RelkitAppend r1@(B.Sourced src1 _) r2
-           -> do b2       <- r1 `relkitRun` b1
-                 B.ab src1 $ r2 `relkitRun` b2
+           -> do b2 <- r1 `relkitRun` b1
+                 B.abortable "run" src1 $ r2 `relkitRun` b2
 
 uniqueR :: (Ord c) => Bool -> [c] -> B.Ab [c]
 uniqueR u = Right . uniqueIf u

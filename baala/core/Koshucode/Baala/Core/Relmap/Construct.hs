@@ -49,22 +49,20 @@ relmapConsHalf :: [B.Named (String, C.RopFullSorter)] -> RelmapConsHalf
 relmapConsHalf halfs = consHalf where
     consHalf :: RelmapConsHalf
     consHalf trees =
-        let toks = B.front $ B.untrees trees
-        in case B.divideTreesByBar trees of
-             [(B.TreeL tok@(B.TWord _ 0 _) : opd)] -> find tok opd
-             [[B.TreeB 1 _ xs]] -> consHalf xs
-             [[B.TreeB _ _ _]]  -> Left $ B.AbortAnalysis toks $ B.AAUndefined "bracket"
-             [_]                -> Left $ B.AbortAnalysis toks $ B.AAUnkRelmap "?"
-             tree2              -> find (B.tokenWord "|") $ map B.treeWrap tree2
+        B.abortable "half" (B.front $ B.untrees trees) $
+         case B.divideTreesByBar trees of
+           [(B.TreeL tok@(B.TWord _ 0 _) : opd)] -> find tok opd
+           [[B.TreeB 1 _ xs]] -> consHalf xs
+           [[B.TreeB _ _ _]]  -> Left $ B.AbortAnalysis [] $ B.AAUndefined "bracket"
+           [_]                -> Left $ B.AbortAnalysis [] $ B.AAUnkRelmap "?"
+           tree2              -> find (B.tokenWord "|") $ map B.treeWrap tree2
 
     find :: B.Token -> [B.TokenTree] -> B.Ab C.HalfRelmap
     find tok opd =
         case lookup (B.tokenContent tok) halfs of
           Nothing -> Right $ half "" tok opd []
-          Just (usage, sorter) ->
-              B.ab [tok] $ do
-                sorted <- sorter opd
-                subrelmap $ half usage tok opd sorted
+          Just (usage, sorter) -> do sorted <- sorter opd
+                                     subrelmap $ half usage tok opd sorted
 
     half :: String -> B.Token -> [B.TokenTree] -> [B.Named [B.TokenTree]] -> C.HalfRelmap
     half usage tok opd sorted =
@@ -94,7 +92,7 @@ relmapConsFull global fulls = consFull where
             subHs = C.halfSubrelmap half
         in case lookup op fulls of
              Nothing   -> Right $ C.RelmapName half op
-             Just cons -> B.abFrom half $ do
+             Just cons -> B.abortableFrom "full" half $ do
                             subFs <- mapM consFull subHs
                             cons $ C.RopUse global half subFs
 

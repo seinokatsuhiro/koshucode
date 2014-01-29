@@ -19,6 +19,7 @@ module Koshucode.Baala.Base.Token.TokenPos
 
 import qualified Data.Generics                 as G
 import qualified Data.Monoid                   as M
+import qualified Koshucode.Baala.Base.Prelude  as B
 import qualified Koshucode.Baala.Base.Syntax   as B
 
 
@@ -48,17 +49,23 @@ tokenPosColumn :: TokenPos -> Int
 tokenPosColumn TokenPos { tokenPosLine = (_, line), tokenPosText = subline }
     = length line - length subline
 
-tokenPosDisplay :: TokenPos -> [String]
-tokenPosDisplay p = [pos, "> " ++ text] where
-    pos   = show lno ++ " " ++ show cno ++ " " ++ res
-    lno   = tokenPosLineNumber p
-    cno   = tokenPosColumn p
-    res   = resourceName $ tokenPosResource p
-    text  = tokenPosText p
+tokenPosDisplay :: String -> TokenPos -> [String]
+tokenPosDisplay tag p
+    | lno > 0   = [pos, "> " ++ shorten text ++ " ... (" ++ tag ++ ")"]
+    | otherwise = []
+    where
+      pos   = show lno ++ " " ++ show cno ++ " " ++ res
+      lno   = tokenPosLineNumber p
+      cno   = tokenPosColumn p
+      res   = resourceName $ tokenPosResource p
+      text  = tokenPosText p
 
 tokenPosZero :: TokenPos
 tokenPosZero = TokenPos (ResourceText "") (0, "") ""
 
+shorten :: B.Map String
+shorten s | length s > 53 = take 50 s
+          | otherwise     = s
 
 -- ----------------------  Resource
 

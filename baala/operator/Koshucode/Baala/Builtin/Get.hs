@@ -79,6 +79,11 @@ getSwitch use n =
          Just [] -> Right True
          _       -> Left $ B.abortNotFound n
 
+getMap :: ([B.TokenTree] -> B.Ab b) -> RopGet c b
+getMap f use n =
+    do trees <- getTrees use n
+       B.abortable "rop" (B.front $ B.untrees trees) $ f trees
+
 getTrees :: RopGet c [B.TokenTree]
 getTrees use = (operand use B.<!!>)
 
@@ -86,7 +91,7 @@ getTree :: RopGet c B.TokenTree
 getTree use n = Right . B.TreeB 1 Nothing =<< getTrees use n
 
 getTermTrees :: RopGet c [B.Named B.TokenTree]
-getTermTrees use n = getTrees use n >>= Op.termTreePairs
+getTermTrees = getMap Op.termTreePairs
 
 {-| Get word from named operand.
 
@@ -119,14 +124,14 @@ getTerm       use n = getTerms use n >>= getHead
 
 {-| Get list of term names from named operand. -}
 getTerms      :: RopGet c [B.Termname]
-getTerms      use n = getTrees use n >>= Op.termnames
+getTerms      = getMap Op.termnames
 
 getTermPair   :: RopGet c (B.Termname, B.Termname)
 getTermPair   use n = getTermPairs use n >>= getSingleton
 
 {-| Get list of term-name pairs from named operand. -}
 getTermPairs  :: RopGet c [(B.Termname, B.Termname)]
-getTermPairs  use n = getTrees use n >>= Op.termnamePairs
+getTermPairs = getMap Op.termnamePairs
 
 
 

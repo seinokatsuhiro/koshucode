@@ -1,3 +1,4 @@
+{-# LANGUAGE TupleSections #-}
 {-# OPTIONS_GHC -Wall #-}
 
 {-| Bundle of abort reasons -}
@@ -5,7 +6,7 @@
 module Koshucode.Baala.Base.Abort.Reason
 ( AbortReason (..),
   Ab, AbMap,
-  ab, abFrom,
+  abortable, abortableFrom,
   sourcedAbMap,
   (<!!>),
   abortMalformedOperand,
@@ -23,9 +24,9 @@ import qualified Koshucode.Baala.Base.Abort.EachReason as B
 {-| Bundle of abort reasons. -}
 data AbortReason
     = AbortIO                 B.AbortIO
-    | AbortSyntax   [B.Token] B.AbortSyntax
-    | AbortAnalysis [B.Token] B.AbortAnalysis
-    | AbortCalc     [B.Token] B.AbortCalc
+    | AbortSyntax   [(String, B.Token)] B.AbortSyntax
+    | AbortAnalysis [(String, B.Token)] B.AbortAnalysis
+    | AbortCalc     [(String, B.Token)] B.AbortCalc
       deriving (Show, Eq, Ord)
 
 instance B.Name AbortReason where
@@ -63,39 +64,39 @@ type Ab b = Either AbortReason b
 {-| Abortable mapping. -}
 type AbMap b = b -> Ab b
 
-source :: [B.Token] -> [String]
-source = map shorten . concatMap f . reverse where
-    f :: B.Token -> [String]
-    f = B.tokenPosDisplay . B.tokenPos
-
-shorten :: B.Map String
-shorten s | length s > 53 = take 50 s ++ "..."
-          | otherwise     = s
+source :: [(String, B.Token)] -> [String]
+source = concatMap f . reverse where
+    f :: (String, B.Token) -> [String]
+    f (name, token) = B.tokenPosDisplay name $ B.tokenPos token
 
 {-| Push source information when process is aborted.
 
-    @ B.ab src $ do ... @
+    @ B.abortable src $ do ... @
     -}
-ab :: [B.Token] -> B.Map (Ab b)
-ab src = either (Left . pushSource src) Right
+abortable :: String -> [B.Token] -> B.Map (Ab b)
+abortable name src = either (Left . pushSource name src) Right
 
 {-| Same as 'ab' except for using 'B.TokenListing'
     instead of list of 'B.Token'. -}
-abFrom :: (B.TokenListing src) => src -> B.Map (Ab b)
-abFrom src = either (Left . pushSourceFrom src) Right
+abortableFrom :: (B.TokenListing src) => String -> src -> B.Map (Ab b)
+abortableFrom name src = either (Left . pushSourceFrom name src) Right
 
-pushSource :: [B.Token] -> B.Map AbortReason
-pushSource src1 (AbortSyntax   src2 a) = AbortSyntax   (src1 ++ src2) a
-pushSource src1 (AbortAnalysis src2 a) = AbortAnalysis (src1 ++ src2) a
-pushSource src1 (AbortCalc     src2 a) = AbortCalc     (src1 ++ src2) a
-pushSource _ a = a
+pushSource :: String -> [B.Token] -> B.Map AbortReason
+pushSource name src1 abort =
+    case abort of
+      (AbortSyntax   src2 a) -> AbortSyntax   (namedSrc1 ++ src2) a
+      (AbortAnalysis src2 a) -> AbortAnalysis (namedSrc1 ++ src2) a
+      (AbortCalc     src2 a) -> AbortCalc     (namedSrc1 ++ src2) a
+      _ -> abort
+    where
+      namedSrc1 = map (name,) src1
 
-pushSourceFrom :: (B.TokenListing a) => a -> B.Map AbortReason
-pushSourceFrom = pushSource . B.tokenListing
+pushSourceFrom :: (B.TokenListing a) => String -> a -> B.Map AbortReason
+pushSourceFrom name = pushSource name . B.tokenListing
 
 sourcedAbMap :: (a -> Ab b) -> B.Sourced a -> Ab (B.Sourced b)
 sourcedAbMap f (B.Sourced src x) =
-    ab src $ do
+    abortable "-" src $ do
       y <- f x
       Right $ B.Sourced src y
 

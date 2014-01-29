@@ -86,7 +86,7 @@ consSection
     => C.RelmapConsFull c   -- ^ Relmap full constructor
     -> B.Resource           -- ^ Resource name
     -> [C.Clause]           -- ^ Output of 'C.consClause'
-    -> B.Ab (Section c)      -- ^ Result section
+    -> B.Ab (Section c)     -- ^ Result section
 consSection consFull resource xs =
     do _        <-  mapMFor unk    isCUnknown
        _        <-  mapMFor unres  isCUnres
@@ -106,9 +106,10 @@ consSection consFull resource xs =
            , sectionResource  =  resource }
     where
       mapFor  f p = pass f `map`  filter (p . C.clauseBody) xs
-      mapMFor f p = pass f `mapM` filter (p . C.clauseBody) xs
+      mapMFor f p = pass (ab f) `mapM` filter (p . C.clauseBody) xs
       pass f (C.Clause src body) = f (B.front $ B.clauseTokens src) body
       consSec = consSection consFull (B.ResourceText "")
+      ab f toks body = B.abortable "read" toks $ f [] body
 
       -- todo: multiple section name
       section ((C.Clause _ (C.CSection n)) : _) = n
@@ -121,25 +122,25 @@ consSection consFull resource xs =
       impt _ (C.CImport _ (Nothing)) = Right emptySection
       impt _ (C.CImport _ (Just e))  = consSec [e]
 
-      judge toks (C.CJudge q pat xs2) =
+      judge _ (C.CJudge q pat xs2) =
           case C.litJudge q pat (B.tokenTrees xs2) of
             Right j -> Right j
-            Left  a -> abort toks a
+            Left  a -> abort a
 
-      relmap toks (C.CRelmap name half) =
+      relmap _ (C.CRelmap name half) =
           case consFull half of
             Right full -> Right (name, full)
-            Left a     -> abort toks a
+            Left a     -> abort a
 
       assert toks (C.CAssert typ pat opt half) =
           case consFull half of
             Right full -> Right $ C.Assert typ pat opt full toks
-            Left a     -> abort toks a
+            Left a     -> abort a
 
-      unk   ls (C.CUnknown)  = Left $ B.AbortSyntax ls B.ASUnkClause
-      unres _  (C.CUnres ts) = Left $ B.AbortSyntax ts B.ASUnresToken
-      abort ls (B.AbortSyntax ts a) = Left $ B.AbortSyntax (ts ++ ls) a
-      abort _ a = Left a
+      unk   _ (C.CUnknown) = Left $ B.AbortSyntax [] B.ASUnkClause
+      unres _ (C.CUnres _) = Left $ B.AbortSyntax [] B.ASUnresToken
+      abort (B.AbortSyntax _ a) = Left $ B.AbortSyntax [] a
+      abort a = Left a
 
 isCImport, isCExport, isCShort,
   isCRelmap, isCAssert, isCJudge,

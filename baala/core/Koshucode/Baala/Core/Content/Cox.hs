@@ -71,8 +71,8 @@ coxCons :: (C.CContent c) => ([Cop c], [B.Named B.InfixHeight]) -> B.TokenTree -
 coxCons (cops, htab) tree =
     case B.infixToPrefix ht tree of
       Right tree2 -> fmap positioning . construct cops $ B.undouble (== 1) tree2
-      Left  xs    -> Left $ B.AbortSyntax (map snd xs)
-                          $ B.ASAmbInfixes $ map detail xs
+      Left  xs    -> Left $ B.AbortSyntax [] $ B.ASAmbInfixes $ map detail xs
+                     
     where
       ht = B.infixHeight text htab
 
@@ -98,12 +98,12 @@ construct cops = cons where
             B.TreeB 1 _ (B.TreeL (B.TWord _ 0 name) : args) ->
                 case lookup name $ map B.named cops of
                   Just cop   ->  call cop args
-                  Nothing    ->  Left $ B.AbortAnalysis src $ B.AAUnkCop name
+                  Nothing    ->  Left $ B.AbortAnalysis [] $ B.AAUnkCop name
 
             B.TreeB n _ _
                 | n > 1  ->  fmap CoxLit $ C.litContent tree  -- literal composite
 
-            _ -> Left $ B.AbortSyntax src $ B.ASUnkCox ""
+            _ -> Left $ B.AbortSyntax [] $ B.ASUnkCox ""
 
     call (CopLit _ f) = fmap CoxLit . f
     call cop          = fmap (CoxApp cop) . mapM cons
@@ -132,7 +132,7 @@ coxRun
   -> (CoxCons c)   -- ^ Content expression
   -> B.Ab c        -- ^ Calculated literal content
 coxRun h arg pcox = run =<< pcox h where
-    run (B.Sourced src cox) = B.ab src $
+    run (B.Sourced src cox) = B.abortable "calc" src $
         case cox of
           CoxLit c      -> Right c
           CoxTerm _ [p] -> Right $ arg !! p
