@@ -4,11 +4,11 @@
 
 module Koshucode.Baala.Minimal.Restrict
 ( -- * some
-  ropConsSome, relmapSome, relkitSome,
+  consSome, relmapSome, relkitSome,
   -- * none
-  ropConsNone, relmapNone, relkitNone,
+  consNone, relmapNone, relkitNone,
   -- * sub
-  ropConsSub, relmapSub, relkitSub,
+  consSub, relmapSub, relkitSub,
 ) where
 
 import qualified Koshucode.Baala.Base as B
@@ -20,8 +20,8 @@ import qualified Koshucode.Baala.Minimal.Tropashko as Rop
 
 -- ----------------------  some
 
-ropConsSome :: (Ord c) => C.RopCons c
-ropConsSome use = 
+consSome :: (Ord c) => C.RopCons c
+consSome use = 
     do m <- Rop.getRelmap use
        Right $ relmapSome use m
 
@@ -36,8 +36,8 @@ relkitSome = relkitSemi False
 
 -- ----------------------  none
 
-ropConsNone :: (Ord c) => C.RopCons c
-ropConsNone use =
+consNone :: (Ord c) => C.RopCons c
+consNone use =
     do m <- Rop.getRelmap use
        Right $ relmapNone use m
 
@@ -66,8 +66,8 @@ relkitSemi isNull (C.Relkit _ f2) h1 =
 
 -- ----------------------  sub
 
-ropConsSub :: (Ord c) => C.RopCons c
-ropConsSub use =
+consSub :: (Ord c) => C.RopCons c
+consSub use =
     do m <- Rop.getRelmap use
        Right $ relmapSub use m
 

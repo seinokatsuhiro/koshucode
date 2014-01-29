@@ -3,16 +3,16 @@
 module Koshucode.Baala.Vanilla.Rop.Check
 ( 
   -- * check-term
-  ropConsCheckTerm,
+  consCheckTerm,
   relmapCheckTermJust, relmapCheckTermHas, relmapCheckTermBut,
   relkitCheckTermJust, relkitCheckTermHas, relkitCheckTermBut,
 
   -- * duplicate
   -- $duplicate
-  ropConsDuplicate, relmapDuplicate,
+  consDuplicate, relmapDuplicate,
 
   -- * typename
-  ropConsTypename,
+  consTypename,
 ) where
 
 import qualified Data.Map                 as Map
@@ -24,8 +24,8 @@ import qualified Koshucode.Baala.Builtin  as Rop
 
 -- ----------------------  check-term
 
-ropConsCheckTerm :: C.RopCons c
-ropConsCheckTerm use =
+consCheckTerm :: C.RopCons c
+consCheckTerm use =
   do optJust <- Rop.getMaybe Rop.getTerms use "-just"
      optHas  <- Rop.getMaybe Rop.getTerms use "-has"
      optBut  <- Rop.getMaybe Rop.getTerms use "-but"
@@ -68,8 +68,8 @@ relkitCheckTermBy f ns h1
 
 -}  
 
-ropConsDuplicate :: (Ord c) => C.RopCons c
-ropConsDuplicate use =
+consDuplicate :: (Ord c) => C.RopCons c
+consDuplicate use =
   do ns <- Rop.getTerms use "-term"
      Right $ relmapDuplicate use ns
 
@@ -99,8 +99,8 @@ relkitDuplicate ns h1
 -- ----------------------  typename
 
 {-| Get typename. -}
-ropConsTypename :: (C.CContent c) => C.RopCons c
-ropConsTypename use =
+consTypename :: (C.CContent c) => C.RopCons c
+consTypename use =
   do (n, p) <- Rop.getTermPair use "-term"
      Right $ C.relmapCalc use $ relkitTypename (n, p)
 

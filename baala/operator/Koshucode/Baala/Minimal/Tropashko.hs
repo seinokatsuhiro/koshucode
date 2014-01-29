@@ -14,13 +14,13 @@ module Koshucode.Baala.Minimal.Tropashko
   -- $FundamentalOperators
 
   -- * meet (natural join)
-  ropConsMeet,
+  consMeet,
   relmapMeet,
   relkitMeet,
   -- $MeetImplementation
 
   -- * join (inner union)
-  ropConsJoin,
+  consJoin,
   relmapJoin,
   relkitJoin,
 ) where
@@ -33,8 +33,8 @@ import qualified Koshucode.Baala.Builtin as Rop
 
 -- ----------------------  Meet
 
-ropConsMeet :: (Ord c) => C.RopCons c
-ropConsMeet use =
+consMeet :: (Ord c) => C.RopCons c
+consMeet use =
   do m <- Rop.getRelmap use
      Right $ relmapMeet use m
 
@@ -83,8 +83,8 @@ relkitMeet (C.Relkit h2 f2) h1 = Right (C.Relkit h3 f3) where
 
 -- ----------------------  Join
 
-ropConsJoin :: (Ord c) => C.RopCons c
-ropConsJoin use =
+consJoin :: (Ord c) => C.RopCons c
+consJoin use =
     do m <- Rop.getRelmap use
        Right $ relmapJoin use m
 

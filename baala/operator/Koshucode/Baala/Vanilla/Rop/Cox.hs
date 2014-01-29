@@ -5,9 +5,9 @@
 module Koshucode.Baala.Vanilla.Rop.Cox
 (
   -- * add
-  ropConsAdd, relmapAdd, relkitAdd,
+  consAdd, relmapAdd, relkitAdd,
   -- * hold
-  ropConsHold, relmapHold, relkitHold,
+  consHold, relmapHold, relkitHold,
 ) where
 
 import qualified Koshucode.Baala.Base    as B
@@ -17,8 +17,8 @@ import qualified Koshucode.Baala.Builtin as Rop
 
 -- ----------------------  add
 
-ropConsAdd :: (C.CRel c, C.CList c) => C.RopUse c -> B.Ab (C.Relmap c)
-ropConsAdd use =
+consAdd :: (C.CRel c, C.CList c) => C.RopUse c -> B.Ab (C.Relmap c)
+consAdd use =
   do trees <- Rop.getTermTrees use "-term"
      coxes <- mapM (B.namedMapM $ ropCoxCons use) trees
      Right $ relmapAdd use coxes
@@ -41,8 +41,8 @@ ropCoxCons = C.globalCoxCons . C.ropGlobal
 
 -- ----------------------  hold
 
-ropConsHold :: (C.CContent c) => C.RopUse c -> B.Ab (C.Relmap c)
-ropConsHold use = do
+consHold :: (C.CContent c) => C.RopUse c -> B.Ab (C.Relmap c)
+consHold use = do
   tree <- Rop.getTree use "-term"
   cox  <- ropCoxCons use tree
   Right $ relmapHold use True cox

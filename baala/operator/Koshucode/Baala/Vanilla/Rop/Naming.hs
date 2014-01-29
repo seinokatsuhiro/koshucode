@@ -2,11 +2,11 @@
 
 module Koshucode.Baala.Vanilla.Rop.Naming
 ( -- * prefix
-  ropConsPrefix, relmapPrefix, relkitPrefix,
+  consPrefix, relmapPrefix, relkitPrefix,
   -- * unprefix
-  ropConsUnprefix, relmapUnprefix, relkitUnprefix,
+  consUnprefix, relmapUnprefix, relkitUnprefix,
   -- * prefix-change
-  ropConsPrefixChange, relmapPrefixChange, relkitPrefixChange,
+  consPrefixChange, relmapPrefixChange, relkitPrefixChange,
 ) where
 
 import qualified Data.List as List
@@ -18,8 +18,8 @@ import qualified Koshucode.Baala.Builtin as Rop
 
 -- ----------------------  prefix
 
-ropConsPrefix :: C.RopCons c
-ropConsPrefix use =
+consPrefix :: C.RopCons c
+consPrefix use =
     do pre <- Rop.getTerm  use "-prefix"
        ns  <- Rop.getTerms use "-term"
        Right $ relmapPrefix use pre ns
@@ -46,8 +46,8 @@ prefixName _ _ = undefined
 
 -- ----------------------  unprefix
 
-ropConsUnprefix :: C.RopCons c
-ropConsUnprefix use =
+consUnprefix :: C.RopCons c
+consUnprefix use =
     do pre <- Rop.getTerm use "-prefix"
        Right $ relmapUnprefix use pre
 
@@ -72,8 +72,8 @@ unprefixName pre n =
 
 -- ----------------------  prefix-change
 
-ropConsPrefixChange :: C.RopCons c
-ropConsPrefixChange use =
+consPrefixChange :: C.RopCons c
+consPrefixChange use =
     do new <- Rop.getTerm use "-new"
        old <- Rop.getTerm use "-old"
        Right $ relmapPrefixChange use new old

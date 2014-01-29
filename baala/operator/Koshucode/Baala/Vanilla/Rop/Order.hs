@@ -3,9 +3,9 @@
 module Koshucode.Baala.Vanilla.Rop.Order
 ( 
   -- * number
-  ropConsNumber, relmapNumber, relkitNumber,
+  consNumber, relmapNumber, relkitNumber,
   -- * rank
-  ropConsRank,
+  consRank,
   relmapGapRank, relkitGapRank,
   relmapDenseRank, relkitDenseRank,
 ) where
@@ -18,8 +18,8 @@ import qualified Koshucode.Baala.Builtin       as Rop
 
 -- ----------------------  number
 
-ropConsNumber :: (Ord c, C.CDec c) => C.RopCons c
-ropConsNumber use =
+consNumber :: (Ord c, C.CDec c) => C.RopCons c
+consNumber use =
     do n  <- Rop.getTerm use "-term"
        ns <- Rop.getOption [] Rop.getTerms use "-order"
        Right $ relmapNumber use n ns
@@ -44,8 +44,8 @@ relkitRanking ranking n ns h1 = Right $ C.relkit h2 (C.RelkitFull False f2) wher
 
 -- ----------------------  rank
 
-ropConsRank :: (Ord c, C.CDec c) => C.RopCons c
-ropConsRank use =
+consRank :: (Ord c, C.CDec c) => C.RopCons c
+consRank use =
     do n     <- Rop.getTerm   use "-term"
        ns    <- Rop.getTerms  use "-order"
        dense <- Rop.getSwitch use "-dense"

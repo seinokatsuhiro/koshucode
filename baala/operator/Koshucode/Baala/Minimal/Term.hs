@@ -3,11 +3,11 @@
 
 module Koshucode.Baala.Minimal.Term
 ( -- * pick
-  ropConsPick, relmapPick,
+  consPick, relmapPick,
   -- * cut
-  ropConsCut, relmapCut,
+  consCut, relmapCut,
   -- * rename
-  ropConsRename, relmapRename,
+  consRename, relmapRename,
 ) where
 
 import qualified Data.List  as List
@@ -21,8 +21,8 @@ import qualified Koshucode.Baala.Builtin as Rop
 
 -- ----------------------  pick
 
-ropConsPick :: (Ord c) => C.RopCons c
-ropConsPick use =
+consPick :: (Ord c) => C.RopCons c
+consPick use =
   do ns <- Rop.getTerms use "-term"
      Right $ relmapPick use ns
 
@@ -39,8 +39,8 @@ relkitPick ns = relkitArrange B.arrangePick B.arrangePick ns
 
 -- ----------------------  cut
 
-ropConsCut :: (Ord c) => C.RopCons c
-ropConsCut use =
+consCut :: (Ord c) => C.RopCons c
+consCut use =
   do ns <- Rop.getTerms use "-term"
      Right $ relmapCut use ns
 
@@ -76,8 +76,8 @@ relkitArrange ha ba ns h1
 
 -- ----------------------  rename
 
-ropConsRename :: C.RopCons c
-ropConsRename use =
+consRename :: C.RopCons c
+consRename use =
   do np <- Rop.getTermPairs use "-term"
      Right $ relmapRename use np
 

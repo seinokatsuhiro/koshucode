@@ -3,11 +3,11 @@
 module Koshucode.Baala.Vanilla.Rop.Confl
 ( 
   -- * maybe
-  ropConsMaybe, relmapMaybe, relkitMaybe,
+  consMaybe, relmapMaybe, relkitMaybe,
   -- * full
-  ropConsFull, relmapFull, relkitFull,
+  consFull, relmapFull, relkitFull,
   -- * group
-  ropConsGroup, relmapGroup, relkitGroup,
+  consGroup, relmapGroup, relkitGroup,
 ) where
 
 import qualified Koshucode.Baala.Base    as B
@@ -19,8 +19,8 @@ import qualified Koshucode.Baala.Minimal as Rop
 
 -- ----------------------  maybe
 
-ropConsMaybe :: (Ord c, C.CNil c) => C.RopCons c
-ropConsMaybe use =
+consMaybe :: (Ord c, C.CNil c) => C.RopCons c
+consMaybe use =
     do m <- Rop.getRelmap use
        Right $ relmapMaybe use m
 
@@ -62,8 +62,8 @@ relkitMaybe (C.Relkit h2 f2) h1 =
 
 -- ----------------------  full
 
-ropConsFull :: (Ord c, C.CNil c) => C.RopCons c
-ropConsFull use =
+consFull :: (Ord c, C.CNil c) => C.RopCons c
+consFull use =
     do [m1, m2] <- Rop.getRelmaps use
        Right $ relmapFull use m1 m2
 
@@ -93,8 +93,8 @@ relkitFull (C.Relkit h1 f1) (C.Relkit h2 f2) _ =
 
 -- ----------------------  group
 
-ropConsGroup :: (Ord c, C.CRel c) => C.RopCons c
-ropConsGroup use =
+consGroup :: (Ord c, C.CRel c) => C.RopCons c
+consGroup use =
   do n <- Rop.getTerm   use "-term"
      m <- Rop.getRelmap use
      Right $ relmapGroup use n m

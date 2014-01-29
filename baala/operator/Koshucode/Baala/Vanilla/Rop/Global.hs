@@ -3,13 +3,13 @@
 module Koshucode.Baala.Vanilla.Rop.Global
 ( 
   -- * koshu-cop
-  ropConsKoshuCop,
+  consKoshuCop,
   -- * koshu-cop-infix
-  ropConsKoshuCopInfix,
+  consKoshuCopInfix,
   -- * koshu-rop
-  ropConsKoshuRop,
+  consKoshuRop,
   -- * koshu-version
-  ropConsKoshuVersion,
+  consKoshuVersion,
 ) where
 
 import qualified Data.Version                  as V
@@ -21,8 +21,8 @@ import qualified Koshucode.Baala.Builtin       as Rop
 
 -- ----------------------  koshu-cop
 
-ropConsKoshuCop :: C.CContent c => C.RopCons c
-ropConsKoshuCop use =
+consKoshuCop :: C.CContent c => C.RopCons c
+consKoshuCop use =
   do name <- Rop.getTerm use "-name"
      Right $ relmapKoshuCop use name
 
@@ -37,8 +37,8 @@ relkitKoshuCop name C.Global { C.globalCops = (cops, _) } _ =
 
 -- ----------------------  koshu-cop-infix
 
-ropConsKoshuCopInfix :: (C.CContent c) => C.RopCons c
-ropConsKoshuCopInfix use =
+consKoshuCopInfix :: (C.CContent c) => C.RopCons c
+consKoshuCopInfix use =
   do name   <- Rop.getTerm use "-name"
      height <- Rop.getMaybe Rop.getTerm use "-height"
      dir    <- Rop.getMaybe Rop.getTerm use "-dir"
@@ -65,8 +65,8 @@ relkitKoshuCopInfix (name, height, dir) C.Global { C.globalCops = (_, htab) } _ 
 
 -- ----------------------  koshu-rop
 
-ropConsKoshuRop :: (C.CContent c) => C.RopCons c
-ropConsKoshuRop use =
+consKoshuRop :: (C.CContent c) => C.RopCons c
+consKoshuRop use =
   do name <- Rop.getTerm use "-name"
      Right $ relmapKoshuRop use name
 
@@ -83,8 +83,8 @@ relkitKoshuRop name C.Global { C.globalRops = rops } _ =
 --  koshu-version /ver [1:0]
 --  koshu-version /ver [1:0] [1:2]
 
-ropConsKoshuVersion :: (C.CContent c) => C.RopCons c
-ropConsKoshuVersion use =
+consKoshuVersion :: (C.CContent c) => C.RopCons c
+consKoshuVersion use =
   do n   <- Rop.getTerm  use "-term"
      ver <- Rop.getTrees use "-version"
      case ver of

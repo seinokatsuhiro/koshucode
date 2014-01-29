@@ -3,16 +3,16 @@
 module Koshucode.Baala.Vanilla.Rop.Calc
 ( 
   -- * enclose
-  ropConsEnclose, relmapEnclose, relkitEnclose,
+  consEnclose, relmapEnclose, relkitEnclose,
   -- * member
   -- $member
-  ropConsMember, relmapMember, relkitMember,
+  consMember, relmapMember, relkitMember,
   -- * range
-  ropConsRange, relmapRange,
+  consRange, relmapRange,
   -- * RDF
-  ropConsRdf,
+  consRdf,
   -- * size
-  ropConsSize, relmapSize, relkitSize,
+  consSize, relmapSize, relkitSize,
 ) where
 
 import qualified Koshucode.Baala.Base          as B
@@ -25,8 +25,8 @@ import qualified Koshucode.Baala.Vanilla.Type  as Rop
 
 -- ----------------------  enclose
 
-ropConsEnclose :: (C.CRel c) => C.RopCons c
-ropConsEnclose use =
+consEnclose :: (C.CRel c) => C.RopCons c
+consEnclose use =
   do n <- Rop.getTerm use "-term"
      Right $ relmapEnclose use n
 
@@ -60,8 +60,8 @@ relkitEnclose n h1 = Right $ C.relkit h2 (C.RelkitFull False f) where
      add term @\/x@ as member of @\/xs@.
 -}  
 
-ropConsMember :: Rop.VRopCons
-ropConsMember use =
+consMember :: Rop.VRopCons
+consMember use =
   do x    <- Rop.getTerm use "-1"
      xs   <- Rop.getTerm use "-2"
      Right $ relmapMember use x xs
@@ -95,8 +95,8 @@ relkitMemberExpand x xsPos h1 = Right $ C.relkit h2 (C.RelkitOneToMany False f) 
 
 -- ----------------------  range
 
-ropConsRange :: (C.CDec c) => C.RopCons c
-ropConsRange use =
+consRange :: (C.CDec c) => C.RopCons c
+consRange use =
   do term <- Rop.getTerm use "-term"
      low  <- Rop.getInt  use "-from"
      high <- Rop.getInt  use "-to"
@@ -117,8 +117,8 @@ relkitRange n low high h1 = Right $ C.relkit h2 (C.RelkitOneToMany False f) wher
 
 -- ----------------------  RDF
 
-ropConsRdf :: C.RopCons c
-ropConsRdf use =
+consRdf :: C.RopCons c
+consRdf use =
     do sign  <- Rop.getWord  use "-pattern"
        [s,o] <- Rop.getTerms use "-term"
        Right $ C.relmapAlias use $
@@ -129,8 +129,8 @@ ropConsRdf use =
 
 -- ----------------------  size
 
-ropConsSize :: (C.CDec c) => C.RopCons c
-ropConsSize use =
+consSize :: (C.CDec c) => C.RopCons c
+consSize use =
   do n <- Rop.getTerm use "-term"
      Right $ relmapSize use n
 

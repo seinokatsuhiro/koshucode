@@ -3,15 +3,15 @@
 
 module Koshucode.Baala.Minimal.Origin
 ( -- * source
-  ropConsSource,
+  consSource,
   -- * id
-  ropConsId, relmapId,
+  consId, relmapId,
   -- * empty
-  ropConsEmpty, relmapEmpty,
+  consEmpty, relmapEmpty,
   -- * contents
-  ropConsContents, relmapContents,
+  consContents, relmapContents,
   -- * reldee & reldum
-  ropConsReldee, ropConsReldum,
+  consReldee, consReldum,
 ) where
 
 import qualified Koshucode.Baala.Base as B
@@ -20,16 +20,16 @@ import qualified Koshucode.Baala.Builtin as Rop
 
 -- ----------------------  source
 
-ropConsSource :: C.RopCons c
-ropConsSource use =
+consSource :: C.RopCons c
+consSource use =
   do pattern  <- Rop.getWord  use "-pattern"
      terms    <- Rop.getTerms use "-term"
      Right $ C.relmapSource use pattern terms
 
 -- ----------------------  id
 
-ropConsId :: C.RopCons c
-ropConsId use = Right $ relmapId use
+consId :: C.RopCons c
+consId use = Right $ relmapId use
 
 {-| Identity mapping, i.e., do nothing. -}
 relmapId :: C.RopUse c -> C.Relmap c
@@ -37,8 +37,8 @@ relmapId use = C.relmapCalc use $ Right . C.relkitId
 
 -- ----------------------  empty
 
-ropConsEmpty :: C.RopCons c
-ropConsEmpty use = Right $ relmapEmpty use
+consEmpty :: C.RopCons c
+consEmpty use = Right $ relmapEmpty use
 
 relmapEmpty :: C.RopUse c -> C.Relmap c
 relmapEmpty use = C.relmapCalc use relkitEmpty
@@ -49,8 +49,8 @@ relkitEmpty h1 = Right $ C.relkit h1 (C.RelkitConst [])
 
 -- ----------------------  contents
 
-ropConsContents :: C.RopCons c
-ropConsContents use =
+consContents :: C.RopCons c
+consContents use =
     do n <- Rop.getTerm use "-term"
        Right $ relmapContents use n
 
@@ -64,8 +64,8 @@ relkitContents n _ = Right $ C.relkit h2 (C.RelkitFull True f) where
 
 -- ----------------------  reldee & reldum
 
-ropConsReldee, ropConsReldum :: C.RopCons c
-ropConsReldee use = Right $ C.relmapConst use B.reldee
-ropConsReldum use = Right $ C.relmapConst use B.reldum
+consReldee, consReldum :: C.RopCons c
+consReldee use = Right $ C.relmapConst use B.reldee
+consReldum use = Right $ C.relmapConst use B.reldum
 
 
