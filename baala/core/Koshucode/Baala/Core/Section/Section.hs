@@ -109,7 +109,7 @@ consSection consFull resource xs =
       mapMFor f p = pass (ab f) `mapM` filter (p . C.clauseBody) xs
       pass f (C.Clause src body) = f (B.front $ B.clauseTokens src) body
       consSec = consSection consFull (B.ResourceText "")
-      ab f toks body = B.abortable "read" toks $ f [] body
+      ab f toks body = B.abortable "clause" toks $ f [] body
 
       -- todo: multiple section name
       section ((C.Clause _ (C.CSection n)) : _) = n

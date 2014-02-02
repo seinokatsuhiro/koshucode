@@ -92,7 +92,7 @@ relmapConsFull global fulls = consFull where
             subHs = C.halfSubrelmap half
         in case lookup op fulls of
              Nothing   -> Right $ C.RelmapName half op
-             Just cons -> B.abortableFrom "full" half $ do
+             Just cons -> B.abortableFrom "relmap" half $ do
                             subFs <- mapM consFull subHs
                             cons $ C.RopUse global half subFs
 

@@ -49,23 +49,23 @@ tokenPosColumn :: TokenPos -> Int
 tokenPosColumn TokenPos { tokenPosLine = (_, line), tokenPosText = subline }
     = length line - length subline
 
-tokenPosDisplay :: String -> TokenPos -> [String]
+tokenPosDisplay :: String -> TokenPos -> [(String, String)]
 tokenPosDisplay tag p
-    | lno > 0   = [pos, "> " ++ shorten text ++ " (" ++ tag ++ ")"]
+    | lno > 0   = [(pos, ""), ("> " ++ shorten text, tag)]
     | otherwise = []
     where
-      pos   = show lno ++ " " ++ show cno ++ " " ++ res
-      lno   = tokenPosLineNumber p
-      cno   = tokenPosColumn p
-      res   = resourceName $ tokenPosResource p
-      text  = tokenPosText p
+      pos  = show lno ++ " " ++ show cno ++ " " ++ res
+      lno  = tokenPosLineNumber p
+      cno  = tokenPosColumn p
+      res  = resourceName $ tokenPosResource p
+      text = tokenPosText p
 
 tokenPosZero :: TokenPos
 tokenPosZero = TokenPos (ResourceText "") (0, "") ""
 
 shorten :: B.Map String
-shorten s | length s > 45 = take 45 s ++ "..."
-          | otherwise     = s ++ " ..."
+shorten s | length s > 48 = take 45 s ++ "..."
+          | otherwise     = s
 
 -- ----------------------  Resource
 

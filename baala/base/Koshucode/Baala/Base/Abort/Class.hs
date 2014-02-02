@@ -27,7 +27,7 @@ class (Show a) => AbortReasonClass a where
     abortDetail  :: a -> [String]
     abortDetail _ = []
 
-    abortSource  :: a -> [String]
+    abortSource  :: a -> [(String, String)]
     abortSource _ = []
 
 {-| Command name and its arguments. -}
@@ -50,27 +50,33 @@ abort cmd a =
      Sys.exitWith $ Sys.ExitFailure 2
 
 messageLines :: (AbortReasonClass a) => CommandLine -> a -> [String]
-messageLines cmd a = sandwich "" "" xs where
-    xs    = B.renderTable " " $ B.alignTable $ title : rule : rows
-    title = [ B.textCell B.Front "ABORTED    "
-            , B.textCell B.Front $ abortReason a ]
-    rule  = [ B.textRuleCell '-'
-            , B.textRuleCell '-' ]
-    rows  = concatMap row
-            [ ("Detail"  , abortDetail a)
-            , ("Source"  , abortSource a)
-            , ("Command" , cmd)
-            , ("Symbol"  , [bracket $ abortSymbol a])
-            ]
+messageLines cmd a = texts where
+    texts  = sandwich "" "" $ B.renderTable " " tab
+    tab    = B.alignTable $ title : rule : rows
+    title  = [ B.textCell B.Front "ABORTED "
+             , B.textCell B.Front $ abortReason a ]
+    rule   = [r, r, r]
+    r      = B.textRuleCell '-'
+    p text = (text, "")
+    rows   = concatMap row
+             [ ("Detail"  , map p $ abortDetail a)
+             , ("Source"  ,         abortSource a)
+             , ("Command" , map p $ cmd)
+             , ("Symbol"  , map p $ [abortSymbol a])
+             ]
 
+    row :: (String, [(String, String)]) -> [[B.Cell]]
     row (_, []) = []
-    row (name, content)
-        = [[ B.textCell B.Front name
-           , B.textBlockCell B.Front content ]]
+    row (name, xs)
+        = let (codes, tags) = unzip xs
+          in [[ B.textCell B.Front name
+              , B.textBlockCell B.Front codes
+              , B.textBlockCell B.Front $ map paren tags ]]
 
 sandwich :: a -> a -> B.Map [a]
 sandwich open close xs = open : xs ++ [close]
 
-bracket :: B.Map String
-bracket = sandwich '[' ']'
+paren :: B.Map String
+paren "" = ""
+paren text = sandwich '(' ')' $ text
 

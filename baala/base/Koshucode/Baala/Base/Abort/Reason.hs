@@ -53,9 +53,9 @@ instance B.AbortReasonClass AbortReason where
     abortDetail (AbortAnalysis _ a)  =  B.abortDetail a
     abortDetail (AbortCalc     _ a)  =  B.abortDetail a
 
-    abortSource (AbortSyntax   src _) = source src
-    abortSource (AbortAnalysis src _) = source src
-    abortSource (AbortCalc     src _) = source src
+    abortSource (AbortSyntax   s _)  =  source s
+    abortSource (AbortAnalysis s _)  =  source s
+    abortSource (AbortCalc     s _)  =  source s
     abortSource _ = []
 
 {-| Abortable result, i.e., either of right result or abort reason. -}
@@ -64,10 +64,10 @@ type Ab b = Either AbortReason b
 {-| Abortable mapping. -}
 type AbMap b = b -> Ab b
 
-source :: [(String, B.Token)] -> [String]
+source :: [(String, B.Token)] -> [(String, String)]
 source = concatMap f . reverse where
-    f :: (String, B.Token) -> [String]
-    f (name, token) = B.tokenPosDisplay name $ B.tokenPos token
+    f :: (String, B.Token) -> [(String, String)]
+    f (tag, token) = B.tokenPosDisplay tag $ B.tokenPos token
 
 {-| Push source information when process is aborted.
 
