@@ -8,7 +8,6 @@ module Koshucode.Baala.Base.Syntax.Tree
 
   -- * Parsing
   tree, trees,
-  treeG,
   treeWrap,
   untree, untrees,
   undouble,
@@ -43,14 +42,14 @@ instance Functor CodeTree where
     fmap f (TreeB n Nothing xs) = TreeB n Nothing $ map (fmap f) xs
     fmap f (TreeB n (Just (x, y)) xs) = TreeB n (Just (f x, f y)) $ map (fmap f) xs
 
-treeG :: [CodeTree a] -> CodeTree a
-treeG [TreeB 1 _ xs] = treeG xs
-treeG [x] = x
-treeG xs = TreeB 1 Nothing xs
+-- treeG :: [CodeTree a] -> CodeTree a
+-- treeG [TreeB 1 _ xs] = treeG xs
+-- treeG [x] = x
+-- treeG xs = TreeB 1 Nothing xs
 
 {-| Convert a list of elements to a single tree. -}
 tree :: (Show a) => GetParenType a -> [a] -> CodeTree a
-tree p = treeG . trees p
+tree p = treeWrap . trees p
 
 {-| Convert a list of elements to trees. -}
 trees :: (Show a) => GetParenType a -> [a] -> [CodeTree a]

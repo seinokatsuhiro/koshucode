@@ -51,7 +51,7 @@ tokenPosColumn TokenPos { tokenPosLine = (_, line), tokenPosText = subline }
 
 tokenPosDisplay :: String -> TokenPos -> [String]
 tokenPosDisplay tag p
-    | lno > 0   = [pos, "> " ++ shorten text ++ " ... (" ++ tag ++ ")"]
+    | lno > 0   = [pos, "> " ++ shorten text ++ " (" ++ tag ++ ")"]
     | otherwise = []
     where
       pos   = show lno ++ " " ++ show cno ++ " " ++ res
@@ -64,8 +64,8 @@ tokenPosZero :: TokenPos
 tokenPosZero = TokenPos (ResourceText "") (0, "") ""
 
 shorten :: B.Map String
-shorten s | length s > 53 = take 50 s
-          | otherwise     = s
+shorten s | length s > 45 = take 45 s ++ "..."
+          | otherwise     = s ++ " ..."
 
 -- ----------------------  Resource
 

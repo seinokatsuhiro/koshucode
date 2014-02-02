@@ -103,7 +103,7 @@ flatnames :: [B.TokenTree] -> B.Ab [B.Termname]
 flatnames trees =
     case mapM flatname trees of
       Just ns -> Right ns
-      Nothing -> Left $ B.AbortAnalysis [] $ B.AAMissingTermname
+      Nothing -> Left $ B.AbortAnalysis [] $ B.AAReqTermName
 
 
 

@@ -53,15 +53,15 @@ messageLines :: (AbortReasonClass a) => CommandLine -> a -> [String]
 messageLines cmd a = sandwich "" "" xs where
     xs    = B.renderTable " " $ B.alignTable $ title : rule : rows
     title = [ B.textCell B.Front "ABORTED    "
-            , B.textCell B.Front $ bracket $ abortSymbol a ]
+            , B.textCell B.Front $ abortReason a ]
     rule  = [ B.textRuleCell '-'
             , B.textRuleCell '-' ]
     rows  = concatMap row
-            [ ("Class"   , [abortClass a])
-            , ("Reason"  , [abortReason a])
-            , ("Detail"  , abortDetail a)
+            [ ("Detail"  , abortDetail a)
             , ("Source"  , abortSource a)
-            , ("Command" , cmd) ]
+            , ("Command" , cmd)
+            , ("Symbol"  , [bracket $ abortSymbol a])
+            ]
 
     row (_, []) = []
     row (name, content)

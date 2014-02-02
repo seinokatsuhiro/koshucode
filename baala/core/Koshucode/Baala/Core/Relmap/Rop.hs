@@ -93,6 +93,10 @@ data RopUse c = RopUse
     , ropSubrelmap :: [Relmap c]     -- ^ Subrelmaps
     } deriving (Show)
 
+instance B.TokenListing (RopUse c) where
+    tokenListing = B.tokenListing . ropHalf
+
+
 
 -- ----------------------  Relmap
 

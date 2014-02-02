@@ -74,10 +74,11 @@ instance B.AbortReasonClass AbortSyntax where
 
 data AbortAnalysis
     = AACheckTerms       [String]
-    | AAMalformedOperand  String
-    | AAMissingTermname
+    | AAUnexpectedOperand String
+    | AAReqTermName
     | AANoTerms          [String]
     | AAOpeandDuplicate  [String]
+    | AAOperandNotFound
     | AAOpeandUnknown    [String]
     | AAReqBoolean        String
     | AAReqFlatname       String
@@ -92,10 +93,11 @@ instance B.AbortReasonClass AbortAnalysis where
 
     abortReason a = case a of
         (AACheckTerms _)        -> "check-term failed"
-        (AAMalformedOperand _)  -> "Malformed operand"
-        (AAMissingTermname)     -> "Require termname"
+        (AAUnexpectedOperand _) -> "Unexpected operand"
+        (AAReqTermName)         -> "Require termn ame"
         (AANoTerms _)           -> "Input relation does not given terms"
         (AAOpeandDuplicate _)   -> "Dulicate operands"
+        (AAOperandNotFound)      -> "Operand not found"
         (AAOpeandUnknown _)     -> "Unknown operand"
         (AAReqBoolean _)        -> "Require boolean"
         (AAReqFlatname _)       -> "Require flatname"
@@ -106,9 +108,10 @@ instance B.AbortReasonClass AbortAnalysis where
 
     abortDetail a = case a of
         (AACheckTerms ns)       -> [unwords ns]
-        (AAMalformedOperand s)  -> [s]
+        (AAUnexpectedOperand s) -> [s]
         (AANoTerms ns)          -> [unwords ns]
         (AAOpeandDuplicate ns)  -> [unwords ns]
+        (AAOperandNotFound)      -> []
         (AAOpeandUnknown ns)    -> [unwords ns]
         (AAReqBoolean s)        -> [s]
         (AAReqFlatname s)       -> [s]

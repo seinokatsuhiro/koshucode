@@ -91,7 +91,7 @@ consKoshuVersion use =
        []      -> Right $ C.relmapGlobal use $ relkitKoshuVersion n
        [f]     -> check n f f
        [f, t]  -> check n f t
-       _       -> Left $ B.AbortAnalysis [] $ B.AAMalformedOperand ""
+       _       -> Left $ B.abortUnexpOperand ""
   where
     check n f t = do
       from <- C.litContent f
@@ -115,3 +115,4 @@ apiVersion V.Version { V.versionBranch = ver } =
       (a : b : _)     -> [a, b, 0]
       (a : _)         -> [a, 0, 0]
       (_)             -> [0, 0, 0]
+

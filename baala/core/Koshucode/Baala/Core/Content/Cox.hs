@@ -167,7 +167,7 @@ coxRun h arg pcox = run =<< pcox h where
 
      [3. @\[Tree Token\] -> Tree Token@]
         Enclose list of token tree in 'B.TreeB'.
-        See 'B.treeG'.
+        See 'B.treeWrap'.
 
      [4. @Tree Token -> Tree Token@]
         Translate binary operators from infix to prefix.

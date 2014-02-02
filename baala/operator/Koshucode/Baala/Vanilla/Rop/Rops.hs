@@ -37,7 +37,7 @@ vanillaRops = Rop.ropList "vanilla"
     , ( "group /N R",
         Rop.consGroup, C.operandTwo "-term" "-relmap" [] )
     , ( "hold E",
-        Rop.consHold, C.operandList "-term" [] )
+        Rop.consHold, C.operandList "-expr" [] )
     , ( "koshu-cop /N",
         Rop.consKoshuCop, C.operandList "-name" [] )
     , ( "koshu-cop-infix /N [ -height /N ][ -dir /N ]",

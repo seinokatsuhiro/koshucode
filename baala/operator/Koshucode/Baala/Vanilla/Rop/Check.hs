@@ -33,7 +33,7 @@ consCheckTerm use =
        (Just ns, Nothing, Nothing) -> Right $ relmapCheckTermJust use ns
        (Nothing, Just ns, Nothing) -> Right $ relmapCheckTermHas  use ns
        (Nothing, Nothing, Just ns) -> Right $ relmapCheckTermBut  use ns
-       _ -> Left $ B.AbortAnalysis [] $ B.AAMalformedOperand "require one of -just / -has / -but"
+       _ -> Left $ B.abortUnexpOperand "require one of -just / -has / -but"
 
 relmapCheckTermJust :: C.RopUse c -> [B.Termname] -> C.Relmap c
 relmapCheckTermHas  :: C.RopUse c -> [B.Termname] -> C.Relmap c
@@ -101,14 +101,16 @@ relkitDuplicate ns h1
 {-| Get typename. -}
 consTypename :: (C.CContent c) => C.RopCons c
 consTypename use =
-  do (n, p) <- Rop.getTermPair use "-term"
-     Right $ C.relmapCalc use $ relkitTypename (n, p)
+  do np <- Rop.getTermPairs use "-term"
+     Right $ C.relmapCalc use $ relkitTypename np
 
 relkitTypename
-  :: (C.CText c) => (B.Termname, B.Termname) -> B.Relhead -> B.Ab (C.Relkit c)
-relkitTypename (n, p) h1 = Right $ C.relkit h2 (C.RelkitOneToOne False f) where
-    h2    = B.headCons n h1
-    pos   = h1 `B.posFor` [p]
-    f cs1 = let [c] = B.posPick pos cs1
-            in C.putText (C.typename c) : cs1
+  :: (C.CText c) => [(B.Termname, B.Termname)] -> B.Relhead -> B.Ab (C.Relkit c)
+relkitTypename np h1 = Right $ C.relkit h2 (C.RelkitOneToOne False f) where
+    ns    = map fst np
+    ps    = map snd np
+    h2    = B.headAppend ns h1
+    pos   = h1 `B.posFor` ps
+    f cs1 = let cs2 = B.posPick pos cs1
+            in (map (C.putText . C.typename) cs2) ++ cs1
 

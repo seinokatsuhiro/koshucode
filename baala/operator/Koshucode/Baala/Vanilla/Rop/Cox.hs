@@ -31,7 +31,7 @@ relkitAdd :: (C.CRel c, C.CList c) => [B.Named (C.CoxCons c)] -> B.Relhead -> B.
 relkitAdd coxes h1 = Right $ C.relkit h2 (C.RelkitOneToAbOne False f) where
     ns    = map fst coxes   -- term names
     es    = map snd coxes   -- term expressions
-    h2    = B.headFrom ns `B.mappend` h1
+    h2    = B.headAppend ns h1
     f cs1 = do cs2 <- mapM (C.coxRun h1 cs1) es
                Right $ cs2 ++ cs1
 
@@ -42,10 +42,10 @@ ropCoxCons = C.globalCoxCons . C.ropGlobal
 -- ----------------------  hold
 
 consHold :: (C.CContent c) => C.RopUse c -> B.Ab (C.Relmap c)
-consHold use = do
-  tree <- Rop.getTree use "-term"
-  cox  <- ropCoxCons use tree
-  Right $ relmapHold use True cox
+consHold use =
+    do trees <- Rop.getTrees use "-expr"
+       cox   <- ropCoxCons use $ B.treeWrap trees
+       Right $ relmapHold use True cox
 
 relmapHold :: (C.CContent c) => C.RopUse c -> Bool -> C.CoxCons c -> C.Relmap c
 relmapHold use b cox = C.relmapCalc use $ relkitHold b cox

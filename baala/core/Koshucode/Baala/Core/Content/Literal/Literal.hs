@@ -148,7 +148,7 @@ hashAssoc =
 litFlatname :: Literalize String
 litFlatname (B.TreeL (B.TTerm _ [n])) = Right n
 litFlatname (B.TreeL (B.TTerm _ ns))  = Left $ B.AbortAnalysis [] $ B.AAReqFlatname (concat ns)
-litFlatname _ = Left $ B.AbortAnalysis [] $ B.AAMissingTermname
+litFlatname _ = Left $ B.AbortAnalysis [] $ B.AAReqTermName
 
 litList :: (C.CContent c) => Literalize c -> LitTrees [c]
 litList _   [] = Right []
@@ -185,7 +185,7 @@ litNamedTrees = name where
     name (x : xs) = let (c, xs2) = cont xs
                     in do n    <- litFlatname x
                           xs2' <- name xs2
-                          Right $ (n, B.treeG c) : xs2'
+                          Right $ (n, B.treeWrap c) : xs2'
 
     cont :: [B.TokenTree] -> ([B.TokenTree], [B.TokenTree])
     cont xs@(B.TreeL (B.TTerm _ _) : _) = ([], xs)
