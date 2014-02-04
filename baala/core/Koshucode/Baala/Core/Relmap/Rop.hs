@@ -3,20 +3,20 @@
 {-| Implementation of relmap operators. -}
 
 module Koshucode.Baala.Core.Relmap.Rop
-( -- * Global
-  Global (..),
-  RelSelect,
-  globalCommandLine,
-  globalFill,
-  global,
-
-  -- * Rop
+( -- * Rop
   Rop (..),
   RopUse (..),
   RopCons,
 
   -- * Relmap
   Relmap (..),
+
+  -- * Global
+  Global (..),
+  RelSelect,
+  globalCommandLine,
+  globalFill,
+  global,
 ) where
 
 import qualified Data.Monoid                            as D
@@ -28,55 +28,15 @@ import qualified Koshucode.Baala.Core.Relmap.Operand    as C
 import qualified Koshucode.Baala.Core.Relmap.Relkit     as C
 
 
--- ----------------------  Global
-
-data Global c = Global
-      { globalVersion :: D.Version
-      , globalRops    :: [Rop c]
-      , globalCops    :: ([C.Cop c], [B.Named B.InfixHeight])
-      , globalCoxCons :: B.TokenTree -> B.Ab (C.CoxCons c)
-      , globalProgram :: String
-      , globalArgs    :: [String]
-      , globalJudges  :: [B.Judge c]
-      , globalSelect  :: RelSelect c
-      }
-
-instance Show (Global c) where
-    show Global { globalRops = rops, globalCops = (cops, _) }
-        = let nr = length rops
-              nc = length cops
-          in "Global (" ++ show nr ++ " rops, " ++ show nc ++ " cops)"
-
-{-| Relation selector -}
-type RelSelect c = B.JudgePattern -> [String] -> B.Rel c
-
-globalCommandLine :: Global c -> [String]
-globalCommandLine Global { globalProgram = prog, globalArgs = args }
-    = prog : args
-
-globalFill :: (C.CContent c) => B.Map (Global c)
-globalFill g = g { globalCoxCons = C.coxCons $ globalCops g }
-
-global :: Global c
-global = Global { globalVersion = D.Version [] []
-                , globalRops    = []
-                , globalCops    = ([], [])
-                , globalCoxCons = undefined
-                , globalProgram = ""
-                , globalArgs    = []
-                , globalJudges  = []
-                , globalSelect  = \_ _ -> B.reldee }
-
-
 -- ----------------------  Rop
 
 {-| Implementation of relmap operator -}
 data Rop c = Rop
-    { ropName       :: String           -- ^ Operator name
-    , ropGroup      :: String           -- ^ Operator group
-    , ropFullSorter :: C.RopFullSorter  -- ^ Operand sorter
-    , ropCons       :: RopCons c        -- ^ Constructor of operator
-    , ropUsage      :: String           -- ^ Usage of operator
+    { ropName     :: String           -- ^ Operator name
+    , ropGroup    :: String           -- ^ Operator group
+    , ropSorter   :: C.RopFullSorter  -- ^ Operand sorter
+    , ropCons     :: RopCons c        -- ^ Constructor of operator
+    , ropUsage    :: String           -- ^ Usage of operator
     }
 
 instance Show (Rop c) where
@@ -139,7 +99,7 @@ instance D.Monoid (Relmap c) where
     mappend = RelmapAppend
 
 halfid :: C.HalfRelmap
-halfid = C.HalfRelmap "id" (B.tokenWord "id") [("operand", [])] []
+halfid = C.HalfRelmap (B.tokenWord "id") [("operand", [])] [] "id"
 
 instance B.Name (Relmap c) where
     name (RelmapSource _ _ _)   = "source"
@@ -179,4 +139,45 @@ relmapHalf = half where
     half (RelmapGlobal h _)     = Just h
     half (RelmapAppend m1 _)    = relmapHalf m1
     half (RelmapName _ _)       = Nothing
+
+
+
+-- ----------------------  Global
+
+data Global c = Global
+      { globalVersion :: D.Version
+      , globalRops    :: [Rop c]
+      , globalCops    :: ([C.Cop c], [B.Named B.InfixHeight])
+      , globalCoxCons :: B.TokenTree -> B.Ab (C.CoxCons c)
+      , globalProgram :: String
+      , globalArgs    :: [String]
+      , globalJudges  :: [B.Judge c]
+      , globalSelect  :: RelSelect c
+      }
+
+instance Show (Global c) where
+    show Global { globalRops = rops, globalCops = (cops, _) }
+        = let nr = length rops
+              nc = length cops
+          in "Global (" ++ show nr ++ " rops, " ++ show nc ++ " cops)"
+
+{-| Relation selector -}
+type RelSelect c = B.JudgePattern -> [String] -> B.Rel c
+
+globalCommandLine :: Global c -> [String]
+globalCommandLine Global { globalProgram = prog, globalArgs = args }
+    = prog : args
+
+globalFill :: (C.CContent c) => B.Map (Global c)
+globalFill g = g { globalCoxCons = C.coxCons $ globalCops g }
+
+global :: Global c
+global = Global { globalVersion = D.Version [] []
+                , globalRops    = []
+                , globalCops    = ([], [])
+                , globalCoxCons = undefined
+                , globalProgram = ""
+                , globalArgs    = []
+                , globalJudges  = []
+                , globalSelect  = \_ _ -> B.reldee }
 

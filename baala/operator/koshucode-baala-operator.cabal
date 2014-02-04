@@ -48,7 +48,7 @@ library
   exposed-modules:
         Koshucode.Baala.Builtin
         Koshucode.Baala.Builtin.Get
-        Koshucode.Baala.Builtin.Operator
+        Koshucode.Baala.Builtin.Rop
         Koshucode.Baala.Builtin.Term
 
         Koshucode.Baala.Minimal

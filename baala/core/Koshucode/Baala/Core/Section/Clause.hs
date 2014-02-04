@@ -126,7 +126,7 @@ consPreclause' src = dispatch $ B.clauseTokens src where
           Right (opt, _, expr)  ->  a expr opt
           Left  expr            ->  a expr []
         where a expr opt =
-                  let opt' = C.sortOperand $ B.tokenTrees opt
+                  let opt' = C.ropOperandAssoc $ B.tokenTrees opt
                   in c1 $ TAssert t p opt' expr
     ass _ _               =  unk
 

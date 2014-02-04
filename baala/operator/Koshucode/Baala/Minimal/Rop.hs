@@ -17,21 +17,21 @@ import qualified Koshucode.Baala.Minimal.Tropashko as Rop
 {-| Minimal implementations of relmap operators. -}
 minimalRops :: (Ord c) => [C.Rop c]
 minimalRops = Builtin.ropList "minimal"  -- GROUP
-    [ ( "contents /N"      , Rop.consContents , C.operandList "-term" [] )
-    , ( "cut /N ..."       , Rop.consCut      , C.operandList "-term" [] )
-    , ( "empty"            , Rop.consEmpty    , C.operandNone [] )
-    , ( "id"               , Rop.consId       , C.operandNone [] )
-    , ( "join R"           , Rop.consJoin     , C.operandOne  "-relmap" [] )
-    , ( "meet R"           , Rop.consMeet     , C.operandOne  "-relmap" [] )
-    , ( "none R"           , Rop.consNone     , C.operandOne  "-relmap" [] )
-    , ( "pick /N ..."      , Rop.consPick     , C.operandList "-term"   [] )
-    , ( "reldee"           , Rop.consReldee   , C.operandNone [] )
-    , ( "reldum"           , Rop.consReldum   , C.operandNone [] )
-    , ( "rename /N /N ..." , Rop.consRename   , C.operandList "-term"   [] )
-    , ( "some R"           , Rop.consSome     , C.operandOne  "-relmap" [] )
-    , ( "source P /N ..."  , Rop.consSource   , C.operandOneList "-pattern" "-term" [] )
-    , ( "sub R"            , Rop.consSub      , C.operandOne  "-relmap" [] )
-    --   SYNOPSIS            CONSTRUCTOR        OPERAND
+    [ ( "contents /N"      , Rop.consContents , C.sortList "-term" [] )
+    , ( "cut /P ..."       , Rop.consCut      , C.sortList "-term" [] )
+    , ( "empty"            , Rop.consEmpty    , C.sortNone [] )
+    , ( "id"               , Rop.consId       , C.sortNone [] )
+    , ( "join R"           , Rop.consJoin     , C.sortOne  "-relmap" [] )
+    , ( "meet R"           , Rop.consMeet     , C.sortOne  "-relmap" [] )
+    , ( "none R"           , Rop.consNone     , C.sortOne  "-relmap" [] )
+    , ( "pick /P ..."      , Rop.consPick     , C.sortList "-term"   [] )
+    , ( "reldee"           , Rop.consReldee   , C.sortNone [] )
+    , ( "reldum"           , Rop.consReldum   , C.sortNone [] )
+    , ( "rename /N /P ..." , Rop.consRename   , C.sortList "-term"   [] )
+    , ( "some R"           , Rop.consSome     , C.sortOne  "-relmap" [] )
+    , ( "source P /T ..."  , Rop.consSource   , C.sortOneList "-pattern" "-term" [] )
+    , ( "sub R"            , Rop.consSub      , C.sortOne  "-relmap" [] )
+    --   USAGE               CONSTRUCTOR        OPERAND
     ]
 
 -- ----------------------

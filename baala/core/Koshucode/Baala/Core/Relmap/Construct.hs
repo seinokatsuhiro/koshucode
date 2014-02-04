@@ -51,29 +51,30 @@ relmapConsHalf halfs = consHalf where
     consHalf trees =
         B.abortable "half" (B.front $ B.untrees trees) $
          case B.divideTreesByBar trees of
-           [(B.TreeL tok@(B.TWord _ 0 _) : opd)] -> find tok opd
+           [(B.TreeL tok@(B.TWord _ 0 _) : od)] -> find tok od
            [[B.TreeB 1 _ xs]] -> consHalf xs
            [[B.TreeB _ _ _]]  -> Left $ B.AbortAnalysis [] $ B.AAUndefined "bracket"
            [_]                -> Left $ B.AbortAnalysis [] $ B.AAUnkRelmap "?"
-           tree2              -> find (B.tokenWord "|") $ map B.treeWrap tree2
+           tree2              -> find (B.tokenWord "append") $ map B.treeWrap tree2
 
     find :: B.Token -> [B.TokenTree] -> B.Ab C.HalfRelmap
-    find tok opd =
-        case lookup (B.tokenContent tok) halfs of
-          Nothing -> Right $ half "" tok opd []
-          Just (usage, sorter) -> do sorted <- sorter opd
-                                     subrelmap $ half usage tok opd sorted
+    find op trees =
+        case lookup (B.tokenContent op) halfs of
+          Nothing -> Right $ half op trees [] "<reference>"
+          Just (usage, operandSorter) ->
+              do sorted <- operandSorter trees
+                 subrelmap $ half op trees sorted usage
 
-    half :: String -> B.Token -> [B.TokenTree] -> [B.Named [B.TokenTree]] -> C.HalfRelmap
-    half usage tok opd sorted =
-        C.HalfRelmap usage tok (("operand", opd) : sorted) []
+    half :: B.Token -> [B.TokenTree] -> [B.Named [B.TokenTree]] -> String -> C.HalfRelmap
+    half op trees sorted usage =
+        C.HalfRelmap op (("operand", trees) : sorted) [] usage
 
     subrelmap :: B.AbMap C.HalfRelmap
-    subrelmap h@C.HalfRelmap { C.halfOperand = opd } =
-        case lookup "-relmap" opd of
+    subrelmap h@C.HalfRelmap { C.halfOperand = od } =
+        case lookup "-relmap" od of
           Nothing    -> Right h   -- no subrelmaps
-          Just trees -> do subHs <- mapM (consHalf . B.singleton) trees
-                           Right $ h { C.halfSubrelmap = subHs }
+          Just trees -> do subs <- mapM (consHalf . B.singleton) trees
+                           Right $ h { C.halfSubrelmap = subs }
 
 
 -- ----------------------  Full construction

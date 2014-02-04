@@ -25,49 +25,49 @@ vanillaRops = Rop.ropList "vanilla"
     --  SYNOPSIS,
     --  CONSTRUCTOR, OPERAND
     [ ( "add /N E ...",
-        Rop.consAdd, C.operandList "-term" [] )
+        Rop.consAdd, C.sortList "-term" [] )
     , ( "check-term [ -just /N ... | -has /N ... | -but /N ... ]",
-        Rop.consCheckTerm, C.operandNone ["-just", "-has", "-but"] )
+        Rop.consCheckTerm, C.sortNone ["-just", "-has", "-but"] )
     , ( "duplicate /N ...",
-        Rop.consDuplicate, C.operandList "-term" [] )
+        Rop.consDuplicate, C.sortList "-term" [] )
     , ( "enclose /N",
-        Rop.consEnclose, C.operandOne "-term" [] )
+        Rop.consEnclose, C.sortOne "-term" [] )
     , ( "full R ...",
-        Rop.consFull, C.operandOne "-relmap" [] )
+        Rop.consFull, C.sortOne "-relmap" [] )
     , ( "group /N R",
-        Rop.consGroup, C.operandTwo "-term" "-relmap" [] )
+        Rop.consGroup, C.sortTwo "-term" "-relmap" [] )
     , ( "hold E",
-        Rop.consHold, C.operandList "-expr" [] )
+        Rop.consHold, C.sortList "-expr" [] )
     , ( "koshu-cop /N",
-        Rop.consKoshuCop, C.operandList "-name" [] )
+        Rop.consKoshuCop, C.sortList "-name" [] )
     , ( "koshu-cop-infix /N [ -height /N ][ -dir /N ]",
-        Rop.consKoshuCopInfix, C.operandOne "-name" ["-height", "-dir"] )
+        Rop.consKoshuCopInfix, C.sortOne "-name" ["-height", "-dir"] )
     , ( "koshu-rop /N",
-        Rop.consKoshuRop, C.operandList "-name" [] )
+        Rop.consKoshuRop, C.sortList "-name" [] )
     , ( "koshu-version /N",
-        Rop.consKoshuVersion, C.operandOneList "-term" "-version" [] )
+        Rop.consKoshuVersion, C.sortOneList "-term" "-version" [] )
     , ( "maybe R",
-        Rop.consMaybe, C.operandOne "-relmap" [] )
+        Rop.consMaybe, C.sortOne "-relmap" [] )
     , ( "member /N /N",
-        Rop.consMember, C.operandEnum ["-1", "-2"] [] )
+        Rop.consMember, C.sortEnum ["-1", "-2"] [] )
     , ( "number /N -order /N ...",
-        Rop.consNumber, C.operandOne "-term" ["-order"] )
+        Rop.consNumber, C.sortOne "-term" ["-order"] )
     , ( "prefix /P /N ...",
-        Rop.consPrefix, C.operandOneList "-prefix" "-term" [] )
+        Rop.consPrefix, C.sortOneList "-prefix" "-term" [] )
     , ( "prefix-change /P /Q",
-        Rop.consPrefixChange, C.operandTwo "-new" "-old" [] )
+        Rop.consPrefixChange, C.sortTwo "-new" "-old" [] )
     , ( "rank /N -order /N ...",
-        Rop.consRank, C.operandOne "-term" ["-order", "-dense"] )
+        Rop.consRank, C.sortOne "-term" ["-order", "-dense"] )
     , ( "range /N -from E -to E",
-        Rop.consRange, C.operandOne "-term" ["-from", "-to"] )
+        Rop.consRange, C.sortOne "-term" ["-from", "-to"] )
     , ( "rdf P /S /O",
-        Rop.consRdf, C.operandOneList "-pattern" "-term" [] )
+        Rop.consRdf, C.sortOneList "-pattern" "-term" [] )
     , ( "size /N",
-        Rop.consSize, C.operandOne "-term" [] )
+        Rop.consSize, C.sortOne "-term" [] )
     , ( "typename /N /P ...",
-        Rop.consTypename, C.operandList "-term" [] )
+        Rop.consTypename, C.sortList "-term" [] )
     , ( "unprefix /P",
-        Rop.consUnprefix, C.operandOne "-prefix" [] )
+        Rop.consUnprefix, C.sortOne "-prefix" [] )
     ]
 
 -- ----------------------

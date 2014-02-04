@@ -16,10 +16,10 @@ import qualified Koshucode.Baala.Core.Relmap.Operand as C
     and (full) 'Relmap' is constructed from 'HalfRelmap'. -}
 
 data HalfRelmap = HalfRelmap
-    { halfUsage     :: String        -- ^ Usages description
-    , halfOpToken   :: B.Token       -- ^ Operator name
-    , halfOperand   :: C.RopAssoc    -- ^ Operand of relmap operation
-    , halfSubrelmap :: [HalfRelmap]  -- ^ Subrelmaps in the operand
+    { halfOpToken   :: B.Token            -- ^ Operator token
+    , halfOperand   :: C.RopOperandAssoc  -- ^ Operand of relmap operation
+    , halfSubrelmap :: [HalfRelmap]       -- ^ Subrelmaps in the operand
+    , halfUsage     :: String             -- ^ Usages description
     } deriving (Show, G.Data, G.Typeable)
 
 instance B.Pretty HalfRelmap where

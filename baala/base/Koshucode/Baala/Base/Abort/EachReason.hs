@@ -77,9 +77,7 @@ data AbortAnalysis
     | AAUnexpectedOperand String
     | AAReqTermName
     | AANoTerms          [String]
-    | AAOpeandDuplicate  [String]
     | AAOperandNotFound
-    | AAOpeandUnknown    [String]
     | AAReqBoolean        String
     | AAReqFlatname       String
     | AAReqNewTerms      [String]
@@ -96,9 +94,7 @@ instance B.AbortReasonClass AbortAnalysis where
         (AAUnexpectedOperand _) -> "Unexpected operand"
         (AAReqTermName)         -> "Require termn ame"
         (AANoTerms _)           -> "Input relation does not given terms"
-        (AAOpeandDuplicate _)   -> "Dulicate operands"
-        (AAOperandNotFound)      -> "Operand not found"
-        (AAOpeandUnknown _)     -> "Unknown operand"
+        (AAOperandNotFound)     -> "Operand not found"
         (AAReqBoolean _)        -> "Require boolean"
         (AAReqFlatname _)       -> "Require flatname"
         (AAReqNewTerms _)       -> "Require new term"
@@ -110,9 +106,7 @@ instance B.AbortReasonClass AbortAnalysis where
         (AACheckTerms ns)       -> [unwords ns]
         (AAUnexpectedOperand s) -> [s]
         (AANoTerms ns)          -> [unwords ns]
-        (AAOpeandDuplicate ns)  -> [unwords ns]
-        (AAOperandNotFound)      -> []
-        (AAOpeandUnknown ns)    -> [unwords ns]
+        (AAOperandNotFound)     -> []
         (AAReqBoolean s)        -> [s]
         (AAReqFlatname s)       -> [s]
         (AAReqNewTerms ns)      -> [unwords ns]
