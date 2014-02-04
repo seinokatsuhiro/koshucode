@@ -105,8 +105,7 @@ sym_link () {
 }
 
 unregister () {
-    echo "Unregistering $1"
-    ghc-pkg unregister koshucode-baala-$1
+    cabal_cmd ghc-pkg unregister koshucode-baala-$1
 }
 
 directories () {
