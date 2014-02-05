@@ -84,6 +84,7 @@ data AbortAnalysis
     | AAUndefined         String
     | AAUnkCop String
     | AAUnkRelmap String
+    | AAUnrecTermIO      [String] [Bool]
       deriving (Show, Eq, Ord)
 
 instance B.AbortReasonClass AbortAnalysis where
@@ -98,6 +99,7 @@ instance B.AbortReasonClass AbortAnalysis where
         (AAReqBoolean _)        -> "Require boolean"
         (AAReqFlatname _)       -> "Require flatname"
         (AAReqNewTerms _)       -> "Require new term"
+        (AAUnrecTermIO _ _)     -> "Unrecognized term I/O"
         (AAUndefined _)         -> "Undefined"
         (AAUnkCop _)            -> "Unknown content operator"
         (AAUnkRelmap _)         -> "Unknown relmap operator"
@@ -113,7 +115,15 @@ instance B.AbortReasonClass AbortAnalysis where
         (AAUndefined x)         -> [x]
         (AAUnkCop op)           -> [op]
         (AAUnkRelmap op)        -> [op]
+        (AAUnrecTermIO ns here) -> [termIOText ns here]
         _                       -> []
+
+termIOText :: [String] -> [Bool] -> String
+termIOText ns here = unwords $ map termIO $ zip ns here
+
+termIO :: (String, Bool) -> String
+termIO (n, True)  = n ++ " in"
+termIO (n, False) = n ++ " out"
 
 
 -- ----------------------  Calc Error

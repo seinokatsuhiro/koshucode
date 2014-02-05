@@ -43,9 +43,7 @@ relmapMeet :: (Ord c)
     => C.RopUse c     -- ^ Source infomation
     -> C.Relmap c     -- ^ Subrelmap of meet operator
     -> C.Relmap c     -- ^ Relmap of meet operator
-relmapMeet use m = C.relmapConfl use fy [m] where
-    fy [r2] = relkitMeet r2
-    fy _    = B.bug
+relmapMeet use = C.relmapBinary use relkitMeet
 
 {-| Meet two relations. -}
 relkitMeet
@@ -94,9 +92,7 @@ relmapJoin
     => C.RopUse c     -- ^ Source infomation
     -> C.Relmap c     -- ^ Subrelmap of join operator
     -> C.Relmap c     -- ^ Relmap of join operator
-relmapJoin use m = C.relmapConfl use fy [m] where
-    fy [r2] = relkitJoin r2
-    fy _    = B.bug
+relmapJoin use = C.relmapBinary use relkitJoin
 
 {-| Join two relations. -}
 relkitJoin

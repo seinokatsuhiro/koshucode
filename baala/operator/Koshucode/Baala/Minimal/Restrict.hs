@@ -26,9 +26,7 @@ consSome use =
        Right $ relmapSome use m
 
 relmapSome :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
-relmapSome use m = C.relmapConfl use fy [m] where
-    fy [r2] = relkitSome r2
-    fy _    = B.bug
+relmapSome use = C.relmapBinary use relkitSome
 
 relkitSome :: (Ord c) => C.Relkit c -> B.Relhead -> B.Ab (C.Relkit c)
 relkitSome = relkitSemi False
@@ -42,9 +40,7 @@ consNone use =
        Right $ relmapNone use m
 
 relmapNone :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
-relmapNone use m = C.relmapConfl use fy [m] where
-    fy [r2] = relkitNone r2
-    fy _    = B.bug
+relmapNone use = C.relmapBinary use relkitNone
 
 relkitNone :: (Ord c) => C.Relkit c -> B.Relhead -> B.Ab (C.Relkit c)
 relkitNone = relkitSemi True
@@ -72,9 +68,7 @@ consSub use =
        Right $ relmapSub use m
 
 relmapSub :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
-relmapSub use m = C.relmapConfl use fy [m] where
-    fy [r2] = relkitSub r2
-    fy _    = B.bug
+relmapSub use = C.relmapBinary use relkitSub
 
 relkitSub
     :: (Ord c)

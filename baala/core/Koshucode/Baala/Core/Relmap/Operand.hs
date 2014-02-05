@@ -20,6 +20,7 @@ module Koshucode.Baala.Core.Relmap.Operand
   sortOne,
   sortTwo,
   sortThree,
+  sortFour,
   sortOneList,
 ) where
 
@@ -51,8 +52,8 @@ ropFullSorter (trunkSorter, trunkNames, branchNames) trees = sorted where
     exists = not . null
 
     sorted :: B.Ab RopOperandAssoc
-    sorted | exists dup  = Left $ B.abortUnexpOperand $ "Duplicate " ++ unwords dup
-           | exists unk  = Left $ B.abortUnexpOperand $ "Unknown "   ++ unwords unk
+    sorted | exists dup  = Left $ B.abortOperand $ "Duplicate " ++ unwords dup
+           | exists unk  = Left $ B.abortOperand $ "Unknown "   ++ unwords unk
            | exists wrap = Right assoc
            | otherwise   = trunkSorter assoc
 
@@ -118,24 +119,29 @@ sortList a ns = (by f, [a], ns) where
 sortOne :: String -> [String] -> RopOperandSorter
 sortOne a ns = (by f, [a], ns) where
     f [x] = Right [ (a, [x]) ]
-    f _   = Left $ B.abortUnexpOperand "Require one operand"
+    f _   = Left $ B.abortOperand "Require one operand"
 
 {-| Operand sorter for two-element trunk. -}
 sortTwo :: String -> String -> [String] -> RopOperandSorter
 sortTwo a b ns = (by f, [a,b], ns) where
     f [x,y] = Right [ (a, [x]), (b, [y]) ]
-    f _     = Left $ B.abortUnexpOperand "Require two operands"
+    f _     = Left $ B.abortOperand "Require two operands"
 
 sortThree :: String -> String -> String -> [String] -> RopOperandSorter
 sortThree a b c ns = (by f, [a,b,c], ns) where
     f [x,y,z] = Right [ (a, [x]), (b, [y]), (c, [z]) ]
-    f _       = Left $ B.abortUnexpOperand "Require three operands"
+    f _       = Left $ B.abortOperand "Require three operands"
+
+sortFour :: String -> String -> String -> String -> [String] -> RopOperandSorter
+sortFour a b c d ns = (by f, [a,b,c,d], ns) where
+    f [x1,x2,x3,x4] = Right [ (a, [x1]), (b, [x2]), (c, [x3]), (d, [x4]) ]
+    f _             = Left $ B.abortOperand "Require four operands"
 
 {-| Operand sorter for one-and-multiple-element trunk. -}
 sortOneList :: String -> String -> [String] -> RopOperandSorter
 sortOneList a b ns = (by f, [a,b], ns) where
     f (x:xs) = Right [ (a, [x]), (b, xs) ]
-    f _      = Left $ B.abortUnexpOperand "Require operands"
+    f _      = Left $ B.abortOperand "Require operands"
 
 {-| Give a name to unnamed operand. -}
 by :: RopFullSorter -> RopTrunkSorter

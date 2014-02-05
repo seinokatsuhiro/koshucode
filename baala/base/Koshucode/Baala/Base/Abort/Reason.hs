@@ -9,7 +9,8 @@ module Koshucode.Baala.Base.Abort.Reason
   abortable, abortableFrom,
   sourcedAbMap,
   (<!!>),
-  abortUnexpOperand,
+  abortOperand,
+  abortTermIO,
   abortNotFound,
   bug,
 ) where
@@ -107,8 +108,11 @@ sourcedAbMap f (B.Sourced src x) =
     loop ((k,v) : kvs) | k == key  = Right v
                        | otherwise = loop kvs
 
-abortUnexpOperand :: String -> AbortReason
-abortUnexpOperand = AbortAnalysis [] . B.AAUnexpectedOperand
+abortOperand :: String -> AbortReason
+abortOperand = AbortAnalysis [] . B.AAUnexpectedOperand
+
+abortTermIO :: [String] -> [Bool] -> AbortReason
+abortTermIO ns here = AbortAnalysis [] $ B.AAUnrecTermIO ns here
 
 abortNotFound :: String -> AbortReason
 abortNotFound = AbortCalc [] . B.ACNotFound

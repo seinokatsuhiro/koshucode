@@ -9,6 +9,7 @@ module Koshucode.Baala.Base.Token.Token
   Termname,
   Termname2,
   Termname3,
+  Termname4,
   tokenWord,
 
   -- * Selectors
@@ -55,6 +56,7 @@ data Token
 type Termname  = String
 type Termname2 = (String, String)
 type Termname3 = (String, String, String)
+type Termname4 = (String, String, String, String)
 
 instance B.Name Token where
     name (TTerm   _ ns) = concat ns

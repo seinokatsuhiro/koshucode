@@ -8,6 +8,7 @@ module Koshucode.Baala.Core.Relmap.Relkit
   RelkitCore (..),
   RelmapCalcRelkit,
   RelmapConflRelkit,
+  RelmapBinaryRelkit,
 
   -- * Constructor
   relkit,
@@ -75,13 +76,15 @@ instance Show (RelkitCore c) where
     show (RelkitAppend      x y)  =  "RelkitAppend " ++ show [x,y]
     show (RelkitUnion      _ xs)  =  "RelkitUnion " ++ show xs
 
+type RelmapCalcRelkit c
+    =  B.Relhead        -- ^ Heading of input relation
+    -> B.Ab (Relkit c)   -- ^ Relfier for output relation
+
 type RelmapConflRelkit c
     =  [(Relkit c)]      -- ^ Relfiers of subrelmaps
     -> RelmapCalcRelkit c
 
-type RelmapCalcRelkit c
-    =  B.Relhead        -- ^ Heading of input relation
-    -> B.Ab (Relkit c)   -- ^ Relfier for output relation
+type RelmapBinaryRelkit c = Relkit c -> RelmapCalcRelkit c
 
 
 

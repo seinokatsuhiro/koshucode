@@ -25,9 +25,7 @@ consMaybe use =
        Right $ relmapMaybe use m
 
 relmapMaybe :: (Ord c, C.CNil c) => C.RopUse c -> B.Map (C.Relmap c)
-relmapMaybe use m = C.relmapConfl use fy [m] where
-    fy [r2] = relkitMaybe r2
-    fy _    = B.bug
+relmapMaybe use = C.relmapBinary use relkitMaybe
 
 relkitMaybe :: (Ord c, C.CNil c) => C.Relkit c -> B.Relhead -> B.Ab (C.Relkit c)
 relkitMaybe (C.Relkit h2 f2) h1 =
@@ -100,9 +98,7 @@ consGroup use =
      Right $ relmapGroup use n m
 
 relmapGroup :: (Ord c, C.CRel c) => C.RopUse c -> String -> B.Map (C.Relmap c)
-relmapGroup use n m = C.relmapConfl use fy [m] where
-    fy [r2] = relkitGroup n r2
-    fy _    = B.bug
+relmapGroup use n = C.relmapBinary use $ relkitGroup n
 
 {-| Grouping relation. -}
 relkitGroup :: (Ord c, C.CRel c) => String -> C.Relkit c -> B.Relhead -> B.Ab (C.Relkit c)

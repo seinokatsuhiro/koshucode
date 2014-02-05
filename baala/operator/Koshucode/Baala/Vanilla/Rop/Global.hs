@@ -91,7 +91,7 @@ consKoshuVersion use =
        []      -> Right $ C.relmapGlobal use $ relkitKoshuVersion n
        [f]     -> check n f f
        [f, t]  -> check n f t
-       _       -> Left $ B.abortUnexpOperand ""
+       _       -> Left $ B.abortOperand ""
   where
     check n f t = do
       from <- C.litContent f

@@ -96,7 +96,7 @@ getRelmap u =
        trees <- getTrees   u "-relmap"
        abortableGetTrees trees $ case ms of
          [m] -> Right m
-         _   -> Left $ B.abortUnexpOperand "Require one relmap"
+         _   -> Left $ B.abortOperand "Require one relmap"
 
 {-| Get relmaps from operator use. -}
 getRelmaps :: C.RopUse c -> B.Ab [C.Relmap c]
@@ -109,7 +109,7 @@ getRelmaps = Right . C.ropSubrelmap
 getTerm :: RopGet c B.Termname
 getTerm = getAbortable get where
     get [x] = Op.termname x
-    get _   = Left $ B.abortUnexpOperand "Require one term"
+    get _   = Left $ B.abortOperand "Require one term"
 
 {-| Get list of term names from named operand. -}
 getTerms :: RopGet c [B.Termname]
@@ -128,7 +128,7 @@ getTermTrees = getAbortable Op.termTreePairs
 getSwitch :: C.RopUse c -> String -> B.Ab Bool
 getSwitch u name = getAbortableOption False get u name where
     get [] = Right True
-    get _  = Left $ B.abortUnexpOperand $ "Just type only " ++ name
+    get _  = Left $ B.abortOperand $ "Just type only " ++ name
 
 {-| Get word from named operand.
 
@@ -140,10 +140,10 @@ getSwitch u name = getAbortableOption False get u name where
 getWord :: RopGet c String
 getWord = getAbortable get where
     get [B.TreeL (B.TWord _ _ s)] = Right s
-    get _ = Left $ B.abortUnexpOperand "Require one word"
+    get _ = Left $ B.abortOperand "Require one word"
 
 getInt :: RopGet c Int
 getInt = getAbortable get where
     get [B.TreeL (B.TWord _ _ i)] = Right (read i :: Int)
-    get _ = Left $ B.abortUnexpOperand "Require one integer"
+    get _ = Left $ B.abortOperand "Require one integer"
 

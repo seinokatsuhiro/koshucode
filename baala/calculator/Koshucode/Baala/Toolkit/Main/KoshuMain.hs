@@ -113,8 +113,7 @@ koshuMain global =
              cmd  = prog : argv
              root = C.makeEmptySection $ C.relmapCons g2
              g2   = C.globalFill global
-                    { C.globalVersion = L.version
-                    , C.globalProgram = prog
+                    { C.globalProgram = prog
                     , C.globalArgs    = argv }
 
        (_, _, errs) -> L.putFailure $ concat errs

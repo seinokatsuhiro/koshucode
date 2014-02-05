@@ -13,6 +13,7 @@ module Koshucode.Baala.Core.Relmap.Relmap
   relmapAlias,
   relmapCalc,
   relmapConfl,
+  relmapBinary,
   relmapGlobal,
 
   -- * Selectors
@@ -50,6 +51,9 @@ relmapCalc use relkit = relmapConfl use (const relkit) []
 {-| Make a confluent relmap. -}
 relmapConfl :: C.RopUse c -> C.RelmapConflRelkit c -> [C.Relmap c] -> C.Relmap c
 relmapConfl = C.RelmapCalc . C.ropHalf
+
+relmapBinary :: C.RopUse c -> C.RelmapBinaryRelkit c -> C.Relmap c -> C.Relmap c
+relmapBinary use kit m = relmapConfl use (kit . head) [m]
 
 relmapGlobal :: C.RopUse c -> (C.Global c -> C.RelmapCalcRelkit c) -> C.Relmap c
 relmapGlobal = C.RelmapGlobal . C.ropHalf

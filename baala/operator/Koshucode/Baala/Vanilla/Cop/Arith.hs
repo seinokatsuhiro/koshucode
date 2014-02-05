@@ -64,7 +64,7 @@ copMinus [a, b] =
        b' <- copDec b
        c' <- B.decimalSub a' b'
        Right . V.VDec $ c'
-copMinus _ = Left $ B.abortUnexpOperand "-"
+copMinus _ = Left $ B.abortOperand "-"
 
 copQuo :: V.VCop
 copQuo [a, b] =
@@ -72,7 +72,7 @@ copQuo [a, b] =
        b' <- copDec b
        c' <- B.decimalQuo a' b'
        Right . V.VDec $ c'
-copQuo _ = Left $ B.abortUnexpOperand "quo"
+copQuo _ = Left $ B.abortOperand "quo"
 
 copRem :: V.VCop
 copRem [a, b] =
@@ -80,14 +80,14 @@ copRem [a, b] =
        b' <- copDec b
        c' <- B.decimalRem a' b'
        Right . V.VDec $ c'
-copRem _ = Left $ B.abortUnexpOperand "rem"
+copRem _ = Left $ B.abortOperand "rem"
 
 copAbs :: V.VCop
 copAbs [V.VList cs] = Right . V.VList =<< mapM copAbs1 cs
 copAbs [c] = copAbs1 c
-copAbs _ = Left $ B.abortUnexpOperand "abs"
+copAbs _ = Left $ B.abortOperand "abs"
 
 copAbs1 :: V.VContent -> B.Ab V.VContent
 copAbs1 (V.VDec n) = Right . V.VDec $ B.decimalAbs n
-copAbs1 _ = Left $ B.abortUnexpOperand "abc"
+copAbs1 _ = Left $ B.abortOperand "abc"
 
