@@ -46,11 +46,7 @@ relmapMeet :: (Ord c)
 relmapMeet use = C.relmapBinary use relkitMeet
 
 {-| Meet two relations. -}
-relkitMeet
-    :: (Ord c)
-    => C.Relkit c          -- ^ Generator of subrelation
-    -> B.Relhead           -- ^ Heading of input relation
-    -> B.Ab (C.Relkit c)   -- ^ Generator for output relation
+relkitMeet :: (Ord c) => C.RelkitBinary c
 relkitMeet (C.Relkit h2 f2) h1 = Right (C.Relkit h3 f3) where
     shared    :: [B.Termname]
     shared    =  B.posInnerNames $ h1 `B.posFrom` h2
@@ -95,10 +91,7 @@ relmapJoin
 relmapJoin use = C.relmapBinary use relkitJoin
 
 {-| Join two relations. -}
-relkitJoin
-    :: C.Relkit c          -- ^ Generator of subrelation
-    -> B.Relhead           -- ^ Heading of input relation
-    -> B.Ab (C.Relkit c)   -- ^ Generator for output relation
+relkitJoin :: C.RelkitBinary c
 relkitJoin (C.Relkit h2 f2) h1 = Right (C.Relkit h3 f3) where
     shared  :: [B.Termname]
     shared  =  B.posInnerNames $ h1 `B.posFrom` h2

@@ -27,13 +27,13 @@ consNumber use =
 relmapNumber :: (C.CDec c, Ord c) => C.RopUse c -> B.Termname -> [B.Termname] -> C.Relmap c
 relmapNumber use n ns = C.relmapCalc use $ relkitNumber n ns
 
-relkitNumber :: (Ord c, C.CDec c) => B.Termname -> [B.Termname] -> B.Relhead -> B.Ab (C.Relkit c)
+relkitNumber :: (Ord c, C.CDec c) => B.Termname -> [B.Termname] -> C.RelkitCalc c
 relkitNumber = relkitRanking B.sortByNameNumbering
 
 relkitRanking
     :: (Ord c, C.CDec c)
     => B.Ranking B.Termname c
-    -> B.Termname -> [B.Termname] -> B.Relhead -> B.Ab (C.Relkit c)
+    -> B.Termname -> [B.Termname] -> C.RelkitCalc c
 relkitRanking ranking n ns h1 = Right $ C.relkit h2 (C.RelkitFull False f2) where
     h2    = B.headCons n h1
     f2 b1 = let (rank, b2) = ranking 0 ords (B.headNames h1) b1
@@ -58,16 +58,14 @@ relmapDenseRank :: (C.CDec c, Ord c) =>
    C.RopUse c -> B.Termname -> [B.Termname] -> C.Relmap c
 relmapDenseRank use n ns = C.relmapCalc use $ relkitDenseRank n ns
 
-relkitDenseRank :: (Ord c, C.CDec c) =>
-   B.Termname -> [B.Termname] -> B.Relhead -> B.Ab (C.Relkit c)
+relkitDenseRank :: (Ord c, C.CDec c) => B.Termname -> [B.Termname] -> C.RelkitCalc c
 relkitDenseRank = relkitRanking B.sortByNameDenseRank
 
 relmapGapRank :: (C.CDec c, Ord c) =>
    C.RopUse c -> B.Termname -> [B.Termname] -> C.Relmap c
 relmapGapRank use n ns = C.relmapCalc use $ relkitGapRank n ns
 
-relkitGapRank :: (Ord c, C.CDec c) =>
-   B.Termname -> [B.Termname] -> B.Relhead -> B.Ab (C.Relkit c)
+relkitGapRank :: (Ord c, C.CDec c) => B.Termname -> [B.Termname] -> C.RelkitCalc c
 relkitGapRank = relkitRanking B.sortByNameGapRank
 
 

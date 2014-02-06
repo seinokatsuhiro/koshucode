@@ -3,13 +3,13 @@
 module Koshucode.Baala.Vanilla.Rop.Global
 ( 
   -- * koshu-cop
-  consKoshuCop,
+  consKoshuCop, relkitKoshuCop,
   -- * koshu-cop-infix
-  consKoshuCopInfix,
+  consKoshuCopInfix, relkitKoshuCopInfix,
   -- * koshu-rop
-  consKoshuRop,
+  consKoshuRop, relkitKoshuRop,
   -- * koshu-version
-  consKoshuVersion,
+  consKoshuVersion, relkitKoshuVersion,
 ) where
 
 import qualified Data.Version                  as V
@@ -27,11 +27,11 @@ consKoshuCop use =
      Right $ relmapKoshuCop use name
 
 relmapKoshuCop :: (C.CContent c) => C.RopUse c -> B.Termname -> C.Relmap c
-relmapKoshuCop use name = C.relmapGlobal use $ relkitKoshuCop name
+relmapKoshuCop use = C.relmapGlobal use . relkitKoshuCop
 
-relkitKoshuCop :: (C.CContent c) => B.Termname -> C.Global c -> B.Relhead -> B.Ab (C.Relkit c)
+relkitKoshuCop :: (C.CContent c) => B.Termname -> C.RelkitGlobal c
 relkitKoshuCop name C.Global { C.globalCops = (cops, _) } _ =
-    Right $C.relkitConstBody [name] $ map (B.singleton . C.putText . B.name) cops
+    Right $ C.relkitConstBody [name] $ map (B.singleton . C.putText . B.name) cops
 
 
 
@@ -45,9 +45,9 @@ consKoshuCopInfix use =
      Right $ relmapKoshuCopInfix use (name, height, dir)
 
 relmapKoshuCopInfix :: (C.CContent c) => C.RopUse c -> (B.Termname, Maybe B.Termname, Maybe B.Termname) -> C.Relmap c
-relmapKoshuCopInfix use terms = C.relmapGlobal use $ relkitKoshuCopInfix terms
+relmapKoshuCopInfix use = C.relmapGlobal use . relkitKoshuCopInfix
 
-relkitKoshuCopInfix :: (C.CContent c) => (B.Termname, Maybe B.Termname, Maybe B.Termname) -> C.Global c -> B.Relhead -> B.Ab (C.Relkit c)
+relkitKoshuCopInfix :: (C.CContent c) => (B.Termname, Maybe B.Termname, Maybe B.Termname) -> C.RelkitGlobal c
 relkitKoshuCopInfix (name, height, dir) C.Global { C.globalCops = (_, htab) } _ = r2 where
     r2 = Right $ C.relkit h2 $ C.RelkitConst (map put htab)
     h2 = B.headFrom $   [name] ++ heightMaybe B.singleton     ++ dirMaybe B.singleton
@@ -71,9 +71,9 @@ consKoshuRop use =
      Right $ relmapKoshuRop use name
 
 relmapKoshuRop :: (C.CContent c) => C.RopUse c -> B.Termname -> C.Relmap c
-relmapKoshuRop use name = C.relmapGlobal use $ relkitKoshuRop name
+relmapKoshuRop use = C.relmapGlobal use . relkitKoshuRop
 
-relkitKoshuRop :: (C.CContent c) => B.Termname -> C.Global c -> B.Relhead -> B.Ab (C.Relkit c)
+relkitKoshuRop :: (C.CContent c) => B.Termname -> C.RelkitGlobal c
 relkitKoshuRop name C.Global { C.globalRops = rops } _ =
     Right $C.relkitConstBody [name] $ map (B.singleton . C.putText . C.ropName) rops
 
@@ -102,7 +102,7 @@ relkitKoshuVersion :: (C.CContent c) => B.Termname -> C.Global c -> B.Relhead ->
 relkitKoshuVersion n C.Global { C.globalVersion = ver } _ =
     Right $ C.relkitConstSingleton [n] [ C.putList $ map C.putDecFromInt $ apiVersion ver ]
 
-relkitKoshuVersionCheck :: (C.CContent c) => (c, c) -> B.Termname -> C.Global c -> B.Relhead -> B.Ab (C.Relkit c)
+relkitKoshuVersionCheck :: (C.CContent c) => (c, c) -> B.Termname -> C.RelkitGlobal c
 relkitKoshuVersionCheck (from, to) n C.Global { C.globalVersion = ver } _
     | version >= from && version <= to  = Right $ C.relkitConstSingleton [n] [version] -- todo
     | otherwise = Right $ C.relkitConstEmpty [n]

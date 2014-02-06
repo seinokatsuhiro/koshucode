@@ -12,8 +12,8 @@ module Koshucode.Baala.Core.Relmap.Relmap
   relmapConst,
   relmapAlias,
   relmapCalc,
-  relmapConfl,
   relmapBinary,
+  relmapConfl,
   relmapGlobal,
 
   -- * Selectors
@@ -45,17 +45,17 @@ relmapAlias :: C.RopUse c -> C.Relmap c -> C.Relmap c
 relmapAlias = C.RelmapAlias . C.ropHalf
 
 {-| Make a non-confluent relmap. -}
-relmapCalc :: C.RopUse c -> C.RelmapCalcRelkit c -> C.Relmap c
+relmapCalc :: C.RopUse c -> C.RelkitCalc c -> C.Relmap c
 relmapCalc use relkit = relmapConfl use (const relkit) []
 
-{-| Make a confluent relmap. -}
-relmapConfl :: C.RopUse c -> C.RelmapConflRelkit c -> [C.Relmap c] -> C.Relmap c
-relmapConfl = C.RelmapCalc . C.ropHalf
-
-relmapBinary :: C.RopUse c -> C.RelmapBinaryRelkit c -> C.Relmap c -> C.Relmap c
+relmapBinary :: C.RopUse c -> C.RelkitBinary c -> C.Relmap c -> C.Relmap c
 relmapBinary use kit m = relmapConfl use (kit . head) [m]
 
-relmapGlobal :: C.RopUse c -> (C.Global c -> C.RelmapCalcRelkit c) -> C.Relmap c
+{-| Make a confluent relmap. -}
+relmapConfl :: C.RopUse c -> C.RelkitConfl c -> [C.Relmap c] -> C.Relmap c
+relmapConfl = C.RelmapCalc . C.ropHalf
+
+relmapGlobal :: C.RopUse c -> C.RelkitGlobal c -> C.Relmap c
 relmapGlobal = C.RelmapGlobal . C.ropHalf
 
 

@@ -47,7 +47,7 @@ relmapEmpty :: C.RopUse c -> C.Relmap c
 relmapEmpty use = C.relmapCalc use relkitEmpty
 
 {-| Throw away all tuples in a relation. -}
-relkitEmpty :: B.Relhead -> B.Ab (C.Relkit c)
+relkitEmpty :: C.RelkitCalc c
 relkitEmpty h1 = Right $ C.relkit h1 (C.RelkitConst [])
 
 
@@ -59,9 +59,9 @@ consContents use =
        Right $ relmapContents use n
 
 relmapContents :: C.RopUse c -> B.Termname -> C.Relmap c
-relmapContents use n = C.relmapCalc use $ relkitContents n
+relmapContents use = C.relmapCalc use . relkitContents
 
-relkitContents :: B.Termname -> B.Relhead -> B.Ab (C.Relkit c)
+relkitContents :: B.Termname -> C.RelkitCalc c
 relkitContents n _ = Right $ C.relkit h2 (C.RelkitFull True f) where
     h2   = B.headFrom [n]
     f b1 = map B.singleton $ concat b1
@@ -69,7 +69,9 @@ relkitContents n _ = Right $ C.relkit h2 (C.RelkitFull True f) where
 
 -- ----------------------  reldee & reldum
 
-consReldee, consReldum :: C.RopCons c
+consReldee :: C.RopCons c
 consReldee use = Right $ C.relmapConst use B.reldee
+
+consReldum :: C.RopCons c
 consReldum use = Right $ C.relmapConst use B.reldum
 

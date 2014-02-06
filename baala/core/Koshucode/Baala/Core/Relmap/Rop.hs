@@ -11,6 +11,12 @@ module Koshucode.Baala.Core.Relmap.Rop
   -- * Relmap
   Relmap (..),
 
+  -- * Relkit
+  RelkitCalc,
+  RelkitBinary,
+  RelkitConfl,
+  RelkitGlobal,
+
   -- * Global
   Global (..),
   RelSelect,
@@ -70,9 +76,9 @@ data Relmap c
     -- | Equavalent relmap
     | RelmapAlias  C.HalfRelmap (Relmap c)
     -- | Relmap that maps relations to a relation
-    | RelmapCalc   C.HalfRelmap (C.RelmapConflRelkit c) [Relmap c]
+    | RelmapCalc   C.HalfRelmap (RelkitConfl c) [Relmap c]
     -- | Relmap that maps relations to a relation
-    | RelmapGlobal C.HalfRelmap (Global c -> C.RelmapCalcRelkit c)
+    | RelmapGlobal C.HalfRelmap (Global c -> RelkitCalc c)
     -- | Connect two relmaps
     | RelmapAppend (Relmap c) (Relmap c)
     -- | Relmap reference
@@ -139,6 +145,22 @@ relmapHalf = half where
     half (RelmapGlobal h _)     = Just h
     half (RelmapAppend m1 _)    = relmapHalf m1
     half (RelmapName _ _)       = Nothing
+
+
+
+-- ----------------------  Relkit
+
+-- | Make 'C.Relkit' from heading of input relation.
+type RelkitCalc c =  B.Relhead -> B.Ab (C.Relkit c)
+
+-- | Make 'C.Relkit' from one subrelmap and input heading.
+type RelkitBinary c = C.Relkit c -> B.Relhead -> B.Ab (C.Relkit c)
+
+-- | Make 'C.Relkit' from subrelmaps and input heading.
+type RelkitConfl c =  [(C.Relkit c)] -> B.Relhead -> B.Ab (C.Relkit c)
+
+-- | Make 'C.Relkit' from globals and input heading.
+type RelkitGlobal c = Global c -> B.Relhead -> B.Ab (C.Relkit c)
 
 
 

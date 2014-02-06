@@ -31,8 +31,7 @@ relmapPrefix use pre ns = C.relmapCalc use $ relkitPrefix pre ns
 relkitPrefix
     :: String             -- ^ Prefix text (except for hyphen)
     -> [String]           -- ^ Changing termnames
-    -> B.Relhead          -- ^ Heading of input relation
-    -> B.Ab (C.Relkit c)   -- ^ Relfier for output relation
+    -> C.RelkitCalc c
 relkitPrefix pre ns h1 = Right $ C.relkit h2 C.RelkitId where
     h2 = B.headChange (map f) h1
     f n | n `elem` ns  = prefixName pre n
@@ -52,13 +51,12 @@ consUnprefix use =
        Right $ relmapUnprefix use pre
 
 relmapUnprefix :: C.RopUse c -> String -> C.Relmap c
-relmapUnprefix use pre = C.relmapCalc use $ relkitUnprefix pre
+relmapUnprefix use = C.relmapCalc use . relkitUnprefix
 
 {-| Remove prefix -}
 relkitUnprefix
     :: String             -- ^ Prefix text (except for hyphen)
-    -> B.Relhead          -- ^ Heading of input relation
-    -> B.Ab (C.Relkit c)  -- ^ Generator for output relation
+    -> C.RelkitCalc c
 relkitUnprefix pre h1 = Right $ C.relkit h2 C.RelkitId where
     h2 = B.headChange (map $ unprefixName pre) h1
 
@@ -85,8 +83,7 @@ relmapPrefixChange use new old = C.relmapCalc use $ relkitPrefixChange new old
 relkitPrefixChange
     :: String             -- ^ New prefix text (except for hyphen)
     -> String             -- ^ Old prefix text (except for hyphen)
-    -> B.Relhead          -- ^ Heading of input relation
-    -> B.Ab (C.Relkit c)  -- ^ Generator for output relation
+    -> C.RelkitCalc c
 relkitPrefixChange new old h1 = Right $ C.relkit h2 C.RelkitId where
     h2   = B.headChange (map f) h1
     new' = new ++ "-"

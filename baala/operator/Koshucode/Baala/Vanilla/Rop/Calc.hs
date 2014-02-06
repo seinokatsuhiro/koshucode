@@ -31,14 +31,10 @@ consEnclose use =
      Right $ relmapEnclose use n
 
 relmapEnclose :: (C.CRel c) => C.RopUse c -> B.Termname -> C.Relmap c
-relmapEnclose use n = C.relmapCalc use $ relkitEnclose n
+relmapEnclose use = C.relmapCalc use . relkitEnclose
 
 {-| Enclose the current relation in a term. -}
-relkitEnclose
-    :: (C.CRel c)
-    => B.Termname         -- ^ Termname of enclosed relation
-    -> B.Relhead          -- ^ Header of input relation
-    -> B.Ab (C.Relkit c)   -- ^ Relfier for output relation
+relkitEnclose :: (C.CRel c) => B.Termname -> C.RelkitCalc c
 relkitEnclose n h1 = Right $ C.relkit h2 (C.RelkitFull False f) where
     h2 = B.Relhead [B.Nest n $ B.headTerms h1]
     f b1 = [[C.putRel $ B.Rel h1 b1]]
@@ -64,25 +60,25 @@ consMember :: Rop.VRopCons
 consMember use =
   do x    <- Rop.getTerm use "-1"
      xs   <- Rop.getTerm use "-2"
-     Right $ relmapMember use x xs
+     Right $ relmapMember use (x, xs)
 
-relmapMember :: C.RopUse Rop.VContent -> B.Termname -> B.Termname -> C.Relmap Rop.VContent
-relmapMember use x xs = C.relmapCalc use $ relkitMember x xs
+relmapMember :: C.RopUse Rop.VContent -> B.Termname2 -> C.Relmap Rop.VContent
+relmapMember use = C.relmapCalc use . relkitMember
 
-relkitMember :: B.Termname -> B.Termname -> B.Relhead -> B.Ab (C.Relkit Rop.VContent)
-relkitMember x xs h1 = r2 where
+relkitMember :: B.Termname2 -> C.RelkitCalc Rop.VContent
+relkitMember (x, xs) h1 = r2 where
     r2 | xHere && xsHere     = relkitMemberCheck  xPos xsPos h1
        | not xHere && xsHere = relkitMemberExpand x    xsPos h1
        | otherwise           = Left $ B.AbortAnalysis [] (B.AANoTerms [x, xs])
     ([xPos, xsPos], [xHere, xsHere])
         = h1 `B.posHere` [x, xs]
 
-relkitMemberCheck :: B.TermPos -> B.TermPos -> B.Relhead -> B.Ab (C.Relkit Rop.VContent)
+relkitMemberCheck :: B.TermPos -> B.TermPos -> C.RelkitCalc Rop.VContent
 relkitMemberCheck xPos xsPos h1 = Right $ C.relkit h1 (C.RelkitPred f) where
     f cs = let [xCont, xsCont] = B.posPick [xPos, xsPos] cs
            in xCont `Rop.isMember` xsCont
 
-relkitMemberExpand :: B.Termname -> B.TermPos -> B.Relhead -> B.Ab (C.Relkit Rop.VContent)
+relkitMemberExpand :: B.Termname -> B.TermPos -> C.RelkitCalc Rop.VContent
 relkitMemberExpand x xsPos h1 = Right $ C.relkit h2 (C.RelkitOneToMany False f) where
     h2     =  B.headCons x h1
     f cs   =  let [xsCont] = B.posPick [xsPos] cs
@@ -105,9 +101,7 @@ consRange use =
 relmapRange :: (C.CDec c) => C.RopUse c -> B.Termname -> Int -> Int -> C.Relmap c
 relmapRange use term low high = C.relmapCalc use $ relkitRange term low high
 
-relkitRange
-  :: (C.CDec c) =>
-     B.Termname -> Int -> Int -> B.Relhead -> B.Ab (C.Relkit c)
+relkitRange :: (C.CDec c) => B.Termname -> Int -> Int -> C.RelkitCalc c
 relkitRange n low high h1 = Right $ C.relkit h2 (C.RelkitOneToMany False f) where
     h2    = B.headCons n h1
     decs  = map C.putDecFromInt [low .. high]
@@ -138,14 +132,8 @@ relmapSize :: (C.CDec c) => C.RopUse c -> B.Termname -> C.Relmap c
 relmapSize use n = C.relmapCalc use $ relkitSize n
 
 {-| Cardinality -}
-relkitSize
-    :: (C.CDec c)
-    => B.Termname         -- ^ Name of new term
-    -> B.Relhead
-    -> B.Ab (C.Relkit c)   -- ^ Relfier for output relation
+relkitSize :: (C.CDec c) => B.Termname -> C.RelkitCalc c
 relkitSize n _ = Right $ C.relkit h2 (C.RelkitFull False f) where
     h2   = B.headFrom [n]
     f b1 = [[C.putDecFromInt $ length b1]]
-
-
 

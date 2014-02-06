@@ -28,7 +28,7 @@ consSome use =
 relmapSome :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
 relmapSome use = C.relmapBinary use relkitSome
 
-relkitSome :: (Ord c) => C.Relkit c -> B.Relhead -> B.Ab (C.Relkit c)
+relkitSome :: (Ord c) => C.RelkitBinary c
 relkitSome = relkitSemi False
 
 
@@ -42,18 +42,13 @@ consNone use =
 relmapNone :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
 relmapNone use = C.relmapBinary use relkitNone
 
-relkitNone :: (Ord c) => C.Relkit c -> B.Relhead -> B.Ab (C.Relkit c)
+relkitNone :: (Ord c) => C.RelkitBinary c
 relkitNone = relkitSemi True
 
 
 -- ----------------------  semi
 
-relkitSemi
-    :: (Ord c)
-    => Bool                -- ^ Is null
-    -> C.Relkit c          -- ^ Relfier of subrelmap
-    -> B.Relhead           -- ^ Heading of input relation
-    -> B.Ab (C.Relkit c)   -- ^ Relfier for output relation
+relkitSemi :: (Ord c) => Bool -> C.RelkitBinary c
 relkitSemi isNull (C.Relkit _ f2) h1 =
     Right $ C.relkit h1 (C.RelkitAbPred p)
     where p cs = do b2 <- C.relkitRun f2 [cs]
@@ -70,11 +65,7 @@ consSub use =
 relmapSub :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
 relmapSub use = C.relmapBinary use relkitSub
 
-relkitSub
-    :: (Ord c)
-    => C.Relkit c
-    -> B.Relhead
-    -> B.Ab (C.Relkit c)
+relkitSub :: (Ord c) => C.RelkitBinary c
 relkitSub r2@(C.Relkit h2 _) h1
     | B.isSuperhead h1 h2 = sub
     | otherwise = Right $ C.relkit h1 (C.RelkitConst [])

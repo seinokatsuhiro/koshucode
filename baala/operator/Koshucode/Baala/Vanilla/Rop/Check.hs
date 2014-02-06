@@ -42,15 +42,14 @@ relmapCheckTermJust use = C.relmapCalc use . relkitCheckTermJust
 relmapCheckTermHas  use = C.relmapCalc use . relkitCheckTermHas
 relmapCheckTermBut  use = C.relmapCalc use . relkitCheckTermBut
 
-relkitCheckTermJust :: [B.Termname] -> B.Relhead -> B.Ab (C.Relkit c)
-relkitCheckTermHas  :: [B.Termname] -> B.Relhead -> B.Ab (C.Relkit c)
-relkitCheckTermBut  :: [B.Termname] -> B.Relhead -> B.Ab (C.Relkit c)
+relkitCheckTermJust :: [B.Termname] -> C.RelkitCalc c
+relkitCheckTermHas  :: [B.Termname] -> C.RelkitCalc c
+relkitCheckTermBut  :: [B.Termname] -> C.RelkitCalc c
 relkitCheckTermJust = relkitCheckTermBy (\ns h1 -> B.headFrom ns `B.isEqvHead` h1)
 relkitCheckTermHas  = relkitCheckTermBy (\ns h1 -> B.headFrom ns `B.isSubhead` h1)
 relkitCheckTermBut  = relkitCheckTermBy (\ns h1 -> null $ B.headKeepTerms h1 ns)
 
-relkitCheckTermBy :: ([String] -> B.Relhead -> Bool)
-                 -> [String] -> B.Relhead -> B.Ab (C.Relkit c)
+relkitCheckTermBy :: ([String] -> B.Relhead -> Bool) -> [String] -> C.RelkitCalc c
 relkitCheckTermBy f ns h1
     | f ns h1 = Right $ C.relkit h1 C.RelkitId
     | otherwise = Left $ B.AbortAnalysis [] (B.AACheckTerms $ B.headNames h1)
@@ -74,10 +73,9 @@ consDuplicate use =
      Right $ relmapDuplicate use ns
 
 relmapDuplicate :: (Ord c) => C.RopUse c -> [B.Termname] -> C.Relmap c
-relmapDuplicate use ns = C.relmapCalc use $ relkitDuplicate ns
+relmapDuplicate use = C.relmapCalc use . relkitDuplicate
 
-relkitDuplicate
-  :: (Ord c) => [B.Termname] -> B.Relhead -> B.Ab (C.Relkit c)
+relkitDuplicate :: (Ord c) => [B.Termname] -> C.RelkitCalc c
 relkitDuplicate ns h1
     | null non  = Right $ C.relkit h1 (C.RelkitFull False f)
     | otherwise = Left  $ B.AbortAnalysis [] (B.AANoTerms non)
@@ -105,7 +103,7 @@ consTypename use =
      Right $ C.relmapCalc use $ relkitTypename np
 
 relkitTypename
-  :: (C.CText c) => [(B.Termname, B.Termname)] -> B.Relhead -> B.Ab (C.Relkit c)
+  :: (C.CText c) => [(B.Termname, B.Termname)] -> C.RelkitCalc c
 relkitTypename np h1 = Right $ C.relkit h2 (C.RelkitOneToOne False f) where
     ns    = map fst np
     ps    = map snd np

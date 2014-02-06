@@ -27,13 +27,10 @@ consPick use =
      Right $ relmapPick use ns
 
 relmapPick :: (Ord c) => C.RopUse c -> [B.Termname] -> C.Relmap c
-relmapPick use ns = C.relmapCalc use $ relkitPick ns
+relmapPick use = C.relmapCalc use . relkitPick
 
-relkitPick
-    :: [B.Termname]        -- ^ Names of picking terms
-    -> B.Relhead           -- ^ Heading of input relation
-    -> B.Ab (C.Relkit c)   -- ^ Relfier for output relation
-relkitPick ns = relkitArrange B.arrangePick B.arrangePick ns
+relkitPick :: [B.Termname] -> C.RelkitCalc c
+relkitPick = relkitArrange B.arrangePick B.arrangePick
 
 
 
@@ -45,20 +42,16 @@ consCut use =
      Right $ relmapCut use ns
 
 relmapCut :: (Ord c) => C.RopUse c -> [B.Termname] -> C.Relmap c
-relmapCut use ns = C.relmapCalc use $ relkitCut ns
+relmapCut use = C.relmapCalc use . relkitCut
 
-relkitCut
-    :: [B.Termname]        -- ^ Names of cutting terms
-    -> B.Relhead           -- ^ Heading of input relation
-    -> B.Ab (C.Relkit c)   -- ^ Relfier for output relation
-relkitCut ns = relkitArrange B.arrangeCut B.arrangeCut ns
+relkitCut :: [B.Termname] -> C.RelkitCalc c
+relkitCut = relkitArrange B.arrangeCut B.arrangeCut
 
 relkitArrange
     :: B.Arrange B.Termname
     -> B.Arrange c
     -> [B.Termname]
-    -> B.Relhead
-    -> B.Ab (C.Relkit c)
+    -> C.RelkitCalc c
 relkitArrange ha ba ns h1
     | null non  = Right $ C.relkit h2 (C.RelkitOneToOne True $ ba ind)
     | otherwise = Left $ B.AbortAnalysis [] $ B.AANoTerms non
@@ -82,13 +75,10 @@ consRename use =
      Right $ relmapRename use np
 
 relmapRename :: C.RopUse c -> [(B.Termname, B.Termname)] -> C.Relmap c
-relmapRename use np = C.relmapCalc use $ relkitRename np
+relmapRename use = C.relmapCalc use . relkitRename
 
 {-| Change terms names -}
-relkitRename
-    :: [(B.Termname, B.Termname)]  -- ^ List of termnames (/to/, /from/)
-    -> B.Relhead                   -- ^ Heading of input relation
-    -> B.Ab (C.Relkit c)           -- ^ Relfier for output relation
+relkitRename :: [(B.Termname, B.Termname)] -> C.RelkitCalc c
 relkitRename np h1
     | nsCheck /= [] = Left  $ B.AbortAnalysis [] $ B.AAReqNewTerms nsCheck
     | psCheck /= [] = Left  $ B.AbortAnalysis [] $ B.AANoTerms psCheck
