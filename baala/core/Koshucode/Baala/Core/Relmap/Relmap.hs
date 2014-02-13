@@ -26,7 +26,6 @@ module Koshucode.Baala.Core.Relmap.Relmap
 
 import qualified Koshucode.Baala.Base               as B
 import qualified Koshucode.Baala.Core.Relmap.Rop    as C
-import qualified Koshucode.Baala.Core.Relmap.Relkit as C
 
 
 

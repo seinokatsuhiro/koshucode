@@ -8,12 +8,10 @@ module Koshucode.Baala.Base.Token.TokenLine
   -- * Library
   TokenLine,
   tokenLines,
-  trimLeft,
+  trimLeft, trimRight, trimBoth,
   tokens,
-  isSimpleWord,
-  isSimpleChar,
-  commentLine,
-  putCommentLines,
+  isSimpleWord, isSimpleChar,
+  commentLine, putCommentLines,
 
   -- * Document
 
@@ -52,6 +50,16 @@ tokens res = concatMap B.lineTokens . tokenLines res
 
 trimLeft :: B.Map String
 trimLeft = dropWhile isSpace
+
+trimRight :: B.Map String
+trimRight [] = []
+trimRight (x : xs) =
+    case x : trimRight xs of
+      [y] | isSpace y -> []
+      ys -> ys
+
+trimBoth :: B.Map String
+trimBoth = trimRight . trimLeft
 
 {-| Split a next token from source text. -}
 nextToken :: B.Resource -> B.NextToken B.Token

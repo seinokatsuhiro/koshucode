@@ -35,7 +35,9 @@ copsLogic =
     , C.CopFun  "or"    copOr
     , C.CopFun  "then"  copImp
     , C.CopFun  "when"  copWhen
-    , C.CopFun  "if"    copIf
+    , C.CopFun  "/if"   copIf
+    , C.CopSyn  "if"    synIf
+    , C.CopSyn  "case"  synCase
     ]
 
 cop1 :: (Bool -> Bool) -> V.VCop
@@ -80,8 +82,43 @@ copIf [test, a, b] =
        case test' of
          True  -> Right a
          False -> Right b
+copIf [test, a] = copIf [test, a, C.nil]
 copIf xs = typeUnmatch xs
+
+funIf :: B.TokenTree
+funIf = B.TreeL $ B.tokenWord "/if"
 
 typeUnmatch :: C.PrimContent a => [a] -> Either B.AbortReason b
 typeUnmatch xs = Left $ B.AbortCalc [] $ B.ACUnmatchType (concatMap C.typename xs)
+
+--  if TEST -> CON        =  /if TEST CON
+--  if TEST -> CON : ALT  =  /if TEST CON ALT
+
+synIf :: C.CopSyn
+synIf trees =
+    case B.divideTreesBy "->" trees of
+      [test, result] -> synIfResult (B.treeWrap test) result
+      _ -> Left $ B.abortOperand "if"
+
+synIfResult :: B.TokenTree -> C.CopSyn
+synIfResult test result =
+    case B.divideTreesBy ":" result of
+      [con, alt] -> Right $ B.treeWrap [funIf, test, B.treeWrap con, B.treeWrap alt]
+      [con]      -> Right $ B.treeWrap [funIf, test, B.treeWrap con]
+      _          -> Left $ B.abortOperand "if"
+
+--  case TEST -> CON : TEST -> CON  =  /if TEST CON (/if TEST CON)
+
+synCase :: C.CopSyn
+synCase trees = folding $ B.divideTreesBy ":" trees where
+    folding :: [[B.TokenTree]] -> B.Ab B.TokenTree
+    folding []        = Right $ B.TreeL $ B.tokenWord "()"
+    folding ([] : xs) = folding xs
+    folding (x : xs)  = cond x =<< folding xs
+
+    cond :: [B.TokenTree] -> B.TokenTree -> B.Ab B.TokenTree
+    cond trees2 alt =
+        case B.divideTreesBy "->" trees2 of
+          [test, con] -> Right $ B.treeWrap [funIf, (B.treeWrap test), B.treeWrap con, alt]
+          _  -> Left $ B.abortOperand "case"
 

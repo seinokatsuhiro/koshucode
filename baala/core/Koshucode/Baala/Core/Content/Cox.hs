@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -Wall #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 {-| Term-content calcutation. -}
 
@@ -10,7 +11,7 @@ module Koshucode.Baala.Core.Content.Cox
 
   -- * Operator
   Cop (..),
-  CopLit, CopFun, CopMacro,
+  CopLit, CopFun, CopSyn,
 
   -- * Construction
   CoxCons,
@@ -42,23 +43,23 @@ data CoxCore c
 
 {-| Term-content operator. -}
 data Cop c
-    = CopLit   String (CopLit   c)
-    | CopMacro String (CopMacro c)
-    | CopFun   String (CopFun   c)
+    = CopLit String (CopLit c)
+    | CopFun String (CopFun c)
+    | CopSyn String (CopSyn)
 
 instance Show (Cop c) where
-    show (CopLit n _)   = "(CopLit "   ++ show n ++ " _)"
-    show (CopFun n _)   = "(CopFun "   ++ show n ++ " _)"
-    show (CopMacro n _) = "(CopMacro " ++ show n ++ " _)"
+    show (CopLit n _) = "(CopLit " ++ show n ++ " _)"
+    show (CopFun n _) = "(CopFun " ++ show n ++ " _)"
+    show (CopSyn n _) = "(CopSyn " ++ show n ++ " _)"
 
 instance B.Name (Cop c) where
-    name (CopLit   n _)  = n
-    name (CopFun n _)    = n
-    name (CopMacro  n _) = n
+    name (CopLit n _) = n
+    name (CopFun n _) = n
+    name (CopSyn n _) = n
 
-type CopLit   c = [B.TokenTree] -> B.Ab c
-type CopFun   c = [c]           -> B.Ab c
-type CopMacro c = [Cox c]       -> B.Ab (Cox c)
+type CopLit c = [B.TokenTree] -> B.Ab c
+type CopFun c = [c]           -> B.Ab c
+type CopSyn   = [B.TokenTree] -> B.Ab B.TokenTree
 
 
 
@@ -67,46 +68,65 @@ type CopMacro c = [Cox c]       -> B.Ab (Cox c)
 type CoxCons c = B.Relhead -> B.Ab (Cox c)
 
 {-| Construct content expression. -}
-coxCons :: (C.CContent c) => ([Cop c], [B.Named B.InfixHeight]) -> B.TokenTree -> B.Ab (CoxCons c)
+coxCons :: forall c. (C.CContent c)
+  => ([Cop c], [B.Named B.InfixHeight]) -> B.TokenTree -> B.Ab (CoxCons c)
 coxCons (cops, htab) tree =
-    case B.infixToPrefix ht tree of
-      Right tree2 -> fmap positioning . construct cops $ B.undouble (== 1) tree2
-      Left  xs    -> Left $ B.AbortSyntax [] $ B.ASAmbInfixes $ map detail xs
-                     
+    Right . positioning
+        =<< cox
+        =<< prefix
+        =<< expand tree
     where
+      assoc :: [B.Named (Cop c)]
+      assoc = map B.named cops
+
+      expand :: B.AbMap B.TokenTree
+      expand tree2@(B.TreeB 1 p (op@(B.TreeL (B.TWord _ 0 name)) : args)) =
+          case lookup name assoc of
+            Just (CopSyn _ f) -> expand =<< f args
+            Just _            -> do args2 <- mapM expand args
+                                    Right $ B.TreeB 1 p (op : args2)
+            _                 -> Right tree2
+      expand tree2 = Right tree2
+
+      prefix :: B.AbMap B.TokenTree
+      prefix tree2 =
+          case B.infixToPrefix ht tree2 of
+            Right tree3 -> Right $ B.undouble (== 1) tree3
+            Left  xs    -> Left $ B.AbortSyntax [] $ B.ASAmbInfixes $ map detail xs
+
       ht = B.infixHeight text htab
 
+      text :: B.Token -> Maybe String
       text (B.TWord _ 0 w) = Just w
       text _ = Nothing
 
       detail (Right n, tok) = detailText tok "right" n
       detail (Left  n, tok) = detailText tok "left"  n
+
       detailText tok dir n = B.tokenContent tok ++ " : " ++ dir ++ " " ++ show n
 
-construct :: (C.CContent c) => [Cop c] -> B.TokenTree -> B.Ab (Cox c)
-construct cops = cons where
-    cons tree = Right . B.Sourced src =<< cox where
-       src = B.front $ B.untree tree
-       cox = case tree of
-            B.TreeL tok -> 
-                case tok of
-                  B.TWord _ _ _  ->  fmap CoxLit $ C.litContent tree
-                  B.TTerm _ ns   ->  Right $ CoxTerm ns []
-                  _              ->  B.bug
+      cox :: B.TokenTree -> B.Ab (Cox c)
+      cox tree2 = let src = B.front $ B.untree tree
+                  in Right . B.Sourced src =<< coxCore tree2
 
-            -- parend unquoted word and its arguments
-            B.TreeB 1 _ (B.TreeL (B.TWord _ 0 name) : args) ->
-                case lookup name $ map B.named cops of
-                  Just cop   ->  call cop args
-                  Nothing    ->  Left $ B.AbortAnalysis [] $ B.AAUnkCop name
+      coxCore :: B.TokenTree -> B.Ab (CoxCore c)
+      coxCore tree2@(B.TreeL tok) =
+          case tok of
+            B.TWord _ _ _  ->  fmap CoxLit $ C.litContent tree2
+            B.TTerm _ ns   ->  Right $ CoxTerm ns []
+            _              ->  B.bug
 
-            B.TreeB n _ _
-                | n > 1  ->  fmap CoxLit $ C.litContent tree  -- literal composite
+      -- parend unquoted word and its arguments
+      coxCore (B.TreeB 1 _ (B.TreeL (B.TWord _ 0 name) : args)) =
+          case lookup name assoc of
+            Just cop@(CopFun _ _)  -> CoxApp cop `fmap` (cox `mapM` args)
+            Just     (CopLit _ f)  -> CoxLit `fmap` f args
+            Just     (CopSyn _ _)  -> B.bug
+            Nothing    ->  Left $ B.AbortAnalysis [] $ B.AAUnkCop name
 
-            _ -> Left $ B.AbortSyntax [] $ B.ASUnkCox ""
-
-    call (CopLit _ f) = fmap CoxLit . f
-    call cop          = fmap (CoxApp cop) . mapM cons
+      -- literal composite
+      coxCore tree2@(B.TreeB n _ _) | n > 1 = fmap CoxLit $ C.litContent tree2  
+      coxCore _ = Left $ B.AbortSyntax [] $ B.ASUnkCox ""
 
 -- Put term positions for actural heading.
 positioning :: Cox c -> CoxCons c
@@ -137,9 +157,9 @@ coxRun h arg pcox = run =<< pcox h where
           CoxLit c      -> Right c
           CoxTerm _ [p] -> Right $ arg !! p
           CoxTerm _ ps  -> term ps arg
-          CoxApp (CopFun   _ f) cs -> f   =<< mapM run cs
-          CoxApp (CopMacro _ f) cs -> run =<< f cs
-          CoxApp (CopLit   _ _) _  -> Left $ B.abortNotFound ""
+          CoxApp (CopFun _ f) cs -> f   =<< mapM run cs
+          CoxApp (CopLit _ _) _  -> Left $ B.abortNotFound ""
+          CoxApp (CopSyn _ _) _  -> B.bug
 
     term []       _ = Left $ B.abortNotFound ""
     term (-1 : _) _ = Left $ B.abortNotFound ""
