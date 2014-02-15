@@ -6,7 +6,7 @@
 module Koshucode.Baala.Base.Abort.Reason
 ( AbortReason (..),
   Ab, AbMap,
-  abortable, abortableFrom,
+  abortable, abortableFrom, abortableTree,
   sourcedAbMap,
   (<!!>),
   abortOperand,
@@ -16,6 +16,7 @@ module Koshucode.Baala.Base.Abort.Reason
 ) where
 
 import qualified Koshucode.Baala.Base.Prelude          as B
+import qualified Koshucode.Baala.Base.Syntax           as B
 import qualified Koshucode.Baala.Base.Token            as B
 import qualified Koshucode.Baala.Base.Abort.Class      as B
 import qualified Koshucode.Baala.Base.Abort.EachReason as B
@@ -81,6 +82,12 @@ abortable name src = either (Left . pushSource name src) Right
     instead of list of 'B.Token'. -}
 abortableFrom :: (B.TokenListing src) => String -> src -> B.Map (Ab b)
 abortableFrom name src = either (Left . pushSourceFrom name src) Right
+
+abortableTree :: String -> B.TokenTree -> B.Map (Ab b)
+abortableTree tag tree = abortable tag $ treeToken tree
+
+treeToken :: B.CodeTree a -> [a]
+treeToken = B.front . B.untree
 
 pushSource :: String -> [B.Token] -> B.Map AbortReason
 pushSource name src1 abort =

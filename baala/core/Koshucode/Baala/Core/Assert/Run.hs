@@ -43,7 +43,7 @@ specialize global = (<$>) where
     C.RelmapConst  half rel  <$> _  = right half (C.relkitConst rel)
     C.RelmapAlias  _ relmap  <$> h1 = relmap <$> h1
     C.RelmapName   half name <$> _  =
-        B.abortableFrom "spec" half $ Left $ B.AbortAnalysis [] $ B.AAUnkRelmap name
+        abort half $ Left $ B.AbortAnalysis [] $ B.AAUnkRelmap name
 
     C.RelmapAppend relmap1 relmap2 <$> h1 =
         do relkit2 <- relmap1 <$> h1
@@ -51,17 +51,19 @@ specialize global = (<$>) where
            Right $ M.mappend relkit2 relkit3
 
     C.RelmapCalc half mk relmaps <$> h1 =
-        B.abortableFrom "spec" half $ do
+        abort half $ do
           subrelkit <- (<$> h1) `mapM` relmaps
           relkit    <- mk subrelkit h1
           right half relkit
 
     C.RelmapGlobal half mk <$> h1 =
-        B.abortableFrom "spec" half $ do
+        abort half $ do
           relkit <- mk global h1
           right half relkit
 
     right half r = Right $ C.relkitSetSource half $ r
+
+    abort = B.abortableFrom "specialize"
 
 
 
@@ -76,7 +78,7 @@ runAssertJudges global asserts =
 runAssertDataset :: (Ord c, C.CNil c) => C.Global c -> [C.Assert c] -> C.Dataset c -> B.Ab [B.Judge c]
 runAssertDataset global asserts dataset = Right . concat =<< mapM each asserts where
     each (C.Assert t pat opt r src) =
-        B.abortable "run" src $ do
+        B.abortable "assert" src $ do
           r1 <- runRelmapDataset global dataset r B.reldee
           let q = C.assertQuality t
           assertOptionProcess q pat opt r1

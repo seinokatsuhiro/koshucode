@@ -37,46 +37,49 @@ copsLogic =
     , C.CopFun  "when"  copWhen
     , C.CopFun  "/if"   copIf
     , C.CopSyn  "if"    synIf
-    , C.CopSyn  "case"  synCase
     ]
 
-cop1 :: (Bool -> Bool) -> V.VCop
+typeUnmatch :: (C.PrimContent a) => [a] -> B.Ab b
+typeUnmatch xs = Left $ B.AbortCalc [] $ B.ACUnmatchType (concatMap C.typename xs)
+
+cop1 :: (C.CBool c) => (Bool -> Bool) -> C.CopFun c
 cop1 p [x] =
     do x' <- C.needBool x
        Right . C.putBool $ p x'
 cop1 _ xs = typeUnmatch xs
 
-cop2 :: (Bool -> Bool -> Bool) -> V.VCop
+cop2 :: (C.CBool c) => (Bool -> Bool -> Bool) -> C.CopFun c
 cop2 p [x, y] =
     do x' <- C.needBool x
        y' <- C.needBool y
        Right . C.putBool $ p x' y'
 cop2 _ xs = typeUnmatch xs
 
-copN :: Bool -> (Bool -> Bool -> Bool) -> V.VCop
+copN :: (C.CBool c) => Bool -> (Bool -> Bool -> Bool) -> C.CopFun c
 copN unit p = loop where
     loop [] = Right . C.putBool $ unit
     loop (x : xs) =
         do x' <- C.needBool x
-           V.VBool xs' <- loop xs 
-           Right . C.putBool $ p x' xs'
+           y  <- loop xs 
+           y' <- C.needBool y
+           Right . C.putBool $ p x' y'
 
-copNot :: V.VCop
+copNot :: (C.CBool c) => C.CopFun c
 copNot =  cop1 not
 
-copWhen  :: V.VCop
+copWhen  :: (C.CBool c) => C.CopFun c
 copWhen  =  cop2 $ \x y -> x || not y
 
-copImp :: V.VCop
+copImp :: (C.CBool c) => C.CopFun c
 copImp =  cop2 $ \x y -> not x || y
 
-copAnd :: V.VCop
+copAnd :: (C.CBool c) => C.CopFun c
 copAnd =  copN True (&&)
 
-copOr  :: V.VCop
+copOr  :: (C.CBool c) => C.CopFun c
 copOr  =  copN False (||)
 
-copIf  :: V.VCop
+copIf  :: (C.CBool c, C.CNil c) => C.CopFun c
 copIf [test, a, b] =
     do test' <- C.needBool test
        case test' of
@@ -88,37 +91,29 @@ copIf xs = typeUnmatch xs
 funIf :: B.TokenTree
 funIf = B.TreeL $ B.tokenWord "/if"
 
-typeUnmatch :: C.PrimContent a => [a] -> Either B.AbortReason b
-typeUnmatch xs = Left $ B.AbortCalc [] $ B.ACUnmatchType (concatMap C.typename xs)
-
---  if TEST -> CON        =  /if TEST CON
---  if TEST -> CON : ALT  =  /if TEST CON ALT
+--  if TEST -> CON : ALT 
+--  if TEST -> CON
+--  if TEST -> CON : TEST -> CON : TEST -> CON
+--  if : TEST -> CON : TEST -> CON : TEST -> CON
 
 synIf :: C.CopSyn
-synIf trees =
-    case B.divideTreesBy "->" trees of
-      [test, result] -> synIfResult (B.treeWrap test) result
-      _ -> Left $ B.abortOperand "if"
-
-synIfResult :: B.TokenTree -> C.CopSyn
-synIfResult test result =
-    case B.divideTreesBy ":" result of
-      [con, alt] -> Right $ B.treeWrap [funIf, test, B.treeWrap con, B.treeWrap alt]
-      [con]      -> Right $ B.treeWrap [funIf, test, B.treeWrap con]
-      _          -> Left $ B.abortOperand "if"
-
---  case TEST -> CON : TEST -> CON  =  /if TEST CON (/if TEST CON)
-
-synCase :: C.CopSyn
-synCase trees = folding $ B.divideTreesBy ":" trees where
+synIf trees = folding $ B.divideTreesBy ":" trees where
     folding :: [[B.TokenTree]] -> B.Ab B.TokenTree
     folding []        = Right $ B.TreeL $ B.tokenWord "()"
     folding ([] : xs) = folding xs
-    folding (x : xs)  = cond x =<< folding xs
+    folding (x : xs)  = fore x =<< folding xs
 
-    cond :: [B.TokenTree] -> B.TokenTree -> B.Ab B.TokenTree
-    cond trees2 alt =
+    fore :: [B.TokenTree] -> B.AbMap B.TokenTree
+    fore trees2 alt =
         case B.divideTreesBy "->" trees2 of
+          [_]         -> back trees2 alt
           [test, con] -> Right $ B.treeWrap [funIf, (B.treeWrap test), B.treeWrap con, alt]
-          _  -> Left $ B.abortOperand "case"
+          _           -> Left  $ B.abortOperand "if"
+
+    back :: [B.TokenTree] -> B.AbMap B.TokenTree
+    back trees2 alt =
+        case B.divideTreesBy "<-" trees2 of
+          [alt2]      -> Right $ B.treeWrap alt2
+          [con, test] -> Right $ B.treeWrap [funIf, (B.treeWrap test), B.treeWrap con, alt]
+          _           -> Left  $ B.abortOperand "if"
 
