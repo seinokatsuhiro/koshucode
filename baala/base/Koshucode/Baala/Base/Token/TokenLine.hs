@@ -165,7 +165,8 @@ isShort :: Char -> Bool
 isShort = Ch.isAlpha
 
 commentLine :: String -> String
-commentLine = ("**  " ++)
+commentLine "" = "**"
+commentLine s  = "**  " ++ s
 
 putCommentLines :: [String] -> IO ()
 putCommentLines = putStr . unlines . map commentLine

@@ -41,6 +41,9 @@ data Assert c = Assert
 {-| Option for assertions. -}
 type AssertOption = [B.Named [B.TokenTree]]
 
+instance B.TokenListing (Assert c) where
+    tokenListing = assertSource
+
 instance B.Pretty (Assert c) where
     doc (Assert q pat _ r _) =
         let qs = B.doch [assertText q, pat]

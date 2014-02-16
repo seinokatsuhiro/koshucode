@@ -50,7 +50,7 @@ abort cmd a =
      Sys.exitWith $ Sys.ExitFailure 2
 
 messageLines :: (AbortReasonClass a) => CommandLine -> a -> [String]
-messageLines cmd a = texts where
+messageLines cmd a = map B.trimRight texts where
     texts  = sandwich "" "" $ B.renderTable " " tab
     tab    = B.alignTable $ title : rule : rows
     title  = [ B.textCell B.Front "ABORTED "
@@ -71,12 +71,13 @@ messageLines cmd a = texts where
         = let (codes, tags) = unzip xs
           in [[ B.textCell B.Front name
               , B.textBlockCell B.Front codes
-              , B.textBlockCell B.Front $ map paren tags ]]
+              , B.textBlockCell B.Front $ map dots tags ]]
+
+    dots :: B.Map String
+    dots ""   = ""
+    dots text = ".. " ++ text
 
 sandwich :: a -> a -> B.Map [a]
 sandwich open close xs = open : xs ++ [close]
 
-paren :: B.Map String
-paren "" = ""
-paren text = sandwich '(' ')' $ text
 

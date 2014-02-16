@@ -22,6 +22,10 @@ import qualified Koshucode.Baala.Vanilla.Type as V
 
  [@*@]     Multipication.
 
+ [@quo@]   Quotient.
+
+ [@rem@]   Remainder.
+
  [@abs@]   Absolute value.
 
 -}
@@ -29,8 +33,8 @@ import qualified Koshucode.Baala.Vanilla.Type as V
 copsArith :: [C.Cop V.VContent]
 copsArith =
     [ C.CopFun  "+"    copPlus
-    , C.CopFun  "*"    copTimes
     , C.CopFun  "-"    copMinus
+    , C.CopFun  "*"    copTimes
     , C.CopFun  "quo"  copQuo
     , C.CopFun  "rem"  copRem
     , C.CopFun  "abs"  copAbs

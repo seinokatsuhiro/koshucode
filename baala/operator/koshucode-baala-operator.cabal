@@ -64,7 +64,6 @@ library
         Koshucode.Baala.Vanilla.Cop
         Koshucode.Baala.Vanilla.Cop.Arith
         Koshucode.Baala.Vanilla.Cop.List
-        Koshucode.Baala.Vanilla.Cop.Literal
         Koshucode.Baala.Vanilla.Cop.Logic
         Koshucode.Baala.Vanilla.Cop.Order
 

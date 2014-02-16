@@ -77,10 +77,10 @@ runAssertJudges global asserts =
 {-| Calculate assertion list. -}
 runAssertDataset :: (Ord c, C.CNil c) => C.Global c -> [C.Assert c] -> C.Dataset c -> B.Ab [B.Judge c]
 runAssertDataset global asserts dataset = Right . concat =<< mapM each asserts where
-    each (C.Assert t pat opt r src) =
-        B.abortable "assert" src $ do
-          r1 <- runRelmapDataset global dataset r B.reldee
-          let q = C.assertQuality t
+    each a@(C.Assert quo pat opt relmap _) =
+        B.abortableFrom "assert" a $ do
+          r1 <- runRelmapDataset global dataset relmap B.reldee
+          let q = C.assertQuality quo
           assertOptionProcess q pat opt r1
 
 {-| Convert relation to list of judges -}

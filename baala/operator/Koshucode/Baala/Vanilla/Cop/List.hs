@@ -51,7 +51,7 @@ copsList =
     , C.CopFun  "sub-length"  copSubLength
     ]
 
-copList :: V.VCop
+copList :: (C.CList c) => C.CopFun c
 copList = Right . C.putList
 
 

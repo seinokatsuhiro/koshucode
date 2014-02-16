@@ -9,7 +9,6 @@ module Koshucode.Baala.Vanilla.Cop.Logic
 
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
-import qualified Koshucode.Baala.Vanilla.Type as V
 
 
 
@@ -26,9 +25,11 @@ import qualified Koshucode.Baala.Vanilla.Type as V
 
  [@when@]   Inverse implication.
 
+ [@if@]     Conditional expression.
+
 -}
 
-copsLogic :: [C.Cop V.VContent]
+copsLogic :: (C.CBool c, C.CNil c) => [C.Cop c]
 copsLogic =
     [ C.CopFun  "not"   copNot
     , C.CopFun  "and"   copAnd

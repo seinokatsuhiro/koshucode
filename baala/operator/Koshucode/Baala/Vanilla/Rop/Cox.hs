@@ -55,5 +55,5 @@ relkitHold b cox h1 = Right $ C.relkit h1 (C.RelkitAbPred p) where
     p cs = do c <- C.coxRun h1 cs cox
               case c of
                 x | C.isBool x -> Right $ b == C.getBool x
-                _ -> Left $ B.AbortAnalysis [] $ B.AAReqBoolean (show c)
+                _ -> Left $ B.AbortAnalysis [] $ B.AAReqBoolean ""
 
