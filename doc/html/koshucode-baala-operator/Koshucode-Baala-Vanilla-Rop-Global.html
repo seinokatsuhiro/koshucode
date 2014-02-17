@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-operator-0.42.0.0: Relational operators in Koshucode</p
+      >koshucode-baala-operator-0.44.0.0: Relational operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -76,37 +76,91 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
-	  ><a href="#v:ropConsKoshuCop"
-	    >ropConsKoshuCop</a
+	  ><a href="#v:consKoshuCop"
+	    >consKoshuCop</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopCons"
 	    >RopCons</a
 	    > c</li
 	  ><li class="src short"
-	  ><a href="#v:ropConsKoshuCopInfix"
-	    >ropConsKoshuCopInfix</a
+	  ><a href="#v:relkitKoshuCop"
+	    >relkitKoshuCop</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Termname"
+	    >Termname</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RelkitGlobal"
+	    >RelkitGlobal</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:consKoshuCopInfix"
+	    >consKoshuCopInfix</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopCons"
 	    >RopCons</a
 	    > c</li
 	  ><li class="src short"
-	  ><a href="#v:ropConsKoshuRop"
-	    >ropConsKoshuRop</a
+	  ><a href="#v:relkitKoshuCopInfix"
+	    >relkitKoshuCopInfix</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Termname"
+	    >Termname</a
+	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Termname"
+	    >Termname</a
+	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Termname"
+	    >Termname</a
+	    >) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RelkitGlobal"
+	    >RelkitGlobal</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:consKoshuRop"
+	    >consKoshuRop</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopCons"
 	    >RopCons</a
 	    > c</li
 	  ><li class="src short"
-	  ><a href="#v:ropConsKoshuVersion"
-	    >ropConsKoshuVersion</a
+	  ><a href="#v:relkitKoshuRop"
+	    >relkitKoshuRop</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Termname"
+	    >Termname</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RelkitGlobal"
+	    >RelkitGlobal</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:consKoshuVersion"
+	    >consKoshuVersion</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopCons"
 	    >RopCons</a
 	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitKoshuVersion"
+	    >relkitKoshuVersion</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Termname"
+	    >Termname</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:Global"
+	    >Global</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c)</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -115,13 +169,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 </h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:ropConsKoshuCop" class="def"
-	    >ropConsKoshuCop</a
+	  ><a name="v:consKoshuCop" class="def"
+	    >consKoshuCop</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopCons"
 	    >RopCons</a
-	    > c<a href="src/Koshucode-Baala-Vanilla-Rop-Global.html#ropConsKoshuCop" class="link"
+	    > c<a href="src/Koshucode-Baala-Vanilla-Rop-Global.html#consKoshuCop" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitKoshuCop" class="def"
+	    >relkitKoshuCop</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Termname"
+	    >Termname</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RelkitGlobal"
+	    >RelkitGlobal</a
+	    > c<a href="src/Koshucode-Baala-Vanilla-Rop-Global.html#relkitKoshuCop" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -130,13 +198,35 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 </h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:ropConsKoshuCopInfix" class="def"
-	    >ropConsKoshuCopInfix</a
+	  ><a name="v:consKoshuCopInfix" class="def"
+	    >consKoshuCopInfix</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopCons"
 	    >RopCons</a
-	    > c<a href="src/Koshucode-Baala-Vanilla-Rop-Global.html#ropConsKoshuCopInfix" class="link"
+	    > c<a href="src/Koshucode-Baala-Vanilla-Rop-Global.html#consKoshuCopInfix" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitKoshuCopInfix" class="def"
+	    >relkitKoshuCopInfix</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Termname"
+	    >Termname</a
+	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Termname"
+	    >Termname</a
+	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Termname"
+	    >Termname</a
+	    >) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RelkitGlobal"
+	    >RelkitGlobal</a
+	    > c<a href="src/Koshucode-Baala-Vanilla-Rop-Global.html#relkitKoshuCopInfix" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -145,13 +235,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 </h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:ropConsKoshuRop" class="def"
-	    >ropConsKoshuRop</a
+	  ><a name="v:consKoshuRop" class="def"
+	    >consKoshuRop</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopCons"
 	    >RopCons</a
-	    > c<a href="src/Koshucode-Baala-Vanilla-Rop-Global.html#ropConsKoshuRop" class="link"
+	    > c<a href="src/Koshucode-Baala-Vanilla-Rop-Global.html#consKoshuRop" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitKoshuRop" class="def"
+	    >relkitKoshuRop</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Termname"
+	    >Termname</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RelkitGlobal"
+	    >RelkitGlobal</a
+	    > c<a href="src/Koshucode-Baala-Vanilla-Rop-Global.html#relkitKoshuRop" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -160,13 +264,33 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Vanill
 </h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:ropConsKoshuVersion" class="def"
-	    >ropConsKoshuVersion</a
+	  ><a name="v:consKoshuVersion" class="def"
+	    >consKoshuVersion</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopCons"
 	    >RopCons</a
-	    > c<a href="src/Koshucode-Baala-Vanilla-Rop-Global.html#ropConsKoshuVersion" class="link"
+	    > c<a href="src/Koshucode-Baala-Vanilla-Rop-Global.html#consKoshuVersion" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitKoshuVersion" class="def"
+	    >relkitKoshuVersion</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Termname"
+	    >Termname</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:Global"
+	    >Global</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relkit.html#t:Relkit"
+	    >Relkit</a
+	    > c)<a href="src/Koshucode-Baala-Vanilla-Rop-Global.html#relkitKoshuVersion" class="link"
 	    >Source</a
 	    ></p
 	  ></div

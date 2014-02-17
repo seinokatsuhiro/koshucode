@@ -18,56 +18,55 @@
 <a name="line-9"></a>
 <a name="line-10"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
 <a name="line-11"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>C</span>
-<a name="line-12"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Vanilla</span><span class='hs-varop'>.</span><span class='hs-conid'>Type</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>V</span>
-<a name="line-13"></a>
-<a name="line-14"></a><span class='hs-comment'>-- ----------------------</span>
-<a name="line-15"></a><span class='hs-comment'>{- $Operators
-<a name="line-16"></a>
-<a name="line-17"></a> [@=@]     Equal.
-<a name="line-18"></a>
-<a name="line-19"></a> [@\&lt;\&gt;@]  Not equal.
-<a name="line-20"></a>
-<a name="line-21"></a> [@&lt;@]     Less than.
-<a name="line-22"></a>
-<a name="line-23"></a> [@&lt;=@]    Less than or equal.
-<a name="line-24"></a>
-<a name="line-25"></a> [@&gt;@]     Grater than.
-<a name="line-26"></a>
-<a name="line-27"></a> [@&gt;=@]    Grater than or equal.
-<a name="line-28"></a>
-<a name="line-29"></a>-}</span>
-<a name="line-30"></a>
-<a name="line-31"></a><a name="copsOrder"></a><span class='hs-definition'>copsOrder</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Cop</span> <span class='hs-conid'>V</span><span class='hs-varop'>.</span><span class='hs-conid'>VContent</span><span class='hs-keyglyph'>]</span>
-<a name="line-32"></a><span class='hs-definition'>copsOrder</span> <span class='hs-keyglyph'>=</span>
-<a name="line-33"></a>    <span class='hs-keyglyph'>[</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CopFun</span>  <span class='hs-str'>"="</span>    <span class='hs-varid'>copEq</span>
-<a name="line-34"></a>    <span class='hs-layout'>,</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CopFun</span>  <span class='hs-str'>"&lt;&gt;"</span>   <span class='hs-varid'>copNeq</span>
-<a name="line-35"></a>    <span class='hs-layout'>,</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CopFun</span>  <span class='hs-str'>"&lt;"</span>    <span class='hs-varid'>copLt</span>
-<a name="line-36"></a>    <span class='hs-layout'>,</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CopFun</span>  <span class='hs-str'>"&lt;="</span>   <span class='hs-varid'>copLte</span>
-<a name="line-37"></a>    <span class='hs-layout'>,</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CopFun</span>  <span class='hs-str'>"&gt;"</span>    <span class='hs-varid'>copGt</span>
-<a name="line-38"></a>    <span class='hs-layout'>,</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CopFun</span>  <span class='hs-str'>"&gt;="</span>   <span class='hs-varid'>copGte</span>
-<a name="line-39"></a>    <span class='hs-keyglyph'>]</span>
-<a name="line-40"></a>
-<a name="line-41"></a><a name="copBy"></a><span class='hs-definition'>copBy</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>V</span><span class='hs-varop'>.</span><span class='hs-conid'>VContent</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>V</span><span class='hs-varop'>.</span><span class='hs-conid'>VContent</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>V</span><span class='hs-varop'>.</span><span class='hs-conid'>VCop</span>
-<a name="line-42"></a><span class='hs-definition'>copBy</span> <span class='hs-varid'>p</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>x</span><span class='hs-layout'>,</span> <span class='hs-varid'>y</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>putBool</span> <span class='hs-varop'>$</span> <span class='hs-varid'>x</span> <span class='hs-varop'>`p`</span> <span class='hs-varid'>y</span>
-<a name="line-43"></a><span class='hs-definition'>copBy</span> <span class='hs-keyword'>_</span> <span class='hs-keyword'>_</span>      <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span>  <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortNotFound</span> <span class='hs-str'>""</span>
-<a name="line-44"></a>
-<a name="line-45"></a><a name="copEq"></a><span class='hs-definition'>copEq</span>   <span class='hs-keyglyph'>::</span> <span class='hs-conid'>V</span><span class='hs-varop'>.</span><span class='hs-conid'>VCop</span>
-<a name="line-46"></a><span class='hs-definition'>copEq</span>   <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>copBy</span> <span class='hs-layout'>(</span><span class='hs-varop'>==</span><span class='hs-layout'>)</span>
-<a name="line-47"></a>
-<a name="line-48"></a><a name="copNeq"></a><span class='hs-definition'>copNeq</span>  <span class='hs-keyglyph'>::</span> <span class='hs-conid'>V</span><span class='hs-varop'>.</span><span class='hs-conid'>VCop</span>
-<a name="line-49"></a><span class='hs-definition'>copNeq</span>  <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>copBy</span> <span class='hs-layout'>(</span><span class='hs-varop'>/=</span><span class='hs-layout'>)</span>
-<a name="line-50"></a>
-<a name="line-51"></a><a name="copLt"></a><span class='hs-definition'>copLt</span>   <span class='hs-keyglyph'>::</span> <span class='hs-conid'>V</span><span class='hs-varop'>.</span><span class='hs-conid'>VCop</span>
-<a name="line-52"></a><span class='hs-definition'>copLt</span>   <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>copBy</span> <span class='hs-layout'>(</span><span class='hs-varop'>&lt;</span><span class='hs-layout'>)</span>
-<a name="line-53"></a>
-<a name="line-54"></a><a name="copLte"></a><span class='hs-definition'>copLte</span>  <span class='hs-keyglyph'>::</span> <span class='hs-conid'>V</span><span class='hs-varop'>.</span><span class='hs-conid'>VCop</span>
-<a name="line-55"></a><span class='hs-definition'>copLte</span>  <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>copBy</span> <span class='hs-layout'>(</span><span class='hs-varop'>&lt;=</span><span class='hs-layout'>)</span>
-<a name="line-56"></a>
-<a name="line-57"></a><a name="copGt"></a><span class='hs-definition'>copGt</span>   <span class='hs-keyglyph'>::</span> <span class='hs-conid'>V</span><span class='hs-varop'>.</span><span class='hs-conid'>VCop</span>
-<a name="line-58"></a><span class='hs-definition'>copGt</span>   <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>copBy</span> <span class='hs-layout'>(</span><span class='hs-varop'>&gt;</span><span class='hs-layout'>)</span>
-<a name="line-59"></a>
-<a name="line-60"></a><a name="copGte"></a><span class='hs-definition'>copGte</span>  <span class='hs-keyglyph'>::</span> <span class='hs-conid'>V</span><span class='hs-varop'>.</span><span class='hs-conid'>VCop</span>
-<a name="line-61"></a><span class='hs-definition'>copGte</span>  <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>copBy</span> <span class='hs-layout'>(</span><span class='hs-varop'>&gt;=</span><span class='hs-layout'>)</span>
-<a name="line-62"></a>
+<a name="line-12"></a>
+<a name="line-13"></a><span class='hs-comment'>-- ----------------------</span>
+<a name="line-14"></a><span class='hs-comment'>{- $Operators
+<a name="line-15"></a>
+<a name="line-16"></a> [@=@]     Equal.
+<a name="line-17"></a>
+<a name="line-18"></a> [@\&lt;\&gt;@]  Not equal.
+<a name="line-19"></a>
+<a name="line-20"></a> [@&lt;@]     Less than.
+<a name="line-21"></a>
+<a name="line-22"></a> [@&lt;=@]    Less than or equal.
+<a name="line-23"></a>
+<a name="line-24"></a> [@&gt;@]     Grater than.
+<a name="line-25"></a>
+<a name="line-26"></a> [@&gt;=@]    Grater than or equal.
+<a name="line-27"></a>
+<a name="line-28"></a>-}</span>
+<a name="line-29"></a>
+<a name="line-30"></a><a name="copsOrder"></a><span class='hs-definition'>copsOrder</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CBool</span> <span class='hs-varid'>c</span><span class='hs-layout'>,</span> <span class='hs-conid'>Eq</span> <span class='hs-varid'>c</span><span class='hs-layout'>,</span> <span class='hs-conid'>Ord</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Cop</span> <span class='hs-varid'>c</span><span class='hs-keyglyph'>]</span>
+<a name="line-31"></a><span class='hs-definition'>copsOrder</span> <span class='hs-keyglyph'>=</span>
+<a name="line-32"></a>    <span class='hs-keyglyph'>[</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CopFun</span>  <span class='hs-str'>"="</span>    <span class='hs-varid'>copEq</span>
+<a name="line-33"></a>    <span class='hs-layout'>,</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CopFun</span>  <span class='hs-str'>"&lt;&gt;"</span>   <span class='hs-varid'>copNeq</span>
+<a name="line-34"></a>    <span class='hs-layout'>,</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CopFun</span>  <span class='hs-str'>"&lt;"</span>    <span class='hs-varid'>copLt</span>
+<a name="line-35"></a>    <span class='hs-layout'>,</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CopFun</span>  <span class='hs-str'>"&lt;="</span>   <span class='hs-varid'>copLte</span>
+<a name="line-36"></a>    <span class='hs-layout'>,</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CopFun</span>  <span class='hs-str'>"&gt;"</span>    <span class='hs-varid'>copGt</span>
+<a name="line-37"></a>    <span class='hs-layout'>,</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CopFun</span>  <span class='hs-str'>"&gt;="</span>   <span class='hs-varid'>copGte</span>
+<a name="line-38"></a>    <span class='hs-keyglyph'>]</span>
+<a name="line-39"></a>
+<a name="line-40"></a><a name="copBy"></a><span class='hs-definition'>copBy</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CBool</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CopFun</span> <span class='hs-varid'>c</span>
+<a name="line-41"></a><span class='hs-definition'>copBy</span> <span class='hs-varid'>p</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>x</span><span class='hs-layout'>,</span> <span class='hs-varid'>y</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>.</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>putBool</span> <span class='hs-varop'>$</span> <span class='hs-varid'>x</span> <span class='hs-varop'>`p`</span> <span class='hs-varid'>y</span>
+<a name="line-42"></a><span class='hs-definition'>copBy</span> <span class='hs-keyword'>_</span> <span class='hs-keyword'>_</span>      <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span>  <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>abortNotFound</span> <span class='hs-str'>""</span>
+<a name="line-43"></a>
+<a name="line-44"></a><a name="copEq"></a><span class='hs-definition'>copEq</span>   <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CBool</span> <span class='hs-varid'>c</span><span class='hs-layout'>,</span> <span class='hs-conid'>Eq</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CopFun</span> <span class='hs-varid'>c</span>
+<a name="line-45"></a><span class='hs-definition'>copEq</span>   <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>copBy</span> <span class='hs-layout'>(</span><span class='hs-varop'>==</span><span class='hs-layout'>)</span>
+<a name="line-46"></a>
+<a name="line-47"></a><a name="copNeq"></a><span class='hs-definition'>copNeq</span>  <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CBool</span> <span class='hs-varid'>c</span><span class='hs-layout'>,</span> <span class='hs-conid'>Eq</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CopFun</span> <span class='hs-varid'>c</span>
+<a name="line-48"></a><span class='hs-definition'>copNeq</span>  <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>copBy</span> <span class='hs-layout'>(</span><span class='hs-varop'>/=</span><span class='hs-layout'>)</span>
+<a name="line-49"></a>
+<a name="line-50"></a><a name="copLt"></a><span class='hs-definition'>copLt</span>   <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CBool</span> <span class='hs-varid'>c</span><span class='hs-layout'>,</span> <span class='hs-conid'>Ord</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CopFun</span> <span class='hs-varid'>c</span>
+<a name="line-51"></a><span class='hs-definition'>copLt</span>   <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>copBy</span> <span class='hs-layout'>(</span><span class='hs-varop'>&lt;</span><span class='hs-layout'>)</span>
+<a name="line-52"></a>
+<a name="line-53"></a><a name="copLte"></a><span class='hs-definition'>copLte</span>  <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CBool</span> <span class='hs-varid'>c</span><span class='hs-layout'>,</span> <span class='hs-conid'>Ord</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CopFun</span> <span class='hs-varid'>c</span>
+<a name="line-54"></a><span class='hs-definition'>copLte</span>  <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>copBy</span> <span class='hs-layout'>(</span><span class='hs-varop'>&lt;=</span><span class='hs-layout'>)</span>
+<a name="line-55"></a>
+<a name="line-56"></a><a name="copGt"></a><span class='hs-definition'>copGt</span>   <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CBool</span> <span class='hs-varid'>c</span><span class='hs-layout'>,</span> <span class='hs-conid'>Ord</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CopFun</span> <span class='hs-varid'>c</span>
+<a name="line-57"></a><span class='hs-definition'>copGt</span>   <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>copBy</span> <span class='hs-layout'>(</span><span class='hs-varop'>&gt;</span><span class='hs-layout'>)</span>
+<a name="line-58"></a>
+<a name="line-59"></a><a name="copGte"></a><span class='hs-definition'>copGte</span>  <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CBool</span> <span class='hs-varid'>c</span><span class='hs-layout'>,</span> <span class='hs-conid'>Ord</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CopFun</span> <span class='hs-varid'>c</span>
+<a name="line-60"></a><span class='hs-definition'>copGte</span>  <span class='hs-keyglyph'>=</span>  <span class='hs-varid'>copBy</span> <span class='hs-layout'>(</span><span class='hs-varop'>&gt;=</span><span class='hs-layout'>)</span>
+<a name="line-61"></a>
 </pre></body>
 </html>
