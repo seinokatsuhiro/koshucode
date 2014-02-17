@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.42.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.44.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -51,15 +51,29 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Datatype
+	    >Full sorter
 </a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Sorter
+	    >Branch sorter
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Trunk sorter
 </a
 	    ></li
 	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Sorter for operand of relmap operator.
+</p
+	  ></div
 	></div
       ><div id="synopsis"
       ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
@@ -68,10 +82,48 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:RopOperand"
-	    >RopOperand</a
-	    > = (<a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopSorter"
-	    >RopSorter</a
+	    > <a href="#t:RopFullSorter"
+	    >RopFullSorter</a
+	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandAssoc"
+	    >RopOperandAssoc</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:ropFullSorter"
+	    >ropFullSorter</a
+	    > :: <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandSorter"
+	    >RopOperandSorter</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopFullSorter"
+	    >RopFullSorter</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:RopOperandAssoc"
+	    >RopOperandAssoc</a
+	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+	    >Named</a
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >]]</li
+	  ><li class="src short"
+	  ><a href="#v:ropOperandAssoc"
+	    >ropOperandAssoc</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandAssoc"
+	    >RopOperandAssoc</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:RopOperandSorter"
+	    >RopOperandSorter</a
+	    > = (<a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopTrunkSorter"
+	    >RopTrunkSorter</a
 	    >, [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    >], [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
@@ -80,265 +132,177 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:RopSorter"
-	    >RopSorter</a
-	    > = <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopAssoc"
-	    >RopAssoc</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopAssoc"
-	    >RopAssoc</a
+	    > <a href="#t:RopTrunkSorter"
+	    >RopTrunkSorter</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
+	    >AbMap</a
+	    > <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandAssoc"
+	    >RopOperandAssoc</a
 	    ></li
 	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:RopFullSorter"
-	    >RopFullSorter</a
-	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopAssoc"
-	    >RopAssoc</a
-	    ></li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:RopAssoc"
-	    >RopAssoc</a
-	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >]]</li
-	  ><li class="src short"
-	  ><a href="#v:sortOperand"
-	    >sortOperand</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopAssoc"
-	    >RopAssoc</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:sortUpOperand"
-	    >sortUpOperand</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Assoc.html#t:OnceMore"
-	    >OnceMore</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >])]</li
-	  ><li class="src short"
-	  ><a href="#v:operandNone"
-	    >operandNone</a
+	  ><a href="#v:sortNone"
+	    >sortNone</a
 	    > :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperand"
-	    >RopOperand</a
+	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandSorter"
+	    >RopOperandSorter</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:operandEnum"
-	    >operandEnum</a
+	  ><a href="#v:sortEnum"
+	    >sortEnum</a
 	    > :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    >] -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperand"
-	    >RopOperand</a
+	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandSorter"
+	    >RopOperandSorter</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:operandList"
-	    >operandList</a
+	  ><a href="#v:sortList"
+	    >sortList</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperand"
-	    >RopOperand</a
+	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandSorter"
+	    >RopOperandSorter</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:operandOne"
-	    >operandOne</a
+	  ><a href="#v:sortOne"
+	    >sortOne</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperand"
-	    >RopOperand</a
+	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandSorter"
+	    >RopOperandSorter</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:operandTwo"
-	    >operandTwo</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperand"
-	    >RopOperand</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:operandThree"
-	    >operandThree</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperand"
-	    >RopOperand</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:operandOneList"
-	    >operandOneList</a
+	  ><a href="#v:sortTwo"
+	    >sortTwo</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperand"
-	    >RopOperand</a
+	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandSorter"
+	    >RopOperandSorter</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:sortThree"
+	    >sortThree</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandSorter"
+	    >RopOperandSorter</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:sortFour"
+	    >sortFour</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandSorter"
+	    >RopOperandSorter</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:sortOneList"
+	    >sortOneList</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandSorter"
+	    >RopOperandSorter</a
 	    ></li
 	  ></ul
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Datatype
+	>Full sorter
 </h1
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:RopOperand" class="def"
-	    >RopOperand</a
-	    > = (<a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopSorter"
-	    >RopSorter</a
-	    >, [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >], [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >])<a href="src/Koshucode-Baala-Core-Relmap-Operand.html#RopOperand" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:RopSorter" class="def"
-	    >RopSorter</a
-	    ><a href="src/Koshucode-Baala-Core-Relmap-Operand.html#RopSorter" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="subs arguments"
-	  ><p class="caption"
-	    >Arguments</p
-	    ><table
-	    ><tr
-	      ><td class="src"
-		>&nbsp;= <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopAssoc"
-		  >RopAssoc</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Basically sorted operand
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-		  >Ab</a
-		  > <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopAssoc"
-		  >RopAssoc</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Fully sorted operand
-</p
-		  ></td
-		></tr
-	      ></table
-	    ></div
-	  ></div
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
 	    > <a name="t:RopFullSorter" class="def"
 	    >RopFullSorter</a
+	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandAssoc"
+	    >RopOperandAssoc</a
 	    ><a href="src/Koshucode-Baala-Core-Relmap-Operand.html#RopFullSorter" class="link"
 	    >Source</a
 	    ></p
-	  ><div class="subs arguments"
-	  ><p class="caption"
-	    >Arguments</p
-	    ><table
-	    ><tr
-	      ><td class="src"
-		>&nbsp;= [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-		  >TokenTree</a
-		  >]</td
-		><td class="doc"
-		><p
-		  >Unsorted operand
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-		  >Ab</a
-		  > <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopAssoc"
-		  >RopAssoc</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Fully sorted operand
-</p
-		  ></td
-		></tr
-	      ></table
-	    ></div
 	  ><div class="doc"
 	  ><p
-	    >Sorter for operand of relational operator.
-    This soters docompose operand trees,
-    and give a name to suboperand. 
+	    >Sorter for operand of relmap operator.
+   Sorters docompose operand trees,
+   and give a name to suboperand.
 </p
 	    ></div
 	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ropFullSorter" class="def"
+	    >ropFullSorter</a
+	    > :: <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandSorter"
+	    >RopOperandSorter</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopFullSorter"
+	    >RopFullSorter</a
+	    ><a href="src/Koshucode-Baala-Core-Relmap-Operand.html#ropFullSorter" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:2"
+	>Branch sorter
+</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:RopAssoc" class="def"
-	    >RopAssoc</a
+	    > <a name="t:RopOperandAssoc" class="def"
+	    >RopOperandAssoc</a
 	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
 	    >Named</a
 	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    >]]<a href="src/Koshucode-Baala-Core-Relmap-Operand.html#RopAssoc" class="link"
+	    >]]<a href="src/Koshucode-Baala-Core-Relmap-Operand.html#RopOperandAssoc" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Relmap operand as association list.
+</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:sortOperand" class="def"
-	    >sortOperand</a
+	  ><a name="v:ropOperandAssoc" class="def"
+	    >ropOperandAssoc</a
 	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopAssoc"
-	    >RopAssoc</a
-	    ><a href="src/Koshucode-Baala-Core-Relmap-Operand.html#sortOperand" class="link"
+	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandAssoc"
+	    >RopOperandAssoc</a
+	    ><a href="src/Koshucode-Baala-Core-Relmap-Operand.html#ropOperandAssoc" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -354,7 +318,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>sortOperand $ B.tt &quot;a b -x /c 'd -y e&quot;
+		>ropOperandAssoc $ B.tt &quot;a b -x /c 'd -y e&quot;
 </code
 		></strong
 	      >[ (&quot;&quot;,   [TreeL (TWord 1 0 &quot;a&quot;), TreeL (TWord 3 0 &quot;b&quot;)])
@@ -363,169 +327,152 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 </pre
 	    ></div
 	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:sortUpOperand" class="def"
-	    >sortUpOperand</a
-	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Assoc.html#t:OnceMore"
-	    >OnceMore</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >])]<a href="src/Koshucode-Baala-Core-Relmap-Operand.html#sortUpOperand" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><h1 id="g:2"
-	>Sorter
+	><h1 id="g:3"
+	>Trunk sorter
 </h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:operandNone" class="def"
-	    >operandNone</a
-	    > :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:RopOperandSorter" class="def"
+	    >RopOperandSorter</a
+	    > = (<a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopTrunkSorter"
+	    >RopTrunkSorter</a
+	    >, [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperand"
-	    >RopOperand</a
-	    ><a href="src/Koshucode-Baala-Core-Relmap-Operand.html#operandNone" class="link"
+	    >], [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >])<a href="src/Koshucode-Baala-Core-Relmap-Operand.html#RopOperandSorter" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >No-element trunk.
+	    >Operand sorter for relmap operator.
+   It consists of trunk sorter, trunk names, and branch names.
+   Trunk part is unnamed operand.
+   Branch part is named operand.
 </p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>operandNone []
-</code
-		></strong
-	      ></pre
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:operandEnum" class="def"
-	    >operandEnum</a
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:RopTrunkSorter" class="def"
+	    >RopTrunkSorter</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
+	    >AbMap</a
+	    > <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandAssoc"
+	    >RopOperandAssoc</a
+	    ><a href="src/Koshucode-Baala-Core-Relmap-Operand.html#RopTrunkSorter" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Mapping from basically sorted operand
+   to fully sorted operand.
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:sortNone" class="def"
+	    >sortNone</a
+	    > :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandSorter"
+	    >RopOperandSorter</a
+	    ><a href="src/Koshucode-Baala-Core-Relmap-Operand.html#sortNone" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Operand sorter for no-element trunk. 
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:sortEnum" class="def"
+	    >sortEnum</a
 	    > :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    >] -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperand"
-	    >RopOperand</a
-	    ><a href="src/Koshucode-Baala-Core-Relmap-Operand.html#operandEnum" class="link"
+	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandSorter"
+	    >RopOperandSorter</a
+	    ><a href="src/Koshucode-Baala-Core-Relmap-Operand.html#sortEnum" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Enumerating trunk.
+	    >Operand sorter for enumerating trunk. 
 </p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>operandEnum [&quot;-1&quot;, &quot;-2&quot;] []
-</code
-		></strong
-	      ></pre
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:operandList" class="def"
-	    >operandList</a
+	  ><a name="v:sortList" class="def"
+	    >sortList</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperand"
-	    >RopOperand</a
-	    ><a href="src/Koshucode-Baala-Core-Relmap-Operand.html#operandList" class="link"
+	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandSorter"
+	    >RopOperandSorter</a
+	    ><a href="src/Koshucode-Baala-Core-Relmap-Operand.html#sortList" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Multiple-element trunk.
+	    >Operand sorter for multiple-element trunk. 
 </p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>operandList &quot;-term&quot; []
-</code
-		></strong
-	      ></pre
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:operandOne" class="def"
-	    >operandOne</a
+	  ><a name="v:sortOne" class="def"
+	    >sortOne</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperand"
-	    >RopOperand</a
-	    ><a href="src/Koshucode-Baala-Core-Relmap-Operand.html#operandOne" class="link"
+	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandSorter"
+	    >RopOperandSorter</a
+	    ><a href="src/Koshucode-Baala-Core-Relmap-Operand.html#sortOne" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >One-element trunk.
+	    >Operand sorter for one-element trunk. 
 </p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>operandOne &quot;-relmap&quot; []
-</code
-		></strong
-	      ></pre
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:operandTwo" class="def"
-	    >operandTwo</a
+	  ><a name="v:sortTwo" class="def"
+	    >sortTwo</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperand"
-	    >RopOperand</a
-	    ><a href="src/Koshucode-Baala-Core-Relmap-Operand.html#operandTwo" class="link"
+	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandSorter"
+	    >RopOperandSorter</a
+	    ><a href="src/Koshucode-Baala-Core-Relmap-Operand.html#sortTwo" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Two-element trunk.
+	    >Operand sorter for two-element trunk. 
 </p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>operandTwo &quot;-term&quot; &quot;-relmap&quot; []
-</code
-		></strong
-	      ></pre
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:operandThree" class="def"
-	    >operandThree</a
+	  ><a name="v:sortThree" class="def"
+	    >sortThree</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
@@ -534,40 +481,51 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >String</a
 	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperand"
-	    >RopOperand</a
-	    ><a href="src/Koshucode-Baala-Core-Relmap-Operand.html#operandThree" class="link"
+	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandSorter"
+	    >RopOperandSorter</a
+	    ><a href="src/Koshucode-Baala-Core-Relmap-Operand.html#sortThree" class="link"
 	    >Source</a
 	    ></p
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:operandOneList" class="def"
-	    >operandOneList</a
+	  ><a name="v:sortFour" class="def"
+	    >sortFour</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandSorter"
+	    >RopOperandSorter</a
+	    ><a href="src/Koshucode-Baala-Core-Relmap-Operand.html#sortFour" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:sortOneList" class="def"
+	    >sortOneList</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperand"
-	    >RopOperand</a
-	    ><a href="src/Koshucode-Baala-Core-Relmap-Operand.html#operandOneList" class="link"
+	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandSorter"
+	    >RopOperandSorter</a
+	    ><a href="src/Koshucode-Baala-Core-Relmap-Operand.html#sortOneList" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >One-and-multiple-element trunk.
+	    >Operand sorter for one-and-multiple-element trunk. 
 </p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>operandOneList &quot;-pattern&quot; &quot;-term&quot; []
-</code
-		></strong
-	      ></pre
 	    ></div
 	  ></div
 	></div

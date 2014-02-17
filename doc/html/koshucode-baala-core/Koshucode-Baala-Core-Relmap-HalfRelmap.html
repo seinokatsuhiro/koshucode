@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.42.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.44.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -58,12 +58,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >HalfRelmap</a
 	    > {<ul class="subs"
 	    ><li
-	      ><a href="#v:halfUsage"
-		>halfUsage</a
-		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		></li
-	      ><li
 	      ><a href="#v:halfOpToken"
 		>halfOpToken</a
 		> :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Token"
@@ -72,8 +66,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      ><li
 	      ><a href="#v:halfOperand"
 		>halfOperand</a
-		> :: <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopAssoc"
-		>RopAssoc</a
+		> :: <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandAssoc"
+		>RopOperandAssoc</a
 		></li
 	      ><li
 	      ><a href="#v:halfSubrelmap"
@@ -81,6 +75,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		> :: [<a href="Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
 		>HalfRelmap</a
 		>]</li
+	      ><li
+	      ><a href="#v:halfUsage"
+		>halfUsage</a
+		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		></li
 	      ></ul
 	    >}</li
 	  ><li class="src short"
@@ -145,17 +145,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		    >Fields</p
 		    ><dl
 		    ><dt class="src"
-		      ><a name="v:halfUsage" class="def"
-			>halfUsage</a
-			> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-			>String</a
-			></dt
-		      ><dd class="doc"
-		      ><p
-			>Usages description
-</p
-			></dd
-		      ><dt class="src"
 		      ><a name="v:halfOpToken" class="def"
 			>halfOpToken</a
 			> :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Token"
@@ -163,14 +152,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 			></dt
 		      ><dd class="doc"
 		      ><p
-			>Operator name
+			>Operator token
 </p
 			></dd
 		      ><dt class="src"
 		      ><a name="v:halfOperand" class="def"
 			>halfOperand</a
-			> :: <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopAssoc"
-			>RopAssoc</a
+			> :: <a href="Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandAssoc"
+			>RopOperandAssoc</a
 			></dt
 		      ><dd class="doc"
 		      ><p
@@ -186,6 +175,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      ><dd class="doc"
 		      ><p
 			>Subrelmaps in the operand
+</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:halfUsage" class="def"
+			>halfUsage</a
+			> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+			>String</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Usages description
 </p
 			></dd
 		      ></dl

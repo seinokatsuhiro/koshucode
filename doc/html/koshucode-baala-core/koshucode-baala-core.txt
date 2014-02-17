@@ -8,71 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-core
-@version 0.42.0.0
-
-module Koshucode.Baala.Core.Relmap.Operand
-type RopOperand = (RopSorter, [String], [String])
-type RopSorter = RopAssoc -> Ab RopAssoc
-
--- | Sorter for operand of relational operator. This soters docompose
---   operand trees, and give a name to suboperand.
-type RopFullSorter = [TokenTree] -> Ab RopAssoc
-type RopAssoc = [Named [TokenTree]]
-
--- | Split operand into named group. Non quoted words beginning with
---   hyphen, e.g., <tt>-x</tt>, are name of group.
---   
---   <pre>
---   &gt;&gt;&gt; sortOperand $ B.tt "a b -x /c 'd -y e"
---   [ ("",   [TreeL (TWord 1 0 "a"), TreeL (TWord 3 0 "b")])
---   , ("-x", [TreeL (TTerm 7 ["/c"]), TreeL (TWord 9 1 "d")])
---   , ("-y", [TreeL (TWord 14 0 "e")]) ]
---   </pre>
-sortOperand :: [TokenTree] -> RopAssoc
-sortUpOperand :: [TokenTree] -> [Named (OnceMore [TokenTree])]
-
--- | No-element trunk.
---   
---   <pre>
---   &gt;&gt;&gt; operandNone []
---   </pre>
-operandNone :: [String] -> RopOperand
-
--- | Enumerating trunk.
---   
---   <pre>
---   &gt;&gt;&gt; operandEnum ["-1", "-2"] []
---   </pre>
-operandEnum :: [String] -> [String] -> RopOperand
-
--- | Multiple-element trunk.
---   
---   <pre>
---   &gt;&gt;&gt; operandList "-term" []
---   </pre>
-operandList :: String -> [String] -> RopOperand
-
--- | One-element trunk.
---   
---   <pre>
---   &gt;&gt;&gt; operandOne "-relmap" []
---   </pre>
-operandOne :: String -> [String] -> RopOperand
-
--- | Two-element trunk.
---   
---   <pre>
---   &gt;&gt;&gt; operandTwo "-term" "-relmap" []
---   </pre>
-operandTwo :: String -> String -> [String] -> RopOperand
-operandThree :: String -> String -> String -> [String] -> RopOperand
-
--- | One-and-multiple-element trunk.
---   
---   <pre>
---   &gt;&gt;&gt; operandOneList "-pattern" "-term" []
---   </pre>
-operandOneList :: String -> String -> [String] -> RopOperand
+@version 0.44.0.0
 
 module Koshucode.Baala.Core.Relmap.Relkit
 data Relkit c
@@ -93,8 +29,6 @@ RelkitConst :: [[c]] -> RelkitCore c
 RelkitId :: RelkitCore c
 RelkitAppend :: (RelkitBody c) -> (RelkitBody c) -> RelkitCore c
 RelkitUnion :: Bool -> [RelkitBody c] -> RelkitCore c
-type RelmapCalcRelkit c = Relhead -> Ab (Relkit c)
-type RelmapConflRelkit c = [(Relkit c)] -> RelmapCalcRelkit c
 relkit :: Relhead -> RelkitCore c -> Relkit c
 relkitId :: Relhead -> Relkit c
 relkitConst :: Rel c -> Relkit c
@@ -106,6 +40,57 @@ relkitRun :: Ord c => RelkitBody c -> AbMap [[c]]
 instance Show (RelkitCore c)
 instance Monoid (Relkit c)
 
+
+-- | Sorter for operand of relmap operator.
+module Koshucode.Baala.Core.Relmap.Operand
+
+-- | Sorter for operand of relmap operator. Sorters docompose operand
+--   trees, and give a name to suboperand.
+type RopFullSorter = [TokenTree] -> Ab RopOperandAssoc
+ropFullSorter :: RopOperandSorter -> RopFullSorter
+
+-- | Relmap operand as association list.
+type RopOperandAssoc = [Named [TokenTree]]
+
+-- | Split operand into named group. Non quoted words beginning with
+--   hyphen, e.g., <tt>-x</tt>, are name of group.
+--   
+--   <pre>
+--   &gt;&gt;&gt; ropOperandAssoc $ B.tt "a b -x /c 'd -y e"
+--   [ ("",   [TreeL (TWord 1 0 "a"), TreeL (TWord 3 0 "b")])
+--   , ("-x", [TreeL (TTerm 7 ["/c"]), TreeL (TWord 9 1 "d")])
+--   , ("-y", [TreeL (TWord 14 0 "e")]) ]
+--   </pre>
+ropOperandAssoc :: [TokenTree] -> RopOperandAssoc
+
+-- | Operand sorter for relmap operator. It consists of trunk sorter, trunk
+--   names, and branch names. Trunk part is unnamed operand. Branch part is
+--   named operand.
+type RopOperandSorter = (RopTrunkSorter, [String], [String])
+
+-- | Mapping from basically sorted operand to fully sorted operand.
+type RopTrunkSorter = AbMap RopOperandAssoc
+
+-- | Operand sorter for no-element trunk.
+sortNone :: [String] -> RopOperandSorter
+
+-- | Operand sorter for enumerating trunk.
+sortEnum :: [String] -> [String] -> RopOperandSorter
+
+-- | Operand sorter for multiple-element trunk.
+sortList :: String -> [String] -> RopOperandSorter
+
+-- | Operand sorter for one-element trunk.
+sortOne :: String -> [String] -> RopOperandSorter
+
+-- | Operand sorter for two-element trunk.
+sortTwo :: String -> String -> [String] -> RopOperandSorter
+sortThree :: String -> String -> String -> [String] -> RopOperandSorter
+sortFour :: String -> String -> String -> String -> [String] -> RopOperandSorter
+
+-- | Operand sorter for one-and-multiple-element trunk.
+sortOneList :: String -> String -> [String] -> RopOperandSorter
+
 module Koshucode.Baala.Core.Relmap.HalfRelmap
 
 -- | Intermediate data that represents use of relational operator.
@@ -113,19 +98,19 @@ module Koshucode.Baala.Core.Relmap.HalfRelmap
 --   <a>HalfRelmap</a> is constructed from list of <tt>TokenTree</tt>, and
 --   (full) <tt>Relmap</tt> is constructed from <a>HalfRelmap</a>.
 data HalfRelmap
-HalfRelmap :: String -> Token -> RopAssoc -> [HalfRelmap] -> HalfRelmap
+HalfRelmap :: Token -> RopOperandAssoc -> [HalfRelmap] -> String -> HalfRelmap
 
--- | Usages description
-halfUsage :: HalfRelmap -> String
-
--- | Operator name
+-- | Operator token
 halfOpToken :: HalfRelmap -> Token
 
 -- | Operand of relmap operation
-halfOperand :: HalfRelmap -> RopAssoc
+halfOperand :: HalfRelmap -> RopOperandAssoc
 
 -- | Subrelmaps in the operand
 halfSubrelmap :: HalfRelmap -> [HalfRelmap]
+
+-- | Usages description
+halfUsage :: HalfRelmap -> String
 halfOpText :: HalfRelmap -> String
 instance Typeable HalfRelmap
 instance Show HalfRelmap
@@ -263,27 +248,28 @@ data CoxCore c
 CoxLit :: c -> CoxCore c
 
 -- | Operator invocation
-CoxApp :: (Cop c) -> [Cox c] -> CoxCore c
+CoxApp :: (CopFun c) -> [Cox c] -> CoxCore c
 
--- | Term reference
+-- | Term reference, its name and position
 CoxTerm :: [Termname] -> [Int] -> CoxCore c
 
 -- | Term-content operator.
 data Cop c
-CopLit :: String -> (CopLit c) -> Cop c
-CopMacro :: String -> (CopMacro c) -> Cop c
+
+-- | Function
 CopFun :: String -> (CopFun c) -> Cop c
-type CopLit c = [TokenTree] -> Ab c
+
+-- | Syntax
+CopSyn :: String -> (CopSyn) -> Cop c
 type CopFun c = [c] -> Ab c
-type CopMacro c = [Cox c] -> Ab (Cox c)
+type CopSyn = CopFun TokenTree
 type CoxCons c = Relhead -> Ab (Cox c)
 
--- | Construct content expression.
+-- | Construct content expressions from token tree.
 coxCons :: CContent c => ([Cop c], [Named InfixHeight]) -> TokenTree -> Ab (CoxCons c)
 
 -- | Calculate content expression.
-coxRun :: (CRel c, CList c) => Relhead -> [c] -> (CoxCons c) -> Ab c
-instance Show c => Show (CoxCore c)
+coxRun :: (CRel c, CList c) => Relhead -> [c] -> CoxCons c -> Ab c
 instance Name (Cop c)
 instance Show (Cop c)
 
@@ -294,22 +280,6 @@ module Koshucode.Baala.Core.Content
 
 -- | Implementation of relmap operators.
 module Koshucode.Baala.Core.Relmap.Rop
-data Global c
-Global :: Version -> [Rop c] -> ([Cop c], [Named InfixHeight]) -> (TokenTree -> Ab (CoxCons c)) -> String -> [String] -> [Judge c] -> RelSelect c -> Global c
-globalVersion :: Global c -> Version
-globalRops :: Global c -> [Rop c]
-globalCops :: Global c -> ([Cop c], [Named InfixHeight])
-globalCoxCons :: Global c -> TokenTree -> Ab (CoxCons c)
-globalProgram :: Global c -> String
-globalArgs :: Global c -> [String]
-globalJudges :: Global c -> [Judge c]
-globalSelect :: Global c -> RelSelect c
-
--- | Relation selector
-type RelSelect c = JudgePattern -> [String] -> Rel c
-globalCommandLine :: Global c -> [String]
-globalFill :: CContent c => Map (Global c)
-global :: Global c
 
 -- | Implementation of relmap operator
 data Rop c
@@ -322,7 +292,7 @@ ropName :: Rop c -> String
 ropGroup :: Rop c -> String
 
 -- | Operand sorter
-ropFullSorter :: Rop c -> RopFullSorter
+ropSorter :: Rop c -> RopFullSorter
 
 -- | Constructor of operator
 ropCons :: Rop c -> RopCons c
@@ -358,53 +328,53 @@ RelmapConst :: HalfRelmap -> (Rel c) -> Relmap c
 RelmapAlias :: HalfRelmap -> (Relmap c) -> Relmap c
 
 -- | Relmap that maps relations to a relation
-RelmapCalc :: HalfRelmap -> (RelmapConflRelkit c) -> [Relmap c] -> Relmap c
+RelmapCalc :: HalfRelmap -> (RelkitConfl c) -> [Relmap c] -> Relmap c
 
 -- | Relmap that maps relations to a relation
-RelmapGlobal :: HalfRelmap -> (Global c -> RelmapCalcRelkit c) -> Relmap c
+RelmapGlobal :: HalfRelmap -> (Global c -> RelkitCalc c) -> Relmap c
 
 -- | Connect two relmaps
 RelmapAppend :: (Relmap c) -> (Relmap c) -> Relmap c
 
 -- | Relmap reference
 RelmapName :: HalfRelmap -> String -> Relmap c
+
+-- | Make <a>Relkit</a> from heading of input relation.
+type RelkitCalc c = Relhead -> Ab (Relkit c)
+
+-- | Make <a>Relkit</a> from one subrelmap and input heading.
+type RelkitBinary c = Relkit c -> Relhead -> Ab (Relkit c)
+
+-- | Make <a>Relkit</a> from subrelmaps and input heading.
+type RelkitConfl c = [(Relkit c)] -> Relhead -> Ab (Relkit c)
+
+-- | Make <a>Relkit</a> from globals and input heading.
+type RelkitGlobal c = Global c -> Relhead -> Ab (Relkit c)
+data Global c
+Global :: Version -> [Rop c] -> ([Cop c], [Named InfixHeight]) -> (TokenTree -> Ab (CoxCons c)) -> String -> [String] -> [Judge c] -> RelSelect c -> Global c
+globalVersion :: Global c -> Version
+globalRops :: Global c -> [Rop c]
+globalCops :: Global c -> ([Cop c], [Named InfixHeight])
+globalCoxCons :: Global c -> TokenTree -> Ab (CoxCons c)
+globalProgram :: Global c -> String
+globalArgs :: Global c -> [String]
+globalJudges :: Global c -> [Judge c]
+globalSelect :: Global c -> RelSelect c
+
+-- | Relation selector
+type RelSelect c = JudgePattern -> [String] -> Rel c
+globalCommandLine :: Global c -> [String]
+globalFill :: CContent c => Map (Global c)
+global :: Global c
 instance Show (RopUse c)
+instance Show (Global c)
 instance TokenListing (Relmap c)
 instance Pretty (Relmap c)
 instance Name (Relmap c)
 instance Monoid (Relmap c)
 instance Show (Relmap c)
+instance TokenListing (RopUse c)
 instance Show (Rop c)
-instance Show (Global c)
-
-
--- | Data structures for relation-to-relation mappings
-module Koshucode.Baala.Core.Relmap.Relmap
-
--- | Retrieve relation from dataset.
-relmapSource :: RopUse c -> JudgePattern -> [Termname] -> (Relmap c)
-
--- | Constant relmap.
-relmapConst :: RopUse c -> Rel c -> Relmap c
-
--- | Alias for relmap.
-relmapAlias :: RopUse c -> Relmap c -> Relmap c
-
--- | Make a non-confluent relmap.
-relmapCalc :: RopUse c -> RelmapCalcRelkit c -> Relmap c
-
--- | Make a confluent relmap.
-relmapConfl :: RopUse c -> RelmapConflRelkit c -> [Relmap c] -> Relmap c
-relmapGlobal :: RopUse c -> (Global c -> RelmapCalcRelkit c) -> Relmap c
-
--- | List of <tt>RelmapSource</tt>
-relmapSourceList :: Relmap c -> [Relmap c]
-
--- | List of name in <tt>RelmapName</tt>
-relmapNameList :: Relmap c -> [String]
-
--- | Link relmaps by its name.
-relmapLinker :: [Named (Relmap c)] -> Relmap c -> Relmap c
 
 
 -- | <tt>Relmap</tt> construction.
@@ -425,6 +395,36 @@ type RelmapConsHalf = [TokenTree] -> Ab HalfRelmap
 --   of <a>HalfRelmap</a>.
 type RelmapConsFull c = HalfRelmap -> Ab (Relmap c)
 instance Show (RelmapCons c)
+
+
+-- | Data structures for relation-to-relation mappings
+module Koshucode.Baala.Core.Relmap.Relmap
+
+-- | Retrieve relation from dataset.
+relmapSource :: RopUse c -> JudgePattern -> [Termname] -> (Relmap c)
+
+-- | Constant relmap.
+relmapConst :: RopUse c -> Rel c -> Relmap c
+
+-- | Alias for relmap.
+relmapAlias :: RopUse c -> Relmap c -> Relmap c
+
+-- | Make a non-confluent relmap.
+relmapCalc :: RopUse c -> RelkitCalc c -> Relmap c
+relmapBinary :: RopUse c -> RelkitBinary c -> Relmap c -> Relmap c
+
+-- | Make a confluent relmap.
+relmapConfl :: RopUse c -> RelkitConfl c -> [Relmap c] -> Relmap c
+relmapGlobal :: RopUse c -> RelkitGlobal c -> Relmap c
+
+-- | List of <tt>RelmapSource</tt>
+relmapSourceList :: Relmap c -> [Relmap c]
+
+-- | List of name in <tt>RelmapName</tt>
+relmapNameList :: Relmap c -> [String]
+
+-- | Link relmaps by its name.
+relmapLinker :: [Named (Relmap c)] -> Relmap c -> Relmap c
 
 
 -- | Relation-to-relation mapping.
@@ -461,6 +461,7 @@ type AssertOption = [Named [TokenTree]]
 
 -- | Apply function to relamp in assert.
 assertMap :: Map (Relmap c) -> Map (Assert c)
+isViolateAssert :: Assert c -> Bool
 data AssertType
 
 -- | <tt>|==</tt> <i>pattern</i> <tt>:</tt> <i>relmap</i>
@@ -485,6 +486,7 @@ instance Ord AssertType
 instance Data AssertType
 instance Show (Assert c)
 instance Pretty (Assert c)
+instance TokenListing (Assert c)
 
 
 -- | Dataset as a set of judges.
@@ -531,6 +533,9 @@ Clause :: TokenClause -> ClauseBody -> Clause
 clauseSource :: Clause -> TokenClause
 clauseBody :: Clause -> ClauseBody
 data ClauseBody
+
+-- | Letter name
+CLetter :: (Maybe String) -> ClauseBody
 
 -- | Section name
 CSection :: (Maybe String) -> ClauseBody
@@ -663,13 +668,9 @@ readSectionText :: CContent c => Section c -> String -> Ab (Section c)
 -- | Read judges from text.
 readJudges :: CContent c => String -> Ab [Judge c]
 
--- | Run section. Output section has judges calculated from assertions in
---   input section.
-runSection :: CContent c => Global c -> AbMap (Section c)
-
--- | Output judges in section. If violated judges are found, output they.
---   If no violations, output regular judges.
-hPutSection :: CContent c => Handle -> Section c -> IO Int
+-- | Select assertions like <tt>sectionAssert</tt>. It returns relmap-liked
+--   assertions. We can run these assertions using <a>runAssertJudges</a>.
+sectionLinkedAssert :: Section c -> ([Assert c], [Assert c])
 
 module Koshucode.Baala.Core.Section.Bundle
 
@@ -682,6 +683,17 @@ bundleFiles :: SectionBundle c -> [FilePath]
 bundleURLs :: SectionBundle c -> [String]
 readSectionBundle :: CContent c => SectionBundle c -> IO [Ab (Section c)]
 instance Show c => Show (SectionBundle c)
+
+module Koshucode.Baala.Core.Section.Letter
+data Letter c
+Letter :: Maybe String -> [Section c] -> Letter c
+letterName :: Letter c -> Maybe String
+letterSections :: Letter c -> [Section c]
+appendSection :: Letter c -> Section c -> Letter c
+appendSections :: Letter c -> [Section c] -> Letter c
+runLetter :: CContent c => Global c -> AbMap (Letter c)
+hPutLetter :: (CContent c, Pretty c) => Handle -> Letter c -> IO Int
+instance Show c => Show (Letter c)
 
 module Koshucode.Baala.Core.Section.Quoter
 

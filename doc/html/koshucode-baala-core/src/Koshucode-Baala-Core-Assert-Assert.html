@@ -17,80 +17,87 @@
 <a name="line-8"></a>  <span class='hs-conid'>Assert</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
 <a name="line-9"></a>  <span class='hs-conid'>AssertOption</span><span class='hs-layout'>,</span>
 <a name="line-10"></a>  <span class='hs-varid'>assertMap</span><span class='hs-layout'>,</span>
-<a name="line-11"></a>
-<a name="line-12"></a>  <span class='hs-comment'>-- * AssertType</span>
-<a name="line-13"></a>  <span class='hs-conid'>AssertType</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
-<a name="line-14"></a>  <span class='hs-varid'>assertQuality</span><span class='hs-layout'>,</span>
-<a name="line-15"></a>
-<a name="line-16"></a>  <span class='hs-comment'>-- * Constructor</span>
-<a name="line-17"></a>  <span class='hs-varid'>affirm</span><span class='hs-layout'>,</span>
-<a name="line-18"></a>  <span class='hs-varid'>deny</span><span class='hs-layout'>,</span>
-<a name="line-19"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
-<a name="line-20"></a>
-<a name="line-21"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Generics</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>G</span>
-<a name="line-22"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
-<a name="line-23"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>C</span>
-<a name="line-24"></a>
+<a name="line-11"></a>  <span class='hs-varid'>isViolateAssert</span><span class='hs-layout'>,</span>
+<a name="line-12"></a>
+<a name="line-13"></a>  <span class='hs-comment'>-- * AssertType</span>
+<a name="line-14"></a>  <span class='hs-conid'>AssertType</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
+<a name="line-15"></a>  <span class='hs-varid'>assertQuality</span><span class='hs-layout'>,</span>
+<a name="line-16"></a>
+<a name="line-17"></a>  <span class='hs-comment'>-- * Constructor</span>
+<a name="line-18"></a>  <span class='hs-varid'>affirm</span><span class='hs-layout'>,</span>
+<a name="line-19"></a>  <span class='hs-varid'>deny</span><span class='hs-layout'>,</span>
+<a name="line-20"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a name="line-21"></a>
+<a name="line-22"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Generics</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>G</span>
+<a name="line-23"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
+<a name="line-24"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>C</span>
 <a name="line-25"></a>
 <a name="line-26"></a>
-<a name="line-27"></a><span class='hs-comment'>-- ----------------------  Assert</span>
-<a name="line-28"></a>
-<a name="line-29"></a><a name="Assert"></a><span class='hs-comment'>{-| Assertion of affirming or denying relation.
-<a name="line-30"></a>    It consists of logical quality, relsign, and relmap.
-<a name="line-31"></a>
-<a name="line-32"></a>    See also 'B.Judge' -}</span>
-<a name="line-33"></a><a name="Assert"></a><span class='hs-keyword'>data</span> <span class='hs-conid'>Assert</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Assert</span>
-<a name="line-34"></a>    <span class='hs-layout'>{</span> <span class='hs-varid'>assertType</span>    <span class='hs-keyglyph'>::</span> <span class='hs-conid'>AssertType</span>      <span class='hs-comment'>-- ^ Logical quality</span>
-<a name="line-35"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>assertPattern</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>JudgePattern</span>  <span class='hs-comment'>-- ^ Pattern of judgement</span>
-<a name="line-36"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>assertOption</span>  <span class='hs-keyglyph'>::</span> <span class='hs-conid'>AssertOption</span>    <span class='hs-comment'>-- ^ Assert option</span>
-<a name="line-37"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>assertRelmap</span>  <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span> <span class='hs-varid'>c</span>      <span class='hs-comment'>-- ^ Relmap</span>
-<a name="line-38"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>assertSource</span>  <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Token</span><span class='hs-keyglyph'>]</span>       <span class='hs-comment'>-- ^ Source code information</span>
-<a name="line-39"></a>    <span class='hs-layout'>}</span> <span class='hs-keyword'>deriving</span> <span class='hs-layout'>(</span><span class='hs-conid'>Show</span><span class='hs-layout'>)</span>
-<a name="line-40"></a>
-<a name="line-41"></a><a name="AssertOption"></a><span class='hs-comment'>{-| Option for assertions. -}</span>
-<a name="line-42"></a><a name="AssertOption"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>AssertOption</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Named</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span><span class='hs-keyglyph'>]</span>
-<a name="line-43"></a>
-<a name="line-44"></a><a name="instance%20B.Pretty%20(Assert%20c)"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Pretty</span> <span class='hs-layout'>(</span><span class='hs-conid'>Assert</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
-<a name="line-45"></a>    <span class='hs-varid'>doc</span> <span class='hs-layout'>(</span><span class='hs-conid'>Assert</span> <span class='hs-varid'>q</span> <span class='hs-varid'>pat</span> <span class='hs-keyword'>_</span> <span class='hs-varid'>r</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span>
-<a name="line-46"></a>        <span class='hs-keyword'>let</span> <span class='hs-varid'>qs</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>doch</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>assertText</span> <span class='hs-varid'>q</span><span class='hs-layout'>,</span> <span class='hs-varid'>pat</span><span class='hs-keyglyph'>]</span>
-<a name="line-47"></a>        <span class='hs-keyword'>in</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>docHang</span> <span class='hs-varid'>qs</span> <span class='hs-num'>2</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>doc</span> <span class='hs-varid'>r</span><span class='hs-layout'>)</span>
-<a name="line-48"></a>
-<a name="line-49"></a><a name="assertMap"></a><span class='hs-comment'>{-| Apply function to relamp in assert. -}</span>
-<a name="line-50"></a><span class='hs-definition'>assertMap</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-layout'>(</span><span class='hs-conid'>Assert</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span>
-<a name="line-51"></a><span class='hs-definition'>assertMap</span> <span class='hs-varid'>f</span> <span class='hs-layout'>(</span><span class='hs-conid'>Assert</span> <span class='hs-varid'>q</span> <span class='hs-varid'>pat</span> <span class='hs-varid'>opt</span> <span class='hs-varid'>r</span> <span class='hs-varid'>src</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Assert</span> <span class='hs-varid'>q</span> <span class='hs-varid'>pat</span> <span class='hs-varid'>opt</span> <span class='hs-layout'>(</span><span class='hs-varid'>f</span> <span class='hs-varid'>r</span><span class='hs-layout'>)</span> <span class='hs-varid'>src</span>
+<a name="line-27"></a>
+<a name="line-28"></a><span class='hs-comment'>-- ----------------------  Assert</span>
+<a name="line-29"></a>
+<a name="line-30"></a><a name="Assert"></a><span class='hs-comment'>{-| Assertion of affirming or denying relation.
+<a name="line-31"></a>    It consists of logical quality, relsign, and relmap.
+<a name="line-32"></a>
+<a name="line-33"></a>    See also 'B.Judge' -}</span>
+<a name="line-34"></a><a name="Assert"></a><span class='hs-keyword'>data</span> <span class='hs-conid'>Assert</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Assert</span>
+<a name="line-35"></a>    <span class='hs-layout'>{</span> <span class='hs-varid'>assertType</span>    <span class='hs-keyglyph'>::</span> <span class='hs-conid'>AssertType</span>      <span class='hs-comment'>-- ^ Logical quality</span>
+<a name="line-36"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>assertPattern</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>JudgePattern</span>  <span class='hs-comment'>-- ^ Pattern of judgement</span>
+<a name="line-37"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>assertOption</span>  <span class='hs-keyglyph'>::</span> <span class='hs-conid'>AssertOption</span>    <span class='hs-comment'>-- ^ Assert option</span>
+<a name="line-38"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>assertRelmap</span>  <span class='hs-keyglyph'>::</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span> <span class='hs-varid'>c</span>      <span class='hs-comment'>-- ^ Relmap</span>
+<a name="line-39"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>assertSource</span>  <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Token</span><span class='hs-keyglyph'>]</span>       <span class='hs-comment'>-- ^ Source code information</span>
+<a name="line-40"></a>    <span class='hs-layout'>}</span> <span class='hs-keyword'>deriving</span> <span class='hs-layout'>(</span><span class='hs-conid'>Show</span><span class='hs-layout'>)</span>
+<a name="line-41"></a>
+<a name="line-42"></a><a name="AssertOption"></a><span class='hs-comment'>{-| Option for assertions. -}</span>
+<a name="line-43"></a><a name="AssertOption"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>AssertOption</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Named</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span><span class='hs-keyglyph'>]</span>
+<a name="line-44"></a>
+<a name="line-45"></a><a name="instance%20B.TokenListing%20(Assert%20c)"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TokenListing</span> <span class='hs-layout'>(</span><span class='hs-conid'>Assert</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a name="line-46"></a>    <span class='hs-varid'>tokenListing</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>assertSource</span>
+<a name="line-47"></a>
+<a name="line-48"></a><a name="instance%20B.Pretty%20(Assert%20c)"></a><span class='hs-keyword'>instance</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Pretty</span> <span class='hs-layout'>(</span><span class='hs-conid'>Assert</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a name="line-49"></a>    <span class='hs-varid'>doc</span> <span class='hs-layout'>(</span><span class='hs-conid'>Assert</span> <span class='hs-varid'>q</span> <span class='hs-varid'>pat</span> <span class='hs-keyword'>_</span> <span class='hs-varid'>r</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span>
+<a name="line-50"></a>        <span class='hs-keyword'>let</span> <span class='hs-varid'>qs</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>doch</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>assertText</span> <span class='hs-varid'>q</span><span class='hs-layout'>,</span> <span class='hs-varid'>pat</span><span class='hs-keyglyph'>]</span>
+<a name="line-51"></a>        <span class='hs-keyword'>in</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>docHang</span> <span class='hs-varid'>qs</span> <span class='hs-num'>2</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>doc</span> <span class='hs-varid'>r</span><span class='hs-layout'>)</span>
 <a name="line-52"></a>
-<a name="line-53"></a>
-<a name="line-54"></a>
-<a name="line-55"></a><span class='hs-comment'>-- ----------------------  AssertType</span>
+<a name="line-53"></a><a name="assertMap"></a><span class='hs-comment'>{-| Apply function to relamp in assert. -}</span>
+<a name="line-54"></a><span class='hs-definition'>assertMap</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-layout'>(</span><span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-layout'>(</span><span class='hs-conid'>Assert</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span>
+<a name="line-55"></a><span class='hs-definition'>assertMap</span> <span class='hs-varid'>f</span> <span class='hs-layout'>(</span><span class='hs-conid'>Assert</span> <span class='hs-varid'>q</span> <span class='hs-varid'>pat</span> <span class='hs-varid'>opt</span> <span class='hs-varid'>r</span> <span class='hs-varid'>src</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Assert</span> <span class='hs-varid'>q</span> <span class='hs-varid'>pat</span> <span class='hs-varid'>opt</span> <span class='hs-layout'>(</span><span class='hs-varid'>f</span> <span class='hs-varid'>r</span><span class='hs-layout'>)</span> <span class='hs-varid'>src</span>
 <a name="line-56"></a>
-<a name="line-57"></a><a name="AssertType"></a><span class='hs-keyword'>data</span> <span class='hs-conid'>AssertType</span>
-<a name="line-58"></a>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>AssertAffirm</span>    <span class='hs-comment'>-- ^ @|==@ /pattern/ @:@ /relmap/</span>
-<a name="line-59"></a>    <span class='hs-keyglyph'>|</span> <span class='hs-conid'>AssertDeny</span>      <span class='hs-comment'>-- ^ @|=X@ /pattern/ @:@ /relmap/</span>
-<a name="line-60"></a>    <span class='hs-keyglyph'>|</span> <span class='hs-conid'>AssertViolate</span>   <span class='hs-comment'>-- ^ @|=V@ /pattern/ @:@ /relmap/</span>
-<a name="line-61"></a>      <span class='hs-keyword'>deriving</span> <span class='hs-layout'>(</span><span class='hs-conid'>Show</span><span class='hs-layout'>,</span> <span class='hs-conid'>Eq</span><span class='hs-layout'>,</span> <span class='hs-conid'>Ord</span><span class='hs-layout'>,</span> <span class='hs-conid'>G</span><span class='hs-varop'>.</span><span class='hs-conid'>Data</span><span class='hs-layout'>,</span> <span class='hs-conid'>G</span><span class='hs-varop'>.</span><span class='hs-conid'>Typeable</span><span class='hs-layout'>)</span>
-<a name="line-62"></a>
-<a name="line-63"></a><a name="assertQuality"></a><span class='hs-definition'>assertQuality</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>AssertType</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
-<a name="line-64"></a><span class='hs-definition'>assertQuality</span> <span class='hs-conid'>AssertAffirm</span>   <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
-<a name="line-65"></a><span class='hs-definition'>assertQuality</span> <span class='hs-conid'>AssertDeny</span>     <span class='hs-keyglyph'>=</span> <span class='hs-conid'>False</span>
-<a name="line-66"></a><span class='hs-definition'>assertQuality</span> <span class='hs-conid'>AssertViolate</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
-<a name="line-67"></a>
-<a name="line-68"></a><a name="assertText"></a><span class='hs-definition'>assertText</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>AssertType</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span>
-<a name="line-69"></a><span class='hs-definition'>assertText</span> <span class='hs-conid'>AssertAffirm</span>   <span class='hs-keyglyph'>=</span> <span class='hs-str'>"affirm"</span>
-<a name="line-70"></a><span class='hs-definition'>assertText</span> <span class='hs-conid'>AssertDeny</span>     <span class='hs-keyglyph'>=</span> <span class='hs-str'>"deny"</span>
-<a name="line-71"></a><span class='hs-definition'>assertText</span> <span class='hs-conid'>AssertViolate</span>  <span class='hs-keyglyph'>=</span> <span class='hs-str'>"violate"</span>
-<a name="line-72"></a>
-<a name="line-73"></a>
+<a name="line-57"></a><a name="isViolateAssert"></a><span class='hs-definition'>isViolateAssert</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Assert</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
+<a name="line-58"></a><span class='hs-definition'>isViolateAssert</span> <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-varop'>==</span> <span class='hs-conid'>AssertViolate</span><span class='hs-layout'>)</span> <span class='hs-varop'>.</span> <span class='hs-varid'>assertType</span>
+<a name="line-59"></a>
+<a name="line-60"></a>
+<a name="line-61"></a>
+<a name="line-62"></a><span class='hs-comment'>-- ----------------------  AssertType</span>
+<a name="line-63"></a>
+<a name="line-64"></a><a name="AssertType"></a><span class='hs-keyword'>data</span> <span class='hs-conid'>AssertType</span>
+<a name="line-65"></a>    <span class='hs-keyglyph'>=</span> <span class='hs-conid'>AssertAffirm</span>    <span class='hs-comment'>-- ^ @|==@ /pattern/ @:@ /relmap/</span>
+<a name="line-66"></a>    <span class='hs-keyglyph'>|</span> <span class='hs-conid'>AssertDeny</span>      <span class='hs-comment'>-- ^ @|=X@ /pattern/ @:@ /relmap/</span>
+<a name="line-67"></a>    <span class='hs-keyglyph'>|</span> <span class='hs-conid'>AssertViolate</span>   <span class='hs-comment'>-- ^ @|=V@ /pattern/ @:@ /relmap/</span>
+<a name="line-68"></a>      <span class='hs-keyword'>deriving</span> <span class='hs-layout'>(</span><span class='hs-conid'>Show</span><span class='hs-layout'>,</span> <span class='hs-conid'>Eq</span><span class='hs-layout'>,</span> <span class='hs-conid'>Ord</span><span class='hs-layout'>,</span> <span class='hs-conid'>G</span><span class='hs-varop'>.</span><span class='hs-conid'>Data</span><span class='hs-layout'>,</span> <span class='hs-conid'>G</span><span class='hs-varop'>.</span><span class='hs-conid'>Typeable</span><span class='hs-layout'>)</span>
+<a name="line-69"></a>
+<a name="line-70"></a><a name="assertQuality"></a><span class='hs-definition'>assertQuality</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>AssertType</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Bool</span>
+<a name="line-71"></a><span class='hs-definition'>assertQuality</span> <span class='hs-conid'>AssertAffirm</span>   <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
+<a name="line-72"></a><span class='hs-definition'>assertQuality</span> <span class='hs-conid'>AssertDeny</span>     <span class='hs-keyglyph'>=</span> <span class='hs-conid'>False</span>
+<a name="line-73"></a><span class='hs-definition'>assertQuality</span> <span class='hs-conid'>AssertViolate</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>True</span>
 <a name="line-74"></a>
-<a name="line-75"></a><span class='hs-comment'>-- ----------------------  Constructor</span>
-<a name="line-76"></a>
-<a name="line-77"></a><a name="affirm"></a><span class='hs-definition'>affirm</span><span class='hs-layout'>,</span> <span class='hs-varid'>deny</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>JudgePattern</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>AssertOption</span>
-<a name="line-78"></a>             <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Token</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Assert</span> <span class='hs-varid'>c</span>
+<a name="line-75"></a><a name="assertText"></a><span class='hs-definition'>assertText</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>AssertType</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span>
+<a name="line-76"></a><span class='hs-definition'>assertText</span> <span class='hs-conid'>AssertAffirm</span>   <span class='hs-keyglyph'>=</span> <span class='hs-str'>"affirm"</span>
+<a name="line-77"></a><span class='hs-definition'>assertText</span> <span class='hs-conid'>AssertDeny</span>     <span class='hs-keyglyph'>=</span> <span class='hs-str'>"deny"</span>
+<a name="line-78"></a><span class='hs-definition'>assertText</span> <span class='hs-conid'>AssertViolate</span>  <span class='hs-keyglyph'>=</span> <span class='hs-str'>"violate"</span>
 <a name="line-79"></a>
-<a name="line-80"></a><span class='hs-comment'>{-| Make affirmed assertion. -}</span>
-<a name="line-81"></a><span class='hs-definition'>affirm</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Assert</span> <span class='hs-conid'>AssertAffirm</span>
-<a name="line-82"></a>
-<a name="line-83"></a><a name="deny"></a><span class='hs-comment'>{-| Make denied assertion. -}</span>
-<a name="line-84"></a><span class='hs-definition'>deny</span>   <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Assert</span> <span class='hs-conid'>AssertDeny</span>
-<a name="line-85"></a>
+<a name="line-80"></a>
+<a name="line-81"></a>
+<a name="line-82"></a><span class='hs-comment'>-- ----------------------  Constructor</span>
+<a name="line-83"></a>
+<a name="line-84"></a><a name="affirm"></a><span class='hs-definition'>affirm</span><span class='hs-layout'>,</span> <span class='hs-varid'>deny</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>JudgePattern</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>AssertOption</span>
+<a name="line-85"></a>             <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Token</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Assert</span> <span class='hs-varid'>c</span>
+<a name="line-86"></a>
+<a name="line-87"></a><span class='hs-comment'>{-| Make affirmed assertion. -}</span>
+<a name="line-88"></a><span class='hs-definition'>affirm</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Assert</span> <span class='hs-conid'>AssertAffirm</span>
+<a name="line-89"></a>
+<a name="line-90"></a><a name="deny"></a><span class='hs-comment'>{-| Make denied assertion. -}</span>
+<a name="line-91"></a><span class='hs-definition'>deny</span>   <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Assert</span> <span class='hs-conid'>AssertDeny</span>
+<a name="line-92"></a>
 </pre></body>
 </html>

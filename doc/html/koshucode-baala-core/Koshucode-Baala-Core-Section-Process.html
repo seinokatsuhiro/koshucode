@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.42.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.44.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -57,11 +57,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	  ><li
 	  ><a href="#g:2"
 	    >Run
-</a
-	    ></li
-	  ><li
-	  ><a href="#g:3"
-	    >Write
 </a
 	    ></li
 	  ></ul
@@ -122,31 +117,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	    >Judge</a
 	    > c]</li
 	  ><li class="src short"
-	  ><a href="#v:runSection"
-	    >runSection</a
-	    > :: <a href="Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
-	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Global"
-	    >Global</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
-	    >AbMap</a
-	    > (<a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
+	  ><a href="#v:sectionLinkedAssert"
+	    >sectionLinkedAssert</a
+	    > ::  <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
 	    >Section</a
-	    > c)</li
-	  ><li class="src short"
-	  ><a href="#v:hPutSection"
-	    >hPutSection</a
-	    > :: <a href="Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
-	    >CContent</a
-	    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
-	    >Handle</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
-	    >Section</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
-	    >IO</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-	    >Int</a
-	    ></li
+	    > c -&gt; ([<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
+	    >Assert</a
+	    > c], [<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
+	    >Assert</a
+	    > c])</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -227,52 +206,28 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 </h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:runSection" class="def"
-	    >runSection</a
-	    > :: <a href="Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
-	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Global"
-	    >Global</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
-	    >AbMap</a
-	    > (<a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
+	  ><a name="v:sectionLinkedAssert" class="def"
+	    >sectionLinkedAssert</a
+	    > ::  <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
 	    >Section</a
-	    > c)<a href="src/Koshucode-Baala-Core-Section-Process.html#runSection" class="link"
+	    > c -&gt; ([<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
+	    >Assert</a
+	    > c], [<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
+	    >Assert</a
+	    > c])<a href="src/Koshucode-Baala-Core-Section-Process.html#sectionLinkedAssert" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Run section.
-    Output section has judges calculated
-    from assertions in input section. 
-</p
-	    ></div
-	  ></div
-	><h1 id="g:3"
-	>Write
-</h1
-	><div class="top"
-	><p class="src"
-	  ><a name="v:hPutSection" class="def"
-	    >hPutSection</a
-	    > :: <a href="Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
-	    >CContent</a
-	    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-IO-Handle.html#t:Handle"
-	    >Handle</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
-	    >Section</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
-	    >IO</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-	    >Int</a
-	    ><a href="src/Koshucode-Baala-Core-Section-Process.html#hPutSection" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Output judges in section.
-    If violated judges are found, output they.
-    If no violations, output regular judges.  
+	    >Select assertions like <code
+	      >sectionAssert</code
+	      >.
+    It returns relmap-liked assertions.
+    We can run these assertions using <code
+	      ><a href="Koshucode-Baala-Core-Assert-Run.html#v:runAssertJudges"
+		>runAssertJudges</a
+		></code
+	      >. 
 </p
 	    ></div
 	  ></div

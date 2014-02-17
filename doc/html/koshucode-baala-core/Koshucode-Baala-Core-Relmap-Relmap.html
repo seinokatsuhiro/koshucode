@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.42.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.44.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -121,8 +121,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >relmapCalc</a
 	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse"
 	    >RopUse</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relkit.html#t:RelmapCalcRelkit"
-	    >RelmapCalcRelkit</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RelkitCalc"
+	    >RelkitCalc</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapBinary"
+	    >relmapBinary</a
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse"
+	    >RopUse</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RelkitBinary"
+	    >RelkitBinary</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
+	    >Relmap</a
 	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
 	    >Relmap</a
 	    > c</li
@@ -131,8 +143,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >relmapConfl</a
 	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse"
 	    >RopUse</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relkit.html#t:RelmapConflRelkit"
-	    >RelmapConflRelkit</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RelkitConfl"
+	    >RelkitConfl</a
 	    > c -&gt; [<a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
 	    >Relmap</a
 	    > c] -&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
@@ -143,11 +155,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >relmapGlobal</a
 	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse"
 	    >RopUse</a
-	    > c -&gt; (<a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Global"
-	    >Global</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relkit.html#t:RelmapCalcRelkit"
-	    >RelmapCalcRelkit</a
-	    > c) -&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
+	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RelkitGlobal"
+	    >RelkitGlobal</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
 	    >Relmap</a
 	    > c</li
 	  ><li class="src short"
@@ -305,8 +315,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >relmapCalc</a
 	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse"
 	    >RopUse</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relkit.html#t:RelmapCalcRelkit"
-	    >RelmapCalcRelkit</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RelkitCalc"
+	    >RelkitCalc</a
 	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
 	    >Relmap</a
 	    > c<a href="src/Koshucode-Baala-Core-Relmap-Relmap.html#relmapCalc" class="link"
@@ -320,12 +330,28 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></div
 	><div class="top"
 	><p class="src"
+	  ><a name="v:relmapBinary" class="def"
+	    >relmapBinary</a
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse"
+	    >RopUse</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RelkitBinary"
+	    >RelkitBinary</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
+	    >Relmap</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
+	    >Relmap</a
+	    > c<a href="src/Koshucode-Baala-Core-Relmap-Relmap.html#relmapBinary" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
 	  ><a name="v:relmapConfl" class="def"
 	    >relmapConfl</a
 	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse"
 	    >RopUse</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relkit.html#t:RelmapConflRelkit"
-	    >RelmapConflRelkit</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RelkitConfl"
+	    >RelkitConfl</a
 	    > c -&gt; [<a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
 	    >Relmap</a
 	    > c] -&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
@@ -345,11 +371,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >relmapGlobal</a
 	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse"
 	    >RopUse</a
-	    > c -&gt; (<a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Global"
-	    >Global</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relkit.html#t:RelmapCalcRelkit"
-	    >RelmapCalcRelkit</a
-	    > c) -&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
+	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RelkitGlobal"
+	    >RelkitGlobal</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
 	    >Relmap</a
 	    > c<a href="src/Koshucode-Baala-Core-Relmap-Relmap.html#relmapGlobal" class="link"
 	    >Source</a
