@@ -8,6 +8,7 @@ module Koshucode.Baala.Core.Assert.Assert
   Assert (..),
   AssertOption,
   assertMap,
+  isViolateAssert,
 
   -- * AssertType
   AssertType (..),
@@ -52,6 +53,9 @@ instance B.Pretty (Assert c) where
 {-| Apply function to relamp in assert. -}
 assertMap :: B.Map (C.Relmap c) -> B.Map (Assert c)
 assertMap f (Assert q pat opt r src) = Assert q pat opt (f r) src
+
+isViolateAssert :: Assert c -> Bool
+isViolateAssert = (== AssertViolate) . assertType
 
 
 

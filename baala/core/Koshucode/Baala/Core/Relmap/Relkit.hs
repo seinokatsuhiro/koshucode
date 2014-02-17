@@ -40,7 +40,7 @@ instance Monoid.Monoid (Relkit c) where
 
 type RelkitBody c = B.Sourced (RelkitCore c)
 
--- Relmap are compiled to Relg
+-- Specialized relmap
 data RelkitCore c
     = RelkitOneToMany    Bool (  [c]  ->      [[c]] )
     | RelkitOneToOne     Bool (  [c]  ->       [c]  )
@@ -106,36 +106,36 @@ relkitSetSource src (Relkit h (B.Sourced _ f)) =
 -- ----------------------  Run
 
 relkitRun :: (Ord c) => RelkitBody c -> B.AbMap [[c]]
-relkitRun (B.Sourced src r) b1 =
+relkitRun (B.Sourced src kit) b1 =
     B.abortable "run" src $
-     case r of
+     case kit of
        RelkitOneToAbMany u f  ->  do b2 <- f `mapM` b1
-                                     uniqueR u $ concat b2
-       RelkitOneToAbOne  u f  ->  uniqueA u $ f `mapM` b1
-       RelkitOneToMany   u f  ->  uniqueR u $ f `concatMap` b1
-       RelkitOneToOne    u f  ->  uniqueR u $ f `map` b1
-       RelkitAbFull      u f  ->  uniqueA u $ f b1
-       RelkitFull        u f  ->  uniqueR u $ f b1
+                                     uniqueRight u $ concat b2
+       RelkitOneToAbOne  u f  ->  uniqueAb    u $ f `mapM` b1
+       RelkitOneToMany   u f  ->  uniqueRight u $ f `concatMap` b1
+       RelkitOneToOne    u f  ->  uniqueRight u $ f `map` b1
+       RelkitAbFull      u f  ->  uniqueAb    u $ f b1
+       RelkitFull        u f  ->  uniqueRight u $ f b1
 
-       RelkitAbPred        f  ->  Monad.filterM f b1
+       RelkitAbPred        f  ->  Monad.filterM  f b1
        RelkitPred          f  ->  Right $ filter f b1
        RelkitConst         b  ->  Right b
        RelkitId               ->  Right b1
 
-       RelkitUnion      u rs  ->  do b2 <- mapM (`relkitRun` b1) rs
-                                     uniqueR u $ concat b2
+       RelkitUnion    u kits  ->  do b2 <- mapM (`relkitRun` b1) kits
+                                     uniqueRight u $ concat b2
 
-       RelkitAppend r1@(B.Sourced src1 _) r2
-           -> do b2 <- r1 `relkitRun` b1
-                 B.abortable "run" src1 $ r2 `relkitRun` b2
+       RelkitAppend kit1@(B.Sourced src1 _) kit2
+           -> do b2 <- kit1 `relkitRun` b1
+                 B.abortable "run" src1 $ kit2 `relkitRun` b2
 
-uniqueR :: (Ord c) => Bool -> [c] -> B.Ab [c]
-uniqueR u = Right . uniqueIf u
+uniqueRight :: (Ord b) => Bool -> [b] -> B.Ab [b]
+uniqueRight u = Right . uniqueIf u
 
-uniqueA :: (Ord c) => Bool -> B.Ab [c] -> B.Ab [c]
-uniqueA u = (Right . uniqueIf u =<<)
+uniqueAb :: (Ord b) => Bool -> B.Ab [b] -> B.Ab [b]
+uniqueAb u = (Right . uniqueIf u =<<)
 
-uniqueIf :: (Ord c) => Bool -> [c] -> [c]
+uniqueIf :: (Ord b) => Bool -> [b] -> [b]
 uniqueIf True  = B.unique
 uniqueIf False = id
 

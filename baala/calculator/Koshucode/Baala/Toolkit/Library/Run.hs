@@ -13,6 +13,7 @@ module Koshucode.Baala.Toolkit.Library.Run
 ) where
 
 import qualified Data.Monoid          as M
+import qualified Control.Monad        as M
 import qualified System.IO            as IO
 import qualified System.FilePath      as Path
 import qualified System.Directory     as Dir
@@ -34,9 +35,8 @@ hRunFiles
     -> C.SectionBundle c  -- ^ Section source code
     -> IO Int
 hRunFiles h global src =
-    do sects <- C.readSectionBundle src
-       let union = concatMM sects
-           files = C.bundleFiles src
+    do abSects <- C.readSectionBundle src
+       let files = C.bundleFiles src
            comm  = B.CommentDoc [ B.CommentSec "INPUT" files ]
 
        IO.hSetEncoding h IO.utf8
@@ -44,15 +44,9 @@ hRunFiles h global src =
        IO.hPutStr      h $ unlines $ B.texts comm
        IO.hPutStrLn    h ""
 
-       let cmd = C.globalCommandLine global
-       B.abortableIO cmd (C.hPutSection h) $ C.runSection global =<< union
-
-concatMM :: (Monad m, M.Monoid a) => [m a] -> m a
-concatMM [] = return M.mempty
-concatMM (s:ss) =
-    do s'  <- s
-       ss' <- concatMM ss
-       return $ M.mappend s' ss'
+       B.abortableIO (C.globalCommandLine global) (C.hPutLetter h) $ do
+         sects <- M.sequence abSects
+         C.runLetter global $ C.Letter Nothing sects
 
 
 
@@ -126,3 +120,9 @@ readSecList src =
     do sects <- C.readSectionBundle src
        return $ sequence $ sects
 
+concatMM :: (Monad m, M.Monoid a) => [m a] -> m a
+concatMM [] = return M.mempty
+concatMM (s:ss) =
+    do s'  <- s
+       ss' <- concatMM ss
+       return $ M.mappend s' ss'
