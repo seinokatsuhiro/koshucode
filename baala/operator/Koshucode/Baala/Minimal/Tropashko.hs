@@ -117,14 +117,16 @@ relkitJoin (C.Relkit h2 f2) h1 = Right (C.Relkit h3 f3) where
    In lattice theory, there are two operators /meet/ and /join/.
 
    [R1 ^ R2]  Meet of /R1/ and /R2/.
-              This operator is one of generalized intersection.
+              This operator is one of generalized intersection,
+              as it were, a more-speaking-and-less-mentioning operation.
               ''Meet'' is same as ''natural join'' in SQL.
               /R1/ tuple is meetable to /R2/ tuple if and only if
               shared terms of /R1/ tuple and /R2/ tuple
               are same contents.
 
    [R1 v R2]  Join of /R1/ and /R2/.
-              This operator is one of generalized union.
+              This operator is one of generalized union,
+              as it were, a less-speaking-and-more-mentioning operation.
               Toropashko calls it ''inner union''.
               Join of /R1/ and /R2/ is ordinary union of
               shared-term-projection tuples in /R1/ and /R2/.
