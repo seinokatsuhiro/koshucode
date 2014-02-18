@@ -16,16 +16,20 @@ module Koshucode.Baala.Base.Data.Judge
   isAffirmed, isDenied,
 
   -- * Writer
+  AbbrJudge,
   putJudges,
   hPutJudges,
-  judgeLines,
+  hPutJudgesFlat,
+  hPutJudgesSectioned,
 ) where
 
-import qualified Data.Monoid as Monoid
-import qualified Data.List   as List
-import qualified Data.Map    as Map
-import qualified System.IO   as IO
+import qualified Control.Monad as M
+import qualified Data.Monoid   as Monoid
+import qualified Data.List     as List
+import qualified Data.Map      as Map
+import qualified System.IO     as IO
 import qualified Koshucode.Baala.Base.Prelude      as B
+import qualified Koshucode.Baala.Base.Data.Abbr    as B
 import qualified Koshucode.Baala.Base.Data.Comment as B
 
 
@@ -121,52 +125,87 @@ isDenied   (Judge q _ _) = not q
 
 -- ----------------------  Writer
 
+type AbbrJudge c = B.Abbr [Judge c]
+
 {-| Print judges to `IO.stdout`. -}
 putJudges :: (Ord c, B.Pretty c) => Int -> [Judge c] -> IO Int
-putJudges = hPutJudges IO.stdout
+putJudges = hPutJudgesFlat IO.stdout
+
+hPutJudges :: (Ord c, B.Pretty c) => IO.Handle -> ([AbbrJudge c], [AbbrJudge c]) -> IO Int
+hPutJudges h ([], jud) = hPutJudgesStatus h 0 jud
+hPutJudges h (vio, _)  = hPutJudgesStatus h 1 vio
 
 {-| Print judges. -}
-hPutJudges :: (Ord c, B.Pretty c) => IO.Handle -> Int -> [Judge c] -> IO Int
-hPutJudges h status js =
-    do IO.hPutStr h $ unlines $ judgeLines label js
+hPutJudgesStatus :: (Ord c, B.Pretty c) => IO.Handle -> Int -> [AbbrJudge c] -> IO Int
+hPutJudgesStatus h status abbrs =
+    do (n, c) <- M.foldM (hPutJudgeAbbr h) (0, Map.empty) abbrs
+       IO.hPutStr h $ unlines $ judgeSummary status (n, c)
        return status
-    where
-      label | status == 0 = "SUMMARY"
-            | otherwise   = "SUMMARY (VIOLATED)"
 
-{-| Convert judgements to lines. -}
-judgeLines :: (Ord c, B.Pretty c) => String -> [Judge c] -> [String]
-judgeLines label = loop 0 Map.empty where
-    loop n c []         =  judgeSummary label n $ Map.assocs c
-    loop n c (j : js)
-        | by 20         =  s : count n' : gutter ss
-        | by 5          =  s : gutter ss
-        | otherwise     =  s : ss
-        where s         =  show $ B.doc j
-              ss        =  loop n' (up c j) js
-              by d      =  n' `mod` d == 0
-              n'        =  n + 1
+hPutJudgeAbbr :: (Ord c, B.Pretty c) => IO.Handle -> Counter -> AbbrJudge c -> IO Counter
+hPutJudgeAbbr h nc (B.Abbr [] js) =
+    do hPutJudgeBody h nc js
+hPutJudgeAbbr h nc (B.Abbr _ js) =
+    do IO.hPutStrLn h "abbr"
+       IO.hPutStrLn h ""
+       hPutJudgeBody h nc js
 
-    up c (Judge _ p _)  =  Map.alter alt p c
-    alt Nothing         =  Just 1
-    alt (Just n)        =  Just $ n + 1
+hPutJudgesFlat :: (Ord c, B.Pretty c) => IO.Handle -> Int -> [Judge c] -> IO Int
+hPutJudgesFlat h status js =
+    do (n, c) <- hPutJudgeBody h (0, Map.empty) js
+       IO.hPutStr h $ unlines $ judgeSummary status (n, c)
+       return status
 
-    count n             =  "**  (" ++ show n ++ " judges)"
+{-| Print judges. -}
+hPutJudgesSectioned :: (Ord c, B.Pretty c) => IO.Handle -> Int -> [[Judge c]] -> IO Int
+hPutJudgesSectioned h status jss =
+    do (n, c) <- M.foldM (hPutJudgeSection h) (0, Map.empty) jss
+       IO.hPutStr h $ unlines $ judgeSummary status (n, c)
+       return status
 
-    gutter ss@("" : _)  =  ss
-    gutter ss           =  "" : ss
+type Counter = (Int, Map.Map String Int)
+
+hPutJudgeSection :: (Ord c, B.Pretty c) => IO.Handle -> Counter -> [Judge c] -> IO Counter
+hPutJudgeSection h nc js =
+    do IO.hPutStrLn h "section"
+       IO.hPutStrLn h ""
+       nc' <- hPutJudgeBody h nc js
+       return nc'
+
+hPutJudgeBody :: (Ord c, B.Pretty c) => IO.Handle -> Counter -> [Judge c] -> IO Counter
+hPutJudgeBody h = loop where
+    loop nc (j:js)    = do nc' <- put j nc
+                           loop nc' js
+    loop nc@(n, _) [] = do M.when (n `mod` 5 /= 0) $ IO.hPutStrLn h ""
+                           return nc
+
+    put judge@(Judge _ pat _) (n, c) =
+        do IO.hPutStrLn h $ show $ B.doc judge
+           let n' = n + 1
+           M.when (n' `mod` 20 == 0) $ counter n'
+           M.when (n' `mod`  5 == 0) $ gutter
+           return $ (n', Map.alter inc pat c)
+
+    counter n = IO.hPutStrLn h $ "*** " ++ show n ++ " judges"
+    gutter    = IO.hPutStrLn h ""
+
+    inc (Nothing) = Just 1
+    inc (Just n)  = Just $ n + 1
 
 -- >>> putStr . unlines $ judgeSummary 10 [("A", 3), ("B", 6), ("C", 1)]
-judgeSummary :: String -> Int -> [(JudgePattern, Int)] -> [String]
-judgeSummary label tt ns     =  "" : B.texts summaryDoc where
-    summaryDoc         =  B.CommentDoc [summary]
-    summary            =  B.CommentSec label $ sumLines ++ [total tt]
-    sumLines           =  map sumLine ns
-    sumLine (p, n)     =  count n ++ " on " ++ p
-    total n            =  count n ++ " in total"
+judgeSummary :: Int -> Counter -> [String]
+judgeSummary status (tt, c) = B.texts summaryDoc where
+    label | status == 0 = "SUMMARY"
+          | otherwise   = "SUMMARY (VIOLATED)"
 
-    count 0            =  comment $ "no judges"
-    count 1            =  comment $ "1 judge "
-    count n            =  comment $ show n ++ " judges"
-    comment j          =  B.padLeft 11 j
+    summaryDoc          =  B.CommentDoc [summary]
+    summary             =  B.CommentSec label $ sumLines ++ [total tt]
+    sumLines            =  map sumLine $ Map.assocs c
+    sumLine (p, n)      =  count n ++ " on " ++ p
+    total n             =  count n ++ " in total"
+
+    count 0             =  comment $ "no judges"
+    count 1             =  comment $ "1 judge "
+    count n             =  comment $ show n ++ " judges"
+    comment j           =  B.padLeft 11 j
 

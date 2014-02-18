@@ -44,9 +44,9 @@ hRunFiles h global src =
        IO.hPutStr      h $ unlines $ B.texts comm
        IO.hPutStrLn    h ""
 
-       B.abortableIO (C.globalCommandLine global) (C.hPutLetter h) $ do
+       B.abortableIO (C.globalCommandLine global) (B.hPutJudges h) $ do
          sects <- M.sequence abSects
-         C.runLetter global $ C.Letter Nothing sects
+         C.runSection global sects
 
 
 

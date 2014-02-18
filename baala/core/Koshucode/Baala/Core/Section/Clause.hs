@@ -30,7 +30,7 @@ data ClauseBody
     = CSection  (Maybe String)            -- ^ Section name
     | CImport   [B.Token] (Maybe Clause)  -- ^ Importing section name
     | CExport   String                    -- ^ Exporting relmap name
-    | CShort    (B.Named String)          -- ^ Short signs
+    | CAbbr     (B.Named String)          -- ^ abbreviated signs
     | CRelmap   String C.HalfRelmap       -- ^ Relmap and its name
     | TRelmap   String [B.Token]          -- ^ Not include HalfRelmap
     | CAssert   C.AssertType B.JudgePattern C.AssertOption C.HalfRelmap  -- ^ Assertions of relmaps
@@ -38,7 +38,7 @@ data ClauseBody
     | CJudge    Bool B.JudgePattern [B.Token]     -- ^ Judge
     | CComment               -- ^ Clause comment
     | CUnknown               -- ^ Unknown clause
-    | CUnres    [B.Token]    -- ^ Unresolved short sign
+    | CUnres    [B.Token]    -- ^ Unresolved abbreviated sign
       deriving (Show, G.Data, G.Typeable)
 
 {-| Name of clause type. e.g., @\"Relmap\"@, @\"Assert\"@. -}
@@ -48,7 +48,7 @@ clauseTypeText (Clause _ body) =
       CSection _         ->  "Section"
       CImport  _ _       ->  "Import"
       CExport  _         ->  "Export"
-      CShort   _         ->  "Short"
+      CAbbr    _         ->  "Abbr"
       CRelmap  _ _       ->  "Relmap"
       TRelmap  _ _       ->  "Relmap"
       CAssert  _ _ _ _   ->  "Assert"
@@ -93,7 +93,7 @@ consPreclause' src = dispatch $ B.clauseTokens src where
         | k == "section"  =  sec xs
         | k == "import"   =  impt xs
         | k == "export"   =  expt xs
-        | k == "short"    =  short xs
+        | k == "abbr"     =  abbr xs
         | k == "****"     =  c1 CComment
     dispatch []           =  []
     dispatch _            =  unk
@@ -132,9 +132,9 @@ consPreclause' src = dispatch $ B.clauseTokens src where
 
     rel n expr            =  c1 $ TRelmap n expr
 
-    sec [B.TWord _ _ n]   =  c1 $ CSection (Just n)
-    sec []                =  c1 $ CSection Nothing
-    sec _                 =  unk
+    sec [B.TWord _ _ n]    =  c1 $ CSection (Just n)
+    sec []                 =  c1 $ CSection Nothing
+    sec _                  =  unk
 
     expt (B.TWord _ _ n : B.TWord _ _ ":" : xs) = c0 (CExport n) : rel n xs
     expt [B.TWord _ _ n]   =  c1 $ CExport n
@@ -142,8 +142,8 @@ consPreclause' src = dispatch $ B.clauseTokens src where
 
     impt xs                =  c1 $ CImport xs Nothing
 
-    short [B.TWord _ _ a, B.TWord _ _ b] = c1 $ CShort (a, b)
-    short _               =  unk
+    abbr [B.TWord _ _ a, B.TWord _ _ b] = c1 $ CAbbr (a, b)
+    abbr _                 =  unk
 
 
 
@@ -168,34 +168,34 @@ clauseHalf half xs = mapM f xs2 where
     h ts = half (B.tokenTrees ts)
 
     xs2 = concatMap resolve xs
-    resolve = resolveClause $ concatMap short xs
-    short (Clause _ (CShort p)) = [p]
-    short _ = []
+    resolve = resolveClause $ concatMap abbr xs
+    abbr (Clause _ (CAbbr p)) = [p]
+    abbr _ = []
 
 resolveClause :: [B.Named String] -> Clause -> [Clause]
-resolveClause shorts = f where
+resolveClause abbrs = f where
     f (Clause src (CJudge  q p xs))     = resolve src xs $ CJudge  q p
     f (Clause src (TAssert q p opt xs)) = resolve src xs $ TAssert q p opt
     f (Clause src (TRelmap n xs))       = resolve src xs $ TRelmap n
     f clause                            = [clause]
 
-    resolve src xs k = let xs2 = map (resolveShort shorts) xs
+    resolve src xs k = let xs2 = map (resolveAbbr abbrs) xs
                        in Clause src (k xs2) : unres src xs2
-    unres src xs2    = case filter isTShort xs2 of
+    unres src xs2    = case filter isTAbbr xs2 of
                          []  -> []
                          xs3 -> [Clause src (CUnres xs3)]
 
-resolveShort :: [B.Named String] -> B.Map B.Token
-resolveShort shorts = f where
-    f token@(B.TShort n a b) =
-        case lookup a shorts of
+resolveAbbr :: [B.Named String] -> B.Map B.Token
+resolveAbbr abbrs = f where
+    f token@(B.TAbbr n a b) =
+        case lookup a abbrs of
           Just l  -> B.TWord n 2 $ l ++ b
           Nothing -> token
     f token = token
 
-isTShort :: B.Token -> Bool
-isTShort (B.TShort _ _ _) = True
-isTShort _                = False
+isTAbbr :: B.Token -> Bool
+isTAbbr (B.TAbbr _ _ _) = True
+isTAbbr _               = False
 
 
 

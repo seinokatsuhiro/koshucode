@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -Wall #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 {-| Read, run, and write sections. -}
 module Koshucode.Baala.Core.Section.Process
@@ -9,13 +10,12 @@ module Koshucode.Baala.Core.Section.Process
   readJudges,
 
   -- * Run
---  runSection,
+  runSection,
   sectionLinkedAssert,
-
-  --hPutSection,
 ) where
 
 import qualified System.Directory                     as Dir
+import qualified Data.Monoid                          as M
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Core.Content         as C
 import qualified Koshucode.Baala.Core.Relmap          as C
@@ -68,6 +68,27 @@ readJudges code =
 
 -- --------------------------------------------  Run
 
+runSection :: (C.CContent c) => C.Global c -> [C.Section c] -> B.Ab ([B.AbbrJudge c], [B.AbbrJudge c])
+runSection global sects =
+    do let s2 = M.mconcat sects
+           g2 = global { C.globalJudges = C.sectionJudge s2 }
+       runSectionBody g2 s2
+
+runSectionBody :: forall c. (C.CNil c, Ord c) => C.Global c -> C.Section c -> B.Ab ([B.AbbrJudge c], [B.AbbrJudge c])
+runSectionBody global sec =
+    do judgesV <- run $ C.assertViolated ass
+       judgesN <- run $ C.assertNormal ass
+       Right (B.abbrTrim judgesV, B.abbrTrim judgesN)
+    where
+      ass :: C.AbbrAsserts c
+      ass = sectionLinkedAssert sec
+
+      run :: C.AbbrAsserts c -> B.Ab ([B.AbbrJudge c])
+      run = sequence . map B.abbrAb . run2
+
+      run2 :: C.AbbrAsserts c -> [B.Abbr (B.Ab [B.Judge c])]
+      run2 = B.abbrMap $ C.runAssertJudges global
+
 -- {-| Run section.
 --     Output section has judges calculated
 --     from assertions in input section. -}
@@ -85,23 +106,12 @@ readJudges code =
 {-| Select assertions like 'sectionAssert'.
     It returns relmap-liked assertions.
     We can run these assertions using 'C.runAssertJudges'. -}
-sectionLinkedAssert :: C.Section c -> ([C.Assert c], [C.Assert c])
-sectionLinkedAssert C.Section { C.sectionRelmap = ms
-                              , C.sectionAssert = ass }
-    = (map linker normal, map linker violated) where
-      linker   = C.assertMap $ C.relmapLinker ms
-      normal   = filter (not . C.isViolateAssert) ass
-      violated = filter C.isViolateAssert ass
+sectionLinkedAssert :: forall c. C.Section c -> [B.Abbr [C.Assert c]]
+sectionLinkedAssert C.Section { C.sectionRelmap = rs, C.sectionAssert = ass }
+    = linkeAssert rs ass
 
-
--- --------------------------------------------  Write
-
--- {-| Output judges in section.
---     If violated judges are found, output they.
---     If no violations, output regular judges.  -}
--- hPutSection :: (C.CContent c) => IO.Handle -> C.Section c -> IO Int
--- hPutSection h C.Section { C.sectionJudge   = output
---                         , C.sectionViolate = violate }
---     | null violate = B.hPutJudges h 0 output
---     | otherwise    = B.hPutJudges h 1 violate
+linkeAssert :: forall c. [B.Named (C.Relmap c)] -> B.Map [B.Abbr [C.Assert c]]
+linkeAssert relmaps = map $ fmap $ map link where
+    link :: B.Map (C.Assert c)
+    link = C.assertMap $ C.relmapLinker relmaps
 

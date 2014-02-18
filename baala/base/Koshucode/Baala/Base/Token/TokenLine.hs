@@ -100,7 +100,7 @@ nextToken res line txt =
       tokR cs k xs                    = (k $ reverse xs, cs)
 
       -- content
-      short (c:cs) xs | c == '.'      = word cs [] (B.TShort pos $ reverse xs)
+      short (c:cs) xs | c == '.'      = word cs [] (B.TAbbr pos $ reverse xs)
                       | isShort c     = short cs (c:xs)
       short ccs xs                    = word ccs xs (B.TWord pos 0)
 

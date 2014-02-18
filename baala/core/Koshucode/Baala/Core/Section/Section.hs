@@ -14,6 +14,9 @@ module Koshucode.Baala.Core.Section.Section
 
   -- * Section
   Section (..),
+  AbbrAsserts,
+  assertViolated,
+  assertNormal,
 
   -- * Constructors
   makeEmptySection,
@@ -28,12 +31,26 @@ import qualified Koshucode.Baala.Core.Relmap          as C
 import qualified Koshucode.Baala.Core.Assert          as C
 import qualified Koshucode.Baala.Core.Section.Clause  as C
 
+
+-- ----------------------  Abbr
+
+assertViolated :: B.Map (AbbrAsserts c)
+assertViolated = B.abbrMap $ filter C.isViolateAssert
+
+assertNormal :: B.Map (AbbrAsserts c)
+assertNormal = B.abbrMap $ filter $ not . C.isViolateAssert
+
+type AbbrAsserts c = [B.Abbr [C.Assert c]]
+
+
+-- ----------------------  Section
+
 data Section c = Section {
       sectionName     :: Maybe String           -- ^ Section name
     , sectionImport   :: [Section c]            -- ^ Importing section
     , sectionExport   :: [String]               -- ^ Exporting relmap names
-    , sectionShort    :: [B.Named String]       -- ^ Prefix for short signs
-    , sectionAssert   :: [C.Assert c]           -- ^ Assertions of relmaps
+    , sectionAbbr     :: [B.Named String]       -- ^ Prefix for abbr signs
+    , sectionAssert   :: AbbrAsserts c          -- ^ Assertions of relmaps
     , sectionRelmap   :: [B.Named (C.Relmap c)] -- ^ Relmaps and its name
     , sectionJudge    :: [B.Judge c]            -- ^ Affirmative or denial judgements
     , sectionViolate  :: [B.Judge c]            -- ^ Violated judgements, i.e., result of @|=V@
@@ -47,7 +64,7 @@ instance (Ord c, B.Pretty c) => B.Pretty (Section c) where
         dRelmap  = B.docv $ map docRelmap $ sectionRelmap sec
         docRelmap (n,m) = B.docZero (n ++ " :") B.<+> B.doc m B.$$ B.doc ""
         dJudge   = B.docv $ sectionJudge sec
-        dAssert  = B.docv $ sectionAssert sec
+        dAssert  = B.docv $ concatMap B.abbrBody $ sectionAssert sec
 
 instance M.Monoid (Section c) where
     mempty  = emptySection
@@ -98,9 +115,9 @@ consSection consFull resource xs =
        Right $ emptySection
            { sectionName      =  section xs
            , sectionImport    =  imports
-           , sectionExport    =  mapFor expt  isCExport
-           , sectionShort     =  mapFor short isCShort
-           , sectionAssert    =  asserts
+           , sectionExport    =  mapFor expt isCExport
+           , sectionAbbr      =  mapFor abbr isCAbbr
+           , sectionAssert    =  [B.Abbr [] asserts]
            , sectionRelmap    =  relmaps
            , sectionJudge     =  judges
            , sectionResource  =  resource }
@@ -117,7 +134,7 @@ consSection consFull resource xs =
       section [] = Nothing
 
       expt  _ (C.CExport n) = n
-      short _ (C.CShort p)  = p
+      abbr  _ (C.CAbbr   p) = p
 
       impt _ (C.CImport _ (Nothing)) = Right emptySection
       impt _ (C.CImport _ (Just e))  = consSec [e]
@@ -142,7 +159,7 @@ consSection consFull resource xs =
       abort (B.AbortSyntax _ a) = Left $ B.AbortSyntax [] a
       abort a = Left a
 
-isCImport, isCExport, isCShort,
+isCImport, isCExport, isCAbbr,
   isCRelmap, isCAssert, isCJudge,
   isCUnknown, isCUnres :: C.ClauseBody -> Bool
 
@@ -152,8 +169,8 @@ isCImport _                    = False
 isCExport (C.CExport _)        = True
 isCExport _                    = False
 
-isCShort (C.CShort _)          = True
-isCShort _                     = False
+isCAbbr (C.CAbbr _)            = True
+isCAbbr _                      = False
 
 isCRelmap (C.CRelmap _ _)      = True
 isCRelmap _                    = False
