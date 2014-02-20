@@ -80,6 +80,18 @@ copAnd =  copN True (&&)
 copOr  :: (C.CBool c) => C.CopFun c
 copOr  =  copN False (||)
 
+-- ----------------------  if
+
+treeOp :: String -> B.TokenTree
+treeOp = B.TreeL . B.tokenWord
+
+treeIf :: B.TokenTree -> B.TokenTree -> B.TokenTree -> B.TokenTree
+treeIf test con alt = B.treeWrap [ treeOp "/if" , test, con , alt ]
+
+treeOrList :: [B.TokenTree] -> B.TokenTree
+treeOrList [x] = x
+treeOrList xs = B.treeWrap $ (treeOp "or") : xs
+
 copIf  :: (C.CBool c, C.CNil c) => C.CopFun c
 copIf [test, a, b] =
     do test' <- C.needBool test
@@ -89,32 +101,45 @@ copIf [test, a, b] =
 copIf [test, a] = copIf [test, a, C.nil]
 copIf xs = typeUnmatch xs
 
-funIf :: B.TokenTree
-funIf = B.TreeL $ B.tokenWord "/if"
-
 --  if TEST -> CON : ALT 
 --  if TEST -> CON
 --  if TEST -> CON : TEST -> CON : TEST -> CON
 --  if : TEST -> CON : TEST -> CON : TEST -> CON
 
 synIf :: C.CopSyn
-synIf trees = folding $ B.divideTreesBy ":" trees where
+synIf trees = folding $ filter (/= []) $ B.divideTreesBy ":" trees where
     folding :: [[B.TokenTree]] -> B.Ab B.TokenTree
     folding []        = Right $ B.TreeL $ B.tokenWord "()"
-    folding ([] : xs) = folding xs
     folding (x : xs)  = fore x =<< folding xs
 
     fore :: [B.TokenTree] -> B.AbMap B.TokenTree
     fore trees2 alt =
         case B.divideTreesBy "->" trees2 of
           [_]         -> back trees2 alt
-          [test, con] -> Right $ B.treeWrap [funIf, (B.treeWrap test), B.treeWrap con, alt]
-          _           -> Left  $ B.abortOperand "if"
+          [test, con] -> do test2 <- stairs ">>" "<<" test
+                            Right $ treeIf test2 (B.treeWrap con) alt
+          _           -> abortSyntax trees2 "Expect E -> E"
 
     back :: [B.TokenTree] -> B.AbMap B.TokenTree
     back trees2 alt =
         case B.divideTreesBy "<-" trees2 of
           [alt2]      -> Right $ B.treeWrap alt2
-          [con, test] -> Right $ B.treeWrap [funIf, (B.treeWrap test), B.treeWrap con, alt]
-          _           -> Left  $ B.abortOperand "if"
+          [con, test] -> do test2 <- stairs "<<" ">>" test
+                            Right $ treeIf test2 (B.treeWrap con) alt
+          _           -> abortSyntax trees2 "Expect E <- E"
+
+    stairs :: String -> String -> [B.TokenTree] -> B.Ab B.TokenTree
+    stairs del del2 xs =
+        do notInclude del2 xs
+           Right $ treeOrList $ map B.treeWrap $ B.divideTreesBy del xs
+
+    notInclude :: String -> [B.TokenTree] -> B.Ab ()
+    notInclude del xs =
+        case B.divideTreesBy del xs of
+          [_] -> Right ()
+          _   -> abortSyntax xs "Mixed arrows"
+
+    abortSyntax xs msg =
+        B.abortableTrees "if" xs $
+         Left $ B.abortOperand msg
 
