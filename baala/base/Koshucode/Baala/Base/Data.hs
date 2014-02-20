@@ -5,13 +5,13 @@
 module Koshucode.Baala.Base.Data
 (
   -- * Modules
-  module Koshucode.Baala.Base.Data.Abbr,
   module Koshucode.Baala.Base.Data.Comment,
   module Koshucode.Baala.Base.Data.Decimal,
   module Koshucode.Baala.Base.Data.Judge,
   module Koshucode.Baala.Base.Data.Rel,
   module Koshucode.Baala.Base.Data.Relhead,
   module Koshucode.Baala.Base.Data.Relterm,
+  module Koshucode.Baala.Base.Data.Short,
   module Koshucode.Baala.Base.Data.TermPos,
 
   -- * Glossary
@@ -19,13 +19,13 @@ module Koshucode.Baala.Base.Data
 )
 where
 
-import Koshucode.Baala.Base.Data.Abbr
 import Koshucode.Baala.Base.Data.Comment
 import Koshucode.Baala.Base.Data.Decimal
 import Koshucode.Baala.Base.Data.Judge
 import Koshucode.Baala.Base.Data.Rel
 import Koshucode.Baala.Base.Data.Relhead
 import Koshucode.Baala.Base.Data.Relterm
+import Koshucode.Baala.Base.Data.Short
 import Koshucode.Baala.Base.Data.TermPos
 
 

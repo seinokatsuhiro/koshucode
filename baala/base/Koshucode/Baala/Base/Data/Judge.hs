@@ -16,11 +16,10 @@ module Koshucode.Baala.Base.Data.Judge
   isAffirmed, isDenied,
 
   -- * Writer
-  AbbrJudge,
+  ShortJudge,
   putJudges,
   hPutJudges,
   hPutJudgesFlat,
-  hPutJudgesSectioned,
 ) where
 
 import qualified Control.Monad as M
@@ -29,7 +28,7 @@ import qualified Data.List     as List
 import qualified Data.Map      as Map
 import qualified System.IO     as IO
 import qualified Koshucode.Baala.Base.Prelude      as B
-import qualified Koshucode.Baala.Base.Data.Abbr    as B
+import qualified Koshucode.Baala.Base.Data.Short   as B
 import qualified Koshucode.Baala.Base.Data.Comment as B
 
 
@@ -125,30 +124,33 @@ isDenied   (Judge q _ _) = not q
 
 -- ----------------------  Writer
 
-type AbbrJudge c = B.Abbr [Judge c]
+type ShortJudge c = B.Short [Judge c]
 
 {-| Print judges to `IO.stdout`. -}
 putJudges :: (Ord c, B.Pretty c) => Int -> [Judge c] -> IO Int
 putJudges = hPutJudgesFlat IO.stdout
 
-hPutJudges :: (Ord c, B.Pretty c) => IO.Handle -> ([AbbrJudge c], [AbbrJudge c]) -> IO Int
+hPutJudges :: (Ord c, B.Pretty c) => IO.Handle -> ([ShortJudge c], [ShortJudge c]) -> IO Int
 hPutJudges h ([], jud) = hPutJudgesStatus h 0 jud
 hPutJudges h (vio, _)  = hPutJudgesStatus h 1 vio
 
 {-| Print judges. -}
-hPutJudgesStatus :: (Ord c, B.Pretty c) => IO.Handle -> Int -> [AbbrJudge c] -> IO Int
-hPutJudgesStatus h status abbrs =
-    do (n, c) <- M.foldM (hPutJudgeAbbr h) (0, Map.empty) abbrs
+hPutJudgesStatus :: (Ord c, B.Pretty c) => IO.Handle -> Int -> [ShortJudge c] -> IO Int
+hPutJudgesStatus h status sh =
+    do (n, c) <- M.foldM (hPutJudgeShort h) (0, Map.empty) sh
        IO.hPutStr h $ unlines $ judgeSummary status (n, c)
        return status
 
-hPutJudgeAbbr :: (Ord c, B.Pretty c) => IO.Handle -> Counter -> AbbrJudge c -> IO Counter
-hPutJudgeAbbr h nc (B.Abbr [] js) =
+hPutJudgeShort :: (Ord c, B.Pretty c) => IO.Handle -> Counter -> ShortJudge c -> IO Counter
+hPutJudgeShort h nc (B.Short [] js) =
     do hPutJudgeBody h nc js
-hPutJudgeAbbr h nc (B.Abbr _ js) =
-    do IO.hPutStrLn h "abbr"
-       IO.hPutStrLn h ""
+hPutJudgeShort h nc (B.Short shorts js) =
+    do IO.hPutStrLn h "short"
+       IO.hPutStrLn h $ unlines $ map shortLine shorts
        hPutJudgeBody h nc js
+    where
+      shortLine :: (String, String) -> String
+      shortLine (a, b) = "  " ++ a ++ " " ++ show b
 
 hPutJudgesFlat :: (Ord c, B.Pretty c) => IO.Handle -> Int -> [Judge c] -> IO Int
 hPutJudgesFlat h status js =
@@ -156,21 +158,7 @@ hPutJudgesFlat h status js =
        IO.hPutStr h $ unlines $ judgeSummary status (n, c)
        return status
 
-{-| Print judges. -}
-hPutJudgesSectioned :: (Ord c, B.Pretty c) => IO.Handle -> Int -> [[Judge c]] -> IO Int
-hPutJudgesSectioned h status jss =
-    do (n, c) <- M.foldM (hPutJudgeSection h) (0, Map.empty) jss
-       IO.hPutStr h $ unlines $ judgeSummary status (n, c)
-       return status
-
 type Counter = (Int, Map.Map String Int)
-
-hPutJudgeSection :: (Ord c, B.Pretty c) => IO.Handle -> Counter -> [Judge c] -> IO Counter
-hPutJudgeSection h nc js =
-    do IO.hPutStrLn h "section"
-       IO.hPutStrLn h ""
-       nc' <- hPutJudgeBody h nc js
-       return nc'
 
 hPutJudgeBody :: (Ord c, B.Pretty c) => IO.Handle -> Counter -> [Judge c] -> IO Counter
 hPutJudgeBody h = loop where

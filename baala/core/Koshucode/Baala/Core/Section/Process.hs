@@ -68,26 +68,26 @@ readJudges code =
 
 -- --------------------------------------------  Run
 
-runSection :: (C.CContent c) => C.Global c -> [C.Section c] -> B.Ab ([B.AbbrJudge c], [B.AbbrJudge c])
+runSection :: (C.CContent c) => C.Global c -> [C.Section c] -> B.Ab ([B.ShortJudge c], [B.ShortJudge c])
 runSection global sects =
     do let s2 = M.mconcat sects
            g2 = global { C.globalJudges = C.sectionJudge s2 }
        runSectionBody g2 s2
 
-runSectionBody :: forall c. (C.CNil c, Ord c) => C.Global c -> C.Section c -> B.Ab ([B.AbbrJudge c], [B.AbbrJudge c])
+runSectionBody :: forall c. (C.CNil c, Ord c) => C.Global c -> C.Section c -> B.Ab ([B.ShortJudge c], [B.ShortJudge c])
 runSectionBody global sec =
     do judgesV <- run $ C.assertViolated ass
        judgesN <- run $ C.assertNormal ass
-       Right (B.abbrTrim judgesV, B.abbrTrim judgesN)
+       Right (B.shortTrim judgesV, B.shortTrim judgesN)
     where
       ass :: C.AbbrAsserts c
       ass = sectionLinkedAssert sec
 
-      run :: C.AbbrAsserts c -> B.Ab ([B.AbbrJudge c])
-      run = sequence . map B.abbrAb . run2
+      run :: C.AbbrAsserts c -> B.Ab ([B.ShortJudge c])
+      run = sequence . map B.shortAb . run2
 
-      run2 :: C.AbbrAsserts c -> [B.Abbr (B.Ab [B.Judge c])]
-      run2 = B.abbrMap $ C.runAssertJudges global
+      run2 :: C.AbbrAsserts c -> [B.Short (B.Ab [B.Judge c])]
+      run2 = B.shortMap $ C.runAssertJudges global
 
 -- {-| Run section.
 --     Output section has judges calculated
@@ -106,11 +106,11 @@ runSectionBody global sec =
 {-| Select assertions like 'sectionAssert'.
     It returns relmap-liked assertions.
     We can run these assertions using 'C.runAssertJudges'. -}
-sectionLinkedAssert :: forall c. C.Section c -> [B.Abbr [C.Assert c]]
+sectionLinkedAssert :: forall c. C.Section c -> [B.Short [C.Assert c]]
 sectionLinkedAssert C.Section { C.sectionRelmap = rs, C.sectionAssert = ass }
     = linkeAssert rs ass
 
-linkeAssert :: forall c. [B.Named (C.Relmap c)] -> B.Map [B.Abbr [C.Assert c]]
+linkeAssert :: forall c. [B.Named (C.Relmap c)] -> B.Map [B.Short [C.Assert c]]
 linkeAssert relmaps = map $ fmap $ map link where
     link :: B.Map (C.Assert c)
     link = C.assertMap $ C.relmapLinker relmaps

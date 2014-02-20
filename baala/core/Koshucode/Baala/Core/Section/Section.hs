@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall -fno-warn-incomplete-patterns #-}
 
 {-| Data structure for relational calculations.
@@ -35,12 +36,12 @@ import qualified Koshucode.Baala.Core.Section.Clause  as C
 -- ----------------------  Abbr
 
 assertViolated :: B.Map (AbbrAsserts c)
-assertViolated = B.abbrMap $ filter C.isViolateAssert
+assertViolated = B.shortMap $ filter C.isViolateAssert
 
 assertNormal :: B.Map (AbbrAsserts c)
-assertNormal = B.abbrMap $ filter $ not . C.isViolateAssert
+assertNormal = B.shortMap $ filter $ not . C.isViolateAssert
 
-type AbbrAsserts c = [B.Abbr [C.Assert c]]
+type AbbrAsserts c = [B.Short [C.Assert c]]
 
 
 -- ----------------------  Section
@@ -49,7 +50,7 @@ data Section c = Section {
       sectionName     :: Maybe String           -- ^ Section name
     , sectionImport   :: [Section c]            -- ^ Importing section
     , sectionExport   :: [String]               -- ^ Exporting relmap names
-    , sectionAbbr     :: [B.Named String]       -- ^ Prefix for abbr signs
+    , sectionShort    :: [[B.Named String]]     -- ^ Prefix for short signs
     , sectionAssert   :: AbbrAsserts c          -- ^ Assertions of relmaps
     , sectionRelmap   :: [B.Named (C.Relmap c)] -- ^ Relmaps and its name
     , sectionJudge    :: [B.Judge c]            -- ^ Affirmative or denial judgements
@@ -64,7 +65,7 @@ instance (Ord c, B.Pretty c) => B.Pretty (Section c) where
         dRelmap  = B.docv $ map docRelmap $ sectionRelmap sec
         docRelmap (n,m) = B.docZero (n ++ " :") B.<+> B.doc m B.$$ B.doc ""
         dJudge   = B.docv $ sectionJudge sec
-        dAssert  = B.docv $ concatMap B.abbrBody $ sectionAssert sec
+        dAssert  = B.docv $ concatMap B.shortBody $ sectionAssert sec
 
 instance M.Monoid (Section c) where
     mempty  = emptySection
@@ -99,12 +100,22 @@ emptySection = makeEmptySection $ C.relmapCons C.global
 
 {-| Second step of constructing 'Section'. -}
 consSection
-    :: (C.CContent c)
+    :: forall c. (C.CContent c)
+    => C.RelmapConsFull c    -- ^ Relmap full constructor
+    -> B.Resource            -- ^ Resource name
+    -> [B.Short [C.Clause]]  -- ^ Output of 'C.consClause'
+    -> B.Ab (Section c)      -- ^ Result section
+consSection consFull resource xss =
+    do sects <- mapM (consSectionEach consFull resource) xss
+       Right $ M.mconcat sects
+
+consSectionEach
+    :: forall c. (C.CContent c)
     => C.RelmapConsFull c   -- ^ Relmap full constructor
     -> B.Resource           -- ^ Resource name
-    -> [C.Clause]           -- ^ Output of 'C.consClause'
+    -> B.Short [C.Clause]   -- ^ Output of 'C.consClause'
     -> B.Ab (Section c)     -- ^ Result section
-consSection consFull resource xs =
+consSectionEach consFull resource (B.Short shorts xs) =
     do _        <-  mapMFor unk    isCUnknown
        _        <-  mapMFor unres  isCUnres
        imports  <-  mapMFor impt   isCImport
@@ -116,8 +127,8 @@ consSection consFull resource xs =
            { sectionName      =  section xs
            , sectionImport    =  imports
            , sectionExport    =  mapFor expt isCExport
-           , sectionAbbr      =  mapFor abbr isCAbbr
-           , sectionAssert    =  [B.Abbr [] asserts]
+           , sectionShort     =  mapFor short isCShort
+           , sectionAssert    =  [B.Short shorts asserts]
            , sectionRelmap    =  relmaps
            , sectionJudge     =  judges
            , sectionResource  =  resource }
@@ -134,21 +145,26 @@ consSection consFull resource xs =
       section [] = Nothing
 
       expt  _ (C.CExport n) = n
-      abbr  _ (C.CAbbr   p) = p
+
+      short :: [B.Token] -> C.ClauseBody -> [B.Named String]
+      short  _ (C.CShort   p) = p
 
       impt _ (C.CImport _ (Nothing)) = Right emptySection
-      impt _ (C.CImport _ (Just e))  = consSec [e]
+      impt _ (C.CImport _ (Just _))  = consSec []
 
+      judge :: [B.Token] -> C.ClauseBody -> B.Ab (B.Judge c)
       judge _ (C.CJudge q pat xs2) =
           case C.litJudge q pat (B.tokenTrees xs2) of
             Right j -> Right j
             Left  a -> abort a
 
+      relmap :: [B.Token] -> C.ClauseBody -> B.Ab (B.Named (C.Relmap c))
       relmap _ (C.CRelmap name half) =
           case consFull half of
             Right full -> Right (name, full)
             Left a     -> abort a
 
+      assert :: [B.Token] -> C.ClauseBody -> B.Ab (C.Assert c)
       assert toks (C.CAssert typ pat opt half) =
           case consFull half of
             Right full -> Right $ C.Assert typ pat opt full toks
@@ -159,33 +175,33 @@ consSection consFull resource xs =
       abort (B.AbortSyntax _ a) = Left $ B.AbortSyntax [] a
       abort a = Left a
 
-isCImport, isCExport, isCAbbr,
+isCImport, isCExport, isCShort,
   isCRelmap, isCAssert, isCJudge,
   isCUnknown, isCUnres :: C.ClauseBody -> Bool
 
-isCImport (C.CImport _ _)      = True
-isCImport _                    = False
+isCImport (C.CImport _ _)       = True
+isCImport _                     = False
 
-isCExport (C.CExport _)        = True
-isCExport _                    = False
+isCExport (C.CExport _)         = True
+isCExport _                     = False
 
-isCAbbr (C.CAbbr _)            = True
-isCAbbr _                      = False
+isCShort (C.CShort _)           = True
+isCShort _                      = False
 
-isCRelmap (C.CRelmap _ _)      = True
-isCRelmap _                    = False
+isCRelmap (C.CRelmap _ _)       = True
+isCRelmap _                     = False
 
-isCAssert (C.CAssert _ _ _ _)  = True
-isCAssert _                    = False
+isCAssert (C.CAssert _ _ _ _)   = True
+isCAssert _                     = False
 
-isCJudge (C.CJudge _ _ _)      = True
-isCJudge _                     = False
+isCJudge (C.CJudge _ _ _)       = True
+isCJudge _                      = False
 
-isCUnknown (C.CUnknown)        = True
-isCUnknown _                   = False
+isCUnknown (C.CUnknown)         = True
+isCUnknown _                    = False
 
-isCUnres (C.CUnres _)          = True
-isCUnres _                     = False
+isCUnres (C.CUnres _)           = True
+isCUnres _                      = False
 
 
 

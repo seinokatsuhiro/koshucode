@@ -27,18 +27,18 @@ data Clause =
            } deriving (Show, G.Data, G.Typeable)
 
 data ClauseBody
-    = CSection  (Maybe String)            -- ^ Section name
-    | CImport   [B.Token] (Maybe Clause)  -- ^ Importing section name
-    | CExport   String                    -- ^ Exporting relmap name
-    | CAbbr     (B.Named String)          -- ^ abbreviated signs
-    | CRelmap   String C.HalfRelmap       -- ^ Relmap and its name
-    | TRelmap   String [B.Token]          -- ^ Not include HalfRelmap
+    = CSection  (Maybe String)                 -- ^ Section name
+    | CImport   [B.Token] (Maybe Clause)       -- ^ Importing section name
+    | CExport   String                         -- ^ Exporting relmap name
+    | CShort    [(B.Named String)]             -- ^ Short signs
+    | CRelmap   String C.HalfRelmap            -- ^ Relmap and its name
+    | TRelmap   String [B.Token]               -- ^ Not include HalfRelmap
     | CAssert   C.AssertType B.JudgePattern C.AssertOption C.HalfRelmap  -- ^ Assertions of relmaps
     | TAssert   C.AssertType B.JudgePattern C.AssertOption [B.Token]     -- ^ Not include HalfRelmap
-    | CJudge    Bool B.JudgePattern [B.Token]     -- ^ Judge
-    | CComment               -- ^ Clause comment
-    | CUnknown               -- ^ Unknown clause
-    | CUnres    [B.Token]    -- ^ Unresolved abbreviated sign
+    | CJudge    Bool B.JudgePattern [B.Token]  -- ^ Judge
+    | CComment                                 -- ^ Clause comment
+    | CUnknown                                 -- ^ Unknown clause
+    | CUnres    [B.Token]                      -- ^ Unresolved short sign
       deriving (Show, G.Data, G.Typeable)
 
 {-| Name of clause type. e.g., @\"Relmap\"@, @\"Assert\"@. -}
@@ -48,7 +48,7 @@ clauseTypeText (Clause _ body) =
       CSection _         ->  "Section"
       CImport  _ _       ->  "Import"
       CExport  _         ->  "Export"
-      CAbbr    _         ->  "Abbr"
+      CShort   _         ->  "Short"
       CRelmap  _ _       ->  "Relmap"
       TRelmap  _ _       ->  "Relmap"
       CAssert  _ _ _ _   ->  "Assert"
@@ -93,7 +93,7 @@ consPreclause' src = dispatch $ B.clauseTokens src where
         | k == "section"  =  sec xs
         | k == "import"   =  impt xs
         | k == "export"   =  expt xs
-        | k == "abbr"     =  abbr xs
+        | k == "short"    =  short xs
         | k == "****"     =  c1 CComment
     dispatch []           =  []
     dispatch _            =  unk
@@ -142,9 +142,24 @@ consPreclause' src = dispatch $ B.clauseTokens src where
 
     impt xs                =  c1 $ CImport xs Nothing
 
-    abbr [B.TWord _ _ a, B.TWord _ _ b] = c1 $ CAbbr (a, b)
-    abbr _                 =  unk
+    short xs               = case wordPairs xs of
+                               Nothing -> unk
+                               Just sh -> c1 $ CShort sh
 
+pairs :: [a] -> Maybe [(a, a)]
+pairs (a:b:cs) = do cs' <- pairs cs
+                    Just $ (a, b) : cs'
+pairs [] = Just []
+pairs _  = Nothing
+
+wordPairs :: [B.Token] -> Maybe [(String, String)]
+wordPairs toks =
+    do p <- pairs toks
+       mapM wordPair p
+    where
+      wordPair :: (B.Token, B.Token) -> Maybe (String, String)
+      wordPair (B.TWord _ _ a, B.TWord _ _ b) = Just (a, b)
+      wordPair _ = Nothing
 
 
 -- ----------------------  Half construction
@@ -152,50 +167,71 @@ consPreclause' src = dispatch $ B.clauseTokens src where
 {-| Construct 'Clause' list from 'B.Token' list.
     This is a first step of constructing 'Section'. -}
 consClause
-    :: C.RelmapConsHalf    -- ^ Relmap half constructor
-    -> [B.TokenLine]       -- ^ Source tokens
-    -> B.Ab [Clause]  -- ^ Result clauses
-consClause half = clauseHalf half . consPreclause
+    :: C.RelmapConsHalf        -- ^ Relmap half constructor
+    -> [B.TokenLine]           -- ^ Source tokens
+    -> B.Ab [B.Short [Clause]]  -- ^ Result clauses
+consClause half = clauseHalfClause half . shortSections . consPreclause
 
-clauseHalf :: C.RelmapConsHalf -> [Clause] -> B.Ab [Clause]
-clauseHalf half xs = mapM f xs2 where
-    f (Clause src body)        = Right . Clause src =<< g body
+clauseHalfClause :: C.RelmapConsHalf -> B.AbMap [B.Short [Clause]]
+clauseHalfClause half = sequence . map B.shortAb . f where
+    f :: [B.Short [Clause]] -> [B.Short (B.Ab [Clause])]
+    f = map $ fmap (clauseHalf half)
 
-    g (TRelmap n ts)       = Right . CRelmap n       =<< h ts
-    g (TAssert q p opt ts) = Right . CAssert q p opt =<< h ts
-    g body                 = Right body
+clauseHalf :: C.RelmapConsHalf -> B.AbMap [Clause]
+clauseHalf half = mapM clause where
+    clause :: B.AbMap Clause
+    clause (Clause src bd)      = Right . Clause src        =<< body bd
 
-    h ts = half (B.tokenTrees ts)
+    body :: B.AbMap ClauseBody
+    body (TRelmap n ts)       = Right . CRelmap n       =<< relmap ts
+    body (TAssert q p opt ts) = Right . CAssert q p opt =<< relmap ts
+    body bd                   = Right bd
 
-    xs2 = concatMap resolve xs
-    resolve = resolveClause $ concatMap abbr xs
-    abbr (Clause _ (CAbbr p)) = [p]
-    abbr _ = []
+    relmap :: [B.Token] -> B.Ab C.HalfRelmap
+    relmap = half . B.tokenTrees
 
-resolveClause :: [B.Named String] -> Clause -> [Clause]
-resolveClause abbrs = f where
-    f (Clause src (CJudge  q p xs))     = resolve src xs $ CJudge  q p
-    f (Clause src (TAssert q p opt xs)) = resolve src xs $ TAssert q p opt
-    f (Clause src (TRelmap n xs))       = resolve src xs $ TRelmap n
-    f clause                            = [clause]
+shortSections :: [Clause] -> [B.Short [Clause]]
+shortSections [] = []
+shortSections xxs@(x : xs)
+    | isCShort x = f xs $ shorts x
+    | otherwise  = f xxs []
+    where f cl sh = case span (not . isCShort) cl of
+                       (xs1, xs2) -> B.Short sh (longSign sh xs1)
+                                     : shortSections xs2
 
-    resolve src xs k = let xs2 = map (resolveAbbr abbrs) xs
-                       in Clause src (k xs2) : unres src xs2
-    unres src xs2    = case filter isTAbbr xs2 of
-                         []  -> []
-                         xs3 -> [Clause src (CUnres xs3)]
+isCShort :: Clause -> Bool
+isCShort (Clause _ (CShort _)) = True
+isCShort _ = False
 
-resolveAbbr :: [B.Named String] -> B.Map B.Token
-resolveAbbr abbrs = f where
-    f token@(B.TAbbr n a b) =
-        case lookup a abbrs of
+shorts :: Clause -> [B.Named String]
+shorts (Clause _ (CShort s)) = s
+shorts _ = []
+
+longSign :: [B.Named String] -> B.Map [Clause]
+longSign [] = id
+longSign sh = map clause where
+    clause :: B.Map Clause
+    clause cl@(Clause src b) =
+        case b of
+          CJudge  q p xs     -> Clause src $ body xs $ CJudge  q p
+          TAssert q p opt xs -> Clause src $ body xs $ TAssert q p opt
+          TRelmap n xs       -> Clause src $ body xs $ TRelmap n
+          _                  -> cl
+
+    body :: [B.Token] -> ([B.Token] -> ClauseBody) -> ClauseBody
+    body xs k =
+        let ls = map long xs
+            ss = filter B.isShortToken ls
+        in if null ss
+           then k ls
+           else CUnres ss
+
+    long :: B.Map B.Token
+    long token@(B.TShort n a b) =
+        case lookup a sh of
           Just l  -> B.TWord n 2 $ l ++ b
           Nothing -> token
-    f token = token
-
-isTAbbr :: B.Token -> Bool
-isTAbbr (B.TAbbr _ _ _) = True
-isTAbbr _               = False
+    long token = token
 
 
 

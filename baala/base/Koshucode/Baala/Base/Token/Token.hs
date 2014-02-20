@@ -19,6 +19,7 @@ module Koshucode.Baala.Base.Token.Token
 
   -- * Predicates
   isBlankToken,
+  isShortToken,
   isOpenTokenOf,
   isCloseTokenOf,
 
@@ -43,7 +44,7 @@ data Token
                --   0 for non-quoted,
                --   1 for single-quoted,
                --   2 for double-quoted.
-    | TAbbr    B.TokenPos String String  -- ^ Abbreviated word
+    | TShort   B.TokenPos String String  -- ^ Abbreviated word
     | TTerm    B.TokenPos [Termname]  -- ^ Termname
     | TOpen    B.TokenPos String      -- ^ Opening paren
     | TClose   B.TokenPos String      -- ^ Closing paren
@@ -69,7 +70,7 @@ instance B.Name Token where
 instance B.Pretty Token where
     doc = d where
         d (TWord    pos q w) = pretty "TWord"    pos [show q, show w]
-        d (TAbbr    pos a b) = pretty "TAbbr"    pos [show a, show b]
+        d (TShort   pos a b) = pretty "TShort"   pos [show a, show b]
         d (TTerm    pos ns)  = pretty "TTerm"    pos [show ns]
         d (TOpen    pos p)   = pretty "TOpen"    pos [show p]
         d (TClose   pos p)   = pretty "TClose"   pos [show p]
@@ -94,7 +95,7 @@ instance (TokenListing a) => TokenListing (Maybe a) where
 
 tokenPos :: Token -> B.TokenPos
 tokenPos (TWord    p _ _)  = p
-tokenPos (TAbbr    p _ _)  = p
+tokenPos (TShort   p _ _)  = p
 tokenPos (TTerm    p _)    = p
 tokenPos (TOpen    p _)    = p
 tokenPos (TClose   p _)    = p
@@ -108,7 +109,7 @@ tokenPos (TUnknown p _)    = p
     "/r/x"  -}
 tokenContent :: Token -> String
 tokenContent (TWord  _ _ s)   = s
-tokenContent (TAbbr  _ a b)   = a ++ "." ++ b
+tokenContent (TShort _ a b)   = a ++ "." ++ b
 tokenContent (TTerm    _ s)   = concat s
 tokenContent (TOpen    _ s)   = s
 tokenContent (TClose   _ s)   = s
@@ -124,7 +125,7 @@ tokenContent (TUnknown _ s)   = s
     "Word"  -}
 tokenTypeText :: Token -> String
 tokenTypeText (TWord  _ _ _)  = "Word"
-tokenTypeText (TAbbr  _ _ _)  = "Short"
+tokenTypeText (TShort _ _ _)  = "Short"
 tokenTypeText (TTerm    _ _)  = "TermN"
 tokenTypeText (TOpen    _ _)  = "Open"
 tokenTypeText (TClose   _ _)  = "Close"
@@ -142,6 +143,10 @@ isBlankToken :: B.Pred Token
 isBlankToken (TSpace _ _)    = True
 isBlankToken (TComment _ _)  = True
 isBlankToken _               = False
+
+isShortToken :: B.Pred Token
+isShortToken (TShort _ _ _)  = True
+isShortToken _               = False
 
 -- {-| Test the token is a term, i.e., 'TTerm'. -}
 -- isTermToken :: Token -> Bool
