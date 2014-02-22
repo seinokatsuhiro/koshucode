@@ -11,9 +11,10 @@ module Koshucode.Baala.Core.Content.Cox
   -- * Operator
   Cop (..), CopFun, CopSyn,
   -- * Construction
-  CoxCons, coxCons,
+  CoxAssoc,
+  coxCons, checkIrreducible,
   -- * Run
-  coxRun,
+  CoxCons, coxPosition, coxRun,
 ) where
 
 import qualified Koshucode.Baala.Base as B
@@ -27,15 +28,16 @@ type Cox c = B.Sourced (CoxCore c)
 
 {-| Content expressions. -}
 data CoxCore c
-    = CoxLit c                      -- ^ Literal content
-    | CoxTerm [B.Termname] [Int]    -- ^ Term reference, its name and position
-    | CoxCall (CopFun c) [Cox c]    -- ^ Call content operator
+    = CoxLit c                      -- ^ A: Literal content
+    | CoxTerm [B.Termname] [Int]    -- ^ A: Term reference, its name and position
+    | CoxCall (CopFun c) [Cox c]    -- ^ A: Call content operator
 
-    | CoxVariable Int String        -- ^ Variable, its de-Bruijn index and name
-    | CoxApply   (Cox c)  (Cox c)   -- ^ Function application
-    | CoxApplyL  (Cox c)  [Cox c]   -- ^ Function application (multiple arguments)
-    | CoxLambda   String  (Cox c)   -- ^ Function abstraction
-    | CoxLambdaL [String] (Cox c)   -- ^ Function abstraction (multiple variables)
+    | CoxVariable Int String        -- ^ B: Variable, its De Bruijn index and name
+    | CoxApply   (Cox c)  (Cox c)   -- ^ B: Function application
+    | CoxLambda   String  (Cox c)   -- ^ B: Function abstraction
+
+    | CoxApplyL  (Cox c)  [Cox c]   -- ^ C: Function application (multiple arguments)
+    | CoxLambdaL [String] (Cox c)   -- ^ C: Function abstraction (multiple variables)
 
 {-| Term-content operator. -}
 data Cop c
@@ -57,22 +59,21 @@ instance B.Name (Cop c) where
 
 -- ----------------------  Construction
 
-type CoxCons c = B.Relhead -> B.Ab (Cox c)
+type CoxAssoc c = [B.Named (Cox c)]
 
 {-| Construct content expressions from token tree. -}
 coxCons :: forall c. (C.CContent c)
-  => ([Cop c], [B.Named B.InfixHeight]) -> B.TokenTree -> B.Ab (CoxCons c)
-coxCons (cops, htab) = body where
-    body :: B.TokenTree -> B.Ab (CoxCons c)
+  => ([Cop c], [B.Named B.InfixHeight]) -> CoxAssoc c -> B.TokenTree -> B.Ab (Cox c)
+coxCons (cops, htab) dict = body where
+    body :: B.TokenTree -> B.Ab (Cox c)
     body tree =
-        Right . position     -- replace term name to term position
-            =<< irrep        -- Check irreducible
-              . beta         -- beta reduction
-              . deBruijn     -- attach De Bruijn indicies
-              . unlist       -- expand multiple variables/arguments
-            =<< expression   -- construct content expression from token tree
-            =<< prefix htab  -- convert infix operator to prefix
-            =<< syntax tree  -- expand syntax operator
+        Right . beta          -- beta reduction
+              . link dict     -- substitute free variables
+              . debruijn      -- attach De Bruijn indicies
+              . unlist        -- expand multiple variables/arguments
+            =<< expression    -- construct content expression from token tree
+            =<< prefix htab   -- convert infix operator to prefix
+            =<< syntax tree   -- expand syntax operator
 
     assoc :: [B.Named (Cop c)]
     assoc = map B.named cops
@@ -139,31 +140,6 @@ coxCons (cops, htab) = body where
     core tree@(B.TreeB n _ _) | n > 1 = fmap CoxLit $ C.litContent tree  
     core (B.TreeB n _ _) = Left $ B.AbortSyntax [] $ B.ASUnkCox $ show n
 
--- put term positions for actural heading
-position :: Cox c -> CoxCons c
-position scox h = spos scox where
-    spos = B.sourcedAbMap pos
-    pos (CoxCall f cs)   = Right . CoxCall f =<< mapM spos cs
-    pos (CoxTerm ns _)  =
-        let index = B.headIndex1 h ns
-        in if all (>= 0) index
-           then Right $ CoxTerm ns index
-           else Left  $ B.AbortAnalysis [] (B.AANoTerms ns)
-    pos e = Right e
-
-irrep :: Cox c -> B.Ab (Cox c)
-irrep e | irreducible e = Right e
-        | otherwise     = Left $ B.AbortSyntax [] $ B.ASUnkCox "Not irreducible"
-
--- irreducible representation
-irreducible :: Cox c -> Bool
-irreducible (B.Sourced _ core) =
-    case core of
-      CoxLit  _     ->  True
-      CoxTerm _ _   ->  True
-      CoxCall _ xs  ->  all irreducible xs
-      _             ->  False
-
 beta :: B.Map (Cox c)
 beta = be [] where
     be :: [(Int, Cox c)] -> B.Map (Cox c)
@@ -184,8 +160,8 @@ beta = be [] where
     inc :: (Int, Cox c) -> (Int, Cox c)
     inc (n, x) = (n + 1, x)
 
-deBruijn :: B.Map (Cox c)
-deBruijn = de [] where
+debruijn :: B.Map (Cox c)
+debruijn = de [] where
     de :: [String] -> B.Map (Cox c)
     de vars (B.Sourced src core) =
         let de' = de vars
@@ -247,17 +223,67 @@ prefix htab tree =
       detailText tok dir n = B.tokenContent tok ++ " : " ++ dir ++ " " ++ show n
 
 
+-- ----------------------  Link
+
+link :: forall c. CoxAssoc c -> B.Map (Cox c)
+link dict = li where
+    li :: B.Map (Cox c)
+    li e@(B.Sourced src core) =
+        let s = B.Sourced src
+        in case core of
+             CoxCall n xs    -> s $ CoxCall n $ map li xs
+             CoxVariable 0 n -> maybe e id $ lookup n dictrec
+             CoxLambda v b   -> s $ CoxLambda v (li b)
+             CoxApply f x    -> s $ CoxApply (li f) (li x)
+             _               -> e
+
+    dictrec :: CoxAssoc c
+    dictrec = mapSnd li dict
+
+mapSnd :: (b -> b) -> [(a, b)] -> [(a, b)]
+mapSnd = map . fmap
+
+
 
 -- ----------------------  Run
 
+type CoxCons c = B.Relhead -> B.Ab (Cox c)
+
+-- put term positions for actural heading
+coxPosition :: Cox c -> CoxCons c
+coxPosition scox h = spos scox where
+    spos = B.sourcedAbMap pos
+    pos (CoxCall f cs)   = Right . CoxCall f =<< mapM spos cs
+    pos (CoxTerm ns _)  =
+        let index = B.headIndex1 h ns
+        in if all (>= 0) index
+           then Right $ CoxTerm ns index
+           else Left  $ B.AbortAnalysis [] (B.AANoTerms ns)
+    pos e = Right e
+
+checkIrreducible :: Cox c -> B.Ab (Cox c)
+checkIrreducible e
+    | irreducible e = Right e
+    | otherwise     = Left $ B.AbortSyntax [] $ B.ASUnkCox "Not irreducible"
+
+-- irreducible representation
+irreducible :: Cox c -> Bool
+irreducible (B.Sourced _ core) =
+    case core of
+      CoxLit  _     ->  True
+      CoxTerm _ _   ->  True
+      CoxCall _ xs  ->  all irreducible xs
+      _             ->  False
+
 {-| Calculate content expression. -}
 coxRun
-  :: (C.CRel c, C.CList c)
+  :: forall c. (C.CRel c, C.CList c)
   => B.Relhead     -- ^ Heading of relation
   -> [c]           -- ^ Tuple in body of relation
   -> CoxCons c     -- ^ Content expression
   -> B.Ab c        -- ^ Calculated literal content
 coxRun h arg pcox = run =<< pcox h where
+    run :: Cox c -> B.Ab c
     run (B.Sourced src cox) = B.abortable "calc" src $
         case cox of
           CoxLit c      -> Right c
@@ -302,11 +328,11 @@ coxRun h arg pcox = run =<< pcox h where
 
      [5. @Tree Token -> Cox c@]
         Convert from token tree to content expression.
-        See 'coxCons'.
+        See 'coxSpecial'.
 
      [6. @Cox c -> (Relhead -> Cox c)@]
         Attach term positions using actural heading of relation.
-        See 'coxCons'.
+        See 'coxSpecial'.
 
      [7. @Cox c -> \[c\] -> c@]
         Calculate content expression for each tuple of relation.

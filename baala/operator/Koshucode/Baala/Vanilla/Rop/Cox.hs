@@ -17,42 +17,53 @@ import qualified Koshucode.Baala.Builtin as Rop
 
 -- ----------------------  add
 
-consAdd :: (C.CRel c, C.CList c) => C.RopCons c
+consAdd :: (C.CContent c) => C.RopCons c
 consAdd use =
-  do trees <- Rop.getTermTrees use "-term"
-     coxes <- mapM (B.namedMapM $ ropCoxCons use) trees
-     Right $ relmapAdd use coxes
+    do treesLet  <- Rop.getMaybe Rop.getWordTrees use "-let"
+       treesTerm <- Rop.getTermTrees use "-term"
+       coxLet    <- maybe (Right []) (ncox use []) treesLet
+       coxTerm   <- ncox use coxLet treesTerm
+       Right $ relmapAdd use coxTerm
 
-relmapAdd :: (C.CRel c, C.CList c) => C.RopUse c -> [B.Named (C.CoxCons c)] -> C.Relmap c
+relmapAdd :: (C.CRel c, C.CList c)=> C.RopUse c -> C.CoxAssoc c -> C.Relmap c
 relmapAdd use = C.relmapCalc use . relkitAdd
 
 -- todo: shared term
-relkitAdd :: (C.CRel c, C.CList c) => [B.Named (C.CoxCons c)] -> C.RelkitCalc c
-relkitAdd coxes h1 = Right $ C.relkit h2 (C.RelkitOneToAbOne False f) where
-    ns    = map fst coxes   -- term names
-    es    = map snd coxes   -- term expressions
-    h2    = B.headAppend ns h1
-    f cs1 = do cs2 <- mapM (C.coxRun h1 cs1) es
-               Right $ cs2 ++ cs1
+relkitAdd :: (C.CRel c, C.CList c) => C.CoxAssoc c -> C.RelkitCalc c
+relkitAdd coxTerm h1 =
+    Right $ C.relkit h2 (C.RelkitOneToAbOne False f)
+        where ns    = map fst coxTerm   -- term names
+              es    = map (C.coxPosition . snd) coxTerm   -- term expressions
+              h2    = B.headAppend ns h1
+              f cs1 = do cs2 <- C.coxRun h1 cs1 `mapM` es
+                         Right $ cs2 ++ cs1
 
-ropCoxCons :: C.RopUse c -> B.TokenTree -> B.Ab (C.CoxCons c)
-ropCoxCons = C.globalCoxCons . C.ropGlobal
+ncox :: (C.CContent c) => C.RopUse c -> C.CoxAssoc c
+  -> [B.Named B.TokenTree] -> B.Ab (C.CoxAssoc c)
+ncox use dict = mapM (B.namedMapM $ cox use dict)
+
+cox :: (C.CContent c) => C.RopUse c -> C.CoxAssoc c
+  -> B.TokenTree -> B.Ab (C.Cox c)
+cox use dict = C.coxCons cops dict where
+    cops = C.globalCops $ C.ropGlobal use
 
 
 -- ----------------------  hold
 
 consHold :: (C.CContent c) => C.RopCons c
 consHold use =
-    do trees <- Rop.getTrees use "-expr"
-       cox   <- ropCoxCons use $ B.treeWrap trees
-       Right $ relmapHold use True cox
+    do treesLet  <- Rop.getMaybe Rop.getWordTrees use "-let"
+       treesExpr <- Rop.getTrees use "-expr"
+       coxLet    <- maybe (Right []) (ncox use []) treesLet
+       coxExpr   <- cox use coxLet $ B.treeWrap treesExpr
+       Right $ relmapHold use (True, coxExpr)
 
-relmapHold :: (C.CContent c) => C.RopUse c -> Bool -> C.CoxCons c -> C.Relmap c
-relmapHold use b cox = C.relmapCalc use $ relkitHold b cox
+relmapHold :: (C.CContent c) => C.RopUse c -> (Bool, C.Cox c) -> C.Relmap c
+relmapHold use = C.relmapCalc use . relkitHold
 
-relkitHold :: (C.CContent c) => Bool -> C.CoxCons c -> C.RelkitCalc c
-relkitHold b cox h1 = Right $ C.relkit h1 (C.RelkitAbPred p) where
-    p cs = do c <- C.coxRun h1 cs cox
+relkitHold :: (C.CContent c) => (Bool, C.Cox c) -> C.RelkitCalc c
+relkitHold (b, coxExpr) h1 = Right $ C.relkit h1 (C.RelkitAbPred p) where
+    p cs = do c <- C.coxRun h1 cs (C.coxPosition coxExpr)
               case c of
                 x | C.isBool x -> Right $ b == C.getBool x
                 _ -> Left $ B.AbortAnalysis [] $ B.AAReqBoolean ""

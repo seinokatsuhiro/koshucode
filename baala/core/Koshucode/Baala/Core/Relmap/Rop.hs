@@ -170,7 +170,6 @@ data Global c = Global
       { globalVersion :: D.Version
       , globalRops    :: [Rop c]
       , globalCops    :: ([C.Cop c], [B.Named B.InfixHeight])
-      , globalCoxCons :: B.TokenTree -> B.Ab (C.CoxCons c)
       , globalProgram :: String
       , globalArgs    :: [String]
       , globalJudges  :: [B.Judge c]
@@ -191,13 +190,12 @@ globalCommandLine Global { globalProgram = prog, globalArgs = args }
     = prog : args
 
 globalFill :: (C.CContent c) => B.Map (Global c)
-globalFill g = g { globalCoxCons = C.coxCons $ globalCops g }
+globalFill g = g
 
 global :: Global c
 global = Global { globalVersion = D.Version [] []
                 , globalRops    = []
                 , globalCops    = ([], [])
-                , globalCoxCons = undefined
                 , globalProgram = ""
                 , globalArgs    = []
                 , globalJudges  = []

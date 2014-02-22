@@ -8,6 +8,7 @@ module Koshucode.Baala.Builtin.Get
   getMaybe,
   getOption,
   getTrees,
+  getWordTrees,
 
   -- * Relmap
   getRelmap,
@@ -79,6 +80,24 @@ getTrees u name =
     case lookupOperand name u of
       Just trees -> Right trees
       Nothing    -> Left $ B.AbortAnalysis [] $ B.AAOperandNotFound
+
+getWordTrees :: RopGet c [B.Named B.TokenTree]
+getWordTrees u name =
+    case lookupOperand name u of
+      Just trees -> wordTrees trees
+      Nothing    -> Left $ B.AbortAnalysis [] $ B.AAOperandNotFound
+
+wordTrees :: [B.TokenTree] -> B.Ab [B.Named B.TokenTree]
+wordTrees []  = Right []
+wordTrees [_] = Left $ B.abortOperand "Require word and tree"
+wordTrees (w : tree : xs) =
+    do w'  <- word w
+       xs' <- wordTrees xs
+       Right $ (w', tree) : xs'
+
+word :: B.TokenTree -> B.Ab String
+word (B.TreeL (B.TWord _ _ w)) = Right w
+word _ = Left $ B.abortOperand "Require one word"
 
 
 -- ----------------------  Relmap
