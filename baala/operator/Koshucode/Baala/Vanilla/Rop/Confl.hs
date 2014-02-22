@@ -70,7 +70,7 @@ relmapFull :: (Ord c, C.CNil c) => C.RopUse c
            -> C.Relmap c -> C.Relmap c -> C.Relmap c
 relmapFull use m1 m2 = C.relmapConfl use fy [m1, m2] where
     fy [r1, r2] = relkitFull r1 r2
-    fy _ = B.bug
+    fy _ = B.bug "relmapFull"
 
 relkitFull :: (Ord c, C.CNil c) => C.Relkit c -> C.RelkitBinary c
 relkitFull (C.Relkit h1 f1) (C.Relkit h2 f2) _ = 

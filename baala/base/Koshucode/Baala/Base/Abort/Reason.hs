@@ -129,6 +129,6 @@ abortNotFound :: String -> AbortReason
 abortNotFound = AbortCalc [] . B.ACNotFound
 
 {-| Stop on error @'bug in koshucode'@ -}
-bug :: a
-bug = error "bug in koshucode"
+bug :: String -> a
+bug msg = error $ "BUG DISCOVERED: " ++ msg
 

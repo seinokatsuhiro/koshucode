@@ -126,7 +126,7 @@ fromDigit '6' = 6
 fromDigit '7' = 7
 fromDigit '8' = 8
 fromDigit '9' = 9
-fromDigit _   = B.bug
+fromDigit _   = B.bug "fromDigit"
 
 
 

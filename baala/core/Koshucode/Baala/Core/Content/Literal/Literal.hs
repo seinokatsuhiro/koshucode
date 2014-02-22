@@ -58,7 +58,7 @@ litContentBy ops = lit where
           3  ->  fmap C.putSet     $ litList    lit xs
           4  ->  fmap C.putTermset $ litTermset lit xs
           5  ->  fmap C.putRel     $ litRel     lit xs
-          _  ->  B.bug
+          _  ->  B.bug "litContentBy"
 
     lit x@(B.TreeL tok)
         | isDecimal x = do dec <- B.litDecimal $ B.tokenContent tok

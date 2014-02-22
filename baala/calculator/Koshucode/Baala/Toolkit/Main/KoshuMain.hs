@@ -149,7 +149,7 @@ putElems src =
     do ass <- L.readSecList src
        case ass of
          Right ss -> B.putJudges 0 $ concatMap L.sectionElem ss
-         Left  _  -> B.bug
+         Left  _  -> B.bug "putElems"
 
 
 -- ----------------------  Pretty printing

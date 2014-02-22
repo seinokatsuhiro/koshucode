@@ -97,21 +97,21 @@ type VRopCons = C.RopCons VContent
 instance C.CBool VContent where
     putBool                  =  VBool
     getBool (VBool x)        =  x
-    getBool _                =  B.bug
+    getBool _                =  B.bug "getBool"
     isBool  (VBool _)        =  True
     isBool  _                =  False
 
 instance C.CDec VContent where
     putDec                   =  VDec
     getDec (VDec x)          =  x
-    getDec _                 =  B.bug
+    getDec _                 =  B.bug "getDec"
     isDec  (VDec _)          =  True
     isDec  _                 =  False
 
 instance C.CText VContent where
     putText                  =  VText
     getText (VText s)        =  s
-    getText _                =  B.bug
+    getText _                =  B.bug "getText"
     isText  (VText _)        =  True
     isText  _                =  False
 
@@ -134,21 +134,21 @@ instance C.CNil VContent where
 instance C.CSet VContent where
     putSet                   =  VSet . C.nonNilFilter . B.unique
     getSet (VSet x)          =  x
-    getSet _                 =  B.bug
+    getSet _                 =  B.bug "getSet"
     isSet  (VSet _)          =  True
     isSet  _                 =  False
 
 instance C.CTermset VContent where
     putTermset               =  VTermset
     getTermset (VTermset x)  =  x
-    getTermset _             =  B.bug
+    getTermset _             =  B.bug "getTermset"
     isTermset  (VTermset _)  =  True
     isTermset  _             =  False
 
 instance C.CRel VContent where
     putRel                   =  VRel
     getRel (VRel r)          =  r
-    getRel _                 =  B.bug
+    getRel _                 =  B.bug "getRel"
     isRel  (VRel _)          =  True
     isRel  _                 =  False
 
