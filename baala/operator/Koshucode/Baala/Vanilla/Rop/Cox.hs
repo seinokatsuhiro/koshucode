@@ -25,11 +25,11 @@ consAdd use =
        coxTerm   <- ncox use coxLet treesTerm
        Right $ relmapAdd use coxTerm
 
-relmapAdd :: (C.CRel c, C.CList c)=> C.RopUse c -> C.CoxAssoc c -> C.Relmap c
+relmapAdd :: (C.CRel c, C.CList c)=> C.RopUse c -> [C.NamedCox c] -> C.Relmap c
 relmapAdd use = C.relmapCalc use . relkitAdd
 
 -- todo: shared term
-relkitAdd :: (C.CRel c, C.CList c) => C.CoxAssoc c -> C.RelkitCalc c
+relkitAdd :: (C.CRel c, C.CList c) => [C.NamedCox c] -> C.RelkitCalc c
 relkitAdd coxTerm h1 =
     Right $ C.relkit h2 (C.RelkitOneToAbOne False f)
         where ns    = map fst coxTerm   -- term names
@@ -38,11 +38,11 @@ relkitAdd coxTerm h1 =
               f cs1 = do cs2 <- C.coxRun h1 cs1 `mapM` es
                          Right $ cs2 ++ cs1
 
-ncox :: (C.CContent c) => C.RopUse c -> C.CoxAssoc c
-  -> [B.Named B.TokenTree] -> B.Ab (C.CoxAssoc c)
+ncox :: (C.CContent c) => C.RopUse c -> [C.NamedCox c]
+  -> [B.Named B.TokenTree] -> B.Ab [C.NamedCox c]
 ncox use dict = mapM (B.namedMapM $ cox use dict)
 
-cox :: (C.CContent c) => C.RopUse c -> C.CoxAssoc c
+cox :: (C.CContent c) => C.RopUse c -> [C.NamedCox c]
   -> B.TokenTree -> B.Ab (C.Cox c)
 cox use dict = C.coxCons cops dict where
     cops = C.globalCops $ C.ropGlobal use
