@@ -83,7 +83,7 @@ litDecimal :: LitDecimal
 litDecimal ccs = headPart id ccs where
     minus x = - x
 
-    headPart _ [] = Right $ Decimal (0, 1) 0 False
+    headPart _ [] = Left $ B.AbortSyntax [] $ B.ASNotNumber []
     headPart sign (c:cs) = case c of
         ' '  ->  headPart sign  cs
         '-'  ->  headPart minus cs

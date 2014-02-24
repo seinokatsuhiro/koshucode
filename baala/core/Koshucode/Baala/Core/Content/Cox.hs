@@ -26,18 +26,41 @@ import qualified Koshucode.Baala.Core.Content.Literal as C
 {-| Content expressions with source code. -}
 type Cox c = B.Sourced (CoxCore c)
 
+type NamedCox c = B.Named (Cox c)
+
 {-| Content expressions. -}
 data CoxCore c
-    = CoxLit c                     -- ^ A: Literal content
-    | CoxTerm [B.Termname] [Int]   -- ^ A: Term reference, its name and position
-    | CoxCall (CopFun c) [Cox c]   -- ^ A: Call content operator
-    | CoxBase (CopFun c)           -- ^ A: Base function
+    = CoxLit c                     -- ^ A:   Literal content
+    | CoxTerm [B.Termname] [Int]   -- ^ A:   Term reference, its name and position
+    | CoxBase String (CopFun c)    -- ^ A:   Base function
 
-    | CoxVar String Int            -- ^ B: Variable, its name and De Bruijn index
-    | CoxApplyL  (Cox c) [Cox c]   -- ^ B: Function application (multiple arguments)
-    | CoxDeriv   String  (Cox c)   -- ^ B: Derived function
+    | CoxVar String Int            -- ^ B:   Variable, its name and De Bruijn index
+    | CoxApplyL  (Cox c) [Cox c]   -- ^ A/B: Function application (multiple arguments)
+    | CoxDeriv   String  (Cox c)   -- ^ B:   Derived function
 
-    | CoxDerivL [String] (Cox c)   -- ^ C: Derived function (multiple variables)
+    | CoxDerivL [String] (Cox c)   -- ^ C:   Derived function (multiple variables)
+
+instance (B.Pretty c) => Show (CoxCore c) where
+    show = show . B.doc
+
+instance (B.Pretty c) => B.Pretty (CoxCore c) where
+    doc e = case e of
+              CoxLit c       -> B.doc c
+              CoxTerm ns _   -> B.doch ns
+              CoxBase n _    -> B.doc n
+              CoxVar v i     -> B.doc v B.<> B.doc "/" B.<> B.doc i
+              CoxApplyL (B.Sourced _ f) xs ->
+                  B.doc "ap" B.<+> B.doc f B.<+> B.doch (map B.unsourced xs)
+              CoxDeriv  v  (B.Sourced _ b) -> fn (B.doc v)   (B.doc b)
+              CoxDerivL vs (B.Sourced _ b) -> fn (B.doch vs) (B.doc b)
+        where
+          fn v b = B.docWraps "(|" "|)" $ v B.<+> B.doc "|" B.<+> b
+
+mapToCox :: B.Map (Cox c) -> B.Map (CoxCore c)
+mapToCox g (CoxApplyL f xs) = CoxApplyL (g f) (map g xs)
+mapToCox g (CoxDeriv v b)   = CoxDeriv v (g b)
+mapToCox g (CoxDerivL vs b) = CoxDerivL vs (g b)
+mapToCox _ e = e
 
 {-| Term-content operator. -}
 data Cop c
@@ -58,8 +81,6 @@ instance B.Name (Cop c) where
 
 
 -- ----------------------  Construction
-
-type NamedCox c = B.Named (Cox c)
 
 {-| Construct content expressions from token tree. -}
 coxCons :: forall c. (C.CContent c)
@@ -113,15 +134,6 @@ coxCons (cops, htab) deriv = body where
                                Left _  -> Right $ CoxVar v 0
           _              ->  B.bug "core/leaf"
 
-    -- parend unquoted word and its arguments
-    core (B.TreeB 1 _ (B.TreeL (B.TWord _ 0 name) : args)) =
-        case lookup name assoc of
-          Just (CopFun _ f) -> CoxCall f `fmap` (expression `mapM` args)
-          Just (CopSyn _ _) -> B.bug "core/copsyn"
-          _                 -> do args' <- expression `mapM` args
-                                  Right $ CoxApplyL (B.Sourced [] $ CoxVar name 0) args'
-          --Nothing -> Left $ B.AbortAnalysis [] $ B.AAUnkCop name
-
     -- function application
     core (B.TreeB 1 _ (fun : args)) =
         do fun'  <- expression fun
@@ -142,22 +154,22 @@ coxCons (cops, htab) deriv = body where
                 
 -- beta reduction
 subst :: B.Map (Cox c)
-subst = be [] where
-    be :: [(Int, Cox c)] -> B.Map (Cox c)
-    be arg e@(B.Sourced src core) =
-        let be' = be arg
-            s   = B.Sourced src
+subst = sub [] where
+    sub :: [(Int, Cox c)] -> B.Map (Cox c)
+    sub arg e@(B.Sourced src core) =
+        let sub' = sub arg
+            s    = B.Sourced src
         in case core of
-             CoxCall n xs       -> s $ CoxCall n $ map be' xs
              CoxVar _ i         -> maybe e id $ lookup i arg
-             CoxDeriv v b       -> s $ CoxDeriv v $ be (map inc arg) b
-             CoxApplyL f []     -> be arg f
-             CoxApplyL f (x:xs) -> let x'   = be' x
+             CoxDeriv v b       -> s $ CoxDeriv v $ sub (map inc arg) b
+             CoxApplyL f []     -> sub' f
+             CoxApplyL f (x:xs) -> let f'   = sub' f
+                                       x'   = sub' x
                                        arg' = (1, x') : arg
-                                   in case be' f of
+                                   in case f' of
                                         B.Sourced _ (CoxDeriv _ b) ->
-                                            be arg' $ (s $ CoxApplyL b xs)
-                                        f' -> s $ CoxApplyL f' (x' : map be' xs)
+                                            sub arg' $ s $ CoxApplyL b xs
+                                        _ -> s $ CoxApplyL f' (x' : map sub' xs)
              _                -> e
 
     inc :: (Int, Cox c) -> (Int, Cox c)
@@ -167,36 +179,27 @@ debruijn :: B.Map (Cox c)
 debruijn = de [] where
     de :: [String] -> B.Map (Cox c)
     de vars (B.Sourced src core) =
-        let de' = de vars
-        in B.Sourced src $ case core of
-             CoxCall n xs   -> CoxCall n $ map de' xs
-             CoxVar v _     -> maybe core (CoxVar v) $ indexFrom 1 v vars
-             CoxApplyL f xs -> CoxApplyL (de' f) (map de' xs)
-             CoxDeriv v b   -> CoxDeriv v $ de (v : vars) b
-             _              -> core
-
-unlist :: B.Map (Cox c)
-unlist e@(B.Sourced src core) =
-    case core of
-      CoxApplyL  f xs -> s $ CoxApplyL (unlist f) (map unlist xs)
-      CoxDerivL vs b  -> lambdaL $ s  $ CoxDerivL vs (unlist b)
-      _               -> e
-    where
-      s = B.Sourced src
-
-      lambdaL :: B.Map (Cox c)
-      lambdaL e2@(B.Sourced src2 core2) =
-          case core2 of
-            CoxDerivL [] b -> b
-            CoxDerivL (v:vs) b ->
-                B.Sourced src2 $ CoxDeriv v $ lambdaL $ B.Sourced src $ CoxDerivL vs b
-            _ -> e2
+        B.Sourced src $ case core of
+          CoxVar v _    -> maybe core (CoxVar v) $ indexFrom 1 v vars
+          CoxApplyL _ _ -> mapToCox (de vars) core
+          CoxDeriv v _  -> mapToCox (de $ v : vars) core
+          _             -> core
 
 indexFrom :: (Eq c) => Int -> c -> [c] -> Maybe Int
 indexFrom origin key = loop origin where
     loop _ [] = Nothing
     loop i (x:xs) | x == key  = Just i
                   | otherwise = loop (i + 1) xs
+
+unlist :: B.Map (Cox c)
+unlist = derivL . (mapToCox unlist `fmap`) where
+    derivL :: B.Map (Cox c)
+    derivL e@(B.Sourced src2 core) =
+        case core of
+          CoxDerivL []     b -> b
+          CoxDerivL (v:vs) b -> let sub = derivL $ B.Sourced src2 $ CoxDerivL vs b
+                                in B.Sourced src2 $ CoxDeriv v sub
+          _ -> e
 
 -- convert from infix to prefix
 prefix :: [B.Named B.InfixHeight] -> B.AbMap (B.TokenTree)
@@ -226,21 +229,17 @@ link base deriv = li where
     li e@(B.Sourced src core) =
         let s = B.Sourced src
         in case core of
-             CoxCall n xs    -> s $ CoxCall n $ map li xs
-             CoxVar n 0      -> maybe e id $ lookup n fs
-             CoxDeriv v b    -> s $ CoxDeriv v (li b)
-             CoxApplyL f xs  -> s $ CoxApplyL (li f) (map li xs)
-             _               -> e
+             CoxVar n 0    -> maybe e id $ lookup n fs
+             CoxDeriv _ _  -> s $ mapToCox li core
+             CoxApplyL _ _ -> s $ mapToCox li core
+             _             -> e
 
     fs :: [NamedCox c]
-    fs = mapSnd li deriv ++ map namedBase base
+    fs = map (fmap li) deriv ++ map namedBase base
 
     namedBase :: Cop c -> NamedCox c
-    namedBase (CopFun n f) = (n, B.Sourced [] $ CoxBase f)
-    namedBase (CopSyn n _) = (n, B.Sourced [] $ CoxBase undefined)
-
-mapSnd :: (b -> b) -> [(a, b)] -> [(a, b)]
-mapSnd = map . fmap
+    namedBase (CopFun n f) = (n, B.Sourced [] $ CoxBase n f)
+    namedBase (CopSyn n _) = (n, B.Sourced [] $ CoxBase n undefined)
 
 
 
@@ -252,48 +251,52 @@ type CoxCons c = B.Relhead -> B.Ab (Cox c)
 coxPosition :: Cox c -> CoxCons c
 coxPosition scox h = spos scox where
     spos = B.sourcedAbMap pos
-    pos (CoxCall f cs)   = Right . CoxCall f =<< mapM spos cs
     pos (CoxTerm ns _)  =
         let index = B.headIndex1 h ns
         in if all (>= 0) index
            then Right $ CoxTerm ns index
            else Left  $ B.AbortAnalysis [] (B.AANoTerms ns)
+    pos (CoxApplyL f xs) = do f'  <- spos f
+                              xs' <- mapM spos xs
+                              Right $ CoxApplyL f' xs'
     pos e = Right e
 
 checkIrreducible :: Cox c -> B.Ab (Cox c)
-checkIrreducible e
+checkIrreducible e@(B.Sourced src _)
     | irreducible e = Right e
-    | otherwise     = Left $ B.AbortSyntax [] $ B.ASUnkCox "Not irreducible"
+    | otherwise     = B.abortable "irrep" src $
+                      Left $ B.AbortSyntax [] $ B.ASUnkCox "Not irreducible"
 
 -- irreducible representation
 irreducible :: Cox c -> Bool
 irreducible (B.Sourced _ core) =
     case core of
-      CoxLit  _     ->  True
-      CoxTerm _ _   ->  True
-      CoxCall _ xs  ->  all irreducible xs
-      _             ->  False
+      CoxLit  _       ->  True
+      CoxTerm _ _     ->  True
+      CoxBase _ _     ->  True
+      CoxApplyL f xs  ->  all irreducible $ f : xs
+      _               ->  False
 
 {-| Calculate content expression. -}
 coxRun
-  :: forall c. (C.CRel c, C.CList c)
+  :: forall c. (C.CRel c, C.CList c, B.Pretty c)
   => B.Relhead     -- ^ Heading of relation
   -> [c]           -- ^ Tuple in body of relation
   -> CoxCons c     -- ^ Content expression
   -> B.Ab c        -- ^ Calculated literal content
-coxRun h arg pcox = run =<< pcox h where
+coxRun h arg pcox = run =<< checkIrreducible =<< pcox h where
     run :: Cox c -> B.Ab c
     run (B.Sourced src cox) = B.abortable "calc" src $
         case cox of
           CoxLit c      -> Right c
           CoxTerm _ [p] -> Right $ arg !! p
           CoxTerm _ ps  -> term ps arg
-          CoxCall f cs  -> f =<< mapM run cs
-          CoxApplyL (B.Sourced _ (CoxBase f)) xs -> f =<< mapM run xs
-          _             -> Left $ B.abortNotFound ""
+          CoxApplyL e [] -> run e
+          CoxApplyL (B.Sourced _ (CoxBase _ f)) xs -> f =<< mapM run xs
+          _             -> Left $ B.abortNotFound $ "cox: " ++ show cox
 
-    term []       _ = Left $ B.abortNotFound ""
-    term (-1 : _) _ = Left $ B.abortNotFound ""
+    term []       _ = Left $ B.abortNotFound "term"
+    term (-1 : _) _ = Left $ B.abortNotFound "term"
     term (p : ps) arg2 =
         let c = arg2 !! p
         in if C.isRel c

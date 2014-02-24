@@ -25,11 +25,11 @@ consAdd use =
        coxTerm   <- ncox use coxLet treesTerm
        Right $ relmapAdd use coxTerm
 
-relmapAdd :: (C.CRel c, C.CList c)=> C.RopUse c -> [C.NamedCox c] -> C.Relmap c
+relmapAdd :: (C.CRel c, C.CList c, B.Pretty c)=> C.RopUse c -> [C.NamedCox c] -> C.Relmap c
 relmapAdd use = C.relmapCalc use . relkitAdd
 
 -- todo: shared term
-relkitAdd :: (C.CRel c, C.CList c) => [C.NamedCox c] -> C.RelkitCalc c
+relkitAdd :: (C.CRel c, C.CList c, B.Pretty c) => [C.NamedCox c] -> C.RelkitCalc c
 relkitAdd coxTerm h1 =
     Right $ C.relkit h2 (C.RelkitOneToAbOne False f)
         where ns    = map fst coxTerm   -- term names

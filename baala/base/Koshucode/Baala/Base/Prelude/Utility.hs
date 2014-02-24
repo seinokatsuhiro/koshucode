@@ -67,7 +67,7 @@ mapmapFst :: (a -> c) -> [(a, b)] -> [(c, b)]
 mapmapFst = map . mapFst
 
 mapmapSnd :: (b -> c) -> [(a, b)] -> [(a, c)]
-mapmapSnd = map . mapSnd
+mapmapSnd = map . fmap
 
 maybePairs :: [a] -> Maybe [(a, a)]
 maybePairs (a:b:xs) = liftA ((a, b):) $ maybePairs xs
