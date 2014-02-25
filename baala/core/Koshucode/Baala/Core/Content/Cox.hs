@@ -153,27 +153,22 @@ coxCons (cops, htab) deriv = body where
     core (B.TreeB n _ _) = Left $ B.AbortSyntax [] $ B.ASUnkCox $ show n
                 
 -- beta reduction
-subst :: B.Map (Cox c)
+subst :: forall c. B.Map (Cox c)
 subst = sub [] where
     sub :: [(Int, Cox c)] -> B.Map (Cox c)
     sub arg e@(B.Sourced src core) =
-        let sub' = sub arg
-            s    = B.Sourced src
+        let s = B.Sourced src
         in case core of
-             CoxVar _ i         -> maybe e id $ lookup i arg
-             CoxDeriv v b       -> s $ CoxDeriv v $ sub (map inc arg) b
-             CoxApplyL f []     -> sub' f
-             CoxApplyL f (x:xs) -> let f'   = sub' f
-                                       x'   = sub' x
-                                       arg' = (1, x') : arg
-                                   in case f' of
-                                        B.Sourced _ (CoxDeriv _ b) ->
-                                            sub arg' $ s $ CoxApplyL b xs
-                                        _ -> s $ CoxApplyL f' (x' : map sub' xs)
-             _                -> e
+             CoxVar _ i    -> maybe e id $ lookup i arg
+             CoxDeriv v b  -> s $ CoxDeriv v $ sub (B.mapmapFst (1+) arg) b
+             CoxApplyL _ _ -> app arg $ s $ mapToCox (sub arg) core
+             _             -> e
 
-    inc :: (Int, Cox c) -> (Int, Cox c)
-    inc (n, x) = (n + 1, x)
+    app :: [(Int, Cox c)] -> B.Map (Cox c)
+    app args (B.Sourced _ (CoxApplyL (B.Sourced _ (CoxDeriv _ b)) (x:xs))) =
+        app ((1,x) : args) $ B.Sourced [] (CoxApplyL b xs)
+    app args (B.Sourced _ (CoxApplyL f [])) = sub args f
+    app _ e = e
 
 debruijn :: B.Map (Cox c)
 debruijn = de [] where
@@ -227,12 +222,9 @@ link :: forall c. [Cop c] -> [NamedCox c] -> B.Map (Cox c)
 link base deriv = li where
     li :: B.Map (Cox c)
     li e@(B.Sourced src core) =
-        let s = B.Sourced src
-        in case core of
-             CoxVar n 0    -> maybe e id $ lookup n fs
-             CoxDeriv _ _  -> s $ mapToCox li core
-             CoxApplyL _ _ -> s $ mapToCox li core
-             _             -> e
+        case core of
+          CoxVar n 0 -> maybe e id $ lookup n fs
+          _          -> B.Sourced src $ mapToCox li core
 
     fs :: [NamedCox c]
     fs = map (fmap li) deriv ++ map namedBase base

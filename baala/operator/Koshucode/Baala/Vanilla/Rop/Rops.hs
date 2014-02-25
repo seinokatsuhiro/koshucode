@@ -25,7 +25,7 @@ vanillaRops = Rop.ropList "vanilla"
     --  SYNOPSIS,
     --  CONSTRUCTOR, OPERAND
     [ ( "add /N E ...",
-        Rop.consAdd, C.sortList "-term" ["-let"] )
+        Rop.consAdd, C.sortList "-in" ["-let"] )
     , ( "check-term [ -just /N ... | -has /N ... | -but /N ... ]",
         Rop.consCheckTerm, C.sortNone ["-just", "-has", "-but"] )
     , ( "duplicate /N ...",
@@ -37,7 +37,7 @@ vanillaRops = Rop.ropList "vanilla"
     , ( "group /N R",
         Rop.consGroup, C.sortTwo "-term" "-relmap" [] )
     , ( "hold E",
-        Rop.consHold, C.sortList "-expr" ["-let"] )
+        Rop.consHold, C.sortList "-in" ["-let"] )
     , ( "koshu-cop /N",
         Rop.consKoshuCop, C.sortList "-name" [] )
     , ( "koshu-cop-infix /N [ -height /N ][ -dir /N ]",
