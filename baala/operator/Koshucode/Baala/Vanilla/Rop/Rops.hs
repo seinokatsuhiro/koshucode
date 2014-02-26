@@ -37,7 +37,9 @@ vanillaRops = Rop.ropList "vanilla"
     , ( "group /N R",
         Rop.consGroup, C.sortTwo "-term" "-relmap" [] )
     , ( "hold E",
-        Rop.consHold, C.sortList "-in" ["-let"] )
+        Rop.consHold True, C.sortList "-in" ["-let"] )
+    , ( "keep E",
+        Rop.consHold True, C.sortList "-in" ["-let"] )
     , ( "koshu-cop /N",
         Rop.consKoshuCop, C.sortList "-name" [] )
     , ( "koshu-cop-infix /N [ -height /N ][ -dir /N ]",
@@ -52,6 +54,8 @@ vanillaRops = Rop.ropList "vanilla"
         Rop.consMember, C.sortEnum ["-1", "-2"] [] )
     , ( "number /N -order /N ...",
         Rop.consNumber, C.sortOne "-term" ["-order"] )
+    , ( "omit E",
+        Rop.consHold False, C.sortList "-in" ["-let"] )
     , ( "prefix /P /N ...",
         Rop.consPrefix, C.sortOneList "-prefix" "-term" [] )
     , ( "prefix-change /P /Q",

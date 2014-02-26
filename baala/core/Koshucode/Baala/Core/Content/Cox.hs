@@ -10,9 +10,12 @@ module Koshucode.Baala.Core.Content.Cox
   Cox, CoxCore (..),
   -- * Operator
   Cop (..), CopFun, CopSyn,
+  isCopFunction,
+  isCopSyntax,
   -- * Construction
   NamedCox,
-  coxCons, checkIrreducible,
+  coxConsAlpha, coxConsBeta,
+  checkIrreducible,
   -- * Run
   CoxCons, coxPosition, coxRun,
 ) where
@@ -44,16 +47,23 @@ instance (B.Pretty c) => Show (CoxCore c) where
     show = show . B.doc
 
 instance (B.Pretty c) => B.Pretty (CoxCore c) where
-    doc e = case e of
-              CoxLit c       -> B.doc c
-              CoxTerm ns _   -> B.doch ns
-              CoxBase n _    -> B.doc n
-              CoxVar v i     -> B.doc v B.<> B.doc "/" B.<> B.doc i
-              CoxApplyL (B.Sourced _ f) xs ->
-                  B.doc "ap" B.<+> B.doc f B.<+> B.doch (map B.unsourced xs)
-              CoxDeriv  v  (B.Sourced _ b) -> fn (B.doc v)   (B.doc b)
-              CoxDerivL vs (B.Sourced _ b) -> fn (B.doch vs) (B.doc b)
+    doc = docCoxCore
+
+docCoxCore :: (B.Pretty c) => CoxCore c -> B.Doc
+docCoxCore = d (0 :: Int) where
+    d 10 _ = B.doc "..."
+    d n e =
+        case e of
+          CoxLit c        -> B.doc c
+          CoxTerm ns _    -> B.doch ns
+          CoxBase name _  -> B.doc name
+          CoxVar v i      -> B.doc v B.<> B.doc "/" B.<> B.doc i
+          CoxApplyL (B.Sourced _ f) xs ->
+              (B.doc "ap" B.<+> d' f) B.$$ (B.nest 3 $ B.docv (map (d' . B.unsourced) xs))
+          CoxDeriv  v  (B.Sourced _ b) -> fn (B.doc v)   (d' b)
+          CoxDerivL vs (B.Sourced _ b) -> fn (B.doch vs) (d' b)
         where
+          d' = d $ n + 1
           fn v b = B.docWraps "(|" "|)" $ v B.<+> B.doc "|" B.<+> b
 
 mapToCox :: B.Map (Cox c) -> B.Map (CoxCore c)
@@ -78,26 +88,30 @@ instance B.Name (Cop c) where
     name (CopFun n _) = n
     name (CopSyn n _) = n
 
+isCopFunction :: Cop c -> Bool
+isCopFunction (CopFun _ _) = True
+isCopFunction _            = False
+
+isCopSyntax :: Cop c -> Bool
+isCopSyntax (CopSyn _ _) = True
+isCopSyntax _            = False
 
 
 -- ----------------------  Construction
 
-{-| Construct content expressions from token tree. -}
-coxCons :: forall c. (C.CContent c)
-  => ([Cop c], [B.Named B.InfixHeight]) -> [NamedCox c] -> B.TokenTree -> B.Ab (Cox c)
-coxCons (cops, htab) deriv = body where
+coxConsAlpha :: forall c. (C.CContent c)
+  => ([Cop c], [B.Named B.InfixHeight]) -> B.TokenTree -> B.Ab (Cox c)
+coxConsAlpha (syn, htab) = body where
     body :: B.TokenTree -> B.Ab (Cox c)
     body tree =
-        Right . subst            -- beta reduction
-              . link cops deriv  -- substitute free variables
-              . debruijn         -- attach De Bruijn indicies
+        Right . debruijn         -- attach De Bruijn indicies
               . unlist           -- expand multiple variables/arguments
             =<< expression       -- construct content expression from token tree
             =<< prefix htab      -- convert infix operator to prefix
             =<< syntax tree      -- expand syntax operator
 
     assoc :: [B.Named (Cop c)]
-    assoc = map B.named cops
+    assoc = map B.named syn
 
     -- expand syntax operator
     syntax :: B.AbMap B.TokenTree
@@ -151,7 +165,14 @@ coxCons (cops, htab) deriv = body where
     -- literal composite
     core tree@(B.TreeB n _ _) | n > 1 = fmap CoxLit $ C.litContent tree  
     core (B.TreeB n _ _) = Left $ B.AbortSyntax [] $ B.ASUnkCox $ show n
-                
+
+coxConsBeta :: forall c. (C.CContent c)
+  => [Cop c] -> [NamedCox c] -> B.Relhead -> Cox c -> B.Ab (Cox c)
+coxConsBeta base deriv h cox =
+    Right . subst            -- beta reduction
+          . link base deriv  -- substitute free variables
+        =<< coxPosition cox h
+
 -- beta reduction
 subst :: forall c. B.Map (Cox c)
 subst = sub [] where
@@ -271,31 +292,40 @@ irreducible (B.Sourced _ core) =
 
 {-| Calculate content expression. -}
 coxRun
-  :: forall c. (C.CRel c, C.CList c, B.Pretty c)
-  => B.Relhead     -- ^ Heading of relation
-  -> [c]           -- ^ Tuple in body of relation
-  -> CoxCons c     -- ^ Content expression
+  :: forall c. (C.CRel c, C.CList c, C.CNil c, C.CBool c, B.Pretty c)
+  => [c]           -- ^ Tuple in body of relation
+  -> Cox c         -- ^ Content expression
   -> B.Ab c        -- ^ Calculated literal content
-coxRun h arg pcox = run =<< checkIrreducible =<< pcox h where
-    run :: Cox c -> B.Ab c
-    run (B.Sourced src cox) = B.abortable "calc" src $
-        case cox of
-          CoxLit c      -> Right c
-          CoxTerm _ [p] -> Right $ arg !! p
-          CoxTerm _ ps  -> term ps arg
-          CoxApplyL e [] -> run e
-          CoxApplyL (B.Sourced _ (CoxBase _ f)) xs -> f =<< mapM run xs
-          _             -> Left $ B.abortNotFound $ "cox: " ++ show cox
+coxRun args cx = run 0 cx {- =<< checkIrreducible cx -} where
+    run :: Int -> Cox c -> B.Ab c
+    run 1000 _ = B.bug "Too deep expression"
+    run n (B.Sourced src cox) =
+        let run' = run $ n + 1
+        in B.abortable "calc" src $
+           case cox of
+             CoxLit c       -> Right c
+             CoxTerm _ [p]  -> Right $ args !! p
+             CoxTerm _ ps   -> term ps args
+             CoxApplyL e [] -> run (n + 1) e
+             CoxApplyL (B.Sourced _ (CoxBase "/if" _)) [x,y,z] ->
+                 do x'   <- run' x
+                    test <- C.needBool x'
+                    case test of
+                      True  -> run' y
+                      False -> run' z
+             CoxApplyL (B.Sourced _ (CoxBase _ f)) xs -> f =<< mapM run' xs
+             _ -> Left $ B.abortNotFound $ "cox: " ++ show cox
 
     term []       _ = Left $ B.abortNotFound "term"
     term (-1 : _) _ = Left $ B.abortNotFound "term"
-    term (p : ps) arg2 =
-        let c = arg2 !! p
+    term (p : ps) args2 =
+        let c = args2 !! p
         in if C.isRel c
            then rel ps $ C.getRel c
            else Right c
 
-    rel ps (B.Rel _ args) = Right . C.putList =<< mapM (term ps) args
+    rel ps (B.Rel _ args2) =
+        Right . C.putList =<< mapM (term ps) args2
 
 
 -- ----------------------

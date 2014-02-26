@@ -23,6 +23,8 @@ module Koshucode.Baala.Core.Relmap.Rop
   globalCommandLine,
   globalFill,
   global,
+  globalSyntax,
+  globalFunction,
 ) where
 
 import qualified Data.Monoid                            as D
@@ -200,4 +202,13 @@ global = Global { globalVersion = D.Version [] []
                 , globalArgs    = []
                 , globalJudges  = []
                 , globalSelect  = \_ _ -> B.reldee }
+
+globalSyntax :: Global c -> ([C.Cop c], [B.Named B.InfixHeight])
+globalSyntax g = (syn, htab) where
+    syn  = filter C.isCopSyntax $ fst cops
+    htab = snd cops
+    cops = globalCops g
+
+globalFunction :: Global c -> [C.Cop c]
+globalFunction = filter C.isCopFunction . fst . globalCops
 

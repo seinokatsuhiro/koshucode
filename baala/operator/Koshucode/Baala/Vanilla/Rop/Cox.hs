@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -Wall #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 {-| Relmap operators using term-content expressions. -}
 
@@ -19,52 +20,58 @@ import qualified Koshucode.Baala.Builtin as Rop
 
 consAdd :: (C.CContent c) => C.RopCons c
 consAdd use =
-    do treesLet  <- Rop.getMaybe Rop.getWordTrees use "-let"
-       treesTerm <- Rop.getTermTrees use "-in"
-       coxLet    <- maybe (Right []) (ncox use []) treesLet
-       coxTerm   <- ncox use coxLet treesTerm
-       Right $ relmapAdd use coxTerm
+    do treesLet <- Rop.getOption [] Rop.getWordTrees use "-let"
+       treesIn  <- Rop.getTermTrees use "-in"
+       coxLet   <- namedAlpha use treesLet
+       coxIn    <- namedAlpha use treesIn
+       let base  = C.globalFunction $ C.ropGlobal use
+       Right $ relmapAdd use (base, coxLet, coxIn)
 
-relmapAdd :: (C.CRel c, C.CList c, B.Pretty c)=> C.RopUse c -> [C.NamedCox c] -> C.Relmap c
+relmapAdd :: (C.CContent c, B.Pretty c)
+  => C.RopUse c -> ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.Relmap c
 relmapAdd use = C.relmapCalc use . relkitAdd
 
 -- todo: shared term
-relkitAdd :: (C.CRel c, C.CList c, B.Pretty c) => [C.NamedCox c] -> C.RelkitCalc c
-relkitAdd coxTerm h1 =
+relkitAdd :: forall c. (C.CContent c, B.Pretty c)
+  => ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.RelkitCalc c
+relkitAdd (base, deriv, bodies) h1 =
     Right $ C.relkit h2 (C.RelkitOneToAbOne False f)
-        where ns    = map fst coxTerm   -- term names
-              es    = map (C.coxPosition . snd) coxTerm  -- term expressions
-              h2    = B.headAppend ns h1
-              f cs1 = do cs2 <- C.coxRun h1 cs1 `mapM` es
+        where ns = map fst bodies   -- term names
+              es = map snd bodies   -- term expression
+              h2 = B.headAppend ns h1
+              f cs1 = do es2 <- mapM (C.coxConsBeta base deriv h1) es
+                         cs2 <- C.coxRun cs1 `mapM` es2
                          Right $ cs2 ++ cs1
-
-ncox :: (C.CContent c) => C.RopUse c -> [C.NamedCox c]
-  -> [B.Named B.TokenTree] -> B.Ab [C.NamedCox c]
-ncox use deriv = mapM (B.namedMapM $ cox use deriv)
-
-cox :: (C.CContent c) => C.RopUse c -> [C.NamedCox c]
-  -> B.TokenTree -> B.Ab (C.Cox c)
-cox use deriv = C.coxCons base deriv where
-    base = C.globalCops $ C.ropGlobal use
 
 
 -- ----------------------  hold
 
-consHold :: (C.CContent c) => C.RopCons c
-consHold use =
-    do treesLet  <- Rop.getMaybe Rop.getWordTrees use "-let"
-       treesExpr <- Rop.getTrees use "-in"
-       coxLet    <- maybe (Right []) (ncox use []) treesLet
-       coxExpr   <- cox use coxLet $ B.treeWrap treesExpr
-       Right $ relmapHold use (True, coxExpr)
+consHold :: (C.CContent c) => Bool -> C.RopCons c
+consHold b use =
+    do treesLet <- Rop.getOption [] Rop.getWordTrees use "-let"
+       treesIn  <- Rop.getTrees use "-in"
+       coxLet   <- namedAlpha use treesLet
+       coxIn    <- alpha use $ B.treeWrap treesIn
+       let base  = C.globalFunction $ C.ropGlobal use
+       Right $ relmapHold use (b, base, coxLet, coxIn)
 
-relmapHold :: (C.CContent c) => C.RopUse c -> (Bool, C.Cox c) -> C.Relmap c
+relmapHold :: (C.CContent c) => C.RopUse c -> (Bool, [C.Cop c], [C.NamedCox c], C.Cox c) -> C.Relmap c
 relmapHold use = C.relmapCalc use . relkitHold
 
-relkitHold :: (C.CContent c) => (Bool, C.Cox c) -> C.RelkitCalc c
-relkitHold (b, coxExpr) h1 = Right $ C.relkit h1 (C.RelkitAbPred p) where
-    p cs = do c <- C.coxRun h1 cs (C.coxPosition coxExpr)
+relkitHold :: (C.CContent c) => (Bool, [C.Cop c], [C.NamedCox c], C.Cox c) -> C.RelkitCalc c
+relkitHold (b, base, deriv, body) h1 = Right $ C.relkit h1 (C.RelkitAbPred p) where
+    p cs = do e <- C.coxConsBeta base deriv h1 body
+              c <- C.coxRun cs e
               case c of
                 x | C.isBool x -> Right $ b == C.getBool x
                 _ -> Left $ B.AbortAnalysis [] $ B.AAReqBoolean ""
+
+
+-- ----------------------  alpha
+
+alpha :: (C.CContent c) => C.RopUse c -> B.TokenTree -> B.Ab (C.Cox c)
+alpha = C.coxConsAlpha . C.globalSyntax . C.ropGlobal
+
+namedAlpha :: (C.CContent c) => C.RopUse c -> [B.Named B.TokenTree] -> B.Ab [C.NamedCox c]
+namedAlpha use = mapM (B.namedMapM $ alpha use)
 
