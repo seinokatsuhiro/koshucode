@@ -110,5 +110,5 @@ relkitTypename np h1 = Right $ C.relkit h2 (C.RelkitOneToOne False f) where
     h2    = B.headAppend ns h1
     pos   = h1 `B.posFor` ps
     f cs1 = let cs2 = B.posPick pos cs1
-            in (map (C.putText . C.typename) cs2) ++ cs1
+            in (map (C.pText . C.typename) cs2) ++ cs1
 

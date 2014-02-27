@@ -37,7 +37,7 @@ relmapEnclose use = C.relmapCalc use . relkitEnclose
 relkitEnclose :: (C.CRel c) => B.Termname -> C.RelkitCalc c
 relkitEnclose n h1 = Right $ C.relkit h2 (C.RelkitFull False f) where
     h2 = B.Relhead [B.Nest n $ B.headTerms h1]
-    f b1 = [[C.putRel $ B.Rel h1 b1]]
+    f b1 = [[C.pRel $ B.Rel h1 b1]]
 
 
 
@@ -104,7 +104,7 @@ relmapRange use term low high = C.relmapCalc use $ relkitRange term low high
 relkitRange :: (C.CDec c) => B.Termname -> Int -> Int -> C.RelkitCalc c
 relkitRange n low high h1 = Right $ C.relkit h2 (C.RelkitOneToMany False f) where
     h2    = B.headCons n h1
-    decs  = map C.putDecFromInt [low .. high]
+    decs  = map C.pDecFromInt [low .. high]
     f cs  = map (: cs) decs
 
 
@@ -135,5 +135,5 @@ relmapSize use n = C.relmapCalc use $ relkitSize n
 relkitSize :: (C.CDec c) => B.Termname -> C.RelkitCalc c
 relkitSize n _ = Right $ C.relkit h2 (C.RelkitFull False f) where
     h2   = B.headFrom [n]
-    f b1 = [[C.putDecFromInt $ length b1]]
+    f b1 = [[C.pDecFromInt $ length b1]]
 

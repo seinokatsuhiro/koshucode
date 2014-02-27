@@ -55,18 +55,18 @@ litContentBy :: forall c. (C.CContent c) => LitOperators c -> Literalize c
 litContentBy ops = lit where
     lit (B.TreeB typ _ xs) = case typ of
           1  ->  paren xs
-          2  ->  C.putListA    =<< litList    lit xs
-          3  ->  C.putSetA     =<< litList    lit xs
-          4  ->  C.putTermsetA =<< litTermset lit xs
-          5  ->  C.putRelA     =<< litRel     lit xs
+          2  ->  C.putList    =<< litList    lit xs
+          3  ->  C.putSet     =<< litList    lit xs
+          4  ->  C.putTermset =<< litTermset lit xs
+          5  ->  C.putRel     =<< litRel     lit xs
           _  ->  B.bug "litContentBy"
 
     lit x@(B.TreeL tok)
         | isDecimal x = do dec <- B.litDecimal $ B.tokenContent tok
-                           C.putDecA dec
+                           C.putDec dec
         | otherwise   = case tok of
               B.TWord _ 0 w -> word w
-              B.TWord _ _ w -> C.putTextA w  -- quoted text
+              B.TWord _ _ w -> C.putText w  -- quoted text
               _             -> Left $ B.AbortSyntax [] $ B.ASUnkWord (show tok)
 
     word w = case w of
@@ -83,7 +83,7 @@ litContentBy ops = lit where
         | isDecimal x =
             do xs2 <- mapM litUnquoted xs
                dec <- B.litDecimal $ concat xs2
-               C.putDecA dec
+               C.putDec dec
 
     -- tagged sequence
     paren (B.TreeL (B.TWord _ 0 tag) : xs) =
@@ -135,11 +135,11 @@ litHash key =
 
 hashAssoc :: (C.CContent c) => [B.Named (B.Ab c)]
 hashAssoc =
-    [ ("true"  , C.putBoolA True)
-    , ("false" , C.putBoolA False)
+    [ ("true"  , C.putBool True)
+    , ("false" , C.putBool False)
     , ("nil"   , Right C.nil)
     ] ++ map f C.hashWordTable where
-    f (key, text) = (key, C.putTextA text)
+    f (key, text) = (key, C.putText text)
 
 
 

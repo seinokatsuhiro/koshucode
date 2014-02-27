@@ -110,8 +110,8 @@ putClause p@(cn, c) =
 
 clauseJudge :: (Int, C.Clause) -> B.Judge V.VContent
 clauseJudge (cn, c) = B.Judge True "CLAUSE" args where
-    args = [ ("/clause-seq"  , C.putDecFromInt cn)
-           , ("/clause-type" , C.putText $ C.clauseTypeText c)]
+    args = [ ("/clause-seq"  , C.pDecFromInt cn)
+           , ("/clause-type" , C.pText $ C.clauseTypeText c)]
 
 putToken :: Int -> Int -> B.TokenLine -> IO (Int)
 putToken cn tn (B.CodeLine ln line toks) =
@@ -122,9 +122,9 @@ putToken cn tn (B.CodeLine ln line toks) =
 
 tokenJudge :: Int -> B.Token -> B.Judge V.VContent
 tokenJudge cn t = B.Judge True "TOKEN" xs where
-    xs = [ ("/clause-seq"   , C.putDecFromInt cn)
-         , ("/token-type"   , C.putText $ B.tokenTypeText t)
-         , ("/token-content", C.putText $ B.tokenContent t) ]
+    xs = [ ("/clause-seq"   , C.pDecFromInt cn)
+         , ("/token-type"   , C.pText $ B.tokenTypeText t)
+         , ("/token-content", C.pText $ B.tokenContent t) ]
 
 
 
@@ -145,9 +145,9 @@ dumpTokenText (n, ys) (B.CodeLine l line ts) = (n + length ts, ys ++ xs) where
 
 dumpTokenJudge :: Int -> B.Token -> B.Judge V.VContent
 dumpTokenJudge l t = B.Judge True "TOKEN" xs where
-    xs = [ ("/line"         , C.putDecFromInt l)
-         , ("/token-type"   , C.putText $ B.tokenTypeText t)
-         , ("/token-content", C.putText $ B.tokenContent  t) ]
+    xs = [ ("/line"         , C.pDecFromInt l)
+         , ("/token-type"   , C.pText $ B.tokenTypeText t)
+         , ("/token-content", C.pText $ B.tokenContent  t) ]
 
 
 

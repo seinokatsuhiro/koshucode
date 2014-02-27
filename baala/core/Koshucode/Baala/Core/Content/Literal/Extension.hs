@@ -31,7 +31,7 @@ litOperators = [ ]
 -- litText _ xs =
 --     do ws <- litWords xs
 --        cs <- mapM loop ws
---        Right . putText $ concatMap unbox $ intersperseBy sp cs
+--        Right . pText $ concatMap unbox $ intersperseBy sp cs
 --     where
 --       loop ('#' : w)
 --           = case B.hashWord w of

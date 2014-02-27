@@ -84,7 +84,7 @@ copRem arg =
        a <- copDec ac
        b <- copDec bc
        c <- B.decimalRem a b
-       C.putDecA $ c
+       C.putDec $ c
 
 copAbs :: V.VCop
 copAbs [Right (V.VList cs)] = Right . V.VList =<< mapM copAbs1 cs
@@ -92,6 +92,6 @@ copAbs [Right c] = copAbs1 c
 copAbs _ = Left $ B.abortOperand "abs"
 
 copAbs1 :: V.VContent -> B.Ab V.VContent
-copAbs1 (V.VDec n) = C.putDecA $ B.decimalAbs n
+copAbs1 (V.VDec n) = C.putDec $ B.decimalAbs n
 copAbs1 _ = Left $ B.abortOperand "abc"
 

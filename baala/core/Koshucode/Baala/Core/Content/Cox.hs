@@ -316,12 +316,12 @@ coxRun args cx = run 0 cx {- =<< checkIrreducible cx -} where
     term (p : ps) args2 =
         let c = args2 !! p
         in if C.isRel c
-           then rel ps $ C.getRel c
+           then rel ps $ C.gRel c
            else Right c
 
     rel :: [Int] -> B.Rel c -> B.Ab c
     rel ps (B.Rel _ args2) =
-        C.putListA =<< mapM (term ps) args2
+        C.putList =<< mapM (term ps) args2
 
 
 -- ----------------------

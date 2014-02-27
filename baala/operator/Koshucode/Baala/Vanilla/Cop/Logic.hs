@@ -46,24 +46,24 @@ copsLogic =
 cop1 :: (C.CBool c) => (Bool -> Bool) -> C.CopFun c
 cop1 p arg =
     do xc <- C.getArg1 arg
-       x  <- C.needBool xc
-       C.putBoolA $ p x
+       x  <- C.getBool xc
+       C.putBool $ p x
 
 cop2 :: (C.CBool c) => (Bool -> Bool -> Bool) -> C.CopFun c
 cop2 p arg =
     do (xc, yc) <- C.getArg2 arg
-       x <- C.needBool xc
-       y <- C.needBool yc
-       C.putBoolA $ p x y
+       x <- C.getBool xc
+       y <- C.getBool yc
+       C.putBool $ p x y
 
 copN :: (C.CBool c) => Bool -> (Bool -> Bool -> Bool) -> C.CopFun c
 copN unit p = loop where
-    loop []   = C.putBoolA unit
+    loop []   = C.putBool unit
     loop [xc] = xc
     loop (xc1 : xc2 : xs) =
-        do x1 <- C.needBool xc1
-           x2 <- C.needBool xc2
-           loop $ C.putBoolA (p x1 x2) : xs
+        do x1 <- C.getBool xc1
+           x2 <- C.getBool xc2
+           loop $ C.putBool (p x1 x2) : xs
 
 copNot :: (C.CBool c) => C.CopFun c
 copNot =  cop1 not
@@ -95,7 +95,7 @@ treeOrList xs = B.treeWrap $ (treeOp "or") : xs
 copIf  :: (C.CBool c, C.CNil c) => C.CopFun c
 copIf arg =
     do (testC, conC, altC) <- C.getArg3 arg
-       test <- C.needBool testC
+       test <- C.getBool testC
        case test of
          True  -> conC
          False -> altC

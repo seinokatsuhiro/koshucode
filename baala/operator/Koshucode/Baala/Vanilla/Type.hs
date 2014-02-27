@@ -95,30 +95,30 @@ type VRopCons = C.RopCons VContent
 -- ----------------------  haskell data
 
 instance C.CBool VContent where
-    putBool                  =  VBool
-    getBool (VBool x)        =  x
-    getBool _                =  B.bug "getBool"
+    pBool                    =  VBool
+    gBool (VBool x)          =  x
+    gBool _                  =  B.bug "gBool"
     isBool  (VBool _)        =  True
     isBool  _                =  False
 
 instance C.CDec VContent where
-    putDec                   =  VDec
-    getDec (VDec x)          =  x
-    getDec _                 =  B.bug "getDec"
+    pDec                     =  VDec
+    gDec (VDec x)            =  x
+    gDec _                   =  B.bug "gDec"
     isDec  (VDec _)          =  True
     isDec  _                 =  False
 
 instance C.CText VContent where
-    putText                  =  VText
-    getText (VText s)        =  s
-    getText _                =  B.bug "getText"
+    pText                    =  VText
+    gText (VText s)          =  s
+    gText _                  =  B.bug "gText"
     isText  (VText _)        =  True
     isText  _                =  False
 
 instance C.CList VContent where
-    putList                  =  VList
-    getList (VList xs)       =  xs
-    getList _                =  []
+    pList                    =  VList
+    gList (VList xs)         =  xs
+    gList _                  =  []
     isList (VList _)         =  True
     isList _                 =  False
 
@@ -132,23 +132,23 @@ instance C.CNil VContent where
     isNil _                  =  False
 
 instance C.CSet VContent where
-    putSet                   =  VSet . C.nonNilFilter . B.unique
-    getSet (VSet x)          =  x
-    getSet _                 =  B.bug "getSet"
+    pSet                     =  VSet . C.nonNilFilter . B.unique
+    gSet (VSet x)            =  x
+    gSet _                   =  B.bug "gSet"
     isSet  (VSet _)          =  True
     isSet  _                 =  False
 
 instance C.CTermset VContent where
-    putTermset               =  VTermset
-    getTermset (VTermset x)  =  x
-    getTermset _             =  B.bug "getTermset"
+    pTermset                 =  VTermset
+    gTermset (VTermset x)    =  x
+    gTermset _               =  B.bug "gTermset"
     isTermset  (VTermset _)  =  True
     isTermset  _             =  False
 
 instance C.CRel VContent where
-    putRel                   =  VRel
-    getRel (VRel r)          =  r
-    getRel _                 =  B.bug "getRel"
+    pRel                     =  VRel
+    gRel (VRel r)            =  r
+    gRel _                   =  B.bug "gRel"
     isRel  (VRel _)          =  True
     isRel  _                 =  False
 

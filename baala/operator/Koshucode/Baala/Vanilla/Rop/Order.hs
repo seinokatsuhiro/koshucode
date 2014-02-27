@@ -37,7 +37,7 @@ relkitRanking
 relkitRanking ranking n ns h1 = Right $ C.relkit h2 (C.RelkitFull False f2) where
     h2    = B.headCons n h1
     f2 b1 = let (rank, b2) = ranking 0 ords (B.headNames h1) b1
-            in zipWith (:) (map C.putDecFromInt rank) b2
+            in zipWith (:) (map C.pDecFromInt rank) b2
     ords  = map B.Asc ns
 
 

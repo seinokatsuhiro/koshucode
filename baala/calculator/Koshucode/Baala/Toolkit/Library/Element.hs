@@ -15,7 +15,7 @@ infixr 0 -:-
 {-| Retrive constituents of sections. -}
 sectionElem :: (C.CContent c) => C.Section c -> [B.Judge c]
 sectionElem sec = map res js where
-    res = judgeCons ("/res" -:- C.putText $ B.resourceName $ C.sectionResource sec)
+    res = judgeCons ("/res" -:- C.pText $ B.resourceName $ C.sectionResource sec)
     js  = concat [ elemJudge       $ C.sectionJudge  sec
                  , elemAssert      $ concatMap B.shortBody $ C.sectionAssert sec
                  , elemNamedRelmap $ C.sectionRelmap sec ]
@@ -27,14 +27,14 @@ elemJudge :: (C.CContent c) => B.Map [B.Judge c]
 elemJudge = B.unique . concatMap f where
     f (B.Judge _ p xs) = map (term p) xs
     term p (n, c) = B.affirm "KOSHU-JUDGE-TERM"
-                    [ "/pat"     -:- C.putText p
-                    , "/name"    -:- C.putText n
+                    [ "/pat"     -:- C.pText p
+                    , "/name"    -:- C.pText n
                     , "/content" -:- c ]
 
 elemAssert :: (C.CContent c) => [C.Assert c] -> [B.Judge c]
 elemAssert = B.unique . concatMap f where
     f (C.Assert t pat _ r _) =
-        B.affirm (name $ C.assertQuality t) [ "/pat" -:- C.putText pat ]
+        B.affirm (name $ C.assertQuality t) [ "/pat" -:- C.pText pat ]
              : elemRelmap r
 
     name True  = "KOSHU-AFFIRM"
@@ -42,17 +42,17 @@ elemAssert = B.unique . concatMap f where
 
 elemNamedRelmap :: (C.CContent c) => [B.Named (C.Relmap c)] -> [B.Judge c]
 elemNamedRelmap = B.unique . concatMap f where
-    f (name, relmap) = map (judgeCons ("/name" -:- C.putText name))
+    f (name, relmap) = map (judgeCons ("/name" -:- C.pText name))
                        $ elemRelmap relmap
 
 elemRelmap :: (C.CContent c) => C.Relmap c -> [B.Judge c]
 elemRelmap relmap = name : f relmap where
     name     = B.affirm "KOSHU-RELMAP-NAME" []
-    ref n    = B.affirm "KOSHU-RELMAP-REF"  [ "/ref" -:- C.putText n ]
-    rop n    = B.affirm "KOSHU-RELMAP-ROP"  [ "/rop" -:- C.putText n ]
+    ref n    = B.affirm "KOSHU-RELMAP-REF"  [ "/ref" -:- C.pText n ]
+    rop n    = B.affirm "KOSHU-RELMAP-ROP"  [ "/rop" -:- C.pText n ]
     src p xs = B.affirm "KOSHU-RELMAP-SOURCE"
-               [ "/pat"   -:- C.putText p
-               , "/terms" -:- C.putTextSet xs ]
+               [ "/pat"   -:- C.pText p
+               , "/terms" -:- C.pTextSet xs ]
 
     f (C.RelmapAppend r1 r2)   =  f r1 ++ f r2
     f (C.RelmapAlias  _ r1)    =  f r1

@@ -125,8 +125,8 @@ putRop rops =
       f :: (C.CText c) => C.Rop c -> B.Judge c
       f C.Rop { C.ropName = n, C.ropGroup = g } =
           B.Judge True "KOSHU-ROP"
-               [ ("/group" , C.putText g)
-               , ("/name"  , C.putText n) ]
+               [ ("/group" , C.pText g)
+               , ("/name"  , C.pText n) ]
 
 runStdin :: (C.CContent c) => C.SectionBundle c -> IO Int
 runStdin sec =
@@ -178,7 +178,7 @@ prettySection (C.SectionBundle root _ files _) =
 -- desc = putStrLn . fromJudges . concatMap info where
 --     info :: (CContent v) => Assert v -> [Judge v]
 --     info a = input a -- ++ output a
---     affirm s arg = fmap putText $ Judge True s arg
+--     affirm s arg = fmap pText $ Judge True s arg
 
 --     input (Assert _ _ r) = concatMap input2 $ relmapSourceList r
 --     input2 m = inputSign m : inputTerms m

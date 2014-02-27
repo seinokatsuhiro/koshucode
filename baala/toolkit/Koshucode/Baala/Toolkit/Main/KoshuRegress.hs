@@ -192,7 +192,7 @@ outputFile :: (C.CContent c) => B.Judge c -> Maybe String
 outputFile jud =
     do (B.Judge _ _ xs) <- judgeOf "KOSHU-CALC" jud
        output <- L.theContent "/output" xs
-       Just $ C.getText output
+       Just $ C.gText output
 
 reportFile :: String -> IO Bool
 reportFile file =
@@ -207,8 +207,8 @@ reportFile file =
 reportMatch :: String -> IO Bool
 reportMatch file =
     do putDoc $ reportJudge
-         [ ("/result" , C.putBool True)
-         , ("/output" , C.putText file) ]
+         [ ("/result" , C.pBool True)
+         , ("/output" , C.pText file) ]
        return True
 
 reportUnmatch
@@ -216,8 +216,8 @@ reportUnmatch
        String -> [B.Judge c] -> (Int, Int) -> IO Bool
 reportUnmatch file js (add, del) =
     do putDoc $ reportJudge
-         [ ("/result" , C.putBool False)
-         , ("/output" , C.putText file) ]
+         [ ("/result" , C.pBool False)
+         , ("/output" , C.pText file) ]
        putStrLn $ "    **  " ++ reportCount add del
        let path = reportDir ++ file
        L.mkdir path
@@ -248,7 +248,7 @@ reportCount = message where
 
 {-| Length of list as an integer content. -}
 theLength :: (C.CDec c) => [a] -> c
-theLength = C.putDecFromInt . length
+theLength = C.pDecFromInt . length
 
 putDoc :: (B.Pretty p) => p -> IO ()
 putDoc = print . B.doc

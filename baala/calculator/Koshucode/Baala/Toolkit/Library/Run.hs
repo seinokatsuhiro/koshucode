@@ -76,7 +76,7 @@ runCalcJudge dir root (B.Judge True "KOSHU-CALC" xs) =
     case theContents ["/input", "/output"] xs of
       Just [input, output] ->
           do let inputFiles = theStrings input
-                 outputFile = dir ++ C.getText output
+                 outputFile = dir ++ C.gText output
              putStrLn $ "**  Output to " ++ outputFile
              mkdir outputFile
              IO.withFile outputFile IO.WriteMode
@@ -102,8 +102,8 @@ theContents :: (C.CContent c) => [String] -> [B.Named c] -> Maybe [c]
 theContents ns termset = mapM (`theContent` termset) ns
 
 theStrings :: (C.CContent c) => c -> [String]
-theStrings c | C.isText c  =  [C.getText c]
-theStrings c | C.isList c  =  map C.getText $ C.getList c
+theStrings c | C.isText c  =  [C.gText c]
+theStrings c | C.isList c  =  map C.gText $ C.gList c
 theStrings _               =  []
 
 

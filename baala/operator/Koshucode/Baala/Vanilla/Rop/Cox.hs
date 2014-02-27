@@ -63,7 +63,7 @@ relkitHold (b, base, deriv, body) h1 = Right $ C.relkit h1 (C.RelkitAbPred p) wh
     p cs = do e <- C.coxConsBeta base deriv h1 body
               c <- C.coxRun cs e
               case c of
-                x | C.isBool x -> Right $ b == C.getBool x
+                x | C.isBool x -> Right $ b == C.gBool x
                 _ -> Left $ B.AbortAnalysis [] $ B.AAReqBoolean ""
 
 

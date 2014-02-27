@@ -32,7 +32,7 @@ judgeFromTriple RDFTuple3 (Triple s p o) =
     B.Judge True "RDF" [("/s", the s), ("/p", the p), ("/o", the o)]
 
 the :: (C.CText c) => Node -> c
-the = C.putText . nodeString
+the = C.pText . nodeString
 
 nodeString :: Node -> String
 nodeString = T.unpack . nodeText

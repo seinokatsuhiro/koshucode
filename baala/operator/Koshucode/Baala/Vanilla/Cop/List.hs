@@ -53,14 +53,14 @@ copsList =
 
 copList :: (C.CList c) => C.CopFun c
 copList argC = do arg <- sequence argC
-                  C.putListA arg
+                  C.putList arg
 
 
 -- ----------------------  aggregation
 
 copTotal :: V.VCop
 copTotal = op where
-    op [Right (V.VList xs)] = C.putDecA =<< B.decimalSum (map C.getDec xs)
+    op [Right (V.VList xs)] = C.putDec =<< B.decimalSum (map C.gDec xs)
     op xs = typeUnmatch xs
 
 copMin :: V.VCop
@@ -75,9 +75,9 @@ copMax = op where
 
 copLength :: V.VCop
 copLength = op where
-    op [Right (V.VList xs)]         = Right . C.putDecFromInt $ length xs
-    op [Right (V.VText xs)]         = Right . C.putDecFromInt $ length xs
-    op [Right (V.VRel (B.Rel _ b))] = Right . C.putDecFromInt $ length b
+    op [Right (V.VList xs)]         = Right . C.pDecFromInt $ length xs
+    op [Right (V.VText xs)]         = Right . C.pDecFromInt $ length xs
+    op [Right (V.VRel (B.Rel _ b))] = Right . C.pDecFromInt $ length b
     op xs = typeUnmatch xs
 
 typeUnmatch :: C.PrimContent a => [B.Ab a] -> Either B.AbortReason b
@@ -90,22 +90,22 @@ typeUnmatch _ = Left $ B.AbortCalc [] $ B.ACUnmatchType []
 copAppend :: V.VCop
 copAppend [] = Right V.VNil
 copAppend xs@(x : _) = op x where
-    op (Right (V.VText _)) = C.putTextA . concat =<< mapM C.needText xs
-    op (Right (V.VSet  _)) = C.putSetA  . concat =<< mapM C.needSet  xs
-    op (Right (V.VList _)) = C.putListA . concat =<< mapM C.needList xs
+    op (Right (V.VText _)) = C.putText . concat =<< mapM C.getText xs
+    op (Right (V.VSet  _)) = C.putSet  . concat =<< mapM C.getSet  xs
+    op (Right (V.VList _)) = C.putList . concat =<< mapM C.getList xs
     op _ = typeUnmatch xs
 
 copIntersect :: V.VCop
 copIntersect [] = Right V.VNil
 copIntersect xs@(x : _) = op x where
-    op (Right (V.VSet  _)) = C.putSetA  . intersectLists =<< mapM C.needSet  xs
-    op (Right (V.VList _)) = C.putListA . intersectLists =<< mapM C.needList xs
+    op (Right (V.VSet  _)) = C.putSet  . intersectLists =<< mapM C.getSet  xs
+    op (Right (V.VList _)) = C.putList . intersectLists =<< mapM C.getList xs
     op _ = typeUnmatch xs
 
 copMinus :: V.VCop
 copMinus = op where
-    op [Right (V.VSet a),  Right (V.VSet b)]  = C.putSetA  (a List.\\ b)
-    op [Right (V.VList a), Right (V.VList b)] = C.putListA (a List.\\ b)
+    op [Right (V.VSet a),  Right (V.VSet b)]  = C.putSet  (a List.\\ b)
+    op [Right (V.VList a), Right (V.VList b)] = C.putList (a List.\\ b)
     op xs = typeUnmatch xs
 
 intersectLists :: (Eq a) => [[a]] -> [a]
@@ -119,8 +119,8 @@ intersectLists (a : b : xs) = intersectLists $ List.intersect a b : xs
 
 copReverse :: V.VCop
 copReverse = op where
-    op [Right (V.VText xs)] = C.putTextA $ reverse xs
-    op [Right (V.VList xs)] = C.putListA $ reverse xs
+    op [Right (V.VText xs)] = C.putText $ reverse xs
+    op [Right (V.VList xs)] = C.putList $ reverse xs
     op xs = typeUnmatch xs
 
 copSubIndex :: V.VCop
@@ -128,7 +128,7 @@ copSubIndex = op where
     op arg = do arg3 <- C.getArg3 arg
                 case arg3 of
                   (Right (V.VText xs), Right (V.VDec from), Right (V.VDec to))
-                      -> C.putTextA (subIndexDecimal from to xs)
+                      -> C.putText (subIndexDecimal from to xs)
                   _ -> typeUnmatch arg
 
 copSubLength :: V.VCop
@@ -136,7 +136,7 @@ copSubLength = op where
     op arg = do arg3 <- C.getArg3 arg
                 case arg3 of
                   (Right (V.VText xs), Right (V.VDec from), Right (V.VDec to))
-                      -> C.putTextA (subLengthDecimal from to xs)
+                      -> C.putText (subLengthDecimal from to xs)
                   _ -> typeUnmatch arg
 
 subIndexDecimal :: B.Decimal -> B.Decimal -> [a] -> [a]

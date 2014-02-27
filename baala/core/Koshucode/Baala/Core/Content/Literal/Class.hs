@@ -12,18 +12,17 @@ module Koshucode.Baala.Core.Content.Literal.Class
   -- * Haskell data
   CBool       (..),
   CText       (..),
+  pTextList,
+  pTextSet,
   CList       (..),
 
   -- * Koshu data
   CNil        (..),
   CDec        (..),
-  putDecFromInt,
+  pDecFromInt,
   CSet        (..),
   CTermset    (..),
   CRel        (..),
-
-  putTextList,
-  putTextSet,
 ) where
 
 import qualified Control.Monad as Monad
@@ -46,17 +45,17 @@ class (Ord c, B.Pretty c, PrimContent c,
     joinContent :: [c] -> B.Ab c
     joinContent = Monad.foldM appendContent nil
 
-{-| Delete empty list ('null') from content list. -}
+-- | Delete empty list ('null') from content list.
 nonNullFilter :: B.Map [[a]]
 nonNullFilter = filter (not . null)
 
-{-| Delete 'nil' from content list. -}
+-- | Delete 'nil' from content list.
 nonNilFilter :: (CNil c) => B.Map [c]
 nonNilFilter = filter (not . isNil)
 
-need :: PrimContent c => (c -> Bool) -> (c -> b) -> B.Ab c -> B.Ab b
-need _ _ (Left reason) =  Left reason
-need is get (Right x)
+getAbAb :: PrimContent c => (c -> Bool) -> (c -> b) -> B.Ab c -> B.Ab b
+getAbAb _ _ (Left reason) =  Left reason
+getAbAb is get (Right x)
     | is x = Right $ get x
     | otherwise = Left $ B.AbortCalc [] $ B.ACUnmatchType (typename x)
 
@@ -65,93 +64,98 @@ need is get (Right x)
 -- ----------------------  Haskell built-in data
 
 class (PrimContent c) => CBool c where
-    {-| Test content @c@ has Boolean value. -}
-    isBool     ::       c -> Bool
-    {-| Put Boolean value into content @c@. -}
-    putBool    ::    Bool -> c
-    putBoolA   ::    Bool -> B.Ab c
-    putBoolA   =    Right . putBool
-    {-| Get Boolean value from content @c@. -}
-    getBool    ::       c -> Bool
-    {-| Get Boolean value from content @c@ if @c@ is @CBool@. -}
-    needBool   ::  B.Ab c -> B.Ab Bool
-    needBool = need isBool getBool
+    isBool      ::       c -> Bool
+    pBool       ::    Bool -> c
+    gBool       ::       c -> Bool
+
+    getBool     ::  B.Ab c -> B.Ab Bool
+    getBool     =   getAbAb isBool gBool
+
+    putBool     ::    Bool -> B.Ab c
+    putBool     =    Right . pBool
 
 class (PrimContent c) => CText c where
-    isText     ::       c -> Bool
-    getText    ::       c -> String
-    putText    ::  String -> c
-    putTextA   ::  String -> B.Ab c
-    putTextA   =    Right . putText
+    isText      ::       c -> Bool
+    gText       ::       c -> String
+    pText       ::  String -> c
 
-    needText   ::  B.Ab c -> B.Ab String
-    needText = need isText getText
+    getText     ::  B.Ab c -> B.Ab String
+    getText     =   getAbAb isText gText
+
+    putText     ::  String -> B.Ab c
+    putText     =    Right . pText
+
+pTextSet :: (CText c, CSet c) => [String] -> c
+pTextSet = pSet . map pText
+
+pTextList :: (CText c, CList c) => [String] -> c
+pTextList = pList . map pText
 
 class (PrimContent c) => CList c where
-    isList     ::       c -> Bool
-    getList    ::       c -> [c]
-    putList    ::     [c] -> c
-    putListA   ::     [c] -> B.Ab c
-    putListA   =    Right . putList
+    isList      ::       c -> Bool
+    gList       ::       c -> [c]
+    pList       ::     [c] -> c
 
-    needList   ::  B.Ab c -> B.Ab [c]
-    needList = need isList getList
+    getList     ::  B.Ab c -> B.Ab [c]
+    getList     =   getAbAb isList gList
+
+    putList     ::     [c] -> B.Ab c
+    putList     =    Right . pList
 
 
 
 -- ----------------------  Data in koshucode
 
-{-| Types that can be nil -}
+-- | Types that can be nil
 class (PrimContent c) => CNil c where
     isNil       ::          c -> Bool
     nil         ::          c
 
 class (PrimContent c) => CDec c where
-    isDec      ::           c -> Bool
-    getDec     ::           c -> B.Decimal
-    putDec     ::   B.Decimal -> c
-    putDecA    ::   B.Decimal -> B.Ab c
-    putDecA    =    Right . putDec
+    isDec       ::           c -> Bool
+    gDec        ::           c -> B.Decimal
+    pDec        ::   B.Decimal -> c
 
-    needDec     ::     B.Ab c -> B.Ab B.Decimal
-    needDec = need isDec getDec
+    getDec      ::     B.Ab c -> B.Ab B.Decimal
+    getDec      =      getAbAb isDec gDec
 
-putDecFromInt :: (CDec c) => Int -> c
-putDecFromInt = putDec . B.intDecimal
+    putDec      ::   B.Decimal -> B.Ab c
+    putDec      =    Right . pDec
+
+pDecFromInt :: (CDec c) => Int -> c
+pDecFromInt = pDec . B.intDecimal
 
 class (PrimContent c) => CSet c where
     isSet       ::          c -> Bool
-    getSet      ::          c -> [c]
-    putSet      ::        [c] -> c
-    putSetA     ::        [c] -> B.Ab c
-    putSetA      =      Right . putSet
+    gSet        ::          c -> [c]
+    pSet        ::        [c] -> c
 
-    needSet     ::     B.Ab c -> B.Ab [c]
-    needSet = need isSet getSet
+    getSet      ::     B.Ab c -> B.Ab [c]
+    getSet      =      getAbAb isSet gSet
+
+    putSet      ::        [c] -> B.Ab c
+    putSet      =       Right . pSet
 
 class (PrimContent c) => CTermset c where
     isTermset   ::           c -> Bool
-    getTermset  ::           c -> [B.Named c]
-    putTermset  :: [B.Named c] -> c
-    putTermsetA :: [B.Named c] -> B.Ab c
-    putTermsetA  = Right . putTermset
+    gTermset    ::           c -> [B.Named c]
+    pTermset    :: [B.Named c] -> c
 
-    needTermset ::      B.Ab c -> B.Ab [B.Named c]
-    needTermset = need isTermset getTermset
+    getTermset  ::      B.Ab c -> B.Ab [B.Named c]
+    getTermset  =       getAbAb isTermset gTermset
+
+    putTermset  :: [B.Named c] -> B.Ab c
+    putTermset  =  Right . pTermset
 
 class (PrimContent c) => CRel c where
     isRel       ::           c -> Bool
-    getRel      ::           c -> B.Rel c
-    putRel      ::     B.Rel c -> c
-    putRelA     ::     B.Rel c -> B.Ab c
-    putRelA      =     Right. putRel
+    gRel        ::           c -> B.Rel c
+    pRel        ::     B.Rel c -> c
 
-    needRel     ::      B.Ab c -> B.Ab (B.Rel c)
-    needRel = need isRel getRel
+    getRel      ::      B.Ab c -> B.Ab (B.Rel c)
+    getRel      =       getAbAb isRel gRel
 
-putTextSet :: (CText c, CSet c) => [String] -> c
-putTextSet = putSet . map putText
+    putRel      ::     B.Rel c -> B.Ab c
+    putRel      =      Right. pRel
 
-putTextList :: (CText c, CList c) => [String] -> c
-putTextList = putList . map putText
 

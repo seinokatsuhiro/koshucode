@@ -120,5 +120,5 @@ relkitGroup n (C.Relkit h2 f2) h1 =
       add map2 cs1 =
           let b2maybe = B.lookupMap (B.posPick share1 cs1) map2
               b2sub   = maybe [] id b2maybe
-          in C.putRel (B.Rel h2 b2sub) : cs1
+          in C.pRel (B.Rel h2 b2sub) : cs1
 
