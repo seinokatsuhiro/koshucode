@@ -1,5 +1,5 @@
-{-# OPTIONS_GHC -Wall #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# OPTIONS_GHC -Wall #-}
 
 {-| Term-content calcutation. -}
 
@@ -77,8 +77,8 @@ data Cop c
     = CopFun String (CopFun c)  -- ^ Function
     | CopSyn String (CopSyn)    -- ^ Syntax
 
-type CopFun c = [c] -> B.Ab c
-type CopSyn   = CopFun B.TokenTree
+type CopFun c = [B.Ab c] -> B.Ab c
+type CopSyn   = [B.TokenTree] -> B.Ab B.TokenTree
 
 instance Show (Cop c) where
     show (CopFun n _) = "(CopFun " ++ show n ++ " _)"
@@ -307,15 +307,10 @@ coxRun args cx = run 0 cx {- =<< checkIrreducible cx -} where
              CoxTerm _ [p]  -> Right $ args !! p
              CoxTerm _ ps   -> term ps args
              CoxApplyL e [] -> run (n + 1) e
-             CoxApplyL (B.Sourced _ (CoxBase "/if" _)) [x,y,z] ->
-                 do x'   <- run' x
-                    test <- C.needBool x'
-                    case test of
-                      True  -> run' y
-                      False -> run' z
-             CoxApplyL (B.Sourced _ (CoxBase _ f)) xs -> f =<< mapM run' xs
+             CoxApplyL (B.Sourced _ (CoxBase _ f)) xs -> f $ map run' xs
              _ -> Left $ B.abortNotFound $ "cox: " ++ show cox
 
+    term :: [Int] -> [c] -> B.Ab c
     term []       _ = Left $ B.abortNotFound "term"
     term (-1 : _) _ = Left $ B.abortNotFound "term"
     term (p : ps) args2 =
@@ -324,8 +319,9 @@ coxRun args cx = run 0 cx {- =<< checkIrreducible cx -} where
            then rel ps $ C.getRel c
            else Right c
 
+    rel :: [Int] -> B.Rel c -> B.Ab c
     rel ps (B.Rel _ args2) =
-        Right . C.putList =<< mapM (term ps) args2
+        C.putListA =<< mapM (term ps) args2
 
 
 -- ----------------------

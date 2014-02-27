@@ -1,4 +1,5 @@
 {-# LANGUAGE TupleSections #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
 {-| Literalizer: Make literal contents from token tree. -}
@@ -50,22 +51,22 @@ type LitOperators c = [B.Named (Literalize c -> LitTrees c)]
 
 {-| Transform 'B.TokenTree' into
     internal form of content. -}
-litContentBy :: (C.CContent c) => LitOperators c -> Literalize c
+litContentBy :: forall c. (C.CContent c) => LitOperators c -> Literalize c
 litContentBy ops = lit where
     lit (B.TreeB typ _ xs) = case typ of
           1  ->  paren xs
-          2  ->  fmap C.putList    $ litList    lit xs
-          3  ->  fmap C.putSet     $ litList    lit xs
-          4  ->  fmap C.putTermset $ litTermset lit xs
-          5  ->  fmap C.putRel     $ litRel     lit xs
+          2  ->  C.putListA    =<< litList    lit xs
+          3  ->  C.putSetA     =<< litList    lit xs
+          4  ->  C.putTermsetA =<< litTermset lit xs
+          5  ->  C.putRelA     =<< litRel     lit xs
           _  ->  B.bug "litContentBy"
 
     lit x@(B.TreeL tok)
         | isDecimal x = do dec <- B.litDecimal $ B.tokenContent tok
-                           Right . C.putDec $ dec
+                           C.putDecA dec
         | otherwise   = case tok of
               B.TWord _ 0 w -> word w
-              B.TWord _ _ w -> Right . C.putText $ w  -- quoted text
+              B.TWord _ _ w -> C.putTextA w  -- quoted text
               _             -> Left $ B.AbortSyntax [] $ B.ASUnkWord (show tok)
 
     word w = case w of
@@ -73,6 +74,7 @@ litContentBy ops = lit where
           "()"     ->  Right C.nil
           _        ->  Left $ B.AbortSyntax [] $ B.ASUnkWord w
 
+    paren :: [B.TokenTree] -> B.Ab c
     paren xs@(x : _)
         -- quoted sequence is text
         | isQuotedOrHashed x =
@@ -81,7 +83,7 @@ litContentBy ops = lit where
         | isDecimal x =
             do xs2 <- mapM litUnquoted xs
                dec <- B.litDecimal $ concat xs2
-               Right . C.putDec $ dec
+               C.putDecA dec
 
     -- tagged sequence
     paren (B.TreeL (B.TWord _ 0 tag) : xs) =
@@ -128,16 +130,16 @@ litUnquoted x = Left $ B.AbortSyntax [] $ B.ASUnkWord (show x)
 litHash :: (C.CContent c) => B.LitString c
 litHash key =
     case lookup key hashAssoc of
-      Just c  -> Right c
+      Just c  -> c
       Nothing -> Left $ B.AbortSyntax [] $ B.ASUnkWord ('#' : key)
 
-hashAssoc :: (C.CContent c) => [B.Named c]
+hashAssoc :: (C.CContent c) => [B.Named (B.Ab c)]
 hashAssoc =
-    [ ("true"  , C.putBool True)
-    , ("false" , C.putBool False)
-    , ("nil"   , C.nil)
+    [ ("true"  , C.putBoolA True)
+    , ("false" , C.putBoolA False)
+    , ("nil"   , Right C.nil)
     ] ++ map f C.hashWordTable where
-    f (key, text) = (key, C.putText text)
+    f (key, text) = (key, C.putTextA text)
 
 
 

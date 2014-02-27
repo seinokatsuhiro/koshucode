@@ -40,9 +40,9 @@ copsArith =
     , C.CopFun  "abs"  copAbs
     ]
 
-copDec :: V.VContent -> B.Ab B.Decimal
-copDec (V.VDec  n) = Right n
-copDec (V.VText n) = B.litDecimal n
+copDec :: B.Ab V.VContent -> B.Ab B.Decimal
+copDec (Right (V.VDec  n)) = Right n
+copDec (Right (V.VText n)) = B.litDecimal n
 copDec x = Left $ B.AbortSyntax [] $ B.ASNotNumber (show x)
 
 copPlus :: V.VCop
@@ -79,19 +79,19 @@ copQuo [a, b] =
 copQuo _ = Left $ B.abortOperand "quo"
 
 copRem :: V.VCop
-copRem [a, b] =
-    do a' <- copDec a
-       b' <- copDec b
-       c' <- B.decimalRem a' b'
-       Right . V.VDec $ c'
-copRem _ = Left $ B.abortOperand "rem"
+copRem arg =
+    do (ac, bc) <- C.getArg2 arg
+       a <- copDec ac
+       b <- copDec bc
+       c <- B.decimalRem a b
+       C.putDecA $ c
 
 copAbs :: V.VCop
-copAbs [V.VList cs] = Right . V.VList =<< mapM copAbs1 cs
-copAbs [c] = copAbs1 c
+copAbs [Right (V.VList cs)] = Right . V.VList =<< mapM copAbs1 cs
+copAbs [Right c] = copAbs1 c
 copAbs _ = Left $ B.abortOperand "abs"
 
 copAbs1 :: V.VContent -> B.Ab V.VContent
-copAbs1 (V.VDec n) = Right . V.VDec $ B.decimalAbs n
+copAbs1 (V.VDec n) = C.putDecA $ B.decimalAbs n
 copAbs1 _ = Left $ B.abortOperand "abc"
 

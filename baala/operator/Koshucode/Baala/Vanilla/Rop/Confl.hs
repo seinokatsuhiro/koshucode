@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Vanilla.Rop.Confl
@@ -98,7 +99,7 @@ relmapGroup :: (Ord c, C.CRel c) => C.RopUse c -> String -> B.Map (C.Relmap c)
 relmapGroup use = C.relmapBinary use . relkitGroup
 
 {-| Grouping relation. -}
-relkitGroup :: (Ord c, C.CRel c) => String -> C.RelkitBinary c
+relkitGroup :: forall c. (Ord c, C.CRel c) => String -> C.RelkitBinary c
 relkitGroup n (C.Relkit h2 f2) h1 =
     Right $ C.relkit h3 (C.RelkitAbFull False f3)
     where

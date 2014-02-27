@@ -7,6 +7,7 @@ module Koshucode.Baala.Core.Relmap.Rop
   Rop (..),
   RopUse (..),
   RopCons,
+  getArg1, getArg2, getArg3,
 
   -- * Relmap
   Relmap (..),
@@ -63,6 +64,18 @@ data RopUse c = RopUse
 
 instance B.TokenListing (RopUse c) where
     tokenListing = B.tokenListing . ropHalf
+
+getArg1 :: [B.Ab c] -> B.Ab (B.Ab c)
+getArg1 [x] = Right x
+getArg1 _ = Left $ B.AbortCalc [] $ B.ACUnmatchType []
+
+getArg2 :: [B.Ab c] -> B.Ab (B.Ab c, B.Ab c)
+getArg2 [x, y] = Right (x, y)
+getArg2 _ = Left $ B.AbortCalc [] $ B.ACUnmatchType []
+
+getArg3 :: [B.Ab c] -> B.Ab (B.Ab c, B.Ab c, B.Ab c)
+getArg3 [x, y, z] = Right (x, y, z)
+getArg3 _ = Left $ B.AbortCalc [] $ B.ACUnmatchType []
 
 
 

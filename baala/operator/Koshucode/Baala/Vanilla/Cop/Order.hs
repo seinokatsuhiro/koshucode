@@ -38,8 +38,8 @@ copsOrder =
     ]
 
 copBy :: (C.CBool c) => (c -> c -> Bool) -> C.CopFun c
-copBy p [x, y] = Right . C.putBool $ x `p` y
-copBy _ _      = Left  $ B.abortNotFound ""
+copBy p [Right x, Right y] = C.putBoolA $ x `p` y
+copBy _ _  = Left  $ B.abortNotFound ""
 
 copEq   :: (C.CBool c, Eq c) => C.CopFun c
 copEq   =  copBy (==)

@@ -52,35 +52,36 @@ copsList =
     ]
 
 copList :: (C.CList c) => C.CopFun c
-copList = Right . C.putList
+copList argC = do arg <- sequence argC
+                  C.putListA arg
 
 
 -- ----------------------  aggregation
 
 copTotal :: V.VCop
 copTotal = op where
-    op [V.VList xs] = Right . C.putDec =<< B.decimalSum (map C.getDec xs)
+    op [Right (V.VList xs)] = C.putDecA =<< B.decimalSum (map C.getDec xs)
     op xs = typeUnmatch xs
 
 copMin :: V.VCop
 copMin = op where
-    op [V.VList xs] = Right $ minimum xs
+    op [Right (V.VList xs)] = Right $ minimum xs
     op xs = typeUnmatch xs
 
 copMax :: V.VCop
 copMax = op where
-    op [V.VList xs] = Right $ maximum xs
+    op [Right (V.VList xs)] = Right $ maximum xs
     op xs = typeUnmatch xs
 
 copLength :: V.VCop
 copLength = op where
-    op [V.VList xs]         = Right . C.putDecFromInt $ length xs
-    op [V.VText xs]         = Right . C.putDecFromInt $ length xs
-    op [V.VRel (B.Rel _ b)] = Right . C.putDecFromInt $ length b
+    op [Right (V.VList xs)]         = Right . C.putDecFromInt $ length xs
+    op [Right (V.VText xs)]         = Right . C.putDecFromInt $ length xs
+    op [Right (V.VRel (B.Rel _ b))] = Right . C.putDecFromInt $ length b
     op xs = typeUnmatch xs
 
-typeUnmatch :: C.PrimContent a => [a] -> Either B.AbortReason b
-typeUnmatch xs = Left $ B.AbortCalc [] $ B.ACUnmatchType (concatMap C.typename xs)
+typeUnmatch :: C.PrimContent a => [B.Ab a] -> Either B.AbortReason b
+typeUnmatch _ = Left $ B.AbortCalc [] $ B.ACUnmatchType []
 
 
 
@@ -89,22 +90,22 @@ typeUnmatch xs = Left $ B.AbortCalc [] $ B.ACUnmatchType (concatMap C.typename x
 copAppend :: V.VCop
 copAppend [] = Right V.VNil
 copAppend xs@(x : _) = op x where
-    op (V.VText _) = Right . C.putText . concat =<< mapM C.needText xs
-    op (V.VSet  _) = Right . C.putSet  . concat =<< mapM C.needSet  xs
-    op (V.VList _) = Right . C.putList . concat =<< mapM C.needList xs
+    op (Right (V.VText _)) = C.putTextA . concat =<< mapM C.needText xs
+    op (Right (V.VSet  _)) = C.putSetA  . concat =<< mapM C.needSet  xs
+    op (Right (V.VList _)) = C.putListA . concat =<< mapM C.needList xs
     op _ = typeUnmatch xs
 
 copIntersect :: V.VCop
 copIntersect [] = Right V.VNil
 copIntersect xs@(x : _) = op x where
-    op (V.VSet  _) = Right . C.putSet  . intersectLists =<< mapM C.needSet  xs
-    op (V.VList _) = Right . C.putList . intersectLists =<< mapM C.needList xs
+    op (Right (V.VSet  _)) = C.putSetA  . intersectLists =<< mapM C.needSet  xs
+    op (Right (V.VList _)) = C.putListA . intersectLists =<< mapM C.needList xs
     op _ = typeUnmatch xs
 
 copMinus :: V.VCop
 copMinus = op where
-    op [V.VSet a,  V.VSet b]  = Right $ V.VSet  (a List.\\ b)
-    op [V.VList a, V.VList b] = Right $ V.VList (a List.\\ b)
+    op [Right (V.VSet a),  Right (V.VSet b)]  = C.putSetA  (a List.\\ b)
+    op [Right (V.VList a), Right (V.VList b)] = C.putListA (a List.\\ b)
     op xs = typeUnmatch xs
 
 intersectLists :: (Eq a) => [[a]] -> [a]
@@ -118,21 +119,25 @@ intersectLists (a : b : xs) = intersectLists $ List.intersect a b : xs
 
 copReverse :: V.VCop
 copReverse = op where
-    op [V.VText xs] = Right . V.VText $ reverse xs
-    op [V.VList xs] = Right . V.VList $ reverse xs
+    op [Right (V.VText xs)] = C.putTextA $ reverse xs
+    op [Right (V.VList xs)] = C.putListA $ reverse xs
     op xs = typeUnmatch xs
 
 copSubIndex :: V.VCop
 copSubIndex = op where
-    op [V.VText xs, V.VDec from, V.VDec to] =
-        Right $ V.VText (subIndexDecimal from to xs)
-    op xs = typeUnmatch xs
+    op arg = do arg3 <- C.getArg3 arg
+                case arg3 of
+                  (Right (V.VText xs), Right (V.VDec from), Right (V.VDec to))
+                      -> C.putTextA (subIndexDecimal from to xs)
+                  _ -> typeUnmatch arg
 
 copSubLength :: V.VCop
 copSubLength = op where
-    op [V.VText xs, V.VDec from, V.VDec to] =
-        Right $ V.VText (subLengthDecimal from to xs)
-    op xs = typeUnmatch xs
+    op arg = do arg3 <- C.getArg3 arg
+                case arg3 of
+                  (Right (V.VText xs), Right (V.VDec from), Right (V.VDec to))
+                      -> C.putTextA (subLengthDecimal from to xs)
+                  _ -> typeUnmatch arg
 
 subIndexDecimal :: B.Decimal -> B.Decimal -> [a] -> [a]
 subIndexDecimal from to = subIndex intFrom intTo where

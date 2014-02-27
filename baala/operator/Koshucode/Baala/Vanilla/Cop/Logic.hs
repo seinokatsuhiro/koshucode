@@ -40,30 +40,30 @@ copsLogic =
     , C.CopSyn  "if"    synIf
     ]
 
-typeUnmatch :: (C.PrimContent a) => [a] -> B.Ab b
-typeUnmatch xs = Left $ B.AbortCalc [] $ B.ACUnmatchType (concatMap C.typename xs)
+-- typeUnmatch :: (C.PrimContent a) => [a] -> B.Ab b
+-- typeUnmatch xs = Left $ B.AbortCalc [] $ B.ACUnmatchType (concatMap C.typename xs)
 
 cop1 :: (C.CBool c) => (Bool -> Bool) -> C.CopFun c
-cop1 p [x] =
-    do x' <- C.needBool x
-       Right . C.putBool $ p x'
-cop1 _ xs = typeUnmatch xs
+cop1 p arg =
+    do xc <- C.getArg1 arg
+       x  <- C.needBool xc
+       C.putBoolA $ p x
 
 cop2 :: (C.CBool c) => (Bool -> Bool -> Bool) -> C.CopFun c
-cop2 p [x, y] =
-    do x' <- C.needBool x
-       y' <- C.needBool y
-       Right . C.putBool $ p x' y'
-cop2 _ xs = typeUnmatch xs
+cop2 p arg =
+    do (xc, yc) <- C.getArg2 arg
+       x <- C.needBool xc
+       y <- C.needBool yc
+       C.putBoolA $ p x y
 
 copN :: (C.CBool c) => Bool -> (Bool -> Bool -> Bool) -> C.CopFun c
 copN unit p = loop where
-    loop [] = Right . C.putBool $ unit
-    loop (x : xs) =
-        do x' <- C.needBool x
-           y  <- loop xs 
-           y' <- C.needBool y
-           Right . C.putBool $ p x' y'
+    loop []   = C.putBoolA unit
+    loop [xc] = xc
+    loop (xc1 : xc2 : xs) =
+        do x1 <- C.needBool xc1
+           x2 <- C.needBool xc2
+           loop $ C.putBoolA (p x1 x2) : xs
 
 copNot :: (C.CBool c) => C.CopFun c
 copNot =  cop1 not
@@ -93,13 +93,12 @@ treeOrList [x] = x
 treeOrList xs = B.treeWrap $ (treeOp "or") : xs
 
 copIf  :: (C.CBool c, C.CNil c) => C.CopFun c
-copIf [test, a, b] =
-    do test' <- C.needBool test
-       case test' of
-         True  -> Right a
-         False -> Right b
-copIf [test, a] = copIf [test, a, C.nil]
-copIf xs = typeUnmatch xs
+copIf arg =
+    do (testC, conC, altC) <- C.getArg3 arg
+       test <- C.needBool testC
+       case test of
+         True  -> conC
+         False -> altC
 
 --  if TEST -> CON : ALT 
 --  if TEST -> CON
