@@ -37,9 +37,9 @@ vanillaRops = Rop.ropList "vanilla"
     , ( "group /N R",
         Rop.consGroup, C.sortTwo "-term" "-relmap" [] )
     , ( "hold E",
-        Rop.consHold True, C.sortList "-in" ["-let"] )
+        Rop.consFilter True, C.sortList "-in" ["-let"] )
     , ( "keep E",
-        Rop.consHold True, C.sortList "-in" ["-let"] )
+        Rop.consFilter True, C.sortList "-in" ["-let"] )
     , ( "koshu-cop /N",
         Rop.consKoshuCop, C.sortList "-name" [] )
     , ( "koshu-cop-infix /N [ -height /N ][ -dir /N ]",
@@ -55,7 +55,7 @@ vanillaRops = Rop.ropList "vanilla"
     , ( "number /N -order /N ...",
         Rop.consNumber, C.sortOne "-term" ["-order"] )
     , ( "omit E",
-        Rop.consHold False, C.sortList "-in" ["-let"] )
+        Rop.consFilter False, C.sortList "-in" ["-let"] )
     , ( "prefix /P /N ...",
         Rop.consPrefix, C.sortOneList "-prefix" "-term" [] )
     , ( "prefix-change /P /Q",
@@ -92,7 +92,7 @@ vanillaRops = Rop.ropList "vanilla"
    [@group \/N R@]
      Group tuples in @R@ by input relation.
 
-   [@hold E@]
+   [@keep E@]
      Keep tuples @E@ equals true.
   
    [@koshu-cop \/N@]
@@ -111,11 +111,14 @@ vanillaRops = Rop.ropList "vanilla"
      Meet input and given relation.
      It keeps input tuples of which counterparts are totally negated.
   
+   [@member \/N \/N@]
+     Membership of set or list.
+  
    [@number \/N \[ -order \/P ... \]@]
      Add numbering term @\/N@ ordered by @\/P@ ...
 
-   [@member \/N \/N@]
-     Membership of set or list.
+   [@omit E@]
+     Omit tuples @E@ equals true.
   
    [@prefix \/P \/N ...@]
      Add prefix @\/P@ to terms @\/N@ ...
