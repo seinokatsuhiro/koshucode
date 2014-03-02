@@ -232,18 +232,18 @@ coxBeta base deriv h cox1 =
 -- beta reduction
 subst :: B.Map (Cox c)
 subst = su [] where
-    su :: [(Int, Cox c)] -> B.Map (Cox c)
+    su :: [Maybe (Cox c)] -> B.Map (Cox c)
     su args e@(B.Sourced src core) =
         let s = B.Sourced src
         in case core of
-             CoxVar _ i    -> maybe e id $ lookup i args
-             CoxDeriv v b  -> s $ CoxDeriv v $ su (B.mapmapFst (1+) args) b
+             CoxVar _ i    -> maybe e id $ args !! (i - 1)
+             CoxDeriv v b  -> s $ CoxDeriv v $ su (Nothing : args) b
              CoxApplyL _ _ -> app args $ s $ mapToCox (su args) core
              _             -> e
 
-    app :: [(Int, Cox c)] -> B.Map (Cox c)
+    app :: [Maybe (Cox c)] -> B.Map (Cox c)
     app args (B.Sourced _ (CoxApplyL (B.Sourced _ (CoxDeriv _ b)) (x:xs))) =
-        app ((1,x) : args) $ B.Sourced [] (CoxApplyL b xs)
+        app (Just x : args) $ B.Sourced [] (CoxApplyL b xs)
     app args (B.Sourced _ (CoxApplyL f [])) = su args f
     app _ e2 = e2
 

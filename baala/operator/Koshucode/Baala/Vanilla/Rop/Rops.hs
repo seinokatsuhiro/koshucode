@@ -38,6 +38,8 @@ vanillaRops = Rop.ropList "vanilla"
         Rop.consGroup, C.sortTwo "-term" "-relmap" [] )
     , ( "hold E",
         Rop.consFilter True, C.sortList "-in" ["-let"] )
+    , ( "if R ...",
+        Rop.consIf, C.sortList "-relmap" [] )
     , ( "keep E",
         Rop.consFilter True, C.sortList "-in" ["-let"] )
     , ( "koshu-cop /N",
