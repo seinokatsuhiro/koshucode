@@ -85,26 +85,30 @@ getArg3 _ = Left $ B.AbortCalc [] $ B.ACUnmatchType []
 -- | Relation-to-relation mapping.
 --   A 'Relmap' is correspond to a use of relational operator.
 data Relmap c
-    -- | Retrieve a relation from a dataset
-    = RelmapSource  C.HalfRelmap B.JudgePattern [B.Termname]
-    -- | Constant relation
-    | RelmapConst   C.HalfRelmap (B.Rel c)
-    -- | Equavalent relmap
-    | RelmapAlias   C.HalfRelmap (Relmap c)
-    -- | Relmap that maps relations to a relation
-    | RelmapCalc    C.HalfRelmap (RelkitConfl c) [Relmap c]
-    -- | Relmap that maps relations to a relation
-    | RelmapGlobal  C.HalfRelmap (Global c -> RelkitCalc c)
-    -- | Connect two relmaps
-    | RelmapAppend  (Relmap c) (Relmap c)
-    -- | Relmap reference
-    | RelmapName    C.HalfRelmap String
+    = RelmapSource   C.HalfRelmap B.JudgePattern [B.Termname]
+      -- ^ Retrieve a relation from a dataset
+    | RelmapConst    C.HalfRelmap (B.Rel c)
+      -- ^ Constant relation
 
+    | RelmapGlobal   C.HalfRelmap (Global c -> RelkitCalc c)
+      -- ^ Relmap that maps relations to a relation with globals
+    | RelmapCalc     C.HalfRelmap (RelkitConfl c) [Relmap c]
+      -- ^ Relmap that maps relations to a relation
+
+    | RelmapLink     C.HalfRelmap String (Maybe (Relmap c))
+      -- ^ Relmap reference
+    | RelmapAlias    C.HalfRelmap (Relmap c)
+      -- ^ Equavalent relmap
+    | RelmapAppend   (Relmap c) (Relmap c)
+      -- ^ Connect two relmaps
+
+-- | Map function to relmaps.
 mapToRelmap :: B.Map (Relmap c) -> B.Map (Relmap c)
 mapToRelmap f = mf where
-    mf (RelmapAlias  h r1)   = RelmapAlias  h (mf r1)
-    mf (RelmapAppend r1 r2)  = RelmapAppend (mf r1) (mf r2)
-    mf (RelmapCalc   h g rs) = RelmapCalc   h g (map mf rs)
+    mf (RelmapAlias  h r1)          = RelmapAlias  h (mf r1)
+    mf (RelmapAppend r1 r2)         = RelmapAppend (mf r1) (mf r2)
+    mf (RelmapCalc   h g rs)        = RelmapCalc   h g (map mf rs)
+    mf (RelmapLink   h n (Just r1)) = RelmapLink   h n (Just $ mf r1)
     mf r1 = f r1
 
 instance Show (Relmap c) where
@@ -114,11 +118,13 @@ showRelmap :: Relmap c -> String
 showRelmap r = sh r where
     sh (RelmapSource _ p xs)  = "RelmapSource " ++ show p ++ " " ++ show xs
     sh (RelmapConst  _ _)     = "RelmapConst "  ++ show (B.name r) ++ " _"
-    sh (RelmapAlias  _ r2)    = "RelmapAlias "  ++ show r2
-    sh (RelmapCalc   _ _ rs)  = "RelmapCalc "   ++ show (B.name r) ++ " _" ++ joinSubs rs
+
     sh (RelmapGlobal _ _)     = "RelmapGlobal " ++ show (B.name r)
+    sh (RelmapCalc   _ _ rs)  = "RelmapCalc "   ++ show (B.name r) ++ " _" ++ joinSubs rs
+
+    sh (RelmapLink _ n _)     = "RelmapLink "   ++ show n
+    sh (RelmapAlias  _ r2)    = "RelmapAlias "  ++ show r2
     sh (RelmapAppend r1 r2)   = "RelmapAppend"  ++ joinSubs [r1, r2]
-    sh (RelmapName _ n)       = "RelmapName "   ++ show n
 
     joinSubs = concatMap sub
     sub r2 = " (" ++ sh r2 ++ ")"
@@ -140,11 +146,13 @@ instance B.Name (Relmap c) where
 instance B.Pretty (Relmap c) where
     doc (RelmapSource h _ _)   = B.doc h
     doc (RelmapConst  h _)     = B.doc h
-    doc (RelmapAlias  h _)     = B.doc h
-    doc (RelmapCalc   h _ _)   = B.doc h -- hang (text $ name m) 2 (doch (map doc ms))
+
     doc (RelmapGlobal h _)     = B.doc h -- hang (text $ name m) 2 (doch (map doc ms))
+    doc (RelmapCalc   h _ _)   = B.doc h -- hang (text $ name m) 2 (doch (map doc ms))
+
+    doc (RelmapLink   _ n _)   = B.doc n
+    doc (RelmapAlias  h _)     = B.doc h
     doc (RelmapAppend m1 m2)   = B.docHang (B.doc m1) 2 (docRelmapAppend m2)
-    doc (RelmapName   _ n)     = B.doc n
 
 docRelmapAppend :: Relmap c -> B.Doc
 docRelmapAppend = B.docv . map pipe . relmapAppendList where
@@ -163,11 +171,13 @@ relmapHalf :: Relmap c -> Maybe C.HalfRelmap
 relmapHalf = half where
     half (RelmapSource h _ _)   = Just h
     half (RelmapConst  h _)     = Just h
-    half (RelmapAlias  h _)     = Just h
-    half (RelmapCalc   h _ _)   = Just h
+
     half (RelmapGlobal h _)     = Just h
+    half (RelmapCalc   h _ _)   = Just h
+
+    half (RelmapLink _ _ _)     = Nothing
+    half (RelmapAlias  h _)     = Just h
     half (RelmapAppend m1 _)    = relmapHalf m1
-    half (RelmapName _ _)       = Nothing
 
 
 

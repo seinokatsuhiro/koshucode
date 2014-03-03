@@ -24,7 +24,10 @@ import qualified Koshucode.Baala.Core.Relmap.Rop        as C
 relmapCons :: C.Global c -> (RelmapCons c)
 relmapCons global = make $ unzip $ map pair $ C.globalRops global where
     make (halfs, fulls) =
-        RelmapCons (relmapConsHalf halfs) (relmapConsFull global fulls)
+        let consHalf = relmapConsHalf halfs
+            consFull = relmapConsFull global fulls
+        in RelmapCons consHalf consFull
+
     pair (C.Rop name _ sorter cons synopsis) =
         let half = (name, (synopsis, sorter))
             full = (name, cons)
@@ -92,10 +95,10 @@ relmapConsFull global fulls = consFull where
         let op    = C.halfOpText    half
             subHs = C.halfSubrelmap half
         in case lookup op fulls of
-             Nothing   -> Right $ C.RelmapName half op
-             Just cons -> B.abortableFrom "relmap" half $ do
-                            subFs <- mapM consFull subHs
-                            cons $ C.RopUse global half subFs
+             Nothing   -> Right $ C.RelmapLink half op Nothing
+             Just cons -> B.abortableFrom "relmap" half $
+                          do subFs <- mapM consFull subHs
+                             cons $ C.RopUse global half subFs
 
 
 -- ----------------------

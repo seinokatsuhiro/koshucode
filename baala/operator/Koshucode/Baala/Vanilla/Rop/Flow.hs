@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Vanilla.Rop.Calc
+module Koshucode.Baala.Vanilla.Rop.Flow
 ( 
   -- * enclose
   consEnclose, relmapEnclose, relkitEnclose,

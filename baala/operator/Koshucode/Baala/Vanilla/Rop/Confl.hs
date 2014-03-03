@@ -11,8 +11,6 @@ module Koshucode.Baala.Vanilla.Rop.Confl
   consGroup, relmapGroup, relkitGroup,
   -- * if
   consIf, relmapIf, relkitIf,
-  -- * do
-  consDo, relmapDo, relkitDo,
 ) where
 
 import qualified Koshucode.Baala.Base    as B
@@ -146,20 +144,4 @@ relkitIf [C.Relkit _ ft, C.Relkit hc fc, C.Relkit ha fa] _
                  [] -> C.relkitRun fa b1
                  _  -> C.relkitRun fc b1
 relkitIf _ _ = B.bug "relkitIf"
-
-
-
--- ----------------------  do
-
-consDo :: (Ord c) => C.RopCons c
-consDo use =
-  do rs <- Rop.getRelmaps use
-     Right $ relmapDo use rs
-
-relmapDo :: (Ord c) => C.RopUse c -> [C.Relmap c] -> C.Relmap c
-relmapDo use = C.relmapConfl use relkitDo
-
-relkitDo :: forall c. (Ord c) => C.RelkitConfl c
-relkitDo [kit] _ = Right kit
-relkitDo _ _ = B.bug "relkitDo"
 

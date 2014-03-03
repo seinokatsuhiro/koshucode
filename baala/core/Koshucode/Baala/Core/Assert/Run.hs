@@ -39,10 +39,11 @@ specialize :: C.Global c -> C.Relmap c -> B.Relhead -> B.Ab (C.Relkit c)
 specialize global = (<$>) where
     sel = C.globalSelect global
 
-    C.RelmapSource half p ns <$> _  = right half (C.relkitConst $ sel p ns)
-    C.RelmapConst  half rel  <$> _  = right half (C.relkitConst rel)
-    C.RelmapAlias  _ relmap  <$> h1 = relmap <$> h1
-    C.RelmapName   half name <$> _  =
+    C.RelmapSource half p ns         <$> _  = right half (C.relkitConst $ sel p ns)
+    C.RelmapConst  half rel          <$> _  = right half (C.relkitConst rel)
+    C.RelmapAlias  _ relmap          <$> h1 = relmap <$> h1
+    C.RelmapLink   _ _ (Just relmap) <$> h1 = relmap <$> h1
+    C.RelmapLink   half name Nothing <$> _  =
         abort half $ Left $ B.AbortAnalysis [] $ B.AAUnkRelmap name
 
     C.RelmapAppend relmap1 relmap2 <$> h1 =

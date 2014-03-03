@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Operations on 'C.Relmap'.
@@ -73,10 +74,10 @@ relmapSourceList = relmapList f where
     f m@(C.RelmapSource _ _ _) = [m]
     f _ = []
 
--- | List of name in 'C.RelmapName'
+-- | List of name in 'C.RelmapLink'
 relmapNameList :: C.Relmap c -> [String]
 relmapNameList = relmapList f where
-    f (C.RelmapName _ n) = [n]
+    f (C.RelmapLink _ n _) = [n]
     f _ = []
 
 relmapList :: B.Map (C.Relmap c -> [a])
@@ -91,11 +92,14 @@ relmapList f = loop where
 -- ----------------------  Link
 
 -- | Link relmaps by its name.
-relmapLink :: [B.Named (C.Relmap c)] -> B.Map (C.Relmap c)
+relmapLink :: forall c. [B.Named (C.Relmap c)] -> B.Map (C.Relmap c)
 relmapLink rslist = maplink where
-    rsrec = maplink `B.mapSndTo` rslist
+    rsrec   = maplink `B.mapSndTo` rslist
     maplink = C.mapToRelmap link
-    link r@(C.RelmapName _ n) = B.maybeWith r $ lookup n rsrec
+
+    link :: B.Map (C.Relmap c)
+    link (C.RelmapLink half name Nothing) =
+        C.RelmapLink half name $ lookup name rsrec
     link r = r
 
 

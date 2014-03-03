@@ -10,13 +10,13 @@ module Koshucode.Baala.Vanilla.Rop.Rops
 import qualified Koshucode.Baala.Core    as C
 import qualified Koshucode.Baala.Builtin as Rop
 
-import qualified Koshucode.Baala.Vanilla.Rop.Calc    as Rop
 import qualified Koshucode.Baala.Vanilla.Rop.Check   as Rop
 import qualified Koshucode.Baala.Vanilla.Rop.Confl   as Rop
 import qualified Koshucode.Baala.Vanilla.Rop.Cox     as Rop
+import qualified Koshucode.Baala.Vanilla.Rop.Flow    as Rop
 import qualified Koshucode.Baala.Vanilla.Rop.Global  as Rop
-import qualified Koshucode.Baala.Vanilla.Rop.Order   as Rop
 import qualified Koshucode.Baala.Vanilla.Rop.Naming  as Rop
+import qualified Koshucode.Baala.Vanilla.Rop.Order   as Rop
 import qualified Koshucode.Baala.Vanilla.Type        as Rop
 
 {-| Implementation of relational operators. -}
@@ -29,7 +29,7 @@ vanillaRops = Rop.ropList "vanilla"
     , ( "check-term [ -just /N ... | -has /N ... | -but /N ... ]",
         Rop.consCheckTerm, C.sortNone ["-just", "-has", "-but"] )
     , ( "do R ...",
-        Rop.consDo, C.sortList "-relmap" [] )
+        Rop.consDo, C.sortList "-relmap" ["-let"] )
     , ( "duplicate /N ...",
         Rop.consDuplicate, C.sortList "-term" [] )
     , ( "enclose /N",

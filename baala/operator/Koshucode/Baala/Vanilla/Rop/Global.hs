@@ -2,6 +2,8 @@
 
 module Koshucode.Baala.Vanilla.Rop.Global
 ( 
+  -- * do
+  consDo,
   -- * koshu-cop
   consKoshuCop, relkitKoshuCop,
   -- * koshu-cop-infix
@@ -16,6 +18,20 @@ import qualified Data.Version                  as V
 import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Core          as C
 import qualified Koshucode.Baala.Builtin       as Rop
+
+
+
+-- ----------------------  do
+
+consDo :: (Ord c) => C.RopCons c
+consDo use =
+  do r <- Rop.getRelmap use
+     treesLet <- Rop.getWordTrees use "-let"
+     let C.RelmapCons half full = C.relmapCons $ C.ropGlobal use
+         (names, trees) = unzip treesLet
+     halfs <- mapM half $ map B.singleton trees
+     fulls <- mapM full halfs
+     Right $ C.relmapLink (zip names fulls) r
 
 
 

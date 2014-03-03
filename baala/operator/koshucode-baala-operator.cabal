@@ -68,10 +68,10 @@ library
         Koshucode.Baala.Vanilla.Cop.Order
 
         Koshucode.Baala.Vanilla.Rop
-        Koshucode.Baala.Vanilla.Rop.Calc
         Koshucode.Baala.Vanilla.Rop.Check
         Koshucode.Baala.Vanilla.Rop.Confl
         Koshucode.Baala.Vanilla.Rop.Cox
+        Koshucode.Baala.Vanilla.Rop.Flow
         Koshucode.Baala.Vanilla.Rop.Global
         Koshucode.Baala.Vanilla.Rop.Naming
         Koshucode.Baala.Vanilla.Rop.Order
