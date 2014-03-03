@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Abort reasons -}
+-- | Abort reasons
 
 module Koshucode.Baala.Base.Abort.EachReason
 ( -- * I/O

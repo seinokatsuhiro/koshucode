@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Vanilla relmap operators. -}
+-- | Vanilla relmap operators.
 
 module Koshucode.Baala.Vanilla.Rop
 (

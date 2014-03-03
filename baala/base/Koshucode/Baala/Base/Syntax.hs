@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Syntactic functions. -}
+-- | Syntactic functions.
 
 module Koshucode.Baala.Base.Syntax
 (

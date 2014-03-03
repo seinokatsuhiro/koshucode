@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Tokens in Koshucode. -}
+-- | Tokens in Koshucode.
 
 module Koshucode.Baala.Base.Token
 (

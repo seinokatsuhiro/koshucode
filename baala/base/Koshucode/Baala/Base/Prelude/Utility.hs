@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| General utilities -}
+-- | General utilities
 
 module Koshucode.Baala.Base.Prelude.Utility
 (
@@ -90,13 +90,13 @@ unique xs = loop xs Set.empty where
         | Set.member x set = loop xs2 set
         | otherwise        = x : loop xs2 (Set.insert x set)
 
-{-| Union list to base list.
-
-    >>> unionUp "cde" "abc"
-    "deabc"
-
-    >>> List.union "cde" "abc"
-    "cdeab"  -}
+-- | Union list to base list.
+--
+--   >>> unionUp "cde" "abc"
+--   "deabc"
+--
+--   >>> List.union "cde" "abc"
+--   "cdeab"
 unionUp
     :: (Eq a)
     => [a]  -- ^ Append list
@@ -104,7 +104,7 @@ unionUp
     -> [a]  -- ^ Result
 unionUp xs ys = (xs List.\\ ys) ++ ys
 
-{-| Make singleton list. -}
+-- | Make singleton list.
 singleton :: a -> [a]
 singleton x = [x]
 
@@ -112,16 +112,16 @@ isSingleton :: [a] -> Bool
 isSingleton [_] = True
 isSingleton  _  = False
 
-{-| Split list by predicate.
-    If list contains an element that satisfies the predicate,
-    @(/before-list/, /the-element/, /after-list/)@ is returned.
-    Otherwise, original list is returned.
-
-    >>> splitBy (== '|') "b c"
-    Left "b c"
-
-    >>> splitBy (== '|') "a | b | c"
-    Right ("a ", '|', " b | c")  -}
+-- | Split list by predicate.
+--   If list contains an element that satisfies the predicate,
+--   @(/before-list/, /the-element/, /after-list/)@ is returned.
+--   Otherwise, original list is returned.
+--
+--   >>> splitBy (== '|') "b c"
+--   Left "b c"
+--
+--   >>> splitBy (== '|') "a | b | c"
+--   Right ("a ", '|', " b | c")
 splitBy
     :: (a -> Bool)
     -> [a]
@@ -131,17 +131,17 @@ splitBy p xs =
       (a, x : b) -> Right (a, x, b)
       _          -> Left xs
 
-{-| Divide list.
-
-    >>> divide '|' "a|bb||ccc|"
-    ["a", "bb", "", "ccc", ""]  -}
+-- | Divide list.
+--
+--   >>> divide '|' "a|bb||ccc|"
+--   ["a", "bb", "", "ccc", ""]
 divide :: (Eq a) => a -> [a] -> [[a]]
 divide dv = divideBy (== dv)
 
-{-| Divide list.
-
-    >>> divideBy (== '|') "a|bb||ccc|"
-    ["a", "bb", "", "ccc", ""]  -}
+-- | Divide list.
+--
+--   >>> divideBy (== '|') "a|bb||ccc|"
+--   ["a", "bb", "", "ccc", ""]
 divideBy :: (a -> Bool) -> [a] -> [[a]]
 divideBy p = loop where
     loop xs = case break p xs of
@@ -156,10 +156,10 @@ charWidth c
     | Char.ord c >= 256 = 2
     | otherwise         = 1
 
-{-| Omit association that has given key.
-
-    >>> assocOmit "b" [("a",1), ("b",2), ("c",3)]
-    [("a",1), ("c",3)]  -}
+-- | Omit association that has given key.
+--
+--   >>> assocOmit "b" [("a",1), ("b",2), ("c",3)]
+--   [("a",1), ("c",3)]
 assocOmit :: (Eq k) => k -> B.Map [(k, a)]
 assocOmit k1 = loop where
     loop [] = []
@@ -177,18 +177,18 @@ maybeEmpty m f = maybe [] f m
 
 -- ----------------------  String
 
-{-| Add spaces to right.
-
-    >>> padRight 10 "abc"
-    "abc       "  -}
+-- | Add spaces to right.
+--
+--   >>> padRight 10 "abc"
+--   "abc       "
 padRight :: Int -> B.Map String
 padRight n s = s ++ replicate rest ' ' where
     rest = max 0 (n - stringWidth s)
 
-{-| Add spaces to left.
-
-    >>> padLeft 10 "abc"
-    "       abc"  -}
+-- | Add spaces to left.
+--
+--   >>> padLeft 10 "abc"
+--   "       abc"
 padLeft :: Int -> B.Map String
 padLeft n s = replicate rest ' ' ++ s where
     rest = max 0 (n - stringWidth s)
@@ -199,7 +199,7 @@ padLeft n s = replicate rest ' ' ++ s where
 
 type Gather a b = a -> (b, a)
 
-{-| Gather what is gotten by splitter. -}
+-- | Gather what is gotten by splitter.
 gather :: Gather [a] b -> [a] -> [b]
 gather one = loop where
     loop [] = []
@@ -213,7 +213,7 @@ gatherWith f = loop where
     loop (c:cs) as = let (b, as') = f c as
                      in b : loop cs as'
 
-{-| Gather (/key/, /value/) to 'Map.Map' /key/ [/value/]. -}
+-- | Gather (/key/, /value/) to 'Map.Map' /key/ [/value/].
 gatherToMap :: (Ord k) => [(k,v)] -> Map.Map k [v]
 gatherToMap xs = loop xs Map.empty where
     loop [] m = m

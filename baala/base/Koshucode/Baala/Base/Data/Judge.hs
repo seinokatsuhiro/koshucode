@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Judgements: a symbolic representations of
-    affirmed or denied statements. -}
+-- | Judgements: a symbolic representations of
+--   affirmed or denied statements.
 
 module Koshucode.Baala.Base.Data.Judge
 (
@@ -34,16 +34,16 @@ import qualified Koshucode.Baala.Base.Data.Comment as B
 
 -- ----------------------  Datatype
 
-{-| Judgement on type 'c'.
- 
-    Judgement (or judge for short) is divided into three parts:
-    logical quality, name of pattern, and argument.
-    Boolean values 'True' or 'False' of logical quality
-    corresponds to affirmed or denied judge.
-    A name of judgement pattern represents
-    certain sentence pattern that gives intepretation of data.
-    Sentence pattern has placeholders filled by
-    'B.Named' @c@ in argument. -} 
+-- | Judgement on type 'c'.
+--
+--   Judgement (or judge for short) is divided into three parts:
+--   logical quality, name of pattern, and argument.
+--   Boolean values 'True' or 'False' of logical quality
+--   corresponds to affirmed or denied judge.
+--   A name of judgement pattern represents
+--   certain sentence pattern that gives intepretation of data.
+--   Sentence pattern has placeholders filled by
+--   'B.Named' @c@ in argument.
 
 data Judge c = Judge Bool JudgePattern [B.Named c]
                deriving (Show)
@@ -60,7 +60,7 @@ instance (Ord c) => Ord (Judge c) where
                `Monoid.mappend` compare q1 q2
                `Monoid.mappend` compare xs1 xs2
 
-{-| Name of judgement pattern. -}
+-- | Name of judgement pattern.
 type JudgePattern = String
 
 -- Apply function to each values
@@ -68,8 +68,8 @@ instance Functor Judge where
     fmap f (Judge q p a) = Judge q p $ map g a
         where g (n, v) = (n, f v)
 
-{-| >>> doc $ Judge True "P" [("/a", 10), ("/b", 20 :: Int)]
-    |-- P  /a 10  /b 20 -}
+-- | >>> doc $ Judge True "P" [("/a", 10), ("/b", 20 :: Int)]
+--   |-- P  /a 10  /b 20
 instance (Ord c, B.Pretty c) => B.Pretty (Judge c) where
     doc (Judge q p a) = quality q B.<+> sign B.<+> arg a
         where
@@ -85,7 +85,7 @@ instance (Ord c, B.Pretty c) => B.Pretty (Judge c) where
                              B.<+> B.doc v B.<+> arg a2
           arg [] = B.docEmpty
 
-{-| Sort terms in alphabetical order. -}
+-- | Sort terms in alphabetical order.
 abcJudge :: (Ord c) => B.Map (Judge c)
 abcJudge (Judge q p a) = Judge q p $ List.sort a
 
@@ -93,30 +93,30 @@ abcJudge (Judge q p a) = Judge q p $ List.sort a
 
 -- ----------------------  Logical quality
 
-{-| Construct affirmed judgement. -}
+-- | Construct affirmed judgement.
 affirm :: JudgePattern -> [B.Named c] -> Judge c
 affirm = Judge True
 
-{-| Construct denied judgement. -}
+-- | Construct denied judgement.
 deny :: JudgePattern -> [B.Named c] -> Judge c
 deny = Judge False
 
-{-| Affirm judgement, i.e., change logical quality to 'True'. -}
+-- | Affirm judgement, i.e., change logical quality to 'True'.
 affirmJudge :: B.Map (Judge c)
 affirmJudge (Judge _ p xs) = Judge True p xs
 
-{-| Deny judgement, i.e., change logical quality to 'False'. -}
+-- | Deny judgement, i.e., change logical quality to 'False'.
 denyJudge   :: B.Map (Judge c)
 denyJudge   (Judge _ p xs) = Judge False p xs
 
-{-| Test that judgement is affirmd. -}
+-- | Test that judgement is affirmd.
 isAffirmed :: Judge c -> Bool
 isAffirmed (Judge q _ _) = q
 
-{-| Test that judgement is denied.
-
-    >>> isDenied $ Judge True "A" []
-    False  -}
+-- | Test that judgement is denied.
+--
+--   >>> isDenied $ Judge True "A" []
+--   False
 isDenied   :: Judge c -> Bool
 isDenied   (Judge q _ _) = not q
 
@@ -126,7 +126,7 @@ isDenied   (Judge q _ _) = not q
 
 type ShortJudge c = B.Short [Judge c]
 
-{-| Print judges to `IO.stdout`. -}
+-- | Print judges to `IO.stdout`.
 putJudges :: (Ord c, B.Pretty c) => Int -> [Judge c] -> IO Int
 putJudges = hPutJudgesFlat IO.stdout
 
@@ -134,7 +134,7 @@ hPutJudges :: (Ord c, B.Pretty c) => IO.Handle -> ([ShortJudge c], [ShortJudge c
 hPutJudges h ([], jud) = hPutJudgesStatus h 0 jud
 hPutJudges h (vio, _)  = hPutJudgesStatus h 1 vio
 
-{-| Print judges. -}
+-- | Print judges.
 hPutJudgesStatus :: (Ord c, B.Pretty c) => IO.Handle -> Int -> [ShortJudge c] -> IO Int
 hPutJudgesStatus h status sh =
     do (n, c) <- M.foldM (hPutJudgeShort h) (0, Map.empty) sh

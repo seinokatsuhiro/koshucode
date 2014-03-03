@@ -1,11 +1,11 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
-{-| This module provides a container for tokens.
-    No tokens in Koshucode are in a extent of multiple lines.
-    'CodeLine' includes whole tokens in a line.
-    You can represent tokenized source code
-    as a list of 'CodeLine'. -}
+-- | This module provides a container for tokens.
+--   No tokens in Koshucode are in a extent of multiple lines.
+--   'CodeLine' includes whole tokens in a line.
+--   You can represent tokenized source code
+--   as a list of 'CodeLine'.
 
 module Koshucode.Baala.Base.Syntax.Code
 ( CodeLine (..),
@@ -25,7 +25,7 @@ import qualified Koshucode.Baala.Base.Syntax.Line as B
 
 -- ----------------------  CodeLine
 
-{-| Tokens in line. -}
+-- | Tokens in line.
 data CodeLine a = CodeLine
     { lineNumber  :: B.LineNumber  -- ^ Line number, from 1.
     , lineContent :: String        -- ^ Line content without newline.
@@ -35,7 +35,7 @@ data CodeLine a = CodeLine
 lineNumberContent :: CodeLine a -> String
 lineNumberContent c = show (lineNumber c) ++ " " ++ (lineContent c)
 
-{-| Tokens in clause. -}
+-- | Tokens in clause.
 data CodeClause a = CodeClause
     { clauseLines     :: [CodeLine a]  -- ^ Source lines of clause
     , clauseTokens    :: [a]           -- ^ Source tokens of clause
@@ -55,22 +55,22 @@ splitClause = first where
     continue i ((n, x) : xs) | n > i  = B.cons1 x $ continue i xs
     continue _ xs                     = ([], xs)
 
-{-| Type of function that splits a next token from string.
-    Tokens can includes 'TokenNumber'. -}
+-- | Type of function that splits a next token from string.
+--   Tokens can includes 'TokenNumber'.
 type NextToken a = B.NumberedLine -> B.Gather String a
 
-{-| Split source text into 'CodeLine' list.
-
-    1. Split source text into lines by line delimiters
-       (carriage return @\\r@ or line feed @\\n@).
-
-    2. Numbering lines from 1.
-       Internally, this is represented as
-       a list of pairs @(@'LineNumber'@,@ 'String'@)@.
-
-    3. Tokenize each lines,
-       and put tokens together in 'CodeLine'.
-  -}
+-- | Split source text into 'CodeLine' list.
+--
+--   1. Split source text into lines by line delimiters
+--      (carriage return @\\r@ or line feed @\\n@).
+--
+--   2. Numbering lines from 1.
+--      Internally, this is represented as
+--      a list of pairs @(@'LineNumber'@,@ 'String'@)@.
+--
+--   3. Tokenize each lines,
+--      and put tokens together in 'CodeLine'.
+--
 codeLines
     :: NextToken a     -- ^ Token splitter
     -> String          -- ^ Source text

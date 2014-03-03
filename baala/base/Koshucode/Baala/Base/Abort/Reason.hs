@@ -1,7 +1,7 @@
 {-# LANGUAGE TupleSections #-}
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Bundle of abort reasons -}
+-- | Bundle of abort reasons
 
 module Koshucode.Baala.Base.Abort.Reason
 ( AbortReason (..),
@@ -24,7 +24,7 @@ import qualified Koshucode.Baala.Base.Abort.EachReason as B
 
 
 
-{-| Bundle of abort reasons. -}
+-- | Bundle of abort reasons.
 data AbortReason
     = AbortIO                 B.AbortIO
     | AbortSyntax   [(String, B.Token)] B.AbortSyntax
@@ -61,10 +61,10 @@ instance B.AbortReasonClass AbortReason where
     abortSource (AbortCalc     s _)  =  source s
     abortSource _ = []
 
-{-| Abortable result, i.e., either of right result or abort reason. -}
+-- | Abortable result, i.e., either of right result or abort reason.
 type Ab b = Either AbortReason b
 
-{-| Abortable mapping. -}
+-- | Abortable mapping.
 type AbMap b = b -> Ab b
 
 source :: [(String, B.Token)] -> [(String, String)]
@@ -72,15 +72,15 @@ source = concatMap f . reverse where
     f :: (String, B.Token) -> [(String, String)]
     f (tag, token) = B.tokenPosDisplay tag $ B.tokenPos token
 
-{-| Push source information when process is aborted.
-
-    @ B.abortable src $ do ... @
-    -}
+-- | Push source information when process is aborted.
+--
+--   @ B.abortable src $ do ... @
+--
 abortable :: String -> [B.Token] -> B.Map (Ab b)
 abortable name src = either (Left . pushSource name src) Right
 
-{-| Same as 'ab' except for using 'B.TokenListing'
-    instead of list of 'B.Token'. -}
+-- | Same as 'ab' except for using 'B.TokenListing'
+--   instead of list of 'B.Token'.
 abortableFrom :: (B.TokenListing src) => String -> src -> B.Map (Ab b)
 abortableFrom name src = either (Left . pushSourceFrom name src) Right
 
@@ -112,7 +112,7 @@ sourcedAbMap f (B.Sourced src x) =
       y <- f x
       Right $ B.Sourced src y
 
-{-| Lookup association list. This function may abort. -}
+-- | Lookup association list. This function may abort.
 (<!!>) :: [B.Named b] -> String -> Ab b
 (<!!>) assoc key = loop assoc where
     loop [] = Left $ abortNotFound key
@@ -128,7 +128,7 @@ abortTermIO ns here = AbortAnalysis [] $ B.AAUnrecTermIO ns here
 abortNotFound :: String -> AbortReason
 abortNotFound = AbortCalc [] . B.ACNotFound
 
-{-| Stop on error @'bug in koshucode'@ -}
+-- | Stop on error @'bug in koshucode'@
 bug :: String -> a
 bug msg = error $ "BUG DISCOVERED: " ++ msg
 

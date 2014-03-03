@@ -36,7 +36,7 @@ import qualified Koshucode.Baala.Base.Token.TokenPos as B
 
 -- ----------------------  Token type
 
-{-| There are eight types of tokens. -}
+-- | There are eight types of tokens.
 data Token
     = TWord    B.TokenPos Int String
                -- ^ Word.
@@ -53,7 +53,7 @@ data Token
     | TUnknown B.TokenPos String      -- ^ Unknown text
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
-{-| Name of term, e.g., @\"\/file\"@ for the term @\/file@. -}
+-- | Name of term, e.g., @\"\/file\"@ for the term @\/file@.
 type Termname  = String
 type Termname2 = (String, String)
 type Termname3 = (String, String, String)
@@ -103,10 +103,10 @@ tokenPos (TSpace   p _)    = p
 tokenPos (TComment p _)    = p
 tokenPos (TUnknown p _)    = p
 
-{-| Get the content of token.
-
-    >>> let tok = TTerm 20 ["/r", "/x"] in tokenContent tok
-    "/r/x"  -}
+-- | Get the content of token.
+--
+--   >>> let tok = TTerm 20 ["/r", "/x"] in tokenContent tok
+--   "/r/x"
 tokenContent :: Token -> String
 tokenContent (TWord  _ _ s)   = s
 tokenContent (TShort _ a b)   = a ++ "." ++ b
@@ -117,12 +117,12 @@ tokenContent (TSpace   _ n)   = replicate n ' '
 tokenContent (TComment _ s)   = s
 tokenContent (TUnknown _ s)   = s
 
-{-| Text of token type, i.e., one of
-    @\"Word\"@, @\"Term\"@, @\"Open\"@, @\"Close\"@,
-    @\"Space\"@, @\"Comment\"@, or @\"Unknown\"@.
-
-    >>> tokenTypeText $ TWord 25 0 "flower"
-    "Word"  -}
+-- | Text of token type, i.e., one of
+--   @\"Word\"@, @\"Term\"@, @\"Open\"@, @\"Close\"@,
+--   @\"Space\"@, @\"Comment\"@, or @\"Unknown\"@.
+--
+--   >>> tokenTypeText $ TWord 25 0 "flower"
+--   "Word"
 tokenTypeText :: Token -> String
 tokenTypeText (TWord  _ _ _)  = "Word"
 tokenTypeText (TShort _ _ _)  = "Short"
@@ -137,8 +137,8 @@ tokenTypeText (TUnknown _ _)  = "Unknown"
 
 -- ----------------------  Predicate
 
-{-| Test the token is blank,
-    i.e., 'TComment' or 'TSpace'. -}
+-- | Test the token is blank,
+--   i.e., 'TComment' or 'TSpace'.
 isBlankToken :: B.Pred Token
 isBlankToken (TSpace _ _)    = True
 isBlankToken (TComment _ _)  = True
@@ -153,18 +153,18 @@ isShortToken _               = False
 -- isTermToken (TTerm _ _)     = True
 -- isTermToken _               = False
 
-{-| Check token is a 'TOpen' of the specific paren.
-
-    >>> let tok = TOpen 0 "(" in isOpenTokenOf "(" tok
-    True
-
-    >>> let tok = TOpen 0 "{" in isOpenTokenOf "(" tok
-    False -}
+-- | Check token is a 'TOpen' of the specific paren.
+--
+--   >>> let tok = TOpen 0 "(" in isOpenTokenOf "(" tok
+--   True
+--
+--   >>> let tok = TOpen 0 "{" in isOpenTokenOf "(" tok
+--   False
 isOpenTokenOf :: String -> B.Pred Token
 isOpenTokenOf p1 (TOpen _ p2) = p1 == p2
 isOpenTokenOf _ _             = False
 
-{-| Check token is a 'TClose' of the specific paren. -}
+-- | Check token is a 'TClose' of the specific paren.
 isCloseTokenOf :: String -> B.Pred Token
 isCloseTokenOf p1 (TClose _ p2) = p1 == p2
 isCloseTokenOf _ _              = False
@@ -173,7 +173,7 @@ isCloseTokenOf _ _              = False
 
 -- ---------------------- Other functions
 
-{-| Remove blank tokens. -}
+-- | Remove blank tokens.
 sweepToken :: B.Map [Token]
 sweepToken = filter (not . isBlankToken)
 

@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Text lines delimited by carriage returns or line feeds. -}
+-- | Text lines delimited by carriage returns or line feeds.
 
 module Koshucode.Baala.Base.Syntax.Line
 ( LineNumber,
@@ -9,18 +9,18 @@ module Koshucode.Baala.Base.Syntax.Line
   linesCrlf,
 ) where
 
-{-| Line number. -}
+-- | Line number.
 type LineNumber = Int
 type NumberedLine = (LineNumber, String)
 
-{-| Line number and its content. -}
+-- | Line number and its content.
 linesCrlfNumbered :: String -> [NumberedLine]
 linesCrlfNumbered = zip [1..] . linesCrlf
 
-{-| Split string into lines.
-    The result strings do not contain
-    carriage returns (@\\r@)
-    and line feeds (@\\n@). -}
+-- | Split string into lines.
+--   The result strings do not contain
+--   carriage returns (@\\r@)
+--   and line feeds (@\\n@).
 linesCrlf :: String -> [String]
 linesCrlf "" = []
 linesCrlf s = ln : next s2 where

@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Content operators. -}
+-- | Content operators.
 
 module Koshucode.Baala.Vanilla.Cop.Logic
 ( copsLogic
@@ -13,21 +13,20 @@ import qualified Koshucode.Baala.Core as C
 
 
 -- ----------------------
-{- $Operators
-
- [@not@]    Logical negation.
-
- [@and@]    Logical conjunction.
-
- [@or@]     Logical disjunction.
-
- [@then@]   Logical implication.
-
- [@when@]   Inverse implication.
-
- [@if@]     Conditional expression.
-
--}
+-- $Operators
+--
+--  [@not@]    Logical negation.
+--
+--  [@and@]    Logical conjunction.
+--
+--  [@or@]     Logical disjunction.
+--
+--  [@then@]   Logical implication.
+--
+--  [@when@]   Inverse implication.
+--
+--  [@if@]     Conditional expression.
+--
 
 copsLogic :: (C.CBool c, C.CNil c) => [C.Cop c]
 copsLogic =

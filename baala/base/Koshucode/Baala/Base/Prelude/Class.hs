@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| General utilities -}
+-- | General utilities
 
 module Koshucode.Baala.Base.Prelude.Class
 ( Name (..),
@@ -17,7 +17,7 @@ class Name a where
     names :: [a] -> [String]
     names = map name
 
-{-| Entry in association list. -}
+-- | Entry in association list.
 type Named a = (String, a)
 
 named :: (Name a) => a -> Named a

@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Utilities for association lists. -}
+-- | Utilities for association lists.
 
 module Koshucode.Baala.Base.Prelude.Assoc
 ( Lookup,

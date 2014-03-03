@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Tokenizer of koshucode. -}
+-- | Tokenizer of koshucode.
 
 module Koshucode.Baala.Base.Token.TokenLine
 (
@@ -36,15 +36,15 @@ import qualified Koshucode.Baala.Base.Token.TokenPos as B
 
 -- ----------------------  Tokenizer
 
-{-| Token list on a line. -}
+-- | Token list on a line.
 type TokenLine = B.CodeLine B.Token
 
-{-| Tokenize text. -}
+-- | Tokenize text.
 tokenLines :: B.Resource -> String -> [TokenLine]
 tokenLines res = B.codeLines $ nextToken res
 
-{-| Split string into list of tokens.
-    Result token list does not contain newline characters. -}
+-- | Split string into list of tokens.
+--   Result token list does not contain newline characters.
 tokens :: B.Resource -> String -> [B.Token]
 tokens res = concatMap B.lineTokens . tokenLines res
 
@@ -61,7 +61,7 @@ trimRight (x : xs) =
 trimBoth :: B.Map String
 trimBoth = trimRight . trimLeft
 
-{-| Split a next token from source text. -}
+-- | Split a next token from source text.
 nextToken :: B.Resource -> B.NextToken B.Token
 nextToken res line txt =
     case txt of
@@ -120,6 +120,7 @@ nextToken res line txt =
       space i ccs                     = tokD ccs (B.TSpace pos i)
 
 
+
 -- ----------------------  Char category
 
 --  ( ) [ ] { } | : " ' # /
@@ -172,104 +173,98 @@ putCommentLines :: [String] -> IO ()
 putCommentLines = putStr . unlines . map commentLine
 
 
--- ----------------------
-{- $TokenType
 
-   [Paren]     Open and closed parens.
-               @(@ /group/ @)@ ,
-               @{@ /set/ @}@ ,
-               @[@ /list/ @]@ ,
-               @\<|@ /termset/ @\|>@ , and
-               @{|@ /relation/ @|}@
+-- ------------------------------------------------------------------
+-- $TokenType
+--
+--  [Paren]     Open and closed parens.
+--              @(@ /group/ @)@ ,
+--              @{@ /set/ @}@ ,
+--              @[@ /list/ @]@ ,
+--              @\<|@ /termset/ @\|>@ , and
+--              @{|@ /relation/ @|}@
+--
+--  [Termname]  Words beginning with slash, e.g., @\/aa@.
+--              Term name like @\/r\/x@ is used for nested relation,
+--              that means term @\/x@ in the relation of term @\/r@.
+--
+--  [Word]      Character sequence not including special characters,
+--              e.g., @aa@, @r2d2@, @12.0@, etc.
+--              Colon @:@ is a one-letter word.
+--              There are four types of quotations.
+--              (1) non-quoted word like @aa@,
+--              (2) single-quoted word like @\'aa@,
+--              (3) double-quoted word like @\"aa\"@,
+--              (4) doubly single-quoted word like @\'\' all-letters-to-end-of-line@.
+--
+--  [Comment]   Texts from double asterisks (@**@) or shebang (@#!@)
+--              to end of line are comments.
+--              Quadruple asterisks (@****@) comments are
+--              treated in 'Koshucode.Baala.Core.Section.Clause.Clause'.
+--
+--  [Space]     /space/ , @\\t@ (tab)
+--
+--  [Unknown]   Other than those above.
+--
 
-   [Termname]  Words beginning with slash, e.g., @\/aa@.
-               Term name like @\/r\/x@ is used for nested relation,
-               that means term @\/x@ in the relation of term @\/r@.
+-- ------------------------------------------------------------------
+-- $Asterisks
+--
+--  There are three uses of asterisks (@*@) in koshucode,
+--
+--  [@*@]     Single asterisk means multiplication,
+--            e.g., @3 * 4@ (three times four).
+--
+--  [@**@]    Double asterisk leads line comment.
+--            Textx from @**@ to end of line are ignored.
+--
+--  [@****@]  Quadruple asterisk (fourfold asterisk) leads caluse comment.
+--            Texts from @****@ to end of clause are ignored.
+--            In other words, line staring with @****@
+--            and following indented lines are ignored.
+--
+--  Triple asterisk @***@ is double and rest of text.
+--  Quintuple (fivefold) asterisk @*****@ is quadruple and rest of text.
+--
+--  Line comments like this:
+--
+--  > ** aaa bbbbb cc
+--
+--  Clause comments like this:
+--
+--  > **** aaa bbb
+--  >      ccccc dddddd
+--  >      ee fffff
+--
+--  You can type @****@ on top of a clause to hide it.
+--
 
-   [Word]      Character sequence not including special characters,
-               e.g., @aa@, @r2d2@, @12.0@, etc.
-               Colon @:@ is a one-letter word.
-               There are four types of quotations.
-               (1) non-quoted word like @aa@,
-               (2) single-quoted word like @\'aa@,
-               (3) double-quoted word like @\"aa\"@,
-               (4) doubly single-quoted word like @\'\' all-letters-to-end-of-line@.
-
-   [Comment]   Texts from double asterisks (@**@) or shebang (@#!@)
-               to end of line are comments.
-               Quadruple asterisks (@****@) comments are
-               treated in 'Koshucode.Baala.Core.Section.Clause.Clause'.
-
-   [Space]     /space/ , @\\t@ (tab)
-
-   [Unknown]   Other than those above.
-
--}
-
-
-
--- ----------------------
-{- $Asterisks
-
-   There are three uses of asterisks (@*@) in koshucode,
-   
-   [@*@]     Single asterisk means multiplication,
-             e.g., @3 * 4@ (three times four).
-   
-   [@**@]    Double asterisk leads line comment.
-             Textx from @**@ to end of line are ignored.
-   
-   [@****@]  Quadruple asterisk (fourfold asterisk) leads caluse comment.
-             Texts from @****@ to end of clause are ignored.
-             In other words, line staring with @****@
-             and following indented lines are ignored.
-   
-   Triple asterisk @***@ is double and rest of text.
-   Quintuple (fivefold) asterisk @*****@ is quadruple and rest of text.
-   
-   Line comments like this:
-   
-   > ** aaa bbbbb cc
-   
-   Clause comments like this:
-   
-   > **** aaa bbb
-   >      ccccc dddddd
-   >      ee fffff
-   
-   You can type @****@ on top of a clause to hide it.
-   -}
-
-
-
--- ----------------------
-{- $Examples
-
-   Words and quotations.
-
-   >>> tokens "aa\n'bb'\n\"cc\""
-   [ TWord 1 0 "aa", TWord 2 1 "bb", TWord 3 1 "", TWord 4 2 "cc" ]
-   
-   Judgement.
-   
-   >>> tokens "|-- R  /a A0 /b 31"
-   [ TWord 1 0 "|", TWord 2 0 "--", TSpace 3 1, TWord 4 0 "R"
-   , TSpace 5 2, TTerm 6 ["/a"], TSpace 7 1, TWord 8 0 "A0"
-   , TSpace 9 1, TTerm 10 ["/b"], TSpace 11 1, TWord 12 0 "31" ]
-
-   Parens.
-
-   >>> tokens "aa (bb x y (z))"
-   [ TWord 1 0 "aa", TSpace 2 1
-   , TOpen 3 "(", TWord 4 0 "bb", TSpace 5 1
-      , TWord 6 0 "x", TSpace 7 1, TWord 8 0 "y", TSpace 9 1
-      , TOpen 10 "(", TWord 11 0 "z", TClose 12 ")", TClose 13 ")" ]
-
-   A comment.
-
-   >>> tokens "abc ** this is a comment\ndef\n"
-   [ TWord 1 0 "abc", TSpace 2 1, TComment 3 "** this is a comment"
-   , TWord 4 0 "def"]
-
--}
-
+-- ------------------------------------------------------------------
+-- $Examples
+--
+--  Words and quotations.
+--
+--  >>> tokens "aa\n'bb'\n\"cc\""
+--  [ TWord 1 0 "aa", TWord 2 1 "bb", TWord 3 1 "", TWord 4 2 "cc" ]
+--
+--  Judgement.
+--
+--  >>> tokens "|-- R  /a A0 /b 31"
+--  [ TWord 1 0 "|", TWord 2 0 "--", TSpace 3 1, TWord 4 0 "R"
+--  , TSpace 5 2, TTerm 6 ["/a"], TSpace 7 1, TWord 8 0 "A0"
+--  , TSpace 9 1, TTerm 10 ["/b"], TSpace 11 1, TWord 12 0 "31" ]
+--
+--  Parens.
+--
+--  >>> tokens "aa (bb x y (z))"
+--  [ TWord 1 0 "aa", TSpace 2 1
+--  , TOpen 3 "(", TWord 4 0 "bb", TSpace 5 1
+--     , TWord 6 0 "x", TSpace 7 1, TWord 8 0 "y", TSpace 9 1
+--     , TOpen 10 "(", TWord 11 0 "z", TClose 12 ")", TClose 13 ")" ]
+--
+--  A comment.
+--
+--  >>> tokens "abc ** this is a comment\ndef\n"
+--  [ TWord 1 0 "abc", TSpace 2 1, TComment 3 "** this is a comment"
+--  , TWord 4 0 "def"]
+--

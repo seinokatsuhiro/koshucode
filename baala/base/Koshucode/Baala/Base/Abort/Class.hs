@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Class for abort reasons -}
+-- | Class for abort reasons
 
 module Koshucode.Baala.Base.Abort.Class
 ( AbortReasonClass (..),
@@ -14,7 +14,7 @@ import qualified Koshucode.Baala.Base.Token   as B
 
 
 
-{-| Class that represents abort reason. -}
+-- | Class that represents abort reason.
 class (Show a) => AbortReasonClass a where
     abortClass   :: a -> String
 
@@ -30,10 +30,10 @@ class (Show a) => AbortReasonClass a where
     abortSource  :: a -> [(String, String)]
     abortSource _ = []
 
-{-| Command name and its arguments. -}
+-- | Command name and its arguments.
 type CommandLine = [String]
 
-{-| Abortable process. -}
+-- | Abortable process.
 abortableIO
     :: (AbortReasonClass a)
     => CommandLine  -- ^ Command line
@@ -42,7 +42,7 @@ abortableIO
     -> IO c         -- ^ Result of the function
 abortableIO = either . abort
 
-{-| Stop program execution abnormally. -}
+-- | Stop program execution abnormally.
 abort :: (AbortReasonClass a) => CommandLine -> a -> IO c
 abort cmd a =
   do B.putCommentLines $ messageLines cmd a

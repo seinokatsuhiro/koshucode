@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Terms in heading of relation. -}
+-- | Terms in heading of relation.
 
 module Koshucode.Baala.Base.Data.Relterm
 ( Relterm (..),
@@ -14,11 +14,11 @@ where
 import qualified Koshucode.Baala.Base.Prelude as B
 import qualified Koshucode.Baala.Base.Token   as B
 
-{-| Path of term,
-    e.g., term @\/r\/x@ is correspond to path @["\/r", "\/x"]@. -}
+-- | Path of term,
+--   e.g., term @\/r\/x@ is correspond to path @["\/r", "\/x"]@.
 type Termpath = [B.Termname]
 
-{-| Term in heading of relation -}
+-- | Term in heading of relation
 data Relterm
     = Term B.Termname             -- ^ For non-relation
     | Nest B.Termname [Relterm]   -- ^ For relation
@@ -32,16 +32,17 @@ instance B.Pretty Relterm where
     doc (Term n)    = B.doc n
     doc (Nest n xs) = B.docWraps "(" ")" (B.doch $ B.doc n : map B.doc xs)
 
-{-| Term path to term position
-
-    >>> termIndex [Term "/a", Term "/b", Term "/c"] ["/b"]
-    [1]
-
-    >>> termIndex [Term "/a", Term "/b", Term "/c"] ["/e"]
-    [-1]
-
-    >>> termIndex [Nest "/r" [Term "/a", Term "/b"]] ["/r", "/b"]
-    [0, 1]  -}
+-- | Term path to term position
+--
+--   >>> termIndex [Term "/a", Term "/b", Term "/c"] ["/b"]
+--   [1]
+--
+--   >>> termIndex [Term "/a", Term "/b", Term "/c"] ["/e"]
+--   [-1]
+--
+--   >>> termIndex [Nest "/r" [Term "/a", Term "/b"]] ["/r", "/b"]
+--   [0, 1]
+--
 termIndex :: [Relterm] -> Termpath -> [Int]
 termIndex ts p = loop ts p 0 where
     loop _ [] _ = []

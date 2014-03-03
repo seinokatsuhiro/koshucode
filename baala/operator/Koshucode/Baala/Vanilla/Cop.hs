@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Term-content operators. -}
+-- | Term-content operators.
 
 module Koshucode.Baala.Vanilla.Cop
 ( vanillaCops,
@@ -15,7 +15,7 @@ import qualified Koshucode.Baala.Vanilla.Cop.List  as Cop
 import qualified Koshucode.Baala.Vanilla.Cop.Logic as Cop
 import qualified Koshucode.Baala.Vanilla.Cop.Order as Cop
 
-{-| Term-content operators and its height table. -}
+-- | Term-content operators and its height table.
 vanillaCops :: ([C.Cop Type.VContent], [B.Named B.InfixHeight])
 vanillaCops = (concat cops, htab) where
 

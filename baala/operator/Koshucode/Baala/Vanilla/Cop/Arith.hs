@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Content operators. -}
+-- | Content operators.
 
 module Koshucode.Baala.Vanilla.Cop.Arith
 ( copsArith
@@ -14,21 +14,20 @@ import qualified Koshucode.Baala.Vanilla.Type as V
 
 
 -- ----------------------
-{- $Operators
-
- [@+@]     Addition.
-
- [@-@]     Subtruction.
-
- [@*@]     Multipication.
-
- [@quo@]   Quotient.
-
- [@rem@]   Remainder.
-
- [@abs@]   Absolute value.
-
--}
+-- $Operators
+--
+--  [@+@]     Addition.
+--
+--  [@-@]     Subtruction.
+--
+--  [@*@]     Multipication.
+--
+--  [@quo@]   Quotient.
+--
+--  [@rem@]   Remainder.
+--
+--  [@abs@]   Absolute value.
+--
 
 copsArith :: [C.Cop V.VContent]
 copsArith =

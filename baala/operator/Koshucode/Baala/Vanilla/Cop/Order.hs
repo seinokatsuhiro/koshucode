@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Content operators. -}
+-- | Content operators.
 
 module Koshucode.Baala.Vanilla.Cop.Order
 ( copsOrder
@@ -11,21 +11,20 @@ import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 
 -- ----------------------
-{- $Operators
-
- [@=@]     Equal.
-
- [@\<\>@]  Not equal.
-
- [@<@]     Less than.
-
- [@<=@]    Less than or equal.
-
- [@>@]     Grater than.
-
- [@>=@]    Grater than or equal.
-
--}
+-- $Operators
+--
+--  [@=@]     Equal.
+--
+--  [@\<\>@]  Not equal.
+--
+--  [@<@]     Less than.
+--
+--  [@<=@]    Less than or equal.
+--
+--  [@>@]     Grater than.
+--
+--  [@>=@]    Grater than or equal.
+--
 
 copsOrder :: (C.CBool c, Eq c, Ord c) => [C.Cop c]
 copsOrder =

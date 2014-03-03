@@ -16,24 +16,24 @@ import qualified Koshucode.Baala.Base.Syntax.Tree as B
 
 -- ----------------------  Height function
 
-{-| Direction and height for binary splitting.
- 
-    [@Left@ /H/] Splits first the left-most operator,
-    and operator height is /H/.
-    For example, if the operator @:@ is of @Left 5@,
-    an expression @(a : b : c)@ is splitted into @(: a (b : c))@
-    and then @(: a (: b c))@.
- 
-    [@Right@ /H/] Right-most splitting and height /H/.
-    For example, if the operator @.@ is of @Right 3@,
-    an expression @(a . b . c)@ is splitted into @(. (a . b) c)@
-    and then @(. (. a b) c)@.
-    An expression @(a . b : c)@ is into @(: (a . b) c)@,
-    and then @(: (. a b) c)@.
-    Symbols that is not a binary operator like @b@ are of height 0.
-    For that reason, heights of expression @(a . b : c)@
-    are @(0 3 0 5 0)@
- -}
+-- | Direction and height for binary splitting.
+--
+--   [@Left@ /H/] Splits first the left-most operator,
+--   and operator height is /H/.
+--   For example, if the operator @:@ is of @Left 5@,
+--   an expression @(a : b : c)@ is splitted into @(: a (b : c))@
+--   and then @(: a (: b c))@.
+--
+--   [@Right@ /H/] Right-most splitting and height /H/.
+--   For example, if the operator @.@ is of @Right 3@,
+--   an expression @(a . b . c)@ is splitted into @(. (a . b) c)@
+--   and then @(. (. a b) c)@.
+--   An expression @(a . b : c)@ is into @(: (a . b) c)@,
+--   and then @(: (. a b) c)@.
+--   Symbols that is not a binary operator like @b@ are of height 0.
+--   For that reason, heights of expression @(a . b : c)@
+--   are @(0 3 0 5 0)@
+--
 type InfixHeight = Either Int Int
 
 heightValue :: InfixHeight -> Int

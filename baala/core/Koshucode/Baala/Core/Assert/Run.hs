@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Running relational calculation. -}
+-- | Running relational calculation.
 
 module Koshucode.Baala.Core.Assert.Run
 ( runAssertJudges,
@@ -18,7 +18,7 @@ import qualified Koshucode.Baala.Core.Assert.Dataset as C
 
 -- ----------------------  Relmap
 
-{-| Calculate 'Relmap' for 'Rel'. -}
+-- | Calculate 'Relmap' for 'Rel'.
 runRelmapDataset
     :: (Ord c, C.CNil c)
     => C.Global c
@@ -70,12 +70,12 @@ specialize global = (<$>) where
 
 -- ----------------------  Assert
 
-{-| Calculate assertion list. -}
+-- | Calculate assertion list.
 runAssertJudges :: (Ord c, C.CNil c) => C.Global c -> [C.Assert c] -> B.Ab [B.Judge c]
 runAssertJudges global asserts =
     runAssertDataset global asserts $ C.dataset $ C.globalJudges global
 
-{-| Calculate assertion list. -}
+-- | Calculate assertion list.
 runAssertDataset :: (Ord c, C.CNil c) => C.Global c -> [C.Assert c] -> C.Dataset c -> B.Ab [B.Judge c]
 runAssertDataset global asserts dataset = Right . concat =<< mapM each asserts where
     each a@(C.Assert quo pat opt relmap _) =
@@ -84,7 +84,7 @@ runAssertDataset global asserts dataset = Right . concat =<< mapM each asserts w
           let q = C.assertQuality quo
           assertOptionProcess q pat opt r1
 
-{-| Convert relation to list of judges -}
+-- | Convert relation to list of judges.
 judgesFromRel :: Bool -> B.JudgePattern -> B.Rel c -> [B.Judge c]
 judgesFromRel q pat = judges where
     judges (B.Rel h b) = map (judge h) b
@@ -97,7 +97,7 @@ optionUnkCheck ns xs =
        then Right ()
        else Left $ B.AbortSyntax [] $ B.ASUnkWord (fst . head $ rest)
 
-{-| Get term name as string only if term is flat. -}
+-- | Get term name as string only if term is flat.
 flatname :: B.TokenTree -> Maybe B.Termname
 flatname (B.TreeL (B.TTerm _ [n])) = Just n
 flatname _ = Nothing
@@ -112,7 +112,8 @@ flatnames trees =
 
 -- ---------------------------------  Option
 
-assertOptionProcess :: (Ord c) => Bool -> B.JudgePattern -> C.AssertOption -> B.Rel c -> B.Ab [B.Judge c]
+assertOptionProcess :: (Ord c)
+  => Bool -> B.JudgePattern -> C.AssertOption -> B.Rel c -> B.Ab [B.Judge c]
 assertOptionProcess q pat opt r1 =
     do assertOptionCheck opt
        r2 <- assertOptionRelmap opt r1

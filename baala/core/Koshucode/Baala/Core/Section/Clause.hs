@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Intermidiate structure between 'String' and 'Section'. -}
+-- | Intermidiate structure between 'String' and 'Section'.
 
 module Koshucode.Baala.Core.Section.Clause
 ( -- * Datatype
@@ -16,7 +16,6 @@ module Koshucode.Baala.Core.Section.Clause
 ) where
 
 import qualified Data.Generics as G
-
 import qualified Koshucode.Baala.Base         as B
 import qualified Koshucode.Baala.Core.Relmap  as C
 import qualified Koshucode.Baala.Core.Assert  as C
@@ -41,7 +40,7 @@ data ClauseBody
     | CUnres    [B.Token]                      -- ^ Unresolved short sign
       deriving (Show, G.Data, G.Typeable)
 
-{-| Name of clause type. e.g., @\"Relmap\"@, @\"Assert\"@. -}
+-- | Name of clause type. e.g., @\"Relmap\"@, @\"Assert\"@.
 clauseTypeText :: Clause -> String
 clauseTypeText (Clause _ body) =
     case body of
@@ -62,22 +61,22 @@ clauseTypeText (Clause _ body) =
 
 -- ----------------------  Preconstruction
 
-{-| Convert token list into clause list.
-    Result clause list does not contain
-    'CRelmap' and 'CAssert'. Instead of them,
-    'TRelmap' and 'TAssert' are contained.
-    This function does not depend on 'C.RelmapConsHalf'.
+-- | Convert token list into clause list.
+--   Result clause list does not contain
+--   'CRelmap' and 'CAssert'. Instead of them,
+--   'TRelmap' and 'TAssert' are contained.
+--   This function does not depend on 'C.RelmapConsHalf'.
+--
+--   >>> consPreclause . B.tokenize $ "a : source A /x /y"
+--   [ TRelmap ( TokenClause
+--                [TWord 1 0 "a", TSpace 2 1, ..., TTerm 11 ["/y"]]
+--                [CodeLine 1 "a : source A /x /y" [TWord 1 0 "a", ...]] )
+--            "a" [ TWord 5 0 "source"
+--                , TWord 7 0 "A"
+--                , TTerm 9 ["/x"]
+--                , TTerm 11 ["/y"]
+--                ]]
 
-    >>> consPreclause . B.tokenize $ "a : source A /x /y"
-    [ TRelmap ( TokenClause
-                 [TWord 1 0 "a", TSpace 2 1, ..., TTerm 11 ["/y"]]
-                 [CodeLine 1 "a : source A /x /y" [TWord 1 0 "a", ...]] )
-             "a" [ TWord 5 0 "source"
-                 , TWord 7 0 "A"
-                 , TTerm 9 ["/x"]
-                 , TTerm 11 ["/y"]
-                 ]]
-    -}
 consPreclause :: [B.TokenLine] -> [Clause]
 consPreclause = concatMap consPreclause' . B.tokenClauses
 
@@ -164,8 +163,8 @@ wordPairs toks =
 
 -- ----------------------  Half construction
 
-{-| Construct 'Clause' list from 'B.Token' list.
-    This is a first step of constructing 'Section'. -}
+-- | Construct 'Clause' list from 'B.Token' list.
+--   This is a first step of constructing 'Section'.
 consClause
     :: C.RelmapConsHalf        -- ^ Relmap half constructor
     -> [B.TokenLine]           -- ^ Source tokens
@@ -236,32 +235,33 @@ longSign sh = map clause where
 
 
 -- ----------------------
-{- $Documentation
-
-   There are seven types of 'Clause'.
-   Textual representation of 'Section' is a list of clauses.
-   'consClause' constructs clause list from section text.
-
-   [@|--@ pattern \/name content ...]
-     Affirmative judgement clause
-
-   [@|-X@ pattern \/name content ...]
-     Denial judgement clause
-
-   [name @:@ relmap]
-     Relmap clause
-
-   [@|==@ pattern @:@ relmap]
-     Affirmative assertion clause
-
-   [@|=X@ pattern @:@ relmap]
-     Denial assertion clause
-
-   [@|=V@ pattern @:@ relmap]
-     Violated assertion clause
-
-   [@****@ blah blah blah ...]
-     Comment clause
-
--}
+-- $Documentation
+--
+--  There are eight types of 'Clause'.
+--  Textual representation of 'Section' is a list of clauses.
+--  'consClause' constructs clause list from section text.
+--
+--  [@short@ prefix full ...]
+--    Clause for declarations of short signs
+--
+--  [@|--@ pattern \/name content ...]
+--    Affirmative judgement clause
+--
+--  [@|-X@ pattern \/name content ...]
+--    Denial judgement clause
+--
+--  [name @:@ relmap]
+--    Relmap clause
+--
+--  [@|==@ pattern @:@ relmap]
+--    Affirmative assertion clause
+--
+--  [@|=X@ pattern @:@ relmap]
+--    Denial assertion clause
+--
+--  [@|=V@ pattern @:@ relmap]
+--    Violated assertion clause
+--
+--  [@****@ blah blah blah ...]
+--    Comment clause
 

@@ -33,7 +33,7 @@ import qualified Koshucode.Baala.Base.Data.Relhead as B
 
 -- ----------------------  Type
 
-{-| Position of flat term -}
+-- | Position of flat term
 data TermPos = TermPos
     { posName   :: B.Termname  -- ^ Name of term
     , posIndex  :: Int         -- ^ Position
@@ -51,23 +51,23 @@ posHere h ns = (ps, bs) where
     ps = h `posFor` ns
     bs = map posExist ps
 
-{-| Positions of given names in a head
-
-    >>> B.headFrom ["/a", "/b", "/c"] `posFor` ["/b", "/c", "/d"]
-    [TermPos "/b" 1, TermPos "/c" 2, TermPos "/d" (-1)]  -}
+-- | Positions of given names in a head
+--
+--   >>> B.headFrom ["/a", "/b", "/c"] `posFor` ["/b", "/c", "/d"]
+--   [TermPos "/b" 1, TermPos "/c" 2, TermPos "/d" (-1)]
 posFor :: B.Relhead -> [B.Termname] -> [TermPos]
 posFor h ns = zipWith TermPos ns $ flatIndex ns where
     flatIndex = withSingleton $ B.headIndex h
     withSingleton f = map head . f . map B.singleton
 
-{-| Positions of given (sub)head in a head
-
-    >>> B.headFrom ["/a", "/b", "/c"] `posFrom` B.headFrom ["/b", "/c", "/d"]
-    [TermPos "/b" 1, TermPos "/c" 2, TermPos "/d" (-1)]  -}
+-- | Positions of given (sub)head in a head
+--
+--   >>> B.headFrom ["/a", "/b", "/c"] `posFrom` B.headFrom ["/b", "/c", "/d"]
+--   [TermPos "/b" 1, TermPos "/c" 2, TermPos "/d" (-1)]
 posFrom :: B.Relhead -> B.Relhead -> [TermPos]
 posFrom h1 h2 = h1 `posFor` B.headNames h2
 
-{-| /h1/ @\`posTo\`@ /h2/ @==@ /h2/ @\`posFrom\`@ /h1/ -}
+-- | /h1/ @\`posTo\`@ /h2/ @==@ /h2/ @\`posFrom\`@ /h1/
 posTo :: B.Relhead -> B.Relhead -> [TermPos]
 posTo h1 h2 = posFrom h2 h1
 
@@ -78,50 +78,50 @@ posTo h1 h2 = posFrom h2 h1
 posExist :: TermPos -> Bool
 posExist pos = posIndex pos >= 0
 
-{-| Pick inner part.
-
-    >>> posInnerNames [TermPos "/a" (-1), TermPos "/b" 1, TermPos "/c" 2]
-    ["/b", "/c"]  -}
+-- | Pick inner part.
+--
+--   >>> posInnerNames [TermPos "/a" (-1), TermPos "/b" 1, TermPos "/c" 2]
+--   ["/b", "/c"]
 posInnerNames :: [TermPos] -> [B.Termname]
 posInnerNames = posFilterNames posExist
 
-{-| Pick outer part.
-
-    >>> posOuterNames [TermPos "/a" (-1), TermPos "/b" 1, TermPos "/c" 2]
-    ["/a"]  -}
+-- | Pick outer part.
+--
+--   >>> posOuterNames [TermPos "/a" (-1), TermPos "/b" 1, TermPos "/c" 2]
+--   ["/a"]
 posOuterNames :: [TermPos] -> [B.Termname]
 posOuterNames = posFilterNames (not . posExist)
 
 posFilterNames :: (TermPos -> Bool) -> [TermPos] -> [B.Termname]
 posFilterNames p = map posName . filter p
 
-{-| Sort list of 'TermPos' by the name.
-
-    >>> posSortByName [TermPos "/y" 2, TermPos "/x" 0, TermPos "/z" 1]
-    [TermPos "/x" 0, TermPos "/y" 2, TermPos "/z" 1]  -}
+-- | Sort list of 'TermPos' by the name.
+--
+--   >>> posSortByName [TermPos "/y" 2, TermPos "/x" 0, TermPos "/z" 1]
+--   [TermPos "/x" 0, TermPos "/y" 2, TermPos "/z" 1]
 posSortByName :: B.Map [TermPos]
 posSortByName = List.sortBy ord where
     ord p1 p2 = compare (posName p1) (posName p2)
 
-{-| Sort list of 'TermPos' by the index.
-
-    >>> posSortByIndex [TermPos "/y" 2, TermPos "/x" 0, TermPos "/z" 1]
-    [TermPos "/x" 0, TermPos "/z" 1, TermPos "/y" 2]  -}
+-- | Sort list of 'TermPos' by the index.
+--
+--   >>> posSortByIndex [TermPos "/y" 2, TermPos "/x" 0, TermPos "/z" 1]
+--   [TermPos "/x" 0, TermPos "/z" 1, TermPos "/y" 2]
 posSortByIndex :: B.Map [TermPos]
 posSortByIndex = List.sortBy ord where
     ord p1 p2 = compare (posIndex p1) (posIndex p2)
 
-{-| Pick contents by positions.
-
-    >>> posPick [TermPos "/b" 1, TermPos "/c" 2] "abcd"
-    "bc"  -}
+-- | Pick contents by positions.
+--
+--   >>> posPick [TermPos "/b" 1, TermPos "/c" 2] "abcd"
+--   "bc"
 posPick :: [TermPos] -> B.Map [c]
 posPick = B.arrangePick . map posIndex
 
-{-| Cut contents by positions.
-
-    >>> posCut [TermPos "/b" 1, TermPos "/c" 2] "abcd"
-    "ad"  -}
+-- | Cut contents by positions.
+--
+--   >>> posCut [TermPos "/b" 1, TermPos "/c" 2] "abcd"
+--   "ad"
 posCut :: [TermPos] -> B.Map [c]
 posCut = B.arrangeCut . map posIndex
 

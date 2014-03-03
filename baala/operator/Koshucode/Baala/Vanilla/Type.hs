@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Content formula. -}
+-- | Content formula.
 
 module Koshucode.Baala.Vanilla.Type
 ( VContent (..),
@@ -17,7 +17,7 @@ import qualified Koshucode.Baala.Core as C
 
 -- ----------------------  vanilla type
 
-{-| Vanilla type -}
+-- | Vanilla type
 
 data VContent
     = VBool    Bool               -- ^ Boolean type
@@ -72,8 +72,8 @@ instance C.CContent VContent where
     appendContent (VText x) (VText y) = Right . VText $ x ++ y
     appendContent x y = Left $ B.AbortCalc [] $ B.ACUnmatchType (show (x, y))
 
-{-| >>> B.doc $ VText "abc"
-    'abc  -}
+-- | >>> B.doc $ VText "abc"
+--   'abc
 instance B.Pretty VContent where
     doc (VText s)
         | s == ""           =  B.doc $ "#empty"

@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Data structure for mapping relation to judges -}
+-- | Data structure for mapping relation to judges
 
 module Koshucode.Baala.Core.Assert.Assert
 ( -- * Assert
@@ -27,10 +27,9 @@ import qualified Koshucode.Baala.Core.Relmap as C
 
 -- ----------------------  Assert
 
-{-| Assertion of affirming or denying relation.
-    It consists of logical quality, relsign, and relmap.
-
-    See also 'B.Judge' -}
+-- | Affirming or denying relation.
+--   It consists of logical quality, judgement pattern, and relmap.
+--   See also 'B.Judge'
 data Assert c = Assert
     { assertType    :: AssertType      -- ^ Logical quality
     , assertPattern :: B.JudgePattern  -- ^ Pattern of judgement
@@ -39,7 +38,7 @@ data Assert c = Assert
     , assertSource  :: [B.Token]       -- ^ Source code information
     } deriving (Show)
 
-{-| Option for assertions. -}
+-- | Option for assertions.
 type AssertOption = [B.Named [B.TokenTree]]
 
 instance B.TokenListing (Assert c) where
@@ -50,7 +49,7 @@ instance B.Pretty (Assert c) where
         let qs = B.doch [assertText q, pat]
         in B.docHang qs 2 (B.doc r)
 
-{-| Apply function to relamp in assert. -}
+-- | Apply function to relamp in assert.
 assertMap :: B.Map (C.Relmap c) -> B.Map (Assert c)
 assertMap f (Assert q pat opt r src) = Assert q pat opt (f r) src
 
@@ -84,9 +83,9 @@ assertText AssertViolate  = "violate"
 affirm, deny :: B.JudgePattern -> AssertOption
              -> C.Relmap c -> [B.Token] -> Assert c
 
-{-| Make affirmed assertion. -}
+-- | Make affirmed assertion.
 affirm = Assert AssertAffirm
 
-{-| Make denied assertion. -}
+-- | Make denied assertion.
 deny   = Assert AssertDeny
 

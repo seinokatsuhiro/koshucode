@@ -13,10 +13,10 @@ infixr 0 -:-
 (-:-) :: a -> b -> (a, b)
 (-:-) = (,)
 
-{-| Table of coresspondences of hashed sequence and its text.
-
-    >>> lookup "lf" hashWordTable
-    Just "\n"  -}
+-- | Table of coresspondences of hashed sequence and its text.
+--
+--   >>> lookup "lf" hashWordTable
+--   Just "\n"
 hashWordTable :: [(String, String)]
 hashWordTable =
     [ "cr"     -:-  "\r"
@@ -29,14 +29,14 @@ hashWordTable =
     , "tab"    -:-  "\t"
     ]
 
-{-| Convert string into hashed form.
-
-    >>> putStrLn $ hashWord "aaa"
-    "aaa"
-
-    >>> putStrLn $ hashWord "aaa\nbbb"
-    "aaa" #lf "bbb"
--}
+-- | Convert string into hashed form.
+--
+--   >>> putStrLn $ hashWord "aaa"
+--   "aaa"
+--
+--   >>> putStrLn $ hashWord "aaa\nbbb"
+--   "aaa" #lf "bbb"
+--
 hashWord :: B.Map String
 hashWord = open . loop where
     loop "" = "\""
@@ -54,11 +54,10 @@ hashWord = open . loop where
     trim (' ' : cs) = trim cs
     trim cs         = cs
 
-{-| >>> hashSplit "abc"
-    Nothing
-
-    >>> hashSplit "\nabc"
-    Just ("#lf", "abc")  -}
+-- | >>> hashSplit "abc"
+--   Nothing
+--   >>> hashSplit "\nabc"
+--   Just ("#lf", "abc")
 hashSplit :: String -> Maybe (String, String)
 hashSplit [] = Nothing
 hashSplit (c : cs)
@@ -83,24 +82,23 @@ hashSplit (c : cs)
 
 
 -- -------------------------------------------------------
-{- $HashWord
-
-   Text literals are written
-   using the following hashed words.
-
-   [@#q@]      Single quote.
-
-   [@#qq@]     Double quote.
-
-   [@#tab@]    Tab (@\\t@).
-
-   [@#sp@]     Space.
-
-   [@#cr@]     Carriage return (@\\r@).
-
-   [@#lf@]     Line feed (@\\n@).
-
-   [@#crlf@]   Carriage return and  line feed (@\\r\\n@).
-
--}
+-- $HashWord
+--
+--  Text literals are written
+--  using the following hashed words.
+--
+--  [@#q@]      Single quote.
+--
+--  [@#qq@]     Double quote.
+--
+--  [@#tab@]    Tab (@\\t@).
+--
+--  [@#sp@]     Space.
+--
+--  [@#cr@]     Carriage return (@\\r@).
+--
+--  [@#lf@]     Line feed (@\\n@).
+--
+--  [@#crlf@]   Carriage return and  line feed (@\\r\\n@).
+--
 

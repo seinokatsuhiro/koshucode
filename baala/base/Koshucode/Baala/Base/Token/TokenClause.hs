@@ -28,7 +28,7 @@ docTokenClause (B.CodeClause ls toks) = d where
     label   xs name = B.doch [ B.doc name
                              , B.doc $ length xs, B.doc "elements" ]
 
-{-| Convert token lines into token clauses -}
+-- | Convert token lines into token clauses
 tokenClauses :: [B.TokenLine] -> [TokenClause]
 tokenClauses = map clause . split where
     clause ls = B.CodeClause ls $ tokens ls

@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Extensions of literalizer -}
+-- | Extensions of literalizer
 
 module Koshucode.Baala.Core.Content.Literal.Extension
 (

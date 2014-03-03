@@ -10,7 +10,7 @@ import qualified Koshucode.Baala.Core.Content         as C
 import qualified Koshucode.Baala.Core.Section.Section as C
 import qualified Koshucode.Baala.Core.Section.Process as C
 
-{-| Bundle of section resources. -}
+-- | Bundle of section resources.
 data SectionBundle c = SectionBundle
     { bundleRoot  :: C.Section c
     , bundleTexts :: [String]

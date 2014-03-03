@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Content operators. -}
+-- | Content operators.
 
 module Koshucode.Baala.Vanilla.Cop.List
 ( copsList
@@ -15,26 +15,25 @@ import qualified Koshucode.Baala.Vanilla.Type as V
 
 
 -- ----------------------
-{- $Operators
-
- [@list@]       Construct list.
-
- [@total@]      Calculate total amount of elements in list,
-                i.e., summation.
-
- [@length@]     Number of elements.
-
- [@min@]        Minimal element.
-
- [@max@]        Maximal element.
-
- [@++@]         Append lists.
-
- [@intersect@]  Common elements.
-
- [@minus@]      Remove elements.
-
--}
+-- $Operators
+--
+--  [@list@]       Construct list.
+--
+--  [@total@]      Calculate total amount of elements in list,
+--                 i.e., summation.
+--
+--  [@length@]     Number of elements.
+--
+--  [@min@]        Minimal element.
+--
+--  [@max@]        Maximal element.
+--
+--  [@++@]         Append lists.
+--
+--  [@intersect@]  Common elements.
+--
+--  [@minus@]      Remove elements.
+--
 
 copsList :: [C.Cop V.VContent]
 copsList =

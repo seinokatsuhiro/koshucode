@@ -1,7 +1,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Term-content calcutation. -}
+-- | Term-content calcutation.
 
 module Koshucode.Baala.Core.Content.Cox
 ( -- $Process
@@ -29,12 +29,12 @@ import qualified Koshucode.Baala.Core.Content.Literal as C
 
 -- ----------------------  expressions and operators
 
-{-| Content expressions with source code. -}
+-- | Content expressions with source code.
 type Cox c = B.Sourced (CoxCore c)
 
 type NamedCox c = B.Named (Cox c)
 
-{-| Content expressions. -}
+-- | Content expressions.
 data CoxCore c
     = CoxLit c                     -- ^ A:   Literal content
     | CoxTerm [B.Termname] [Int]   -- ^ A:   Term reference, its name and position
@@ -75,7 +75,7 @@ mapToCox g (CoxDeriv v b)   = CoxDeriv v (g b)
 mapToCox g (CoxDerivL vs b) = CoxDerivL vs (g b)
 mapToCox _ e = e
 
-{-| Term-content operator. -}
+-- | Term-content operator.
 data Cop c
     = CopFun String (CopFun c)  -- ^ Function
     | CopSyn String (CopSyn)    -- ^ Syntax
@@ -279,7 +279,7 @@ position h = spos where
 
 -- ----------------------  Run
 
-{-| Calculate content expression. -}
+-- | Calculate content expression.
 coxRun
   :: forall c. (C.CRel c, C.CList c, B.Pretty c)
   => [c]           -- ^ Tuple in body of relation
@@ -330,49 +330,47 @@ irreducible (B.Sourced _ core) =
 
 
 -- ----------------------
-{- $Process
-
-   Phase 1. Convert input texts into token trees.
-
-     [1. @String -> \[Token\]@]
-        Parse input string into list of token.
-        See 'B.tokens'.
-
-     [2. @\[Token\] -> \[TokenTree\]@]
-        Analyze token list structure.
-        See 'B.tokenTrees'
-
-     [3. @\[TokenTree\] -> TokenTree@]
-        Enclose list of token tree in 'B.TreeB'.
-        See 'B.treeWrap'.
-
-   Phase 2. Transform token trees,
-            and convert into abstract syntax trees.
-
-     [4. @TokenTree -> TokenTree@]
-        Expand syntax operators.
-
-     [5. @TokenTree -> TokenTree@]
-        Translate binary operators from infix to prefix.
-        See 'B.infixToPrefix'.
-
-     [6. @TokenTree -> Cox c@]
-        Convert from token tree into abstract syntax trees.
-
-   Phase 3. Calculate content expressions.
-
-     [7. @Cox c -> Cox c@]
-        Attach De Bruijn indecies for bound variables.
-
-     [8. @Relhead -> Cox c -> Cox c@]
-        Attach term positions using actural heading of relation.
-
-     [9. @Cox c -> Cox c@]
-        Reduce derived expressions into base expressions.
-
-     [10. @\[c\] -> Cox c -> c@]
-        Calculate content expression for each tuple of relation.
-        See 'coxRun'.
-
--}
+-- $Process
+--
+--  Phase 1. Convert input texts into token trees.
+--
+--    [1. @String -> \[Token\]@]
+--       Parse input string into list of token.
+--       See 'B.tokens'.
+--
+--    [2. @\[Token\] -> \[TokenTree\]@]
+--       Analyze token list structure.
+--       See 'B.tokenTrees'
+--
+--    [3. @\[TokenTree\] -> TokenTree@]
+--       Enclose list of token tree in 'B.TreeB'.
+--       See 'B.treeWrap'.
+--
+--  Phase 2. Transform token trees,
+--           and convert into abstract syntax trees.
+--
+--    [4. @TokenTree -> TokenTree@]
+--       Expand syntax operators.
+--
+--    [5. @TokenTree -> TokenTree@]
+--       Translate binary operators from infix to prefix.
+--       See 'B.infixToPrefix'.
+--
+--    [6. @TokenTree -> Cox c@]
+--       Convert from token tree into abstract syntax trees.
+--
+--  Phase 3. Calculate content expressions.
+--
+--    [7. @Cox c -> Cox c@]
+--       Attach De Bruijn indecies for bound variables.
+--
+--    [8. @Relhead -> Cox c -> Cox c@]
+--       Attach term positions using actural heading of relation.
+--
+--    [9. @Cox c -> Cox c@]
+--       Reduce derived expressions into base expressions.
+--
+--    [10. @\[c\] -> Cox c -> c@]
+--       Calculate content expression for each tuple of relation.
+--       See 'coxRun'.
 

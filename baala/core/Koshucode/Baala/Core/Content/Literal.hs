@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Term content -}
+-- | Term content
 
 module Koshucode.Baala.Core.Content.Literal
 ( module Koshucode.Baala.Core.Content.Literal.Class,

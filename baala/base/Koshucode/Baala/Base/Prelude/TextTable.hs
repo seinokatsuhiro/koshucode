@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Text table -}
+-- | Text table
 
 module Koshucode.Baala.Base.Prelude.TextTable
 ( -- * Position of contents

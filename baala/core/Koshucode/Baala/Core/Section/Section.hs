@@ -1,12 +1,11 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall -fno-warn-incomplete-patterns #-}
 
-{-| Data structure for relational calculations.
-    There are three types of section:
-    (1) /editing sections/ that output judges and read other sections,
-    (2) /library sections/ that make relmaps reusable,
-    (3) /data sections/ that provide data.
-  -}
+-- | Data structure for relational calculations.
+--   There are three types of section:
+--   (1) /editing sections/ that output judges and read other sections,
+--   (2) /library sections/ that make relmaps reusable,
+--   (3) /data sections/ that provide data.
 
 module Koshucode.Baala.Core.Section.Section
 (
@@ -98,7 +97,7 @@ emptySection = makeEmptySection $ C.relmapCons C.global
 
 -- ----------------------  Full construction
 
-{-| Second step of constructing 'Section'. -}
+-- | Second step of constructing 'Section'.
 consSection
     :: forall c. (C.CContent c)
     => C.RelmapConsFull c    -- ^ Relmap full constructor
@@ -206,27 +205,24 @@ isCUnres _                      = False
 
 
 -- ----------------------
-{- $Process
-  
-   Section is constructed using following steps.
-   
-   [1. @??? -> String@]
-       Get string from something.
-   
-   [2. @String -> \[String\]@]
-       Split string into lines.
-   
-   [3. @\[String\] -> \[Token\]@]
-       Split line-breaked strings into tokens.
-  
-   [4. @\[Token\] -> \[\[Token\]\]@]
-       Collect tokens for clauses.
-  
-   [5. @\[\[Token\]\] -> \[Clause\]@]
-       Classify tokens.
-  
-   [6. @\[Clause\] -> Section a@]
-       Make section from list of clauses.
-
--}
-
+-- $Process
+--  
+--  Section is constructed using following steps.
+--  
+--  [1. @??? -> String@]
+--      Get string from something.
+--  
+--  [2. @String -> \[String\]@]
+--      Split string into lines.
+--  
+--  [3. @\[String\] -> \[Token\]@]
+--      Split line-breaked strings into tokens.
+--
+--  [4. @\[Token\] -> \[\[Token\]\]@]
+--      Collect tokens for clauses.
+--
+--  [5. @\[\[Token\]\] -> \[Clause\]@]
+--      Classify tokens.
+--
+--  [6. @\[Clause\] -> Section a@]
+--      Make section from list of clauses.

@@ -7,20 +7,19 @@ module Koshucode.Baala.Base.Data.Comment
   emacsModeComment,
 ) where
 
-{-| Something that can become a string list. -}
+-- | Something that can become a string list.
 class Texts a where
     texts :: a -> [String]
 
-{-| Simple document in comment.
-
-    >>> texts $ CommentDoc [CommentSec "SAMPLE" ["This is a sample section."]]
-    [ "**"
-    , "**  SAMPLE"
-    , "**    This is a sample section."
-    , "**"
-    ]
-
-  -}
+-- | Simple document in comment.
+--
+--   >>> texts $ CommentDoc [CommentSec "SAMPLE" ["This is a sample section."]]
+--   [ "**"
+--   , "**  SAMPLE"
+--   , "**    This is a sample section."
+--   , "**"
+--   ]
+--
 data CommentDoc =
     CommentDoc [CommentSec]
     deriving (Show, Eq, Ord)
@@ -30,7 +29,7 @@ instance Texts CommentDoc where
         let ls = "" : concatMap texts ss
         in map (prepend "**" "  ") ls
 
-{-| Section title and its contents. -}
+-- | Section title and its contents.
 data CommentSec =
     CommentSec String [String]
     deriving (Show, Eq, Ord)
