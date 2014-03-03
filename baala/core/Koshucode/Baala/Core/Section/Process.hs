@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
-{-| Read, run, and write sections. -}
+-- | Read, run, and write sections.
 module Koshucode.Baala.Core.Section.Process
 ( -- * Read
   readSection,
@@ -27,7 +27,7 @@ import qualified Koshucode.Baala.Core.Section.Clause  as C
 
 -- --------------------------------------------  Read
 
-{-| Read section from certain resource. -}
+-- | Read section from certain resource.
 readSection :: (C.CContent c) => C.Section c -> B.Resource -> IO (B.Ab (C.Section c))
 readSection root res = dispatch res where
     dispatch (B.ResourceFile path)
@@ -54,12 +54,12 @@ readSectionCode root res code =
        clauses <- C.consClause half $ B.tokenLines res code
        C.consSection full res clauses
 
-{-| Read section from text. -}
+-- | Read section from text.
 readSectionText :: (C.CContent c) => C.Section c -> String -> B.Ab (C.Section c)
 readSectionText root code =
     readSectionCode root (B.ResourceText code) code
 
-{-| Read judges from text. -}
+-- | Read judges from text.
 readJudges :: (C.CContent c) => String -> B.Ab [B.Judge c]
 readJudges code =
     do sec <- readSectionText C.emptySection code
@@ -89,29 +89,15 @@ runSectionBody global sec =
       run2 :: C.AbbrAsserts c -> [B.Short (B.Ab [B.Judge c])]
       run2 = B.shortMap $ C.runAssertJudges global
 
--- {-| Run section.
---     Output section has judges calculated
---     from assertions in input section. -}
--- runSection :: (C.CContent c) => C.Global c -> B.AbMap (C.Section c)
--- runSection global sec =
---     do let g2          = global { C.globalJudges = C.sectionJudge sec }
---            allAsserts  = sectionLinkedAssert sec
---            asserts p   = filter (p . C.assertType) allAsserts
---            judges p    = C.runAssertJudges g2 (asserts p)
---        violate <- judges (== C.AssertViolate)
---        output  <- judges (/= C.AssertViolate)
---        Right $ sec { C.sectionJudge   = output
---                    , C.sectionViolate = violate }
-
-{-| Select assertions like 'sectionAssert'.
-    It returns relmap-liked assertions.
-    We can run these assertions using 'C.runAssertJudges'. -}
+-- | Select assertions like 'sectionAssert'.
+--   It returns relmap-liked assertions.
+--   We can run these assertions using 'C.runAssertJudges'.
 sectionLinkedAssert :: forall c. C.Section c -> [B.Short [C.Assert c]]
 sectionLinkedAssert C.Section { C.sectionRelmap = rs, C.sectionAssert = ass }
     = linkeAssert rs ass
 
 linkeAssert :: forall c. [B.Named (C.Relmap c)] -> B.Map [B.Short [C.Assert c]]
-linkeAssert relmaps = map $ fmap $ map link where
+linkeAssert rslink = map $ fmap $ map link where
     link :: B.Map (C.Assert c)
-    link = C.assertMap $ C.relmapLinker relmaps
+    link = C.assertMap $ C.relmapLink rslink
 

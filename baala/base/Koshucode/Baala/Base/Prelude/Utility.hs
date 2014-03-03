@@ -1,5 +1,4 @@
-{-# LANGUAGE Rank2Types #-}
-{-# OPTIONS_GHC #-}
+{-# OPTIONS_GHC -Wall #-}
 
 {-| General utilities -}
 
@@ -9,8 +8,8 @@ module Koshucode.Baala.Base.Prelude.Utility
   mapFst,
   mapSnd,
   cons1,
-  mapmapFst,
-  mapmapSnd,
+  mapFstTo,
+  mapSndTo,
   maybePairs,
 
   -- * List
@@ -36,10 +35,11 @@ module Koshucode.Baala.Base.Prelude.Utility
   gatherWith,
   gatherToMap,
 
-  -- * I/O
+  -- * Lookup
   putShow,
   putShowLn,
   putLines,
+  maybeWith,
 ) where
 
 import Control.Applicative
@@ -63,11 +63,11 @@ mapSnd f (x, y) = (x, f y)
 cons1 :: a -> ([a], b) -> ([a], b)
 cons1 x = mapFst (x:)
 
-mapmapFst :: (a -> c) -> [(a, b)] -> [(c, b)]
-mapmapFst = map . mapFst
+mapFstTo :: (Functor m) => (a -> c) -> m (a, b) -> m (c, b)
+mapFstTo = fmap . mapFst
 
-mapmapSnd :: (b -> c) -> [(a, b)] -> [(a, c)]
-mapmapSnd = map . fmap
+mapSndTo :: (Functor m) => (b -> c) -> m (a, b) -> m  (a, c)
+mapSndTo = fmap . fmap
 
 maybePairs :: [a] -> Maybe [(a, a)]
 maybePairs (a:b:xs) = liftA ((a, b):) $ maybePairs xs
@@ -234,4 +234,7 @@ putShowLn = putStrLn . show
 
 putLines :: [String] -> IO ()
 putLines = putStr . unlines
+
+maybeWith :: a -> Maybe a -> a
+maybeWith a = maybe a id
 

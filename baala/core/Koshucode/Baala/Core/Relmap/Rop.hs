@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Implementation of relmap operators. -}
+-- | Implementation of relmap operators.
 
 module Koshucode.Baala.Core.Relmap.Rop
 ( -- * Rop
@@ -11,12 +11,13 @@ module Koshucode.Baala.Core.Relmap.Rop
 
   -- * Relmap
   Relmap (..),
+  mapToRelmap,
 
   -- * Relkit
   RelkitCalc,
+  RelkitGlobal,
   RelkitBinary,
   RelkitConfl,
-  RelkitGlobal,
 
   -- * Global
   Global (..),
@@ -39,7 +40,7 @@ import qualified Koshucode.Baala.Core.Relmap.Relkit     as C
 
 -- ----------------------  Rop
 
-{-| Implementation of relmap operator -}
+-- | Implementation of relmap operator
 data Rop c = Rop
     { ropName     :: String           -- ^ Operator name
     , ropGroup    :: String           -- ^ Operator group
@@ -52,10 +53,10 @@ instance Show (Rop c) where
     show Rop { ropName = name, ropGroup = group }
         = "Rop (" ++ group ++ "/" ++ name ++ ")"
 
-{-| Constructor of relmap operator -}
+-- | Constructor of relmap operator
 type RopCons c = RopUse c -> B.Ab (Relmap c)
 
-{-| Use of relmap operator -}
+-- | Use of relmap operator
 data RopUse c = RopUse
     { ropGlobal    :: Global c
     , ropHalf      :: C.HalfRelmap   -- ^ Syntactic data of operator use
@@ -81,23 +82,30 @@ getArg3 _ = Left $ B.AbortCalc [] $ B.ACUnmatchType []
 
 -- ----------------------  Relmap
 
-{-| Relation-to-relation mapping.
-    A 'Relmap' is correspond to a use of relational operator. -}
+-- | Relation-to-relation mapping.
+--   A 'Relmap' is correspond to a use of relational operator.
 data Relmap c
     -- | Retrieve a relation from a dataset
-    = RelmapSource C.HalfRelmap B.JudgePattern [B.Termname]
+    = RelmapSource  C.HalfRelmap B.JudgePattern [B.Termname]
     -- | Constant relation
-    | RelmapConst  C.HalfRelmap (B.Rel c)
+    | RelmapConst   C.HalfRelmap (B.Rel c)
     -- | Equavalent relmap
-    | RelmapAlias  C.HalfRelmap (Relmap c)
+    | RelmapAlias   C.HalfRelmap (Relmap c)
     -- | Relmap that maps relations to a relation
-    | RelmapCalc   C.HalfRelmap (RelkitConfl c) [Relmap c]
+    | RelmapCalc    C.HalfRelmap (RelkitConfl c) [Relmap c]
     -- | Relmap that maps relations to a relation
-    | RelmapGlobal C.HalfRelmap (Global c -> RelkitCalc c)
+    | RelmapGlobal  C.HalfRelmap (Global c -> RelkitCalc c)
     -- | Connect two relmaps
-    | RelmapAppend (Relmap c) (Relmap c)
+    | RelmapAppend  (Relmap c) (Relmap c)
     -- | Relmap reference
-    | RelmapName   C.HalfRelmap String
+    | RelmapName    C.HalfRelmap String
+
+mapToRelmap :: B.Map (Relmap c) -> B.Map (Relmap c)
+mapToRelmap f = mf where
+    mf (RelmapAlias  h r1)   = RelmapAlias  h (mf r1)
+    mf (RelmapAppend r1 r2)  = RelmapAppend (mf r1) (mf r2)
+    mf (RelmapCalc   h g rs) = RelmapCalc   h g (map mf rs)
+    mf r1 = f r1
 
 instance Show (Relmap c) where
     show = showRelmap
@@ -168,14 +176,14 @@ relmapHalf = half where
 -- | Make 'C.Relkit' from heading of input relation.
 type RelkitCalc c =  B.Relhead -> B.Ab (C.Relkit c)
 
+-- | Make 'C.Relkit' from globals and input heading.
+type RelkitGlobal c = Global c -> B.Relhead -> B.Ab (C.Relkit c)
+
 -- | Make 'C.Relkit' from one subrelmap and input heading.
 type RelkitBinary c = C.Relkit c -> B.Relhead -> B.Ab (C.Relkit c)
 
--- | Make 'C.Relkit' from subrelmaps and input heading.
+-- | Make 'C.Relkit' from multiple subrelmaps and input heading.
 type RelkitConfl c =  [(C.Relkit c)] -> B.Relhead -> B.Ab (C.Relkit c)
-
--- | Make 'C.Relkit' from globals and input heading.
-type RelkitGlobal c = Global c -> B.Relhead -> B.Ab (C.Relkit c)
 
 
 
@@ -197,7 +205,7 @@ instance Show (Global c) where
               nc = length cops
           in "Global (" ++ show nr ++ " rops, " ++ show nc ++ " cops)"
 
-{-| Relation selector -}
+-- | Relation selector
 type RelSelect c = B.JudgePattern -> [String] -> B.Rel c
 
 globalCommandLine :: Global c -> [String]

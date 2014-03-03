@@ -25,7 +25,7 @@ consNumber use =
        Right $ relmapNumber use n ns
 
 relmapNumber :: (C.CDec c, Ord c) => C.RopUse c -> B.Termname -> [B.Termname] -> C.Relmap c
-relmapNumber use n ns = C.relmapCalc use $ relkitNumber n ns
+relmapNumber use n ns = C.relmapFlow use $ relkitNumber n ns
 
 relkitNumber :: (Ord c, C.CDec c) => B.Termname -> [B.Termname] -> C.RelkitCalc c
 relkitNumber = relkitRanking B.sortByNameNumbering
@@ -56,14 +56,14 @@ consRank use =
 
 relmapDenseRank :: (C.CDec c, Ord c) =>
    C.RopUse c -> B.Termname -> [B.Termname] -> C.Relmap c
-relmapDenseRank use n ns = C.relmapCalc use $ relkitDenseRank n ns
+relmapDenseRank use n ns = C.relmapFlow use $ relkitDenseRank n ns
 
 relkitDenseRank :: (Ord c, C.CDec c) => B.Termname -> [B.Termname] -> C.RelkitCalc c
 relkitDenseRank = relkitRanking B.sortByNameDenseRank
 
 relmapGapRank :: (C.CDec c, Ord c) =>
    C.RopUse c -> B.Termname -> [B.Termname] -> C.Relmap c
-relmapGapRank use n ns = C.relmapCalc use $ relkitGapRank n ns
+relmapGapRank use n ns = C.relmapFlow use $ relkitGapRank n ns
 
 relkitGapRank :: (Ord c, C.CDec c) => B.Termname -> [B.Termname] -> C.RelkitCalc c
 relkitGapRank = relkitRanking B.sortByNameGapRank
@@ -71,7 +71,7 @@ relkitGapRank = relkitRanking B.sortByNameGapRank
 
 -- -- | Keep leading tuples.
 -- limit :: (Ord c) => C.RopUse c -> Int -> String -> C.Relmap c
--- limit use c ns = C.relmapCalc use $ limit2 c ns
+-- limit use c ns = C.relmapFlow use $ limit2 c ns
 
 -- limit2 :: (Ord c) => Int -> String -> a -> B.AbMap (B.Rel c)
 -- limit2 c ns _ (B.Rel h1 b1) = Right $ B.Rel h1 b2 where

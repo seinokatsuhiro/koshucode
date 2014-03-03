@@ -11,6 +11,8 @@ module Koshucode.Baala.Vanilla.Rop.Confl
   consGroup, relmapGroup, relkitGroup,
   -- * if
   consIf, relmapIf, relkitIf,
+  -- * do
+  consDo, relmapDo, relkitDo,
 ) where
 
 import qualified Koshucode.Baala.Base    as B
@@ -121,7 +123,7 @@ relkitGroup n (C.Relkit h2 f2) h1 =
                      Right $ map (add map2) b1
       add map2 cs1 =
           let b2maybe = B.lookupMap (B.posPick share1 cs1) map2
-              b2sub   = maybe [] id b2maybe
+              b2sub   = B.maybeWith [] b2maybe
           in C.pRel (B.Rel h2 b2sub) : cs1
 
 
@@ -144,4 +146,20 @@ relkitIf [C.Relkit _ ft, C.Relkit hc fc, C.Relkit ha fa] _
                  [] -> C.relkitRun fa b1
                  _  -> C.relkitRun fc b1
 relkitIf _ _ = B.bug "relkitIf"
+
+
+
+-- ----------------------  do
+
+consDo :: (Ord c) => C.RopCons c
+consDo use =
+  do rs <- Rop.getRelmaps use
+     Right $ relmapDo use rs
+
+relmapDo :: (Ord c) => C.RopUse c -> [C.Relmap c] -> C.Relmap c
+relmapDo use = C.relmapConfl use relkitDo
+
+relkitDo :: forall c. (Ord c) => C.RelkitConfl c
+relkitDo [kit] _ = Right kit
+relkitDo _ _ = B.bug "relkitDo"
 

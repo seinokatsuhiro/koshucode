@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| 'Relmap' construction. -}
+-- | 'C.Relmap' construction.
 
 module Koshucode.Baala.Core.Relmap.Construct
 ( relmapCons,
@@ -20,7 +20,7 @@ import qualified Koshucode.Baala.Core.Relmap.Rop        as C
 
 -- ----------------------  Constructions
 
-{-| Make half and full relmap constructors. -}
+-- | Make half and full relmap constructors.
 relmapCons :: C.Global c -> (RelmapCons c)
 relmapCons global = make $ unzip $ map pair $ C.globalRops global where
     make (halfs, fulls) =
@@ -30,7 +30,7 @@ relmapCons global = make $ unzip $ map pair $ C.globalRops global where
             full = (name, cons)
         in (half, full)
 
-{-| Half and full relmap constructor -}
+-- | Half and full relmap constructor
 data RelmapCons c = RelmapCons RelmapConsHalf (RelmapConsFull c)
 
 instance Show (RelmapCons c) where
@@ -39,8 +39,8 @@ instance Show (RelmapCons c) where
 
 -- ----------------------  Half construction
 
-{-| First step of constructing relmap,
-    make 'C.HalfRelmap' from use of relmap operator. -}
+-- | First step of constructing relmap,
+--   make 'C.HalfRelmap' from use of relmap operator.
 type RelmapConsHalf
     =  [B.TokenTree]      -- ^ Source of relmap operator
     -> B.Ab C.HalfRelmap  -- ^ Result half relmap
@@ -79,13 +79,13 @@ relmapConsHalf halfs = consHalf where
 
 -- ----------------------  Full construction
 
-{-| Second step of constructing relmap,
-    make 'C.Relmap' from contents of 'C.HalfRelmap'. -}
+-- | Second step of constructing relmap,
+--   make 'C.Relmap' from contents of 'C.HalfRelmap'.
 type RelmapConsFull c
     = C.HalfRelmap        -- ^ Half relmap
     -> B.Ab (C.Relmap c)  -- ^ Result full relmap
 
-{-| Construct (full) relmap. -}
+-- | Construct (full) relmap.
 relmapConsFull :: C.Global c -> [B.Named (C.RopCons c)] -> RelmapConsFull c
 relmapConsFull global fulls = consFull where
     consFull half =
@@ -99,20 +99,19 @@ relmapConsFull global fulls = consFull where
 
 
 -- ----------------------
-{- $ConstructionProcess
-  
-   Construction process of half relmaps from source trees.
-  
-   [@\[TokenTree\] -> \[\[TokenTree\]\]@]
-      Dicide list of 'B.TokenTree' by vertical bar (@|@).
-  
-   [@\[\[TokenTree\]\] -> \[HalfRelmap\]@]
-      Construct each 'C.HalfRelmap' from lists of 'B.TokenTree'.
-      When there are subrelmaps in token trees,
-      constructs 'C.HalfRelmap' recursively.
-  
-   [@\[HalfRelmap\] -> HalfRelmap@]
-      Wrap list of 'C.HalfRelmap' into one 'C.HalfRelmap'
-      that has these relmaps in 'C.halfSubrelmap'.
--}
-
+-- $ConstructionProcess
+--
+--  Construction process of half relmaps from source trees.
+--
+--  [@\[TokenTree\] -> \[\[TokenTree\]\]@]
+--     Dicide list of 'B.TokenTree' by vertical bar (@|@).
+--
+--  [@\[\[TokenTree\]\] -> \[HalfRelmap\]@]
+--     Construct each 'C.HalfRelmap' from lists of 'B.TokenTree'.
+--     When there are subrelmaps in token trees,
+--     constructs 'C.HalfRelmap' recursively.
+--
+--  [@\[HalfRelmap\] -> HalfRelmap@]
+--     Wrap list of 'C.HalfRelmap' into one 'C.HalfRelmap'
+--     that has these relmaps in 'C.halfSubrelmap'.
+--

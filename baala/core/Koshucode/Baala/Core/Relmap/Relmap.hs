@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Data structures for relation-to-relation mappings -}
+-- | Operations on 'C.Relmap'.
 
 module Koshucode.Baala.Core.Relmap.Relmap
 ( 
@@ -11,17 +11,17 @@ module Koshucode.Baala.Core.Relmap.Relmap
   relmapSource,
   relmapConst,
   relmapAlias,
-  relmapCalc,
+  relmapFlow,
+  relmapGlobal,
   relmapBinary,
   relmapConfl,
-  relmapGlobal,
 
   -- * Selectors
   relmapSourceList,
   relmapNameList,
 
   -- * Linker
-  relmapLinker,
+  relmapLink,
 ) where
 
 import qualified Koshucode.Baala.Base               as B
@@ -31,42 +31,49 @@ import qualified Koshucode.Baala.Core.Relmap.Rop    as C
 
 -- ----------------------  Constructors
 
-{-| Retrieve relation from dataset. -}
+-- | Retrieve relation from dataset.
 relmapSource :: C.RopUse c -> B.JudgePattern -> [B.Termname] -> (C.Relmap c)
 relmapSource = C.RelmapSource . C.ropHalf
 
-{-| Constant relmap. -}
+-- | Make a constant relmap.
 relmapConst :: C.RopUse c -> B.Rel c -> C.Relmap c
 relmapConst = C.RelmapConst . C.ropHalf
 
-{-| Alias for relmap. -}
+-- | Alias for relmap.
 relmapAlias :: C.RopUse c -> C.Relmap c -> C.Relmap c
 relmapAlias = C.RelmapAlias . C.ropHalf
 
-{-| Make a non-confluent relmap. -}
-relmapCalc :: C.RopUse c -> C.RelkitCalc c -> C.Relmap c
-relmapCalc use relkit = relmapConfl use (const relkit) []
+-- | Make a flow relmap.
+--   Flow relmaps take no subrelmaps.
+relmapFlow :: C.RopUse c -> C.RelkitCalc c -> C.Relmap c
+relmapFlow use relkit = relmapConfl use (const relkit) []
 
+-- | Make a global relmap.
+--   Global relmaps are flow relmaps with globals.
+relmapGlobal :: C.RopUse c -> C.RelkitGlobal c -> C.Relmap c
+relmapGlobal = C.RelmapGlobal . C.ropHalf
+
+-- | Make a binary relmap.
+--   Binary relmaps take one subrelmap.
 relmapBinary :: C.RopUse c -> C.RelkitBinary c -> C.Relmap c -> C.Relmap c
 relmapBinary use kit m = relmapConfl use (kit . head) [m]
 
-{-| Make a confluent relmap. -}
+-- | Make a confluent relmap.
+--   Confluent relmaps take multiple subrelmaps.
 relmapConfl :: C.RopUse c -> C.RelkitConfl c -> [C.Relmap c] -> C.Relmap c
 relmapConfl = C.RelmapCalc . C.ropHalf
 
-relmapGlobal :: C.RopUse c -> C.RelkitGlobal c -> C.Relmap c
-relmapGlobal = C.RelmapGlobal . C.ropHalf
 
 
 -- ----------------------  Selector
 
-{-| List of 'RelmapSource' -}
+-- | List of 'C.RelmapSource'
 relmapSourceList :: C.Relmap c -> [C.Relmap c]
 relmapSourceList = relmapList f where
     f m@(C.RelmapSource _ _ _) = [m]
     f _ = []
 
-{-| List of name in 'RelmapName' -}
+-- | List of name in 'C.RelmapName'
 relmapNameList :: C.Relmap c -> [String]
 relmapNameList = relmapList f where
     f (C.RelmapName _ n) = [n]
@@ -83,54 +90,37 @@ relmapList f = loop where
 
 -- ----------------------  Link
 
-{-| Link relmaps by its name. -}
-relmapLinker
-    :: [B.Named (C.Relmap c)]  -- ^ Relmap and its linking name
-    -> C.Relmap c              -- ^ Relmap before linking
-    -> C.Relmap c              -- ^ Linked relmap
-relmapLinker = relmapLinker' . relmapLink
-
-relmapLinker' :: [B.Named (C.Relmap c)] -> B.Map (C.Relmap c)
-relmapLinker' ms' = link where
-    link (C.RelmapAlias h m)     = C.RelmapAlias h (link m)
-    link (C.RelmapAppend m1 m2)  = C.RelmapAppend (link m1) (link m2)
-    link (C.RelmapCalc h g ms)   = C.RelmapCalc h g $ map link ms
-    link m@(C.RelmapName _ n)    = case lookup n ms' of
-                                   Just m' -> m'
-                                   Nothing -> m
-    link m                     = m
-
-relmapLink :: B.Map [B.Named (C.Relmap c)]
-relmapLink ms = ms' where
-    ms'         = map link ms  -- make linked relmaps
-    link (n, m) = (n, linker m)
-    linker      = relmapLinker' ms'
+-- | Link relmaps by its name.
+relmapLink :: [B.Named (C.Relmap c)] -> B.Map (C.Relmap c)
+relmapLink rslist = maplink where
+    rsrec = maplink `B.mapSndTo` rslist
+    maplink = C.mapToRelmap link
+    link r@(C.RelmapName _ n) = B.maybeWith r $ lookup n rsrec
+    link r = r
 
 
 
 -- ----------------------
-{- $AppendRelmaps
-
-   This picture represents calculation
-   of mapping input relation to output relation.
-
-   > input -[ relmap ]- output
-
-   Relmap /A/ maps relation /R1/ to relation /R2/.
-   Another relmap /B/ maps /R2/ to /R3/.
-
-   > R1 -[ A ]- R2
-   > R2 -[ B ]- R3
-
-   Two relmaps /A/ and /B/ are jointed
-   with intermidiate relation /R2/.
-
-   > R1 -[ A ]- R2 -[ B ]- R3
-
-   Or, we can draw a directly jointed picture.
-   This whole structure is also 'RelmapAppend' /A B/.
-
-   > R1 -[ A ]--[ B ]- R3
-
--}
+-- $AppendRelmaps
+--
+--  This picture represents calculation
+--  of mapping input relation to output relation.
+--
+--  > input -[ relmap ]- output
+--
+--  Relmap /A/ maps relation /R1/ to relation /R2/.
+--  Another relmap /B/ maps /R2/ to /R3/.
+--
+--  > R1 -[ A ]- R2
+--  > R2 -[ B ]- R3
+--
+--  Two relmaps /A/ and /B/ are jointed
+--  with intermidiate relation /R2/.
+--
+--  > R1 -[ A ]- R2 -[ B ]- R3
+--
+--  Or, we can draw a directly jointed picture.
+--  This whole structure is also 'RelmapAppend' /A B/.
+--
+--  > R1 -[ A ]--[ B ]- R3
 

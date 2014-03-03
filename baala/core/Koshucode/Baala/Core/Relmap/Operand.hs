@@ -64,23 +64,19 @@ ropFullSorter (trunkSorter, trunkNames, branchNames) trees = sorted where
 -- | Relmap operand as association list.
 type RopOperandAssoc = [B.Named [B.TokenTree]]
 
-{-| Split operand into named group.
-    Non quoted words beginning with hyphen, e.g., @-x@,
-    are name of group.
-  
-    >>> ropOperandAssoc $ B.tt "a b -x /c 'd -y e"
-    [ ("",   [TreeL (TWord 1 0 "a"), TreeL (TWord 3 0 "b")])
-    , ("-x", [TreeL (TTerm 7 ["/c"]), TreeL (TWord 9 1 "d")])
-    , ("-y", [TreeL (TWord 14 0 "e")]) ]
-  -}
-
+-- | Split operand into named group.
+--   Non quoted words beginning with hyphen, e.g., @-x@,
+--   are name of group.
+--
+--   >>> ropOperandAssoc $ B.tt "a b -x /c 'd -y e"
+--   [ ("",   [TreeL (TWord 1 0 "a"), TreeL (TWord 3 0 "b")])
+--   , ("-x", [TreeL (TTerm 7 ["/c"]), TreeL (TWord 9 1 "d")])
+--   , ("-y", [TreeL (TWord 14 0 "e")]) ]
+--
 ropOperandAssoc :: [B.TokenTree] -> RopOperandAssoc
 ropOperandAssoc = B.assocBy maybeBranch "" where
     maybeBranch (B.TreeL (B.TWord _ 0 n@('-' : _))) = Just n
     maybeBranch _ = Nothing
-
--- sortUpOperand :: [B.TokenTree] -> [B.Named (B.OnceMore [B.TokenTree])]
--- sortUpOperand = B.assocGather . ropOperandAssoc
 
 
 
@@ -100,28 +96,28 @@ type RopOperandSorter =
 --   to fully sorted operand.
 type RopTrunkSorter =  B.AbMap RopOperandAssoc
 
-{-| Operand sorter for no-element trunk. -}
+-- | Operand sorter for no-element trunk.
 sortNone :: [String] -> RopOperandSorter
 sortNone ns = (Right, [], ns)
 
-{-| Operand sorter for enumerating trunk. -}
+-- | Operand sorter for enumerating trunk.
 sortEnum :: [String] -> [String] -> RopOperandSorter
 sortEnum ks ns = (by f, ks, ns) where
     f xs  = Right $ zip names $ map B.singleton xs
     names = map (('-' :) . show) [1 :: Int ..]
 
-{-| Operand sorter for multiple-element trunk. -}
+-- | Operand sorter for multiple-element trunk.
 sortList :: String -> [String] -> RopOperandSorter
 sortList a ns = (by f, [a], ns) where
     f xs = Right [ (a, xs) ]
 
-{-| Operand sorter for one-element trunk. -}
+-- | Operand sorter for one-element trunk.
 sortOne :: String -> [String] -> RopOperandSorter
 sortOne a ns = (by f, [a], ns) where
     f [x] = Right [ (a, [x]) ]
     f _   = Left $ B.abortOperand "Require one operand"
 
-{-| Operand sorter for two-element trunk. -}
+-- | Operand sorter for two-element trunk.
 sortTwo :: String -> String -> [String] -> RopOperandSorter
 sortTwo a b ns = (by f, [a,b], ns) where
     f [x,y] = Right [ (a, [x]), (b, [y]) ]
@@ -137,13 +133,13 @@ sortFour a b c d ns = (by f, [a,b,c,d], ns) where
     f [x1,x2,x3,x4] = Right [ (a, [x1]), (b, [x2]), (c, [x3]), (d, [x4]) ]
     f _             = Left $ B.abortOperand "Require four operands"
 
-{-| Operand sorter for one-and-multiple-element trunk. -}
+-- | Operand sorter for one-and-multiple-element trunk.
 sortOneList :: String -> String -> [String] -> RopOperandSorter
 sortOneList a b ns = (by f, [a,b], ns) where
     f (x:xs) = Right [ (a, [x]), (b, xs) ]
     f _      = Left $ B.abortOperand "Require operands"
 
-{-| Give a name to unnamed operand. -}
+-- | Give a name to unnamed operand.
 by :: RopFullSorter -> RopTrunkSorter
 by f xs = case lookup "" xs of
             Just x  -> Right . (++ xs) =<< f x

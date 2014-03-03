@@ -38,9 +38,9 @@ consCheckTerm use =
 relmapCheckTermJust :: C.RopUse c -> [B.Termname] -> C.Relmap c
 relmapCheckTermHas  :: C.RopUse c -> [B.Termname] -> C.Relmap c
 relmapCheckTermBut  :: C.RopUse c -> [B.Termname] -> C.Relmap c
-relmapCheckTermJust use = C.relmapCalc use . relkitCheckTermJust
-relmapCheckTermHas  use = C.relmapCalc use . relkitCheckTermHas
-relmapCheckTermBut  use = C.relmapCalc use . relkitCheckTermBut
+relmapCheckTermJust use = C.relmapFlow use . relkitCheckTermJust
+relmapCheckTermHas  use = C.relmapFlow use . relkitCheckTermHas
+relmapCheckTermBut  use = C.relmapFlow use . relkitCheckTermBut
 
 relkitCheckTermJust :: [B.Termname] -> C.RelkitCalc c
 relkitCheckTermHas  :: [B.Termname] -> C.RelkitCalc c
@@ -73,7 +73,7 @@ consDuplicate use =
      Right $ relmapDuplicate use ns
 
 relmapDuplicate :: (Ord c) => C.RopUse c -> [B.Termname] -> C.Relmap c
-relmapDuplicate use = C.relmapCalc use . relkitDuplicate
+relmapDuplicate use = C.relmapFlow use . relkitDuplicate
 
 relkitDuplicate :: (Ord c) => [B.Termname] -> C.RelkitCalc c
 relkitDuplicate ns h1
@@ -100,7 +100,7 @@ relkitDuplicate ns h1
 consTypename :: (C.CContent c) => C.RopCons c
 consTypename use =
   do np <- Rop.getTermPairs use "-term"
-     Right $ C.relmapCalc use $ relkitTypename np
+     Right $ C.relmapFlow use $ relkitTypename np
 
 relkitTypename
   :: (C.CText c) => [(B.Termname, B.Termname)] -> C.RelkitCalc c

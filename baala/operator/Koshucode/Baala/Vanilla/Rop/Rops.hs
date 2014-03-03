@@ -28,6 +28,8 @@ vanillaRops = Rop.ropList "vanilla"
         Rop.consAdd, C.sortList "-in" ["-let"] )
     , ( "check-term [ -just /N ... | -has /N ... | -but /N ... ]",
         Rop.consCheckTerm, C.sortNone ["-just", "-has", "-but"] )
+    , ( "do R ...",
+        Rop.consDo, C.sortList "-relmap" [] )
     , ( "duplicate /N ...",
         Rop.consDuplicate, C.sortList "-term" [] )
     , ( "enclose /N",

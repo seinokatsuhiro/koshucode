@@ -31,7 +31,7 @@ consEnclose use =
      Right $ relmapEnclose use n
 
 relmapEnclose :: (C.CRel c) => C.RopUse c -> B.Termname -> C.Relmap c
-relmapEnclose use = C.relmapCalc use . relkitEnclose
+relmapEnclose use = C.relmapFlow use . relkitEnclose
 
 {-| Enclose the current relation in a term. -}
 relkitEnclose :: (C.CRel c) => B.Termname -> C.RelkitCalc c
@@ -63,7 +63,7 @@ consMember use =
      Right $ relmapMember use (x, xs)
 
 relmapMember :: C.RopUse Rop.VContent -> B.Termname2 -> C.Relmap Rop.VContent
-relmapMember use = C.relmapCalc use . relkitMember
+relmapMember use = C.relmapFlow use . relkitMember
 
 relkitMember :: B.Termname2 -> C.RelkitCalc Rop.VContent
 relkitMember (x, xs) h1 = r2 where
@@ -99,7 +99,7 @@ consRange use =
      Right $ relmapRange use term low high
 
 relmapRange :: (C.CDec c) => C.RopUse c -> B.Termname -> Int -> Int -> C.Relmap c
-relmapRange use term low high = C.relmapCalc use $ relkitRange term low high
+relmapRange use term low high = C.relmapFlow use $ relkitRange term low high
 
 relkitRange :: (C.CDec c) => B.Termname -> Int -> Int -> C.RelkitCalc c
 relkitRange n low high h1 = Right $ C.relkit h2 (C.RelkitOneToMany False f) where
@@ -129,7 +129,7 @@ consSize use =
      Right $ relmapSize use n
 
 relmapSize :: (C.CDec c) => C.RopUse c -> B.Termname -> C.Relmap c
-relmapSize use n = C.relmapCalc use $ relkitSize n
+relmapSize use n = C.relmapFlow use $ relkitSize n
 
 {-| Cardinality -}
 relkitSize :: (C.CDec c) => B.Termname -> C.RelkitCalc c

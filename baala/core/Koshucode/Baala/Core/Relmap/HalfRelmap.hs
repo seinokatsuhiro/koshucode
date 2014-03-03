@@ -10,11 +10,11 @@ import qualified Data.Generics        as G
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core.Relmap.Operand as C
 
-{-| Intermediate data that represents use of relational operator.
-
-    'HalfRelmap' is constructed from list of 'TokenTree',
-    and (full) 'Relmap' is constructed from 'HalfRelmap'. -}
-
+-- | Intermediate data that represents use of relational operator.
+--
+--   'HalfRelmap' is constructed from list of 'TokenTree',
+--   and (full) 'Relmap' is constructed from 'HalfRelmap'.
+--
 data HalfRelmap = HalfRelmap
     { halfOpToken   :: B.Token            -- ^ Operator token
     , halfOperand   :: C.RopOperandAssoc  -- ^ Operand of relmap operation

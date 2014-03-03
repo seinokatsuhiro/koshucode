@@ -27,7 +27,7 @@ consPick use =
      Right $ relmapPick use ns
 
 relmapPick :: (Ord c) => C.RopUse c -> [B.Termname] -> C.Relmap c
-relmapPick use = C.relmapCalc use . relkitPick
+relmapPick use = C.relmapFlow use . relkitPick
 
 relkitPick :: [B.Termname] -> C.RelkitCalc c
 relkitPick = relkitArrange B.arrangePick B.arrangePick
@@ -42,7 +42,7 @@ consCut use =
      Right $ relmapCut use ns
 
 relmapCut :: (Ord c) => C.RopUse c -> [B.Termname] -> C.Relmap c
-relmapCut use = C.relmapCalc use . relkitCut
+relmapCut use = C.relmapFlow use . relkitCut
 
 relkitCut :: [B.Termname] -> C.RelkitCalc c
 relkitCut = relkitArrange B.arrangeCut B.arrangeCut
@@ -75,7 +75,7 @@ consRename use =
      Right $ relmapRename use np
 
 relmapRename :: C.RopUse c -> [(B.Termname, B.Termname)] -> C.Relmap c
-relmapRename use = C.relmapCalc use . relkitRename
+relmapRename use = C.relmapFlow use . relkitRename
 
 {-| Change terms names -}
 relkitRename :: [(B.Termname, B.Termname)] -> C.RelkitCalc c

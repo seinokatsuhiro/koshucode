@@ -44,7 +44,7 @@ caps ords = zipWith ($) (ords ++ repeat Asc)
 
 sortBy :: (Ord a, Ord b) =>
   [OrderCapSign a] -> [([a], b)] -> [([OrderCap a], b)]
-sortBy ords = List.sort . B.mapmapFst (caps ords)
+sortBy ords = List.sort . B.mapFstTo (caps ords)
 
 sortByName :: (Ord a, Eq n) => [OrderCap n] -> [n] -> B.Map [[a]]
 sortByName ords ns = map snd . sortByNameOrder ords ns

@@ -35,7 +35,7 @@ consId use = Right $ relmapId use
 
 {-| Identity mapping, i.e., do nothing. -}
 relmapId :: C.RopUse c -> C.Relmap c
-relmapId use = C.relmapCalc use $ Right . C.relkitId
+relmapId use = C.relmapFlow use $ Right . C.relkitId
 
 
 -- ----------------------  empty
@@ -44,7 +44,7 @@ consEmpty :: C.RopCons c
 consEmpty use = Right $ relmapEmpty use
 
 relmapEmpty :: C.RopUse c -> C.Relmap c
-relmapEmpty use = C.relmapCalc use relkitEmpty
+relmapEmpty use = C.relmapFlow use relkitEmpty
 
 {-| Throw away all tuples in a relation. -}
 relkitEmpty :: C.RelkitCalc c
@@ -59,7 +59,7 @@ consContents use =
        Right $ relmapContents use n
 
 relmapContents :: C.RopUse c -> B.Termname -> C.Relmap c
-relmapContents use = C.relmapCalc use . relkitContents
+relmapContents use = C.relmapFlow use . relkitContents
 
 relkitContents :: B.Termname -> C.RelkitCalc c
 relkitContents n _ = Right $ C.relkit h2 (C.RelkitFull True f) where

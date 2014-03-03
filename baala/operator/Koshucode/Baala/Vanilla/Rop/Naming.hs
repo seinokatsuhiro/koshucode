@@ -25,7 +25,7 @@ consPrefix use =
        Right $ relmapPrefix use pre ns
 
 relmapPrefix :: C.RopUse c -> String -> [String] -> C.Relmap c
-relmapPrefix use pre ns = C.relmapCalc use $ relkitPrefix pre ns
+relmapPrefix use pre ns = C.relmapFlow use $ relkitPrefix pre ns
 
 {-| Add prefix to specified terms. -}
 relkitPrefix
@@ -51,7 +51,7 @@ consUnprefix use =
        Right $ relmapUnprefix use pre
 
 relmapUnprefix :: C.RopUse c -> String -> C.Relmap c
-relmapUnprefix use = C.relmapCalc use . relkitUnprefix
+relmapUnprefix use = C.relmapFlow use . relkitUnprefix
 
 {-| Remove prefix -}
 relkitUnprefix
@@ -77,7 +77,7 @@ consPrefixChange use =
        Right $ relmapPrefixChange use new old
 
 relmapPrefixChange :: C.RopUse c -> String -> String -> C.Relmap c
-relmapPrefixChange use new old = C.relmapCalc use $ relkitPrefixChange new old
+relmapPrefixChange use new old = C.relmapFlow use $ relkitPrefixChange new old
 
 {-| Change prefix -}
 relkitPrefixChange

@@ -29,7 +29,7 @@ consAdd use =
 
 relmapAdd :: (C.CList c, C.CRel c, B.Pretty c)
   => C.RopUse c -> ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.Relmap c
-relmapAdd use = C.relmapCalc use . relkitAdd
+relmapAdd use = C.relmapFlow use . relkitAdd
 
 -- todo: shared term
 relkitAdd :: (C.CList c, C.CRel c, B.Pretty c)
@@ -57,7 +57,7 @@ consFilter b use =
 
 relmapFilter :: (C.CList c, C.CRel c, C.CBool c, B.Pretty c)
   => C.RopUse c -> (Bool, [C.Cop c], [C.NamedCox c], C.Cox c) -> C.Relmap c
-relmapFilter use = C.relmapCalc use . relkitFilter
+relmapFilter use = C.relmapFlow use . relkitFilter
 
 relkitFilter :: (C.CList c, C.CRel c, C.CBool c, B.Pretty c)
   => (Bool, [C.Cop c], [C.NamedCox c], C.Cox c) -> C.RelkitCalc c
