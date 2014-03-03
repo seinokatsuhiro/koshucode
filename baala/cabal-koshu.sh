@@ -18,7 +18,7 @@ usage () {
     echo "cabal for each packages"
     echo ""
 
-    if [ -z $cabal ]; then
+    if [ -z $command ]; then
         echo "  $0 clean          cleaning directories"
         echo "  $0 link           make symbolic-linked commands"
         echo "  $0 unreg          unregister koshucode packages"
@@ -38,19 +38,21 @@ usage () {
 }
 
 main () {
-    decide_program `basename $0`
+    decide_command `basename $0`
 
     case "$1" in
         clean)
-            cabal=cabal_clean
+            command=cabal_clean
             cabal_for base core operator calculator toolkit
             exit ;;
 
         link)
+            # alphabetical order
             sym_link "$0" haddock.link
             sym_link "$0" html.link
             sym_link "$0" install.link
             sym_link "$0" sdist.link
+            sym_link "$0" sloc.link
             exit ;;
 
         unreg)
@@ -75,23 +77,23 @@ main () {
     esac
 }
 
-decide_program () {
+decide_command () {
     case "$1" in
-        sdist.link)
-            cabal=cabal_sdist
-            echo "sdist -- generate a source distribution file" ;;
-
         haddock.link)
-            cabal=cabal_haddock
+            command=cabal_haddock
             echo "haddock -- generate Haddock HTML documentation" ;;
-
-        install.link)
-            cabal=cabal_install
-            echo "install -- installs packages" ;;
-
         html.link)
-            cabal=cabal_html
+            command=cabal_html
             echo "html -- open html documents" ;;
+        install.link)
+            command=cabal_install
+            echo "install -- installs packages" ;;
+        sdist.link)
+            command=cabal_sdist
+            echo "sdist -- generate a source distribution file" ;;
+        sloc.link)
+            command=sloc
+            echo "sloc -- count source lines of code" ;;
     esac
 }
 
@@ -122,7 +124,7 @@ directories () {
 
 
 
-# ======================  cabal command
+# ======================  cabal
 
 CABAL_DEV=$HOME/cabal-dev
 GITHUB_DOC=http://seinokatsuhiro.github.io/koshucode/doc/html
@@ -135,7 +137,7 @@ cabal_cmd () {
 }
 
 cabal_for () {
-    if [ -z $cabal ]; then
+    if [ -z $command ]; then
         usage
         exit
     fi
@@ -143,7 +145,7 @@ cabal_for () {
     for d in "$@"; do
         echo
         echo "================================= $d"
-        (cd "$d"; time $cabal "$d") || exit 1
+        (cd "$d"; time $command "$d") || exit 1
     done
 }
 
@@ -153,6 +155,33 @@ section () {
 
 cabal_clean () {
     cabal_cmd clean
+}
+
+
+
+# ======================  commands for each packages
+
+cabal_haddock () {
+    if [ `pwd_base` = XXXcalculator ]; then
+        cabal_cmd haddock --executables
+    else
+        cabal_cmd haddock
+    fi
+}
+
+pwd_base () {
+    basename $PWD
+}
+
+cabal_html () {
+    open dist/doc/html/koshucode-baala-*/index.html
+}
+
+cabal_install () {
+    cabal_cmd install \
+        --force-reinstalls \
+        --disable-documentation \
+        --disable-optimization
 }
 
 cabal_sdist () {
@@ -191,27 +220,8 @@ if_file () {
     fi
 }
 
-cabal_haddock () {
-    if [ `pwd_base` = XXXcalculator ]; then
-        cabal_cmd haddock --executables
-    else
-        cabal_cmd haddock
-    fi
-}
-
-pwd_base () {
-    basename $PWD
-}
-
-cabal_install () {
-    cabal_cmd install \
-        --force-reinstalls \
-        --disable-documentation \
-        --disable-optimization
-}
-
-cabal_html () {
-    open dist/doc/html/koshucode-baala-*/index.html
+sloc () {
+    ../sloc-haskell.pl `find . -name "[A-Z]*.hs"`
 }
 
 main "$1"
