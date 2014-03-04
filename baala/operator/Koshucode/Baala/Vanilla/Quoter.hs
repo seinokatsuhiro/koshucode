@@ -12,11 +12,11 @@ import Koshucode.Baala.Vanilla.Type
 
 -- | Quasiquoter for @[koshu| ... |]@.
 koshu :: C.QuasiQuoter
-koshu = C.koshuQuoter vanillaHalf [| vanillaFull |]
+koshu = C.koshuQuoter vanillaLex [| vanillaFull |]
 
 -- relmap constructors
-vanillaHalf :: C.RelmapConsHalf
+vanillaLex  :: C.RelmapConsLex
 vanillaFull :: C.RelmapConsFull VContent
-(C.RelmapCons vanillaHalf vanillaFull)
+(C.RelmapCons vanillaLex vanillaFull)
     = C.relmapCons $ C.global { C.globalRops = vanillaRops }
 

@@ -50,8 +50,8 @@ readSectionCode
     -> String       -- ^ Source text
     -> B.Ab (C.Section c)  -- ^ Resulting section
 readSectionCode root res code =
-    do let (C.RelmapCons half full) = C.sectionCons root
-       clauses <- C.consClause half $ B.tokenLines res code
+    do let (C.RelmapCons lx full) = C.sectionCons root
+       clauses <- C.consClause lx $ B.tokenLines res code
        C.consSection full res clauses
 
 -- | Read section from text.

@@ -39,30 +39,30 @@ specialize :: C.Global c -> C.Relmap c -> B.Relhead -> B.Ab (C.Relkit c)
 specialize global = (<$>) where
     sel = C.globalSelect global
 
-    C.RelmapSource half p ns         <$> _  = right half (C.relkitConst $ sel p ns)
-    C.RelmapConst  half rel          <$> _  = right half (C.relkitConst rel)
+    C.RelmapSource lx p ns           <$> _  = right lx (C.relkitConst $ sel p ns)
+    C.RelmapConst  lx rel            <$> _  = right lx (C.relkitConst rel)
     C.RelmapAlias  _ relmap          <$> h1 = relmap <$> h1
     C.RelmapLink   _ _ (Just relmap) <$> h1 = relmap <$> h1
-    C.RelmapLink   half name Nothing <$> _  =
-        abort half $ Left $ B.AbortAnalysis [] $ B.AAUnkRelmap name
+    C.RelmapLink   lx name Nothing   <$> _  =
+        abort lx $ Left $ B.AbortAnalysis [] $ B.AAUnkRelmap name
 
     C.RelmapAppend relmap1 relmap2 <$> h1 =
         do relkit2 <- relmap1 <$> h1
            relkit3 <- relmap2 <$> C.relkitHead relkit2
            Right $ M.mappend relkit2 relkit3
 
-    C.RelmapCalc half mk relmaps <$> h1 =
-        abort half $ do
+    C.RelmapCalc lx mk relmaps <$> h1 =
+        abort lx $ do
           subrelkit <- (<$> h1) `mapM` relmaps
           relkit    <- mk subrelkit h1
-          right half relkit
+          right lx relkit
 
-    C.RelmapGlobal half mk <$> h1 =
-        abort half $ do
+    C.RelmapGlobal lx mk <$> h1 =
+        abort lx $ do
           relkit <- mk global h1
-          right half relkit
+          right lx relkit
 
-    right half r = Right $ C.relkitSetSource half $ r
+    right lx r = Right $ C.relkitSetSource lx $ r
 
     abort = B.abortableFrom "specialize"
 

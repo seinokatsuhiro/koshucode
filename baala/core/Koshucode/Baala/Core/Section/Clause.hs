@@ -30,10 +30,10 @@ data ClauseBody
     | CImport   [B.Token] (Maybe Clause)       -- ^ Importing section name
     | CExport   String                         -- ^ Exporting relmap name
     | CShort    [(B.Named String)]             -- ^ Short signs
-    | CRelmap   String C.HalfRelmap            -- ^ Relmap and its name
-    | TRelmap   String [B.Token]               -- ^ Not include HalfRelmap
-    | CAssert   C.AssertType B.JudgePattern C.AssertOption C.HalfRelmap  -- ^ Assertions of relmaps
-    | TAssert   C.AssertType B.JudgePattern C.AssertOption [B.Token]     -- ^ Not include HalfRelmap
+    | CRelmap   String C.LexRelmap             -- ^ Relmap and its name
+    | TRelmap   String [B.Token]               -- ^ Not include LexRelmap
+    | CAssert   C.AssertType B.JudgePattern C.AssertOption C.LexRelmap   -- ^ Assertions of relmaps
+    | TAssert   C.AssertType B.JudgePattern C.AssertOption [B.Token]     -- ^ Not include LexRelmap
     | CJudge    Bool B.JudgePattern [B.Token]  -- ^ Judge
     | CComment                                 -- ^ Clause comment
     | CUnknown                                 -- ^ Unknown clause
@@ -65,7 +65,7 @@ clauseTypeText (Clause _ body) =
 --   Result clause list does not contain
 --   'CRelmap' and 'CAssert'. Instead of them,
 --   'TRelmap' and 'TAssert' are contained.
---   This function does not depend on 'C.RelmapConsHalf'.
+--   This function does not depend on 'C.RelmapConsLex'.
 --
 --   >>> consPreclause . B.tokenize $ "a : source A /x /y"
 --   [ TRelmap ( TokenClause
@@ -161,23 +161,23 @@ wordPairs toks =
       wordPair _ = Nothing
 
 
--- ----------------------  Half construction
+-- ----------------------  Lex construction
 
 -- | Construct 'Clause' list from 'B.Token' list.
 --   This is a first step of constructing 'Section'.
 consClause
-    :: C.RelmapConsHalf        -- ^ Relmap half constructor
-    -> [B.TokenLine]           -- ^ Source tokens
+    :: C.RelmapConsLex          -- ^ Relmap lex constructor
+    -> [B.TokenLine]            -- ^ Source tokens
     -> B.Ab [B.Short [Clause]]  -- ^ Result clauses
-consClause half = clauseHalfClause half . shortSections . consPreclause
+consClause lx = clauseLexClause lx . shortSections . consPreclause
 
-clauseHalfClause :: C.RelmapConsHalf -> B.AbMap [B.Short [Clause]]
-clauseHalfClause half = sequence . map B.shortAb . f where
+clauseLexClause :: C.RelmapConsLex -> B.AbMap [B.Short [Clause]]
+clauseLexClause lx = sequence . map B.shortAb . f where
     f :: [B.Short [Clause]] -> [B.Short (B.Ab [Clause])]
-    f = map $ fmap (clauseHalf half)
+    f = map $ fmap (clauseLex lx)
 
-clauseHalf :: C.RelmapConsHalf -> B.AbMap [Clause]
-clauseHalf half = mapM clause where
+clauseLex :: C.RelmapConsLex -> B.AbMap [Clause]
+clauseLex lx = mapM clause where
     clause :: B.AbMap Clause
     clause (Clause src bd)      = Right . Clause src        =<< body bd
 
@@ -186,8 +186,8 @@ clauseHalf half = mapM clause where
     body (TAssert q p opt ts) = Right . CAssert q p opt =<< relmap ts
     body bd                   = Right bd
 
-    relmap :: [B.Token] -> B.Ab C.HalfRelmap
-    relmap = half . B.tokenTrees
+    relmap :: [B.Token] -> B.Ab C.LexRelmap
+    relmap = lx . B.tokenTrees
 
 shortSections :: [Clause] -> [B.Short [Clause]]
 shortSections [] = []

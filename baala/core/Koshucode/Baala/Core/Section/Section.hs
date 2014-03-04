@@ -158,14 +158,14 @@ consSectionEach consFull resource (B.Short shorts xs) =
             Left  a -> abort a
 
       relmap :: [B.Token] -> C.ClauseBody -> B.Ab (B.Named (C.Relmap c))
-      relmap _ (C.CRelmap name half) =
-          case consFull half of
+      relmap _ (C.CRelmap name lx) =
+          case consFull lx of
             Right full -> Right (name, full)
             Left a     -> abort a
 
       assert :: [B.Token] -> C.ClauseBody -> B.Ab (C.Assert c)
-      assert toks (C.CAssert typ pat opt half) =
-          case consFull half of
+      assert toks (C.CAssert typ pat opt lx) =
+          case consFull lx of
             Right full -> Right $ C.Assert typ pat opt full toks
             Left a     -> abort a
 

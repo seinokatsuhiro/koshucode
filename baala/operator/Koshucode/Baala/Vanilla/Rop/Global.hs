@@ -27,10 +27,10 @@ consDo :: (Ord c) => C.RopCons c
 consDo use =
   do r <- Rop.getRelmap use
      treesLet <- Rop.getWordTrees use "-let"
-     let C.RelmapCons half full = C.relmapCons $ C.ropGlobal use
+     let C.RelmapCons lx full = C.relmapCons $ C.ropGlobal use
          (names, trees) = unzip treesLet
-     halfs <- mapM half $ map B.singleton trees
-     fulls <- mapM full halfs
+     lxs   <- mapM lx $ map B.singleton trees
+     fulls <- mapM full lxs
      Right $ C.relmapLink (zip names fulls) r
 
 

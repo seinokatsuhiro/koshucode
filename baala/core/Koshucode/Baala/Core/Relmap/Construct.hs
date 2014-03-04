@@ -5,7 +5,7 @@
 module Koshucode.Baala.Core.Relmap.Construct
 ( relmapCons,
   RelmapCons (..),
-  RelmapConsHalf,
+  RelmapConsLex,
   RelmapConsFull,
 
   -- * Construction process
@@ -13,108 +13,108 @@ module Koshucode.Baala.Core.Relmap.Construct
 ) where
 
 import qualified Koshucode.Baala.Base                   as B
-import qualified Koshucode.Baala.Core.Relmap.HalfRelmap as C
+import qualified Koshucode.Baala.Core.Relmap.Lexical    as C
 import qualified Koshucode.Baala.Core.Relmap.Operand    as C
 import qualified Koshucode.Baala.Core.Relmap.Rop        as C
 
 
 -- ----------------------  Constructions
 
--- | Make half and full relmap constructors.
+-- | Make lex and full relmap constructors.
 relmapCons :: C.Global c -> (RelmapCons c)
 relmapCons global = make $ unzip $ map pair $ C.globalRops global where
-    make (halfs, fulls) =
-        let consHalf = relmapConsHalf halfs
+    make (lxs, fulls) =
+        let consLex  = relmapConsLex lxs
             consFull = relmapConsFull global fulls
-        in RelmapCons consHalf consFull
+        in RelmapCons consLex consFull
 
     pair (C.Rop name _ sorter cons synopsis) =
-        let half = (name, (synopsis, sorter))
+        let lx = (name, (synopsis, sorter))
             full = (name, cons)
-        in (half, full)
+        in (lx, full)
 
--- | Half and full relmap constructor
-data RelmapCons c = RelmapCons RelmapConsHalf (RelmapConsFull c)
+-- | Lex and full relmap constructor
+data RelmapCons c = RelmapCons RelmapConsLex (RelmapConsFull c)
 
 instance Show (RelmapCons c) where
-    show _ = "RelmapCons <half> <full>"
+    show _ = "RelmapCons <lex> <full>"
 
 
--- ----------------------  Half construction
+-- ----------------------  Lex construction
 
 -- | First step of constructing relmap,
---   make 'C.HalfRelmap' from use of relmap operator.
-type RelmapConsHalf
-    =  [B.TokenTree]      -- ^ Source of relmap operator
-    -> B.Ab C.HalfRelmap  -- ^ Result half relmap
+--   make 'C.LexRelmap' from use of relmap operator.
+type RelmapConsLex
+    =  [B.TokenTree]     -- ^ Source of relmap operator
+    -> B.Ab C.LexRelmap  -- ^ Result lex relmap
 
-relmapConsHalf :: [B.Named (String, C.RopFullSorter)] -> RelmapConsHalf
-relmapConsHalf halfs = consHalf where
-    consHalf :: RelmapConsHalf
-    consHalf trees =
-        B.abortable "half" (B.front $ B.untrees trees) $
+relmapConsLex :: [B.Named (String, C.RopFullSorter)] -> RelmapConsLex
+relmapConsLex lxs = consLex where
+    consLex :: RelmapConsLex
+    consLex trees =
+        B.abortable "lex" (B.front $ B.untrees trees) $
          case B.divideTreesByBar trees of
            [(B.TreeL tok@(B.TWord _ 0 _) : od)] -> find tok od
-           [[B.TreeB 1 _ xs]] -> consHalf xs
+           [[B.TreeB 1 _ xs]] -> consLex xs
            [[B.TreeB _ _ _]]  -> Left $ B.AbortAnalysis [] $ B.AAUndefined "bracket"
            [_]                -> Left $ B.AbortAnalysis [] $ B.AAUnkRelmap "?"
            tree2              -> find (B.tokenWord "append") $ map B.treeWrap tree2
 
-    find :: B.Token -> [B.TokenTree] -> B.Ab C.HalfRelmap
+    find :: B.Token -> [B.TokenTree] -> B.Ab C.LexRelmap
     find op trees =
-        case lookup (B.tokenContent op) halfs of
-          Nothing -> Right $ half op trees [] "<reference>"
+        case lookup (B.tokenContent op) lxs of
+          Nothing -> Right $ lx op trees [] "<reference>"
           Just (usage, operandSorter) ->
               do sorted <- operandSorter trees
-                 subrelmap $ half op trees sorted usage
+                 subrelmap $ lx op trees sorted usage
 
-    half :: B.Token -> [B.TokenTree] -> [B.Named [B.TokenTree]] -> String -> C.HalfRelmap
-    half op trees sorted usage =
-        C.HalfRelmap op (("operand", trees) : sorted) [] usage
+    lx :: B.Token -> [B.TokenTree] -> [B.Named [B.TokenTree]] -> String -> C.LexRelmap
+    lx op trees sorted usage =
+        C.LexRelmap op (("operand", trees) : sorted) [] usage
 
-    subrelmap :: B.AbMap C.HalfRelmap
-    subrelmap h@C.HalfRelmap { C.halfOperand = od } =
+    subrelmap :: B.AbMap C.LexRelmap
+    subrelmap h@C.LexRelmap { C.lexOperand = od } =
         case lookup "-relmap" od of
           Nothing    -> Right h   -- no subrelmaps
-          Just trees -> do subs <- mapM (consHalf . B.singleton) trees
-                           Right $ h { C.halfSubrelmap = subs }
+          Just trees -> do subs <- mapM (consLex . B.singleton) trees
+                           Right $ h { C.lexSubrelmap = subs }
 
 
 -- ----------------------  Full construction
 
 -- | Second step of constructing relmap,
---   make 'C.Relmap' from contents of 'C.HalfRelmap'.
+--   make 'C.Relmap' from contents of 'C.LexRelmap'.
 type RelmapConsFull c
-    = C.HalfRelmap        -- ^ Half relmap
+    = C.LexRelmap         -- ^ Lexical relmap
     -> B.Ab (C.Relmap c)  -- ^ Result full relmap
 
 -- | Construct (full) relmap.
 relmapConsFull :: C.Global c -> [B.Named (C.RopCons c)] -> RelmapConsFull c
 relmapConsFull global fulls = consFull where
-    consFull half =
-        let op    = C.halfOpText    half
-            subHs = C.halfSubrelmap half
+    consFull lx =
+        let op    = C.lexOpText lx
+            subHs = C.lexSubrelmap lx
         in case lookup op fulls of
-             Nothing   -> Right $ C.RelmapLink half op Nothing
-             Just cons -> B.abortableFrom "relmap" half $
+             Nothing   -> Right $ C.RelmapLink lx op Nothing
+             Just cons -> B.abortableFrom "relmap" lx $
                           do subFs <- mapM consFull subHs
-                             cons $ C.RopUse global half subFs
+                             cons $ C.RopUse global lx subFs
 
 
 -- ----------------------
 -- $ConstructionProcess
 --
---  Construction process of half relmaps from source trees.
+--  Construction process of lex relmaps from source trees.
 --
 --  [@\[TokenTree\] -> \[\[TokenTree\]\]@]
 --     Dicide list of 'B.TokenTree' by vertical bar (@|@).
 --
---  [@\[\[TokenTree\]\] -> \[HalfRelmap\]@]
---     Construct each 'C.HalfRelmap' from lists of 'B.TokenTree'.
+--  [@\[\[TokenTree\]\] -> \[LexRelmap\]@]
+--     Construct each 'C.LexRelmap' from lists of 'B.TokenTree'.
 --     When there are subrelmaps in token trees,
---     constructs 'C.HalfRelmap' recursively.
+--     constructs 'C.LexRelmap' recursively.
 --
---  [@\[HalfRelmap\] -> HalfRelmap@]
---     Wrap list of 'C.HalfRelmap' into one 'C.HalfRelmap'
---     that has these relmaps in 'C.halfSubrelmap'.
+--  [@\[LexRelmap\] -> LexRelmap@]
+--     Wrap list of 'C.LexRelmap' into one 'C.LexRelmap'
+--     that has these relmaps in 'C.lexSubrelmap'.
 --

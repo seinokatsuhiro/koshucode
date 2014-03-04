@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Core.Relmap
 ( module Koshucode.Baala.Core.Relmap.Construct,
-  module Koshucode.Baala.Core.Relmap.HalfRelmap,
+  module Koshucode.Baala.Core.Relmap.Lexical,
   module Koshucode.Baala.Core.Relmap.Operand,
   module Koshucode.Baala.Core.Relmap.Relkit,
   module Koshucode.Baala.Core.Relmap.Relmap,
@@ -15,7 +15,7 @@ module Koshucode.Baala.Core.Relmap
 ) where
 
 import Koshucode.Baala.Core.Relmap.Construct
-import Koshucode.Baala.Core.Relmap.HalfRelmap
+import Koshucode.Baala.Core.Relmap.Lexical
 import Koshucode.Baala.Core.Relmap.Operand
 import Koshucode.Baala.Core.Relmap.Relkit
 import Koshucode.Baala.Core.Relmap.Relmap
@@ -31,10 +31,10 @@ import Koshucode.Baala.Core.Relmap.Rop
  * Data 'Relmap' has
    'Relmap' (recursive),
    'Koshucode.Baala.Base.Data.Rel.Rel', and
-   'HalfRelmap'.
+   'LexRelmap'.
  
- * Data 'HalfRelmap' has
-   'HalfRelmap' (recursive),
+ * Data 'LexRelmap' has
+   'LexRelmap' (recursive),
    'Koshucode.Baala.Base.Syntax.Tokenize.TokenLine' and
    'Koshucode.Baala.Base.Syntax.TokenTree.TokenTree'.
  
@@ -52,22 +52,22 @@ import Koshucode.Baala.Core.Relmap.Rop
    'Relmap'.
 
  * Data 'RopUse' has
-   'HalfRelmap' and
+   'LexRelmap' and
    'Relmap'.
 
  Datatypes for constructing 'Relmap'.
  
  * Data 'RelmapCons' has
-   'RelmapConsHalf' and
+   'RelmapConsLex' and
    'RelmapConsFull'.
     
- * Type 'RelmapConsHalf' has
-   'HalfRelmap',
+ * Type 'RelmapConsLex' has
+   'LexRelmap',
    'Koshucode.Baala.Base.Syntax.Tokenize.TokenLine' and
    'Koshucode.Baala.Base.Syntax.TokenTree.TokenTree'.
  
  * Type 'RelmapConsFull' has
-   'HalfRelmap' and
+   'LexRelmap' and
    'Relmap'.
 -}
 

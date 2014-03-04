@@ -33,7 +33,7 @@ import qualified Data.Monoid                            as D
 import qualified Data.Version                           as D
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Core.Content           as C
-import qualified Koshucode.Baala.Core.Relmap.HalfRelmap as C
+import qualified Koshucode.Baala.Core.Relmap.Lexical    as C
 import qualified Koshucode.Baala.Core.Relmap.Operand    as C
 import qualified Koshucode.Baala.Core.Relmap.Relkit     as C
 
@@ -59,12 +59,12 @@ type RopCons c = RopUse c -> B.Ab (Relmap c)
 -- | Use of relmap operator
 data RopUse c = RopUse
     { ropGlobal    :: Global c
-    , ropHalf      :: C.HalfRelmap   -- ^ Syntactic data of operator use
-    , ropSubrelmap :: [Relmap c]     -- ^ Subrelmaps
+    , ropLex       :: C.LexRelmap   -- ^ Syntactic data of operator use
+    , ropSubrelmap :: [Relmap c]    -- ^ Subrelmaps
     } deriving (Show)
 
 instance B.TokenListing (RopUse c) where
-    tokenListing = B.tokenListing . ropHalf
+    tokenListing = B.tokenListing . ropLex
 
 getArg1 :: [B.Ab c] -> B.Ab (B.Ab c)
 getArg1 [x] = Right x
@@ -85,19 +85,19 @@ getArg3 _ = Left $ B.AbortCalc [] $ B.ACUnmatchType []
 -- | Relation-to-relation mapping.
 --   A 'Relmap' is correspond to a use of relational operator.
 data Relmap c
-    = RelmapSource   C.HalfRelmap B.JudgePattern [B.Termname]
+    = RelmapSource   C.LexRelmap B.JudgePattern [B.Termname]
       -- ^ Retrieve a relation from a dataset
-    | RelmapConst    C.HalfRelmap (B.Rel c)
+    | RelmapConst    C.LexRelmap (B.Rel c)
       -- ^ Constant relation
 
-    | RelmapGlobal   C.HalfRelmap (Global c -> RelkitCalc c)
+    | RelmapGlobal   C.LexRelmap (Global c -> RelkitCalc c)
       -- ^ Relmap that maps relations to a relation with globals
-    | RelmapCalc     C.HalfRelmap (RelkitConfl c) [Relmap c]
+    | RelmapCalc     C.LexRelmap (RelkitConfl c) [Relmap c]
       -- ^ Relmap that maps relations to a relation
 
-    | RelmapLink     C.HalfRelmap String (Maybe (Relmap c))
+    | RelmapLink     C.LexRelmap String (Maybe (Relmap c))
       -- ^ Relmap reference
-    | RelmapAlias    C.HalfRelmap (Relmap c)
+    | RelmapAlias    C.LexRelmap (Relmap c)
       -- ^ Equavalent relmap
     | RelmapAppend   (Relmap c) (Relmap c)
       -- ^ Connect two relmaps
@@ -130,16 +130,16 @@ showRelmap r = sh r where
     sub r2 = " (" ++ sh r2 ++ ")"
 
 instance D.Monoid (Relmap c) where
-    mempty  = RelmapCalc halfid (const $ Right . C.relkitId) []
+    mempty  = RelmapCalc lexid (const $ Right . C.relkitId) []
     mappend = RelmapAppend
 
-halfid :: C.HalfRelmap
-halfid = C.HalfRelmap (B.tokenWord "id") [("operand", [])] [] "id"
+lexid :: C.LexRelmap
+lexid = C.LexRelmap (B.tokenWord "id") [("operand", [])] [] "id"
 
 instance B.Name (Relmap c) where
     name (RelmapSource _ _ _)   = "source"
-    name (RelmapConst  h _)     = C.halfOpText h
-    name (RelmapCalc   h _ _)   = C.halfOpText h
+    name (RelmapConst  h _)     = C.lexOpText h
+    name (RelmapCalc   h _ _)   = C.lexOpText h
     name (RelmapAppend _ _)     = "append"
     name _ = undefined
 
@@ -165,19 +165,30 @@ relmapAppendList = expand where
     expand r = [r]
 
 instance B.TokenListing (Relmap c) where
-    tokenListing r = B.tokenListing $ relmapHalf r
+    tokenListing = B.tokenListing . relmapLex
 
-relmapHalf :: Relmap c -> Maybe C.HalfRelmap
-relmapHalf = half where
-    half (RelmapSource h _ _)   = Just h
-    half (RelmapConst  h _)     = Just h
+instance Ord (Relmap c) where
+    r1 `compare` r2 = relmapLexList r1 `compare` relmapLexList r2
 
-    half (RelmapGlobal h _)     = Just h
-    half (RelmapCalc   h _ _)   = Just h
+instance Eq (Relmap c) where
+    r1 == r2  =  compare r1 r2 == EQ
 
-    half (RelmapLink _ _ _)     = Nothing
-    half (RelmapAlias  h _)     = Just h
-    half (RelmapAppend m1 _)    = relmapHalf m1
+relmapLex :: Relmap c -> Maybe C.LexRelmap
+relmapLex r = case relmapLexList r of
+                []       -> Nothing
+                (lx : _) -> Just lx
+
+relmapLexList :: Relmap c -> [C.LexRelmap]
+relmapLexList = collect where
+    collect (RelmapSource lx _ _)  = [lx]
+    collect (RelmapConst  lx _)    = [lx]
+
+    collect (RelmapGlobal lx _)    = [lx]
+    collect (RelmapCalc   lx _ _)  = [lx]
+
+    collect (RelmapLink   lx _ _)  = [lx]
+    collect (RelmapAlias  lx _)    = [lx]
+    collect (RelmapAppend r1 r2)   = collect r1 ++ collect r2
 
 
 

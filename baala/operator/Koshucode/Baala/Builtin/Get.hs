@@ -41,7 +41,7 @@ abortableGetTrees :: [B.TokenTree] -> B.Map (B.Ab b)
 abortableGetTrees = B.abortable abortableTag . B.front . B.untrees
 
 lookupOperand :: String -> C.RopUse c -> Maybe [B.TokenTree]
-lookupOperand name = lookup name . C.halfOperand . C.ropHalf
+lookupOperand name = lookup name . C.lexOperand . C.ropLex
 
 getAbortable :: ([B.TokenTree] -> B.Ab b) -> RopGet c b
 getAbortable f u name =
