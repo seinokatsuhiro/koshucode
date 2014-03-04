@@ -5,6 +5,8 @@
 module Koshucode.Baala.Core.Assert.Run
 ( runAssertJudges,
   runAssertDataset,
+  RelkitAssoc,
+  specializeRelmap,
 ) where
 
 import qualified Data.Monoid as M
@@ -31,38 +33,86 @@ runRelmapDataset global dataset = runRelmapViaRelkit g2 where
 
 runRelmapViaRelkit :: (Ord c) => C.Global c -> C.Relmap c -> B.AbMap (B.Rel c)
 runRelmapViaRelkit global r (B.Rel h1 b1) =
-    do C.Relkit h2 f2 <- specialize global r h1
+--    do C.Relkit h2 f2 <- specialize global r h1
+    do (C.Relkit h2 f2, _) <- specializeRelmap global [] [] h1 r
        b2 <- C.relkitRun f2 b1
        Right $ B.Rel h2 b2
 
-specialize :: C.Global c -> C.Relmap c -> B.Relhead -> B.Ab (C.Relkit c)
-specialize global = (<$>) where
+-- specialize :: C.Global c -> C.Relmap c -> B.Relhead -> B.Ab (C.Relkit c)
+-- specialize global = (<$>) where
+--     sel = C.globalSelect global
+
+--     C.RelmapSource lx p ns           <$> _  = right lx (C.relkitConst $ sel p ns)
+--     C.RelmapConst  lx rel            <$> _  = right lx (C.relkitConst rel)
+--     C.RelmapAlias  _ relmap          <$> h1 = relmap <$> h1
+--     C.RelmapLink   _ _ (Just relmap) <$> h1 = relmap <$> h1
+--     C.RelmapLink   lx name Nothing   <$> _  =
+--         abort lx $ Left $ B.AbortAnalysis [] $ B.AAUnkRelmap name
+
+--     C.RelmapAppend relmap1 relmap2 <$> h1 =
+--         do relkit2 <- relmap1 <$> h1
+--            relkit3 <- relmap2 <$> C.relkitHead relkit2
+--            Right $ M.mappend relkit2 relkit3
+
+--     C.RelmapCalc lx mk relmaps <$> h1 =
+--         abort lx $ do
+--           subrelkit <- (<$> h1) `mapM` relmaps
+--           relkit    <- mk subrelkit h1
+--           right lx relkit
+
+--     C.RelmapGlobal lx mk <$> h1 =
+--         abort lx $ do
+--           relkit <- mk global h1
+--           right lx relkit
+
+--     right lx r = Right $ C.relkitSetSource lx $ r
+
+--     abort = B.abortableFrom "specialize"
+
+type RelkitAssoc c = [(C.RelkitKey, C.Relkit c)]
+
+specializeRelmap :: C.Global c -> [B.Named (C.Relmap c)]
+  -> RelkitAssoc c -> B.Relhead -> C.Relmap c -> B.Ab (C.Relkit c, RelkitAssoc c)
+specializeRelmap global relmapList = sp where
     sel = C.globalSelect global
 
-    C.RelmapSource lx p ns           <$> _  = right lx (C.relkitConst $ sel p ns)
-    C.RelmapConst  lx rel            <$> _  = right lx (C.relkitConst rel)
-    C.RelmapAlias  _ relmap          <$> h1 = relmap <$> h1
-    C.RelmapLink   _ _ (Just relmap) <$> h1 = relmap <$> h1
-    C.RelmapLink   lx name Nothing   <$> _  =
-        abort lx $ Left $ B.AbortAnalysis [] $ B.AAUnkRelmap name
+    sp kits _  (C.RelmapSource lx p ns)           = right kits lx (C.relkitConst $ sel p ns)
+    sp kits _  (C.RelmapConst  lx rel)            = right kits lx (C.relkitConst rel)
+    sp kits h1 (C.RelmapAlias  _ relmap)          = sp kits h1 relmap
+    sp kits h1 (C.RelmapLink   _ _ (Just relmap)) = sp kits h1 relmap
+    sp kits h1 (C.RelmapLink   lx name Nothing)   =
+        case lookup name relmapList of
+          Nothing -> abort lx $ Left $ B.AbortAnalysis [] $ B.AAUnkRelmap name
+          Just r  -> let key = (h1, C.relmapLexList r)
+                     in case lookup key kits of
+                          Just relkit -> Right (relkit, kits)
+                          Nothing -> do (relkit@(C.Relkit h2 _), kits2) <- sp kits h1 r
+                                        Right (C.Relkit h2 (B.Sourced [] $ C.RelkitLink name key),
+                                               (key, relkit) : kits2)
 
-    C.RelmapAppend relmap1 relmap2 <$> h1 =
-        do relkit2 <- relmap1 <$> h1
-           relkit3 <- relmap2 <$> C.relkitHead relkit2
-           Right $ M.mappend relkit2 relkit3
+    sp kits h1 (C.RelmapAppend relmap1 relmap2) =
+        do (relkit2, kits2) <- sp kits h1 relmap1
+           (relkit3, kits3) <- sp kits2 (C.relkitHead relkit2) relmap2
+           Right (M.mappend relkit2 relkit3, kits3)
 
-    C.RelmapCalc lx mk relmaps <$> h1 =
+    sp kits h1 (C.RelmapCalc lx mk relmaps) =
         abort lx $ do
-          subrelkit <- (<$> h1) `mapM` relmaps
-          relkit    <- mk subrelkit h1
-          right lx relkit
+          (subkits, kits2) <- spCollect kits h1 relmaps
+          relkit <- mk subkits h1
+          right kits2 lx relkit
 
-    C.RelmapGlobal lx mk <$> h1 =
+    sp kits h1 (C.RelmapGlobal lx mk) =
         abort lx $ do
           relkit <- mk global h1
-          right lx relkit
+          right kits lx relkit
 
-    right lx r = Right $ C.relkitSetSource lx $ r
+    spCollect kits _ [] = Right ([], kits)
+    spCollect kits h1 (r : rs) =
+        do (relkit,  kits2) <- sp        kits  h1 r
+           (relkits, kits3) <- spCollect kits2 h1 rs
+           Right (relkit : relkits, kits3)
+
+    right kits lx r = Right (C.relkitSetSource lx r, kits)
 
     abort = B.abortableFrom "specialize"
 

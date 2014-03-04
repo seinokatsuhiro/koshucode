@@ -12,6 +12,7 @@ module Koshucode.Baala.Core.Relmap.Rop
   -- * Relmap
   Relmap (..),
   mapToRelmap,
+  relmapLexList,
 
   -- * Relkit
   RelkitCalc,

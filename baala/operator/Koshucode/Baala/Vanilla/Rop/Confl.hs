@@ -30,9 +30,9 @@ consMaybe use =
 relmapMaybe :: (Ord c, C.CNil c) => C.RopUse c -> B.Map (C.Relmap c)
 relmapMaybe use = C.relmapBinary use relkitMaybe
 
-relkitMaybe :: (Ord c, C.CNil c) => C.RelkitBinary c
+relkitMaybe :: forall c. (Ord c, C.CNil c) => C.RelkitBinary c
 relkitMaybe (C.Relkit h2 f2) h1 =
-    Right $ C.relkit h3 (C.RelkitAbFull False f3)
+    Right $ C.relkit h3 (C.RelkitAbFull False [f2] f3)
     where
       pos     :: [B.TermPos]
       pos     =  h1 `B.posFrom` h2
@@ -46,14 +46,17 @@ relkitMaybe (C.Relkit h2 f2) h1 =
       share2  =  h2 `B.posFor` shared
       side2   =  h2 `B.posFor` sided
 
-      m2 b1   = do b2 <- C.relkitRun f2 b1
-                   Right $ B.gatherToMap $ map kv b2
+      m2 b2   = Right $ B.gatherToMap $ map kv b2
       kv cs2  = ( B.posPick share2 cs2,
                   B.posPick side2  cs2 )
 
       h3 = B.mappend h2 h1
-      f3 b1 = do m <- m2 b1
-                 Right $ concatMap (step m) b1
+
+      f3 :: [B.Ab [[c]]] -> [[c]] -> B.Ab [[c]]
+      f3 sub b1 = do let [b2'] = sub
+                     b2 <- b2'
+                     m  <- m2 b2
+                     Right $ concatMap (step m) b1
       nils = replicate (B.headDegree h3 - B.headDegree h1) C.nil
       step m cs1 = case B.lookupMap (B.posPick share1 cs1) m of
                      Just side -> map (++ cs1) side
@@ -100,10 +103,10 @@ consGroup use =
 relmapGroup :: (Ord c, C.CRel c) => C.RopUse c -> String -> B.Map (C.Relmap c)
 relmapGroup use = C.relmapBinary use . relkitGroup
 
-{-| Grouping relation. -}
+-- | Grouping relation.
 relkitGroup :: forall c. (Ord c, C.CRel c) => String -> C.RelkitBinary c
 relkitGroup n (C.Relkit h2 f2) h1 =
-    Right $ C.relkit h3 (C.RelkitAbFull False f3)
+    Right $ C.relkit h3 (C.RelkitAbFull False [f2] f3)
     where
       shared    :: [B.Termname]
       shared    = B.posInnerNames $ h1 `B.posFrom` h2
@@ -112,12 +115,13 @@ relkitGroup n (C.Relkit h2 f2) h1 =
       share1    = h1 `B.posFor` shared
       share2    = h2 `B.posFor` shared
 
-      toMap2 b1 = do b2 <- C.relkitRun f2 b1
-                     Right $ B.gatherToMap $ map kv b2
+      toMap2 b2 = Right $ B.gatherToMap $ map kv b2
       kv cs2    = ( B.posPick share2 cs2, cs2 )
 
       h3        = B.Nest n (B.headTerms h2) `B.headConsTerm` h1
-      f3 b1     = do map2 <- toMap2 b1
+      f3 sub b1 = do let [b2'] = sub
+                     b2 <- b2'
+                     map2 <- toMap2 b2
                      Right $ map (add map2) b1
       add map2 cs1 =
           let b2maybe = B.lookupMap (B.posPick share1 cs1) map2
@@ -138,10 +142,10 @@ relmapIf use = C.relmapConfl use relkitIf
 
 relkitIf :: forall c. (Ord c) => C.RelkitConfl c
 relkitIf [C.Relkit _ ft, C.Relkit hc fc, C.Relkit ha fa] _
-    | hc == ha = Right $ C.relkit hc (C.RelkitAbFull True f3) where
-    f3 b1 = do b2 <- C.relkitRun ft b1
-               case b2 of
-                 [] -> C.relkitRun fa b1
-                 _  -> C.relkitRun fc b1
+    | hc == ha = Right $ C.relkit hc (C.RelkitAbFull True subkits f3) where
+    subkits = [ft, fc, fa]
+    f3 sub _ = do let [bt', bc', ba'] = sub
+                  bt <- bt'
+                  if bt /= [] then bc' else ba'
 relkitIf _ _ = B.bug "relkitIf"
 

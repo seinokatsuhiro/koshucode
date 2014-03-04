@@ -94,7 +94,9 @@ relmapList f = loop where
 -- | Link relmaps by its name.
 relmapLink :: forall c. [B.Named (C.Relmap c)] -> B.Map (C.Relmap c)
 relmapLink rslist = maplink where
-    rsrec   = maplink `B.mapSndTo` rslist
+    rsrec :: [B.Named (C.Relmap c)]
+    rsrec = maplink `B.mapSndTo` rslist
+
     maplink = C.mapToRelmap link
 
     link :: B.Map (C.Relmap c)
