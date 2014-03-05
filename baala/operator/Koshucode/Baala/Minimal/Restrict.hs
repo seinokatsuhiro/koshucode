@@ -31,6 +31,12 @@ relmapSome use = C.relmapBinary use relkitSome
 relkitSome :: (Ord c) => C.RelkitBinary c
 relkitSome = relkitSemi False
 
+relkitSemi :: (Ord c) => Bool -> C.RelkitBinary c
+relkitSemi isNull (C.Relkit _ f2) h1 =
+    Right $ C.relkit h1 (C.RelkitAbSemi f2 p)
+    where p b2 = Right $ null b2 == isNull
+
+
 
 -- ----------------------  none
 
@@ -45,19 +51,6 @@ relmapNone use = C.relmapBinary use relkitNone
 relkitNone :: (Ord c) => C.RelkitBinary c
 relkitNone = relkitSemi True
 
-
--- ----------------------  semi
-
-relkitSemi :: (Ord c) => Bool -> C.RelkitBinary c
-relkitSemi isNull (C.Relkit _ f2) h1 =
-    Right $ C.relkit h1 (C.RelkitAbSemi f2 p)
-    where p b2 = Right $ null b2 == isNull
-
--- relkitSemi :: (Ord c) => Bool -> C.RelkitBinary c
--- relkitSemi isNull (C.Relkit _ f2) h1 =
---     Right $ C.relkit h1 (C.RelkitAbPred p)
---     where p cs = do b2 <- C.relkitRun f2 [cs]
---                     Right $ null b2 == isNull
 
 
 -- ----------------------  sub

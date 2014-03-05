@@ -61,15 +61,13 @@ relkitMeet (C.Relkit h2 f2) h1 = Right (C.Relkit h3 f3) where
     cut2      =  B.posCut  share2
 
     h3        =  h2 `B.mappend` h1
-    f3        =  case f2 of
-                   (B.Sourced _ (C.RelkitConst b2)) -> B.Sourced [] $ C.RelkitOneToAbMany False (meet2 b2)
-                   _  -> B.Sourced [] $ C.RelkitOneToAbMany False meet
-    meet cs1  =  do b2sub <- C.relkitRun f2 [cs1]
-                    meet2 b2sub cs1
-    meet2 b2 cs1 =  let m2 = B.gatherToMap $ map kv b2
-                    in case B.lookupMap (pick1 cs1) m2 of
-                         Just b2side -> Right $ map (++ cs1) b2side
-                         Nothing -> Right $ []
+    f3        =  B.Sourced [] $ C.RelkitOneToAbMany False [f2] meet
+    meet sub cs1 = do let [b2'] = sub
+                      b2 <- b2'
+                      let m2 = B.gatherToMap $ map kv b2
+                      case B.lookupMap (pick1 cs1) m2 of
+                        Just b2side -> Right $ map (++ cs1) b2side
+                        Nothing -> Right $ []
     kv cs2    =  ( pick2 cs2,  -- key is shared cs
                    cut2  cs2 ) -- value is side cs
 

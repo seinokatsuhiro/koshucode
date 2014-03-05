@@ -87,7 +87,7 @@ specializeRelmap global relmapList = sp where
                      in case lookup key kits of
                           Just relkit -> Right (relkit, kits)
                           Nothing -> do (relkit@(C.Relkit h2 _), kits2) <- sp kits h1 r
-                                        Right (C.Relkit h2 (B.Sourced [] $ C.RelkitLink name key),
+                                        Right (C.Relkit h2 (B.Sourced [] $ C.RelkitLink name key Nothing),
                                                (key, relkit) : kits2)
 
     sp kits h1 (C.RelmapAppend relmap1 relmap2) =

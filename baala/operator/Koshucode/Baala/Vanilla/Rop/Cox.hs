@@ -35,13 +35,13 @@ relmapAdd use = C.relmapFlow use . relkitAdd
 relkitAdd :: (C.CList c, C.CRel c, B.Pretty c)
   => ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.RelkitCalc c
 relkitAdd (base, deriv, bodies) h1 =
-    Right $ C.relkit h2 (C.RelkitOneToAbOne False f) where
+    Right $ C.relkit h2 (C.RelkitOneToAbOne False [] f) where
         ns = map fst bodies   -- term names
         es = map snd bodies   -- term expression
         h2 = B.headAppend ns h1
-        f cs1 = do es2 <- mapM (C.coxBeta base deriv h1) es
-                   cs2 <- C.coxRun cs1 `mapM` es2
-                   Right $ cs2 ++ cs1
+        f _ cs1 = do es2 <- mapM (C.coxBeta base deriv h1) es
+                     cs2 <- C.coxRun cs1 `mapM` es2
+                     Right $ cs2 ++ cs1
 
 
 -- ----------------------  filter
