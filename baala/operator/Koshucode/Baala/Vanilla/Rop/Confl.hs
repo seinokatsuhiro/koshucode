@@ -31,8 +31,8 @@ relmapMaybe :: (Ord c, C.CNil c) => C.RopUse c -> B.Map (C.Relmap c)
 relmapMaybe use = C.relmapBinary use relkitMaybe
 
 relkitMaybe :: forall c. (Ord c, C.CNil c) => C.RelkitBinary c
-relkitMaybe (C.Relkit h2 f2) h1 =
-    Right $ C.relkit h3 (C.RelkitAbFull False [f2] f3)
+relkitMaybe (C.Relkit (Just h2) f2) (Just h1) =
+    Right $ C.relkitJust h3 (C.RelkitAbFull False [f2] f3)
     where
       pos     :: [B.TermPos]
       pos     =  h1 `B.posFrom` h2
@@ -61,7 +61,7 @@ relkitMaybe (C.Relkit h2 f2) h1 =
       step m cs1 = case B.lookupMap (B.posPick share1 cs1) m of
                      Just side -> map (++ cs1) side
                      Nothing   -> [nils ++ cs1]
-
+relkitMaybe _ _ = Right C.relkitNothing
 
 
 -- ----------------------  full
@@ -105,8 +105,8 @@ relmapGroup use = C.relmapBinary use . relkitGroup
 
 -- | Grouping relation.
 relkitGroup :: forall c. (Ord c, C.CRel c) => String -> C.RelkitBinary c
-relkitGroup n (C.Relkit h2 f2) h1 =
-    Right $ C.relkit h3 (C.RelkitAbFull False [f2] f3)
+relkitGroup n (C.Relkit (Just h2) f2) (Just h1) =
+    Right $ C.relkitJust h3 (C.RelkitAbFull False [f2] f3)
     where
       shared    :: [B.Termname]
       shared    = B.posInnerNames $ h1 `B.posFrom` h2
@@ -127,7 +127,7 @@ relkitGroup n (C.Relkit h2 f2) h1 =
           let b2maybe = B.lookupMap (B.posPick share1 cs1) map2
               b2sub   = B.maybeWith [] b2maybe
           in C.pRel (B.Rel h2 b2sub) : cs1
-
+relkitGroup _ _ _ = Right C.relkitNothing
 
 
 -- ----------------------  if
@@ -141,11 +141,15 @@ relmapIf :: (Ord c) => C.RopUse c -> [C.Relmap c] -> C.Relmap c
 relmapIf use = C.relmapConfl use relkitIf
 
 relkitIf :: forall c. (Ord c) => C.RelkitConfl c
-relkitIf [C.Relkit _ ft, C.Relkit hc fc, C.Relkit ha fa] _
-    | hc == ha = Right $ C.relkit hc (C.RelkitAbFull True subkits f3) where
-    subkits = [ft, fc, fa]
-    f3 sub _ = do let [bt', bc', ba'] = sub
-                  bt <- bt'
-                  if bt /= [] then bc' else ba'
-relkitIf _ _ = B.bug "relkitIf"
+relkitIf [rt@(C.Relkit _ ft), rc@(C.Relkit hc fc), ra@(C.Relkit ha fa)] r
+    | hc == Nothing && ha == Nothing = Right C.relkitNothing
+    | hc == Nothing = relkitIf [rt, C.Relkit ha fc, ra] r
+    | ha == Nothing = relkitIf [rt, rc, C.Relkit hc fa] r
+    | hc == ha = Right $ C.relkit hc (C.RelkitAbFull True subkits f3)
+    | otherwise = Right C.relkitNothing
+    where
+      subkits  = [ft, fc, fa]
+      f3 sub _ = do let [bt', bc', ba'] = sub
+                    bt <- bt'
+                    if bt /= [] then bc' else ba'
 

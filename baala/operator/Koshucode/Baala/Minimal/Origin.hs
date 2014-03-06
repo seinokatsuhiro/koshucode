@@ -62,7 +62,7 @@ relmapContents :: C.RopUse c -> B.Termname -> C.Relmap c
 relmapContents use = C.relmapFlow use . relkitContents
 
 relkitContents :: B.Termname -> C.RelkitCalc c
-relkitContents n _ = Right $ C.relkit h2 (C.RelkitFull True f) where
+relkitContents n _ = Right $ C.relkitJust h2 (C.RelkitFull True f) where
     h2   = B.headFrom [n]
     f b1 = map B.singleton $ concat b1
 

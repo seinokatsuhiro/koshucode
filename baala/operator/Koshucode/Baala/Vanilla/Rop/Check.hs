@@ -50,8 +50,9 @@ relkitCheckTermHas  = relkitCheckTermBy (\ns h1 -> B.headFrom ns `B.isSubhead` h
 relkitCheckTermBut  = relkitCheckTermBy (\ns h1 -> null $ B.headKeepTerms h1 ns)
 
 relkitCheckTermBy :: ([String] -> B.Relhead -> Bool) -> [String] -> C.RelkitCalc c
-relkitCheckTermBy f ns h1
-    | f ns h1 = Right $ C.relkit h1 C.RelkitId
+relkitCheckTermBy _ _ Nothing = Right C.relkitNothing
+relkitCheckTermBy f ns (Just h1)
+    | f ns h1 = Right $ C.relkitJust h1 C.RelkitId
     | otherwise = Left $ B.AbortAnalysis [] (B.AACheckTerms $ B.headNames h1)
 
 
@@ -76,8 +77,9 @@ relmapDuplicate :: (Ord c) => C.RopUse c -> [B.Termname] -> C.Relmap c
 relmapDuplicate use = C.relmapFlow use . relkitDuplicate
 
 relkitDuplicate :: (Ord c) => [B.Termname] -> C.RelkitCalc c
-relkitDuplicate ns h1
-    | null non  = Right $ C.relkit h1 (C.RelkitFull False f)
+relkitDuplicate _ Nothing = Right C.relkitNothing
+relkitDuplicate ns (Just h1)
+    | null non  = Right $ C.relkitJust h1 (C.RelkitFull False f)
     | otherwise = Left  $ B.AbortAnalysis [] (B.AANoTerms non)
     where
       non :: [B.Termname]
@@ -104,7 +106,9 @@ consTypename use =
 
 relkitTypename
   :: (C.CText c) => [(B.Termname, B.Termname)] -> C.RelkitCalc c
-relkitTypename np h1 = Right $ C.relkit h2 (C.RelkitOneToOne False f) where
+relkitTypename _ Nothing = Right C.relkitNothing
+relkitTypename np (Just h1) =
+    Right $ C.relkitJust h2 (C.RelkitOneToOne False f) where
     ns    = map fst np
     ps    = map snd np
     h2    = B.headAppend ns h1

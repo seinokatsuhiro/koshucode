@@ -32,8 +32,9 @@ runRelmapViaRelkit :: (Ord c)
   => C.Global c -> [C.RelmapDef c]
   -> C.Relmap c -> B.AbMap (B.Rel c)
 runRelmapViaRelkit global rdef r (B.Rel h1 b1) =
-    do (C.Relkit h2' f2', relkits) <- C.relmapSpecialize global rdef [] h1 r
-       let C.Relkit h2 f2 = C.relkitLink relkits $ C.Relkit h2' f2'
+    do (C.Relkit h2' f2', relkits) <- C.relmapSpecialize global rdef [] (Just h1) r
+       -- todo: nothing
+       let C.Relkit (Just h2) f2 = C.relkitLink relkits $ C.Relkit h2' f2'
        b2 <- C.relkitRun f2 b1
        Right $ B.Rel h2 b2
 

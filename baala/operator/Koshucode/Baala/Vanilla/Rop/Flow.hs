@@ -35,7 +35,8 @@ relmapEnclose use = C.relmapFlow use . relkitEnclose
 
 {-| Enclose the current relation in a term. -}
 relkitEnclose :: (C.CRel c) => B.Termname -> C.RelkitCalc c
-relkitEnclose n h1 = Right $ C.relkit h2 (C.RelkitFull False f) where
+relkitEnclose _ Nothing = Right C.relkitNothing
+relkitEnclose n (Just h1) = Right $ C.relkitJust h2 (C.RelkitFull False f) where
     h2 = B.Relhead [B.Nest n $ B.headTerms h1]
     f b1 = [[C.pRel $ B.Rel h1 b1]]
 
@@ -66,9 +67,10 @@ relmapMember :: C.RopUse Rop.VContent -> B.Termname2 -> C.Relmap Rop.VContent
 relmapMember use = C.relmapFlow use . relkitMember
 
 relkitMember :: B.Termname2 -> C.RelkitCalc Rop.VContent
-relkitMember (x, xs) h1 = r2 where
-    r2 | xHere && xsHere     = relkitMemberCheck  xPos xsPos h1
-       | not xHere && xsHere = relkitMemberExpand x    xsPos h1
+relkitMember _ Nothing = Right C.relkitNothing
+relkitMember (x, xs) (Just h1) = r2 where
+    r2 | xHere && xsHere     = relkitMemberCheck  xPos xsPos (Just h1)
+       | not xHere && xsHere = relkitMemberExpand x    xsPos (Just h1)
        | otherwise           = Left $ B.AbortAnalysis [] (B.AANoTerms [x, xs])
     ([xPos, xsPos], [xHere, xsHere])
         = h1 `B.posHere` [x, xs]
@@ -79,7 +81,9 @@ relkitMemberCheck xPos xsPos h1 = Right $ C.relkit h1 (C.RelkitPred f) where
            in xCont `Rop.isMember` xsCont
 
 relkitMemberExpand :: B.Termname -> B.TermPos -> C.RelkitCalc Rop.VContent
-relkitMemberExpand x xsPos h1 = Right $ C.relkit h2 (C.RelkitOneToMany False f) where
+relkitMemberExpand _ _ Nothing = Right C.relkitNothing
+relkitMemberExpand x xsPos (Just h1) =
+    Right $ C.relkitJust h2 (C.RelkitOneToMany False f) where
     h2     =  B.headCons x h1
     f cs   =  let [xsCont] = B.posPick [xsPos] cs
               in case xsCont of
@@ -96,13 +100,15 @@ consRange use =
   do term <- Rop.getTerm use "-term"
      low  <- Rop.getInt  use "-from"
      high <- Rop.getInt  use "-to"
-     Right $ relmapRange use term low high
+     Right $ relmapRange use (term, low, high)
 
-relmapRange :: (C.CDec c) => C.RopUse c -> B.Termname -> Int -> Int -> C.Relmap c
-relmapRange use term low high = C.relmapFlow use $ relkitRange term low high
+relmapRange :: (C.CDec c) => C.RopUse c -> (B.Termname, Int, Int) -> C.Relmap c
+relmapRange use = C.relmapFlow use . relkitRange
 
-relkitRange :: (C.CDec c) => B.Termname -> Int -> Int -> C.RelkitCalc c
-relkitRange n low high h1 = Right $ C.relkit h2 (C.RelkitOneToMany False f) where
+relkitRange :: (C.CDec c) => (B.Termname, Int, Int) -> C.RelkitCalc c
+relkitRange _ Nothing = Right C.relkitNothing
+relkitRange (n, low, high) (Just h1) =
+    Right $ C.relkitJust h2 (C.RelkitOneToMany False f) where
     h2    = B.headCons n h1
     decs  = map C.pDecFromInt [low .. high]
     f cs  = map (: cs) decs
@@ -133,7 +139,7 @@ relmapSize use n = C.relmapFlow use $ relkitSize n
 
 {-| Cardinality -}
 relkitSize :: (C.CDec c) => B.Termname -> C.RelkitCalc c
-relkitSize n _ = Right $ C.relkit h2 (C.RelkitFull False f) where
+relkitSize n _ = Right $ C.relkitJust h2 (C.RelkitFull False f) where
     h2   = B.headFrom [n]
     f b1 = [[C.pDecFromInt $ length b1]]
 

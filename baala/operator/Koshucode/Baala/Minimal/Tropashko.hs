@@ -47,7 +47,8 @@ relmapMeet use = C.relmapBinary use relkitMeet
 
 {-| Meet two relations. -}
 relkitMeet :: (Ord c) => C.RelkitBinary c
-relkitMeet (C.Relkit h2 f2) h1 = Right (C.Relkit h3 f3) where
+relkitMeet (C.Relkit (Just h2) f2) (Just h1) =
+    Right (C.Relkit (Just h3) f3) where
     shared    :: [B.Termname]
     shared    =  B.posInnerNames $ h1 `B.posFrom` h2
 
@@ -70,6 +71,7 @@ relkitMeet (C.Relkit h2 f2) h1 = Right (C.Relkit h3 f3) where
                         Nothing -> Right $ []
     kv cs2    =  ( pick2 cs2,  -- key is shared cs
                    cut2  cs2 ) -- value is side cs
+relkitMeet _ _ = Right C.relkitNothing
 
 
 
@@ -90,7 +92,8 @@ relmapJoin use = C.relmapBinary use relkitJoin
 
 {-| Join two relations. -}
 relkitJoin :: C.RelkitBinary c
-relkitJoin (C.Relkit h2 f2) h1 = Right (C.Relkit h3 f3) where
+relkitJoin (C.Relkit (Just h2) f2) (Just h1) =
+    Right (C.Relkit (Just h3) f3) where
     shared  :: [B.Termname]
     shared  =  B.posInnerNames $ h1 `B.posFrom` h2
 
@@ -106,6 +109,7 @@ relkitJoin (C.Relkit h2 f2) h1 = Right (C.Relkit h3 f3) where
     f3      =  B.Sourced [] $ C.RelkitUnion True
                   [ B.Sourced [] $ C.RelkitOneToOne True pick1
                   , B.Sourced [] $ C.RelkitAppend f2 (B.Sourced [] $ C.RelkitOneToOne True pick2) ]
+relkitJoin _ _ = Right C.relkitNothing
 
 
 

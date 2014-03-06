@@ -22,7 +22,6 @@ module Koshucode.Baala.Core.Relmap.Relmap
   relmapNameList,
 
   -- * Linker
-  relmapLink,
   relmapSpecialize,
 ) where
 
@@ -93,24 +92,12 @@ relmapList f = loop where
 
 -- ----------------------  Link
 
--- | Link relmaps by its name.
-relmapLink :: forall c. [C.RelmapDef c] -> B.Map (C.Relmap c)
-relmapLink rslist = maplink where
-    rsrec :: [C.RelmapDef c]
-    rsrec = maplink `B.mapSndTo` rslist
-
-    maplink = C.mapToRelmap link
-
-    link :: B.Map (C.Relmap c)
-    link (C.RelmapLink lx name Nothing) =
-        C.RelmapLink lx name $ lookup name rsrec
-    link r = r
-
-relmapSpecialize :: C.Global c -> [C.RelmapDef c]
-  -> [C.RelkitDef c] -> B.Relhead -> C.Relmap c -> B.Ab (C.Relkit c, [C.RelkitDef c])
+relmapSpecialize :: forall c. C.Global c -> [C.RelmapDef c]
+  -> [C.RelkitDef c] -> Maybe B.Relhead -> C.Relmap c -> B.Ab (C.Relkit c, [C.RelkitDef c])
 relmapSpecialize global rdef = sp [] where
     sel = C.globalSelect global
 
+    sp :: [C.RelkitKey] -> [C.RelkitDef c] -> Maybe B.Relhead -> C.Relmap c -> B.Ab (C.Relkit c, [C.RelkitDef c])
     sp _  kits _  (C.RelmapSource lx p ns)           = right kits lx (C.relkitConst $ sel p ns)
     sp _  kits _  (C.RelmapConst  lx rel)            = right kits lx (C.relkitConst rel)
     sp ks kits h1 (C.RelmapAlias  _ relmap)          = sp ks kits h1 relmap
@@ -120,7 +107,7 @@ relmapSpecialize global rdef = sp [] where
           Nothing -> abort lx $ Left $ B.AbortAnalysis [] $ B.AAUnkRelmap name
           Just r  -> let key = (h1, C.relmapLexList r)
                      in if key `elem` ks
-                        then Right (C.Relkit h1 (B.Sourced [] $ C.RelkitLink name key Nothing),
+                        then Right (C.Relkit Nothing (B.Sourced [] $ C.RelkitLink name key Nothing),
                                      kits)
                         else case lookup key kits of
                                Just relkit -> Right (relkit, kits)
@@ -154,6 +141,18 @@ relmapSpecialize global rdef = sp [] where
 
     abort = B.abortableFrom "specialize"
 
+-- -- | Link relmaps by its name.
+-- relmapLink :: forall c. [C.RelmapDef c] -> B.Map (C.Relmap c)
+-- relmapLink rslist = maplink where
+--     rsrec :: [C.RelmapDef c]
+--     rsrec = maplink `B.mapSndTo` rslist
+
+--     maplink = C.mapToRelmap link
+
+--     link :: B.Map (C.Relmap c)
+--     link (C.RelmapLink lx name Nothing) =
+--         C.RelmapLink lx name $ lookup name rsrec
+--     link r = r
 
 
 

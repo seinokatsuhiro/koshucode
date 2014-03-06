@@ -52,8 +52,9 @@ relkitArrange
     -> B.Arrange c
     -> [B.Termname]
     -> C.RelkitCalc c
-relkitArrange ha ba ns h1
-    | null non  = Right $ C.relkit h2 (C.RelkitOneToOne True $ ba ind)
+relkitArrange _ _ _ Nothing = Right C.relkitNothing
+relkitArrange ha ba ns (Just h1)
+    | null non  = Right $ C.relkitJust h2 (C.RelkitOneToOne True $ ba ind)
     | otherwise = Left $ B.AbortAnalysis [] $ B.AANoTerms non
     where
       non =  B.headDropTerms h1 ns
@@ -79,10 +80,11 @@ relmapRename use = C.relmapFlow use . relkitRename
 
 {-| Change terms names -}
 relkitRename :: [(B.Termname, B.Termname)] -> C.RelkitCalc c
-relkitRename np h1
+relkitRename _ Nothing = Right C.relkitNothing
+relkitRename np (Just h1)
     | nsCheck /= [] = Left  $ B.AbortAnalysis [] $ B.AAReqNewTerms nsCheck
     | psCheck /= [] = Left  $ B.AbortAnalysis [] $ B.AANoTerms psCheck
-    | otherwise     = Right $ C.relkit h2 C.RelkitId
+    | otherwise     = Right $ C.relkitJust h2 C.RelkitId
     where
       (ns, ps) = unzip np
       nsCheck  = B.headKeepTerms h1 ns

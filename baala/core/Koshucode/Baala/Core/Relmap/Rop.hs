@@ -199,16 +199,16 @@ relmapLexList = collect where
 -- ----------------------  Relkit
 
 -- | Make 'C.Relkit' from heading of input relation.
-type RelkitCalc c =  B.Relhead -> B.Ab (C.Relkit c)
+type RelkitCalc c   = Maybe B.Relhead -> B.Ab (C.Relkit c)
 
 -- | Make 'C.Relkit' from globals and input heading.
-type RelkitGlobal c = Global c -> B.Relhead -> B.Ab (C.Relkit c)
+type RelkitGlobal c = Global c -> RelkitCalc c
 
 -- | Make 'C.Relkit' from one subrelmap and input heading.
-type RelkitBinary c = C.Relkit c -> B.Relhead -> B.Ab (C.Relkit c)
+type RelkitBinary c = C.Relkit c -> RelkitCalc c
 
 -- | Make 'C.Relkit' from multiple subrelmaps and input heading.
-type RelkitConfl c =  [(C.Relkit c)] -> B.Relhead -> B.Ab (C.Relkit c)
+type RelkitConfl c  = [(C.Relkit c)] -> RelkitCalc c
 
 
 

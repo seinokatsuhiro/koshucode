@@ -32,7 +32,8 @@ relkitPrefix
     :: String             -- ^ Prefix text (except for hyphen)
     -> [String]           -- ^ Changing termnames
     -> C.RelkitCalc c
-relkitPrefix pre ns h1 = Right $ C.relkit h2 C.RelkitId where
+relkitPrefix _ _ Nothing = Right C.relkitNothing
+relkitPrefix pre ns (Just h1) = Right $ C.relkitJust h2 C.RelkitId where
     h2 = B.headChange (map f) h1
     f n | n `elem` ns  = prefixName pre n
         | otherwise    = n
@@ -57,7 +58,8 @@ relmapUnprefix use = C.relmapFlow use . relkitUnprefix
 relkitUnprefix
     :: String             -- ^ Prefix text (except for hyphen)
     -> C.RelkitCalc c
-relkitUnprefix pre h1 = Right $ C.relkit h2 C.RelkitId where
+relkitUnprefix _ Nothing = Right C.relkitNothing
+relkitUnprefix pre (Just h1) = Right $ C.relkitJust h2 C.RelkitId where
     h2 = B.headChange (map $ unprefixName pre) h1
 
 unprefixName :: String -> String -> String
@@ -84,7 +86,9 @@ relkitPrefixChange
     :: String             -- ^ New prefix text (except for hyphen)
     -> String             -- ^ Old prefix text (except for hyphen)
     -> C.RelkitCalc c
-relkitPrefixChange new old h1 = Right $ C.relkit h2 C.RelkitId where
+relkitPrefixChange _ _ Nothing = Right C.relkitNothing
+relkitPrefixChange new old (Just h1) =
+    Right $ C.relkitJust h2 C.RelkitId where
     h2   = B.headChange (map f) h1
     new' = new ++ "-"
     old' = old ++ "-"

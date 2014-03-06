@@ -12,6 +12,8 @@ module Koshucode.Baala.Core.Relmap.Relkit
 
   -- * Constructor
   relkit,
+  relkitJust,
+  relkitNothing,
   relkitId,
   relkitConst,
   relkitConstEmpty,
@@ -34,7 +36,7 @@ import qualified Koshucode.Baala.Core.Relmap.Lexical as C
 -- ----------------------  Datatype
 
 data Relkit c = Relkit
-    { relkitHead :: B.Relhead
+    { relkitHead :: Maybe B.Relhead
     , relkitBody :: RelkitBody c
     }
 
@@ -44,7 +46,7 @@ instance Monoid.Monoid (Relkit c) where
         Relkit h2 $ B.Sourced [] $ RelkitAppend b1 b2
 
 type RelkitBody c = B.Sourced (RelkitCore c)
-type RelkitKey    = (B.Relhead, [C.Lexmap])
+type RelkitKey    = (Maybe B.Relhead, [C.Lexmap])
 type RelkitDef c  = (RelkitKey, Relkit c)
 
 -- Specialized relmap
@@ -90,14 +92,20 @@ instance Show (RelkitCore c) where
 
 -- ----------------------  Constructor
 
-relkit :: B.Relhead -> RelkitCore c -> Relkit c
+relkit :: Maybe B.Relhead -> RelkitCore c -> Relkit c
 relkit h f = Relkit h $ B.Sourced [] f
 
-relkitId :: B.Relhead -> Relkit c
+relkitJust :: B.Relhead -> RelkitCore c -> Relkit c
+relkitJust h = relkit (Just h)
+
+relkitNothing :: Relkit c
+relkitNothing = relkit Nothing RelkitId
+
+relkitId :: Maybe B.Relhead -> Relkit c
 relkitId h = (relkit h RelkitId)
 
 relkitConst :: B.Rel c -> Relkit c
-relkitConst (B.Rel h b) = relkit h $ RelkitConst b
+relkitConst (B.Rel h b) = relkit (Just h) $ RelkitConst b
 
 relkitConstEmpty :: [B.Termname] -> Relkit c
 relkitConstEmpty ns = relkitConstBody ns []
@@ -108,7 +116,7 @@ relkitConstSingleton ns tuple = relkitConstBody ns [tuple]
 relkitConstBody :: [B.Termname] -> [[c]] -> Relkit c
 relkitConstBody ns body = r where
     r = relkit h $ RelkitConst body
-    h = B.headFrom ns
+    h = Just $ B.headFrom ns
 
 relkitSetSource :: (B.TokenListing a) => a -> B.Map (Relkit c)
 relkitSetSource src (Relkit h (B.Sourced _ f)) =

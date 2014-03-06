@@ -20,6 +20,7 @@ minimalRops = Builtin.ropList "minimal"  -- GROUP
     [ ( "contents /N"      , Rop.consContents , C.sortList "-term" [] )
     , ( "cut /P ..."       , Rop.consCut      , C.sortList "-term" [] )
     , ( "empty"            , Rop.consEmpty    , C.sortNone [] )
+    , ( "equal"            , Rop.consEqual    , C.sortOne  "-relmap" [] )
     , ( "id"               , Rop.consId       , C.sortNone [] )
     , ( "join R"           , Rop.consJoin     , C.sortOne  "-relmap" [] )
     , ( "meet R"           , Rop.consMeet     , C.sortOne  "-relmap" [] )

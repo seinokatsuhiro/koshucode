@@ -11,7 +11,6 @@ module Koshucode.Baala.Core.Section.Process
 
   -- * Run
   runSection,
-  sectionLinkedAssert,
 ) where
 
 import qualified System.Directory                     as Dir
@@ -80,24 +79,21 @@ runSectionBody global C.Section { C.sectionRelmap = rdef, C.sectionAssert = ass2
        judgesN <- run $ C.assertNormal   ass2
        Right (B.shortTrim judgesV, B.shortTrim judgesN)
     where
-      -- ass :: C.AbbrAsserts c
-      -- ass = sectionLinkedAssert sec
-
       run :: C.AbbrAsserts c -> B.Ab ([B.ShortJudge c])
       run = sequence . map B.shortAb . run2
 
       run2 :: C.AbbrAsserts c -> [B.Short (B.Ab [B.Judge c])]
       run2 = B.shortMap $ C.runAssertJudges global rdef
 
--- | Select assertions like 'sectionAssert'.
---   It returns relmap-liked assertions.
---   We can run these assertions using 'C.runAssertJudges'.
-sectionLinkedAssert :: forall c. C.Section c -> [B.Short [C.Assert c]]
-sectionLinkedAssert C.Section { C.sectionRelmap = rs, C.sectionAssert = ass }
-    = linkeAssert rs ass where
+-- -- | Select assertions like 'sectionAssert'.
+-- --   It returns relmap-liked assertions.
+-- --   We can run these assertions using 'C.runAssertJudges'.
+-- sectionLinkedAssert :: forall c. C.Section c -> [B.Short [C.Assert c]]
+-- sectionLinkedAssert C.Section { C.sectionRelmap = rs, C.sectionAssert = ass }
+--     = linkeAssert rs ass where
 
-linkeAssert :: forall c. [C.RelmapDef c] -> B.Map [B.Short [C.Assert c]]
-linkeAssert rslink = map $ fmap $ map link where
-    link :: B.Map (C.Assert c)
-    link = C.assertMap $ C.relmapLink rslink
+-- linkeAssert :: forall c. [C.RelmapDef c] -> B.Map [B.Short [C.Assert c]]
+-- linkeAssert rslink = map $ fmap $ map link where
+--     link :: B.Map (C.Assert c)
+--     link = C.assertMap $ C.relmapLink rslink
 

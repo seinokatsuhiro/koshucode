@@ -31,7 +31,7 @@ consDo use =
          (names, trees) = unzip treesLet
      lxs   <- mapM lx $ map B.singleton trees
      fulls <- mapM full lxs
-     Right $ C.relmapLink (zip names fulls) r
+     Right $ undefined
 
 
 
@@ -65,7 +65,7 @@ relmapKoshuCopInfix use = C.relmapGlobal use . relkitKoshuCopInfix
 
 relkitKoshuCopInfix :: (C.CContent c) => (B.Termname, Maybe B.Termname, Maybe B.Termname) -> C.RelkitGlobal c
 relkitKoshuCopInfix (name, height, dir) C.Global { C.globalCops = (_, htab) } _ = r2 where
-    r2 = Right $ C.relkit h2 $ C.RelkitConst (map put htab)
+    r2 = Right $ C.relkitJust h2 $ C.RelkitConst (map put htab)
     h2 = B.headFrom $   [name] ++ heightMaybe B.singleton   ++ dirMaybe B.singleton
     put (n,ih) = [C.pText n] ++ heightMaybe (heightTerm ih) ++ dirMaybe (dirTerm ih)
 
@@ -114,7 +114,7 @@ consKoshuVersion use =
       to   <- C.litContent t
       Right $ C.relmapGlobal use $ relkitKoshuVersionCheck (from, to) n
 
-relkitKoshuVersion :: (C.CContent c) => B.Termname -> C.Global c -> B.Relhead -> B.Ab (C.Relkit c)
+relkitKoshuVersion :: (C.CContent c) => B.Termname -> C.Global c -> Maybe B.Relhead -> B.Ab (C.Relkit c)
 relkitKoshuVersion n C.Global { C.globalVersion = ver } _ =
     Right $ C.relkitConstSingleton [n] [ C.pList $ map C.pDecFromInt $ apiVersion ver ]
 

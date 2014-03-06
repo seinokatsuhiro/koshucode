@@ -9,10 +9,12 @@ module Koshucode.Baala.Minimal.Restrict
   consNone, relmapNone, relkitNone,
   -- * sub
   consSub, relmapSub, relkitSub,
+  -- * equal
+  consEqual, relmapEqual, relkitEqual,
 ) where
 
-import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Core as C
+import qualified Koshucode.Baala.Base    as B
+import qualified Koshucode.Baala.Core    as C
 import qualified Koshucode.Baala.Builtin as Rop
 import qualified Koshucode.Baala.Minimal.Tropashko as Rop
 
@@ -64,11 +66,34 @@ relmapSub :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
 relmapSub use = C.relmapBinary use relkitSub
 
 relkitSub :: (Ord c) => C.RelkitBinary c
-relkitSub r2@(C.Relkit h2 _) h1
+relkitSub r2@(C.Relkit (Just h2) _) (Just h1)
     | B.isSuperhead h1 h2 = sub
-    | otherwise = Right $ C.relkit h1 (C.RelkitConst [])
+    | otherwise = Right $ C.relkitJust h1 (C.RelkitConst [])
     where
-      sub = do r3 <- Rop.relkitMeet r2 h1
-               f3 <- relkitSome r3 h1
+      sub = do r3 <- Rop.relkitMeet r2 (Just h1)
+               f3 <- relkitSome r3 (Just h1)
                Right f3
+relkitSub _ _ = Right C.relkitNothing
+
+
+
+-- ----------------------  equal
+
+consEqual :: (Ord c) => C.RopCons c
+consEqual use =
+    do m <- Rop.getRelmap use
+       Right $ relmapEqual use m
+
+relmapEqual :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
+relmapEqual use = C.relmapBinary use relkitEqual
+
+relkitEqual :: (Ord c) => C.RelkitBinary c
+relkitEqual (C.Relkit (Just h2) f2) (Just h1) =
+    Right $ C.relkitJust h2 $ C.RelkitAbFull False [f2] equal
+    where equal sub b1 =
+              do let [b2'] = sub
+                 b2 <- b2'
+                 Right $ if B.Rel h1 b1 == B.Rel h2 b2
+                         then [[]] else []
+relkitEqual _ _ = Right C.relkitNothing
 

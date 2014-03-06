@@ -34,7 +34,9 @@ relkitRanking
     :: (Ord c, C.CDec c)
     => B.Ranking B.Termname c
     -> B.Termname -> [B.Termname] -> C.RelkitCalc c
-relkitRanking ranking n ns h1 = Right $ C.relkit h2 (C.RelkitFull False f2) where
+relkitRanking _ _ _ Nothing = Right C.relkitNothing
+relkitRanking ranking n ns (Just h1) =
+    Right $ C.relkitJust h2 (C.RelkitFull False f2) where
     h2    = B.headCons n h1
     f2 b1 = let (rank, b2) = ranking 0 ords (B.headNames h1) b1
             in zipWith (:) (map C.pDecFromInt rank) b2
