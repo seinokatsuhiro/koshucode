@@ -74,8 +74,12 @@ vanillaRops = Rop.ropList "vanilla"
         Rop.consSize, C.sortOne "-term" [] )
     , ( "typename /N /P ...",
         Rop.consTypename, C.sortList "-term" [] )
+    , ( "unless R R",
+        Rop.consUnless, C.sortList "-relmap" [] )
     , ( "unprefix /P",
         Rop.consUnprefix, C.sortOne "-prefix" [] )
+    , ( "when R R",
+        Rop.consWhen, C.sortList "-relmap" [] )
     ]
 
 -- ----------------------

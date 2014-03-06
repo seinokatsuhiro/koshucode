@@ -7,12 +7,14 @@ module Koshucode.Baala.Base.Data.Rel
   Rel (..),
   Relbody,
   relPosHere,
+  relSort,
 
   -- * Constant
   reldum,
   reldee,
 ) where
 
+import qualified Data.List                         as List
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Token        as B
 import qualified Koshucode.Baala.Base.Data.Relhead as B
@@ -29,7 +31,10 @@ import qualified Koshucode.Baala.Base.Data.TermPos as B
 data Rel c = Rel
     { relHead :: B.Relhead    -- ^ Heading of relation
     , relBody :: Relbody c    -- ^ Body of relbody
-    } deriving (Show, Eq, Ord)
+    } deriving (Show, Ord)
+
+instance (Ord c) => Eq (Rel c) where
+    (==) = relEq
 
 -- | Body of relation, i.e., a list of tuples.
 --   Tuple is list of contents.
@@ -46,6 +51,27 @@ instance (B.Pretty c) => B.Pretty (Rel c) where
 {-| Relational version of `B.posHere`. -}
 relPosHere :: Rel c -> [B.Termname] -> ([B.TermPos], [Bool])
 relPosHere r = B.posHere $ relHead r
+
+
+
+-- ----------------------  Equality
+
+relEq :: (Ord c) => Rel c -> Rel c -> Bool
+relEq r1 r2 = hb (relSort r1) == hb (relSort r2) where
+    hb (Rel h b) = (h, b)
+
+relSort :: (Ord c) => B.Map (Rel c)
+relSort = relSortBody . relSortHead
+
+relSortBody :: (Ord c) => B.Map (Rel c)
+relSortBody (Rel h1 b1) = Rel h1 $ B.unique $ List.sort b1
+
+relSortHead :: B.Map (Rel c)
+relSortHead (Rel h1 b1) = Rel h2 b2 where
+    h2    = B.headFrom $ List.sort $ B.headNames h1
+    b2    = B.arrangeFore index `map` b1
+    index = B.posIndex `map` pos
+    pos   = B.posSortByName $ h1 `B.posFrom` h2
 
 
 

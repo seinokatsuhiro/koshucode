@@ -12,6 +12,7 @@ module Koshucode.Baala.Core.Relmap.Rop
   -- * Relmap
   Relmap (..),
   RelmapDef,
+  relmapId,
   mapToRelmap,
   relmapLexList,
 
@@ -134,8 +135,11 @@ showRelmap r = sh r where
     sub r2 = " (" ++ sh r2 ++ ")"
 
 instance D.Monoid (Relmap c) where
-    mempty  = RelmapCalc lexid (const $ Right . C.relkitId) []
+    mempty  = relmapId
     mappend = RelmapAppend
+
+relmapId :: Relmap c
+relmapId = RelmapCalc lexid (const $ Right . C.relkitId) []
 
 lexid :: C.Lexmap
 lexid = C.Lexmap (B.tokenWord "id") [("operand", [])] [] "id"

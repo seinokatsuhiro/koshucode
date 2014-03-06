@@ -36,7 +36,7 @@ relkitAdd :: (C.CList c, C.CRel c, B.Pretty c)
   => ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.RelkitCalc c
 relkitAdd _ Nothing = Right C.relkitNothing
 relkitAdd (base, deriv, bodies) (Just h1) =
-    Right $ C.relkitJust h2 (C.RelkitOneToAbOne False [] f) where
+    Right $ C.relkitJust h2 (C.RelkitOneToAbOne False f []) where
         ns = map fst bodies   -- term names
         es = map snd bodies   -- term expression
         h2 = B.headAppend ns h1

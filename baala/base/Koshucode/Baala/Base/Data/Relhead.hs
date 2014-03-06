@@ -24,7 +24,8 @@ module Koshucode.Baala.Base.Data.Relhead
   M.mappend,
 ) where
 
-import qualified Data.Monoid as M
+import qualified Data.List                         as L
+import qualified Data.Monoid                       as M
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Token        as B
 import qualified Koshucode.Baala.Base.Data.Relterm as B
@@ -36,7 +37,13 @@ import qualified Koshucode.Baala.Base.Data.Relterm as B
 -- | Heading of relation as a list of terms
 data Relhead = Relhead {
       headTerms :: [B.Relterm]
-    } deriving (Show, Eq, Ord)
+    } deriving (Show, Ord)
+
+instance Eq Relhead where
+    (==) = headEq
+
+headEq :: Relhead -> Relhead -> Bool
+headEq (Relhead a) (Relhead b) = L.sort a == L.sort b
 
 instance M.Monoid Relhead where
     mempty = Relhead []

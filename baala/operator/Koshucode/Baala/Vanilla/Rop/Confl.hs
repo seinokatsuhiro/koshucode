@@ -11,6 +11,8 @@ module Koshucode.Baala.Vanilla.Rop.Confl
   consGroup, relmapGroup, relkitGroup,
   -- * if
   consIf, relmapIf, relkitIf,
+  -- * when & unless
+  consWhen, consUnless,
 ) where
 
 import qualified Koshucode.Baala.Base    as B
@@ -32,7 +34,7 @@ relmapMaybe use = C.relmapBinary use relkitMaybe
 
 relkitMaybe :: forall c. (Ord c, C.CNil c) => C.RelkitBinary c
 relkitMaybe (C.Relkit (Just h2) f2) (Just h1) =
-    Right $ C.relkitJust h3 (C.RelkitAbFull False [f2] f3)
+    Right $ C.relkitJust h3 (C.RelkitAbFull False f3 [f2])
     where
       pos     :: [B.TermPos]
       pos     =  h1 `B.posFrom` h2
@@ -106,7 +108,7 @@ relmapGroup use = C.relmapBinary use . relkitGroup
 -- | Grouping relation.
 relkitGroup :: forall c. (Ord c, C.CRel c) => String -> C.RelkitBinary c
 relkitGroup n (C.Relkit (Just h2) f2) (Just h1) =
-    Right $ C.relkitJust h3 (C.RelkitAbFull False [f2] f3)
+    Right $ C.relkitJust h3 (C.RelkitAbFull False f3 [f2])
     where
       shared    :: [B.Termname]
       shared    = B.posInnerNames $ h1 `B.posFrom` h2
@@ -142,14 +144,33 @@ relmapIf use = C.relmapConfl use relkitIf
 
 relkitIf :: forall c. (Ord c) => C.RelkitConfl c
 relkitIf [rt@(C.Relkit _ ft), rc@(C.Relkit hc fc), ra@(C.Relkit ha fa)] r
-    | hc == Nothing && ha == Nothing = Right C.relkitNothing
-    | hc == Nothing = relkitIf [rt, C.Relkit ha fc, ra] r
-    | ha == Nothing = relkitIf [rt, rc, C.Relkit hc fa] r
-    | hc == ha = Right $ C.relkit hc (C.RelkitAbFull True subkits f3)
-    | otherwise = Right C.relkitNothing
+    | isNothing2 hc ha  = Right C.relkitNothing
+    | isNothing hc      = relkitIf [rt, C.Relkit ha fc, ra] r
+    | isNothing ha      = relkitIf [rt, rc, C.Relkit hc fa] r
+    | hc == ha          = Right $ C.relkit hc (C.RelkitAbFull True f3 subkits)
+    | otherwise         = Left $ B.abortOperand "different headings"
     where
       subkits  = [ft, fc, fa]
       f3 sub _ = do let [bt', bc', ba'] = sub
                     bt <- bt'
                     if bt /= [] then bc' else ba'
+
+isNothing :: Maybe B.Relhead -> Bool
+isNothing = (== Nothing)
+
+isNothing2 :: Maybe B.Relhead -> Maybe B.Relhead -> Bool
+isNothing2 a b = isNothing a && isNothing b
+
+
+-- ----------------------  when & unless
+
+consWhen :: (Ord c) => C.RopCons c
+consWhen use =
+  do [test, con] <- Rop.getRelmaps use
+     Right $ relmapIf use [test, con, C.relmapId]
+
+consUnless :: (Ord c) => C.RopCons c
+consUnless use =
+  do [test, alt] <- Rop.getRelmaps use
+     Right $ relmapIf use [test, C.relmapId, alt]
 

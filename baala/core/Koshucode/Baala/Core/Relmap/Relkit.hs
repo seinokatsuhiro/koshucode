@@ -56,15 +56,14 @@ data RelkitCore c
     | RelkitOneToOne     Bool (  [c]  ->  [c]  )
     | RelkitPred              (  [c]  -> Bool  )
 
-    | RelkitAbFull       Bool [RelkitBody c] ( [B.Ab [[c]]] -> [[c]] -> B.Ab [[c]] )
-    | RelkitOneToAbMany  Bool [RelkitBody c] ( [B.Ab [[c]]] -> [c]   -> B.Ab [[c]] )
-    | RelkitOneToAbOne   Bool [RelkitBody c] ( [B.Ab [[c]]] -> [c]   -> B.Ab [c] )
-    | RelkitAbSemi            (RelkitBody c)                ( [[c]]  -> B.Ab Bool )
-    | RelkitAbPred                                           ( [c]   -> B.Ab Bool )
+    | RelkitAbFull       Bool ( [B.Ab [[c]]] -> [[c]] -> B.Ab [[c]] ) [RelkitBody c]
+    | RelkitOneToAbMany  Bool ( [B.Ab [[c]]] -> [c]   -> B.Ab [[c]] ) [RelkitBody c]
+    | RelkitOneToAbOne   Bool ( [B.Ab [[c]]] -> [c]   -> B.Ab [c] )   [RelkitBody c]
+    | RelkitAbSemi            ( [[c]]  -> B.Ab Bool )                 (RelkitBody c)
+    | RelkitAbPred            (  [c]   -> B.Ab Bool )
 
     | RelkitConst             [[c]]
     | RelkitAppend            (RelkitBody c) (RelkitBody c)
-    | RelkitUnion        Bool [RelkitBody c]
     | RelkitId
 
     | RelkitLink         String RelkitKey (Maybe (RelkitBody c))
@@ -84,7 +83,6 @@ instance Show (RelkitCore c) where
     show (RelkitConst         _)   =  "RelkitConst"
     show (RelkitId             )   =  "RelkitId"
     show (RelkitAppend      x y)   =  "RelkitAppend " ++ show [x,y]
-    show (RelkitUnion      _ xs)   =  "RelkitUnion " ++ show xs
 
     show (RelkitLink      n _ _)   =  "RelkitLink " ++ n
 
@@ -138,12 +136,11 @@ relkitLink kits = linkKit where
     link (B.Sourced src core) =
         let s = B.Sourced src
         in s $ case core of
-                 RelkitAbFull      u bs f  -> RelkitAbFull      u (map link bs) f
-                 RelkitOneToAbMany u bs f  -> RelkitOneToAbMany u (map link bs) f
-                 RelkitOneToAbOne  u bs f  -> RelkitOneToAbOne  u (map link bs) f
-                 RelkitAbSemi        b1 f  -> RelkitAbSemi        (link b1) f
+                 RelkitAbFull      u f bs  -> RelkitAbFull      u f (map link bs)
+                 RelkitOneToAbMany u f bs  -> RelkitOneToAbMany u f (map link bs)
+                 RelkitOneToAbOne  u f bs  -> RelkitOneToAbOne  u f (map link bs)
+                 RelkitAbSemi        f  b1 -> RelkitAbSemi        f (link b1)
                  RelkitAppend        b1 b2 -> RelkitAppend        (link b1) (link b2)
-                 RelkitUnion       u bs    -> RelkitUnion       u (map link bs)
                  RelkitLink       n key _  -> case lookup key kitsRec of
                                                 Nothing -> core
                                                 Just (Relkit _ b2) ->
@@ -155,25 +152,19 @@ relkitRun :: (Ord c) => RelkitBody c -> B.AbMap [[c]]
 relkitRun (B.Sourced src kit) b1 =
     B.abortable "run" src $
      case kit of
-       RelkitOneToAbMany u k f  ->  do let b2 = map (`relkitRun` b1) k
-                                       b3 <- f b2 `mapM` b1
-                                       uniqueRight u $ concat b3
-       RelkitOneToAbOne  u k f  ->  do let b2 = map (`relkitRun` b1) k
-                                       uniqueAb u $ f b2 `mapM` b1
-       RelkitOneToMany   u f  ->  uniqueRight u $ f `concatMap` b1
-       RelkitOneToOne    u f  ->  uniqueRight u $ f `map` b1
-       RelkitAbFull    u k f  ->  do let b2 = map (`relkitRun` b1) k
-                                     uniqueAb u $ f b2 b1
-       RelkitFull        u f  ->  uniqueRight u $ f b1
+       RelkitFull        u f    ->  uniqueRight u $ f b1
+       RelkitOneToMany   u f    ->  uniqueRight u $ f `concatMap` b1
+       RelkitOneToOne    u f    ->  uniqueRight u $ f `map` b1
+       RelkitPred          f    ->  Right $ filter f b1
 
-       RelkitAbPred        f  ->  Monad.filterM  f b1
-       RelkitAbSemi      k f  ->  Monad.filterM (semi k f) b1
-       RelkitPred          f  ->  Right $ filter f b1
-       RelkitConst         b  ->  Right b
-       RelkitId               ->  Right b1
+       RelkitAbFull      u f ks ->  uniqueAb u $ f (sub ks) b1
+       RelkitOneToAbMany u f ks ->  uniqueRight u . concat =<< f (sub ks) `mapM` b1
+       RelkitOneToAbOne  u f ks ->  uniqueAb u $ f (sub ks) `mapM` b1
+       RelkitAbSemi        f k  ->  Monad.filterM (semi k f) b1
+       RelkitAbPred        f    ->  Monad.filterM f b1
 
-       RelkitUnion    u kits  ->  do b2 <- mapM (`relkitRun` b1) kits
-                                     uniqueRight u $ concat b2
+       RelkitConst           b  ->  Right b
+       RelkitId                 ->  Right b1
 
        RelkitAppend kit1@(B.Sourced src1 _) kit2
            -> do b2 <- kit1 `relkitRun` b1
@@ -183,6 +174,7 @@ relkitRun (B.Sourced src kit) b1 =
        RelkitLink n _ (Nothing)   -> Left $ B.AbortAnalysis [] $ B.AAUnkRelmap n
 
     where
+      sub = map (`relkitRun` b1)
       semi k f cs = f =<< relkitRun k [cs]
 
 uniqueRight :: (Ord b) => Bool -> [b] -> B.Ab [b]

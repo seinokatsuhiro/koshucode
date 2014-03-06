@@ -35,7 +35,7 @@ relkitSome = relkitSemi False
 
 relkitSemi :: (Ord c) => Bool -> C.RelkitBinary c
 relkitSemi isNull (C.Relkit _ f2) h1 =
-    Right $ C.relkit h1 (C.RelkitAbSemi f2 p)
+    Right $ C.relkit h1 (C.RelkitAbSemi p f2)
     where p b2 = Right $ null b2 == isNull
 
 
@@ -89,7 +89,7 @@ relmapEqual use = C.relmapBinary use relkitEqual
 
 relkitEqual :: (Ord c) => C.RelkitBinary c
 relkitEqual (C.Relkit (Just h2) f2) (Just h1) =
-    Right $ C.relkitJust h2 $ C.RelkitAbFull False [f2] equal
+    Right $ C.relkitJust h2 $ C.RelkitAbFull False equal [f2]
     where equal sub b1 =
               do let [b2'] = sub
                  b2 <- b2'

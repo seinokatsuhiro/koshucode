@@ -10,9 +10,9 @@ module Koshucode.Baala.Minimal.Term
   consRename, relmapRename,
 ) where
 
-import qualified Data.List  as List
-import qualified Data.Maybe as Maybe
-import qualified Data.Tuple as Tuple
+import qualified Data.List               as List
+import qualified Data.Maybe              as Maybe
+import qualified Data.Tuple              as Tuple
 import qualified Koshucode.Baala.Base    as B
 import qualified Koshucode.Baala.Core    as C
 import qualified Koshucode.Baala.Builtin as Rop
