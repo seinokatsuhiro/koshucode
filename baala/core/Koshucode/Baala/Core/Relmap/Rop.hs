@@ -11,6 +11,7 @@ module Koshucode.Baala.Core.Relmap.Rop
 
   -- * Relmap
   Relmap (..),
+  RelmapDef,
   mapToRelmap,
   relmapLexList,
 
@@ -60,8 +61,8 @@ type RopCons c = RopUse c -> B.Ab (Relmap c)
 -- | Use of relmap operator
 data RopUse c = RopUse
     { ropGlobal    :: Global c
-    , ropLex       :: C.LexRelmap   -- ^ Syntactic data of operator use
-    , ropSubrelmap :: [Relmap c]    -- ^ Subrelmaps
+    , ropLex       :: C.Lexmap     -- ^ Syntactic data of operator use
+    , ropSubrelmap :: [Relmap c]   -- ^ Subrelmaps
     } deriving (Show)
 
 instance B.TokenListing (RopUse c) where
@@ -83,22 +84,24 @@ getArg3 _ = Left $ B.AbortCalc [] $ B.ACUnmatchType []
 
 -- ----------------------  Relmap
 
+type RelmapDef c = B.Named (Relmap c)
+
 -- | Relation-to-relation mapping.
 --   A 'Relmap' is correspond to a use of relational operator.
 data Relmap c
-    = RelmapSource   C.LexRelmap B.JudgePattern [B.Termname]
+    = RelmapSource   C.Lexmap B.JudgePattern [B.Termname]
       -- ^ Retrieve a relation from a dataset
-    | RelmapConst    C.LexRelmap (B.Rel c)
+    | RelmapConst    C.Lexmap (B.Rel c)
       -- ^ Constant relation
 
-    | RelmapGlobal   C.LexRelmap (Global c -> RelkitCalc c)
+    | RelmapGlobal   C.Lexmap (Global c -> RelkitCalc c)
       -- ^ Relmap that maps relations to a relation with globals
-    | RelmapCalc     C.LexRelmap (RelkitConfl c) [Relmap c]
+    | RelmapCalc     C.Lexmap (RelkitConfl c) [Relmap c]
       -- ^ Relmap that maps relations to a relation
 
-    | RelmapLink     C.LexRelmap String (Maybe (Relmap c))
+    | RelmapLink     C.Lexmap String (Maybe (Relmap c))
       -- ^ Relmap reference
-    | RelmapAlias    C.LexRelmap (Relmap c)
+    | RelmapAlias    C.Lexmap (Relmap c)
       -- ^ Equavalent relmap
     | RelmapAppend   (Relmap c) (Relmap c)
       -- ^ Connect two relmaps
@@ -134,8 +137,8 @@ instance D.Monoid (Relmap c) where
     mempty  = RelmapCalc lexid (const $ Right . C.relkitId) []
     mappend = RelmapAppend
 
-lexid :: C.LexRelmap
-lexid = C.LexRelmap (B.tokenWord "id") [("operand", [])] [] "id"
+lexid :: C.Lexmap
+lexid = C.Lexmap (B.tokenWord "id") [("operand", [])] [] "id"
 
 instance B.Name (Relmap c) where
     name (RelmapSource _ _ _)   = "source"
@@ -174,12 +177,12 @@ instance Ord (Relmap c) where
 instance Eq (Relmap c) where
     r1 == r2  =  compare r1 r2 == EQ
 
-relmapLex :: Relmap c -> Maybe C.LexRelmap
+relmapLex :: Relmap c -> Maybe C.Lexmap
 relmapLex r = case relmapLexList r of
                 []       -> Nothing
                 (lx : _) -> Just lx
 
-relmapLexList :: Relmap c -> [C.LexRelmap]
+relmapLexList :: Relmap c -> [C.Lexmap]
 relmapLexList = collect where
     collect (RelmapSource lx _ _)  = [lx]
     collect (RelmapConst  lx _)    = [lx]

@@ -30,10 +30,10 @@ data ClauseBody
     | CImport   [B.Token] (Maybe Clause)       -- ^ Importing section name
     | CExport   String                         -- ^ Exporting relmap name
     | CShort    [(B.Named String)]             -- ^ Short signs
-    | CRelmap   String C.LexRelmap             -- ^ Relmap and its name
-    | TRelmap   String [B.Token]               -- ^ Not include LexRelmap
-    | CAssert   C.AssertType B.JudgePattern C.AssertOption C.LexRelmap   -- ^ Assertions of relmaps
-    | TAssert   C.AssertType B.JudgePattern C.AssertOption [B.Token]     -- ^ Not include LexRelmap
+    | CRelmap   String C.Lexmap                -- ^ Relmap and its name
+    | TRelmap   String [B.Token]               -- ^ Not include Lexmap
+    | CAssert   C.AssertType B.JudgePattern C.AssertOption C.Lexmap   -- ^ Assertions of relmaps
+    | TAssert   C.AssertType B.JudgePattern C.AssertOption [B.Token]   -- ^ Not include Lexmap
     | CJudge    Bool B.JudgePattern [B.Token]  -- ^ Judge
     | CComment                                 -- ^ Clause comment
     | CUnknown                                 -- ^ Unknown clause
@@ -186,7 +186,7 @@ clauseLex lx = mapM clause where
     body (TAssert q p opt ts) = Right . CAssert q p opt =<< relmap ts
     body bd                   = Right bd
 
-    relmap :: [B.Token] -> B.Ab C.LexRelmap
+    relmap :: [B.Token] -> B.Ab C.Lexmap
     relmap = lx . B.tokenTrees
 
 shortSections :: [Clause] -> [B.Short [Clause]]

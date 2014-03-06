@@ -38,7 +38,7 @@ Dependencies of significant data types.
 
 * 'Clause' uses
   'Clause',
-  'Koshucode.Baala.Core.Relmap.LexRelmap', and
+  'Koshucode.Baala.Core.Relmap.Lexmap', and
   'Koshucode.Baala.Base.Syntax.Token.Token'.
 -}
 

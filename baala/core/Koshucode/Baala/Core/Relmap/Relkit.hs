@@ -7,6 +7,7 @@ module Koshucode.Baala.Core.Relmap.Relkit
   Relkit (..),
   RelkitBody,
   RelkitKey,
+  RelkitDef,
   RelkitCore (..),
 
   -- * Constructor
@@ -43,7 +44,8 @@ instance Monoid.Monoid (Relkit c) where
         Relkit h2 $ B.Sourced [] $ RelkitAppend b1 b2
 
 type RelkitBody c = B.Sourced (RelkitCore c)
-type RelkitKey = (B.Relhead, [C.LexRelmap])
+type RelkitKey    = (B.Relhead, [C.Lexmap])
+type RelkitDef c  = (RelkitKey, Relkit c)
 
 -- Specialized relmap
 data RelkitCore c

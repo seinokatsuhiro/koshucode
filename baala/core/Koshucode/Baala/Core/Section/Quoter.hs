@@ -56,16 +56,16 @@ plain _ = Nothing
 {- Construct ExpQ of Relmap
    Tokens like @name in relmap context are Haskell variables. -}
 consFullRelmapQ
-    :: TH.ExpQ        -- ^ Quotation expression of 'RelmapConsFull'
-    -> C.LexRelmap    -- ^ Target relmap operator
-    -> TH.ExpQ        -- ^ ExpQ of 'Relmap' v
+    :: TH.ExpQ     -- ^ Quotation expression of 'RelmapConsFull'
+    -> C.Lexmap    -- ^ Target relmap operator
+    -> TH.ExpQ     -- ^ ExpQ of 'Relmap' v
 consFullRelmapQ fullQ = make where
     make = TH.dataToExpQ (plain `extQ` custom)
-    custom (C.LexRelmap (B.TWord _ 0 ('@':op)) _ _ _) =
+    custom (C.Lexmap (B.TWord _ 0 ('@':op)) _ _ _) =
         Just $ TH.varE $ TH.mkName op
-    custom h@(C.LexRelmap _ op opd subs) =
+    custom h@(C.Lexmap _ op opd subs) =
         Just $ [| either consError id
                     ($fullQ $(TH.dataToExpQ plain h))
 --                     $(dataToExpQ plain opd)   -- [Relmap v]
---                     $(listE (map make subs))) -- [LexRelmap] -> [Relmap]
+--                     $(listE (map make subs))) -- [Lexmap] -> [Relmap]
                 |]

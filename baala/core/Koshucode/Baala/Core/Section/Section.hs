@@ -46,16 +46,16 @@ type AbbrAsserts c = [B.Short [C.Assert c]]
 -- ----------------------  Section
 
 data Section c = Section {
-      sectionName     :: Maybe String           -- ^ Section name
-    , sectionImport   :: [Section c]            -- ^ Importing section
-    , sectionExport   :: [String]               -- ^ Exporting relmap names
-    , sectionShort    :: [[B.Named String]]     -- ^ Prefix for short signs
-    , sectionAssert   :: AbbrAsserts c          -- ^ Assertions of relmaps
-    , sectionRelmap   :: [B.Named (C.Relmap c)] -- ^ Relmaps and its name
-    , sectionJudge    :: [B.Judge c]            -- ^ Affirmative or denial judgements
-    , sectionViolate  :: [B.Judge c]            -- ^ Violated judgements, i.e., result of @|=V@
-    , sectionResource :: B.Resource             -- ^ Resource name
-    , sectionCons     :: C.RelmapCons c         -- ^ Relmap constructor for this section
+      sectionName     :: Maybe String        -- ^ Section name
+    , sectionImport   :: [Section c]         -- ^ Importing section
+    , sectionExport   :: [String]            -- ^ Exporting relmap names
+    , sectionShort    :: [[B.Named String]]  -- ^ Prefix for short signs
+    , sectionAssert   :: AbbrAsserts c       -- ^ Assertions of relmaps
+    , sectionRelmap   :: [C.RelmapDef c]     -- ^ Relmaps and its name
+    , sectionJudge    :: [B.Judge c]         -- ^ Affirmative or denial judgements
+    , sectionViolate  :: [B.Judge c]         -- ^ Violated judgements, i.e., result of @|=V@
+    , sectionResource :: B.Resource          -- ^ Resource name
+    , sectionCons     :: C.RelmapCons c      -- ^ Relmap constructor for this section
     } deriving (Show)
 
 instance (Ord c, B.Pretty c) => B.Pretty (Section c) where
@@ -157,7 +157,7 @@ consSectionEach consFull resource (B.Short shorts xs) =
             Right j -> Right j
             Left  a -> abort a
 
-      relmap :: [B.Token] -> C.ClauseBody -> B.Ab (B.Named (C.Relmap c))
+      relmap :: [B.Token] -> C.ClauseBody -> B.Ab (C.RelmapDef c)
       relmap _ (C.CRelmap name lx) =
           case consFull lx of
             Right full -> Right (name, full)

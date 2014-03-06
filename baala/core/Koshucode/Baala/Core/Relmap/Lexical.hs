@@ -1,8 +1,10 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Lexical relmap.
+
 module Koshucode.Baala.Core.Relmap.Lexical
-( LexRelmap (..),
+( Lexmap (..),
   lexOpText,
 ) where
 
@@ -12,26 +14,26 @@ import qualified Koshucode.Baala.Core.Relmap.Operand as C
 
 -- | Intermediate data that represents use of relational operator.
 --
---   'LexRelmap' is constructed from list of 'TokenTree',
---   and (generic) 'Relmap' is constructed from 'LexRelmap'.
+--   'Lexmap' is constructed from list of 'TokenTree',
+--   and (generic) 'Relmap' is constructed from 'Lexmap'.
 --
-data LexRelmap = LexRelmap
+data Lexmap = Lexmap
     { lexOpToken   :: B.Token            -- ^ Operator token
     , lexOperand   :: C.RopOperandAssoc  -- ^ Operand of relmap operation
-    , lexSubrelmap :: [LexRelmap]    -- ^ Subrelmaps in the operand
+    , lexSubrelmap :: [Lexmap]           -- ^ Subrelmaps in the operand
     , lexUsage     :: String             -- ^ Usages description
     } deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
-instance B.Pretty LexRelmap where
-    doc LexRelmap { lexOpToken = opTok, lexOperand = opd } =
+instance B.Pretty Lexmap where
+    doc Lexmap { lexOpToken = opTok, lexOperand = opd } =
         case lookup "operand" opd of
           Nothing -> B.doch [op, "..."]
           Just xs -> B.doch [op, show xs]
         where op = B.tokenContent opTok
 
-instance B.TokenListing LexRelmap where
-    tokenListing LexRelmap { lexOpToken = op } = [op]
+instance B.TokenListing Lexmap where
+    tokenListing Lexmap { lexOpToken = op } = [op]
 
-lexOpText :: LexRelmap -> String
+lexOpText :: Lexmap -> String
 lexOpText = B.tokenContent . lexOpToken
 

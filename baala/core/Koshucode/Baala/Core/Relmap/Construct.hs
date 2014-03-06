@@ -43,10 +43,10 @@ instance Show (RelmapCons c) where
 -- ----------------------  Lex construction
 
 -- | First step of constructing relmap,
---   make 'C.LexRelmap' from use of relmap operator.
+--   make 'C.Lexmap' from use of relmap operator.
 type RelmapConsLex
-    =  [B.TokenTree]     -- ^ Source of relmap operator
-    -> B.Ab C.LexRelmap  -- ^ Result lex relmap
+    =  [B.TokenTree]   -- ^ Source of relmap operator
+    -> B.Ab C.Lexmap   -- ^ Result lex relmap
 
 relmapConsLex :: [B.Named (String, C.RopFullSorter)] -> RelmapConsLex
 relmapConsLex lxs = consLex where
@@ -60,7 +60,7 @@ relmapConsLex lxs = consLex where
            [_]                -> Left $ B.AbortAnalysis [] $ B.AAUnkRelmap "?"
            tree2              -> find (B.tokenWord "append") $ map B.treeWrap tree2
 
-    find :: B.Token -> [B.TokenTree] -> B.Ab C.LexRelmap
+    find :: B.Token -> [B.TokenTree] -> B.Ab C.Lexmap
     find op trees =
         case lookup (B.tokenContent op) lxs of
           Nothing -> Right $ lx op trees [] "<reference>"
@@ -68,12 +68,12 @@ relmapConsLex lxs = consLex where
               do sorted <- operandSorter trees
                  subrelmap $ lx op trees sorted usage
 
-    lx :: B.Token -> [B.TokenTree] -> [B.Named [B.TokenTree]] -> String -> C.LexRelmap
+    lx :: B.Token -> [B.TokenTree] -> [B.Named [B.TokenTree]] -> String -> C.Lexmap
     lx op trees sorted usage =
-        C.LexRelmap op (("operand", trees) : sorted) [] usage
+        C.Lexmap op (("operand", trees) : sorted) [] usage
 
-    subrelmap :: B.AbMap C.LexRelmap
-    subrelmap h@C.LexRelmap { C.lexOperand = od } =
+    subrelmap :: B.AbMap C.Lexmap
+    subrelmap h@C.Lexmap { C.lexOperand = od } =
         case lookup "-relmap" od of
           Nothing    -> Right h   -- no subrelmaps
           Just trees -> do subs <- mapM (consLex . B.singleton) trees
@@ -83,9 +83,9 @@ relmapConsLex lxs = consLex where
 -- ----------------------  Full construction
 
 -- | Second step of constructing relmap,
---   make 'C.Relmap' from contents of 'C.LexRelmap'.
+--   make 'C.Relmap' from contents of 'C.Lexmap'.
 type RelmapConsFull c
-    = C.LexRelmap         -- ^ Lexical relmap
+    = C.Lexmap            -- ^ Lexical relmap
     -> B.Ab (C.Relmap c)  -- ^ Result full relmap
 
 -- | Construct (full) relmap.
@@ -109,12 +109,12 @@ relmapConsFull global fulls = consFull where
 --  [@\[TokenTree\] -> \[\[TokenTree\]\]@]
 --     Dicide list of 'B.TokenTree' by vertical bar (@|@).
 --
---  [@\[\[TokenTree\]\] -> \[LexRelmap\]@]
---     Construct each 'C.LexRelmap' from lists of 'B.TokenTree'.
+--  [@\[\[TokenTree\]\] -> \[Lexmap\]@]
+--     Construct each 'C.Lexmap' from lists of 'B.TokenTree'.
 --     When there are subrelmaps in token trees,
---     constructs 'C.LexRelmap' recursively.
+--     constructs 'C.Lexmap' recursively.
 --
---  [@\[LexRelmap\] -> LexRelmap@]
---     Wrap list of 'C.LexRelmap' into one 'C.LexRelmap'
+--  [@\[Lexmap\] -> Lexmap@]
+--     Wrap list of 'C.Lexmap' into one 'C.Lexmap'
 --     that has these relmaps in 'C.lexSubrelmap'.
 --
