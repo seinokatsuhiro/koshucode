@@ -13,6 +13,8 @@ module Koshucode.Baala.Vanilla.Rop.Confl
   consIf, relmapIf, relkitIf,
   -- * when & unless
   consWhen, consUnless,
+  -- * fix
+  consFix,
 ) where
 
 import qualified Koshucode.Baala.Base    as B
@@ -54,9 +56,9 @@ relkitMaybe (C.Relkit (Just h2) f2) (Just h1) =
 
       h3 = B.mappend h2 h1
 
-      f3 :: [B.Ab [[c]]] -> [[c]] -> B.Ab [[c]]
-      f3 sub b1 = do let [b2'] = sub
-                     b2 <- b2'
+      f3 :: [C.Relfun c] -> C.Relfun c
+      f3 sub b1 = do let [g2] = sub
+                     b2 <- g2 b1
                      m  <- m2 b2
                      Right $ concatMap (step m) b1
       nils = replicate (B.headDegree h3 - B.headDegree h1) C.nil
@@ -121,8 +123,8 @@ relkitGroup n (C.Relkit (Just h2) f2) (Just h1) =
       kv cs2    = ( B.posPick share2 cs2, cs2 )
 
       h3        = B.Nest n (B.headTerms h2) `B.headConsTerm` h1
-      f3 sub b1 = do let [b2'] = sub
-                     b2 <- b2'
+      f3 sub b1 = do let [g2] = sub
+                     b2 <- g2 b1
                      map2 <- toMap2 b2
                      Right $ map (add map2) b1
       add map2 cs1 =
@@ -134,6 +136,9 @@ relkitGroup _ _ _ = Right C.relkitNothing
 
 -- ----------------------  if
 
+--  'if T A B' is same as 'A' when T is an empty relation
+--  or same as 'B' when T is not an empty relation.
+
 consIf :: (Ord c) => C.RopCons c
 consIf use =
   do rs <- Rop.getRelmaps use
@@ -143,17 +148,26 @@ relmapIf :: (Ord c) => C.RopUse c -> [C.Relmap c] -> C.Relmap c
 relmapIf use = C.relmapConfl use relkitIf
 
 relkitIf :: forall c. (Ord c) => C.RelkitConfl c
-relkitIf [rt@(C.Relkit _ ft), rc@(C.Relkit hc fc), ra@(C.Relkit ha fa)] r
-    | isNothing2 hc ha  = Right C.relkitNothing
-    | isNothing hc      = relkitIf [rt, C.Relkit ha fc, ra] r
-    | isNothing ha      = relkitIf [rt, rc, C.Relkit hc fa] r
-    | hc == ha          = Right $ C.relkit hc (C.RelkitAbFull True f3 subkits)
-    | otherwise         = Left $ B.abortOperand "different headings"
+relkitIf [rt@(C.Relkit _ ft), ra@(C.Relkit ha fa), rb@(C.Relkit hb fb)] _
+    | isNothing2 ha hb  = Right C.relkitNothing
+    | isNothing ha      = relkitIf [rt, C.Relkit hb fa, rb] Nothing
+    | isNothing hb      = relkitIf [rt, ra, C.Relkit ha fb] Nothing
+    | otherwise         =
+        case (ha, hb) of
+          (Just a, Just b) | B.headEquiv a b
+            -> Right $ C.relkit ha (C.RelkitAbFull True (f3 a b) subkits)
+          _ -> Left $ B.abortOperand $ "different headings: "
+               ++ showHead ha ++ " and " ++ showHead hb
     where
-      subkits  = [ft, fc, fa]
-      f3 sub _ = do let [bt', bc', ba'] = sub
-                    bt <- bt'
-                    if bt /= [] then bc' else ba'
+      showHead h = show (B.doc $ maybe (B.headFrom []) id h)
+      subkits  = [ft, fa, fb]
+      f3 c a sub b1 = do let [gt, gc, ga] = sub
+                         bt <- gt b1
+                         if bt /= [] then gc b1 else align c a (ga b1)
+
+      align :: B.Relhead -> B.Relhead -> B.Map (B.Ab [[c]])
+      align a b = fmap (B.headArrange a b `map`)
+relkitIf _ _ = Left $ B.abortOperand $ "if T A b"
 
 isNothing :: Maybe B.Relhead -> Bool
 isNothing = (== Nothing)
@@ -173,4 +187,23 @@ consUnless :: (Ord c) => C.RopCons c
 consUnless use =
   do [test, alt] <- Rop.getRelmaps use
      Right $ relmapIf use [test, C.relmapId, alt]
+
+
+-- ----------------------  fix
+
+consFix :: (Ord c) => C.RopCons c
+consFix use =
+  do r <- Rop.getRelmap use
+     Right $ relmapFix use r
+
+relmapFix :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
+relmapFix use = C.relmapBinary use relkitFix
+
+relkitFix :: forall c. (Ord c) => C.RelkitBinary c
+relkitFix (C.Relkit (Just h2) f2) (Just h1) =
+    Right $ C.relkitJust h1 (C.RelkitAbFull True f3 [f2])
+    where f3 sub = let [g] = sub
+                       g'  = C.bodyMapArrange h1 h2 g
+                   in C.fixedRelation g'
+relkitFix _ _ = Right C.relkitNothing
 

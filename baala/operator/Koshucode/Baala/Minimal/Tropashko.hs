@@ -106,8 +106,8 @@ relkitJoin (C.Relkit (Just h2) f2) (Just h1) =
     pick2   =  B.posPick share2
 
     h3      =  B.headChange pick1 h1
-    f3 sub b1 = do let [b2'] = sub
-                   b2 <- b2'
+    f3 sub b1 = do let [g2] = sub
+                   b2 <- g2 b1
                    Right $ map pick1 b1 ++ map pick2 b2
 relkitJoin _ _ = Right C.relkitNothing
 

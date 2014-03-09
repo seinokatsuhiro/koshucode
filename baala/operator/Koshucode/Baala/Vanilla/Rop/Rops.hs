@@ -34,6 +34,8 @@ vanillaRops = Rop.ropList "vanilla"
         Rop.consDuplicate, C.sortList "-term" [] )
     , ( "enclose /N",
         Rop.consEnclose, C.sortOne "-term" [] )
+    , ( "fix R",
+        Rop.consFix, C.sortOne "-relmap" [] )
     , ( "full R ...",
         Rop.consFull, C.sortList "-relmap" [] )
     , ( "group /N R",

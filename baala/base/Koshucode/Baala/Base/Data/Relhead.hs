@@ -5,6 +5,7 @@
 module Koshucode.Baala.Base.Data.Relhead
 ( -- * Type
   Relhead (..),
+  headEquiv,
   headFrom,
   headAppend,
   headConsTerm,
@@ -37,13 +38,10 @@ import qualified Koshucode.Baala.Base.Data.Relterm as B
 -- | Heading of relation as a list of terms
 data Relhead = Relhead {
       headTerms :: [B.Relterm]
-    } deriving (Show, Ord)
+    } deriving (Show, Eq, Ord)
 
-instance Eq Relhead where
-    (==) = headEq
-
-headEq :: Relhead -> Relhead -> Bool
-headEq (Relhead a) (Relhead b) = L.sort a == L.sort b
+headEquiv :: Relhead -> Relhead -> Bool
+headEquiv (Relhead a) (Relhead b) = L.sort a == L.sort b
 
 instance M.Monoid Relhead where
     mempty = Relhead []
@@ -156,5 +154,4 @@ isSuperhead h1 h2 = isSubhead h2 h1
 
 isEqvHead :: Relhead -> Relhead -> Bool
 isEqvHead h1 h2 = isSubhead h1 h2 && isSubhead h2 h1
-
 

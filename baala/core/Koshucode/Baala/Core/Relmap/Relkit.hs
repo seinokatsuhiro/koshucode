@@ -8,6 +8,7 @@ module Koshucode.Baala.Core.Relmap.Relkit
   RelkitBody,
   RelkitKey,
   RelkitDef,
+  Relfun,
   RelkitCore (..),
 
   -- * Constructor
@@ -24,6 +25,8 @@ module Koshucode.Baala.Core.Relmap.Relkit
   -- * Run
   relkitLink,
   relkitRun,
+  fixedRelation,
+  bodyMapArrange,
 ) where
 
 import qualified Control.Monad        as Monad
@@ -48,6 +51,7 @@ instance Monoid.Monoid (Relkit c) where
 type RelkitBody c = B.Sourced (RelkitCore c)
 type RelkitKey    = (Maybe B.Relhead, [C.Lexmap])
 type RelkitDef c  = (RelkitKey, Relkit c)
+type Relfun c     = [[c]] -> B.Ab [[c]]
 
 -- Specialized relmap
 data RelkitCore c
@@ -56,9 +60,9 @@ data RelkitCore c
     | RelkitOneToOne     Bool (  [c]  ->  [c]  )
     | RelkitPred              (  [c]  -> Bool  )
 
-    | RelkitAbFull       Bool ( [B.Ab [[c]]] -> [[c]] -> B.Ab [[c]] ) [RelkitBody c]
-    | RelkitOneToAbMany  Bool ( [B.Ab [[c]]] -> [c]   -> B.Ab [[c]] ) [RelkitBody c]
-    | RelkitOneToAbOne   Bool ( [B.Ab [[c]]] -> [c]   -> B.Ab [c] )   [RelkitBody c]
+    | RelkitAbFull       Bool ( [ Relfun c ] -> Relfun c ) [RelkitBody c]
+    | RelkitOneToAbMany  Bool ( [ B.Ab [[c]] ] -> [c]   -> B.Ab [[c]] ) [RelkitBody c]
+    | RelkitOneToAbOne   Bool ( [ B.Ab [[c]] ] -> [c]   -> B.Ab [c] )   [RelkitBody c]
     | RelkitAbSemi            ( [[c]]  -> B.Ab Bool )                 (RelkitBody c)
     | RelkitAbPred            (  [c]   -> B.Ab Bool )
 
@@ -69,20 +73,20 @@ data RelkitCore c
     | RelkitLink         String RelkitKey (Maybe (RelkitBody c))
 
 instance Show (RelkitCore c) where
+    show (RelkitFull        _ _)   =  "RelkitFull"
     show (RelkitOneToMany   _ _)   =  "RelkitOneToMany"
     show (RelkitOneToOne    _ _)   =  "RelkitOneToOne"
-    show (RelkitFull        _ _)   =  "RelkitFull"
     show (RelkitPred          _)   =  "RelkitPred"
 
+    show (RelkitAbFull    _ _ _)   =  "RelkitAbFull"
     show (RelkitOneToAbMany _ _ _) =  "RelkitOneToAbMany"
     show (RelkitOneToAbOne _ _ _)  =  "RelkitOneToAbOne"
-    show (RelkitAbFull    _ _ _)   =  "RelkitAbFull"
-    show (RelkitAbPred        _)   =  "RelkitAbPred"
     show (RelkitAbSemi      _ _)   =  "RelkitAbSemi"
+    show (RelkitAbPred        _)   =  "RelkitAbPred"
 
     show (RelkitConst         _)   =  "RelkitConst"
-    show (RelkitId             )   =  "RelkitId"
     show (RelkitAppend      x y)   =  "RelkitAppend " ++ show [x,y]
+    show (RelkitId             )   =  "RelkitId"
 
     show (RelkitLink      n _ _)   =  "RelkitLink " ++ n
 
@@ -157,7 +161,7 @@ relkitRun (B.Sourced src kit) b1 =
        RelkitOneToOne    u f    ->  uniqueRight u $ f `map` b1
        RelkitPred          f    ->  Right $ filter f b1
 
-       RelkitAbFull      u f ks ->  uniqueAb u $ f (sub ks) b1
+       RelkitAbFull      u f ks ->  uniqueAb u $ f (map relkitRun ks) b1
        RelkitOneToAbMany u f ks ->  uniqueRight u . concat =<< f (sub ks) `mapM` b1
        RelkitOneToAbOne  u f ks ->  uniqueAb u $ f (sub ks) `mapM` b1
        RelkitAbSemi        f k  ->  Monad.filterM (semi k f) b1
@@ -186,4 +190,14 @@ uniqueAb u = (Right . uniqueIf u =<<)
 uniqueIf :: (Ord b) => Bool -> [b] -> [b]
 uniqueIf True  = B.unique
 uniqueIf False = id
+
+fixedRelation :: (Ord c) => B.Map (B.AbMap [[c]])
+fixedRelation f = fix where
+    fix b1 = do b2 <- f b1
+                if b1 == b2 then Right b2 else fix b2
+
+bodyMapArrange :: B.Relhead -> B.Relhead ->  B.Map (B.AbMap [[c]])
+bodyMapArrange h1 h2 f = g where
+    g b1 = do b2 <- f b1
+              Right $ B.bodyArrange h1 h2 b2
 

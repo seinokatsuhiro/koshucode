@@ -91,8 +91,8 @@ relkitEqual :: (Ord c) => C.RelkitBinary c
 relkitEqual (C.Relkit (Just h2) f2) (Just h1) =
     Right $ C.relkitJust h2 $ C.RelkitAbFull False equal [f2]
     where equal sub b1 =
-              do let [b2'] = sub
-                 b2 <- b2'
+              do let [g2] = sub
+                 b2 <- g2 b1
                  Right $ if B.Rel h1 b1 == B.Rel h2 b2
                          then [[]] else []
 relkitEqual _ _ = Right C.relkitNothing
