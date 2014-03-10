@@ -13,8 +13,9 @@ module Koshucode.Baala.Vanilla.Rop.Confl
   consIf, relmapIf, relkitIf,
   -- * when & unless
   consWhen, consUnless,
-  -- * fix
+  -- * fix & fix-join
   consFix,
+  consFixJoin,
 ) where
 
 import qualified Koshucode.Baala.Base    as B
@@ -134,6 +135,7 @@ relkitGroup n (C.Relkit (Just h2) f2) (Just h1) =
 relkitGroup _ _ _ = Right C.relkitNothing
 
 
+
 -- ----------------------  if
 
 --  'if T A B' is same as 'A' when T is an empty relation
@@ -176,6 +178,7 @@ isNothing2 :: Maybe B.Relhead -> Maybe B.Relhead -> Bool
 isNothing2 a b = isNothing a && isNothing b
 
 
+
 -- ----------------------  when & unless
 
 consWhen :: (Ord c) => C.RopCons c
@@ -189,12 +192,18 @@ consUnless use =
      Right $ relmapIf use [test, C.relmapId, alt]
 
 
--- ----------------------  fix
+
+-- ----------------------  fix & fix-join
 
 consFix :: (Ord c) => C.RopCons c
 consFix use =
   do r <- Rop.getRelmap use
      Right $ relmapFix use r
+
+consFixJoin :: (Ord c) => C.RopCons c
+consFixJoin use =
+  do r <- Rop.getRelmap use
+     Right $ relmapFix use (Rop.relmapJoin use r)
 
 relmapFix :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
 relmapFix use = C.relmapBinary use relkitFix
