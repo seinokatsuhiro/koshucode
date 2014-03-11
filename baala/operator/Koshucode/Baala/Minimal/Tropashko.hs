@@ -25,8 +25,8 @@ module Koshucode.Baala.Minimal.Tropashko
   relkitJoin,
 ) where
 
-import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Core as C
+import qualified Koshucode.Baala.Base    as B
+import qualified Koshucode.Baala.Core    as C
 import qualified Koshucode.Baala.Builtin as Rop
 
 
@@ -35,8 +35,8 @@ import qualified Koshucode.Baala.Builtin as Rop
 
 consMeet :: (Ord c) => C.RopCons c
 consMeet use =
-  do m <- Rop.getRelmap use
-     Right $ relmapMeet use m
+  do rmap <- Rop.getRelmap use
+     Right $ relmapMeet use rmap
 
 -- | Meet two relations.
 relmapMeet :: (Ord c)
@@ -47,30 +47,30 @@ relmapMeet use = C.relmapBinary use relkitMeet
 
 -- | Meet two relations.
 relkitMeet :: (Ord c) => C.RelkitBinary c
-relkitMeet (C.Relkit (Just h2) f2) (Just h1) =
-    Right (C.Relkit (Just h3) f3) where
+relkitMeet (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
     shared    :: [B.Termname]
-    shared    =  B.posInnerNames $ h1 `B.posFrom` h2
+    shared    =  B.posInnerNames $ he1 `B.posFrom` he2
 
     share1, share2 :: [B.TermPos]
-    share1    =  h1 `B.posFor` shared
-    share2    =  h2 `B.posFor` shared
+    share1    =  he1 `B.posFor` shared
+    share2    =  he2 `B.posFor` shared
 
     pick1, pick2, cut2 :: B.Map [c]
     pick1     =  B.posPick share1
     pick2     =  B.posPick share2
     cut2      =  B.posCut  share2
 
-    h3        =  h2 `B.mappend` h1
-    f3        =  B.Sourced [] $ C.RelkitOneToAbMany False meet [f2]
-    meet sub cs1 = do let [b2'] = sub
-                      b2 <- b2'
-                      let m2 = B.gatherToMap $ map kv b2
-                      case B.lookupMap (pick1 cs1) m2 of
-                        Just b2side -> Right $ map (++ cs1) b2side
-                        Nothing -> Right $ []
-    kv cs2    =  ( pick2 cs2,  -- key is shared cs
-                   cut2  cs2 ) -- value is side cs
+    he3       =  he2 `B.mappend` he1
+    kv cs2    =  (pick2 cs2, cut2 cs2) -- shared contents and side contents
+    kit3      =  C.relkitJust he3 $ C.RelkitOneToAbMany False kitf3 [kitb2]
+    kitf3 bmaps cs1 =
+        do let [bmap2] = bmaps
+           bo2 <- bmap2 [cs1]
+           let b2map = B.gatherToMap $ map kv bo2
+           case B.lookupMap (pick1 cs1) b2map of
+             Just b2side -> Right $ map (++ cs1) b2side
+             Nothing     -> Right $ []
+
 relkitMeet _ _ = Right C.relkitNothing
 
 
@@ -79,8 +79,8 @@ relkitMeet _ _ = Right C.relkitNothing
 
 consJoin :: (Ord c) => C.RopCons c
 consJoin use =
-    do m <- Rop.getRelmap use
-       Right $ relmapJoin use m
+    do rmap <- Rop.getRelmap use
+       Right $ relmapJoin use rmap
 
 -- | Join two relations.
 relmapJoin
@@ -92,23 +92,25 @@ relmapJoin use = C.relmapBinary use relkitJoin
 
 -- | Join two relations.
 relkitJoin :: C.RelkitBinary c
-relkitJoin (C.Relkit (Just h2) f2) (Just h1) =
-    Right (C.relkitJust h3 $ C.RelkitAbFull True f3 [f2]) where
+relkitJoin (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
     shared  :: [B.Termname]
-    shared  =  B.posInnerNames $ h1 `B.posFrom` h2
+    shared  =  B.posInnerNames $ he1 `B.posFrom` he2
 
     share1, share2 :: [B.TermPos]
-    share1  =  h1 `B.posFor` shared
-    share2  =  h2 `B.posFor` shared
+    share1  =  he1 `B.posFor` shared
+    share2  =  he2 `B.posFor` shared
 
     pick1, pick2 :: B.Map [c]
     pick1   =  B.posPick share1
     pick2   =  B.posPick share2
 
-    h3      =  B.headChange pick1 h1
-    f3 sub b1 = do let [g2] = sub
-                   b2 <- g2 b1
-                   Right $ map pick1 b1 ++ map pick2 b2
+    he3     =  B.headChange pick1 he1
+    kit3    =  C.relkitJust he3 $ C.RelkitAbFull True kitf3 [kitb2]
+    kitf3 bmaps bo1 =
+        do let [bmap2] = bmaps
+           bo2 <- bmap2 bo1
+           Right $ map pick1 bo1 ++ map pick2 bo2
+
 relkitJoin _ _ = Right C.relkitNothing
 
 
@@ -142,17 +144,17 @@ relkitJoin _ _ = Right C.relkitNothing
 --    In this case, shared terms are @\/b@ and @\/c@,
 --    left-sided term is @\/a@, and right-sided term is @\/d@.
 --
---    [Input]    Relations @(Rel h1 b1)@ and @(Rel h2 b2)@
+--    [Input]    Relations @(Rel he1 bo1)@ and @(Rel he2 bo2)@
 --
---    [Output]   Relation @(Rel h3 b3)@
+--    [Output]   Relation @(Rel he3 b3)@
 --
---    1. Let @s1@ be shared-term information of @h1@.
+--    1. Let @s1@ be shared-term information of @he1@.
 --
---    2. Let @s2@ be shared-term information of @h2@.
+--    2. Let @s2@ be shared-term information of @he2@.
 --
---    3. Let @cs1@ :: @[c]@ be element of @b1@.
+--    3. Let @cs1@ :: @[c]@ be element of @bo1@.
 --
---    4. Let @cs2@ :: @[c]@ be element of @b2@.
+--    4. Let @cs2@ :: @[c]@ be element of @bo2@.
 --
 --    5. Split each @cs2@, by @s2@,
 --       into shared and sided terms :: @([c], [c])@.

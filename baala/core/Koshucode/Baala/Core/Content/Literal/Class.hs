@@ -23,6 +23,7 @@ module Koshucode.Baala.Core.Content.Literal.Class
   CSet        (..),
   CTermset    (..),
   CRel        (..),
+  isMember,
 ) where
 
 import qualified Control.Monad as Monad
@@ -158,4 +159,8 @@ class (PrimContent c) => CRel c where
     putRel      ::     B.Rel c -> B.Ab c
     putRel      =      Right. pRel
 
+isMember :: (Eq c, CSet c, CList c) => c -> c -> Bool
+isMember x xs | isSet xs  = x `elem` gSet xs
+isMember x xs | isList xs = x `elem` gList xs
+isMember _ _ = False
 

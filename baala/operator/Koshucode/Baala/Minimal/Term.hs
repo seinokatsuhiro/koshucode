@@ -19,7 +19,7 @@ import qualified Koshucode.Baala.Builtin as Rop
 
 
 
--- ----------------------  pick
+-- ----------------------  pick & cut
 
 consPick :: (Ord c) => C.RopCons c
 consPick use =
@@ -31,10 +31,6 @@ relmapPick use = C.relmapFlow use . relkitPick
 
 relkitPick :: [B.Termname] -> C.RelkitCalc c
 relkitPick = relkitArrange B.arrangePick B.arrangePick
-
-
-
--- ----------------------  cut
 
 consCut :: (Ord c) => C.RopCons c
 consCut use =
@@ -53,18 +49,19 @@ relkitArrange
     -> [B.Termname]
     -> C.RelkitCalc c
 relkitArrange _ _ _ Nothing = Right C.relkitNothing
-relkitArrange ha ba ns (Just h1)
-    | null non  = Right $ C.relkitJust h2 (C.RelkitOneToOne True $ ba ind)
+relkitArrange hearr boarr ns (Just he1)
+    | null non  = Right $ C.relkitJust he2 $ C.RelkitOneToOne True $ boarr ind
     | otherwise = Left $ B.AbortAnalysis [] $ B.AANoTerms non
     where
-      non =  B.headDropTerms h1 ns
+      non =  B.headDropTerms he1 ns
+
       pos :: [B.TermPos]
-      pos =  List.sort $ h1 `B.posFor` ns
+      pos =  List.sort $ he1 `B.posFor` ns
 
       ind :: [Int]
       ind =  map B.posIndex pos
 
-      h2  =  B.headChange (ha ind) h1
+      he2 =  B.headChange (hearr ind) he1
 
 
 
@@ -81,15 +78,15 @@ relmapRename use = C.relmapFlow use . relkitRename
 {-| Change terms names -}
 relkitRename :: [(B.Termname, B.Termname)] -> C.RelkitCalc c
 relkitRename _ Nothing = Right C.relkitNothing
-relkitRename np (Just h1)
+relkitRename np (Just he1)
     | nsCheck /= [] = Left  $ B.AbortAnalysis [] $ B.AAReqNewTerms nsCheck
-    | psCheck /= [] = Left  $ B.AbortAnalysis [] $ B.AANoTerms psCheck
-    | otherwise     = Right $ C.relkitJust h2 C.RelkitId
+    | psCheck /= [] = Left  $ B.AbortAnalysis [] $ B.AANoTerms     psCheck
+    | otherwise     = Right $ C.relkitJust he2 C.RelkitId
     where
       (ns, ps) = unzip np
-      nsCheck  = B.headKeepTerms h1 ns
-      psCheck  = B.headDropTerms h1 ps
-      h2       = B.headChange (map rename) h1
+      nsCheck  = B.headKeepTerms he1 ns
+      psCheck  = B.headDropTerms he1 ps
+      he2      = B.headChange (map rename) he1
       pn       = map Tuple.swap np
       rename p = Maybe.fromMaybe p $ lookup p pn
 

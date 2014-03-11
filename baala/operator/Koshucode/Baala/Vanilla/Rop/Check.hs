@@ -45,15 +45,15 @@ relmapCheckTermBut  use = C.relmapFlow use . relkitCheckTermBut
 relkitCheckTermJust :: [B.Termname] -> C.RelkitCalc c
 relkitCheckTermHas  :: [B.Termname] -> C.RelkitCalc c
 relkitCheckTermBut  :: [B.Termname] -> C.RelkitCalc c
-relkitCheckTermJust = relkitCheckTermBy (\ns h1 -> B.headFrom ns `B.isEqvHead` h1)
-relkitCheckTermHas  = relkitCheckTermBy (\ns h1 -> B.headFrom ns `B.isSubhead` h1)
-relkitCheckTermBut  = relkitCheckTermBy (\ns h1 -> null $ B.headKeepTerms h1 ns)
+relkitCheckTermJust = relkitCheckTermBy (\ns he1 -> B.headFrom ns `B.isEqvHead` he1)
+relkitCheckTermHas  = relkitCheckTermBy (\ns he1 -> B.headFrom ns `B.isSubhead` he1)
+relkitCheckTermBut  = relkitCheckTermBy (\ns he1 -> null $ B.headKeepTerms he1 ns)
 
 relkitCheckTermBy :: ([String] -> B.Relhead -> Bool) -> [String] -> C.RelkitCalc c
 relkitCheckTermBy _ _ Nothing = Right C.relkitNothing
-relkitCheckTermBy f ns (Just h1)
-    | f ns h1 = Right $ C.relkitJust h1 C.RelkitId
-    | otherwise = Left $ B.AbortAnalysis [] (B.AACheckTerms $ B.headNames h1)
+relkitCheckTermBy f ns (Just he1)
+    | f ns he1 = Right $ C.relkitJust he1 C.RelkitId
+    | otherwise = Left $ B.AbortAnalysis [] (B.AACheckTerms $ B.headNames he1)
 
 
 
@@ -78,21 +78,22 @@ relmapDuplicate use = C.relmapFlow use . relkitDuplicate
 
 relkitDuplicate :: (Ord c) => [B.Termname] -> C.RelkitCalc c
 relkitDuplicate _ Nothing = Right C.relkitNothing
-relkitDuplicate ns (Just h1)
-    | null non  = Right $ C.relkitJust h1 (C.RelkitFull False f)
+relkitDuplicate ns (Just he1)
+    | null non  = Right kit2
     | otherwise = Left  $ B.AbortAnalysis [] (B.AANoTerms non)
     where
       non :: [B.Termname]
-      non = B.headDropTerms h1 ns
+      non = B.headDropTerms he1 ns
 
       pos :: [B.TermPos]
-      pos = h1 `B.posFor` ns
+      pos = he1 `B.posFor` ns
 
-      f :: (Ord c) => [[c]] -> [[c]]
-      f b1    = let m = B.gatherToMap $ map kv b1
-                in concat $ Map.elems $ Map.filter dup m
-      kv cs1  = ( B.posPick pos cs1, cs1 )
-      dup     = not . B.isSingleton
+      kit2 = C.relkitJust he1 $ C.RelkitFull False kitf2
+      kitf2 :: (Ord c) => [[c]] -> [[c]]
+      kitf2 bo1 = let bo1map = B.gatherToMap $ map kv bo1
+                  in concat $ Map.elems $ Map.filter dup bo1map
+      kv cs     = (B.posPick pos cs, cs)
+      dup       = not . B.isSingleton
 
 
 
@@ -107,12 +108,13 @@ consTypename use =
 relkitTypename
   :: (C.CText c) => [(B.Termname, B.Termname)] -> C.RelkitCalc c
 relkitTypename _ Nothing = Right C.relkitNothing
-relkitTypename np (Just h1) =
-    Right $ C.relkitJust h2 (C.RelkitOneToOne False f) where
+relkitTypename np (Just he1) = Right kit2 where
     ns    = map fst np
     ps    = map snd np
-    h2    = B.headAppend ns h1
-    pos   = h1 `B.posFor` ps
-    f cs1 = let cs2 = B.posPick pos cs1
-            in (map (C.pText . C.typename) cs2) ++ cs1
+    he2   = B.headAppend ns he1
+    pos   = he1 `B.posFor` ps
+
+    kit2 = C.relkitJust he2 $ C.RelkitOneToOne False kitf2
+    kitf2 cs1 = let cs2 = B.posPick pos cs1
+                in ((C.pText . C.typename) `map` cs2) ++ cs1
 

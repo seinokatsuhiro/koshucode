@@ -27,14 +27,12 @@ consPrefix use =
 relmapPrefix :: C.RopUse c -> String -> [String] -> C.Relmap c
 relmapPrefix use pre ns = C.relmapFlow use $ relkitPrefix pre ns
 
-{-| Add prefix to specified terms. -}
-relkitPrefix
-    :: String             -- ^ Prefix text (except for hyphen)
-    -> [String]           -- ^ Changing termnames
-    -> C.RelkitCalc c
+-- | Add prefix to specified terms.
+relkitPrefix :: String -> [String] -> C.RelkitCalc c
 relkitPrefix _ _ Nothing = Right C.relkitNothing
-relkitPrefix pre ns (Just h1) = Right $ C.relkitJust h2 C.RelkitId where
-    h2 = B.headChange (map f) h1
+relkitPrefix pre ns (Just he1) = Right kit2 where
+    he2 =  B.headChange (map f) he1
+    kit2 = C.relkitId $ Just he2
     f n | n `elem` ns  = prefixName pre n
         | otherwise    = n
 
@@ -54,13 +52,12 @@ consUnprefix use =
 relmapUnprefix :: C.RopUse c -> String -> C.Relmap c
 relmapUnprefix use = C.relmapFlow use . relkitUnprefix
 
-{-| Remove prefix -}
-relkitUnprefix
-    :: String             -- ^ Prefix text (except for hyphen)
-    -> C.RelkitCalc c
+-- | Remove prefix
+relkitUnprefix :: String -> C.RelkitCalc c
 relkitUnprefix _ Nothing = Right C.relkitNothing
-relkitUnprefix pre (Just h1) = Right $ C.relkitJust h2 C.RelkitId where
-    h2 = B.headChange (map $ unprefixName pre) h1
+relkitUnprefix pre (Just he1) = Right kit2 where
+    he2  = B.headChange (map $ unprefixName pre) he1
+    kit2 = C.relkitId $ Just he2
 
 unprefixName :: String -> String -> String
 unprefixName pre n =
@@ -76,20 +73,17 @@ consPrefixChange :: C.RopCons c
 consPrefixChange use =
     do new <- Rop.getTerm use "-new"
        old <- Rop.getTerm use "-old"
-       Right $ relmapPrefixChange use new old
+       Right $ relmapPrefixChange use (new, old)
 
-relmapPrefixChange :: C.RopUse c -> String -> String -> C.Relmap c
-relmapPrefixChange use new old = C.relmapFlow use $ relkitPrefixChange new old
+relmapPrefixChange :: C.RopUse c -> (String, String) -> C.Relmap c
+relmapPrefixChange use = C.relmapFlow use . relkitPrefixChange
 
-{-| Change prefix -}
-relkitPrefixChange
-    :: String             -- ^ New prefix text (except for hyphen)
-    -> String             -- ^ Old prefix text (except for hyphen)
-    -> C.RelkitCalc c
-relkitPrefixChange _ _ Nothing = Right C.relkitNothing
-relkitPrefixChange new old (Just h1) =
-    Right $ C.relkitJust h2 C.RelkitId where
-    h2   = B.headChange (map f) h1
+-- | Change prefix
+relkitPrefixChange :: (String, String) -> C.RelkitCalc c
+relkitPrefixChange _ Nothing = Right C.relkitNothing
+relkitPrefixChange (new, old) (Just he1) = Right kit2 where
+    he2  = B.headChange (map f) he1
+    kit2 = C.relkitId $ Just he2
     new' = new ++ "-"
     old' = old ++ "-"
     f n' = case List.stripPrefix old' n' of

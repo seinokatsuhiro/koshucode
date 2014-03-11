@@ -6,7 +6,6 @@ module Koshucode.Baala.Vanilla.Type
 ( VContent (..),
   VCop,
   VRopCons,
-  isMember,
 ) where
 
 import qualified Data.Set as Set
@@ -151,13 +150,4 @@ instance C.CRel VContent where
     gRel _                   =  B.bug "gRel"
     isRel  (VRel _)          =  True
     isRel  _                 =  False
-
-
-
--- ----------------------
-
-isMember :: VContent -> VContent -> Bool
-isMember x (VSet  xs) = x `elem` xs
-isMember x (VList xs) = x `elem` xs
-isMember _ _ = False
 

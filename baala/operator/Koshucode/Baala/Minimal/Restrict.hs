@@ -24,8 +24,8 @@ import qualified Koshucode.Baala.Minimal.Tropashko as Rop
 
 consSome :: (Ord c) => C.RopCons c
 consSome use = 
-    do m <- Rop.getRelmap use
-       Right $ relmapSome use m
+    do rmap <- Rop.getRelmap use
+       Right $ relmapSome use rmap
 
 relmapSome :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
 relmapSome use = C.relmapBinary use relkitSome
@@ -34,9 +34,9 @@ relkitSome :: (Ord c) => C.RelkitBinary c
 relkitSome = relkitSemi False
 
 relkitSemi :: (Ord c) => Bool -> C.RelkitBinary c
-relkitSemi isNull (C.Relkit _ f2) h1 =
-    Right $ C.relkit h1 (C.RelkitAbSemi p f2)
-    where p b2 = Right $ null b2 == isNull
+relkitSemi isEmpty (C.Relkit _ kitb2) he1 =
+    Right $ C.relkit he1 $ C.RelkitAbSemi p kitb2
+    where p bo2 = Right $ null bo2 == isEmpty
 
 
 
@@ -44,8 +44,8 @@ relkitSemi isNull (C.Relkit _ f2) h1 =
 
 consNone :: (Ord c) => C.RopCons c
 consNone use =
-    do m <- Rop.getRelmap use
-       Right $ relmapNone use m
+    do rmap <- Rop.getRelmap use
+       Right $ relmapNone use rmap
 
 relmapNone :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
 relmapNone use = C.relmapBinary use relkitNone
@@ -59,20 +59,20 @@ relkitNone = relkitSemi True
 
 consSub :: (Ord c) => C.RopCons c
 consSub use =
-    do m <- Rop.getRelmap use
-       Right $ relmapSub use m
+    do rmap <- Rop.getRelmap use
+       Right $ relmapSub use rmap
 
 relmapSub :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
 relmapSub use = C.relmapBinary use relkitSub
 
 relkitSub :: (Ord c) => C.RelkitBinary c
-relkitSub r2@(C.Relkit (Just h2) _) (Just h1)
-    | B.isSuperhead h1 h2 = sub
-    | otherwise = Right $ C.relkitJust h1 (C.RelkitConst [])
+relkitSub kit2@(C.Relkit (Just he2) _) he1'@(Just he1)
+    | B.isSuperhead he1 he2 = kit
+    | otherwise = Right $ C.relkitJust he1 $ C.RelkitConst []
     where
-      sub = do r3 <- Rop.relkitMeet r2 (Just h1)
-               f3 <- relkitSome r3 (Just h1)
-               Right f3
+      kit = do kit3 <- Rop.relkitMeet kit2 he1'
+               kit4 <- relkitSome kit3 he1'
+               Right kit4
 relkitSub _ _ = Right C.relkitNothing
 
 
@@ -81,19 +81,19 @@ relkitSub _ _ = Right C.relkitNothing
 
 consEqual :: (Ord c) => C.RopCons c
 consEqual use =
-    do m <- Rop.getRelmap use
-       Right $ relmapEqual use m
+    do rmap <- Rop.getRelmap use
+       Right $ relmapEqual use rmap
 
 relmapEqual :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
 relmapEqual use = C.relmapBinary use relkitEqual
 
 relkitEqual :: (Ord c) => C.RelkitBinary c
-relkitEqual (C.Relkit (Just h2) f2) (Just h1) =
-    Right $ C.relkitJust h2 $ C.RelkitAbFull False equal [f2]
-    where equal sub b1 =
-              do let [g2] = sub
-                 b2 <- g2 b1
-                 Right $ if B.Rel h1 b1 == B.Rel h2 b2
-                         then [[]] else []
+relkitEqual (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
+    kit3 = C.relkitJust B.headEmpty $ C.RelkitAbFull False kitf3 [kitb2]
+    kitf3 bmaps bo1 =
+        do let [bmap2] = bmaps
+           bo2 <- bmap2 bo1
+           Right $ if B.Rel he1 bo1 == B.Rel he2 bo2
+                   then [[]] else []
 relkitEqual _ _ = Right C.relkitNothing
 

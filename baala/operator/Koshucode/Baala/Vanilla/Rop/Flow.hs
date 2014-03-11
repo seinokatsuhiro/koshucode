@@ -33,29 +33,30 @@ consEnclose use =
 relmapEnclose :: (C.CRel c) => C.RopUse c -> B.Termname -> C.Relmap c
 relmapEnclose use = C.relmapFlow use . relkitEnclose
 
-{-| Enclose the current relation in a term. -}
+-- | Enclose the current relation in a term.
 relkitEnclose :: (C.CRel c) => B.Termname -> C.RelkitCalc c
 relkitEnclose _ Nothing = Right C.relkitNothing
-relkitEnclose n (Just h1) = Right $ C.relkitJust h2 (C.RelkitFull False f) where
-    h2 = B.Relhead [B.Nest n $ B.headTerms h1]
-    f b1 = [[C.pRel $ B.Rel h1 b1]]
+relkitEnclose n (Just he1) = Right kit2 where
+    he2       = B.Relhead [B.Nest n $ B.headTerms he1]
+    kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
+    kitf2 bo1 = [[C.pRel $ B.Rel he1 bo1]]
 
 
 
 -- ----------------------  member
 
-{- $member
-
-   Membership.
-   Relmap @member@ @\/x@ @\/xs@ means
-   @\/x@ is a member of @\/xs@.
-
-   - Input relation has both @\/x@ and @\/xs@,
-     check content of @\/x@ is acturally the member of @\/xs@.
-
-   - Input relation has @\/xs@ and not @\/x@,
-     add term @\/x@ as member of @\/xs@.
--}  
+-- $member
+--
+--  Membership.
+--  Relmap @member@ @\/x@ @\/xs@ means
+--  @\/x@ is a member of @\/xs@.
+--
+--  - Input relation has both @\/x@ and @\/xs@,
+--    check content of @\/x@ is acturally the member of @\/xs@.
+--
+--  - Input relation has @\/xs@ and not @\/x@,
+--    add term @\/x@ as member of @\/xs@.
+--
 
 consMember :: Rop.VRopCons
 consMember use =
@@ -63,33 +64,38 @@ consMember use =
      xs   <- Rop.getTerm use "-2"
      Right $ relmapMember use (x, xs)
 
-relmapMember :: C.RopUse Rop.VContent -> B.Termname2 -> C.Relmap Rop.VContent
+relmapMember :: (Ord c, C.CSet c, C.CList c)
+  => C.RopUse c -> B.Termname2 -> C.Relmap c
 relmapMember use = C.relmapFlow use . relkitMember
 
-relkitMember :: B.Termname2 -> C.RelkitCalc Rop.VContent
+relkitMember :: (Ord c, C.CSet c, C.CList c)
+  => B.Termname2 -> C.RelkitCalc c
 relkitMember _ Nothing = Right C.relkitNothing
-relkitMember (x, xs) (Just h1) = r2 where
-    r2 | xHere && xsHere     = relkitMemberCheck  xPos xsPos (Just h1)
-       | not xHere && xsHere = relkitMemberExpand x    xsPos (Just h1)
-       | otherwise           = Left $ B.AbortAnalysis [] (B.AANoTerms [x, xs])
+relkitMember (x, xs) he1'@(Just he1) = kit2 where
+    kit2 | xHere     && xsHere = relkitMemberCheck  xPos xsPos he1'
+         | not xHere && xsHere = relkitMemberExpand x    xsPos he1'
+         | otherwise           = Left $ B.AbortAnalysis [] (B.AANoTerms [x, xs])
     ([xPos, xsPos], [xHere, xsHere])
-        = h1 `B.posHere` [x, xs]
+        = he1 `B.posHere` [x, xs]
 
-relkitMemberCheck :: B.TermPos -> B.TermPos -> C.RelkitCalc Rop.VContent
-relkitMemberCheck xPos xsPos h1 = Right $ C.relkit h1 (C.RelkitPred f) where
-    f cs = let [xCont, xsCont] = B.posPick [xPos, xsPos] cs
-           in xCont `Rop.isMember` xsCont
+relkitMemberCheck :: (Eq c, C.CSet c, C.CList c)
+  => B.TermPos -> B.TermPos -> C.RelkitCalc c
+relkitMemberCheck xPos xsPos he1' = Right kit2 where
+    kit2 = C.relkit he1' $ C.RelkitPred kitf2
+    kitf2 cs = let [xCont, xsCont] = B.posPick [xPos, xsPos] cs
+               in xCont `C.isMember` xsCont
 
-relkitMemberExpand :: B.Termname -> B.TermPos -> C.RelkitCalc Rop.VContent
+relkitMemberExpand :: (Ord c, C.CSet c, C.CList c)
+  => B.Termname -> B.TermPos -> C.RelkitCalc c
 relkitMemberExpand _ _ Nothing = Right C.relkitNothing
-relkitMemberExpand x xsPos (Just h1) =
-    Right $ C.relkitJust h2 (C.RelkitOneToMany False f) where
-    h2     =  B.headCons x h1
-    f cs   =  let [xsCont] = B.posPick [xsPos] cs
-              in case xsCont of
-                   Rop.VSet  xs -> map (: cs) xs
-                   Rop.VList xs -> map (: cs) $ B.unique xs
-                   _            -> [xsCont : cs]
+relkitMemberExpand x xsPos (Just he1) = Right kit2 where
+    he2  = B.headCons x he1
+    kit2 = C.relkitJust he2 $ C.RelkitOneToMany False kitf2
+    kitf2 cs = let [xsCont] = B.posPick [xsPos] cs
+               in case xsCont of
+                    _ | C.isSet  xsCont -> map (: cs) $ C.gSet xsCont
+                    _ | C.isList xsCont -> map (: cs) $ B.unique $ C.gList xsCont
+                    _                   -> [xsCont : cs]
 
 
 
@@ -107,11 +113,11 @@ relmapRange use = C.relmapFlow use . relkitRange
 
 relkitRange :: (C.CDec c) => (B.Termname, Int, Int) -> C.RelkitCalc c
 relkitRange _ Nothing = Right C.relkitNothing
-relkitRange (n, low, high) (Just h1) =
-    Right $ C.relkitJust h2 (C.RelkitOneToMany False f) where
-    h2    = B.headCons n h1
-    decs  = map C.pDecFromInt [low .. high]
-    f cs  = map (: cs) decs
+relkitRange (n, low, high) (Just he1) = Right kit2 where
+    he2      = B.headCons n he1
+    kit2     = C.relkitJust he2 $ C.RelkitOneToMany False kitf2
+    kitf2 cs = map (: cs) decs
+    decs     = map C.pDecFromInt [low .. high]
 
 
 
@@ -139,7 +145,8 @@ relmapSize use n = C.relmapFlow use $ relkitSize n
 
 {-| Cardinality -}
 relkitSize :: (C.CDec c) => B.Termname -> C.RelkitCalc c
-relkitSize n _ = Right $ C.relkitJust h2 (C.RelkitFull False f) where
-    h2   = B.headFrom [n]
-    f b1 = [[C.pDecFromInt $ length b1]]
+relkitSize n _ = Right kit2 where
+    he2       = B.headFrom [n]
+    kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
+    kitf2 bo1 = [[ C.pDecFromInt $ length bo1 ]]
 

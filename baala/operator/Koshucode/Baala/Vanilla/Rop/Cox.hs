@@ -35,12 +35,12 @@ relmapAdd use = C.relmapFlow use . relkitAdd
 relkitAdd :: (C.CList c, C.CRel c, B.Pretty c)
   => ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.RelkitCalc c
 relkitAdd _ Nothing = Right C.relkitNothing
-relkitAdd (base, deriv, bodies) (Just h1) =
-    Right $ C.relkitJust h2 (C.RelkitOneToAbOne False f []) where
-        ns = map fst bodies   -- term names
-        es = map snd bodies   -- term expression
-        h2 = B.headAppend ns h1
-        f _ cs1 = do es2 <- mapM (C.coxBeta base deriv h1) es
+relkitAdd (base, deriv, bodies) (Just he1) = Right kit2 where
+    ns   = map fst bodies   -- term names
+    es   = map snd bodies   -- term expression
+    he2  = B.headAppend ns he1
+    kit2 = C.relkitJust he2 $ C.RelkitOneToAbOne False kitf2 []
+    kitf2 _ cs1 = do es2 <- C.coxBeta base deriv he1 `mapM` es
                      cs2 <- C.coxRun cs1 `mapM` es2
                      Right $ cs2 ++ cs1
 
@@ -63,13 +63,13 @@ relmapFilter use = C.relmapFlow use . relkitFilter
 relkitFilter :: (C.CList c, C.CRel c, C.CBool c, B.Pretty c)
   => (Bool, [C.Cop c], [C.NamedCox c], C.Cox c) -> C.RelkitCalc c
 relkitFilter _ Nothing = Right C.relkitNothing
-relkitFilter (b, base, deriv, body) (Just h1) =
-    Right $ C.relkitJust h1 (C.RelkitAbPred p) where
-    p cs = do e <- C.coxBeta base deriv h1 body
-              c <- C.coxRun cs e
-              case c of
-                x | C.isBool x -> Right $ b == C.gBool x
-                _ -> Left $ B.AbortAnalysis [] $ B.AAReqBoolean ""
+relkitFilter (which, base, deriv, body) (Just he1) = Right kit2 where
+    kit2 = C.relkitJust he1 $ C.RelkitAbPred p
+    p cs1 = do e <- C.coxBeta base deriv he1 body
+               c <- C.coxRun cs1 e
+               case C.isBool c of
+                 True  -> Right $ C.gBool c == which
+                 False -> Left $ B.AbortAnalysis [] $ B.AAReqBoolean ""
 
 
 -- ----------------------  alpha

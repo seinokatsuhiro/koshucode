@@ -48,23 +48,23 @@ relmapEmpty use = C.relmapFlow use relkitEmpty
 
 {-| Throw away all tuples in a relation. -}
 relkitEmpty :: C.RelkitCalc c
-relkitEmpty h1 = Right $ C.relkit h1 (C.RelkitConst [])
+relkitEmpty he1 = Right $ C.relkit he1 $ C.RelkitConst []
 
 
 -- ----------------------  contents
 
-consContents :: C.RopCons c
+consContents :: (Ord c) => C.RopCons c
 consContents use =
     do n <- Rop.getTerm use "-term"
        Right $ relmapContents use n
 
-relmapContents :: C.RopUse c -> B.Termname -> C.Relmap c
+relmapContents :: (Ord c) => C.RopUse c -> B.Termname -> C.Relmap c
 relmapContents use = C.relmapFlow use . relkitContents
 
-relkitContents :: B.Termname -> C.RelkitCalc c
-relkitContents n _ = Right $ C.relkitJust h2 (C.RelkitFull True f) where
-    h2   = B.headFrom [n]
-    f b1 = map B.singleton $ concat b1
+relkitContents :: (Ord c) => B.Termname -> C.RelkitCalc c
+relkitContents n _ = Right $ C.relkitJust he2 $ C.RelkitFull False kitf where
+    he2  = B.headFrom [n]
+    kitf = map B.singleton . B.unique . concat
 
 
 -- ----------------------  reldee & reldum

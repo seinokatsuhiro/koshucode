@@ -20,19 +20,17 @@ import qualified Koshucode.Baala.Core          as C
 import qualified Koshucode.Baala.Builtin       as Rop
 
 
-
 -- ----------------------  do
 
 consDo :: (Ord c) => C.RopCons c
 consDo use =
-  do r <- Rop.getRelmap use
+  do rmap <- Rop.getRelmap use
      treesLet <- Rop.getWordTrees use "-let"
      let C.RelmapCons lx full = C.relmapCons $ C.ropGlobal use
          (names, trees) = unzip treesLet
      lxs   <- mapM lx $ map B.singleton trees
      fulls <- mapM full lxs
      Right $ undefined
-
 
 
 -- ----------------------  koshu-cop
@@ -50,7 +48,6 @@ relkitKoshuCop name C.Global { C.globalCops = (cops, _) } _ =
     Right $ C.relkitConstBody [name] $ map (B.singleton . C.pText . B.name) cops
 
 
-
 -- ----------------------  koshu-cop-infix
 
 consKoshuCopInfix :: (C.CContent c) => C.RopCons c
@@ -64,10 +61,10 @@ relmapKoshuCopInfix :: (C.CContent c) => C.RopUse c -> (B.Termname, Maybe B.Term
 relmapKoshuCopInfix use = C.relmapGlobal use . relkitKoshuCopInfix
 
 relkitKoshuCopInfix :: (C.CContent c) => (B.Termname, Maybe B.Termname, Maybe B.Termname) -> C.RelkitGlobal c
-relkitKoshuCopInfix (name, height, dir) C.Global { C.globalCops = (_, htab) } _ = r2 where
-    r2 = Right $ C.relkitJust h2 $ C.RelkitConst (map put htab)
-    h2 = B.headFrom $   [name] ++ heightMaybe B.singleton   ++ dirMaybe B.singleton
-    put (n,ih) = [C.pText n] ++ heightMaybe (heightTerm ih) ++ dirMaybe (dirTerm ih)
+relkitKoshuCopInfix (name, height, dir) C.Global { C.globalCops = (_, htab) } _ = Right kit2 where
+    kit2 = C.relkitJust he2 $ C.RelkitConst (map put htab)
+    he2  = B.headFrom $ [name] ++ heightMaybe B.singleton     ++ dirMaybe B.singleton
+    put (n, ih)  = [C.pText n] ++ heightMaybe (heightTerm ih) ++ dirMaybe (dirTerm ih)
 
     heightMaybe = B.maybeEmpty height
     dirMaybe    = B.maybeEmpty dir
@@ -90,8 +87,10 @@ relmapKoshuRop :: (C.CContent c) => C.RopUse c -> B.Termname -> C.Relmap c
 relmapKoshuRop use = C.relmapGlobal use . relkitKoshuRop
 
 relkitKoshuRop :: (C.CContent c) => B.Termname -> C.RelkitGlobal c
-relkitKoshuRop name C.Global { C.globalRops = rops } _ =
-    Right $C.relkitConstBody [name] $ map (B.singleton . C.pText . C.ropName) rops
+relkitKoshuRop name C.Global { C.globalRops = rops } _ = Right kit2 where
+    kit2 = C.relkitConstBody [name] bo2
+    bo2  = map (B.singleton . C.pText . C.ropName) rops
+
 
 -- ----------------------  koshu-version
 
@@ -120,9 +119,11 @@ relkitKoshuVersion n C.Global { C.globalVersion = ver } _ =
 
 relkitKoshuVersionCheck :: (C.CContent c) => (c, c) -> B.Termname -> C.RelkitGlobal c
 relkitKoshuVersionCheck (from, to) n C.Global { C.globalVersion = ver } _
-    | version >= from && version <= to  = Right $ C.relkitConstSingleton [n] [version] -- todo
-    | otherwise = Right $ C.relkitConstEmpty [n]
-    where version = C.pList $ map C.pDecFromInt $ apiVersion ver
+    | verC >= from && verC <= to  = Right kitV
+    | otherwise                   = Right kitE
+    where verC = C.pList $ map C.pDecFromInt $ apiVersion ver
+          kitV = C.relkitConstSingleton [n] [verC] -- todo
+          kitE = C.relkitConstEmpty [n]
 
 apiVersion :: V.Version -> [Int]
 apiVersion V.Version { V.versionBranch = ver } =

@@ -1,6 +1,8 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Specialized relmap.
+
 module Koshucode.Baala.Core.Relmap.Relkit
 ( 
   -- * Datatype
@@ -8,7 +10,7 @@ module Koshucode.Baala.Core.Relmap.Relkit
   RelkitBody,
   RelkitKey,
   RelkitDef,
-  Relfun,
+  Relbmap,
   RelkitCore (..),
 
   -- * Constructor
@@ -38,6 +40,7 @@ import qualified Koshucode.Baala.Core.Relmap.Lexical as C
 
 -- ----------------------  Datatype
 
+-- | Specialized relmap.
 data Relkit c = Relkit
     { relkitHead :: Maybe B.Relhead
     , relkitBody :: RelkitBody c
@@ -45,32 +48,33 @@ data Relkit c = Relkit
 
 instance Monoid.Monoid (Relkit c) where
     mempty = relkitConst B.reldee
-    mappend (Relkit _ b1) (Relkit h2 b2) =
-        Relkit h2 $ B.Sourced [] $ RelkitAppend b1 b2
+    mappend (Relkit _ bo1) (Relkit he2 bo2) =
+        relkit he2 $ RelkitAppend bo1 bo2
 
 type RelkitBody c = B.Sourced (RelkitCore c)
 type RelkitKey    = (Maybe B.Relhead, [C.Lexmap])
 type RelkitDef c  = (RelkitKey, Relkit c)
-type Relfun c     = [[c]] -> B.Ab [[c]]
 
--- Specialized relmap
+-- | Mapping for body of relation.
+type Relbmap c = [[c]] -> B.Ab [[c]]
+
 data RelkitCore c
     = RelkitFull         Bool ( [[c]] -> [[c]] )
     | RelkitOneToMany    Bool (  [c]  -> [[c]] )
     | RelkitOneToOne     Bool (  [c]  ->  [c]  )
     | RelkitPred              (  [c]  -> Bool  )
 
-    | RelkitAbFull       Bool ( [ Relfun c ] -> Relfun c ) [RelkitBody c]
-    | RelkitOneToAbMany  Bool ( [ B.Ab [[c]] ] -> [c]   -> B.Ab [[c]] ) [RelkitBody c]
-    | RelkitOneToAbOne   Bool ( [ B.Ab [[c]] ] -> [c]   -> B.Ab [c] )   [RelkitBody c]
-    | RelkitAbSemi            ( [[c]]  -> B.Ab Bool )                 (RelkitBody c)
-    | RelkitAbPred            (  [c]   -> B.Ab Bool )
+    | RelkitAbFull       Bool ( [Relbmap c] -> [[c]] -> B.Ab [[c]] ) [RelkitBody c]
+    | RelkitOneToAbMany  Bool ( [Relbmap c] ->  [c]  -> B.Ab [[c]] ) [RelkitBody c]
+    | RelkitOneToAbOne   Bool ( [Relbmap c] ->  [c]  -> B.Ab  [c]  ) [RelkitBody c]
+    | RelkitAbSemi                           ( [[c]] -> B.Ab Bool )  (RelkitBody c)
+    | RelkitAbPred                           (  [c]  -> B.Ab Bool )
 
     | RelkitConst             [[c]]
     | RelkitAppend            (RelkitBody c) (RelkitBody c)
     | RelkitId
 
-    | RelkitLink         String RelkitKey (Maybe (RelkitBody c))
+    | RelkitLink        String RelkitKey (Maybe (RelkitBody c))
 
 instance Show (RelkitCore c) where
     show (RelkitFull        _ _)   =  "RelkitFull"
@@ -95,19 +99,19 @@ instance Show (RelkitCore c) where
 -- ----------------------  Constructor
 
 relkit :: Maybe B.Relhead -> RelkitCore c -> Relkit c
-relkit h f = Relkit h $ B.Sourced [] f
+relkit he = Relkit he . B.Sourced []
 
 relkitJust :: B.Relhead -> RelkitCore c -> Relkit c
-relkitJust h = relkit (Just h)
+relkitJust he = relkit $ Just he
 
 relkitNothing :: Relkit c
 relkitNothing = relkit Nothing RelkitId
 
 relkitId :: Maybe B.Relhead -> Relkit c
-relkitId h = (relkit h RelkitId)
+relkitId he = relkit he RelkitId
 
 relkitConst :: B.Rel c -> Relkit c
-relkitConst (B.Rel h b) = relkit (Just h) $ RelkitConst b
+relkitConst (B.Rel he bo) = relkitJust he $ RelkitConst bo
 
 relkitConstEmpty :: [B.Termname] -> Relkit c
 relkitConstEmpty ns = relkitConstBody ns []
@@ -116,88 +120,94 @@ relkitConstSingleton :: [B.Termname] -> [c] -> Relkit c
 relkitConstSingleton ns tuple = relkitConstBody ns [tuple]
 
 relkitConstBody :: [B.Termname] -> [[c]] -> Relkit c
-relkitConstBody ns body = r where
-    r = relkit h $ RelkitConst body
-    h = Just $ B.headFrom ns
+relkitConstBody ns bo = kit where
+    he  = B.headFrom ns
+    kit = relkitJust he $ RelkitConst bo
 
 relkitSetSource :: (B.TokenListing a) => a -> B.Map (Relkit c)
-relkitSetSource src (Relkit h (B.Sourced _ f)) =
-    Relkit h $ B.Sourced (B.tokenListing src) f
+relkitSetSource src (Relkit he (B.Sourced _ core)) =
+    Relkit he $ B.Sourced (B.tokenListing src) core
 
 
 
 -- ----------------------  Run
 
-relkitLink :: forall c. (Ord c) => [(RelkitKey, Relkit c)] -> B.Map (Relkit c)
+relkitLink :: forall c. (Ord c) => [RelkitDef c] -> B.Map (Relkit c)
 relkitLink kits = linkKit where
     linkKit :: B.Map (Relkit c)
-    linkKit (Relkit h b) = Relkit h $ link b
+    linkKit (Relkit he bo) = Relkit he $ link bo
 
-    kitsRec :: [(RelkitKey, Relkit c)]
+    kitsRec :: [RelkitDef c]
     kitsRec = linkKit `B.mapSndTo` kits
+
+    links = map link
 
     link :: B.Map (RelkitBody c)
     link (B.Sourced src core) =
-        let s = B.Sourced src
-        in s $ case core of
-                 RelkitAbFull      u f bs  -> RelkitAbFull      u f (map link bs)
-                 RelkitOneToAbMany u f bs  -> RelkitOneToAbMany u f (map link bs)
-                 RelkitOneToAbOne  u f bs  -> RelkitOneToAbOne  u f (map link bs)
-                 RelkitAbSemi        f  b1 -> RelkitAbSemi        f (link b1)
-                 RelkitAppend        b1 b2 -> RelkitAppend        (link b1) (link b2)
-                 RelkitLink       n key _  -> case lookup key kitsRec of
-                                                Nothing -> core
-                                                Just (Relkit _ b2) ->
-                                                    RelkitLink n key (Just b2)
-                 _ -> core
+        B.Sourced src $
+         case core of
+           RelkitAbFull      u kitf kitbs  -> RelkitAbFull      u kitf $ links kitbs
+           RelkitOneToAbMany u kitf kitbs  -> RelkitOneToAbMany u kitf $ links kitbs
+           RelkitOneToAbOne  u kitf kitbs  -> RelkitOneToAbOne  u kitf $ links kitbs
+           RelkitAbSemi        kitf kitb   -> RelkitAbSemi        kitf $ link  kitb
+           RelkitAppend        kitb1 kitb2 -> RelkitAppend (link kitb1) (link kitb2)
+
+           RelkitLink n key _ 
+               -> case lookup key kitsRec of
+                    Nothing -> core
+                    Just (Relkit _ kitb) ->
+                        RelkitLink n key $ Just kitb
+           _ -> core
 
 -- todo: optimization
-relkitRun :: (Ord c) => RelkitBody c -> B.AbMap [[c]]
-relkitRun (B.Sourced src kit) b1 =
+relkitRun :: forall c. (Ord c) => RelkitBody c -> B.AbMap [[c]]
+relkitRun (B.Sourced src core) bo1 =
     B.abortable "run" src $
-     case kit of
-       RelkitFull        u f    ->  uniqueRight u $ f b1
-       RelkitOneToMany   u f    ->  uniqueRight u $ f `concatMap` b1
-       RelkitOneToOne    u f    ->  uniqueRight u $ f `map` b1
-       RelkitPred          f    ->  Right $ filter f b1
+     case core of
+       RelkitFull        u kitf       ->  right u $ kitf             bo1
+       RelkitOneToMany   u kitf       ->  right u $ kitf `concatMap` bo1
+       RelkitOneToOne    u kitf       ->  right u $ kitf `map`       bo1
+       RelkitPred          kitf       ->  Right   $ filter kitf      bo1
 
-       RelkitAbFull      u f ks ->  uniqueAb u $ f (map relkitRun ks) b1
-       RelkitOneToAbMany u f ks ->  uniqueRight u . concat =<< f (sub ks) `mapM` b1
-       RelkitOneToAbOne  u f ks ->  uniqueAb u $ f (sub ks) `mapM` b1
-       RelkitAbSemi        f k  ->  Monad.filterM (semi k f) b1
-       RelkitAbPred        f    ->  Monad.filterM f b1
+       RelkitAbFull      u kitf kitbs ->  ab    u $            kitf (bmaps kitbs)        bo1
+       RelkitOneToAbOne  u kitf kitbs ->  ab    u $            kitf (bmaps kitbs) `mapM` bo1
+       RelkitOneToAbMany u kitf kitbs ->  right u . concat =<< kitf (bmaps kitbs) `mapM` bo1
+       RelkitAbSemi        kitf kitb  ->  Monad.filterM (semi kitf kitb) bo1
+       RelkitAbPred        kitf       ->  Monad.filterM kitf bo1
 
-       RelkitConst           b  ->  Right b
-       RelkitId                 ->  Right b1
+       RelkitConst                 bo ->  Right bo
+       RelkitId                       ->  Right bo1
 
-       RelkitAppend kit1@(B.Sourced src1 _) kit2
-           -> do b2 <- kit1 `relkitRun` b1
-                 B.abortable "run" src1 $ kit2 `relkitRun` b2
+       RelkitAppend kitb1@(B.Sourced src1 _) kitb2
+           -> do bo2 <- kitb1 `relkitRun` bo1
+                 B.abortable "run" src1 $ kitb2 `relkitRun` bo2
 
-       RelkitLink _ _ (Just kit2) -> relkitRun kit2 b1
-       RelkitLink n _ (Nothing)   -> Left $ B.AbortAnalysis [] $ B.AAUnkRelmap n
+       RelkitLink _ _ (Just kitb2) -> relkitRun kitb2 bo1
+       RelkitLink n _ (Nothing)    -> Left $ B.AbortAnalysis [] $ B.AAUnkRelmap n
 
     where
-      sub = map (`relkitRun` b1)
-      semi k f cs = f =<< relkitRun k [cs]
+      bmaps = map relkitRun
 
-uniqueRight :: (Ord b) => Bool -> [b] -> B.Ab [b]
-uniqueRight u = Right . uniqueIf u
+      semi :: ([[c]] -> B.Ab Bool) -> RelkitBody c -> [c] -> B.Ab Bool
+      semi kitf kitb cs = kitf =<< relkitRun kitb [cs]
 
-uniqueAb :: (Ord b) => Bool -> B.Ab [b] -> B.Ab [b]
-uniqueAb u = (Right . uniqueIf u =<<)
+      right :: (Ord b) => Bool -> [b] -> B.Ab [b]
+      right u = Right . uif u
 
-uniqueIf :: (Ord b) => Bool -> [b] -> [b]
-uniqueIf True  = B.unique
-uniqueIf False = id
+      ab :: (Ord b) => Bool -> B.Ab [b] -> B.Ab [b]
+      ab u = (Right . uif u =<<)
+
+      uif :: (Ord b) => Bool -> [b] -> [b]
+      uif True   = B.unique
+      uif False  = id
 
 fixedRelation :: (Ord c) => B.Map (B.AbMap [[c]])
 fixedRelation f = fix where
-    fix b1 = do b2 <- f b1
-                if b1 == b2 then Right b2 else fix b2
+    fix bo1 = do bo2 <- f bo1
+                 if bo1 == bo2 then Right bo2 else fix bo2
 
 bodyMapArrange :: B.Relhead -> B.Relhead ->  B.Map (B.AbMap [[c]])
-bodyMapArrange h1 h2 f = g where
-    g b1 = do b2 <- f b1
-              Right $ B.bodyArrange h1 h2 b2
+bodyMapArrange he1 he2 f = g where
+    g bo1 = do bo2 <- f bo1
+               Right $ B.bodyArrange he1 he2 bo2
 

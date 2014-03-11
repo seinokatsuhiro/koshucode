@@ -6,6 +6,7 @@ module Koshucode.Baala.Base.Data.Relhead
 ( -- * Type
   Relhead (..),
   headEquiv,
+  headEmpty,
   headFrom,
   headAppend,
   headConsTerm,
@@ -52,6 +53,9 @@ instance M.Monoid Relhead where
 --   /a : /b
 instance B.Pretty Relhead where
     doc (Relhead ts) = B.docColon ts
+
+headEmpty :: Relhead
+headEmpty = headFrom []
 
 -- | Make head from termnames.
 --
