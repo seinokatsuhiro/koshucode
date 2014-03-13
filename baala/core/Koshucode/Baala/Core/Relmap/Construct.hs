@@ -95,7 +95,7 @@ relmapConsFull global fulls = consFull where
         let op    = C.lexOpText lx
             subHs = C.lexSubrelmap lx
         in case lookup op fulls of
-             Nothing   -> Right $ C.RelmapLink lx op Nothing
+             Nothing   -> Right $ C.RelmapLink lx op
              Just cons -> B.abortableFrom "relmap" lx $
                           do subFs <- mapM consFull subHs
                              cons $ C.RopUse global lx subFs

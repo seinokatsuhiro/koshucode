@@ -31,12 +31,12 @@ runRelmapDataset global dataset rdef = runRelmapViaRelkit g2 rdef where
 runRelmapViaRelkit :: (Ord c)
   => C.Global c -> [C.RelmapDef c]
   -> C.Relmap c -> B.AbMap (B.Rel c)
-runRelmapViaRelkit global rdef r (B.Rel h1 b1) =
-    do (C.Relkit h2' f2', relkits) <- C.relmapSpecialize global rdef [] (Just h1) r
-       let C.Relkit mh2 f2 = C.relkitLink relkits $ C.Relkit h2' f2'
-       h2 <- justRelhead mh2
-       b2 <- C.relkitRun f2 b1
-       Right $ B.Rel h2 b2
+runRelmapViaRelkit global rdef r (B.Rel he1 bo1) =
+    do (kdef, C.Relkit he2' f2') <- C.relmapSpecialize global rdef [] (Just he1) r
+       let C.Relkit mhe2 f2 = C.relkitLink kdef $ C.Relkit he2' f2'
+       he2 <- justRelhead mhe2
+       bo2 <- C.relkitRun f2 bo1
+       Right $ B.Rel he2 bo2
 
 justRelhead :: Maybe B.Relhead -> B.Ab B.Relhead
 justRelhead = just "unknown relhead"
@@ -139,18 +139,18 @@ arrangeRelUsing
     -> B.Arrange c
     -> [B.Termname]
     -> B.AbMap (B.Rel c)
-arrangeRelUsing sort ha ba ns (B.Rel h1 b1)
-    | null non   = Right $ B.Rel h2 b2
+arrangeRelUsing sort ha ba ns (B.Rel he1 bo1)
+    | null non   = Right $ B.Rel he2 bo2
     | otherwise  = Left  $ B.AbortAnalysis [] (B.AANoTerms non)
     where
-      non  =  B.headDropTerms h1 ns
+      non  =  B.headDropTerms he1 ns
 
       pos  :: [B.TermPos]
-      pos  =  sort $ h1 `B.posFor` ns
+      pos  =  sort $ he1 `B.posFor` ns
 
       ind  :: [Int]
       ind  =  map B.posIndex pos
 
-      h2   =  B.headChange   (ha ind) h1
-      b2   =  B.unique $ map (ba ind) b1
+      he2  =  B.headChange   (ha ind) he1
+      bo2  =  B.unique $ map (ba ind) bo1
 

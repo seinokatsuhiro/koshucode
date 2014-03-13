@@ -127,9 +127,8 @@ consRdf :: C.RopCons c
 consRdf use =
     do sign  <- Rop.getWord  use "-pattern"
        [s,o] <- Rop.getTerms use "-term"
-       Right $ C.relmapAlias use $
-             C.relmapSource use sign ["/s", "/o"] `B.mappend`
-             Rop.relmapRename use [(s,"/s"), (o,"/o")]
+       Right $ C.relmapSource use sign ["/s", "/o"] `B.mappend`
+               Rop.relmapRename use [(s,"/s"), (o,"/o")]
 
 
 

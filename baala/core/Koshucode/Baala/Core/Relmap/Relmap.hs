@@ -5,33 +5,55 @@
 
 module Koshucode.Baala.Core.Relmap.Relmap
 ( 
-  -- * Append relmaps
-  -- $AppendRelmaps
+  -- * Select from relmap
+  relmapSourceList,
+  relmapNameList,
 
-  -- * Constructors
+  -- * Construct relmap
   relmapSource,
   relmapConst,
-  relmapAlias,
   relmapFlow,
   relmapGlobal,
   relmapBinary,
   relmapConfl,
 
-  -- * Selectors
-  relmapSourceList,
-  relmapNameList,
-
-  -- * Linker
+  -- * Specialize relmap to relkit
   relmapSpecialize,
+
+  -- * Append relmaps
+  -- $AppendRelmaps
 ) where
 
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Core.Relmap.Rop      as C
+import qualified Koshucode.Baala.Core.Relmap.Lexical  as C
 import qualified Koshucode.Baala.Core.Relmap.Relkit   as C
 
 
 
--- ----------------------  Constructors
+-- ----------------------  Select
+
+-- | List of 'C.RelmapSource'
+relmapSourceList :: C.Relmap c -> [C.Relmap c]
+relmapSourceList = relmapList f where
+    f rmap@(C.RelmapSource _ _ _) = [rmap]
+    f _ = []
+
+-- | List of name in 'C.RelmapLink'
+relmapNameList :: C.Relmap c -> [String]
+relmapNameList = relmapList f where
+    f (C.RelmapLink _ n) = [n]
+    f _ = []
+
+relmapList :: B.Map (C.Relmap c -> [a])
+relmapList f = loop where
+    loop (C.RelmapAppend rmap1 rmap2) = loop rmap1 ++ loop rmap2
+    loop (C.RelmapCalc _ _ rmaps)     = concatMap loop rmaps
+    loop m = f m
+
+
+
+-- ----------------------  Construct
 
 -- | Retrieve relation from dataset.
 relmapSource :: C.RopUse c -> B.JudgePattern -> [B.Termname] -> (C.Relmap c)
@@ -40,10 +62,6 @@ relmapSource = C.RelmapSource . C.ropLex
 -- | Make a constant relmap.
 relmapConst :: C.RopUse c -> B.Rel c -> C.Relmap c
 relmapConst = C.RelmapConst . C.ropLex
-
--- | Alias for relmap.
-relmapAlias :: C.RopUse c -> C.Relmap c -> C.Relmap c
-relmapAlias = C.RelmapAlias . C.ropLex
 
 -- | Make a flow relmap.
 --   Flow relmaps take no subrelmaps.
@@ -58,7 +76,7 @@ relmapGlobal = C.RelmapGlobal . C.ropLex
 -- | Make a binary relmap.
 --   Binary relmaps take one subrelmap.
 relmapBinary :: C.RopUse c -> C.RelkitBinary c -> C.Relmap c -> C.Relmap c
-relmapBinary use kit m = relmapConfl use (kit . head) [m]
+relmapBinary use kit rmap = relmapConfl use (kit . head) [rmap]
 
 -- | Make a confluent relmap.
 --   Confluent relmaps take multiple subrelmaps.
@@ -67,92 +85,66 @@ relmapConfl = C.RelmapCalc . C.ropLex
 
 
 
--- ----------------------  Selector
-
--- | List of 'C.RelmapSource'
-relmapSourceList :: C.Relmap c -> [C.Relmap c]
-relmapSourceList = relmapList f where
-    f m@(C.RelmapSource _ _ _) = [m]
-    f _ = []
-
--- | List of name in 'C.RelmapLink'
-relmapNameList :: C.Relmap c -> [String]
-relmapNameList = relmapList f where
-    f (C.RelmapLink _ n _) = [n]
-    f _ = []
-
-relmapList :: B.Map (C.Relmap c -> [a])
-relmapList f = loop where
-    loop (C.RelmapAlias _ m1)   = loop m1
-    loop (C.RelmapAppend m1 m2) = loop m1 ++ loop m2
-    loop (C.RelmapCalc _ _ ms)  = concatMap loop ms
-    loop m = f m
-
-
-
--- ----------------------  Link
+-- ----------------------  Specialize
 
 relmapSpecialize :: forall c. C.Global c -> [C.RelmapDef c]
-  -> [C.RelkitDef c] -> Maybe B.Relhead -> C.Relmap c -> B.Ab (C.Relkit c, [C.RelkitDef c])
-relmapSpecialize global rdef = sp [] where
+  -> [C.RelkitDef c] -> Maybe B.Relhead -> C.Relmap c -> B.Ab ([C.RelkitDef c], C.Relkit c)
+relmapSpecialize global rdef = spec [] where
     sel = C.globalSelect global
 
-    sp :: [C.RelkitKey] -> [C.RelkitDef c] -> Maybe B.Relhead -> C.Relmap c -> B.Ab (C.Relkit c, [C.RelkitDef c])
-    sp _  kits _  (C.RelmapSource lx p ns)           = right kits lx (C.relkitConst $ sel p ns)
-    sp _  kits _  (C.RelmapConst  lx rel)            = right kits lx (C.relkitConst rel)
-    sp ks kits h1 (C.RelmapAlias  _ relmap)          = sp ks kits h1 relmap
-    sp ks kits h1 (C.RelmapLink   _ _ (Just relmap)) = sp ks kits h1 relmap
-    sp ks kits h1 (C.RelmapLink   lx name Nothing) =
-        case lookup name rdef of
-          Nothing -> abort lx $ Left $ B.AbortAnalysis [] $ B.AAUnkRelmap name
-          Just r  -> let key = (h1, C.relmapLexList r)
-                     in if key `elem` ks
-                        then Right (C.Relkit Nothing (B.Sourced [] $ C.RelkitLink name key Nothing),
-                                     kits)
-                        else case lookup key kits of
-                               Just relkit -> Right (relkit, kits)
-                               Nothing -> do (relkit@(C.Relkit h2 _), kits2) <- sp (key : ks) kits h1 r
-                                             Right (C.Relkit h2 (B.Sourced [] $ C.RelkitLink name key Nothing),
-                                                    (key, relkit) : kits2)
+    spec :: [C.RelkitKey] -> [C.RelkitDef c] -> Maybe B.Relhead -> C.Relmap c -> B.Ab ([C.RelkitDef c], C.Relkit c)
+    spec keys kdef he1 rmap = s where
+        s = case rmap of
+              C.RelmapSource lx p ns -> post lx $ Right (kdef, C.relkitConst $ sel p ns)
+              C.RelmapConst  lx rel  -> post lx $ Right (kdef, C.relkitConst rel)
 
-    sp ks kits h1 (C.RelmapAppend relmap1 relmap2) =
-        do (relkit2, kits2) <- sp ks kits h1 relmap1
-           (relkit3, kits3) <- sp ks kits2 (C.relkitHead relkit2) relmap2
-           Right (B.mappend relkit2 relkit3, kits3)
+              C.RelmapAppend rmap1 rmap2 ->
+                  do (kdef2, kit2) <- spec keys kdef he1 rmap1
+                     (kdef3, kit3) <- spec keys kdef2 (C.relkitHead kit2) rmap2
+                     Right (kdef3, B.mappend kit2 kit3)
 
-    sp ks kits h1 (C.RelmapCalc lx mk relmaps) =
-        abort lx $ do
-          (subkits, kits2) <- spCollect ks kits h1 relmaps
-          relkit <- mk subkits h1
-          right kits2 lx relkit
+              C.RelmapCalc lx makeKit rmaps ->
+                  post lx $ do
+                     (kdef2, kits) <- list kdef rmaps
+                     kit <- makeKit kits he1
+                     Right (kdef2, kit)
 
-    sp _ kits h1 (C.RelmapGlobal lx mk) =
-        abort lx $ do
-          relkit <- mk global h1
-          right kits lx relkit
+              C.RelmapGlobal lx makeKit ->
+                  post lx $ do
+                     kit <- makeKit global he1
+                     Right (kdef, kit)
 
-    spCollect _  kits _ [] = Right ([], kits)
-    spCollect ks kits h1 (r : rs) =
-        do (relkit,  kits2) <- sp        ks kits  h1 r
-           (relkits, kits3) <- spCollect ks kits2 h1 rs
-           Right (relkit : relkits, kits3)
+              C.RelmapLink lx n ->
+                  post lx $ case lookup n rdef of
+                     Nothing    -> Left $ B.AbortAnalysis [] $ B.AAUnkRelmap n
+                     Just rmap1 -> link n rmap1 (he1, C.relmapLexList rmap1)
 
-    right kits lx r = Right (C.relkitSetSource lx r, kits)
+        post :: C.Lexmap -> B.Map (B.Ab ([C.RelkitDef c], C.Relkit c))
+        post lx result =
+            B.abortableFrom "specialize" lx $ do
+               (kdef2, kit) <- result
+               Right (kdef2, C.relkitSetSource lx kit)
 
-    abort = B.abortableFrom "specialize"
+        -- specialize subrelmaps to subrelkits
+        list :: [C.RelkitDef c] -> [C.Relmap c] -> B.Ab ([C.RelkitDef c], [C.Relkit c])
+        list kdef1 [] = Right (kdef1, [])
+        list kdef1 (rmap1 : rmaps) =
+            do (kdef2, kit)  <- spec keys kdef1 he1 rmap1
+               (kdef3, kits) <- list kdef2 rmaps
+               Right (kdef3, kit : kits)
 
--- -- | Link relmaps by its name.
--- relmapLink :: forall c. [C.RelmapDef c] -> B.Map (C.Relmap c)
--- relmapLink rslist = maplink where
---     rsrec :: [C.RelmapDef c]
---     rsrec = maplink `B.mapSndTo` rslist
-
---     maplink = C.mapToRelmap link
-
---     link :: B.Map (C.Relmap c)
---     link (C.RelmapLink lx name Nothing) =
---         C.RelmapLink lx name $ lookup name rsrec
---     link r = r
+        link :: String -> C.Relmap c -> C.RelkitKey -> B.Ab ([C.RelkitDef c], C.Relkit c)
+        link n rmap1 key1
+            | key1 `elem` keys = Right (kdef, cyclic)
+            | otherwise = case lookup key1 kdef of
+                Just kit -> Right (kdef, kit)
+                Nothing  -> do (kdef2, kit1) <- spec (key1 : keys) kdef he1 rmap1
+                               let kdef3 = (key1, kit1) : kdef2
+                               Right (kdef3, acyclic kit1)
+            where
+              cyclic       =  C.Relkit Nothing             body
+              acyclic kit1 =  C.Relkit (C.relkitHead kit1) body
+              body         =  B.Sourced [] $ C.RelkitLink n key1 Nothing
 
 
 

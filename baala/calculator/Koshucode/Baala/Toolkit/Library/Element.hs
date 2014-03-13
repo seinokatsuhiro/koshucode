@@ -12,7 +12,7 @@ infixr 0 -:-
 (-:-) :: a -> b -> (a, b)
 (-:-) = (,)
 
-{-| Retrive constituents of sections. -}
+-- | Retrive constituents of sections.
 sectionElem :: (C.CContent c) => C.Section c -> [B.Judge c]
 sectionElem sec = map res js where
     res = judgeCons ("/res" -:- C.pText $ B.resourceName $ C.sectionResource sec)
@@ -55,45 +55,43 @@ elemRelmap relmap = name : f relmap where
                , "/terms" -:- C.pTextSet xs ]
 
     f (C.RelmapAppend r1 r2)   =  f r1 ++ f r2
-    f (C.RelmapAlias  _ r1)    =  f r1
     f (C.RelmapSource _ p xs)  =  [ rop "source", src p xs ]
-    f (C.RelmapLink   _ n _)   =  [ ref n ]
+    f (C.RelmapLink   _ n)     =  [ ref n ]
     f (C.RelmapCalc   _ _ rs)  =  rop (B.name relmap) : concatMap f rs
     f (C.RelmapGlobal _ _)     =  [ rop (B.name relmap) ]
     f (C.RelmapConst  _ _)     =  [ rop (B.name relmap) ]
 
 -- ------------------------------------------------------------------
-{- $Pattern
-
-'sectionElem' may output judges of the following patterns.
-
-[@KOSHU-AFFIRM@]
-  There is affirmed relmap for pattern @\/pat@
-  in the resource @\/res@.
-
-[@KOSHU-DENY@]
-  There is denied relmap for pattern @\/pat@
-  in the resource @\/res@.
-
-[@KOSHU-JUDGE-TERM@]
-  In the resource @\/res@,
-  there are judges of pattern @\/pat@
-  with term named @\/name@ having @\/content@.
-
-[@KOSHU-RELMAP-NAME@]
-  There is a relmap named @\/name@ in the resource @\/res@.
-
-[@KOSHU-RELMAP-REF@]
-  Relmap @\/name@ in the resource @\/res@
-  refers the other relmap @\/ref@.
-
-[@KOSHU-RELMAP-ROP@]
-  Relmap @\/name@ in the resource @\/res@
-  uses the relmap operator @\/rop@.
-
-[@KOSHU-RELMAP-SOURCE@]
-  Judges of pattern @\/pat@ with terms @\/terms@
-  are read from the resource @\/res@.
-
--}
+-- $Pattern
+--
+-- 'sectionElem' may output judges of the following patterns.
+--
+-- [@KOSHU-AFFIRM@]
+--   There is affirmed relmap for pattern @\/pat@
+--   in the resource @\/res@.
+--
+-- [@KOSHU-DENY@]
+--   There is denied relmap for pattern @\/pat@
+--   in the resource @\/res@.
+--
+-- [@KOSHU-JUDGE-TERM@]
+--   In the resource @\/res@,
+--   there are judges of pattern @\/pat@
+--   with term named @\/name@ having @\/content@.
+--
+-- [@KOSHU-RELMAP-NAME@]
+--   There is a relmap named @\/name@ in the resource @\/res@.
+--
+-- [@KOSHU-RELMAP-REF@]
+--   Relmap @\/name@ in the resource @\/res@
+--   refers the other relmap @\/ref@.
+--
+-- [@KOSHU-RELMAP-ROP@]
+--   Relmap @\/name@ in the resource @\/res@
+--   uses the relmap operator @\/rop@.
+--
+-- [@KOSHU-RELMAP-SOURCE@]
+--   Judges of pattern @\/pat@ with terms @\/terms@
+--   are read from the resource @\/res@.
+--
 

@@ -100,20 +100,16 @@ data Relmap c
     | RelmapCalc     C.Lexmap (RelkitConfl c) [Relmap c]
       -- ^ Relmap that maps relations to a relation
 
-    | RelmapLink     C.Lexmap String (Maybe (Relmap c))
+    | RelmapLink     C.Lexmap String
       -- ^ Relmap reference
-    | RelmapAlias    C.Lexmap (Relmap c)
-      -- ^ Equavalent relmap
     | RelmapAppend   (Relmap c) (Relmap c)
       -- ^ Connect two relmaps
 
 -- | Map function to relmaps.
 mapToRelmap :: B.Map (Relmap c) -> B.Map (Relmap c)
 mapToRelmap f = mf where
-    mf (RelmapAlias  h r1)          = RelmapAlias  h (mf r1)
-    mf (RelmapAppend r1 r2)         = RelmapAppend (mf r1) (mf r2)
-    mf (RelmapCalc   h g rs)        = RelmapCalc   h g (map mf rs)
-    mf (RelmapLink   h n (Just r1)) = RelmapLink   h n (Just $ mf r1)
+    mf (RelmapAppend r1 r2)   = RelmapAppend (mf r1) (mf r2)
+    mf (RelmapCalc   h g rs)  = RelmapCalc   h g (map mf rs)
     mf r1 = f r1
 
 instance Show (Relmap c) where
@@ -127,8 +123,7 @@ showRelmap r = sh r where
     sh (RelmapGlobal _ _)     = "RelmapGlobal " ++ show (B.name r)
     sh (RelmapCalc   _ _ rs)  = "RelmapCalc "   ++ show (B.name r) ++ " _" ++ joinSubs rs
 
-    sh (RelmapLink _ n _)     = "RelmapLink "   ++ show n
-    sh (RelmapAlias  _ r2)    = "RelmapAlias "  ++ show r2
+    sh (RelmapLink _ n)       = "RelmapLink "   ++ show n
     sh (RelmapAppend r1 r2)   = "RelmapAppend"  ++ joinSubs [r1, r2]
 
     joinSubs = concatMap sub
@@ -158,8 +153,7 @@ instance B.Pretty (Relmap c) where
     doc (RelmapGlobal h _)     = B.doc h -- hang (text $ name m) 2 (doch (map doc ms))
     doc (RelmapCalc   h _ _)   = B.doc h -- hang (text $ name m) 2 (doch (map doc ms))
 
-    doc (RelmapLink   _ n _)   = B.doc n
-    doc (RelmapAlias  h _)     = B.doc h
+    doc (RelmapLink   _ n)     = B.doc n
     doc (RelmapAppend m1 m2)   = B.docHang (B.doc m1) 2 (docRelmapAppend m2)
 
 docRelmapAppend :: Relmap c -> B.Doc
@@ -194,8 +188,7 @@ relmapLexList = collect where
     collect (RelmapGlobal lx _)    = [lx]
     collect (RelmapCalc   lx _ _)  = [lx]
 
-    collect (RelmapLink   lx _ _)  = [lx]
-    collect (RelmapAlias  lx _)    = [lx]
+    collect (RelmapLink   lx _)    = [lx]
     collect (RelmapAppend r1 r2)   = collect r1 ++ collect r2
 
 
