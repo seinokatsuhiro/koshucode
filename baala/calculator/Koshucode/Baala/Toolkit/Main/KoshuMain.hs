@@ -90,7 +90,7 @@ header = unlines
 -- ----------------------  Main
 
 {-| The main function for @koshu@ command.
-    See 'Koshucode.Baala.Vanilla.Relmap.Implement.vanillaRops'
+    See 'Koshucode.Baala.Op.Vanilla.Relmap.Implement.vanillaRops'
     for default argument. -}
 koshuMain :: (C.CContent c) => C.Global c -> IO Int
 koshuMain global =
@@ -210,7 +210,7 @@ prettySection (C.SectionBundle root _ files _) =
    @koshu@ command is implemented using 'koshuMain'.
   
    > import Koshucode.Baala.Toolkit.Main.KoshuMain
-   > import Koshucode.Baala.Vanilla
+   > import Koshucode.Baala.Op.Vanilla
    > 
    > main :: IO ()
    > main = koshuMain vanillaRops

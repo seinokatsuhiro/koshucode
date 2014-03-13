@@ -14,7 +14,7 @@ module Koshucode.Baala.Toolkit.Library.Input
 
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
-import Koshucode.Baala.Vanilla
+import Koshucode.Baala.Op.Vanilla
 
 
 -- ----------------------  Input

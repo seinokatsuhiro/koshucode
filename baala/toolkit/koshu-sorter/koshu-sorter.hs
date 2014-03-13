@@ -24,12 +24,12 @@
 --
 -- ------------------------------------------------------------------
 
-import qualified Data.Char                as C
-import qualified Text.PrettyPrint         as P
-import qualified Koshucode.Baala.Base     as B
-import qualified Koshucode.Baala.Core     as C
-import qualified Koshucode.Baala.Minimal  as Minimal
-import qualified Koshucode.Baala.Vanilla  as Vanilla
+import qualified Data.Char                   as C
+import qualified Text.PrettyPrint            as P
+import qualified Koshucode.Baala.Base        as B
+import qualified Koshucode.Baala.Core        as C
+import qualified Koshucode.Baala.Op.Minimal  as Minimal
+import qualified Koshucode.Baala.Op.Vanilla  as Vanilla
 
 
 main :: IO ()

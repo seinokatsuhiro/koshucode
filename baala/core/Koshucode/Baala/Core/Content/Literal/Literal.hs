@@ -245,7 +245,7 @@ litNamedTrees = name where
 --
 --  Prepere some definitions.
 --
---  >>> :m +Koshucode.Baala.Vanilla.Type
+--  >>> :m +Koshucode.Baala.Op.Vanilla.Type
 --  >>> let trees = B.tokenTrees . B.tokens
 --  >>> let lit  = litContentBy [] :: B.TokenTree -> B.Ab VContent
 --  >>> let lits = litList lit . trees

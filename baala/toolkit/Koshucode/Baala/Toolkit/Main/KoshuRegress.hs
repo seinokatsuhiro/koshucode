@@ -15,9 +15,9 @@ import System.IO
 import Data.Maybe (mapMaybe)
 import qualified System.Directory as Dir
 
-import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Core as C
-import qualified Koshucode.Baala.Vanilla as Rop
+import qualified Koshucode.Baala.Base       as B
+import qualified Koshucode.Baala.Core       as C
+import qualified Koshucode.Baala.Op.Vanilla as Op
 
 import qualified Koshucode.Baala.Toolkit.Library.Change   as L
 import qualified Koshucode.Baala.Toolkit.Library.Exit     as L
@@ -142,11 +142,11 @@ regClean =
 -- ----------------------  Reporting
 
 -- report for each cases.
-reportJudge :: [B.Named Rop.VContent] -> B.Judge Rop.VContent
+reportJudge :: [B.Named Op.VContent] -> B.Judge Op.VContent
 reportJudge = B.Judge True "KOSHU-REGRESS-REPORT"
 
 -- report for all cases.
-summaryJudge :: [B.Named Rop.VContent] -> B.Judge Rop.VContent
+summaryJudge :: [B.Named Op.VContent] -> B.Judge Op.VContent
 summaryJudge = B.Judge True "KOSHU-REGRESS-SUMMARY"
 
 reportHead :: B.CommentDoc
@@ -271,7 +271,7 @@ countAffirmDeny js =
    @koshu-regress@ command is implemented using 'koshuRegressMain'.
 
    > import Koshucode.Baala.Toolkit.Main.KoshuRegress
-   > import Koshucode.Baala.Vanilla as V
+   > import Koshucode.Baala.Op.Vanilla as V
    > 
    > main :: IO ()
    > main = koshuRegressMain V.vanillaRops

@@ -14,7 +14,7 @@ import System.Console.GetOpt
 
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
-import qualified Koshucode.Baala.Vanilla as V
+import qualified Koshucode.Baala.Op.Vanilla as Op
 
 import qualified Koshucode.Baala.Toolkit.Library.Exit    as L
 import qualified Koshucode.Baala.Toolkit.Library.Version as L
@@ -108,7 +108,7 @@ putClause p@(cn, c) =
          ls  = B.clauseLines src
      foldM_ (putToken cn) 1 ls
 
-clauseJudge :: (Int, C.Clause) -> B.Judge V.VContent
+clauseJudge :: (Int, C.Clause) -> B.Judge Op.VContent
 clauseJudge (cn, c) = B.Judge True "CLAUSE" args where
     args = [ ("/clause-seq"  , C.pDecFromInt cn)
            , ("/clause-type" , C.pText $ C.clauseTypeText c)]
@@ -120,7 +120,7 @@ putToken cn tn (B.CodeLine ln line toks) =
      print $ B.docv $ map (tokenJudge cn) toks
      return $ tn + length toks
 
-tokenJudge :: Int -> B.Token -> B.Judge V.VContent
+tokenJudge :: Int -> B.Token -> B.Judge Op.VContent
 tokenJudge cn t = B.Judge True "TOKEN" xs where
     xs = [ ("/clause-seq"   , C.pDecFromInt cn)
          , ("/token-type"   , C.pText $ B.tokenTypeText t)
@@ -143,7 +143,7 @@ dumpTokenText (n, ys) (B.CodeLine l line ts) = (n + length ts, ys ++ xs) where
     xs = h ++ (map dump ts)
     dump p = show $ B.doc $ dumpTokenJudge l p
 
-dumpTokenJudge :: Int -> B.Token -> B.Judge V.VContent
+dumpTokenJudge :: Int -> B.Token -> B.Judge Op.VContent
 dumpTokenJudge l t = B.Judge True "TOKEN" xs where
     xs = [ ("/line"         , C.pDecFromInt l)
          , ("/token-type"   , C.pText $ B.tokenTypeText t)

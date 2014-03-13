@@ -16,8 +16,8 @@ import qualified Data.Text.IO             as Text
 import qualified Text.RDF.RDF4H.XmlParser as RDF
 import System.Console.GetOpt
 
-import qualified Koshucode.Baala.Base    as B
-import qualified Koshucode.Baala.Vanilla as V
+import qualified Koshucode.Baala.Base       as B
+import qualified Koshucode.Baala.Op.Vanilla as Op
 import qualified Koshucode.Baala.Toolkit.Library.Exit    as L
 import qualified Koshucode.Baala.Toolkit.Library.RDF     as L
 import qualified Koshucode.Baala.Toolkit.Library.Version as L
@@ -128,7 +128,7 @@ readXmlRdf path = do
   let rdf = xmlParser txt
   return $ RDF.fromEither rdf
 
-writeJudges :: [B.Judge V.VContent] -> IO ()
+writeJudges :: [B.Judge Op.VContent] -> IO ()
 writeJudges js = print $ B.docv js
 
 
