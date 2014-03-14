@@ -23,8 +23,9 @@ module Koshucode.Baala.Core.Content.Cox
   coxRun,
 ) where
 
-import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Core.Content.Literal as C
+import qualified Koshucode.Baala.Base                   as B
+import qualified Koshucode.Baala.Core.Content.Class     as C
+import qualified Koshucode.Baala.Core.Content.Extension as C
 
 
 -- ----------------------  expressions and operators

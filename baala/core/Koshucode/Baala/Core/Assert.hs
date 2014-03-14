@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Relation-to-relation mapping. -}
+-- | Affirming or denying proposition.
 
 module Koshucode.Baala.Core.Assert
 ( module Koshucode.Baala.Core.Assert.Assert,

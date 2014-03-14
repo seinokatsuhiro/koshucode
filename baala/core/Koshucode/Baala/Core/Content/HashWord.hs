@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Core.Content.Literal.HashWord
+module Koshucode.Baala.Core.Content.HashWord
 ( -- $HashWord
   hashWordTable,
   hashWord,

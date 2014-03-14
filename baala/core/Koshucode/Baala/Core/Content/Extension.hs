@@ -2,7 +2,7 @@
 
 -- | Extensions of literalizer
 
-module Koshucode.Baala.Core.Content.Literal.Extension
+module Koshucode.Baala.Core.Content.Extension
 (
   -- * Library
   litContent,
@@ -11,8 +11,8 @@ module Koshucode.Baala.Core.Content.Literal.Extension
 ) where
 
 import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Core.Content.Literal.Class   as C
-import qualified Koshucode.Baala.Core.Content.Literal.Literal as C
+import qualified Koshucode.Baala.Core.Content.Class   as C
+import qualified Koshucode.Baala.Core.Content.Literal as C
 
 
 

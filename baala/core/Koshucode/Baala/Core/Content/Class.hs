@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Core.Content.Literal.Class
+module Koshucode.Baala.Core.Content.Class
 (
   -- * Generic content
   PrimContent (..),
