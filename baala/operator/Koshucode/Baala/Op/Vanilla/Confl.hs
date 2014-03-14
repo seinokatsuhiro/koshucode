@@ -1,7 +1,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Op.Vanilla.Rop.Confl
+module Koshucode.Baala.Op.Vanilla.Confl
 ( 
   -- * maybe
   consMaybe, relmapMaybe, relkitMaybe,

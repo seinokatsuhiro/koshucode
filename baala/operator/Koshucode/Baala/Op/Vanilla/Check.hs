@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Op.Vanilla.Rop.Check
+module Koshucode.Baala.Op.Vanilla.Check
 ( 
   -- * check-term
   consCheckTerm,

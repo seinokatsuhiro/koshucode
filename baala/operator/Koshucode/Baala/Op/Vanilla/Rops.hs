@@ -2,21 +2,21 @@
 
 {-| Vanilla relational operators. -}
 
-module Koshucode.Baala.Op.Vanilla.Rop.Rops
+module Koshucode.Baala.Op.Vanilla.Rops
 ( vanillaRops,
   -- $Operators
 ) where
 
-import qualified Koshucode.Baala.Core                   as C
-import qualified Koshucode.Baala.Op.Builtin             as Op
-import qualified Koshucode.Baala.Op.Vanilla.Rop.Check   as Op
-import qualified Koshucode.Baala.Op.Vanilla.Rop.Confl   as Op
-import qualified Koshucode.Baala.Op.Vanilla.Rop.Cox     as Op
-import qualified Koshucode.Baala.Op.Vanilla.Rop.Flow    as Op
-import qualified Koshucode.Baala.Op.Vanilla.Rop.Global  as Op
-import qualified Koshucode.Baala.Op.Vanilla.Rop.Naming  as Op
-import qualified Koshucode.Baala.Op.Vanilla.Rop.Order   as Op
-import qualified Koshucode.Baala.Op.Vanilla.Type        as Op
+import qualified Koshucode.Baala.Core               as C
+import qualified Koshucode.Baala.Op.Builtin         as Op
+import qualified Koshucode.Baala.Op.Vanilla.Check   as Op
+import qualified Koshucode.Baala.Op.Vanilla.Confl   as Op
+import qualified Koshucode.Baala.Op.Vanilla.Cox     as Op
+import qualified Koshucode.Baala.Op.Vanilla.Flow    as Op
+import qualified Koshucode.Baala.Op.Vanilla.Global  as Op
+import qualified Koshucode.Baala.Op.Vanilla.Naming  as Op
+import qualified Koshucode.Baala.Op.Vanilla.Order   as Op
+import qualified Koshucode.Baala.Op.Vanilla.Type    as Op
 
 {-| Implementation of relational operators. -}
 vanillaRops :: [C.Rop Op.VContent]

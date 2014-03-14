@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Op.Vanilla.Rop.Naming
+module Koshucode.Baala.Op.Vanilla.Naming
 ( -- * prefix
   consPrefix, relmapPrefix, relkitPrefix,
   -- * unprefix

@@ -1,9 +1,9 @@
 {-# OPTIONS_GHC -Wall #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
-{-| Relmap operators using term-content expressions. -}
+-- | Relmap operators using term-content expressions.
 
-module Koshucode.Baala.Op.Vanilla.Rop.Cox
+module Koshucode.Baala.Op.Vanilla.Cox
 (
   -- * add
   consAdd, relmapAdd, relkitAdd,

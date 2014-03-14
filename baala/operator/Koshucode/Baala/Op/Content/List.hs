@@ -2,14 +2,14 @@
 
 -- | Content operators.
 
-module Koshucode.Baala.Op.Vanilla.Cop.List
+module Koshucode.Baala.Op.Content.List
 ( copsList
   -- $Operators
 ) where
 
-import qualified Data.List as List
-import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Core as C
+import qualified Data.List                       as List
+import qualified Koshucode.Baala.Base            as B
+import qualified Koshucode.Baala.Core            as C
 import qualified Koshucode.Baala.Op.Vanilla.Type as Op
 
 

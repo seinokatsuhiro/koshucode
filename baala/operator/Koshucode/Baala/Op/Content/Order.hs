@@ -2,7 +2,7 @@
 
 -- | Content operators.
 
-module Koshucode.Baala.Op.Vanilla.Cop.Order
+module Koshucode.Baala.Op.Content.Order
 ( copsOrder
   -- $Operators
 ) where

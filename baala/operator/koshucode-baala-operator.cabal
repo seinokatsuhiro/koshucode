@@ -46,10 +46,18 @@ extra-source-files:
 library
   -- Modules exported by the library.
   exposed-modules:
+        Koshucode.Baala.Op
+
         Koshucode.Baala.Op.Builtin
         Koshucode.Baala.Op.Builtin.Get
         Koshucode.Baala.Op.Builtin.Rop
         Koshucode.Baala.Op.Builtin.Term
+
+        Koshucode.Baala.Op.Content
+        Koshucode.Baala.Op.Content.Arith
+        Koshucode.Baala.Op.Content.List
+        Koshucode.Baala.Op.Content.Logic
+        Koshucode.Baala.Op.Content.Order
 
         Koshucode.Baala.Op.Minimal
         Koshucode.Baala.Op.Minimal.Origin
@@ -59,24 +67,15 @@ library
         Koshucode.Baala.Op.Minimal.Tropashko
 
         Koshucode.Baala.Op.Vanilla
+        Koshucode.Baala.Op.Vanilla.Check
+        Koshucode.Baala.Op.Vanilla.Confl
+        Koshucode.Baala.Op.Vanilla.Cox
+        Koshucode.Baala.Op.Vanilla.Flow
+        Koshucode.Baala.Op.Vanilla.Global
+        Koshucode.Baala.Op.Vanilla.Naming
+        Koshucode.Baala.Op.Vanilla.Order
         Koshucode.Baala.Op.Vanilla.Quoter
-
-        Koshucode.Baala.Op.Vanilla.Cop
-        Koshucode.Baala.Op.Vanilla.Cop.Arith
-        Koshucode.Baala.Op.Vanilla.Cop.List
-        Koshucode.Baala.Op.Vanilla.Cop.Logic
-        Koshucode.Baala.Op.Vanilla.Cop.Order
-
-        Koshucode.Baala.Op.Vanilla.Rop
-        Koshucode.Baala.Op.Vanilla.Rop.Check
-        Koshucode.Baala.Op.Vanilla.Rop.Confl
-        Koshucode.Baala.Op.Vanilla.Rop.Cox
-        Koshucode.Baala.Op.Vanilla.Rop.Flow
-        Koshucode.Baala.Op.Vanilla.Rop.Global
-        Koshucode.Baala.Op.Vanilla.Rop.Naming
-        Koshucode.Baala.Op.Vanilla.Rop.Order
-        Koshucode.Baala.Op.Vanilla.Rop.Rops
-
+        Koshucode.Baala.Op.Vanilla.Rops
         Koshucode.Baala.Op.Vanilla.Type
 
   -- Modules included in this library but not exported.

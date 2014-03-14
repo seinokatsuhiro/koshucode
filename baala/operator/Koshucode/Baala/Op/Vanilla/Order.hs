@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Op.Vanilla.Rop.Order
+module Koshucode.Baala.Op.Vanilla.Order
 ( 
   -- * number
   consNumber, relmapNumber, relkitNumber,

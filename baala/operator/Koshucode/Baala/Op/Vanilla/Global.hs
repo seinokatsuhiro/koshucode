@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Op.Vanilla.Rop.Global
+module Koshucode.Baala.Op.Vanilla.Global
 ( 
   -- * do
   consDo,
