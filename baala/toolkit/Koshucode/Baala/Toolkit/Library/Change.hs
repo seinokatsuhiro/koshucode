@@ -20,7 +20,7 @@ module Koshucode.Baala.Toolkit.Library.Change
 import qualified Data.Set as S
 
 import qualified Koshucode.Baala.Base as B
-import Koshucode.Baala.Op.Vanilla
+import qualified Koshucode.Baala.Op.Content as Op
 
 import Koshucode.Baala.Toolkit.Library.Input
 
@@ -39,7 +39,7 @@ minusInput inputA inputB =
        putStrLn ""
        B.putJudges 0 js
 
-minusInputJudge :: Input -> Input -> IO ([B.Judge VContent])
+minusInputJudge :: Input -> Input -> IO ([B.Judge Op.VContent])
 minusInputJudge inputA inputB =
     do [textA, textB] <- readInputs [inputA, inputB]
        return $ readJudge textA `minusJudge` readJudge textB

@@ -19,7 +19,6 @@ import qualified Koshucode.Baala.Base             as B
 import qualified Koshucode.Baala.Core             as C
 import qualified Koshucode.Baala.Op.Builtin       as Op
 import qualified Koshucode.Baala.Op.Minimal       as Op
-import qualified Koshucode.Baala.Op.Vanilla.Type  as Op
 
 
 
@@ -58,7 +57,7 @@ relkitEnclose n (Just he1) = Right kit2 where
 --    add term @\/x@ as member of @\/xs@.
 --
 
-consMember :: Op.VRopCons
+consMember :: (Ord c, C.CSet c, C.CList c) => C.RopCons c
 consMember use =
   do x    <- Op.getTerm use "-1"
      xs   <- Op.getTerm use "-2"

@@ -55,9 +55,12 @@ library
 
         Koshucode.Baala.Op.Content
         Koshucode.Baala.Op.Content.Arith
+        Koshucode.Baala.Op.Content.Cops
         Koshucode.Baala.Op.Content.List
         Koshucode.Baala.Op.Content.Logic
         Koshucode.Baala.Op.Content.Order
+        Koshucode.Baala.Op.Content.Quoter
+        Koshucode.Baala.Op.Content.Type
 
         Koshucode.Baala.Op.Minimal
         Koshucode.Baala.Op.Minimal.Origin
@@ -74,9 +77,7 @@ library
         Koshucode.Baala.Op.Vanilla.Global
         Koshucode.Baala.Op.Vanilla.Naming
         Koshucode.Baala.Op.Vanilla.Order
-        Koshucode.Baala.Op.Vanilla.Quoter
         Koshucode.Baala.Op.Vanilla.Rops
-        Koshucode.Baala.Op.Vanilla.Type
 
   -- Modules included in this library but not exported.
   --other-modules:       

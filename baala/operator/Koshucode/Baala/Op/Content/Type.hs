@@ -2,10 +2,9 @@
 
 -- | Content formula.
 
-module Koshucode.Baala.Op.Vanilla.Type
+module Koshucode.Baala.Op.Content.Type
 ( VContent (..),
   VCop,
-  VRopCons,
 ) where
 
 import qualified Data.Set as Set
@@ -87,7 +86,6 @@ instance B.Pretty VContent where
     doc (VRel r)            =  B.doc r
 
 type VCop = C.CopFun VContent
-type VRopCons = C.RopCons VContent
 
 
 

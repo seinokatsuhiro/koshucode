@@ -3,69 +3,19 @@
 -- | Term-content operators.
 
 module Koshucode.Baala.Op.Content
-( vanillaGlobal,
-  vanillaCops,
+(
+module Koshucode.Baala.Op.Content.Arith,
+module Koshucode.Baala.Op.Content.Cops,
+module Koshucode.Baala.Op.Content.List,
+module Koshucode.Baala.Op.Content.Logic,
+module Koshucode.Baala.Op.Content.Order,
+module Koshucode.Baala.Op.Content.Type,
 ) where
 
-import qualified Koshucode.Baala.Base              as B
-import qualified Koshucode.Baala.Core              as C
-import qualified Koshucode.Baala.Op.Vanilla        as Op
-import qualified Koshucode.Baala.Op.Builtin        as Op
-import qualified Koshucode.Baala.Op.Minimal        as Op
-import qualified Koshucode.Baala.Op.Content.Arith  as Op
-import qualified Koshucode.Baala.Op.Content.List   as Op
-import qualified Koshucode.Baala.Op.Content.Logic  as Op
-import qualified Koshucode.Baala.Op.Content.Order  as Op
+import Koshucode.Baala.Op.Content.Arith
+import Koshucode.Baala.Op.Content.Cops
+import Koshucode.Baala.Op.Content.List
+import Koshucode.Baala.Op.Content.Logic
+import Koshucode.Baala.Op.Content.Order
+import Koshucode.Baala.Op.Content.Type
 
-vanillaGlobal :: C.Global Op.VContent
-vanillaGlobal =
-    C.global { C.globalCops = vanillaCops
-             , C.globalRops = Op.vanillaRops ++
-                              Op.minimalRops ++
-                              Op.builtinRops }
-
-
-
-
--- | Term-content operators and its height table.
-vanillaCops :: ([C.Cop Op.VContent], [B.Named B.InfixHeight])
-vanillaCops = (concat cops, htab) where
-
-    cops = [ Op.copsArith
-           , Op.copsLogic
-           , Op.copsList
-           , Op.copsOrder ]
-
-    h ! name = (name, Right h)
-
-    htab =
-        [ 9 ! "then"
-        , 9 ! "when"
-        , 9 ! "unless"
-
-        , 8 ! "or"
-
-        , 7 ! "and"
-
-        , 6 ! "="
-        , 6 ! "<>"
-        , 6 ! "<"
-        , 6 ! ">"
-        , 6 ! "<="
-        , 6 ! ">="
-
-        , 2 ! "+"
-        , 2 ! "-"
-        , 2 ! "++"
-        , 2 ! "intersect"
-        , 2 ! "minus"
-
-        , 1 ! "*"
-        , 1 ! "/"
-        , 1 ! "quo"
-        , 1 ! "rem"
-
-        , ("<left-1>"  , Left 1)
-        , ("<right-1>" , Right 1)
-        ]
-    

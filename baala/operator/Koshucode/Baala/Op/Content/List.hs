@@ -10,7 +10,7 @@ module Koshucode.Baala.Op.Content.List
 import qualified Data.List                       as List
 import qualified Koshucode.Baala.Base            as B
 import qualified Koshucode.Baala.Core            as C
-import qualified Koshucode.Baala.Op.Vanilla.Type as Op
+import qualified Koshucode.Baala.Op.Content.Type as Op
 
 
 
@@ -57,26 +57,26 @@ copList argC = do arg <- sequence argC
 
 -- ----------------------  aggregation
 
-copTotal :: Op.VCop
+copTotal :: (C.CContent c) => C.CopFun c
 copTotal = op where
-    op [Right (Op.VList xs)] = C.putDec =<< B.decimalSum (map C.gDec xs)
+    op [Right c] | C.isList c = C.putDec =<< B.decimalSum (map C.gDec $ C.gList c)
     op xs = typeUnmatch xs
 
-copMin :: Op.VCop
+copMin :: (C.CContent c) => C.CopFun c
 copMin = op where
-    op [Right (Op.VList xs)] = Right $ minimum xs
+    op [Right c] | C.isList c = Right $ minimum (C.gList c)
     op xs = typeUnmatch xs
 
-copMax :: Op.VCop
+copMax :: (C.CContent c) => C.CopFun c
 copMax = op where
-    op [Right (Op.VList xs)] = Right $ maximum xs
+    op [Right c] | C.isList c = Right $ maximum (C.gList c)
     op xs = typeUnmatch xs
 
-copLength :: Op.VCop
+copLength :: (C.CContent c) => C.CopFun c
 copLength = op where
-    op [Right (Op.VList xs)]         = Right . C.pDecFromInt $ length xs
-    op [Right (Op.VText xs)]         = Right . C.pDecFromInt $ length xs
-    op [Right (Op.VRel (B.Rel _ b))] = Right . C.pDecFromInt $ length b
+    op [Right c] | C.isList c  = Right . C.pDecFromInt $ length (C.gList c)
+                 | C.isText c  = Right . C.pDecFromInt $ length (C.gText c)
+                 | C.isRel c   = Right . C.pDecFromInt $ length (B.relBody $ C.gRel c)
     op xs = typeUnmatch xs
 
 typeUnmatch :: C.PrimContent a => [B.Ab a] -> Either B.AbortReason b

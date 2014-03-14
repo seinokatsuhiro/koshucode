@@ -17,7 +17,7 @@ import qualified Text.RDF.RDF4H.XmlParser as RDF
 import System.Console.GetOpt
 
 import qualified Koshucode.Baala.Base       as B
-import qualified Koshucode.Baala.Op.Vanilla as Op
+import qualified Koshucode.Baala.Op.Content as Op
 import qualified Koshucode.Baala.Toolkit.Library.Exit    as L
 import qualified Koshucode.Baala.Toolkit.Library.RDF     as L
 import qualified Koshucode.Baala.Toolkit.Library.Version as L

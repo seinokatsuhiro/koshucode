@@ -17,7 +17,7 @@ import qualified System.Directory as Dir
 
 import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Core       as C
-import qualified Koshucode.Baala.Op.Vanilla as Op
+import qualified Koshucode.Baala.Op.Content as Op
 
 import qualified Koshucode.Baala.Toolkit.Library.Change   as L
 import qualified Koshucode.Baala.Toolkit.Library.Exit     as L

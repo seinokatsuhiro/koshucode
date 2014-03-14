@@ -3,7 +3,9 @@
 
 import qualified Koshucode.Baala.Toolkit.Main.KoshuRegress as Main
 import qualified Koshucode.Baala.Toolkit.Library.Exit      as Main
+import qualified Koshucode.Baala.Core       as C
 import qualified Koshucode.Baala.Op.Builtin as Op
+import qualified Koshucode.Baala.Op.Content as Op
 import qualified Koshucode.Baala.Op.Minimal as Op
 import qualified Koshucode.Baala.Op.Vanilla as Op
 
@@ -12,6 +14,7 @@ main =
     do status <- Main.koshuRegressMain rops
        Main.exit status
     where
+      rops :: [C.Rop Op.VContent]
       rops = concat [ Op.builtinRops
                     , Op.minimalRops
                     , Op.vanillaRops ]

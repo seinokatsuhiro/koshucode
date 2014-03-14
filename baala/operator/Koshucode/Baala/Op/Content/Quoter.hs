@@ -3,13 +3,13 @@
 
 -- | Quasiquoter of Koshucode
 
-module Koshucode.Baala.Op.Vanilla.Quoter
+module Koshucode.Baala.Op.Content.Quoter
 ( koshu
 ) where
 
 import qualified Koshucode.Baala.Core as C
 import Koshucode.Baala.Op.Vanilla.Rops
-import Koshucode.Baala.Op.Vanilla.Type
+import Koshucode.Baala.Op.Content.Type
 
 -- | Quasiquoter for @[koshu| ... |]@.
 koshu :: C.QuasiQuoter
