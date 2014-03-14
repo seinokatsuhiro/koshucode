@@ -47,6 +47,8 @@ library
   -- Modules exported by the library.
   exposed-modules:
         Koshucode.Baala.Op
+        Koshucode.Baala.Op.Quoter
+        Koshucode.Baala.Op.Type
 
         Koshucode.Baala.Op.Builtin
         Koshucode.Baala.Op.Builtin.Get
@@ -59,8 +61,6 @@ library
         Koshucode.Baala.Op.Content.List
         Koshucode.Baala.Op.Content.Logic
         Koshucode.Baala.Op.Content.Order
-        Koshucode.Baala.Op.Content.Quoter
-        Koshucode.Baala.Op.Content.Type
 
         Koshucode.Baala.Op.Minimal
         Koshucode.Baala.Op.Minimal.Origin

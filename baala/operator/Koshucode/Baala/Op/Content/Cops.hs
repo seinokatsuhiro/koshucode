@@ -16,9 +16,10 @@ import qualified Koshucode.Baala.Op.Content.Arith  as Op
 import qualified Koshucode.Baala.Op.Content.List   as Op
 import qualified Koshucode.Baala.Op.Content.Logic  as Op
 import qualified Koshucode.Baala.Op.Content.Order  as Op
-import qualified Koshucode.Baala.Op.Content.Type   as Op
+--import qualified Koshucode.Baala.Op.Content.Type   as Op
 
-vanillaGlobal :: C.Global Op.VContent
+--vanillaGlobal :: C.Global Op.VContent
+vanillaGlobal :: (C.CContent c) => C.Global c
 vanillaGlobal =
     C.global { C.globalCops = vanillaCops
              , C.globalRops = OpBase.vanillaRops ++
@@ -29,7 +30,7 @@ vanillaGlobal =
 
 
 -- | Term-content operators and its height table.
-vanillaCops :: ([C.Cop Op.VContent], [B.Named B.InfixHeight])
+vanillaCops :: (C.CContent c) => ([C.Cop c], [B.Named B.InfixHeight])
 vanillaCops = (concat cops, htab) where
 
     cops = [ Op.copsArith

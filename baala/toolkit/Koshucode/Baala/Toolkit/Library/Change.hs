@@ -20,7 +20,7 @@ module Koshucode.Baala.Toolkit.Library.Change
 import qualified Data.Set as S
 
 import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Op.Content as Op
+import qualified Koshucode.Baala.Op   as Op
 
 import Koshucode.Baala.Toolkit.Library.Input
 

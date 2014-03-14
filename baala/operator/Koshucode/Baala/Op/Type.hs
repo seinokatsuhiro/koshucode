@@ -2,7 +2,7 @@
 
 -- | Content formula.
 
-module Koshucode.Baala.Op.Content.Type
+module Koshucode.Baala.Op.Type
 ( VContent (..),
   VCop,
 ) where

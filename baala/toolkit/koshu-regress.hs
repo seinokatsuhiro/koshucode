@@ -3,11 +3,8 @@
 
 import qualified Koshucode.Baala.Toolkit.Main.KoshuRegress as Main
 import qualified Koshucode.Baala.Toolkit.Library.Exit      as Main
-import qualified Koshucode.Baala.Core       as C
-import qualified Koshucode.Baala.Op.Builtin as Op
-import qualified Koshucode.Baala.Op.Content as Op
-import qualified Koshucode.Baala.Op.Minimal as Op
-import qualified Koshucode.Baala.Op.Vanilla as Op
+import qualified Koshucode.Baala.Core  as C
+import qualified Koshucode.Baala.Op    as Op
 
 main :: IO ()
 main =

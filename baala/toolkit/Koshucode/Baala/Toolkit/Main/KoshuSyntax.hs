@@ -14,7 +14,7 @@ import System.Console.GetOpt
 
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
-import qualified Koshucode.Baala.Op.Content as Op
+import qualified Koshucode.Baala.Op   as Op
 
 import qualified Koshucode.Baala.Toolkit.Library.Exit    as L
 import qualified Koshucode.Baala.Toolkit.Library.Version as L

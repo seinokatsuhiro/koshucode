@@ -3,13 +3,13 @@
 
 -- | Quasiquoter of Koshucode
 
-module Koshucode.Baala.Op.Content.Quoter
+module Koshucode.Baala.Op.Quoter
 ( koshu
 ) where
 
 import qualified Koshucode.Baala.Core as C
-import Koshucode.Baala.Op.Vanilla.Rops
-import Koshucode.Baala.Op.Content.Type
+import qualified Koshucode.Baala.Op.Vanilla as Op
+import qualified Koshucode.Baala.Op.Type as Op
 
 -- | Quasiquoter for @[koshu| ... |]@.
 koshu :: C.QuasiQuoter
@@ -17,7 +17,7 @@ koshu = C.koshuQuoter vanillaLex [| vanillaFull |]
 
 -- relmap constructors
 vanillaLex  :: C.RelmapConsLex
-vanillaFull :: C.RelmapConsFull VContent
+vanillaFull :: C.RelmapConsFull Op.VContent
 (C.RelmapCons vanillaLex vanillaFull)
-    = C.relmapCons $ C.global { C.globalRops = vanillaRops }
+    = C.relmapCons $ C.global { C.globalRops = Op.vanillaRops }
 

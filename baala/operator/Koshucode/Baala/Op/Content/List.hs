@@ -10,7 +10,6 @@ module Koshucode.Baala.Op.Content.List
 import qualified Data.List                       as List
 import qualified Koshucode.Baala.Base            as B
 import qualified Koshucode.Baala.Core            as C
-import qualified Koshucode.Baala.Op.Content.Type as Op
 
 
 
@@ -35,7 +34,7 @@ import qualified Koshucode.Baala.Op.Content.Type as Op
 --  [@minus@]      Remove elements.
 --
 
-copsList :: [C.Cop Op.VContent]
+copsList :: (C.CContent c) => [C.Cop c]
 copsList =
     [ C.CopFun  "++"          copAppend
     , C.CopFun  "intersect"   copIntersect
@@ -86,25 +85,26 @@ typeUnmatch _ = Left $ B.AbortCalc [] $ B.ACUnmatchType []
 
 -- ----------------------  set-like operation
 
-copAppend :: Op.VCop
-copAppend [] = Right Op.VNil
+copAppend :: (C.CContent c) => C.CopFun c
+copAppend [] = Right C.nil
 copAppend xs@(x : _) = op x where
-    op (Right (Op.VText _)) = C.putText . concat =<< mapM C.getText xs
-    op (Right (Op.VSet  _)) = C.putSet  . concat =<< mapM C.getSet  xs
-    op (Right (Op.VList _)) = C.putList . concat =<< mapM C.getList xs
+    op (Right c) | C.isText c = C.putText . concat =<< mapM C.getText xs
+                 | C.isSet  c = C.putSet  . concat =<< mapM C.getSet  xs
+                 | C.isList c = C.putList . concat =<< mapM C.getList xs
     op _ = typeUnmatch xs
 
-copIntersect :: Op.VCop
-copIntersect [] = Right Op.VNil
+copIntersect :: (C.CContent c) => C.CopFun c
+copIntersect [] = Right C.nil
 copIntersect xs@(x : _) = op x where
-    op (Right (Op.VSet  _)) = C.putSet  . intersectLists =<< mapM C.getSet  xs
-    op (Right (Op.VList _)) = C.putList . intersectLists =<< mapM C.getList xs
+    op (Right c) | C.isSet  c = C.putSet  . intersectLists =<< mapM C.getSet  xs
+                 | C.isList c = C.putList . intersectLists =<< mapM C.getList xs
     op _ = typeUnmatch xs
 
-copMinus :: Op.VCop
+copMinus :: (C.CContent c) => C.CopFun c
 copMinus = op where
-    op [Right (Op.VSet a),  Right (Op.VSet b)]  = C.putSet  (a List.\\ b)
-    op [Right (Op.VList a), Right (Op.VList b)] = C.putList (a List.\\ b)
+    op [Right a,  Right b]
+        | C.isSet  a && C.isSet  b = C.putSet  (C.gSet  a List.\\ C.gSet  b)
+        | C.isList a && C.isList b = C.putList (C.gList a List.\\ C.gList b)
     op xs = typeUnmatch xs
 
 intersectLists :: (Eq a) => [[a]] -> [a]
@@ -116,26 +116,34 @@ intersectLists (a : b : xs) = intersectLists $ List.intersect a b : xs
 
 -- ----------------------  others
 
-copReverse :: Op.VCop
+copReverse :: (C.CContent c) => C.CopFun c
 copReverse = op where
-    op [Right (Op.VText xs)] = C.putText $ reverse xs
-    op [Right (Op.VList xs)] = C.putList $ reverse xs
+    op [Right c] | C.isText c = C.putText $ reverse (C.gText c)
+                 | C.isList c = C.putList $ reverse (C.gList c)
     op xs = typeUnmatch xs
 
-copSubIndex :: Op.VCop
+copSubIndex :: (C.CContent c) => C.CopFun c
 copSubIndex = op where
     op arg = do arg3 <- C.getArg3 arg
                 case arg3 of
-                  (Right (Op.VText xs), Right (Op.VDec from), Right (Op.VDec to))
-                      -> C.putText (subIndexDecimal from to xs)
+                  (Right xs', Right from', Right to')
+                      | C.isText xs' && C.isDec from' && C.isDec to'
+                      -> let xs   = C.gText xs'
+                             from = C.gDec from'
+                             to   = C.gDec to'
+                         in C.putText (subIndexDecimal from to xs)
                   _ -> typeUnmatch arg
 
-copSubLength :: Op.VCop
+copSubLength :: (C.CContent c) => C.CopFun c
 copSubLength = op where
     op arg = do arg3 <- C.getArg3 arg
                 case arg3 of
-                  (Right (Op.VText xs), Right (Op.VDec from), Right (Op.VDec to))
-                      -> C.putText (subLengthDecimal from to xs)
+                  (Right xs', Right from', Right to')
+                      | C.isText xs' && C.isDec from' && C.isDec to'
+                      -> let xs   = C.gText xs'
+                             from = C.gDec from'
+                             to   = C.gDec to'
+                         in C.putText (subLengthDecimal from to xs)
                   _ -> typeUnmatch arg
 
 subIndexDecimal :: B.Decimal -> B.Decimal -> [a] -> [a]
