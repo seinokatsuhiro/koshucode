@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.44.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.48.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -62,8 +62,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><div class="doc"
 	><p
 	  ><code
-	    >Relmap</code
-	    > construction. 
+	    ><a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
+	      >Relmap</a
+	      ></code
+	    > construction.
 </p
 	  ></div
 	></div
@@ -86,30 +88,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >RelmapCons</a
 	    > c = <a href="#v:RelmapCons"
 	    >RelmapCons</a
-	    > <a href="Koshucode-Baala-Core-Relmap-Construct.html#t:RelmapConsHalf"
-	    >RelmapConsHalf</a
+	    > <a href="Koshucode-Baala-Core-Relmap-Construct.html#t:RelmapConsLex"
+	    >RelmapConsLex</a
 	    > (<a href="Koshucode-Baala-Core-Relmap-Construct.html#t:RelmapConsFull"
 	    >RelmapConsFull</a
 	    > c)</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:RelmapConsHalf"
-	    >RelmapConsHalf</a
+	    > <a href="#t:RelmapConsLex"
+	    >RelmapConsLex</a
 	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > <a href="Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
-	    >HalfRelmap</a
+	    > <a href="Koshucode-Baala-Core-Relmap-Lexical.html#t:Lexmap"
+	    >Lexmap</a
 	    ></li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
 	    > <a href="#t:RelmapConsFull"
 	    >RelmapConsFull</a
-	    > c = <a href="Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
-	    >HalfRelmap</a
+	    > c = <a href="Koshucode-Baala-Core-Relmap-Lexical.html#t:Lexmap"
+	    >Lexmap</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
 	    > (<a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
@@ -133,7 +135,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Make half and full relmap constructors. 
+	    >Make lex and full relmap constructors.
 </p
 	    ></div
 	  ></div
@@ -148,7 +150,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Half and full relmap constructor 
+	    >Lex and full relmap constructor
 </p
 	    ></div
 	  ><div class="subs constructors"
@@ -159,8 +161,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      ><td class="src"
 		><a name="v:RelmapCons" class="def"
 		  >RelmapCons</a
-		  > <a href="Koshucode-Baala-Core-Relmap-Construct.html#t:RelmapConsHalf"
-		  >RelmapConsHalf</a
+		  > <a href="Koshucode-Baala-Core-Relmap-Construct.html#t:RelmapConsLex"
+		  >RelmapConsLex</a
 		  > (<a href="Koshucode-Baala-Core-Relmap-Construct.html#t:RelmapConsFull"
 		  >RelmapConsFull</a
 		  > c)</td
@@ -192,9 +194,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:RelmapConsHalf" class="def"
-	    >RelmapConsHalf</a
-	    ><a href="src/Koshucode-Baala-Core-Relmap-Construct.html#RelmapConsHalf" class="link"
+	    > <a name="t:RelmapConsLex" class="def"
+	    >RelmapConsLex</a
+	    ><a href="src/Koshucode-Baala-Core-Relmap-Construct.html#RelmapConsLex" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs arguments"
@@ -216,12 +218,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      ><td class="src"
 		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 		  >Ab</a
-		  > <a href="Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
-		  >HalfRelmap</a
+		  > <a href="Koshucode-Baala-Core-Relmap-Lexical.html#t:Lexmap"
+		  >Lexmap</a
 		  ></td
 		><td class="doc"
 		><p
-		  >Result half relmap
+		  >Result lex relmap
 </p
 		  ></td
 		></tr
@@ -230,11 +232,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ><div class="doc"
 	  ><p
 	    >First step of constructing relmap,
-    make <code
-	      ><a href="Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
-		>HalfRelmap</a
+   make <code
+	      ><a href="Koshucode-Baala-Core-Relmap-Lexical.html#t:Lexmap"
+		>Lexmap</a
 		></code
-	      > from use of relmap operator. 
+	      > from use of relmap operator.
 </p
 	    ></div
 	  ></div
@@ -253,12 +255,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ><table
 	    ><tr
 	      ><td class="src"
-		>&nbsp;= <a href="Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
-		  >HalfRelmap</a
+		>&nbsp;= <a href="Koshucode-Baala-Core-Relmap-Lexical.html#t:Lexmap"
+		  >Lexmap</a
 		  ></td
 		><td class="doc"
 		><p
-		  >Half relmap
+		  >Lexical relmap
 </p
 		  ></td
 		></tr
@@ -280,15 +282,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ><div class="doc"
 	  ><p
 	    >Second step of constructing relmap,
-    make <code
+   make <code
 	      ><a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
 		>Relmap</a
 		></code
 	      > from contents of <code
-	      ><a href="Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
-		>HalfRelmap</a
+	      ><a href="Koshucode-Baala-Core-Relmap-Lexical.html#t:Lexmap"
+		>Lexmap</a
 		></code
-	      >. 
+	      >.
 </p
 	    ></div
 	  ></div
@@ -297,7 +299,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 </h1
 	><div class="doc"
 	><p
-	  >Construction process of half relmaps from source trees.
+	  >Construction process of lex relmaps from source trees.
 </p
 	  ><dl
 	  ><dt
@@ -306,7 +308,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      ></dt
 	    ><dd
 	    >
-      Dicide list of <code
+     Dicide list of <code
 	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 		>TokenTree</a
 		></code
@@ -316,44 +318,44 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 </dd
 	    ><dt
 	    ><code
-	      >[[TokenTree]] -&gt; [HalfRelmap]</code
+	      >[[TokenTree]] -&gt; [Lexmap]</code
 	      ></dt
 	    ><dd
 	    >
-      Construct each <code
-	      ><a href="Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
-		>HalfRelmap</a
+     Construct each <code
+	      ><a href="Koshucode-Baala-Core-Relmap-Lexical.html#t:Lexmap"
+		>Lexmap</a
 		></code
 	      > from lists of <code
 	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 		>TokenTree</a
 		></code
 	      >.
-      When there are subrelmaps in token trees,
-      constructs <code
-	      ><a href="Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
-		>HalfRelmap</a
+     When there are subrelmaps in token trees,
+     constructs <code
+	      ><a href="Koshucode-Baala-Core-Relmap-Lexical.html#t:Lexmap"
+		>Lexmap</a
 		></code
 	      > recursively.
 </dd
 	    ><dt
 	    ><code
-	      >[HalfRelmap] -&gt; HalfRelmap</code
+	      >[Lexmap] -&gt; Lexmap</code
 	      ></dt
 	    ><dd
 	    >
-      Wrap list of <code
-	      ><a href="Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
-		>HalfRelmap</a
+     Wrap list of <code
+	      ><a href="Koshucode-Baala-Core-Relmap-Lexical.html#t:Lexmap"
+		>Lexmap</a
 		></code
 	      > into one <code
-	      ><a href="Koshucode-Baala-Core-Relmap-HalfRelmap.html#t:HalfRelmap"
-		>HalfRelmap</a
+	      ><a href="Koshucode-Baala-Core-Relmap-Lexical.html#t:Lexmap"
+		>Lexmap</a
 		></code
 	      >
-      that has these relmaps in <code
-	      ><a href="Koshucode-Baala-Core-Relmap-HalfRelmap.html#v:halfSubrelmap"
-		>halfSubrelmap</a
+     that has these relmaps in <code
+	      ><a href="Koshucode-Baala-Core-Relmap-Lexical.html#v:lexSubrelmap"
+		>lexSubrelmap</a
 		></code
 	      >.
 </dd

@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.44.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.48.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -120,16 +120,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	    > <code
 	      >[Core]</code
 	      > module is a union of
-  <code
+   <code
 	      >Section</code
 	      >,
-  <code
+   <code
 	      >Assert</code
 	      >,
-  <code
+   <code
 	      >Relmap</code
 	      >, and
-  <code
+   <code
 	      >Content</code
 	      > modules.
 </li
@@ -137,16 +137,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	    > <code
 	      >Section</code
 	      > module uses
-  <code
+   <code
 	      >Assert</code
 	      >,
-  <code
+   <code
 	      >Relmap</code
 	      >,
-  <code
+   <code
 	      >Content</code
 	      >, and
-  <code
+   <code
 	      >[Base]</code
 	      > modules.
 </li
@@ -154,13 +154,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	    > <code
 	      >Assert</code
 	      > module uses
-  <code
+   <code
 	      >Relmap</code
 	      >,
-  <code
+   <code
 	      >Content</code
 	      >, and
-  <code
+   <code
 	      >[Base]</code
 	      > modules.
 </li
@@ -168,10 +168,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	    > <code
 	      >Relmap</code
 	      > module uses
-  <code
+   <code
 	      >Content</code
 	      >, and
-  <code
+   <code
 	      >[Base]</code
 	      > modules.
 </li
@@ -179,10 +179,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	    > <code
 	      >Content</code
 	      > module uses
-  <code
+   <code
 	      >Data</code
 	      >, and
-  <code
+   <code
 	      >[Base]</code
 	      > modules.
 </li
@@ -190,16 +190,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	    > <code
 	      >[Base]</code
 	      > module is a union of
-  <code
+   <code
 	      >Data</code
 	      >,
-  <code
+   <code
 	      >Abort</code
 	      >,
-  <code
+   <code
 	      >Syntax</code
 	      >, and
-  <code
+   <code
 	      >Prelude</code
 	      > modules.
 </li
@@ -207,10 +207,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	    > <code
 	      >Abort</code
 	      > module uses
-  <code
+   <code
 	      >Syntax</code
 	      > and
-  <code
+   <code
 	      >Prelude</code
 	      > modules.
 </li
@@ -218,7 +218,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	    > <code
 	      >Syntax</code
 	      > module uses
-  <code
+   <code
 	      >Prelude</code
 	      > module.
 </li
@@ -226,7 +226,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	    > <code
 	      >Data</code
 	      > module uses
-  <code
+   <code
 	      >Prelude</code
 	      > module.
 </li
@@ -234,7 +234,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	    > <code
 	      >Prelude</code
 	      > module uses
-  no modules in Koshucode.
+   no modules in Koshucode.
 </li
 	    ></ul
 	  ><p
@@ -243,14 +243,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	  ><pre
 	  >
       [Core]             [Base]
-        |               /     \
-      Section        Data     Abort
+        |                /    \
+      Section           /     Abort
+        |              /        |
+      Assert          Data    Token
         |              \        |
-      Assert            \     Syntax
+      Relmap            \     Syntax
         |                \     /
-      Relmap             Prelude
-        |
-      Content
+      Content             Prelude
         |
       [Base]
 </pre

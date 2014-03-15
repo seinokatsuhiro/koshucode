@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.44.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.48.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -72,14 +72,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	><div class="doc"
 	><p
 	  >Data structure for relational calculations.
-    There are three types of section:
-    (1) <em
+   There are three types of section:
+   (1) <em
 	    >editing sections</em
 	    > that output judges and read other sections,
-    (2) <em
+   (2) <em
 	    >library sections</em
 	    > that make relmaps reusable,
-    (3) <em
+   (3) <em
 	    >data sections</em
 	    > that provide data.
 </p
@@ -120,25 +120,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	      ><li
 	      ><a href="#v:sectionShort"
 		>sectionShort</a
-		> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+		> :: [[<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
 		>Named</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
-		>]</li
+		>]]</li
 	      ><li
 	      ><a href="#v:sectionAssert"
 		>sectionAssert</a
-		> :: [<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
-		>Assert</a
-		> c]</li
+		> :: <a href="Koshucode-Baala-Core-Section-Section.html#t:AbbrAsserts"
+		>AbbrAsserts</a
+		> c</li
 	      ><li
 	      ><a href="#v:sectionRelmap"
 		>sectionRelmap</a
-		> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-		>Named</a
-		> (<a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
-		>Relmap</a
-		> c)]</li
+		> :: [<a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RelmapDef"
+		>RelmapDef</a
+		> c]</li
 	      ><li
 	      ><a href="#v:sectionJudge"
 		>sectionJudge</a
@@ -166,6 +164,32 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	      ></ul
 	    >}</li
 	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:AbbrAsserts"
+	    >AbbrAsserts</a
+	    > c = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Short.html#t:Short"
+	    >Short</a
+	    > [<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
+	    >Assert</a
+	    > c]]</li
+	  ><li class="src short"
+	  ><a href="#v:assertViolated"
+	    >assertViolated</a
+	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Core-Section-Section.html#t:AbbrAsserts"
+	    >AbbrAsserts</a
+	    > c)</li
+	  ><li class="src short"
+	  ><a href="#v:assertNormal"
+	    >assertNormal</a
+	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Core-Section-Section.html#t:AbbrAsserts"
+	    >AbbrAsserts</a
+	    > c)</li
+	  ><li class="src short"
 	  ><a href="#v:makeEmptySection"
 	    >makeEmptySection</a
 	    > ::  <a href="Koshucode-Baala-Core-Relmap-Construct.html#t:RelmapCons"
@@ -182,15 +206,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	  ><li class="src short"
 	  ><a href="#v:consSection"
 	    >consSection</a
-	    > :: <a href="Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
+	    > :: <span class="keyword"
+	    >forall</span
+	    > c. <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="Koshucode-Baala-Core-Relmap-Construct.html#t:RelmapConsFull"
 	    >RelmapConsFull</a
 	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenPos.html#t:Resource"
 	    >Resource</a
-	    > -&gt; [<a href="Koshucode-Baala-Core-Section-Clause.html#t:Clause"
+	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Short.html#t:Short"
+	    >Short</a
+	    > [<a href="Koshucode-Baala-Core-Section-Clause.html#t:Clause"
 	    >Clause</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >]] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
 	    > (<a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
 	    >Section</a
@@ -212,7 +240,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	      ></dt
 	    ><dd
 	    >
-       Get string from something.
+      Get string from something.
 </dd
 	    ><dt
 	    >2. <code
@@ -220,7 +248,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	      ></dt
 	    ><dd
 	    >
-       Split string into lines.
+      Split string into lines.
 </dd
 	    ><dt
 	    >3. <code
@@ -228,7 +256,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	      ></dt
 	    ><dd
 	    >
-       Split line-breaked strings into tokens.
+      Split line-breaked strings into tokens.
 </dd
 	    ><dt
 	    >4. <code
@@ -236,7 +264,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	      ></dt
 	    ><dd
 	    >
-       Collect tokens for clauses.
+      Collect tokens for clauses.
 </dd
 	    ><dt
 	    >5. <code
@@ -244,7 +272,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	      ></dt
 	    ><dd
 	    >
-       Classify tokens.
+      Classify tokens.
 </dd
 	    ><dt
 	    >6. <code
@@ -252,7 +280,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	      ></dt
 	    ><dd
 	    >
-       Make section from list of clauses.
+      Make section from list of clauses.
 </dd
 	    ></dl
 	  ></div
@@ -324,11 +352,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 		      ><dt class="src"
 		      ><a name="v:sectionShort" class="def"
 			>sectionShort</a
-			> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+			> :: [[<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
 			>Named</a
 			> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 			>String</a
-			>]</dt
+			>]]</dt
 		      ><dd class="doc"
 		      ><p
 			>Prefix for short signs
@@ -337,9 +365,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 		      ><dt class="src"
 		      ><a name="v:sectionAssert" class="def"
 			>sectionAssert</a
-			> :: [<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
-			>Assert</a
-			> c]</dt
+			> :: <a href="Koshucode-Baala-Core-Section-Section.html#t:AbbrAsserts"
+			>AbbrAsserts</a
+			> c</dt
 		      ><dd class="doc"
 		      ><p
 			>Assertions of relmaps
@@ -348,11 +376,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 		      ><dt class="src"
 		      ><a name="v:sectionRelmap" class="def"
 			>sectionRelmap</a
-			> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-			>Named</a
-			> (<a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
-			>Relmap</a
-			> c)]</dt
+			> :: [<a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RelmapDef"
+			>RelmapDef</a
+			> c]</dt
 		      ><dd class="doc"
 		      ><p
 			>Relmaps and its name
@@ -457,6 +483,44 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	      ></div
 	    ></div
 	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:AbbrAsserts" class="def"
+	    >AbbrAsserts</a
+	    > c = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Short.html#t:Short"
+	    >Short</a
+	    > [<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
+	    >Assert</a
+	    > c]]<a href="src/Koshucode-Baala-Core-Section-Section.html#AbbrAsserts" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:assertViolated" class="def"
+	    >assertViolated</a
+	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Core-Section-Section.html#t:AbbrAsserts"
+	    >AbbrAsserts</a
+	    > c)<a href="src/Koshucode-Baala-Core-Section-Section.html#assertViolated" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:assertNormal" class="def"
+	    >assertNormal</a
+	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Core-Section-Section.html#t:AbbrAsserts"
+	    >AbbrAsserts</a
+	    > c)<a href="src/Koshucode-Baala-Core-Section-Section.html#assertNormal" class="link"
+	    >Source</a
+	    ></p
+	  ></div
 	><h1 id="g:3"
 	>Constructors
 </h1
@@ -505,7 +569,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	    ><table
 	    ><tr
 	      ><td class="src"
-		>:: <a href="Koshucode-Baala-Core-Content-Literal-Class.html#t:CContent"
+		>:: <span class="keyword"
+		  >forall</span
+		  > c . <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
 		  >CContent</a
 		  > c</td
 		><td class="doc empty"
@@ -535,9 +601,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; [<a href="Koshucode-Baala-Core-Section-Clause.html#t:Clause"
+		>-&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Short.html#t:Short"
+		  >Short</a
+		  > [<a href="Koshucode-Baala-Core-Section-Clause.html#t:Clause"
 		  >Clause</a
-		  >]</td
+		  >]]</td
 		><td class="doc"
 		><p
 		  >Output of <code
@@ -569,7 +637,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	      ><a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
 		>Section</a
 		></code
-	      >. 
+	      >.
 </p
 	    ></div
 	  ></div

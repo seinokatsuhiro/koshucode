@@ -8,37 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-core
-@version 0.44.0.0
-
-module Koshucode.Baala.Core.Relmap.Relkit
-data Relkit c
-Relkit :: Relhead -> RelkitBody c -> Relkit c
-relkitHead :: Relkit c -> Relhead
-relkitBody :: Relkit c -> RelkitBody c
-type RelkitBody c = Sourced (RelkitCore c)
-data RelkitCore c
-RelkitOneToMany :: Bool -> ([c] -> [[c]]) -> RelkitCore c
-RelkitOneToOne :: Bool -> ([c] -> [c]) -> RelkitCore c
-RelkitFull :: Bool -> ([[c]] -> [[c]]) -> RelkitCore c
-RelkitPred :: ([c] -> Bool) -> RelkitCore c
-RelkitOneToAbMany :: Bool -> ([c] -> Ab [[c]]) -> RelkitCore c
-RelkitOneToAbOne :: Bool -> ([c] -> Ab [c]) -> RelkitCore c
-RelkitAbFull :: Bool -> ([[c]] -> Ab [[c]]) -> RelkitCore c
-RelkitAbPred :: ([c] -> Ab Bool) -> RelkitCore c
-RelkitConst :: [[c]] -> RelkitCore c
-RelkitId :: RelkitCore c
-RelkitAppend :: (RelkitBody c) -> (RelkitBody c) -> RelkitCore c
-RelkitUnion :: Bool -> [RelkitBody c] -> RelkitCore c
-relkit :: Relhead -> RelkitCore c -> Relkit c
-relkitId :: Relhead -> Relkit c
-relkitConst :: Rel c -> Relkit c
-relkitConstEmpty :: [Termname] -> Relkit c
-relkitConstSingleton :: [Termname] -> [c] -> Relkit c
-relkitConstBody :: [Termname] -> [[c]] -> Relkit c
-relkitSetSource :: TokenListing a => a -> Map (Relkit c)
-relkitRun :: Ord c => RelkitBody c -> AbMap [[c]]
-instance Show (RelkitCore c)
-instance Monoid (Relkit c)
+@version 0.48.0.0
 
 
 -- | Sorter for operand of relmap operator.
@@ -91,40 +61,89 @@ sortFour :: String -> String -> String -> String -> [String] -> RopOperandSorter
 -- | Operand sorter for one-and-multiple-element trunk.
 sortOneList :: String -> String -> [String] -> RopOperandSorter
 
-module Koshucode.Baala.Core.Relmap.HalfRelmap
+
+-- | Lexical relmap.
+module Koshucode.Baala.Core.Relmap.Lexical
 
 -- | Intermediate data that represents use of relational operator.
 --   
---   <a>HalfRelmap</a> is constructed from list of <tt>TokenTree</tt>, and
---   (full) <tt>Relmap</tt> is constructed from <a>HalfRelmap</a>.
-data HalfRelmap
-HalfRelmap :: Token -> RopOperandAssoc -> [HalfRelmap] -> String -> HalfRelmap
+--   <a>Lexmap</a> is constructed from list of <tt>TokenTree</tt>, and
+--   (generic) <tt>Relmap</tt> is constructed from <a>Lexmap</a>.
+data Lexmap
+Lexmap :: Token -> RopOperandAssoc -> [Lexmap] -> String -> Lexmap
 
 -- | Operator token
-halfOpToken :: HalfRelmap -> Token
+lexOpToken :: Lexmap -> Token
 
 -- | Operand of relmap operation
-halfOperand :: HalfRelmap -> RopOperandAssoc
+lexOperand :: Lexmap -> RopOperandAssoc
 
 -- | Subrelmaps in the operand
-halfSubrelmap :: HalfRelmap -> [HalfRelmap]
+lexSubrelmap :: Lexmap -> [Lexmap]
 
 -- | Usages description
-halfUsage :: HalfRelmap -> String
-halfOpText :: HalfRelmap -> String
-instance Typeable HalfRelmap
-instance Show HalfRelmap
-instance Data HalfRelmap
-instance TokenListing HalfRelmap
-instance Pretty HalfRelmap
+lexUsage :: Lexmap -> String
+lexOpText :: Lexmap -> String
+instance Typeable Lexmap
+instance Show Lexmap
+instance Eq Lexmap
+instance Ord Lexmap
+instance Data Lexmap
+instance TokenListing Lexmap
+instance Pretty Lexmap
 
-module Koshucode.Baala.Core.Content.Literal.HashWord
+
+-- | Specialized relmap.
+module Koshucode.Baala.Core.Relmap.Relkit
+
+-- | Specialized relmap.
+data Relkit c
+Relkit :: Maybe Relhead -> RelkitBody c -> Relkit c
+relkitHead :: Relkit c -> Maybe Relhead
+relkitBody :: Relkit c -> RelkitBody c
+type RelkitBody c = Sourced (RelkitCore c)
+type RelkitKey = (Maybe Relhead, [Lexmap])
+type RelkitDef c = (RelkitKey, Relkit c)
+
+-- | Mapping for body of relation.
+type Relbmap c = [[c]] -> Ab [[c]]
+data RelkitCore c
+RelkitFull :: Bool -> ([[c]] -> [[c]]) -> RelkitCore c
+RelkitOneToMany :: Bool -> ([c] -> [[c]]) -> RelkitCore c
+RelkitOneToOne :: Bool -> ([c] -> [c]) -> RelkitCore c
+RelkitPred :: ([c] -> Bool) -> RelkitCore c
+RelkitAbFull :: Bool -> ([Relbmap c] -> [[c]] -> Ab [[c]]) -> [RelkitBody c] -> RelkitCore c
+RelkitOneToAbMany :: Bool -> ([Relbmap c] -> [c] -> Ab [[c]]) -> [RelkitBody c] -> RelkitCore c
+RelkitOneToAbOne :: Bool -> ([Relbmap c] -> [c] -> Ab [c]) -> [RelkitBody c] -> RelkitCore c
+RelkitAbSemi :: ([[c]] -> Ab Bool) -> (RelkitBody c) -> RelkitCore c
+RelkitAbPred :: ([c] -> Ab Bool) -> RelkitCore c
+RelkitConst :: [[c]] -> RelkitCore c
+RelkitAppend :: (RelkitBody c) -> (RelkitBody c) -> RelkitCore c
+RelkitId :: RelkitCore c
+RelkitLink :: String -> RelkitKey -> (Maybe (RelkitBody c)) -> RelkitCore c
+relkit :: Maybe Relhead -> RelkitCore c -> Relkit c
+relkitJust :: Relhead -> RelkitCore c -> Relkit c
+relkitNothing :: Relkit c
+relkitId :: Maybe Relhead -> Relkit c
+relkitConst :: Rel c -> Relkit c
+relkitConstEmpty :: [Termname] -> Relkit c
+relkitConstSingleton :: [Termname] -> [c] -> Relkit c
+relkitConstBody :: [Termname] -> [[c]] -> Relkit c
+relkitSetSource :: TokenListing a => a -> Map (Relkit c)
+relkitLink :: Ord c => [RelkitDef c] -> Map (Relkit c)
+relkitRun :: Ord c => RelkitBody c -> AbMap [[c]]
+fixedRelation :: Ord c => Map (AbMap [[c]])
+bodyMapArrange :: Relhead -> Relhead -> Map (AbMap [[c]])
+instance Show (RelkitCore c)
+instance Monoid (Relkit c)
+
+module Koshucode.Baala.Core.Content.HashWord
 
 -- | Table of coresspondences of hashed sequence and its text.
 --   
 --   <pre>
 --   &gt;&gt;&gt; lookup "lf" hashWordTable
---   Just "\n"  
+--   Just "\n"
 --   </pre>
 hashWordTable :: [(String, String)]
 
@@ -141,7 +160,7 @@ hashWordTable :: [(String, String)]
 --   </pre>
 hashWord :: Map String
 
-module Koshucode.Baala.Core.Content.Literal.Class
+module Koshucode.Baala.Core.Content.Class
 class Show c => PrimContent c
 typename :: PrimContent c => c -> String
 class (Ord c, Pretty c, PrimContent c, CBool c, CText c, CDec c, CList c, CNil c, CSet c, CTermset c, CRel c) => CContent c where joinContent = foldM appendContent nil
@@ -153,53 +172,61 @@ nonNullFilter :: Map [[a]]
 
 -- | Delete <a>nil</a> from content list.
 nonNilFilter :: CNil c => Map [c]
-class PrimContent c => CBool c where needBool = need isBool getBool
+class PrimContent c => CBool c where getBool = getAbAb isBool gBool putBool = Right . pBool
 isBool :: CBool c => c -> Bool
-putBool :: CBool c => Bool -> c
-getBool :: CBool c => c -> Bool
-needBool :: CBool c => c -> Ab Bool
-class PrimContent c => CText c where needText = need isText getText
+pBool :: CBool c => Bool -> c
+gBool :: CBool c => c -> Bool
+getBool :: CBool c => Ab c -> Ab Bool
+putBool :: CBool c => Bool -> Ab c
+class PrimContent c => CText c where getText = getAbAb isText gText putText = Right . pText
 isText :: CText c => c -> Bool
-getText :: CText c => c -> String
-putText :: CText c => String -> c
-needText :: CText c => c -> Ab String
-class PrimContent c => CList c where needList = need isList getList
+gText :: CText c => c -> String
+pText :: CText c => String -> c
+getText :: CText c => Ab c -> Ab String
+putText :: CText c => String -> Ab c
+pTextList :: (CText c, CList c) => [String] -> c
+pTextSet :: (CText c, CSet c) => [String] -> c
+class PrimContent c => CList c where getList = getAbAb isList gList putList = Right . pList
 isList :: CList c => c -> Bool
-getList :: CList c => c -> [c]
-putList :: CList c => [c] -> c
-needList :: CList c => c -> Ab [c]
+gList :: CList c => c -> [c]
+pList :: CList c => [c] -> c
+getList :: CList c => Ab c -> Ab [c]
+putList :: CList c => [c] -> Ab c
 
 -- | Types that can be nil
 class PrimContent c => CNil c
 isNil :: CNil c => c -> Bool
 nil :: CNil c => c
-class PrimContent c => CDec c where needDec = need isDec getDec
+class PrimContent c => CDec c where getDec = getAbAb isDec gDec putDec = Right . pDec
 isDec :: CDec c => c -> Bool
-getDec :: CDec c => c -> Decimal
-putDec :: CDec c => Decimal -> c
-needDec :: CDec c => c -> Ab Decimal
-putDecFromInt :: CDec c => Int -> c
-class PrimContent c => CSet c where needSet = need isSet getSet
+gDec :: CDec c => c -> Decimal
+pDec :: CDec c => Decimal -> c
+getDec :: CDec c => Ab c -> Ab Decimal
+putDec :: CDec c => Decimal -> Ab c
+pDecFromInt :: CDec c => Int -> c
+class PrimContent c => CSet c where getSet = getAbAb isSet gSet putSet = Right . pSet
 isSet :: CSet c => c -> Bool
-getSet :: CSet c => c -> [c]
-putSet :: CSet c => [c] -> c
-needSet :: CSet c => c -> Ab [c]
-class PrimContent c => CTermset c where needTermset = need isTermset getTermset
+gSet :: CSet c => c -> [c]
+pSet :: CSet c => [c] -> c
+getSet :: CSet c => Ab c -> Ab [c]
+putSet :: CSet c => [c] -> Ab c
+class PrimContent c => CTermset c where getTermset = getAbAb isTermset gTermset putTermset = Right . pTermset
 isTermset :: CTermset c => c -> Bool
-getTermset :: CTermset c => c -> [Named c]
-putTermset :: CTermset c => [Named c] -> c
-needTermset :: CTermset c => c -> Ab [Named c]
-class PrimContent c => CRel c where needRel = need isRel getRel
+gTermset :: CTermset c => c -> [Named c]
+pTermset :: CTermset c => [Named c] -> c
+getTermset :: CTermset c => Ab c -> Ab [Named c]
+putTermset :: CTermset c => [Named c] -> Ab c
+class PrimContent c => CRel c where getRel = getAbAb isRel gRel putRel = Right . pRel
 isRel :: CRel c => c -> Bool
-getRel :: CRel c => c -> Rel c
-putRel :: CRel c => Rel c -> c
-needRel :: CRel c => c -> Ab (Rel c)
-putTextList :: (CText c, CList c) => [String] -> c
-putTextSet :: (CText c, CSet c) => [String] -> c
+gRel :: CRel c => c -> Rel c
+pRel :: CRel c => Rel c -> c
+getRel :: CRel c => Ab c -> Ab (Rel c)
+putRel :: CRel c => Rel c -> Ab c
+isMember :: (Eq c, CSet c, CList c) => c -> c -> Bool
 
 
 -- | Literalizer: Make literal contents from token tree.
-module Koshucode.Baala.Core.Content.Literal.Literal
+module Koshucode.Baala.Core.Content.Literal
 
 -- | Transform <a>TokenTree</a> to something.
 type Literalize a = TokenTree -> Ab a
@@ -225,14 +252,10 @@ litNamedTrees :: LitTrees [Named TokenTree]
 
 
 -- | Extensions of literalizer
-module Koshucode.Baala.Core.Content.Literal.Extension
+module Koshucode.Baala.Core.Content.Extension
 litContent :: CContent c => Literalize c
 litOperators :: CContent c => LitOperators c
 litJudge :: CContent c => Bool -> JudgePattern -> LitTrees (Judge c)
-
-
--- | Term content
-module Koshucode.Baala.Core.Content.Literal
 
 
 -- | Term-content calcutation.
@@ -244,14 +267,26 @@ type Cox c = Sourced (CoxCore c)
 -- | Content expressions.
 data CoxCore c
 
--- | Literal content
+-- | A: Literal content
 CoxLit :: c -> CoxCore c
 
--- | Operator invocation
-CoxApp :: (CopFun c) -> [Cox c] -> CoxCore c
-
--- | Term reference, its name and position
+-- | A: Term reference, its name and position
 CoxTerm :: [Termname] -> [Int] -> CoxCore c
+
+-- | A: Base function
+CoxBase :: String -> (CopFun c) -> CoxCore c
+
+-- | B: Variable, its name and De Bruijn index
+CoxVar :: String -> Int -> CoxCore c
+
+-- | A/B: Function application (multiple arguments)
+CoxApplyL :: (Cox c) -> [Cox c] -> CoxCore c
+
+-- | B: Derived function
+CoxDeriv :: String -> (Cox c) -> CoxCore c
+
+-- | C: Derived function (multiple variables)
+CoxDerivL :: [String] -> (Cox c) -> CoxCore c
 
 -- | Term-content operator.
 data Cop c
@@ -261,17 +296,21 @@ CopFun :: String -> (CopFun c) -> Cop c
 
 -- | Syntax
 CopSyn :: String -> (CopSyn) -> Cop c
-type CopFun c = [c] -> Ab c
-type CopSyn = CopFun TokenTree
-type CoxCons c = Relhead -> Ab (Cox c)
-
--- | Construct content expressions from token tree.
-coxCons :: CContent c => ([Cop c], [Named InfixHeight]) -> TokenTree -> Ab (CoxCons c)
+type CopFun c = [Ab c] -> Ab c
+type CopSyn = [TokenTree] -> Ab TokenTree
+isCopFunction :: Cop c -> Bool
+isCopSyntax :: Cop c -> Bool
+type NamedCox c = Named (Cox c)
+coxAlpha :: CContent c => ([Cop c], [Named InfixHeight]) -> TokenTree -> Ab (Cox c)
+coxBeta :: [Cop c] -> [NamedCox c] -> Relhead -> Cox c -> Ab (Cox c)
+checkIrreducible :: Cox c -> Ab (Cox c)
 
 -- | Calculate content expression.
-coxRun :: (CRel c, CList c) => Relhead -> [c] -> CoxCons c -> Ab c
+coxRun :: (CRel c, CList c, Pretty c) => [c] -> Cox c -> Ab c
 instance Name (Cop c)
 instance Show (Cop c)
+instance Pretty c => Pretty (CoxCore c)
+instance Pretty c => Show (CoxCore c)
 
 
 -- | Term content
@@ -302,60 +341,65 @@ ropUsage :: Rop c -> String
 
 -- | Use of relmap operator
 data RopUse c
-RopUse :: Global c -> HalfRelmap -> [Relmap c] -> RopUse c
+RopUse :: Global c -> Lexmap -> [Relmap c] -> RopUse c
 ropGlobal :: RopUse c -> Global c
 
 -- | Syntactic data of operator use
-ropHalf :: RopUse c -> HalfRelmap
+ropLex :: RopUse c -> Lexmap
 
 -- | Subrelmaps
 ropSubrelmap :: RopUse c -> [Relmap c]
 
 -- | Constructor of relmap operator
 type RopCons c = RopUse c -> Ab (Relmap c)
+getArg1 :: [Ab c] -> Ab (Ab c)
+getArg2 :: [Ab c] -> Ab (Ab c, Ab c)
+getArg3 :: [Ab c] -> Ab (Ab c, Ab c, Ab c)
 
 -- | Relation-to-relation mapping. A <a>Relmap</a> is correspond to a use
 --   of relational operator.
 data Relmap c
 
 -- | Retrieve a relation from a dataset
-RelmapSource :: HalfRelmap -> JudgePattern -> [Termname] -> Relmap c
+RelmapSource :: Lexmap -> JudgePattern -> [Termname] -> Relmap c
 
 -- | Constant relation
-RelmapConst :: HalfRelmap -> (Rel c) -> Relmap c
+RelmapConst :: Lexmap -> (Rel c) -> Relmap c
 
--- | Equavalent relmap
-RelmapAlias :: HalfRelmap -> (Relmap c) -> Relmap c
-
--- | Relmap that maps relations to a relation
-RelmapCalc :: HalfRelmap -> (RelkitConfl c) -> [Relmap c] -> Relmap c
+-- | Relmap that maps relations to a relation with globals
+RelmapGlobal :: Lexmap -> (Global c -> RelkitCalc c) -> Relmap c
 
 -- | Relmap that maps relations to a relation
-RelmapGlobal :: HalfRelmap -> (Global c -> RelkitCalc c) -> Relmap c
+RelmapCalc :: Lexmap -> (RelkitConfl c) -> [Relmap c] -> Relmap c
+
+-- | Relmap reference
+RelmapLink :: Lexmap -> String -> Relmap c
 
 -- | Connect two relmaps
 RelmapAppend :: (Relmap c) -> (Relmap c) -> Relmap c
+type RelmapDef c = Named (Relmap c)
+relmapId :: Relmap c
 
--- | Relmap reference
-RelmapName :: HalfRelmap -> String -> Relmap c
+-- | Map function to relmaps.
+mapToRelmap :: Map (Relmap c) -> Map (Relmap c)
+relmapLexList :: Relmap c -> [Lexmap]
 
 -- | Make <a>Relkit</a> from heading of input relation.
-type RelkitCalc c = Relhead -> Ab (Relkit c)
-
--- | Make <a>Relkit</a> from one subrelmap and input heading.
-type RelkitBinary c = Relkit c -> Relhead -> Ab (Relkit c)
-
--- | Make <a>Relkit</a> from subrelmaps and input heading.
-type RelkitConfl c = [(Relkit c)] -> Relhead -> Ab (Relkit c)
+type RelkitCalc c = Maybe Relhead -> Ab (Relkit c)
 
 -- | Make <a>Relkit</a> from globals and input heading.
-type RelkitGlobal c = Global c -> Relhead -> Ab (Relkit c)
+type RelkitGlobal c = Global c -> RelkitCalc c
+
+-- | Make <a>Relkit</a> from one subrelmap and input heading.
+type RelkitBinary c = Relkit c -> RelkitCalc c
+
+-- | Make <a>Relkit</a> from multiple subrelmaps and input heading.
+type RelkitConfl c = [(Relkit c)] -> RelkitCalc c
 data Global c
-Global :: Version -> [Rop c] -> ([Cop c], [Named InfixHeight]) -> (TokenTree -> Ab (CoxCons c)) -> String -> [String] -> [Judge c] -> RelSelect c -> Global c
+Global :: Version -> [Rop c] -> ([Cop c], [Named InfixHeight]) -> String -> [String] -> [Judge c] -> RelSelect c -> Global c
 globalVersion :: Global c -> Version
 globalRops :: Global c -> [Rop c]
 globalCops :: Global c -> ([Cop c], [Named InfixHeight])
-globalCoxCons :: Global c -> TokenTree -> Ab (CoxCons c)
 globalProgram :: Global c -> String
 globalArgs :: Global c -> [String]
 globalJudges :: Global c -> [Judge c]
@@ -366,8 +410,12 @@ type RelSelect c = JudgePattern -> [String] -> Rel c
 globalCommandLine :: Global c -> [String]
 globalFill :: CContent c => Map (Global c)
 global :: Global c
+globalSyntax :: Global c -> ([Cop c], [Named InfixHeight])
+globalFunction :: Global c -> [Cop c]
 instance Show (RopUse c)
 instance Show (Global c)
+instance Eq (Relmap c)
+instance Ord (Relmap c)
 instance TokenListing (Relmap c)
 instance Pretty (Relmap c)
 instance Name (Relmap c)
@@ -377,54 +425,53 @@ instance TokenListing (RopUse c)
 instance Show (Rop c)
 
 
--- | <tt>Relmap</tt> construction.
+-- | <a>Relmap</a> construction.
 module Koshucode.Baala.Core.Relmap.Construct
 
--- | Make half and full relmap constructors.
+-- | Make lex and full relmap constructors.
 relmapCons :: Global c -> (RelmapCons c)
 
--- | Half and full relmap constructor
+-- | Lex and full relmap constructor
 data RelmapCons c
-RelmapCons :: RelmapConsHalf -> (RelmapConsFull c) -> RelmapCons c
+RelmapCons :: RelmapConsLex -> (RelmapConsFull c) -> RelmapCons c
 
--- | First step of constructing relmap, make <a>HalfRelmap</a> from use of
+-- | First step of constructing relmap, make <a>Lexmap</a> from use of
 --   relmap operator.
-type RelmapConsHalf = [TokenTree] -> Ab HalfRelmap
+type RelmapConsLex = [TokenTree] -> Ab Lexmap
 
 -- | Second step of constructing relmap, make <a>Relmap</a> from contents
---   of <a>HalfRelmap</a>.
-type RelmapConsFull c = HalfRelmap -> Ab (Relmap c)
+--   of <a>Lexmap</a>.
+type RelmapConsFull c = Lexmap -> Ab (Relmap c)
 instance Show (RelmapCons c)
 
 
--- | Data structures for relation-to-relation mappings
+-- | Operations on <a>Relmap</a>.
 module Koshucode.Baala.Core.Relmap.Relmap
+
+-- | List of <a>RelmapSource</a>
+relmapSourceList :: Relmap c -> [Relmap c]
+
+-- | List of name in <a>RelmapLink</a>
+relmapNameList :: Relmap c -> [String]
 
 -- | Retrieve relation from dataset.
 relmapSource :: RopUse c -> JudgePattern -> [Termname] -> (Relmap c)
 
--- | Constant relmap.
+-- | Make a constant relmap.
 relmapConst :: RopUse c -> Rel c -> Relmap c
 
--- | Alias for relmap.
-relmapAlias :: RopUse c -> Relmap c -> Relmap c
+-- | Make a flow relmap. Flow relmaps take no subrelmaps.
+relmapFlow :: RopUse c -> RelkitCalc c -> Relmap c
 
--- | Make a non-confluent relmap.
-relmapCalc :: RopUse c -> RelkitCalc c -> Relmap c
-relmapBinary :: RopUse c -> RelkitBinary c -> Relmap c -> Relmap c
-
--- | Make a confluent relmap.
-relmapConfl :: RopUse c -> RelkitConfl c -> [Relmap c] -> Relmap c
+-- | Make a global relmap. Global relmaps are flow relmaps with globals.
 relmapGlobal :: RopUse c -> RelkitGlobal c -> Relmap c
 
--- | List of <tt>RelmapSource</tt>
-relmapSourceList :: Relmap c -> [Relmap c]
+-- | Make a binary relmap. Binary relmaps take one subrelmap.
+relmapBinary :: RopUse c -> RelkitBinary c -> Relmap c -> Relmap c
 
--- | List of name in <tt>RelmapName</tt>
-relmapNameList :: Relmap c -> [String]
-
--- | Link relmaps by its name.
-relmapLinker :: [Named (Relmap c)] -> Relmap c -> Relmap c
+-- | Make a confluent relmap. Confluent relmaps take multiple subrelmaps.
+relmapConfl :: RopUse c -> RelkitConfl c -> [Relmap c] -> Relmap c
+relmapSpecialize :: Global c -> [RelmapDef c] -> [RelkitDef c] -> Maybe Relhead -> Relmap c -> Ab ([RelkitDef c], Relkit c)
 
 
 -- | Relation-to-relation mapping.
@@ -434,10 +481,8 @@ module Koshucode.Baala.Core.Relmap
 -- | Data structure for mapping relation to judges
 module Koshucode.Baala.Core.Assert.Assert
 
--- | Assertion of affirming or denying relation. It consists of logical
---   quality, relsign, and relmap.
---   
---   See also <a>Judge</a>
+-- | Affirming or denying relation. It consists of logical quality,
+--   judgement pattern, and relmap. See also <a>Judge</a>
 data Assert c
 Assert :: AssertType -> JudgePattern -> AssertOption -> Relmap c -> [Token] -> Assert c
 
@@ -498,10 +543,10 @@ module Koshucode.Baala.Core.Assert.Dataset
 -- | Dataset is a set of judges.
 data Dataset c
 
--- | Dataset that has no judges
+-- | Dataset that has no judges.
 emptyDataset :: Dataset c
 
--- | Gather judges into a dataset
+-- | Gather judges into a dataset.
 dataset :: [Judge c] -> Dataset c
 
 -- | Add judges to dataset.
@@ -516,13 +561,10 @@ selectRelation :: (Ord c, CNil c) => Dataset c -> RelSelect c
 module Koshucode.Baala.Core.Assert.Run
 
 -- | Calculate assertion list.
-runAssertJudges :: (Ord c, CNil c) => Global c -> [Assert c] -> Ab [Judge c]
-
--- | Calculate assertion list.
-runAssertDataset :: (Ord c, CNil c) => Global c -> [Assert c] -> Dataset c -> Ab [Judge c]
+runAssertJudges :: (Ord c, CNil c) => Global c -> [RelmapDef c] -> [Assert c] -> Ab [Judge c]
 
 
--- | Relation-to-relation mapping.
+-- | Affirming or denying proposition.
 module Koshucode.Baala.Core.Assert
 
 
@@ -534,9 +576,6 @@ clauseSource :: Clause -> TokenClause
 clauseBody :: Clause -> ClauseBody
 data ClauseBody
 
--- | Letter name
-CLetter :: (Maybe String) -> ClauseBody
-
 -- | Section name
 CSection :: (Maybe String) -> ClauseBody
 
@@ -547,18 +586,18 @@ CImport :: [Token] -> (Maybe Clause) -> ClauseBody
 CExport :: String -> ClauseBody
 
 -- | Short signs
-CShort :: (Named String) -> ClauseBody
+CShort :: [(Named String)] -> ClauseBody
 
 -- | Relmap and its name
-CRelmap :: String -> HalfRelmap -> ClauseBody
+CRelmap :: String -> Lexmap -> ClauseBody
 
--- | Not include HalfRelmap
+-- | Not include Lexmap
 TRelmap :: String -> [Token] -> ClauseBody
 
 -- | Assertions of relmaps
-CAssert :: AssertType -> JudgePattern -> AssertOption -> HalfRelmap -> ClauseBody
+CAssert :: AssertType -> JudgePattern -> AssertOption -> Lexmap -> ClauseBody
 
--- | Not include HalfRelmap
+-- | Not include Lexmap
 TAssert :: AssertType -> JudgePattern -> AssertOption -> [Token] -> ClauseBody
 
 -- | Judge
@@ -579,7 +618,7 @@ clauseTypeText :: Clause -> String
 -- | Convert token list into clause list. Result clause list does not
 --   contain <a>CRelmap</a> and <a>CAssert</a>. Instead of them,
 --   <a>TRelmap</a> and <a>TAssert</a> are contained. This function does
---   not depend on <a>RelmapConsHalf</a>.
+--   not depend on <a>RelmapConsLex</a>.
 --   
 --   <pre>
 --   &gt;&gt;&gt; consPreclause . B.tokenize $ "a : source A /x /y"
@@ -596,7 +635,7 @@ consPreclause :: [TokenLine] -> [Clause]
 
 -- | Construct <a>Clause</a> list from <a>Token</a> list. This is a first
 --   step of constructing <tt>Section</tt>.
-consClause :: RelmapConsHalf -> [TokenLine] -> Ab [Clause]
+consClause :: RelmapConsLex -> [TokenLine] -> Ab [Short [Clause]]
 instance Typeable ClauseBody
 instance Typeable Clause
 instance Show ClauseBody
@@ -611,7 +650,7 @@ instance Data Clause
 --   <i>data sections</i> that provide data.
 module Koshucode.Baala.Core.Section.Section
 data Section c
-Section :: Maybe String -> [Section c] -> [String] -> [Named String] -> [Assert c] -> [Named (Relmap c)] -> [Judge c] -> [Judge c] -> Resource -> RelmapCons c -> Section c
+Section :: Maybe String -> [Section c] -> [String] -> [[Named String]] -> AbbrAsserts c -> [RelmapDef c] -> [Judge c] -> [Judge c] -> Resource -> RelmapCons c -> Section c
 
 -- | Section name
 sectionName :: Section c -> Maybe String
@@ -623,13 +662,13 @@ sectionImport :: Section c -> [Section c]
 sectionExport :: Section c -> [String]
 
 -- | Prefix for short signs
-sectionShort :: Section c -> [Named String]
+sectionShort :: Section c -> [[Named String]]
 
 -- | Assertions of relmaps
-sectionAssert :: Section c -> [Assert c]
+sectionAssert :: Section c -> AbbrAsserts c
 
 -- | Relmaps and its name
-sectionRelmap :: Section c -> [Named (Relmap c)]
+sectionRelmap :: Section c -> [RelmapDef c]
 
 -- | Affirmative or denial judgements
 sectionJudge :: Section c -> [Judge c]
@@ -642,6 +681,9 @@ sectionResource :: Section c -> Resource
 
 -- | Relmap constructor for this section
 sectionCons :: Section c -> RelmapCons c
+type AbbrAsserts c = [Short [Assert c]]
+assertViolated :: Map (AbbrAsserts c)
+assertNormal :: Map (AbbrAsserts c)
 
 -- | Make empty section that has a given constructor.
 makeEmptySection :: RelmapCons c -> Section c
@@ -650,7 +692,7 @@ makeEmptySection :: RelmapCons c -> Section c
 emptySection :: Section c
 
 -- | Second step of constructing <a>Section</a>.
-consSection :: CContent c => RelmapConsFull c -> Resource -> [Clause] -> Ab (Section c)
+consSection :: CContent c => RelmapConsFull c -> Resource -> [Short [Clause]] -> Ab (Section c)
 instance Show c => Show (Section c)
 instance Monoid (Section c)
 instance (Ord c, Pretty c) => Pretty (Section c)
@@ -667,10 +709,7 @@ readSectionText :: CContent c => Section c -> String -> Ab (Section c)
 
 -- | Read judges from text.
 readJudges :: CContent c => String -> Ab [Judge c]
-
--- | Select assertions like <tt>sectionAssert</tt>. It returns relmap-liked
---   assertions. We can run these assertions using <a>runAssertJudges</a>.
-sectionLinkedAssert :: Section c -> ([Assert c], [Assert c])
+runSection :: CContent c => Global c -> [Section c] -> Ab ([ShortJudge c], [ShortJudge c])
 
 module Koshucode.Baala.Core.Section.Bundle
 
@@ -684,21 +723,10 @@ bundleURLs :: SectionBundle c -> [String]
 readSectionBundle :: CContent c => SectionBundle c -> IO [Ab (Section c)]
 instance Show c => Show (SectionBundle c)
 
-module Koshucode.Baala.Core.Section.Letter
-data Letter c
-Letter :: Maybe String -> [Section c] -> Letter c
-letterName :: Letter c -> Maybe String
-letterSections :: Letter c -> [Section c]
-appendSection :: Letter c -> Section c -> Letter c
-appendSections :: Letter c -> [Section c] -> Letter c
-runLetter :: CContent c => Global c -> AbMap (Letter c)
-hPutLetter :: (CContent c, Pretty c) => Handle -> Letter c -> IO Int
-instance Show c => Show (Letter c)
-
 module Koshucode.Baala.Core.Section.Quoter
 
 -- | Make quasiquoter for <tt>[koshu| ... |]</tt>.
-koshuQuoter :: RelmapConsHalf -> ExpQ -> QuasiQuoter
+koshuQuoter :: RelmapConsLex -> ExpQ -> QuasiQuoter
 data QuasiQuoter :: *
 
 

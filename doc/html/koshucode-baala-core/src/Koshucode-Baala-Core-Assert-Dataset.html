@@ -9,11 +9,11 @@
 <body>
 <pre><a name="line-1"></a><span class='hs-comment'>{-# OPTIONS_GHC -Wall #-}</span>
 <a name="line-2"></a>
-<a name="line-3"></a><span class='hs-comment'>{-| Dataset as a set of judges.
-<a name="line-4"></a>
-<a name="line-5"></a>    Dataset is like a bridge of judges and relations.
-<a name="line-6"></a>    We can get a relation from a dataset,
-<a name="line-7"></a>    that dataset is build from judges.  -}</span>
+<a name="line-3"></a><span class='hs-comment'>-- | Dataset as a set of judges.</span>
+<a name="line-4"></a><span class='hs-comment'>--</span>
+<a name="line-5"></a><span class='hs-comment'>--   Dataset is like a bridge of judges and relations.</span>
+<a name="line-6"></a><span class='hs-comment'>--   We can get a relation from a dataset,</span>
+<a name="line-7"></a><span class='hs-comment'>--   that dataset is build from judges.</span>
 <a name="line-8"></a>
 <a name="line-9"></a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Assert</span><span class='hs-varop'>.</span><span class='hs-conid'>Dataset</span>
 <a name="line-10"></a><span class='hs-layout'>(</span> <span class='hs-conid'>Dataset</span><span class='hs-layout'>,</span>
@@ -30,30 +30,30 @@
 <a name="line-21"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Relmap</span>  <span class='hs-keyword'>as</span> <span class='hs-conid'>C</span>
 <a name="line-22"></a>
 <a name="line-23"></a>
-<a name="line-24"></a><a name="Dataset"></a><span class='hs-comment'>{-| Dataset is a set of judges. -}</span>
+<a name="line-24"></a><a name="Dataset"></a><span class='hs-comment'>-- | Dataset is a set of judges.</span>
 <a name="line-25"></a><a name="Dataset"></a><span class='hs-keyword'>data</span> <span class='hs-conid'>Dataset</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Dataset</span> <span class='hs-layout'>(</span><span class='hs-conid'>Map</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>JudgePattern</span> <span class='hs-keyglyph'>[</span><span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Named</span> <span class='hs-varid'>c</span><span class='hs-keyglyph'>]</span><span class='hs-keyglyph'>]</span><span class='hs-layout'>)</span>
 <a name="line-26"></a>
-<a name="line-27"></a><a name="emptyDataset"></a><span class='hs-comment'>{-| Dataset that has no judges -}</span>
+<a name="line-27"></a><a name="emptyDataset"></a><span class='hs-comment'>-- | Dataset that has no judges.</span>
 <a name="line-28"></a><span class='hs-definition'>emptyDataset</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Dataset</span> <span class='hs-varid'>c</span>
 <a name="line-29"></a><span class='hs-definition'>emptyDataset</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Dataset</span> <span class='hs-conid'>Map</span><span class='hs-varop'>.</span><span class='hs-varid'>empty</span>
 <a name="line-30"></a>
-<a name="line-31"></a><a name="dataset"></a><span class='hs-comment'>{-| Gather judges into a dataset -}</span>
+<a name="line-31"></a><a name="dataset"></a><span class='hs-comment'>-- | Gather judges into a dataset.</span>
 <a name="line-32"></a><span class='hs-definition'>dataset</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Judge</span> <span class='hs-varid'>c</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Dataset</span> <span class='hs-varid'>c</span>
 <a name="line-33"></a><span class='hs-definition'>dataset</span> <span class='hs-varid'>js</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>addJudges</span> <span class='hs-varid'>js</span> <span class='hs-varid'>emptyDataset</span>
 <a name="line-34"></a>
-<a name="line-35"></a><a name="addJudges"></a><span class='hs-comment'>{-| Add judges to dataset. -}</span>
+<a name="line-35"></a><a name="addJudges"></a><span class='hs-comment'>-- | Add judges to dataset.</span>
 <a name="line-36"></a><span class='hs-definition'>addJudges</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Judge</span> <span class='hs-varid'>c</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Dataset</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Dataset</span> <span class='hs-varid'>c</span>
 <a name="line-37"></a><span class='hs-definition'>addJudges</span> <span class='hs-varid'>js</span> <span class='hs-varid'>ds1</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>foldr</span> <span class='hs-varid'>addJudge</span> <span class='hs-varid'>ds1</span> <span class='hs-varid'>js</span>
 <a name="line-38"></a>
-<a name="line-39"></a><a name="addJudge"></a><span class='hs-comment'>{-| Add a judge to dataset. -}</span>
+<a name="line-39"></a><a name="addJudge"></a><span class='hs-comment'>-- | Add a judge to dataset.</span>
 <a name="line-40"></a><span class='hs-definition'>addJudge</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Judge</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Dataset</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Dataset</span> <span class='hs-varid'>c</span>
 <a name="line-41"></a><span class='hs-definition'>addJudge</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Judge</span> <span class='hs-conid'>True</span> <span class='hs-varid'>sign</span> <span class='hs-varid'>xs</span><span class='hs-layout'>)</span> <span class='hs-layout'>(</span><span class='hs-conid'>Dataset</span> <span class='hs-varid'>ds1</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Dataset</span> <span class='hs-varid'>ds2</span> <span class='hs-keyword'>where</span>
 <a name="line-42"></a>    <span class='hs-varid'>ds2</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Map</span><span class='hs-varop'>.</span><span class='hs-varid'>insertWith</span> <span class='hs-varid'>add</span> <span class='hs-varid'>sign</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>xs</span><span class='hs-keyglyph'>]</span> <span class='hs-varid'>ds1</span>
 <a name="line-43"></a>    <span class='hs-varid'>add</span> <span class='hs-varid'>new</span> <span class='hs-varid'>old</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>new</span> <span class='hs-varop'>++</span> <span class='hs-varid'>old</span>
 <a name="line-44"></a><span class='hs-definition'>addJudge</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Judge</span> <span class='hs-conid'>False</span> <span class='hs-keyword'>_</span> <span class='hs-keyword'>_</span><span class='hs-layout'>)</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>undefined</span>
 <a name="line-45"></a>
-<a name="line-46"></a><a name="selectRelation"></a><span class='hs-comment'>{-| Select relation from dataset.
-<a name="line-47"></a>    If a giving term is not in judges, 'CNil' sign is used. -}</span>
+<a name="line-46"></a><a name="selectRelation"></a><span class='hs-comment'>-- | Select relation from dataset.</span>
+<a name="line-47"></a><span class='hs-comment'>--   If a giving term is not in judges, 'CNil' sign is used.</span>
 <a name="line-48"></a><span class='hs-definition'>selectRelation</span>
 <a name="line-49"></a>    <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Ord</span> <span class='hs-varid'>c</span><span class='hs-layout'>,</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>CNil</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span>
 <a name="line-50"></a>    <span class='hs-keyglyph'>=&gt;</span> <span class='hs-conid'>Dataset</span> <span class='hs-varid'>c</span>       <span class='hs-comment'>-- ^ Dataset</span>

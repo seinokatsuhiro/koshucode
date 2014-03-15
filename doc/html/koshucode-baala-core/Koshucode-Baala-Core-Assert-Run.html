@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.44.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.48.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -50,7 +50,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	>Description</p
 	><div class="doc"
 	><p
-	  >Running relational calculation. 
+	  >Running relational calculation.
 </p
 	  ></div
 	></div
@@ -63,31 +63,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	    >runAssertJudges</a
 	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c, <a href="Koshucode-Baala-Core-Content-Literal-Class.html#t:CNil"
+	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CNil"
 	    >CNil</a
 	    > c) =&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Global"
 	    >Global</a
-	    > c -&gt; [<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
+	    > c -&gt; [<a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RelmapDef"
+	    >RelmapDef</a
+	    > c] -&gt; [<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
 	    >Assert</a
 	    > c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
-	    >Judge</a
-	    > c]</li
-	  ><li class="src short"
-	  ><a href="#v:runAssertDataset"
-	    >runAssertDataset</a
-	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > c, <a href="Koshucode-Baala-Core-Content-Literal-Class.html#t:CNil"
-	    >CNil</a
-	    > c) =&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Global"
-	    >Global</a
-	    > c -&gt; [<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
-	    >Assert</a
-	    > c] -&gt; <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
-	    >Dataset</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
 	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
@@ -103,11 +87,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	    >runAssertJudges</a
 	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c, <a href="Koshucode-Baala-Core-Content-Literal-Class.html#t:CNil"
+	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CNil"
 	    >CNil</a
 	    > c) =&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Global"
 	    >Global</a
-	    > c -&gt; [<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
+	    > c -&gt; [<a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RelmapDef"
+	    >RelmapDef</a
+	    > c] -&gt; [<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
 	    >Assert</a
 	    > c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
@@ -118,34 +104,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Calculate assertion list. 
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:runAssertDataset" class="def"
-	    >runAssertDataset</a
-	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > c, <a href="Koshucode-Baala-Core-Content-Literal-Class.html#t:CNil"
-	    >CNil</a
-	    > c) =&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Global"
-	    >Global</a
-	    > c -&gt; [<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
-	    >Assert</a
-	    > c] -&gt; <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
-	    >Dataset</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
-	    >Judge</a
-	    > c]<a href="src/Koshucode-Baala-Core-Assert-Run.html#runAssertDataset" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Calculate assertion list. 
+	    >Calculate assertion list.
 </p
 	    ></div
 	  ></div
