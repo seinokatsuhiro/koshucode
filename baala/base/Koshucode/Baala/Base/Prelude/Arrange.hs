@@ -8,6 +8,7 @@ module Koshucode.Baala.Base.Prelude.Arrange
   arrangePick,
   arrangeCut,
   arrangeFore,
+  namesCut,
 ) where
 
 import qualified Data.List as List
@@ -64,4 +65,9 @@ arrangeCut ps xs = loop 0 xs where
 --   "bdacefg"
 arrangeFore :: [Int] -> B.Map [a]
 arrangeFore ps xs = arrangePick ps xs ++ arrangeCut ps xs
+
+namesCut :: (Eq a) => [a] -> [a] -> [a]
+namesCut xs1 xs2 = xs3 where
+    ind = sharedIndex xs1 xs2
+    xs3 = arrangeCut  ind xs2
 

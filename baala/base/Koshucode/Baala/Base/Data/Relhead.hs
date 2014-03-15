@@ -8,12 +8,16 @@ module Koshucode.Baala.Base.Data.Relhead
   headEquiv,
   headEmpty,
   headFrom,
-  headAppend,
-  headConsTerm,
-  headCons, headCons2, headCons3,
-  headChange,
   headNames,
   headDegree,
+
+  -- * Transform
+  headConsTerm,
+  headCons, headCons2, headCons3,
+  headAppend,
+  headCut,
+  headSubst,
+  headChange,
 
   -- * Other functions
   headKeepTerms,
@@ -37,9 +41,8 @@ import qualified Koshucode.Baala.Base.Data.Relterm as B
 -- ---------------------- Type
 
 -- | Heading of relation as a list of terms
-data Relhead = Relhead {
-      headTerms :: [B.Relterm]
-    } deriving (Show, Eq, Ord)
+data Relhead = Relhead { headTerms :: [B.Relterm] }
+               deriving (Show, Eq, Ord)
 
 headEquiv :: Relhead -> Relhead -> Bool
 headEquiv (Relhead a) (Relhead b) = L.sort a == L.sort b
@@ -64,35 +67,6 @@ headEmpty = headFrom []
 headFrom :: [B.Termname] -> Relhead
 headFrom = Relhead . map B.Term
 
-headAppend :: [B.Termname] -> B.Map Relhead
-headAppend ns h = headFrom ns `M.mappend` h
-
-headConsTerm :: B.Relterm -> B.Map Relhead
-headConsTerm t1 (Relhead ns) = Relhead $ t1 : ns
-
--- | Add term to head.
---
---   >>> let h = headFrom ["/a", "/b"] in headCons "/c" h
---   Relhead [Term "/c", Term "/a", Term "/b"]
-headCons :: B.Termname -> B.Map Relhead
-headCons n1 (Relhead ns) =
-    Relhead $ B.Term n1 : ns
-
-headCons2 :: B.Termname -> B.Termname -> B.Map Relhead
-headCons2 n1 n2 (Relhead ns) =
-    Relhead $ B.Term n1 : B.Term n2 : ns
-
-headCons3 :: B.Termname -> B.Termname -> B.Termname -> B.Map Relhead
-headCons3 n1 n2 n3 (Relhead ns) =
-    Relhead $ B.Term n1 : B.Term n2 : B.Term n3 : ns
-
--- | Reconstruct head.
---
---   >>> let h = headFrom ["/a", "/b"] in headChange reverse h
---   Relhead [Term "/b", Term "/a"]
-headChange :: (B.Map [B.Termname]) -> B.Map Relhead
-headChange f = headFrom . f . headNames
-
 -- | List of term names.
 --
 --   >>> let h = headFrom ["/a", "/b"] in headNames h
@@ -106,6 +80,45 @@ headNames = B.names . headTerms
 --   2
 headDegree :: Relhead -> Int
 headDegree = length . headTerms
+
+
+
+-- ----------------------  Transform
+
+headConsTerm :: B.Relterm -> B.Map Relhead
+headConsTerm t1 (Relhead ns) = Relhead $ t1 : ns
+
+-- | Add term to head.
+--
+--   >>> let h = headFrom ["/a", "/b"] in headCons "/c" h
+--   Relhead [Term "/c", Term "/a", Term "/b"]
+headCons :: B.Termname -> B.Map Relhead
+headCons n1 (Relhead ns) =
+    Relhead $ B.Term n1 : ns
+
+headCons2 :: B.Termname2 -> B.Map Relhead
+headCons2 (n1, n2) (Relhead ns) =
+    Relhead $ B.Term n1 : B.Term n2 : ns
+
+headCons3 :: B.Termname3 -> B.Map Relhead
+headCons3 (n1, n2, n3) (Relhead ns) =
+    Relhead $ B.Term n1 : B.Term n2 : B.Term n3 : ns
+
+headAppend :: [B.Termname] -> B.Map Relhead
+headAppend ns he = headFrom ns `M.mappend` he
+
+headCut   :: [B.Termname] -> B.Map Relhead
+headCut   ns he = headFrom $ ns `B.namesCut` headNames he
+
+headSubst :: [B.Termname] -> B.Map Relhead
+headSubst ns he = ns `headAppend` (ns `headCut` he)
+
+-- | Reconstruct head.
+--
+--   >>> let h = headFrom ["/a", "/b"] in headChange reverse h
+--   Relhead [Term "/b", Term "/a"]
+headChange :: (B.Map [B.Termname]) -> B.Map Relhead
+headChange f = headFrom . f . headNames
 
 
 

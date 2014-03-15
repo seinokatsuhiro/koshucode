@@ -75,6 +75,8 @@ vanillaRops = Op.ropList "vanilla"
         Op.consRdf, C.sortOneList "-pattern" "-term" [] )
     , ( "size /N",
         Op.consSize, C.sortOne "-term" [] )
+    , ( "subst /N E ...",
+        Op.consSubst, C.sortList "-in" ["-let"] )
     , ( "typename /N /P ...",
         Op.consTypename, C.sortList "-term" [] )
     , ( "unless R R",

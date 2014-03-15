@@ -6,7 +6,9 @@
 module Koshucode.Baala.Op.Vanilla.Cox
 (
   -- * add
-  consAdd, relmapAdd, relkitAdd,
+  consAdd, relmapAdd,
+  -- * subst
+  consSubst, relmapSubst,
   -- * filter
   consFilter, relmapFilter, relkitFilter,
 ) where
@@ -29,20 +31,39 @@ consAdd use =
 
 relmapAdd :: (C.CList c, C.CRel c, B.Pretty c)
   => C.RopUse c -> ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.Relmap c
-relmapAdd use = C.relmapFlow use . relkitAdd
+relmapAdd use = C.relmapFlow use . relkitAdd B.headAppend
 
 -- todo: shared term
 relkitAdd :: (C.CList c, C.CRel c, B.Pretty c)
-  => ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.RelkitCalc c
-relkitAdd _ Nothing = Right C.relkitNothing
-relkitAdd (base, deriv, bodies) (Just he1) = Right kit2 where
+  => ([B.Termname] -> B.Map B.Relhead)
+  -> ([C.Cop c], [C.NamedCox c], [C.NamedCox c])
+  -> C.RelkitCalc c
+relkitAdd _ _ Nothing = Right C.relkitNothing
+relkitAdd headTrans (base, deriv, bodies) (Just he1) = Right kit2 where
     ns   = map fst bodies   -- term names
     es   = map snd bodies   -- term expression
-    he2  = B.headAppend ns he1
+    he2  = ns `headTrans` he1
     kit2 = C.relkitJust he2 $ C.RelkitOneToAbOne False kitf2 []
     kitf2 _ cs1 = do es2 <- C.coxBeta base deriv he1 `mapM` es
                      cs2 <- C.coxRun cs1 `mapM` es2
                      Right $ cs2 ++ cs1
+
+
+-- ----------------------  subst
+
+consSubst :: (C.CContent c) => C.RopCons c
+consSubst use =
+    do treesLet <- Op.getOption [] Op.getWordTrees use "-let"
+       treesIn  <- Op.getTermTrees use "-in"
+       coxLet   <- alphas use treesLet
+       coxIn    <- alphas use treesIn
+       let base = C.globalFunction $ C.ropGlobal use
+       Right $ relmapSubst use (base, coxLet, coxIn)
+
+relmapSubst :: (C.CList c, C.CRel c, B.Pretty c)
+  => C.RopUse c -> ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.Relmap c
+relmapSubst use = C.relmapFlow use . relkitAdd B.headSubst
+
 
 
 -- ----------------------  filter
