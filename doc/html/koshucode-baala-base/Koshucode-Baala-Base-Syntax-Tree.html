@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.42.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.48.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -113,14 +113,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >CodeTree</a
 	    > a]</li
 	  ><li class="src short"
-	  ><a href="#v:treeG"
-	    >treeG</a
-	    > ::  [<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
-	    >CodeTree</a
-	    > a] -&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
-	    >CodeTree</a
-	    > a</li
-	  ><li class="src short"
 	  ><a href="#v:treeWrap"
 	    >treeWrap</a
 	    > ::  [<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
@@ -199,7 +191,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Tree of leaf and branch. 
+	    >Tree of leaf and branch.
 </p
 	    ></div
 	  ><div class="subs constructors"
@@ -331,7 +323,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Convert a list of elements to a single tree. 
+	    >Convert a list of elements to a single tree.
 </p
 	    ></div
 	  ></div
@@ -350,21 +342,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Convert a list of elements to trees. 
+	    >Convert a list of elements to trees.
 </p
 	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:treeG" class="def"
-	    >treeG</a
-	    > ::  [<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
-	    >CodeTree</a
-	    > a] -&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
-	    >CodeTree</a
-	    > a<a href="src/Koshucode-Baala-Base-Syntax-Tree.html#treeG" class="link"
-	    >Source</a
-	    ></p
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -389,7 +369,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Convert tree to list of tokens. 
+	    >Convert tree to list of tokens.
 </p
 	    ></div
 	  ></div
@@ -404,7 +384,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Convert tree to list of tokens. 
+	    >Convert tree to list of tokens.
 </p
 	    ></div
 	  ></div
@@ -426,7 +406,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ><div class="doc"
 	  ><p
 	    >Simplify tree by removing double parens,
-    like <code
+   like <code
 	      >((a))</code
 	      > to <code
 	      >(a)</code
@@ -472,7 +452,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Get a paren type. 
+	    >Get a paren type.
 </p
 	    ></div
 	  ></div
@@ -533,7 +513,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 		>GetParenType</a
 		></code
 	      > functions
-    from a type-open-close table.
+   from a type-open-close table.
 </p
 	    ><p
 	    >Make paren/type functions from <code
@@ -560,8 +540,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ></pre
 	    ><p
 	    >Get paren types for each chars.
-    Types of open parens are positive integer,
-    and closes are negative.
+   Types of open parens are positive integer,
+   and closes are negative.
 </p
 	    ><pre class="screen"
 	    ><code class="prompt"

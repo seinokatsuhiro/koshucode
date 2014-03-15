@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.42.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.48.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -130,20 +130,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 		></dt
 	      ><dd
 	      > Splits first the left-most operator,
-    and operator height is <em
+   and operator height is <em
 		>H</em
 		>.
-    For example, if the operator <code
+   For example, if the operator <code
 		>:</code
 		> is of <code
 		>Left 5</code
 		>,
-    an expression <code
+   an expression <code
 		>(a : b : c)</code
 		> is splitted into <code
 		>(: a (b : c))</code
 		>
-    and then <code
+   and then <code
 		>(: a (: b c))</code
 		>.
 </dd
@@ -157,34 +157,34 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      > Right-most splitting and height <em
 		>H</em
 		>.
-    For example, if the operator <code
+   For example, if the operator <code
 		>.</code
 		> is of <code
 		>Right 3</code
 		>,
-    an expression <code
+   an expression <code
 		>(a . b . c)</code
 		> is splitted into <code
 		>(. (a . b) c)</code
 		>
-    and then <code
+   and then <code
 		>(. (. a b) c)</code
 		>.
-    An expression <code
+   An expression <code
 		>(a . b : c)</code
 		> is into <code
 		>(: (a . b) c)</code
 		>,
-    and then <code
+   and then <code
 		>(: (. a b) c)</code
 		>.
-    Symbols that is not a binary operator like <code
+   Symbols that is not a binary operator like <code
 		>b</code
 		> are of height 0.
-    For that reason, heights of expression <code
+   For that reason, heights of expression <code
 		>(a . b : c)</code
 		>
-    are <code
+   are <code
 		>(0 3 0 5 0)</code
 		>
 </dd

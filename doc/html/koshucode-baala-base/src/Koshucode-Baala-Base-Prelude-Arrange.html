@@ -9,7 +9,7 @@
 <body>
 <pre><a name="line-1"></a><span class='hs-comment'>{-# OPTIONS_GHC -Wall #-}</span>
 <a name="line-2"></a>
-<a name="line-3"></a><span class='hs-comment'>{- | Arrangement of lists. -}</span>
+<a name="line-3"></a><span class='hs-comment'>-- | Arrangement of lists.</span>
 <a name="line-4"></a>
 <a name="line-5"></a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Prelude</span><span class='hs-varop'>.</span><span class='hs-conid'>Arrange</span>
 <a name="line-6"></a><span class='hs-layout'>(</span> <span class='hs-conid'>Arrange</span><span class='hs-layout'>,</span>
@@ -24,10 +24,10 @@
 <a name="line-15"></a>
 <a name="line-16"></a><a name="Arrange"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>Arrange</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Int</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>a</span><span class='hs-keyglyph'>]</span>
 <a name="line-17"></a>
-<a name="line-18"></a><a name="sharedIndex"></a><span class='hs-comment'>{-| Indices of shared elements.
-<a name="line-19"></a>
-<a name="line-20"></a>    &gt;&gt;&gt; "bdk" `sharedIndex` "abcdefg"
-<a name="line-21"></a>    [1,3]  -}</span>
+<a name="line-18"></a><a name="sharedIndex"></a><span class='hs-comment'>-- | Indices of shared elements.</span>
+<a name="line-19"></a><span class='hs-comment'>--</span>
+<a name="line-20"></a><span class='hs-comment'>--   &gt;&gt;&gt; "bdk" `sharedIndex` "abcdefg"</span>
+<a name="line-21"></a><span class='hs-comment'>--   [1,3]</span>
 <a name="line-22"></a><span class='hs-definition'>sharedIndex</span> <span class='hs-keyglyph'>::</span> <span class='hs-layout'>(</span><span class='hs-conid'>Eq</span> <span class='hs-varid'>a</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>a</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>a</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Int</span><span class='hs-keyglyph'>]</span>
 <a name="line-23"></a><span class='hs-definition'>sharedIndex</span> <span class='hs-varid'>ks</span> <span class='hs-varid'>vs</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-varid'>ks</span> <span class='hs-keyword'>where</span>
 <a name="line-24"></a>    <span class='hs-varid'>loop</span> <span class='hs-conid'>[]</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>[]</span>
@@ -35,10 +35,10 @@
 <a name="line-26"></a>                    <span class='hs-conid'>Just</span> <span class='hs-varid'>p</span>  <span class='hs-keyglyph'>-&gt;</span>  <span class='hs-varid'>p</span> <span class='hs-conop'>:</span> <span class='hs-varid'>loop</span> <span class='hs-varid'>ks2</span>
 <a name="line-27"></a>                    <span class='hs-conid'>Nothing</span> <span class='hs-keyglyph'>-&gt;</span>      <span class='hs-varid'>loop</span> <span class='hs-varid'>ks2</span>
 <a name="line-28"></a>
-<a name="line-29"></a><a name="arrangePick"></a><span class='hs-comment'>{-| Pick indexed elements.
-<a name="line-30"></a>
-<a name="line-31"></a>    &gt;&gt;&gt; arrangePick [1,3] "abcdefg"
-<a name="line-32"></a>    "bd"  -}</span>
+<a name="line-29"></a><a name="arrangePick"></a><span class='hs-comment'>-- | Pick indexed elements.</span>
+<a name="line-30"></a><span class='hs-comment'>--</span>
+<a name="line-31"></a><span class='hs-comment'>--   &gt;&gt;&gt; arrangePick [1,3] "abcdefg"</span>
+<a name="line-32"></a><span class='hs-comment'>--   "bd"</span>
 <a name="line-33"></a><span class='hs-definition'>arrangePick</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>Arrange</span> <span class='hs-varid'>a</span>
 <a name="line-34"></a><span class='hs-definition'>arrangePick</span> <span class='hs-varid'>ps</span> <span class='hs-varid'>xs</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-varid'>ps</span> <span class='hs-varid'>xs</span> <span class='hs-num'>0</span> <span class='hs-keyword'>where</span>
 <a name="line-35"></a>    <span class='hs-varid'>loop</span> <span class='hs-varid'>pps</span><span class='hs-keyglyph'>@</span><span class='hs-layout'>(</span><span class='hs-varid'>p</span><span class='hs-conop'>:</span><span class='hs-varid'>ps2</span><span class='hs-layout'>)</span> <span class='hs-layout'>(</span><span class='hs-varid'>x</span><span class='hs-conop'>:</span><span class='hs-varid'>xs2</span><span class='hs-layout'>)</span> <span class='hs-varid'>i</span> <span class='hs-keyglyph'>=</span>
@@ -56,10 +56,10 @@
 <a name="line-47"></a><span class='hs-comment'>-- arrangePick :: [Int] -&gt; Map [a]</span>
 <a name="line-48"></a><span class='hs-comment'>-- arrangePick ps xs = map (xs !!) ps</span>
 <a name="line-49"></a>
-<a name="line-50"></a><a name="arrangeCut"></a><span class='hs-comment'>{-| Cut indexed elements
-<a name="line-51"></a>
-<a name="line-52"></a>    &gt;&gt;&gt; arrangeCut [1,3] "abcdefg"
-<a name="line-53"></a>    "acefg"  -}</span>
+<a name="line-50"></a><a name="arrangeCut"></a><span class='hs-comment'>-- | Cut indexed elements</span>
+<a name="line-51"></a><span class='hs-comment'>--</span>
+<a name="line-52"></a><span class='hs-comment'>--   &gt;&gt;&gt; arrangeCut [1,3] "abcdefg"</span>
+<a name="line-53"></a><span class='hs-comment'>--   "acefg"</span>
 <a name="line-54"></a><span class='hs-definition'>arrangeCut</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Int</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>a</span><span class='hs-keyglyph'>]</span>
 <a name="line-55"></a><span class='hs-definition'>arrangeCut</span> <span class='hs-varid'>ps</span> <span class='hs-varid'>xs</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-num'>0</span> <span class='hs-varid'>xs</span> <span class='hs-keyword'>where</span>
 <a name="line-56"></a>    <span class='hs-varid'>loop</span> <span class='hs-keyword'>_</span> <span class='hs-conid'>[]</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>[]</span>
@@ -67,35 +67,12 @@
 <a name="line-58"></a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>p</span> <span class='hs-varop'>`elem`</span> <span class='hs-varid'>ps</span>  <span class='hs-keyglyph'>=</span>     <span class='hs-varid'>loop</span> <span class='hs-layout'>(</span><span class='hs-varid'>p</span> <span class='hs-varop'>+</span> <span class='hs-num'>1</span><span class='hs-layout'>)</span> <span class='hs-varid'>xs2</span>
 <a name="line-59"></a>        <span class='hs-keyglyph'>|</span> <span class='hs-varid'>otherwise</span>    <span class='hs-keyglyph'>=</span> <span class='hs-varid'>x</span> <span class='hs-conop'>:</span> <span class='hs-varid'>loop</span> <span class='hs-layout'>(</span><span class='hs-varid'>p</span> <span class='hs-varop'>+</span> <span class='hs-num'>1</span><span class='hs-layout'>)</span> <span class='hs-varid'>xs2</span>
 <a name="line-60"></a>
-<a name="line-61"></a><a name="arrangeFore"></a><span class='hs-comment'>{-| Move indexed elements to the front.
-<a name="line-62"></a>
-<a name="line-63"></a>    &gt;&gt;&gt; arrangeFore [1,3] "abcdefg"
-<a name="line-64"></a>    "bdacefg"  -}</span>
+<a name="line-61"></a><a name="arrangeFore"></a><span class='hs-comment'>-- | Move indexed elements to the front.</span>
+<a name="line-62"></a><span class='hs-comment'>--</span>
+<a name="line-63"></a><span class='hs-comment'>--   &gt;&gt;&gt; arrangeFore [1,3] "abcdefg"</span>
+<a name="line-64"></a><span class='hs-comment'>--   "bdacefg"</span>
 <a name="line-65"></a><span class='hs-definition'>arrangeFore</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>Int</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>a</span><span class='hs-keyglyph'>]</span>
 <a name="line-66"></a><span class='hs-definition'>arrangeFore</span> <span class='hs-varid'>ps</span> <span class='hs-varid'>xs</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>arrangePick</span> <span class='hs-varid'>ps</span> <span class='hs-varid'>xs</span> <span class='hs-varop'>++</span> <span class='hs-varid'>arrangeCut</span> <span class='hs-varid'>ps</span> <span class='hs-varid'>xs</span>
 <a name="line-67"></a>
-<a name="line-68"></a><span class='hs-comment'>-- grip :: [Int] -&gt; [a] -&gt; ([a], [a])</span>
-<a name="line-69"></a><span class='hs-comment'>-- grip ps xs = (take ps xs, xs)</span>
-<a name="line-70"></a>
-<a name="line-71"></a><span class='hs-comment'>-- split :: [Int] -&gt; [a] -&gt; ([a], [a])</span>
-<a name="line-72"></a><span class='hs-comment'>-- split ps xs = loop 0 xs where</span>
-<a name="line-73"></a><span class='hs-comment'>--     loop _ [] = ([], [])</span>
-<a name="line-74"></a><span class='hs-comment'>--     loop p (x:xs2)</span>
-<a name="line-75"></a><span class='hs-comment'>--         | p `elem` ps = mapFst (x:) $ loop (p + 1) xs2</span>
-<a name="line-76"></a><span class='hs-comment'>--         | otherwise   = mapSnd (x:) $ loop (p + 1) xs2</span>
-<a name="line-77"></a>
-<a name="line-78"></a><span class='hs-comment'>-- like :: [Int] -&gt; [Char] -&gt; Bool</span>
-<a name="line-79"></a><span class='hs-comment'>-- like xs cs = loop xs cs where</span>
-<a name="line-80"></a><span class='hs-comment'>--     loop (x:xs2) (c:cs2)</span>
-<a name="line-81"></a><span class='hs-comment'>--         | c /= '-' &amp;&amp; x &gt;= 0   = loop xs2 cs2</span>
-<a name="line-82"></a><span class='hs-comment'>--         | c == '-' &amp;&amp; x &lt;  0   = loop xs2 cs2</span>
-<a name="line-83"></a><span class='hs-comment'>--         | c == '?'             = loop xs2 cs2</span>
-<a name="line-84"></a><span class='hs-comment'>--         | otherwise            = False</span>
-<a name="line-85"></a><span class='hs-comment'>--     loop [] [] = True</span>
-<a name="line-86"></a><span class='hs-comment'>--     loop _  _  = False</span>
-<a name="line-87"></a>
-<a name="line-88"></a><span class='hs-comment'>-- ap :: ((Int -&gt; v) -&gt; [v] -&gt; a) -&gt; [v] -&gt; a</span>
-<a name="line-89"></a><span class='hs-comment'>-- ap f arg = f (arg !!) arg</span>
-<a name="line-90"></a>
 </pre></body>
 </html>

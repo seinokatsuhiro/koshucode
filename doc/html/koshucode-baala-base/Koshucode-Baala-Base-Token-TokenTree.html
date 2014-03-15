@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.42.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.48.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -76,7 +76,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	>Description</p
 	><div class="doc"
 	><p
-	  >Parened tree of tokens 
+	  >Parened tree of tokens
 </p
 	  ></div
 	></div
@@ -91,9 +91,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Sourced</a
 	    > a = <a href="#v:Sourced"
 	    >Sourced</a
-	    > [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
-	    >Token</a
-	    >] a</li
+	    > {<ul class="subs"
+	    ><li
+	      ><a href="#v:source"
+		>source</a
+		> :: [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+		>Token</a
+		>]</li
+	      ><li
+	      ><a href="#v:unsourced"
+		>unsourced</a
+		> :: a</li
+	      ></ul
+	    >}</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
@@ -221,11 +231,35 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      ><td class="src"
 		><a name="v:Sourced" class="def"
 		  >Sourced</a
-		  > [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
-		  >Token</a
-		  >] a</td
+		  ></td
 		><td class="doc empty"
 		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td colspan="2"
+		><div class="subs fields"
+		  ><p class="caption"
+		    >Fields</p
+		    ><dl
+		    ><dt class="src"
+		      ><a name="v:source" class="def"
+			>source</a
+			> :: [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+			>Token</a
+			>]</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ><dt class="src"
+		      ><a name="v:unsourced" class="def"
+			>unsourced</a
+			> :: a</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ></dl
+		    ><div class="clear"
+		    ></div
+		    ></div
+		  ></td
 		></tr
 	      ></table
 	    ></div
@@ -299,7 +333,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Tree of tokens. 
+	    >Tree of tokens.
 </p
 	    ></div
 	  ></div
@@ -317,11 +351,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ><div class="doc"
 	  ><p
 	    >Parse tokens into parened trees.
-    Blank tokens and comments are excluded.
+   Blank tokens and comments are excluded.
 </p
 	    ><p
 	    >There are four types of parens -- 1, 2, 3, or 4.
-    Paren type is in <code
+   Paren type is in <code
 	      >TreeB</code
 	      > <em
 	      >type</em
@@ -498,16 +532,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ><div class="doc"
 	  ><p
 	    >Split token list by unquoted word.
-    If token list contains the word,
-    pair of <em
+   If token list contains the word,
+   pair of <em
 	      >before-list</em
 	      >, <em
 	      >the-word</em
 	      > and <em
 	      >after-list</em
 	      > is returned.
-    If does not contains the word,
-    original token list is returned.
+   If does not contains the word,
+   original token list is returned.
 </p
 	    ><pre class="screen"
 	    ><code class="prompt"
@@ -530,7 +564,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      >Right ( [ TWord 1 0 &quot;a&quot;, TSpace 2 1 ]
         , TWord 3 0 &quot;|&quot;
         , [ TSpace 4 1, TWord 5 0 &quot;b&quot;, TSpace 6 1
-          , TWord 7 0 &quot;|&quot;, TSpace 8 1, TWord 9 0 &quot;c&quot; ] )  
+          , TWord 7 0 &quot;|&quot;, TSpace 8 1, TWord 9 0 &quot;c&quot; ] )
 </pre
 	    ></div
 	  ></div
@@ -575,7 +609,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		></strong
 	      >[ [TreeL (TWord 1 0 &quot;a&quot;)]
 , [TreeL (TWord 5 0 &quot;b&quot;)]
-, [TreeL (TWord 9 0 &quot;c&quot;)] ]  
+, [TreeL (TWord 9 0 &quot;c&quot;)] ]
 </pre
 	    ></div
 	  ></div
@@ -606,7 +640,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		></strong
 	      >[ [TreeL (TWord 1 0 &quot;a&quot;)]
 , [TreeL (TWord 5 0 &quot;b&quot;)]
-, [TreeL (TWord 9 0 &quot;c&quot;)] ]  
+, [TreeL (TWord 9 0 &quot;c&quot;)] ]
 </pre
 	    ></div
 	  ></div

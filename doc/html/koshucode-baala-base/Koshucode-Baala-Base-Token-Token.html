@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.42.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.48.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -198,6 +198,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >String</a
 	    >)</li
 	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:Termname4"
+	    >Termname4</a
+	    > = (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >)</li
+	  ><li class="src short"
 	  ><a href="#v:tokenWord"
 	    >tokenWord</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
@@ -232,6 +246,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ><li class="src short"
 	  ><a href="#v:isBlankToken"
 	    >isBlankToken</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isShortToken"
+	    >isShortToken</a
 	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
 	    >Pred</a
 	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
@@ -290,7 +312,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >There are eight types of tokens. 
+	    >There are eight types of tokens.
 </p
 	    ></div
 	  ><div class="subs constructors"
@@ -583,7 +605,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      >&quot;/file&quot;</code
 	      > for the term <code
 	      >/file</code
-	      >. 
+	      >.
 </p
 	    ></div
 	  ></div
@@ -614,6 +636,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    >)<a href="src/Koshucode-Baala-Base-Token-Token.html#Termname3" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:Termname4" class="def"
+	    >Termname4</a
+	    > = (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >)<a href="src/Koshucode-Baala-Base-Token-Token.html#Termname4" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -667,7 +707,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		>let tok = TTerm 20 [&quot;/r&quot;, &quot;/x&quot;] in tokenContent tok
 </code
 		></strong
-	      >&quot;/r/x&quot;  
+	      >&quot;/r/x&quot;
 </pre
 	    ></div
 	  ></div
@@ -685,7 +725,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ><div class="doc"
 	  ><p
 	    >Text of token type, i.e., one of
-    <code
+   <code
 	      >&quot;Word&quot;</code
 	      >, <code
 	      >&quot;Term&quot;</code
@@ -694,7 +734,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      >, <code
 	      >&quot;Close&quot;</code
 	      >,
-    <code
+   <code
 	      >&quot;Space&quot;</code
 	      >, <code
 	      >&quot;Comment&quot;</code
@@ -710,7 +750,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		>tokenTypeText $ TWord 25 0 &quot;flower&quot;
 </code
 		></strong
-	      >&quot;Word&quot;  
+	      >&quot;Word&quot;
 </pre
 	    ></div
 	  ></div
@@ -731,7 +771,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ><div class="doc"
 	  ><p
 	    >Test the token is blank,
-    i.e., <code
+   i.e., <code
 	      ><a href="Koshucode-Baala-Base-Token-Token.html#v:TComment"
 		>TComment</a
 		></code
@@ -739,9 +779,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      ><a href="Koshucode-Baala-Base-Token-Token.html#v:TSpace"
 		>TSpace</a
 		></code
-	      >. 
+	      >.
 </p
 	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isShortToken" class="def"
+	    >isShortToken</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    ><a href="src/Koshucode-Baala-Base-Token-Token.html#isShortToken" class="link"
+	    >Source</a
+	    ></p
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -782,7 +834,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		>let tok = TOpen 0 &quot;{&quot; in isOpenTokenOf &quot;(&quot; tok
 </code
 		></strong
-	      >False 
+	      >False
 </pre
 	    ></div
 	  ></div
@@ -805,7 +857,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      ><a href="Koshucode-Baala-Base-Token-Token.html#v:TClose"
 		>TClose</a
 		></code
-	      > of the specific paren. 
+	      > of the specific paren.
 </p
 	    ></div
 	  ></div
@@ -825,7 +877,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Remove blank tokens. 
+	    >Remove blank tokens.
 </p
 	    ></div
 	  ></div

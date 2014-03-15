@@ -92,7 +92,7 @@
 <a name="line-83"></a><span class='hs-definition'>litDecimal</span> <span class='hs-varid'>ccs</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>headPart</span> <span class='hs-varid'>id</span> <span class='hs-varid'>ccs</span> <span class='hs-keyword'>where</span>
 <a name="line-84"></a>    <span class='hs-varid'>minus</span> <span class='hs-varid'>x</span> <span class='hs-keyglyph'>=</span> <span class='hs-comment'>-</span> <span class='hs-varid'>x</span>
 <a name="line-85"></a>
-<a name="line-86"></a>    <span class='hs-varid'>headPart</span> <span class='hs-keyword'>_</span> <span class='hs-conid'>[]</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-conid'>Decimal</span> <span class='hs-layout'>(</span><span class='hs-num'>0</span><span class='hs-layout'>,</span> <span class='hs-num'>1</span><span class='hs-layout'>)</span> <span class='hs-num'>0</span> <span class='hs-conid'>False</span>
+<a name="line-86"></a>    <span class='hs-varid'>headPart</span> <span class='hs-keyword'>_</span> <span class='hs-conid'>[]</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>AbortSyntax</span> <span class='hs-conid'>[]</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>ASNotNumber</span> <span class='hs-conid'>[]</span>
 <a name="line-87"></a>    <span class='hs-varid'>headPart</span> <span class='hs-varid'>sign</span> <span class='hs-layout'>(</span><span class='hs-varid'>c</span><span class='hs-conop'>:</span><span class='hs-varid'>cs</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-keyword'>case</span> <span class='hs-varid'>c</span> <span class='hs-keyword'>of</span>
 <a name="line-88"></a>        <span class='hs-chr'>' '</span>  <span class='hs-keyglyph'>-&gt;</span>  <span class='hs-varid'>headPart</span> <span class='hs-varid'>sign</span>  <span class='hs-varid'>cs</span>
 <a name="line-89"></a>        <span class='hs-chr'>'-'</span>  <span class='hs-keyglyph'>-&gt;</span>  <span class='hs-varid'>headPart</span> <span class='hs-varid'>minus</span> <span class='hs-varid'>cs</span>
@@ -135,7 +135,7 @@
 <a name="line-126"></a><span class='hs-definition'>fromDigit</span> <span class='hs-chr'>'7'</span> <span class='hs-keyglyph'>=</span> <span class='hs-num'>7</span>
 <a name="line-127"></a><span class='hs-definition'>fromDigit</span> <span class='hs-chr'>'8'</span> <span class='hs-keyglyph'>=</span> <span class='hs-num'>8</span>
 <a name="line-128"></a><span class='hs-definition'>fromDigit</span> <span class='hs-chr'>'9'</span> <span class='hs-keyglyph'>=</span> <span class='hs-num'>9</span>
-<a name="line-129"></a><span class='hs-definition'>fromDigit</span> <span class='hs-keyword'>_</span>   <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>bug</span>
+<a name="line-129"></a><span class='hs-definition'>fromDigit</span> <span class='hs-keyword'>_</span>   <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>bug</span> <span class='hs-str'>"fromDigit"</span>
 <a name="line-130"></a>
 <a name="line-131"></a>
 <a name="line-132"></a>

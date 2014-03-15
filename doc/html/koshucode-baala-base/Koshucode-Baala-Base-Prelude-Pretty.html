@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.42.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.48.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -167,6 +167,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >Doc</a
 	    ></li
 	  ><li class="src short"
+	  ><a href="#v:nest"
+	    >nest</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
+	    ></li
+	  ><li class="src short"
 	  ><a href="#v:docEmpty"
 	    >docEmpty</a
 	    > :: <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
@@ -211,7 +221,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Type that has a pretty printer. 
+	    >Type that has a pretty printer.
 </p
 	    ></div
 	  ><div class="subs methods"
@@ -233,7 +243,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		  ></code
 		> of <code
 		>a</code
-		>. 
+		>.
 </p
 	      ></div
 	    ><p class="src"
@@ -252,7 +262,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		  ></code
 		> joined by <code
 		>vcat</code
-		>. 
+		>.
 </p
 	      ></div
 	    ><p class="src"
@@ -271,7 +281,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		  ></code
 		> joined by <code
 		>hsep</code
-		>. 
+		>.
 </p
 	      ></div
 	    ></div
@@ -296,7 +306,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 			>doch [True, False]
 </code
 			></strong
-		      >   #true #false  
+		      >  #true #false
 </pre
 		    ></td
 		  ></tr
@@ -313,7 +323,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#v:int"
 			>int</a
 			></code
-		      >.  
+		      >.
 </p
 		    ></td
 		  ></tr
@@ -330,7 +340,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#v:text"
 			>text</a
 			></code
-		      >.  
+		      >.
 </p
 		    ></td
 		  ></tr
@@ -347,7 +357,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		      ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
 			>Doc</a
 			></code
-		      > itself. 
+		      > itself.
 </p
 		    ></td
 		  ></tr
@@ -397,7 +407,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 			>doc $ headFrom [&quot;/a&quot;, &quot;/b&quot;]
 </code
 			></strong
-		      >   /a : /b  
+		      >  /a : /b
 </pre
 		    ></td
 		  ></tr
@@ -421,7 +431,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 			>doc $ Judge True &quot;P&quot; [(&quot;/a&quot;, 10), (&quot;/b&quot;, 20 :: Int)]
 </code
 			></strong
-		      >   |-- P  /a 10  /b 20 
+		      >  |-- P  /a 10  /b 20
 </pre
 		    ></td
 		  ></tr
@@ -453,7 +463,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 			>doc $ rel [&quot;/a&quot;, &quot;/b&quot;] [[10, 20], [30, 40 :: Int]]
 </code
 			></strong
-		      >   {| /a /b | 10 : 20 | 30 : 40 |}  
+		      >  {| /a /b | 10 : 20 | 30 : 40 |}
 </pre
 		    ></td
 		  ></tr
@@ -475,7 +485,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 			>doc (&quot;/a&quot;, &quot;xxx&quot;)
 </code
 			></strong
-		      >   /a xxx  
+		      >  /a xxx
 </pre
 		    ></td
 		  ></tr
@@ -509,7 +519,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		>docBracket $ docColon [True, False]
 </code
 		></strong
-	      >[ #true : #false ]  
+	      >[ #true : #false ]
 </pre
 	    ></div
 	  ></div
@@ -540,7 +550,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		>docWrap &quot;(&quot; &quot;)&quot; &quot;abc&quot;
 </code
 		></strong
-	      >(abc)  
+	      >(abc)
 </pre
 	    ></div
 	  ></div
@@ -562,7 +572,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><div class="doc"
 	  ><p
 	    >Wrap in open and close brackets.
-    Put spaces between content and brackets.
+   Put spaces between content and brackets.
 </p
 	    ><pre class="screen"
 	    ><code class="prompt"
@@ -572,7 +582,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		>docWraps &quot;(&quot; &quot;)&quot; &quot;abc&quot;
 </code
 		></strong
-	      >( abc )  
+	      >( abc )
 </pre
 	    ></div
 	  ></div
@@ -641,7 +651,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		      ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
 			>Doc</a
 			></code
-		      > itself. 
+		      > itself.
 </p
 		    ></td
 		  ></tr
@@ -774,6 +784,149 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		> non-empty.
 </li
 	      ></ul
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:nest" class="def"
+	    >nest</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Doc"
+	    >Doc</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Nest (or indent) a document by a given number of positions
+ (which may also be negative).  <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:nest"
+		>nest</a
+		></code
+	      > satisfies the laws:
+</p
+	    ><ul
+	    ><li
+	      ><pre
+		><code
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:nest"
+		    >nest</a
+		    ></code
+		  > 0 x = x</pre
+		></li
+	      ><li
+	      ><pre
+		><code
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:nest"
+		    >nest</a
+		    ></code
+		  > k (<code
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:nest"
+		    >nest</a
+		    ></code
+		  > k' x) = <code
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:nest"
+		    >nest</a
+		    ></code
+		  > (k+k') x</pre
+		></li
+	      ><li
+	      ><pre
+		><code
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:nest"
+		    >nest</a
+		    ></code
+		  > k (x <code
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:-60--62-"
+		    >&lt;&gt;</a
+		    ></code
+		  > y) = <code
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:nest"
+		    >nest</a
+		    ></code
+		  > k z <code
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:-60--62-"
+		    >&lt;&gt;</a
+		    ></code
+		  > <code
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:nest"
+		    >nest</a
+		    ></code
+		  > k y</pre
+		></li
+	      ><li
+	      ><pre
+		><code
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:nest"
+		    >nest</a
+		    ></code
+		  > k (x <code
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:-36--36-"
+		    >$$</a
+		    ></code
+		  > y) = <code
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:nest"
+		    >nest</a
+		    ></code
+		  > k x <code
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:-36--36-"
+		    >$$</a
+		    ></code
+		  > <code
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:nest"
+		    >nest</a
+		    ></code
+		  > k y</pre
+		></li
+	      ><li
+	      ><pre
+		><code
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:nest"
+		    >nest</a
+		    ></code
+		  > k <code
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#v:empty"
+		    >empty</a
+		    ></code
+		  > = <code
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#v:empty"
+		    >empty</a
+		    ></code
+		  ></pre
+		></li
+	      ><li
+	      > <code
+		>x <code
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:-60--62-"
+		    >&lt;&gt;</a
+		    ></code
+		  > <code
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:nest"
+		    >nest</a
+		    ></code
+		  > k y = x <code
+		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:-60--62-"
+		    >&lt;&gt;</a
+		    ></code
+		  > y</code
+		>, if <code
+		>x</code
+		> non-empty
+</li
+	      ></ul
+	    ><p
+	    >The side condition on the last law is needed because
+ <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#v:empty"
+		>empty</a
+		></code
+	      > is a left identity for <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#v:-60--62-"
+		>&lt;&gt;</a
+		></code
+	      >.
+</p
 	    ></div
 	  ></div
 	><div class="top"

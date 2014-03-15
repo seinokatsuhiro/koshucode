@@ -10,11 +10,11 @@
 <pre><a name="line-1"></a><span class='hs-comment'>{-# LANGUAGE DeriveDataTypeable #-}</span>
 <a name="line-2"></a><span class='hs-comment'>{-# OPTIONS_GHC -Wall #-}</span>
 <a name="line-3"></a>
-<a name="line-4"></a><span class='hs-comment'>{-| This module provides a container for tokens.
-<a name="line-5"></a>    No tokens in Koshucode are in a extent of multiple lines.
-<a name="line-6"></a>    'CodeLine' includes whole tokens in a line.
-<a name="line-7"></a>    You can represent tokenized source code
-<a name="line-8"></a>    as a list of 'CodeLine'. -}</span>
+<a name="line-4"></a><span class='hs-comment'>-- | This module provides a container for tokens.</span>
+<a name="line-5"></a><span class='hs-comment'>--   No tokens in Koshucode are in a extent of multiple lines.</span>
+<a name="line-6"></a><span class='hs-comment'>--   'CodeLine' includes whole tokens in a line.</span>
+<a name="line-7"></a><span class='hs-comment'>--   You can represent tokenized source code</span>
+<a name="line-8"></a><span class='hs-comment'>--   as a list of 'CodeLine'.</span>
 <a name="line-9"></a>
 <a name="line-10"></a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Syntax</span><span class='hs-varop'>.</span><span class='hs-conid'>Code</span>
 <a name="line-11"></a><span class='hs-layout'>(</span> <span class='hs-conid'>CodeLine</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
@@ -34,7 +34,7 @@
 <a name="line-25"></a>
 <a name="line-26"></a><span class='hs-comment'>-- ----------------------  CodeLine</span>
 <a name="line-27"></a>
-<a name="line-28"></a><a name="CodeLine"></a><span class='hs-comment'>{-| Tokens in line. -}</span>
+<a name="line-28"></a><a name="CodeLine"></a><span class='hs-comment'>-- | Tokens in line.</span>
 <a name="line-29"></a><a name="CodeLine"></a><span class='hs-keyword'>data</span> <span class='hs-conid'>CodeLine</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>CodeLine</span>
 <a name="line-30"></a>    <span class='hs-layout'>{</span> <span class='hs-varid'>lineNumber</span>  <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>LineNumber</span>  <span class='hs-comment'>-- ^ Line number, from 1.</span>
 <a name="line-31"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>lineContent</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span>        <span class='hs-comment'>-- ^ Line content without newline.</span>
@@ -44,7 +44,7 @@
 <a name="line-35"></a><a name="lineNumberContent"></a><span class='hs-definition'>lineNumberContent</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>CodeLine</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span>
 <a name="line-36"></a><span class='hs-definition'>lineNumberContent</span> <span class='hs-varid'>c</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>show</span> <span class='hs-layout'>(</span><span class='hs-varid'>lineNumber</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span> <span class='hs-varop'>++</span> <span class='hs-str'>" "</span> <span class='hs-varop'>++</span> <span class='hs-layout'>(</span><span class='hs-varid'>lineContent</span> <span class='hs-varid'>c</span><span class='hs-layout'>)</span>
 <a name="line-37"></a>
-<a name="line-38"></a><a name="CodeClause"></a><span class='hs-comment'>{-| Tokens in clause. -}</span>
+<a name="line-38"></a><a name="CodeClause"></a><span class='hs-comment'>-- | Tokens in clause.</span>
 <a name="line-39"></a><a name="CodeClause"></a><span class='hs-keyword'>data</span> <span class='hs-conid'>CodeClause</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>CodeClause</span>
 <a name="line-40"></a>    <span class='hs-layout'>{</span> <span class='hs-varid'>clauseLines</span>     <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>CodeLine</span> <span class='hs-varid'>a</span><span class='hs-keyglyph'>]</span>  <span class='hs-comment'>-- ^ Source lines of clause</span>
 <a name="line-41"></a>    <span class='hs-layout'>,</span> <span class='hs-varid'>clauseTokens</span>    <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>a</span><span class='hs-keyglyph'>]</span>           <span class='hs-comment'>-- ^ Source tokens of clause</span>
@@ -64,22 +64,22 @@
 <a name="line-55"></a>    <span class='hs-varid'>continue</span> <span class='hs-varid'>i</span> <span class='hs-layout'>(</span><span class='hs-layout'>(</span><span class='hs-varid'>n</span><span class='hs-layout'>,</span> <span class='hs-varid'>x</span><span class='hs-layout'>)</span> <span class='hs-conop'>:</span> <span class='hs-varid'>xs</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>|</span> <span class='hs-varid'>n</span> <span class='hs-varop'>&gt;</span> <span class='hs-varid'>i</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>cons1</span> <span class='hs-varid'>x</span> <span class='hs-varop'>$</span> <span class='hs-varid'>continue</span> <span class='hs-varid'>i</span> <span class='hs-varid'>xs</span>
 <a name="line-56"></a>    <span class='hs-varid'>continue</span> <span class='hs-keyword'>_</span> <span class='hs-varid'>xs</span>                     <span class='hs-keyglyph'>=</span> <span class='hs-layout'>(</span><span class='hs-conid'>[]</span><span class='hs-layout'>,</span> <span class='hs-varid'>xs</span><span class='hs-layout'>)</span>
 <a name="line-57"></a>
-<a name="line-58"></a><a name="NextToken"></a><span class='hs-comment'>{-| Type of function that splits a next token from string.
-<a name="line-59"></a>    Tokens can includes 'TokenNumber'. -}</span>
+<a name="line-58"></a><a name="NextToken"></a><span class='hs-comment'>-- | Type of function that splits a next token from string.</span>
+<a name="line-59"></a><a name="NextToken"></a><span class='hs-comment'>--   Tokens can includes 'TokenNumber'.</span>
 <a name="line-60"></a><a name="NextToken"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>NextToken</span> <span class='hs-varid'>a</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>NumberedLine</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Gather</span> <span class='hs-conid'>String</span> <span class='hs-varid'>a</span>
 <a name="line-61"></a>
-<a name="line-62"></a><a name="codeLines"></a><span class='hs-comment'>{-| Split source text into 'CodeLine' list.
-<a name="line-63"></a>
-<a name="line-64"></a>    1. Split source text into lines by line delimiters
-<a name="line-65"></a>       (carriage return @\\r@ or line feed @\\n@).
-<a name="line-66"></a>
-<a name="line-67"></a>    2. Numbering lines from 1.
-<a name="line-68"></a>       Internally, this is represented as
-<a name="line-69"></a>       a list of pairs @(@'LineNumber'@,@ 'String'@)@.
-<a name="line-70"></a>
-<a name="line-71"></a>    3. Tokenize each lines,
-<a name="line-72"></a>       and put tokens together in 'CodeLine'.
-<a name="line-73"></a>  -}</span>
+<a name="line-62"></a><a name="codeLines"></a><span class='hs-comment'>-- | Split source text into 'CodeLine' list.</span>
+<a name="line-63"></a><span class='hs-comment'>--</span>
+<a name="line-64"></a><span class='hs-comment'>--   1. Split source text into lines by line delimiters</span>
+<a name="line-65"></a><span class='hs-comment'>--      (carriage return @\\r@ or line feed @\\n@).</span>
+<a name="line-66"></a><span class='hs-comment'>--</span>
+<a name="line-67"></a><span class='hs-comment'>--   2. Numbering lines from 1.</span>
+<a name="line-68"></a><span class='hs-comment'>--      Internally, this is represented as</span>
+<a name="line-69"></a><span class='hs-comment'>--      a list of pairs @(@'LineNumber'@,@ 'String'@)@.</span>
+<a name="line-70"></a><span class='hs-comment'>--</span>
+<a name="line-71"></a><span class='hs-comment'>--   3. Tokenize each lines,</span>
+<a name="line-72"></a><span class='hs-comment'>--      and put tokens together in 'CodeLine'.</span>
+<a name="line-73"></a><span class='hs-comment'>--</span>
 <a name="line-74"></a><span class='hs-definition'>codeLines</span>
 <a name="line-75"></a>    <span class='hs-keyglyph'>::</span> <span class='hs-conid'>NextToken</span> <span class='hs-varid'>a</span>     <span class='hs-comment'>-- ^ Token splitter</span>
 <a name="line-76"></a>    <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>String</span>          <span class='hs-comment'>-- ^ Source text</span>

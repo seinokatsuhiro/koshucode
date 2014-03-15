@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.42.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.48.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -76,7 +76,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	>Description</p
 	><div class="doc"
 	><p
-	  >Abort reasons 
+	  >Abort reasons
 </p
 	  ></div
 	></div
@@ -157,16 +157,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		>String</a
 		>]  </li
 	      ><li
-	      >| <a href="#v:AAMalformedOperand"
-		>AAMalformedOperand</a
+	      >| <a href="#v:AAUnexpectedOperand"
+		>AAUnexpectedOperand</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
 		>  </li
 	      ><li
-	      >| <a href="#v:AAMissingTermname"
-		>AAMissingTermname</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
+	      >| <a href="#v:AAReqTermName"
+		>AAReqTermName</a
 		>  </li
 	      ><li
 	      >| <a href="#v:AANoTerms"
@@ -175,17 +173,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		>String</a
 		>]  </li
 	      ><li
-	      >| <a href="#v:AAOpeandDuplicate"
-		>AAOpeandDuplicate</a
-		> [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>]  </li
-	      ><li
-	      >| <a href="#v:AAOpeandUnknown"
-		>AAOpeandUnknown</a
-		> [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>]  </li
+	      >| <a href="#v:AAOperandNotFound"
+		>AAOperandNotFound</a
+		>  </li
 	      ><li
 	      >| <a href="#v:AAReqBoolean"
 		>AAReqBoolean</a
@@ -222,6 +212,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
 		>  </li
+	      ><li
+	      >| <a href="#v:AAUnrecTermIO"
+		>AAUnrecTermIO</a
+		> [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		>] [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		>Bool</a
+		>]  </li
 	      ></ul
 	    ></li
 	  ><li class="src short"
@@ -529,8 +527,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:AAMalformedOperand" class="def"
-		  >AAMalformedOperand</a
+		><a name="v:AAUnexpectedOperand" class="def"
+		  >AAUnexpectedOperand</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
 		  ></td
@@ -539,10 +537,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:AAMissingTermname" class="def"
-		  >AAMissingTermname</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
+		><a name="v:AAReqTermName" class="def"
+		  >AAReqTermName</a
 		  ></td
 		><td class="doc empty"
 		>&nbsp;</td
@@ -559,21 +555,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:AAOpeandDuplicate" class="def"
-		  >AAOpeandDuplicate</a
-		  > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  >]</td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:AAOpeandUnknown" class="def"
-		  >AAOpeandUnknown</a
-		  > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  >]</td
+		><a name="v:AAOperandNotFound" class="def"
+		  >AAOperandNotFound</a
+		  ></td
 		><td class="doc empty"
 		>&nbsp;</td
 		></tr
@@ -634,6 +618,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
 		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AAUnrecTermIO" class="def"
+		  >AAUnrecTermIO</a
+		  > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  >] [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		  >Bool</a
+		  >]</td
 		><td class="doc empty"
 		>&nbsp;</td
 		></tr

@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.42.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.48.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -71,7 +71,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ></li
 	  ><li
 	  ><a href="#g:5"
-	    >I/O
+	    >Lookup
 </a
 	    ></li
 	  ></ul
@@ -81,7 +81,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	>Description</p
 	><div class="doc"
 	><p
-	  >General utilities 
+	  >General utilities
 </p
 	  ></div
 	></div
@@ -102,13 +102,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >cons1</a
 	    > ::  a -&gt; ([a], b) -&gt; ([a], b)</li
 	  ><li class="src short"
-	  ><a href="#v:mapmapFst"
-	    >mapmapFst</a
-	    > ::  (a -&gt; c) -&gt; [(a, b)] -&gt; [(c, b)]</li
+	  ><a href="#v:mapFstTo"
+	    >mapFstTo</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Functor"
+	    >Functor</a
+	    > m =&gt; (a -&gt; c) -&gt; m (a, b) -&gt; m (c, b)</li
 	  ><li class="src short"
-	  ><a href="#v:mapmapSnd"
-	    >mapmapSnd</a
-	    > ::  (b -&gt; c) -&gt; [(a, b)] -&gt; [(a, c)]</li
+	  ><a href="#v:mapSndTo"
+	    >mapSndTo</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Functor"
+	    >Functor</a
+	    > m =&gt; (b -&gt; c) -&gt; m (a, b) -&gt; m (a, c)</li
 	  ><li class="src short"
 	  ><a href="#v:maybePairs"
 	    >maybePairs</a
@@ -253,6 +257,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
 	    > ()</li
+	  ><li class="src short"
+	  ><a href="#v:maybeWith"
+	    >maybeWith</a
+	    > ::  a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > a -&gt; a</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -285,17 +295,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:mapmapFst" class="def"
-	    >mapmapFst</a
-	    > ::  (a -&gt; c) -&gt; [(a, b)] -&gt; [(c, b)]<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#mapmapFst" class="link"
+	  ><a name="v:mapFstTo" class="def"
+	    >mapFstTo</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Functor"
+	    >Functor</a
+	    > m =&gt; (a -&gt; c) -&gt; m (a, b) -&gt; m (c, b)<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#mapFstTo" class="link"
 	    >Source</a
 	    ></p
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:mapmapSnd" class="def"
-	    >mapmapSnd</a
-	    > ::  (b -&gt; c) -&gt; [(a, b)] -&gt; [(a, c)]<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#mapmapSnd" class="link"
+	  ><a name="v:mapSndTo" class="def"
+	    >mapSndTo</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Functor"
+	    >Functor</a
+	    > m =&gt; (b -&gt; c) -&gt; m (a, b) -&gt; m (a, c)<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#mapSndTo" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -405,7 +419,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		>List.union &quot;cde&quot; &quot;abc&quot;
 </code
 		></strong
-	      >&quot;cdeab&quot;  
+	      >&quot;cdeab&quot;
 </pre
 	    ></div
 	  ></div
@@ -418,7 +432,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Make singleton list. 
+	    >Make singleton list.
 </p
 	    ></div
 	  ></div
@@ -446,8 +460,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><div class="doc"
 	  ><p
 	    >Split list by predicate.
-    If list contains an element that satisfies the predicate,
-    <code
+   If list contains an element that satisfies the predicate,
+   <code
 	      >(<em
 		>before-list</em
 		>, <em
@@ -456,7 +470,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		>after-list</em
 		>)</code
 	      > is returned.
-    Otherwise, original list is returned.
+   Otherwise, original list is returned.
 </p
 	    ><pre class="screen"
 	    ><code class="prompt"
@@ -476,7 +490,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		>splitBy (== '|') &quot;a | b | c&quot;
 </code
 		></strong
-	      >Right (&quot;a &quot;, '|', &quot; b | c&quot;)  
+	      >Right (&quot;a &quot;, '|', &quot; b | c&quot;)
 </pre
 	    ></div
 	  ></div
@@ -501,7 +515,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		>divide '|' &quot;a|bb||ccc|&quot;
 </code
 		></strong
-	      >[&quot;a&quot;, &quot;bb&quot;, &quot;&quot;, &quot;ccc&quot;, &quot;&quot;]  
+	      >[&quot;a&quot;, &quot;bb&quot;, &quot;&quot;, &quot;ccc&quot;, &quot;&quot;]
 </pre
 	    ></div
 	  ></div
@@ -526,7 +540,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		>divideBy (== '|') &quot;a|bb||ccc|&quot;
 </code
 		></strong
-	      >[&quot;a&quot;, &quot;bb&quot;, &quot;&quot;, &quot;ccc&quot;, &quot;&quot;]  
+	      >[&quot;a&quot;, &quot;bb&quot;, &quot;&quot;, &quot;ccc&quot;, &quot;&quot;]
 </pre
 	    ></div
 	  ></div
@@ -553,7 +567,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		>assocOmit &quot;b&quot; [(&quot;a&quot;,1), (&quot;b&quot;,2), (&quot;c&quot;,3)]
 </code
 		></strong
-	      >[(&quot;a&quot;,1), (&quot;c&quot;,3)]  
+	      >[(&quot;a&quot;,1), (&quot;c&quot;,3)]
 </pre
 	    ></div
 	  ></div
@@ -612,7 +626,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		>padRight 10 &quot;abc&quot;
 </code
 		></strong
-	      >&quot;abc       &quot;  
+	      >&quot;abc       &quot;
 </pre
 	    ></div
 	  ></div
@@ -641,7 +655,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		>padLeft 10 &quot;abc&quot;
 </code
 		></strong
-	      >&quot;       abc&quot;  
+	      >&quot;       abc&quot;
 </pre
 	    ></div
 	  ></div
@@ -669,7 +683,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Gather what is gotten by splitter. 
+	    >Gather what is gotten by splitter.
 </p
 	    ></div
 	  ></div
@@ -708,12 +722,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	      >key</em
 	      > [<em
 	      >value</em
-	      >]. 
+	      >].
 </p
 	    ></div
 	  ></div
 	><h1 id="g:5"
-	>I/O
+	>Lookup
 </h1
 	><div class="top"
 	><p class="src"
@@ -748,6 +762,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
 	    >IO</a
 	    > ()<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#putLines" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:maybeWith" class="def"
+	    >maybeWith</a
+	    > ::  a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > a -&gt; a<a href="src/Koshucode-Baala-Base-Prelude-Utility.html#maybeWith" class="link"
 	    >Source</a
 	    ></p
 	  ></div

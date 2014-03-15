@@ -25,24 +25,24 @@
 <a name="line-16"></a>
 <a name="line-17"></a><span class='hs-comment'>-- ----------------------  Height function</span>
 <a name="line-18"></a>
-<a name="line-19"></a><a name="InfixHeight"></a><span class='hs-comment'>{-| Direction and height for binary splitting.
-<a name="line-20"></a> 
-<a name="line-21"></a>    [@Left@ /H/] Splits first the left-most operator,
-<a name="line-22"></a>    and operator height is /H/.
-<a name="line-23"></a>    For example, if the operator @:@ is of @Left 5@,
-<a name="line-24"></a>    an expression @(a : b : c)@ is splitted into @(: a (b : c))@
-<a name="line-25"></a>    and then @(: a (: b c))@.
-<a name="line-26"></a> 
-<a name="line-27"></a>    [@Right@ /H/] Right-most splitting and height /H/.
-<a name="line-28"></a>    For example, if the operator @.@ is of @Right 3@,
-<a name="line-29"></a>    an expression @(a . b . c)@ is splitted into @(. (a . b) c)@
-<a name="line-30"></a>    and then @(. (. a b) c)@.
-<a name="line-31"></a>    An expression @(a . b : c)@ is into @(: (a . b) c)@,
-<a name="line-32"></a>    and then @(: (. a b) c)@.
-<a name="line-33"></a>    Symbols that is not a binary operator like @b@ are of height 0.
-<a name="line-34"></a>    For that reason, heights of expression @(a . b : c)@
-<a name="line-35"></a>    are @(0 3 0 5 0)@
-<a name="line-36"></a> -}</span>
+<a name="line-19"></a><a name="InfixHeight"></a><span class='hs-comment'>-- | Direction and height for binary splitting.</span>
+<a name="line-20"></a><a name="InfixHeight"></a><span class='hs-comment'>--</span>
+<a name="line-21"></a><a name="InfixHeight"></a><span class='hs-comment'>--   [@Left@ /H/] Splits first the left-most operator,</span>
+<a name="line-22"></a><a name="InfixHeight"></a><span class='hs-comment'>--   and operator height is /H/.</span>
+<a name="line-23"></a><a name="InfixHeight"></a><span class='hs-comment'>--   For example, if the operator @:@ is of @Left 5@,</span>
+<a name="line-24"></a><a name="InfixHeight"></a><span class='hs-comment'>--   an expression @(a : b : c)@ is splitted into @(: a (b : c))@</span>
+<a name="line-25"></a><a name="InfixHeight"></a><span class='hs-comment'>--   and then @(: a (: b c))@.</span>
+<a name="line-26"></a><a name="InfixHeight"></a><span class='hs-comment'>--</span>
+<a name="line-27"></a><a name="InfixHeight"></a><span class='hs-comment'>--   [@Right@ /H/] Right-most splitting and height /H/.</span>
+<a name="line-28"></a><a name="InfixHeight"></a><span class='hs-comment'>--   For example, if the operator @.@ is of @Right 3@,</span>
+<a name="line-29"></a><a name="InfixHeight"></a><span class='hs-comment'>--   an expression @(a . b . c)@ is splitted into @(. (a . b) c)@</span>
+<a name="line-30"></a><a name="InfixHeight"></a><span class='hs-comment'>--   and then @(. (. a b) c)@.</span>
+<a name="line-31"></a><a name="InfixHeight"></a><span class='hs-comment'>--   An expression @(a . b : c)@ is into @(: (a . b) c)@,</span>
+<a name="line-32"></a><a name="InfixHeight"></a><span class='hs-comment'>--   and then @(: (. a b) c)@.</span>
+<a name="line-33"></a><a name="InfixHeight"></a><span class='hs-comment'>--   Symbols that is not a binary operator like @b@ are of height 0.</span>
+<a name="line-34"></a><a name="InfixHeight"></a><span class='hs-comment'>--   For that reason, heights of expression @(a . b : c)@</span>
+<a name="line-35"></a><a name="InfixHeight"></a><span class='hs-comment'>--   are @(0 3 0 5 0)@</span>
+<a name="line-36"></a><a name="InfixHeight"></a><span class='hs-comment'>--</span>
 <a name="line-37"></a><a name="InfixHeight"></a><span class='hs-keyword'>type</span> <span class='hs-conid'>InfixHeight</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Either</span> <span class='hs-conid'>Int</span> <span class='hs-conid'>Int</span>
 <a name="line-38"></a>
 <a name="line-39"></a><a name="heightValue"></a><span class='hs-definition'>heightValue</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>InfixHeight</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Int</span>

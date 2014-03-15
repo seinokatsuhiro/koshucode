@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.42.0.0
+@version 0.48.0.0
 
 
 -- | Text lines delimited by carriage returns or line feeds.
@@ -97,7 +97,7 @@ doch :: Pretty a => [a] -> Doc
 --   
 --   <pre>
 --   &gt;&gt;&gt; docBracket $ docColon [True, False]
---   [ #true : #false ]  
+--   [ #true : #false ]
 --   </pre>
 docColon :: Pretty a => [a] -> Doc
 
@@ -105,7 +105,7 @@ docColon :: Pretty a => [a] -> Doc
 --   
 --   <pre>
 --   &gt;&gt;&gt; docWrap "(" ")" "abc"
---   (abc)  
+--   (abc)
 --   </pre>
 docWrap :: Pretty a => String -> String -> a -> Doc
 
@@ -114,7 +114,7 @@ docWrap :: Pretty a => String -> String -> a -> Doc
 --   
 --   <pre>
 --   &gt;&gt;&gt; docWraps "(" ")" "abc"
---   ( abc )  
+--   ( abc )
 --   </pre>
 docWraps :: Pretty a => String -> String -> a -> Doc
 
@@ -159,6 +159,26 @@ data Doc :: *
 --   <a>&lt;&gt;</a> z)</tt>, if <tt>y</tt> non-empty.</li>
 --   </ul>
 ($$) :: Doc -> Doc -> Doc
+
+-- | Nest (or indent) a document by a given number of positions (which may
+--   also be negative). <a>nest</a> satisfies the laws:
+--   
+--   <ul>
+--   <li><pre><a>nest</a> 0 x = x</pre></li>
+--   <li><pre><a>nest</a> k (<a>nest</a> k' x) = <a>nest</a> (k+k')
+--   x</pre></li>
+--   <li><pre><a>nest</a> k (x <a>&lt;&gt;</a> y) = <a>nest</a> k z
+--   <a>&lt;&gt;</a> <a>nest</a> k y</pre></li>
+--   <li><pre><a>nest</a> k (x <a>$$</a> y) = <a>nest</a> k x <a>$$</a>
+--   <a>nest</a> k y</pre></li>
+--   <li><pre><a>nest</a> k <a>empty</a> = <a>empty</a></pre></li>
+--   <li><tt>x <a>&lt;&gt;</a> <a>nest</a> k y = x <a>&lt;&gt;</a> y</tt>,
+--   if <tt>x</tt> non-empty</li>
+--   </ul>
+--   
+--   The side condition on the last law is needed because <a>empty</a> is a
+--   left identity for <a>&lt;&gt;</a>.
+nest :: Int -> Doc -> Doc
 docEmpty :: Doc
 docHang :: Doc -> Int -> Doc -> Doc
 docZero :: String -> Doc
@@ -195,8 +215,8 @@ module Koshucode.Baala.Base.Prelude.Utility
 mapFst :: (a -> c) -> (a, b) -> (c, b)
 mapSnd :: (b -> c) -> (a, b) -> (a, c)
 cons1 :: a -> ([a], b) -> ([a], b)
-mapmapFst :: (a -> c) -> [(a, b)] -> [(c, b)]
-mapmapSnd :: (b -> c) -> [(a, b)] -> [(a, c)]
+mapFstTo :: Functor m => (a -> c) -> m (a, b) -> m (c, b)
+mapSndTo :: Functor m => (b -> c) -> m (a, b) -> m (a, c)
 maybePairs :: [a] -> Maybe [(a, a)]
 front :: [a] -> [a]
 
@@ -212,7 +232,7 @@ unique :: Ord a => [a] -> [a]
 --   
 --   <pre>
 --   &gt;&gt;&gt; List.union "cde" "abc"
---   "cdeab"  
+--   "cdeab"
 --   </pre>
 unionUp :: Eq a => [a] -> [a] -> [a]
 
@@ -232,7 +252,7 @@ isSingleton :: [a] -> Bool
 --   
 --   <pre>
 --   &gt;&gt;&gt; splitBy (== '|') "a | b | c"
---   Right ("a ", '|', " b | c")  
+--   Right ("a ", '|', " b | c")
 --   </pre>
 splitBy :: (a -> Bool) -> [a] -> Either [a] ([a], a, [a])
 
@@ -240,7 +260,7 @@ splitBy :: (a -> Bool) -> [a] -> Either [a] ([a], a, [a])
 --   
 --   <pre>
 --   &gt;&gt;&gt; divide '|' "a|bb||ccc|"
---   ["a", "bb", "", "ccc", ""]  
+--   ["a", "bb", "", "ccc", ""]
 --   </pre>
 divide :: Eq a => a -> [a] -> [[a]]
 
@@ -248,7 +268,7 @@ divide :: Eq a => a -> [a] -> [[a]]
 --   
 --   <pre>
 --   &gt;&gt;&gt; divideBy (== '|') "a|bb||ccc|"
---   ["a", "bb", "", "ccc", ""]  
+--   ["a", "bb", "", "ccc", ""]
 --   </pre>
 divideBy :: (a -> Bool) -> [a] -> [[a]]
 
@@ -256,7 +276,7 @@ divideBy :: (a -> Bool) -> [a] -> [[a]]
 --   
 --   <pre>
 --   &gt;&gt;&gt; assocOmit "b" [("a",1), ("b",2), ("c",3)]
---   [("a",1), ("c",3)]  
+--   [("a",1), ("c",3)]
 --   </pre>
 assocOmit :: Eq k => k -> Map [(k, a)]
 
@@ -268,7 +288,7 @@ maybeEmpty :: Maybe a -> (a -> [b]) -> [b]
 --   
 --   <pre>
 --   &gt;&gt;&gt; padRight 10 "abc"
---   "abc       "  
+--   "abc       "
 --   </pre>
 padRight :: Int -> Map String
 
@@ -276,7 +296,7 @@ padRight :: Int -> Map String
 --   
 --   <pre>
 --   &gt;&gt;&gt; padLeft 10 "abc"
---   "       abc"  
+--   "       abc"
 --   </pre>
 padLeft :: Int -> Map String
 type Gather a b = a -> (b, a)
@@ -291,6 +311,7 @@ gatherToMap :: Ord k => [(k, v)] -> Map k [v]
 putShow :: Show a => a -> IO ()
 putShowLn :: Show a => a -> IO ()
 putLines :: [String] -> IO ()
+maybeWith :: a -> Maybe a -> a
 
 
 -- | Utilities for association lists.
@@ -322,7 +343,7 @@ type Arrange a = [Int] -> Map [a]
 --   
 --   <pre>
 --   &gt;&gt;&gt; "bdk" `sharedIndex` "abcdefg"
---   [1,3]  
+--   [1,3]
 --   </pre>
 sharedIndex :: Eq a => [a] -> [a] -> [Int]
 
@@ -330,7 +351,7 @@ sharedIndex :: Eq a => [a] -> [a] -> [Int]
 --   
 --   <pre>
 --   &gt;&gt;&gt; arrangePick [1,3] "abcdefg"
---   "bd"  
+--   "bd"
 --   </pre>
 arrangePick :: Arrange a
 
@@ -338,7 +359,7 @@ arrangePick :: Arrange a
 --   
 --   <pre>
 --   &gt;&gt;&gt; arrangeCut [1,3] "abcdefg"
---   "acefg"  
+--   "acefg"
 --   </pre>
 arrangeCut :: [Int] -> Map [a]
 
@@ -346,7 +367,7 @@ arrangeCut :: [Int] -> Map [a]
 --   
 --   <pre>
 --   &gt;&gt;&gt; arrangeFore [1,3] "abcdefg"
---   "bdacefg"  
+--   "bdacefg"
 --   </pre>
 arrangeFore :: [Int] -> Map [a]
 
@@ -398,65 +419,6 @@ instance Texts CommentSec
 instance Texts CommentDoc
 
 module Koshucode.Baala.Base.Prelude
-
-
--- | Judgements: a symbolic representations of affirmed or denied
---   statements.
-module Koshucode.Baala.Base.Data.Judge
-
--- | Judgement on type <tt>c</tt>.
---   
---   Judgement (or judge for short) is divided into three parts: logical
---   quality, name of pattern, and argument. Boolean values <a>True</a> or
---   <a>False</a> of logical quality corresponds to affirmed or denied
---   judge. A name of judgement pattern represents certain sentence pattern
---   that gives intepretation of data. Sentence pattern has placeholders
---   filled by <a>Named</a> <tt>c</tt> in argument.
-data Judge c
-Judge :: Bool -> JudgePattern -> [Named c] -> Judge c
-
--- | Name of judgement pattern.
-type JudgePattern = String
-
--- | Sort terms in alphabetical order.
-abcJudge :: Ord c => Map (Judge c)
-
--- | Construct affirmed judgement.
-affirm :: JudgePattern -> [Named c] -> Judge c
-
--- | Construct denied judgement.
-deny :: JudgePattern -> [Named c] -> Judge c
-
--- | Affirm judgement, i.e., change logical quality to <a>True</a>.
-affirmJudge :: Map (Judge c)
-
--- | Deny judgement, i.e., change logical quality to <a>False</a>.
-denyJudge :: Map (Judge c)
-
--- | Test that judgement is affirmd.
-isAffirmed :: Judge c -> Bool
-
--- | Test that judgement is denied.
---   
---   <pre>
---   &gt;&gt;&gt; isDenied $ Judge True "A" []
---   False  
---   </pre>
-isDenied :: Judge c -> Bool
-
--- | Print judges to <a>stdout</a>.
-putJudges :: (Ord c, Pretty c) => Int -> [Judge c] -> IO Int
-
--- | Print judges.
-hPutJudges :: (Ord c, Pretty c) => Handle -> Int -> [Judge c] -> IO Int
-
--- | Convert judgements to lines.
-judgeLines :: (Ord c, Pretty c) => String -> [Judge c] -> [String]
-instance Show c => Show (Judge c)
-instance (Ord c, Pretty c) => Pretty (Judge c)
-instance Functor Judge
-instance Ord c => Ord (Judge c)
-instance Ord c => Eq (Judge c)
 
 
 -- | This module provides a container for tokens. No tokens in Koshucode
@@ -533,7 +495,6 @@ tree :: Show a => GetParenType a -> [a] -> CodeTree a
 
 -- | Convert a list of elements to trees.
 trees :: Show a => GetParenType a -> [a] -> [CodeTree a]
-treeG :: [CodeTree a] -> CodeTree a
 treeWrap :: [CodeTree a] -> CodeTree a
 
 -- | Convert tree to list of tokens.
@@ -631,7 +592,7 @@ tokenPosText :: TokenPos -> String
 tokenPosLineNumber :: TokenPos -> Int
 tokenPosLineText :: TokenPos -> String
 tokenPosColumn :: TokenPos -> Int
-tokenPosDisplay :: TokenPos -> [String]
+tokenPosDisplay :: String -> TokenPos -> [(String, String)]
 tokenPosZero :: TokenPos
 data Resource
 ResourceFile :: String -> Resource
@@ -686,6 +647,7 @@ tokenListing :: TokenListing a => a -> [Token]
 type Termname = String
 type Termname2 = (String, String)
 type Termname3 = (String, String, String)
+type Termname4 = (String, String, String, String)
 tokenWord :: String -> Token
 tokenPos :: Token -> TokenPos
 
@@ -693,7 +655,7 @@ tokenPos :: Token -> TokenPos
 --   
 --   <pre>
 --   &gt;&gt;&gt; let tok = TTerm 20 ["/r", "/x"] in tokenContent tok
---   "/r/x"  
+--   "/r/x"
 --   </pre>
 tokenContent :: Token -> String
 
@@ -703,12 +665,13 @@ tokenContent :: Token -> String
 --   
 --   <pre>
 --   &gt;&gt;&gt; tokenTypeText $ TWord 25 0 "flower"
---   "Word"  
+--   "Word"
 --   </pre>
 tokenTypeText :: Token -> String
 
 -- | Test the token is blank, i.e., <a>TComment</a> or <a>TSpace</a>.
 isBlankToken :: Pred Token
+isShortToken :: Pred Token
 
 -- | Check token is a <a>TOpen</a> of the specific paren.
 --   
@@ -719,7 +682,7 @@ isBlankToken :: Pred Token
 --   
 --   <pre>
 --   &gt;&gt;&gt; let tok = TOpen 0 "{" in isOpenTokenOf "(" tok
---   False 
+--   False
 --   </pre>
 isOpenTokenOf :: String -> Pred Token
 
@@ -748,6 +711,8 @@ type TokenLine = CodeLine Token
 -- | Tokenize text.
 tokenLines :: Resource -> String -> [TokenLine]
 trimLeft :: Map String
+trimRight :: Map String
+trimBoth :: Map String
 
 -- | Split string into list of tokens. Result token list does not contain
 --   newline characters.
@@ -769,6 +734,8 @@ instance Pretty TokenClause
 module Koshucode.Baala.Base.Token.TokenTree
 data Sourced a
 Sourced :: [Token] -> a -> Sourced a
+source :: Sourced a -> [Token]
+unsourced :: Sourced a -> a
 
 -- | Tree of tokens.
 type TokenTree = CodeTree Token
@@ -811,7 +778,7 @@ ttDoc :: [TokenTree] -> Doc
 --   Right ( [ TWord 1 0 "a", TSpace 2 1 ]
 --           , TWord 3 0 "|"
 --           , [ TSpace 4 1, TWord 5 0 "b", TSpace 6 1
---             , TWord 7 0 "|", TSpace 8 1, TWord 9 0 "c" ] )  
+--             , TWord 7 0 "|", TSpace 8 1, TWord 9 0 "c" ] )
 --   </pre>
 splitTokensBy :: Pred String -> [Token] -> Either [Token] ([Token], Token, [Token])
 divideTreesBy :: String -> [TokenTree] -> [[TokenTree]]
@@ -822,7 +789,7 @@ divideTreesBy :: String -> [TokenTree] -> [[TokenTree]]
 --   &gt;&gt;&gt; divideTreesByBar . tokenTrees . tokens $ "a | b | c"
 --   [ [TreeL (TWord 1 0 "a")]
 --   , [TreeL (TWord 5 0 "b")]
---   , [TreeL (TWord 9 0 "c")] ]  
+--   , [TreeL (TWord 9 0 "c")] ]
 --   </pre>
 divideTreesByBar :: [TokenTree] -> [[TokenTree]]
 
@@ -832,7 +799,7 @@ divideTreesByBar :: [TokenTree] -> [[TokenTree]]
 --   &gt;&gt;&gt; divideTreesByColon . tokenTrees . tokens $ "a : b : c"
 --   [ [TreeL (TWord 1 0 "a")]
 --   , [TreeL (TWord 5 0 "b")]
---   , [TreeL (TWord 9 0 "c")] ]  
+--   , [TreeL (TWord 9 0 "c")] ]
 --   </pre>
 divideTreesByColon :: [TokenTree] -> [[TokenTree]]
 instance Show a => Show (Sourced a)
@@ -854,7 +821,7 @@ abortClass :: AbortReasonClass a => a -> String
 abortSymbol :: AbortReasonClass a => a -> String
 abortReason :: AbortReasonClass a => a -> String
 abortDetail :: AbortReasonClass a => a -> [String]
-abortSource :: AbortReasonClass a => a -> [String]
+abortSource :: AbortReasonClass a => a -> [(String, String)]
 
 -- | Command name and its arguments.
 type CommandLine = [String]
@@ -894,17 +861,17 @@ ASUnkWord :: String -> AbortSyntax
 ASUnresToken :: AbortSyntax
 data AbortAnalysis
 AACheckTerms :: [String] -> AbortAnalysis
-AAMalformedOperand :: String -> AbortAnalysis
-AAMissingTermname :: String -> AbortAnalysis
+AAUnexpectedOperand :: String -> AbortAnalysis
+AAReqTermName :: AbortAnalysis
 AANoTerms :: [String] -> AbortAnalysis
-AAOpeandDuplicate :: [String] -> AbortAnalysis
-AAOpeandUnknown :: [String] -> AbortAnalysis
+AAOperandNotFound :: AbortAnalysis
 AAReqBoolean :: String -> AbortAnalysis
 AAReqFlatname :: String -> AbortAnalysis
 AAReqNewTerms :: [String] -> AbortAnalysis
 AAUndefined :: String -> AbortAnalysis
 AAUnkCop :: String -> AbortAnalysis
 AAUnkRelmap :: String -> AbortAnalysis
+AAUnrecTermIO :: [String] -> [Bool] -> AbortAnalysis
 data AbortCalc
 ACDivideByZero :: AbortCalc
 ACUnmatchType :: String -> AbortCalc
@@ -934,9 +901,9 @@ module Koshucode.Baala.Base.Abort.Reason
 -- | Bundle of abort reasons.
 data AbortReason
 AbortIO :: AbortIO -> AbortReason
-AbortSyntax :: [Token] -> AbortSyntax -> AbortReason
-AbortAnalysis :: [Token] -> AbortAnalysis -> AbortReason
-AbortCalc :: [Token] -> AbortCalc -> AbortReason
+AbortSyntax :: [(String, Token)] -> AbortSyntax -> AbortReason
+AbortAnalysis :: [(String, Token)] -> AbortAnalysis -> AbortReason
+AbortCalc :: [(String, Token)] -> AbortCalc -> AbortReason
 
 -- | Abortable result, i.e., either of right result or abort reason.
 type Ab b = Either AbortReason b
@@ -947,22 +914,25 @@ type AbMap b = b -> Ab b
 -- | Push source information when process is aborted.
 --   
 --   <pre>
---   B.ab src $ do ...
+--   B.abortable src $ do ...
 --   </pre>
-ab :: [Token] -> Map (Ab b)
+abortable :: String -> [Token] -> Map (Ab b)
 
--- | Same as <a>ab</a> except for using <a>TokenListing</a> instead of list
---   of <a>Token</a>.
-abFrom :: TokenListing src => src -> Map (Ab b)
+-- | Same as <tt>ab</tt> except for using <a>TokenListing</a> instead of
+--   list of <a>Token</a>.
+abortableFrom :: TokenListing src => String -> src -> Map (Ab b)
+abortableTree :: String -> TokenTree -> Map (Ab b)
+abortableTrees :: String -> [TokenTree] -> Map (Ab b)
 sourcedAbMap :: (a -> Ab b) -> Sourced a -> Ab (Sourced b)
 
 -- | Lookup association list. This function may abort.
 (<!!>) :: [Named b] -> String -> Ab b
-abortMalformedOperand :: String -> AbortReason
+abortOperand :: String -> AbortReason
+abortTermIO :: [String] -> [Bool] -> AbortReason
 abortNotFound :: String -> AbortReason
 
 -- | Stop on error <tt>'bug in koshucode'</tt>
-bug :: a
+bug :: String -> a
 instance Show AbortReason
 instance Eq AbortReason
 instance Ord AbortReason
@@ -1001,7 +971,7 @@ termsIndex :: [Relterm] -> [Termpath] -> [[Int]]
 --   
 --   <pre>
 --   &gt;&gt;&gt; termIndex [Nest "/r" [Term "/a", Term "/b"]] ["/r", "/b"]
---   [0, 1]  
+--   [0, 1]
 --   </pre>
 termIndex :: [Relterm] -> Termpath -> [Int]
 termExist :: [Relterm] -> Termpath -> Bool
@@ -1019,21 +989,24 @@ module Koshucode.Baala.Base.Data.Relhead
 data Relhead
 Relhead :: [Relterm] -> Relhead
 headTerms :: Relhead -> [Relterm]
+headEquiv :: Relhead -> Relhead -> Bool
+headEmpty :: Relhead
 
 -- | Make head from termnames.
 --   
 --   <pre>
 --   &gt;&gt;&gt; headFrom ["/a", "/b"]
---   Relhead [Term "/a", Term "/b"]  
+--   Relhead [Term "/a", Term "/b"]
 --   </pre>
 headFrom :: [Termname] -> Relhead
+headAppend :: [Termname] -> Map Relhead
 headConsTerm :: Relterm -> Map Relhead
 
 -- | Add term to head.
 --   
 --   <pre>
 --   &gt;&gt;&gt; let h = headFrom ["/a", "/b"] in headCons "/c" h
---   Relhead [Term "/c", Term "/a", Term "/b"]  
+--   Relhead [Term "/c", Term "/a", Term "/b"]
 --   </pre>
 headCons :: Termname -> Map Relhead
 headCons2 :: Termname -> Termname -> Map Relhead
@@ -1043,7 +1016,7 @@ headCons3 :: Termname -> Termname -> Termname -> Map Relhead
 --   
 --   <pre>
 --   &gt;&gt;&gt; let h = headFrom ["/a", "/b"] in headChange reverse h
---   Relhead [Term "/b", Term "/a"]  
+--   Relhead [Term "/b", Term "/a"]
 --   </pre>
 headChange :: (Map [Termname]) -> Map Relhead
 
@@ -1051,7 +1024,7 @@ headChange :: (Map [Termname]) -> Map Relhead
 --   
 --   <pre>
 --   &gt;&gt;&gt; let h = headFrom ["/a", "/b"] in headNames h
---   ["/a", "/b"]  
+--   ["/a", "/b"]
 --   </pre>
 headNames :: Relhead -> [Termname]
 
@@ -1059,7 +1032,7 @@ headNames :: Relhead -> [Termname]
 --   
 --   <pre>
 --   &gt;&gt;&gt; let h = headFrom ["/a", "/b"] in headDegree h
---   2  
+--   2
 --   </pre>
 headDegree :: Relhead -> Int
 
@@ -1067,7 +1040,7 @@ headDegree :: Relhead -> Int
 --   
 --   <pre>
 --   &gt;&gt;&gt; let h = headFrom ["/b"] in headKeepTerms h ["/a", "/b", "/c"]
---   ["/b"]  
+--   ["/b"]
 --   </pre>
 headKeepTerms :: Relhead -> Map [Termname]
 
@@ -1075,7 +1048,7 @@ headKeepTerms :: Relhead -> Map [Termname]
 --   
 --   <pre>
 --   &gt;&gt;&gt; let h = headFrom ["/b"] in headDropTerms h ["/a", "/b", "/c"]
---   ["/a","/c"]  
+--   ["/a","/c"]
 --   </pre>
 headDropTerms :: Relhead -> Map [Termname]
 
@@ -1083,7 +1056,7 @@ headDropTerms :: Relhead -> Map [Termname]
 --   
 --   <pre>
 --   &gt;&gt;&gt; let h = headFrom ["/a", "/b"] in headIndex h [["/a"], ["/b"], ["/c"]]
---   [[0], [1], [-1]]  
+--   [[0], [1], [-1]]
 --   </pre>
 headIndex :: Relhead -> [Termpath] -> [[Int]]
 
@@ -1091,13 +1064,13 @@ headIndex :: Relhead -> [Termpath] -> [[Int]]
 --   
 --   <pre>
 --   &gt;&gt;&gt; let h = headFrom ["/a", "/b"] in headIndex1 h ["/a"]
---   [0]  
+--   [0]
 --   </pre>
 headIndex1 :: Relhead -> Termpath -> [Int]
 
 -- | <pre>
 --   &gt;&gt;&gt; headFrom ["/a", "/b"] `isSubhead` headFrom ["/a", "/b", "/c"]
---      True
+--     True
 --   </pre>
 --   
 --   <pre>
@@ -1138,7 +1111,7 @@ posHere :: Relhead -> [Termname] -> ([TermPos], [Bool])
 --   
 --   <pre>
 --   &gt;&gt;&gt; B.headFrom ["/a", "/b", "/c"] `posFor` ["/b", "/c", "/d"]
---   [TermPos "/b" 1, TermPos "/c" 2, TermPos "/d" (-1)]  
+--   [TermPos "/b" 1, TermPos "/c" 2, TermPos "/d" (-1)]
 --   </pre>
 posFor :: Relhead -> [Termname] -> [TermPos]
 
@@ -1146,7 +1119,7 @@ posFor :: Relhead -> [Termname] -> [TermPos]
 --   
 --   <pre>
 --   &gt;&gt;&gt; B.headFrom ["/a", "/b", "/c"] `posFrom` B.headFrom ["/b", "/c", "/d"]
---   [TermPos "/b" 1, TermPos "/c" 2, TermPos "/d" (-1)]  
+--   [TermPos "/b" 1, TermPos "/c" 2, TermPos "/d" (-1)]
 --   </pre>
 posFrom :: Relhead -> Relhead -> [TermPos]
 
@@ -1159,7 +1132,7 @@ posExist :: TermPos -> Bool
 --   
 --   <pre>
 --   &gt;&gt;&gt; posInnerNames [TermPos "/a" (-1), TermPos "/b" 1, TermPos "/c" 2]
---   ["/b", "/c"]  
+--   ["/b", "/c"]
 --   </pre>
 posInnerNames :: [TermPos] -> [Termname]
 
@@ -1167,7 +1140,7 @@ posInnerNames :: [TermPos] -> [Termname]
 --   
 --   <pre>
 --   &gt;&gt;&gt; posOuterNames [TermPos "/a" (-1), TermPos "/b" 1, TermPos "/c" 2]
---   ["/a"]  
+--   ["/a"]
 --   </pre>
 posOuterNames :: [TermPos] -> [Termname]
 
@@ -1175,7 +1148,7 @@ posOuterNames :: [TermPos] -> [Termname]
 --   
 --   <pre>
 --   &gt;&gt;&gt; posSortByName [TermPos "/y" 2, TermPos "/x" 0, TermPos "/z" 1]
---   [TermPos "/x" 0, TermPos "/y" 2, TermPos "/z" 1]  
+--   [TermPos "/x" 0, TermPos "/y" 2, TermPos "/z" 1]
 --   </pre>
 posSortByName :: Map [TermPos]
 
@@ -1183,7 +1156,7 @@ posSortByName :: Map [TermPos]
 --   
 --   <pre>
 --   &gt;&gt;&gt; posSortByIndex [TermPos "/y" 2, TermPos "/x" 0, TermPos "/z" 1]
---   [TermPos "/x" 0, TermPos "/z" 1, TermPos "/y" 2]  
+--   [TermPos "/x" 0, TermPos "/z" 1, TermPos "/y" 2]
 --   </pre>
 posSortByIndex :: Map [TermPos]
 
@@ -1191,7 +1164,7 @@ posSortByIndex :: Map [TermPos]
 --   
 --   <pre>
 --   &gt;&gt;&gt; posPick [TermPos "/b" 1, TermPos "/c" 2] "abcd"
---   "bc"  
+--   "bc"
 --   </pre>
 posPick :: [TermPos] -> Map [c]
 
@@ -1199,7 +1172,7 @@ posPick :: [TermPos] -> Map [c]
 --   
 --   <pre>
 --   &gt;&gt;&gt; posCut [TermPos "/b" 1, TermPos "/c" 2] "abcd"
---   "ad"  
+--   "ad"
 --   </pre>
 posCut :: [TermPos] -> Map [c]
 instance Show TermPos
@@ -1228,13 +1201,16 @@ type Relbody c = [[c]]
 
 -- | Relational version of <a>posHere</a>.
 relPosHere :: Rel c -> [Termname] -> ([TermPos], [Bool])
+relSort :: Ord c => Map (Rel c)
+headArrange :: Relhead -> Relhead -> Map [c]
+bodyArrange :: Relhead -> Relhead -> Map [[c]]
 
 -- | The nullary empty relation. In other words, relational constant that
 --   has no terms and no tuples.
 --   
 --   <pre>
 --   &gt;&gt;&gt; B.doc (reldum :: Rel Bool)
---   {| |}  
+--   {| |}
 --   </pre>
 reldum :: Rel c
 
@@ -1243,13 +1219,13 @@ reldum :: Rel c
 --   
 --   <pre>
 --   &gt;&gt;&gt; B.doc (reldee :: Rel Bool)
---   {| | |}  
+--   {| | |}
 --   </pre>
 reldee :: Rel c
 instance Show c => Show (Rel c)
-instance Eq c => Eq (Rel c)
 instance Ord c => Ord (Rel c)
 instance Pretty c => Pretty (Rel c)
+instance Ord c => Eq (Rel c)
 
 
 -- | Abort symbols
@@ -1286,6 +1262,76 @@ decimalSum :: [Decimal] -> Ab Decimal
 instance Show Decimal
 instance Eq Decimal
 instance Ord Decimal
+
+module Koshucode.Baala.Base.Data.Short
+data Short a
+Short :: [Named String] -> a -> Short a
+shortHead :: Short a -> [Named String]
+shortBody :: Short a -> a
+shortMap :: Functor f => (a -> b) -> [f a] -> [f b]
+shortAb :: Short (Ab a) -> Ab (Short a)
+shortAbList :: Short [Ab a] -> Ab (Short [a])
+shortTrim :: Map ([Short [a]])
+instance Show a => Show (Short a)
+instance Ord a => Ord (Short a)
+instance Eq a => Eq (Short a)
+instance Functor Short
+
+
+-- | Judgements: a symbolic representations of affirmed or denied
+--   statements.
+module Koshucode.Baala.Base.Data.Judge
+
+-- | Judgement on type <tt>c</tt>.
+--   
+--   Judgement (or judge for short) is divided into three parts: logical
+--   quality, name of pattern, and argument. Boolean values <a>True</a> or
+--   <a>False</a> of logical quality corresponds to affirmed or denied
+--   judge. A name of judgement pattern represents certain sentence pattern
+--   that gives intepretation of data. Sentence pattern has placeholders
+--   filled by <a>Named</a> <tt>c</tt> in argument.
+data Judge c
+Judge :: Bool -> JudgePattern -> [Named c] -> Judge c
+
+-- | Name of judgement pattern.
+type JudgePattern = String
+
+-- | Sort terms in alphabetical order.
+abcJudge :: Ord c => Map (Judge c)
+
+-- | Construct affirmed judgement.
+affirm :: JudgePattern -> [Named c] -> Judge c
+
+-- | Construct denied judgement.
+deny :: JudgePattern -> [Named c] -> Judge c
+
+-- | Affirm judgement, i.e., change logical quality to <a>True</a>.
+affirmJudge :: Map (Judge c)
+
+-- | Deny judgement, i.e., change logical quality to <a>False</a>.
+denyJudge :: Map (Judge c)
+
+-- | Test that judgement is affirmd.
+isAffirmed :: Judge c -> Bool
+
+-- | Test that judgement is denied.
+--   
+--   <pre>
+--   &gt;&gt;&gt; isDenied $ Judge True "A" []
+--   False
+--   </pre>
+isDenied :: Judge c -> Bool
+type ShortJudge c = Short [Judge c]
+
+-- | Print judges to <a>stdout</a>.
+putJudges :: (Ord c, Pretty c) => Int -> [Judge c] -> IO Int
+hPutJudges :: (Ord c, Pretty c) => Handle -> ([ShortJudge c], [ShortJudge c]) -> IO Int
+hPutJudgesFlat :: (Ord c, Pretty c) => Handle -> Int -> [Judge c] -> IO Int
+instance Show c => Show (Judge c)
+instance (Ord c, Pretty c) => Pretty (Judge c)
+instance Functor Judge
+instance Ord c => Ord (Judge c)
+instance Ord c => Eq (Judge c)
 
 
 -- | Data on value type <tt>c</tt>

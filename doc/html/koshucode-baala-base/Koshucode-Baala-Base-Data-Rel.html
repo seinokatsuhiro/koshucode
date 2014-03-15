@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.42.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.48.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -66,7 +66,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	>Description</p
 	><div class="doc"
 	><p
-	  >Relation type 
+	  >Relation type
 </p
 	  ></div
 	></div
@@ -115,6 +115,36 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Bool</a
 	    >])</li
 	  ><li class="src short"
+	  ><a href="#v:relSort"
+	    >relSort</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
+	    >Rel</a
+	    > c)</li
+	  ><li class="src short"
+	  ><a href="#v:headArrange"
+	    >headArrange</a
+	    > ::  <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > [c]</li
+	  ><li class="src short"
+	  ><a href="#v:bodyArrange"
+	    >bodyArrange</a
+	    > ::  <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > [[c]]</li
+	  ><li class="src short"
 	  ><a href="#v:reldum"
 	    >reldum</a
 	    > ::  <a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
@@ -146,9 +176,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Relations on type <code
 	      >c</code
 	      >.
-    Relation is consist of heading and body.
-    Body is thoretically a set of tuples,
-    but implemented using list of list.  
+   Relation is consist of heading and body.
+   Body is thoretically a set of tuples,
+   but implemented using list of list.
 </p
 	    ></div
 	  ><div class="subs constructors"
@@ -206,8 +236,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    ><table
 	      ><tr
 		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
-		    >Eq</a
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		    >Ord</a
 		    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
 		    >Eq</a
 		    > (<a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
@@ -258,7 +288,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 			>doc $ rel [&quot;/a&quot;, &quot;/b&quot;] [[10, 20], [30, 40 :: Int]]
 </code
 			></strong
-		      >   {| /a /b | 10 : 20 | 30 : 40 |}  
+		      >  {| /a /b | 10 : 20 | 30 : 40 |}
 </pre
 		    ></td
 		  ></tr
@@ -278,7 +308,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ><div class="doc"
 	  ><p
 	    >Body of relation, i.e., a list of tuples.
-    Tuple is list of contents. 
+   Tuple is list of contents.
 </p
 	    ></div
 	  ></div
@@ -307,6 +337,48 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 </p
 	    ></div
 	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relSort" class="def"
+	    >relSort</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > c =&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
+	    >Rel</a
+	    > c)<a href="src/Koshucode-Baala-Base-Data-Rel.html#relSort" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:headArrange" class="def"
+	    >headArrange</a
+	    > ::  <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > [c]<a href="src/Koshucode-Baala-Base-Data-Rel.html#headArrange" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:bodyArrange" class="def"
+	    >bodyArrange</a
+	    > ::  <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
+	    >Relhead</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > [[c]]<a href="src/Koshucode-Baala-Base-Data-Rel.html#bodyArrange" class="link"
+	    >Source</a
+	    ></p
+	  ></div
 	><h1 id="g:2"
 	>Constant
 </h1
@@ -322,8 +394,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ><div class="doc"
 	  ><p
 	    >The nullary empty relation.
-    In other words, relational constant
-    that has no terms and no tuples.
+   In other words, relational constant
+   that has no terms and no tuples.
 </p
 	    ><pre class="screen"
 	    ><code class="prompt"
@@ -333,7 +405,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		>B.doc (reldum :: Rel Bool)
 </code
 		></strong
-	      >{| |}  
+	      >{| |}
 </pre
 	    ></div
 	  ></div
@@ -349,8 +421,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ><div class="doc"
 	  ><p
 	    >The nullary full relation.
-    In other words, relational constant
-    that has no terms and the empty tuple.
+   In other words, relational constant
+   that has no terms and the empty tuple.
 </p
 	    ><pre class="screen"
 	    ><code class="prompt"
@@ -360,7 +432,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		>B.doc (reldee :: Rel Bool)
 </code
 		></strong
-	      >{| | |}  
+	      >{| | |}
 </pre
 	    ></div
 	  ></div
