@@ -9,29 +9,24 @@
 --   <a>koshu</a> command. <a>koshu</a> reads koshucode data, calculates
 --   it, and writes the result.
 @package koshucode-baala-calculator
-@version 0.39.0.0
+@version 0.48.0.0
 
 module Koshucode.Baala.Toolkit.Library.Version
+version :: Version
 versionString :: String
 
 module Koshucode.Baala.Toolkit.Library.Run
-data SectionSource c
-SectionSource :: Section c -> [String] -> [FilePath] -> SectionSource c
-rootSection :: SectionSource c -> Section c
-textSections :: SectionSource c -> [String]
-fileSections :: SectionSource c -> [FilePath]
-runFiles :: CContent c => SectionSource c -> IO Int
+runFiles :: CContent c => Global c -> SectionBundle c -> IO Int
 
 -- | Read and union sections from files, and run the section.
-hRunFiles :: CContent c => Handle -> SectionSource c -> IO Int
+hRunFiles :: CContent c => Handle -> Global c -> SectionBundle c -> IO Int
 concatMM :: (Monad m, Monoid a) => [m a] -> m a
-runCalc :: CContent c => SectionSource c -> IO Int
-runCalcTo :: CContent c => FilePath -> SectionSource c -> IO Int
+runCalc :: CContent c => CommandLine -> SectionBundle c -> IO Int
+runCalcTo :: CContent c => FilePath -> CommandLine -> SectionBundle c -> IO Int
 theContent :: CContent c => String -> [Named c] -> Maybe c
-readSec :: CContent c => SectionSource c -> IO (AbortOr (Section c))
-readSecList :: CContent c => SectionSource c -> IO (AbortOr [Section c])
+readSec :: CContent c => SectionBundle c -> IO (Ab (Section c))
+readSecList :: CContent c => SectionBundle c -> IO (Ab [Section c])
 mkdir :: FilePath -> IO ()
-instance Show c => Show (SectionSource c)
 
 module Koshucode.Baala.Toolkit.Library.Exit
 prelude :: IO (String, [String])
@@ -55,6 +50,6 @@ module Koshucode.Baala.Toolkit.Main.KoshuMain
 
 -- | The main function for <tt>koshu</tt> command. See <a>vanillaRops</a>
 --   for default argument.
-koshuMain :: CContent c => [Rop c] -> IO Int
+koshuMain :: CContent c => Global c -> IO Int
 instance Show Option
 instance Eq Option
