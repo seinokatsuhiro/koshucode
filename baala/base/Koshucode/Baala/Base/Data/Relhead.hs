@@ -15,8 +15,6 @@ module Koshucode.Baala.Base.Data.Relhead
   headConsTerm,
   headCons, headCons2, headCons3,
   headAppend,
-  headCut,
-  headSubst,
   headChange,
 
   -- * Other functions
@@ -106,12 +104,6 @@ headCons3 (n1, n2, n3) (Relhead ns) =
 
 headAppend :: [B.Termname] -> B.Map Relhead
 headAppend ns he = headFrom ns `M.mappend` he
-
-headCut   :: [B.Termname] -> B.Map Relhead
-headCut   ns he = headFrom $ ns `B.namesCut` headNames he
-
-headSubst :: [B.Termname] -> B.Map Relhead
-headSubst ns he = ns `headAppend` (ns `headCut` he)
 
 -- | Reconstruct head.
 --

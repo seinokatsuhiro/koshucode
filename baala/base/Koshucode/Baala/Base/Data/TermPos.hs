@@ -116,12 +116,12 @@ posSortByIndex = List.sortBy ord where
 --   >>> posPick [TermPos "/b" 1, TermPos "/c" 2] "abcd"
 --   "bc"
 posPick :: [TermPos] -> B.Map [c]
-posPick = B.arrangePick . map posIndex
+posPick = B.snipFrom . map posIndex
 
 -- | Cut contents by positions.
 --
 --   >>> posCut [TermPos "/b" 1, TermPos "/c" 2] "abcd"
 --   "ad"
 posCut :: [TermPos] -> B.Map [c]
-posCut = B.arrangeCut . map posIndex
+posCut = B.snipOff . map posIndex
 

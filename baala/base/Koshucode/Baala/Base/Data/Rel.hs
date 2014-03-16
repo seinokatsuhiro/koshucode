@@ -76,7 +76,7 @@ relSortHead (Rel h1 b1) = Rel h2 b2 where
 headArrange :: B.Relhead -> B.Relhead -> B.Map [c]
 headArrange to from
     | to == from = id
-    | otherwise  = B.arrangePick index
+    | otherwise  = B.snipFrom index
     where
       index = B.posIndex `map` B.posTo from to
 

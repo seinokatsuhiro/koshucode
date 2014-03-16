@@ -31,18 +31,17 @@ consAdd use =
 
 relmapAdd :: (C.CList c, C.CRel c, B.Pretty c)
   => C.RopUse c -> ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.Relmap c
-relmapAdd use = C.relmapFlow use . relkitAdd B.headAppend
+relmapAdd use = C.relmapFlow use . relkitAdd
 
 -- todo: shared term
 relkitAdd :: (C.CList c, C.CRel c, B.Pretty c)
-  => ([B.Termname] -> B.Map B.Relhead)
-  -> ([C.Cop c], [C.NamedCox c], [C.NamedCox c])
+  => ([C.Cop c], [C.NamedCox c], [C.NamedCox c])
   -> C.RelkitCalc c
-relkitAdd _ _ Nothing = Right C.relkitNothing
-relkitAdd headTrans (base, deriv, bodies) (Just he1) = Right kit2 where
+relkitAdd _ Nothing = Right C.relkitNothing
+relkitAdd (base, deriv, bodies) (Just he1) = Right kit2 where
     ns   = map fst bodies   -- term names
     es   = map snd bodies   -- term expression
-    he2  = ns `headTrans` he1
+    he2  = ns `B.headAppend` he1
     kit2 = C.relkitJust he2 $ C.RelkitOneToAbOne False kitf2 []
     kitf2 _ cs1 = do es2 <- C.coxBeta base deriv he1 `mapM` es
                      cs2 <- C.coxRun cs1 `mapM` es2
@@ -62,8 +61,21 @@ consSubst use =
 
 relmapSubst :: (C.CList c, C.CRel c, B.Pretty c)
   => C.RopUse c -> ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.Relmap c
-relmapSubst use = C.relmapFlow use . relkitAdd B.headSubst
+relmapSubst use = C.relmapFlow use . relkitSubst
 
+relkitSubst :: (C.CList c, C.CRel c, B.Pretty c)
+  => ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.RelkitCalc c
+relkitSubst _ Nothing = Right C.relkitNothing
+relkitSubst (base, deriv, bodies) (Just he1) = Right kit2 where
+    (ns, xs)    = unzip bodies                 -- names and expressions
+    ns1         = B.headNames he1              -- term names of input relation
+    ind         = ns `B.snipIndex` ns1         -- indicies for ns on input relation
+    cut         = B.snipOff ind                -- cutting-ns function
+    he2         = B.headFrom $ ns ++ cut ns1   -- heading of output relation
+    kit2        = C.relkitJust he2 $ C.RelkitOneToAbOne True kitf2 []
+    kitf2 _ cs1 = do xs2 <- C.coxBeta base deriv he1 `mapM` xs
+                     cs2 <- C.coxRun cs1 `mapM` xs2
+                     Right $ cs2 ++ cut cs1
 
 
 -- ----------------------  filter

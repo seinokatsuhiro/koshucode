@@ -115,7 +115,7 @@ assertOptionRelmap opt r1 =
 assertOptionFore :: (Ord c) => [B.TokenTree] -> B.AbMap (B.Rel c)
 assertOptionFore opt r1 =
     do ns <- flatnames opt
-       arrangeRelRaw B.arrangeFore B.arrangeFore ns r1
+       arrangeRelRaw B.snipFore B.snipFore ns r1
 
 assertOptionOrder :: (Ord c) => [B.TokenTree] ->  B.AbMap (B.Rel c)
 assertOptionOrder _ r1 = Right r1
@@ -125,9 +125,9 @@ assertOptionJudges _ js = Right js
 
 arrangeRelRaw
     :: (Ord c)
-    => B.Arrange B.Termname  -- ^ Arranger for termnames,
-                             --   e.g., 'B.arrangePick', 'B.arrangeCut', etc
-    -> B.Arrange c           -- ^ Arranger for term contents
+    => B.Snip B.Termname     -- ^ Arranger for termnames,
+                             --   e.g., 'B.snipFrom', 'B.snipOff', etc
+    -> B.Snip c              -- ^ Arranger for term contents
     -> [B.Termname]          -- ^ Names of terms
     -> B.AbMap (B.Rel c)     -- ^ Relation-to-relation mapping
 arrangeRelRaw = arrangeRelUsing id
@@ -135,8 +135,8 @@ arrangeRelRaw = arrangeRelUsing id
 arrangeRelUsing
     :: (Ord c)
     => B.Map [B.TermPos]
-    -> B.Arrange B.Termname
-    -> B.Arrange c
+    -> B.Snip B.Termname
+    -> B.Snip c
     -> [B.Termname]
     -> B.AbMap (B.Rel c)
 arrangeRelUsing sort ha ba ns (B.Rel he1 bo1)

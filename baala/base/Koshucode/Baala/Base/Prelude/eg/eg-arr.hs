@@ -47,8 +47,8 @@ egArrange =
        "arrange"   >>> arr "ab" [2]
 
 arr :: [a] -> [Int] -> ([a], [a], [a], [Int])
-arr x p = ( arrangePick p x
-          , arrangeCut  p x
-          , arrangeFore p x
+arr x p = ( snipFrom p x
+          , snipOff  p x
+          , snipFore p x
           , p )
 

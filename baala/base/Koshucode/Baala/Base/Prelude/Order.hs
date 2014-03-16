@@ -11,9 +11,9 @@ module Koshucode.Baala.Base.Prelude.Order
   gapRankFrom,
 ) where
 
-import qualified Data.List as List
-import qualified Koshucode.Baala.Base.Prelude.Arrange as B
+import qualified Data.List                            as List
 import qualified Koshucode.Baala.Base.Prelude.Class   as B
+import qualified Koshucode.Baala.Base.Prelude.Snip    as B
 import qualified Koshucode.Baala.Base.Prelude.Utility as B
 
 
@@ -72,9 +72,9 @@ sortByNameOrder :: (Ord a, Eq n) => [OrderCap n] -> [n] -> [[a]] -> [([OrderCap 
 sortByNameOrder ords ns xs = sortBy ords2 xs2 where
     ords2 = map sign  ords
     ns2   = map uncap ords
-    p     = ns2 `B.sharedIndex` ns
+    p     = ns2 `B.snipIndex` ns
     xs2   = map f xs
-    f x   = (B.arrangePick p x, x)
+    f x   = (B.snipFrom p x, x)
 
 -- 1223 ranking
 denseRankFrom :: (Ord a, Integral r) => r -> [a] -> [r]

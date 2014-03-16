@@ -30,7 +30,7 @@ relmapPick :: (Ord c) => C.RopUse c -> [B.Termname] -> C.Relmap c
 relmapPick use = C.relmapFlow use . relkitPick
 
 relkitPick :: [B.Termname] -> C.RelkitCalc c
-relkitPick = relkitArrange B.arrangePick B.arrangePick
+relkitPick = relkitArrange B.snipFrom B.snipFrom
 
 consCut :: (Ord c) => C.RopCons c
 consCut use =
@@ -41,11 +41,11 @@ relmapCut :: (Ord c) => C.RopUse c -> [B.Termname] -> C.Relmap c
 relmapCut use = C.relmapFlow use . relkitCut
 
 relkitCut :: [B.Termname] -> C.RelkitCalc c
-relkitCut = relkitArrange B.arrangeCut B.arrangeCut
+relkitCut = relkitArrange B.snipOff B.snipOff
 
 relkitArrange
-    :: B.Arrange B.Termname
-    -> B.Arrange c
+    :: B.Snip B.Termname
+    -> B.Snip c
     -> [B.Termname]
     -> C.RelkitCalc c
 relkitArrange _ _ _ Nothing = Right C.relkitNothing
