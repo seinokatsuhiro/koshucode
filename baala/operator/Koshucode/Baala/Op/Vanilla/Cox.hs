@@ -102,7 +102,7 @@ relkitFilter (which, base, deriv, body) (Just he1) = Right kit2 where
                c <- C.coxRun cs1 e
                case C.isBool c of
                  True  -> Right $ C.gBool c == which
-                 False -> Left $ B.AbortAnalysis [] $ B.AAReqBoolean ""
+                 False -> Left $ B.abortBy $ B.AbortAnalysis [] $ B.AAReqBoolean ""
 
 
 -- ----------------------  alpha

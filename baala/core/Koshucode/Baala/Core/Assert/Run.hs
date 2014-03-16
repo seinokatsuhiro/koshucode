@@ -43,7 +43,7 @@ justRelhead = just "unknown relhead"
 
 just :: String -> Maybe a -> B.Ab a
 just _ (Just h) = Right h
-just s Nothing  = Left $ B.AbortAnalysis [] $ B.AAUndefined s
+just s Nothing  = Left $ B.abortBy $ B.AbortAnalysis [] $ B.AAUndefined s
 
 -- ----------------------  Assert
 
@@ -75,7 +75,7 @@ optionUnkCheck ns xs =
     let rest = B.assocOmitAll ("" : ns) xs
     in if null rest
        then Right ()
-       else Left $ B.AbortSyntax [] $ B.ASUnkWord (fst . head $ rest)
+       else Left $ B.abortBy $ B.AbortSyntax [] $ B.ASUnkWord (fst . head $ rest)
 
 -- | Get term name as string only if term is flat.
 flatname :: B.TokenTree -> Maybe B.Termname
@@ -86,7 +86,7 @@ flatnames :: [B.TokenTree] -> B.Ab [B.Termname]
 flatnames trees =
     case mapM flatname trees of
       Just ns -> Right ns
-      Nothing -> Left $ B.AbortAnalysis [] $ B.AAReqTermName
+      Nothing -> Left $ B.abortBy $ B.AbortAnalysis [] $ B.AAReqTermName
 
 
 
@@ -141,7 +141,7 @@ arrangeRelUsing
     -> B.AbMap (B.Rel c)
 arrangeRelUsing sort ha ba ns (B.Rel he1 bo1)
     | null non   = Right $ B.Rel he2 bo2
-    | otherwise  = Left  $ B.AbortAnalysis [] (B.AANoTerms non)
+    | otherwise  = Left  $ B.abortBy $ B.AbortAnalysis [] (B.AANoTerms non)
     where
       non  =  B.headDropTerms he1 ns
 

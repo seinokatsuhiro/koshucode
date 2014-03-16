@@ -4,7 +4,9 @@
 -- | Bundle of abort reasons
 
 module Koshucode.Baala.Base.Abort.Reason
-( AbortReason (..),
+( AbortReason2 (..),
+  AbortBy (..),
+  AbortReason (..),
   Ab, AbMap,
   abortable, abortableFrom,
   abortableTree, abortableTrees,
@@ -24,6 +26,23 @@ import qualified Koshucode.Baala.Base.Abort.EachReason as B
 
 
 
+class AbortBy a where
+    abortBy :: a -> AbortReason2
+
+data AbortReason2 = AbortReason2
+    { abortSymbol2 :: String
+    , abortReason2 :: String
+    , abortDetail2 :: [String]
+    , abortSource2 :: [(String, B.Token)]
+    } deriving (Show, Eq, Ord)
+
+instance B.AbortReasonClass AbortReason2 where
+    abortSymbol = abortSymbol2
+    abortReason = abortReason2
+    abortDetail = abortDetail2
+    abortSource = source . abortSource2
+
+
 -- | Bundle of abort reasons.
 data AbortReason
     = AbortIO                 B.AbortIO
@@ -31,6 +50,15 @@ data AbortReason
     | AbortAnalysis [(String, B.Token)] B.AbortAnalysis
     | AbortCalc     [(String, B.Token)] B.AbortCalc
       deriving (Show, Eq, Ord)
+
+instance AbortBy AbortReason where
+    abortBy a =
+        AbortReason2
+        { abortSymbol2 = B.abortSymbol a
+        , abortReason2 = B.abortReason a
+        , abortDetail2 = B.abortDetail a
+        , abortSource2 = []
+        }
 
 instance B.Name AbortReason where
     name = B.abortSymbol
@@ -40,11 +68,6 @@ instance B.AbortReasonClass AbortReason where
     abortSymbol (AbortSyntax   _ a)  =  B.abortSymbol a
     abortSymbol (AbortAnalysis _ a)  =  B.abortSymbol a
     abortSymbol (AbortCalc     _ a)  =  B.abortSymbol a
-
-    abortClass  (AbortIO         a)  =  B.abortClass a
-    abortClass  (AbortSyntax   _ a)  =  B.abortClass a
-    abortClass  (AbortAnalysis _ a)  =  B.abortClass a
-    abortClass  (AbortCalc     _ a)  =  B.abortClass a
 
     abortReason (AbortIO         a)  =  B.abortReason a
     abortReason (AbortSyntax   _ a)  =  B.abortReason a
@@ -62,7 +85,7 @@ instance B.AbortReasonClass AbortReason where
     abortSource _ = []
 
 -- | Abortable result, i.e., either of right result or abort reason.
-type Ab b = Either AbortReason b
+type Ab b = Either AbortReason2 b
 
 -- | Abortable mapping.
 type AbMap b = b -> Ab b
@@ -93,17 +116,13 @@ abortableTrees tag tree = abortable tag $ treeToken $ B.treeWrap tree
 treeToken :: B.CodeTree a -> [a]
 treeToken = B.front . B.untree
 
-pushSource :: String -> [B.Token] -> B.Map AbortReason
-pushSource name src1 abort =
-    case abort of
-      (AbortSyntax   src2 a) -> AbortSyntax   (namedSrc1 ++ src2) a
-      (AbortAnalysis src2 a) -> AbortAnalysis (namedSrc1 ++ src2) a
-      (AbortCalc     src2 a) -> AbortCalc     (namedSrc1 ++ src2) a
-      _ -> abort
+pushSource :: String -> [B.Token] -> B.Map AbortReason2
+pushSource name src1 abort@AbortReason2 { abortSource2 = src2 } =
+    abort { abortSource2 = namedSrc1 ++ src2 }
     where
       namedSrc1 = map (name,) src1
 
-pushSourceFrom :: (B.TokenListing a) => String -> a -> B.Map AbortReason
+pushSourceFrom :: (B.TokenListing a) => String -> a -> B.Map AbortReason2
 pushSourceFrom name = pushSource name . B.tokenListing
 
 sourcedAbMap :: (a -> Ab b) -> B.Sourced a -> Ab (B.Sourced b)
@@ -119,14 +138,14 @@ sourcedAbMap f (B.Sourced src x) =
     loop ((k,v) : kvs) | k == key  = Right v
                        | otherwise = loop kvs
 
-abortOperand :: String -> AbortReason
-abortOperand = AbortAnalysis [] . B.AAUnexpectedOperand
+abortOperand :: String -> AbortReason2
+abortOperand = abortBy . AbortAnalysis [] . B.AAUnexpectedOperand
 
-abortTermIO :: [String] -> [Bool] -> AbortReason
-abortTermIO ns here = AbortAnalysis [] $ B.AAUnrecTermIO ns here
+abortTermIO :: [String] -> [Bool] -> AbortReason2
+abortTermIO ns here = abortBy $ AbortAnalysis [] $ B.AAUnrecTermIO ns here
 
-abortNotFound :: String -> AbortReason
-abortNotFound = AbortCalc [] . B.ACNotFound
+abortNotFound :: String -> AbortReason2
+abortNotFound = abortBy . AbortCalc [] . B.ACNotFound
 
 -- | Stop on error @'bug in koshucode'@
 bug :: String -> a

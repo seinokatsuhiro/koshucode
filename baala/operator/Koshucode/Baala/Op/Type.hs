@@ -68,7 +68,7 @@ instance C.CContent VContent where
     appendContent (VNil) x = Right x
     appendContent x (VNil) = Right x
     appendContent (VText x) (VText y) = Right . VText $ x ++ y
-    appendContent x y = Left $ B.AbortCalc [] $ B.ACUnmatchType (show (x, y))
+    appendContent x y = Left $ B.abortBy $ B.AbortCalc [] $ B.ACUnmatchType (show (x, y))
 
 -- | >>> B.doc $ VText "abc"
 --   'abc

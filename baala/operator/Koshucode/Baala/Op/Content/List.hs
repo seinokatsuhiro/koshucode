@@ -78,8 +78,8 @@ copLength = op where
                  | C.isRel c   = Right . C.pDecFromInt $ length (B.relBody $ C.gRel c)
     op xs = typeUnmatch xs
 
-typeUnmatch :: C.PrimContent a => [B.Ab a] -> Either B.AbortReason b
-typeUnmatch _ = Left $ B.AbortCalc [] $ B.ACUnmatchType []
+typeUnmatch :: C.PrimContent a => [B.Ab a] -> B.Ab b
+typeUnmatch _ = Left $ B.abortBy $ B.AbortCalc [] $ B.ACUnmatchType []
 
 
 

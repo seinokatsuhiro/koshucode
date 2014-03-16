@@ -56,8 +56,8 @@ relmapConsLex lxs = consLex where
          case B.divideTreesByBar trees of
            [(B.TreeL tok@(B.TWord _ 0 _) : od)] -> find tok od
            [[B.TreeB 1 _ xs]] -> consLex xs
-           [[B.TreeB _ _ _]]  -> Left $ B.AbortAnalysis [] $ B.AAUndefined "bracket"
-           [_]                -> Left $ B.AbortAnalysis [] $ B.AAUnkRelmap "?"
+           [[B.TreeB _ _ _]]  -> Left $ B.abortBy $ B.AbortAnalysis [] $ B.AAUndefined "bracket"
+           [_]                -> Left $ B.abortBy $ B.AbortAnalysis [] $ B.AAUnkRelmap "?"
            tree2              -> find (B.tokenWord "append") $ map B.treeWrap tree2
 
     find :: B.Token -> [B.TokenTree] -> B.Ab C.Lexmap

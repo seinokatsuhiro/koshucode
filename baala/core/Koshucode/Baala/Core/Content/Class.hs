@@ -58,7 +58,7 @@ getAbAb :: PrimContent c => (c -> Bool) -> (c -> b) -> B.Ab c -> B.Ab b
 getAbAb _ _ (Left reason) =  Left reason
 getAbAb is get (Right x)
     | is x = Right $ get x
-    | otherwise = Left $ B.AbortCalc [] $ B.ACUnmatchType (typename x)
+    | otherwise = Left $ B.abortBy $ B.AbortCalc [] $ B.ACUnmatchType (typename x)
 
 
 

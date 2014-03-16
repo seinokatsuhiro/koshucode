@@ -32,7 +32,7 @@ readSection root res = dispatch res where
     dispatch (B.ResourceFile path)
         = do exist <- Dir.doesFileExist path
              case exist of
-               False -> return $ Left $ B.AbortIO $ B.AIONoFile path
+               False -> return $ Left $ B.abortBy $ B.AbortIO $ B.AIONoFile path
                True  -> do code <- readFile path
                            return $ readSectionCode root res code
 

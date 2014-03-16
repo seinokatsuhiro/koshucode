@@ -16,8 +16,6 @@ import qualified Koshucode.Baala.Base.Token   as B
 
 -- | Class that represents abort reason.
 class (Show a) => AbortReasonClass a where
-    abortClass   :: a -> String
-
     abortSymbol  :: a -> String
     abortSymbol  = head . words . show
 

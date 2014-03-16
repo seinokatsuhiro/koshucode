@@ -42,7 +42,7 @@ copsArith =
 copDec :: (Show c, C.CText c, C.CDec c) => B.Ab c -> B.Ab B.Decimal
 copDec (Right c) | C.isDec  c = Right $ C.gDec c
                  | C.isText c = B.litDecimal $ C.gText c
-copDec x = Left $ B.AbortSyntax [] $ B.ASNotNumber (show x)
+copDec x = Left $ B.abortBy $ B.AbortSyntax [] $ B.ASNotNumber (show x)
 
 copPlus :: (C.CText c, C.CDec c) => C.CopFun c
 copPlus xs = fmap C.pDec $ loop xs where

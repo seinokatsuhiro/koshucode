@@ -116,7 +116,7 @@ relmapSpecialize global rdef = spec [] where
 
               C.RelmapLink lx n ->
                   post lx $ case lookup n rdef of
-                     Nothing    -> Left $ B.AbortAnalysis [] $ B.AAUnkRelmap n
+                     Nothing    -> Left $ B.abortBy $ B.AbortAnalysis [] $ B.AAUnkRelmap n
                      Just rmap1 -> link n rmap1 (he1, C.relmapLexList rmap1)
 
         post :: C.Lexmap -> B.Map (B.Ab ([C.RelkitDef c], C.Relkit c))

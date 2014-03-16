@@ -73,7 +73,7 @@ relkitMember _ Nothing = Right C.relkitNothing
 relkitMember (x, xs) he1'@(Just he1) = kit2 where
     kit2 | xHere     && xsHere = relkitMemberCheck  xPos xsPos he1'
          | not xHere && xsHere = relkitMemberExpand x    xsPos he1'
-         | otherwise           = Left $ B.AbortAnalysis [] (B.AANoTerms [x, xs])
+         | otherwise           = Left $ B.abortBy $ B.AbortAnalysis [] (B.AANoTerms [x, xs])
     ([xPos, xsPos], [xHere, xsHere])
         = he1 `B.posHere` [x, xs]
 

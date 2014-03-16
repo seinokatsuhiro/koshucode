@@ -24,8 +24,6 @@ data AbortIO
       deriving (Show, Eq, Ord)
 
 instance B.AbortReasonClass AbortIO where
-    abortClass _ = "I/O ERROR"
-
     abortReason a = case a of
         (AIONoFile _)  -> "File not found"
 
@@ -47,8 +45,6 @@ data AbortSyntax
       deriving (Show, Eq, Ord)
 
 instance B.AbortReasonClass AbortSyntax where
-    abortClass _ = "SYNTAX ERROR"
-
     abortReason a = case a of
         (ASAmbInfixes _)     -> "Ambiguous infix operators"
         (ASNotNumber _)      -> "Can't read as number"
@@ -88,8 +84,6 @@ data AbortAnalysis
       deriving (Show, Eq, Ord)
 
 instance B.AbortReasonClass AbortAnalysis where
-    abortClass _ = "ANALYSIS ERROR"
-
     abortReason a = case a of
         (AACheckTerms _)        -> "check-term failed"
         (AAUnexpectedOperand _) -> "Unexpected operand"
@@ -136,8 +130,6 @@ data AbortCalc
       deriving (Show, Eq, Ord)
 
 instance B.AbortReasonClass AbortCalc where
-    abortClass _ = "CALC ERROR"
-
     abortReason a = case a of
         (ACDivideByZero)      -> "Divide by zero"
         (ACUnmatchType _)     -> "Type unmatch"

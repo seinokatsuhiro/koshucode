@@ -175,7 +175,7 @@ cox = expr where
 
     -- literal composite
     core tree@(B.TreeB n _ _) | n > 1 = fmap CoxLit $ C.litContent tree
-    core (B.TreeB n _ _) = Left $ B.AbortSyntax [] $ B.ASUnkCox $ show n
+    core (B.TreeB n _ _) = Left $ B.abortBy $ B.AbortSyntax [] $ B.ASUnkCox $ show n
 
 -- convert from infix to prefix
 prefix :: [B.Named B.InfixHeight] -> B.AbMap (B.TokenTree)
@@ -183,7 +183,7 @@ prefix htab tree =
     B.abortableTree "prefix" tree $
      case B.infixToPrefix ht tree of
        Right tree3 -> Right $ B.undouble (== 1) tree3
-       Left  xs    -> Left  $ B.AbortSyntax [] $ B.ASAmbInfixes $ map detail xs
+       Left  xs    -> Left  $ B.abortBy $ B.AbortSyntax [] $ B.ASAmbInfixes $ map detail xs
     where
       ht = B.infixHeight wordText htab
 
@@ -217,7 +217,7 @@ syntax syn = expand where
         case B.divideTreesBy "|" trees of
           [vars, b1] -> do b2 <- expand $ B.treeWrap b1
                            Right $ B.TreeB 6 p [B.treeWrap vars, b2]
-          _ -> Left $ B.AbortSyntax [] $ B.ASUnkCox "abstruction"
+          _ -> Left $ B.abortBy $ B.AbortSyntax [] $ B.ASUnkCox "abstruction"
     expand tree = Right tree
 
 
@@ -270,7 +270,7 @@ position h = spos where
         let index = B.headIndex1 h ns
         in if all (>= 0) index
            then Right $ CoxTerm ns index
-           else Left  $ B.AbortAnalysis [] (B.AANoTerms ns)
+           else Left  $ B.abortBy $ B.AbortAnalysis [] (B.AANoTerms ns)
     pos (CoxApplyL f xs) = do f'  <- spos f
                               xs' <- mapM spos xs
                               Right $ CoxApplyL f' xs'
@@ -317,7 +317,7 @@ checkIrreducible :: Cox c -> B.Ab (Cox c)
 checkIrreducible e@(B.Sourced src _)
     | irreducible e = Right e
     | otherwise     = B.abortable "irrep" src $
-                      Left $ B.AbortSyntax [] $ B.ASUnkCox "Not irreducible"
+                      Left $ B.abortBy $ B.AbortSyntax [] $ B.ASUnkCox "Not irreducible"
 
 -- irreducible representation
 irreducible :: Cox c -> Bool
