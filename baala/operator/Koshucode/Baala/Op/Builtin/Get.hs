@@ -79,13 +79,13 @@ getTrees :: RopGet c [B.TokenTree]
 getTrees u name =
     case lookupOperand name u of
       Just trees -> Right trees
-      Nothing    -> Left $ B.abortBy $ B.AbortAnalysis [] $ B.AAOperandNotFound
+      Nothing    -> Left $ B.abortBy B.AAOperandNotFound
 
 getWordTrees :: RopGet c [B.Named B.TokenTree]
 getWordTrees u name =
     case lookupOperand name u of
       Just trees -> wordTrees trees
-      Nothing    -> Left $ B.abortBy $ B.AbortAnalysis [] $ B.AAOperandNotFound
+      Nothing    -> Left $ B.abortBy B.AAOperandNotFound
 
 wordTrees :: [B.TokenTree] -> B.Ab [B.Named B.TokenTree]
 wordTrees []  = Right []

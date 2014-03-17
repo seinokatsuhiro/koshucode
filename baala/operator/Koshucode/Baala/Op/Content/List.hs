@@ -79,7 +79,7 @@ copLength = op where
     op xs = typeUnmatch xs
 
 typeUnmatch :: C.PrimContent a => [B.Ab a] -> B.Ab b
-typeUnmatch _ = Left $ B.abortBy $ B.AbortCalc [] $ B.ACUnmatchType []
+typeUnmatch _ = Left $ B.abortBy $ B.ACUnmatchType []
 
 
 

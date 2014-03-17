@@ -3,7 +3,9 @@
 -- | Class for abort reasons
 
 module Koshucode.Baala.Base.Abort.Class
-( AbortReasonClass (..),
+( AbortReason (..),
+  abortSymbolGet,
+  AbortBy (..),
   CommandLine,
   abortableIO,
 ) where
@@ -14,40 +16,43 @@ import qualified Koshucode.Baala.Base.Token   as B
 
 
 
--- | Class that represents abort reason.
-class (Show a) => AbortReasonClass a where
-    abortSymbol  :: a -> String
-    abortSymbol  = head . words . show
+class AbortBy a where
+    abortBy :: a -> AbortReason
 
-    abortReason  :: a -> String
-    abortReason _ = ""
+data AbortReason = AbortReason
+    { abortSymbol :: String
+    , abortReason :: String
+    , abortDetail :: [String]
+    , abortSource :: [(String, B.Token)]
+    } deriving (Show, Eq, Ord)
 
-    abortDetail  :: a -> [String]
-    abortDetail _ = []
+abortSymbolGet :: (Show a) => a -> String
+abortSymbolGet = head . words . show
 
-    abortSource  :: a -> [(String, String)]
-    abortSource _ = []
+source :: [(String, B.Token)] -> [(String, String)]
+source = concatMap f . reverse where
+    f :: (String, B.Token) -> [(String, String)]
+    f (tag, token) = B.tokenPosDisplay tag $ B.tokenPos token
 
 -- | Command name and its arguments.
 type CommandLine = [String]
 
 -- | Abortable process.
 abortableIO
-    :: (AbortReasonClass a)
-    => CommandLine  -- ^ Command line
+    :: CommandLine  -- ^ Command line
     -> (b -> IO c)  -- ^ I/O function
-    -> Either a b   -- ^ Argument of the function
+    -> Either AbortReason b   -- ^ Argument of the function
     -> IO c         -- ^ Result of the function
 abortableIO = either . abort
 
 -- | Stop program execution abnormally.
-abort :: (AbortReasonClass a) => CommandLine -> a -> IO c
+abort :: CommandLine -> AbortReason -> IO c
 abort cmd a =
   do B.putCommentLines $ messageLines cmd a
      B.putCommentLines ["Exit with status 2", ""]
      Sys.exitWith $ Sys.ExitFailure 2
 
-messageLines :: (AbortReasonClass a) => CommandLine -> a -> [String]
+messageLines :: CommandLine -> AbortReason -> [String]
 messageLines cmd a = map B.trimRight texts where
     texts  = sandwich "" "" $ B.renderTable " " tab
     tab    = B.alignTable $ title : rule : rows
@@ -58,7 +63,7 @@ messageLines cmd a = map B.trimRight texts where
     p text = (text, "")
     rows   = concatMap row
              [ ("Detail"  , map p $ abortDetail a)
-             , ("Source"  ,         abortSource a)
+             , ("Source"  , source $ abortSource a)
              , ("Command" , map p $ cmd)
              , ("Symbol"  , map p $ [abortSymbol a])
              ]

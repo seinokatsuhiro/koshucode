@@ -183,7 +183,7 @@ relkitRun (B.Sourced src core) bo1 =
                  B.abortable "run" src1 $ kitb2 `relkitRun` bo2
 
        RelkitLink _ _ (Just kitb2) -> relkitRun kitb2 bo1
-       RelkitLink n _ (Nothing)    -> Left $ B.abortBy $ B.AbortAnalysis [] $ B.AAUnkRelmap n
+       RelkitLink n _ (Nothing)    -> Left $ B.abortBy $ B.AAUnkRelmap n
 
     where
       bmaps = map relkitRun

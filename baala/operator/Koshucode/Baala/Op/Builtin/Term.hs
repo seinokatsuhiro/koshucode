@@ -16,8 +16,8 @@ import qualified Koshucode.Baala.Core as C
 
 -- ----------------------  Term
 
-abortReqTermName :: B.AbortReason2
-abortReqTermName = B.abortBy $ B.AbortAnalysis [] $ B.AAReqTermName
+abortReqTermName :: B.AbortReason
+abortReqTermName = B.abortBy B.AAReqTermName
 
 {-| Extract a term name. -}
 termname :: B.TokenTree -> B.Ab B.Termname

@@ -39,9 +39,6 @@ copsLogic =
     , C.CopSyn  "if"    synIf
     ]
 
--- typeUnmatch :: (C.PrimContent a) => [a] -> B.Ab b
--- typeUnmatch xs = Left $ B.AbortCalc [] $ B.ACUnmatchType (concatMap C.typename xs)
-
 cop1 :: (C.CBool c) => (Bool -> Bool) -> C.CopFun c
 cop1 p arg =
     do xc <- C.getArg1 arg
