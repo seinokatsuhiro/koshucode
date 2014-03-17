@@ -26,6 +26,7 @@ module Koshucode.Baala.Core.Content.Cox
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Core.Content.Class     as C
 import qualified Koshucode.Baala.Core.Content.Extension as C
+import qualified Koshucode.Baala.Core.Abort             as Abort
 
 
 -- ----------------------  expressions and operators
@@ -175,7 +176,7 @@ cox = expr where
 
     -- literal composite
     core tree@(B.TreeB n _ _) | n > 1 = fmap CoxLit $ C.litContent tree
-    core (B.TreeB n _ _) = Left $ B.abortBy $ B.ASUnkCox $ show n
+    core (B.TreeB n _ _) = Abort.unkCox $ show n
 
 -- convert from infix to prefix
 prefix :: [B.Named B.InfixHeight] -> B.AbMap (B.TokenTree)
@@ -183,7 +184,7 @@ prefix htab tree =
     B.abortableTree "prefix" tree $
      case B.infixToPrefix ht tree of
        Right tree3 -> Right $ B.undouble (== 1) tree3
-       Left  xs    -> Left  $ B.abortBy $ B.ASAmbInfixes $ map detail xs
+       Left  xs    -> Abort.ambInfixes $ map detail xs
     where
       ht = B.infixHeight wordText htab
 
@@ -217,7 +218,7 @@ syntax syn = expand where
         case B.divideTreesBy "|" trees of
           [vars, b1] -> do b2 <- expand $ B.treeWrap b1
                            Right $ B.TreeB 6 p [B.treeWrap vars, b2]
-          _ -> Left $ B.abortBy $ B.ASUnkCox "abstruction"
+          _ -> Abort.unkCox "abstruction"
     expand tree = Right tree
 
 
@@ -317,7 +318,7 @@ checkIrreducible :: Cox c -> B.Ab (Cox c)
 checkIrreducible e@(B.Sourced src _)
     | irreducible e = Right e
     | otherwise     = B.abortable "irrep" src $
-                      Left $ B.abortBy $ B.ASUnkCox "Not irreducible"
+                      Abort.unkCox "Not irreducible"
 
 -- irreducible representation
 irreducible :: Cox c -> Bool

@@ -3,79 +3,19 @@
 -- | Abort reasons
 
 module Koshucode.Baala.Base.Abort.EachReason
-( -- * I/O
-  AbortIO (..),
-  -- * Syntax
-  AbortSyntax (..),
-  -- * Analysis
+( -- * Analysis
   AbortAnalysis (..),
-  -- * Calculation
-  AbortCalc (..),
+  -- * Base
+  AbortBase (..),
   abortNotFound,
+  divideByZero,
+  heteroDecimal,
+  notNumber,
   (<!!>),
 ) where
 
 import qualified Koshucode.Baala.Base.Prelude       as B
 import qualified Koshucode.Baala.Base.Abort.Message as B
-
-
-
--- ----------------------  I/O Error
-
-data AbortIO
-    = AIONoFile String
-      deriving (Show, Eq, Ord)
-
-instance B.AbortBy AbortIO where
-    abortBy a = B.AbortReason
-                { B.abortSymbol = B.abortSymbolGet a
-                , B.abortReason = r a
-                , B.abortDetail = d a
-                , B.abortSource = []
-                } where
-
-        r (AIONoFile _)     = "File not found"
-
-        d (AIONoFile path)  = [path]
-
-
-
--- ----------------------  Syntax Error
-
-data AbortSyntax
-    = ASAmbInfixes [String]     -- ^ Ambiguous infix operators
-    | ASNotNumber  String       -- ^ Can't read as number
-    | ASNotText    String       -- ^ Can't read as text
-    | ASOddRelation             -- ^ Odd relation literal
-    | ASUnkClause               -- ^ Unknown clause
-    | ASUnkCox     String       -- ^ Unknown expression
-    | ASUnkWord    String       -- ^ Unknown word
-    | ASUnresToken              -- ^ Unresolved prefix
-      deriving (Show, Eq, Ord)
-
-instance B.AbortBy AbortSyntax where
-    abortBy a = B.AbortReason
-                { B.abortSymbol = B.abortSymbolGet a
-                , B.abortReason = r a
-                , B.abortDetail = d a
-                , B.abortSource = []
-                } where
-
-        r (ASAmbInfixes _)     = "Ambiguous infix operators"
-        r (ASNotNumber _)      = "Can't read as number"
-        r (ASNotText _)        = "Can't read as text"
-        r (ASOddRelation)      = "Odd relation literal"
-        r (ASUnkClause)        = "Unknown clause"
-        r (ASUnkCox _)         = "Unknown expression"
-        r (ASUnkWord _)        = "Unknown word"
-        r (ASUnresToken)       = "Unresolved prefix"
-
-        d (ASAmbInfixes ops)   = ops
-        d (ASNotNumber s)      = [s]
-        d (ASNotText s)        = [s]
-        d (ASUnkCox s)         = [s]
-        d (ASUnkWord s)        = [s]
-        d _                    = []
 
 
 
@@ -140,14 +80,15 @@ termIO (n, False) = n ++ " out"
 
 -- ----------------------  Calc Error
 
-data AbortCalc
+data AbortBase
     = ACDivideByZero
     | ACUnmatchType   String
     | ACHeteroDecimal String String
     | ACNotFound      String
+    | ASNotNumber  String
       deriving (Show, Eq, Ord)
 
-instance B.AbortBy AbortCalc where
+instance B.AbortBy AbortBase where
     abortBy a = B.AbortReason
                 { B.abortSymbol = B.abortSymbolGet a
                 , B.abortReason = r a
@@ -159,12 +100,30 @@ instance B.AbortBy AbortCalc where
         r (ACUnmatchType _)     = "Type unmatch"
         r (ACHeteroDecimal _ _) = "Different decimal length"
         r (ACNotFound _)        = "Not found"
+        r (ASNotNumber _)       = "Can't read as number"
 
         d (ACDivideByZero)      = []
         d (ACUnmatchType s)     = [s]
         d (ACHeteroDecimal x y) = [x ++ " : " ++ y]
         d (ACNotFound key)      = [key]
+        d (ASNotNumber s)       = [s]
 
+ab :: AbortBase -> B.Ab a
+ab = Left . B.abortBy
+
+-- | Different decimal length
+heteroDecimal :: String -> String -> B.Ab a
+heteroDecimal a b = ab $ ACHeteroDecimal a b
+
+-- | Different decimal length
+notNumber :: String -> B.Ab a
+notNumber = ab . ASNotNumber
+
+-- | Divide by zero
+divideByZero :: B.Ab a
+divideByZero = ab ACDivideByZero
+
+-- | Not found
 abortNotFound :: String -> B.AbortReason
 abortNotFound = B.abortBy . ACNotFound
 

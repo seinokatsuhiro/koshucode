@@ -21,6 +21,7 @@ import qualified Koshucode.Baala.Core.Relmap          as C
 import qualified Koshucode.Baala.Core.Assert          as C
 import qualified Koshucode.Baala.Core.Section.Section as C
 import qualified Koshucode.Baala.Core.Section.Clause  as C
+import qualified Koshucode.Baala.Core.Abort           as Abort
 
 
 
@@ -32,7 +33,7 @@ readSection root res = dispatch res where
     dispatch (B.ResourceFile path)
         = do exist <- Dir.doesFileExist path
              case exist of
-               False -> return $ Left $ B.abortBy $ B.AIONoFile path
+               False -> return $ Abort.noFile path
                True  -> do code <- readFile path
                            return $ readSectionCode root res code
 

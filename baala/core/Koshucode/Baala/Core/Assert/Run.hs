@@ -11,6 +11,7 @@ import qualified Koshucode.Baala.Core.Content        as C
 import qualified Koshucode.Baala.Core.Relmap         as C
 import qualified Koshucode.Baala.Core.Assert.Assert  as C
 import qualified Koshucode.Baala.Core.Assert.Dataset as C
+import qualified Koshucode.Baala.Core.Abort          as Abort
 
 
 
@@ -75,7 +76,7 @@ optionUnkCheck ns xs =
     let rest = B.assocOmitAll ("" : ns) xs
     in if null rest
        then Right ()
-       else Left $ B.abortBy $ B.ASUnkWord (fst . head $ rest)
+       else Abort.unkWord (fst . head $ rest)
 
 -- | Get term name as string only if term is flat.
 flatname :: B.TokenTree -> Maybe B.Termname

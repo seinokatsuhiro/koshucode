@@ -1,7 +1,14 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Core.Abort
-( unexpOperand,
+( ambInfixes,
+  noFile,
+  oddRelation,
+  unexpOperand,
+  unkClause,
+  unkCox,
+  unkWord,
+  unresPrefix,
 ) where
 
 import qualified Koshucode.Baala.Base as B
@@ -12,14 +19,49 @@ import qualified Koshucode.Baala.Base as B
 ab :: AbortCore -> B.Ab a
 ab = Left . B.abortBy
 
+ambInfixes :: [String] -> B.Ab a
+ambInfixes = ab . AmbInfixes
+
+-- | File not found
+noFile :: String -> B.Ab a
+noFile = ab . NoFile
+
+-- | Odd relation literal
+oddRelation :: B.Ab a
+oddRelation = ab OddRelation
+
 -- | Unexpected term names
 unexpOperand :: String -> B.Ab a
-unexpOperand = ab . OpUnexpOperand
+unexpOperand = ab . UnexpOperand
+
+-- | Unknown clause
+unkClause :: B.Ab a
+unkClause = ab UnkClause
+
+-- | Unknown expression
+unkCox :: String -> B.Ab a
+unkCox = ab . UnkCox
+
+-- | Unknown word
+unkWord :: String -> B.Ab a
+unkWord = ab . UnkWord
+
+-- | Unresolved prefix
+unresPrefix :: B.Ab a
+unresPrefix = ab UnresPrefix
+
 
 -- ----------------------  Datatype
 
 data AbortCore
-    = OpUnexpOperand String
+    = AmbInfixes [String]
+    | NoFile String
+    | OddRelation
+    | UnexpOperand String
+    | UnkClause
+    | UnkCox String
+    | UnkWord String
+    | UnresPrefix
       deriving (Show, Eq, Ord)
 
 instance B.AbortBy AbortCore where
@@ -30,7 +72,19 @@ instance B.AbortBy AbortCore where
                 , B.abortSource = []
                 } where
 
-        r (OpUnexpOperand _)   = "Unexpected term names"
+        r (AmbInfixes _)     = "Ambiguous infix operators"
+        r (NoFile _)         = "File not found"
+        r (OddRelation)      = "Odd relation literal"
+        r (UnexpOperand _)   = "Unexpected term names"
+        r (UnkClause)        = "Unknown clause"
+        r (UnkCox _)         = "Unknown expression"
+        r (UnkWord _)        = "Unknown word"
+        r (UnresPrefix)      = "Unresolved prefix"
 
-        d (OpUnexpOperand s)   = [s]
+        d (AmbInfixes ops)   = ops
+        d (NoFile path)      = [path]
+        d (UnkCox s)         = [s]
+        d (UnkWord s)        = [s]
+        d (UnexpOperand s)   = [s]
+        d _                  = []
 

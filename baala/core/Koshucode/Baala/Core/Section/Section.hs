@@ -30,6 +30,7 @@ import qualified Koshucode.Baala.Core.Content         as C
 import qualified Koshucode.Baala.Core.Relmap          as C
 import qualified Koshucode.Baala.Core.Assert          as C
 import qualified Koshucode.Baala.Core.Section.Clause  as C
+import qualified Koshucode.Baala.Core.Abort           as Abort
 
 
 -- ----------------------  Abbr
@@ -169,8 +170,8 @@ consSectionEach consFull resource (B.Short shorts xs) =
             Right full -> Right $ C.Assert typ pat opt full toks
             Left a     -> abort a
 
-      unk   _ (C.CUnknown) = Left $ B.abortBy $ B.ASUnkClause
-      unres _ (C.CUnres _) = Left $ B.abortBy $ B.ASUnresToken
+      unk   _ (C.CUnknown) = Abort.unkClause
+      unres _ (C.CUnres _) = Abort.unresPrefix
       abort a = Left a
 
 isCImport, isCExport, isCShort,

@@ -31,6 +31,7 @@ module Koshucode.Baala.Core.Content.Literal
 ) where
 
 import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.Core.Abort            as Abort
 import qualified Koshucode.Baala.Core.Content.Class    as C
 import qualified Koshucode.Baala.Core.Content.HashWord as C
 
@@ -67,12 +68,12 @@ litContentBy ops = lit where
         | otherwise   = case tok of
               B.TWord _ 0 w -> word w
               B.TWord _ _ w -> C.putText w  -- quoted text
-              _             -> Left $ B.abortBy $ B.ASUnkWord (show tok)
+              _             -> Abort.unkWord (show tok)
 
     word w = case w of
           '#' : s  ->  litHash s
           "()"     ->  Right C.nil
-          _        ->  Left $ B.abortBy $ B.ASUnkWord w
+          _        ->  Abort.unkWord w
 
     paren :: [B.TokenTree] -> B.Ab c
     paren xs@(x : _)
@@ -95,7 +96,7 @@ litContentBy ops = lit where
     paren [] = Right C.nil
 
     -- unknown sequence
-    paren x  = Left $ B.abortBy $ B.ASUnkWord (show x)
+    paren x  = Abort.unkWord (show x)
 
 -- First letters of decimals
 isDecimalChar :: Char -> Bool
@@ -125,13 +126,13 @@ isQuotedOrHashed x = isQuoted x || isHashed x
 
 litUnquoted :: Literalize String
 litUnquoted x@(B.TreeL (B.TWord _ 0 w)) | not $ isHashed x = Right w
-litUnquoted x = Left $ B.abortBy $ B.ASUnkWord (show x)
+litUnquoted x = Abort.unkWord (show x)
 
 litHash :: (C.CContent c) => B.LitString c
 litHash key =
     case lookup key hashAssoc of
       Just c  -> c
-      Nothing -> Left $ B.abortBy $ B.ASUnkWord ('#' : key)
+      Nothing -> Abort.unkWord ('#' : key)
 
 hashAssoc :: (C.CContent c) => [B.Named (B.Ab c)]
 hashAssoc =
@@ -166,7 +167,7 @@ litRel lit cs =
        b2 <- mapM (litList lit) b1
        let b3 = B.unique b2
        if any (length h2 /=) $ map length b3
-          then Left  $ B.abortBy $ B.ASOddRelation
+          then Abort.oddRelation
           else Right $ B.Rel (B.headFrom h2) b3
 
 -- | Collect term name and content.
