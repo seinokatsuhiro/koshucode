@@ -29,6 +29,7 @@ module Koshucode.Baala.Op.Builtin.Get
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 import qualified Koshucode.Baala.Op.Builtin.Term as Op
+import qualified Koshucode.Baala.Op.Abort        as Abort
 
 
 
@@ -89,7 +90,7 @@ getWordTrees u name =
 
 wordTrees :: [B.TokenTree] -> B.Ab [B.Named B.TokenTree]
 wordTrees []  = Right []
-wordTrees [_] = Left $ B.abortOperand "Require word and tree"
+wordTrees [_] = Abort.unexpOperand "Require word and tree"
 wordTrees (w : tree : xs) =
     do w'  <- word w
        xs' <- wordTrees xs
@@ -97,7 +98,7 @@ wordTrees (w : tree : xs) =
 
 word :: B.TokenTree -> B.Ab String
 word (B.TreeL (B.TWord _ _ w)) = Right w
-word _ = Left $ B.abortOperand "Require one word"
+word _ = Abort.unexpOperand "Require one word"
 
 
 -- ----------------------  Relmap
@@ -115,7 +116,7 @@ getRelmap u =
        trees <- getTrees   u "-relmap"
        abortableGetTrees trees $ case ms of
          [m] -> Right m
-         _   -> Left $ B.abortOperand "Require one relmap"
+         _   -> Abort.unexpOperand "Require one relmap"
 
 {-| Get relmaps from operator use. -}
 getRelmaps :: C.RopUse c -> B.Ab [C.Relmap c]
@@ -128,7 +129,7 @@ getRelmaps = Right . C.ropSubrelmap
 getTerm :: RopGet c B.Termname
 getTerm = getAbortable get where
     get [x] = Op.termname x
-    get _   = Left $ B.abortOperand "Require one term"
+    get _   = Abort.unexpOperand "Require one term"
 
 {-| Get list of term names from named operand. -}
 getTerms :: RopGet c [B.Termname]
@@ -147,7 +148,7 @@ getTermTrees = getAbortable Op.termTreePairs
 getSwitch :: C.RopUse c -> String -> B.Ab Bool
 getSwitch u name = getAbortableOption False get u name where
     get [] = Right True
-    get _  = Left $ B.abortOperand $ "Just type only " ++ name
+    get _  = Abort.unexpOperand $ "Just type only " ++ name
 
 {-| Get word from named operand.
 
@@ -159,10 +160,10 @@ getSwitch u name = getAbortableOption False get u name where
 getWord :: RopGet c String
 getWord = getAbortable get where
     get [B.TreeL (B.TWord _ _ s)] = Right s
-    get _ = Left $ B.abortOperand "Require one word"
+    get _ = Abort.unexpOperand "Require one word"
 
 getInt :: RopGet c Int
 getInt = getAbortable get where
     get [B.TreeL (B.TWord _ _ i)] = Right (read i :: Int)
-    get _ = Left $ B.abortOperand "Require one integer"
+    get _ = Abort.unexpOperand "Require one integer"
 

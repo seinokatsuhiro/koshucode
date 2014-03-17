@@ -11,9 +11,12 @@ module Koshucode.Baala.Base.Abort.EachReason
   AbortAnalysis (..),
   -- * Calculation
   AbortCalc (..),
+  abortNotFound,
+  (<!!>),
 ) where
 
-import qualified Koshucode.Baala.Base.Abort.Class as B
+import qualified Koshucode.Baala.Base.Prelude       as B
+import qualified Koshucode.Baala.Base.Abort.Message as B
 
 
 
@@ -162,3 +165,12 @@ instance B.AbortBy AbortCalc where
         d (ACHeteroDecimal x y) = [x ++ " : " ++ y]
         d (ACNotFound key)      = [key]
 
+abortNotFound :: String -> B.AbortReason
+abortNotFound = B.abortBy . ACNotFound
+
+-- | Lookup association list. This function may abort.
+(<!!>) :: [B.Named b] -> String -> B.Ab b
+(<!!>) assoc key = loop assoc where
+    loop [] = Left $ abortNotFound key
+    loop ((k,v) : kvs) | k == key  = Right v
+                       | otherwise = loop kvs

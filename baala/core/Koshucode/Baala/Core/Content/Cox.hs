@@ -265,7 +265,7 @@ link base deriv = li where
 -- put term positions for actural heading
 position :: B.Relhead -> Cox c -> B.Ab (Cox c)
 position h = spos where
-    spos = B.sourcedAbMap pos
+    spos = B.abortableSourced "position" pos
     pos (CoxTerm ns _)  =
         let index = B.headIndex1 h ns
         in if all (>= 0) index

@@ -44,9 +44,13 @@ hRunFiles h global src =
        IO.hPutStr      h $ unlines $ B.texts comm
        IO.hPutStrLn    h ""
 
-       B.abortableIO (C.globalCommandLine global) (B.hPutJudges h) $ do
-         sects <- M.sequence abSects
-         C.runSection global sects
+       let cmd = C.globalCommandLine global
+           js' = do sects <- M.sequence abSects
+                    C.runSection global sects
+
+       case js' of
+         Left a   -> B.abort cmd a
+         Right js -> B.hPutJudges h js
 
 
 
@@ -55,15 +59,13 @@ hRunFiles h global src =
 runCalc :: (C.CContent c) => B.CommandLine -> C.SectionBundle c -> IO Int
 runCalc = runCalcTo ""
 
-runCalcTo
-    :: (C.CContent c)
-    => FilePath          -- ^ Output path prefix
-    -> B.CommandLine
-    -> C.SectionBundle c   -- ^ Section
-    -> IO Int
-runCalcTo dir cmd sec =
-    do union <- readSec sec
-       B.abortableIO cmd (runCalcSec dir $ C.bundleRoot sec) union
+runCalcTo :: (C.CContent c) =>
+  FilePath -> B.CommandLine -> C.SectionBundle c -> IO Int
+runCalcTo dir cmd bundle =
+    do union <- readSec bundle
+       case union of
+         Left a    -> B.abort cmd a
+         Right sec -> runCalcSec dir (C.bundleRoot bundle) sec
 
 runCalcSec :: (C.CContent c) => String -> C.Section c -> C.Section c -> IO Int
 runCalcSec dir root sec =

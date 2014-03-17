@@ -16,6 +16,7 @@ module Koshucode.Baala.Op.Vanilla.Cox
 import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Core       as C
 import qualified Koshucode.Baala.Op.Builtin as Op
+import qualified Koshucode.Baala.Op.Abort    as Abort
 
 
 -- ----------------------  add
@@ -33,19 +34,21 @@ relmapAdd :: (C.CList c, C.CRel c, B.Pretty c)
   => C.RopUse c -> ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.Relmap c
 relmapAdd use = C.relmapFlow use . relkitAdd
 
--- todo: shared term
 relkitAdd :: (C.CList c, C.CRel c, B.Pretty c)
-  => ([C.Cop c], [C.NamedCox c], [C.NamedCox c])
-  -> C.RelkitCalc c
+  => ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.RelkitCalc c
 relkitAdd _ Nothing = Right C.relkitNothing
-relkitAdd (base, deriv, bodies) (Just he1) = Right kit2 where
-    ns   = map fst bodies   -- term names
-    es   = map snd bodies   -- term expression
-    he2  = ns `B.headAppend` he1
-    kit2 = C.relkitJust he2 $ C.RelkitOneToAbOne False kitf2 []
-    kitf2 _ cs1 = do es2 <- C.coxBeta base deriv he1 `mapM` es
-                     cs2 <- C.coxRun cs1 `mapM` es2
-                     Right $ cs2 ++ cs1
+relkitAdd (base, deriv, bodies) (Just he1)
+    | null ind  = Right kit2
+    | otherwise = Abort.unexpTermName
+    where
+      (ns, xs)    = unzip bodies            -- names and expressions
+      ns1         = B.headNames he1         -- term names of input relation
+      ind         = ns `B.snipIndex` ns1    -- indicies for ns on input relation
+      he2         = ns `B.headAppend` he1
+      kit2        = C.relkitJust he2 $ C.RelkitOneToAbOne False kitf2 []
+      kitf2 _ cs1 = do xs2 <- C.coxBeta base deriv he1 `mapM` xs
+                       cs2 <- C.coxRun cs1 `mapM` xs2
+                       Right $ cs2 ++ cs1
 
 
 -- ----------------------  subst
@@ -66,16 +69,22 @@ relmapSubst use = C.relmapFlow use . relkitSubst
 relkitSubst :: (C.CList c, C.CRel c, B.Pretty c)
   => ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.RelkitCalc c
 relkitSubst _ Nothing = Right C.relkitNothing
-relkitSubst (base, deriv, bodies) (Just he1) = Right kit2 where
-    (ns, xs)    = unzip bodies                 -- names and expressions
-    ns1         = B.headNames he1              -- term names of input relation
-    ind         = ns `B.snipIndex` ns1         -- indicies for ns on input relation
-    cut         = B.snipOff ind                -- cutting-ns function
-    he2         = B.headFrom $ ns ++ cut ns1   -- heading of output relation
-    kit2        = C.relkitJust he2 $ C.RelkitOneToAbOne True kitf2 []
-    kitf2 _ cs1 = do xs2 <- C.coxBeta base deriv he1 `mapM` xs
-                     cs2 <- C.coxRun cs1 `mapM` xs2
-                     Right $ cs2 ++ cut cs1
+relkitSubst (base, deriv, bodies) (Just he1)
+    | sameLength ns ind = Right kit2
+    | otherwise         = Abort.unexpTermName
+    where
+      (ns, xs)    = unzip bodies                 -- names and expressions
+      ns1         = B.headNames he1              -- term names of input relation
+      ind         = ns `B.snipIndex` ns1         -- indicies for ns on input relation
+      cut         = B.snipOff ind                -- cutting-ns function
+      he2         = B.headFrom $ ns ++ cut ns1   -- heading of output relation
+      kit2        = C.relkitJust he2 $ C.RelkitOneToAbOne True kitf2 []
+      kitf2 _ cs1 = do xs2 <- C.coxBeta base deriv he1 `mapM` xs
+                       cs2 <- C.coxRun cs1 `mapM` xs2
+                       Right $ cs2 ++ cut cs1
+
+sameLength :: [a] -> [a1] -> Bool
+sameLength a b = length a == length b
 
 
 -- ----------------------  filter
@@ -102,7 +111,7 @@ relkitFilter (which, base, deriv, body) (Just he1) = Right kit2 where
                c <- C.coxRun cs1 e
                case C.isBool c of
                  True  -> Right $ C.gBool c == which
-                 False -> Left $ B.abortBy $ B.AAReqBoolean ""
+                 False -> Abort.reqBool
 
 
 -- ----------------------  alpha

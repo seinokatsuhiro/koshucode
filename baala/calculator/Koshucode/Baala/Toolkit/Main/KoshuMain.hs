@@ -165,7 +165,10 @@ prettySection (C.SectionBundle root _ files _) =
                    prettyPrint md
                    return 0
       _      -> L.putSuccess usage
-    where prettyPrint md = B.abortableIO [] (print . B.doc) md
+    where prettyPrint md' =
+              case md' of
+                Left a   -> B.abort [] a
+                Right md -> print $ B.doc md
 
 
 

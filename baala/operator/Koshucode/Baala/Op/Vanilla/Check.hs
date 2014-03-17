@@ -19,6 +19,7 @@ import qualified Data.Map                    as Map
 import qualified Koshucode.Baala.Base        as B
 import qualified Koshucode.Baala.Core        as C
 import qualified Koshucode.Baala.Op.Builtin  as Op
+import qualified Koshucode.Baala.Op.Abort    as Abort
 
 
 
@@ -33,7 +34,7 @@ consCheckTerm use =
        (Just ns, Nothing, Nothing) -> Right $ relmapCheckTermJust use ns
        (Nothing, Just ns, Nothing) -> Right $ relmapCheckTermHas  use ns
        (Nothing, Nothing, Just ns) -> Right $ relmapCheckTermBut  use ns
-       _ -> Left $ B.abortOperand "require one of -just / -has / -but"
+       _ -> Abort.unexpOperand "require one of -just / -has / -but"
 
 relmapCheckTermJust :: C.RopUse c -> [B.Termname] -> C.Relmap c
 relmapCheckTermHas  :: C.RopUse c -> [B.Termname] -> C.Relmap c

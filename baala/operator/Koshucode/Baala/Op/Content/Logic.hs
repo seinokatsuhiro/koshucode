@@ -7,8 +7,9 @@ module Koshucode.Baala.Op.Content.Logic
   -- $Operators
 ) where
 
-import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Core as C
+import qualified Koshucode.Baala.Base     as B
+import qualified Koshucode.Baala.Core     as C
+import qualified Koshucode.Baala.Op.Abort as Abort
 
 
 
@@ -136,5 +137,5 @@ synIf trees = folding $ filter (/= []) $ B.divideTreesBy ":" trees where
 
     abortSyntax xs msg =
         B.abortableTrees "if" xs $
-         Left $ B.abortOperand msg
+         Abort.unexpOperand msg
 

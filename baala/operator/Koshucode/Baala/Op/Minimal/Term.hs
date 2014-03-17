@@ -16,6 +16,7 @@ import qualified Data.Tuple                 as Tuple
 import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Core       as C
 import qualified Koshucode.Baala.Op.Builtin as Op
+import qualified Koshucode.Baala.Op.Abort   as Abort
 
 
 
@@ -51,7 +52,7 @@ relkitArrange
 relkitArrange _ _ _ Nothing = Right C.relkitNothing
 relkitArrange hearr boarr ns (Just he1)
     | null non  = Right $ C.relkitJust he2 $ C.RelkitOneToOne True $ boarr ind
-    | otherwise = Left $ B.abortBy $ B.AANoTerms non
+    | otherwise = Abort.noTerm non
     where
       non =  B.headDropTerms he1 ns
 
@@ -79,8 +80,8 @@ relmapRename use = C.relmapFlow use . relkitRename
 relkitRename :: [(B.Termname, B.Termname)] -> C.RelkitCalc c
 relkitRename _ Nothing = Right C.relkitNothing
 relkitRename np (Just he1)
-    | nsCheck /= [] = Left  $ B.abortBy $ B.AAReqNewTerms nsCheck
-    | psCheck /= [] = Left  $ B.abortBy $ B.AANoTerms     psCheck
+    | nsCheck /= [] = Abort.reqNewTerm nsCheck
+    | psCheck /= [] = Abort.noTerm     psCheck
     | otherwise     = Right $ C.relkitJust he2 C.RelkitId
     where
       (ns, ps) = unzip np

@@ -8,8 +8,9 @@ module Koshucode.Baala.Op.Content.Arith
   -- $Operators
 ) where
 
-import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Core as C
+import qualified Koshucode.Baala.Base     as B
+import qualified Koshucode.Baala.Core     as C
+import qualified Koshucode.Baala.Op.Abort as Abort
 
 
 
@@ -67,7 +68,7 @@ copMinus [a, b] =
        b' <- copDec b
        c' <- B.decimalSub a' b'
        Right $ C.pDec c'
-copMinus _ = Left $ B.abortOperand "-"
+copMinus _ = Abort.unexpOperand "-"
 
 copQuo :: (C.CText c, C.CDec c) => C.CopFun c
 copQuo [a, b] =
@@ -75,7 +76,7 @@ copQuo [a, b] =
        b' <- copDec b
        c' <- B.decimalQuo a' b'
        Right $ C.pDec c'
-copQuo _ = Left $ B.abortOperand "quo"
+copQuo _ = Abort.unexpOperand "quo"
 
 copRem :: (C.CText c, C.CDec c) => C.CopFun c
 copRem arg =
@@ -85,17 +86,12 @@ copRem arg =
        c <- B.decimalRem a b
        C.putDec $ c
 
--- copAbs :: Op.VCop
--- copAbs [Right (Op.VList cs)] = Right . Op.VList =<< mapM copAbs1 cs
--- copAbs [Right c] = copAbs1 c
--- copAbs _ = Left $ B.abortOperand "abs"
-
 copAbs :: (C.CList c, C.CDec c) => C.CopFun c
 copAbs [Right c] | C.isList c = Right . C.pList =<< mapM copAbs1 (C.gList c)
                  | otherwise  = copAbs1 c
-copAbs _ = Left $ B.abortOperand "abs"
+copAbs _ = Abort.unexpOperand "abs"
 
 copAbs1 :: (C.CDec c) => B.AbMap c
 copAbs1 c | C.isDec c = C.putDec $ B.decimalAbs $ C.gDec c
-copAbs1 _ = Left $ B.abortOperand "abc"
+copAbs1 _ = Abort.unexpOperand "abc"
 

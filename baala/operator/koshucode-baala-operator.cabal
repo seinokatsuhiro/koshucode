@@ -47,6 +47,7 @@ library
   -- Modules exported by the library.
   exposed-modules:
         Koshucode.Baala.Op
+        Koshucode.Baala.Op.Abort
         Koshucode.Baala.Op.Quoter
         Koshucode.Baala.Op.Type
 

@@ -22,6 +22,7 @@ import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Core       as C
 import qualified Koshucode.Baala.Op.Builtin as Op
 import qualified Koshucode.Baala.Op.Minimal as Op
+import qualified Koshucode.Baala.Op.Abort   as Abort
 
 
 
@@ -157,8 +158,8 @@ relmapIf use = C.relmapConfl use relkitIf
 relkitIf :: (Ord c) => C.RelkitConfl c
 relkitIf [(C.Relkit _ kitbT), (C.Relkit (Just heA) kitbA), (C.Relkit (Just heB) kitbB)] _
     | B.headEquiv heA heB = Right $ kit3
-    | otherwise = Left $ B.abortOperand $ "different headings: "
-                  ++ showHead heA ++ " and " ++ showHead heB
+    | otherwise = Abort.unexpOperand $ "different headings: "
+                    ++ showHead heA ++ " and " ++ showHead heB
     where
       showHead = show . B.doc
       kit3 = C.relkitJust heA $ C.RelkitAbFull True kitf3 [kitbT, kitbA, kitbB]
@@ -175,7 +176,7 @@ relkitIf [kitT@(C.Relkit _ _), kitA@(C.Relkit heA' kitbA), kitB@(C.Relkit heB' k
     | isNothing2 heA' heB' = Right C.relkitNothing
     | isNothing heA'       = relkitIf [kitT, C.Relkit heB' kitbA, kitB] Nothing
     | isNothing heB'       = relkitIf [kitT, kitA, C.Relkit heA' kitbB] Nothing
-relkitIf _ _ = Left $ B.abortOperand $ "if T A b"
+relkitIf _ _ = Abort.unexpOperand "if T A b"
 
 isNothing :: Maybe B.Relhead -> Bool
 isNothing = (== Nothing)
