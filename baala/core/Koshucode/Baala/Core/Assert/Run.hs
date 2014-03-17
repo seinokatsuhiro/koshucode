@@ -44,7 +44,7 @@ justRelhead = just "unknown relhead"
 
 just :: String -> Maybe a -> B.Ab a
 just _ (Just h) = Right h
-just s Nothing  = Left $ B.abortBy $ B.AAUndefined s
+just s Nothing  = Abort.adlib s
 
 -- ----------------------  Assert
 
@@ -87,7 +87,7 @@ flatnames :: [B.TokenTree] -> B.Ab [B.Termname]
 flatnames trees =
     case mapM flatname trees of
       Just ns -> Right ns
-      Nothing -> Left $ B.abortBy $ B.AAReqTermName
+      Nothing -> Abort.reqTermName
 
 
 
@@ -142,7 +142,7 @@ arrangeRelUsing
     -> B.AbMap (B.Rel c)
 arrangeRelUsing sort ha ba ns (B.Rel he1 bo1)
     | null non   = Right $ B.Rel he2 bo2
-    | otherwise  = Left  $ B.abortBy (B.AANoTerms non)
+    | otherwise  = Abort.noTerm non
     where
       non  =  B.headDropTerms he1 ns
 

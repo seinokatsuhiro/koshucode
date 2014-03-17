@@ -3,9 +3,7 @@
 -- | Abort reasons
 
 module Koshucode.Baala.Base.Abort.EachReason
-( -- * Analysis
-  AbortAnalysis (..),
-  -- * Base
+( -- * Base
   AbortBase (..),
   abortNotFound,
   divideByZero,
@@ -17,65 +15,6 @@ module Koshucode.Baala.Base.Abort.EachReason
 import qualified Koshucode.Baala.Base.Prelude       as B
 import qualified Koshucode.Baala.Base.Abort.Message as B
 
-
-
--- ----------------------  Analysis Error
-
-data AbortAnalysis
-    = AACheckTerms       [String]
-    | AAUnexpectedOperand String
-    | AAReqTermName
-    | AANoTerms          [String]
-    | AAOperandNotFound
-    | AAReqBoolean        String
-    | AAReqFlatname       String
-    | AAReqNewTerms      [String]
-    | AAUndefined         String
-    | AAUnkCop String
-    | AAUnkRelmap String
-    | AAUnrecTermIO      [String] [Bool]
-      deriving (Show, Eq, Ord)
-
-instance B.AbortBy AbortAnalysis where
-    abortBy a = B.AbortReason
-                { B.abortSymbol = B.abortSymbolGet a
-                , B.abortReason = r a
-                , B.abortDetail = d a
-                , B.abortSource = []
-                } where
-
-        r (AACheckTerms _)        = "check-term failed"
-        r (AAUnexpectedOperand _) = "Unexpected operand"
-        r (AAReqTermName)         = "Require termn ame"
-        r (AANoTerms _)           = "Input relation does not given terms"
-        r (AAOperandNotFound)     = "Operand not found"
-        r (AAReqBoolean _)        = "Require boolean"
-        r (AAReqFlatname _)       = "Require flatname"
-        r (AAReqNewTerms _)       = "Require new term"
-        r (AAUnrecTermIO _ _)     = "Unrecognized term I/O"
-        r (AAUndefined _)         = "Undefined"
-        r (AAUnkCop _)            = "Unknown content operator"
-        r (AAUnkRelmap _)         = "Unknown relmap operator"
-
-        d (AACheckTerms ns)       = [unwords ns]
-        d (AAUnexpectedOperand s) = [s]
-        d (AANoTerms ns)          = [unwords ns]
-        d (AAOperandNotFound)     = []
-        d (AAReqBoolean s)        = [s]
-        d (AAReqFlatname s)       = [s]
-        d (AAReqNewTerms ns)      = [unwords ns]
-        d (AAUndefined x)         = [x]
-        d (AAUnkCop op)           = [op]
-        d (AAUnkRelmap op)        = [op]
-        d (AAUnrecTermIO ns here) = [termIOText ns here]
-        d _                       = []
-
-termIOText :: [String] -> [Bool] -> String
-termIOText ns here = unwords $ map termIO $ zip ns here
-
-termIO :: (String, Bool) -> String
-termIO (n, True)  = n ++ " in"
-termIO (n, False) = n ++ " out"
 
 
 -- ----------------------  Calc Error
@@ -90,8 +29,7 @@ data AbortBase
 
 instance B.AbortBy AbortBase where
     abortBy a = B.AbortReason
-                { B.abortSymbol = B.abortSymbolGet a
-                , B.abortReason = r a
+                { B.abortReason = r a
                 , B.abortDetail = d a
                 , B.abortSource = []
                 } where

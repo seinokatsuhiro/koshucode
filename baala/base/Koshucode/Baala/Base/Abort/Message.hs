@@ -7,7 +7,12 @@ module Koshucode.Baala.Base.Abort.Message
   AbortBy (..),
   AbortReason (..),
   Ab, AbMap,
-  abortSymbolGet,
+
+  -- * Construct
+  abortBecause,
+  abortLine,
+  abortLines,
+  abortTokens,
 
   -- * Report
   CommandLine,
@@ -27,8 +32,7 @@ class AbortBy a where
     abortBy :: a -> AbortReason
 
 data AbortReason = AbortReason
-    { abortSymbol :: String
-    , abortReason :: String
+    { abortReason :: String
     , abortDetail :: [String]
     , abortSource :: [(String, B.Token)]
     } deriving (Show, Eq, Ord)
@@ -39,8 +43,29 @@ type Ab b = Either AbortReason b
 -- | Abortable mapping.
 type AbMap b = b -> Ab b
 
-abortSymbolGet :: (Show a) => a -> String
-abortSymbolGet = head . words . show
+
+
+-- ----------------------  Contruct
+
+abortBecause :: String -> AbortReason
+abortBecause reason =
+    AbortReason
+    { abortReason = reason
+    , abortDetail = []
+    , abortSource = []
+    }
+
+abortLine :: String -> String -> AbortReason
+abortLine reason detail =
+    (abortBecause reason) { abortDetail = [detail] }
+
+abortLines :: String -> [String] -> AbortReason
+abortLines reason details =
+    (abortBecause reason) { abortDetail = details }
+
+abortTokens :: String -> [B.Token] -> AbortReason
+abortTokens reason tokens =
+    (abortBecause reason) { abortDetail = map B.tokenContent tokens }
 
 
 
@@ -69,7 +94,6 @@ abortMessage cmd a = map B.trimRight texts where
              [ ("Detail"  , map p $ abortDetail a)
              , ("Source"  , source $ abortSource a)
              , ("Command" , map p $ cmd)
-             , ("Symbol"  , map p $ [abortSymbol a])
              ]
 
     row :: (String, [(String, String)]) -> [[B.Cell]]

@@ -31,10 +31,11 @@ module Koshucode.Baala.Core.Relmap.Relkit
   bodyMapArrange,
 ) where
 
-import qualified Control.Monad        as Monad
-import qualified Data.Monoid          as Monoid
-import qualified Koshucode.Baala.Base as B
+import qualified Control.Monad                       as Monad
+import qualified Data.Monoid                         as Monoid
+import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Core.Relmap.Lexical as C
+import qualified Koshucode.Baala.Core.Abort          as Abort
 
 
 
@@ -183,7 +184,7 @@ relkitRun (B.Sourced src core) bo1 =
                  B.abortable "run" src1 $ kitb2 `relkitRun` bo2
 
        RelkitLink _ _ (Just kitb2) -> relkitRun kitb2 bo1
-       RelkitLink n _ (Nothing)    -> Left $ B.abortBy $ B.AAUnkRelmap n
+       RelkitLink n _ (Nothing)    -> Abort.unkRelmap n
 
     where
       bmaps = map relkitRun

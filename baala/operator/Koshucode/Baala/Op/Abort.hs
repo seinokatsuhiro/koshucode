@@ -1,14 +1,18 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.Abort
-( noTerm,
+( -- * Op package
+  noOperand,
   reqBool,
   reqNewTerm,
-  unexpOperand,
   unexpTermName,
+
+  -- * Core package
+  module Koshucode.Baala.Core.Abort
 ) where
 
 import qualified Koshucode.Baala.Base as B
+import Koshucode.Baala.Core.Abort
 
 
 -- ----------------------  Function
@@ -16,9 +20,9 @@ import qualified Koshucode.Baala.Base as B
 ab :: AbortOp -> B.Ab a
 ab = Left . B.abortBy
 
--- | Input relation does not given terms
-noTerm :: [String] -> B.Ab a
-noTerm = ab . OpNoTerm
+-- | Operand not found
+noOperand :: B.Ab a
+noOperand = Left $ B.abortBecause "Operand not found"
 
 -- | Require Boolean
 reqBool :: B.Ab a
@@ -27,10 +31,6 @@ reqBool = ab OpReqBool
 -- | Require new term names
 reqNewTerm :: [String] -> B.Ab a
 reqNewTerm = ab . OpReqNewTerm
-
--- | Unexpected term names
-unexpOperand :: String -> B.Ab a
-unexpOperand = ab . OpUnexpOperand
 
 -- | Unexpected operand
 unexpTermName :: B.Ab a
@@ -49,8 +49,7 @@ data AbortOp
 
 instance B.AbortBy AbortOp where
     abortBy a = B.AbortReason
-                { B.abortSymbol = B.abortSymbolGet a
-                , B.abortReason = r a
+                { B.abortReason = r a
                 , B.abortDetail = d a
                 , B.abortSource = []
                 } where

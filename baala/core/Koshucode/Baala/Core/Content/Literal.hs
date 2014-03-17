@@ -90,7 +90,7 @@ litContentBy ops = lit where
     paren (B.TreeL (B.TWord _ 0 tag) : xs) =
         case lookup tag ops of
           Just f  -> f lit xs
-          Nothing -> Left $ B.abortBy $ B.AAUnkCop tag
+          Nothing -> Abort.unkCop tag
 
     -- empty sequence is nil
     paren [] = Right C.nil
@@ -150,8 +150,8 @@ hashAssoc =
 --   If 'TokenTree' contains nested term name, this function failed.
 litFlatname :: Literalize String
 litFlatname (B.TreeL (B.TTerm _ [n])) = Right n
-litFlatname (B.TreeL (B.TTerm _ ns))  = Left $ B.abortBy $ B.AAReqFlatname (concat ns)
-litFlatname _ = Left $ B.abortBy $ B.AAReqTermName
+litFlatname (B.TreeL (B.TTerm _ ns))  = Abort.reqFlatname (concat ns)
+litFlatname _ = Abort.reqTermName
 
 litList :: (C.CContent c) => Literalize c -> LitTrees [c]
 litList _   [] = Right []

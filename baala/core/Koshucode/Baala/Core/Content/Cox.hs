@@ -271,7 +271,7 @@ position h = spos where
         let index = B.headIndex1 h ns
         in if all (>= 0) index
            then Right $ CoxTerm ns index
-           else Left  $ B.abortBy (B.AANoTerms ns)
+           else Abort.noTerm ns
     pos (CoxApplyL f xs) = do f'  <- spos f
                               xs' <- mapM spos xs
                               Right $ CoxApplyL f' xs'

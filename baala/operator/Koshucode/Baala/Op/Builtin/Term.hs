@@ -9,20 +9,18 @@ module Koshucode.Baala.Op.Builtin.Term
   termTreePairs,
 ) where
 
-import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Core as C
+import qualified Koshucode.Baala.Base       as B
+import qualified Koshucode.Baala.Core       as C
+import qualified Koshucode.Baala.Core.Abort as Abort
 
 
 
 -- ----------------------  Term
 
-abortReqTermName :: B.AbortReason
-abortReqTermName = B.abortBy B.AAReqTermName
-
 {-| Extract a term name. -}
 termname :: B.TokenTree -> B.Ab B.Termname
 termname (B.TreeL (B.TTerm _ [n])) = Right n
-termname _ = Left $ abortReqTermName
+termname _ = Abort.reqTermName
 
 {-| Extract a list of term names.
  
@@ -33,7 +31,7 @@ termnames :: [B.TokenTree] -> B.Ab [B.Termname]
 termnames trees =
     case mapM termname trees of
       Right ns -> Right ns
-      Left  _  -> Left $ abortReqTermName
+      Left  _  -> Abort.reqTermName
 
 {-| Extract a list of name-and-name pairs.
  
@@ -48,7 +46,7 @@ termnamePairs = loop where
            xs' <- loop xs
            Right $ (a', b') : xs'
     loop [] = Right []
-    loop _ = Left $ abortReqTermName
+    loop _ = Abort.reqTermName
 
 {-| Extract a list of name-and-tree pairs.
  

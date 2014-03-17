@@ -53,8 +53,8 @@ relkitCheckTermBut  = relkitCheckTermBy (\ns he1 -> null $ B.headKeepTerms he1 n
 relkitCheckTermBy :: ([String] -> B.Relhead -> Bool) -> [String] -> C.RelkitCalc c
 relkitCheckTermBy _ _ Nothing = Right C.relkitNothing
 relkitCheckTermBy f ns (Just he1)
-    | f ns he1 = Right $ C.relkitJust he1 C.RelkitId
-    | otherwise = Left $ B.abortBy (B.AACheckTerms $ B.headNames he1)
+    | f ns he1  = Right $ C.relkitJust he1 C.RelkitId
+    | otherwise = Abort.checkTerm $ B.headNames he1
 
 
 
@@ -81,7 +81,7 @@ relkitDuplicate :: (Ord c) => [B.Termname] -> C.RelkitCalc c
 relkitDuplicate _ Nothing = Right C.relkitNothing
 relkitDuplicate ns (Just he1)
     | null non  = Right kit2
-    | otherwise = Left $ B.abortBy (B.AANoTerms non)
+    | otherwise = Abort.noTerm non
     where
       non :: [B.Termname]
       non = B.headDropTerms he1 ns
