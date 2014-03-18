@@ -18,38 +18,35 @@ import qualified Koshucode.Baala.Base.Abort.Report    as B
 
 
 
--- ----------------------  Abortable process
-
 -- | Push source information when process is aborted.
 abortable :: String -> [B.Token] -> B.Map (B.Ab b)
-abortable tag src = either (Left . pushSource tag src) Right
+abortable tag toks = either (Left . push tag toks) Right
 
 -- | Same as 'abortable' except for using 'B.TokenListing'
 --   instead of list of 'B.Token'.
 abortableFrom :: (B.TokenListing src) => String -> src -> B.Map (B.Ab b)
-abortableFrom tag src = abortable tag $ B.tokenListing src
+abortableFrom tag = abortable tag . B.tokenListing
 
 -- | Same as 'abortable' except for using 'B.TokenTree'
 --   instead of list of 'B.Token'.
 abortableTree :: String -> B.TokenTree -> B.Map (B.Ab b)
-abortableTree tag tree = abortable tag $ treeToken tree
+abortableTree tag = abortable tag . B.untree
 
 -- | Same as 'abortable' except for using list of 'B.TokenTree'
 --   instead of list of 'B.Token'.
 abortableTrees :: String -> [B.TokenTree] -> B.Map (B.Ab b)
-abortableTrees tag trees = abortable tag $ treeToken (B.treeWrap trees)
+abortableTrees tag = abortable tag . B.untrees
 
 abortableSourced :: String -> (a -> B.Ab b) -> B.Sourced a -> B.Ab (B.Sourced b)
-abortableSourced tag f (B.Sourced src x) =
-    abortable tag src $ do
+abortableSourced tag f (B.Sourced toks x) =
+    abortable tag toks $ do
       y <- f x
-      Right $ B.Sourced src y
+      Right $ B.Sourced toks y
 
-treeToken :: B.CodeTree a -> [a]
-treeToken = B.front . B.untree
-
-pushSource :: String -> [B.Token] -> B.Map B.AbortReason
-pushSource name src1 abort@B.AbortReason { B.abortSource = src2 } =
-    abort { B.abortSource = namedSrc1 ++ src2 }
-    where namedSrc1 = map (name,) src1
+push :: String -> [B.Token] -> B.Map B.AbortReason
+push tag toks abort@B.AbortReason { B.abortSource = src } =
+     case toks of
+       []        -> abort
+       [tok]     -> abort { B.abortSource = (tag, tok) : src }
+       (tok : _) -> push tag [tok] abort
 

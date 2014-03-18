@@ -162,16 +162,16 @@ relkitLink kits = linkKit where
 
 -- todo: optimization
 relkitRun :: forall c. (Ord c) => RelkitBody c -> B.AbMap [[c]]
-relkitRun (B.Sourced src core) bo1 =
-    B.abortable "run" src $
+relkitRun (B.Sourced toks core) bo1 =
+    ab toks $
      case core of
        RelkitFull        u kitf       ->  right u $ kitf             bo1
        RelkitOneToMany   u kitf       ->  right u $ kitf `concatMap` bo1
        RelkitOneToOne    u kitf       ->  right u $ kitf `map`       bo1
        RelkitPred          kitf       ->  Right   $ filter kitf      bo1
 
-       RelkitAbFull      u kitf kitbs ->  ab    u $            kitf (bmaps kitbs)        bo1
-       RelkitOneToAbOne  u kitf kitbs ->  ab    u $            kitf (bmaps kitbs) `mapM` bo1
+       RelkitAbFull      u kitf kitbs ->  monad u $            kitf (bmaps kitbs)        bo1
+       RelkitOneToAbOne  u kitf kitbs ->  monad u $            kitf (bmaps kitbs) `mapM` bo1
        RelkitOneToAbMany u kitf kitbs ->  right u . concat =<< kitf (bmaps kitbs) `mapM` bo1
        RelkitAbSemi        kitf kitb  ->  Monad.filterM (semi kitf kitb) bo1
        RelkitAbPred        kitf       ->  Monad.filterM kitf bo1
@@ -179,14 +179,15 @@ relkitRun (B.Sourced src core) bo1 =
        RelkitConst                 bo ->  Right bo
        RelkitId                       ->  Right bo1
 
-       RelkitAppend kitb1@(B.Sourced src1 _) kitb2
+       RelkitAppend kitb1@(B.Sourced toks1 _) kitb2
            -> do bo2 <- kitb1 `relkitRun` bo1
-                 B.abortable "run" src1 $ kitb2 `relkitRun` bo2
+                 ab toks1 $ kitb2 `relkitRun` bo2
 
        RelkitLink _ _ (Just kitb2) -> relkitRun kitb2 bo1
        RelkitLink n _ (Nothing)    -> Message.unkRelmap n
 
     where
+      ab    = B.abortable "run"
       bmaps = map relkitRun
 
       semi :: ([[c]] -> B.Ab Bool) -> RelkitBody c -> [c] -> B.Ab Bool
@@ -195,8 +196,8 @@ relkitRun (B.Sourced src core) bo1 =
       right :: (Ord b) => Bool -> [b] -> B.Ab [b]
       right u = Right . uif u
 
-      ab :: (Ord b) => Bool -> B.Ab [b] -> B.Ab [b]
-      ab u = (Right . uif u =<<)
+      monad :: (Ord b) => Bool -> B.Ab [b] -> B.Ab [b]
+      monad u = (Right . uif u =<<)
 
       uif :: (Ord b) => Bool -> [b] -> [b]
       uif True   = B.unique

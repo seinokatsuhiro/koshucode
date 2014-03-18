@@ -35,11 +35,8 @@ import qualified Koshucode.Baala.Op.Message      as Message
 
 -- ---------------------- Utility
 
-abortableTag :: String
-abortableTag = "operand"
-
-abortableGetTrees :: [B.TokenTree] -> B.Map (B.Ab b)
-abortableGetTrees = B.abortable abortableTag . B.front . B.untrees
+ab :: [B.TokenTree] -> B.Map (B.Ab b)
+ab = B.abortableTrees "operand"
 
 lookupOperand :: String -> C.RopUse c -> Maybe [B.TokenTree]
 lookupOperand name = lookup name . C.lexOperand . C.ropLex
@@ -47,14 +44,14 @@ lookupOperand name = lookup name . C.lexOperand . C.ropLex
 getAbortable :: ([B.TokenTree] -> B.Ab b) -> RopGet c b
 getAbortable f u name =
     do trees <- getTrees u name
-       abortableGetTrees trees $ f trees
+       ab trees $ f trees
 
 getAbortableOption :: b -> ([B.TokenTree] -> B.Ab b) -> RopGet c b
 getAbortableOption y f u name =
     do m <- getMaybe getTrees u name
        case m of
          Nothing    -> Right y
-         Just trees -> abortableGetTrees trees $ f trees
+         Just trees -> ab trees $ f trees
 
 
 -- ----------------------  Datatype
@@ -114,7 +111,7 @@ getRelmap :: C.RopUse c -> B.Ab (C.Relmap c)
 getRelmap u =
     do ms    <- getRelmaps u
        trees <- getTrees   u "-relmap"
-       abortableGetTrees trees $ case ms of
+       ab trees $ case ms of
          [m] -> Right m
          _   -> Message.unexpOperand "Require one relmap"
 

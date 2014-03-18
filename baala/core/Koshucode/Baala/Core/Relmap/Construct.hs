@@ -53,7 +53,7 @@ relmapConsLex :: [B.Named (String, C.RopFullSorter)] -> RelmapConsLex
 relmapConsLex lxs = consLex where
     consLex :: RelmapConsLex
     consLex trees =
-        B.abortable "lex" (B.front $ B.untrees trees) $
+        B.abortable "lexmap" (B.front $ B.untrees trees) $
          case B.divideTreesByBar trees of
            [(B.TreeL tok@(B.TWord _ 0 _) : od)] -> find tok od
            [[B.TreeB 1 _ xs]] -> consLex xs
