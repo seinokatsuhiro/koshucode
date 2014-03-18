@@ -18,7 +18,7 @@ import qualified Data.Version                  as V
 import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Core          as C
 import qualified Koshucode.Baala.Op.Builtin    as Op
-import qualified Koshucode.Baala.Op.Abort      as Abort
+import qualified Koshucode.Baala.Op.Message    as Abort
 
 
 -- ----------------------  do

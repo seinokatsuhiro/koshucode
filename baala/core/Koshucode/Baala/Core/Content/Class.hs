@@ -26,8 +26,9 @@ module Koshucode.Baala.Core.Content.Class
   isMember,
 ) where
 
-import qualified Control.Monad as Monad
-import qualified Koshucode.Baala.Base as B
+import qualified Control.Monad                as Monad
+import qualified Koshucode.Baala.Base         as B
+import qualified Koshucode.Baala.Core.Message as Abort
 
 
 
@@ -58,7 +59,7 @@ getAbAb :: PrimContent c => (c -> Bool) -> (c -> b) -> B.Ab c -> B.Ab b
 getAbAb _ _ (Left reason) =  Left reason
 getAbAb is get (Right x)
     | is x = Right $ get x
-    | otherwise = Left $ B.abortBy $ B.ACUnmatchType (typename x)
+    | otherwise = Abort.unmatchType (typename x)
 
 
 

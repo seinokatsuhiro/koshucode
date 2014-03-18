@@ -2,7 +2,7 @@
 
 -- | Aborting message
 
-module Koshucode.Baala.Base.Abort.Message
+module Koshucode.Baala.Base.Abort.Report
 ( -- * Type
   AbortBy (..),
   AbortReason (..),

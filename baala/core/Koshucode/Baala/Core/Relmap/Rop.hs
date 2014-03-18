@@ -39,6 +39,7 @@ import qualified Koshucode.Baala.Core.Content           as C
 import qualified Koshucode.Baala.Core.Relmap.Lexical    as C
 import qualified Koshucode.Baala.Core.Relmap.Operand    as C
 import qualified Koshucode.Baala.Core.Relmap.Relkit     as C
+import qualified Koshucode.Baala.Core.Message           as Abort
 
 
 -- ----------------------  Rop
@@ -71,15 +72,15 @@ instance B.TokenListing (RopUse c) where
 
 getArg1 :: [B.Ab c] -> B.Ab (B.Ab c)
 getArg1 [x] = Right x
-getArg1 _ = Left $ B.abortBy $ B.ACUnmatchType []
+getArg1 _ = Abort.unmatchType ""
 
 getArg2 :: [B.Ab c] -> B.Ab (B.Ab c, B.Ab c)
 getArg2 [x, y] = Right (x, y)
-getArg2 _ = Left $ B.abortBy $ B.ACUnmatchType []
+getArg2 _ = Abort.unmatchType ""
 
 getArg3 :: [B.Ab c] -> B.Ab (B.Ab c, B.Ab c, B.Ab c)
 getArg3 [x, y, z] = Right (x, y, z)
-getArg3 _ = Left $ B.abortBy $ B.ACUnmatchType []
+getArg3 _ = Abort.unmatchType ""
 
 
 

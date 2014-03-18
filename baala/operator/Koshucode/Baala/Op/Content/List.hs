@@ -7,9 +7,10 @@ module Koshucode.Baala.Op.Content.List
   -- $Operators
 ) where
 
-import qualified Data.List                       as List
-import qualified Koshucode.Baala.Base            as B
-import qualified Koshucode.Baala.Core            as C
+import qualified Data.List                     as List
+import qualified Koshucode.Baala.Base          as B
+import qualified Koshucode.Baala.Core          as C
+import qualified Koshucode.Baala.Op.Message    as Abort
 
 
 
@@ -79,7 +80,7 @@ copLength = op where
     op xs = typeUnmatch xs
 
 typeUnmatch :: C.PrimContent a => [B.Ab a] -> B.Ab b
-typeUnmatch _ = Left $ B.abortBy $ B.ACUnmatchType []
+typeUnmatch _ = Abort.unmatchType ""
 
 
 

@@ -47,7 +47,7 @@ library
   -- Modules exported by the library.
   exposed-modules:
         Koshucode.Baala.Core
-        Koshucode.Baala.Core.Abort
+        Koshucode.Baala.Core.Message
 
         Koshucode.Baala.Core.Assert
         Koshucode.Baala.Core.Assert.Assert

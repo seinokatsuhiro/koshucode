@@ -9,9 +9,9 @@ module Koshucode.Baala.Op.Builtin.Term
   termTreePairs,
 ) where
 
-import qualified Koshucode.Baala.Base       as B
-import qualified Koshucode.Baala.Core       as C
-import qualified Koshucode.Baala.Core.Abort as Abort
+import qualified Koshucode.Baala.Base         as B
+import qualified Koshucode.Baala.Core         as C
+import qualified Koshucode.Baala.Core.Message as Abort
 
 
 

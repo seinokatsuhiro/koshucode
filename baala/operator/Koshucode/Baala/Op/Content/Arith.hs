@@ -8,9 +8,9 @@ module Koshucode.Baala.Op.Content.Arith
   -- $Operators
 ) where
 
-import qualified Koshucode.Baala.Base     as B
-import qualified Koshucode.Baala.Core     as C
-import qualified Koshucode.Baala.Op.Abort as Abort
+import qualified Koshucode.Baala.Base       as B
+import qualified Koshucode.Baala.Core       as C
+import qualified Koshucode.Baala.Op.Message as Abort
 
 
 
@@ -43,7 +43,7 @@ copsArith =
 copDec :: (Show c, C.CText c, C.CDec c) => B.Ab c -> B.Ab B.Decimal
 copDec (Right c) | C.isDec  c = Right $ C.gDec c
                  | C.isText c = B.litDecimal $ C.gText c
-copDec x = Left $ B.abortBy $ B.ASNotNumber (show x)
+copDec x = Abort.notNumber (show x)
 
 copPlus :: (C.CText c, C.CDec c) => C.CopFun c
 copPlus xs = fmap C.pDec $ loop xs where

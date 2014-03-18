@@ -11,10 +11,10 @@ module Koshucode.Baala.Base.Abort.Process
   abortableSourced,
 ) where
 
-import qualified Koshucode.Baala.Base.Prelude          as B
-import qualified Koshucode.Baala.Base.Syntax           as B
-import qualified Koshucode.Baala.Base.Token            as B
-import qualified Koshucode.Baala.Base.Abort.Message    as B
+import qualified Koshucode.Baala.Base.Prelude         as B
+import qualified Koshucode.Baala.Base.Syntax          as B
+import qualified Koshucode.Baala.Base.Token           as B
+import qualified Koshucode.Baala.Base.Abort.Report    as B
 
 
 

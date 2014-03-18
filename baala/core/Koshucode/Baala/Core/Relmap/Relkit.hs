@@ -35,7 +35,7 @@ import qualified Control.Monad                       as Monad
 import qualified Data.Monoid                         as Monoid
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Core.Relmap.Lexical as C
-import qualified Koshucode.Baala.Core.Abort          as Abort
+import qualified Koshucode.Baala.Core.Message        as Abort
 
 
 

@@ -11,7 +11,7 @@ import qualified Koshucode.Baala.Core.Content        as C
 import qualified Koshucode.Baala.Core.Relmap         as C
 import qualified Koshucode.Baala.Core.Assert.Assert  as C
 import qualified Koshucode.Baala.Core.Assert.Dataset as C
-import qualified Koshucode.Baala.Core.Abort          as Abort
+import qualified Koshucode.Baala.Core.Message        as Abort
 
 
 

@@ -24,9 +24,9 @@ module Koshucode.Baala.Core.Relmap.Operand
   sortOneList,
 ) where
 
-import qualified Data.List                  as List
-import qualified Koshucode.Baala.Base       as B
-import qualified Koshucode.Baala.Core.Abort as Abort
+import qualified Data.List                    as List
+import qualified Koshucode.Baala.Base         as B
+import qualified Koshucode.Baala.Core.Message as Abort
 
 
 

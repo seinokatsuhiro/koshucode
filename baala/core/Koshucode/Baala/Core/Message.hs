@@ -1,7 +1,11 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Core.Abort
-( adlib,
+module Koshucode.Baala.Core.Message
+( -- * Base package
+  module Koshucode.Baala.Base.Message,
+
+  -- * Core package
+  adlib,
   ambInfixes,
   checkTerm,
   noFile,
@@ -15,10 +19,12 @@ module Koshucode.Baala.Core.Abort
   unkCox,
   unkRelmap,
   unkWord,
+  unmatchType,
   unresPrefix,
 ) where
 
 import qualified Koshucode.Baala.Base as B
+import Koshucode.Baala.Base.Message
 
 
 -- ----------------------  Function
@@ -80,6 +86,9 @@ unkCop = Left . B.abortLine "Unknown content operator"
 -- | Unknown relmap operator
 unkRelmap :: String -> B.Ab a
 unkRelmap = Left . B.abortLine "Unknown relmap operator"
+
+unmatchType :: String -> B.Ab a
+unmatchType = Left . B.abortLine "Type unmatch"
 
 -- | Unresolved prefix
 unresPrefix :: B.Ab a

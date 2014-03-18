@@ -34,7 +34,7 @@ module Koshucode.Baala.Base.Data.Decimal
 
 import qualified Data.Char as Ch
 import Control.Monad
-import qualified Koshucode.Baala.Base.Abort.EachReason as Abort
+import qualified Koshucode.Baala.Base.Message as Abort
 import qualified Koshucode.Baala.Base.Abort   as B
 import qualified Koshucode.Baala.Base.Prelude as B
 

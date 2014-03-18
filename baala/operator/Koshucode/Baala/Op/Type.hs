@@ -7,9 +7,10 @@ module Koshucode.Baala.Op.Type
   VCop,
 ) where
 
-import qualified Data.Set as Set
-import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Core as C
+import qualified Data.Set                   as Set
+import qualified Koshucode.Baala.Base       as B
+import qualified Koshucode.Baala.Core       as C
+import qualified Koshucode.Baala.Op.Message as Abort
 
 
 
@@ -68,7 +69,7 @@ instance C.CContent VContent where
     appendContent (VNil) x = Right x
     appendContent x (VNil) = Right x
     appendContent (VText x) (VText y) = Right . VText $ x ++ y
-    appendContent x y = Left $ B.abortBy $ B.ACUnmatchType (show (x, y))
+    appendContent x y = Abort.unmatchType (show (x, y))
 
 -- | >>> B.doc $ VText "abc"
 --   'abc

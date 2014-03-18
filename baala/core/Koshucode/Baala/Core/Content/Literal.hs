@@ -31,7 +31,7 @@ module Koshucode.Baala.Core.Content.Literal
 ) where
 
 import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Core.Abort            as Abort
+import qualified Koshucode.Baala.Core.Message          as Abort
 import qualified Koshucode.Baala.Core.Content.Class    as C
 import qualified Koshucode.Baala.Core.Content.HashWord as C
 

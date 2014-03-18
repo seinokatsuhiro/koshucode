@@ -1,18 +1,18 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Op.Abort
-( -- * Op package
+module Koshucode.Baala.Op.Message
+( -- * Core package
+  module Koshucode.Baala.Core.Message,
+
+  -- * Op package
   noOperand,
   reqBool,
   reqNewTerm,
   unexpTermName,
-
-  -- * Core package
-  module Koshucode.Baala.Core.Abort
 ) where
 
 import qualified Koshucode.Baala.Base as B
-import Koshucode.Baala.Core.Abort
+import Koshucode.Baala.Core.Message
 
 
 -- ----------------------  Function

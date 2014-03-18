@@ -26,7 +26,7 @@ module Koshucode.Baala.Core.Content.Cox
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Core.Content.Class     as C
 import qualified Koshucode.Baala.Core.Content.Extension as C
-import qualified Koshucode.Baala.Core.Abort             as Abort
+import qualified Koshucode.Baala.Core.Message           as Abort
 
 
 -- ----------------------  expressions and operators
@@ -299,11 +299,11 @@ coxRun args = run 0 where
              CoxTerm _ ps   -> term ps args
              CoxApplyL e [] -> run' e
              CoxApplyL (B.Sourced _ (CoxBase _ f)) xs -> f $ map run' xs
-             _ -> Left $ B.abortNotFound $ "cox: " ++ show core
+             _ -> Abort.notFound $ "cox: " ++ show core
 
     term :: [Int] -> [c] -> B.Ab c
-    term []       _ = Left $ B.abortNotFound "term"
-    term (-1 : _) _ = Left $ B.abortNotFound "term"
+    term []       _ = Abort.notFound "term"
+    term (-1 : _) _ = Abort.notFound "term"
     term (p : ps) args2 =
         let c = args2 !! p
         in if C.isRel c
