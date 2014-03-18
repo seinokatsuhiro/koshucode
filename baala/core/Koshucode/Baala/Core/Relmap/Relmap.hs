@@ -28,7 +28,7 @@ import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Core.Relmap.Rop      as C
 import qualified Koshucode.Baala.Core.Relmap.Lexical  as C
 import qualified Koshucode.Baala.Core.Relmap.Relkit   as C
-import qualified Koshucode.Baala.Core.Message         as Abort
+import qualified Koshucode.Baala.Core.Message         as Message
 
 
 
@@ -117,7 +117,7 @@ relmapSpecialize global rdef = spec [] where
 
               C.RelmapLink lx n ->
                   post lx $ case lookup n rdef of
-                     Nothing    -> Abort.unkRelmap n
+                     Nothing    -> Message.unkRelmap n
                      Just rmap1 -> link n rmap1 (he1, C.relmapLexList rmap1)
 
         post :: C.Lexmap -> B.Map (B.Ab ([C.RelkitDef c], C.Relkit c))

@@ -11,7 +11,7 @@ import qualified Koshucode.Baala.Core.Content        as C
 import qualified Koshucode.Baala.Core.Relmap         as C
 import qualified Koshucode.Baala.Core.Assert.Assert  as C
 import qualified Koshucode.Baala.Core.Assert.Dataset as C
-import qualified Koshucode.Baala.Core.Message        as Abort
+import qualified Koshucode.Baala.Core.Message        as Message
 
 
 
@@ -44,7 +44,7 @@ justRelhead = just "unknown relhead"
 
 just :: String -> Maybe a -> B.Ab a
 just _ (Just h) = Right h
-just s Nothing  = Abort.adlib s
+just s Nothing  = Message.adlib s
 
 -- ----------------------  Assert
 
@@ -76,7 +76,7 @@ optionUnkCheck ns xs =
     let rest = B.assocOmitAll ("" : ns) xs
     in if null rest
        then Right ()
-       else Abort.unkWord (fst . head $ rest)
+       else Message.unkWord (fst . head $ rest)
 
 -- | Get term name as string only if term is flat.
 flatname :: B.TokenTree -> Maybe B.Termname
@@ -87,7 +87,7 @@ flatnames :: [B.TokenTree] -> B.Ab [B.Termname]
 flatnames trees =
     case mapM flatname trees of
       Just ns -> Right ns
-      Nothing -> Abort.reqTermName
+      Nothing -> Message.reqTermName
 
 
 
@@ -142,7 +142,7 @@ arrangeRelUsing
     -> B.AbMap (B.Rel c)
 arrangeRelUsing sort ha ba ns (B.Rel he1 bo1)
     | null non   = Right $ B.Rel he2 bo2
-    | otherwise  = Abort.noTerm non
+    | otherwise  = Message.noTerm non
     where
       non  =  B.headDropTerms he1 ns
 

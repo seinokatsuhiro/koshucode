@@ -16,7 +16,7 @@ import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Core.Relmap.Lexical    as C
 import qualified Koshucode.Baala.Core.Relmap.Operand    as C
 import qualified Koshucode.Baala.Core.Relmap.Rop        as C
-import qualified Koshucode.Baala.Core.Message           as Abort
+import qualified Koshucode.Baala.Core.Message           as Message
 
 
 -- ----------------------  Constructions
@@ -57,8 +57,8 @@ relmapConsLex lxs = consLex where
          case B.divideTreesByBar trees of
            [(B.TreeL tok@(B.TWord _ 0 _) : od)] -> find tok od
            [[B.TreeB 1 _ xs]] -> consLex xs
-           [[B.TreeB _ _ _]]  -> Abort.adlib "bracket"
-           [_]                -> Abort.unkRelmap "?"
+           [[B.TreeB _ _ _]]  -> Message.adlib "bracket"
+           [_]                -> Message.unkRelmap "?"
            tree2              -> find (B.tokenWord "append") $ map B.treeWrap tree2
 
     find :: B.Token -> [B.TokenTree] -> B.Ab C.Lexmap

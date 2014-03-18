@@ -10,7 +10,7 @@ module Koshucode.Baala.Op.Content.List
 import qualified Data.List                     as List
 import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Core          as C
-import qualified Koshucode.Baala.Op.Message    as Abort
+import qualified Koshucode.Baala.Op.Message    as Message
 
 
 
@@ -80,7 +80,7 @@ copLength = op where
     op xs = typeUnmatch xs
 
 typeUnmatch :: C.PrimContent a => [B.Ab a] -> B.Ab b
-typeUnmatch _ = Abort.unmatchType ""
+typeUnmatch _ = Message.unmatchType ""
 
 
 

@@ -16,7 +16,7 @@ module Koshucode.Baala.Op.Vanilla.Cox
 import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Core       as C
 import qualified Koshucode.Baala.Op.Builtin as Op
-import qualified Koshucode.Baala.Op.Message as Abort
+import qualified Koshucode.Baala.Op.Message as Message
 
 
 -- ----------------------  add
@@ -39,7 +39,7 @@ relkitAdd :: (C.CList c, C.CRel c, B.Pretty c)
 relkitAdd _ Nothing = Right C.relkitNothing
 relkitAdd (base, deriv, bodies) (Just he1)
     | null ind  = Right kit2
-    | otherwise = Abort.unexpTermName
+    | otherwise = Message.unexpTermName
     where
       (ns, xs)    = unzip bodies            -- names and expressions
       ns1         = B.headNames he1         -- term names of input relation
@@ -71,7 +71,7 @@ relkitSubst :: (C.CList c, C.CRel c, B.Pretty c)
 relkitSubst _ Nothing = Right C.relkitNothing
 relkitSubst (base, deriv, bodies) (Just he1)
     | sameLength ns ind = Right kit2
-    | otherwise         = Abort.unexpTermName
+    | otherwise         = Message.unexpTermName
     where
       (ns, xs)    = unzip bodies                 -- names and expressions
       ns1         = B.headNames he1              -- term names of input relation
@@ -111,7 +111,7 @@ relkitFilter (which, base, deriv, body) (Just he1) = Right kit2 where
                c <- C.coxRun cs1 e
                case C.isBool c of
                  True  -> Right $ C.gBool c == which
-                 False -> Abort.reqBool
+                 False -> Message.reqBool
 
 
 -- ----------------------  alpha

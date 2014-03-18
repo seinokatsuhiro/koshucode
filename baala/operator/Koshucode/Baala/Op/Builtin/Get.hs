@@ -29,7 +29,7 @@ module Koshucode.Baala.Op.Builtin.Get
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 import qualified Koshucode.Baala.Op.Builtin.Term as Op
-import qualified Koshucode.Baala.Op.Message      as Abort
+import qualified Koshucode.Baala.Op.Message      as Message
 
 
 
@@ -80,17 +80,17 @@ getTrees :: RopGet c [B.TokenTree]
 getTrees u name =
     case lookupOperand name u of
       Just trees -> Right trees
-      Nothing    -> Abort.noOperand
+      Nothing    -> Message.noOperand
 
 getWordTrees :: RopGet c [B.Named B.TokenTree]
 getWordTrees u name =
     case lookupOperand name u of
       Just trees -> wordTrees trees
-      Nothing    -> Abort.noOperand
+      Nothing    -> Message.noOperand
 
 wordTrees :: [B.TokenTree] -> B.Ab [B.Named B.TokenTree]
 wordTrees []  = Right []
-wordTrees [_] = Abort.unexpOperand "Require word and tree"
+wordTrees [_] = Message.unexpOperand "Require word and tree"
 wordTrees (w : tree : xs) =
     do w'  <- word w
        xs' <- wordTrees xs
@@ -98,7 +98,7 @@ wordTrees (w : tree : xs) =
 
 word :: B.TokenTree -> B.Ab String
 word (B.TreeL (B.TWord _ _ w)) = Right w
-word _ = Abort.unexpOperand "Require one word"
+word _ = Message.unexpOperand "Require one word"
 
 
 -- ----------------------  Relmap
@@ -116,7 +116,7 @@ getRelmap u =
        trees <- getTrees   u "-relmap"
        abortableGetTrees trees $ case ms of
          [m] -> Right m
-         _   -> Abort.unexpOperand "Require one relmap"
+         _   -> Message.unexpOperand "Require one relmap"
 
 {-| Get relmaps from operator use. -}
 getRelmaps :: C.RopUse c -> B.Ab [C.Relmap c]
@@ -129,7 +129,7 @@ getRelmaps = Right . C.ropSubrelmap
 getTerm :: RopGet c B.Termname
 getTerm = getAbortable get where
     get [x] = Op.termname x
-    get _   = Abort.unexpOperand "Require one term"
+    get _   = Message.unexpOperand "Require one term"
 
 {-| Get list of term names from named operand. -}
 getTerms :: RopGet c [B.Termname]
@@ -148,7 +148,7 @@ getTermTrees = getAbortable Op.termTreePairs
 getSwitch :: C.RopUse c -> String -> B.Ab Bool
 getSwitch u name = getAbortableOption False get u name where
     get [] = Right True
-    get _  = Abort.unexpOperand $ "Just type only " ++ name
+    get _  = Message.unexpOperand $ "Just type only " ++ name
 
 {-| Get word from named operand.
 
@@ -160,10 +160,10 @@ getSwitch u name = getAbortableOption False get u name where
 getWord :: RopGet c String
 getWord = getAbortable get where
     get [B.TreeL (B.TWord _ _ s)] = Right s
-    get _ = Abort.unexpOperand "Require one word"
+    get _ = Message.unexpOperand "Require one word"
 
 getInt :: RopGet c Int
 getInt = getAbortable get where
     get [B.TreeL (B.TWord _ _ i)] = Right (read i :: Int)
-    get _ = Abort.unexpOperand "Require one integer"
+    get _ = Message.unexpOperand "Require one integer"
 

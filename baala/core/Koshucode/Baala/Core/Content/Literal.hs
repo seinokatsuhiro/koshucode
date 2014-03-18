@@ -31,7 +31,7 @@ module Koshucode.Baala.Core.Content.Literal
 ) where
 
 import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Core.Message          as Abort
+import qualified Koshucode.Baala.Core.Message          as Message
 import qualified Koshucode.Baala.Core.Content.Class    as C
 import qualified Koshucode.Baala.Core.Content.HashWord as C
 
@@ -68,12 +68,12 @@ litContentBy ops = lit where
         | otherwise   = case tok of
               B.TWord _ 0 w -> word w
               B.TWord _ _ w -> C.putText w  -- quoted text
-              _             -> Abort.unkWord (show tok)
+              _             -> Message.unkWord (show tok)
 
     word w = case w of
           '#' : s  ->  litHash s
           "()"     ->  Right C.nil
-          _        ->  Abort.unkWord w
+          _        ->  Message.unkWord w
 
     paren :: [B.TokenTree] -> B.Ab c
     paren xs@(x : _)
@@ -90,13 +90,13 @@ litContentBy ops = lit where
     paren (B.TreeL (B.TWord _ 0 tag) : xs) =
         case lookup tag ops of
           Just f  -> f lit xs
-          Nothing -> Abort.unkCop tag
+          Nothing -> Message.unkCop tag
 
     -- empty sequence is nil
     paren [] = Right C.nil
 
     -- unknown sequence
-    paren x  = Abort.unkWord (show x)
+    paren x  = Message.unkWord (show x)
 
 -- First letters of decimals
 isDecimalChar :: Char -> Bool
@@ -126,13 +126,13 @@ isQuotedOrHashed x = isQuoted x || isHashed x
 
 litUnquoted :: Literalize String
 litUnquoted x@(B.TreeL (B.TWord _ 0 w)) | not $ isHashed x = Right w
-litUnquoted x = Abort.unkWord (show x)
+litUnquoted x = Message.unkWord (show x)
 
 litHash :: (C.CContent c) => B.LitString c
 litHash key =
     case lookup key hashAssoc of
       Just c  -> c
-      Nothing -> Abort.unkWord ('#' : key)
+      Nothing -> Message.unkWord ('#' : key)
 
 hashAssoc :: (C.CContent c) => [B.Named (B.Ab c)]
 hashAssoc =
@@ -150,8 +150,8 @@ hashAssoc =
 --   If 'TokenTree' contains nested term name, this function failed.
 litFlatname :: Literalize String
 litFlatname (B.TreeL (B.TTerm _ [n])) = Right n
-litFlatname (B.TreeL (B.TTerm _ ns))  = Abort.reqFlatname (concat ns)
-litFlatname _ = Abort.reqTermName
+litFlatname (B.TreeL (B.TTerm _ ns))  = Message.reqFlatname (concat ns)
+litFlatname _ = Message.reqTermName
 
 litList :: (C.CContent c) => Literalize c -> LitTrees [c]
 litList _   [] = Right []
@@ -167,7 +167,7 @@ litRel lit cs =
        b2 <- mapM (litList lit) b1
        let b3 = B.unique b2
        if any (length h2 /=) $ map length b3
-          then Abort.oddRelation
+          then Message.oddRelation
           else Right $ B.Rel (B.headFrom h2) b3
 
 -- | Collect term name and content.

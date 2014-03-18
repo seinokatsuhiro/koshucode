@@ -35,7 +35,7 @@ import qualified Control.Monad                       as Monad
 import qualified Data.Monoid                         as Monoid
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Core.Relmap.Lexical as C
-import qualified Koshucode.Baala.Core.Message        as Abort
+import qualified Koshucode.Baala.Core.Message        as Message
 
 
 
@@ -184,7 +184,7 @@ relkitRun (B.Sourced src core) bo1 =
                  B.abortable "run" src1 $ kitb2 `relkitRun` bo2
 
        RelkitLink _ _ (Just kitb2) -> relkitRun kitb2 bo1
-       RelkitLink n _ (Nothing)    -> Abort.unkRelmap n
+       RelkitLink n _ (Nothing)    -> Message.unkRelmap n
 
     where
       bmaps = map relkitRun

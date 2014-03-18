@@ -18,7 +18,7 @@ import qualified Data.Version                  as V
 import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Core          as C
 import qualified Koshucode.Baala.Op.Builtin    as Op
-import qualified Koshucode.Baala.Op.Message    as Abort
+import qualified Koshucode.Baala.Op.Message    as Message
 
 
 -- ----------------------  do
@@ -107,7 +107,7 @@ consKoshuVersion use =
        []      -> Right $ C.relmapGlobal use $ relkitKoshuVersion n
        [f]     -> check n f f
        [f, t]  -> check n f t
-       _       -> Abort.unexpOperand ""
+       _       -> Message.unexpOperand ""
   where
     check n f t = do
       from <- C.litContent f

@@ -9,7 +9,7 @@ module Koshucode.Baala.Op.Content.Logic
 
 import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Core       as C
-import qualified Koshucode.Baala.Op.Message as Abort
+import qualified Koshucode.Baala.Op.Message as Message
 
 
 
@@ -137,5 +137,5 @@ synIf trees = folding $ filter (/= []) $ B.divideTreesBy ":" trees where
 
     abortSyntax xs msg =
         B.abortableTrees "if" xs $
-         Abort.unexpOperand msg
+         Message.unexpOperand msg
 

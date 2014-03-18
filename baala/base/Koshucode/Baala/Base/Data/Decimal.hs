@@ -34,7 +34,7 @@ module Koshucode.Baala.Base.Data.Decimal
 
 import qualified Data.Char as Ch
 import Control.Monad
-import qualified Koshucode.Baala.Base.Message as Abort
+import qualified Koshucode.Baala.Base.Message as Message
 import qualified Koshucode.Baala.Base.Abort   as B
 import qualified Koshucode.Baala.Base.Prelude as B
 
@@ -84,7 +84,7 @@ litDecimal :: LitDecimal
 litDecimal ccs = headPart id ccs where
     minus x = - x
 
-    headPart _ [] = Abort.notNumber []
+    headPart _ [] = Message.notNumber []
     headPart sign (c:cs) = case c of
         ' '  ->  headPart sign  cs
         '-'  ->  headPart minus cs
@@ -114,7 +114,7 @@ litDecimal ccs = headPart id ccs where
         '+'  ->  tailPart approx id    dec cs
         'a'  ->  tailPart True   sign  dec cs
         'A'  ->  tailPart True   sign  dec cs
-        _    ->  Abort.notNumber ccs
+        _    ->  Message.notNumber ccs
 
 fromDigit :: Char -> Int
 fromDigit '0' = 0
@@ -175,7 +175,7 @@ quoteDigit n = let (n', d) = quotRem n 10
 decimalAdd :: DecimalBinary
 decimalAdd d1@(Decimal (n1, den1) p1 a1)
            d2@(Decimal (n2, den2) p2 a2)
-    | p1 /= p2     = Abort.heteroDecimal txt1 txt2
+    | p1 /= p2     = Message.heteroDecimal txt1 txt2
     | den1 == den2 = Right $ reduceDecimal (n1 + n2, den1) p1 a3
     | otherwise    = Right $ reduceDecimal (n3, den3) p1 a3
     where n3    =  (n1 * den2) + (n2 * den1)
@@ -211,8 +211,8 @@ decimalQR :: (Int -> Int -> Int) -> DecimalBinary
 decimalQR qr
           d1@(Decimal (n1, den1) p1 a1)
           d2@(Decimal (n2, den2) p2 a2)
-    | p1 /= p2     = Abort.heteroDecimal txt1 txt2
-    | n2 == 0      = Abort.divideByZero
+    | p1 /= p2     = Message.heteroDecimal txt1 txt2
+    | n2 == 0      = Message.divideByZero
     | otherwise    = Right $ Decimal (n3, 1) p1 a3
     where n3    =  (n1 * den2) `qr` (n2 * den1)
           a3    =  a1 || a2

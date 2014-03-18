@@ -26,7 +26,7 @@ module Koshucode.Baala.Core.Content.Cox
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Core.Content.Class     as C
 import qualified Koshucode.Baala.Core.Content.Extension as C
-import qualified Koshucode.Baala.Core.Message           as Abort
+import qualified Koshucode.Baala.Core.Message           as Message
 
 
 -- ----------------------  expressions and operators
@@ -176,7 +176,7 @@ cox = expr where
 
     -- literal composite
     core tree@(B.TreeB n _ _) | n > 1 = fmap CoxLit $ C.litContent tree
-    core (B.TreeB n _ _) = Abort.unkCox $ show n
+    core (B.TreeB n _ _) = Message.unkCox $ show n
 
 -- convert from infix to prefix
 prefix :: [B.Named B.InfixHeight] -> B.AbMap (B.TokenTree)
@@ -184,7 +184,7 @@ prefix htab tree =
     B.abortableTree "prefix" tree $
      case B.infixToPrefix ht tree of
        Right tree3 -> Right $ B.undouble (== 1) tree3
-       Left  xs    -> Abort.ambInfixes $ map detail xs
+       Left  xs    -> Message.ambInfixes $ map detail xs
     where
       ht = B.infixHeight wordText htab
 
@@ -218,7 +218,7 @@ syntax syn = expand where
         case B.divideTreesBy "|" trees of
           [vars, b1] -> do b2 <- expand $ B.treeWrap b1
                            Right $ B.TreeB 6 p [B.treeWrap vars, b2]
-          _ -> Abort.unkCox "abstruction"
+          _ -> Message.unkCox "abstruction"
     expand tree = Right tree
 
 
@@ -271,7 +271,7 @@ position h = spos where
         let index = B.headIndex1 h ns
         in if all (>= 0) index
            then Right $ CoxTerm ns index
-           else Abort.noTerm ns
+           else Message.noTerm ns
     pos (CoxApplyL f xs) = do f'  <- spos f
                               xs' <- mapM spos xs
                               Right $ CoxApplyL f' xs'
@@ -299,11 +299,11 @@ coxRun args = run 0 where
              CoxTerm _ ps   -> term ps args
              CoxApplyL e [] -> run' e
              CoxApplyL (B.Sourced _ (CoxBase _ f)) xs -> f $ map run' xs
-             _ -> Abort.notFound $ "cox: " ++ show core
+             _ -> Message.notFound $ "cox: " ++ show core
 
     term :: [Int] -> [c] -> B.Ab c
-    term []       _ = Abort.notFound "term"
-    term (-1 : _) _ = Abort.notFound "term"
+    term []       _ = Message.notFound "term"
+    term (-1 : _) _ = Message.notFound "term"
     term (p : ps) args2 =
         let c = args2 !! p
         in if C.isRel c
@@ -318,7 +318,7 @@ checkIrreducible :: Cox c -> B.Ab (Cox c)
 checkIrreducible e@(B.Sourced src _)
     | irreducible e = Right e
     | otherwise     = B.abortable "irrep" src $
-                      Abort.unkCox "Not irreducible"
+                      Message.unkCox "Not irreducible"
 
 -- irreducible representation
 irreducible :: Cox c -> Bool

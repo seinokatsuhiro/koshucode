@@ -19,7 +19,7 @@ import qualified Data.Map                    as Map
 import qualified Koshucode.Baala.Base        as B
 import qualified Koshucode.Baala.Core        as C
 import qualified Koshucode.Baala.Op.Builtin  as Op
-import qualified Koshucode.Baala.Op.Message  as Abort
+import qualified Koshucode.Baala.Op.Message  as Message
 
 
 
@@ -34,7 +34,7 @@ consCheckTerm use =
        (Just ns, Nothing, Nothing) -> Right $ relmapCheckTermJust use ns
        (Nothing, Just ns, Nothing) -> Right $ relmapCheckTermHas  use ns
        (Nothing, Nothing, Just ns) -> Right $ relmapCheckTermBut  use ns
-       _ -> Abort.unexpOperand "require one of -just / -has / -but"
+       _ -> Message.unexpOperand "require one of -just / -has / -but"
 
 relmapCheckTermJust :: C.RopUse c -> [B.Termname] -> C.Relmap c
 relmapCheckTermHas  :: C.RopUse c -> [B.Termname] -> C.Relmap c
@@ -54,7 +54,7 @@ relkitCheckTermBy :: ([String] -> B.Relhead -> Bool) -> [String] -> C.RelkitCalc
 relkitCheckTermBy _ _ Nothing = Right C.relkitNothing
 relkitCheckTermBy f ns (Just he1)
     | f ns he1  = Right $ C.relkitJust he1 C.RelkitId
-    | otherwise = Abort.checkTerm $ B.headNames he1
+    | otherwise = Message.checkTerm $ B.headNames he1
 
 
 
@@ -81,7 +81,7 @@ relkitDuplicate :: (Ord c) => [B.Termname] -> C.RelkitCalc c
 relkitDuplicate _ Nothing = Right C.relkitNothing
 relkitDuplicate ns (Just he1)
     | null non  = Right kit2
-    | otherwise = Abort.noTerm non
+    | otherwise = Message.noTerm non
     where
       non :: [B.Termname]
       non = B.headDropTerms he1 ns

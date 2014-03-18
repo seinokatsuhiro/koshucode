@@ -8,7 +8,7 @@ module Koshucode.Baala.Op.Content.Order
 ) where
 
 import qualified Koshucode.Baala.Core       as C
-import qualified Koshucode.Baala.Op.Message as Abort
+import qualified Koshucode.Baala.Op.Message as Message
 
 -- ----------------------
 -- $Operators
@@ -38,7 +38,7 @@ copsOrder =
 
 copBy :: (C.CBool c) => (c -> c -> Bool) -> C.CopFun c
 copBy p [Right x, Right y] = C.putBool $ x `p` y
-copBy _ _  = Abort.notFound ""
+copBy _ _  = Message.notFound ""
 
 copEq   :: (C.CBool c, Eq c) => C.CopFun c
 copEq   =  copBy (==)
