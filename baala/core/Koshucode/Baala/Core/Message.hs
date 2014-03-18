@@ -5,7 +5,6 @@ module Koshucode.Baala.Core.Message
   module Koshucode.Baala.Base.Message,
 
   -- * Core package
-  adlib,
   ambInfixes,
   checkTerm,
   noFile,
@@ -27,15 +26,6 @@ import qualified Koshucode.Baala.Base as B
 import Koshucode.Baala.Base.Message
 
 
--- ----------------------  Function
-
-ab :: AbortCore -> B.Ab a
-ab = Left . B.abortBy
-
--- | AD-LIB: reason
-adlib :: String -> B.Ab a
-adlib reason = Left $ B.abortBecause $ "AD-LIB: " ++ reason
-
 -- | Ambiguous infix operators
 ambInfixes :: [String] -> B.Ab a
 ambInfixes = Left . B.abortLines "Ambiguous infix operators"
@@ -46,7 +36,7 @@ checkTerm = Left . B.abortLines "check-term failed"
 
 -- | File not found
 noFile :: String -> B.Ab a
-noFile = ab . NoFile
+noFile = Left . B.abortLine "File not found"
 
 -- | Input relation does not given terms
 noTerm :: [String] -> B.Ab a
@@ -54,7 +44,7 @@ noTerm = Left . B.abortLines "Input relation does not given terms"
 
 -- | Odd relation literal
 oddRelation :: B.Ab a
-oddRelation = ab OddRelation
+oddRelation = Left $ B.abortBecause "Odd relation literal"
 
 -- | Require flatname
 reqFlatname :: String -> B.Ab a
@@ -63,21 +53,21 @@ reqFlatname = Left . B.abortLine "Require flatname"
 reqTermName :: B.Ab a
 reqTermName = Left $ B.abortBecause "Require term name"
 
--- | Unexpected term names
+-- | Unexpected operand
 unexpOperand :: String -> B.Ab a
-unexpOperand = ab . UnexpOperand
+unexpOperand = Left . B.abortLine "Unexpected operand"
 
 -- | Unknown clause
 unkClause :: B.Ab a
-unkClause = ab UnkClause
+unkClause = Left $ B.abortBecause "Unknown clause"
 
 -- | Unknown expression
 unkCox :: String -> B.Ab a
-unkCox = ab . UnkCox
+unkCox = Left . B.abortLine "Unknown expression"
 
 -- | Unknown word
 unkWord :: String -> B.Ab a
-unkWord = ab . UnkWord
+unkWord = Left . B.abortLine "Unknown word"
 
 -- | Unknown content operator
 unkCop :: String -> B.Ab a
@@ -92,40 +82,5 @@ unmatchType = Left . B.abortLine "Type unmatch"
 
 -- | Unresolved prefix
 unresPrefix :: B.Ab a
-unresPrefix = ab UnresPrefix
-
-
-
--- ----------------------  Datatype
-
-data AbortCore
-    = NoFile String
-    | OddRelation
-    | UnexpOperand String
-    | UnkClause
-    | UnkCox String
-    | UnkWord String
-    | UnresPrefix
-      deriving (Show, Eq, Ord)
-
-instance B.AbortBy AbortCore where
-    abortBy a = B.AbortReason
-                { B.abortReason = r a
-                , B.abortDetail = d a
-                , B.abortSource = []
-                } where
-
-        r (NoFile _)         = "File not found"
-        r (OddRelation)      = "Odd relation literal"
-        r (UnexpOperand _)   = "Unexpected term names"
-        r (UnkClause)        = "Unknown clause"
-        r (UnkCox _)         = "Unknown expression"
-        r (UnkWord _)        = "Unknown word"
-        r (UnresPrefix)      = "Unresolved prefix"
-
-        d (NoFile path)      = [path]
-        d (UnkCox s)         = [s]
-        d (UnkWord s)        = [s]
-        d (UnexpOperand s)   = [s]
-        d _                  = []
+unresPrefix = Left $ B.abortBecause "Unresolved prefix"
 

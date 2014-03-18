@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Message
-( -- * Base package
+( adlib,
   notFound,
   divideByZero,
   heteroDecimal,
@@ -11,6 +11,11 @@ module Koshucode.Baala.Base.Message
 
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Abort.Report as B
+
+
+-- | AD-LIB: reason
+adlib :: String -> B.Ab a
+adlib reason = Left $ B.abortBecause $ "AD-LIB: " ++ reason
 
 -- | Different decimal length
 heteroDecimal :: String -> String -> B.Ab a

@@ -1,10 +1,9 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Aborting message
+-- | Reporting abort reasons.
 
 module Koshucode.Baala.Base.Abort.Report
 ( -- * Type
-  AbortBy (..),
   AbortReason (..),
   Ab, AbMap,
 
@@ -27,9 +26,6 @@ import qualified Koshucode.Baala.Base.Token   as B
 
 
 -- ----------------------  Type
-
-class AbortBy a where
-    abortBy :: a -> AbortReason
 
 data AbortReason = AbortReason
     { abortReason :: String
