@@ -38,9 +38,9 @@ checkTerm = Left . B.abortLines "check-term failed"
 noFile :: String -> B.Ab a
 noFile = Left . B.abortLine "File not found"
 
--- | Input relation does not given terms
+-- | No term in relation
 noTerm :: [String] -> B.Ab a
-noTerm = Left . B.abortLines "Input relation does not given terms"
+noTerm = Left . B.abortLines "No term in relation"
 
 -- | Odd relation literal
 oddRelation :: B.Ab a

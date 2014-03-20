@@ -19,6 +19,7 @@ minimalRops :: (Ord c) => [C.Rop c]
 minimalRops = Builtin.ropList "minimal"  -- GROUP
     [ ( "contents /N"      , Op.consContents , C.sortList "-term" [] )
     , ( "cut /P ..."       , Op.consCut      , C.sortList "-term" [] )
+    , ( "cut-term /R"      , Op.consCutTerm  , C.sortOne  "-relmap" [] )
     , ( "empty"            , Op.consEmpty    , C.sortNone [] )
     , ( "equal"            , Op.consEqual    , C.sortOne  "-relmap" [] )
     , ( "id"               , Op.consId       , C.sortNone [] )
@@ -26,6 +27,7 @@ minimalRops = Builtin.ropList "minimal"  -- GROUP
     , ( "meet R"           , Op.consMeet     , C.sortOne  "-relmap" [] )
     , ( "none R"           , Op.consNone     , C.sortOne  "-relmap" [] )
     , ( "pick /P ..."      , Op.consPick     , C.sortList "-term"   [] )
+    , ( "pick-term /R"     , Op.consPickTerm , C.sortOne  "-relmap" [] )
     , ( "reldee"           , Op.consReldee   , C.sortNone [] )
     , ( "reldum"           , Op.consReldum   , C.sortNone [] )
     , ( "rename /N /P ..." , Op.consRename   , C.sortList "-term"   [] )
