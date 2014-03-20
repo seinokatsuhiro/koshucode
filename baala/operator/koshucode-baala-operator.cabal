@@ -78,7 +78,7 @@ library
         Koshucode.Baala.Op.Vanilla.Global
         Koshucode.Baala.Op.Vanilla.Naming
         Koshucode.Baala.Op.Vanilla.Order
-        Koshucode.Baala.Op.Vanilla.Rops
+        Koshucode.Baala.Op.Vanilla.Rop
 
   -- Modules included in this library but not exported.
   --other-modules:       

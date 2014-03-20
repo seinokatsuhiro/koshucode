@@ -2,15 +2,15 @@
 
 module Koshucode.Baala.Op.Minimal.Term
 ( -- * pick
-  consPick, relmapPick,
+  consPick, relmapPick, relkitPick,
   -- * cut
-  consCut, relmapCut,
+  consCut, relmapCut, relkitCut,
   -- * pick-term
-  consPickTerm, relmapPickTerm,
+  consPickTerm, relmapPickTerm, relkitPickTerm,
   -- * cut-term
-  consCutTerm, relmapCutTerm,
+  consCutTerm, relmapCutTerm, relkitCutTerm,
   -- * rename
-  consRename, relmapRename,
+  consRename, relmapRename, relkitRename,
 ) where
 
 import qualified Data.Maybe                 as Maybe

@@ -2,7 +2,7 @@
 
 {-| Vanilla relational operators. -}
 
-module Koshucode.Baala.Op.Vanilla.Rops
+module Koshucode.Baala.Op.Vanilla.Rop
 ( vanillaRops,
   -- $Operators
 ) where
@@ -27,6 +27,8 @@ vanillaRops = Op.ropList "vanilla"
         Op.consAdd, C.sortList "-in" ["-let"] )
     , ( "check-term [ -just /N ... | -has /N ... | -but /N ... ]",
         Op.consCheckTerm, C.sortNone ["-just", "-has", "-but"] )
+    , ( "compose R",
+        Op.consCompose, C.sortOne "-relmap" [] )
     , ( "do R ...",
         Op.consDo, C.sortList "-relmap" ["-let"] )
     , ( "duplicate /N ...",

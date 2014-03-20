@@ -3,6 +3,8 @@
 
 module Koshucode.Baala.Op.Vanilla.Confl
 ( 
+  -- * compose
+  consCompose, relmapCompose, relkitCompose,
   -- * maybe
   consMaybe, relmapMaybe, relkitMaybe,
   -- * full
@@ -23,6 +25,30 @@ import qualified Koshucode.Baala.Core       as C
 import qualified Koshucode.Baala.Op.Builtin as Op
 import qualified Koshucode.Baala.Op.Minimal as Op
 import qualified Koshucode.Baala.Op.Message as Message
+
+
+
+-- ----------------------  compose
+
+consCompose :: (Ord c, C.CNil c) => C.RopCons c
+consCompose use =
+    do rmap <- Op.getRelmap use
+       Right $ relmapCompose use rmap
+
+relmapCompose :: (Ord c, C.CNil c) => C.RopUse c -> B.Map (C.Relmap c)
+relmapCompose use = C.relmapBinary use relkitCompose
+
+relkitCompose :: forall c. (Ord c, C.CNil c) => C.RelkitBinary c
+relkitCompose kit2@(C.Relkit (Just he2) _) (Just he1) =
+    do kitMeet <- Op.relkitMeet kit2 (Just he1)
+       kitCut  <- Op.relkitCut shared $ C.relkitHead kitMeet
+       Right $ kitMeet `B.mappend` kitCut
+    where
+      ns1    = B.headNames he1
+      ns2    = B.headNames he2
+      ind    = B.snipIndex ns1 ns2
+      shared = B.snipFrom  ind ns2
+relkitCompose _ _ = Right C.relkitNothing
 
 
 

@@ -7,8 +7,8 @@ module Koshucode.Baala.Op.Minimal.Rop
   -- $ListOfOperators
 ) where
 
-import qualified Koshucode.Baala.Core    as C
-import qualified Koshucode.Baala.Op.Builtin           as Builtin
+import qualified Koshucode.Baala.Core                 as C
+import qualified Koshucode.Baala.Op.Builtin           as Op
 import qualified Koshucode.Baala.Op.Minimal.Origin    as Op
 import qualified Koshucode.Baala.Op.Minimal.Restrict  as Op
 import qualified Koshucode.Baala.Op.Minimal.Term      as Op
@@ -16,7 +16,7 @@ import qualified Koshucode.Baala.Op.Minimal.Tropashko as Op
 
 {-| Minimal implementations of relmap operators. -}
 minimalRops :: (Ord c) => [C.Rop c]
-minimalRops = Builtin.ropList "minimal"  -- GROUP
+minimalRops = Op.ropList "minimal"  -- GROUP
     [ ( "contents /N"      , Op.consContents , C.sortList "-term" [] )
     , ( "cut /P ..."       , Op.consCut      , C.sortList "-term" [] )
     , ( "cut-term /R"      , Op.consCutTerm  , C.sortOne  "-relmap" [] )
