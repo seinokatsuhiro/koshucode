@@ -44,6 +44,7 @@ copsList =
     , C.CopFun  "max"         copMax
     , C.CopFun  "min"         copMin
     , C.CopFun  "minus"       copMinus
+    , C.CopFun  "push"        copPush
     , C.CopFun  "reverse"     copReverse
     , C.CopFun  "total"       copTotal
     , C.CopFun  "sub-index"   copSubIndex
@@ -164,4 +165,13 @@ subIndex from to xs = xs2 where
 subLength :: Int -> Int -> [a] -> [a]
 subLength from len xs = xs2 where
     xs2 = take len $ drop (from - 1) xs
+
+copPush :: (C.CContent c) => C.CopFun c
+copPush arg =
+    do arg2 <- C.getArg2 arg
+       case arg2 of
+         (Right c, Right cs)
+             | C.isSet cs -> C.putSet $ c : C.gSet cs
+             | otherwise  -> Message.reqCollection
+         _ -> typeUnmatch arg
 

@@ -28,7 +28,7 @@ module Koshucode.Baala.Core.Relmap.Relkit
   relkitLink,
   relkitRun,
   fixedRelation,
-  bodyMapArrange,
+  bmapAlign,
 ) where
 
 import qualified Control.Monad                       as Monad
@@ -208,8 +208,8 @@ fixedRelation f = fix where
     fix bo1 = do bo2 <- f bo1
                  if bo1 == bo2 then Right bo2 else fix bo2
 
-bodyMapArrange :: B.Relhead -> B.Relhead ->  B.Map (B.AbMap [[c]])
-bodyMapArrange he1 he2 f = g where
+bmapAlign :: B.Relhead -> B.Relhead -> B.Map (B.AbMap [[c]])
+bmapAlign he1 he2 f = g where
     g bo1 = do bo2 <- f bo1
-               Right $ B.bodyArrange he1 he2 bo2
+               Right $ B.bodyAlign he1 he2 bo2
 

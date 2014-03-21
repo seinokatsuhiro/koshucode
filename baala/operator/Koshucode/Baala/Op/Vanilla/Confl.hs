@@ -18,6 +18,8 @@ module Koshucode.Baala.Op.Vanilla.Confl
   -- * fix & fix-join
   consFix,
   consFixJoin,
+  -- * repeat
+  consRepeat,
 ) where
 
 import qualified Koshucode.Baala.Base       as B
@@ -76,23 +78,24 @@ relkitMaybe (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
     share2  =  he2 `B.posFor` shared
     side2   =  he2 `B.posFor` sided
 
-    m2 bo2   = Right $ B.gatherToMap $ map kv bo2
-    kv cs2  = ( B.posPick share2 cs2,
-                B.posPick side2  cs2 )
+    pick1     =  B.posPick share1
+    pick2     =  B.posPick share2
 
-    he3  = B.mappend he2 he1
+    kv cs2  = (pick2 cs2, B.posPick side2 cs2)
+
+    he3  = he2 `B.mappend` he1
     kit3 = C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
     kitf3 :: [C.Relbmap c] -> C.Relbmap c
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
            bo2 <- bmap2 bo1
-           m   <- m2 bo2
-           Right $ concatMap (step m) bo1
+           let b2map = B.gatherToMap $ map kv bo2
+           Right $ step b2map `concatMap` bo1
 
-    nils       = replicate (B.headDegree he3 - B.headDegree he1) C.nil
-    step m cs1 = case B.lookupMap (B.posPick share1 cs1) m of
-                   Just side -> map (++ cs1) side
-                   Nothing   -> [nils ++ cs1]
+    nils = replicate (B.headDegree he3 - B.headDegree he1) C.nil
+    step b2map cs1 = case B.lookupMap (pick1 cs1) b2map of
+                       Just b2side -> map (++ cs1) b2side
+                       Nothing     -> [nils ++ cs1]
 
 relkitMaybe _ _ = Right C.relkitNothing
 
@@ -184,10 +187,8 @@ relmapIf use = C.relmapConfl use relkitIf
 relkitIf :: (Ord c) => C.RelkitConfl c
 relkitIf [(C.Relkit _ kitbT), (C.Relkit (Just heA) kitbA), (C.Relkit (Just heB) kitbB)] _
     | B.headEquiv heA heB = Right $ kit3
-    | otherwise = Message.unexpOperand $ "different headings: "
-                    ++ showHead heA ++ " and " ++ showHead heB
+    | otherwise = Message.diffHead [heA, heB]
     where
-      showHead = show . B.doc
       kit3 = C.relkitJust heA $ C.RelkitAbFull True kitf3 [kitbT, kitbA, kitbB]
       kitf3 bmaps bo1 =
           do let [bmapT, bmapA, bmapB] = bmaps
@@ -196,7 +197,7 @@ relkitIf [(C.Relkit _ kitbT), (C.Relkit (Just heA) kitbA), (C.Relkit (Just heB) 
                [] -> align $ bmapB bo1
                _  -> bmapA bo1
       align :: B.Map (B.Ab [[c]])
-      align = fmap (B.headArrange heA heB `map`)
+      align = fmap (B.headAlign heA heB `map`)
 
 relkitIf [kitT@(C.Relkit _ _), kitA@(C.Relkit heA' kitbA), kitB@(C.Relkit heB' kitbB)] _
     | isNothing2 heA' heB' = Right C.relkitNothing
@@ -242,10 +243,43 @@ relmapFix :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
 relmapFix use = C.relmapBinary use relkitFix
 
 relkitFix :: forall c. (Ord c) => C.RelkitBinary c
-relkitFix (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
-    kit3 = C.relkitJust he1 $ C.RelkitAbFull True kitf3 [kitb2]
-    kitf3 bmaps = let [bmap2] = bmaps
-                      bmap2'  = C.bodyMapArrange he1 he2 bmap2
-                  in C.fixedRelation bmap2'
+relkitFix (C.Relkit (Just he2) kitb2) (Just he1)
+    | B.headEquiv he1 he2 = Right $ kit3
+    | otherwise = Message.diffHead [he1, he2]
+    where
+      kit3 = C.relkitJust he1 $ C.RelkitAbFull True kitf3 [kitb2]
+      kitf3 bmaps = let [bmap2] = bmaps
+                        bmap2'  = C.bmapAlign he2 he1 bmap2
+                    in C.fixedRelation bmap2'
 relkitFix _ _ = Right C.relkitNothing
+
+
+-- ----------------------  repeat
+
+consRepeat :: (Ord c) => C.RopCons c
+consRepeat use =
+  do cnt  <- Op.getInt    use "-count"
+     rmap <- Op.getRelmap use
+     Right $ relmapRepeat use cnt rmap
+
+relmapRepeat :: (Ord c) => C.RopUse c -> Int -> B.Map (C.Relmap c)
+relmapRepeat use cnt = C.relmapBinary use $ relkitRepeat cnt
+
+relkitRepeat :: forall c. (Ord c) => Int -> C.RelkitBinary c
+relkitRepeat cnt (C.Relkit (Just he2) kitb2) (Just he1)
+    | B.headEquiv he1 he2 = Right $ kit3
+    | otherwise = Message.diffHead [he1, he2]
+    where
+    kit3 = C.relkitJust he1 $ C.RelkitAbFull True kitf3 [kitb2]
+    kitf3 bmaps bo1 =
+        do let [bmap2] = bmaps
+               bmap2'  = C.bmapAlign he2 he1 bmap2
+           bo2 <- rep bmap2' cnt bo1
+           Right bo2
+
+    rep bmap2' = loop where
+        loop c bo | c > 0     = loop (c - 1) =<< bmap2' bo
+                  | otherwise = Right bo
+
+relkitRepeat _ _ _ = Right C.relkitNothing
 

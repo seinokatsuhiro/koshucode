@@ -69,12 +69,14 @@ vanillaRops = Op.ropList "vanilla"
         Op.consPrefix, C.sortOneList "-prefix" "-term" [] )
     , ( "prefix-change /P /Q",
         Op.consPrefixChange, C.sortTwo "-new" "-old" [] )
-    , ( "rank /N -order /N ...",
-        Op.consRank, C.sortOne "-term" ["-order", "-dense"] )
     , ( "range /N -from E -to E",
         Op.consRange, C.sortOne "-term" ["-from", "-to"] )
+    , ( "rank /N -order /N ...",
+        Op.consRank, C.sortOne "-term" ["-order", "-dense"] )
     , ( "rdf P /S /O",
         Op.consRdf, C.sortOneList "-pattern" "-term" [] )
+    , ( "repeat N R",
+        Op.consRepeat, C.sortTwo "-count" "-relmap" [] )
     , ( "size /N",
         Op.consSize, C.sortOne "-term" [] )
     , ( "subst /N E ...",

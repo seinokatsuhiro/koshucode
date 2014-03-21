@@ -8,8 +8,8 @@ module Koshucode.Baala.Base.Data.Rel
   Relbody,
   relPosHere,
   relSort,
-  headArrange,
-  bodyArrange,
+  headAlign,
+  bodyAlign,
 
   -- * Constant
   reldum,
@@ -71,17 +71,17 @@ relSortBody (Rel h1 b1) = Rel h1 $ B.unique $ List.sort b1
 relSortHead :: B.Map (Rel c)
 relSortHead (Rel h1 b1) = Rel h2 b2 where
     h2 = B.headFrom $ List.sort $ B.headNames h1
-    b2 = (h2 `headArrange` h1) `map` b1
+    b2 = (h2 `headAlign` h1) `map` b1
 
-headArrange :: B.Relhead -> B.Relhead -> B.Map [c]
-headArrange to from
+headAlign :: B.Relhead -> B.Relhead -> B.Map [c]
+headAlign to from
     | to == from = id
     | otherwise  = B.snipFrom index
     where
       index = B.posIndex `map` B.posTo from to
 
-bodyArrange :: B.Relhead -> B.Relhead -> B.Map [[c]]
-bodyArrange h1 h2 = (headArrange h1 h2 `map`)
+bodyAlign :: B.Relhead -> B.Relhead -> B.Map [[c]]
+bodyAlign h1 h2 = (headAlign h1 h2 `map`)
 
 
 

@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Fundamental operators in relational algebra.
@@ -46,7 +47,7 @@ relmapMeet :: (Ord c)
 relmapMeet use = C.relmapBinary use relkitMeet
 
 -- | Meet two relations.
-relkitMeet :: (Ord c) => C.RelkitBinary c
+relkitMeet :: forall c. (Ord c) => C.RelkitBinary c
 relkitMeet (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
     shared    :: [B.Termname]
     shared    =  B.posInnerNames $ he1 `B.posFrom` he2
@@ -62,14 +63,18 @@ relkitMeet (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
 
     he3       =  he2 `B.mappend` he1
     kv cs2    =  (pick2 cs2, cut2 cs2) -- shared contents and side contents
-    kit3      =  C.relkitJust he3 $ C.RelkitOneToAbMany False kitf3 [kitb2]
-    kitf3 bmaps cs1 =
+
+    kit3      =  C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
+    kitf3 :: [C.Relbmap c] -> C.Relbmap c
+    kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
-           bo2 <- bmap2 [cs1]
+           bo2 <- bmap2 bo1
            let b2map = B.gatherToMap $ map kv bo2
-           case B.lookupMap (pick1 cs1) b2map of
-             Just b2side -> Right $ map (++ cs1) b2side
-             Nothing     -> Right $ []
+           Right $ step b2map `concatMap` bo1
+
+    step b2map cs1 = case B.lookupMap (pick1 cs1) b2map of
+                       Just b2side -> map (++ cs1) b2side
+                       Nothing     -> []
 
 relkitMeet _ _ = Right C.relkitNothing
 
