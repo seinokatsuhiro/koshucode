@@ -82,13 +82,15 @@ relkitSnipTerm heSnip boSnip (C.Relkit (Just he2) _) =
 relkitSnip :: B.Snip B.Termname -> B.Snip c -> [B.Termname] -> C.RelkitCalc c
 relkitSnip _ _ _ Nothing = Right C.relkitNothing
 relkitSnip heSnip boSnip ns (Just he1)
-    | null non  = Right kit2
-    | otherwise = Message.noTerm non
+    | B.sameLength ns ind1 = Right kit2
+    | otherwise = Message.noTerm non he1
     where
-      non  = B.headDropTerms he1 ns
-      he2  = B.headChange (heSnip ind) he1
-      kit2 = C.relkitJust he2 $ C.RelkitOneToOne True $ boSnip ind
-      ind  = ns `B.snipIndex` B.headNames he1
+      he2   = B.headChange (heSnip ind1) he1
+      kit2  = C.relkitJust he2 $ C.RelkitOneToOne True $ boSnip ind1
+      ns1   = B.headNames he1
+      non   = B.snipOff ind ns
+      ind1  = ns  `B.snipIndex` ns1
+      ind   = ns1 `B.snipIndex` ns
 
 
 -- ----------------------  rename
@@ -101,12 +103,12 @@ consRename use =
 relmapRename :: C.RopUse c -> [(B.Termname, B.Termname)] -> C.Relmap c
 relmapRename use = C.relmapFlow use . relkitRename
 
-{-| Change terms names -}
+-- | Change terms names
 relkitRename :: [(B.Termname, B.Termname)] -> C.RelkitCalc c
 relkitRename _ Nothing = Right C.relkitNothing
 relkitRename np (Just he1)
     | nsCheck /= [] = Message.reqNewTerm nsCheck
-    | psCheck /= [] = Message.noTerm     psCheck
+    | psCheck /= [] = Message.noTerm     psCheck he1
     | otherwise     = Right kit2
     where
       (ns, ps) = unzip np

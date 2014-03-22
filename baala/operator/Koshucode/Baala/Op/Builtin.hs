@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Builtin relational operator. -}
+-- | Builtin relmap operator.
 
 module Koshucode.Baala.Op.Builtin
 ( module Koshucode.Baala.Op.Builtin.Get,

@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Vanilla relational operators. -}
+-- | Vanilla relational operators.
 
 module Koshucode.Baala.Op.Vanilla.Rop
 ( vanillaRops,
@@ -17,8 +17,7 @@ import qualified Koshucode.Baala.Op.Vanilla.Global  as Op
 import qualified Koshucode.Baala.Op.Vanilla.Naming  as Op
 import qualified Koshucode.Baala.Op.Vanilla.Order   as Op
 
-{-| Implementation of relational operators. -}
---vanillaRops :: [C.Rop Op.VContent]
+-- | Implementation of relational operators.
 vanillaRops :: (C.CContent c) => [C.Rop c]
 vanillaRops = Op.ropList "vanilla"
     --  SYNOPSIS,
@@ -92,68 +91,65 @@ vanillaRops = Op.ropList "vanilla"
     ]
 
 -- ----------------------
-{- $Operators
-
-   [@add \/N E ...@]
-     Add terms of name @\/N@ and content @E@ ...
-
-   [@check-term \[ -just \/P ... | -has \/P ... | -but \/N ... \]@]
-     Check occurences of terms for input relation.
-
-   [@duplicate \/P ...@]
-     Pass duplicate tuples on @\/P@ ...
-
-   [@enclose \/N@]
-     Enclose input relation in a term.
-
-   [@group \/N R@]
-     Group tuples in @R@ by input relation.
-
-   [@keep E@]
-     Keep tuples @E@ equals true.
-  
-   [@koshu-cop \/N@]
-     Retrieve list of content operators.
-  
-   [@koshu-cop-infix \/N \[ -height \/N \]\[ -dir \/N \]@]
-     Retrieve list of infix specifications.
-  
-   [@koshu-rop /N@]
-     Retrieve list of relmap operators.
-  
-   [@koshu-version /N@]
-     Get version number of the koshu calculator.
-  
-   [@maybe R@]
-     Meet input and given relation.
-     It keeps input tuples of which counterparts are totally negated.
-  
-   [@member \/N \/N@]
-     Membership of set or list.
-  
-   [@number \/N \[ -order \/P ... \]@]
-     Add numbering term @\/N@ ordered by @\/P@ ...
-
-   [@omit E@]
-     Omit tuples @E@ equals true.
-  
-   [@prefix \/P \/N ...@]
-     Add prefix @\/P@ to terms @\/N@ ...
-  
-   [@prefix-change \/P \/Q@]
-     Change prefix from @\/P@ to @\/Q@.
-  
-   [@rank \/N -order \/P ... \[ -dense \]@]
-     Add term @\/N@ for ranking ordered by @\/P@ ...
-
-   [@rdf P \/S \/O@]
-     Retrieve relation from RDF-like judgements.
-  
-   [@size \/N@]
-     Calculate cardinality of input relation.
-  
-   [@unprefix \/P@]
-     Remove prefix @\/P@ from term name.
-
--}
-
+-- $Operators
+--
+--  [@add \/N E ...@]
+--    Add terms of name @\/N@ and content @E@ ...
+--
+--  [@check-term \[ -just \/P ... | -has \/P ... | -but \/N ... \]@]
+--    Check occurences of terms for input relation.
+--
+--  [@duplicate \/P ...@]
+--    Pass duplicate tuples on @\/P@ ...
+--
+--  [@enclose \/N@]
+--    Enclose input relation in a term.
+--
+--  [@group \/N R@]
+--    Group tuples in @R@ by input relation.
+--
+--  [@keep E@]
+--    Keep tuples @E@ equals true.
+-- 
+--  [@koshu-cop \/N@]
+--    Retrieve list of content operators.
+-- 
+--  [@koshu-cop-infix \/N \[ -height \/N \]\[ -dir \/N \]@]
+--    Retrieve list of infix specifications.
+-- 
+--  [@koshu-rop /N@]
+--    Retrieve list of relmap operators.
+-- 
+--  [@koshu-version /N@]
+--    Get version number of the koshu calculator.
+-- 
+--  [@maybe R@]
+--    Meet input and given relation.
+--    It keeps input tuples of which counterparts are totally negated.
+-- 
+--  [@member \/N \/N@]
+--    Membership of set or list.
+-- 
+--  [@number \/N \[ -order \/P ... \]@]
+--    Add numbering term @\/N@ ordered by @\/P@ ...
+--
+--  [@omit E@]
+--    Omit tuples @E@ equals true.
+-- 
+--  [@prefix \/P \/N ...@]
+--    Add prefix @\/P@ to terms @\/N@ ...
+-- 
+--  [@prefix-change \/P \/Q@]
+--    Change prefix from @\/P@ to @\/Q@.
+-- 
+--  [@rank \/N -order \/P ... \[ -dense \]@]
+--    Add term @\/N@ for ranking ordered by @\/P@ ...
+--
+--  [@rdf P \/S \/O@]
+--    Retrieve relation from RDF-like judgements.
+-- 
+--  [@size \/N@]
+--    Calculate cardinality of input relation.
+-- 
+--  [@unprefix \/P@]
+--    Remove prefix @\/P@ from term name.

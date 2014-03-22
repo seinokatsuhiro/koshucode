@@ -16,9 +16,7 @@ import qualified Koshucode.Baala.Op.Content.Arith  as Op
 import qualified Koshucode.Baala.Op.Content.List   as Op
 import qualified Koshucode.Baala.Op.Content.Logic  as Op
 import qualified Koshucode.Baala.Op.Content.Order  as Op
---import qualified Koshucode.Baala.Op.Content.Type   as Op
 
---vanillaGlobal :: C.Global Op.VContent
 vanillaGlobal :: (C.CContent c) => C.Global c
 vanillaGlobal =
     C.global { C.globalCops = vanillaCops

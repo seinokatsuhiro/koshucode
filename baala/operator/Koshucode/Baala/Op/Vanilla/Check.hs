@@ -60,14 +60,12 @@ relkitCheckTermBy f ns (Just he1)
 
 -- ----------------------  duplicate
 
-{- $duplicate
-
-   Output tuples of which key is duplicated.
-   Relmap @duplicate@ @\/x@ @\/y@ means
-   if set of terms @\/x@ and @\/y@ is a key of relation,
-   there are another tuples that has the same key.
-
--}  
+-- $duplicate
+--
+--  Output tuples of which key is duplicated.
+--  Relmap @duplicate@ @\/x@ @\/y@ means
+--  if set of terms @\/x@ and @\/y@ is a key of relation,
+--  there are another tuples that has the same key.
 
 consDuplicate :: (Ord c) => C.RopCons c
 consDuplicate use =
@@ -81,7 +79,7 @@ relkitDuplicate :: (Ord c) => [B.Termname] -> C.RelkitCalc c
 relkitDuplicate _ Nothing = Right C.relkitNothing
 relkitDuplicate ns (Just he1)
     | null non  = Right kit2
-    | otherwise = Message.noTerm non
+    | otherwise = Message.noTerm non he1
     where
       non :: [B.Termname]
       non = B.headDropTerms he1 ns
@@ -100,7 +98,7 @@ relkitDuplicate ns (Just he1)
 
 -- ----------------------  typename
 
-{-| Get typename. -}
+-- | Get typename.
 consTypename :: (C.CContent c) => C.RopCons c
 consTypename use =
   do np <- Op.getTermPairs use "-term"

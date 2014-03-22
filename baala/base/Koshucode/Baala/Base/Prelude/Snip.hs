@@ -10,7 +10,9 @@ module Koshucode.Baala.Base.Prelude.Snip
   snipIndex,
   snipFrom,
   snipOff,
+  snipBoth,
   snipFore,
+  sameLength,
 
   -- * Example
   -- $Example
@@ -23,11 +25,11 @@ type Snip a = [Int] -> B.Map [a]
 
 -- | Indices of shared elements.
 snipIndex :: (Eq a) => [a] -> [a] -> [Int]
-snipIndex ks vs = loop ks where
+snipIndex ks xs = loop ks where
     loop [] = []
-    loop (k:ks2) = case List.elemIndex k vs of
-                    Just p  ->  p : loop ks2
-                    Nothing ->      loop ks2
+    loop (k:ks2) = case List.elemIndex k xs of
+                     Just p  -> p : loop ks2
+                     Nothing ->     loop ks2
 
 -- | Pick up indexed elements.
 snipFrom :: Snip a
@@ -55,10 +57,19 @@ snipOff ps xs = loop 0 xs where
         | p `elem` ps  =     loop (p + 1) xs2
         | otherwise    = x : loop (p + 1) xs2
 
+-- | Pair of picking-up and cutting-off elements.
+snipBoth :: [Int] -> [a] -> ([a], [a])
+snipBoth ps xs = (snipFrom ps xs, snipOff ps xs)
+
 -- | Move indexed elements to the front.
 snipFore :: Snip a
-snipFore ps xs = snipFrom ps xs ++ snipOff ps xs
+snipFore ps xs =
+    let (from, off) = snipBoth ps xs
+    in from ++ off
 
+-- | Check lengths of two lists are same.
+sameLength :: [a] -> [b] -> Bool
+sameLength a b = length a == length b
 
 -- --------------------------------------------
 -- $Example
@@ -80,6 +91,11 @@ snipFore ps xs = snipFrom ps xs ++ snipOff ps xs
 --
 --  >>> (snipIndex "ce" "abcdefg") `snipOff` "ABCDEFG"
 --  "ABDFG"
+--
+--  Get pick-up and cut-off elements.
+--
+--  >>> (snipIndex "ce" "abcdefg") `snipBoth` "ABCDEFG"
+--  ("CE", "ABDFG")
 --
 --  Move snipping elements to the front.
 --

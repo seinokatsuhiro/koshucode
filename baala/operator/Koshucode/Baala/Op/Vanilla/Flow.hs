@@ -74,7 +74,7 @@ relkitMember _ Nothing = Right C.relkitNothing
 relkitMember (x, xs) he1'@(Just he1) = kit2 where
     kit2 | xHere     && xsHere = relkitMemberCheck  xPos xsPos he1'
          | not xHere && xsHere = relkitMemberExpand x    xsPos he1'
-         | otherwise           = Message.noTerm [x, xs]
+         | otherwise           = Message.noTerm [x, xs] he1
     ([xPos, xsPos], [xHere, xsHere])
         = he1 `B.posHere` [x, xs]
 
@@ -142,7 +142,7 @@ consSize use =
 relmapSize :: (C.CDec c) => C.RopUse c -> B.Termname -> C.Relmap c
 relmapSize use n = C.relmapFlow use $ relkitSize n
 
-{-| Cardinality -}
+-- | Cardinality
 relkitSize :: (C.CDec c) => B.Termname -> C.RelkitCalc c
 relkitSize n _ = Right kit2 where
     he2       = B.headFrom [n]

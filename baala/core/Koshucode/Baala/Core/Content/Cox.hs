@@ -265,13 +265,13 @@ link base deriv = li where
 
 -- put term positions for actural heading
 position :: B.Relhead -> Cox c -> B.Ab (Cox c)
-position h = spos where
+position he = spos where
     spos = B.abortableSourced "position" pos
     pos (CoxTerm ns _)  =
-        let index = B.headIndex1 h ns
+        let index = B.headIndex1 he ns
         in if all (>= 0) index
            then Right $ CoxTerm ns index
-           else Message.noTerm ns
+           else Message.noTerm ns he
     pos (CoxApplyL f xs) = do f'  <- spos f
                               xs' <- mapM spos xs
                               Right $ CoxApplyL f' xs'

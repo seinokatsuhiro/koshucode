@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Restrict by relmap -}
+-- | Restrict by relmap
 
 module Koshucode.Baala.Op.Minimal.Restrict
 ( -- * some

@@ -33,7 +33,7 @@ consSource use =
 consId :: C.RopCons c
 consId use = Right $ relmapId use
 
-{-| Identity mapping, i.e., do nothing. -}
+-- | Identity mapping, i.e., do nothing.
 relmapId :: C.RopUse c -> C.Relmap c
 relmapId use = C.relmapFlow use $ Right . C.relkitId
 
@@ -46,7 +46,7 @@ consEmpty use = Right $ relmapEmpty use
 relmapEmpty :: C.RopUse c -> C.Relmap c
 relmapEmpty use = C.relmapFlow use relkitEmpty
 
-{-| Throw away all tuples in a relation. -}
+-- | Throw away all tuples in a relation.
 relkitEmpty :: C.RelkitCalc c
 relkitEmpty he1 = Right $ C.relkit he1 $ C.RelkitConst []
 

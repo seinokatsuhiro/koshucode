@@ -39,8 +39,11 @@ noFile :: String -> B.Ab a
 noFile = Left . B.abortLine "File not found"
 
 -- | No term in relation
-noTerm :: [String] -> B.Ab a
-noTerm = Left . B.abortLines "No term in relation"
+noTerm :: [B.Termname] -> B.Relhead -> B.Ab a
+noTerm ns he1 = Left $ B.abortLines "No term in relation" detail where
+    detail = ["Unknown"] ++ indent ns ++ ["Relation"] ++ indent ns1
+    indent = map ("  " ++)
+    ns1    = B.headNames he1
 
 -- | Odd relation literal
 oddRelation :: B.Ab a

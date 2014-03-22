@@ -107,7 +107,7 @@ consFull use =
     do [m1, m2] <- Op.getRelmaps use
        Right $ relmapFull use m1 m2
 
-{-| like SQL's full join -}
+-- | like SQL's full join
 relmapFull :: (Ord c, C.CNil c) => C.RopUse c
            -> C.Relmap c -> C.Relmap c -> C.Relmap c
 relmapFull use m1 m2 = C.relmapConfl use fy [m1, m2] where

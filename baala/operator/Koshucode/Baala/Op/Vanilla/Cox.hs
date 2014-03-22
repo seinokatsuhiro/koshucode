@@ -70,8 +70,8 @@ relkitSubst :: (C.CList c, C.CRel c, B.Pretty c)
   => ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.RelkitCalc c
 relkitSubst _ Nothing = Right C.relkitNothing
 relkitSubst (base, deriv, bodies) (Just he1)
-    | sameLength ns ind = Right kit2
-    | otherwise         = Message.unexpTermName
+    | B.sameLength ns ind = Right kit2
+    | otherwise           = Message.unexpTermName
     where
       (ns, xs)    = unzip bodies                 -- names and expressions
       ns1         = B.headNames he1              -- term names of input relation
@@ -82,9 +82,6 @@ relkitSubst (base, deriv, bodies) (Just he1)
       kitf2 _ cs1 = do xs2 <- C.coxBeta base deriv he1 `mapM` xs
                        cs2 <- C.coxRun cs1 `mapM` xs2
                        Right $ cs2 ++ cut cs1
-
-sameLength :: [a] -> [a1] -> Bool
-sameLength a b = length a == length b
 
 
 -- ----------------------  filter

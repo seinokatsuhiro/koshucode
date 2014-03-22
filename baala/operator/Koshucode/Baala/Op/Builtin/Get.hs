@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| Extract suboperand from use of relmap -}
+-- | Extract suboperand from use of relmap
 
 module Koshucode.Baala.Op.Builtin.Get
 ( -- * Datatype
@@ -100,13 +100,12 @@ word _ = Message.unexpOperand "Require one word"
 
 -- ----------------------  Relmap
 
-{-| Get a relmap from operator use.
-
-    > consMeet :: (Ord c) => RopCons c
-    > consMeet u = do
-    >   m <- getRelmap u
-    >   Right $ relmapMeet u m
-    -}
+-- | Get a relmap from operator use.
+--
+--   > consMeet :: (Ord c) => RopCons c
+--   > consMeet u = do
+--   >   m <- getRelmap u
+--   >   Right $ relmapMeet u m
 getRelmap :: C.RopUse c -> B.Ab (C.Relmap c)
 getRelmap u =
     do ms    <- getRelmaps u
@@ -115,24 +114,24 @@ getRelmap u =
          [m] -> Right m
          _   -> Message.unexpOperand "Require one relmap"
 
-{-| Get relmaps from operator use. -}
+-- | Get relmaps from operator use.
 getRelmaps :: C.RopUse c -> B.Ab [C.Relmap c]
 getRelmaps = Right . C.ropSubrelmap
 
 
 -- ----------------------  Term
 
-{-| Get a term name from named operand. -}
+-- | Get a term name from named operand.
 getTerm :: RopGet c B.Termname
 getTerm = getAbortable get where
     get [x] = Op.termname x
     get _   = Message.unexpOperand "Require one term"
 
-{-| Get list of term names from named operand. -}
+-- | Get list of term names from named operand.
 getTerms :: RopGet c [B.Termname]
 getTerms = getAbortable Op.termnames
 
-{-| Get list of term-name pairs from named operand. -}
+-- | Get list of term-name pairs from named operand.
 getTermPairs :: RopGet c [(B.Termname, B.Termname)]
 getTermPairs = getAbortable Op.termnamePairs
 
@@ -147,13 +146,12 @@ getSwitch u name = getAbortableOption False get u name where
     get [] = Right True
     get _  = Message.unexpOperand $ "Just type only " ++ name
 
-{-| Get word from named operand.
-
-    > consXxx :: RopCons c
-    > consXxx u = do
-    >   sign <- getWord u "-sign"
-    >   ...
-    -}
+-- | Get word from named operand.
+--
+--   > consXxx :: RopCons c
+--   > consXxx u = do
+--   >   sign <- getWord u "-sign"
+--   >   ...
 getWord :: RopGet c String
 getWord = getAbortable get where
     get [B.TreeL (B.TWord _ _ s)] = Right s

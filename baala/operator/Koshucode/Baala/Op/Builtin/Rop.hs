@@ -5,7 +5,6 @@
 module Koshucode.Baala.Op.Builtin.Rop
 ( builtinRops,
   ropList,
-
   -- $ListOfOperator
 ) where
 
@@ -13,7 +12,7 @@ import qualified Data.Monoid as M
 import qualified Koshucode.Baala.Core as C
 
 
-{-| Built-in relmap operator. -}
+-- | Built-in relmap operator.
 builtinRops :: [C.Rop c]
 builtinRops = ropList "builtin"
     [ ("append R ...", ropConsConcat, C.sortList "-relmap" []) ]
@@ -21,7 +20,7 @@ builtinRops = ropList "builtin"
 ropConsConcat :: C.RopCons c
 ropConsConcat = Right . M.mconcat . C.ropSubrelmap
 
-{-| Make implementations of relation-mapping operators. -}
+-- | Make implementations of relation-mapping operators.
 ropList
     :: String      -- ^ Operator group
     -> [(String, C.RopCons c, C.RopOperandSorter)]
@@ -34,11 +33,8 @@ ropList group = map rop where
         in C.Rop name group sorter cons synopsis
 
 
-
 -- ----------------------
-{- $ListOfOperator
-
-   [/r/ @|@ /s/]   Append relmaps
-
--}
+-- $ListOfOperator
+--
+--  [/r/ @|@ /s/]   Append relmaps
 
