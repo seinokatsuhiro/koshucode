@@ -8,15 +8,15 @@ module Koshucode.Baala.Core.Message
   ambInfixes,
   checkTerm,
   noFile,
-  noTerm,
   oddRelation,
-  reqFlatname,
+  reqFlatName,
   reqTermName,
   unexpOperand,
   unkClause,
   unkCop,
   unkCox,
   unkRelmap,
+  unkTerm,
   unkWord,
   unmatchType,
   unresPrefix,
@@ -38,21 +38,16 @@ checkTerm = Left . B.abortLines "check-term failed"
 noFile :: String -> B.Ab a
 noFile = Left . B.abortLine "File not found"
 
--- | No term in relation
-noTerm :: [B.Termname] -> B.Relhead -> B.Ab a
-noTerm ns he1 = Left $ B.abortLines "No term in relation" detail where
-    detail = ["Unknown"] ++ indent ns ++ ["Relation"] ++ indent ns1
-    indent = map ("  " ++)
-    ns1    = B.headNames he1
-
 -- | Odd relation literal
 oddRelation :: B.Ab a
 oddRelation = Left $ B.abortBecause "Odd relation literal"
 
--- | Require flatname
-reqFlatname :: String -> B.Ab a
-reqFlatname = Left . B.abortLine "Require flatname"
+-- | Require flat name
+reqFlatName :: B.Token -> B.Ab a
+reqFlatName tok = Left $ B.abortLine "Require flat name" n where
+    n = B.tokenContent tok
 
+-- | Require term name
 reqTermName :: B.Ab a
 reqTermName = Left $ B.abortBecause "Require term name"
 
@@ -67,6 +62,13 @@ unkClause = Left $ B.abortBecause "Unknown clause"
 -- | Unknown expression
 unkCox :: String -> B.Ab a
 unkCox = Left . B.abortLine "Unknown expression"
+
+-- | Unknown term name
+unkTerm :: [B.Termname] -> B.Relhead -> B.Ab a
+unkTerm ns he1 = Left $ B.abortLines "Unknown term name" detail where
+    detail = ["Unknown"] ++ indent ns ++ ["Relation"] ++ indent ns1
+    indent = map ("  " ++)
+    ns1    = map (show . B.doc) $ B.headTerms he1
 
 -- | Unknown word
 unkWord :: String -> B.Ab a

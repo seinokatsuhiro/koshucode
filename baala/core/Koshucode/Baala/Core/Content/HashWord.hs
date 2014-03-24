@@ -7,7 +7,7 @@ module Koshucode.Baala.Core.Content.HashWord
 ) where
 
 import qualified Data.Char as Ch
-import qualified Koshucode.Baala.Base.Prelude as B
+import qualified Koshucode.Baala.Base as B
 
 infixr 0 -:-
 (-:-) :: a -> b -> (a, b)

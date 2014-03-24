@@ -26,8 +26,7 @@ module Koshucode.Baala.Base.Prelude.Utility
   maybeEmpty,
 
   -- * String
-  padRight,
-  padLeft,
+  padRight, padLeft,
 
   -- * Gather
   Gather,

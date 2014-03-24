@@ -53,7 +53,7 @@ type LitOperators c = [B.Named (Literalize c -> LitTrees c)]
 -- | Transform 'B.TokenTree' into
 --   internal form of content.
 litContentBy :: forall c. (C.CContent c) => LitOperators c -> Literalize c
-litContentBy ops = lit where
+litContentBy ops tree = B.abortableTree "literal" tree $ lit tree where
     lit (B.TreeB typ _ xs) = case typ of
           1  ->  paren xs
           2  ->  C.putList    =<< litList    lit xs
@@ -63,12 +63,12 @@ litContentBy ops = lit where
           _  ->  B.bug "litContentBy"
 
     lit x@(B.TreeL tok)
-        | isDecimal x = do dec <- B.litDecimal $ B.tokenContent tok
-                           C.putDec dec
+        | isDecimal x = C.putDec =<< B.litDecimal cont
         | otherwise   = case tok of
               B.TWord _ 0 w -> word w
               B.TWord _ _ w -> C.putText w  -- quoted text
-              _             -> Message.unkWord (show tok)
+              _             -> Message.unkWord cont
+        where cont = B.tokenContent tok
 
     word w = case w of
           '#' : s  ->  litHash s
@@ -150,7 +150,7 @@ hashAssoc =
 --   If 'TokenTree' contains nested term name, this function failed.
 litFlatname :: Literalize String
 litFlatname (B.TreeL (B.TTerm _ [n])) = Right n
-litFlatname (B.TreeL (B.TTerm _ ns))  = Message.reqFlatname (concat ns)
+litFlatname (B.TreeL t) = Message.reqFlatName t
 litFlatname _ = Message.reqTermName
 
 litList :: (C.CContent c) => Literalize c -> LitTrees [c]

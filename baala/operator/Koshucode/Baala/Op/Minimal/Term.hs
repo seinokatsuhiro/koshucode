@@ -83,7 +83,7 @@ relkitSnip :: B.Snip B.Termname -> B.Snip c -> [B.Termname] -> C.RelkitCalc c
 relkitSnip _ _ _ Nothing = Right C.relkitNothing
 relkitSnip heSnip boSnip ns (Just he1)
     | B.sameLength ns ind1 = Right kit2
-    | otherwise = Message.noTerm non he1
+    | otherwise = Message.unkTerm non he1
     where
       he2   = B.headChange (heSnip ind1) he1
       kit2  = C.relkitJust he2 $ C.RelkitOneToOne True $ boSnip ind1
@@ -108,7 +108,7 @@ relkitRename :: [(B.Termname, B.Termname)] -> C.RelkitCalc c
 relkitRename _ Nothing = Right C.relkitNothing
 relkitRename np (Just he1)
     | nsCheck /= [] = Message.reqNewTerm nsCheck
-    | psCheck /= [] = Message.noTerm     psCheck he1
+    | psCheck /= [] = Message.unkTerm    psCheck he1
     | otherwise     = Right kit2
     where
       (ns, ps) = unzip np

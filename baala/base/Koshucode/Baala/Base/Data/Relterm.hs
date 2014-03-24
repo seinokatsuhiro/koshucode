@@ -8,6 +8,9 @@ module Koshucode.Baala.Base.Data.Relterm
   termsIndex,
   termIndex,
   termExist,
+
+  showTermName,
+  showNestedTermName,
 )
 where
 
@@ -29,8 +32,15 @@ instance B.Name Relterm where
     name (Nest s _) = s
 
 instance B.Pretty Relterm where
-    doc (Term n)    = B.doc n
-    doc (Nest n xs) = B.docWraps "(" ")" (B.doch $ B.doc n : map B.doc xs)
+    doc (Term n)    = B.doc (showTermName n)
+    doc (Nest n xs) = B.docWraps "(" ")"
+                      (B.doch $ B.doc (showTermName n) : map B.doc xs)
+
+showTermName :: B.Map String
+showTermName n = ('/' : n)
+
+showNestedTermName :: [String] -> String
+showNestedTermName = concat . map showTermName
 
 -- | Term path to term position
 --

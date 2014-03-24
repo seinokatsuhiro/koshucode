@@ -271,7 +271,7 @@ position he = spos where
         let index = B.headIndex1 he ns
         in if all (>= 0) index
            then Right $ CoxTerm ns index
-           else Message.noTerm ns he
+           else Message.unkTerm [B.showNestedTermName ns] he
     pos (CoxApplyL f xs) = do f'  <- spos f
                               xs' <- mapM spos xs
                               Right $ CoxApplyL f' xs'

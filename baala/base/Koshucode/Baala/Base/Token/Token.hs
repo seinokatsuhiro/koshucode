@@ -1,6 +1,8 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Tokens in Koshucode.
+
 module Koshucode.Baala.Base.Token.Token
 (
   -- * Token type
@@ -110,7 +112,7 @@ tokenPos (TUnknown p _)    = p
 tokenContent :: Token -> String
 tokenContent (TWord  _ _ s)   = s
 tokenContent (TShort _ a b)   = a ++ "." ++ b
-tokenContent (TTerm    _ s)   = concat s
+tokenContent (TTerm    _ ns)  = concat $ map ('/':) ns
 tokenContent (TOpen    _ s)   = s
 tokenContent (TClose   _ s)   = s
 tokenContent (TSpace   _ n)   = replicate n ' '

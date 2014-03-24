@@ -30,6 +30,7 @@ import qualified System.IO     as IO
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Data.Short   as B
 import qualified Koshucode.Baala.Base.Data.Comment as B
+import qualified Koshucode.Baala.Base.Data.Relterm as B
 
 
 -- ----------------------  Datatype
@@ -81,7 +82,7 @@ instance (Ord c, B.Pretty c) => B.Pretty (Judge c) where
           sign | ':' `elem` p = B.docWrap "\"" "\"" p
                | otherwise    = B.doc p
           -- term name and term value
-          arg ((n,v) : a2) = B.doc " " B.<> B.doc n
+          arg ((n,v) : a2) = B.doc " " B.<> B.doc (B.showTermName n)
                              B.<+> B.doc v B.<+> arg a2
           arg [] = B.docEmpty
 

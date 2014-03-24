@@ -79,7 +79,7 @@ relkitDuplicate :: (Ord c) => [B.Termname] -> C.RelkitCalc c
 relkitDuplicate _ Nothing = Right C.relkitNothing
 relkitDuplicate ns (Just he1)
     | null non  = Right kit2
-    | otherwise = Message.noTerm non he1
+    | otherwise = Message.unkTerm non he1
     where
       non :: [B.Termname]
       non = B.headDropTerms he1 ns

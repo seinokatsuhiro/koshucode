@@ -70,7 +70,6 @@ library
         Koshucode.Baala.Base.Prelude.Pretty
         Koshucode.Baala.Base.Prelude.Snip
         Koshucode.Baala.Base.Prelude.TextTable
-        Koshucode.Baala.Base.Prelude.Unicode
         Koshucode.Baala.Base.Prelude.Utility
 
         Koshucode.Baala.Base.Syntax
@@ -85,6 +84,7 @@ library
         Koshucode.Baala.Base.Token.TokenLine
         Koshucode.Baala.Base.Token.TokenPos
         Koshucode.Baala.Base.Token.TokenTree
+        Koshucode.Baala.Base.Token.Unicode
 
   -- Modules included in this library but not exported.
   --other-modules:       

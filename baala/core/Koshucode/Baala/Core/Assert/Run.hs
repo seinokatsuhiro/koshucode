@@ -142,7 +142,7 @@ arrangeRelUsing
     -> B.AbMap (B.Rel c)
 arrangeRelUsing sort ha ba ns (B.Rel he1 bo1)
     | null non   = Right $ B.Rel he2 bo2
-    | otherwise  = Message.noTerm non he1
+    | otherwise  = Message.unkTerm non he1
     where
       non  =  B.headDropTerms he1 ns
 

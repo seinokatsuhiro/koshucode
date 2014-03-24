@@ -1,8 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.Vanilla.Flow
-( 
-  -- * enclose
+( -- * enclose
   consEnclose, relmapEnclose, relkitEnclose,
   -- * member
   -- $member
@@ -15,11 +14,11 @@ module Koshucode.Baala.Op.Vanilla.Flow
   consSize, relmapSize, relkitSize,
 ) where
 
-import qualified Koshucode.Baala.Base             as B
-import qualified Koshucode.Baala.Core             as C
-import qualified Koshucode.Baala.Op.Builtin       as Op
-import qualified Koshucode.Baala.Op.Minimal       as Op
-import qualified Koshucode.Baala.Op.Message       as Message
+import qualified Koshucode.Baala.Base         as B
+import qualified Koshucode.Baala.Core         as C
+import qualified Koshucode.Baala.Op.Builtin   as Op
+import qualified Koshucode.Baala.Op.Minimal   as Op
+import qualified Koshucode.Baala.Op.Message   as Message
 
 
 
@@ -74,7 +73,7 @@ relkitMember _ Nothing = Right C.relkitNothing
 relkitMember (x, xs) he1'@(Just he1) = kit2 where
     kit2 | xHere     && xsHere = relkitMemberCheck  xPos xsPos he1'
          | not xHere && xsHere = relkitMemberExpand x    xsPos he1'
-         | otherwise           = Message.noTerm [x, xs] he1
+         | otherwise           = Message.unkTerm [x, xs] he1
     ([xPos, xsPos], [xHere, xsHere])
         = he1 `B.posHere` [x, xs]
 

@@ -8,10 +8,10 @@ module Koshucode.Baala.Base.Token.TokenLine
   -- * Library
   TokenLine,
   tokenLines,
-  trimLeft, trimRight, trimBoth,
   tokens,
   isSimpleWord, isSimpleChar,
   commentLine, putCommentLines,
+  trimLeft, trimRight, trimBoth,
 
   -- * Document
 
@@ -31,6 +31,7 @@ import qualified Koshucode.Baala.Base.Prelude        as B
 import qualified Koshucode.Baala.Base.Syntax         as B
 import qualified Koshucode.Baala.Base.Token.Token    as B
 import qualified Koshucode.Baala.Base.Token.TokenPos as B
+import qualified Koshucode.Baala.Base.Token.Unicode  as B
 
 
 
@@ -47,19 +48,6 @@ tokenLines res = B.codeLines $ nextToken res
 --   Result token list does not contain newline characters.
 tokens :: B.Resource -> String -> [B.Token]
 tokens res = concatMap B.lineTokens . tokenLines res
-
-trimLeft :: B.Map String
-trimLeft = dropWhile isSpace
-
-trimRight :: B.Map String
-trimRight [] = []
-trimRight (x : xs) =
-    case x : trimRight xs of
-      [y] | isSpace y -> []
-      ys -> ys
-
-trimBoth :: B.Map String
-trimBoth = trimRight . trimLeft
 
 -- | Split a next token from source text.
 nextToken :: B.Resource -> B.NextToken B.Token
@@ -83,39 +71,56 @@ nextToken res line txt =
           | isOpen    c       ->  tokD cs $ B.TOpen  pos [c]
           | isClose   c       ->  tokD cs $ B.TClose pos [c]
           | isSingle  c       ->  tokD cs $ B.TWord  pos 0 [c]
-          | isTerm    c       ->  term cs [c] []
-          | isQQ      c       ->  qq   cs []
+          | isTerm    c       ->  term cs [] []
+          | isQQ      c       ->  qq   cs
           | isQ       c       ->  word cs []  $ B.TWord pos 1
           | isShort   c       ->  short cs [c]
           | isWord    c       ->  word cs [c] $ B.TWord pos 0
           | isSpace   c       ->  space 1 cs
 
-      _ -> tokD [] $ B.TUnknown pos []
+      _                       ->  tokD [] $ B.TUnknown pos []
 
     where
       pos                             = B.TokenPos res line txt
 
-      -- function value
+      tokD :: String -> B.Token -> (B.Token, String)
       tokD cs token                   = (token, cs)
+
+      tokR :: String -> ([a] -> B.Token) -> [a] -> (B.Token, String)
       tokR cs k xs                    = (k $ reverse xs, cs)
 
-      -- content
+      short :: String -> String -> (B.Token, String)
       short (c:cs) xs | c == '.'      = word cs [] (B.TShort pos $ reverse xs)
                       | isShort c     = short cs (c:xs)
       short ccs xs                    = word ccs xs (B.TWord pos 0)
 
-      word (c:cs) xs k | isWord c     = word cs (c:xs) k
-      word ccs xs k                   = tokR ccs k xs
+      word :: String -> String -> (String -> B.Token) -> (B.Token, String)
+      word (c:cs) text k | isWord c   = word cs (c : text) k
+      word ccs    text k              = tokR ccs k text
 
-      qq [] xs                        = tokR [] (B.TWord pos 2) xs
-      qq (c:cs) xs | isQQ c           = tokR cs (B.TWord pos 2) xs
-                   | otherwise        = qq cs (c:xs)
+      qqText :: String -> String -> Maybe (String, String)
+      qqText [] _                     = Nothing
+      qqText (c:cs) text | isQQ c     = Just (text, cs)
+                         | otherwise  = qqText cs (c : text)
 
-      term (c:cs) xs ns | isTerm c    = term cs [c] $ t xs ns
+      qq :: String -> (B.Token, String)
+      qq cs                           = case qqText cs [] of
+                                          Just (text, cs2) -> tokR cs2 (B.TWord pos 2) text
+                                          Nothing -> tokD [] $ B.TUnknown pos cs
+
+      term :: String -> String -> [String] -> (B.Token, String)
+      term (c:cs) xs ns | isTerm c    = term cs [] $ termUp xs ns
                         | isWord c    = term cs (c:xs) ns
-      term ccs xs ns                  = tokR ccs (B.TTerm pos) (t xs ns)
-      t xs = (reverse xs :)
+                        | isQQ   c    = case qqText cs xs of
+                                          Just (text, cs2) -> term cs2 [] $ termUp text ns
+                                          Nothing -> tokD [] $ B.TUnknown pos (c:cs)
+      term ccs xs ns                  = tokR ccs (B.TTerm pos) $ termUp xs ns
 
+      termUp :: String -> [String] -> [String]
+      termUp [] ns = ns 
+      termUp xs ns = reverse xs : ns
+
+      space :: Int -> String -> (B.Token, String)
       space i (c:cs) | isSpace c      = space (i + 1) cs
       space i ccs                     = tokD ccs (B.TSpace pos i)
 
@@ -171,6 +176,19 @@ commentLine s  = "**  " ++ s
 
 putCommentLines :: [String] -> IO ()
 putCommentLines = putStr . unlines . map commentLine
+
+trimLeft :: B.Map String
+trimLeft = dropWhile isSpace
+
+trimRight :: B.Map String
+trimRight [] = []
+trimRight (x : xs) =
+    case x : trimRight xs of
+      [y] | isSpace y -> []
+      ys -> ys
+
+trimBoth :: B.Map String
+trimBoth = trimRight . trimLeft
 
 
 
