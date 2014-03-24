@@ -36,8 +36,12 @@ reqCollection :: B.Ab a
 reqCollection = Left $ B.abortBecause "Require collection type"
 
 -- | Require new term names
-reqNewTerm :: [String] -> B.Ab a
-reqNewTerm = Left . B.abortLines "Require new term names"
+reqNewTerm :: [B.TermName] -> B.Relhead -> B.Ab a
+reqNewTerm ns he1 = Left $ B.abortLines "Require new term names" detail where
+    detail = ["Known"] ++ indent ns' ++ ["Relation"] ++ indent ns1
+    indent = map ("  " ++)
+    ns'    = map B.showTermName ns
+    ns1    = map (show . B.doc) $ B.headTerms he1
 
 -- | Unexpected term names
 unexpTermName :: B.Ab a

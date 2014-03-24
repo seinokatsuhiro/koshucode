@@ -107,13 +107,14 @@ relmapRename use = C.relmapFlow use . relkitRename
 relkitRename :: [(B.TermName, B.TermName)] -> C.RelkitCalc c
 relkitRename _ Nothing = Right C.relkitNothing
 relkitRename np (Just he1)
-    | nsCheck /= [] = Message.reqNewTerm nsCheck
-    | psCheck /= [] = Message.unkTerm    psCheck he1
+    | nsShare /= [] = Message.reqNewTerm nsShare he1
+    | psLeft  /= [] = Message.unkTerm    psLeft  he1
     | otherwise     = Right kit2
     where
       (ns, ps) = unzip np
-      nsCheck  = B.headKeepTerms he1 ns
-      psCheck  = B.headDropTerms he1 ps
+      ns1      = B.headNames he1
+      nsShare  = ns `B.snipShare` ns1
+      psLeft   = ps `B.snipLeft`  ns1
 
       pn       = map Tuple.swap np
       rename p = Maybe.fromMaybe p $ lookup p pn
