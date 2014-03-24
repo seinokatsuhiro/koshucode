@@ -32,6 +32,7 @@ module Koshucode.Baala.Base.Token.Token
 
 import qualified Data.Generics                       as G
 import qualified Koshucode.Baala.Base.Prelude        as B
+import qualified Koshucode.Baala.Base.Text           as B
 import qualified Koshucode.Baala.Base.Token.TokenPos as B
 
 

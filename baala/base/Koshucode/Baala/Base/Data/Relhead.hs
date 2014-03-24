@@ -31,6 +31,7 @@ module Koshucode.Baala.Base.Data.Relhead
 import qualified Data.List                         as L
 import qualified Data.Monoid                       as M
 import qualified Koshucode.Baala.Base.Prelude      as B
+import qualified Koshucode.Baala.Base.Text         as B
 import qualified Koshucode.Baala.Base.Token        as B
 import qualified Koshucode.Baala.Base.Data.Relterm as B
 
@@ -63,7 +64,7 @@ headEmpty = headFrom []
 --   >>> headFrom ["/a", "/b"]
 --   Relhead [Term "/a", Term "/b"]
 headFrom :: [B.TermName] -> Relhead
-headFrom = Relhead . map B.Term
+headFrom = Relhead . map B.Relterm
 
 -- | List of term names.
 --
@@ -92,15 +93,15 @@ headConsTerm t1 (Relhead ns) = Relhead $ t1 : ns
 --   Relhead [Term "/c", Term "/a", Term "/b"]
 headCons :: B.TermName -> B.Map Relhead
 headCons n1 (Relhead ns) =
-    Relhead $ B.Term n1 : ns
+    Relhead $ B.Relterm n1 : ns
 
 headCons2 :: B.TermName2 -> B.Map Relhead
 headCons2 (n1, n2) (Relhead ns) =
-    Relhead $ B.Term n1 : B.Term n2 : ns
+    Relhead $ B.Relterm n1 : B.Relterm n2 : ns
 
 headCons3 :: B.TermName3 -> B.Map Relhead
 headCons3 (n1, n2, n3) (Relhead ns) =
-    Relhead $ B.Term n1 : B.Term n2 : B.Term n3 : ns
+    Relhead $ B.Relterm n1 : B.Relterm n2 : B.Relterm n3 : ns
 
 headAppend :: [B.TermName] -> B.Map Relhead
 headAppend ns he = headFrom ns `M.mappend` he

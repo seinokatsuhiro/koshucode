@@ -55,7 +55,6 @@ library
 
         Koshucode.Baala.Base.Data
         Koshucode.Baala.Base.Data.Short
-        Koshucode.Baala.Base.Data.Comment
         Koshucode.Baala.Base.Data.Decimal
         Koshucode.Baala.Base.Data.Judge
         Koshucode.Baala.Base.Data.Rel
@@ -67,9 +66,7 @@ library
         Koshucode.Baala.Base.Prelude.Assoc
         Koshucode.Baala.Base.Prelude.Class
         Koshucode.Baala.Base.Prelude.Order
-        Koshucode.Baala.Base.Prelude.Pretty
         Koshucode.Baala.Base.Prelude.Snip
-        Koshucode.Baala.Base.Prelude.TextTable
         Koshucode.Baala.Base.Prelude.Utility
 
         Koshucode.Baala.Base.Syntax
@@ -78,13 +75,18 @@ library
         Koshucode.Baala.Base.Syntax.Line
         Koshucode.Baala.Base.Syntax.Tree
 
+        Koshucode.Baala.Base.Text
+        Koshucode.Baala.Base.Text.Comment
+        Koshucode.Baala.Base.Text.Pretty
+        Koshucode.Baala.Base.Text.TextTable
+        Koshucode.Baala.Base.Text.Unicode
+
         Koshucode.Baala.Base.Token
         Koshucode.Baala.Base.Token.Token
         Koshucode.Baala.Base.Token.TokenClause
         Koshucode.Baala.Base.Token.TokenLine
         Koshucode.Baala.Base.Token.TokenPos
         Koshucode.Baala.Base.Token.TokenTree
-        Koshucode.Baala.Base.Token.Unicode
 
   -- Modules included in this library but not exported.
   --other-modules:       

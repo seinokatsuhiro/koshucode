@@ -21,6 +21,7 @@ module Koshucode.Baala.Base.Abort.Report
 
 import qualified System.Exit as Sys
 import qualified Koshucode.Baala.Base.Prelude as B
+import qualified Koshucode.Baala.Base.Text    as B
 import qualified Koshucode.Baala.Base.Token   as B
 
 

@@ -36,9 +36,9 @@ relmapEnclose use = C.relmapFlow use . relkitEnclose
 relkitEnclose :: (C.CRel c) => B.TermName -> C.RelkitCalc c
 relkitEnclose _ Nothing = Right C.relkitNothing
 relkitEnclose n (Just he1) = Right kit2 where
-    he2       = B.Relhead [B.Nest n $ B.headTerms he1]
+    he2       = B.Relhead [B.Relnest n $ B.headTerms he1]
     kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
-    kitf2 bo1 = [[C.pRel $ B.Rel he1 bo1]]
+    kitf2 bo1 = [[ C.pRel $ B.Rel he1 bo1 ]]
 
 
 

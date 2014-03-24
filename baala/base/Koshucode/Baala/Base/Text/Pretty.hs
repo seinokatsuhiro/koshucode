@@ -1,7 +1,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Prelude.Pretty
+module Koshucode.Baala.Base.Text.Pretty
 ( -- * Class
   Pretty (..),
 

@@ -2,7 +2,7 @@
 
 -- | Text table
 
-module Koshucode.Baala.Base.Prelude.TextTable
+module Koshucode.Baala.Base.Text.TextTable
 ( -- * Position of contents
   Position (..),
   textPos,

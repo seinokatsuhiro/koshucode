@@ -154,7 +154,7 @@ relkitGroup n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
     toMap2 bo2 = Right $ B.gatherToMap $ map kv bo2
     kv cs2     = (B.posPick share2 cs2, cs2)
 
-    he3        = B.Nest n (B.headTerms he2) `B.headConsTerm` he1
+    he3        = B.Relnest n (B.headTerms he2) `B.headConsTerm` he1
     kit3       = C.relkitJust he3 (C.RelkitAbFull False kitf3 [kitb2])
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps

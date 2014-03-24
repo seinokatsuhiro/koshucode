@@ -50,7 +50,7 @@ selectRelation
     => Dataset c       -- ^ Dataset
     -> C.RelSelect c   -- ^ Relation selector
 selectRelation (Dataset m) sign ns = B.Rel h1 b1 where
-    h1 = B.Relhead $ map B.Term ns
+    h1 = B.headFrom ns
     b1 = case Map.lookup sign m of
       Just args -> B.unique $ map (subarg ns) args
       Nothing   -> []

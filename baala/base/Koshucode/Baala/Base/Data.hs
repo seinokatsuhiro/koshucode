@@ -5,7 +5,6 @@
 module Koshucode.Baala.Base.Data
 (
   -- * Modules
-  module Koshucode.Baala.Base.Data.Comment,
   module Koshucode.Baala.Base.Data.Decimal,
   module Koshucode.Baala.Base.Data.Judge,
   module Koshucode.Baala.Base.Data.Rel,
@@ -19,7 +18,6 @@ module Koshucode.Baala.Base.Data
 )
 where
 
-import Koshucode.Baala.Base.Data.Comment
 import Koshucode.Baala.Base.Data.Decimal
 import Koshucode.Baala.Base.Data.Judge
 import Koshucode.Baala.Base.Data.Rel

@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Data.Comment
+module Koshucode.Baala.Base.Text.Comment
 ( Texts (..),
   CommentDoc (..),
   CommentSec (..),

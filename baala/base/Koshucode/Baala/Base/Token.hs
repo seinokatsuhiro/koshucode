@@ -9,7 +9,6 @@ module Koshucode.Baala.Base.Token.TokenClause,
 module Koshucode.Baala.Base.Token.TokenTree,
 module Koshucode.Baala.Base.Token.TokenLine,
 module Koshucode.Baala.Base.Token.TokenPos,
-module Koshucode.Baala.Base.Token.Unicode,
 ) where
 
 import Koshucode.Baala.Base.Token.Token
@@ -17,5 +16,5 @@ import Koshucode.Baala.Base.Token.TokenClause
 import Koshucode.Baala.Base.Token.TokenTree
 import Koshucode.Baala.Base.Token.TokenLine
 import Koshucode.Baala.Base.Token.TokenPos
-import Koshucode.Baala.Base.Token.Unicode
+
 

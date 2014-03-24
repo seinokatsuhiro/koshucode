@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Token.Unicode
+module Koshucode.Baala.Base.Text.Unicode
 ( GeneralCategoryGroup (..),
   generalCategoryLetter,
   generalCategoryGroup,
