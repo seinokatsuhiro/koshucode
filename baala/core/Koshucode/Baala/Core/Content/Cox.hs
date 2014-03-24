@@ -39,7 +39,7 @@ type NamedCox c = B.Named (Cox c)
 -- | Content expressions.
 data CoxCore c
     = CoxLit c                     -- ^ A:   Literal content
-    | CoxTerm [B.Termname] [Int]   -- ^ A:   Term reference, its name and position
+    | CoxTerm [B.TermName] [Int]   -- ^ A:   Term reference, its name and position
     | CoxBase String (CopFun c)    -- ^ A:   Base function
 
     | CoxVar String Int            -- ^ B:   Variable, its name and De Bruijn index

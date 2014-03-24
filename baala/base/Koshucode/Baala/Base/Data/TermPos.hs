@@ -35,7 +35,7 @@ import qualified Koshucode.Baala.Base.Data.Relhead as B
 
 -- | Position of flat term
 data TermPos = TermPos
-    { posName   :: B.Termname  -- ^ Name of term
+    { posName   :: B.TermName  -- ^ Name of term
     , posIndex  :: Int         -- ^ Position
     } deriving (Show, Eq, Ord)
 
@@ -46,7 +46,7 @@ instance B.Name TermPos where
 
 -- ----------------------  Construction
 
-posHere :: B.Relhead -> [B.Termname] -> ([TermPos], [Bool])
+posHere :: B.Relhead -> [B.TermName] -> ([TermPos], [Bool])
 posHere h ns = (ps, bs) where
     ps = h `posFor` ns
     bs = map posExist ps
@@ -55,7 +55,7 @@ posHere h ns = (ps, bs) where
 --
 --   >>> B.headFrom ["/a", "/b", "/c"] `posFor` ["/b", "/c", "/d"]
 --   [TermPos "/b" 1, TermPos "/c" 2, TermPos "/d" (-1)]
-posFor :: B.Relhead -> [B.Termname] -> [TermPos]
+posFor :: B.Relhead -> [B.TermName] -> [TermPos]
 posFor h ns = zipWith TermPos ns $ flatIndex ns where
     flatIndex = withSingleton $ B.headIndex h
     withSingleton f = map head . f . map B.singleton
@@ -82,17 +82,17 @@ posExist pos = posIndex pos >= 0
 --
 --   >>> posInnerNames [TermPos "/a" (-1), TermPos "/b" 1, TermPos "/c" 2]
 --   ["/b", "/c"]
-posInnerNames :: [TermPos] -> [B.Termname]
+posInnerNames :: [TermPos] -> [B.TermName]
 posInnerNames = posFilterNames posExist
 
 -- | Pick outer part.
 --
 --   >>> posOuterNames [TermPos "/a" (-1), TermPos "/b" 1, TermPos "/c" 2]
 --   ["/a"]
-posOuterNames :: [TermPos] -> [B.Termname]
+posOuterNames :: [TermPos] -> [B.TermName]
 posOuterNames = posFilterNames (not . posExist)
 
-posFilterNames :: (TermPos -> Bool) -> [TermPos] -> [B.Termname]
+posFilterNames :: (TermPos -> Bool) -> [TermPos] -> [B.TermName]
 posFilterNames p = map posName . filter p
 
 -- | Sort list of 'TermPos' by the name.

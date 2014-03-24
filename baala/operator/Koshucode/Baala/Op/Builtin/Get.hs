@@ -122,18 +122,18 @@ getRelmaps = Right . C.ropSubrelmap
 -- ----------------------  Term
 
 -- | Get a term name from named operand.
-getTerm :: RopGet c B.Termname
+getTerm :: RopGet c B.TermName
 getTerm = getAbortable get where
-    get [x] = Op.termname x
+    get [x] = Op.termName x
     get _   = Message.unexpOperand "Require one term"
 
 -- | Get list of term names from named operand.
-getTerms :: RopGet c [B.Termname]
-getTerms = getAbortable Op.termnames
+getTerms :: RopGet c [B.TermName]
+getTerms = getAbortable Op.termNames
 
 -- | Get list of term-name pairs from named operand.
-getTermPairs :: RopGet c [(B.Termname, B.Termname)]
-getTermPairs = getAbortable Op.termnamePairs
+getTermPairs :: RopGet c [(B.TermName, B.TermName)]
+getTermPairs = getAbortable Op.termNamePairs
 
 getTermTrees :: RopGet c [B.Named B.TokenTree]
 getTermTrees = getAbortable Op.termTreePairs

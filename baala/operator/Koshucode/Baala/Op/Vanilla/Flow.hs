@@ -29,11 +29,11 @@ consEnclose use =
   do n <- Op.getTerm use "-term"
      Right $ relmapEnclose use n
 
-relmapEnclose :: (C.CRel c) => C.RopUse c -> B.Termname -> C.Relmap c
+relmapEnclose :: (C.CRel c) => C.RopUse c -> B.TermName -> C.Relmap c
 relmapEnclose use = C.relmapFlow use . relkitEnclose
 
 -- | Enclose the current relation in a term.
-relkitEnclose :: (C.CRel c) => B.Termname -> C.RelkitCalc c
+relkitEnclose :: (C.CRel c) => B.TermName -> C.RelkitCalc c
 relkitEnclose _ Nothing = Right C.relkitNothing
 relkitEnclose n (Just he1) = Right kit2 where
     he2       = B.Relhead [B.Nest n $ B.headTerms he1]
@@ -64,11 +64,11 @@ consMember use =
      Right $ relmapMember use (x, xs)
 
 relmapMember :: (Ord c, C.CSet c, C.CList c)
-  => C.RopUse c -> B.Termname2 -> C.Relmap c
+  => C.RopUse c -> B.TermName2 -> C.Relmap c
 relmapMember use = C.relmapFlow use . relkitMember
 
 relkitMember :: (Ord c, C.CSet c, C.CList c)
-  => B.Termname2 -> C.RelkitCalc c
+  => B.TermName2 -> C.RelkitCalc c
 relkitMember _ Nothing = Right C.relkitNothing
 relkitMember (x, xs) he1'@(Just he1) = kit2 where
     kit2 | xHere     && xsHere = relkitMemberCheck  xPos xsPos he1'
@@ -85,7 +85,7 @@ relkitMemberCheck xPos xsPos he1' = Right kit2 where
                in xCont `C.isMember` xsCont
 
 relkitMemberExpand :: (Ord c, C.CSet c, C.CList c)
-  => B.Termname -> B.TermPos -> C.RelkitCalc c
+  => B.TermName -> B.TermPos -> C.RelkitCalc c
 relkitMemberExpand _ _ Nothing = Right C.relkitNothing
 relkitMemberExpand x xsPos (Just he1) = Right kit2 where
     he2  = B.headCons x he1
@@ -107,10 +107,10 @@ consRange use =
      high <- Op.getInt  use "-to"
      Right $ relmapRange use (term, low, high)
 
-relmapRange :: (C.CDec c) => C.RopUse c -> (B.Termname, Int, Int) -> C.Relmap c
+relmapRange :: (C.CDec c) => C.RopUse c -> (B.TermName, Int, Int) -> C.Relmap c
 relmapRange use = C.relmapFlow use . relkitRange
 
-relkitRange :: (C.CDec c) => (B.Termname, Int, Int) -> C.RelkitCalc c
+relkitRange :: (C.CDec c) => (B.TermName, Int, Int) -> C.RelkitCalc c
 relkitRange _ Nothing = Right C.relkitNothing
 relkitRange (n, low, high) (Just he1) = Right kit2 where
     he2      = B.headCons n he1
@@ -138,11 +138,11 @@ consSize use =
   do n <- Op.getTerm use "-term"
      Right $ relmapSize use n
 
-relmapSize :: (C.CDec c) => C.RopUse c -> B.Termname -> C.Relmap c
+relmapSize :: (C.CDec c) => C.RopUse c -> B.TermName -> C.Relmap c
 relmapSize use n = C.relmapFlow use $ relkitSize n
 
 -- | Cardinality
-relkitSize :: (C.CDec c) => B.Termname -> C.RelkitCalc c
+relkitSize :: (C.CDec c) => B.TermName -> C.RelkitCalc c
 relkitSize n _ = Right kit2 where
     he2       = B.headFrom [n]
     kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2

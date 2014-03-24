@@ -19,12 +19,12 @@ import qualified Koshucode.Baala.Base.Token   as B
 
 -- | Path of term,
 --   e.g., term @\/r\/x@ is correspond to path @["\/r", "\/x"]@.
-type Termpath = [B.Termname]
+type Termpath = [B.TermName]
 
 -- | Term in heading of relation
 data Relterm
-    = Term B.Termname             -- ^ For non-relation
-    | Nest B.Termname [Relterm]   -- ^ For relation
+    = Term B.TermName             -- ^ For non-relation
+    | Nest B.TermName [Relterm]   -- ^ For relation
       deriving (Show, Eq, Ord)
 
 instance B.Name Relterm where

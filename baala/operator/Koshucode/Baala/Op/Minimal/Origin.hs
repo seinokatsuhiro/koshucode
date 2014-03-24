@@ -58,10 +58,10 @@ consContents use =
     do n <- Op.getTerm use "-term"
        Right $ relmapContents use n
 
-relmapContents :: (Ord c) => C.RopUse c -> B.Termname -> C.Relmap c
+relmapContents :: (Ord c) => C.RopUse c -> B.TermName -> C.Relmap c
 relmapContents use = C.relmapFlow use . relkitContents
 
-relkitContents :: (Ord c) => B.Termname -> C.RelkitCalc c
+relkitContents :: (Ord c) => B.TermName -> C.RelkitCalc c
 relkitContents n _ = Right $ C.relkitJust he2 $ C.RelkitFull False kitf where
     he2  = B.headFrom [n]
     kitf = map B.singleton . B.unique . concat

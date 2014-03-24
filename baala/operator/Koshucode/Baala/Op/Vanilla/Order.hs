@@ -24,16 +24,16 @@ consNumber use =
        ns <- Op.getOption [] Op.getTerms use "-order"
        Right $ relmapNumber use (n, ns)
 
-relmapNumber :: (C.CDec c, Ord c) => C.RopUse c -> (B.Termname, [B.Termname]) -> C.Relmap c
+relmapNumber :: (C.CDec c, Ord c) => C.RopUse c -> (B.TermName, [B.TermName]) -> C.Relmap c
 relmapNumber use = C.relmapFlow use . relkitNumber
 
-relkitNumber :: (Ord c, C.CDec c) => (B.Termname, [B.Termname]) -> C.RelkitCalc c
+relkitNumber :: (Ord c, C.CDec c) => (B.TermName, [B.TermName]) -> C.RelkitCalc c
 relkitNumber = relkitRanking B.sortByNameNumbering
 
 relkitRanking
     :: (Ord c, C.CDec c)
-    => B.Ranking B.Termname c
-    -> (B.Termname, [B.Termname]) -> C.RelkitCalc c
+    => B.Ranking B.TermName c
+    -> (B.TermName, [B.TermName]) -> C.RelkitCalc c
 relkitRanking _ _ Nothing = Right C.relkitNothing
 relkitRanking ranking (n, ns) (Just he1) = Right kit2 where
     he2   = B.headCons n he1
@@ -57,16 +57,16 @@ consRank use =
        Right $ relmapRank use (n, ns)
 
 relmapDenseRank :: (C.CDec c, Ord c) =>
-   C.RopUse c -> (B.Termname, [B.Termname]) -> C.Relmap c
+   C.RopUse c -> (B.TermName, [B.TermName]) -> C.Relmap c
 relmapDenseRank use = C.relmapFlow use . relkitDenseRank
 
-relkitDenseRank :: (Ord c, C.CDec c) => (B.Termname, [B.Termname]) -> C.RelkitCalc c
+relkitDenseRank :: (Ord c, C.CDec c) => (B.TermName, [B.TermName]) -> C.RelkitCalc c
 relkitDenseRank = relkitRanking B.sortByNameDenseRank
 
 relmapGapRank :: (C.CDec c, Ord c) =>
-   C.RopUse c -> (B.Termname, [B.Termname]) -> C.Relmap c
+   C.RopUse c -> (B.TermName, [B.TermName]) -> C.Relmap c
 relmapGapRank use (n, ns) = C.relmapFlow use $ relkitGapRank (n, ns)
 
-relkitGapRank :: (Ord c, C.CDec c) => (B.Termname, [B.Termname]) -> C.RelkitCalc c
+relkitGapRank :: (Ord c, C.CDec c) => (B.TermName, [B.TermName]) -> C.RelkitCalc c
 relkitGapRank = relkitRanking B.sortByNameGapRank
 

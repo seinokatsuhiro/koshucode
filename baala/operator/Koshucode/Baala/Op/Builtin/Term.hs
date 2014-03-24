@@ -3,9 +3,9 @@
 -- | Parsing list of terms.
 
 module Koshucode.Baala.Op.Builtin.Term
-( termname,
-  termnames,
-  termnamePairs,
+( termName,
+  termNames,
+  termNamePairs,
   termTreePairs,
 ) where
 
@@ -18,29 +18,29 @@ import qualified Koshucode.Baala.Core.Message as Message
 -- ----------------------  Term
 
 -- | Extract a term name.
-termname :: B.TokenTree -> B.Ab B.Termname
-termname (B.TreeL (B.TTerm _ [n])) = Right n
-termname _ = Message.reqTermName
+termName :: B.TokenTree -> B.Ab B.TermName
+termName (B.TreeL (B.TTerm _ [n])) = Right n
+termName _ = Message.reqTermName
 
 -- | Extract a list of term names.
 -- 
---   >>> termnames . B.tt $ "/a /b /c"
+--   >>> termNames . B.tt $ "/a /b /c"
 --   Right ["/a", "/b", "/c"]
-termnames :: [B.TokenTree] -> B.Ab [B.Termname]
-termnames trees =
-    case mapM termname trees of
+termNames :: [B.TokenTree] -> B.Ab [B.TermName]
+termNames trees =
+    case mapM termName trees of
       Right ns -> Right ns
       Left  _  -> Message.reqTermName
 
 -- | Extract a list of name-and-name pairs.
 -- 
---   >>> termnamePairs . B.tt $ "/a /x /b /y"
+--   >>> termNamePairs . B.tt $ "/a /x /b /y"
 --   Right [("/a", "/x"), ("/b", "/y")]
-termnamePairs :: [B.TokenTree] -> B.Ab [(B.Termname, B.Termname)]
-termnamePairs = loop where
+termNamePairs :: [B.TokenTree] -> B.Ab [(B.TermName, B.TermName)]
+termNamePairs = loop where
     loop (a : b : xs) =
-        do a'  <- termname a
-           b'  <- termname b
+        do a'  <- termName a
+           b'  <- termName b
            xs' <- loop xs
            Right $ (a', b') : xs'
     loop [] = Right []

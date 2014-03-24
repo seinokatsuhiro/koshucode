@@ -64,7 +64,7 @@ unkCox :: String -> B.Ab a
 unkCox = Left . B.abortLine "Unknown expression"
 
 -- | Unknown term name
-unkTerm :: [B.Termname] -> B.Relhead -> B.Ab a
+unkTerm :: [B.TermName] -> B.Relhead -> B.Ab a
 unkTerm ns he1 = Left $ B.abortLines "Unknown term name" detail where
     detail = ["Unknown"] ++ indent ns ++ ["Relation"] ++ indent ns1
     indent = map ("  " ++)

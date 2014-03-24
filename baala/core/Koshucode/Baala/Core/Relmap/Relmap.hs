@@ -57,7 +57,7 @@ relmapList f = loop where
 -- ----------------------  Construct
 
 -- | Retrieve relation from dataset.
-relmapSource :: C.RopUse c -> B.JudgePattern -> [B.Termname] -> (C.Relmap c)
+relmapSource :: C.RopUse c -> B.JudgePattern -> [B.TermName] -> (C.Relmap c)
 relmapSource = C.RelmapSource . C.ropLex
 
 -- | Make a constant relmap.

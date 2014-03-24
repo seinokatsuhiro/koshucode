@@ -8,10 +8,10 @@ module Koshucode.Baala.Base.Token.Token
   -- * Token type
   Token (..),
   TokenListing (..),
-  Termname,
-  Termname2,
-  Termname3,
-  Termname4,
+  TermName,
+  TermName2,
+  TermName3,
+  TermName4,
   tokenWord,
 
   -- * Selectors
@@ -47,7 +47,7 @@ data Token
                --   1 for single-quoted,
                --   2 for double-quoted.
     | TShort   B.TokenPos String String  -- ^ Abbreviated word
-    | TTerm    B.TokenPos [Termname]  -- ^ Termname
+    | TTerm    B.TokenPos [TermName]  -- ^ Term name
     | TOpen    B.TokenPos String      -- ^ Opening paren
     | TClose   B.TokenPos String      -- ^ Closing paren
     | TSpace   B.TokenPos Int         -- ^ /N/ space characters
@@ -55,11 +55,11 @@ data Token
     | TUnknown B.TokenPos String      -- ^ Unknown text
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
--- | Name of term, e.g., @\"\/file\"@ for the term @\/file@.
-type Termname  = String
-type Termname2 = (String, String)
-type Termname3 = (String, String, String)
-type Termname4 = (String, String, String, String)
+-- | Name of term, e.g., @\"file\"@ for the term @\/file@.
+type TermName  = String
+type TermName2 = (String, String)
+type TermName3 = (String, String, String)
+type TermName4 = (String, String, String, String)
 
 instance B.Name Token where
     name (TTerm   _ ns) = concat ns

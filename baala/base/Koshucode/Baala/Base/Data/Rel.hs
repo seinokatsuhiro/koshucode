@@ -51,7 +51,7 @@ instance (B.Pretty c) => B.Pretty (Rel c) where
               d xs  = B.doc "|" B.<+> B.docColon xs
 
 {-| Relational version of `B.posHere`. -}
-relPosHere :: Rel c -> [B.Termname] -> ([B.TermPos], [Bool])
+relPosHere :: Rel c -> [B.TermName] -> ([B.TermPos], [Bool])
 relPosHere r = B.posHere $ relHead r
 
 

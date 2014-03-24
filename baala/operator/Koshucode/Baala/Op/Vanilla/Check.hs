@@ -36,16 +36,16 @@ consCheckTerm use =
        (Nothing, Nothing, Just ns) -> Right $ relmapCheckTermBut  use ns
        _ -> Message.unexpOperand "require one of -just / -has / -but"
 
-relmapCheckTermJust :: C.RopUse c -> [B.Termname] -> C.Relmap c
-relmapCheckTermHas  :: C.RopUse c -> [B.Termname] -> C.Relmap c
-relmapCheckTermBut  :: C.RopUse c -> [B.Termname] -> C.Relmap c
+relmapCheckTermJust :: C.RopUse c -> [B.TermName] -> C.Relmap c
+relmapCheckTermHas  :: C.RopUse c -> [B.TermName] -> C.Relmap c
+relmapCheckTermBut  :: C.RopUse c -> [B.TermName] -> C.Relmap c
 relmapCheckTermJust use = C.relmapFlow use . relkitCheckTermJust
 relmapCheckTermHas  use = C.relmapFlow use . relkitCheckTermHas
 relmapCheckTermBut  use = C.relmapFlow use . relkitCheckTermBut
 
-relkitCheckTermJust :: [B.Termname] -> C.RelkitCalc c
-relkitCheckTermHas  :: [B.Termname] -> C.RelkitCalc c
-relkitCheckTermBut  :: [B.Termname] -> C.RelkitCalc c
+relkitCheckTermJust :: [B.TermName] -> C.RelkitCalc c
+relkitCheckTermHas  :: [B.TermName] -> C.RelkitCalc c
+relkitCheckTermBut  :: [B.TermName] -> C.RelkitCalc c
 relkitCheckTermJust = relkitCheckTermBy (\ns he1 -> B.headFrom ns `B.isEqvHead` he1)
 relkitCheckTermHas  = relkitCheckTermBy (\ns he1 -> B.headFrom ns `B.isSubhead` he1)
 relkitCheckTermBut  = relkitCheckTermBy (\ns he1 -> null $ B.headKeepTerms he1 ns)
@@ -72,16 +72,16 @@ consDuplicate use =
   do ns <- Op.getTerms use "-term"
      Right $ relmapDuplicate use ns
 
-relmapDuplicate :: (Ord c) => C.RopUse c -> [B.Termname] -> C.Relmap c
+relmapDuplicate :: (Ord c) => C.RopUse c -> [B.TermName] -> C.Relmap c
 relmapDuplicate use = C.relmapFlow use . relkitDuplicate
 
-relkitDuplicate :: (Ord c) => [B.Termname] -> C.RelkitCalc c
+relkitDuplicate :: (Ord c) => [B.TermName] -> C.RelkitCalc c
 relkitDuplicate _ Nothing = Right C.relkitNothing
 relkitDuplicate ns (Just he1)
     | null non  = Right kit2
     | otherwise = Message.unkTerm non he1
     where
-      non :: [B.Termname]
+      non :: [B.TermName]
       non = B.headDropTerms he1 ns
 
       pos :: [B.TermPos]
@@ -105,7 +105,7 @@ consTypename use =
      Right $ C.relmapFlow use $ relkitTypename np
 
 relkitTypename
-  :: (C.CText c) => [(B.Termname, B.Termname)] -> C.RelkitCalc c
+  :: (C.CText c) => [(B.TermName, B.TermName)] -> C.RelkitCalc c
 relkitTypename _ Nothing = Right C.relkitNothing
 relkitTypename np (Just he1) = Right kit2 where
     ns    = map fst np

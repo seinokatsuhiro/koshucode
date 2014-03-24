@@ -58,18 +58,18 @@ instance B.Pretty Relhead where
 headEmpty :: Relhead
 headEmpty = headFrom []
 
--- | Make head from termnames.
+-- | Make head from term names.
 --
 --   >>> headFrom ["/a", "/b"]
 --   Relhead [Term "/a", Term "/b"]
-headFrom :: [B.Termname] -> Relhead
+headFrom :: [B.TermName] -> Relhead
 headFrom = Relhead . map B.Term
 
 -- | List of term names.
 --
 --   >>> let h = headFrom ["/a", "/b"] in headNames h
 --   ["/a", "/b"]
-headNames :: Relhead -> [B.Termname]
+headNames :: Relhead -> [B.TermName]
 headNames = B.names . headTerms
 
 -- | Number of terms.
@@ -90,26 +90,26 @@ headConsTerm t1 (Relhead ns) = Relhead $ t1 : ns
 --
 --   >>> let h = headFrom ["/a", "/b"] in headCons "/c" h
 --   Relhead [Term "/c", Term "/a", Term "/b"]
-headCons :: B.Termname -> B.Map Relhead
+headCons :: B.TermName -> B.Map Relhead
 headCons n1 (Relhead ns) =
     Relhead $ B.Term n1 : ns
 
-headCons2 :: B.Termname2 -> B.Map Relhead
+headCons2 :: B.TermName2 -> B.Map Relhead
 headCons2 (n1, n2) (Relhead ns) =
     Relhead $ B.Term n1 : B.Term n2 : ns
 
-headCons3 :: B.Termname3 -> B.Map Relhead
+headCons3 :: B.TermName3 -> B.Map Relhead
 headCons3 (n1, n2, n3) (Relhead ns) =
     Relhead $ B.Term n1 : B.Term n2 : B.Term n3 : ns
 
-headAppend :: [B.Termname] -> B.Map Relhead
+headAppend :: [B.TermName] -> B.Map Relhead
 headAppend ns he = headFrom ns `M.mappend` he
 
 -- | Reconstruct head.
 --
 --   >>> let h = headFrom ["/a", "/b"] in headChange reverse h
 --   Relhead [Term "/b", Term "/a"]
-headChange :: (B.Map [B.Termname]) -> B.Map Relhead
+headChange :: (B.Map [B.TermName]) -> B.Map Relhead
 headChange f = headFrom . f . headNames
 
 
@@ -120,17 +120,17 @@ headChange f = headFrom . f . headNames
 --
 --   >>> let h = headFrom ["/b"] in headKeepTerms h ["/a", "/b", "/c"]
 --   ["/b"]
-headKeepTerms :: Relhead -> B.Map [B.Termname]
+headKeepTerms :: Relhead -> B.Map [B.TermName]
 headKeepTerms (Relhead ts) = filter $ nameExist ts
 
 -- | Drop terms that exist in head.
 --
 --   >>> let h = headFrom ["/b"] in headDropTerms h ["/a", "/b", "/c"]
 --   ["/a","/c"]
-headDropTerms :: Relhead -> B.Map [B.Termname]
+headDropTerms :: Relhead -> B.Map [B.TermName]
 headDropTerms (Relhead ts) = filter $ not . nameExist ts
 
-nameExist :: [B.Relterm] -> B.Termname -> Bool
+nameExist :: [B.Relterm] -> B.TermName -> Bool
 nameExist ts n = B.termExist ts [n]
 
 -- | Index of terms.

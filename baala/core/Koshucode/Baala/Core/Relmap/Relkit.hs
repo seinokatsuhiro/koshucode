@@ -114,13 +114,13 @@ relkitId he = relkit he RelkitId
 relkitConst :: B.Rel c -> Relkit c
 relkitConst (B.Rel he bo) = relkitJust he $ RelkitConst bo
 
-relkitConstEmpty :: [B.Termname] -> Relkit c
+relkitConstEmpty :: [B.TermName] -> Relkit c
 relkitConstEmpty ns = relkitConstBody ns []
 
-relkitConstSingleton :: [B.Termname] -> [c] -> Relkit c
+relkitConstSingleton :: [B.TermName] -> [c] -> Relkit c
 relkitConstSingleton ns tuple = relkitConstBody ns [tuple]
 
-relkitConstBody :: [B.Termname] -> [[c]] -> Relkit c
+relkitConstBody :: [B.TermName] -> [[c]] -> Relkit c
 relkitConstBody ns bo = kit where
     he  = B.headFrom ns
     kit = relkitJust he $ RelkitConst bo

@@ -91,7 +91,7 @@ type RelmapDef c = B.Named (Relmap c)
 -- | Relation-to-relation mapping.
 --   A 'Relmap' is correspond to a use of relational operator.
 data Relmap c
-    = RelmapSource   C.Lexmap B.JudgePattern [B.Termname]
+    = RelmapSource   C.Lexmap B.JudgePattern [B.TermName]
       -- ^ Retrieve a relation from a dataset
     | RelmapConst    C.Lexmap (B.Rel c)
       -- ^ Constant relation

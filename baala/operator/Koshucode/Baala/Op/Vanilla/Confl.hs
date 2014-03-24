@@ -69,7 +69,7 @@ relkitMaybe (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
     pos     :: [B.TermPos]
     pos     =  he1 `B.posFrom` he2
 
-    shared, sided :: [B.Termname]
+    shared, sided :: [B.TermName]
     shared  =  B.posInnerNames pos
     sided   =  B.posOuterNames pos
 
@@ -144,7 +144,7 @@ relmapGroup use = C.relmapBinary use . relkitGroup
 -- | Grouping relation.
 relkitGroup :: forall c. (Ord c, C.CRel c) => String -> C.RelkitBinary c
 relkitGroup n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
-    shared     :: [B.Termname]
+    shared     :: [B.TermName]
     shared     = B.posInnerNames $ he1 `B.posFrom` he2
 
     share1, share2 :: [B.TermPos]

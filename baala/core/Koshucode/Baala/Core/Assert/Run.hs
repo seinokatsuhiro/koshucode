@@ -79,11 +79,11 @@ optionUnkCheck ns xs =
        else Message.unkWord (fst . head $ rest)
 
 -- | Get term name as string only if term is flat.
-flatname :: B.TokenTree -> Maybe B.Termname
+flatname :: B.TokenTree -> Maybe B.TermName
 flatname (B.TreeL (B.TTerm _ [n])) = Just n
 flatname _ = Nothing
 
-flatnames :: [B.TokenTree] -> B.Ab [B.Termname]
+flatnames :: [B.TokenTree] -> B.Ab [B.TermName]
 flatnames trees =
     case mapM flatname trees of
       Just ns -> Right ns
@@ -126,19 +126,19 @@ assertOptionJudges _ js = Right js
 
 arrangeRelRaw
     :: (Ord c)
-    => B.Snip B.Termname     -- ^ Arranger for termnames,
+    => B.Snip B.TermName     -- ^ Arranger for term names,
                              --   e.g., 'B.snipFrom', 'B.snipOff', etc
     -> B.Snip c              -- ^ Arranger for term contents
-    -> [B.Termname]          -- ^ Names of terms
+    -> [B.TermName]          -- ^ Names of terms
     -> B.AbMap (B.Rel c)     -- ^ Relation-to-relation mapping
 arrangeRelRaw = arrangeRelUsing id
 
 arrangeRelUsing
     :: (Ord c)
     => B.Map [B.TermPos]
-    -> B.Snip B.Termname
+    -> B.Snip B.TermName
     -> B.Snip c
-    -> [B.Termname]
+    -> [B.TermName]
     -> B.AbMap (B.Rel c)
 arrangeRelUsing sort ha ba ns (B.Rel he1 bo1)
     | null non   = Right $ B.Rel he2 bo2

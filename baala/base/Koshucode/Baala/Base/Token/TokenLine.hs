@@ -202,7 +202,7 @@ trimBoth = trimRight . trimLeft
 --              @\<|@ /termset/ @\|>@ , and
 --              @{|@ /relation/ @|}@
 --
---  [Termname]  Words beginning with slash, e.g., @\/aa@.
+--  [TermName]  Words beginning with slash, e.g., @\/aa@.
 --              Term name like @\/r\/x@ is used for nested relation,
 --              that means term @\/x@ in the relation of term @\/r@.
 --

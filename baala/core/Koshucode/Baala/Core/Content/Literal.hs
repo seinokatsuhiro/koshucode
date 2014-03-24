@@ -176,7 +176,7 @@ litTermset lit xs = namedC where
     namedC   = mapM p       =<< litNamedTrees xs
     p (n, c) = Right . (n,) =<< lit c
 
--- | Read list of termname and its content.
+-- | Read list of term name and its content.
 --
 --   >>> litNamedTrees . B.tokenTrees . B.tokens $ "/a 'A3 /b 10"
 --   Right [("/a", TreeB 1 [TreeL (TWord 3 0 "'"), TreeL (TWord 4 0 "A3")]),

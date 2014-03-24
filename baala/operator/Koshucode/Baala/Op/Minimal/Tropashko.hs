@@ -49,7 +49,7 @@ relmapMeet use = C.relmapBinary use relkitMeet
 -- | Meet two relations.
 relkitMeet :: forall c. (Ord c) => C.RelkitBinary c
 relkitMeet (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
-    shared    :: [B.Termname]
+    shared    :: [B.TermName]
     shared    =  B.posInnerNames $ he1 `B.posFrom` he2
 
     share1, share2 :: [B.TermPos]
@@ -98,7 +98,7 @@ relmapJoin use = C.relmapBinary use relkitJoin
 -- | Join two relations.
 relkitJoin :: C.RelkitBinary c
 relkitJoin (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
-    shared  :: [B.Termname]
+    shared  :: [B.TermName]
     shared  =  B.posInnerNames $ he1 `B.posFrom` he2
 
     share1, share2 :: [B.TermPos]
