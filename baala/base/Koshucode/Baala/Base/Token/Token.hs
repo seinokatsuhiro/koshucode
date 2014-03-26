@@ -8,11 +8,14 @@ module Koshucode.Baala.Base.Token.Token
   -- * Token type
   Token (..),
   TokenListing (..),
+  tokenWord,
+
+  -- * Term name
   TermName,
   TermName2,
   TermName3,
   TermName4,
-  tokenWord,
+  TermPath,
 
   -- * Selectors
   tokenPos,
@@ -48,19 +51,13 @@ data Token
                --   1 for single-quoted,
                --   2 for double-quoted.
     | TShort   B.TokenPos String String  -- ^ Abbreviated word
-    | TTerm    B.TokenPos [TermName]  -- ^ Term name
+    | TTerm    B.TokenPos TermPath    -- ^ Term name
     | TOpen    B.TokenPos String      -- ^ Opening paren
     | TClose   B.TokenPos String      -- ^ Closing paren
     | TSpace   B.TokenPos Int         -- ^ /N/ space characters
     | TComment B.TokenPos String      -- ^ Comment text
     | TUnknown B.TokenPos String      -- ^ Unknown text
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
-
--- | Name of term, e.g., @\"file\"@ for the term @\/file@.
-type TermName  = String
-type TermName2 = (String, String)
-type TermName3 = (String, String, String)
-type TermName4 = (String, String, String, String)
 
 instance B.Name Token where
     name (TTerm   _ ns) = concat ns
@@ -93,6 +90,19 @@ class TokenListing a where
 instance (TokenListing a) => TokenListing (Maybe a) where
     tokenListing (Nothing) = []
     tokenListing (Just a)  = tokenListing a
+
+
+-- ---------------------- Term name
+
+-- | Name of term, e.g., @\"file\"@ for the term @\/file@.
+type TermName  = String
+type TermName2 = (String, String)
+type TermName3 = (String, String, String)
+type TermName4 = (String, String, String, String)
+
+-- | Path of term, e.g., term @\/r\/x@ is correspond to path @["r", "x"]@.
+type TermPath = [TermName]
+
 
 -- ---------------------- Selector
 

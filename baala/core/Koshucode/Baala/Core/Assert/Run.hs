@@ -116,7 +116,7 @@ assertOptionRelmap opt r1 =
 assertOptionFore :: (Ord c) => [B.TokenTree] -> B.AbMap (B.Rel c)
 assertOptionFore opt r1 =
     do ns <- flatnames opt
-       arrangeRelRaw B.snipFore B.snipFore ns r1
+       snipRelRaw B.snipFore2 ns r1
 
 assertOptionOrder :: (Ord c) => [B.TokenTree] ->  B.AbMap (B.Rel c)
 assertOptionOrder _ r1 = Right r1
@@ -124,34 +124,16 @@ assertOptionOrder _ r1 = Right r1
 assertOptionJudges :: C.AssertOption -> [B.Judge c] -> B.Ab [B.Judge c]
 assertOptionJudges _ js = Right js
 
-arrangeRelRaw
-    :: (Ord c)
-    => B.Snip B.TermName     -- ^ Arranger for term names,
-                             --   e.g., 'B.snipFrom', 'B.snipOff', etc
-    -> B.Snip c              -- ^ Arranger for term contents
-    -> [B.TermName]          -- ^ Names of terms
-    -> B.AbMap (B.Rel c)     -- ^ Relation-to-relation mapping
-arrangeRelRaw = arrangeRelUsing id
-
-arrangeRelUsing
-    :: (Ord c)
-    => B.Map [B.TermPos]
-    -> B.Snip B.TermName
-    -> B.Snip c
-    -> [B.TermName]
-    -> B.AbMap (B.Rel c)
-arrangeRelUsing sort ha ba ns (B.Rel he1 bo1)
-    | null non   = Right $ B.Rel he2 bo2
-    | otherwise  = Message.unkTerm non he1
+snipRelRaw :: (Ord c) => B.SnipPair B.TermName c -> [B.TermName] -> B.AbMap (B.Rel c)
+snipRelRaw (heSnip, boSnip) ns (B.Rel he1 bo1)
+    | null left  = Right r2
+    | otherwise  = Message.unkTerm left he1
     where
-      non  =  B.headDropTerms he1 ns
+      ns1  =  B.headNames he1
+      ind  =  ns `B.snipIndex` ns1
+      left =  ns `B.snipLeft`  ns1
 
-      pos  :: [B.TermPos]
-      pos  =  sort $ he1 `B.posFor` ns
-
-      ind  :: [Int]
-      ind  =  map B.posIndex pos
-
-      he2  =  B.headChange   (ha ind) he1
-      bo2  =  B.unique $ map (ba ind) bo1
+      r2   =  B.Rel he2 bo2
+      he2  =  B.headFrom $ heSnip ind       ns1
+      bo2  =               boSnip ind `map` bo1
 

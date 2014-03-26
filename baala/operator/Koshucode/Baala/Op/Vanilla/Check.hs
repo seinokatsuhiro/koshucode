@@ -46,15 +46,15 @@ relmapCheckTermBut  use = C.relmapFlow use . relkitCheckTermBut
 relkitCheckTermJust :: [B.TermName] -> C.RelkitCalc c
 relkitCheckTermHas  :: [B.TermName] -> C.RelkitCalc c
 relkitCheckTermBut  :: [B.TermName] -> C.RelkitCalc c
-relkitCheckTermJust = relkitCheckTermBy (\ns he1 -> B.headFrom ns `B.isEqvHead` he1)
-relkitCheckTermHas  = relkitCheckTermBy (\ns he1 -> B.headFrom ns `B.isSubhead` he1)
-relkitCheckTermBut  = relkitCheckTermBy (\ns he1 -> null $ B.headKeepTerms he1 ns)
+relkitCheckTermJust = checkTerm "Just" (\ns he1 -> B.headFrom ns `B.headEquiv` he1)
+relkitCheckTermHas  = checkTerm "Has"  (\ns he1 -> B.headFrom ns `B.isSubhead` he1)
+relkitCheckTermBut  = checkTerm "But"  (\ns he1 -> null $ ns `B.snipShare` B.headNames he1)
 
-relkitCheckTermBy :: ([String] -> B.Relhead -> Bool) -> [String] -> C.RelkitCalc c
-relkitCheckTermBy _ _ Nothing = Right C.relkitNothing
-relkitCheckTermBy f ns (Just he1)
-    | f ns he1  = Right $ C.relkitJust he1 C.RelkitId
-    | otherwise = Message.checkTerm $ B.headNames he1
+checkTerm :: String -> ([B.TermName] -> B.Relhead -> Bool) -> [B.TermName] -> C.RelkitCalc c
+checkTerm _ _ _ Nothing = Right C.relkitNothing
+checkTerm opt check ns (Just he1)
+    | check ns he1 = Right $ C.relkitJust he1 C.RelkitId
+    | otherwise    = Message.checkTerm opt ns he1
 
 
 
@@ -78,11 +78,11 @@ relmapDuplicate use = C.relmapFlow use . relkitDuplicate
 relkitDuplicate :: (Ord c) => [B.TermName] -> C.RelkitCalc c
 relkitDuplicate _ Nothing = Right C.relkitNothing
 relkitDuplicate ns (Just he1)
-    | null non  = Right kit2
-    | otherwise = Message.unkTerm non he1
+    | null nsLeft = Right kit2
+    | otherwise   = Message.unkTerm nsLeft he1
     where
-      non :: [B.TermName]
-      non = B.headDropTerms he1 ns
+      nsLeft :: [B.TermName]
+      nsLeft = ns `B.snipLeft` B.headNames he1
 
       pos :: [B.TermPos]
       pos = he1 `B.posFor` ns

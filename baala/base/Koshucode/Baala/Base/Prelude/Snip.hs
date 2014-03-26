@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Base.Prelude.Snip
 ( -- * Type
-  Snip,
+  Snip, SnipPair,
 
   -- * Function
   snipIndex,
@@ -13,7 +13,7 @@ module Koshucode.Baala.Base.Prelude.Snip
   -- $FunctionExample
 
   -- * Derivative
-  snipFore,
+  snipFore, snipFore2,
   snipLeft, snipShare, snipRight,
   sameLength,
   -- $DerivativeExample
@@ -24,6 +24,8 @@ import qualified Data.List as List
 import qualified Koshucode.Baala.Base.Prelude.Class as B
 
 type Snip a = [Int] -> B.Map [a]
+
+type SnipPair a b = (Snip a, Snip b)
 
 
 -- --------------------------------------------  Function
@@ -122,6 +124,9 @@ snipFore :: Snip a
 snipFore ps xs =
     let (from, off) = snipBoth ps xs
     in from ++ off
+
+snipFore2 :: SnipPair a b
+snipFore2 = (snipFore, snipFore)
 
 -- | Take left-side elements.
 snipLeft :: (Eq a) => [a] -> [a] -> [a]

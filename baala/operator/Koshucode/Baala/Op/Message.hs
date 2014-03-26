@@ -5,6 +5,7 @@ module Koshucode.Baala.Op.Message
   module Koshucode.Baala.Core.Message,
 
   -- * Op package
+  checkTerm,
   diffHead,
   noOperand,
   reqBool,
@@ -15,6 +16,12 @@ module Koshucode.Baala.Op.Message
 
 import qualified Koshucode.Baala.Base as B
 import Koshucode.Baala.Core.Message
+
+-- | check-term failed
+checkTerm :: String -> [B.TermName] -> B.Relhead -> B.Ab a
+checkTerm label ns he1 =
+    Left $ B.abortLines "check-term failed"
+         $ detailTermRel label ns he1
 
 -- | Different headings
 diffHead :: [B.Relhead] -> B.Ab a
@@ -37,11 +44,9 @@ reqCollection = Left $ B.abortBecause "Require collection type"
 
 -- | Require new term names
 reqNewTerm :: [B.TermName] -> B.Relhead -> B.Ab a
-reqNewTerm ns he1 = Left $ B.abortLines "Require new term names" detail where
-    detail = ["Known"] ++ indent ns' ++ ["Relation"] ++ indent ns1
-    indent = map ("  " ++)
-    ns'    = map B.showTermName ns
-    ns1    = map (show . B.doc) $ B.headTerms he1
+reqNewTerm ns he1 =
+    Left $ B.abortLines "Require new term names"
+         $ detailTermRel "Known" ns he1
 
 -- | Unexpected term names
 unexpTermName :: B.Ab a

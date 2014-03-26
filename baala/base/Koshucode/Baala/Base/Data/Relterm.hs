@@ -4,7 +4,6 @@
 
 module Koshucode.Baala.Base.Data.Relterm
 ( Relterm (..),
-  Termpath,
   termsIndex,
   termIndex,
   termExist,
@@ -17,10 +16,6 @@ where
 import qualified Koshucode.Baala.Base.Prelude as B
 import qualified Koshucode.Baala.Base.Text    as B
 import qualified Koshucode.Baala.Base.Token   as B
-
--- | Path of term,
---   e.g., term @\/r\/x@ is correspond to path @["\/r", "\/x"]@.
-type Termpath = [B.TermName]
 
 -- | Term in heading of relation
 data Relterm
@@ -54,7 +49,7 @@ showNestedTermName = concat . map showTermName
 --   >>> termIndex [Relnest "/r" [Term "/a", Term "/b"]] ["/r", "/b"]
 --   [0, 1]
 --
-termIndex :: [Relterm] -> Termpath -> [Int]
+termIndex :: [Relterm] -> B.TermPath -> [Int]
 termIndex ts p = loop ts p 0 where
     loop _ [] _ = []
     loop [] _ _ = [-1]
@@ -65,9 +60,9 @@ termIndex ts p = loop ts p 0 where
         | n1 == n2  = i : loop ts' ns 0
         | otherwise = loop ts2 nns (i + 1)
 
-termsIndex :: [Relterm] -> [Termpath] -> [[Int]]
+termsIndex :: [Relterm] -> [B.TermPath] -> [[Int]]
 termsIndex = map . termIndex
 
-termExist :: [Relterm] -> Termpath -> Bool
+termExist :: [Relterm] -> B.TermPath -> Bool
 termExist ts p = all (>= 0) $ termIndex ts p
 
