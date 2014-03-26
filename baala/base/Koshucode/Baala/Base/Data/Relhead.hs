@@ -9,6 +9,7 @@ module Koshucode.Baala.Base.Data.Relhead
   -- * Constructor
   headEmpty,
   headFrom,
+  headWords,
   headNames,
   headDegree,
   -- $ConstructorExample
@@ -25,8 +26,8 @@ module Koshucode.Baala.Base.Data.Relhead
 
   -- * Utility
   headChange,
-  headIndex1,
-  headIndex, 
+  headIndex1, headIndex, 
+  headAlign, bodyAlign,
   -- $UtilityExample
 
   -- * Monoid
@@ -40,7 +41,6 @@ import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
 import qualified Koshucode.Baala.Base.Token        as B
 import qualified Koshucode.Baala.Base.Data.Relterm as B
-
 
 
 -- ---------------------- Type
@@ -92,6 +92,9 @@ headEmpty = headFrom []
 -- | Make head from term names.
 headFrom :: [B.TermName] -> Relhead
 headFrom = Relhead . map B.Relterm
+
+headWords :: String -> Relhead
+headWords = headFrom . words
 
 -- | List of term names.
 headNames :: Relhead -> [B.TermName]
@@ -186,3 +189,8 @@ headIndex1 = B.termIndex . headTerms
 headIndex :: Relhead -> [B.TermPath] -> [[Int]]
 headIndex = B.termsIndex . headTerms
 
+headAlign :: Relhead -> Relhead -> B.Map [c]
+headAlign to from = B.snipOrder (headNames to) (headNames from)
+
+bodyAlign :: Relhead -> Relhead -> B.Map [[c]]
+bodyAlign h1 h2 = (headAlign h1 h2 `map`)

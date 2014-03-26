@@ -66,22 +66,16 @@ relmapMaybe use = C.relmapBinary use relkitMaybe
 
 relkitMaybe :: forall c. (Ord c, C.CNil c) => C.RelkitBinary c
 relkitMaybe (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
-    pos     :: [B.TermPos]
-    pos     =  he1 `B.posFrom` he2
 
-    shared, sided :: [B.TermName]
-    shared  =  B.posInnerNames pos
-    sided   =  B.posOuterNames pos
+    ind1, ind2 :: [Int]
+    (ind1, ind2) = B.headNames he1 `B.snipPair` B.headNames he2
 
-    share1, share2, side2 :: [B.TermPos]
-    share1  =  he1 `B.posFor` shared
-    share2  =  he2 `B.posFor` shared
-    side2   =  he2 `B.posFor` sided
+    share1, share2, right2 :: B.Map [c]
+    share1 = B.snipFrom ind1
+    share2 = B.snipFrom ind2
+    right2 = B.snipOff  ind2
 
-    pick1     =  B.posPick share1
-    pick2     =  B.posPick share2
-
-    kv cs2  = (pick2 cs2, B.posPick side2 cs2)
+    kv cs2  = (share2 cs2, right2 cs2)
 
     he3  = he2 `B.mappend` he1
     kit3 = C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
@@ -93,7 +87,7 @@ relkitMaybe (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
            Right $ step b2map `concatMap` bo1
 
     nils = replicate (B.headDegree he3 - B.headDegree he1) C.nil
-    step b2map cs1 = case B.lookupMap (pick1 cs1) b2map of
+    step b2map cs1 = case B.lookupMap (share1 cs1) b2map of
                        Just b2side -> map (++ cs1) b2side
                        Nothing     -> [nils ++ cs1]
 

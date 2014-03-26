@@ -7,7 +7,7 @@ module Koshucode.Baala.Base.Prelude.Snip
   Snip, SnipPair,
 
   -- * Function
-  snipIndex,
+  snipIndex, snipPair,
   snipBoth,
   snipFrom, snipOff,
   -- $FunctionExample
@@ -15,6 +15,7 @@ module Koshucode.Baala.Base.Prelude.Snip
   -- * Derivative
   snipFore, snipFore2,
   snipLeft, snipShare, snipRight,
+  snipOrder,
   sameLength,
   -- $DerivativeExample
 
@@ -64,6 +65,11 @@ snipIndex ks xs = loop ks where
     loop (k:ks2) = case List.elemIndex k xs of
                      Just p  -> p : loop ks2
                      Nothing ->     loop ks2
+
+snipPair :: (Ord a) => [a] -> [a] -> ([Int], [Int])
+snipPair xs1 xs2 = (snipIndex sh xs1, snipIndex sh xs2) where
+    ind = snipIndex xs1 xs2
+    sh  = List.sort $ snipFrom ind xs2
 
 -- | Pair of picking-up and cutting-off elements.
 snipBoth :: [Int] -> [a] -> ([a], [a])
@@ -139,6 +145,11 @@ snipShare xs ys = snipIndex xs ys `snipFrom` ys
 -- | Take right-side elements.
 snipRight :: (Eq a) => [a] -> [a] -> [a]
 snipRight xs ys = snipLeft ys xs
+
+snipOrder :: (Eq a) => [a] -> [a] -> B.Map [c]
+snipOrder to from
+    | to == from = id
+    | otherwise  = snipFrom $ snipIndex to from
 
 -- | Check lengths of two lists are same.
 sameLength :: [a] -> [b] -> Bool

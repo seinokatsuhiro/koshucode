@@ -3,15 +3,16 @@
 -- | Minimal relmap operators.
 
 module Koshucode.Baala.Op.Minimal
-( -- * Relation-mapping operators
-  module Koshucode.Baala.Op.Minimal.Origin,
-  module Koshucode.Baala.Op.Minimal.Restrict,
-  module Koshucode.Baala.Op.Minimal.Rop,
-  module Koshucode.Baala.Op.Minimal.Term,
-  module Koshucode.Baala.Op.Minimal.Tropashko,
+(
+-- * Relation-mapping operators
+module Koshucode.Baala.Op.Minimal.Origin,
+module Koshucode.Baala.Op.Minimal.Restrict,
+module Koshucode.Baala.Op.Minimal.Rop,
+module Koshucode.Baala.Op.Minimal.Term,
+module Koshucode.Baala.Op.Minimal.Tropashko,
 
-  -- * Naming conventions
-  -- $NamingConventions
+-- * Naming conventions
+-- $NamingConventions
 ) where
 
 import Koshucode.Baala.Op.Minimal.Origin

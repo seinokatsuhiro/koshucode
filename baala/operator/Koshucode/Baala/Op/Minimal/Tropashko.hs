@@ -49,22 +49,19 @@ relmapMeet use = C.relmapBinary use relkitMeet
 -- | Meet two relations.
 relkitMeet :: forall c. (Ord c) => C.RelkitBinary c
 relkitMeet (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
-    shared    :: [B.TermName]
-    shared    =  B.posInnerNames $ he1 `B.posFrom` he2
 
-    share1, share2 :: [B.TermPos]
-    share1    =  he1 `B.posFor` shared
-    share2    =  he2 `B.posFor` shared
+    ind1, ind2 :: [Int]
+    (ind1, ind2) = B.headNames he1 `B.snipPair` B.headNames he2
 
-    pick1, pick2, cut2 :: B.Map [c]
-    pick1     =  B.posPick share1
-    pick2     =  B.posPick share2
-    cut2      =  B.posCut  share2
+    share1, share2, right2 :: B.Map [c]
+    share1 = B.snipFrom ind1
+    share2 = B.snipFrom ind2
+    right2 = B.snipOff  ind2
 
-    he3       =  he2 `B.mappend` he1
-    kv cs2    =  (pick2 cs2, cut2 cs2) -- shared contents and side contents
+    kv cs2 = (share2 cs2, right2 cs2) -- shared and side contents
 
-    kit3      =  C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
+    he3    = he2 `B.mappend` he1
+    kit3   = C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
     kitf3 :: [C.Relbmap c] -> C.Relbmap c
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
@@ -72,7 +69,7 @@ relkitMeet (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
            let b2map = B.gatherToMap $ map kv bo2
            Right $ step b2map `concatMap` bo1
 
-    step b2map cs1 = case B.lookupMap (pick1 cs1) b2map of
+    step b2map cs1 = case B.lookupMap (share1 cs1) b2map of
                        Just b2side -> map (++ cs1) b2side
                        Nothing     -> []
 
@@ -98,23 +95,20 @@ relmapJoin use = C.relmapBinary use relkitJoin
 -- | Join two relations.
 relkitJoin :: C.RelkitBinary c
 relkitJoin (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
-    shared  :: [B.TermName]
-    shared  =  B.posInnerNames $ he1 `B.posFrom` he2
 
-    share1, share2 :: [B.TermPos]
-    share1  =  he1 `B.posFor` shared
-    share2  =  he2 `B.posFor` shared
+    ind1, ind2 :: [Int]
+    (ind1, ind2) = B.headNames he1 `B.snipPair` B.headNames he2
 
-    pick1, pick2 :: B.Map [c]
-    pick1   =  B.posPick share1
-    pick2   =  B.posPick share2
+    share1, share2 :: B.Map [c]
+    share1 = B.snipFrom ind1
+    share2 = B.snipFrom ind2
 
-    he3     =  B.headChange pick1 he1
-    kit3    =  C.relkitJust he3 $ C.RelkitAbFull True kitf3 [kitb2]
+    he3    =  B.headChange share1 he1
+    kit3   =  C.relkitJust he3 $ C.RelkitAbFull True kitf3 [kitb2]
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
            bo2 <- bmap2 bo1
-           Right $ map pick1 bo1 ++ map pick2 bo2
+           Right $ map share1 bo1 ++ map share2 bo2
 
 relkitJoin _ _ = Right C.relkitNothing
 
