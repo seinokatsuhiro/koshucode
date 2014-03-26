@@ -71,30 +71,29 @@ relkitMember :: (Ord c, C.CSet c, C.CList c)
   => B.TermName2 -> C.RelkitCalc c
 relkitMember _ Nothing = Right C.relkitNothing
 relkitMember (x, xs) he1'@(Just he1) = kit2 where
-    kit2 | xHere     && xsHere = relkitMemberCheck  xPos xsPos he1'
-         | not xHere && xsHere = relkitMemberExpand x    xsPos he1'
+    kit2 | xi >= 0 && xsi >= 0 = relkitMemberCheck  xi xsi he1'
+         | xi <  0 && xsi >= 0 = relkitMemberExpand x  xsi he1'
          | otherwise           = Message.unkTerm [x, xs] he1
-    ([xPos, xsPos], [xHere, xsHere])
-        = he1 `B.posHere` [x, xs]
+    [xi, xsi] = [x, xs] `B.snipFull` B.headNames he1
 
 relkitMemberCheck :: (Eq c, C.CSet c, C.CList c)
-  => B.TermPos -> B.TermPos -> C.RelkitCalc c
-relkitMemberCheck xPos xsPos he1' = Right kit2 where
+  => Int -> Int -> C.RelkitCalc c
+relkitMemberCheck xi xsi he1' = Right kit2 where
     kit2 = C.relkit he1' $ C.RelkitPred kitf2
-    kitf2 cs = let [xCont, xsCont] = B.posPick [xPos, xsPos] cs
-               in xCont `C.isMember` xsCont
+    kitf2 cs = let [xc, xsc] = [xi, xsi] `B.snipFrom` cs
+               in xc `C.isMember` xsc
 
 relkitMemberExpand :: (Ord c, C.CSet c, C.CList c)
-  => B.TermName -> B.TermPos -> C.RelkitCalc c
+  => B.TermName -> Int -> C.RelkitCalc c
 relkitMemberExpand _ _ Nothing = Right C.relkitNothing
-relkitMemberExpand x xsPos (Just he1) = Right kit2 where
-    he2  = B.headCons x he1
-    kit2 = C.relkitJust he2 $ C.RelkitOneToMany False kitf2
-    kitf2 cs = let [xsCont] = B.posPick [xsPos] cs
-               in case xsCont of
-                    _ | C.isSet  xsCont -> map (: cs) $ C.gSet xsCont
-                    _ | C.isList xsCont -> map (: cs) $ B.unique $ C.gList xsCont
-                    _                   -> [xsCont : cs]
+relkitMemberExpand x xsi (Just he1) = Right kit2 where
+    he2      = B.headCons x he1
+    kit2     = C.relkitJust he2 $ C.RelkitOneToMany False kitf2
+    kitf2 cs = let [xsc] = [xsi] `B.snipFrom` cs
+               in case xsc of
+                    _ | C.isSet  xsc -> map (: cs) $ C.gSet xsc
+                    _ | C.isList xsc -> map (: cs) $ B.unique $ C.gList xsc
+                    _                -> [xsc : cs]
 
 
 

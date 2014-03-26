@@ -7,9 +7,8 @@ module Koshucode.Baala.Base.Prelude.Snip
   Snip, SnipPair,
 
   -- * Function
-  snipIndex, snipPair,
-  snipBoth,
-  snipFrom, snipOff,
+  snipFull, snipIndex, snipPair,
+  snipBoth, snipFrom, snipOff,
   -- $FunctionExample
 
   -- * Derivative
@@ -58,13 +57,13 @@ type SnipPair a b = (Snip a, Snip b)
 --    >>> (snipIndex "ce" "abcdefg") `snipBoth` "ABCDEFG"
 --    ("CE", "ABDFG")
 
+snipFull :: (Eq a) => [a] -> [a] -> [Int]
+snipFull ks xs = map ind ks where
+    ind k = maybe (-1) id $ List.elemIndex k xs
+
 -- | Indices of shared elements.
 snipIndex :: (Eq a) => [a] -> [a] -> [Int]
-snipIndex ks xs = loop ks where
-    loop [] = []
-    loop (k:ks2) = case List.elemIndex k xs of
-                     Just p  -> p : loop ks2
-                     Nothing ->     loop ks2
+snipIndex ks xs = filter (>= 0) $ snipFull ks xs
 
 snipPair :: (Ord a) => [a] -> [a] -> ([Int], [Int])
 snipPair xs1 xs2 = (snipIndex sh xs1, snipIndex sh xs2) where

@@ -10,7 +10,6 @@ module Koshucode.Baala.Base.Data.Rel,
 module Koshucode.Baala.Base.Data.Relhead,
 module Koshucode.Baala.Base.Data.Relterm,
 module Koshucode.Baala.Base.Data.Short,
-module Koshucode.Baala.Base.Data.TermPos,
 ) where
 
 import Koshucode.Baala.Base.Data.Decimal
@@ -19,4 +18,3 @@ import Koshucode.Baala.Base.Data.Rel
 import Koshucode.Baala.Base.Data.Relhead
 import Koshucode.Baala.Base.Data.Relterm
 import Koshucode.Baala.Base.Data.Short
-import Koshucode.Baala.Base.Data.TermPos

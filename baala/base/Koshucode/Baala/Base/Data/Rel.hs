@@ -6,7 +6,6 @@ module Koshucode.Baala.Base.Data.Rel
 ( -- * Datatype
   Rel (..),
   Relbody,
-  relPosHere,
   relSort,
 
   -- * Constant
@@ -18,9 +17,7 @@ module Koshucode.Baala.Base.Data.Rel
 import qualified Data.List                         as List
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
-import qualified Koshucode.Baala.Base.Token        as B
 import qualified Koshucode.Baala.Base.Data.Relhead as B
-import qualified Koshucode.Baala.Base.Data.TermPos as B
 
 
 
@@ -49,10 +46,6 @@ instance (B.Pretty c) => B.Pretty (Rel c) where
         where h2    = B.doc h1
               b2    = B.doch $ map d b1
               d xs  = B.doc "|" B.<+> B.docColon xs
-
--- | Relational version of `B.posHere`.
-relPosHere :: Rel c -> [B.TermName] -> ([B.TermPos], [Bool])
-relPosHere = B.posHere . relHead
 
 
 

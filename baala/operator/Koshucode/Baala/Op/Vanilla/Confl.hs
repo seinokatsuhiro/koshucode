@@ -138,15 +138,16 @@ relmapGroup use = C.relmapBinary use . relkitGroup
 -- | Grouping relation.
 relkitGroup :: forall c. (Ord c, C.CRel c) => String -> C.RelkitBinary c
 relkitGroup n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
-    shared     :: [B.TermName]
-    shared     = B.posInnerNames $ he1 `B.posFrom` he2
 
-    share1, share2 :: [B.TermPos]
-    share1     = he1 `B.posFor` shared
-    share2     = he2 `B.posFor` shared
+    ind1, ind2 :: [Int]
+    (ind1, ind2) = B.headNames he1 `B.snipPair` B.headNames he2
+
+    share1, share2 :: B.Map [c]
+    share1 = B.snipFrom ind1
+    share2 = B.snipFrom ind2
 
     toMap2 bo2 = Right $ B.gatherToMap $ map kv bo2
-    kv cs2     = (B.posPick share2 cs2, cs2)
+    kv cs2     = (share2 cs2, cs2)
 
     he3        = B.Relnest n (B.headTerms he2) `B.headConsTerm` he1
     kit3       = C.relkitJust he3 (C.RelkitAbFull False kitf3 [kitb2])
@@ -157,7 +158,7 @@ relkitGroup n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
            Right $ map (add map2) bo1
 
     add map2 cs1 =
-        let b2maybe = B.lookupMap (B.posPick share1 cs1) map2
+        let b2maybe = B.lookupMap (share1 cs1) map2
             b2sub   = B.maybeWith [] b2maybe
         in C.pRel (B.Rel he2 b2sub) : cs1
 

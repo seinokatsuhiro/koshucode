@@ -82,16 +82,17 @@ relkitDuplicate ns (Just he1)
     | otherwise   = Message.unkTerm nsLeft he1
     where
       nsLeft :: [B.TermName]
-      nsLeft = ns `B.snipLeft` B.headNames he1
+      nsLeft = ns `B.snipLeft` ns1
 
-      pos :: [B.TermPos]
-      pos = he1 `B.posFor` ns
+      ns1    = B.headNames he1
+      ind1   = ns `B.snipIndex` ns1
+      share1 = B.snipFrom ind1
 
       kit2 = C.relkitJust he1 $ C.RelkitFull False kitf2
       kitf2 :: (Ord c) => [[c]] -> [[c]]
       kitf2 bo1 = let bo1map = B.gatherToMap $ map kv bo1
                   in concat $ Map.elems $ Map.filter dup bo1map
-      kv cs     = (B.posPick pos cs, cs)
+      kv cs1    = (share1 cs1, cs1)
       dup       = not . B.isSingleton
 
 
@@ -108,12 +109,15 @@ relkitTypename
   :: (C.CText c) => [(B.TermName, B.TermName)] -> C.RelkitCalc c
 relkitTypename _ Nothing = Right C.relkitNothing
 relkitTypename np (Just he1) = Right kit2 where
-    ns    = map fst np
-    ps    = map snd np
-    he2   = B.headAppend ns he1
-    pos   = he1 `B.posFor` ps
+    ns, ps :: [B.TermName]
+    (ns, ps)  = unzip np
 
-    kit2 = C.relkitJust he2 $ C.RelkitOneToOne False kitf2
-    kitf2 cs1 = let cs2 = B.posPick pos cs1
-                in ((C.pText . C.typename) `map` cs2) ++ cs1
+    ns1       = B.headNames he1
+    ind1      = ps `B.snipIndex` ns1
+    share1    = B.snipFrom ind1
+
+    he2       = ns `B.headAppend` he1
+    kit2      = C.relkitJust he2 $ C.RelkitOneToOne False kitf2
+    kitf2 cs1 = let cs2 = share1 cs1 in map typetext cs2 ++ cs1
+    typetext  = C.pText . C.typename
 
