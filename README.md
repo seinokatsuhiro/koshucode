@@ -2,6 +2,9 @@
 
 
 甲州計算機はデータ処理のためのソフトウェアです。
+SQL データベースのような関係モデルにもとづくデータ処理を、
+データベース分野だけではなく、
+[関係型データ交換][rdi] などにも適用できる基礎技術です。
 まだ、開発が続けられており、
 正式にリリースされた版はありません。
 現段階で試してみたい方のために、
@@ -21,4 +24,5 @@
 [preview]:  https://github.com/seinokatsuhiro/koshucode/archive/preview.zip
 [japanese]: https://github.com/seinokatsuhiro/abc-of-koshucode/tree/master/draft/japanese
 [english]:  https://github.com/seinokatsuhiro/abc-of-koshucode/tree/master/draft/english
+[rdi]:      https://github.com/seinokatsuhiro/koshucode-design/tree/master/note/rdi
 
