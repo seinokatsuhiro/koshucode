@@ -1,8 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.Vanilla.Flow
-( -- * enclose
-  consEnclose, relmapEnclose, relkitEnclose,
+( 
   -- * member
   -- $member
   consMember, relmapMember, relkitMember,
@@ -19,26 +18,6 @@ import qualified Koshucode.Baala.Core         as C
 import qualified Koshucode.Baala.Op.Builtin   as Op
 import qualified Koshucode.Baala.Op.Minimal   as Op
 import qualified Koshucode.Baala.Op.Message   as Message
-
-
-
--- ----------------------  enclose
-
-consEnclose :: (C.CRel c) => C.RopCons c
-consEnclose use =
-  do n <- Op.getTerm use "-term"
-     Right $ relmapEnclose use n
-
-relmapEnclose :: (C.CRel c) => C.RopUse c -> B.TermName -> C.Relmap c
-relmapEnclose use = C.relmapFlow use . relkitEnclose
-
--- | Enclose the current relation in a term.
-relkitEnclose :: (C.CRel c) => B.TermName -> C.RelkitCalc c
-relkitEnclose _ Nothing = Right C.relkitNothing
-relkitEnclose n (Just he1) = Right kit2 where
-    he2       = B.Relhead [B.Relnest n $ B.headTerms he1]
-    kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
-    kitf2 bo1 = [[ C.pRel $ B.Rel he1 bo1 ]]
 
 
 

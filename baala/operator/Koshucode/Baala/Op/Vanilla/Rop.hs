@@ -32,16 +32,12 @@ vanillaRops = Op.ropList "vanilla"
         Op.consDo, C.sortList "-relmap" ["-let"] )
     , ( "duplicate /N ...",
         Op.consDuplicate, C.sortList "-term" [] )
-    , ( "enclose /N",
-        Op.consEnclose, C.sortOne "-term" [] )
     , ( "fix R",
         Op.consFix, C.sortOne "-relmap" [] )
     , ( "fix-join R",
         Op.consFixJoin, C.sortOne "-relmap" [] )
     , ( "full R ...",
         Op.consFull, C.sortList "-relmap" [] )
-    , ( "group /N R",
-        Op.consGroup, C.sortTwo "-term" "-relmap" [] )
     , ( "hold E",
         Op.consFilter True, C.sortList "-in" ["-let"] )
     , ( "if R ...",
@@ -101,12 +97,6 @@ vanillaRops = Op.ropList "vanilla"
 --
 --  [@duplicate \/P ...@]
 --    Pass duplicate tuples on @\/P@ ...
---
---  [@enclose \/N@]
---    Enclose input relation in a term.
---
---  [@group \/N R@]
---    Group tuples in @R@ by input relation.
 --
 --  [@keep E@]
 --    Keep tuples @E@ equals true.

@@ -11,6 +11,7 @@ import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Core              as C
 import qualified Koshucode.Baala.Op.Builtin        as OpBase
 import qualified Koshucode.Baala.Op.Minimal        as OpBase
+import qualified Koshucode.Baala.Op.Nest           as OpBase
 import qualified Koshucode.Baala.Op.Vanilla        as OpBase
 import qualified Koshucode.Baala.Op.Content.Arith  as Op
 import qualified Koshucode.Baala.Op.Content.List   as Op
@@ -22,7 +23,8 @@ vanillaGlobal =
     C.global { C.globalCops = vanillaCops
              , C.globalRops = OpBase.vanillaRops ++
                               OpBase.minimalRops ++
-                              OpBase.builtinRops }
+                              OpBase.builtinRops ++
+                              OpBase.nestRops }
 
 
 

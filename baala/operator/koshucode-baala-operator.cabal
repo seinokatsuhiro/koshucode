@@ -70,6 +70,10 @@ library
         Koshucode.Baala.Op.Minimal.Term
         Koshucode.Baala.Op.Minimal.Tropashko
 
+        Koshucode.Baala.Op.Nest
+        Koshucode.Baala.Op.Nest.Confl
+        Koshucode.Baala.Op.Nest.Rop
+
         Koshucode.Baala.Op.Vanilla
         Koshucode.Baala.Op.Vanilla.Check
         Koshucode.Baala.Op.Vanilla.Confl
