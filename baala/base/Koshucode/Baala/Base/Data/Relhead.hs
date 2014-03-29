@@ -28,6 +28,7 @@ module Koshucode.Baala.Base.Data.Relhead
   headChange,
   headIndex1, headIndex, 
   headAlign, bodyAlign,
+  headNested,
   -- $UtilityExample
 
   -- * Monoid
@@ -194,3 +195,9 @@ headAlign to from = B.snipOrder (headNames to) (headNames from)
 
 bodyAlign :: Relhead -> Relhead -> B.Map [[c]]
 bodyAlign h1 h2 = (headAlign h1 h2 `map`)
+
+headNested :: Relhead -> [(String, Relhead)]
+headNested (Relhead ts1) = map h $ filter B.isNested ts1 where
+    h (B.Relnest n ts2) = (n, Relhead ts2)
+    h (B.Relterm n)     = (n, Relhead [])
+

@@ -94,30 +94,30 @@ relkitMaybe _ _ = Right C.relkitNothing
 
 -- ----------------------  full
 
-consFull :: (Ord c, C.CNil c) => C.RopCons c
+consFull :: (Ord c, C.CRel c, C.CNil c) => C.RopCons c
 consFull use =
     do [m1, m2] <- Op.getRelmaps use
        Right $ relmapFull use m1 m2
 
 -- | like SQL's full join
-relmapFull :: (Ord c, C.CNil c) => C.RopUse c
-           -> C.Relmap c -> C.Relmap c -> C.Relmap c
+relmapFull :: (Ord c, C.CRel c, C.CNil c) =>
+    C.RopUse c -> C.Relmap c -> C.Relmap c -> C.Relmap c
 relmapFull use m1 m2 = C.relmapConfl use fy [m1, m2] where
     fy [r1, r2] = relkitFull r1 r2
     fy _ = B.bug "relmapFull"
 
-relkitFull :: (Ord c, C.CNil c) => C.Relkit c -> C.RelkitBinary c
+relkitFull :: (Ord c, C.CRel c, C.CNil c) => C.Relkit c -> C.RelkitBinary c
 relkitFull (C.Relkit he1 f1) (C.Relkit he2 f2) _ = 
     do C.Relkit h3 f3 <- relkitMaybe (C.Relkit he2 f2) he1
        C.Relkit h4 f4 <- relkitMaybe (C.Relkit he1 f1) he2
 
-       bo1 <- C.relkitRun f1 []
-       bo2 <- C.relkitRun f2 []
-       bo3 <- C.relkitRun f3 bo1
-       bo4 <- C.relkitRun f4 bo2
+       bo1 <- C.relkitRun [] f1 []
+       bo2 <- C.relkitRun [] f2 []
+       bo3 <- C.relkitRun [] f3 bo1
+       bo4 <- C.relkitRun [] f4 bo2
        C.Relkit he5 kit5 <- Op.relkitJoin (C.relkit h4 $ C.RelkitConst bo4) h3
 
-       bo5 <- C.relkitRun kit5 bo3
+       bo5 <- C.relkitRun [] kit5 bo3
        Right $ C.relkit he5 $ C.RelkitConst bo5
 
 

@@ -7,7 +7,6 @@ module Koshucode.Baala.Core.Relmap.Rop
   Rop (..),
   RopUse (..),
   RopCons,
-  getArg1, getArg2, getArg3,
 
   -- * Relmap
   Relmap (..),
@@ -39,7 +38,6 @@ import qualified Koshucode.Baala.Core.Content           as C
 import qualified Koshucode.Baala.Core.Relmap.Lexical    as C
 import qualified Koshucode.Baala.Core.Relmap.Operand    as C
 import qualified Koshucode.Baala.Core.Relmap.Relkit     as C
-import qualified Koshucode.Baala.Core.Message           as Message
 
 
 -- ----------------------  Rop
@@ -70,26 +68,13 @@ data RopUse c = RopUse
 instance B.TokenListing (RopUse c) where
     tokenListing = B.tokenListing . ropLex
 
-getArg1 :: [B.Ab c] -> B.Ab (B.Ab c)
-getArg1 [x] = Right x
-getArg1 _ = Message.unmatchType ""
-
-getArg2 :: [B.Ab c] -> B.Ab (B.Ab c, B.Ab c)
-getArg2 [x, y] = Right (x, y)
-getArg2 _ = Message.unmatchType ""
-
-getArg3 :: [B.Ab c] -> B.Ab (B.Ab c, B.Ab c, B.Ab c)
-getArg3 [x, y, z] = Right (x, y, z)
-getArg3 _ = Message.unmatchType ""
-
 
 
 -- ----------------------  Relmap
 
 type RelmapDef c = B.Named (Relmap c)
 
--- | Relation-to-relation mapping.
---   A 'Relmap' is correspond to a use of relational operator.
+-- | Generic relmap.
 data Relmap c
     = RelmapSource   C.Lexmap B.JudgePattern [B.TermName]
       -- ^ Retrieve a relation from a dataset
@@ -105,6 +90,9 @@ data Relmap c
       -- ^ Relmap reference
     | RelmapAppend   (Relmap c) (Relmap c)
       -- ^ Connect two relmaps
+
+    | RelmapWith     C.Lexmap [(B.TermName, String)] (Relmap c)
+      -- ^ Relmap for environment of nested relations
 
 -- | Map function to relmaps.
 mapToRelmap :: B.Map (Relmap c) -> B.Map (Relmap c)
@@ -125,6 +113,7 @@ showRelmap r = sh r where
     sh (RelmapCalc   _ _ rs)  = "RelmapCalc "   ++ show (B.name r) ++ " _" ++ joinSubs rs
 
     sh (RelmapLink _ n)       = "RelmapLink "   ++ show n
+    sh (RelmapWith _ ns r1)   = "RelmapWith "   ++ show ns ++ joinSubs [r1]
     sh (RelmapAppend r1 r2)   = "RelmapAppend"  ++ joinSubs [r1, r2]
 
     joinSubs = concatMap sub
@@ -148,14 +137,15 @@ instance B.Name (Relmap c) where
     name _ = undefined
 
 instance B.Pretty (Relmap c) where
-    doc (RelmapSource h _ _)   = B.doc h
-    doc (RelmapConst  h _)     = B.doc h
+    doc (RelmapSource lx _ _)  = B.doc lx
+    doc (RelmapConst  lx _)    = B.doc lx
 
-    doc (RelmapGlobal h _)     = B.doc h -- hang (text $ name m) 2 (doch (map doc ms))
-    doc (RelmapCalc   h _ _)   = B.doc h -- hang (text $ name m) 2 (doch (map doc ms))
+    doc (RelmapGlobal lx _)    = B.doc lx -- hang (text $ name m) 2 (doch (map doc ms))
+    doc (RelmapCalc   lx _ _)  = B.doc lx -- hang (text $ name m) 2 (doch (map doc ms))
 
-    doc (RelmapLink   _ n)     = B.doc n
-    doc (RelmapAppend m1 m2)   = B.docHang (B.doc m1) 2 (docRelmapAppend m2)
+    doc (RelmapLink   lx _)    = B.doc lx
+    doc (RelmapWith   _ _ r)   = B.doc r
+    doc (RelmapAppend r1 r2)   = B.docHang (B.doc r1) 2 (docRelmapAppend r2)
 
 docRelmapAppend :: Relmap c -> B.Doc
 docRelmapAppend = B.docv . map pipe . relmapAppendList where
@@ -190,6 +180,7 @@ relmapLexList = collect where
     collect (RelmapCalc   lx _ _)  = [lx]
 
     collect (RelmapLink   lx _)    = [lx]
+    collect (RelmapWith   lx _ _)  = [lx]
     collect (RelmapAppend r1 r2)   = collect r1 ++ collect r2
 
 

@@ -74,7 +74,8 @@ runSection global sects =
            g2 = global { C.globalJudges = C.sectionJudge s2 }
        runSectionBody g2 s2
 
-runSectionBody :: forall c. (C.CNil c, Ord c) => C.Global c -> C.Section c -> B.Ab ([B.ShortJudge c], [B.ShortJudge c])
+runSectionBody :: forall c. (Ord c, C.CRel c, C.CNil c) =>
+  C.Global c -> C.Section c -> B.Ab ([B.ShortJudge c], [B.ShortJudge c])
 runSectionBody global C.Section { C.sectionRelmap = rdef, C.sectionAssert = ass2 } =
     do judgesV <- run $ C.assertViolated ass2
        judgesN <- run $ C.assertNormal   ass2
@@ -85,16 +86,4 @@ runSectionBody global C.Section { C.sectionRelmap = rdef, C.sectionAssert = ass2
 
       run2 :: C.AbbrAsserts c -> [B.Short (B.Ab [B.Judge c])]
       run2 = B.shortMap $ C.runAssertJudges global rdef
-
--- -- | Select assertions like 'sectionAssert'.
--- --   It returns relmap-liked assertions.
--- --   We can run these assertions using 'C.runAssertJudges'.
--- sectionLinkedAssert :: forall c. C.Section c -> [B.Short [C.Assert c]]
--- sectionLinkedAssert C.Section { C.sectionRelmap = rs, C.sectionAssert = ass }
---     = linkeAssert rs ass where
-
--- linkeAssert :: forall c. [C.RelmapDef c] -> B.Map [B.Short [C.Assert c]]
--- linkeAssert rslink = map $ fmap $ map link where
---     link :: B.Map (C.Assert c)
---     link = C.assertMap $ C.relmapLink rslink
 

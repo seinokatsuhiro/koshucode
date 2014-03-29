@@ -14,6 +14,7 @@ module Koshucode.Baala.Core.Message
   unkClause,
   unkCop,
   unkCox,
+  unkNestRel,
   unkRelmap,
   unkTerm,
   unkWord,
@@ -74,6 +75,10 @@ unkWord = Left . B.abortLine "Unknown word"
 -- | Unknown content operator
 unkCop :: String -> B.Ab a
 unkCop = Left . B.abortLine "Unknown content operator"
+
+-- | Unknown nested relation
+unkNestRel :: String -> B.Ab a
+unkNestRel = Left . B.abortLine "Unknown nested relation"
 
 -- | Unknown relmap operator
 unkRelmap :: String -> B.Ab a

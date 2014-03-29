@@ -23,14 +23,15 @@ consRelAdd :: (C.CRel c) => C.RopCons c
 consRelAdd use =
   do n    <- Op.getTerm   use "-term"
      rmap <- Op.getRelmap use
-     with <- Op.getMaybe Op.getTerms use "-with"
-     Right $ relmapRelAdd use (n, maybe [] id with) rmap
+     with <- Op.getOption [] Op.getTerms use "-with"
+     Right $ relmapRelAdd use with n rmap
 
-relmapRelAdd :: (C.CRel c) => C.RopUse c -> (B.TermName, [B.TermName]) -> B.Map (C.Relmap c)
-relmapRelAdd use = C.relmapBinary use . relkitRelAdd
+relmapRelAdd :: (C.CRel c) => C.RopUse c -> [B.TermName] -> B.TermName -> B.Map (C.Relmap c)
+relmapRelAdd use with n = C.relmapWith use (zip with with) . bin where
+    bin = C.relmapBinary use $ relkitRelAdd n
 
-relkitRelAdd :: (C.CRel c) => (B.TermName, [B.TermName]) -> C.RelkitBinary c
-relkitRelAdd (n, with) (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
+relkitRelAdd :: (C.CRel c) => B.TermName -> C.RelkitBinary c
+relkitRelAdd n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
     he3   = B.Relnest n (B.headTerms he2) `B.headConsTerm` he1
     kit3  = C.relkitJust he3 $ C.RelkitOneToAbOne False kitf3 [kitb2]
     kitf3 bmaps cs1 =

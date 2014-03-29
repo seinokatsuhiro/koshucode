@@ -4,12 +4,13 @@
 
 module Koshucode.Baala.Base.Data.Relterm
 ( Relterm (..),
+  showTermName,
+  showNestedTermName,
+
   termsIndex,
   termIndex,
   termExist,
-
-  showTermName,
-  showNestedTermName,
+  isNested,
 )
 where
 
@@ -65,4 +66,8 @@ termsIndex = map . termIndex
 
 termExist :: [Relterm] -> B.TermPath -> Bool
 termExist ts p = all (>= 0) $ termIndex ts p
+
+isNested :: Relterm -> Bool
+isNested (Relnest _ _) = True
+isNested _             = False
 

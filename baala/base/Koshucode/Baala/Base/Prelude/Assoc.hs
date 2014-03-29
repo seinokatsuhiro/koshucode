@@ -16,6 +16,7 @@ module Koshucode.Baala.Base.Prelude.Assoc
   namedMapM,
   lookupSatisfy,
   lookupMap,
+  subassoc,
 ) where
 
 import qualified Data.Map   as Map
@@ -90,4 +91,11 @@ lookupSatisfy x = loop where
 
 lookupMap :: (Ord k) => k -> Map.Map k a -> Maybe a
 lookupMap = Map.lookup
+
+subassoc :: (Eq a) => [a] -> [(a, b)] -> [(a, b)]
+subassoc xs = loop where
+    loop [] = []
+    loop (kv@(key, _) : kvs)
+        | key `elem` xs = kv : loop kvs
+        | otherwise     =      loop kvs
 

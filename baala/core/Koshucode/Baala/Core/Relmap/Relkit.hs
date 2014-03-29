@@ -22,6 +22,8 @@ module Koshucode.Baala.Core.Relmap.Relkit
   relkitConstEmpty,
   relkitConstSingleton,
   relkitConstBody,
+  relkitNest,
+  relkitWith,
   relkitSetSource,
 
   -- * Run
@@ -34,6 +36,7 @@ module Koshucode.Baala.Core.Relmap.Relkit
 import qualified Control.Monad                       as Monad
 import qualified Data.Monoid                         as Monoid
 import qualified Koshucode.Baala.Base                as B
+import qualified Koshucode.Baala.Core.Content        as C
 import qualified Koshucode.Baala.Core.Relmap.Lexical as C
 import qualified Koshucode.Baala.Core.Message        as Message
 
@@ -76,6 +79,8 @@ data RelkitCore c
     | RelkitId
 
     | RelkitLink        String RelkitKey (Maybe (RelkitBody c))
+    | RelkitNest        String
+    | RelkitWith        [(String, Int)] (RelkitBody c)
 
 instance Show (RelkitCore c) where
     show (RelkitFull        _ _)   =  "RelkitFull"
@@ -94,6 +99,8 @@ instance Show (RelkitCore c) where
     show (RelkitId             )   =  "RelkitId"
 
     show (RelkitLink      n _ _)   =  "RelkitLink " ++ n
+    show (RelkitNest          n)   =  "RelkitNest " ++ n
+    show (RelkitWith        _ _)   =  "RelkitWith "
 
 
 
@@ -125,6 +132,14 @@ relkitConstBody ns bo = kit where
     he  = B.headFrom ns
     kit = relkitJust he $ RelkitConst bo
 
+relkitNest :: String -> B.Relhead -> Relkit c
+relkitNest n he = kit where
+    kit = relkitJust he $ RelkitNest n
+
+relkitWith :: [(String, Int)] -> B.Map (Relkit c)
+relkitWith with (Relkit he kitb) = kit2 where
+    kit2 = relkit he $ RelkitWith with kitb
+
 relkitSetSource :: (B.TokenListing a) => a -> B.Map (Relkit c)
 relkitSetSource src (Relkit he (B.Sourced _ core)) =
     Relkit he $ B.Sourced (B.tokenListing src) core
@@ -152,6 +167,7 @@ relkitLink kits = linkKit where
            RelkitOneToAbOne  u kitf kitbs  -> RelkitOneToAbOne  u kitf $ links kitbs
            RelkitAbSemi        kitf kitb   -> RelkitAbSemi        kitf $ link  kitb
            RelkitAppend        kitb1 kitb2 -> RelkitAppend (link kitb1) (link kitb2)
+           RelkitWith          with kitb   -> RelkitWith          with $ link  kitb
 
            RelkitLink n key _ 
                -> case lookup key kitsRec of
@@ -161,8 +177,8 @@ relkitLink kits = linkKit where
            _ -> core
 
 -- todo: optimization
-relkitRun :: forall c. (Ord c) => RelkitBody c -> B.AbMap [[c]]
-relkitRun (B.Sourced toks core) bo1 =
+relkitRun :: forall c. (Ord c, C.CRel c) => [B.Named [[c]]] -> RelkitBody c -> B.AbMap [[c]]
+relkitRun rs (B.Sourced toks core) bo1 =
     ab toks $
      case core of
        RelkitFull        u kitf       ->  right u $ kitf             bo1
@@ -180,18 +196,25 @@ relkitRun (B.Sourced toks core) bo1 =
        RelkitId                       ->  Right bo1
 
        RelkitAppend kitb1@(B.Sourced toks1 _) kitb2
-           -> do bo2 <- kitb1 `relkitRun` bo1
-                 ab toks1 $ kitb2 `relkitRun` bo2
+           -> do bo2 <- relkitRun rs kitb1 bo1
+                 ab toks1 $ relkitRun rs kitb2 bo2
 
-       RelkitLink _ _ (Just kitb2) -> relkitRun kitb2 bo1
+       RelkitLink _ _ (Just kitb2) -> relkitRun rs kitb2 bo1
        RelkitLink n _ (Nothing)    -> Message.unkRelmap n
+
+       RelkitNest n                -> case lookup n rs of
+                                        Just bo2 -> Right bo2
+                                        Nothing  -> Message.unkNestRel n
+
+       RelkitWith with kitb        -> let nest = nestRel with $ head bo1
+                                      in relkitRun (nest ++ rs) kitb bo1
 
     where
       ab    = B.abortable "run"
-      bmaps = map relkitRun
+      bmaps = map $ relkitRun rs
 
       semi :: ([[c]] -> B.Ab Bool) -> RelkitBody c -> [c] -> B.Ab Bool
-      semi kitf kitb cs = kitf =<< relkitRun kitb [cs]
+      semi kitf kitb cs = kitf =<< relkitRun rs kitb [cs]
 
       right :: (Ord b) => Bool -> [b] -> B.Ab [b]
       right u = Right . uif u
@@ -202,6 +225,12 @@ relkitRun (B.Sourced toks core) bo1 =
       uif :: (Ord b) => Bool -> [b] -> [b]
       uif True   = B.unique
       uif False  = id
+
+      nestRel :: [(String, Int)] -> [c] -> [B.Named [[c]]]
+      nestRel with cs = pickup cs `map` with
+
+      pickup :: [c] -> (String, Int) -> B.Named [[c]]
+      pickup cs (name, ind) = (name, B.relBody $ C.gRel $ cs !! ind)
 
 fixedRelation :: (Ord c) => B.Map (B.AbMap [[c]])
 fixedRelation f = fix where

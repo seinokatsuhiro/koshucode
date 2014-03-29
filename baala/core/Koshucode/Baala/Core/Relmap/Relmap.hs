@@ -16,6 +16,7 @@ module Koshucode.Baala.Core.Relmap.Relmap
   relmapGlobal,
   relmapBinary,
   relmapConfl,
+  relmapWith,
 
   -- * Specialize relmap to relkit
   relmapSpecialize,
@@ -29,7 +30,7 @@ import qualified Koshucode.Baala.Core.Relmap.Rop      as C
 import qualified Koshucode.Baala.Core.Relmap.Lexical  as C
 import qualified Koshucode.Baala.Core.Relmap.Relkit   as C
 import qualified Koshucode.Baala.Core.Message         as Message
-
+import Data.Maybe (fromJust)
 
 
 -- ----------------------  Select
@@ -52,6 +53,27 @@ relmapList f = loop where
     loop (C.RelmapCalc _ _ rmaps)     = concatMap loop rmaps
     loop m = f m
 
+-- relmapMap :: B.Map (C.Relmap c) -> B.Map (C.Relmap c)
+-- relmapMap f = loop where
+--     loop rmap =
+--         case rmap of
+--           C.RelmapCalc lx confl rmaps -> C.RelmapCalc lx confl $ map loop rmaps
+--           C.RelmapWith lx with rmap1  -> C.RelmapWith lx with  $     loop rmap1
+--           C.RelmapAppend rmap1 rmap2  -> C.RelmapAppend (loop rmap1) (loop rmap2)
+--           _ -> f rmap
+
+-- relmapAbMap :: B.AbMap (C.Relmap c) -> B.AbMap (C.Relmap c)
+-- relmapAbMap f = loop where
+--     loop rmap =
+--         case rmap of
+--           C.RelmapCalc lx confl rmaps -> do rmap2 <- loop `mapM` rmaps
+--                                             Right $ C.RelmapCalc lx confl rmap2
+--           C.RelmapWith lx with rmap1  -> do rmap2 <- loop rmap1
+--                                             Right $ C.RelmapWith lx with rmap2
+--           C.RelmapAppend rmap1 rmap2  -> do rmap3 <- loop rmap1
+--                                             rmap4 <- loop rmap2
+--                                             Right $ C.RelmapAppend rmap3 rmap4
+--           _ -> f rmap
 
 
 -- ----------------------  Construct
@@ -84,24 +106,32 @@ relmapBinary use kit rmap = relmapConfl use (kit . head) [rmap]
 relmapConfl :: C.RopUse c -> C.RelkitConfl c -> [C.Relmap c] -> C.Relmap c
 relmapConfl = C.RelmapCalc . C.ropLex
 
+relmapWith :: C.RopUse c -> [(B.TermName, String)] -> B.Map (C.Relmap c)
+relmapWith = C.RelmapWith . C.ropLex
+
 
 
 -- ----------------------  Specialize
 
 relmapSpecialize :: forall c. C.Global c -> [C.RelmapDef c]
   -> [C.RelkitDef c] -> Maybe B.Relhead -> C.Relmap c -> B.Ab ([C.RelkitDef c], C.Relkit c)
-relmapSpecialize global rdef = spec [] where
+relmapSpecialize global rdef = spec [] [] where
     sel = C.globalSelect global
 
-    spec :: [C.RelkitKey] -> [C.RelkitDef c] -> Maybe B.Relhead -> C.Relmap c -> B.Ab ([C.RelkitDef c], C.Relkit c)
-    spec keys kdef he1 rmap = s where
+    spec :: [(String, B.Relhead)] -- name of nested relation, and its heading
+         -> [C.RelkitKey]         -- information for detecting cyclic relmap
+         -> [C.RelkitDef c]       -- list of known specialized relkits
+         -> Maybe B.Relhead       -- input head feeding into generic relmap
+         -> C.Relmap c            -- generic relmap to specialize
+         -> B.Ab ([C.RelkitDef c], C.Relkit c)
+    spec with keys kdef he1 rmap = s where
         s = case rmap of
               C.RelmapSource lx p ns -> post lx $ Right (kdef, C.relkitConst $ sel p ns)
               C.RelmapConst  lx rel  -> post lx $ Right (kdef, C.relkitConst rel)
 
               C.RelmapAppend rmap1 rmap2 ->
-                  do (kdef2, kit2) <- spec keys kdef he1 rmap1
-                     (kdef3, kit3) <- spec keys kdef2 (C.relkitHead kit2) rmap2
+                  do (kdef2, kit2) <- spec with keys kdef he1 rmap1
+                     (kdef3, kit3) <- spec with keys kdef2 (C.relkitHead kit2) rmap2
                      Right (kdef3, B.mappend kit2 kit3)
 
               C.RelmapCalc lx makeKit rmaps ->
@@ -116,9 +146,20 @@ relmapSpecialize global rdef = spec [] where
                      Right (kdef, kit)
 
               C.RelmapLink lx n ->
-                  post lx $ case lookup n rdef of
-                     Nothing    -> Message.unkRelmap n
-                     Just rmap1 -> link n rmap1 (he1, C.relmapLexList rmap1)
+                  post lx $ case lookup n with of
+                     Just he -> Right (kdef, C.relkitNest n he)
+                     Nothing -> case lookup n rdef of
+                       Nothing    -> Message.unkRelmap n
+                       Just rmap1 -> link n rmap1 (he1, C.relmapLexList rmap1)
+
+              C.RelmapWith lx with1 rmap1 ->
+                  do let terms    = map fst with1
+                         heJust   = fromJust he1
+                         heWith   = B.subassoc terms $ B.headNested heJust
+                         heInd    = terms `B.snipIndex` B.headNames heJust
+                         withInd  = zip terms heInd
+                     (kdef2, kit2) <- post lx $ spec (heWith ++ with) keys kdef he1 rmap1
+                     Right (kdef2, C.relkitWith withInd kit2)
 
         post :: C.Lexmap -> B.Map (B.Ab ([C.RelkitDef c], C.Relkit c))
         post lx result =
@@ -130,7 +171,7 @@ relmapSpecialize global rdef = spec [] where
         list :: [C.RelkitDef c] -> [C.Relmap c] -> B.Ab ([C.RelkitDef c], [C.Relkit c])
         list kdef1 [] = Right (kdef1, [])
         list kdef1 (rmap1 : rmaps) =
-            do (kdef2, kit)  <- spec keys kdef1 he1 rmap1
+            do (kdef2, kit)  <- spec with keys kdef1 he1 rmap1
                (kdef3, kits) <- list kdef2 rmaps
                Right (kdef3, kit : kits)
 
@@ -139,7 +180,7 @@ relmapSpecialize global rdef = spec [] where
             | key1 `elem` keys = Right (kdef, cyclic)
             | otherwise = case lookup key1 kdef of
                 Just kit -> Right (kdef, kit)
-                Nothing  -> do (kdef2, kit1) <- spec (key1 : keys) kdef he1 rmap1
+                Nothing  -> do (kdef2, kit1) <- spec with (key1 : keys) kdef he1 rmap1
                                let kdef3 = (key1, kit1) : kdef2
                                Right (kdef3, acyclic kit1)
             where

@@ -20,6 +20,7 @@ module Koshucode.Baala.Core.Content.Cox
   checkIrreducible,
 
   -- * Run
+  getArg1, getArg2, getArg3,
   coxRun,
 ) where
 
@@ -280,6 +281,18 @@ position he = spos where
 
 
 -- ----------------------  Run
+
+getArg1 :: [B.Ab c] -> B.Ab (B.Ab c)
+getArg1 [x] = Right x
+getArg1 _ = Message.unmatchType ""
+
+getArg2 :: [B.Ab c] -> B.Ab (B.Ab c, B.Ab c)
+getArg2 [x, y] = Right (x, y)
+getArg2 _ = Message.unmatchType ""
+
+getArg3 :: [B.Ab c] -> B.Ab (B.Ab c, B.Ab c, B.Ab c)
+getArg3 [x, y, z] = Right (x, y, z)
+getArg3 _ = Message.unmatchType ""
 
 -- | Calculate content expression.
 coxRun

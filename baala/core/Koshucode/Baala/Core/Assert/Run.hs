@@ -19,7 +19,7 @@ import qualified Koshucode.Baala.Core.Message        as Message
 
 -- | Calculate 'Relmap' for 'Rel'.
 runRelmapDataset
-    :: (Ord c, C.CNil c)
+    :: (Ord c, C.CRel c, C.CNil c)
     => C.Global c
     -> C.Dataset c     -- ^ Judges read from @source@ operator
     -> [C.RelmapDef c]
@@ -29,14 +29,14 @@ runRelmapDataset
 runRelmapDataset global dataset rdef = runRelmapViaRelkit g2 rdef where
     g2 = global { C.globalSelect = C.selectRelation dataset }
 
-runRelmapViaRelkit :: (Ord c)
+runRelmapViaRelkit :: (Ord c, C.CRel c)
   => C.Global c -> [C.RelmapDef c]
   -> C.Relmap c -> B.AbMap (B.Rel c)
 runRelmapViaRelkit global rdef r (B.Rel he1 bo1) =
     do (kdef, C.Relkit he2' f2') <- C.relmapSpecialize global rdef [] (Just he1) r
        let C.Relkit mhe2 f2 = C.relkitLink kdef $ C.Relkit he2' f2'
        he2 <- justRelhead mhe2
-       bo2 <- C.relkitRun f2 bo1
+       bo2 <- C.relkitRun [] f2 bo1
        Right $ B.Rel he2 bo2
 
 justRelhead :: Maybe B.Relhead -> B.Ab B.Relhead
@@ -49,14 +49,14 @@ just s Nothing  = Message.adlib s
 -- ----------------------  Assert
 
 -- | Calculate assertion list.
-runAssertJudges :: (Ord c, C.CNil c)
+runAssertJudges :: (Ord c, C.CRel c, C.CNil c)
   => C.Global c -> [C.RelmapDef c] -> [C.Assert c] -> B.Ab [B.Judge c]
 runAssertJudges global rdef asserts =
     runAssertDataset global asserts ds rdef where
         ds = C.dataset $ C.globalJudges global
 
 -- | Calculate assertion list.
-runAssertDataset :: (Ord c, C.CNil c)
+runAssertDataset :: (Ord c, C.CRel c, C.CNil c)
   => C.Global c -> [C.Assert c] -> C.Dataset c -> [C.RelmapDef c] -> B.Ab [B.Judge c]
 runAssertDataset global asserts dataset rdef = Right . concat =<< mapM each asserts where
     each a@(C.Assert quo pat opt relmap _) =
