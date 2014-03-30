@@ -3,17 +3,49 @@
 
 module Koshucode.Baala.Op.Nest.Confl
 ( 
-  -- * rel-add
-  consRelAdd, relmapRelAdd, relkitRelAdd,
-  -- * rel-down
-  consRelDown, relmapRelDown, relkitRelDown,
+  -- * for
+  consFor, relmapFor, relkitFor,
   -- * group
   consGroup, relmapGroup, relkitGroup,
+  -- * rel-add
+  consRelAdd, relmapRelAdd, relkitRelAdd,
 ) where
 
 import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Core       as C
 import qualified Koshucode.Baala.Op.Builtin as Op
+
+
+
+-- ----------------------  for
+
+consFor :: (C.CRel c) => C.RopCons c
+consFor use =
+  do n    <- Op.getTerm   use "-term"
+     rmap <- Op.getRelmap use
+     with <- Op.getOption [] Op.getTerms use "-with"
+     Right $ relmapFor use with n rmap
+
+relmapFor :: (C.CRel c) => C.RopUse c -> [B.TermName] -> B.TermName -> B.Map (C.Relmap c)
+relmapFor use with n = C.relmapWith use (zip with with) . bin where
+    bin = C.relmapBinary use $ relkitFor n
+
+relkitFor :: forall c. (C.CRel c) => B.TermName -> C.RelkitBinary c
+relkitFor n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
+    ns1   = B.headNames he1
+    ind1  = [n] `B.snipIndex` ns1
+    pick1 = B.snipFrom ind1
+    cut1  = B.snipOff  ind1
+    he3   = B.Relnest n (B.headTerms he2) `B.headConsTerm` B.Relhead (cut1 (B.headTerms he1))
+    kit3  = C.relkitJust he3 $ C.RelkitOneToAbOne False kitf3 [kitb2]
+
+    kitf3 :: [C.Relbmap c] -> [c] -> B.Ab [c]
+    kitf3 bmaps cs1 =
+        do let bo1 = B.relBody $ C.gRel (head $ pick1 cs1)
+               [bmap2] = bmaps
+           bo2 <- bmap2 bo1
+           Right $ C.pRel (B.Rel he2 bo2) : cut1 cs1
+relkitFor _ _ _ = Right C.relkitNothing
 
 
 
@@ -39,26 +71,6 @@ relkitRelAdd n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
            bo2 <- bmap2 [cs1]
            Right $ C.pRel (B.Rel he2 bo2) : cs1
 relkitRelAdd _ _ _ = Right C.relkitNothing
-
-
-
--- ----------------------  rel-down
-
-consRelDown :: (C.CRel c) => C.RopCons c
-consRelDown use =
-  do n <- Op.getTerm use "-term"
-     Right $ relmapRelDown use n
-
-relmapRelDown :: (C.CRel c) => C.RopUse c -> B.TermName -> C.Relmap c
-relmapRelDown use = C.relmapFlow use . relkitRelDown
-
--- | RelDown the current relation in a term.
-relkitRelDown :: (C.CRel c) => B.TermName -> C.RelkitCalc c
-relkitRelDown _ Nothing = Right C.relkitNothing
-relkitRelDown n (Just he1) = Right kit2 where
-    he2       = B.Relhead [B.Relnest n $ B.headTerms he1]
-    kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
-    kitf2 bo1 = [[ C.pRel $ B.Rel he1 bo1 ]]
 
 
 

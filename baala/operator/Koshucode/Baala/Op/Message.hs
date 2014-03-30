@@ -8,6 +8,7 @@ module Koshucode.Baala.Op.Message
   checkTerm,
   diffHead,
   noOperand,
+  notNestRel,
   reqBool,
   reqCollection,
   reqNewTerm,
@@ -27,12 +28,15 @@ checkTerm label ns he1 =
 diffHead :: [B.Relhead] -> B.Ab a
 diffHead = Left . B.abortLines "Different headings" . map showHead
 
-showHead :: B.Relhead -> String
-showHead = unwords . B.headNames
-
 -- | Operand not found
 noOperand :: B.Ab a
 noOperand = Left $ B.abortBecause "Operand not found"
+
+-- | Not a nested relation
+notNestRel :: [B.TermName] -> B.Relhead -> B.Ab a
+notNestRel ns he1 =
+    Left $ B.abortLines "Not a nested relation"
+         $ detailTermRel "Given" ns he1
 
 -- | Require Boolean
 reqBool :: B.Ab a
@@ -52,3 +56,5 @@ reqNewTerm ns he1 =
 unexpTermName :: B.Ab a
 unexpTermName = Left $ B.abortBecause "Unexpected term names"
 
+showHead :: B.Relhead -> String
+showHead = unwords . B.headNames

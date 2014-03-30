@@ -206,9 +206,8 @@ relkitRun rs (B.Sourced toks core) bo1 =
                                         Just bo2 -> Right bo2
                                         Nothing  -> Message.unkNestRel n
 
-       RelkitWith with kitb        -> let nest = nestRel with $ head bo1
-                                      in relkitRun (nest ++ rs) kitb bo1
-
+       RelkitWith with kitb        -> do bo2 <- withRel with kitb `mapM` bo1
+                                         right True $ concat bo2
     where
       ab    = B.abortable "run"
       bmaps = map $ relkitRun rs
@@ -226,8 +225,10 @@ relkitRun rs (B.Sourced toks core) bo1 =
       uif True   = B.unique
       uif False  = id
 
-      nestRel :: [(String, Int)] -> [c] -> [B.Named [[c]]]
-      nestRel with cs = pickup cs `map` with
+      withRel :: [(String, Int)] -> RelkitBody c -> [c] -> B.Ab [[c]]
+      withRel with kitb cs =
+          let nest = pickup cs `map` with
+          in relkitRun (nest ++ rs) kitb [cs]
 
       pickup :: [c] -> (String, Int) -> B.Named [[c]]
       pickup cs (name, ind) = (name, B.relBody $ C.gRel $ cs !! ind)

@@ -71,6 +71,7 @@ library
         Koshucode.Baala.Op.Minimal.Tropashko
 
         Koshucode.Baala.Op.Nest
+        Koshucode.Baala.Op.Nest.Flow
         Koshucode.Baala.Op.Nest.Confl
         Koshucode.Baala.Op.Nest.Rop
 

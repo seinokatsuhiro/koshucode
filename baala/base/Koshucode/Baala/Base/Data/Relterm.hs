@@ -6,6 +6,7 @@ module Koshucode.Baala.Base.Data.Relterm
 ( Relterm (..),
   showTermName,
   showNestedTermName,
+  relnestTerms,
 
   termsIndex,
   termIndex,
@@ -14,6 +15,7 @@ module Koshucode.Baala.Base.Data.Relterm
 )
 where
 
+import qualified Koshucode.Baala.Base.Abort   as B
 import qualified Koshucode.Baala.Base.Prelude as B
 import qualified Koshucode.Baala.Base.Text    as B
 import qualified Koshucode.Baala.Base.Token   as B
@@ -31,13 +33,17 @@ instance B.Name Relterm where
 instance B.Pretty Relterm where
     doc (Relterm n)    = B.doc (showTermName n)
     doc (Relnest n xs) = B.docWraps "(" ")"
-                      (B.doch $ B.doc (showTermName n) : map B.doc xs)
+                         (B.doch $ B.doc (showTermName n) : map B.doc xs)
 
 showTermName :: B.Map String
 showTermName n = ('/' : n)
 
 showNestedTermName :: [String] -> String
 showNestedTermName = concat . map showTermName
+
+relnestTerms :: Relterm -> [Relterm]
+relnestTerms (Relnest _ ts) = ts
+relnestTerms (Relterm _)    = B.bug "flat term"
 
 -- | Term path to term position
 --
