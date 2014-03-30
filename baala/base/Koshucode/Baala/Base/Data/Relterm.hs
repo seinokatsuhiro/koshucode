@@ -12,6 +12,7 @@ module Koshucode.Baala.Base.Data.Relterm
   termIndex,
   termExist,
   isNested,
+  termChange,
 )
 where
 
@@ -76,4 +77,8 @@ termExist ts p = all (>= 0) $ termIndex ts p
 isNested :: Relterm -> Bool
 isNested (Relnest _ _) = True
 isNested _             = False
+
+termChange :: (B.Map B.TermName) -> B.Map Relterm
+termChange f (Relterm n)    = Relterm (f n)
+termChange f (Relnest n ts) = Relnest (f n) ts
 

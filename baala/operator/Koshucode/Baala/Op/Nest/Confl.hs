@@ -11,9 +11,10 @@ module Koshucode.Baala.Op.Nest.Confl
   consRelAdd, relmapRelAdd, relkitRelAdd,
 ) where
 
-import qualified Koshucode.Baala.Base       as B
-import qualified Koshucode.Baala.Core       as C
-import qualified Koshucode.Baala.Op.Builtin as Op
+import qualified Koshucode.Baala.Base          as B
+import qualified Koshucode.Baala.Core          as C
+import qualified Koshucode.Baala.Op.Builtin    as Op
+import qualified Koshucode.Baala.Op.Nest.Flow  as Op
 
 
 
@@ -34,16 +35,14 @@ relkitFor :: forall c. (C.CRel c) => B.TermName -> C.RelkitBinary c
 relkitFor n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
     ns1   = B.headNames he1
     ind1  = [n] `B.snipIndex` ns1
-    pick1 = B.snipFrom ind1
     cut1  = B.snipOff  ind1
-    he3   = B.Relnest n (B.headTerms he2) `B.headConsTerm` B.Relhead (cut1 (B.headTerms he1))
+    he3   = B.Relnest n (B.headTerms he2) `B.headConsTerm` B.Relhead (cut1 $ B.headTerms he1)
     kit3  = C.relkitJust he3 $ C.RelkitOneToAbOne False kitf3 [kitb2]
 
     kitf3 :: [C.Relbmap c] -> [c] -> B.Ab [c]
     kitf3 bmaps cs1 =
-        do let bo1 = B.relBody $ C.gRel (head $ pick1 cs1)
-               [bmap2] = bmaps
-           bo2 <- bmap2 bo1
+        do let [bmap2] = bmaps
+           bo2 <- bmap2 [cs1]
            Right $ C.pRel (B.Rel he2 bo2) : cut1 cs1
 relkitFor _ _ _ = Right C.relkitNothing
 
@@ -109,7 +108,7 @@ relkitGroup n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
 
     add map2 cs1 =
         let b2maybe = B.lookupMap (share1 cs1) map2
-            b2sub   = B.maybeWith [] b2maybe
+            b2sub   = B.fromMaybe [] b2maybe
         in C.pRel (B.Rel he2 b2sub) : cs1
 
 relkitGroup _ _ _ = Right C.relkitNothing

@@ -239,7 +239,7 @@ subst = su [] where
     su args e@(B.Sourced src core) =
         let s = B.Sourced src
         in case core of
-             CoxVar _ i    -> B.maybeWith e $ args !! (i - 1)
+             CoxVar _ i    -> B.fromMaybe e $ args !! (i - 1)
              CoxDeriv v b  -> s $ CoxDeriv v $ su (Nothing : args) b
              CoxApplyL _ _ -> app args $ s $ mapToCox (su args) core
              _             -> e
@@ -254,7 +254,7 @@ link :: forall c. [Cop c] -> [NamedCox c] -> B.Map (Cox c)
 link base deriv = li where
     li e@(B.Sourced src core) =
         case core of
-          CoxVar n 0 -> B.maybeWith e $ lookup n fs
+          CoxVar n 0 -> B.fromMaybe e $ lookup n fs
           _          -> B.Sourced src $ mapToCox li core
 
     fs :: [NamedCox c]

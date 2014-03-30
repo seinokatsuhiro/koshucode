@@ -155,7 +155,7 @@ relmapSpecialize global rdef = spec [] [] where
               C.RelmapWith lx with1 rmap1 ->
                   do let terms    = map fst with1
                          heJust   = fromJust he1
-                         heWith   = B.subassoc terms $ B.headNested heJust
+                         heWith   = B.assocPick terms $ B.headNested heJust
                          heInd    = terms `B.snipIndex` B.headNames heJust
                          withInd  = zip terms heInd
                      (kdef2, kit2) <- post lx $ spec (heWith ++ with) keys kdef he1 rmap1

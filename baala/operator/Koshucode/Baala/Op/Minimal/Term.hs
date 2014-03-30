@@ -74,12 +74,12 @@ relkitCutTerm = relkitSnipTerm B.snipOff B.snipOff
 
 -- ----------------------  snip
 
-relkitSnipTerm :: B.Snip B.TermName -> B.Snip c -> C.RelkitBinary c
+relkitSnipTerm :: B.Snip B.Relterm -> B.Snip c -> C.RelkitBinary c
 relkitSnipTerm _ _ (C.Relkit Nothing _) = const $ Right C.relkitNothing
 relkitSnipTerm heSnip boSnip (C.Relkit (Just he2) _) =
     relkitSnip heSnip boSnip $ B.headNames he2
 
-relkitSnip :: B.Snip B.TermName -> B.Snip c -> [B.TermName] -> C.RelkitCalc c
+relkitSnip :: B.Snip B.Relterm -> B.Snip c -> [B.TermName] -> C.RelkitCalc c
 relkitSnip _ _ _ Nothing = Right C.relkitNothing
 relkitSnip heSnip boSnip ns (Just he1)
     | B.sameLength ns ind1 = Right kit2
@@ -117,8 +117,8 @@ relkitRename np (Just he1)
       psLeft   = ps `B.snipLeft`  ns1
 
       pn       = map Tuple.swap np
-      rename p = Maybe.fromMaybe p $ lookup p pn
+      ren p    = Maybe.fromMaybe p $ lookup p pn
 
-      he2      = B.headChange (map rename) he1
+      he2      = B.headRename ren he1
       kit2     = C.relkitJust he2 C.RelkitId
 

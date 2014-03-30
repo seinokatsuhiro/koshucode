@@ -26,6 +26,7 @@ module Koshucode.Baala.Base.Data.Relhead
 
   -- * Utility
   headChange,
+  headRename,
   headIndex1, headIndex, 
   headAlign, bodyAlign,
   headNested,
@@ -179,8 +180,11 @@ headAppend ns1 (Relhead ns) = Relhead $ map B.Relterm ns1 ++ ns
 --
 
 -- | Reconstruct head.
-headChange :: (B.Map [B.TermName]) -> B.Map Relhead
-headChange f = headFrom . f . headNames
+headChange :: (B.Map [B.Relterm]) -> B.Map Relhead
+headChange f = Relhead . f . headTerms
+
+headRename :: B.Map B.TermName -> B.Map Relhead
+headRename f = headChange (map $ B.termChange f)
 
 -- | Index of a term.
 headIndex1 :: Relhead -> B.TermPath -> [Int]

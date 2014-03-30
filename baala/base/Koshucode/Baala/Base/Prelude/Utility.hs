@@ -21,30 +21,20 @@ module Koshucode.Baala.Base.Prelude.Utility
   splitBy,
   divide,
   divideBy,
-  assocOmit,
-  assocOmitAll,
   maybeEmpty,
 
   -- * String
   padRight, padLeft,
 
-  -- * Gather
-  Gather,
-  gather,
-  gatherWith,
-  gatherToMap,
-
-  -- * Lookup
+  -- * Put
   putShow,
   putShowLn,
   putLines,
-  maybeWith,
 ) where
 
 import Control.Applicative
 import qualified Data.Char as Char
 import qualified Data.List as List
-import qualified Data.Map  as Map
 import qualified Data.Set  as Set
 
 import qualified Koshucode.Baala.Base.Prelude.Class as B
@@ -155,21 +145,6 @@ charWidth c
     | Char.ord c >= 256 = 2
     | otherwise         = 1
 
--- | Omit association that has given key.
---
---   >>> assocOmit "b" [("a",1), ("b",2), ("c",3)]
---   [("a",1), ("c",3)]
-assocOmit :: (Eq k) => k -> B.Map [(k, a)]
-assocOmit k1 = loop where
-    loop [] = []
-    loop (x@(k2, _) : xs)
-        | k1 == k2   =  xs
-        | otherwise  =  x : loop xs
-
-{-| Omit associations that have given keys. -}
-assocOmitAll :: (Eq k) => [k] -> B.Map [(k, a)]
-assocOmitAll ks xs = foldr assocOmit xs ks
-
 maybeEmpty :: Maybe a -> (a -> [b]) -> [b]
 maybeEmpty m f = maybe [] f m
 
@@ -193,37 +168,7 @@ padLeft n s = replicate rest ' ' ++ s where
     rest = max 0 (n - stringWidth s)
 
 
-
--- ----------------------  Gather
-
-type Gather a b = a -> (b, a)
-
--- | Gather what is gotten by splitter.
-gather :: Gather [a] b -> [a] -> [b]
-gather one = loop where
-    loop [] = []
-    loop xs = let (y, xs2) = one xs
-              in y : loop xs2
-
-gatherWith :: (c -> Gather [a] b) -> [c] -> [a] -> [b]
-gatherWith f = loop where
-    loop [] _ = []
-    loop _ [] = []
-    loop (c:cs) as = let (b, as') = f c as
-                     in b : loop cs as'
-
--- | Gather (/key/, /value/) to 'Map.Map' /key/ [/value/].
-gatherToMap :: (Ord k) => [(k,v)] -> Map.Map k [v]
-gatherToMap xs = loop xs Map.empty where
-    loop [] m = m
-    loop ((k,v) : xs2) m =
-        case Map.lookup k m of
-          Just vs -> loop xs2 $ Map.insert k (v:vs) m
-          Nothing -> loop xs2 $ Map.insert k [v] m
-
-
-
--- ----------------------  Lookup
+-- ----------------------  Put
 
 putShow :: (Show a) => a -> IO ()
 putShow = putStr . show
@@ -234,6 +179,4 @@ putShowLn = putStrLn . show
 putLines :: [String] -> IO ()
 putLines = putStr . unlines
 
-maybeWith :: a -> Maybe a -> a
-maybeWith a = maybe a id
 

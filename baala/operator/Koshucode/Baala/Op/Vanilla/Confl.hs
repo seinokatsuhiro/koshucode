@@ -136,7 +136,7 @@ relmapIf :: (Ord c) => C.RopUse c -> [C.Relmap c] -> C.Relmap c
 relmapIf use = C.relmapConfl use relkitIf
 
 relkitIf :: (Ord c) => C.RelkitConfl c
-relkitIf [(C.Relkit _ kitbT), (C.Relkit (Just heA) kitbA), (C.Relkit (Just heB) kitbB)] _
+relkitIf [C.Relkit _ kitbT, C.Relkit (Just heA) kitbA, C.Relkit (Just heB) kitbB] _
     | B.headEquiv heA heB = Right $ kit3
     | otherwise = Message.diffHead [heA, heB]
     where
