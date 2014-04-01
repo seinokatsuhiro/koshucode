@@ -5,6 +5,7 @@
 module Koshucode.Baala.Base.Data.Relterm
 ( Relterm (..),
   termName,
+  termExplainDoc,
   showTermName,
   showNestedTermName,
   relnestTerms,
@@ -40,6 +41,11 @@ instance B.Pretty Relterm where
 termName :: Relterm -> String
 termName (Relterm n)   = n
 termName (Relnest n _) = n
+
+termExplainDoc :: Relterm -> B.Doc
+termExplainDoc (Relterm n)    = B.doc (showTermName n)
+termExplainDoc (Relnest n ts) = B.doc (showTermName n)
+                                B.<+> (B.docv $ map termExplainDoc ts)
 
 showTermName :: B.Map String
 showTermName n = ('/' : n)

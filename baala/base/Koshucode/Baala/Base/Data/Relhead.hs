@@ -5,6 +5,9 @@
 module Koshucode.Baala.Base.Data.Relhead
 ( -- * Type
   Relhead (..),
+  headExplain,
+  headExplainLines,
+  headExplainDoc,
 
   -- * Constructor
   headEmpty,
@@ -58,6 +61,15 @@ instance M.Monoid Relhead where
 
 instance B.Pretty Relhead where
     doc (Relhead ts) = B.docColon $ map (B.showTermName . B.termName) ts
+
+headExplain :: Relhead -> String
+headExplain = show . headExplainDoc
+
+headExplainLines :: Relhead -> [String]
+headExplainLines = lines . headExplain
+
+headExplainDoc :: Relhead -> B.Doc
+headExplainDoc (Relhead ts) = B.docv $ map B.termExplainDoc ts
 
 
 -- ---------------------- Constructor

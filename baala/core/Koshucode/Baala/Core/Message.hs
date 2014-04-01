@@ -91,10 +91,10 @@ unmatchType = Left . B.abortLine "Type unmatch"
 unresPrefix :: B.Ab a
 unresPrefix = Left $ B.abortBecause "Unresolved prefix"
 
-detailTermRel :: [Char] -> [String] -> B.Relhead -> [[Char]]
+detailTermRel :: String -> [String] -> B.Relhead -> [String]
 detailTermRel label ns he1 = detail where
     detail = [label] ++ indent ns' ++ ["Relation"] ++ indent ns1
     indent = map ("  " ++)
     ns'    = map B.showTermName ns
-    ns1    = map (show . B.doc) $ B.headTerms he1
+    ns1    = B.headExplainLines he1
 
