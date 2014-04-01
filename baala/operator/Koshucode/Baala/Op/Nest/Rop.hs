@@ -17,29 +17,34 @@ nestRops :: (C.CContent c) => [C.Rop c]
 nestRops = Op.ropList "nest"
     --  SYNOPSIS,
     --  CONSTRUCTOR, OPERAND
-    [ ( "for /N R [ -with /N ... ]",
+    [ ( "down /N",
+        Op.consDown, C.sortOne "-term" [] )
+    , ( "for /N R [ -with /N ... ]",
         Op.consFor, C.sortTwo "-term" "-relmap" ["-with"] )
     , ( "group /N R",
         Op.consGroup, C.sortTwo "-term" "-relmap" [] )
-    , ( "rel-add /N R [ -with /N ... ]",
-        Op.consRelAdd, C.sortTwo "-term" "-relmap" ["-with"] )
-    , ( "rel-down /N",
-        Op.consRelDown, C.sortOne "-term" [] )
-    , ( "rel-up /N",
-        Op.consRelUp, C.sortOne "-term" [] )
+    , ( "rel /N R [ -with /N ... ]",
+        Op.consRel, C.sortTwo "-term" "-relmap" ["-with"] )
+    , ( "up /N",
+        Op.consUp, C.sortOne "-term" [] )
     ]
 
 
 -- ----------------------
 -- $Operators
 --
---  [@for \/N R@]
+--  [@down \/N@]
+--    Enclose input relation in a term @\/N@.
+--
+--  [@for \/P R@]
+--    Convert nested relation @\/P@ by relmap @R@.
 --
 --  [@group \/N R@]
 --    Group tuples in @R@ by input relation.
 --
---  [@rel-add \/N R@]
+--  [@rel \/N R@]
+--    Add nested relation as output of relmap @R@.
 --
---  [@rel-down \/N@]
---    Enclose input relation in a term.
+--  [@up \/P@]
+--    Lift up nested relation.
 --

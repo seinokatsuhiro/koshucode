@@ -4,6 +4,7 @@
 
 module Koshucode.Baala.Base.Data.Relterm
 ( Relterm (..),
+  termName,
   showTermName,
   showNestedTermName,
   relnestTerms,
@@ -35,6 +36,10 @@ instance B.Pretty Relterm where
     doc (Relterm n)    = B.doc (showTermName n)
     doc (Relnest n xs) = B.docWraps "(" ")"
                          (B.doch $ B.doc (showTermName n) : map B.doc xs)
+
+termName :: Relterm -> String
+termName (Relterm n)   = n
+termName (Relnest n _) = n
 
 showTermName :: B.Map String
 showTermName n = ('/' : n)

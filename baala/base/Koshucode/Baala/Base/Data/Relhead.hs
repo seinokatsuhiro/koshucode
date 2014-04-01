@@ -57,7 +57,7 @@ instance M.Monoid Relhead where
         Relhead $ B.unionUp t1 t2
 
 instance B.Pretty Relhead where
-    doc (Relhead ts) = B.docColon ts
+    doc (Relhead ts) = B.docColon $ map (B.showTermName . B.termName) ts
 
 
 -- ---------------------- Constructor

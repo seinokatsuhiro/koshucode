@@ -5,10 +5,15 @@ module Koshucode.Baala.Op.Nest.Confl
 ( 
   -- * for
   consFor, relmapFor, relkitFor,
+  -- $ForExample
+
   -- * group
   consGroup, relmapGroup, relkitGroup,
-  -- * rel-add
-  consRelAdd, relmapRelAdd, relkitRelAdd,
+  -- $GroupExample
+
+  -- * rel
+  consRel, relmapRel, relkitRel,
+  -- $RelExample
 ) where
 
 import qualified Koshucode.Baala.Base          as B
@@ -20,12 +25,18 @@ import qualified Koshucode.Baala.Op.Nest.Flow  as Op
 
 -- ----------------------  for
 
+-- $ForExample
+--
+--  Remove term @\/c@ from a nested relation in term @\/r@.
+--
+--    > for /r ( cut /c )
+
 consFor :: (C.CRel c) => C.RopCons c
 consFor use =
   do n    <- Op.getTerm   use "-term"
      rmap <- Op.getRelmap use
      with <- Op.getOption [] Op.getTerms use "-with"
-     Right $ relmapFor use with n rmap
+     Right $ relmapFor use with n (Op.relmapUp use n `B.mappend` rmap)
 
 relmapFor :: (C.CRel c) => C.RopUse c -> [B.TermName] -> B.TermName -> B.Map (C.Relmap c)
 relmapFor use with n = C.relmapWith use (zip with with) . bin where
@@ -48,32 +59,15 @@ relkitFor _ _ _ = Right C.relkitNothing
 
 
 
--- ----------------------  rel-add
-
-consRelAdd :: (C.CRel c) => C.RopCons c
-consRelAdd use =
-  do n    <- Op.getTerm   use "-term"
-     rmap <- Op.getRelmap use
-     with <- Op.getOption [] Op.getTerms use "-with"
-     Right $ relmapRelAdd use with n rmap
-
-relmapRelAdd :: (C.CRel c) => C.RopUse c -> [B.TermName] -> B.TermName -> B.Map (C.Relmap c)
-relmapRelAdd use with n = C.relmapWith use (zip with with) . bin where
-    bin = C.relmapBinary use $ relkitRelAdd n
-
-relkitRelAdd :: (C.CRel c) => B.TermName -> C.RelkitBinary c
-relkitRelAdd n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
-    he3   = B.Relnest n (B.headTerms he2) `B.headConsTerm` he1
-    kit3  = C.relkitJust he3 $ C.RelkitOneToAbOne False kitf3 [kitb2]
-    kitf3 bmaps cs1 =
-        do let [bmap2] = bmaps
-           bo2 <- bmap2 [cs1]
-           Right $ C.pRel (B.Rel he2 bo2) : cs1
-relkitRelAdd _ _ _ = Right C.relkitNothing
-
-
-
 -- ----------------------  group
+
+-- $GroupExample
+--
+--  Split relation from @b@ by relation from @a@.
+--  In other words, group @b@ by @a@.
+--  Result relations are nested in term @\/r@.
+--
+--    > a | group /r b
 
 consGroup :: (Ord c, C.CRel c) => C.RopCons c
 consGroup use =
@@ -84,7 +78,6 @@ consGroup use =
 relmapGroup :: (Ord c, C.CRel c) => C.RopUse c -> B.TermName -> B.Map (C.Relmap c)
 relmapGroup use = C.relmapBinary use . relkitGroup
 
--- | Grouping relation.
 relkitGroup :: forall c. (Ord c, C.CRel c) => B.TermName -> C.RelkitBinary c
 relkitGroup n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
 
@@ -112,4 +105,40 @@ relkitGroup n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
         in C.pRel (B.Rel he2 b2sub) : cs1
 
 relkitGroup _ _ _ = Right C.relkitNothing
+
+
+
+-- ----------------------  rel
+
+-- $RelExample
+--
+--  Add nested relation in term @\/p@.
+--
+--    > rel /p ( source P /a /b )
+--
+--  Add nested relation as meet of @\/p@ and @\/q@.
+--
+--    > rel /r ( p | meet q ) -with /p /q
+--
+
+consRel :: (C.CRel c) => C.RopCons c
+consRel use =
+  do n    <- Op.getTerm   use "-term"
+     rmap <- Op.getRelmap use
+     with <- Op.getOption [] Op.getTerms use "-with"
+     Right $ relmapRel use with n rmap
+
+relmapRel :: (C.CRel c) => C.RopUse c -> [B.TermName] -> B.TermName -> B.Map (C.Relmap c)
+relmapRel use with n = C.relmapWith use (zip with with) . bin where
+    bin = C.relmapBinary use $ relkitRel n
+
+relkitRel :: (C.CRel c) => B.TermName -> C.RelkitBinary c
+relkitRel n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
+    he3   = B.Relnest n (B.headTerms he2) `B.headConsTerm` he1
+    kit3  = C.relkitJust he3 $ C.RelkitOneToAbOne False kitf3 [kitb2]
+    kitf3 bmaps cs1 =
+        do let [bmap2] = bmaps
+           bo2 <- bmap2 [cs1]
+           Right $ C.pRel (B.Rel he2 bo2) : cs1
+relkitRel _ _ _ = Right C.relkitNothing
 

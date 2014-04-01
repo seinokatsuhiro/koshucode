@@ -3,10 +3,13 @@
 
 module Koshucode.Baala.Op.Nest.Flow
 ( 
-  -- * rel-down
-  consRelDown, relmapRelDown, relkitRelDown,
-  -- * rel-up
-  consRelUp, relmapRelUp, relkitRelUp,
+  -- * down
+  consDown, relmapDown, relkitDown,
+  -- $DownExample
+
+  -- * up
+  consUp, relmapUp, relkitUp,
+  -- $UpExample
 ) where
 
 import qualified Koshucode.Baala.Base       as B
@@ -16,38 +19,51 @@ import qualified Koshucode.Baala.Op.Message as Message
 
 
 
--- ----------------------  rel-down
+-- ----------------------  down
 
-consRelDown :: (C.CRel c) => C.RopCons c
-consRelDown use =
+-- $DownExample
+--
+--  Enclose relation from @a@ into term @\/r@.
+--  In other words, relation flows down to nested level.
+--
+--    > a | down /r
+
+consDown :: (C.CRel c) => C.RopCons c
+consDown use =
   do n <- Op.getTerm use "-term"
-     Right $ relmapRelDown use n
+     Right $ relmapDown use n
 
-relmapRelDown :: (C.CRel c) => C.RopUse c -> B.TermName -> C.Relmap c
-relmapRelDown use = C.relmapFlow use . relkitRelDown
+relmapDown :: (C.CRel c) => C.RopUse c -> B.TermName -> C.Relmap c
+relmapDown use = C.relmapFlow use . relkitDown
 
-relkitRelDown :: (C.CRel c) => B.TermName -> C.RelkitCalc c
-relkitRelDown _ Nothing = Right C.relkitNothing
-relkitRelDown n (Just he1) = Right kit2 where
+relkitDown :: (C.CRel c) => B.TermName -> C.RelkitCalc c
+relkitDown _ Nothing = Right C.relkitNothing
+relkitDown n (Just he1) = Right kit2 where
     he2       = B.Relhead [B.Relnest n $ B.headTerms he1]
     kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
     kitf2 bo1 = [[ C.pRel $ B.Rel he1 bo1 ]]
 
 
 
--- ----------------------  rel-up
+-- ----------------------  up
 
-consRelUp :: (C.CRel c) => C.RopCons c
-consRelUp use =
+-- $UpExample
+--
+--  Lift nested relation @\/r@ up onto current flow.
+--
+--    > b | up /r
+
+consUp :: (C.CRel c) => C.RopCons c
+consUp use =
   do n <- Op.getTerm use "-term"
-     Right $ relmapRelUp use n
+     Right $ relmapUp use n
 
-relmapRelUp :: (C.CRel c) => C.RopUse c -> B.TermName -> C.Relmap c
-relmapRelUp use = C.relmapFlow use . relkitRelUp
+relmapUp :: (C.CRel c) => C.RopUse c -> B.TermName -> C.Relmap c
+relmapUp use = C.relmapFlow use . relkitUp
 
-relkitRelUp :: (C.CRel c) => B.TermName -> C.RelkitCalc c
-relkitRelUp _ Nothing = Right C.relkitNothing
-relkitRelUp n (Just he1)
+relkitUp :: (C.CRel c) => B.TermName -> C.RelkitCalc c
+relkitUp _ Nothing = Right C.relkitNothing
+relkitUp n (Just he1)
     | null ind1     = Message.unkTerm [n] he1
     | B.isNested t1 = Right kit2
     | otherwise     = Message.notNestRel [n] he1
