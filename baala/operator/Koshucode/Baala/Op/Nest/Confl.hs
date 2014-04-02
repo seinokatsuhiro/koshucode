@@ -11,9 +11,12 @@ module Koshucode.Baala.Op.Nest.Confl
   consGroup, relmapGroup, relkitGroup,
   -- $GroupExample
 
-  -- * rel
-  consRel, relmapRel, relkitRel,
-  -- $RelExample
+  -- * group-by
+  consGroupBy,
+
+  -- * slice
+  consSlice, relmapSlice, relkitSlice,
+  -- $SliceExample
 ) where
 
 import qualified Koshucode.Baala.Base          as B
@@ -108,9 +111,22 @@ relkitGroup _ _ _ = Right C.relkitNothing
 
 
 
--- ----------------------  rel
+-- ----------------------  group-by
 
--- $RelExample
+consGroupBy :: (Ord c, C.CRel c) => C.RopCons c
+consGroupBy use =
+  do n    <- Op.getTerm   use "-term"
+     rmap <- Op.getRelmap use
+     Right $ relmapGroupBy use n rmap
+
+relmapGroupBy :: (Ord c, C.CRel c) => C.RopUse c -> B.TermName -> B.Map (C.Relmap c)
+relmapGroupBy use n rmap = C.relmapCommute use $ relmapGroup use n rmap
+
+
+
+-- ----------------------  slice
+
+-- $SliceExample
 --
 --  Add nested relation in term @\/p@.
 --
@@ -121,24 +137,24 @@ relkitGroup _ _ _ = Right C.relkitNothing
 --    > rel /r ( p | meet q ) -with /p /q
 --
 
-consRel :: (C.CRel c) => C.RopCons c
-consRel use =
+consSlice :: (C.CRel c) => C.RopCons c
+consSlice use =
   do n    <- Op.getTerm   use "-term"
      rmap <- Op.getRelmap use
      with <- Op.getOption [] Op.getTerms use "-with"
-     Right $ relmapRel use with n rmap
+     Right $ relmapSlice use with n rmap
 
-relmapRel :: (C.CRel c) => C.RopUse c -> [B.TermName] -> B.TermName -> B.Map (C.Relmap c)
-relmapRel use with n = C.relmapWith use (zip with with) . bin where
-    bin = C.relmapBinary use $ relkitRel n
+relmapSlice :: (C.CRel c) => C.RopUse c -> [B.TermName] -> B.TermName -> B.Map (C.Relmap c)
+relmapSlice use with n = C.relmapWith use (zip with with) . bin where
+    bin = C.relmapBinary use $ relkitSlice n
 
-relkitRel :: (C.CRel c) => B.TermName -> C.RelkitBinary c
-relkitRel n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
+relkitSlice :: (C.CRel c) => B.TermName -> C.RelkitBinary c
+relkitSlice n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
     he3   = B.Relnest n (B.headTerms he2) `B.headConsTerm` he1
     kit3  = C.relkitJust he3 $ C.RelkitOneToAbOne False kitf3 [kitb2]
     kitf3 bmaps cs1 =
         do let [bmap2] = bmaps
            bo2 <- bmap2 [cs1]
            Right $ C.pRel (B.Rel he2 bo2) : cs1
-relkitRel _ _ _ = Right C.relkitNothing
+relkitSlice _ _ _ = Right C.relkitNothing
 

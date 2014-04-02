@@ -16,6 +16,7 @@ module Koshucode.Baala.Core.Relmap.Relmap
   relmapGlobal,
   relmapBinary,
   relmapConfl,
+  relmapCommute,
   relmapWith,
 
   -- * Specialize relmap to relkit
@@ -106,6 +107,9 @@ relmapBinary use kit rmap = relmapConfl use (kit . head) [rmap]
 relmapConfl :: C.RopUse c -> C.RelkitConfl c -> [C.Relmap c] -> C.Relmap c
 relmapConfl = C.RelmapCalc . C.ropLex
 
+relmapCommute :: C.RopUse c -> C.Relmap c -> C.Relmap c
+relmapCommute = C.RelmapCommute . C.ropLex
+
 relmapWith :: C.RopUse c -> [(B.TermName, String)] -> B.Map (C.Relmap c)
 relmapWith = C.RelmapWith . C.ropLex
 
@@ -128,6 +132,12 @@ relmapSpecialize global rdef = spec [] [] where
         s = case rmap of
               C.RelmapSource lx p ns -> post lx $ Right (kdef, C.relkitConst $ sel p ns)
               C.RelmapConst  lx rel  -> post lx $ Right (kdef, C.relkitConst rel)
+
+              C.RelmapAppend rmap1 (C.RelmapCommute _ (C.RelmapCalc lx makeKit [rmap2])) ->
+                  spec with keys kdef he1
+                       $ C.RelmapAppend rmap1
+                         $ C.RelmapAppend rmap2
+                           $ C.RelmapCalc lx makeKit [rmap1]
 
               C.RelmapAppend rmap1 rmap2 ->
                   do (kdef2, kit2) <- spec with keys kdef he1 rmap1
@@ -160,6 +170,9 @@ relmapSpecialize global rdef = spec [] [] where
                          withInd  = zip terms heInd
                      (kdef2, kit2) <- post lx $ spec (heWith ++ with) keys kdef he1 rmap1
                      Right (kdef2, C.relkitWith withInd kit2)
+
+              C.RelmapCommute lx _ ->
+                  post lx $ Message.notCommute
 
         post :: C.Lexmap -> B.Map (B.Ab ([C.RelkitDef c], C.Relkit c))
         post lx result =

@@ -85,14 +85,17 @@ data Relmap c
       -- ^ Relmap that maps relations to a relation with globals
     | RelmapCalc     C.Lexmap (RelkitConfl c) [Relmap c]
       -- ^ Relmap that maps relations to a relation
-
-    | RelmapLink     C.Lexmap String
-      -- ^ Relmap reference
-    | RelmapAppend   (Relmap c) (Relmap c)
-      -- ^ Connect two relmaps
+    | RelmapCommute  C.Lexmap (Relmap c)
+      -- ^ Commute binary relmap (EXPERIMENTAL)
 
     | RelmapWith     C.Lexmap [(B.TermName, String)] (Relmap c)
       -- ^ Relmap for environment of nested relations
+    | RelmapLink     C.Lexmap String
+      -- ^ Relmap reference
+
+    | RelmapAppend   (Relmap c) (Relmap c)
+      -- ^ Connect two relmaps
+
 
 -- | Map function to relmaps.
 mapToRelmap :: B.Map (Relmap c) -> B.Map (Relmap c)
@@ -111,9 +114,10 @@ showRelmap r = sh r where
 
     sh (RelmapGlobal _ _)     = "RelmapGlobal " ++ show (B.name r)
     sh (RelmapCalc   _ _ rs)  = "RelmapCalc "   ++ show (B.name r) ++ " _" ++ joinSubs rs
+    sh (RelmapCommute _ r1)   = "RelmapCommute" ++ joinSubs [r1]
 
-    sh (RelmapLink _ n)       = "RelmapLink "   ++ show n
     sh (RelmapWith _ ns r1)   = "RelmapWith "   ++ show ns ++ joinSubs [r1]
+    sh (RelmapLink _ n)       = "RelmapLink "   ++ show n
     sh (RelmapAppend r1 r2)   = "RelmapAppend"  ++ joinSubs [r1, r2]
 
     joinSubs = concatMap sub
@@ -142,9 +146,10 @@ instance B.Pretty (Relmap c) where
 
     doc (RelmapGlobal lx _)    = B.doc lx -- hang (text $ name m) 2 (doch (map doc ms))
     doc (RelmapCalc   lx _ _)  = B.doc lx -- hang (text $ name m) 2 (doch (map doc ms))
+    doc (RelmapCommute lx _)   = B.doc lx
 
+    doc (RelmapWith   _ _ r1)  = B.doc r1
     doc (RelmapLink   lx _)    = B.doc lx
-    doc (RelmapWith   _ _ r)   = B.doc r
     doc (RelmapAppend r1 r2)   = B.docHang (B.doc r1) 2 (docRelmapAppend r2)
 
 docRelmapAppend :: Relmap c -> B.Doc
@@ -173,15 +178,16 @@ relmapLex r = case relmapLexList r of
 
 relmapLexList :: Relmap c -> [C.Lexmap]
 relmapLexList = collect where
-    collect (RelmapSource lx _ _)  = [lx]
-    collect (RelmapConst  lx _)    = [lx]
+    collect (RelmapSource  lx _ _)  = [lx]
+    collect (RelmapConst   lx _)    = [lx]
 
-    collect (RelmapGlobal lx _)    = [lx]
-    collect (RelmapCalc   lx _ _)  = [lx]
+    collect (RelmapGlobal  lx _)    = [lx]
+    collect (RelmapCalc    lx _ _)  = [lx]
+    collect (RelmapCommute lx _)    = [lx]
 
-    collect (RelmapLink   lx _)    = [lx]
-    collect (RelmapWith   lx _ _)  = [lx]
-    collect (RelmapAppend r1 r2)   = collect r1 ++ collect r2
+    collect (RelmapWith    lx _ _)  = [lx]
+    collect (RelmapLink    lx _)    = [lx]
+    collect (RelmapAppend  r1 r2)   = collect r1 ++ collect r2
 
 
 

@@ -50,9 +50,9 @@ relkitMember :: (Ord c, C.CSet c, C.CList c)
   => B.TermName2 -> C.RelkitCalc c
 relkitMember _ Nothing = Right C.relkitNothing
 relkitMember (x, xs) he1'@(Just he1) = kit2 where
-    kit2 | xi >= 0 && xsi >= 0 = relkitMemberCheck  xi xsi he1'
-         | xi <  0 && xsi >= 0 = relkitMemberExpand x  xsi he1'
-         | otherwise           = Message.unkTerm [x, xs] he1
+    kit2 | B.operand [xi, xsi] [] = relkitMemberCheck  xi xsi he1'
+         | B.operand [xsi] [xi]   = relkitMemberExpand x  xsi he1'
+         | otherwise              = Message.unkTerm [x, xs] he1
     [xi, xsi] = [x, xs] `B.snipFull` B.headNames he1
 
 relkitMemberCheck :: (Eq c, C.CSet c, C.CList c)

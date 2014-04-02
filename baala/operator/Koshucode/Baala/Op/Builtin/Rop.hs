@@ -17,8 +17,10 @@ builtinRops :: [C.Rop c]
 builtinRops = ropList "builtin"
     [ ("append R ...", ropConsConcat, C.sortList "-relmap" []) ]
 
+-- TODO
 ropConsConcat :: C.RopCons c
-ropConsConcat = Right . M.mconcat . C.ropSubrelmap
+ropConsConcat = Right . foldl M.mappend M.mempty . C.ropSubrelmap
+--ropConsConcat = Right . M.mconcat . C.ropSubrelmap
 
 -- | Make implementations of relation-mapping operators.
 ropList

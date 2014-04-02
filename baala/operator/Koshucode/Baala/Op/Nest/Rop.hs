@@ -23,8 +23,10 @@ nestRops = Op.ropList "nest"
         Op.consFor, C.sortTwo "-term" "-relmap" ["-with"] )
     , ( "group /N R",
         Op.consGroup, C.sortTwo "-term" "-relmap" [] )
-    , ( "rel /N R [ -with /N ... ]",
-        Op.consRel, C.sortTwo "-term" "-relmap" ["-with"] )
+    , ( "group-by /N R",
+        Op.consGroupBy, C.sortTwo "-term" "-relmap" [] )
+    , ( "slice /N R [ -with /N ... ]",
+        Op.consSlice, C.sortTwo "-term" "-relmap" ["-with"] )
     , ( "up /N",
         Op.consUp, C.sortOne "-term" [] )
     ]
@@ -42,7 +44,7 @@ nestRops = Op.ropList "nest"
 --  [@group \/N R@]
 --    Group tuples in @R@ by input relation.
 --
---  [@rel \/N R@]
+--  [@slice \/N R@]
 --    Add nested relation as output of relmap @R@.
 --
 --  [@up \/P@]

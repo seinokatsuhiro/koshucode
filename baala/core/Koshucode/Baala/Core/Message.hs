@@ -7,6 +7,7 @@ module Koshucode.Baala.Core.Message
   -- * Core package
   ambInfixes,
   noFile,
+  notCommute,
   oddRelation,
   reqFlatName,
   reqTermName,
@@ -36,6 +37,10 @@ ambInfixes = Left . B.abortLines "Ambiguous infix operators"
 -- | File not found
 noFile :: String -> B.Ab a
 noFile = Left . B.abortLine "File not found"
+
+-- | Not commutable
+notCommute :: B.Ab a
+notCommute = Left $ B.abortBecause "Not commutable"
 
 -- | Odd relation literal
 oddRelation :: B.Ab a
