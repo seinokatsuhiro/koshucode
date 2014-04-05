@@ -10,15 +10,21 @@ md_usage () {
     echo "  Generate markdown document for koshu scripts."
     echo
     echo "USAGE"
-    echo "  koshu-markdown.sh [-g | -f FILE] [-p PROG] [-x EXT] SCRIPT.k ..."
+    echo "  $md_base [OPTION ...] SCRIPT.k ..."
     echo
-    echo "  Option -g globs input files by *.$md_glob_ext"
-    echo "  Option -f takes from each liens in FILE."
+    echo "OPTION"
+    echo "  -f FILE     take input files from FILE"
+    echo "  -g          glob input files by *.$md_glob_ext"
+    echo "  -h          print help message"
+    echo "  -o FILE.md  save document to FILE.md"
+    echo "  -p PROG     use PROGram instead of $md_program"
+    echo "  -r          save document to README.md"
+    echo "  -x EXT      use EXTension instead of *.$md_glob_ext"
     echo
-    echo "EXAMPLES"
-    echo "  koshu-markdown.sh -g CALC.k > README.md"
-    echo "  koshu-markdown.sh -f FILE CALC.k > README.md"
-    echo "  koshu-markdown.sh CALC.k DATA.k > README.md"
+    echo "EXAMPLE"
+    echo "  $md_base -r -g CALC.k"
+    echo "  $md_base -o CALC.md -f FILE CALC.k"
+    echo "  $md_base CALC.k DATA.k"
     echo
     exit
 }
@@ -28,10 +34,36 @@ error () {
 }
 
 
+# ============================================  Document
+
+md_doc () {
+    if [ -z "$md_output" ]; then
+        md_doc_body $@
+    else
+        md_doc_body $@ > $md_output
+        error "  Output to $md_output"
+    fi
+}
+
+md_doc_body () {
+    md_title
+    md_body $@
+    md_trailer
+}
+
+check_output () {
+    case "$md_output" in
+        *.$md_glob_ext )
+              error "  Output file is probably input file."
+              error "  Please check: $md_output"
+              exit 2 ;; 
+    esac
+}
 
 # ============================================  Table of contents
 
-md_link   () { echo "(#$@)" | tr -d '. ' ; }
+md_link   () { echo "(#$@)" | tr -d '.' | tr ' ' '-' \
+                            | tr "[:upper:]" "[:lower:]"; }
 md_table_calc () { echo "- [$@]`md_link $@`" ; }
 md_table_data () { echo "- $md_program $md_calc [$@]`md_link "$@"`" ; }
 md_table_from () { echo "$@" | xargs -n 1 | md_table ; }
@@ -96,7 +128,7 @@ md_input () {
 md_output () {
     $md_program "$@" > $md_temp
     md_status=$?
-    error "$md_status <- $md_program $@"
+    error "  $md_status <- $md_program $@"
 
     echo
     if [ "$md_status" = 0 ]; then
@@ -122,7 +154,9 @@ md_body () {
 
 md_body_args () {
     # Table
-    md_table_from $@ output
+    for k in $@ output; do
+        md_table_calc $k
+    done
 
     # Input
     for k in $@; do
@@ -189,23 +223,28 @@ md_exist () {(
 )}
 
 
-
 # ============================================  Main
 
-md_temp=`mktemp TEMP-XXXX`
+# variable
+
 md_base=`basename $0`
 md_args="$*"
+md_output=
 md_program=koshu
 md_glob_type=args
 md_glob_file=
 md_glob_ext=k
 
-while getopts f:ghpx:V opt; do
+# option
+
+while getopts f:gho:p:rx:V opt; do
     case $opt in
         f)  md_glob_type=file
             md_glob_file=$OPTARG ;;
         g)  md_glob_type=glob    ;;
+        o)  md_output=$OPTARG    ;;
         p)  md_program=$OPTARG   ;;
+        r)  md_output=README.md  ;;
         x)  md_glob_ext=$OPTARG  ;;
         V)  md_version           ;;
         ?)  md_usage             ;;
@@ -214,9 +253,14 @@ done
 
 shift $(($OPTIND - 1))
 
-md_title
-md_body $@
-md_trailer
+# document
+
+error "$md_base $md_args"
+check_output
+md_temp=`mktemp TEMP-KOSHU-XXXXX`
+md_doc $@
+
+# clean up
 
 if [ -f $md_temp ]; then
     rm $md_temp
