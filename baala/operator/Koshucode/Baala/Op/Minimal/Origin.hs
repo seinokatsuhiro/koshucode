@@ -11,7 +11,7 @@ module Koshucode.Baala.Op.Minimal.Origin
   -- * contents
   consContents, relmapContents,
   -- * reldee & reldum
-  consReldee, consReldum,
+  consDee, consDum,
 ) where
 
 import qualified Koshucode.Baala.Base    as B
@@ -69,9 +69,9 @@ relkitContents n _ = Right $ C.relkitJust he2 $ C.RelkitFull False kitf where
 
 -- ----------------------  reldee & reldum
 
-consReldee :: C.RopCons c
-consReldee use = Right $ C.relmapConst use B.reldee
+consDee :: C.RopCons c
+consDee use = Right $ C.relmapConst use B.reldee
 
-consReldum :: C.RopCons c
-consReldum use = Right $ C.relmapConst use B.reldum
+consDum :: C.RopCons c
+consDum use = Right $ C.relmapConst use B.reldum
 

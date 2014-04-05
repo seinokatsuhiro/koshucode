@@ -60,6 +60,8 @@ elemRelmap relmap = name : f relmap where
     f (C.RelmapCalc   _ _ rs)  =  rop (B.name relmap) : concatMap f rs
     f (C.RelmapGlobal _ _)     =  [ rop (B.name relmap) ]
     f (C.RelmapConst  _ _)     =  [ rop (B.name relmap) ]
+    f (C.RelmapCommute  _ r1)  =  f r1
+    f (C.RelmapCopy   _ _ r1)  =  f r1
     f (C.RelmapWith   _ _ r1)  =  f r1
 
 

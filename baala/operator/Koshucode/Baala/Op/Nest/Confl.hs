@@ -3,6 +3,9 @@
 
 module Koshucode.Baala.Op.Nest.Confl
 ( 
+  -- * copy
+  consCopy,
+
   -- * for
   consFor, relmapFor, relkitFor,
   -- $ForExample
@@ -23,6 +26,21 @@ import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Core          as C
 import qualified Koshucode.Baala.Op.Builtin    as Op
 import qualified Koshucode.Baala.Op.Nest.Flow  as Op
+
+
+
+-- ----------------------  copy
+
+--   > a | copy a b
+
+consCopy :: (C.CRel c) => C.RopCons c
+consCopy use =
+  do n    <- Op.getWord   use "-name"
+     rmap <- Op.getRelmap use
+     Right $ relmapCopy use n rmap
+
+relmapCopy :: (C.CRel c) => C.RopUse c -> String -> B.Map (C.Relmap c)
+relmapCopy use n = C.relmapCopy use n
 
 
 

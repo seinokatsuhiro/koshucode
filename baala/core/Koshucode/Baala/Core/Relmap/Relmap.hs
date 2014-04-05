@@ -17,6 +17,7 @@ module Koshucode.Baala.Core.Relmap.Relmap
   relmapBinary,
   relmapConfl,
   relmapCommute,
+  relmapCopy,
   relmapWith,
 
   -- * Specialize relmap to relkit
@@ -110,6 +111,9 @@ relmapConfl = C.RelmapCalc . C.ropLex
 relmapCommute :: C.RopUse c -> C.Relmap c -> C.Relmap c
 relmapCommute = C.RelmapCommute . C.ropLex
 
+relmapCopy :: C.RopUse c -> String -> B.Map (C.Relmap c)
+relmapCopy = C.RelmapCopy . C.ropLex
+
 relmapWith :: C.RopUse c -> [(B.TermName, String)] -> B.Map (C.Relmap c)
 relmapWith = C.RelmapWith . C.ropLex
 
@@ -162,13 +166,20 @@ relmapSpecialize global rdef = spec [] [] where
                        Nothing    -> Message.unkRelmap n
                        Just rmap1 -> link n rmap1 (he1, C.relmapLexList rmap1)
 
+              C.RelmapCopy lx n rmap1 ->
+                  do let heJust = fromJust he1
+                         with' = (n, heJust) : with
+                     (kdef2, kit2) <- post lx $ spec with' keys kdef he1 rmap1
+                     Right (kdef2, C.relkitCopy n kit2)
+
               C.RelmapWith lx with1 rmap1 ->
                   do let terms    = map fst with1
                          heJust   = fromJust he1
                          heWith   = B.assocPick terms $ B.headNested heJust
                          heInd    = terms `B.snipIndex` B.headNames heJust
+                         with'    = heWith ++ with
                          withInd  = zip terms heInd
-                     (kdef2, kit2) <- post lx $ spec (heWith ++ with) keys kdef he1 rmap1
+                     (kdef2, kit2) <- post lx $ spec with' keys kdef he1 rmap1
                      Right (kdef2, C.relkitWith withInd kit2)
 
               C.RelmapCommute lx _ ->

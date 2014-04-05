@@ -23,6 +23,7 @@ module Koshucode.Baala.Core.Relmap.Relkit
   relkitConstSingleton,
   relkitConstBody,
   relkitNest,
+  relkitCopy,
   relkitWith,
   relkitSetSource,
 
@@ -80,6 +81,7 @@ data RelkitCore c
 
     | RelkitLink        String RelkitKey (Maybe (RelkitBody c))
     | RelkitNest        String
+    | RelkitCopy        String (RelkitBody c)
     | RelkitWith        [(String, Int)] (RelkitBody c)
 
 instance Show (RelkitCore c) where
@@ -100,6 +102,7 @@ instance Show (RelkitCore c) where
 
     show (RelkitLink      n _ _)   =  "RelkitLink " ++ n
     show (RelkitNest          n)   =  "RelkitNest " ++ n
+    show (RelkitCopy        _ _)   =  "RelkitCopy "
     show (RelkitWith        _ _)   =  "RelkitWith "
 
 
@@ -135,6 +138,10 @@ relkitConstBody ns bo = kit where
 relkitNest :: String -> B.Relhead -> Relkit c
 relkitNest n he = kit where
     kit = relkitJust he $ RelkitNest n
+
+relkitCopy :: String -> B.Map (Relkit c)
+relkitCopy n (Relkit he kitb) = kit2 where
+    kit2 = relkit he $ RelkitCopy n kitb
 
 relkitWith :: [(String, Int)] -> B.Map (Relkit c)
 relkitWith with (Relkit he kitb) = kit2 where
@@ -206,6 +213,8 @@ relkitRun rs (B.Sourced toks core) bo1 =
                                         Just bo2 -> Right bo2
                                         Nothing  -> Message.unkNestRel n
 
+       RelkitCopy n kitb           -> do bo2 <- relkitRun ((n, bo1) : rs) kitb bo1
+                                         right True $ bo2
        RelkitWith with kitb        -> do bo2 <- withRel with kitb `mapM` bo1
                                          right True $ concat bo2
     where
