@@ -17,7 +17,9 @@ nestRops :: (C.CContent c) => [C.Rop c]
 nestRops = Op.ropList "nest"
     --  SYNOPSIS,
     --  CONSTRUCTOR, OPERAND
-    [ ( "down /N",
+    [ ( "copy N R",
+        Op.consCopy, C.sortTwo "-name" "-relmap" [] )
+    , ( "down /N",
         Op.consDown, C.sortOne "-term" [] )
     , ( "for /N R [ -with /N ... ]",
         Op.consFor, C.sortTwo "-term" "-relmap" ["-with"] )
@@ -25,8 +27,6 @@ nestRops = Op.ropList "nest"
         Op.consGroup, C.sortTwo "-term" "-relmap" [] )
     , ( "group-by /N R",
         Op.consGroupBy, C.sortTwo "-term" "-relmap" [] )
-    , ( "copy N R",
-        Op.consCopy, C.sortTwo "-name" "-relmap" [] )
     , ( "slice /N R [ -with /N ... ]",
         Op.consSlice, C.sortTwo "-term" "-relmap" ["-with"] )
     , ( "up /N",
@@ -37,14 +37,14 @@ nestRops = Op.ropList "nest"
 -- ----------------------
 -- $Operators
 --
+--  [@copy N R@]
+--    Naming input relation as @N@ in relmap @R@.
+--
 --  [@down \/N@]
 --    Enclose input relation in a term @\/N@.
 --
 --  [@for \/P R@]
 --    Convert nested relation @\/P@ by relmap @R@.
---
---  [@copy N R@]
---    Naming input relation as @N@ in relmap @R@.
 --
 --  [@group \/N R@]
 --    Group tuples in @R@ by input relation.

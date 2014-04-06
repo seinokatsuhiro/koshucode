@@ -5,6 +5,7 @@ module Koshucode.Baala.Op.Nest.Confl
 ( 
   -- * copy
   consCopy,
+  -- $CopyExample
 
   -- * for
   consFor, relmapFor, relkitFor,
@@ -16,6 +17,7 @@ module Koshucode.Baala.Op.Nest.Confl
 
   -- * group-by
   consGroupBy,
+  -- $GroupByExample
 
   -- * slice
   consSlice, relmapSlice, relkitSlice,
@@ -31,16 +33,17 @@ import qualified Koshucode.Baala.Op.Nest.Flow  as Op
 
 -- ----------------------  copy
 
---   > a | copy a b
+-- $CopyExample
+--
+--  Equivalent operation for @down@ @\/r@.
+--
+--    > copy r ( dee | slice /r r )
 
-consCopy :: (C.CRel c) => C.RopCons c
+consCopy :: C.RopCons c
 consCopy use =
   do n    <- Op.getWord   use "-name"
      rmap <- Op.getRelmap use
-     Right $ relmapCopy use n rmap
-
-relmapCopy :: (C.CRel c) => C.RopUse c -> String -> B.Map (C.Relmap c)
-relmapCopy use n = C.relmapCopy use n
+     Right $ C.relmapCopy use n rmap
 
 
 
@@ -131,6 +134,12 @@ relkitGroup _ _ _ = Right C.relkitNothing
 
 -- ----------------------  group-by
 
+-- $GroupByExample
+--
+--  Grouping relation by relmap output.
+--
+--   > source P /a /b | group-by /g ( pick /a )
+
 consGroupBy :: (Ord c, C.CRel c) => C.RopCons c
 consGroupBy use =
   do n    <- Op.getTerm   use "-term"
@@ -138,7 +147,9 @@ consGroupBy use =
      Right $ relmapGroupBy use n rmap
 
 relmapGroupBy :: (Ord c, C.CRel c) => C.RopUse c -> B.TermName -> B.Map (C.Relmap c)
-relmapGroupBy use n rmap = C.relmapCommute use $ relmapGroup use n rmap
+relmapGroupBy use n rmap = C.relmapCopy use n rmapGroup where
+    rmapGroup = rmap `B.mappend` relmapGroup use n rmapCopy
+    rmapCopy  = C.relmapLink use n
 
 
 

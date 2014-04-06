@@ -85,8 +85,6 @@ data Relmap c
       -- ^ Relmap that maps relations to a relation with globals
     | RelmapCalc     C.Lexmap (RelkitConfl c) [Relmap c]
       -- ^ Relmap that maps relations to a relation
-    | RelmapCommute  C.Lexmap (Relmap c)
-      -- ^ Commute binary relmap (EXPERIMENTAL)
 
     | RelmapCopy     C.Lexmap String (Relmap c)
       -- ^ Relmap for environment of input relation
@@ -116,7 +114,6 @@ showRelmap r = sh r where
 
     sh (RelmapGlobal _ _)     = "RelmapGlobal " ++ show (B.name r)
     sh (RelmapCalc   _ _ rs)  = "RelmapCalc "   ++ show (B.name r) ++ " _" ++ joinSubs rs
-    sh (RelmapCommute _ r1)   = "RelmapCommute" ++ joinSubs [r1]
 
     sh (RelmapCopy _ n r1)    = "RelmapCopy "   ++ show n ++ joinSubs [r1]
     sh (RelmapWith _ ns r1)   = "RelmapWith "   ++ show ns ++ joinSubs [r1]
@@ -149,7 +146,6 @@ instance B.Pretty (Relmap c) where
 
     doc (RelmapGlobal lx _)    = B.doc lx -- hang (text $ name m) 2 (doch (map doc ms))
     doc (RelmapCalc   lx _ _)  = B.doc lx -- hang (text $ name m) 2 (doch (map doc ms))
-    doc (RelmapCommute lx _)   = B.doc lx
 
     doc (RelmapCopy   _ _ r1)  = B.doc r1
     doc (RelmapWith   _ _ r1)  = B.doc r1
@@ -187,7 +183,6 @@ relmapLexList = collect where
 
     collect (RelmapGlobal  lx _)    = [lx]
     collect (RelmapCalc    lx _ _)  = [lx]
-    collect (RelmapCommute lx _)    = [lx]
 
     collect (RelmapCopy    lx _ _)  = [lx]
     collect (RelmapWith    lx _ _)  = [lx]
