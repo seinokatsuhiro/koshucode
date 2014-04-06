@@ -3,12 +3,12 @@
 
 module Koshucode.Baala.Op.Vanilla.Confl
 ( 
+  -- * both
+  consBoth, relmapBoth,
   -- * compose
   consCompose, relmapCompose, relkitCompose,
   -- * maybe
   consMaybe, relmapMaybe, relkitMaybe,
-  -- * full
-  consFull, relmapFull, relkitFull,
   -- * if
   consIf, relmapIf, relkitIf,
   -- * when & unless
@@ -25,6 +25,22 @@ import qualified Koshucode.Baala.Core       as C
 import qualified Koshucode.Baala.Op.Builtin as Op
 import qualified Koshucode.Baala.Op.Minimal as Op
 import qualified Koshucode.Baala.Op.Message as Message
+
+
+
+-- ----------------------  both
+
+consBoth :: (Ord c, C.CRel c, C.CNil c) => C.RopCons c
+consBoth use =
+    do rmap <- Op.getRelmap use
+       Right $ relmapBoth use rmap
+
+relmapBoth :: (Ord c, C.CRel c, C.CNil c) => C.RopUse c -> B.Map (C.Relmap c)
+relmapBoth use rmap = C.relmapCopy use "i" rmapBoth where
+    rmapBoth = rmapL `B.mappend` Op.relmapJoin use rmapR
+    rmapR    = rmap  `B.mappend` relmapMaybe use rmapIn
+    rmapL    = relmapMaybe use rmap
+    rmapIn   = C.relmapLink use "i"
 
 
 
@@ -90,35 +106,6 @@ relkitMaybe (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
                        Nothing     -> [nils ++ cs1]
 
 relkitMaybe _ _ = Right C.relkitNothing
-
-
--- ----------------------  full
-
-consFull :: (Ord c, C.CRel c, C.CNil c) => C.RopCons c
-consFull use =
-    do [m1, m2] <- Op.getRelmaps use
-       Right $ relmapFull use m1 m2
-
--- | like SQL's full join
-relmapFull :: (Ord c, C.CRel c, C.CNil c) =>
-    C.RopUse c -> C.Relmap c -> C.Relmap c -> C.Relmap c
-relmapFull use m1 m2 = C.relmapConfl use fy [m1, m2] where
-    fy [r1, r2] = relkitFull r1 r2
-    fy _ = B.bug "relmapFull"
-
-relkitFull :: (Ord c, C.CRel c, C.CNil c) => C.Relkit c -> C.RelkitBinary c
-relkitFull (C.Relkit he1 f1) (C.Relkit he2 f2) _ = 
-    do C.Relkit h3 f3 <- relkitMaybe (C.Relkit he2 f2) he1
-       C.Relkit h4 f4 <- relkitMaybe (C.Relkit he1 f1) he2
-
-       bo1 <- C.relkitRun [] f1 []
-       bo2 <- C.relkitRun [] f2 []
-       bo3 <- C.relkitRun [] f3 bo1
-       bo4 <- C.relkitRun [] f4 bo2
-       C.Relkit he5 kit5 <- Op.relkitJoin (C.relkit h4 $ C.RelkitConst bo4) h3
-
-       bo5 <- C.relkitRun [] kit5 bo3
-       Right $ C.relkit he5 $ C.RelkitConst bo5
 
 
 

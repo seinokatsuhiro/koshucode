@@ -36,8 +36,8 @@ vanillaRops = Op.ropList "vanilla"
         Op.consFix, C.sortOne "-relmap" [] )
     , ( "fix-join R",
         Op.consFixJoin, C.sortOne "-relmap" [] )
-    , ( "full R ...",
-        Op.consFull, C.sortList "-relmap" [] )
+    , ( "both R",
+        Op.consBoth, C.sortOne "-relmap" [] )
     , ( "hold E",
         Op.consFilter True, C.sortList "-in" ["-let"] )
     , ( "if R ...",

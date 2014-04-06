@@ -175,6 +175,7 @@ relkitLink kits = linkKit where
            RelkitAbSemi        kitf kitb   -> RelkitAbSemi        kitf $ link  kitb
            RelkitAppend        kitb1 kitb2 -> RelkitAppend (link kitb1) (link kitb2)
            RelkitWith          with kitb   -> RelkitWith          with $ link  kitb
+           RelkitCopy          copy kitb   -> RelkitCopy          copy $ link  kitb
 
            RelkitLink n key _ 
                -> case lookup key kitsRec of
