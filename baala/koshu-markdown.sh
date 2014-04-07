@@ -1,7 +1,7 @@
 #!/bin/sh
 
 md_version () {
-    echo "koshu-markdown-2014.1"
+    echo "koshu-markdown-0.50"
     exit
 }
 
@@ -10,9 +10,10 @@ md_usage () {
     echo "  Generate markdown document for koshu scripts."
     echo
     echo "USAGE"
-    echo "  $md_base [OPTION ...] SCRIPT.k ..."
+    echo "  $md_cmd [OPTION ...] SCRIPT.k ..."
     echo
     echo "OPTION"
+    echo "  -d          show differences from last document"
     echo "  -f FILE     take input files from FILE"
     echo "  -g          glob input files by *.$md_glob_ext"
     echo "  -h          print help message"
@@ -22,15 +23,17 @@ md_usage () {
     echo "  -x EXT      use EXTension instead of *.$md_glob_ext"
     echo
     echo "EXAMPLE"
-    echo "  $md_base -r -g CALC.k"
-    echo "  $md_base -o CALC.md -f FILE CALC.k"
-    echo "  $md_base CALC.k DATA.k"
+    echo "  $md_cmd -r -g CALC.k"
+    echo "  $md_cmd -o CALC.md -f FILE CALC.k"
+    echo "  $md_cmd CALC.k DATA.k"
     echo
     exit
 }
 
 error () {
-    echo "$*" 1>&2
+    if [ $md_error = output ]; then
+        echo "$*" 1>&2
+    fi
 }
 
 
@@ -62,8 +65,8 @@ check_output () {
 
 # ============================================  Table of contents
 
-md_link   () { echo "(#$@)" | tr -d '.' | tr ' ' '-' \
-                            | tr "[:upper:]" "[:lower:]"; }
+md_link       () { echo "(#$@)" | tr -d . | tr ' ' '-' \
+                                | tr '[:upper:]' '[:lower:]'; }
 md_table_calc () { echo "- [$@]`md_link $@`" ; }
 md_table_data () { echo "- $md_program $md_calc [$@]`md_link "$@"`" ; }
 md_table_from () { echo "$@" | xargs -n 1 | md_table ; }
@@ -99,7 +102,7 @@ md_trailer () {
     echo "This document is produced by the command:"
     echo
     echo '```'
-    echo "$md_base $md_args"
+    echo "$md_cmdline"
     echo '```'
 }
 
@@ -154,15 +157,9 @@ md_body () {
 
 md_body_args () {
     # Table
-    for k in $@ output; do
-        md_table_calc $k
-    done
-
+    for k in $@ output; do md_table_calc $k; done
     # Input
-    for k in $@; do
-        md_input $k
-    done
-
+    for k in $@; do md_input $k; done
     # Output
     md_head output
     md_output $@
@@ -173,8 +170,9 @@ md_body_file () {
 
     # Table
     cat $md_glob_file | md_table
-
-    # Calc and Data
+    # Calc
+    for k in $md_calc; do md_input $k; done
+    # Data
     cat $md_glob_file | while read md_data; do
         md_head $md_data
         md_list_all $md_data
@@ -188,12 +186,8 @@ md_body_glob () {
 
     # Table
     md_table_from $md_data
-
     # Calc
-    for k in $md_calc; do
-        md_input $k
-    done
-
+    for k in $md_calc; do md_input $k; done
     # Data
     for k in $md_data; do
         md_input $k
@@ -223,22 +217,91 @@ md_exist () {(
 )}
 
 
+# ============================================  Diff
+
+md_diff () {
+    if [ -f "$md_output" ]; then
+        md_diff_body $@
+        [ -f $md_output ] && rm $md_output
+    else
+        echo "file not found: $md_output"
+        exit 2
+    fi
+}
+
+md_diff_body () {
+    md_output_original=$md_output
+    md_output=`mktemp TEMP-KOSHU-DIFF-XXXXX`
+
+    md_doc $@
+
+    if diff -u $md_output_original $md_output > $md_temp; then
+        md_diff_result OK
+    else
+        echo
+        md_diff_result DIFF
+        echo
+        echo "**  Differences are found"
+        echo "**"
+        sed 's/^/**  /' < $md_temp
+        echo
+
+        if [ $md_diff = 1 ]; then
+            echo "**  To show all differences, please give more -d flag."
+            echo "**  To examine this differences, cd `md_pwd`"
+            md_status=2
+            return
+        fi
+    fi
+}
+
+md_diff_result () {
+    echo "|-- $1  /dir \"`md_pwd`\"  /cmd \"$md_cmdline\""
+}
+
+md_pwd () {
+    if [ -d "$MD_TOP" ]; then
+        md_top=`echo $MD_TOP | tr '[:punct:]' .`'/*'
+        pwd | sed "s:^$md_top::"
+    else
+        pwd
+    fi
+}
+
+md_diff_del () {
+    for arg in $*; do
+        case $arg in
+            -d)  ;;
+            -dd) ;;
+            *)   echo $arg ;;
+        esac
+    done | xargs
+}
+
 # ============================================  Main
 
 # variable
 
-md_base=`basename $0`
-md_args="$*"
+md_cmd=`basename $0`
+md_cmdline=`md_diff_del $md_cmd $*`
+md_diff=0
+md_error=output
+md_glob_ext=k
+md_glob_file=
+md_glob_type=args
 md_output=
 md_program=koshu
-md_glob_type=args
-md_glob_file=
-md_glob_ext=k
+md_status=0
 
 # option
 
-while getopts f:gho:p:rx:V opt; do
+while getopts df:gho:p:rx:V opt; do
     case $opt in
+        d)  case $md_diff in
+              1) md_diff=2 ;;
+              *) md_diff=1 ;;
+            esac
+            md_error=inhibit     ;;
         f)  md_glob_type=file
             md_glob_file=$OPTARG ;;
         g)  md_glob_type=glob    ;;
@@ -255,14 +318,18 @@ shift $(($OPTIND - 1))
 
 # document
 
-error "$md_base $md_args"
+error "$md_cmdline"
 check_output
 md_temp=`mktemp TEMP-KOSHU-XXXXX`
-md_doc $@
+
+if [ $md_diff = 0 ]; then
+    md_doc $@
+else
+    md_diff $@
+fi
 
 # clean up
 
-if [ -f $md_temp ]; then
-    rm $md_temp
-fi
+[ -f $md_temp ] && rm $md_temp
 
+exit $md_status
