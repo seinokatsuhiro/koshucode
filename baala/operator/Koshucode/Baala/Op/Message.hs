@@ -10,6 +10,7 @@ module Koshucode.Baala.Op.Message
   noOperand,
   notNestRel,
   reqBool,
+  reqRel,
   reqCollection,
   reqNewTerm,
   unexpTermName,
@@ -41,6 +42,10 @@ notNestRel ns he1 =
 -- | Require Boolean
 reqBool :: B.Ab a
 reqBool = Left $ B.abortBecause "Require Boolean"
+
+-- | Require relation
+reqRel :: B.Ab a
+reqRel = Left $ B.abortBecause "Require relation"
 
 -- | Require collection type
 reqCollection :: B.Ab a

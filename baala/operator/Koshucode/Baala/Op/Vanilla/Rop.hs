@@ -28,6 +28,8 @@ vanillaRops = Op.ropList "vanilla"
         Op.consCheckTerm, C.sortNone ["-just", "-has", "-but"] )
     , ( "compose R",
         Op.consCompose, C.sortOne "-relmap" [] )
+    , ( "const R",
+        Op.consConst, C.sortOne "-lit" [] )
     , ( "do R ...",
         Op.consDo, C.sortList "-relmap" ["-let"] )
     , ( "duplicate /N ...",

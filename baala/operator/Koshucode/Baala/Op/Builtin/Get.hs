@@ -5,9 +5,8 @@
 module Koshucode.Baala.Op.Builtin.Get
 ( -- * Datatype
   RopGet,
-  getMaybe,
-  getOption,
-  getTrees,
+  getMaybe, getOption,
+  getTree, getTrees,
   getWordTrees,
 
   -- * Relmap
@@ -78,6 +77,11 @@ getTrees u name =
     case lookupOperand name u of
       Just trees -> Right trees
       Nothing    -> Message.noOperand
+
+getTree :: RopGet c B.TokenTree
+getTree u name =
+    do trees <- getTrees u name
+       Right $ B.treeWrap trees
 
 getWordTrees :: RopGet c [B.Named B.TokenTree]
 getWordTrees u name =
