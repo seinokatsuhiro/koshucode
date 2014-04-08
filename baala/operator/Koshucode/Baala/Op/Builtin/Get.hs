@@ -12,6 +12,7 @@ module Koshucode.Baala.Op.Builtin.Get
   -- * Relmap
   getRelmap,
   getRelmaps,
+  getRelmapOption,
 
   -- * Term
   getTerm,
@@ -121,6 +122,12 @@ getRelmap u =
 -- | Get relmaps from operator use.
 getRelmaps :: C.RopUse c -> B.Ab [C.Relmap c]
 getRelmaps = Right . C.ropSubrelmap
+
+getRelmapOption :: C.RopUse c -> C.Relmap c -> B.Ab (C.Relmap c)
+getRelmapOption u rmapDefault =
+    case getRelmap u of
+      Right rmap -> Right rmap
+      Left _     -> Right rmapDefault
 
 
 -- ----------------------  Term

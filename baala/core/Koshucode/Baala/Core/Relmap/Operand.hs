@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Sorter for operand of relmap operator.
+-- | Operand sorters for relmap operators.
 
 module Koshucode.Baala.Core.Relmap.Operand
 ( -- * Full sorter
@@ -22,6 +22,8 @@ module Koshucode.Baala.Core.Relmap.Operand
   sortThree,
   sortFour,
   sortOneList,
+  sortOneOpt,
+  -- $TrunkSorter
 ) where
 
 import qualified Data.List                    as List
@@ -83,6 +85,26 @@ ropOperandAssoc = B.assocBy maybeBranch "" where
 
 -- ----------------------  Trunk sorters
 
+-- $TrunkSorter
+--
+--  /Examples/
+--
+--  One required operand and no options.
+--
+--    > sortOne "-term" []
+--
+--  Two required operands and no options.
+--
+--    > sortTwo "-name" "-relmap" []
+--
+--  Any number of operands and no options.
+--
+--    > sortList "-term" []
+--
+--  One and any number of operands.
+--
+--    > sortOneList "-pattern" "-term" []
+
 -- | Operand sorter for relmap operator.
 --   It consists of trunk sorter, trunk names, and branch names.
 --   Trunk part is unnamed operand.
@@ -139,6 +161,12 @@ sortOneList :: String -> String -> [String] -> RopOperandSorter
 sortOneList a b ns = (by f, [a,b], ns) where
     f (x:xs) = Right [ (a, [x]), (b, xs) ]
     f _      = Message.unexpOperand "Require operands"
+
+sortOneOpt :: String -> String -> [String] -> RopOperandSorter
+sortOneOpt a b ns = (by f, [a,b], ns) where
+    f [x]   = Right [ (a, [x]), (b, []) ]
+    f [x,y] = Right [ (a, [x]), (b, [y]) ]
+    f _     = Message.unexpOperand "Require two operands"
 
 -- | Give a name to unnamed operand.
 by :: RopFullSorter -> RopTrunkSorter

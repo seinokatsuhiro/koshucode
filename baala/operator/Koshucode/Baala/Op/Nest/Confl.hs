@@ -22,6 +22,9 @@ module Koshucode.Baala.Op.Nest.Confl
   -- * slice
   consSlice, relmapSlice, relkitSlice,
   -- $SliceExample
+
+  -- * slice-up
+  consSliceUp, relmapSliceUp, relkitSliceUp,
 ) where
 
 import qualified Koshucode.Baala.Base          as B
@@ -169,7 +172,7 @@ relmapGroupBy use n rmap = C.relmapCopy use n rmapGroup where
 consSlice :: (C.CRel c) => C.RopCons c
 consSlice use =
   do n    <- Op.getTerm   use "-term"
-     rmap <- Op.getRelmap use
+     rmap <- Op.getRelmapOption use C.relmapId
      with <- Op.getOption [] Op.getTerms use "-with"
      Right $ relmapSlice use with n rmap
 
@@ -186,4 +189,24 @@ relkitSlice n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
            bo2 <- bmap2 [cs1]
            Right $ C.pRel (B.Rel he2 bo2) : cs1
 relkitSlice _ _ _ = Right C.relkitNothing
+
+
+-- ----------------------  slice-up
+
+consSliceUp :: (C.CRel c) => C.RopCons c
+consSliceUp use =
+  do rmap <- Op.getRelmapOption use C.relmapId
+     with <- Op.getOption [] Op.getTerms use "-with"
+     Right $ relmapSliceUp use with rmap
+
+relmapSliceUp :: (C.CRel c) => C.RopUse c -> [B.TermName] -> B.Map (C.Relmap c)
+relmapSliceUp use with = C.relmapWith use (zip with with) . bin where
+    bin = C.relmapBinary use relkitSliceUp
+
+relkitSliceUp :: (C.CRel c) => C.RelkitBinary c
+relkitSliceUp (C.Relkit (Just he2) kitb2) _ = Right kit3 where
+    kit3  = C.relkitJust he2 $ C.RelkitOneToAbMany False kitf3 [kitb2]
+    kitf3 bmaps cs1 = do let [bmap2] = bmaps
+                         bmap2 [cs1]
+relkitSliceUp _ _ = Right C.relkitNothing
 
