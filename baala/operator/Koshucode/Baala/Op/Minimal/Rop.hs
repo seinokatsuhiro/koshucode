@@ -18,26 +18,27 @@ import qualified Koshucode.Baala.Op.Minimal.Tropashko as Op
 -- | Minimal implementations of relmap operators.
 minimalRops :: (Ord c) => [C.Rop c]
 minimalRops = Op.ropList "minimal"  -- GROUP
-    [ ( "contents /N"      , Op.consContents , C.sortList "-term" [] )
-    , ( "cut /P ..."       , Op.consCut      , C.sortList "-term" [] )
-    , ( "cut-term /R"      , Op.consCutTerm  , C.sortOne  "-relmap" [] )
-    , ( "dee"              , Op.consDee      , C.sortNone [] )
-    , ( "dum"              , Op.consDum      , C.sortNone [] )
-    , ( "empty"            , Op.consEmpty    , C.sortNone [] )
-    , ( "equal"            , Op.consEqual    , C.sortOne  "-relmap" [] )
-    , ( "id"               , Op.consId       , C.sortNone [] )
-    , ( "join R"           , Op.consJoin     , C.sortOne  "-relmap" [] )
-    , ( "meet R"           , Op.consMeet     , C.sortOne  "-relmap" [] )
-    , ( "none R"           , Op.consNone     , C.sortOne  "-relmap" [] )
-    , ( "pick /P ..."      , Op.consPick     , C.sortList "-term"   [] )
-    , ( "pick-term /R"     , Op.consPickTerm , C.sortOne  "-relmap" [] )
-    , ( "reldee"           , Op.consDee      , C.sortNone [] )
-    , ( "reldum"           , Op.consDum      , C.sortNone [] )
-    , ( "rename /N /P ..." , Op.consRename   , C.sortList "-term"   [] )
-    , ( "some R"           , Op.consSome     , C.sortOne  "-relmap" [] )
-    , ( "source P /T ..."  , Op.consSource   , C.sortOneList "-pattern" "-term" [] )
-    , ( "sub R"            , Op.consSub      , C.sortOne  "-relmap" [] )
-    --   USAGE               CONSTRUCTOR       OPERAND
+    [ ( "contents /N"       , Op.consContents , C.sortList "-term" [] )
+    , ( "cut /P ..."        , Op.consCut      , C.sortList "-term" [] )
+    , ( "cut-term /R"       , Op.consCutTerm  , C.sortOne  "-relmap" [] )
+    , ( "dee"               , Op.consDee      , C.sortNone [] )
+    , ( "dum"               , Op.consDum      , C.sortNone [] )
+    , ( "empty"             , Op.consEmpty    , C.sortNone [] )
+    , ( "equal"             , Op.consEqual    , C.sortOne  "-relmap" [] )
+    , ( "id"                , Op.consId       , C.sortNone [] )
+    , ( "join R"            , Op.consJoin     , C.sortOne  "-relmap" [] )
+    , ( "meet R"            , Op.consMeet     , C.sortOne  "-relmap" [] )
+    , ( "none R"            , Op.consNone     , C.sortOne  "-relmap" [] )
+    , ( "pick /P ..."       , Op.consPick     , C.sortList "-term"   [] )
+    , ( "pick-term /R"      , Op.consPickTerm , C.sortOne  "-relmap" [] )
+    , ( "reldee"            , Op.consDee      , C.sortNone [] )
+    , ( "reldum"            , Op.consDum      , C.sortNone [] )
+    , ( "rename /N /P ..."  , Op.consRename   , C.sortList "-term"   [] )
+    , ( "move /P ... -to /N ...", Op.consMove , C.sortList "-term" ["-to"] )
+    , ( "some R"            , Op.consSome     , C.sortOne  "-relmap" [] )
+    , ( "source P /T ..."   , Op.consSource   , C.sortOneList "-pattern" "-term" [] )
+    , ( "sub R"             , Op.consSub      , C.sortOne  "-relmap" [] )
+    --   USAGE                CONSTRUCTOR       OPERAND
     ]
 
 
@@ -67,6 +68,8 @@ minimalRops = Op.ropList "minimal"  -- GROUP
 --  [@dum@]        Nullary empty relation.
 --
 --  [@rename@]     Change term name.
+--
+--  [@rehead@]     Change heading.
 --
 --  [@some@]       Restriction by relmaps.
 --

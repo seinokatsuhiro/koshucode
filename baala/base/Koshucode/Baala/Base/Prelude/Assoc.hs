@@ -11,14 +11,14 @@ module Koshucode.Baala.Base.Prelude.Assoc
   lookupSatisfy,
   lookupMap,
   fromMaybe,
-  -- $AssocExample
+  -- $Assoc
 
   -- * Tuple-like operator
   assocPick,
   assocCut,
   assocCut1,
   assocRename1,
-  -- $TupleLikeExample
+  -- $TupleLike
 
   -- * Once/more list
   OnceMore (..),
@@ -26,13 +26,15 @@ module Koshucode.Baala.Base.Prelude.Assoc
   assocPush,
   assocOnce,
   assocMore,
-  -- $OnceMoreExample
+  -- $OnceMore
 
   -- * Gather
   Gather,
   gather,
   gatherWith,
   gatherToMap,
+  duplicate,
+  -- $Gather
 ) where
 
 import qualified Data.Map   as Map
@@ -43,7 +45,7 @@ import qualified Koshucode.Baala.Base.Prelude.Class as B
 
 -- ---------------------- Association list
 
--- $AssocExample
+-- $Assoc
 --
 --  /Examples/
 --
@@ -113,7 +115,7 @@ fromMaybe = Maybe.fromMaybe
 
 -- ----------------------  Tuple-like operator
 
--- $TupleLikeExample
+-- $TupleLike
 --
 --  /Examples/
 --
@@ -162,7 +164,7 @@ assocRename1 new old = map r where
 
 -- ----------------------  Once/more list
 
--- $OnceMoreExample
+-- $OnceMore
 --
 --  /Examples/
 --
@@ -233,6 +235,15 @@ assocMore = loop where
 
 -- ----------------------  Gather
 
+-- $Gather
+--
+--  /Examples/
+--
+--  Duplicate elements
+--
+--    >>> duplicate "apples and bananas"
+--    " anps"
+
 type Gather a b = a -> (b, a)
 
 -- | Gather what is gotten by splitter.
@@ -257,4 +268,11 @@ gatherToMap xs = loop xs Map.empty where
         case Map.lookup k m of
           Just vs -> loop xs2 $ Map.insert k (v:vs) m
           Nothing -> loop xs2 $ Map.insert k [v] m
+
+duplicate :: (Ord k) => [k] -> [k]
+duplicate ks = Map.keys $ Map.filter (> 1) $ countToMap ks
+
+countToMap :: (Ord k) => [k] -> Map.Map k Int
+countToMap ks = foldr add Map.empty ks where
+    add k = Map.insertWith (+) k 1
 

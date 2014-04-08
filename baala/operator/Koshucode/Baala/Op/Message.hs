@@ -7,8 +7,10 @@ module Koshucode.Baala.Op.Message
   -- * Op package
   checkTerm,
   diffHead,
+  dupTerm,
   noOperand,
   notNestRel,
+  oddOperand,
   reqBool,
   reqRel,
   reqCollection,
@@ -21,13 +23,24 @@ import Koshucode.Baala.Core.Message
 
 -- | check-term failed
 checkTerm :: String -> [B.TermName] -> B.Relhead -> B.Ab a
-checkTerm label ns he1 =
+checkTerm label ns he =
     Left $ B.abortLines "check-term failed"
-         $ detailTermRel label ns he1
+         $ detailTermRel label ns he
 
 -- | Different headings
 diffHead :: [B.Relhead] -> B.Ab a
 diffHead = Left . B.abortLines "Different headings" . map showHead
+
+
+-- | Duplicate term name
+dupTerm :: [B.TermName] -> B.Relhead -> B.Ab a
+dupTerm ns he =
+    Left $ B.abortLines "Duplicate term name"
+         $ detailTermRel "Duplicated" ns he
+
+-- | Odd operand
+oddOperand :: B.Ab a
+oddOperand = Left $ B.abortBecause "Odd operand"
 
 -- | Operand not found
 noOperand :: B.Ab a
@@ -35,9 +48,9 @@ noOperand = Left $ B.abortBecause "Operand not found"
 
 -- | Not a nested relation
 notNestRel :: [B.TermName] -> B.Relhead -> B.Ab a
-notNestRel ns he1 =
+notNestRel ns he =
     Left $ B.abortLines "Not a nested relation"
-         $ detailTermRel "Given" ns he1
+         $ detailTermRel "Given" ns he
 
 -- | Require Boolean
 reqBool :: B.Ab a
@@ -53,9 +66,9 @@ reqCollection = Left $ B.abortBecause "Require collection type"
 
 -- | Require new term names
 reqNewTerm :: [B.TermName] -> B.Relhead -> B.Ab a
-reqNewTerm ns he1 =
+reqNewTerm ns he =
     Left $ B.abortLines "Require new term names"
-         $ detailTermRel "Known" ns he1
+         $ detailTermRel "Known" ns he
 
 -- | Unexpected term names
 unexpTermName :: B.Ab a

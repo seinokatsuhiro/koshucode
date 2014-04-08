@@ -15,7 +15,7 @@ module Koshucode.Baala.Base.Prelude.Snip
   snipFore, snipFore2,
   snipLeft, snipShare, snipRight,
   snipOrder,
-  sameLength,
+  sameLength, notSameLength,
   operand,
   -- $DerivativeExample
 
@@ -162,6 +162,9 @@ snipOrder to from
 -- | Check lengths of two lists are same.
 sameLength :: [a] -> [b] -> Bool
 sameLength a b = length a == length b
+
+notSameLength :: [a] -> [b] -> Bool
+notSameLength a b = not $ sameLength a b
 
 -- | Check elements in the first list are non-negative,
 --   and elements in the second are negative.
