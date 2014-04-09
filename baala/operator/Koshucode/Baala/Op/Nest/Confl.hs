@@ -25,11 +25,18 @@ module Koshucode.Baala.Op.Nest.Confl
 
   -- * slice-up
   consSliceUp, relmapSliceUp, relkitSliceUp,
+
+  -- * nest
+  consNest, relmapNest,
+
+  -- * unnest
+  consUnnest, relmapUnnest,
 ) where
 
 import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Core          as C
 import qualified Koshucode.Baala.Op.Builtin    as Op
+import qualified Koshucode.Baala.Op.Minimal    as Op
 import qualified Koshucode.Baala.Op.Nest.Flow  as Op
 
 
@@ -63,10 +70,13 @@ consFor use =
   do n    <- Op.getTerm   use "-term"
      rmap <- Op.getRelmap use
      with <- Op.getOption [] Op.getTerms use "-with"
-     Right $ relmapFor use with n (Op.relmapUp use n `B.mappend` rmap)
+     Right $ relmapFor use with n rmap
 
 relmapFor :: (C.CRel c) => C.RopUse c -> [B.TermName] -> B.TermName -> B.Map (C.Relmap c)
-relmapFor use with n = C.relmapWith use (zip with with) . bin where
+relmapFor use with n rmap = relmapForInner use with n (Op.relmapUp use n `B.mappend` rmap)
+
+relmapForInner :: (C.CRel c) => C.RopUse c -> [B.TermName] -> B.TermName -> B.Map (C.Relmap c)
+relmapForInner use with n = C.relmapWith use (zip with with) . bin where
     bin = C.relmapBinary use $ relkitFor n
 
 relkitFor :: forall c. (C.CRel c) => B.TermName -> C.RelkitBinary c
@@ -209,4 +219,46 @@ relkitSliceUp (C.Relkit (Just he2) kitb2) _ = Right kit3 where
     kitf3 bmaps cs1 = do let [bmap2] = bmaps
                          bmap2 [cs1]
 relkitSliceUp _ _ = Right C.relkitNothing
+
+
+-- ----------------------  nest
+
+-- $Nest
+--
+--  > nest /y /z -to /g
+--  > group-by /g ( cut /y /z ) | for /g ( pick /y /z )
+
+consNest :: (Ord c, C.CRel c) => C.RopCons c
+consNest use =
+  do ns <- Op.getTerms use "-term"
+     to <- Op.getTerm use "-to"
+     Right $ relmapNest use (ns, to)
+
+relmapNest :: (Ord c, C.CRel c) => C.RopUse c -> ([B.TermName], B.TermName) -> C.Relmap c
+relmapNest use (ns, to) = nest where
+    nest   =  group `B.mappend` for
+    group  =  relmapGroupBy use to cut
+    for    =  relmapFor use [] to pick
+    pick   =  Op.relmapPick use ns
+    cut    =  Op.relmapCut use ns
+
+
+-- ----------------------  unnest
+
+-- $Unnest
+--
+--  > unnest /g
+--  > slice-up ( meet g ) -with /g | cut /g
+
+consUnnest :: (Ord c, C.CRel c) => C.RopCons c
+consUnnest use =
+  do n <- Op.getTerm use "-term"
+     Right $ relmapUnnest use n
+
+relmapUnnest :: (Ord c, C.CRel c) => C.RopUse c -> B.TermName -> C.Relmap c
+relmapUnnest use n = unnest where
+    unnest  =  slice `B.mappend` cut
+    slice   =  relmapSliceUp use [n] meet
+    meet    =  Op.relmapMeet use $ C.relmapLink use n
+    cut     =  Op.relmapCut use [n]
 

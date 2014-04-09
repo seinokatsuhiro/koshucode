@@ -12,10 +12,10 @@ module Koshucode.Baala.Op.Nest.Flow
   -- $UpExample
 ) where
 
-import qualified Koshucode.Baala.Base       as B
-import qualified Koshucode.Baala.Core       as C
-import qualified Koshucode.Baala.Op.Builtin as Op
-import qualified Koshucode.Baala.Op.Message as Message
+import qualified Koshucode.Baala.Base          as B
+import qualified Koshucode.Baala.Core          as C
+import qualified Koshucode.Baala.Op.Builtin    as Op
+import qualified Koshucode.Baala.Op.Message    as Message
 
 
 
@@ -75,4 +75,6 @@ relkitUp n (Just he1)
       he2   = B.Relhead $ B.relnestTerms t1
       kit2  = C.relkitJust he2 $ C.RelkitOneToMany True kitf2
       kitf2 = B.relBody . C.gRel . head . pick1
+
+
 

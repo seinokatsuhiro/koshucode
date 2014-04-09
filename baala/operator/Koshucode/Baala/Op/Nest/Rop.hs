@@ -27,6 +27,10 @@ nestRops = Op.ropList "nest"
         Op.consGroup, C.sortTwo "-term" "-relmap" [] )
     , ( "group-by /N R",
         Op.consGroupBy, C.sortTwo "-term" "-relmap" [] )
+    , ( "nest /P ... -to /N",
+        Op.consNest, C.sortList "-term" ["-to"] )
+    , ( "unnest /P",
+        Op.consUnnest, C.sortList "-term" [] )
     , ( "slice /N [R] [ -with /N ... ]",
         Op.consSlice, C.sortOneOpt "-term" "-relmap" ["-with"] )
     , ( "slice-up R [ -with /N ... ]",
