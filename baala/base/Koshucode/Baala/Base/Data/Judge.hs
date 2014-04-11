@@ -17,6 +17,7 @@ module Koshucode.Baala.Base.Data.Judge
 
   -- * Writer
   ShortJudge,
+  OutputChunk (..),
   putJudges,
   hPutJudges,
   hPutJudgesFlat,
@@ -29,6 +30,7 @@ import qualified Data.Map                          as Map
 import qualified System.IO                         as IO
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
+import qualified Koshucode.Baala.Base.Token        as B
 import qualified Koshucode.Baala.Base.Data.Term    as B
 import qualified Koshucode.Baala.Base.Data.Short   as B
 
@@ -125,7 +127,12 @@ isDenied   (Judge q _ _) = not q
 
 -- ----------------------  Writer
 
-type ShortJudge c = B.Short [Judge c]
+type ShortJudge c = B.Short [OutputChunk c]
+
+data OutputChunk c
+    = OutputJudge   [Judge c]
+    | OutputComment [String]
+      deriving (Show, Eq, Ord)
 
 -- | Print judges to `IO.stdout`.
 putJudges :: (Ord c, B.Pretty c) => Int -> [Judge c] -> IO Int
@@ -143,15 +150,27 @@ hPutJudgesStatus h status sh =
        return status
 
 hPutJudgeShort :: (Ord c, B.Pretty c) => IO.Handle -> Counter -> ShortJudge c -> IO Counter
-hPutJudgeShort h nc (B.Short [] js) =
-    do hPutJudgeBody h nc js
-hPutJudgeShort h nc (B.Short shorts js) =
+hPutJudgeShort h nc (B.Short [] output) =
+    do hPutOutput h nc output
+hPutJudgeShort h nc (B.Short shorts output) =
     do IO.hPutStrLn h "short"
        IO.hPutStrLn h $ unlines $ map shortLine shorts
-       hPutJudgeBody h nc js
+       hPutOutput h nc output
     where
       shortLine :: (String, String) -> String
       shortLine (a, b) = "  " ++ a ++ " " ++ show b
+
+hPutOutput :: (Ord c, B.Pretty c) => IO.Handle -> Counter -> [OutputChunk c] -> IO Counter
+hPutOutput _ nc [] = return nc
+hPutOutput h nc (OutputJudge js : xs) =
+    do nc' <- hPutJudgeBody h nc js
+       hPutOutput h nc' xs
+hPutOutput h nc (OutputComment [] : xs) =
+       hPutOutput h nc xs
+hPutOutput h nc (OutputComment ls : xs) =
+    do B.putCommentLines ls
+       putStrLn ""
+       hPutOutput h nc xs
 
 hPutJudgesFlat :: (Ord c, B.Pretty c) => IO.Handle -> Int -> [Judge c] -> IO Int
 hPutJudgesFlat h status js =

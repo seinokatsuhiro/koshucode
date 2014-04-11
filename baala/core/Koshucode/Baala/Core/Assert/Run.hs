@@ -7,11 +7,12 @@ module Koshucode.Baala.Core.Assert.Run
 ) where
 
 import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Core.Content        as C
-import qualified Koshucode.Baala.Core.Relmap         as C
-import qualified Koshucode.Baala.Core.Assert.Assert  as C
-import qualified Koshucode.Baala.Core.Assert.Dataset as C
-import qualified Koshucode.Baala.Core.Message        as Message
+import qualified Koshucode.Baala.Core.Content         as C
+import qualified Koshucode.Baala.Core.Relmap          as C
+import qualified Koshucode.Baala.Core.Assert.Assert   as C
+import qualified Koshucode.Baala.Core.Assert.Dataset  as C
+import qualified Koshucode.Baala.Core.Assert.RelTable as C
+import qualified Koshucode.Baala.Core.Message         as Message
 
 
 
@@ -49,15 +50,15 @@ just s Nothing  = Message.adlib s
 -- ----------------------  Assert
 
 -- | Calculate assertion list.
-runAssertJudges :: (Ord c, C.CRel c, C.CNil c)
-  => C.Global c -> [C.RelmapDef c] -> [C.Assert c] -> B.Ab [B.Judge c]
+runAssertJudges :: (Ord c, C.CRel c, C.CNil c, B.Pretty c)
+  => C.Global c -> [C.RelmapDef c] -> [C.Assert c] -> B.Ab [B.OutputChunk c]
 runAssertJudges global rdef asserts =
     runAssertDataset global asserts ds rdef where
         ds = C.dataset $ C.globalJudges global
 
 -- | Calculate assertion list.
-runAssertDataset :: (Ord c, C.CRel c, C.CNil c)
-  => C.Global c -> [C.Assert c] -> C.Dataset c -> [C.RelmapDef c] -> B.Ab [B.Judge c]
+runAssertDataset :: (Ord c, C.CRel c, C.CNil c, B.Pretty c)
+  => C.Global c -> [C.Assert c] -> C.Dataset c -> [C.RelmapDef c] -> B.Ab [B.OutputChunk c]
 runAssertDataset global asserts dataset rdef = Right . concat =<< mapM each asserts where
     each a@(C.Assert quo pat opt relmap _) =
         B.abortableFrom "assert" a $ do
@@ -93,16 +94,17 @@ flatnames trees =
 
 -- ---------------------------------  Option
 
-assertOptionProcess :: (Ord c)
-  => Bool -> B.JudgePattern -> C.AssertOption -> B.Rel c -> B.Ab [B.Judge c]
+assertOptionProcess :: (Ord c, B.Pretty c, C.CRel c)
+  => Bool -> B.JudgePattern -> C.AssertOption -> B.Rel c -> B.Ab [B.OutputChunk c]
 assertOptionProcess q pat opt r1 =
     do assertOptionCheck opt
        r2 <- assertOptionRelmap opt r1
        let js = judgesFromRel q pat r2
-       assertOptionJudges opt js
+           cm = assertOptionComment pat opt r2
+       assertOptionJudges opt js cm
 
 assertOptionCheck :: C.AssertOption -> B.Ab ()
-assertOptionCheck = optionUnkCheck ["-fore", "-order", "-align", "-table"]
+assertOptionCheck = optionUnkCheck ["-fore", "-order", "-align", "-with-table"]
 
 assertOptionRelmap :: (Ord c) => C.AssertOption -> B.Rel c -> B.Ab (B.Rel c)
 assertOptionRelmap opt r1 =
@@ -121,8 +123,19 @@ assertOptionFore opt r1 =
 assertOptionOrder :: (Ord c) => [B.TokenTree] ->  B.AbMap (B.Rel c)
 assertOptionOrder _ r1 = Right r1
 
-assertOptionJudges :: C.AssertOption -> [B.Judge c] -> B.Ab [B.Judge c]
-assertOptionJudges _ js = Right js
+assertOptionComment :: (B.Pretty c, C.CRel c) =>
+    B.JudgePattern -> C.AssertOption -> B.Rel c -> [String]
+assertOptionComment p opt r =
+    case lookup "-with-table" opt of
+      Nothing -> []
+      Just _  -> title : "" : table
+    where
+      title = "TABLE : " ++ p
+      table = map ("  " ++) $ C.relTableLines r
+    
+
+assertOptionJudges :: C.AssertOption -> [B.Judge c] -> [String] -> B.Ab [B.OutputChunk c]
+assertOptionJudges _ js cm = Right [ B.OutputJudge js, B.OutputComment cm ]
 
 snipRelRaw :: (Ord c) => B.SnipPair B.TermName c -> [B.TermName] -> B.AbMap (B.Rel c)
 snipRelRaw (heSnip, boSnip) ns (B.Rel he1 bo1)

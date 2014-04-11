@@ -74,7 +74,7 @@ runSection global sects =
            g2 = global { C.globalJudges = C.sectionJudge s2 }
        runSectionBody g2 s2
 
-runSectionBody :: forall c. (Ord c, C.CRel c, C.CNil c) =>
+runSectionBody :: forall c. (Ord c, B.Pretty c, C.CRel c, C.CNil c) =>
   C.Global c -> C.Section c -> B.Ab ([B.ShortJudge c], [B.ShortJudge c])
 runSectionBody global C.Section { C.sectionRelmap = rdef, C.sectionAssert = ass2 } =
     do judgesV <- run $ C.assertViolated ass2
@@ -84,6 +84,6 @@ runSectionBody global C.Section { C.sectionRelmap = rdef, C.sectionAssert = ass2
       run :: C.AbbrAsserts c -> B.Ab ([B.ShortJudge c])
       run = sequence . map B.shortAb . run2
 
-      run2 :: C.AbbrAsserts c -> [B.Short (B.Ab [B.Judge c])]
+      run2 :: C.AbbrAsserts c -> [B.Short (B.Ab [B.OutputChunk c])]
       run2 = B.shortMap $ C.runAssertJudges global rdef
 
