@@ -64,7 +64,7 @@ termMap gRel from f (B.Rel (B.Relhead ts) bo) =
     accum [] Map.empty $ zip ts $ List.transpose bo
     where
       accum  path = foldr $ column path
-      column path (B.Relnest n ts2, cs) m = accum (n : path) m $ zip ts2 (trans cs)
-      column path (B.Relterm n, cs)     m = foldr (add $ n : path) m cs
+      column path (B.TermNest n ts2, cs) m = accum (n : path) m $ zip ts2 (trans cs)
+      column path (B.TermFlat n, cs)     m = foldr (add $ n : path) m cs
       add    path c m = Map.insertWith f path (from c) m
       trans = List.transpose . concatMap (B.relBody . gRel)

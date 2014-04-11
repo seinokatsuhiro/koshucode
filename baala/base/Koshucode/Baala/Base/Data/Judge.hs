@@ -22,15 +22,15 @@ module Koshucode.Baala.Base.Data.Judge
   hPutJudgesFlat,
 ) where
 
-import qualified Control.Monad as M
-import qualified Data.Monoid   as Monoid
-import qualified Data.List     as List
-import qualified Data.Map      as Map
-import qualified System.IO     as IO
+import qualified Control.Monad                     as M
+import qualified Data.Monoid                       as Monoid
+import qualified Data.List                         as List
+import qualified Data.Map                          as Map
+import qualified System.IO                         as IO
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
+import qualified Koshucode.Baala.Base.Data.Term    as B
 import qualified Koshucode.Baala.Base.Data.Short   as B
-import qualified Koshucode.Baala.Base.Data.Relterm as B
 
 
 -- ----------------------  Datatype

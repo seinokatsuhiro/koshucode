@@ -54,13 +54,13 @@ library
         Koshucode.Baala.Base.Abort.Process
 
         Koshucode.Baala.Base.Data
-        Koshucode.Baala.Base.Data.Short
         Koshucode.Baala.Base.Data.Decimal
         Koshucode.Baala.Base.Data.Judge
         Koshucode.Baala.Base.Data.Mono
         Koshucode.Baala.Base.Data.Rel
         Koshucode.Baala.Base.Data.Relhead
-        Koshucode.Baala.Base.Data.Relterm
+        Koshucode.Baala.Base.Data.Short
+        Koshucode.Baala.Base.Data.Term
 
         Koshucode.Baala.Base.Prelude
         Koshucode.Baala.Base.Prelude.Assoc

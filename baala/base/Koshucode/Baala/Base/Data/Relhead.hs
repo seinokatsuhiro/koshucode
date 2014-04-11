@@ -45,13 +45,13 @@ import qualified Data.Monoid                       as M
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
 import qualified Koshucode.Baala.Base.Token        as B
-import qualified Koshucode.Baala.Base.Data.Relterm as B
+import qualified Koshucode.Baala.Base.Data.Term    as B
 
 
 -- ---------------------- Type
 
 -- | Heading of relation as a list of terms
-data Relhead = Relhead { headTerms :: [B.Relterm] }
+data Relhead = Relhead { headTerms :: [B.Term] }
                deriving (Show, Eq, Ord)
 
 instance M.Monoid Relhead where
@@ -81,7 +81,7 @@ headExplainDoc (Relhead ts) = B.docv $ map B.termExplainDoc ts
 --  Make heading of @\/a@ @\/b@.
 --
 --    >>> headFrom ["a", "b"]
---    Relhead [Relterm "a", Relterm "b"]
+--    Relhead [TermFlat "a", TermFlat "b"]
 --
 --  Show heading.
 --
@@ -105,7 +105,7 @@ headEmpty = headFrom []
 
 -- | Make head from term names.
 headFrom :: [B.TermName] -> Relhead
-headFrom = Relhead . map B.Relterm
+headFrom = Relhead . map B.TermFlat
 
 headWords :: String -> Relhead
 headWords = headFrom . words
@@ -140,28 +140,28 @@ isSuperhead h1 h2 = isSubhead h2 h1
 --  Add term @\/c@ to heading.
 --
 --    >>> let h = headFrom ["a", "b"] in headCons "c" h
---    Relhead [Relterm "c", Relterm "a", Relterm "b"]
+--    Relhead [TermFlat "c", TermFlat "a", TermFlat "b"]
 --
 
-headConsTerm :: B.Relterm -> B.Map Relhead
+headConsTerm :: B.Term -> B.Map Relhead
 headConsTerm t1 (Relhead ns) = Relhead $ t1 : ns
 
 -- | Add term to head.
 headCons :: B.TermName -> B.Map Relhead
 headCons n1 (Relhead ns) =
-    Relhead $ B.Relterm n1 : ns
+    Relhead $ B.TermFlat n1 : ns
 
 headCons2 :: B.TermName2 -> B.Map Relhead
 headCons2 (n1, n2) (Relhead ns) =
-    Relhead $ B.Relterm n1 : B.Relterm n2 : ns
+    Relhead $ B.TermFlat n1 : B.TermFlat n2 : ns
 
 headCons3 :: B.TermName3 -> B.Map Relhead
 headCons3 (n1, n2, n3) (Relhead ns) =
-    Relhead $ B.Relterm n1 : B.Relterm n2 : B.Relterm n3 : ns
+    Relhead $ B.TermFlat n1 : B.TermFlat n2 : B.TermFlat n3 : ns
 
 -- | Add any number of terms to head.
 headAppend :: [B.TermName] -> B.Map Relhead
-headAppend ns1 (Relhead ns) = Relhead $ map B.Relterm ns1 ++ ns
+headAppend ns1 (Relhead ns) = Relhead $ map B.TermFlat ns1 ++ ns
 
 
 
@@ -174,7 +174,7 @@ headAppend ns1 (Relhead ns) = Relhead $ map B.Relterm ns1 ++ ns
 --  Reverse term names.
 --
 --    >>> let h = headFrom ["a", "b"] in headChange reverse h
---    Relhead [Relterm "b", Relterm "a"]
+--    Relhead [TermFlat "b", TermFlat "a"]
 --
 --  Calculate indices of heading.
 --
@@ -192,7 +192,7 @@ headAppend ns1 (Relhead ns) = Relhead $ map B.Relterm ns1 ++ ns
 --
 
 -- | Reconstruct head.
-headChange :: (B.Map [B.Relterm]) -> B.Map Relhead
+headChange :: B.Map [B.Term] -> B.Map Relhead
 headChange f = Relhead . f . headTerms
 
 headRename :: B.Map B.TermName -> B.Map Relhead
@@ -213,7 +213,7 @@ bodyAlign :: Relhead -> Relhead -> B.Map [[c]]
 bodyAlign h1 h2 = (headAlign h1 h2 `map`)
 
 headNested :: Relhead -> [(String, Relhead)]
-headNested (Relhead ts1) = map h $ filter B.isNested ts1 where
-    h (B.Relnest n ts2) = (n, Relhead ts2)
-    h (B.Relterm n)     = (n, Relhead [])
+headNested (Relhead ts1) = map h $ filter B.isTermNest ts1 where
+    h (B.TermNest n ts2) = (n, Relhead ts2)
+    h (B.TermFlat n)     = (n, Relhead [])
 

@@ -39,7 +39,7 @@ relmapDown use = C.relmapFlow use . relkitDown
 relkitDown :: (C.CRel c) => B.TermName -> C.RelkitCalc c
 relkitDown _ Nothing = Right C.relkitNothing
 relkitDown n (Just he1) = Right kit2 where
-    he2       = B.Relhead [B.Relnest n $ B.headTerms he1]
+    he2       = B.Relhead [B.TermNest n $ B.headTerms he1]
     kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
     kitf2 bo1 = [[ C.pRel $ B.Rel he1 bo1 ]]
 
@@ -64,17 +64,15 @@ relmapUp use = C.relmapFlow use . relkitUp
 relkitUp :: (C.CRel c) => B.TermName -> C.RelkitCalc c
 relkitUp _ Nothing = Right C.relkitNothing
 relkitUp n (Just he1)
-    | null ind1     = Message.unkTerm [n] he1
-    | B.isNested t1 = Right kit2
-    | otherwise     = Message.notNestRel [n] he1
+    | null ind1       = Message.unkTerm [n] he1
+    | B.isTermNest t1 = Right kit2
+    | otherwise       = Message.notNestRel [n] he1
     where
       ns1   = B.headNames he1
       ind1  = [n] `B.snipIndex` ns1
       pick1 = B.snipFrom ind1
       t1    = head $ pick1 $ B.headTerms he1
-      he2   = B.Relhead $ B.relnestTerms t1
+      he2   = B.Relhead $ B.termNest t1
       kit2  = C.relkitJust he2 $ C.RelkitOneToMany True kitf2
       kitf2 = B.relBody . C.gRel . head . pick1
-
-
 
