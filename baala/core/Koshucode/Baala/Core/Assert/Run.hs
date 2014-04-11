@@ -47,17 +47,19 @@ just :: String -> Maybe a -> B.Ab a
 just _ (Just h) = Right h
 just s Nothing  = Message.adlib s
 
+
+
 -- ----------------------  Assert
 
 -- | Calculate assertion list.
-runAssertJudges :: (Ord c, C.CRel c, C.CNil c, B.Pretty c)
+runAssertJudges :: (Ord c, B.Pretty c, C.CRel c, C.CNil c)
   => C.Global c -> [C.RelmapDef c] -> [C.Assert c] -> B.Ab [B.OutputChunk c]
 runAssertJudges global rdef asserts =
     runAssertDataset global asserts ds rdef where
         ds = C.dataset $ C.globalJudges global
 
 -- | Calculate assertion list.
-runAssertDataset :: (Ord c, C.CRel c, C.CNil c, B.Pretty c)
+runAssertDataset :: (Ord c, B.Pretty c, C.CRel c, C.CNil c)
   => C.Global c -> [C.Assert c] -> C.Dataset c -> [C.RelmapDef c] -> B.Ab [B.OutputChunk c]
 runAssertDataset global asserts dataset rdef = Right . concat =<< mapM each asserts where
     each a@(C.Assert quo pat opt relmap _) =
@@ -137,7 +139,7 @@ assertOptionComment p opt r =
 assertOptionJudges :: C.AssertOption -> [B.Judge c] -> [String] -> B.Ab [B.OutputChunk c]
 assertOptionJudges _ js cm = Right [ B.OutputJudge js, B.OutputComment cm ]
 
-snipRelRaw :: (Ord c) => B.SnipPair B.TermName c -> [B.TermName] -> B.AbMap (B.Rel c)
+snipRelRaw :: (Ord c) => B.SnipPair B.Term c -> [B.TermName] -> B.AbMap (B.Rel c)
 snipRelRaw (heSnip, boSnip) ns (B.Rel he1 bo1)
     | null left  = Right r2
     | otherwise  = Message.unkTerm left he1
@@ -147,6 +149,6 @@ snipRelRaw (heSnip, boSnip) ns (B.Rel he1 bo1)
       left =  ns `B.snipLeft`  ns1
 
       r2   =  B.Rel he2 bo2
-      he2  =  B.headFrom $ heSnip ind       ns1
-      bo2  =               boSnip ind `map` bo1
+      he2  =  B.headChange (heSnip ind) he1
+      bo2  =  boSnip ind `map` bo1
 
