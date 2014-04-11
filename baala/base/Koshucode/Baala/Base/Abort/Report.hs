@@ -12,6 +12,7 @@ module Koshucode.Baala.Base.Abort.Report
   abortLine,
   abortLines,
   abortTokens,
+  abortPage,
 
   -- * Report
   CommandLine,
@@ -32,6 +33,7 @@ data AbortReason = AbortReason
     { abortReason :: String
     , abortDetail :: [String]
     , abortSource :: [(String, B.Token)]
+    , abortNote   :: [String]
     } deriving (Show, Eq, Ord)
 
 -- | Abortable result, i.e., either of right result or abort reason.
@@ -50,6 +52,7 @@ abortBecause reason =
     { abortReason = reason
     , abortDetail = []
     , abortSource = []
+    , abortNote   = []
     }
 
 abortLine :: String -> String -> AbortReason
@@ -63,6 +66,10 @@ abortLines reason details =
 abortTokens :: String -> [B.Token] -> AbortReason
 abortTokens reason tokens =
     (abortBecause reason) { abortDetail = map B.tokenContent tokens }
+
+abortPage :: String -> [String] -> AbortReason
+abortPage reason note =
+    (abortBecause reason) { abortNote = note }
 
 
 
@@ -79,8 +86,8 @@ abort cmd a =
      Sys.exitWith $ Sys.ExitFailure 2
 
 abortMessage :: CommandLine -> AbortReason -> [String]
-abortMessage cmd a = map B.trimRight texts where
-    texts  = sandwich "" "" $ B.renderTable " " tab
+abortMessage cmd a = B.squeezeEmptyLines $ map B.trimRight texts where
+    texts  = sandwich "" "" $ B.renderTable " " tab ++ note
     tab    = B.alignTable $ title : rule : rows
     title  = [ B.textCell B.Front "ABORTED "
              , B.textCell B.Front $ abortReason a ]
@@ -92,6 +99,10 @@ abortMessage cmd a = map B.trimRight texts where
              , ("Source"  , source $ abortSource a)
              , ("Command" , map p $ cmd)
              ]
+
+    note = case abortNote a of
+             n | n == []   -> []
+               | otherwise -> "" : "Note" : "" : map ("  " ++) n
 
     row :: (String, [(String, String)]) -> [[B.Cell]]
     row (_, []) = []

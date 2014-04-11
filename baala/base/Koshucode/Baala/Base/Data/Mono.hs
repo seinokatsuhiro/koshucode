@@ -4,6 +4,7 @@
 
 module Koshucode.Baala.Base.Data.Mono
 ( Mono (..),
+  RelText,
   isMonoType, isMonoNest,
   gMonoType, gMonoNest,
   pMonoNest, pMonoType,
@@ -16,6 +17,8 @@ data Mono a
     = MonoType a
     | MonoNest (B.Rel (Mono a))
       deriving (Show, Eq, Ord)
+
+type RelText = B.Rel (Mono String)
 
 isMonoNest :: Mono a -> Bool
 isMonoNest (MonoType _) = False

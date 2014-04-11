@@ -13,6 +13,9 @@ module Koshucode.Baala.Op.Vanilla.Check
 
   -- * typename
   consTypename,
+
+  -- * dump
+  consDump,
 ) where
 
 import qualified Data.Map                    as Map
@@ -121,3 +124,14 @@ relkitTypename np (Just he1) = Right kit2 where
     kitf2 cs1 = let cs2 = share1 cs1 in map typetext cs2 ++ cs1
     typetext  = C.pText . C.typename
 
+
+-- ----------------------  dump
+
+consDump :: (B.Pretty c, C.CRel c) => C.RopCons c
+consDump use = Right $ C.relmapFlow use $ relkitDump
+
+relkitDump :: (B.Pretty c, C.CRel c) => C.RelkitCalc c
+relkitDump Nothing = Right C.relkitNothing
+relkitDump (Just he1) = Right kit2 where
+    kit2 = C.relkitJust he1 $ C.RelkitAbFull False kitf2 []
+    kitf2 _ bo1 = Message.dumpRel $ B.Rel he1 bo1

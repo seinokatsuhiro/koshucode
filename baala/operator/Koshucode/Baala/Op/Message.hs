@@ -8,6 +8,7 @@ module Koshucode.Baala.Op.Message
   checkTerm,
   diffHead,
   dupTerm,
+  dumpRel,
   noOperand,
   notNestRel,
   oddOperand,
@@ -19,6 +20,7 @@ module Koshucode.Baala.Op.Message
 ) where
 
 import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.Core as C
 import Koshucode.Baala.Core.Message
 
 -- | check-term failed
@@ -31,6 +33,9 @@ checkTerm label ns he =
 diffHead :: [B.Relhead] -> B.Ab a
 diffHead = Left . B.abortLines "Different headings" . map showHead
 
+-- | Dump relation
+dumpRel :: (B.Pretty c, C.CRel c) => B.Rel c -> B.Ab a
+dumpRel r = Left $ B.abortPage "Dump relation" $ C.relTableLines r
 
 -- | Duplicate term name
 dupTerm :: [B.TermName] -> B.Relhead -> B.Ab a

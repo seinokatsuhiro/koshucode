@@ -22,6 +22,7 @@ module Koshucode.Baala.Base.Prelude.Utility
   divide,
   divideBy,
   maybeEmpty,
+  squeeze, squeezeEmptyLines,
 
   -- * String
   padRight, padLeft,
@@ -147,6 +148,17 @@ charWidth c
 
 maybeEmpty :: Maybe a -> (a -> [b]) -> [b]
 maybeEmpty m f = maybe [] f m
+
+squeeze :: (a -> Bool) -> B.Map [a]
+squeeze p = loop where
+    loop (x1 : x2 : xs)
+        | p x1 && p x2 = x2 : squeeze p xs
+        | otherwise    = x1 : squeeze p (x2 : xs)
+    loop xs = xs
+
+squeezeEmptyLines :: B.Map [String]
+squeezeEmptyLines = squeeze $ null . dropWhile (== ' ')
+
 
 
 -- ----------------------  String
