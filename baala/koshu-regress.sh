@@ -1,16 +1,16 @@
 #!/bin/sh
 
-md_version () {
-    echo "koshu-regress-0.50"
+io_version () {
+    echo "koshu-regress-0.51"
     exit
 }
 
-md_usage () {
+io_usage () {
     echo "DESCRIPTION"
     echo "  Do regression test using output of koshu-markdown.sh"
     echo
     echo "USAGE"
-    echo "  $md_cmd [OPTION ...]"
+    echo "  $io_cmd [OPTION ...]"
     echo
     echo "OPTION"
     echo "  -d    show all differences"
@@ -18,52 +18,52 @@ md_usage () {
     echo "  -V    print version"
     echo
     echo "EXAMPLE"
-    echo "  $md_cmd -d | tee REGRESS.k"
+    echo "  $io_cmd -d | tee REGRESS.k"
     echo
     exit
 }
 
 # ============================================  Diff
 
-md_diff () {
-    MD_TOP=`pwd`
-    export MD_TOP
-
-    if grep koshu-markdown.sh $sh > /dev/null; then
+io_diff () {
+    if grep koshu-inout.sh $sh > /dev/null; then
         cd `dirname $sh`
-        ./`basename $sh` -d $md_more
-
-        status=$?
-        [ $status = 0 ] || exit $status
+        ( ./`basename $sh` -d $io_more ) || exit $status
     fi
 }
 
-md_regress () {
-    echo "** -*- koshu -*-"
-    echo "**"
-    echo "**  DESCRIPTION"
-    echo "**    Result of comparing I/O lists."
-    echo "**    This dataset is produced by $md_cmd."
-    echo "**"
+io_regress () {
+    IO_TOP=`pwd`
+    export IO_TOP
+
+    echo "# Report on I/O lists"
+    echo
+    echo "This is a summary of I/O lists."
+    echo "Each entry consists of a result of regression test,"
+    echo "a markdown file, and its directory."
+    echo "Results of regression tests are recorded in OK or DIFF."
+    echo "This summary is produced by the command \`$io_cmd\`"
     echo
 
-    for sh in `find . -name README.sh`; do
-        ( md_diff )
+    for sh in `find . -name $io_shell`; do
+        ( io_diff ) || exit $?
     done
 }
 
 # ============================================  Main
 
-md_cmd=`basename $0`
-md_more=
+io_cmd=`basename $0`
+io_more=
+io_shell=INOUT.sh
 
-while getopts dhV opt; do
+while getopts dhs:V opt; do
     case $opt in
-        d)  md_more=-d ;;
-        V)  md_version ;;
-        ?)  md_usage   ;;
+        d)  io_more=-d       ;;
+        V)  io_version       ;;
+        s)  io_shell=$OPTARG ;;
+        ?)  io_usage         ;;
     esac
 done
 
-md_regress
+io_regress
 
