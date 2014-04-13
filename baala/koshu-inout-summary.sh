@@ -1,24 +1,27 @@
 #!/bin/sh
 
 io_version () {
-    echo "koshu-regress-0.51"
+    echo "koshu-inout-summary-0.51"
     exit
 }
 
 io_usage () {
     echo "DESCRIPTION"
-    echo "  Do regression test using output of koshu-markdown.sh"
+    echo "  Output summary report on I/O lists in subdirectories"
     echo
     echo "USAGE"
     echo "  $io_cmd [OPTION ...]"
     echo
     echo "OPTION"
-    echo "  -d    show all differences"
-    echo "  -h    print help message"
-    echo "  -V    print version"
+    echo "  -d          show all differences"
+    echo "  -f FILE.sh  find FILE.sh and invoke it for each I/O list"
+    echo "  -h          print help message"
+    echo "  -r          save report to README.md"
+    echo "  -s          save report to INOUT-SUMMARY.md"
+    echo "  -V          print version"
     echo
     echo "EXAMPLE"
-    echo "  $io_cmd -d | tee REGRESS.k"
+    echo "  $io_cmd -d | tee INOUT-SUMMARY.md"
     echo
     exit
 }
@@ -32,7 +35,7 @@ io_diff () {
     fi
 }
 
-io_regress () {
+io_summary () {
     IO_TOP=`pwd`
     export IO_TOP
 
@@ -45,7 +48,7 @@ io_regress () {
     echo "This summary is produced by the command \`$io_cmd\`"
     echo
 
-    for sh in `find . -name $io_shell`; do
+    for sh in `find . -name $io_script`; do
         ( io_diff ) || exit $?
     done
 }
@@ -54,16 +57,25 @@ io_regress () {
 
 io_cmd=`basename $0`
 io_more=
-io_shell=INOUT.sh
+io_output=
+io_script=INOUT.sh
 
-while getopts dhs:V opt; do
+while getopts df:hrsV opt; do
     case $opt in
-        d)  io_more=-d       ;;
-        V)  io_version       ;;
-        s)  io_shell=$OPTARG ;;
-        ?)  io_usage         ;;
+        d)  io_more=-d          ;;
+        f)  io_script=$OPTARG   ;;
+        r)  io_output=README.md ;;
+        s)  io_output=INOUT-SUMMARY.md ;;
+        V)  io_version          ;;
+        ?)  io_usage            ;;
     esac
 done
 
-io_regress
+if [ -z "$io_output" ]; then
+    io_summary
+else
+    io_summary | tee $io_output
+    echo
+    echo "(Copy of this report is saved to $io_output)"
+fi
 
