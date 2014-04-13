@@ -23,7 +23,6 @@ module Koshucode.Baala.Core.Relmap.Rop
 
   -- * Global
   Global (..),
-  RelSelect,
   globalCommandLine,
   globalFill,
   global,
@@ -216,7 +215,7 @@ data Global c = Global
       , globalProgram :: String
       , globalArgs    :: [String]
       , globalJudges  :: [B.Judge c]
-      , globalSelect  :: RelSelect c
+      , globalSelect  :: C.RelSelect c
       }
 
 instance Show (Global c) where
@@ -224,9 +223,6 @@ instance Show (Global c) where
         = let nr = length rops
               nc = length cops
           in "Global (" ++ show nr ++ " rops, " ++ show nc ++ " cops)"
-
--- | Relation selector
-type RelSelect c = B.JudgePattern -> [String] -> B.Rel c
 
 globalCommandLine :: Global c -> [String]
 globalCommandLine Global { globalProgram = prog, globalArgs = args }

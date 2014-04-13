@@ -124,8 +124,6 @@ relmapLink = C.RelmapLink . C.ropLex
 relmapSpecialize :: forall c. C.Global c -> [C.RelmapDef c]
   -> [C.RelkitDef c] -> Maybe B.Relhead -> C.Relmap c -> B.Ab ([C.RelkitDef c], C.Relkit c)
 relmapSpecialize global rdef = spec [] [] where
-    sel = C.globalSelect global
-
     spec :: [(String, B.Relhead)] -- name of nested relation, and its heading
          -> [C.RelkitKey]         -- information for detecting cyclic relmap
          -> [C.RelkitDef c]       -- list of known specialized relkits
@@ -134,7 +132,7 @@ relmapSpecialize global rdef = spec [] [] where
          -> B.Ab ([C.RelkitDef c], C.Relkit c)
     spec with keys kdef he1 rmap = s where
         s = case rmap of
-              C.RelmapSource lx p ns -> post lx $ Right (kdef, C.relkitConst $ sel p ns)
+              C.RelmapSource lx p ns -> post lx $ Right (kdef, C.relkitSource p ns)
               C.RelmapConst  lx rel  -> post lx $ Right (kdef, C.relkitConst rel)
 
               C.RelmapAppend rmap1 rmap2 ->

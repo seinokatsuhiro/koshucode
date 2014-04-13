@@ -37,7 +37,7 @@ runRelmapViaRelkit global rdef r (B.Rel he1 bo1) =
     do (kdef, C.Relkit he2' f2') <- C.relmapSpecialize global rdef [] (Just he1) r
        let C.Relkit mhe2 f2 = C.relkitLink kdef $ C.Relkit he2' f2'
        he2 <- justRelhead mhe2
-       bo2 <- C.relkitRun [] f2 bo1
+       bo2 <- C.relkitRun global [] f2 bo1
        Right $ B.Rel he2 bo2
 
 justRelhead :: Maybe B.Relhead -> B.Ab B.Relhead
