@@ -5,12 +5,20 @@
 #    Cabal for each packages
 #
 #  USAGE
-#    [1] ./cabal-koshu.sh link
-#          Make symbolic links 'install.link', etc.
-#    [2] ./install.link base
-#          Build and install base package.
-#    [3] ./install.link
-#          Build and install all packages.
+#    [1] ./cabal-koshu.sh sandbox-init
+#          Initialize cabal/sandbox
+#
+#    [2] ./cabal-koshu.sh sandbox-deps
+#          Install dependent libraries
+#
+#    [3] ./cabal-koshu.sh link
+#          Make symbolic links 'cabal/build.link', etc.
+#
+#    [4] cabal/build.link base
+#          Build base package.
+#
+#    [5] cabal/build.link
+#          Build all packages.
 #
 # ------------------------------------------------------------------
 
@@ -18,42 +26,61 @@ usage () {
     echo "cabal for each packages"
     echo ""
 
-    if [ -z $command ]; then
-        echo "  $0 clean          cleaning directories"
-        echo "  $0 link           make symbolic-linked commands"
-        echo "  $0 unreg          unregister koshucode packages"
-        echo "  $0 update         update cabal packages"
+    if [ -z $cab_command ]; then
+        echo "  $0 clean             cleaning directories"
+        echo "  $0 link              make symbolic-linked commands"
+        echo "  $0 ls                list files"
+        echo "  $0 sandbox-delete    delete cabal sandbox"
+        echo "  $0 sandbox-deps      install dependent libraries"
+        echo "  $0 sandbox-init      initialize cabal sandbox"
+        echo "  $0 unreg             unregister koshucode packages"
+        echo "  $0 update            update cabal packages"
         echo ""
     else
-        echo "  $0                cabal for all packages"
-        echo "  $0 koshu          cabal to install koshu program"
+        echo "  $0                   cabal for all packages"
+        echo "  $0 koshu             cabal to install koshu program"
         echo ""
-        echo "  $0 base           cabal for base package"
-        echo "  $0 core           cabal for core package"
-        echo "  $0 operator       cabal for operator package"
-        echo "  $0 calculator     cabal for calculator package"
-        echo "  $0 toolkit        cabal for toolkit package"
+        echo "  $0 base              cabal for base package"
+        echo "  $0 core              cabal for core package"
+        echo "  $0 operator          cabal for operator package"
+        echo "  $0 calculator        cabal for calculator package"
+        echo "  $0 toolkit           cabal for toolkit package"
         echo ""
     fi
 }
 
 main () {
+    cab_time=non
     decide_command `basename $0`
 
     case "$1" in
         clean)
-            command=cabal_clean
-            cabal_for base core operator calculator toolkit
-            exit ;;
+            cabal_for_all cabal_clean ;;
 
         link)
             # alphabetical order
-            sym_link "$0" haddock.link
-            sym_link "$0" html.link
-            sym_link "$0" install.link
-            sym_link "$0" sdist.link
-            sym_link "$0" sloc.link
-            exit ;;
+            ( cd cabal
+              sym_link "$0" build.link
+              sym_link "$0" haddock.link
+              sym_link "$0" html.link
+              sym_link "$0" install.link
+              sym_link "$0" sdist.link
+              sym_link "$0" sloc.link
+            ) ;;
+
+        ls)
+            cabal_for_all cabal_ls ;;
+
+        sandbox-init)
+            cabal_for_all cabal_sandbox_init ;;
+
+        sandbox-deps)
+            cabal_for_all cabal_sandbox_deps ;;
+
+        sandbox-delete)
+            cabal_for_all cabal_sandbox_delete
+            [ -d cabal/sandbox ] && rm -r cabal/sandbox
+            ;;
 
         unreg)
             unregister toolkit
@@ -61,48 +88,50 @@ main () {
             unregister operator
             unregister core
             unregister base
-            exit ;;
+            ;;
 
         update)
-            cabal_cmd update
-            exit ;;
+            cabal_cmd update ;;
 
         '' | base* | core* | operator* | calculator* | toolkit* | koshu )
+            cab_time=time
             cabal_for `directories "$1"`
-            exit ;;
+            ;;
 
         *)
-            usage
-            exit ;;
+            usage ;;
     esac
 }
 
 decide_command () {
     case "$1" in
+        build.link)
+            cab_command=cabal_build
+            echo "build -- build packages" ;;
         haddock.link)
-            command=cabal_haddock
+            cab_command=cabal_haddock
             echo "haddock -- generate Haddock HTML documentation" ;;
         html.link)
-            command=cabal_html
+            cab_command=cabal_html
             echo "html -- open html documents" ;;
         install.link)
-            command=cabal_install
+            cab_command=cabal_install
             echo "install -- installs packages" ;;
         sdist.link)
-            command=cabal_sdist
+            cab_command=cabal_sdist
             echo "sdist -- generate a source distribution file" ;;
         sloc.link)
-            command=sloc
+            cab_command=sloc
             echo "sloc -- count source lines of code" ;;
     esac
 }
 
 sym_link () {
     if [ -e "$2" ]; then
-        echo "already exists: $2"
+        echo "already exists: cabal/$2"
     else
-        echo "making $2"
-        ln -s "$1" "$2"
+        echo "making cabal/$2"
+        ln -s "../$1" "$2"
     fi
 }
 
@@ -126,27 +155,37 @@ directories () {
 
 # ======================  cabal
 
-CABAL_DEV=$HOME/cabal-dev
-GITHUB_DOC=http://seinokatsuhiro.github.io/koshucode/doc/html
-URL=http://hackage.haskell.org/packages/archive/base/latest/doc/html
+CAB_GITHUB_DOC=http://seinokatsuhiro.github.io/koshucode/doc/html
+CAB_URL=http://hackage.haskell.org/packages/archive/base/latest/doc/html
 
 cabal_cmd () {
     echo "# $@"
-    cabal-dev --sandbox=$CABAL_DEV/koshucode "$@"
-    #cabal "$@"
+    cabal "$@"
 }
 
 cabal_for () {
-    if [ -z $command ]; then
+    if [ -z $cab_command ]; then
         usage
         exit
     fi
 
-    for d in "$@"; do
+    for cab_dir in "$@"; do
         echo
-        echo "================================= $d"
-        (cd "$d"; time $command "$d") || exit 1
+        echo "================================= $cab_dir"
+
+        ( cd "$cab_dir"
+          if [ $cab_time = time ]; then
+              time $cab_command "$cab_dir" 
+          else
+              $cab_command "$cab_dir" 
+          fi
+        ) || exit 1
     done
+}
+
+cabal_for_all () {
+    cab_command=$1
+    cabal_for base core operator calculator toolkit
 }
 
 section () {
@@ -157,6 +196,43 @@ cabal_clean () {
     cabal_cmd clean
 }
 
+cabal_ls () {
+    ls -l
+}
+
+
+# ======================  sandbox commands
+
+cabal_sandbox_init () {
+    if [ ! -f cabal.sandbox.config ]; then
+        cabal_cmd sandbox init --sandbox=../cabal/sandbox
+    fi
+}
+
+cabal_sandbox_delete () {
+    if [ -f cabal.sandbox.config ]; then
+        cabal_cmd sandbox delete
+        echo "(exit with $?)"
+    else
+        echo "not in sandbox"
+    fi
+}
+
+cabal_sandbox_deps () {
+    if [ -f cabal.sandbox.config ]; then
+        cabal_sandbox_add_source
+        cabal_cmd install --only-dependencies
+    fi
+}
+
+cabal_sandbox_add_source () {
+    case $cab_dir in
+        core)        cabal_cmd sandbox add-source ../base       ;;
+        operator)    cabal_cmd sandbox add-source ../core       ;;
+        calculator)  cabal_cmd sandbox add-source ../operator   ;;
+        toolkit)     cabal_cmd sandbox add-source ../calculator ;;
+    esac
+}
 
 
 # ======================  commands for each packages
@@ -175,6 +251,10 @@ pwd_base () {
 
 cabal_html () {
     open dist/doc/html/koshucode-baala-*/index.html
+}
+
+cabal_build () {
+    cabal_cmd build
 }
 
 cabal_install () {
@@ -200,7 +280,7 @@ cabal_sdist () {
         --haddock-option=`if_file core` \
         --haddock-option=`if_file operator` \
         --haddock-option=`if_file calculator` \
-        --html-location=$URL
+        --html-location=$CAB_URL
         # --executable \
 
     section sdist
@@ -209,12 +289,12 @@ cabal_sdist () {
 
 # interface file
 if_file () {
-    package=koshucode-baala-$1
-    haddock=../$1/dist/doc/html/$package/$package.haddock
+    cab_package=koshucode-baala-$1
+    cab_haddock=../$1/dist/doc/html/$cab_package/$cab_package.haddock
     if [ `pwd_base` = $1 ]; then
         echo --html
-    elif [ -e $haddock ]; then
-        echo --read-interface=$GITHUB_DOC/$package/,$haddock
+    elif [ -e $cab_haddock ]; then
+        echo --read-interface=$CAB_GITHUB_DOC/$cab_package/,$cab_haddock
     else
         echo --html
     fi
