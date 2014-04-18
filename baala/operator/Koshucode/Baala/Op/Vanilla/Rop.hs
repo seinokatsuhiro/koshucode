@@ -13,7 +13,6 @@ import qualified Koshucode.Baala.Op.Vanilla.Check   as Op
 import qualified Koshucode.Baala.Op.Vanilla.Confl   as Op
 import qualified Koshucode.Baala.Op.Vanilla.Cox     as Op
 import qualified Koshucode.Baala.Op.Vanilla.Flow    as Op
-import qualified Koshucode.Baala.Op.Vanilla.Global  as Op
 import qualified Koshucode.Baala.Op.Vanilla.Naming  as Op
 import qualified Koshucode.Baala.Op.Vanilla.Order   as Op
 
@@ -30,8 +29,6 @@ vanillaRops = Op.ropList "vanilla"
         Op.consCompose, C.sortOne "-relmap" [] )
     , ( "const R",
         Op.consConst, C.sortOne "-lit" [] )
-    , ( "do R ...",
-        Op.consDo, C.sortList "-relmap" ["-let"] )
     , ( "dump",
         Op.consDump, C.sortNone [] )
     , ( "duplicate /N ...",
@@ -48,14 +45,6 @@ vanillaRops = Op.ropList "vanilla"
         Op.consIf, C.sortList "-relmap" [] )
     , ( "keep E",
         Op.consFilter True, C.sortList "-in" ["-let"] )
-    , ( "koshu-cop /N",
-        Op.consKoshuCop, C.sortList "-name" [] )
-    , ( "koshu-cop-infix /N [ -height /N ][ -dir /N ]",
-        Op.consKoshuCopInfix, C.sortOne "-name" ["-height", "-dir"] )
-    , ( "koshu-rop /N",
-        Op.consKoshuRop, C.sortList "-name" [] )
-    , ( "koshu-version /N",
-        Op.consKoshuVersion, C.sortOneList "-term" "-version" [] )
     , ( "maybe R",
         Op.consMaybe, C.sortOne "-relmap" [] )
     , ( "member /N /N",
@@ -104,18 +93,6 @@ vanillaRops = Op.ropList "vanilla"
 --
 --  [@keep E@]
 --    Keep tuples @E@ equals true.
--- 
---  [@koshu-cop \/N@]
---    Retrieve list of content operators.
--- 
---  [@koshu-cop-infix \/N \[ -height \/N \]\[ -dir \/N \]@]
---    Retrieve list of infix specifications.
--- 
---  [@koshu-rop /N@]
---    Retrieve list of relmap operators.
--- 
---  [@koshu-version /N@]
---    Get version number of the koshu calculator.
 -- 
 --  [@maybe R@]
 --    Meet input and given relation.

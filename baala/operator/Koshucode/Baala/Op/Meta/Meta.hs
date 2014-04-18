@@ -1,9 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Op.Vanilla.Global
+module Koshucode.Baala.Op.Meta.Meta
 ( 
-  -- * do
-  consDo,
   -- * koshu-cop
   consKoshuCop, relkitKoshuCop,
   -- * koshu-cop-infix
@@ -19,19 +17,6 @@ import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Core          as C
 import qualified Koshucode.Baala.Op.Builtin    as Op
 import qualified Koshucode.Baala.Op.Message    as Message
-
-
--- ----------------------  do
-
-consDo :: (Ord c) => C.RopCons c
-consDo use =
-  do rmap <- Op.getRelmap use
-     treesLet <- Op.getWordTrees use "-let"
-     let C.RelmapCons lx full = C.relmapCons $ C.ropGlobal use
-         (names, trees) = unzip treesLet
-     lxs   <- mapM lx $ map B.singleton trees
-     fulls <- mapM full lxs
-     Right $ undefined
 
 
 -- ----------------------  koshu-cop
