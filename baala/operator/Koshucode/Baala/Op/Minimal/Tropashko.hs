@@ -23,6 +23,7 @@ module Koshucode.Baala.Op.Minimal.Tropashko
   -- * join (inner union)
   consJoin,
   relmapJoin,
+  relmapJoinList,
   relkitJoin,
 ) where
 
@@ -32,7 +33,7 @@ import qualified Koshucode.Baala.Op.Builtin as Op
 
 
 
--- ----------------------  Meet
+-- ----------------------  meet
 
 consMeet :: (Ord c) => C.RopCons c
 consMeet use =
@@ -77,7 +78,7 @@ relkitMeet _ _ = Right C.relkitNothing
 
 
 
--- ----------------------  Join
+-- ----------------------  join
 
 consJoin :: (Ord c) => C.RopCons c
 consJoin use =
@@ -91,6 +92,12 @@ relmapJoin
     -> C.Relmap c     -- ^ Subrelmap of join operator
     -> C.Relmap c     -- ^ Relmap of join operator
 relmapJoin use = C.relmapBinary use relkitJoin
+
+relmapJoinList :: (Ord c) => C.RopUse c -> [C.Relmap c] -> C.Relmap c
+relmapJoinList use [] = C.relmapConst use B.reldau
+relmapJoinList _ [rmap] = rmap
+relmapJoinList use (rmap : rmaps) = rmap `B.mappend` rmaps' where
+    rmaps' = relmapJoin use $ relmapJoinList use rmaps
 
 -- | Join two relations.
 relkitJoin :: C.RelkitBinary c
@@ -111,6 +118,7 @@ relkitJoin (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
            Right $ map share1 bo1 ++ map share2 bo2
 
 relkitJoin _ _ = Right C.relkitNothing
+
 
 
 

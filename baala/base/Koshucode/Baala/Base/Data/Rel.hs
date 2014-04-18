@@ -11,6 +11,7 @@ module Koshucode.Baala.Base.Data.Rel
   -- * Constant
   reldum,
   reldee,
+  reldau,
   -- $ConstantExample
 ) where
 
@@ -91,4 +92,9 @@ reldum = Rel B.mempty []
 --   that has no terms and the empty tuple.
 reldee :: Rel c
 reldee = Rel B.mempty [[]]
+
+-- | The empty relation with all terms.
+--   This is fake.
+reldau :: Rel c
+reldau = Rel B.mempty []
 
