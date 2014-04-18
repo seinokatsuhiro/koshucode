@@ -86,7 +86,7 @@ library
          base                 == 4.6.*
        , containers           == 0.5.*
        , directory            == 1.2.*
-       , syb                  == 0.3.*
+       , syb                  == 0.4.*
        , template-haskell     == 2.8.*
        , koshucode-baala-base == 0.52.*
 

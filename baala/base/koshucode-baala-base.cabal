@@ -97,7 +97,7 @@ library
          base             == 4.6.*
        , containers       == 0.5.*
        , pretty           == 1.1.*
-       , syb              == 0.3.*
+       , syb              == 0.4.*
 
   ghc-options:         -Wall
 
