@@ -18,8 +18,8 @@ metaRops = Op.ropList "meta"
         Op.consKoshuCop, C.sortList "-name" [] )
     , ( "koshu-cop-infix /N [ -height /N ][ -dir /N ]",
         Op.consKoshuCopInfix, C.sortOne "-name" ["-height", "-dir"] )
-    , ( "koshu-rop /N",
-        Op.consKoshuRop, C.sortList "-name" [] )
+    , ( "koshu-rop /N /N",
+        Op.consKoshuRop, C.sortList "-name" ["-group", "-usage"] )
     , ( "koshu-version /N",
         Op.consKoshuVersion, C.sortOneList "-term" "-version" [] )
     ]

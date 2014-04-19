@@ -73,11 +73,12 @@ relkitSubst (base, deriv, bodies) (Just he1)
     | B.sameLength ns ind = Right kit2
     | otherwise           = Message.unexpTermName
     where
-      (ns, xs)    = unzip bodies                 -- names and expressions
-      ns1         = B.headNames he1              -- term names of input relation
-      ind         = ns `B.snipIndex` ns1         -- indicies for ns on input relation
-      cut         = B.snipOff ind                -- cutting-ns function
-      he2         = B.headFrom $ ns ++ cut ns1   -- heading of output relation
+      (ns, xs)    = unzip bodies               -- names and expressions
+      ns1         = B.headNames he1            -- term names of input relation
+      ind         = ns `B.snipIndex` ns1       -- indicies for ns on input relation
+      cut         = B.snipOff  ind             -- cutting-ns function
+      fore        = B.snipFore ind             -- cutting-ns function
+      he2         = B.headChange fore he1      -- heading of output relation
       kit2        = C.relkitJust he2 $ C.RelkitOneToAbOne True kitf2 []
       kitf2 _ cs1 = do xs2 <- C.coxBeta base deriv he1 `mapM` xs
                        cs2 <- C.coxRun cs1 `mapM` xs2

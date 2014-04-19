@@ -66,16 +66,30 @@ relkitKoshuCopInfix (name, height, dir) C.Global { C.globalCops = (_, htab) } _ 
 
 consKoshuRop :: (C.CContent c) => C.RopCons c
 consKoshuRop use =
-  do name <- Op.getTerm use "-name"
-     Right $ relmapKoshuRop use name
+  do name  <- Op.getTerm use "-name"
+     group <- Op.getMaybe Op.getTerm use "-group"
+     usage <- Op.getMaybe Op.getTerm use "-usage"
+     Right $ relmapKoshuRop use (Just name, group, usage)
 
-relmapKoshuRop :: (C.CContent c) => C.RopUse c -> B.TermName -> C.Relmap c
+relmapKoshuRop :: (C.CContent c)
+    => C.RopUse c -> (Maybe B.TermName, Maybe B.TermName, Maybe B.TermName)
+    -> C.Relmap c
 relmapKoshuRop use = C.relmapGlobal use . relkitKoshuRop
 
-relkitKoshuRop :: (C.CContent c) => B.TermName -> C.RelkitGlobal c
-relkitKoshuRop name C.Global { C.globalRops = rops } _ = Right kit2 where
-    kit2 = C.relkitConstBody [name] bo2
-    bo2  = map (B.singleton . C.pText . C.ropName) rops
+relkitKoshuRop :: (C.CContent c)
+    => (Maybe B.TermName, Maybe B.TermName, Maybe B.TermName)
+    -> C.RelkitGlobal c
+relkitKoshuRop (name, group, usage) C.Global { C.globalRops = rops } _ = Right kit2 where
+    kit2  = C.relkitConstBody ns bo2
+    ns    = B.catMaybes [group, name, usage]
+    bo2   = map f rops
+    f rop = cond group C.ropGroup ++
+            cond name  C.ropName  ++
+            cond usage C.ropUsage
+        where
+          cond (Just _) get = [C.pText $ get rop]
+          cond _ _ = []
+
 
 
 -- ----------------------  koshu-version

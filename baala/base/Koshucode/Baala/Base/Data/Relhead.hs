@@ -34,10 +34,6 @@ module Koshucode.Baala.Base.Data.Relhead
   headAlign, bodyAlign,
   headNested,
   -- $UtilityExample
-
-  -- * Monoid
-  M.mempty,
-  M.mappend,
 ) where
 
 import qualified Data.List                         as L

@@ -20,25 +20,26 @@ import qualified Koshucode.Baala.Op.Builtin   as Op
 
 consNumber :: (Ord c, C.CDec c) => C.RopCons c
 consNumber use =
-    do n  <- Op.getTerm use "-term"
-       ns <- Op.getOption [] Op.getTerms use "-order"
-       Right $ relmapNumber use (n, ns)
+    do n    <- Op.getTerm use "-term"
+       ns   <- Op.getOption [] Op.getTerms use "-order"
+       from <- Op.getOption 0  Op.getInt   use "-from"
+       Right $ relmapNumber use (n, ns, from)
 
-relmapNumber :: (C.CDec c, Ord c) => C.RopUse c -> (B.TermName, [B.TermName]) -> C.Relmap c
+relmapNumber :: (C.CDec c, Ord c) => C.RopUse c -> (B.TermName, [B.TermName], Int) -> C.Relmap c
 relmapNumber use = C.relmapFlow use . relkitNumber
 
-relkitNumber :: (Ord c, C.CDec c) => (B.TermName, [B.TermName]) -> C.RelkitCalc c
+relkitNumber :: (Ord c, C.CDec c) => (B.TermName, [B.TermName], Int) -> C.RelkitCalc c
 relkitNumber = relkitRanking B.sortByNameNumbering
 
 relkitRanking
     :: (Ord c, C.CDec c)
     => B.Ranking B.TermName c
-    -> (B.TermName, [B.TermName]) -> C.RelkitCalc c
+    -> (B.TermName, [B.TermName], Int) -> C.RelkitCalc c
 relkitRanking _ _ Nothing = Right C.relkitNothing
-relkitRanking ranking (n, ns) (Just he1) = Right kit2 where
+relkitRanking ranking (n, ns, from) (Just he1) = Right kit2 where
     he2   = B.headCons n he1
     kit2  = C.relkitJust he2 $ C.RelkitFull False kitf2
-    kitf2 bo1 = let (rank, bo2) = ranking 0 ords (B.headNames he1) bo1
+    kitf2 bo1 = let (rank, bo2) = ranking from ords (B.headNames he1) bo1
                 in zipWith (:) (map C.pDecFromInt rank) bo2
     ords  = map B.Asc ns
 
@@ -54,19 +55,19 @@ consRank use =
        let relmapRank = if dense
                         then relmapDenseRank
                         else relmapGapRank
-       Right $ relmapRank use (n, ns)
+       Right $ relmapRank use (n, ns, 0)
 
 relmapDenseRank :: (C.CDec c, Ord c) =>
-   C.RopUse c -> (B.TermName, [B.TermName]) -> C.Relmap c
+   C.RopUse c -> (B.TermName, [B.TermName], Int) -> C.Relmap c
 relmapDenseRank use = C.relmapFlow use . relkitDenseRank
 
-relkitDenseRank :: (Ord c, C.CDec c) => (B.TermName, [B.TermName]) -> C.RelkitCalc c
+relkitDenseRank :: (Ord c, C.CDec c) => (B.TermName, [B.TermName], Int) -> C.RelkitCalc c
 relkitDenseRank = relkitRanking B.sortByNameDenseRank
 
 relmapGapRank :: (C.CDec c, Ord c) =>
-   C.RopUse c -> (B.TermName, [B.TermName]) -> C.Relmap c
-relmapGapRank use (n, ns) = C.relmapFlow use $ relkitGapRank (n, ns)
+   C.RopUse c -> (B.TermName, [B.TermName], Int) -> C.Relmap c
+relmapGapRank use = C.relmapFlow use . relkitGapRank
 
-relkitGapRank :: (Ord c, C.CDec c) => (B.TermName, [B.TermName]) -> C.RelkitCalc c
+relkitGapRank :: (Ord c, C.CDec c) => (B.TermName, [B.TermName], Int) -> C.RelkitCalc c
 relkitGapRank = relkitRanking B.sortByNameGapRank
 

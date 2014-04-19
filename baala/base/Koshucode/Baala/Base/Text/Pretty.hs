@@ -11,8 +11,6 @@ module Koshucode.Baala.Base.Text.Pretty
   docWraps,
 
   -- * Excerpt from PrettyPrint
-  D.Doc,
-  (D.<>), (D.<+>), (D.$$), D.nest,
   docEmpty,
   docHang,
   docZero,

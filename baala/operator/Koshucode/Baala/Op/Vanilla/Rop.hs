@@ -50,7 +50,7 @@ vanillaRops = Op.ropList "vanilla"
     , ( "member /N /N",
         Op.consMember, C.sortEnum ["-1", "-2"] [] )
     , ( "number /N -order /N ...",
-        Op.consNumber, C.sortOne "-term" ["-order"] )
+        Op.consNumber, C.sortOne "-term" ["-order", "-from"] )
     , ( "omit E",
         Op.consFilter False, C.sortList "-in" ["-let"] )
     , ( "prefix /P /N ...",
