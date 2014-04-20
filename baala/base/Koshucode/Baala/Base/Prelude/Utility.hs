@@ -23,6 +23,7 @@ module Koshucode.Baala.Base.Prelude.Utility
   divideBy,
   maybeEmpty,
   squeeze, squeezeEmptyLines,
+  mapWithLast,
 
   -- * String
   padRight, padLeft,
@@ -159,6 +160,11 @@ squeeze p = loop where
 squeezeEmptyLines :: B.Map [String]
 squeezeEmptyLines = squeeze $ null . dropWhile (== ' ')
 
+mapWithLast :: (a -> b) -> (a -> b) -> [a] -> [b]
+mapWithLast f g = loop where
+    loop [] = []
+    loop [x] = [g x]
+    loop (x:xs) = f x : loop xs
 
 
 -- ----------------------  String

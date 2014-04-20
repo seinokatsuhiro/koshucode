@@ -50,7 +50,7 @@ hRunFiles h global src =
 
        case js' of
          Left a   -> B.abort cmd a
-         Right js -> B.hPutJudges h js
+         Right js -> B.hPutOutputResult h js
 
 
 

@@ -24,6 +24,7 @@ module Koshucode.Baala.Base.Text.TextTable
 
 import qualified Data.Char as C
 import qualified Data.List as L
+import qualified Koshucode.Baala.Base.Prelude as B
 
 
 -- ---------------------------------  Position
@@ -146,12 +147,17 @@ renderRow :: String -> [Cell] -> [String]
 renderRow vrule =
     map (L.intercalate vrule)
      . L.transpose
-     . map renderCell
+     . B.mapWithLast renderCell (renderCell . unpad)
 
 renderCell :: Cell -> [String]
 renderCell (Cell texts wd ht pos pad) = map width $ height texts where
     width  = position displaySize pad pos wd
     height = position length "" Front ht
+
+unpad :: B.Map Cell
+unpad cell
+    | cellPad cell == ' ' = cell { cellWidth = 0 }
+    | otherwise           = cell
 
 
 -- ---------------------------------  Utility
