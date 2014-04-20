@@ -1,13 +1,13 @@
 #!/bin/sh
 
 io_version () {
-    echo "koshu-inout-0.51"
+    echo "koshu-inout-0.52"
     exit
 }
 
 io_usage () {
     echo "DESCRIPTION"
-    echo "  Generate markdown document for koshu scripts."
+    echo "  Generate I/O list for koshu scripts."
     echo
     echo "USAGE"
     echo "  $io_cmd [OPTION ...] SCRIPT.k ..."
@@ -21,6 +21,7 @@ io_usage () {
     echo "  -p PROG     use PROGram instead of $io_program"
     echo "  -r          save document to README.md"
     echo "  -s          save document to INOUT.md"
+    echo "  -t          do not delete temporary files"
     echo "  -x EXT      use EXTension instead of *.$io_glob_ext"
     echo
     echo "EXAMPLE"
@@ -31,9 +32,19 @@ io_usage () {
     exit
 }
 
-error () {
+stderr () {
     if [ $io_error = output ]; then
         echo "$*" 1>&2
+    fi
+}
+
+io_create_temporary () {
+    mktemp TEMP-KOSHU-XXXX
+}
+
+io_delete_temporary () {
+    if [ $io_keep_temp = no ]; then
+        [ -f $1 ] && rm $1
     fi
 }
 
@@ -41,11 +52,11 @@ error () {
 # ============================================  Document
 
 io_doc () {
-    if [ -z "$io_output" ]; then
+    if [ -z "$io_output_work" ]; then
         io_doc_body $@
     else
-        io_doc_body $@ > $io_output
-        error "  Output to $io_output"
+        io_doc_body $@ > $io_output_work
+        stderr "  Output to $io_output_work"
     fi
 }
 
@@ -56,10 +67,10 @@ io_doc_body () {
 }
 
 check_output () {
-    case "$io_output" in
+    case "$io_output_work" in
         *.$io_glob_ext )
-              error "  Output file is probably input file."
-              error "  Please check: $io_output"
+              stderr "  Output file is probably input file."
+              stderr "  Please check: $io_output_work"
               exit 2 ;; 
     esac
 }
@@ -132,7 +143,7 @@ io_input () {
 io_output () {
     $io_program "$@" > $io_temp
     io_status=$?
-    error "  $io_status <- $io_program $@"
+    stderr "  $io_status <- $io_program $@"
 
     echo
     if [ "$io_status" = 0 ]; then
@@ -221,22 +232,20 @@ io_exist () {(
 # ============================================  Diff
 
 io_diff () {
-    if [ -f "$io_output" ]; then
+    if [ -f "$io_output_orig" ]; then
+        io_output_work=`io_create_temporary`
         io_diff_body $@
-        [ -f $io_output ] && rm $io_output
+        io_delete_temporary $io_output_work
     else
-        echo "file not found: $io_output"
+        echo "file not found: $io_output_orig"
         exit 2
     fi
 }
 
 io_diff_body () {
-    io_output_original=$io_output
-    io_output=`mktemp TEMP-KOSHU-DIFF-XXXXX`
+    io_doc $@  # output to $io_output_work
 
-    io_doc $@
-
-    if diff -u $io_output_original $io_output > $io_temp; then
+    if diff -u $io_output_orig $io_output_work > $io_temp; then
         io_diff_result OK
     else
         echo
@@ -260,7 +269,7 @@ io_diff_body () {
 io_diff_result () {
     io_dir=`io_pwd`
     io_dir_md=`echo $io_dir | sed 's:/: / :g'`
-    echo "- $1 – [$io_output_original]($io_dir/$io_output_original) in $io_dir_md"
+    echo "- $1 – [$io_output_orig]($io_dir/$io_output_orig) in $io_dir_md"
 }
 
 io_pwd () {
@@ -282,6 +291,7 @@ io_diff_del () {
     done | xargs
 }
 
+
 # ============================================  Main
 
 # variable
@@ -293,39 +303,43 @@ io_error=output
 io_glob_ext=k
 io_glob_file=
 io_glob_type=args
-io_output=
+io_keep_temp=no
+io_output_orig=
 io_program=koshu
 io_status=0
 
 # option
 
-while getopts df:gho:p:rsx:V opt; do
+while getopts df:gho:p:rstx:V opt; do
     case $opt in
         d)  case $io_diff in
               1) io_diff=2 ;;
               *) io_diff=1 ;;
             esac
-            io_error=inhibit     ;;
+            io_error=inhibit          ;;
         f)  io_glob_type=file
-            io_glob_file=$OPTARG ;;
-        g)  io_glob_type=glob    ;;
-        o)  io_output=$OPTARG    ;;
-        p)  io_program=$OPTARG   ;;
-        r)  io_output=README.md  ;;
-        s)  io_output=INOUT.md   ;;
-        x)  io_glob_ext=$OPTARG  ;;
-        V)  io_version           ;;
-        ?)  io_usage             ;;
+            io_glob_file=$OPTARG      ;;
+        g)  io_glob_type=glob         ;;
+        o)  io_output_orig=$OPTARG    ;;
+        p)  io_program=$OPTARG        ;;
+        r)  io_output_orig=README.md  ;;
+        s)  io_output_orig=INOUT.md   ;;
+        t)  io_keep_temp=yes          ;;
+        x)  io_glob_ext=$OPTARG       ;;
+        V)  io_version                ;;
+        ?)  io_usage                  ;;
     esac
 done
 
+io_output_work=$io_output_orig
 shift $(($OPTIND - 1))
 
 # document
 
-error "$io_cmdline"
+stderr "$io_cmdline"
 check_output
-io_temp=`mktemp TEMP-KOSHU-XXXXX`
+
+io_temp=`io_create_temporary`
 
 if [ $io_diff = 0 ]; then
     io_doc $@
@@ -335,6 +349,6 @@ fi
 
 # clean up
 
-[ -f $io_temp ] && rm $io_temp
+io_delete_temporary $io_temp
 
 exit $io_status
