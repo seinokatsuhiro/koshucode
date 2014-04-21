@@ -3,7 +3,7 @@
 
 -- | Lexical relmap.
 
-module Koshucode.Baala.Core.Relmap.Lexical
+module Koshucode.Baala.Core.Relmap.Lexmap
 ( Lexmap (..),
   lexOpText,
 ) where

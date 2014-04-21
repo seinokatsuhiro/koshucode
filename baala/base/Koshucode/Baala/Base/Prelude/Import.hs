@@ -3,6 +3,7 @@
 module Koshucode.Baala.Base.Prelude.Import
 ( -- * Data.Maybe
   Data.Maybe.catMaybes,
+  Data.Maybe.fromJust,
 
   -- * Data.Monoid
   Data.Monoid.mempty,

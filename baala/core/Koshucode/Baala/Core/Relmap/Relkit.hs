@@ -31,12 +31,9 @@ module Koshucode.Baala.Core.Relmap.Relkit
   relkitSetSource,
 ) where
 
---import qualified Control.Monad                       as Monad
 import qualified Data.Monoid                         as Monoid
 import qualified Koshucode.Baala.Base                as B
---import qualified Koshucode.Baala.Core.Content        as C
-import qualified Koshucode.Baala.Core.Relmap.Lexical as C
---import qualified Koshucode.Baala.Core.Message        as Message
+import qualified Koshucode.Baala.Core.Relmap.Lexmap  as C
 
 
 
