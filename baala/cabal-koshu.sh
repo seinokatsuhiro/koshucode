@@ -135,9 +135,10 @@ sym_link () {
     fi
 }
 
-unregister () {
-    cabal_cmd ghc-pkg unregister koshucode-baala-$1
-}
+unregister () {(
+    cd $1
+    cabal_cmd sandbox hc-pkg unregister koshucode-baala-$1
+)}
 
 directories () {
     case `basename "$1"` in
