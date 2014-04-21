@@ -101,7 +101,7 @@ emptySection = makeEmptySection $ C.relmapCons C.global
 -- | Second step of constructing 'Section'.
 consSection
     :: forall c. (C.CContent c)
-    => C.RelmapConsFull c    -- ^ Relmap full constructor
+    => C.ConsRelmap c        -- ^ Relmap full constructor
     -> B.Resource            -- ^ Resource name
     -> [B.Short [C.Clause]]  -- ^ Output of 'C.consClause'
     -> B.Ab (Section c)      -- ^ Result section
@@ -111,7 +111,7 @@ consSection consFull resource xss =
 
 consSectionEach
     :: forall c. (C.CContent c)
-    => C.RelmapConsFull c   -- ^ Relmap full constructor
+    => C.ConsRelmap c       -- ^ Relmap full constructor
     -> B.Resource           -- ^ Resource name
     -> B.Short [C.Clause]   -- ^ Output of 'C.consClause'
     -> B.Ab (Section c)     -- ^ Result section

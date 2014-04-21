@@ -19,14 +19,14 @@ import qualified Koshucode.Baala.Core.Section.Section as C
 
 {-| Make quasiquoter for @[koshu| ... |]@. -}
 koshuQuoter
-    :: C.RelmapConsLex  -- ^ Relmap lex constructor
-    -> TH.ExpQ          -- ^ Quotation expression of 'RelmapConsFull'
+    :: C.ConsLexmap     -- ^ Relmap lex constructor
+    -> TH.ExpQ          -- ^ Quotation expression of 'ConsRelmap'
     -> TH.QuasiQuoter   -- ^ Quoter that outputs
                         --  'Koshucode.Baala.Core.Section.Section' or
                         --  'Koshucode.Baala.Core.Relmap.Relmap'
 koshuQuoter lx fullQ = TH.QuasiQuoter { TH.quoteExp = koshuQ lx fullQ }
 
-koshuQ :: C.RelmapConsLex -> TH.ExpQ -> String -> TH.ExpQ
+koshuQ :: C.ConsLexmap -> TH.ExpQ -> String -> TH.ExpQ
 koshuQ lx fullQ text =
     dispatch $ B.tokenLines (B.ResourceText text) text
     where
@@ -38,7 +38,7 @@ koshuQ lx fullQ text =
    Tokens like @name in section context and relmap context
    are Haskell variables. -}
 consSectionQ
-    :: TH.ExpQ      -- ^ Quotation expression of 'RelmapConsFull'
+    :: TH.ExpQ      -- ^ Quotation expression of 'ConsRelmap'
     -> [C.Clause]   -- ^ Materials of section
     -> TH.ExpQ      -- ^ ExpQ of 'Section'
 consSectionQ fullQ xs =
@@ -56,7 +56,7 @@ plain _ = Nothing
 {- Construct ExpQ of Relmap
    Tokens like @name in relmap context are Haskell variables. -}
 consFullRelmapQ
-    :: TH.ExpQ     -- ^ Quotation expression of 'RelmapConsFull'
+    :: TH.ExpQ     -- ^ Quotation expression of 'ConsRelmap'
     -> C.Lexmap    -- ^ Target relmap operator
     -> TH.ExpQ     -- ^ ExpQ of 'Relmap' v
 consFullRelmapQ fullQ = make where

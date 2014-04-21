@@ -63,15 +63,15 @@ import Koshucode.Baala.Core.Relmap.Specialize
 --  Datatypes for constructing 'Relmap'.
 --
 --  * Data 'RelmapCons' has
---    'RelmapConsLex' and
---    'RelmapConsFull'.
+--    'ConsLexmap' and
+--    'ConsRelmap'.
 --
---  * Type 'RelmapConsLex' has
+--  * Type 'ConsLexmap' has
 --    'Lexmap',
 --    'Koshucode.Baala.Base.Syntax.Tokenize.TokenLine' and
 --    'Koshucode.Baala.Base.Syntax.TokenTree.TokenTree'.
 --
---  * Type 'RelmapConsFull' has
+--  * Type 'ConsRelmap' has
 --    'Lexmap' and
 --    'Relmap'.
 --

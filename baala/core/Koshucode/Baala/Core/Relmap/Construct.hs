@@ -1,12 +1,15 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | 'C.Relmap' construction.
+-- | Construct 'C.Lexmap' and 'C.Relmap'.
 
 module Koshucode.Baala.Core.Relmap.Construct
-( relmapCons,
+( -- * Data type
   RelmapCons (..),
-  RelmapConsLex,
-  RelmapConsFull,
+  ConsLexmap,
+  ConsRelmap,
+
+  -- * Function
+  relmapCons,
 
   -- * Construction process
   -- $ConstructionProcess
@@ -21,12 +24,18 @@ import qualified Koshucode.Baala.Core.Message          as Message
 
 -- ----------------------  Constructions
 
--- | Make lex and full relmap constructors.
+-- | Constructor of lexmap and relmap.
+data RelmapCons c = RelmapCons ConsLexmap (ConsRelmap c)
+
+instance Show (RelmapCons c) where
+    show _ = "RelmapCons <lex> <full>"
+
+-- | Make a constructor pair of lexmap and relmap.
 relmapCons :: C.Global c -> (RelmapCons c)
 relmapCons global = make $ unzip $ map pair $ C.globalRops global where
     make (lxs, fulls) =
-        let consLex  = relmapConsLex lxs
-            consFull = relmapConsFull global fulls
+        let consLex  = consLexmap lxs
+            consFull = consRelmap global fulls
         in RelmapCons consLex consFull
 
     pair (C.Rop name _ sorter cons synopsis) =
@@ -34,24 +43,17 @@ relmapCons global = make $ unzip $ map pair $ C.globalRops global where
             full = (name, cons)
         in (lx, full)
 
--- | Lex and full relmap constructor
-data RelmapCons c = RelmapCons RelmapConsLex (RelmapConsFull c)
-
-instance Show (RelmapCons c) where
-    show _ = "RelmapCons <lex> <full>"
 
 
 -- ----------------------  Lex construction
 
 -- | First step of constructing relmap,
---   make 'C.Lexmap' from use of relmap operator.
-type RelmapConsLex
-    =  [B.TokenTree]   -- ^ Source of relmap operator
-    -> B.Ab C.Lexmap   -- ^ Result lex relmap
+--   make lexmap from source of relmap operator.
+type ConsLexmap = [B.TokenTree] -> B.Ab C.Lexmap
 
-relmapConsLex :: [B.Named (String, C.RopFullSorter)] -> RelmapConsLex
-relmapConsLex lxs = consLex where
-    consLex :: RelmapConsLex
+consLexmap :: [B.Named (String, C.RopFullSorter)] -> ConsLexmap
+consLexmap lxs = consLex where
+    consLex :: ConsLexmap
     consLex trees =
         B.abortable "lexmap" (B.front $ B.untrees trees) $
          case B.divideTreesByBar trees of
@@ -84,14 +86,11 @@ relmapConsLex lxs = consLex where
 -- ----------------------  Full construction
 
 -- | Second step of constructing relmap,
---   make 'C.Relmap' from contents of 'C.Lexmap'.
-type RelmapConsFull c
-    = C.Lexmap            -- ^ Lexical relmap
-    -> B.Ab (C.Relmap c)  -- ^ Result full relmap
+--   make relmap from contents of lexmap.
+type ConsRelmap c = C.Lexmap -> B.Ab (C.Relmap c)
 
--- | Construct (full) relmap.
-relmapConsFull :: C.Global c -> [B.Named (C.RopCons c)] -> RelmapConsFull c
-relmapConsFull global fulls = consFull where
+consRelmap :: C.Global c -> [B.Named (C.RopCons c)] -> ConsRelmap c
+consRelmap global fulls = consFull where
     consFull lx =
         let op    = C.lexOpText lx
             subHs = C.lexSubrelmap lx
@@ -108,7 +107,7 @@ relmapConsFull global fulls = consFull where
 --  Construction process of lex relmaps from source trees.
 --
 --  [@\[TokenTree\] -> \[\[TokenTree\]\]@]
---     Dicide list of 'B.TokenTree' by vertical bar (@|@).
+--     Divide list of 'B.TokenTree' by vertical bar (@|@).
 --
 --  [@\[\[TokenTree\]\] -> \[Lexmap\]@]
 --     Construct each 'C.Lexmap' from lists of 'B.TokenTree'.

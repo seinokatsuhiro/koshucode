@@ -65,7 +65,7 @@ clauseTypeText (Clause _ body) =
 --   Result clause list does not contain
 --   'CRelmap' and 'CAssert'. Instead of them,
 --   'TRelmap' and 'TAssert' are contained.
---   This function does not depend on 'C.RelmapConsLex'.
+--   This function does not depend on 'C.ConsLexmap'.
 --
 --   >>> consPreclause . B.tokenize $ "a : source A /x /y"
 --   [ TRelmap ( TokenClause
@@ -166,17 +166,17 @@ wordPairs toks =
 -- | Construct 'Clause' list from 'B.Token' list.
 --   This is a first step of constructing 'Section'.
 consClause
-    :: C.RelmapConsLex          -- ^ Relmap lex constructor
+    :: C.ConsLexmap             -- ^ Relmap lex constructor
     -> [B.TokenLine]            -- ^ Source tokens
     -> B.Ab [B.Short [Clause]]  -- ^ Result clauses
 consClause lx = clauseLexClause lx . shortSections . consPreclause
 
-clauseLexClause :: C.RelmapConsLex -> B.AbMap [B.Short [Clause]]
+clauseLexClause :: C.ConsLexmap -> B.AbMap [B.Short [Clause]]
 clauseLexClause lx = sequence . map B.shortAb . f where
     f :: [B.Short [Clause]] -> [B.Short (B.Ab [Clause])]
     f = map $ fmap (clauseLex lx)
 
-clauseLex :: C.RelmapConsLex -> B.AbMap [Clause]
+clauseLex :: C.ConsLexmap -> B.AbMap [Clause]
 clauseLex lx = mapM clause where
     clause :: B.AbMap Clause
     clause (Clause src bd)      = Right . Clause src        =<< body bd
