@@ -6,6 +6,7 @@ module Koshucode.Baala.Core.Relmap.Operand
 ( -- * Full sorter
   RopFullSorter,
   ropFullSorter,
+  ropBaseSorter,
 
   -- * Branch sorter
   RopOperandAssoc,
@@ -40,23 +41,32 @@ import qualified Koshucode.Baala.Core.Message as Message
 type RopFullSorter = [B.TokenTree] -> B.Ab RopOperandAssoc
 
 ropFullSorter :: RopOperandSorter -> RopFullSorter
-ropFullSorter (trunkSorter, trunkNames, branchNames) trees = sorted where
+ropFullSorter sorter = ropUserSorter sorter B.<=< ropBaseSorter
 
+ropBaseSorter :: RopFullSorter
+ropBaseSorter trees = sorted where
     assoc :: RopOperandAssoc
     assoc = ropOperandAssoc trees
 
-    alls, given, unk, wrap, dup :: [String]
+    dup :: [String]
+    dup = map fst $ B.assocMore $ B.assocGather assoc
+
+    sorted :: B.Ab RopOperandAssoc
+    sorted | null dup   = Right assoc
+           | otherwise  = Message.unexpOperand $ "Duplicate " ++ unwords dup
+
+ropUserSorter :: RopOperandSorter -> B.AbMap RopOperandAssoc
+ropUserSorter (trunkSorter, trunkNames, branchNames) assoc = sorted where
+    alls, given, unk, wrap :: [String]
     alls  = "" : trunkNames ++ branchNames
     given = map fst assoc
     unk   = given  List.\\  alls
     wrap  = given `List.intersect` trunkNames
-    dup   = map fst $ B.assocMore $ B.assocGather assoc
 
     exists = not . null
 
     sorted :: B.Ab RopOperandAssoc
-    sorted | exists dup  = Message.unexpOperand $ "Duplicate " ++ unwords dup
-           | exists unk  = Message.unexpOperand $ "Unknown "   ++ unwords unk
+    sorted | exists unk  = Message.unexpOperand $ "Unknown " ++ unwords unk
            | exists wrap = Right assoc
            | otherwise   = trunkSorter assoc
 

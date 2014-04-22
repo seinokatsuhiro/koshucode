@@ -45,7 +45,7 @@ relmapCons global = make $ unzip $ map pair $ C.globalRops global where
 
 
 
--- ----------------------  Lex construction
+-- ----------------------  Lexmap
 
 -- | First step of constructing relmap,
 --   make lexmap from source of relmap operator.
@@ -66,24 +66,26 @@ consLexmap lxs = consLex where
     find :: B.Token -> [B.TokenTree] -> B.Ab C.Lexmap
     find op trees =
         case lookup (B.tokenContent op) lxs of
-          Nothing -> Right $ lx op trees [] "<reference>"
+          Nothing ->
+              do sorted <- C.ropBaseSorter trees
+                 Right $ lexmap op trees sorted "<derived>"
           Just (usage, operandSorter) ->
               do sorted <- operandSorter trees
-                 subrelmap $ lx op trees sorted usage
+                 submap $ lexmap op trees sorted usage
 
-    lx :: B.Token -> [B.TokenTree] -> [B.Named [B.TokenTree]] -> String -> C.Lexmap
-    lx op trees sorted usage =
+    lexmap :: B.Token -> [B.TokenTree] -> [B.Named [B.TokenTree]] -> String -> C.Lexmap
+    lexmap op trees sorted usage =
         C.Lexmap op (("operand", trees) : sorted) [] usage
 
-    subrelmap :: B.AbMap C.Lexmap
-    subrelmap h@C.Lexmap { C.lexOperand = od } =
+    submap :: B.AbMap C.Lexmap
+    submap lx@C.Lexmap { C.lexOperand = od } =
         case lookup "-relmap" od of
-          Nothing    -> Right h   -- no subrelmaps
+          Nothing    -> Right lx   -- no submaps
           Just trees -> do subs <- mapM (consLex . B.singleton) trees
-                           Right $ h { C.lexSubrelmap = subs }
+                           Right $ lx { C.lexSubmap = subs }
 
 
--- ----------------------  Full construction
+-- ----------------------  Generic relmap
 
 -- | Second step of constructing relmap,
 --   make relmap from contents of lexmap.
@@ -93,7 +95,7 @@ consRelmap :: C.Global c -> [B.Named (C.RopCons c)] -> ConsRelmap c
 consRelmap global fulls = consFull where
     consFull lx =
         let op    = C.lexOpText lx
-            subHs = C.lexSubrelmap lx
+            subHs = C.lexSubmap lx
         in case lookup op fulls of
              Nothing   -> Right $ C.RelmapLink lx op
              Just cons -> B.abortableFrom "relmap" lx $
@@ -111,10 +113,10 @@ consRelmap global fulls = consFull where
 --
 --  [@\[\[TokenTree\]\] -> \[Lexmap\]@]
 --     Construct each 'C.Lexmap' from lists of 'B.TokenTree'.
---     When there are subrelmaps in token trees,
+--     When there are submaps in token trees,
 --     constructs 'C.Lexmap' recursively.
 --
 --  [@\[Lexmap\] -> Lexmap@]
 --     Wrap list of 'C.Lexmap' into one 'C.Lexmap'
---     that has these relmaps in 'C.lexSubrelmap'.
+--     that has these relmaps in 'C.lexSubmap'.
 --

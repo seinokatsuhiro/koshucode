@@ -1,7 +1,10 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Prelude.Import
-( -- * Data.Maybe
+( -- * Control.Monad
+  (Control.Monad.<=<),
+
+  -- * Data.Maybe
   Data.Maybe.catMaybes,
   Data.Maybe.fromJust,
 
@@ -17,6 +20,7 @@ module Koshucode.Baala.Base.Prelude.Import
   Text.PrettyPrint.nest,
 ) where
 
+import Control.Monad
 import Data.Maybe
 import Data.Monoid
 import Text.PrettyPrint
