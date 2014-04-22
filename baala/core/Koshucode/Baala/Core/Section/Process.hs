@@ -81,9 +81,9 @@ runSectionBody global C.Section { C.sectionRelmap = rdef, C.sectionAssert = ass2
        judgesN <- run $ C.assertNormal   ass2
        Right (B.shortTrim judgesV, B.shortTrim judgesN)
     where
-      run :: C.AbbrAsserts c -> B.Ab ([B.OutputChunks c])
+      run :: C.ShortAsserts c -> B.Ab ([B.OutputChunks c])
       run = sequence . map B.shortAb . run2
 
-      run2 :: C.AbbrAsserts c -> [B.Short (B.Ab [B.OutputChunk c])]
+      run2 :: C.ShortAsserts c -> [B.Short (B.Ab [B.OutputChunk c])]
       run2 = B.shortMap $ C.runAssertJudges global rdef
 

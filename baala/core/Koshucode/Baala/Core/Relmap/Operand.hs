@@ -3,18 +3,20 @@
 -- | Operand sorters for relmap operators.
 
 module Koshucode.Baala.Core.Relmap.Operand
-( -- * Full sorter
+( -- * Data type
+  RopOperand,
   RopFullSorter,
+  RopOperandSorter,
+  RopTrunkSorter,
+
+  -- * Full sorter
   ropFullSorter,
   ropBaseSorter,
 
   -- * Branch sorter
-  RopOperandAssoc,
   ropOperandAssoc,
 
   -- * Trunk sorter
-  RopOperandSorter,
-  RopTrunkSorter,
   sortNone,
   sortEnum,
   sortList,
@@ -33,29 +35,50 @@ import qualified Koshucode.Baala.Core.Message as Message
 
 
 
--- ----------------------  Full sorter
+-- ----------------------  Data type
+
+-- | Relmap operand as association list.
+type RopOperand = [B.Named [B.TokenTree]]
 
 -- | Sorter for operand of relmap operator.
 --   Sorters docompose operand trees,
 --   and give a name to suboperand.
-type RopFullSorter = [B.TokenTree] -> B.Ab RopOperandAssoc
+type RopFullSorter = [B.TokenTree] -> B.Ab RopOperand
+
+-- | Operand sorter for relmap operator.
+--   It consists of trunk sorter, trunk names, and branch names.
+--   Trunk part is unnamed operand.
+--   Branch part is named operand.
+type RopOperandSorter =
+    ( RopTrunkSorter  -- Trunk sorter
+    , [String]        -- Trunk names
+    , [String]        -- Branch names
+    )
+
+-- | Mapping from basically sorted operand
+--   to fully sorted operand.
+type RopTrunkSorter =  B.AbMap RopOperand
+
+
+
+-- ----------------------  Full sorter
 
 ropFullSorter :: RopOperandSorter -> RopFullSorter
 ropFullSorter sorter = ropUserSorter sorter B.<=< ropBaseSorter
 
 ropBaseSorter :: RopFullSorter
 ropBaseSorter trees = sorted where
-    assoc :: RopOperandAssoc
+    assoc :: RopOperand
     assoc = ropOperandAssoc trees
 
     dup :: [String]
     dup = map fst $ B.assocMore $ B.assocGather assoc
 
-    sorted :: B.Ab RopOperandAssoc
+    sorted :: B.Ab RopOperand
     sorted | null dup   = Right assoc
            | otherwise  = Message.unexpOperand $ "Duplicate " ++ unwords dup
 
-ropUserSorter :: RopOperandSorter -> B.AbMap RopOperandAssoc
+ropUserSorter :: RopOperandSorter -> B.AbMap RopOperand
 ropUserSorter (trunkSorter, trunkNames, branchNames) assoc = sorted where
     alls, given, unk, wrap :: [String]
     alls  = "" : trunkNames ++ branchNames
@@ -65,7 +88,7 @@ ropUserSorter (trunkSorter, trunkNames, branchNames) assoc = sorted where
 
     exists = not . null
 
-    sorted :: B.Ab RopOperandAssoc
+    sorted :: B.Ab RopOperand
     sorted | exists unk  = Message.unexpOperand $ "Unknown " ++ unwords unk
            | exists wrap = Right assoc
            | otherwise   = trunkSorter assoc
@@ -73,9 +96,6 @@ ropUserSorter (trunkSorter, trunkNames, branchNames) assoc = sorted where
 
 
 -- ----------------------  Branch sorter
-
--- | Relmap operand as association list.
-type RopOperandAssoc = [B.Named [B.TokenTree]]
 
 -- | Split operand into named group.
 --   Non quoted words beginning with hyphen, e.g., @-x@,
@@ -86,7 +106,7 @@ type RopOperandAssoc = [B.Named [B.TokenTree]]
 --   , ("-x", [TreeL (TTerm 7 ["/c"]), TreeL (TWord 9 1 "d")])
 --   , ("-y", [TreeL (TWord 14 0 "e")]) ]
 --
-ropOperandAssoc :: [B.TokenTree] -> RopOperandAssoc
+ropOperandAssoc :: [B.TokenTree] -> RopOperand
 ropOperandAssoc = B.assocBy maybeBranch "" where
     maybeBranch (B.TreeL (B.TWord _ 0 n@('-' : _))) = Just n
     maybeBranch _ = Nothing
@@ -114,20 +134,6 @@ ropOperandAssoc = B.assocBy maybeBranch "" where
 --  One and any number of operands.
 --
 --    > sortOneList "-pattern" "-term" []
-
--- | Operand sorter for relmap operator.
---   It consists of trunk sorter, trunk names, and branch names.
---   Trunk part is unnamed operand.
---   Branch part is named operand.
-type RopOperandSorter =
-    ( RopTrunkSorter  -- Trunk sorter
-    , [String]        -- Trunk names
-    , [String]        -- Branch names
-    )
-
--- | Mapping from basically sorted operand
---   to fully sorted operand.
-type RopTrunkSorter =  B.AbMap RopOperandAssoc
 
 -- | Operand sorter for no-element trunk.
 sortNone :: [String] -> RopOperandSorter

@@ -20,42 +20,48 @@ import qualified Koshucode.Baala.Base         as B
 import qualified Koshucode.Baala.Core.Relmap  as C
 import qualified Koshucode.Baala.Core.Assert  as C
 
+
+
+-- ----------------------  Data type
+
 data Clause =
     Clause { clauseSource :: B.TokenClause
            , clauseBody   :: ClauseBody
            } deriving (Show, G.Data, G.Typeable)
 
 data ClauseBody
-    = CSection  (Maybe String)                 -- ^ Section name
-    | CImport   [B.Token] (Maybe Clause)       -- ^ Importing section name
-    | CExport   String                         -- ^ Exporting relmap name
-    | CShort    [(B.Named String)]             -- ^ Short signs
-    | CRelmap   String C.Lexmap                -- ^ Relmap and its name
-    | TRelmap   String [B.Token]               -- ^ Not include Lexmap
-    | CAssert   C.AssertType B.JudgePattern C.AssertOption C.Lexmap   -- ^ Assertions of relmaps
-    | TAssert   C.AssertType B.JudgePattern C.AssertOption [B.Token]   -- ^ Not include Lexmap
-    | CJudge    Bool B.JudgePattern [B.Token]  -- ^ Judge
-    | CComment                                 -- ^ Clause comment
-    | CUnknown                                 -- ^ Unknown clause
-    | CUnres    [B.Token]                      -- ^ Unresolved short sign
+    = CSection    (Maybe String)                 -- ^ Section name
+    | CImport     [B.Token] (Maybe Clause)       -- ^ Importing section name
+    | CExport     String                         -- ^ Exporting relmap name
+    | CShort      [(B.Named String)]             -- ^ Short signs
+    | CRelmapUse  String C.RopOperand C.Lexmap   -- ^ Lexmap and its name
+    | TRelmapDef  String [B.TokenTree]
+    | TRelmap     String [B.Token]               -- ^ Not include Lexmap
+    | CAssert     C.AssertType B.JudgePattern C.AssertOption C.Lexmap   -- ^ Assertions of relmaps
+    | TAssert     C.AssertType B.JudgePattern C.AssertOption [B.Token]   -- ^ Not include Lexmap
+    | CJudge      Bool B.JudgePattern [B.Token]  -- ^ Judge
+    | CComment                                   -- ^ Clause comment
+    | CUnknown                                   -- ^ Unknown clause
+    | CUnres      [B.Token]                      -- ^ Unresolved short sign
       deriving (Show, G.Data, G.Typeable)
 
 -- | Name of clause type. e.g., @\"Relmap\"@, @\"Assert\"@.
 clauseTypeText :: Clause -> String
 clauseTypeText (Clause _ body) =
     case body of
-      CSection _         ->  "Section"
-      CImport  _ _       ->  "Import"
-      CExport  _         ->  "Export"
-      CShort   _         ->  "Short"
-      CRelmap  _ _       ->  "Relmap"
-      TRelmap  _ _       ->  "Relmap"
-      CAssert  _ _ _ _   ->  "Assert"
-      TAssert  _ _ _ _   ->  "Assert"
-      CJudge   _ _ _     ->  "Judge"
-      CComment           ->  "Comment"
-      CUnknown           ->  "Unknown"
-      CUnres   _         ->  "Unres"
+      CSection   _         ->  "Section"
+      CImport    _ _       ->  "Import"
+      CExport    _         ->  "Export"
+      CShort     _         ->  "Short"
+      CRelmapUse _ _ _     ->  "RelmapUse"
+      TRelmapDef _ _       ->  "RelmapDef"
+      TRelmap    _ _       ->  "Relmap"
+      CAssert    _ _ _ _   ->  "Assert"
+      TAssert    _ _ _ _   ->  "Assert"
+      CJudge     _ _ _     ->  "Judge"
+      CComment             ->  "Comment"
+      CUnknown             ->  "Unknown"
+      CUnres     _         ->  "Unres"
 
 
 
@@ -63,7 +69,7 @@ clauseTypeText (Clause _ body) =
 
 -- | Convert token list into clause list.
 --   Result clause list does not contain
---   'CRelmap' and 'CAssert'. Instead of them,
+--   'CRelmapUse' and 'CAssert'. Instead of them,
 --   'TRelmap' and 'TAssert' are contained.
 --   This function does not depend on 'C.ConsLexmap'.
 --
@@ -161,7 +167,7 @@ wordPairs toks =
       wordPair _ = Nothing
 
 
--- ----------------------  Lex construction
+-- ----------------------  Lexmap construction
 
 -- | Construct 'Clause' list from 'B.Token' list.
 --   This is a first step of constructing 'Section'.
@@ -174,20 +180,29 @@ consClause lx = clauseLexClause lx . shortSections . consPreclause
 clauseLexClause :: C.ConsLexmap -> B.AbMap [B.Short [Clause]]
 clauseLexClause lx = sequence . map B.shortAb . f where
     f :: [B.Short [Clause]] -> [B.Short (B.Ab [Clause])]
-    f = map $ fmap (clauseLex lx)
+    f = map $ fmap (clauseLexUse lx . clauseLexDef)
 
-clauseLex :: C.ConsLexmap -> B.AbMap [Clause]
-clauseLex lx = mapM clause where
+clauseLexDef :: B.Map [Clause]
+clauseLexDef = map clause where
+    clause :: B.Map Clause
+    clause (Clause src bd) = Clause src $ def bd
+
+    def :: B.Map ClauseBody
+    def (TRelmap n ts) = TRelmapDef n $ B.tokenTrees ts
+    def bd             = bd
+
+clauseLexUse :: C.ConsLexmap -> B.AbMap [Clause]
+clauseLexUse lx = mapM clause where
     clause :: B.AbMap Clause
-    clause (Clause src bd)      = Right . Clause src        =<< body bd
+    clause (Clause src bd)    = Right . Clause src      =<< body bd
 
     body :: B.AbMap ClauseBody
-    body (TRelmap n ts)       = Right . CRelmap n       =<< relmap ts
-    body (TAssert q p opt ts) = Right . CAssert q p opt =<< relmap ts
+    body (TRelmapDef n trees) = Right . CRelmapUse n [] =<< lx trees
+    body (TAssert q p opt ts) = Right . CAssert q p opt =<< lx (B.tokenTrees ts)
     body bd                   = Right bd
 
-    relmap :: [B.Token] -> B.Ab C.Lexmap
-    relmap = lx . B.tokenTrees
+
+-- ----------------------  Short-to-long conversion
 
 shortSections :: [Clause] -> [B.Short [Clause]]
 shortSections [] = []
@@ -195,7 +210,7 @@ shortSections xxs@(x : xs)
     | isCShort x = f xs $ shorts x
     | otherwise  = f xxs []
     where f cl sh = case span (not . isCShort) cl of
-                       (xs1, xs2) -> B.Short sh (longSign sh xs1)
+                       (xs1, xs2) -> B.Short sh (shortToLong sh xs1)
                                      : shortSections xs2
 
 isCShort :: Clause -> Bool
@@ -206,9 +221,9 @@ shorts :: Clause -> [B.Named String]
 shorts (Clause _ (CShort s)) = s
 shorts _ = []
 
-longSign :: [B.Named String] -> B.Map [Clause]
-longSign [] = id
-longSign sh = map clause where
+shortToLong :: [B.Named String] -> B.Map [Clause]
+shortToLong [] = id
+shortToLong sh = map clause where
     clause :: B.Map Clause
     clause cl@(Clause src b) =
         case b of
@@ -231,6 +246,21 @@ longSign sh = map clause where
           Just l  -> B.TWord n 2 $ l ++ b
           Nothing -> token
     long token = token
+
+
+-- ----------------------  Substitution
+
+substTree :: C.RopOperand -> B.Map B.TokenTree
+substTree assoc = loop where
+    loop (B.TreeB p q sub) = B.TreeB p q $ map loop sub
+    loop tk@(B.TreeL (B.TWord _ 0 ('#' : word))) =
+        case lookup word assoc of
+          Nothing    -> tk
+          Just trees -> B.TreeB 1 Nothing trees
+    loop tk = tk
+
+substTrees :: C.RopOperand -> B.Map [B.TokenTree]
+substTrees assoc = (substTree assoc `map`)
 
 
 

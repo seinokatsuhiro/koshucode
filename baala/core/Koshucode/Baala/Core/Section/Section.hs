@@ -14,7 +14,7 @@ module Koshucode.Baala.Core.Section.Section
 
   -- * Section
   Section (..),
-  AbbrAsserts,
+  ShortAsserts,
   assertViolated,
   assertNormal,
 
@@ -33,15 +33,15 @@ import qualified Koshucode.Baala.Core.Section.Clause  as C
 import qualified Koshucode.Baala.Core.Message         as Message
 
 
--- ----------------------  Abbr
+-- ----------------------  Short
 
-assertViolated :: B.Map (AbbrAsserts c)
+assertViolated :: B.Map (ShortAsserts c)
 assertViolated = B.shortMap $ filter C.isViolateAssert
 
-assertNormal :: B.Map (AbbrAsserts c)
+assertNormal :: B.Map (ShortAsserts c)
 assertNormal = B.shortMap $ filter $ not . C.isViolateAssert
 
-type AbbrAsserts c = [B.Short [C.Assert c]]
+type ShortAsserts c = [B.Short [C.Assert c]]
 
 
 -- ----------------------  Section
@@ -51,8 +51,8 @@ data Section c = Section {
     , sectionImport   :: [Section c]         -- ^ Importing section
     , sectionExport   :: [String]            -- ^ Exporting relmap names
     , sectionShort    :: [[B.Named String]]  -- ^ Prefix for short signs
-    , sectionAssert   :: AbbrAsserts c       -- ^ Assertions of relmaps
-    , sectionRelmap   :: [C.RelmapDef c]     -- ^ Relmaps and its name
+    , sectionAssert   :: ShortAsserts c      -- ^ Assertions of relmaps
+    , sectionRelmap   :: [C.RelmapAssoc c]   -- ^ Relmaps and its name
     , sectionJudge    :: [B.Judge c]         -- ^ Affirmative or denial judgements
     , sectionViolate  :: [B.Judge c]         -- ^ Violated judgements, i.e., result of @|=V@
     , sectionResource :: B.Resource          -- ^ Resource name
@@ -63,7 +63,7 @@ instance (Ord c, B.Pretty c) => B.Pretty (Section c) where
     doc sec = dSection where
         dSection = B.docv [dRelmap, dAssert, dJudge]
         dRelmap  = B.docv $ map docRelmap $ sectionRelmap sec
-        docRelmap (n,m) = B.docZero (n ++ " :") B.<+> B.doc m B.$$ B.doc ""
+        docRelmap ((n, _),m) = B.docZero (n ++ " :") B.<+> B.doc m B.$$ B.doc ""
         dJudge   = B.docv $ sectionJudge sec
         dAssert  = B.docv $ concatMap B.shortBody $ sectionAssert sec
 
@@ -120,7 +120,7 @@ consSectionEach consFull resource (B.Short shorts xs) =
        _        <-  mapMFor unres  isCUnres
        imports  <-  mapMFor impt   isCImport
        judges   <-  mapMFor judge  isCJudge 
-       relmaps  <-  mapMFor relmap isCRelmap
+       relmaps  <-  mapMFor relmap isCRelmapUse
        asserts  <-  mapMFor assert isCAssert
 
        Right $ emptySection
@@ -158,10 +158,10 @@ consSectionEach consFull resource (B.Short shorts xs) =
             Right j -> Right j
             Left  a -> abort a
 
-      relmap :: [B.Token] -> C.ClauseBody -> B.Ab (C.RelmapDef c)
-      relmap _ (C.CRelmap name lx) =
+      relmap :: [B.Token] -> C.ClauseBody -> B.Ab (C.RelmapAssoc c)
+      relmap _ (C.CRelmapUse name od lx) =
           case consFull lx of
-            Right full -> Right (name, full)
+            Right full -> Right ((name, od), full)
             Left a     -> abort a
 
       assert :: [B.Token] -> C.ClauseBody -> B.Ab (C.Assert c)
@@ -175,32 +175,32 @@ consSectionEach consFull resource (B.Short shorts xs) =
       abort a = Left a
 
 isCImport, isCExport, isCShort,
-  isCRelmap, isCAssert, isCJudge,
+  isCRelmapUse, isCAssert, isCJudge,
   isCUnknown, isCUnres :: C.ClauseBody -> Bool
 
-isCImport (C.CImport _ _)       = True
-isCImport _                     = False
+isCImport (C.CImport _ _)         = True
+isCImport _                       = False
 
-isCExport (C.CExport _)         = True
-isCExport _                     = False
+isCExport (C.CExport _)           = True
+isCExport _                       = False
 
-isCShort (C.CShort _)           = True
-isCShort _                      = False
+isCShort (C.CShort _)             = True
+isCShort _                        = False
 
-isCRelmap (C.CRelmap _ _)       = True
-isCRelmap _                     = False
+isCRelmapUse (C.CRelmapUse _ _ _) = True
+isCRelmapUse _                    = False
 
-isCAssert (C.CAssert _ _ _ _)   = True
-isCAssert _                     = False
+isCAssert (C.CAssert _ _ _ _)     = True
+isCAssert _                       = False
 
-isCJudge (C.CJudge _ _ _)       = True
-isCJudge _                      = False
+isCJudge (C.CJudge _ _ _)         = True
+isCJudge _                        = False
 
-isCUnknown (C.CUnknown)         = True
-isCUnknown _                    = False
+isCUnknown (C.CUnknown)           = True
+isCUnknown _                      = False
 
-isCUnres (C.CUnres _)           = True
-isCUnres _                      = False
+isCUnres (C.CUnres _)             = True
+isCUnres _                        = False
 
 
 
