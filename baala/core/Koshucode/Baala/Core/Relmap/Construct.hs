@@ -95,9 +95,10 @@ consRelmap :: C.Global c -> [B.Named (C.RopCons c)] -> ConsRelmap c
 consRelmap global fulls = consFull where
     consFull lx =
         let op    = C.lexOpText lx
+            od    = C.lexOperand lx
             subHs = C.lexSubmap lx
         in case lookup op fulls of
-             Nothing   -> Right $ C.RelmapLink lx op
+             Nothing   -> Right $ C.RelmapLink lx op od
              Just cons -> B.abortableFrom "relmap" lx $
                           do subFs <- mapM consFull subHs
                              cons $ C.RopUse global lx subFs

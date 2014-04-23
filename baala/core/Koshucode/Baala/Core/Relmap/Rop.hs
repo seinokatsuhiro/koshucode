@@ -89,7 +89,7 @@ data Relmap c
       -- ^ Relmap for environment of input relation
     | RelmapWith     C.Lexmap [(B.TermName, String)] (Relmap c)
       -- ^ Relmap for environment of nested relations
-    | RelmapLink     C.Lexmap String
+    | RelmapLink     C.Lexmap String C.Rod
       -- ^ Relmap reference
 
     | RelmapAppend   (Relmap c) (Relmap c)
@@ -116,7 +116,7 @@ showRelmap r = sh r where
 
     sh (RelmapCopy _ n r1)    = "RelmapCopy "   ++ show n ++ joinSubs [r1]
     sh (RelmapWith _ ns r1)   = "RelmapWith "   ++ show ns ++ joinSubs [r1]
-    sh (RelmapLink _ n)       = "RelmapLink "   ++ show n
+    sh (RelmapLink _ n _)     = "RelmapLink "   ++ show n
     sh (RelmapAppend r1 r2)   = "RelmapAppend"  ++ joinSubs [r1, r2]
 
     joinSubs = concatMap sub
@@ -148,7 +148,7 @@ instance B.Pretty (Relmap c) where
 
     doc (RelmapCopy   _ _ r1)  = B.doc r1
     doc (RelmapWith   _ _ r1)  = B.doc r1
-    doc (RelmapLink   lx _)    = B.doc lx
+    doc (RelmapLink   lx _ _)  = B.doc lx
     doc (RelmapAppend r1 r2)   = B.docHang (B.doc r1) 2 (docRelmapAppend r2)
 
 docRelmapAppend :: Relmap c -> B.Doc
@@ -185,7 +185,7 @@ relmapLexList = collect where
 
     collect (RelmapCopy    lx _ _)  = [lx]
     collect (RelmapWith    lx _ _)  = [lx]
-    collect (RelmapLink    lx _)    = [lx]
+    collect (RelmapLink    lx _ _)  = [lx]
     collect (RelmapAppend  r1 r2)   = collect r1 ++ collect r2
 
 

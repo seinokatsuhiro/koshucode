@@ -45,10 +45,10 @@ relmapSpecialize global rdef = spec [] [] where
                      kit <- makeKit global he1
                      Right (kdef, kit)
 
-              C.RelmapLink lx n ->
+              C.RelmapLink lx n od ->
                   post lx $ case lookup n with of
                      Just he -> Right (kdef, C.relkitNest n he)
-                     Nothing -> case lookup (n ,[]) rdef of
+                     Nothing -> case lookup (n, od) rdef of
                        Nothing    -> Message.unkRelmap n
                        Just rmap1 -> link n rmap1 (he1, C.relmapLexList rmap1)
 

@@ -94,7 +94,8 @@ consJoinUp use =
 
 relmapJoinUp :: (Ord c) => C.RopUse c -> [B.TermName] -> C.Relmap c
 relmapJoinUp use ns = C.relmapWith use (zip ns ns) $ Op.relmapJoinList use rmaps where
-    rmaps = C.relmapLink use `map` ns
+    rmaps = link `map` ns
+    link n = C.relmapLink use n []
 
 
 

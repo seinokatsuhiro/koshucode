@@ -162,7 +162,7 @@ consGroupBy use =
 relmapGroupBy :: (Ord c, C.CRel c) => C.RopUse c -> B.TermName -> B.Map (C.Relmap c)
 relmapGroupBy use n rmap = C.relmapCopy use n rmapGroup where
     rmapGroup = rmap `B.mappend` relmapGroup use n rmapCopy
-    rmapCopy  = C.relmapLink use n
+    rmapCopy  = C.relmapLink use n []
 
 
 
@@ -259,6 +259,6 @@ relmapUnnest :: (Ord c, C.CRel c) => C.RopUse c -> B.TermName -> C.Relmap c
 relmapUnnest use n = unnest where
     unnest  =  slice `B.mappend` cut
     slice   =  relmapSliceUp use [n] meet
-    meet    =  Op.relmapMeet use $ C.relmapLink use n
+    meet    =  Op.relmapMeet use $ C.relmapLink use n []
     cut     =  Op.relmapCut use [n]
 

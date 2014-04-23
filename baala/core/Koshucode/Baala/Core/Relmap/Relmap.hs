@@ -25,6 +25,7 @@ module Koshucode.Baala.Core.Relmap.Relmap
 ) where
 
 import qualified Koshucode.Baala.Base                 as B
+import qualified Koshucode.Baala.Core.Relmap.Operand  as C
 import qualified Koshucode.Baala.Core.Relmap.Rop      as C
 
 
@@ -39,7 +40,7 @@ relmapSourceList = relmapList f where
 -- | List of name in 'C.RelmapLink'
 relmapNameList :: C.Relmap c -> [String]
 relmapNameList = relmapList f where
-    f (C.RelmapLink _ n) = [n]
+    f (C.RelmapLink _ n _) = [n]
     f _ = []
 
 relmapList :: B.Map (C.Relmap c -> [a])
@@ -107,7 +108,7 @@ relmapCopy = C.RelmapCopy . C.ropLex
 relmapWith :: C.RopUse c -> [(B.TermName, String)] -> B.Map (C.Relmap c)
 relmapWith = C.RelmapWith . C.ropLex
 
-relmapLink :: C.RopUse c -> String -> C.Relmap c
+relmapLink :: C.RopUse c -> String -> C.Rod -> C.Relmap c
 relmapLink = C.RelmapLink . C.ropLex
 
 

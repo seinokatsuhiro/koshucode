@@ -40,7 +40,7 @@ relmapBoth use rmap = C.relmapCopy use "i" rmapBoth where
     rmapBoth = rmapL `B.mappend` Op.relmapJoin use rmapR
     rmapR    = rmap  `B.mappend` relmapMaybe use rmapIn
     rmapL    = relmapMaybe use rmap
-    rmapIn   = C.relmapLink use "i"
+    rmapIn   = C.relmapLink use "i" []
 
 
 
