@@ -25,7 +25,7 @@ ropConsConcat = Right . foldl M.mappend M.mempty . C.ropSubrelmap
 -- | Make implementations of relation-mapping operators.
 ropList
     :: String      -- ^ Operator group
-    -> [(String, C.RopCons c, C.RopOperandSorter)]
+    -> [(String, C.RopCons c, C.RodSorter)]
                    -- ^ Synopsis, constructor, and operand sorter
     -> [C.Rop c]   -- ^ List of relation-mapping operators
 ropList group = map rop where

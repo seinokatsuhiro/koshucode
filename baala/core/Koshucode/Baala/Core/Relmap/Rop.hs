@@ -71,7 +71,7 @@ instance B.TokenListing (RopUse c) where
 
 -- ----------------------  Relmap
 
-type RelmapAssoc c = ((String, C.RopOperand), Relmap c)
+type RelmapAssoc c = ((String, C.Rod), Relmap c)
 
 -- | Generic relmap.
 data Relmap c

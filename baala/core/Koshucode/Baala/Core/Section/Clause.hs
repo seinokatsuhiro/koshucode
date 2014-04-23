@@ -34,11 +34,11 @@ data ClauseBody
     | CImport     [B.Token] (Maybe Clause)       -- ^ Importing section name
     | CExport     String                         -- ^ Exporting relmap name
     | CShort      [(B.Named String)]             -- ^ Short signs
-    | CRelmapUse  String C.RopOperand C.Lexmap   -- ^ Lexmap and its name
+    | CRelmapUse  String C.Rod C.Lexmap          -- ^ Lexmap and its name
     | TRelmapDef  String [B.TokenTree]
     | TRelmap     String [B.Token]               -- ^ Not include Lexmap
     | CAssert     C.AssertType B.JudgePattern C.AssertOption C.Lexmap   -- ^ Assertions of relmaps
-    | TAssert     C.AssertType B.JudgePattern C.AssertOption [B.Token]   -- ^ Not include Lexmap
+    | TAssert     C.AssertType B.JudgePattern C.AssertOption [B.Token]  -- ^ Not include Lexmap
     | CJudge      Bool B.JudgePattern [B.Token]  -- ^ Judge
     | CComment                                   -- ^ Clause comment
     | CUnknown                                   -- ^ Unknown clause
@@ -250,7 +250,7 @@ shortToLong sh = map clause where
 
 -- ----------------------  Substitution
 
-substTree :: C.RopOperand -> B.Map B.TokenTree
+substTree :: C.Rod -> B.Map B.TokenTree
 substTree assoc = loop where
     loop (B.TreeB p q sub) = B.TreeB p q $ map loop sub
     loop tk@(B.TreeL (B.TWord _ 0 ('#' : word))) =
@@ -259,9 +259,8 @@ substTree assoc = loop where
           Just trees -> B.TreeB 1 Nothing trees
     loop tk = tk
 
-substTrees :: C.RopOperand -> B.Map [B.TokenTree]
+substTrees :: C.Rod -> B.Map [B.TokenTree]
 substTrees assoc = (substTree assoc `map`)
-
 
 
 -- ----------------------
