@@ -47,39 +47,39 @@ type ShortAsserts c = [B.Short [C.Assert c]]
 -- ----------------------  Section
 
 data Section c = Section {
-      sectionName     :: Maybe String        -- ^ Section name
-    , sectionImport   :: [Section c]         -- ^ Importing section
-    , sectionExport   :: [String]            -- ^ Exporting relmap names
-    , sectionShort    :: [[B.Named String]]  -- ^ Prefix for short signs
-    , sectionAssert   :: ShortAsserts c      -- ^ Assertions of relmaps
-    , sectionRelmap   :: [C.RelmapAssoc c]   -- ^ Relmaps and its name
-    , sectionJudge    :: [B.Judge c]         -- ^ Affirmative or denial judgements
-    , sectionViolate  :: [B.Judge c]         -- ^ Violated judgements, i.e., result of @|=V@
-    , sectionResource :: B.Resource          -- ^ Resource name
-    , sectionCons     :: C.RelmapCons c      -- ^ Relmap constructor for this section
+      secName     :: Maybe String        -- ^ Section name
+    , secImport   :: [Section c]         -- ^ Importing section
+    , secExport   :: [String]            -- ^ Exporting relmap names
+    , secShort    :: [[B.Named String]]  -- ^ Prefix for short signs
+    , secAssert   :: ShortAsserts c      -- ^ Assertions of relmaps
+    , secRelmap   :: [C.RelmapAssoc c]   -- ^ Relmaps and its name
+    , secJudge    :: [B.Judge c]         -- ^ Affirmative or denial judgements
+    , secViolate  :: [B.Judge c]         -- ^ Violated judgements, i.e., result of @|=V@
+    , secResource :: B.Resource          -- ^ Resource name
+    , secCons     :: C.RelmapCons c      -- ^ Relmap constructor for this section
     } deriving (Show)
 
 instance (Ord c, B.Pretty c) => B.Pretty (Section c) where
     doc sec = dSection where
         dSection = B.docv [dRelmap, dAssert, dJudge]
-        dRelmap  = B.docv $ map docRelmap $ sectionRelmap sec
+        dRelmap  = B.docv $ map docRelmap $ secRelmap sec
         docRelmap ((n, _),m) = B.docZero (n ++ " :") B.<+> B.doc m B.$$ B.doc ""
-        dJudge   = B.docv $ sectionJudge sec
-        dAssert  = B.docv $ concatMap B.shortBody $ sectionAssert sec
+        dJudge   = B.docv $ secJudge sec
+        dAssert  = B.docv $ concatMap B.shortBody $ secAssert sec
 
 instance M.Monoid (Section c) where
     mempty  = emptySection
-    mappend = sectionUnion
+    mappend = secUnion
 
-sectionUnion :: Section c -> Section c -> Section c
-sectionUnion s1 s2 =
-    s1 { sectionName    = Nothing
-       , sectionImport  = []
-       , sectionExport  = union sectionExport
-       , sectionAssert  = union sectionAssert
-       , sectionRelmap  = union sectionRelmap
-       , sectionJudge   = union sectionJudge
-       , sectionViolate = union sectionViolate
+secUnion :: Section c -> Section c -> Section c
+secUnion s1 s2 =
+    s1 { secName    = Nothing
+       , secImport  = []
+       , secExport  = union secExport
+       , secAssert  = union secAssert
+       , secRelmap  = union secRelmap
+       , secJudge   = union secJudge
+       , secViolate = union secViolate
        } where union f  = f s1 ++ f s2
 
 {-| Make empty section that has a given constructor. -}
@@ -92,7 +92,7 @@ emptySection = makeEmptySection $ C.relmapCons C.global
 
 -- {-| Section that has only judgements. -}
 -- dataSection :: [B.Judge c] -> Section c
--- dataSection js = emptySection { sectionJudge = js }
+-- dataSection js = emptySection { secJudge = js }
 
 
 
@@ -124,14 +124,14 @@ consSectionEach consFull resource (B.Short shorts xs) =
        asserts  <-  mapMFor assert isCAssert
 
        Right $ emptySection
-           { sectionName      =  section xs
-           , sectionImport    =  imports
-           , sectionExport    =  mapFor expt isCExport
-           , sectionShort     =  mapFor short isCShort
-           , sectionAssert    =  [B.Short shorts asserts]
-           , sectionRelmap    =  relmaps
-           , sectionJudge     =  judges
-           , sectionResource  =  resource }
+           { secName      =  section xs
+           , secImport    =  imports
+           , secExport    =  mapFor expt isCExport
+           , secShort     =  mapFor short isCShort
+           , secAssert    =  [B.Short shorts asserts]
+           , secRelmap    =  relmaps
+           , secJudge     =  judges
+           , secResource  =  resource }
     where
       mapFor  f p = pass     f  `map`  filter (p . C.clauseBody) xs
       mapMFor f p = pass (ab f) `mapM` filter (p . C.clauseBody) xs

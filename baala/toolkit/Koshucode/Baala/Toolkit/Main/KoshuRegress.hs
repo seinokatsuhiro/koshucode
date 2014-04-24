@@ -173,7 +173,7 @@ regReport sec =
 
 regReportBody :: (C.CContent c) => C.Section c -> IO ()
 regReportBody sec =
-    do let js = C.sectionJudge sec
+    do let js = C.secJudge sec
            fs = mapMaybe outputFile js
        bs <- mapM reportFile fs
        let match   = filter id  bs

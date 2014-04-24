@@ -69,7 +69,7 @@ runCalcTo dir cmd bundle =
 
 runCalcSec :: (C.CContent c) => String -> C.Section c -> C.Section c -> IO Int
 runCalcSec dir root sec =
-    do let js = C.sectionJudge sec
+    do let js = C.secJudge sec
        mapM_ (runCalcJudge dir root) js
        return 0
 

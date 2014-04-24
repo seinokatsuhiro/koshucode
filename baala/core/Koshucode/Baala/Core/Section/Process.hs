@@ -50,7 +50,7 @@ readSectionCode
     -> String       -- ^ Source text
     -> B.Ab (C.Section c)  -- ^ Resulting section
 readSectionCode root res code =
-    do let (C.RelmapCons lx full) = C.sectionCons root
+    do let (C.RelmapCons lx full) = C.secCons root
        clauses <- C.consClause lx $ B.tokenLines res code
        C.consSection full res clauses
 
@@ -63,7 +63,7 @@ readSectionText root code =
 readJudges :: (C.CContent c) => String -> B.Ab [B.Judge c]
 readJudges code =
     do sec <- readSectionText C.emptySection code
-       Right $ C.sectionJudge sec
+       Right $ C.secJudge sec
 
 
 -- --------------------------------------------  Run
@@ -71,12 +71,12 @@ readJudges code =
 runSection :: (C.CContent c) => C.Global c -> [C.Section c] -> B.Ab (B.OutputResult c)
 runSection global sects =
     do let s2 = M.mconcat sects
-           g2 = global { C.globalJudges = C.sectionJudge s2 }
+           g2 = global { C.globalJudges = C.secJudge s2 }
        runSectionBody g2 s2
 
 runSectionBody :: forall c. (Ord c, B.Pretty c, C.CRel c, C.CNil c) =>
     C.Global c -> C.Section c -> B.Ab (B.OutputResult c)
-runSectionBody global C.Section { C.sectionRelmap = rdef, C.sectionAssert = ass2 } =
+runSectionBody global C.Section { C.secRelmap = rdef, C.secAssert = ass2 } =
     do judgesV <- run $ C.assertViolated ass2
        judgesN <- run $ C.assertNormal   ass2
        Right (B.shortTrim judgesV, B.shortTrim judgesN)
