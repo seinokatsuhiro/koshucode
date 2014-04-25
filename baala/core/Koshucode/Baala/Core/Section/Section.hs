@@ -51,10 +51,8 @@ data Section c = Section {
     , secImport   :: [Section c]         -- ^ Importing section
     , secExport   :: [String]            -- ^ Exporting relmap names
     , secShort    :: [[B.Named String]]  -- ^ Prefix for short signs
-    , secAssert   :: ShortAsserts c     -- ^ Assertions of relmaps
-    , secRelmap   :: [C.RelmapAssoc c]   -- ^ Relmaps and its name
-    , secLexmap   :: [((String, C.Rod), C.Lexmap)]
-    , secTokmap   :: [(String, [B.TokenTree])]
+    , secAssert   :: ShortAsserts c      -- ^ Assertions of relmaps
+    , secTokmap   :: [B.Named [B.TokenTree]]
     , secJudge    :: [B.Judge c]         -- ^ Affirmative or denial judgements
     , secViolate  :: [B.Judge c]         -- ^ Violated judgements, i.e., result of @|=V@
     , secResource :: B.Resource          -- ^ Resource name
@@ -63,9 +61,7 @@ data Section c = Section {
 
 instance (Ord c, B.Pretty c) => B.Pretty (Section c) where
     doc sec = dSection where
-        dSection = B.docv [dRelmap, dAssert, dJudge]
-        dRelmap  = B.docv $ map docRelmap $ secRelmap sec
-        docRelmap ((n, _),m) = B.docZero (n ++ " :") B.<+> B.doc m B.$$ B.doc ""
+        dSection = B.docv [dAssert, dJudge]
         dJudge   = B.docv $ secJudge sec
         dAssert  = B.docv $ concatMap B.shortBody $ secAssert sec
 
@@ -79,8 +75,6 @@ secUnion s1 s2 =
        , secImport  = []
        , secExport  = union secExport
        , secAssert  = union secAssert
-       , secRelmap  = union secRelmap
-       , secLexmap  = union secLexmap
        , secTokmap  = union secTokmap
        , secJudge   = union secJudge
        , secViolate = union secViolate
@@ -88,7 +82,7 @@ secUnion s1 s2 =
 
 {-| Make empty section that has a given constructor. -}
 makeEmptySection :: C.RelmapCons c -> Section c
-makeEmptySection = Section Nothing [] [] [] [] [] [] [] [] []
+makeEmptySection = Section Nothing [] [] [] [] [] [] []
                    (B.ResourceText "")
 
 {-| Section that has no contents. -}
@@ -125,16 +119,16 @@ consSectionEach root resource (B.Short shorts xs) =
        _        <-  mapMFor unres   isCUnres
        imports  <-  mapMFor impt    isCImport
        judges   <-  mapMFor judge   isCJudge 
-       relmaps  <-  mapMFor relmap  isCRelmapUse
-       asserts  <-  mapMFor assert isCAssert
+       tokmaps  <-  mapMFor tokmap  isCTokmap
+       asserts  <-  mapMFor assert  isCAssert
 
        Right $ root
            { secName      =  section xs
            , secImport    =  imports
            , secExport    =  mapFor expt isCExport
            , secShort     =  mapFor short isCShort
-           , secAssert   =  [B.Short shorts asserts]
-           , secRelmap    =  relmaps
+           , secAssert    =  [B.Short shorts asserts]
+           , secTokmap    =  tokmaps
            , secJudge     =  judges
            , secResource  =  resource }
     where
@@ -163,24 +157,20 @@ consSectionEach root resource (B.Short shorts xs) =
             Right j -> Right j
             Left  a -> abort a
 
-      consFull = C.consRelmap $ secCons root
-
-      relmap :: [B.Token] -> C.ClauseBody -> B.Ab (C.RelmapAssoc c)
-      relmap _ (C.CRelmapUse name od lx) =
-          case consFull lx of
-            Right full -> Right ((name, od), full)
-            Left a     -> abort a
+      tokmap :: [B.Token] -> C.ClauseBody -> B.Ab (String, [B.TokenTree])
+      tokmap _ (C.TRelmapDef name tree) =
+          Right (name, tree)
 
       assert :: [B.Token] -> C.ClauseBody -> B.Ab (C.Assert c)
       assert toks (C.CAssert typ pat opt lx) =
-          Right $ C.Assert typ pat opt lx Nothing toks
+          Right $ C.Assert typ pat opt lx Nothing [] toks
 
       unk   _ (C.CUnknown) = Message.unkClause
       unres _ (C.CUnres _) = Message.unresPrefix
       abort a = Left a
 
 isCImport, isCExport, isCShort,
-  isCRelmapUse, isCAssert, isCJudge,
+  isCTokmap, isCAssert, isCJudge,
   isCUnknown, isCUnres :: C.ClauseBody -> Bool
 
 isCImport (C.CImport _ _)         = True
@@ -192,8 +182,8 @@ isCExport _                       = False
 isCShort (C.CShort _)             = True
 isCShort _                        = False
 
-isCRelmapUse (C.CRelmapUse _ _ _) = True
-isCRelmapUse _                    = False
+isCTokmap (C.TRelmapDef _ _)      = True
+isCTokmap _                       = False
 
 isCAssert (C.CAssert _ _ _ _)     = True
 isCAssert _                       = False

@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Running relational calculation.
@@ -23,7 +24,7 @@ runRelmapDataset
     :: (Ord c, C.CRel c, C.CNil c)
     => C.Global c
     -> C.Dataset c     -- ^ Judges read from @source@ operator
-    -> [C.RelmapAssoc c]
+    -> [C.RodyRelmap c]
     -> C.Relmap c      -- ^ Mapping from 'Rel' to 'Rel'
     -> B.Rel c         -- ^ Input relation
     -> B.Ab (B.Rel c)  -- ^ Output relation
@@ -31,7 +32,7 @@ runRelmapDataset global dataset rdef = runRelmapViaRelkit g2 rdef where
     g2 = global { C.globalSelect = C.selectRelation dataset }
 
 runRelmapViaRelkit :: (Ord c, C.CRel c)
-  => C.Global c -> [C.RelmapAssoc c]
+  => C.Global c -> [C.RodyRelmap c]
   -> C.Relmap c -> B.AbMap (B.Rel c)
 runRelmapViaRelkit global rdef r (B.Rel he1 bo1) =
     do (kdef, C.Relkit he2' f2') <- C.relmapSpecialize global rdef [] (Just he1) r
@@ -53,19 +54,19 @@ just s Nothing  = Message.adlib s
 
 -- | Calculate assertion list.
 runAssertJudges :: (Ord c, B.Pretty c, C.CRel c, C.CNil c)
-  => C.Global c -> [C.RelmapAssoc c] -> [C.Assert c] -> B.Ab [B.OutputChunk c]
-runAssertJudges global rdef asserts =
-    runAssertDataset global asserts ds rdef where
+  => C.Global c -> [C.Assert c] -> B.Ab [B.OutputChunk c]
+runAssertJudges global asserts =
+    runAssertDataset global asserts ds where
         ds = C.dataset $ C.globalJudges global
 
 -- | Calculate assertion list.
-runAssertDataset :: (Ord c, B.Pretty c, C.CRel c, C.CNil c)
-  => C.Global c -> [C.Assert c] -> C.Dataset c -> [C.RelmapAssoc c] -> B.Ab [B.OutputChunk c]
-runAssertDataset global asserts dataset rdef = Right . concat =<< mapM each asserts where
-    each (C.Assert _ _ _ _ Nothing _) = B.bug "runAssertDataset"
-    each a@(C.Assert quo pat opt _ (Just relmap) _) =
+runAssertDataset :: forall c. (Ord c, B.Pretty c, C.CRel c, C.CNil c)
+  => C.Global c -> [C.Assert c] -> C.Dataset c -> B.Ab [B.OutputChunk c]
+runAssertDataset global asserts dataset = Right . concat =<< mapM each asserts where
+    each (C.Assert _ _ _ _ Nothing _ _) = B.bug "runAssertDataset"
+    each a@(C.Assert quo pat opt _ (Just relmap) libs _) =
         B.abortableFrom "assert" a $ do
-          r1 <- runRelmapDataset global dataset rdef relmap B.reldee
+          r1 <- runRelmapDataset global dataset libs relmap B.reldee
           let q = C.assertQuality quo
           assertOptionProcess q pat opt r1
 

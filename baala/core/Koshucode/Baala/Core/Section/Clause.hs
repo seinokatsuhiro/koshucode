@@ -13,6 +13,7 @@ module Koshucode.Baala.Core.Section.Clause
   -- * Constructors
   consPreclause,
   consClause,
+  lexmapList,
 ) where
 
 import qualified Data.Generics as G
@@ -188,8 +189,8 @@ clauseLexDef cons = mapM clause where
     clause (Clause src bd) = Right . Clause src =<< def bd
 
     def :: B.AbMap ClauseBody
-    def (TRelmap n ts)       -- = Right $ TRelmapDef n $ B.tokenTrees ts
-                             = Right . CRelmapUse n [] =<< cons (B.tokenTrees ts)
+    def (TRelmap n ts)       = Right $ TRelmapDef n $ B.tokenTrees ts
+                             -- = Right . CRelmapUse n [] =<< cons (B.tokenTrees ts)
     def (TAssert q p opt ts) = Right . CAssert q p opt =<< cons (B.tokenTrees ts)
     def bd = Right bd
 
@@ -285,6 +286,27 @@ lexmapUse cons lexmap def = loop lexmap where
                           Right $ Clause src (CRelmapUse op od lx2) : use2 ++ use3
 
     loops :: [C.Lexmap] -> B.Ab [Clause]
+    loops [] = Right []
+    loops (lx : lxs) = do lx'  <- loop lx
+                          lxs' <- loops lxs
+                          Right $ lx' ++ lxs'
+
+lexmapList :: C.ConsLexmap -> C.Lexmap
+    -> [B.Named [B.TokenTree]]
+    -> B.Ab [C.Rody C.Lexmap]
+lexmapList cons lexmap def = loop lexmap where
+    loop lx = let op = C.lexOpText lx
+                  od = C.lexOperand lx
+                  subuse = loops $ C.lexSubmap lx
+              in case lookup op def of
+                   Nothing    -> subuse
+                   Just trees ->
+                       do lx2 <- cons $ substTrees od trees
+                          use2 <- loop lx2
+                          use3 <- subuse
+                          Right $ ((op, od), lx2) : use2 ++ use3
+
+    loops :: [C.Lexmap] -> B.Ab [C.Rody C.Lexmap]
     loops [] = Right []
     loops (lx : lxs) = do lx'  <- loop lx
                           lxs' <- loops lxs

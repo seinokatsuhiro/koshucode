@@ -5,6 +5,7 @@
 module Koshucode.Baala.Core.Relmap.Operand
 ( -- * Data type
   Rod,
+  Rody,
   RopFullSorter,
   RodSorter,
   RopTrunkSorter,
@@ -39,6 +40,8 @@ import qualified Koshucode.Baala.Core.Message as Message
 
 -- | Relmap operand as association list.
 type Rod = [B.Named [B.TokenTree]]
+
+type Rody a = ((String, Rod), a)
 
 -- | Sorter for operand of relmap operator.
 --   Sorters docompose operand trees,

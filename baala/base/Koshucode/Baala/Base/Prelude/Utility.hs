@@ -11,6 +11,7 @@ module Koshucode.Baala.Base.Prelude.Utility
   mapFstTo,
   mapSndTo,
   maybePairs,
+  sequenceSnd,
 
   -- * List
   front,
@@ -64,6 +65,12 @@ maybePairs :: [a] -> Maybe [(a, a)]
 maybePairs (a:b:xs) = liftA ((a, b):) $ maybePairs xs
 maybePairs []       = Just []
 maybePairs _        = Nothing
+
+sequenceSnd :: (Monad m) => [(a, m b)] -> m [(a, b)]
+sequenceSnd xs =
+    do let (fs, ss) = unzip xs
+       ss' <- sequence ss
+       return $ zip fs ss'
 
 
 

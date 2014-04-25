@@ -10,7 +10,7 @@ module Koshucode.Baala.Core.Relmap.Rop
 
   -- * Relmap
   Relmap (..),
-  RelmapAssoc,
+  RodyRelmap,
   relmapId,
   mapToRelmap,
   relmapLexList,
@@ -71,7 +71,7 @@ instance B.TokenListing (RopUse c) where
 
 -- ----------------------  Relmap
 
-type RelmapAssoc c = ((String, C.Rod), Relmap c)
+type RodyRelmap c = C.Rody (Relmap c)
 
 -- | Generic relmap.
 data Relmap c

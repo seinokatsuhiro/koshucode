@@ -18,7 +18,7 @@ sectionElem sec = map res js where
     res = judgeCons ("/res" -:- C.pText $ B.resourceName $ C.secResource sec)
     js  = concat [ elemJudge       $ C.secJudge  sec
                  , elemAssert      $ concatMap B.shortBody $ C.secAssert sec
-                 , elemNamedRelmap $ C.secRelmap sec ]
+                 , elemNamedRelmap [] ]
 
 judgeCons :: B.Named c -> B.Map (B.Judge c)
 judgeCons x (B.Judge q p xs) = B.Judge q p $ x : xs
@@ -33,15 +33,15 @@ elemJudge = B.unique . concatMap f where
 
 elemAssert :: (C.CContent c) => [C.Assert c] -> [B.Judge c]
 elemAssert = B.unique . concatMap f where
-    f (C.Assert _ _ _ _ Nothing _) = B.bug "elemAssert"
-    f (C.Assert t pat _ _ (Just r) _) =
+    f (C.Assert _ _ _ _ Nothing _ _) = B.bug "elemAssert"
+    f (C.Assert t pat _ _ (Just r) _ _) =
         B.affirm (name $ C.assertQuality t) [ "/pat" -:- C.pText pat ]
              : elemRelmap r
 
     name True  = "KOSHU-AFFIRM"
     name False = "KOSHU-DENY"
 
-elemNamedRelmap :: (C.CContent c) => [C.RelmapAssoc c] -> [B.Judge c]
+elemNamedRelmap :: (C.CContent c) => [C.RodyRelmap c] -> [B.Judge c]
 elemNamedRelmap = B.unique . concatMap f where
     f ((name, _), relmap) = map (judgeCons ("/name" -:- C.pText name))
                             $ elemRelmap relmap

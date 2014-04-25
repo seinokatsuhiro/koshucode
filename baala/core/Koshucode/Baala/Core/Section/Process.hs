@@ -75,24 +75,30 @@ runSection global sects =
 
 runSectionBody :: forall c. (Ord c, B.Pretty c, C.CRel c, C.CNil c) =>
     C.Global c -> C.Section c -> B.Ab (B.OutputResult c)
-runSectionBody global C.Section { C.secRelmap = rdef,
-                                  C.secAssert = ass2, C.secCons = cons } =
-    do ass3    <- mapM f `B.shortMapM` ass2
-       judgesV <- run $ C.assertViolated ass3
-       judgesN <- run $ C.assertNormal   ass3
+runSectionBody global C.Section { C.secTokmap = tok,
+                                  C.secAssert = ass, C.secCons = cons } =
+    do ass2    <- mapM f `B.shortMapM` ass
+       judgesV <- run $ C.assertViolated ass2
+       judgesN <- run $ C.assertNormal   ass2
        Right (B.shortTrim judgesV, B.shortTrim judgesN)
     where
       run :: C.ShortAsserts c -> B.Ab ([B.OutputChunks c])
       run = sequence . map B.shortM . run2
 
       run2 :: C.ShortAsserts c -> [B.Short (B.Ab [B.OutputChunk c])]
-      run2 = B.shortMap $ C.runAssertJudges global rdef
+      run2 = B.shortMap $ C.runAssertJudges global
 
-      f a = do rmap <- C.consRelmap cons $ C.assLexmap a
+      lexmap = C.consLexmap cons
+      relmap = C.consRelmap cons
+
+      f a = do let lx = C.assLexmap a
+               lexes <- C.lexmapList lexmap lx tok
+               rdef  <- B.sequenceSnd $ B.mapSndTo relmap lexes
+               rmap  <- relmap $ C.assLexmap a
                Right $ C.Assert (C.assType    a)
                                 (C.assPattern a)
                                 (C.assOption  a)
-                                (C.assLexmap  a)
+                                lx
                                 (Just rmap)
+                                rdef
                                 (C.assSource a)
-
