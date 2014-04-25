@@ -42,7 +42,6 @@ assertNormal :: B.Map (ShortAsserts c)
 assertNormal = B.shortMap $ filter $ not . C.isViolateAssert
 
 type ShortAsserts c = [B.Short [C.Assert c]]
-type ShortAsserts2 c = [B.Short [C.Assert2]]
 
 
 -- ----------------------  Section
@@ -52,8 +51,7 @@ data Section c = Section {
     , secImport   :: [Section c]         -- ^ Importing section
     , secExport   :: [String]            -- ^ Exporting relmap names
     , secShort    :: [[B.Named String]]  -- ^ Prefix for short signs
-    , secAssert   :: ShortAsserts c      -- ^ Assertions of relmaps
-    , secAssert2  :: ShortAsserts2 c     -- ^ Assertions of relmaps
+    , secAssert   :: ShortAsserts c     -- ^ Assertions of relmaps
     , secRelmap   :: [C.RelmapAssoc c]   -- ^ Relmaps and its name
     , secLexmap   :: [((String, C.Rod), C.Lexmap)]
     , secTokmap   :: [(String, [B.TokenTree])]
@@ -81,7 +79,6 @@ secUnion s1 s2 =
        , secImport  = []
        , secExport  = union secExport
        , secAssert  = union secAssert
-       , secAssert2 = union secAssert2
        , secRelmap  = union secRelmap
        , secLexmap  = union secLexmap
        , secTokmap  = union secTokmap
@@ -91,7 +88,7 @@ secUnion s1 s2 =
 
 {-| Make empty section that has a given constructor. -}
 makeEmptySection :: C.RelmapCons c -> Section c
-makeEmptySection = Section Nothing [] [] [] [] [] [] [] [] [] []
+makeEmptySection = Section Nothing [] [] [] [] [] [] [] [] []
                    (B.ResourceText "")
 
 {-| Section that has no contents. -}
@@ -129,16 +126,14 @@ consSectionEach root resource (B.Short shorts xs) =
        imports  <-  mapMFor impt    isCImport
        judges   <-  mapMFor judge   isCJudge 
        relmaps  <-  mapMFor relmap  isCRelmapUse
-       asserts  <-  mapMFor assert  isCAssert
-       asserts2 <-  mapMFor assert2 isCAssert
+       asserts  <-  mapMFor assert isCAssert
 
        Right $ root
            { secName      =  section xs
            , secImport    =  imports
            , secExport    =  mapFor expt isCExport
            , secShort     =  mapFor short isCShort
-           , secAssert    =  [B.Short shorts asserts]
-           , secAssert2   =  [B.Short shorts asserts2]
+           , secAssert   =  [B.Short shorts asserts]
            , secRelmap    =  relmaps
            , secJudge     =  judges
            , secResource  =  resource }
@@ -178,13 +173,7 @@ consSectionEach root resource (B.Short shorts xs) =
 
       assert :: [B.Token] -> C.ClauseBody -> B.Ab (C.Assert c)
       assert toks (C.CAssert typ pat opt lx) =
-          case consFull lx of
-            Right rmap -> Right $ C.Assert typ pat opt rmap toks
-            Left a     -> abort a
-
-      assert2 :: [B.Token] -> C.ClauseBody -> B.Ab C.Assert2
-      assert2 toks (C.CAssert typ pat opt lx) =
-          Right $ C.Assert2 typ pat opt lx toks
+          Right $ C.Assert typ pat opt lx Nothing toks
 
       unk   _ (C.CUnknown) = Message.unkClause
       unres _ (C.CUnres _) = Message.unresPrefix

@@ -76,7 +76,7 @@ runSection global sects =
 runSectionBody :: forall c. (Ord c, B.Pretty c, C.CRel c, C.CNil c) =>
     C.Global c -> C.Section c -> B.Ab (B.OutputResult c)
 runSectionBody global C.Section { C.secRelmap = rdef,
-                                  C.secAssert2 = ass2, C.secCons = cons } =
+                                  C.secAssert = ass2, C.secCons = cons } =
     do ass3    <- mapM f `B.shortMapM` ass2
        judgesV <- run $ C.assertViolated ass3
        judgesN <- run $ C.assertNormal   ass3
@@ -92,6 +92,7 @@ runSectionBody global C.Section { C.secRelmap = rdef,
                Right $ C.Assert (C.assType    a)
                                 (C.assPattern a)
                                 (C.assOption  a)
-                                rmap
+                                (C.assLexmap  a)
+                                (Just rmap)
                                 (C.assSource a)
 

@@ -208,16 +208,6 @@ clauseLexUse cons cs =
       maybeLexmap (Clause _ (CAssert _ _ _ lexmap)) = Just lexmap
       maybeLexmap _ = Nothing
 
--- clauseLexUse :: C.ConsLexmap -> B.AbMap [Clause]
--- clauseLexUse lx = mapM clause where
---     clause :: B.AbMap Clause
---     clause (Clause src bd)    = Right . Clause src      =<< body bd
-
---     body :: B.AbMap ClauseBody
---     body (TRelmapDef n trees) = Right . CRelmapUse n [] =<< lx trees
---     body (TAssert q p opt ts) = Right . CAssert q p opt =<< lx (B.tokenTrees ts)
---     body bd                   = Right bd
-
 
 -- ----------------------  Short-to-long conversion
 

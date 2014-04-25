@@ -62,7 +62,8 @@ runAssertJudges global rdef asserts =
 runAssertDataset :: (Ord c, B.Pretty c, C.CRel c, C.CNil c)
   => C.Global c -> [C.Assert c] -> C.Dataset c -> [C.RelmapAssoc c] -> B.Ab [B.OutputChunk c]
 runAssertDataset global asserts dataset rdef = Right . concat =<< mapM each asserts where
-    each a@(C.Assert quo pat opt relmap _) =
+    each (C.Assert _ _ _ _ Nothing _) = B.bug "runAssertDataset"
+    each a@(C.Assert quo pat opt _ (Just relmap) _) =
         B.abortableFrom "assert" a $ do
           r1 <- runRelmapDataset global dataset rdef relmap B.reldee
           let q = C.assertQuality quo

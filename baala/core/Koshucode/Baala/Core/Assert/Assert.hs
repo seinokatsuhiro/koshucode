@@ -6,7 +6,6 @@
 module Koshucode.Baala.Core.Assert.Assert
 ( -- * Assert
   Assert (..),
-  Assert2 (..),
   AssertOption,
   assertMap,
   isViolateAssert,
@@ -32,43 +31,32 @@ import qualified Koshucode.Baala.Core.Relmap as C
 --   It consists of logical quality, judgement pattern, and relmap.
 --   See also 'B.Judge'
 data Assert c = Assert
-    { assertType    :: AssertType      -- ^ Logical quality
-    , assertPattern :: B.JudgePattern  -- ^ Pattern of judgement
-    , assertOption  :: AssertOption    -- ^ Assert option
-    , assertRelmap  :: C.Relmap c      -- ^ Relmap
-    , assertSource  :: [B.Token]       -- ^ Source code information
-    } deriving (Show)
-
-data Assert2 = Assert2
-    { assType    :: AssertType      -- ^ Logical quality
-    , assPattern :: B.JudgePattern  -- ^ Pattern of judgement
-    , assOption  :: AssertOption    -- ^ Assert option
-    , assLexmap  :: C.Lexmap        -- ^ Lexmap
-    , assSource  :: [B.Token]       -- ^ Source code information
+    { assType    :: AssertType          -- ^ Logical quality
+    , assPattern :: B.JudgePattern      -- ^ Pattern of judgement
+    , assOption  :: AssertOption        -- ^ Assert option
+    , assLexmap  :: C.Lexmap            -- ^ Lexmap
+    , assRelmap  :: Maybe (C.Relmap c)  -- ^ Relmap
+    , assSource  :: [B.Token]           -- ^ Source code information
     } deriving (Show)
 
 -- | Option for assertions.
 type AssertOption = [B.Named [B.TokenTree]]
 
 instance B.TokenListing (Assert c) where
-    tokenListing = assertSource
+    tokenListing = assSource
 
 instance B.Pretty (Assert c) where
-    doc (Assert q pat _ r _) =
-        let qs = B.doch [assertText q, pat]
-        in B.docHang qs 2 (B.doc r)
-
-instance B.Pretty Assert2 where
-    doc (Assert2 q pat _ lx _) =
+    doc (Assert q pat _ lx _ _) =
         let qs = B.doch [assertText q, pat]
         in B.docHang qs 2 (B.doc lx)
 
 -- | Apply function to relamp in assert.
 assertMap :: B.Map (C.Relmap c) -> B.Map (Assert c)
-assertMap f (Assert q pat opt r src) = Assert q pat opt (f r) src
+assertMap f (Assert q pat opt lx r src) =
+    Assert q pat opt lx (fmap f r) src
 
 isViolateAssert :: Assert c -> Bool
-isViolateAssert = (== AssertViolate) . assertType
+isViolateAssert = (== AssertViolate) . assType
 
 
 
@@ -95,7 +83,7 @@ assertText AssertViolate  = "violate"
 -- ----------------------  Constructor
 
 affirm, deny :: B.JudgePattern -> AssertOption
-             -> C.Relmap c -> [B.Token] -> Assert c
+             -> C.Lexmap -> Maybe (C.Relmap c) -> [B.Token] -> Assert c
 
 -- | Make affirmed assertion.
 affirm = Assert AssertAffirm
