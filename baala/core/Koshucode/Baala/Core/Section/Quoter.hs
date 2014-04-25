@@ -27,7 +27,7 @@ koshuQuoter
 koshuQuoter lx fullQ = TH.QuasiQuoter { TH.quoteExp = koshuQ lx fullQ }
 
 koshuQ :: C.ConsLexmap -> TH.ExpQ -> String -> TH.ExpQ
-koshuQ lx fullQ text =
+koshuQ _ fullQ text =
     dispatch $ B.tokenLines (B.ResourceText text) text
     where
       dispatch src = sectionQ src -- relmapQ src
@@ -43,7 +43,7 @@ consSectionQ
     -> TH.ExpQ      -- ^ ExpQ of 'Section'
 consSectionQ fullQ xs =
     [| either consError id
-         (C.consSection $fullQ (B.ResourceText "qq")
+         (C.consSection C.emptySection (B.ResourceText "qq")
                $(TH.dataToExpQ plain xs)) |]
 
 {- construction error -}

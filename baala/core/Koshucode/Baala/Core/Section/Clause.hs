@@ -178,7 +178,7 @@ consClause
 consClause cons = clauseLexClause cons . shortSections . consPreclause
 
 clauseLexClause :: C.ConsLexmap -> B.AbMap [B.Short [Clause]]
-clauseLexClause cons = sequence . map B.shortAb . f where
+clauseLexClause cons = sequence . map B.shortM . f where
     f :: [B.Short [Clause]] -> [B.Short (B.Ab [Clause])]
     f = map $ fmap (clauseLexUse cons B.<=< clauseLexDef cons)
 
@@ -188,8 +188,8 @@ clauseLexDef cons = mapM clause where
     clause (Clause src bd) = Right . Clause src =<< def bd
 
     def :: B.AbMap ClauseBody
-    def (TRelmap n ts)       = Right $ TRelmapDef n $ B.tokenTrees ts
-                             -- = Right . CRelmapUse n [] =<< cons (B.tokenTrees ts)
+    def (TRelmap n ts)       -- = Right $ TRelmapDef n $ B.tokenTrees ts
+                             = Right . CRelmapUse n [] =<< cons (B.tokenTrees ts)
     def (TAssert q p opt ts) = Right . CAssert q p opt =<< cons (B.tokenTrees ts)
     def bd = Right bd
 

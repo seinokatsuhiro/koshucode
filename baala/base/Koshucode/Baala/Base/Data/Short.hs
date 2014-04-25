@@ -3,13 +3,12 @@
 module Koshucode.Baala.Base.Data.Short
 ( Short (..),
   shortMap,
-  shortAb,
-  shortAbList,
+  shortMapM,
+  shortM,
   shortTrim,
 ) where
 
 import qualified Koshucode.Baala.Base.Prelude as B
-import qualified Koshucode.Baala.Base.Abort   as B
 
 data Short a =
     Short { shortHead :: [B.Named String]
@@ -22,12 +21,13 @@ instance Functor Short where
 shortMap :: (Functor f) => (a -> b) -> [f a] -> [f b]
 shortMap = map . fmap
 
-shortAb :: Short (B.Ab a) -> B.Ab (Short a)
-shortAb (Short a (Right x)) = Right $ Short a x
-shortAb (Short _ (Left  x)) = Left x
+shortMapM :: (Monad m) => (a -> m b) -> [Short a] -> m [Short b]
+shortMapM f = mapM (shortM . fmap f)
 
-shortAbList :: Short [B.Ab a] -> B.Ab (Short [a])
-shortAbList (Short a xs) = shortAb $ Short a $ sequence xs
+shortM :: (Monad m) => Short (m a) -> m (Short a)
+shortM (Short he bo) =
+    do bo' <- bo
+       return $ Short he bo'
 
 shortTrim :: B.Map ([Short [a]])
 shortTrim = filter $ not . null . shortBody

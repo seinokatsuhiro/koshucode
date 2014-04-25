@@ -6,7 +6,6 @@ module Koshucode.Baala.Core.Section.Process
 ( -- * Read
   readSection,
   readSectionText,
-
   readJudges,
 
   -- * Run
@@ -50,9 +49,9 @@ readSectionCode
     -> String       -- ^ Source text
     -> B.Ab (C.Section c)  -- ^ Resulting section
 readSectionCode root res code =
-    do let (C.RelmapCons lx full) = C.secCons root
+    do let (C.RelmapCons lx _) = C.secCons root
        clauses <- C.consClause lx $ B.tokenLines res code
-       C.consSection full res clauses
+       C.consSection root res clauses
 
 -- | Read section from text.
 readSectionText :: (C.CContent c) => C.Section c -> String -> B.Ab (C.Section c)
@@ -76,14 +75,23 @@ runSection global sects =
 
 runSectionBody :: forall c. (Ord c, B.Pretty c, C.CRel c, C.CNil c) =>
     C.Global c -> C.Section c -> B.Ab (B.OutputResult c)
-runSectionBody global C.Section { C.secRelmap = rdef, C.secAssert = ass2 } =
-    do judgesV <- run $ C.assertViolated ass2
-       judgesN <- run $ C.assertNormal   ass2
+runSectionBody global C.Section { C.secRelmap = rdef,
+                                  C.secAssert2 = ass2, C.secCons = cons } =
+    do ass3    <- mapM f `B.shortMapM` ass2
+       judgesV <- run $ C.assertViolated ass3
+       judgesN <- run $ C.assertNormal   ass3
        Right (B.shortTrim judgesV, B.shortTrim judgesN)
     where
       run :: C.ShortAsserts c -> B.Ab ([B.OutputChunks c])
-      run = sequence . map B.shortAb . run2
+      run = sequence . map B.shortM . run2
 
       run2 :: C.ShortAsserts c -> [B.Short (B.Ab [B.OutputChunk c])]
       run2 = B.shortMap $ C.runAssertJudges global rdef
+
+      f a = do rmap <- C.consRelmap cons $ C.assLexmap a
+               Right $ C.Assert (C.assType    a)
+                                (C.assPattern a)
+                                (C.assOption  a)
+                                rmap
+                                (C.assSource a)
 

@@ -6,6 +6,7 @@
 module Koshucode.Baala.Core.Assert.Assert
 ( -- * Assert
   Assert (..),
+  Assert2 (..),
   AssertOption,
   assertMap,
   isViolateAssert,
@@ -38,6 +39,14 @@ data Assert c = Assert
     , assertSource  :: [B.Token]       -- ^ Source code information
     } deriving (Show)
 
+data Assert2 = Assert2
+    { assType    :: AssertType      -- ^ Logical quality
+    , assPattern :: B.JudgePattern  -- ^ Pattern of judgement
+    , assOption  :: AssertOption    -- ^ Assert option
+    , assLexmap  :: C.Lexmap        -- ^ Lexmap
+    , assSource  :: [B.Token]       -- ^ Source code information
+    } deriving (Show)
+
 -- | Option for assertions.
 type AssertOption = [B.Named [B.TokenTree]]
 
@@ -48,6 +57,11 @@ instance B.Pretty (Assert c) where
     doc (Assert q pat _ r _) =
         let qs = B.doch [assertText q, pat]
         in B.docHang qs 2 (B.doc r)
+
+instance B.Pretty Assert2 where
+    doc (Assert2 q pat _ lx _) =
+        let qs = B.doch [assertText q, pat]
+        in B.docHang qs 2 (B.doc lx)
 
 -- | Apply function to relamp in assert.
 assertMap :: B.Map (C.Relmap c) -> B.Map (Assert c)

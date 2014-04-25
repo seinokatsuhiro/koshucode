@@ -42,6 +42,7 @@ assertNormal :: B.Map (ShortAsserts c)
 assertNormal = B.shortMap $ filter $ not . C.isViolateAssert
 
 type ShortAsserts c = [B.Short [C.Assert c]]
+type ShortAsserts2 c = [B.Short [C.Assert2]]
 
 
 -- ----------------------  Section
@@ -52,7 +53,10 @@ data Section c = Section {
     , secExport   :: [String]            -- ^ Exporting relmap names
     , secShort    :: [[B.Named String]]  -- ^ Prefix for short signs
     , secAssert   :: ShortAsserts c      -- ^ Assertions of relmaps
+    , secAssert2  :: ShortAsserts2 c     -- ^ Assertions of relmaps
     , secRelmap   :: [C.RelmapAssoc c]   -- ^ Relmaps and its name
+    , secLexmap   :: [((String, C.Rod), C.Lexmap)]
+    , secTokmap   :: [(String, [B.TokenTree])]
     , secJudge    :: [B.Judge c]         -- ^ Affirmative or denial judgements
     , secViolate  :: [B.Judge c]         -- ^ Violated judgements, i.e., result of @|=V@
     , secResource :: B.Resource          -- ^ Resource name
@@ -77,14 +81,18 @@ secUnion s1 s2 =
        , secImport  = []
        , secExport  = union secExport
        , secAssert  = union secAssert
+       , secAssert2 = union secAssert2
        , secRelmap  = union secRelmap
+       , secLexmap  = union secLexmap
+       , secTokmap  = union secTokmap
        , secJudge   = union secJudge
        , secViolate = union secViolate
-       } where union f  = f s1 ++ f s2
+       } where union f = f s1 ++ f s2
 
 {-| Make empty section that has a given constructor. -}
 makeEmptySection :: C.RelmapCons c -> Section c
-makeEmptySection = Section Nothing [] [] [] [] [] [] [] (B.ResourceText "")
+makeEmptySection = Section Nothing [] [] [] [] [] [] [] [] [] []
+                   (B.ResourceText "")
 
 {-| Section that has no contents. -}
 emptySection :: Section c
@@ -101,34 +109,36 @@ emptySection = makeEmptySection $ C.relmapCons C.global
 -- | Second step of constructing 'Section'.
 consSection
     :: forall c. (C.CContent c)
-    => C.ConsRelmap c        -- ^ Relmap full constructor
+    => Section c
     -> B.Resource            -- ^ Resource name
     -> [B.Short [C.Clause]]  -- ^ Output of 'C.consClause'
     -> B.Ab (Section c)      -- ^ Result section
-consSection consFull resource xss =
-    do sects <- mapM (consSectionEach consFull resource) xss
+consSection root resource xss =
+    do sects <- mapM (consSectionEach root resource) xss
        Right $ M.mconcat sects
 
 consSectionEach
     :: forall c. (C.CContent c)
-    => C.ConsRelmap c       -- ^ Relmap full constructor
+    => Section c
     -> B.Resource           -- ^ Resource name
     -> B.Short [C.Clause]   -- ^ Output of 'C.consClause'
     -> B.Ab (Section c)     -- ^ Result section
-consSectionEach consFull resource (B.Short shorts xs) =
-    do _        <-  mapMFor unk    isCUnknown
-       _        <-  mapMFor unres  isCUnres
-       imports  <-  mapMFor impt   isCImport
-       judges   <-  mapMFor judge  isCJudge 
-       relmaps  <-  mapMFor relmap isCRelmapUse
-       asserts  <-  mapMFor assert isCAssert
+consSectionEach root resource (B.Short shorts xs) =
+    do _        <-  mapMFor unk     isCUnknown
+       _        <-  mapMFor unres   isCUnres
+       imports  <-  mapMFor impt    isCImport
+       judges   <-  mapMFor judge   isCJudge 
+       relmaps  <-  mapMFor relmap  isCRelmapUse
+       asserts  <-  mapMFor assert  isCAssert
+       asserts2 <-  mapMFor assert2 isCAssert
 
-       Right $ emptySection
+       Right $ root
            { secName      =  section xs
            , secImport    =  imports
            , secExport    =  mapFor expt isCExport
            , secShort     =  mapFor short isCShort
            , secAssert    =  [B.Short shorts asserts]
+           , secAssert2   =  [B.Short shorts asserts2]
            , secRelmap    =  relmaps
            , secJudge     =  judges
            , secResource  =  resource }
@@ -136,7 +146,7 @@ consSectionEach consFull resource (B.Short shorts xs) =
       mapFor  f p = pass     f  `map`  filter (p . C.clauseBody) xs
       mapMFor f p = pass (ab f) `mapM` filter (p . C.clauseBody) xs
       pass f (C.Clause src body) = f (B.front $ B.clauseTokens src) body
-      consSec = consSection consFull (B.ResourceText "")
+      consSec = consSection root (B.ResourceText "")
       ab f toks body = B.abortable "clause" toks $ f toks body
 
       -- todo: multiple section name
@@ -158,6 +168,8 @@ consSectionEach consFull resource (B.Short shorts xs) =
             Right j -> Right j
             Left  a -> abort a
 
+      consFull = C.consRelmap $ secCons root
+
       relmap :: [B.Token] -> C.ClauseBody -> B.Ab (C.RelmapAssoc c)
       relmap _ (C.CRelmapUse name od lx) =
           case consFull lx of
@@ -167,8 +179,12 @@ consSectionEach consFull resource (B.Short shorts xs) =
       assert :: [B.Token] -> C.ClauseBody -> B.Ab (C.Assert c)
       assert toks (C.CAssert typ pat opt lx) =
           case consFull lx of
-            Right full -> Right $ C.Assert typ pat opt full toks
+            Right rmap -> Right $ C.Assert typ pat opt rmap toks
             Left a     -> abort a
+
+      assert2 :: [B.Token] -> C.ClauseBody -> B.Ab C.Assert2
+      assert2 toks (C.CAssert typ pat opt lx) =
+          Right $ C.Assert2 typ pat opt lx toks
 
       unk   _ (C.CUnknown) = Message.unkClause
       unres _ (C.CUnres _) = Message.unresPrefix

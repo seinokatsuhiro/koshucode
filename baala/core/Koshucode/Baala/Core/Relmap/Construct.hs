@@ -25,7 +25,10 @@ import qualified Koshucode.Baala.Core.Message          as Message
 -- ----------------------  Constructions
 
 -- | Constructor of lexmap and relmap.
-data RelmapCons c = RelmapCons ConsLexmap (ConsRelmap c)
+data RelmapCons c = RelmapCons
+      { consLexmap :: ConsLexmap
+      , consRelmap :: ConsRelmap c
+      }
 
 instance Show (RelmapCons c) where
     show _ = "RelmapCons <lex> <full>"
@@ -34,8 +37,8 @@ instance Show (RelmapCons c) where
 relmapCons :: C.Global c -> (RelmapCons c)
 relmapCons global = make $ unzip $ map pair $ C.globalRops global where
     make (lxs, fulls) =
-        let consLex  = consLexmap lxs
-            consFull = consRelmap global fulls
+        let consLex  = makeConsLexmap lxs
+            consFull = makeConsRelmap global fulls
         in RelmapCons consLex consFull
 
     pair (C.Rop name _ sorter cons synopsis) =
@@ -51,8 +54,8 @@ relmapCons global = make $ unzip $ map pair $ C.globalRops global where
 --   make lexmap from source of relmap operator.
 type ConsLexmap = [B.TokenTree] -> B.Ab C.Lexmap
 
-consLexmap :: [B.Named (String, C.RopFullSorter)] -> ConsLexmap
-consLexmap lxs = consLex where
+makeConsLexmap :: [B.Named (String, C.RopFullSorter)] -> ConsLexmap
+makeConsLexmap lxs = consLex where
     consLex :: ConsLexmap
     consLex trees =
         B.abortable "lexmap" (B.front $ B.untrees trees) $
@@ -91,14 +94,14 @@ consLexmap lxs = consLex where
 --   make relmap from contents of lexmap.
 type ConsRelmap c = C.Lexmap -> B.Ab (C.Relmap c)
 
-consRelmap :: C.Global c -> [B.Named (C.RopCons c)] -> ConsRelmap c
-consRelmap global fulls = consFull where
+makeConsRelmap :: C.Global c -> [B.Named (C.RopCons c)] -> ConsRelmap c
+makeConsRelmap global fulls = consFull where
     consFull lx =
         let op    = C.lexOpText lx
             od    = C.lexOperand lx
             subHs = C.lexSubmap lx
         in case lookup op fulls of
-             Nothing   -> Right $ C.RelmapLink lx op od
+             Nothing   -> Right $ C.RelmapLink lx op []
              Just cons -> B.abortableFrom "relmap" lx $
                           do subFs <- mapM consFull subHs
                              cons $ C.RopUse global lx subFs
