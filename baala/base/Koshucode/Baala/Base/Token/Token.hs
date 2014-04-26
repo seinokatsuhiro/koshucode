@@ -52,6 +52,7 @@ data Token
                --   2 for double-quoted.
     | TShort   B.TokenPos String String  -- ^ Abbreviated word
     | TTerm    B.TokenPos TermPath    -- ^ Term name
+    | TSlot    B.TokenPos Int String  -- ^ Slot name
     | TOpen    B.TokenPos String      -- ^ Opening paren
     | TClose   B.TokenPos String      -- ^ Closing paren
     | TSpace   B.TokenPos Int         -- ^ /N/ space characters
@@ -61,6 +62,7 @@ data Token
 
 instance B.Name Token where
     name (TTerm   _ ns) = concat ns
+    name (TSlot  _ _ s) = s
     name (TWord  _ _ s) = s
     name (TOpen    _ s) = s
     name (TClose   _ s) = s
@@ -72,6 +74,7 @@ instance B.Pretty Token where
         d (TWord    pos q w) = pretty "TWord"    pos [show q, show w]
         d (TShort   pos a b) = pretty "TShort"   pos [show a, show b]
         d (TTerm    pos ns)  = pretty "TTerm"    pos [show ns]
+        d (TSlot    pos n w) = pretty "TSlot"    pos [show n, show w]
         d (TOpen    pos p)   = pretty "TOpen"    pos [show p]
         d (TClose   pos p)   = pretty "TClose"   pos [show p]
         d (TSpace   pos c)   = pretty "TSpace"   pos [show c]
@@ -110,6 +113,7 @@ tokenPos :: Token -> B.TokenPos
 tokenPos (TWord    p _ _)  = p
 tokenPos (TShort   p _ _)  = p
 tokenPos (TTerm    p _)    = p
+tokenPos (TSlot    p _ _)  = p
 tokenPos (TOpen    p _)    = p
 tokenPos (TClose   p _)    = p
 tokenPos (TSpace   p _)    = p
@@ -124,6 +128,7 @@ tokenContent :: Token -> String
 tokenContent (TWord  _ _ s)   = s
 tokenContent (TShort _ a b)   = a ++ "." ++ b
 tokenContent (TTerm    _ ns)  = concat $ map ('/':) ns
+tokenContent (TSlot  _ _ s)   = s
 tokenContent (TOpen    _ s)   = s
 tokenContent (TClose   _ s)   = s
 tokenContent (TSpace   _ n)   = replicate n ' '
@@ -140,6 +145,7 @@ tokenTypeText :: Token -> String
 tokenTypeText (TWord  _ _ _)  = "Word"
 tokenTypeText (TShort _ _ _)  = "Short"
 tokenTypeText (TTerm    _ _)  = "TermN"
+tokenTypeText (TSlot  _ _ _)  = "Slot"
 tokenTypeText (TOpen    _ _)  = "Open"
 tokenTypeText (TClose   _ _)  = "Close"
 tokenTypeText (TSpace   _ _)  = "Space"

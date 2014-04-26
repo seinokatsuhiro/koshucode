@@ -16,6 +16,7 @@ module Koshucode.Baala.Core.Message
   unkCox,
   unkNestRel,
   unkRelmap,
+  unkSlot,
   unkTerm,
   unkWord,
   unmatchType,
@@ -62,16 +63,6 @@ unkClause = Left $ B.abortBecause "Unknown clause"
 unkCox :: String -> B.Ab a
 unkCox = Left . B.abortLine "Unknown expression"
 
--- | Unknown term name
-unkTerm :: [B.TermName] -> B.Relhead -> B.Ab a
-unkTerm ns he1 =
-    Left $ B.abortLines "Unknown term name"
-         $ detailTermRel "Unknown" ns he1
-
--- | Unknown word
-unkWord :: String -> B.Ab a
-unkWord = Left . B.abortLine "Unknown word"
-
 -- | Unknown content operator
 unkCop :: String -> B.Ab a
 unkCop = Left . B.abortLine "Unknown content operator"
@@ -83,6 +74,20 @@ unkNestRel = Left . B.abortLine "Unknown nested relation"
 -- | Unknown relmap operator
 unkRelmap :: String -> B.Ab a
 unkRelmap = Left . B.abortLine "Unknown relmap operator"
+
+-- | Unknown slot
+unkSlot :: String -> B.Ab a
+unkSlot = Left . B.abortLine "Unknown slot"
+
+-- | Unknown term name
+unkTerm :: [B.TermName] -> B.Relhead -> B.Ab a
+unkTerm ns he1 =
+    Left $ B.abortLines "Unknown term name"
+         $ detailTermRel "Unknown" ns he1
+
+-- | Unknown word
+unkWord :: String -> B.Ab a
+unkWord = Left . B.abortLine "Unknown word"
 
 unmatchType :: String -> B.Ab a
 unmatchType = Left . B.abortLine "Type unmatch"

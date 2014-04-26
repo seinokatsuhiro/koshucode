@@ -93,10 +93,11 @@ runSectionBody global C.Section { C.secTokmap = tok,
 
       consAssert :: B.AbMap (C.Assert c)
       consAssert a =
-          do let lx = C.assLexmap a
-             rmap  <- relmap lx
-             lxs   <- C.lexmapList lexmap lx tok
-             parts <- B.sequenceSnd $ B.mapSndTo relmap lxs
-             Right $ a { C.assRelmap = Just rmap
-                       , C.assParts  = parts }
+          B.abortableFrom "assert" a $ do
+            let lx = C.assLexmap a
+            rmap  <- relmap lx
+            lxs   <- C.lexmapList lexmap lx tok
+            parts <- B.sequenceSnd $ B.mapSndTo relmap lxs
+            Right $ a { C.assRelmap = Just rmap
+                      , C.assParts  = parts }
 

@@ -75,6 +75,8 @@ nextToken res line txt =
           | isTerm    c       ->  term cs [] []
           | isQQ      c       ->  qq   cs
           | isQ       c       ->  word cs []  $ B.TWord pos 1
+          | isSlot    c       ->  let (n, cs2) = slot 1 cs
+                                  in word cs2 [] $ B.TSlot pos n
           | isShort   c       ->  short cs [c]
           | isWord    c       ->  word cs [c] $ B.TWord pos 0
           | isSpace   c       ->  space 1 cs
@@ -94,6 +96,10 @@ nextToken res line txt =
       short (c:cs) xs | c == '.'      = word cs [] (B.TShort pos $ reverse xs)
                       | isShort c     = short cs (c:xs)
       short ccs xs                    = word ccs xs (B.TWord pos 0)
+
+      slot :: Int -> String -> (Int, String)
+      slot n ('@' : cs) = slot (n + 1) cs
+      slot n cs         = (n, cs)
 
       word :: String -> String -> (String -> B.Token) -> (B.Token, String)
       word (c:cs) text k | isWord c   = word cs (c : text) k
@@ -133,13 +139,14 @@ nextToken res line txt =
 --  O C O C O C S S Q Q H T
 
 -- Punctuations
-isOpen, isClose, isSingle, isQ, isQQ, isPunct :: B.Pred Char
+isOpen, isClose, isSingle, isQ, isQQ, isSlot, isPunct :: B.Pred Char
 
 isOpen    =  (`elem` "([{")   -- UnicodePunctuation
 isClose   =  (`elem` "}])")   -- UnicodePunctuation
 isSingle  =  (`elem` ":|")    -- UnicodePunctuation | UnicodeSymbol
 isQ       =  (== '\'')        -- UnicodePunctuation
 isQQ      =  (== '"')         -- UnicodePunctuation
+isSlot    =  (== '@')         -- UnicodePunctuation
 isPunct c =  isOpen c || isClose c || isSingle c ||
              isQ c || isQQ c || c == '#'
 

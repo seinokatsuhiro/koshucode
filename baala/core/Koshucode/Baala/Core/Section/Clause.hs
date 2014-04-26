@@ -17,9 +17,10 @@ module Koshucode.Baala.Core.Section.Clause
 ) where
 
 import qualified Data.Generics as G
-import qualified Koshucode.Baala.Base         as B
-import qualified Koshucode.Baala.Core.Relmap  as C
-import qualified Koshucode.Baala.Core.Assert  as C
+import qualified Koshucode.Baala.Base          as B
+import qualified Koshucode.Baala.Core.Relmap   as C
+import qualified Koshucode.Baala.Core.Assert   as C
+import qualified Koshucode.Baala.Core.Message  as Message
 
 
 
@@ -233,32 +234,37 @@ shortToLong sh = map clause where
 
 -- ----------------------  Substitution
 
-substTree :: C.Rod -> B.Map B.TokenTree
-substTree assoc = loop where
-    loop (B.TreeB p q sub) = B.TreeB p q $ map loop sub
-    loop tk@(B.TreeL (B.TWord _ 0 ('#' : word))) =
-        case lookup word assoc of
-          Nothing    -> tk
-          Just trees -> B.TreeB 1 Nothing trees
-    loop tk = tk
+substTree :: C.Rod -> B.AbMap B.TokenTree
+substTree rod tree = B.abortableTree "slot" tree $ loop tree where
+    loop (B.TreeB p q sub) =
+        do sub' <- mapM loop sub
+           Right $ B.TreeB p q sub'
+    loop (B.TreeL (B.TSlot _ n name))
+        | n == 1    = case lookup ('-' : name) rod of
+                        Nothing    -> Message.unkSlot name
+                        Just trees -> Right $ B.TreeB 1 Nothing trees
+        | otherwise = Message.unkSlot name
+    loop tk = Right tk
 
-substTrees :: C.Rod -> B.Map [B.TokenTree]
-substTrees assoc = (substTree assoc `map`)
+substTrees :: C.Rod -> B.AbMap [B.TokenTree]
+substTrees rod = (substTree rod `mapM`)
 
 lexmapList :: C.ConsLexmap -> C.Lexmap
     -> [B.Named [B.TokenTree]]
     -> B.Ab [C.Rody C.Lexmap]
 lexmapList cons lexmap def = loop lexmap where
-    loop lx = let op = C.lexOpText lx
-                  od = C.lexOperand lx
+    loop lx = let rop = C.lexOpText lx
+                  rod = C.lexOperand lx
                   subuse = loops $ C.lexSubmap lx
-              in case lookup op def of
+              in B.abortableFrom "slot" lx $
+                 case lookup rop def of
                    Nothing    -> subuse
                    Just trees ->
-                       do lx2 <- cons $ substTrees od trees
-                          use2 <- loop lx2
-                          use3 <- subuse
-                          Right $ ((op, od), lx2) : use2 ++ use3
+                       do trees' <- substTrees rod trees
+                          lx2    <- cons trees'
+                          use2   <- loop lx2
+                          use3   <- subuse
+                          Right $ ((rop, rod), lx2) : use2 ++ use3
 
     loops :: [C.Lexmap] -> B.Ab [C.Rody C.Lexmap]
     loops [] = Right []
