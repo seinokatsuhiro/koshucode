@@ -10,7 +10,8 @@ module Koshucode.Baala.Base.Token.TokenLine
   tokenLines,
   tokens,
   isSimpleWord, isSimpleChar,
-  commentLine, putCommentLines,
+  commentLine,
+  putCommentLines, hPutCommentLines,
   trimLeft, trimRight, trimBoth,
 
   -- * Document
@@ -25,8 +26,8 @@ module Koshucode.Baala.Base.Token.TokenLine
   -- $Examples
 ) where
 
-import qualified Data.Char as Ch
-
+import qualified Data.Char                           as Ch
+import qualified System.IO                           as IO
 import qualified Koshucode.Baala.Base.Prelude        as B
 import qualified Koshucode.Baala.Base.Syntax         as B
 import qualified Koshucode.Baala.Base.Text           as B
@@ -176,6 +177,9 @@ commentLine s  = "**  " ++ s
 
 putCommentLines :: [String] -> IO ()
 putCommentLines = putStr . unlines . map commentLine
+
+hPutCommentLines :: IO.Handle -> [String] -> IO ()
+hPutCommentLines h = IO.hPutStr h . unlines . map commentLine
 
 trimLeft :: B.Map String
 trimLeft = dropWhile isSpace

@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Output judgements.
@@ -10,9 +11,9 @@ module Koshucode.Baala.Base.Data.Output
   OutputChunk (..),
 
   -- * Function
-  hPutOutputResult,
-  hPutJudgesFlat,
   putJudges,
+  hPutJudges,
+  hPutOutputResult,
 ) where
 
 import qualified Control.Monad                     as M
@@ -33,6 +34,7 @@ hPutLines h = (IO.hPutStrLn h `mapM_`)
 
 -- ----------------------  Output judges
 
+-- total and per-judgement counter
 type Counter = (Int, Map.Map String Int)
 
 initialCounter :: Counter
@@ -40,52 +42,62 @@ initialCounter = (0, Map.empty)
 
 -- | Print judges to `IO.stdout`.
 putJudges :: (Ord c, B.Pretty c) => Int -> [B.Judge c] -> IO Int
-putJudges = hPutJudgesFlat IO.stdout
+putJudges = hPutJudges IO.stdout
 
-hPutJudgesFlat :: (Ord c, B.Pretty c) => IO.Handle -> Int -> [B.Judge c] -> IO Int
-hPutJudgesFlat h status js =
-    do cnt <- judges h initialCounter js
+hPutJudges :: (Ord c, B.Pretty c) => IO.Handle -> Int -> [B.Judge c] -> IO Int
+hPutJudges h status js =
+    do cnt <- judges h js initialCounter
        hPutLines h $ summary status cnt
        return status
 
-judges :: (Ord c, B.Pretty c) => IO.Handle -> Counter -> [B.Judge c] -> IO Counter
+judges :: forall c. (Ord c, B.Pretty c) =>
+    IO.Handle -> [B.Judge c] -> Counter -> IO Counter
 judges h = loop where
-    loop cnt (j:js)     = do cnt' <- put j cnt
-                             loop cnt' js
-    loop cnt@(tt, _) [] = do M.when (tt `mod` 5 /= 0) $ hPutEmptyLine h
-                             return cnt
+    loop (j : js) cnt  = loop js =<< put j cnt
+    loop [] cnt@(c, _) = do M.when (c > 0) $ hPutEmptyLine h
+                            total c
+                            hPutEmptyLine h
+                            return cnt
 
-    put judge@(B.Judge _ pat _) (tt, c) =
-        do IO.hPutStrLn h $ show $ B.doc judge
-           let tt' = tt + 1
-           M.when (mod20 tt') $ counter tt'
-           M.when (mod5  tt') $ hPutEmptyLine h
-           return $ (tt', Map.alter inc pat c)
+    put :: B.Judge c -> Counter -> IO Counter
+    put judge@(B.Judge _ pat _) (c, tab) =
+        do M.when (mod5 c && c > 0) $
+            do M.when (mod25 c) $ progress c
+               hPutEmptyLine h
+           IO.hPutStrLn h $ show $ B.doc judge
+           let c' = c + 1
+           return (c', Map.alter inc pat tab)
 
-    mod20 n = (n `mod` 20 == 0)
-    mod5  n = (n `mod` 5  == 0)
+    mod25 n       = (n `mod` 25 == 0)
+    mod5  n       = (n `mod` 5  == 0)
 
-    counter n = IO.hPutStrLn h $ "*** " ++ show n ++ " judges"
+    total    n    = IO.hPutStrLn h $ "*** " ++ showCount n
+    progress n    = IO.hPutStrLn h $ "*** " ++ show n
 
     inc (Nothing) = Just 1
     inc (Just n)  = Just $ n + 1
 
 -- hPutLines IO.stdout $ summary 0 (10, Map.fromList [("A", 3), ("B", 6), ("C", 1)])
 summary :: Int -> Counter -> [String]
-summary status (tt, c) = B.texts sumDoc where
+summary status (_, tab) = B.texts sumDoc where
     label | status == 0 =  "SUMMARY"
           | otherwise   =  "SUMMARY (VIOLATED)"
 
     sumDoc              =  B.CommentDoc [sumSec]
     sumSec              =  B.CommentSec label $ sumLines ++ [total]
-    sumLines            =  map sumLine $ Map.assocs c
+    sumLines            =  map sumLine $ Map.assocs tab
     sumLine (p, n)      =  count n ++ " on " ++ p
-    total               =  count tt ++ " in total"
+    total               =  count (sumOf tab) ++ " in total"
 
-    count 0             =  comment $ "no judges"
-    count 1             =  comment $ "1 judge "
-    count n             =  comment $ show n ++ " judges"
-    comment             =  B.padLeft 11
+    count n             =  B.padLeft 11 $ showCount n
+
+sumOf :: Map.Map a Int -> Int
+sumOf = Map.foldr (+) 0
+
+showCount :: Int -> String
+showCount 0 = "no judges"
+showCount 1 = "1 judge "
+showCount n = show n ++ " judges"
 
 
 -- ----------------------  Output chunks
@@ -111,23 +123,23 @@ shortList h status shorts =
 
 short :: (Ord c, B.Pretty c) => IO.Handle -> Counter -> OutputChunks c -> IO Counter
 short h cnt (B.Short [] output) =
-    do chunks h cnt output
+    do chunks h output cnt
 short h cnt (B.Short shorts output) =
     do hPutLines h $ "short" : map shortLine shorts
-       chunks h cnt output
+       chunks h output cnt
     where
       shortLine :: (String, String) -> String
       shortLine (a, b) = "  " ++ a ++ " " ++ show b
 
-chunks :: (Ord c, B.Pretty c) => IO.Handle -> Counter -> [OutputChunk c] -> IO Counter
+chunks :: (Ord c, B.Pretty c) => IO.Handle -> [OutputChunk c] -> Counter -> IO Counter
 chunks h = loop where
-    loop cnt [] = return cnt
-    loop cnt (OutputJudge js : xs) =
-        do cnt' <- judges h cnt js
-           loop cnt' xs
-    loop cnt (OutputComment [] : xs) = loop cnt xs
-    loop cnt (OutputComment ls : xs) =
-        do B.putCommentLines ls
-           putStrLn ""
-           loop cnt xs
+    loop [] cnt = return cnt
+    loop (OutputJudge js : xs) (_, tab) =
+        do cnt' <- judges h js (0, tab)
+           loop xs cnt'
+    loop (OutputComment [] : xs) cnt = loop xs cnt
+    loop (OutputComment ls : xs) cnt =
+        do B.hPutCommentLines h ls
+           hPutEmptyLine h
+           loop xs cnt
 
