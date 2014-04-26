@@ -1,7 +1,7 @@
 #!/bin/sh
 
 io_version () {
-    echo "koshu-inout-0.52"
+    echo "koshu-inout-0.53"
     exit
 }
 
@@ -245,7 +245,7 @@ io_diff () {
 io_diff_body () {
     io_doc $@  # output to $io_output_work
 
-    if diff -u $io_output_orig $io_output_work > $io_temp; then
+    if io_diff_cmd $io_output_orig $io_output_work > $io_temp; then
         io_diff_result OK
     else
         echo
@@ -266,10 +266,27 @@ io_diff_body () {
     fi
 }
 
+io_diff_cmd () {
+    diff \
+        --old-line-format=' - %.4dn | %L' \
+        --new-line-format=' + %.4dn | %L' \
+        --old-group-format='Deleted
+%<
+' \
+        --new-group-format='Added
+%>
+' \
+        --changed-group-format='Changed
+%<%>
+' \
+        --unchanged-group-format='' \
+        "$1" "$2"
+}
+
 io_diff_result () {
     io_dir=`io_pwd`
     io_dir_md=`echo $io_dir | sed 's:/: / :g'`
-    echo "- $1 – [$io_output_orig]($io_dir/$io_output_orig) in $io_dir_md"
+    echo "* $1 – [$io_output_orig]($io_dir/$io_output_orig) in $io_dir_md"
 }
 
 io_pwd () {
