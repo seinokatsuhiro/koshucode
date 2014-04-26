@@ -157,45 +157,50 @@ consSectionEach root resource (B.Short shorts xs) =
             Right j -> Right j
             Left  a -> abort a
 
-      tokmap :: [B.Token] -> C.ClauseBody -> B.Ab (String, [B.TokenTree])
-      tokmap _ (C.TRelmapDef name tree) =
-          Right (name, tree)
+      tokmap :: [B.Token] -> C.ClauseBody -> B.Ab (B.Named [B.TokenTree])
+      tokmap _ (C.CTokmap name tree) = Right (name, tree)
 
       assert :: [B.Token] -> C.ClauseBody -> B.Ab (C.Assert c)
-      assert toks (C.CAssert typ pat opt lx) =
-          Right $ C.Assert typ pat opt lx Nothing [] toks
+      assert toks (C.CAssert typ pat opt trees) =
+          do lx <- lexmap trees
+             Right $ C.Assert typ pat opt lx Nothing [] toks
+
+      lexmap = C.consLexmap $ secCons root
 
       unk   _ (C.CUnknown) = Message.unkClause
       unres _ (C.CUnres _) = Message.unresPrefix
       abort a = Left a
 
+
+-- ----------------------  Clause type
+
 isCImport, isCExport, isCShort,
   isCTokmap, isCAssert, isCJudge,
   isCUnknown, isCUnres :: C.ClauseBody -> Bool
 
-isCImport (C.CImport _ _)         = True
-isCImport _                       = False
+isCImport (C.CImport _ _)      = True
+isCImport _                    = False
 
-isCExport (C.CExport _)           = True
-isCExport _                       = False
+isCExport (C.CExport _)        = True
+isCExport _                    = False
 
-isCShort (C.CShort _)             = True
-isCShort _                        = False
+isCShort (C.CShort _)          = True
+isCShort _                     = False
 
-isCTokmap (C.TRelmapDef _ _)      = True
-isCTokmap _                       = False
+isCTokmap (C.CTokmap _ _)      = True
+isCTokmap _                    = False
 
-isCAssert (C.CAssert _ _ _ _)     = True
-isCAssert _                       = False
+isCAssert (C.CAssert _ _ _ _)  = True
+isCAssert _                    = False
 
-isCJudge (C.CJudge _ _ _)         = True
-isCJudge _                        = False
+isCJudge (C.CJudge _ _ _)      = True
+isCJudge _                     = False
 
-isCUnknown (C.CUnknown)           = True
-isCUnknown _                      = False
+isCUnknown (C.CUnknown)        = True
+isCUnknown _                   = False
 
-isCUnres (C.CUnres _)             = True
-isCUnres _                        = False
+isCUnres (C.CUnres _)          = True
+isCUnres _                     = False
 
 
 

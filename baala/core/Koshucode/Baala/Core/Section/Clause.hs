@@ -35,11 +35,10 @@ data ClauseBody
     | CImport     [B.Token] (Maybe Clause)       -- ^ Importing section name
     | CExport     String                         -- ^ Exporting relmap name
     | CShort      [(B.Named String)]             -- ^ Short signs
-    | CRelmapUse  String C.Rod C.Lexmap          -- ^ Lexmap and its name
-    | TRelmapDef  String [B.TokenTree]
-    | TRelmap     String [B.Token]               -- ^ Not include Lexmap
-    | CAssert     C.AssertType B.JudgePattern C.AssertOption C.Lexmap   -- ^ Assertions of relmaps
-    | TAssert     C.AssertType B.JudgePattern C.AssertOption [B.Token]  -- ^ Not include Lexmap
+    | CTokmap     String [B.TokenTree]           -- ^ Source of relmap
+    | TTokmap     String [B.Token]               -- ^ (Intermediate data)
+    | CAssert     C.AssertType B.JudgePattern C.AssertOption [B.TokenTree] -- ^ Assertions of relmap
+    | TAssert     C.AssertType B.JudgePattern C.AssertOption [B.Token]     -- ^ (Intermediate data)
     | CJudge      Bool B.JudgePattern [B.Token]  -- ^ Judge
     | CComment                                   -- ^ Clause comment
     | CUnknown                                   -- ^ Unknown clause
@@ -54,9 +53,8 @@ clauseTypeText (Clause _ body) =
       CImport    _ _       ->  "Import"
       CExport    _         ->  "Export"
       CShort     _         ->  "Short"
-      CRelmapUse _ _ _     ->  "RelmapUse"
-      TRelmapDef _ _       ->  "RelmapDef"
-      TRelmap    _ _       ->  "Relmap"
+      CTokmap    _ _       ->  "Tokmap"
+      TTokmap    _ _       ->  "Tokmap"
       CAssert    _ _ _ _   ->  "Assert"
       TAssert    _ _ _ _   ->  "Assert"
       CJudge     _ _ _     ->  "Judge"
@@ -70,12 +68,12 @@ clauseTypeText (Clause _ body) =
 
 -- | Convert token list into clause list.
 --   Result clause list does not contain
---   'CRelmapUse' and 'CAssert'. Instead of them,
---   'TRelmap' and 'TAssert' are contained.
+--   'CTokmap' and 'CAssert'. Instead of them,
+--   'TTokmap' and 'TAssert' are contained.
 --   This function does not depend on 'C.ConsLexmap'.
 --
 --   >>> consPreclause . B.tokenize $ "a : source A /x /y"
---   [ TRelmap ( TokenClause
+--   [ TTokmap ( TokenClause
 --                [TWord 1 0 "a", TSpace 2 1, ..., TTerm 11 ["/y"]]
 --                [CodeLine 1 "a : source A /x /y" [TWord 1 0 "a", ...]] )
 --            "a" [ TWord 5 0 "source"
@@ -132,11 +130,11 @@ consPreclause' src = dispatch $ B.clauseTokens src where
           Right (opt, _, expr)  ->  a expr opt
           Left  expr            ->  a expr []
         where a expr opt =
-                  let opt' = C.ropOperandAssoc $ B.tokenTrees opt
+                  let opt' = C.rod $ B.tokenTrees opt
                   in c1 $ TAssert t p opt' expr
     ass _ _               =  unk
 
-    rel n expr            =  c1 $ TRelmap n expr
+    rel n expr            =  c1 $ TTokmap n expr
 
     sec [B.TWord _ _ n]    =  c1 $ CSection (Just n)
     sec []                 =  c1 $ CSection Nothing
@@ -172,42 +170,19 @@ wordPairs toks =
 
 -- | Construct 'Clause' list from 'B.Token' list.
 --   This is a first step of constructing 'Section'.
-consClause
-    :: C.ConsLexmap             -- ^ Relmap lex constructor
-    -> [B.TokenLine]            -- ^ Source tokens
-    -> B.Ab [B.Short [Clause]]  -- ^ Result clauses
-consClause cons = clauseLexClause cons . shortSections . consPreclause
+consClause :: [B.TokenLine] -> [B.Short [Clause]]
+consClause = (map $ fmap clauseTree) . shortSections . consPreclause
 
-clauseLexClause :: C.ConsLexmap -> B.AbMap [B.Short [Clause]]
-clauseLexClause cons = sequence . map B.shortM . f where
-    f :: [B.Short [Clause]] -> [B.Short (B.Ab [Clause])]
-    f = map $ fmap (clauseLexUse cons B.<=< clauseLexDef cons)
+clauseTree :: B.Map [Clause]
+clauseTree = map clause where
+    clause :: B.Map Clause
+    clause (Clause src bo) = Clause src $ tree bo
 
-clauseLexDef :: C.ConsLexmap -> B.AbMap [Clause]
-clauseLexDef cons = mapM clause where
-    clause :: B.AbMap Clause
-    clause (Clause src bd) = Right . Clause src =<< def bd
+    tree :: B.Map ClauseBody
+    tree (TTokmap n ts)     = CTokmap n     $ B.tokenTrees ts
+    tree (TAssert q p o ts) = CAssert q p o $ B.tokenTrees ts
+    tree bo = bo
 
-    def :: B.AbMap ClauseBody
-    def (TRelmap n ts)       = Right $ TRelmapDef n $ B.tokenTrees ts
-                             -- = Right . CRelmapUse n [] =<< cons (B.tokenTrees ts)
-    def (TAssert q p opt ts) = Right . CAssert q p opt =<< cons (B.tokenTrees ts)
-    def bd = Right bd
-
-clauseLexUse :: C.ConsLexmap -> B.AbMap [Clause]
-clauseLexUse cons cs =
-    do cs2 <- mapM use ass
-       Right $ concat cs2 ++ cs
-    where
-      def = map rel cs
-      ass = B.catMaybes $ map maybeLexmap cs
-      use lexmap = lexmapUse cons lexmap def
-
-      rel (Clause src (TRelmapDef n trees)) = (n, (src, trees))
-      rel (Clause src _) = ("", (src, []))
-
-      maybeLexmap (Clause _ (CAssert _ _ _ lexmap)) = Just lexmap
-      maybeLexmap _ = Nothing
 
 
 -- ----------------------  Short-to-long conversion
@@ -237,7 +212,7 @@ shortToLong sh = map clause where
         case b of
           CJudge  q p xs     -> Clause src $ body xs $ CJudge  q p
           TAssert q p opt xs -> Clause src $ body xs $ TAssert q p opt
-          TRelmap n xs       -> Clause src $ body xs $ TRelmap n
+          TTokmap n xs       -> Clause src $ body xs $ TTokmap n
           _                  -> cl
 
     body :: [B.Token] -> ([B.Token] -> ClauseBody) -> ClauseBody
@@ -269,27 +244,6 @@ substTree assoc = loop where
 
 substTrees :: C.Rod -> B.Map [B.TokenTree]
 substTrees assoc = (substTree assoc `map`)
-
-lexmapUse :: C.ConsLexmap -> C.Lexmap
-    -> [(String, (B.TokenClause, [B.TokenTree]))]
-    -> B.Ab [Clause]
-lexmapUse cons lexmap def = loop lexmap where
-    loop lx = let op = C.lexOpText lx
-                  od = C.lexOperand lx
-                  subuse = loops $ C.lexSubmap lx
-              in case lookup op def of
-                   Nothing    -> subuse
-                   Just (src, trees) ->
-                       do lx2 <- cons $ substTrees od trees
-                          use2 <- loop lx2
-                          use3 <- subuse
-                          Right $ Clause src (CRelmapUse op od lx2) : use2 ++ use3
-
-    loops :: [C.Lexmap] -> B.Ab [Clause]
-    loops [] = Right []
-    loops (lx : lxs) = do lx'  <- loop lx
-                          lxs' <- loops lxs
-                          Right $ lx' ++ lxs'
 
 lexmapList :: C.ConsLexmap -> C.Lexmap
     -> [B.Named [B.TokenTree]]

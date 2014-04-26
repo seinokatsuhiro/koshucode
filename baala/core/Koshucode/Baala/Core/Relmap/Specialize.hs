@@ -17,7 +17,7 @@ import qualified Koshucode.Baala.Core.Message         as Message
 
 relmapSpecialize :: forall c. C.Global c -> [C.RodyRelmap c]
   -> [C.RelkitDef c] -> Maybe B.Relhead -> C.Relmap c -> B.Ab ([C.RelkitDef c], C.Relkit c)
-relmapSpecialize global rdef = spec [] [] where
+relmapSpecialize global parts = spec [] [] where
     spec :: [(String, B.Relhead)] -- name of nested relation, and its heading
          -> [C.RelkitKey]         -- information for detecting cyclic relmap
          -> [C.RelkitDef c]       -- list of known specialized relkits
@@ -48,7 +48,7 @@ relmapSpecialize global rdef = spec [] [] where
               C.RelmapLink lx n od ->
                   post lx $ case lookup n with of
                      Just he -> Right (kdef, C.relkitNest n he)
-                     Nothing -> case lookup (n, od) rdef of
+                     Nothing -> case lookup (n, od) parts of
                        Nothing    -> Message.unkRelmap n
                        Just rmap1 -> link n rmap1 (he1, C.relmapLexList rmap1)
 

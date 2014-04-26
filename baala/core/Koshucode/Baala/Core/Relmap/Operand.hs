@@ -15,7 +15,7 @@ module Koshucode.Baala.Core.Relmap.Operand
   ropBaseSorter,
 
   -- * Branch sorter
-  ropOperandAssoc,
+  rod,
 
   -- * Trunk sorter
   sortNone,
@@ -72,7 +72,7 @@ ropFullSorter sorter = ropUserSorter sorter B.<=< ropBaseSorter
 ropBaseSorter :: RopFullSorter
 ropBaseSorter trees = sorted where
     assoc :: Rod
-    assoc = ropOperandAssoc trees
+    assoc = rod trees
 
     dup :: [String]
     dup = map fst $ B.assocMore $ B.assocGather assoc
@@ -104,13 +104,13 @@ ropUserSorter (trunkSorter, trunkNames, branchNames) assoc = sorted where
 --   Non quoted words beginning with hyphen, e.g., @-x@,
 --   are name of group.
 --
---   >>> ropOperandAssoc $ B.tt "a b -x /c 'd -y e"
+--   >>> rod $ B.tt "a b -x /c 'd -y e"
 --   [ ("",   [TreeL (TWord 1 0 "a"), TreeL (TWord 3 0 "b")])
 --   , ("-x", [TreeL (TTerm 7 ["/c"]), TreeL (TWord 9 1 "d")])
 --   , ("-y", [TreeL (TWord 14 0 "e")]) ]
 --
-ropOperandAssoc :: [B.TokenTree] -> Rod
-ropOperandAssoc = B.assocBy maybeBranch "" where
+rod :: [B.TokenTree] -> Rod
+rod = B.assocBy maybeBranch "" where
     maybeBranch (B.TreeL (B.TWord _ 0 n@('-' : _))) = Just n
     maybeBranch _ = Nothing
 

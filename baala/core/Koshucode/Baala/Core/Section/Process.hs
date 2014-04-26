@@ -49,8 +49,7 @@ readSectionCode
     -> String       -- ^ Source text
     -> B.Ab (C.Section c)  -- ^ Resulting section
 readSectionCode root res code =
-    do let (C.RelmapCons lx _) = C.secCons root
-       clauses <- C.consClause lx $ B.tokenLines res code
+    do let clauses = C.consClause $ B.tokenLines res code
        C.consSection root res clauses
 
 -- | Read section from text.
@@ -76,14 +75,15 @@ runSection global sects =
 runSectionBody :: forall c. (Ord c, B.Pretty c, C.CRel c, C.CNil c) =>
     C.Global c -> C.Section c -> B.Ab (B.OutputResult c)
 runSectionBody global C.Section { C.secTokmap = tok,
-                                  C.secAssert = ass, C.secCons = cons } =
-    do ass2    <- mapM f `B.shortMapM` ass
+                                  C.secAssert = ass,
+                                  C.secCons   = cons } =
+    do ass2    <- mapM consAssert `B.shortMapM` ass
        judgesV <- run $ C.assertViolated ass2
        judgesN <- run $ C.assertNormal   ass2
        Right (B.shortTrim judgesV, B.shortTrim judgesN)
     where
-      run :: C.ShortAsserts c -> B.Ab ([B.OutputChunks c])
-      run = sequence . map B.shortM . run2
+      run :: C.ShortAsserts c -> B.Ab [B.OutputChunks c]
+      run = mapM B.shortM . run2
 
       run2 :: C.ShortAsserts c -> [B.Short (B.Ab [B.OutputChunk c])]
       run2 = B.shortMap $ C.runAssertJudges global
@@ -91,14 +91,12 @@ runSectionBody global C.Section { C.secTokmap = tok,
       lexmap = C.consLexmap cons
       relmap = C.consRelmap cons
 
-      f a = do let lx = C.assLexmap a
-               lexes <- C.lexmapList lexmap lx tok
-               rdef  <- B.sequenceSnd $ B.mapSndTo relmap lexes
-               rmap  <- relmap $ C.assLexmap a
-               Right $ C.Assert (C.assType    a)
-                                (C.assPattern a)
-                                (C.assOption  a)
-                                lx
-                                (Just rmap)
-                                rdef
-                                (C.assSource a)
+      consAssert :: B.AbMap (C.Assert c)
+      consAssert a =
+          do let lx = C.assLexmap a
+             rmap  <- relmap lx
+             lxs   <- C.lexmapList lexmap lx tok
+             parts <- B.sequenceSnd $ B.mapSndTo relmap lxs
+             Right $ a { C.assRelmap = Just rmap
+                       , C.assParts  = parts }
+

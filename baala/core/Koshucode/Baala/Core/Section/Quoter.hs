@@ -31,7 +31,7 @@ koshuQ _ fullQ text =
     dispatch $ B.tokenLines (B.ResourceText text) text
     where
       dispatch src = sectionQ src -- relmapQ src
-      sectionQ = consSectionQ fullQ . {- C.consClause lx -} undefined
+      sectionQ = consSectionQ fullQ . {- C.consClause -} undefined
       --relmapQ  = consFullRelmapQ fullQ . lx [] . tokenTrees
 
 {- Construct ExpQ of Section

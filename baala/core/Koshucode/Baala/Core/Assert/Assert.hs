@@ -36,7 +36,7 @@ data Assert c = Assert
     , assOption  :: AssertOption        -- ^ Assert option
     , assLexmap  :: C.Lexmap            -- ^ Lexmap
     , assRelmap  :: Maybe (C.Relmap c)  -- ^ Relmap
-    , assLibs    :: [C.RodyRelmap c]
+    , assParts   :: [C.RodyRelmap c]
     , assSource  :: [B.Token]           -- ^ Source code information
     } deriving (Show)
 
