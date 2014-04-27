@@ -13,14 +13,12 @@ module Koshucode.Baala.Core.Section.Clause
   -- * Constructors
   consPreclause,
   consClause,
-  lexmapList,
 ) where
 
 import qualified Data.Generics as G
 import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Core.Relmap   as C
 import qualified Koshucode.Baala.Core.Assert   as C
-import qualified Koshucode.Baala.Core.Message  as Message
 
 
 
@@ -91,9 +89,9 @@ consPreclause' src = dispatch $ B.clauseTokens src where
 
     dispatch :: [B.Token] -> [Clause]
     dispatch (B.TWord _ 0 "|" : B.TWord _ 0 k : xs) =
-        frege k xs  -- frege's judgement stroke
+        frege k xs  -- Frege's judgement stroke
     dispatch (B.TWord _ 0 name : B.TWord _ 0 colon : xs)
-        | isDelim colon   =  rel name xs
+        | isDelim colon   =  rmap name xs
     dispatch (B.TWord _ 0 k : xs)
         | k == "section"  =  sec xs
         | k == "import"   =  impt xs
@@ -109,47 +107,48 @@ consPreclause' src = dispatch $ B.clauseTokens src where
 
     isDelim     =  (`elem` ["|", ":"])
 
-    frege "--"  =  jud True
-    frege "-"   =  jud True
-    frege "-X"  =  jud False
-    frege "-x"  =  jud False
+    frege "--"  =  judge True
+    frege "-"   =  judge True
+    frege "-X"  =  judge False
+    frege "-x"  =  judge False
 
-    frege "=="  =  ass C.AssertAffirm
-    frege "="   =  ass C.AssertAffirm
-    frege "=X"  =  ass C.AssertDeny
-    frege "=x"  =  ass C.AssertDeny
-    frege "=V"  =  ass C.AssertViolate
-    frege "=v"  =  ass C.AssertViolate
+    frege "=="  =  assert C.AssertAffirm
+    frege "="   =  assert C.AssertAffirm
+    frege "=X"  =  assert C.AssertDeny
+    frege "=x"  =  assert C.AssertDeny
+    frege "=V"  =  assert C.AssertViolate
+    frege "=v"  =  assert C.AssertViolate
 
     frege _     =  const unk
 
-    jud q (B.TWord _ _ p : xs) = c1 $ CJudge q p xs
-    jud _ _     =  unk
+    judge q (B.TWord _ _ p : xs)  =  c1 $ CJudge q p xs
+    judge _ _                     =  unk
 
-    ass t (B.TWord _ _ p : xs) =
+    assert t (B.TWord _ _ p : xs) =
         case B.splitTokensBy isDelim xs of
           Right (opt, _, expr)  ->  a expr opt
           Left  expr            ->  a expr []
         where a expr opt =
                   let opt' = C.rod $ B.tokenTrees opt
                   in c1 $ TAssert t p opt' expr
-    ass _ _               =  unk
+    assert _ _             =  unk
 
-    rel n expr            =  c1 $ TTokmap n expr
+    rmap n expr            =  c1 $ TTokmap n expr
 
     sec [B.TWord _ _ n]    =  c1 $ CSection (Just n)
     sec []                 =  c1 $ CSection Nothing
     sec _                  =  unk
 
-    expt (B.TWord _ _ n : B.TWord _ _ ":" : xs) = c0 (CExport n) : rel n xs
+    expt (B.TWord _ _ n : B.TWord _ _ ":" : xs)
+                           =  c0 (CExport n) : rmap n xs
     expt [B.TWord _ _ n]   =  c1 $ CExport n
     expt _                 =  unk
 
     impt xs                =  c1 $ CImport xs Nothing
 
-    short xs               = case wordPairs xs of
-                               Nothing -> unk
-                               Just sh -> c1 $ CShort sh
+    short xs               =  case wordPairs xs of
+                                Nothing -> unk
+                                Just sh -> c1 $ CShort sh
 
 pairs :: [a] -> Maybe [(a, a)]
 pairs (a:b:cs) = do cs' <- pairs cs
@@ -230,47 +229,6 @@ shortToLong sh = map clause where
           Just l  -> B.TWord n 2 $ l ++ b
           Nothing -> token
     long token = token
-
-
--- ----------------------  Substitution
-
-substTree :: C.Rod -> B.AbMap B.TokenTree
-substTree rod tree = B.abortableTree "slot" tree $ loop tree where
-    loop (B.TreeB p q sub) =
-        do sub' <- mapM loop sub
-           Right $ B.TreeB p q sub'
-    loop (B.TreeL (B.TSlot _ n name))
-        | n == 1    = case lookup ('-' : name) rod of
-                        Nothing    -> Message.unkSlot name
-                        Just trees -> Right $ B.TreeB 1 Nothing trees
-        | otherwise = Message.unkSlot name
-    loop tk = Right tk
-
-substTrees :: C.Rod -> B.AbMap [B.TokenTree]
-substTrees rod = (substTree rod `mapM`)
-
-lexmapList :: C.ConsLexmap -> C.Lexmap
-    -> [B.Named [B.TokenTree]]
-    -> B.Ab [C.Rody C.Lexmap]
-lexmapList cons lexmap def = loop lexmap where
-    loop lx = let rop = C.lexOpText lx
-                  rod = C.lexOperand lx
-                  subuse = loops $ C.lexSubmap lx
-              in B.abortableFrom "slot" lx $
-                 case lookup rop def of
-                   Nothing    -> subuse
-                   Just trees ->
-                       do trees' <- substTrees rod trees
-                          lx2    <- cons trees'
-                          use2   <- loop lx2
-                          use3   <- subuse
-                          Right $ ((rop, rod), lx2) : use2 ++ use3
-
-    loops :: [C.Lexmap] -> B.Ab [C.Rody C.Lexmap]
-    loops [] = Right []
-    loops (lx : lxs) = do lx'  <- loop lx
-                          lxs' <- loops lxs
-                          Right $ lx' ++ lxs'
 
 
 -- ----------------------

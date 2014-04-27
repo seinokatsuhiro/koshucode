@@ -98,8 +98,9 @@ nextToken res line txt =
       short ccs xs                    = word ccs xs (B.TWord pos 0)
 
       slot :: Int -> String -> (Int, String)
-      slot n ('@' : cs) = slot (n + 1) cs
-      slot n cs         = (n, cs)
+      slot n ('@'  : cs) = slot (n + 1) cs
+      slot _ ('\'' : cs) = (3, cs)
+      slot n cs          = (n, cs)
 
       word :: String -> String -> (String -> B.Token) -> (B.Token, String)
       word (c:cs) text k | isWord c   = word cs (c : text) k

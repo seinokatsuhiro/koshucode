@@ -7,6 +7,8 @@ module Koshucode.Baala.Core.Message
   -- * Core package
   ambInfixes,
   noFile,
+  noSlotLeaf,
+  noSlotIndex,
   oddRelation,
   reqFlatName,
   reqTermName,
@@ -16,7 +18,6 @@ module Koshucode.Baala.Core.Message
   unkCox,
   unkNestRel,
   unkRelmap,
-  unkSlot,
   unkTerm,
   unkWord,
   unmatchType,
@@ -37,6 +38,16 @@ ambInfixes = Left . B.abortLines "Ambiguous infix operators"
 -- | File not found
 noFile :: String -> B.Ab a
 noFile = Left . B.abortLine "File not found"
+
+-- | Unknown slot
+noSlotLeaf :: String -> B.Ab a
+noSlotLeaf name = Left $ B.abortLine "No slot content" $
+                  "No operand for @" ++ name
+
+-- | No slot content
+noSlotIndex :: [String] -> Int -> B.Ab a
+noSlotIndex xs n = Left $ B.abortLines "No slot content" $
+                   ("No index @'" ++ show n ++ " in") : xs
 
 -- | Odd relation literal
 oddRelation :: B.Ab a
@@ -74,10 +85,6 @@ unkNestRel = Left . B.abortLine "Unknown nested relation"
 -- | Unknown relmap operator
 unkRelmap :: String -> B.Ab a
 unkRelmap = Left . B.abortLine "Unknown relmap operator"
-
--- | Unknown slot
-unkSlot :: String -> B.Ab a
-unkSlot = Left . B.abortLine "Unknown slot"
 
 -- | Unknown term name
 unkTerm :: [B.TermName] -> B.Relhead -> B.Ab a

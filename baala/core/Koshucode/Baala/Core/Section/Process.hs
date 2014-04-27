@@ -96,8 +96,72 @@ runSectionBody global C.Section { C.secTokmap = tok,
           B.abortableFrom "assert" a $ do
             let lx = C.assLexmap a
             rmap  <- relmap lx
-            lxs   <- C.lexmapList lexmap lx tok
+            lxs   <- substSlot lexmap lx tok
             parts <- B.sequenceSnd $ B.mapSndTo relmap lxs
             Right $ a { C.assRelmap = Just rmap
                       , C.assParts  = parts }
+
+
+
+-- ----------------------  Slot substitution
+
+substSlot :: C.ConsLexmap -> C.Lexmap
+    -> [B.Named [B.TokenTree]]
+    -> B.Ab [C.Rody C.Lexmap]
+substSlot cons lexmap def = loop lexmap where
+    loop lx = let rop = C.lexOpText lx
+                  rod = C.lexOperand lx
+                  subuse = loops $ C.lexSubmap lx
+              in B.abortableFrom "slot" lx $
+                 case lookup rop def of
+                   Nothing    -> subuse
+                   Just trees ->
+                       do trees' <- substTrees rod trees
+                          lx2    <- cons trees'
+                          use2   <- loop lx2
+                          use3   <- subuse
+                          Right $ ((rop, rod), lx2) : use2 ++ use3
+
+    loops :: [C.Lexmap] -> B.Ab [C.Rody C.Lexmap]
+    loops [] = Right []
+    loops (lx : lxs) = do lx'  <- loop lx
+                          lxs' <- loops lxs
+                          Right $ lx' ++ lxs'
+
+substTrees :: C.Rod -> B.AbMap [B.TokenTree]
+substTrees rod trees =
+    do trees' <- substTree rod `mapM` trees
+       Right $ concat trees'
+
+substTree :: C.Rod -> B.TokenTree -> B.Ab [B.TokenTree]
+substTree rod tree = B.abortableTree "slot" tree $ loop tree where
+    loop (B.TreeB p q sub) =
+        do sub' <- mapM loop sub
+           Right [B.TreeB p q $ concat sub']
+    loop (B.TreeL (B.TSlot _ 1 name))
+        = case lookup ('-' : name) rod of
+            Nothing -> Message.noSlotLeaf name
+            Just od -> Right od
+    loop (B.TreeL (B.TSlot _ 3 name))
+        = case lookup "operand" rod of
+            Nothing -> Message.noSlotLeaf name
+            Just od -> od `pos` name
+    loop (B.TreeL (B.TSlot _ _ name)) = Message.noSlotLeaf name
+    loop tk = Right [tk]
+
+    pos :: [B.TokenTree] -> String -> B.Ab [B.TokenTree]
+    pos od "*" = Right od
+    pos od n   = case (reads :: ReadS Int) n of
+                   [(i, "")] -> Right . B.singleton =<< od `at` i
+                   _         -> Message.noSlotLeaf n
+
+    at = slotIndex $ unwords . map B.tokenContent . B.untree
+
+slotIndex :: (a -> String) -> [a] -> Int -> B.Ab a
+slotIndex toString xxs n = loop xxs n where
+    loop (x : _)  1 = Right x
+    loop (_ : xs) i = loop xs $ i - 1
+    loop _ _        = Message.noSlotIndex (number $ map toString xxs) n
+    number xs = map pair $ zip [1 :: Int ..] xs
+    pair (i, x) = "@'" ++ show i ++ " = " ++ x
 
