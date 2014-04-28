@@ -24,7 +24,7 @@ data Lexmap = Lexmap
 
 instance B.Pretty Lexmap where
     doc Lexmap { lexOpToken = opTok, lexOperand = opd } =
-        case lookup "operand" opd of
+        case lookup "@operand" opd of
           Nothing -> B.doch [op, "..."]
           Just xs -> B.doch [op, show xs]
         where op = B.tokenContent opTok

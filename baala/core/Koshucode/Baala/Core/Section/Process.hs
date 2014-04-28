@@ -138,22 +138,22 @@ substTree rod tree = B.abortableTree "slot" tree $ loop tree where
     loop (B.TreeB p q sub) =
         do sub' <- mapM loop sub
            Right [B.TreeB p q $ concat sub']
-    loop (B.TreeL (B.TSlot _ 1 name))
-        = case lookup ('-' : name) rod of
-            Nothing -> Message.noSlotLeaf name
-            Just od -> Right od
-    loop (B.TreeL (B.TSlot _ 3 name))
-        = case lookup "operand" rod of
-            Nothing -> Message.noSlotLeaf name
-            Just od -> od `pos` name
-    loop (B.TreeL (B.TSlot _ _ name)) = Message.noSlotLeaf name
+    loop (B.TreeL (B.TSlot _ n name))
+        | n == 0 = case lookup "@operand" rod of
+                     Nothing -> Message.noSlotLeaf name
+                     Just od -> od `pos` name
+        | n == 1 = case lookup ('-' : name) rod of
+                     Nothing -> Message.noSlotLeaf name
+                     Just od -> Right od
+        | n == 2 = B.bug "global slots are unimplemented"
+        | otherwise = Message.noSlotLeaf name
     loop tk = Right [tk]
 
     pos :: [B.TokenTree] -> String -> B.Ab [B.TokenTree]
-    pos od "*" = Right od
-    pos od n   = case (reads :: ReadS Int) n of
-                   [(i, "")] -> Right . B.singleton =<< od `at` i
-                   _         -> Message.noSlotLeaf n
+    pos od "all" = Right od
+    pos od n     = case (reads :: ReadS Int) n of
+                     [(i, "")] -> Right . B.singleton =<< od `at` i
+                     _         -> Message.noSlotLeaf n
 
     at = slotIndex $ unwords . map B.tokenContent . B.untree
 

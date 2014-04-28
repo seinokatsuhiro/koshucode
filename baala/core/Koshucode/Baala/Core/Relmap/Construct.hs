@@ -78,14 +78,15 @@ makeConsLexmap lxs = consLex where
 
     lexmap :: B.Token -> [B.TokenTree] -> [B.Named [B.TokenTree]] -> String -> C.Lexmap
     lexmap op trees sorted usage =
-        C.Lexmap op (("operand", trees) : sorted) [] usage
+        C.Lexmap op (("@operand", trees) : sorted) [] usage
 
     submap :: B.AbMap C.Lexmap
     submap lx@C.Lexmap { C.lexOperand = od } =
-        case lookup "-relmap" od of
+        case lookup "-relmap" $ B.mapFstTo (take 7) od of
           Nothing    -> Right lx   -- no submaps
           Just trees -> do subs <- mapM (consLex . B.singleton) trees
                            Right $ lx { C.lexSubmap = subs }
+
 
 
 -- ----------------------  Generic relmap

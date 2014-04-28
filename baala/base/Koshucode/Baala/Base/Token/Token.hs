@@ -44,20 +44,23 @@ import qualified Koshucode.Baala.Base.Token.TokenPos as B
 
 -- | There are eight types of tokens.
 data Token
-    = TWord    B.TokenPos Int String
-               -- ^ Word.
-               --   'Int' represents quotation level, i.e.,
-               --   0 for non-quoted,
-               --   1 for single-quoted,
-               --   2 for double-quoted.
-    | TShort   B.TokenPos String String  -- ^ Abbreviated word
-    | TTerm    B.TokenPos TermPath    -- ^ Term name
-    | TSlot    B.TokenPos Int String  -- ^ Slot name
-    | TOpen    B.TokenPos String      -- ^ Opening paren
-    | TClose   B.TokenPos String      -- ^ Closing paren
-    | TSpace   B.TokenPos Int         -- ^ /N/ space characters
-    | TComment B.TokenPos String      -- ^ Comment text
-    | TUnknown B.TokenPos String      -- ^ Unknown text
+    = TWord    B.TokenPos Int String     -- ^ Word.
+                                         --   'Int' represents quotation level, i.e.,
+                                         --   0 for non-quoted,
+                                         --   1 for single-quoted,
+                                         --   2 for double-quoted.
+    | TShort   B.TokenPos String String  -- ^ Abbreviated word.
+    | TTerm    B.TokenPos TermPath       -- ^ Term name.
+    | TSlot    B.TokenPos Int String     -- ^ Slot name.
+                                         --   'Int' represents slot level, i.e.,
+                                         --   0 for positional slots,
+                                         --   1 for named slots,
+                                         --   2 for global slots.
+    | TOpen    B.TokenPos String         -- ^ Opening paren.
+    | TClose   B.TokenPos String         -- ^ Closing paren.
+    | TSpace   B.TokenPos Int            -- ^ /N/ space characters.
+    | TComment B.TokenPos String         -- ^ Comment text.
+    | TUnknown B.TokenPos String         -- ^ Unknown text.
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance B.Name Token where

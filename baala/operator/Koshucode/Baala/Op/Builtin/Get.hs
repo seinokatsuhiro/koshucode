@@ -36,7 +36,7 @@ import qualified Koshucode.Baala.Op.Message      as Message
 -- ---------------------- Utility
 
 ab :: [B.TokenTree] -> B.Map (B.Ab b)
-ab = B.abortableTrees "operand"
+ab = B.abortableTrees "@operand"
 
 lookupOperand :: String -> C.RopUse c -> Maybe [B.TokenTree]
 lookupOperand name = lookup name . C.lexOperand . C.ropLex
