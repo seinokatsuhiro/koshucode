@@ -22,61 +22,61 @@ vanillaRops = Op.ropList "vanilla"
     --  SYNOPSIS,
     --  CONSTRUCTOR, OPERAND
     [ ( "add /N E ...",
-        Op.consAdd, C.sortList "-in" ["-let"] )
+        Op.consAdd, C.rodList "-in" ["-let"] )
     , ( "check-term [ -just /N ... | -has /N ... | -but /N ... ]",
-        Op.consCheckTerm, C.sortNone ["-just", "-has", "-but"] )
+        Op.consCheckTerm, C.rodNone ["-just", "-has", "-but"] )
     , ( "compose R",
-        Op.consCompose, C.sortOne "-relmap" [] )
+        Op.consCompose, C.rodOne "-relmap" [] )
     , ( "const R",
-        Op.consConst, C.sortOne "-lit" [] )
+        Op.consConst, C.rodOne "-lit" [] )
     , ( "dump",
-        Op.consDump, C.sortNone [] )
+        Op.consDump, C.rodNone [] )
     , ( "duplicate /N ...",
-        Op.consDuplicate, C.sortList "-term" [] )
+        Op.consDuplicate, C.rodList "-term" [] )
     , ( "fix R",
-        Op.consFix, C.sortOne "-relmap" [] )
+        Op.consFix, C.rodOne "-relmap" [] )
     , ( "fix-join R",
-        Op.consFixJoin, C.sortOne "-relmap" [] )
+        Op.consFixJoin, C.rodOne "-relmap" [] )
     , ( "both R",
-        Op.consBoth, C.sortOne "-relmap" [] )
+        Op.consBoth, C.rodOne "-relmap" [] )
     , ( "hold E",
-        Op.consFilter True, C.sortList "-in" ["-let"] )
+        Op.consFilter True, C.rodList "-in" ["-let"] )
     , ( "if R ...",
-        Op.consIf, C.sortList "-relmap" [] )
+        Op.consIf, C.rodList "-relmap" [] )
     , ( "keep E",
-        Op.consFilter True, C.sortList "-in" ["-let"] )
+        Op.consFilter True, C.rodList "-in" ["-let"] )
     , ( "maybe R",
-        Op.consMaybe, C.sortOne "-relmap" [] )
+        Op.consMaybe, C.rodOne "-relmap" [] )
     , ( "member /N /N",
-        Op.consMember, C.sortEnum ["-1", "-2"] [] )
+        Op.consMember, C.rodEnum ["-1", "-2"] [] )
     , ( "number /N -order /N ...",
-        Op.consNumber, C.sortOne "-term" ["-order", "-from"] )
+        Op.consNumber, C.rodOne "-term" ["-order", "-from"] )
     , ( "omit E",
-        Op.consFilter False, C.sortList "-in" ["-let"] )
+        Op.consFilter False, C.rodList "-in" ["-let"] )
     , ( "prefix /P /N ...",
-        Op.consPrefix, C.sortOneList "-prefix" "-term" [] )
+        Op.consPrefix, C.rodOneList "-prefix" "-term" [] )
     , ( "prefix-change /P /Q",
-        Op.consPrefixChange, C.sortTwo "-new" "-old" [] )
+        Op.consPrefixChange, C.rodTwo "-new" "-old" [] )
     , ( "range /N -from E -to E",
-        Op.consRange, C.sortOne "-term" ["-from", "-to"] )
+        Op.consRange, C.rodOne "-term" ["-from", "-to"] )
     , ( "rank /N -order /N ...",
-        Op.consRank, C.sortOne "-term" ["-order", "-dense"] )
+        Op.consRank, C.rodOne "-term" ["-order", "-dense"] )
     , ( "rdf P /S /O",
-        Op.consRdf, C.sortOneList "-pattern" "-term" [] )
+        Op.consRdf, C.rodOneList "-pattern" "-term" [] )
     , ( "repeat N R",
-        Op.consRepeat, C.sortTwo "-count" "-relmap" [] )
+        Op.consRepeat, C.rodTwo "-count" "-relmap" [] )
     , ( "size /N",
-        Op.consSize, C.sortOne "-term" [] )
+        Op.consSize, C.rodOne "-term" [] )
     , ( "subst /N E ...",
-        Op.consSubst, C.sortList "-in" ["-let"] )
+        Op.consSubst, C.rodList "-in" ["-let"] )
     , ( "typename /N /P ...",
-        Op.consTypename, C.sortList "-term" [] )
+        Op.consTypename, C.rodList "-term" [] )
     , ( "unless R R",
-        Op.consUnless, C.sortList "-relmap" [] )
+        Op.consUnless, C.rodList "-relmap" [] )
     , ( "unprefix /P",
-        Op.consUnprefix, C.sortOne "-prefix" [] )
+        Op.consUnprefix, C.rodOne "-prefix" [] )
     , ( "when R R",
-        Op.consWhen, C.sortList "-relmap" [] )
+        Op.consWhen, C.rodList "-relmap" [] )
     ]
 
 -- ----------------------

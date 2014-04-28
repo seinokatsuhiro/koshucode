@@ -15,15 +15,15 @@ module Koshucode.Baala.Core.Relmap.Operand
   rodSorter,
 
   -- * Trunk sorter
-  sortNone,
-  sortEnum,
-  sortList,
-  sortOne,
-  sortTwo,
-  sortThree,
-  sortFour,
-  sortOneList,
-  sortOneOpt,
+  rodNone,
+  rodEnum,
+  rodList,
+  rodOne,
+  rodTwo,
+  rodThree,
+  rodFour,
+  rodOneList,
+  rodOneOpt,
   -- $TrunkSorter
 ) where
 
@@ -110,65 +110,65 @@ rodTrunk (trunkSorter, trunkNames, branchNames) assoc = sorted where
 --
 --  One required operand and no options.
 --
---    > sortOne "-term" []
+--    > rodOne "-term" []
 --
 --  Two required operands and no options.
 --
---    > sortTwo "-name" "-relmap" []
+--    > rodTwo "-name" "-relmap" []
 --
 --  Any number of operands and no options.
 --
---    > sortList "-term" []
+--    > rodList "-term" []
 --
 --  One and any number of operands.
 --
---    > sortOneList "-pattern" "-term" []
+--    > rodOneList "-pattern" "-term" []
 
 -- | Operand sorter for no-element trunk.
-sortNone :: [String] -> RodSpec
-sortNone ns = (Right, [], ns)
+rodNone :: [String] -> RodSpec
+rodNone ns = (Right, [], ns)
 
 -- | Operand sorter for enumerating trunk.
-sortEnum :: [String] -> [String] -> RodSpec
-sortEnum ks ns = (by f, ks, ns) where
+rodEnum :: [String] -> [String] -> RodSpec
+rodEnum ks ns = (by f, ks, ns) where
     f xs  = Right $ zip names $ map B.singleton xs
     names = map (('-' :) . show) [1 :: Int ..]
 
 -- | Operand sorter for multiple-element trunk.
-sortList :: String -> [String] -> RodSpec
-sortList a ns = (by f, [a], ns) where
+rodList :: String -> [String] -> RodSpec
+rodList a ns = (by f, [a], ns) where
     f xs = Right [ (a, xs) ]
 
 -- | Operand sorter for one-element trunk.
-sortOne :: String -> [String] -> RodSpec
-sortOne a ns = (by f, [a], ns) where
+rodOne :: String -> [String] -> RodSpec
+rodOne a ns = (by f, [a], ns) where
     f [x] = Right [ (a, [x]) ]
     f _   = Message.unexpOperand "Require one operand"
 
 -- | Operand sorter for two-element trunk.
-sortTwo :: String -> String -> [String] -> RodSpec
-sortTwo a b ns = (by f, [a,b], ns) where
+rodTwo :: String -> String -> [String] -> RodSpec
+rodTwo a b ns = (by f, [a,b], ns) where
     f [x,y] = Right [ (a, [x]), (b, [y]) ]
     f _     = Message.unexpOperand "Require two operands"
 
-sortThree :: String -> String -> String -> [String] -> RodSpec
-sortThree a b c ns = (by f, [a,b,c], ns) where
+rodThree :: String -> String -> String -> [String] -> RodSpec
+rodThree a b c ns = (by f, [a,b,c], ns) where
     f [x,y,z] = Right [ (a, [x]), (b, [y]), (c, [z]) ]
     f _       = Message.unexpOperand "Require three operands"
 
-sortFour :: String -> String -> String -> String -> [String] -> RodSpec
-sortFour a b c d ns = (by f, [a,b,c,d], ns) where
+rodFour :: String -> String -> String -> String -> [String] -> RodSpec
+rodFour a b c d ns = (by f, [a,b,c,d], ns) where
     f [x1,x2,x3,x4] = Right [ (a, [x1]), (b, [x2]), (c, [x3]), (d, [x4]) ]
     f _             = Message.unexpOperand "Require four operands"
 
 -- | Operand sorter for one-and-multiple-element trunk.
-sortOneList :: String -> String -> [String] -> RodSpec
-sortOneList a b ns = (by f, [a,b], ns) where
+rodOneList :: String -> String -> [String] -> RodSpec
+rodOneList a b ns = (by f, [a,b], ns) where
     f (x:xs) = Right [ (a, [x]), (b, xs) ]
     f _      = Message.unexpOperand "Require operands"
 
-sortOneOpt :: String -> String -> [String] -> RodSpec
-sortOneOpt a b ns = (by f, [a,b], ns) where
+rodOneOpt :: String -> String -> [String] -> RodSpec
+rodOneOpt a b ns = (by f, [a,b], ns) where
     f [x]   = Right [ (a, [x]), (b, []) ]
     f [x,y] = Right [ (a, [x]), (b, [y]) ]
     f _     = Message.unexpOperand "Require two operands"

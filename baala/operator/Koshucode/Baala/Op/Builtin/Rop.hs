@@ -15,7 +15,7 @@ import qualified Koshucode.Baala.Core as C
 -- | Built-in relmap operator.
 builtinRops :: [C.Rop c]
 builtinRops = ropList "builtin"
-    [ ("append R ...", ropConsConcat, C.sortList "-relmap" []) ]
+    [ ("append R ...", ropConsConcat, C.rodList "-relmap" []) ]
 
 -- TODO
 ropConsConcat :: C.RopCons c

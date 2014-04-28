@@ -18,29 +18,29 @@ nestRops = Op.ropList "nest"
     --  SYNOPSIS,
     --  CONSTRUCTOR, OPERAND
     [ ( "copy N R",
-        Op.consCopy, C.sortTwo "-name" "-relmap" [] )
+        Op.consCopy, C.rodTwo "-name" "-relmap" [] )
     , ( "down /N",
-        Op.consDown, C.sortOne "-term" [] )
+        Op.consDown, C.rodOne "-term" [] )
     , ( "for /N R [ -with /N ... ]",
-        Op.consFor, C.sortTwo "-term" "-relmap" ["-with"] )
+        Op.consFor, C.rodTwo "-term" "-relmap" ["-with"] )
     , ( "group /N R",
-        Op.consGroup, C.sortTwo "-term" "-relmap" [] )
+        Op.consGroup, C.rodTwo "-term" "-relmap" [] )
     , ( "group-by /N R",
-        Op.consGroupBy, C.sortTwo "-term" "-relmap" [] )
+        Op.consGroupBy, C.rodTwo "-term" "-relmap" [] )
     , ( "join-up /P ...",
-        Op.consJoinUp, C.sortList "-term" [] )
+        Op.consJoinUp, C.rodList "-term" [] )
     , ( "nest /P ... -to /N",
-        Op.consNest, C.sortList "-term" ["-to"] )
+        Op.consNest, C.rodList "-term" ["-to"] )
     , ( "unnest /P",
-        Op.consUnnest, C.sortList "-term" [] )
+        Op.consUnnest, C.rodList "-term" [] )
     , ( "slice /N [R] [ -with /N ... ]",
-        Op.consSlice, C.sortOneOpt "-term" "-relmap" ["-with"] )
+        Op.consSlice, C.rodOneOpt "-term" "-relmap" ["-with"] )
     , ( "slice-up R [ -with /N ... ]",
-        Op.consSliceUp, C.sortOne "-relmap" ["-with"] )
+        Op.consSliceUp, C.rodOne "-relmap" ["-with"] )
     , ( "split /N E ...",
-        Op.consSplit, C.sortList "-in" ["-let"] )
+        Op.consSplit, C.rodList "-in" ["-let"] )
     , ( "up /N",
-        Op.consUp, C.sortOne "-term" [] )
+        Op.consUp, C.rodOne "-term" [] )
     ]
 
 

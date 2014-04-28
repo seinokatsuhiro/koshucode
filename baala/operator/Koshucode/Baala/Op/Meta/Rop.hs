@@ -15,13 +15,13 @@ metaRops = Op.ropList "meta"
     --  SYNOPSIS,
     --  CONSTRUCTOR, OPERAND
     [ ( "koshu-cop /N",
-        Op.consKoshuCop, C.sortList "-name" [] )
+        Op.consKoshuCop, C.rodList "-name" [] )
     , ( "koshu-cop-infix /N [ -height /N ][ -dir /N ]",
-        Op.consKoshuCopInfix, C.sortOne "-name" ["-height", "-dir"] )
+        Op.consKoshuCopInfix, C.rodOne "-name" ["-height", "-dir"] )
     , ( "koshu-rop /N /N",
-        Op.consKoshuRop, C.sortList "-name" ["-group", "-usage"] )
+        Op.consKoshuRop, C.rodList "-name" ["-group", "-usage"] )
     , ( "koshu-version /N",
-        Op.consKoshuVersion, C.sortOneList "-term" "-version" [] )
+        Op.consKoshuVersion, C.rodOneList "-term" "-version" [] )
     ]
 
 -- ----------------------
