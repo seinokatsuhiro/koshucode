@@ -19,13 +19,22 @@ Setup a shared sandbox.
     ./cabal-koshu.sh sandbox-init
     ./cabal-koshu.sh sandbox-deps
 
-Build the koshu command.
+Unregister installed libraries.
+
+    ./cabal-koshu unreg
+
+Prepare to build packages.
 
     ./cabal-koshu.sh link
 
-    cabal/install.link koshu
+Build the `koshu` executable file.
 
-    ls cabal/sanbox/bin
+    cabal/install.link calculator
+
+Check the `koshu` executable file.
+
+    ls -l cabal/sanbox/bin
+
 
 
 
