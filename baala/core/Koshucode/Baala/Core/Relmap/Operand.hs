@@ -6,16 +6,13 @@ module Koshucode.Baala.Core.Relmap.Operand
 ( -- * Data type
   Rod,
   Rody,
-  RopFullSorter,
   RodSorter,
-  RopTrunkSorter,
-
-  -- * Full sorter
-  ropFullSorter,
-  ropBaseSorter,
+  RodSpec,
 
   -- * Branch sorter
   rod,
+  rodBranch,
+  rodSorter,
 
   -- * Trunk sorter
   sortNone,
@@ -41,61 +38,22 @@ import qualified Koshucode.Baala.Core.Message as Message
 -- | Relmap operand as association list.
 type Rod = [B.Named [B.TokenTree]]
 
+-- | Association of operand use and something.
+--   Operand use is represented as pair of operator name and operand.
 type Rody a = ((String, Rod), a)
 
 -- | Sorter for operand of relmap operator.
 --   Sorters docompose operand trees,
 --   and give a name to suboperand.
-type RopFullSorter = [B.TokenTree] -> B.Ab Rod
+type RodSorter = [B.TokenTree] -> B.Ab Rod
 
 -- | Operand sorter for relmap operator.
 --   It consists of trunk sorter, trunk names, and branch names.
---   Trunk part is unnamed operand.
---   Branch part is named operand.
-type RodSorter =
-    ( RopTrunkSorter  -- Trunk sorter
-    , [String]        -- Trunk names
-    , [String]        -- Branch names
+type RodSpec =
+    ( B.AbMap Rod  -- Trunk sorter
+    , [String]     -- Trunk names
+    , [String]     -- Branch names
     )
-
--- | Mapping from basically sorted operand
---   to fully sorted operand.
-type RopTrunkSorter =  B.AbMap Rod
-
-
-
--- ----------------------  Full sorter
-
-ropFullSorter :: RodSorter -> RopFullSorter
-ropFullSorter sorter = ropUserSorter sorter B.<=< ropBaseSorter
-
-ropBaseSorter :: RopFullSorter
-ropBaseSorter trees = sorted where
-    assoc :: Rod
-    assoc = rod trees
-
-    dup :: [String]
-    dup = map fst $ B.assocMore $ B.assocGather assoc
-
-    sorted :: B.Ab Rod
-    sorted | null dup   = Right assoc
-           | otherwise  = Message.unexpOperand $ "Duplicate " ++ unwords dup
-
-ropUserSorter :: RodSorter -> B.AbMap Rod
-ropUserSorter (trunkSorter, trunkNames, branchNames) assoc = sorted where
-    alls, given, unk, wrap :: [String]
-    alls  = "" : trunkNames ++ branchNames
-    given = map fst assoc
-    unk   = given  List.\\  alls
-    wrap  = given `List.intersect` trunkNames
-
-    exists = not . null
-
-    sorted :: B.Ab Rod
-    sorted | exists unk  = Message.unexpOperand $ "Unknown " ++ unwords unk
-           | exists wrap = Right assoc
-           | otherwise   = trunkSorter assoc
-
 
 
 -- ----------------------  Branch sorter
@@ -105,14 +63,42 @@ ropUserSorter (trunkSorter, trunkNames, branchNames) assoc = sorted where
 --   are name of group.
 --
 --   >>> rod $ B.tt "a b -x /c 'd -y e"
---   [ ("",   [TreeL (TWord 1 0 "a"), TreeL (TWord 3 0 "b")])
+--   [ ("@trunk", [TreeL (TWord 1 0 "a"), TreeL (TWord 3 0 "b")])
 --   , ("-x", [TreeL (TTerm 7 ["/c"]), TreeL (TWord 9 1 "d")])
 --   , ("-y", [TreeL (TWord 14 0 "e")]) ]
 --
 rod :: [B.TokenTree] -> Rod
-rod = B.assocBy maybeBranch "" where
-    maybeBranch (B.TreeL (B.TWord _ 0 n@('-' : _))) = Just n
-    maybeBranch _ = Nothing
+rod = B.assocBy branchName "@trunk" where
+    branchName (B.TreeL (B.TWord _ 0 n@('-' : _))) = Just n
+    branchName _ = Nothing
+
+rodSorter :: RodSpec -> RodSorter
+rodSorter spec = rodBranch B.>=> rodTrunk spec
+
+rodBranch :: RodSorter
+rodBranch trees = sorted where
+    a :: Rod
+    a = rod trees
+
+    dup :: [String]
+    dup = map fst $ B.assocMore $ B.assocGather a
+
+    sorted :: B.Ab Rod
+    sorted | null dup  = Right a
+           | otherwise = Message.unexpOperand $ "Duplicate " ++ unwords dup
+
+rodTrunk :: RodSpec -> B.AbMap Rod
+rodTrunk (trunkSorter, trunkNames, branchNames) assoc = sorted where
+    alls, given, unk, wrap :: [String]
+    alls  = "@trunk" : trunkNames ++ branchNames
+    given = map fst assoc
+    unk   = given  List.\\  alls
+    wrap  = given `List.intersect` trunkNames
+
+    sorted :: B.Ab Rod
+    sorted | B.notNull unk  = Message.unexpOperand $ "Unknown " ++ unwords unk
+           | B.notNull wrap = Right assoc
+           | otherwise      = trunkSorter assoc
 
 
 
@@ -139,57 +125,57 @@ rod = B.assocBy maybeBranch "" where
 --    > sortOneList "-pattern" "-term" []
 
 -- | Operand sorter for no-element trunk.
-sortNone :: [String] -> RodSorter
+sortNone :: [String] -> RodSpec
 sortNone ns = (Right, [], ns)
 
 -- | Operand sorter for enumerating trunk.
-sortEnum :: [String] -> [String] -> RodSorter
+sortEnum :: [String] -> [String] -> RodSpec
 sortEnum ks ns = (by f, ks, ns) where
     f xs  = Right $ zip names $ map B.singleton xs
     names = map (('-' :) . show) [1 :: Int ..]
 
 -- | Operand sorter for multiple-element trunk.
-sortList :: String -> [String] -> RodSorter
+sortList :: String -> [String] -> RodSpec
 sortList a ns = (by f, [a], ns) where
     f xs = Right [ (a, xs) ]
 
 -- | Operand sorter for one-element trunk.
-sortOne :: String -> [String] -> RodSorter
+sortOne :: String -> [String] -> RodSpec
 sortOne a ns = (by f, [a], ns) where
     f [x] = Right [ (a, [x]) ]
     f _   = Message.unexpOperand "Require one operand"
 
 -- | Operand sorter for two-element trunk.
-sortTwo :: String -> String -> [String] -> RodSorter
+sortTwo :: String -> String -> [String] -> RodSpec
 sortTwo a b ns = (by f, [a,b], ns) where
     f [x,y] = Right [ (a, [x]), (b, [y]) ]
     f _     = Message.unexpOperand "Require two operands"
 
-sortThree :: String -> String -> String -> [String] -> RodSorter
+sortThree :: String -> String -> String -> [String] -> RodSpec
 sortThree a b c ns = (by f, [a,b,c], ns) where
     f [x,y,z] = Right [ (a, [x]), (b, [y]), (c, [z]) ]
     f _       = Message.unexpOperand "Require three operands"
 
-sortFour :: String -> String -> String -> String -> [String] -> RodSorter
+sortFour :: String -> String -> String -> String -> [String] -> RodSpec
 sortFour a b c d ns = (by f, [a,b,c,d], ns) where
     f [x1,x2,x3,x4] = Right [ (a, [x1]), (b, [x2]), (c, [x3]), (d, [x4]) ]
     f _             = Message.unexpOperand "Require four operands"
 
 -- | Operand sorter for one-and-multiple-element trunk.
-sortOneList :: String -> String -> [String] -> RodSorter
+sortOneList :: String -> String -> [String] -> RodSpec
 sortOneList a b ns = (by f, [a,b], ns) where
     f (x:xs) = Right [ (a, [x]), (b, xs) ]
     f _      = Message.unexpOperand "Require operands"
 
-sortOneOpt :: String -> String -> [String] -> RodSorter
+sortOneOpt :: String -> String -> [String] -> RodSpec
 sortOneOpt a b ns = (by f, [a,b], ns) where
     f [x]   = Right [ (a, [x]), (b, []) ]
     f [x,y] = Right [ (a, [x]), (b, [y]) ]
     f _     = Message.unexpOperand "Require two operands"
 
 -- | Give a name to unnamed operand.
-by :: RopFullSorter -> RopTrunkSorter
-by f xs = case lookup "" xs of
+by :: RodSorter -> B.AbMap Rod
+by f xs = case lookup "@trunk" xs of
             Just x  -> Right . (++ xs) =<< f x
             Nothing -> Right xs
 

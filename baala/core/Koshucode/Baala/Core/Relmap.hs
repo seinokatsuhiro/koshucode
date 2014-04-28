@@ -46,10 +46,10 @@ import Koshucode.Baala.Core.Relmap.Specialize
 --  Datatypes for implementing 'Relmap' operators.
 --
 --  * Data 'Rop' has
---    'RopFullSorter' and
+--    'RodSorter' and
 --    'RopCons'.
 --
---  * Data 'RopFullSorter' has
+--  * Data 'RodSorter' has
 --    'Koshucode.Baala.Base.Syntax.TokenTree.TokenTree'.
 --
 --  * Data 'RopCons' has

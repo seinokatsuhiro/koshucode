@@ -139,7 +139,7 @@ substTree rod tree = B.abortableTree "slot" tree $ loop tree where
         do sub' <- mapM loop sub
            Right [B.TreeB p q $ concat sub']
     loop (B.TreeL (B.TSlot _ n name))
-        | n == 0 = case lookup "@operand" rod of
+        | n == 0 = case lookup "@trunk" rod of
                      Nothing -> Message.noSlotLeaf name
                      Just od -> od `pos` name
         | n == 1 = case lookup ('-' : name) rod of

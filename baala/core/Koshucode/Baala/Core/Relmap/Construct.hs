@@ -54,7 +54,7 @@ relmapCons global = make $ unzip $ map pair $ C.globalRops global where
 --   make lexmap from source of relmap operator.
 type ConsLexmap = [B.TokenTree] -> B.Ab C.Lexmap
 
-makeConsLexmap :: [B.Named (String, C.RopFullSorter)] -> ConsLexmap
+makeConsLexmap :: [B.Named (String, C.RodSorter)] -> ConsLexmap
 makeConsLexmap lxs = consLex where
     consLex :: ConsLexmap
     consLex trees =
@@ -70,7 +70,7 @@ makeConsLexmap lxs = consLex where
     find op trees =
         case lookup (B.tokenContent op) lxs of
           Nothing ->
-              do sorted <- C.ropBaseSorter trees
+              do sorted <- C.rodBranch trees
                  Right $ lexmap op trees sorted "<derived>"
           Just (usage, operandSorter) ->
               do sorted <- operandSorter trees

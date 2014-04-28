@@ -43,11 +43,11 @@ import qualified Koshucode.Baala.Core.Relmap.Relkit     as C
 
 -- | Implementation of relmap operator
 data Rop c = Rop
-    { ropName     :: String           -- ^ Operator name
-    , ropGroup    :: String           -- ^ Operator group
-    , ropSorter   :: C.RopFullSorter  -- ^ Operand sorter
-    , ropCons     :: RopCons c        -- ^ Constructor of operator
-    , ropUsage    :: String           -- ^ Usage of operator
+    { ropName     :: String        -- ^ Operator name
+    , ropGroup    :: String        -- ^ Operator group
+    , ropSorter   :: C.RodSorter   -- ^ Operand sorter
+    , ropCons     :: RopCons c     -- ^ Constructor of operator
+    , ropUsage    :: String        -- ^ Usage of operator
     }
 
 instance Show (Rop c) where

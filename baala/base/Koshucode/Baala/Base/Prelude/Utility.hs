@@ -25,6 +25,7 @@ module Koshucode.Baala.Base.Prelude.Utility
   maybeEmpty,
   squeeze, squeezeEmptyLines,
   mapWithLast,
+  notNull,
 
   -- * String
   padRight, padLeft,
@@ -172,6 +173,9 @@ mapWithLast f g = loop where
     loop [] = []
     loop [x] = [g x]
     loop (x:xs) = f x : loop xs
+
+notNull :: [a] -> Bool
+notNull = not . null
 
 
 -- ----------------------  String

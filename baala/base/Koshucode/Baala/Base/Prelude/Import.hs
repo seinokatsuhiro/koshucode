@@ -3,6 +3,7 @@
 module Koshucode.Baala.Base.Prelude.Import
 ( -- * Control.Monad
   (Control.Monad.<=<),
+  (Control.Monad.>=>),
 
   -- * Data.Maybe
   Data.Maybe.catMaybes,
