@@ -228,7 +228,7 @@ writeJudgesToFile :: (Ord c, B.Pretty c) => FilePath -> [B.Judge c] -> IO Int
 writeJudgesToFile path js =
     withFile path WriteMode writer where
     writer h = do hSetEncoding h utf8
-                  B.hPutJudgesFlat h 0 js
+                  B.hPutJudges h 0 js
 
 reportCount :: Int -> Int -> String
 reportCount = message where
