@@ -76,7 +76,7 @@ judgesFromRel q pat = judges where
     judges (B.Rel h b) = map (judge h) b
     judge h = B.Judge q pat . zip (B.headNames h)
 
-optionUnkCheck :: [String] -> [B.Named [B.TokenTree]] -> B.Ab ()
+optionUnkCheck :: [String] -> [B.NamedTrees] -> B.Ab ()
 optionUnkCheck ns xs =
     let rest = B.assocCut ("@trunk" : ns) xs
     in if null rest

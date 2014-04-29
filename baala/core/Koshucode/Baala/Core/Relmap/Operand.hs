@@ -36,7 +36,7 @@ import qualified Koshucode.Baala.Core.Message as Message
 -- ----------------------  Data type
 
 -- | Relmap operand as association list.
-type Rod = [B.Named [B.TokenTree]]
+type Rod = [B.NamedTrees]
 
 -- | Association of operand use and something.
 --   Operand use is represented as pair of operator name and operand.

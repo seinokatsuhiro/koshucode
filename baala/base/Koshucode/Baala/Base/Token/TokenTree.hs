@@ -7,6 +7,7 @@ module Koshucode.Baala.Base.Token.TokenTree
   -- * Library
   Sourced (..),
   TokenTree,
+  NamedTrees,
   tokenTrees,
   treeTokens,
   treesTokens,
@@ -47,6 +48,9 @@ instance Functor Sourced where
 
 -- | Tree of tokens.
 type TokenTree = B.CodeTree B.Token
+
+-- | Pair of token trees and its name.
+type NamedTrees = B.Named [TokenTree]
 
 -- | Parse tokens into parened trees.
 --   Blank tokens and comments are excluded.

@@ -76,7 +76,7 @@ makeConsLexmap lxs = consLex where
               do sorted <- operandSorter trees
                  submap $ lexmap op trees sorted usage
 
-    lexmap :: B.Token -> [B.TokenTree] -> [B.Named [B.TokenTree]] -> String -> C.Lexmap
+    lexmap :: B.Token -> [B.TokenTree] -> [B.NamedTrees] -> String -> C.Lexmap
     lexmap op trees sorted usage =
         C.Lexmap op (("@operand", trees) : sorted) [] usage
 

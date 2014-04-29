@@ -1,5 +1,5 @@
-{-# OPTIONS_GHC -Wall #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# OPTIONS_GHC -Wall #-}
 
 -- | Read, run, and write sections.
 module Koshucode.Baala.Core.Section.Process
@@ -64,6 +64,7 @@ readJudges code =
        Right $ C.secJudge sec
 
 
+
 -- --------------------------------------------  Run
 
 runSection :: (C.CContent c) => C.Global c -> [C.Section c] -> B.Ab (B.OutputResult c)
@@ -74,9 +75,11 @@ runSection global sects =
 
 runSectionBody :: forall c. (Ord c, B.Pretty c, C.CRel c, C.CNil c) =>
     C.Global c -> C.Section c -> B.Ab (B.OutputResult c)
-runSectionBody global C.Section { C.secTokmap = tok,
-                                  C.secAssert = ass,
-                                  C.secCons   = cons } =
+runSectionBody global C.Section { C.secSlot   = slot
+                                , C.secTokmap = tok
+                                , C.secAssert = ass
+                                , C.secCons   = cons } =
+
     do ass2    <- mapM consAssert `B.shortMapM` ass
        judgesV <- run $ C.assertViolated ass2
        judgesN <- run $ C.assertNormal   ass2
@@ -96,7 +99,7 @@ runSectionBody global C.Section { C.secTokmap = tok,
           B.abortableFrom "assert" a $ do
             let lx = C.assLexmap a
             rmap  <- relmap lx
-            lxs   <- substSlot lexmap lx tok
+            lxs   <- substSlot slot lexmap lx tok
             parts <- B.sequenceSnd $ B.mapSndTo relmap lxs
             Right $ a { C.assRelmap = Just rmap
                       , C.assParts  = parts }
@@ -105,10 +108,10 @@ runSectionBody global C.Section { C.secTokmap = tok,
 
 -- ----------------------  Slot substitution
 
-substSlot :: C.ConsLexmap -> C.Lexmap
-    -> [B.Named [B.TokenTree]]
+substSlot :: [B.NamedTrees] -> C.ConsLexmap -> C.Lexmap
+    -> [B.NamedTrees]
     -> B.Ab [C.Rody C.Lexmap]
-substSlot cons lexmap def = loop lexmap where
+substSlot slot cons lexmap def = loop lexmap where
     loop lx = let rop = C.lexOpText lx
                   rod = C.lexOperand lx
                   subuse = loops $ C.lexSubmap lx
@@ -116,7 +119,7 @@ substSlot cons lexmap def = loop lexmap where
                  case lookup rop def of
                    Nothing    -> subuse
                    Just trees ->
-                       do trees' <- substTrees rod trees
+                       do trees' <- substTrees slot rod trees
                           lx2    <- cons trees'
                           use2   <- loop lx2
                           use3   <- subuse
@@ -128,24 +131,26 @@ substSlot cons lexmap def = loop lexmap where
                           lxs' <- loops lxs
                           Right $ lx' ++ lxs'
 
-substTrees :: C.Rod -> B.AbMap [B.TokenTree]
-substTrees rod trees =
-    do trees' <- substTree rod `mapM` trees
+substTrees :: [B.NamedTrees] -> C.Rod -> B.AbMap [B.TokenTree]
+substTrees slot rod trees =
+    do trees' <- substTree slot rod `mapM` trees
        Right $ concat trees'
 
-substTree :: C.Rod -> B.TokenTree -> B.Ab [B.TokenTree]
-substTree rod tree = B.abortableTree "slot" tree $ loop tree where
+substTree :: [B.NamedTrees] -> C.Rod -> B.TokenTree -> B.Ab [B.TokenTree]
+substTree slot rod tree = B.abortableTree "slot" tree $ loop tree where
     loop (B.TreeB p q sub) =
         do sub' <- mapM loop sub
            Right [B.TreeB p q $ concat sub']
     loop (B.TreeL (B.TSlot _ n name))
-        | n == 0 = case lookup "@trunk" rod of
-                     Nothing -> Message.noSlotLeaf name
-                     Just od -> od `pos` name
-        | n == 1 = case lookup ('-' : name) rod of
-                     Nothing -> Message.noSlotLeaf name
-                     Just od -> Right od
-        | n == 2 = B.bug "global slots are unimplemented"
+        | n == 0  = case lookup "@trunk" rod of
+                      Nothing -> Message.noSlotLeaf name
+                      Just od -> od `pos` name
+        | n == 1  = case lookup ('-' : name) rod of
+                      Nothing -> Message.noSlotLeaf name
+                      Just od -> Right od
+        | n == 2  = case lookup name slot of
+                      Nothing -> Message.noSlotLeaf name
+                      Just od -> Right od
         | otherwise = Message.noSlotLeaf name
     loop tk = Right [tk]
 

@@ -39,6 +39,8 @@ data ClauseBody
     | CAssert     C.AssertType B.JudgePattern C.AssertOption [B.TokenTree] -- ^ Assertions of relmap
     | TAssert     C.AssertType B.JudgePattern C.AssertOption [B.Token]     -- ^ (Intermediate data)
     | CJudge      Bool B.JudgePattern [B.Token]  -- ^ Judge
+    | CSlot       String [B.TokenTree]           -- ^ Global slot
+    | TSlot       String [B.Token]               -- ^ Global slot
     | CComment                                   -- ^ Clause comment
     | CUnknown                                   -- ^ Unknown clause
     | CUnres      [B.Token]                      -- ^ Unresolved short sign
@@ -57,6 +59,8 @@ clauseTypeText (Clause _ body) =
       CAssert    _ _ _ _   ->  "Assert"
       TAssert    _ _ _ _   ->  "Assert"
       CJudge     _ _ _     ->  "Judge"
+      CSlot      _ _       ->  "Slot"
+      TSlot      _ _       ->  "Slot"
       CComment             ->  "Comment"
       CUnknown             ->  "Unknown"
       CUnres     _         ->  "Unres"
@@ -98,6 +102,7 @@ consPreclause' src = dispatch $ B.clauseTokens src where
         | k == "export"   =  expt xs
         | k == "short"    =  short xs
         | k == "****"     =  c1 CComment
+    dispatch (B.TSlot _ 2 n : xs) = slot n xs
     dispatch []           =  []
     dispatch _            =  unk
 
@@ -133,7 +138,8 @@ consPreclause' src = dispatch $ B.clauseTokens src where
                   in c1 $ TAssert t p opt' expr
     assert _ _             =  unk
 
-    rmap n expr            =  c1 $ TTokmap n expr
+    rmap n xs              =  c1 $ TTokmap n xs
+    slot n xs              =  c1 $ TSlot   n xs
 
     sec [B.TWord _ _ n]    =  c1 $ CSection (Just n)
     sec []                 =  c1 $ CSection Nothing
@@ -179,6 +185,7 @@ clauseTree = map clause where
     clause (Clause src bo) = Clause src $ tree bo
 
     tree :: B.Map ClauseBody
+    tree (TSlot   n ts)     = CSlot   n     $ B.tokenTrees ts
     tree (TTokmap n ts)     = CTokmap n     $ B.tokenTrees ts
     tree (TAssert q p o ts) = CAssert q p o $ B.tokenTrees ts
     tree bo = bo

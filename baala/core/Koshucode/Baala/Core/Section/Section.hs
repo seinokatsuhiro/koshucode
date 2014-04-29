@@ -51,8 +51,9 @@ data Section c = Section {
     , secImport   :: [Section c]         -- ^ Importing section
     , secExport   :: [String]            -- ^ Exporting relmap names
     , secShort    :: [[B.Named String]]  -- ^ Prefix for short signs
+    , secSlot     :: [B.NamedTrees]      -- ^ Global slot
     , secAssert   :: ShortAsserts c      -- ^ Assertions of relmaps
-    , secTokmap   :: [B.Named [B.TokenTree]]
+    , secTokmap   :: [B.NamedTrees]
     , secJudge    :: [B.Judge c]         -- ^ Affirmative or denial judgements
     , secViolate  :: [B.Judge c]         -- ^ Violated judgements, i.e., result of @|=V@
     , secResource :: B.Resource          -- ^ Resource name
@@ -74,6 +75,7 @@ secUnion s1 s2 =
     s1 { secName    = Nothing
        , secImport  = []
        , secExport  = union secExport
+       , secSlot    = union secSlot
        , secAssert  = union secAssert
        , secTokmap  = union secTokmap
        , secJudge   = union secJudge
@@ -82,7 +84,7 @@ secUnion s1 s2 =
 
 {-| Make empty section that has a given constructor. -}
 makeEmptySection :: C.RelmapCons c -> Section c
-makeEmptySection = Section Nothing [] [] [] [] [] [] []
+makeEmptySection = Section Nothing [] [] [] [] [] [] [] []
                    (B.ResourceText "")
 
 {-| Section that has no contents. -}
@@ -119,7 +121,6 @@ consSectionEach root resource (B.Short shorts xs) =
        _        <-  mapMFor unres   isCUnres
        imports  <-  mapMFor impt    isCImport
        judges   <-  mapMFor judge   isCJudge 
-       tokmaps  <-  mapMFor tokmap  isCTokmap
        asserts  <-  mapMFor assert  isCAssert
 
        Right $ root
@@ -127,8 +128,9 @@ consSectionEach root resource (B.Short shorts xs) =
            , secImport    =  imports
            , secExport    =  mapFor expt isCExport
            , secShort     =  mapFor short isCShort
+           , secSlot      =  mapFor slot isCSlot
+           , secTokmap    =  mapFor tokmap isCTokmap
            , secAssert    =  [B.Short shorts asserts]
-           , secTokmap    =  tokmaps
            , secJudge     =  judges
            , secResource  =  resource }
     where
@@ -157,8 +159,11 @@ consSectionEach root resource (B.Short shorts xs) =
             Right j -> Right j
             Left  a -> abort a
 
-      tokmap :: [B.Token] -> C.ClauseBody -> B.Ab (B.Named [B.TokenTree])
-      tokmap _ (C.CTokmap name tree) = Right (name, tree)
+      slot :: [B.Token] -> C.ClauseBody -> B.NamedTrees
+      slot _ (C.CSlot name trees) = (name, trees)
+
+      tokmap :: [B.Token] -> C.ClauseBody -> B.NamedTrees
+      tokmap _ (C.CTokmap name trees) = (name, trees)
 
       assert :: [B.Token] -> C.ClauseBody -> B.Ab (C.Assert c)
       assert toks (C.CAssert typ pat opt trees) =
@@ -175,7 +180,7 @@ consSectionEach root resource (B.Short shorts xs) =
 -- ----------------------  Clause type
 
 isCImport, isCExport, isCShort,
-  isCTokmap, isCAssert, isCJudge,
+  isCSlot, isCTokmap, isCAssert, isCJudge,
   isCUnknown, isCUnres :: C.ClauseBody -> Bool
 
 isCImport (C.CImport _ _)      = True
@@ -186,6 +191,9 @@ isCExport _                    = False
 
 isCShort (C.CShort _)          = True
 isCShort _                     = False
+
+isCSlot (C.CSlot _ _)          = True
+isCSlot _                      = False
 
 isCTokmap (C.CTokmap _ _)      = True
 isCTokmap _                    = False

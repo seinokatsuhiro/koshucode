@@ -70,7 +70,7 @@ unconsWord xs = (word, rest') where
     (word, rest) = span (not . C.isSpace) xs
     rest'        = dropWhile C.isSpace rest
 
-namedTtDoc :: [B.Named [B.TokenTree]] -> B.Doc
+namedTtDoc :: [B.NamedTrees] -> B.Doc
 namedTtDoc = B.docv . map d where
     d ("", _)  = P.empty
     d (n,  xs) = B.doc n P.$$ P.nest 3 (B.ttDoc xs)

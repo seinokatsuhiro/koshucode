@@ -41,7 +41,7 @@ data Assert c = Assert
     } deriving (Show)
 
 -- | Option for assertions.
-type AssertOption = [B.Named [B.TokenTree]]
+type AssertOption = [B.NamedTrees]
 
 instance B.TokenListing (Assert c) where
     tokenListing = assSource
