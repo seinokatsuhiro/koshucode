@@ -168,7 +168,7 @@ consSectionEach root resource (B.Short shorts xs) =
       assert :: [B.Token] -> C.ClauseBody -> B.Ab (C.Assert c)
       assert toks (C.CAssert typ pat opt trees) =
           do lx <- lexmap trees
-             Right $ C.Assert typ pat opt lx Nothing [] toks
+             Right $ C.Assert typ pat opt toks lx Nothing []
 
       lexmap = C.consLexmap $ secCons root
 

@@ -60,17 +60,18 @@ type RopCons c = RopUse c -> B.Ab (Relmap c)
 -- | Use of relmap operator
 data RopUse c = RopUse
     { ropGlobal    :: Global c
-    , ropLex       :: C.Lexmap     -- ^ Syntactic data of operator use
+    , ropLexmap    :: C.Lexmap     -- ^ Syntactic data of operator use
     , ropSubrelmap :: [Relmap c]   -- ^ Subrelmaps
     } deriving (Show)
 
 instance B.TokenListing (RopUse c) where
-    tokenListing = B.tokenListing . ropLex
+    tokenListing = B.tokenListing . ropLexmap
 
 
 
 -- ----------------------  Relmap
 
+-- | Relmap with operand.
 type RodyRelmap c = C.Rody (Relmap c)
 
 -- | Generic relmap.
@@ -126,6 +127,7 @@ instance D.Monoid (Relmap c) where
     mempty  = relmapId
     mappend = RelmapAppend
 
+-- | Identity relmap.
 relmapId :: Relmap c
 relmapId = RelmapCalc lexid (const $ Right . C.relkitId) []
 

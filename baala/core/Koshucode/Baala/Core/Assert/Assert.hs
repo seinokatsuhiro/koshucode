@@ -34,27 +34,27 @@ data Assert c = Assert
     { assType    :: AssertType          -- ^ Logical quality
     , assPattern :: B.JudgePattern      -- ^ Pattern of judgement
     , assOption  :: AssertOption        -- ^ Assert option
+    , assToken   :: [B.Token]           -- ^ Source token list
     , assLexmap  :: C.Lexmap            -- ^ Lexmap
     , assRelmap  :: Maybe (C.Relmap c)  -- ^ Relmap
     , assParts   :: [C.RodyRelmap c]
-    , assSource  :: [B.Token]           -- ^ Source code information
     } deriving (Show)
 
 -- | Option for assertions.
 type AssertOption = [B.NamedTrees]
 
 instance B.TokenListing (Assert c) where
-    tokenListing = assSource
+    tokenListing = assToken
 
 instance B.Pretty (Assert c) where
-    doc (Assert q pat _ lx _ _ _) =
+    doc (Assert q pat _ _ lx _ _) =
         let qs = B.doch [assertText q, pat]
         in B.docHang qs 2 (B.doc lx)
 
 -- | Apply function to relamp in assert.
 assertMap :: B.Map (C.Relmap c) -> B.Map (Assert c)
-assertMap f (Assert q pat opt lx r def src) =
-    Assert q pat opt lx (fmap f r) def src
+assertMap f (Assert q pat opt tok lx r def) =
+    Assert q pat opt tok lx (fmap f r) def
 
 isViolateAssert :: Assert c -> Bool
 isViolateAssert = (== AssertViolate) . assType
@@ -84,8 +84,9 @@ assertText AssertViolate  = "violate"
 -- ----------------------  Constructor
 
 affirm, deny :: B.JudgePattern -> AssertOption
-             -> C.Lexmap -> Maybe (C.Relmap c) -> [((String, C.Rod), C.Relmap c)]
-             -> [B.Token] -> Assert c
+    -> [B.Token] -> C.Lexmap -> Maybe (C.Relmap c)
+    -> [C.RodyRelmap c]
+    -> Assert c
 
 -- | Make affirmed assertion.
 affirm = Assert AssertAffirm

@@ -39,7 +39,7 @@ ab :: [B.TokenTree] -> B.Map (B.Ab b)
 ab = B.abortableTrees "@operand"
 
 lookupOperand :: String -> C.RopUse c -> Maybe [B.TokenTree]
-lookupOperand name = lookup name . C.lexOperand . C.ropLex
+lookupOperand name = lookup name . C.lexOperand . C.ropLexmap
 
 getAbortable :: ([B.TokenTree] -> B.Ab b) -> RopGet c b
 getAbortable f u name =

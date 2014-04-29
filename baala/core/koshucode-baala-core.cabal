@@ -75,7 +75,8 @@ library
         Koshucode.Baala.Core.Section
         Koshucode.Baala.Core.Section.Bundle
         Koshucode.Baala.Core.Section.Clause
-        Koshucode.Baala.Core.Section.Process
+        Koshucode.Baala.Core.Section.Read
+        Koshucode.Baala.Core.Section.Run
         Koshucode.Baala.Core.Section.Quoter
         Koshucode.Baala.Core.Section.Section
 

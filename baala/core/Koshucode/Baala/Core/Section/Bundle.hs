@@ -8,7 +8,7 @@ module Koshucode.Baala.Core.Section.Bundle
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Core.Content         as C
 import qualified Koshucode.Baala.Core.Section.Section as C
-import qualified Koshucode.Baala.Core.Section.Process as C
+import qualified Koshucode.Baala.Core.Section.Read    as C
 
 -- | Bundle of section resources.
 data SectionBundle c = SectionBundle

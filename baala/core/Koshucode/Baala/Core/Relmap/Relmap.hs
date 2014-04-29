@@ -76,11 +76,11 @@ relmapList f = loop where
 
 -- | Retrieve relation from dataset.
 relmapSource :: C.RopUse c -> B.JudgePattern -> [B.TermName] -> (C.Relmap c)
-relmapSource = C.RelmapSource . C.ropLex
+relmapSource = C.RelmapSource . C.ropLexmap
 
 -- | Make a constant relmap.
 relmapConst :: C.RopUse c -> B.Rel c -> C.Relmap c
-relmapConst = C.RelmapConst . C.ropLex
+relmapConst = C.RelmapConst . C.ropLexmap
 
 -- | Make a flow relmap.
 --   Flow relmaps take no subrelmaps.
@@ -90,7 +90,7 @@ relmapFlow use relkit = relmapConfl use (const relkit) []
 -- | Make a global relmap.
 --   Global relmaps are flow relmaps with globals.
 relmapGlobal :: C.RopUse c -> C.RelkitGlobal c -> C.Relmap c
-relmapGlobal = C.RelmapGlobal . C.ropLex
+relmapGlobal = C.RelmapGlobal . C.ropLexmap
 
 -- | Make a binary relmap.
 --   Binary relmaps take one subrelmap.
@@ -100,16 +100,16 @@ relmapBinary use kit rmap = relmapConfl use (kit . head) [rmap]
 -- | Make a confluent relmap.
 --   Confluent relmaps take multiple subrelmaps.
 relmapConfl :: C.RopUse c -> C.RelkitConfl c -> [C.Relmap c] -> C.Relmap c
-relmapConfl = C.RelmapCalc . C.ropLex
+relmapConfl = C.RelmapCalc . C.ropLexmap
 
 relmapCopy :: C.RopUse c -> String -> B.Map (C.Relmap c)
-relmapCopy = C.RelmapCopy . C.ropLex
+relmapCopy = C.RelmapCopy . C.ropLexmap
 
 relmapWith :: C.RopUse c -> [(B.TermName, String)] -> B.Map (C.Relmap c)
-relmapWith = C.RelmapWith . C.ropLex
+relmapWith = C.RelmapWith . C.ropLexmap
 
 relmapLink :: C.RopUse c -> String -> C.Rod -> C.Relmap c
-relmapLink = C.RelmapLink . C.ropLex
+relmapLink = C.RelmapLink . C.ropLexmap
 
 
 
