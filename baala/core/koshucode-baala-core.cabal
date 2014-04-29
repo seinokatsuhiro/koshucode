@@ -66,9 +66,9 @@ library
         Koshucode.Baala.Core.Relmap.Construct
         Koshucode.Baala.Core.Relmap.Lexmap
         Koshucode.Baala.Core.Relmap.Operand
+        Koshucode.Baala.Core.Relmap.Operator
         Koshucode.Baala.Core.Relmap.Relkit
         Koshucode.Baala.Core.Relmap.Relmap
-        Koshucode.Baala.Core.Relmap.Rop
         Koshucode.Baala.Core.Relmap.Run
         Koshucode.Baala.Core.Relmap.Specialize
 

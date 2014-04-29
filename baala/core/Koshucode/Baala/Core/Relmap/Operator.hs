@@ -2,7 +2,7 @@
 
 -- | Implementation of relmap operators.
 
-module Koshucode.Baala.Core.Relmap.Rop
+module Koshucode.Baala.Core.Relmap.Operator
 ( -- * Rop
   Rop (..),
   RopUse (..),

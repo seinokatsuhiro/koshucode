@@ -30,7 +30,7 @@ import Koshucode.Baala.Op.Minimal.Tropashko
 --
 --  [@xxx-yyy@]       Name of relation-mapping operator.
 --
---  [@consXxxYyy@]    Functions of 'Koshucode.Baala.Core.Relmap.Rop.RopCons'.
+--  [@consXxxYyy@]    Functions of 'Koshucode.Baala.Core.Relmap.Operator.RopCons'.
 --                    These functions make 'Koshucode.Baala.Core.Relmap.Relmap.Relmap'
 --                    from operator usages.
 --

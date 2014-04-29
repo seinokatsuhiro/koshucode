@@ -9,8 +9,8 @@ module Koshucode.Baala.Core.Relmap.Specialize
 
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Core.Relmap.Lexmap   as C
+import qualified Koshucode.Baala.Core.Relmap.Operator as C
 import qualified Koshucode.Baala.Core.Relmap.Relkit   as C
-import qualified Koshucode.Baala.Core.Relmap.Rop      as C
 import qualified Koshucode.Baala.Core.Message         as Message
 
 

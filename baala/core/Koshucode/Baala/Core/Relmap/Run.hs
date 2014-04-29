@@ -12,12 +12,12 @@ module Koshucode.Baala.Core.Relmap.Run
   bmapAlign,
 ) where
 
-import qualified Control.Monad                       as Monad
-import qualified Koshucode.Baala.Base                as B
-import qualified Koshucode.Baala.Core.Content        as C
-import qualified Koshucode.Baala.Core.Relmap.Relkit  as C
-import qualified Koshucode.Baala.Core.Relmap.Rop     as C
-import qualified Koshucode.Baala.Core.Message        as Message
+import qualified Control.Monad                        as Monad
+import qualified Koshucode.Baala.Base                 as B
+import qualified Koshucode.Baala.Core.Content         as C
+import qualified Koshucode.Baala.Core.Relmap.Operator as C
+import qualified Koshucode.Baala.Core.Relmap.Relkit   as C
+import qualified Koshucode.Baala.Core.Message         as Message
 
 
 
