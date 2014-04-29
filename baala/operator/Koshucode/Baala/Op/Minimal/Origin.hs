@@ -121,11 +121,11 @@ relkitContents n _ = Right $ C.relkitJust he2 $ C.RelkitFull False kitf where
 --
 --  Nullary fullset relation.
 --
---    > reldee
+--    > dee
 --
 --  Nullary empty relation.
 --
---    > reldum
+--    > dum
 
 consDee :: C.RopCons c
 consDee use = Right $ C.relmapConst use B.reldee

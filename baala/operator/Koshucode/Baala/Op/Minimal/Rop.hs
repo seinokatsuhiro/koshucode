@@ -31,8 +31,6 @@ minimalRops = Op.ropList "minimal"  -- GROUP
     , ( "none R"            , Op.consNone       , C.rodOne  "-relmap" [] )
     , ( "pick /P ..."       , Op.consPick       , C.rodList "-term"   [] )
     , ( "pick-term /R"      , Op.consPickTerm   , C.rodOne  "-relmap" [] )
-    , ( "reldee"            , Op.consDee        , C.rodNone [] )
-    , ( "reldum"            , Op.consDum        , C.rodNone [] )
     , ( "rename /N /P ..."  , Op.consRename     , C.rodList "-term"   [] )
     , ( "move /P ... -to /N ...", Op.consMove   , C.rodList "-term" ["-to"] )
     , ( "some R"            , Op.consSome       , C.rodOne  "-relmap" [] )
