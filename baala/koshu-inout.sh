@@ -1,7 +1,7 @@
 #!/bin/sh
 
 io_version () {
-    echo "koshu-inout-0.53"
+    echo "koshu-inout-0.54"
     exit
 }
 
@@ -256,8 +256,8 @@ io_diff_body () {
         io_list $io_temp
         echo
 
-        if [ $io_diff = 1 ]; then
-            echo "To show all differences, please give more -d flag."
+        if [ $io_diff '<' 3 ]; then
+            echo "To show all differences, please give more -d flags."
             echo "To examine this differences, type: cd `io_pwd`"
             echo
             io_status=2
@@ -276,8 +276,9 @@ io_diff_cmd () {
         --new-group-format='Added
 %>
 ' \
-        --changed-group-format='Changed
-%<%>
+        --changed-group-format='Changed from
+%<to
+%>
 ' \
         --unchanged-group-format='' \
         "$1" "$2"
@@ -286,7 +287,14 @@ io_diff_cmd () {
 io_diff_result () {
     io_dir=`io_pwd`
     io_dir_md=`echo $io_dir | sed 's:/: / :g'`
-    echo "* $1 – [$io_output_orig]($io_dir/$io_output_orig) in $io_dir_md"
+
+    if [ $io_diff = 1 ]; then
+        # without link
+        echo "* $1 – $io_output_orig in $io_dir_md"
+    else
+        # with link
+        echo "* $1 – [$io_output_orig]($io_dir/$io_output_orig) in $io_dir_md"
+    fi
 }
 
 io_pwd () {
@@ -327,11 +335,13 @@ io_status=0
 
 # option
 
-while getopts df:gho:p:rstx:V opt; do
-    case $opt in
+while getopts df:gho:p:rstx:V io_opt; do
+    case $io_opt in
         d)  case $io_diff in
-              1) io_diff=2 ;;
-              *) io_diff=1 ;;
+              3) io_diff=3 ;;
+              2) io_diff=3 ;;  # show all differences
+              1) io_diff=2 ;;  # show first differences with linked output
+              *) io_diff=1 ;;  # show first differences shortly
             esac
             io_error=inhibit          ;;
         f)  io_glob_type=file
