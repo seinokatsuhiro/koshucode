@@ -48,7 +48,7 @@ runSectionBody global C.Section { C.secSlot   = slot
       consAssert :: B.AbMap (C.Assert c)
       consAssert a =
           B.abortableFrom "assert" a $ do
-            let lx = C.assLexmap a
+            lx    <- lexmap $ C.assTree a
             rmap  <- relmap lx
             lxs   <- substSlot slot lexmap lx tok
             parts <- B.sequenceSnd $ B.mapSndTo relmap lxs

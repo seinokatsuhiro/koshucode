@@ -121,7 +121,6 @@ consSectionEach root resource (B.Short shorts xs) =
        _        <-  mapMFor unres   isCUnres
        imports  <-  mapMFor impt    isCImport
        judges   <-  mapMFor judge   isCJudge 
-       asserts  <-  mapMFor assert  isCAssert
 
        Right $ root
            { secName      =  section xs
@@ -130,7 +129,7 @@ consSectionEach root resource (B.Short shorts xs) =
            , secShort     =  mapFor short isCShort
            , secSlot      =  mapFor slot isCSlot
            , secTokmap    =  mapFor tokmap isCTokmap
-           , secAssert    =  [B.Short shorts asserts]
+           , secAssert    =  [B.Short shorts $ mapFor assert isCAssert]
            , secJudge     =  judges
            , secResource  =  resource }
     where
@@ -165,12 +164,9 @@ consSectionEach root resource (B.Short shorts xs) =
       tokmap :: [B.Token] -> C.ClauseBody -> B.NamedTrees
       tokmap _ (C.CTokmap name trees) = (name, trees)
 
-      assert :: [B.Token] -> C.ClauseBody -> B.Ab (C.Assert c)
+      assert :: [B.Token] -> C.ClauseBody -> C.Assert c
       assert toks (C.CAssert typ pat opt trees) =
-          do lx <- lexmap trees
-             Right $ C.Assert typ pat opt toks lx Nothing []
-
-      lexmap = C.consLexmap $ secCons root
+          C.Assert typ pat opt toks trees Nothing []
 
       unk   _ (C.CUnknown) = Message.unkClause
       unres _ (C.CUnres _) = Message.unresPrefix

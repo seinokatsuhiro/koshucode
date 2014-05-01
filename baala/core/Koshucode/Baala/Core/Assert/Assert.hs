@@ -13,6 +13,7 @@ module Koshucode.Baala.Core.Assert.Assert
   -- * AssertType
   AssertType (..),
   assertQuality,
+  assertText,
 
   -- * Constructor
   affirm,
@@ -35,7 +36,7 @@ data Assert c = Assert
     , assPattern :: B.JudgePattern      -- ^ Pattern of judgement
     , assOption  :: AssertOption        -- ^ Assert option
     , assToken   :: [B.Token]           -- ^ Source token list
-    , assLexmap  :: C.Lexmap            -- ^ Lexmap
+    , assTree    :: [B.TokenTree]       -- ^ Token relmap
     , assRelmap  :: Maybe (C.Relmap c)  -- ^ Relmap
     , assParts   :: [C.RodyRelmap c]
     } deriving (Show)
@@ -47,14 +48,14 @@ instance B.TokenListing (Assert c) where
     tokenListing = assToken
 
 instance B.Pretty (Assert c) where
-    doc (Assert q pat _ _ lx _ _) =
+    doc (Assert q pat _ toks _ _ _) =
         let qs = B.doch [assertText q, pat]
-        in B.docHang qs 2 (B.doc lx)
+        in B.docHang qs 2 (B.doch toks)
 
 -- | Apply function to relamp in assert.
 assertMap :: B.Map (C.Relmap c) -> B.Map (Assert c)
-assertMap f (Assert q pat opt tok lx r def) =
-    Assert q pat opt tok lx (fmap f r) def
+assertMap f (Assert q pat opt tok tree r def) =
+    Assert q pat opt tok tree (fmap f r) def
 
 isViolateAssert :: Assert c -> Bool
 isViolateAssert = (== AssertViolate) . assType
@@ -75,16 +76,16 @@ assertQuality AssertDeny     = False
 assertQuality AssertViolate  = True
 
 assertText :: AssertType -> String
-assertText AssertAffirm   = "affirm"
-assertText AssertDeny     = "deny"
-assertText AssertViolate  = "violate"
+assertText AssertAffirm   = "|=="
+assertText AssertDeny     = "|=X"
+assertText AssertViolate  = "|=V"
 
 
 
 -- ----------------------  Constructor
 
 affirm, deny :: B.JudgePattern -> AssertOption
-    -> [B.Token] -> C.Lexmap -> Maybe (C.Relmap c)
+    -> [B.Token] -> [B.TokenTree] -> Maybe (C.Relmap c)
     -> [C.RodyRelmap c]
     -> Assert c
 
