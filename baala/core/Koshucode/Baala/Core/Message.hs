@@ -7,7 +7,7 @@ module Koshucode.Baala.Core.Message
   -- * Core package
   ambInfixes,
   noFile,
-  noSlotLeaf,
+  noSlotName,
   noSlotIndex,
   oddRelation,
   reqFlatName,
@@ -39,10 +39,13 @@ ambInfixes = Left . B.abortLines "Ambiguous infix operators"
 noFile :: String -> B.Ab a
 noFile = Left . B.abortLine "File not found"
 
--- | Unknown slot
-noSlotLeaf :: String -> B.Ab a
-noSlotLeaf name = Left $ B.abortLine "No slot content" $
-                  "No operand for @" ++ name
+-- | No slot content
+noSlotName :: Int -> String -> B.Ab a
+noSlotName n name = Left $ B.abortLine "No slot content" $ detail n where
+    detail 0 = "Positional operand @'" ++ name
+    detail 1 = "Named operand -"       ++ name
+    detail 2 = "Global slot @@"        ++ name
+    detail a = "Unknown slot level "   ++ show a
 
 -- | No slot content
 noSlotIndex :: [String] -> Int -> B.Ab a

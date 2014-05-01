@@ -48,7 +48,8 @@ runSectionBody global C.Section { C.secSlot   = slot
       consAssert :: B.AbMap (C.Assert c)
       consAssert a =
           B.abortableFrom "assert" a $ do
-            lx    <- lexmap $ C.assTree a
+            trees <- substTrees slot [] $ C.assTree a
+            lx    <- lexmap trees
             rmap  <- relmap lx
             lxs   <- substSlot slot lexmap lx tok
             parts <- B.sequenceSnd $ B.mapSndTo relmap lxs
@@ -89,27 +90,25 @@ substTrees slot rod trees =
 
 substTree :: [B.NamedTrees] -> C.Rod -> B.TokenTree -> B.Ab [B.TokenTree]
 substTree slot rod tree = B.abortableTree "slot" tree $ loop tree where
-    loop (B.TreeB p q sub) =
-        do sub' <- mapM loop sub
-           Right [B.TreeB p q $ concat sub']
+    loop (B.TreeB p q sub) = do sub' <- mapM loop sub
+                                Right [B.TreeB p q $ concat sub']
     loop (B.TreeL (B.TSlot _ n name))
-        | n == 0  = case lookup "@trunk" rod of
-                      Nothing -> Message.noSlotLeaf name
-                      Just od -> od `pos` name
-        | n == 1  = case lookup ('-' : name) rod of
-                      Nothing -> Message.noSlotLeaf name
-                      Just od -> Right od
-        | n == 2  = case lookup name slot of
-                      Nothing -> Message.noSlotLeaf name
-                      Just od -> Right od
-        | otherwise = Message.noSlotLeaf name
+        | n == 0    = replace n name "@trunk"     rod  (`pos` name)
+        | n == 1    = replace n name ('-' : name) rod  Right
+        | n == 2    = replace n name name         slot Right
+        | otherwise = Message.noSlotName n name
     loop tk = Right [tk]
+
+    replace n name key assoc f =
+        case lookup key assoc of
+          Just od -> f od
+          Nothing -> Message.noSlotName n name
 
     pos :: [B.TokenTree] -> String -> B.Ab [B.TokenTree]
     pos od "all" = Right od
     pos od n     = case (reads :: ReadS Int) n of
                      [(i, "")] -> Right . B.singleton =<< od `at` i
-                     _         -> Message.noSlotLeaf n
+                     _         -> Message.noSlotName 0 n
 
     at = slotIndex $ unwords . map B.tokenContent . B.untree
 
