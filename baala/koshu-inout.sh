@@ -7,27 +7,27 @@ io_version () {
 
 io_usage () {
     echo "DESCRIPTION"
-    echo "  Generate I/O list for koshu scripts."
+    echo "  Generate I/O list"
     echo
     echo "USAGE"
-    echo "  $io_cmd [OPTION ...] SCRIPT.k ..."
+    echo "  $io_cmd [OPTION ...] koshu FILE.k ..."
     echo
     echo "OPTION"
     echo "  -d          show differences from last document"
     echo "  -f FILE     take input files from FILE"
     echo "  -g          glob input files by *.$io_glob_ext"
     echo "  -h          print help message"
+    echo "  -l          link to I/O list when -d specified"
     echo "  -o FILE.md  save document to FILE.md"
-    echo "  -p PROG     use PROGram instead of $io_program"
     echo "  -r          save document to README.md"
     echo "  -s          save document to INOUT.md"
     echo "  -t          do not delete temporary files"
     echo "  -x EXT      use EXTension instead of *.$io_glob_ext"
     echo
     echo "EXAMPLE"
-    echo "  $io_cmd -r -g CALC.k"
-    echo "  $io_cmd -o CALC.md -f FILE CALC.k"
-    echo "  $io_cmd CALC.k DATA.k"
+    echo "  $io_cmd -r -g koshu CALC.k"
+    echo "  $io_cmd -o CALC.md -f FILE koshu CALC.k"
+    echo "  $io_cmd koshu CALC.k DATA.k"
     echo
     exit
 }
@@ -43,7 +43,7 @@ io_create_temporary () {
 }
 
 io_delete_temporary () {
-    if [ $io_keep_temp = no ]; then
+    if [ $io_keep_temp_yn = n ]; then
         [ -f $1 ] && rm $1
     fi
 }
@@ -66,33 +66,35 @@ io_doc_body () {
     io_trailer
 }
 
-check_output () {
-    case "$io_output_work" in
-        *.$io_glob_ext )
-              stderr "  Output file is probably input file."
-              stderr "  Please check: $io_output_work"
-              exit 2 ;; 
-    esac
-}
 
 # ============================================  Table of contents
 
-io_link       () { echo "(#$@)" | tr -d . | tr ' ' '-' \
-                                | tr '[:upper:]' '[:lower:]'; }
 io_table_calc () { echo "- [$@]`io_link $@`" ; }
-io_table_data () { echo "- $io_program $io_calc [$@]`io_link "$@"`" ; }
+io_table_data () { echo "- $io_calc [$@]`io_link "$@"`" ; }
 io_table_from () { echo "$@" | xargs -n 1 | io_table ; }
 
+io_link () {
+    echo "(#$@)" \
+        | tr -d . \
+        | tr ' ' '-' \
+        | tr '[:upper:]' '[:lower:]'
+}
+
 io_table () {
-    for k in $io_calc ; do io_table_calc $k ; done
-    while read k      ; do io_table_data $k ; done
+    for k in $io_calc ; do
+        [ -f $k ] && io_table_calc $k
+    done
+
+    while read k; do
+        io_table_data $k
+    done
 }
 
 
 # ============================================  Heading
 
 io_title () {
-    echo "# I/O list of $io_program"
+    echo "# I/O List"
     echo
 }
 
@@ -114,7 +116,7 @@ io_trailer () {
     echo "This document is produced by the command:"
     echo
     echo '```'
-    echo "$io_cmdline"
+    echo "$io_cmd_line"
     echo '```'
 }
 
@@ -122,6 +124,8 @@ io_trailer () {
 # ============================================  Input / Output
 
 io_list () {
+    [ -f "$1" ] || return
+
     echo '```'
     tr -d '\r' < "$1"
     echo '```'
@@ -134,22 +138,22 @@ io_list_all () {
 }
 
 io_input () {
-    if [ -f "$1" ]; then
-        io_linked_head "$1"
-        io_list "$1"
-    fi
+    [ -f "$1" ] || return
+
+    io_linked_head "$1"
+    io_list "$1"
 }
 
 io_output () {
-    $io_program "$@" > $io_temp
+    $@ > $io_temp
     io_status=$?
-    stderr "  $io_status <- $io_program $@"
+    stderr "  $io_status <- $@"
 
     echo
     if [ "$io_status" = 0 ]; then
-        echo "Command \`$io_program $@\` produces:"
+        echo "Command \`$@\` produces:"
     else
-        echo "Command \`$io_program $@\` exits with $io_status and produces:"
+        echo "Command \`$@\` exits with $io_status and produces:"
     fi
 
     echo
@@ -169,7 +173,7 @@ io_body () {
 
 io_body_args () {
     # Table
-    for k in $@ output; do io_table_calc $k; done
+    for k in `io_real_files $@` output; do io_table_calc $k; done
     # Input
     for k in $@; do io_input $k; done
     # Output
@@ -177,14 +181,20 @@ io_body_args () {
     io_output $@
 }
 
+io_real_files () {
+    for k in $@; do
+        [ -f $k ] && echo $k
+    done
+}
+
 io_body_file () {
     io_calc=$@
 
     # Table
     cat $io_glob_file | io_table
-    # Calc
+    # Input
     for k in $io_calc; do io_input $k; done
-    # Data
+    # Output
     cat $io_glob_file | while read io_data; do
         io_head $io_data
         io_list_all $io_data
@@ -209,6 +219,7 @@ io_body_glob () {
 
 io_glob_data () {(
     for k in *.$io_glob_ext; do
+        # exclude calc files
         if ! io_exist $k $io_calc; then
             echo $k
         fi
@@ -256,7 +267,7 @@ io_diff_body () {
         io_list $io_temp
         echo
 
-        if [ $io_diff '<' 3 ]; then
+        if [ $io_diff '<' 2 ]; then
             echo "To show all differences, please give more -d flags."
             echo "To examine this differences, type: cd `io_pwd`"
             echo
@@ -288,12 +299,10 @@ io_diff_result () {
     io_dir=`io_pwd`
     io_dir_md=`echo $io_dir | sed 's:/: / :g'`
 
-    if [ $io_diff = 1 ]; then
-        # without link
-        echo "* $1 – $io_output_orig in $io_dir_md"
-    else
-        # with link
+    if [ $io_link_yn = y ]; then
         echo "* $1 – [$io_output_orig]($io_dir/$io_output_orig) in $io_dir_md"
+    else
+        echo "* $1 – $io_output_orig in $io_dir_md"
     fi
 }
 
@@ -306,9 +315,13 @@ io_pwd () {
     fi
 }
 
-io_diff_del () {
+
+# ============================================  Command line
+
+io_cmd_line () {
     for arg in $*; do
         case $arg in
+            -l)  ;;
             -d)  ;;
             -dd) ;;
             *)   echo $arg ;;
@@ -316,42 +329,43 @@ io_diff_del () {
     done | xargs
 }
 
-
-# ============================================  Main
-
-# variable
+io_cmd_check () {
+    case "$io_output_work" in
+        *.$io_glob_ext )
+              stderr "  Output file is probably input file."
+              stderr "  Please check: $io_output_work"
+              exit 2 ;; 
+    esac
+}
 
 io_cmd=`basename $0`
-io_cmdline=`io_diff_del $io_cmd $*`
-io_diff=0
-io_error=output
+io_cmd_line=`io_cmd_line $io_cmd $*`
+io_diff=0             # 0 | 1 | 2
+io_error=output       # output | inhibit
 io_glob_ext=k
 io_glob_file=
-io_glob_type=args
-io_keep_temp=no
+io_glob_type=args     # args | glob | file
+io_keep_temp_yn=n     # y | n
+io_link_yn=n          # y | n
 io_output_orig=
-io_program=koshu
 io_status=0
 
-# option
-
-while getopts df:gho:p:rstx:V io_opt; do
+while getopts df:ghlo:rstx:V io_opt; do
     case $io_opt in
         d)  case $io_diff in
-              3) io_diff=3 ;;
-              2) io_diff=3 ;;  # show all differences
-              1) io_diff=2 ;;  # show first differences with linked output
+              2) io_diff=2 ;;
+              1) io_diff=2 ;;  # show all differences
               *) io_diff=1 ;;  # show first differences shortly
             esac
             io_error=inhibit          ;;
         f)  io_glob_type=file
             io_glob_file=$OPTARG      ;;
         g)  io_glob_type=glob         ;;
+        l)  io_link_yn=y              ;;
         o)  io_output_orig=$OPTARG    ;;
-        p)  io_program=$OPTARG        ;;
         r)  io_output_orig=README.md  ;;
         s)  io_output_orig=INOUT.md   ;;
-        t)  io_keep_temp=yes          ;;
+        t)  io_keep_temp_yn=y         ;;
         x)  io_glob_ext=$OPTARG       ;;
         V)  io_version                ;;
         ?)  io_usage                  ;;
@@ -361,10 +375,13 @@ done
 io_output_work=$io_output_orig
 shift $(($OPTIND - 1))
 
-# document
+[ $# = 0 ] && io_usage
 
-stderr "$io_cmdline"
-check_output
+stderr "$io_cmd_line"
+io_cmd_check
+
+
+# ============================================  Main
 
 io_temp=`io_create_temporary`
 
@@ -379,3 +396,4 @@ fi
 io_delete_temporary $io_temp
 
 exit $io_status
+

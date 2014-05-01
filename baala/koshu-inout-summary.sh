@@ -13,74 +13,40 @@ io_usage () {
     echo "  $io_cmd [OPTION ...]"
     echo
     echo "OPTION"
-    echo "  -c          print all markdown reports"
     echo "  -d          show all differences"
-    echo "  -f FILE     find FILE ($io_script) and invoke it for each I/O list"
+    echo "  -f FILE     find FILE and invoke it for each I/O list"
+    echo "  -g          grand summary mode"
     echo "  -h          print help message"
     echo "  -l          link to each reports"
-    echo "  -r          save report to README.md"
-    echo "  -s          save report to INOUT-SUMMARY.md"
+    echo "  -o FILE     save report to FILE"
+    echo "  -s          save report to INOUT-[GRAND]-SUMMARY.md"
     echo "  -V          print version"
     echo
-    echo "EXAMPLE"
-    echo "  $io_cmd"
-    echo "  $io_cmd -d | tee $io_script"
+    echo "FILENAME"
+    echo "  INOUT.sh                 script that outputs I/O list"
+    echo "  INOUT.md                 I/O list"
+    echo "  INOUT-SUMMARY.md         summary report of I/O lists"
+    echo "  INOUT-GRAND-SUMMARY.md   summary of summaries"
+    echo
+    echo "  This command collects each I/O lists into summary report,"
+    echo "  when -g mode, collects summaries into grand summary."
     echo
     exit
 }
 
 
-# ============================================  Report
+# ============================================  Path
 
-io_summary () {
-    IO_TOP=`pwd`
-    export IO_TOP
-
-    echo "# Report on I/O lists"
-    echo
-    echo "This is a summary of I/O lists."
-    echo "Each entry consists of a result of regression test,"
-    echo "a markdown file, and its directory."
-    echo "Results of regression tests are recorded in OK or DIFF."
-    echo "This summary is produced by the command \`$io_cmd\`"
-    echo
-
-    for sh in `find . -name $io_script`; do
-        io_diff || exit $?
-    done
-}
-
-io_diff () {
-    if grep koshu-inout.sh $sh > /dev/null; then
-        (   io_split_path $sh
-            cd $io_dir
-            ./$io_base -d $io_more
-        )   || exit $status
-    fi
-}
-
-io_split_path () {
+io_path_split () {
     io_base=`basename $1`
     io_dir=`dirname $1`
 }
 
-
-# ============================================  Collection
-
-io_collect () {
-    echo "# Collection of reports"
-    echo
-
-    for md in `find . -name $io_output | sed "s:^[.]/::"`; do
-        [ $md != $io_output ] && io_path_item $md
-    done
-}
-
 io_path_item () {
-    io_split_path $1
+    io_path_split $1
     io_dir_spaced=`echo $io_dir | sed "s:/: / :g"`
 
-    if [ $io_link_yn = y ]; then
+    if [ "$io_link" = -l ]; then
         echo "* [$io_base]($io_dir/$io_base) in $io_dir_spaced"
     else
         echo "* $io_base in $io_dir_spaced"
@@ -88,31 +54,97 @@ io_path_item () {
 }
 
 
-# ============================================  Main
+# ============================================  Summary
+
+io_summary () {
+    IO_TOP=`pwd`
+    export IO_TOP
+
+    echo "# Summary of I/O Lists"
+    echo
+    echo "This is a summary of I/O lists."
+    echo "Each entry consists of a result of regression test,"
+    echo "a markdown file, and its directory."
+    echo "Results of regression tests are recorded in OK or DIFF."
+    echo "This summary is produced by the command \`$io_cmd\`."
+    echo
+
+    for sh in `find . -name $io_find`; do
+        io_diff || exit $?
+    done
+}
+
+io_diff () {
+    if grep koshu-inout.sh $sh > /dev/null; then
+        (   io_path_split $sh
+            cd $io_dir
+            ./$io_base -d $io_link $io_more
+        )   || exit $status
+    fi
+}
+
+
+# ============================================  Grand summary
+
+io_grand () {
+    echo "# Grand Summary of I/O Lists"
+    echo
+    echo "This is a grand summary of I/O lists."
+    echo "This summary is produced by the command \`$io_cmd\`."
+    echo
+
+    for md in `find . -name $io_find | sed "s:^[.]/::"`; do
+        [ $md != $io_find ] && io_path_item $md
+    done
+}
+
+
+# ============================================  Command line
+
+io_decide_file () {
+    if [ -z $io_find ]; then
+        case $io_proc in
+            io_summary ) io_find=INOUT.sh ;;
+            io_grand   ) io_find=INOUT-SUMMARY.md ;;
+        esac
+    fi
+
+    if [ -z "$io_output" -a $io_output_yn = y ]; then
+        case $io_proc in
+            io_summary ) io_output=INOUT-SUMMARY.md ;;
+            io_grand   ) io_output=INOUT-GRAND-SUMMARY.md ;;
+        esac
+    fi
+}
 
 io_cmd=`basename $0`
-io_link_yn=n
+io_link=
 io_more=
-io_output=INOUT-SUMMARY.md
-io_output_yn=no
+io_output=
+io_output_yn=n
 io_proc=io_summary
-io_script=INOUT.sh
+io_find=
 
-while getopts cdf:hlrsV io_opt; do
+while getopts df:ghlo:sV io_opt; do
     case $io_opt in
-        c)  io_proc=io_collect  ;;
-        d)  io_more=-dd         ;;
-        f)  io_script=$OPTARG   ;;
-        l)  io_link_yn=y        ;;
-        r)  io_output_yn=y
-            io_output=README.md ;;
-        s)  io_output_yn=y ;;
+        d)  io_more=-d　        ;;
+        f)  io_find=$OPTARG     ;;
+        g)  io_proc=io_grand    ;;
+        l)  io_link=-l          ;;
+        o)  io_output=$OPTARG
+            io_output_yn=y      ;;
+        s)  io_output_yn=y      ;;
         V)  io_version          ;;
         ?)  io_usage            ;;
     esac
 done
 
-if [ $io_output_yn = y ]; then
+io_decide_file
+
+
+# ============================================  Main
+
+if [ ! -z "$io_output" -a $io_output_yn = y ]; then
     $io_proc | tee $io_output
     echo
     echo "(Copy of this report is saved to $io_output)"
