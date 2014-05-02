@@ -31,7 +31,6 @@ module Koshucode.Baala.Core.Relmap.Relkit
   relkitSetSource,
 ) where
 
-import qualified Data.Monoid                         as Monoid
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Core.Relmap.Lexmap  as C
 
@@ -45,7 +44,7 @@ data Relkit c = Relkit
     , relkitBody :: RelkitBody c
     }
 
-instance Monoid.Monoid (Relkit c) where
+instance B.Monoid (Relkit c) where
     mempty = relkitConst B.reldee
     mappend (Relkit _ bo1) (Relkit he2 bo2) =
         relkit he2 $ RelkitAppend bo1 bo2

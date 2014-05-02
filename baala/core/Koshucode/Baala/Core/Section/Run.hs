@@ -6,7 +6,6 @@ module Koshucode.Baala.Core.Section.Run
 ( runSection,
 ) where
 
-import qualified Data.Monoid                          as M
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Core.Content         as C
 import qualified Koshucode.Baala.Core.Relmap          as C
@@ -20,7 +19,7 @@ import qualified Koshucode.Baala.Core.Message         as Message
 
 runSection :: (C.CContent c) => C.Global c -> [C.Section c] -> B.Ab (B.OutputResult c)
 runSection global sects =
-    do let s2 = M.mconcat sects
+    do let s2 = B.mconcat sects
            g2 = global { C.globalJudges = C.secJudge s2 }
        runSectionBody g2 s2
 

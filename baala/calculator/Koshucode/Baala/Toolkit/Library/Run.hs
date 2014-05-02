@@ -12,8 +12,6 @@ module Koshucode.Baala.Toolkit.Library.Run
   mkdir,
 ) where
 
-import qualified Data.Monoid          as M
-import qualified Control.Monad        as M
 import qualified System.IO            as IO
 import qualified System.FilePath      as Path
 import qualified System.Directory     as Dir
@@ -45,7 +43,7 @@ hRunFiles h global src =
        IO.hPutStrLn    h ""
 
        let cmd = C.globalCommandLine global
-           js' = do sects <- M.sequence abSects
+           js' = do sects <- B.sequence abSects
                     C.runSection global sects
 
        case js' of
@@ -122,9 +120,9 @@ readSecList src =
     do sects <- C.readSectionBundle src
        return $ sequence $ sects
 
-concatMM :: (Monad m, M.Monoid a) => [m a] -> m a
-concatMM [] = return M.mempty
+concatMM :: (Monad m, B.Monoid a) => [m a] -> m a
+concatMM [] = return B.mempty
 concatMM (s:ss) =
     do s'  <- s
        ss' <- concatMM ss
-       return $ M.mappend s' ss'
+       return $ B.mappend s' ss'

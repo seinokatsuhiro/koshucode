@@ -41,7 +41,7 @@ elemAssert = B.unique . concatMap f where
     name True  = "KOSHU-AFFIRM"
     name False = "KOSHU-DENY"
 
-elemNamedRelmap :: (C.CContent c) => [C.RodyRelmap c] -> [B.Judge c]
+elemNamedRelmap :: (C.CContent c) => [C.Rodmap c] -> [B.Judge c]
 elemNamedRelmap = B.unique . concatMap f where
     f ((name, _), relmap) = map (judgeCons ("/name" -:- C.pText name))
                             $ elemRelmap relmap

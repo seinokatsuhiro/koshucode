@@ -37,7 +37,6 @@ module Koshucode.Baala.Base.Data.Relhead
 ) where
 
 import qualified Data.List                         as L
-import qualified Data.Monoid                       as M
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
 import qualified Koshucode.Baala.Base.Token        as B
@@ -50,7 +49,7 @@ import qualified Koshucode.Baala.Base.Data.Term    as B
 data Relhead = Relhead { headTerms :: [B.Term] }
                deriving (Show, Eq, Ord)
 
-instance M.Monoid Relhead where
+instance B.Monoid Relhead where
     mempty = Relhead []
     mappend (Relhead t1) (Relhead t2) =
         Relhead $ B.unionUp t1 t2

@@ -18,7 +18,6 @@ module Koshucode.Baala.Base.Token.TokenPos
 ) where
 
 import qualified Data.Generics                 as G
-import qualified Data.Monoid                   as M
 import qualified Koshucode.Baala.Base.Prelude  as B
 import qualified Koshucode.Baala.Base.Syntax   as B
 
@@ -34,7 +33,7 @@ data TokenPos = TokenPos
 instance Ord TokenPos where
     compare p1 p2
         = (tokenPosLineNumber p1 `compare` tokenPosLineNumber p2)
-          `M.mappend` (tokenPosTextLength p2 `compare` tokenPosTextLength p1)
+          `B.mappend` (tokenPosTextLength p2 `compare` tokenPosTextLength p1)
 
 tokenPosLineNumber :: TokenPos -> Int
 tokenPosLineNumber = fst . tokenPosLine

@@ -10,7 +10,7 @@ module Koshucode.Baala.Core.Relmap.Operator
 
   -- * Relmap
   Relmap (..),
-  RodyRelmap,
+  Rodmap,
   relmapId,
   mapToRelmap,
   relmapLexList,
@@ -30,7 +30,6 @@ module Koshucode.Baala.Core.Relmap.Operator
   globalFunction,
 ) where
 
-import qualified Data.Monoid                            as D
 import qualified Data.Version                           as D
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Core.Content           as C
@@ -72,7 +71,7 @@ instance B.TokenListing (RopUse c) where
 -- ----------------------  Relmap
 
 -- | Relmap with operand.
-type RodyRelmap c = C.Rody (Relmap c)
+type Rodmap c = C.Rody (Relmap c)
 
 -- | Generic relmap.
 data Relmap c
@@ -123,7 +122,7 @@ showRelmap r = sh r where
     joinSubs = concatMap sub
     sub r2 = " (" ++ sh r2 ++ ")"
 
-instance D.Monoid (Relmap c) where
+instance B.Monoid (Relmap c) where
     mempty  = relmapId
     mappend = RelmapAppend
 

@@ -15,7 +15,7 @@ import qualified Koshucode.Baala.Core.Message         as Message
 
 
 
-relmapSpecialize :: forall c. C.Global c -> [C.RodyRelmap c]
+relmapSpecialize :: forall c. C.Global c -> [C.Rodmap c]
   -> [C.RelkitDef c] -> Maybe B.Relhead -> C.Relmap c -> B.Ab ([C.RelkitDef c], C.Relkit c)
 relmapSpecialize global parts = spec [] [] where
     spec :: [(String, B.Relhead)] -- name of nested relation, and its heading

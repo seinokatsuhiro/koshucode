@@ -38,7 +38,7 @@ data Assert c = Assert
     , assToken   :: [B.Token]           -- ^ Source token list
     , assTree    :: [B.TokenTree]       -- ^ Token relmap
     , assRelmap  :: Maybe (C.Relmap c)  -- ^ Relmap
-    , assParts   :: [C.RodyRelmap c]
+    , assParts   :: [C.Rodmap c]
     } deriving (Show)
 
 -- | Option for assertions.
@@ -86,7 +86,7 @@ assertText AssertViolate  = "|=V"
 
 affirm, deny :: B.JudgePattern -> AssertOption
     -> [B.Token] -> [B.TokenTree] -> Maybe (C.Relmap c)
-    -> [C.RodyRelmap c]
+    -> [C.Rodmap c]
     -> Assert c
 
 -- | Make affirmed assertion.

@@ -16,7 +16,6 @@ module Koshucode.Baala.Base.Data.Judge
   isAffirmed, isDenied,
 ) where
 
-import qualified Data.Monoid                       as Monoid
 import qualified Data.List                         as List
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
@@ -48,8 +47,8 @@ instance (Ord c) => Ord (Judge c) where
         let Judge q1 p1 xs1 = abcJudge j1
             Judge q2 p2 xs2 = abcJudge j2
         in compare p1 p2
-               `Monoid.mappend` compare q1 q2
-               `Monoid.mappend` compare xs1 xs2
+               `B.mappend` compare q1 q2
+               `B.mappend` compare xs1 xs2
 
 -- | Name of judgement pattern.
 type JudgePattern = String

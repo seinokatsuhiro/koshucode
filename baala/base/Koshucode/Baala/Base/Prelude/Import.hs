@@ -4,14 +4,17 @@ module Koshucode.Baala.Base.Prelude.Import
 ( -- * Control.Monad
   (Control.Monad.<=<),
   (Control.Monad.>=>),
+  Control.Monad.sequence,
 
   -- * Data.Maybe
   Data.Maybe.catMaybes,
   Data.Maybe.fromJust,
 
   -- * Data.Monoid
-  Data.Monoid.mempty,
+  Data.Monoid.Monoid,
   Data.Monoid.mappend,
+  Data.Monoid.mconcat,
+  Data.Monoid.mempty,
 
   -- * Text.PrettyPrint
   Text.PrettyPrint.Doc,

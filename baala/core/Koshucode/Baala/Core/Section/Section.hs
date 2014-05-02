@@ -24,7 +24,6 @@ module Koshucode.Baala.Core.Section.Section
   consSection,
 ) where
 
-import qualified Data.Monoid                          as M
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Core.Content         as C
 import qualified Koshucode.Baala.Core.Relmap          as C
@@ -66,7 +65,7 @@ instance (Ord c, B.Pretty c) => B.Pretty (Section c) where
         dJudge   = B.docv $ secJudge sec
         dAssert  = B.docv $ concatMap B.shortBody $ secAssert sec
 
-instance M.Monoid (Section c) where
+instance B.Monoid (Section c) where
     mempty  = emptySection
     mappend = secUnion
 
@@ -108,7 +107,7 @@ consSection
     -> B.Ab (Section c)      -- ^ Result section
 consSection root resource xss =
     do sects <- mapM (consSectionEach root resource) xss
-       Right $ M.mconcat sects
+       Right $ B.mconcat sects
 
 consSectionEach
     :: forall c. (C.CContent c)

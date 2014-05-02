@@ -8,7 +8,7 @@ module Koshucode.Baala.Op.Builtin.Rop
   -- $ListOfOperator
 ) where
 
-import qualified Data.Monoid as M
+import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 
 
@@ -19,8 +19,7 @@ builtinRops = ropList "builtin"
 
 -- TODO
 ropConsConcat :: C.RopCons c
-ropConsConcat = Right . foldl M.mappend M.mempty . C.ropSubrelmap
---ropConsConcat = Right . M.mconcat . C.ropSubrelmap
+ropConsConcat = Right . foldl B.mappend B.mempty . C.ropSubrelmap
 
 -- | Make implementations of relation-mapping operators.
 ropList
