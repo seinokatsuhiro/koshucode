@@ -116,24 +116,25 @@ consSectionEach
     -> B.Short [C.Clause]   -- ^ Output of 'C.consClause'
     -> B.Ab (Section c)     -- ^ Result section
 consSectionEach root resource (B.Short shorts xs) =
-    do _        <-  mapMFor unk     isCUnknown
-       _        <-  mapMFor unres   isCUnres
-       imports  <-  mapMFor impt    isCImport
-       judges   <-  mapMFor judge   isCJudge 
+    do _        <-  forM isCUnknown unk
+       _        <-  forM isCUnres   unres
+       imports  <-  forM isCImport  impt
+       judges   <-  forM isCJudge   judge
 
        Right $ root
            { secName      =  section xs
            , secImport    =  imports
-           , secExport    =  mapFor expt isCExport
-           , secShort     =  mapFor short isCShort
-           , secSlot      =  mapFor slot isCSlot
-           , secTokmap    =  mapFor tokmap isCTokmap
-           , secAssert    =  [B.Short shorts $ mapFor assert isCAssert]
+           , secExport    =  for isCExport expt
+           , secShort     =  for isCShort  short
+           , secSlot      =  for isCSlot   slot
+           , secTokmap    =  for isCTokmap tokmap
+           , secAssert    =  [B.Short shorts $ for isCAssert assert]
            , secJudge     =  judges
            , secResource  =  resource }
     where
-      mapFor  f p = pass     f  `map`  filter (p . C.clauseBody) xs
-      mapMFor f p = pass (ab f) `mapM` filter (p . C.clauseBody) xs
+      for  p f = pass     f  `map`  filter (p . C.clauseBody) xs
+      forM p f = pass (ab f) `mapM` filter (p . C.clauseBody) xs
+
       pass f (C.Clause src body) = f (B.front $ B.clauseTokens src) body
       consSec = consSection root (B.ResourceText "")
       ab f toks body = B.abortable "clause" toks $ f toks body
@@ -143,33 +144,34 @@ consSectionEach root resource (B.Short shorts xs) =
       section (_ : xs2) = section xs2
       section [] = Nothing
 
-      expt  _ (C.CExport n) = n
+      expt :: Cl String
+      expt _ (C.CExport n) = n
 
-      short :: [B.Token] -> C.ClauseBody -> [B.Named String]
-      short  _ (C.CShort   p) = p
-
+      impt :: Clab (Section c)
       impt _ (C.CImport _ (Nothing)) = Right emptySection
       impt _ (C.CImport _ (Just _))  = consSec []
 
-      judge :: [B.Token] -> C.ClauseBody -> B.Ab (B.Judge c)
-      judge _ (C.CJudge q pat xs2) =
-          case C.litJudge q pat (B.tokenTrees xs2) of
-            Right j -> Right j
-            Left  a -> abort a
+      short :: Cl [B.Named String]
+      short _ (C.CShort p) = p
 
-      slot :: [B.Token] -> C.ClauseBody -> B.NamedTrees
+      judge :: Clab (B.Judge c)
+      judge _ (C.CJudge q pat xs2) = C.litJudge q pat (B.tokenTrees xs2)
+
+      slot :: Cl (B.NamedTrees)
       slot _ (C.CSlot name trees) = (name, trees)
 
-      tokmap :: [B.Token] -> C.ClauseBody -> B.NamedTrees
+      tokmap :: Cl (B.NamedTrees)
       tokmap _ (C.CTokmap name trees) = (name, trees)
 
-      assert :: [B.Token] -> C.ClauseBody -> C.Assert c
+      assert :: Cl (C.Assert c)
       assert toks (C.CAssert typ pat opt trees) =
           C.Assert typ pat opt toks trees Nothing []
 
       unk   _ (C.CUnknown) = Message.unkClause
       unres _ (C.CUnres _) = Message.unresPrefix
-      abort a = Left a
+
+type Cl   a = [B.Token] -> C.ClauseBody -> a
+type Clab a = Cl (B.Ab a)
 
 
 -- ----------------------  Clause type

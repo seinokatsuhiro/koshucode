@@ -19,21 +19,16 @@ import qualified Koshucode.Baala.Core.Message         as Message
 
 runSection :: (C.CContent c) => C.Global c -> [C.Section c] -> B.Ab (B.OutputResult c)
 runSection global sects =
-    do let s2 = B.mconcat sects
-           g2 = global { C.globalJudges = C.secJudge s2 }
+    do s2 <- assembleRelmap $ B.mconcat sects
+       let g2 = global { C.globalJudges = C.secJudge s2 }
        runSectionBody g2 s2
 
 runSectionBody :: forall c. (Ord c, B.Pretty c, C.CRel c, C.CNil c) =>
     C.Global c -> C.Section c -> B.Ab (B.OutputResult c)
-runSectionBody global C.Section { C.secSlot   = slot
-                                , C.secTokmap = tok
-                                , C.secAssert = ass
-                                , C.secCons   = cons } =
-
-    do ass2    <- mapM consAssert `B.shortMapM` ass
-       judgesV <- run $ C.assertViolated ass2
-       judgesN <- run $ C.assertNormal   ass2
-       Right (B.shortTrim judgesV, B.shortTrim judgesN)
+runSectionBody global C.Section { C.secAssert = ass } =
+    do js1 <- run $ C.assertViolated ass
+       js2 <- run $ C.assertNormal   ass
+       Right (B.shortTrim js1, B.shortTrim js2)
     where
       run :: C.ShortAsserts c -> B.Ab [B.OutputChunks c]
       run = mapM B.shortM . run2
@@ -41,16 +36,23 @@ runSectionBody global C.Section { C.secSlot   = slot
       run2 :: C.ShortAsserts c -> [B.Short (B.Ab [B.OutputChunk c])]
       run2 = B.shortMap $ C.runAssertJudges global
 
-      lexmap = C.consLexmap cons
-      relmap = C.consRelmap cons
-
-      consAssert :: B.AbMap (C.Assert c)
-      consAssert a =
+assembleRelmap :: forall c. B.AbMap (C.Section c)
+assembleRelmap s@C.Section { C.secSlot   = slot
+                           , C.secTokmap = tok
+                           , C.secAssert = ass
+                           , C.secCons   = C.RelmapCons
+                                           { C.consLexmap = lexmap
+                                           , C.consRelmap = relmap }} =
+    do ass2 <- mapM assemble `B.shortMapM` ass
+       Right $ s { C.secAssert = ass2 }
+    where
+      assemble :: B.AbMap (C.Assert c)
+      assemble a =
           B.abortableFrom "assert" a $ do
-            trees <- substTrees slot [] $ C.assTree a
+            trees <- slotTrees slot [] $ C.assTree a
             lx    <- lexmap trees
             rmap  <- relmap lx
-            lxs   <- substSlot slot lexmap lx tok
+            lxs   <- slotLexmap slot lexmap lx tok
             parts <- B.sequenceSnd $ B.mapSndTo relmap lxs
             Right $ a { C.assRelmap = Just rmap
                       , C.assParts  = parts }
@@ -59,10 +61,10 @@ runSectionBody global C.Section { C.secSlot   = slot
 
 -- ----------------------  Slot substitution
 
-substSlot :: [B.NamedTrees] -> C.ConsLexmap -> C.Lexmap
+slotLexmap :: [B.NamedTrees] -> C.ConsLexmap -> C.Lexmap
     -> [B.NamedTrees]
     -> B.Ab [C.Rody C.Lexmap]
-substSlot slot cons lexmap def = loop lexmap where
+slotLexmap slot cons lexmap def = loop lexmap where
     loop lx = let rop = C.lexOpText lx
                   rod = C.lexOperand lx
                   subuse = loops $ C.lexSubmap lx
@@ -70,7 +72,7 @@ substSlot slot cons lexmap def = loop lexmap where
                  case lookup rop def of
                    Nothing    -> subuse
                    Just trees ->
-                       do trees' <- substTrees slot rod trees
+                       do trees' <- slotTrees slot rod trees
                           lx2    <- cons trees'
                           use2   <- loop lx2
                           use3   <- subuse
@@ -82,13 +84,13 @@ substSlot slot cons lexmap def = loop lexmap where
                           lxs' <- loops lxs
                           Right $ lx' ++ lxs'
 
-substTrees :: [B.NamedTrees] -> C.Rod -> B.AbMap [B.TokenTree]
-substTrees slot rod trees =
-    do trees' <- substTree slot rod `mapM` trees
+slotTrees :: [B.NamedTrees] -> C.Rod -> B.AbMap [B.TokenTree]
+slotTrees slot rod trees =
+    do trees' <- slotTree slot rod `mapM` trees
        Right $ concat trees'
 
-substTree :: [B.NamedTrees] -> C.Rod -> B.TokenTree -> B.Ab [B.TokenTree]
-substTree slot rod tree = B.abortableTree "slot" tree $ loop tree where
+slotTree :: [B.NamedTrees] -> C.Rod -> B.TokenTree -> B.Ab [B.TokenTree]
+slotTree slot rod tree = B.abortableTree "slot" tree $ loop tree where
     loop (B.TreeB p q sub) = do sub' <- mapM loop sub
                                 Right [B.TreeB p q $ concat sub']
     loop (B.TreeL (B.TSlot _ n name))
