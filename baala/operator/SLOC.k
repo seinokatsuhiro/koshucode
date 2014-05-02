@@ -2,19 +2,19 @@
 
 |-- DIR  /code 17   /comment 6    /dir "operator/Koshucode/Baala"
 |-- DIR  /code 240  /comment 136  /dir "operator/Koshucode/Baala/Op"
-|-- DIR  /code 158  /comment 117  /dir "operator/Koshucode/Baala/Op/Builtin"
+|-- DIR  /code 158  /comment 116  /dir "operator/Koshucode/Baala/Op/Builtin"
 |-- DIR  /code 352  /comment 198  /dir "operator/Koshucode/Baala/Op/Content"
 |-- DIR  /code 111  /comment 66   /dir "operator/Koshucode/Baala/Op/Meta"
-|-- DIR  /code 333  /comment 331  /dir "operator/Koshucode/Baala/Op/Minimal"
+|-- DIR  /code 331  /comment 331  /dir "operator/Koshucode/Baala/Op/Minimal"
 |-- DIR  /code 267  /comment 223  /dir "operator/Koshucode/Baala/Op/Nest"
 |-- DIR  /code 598  /comment 352  /dir "operator/Koshucode/Baala/Op/Vanilla"
 
-|-- DIR-TOTAL  /code 2076  /comment 1429
+|-- DIR-TOTAL  /code 2074  /comment 1428
 
 |-- FILE  /code 17   /comment 6    /file "Op.hs"          /dir "operator/Koshucode/Baala"
 |-- FILE  /code 9    /comment 6    /file "Builtin.hs"     /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 109  /comment 66   /file "Get.hs"         /dir "operator/Koshucode/Baala/Op/Builtin"
-|-- FILE  /code 21   /comment 22   /file "Rop.hs"         /dir "operator/Koshucode/Baala/Op/Builtin"
+|-- FILE  /code 21   /comment 21   /file "Rop.hs"         /dir "operator/Koshucode/Baala/Op/Builtin"
 |-- FILE  /code 28   /comment 29   /file "Term.hs"        /dir "operator/Koshucode/Baala/Op/Builtin"
 |-- FILE  /code 13   /comment 7    /file "Content.hs"     /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 62   /comment 35   /file "Arith.hs"       /dir "operator/Koshucode/Baala/Op/Content"
@@ -29,7 +29,7 @@
 |-- FILE  /code 13   /comment 28   /file "Minimal.hs"     /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 53   /comment 82   /file "Origin.hs"      /dir "operator/Koshucode/Baala/Op/Minimal"
 |-- FILE  /code 61   /comment 38   /file "Restrict.hs"    /dir "operator/Koshucode/Baala/Op/Minimal"
-|-- FILE  /code 33   /comment 47   /file "Rop.hs"         /dir "operator/Koshucode/Baala/Op/Minimal"
+|-- FILE  /code 31   /comment 47   /file "Rop.hs"         /dir "operator/Koshucode/Baala/Op/Minimal"
 |-- FILE  /code 114  /comment 58   /file "Term.hs"        /dir "operator/Koshucode/Baala/Op/Minimal"
 |-- FILE  /code 72   /comment 106  /file "Tropashko.hs"   /dir "operator/Koshucode/Baala/Op/Minimal"
 |-- FILE  /code 7    /comment 6    /file "Nest.hs"        /dir "operator/Koshucode/Baala/Op"
@@ -47,4 +47,4 @@
 |-- FILE  /code 50   /comment 23   /file "Order.hs"       /dir "operator/Koshucode/Baala/Op/Vanilla"
 |-- FILE  /code 70   /comment 56   /file "Rop.hs"         /dir "operator/Koshucode/Baala/Op/Vanilla"
 
-|-- FILE-TOTAL  /code 2076  /comment 1429
+|-- FILE-TOTAL  /code 2074  /comment 1428
