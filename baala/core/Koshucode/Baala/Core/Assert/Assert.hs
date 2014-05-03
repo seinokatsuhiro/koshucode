@@ -4,20 +4,16 @@
 -- | Data structure for mapping relation to judges
 
 module Koshucode.Baala.Core.Assert.Assert
-( -- * Assert
+( -- * Data type
   Assert (..),
-  AssertOption,
-  assertMap,
-  isViolateAssert,
-
-  -- * AssertType
   AssertType (..),
+  AssertOption,
   assertQuality,
-  assertText,
 
-  -- * Constructor
-  affirm,
-  deny,
+  -- * Short assertion
+  ShortAssert,
+  assertNormal,
+  assertViolated,
 ) where
 
 import qualified Data.Generics as G
@@ -52,18 +48,6 @@ instance B.Pretty (Assert c) where
         let qs = B.doch [assertText q, pat]
         in B.docHang qs 2 (B.doch toks)
 
--- | Apply function to relamp in assert.
-assertMap :: B.Map (C.Relmap c) -> B.Map (Assert c)
-assertMap f (Assert q pat opt tok tree r def) =
-    Assert q pat opt tok tree (fmap f r) def
-
-isViolateAssert :: Assert c -> Bool
-isViolateAssert = (== AssertViolate) . assType
-
-
-
--- ----------------------  AssertType
-
 data AssertType
     = AssertAffirm    -- ^ @|==@ /pattern/ @:@ /relmap/
     | AssertDeny      -- ^ @|=X@ /pattern/ @:@ /relmap/
@@ -81,17 +65,19 @@ assertText AssertDeny     = "|=X"
 assertText AssertViolate  = "|=V"
 
 
+-- ----------------------  Short assertion
 
--- ----------------------  Constructor
+-- | Assertion list with short signs.
+type ShortAssert c = B.Short [Assert c]
 
-affirm, deny :: B.JudgePattern -> AssertOption
-    -> [B.Token] -> [B.TokenTree] -> Maybe (C.Relmap c)
-    -> [C.Rodmap c]
-    -> Assert c
+-- | Select affirmative or denial assertions.
+assertNormal :: B.Map [ShortAssert c]
+assertNormal = B.shortMap $ filter (not . violated)
 
--- | Make affirmed assertion.
-affirm = Assert AssertAffirm
+-- | Select violated assertions.
+assertViolated :: B.Map [ShortAssert c]
+assertViolated = B.shortMap $ filter violated
 
--- | Make denied assertion.
-deny   = Assert AssertDeny
+violated :: Assert c -> Bool
+violated = (== AssertViolate) . assType
 

@@ -4,8 +4,9 @@
 -- | Intermidiate structure between 'String' and 'Section'.
 
 module Koshucode.Baala.Core.Section.Clause
-( -- * Datatype
+( -- * Data type
   -- $Documentation
+  ShortClause,
   Clause (..),
   ClauseBody (..),
   clauseTypeText,
@@ -15,7 +16,7 @@ module Koshucode.Baala.Core.Section.Clause
   consClause,
 ) where
 
-import qualified Data.Generics as G
+import qualified Data.Generics                 as G
 import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Core.Relmap   as C
 import qualified Koshucode.Baala.Core.Assert   as C
@@ -23,6 +24,8 @@ import qualified Koshucode.Baala.Core.Assert   as C
 
 
 -- ----------------------  Data type
+
+type ShortClause = B.Short [Clause]
 
 data Clause =
     Clause { clauseSource :: B.TokenClause
@@ -176,7 +179,7 @@ wordPairs toks =
 
 -- | Construct 'Clause' list from 'B.Token' list.
 --   This is a first step of constructing 'Section'.
-consClause :: [B.TokenLine] -> [B.Short [Clause]]
+consClause :: [B.TokenLine] -> [ShortClause]
 consClause = (map $ fmap clauseTree) . shortSections . consPreclause
 
 clauseTree :: B.Map [Clause]
@@ -194,7 +197,7 @@ clauseTree = map clause where
 
 -- ----------------------  Short-to-long conversion
 
-shortSections :: [Clause] -> [B.Short [Clause]]
+shortSections :: [Clause] -> [ShortClause]
 shortSections [] = []
 shortSections xxs@(x : xs)
     | isCShort x = f xs $ shorts x

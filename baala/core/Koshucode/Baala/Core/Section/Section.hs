@@ -1,27 +1,19 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall -fno-warn-incomplete-patterns #-}
 
--- | Data structure for relational calculations.
---   There are three types of section:
---   (1) /editing sections/ that output judges and read other sections,
---   (2) /library sections/ that make relmaps reusable,
---   (3) /data sections/ that provide data.
+-- | Section as bundle of relational expressions.
 
 module Koshucode.Baala.Core.Section.Section
 (
-  -- * Process
-  -- $Process
-
-  -- * Section
+  -- * Data type
   Section (..),
-  ShortAsserts,
-  assertViolated,
-  assertNormal,
 
   -- * Constructors
-  makeEmptySection,
   emptySection,
   consSection,
+
+  -- * Process
+  -- $Process
 ) where
 
 import qualified Koshucode.Baala.Base                 as B
@@ -32,29 +24,18 @@ import qualified Koshucode.Baala.Core.Section.Clause  as C
 import qualified Koshucode.Baala.Core.Message         as Message
 
 
--- ----------------------  Short
 
-assertViolated :: B.Map (ShortAsserts c)
-assertViolated = B.shortMap $ filter C.isViolateAssert
-
-assertNormal :: B.Map (ShortAsserts c)
-assertNormal = B.shortMap $ filter $ not . C.isViolateAssert
-
-type ShortAsserts c = [B.Short [C.Assert c]]
-
-
--- ----------------------  Section
+-- ----------------------  Data type
 
 data Section c = Section {
       secName     :: Maybe String        -- ^ Section name
     , secImport   :: [Section c]         -- ^ Importing section
     , secExport   :: [String]            -- ^ Exporting relmap names
     , secShort    :: [[B.Named String]]  -- ^ Prefix for short signs
-    , secSlot     :: [B.NamedTrees]      -- ^ Global slot
-    , secAssert   :: ShortAsserts c      -- ^ Assertions of relmaps
-    , secTokmap   :: [B.NamedTrees]
+    , secSlot     :: [B.NamedTrees]      -- ^ Global slots
+    , secTokmap   :: [B.NamedTrees]      -- ^ Source of relmaps
+    , secAssert   :: [C.ShortAssert c]   -- ^ Assertions of relmaps
     , secJudge    :: [B.Judge c]         -- ^ Affirmative or denial judgements
-    , secViolate  :: [B.Judge c]         -- ^ Violated judgements, i.e., result of @|=V@
     , secResource :: B.Resource          -- ^ Resource name
     , secCons     :: C.RelmapCons c      -- ^ Relmap constructor for this section
     } deriving (Show)
@@ -78,43 +59,32 @@ secUnion s1 s2 =
        , secAssert  = union secAssert
        , secTokmap  = union secTokmap
        , secJudge   = union secJudge
-       , secViolate = union secViolate
        } where union f = f s1 ++ f s2
 
-{-| Make empty section that has a given constructor. -}
-makeEmptySection :: C.RelmapCons c -> Section c
-makeEmptySection = Section Nothing [] [] [] [] [] [] [] []
-                   (B.ResourceText "")
-
-{-| Section that has no contents. -}
+-- | Section that has no contents.
 emptySection :: Section c
-emptySection = makeEmptySection $ C.relmapCons C.global
-
--- {-| Section that has only judgements. -}
--- dataSection :: [B.Judge c] -> Section c
--- dataSection js = emptySection { secJudge = js }
+emptySection = Section Nothing [] [] [] [] [] [] [] res cons where
+    res  = B.ResourceText ""
+    cons = C.relmapCons C.global
 
 
 
--- ----------------------  Full construction
+
+-- ----------------------  Construction
 
 -- | Second step of constructing 'Section'.
 consSection
     :: forall c. (C.CContent c)
-    => Section c
-    -> B.Resource            -- ^ Resource name
-    -> [B.Short [C.Clause]]  -- ^ Output of 'C.consClause'
-    -> B.Ab (Section c)      -- ^ Result section
+    => Section c          -- ^ Root section
+    -> B.Resource         -- ^ Resource name
+    -> [C.ShortClause]    -- ^ Output of 'C.consClause'
+    -> B.Ab (Section c)   -- ^ Result section
 consSection root resource xss =
-    do sects <- mapM (consSectionEach root resource) xss
+    do sects <- consSectionEach root resource `mapM` xss
        Right $ B.mconcat sects
 
-consSectionEach
-    :: forall c. (C.CContent c)
-    => Section c
-    -> B.Resource           -- ^ Resource name
-    -> B.Short [C.Clause]   -- ^ Output of 'C.consClause'
-    -> B.Ab (Section c)     -- ^ Result section
+consSectionEach :: forall c. (C.CContent c) =>
+    Section c -> B.Resource -> C.ShortClause -> B.Ab (Section c)
 consSectionEach root resource (B.Short shorts xs) =
     do _        <-  forM isCUnknown unk
        _        <-  forM isCUnres   unres
@@ -122,7 +92,7 @@ consSectionEach root resource (B.Short shorts xs) =
        judges   <-  forM isCJudge   judge
 
        Right $ root
-           { secName      =  section xs
+           { secName      =  name xs
            , secImport    =  imports
            , secExport    =  for isCExport expt
            , secShort     =  for isCShort  short
@@ -132,17 +102,17 @@ consSectionEach root resource (B.Short shorts xs) =
            , secJudge     =  judges
            , secResource  =  resource }
     where
-      for  p f = pass     f  `map`  filter (p . C.clauseBody) xs
-      forM p f = pass (ab f) `mapM` filter (p . C.clauseBody) xs
+      for  isX f = pass     f  `map`  filter (isX . C.clauseBody) xs
+      forM isX f = pass (ab f) `mapM` filter (isX . C.clauseBody) xs
 
       pass f (C.Clause src body) = f (B.front $ B.clauseTokens src) body
       consSec = consSection root (B.ResourceText "")
       ab f toks body = B.abortable "clause" toks $ f toks body
 
       -- todo: multiple section name
-      section ((C.Clause _ (C.CSection n)) : _) = n
-      section (_ : xs2) = section xs2
-      section [] = Nothing
+      name ((C.Clause _ (C.CSection n)) : _) = n
+      name (_ : xs2) = name xs2
+      name [] = Nothing
 
       expt :: Cl String
       expt _ (C.CExport n) = n
@@ -152,16 +122,16 @@ consSectionEach root resource (B.Short shorts xs) =
       impt _ (C.CImport _ (Just _))  = consSec []
 
       short :: Cl [B.Named String]
-      short _ (C.CShort p) = p
+      short _ (C.CShort ps) = ps
+
+      slot :: Cl B.NamedTrees
+      slot _ (C.CSlot n trees) = (n, trees)
+
+      tokmap :: Cl B.NamedTrees
+      tokmap _ (C.CTokmap n trees) = (n, trees)
 
       judge :: Clab (B.Judge c)
-      judge _ (C.CJudge q pat xs2) = C.litJudge q pat (B.tokenTrees xs2)
-
-      slot :: Cl (B.NamedTrees)
-      slot _ (C.CSlot name trees) = (name, trees)
-
-      tokmap :: Cl (B.NamedTrees)
-      tokmap _ (C.CTokmap name trees) = (name, trees)
+      judge _ (C.CJudge q p xs2) = C.litJudge q p $ B.tokenTrees xs2
 
       assert :: Cl (C.Assert c)
       assert toks (C.CAssert typ pat opt trees) =

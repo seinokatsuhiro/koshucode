@@ -30,10 +30,10 @@ runSectionBody global C.Section { C.secAssert = ass } =
        js2 <- run $ C.assertNormal   ass
        Right (B.shortTrim js1, B.shortTrim js2)
     where
-      run :: C.ShortAsserts c -> B.Ab [B.OutputChunks c]
+      run :: [C.ShortAssert c] -> B.Ab [B.OutputChunks c]
       run = mapM B.shortM . run2
 
-      run2 :: C.ShortAsserts c -> [B.Short (B.Ab [B.OutputChunk c])]
+      run2 :: [C.ShortAssert c] -> [B.Short (B.Ab [B.OutputChunk c])]
       run2 = B.shortMap $ C.runAssertJudges global
 
 assembleRelmap :: forall c. B.AbMap (C.Section c)
