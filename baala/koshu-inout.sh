@@ -75,7 +75,7 @@ io_table_from () { echo "$@" | xargs -n 1 | io_table ; }
 
 io_link () {
     echo "(#$@)" \
-        | tr -d . \
+        | tr -d ./ \
         | tr ' ' '-' \
         | tr '[:upper:]' '[:lower:]'
 }
