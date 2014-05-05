@@ -12,8 +12,8 @@ module Koshucode.Baala.Core.Section.Clause
   clauseTypeText,
 
   -- * Constructors
-  consPreclause,
   consClause,
+  consPreclause,
 ) where
 
 import qualified Data.Generics                 as G
@@ -37,13 +37,10 @@ data ClauseBody
     | CImport     [B.Token] (Maybe Clause)       -- ^ Importing section name
     | CExport     String                         -- ^ Exporting relmap name
     | CShort      [(B.Named String)]             -- ^ Short signs
-    | CTokmap     String [B.TokenTree]           -- ^ Source of relmap
-    | TTokmap     String [B.Token]               -- ^ (Intermediate data)
-    | CAssert     C.AssertType B.JudgePattern C.AssertOption [B.TokenTree] -- ^ Assertions of relmap
-    | TAssert     C.AssertType B.JudgePattern C.AssertOption [B.Token]     -- ^ (Intermediate data)
+    | CTokmap     String [B.Token]               -- ^ Source of relmap
+    | CAssert     C.AssertType B.JudgePattern C.AssertOption [B.Token]     -- ^ (Intermediate data)
     | CJudge      Bool B.JudgePattern [B.Token]  -- ^ Judge
-    | CSlot       String [B.TokenTree]           -- ^ Global slot
-    | TSlot       String [B.Token]               -- ^ Global slot
+    | CSlot       String [B.Token]               -- ^ Global slot
     | CComment                                   -- ^ Clause comment
     | CUnknown                                   -- ^ Unknown clause
     | CUnres      [B.Token]                      -- ^ Unresolved short sign
@@ -58,24 +55,21 @@ clauseTypeText (Clause _ body) =
       CExport    _         ->  "Export"
       CShort     _         ->  "Short"
       CTokmap    _ _       ->  "Tokmap"
-      TTokmap    _ _       ->  "Tokmap"
       CAssert    _ _ _ _   ->  "Assert"
-      TAssert    _ _ _ _   ->  "Assert"
       CJudge     _ _ _     ->  "Judge"
       CSlot      _ _       ->  "Slot"
-      TSlot      _ _       ->  "Slot"
       CComment             ->  "Comment"
       CUnknown             ->  "Unknown"
       CUnres     _         ->  "Unres"
 
 
 
--- ----------------------  Preconstruction
+-- ----------------------  Construction
 
 -- | Convert token list into clause list.
 --   Result clause list does not contain
 --   'CTokmap' and 'CAssert'. Instead of them,
---   'TTokmap' and 'TAssert' are contained.
+--   'TTokmap' and 'CAssert' are contained.
 --   This function does not depend on 'C.ConsLexmap'.
 --
 --   >>> consPreclause . B.tokenize $ "a : source A /x /y"
@@ -87,6 +81,10 @@ clauseTypeText (Clause _ body) =
 --                , TTerm 9 ["/x"]
 --                , TTerm 11 ["/y"]
 --                ]]
+
+-- | First step of constructing 'Section'.
+consClause :: [B.TokenLine] -> [ShortClause]
+consClause = shortSections . consPreclause
 
 consPreclause :: [B.TokenLine] -> [Clause]
 consPreclause = concatMap consPreclause' . B.tokenClauses
@@ -138,11 +136,11 @@ consPreclause' src = dispatch $ B.clauseTokens src where
           Left  expr            ->  a expr []
         where a expr opt =
                   let opt' = C.rod $ B.tokenTrees opt
-                  in c1 $ TAssert t p opt' expr
+                  in c1 $ CAssert t p opt' expr
     assert _ _             =  unk
 
-    rmap n xs              =  c1 $ TTokmap n xs
-    slot n xs              =  c1 $ TSlot   n xs
+    rmap n xs              =  c1 $ CTokmap n xs
+    slot n xs              =  c1 $ CSlot   n xs
 
     sec [B.TWord _ _ n]    =  c1 $ CSection (Just n)
     sec []                 =  c1 $ CSection Nothing
@@ -175,25 +173,6 @@ wordPairs toks =
       wordPair _ = Nothing
 
 
--- ----------------------  Lexmap construction
-
--- | Construct 'Clause' list from 'B.Token' list.
---   This is a first step of constructing 'Section'.
-consClause :: [B.TokenLine] -> [ShortClause]
-consClause = (map $ fmap clauseTree) . shortSections . consPreclause
-
-clauseTree :: B.Map [Clause]
-clauseTree = map clause where
-    clause :: B.Map Clause
-    clause (Clause src bo) = Clause src $ tree bo
-
-    tree :: B.Map ClauseBody
-    tree (TSlot   n ts)     = CSlot   n     $ B.tokenTrees ts
-    tree (TTokmap n ts)     = CTokmap n     $ B.tokenTrees ts
-    tree (TAssert q p o ts) = CAssert q p o $ B.tokenTrees ts
-    tree bo = bo
-
-
 
 -- ----------------------  Short-to-long conversion
 
@@ -221,8 +200,8 @@ shortToLong sh = map clause where
     clause cl@(Clause src b) =
         case b of
           CJudge  q p xs     -> Clause src $ body xs $ CJudge  q p
-          TAssert q p opt xs -> Clause src $ body xs $ TAssert q p opt
-          TTokmap n xs       -> Clause src $ body xs $ TTokmap n
+          CAssert q p opt xs -> Clause src $ body xs $ CAssert q p opt
+          CTokmap n xs       -> Clause src $ body xs $ CTokmap n
           _                  -> cl
 
     body :: [B.Token] -> ([B.Token] -> ClauseBody) -> ClauseBody
@@ -239,6 +218,7 @@ shortToLong sh = map clause where
           Just l  -> B.TWord n 2 $ l ++ b
           Nothing -> token
     long token = token
+
 
 
 -- ----------------------

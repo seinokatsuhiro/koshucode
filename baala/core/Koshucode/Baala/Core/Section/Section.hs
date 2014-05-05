@@ -48,10 +48,10 @@ instance (Ord c, B.Pretty c) => B.Pretty (Section c) where
 
 instance B.Monoid (Section c) where
     mempty  = emptySection
-    mappend = secUnion
+    mappend = appendSection
 
-secUnion :: Section c -> Section c -> Section c
-secUnion s1 s2 =
+appendSection :: Section c -> Section c -> Section c
+appendSection s1 s2 =
     s1 { secName    = Nothing
        , secImport  = []
        , secExport  = union secExport
@@ -125,17 +125,17 @@ consSectionEach root resource (B.Short shorts xs) =
       short _ (C.CShort ps) = ps
 
       slot :: Cl B.NamedTrees
-      slot _ (C.CSlot n trees) = (n, trees)
+      slot _ (C.CSlot n toks) = (n, B.tokenTrees toks)
 
       tokmap :: Cl B.NamedTrees
-      tokmap _ (C.CTokmap n trees) = (n, trees)
+      tokmap _ (C.CTokmap n toks) = (n, B.tokenTrees toks)
 
       judge :: Clab (B.Judge c)
-      judge _ (C.CJudge q p xs2) = C.litJudge q p $ B.tokenTrees xs2
+      judge _ (C.CJudge q p toks) = C.litJudge q p $ B.tokenTrees toks
 
       assert :: Cl (C.Assert c)
-      assert toks (C.CAssert typ pat opt trees) =
-          C.Assert typ pat opt toks trees Nothing []
+      assert src (C.CAssert typ pat opt toks) =
+          C.Assert typ pat opt src (B.tokenTrees toks) Nothing []
 
       unk   _ (C.CUnknown) = Message.unkClause
       unres _ (C.CUnres _) = Message.unresPrefix
