@@ -1,7 +1,8 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Data.Short
-( Short (..),
+( ShortDef,
+  Short (..),
   shortMap,
   shortMapM,
   shortM,
@@ -10,8 +11,10 @@ module Koshucode.Baala.Base.Data.Short
 
 import qualified Koshucode.Baala.Base.Prelude as B
 
+type ShortDef = B.Named String
+
 data Short a =
-    Short { shortHead :: [B.Named String]
+    Short { shortHead :: [ShortDef]
           , shortBody :: a }
     deriving (Show, Ord, Eq)
 
@@ -25,10 +28,8 @@ shortMapM :: (Monad m) => (a -> m b) -> [Short a] -> m [Short b]
 shortMapM f = mapM (shortM . fmap f)
 
 shortM :: (Monad m) => Short (m a) -> m (Short a)
-shortM (Short he bo) =
-    do bo' <- bo
-       return $ Short he bo'
+shortM (Short he bo) = return . Short he =<< bo
 
-shortTrim :: B.Map ([Short [a]])
+shortTrim :: B.Map [Short [a]]
 shortTrim = filter $ not . null . shortBody
 

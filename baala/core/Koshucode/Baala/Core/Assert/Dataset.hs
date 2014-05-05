@@ -22,7 +22,7 @@ import qualified Koshucode.Baala.Core.Relmap  as C
 
 
 -- | Dataset is a set of judges.
-data Dataset c = Dataset (Map.Map B.JudgePattern [[B.Named c]])
+data Dataset c = Dataset (Map.Map B.JudgePat [[B.Named c]])
 
 -- | Dataset that has no judges.
 emptyDataset :: Dataset c

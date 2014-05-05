@@ -75,7 +75,7 @@ type Rodmap c = C.Rody (Relmap c)
 
 -- | Generic relmap.
 data Relmap c
-    = RelmapSource   C.Lexmap B.JudgePattern [B.TermName]
+    = RelmapSource   C.Lexmap B.JudgePat [B.TermName]
       -- ^ Retrieve a relation from a dataset
     | RelmapConst    C.Lexmap (B.Rel c)
       -- ^ Constant relation

@@ -71,7 +71,7 @@ runAssertDataset global asserts dataset = Right . concat =<< mapM each asserts w
           assertOptionProcess q pat opt r1
 
 -- | Convert relation to list of judges.
-judgesFromRel :: Bool -> B.JudgePattern -> B.Rel c -> [B.Judge c]
+judgesFromRel :: Bool -> B.JudgePat -> B.Rel c -> [B.Judge c]
 judgesFromRel q pat = judges where
     judges (B.Rel h b) = map (judge h) b
     judge h = B.Judge q pat . zip (B.headNames h)
@@ -99,7 +99,7 @@ flatnames trees =
 -- ---------------------------------  Option
 
 assertOptionProcess :: (Ord c, B.Pretty c, C.CRel c)
-  => Bool -> B.JudgePattern -> C.AssertOption -> B.Rel c -> B.Ab [B.OutputChunk c]
+  => Bool -> B.JudgePat -> C.AssertOption -> B.Rel c -> B.Ab [B.OutputChunk c]
 assertOptionProcess q pat opt r1 =
     do assertOptionCheck opt
        r2 <- assertOptionRelmap opt r1
@@ -128,7 +128,7 @@ assertOptionOrder :: (Ord c) => [B.TokenTree] ->  B.AbMap (B.Rel c)
 assertOptionOrder _ r1 = Right r1
 
 assertOptionComment :: (B.Pretty c, C.CRel c) =>
-    B.JudgePattern -> C.AssertOption -> B.Rel c -> [String]
+    B.JudgePat -> C.AssertOption -> B.Rel c -> [String]
 assertOptionComment p opt r =
     case lookup "-with-table" opt of
       Nothing -> []

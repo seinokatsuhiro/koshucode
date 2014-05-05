@@ -99,7 +99,7 @@ type RelkitKey    = (Maybe B.Relhead, [C.Lexmap])
 type RelkitDef c  = (RelkitKey, Relkit c)
 
 -- | Relation selector
-type RelSelect c = B.JudgePattern -> [String] -> B.Rel c
+type RelSelect c = B.JudgePat -> [String] -> B.Rel c
 
 -- | Mapping for body of relation.
 type Relbmap c = [[c]] -> B.Ab [[c]]

@@ -65,8 +65,8 @@ litOperators = [ ]
 
 litJudge
     :: (C.CContent c)
-    => Bool                  -- ^ Logical quality
-    -> B.JudgePattern        -- ^ Judgement pattern
+    => Bool                    -- ^ Logical quality
+    -> B.JudgePat              -- ^ Judgement pattern
     -> C.LitTrees (B.Judge c)  -- ^ Convertor into judge
 litJudge = litJudgeBy litOperators
 
@@ -77,7 +77,7 @@ litJudgeBy
     :: (C.CContent c)
     => [B.Named (C.Literalize c -> C.LitTrees c)]
     -> Bool                   -- ^ Logical quality
-    -> B.JudgePattern         -- ^ Judgement pattern
+    -> B.JudgePat             -- ^ Judgement pattern
     -> C.LitTrees (B.Judge c) -- ^ Convertor into judge
 litJudgeBy ops q p xs =
   do xs' <- C.litTermset (C.litContentBy ops) xs

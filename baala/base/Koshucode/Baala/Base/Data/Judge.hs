@@ -7,7 +7,7 @@ module Koshucode.Baala.Base.Data.Judge
 (
   -- * Datatype
   Judge (Judge),
-  JudgePattern,
+  JudgePat,
   abcJudge,
 
   -- * Logical quality
@@ -35,7 +35,7 @@ import qualified Koshucode.Baala.Base.Data.Term    as B
 --   Sentence pattern has placeholders filled by
 --   'B.Named' @c@ in argument.
 
-data Judge c = Judge Bool JudgePattern [B.Named c]
+data Judge c = Judge Bool JudgePat [B.Named c]
                deriving (Show)
 
 instance (Ord c) => Eq (Judge c) where
@@ -51,7 +51,7 @@ instance (Ord c) => Ord (Judge c) where
                `B.mappend` compare xs1 xs2
 
 -- | Name of judgement pattern.
-type JudgePattern = String
+type JudgePat = String
 
 -- Apply function to each values
 instance Functor Judge where
@@ -84,11 +84,11 @@ abcJudge (Judge q p a) = Judge q p $ List.sort a
 -- ----------------------  Logical quality
 
 -- | Construct affirmed judgement.
-affirm :: JudgePattern -> [B.Named c] -> Judge c
+affirm :: JudgePat -> [B.Named c] -> Judge c
 affirm = Judge True
 
 -- | Construct denied judgement.
-deny :: JudgePattern -> [B.Named c] -> Judge c
+deny :: JudgePat -> [B.Named c] -> Judge c
 deny = Judge False
 
 -- | Affirm judgement, i.e., change logical quality to 'True'.

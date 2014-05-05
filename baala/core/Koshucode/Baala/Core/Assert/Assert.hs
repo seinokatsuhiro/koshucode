@@ -29,7 +29,7 @@ import qualified Koshucode.Baala.Core.Relmap as C
 --   See also 'B.Judge'
 data Assert c = Assert
     { assType    :: AssertType          -- ^ Logical quality
-    , assPattern :: B.JudgePattern      -- ^ Pattern of judgement
+    , assPattern :: B.JudgePat          -- ^ Pattern of judgement
     , assOption  :: AssertOption        -- ^ Assert option
     , assToken   :: [B.Token]           -- ^ Source token list
     , assTree    :: [B.TokenTree]       -- ^ Token relmap

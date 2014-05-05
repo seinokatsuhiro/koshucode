@@ -36,10 +36,10 @@ data ClauseBody
     = CSection    (Maybe String)                 -- ^ Section name
     | CImport     [B.Token] (Maybe Clause)       -- ^ Importing section name
     | CExport     String                         -- ^ Exporting relmap name
-    | CShort      [(B.Named String)]             -- ^ Short signs
+    | CShort      [B.ShortDef]                   -- ^ Short signs
     | CTokmap     String [B.Token]               -- ^ Source of relmap
-    | CAssert     C.AssertType B.JudgePattern C.AssertOption [B.Token]     -- ^ (Intermediate data)
-    | CJudge      Bool B.JudgePattern [B.Token]  -- ^ Judge
+    | CAssert     C.AssertType B.JudgePat C.AssertOption [B.Token] -- ^ (Intermediate data)
+    | CJudge      Bool B.JudgePat [B.Token]  -- ^ Judge
     | CSlot       String [B.Token]               -- ^ Global slot
     | CComment                                   -- ^ Clause comment
     | CUnknown                                   -- ^ Unknown clause
@@ -84,7 +84,7 @@ clauseTypeText (Clause _ body) =
 
 -- | First step of constructing 'Section'.
 consClause :: [B.TokenLine] -> [ShortClause]
-consClause = shortSections . consPreclause
+consClause = shortClause . consPreclause
 
 consPreclause :: [B.TokenLine] -> [Clause]
 consPreclause = concatMap consPreclause' . B.tokenClauses
@@ -176,36 +176,40 @@ wordPairs toks =
 
 -- ----------------------  Short-to-long conversion
 
-shortSections :: [Clause] -> [ShortClause]
-shortSections [] = []
-shortSections xxs@(x : xs)
-    | isCShort x = f xs $ shorts x
-    | otherwise  = f xxs []
-    where f cl sh = case span (not . isCShort) cl of
-                       (xs1, xs2) -> B.Short sh (shortToLong sh xs1)
-                                     : shortSections xs2
+shortClause :: [Clause] -> [ShortClause]
+shortClause [] = []
+shortClause ccs@(c : cs)
+    | isCShort c = scope cs  $ shorts c
+    | otherwise  = scope ccs []
+    where
+      scope :: [Clause] -> [B.ShortDef] -> [ShortClause]
+      scope cs12 sh =
+          let (cs1, cs2) = span (not . isCShort) cs12
+              short      = B.Short sh $ shortToLong sh cs1
+          in  short : shortClause cs2
 
-isCShort :: Clause -> Bool
-isCShort (Clause _ (CShort _)) = True
-isCShort _ = False
+      shorts :: Clause -> [B.ShortDef]
+      shorts (Clause _ (CShort sh)) = sh
+      shorts _                      = B.bug "shortClause"
 
-shorts :: Clause -> [B.Named String]
-shorts (Clause _ (CShort s)) = s
-shorts _ = []
+      isCShort :: Clause -> Bool
+      isCShort (Clause _ (CShort _)) = True
+      isCShort _                     = False
 
-shortToLong :: [B.Named String] -> B.Map [Clause]
+shortToLong :: [B.ShortDef] -> B.Map [Clause]
 shortToLong [] = id
 shortToLong sh = map clause where
     clause :: B.Map Clause
-    clause cl@(Clause src b) =
-        case b of
-          CJudge  q p xs     -> Clause src $ body xs $ CJudge  q p
-          CAssert q p opt xs -> Clause src $ body xs $ CAssert q p opt
-          CTokmap n xs       -> Clause src $ body xs $ CTokmap n
-          _                  -> cl
+    clause (Clause src bo) =
+        Clause src $ case bo of
+          CJudge  q p     xs  ->  body (CJudge  q p)     xs
+          CAssert q p opt xs  ->  body (CAssert q p opt) xs
+          CTokmap n       xs  ->  body (CTokmap n)       xs
+          CSlot   n       xs  ->  body (CSlot   n)       xs
+          _                   ->  bo
 
-    body :: [B.Token] -> ([B.Token] -> ClauseBody) -> ClauseBody
-    body xs k =
+    body :: ([B.Token] -> ClauseBody) -> [B.Token] -> ClauseBody
+    body k xs =
         let ls = map long xs
             ss = filter B.isShortToken ls
         in if null ss
