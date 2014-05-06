@@ -111,9 +111,18 @@ data OutputChunk c
       deriving (Show, Eq, Ord)
 
 -- | Print result of calculation, and return status.
-hPutOutputResult :: (Ord c, B.Pretty c) => IO.Handle -> OutputResult c -> IO Int
-hPutOutputResult h ([], jud) = shortList h 0 jud
-hPutOutputResult h (vio, _)  = shortList h 1 vio
+hPutOutputResult :: forall c. (Ord c, B.Pretty c) => IO.Handle -> OutputResult c -> IO Int
+hPutOutputResult h (vio, jud)
+    | null vio2  = shortList h 0 jud
+    | otherwise  = shortList h 1 vio2
+    where
+      vio2 :: [OutputChunks c]
+      vio2 = B.shortTrim $ B.shortMap (filter $ existJudge) vio
+
+      existJudge :: OutputChunk c -> Bool
+      existJudge (OutputComment _) = False
+      existJudge (OutputJudge [])  = False
+      existJudge _                 = True
 
 shortList :: (Ord c, B.Pretty c) => IO.Handle -> Int -> [OutputChunks c] -> IO Int
 shortList h status shorts =
@@ -126,6 +135,7 @@ short h cnt (B.Short [] output) =
     do chunks h output cnt
 short h cnt (B.Short shorts output) =
     do hPutLines h $ "short" : map shortLine shorts
+       hPutEmptyLine h
        chunks h output cnt
     where
       shortLine :: (String, String) -> String

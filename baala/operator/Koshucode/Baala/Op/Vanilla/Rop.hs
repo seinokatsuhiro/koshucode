@@ -39,8 +39,6 @@ vanillaRops = Op.ropList "vanilla"
         Op.consFixJoin, C.rodOne "-relmap" [] )
     , ( "both R",
         Op.consBoth, C.rodOne "-relmap" [] )
-    , ( "hold E",
-        Op.consFilter True, C.rodList "-in" ["-let"] )
     , ( "if R ...",
         Op.consIf, C.rodList "-relmap" [] )
     , ( "keep E",
