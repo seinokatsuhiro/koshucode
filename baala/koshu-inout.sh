@@ -1,7 +1,7 @@
 #!/bin/sh
 
 io_version () {
-    echo "koshu-inout-0.54"
+    echo "koshu-inout-0.55"
     exit
 }
 
@@ -22,6 +22,7 @@ io_usage () {
     echo "  -r          save document to README.md"
     echo "  -s          save document to INOUT.md"
     echo "  -t          do not delete temporary files"
+    echo "  -u          update I/O list interactively"
     echo "  -x EXT      use EXTension instead of *.$io_glob_ext"
     echo
     echo "EXAMPLE"
@@ -146,14 +147,14 @@ io_input () {
 
 io_output () {
     $@ > $io_temp
-    io_status=$?
-    stderr "  $io_status <- $@"
+    io_cmd_status=$?
+    stderr "  $io_cmd_status <- $@"
 
     echo
-    if [ "$io_status" = 0 ]; then
+    if [ "$io_cmd_status" = 0 ]; then
         echo "Command \`$@\` produces:"
     else
-        echo "Command \`$@\` exits with $io_status and produces:"
+        echo "Command \`$@\` exits with $io_cmd_status and produces:"
     fi
 
     echo
@@ -258,23 +259,53 @@ io_diff_body () {
 
     if io_diff_cmd $io_output_orig $io_output_work > $io_temp; then
         io_diff_result OK
+    elif [ $io_update_yn = y ]; then
+        io_diff_update
     else
-        echo
-        io_diff_result DIFF
-        echo
-        echo "Differences are found:"
-        echo
-        io_list $io_temp
-        echo
-
+        io_diff_show
         if [ $io_diff '<' 2 ]; then
             echo "To show all differences, please give more -d flags."
             echo "To examine this differences, type: cd `io_pwd`"
             echo
-            io_status=2
             return
         fi
     fi
+}
+
+io_diff_update () {
+    io_diff_show
+
+    if [ $io_update = yes-all ]; then
+        io_diff_copy
+        return
+    fi
+
+    while [ $io_update = next ]; do
+        printf "Type [yes] [yes-all] [no] [quit], update? "
+        read io_update
+        case $io_update in
+            yes | yes-all ) io_diff_copy ;;
+            no            ) io_diff_status=0 ;;
+            quit          ) io_diff_status=2 ;;
+            *             ) io_update=next
+        esac
+    done
+    echo
+}
+
+io_diff_copy () {
+    cp $io_output_work $io_output_orig
+    io_diff_status=0
+}
+
+io_diff_show () {
+    echo
+    io_diff_result DIFF
+    echo
+    echo "Differences are found:"
+    echo
+    io_list $io_temp
+    echo
 }
 
 io_diff_cmd () {
@@ -293,6 +324,9 @@ io_diff_cmd () {
 ' \
         --unchanged-group-format='' \
         "$1" "$2"
+
+    io_diff_status=$?
+    return $io_diff_status
 }
 
 io_diff_result () {
@@ -324,6 +358,7 @@ io_cmd_line () {
             -l)  ;;
             -d)  ;;
             -dd) ;;
+            -u)  ;;
             *)   echo $arg ;;
         esac
     done | xargs
@@ -340,7 +375,9 @@ io_cmd_check () {
 
 io_cmd=`basename $0`
 io_cmd_line=`io_cmd_line $io_cmd $*`
+io_cmd_status=0
 io_diff=0             # 0 | 1 | 2
+io_diff_status=0
 io_error=output       # output | inhibit
 io_glob_ext=k
 io_glob_file=
@@ -348,9 +385,10 @@ io_glob_type=args     # args | glob | file
 io_keep_temp_yn=n     # y | n
 io_link_yn=n          # y | n
 io_output_orig=
-io_status=0
+io_update=next
+io_update_yn=n        # y | n
 
-while getopts df:ghlo:rstx:V io_opt; do
+while getopts df:ghlo:rstux:V io_opt; do
     case $io_opt in
         d)  case $io_diff in
               2) io_diff=2 ;;
@@ -366,6 +404,7 @@ while getopts df:ghlo:rstx:V io_opt; do
         r)  io_output_orig=README.md  ;;
         s)  io_output_orig=INOUT.md   ;;
         t)  io_keep_temp_yn=y         ;;
+        u)  io_update_yn=y            ;;
         x)  io_glob_ext=$OPTARG       ;;
         V)  io_version                ;;
         ?)  io_usage                  ;;
@@ -375,7 +414,8 @@ done
 io_output_work=$io_output_orig
 shift $(($OPTIND - 1))
 
-[ $# = 0 ] && io_usage
+# no command
+[ $io_glob_type != file -a $# = 0 ] && io_usage
 
 stderr "$io_cmd_line"
 io_cmd_check
@@ -387,8 +427,10 @@ io_temp=`io_create_temporary`
 
 if [ $io_diff = 0 ]; then
     io_doc $@
+    io_status=$io_cmd_status
 else
     io_diff $@
+    io_status=$io_diff_status
 fi
 
 # clean up

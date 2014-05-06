@@ -1,7 +1,7 @@
 #!/bin/sh
 
 io_version () {
-    echo "koshu-inout-summary-0.54"
+    echo "koshu-inout-summary-0.55"
     exit
 }
 
@@ -17,9 +17,11 @@ io_usage () {
     echo "  -f FILE     find FILE and invoke it for each I/O list"
     echo "  -g          grand summary mode"
     echo "  -h          print help message"
+    echo "  -i          generate INOUT.sh template"
     echo "  -l          link to each reports"
     echo "  -o FILE     save report to FILE"
     echo "  -s          save report to INOUT-[GRAND]-SUMMARY.md"
+    echo "  -u          update I/O list interactively"
     echo "  -V          print version"
     echo
     echo "FILENAME"
@@ -99,12 +101,38 @@ io_grand () {
 }
 
 
+# ============================================  Generate INOUT.sh
+
+io_gen () {
+    if [ -f $io_find ]; then
+        echo "$io_find already exists."
+        exit 2
+    fi
+
+    io_gen_content > $io_find
+
+    if [ $? = 0 ]; then
+        echo "$io_find is generated, please edit the contents."
+        chmod 755 $io_find
+    else
+        echo "$io_find is not generated."
+        exit 2
+    fi
+}
+
+io_gen_content () {
+    echo "#!/bin/sh"
+    echo "koshu-inout.sh \$* -s -g koshu"
+}
+
+
 # ============================================  Command line
 
 io_decide_file () {
     if [ -z $io_find ]; then
         case $io_proc in
             io_summary ) io_find=INOUT.sh ;;
+            io_gen     ) io_find=INOUT.sh ;;
             io_grand   ) io_find=INOUT-SUMMARY.md ;;
         esac
     fi
@@ -118,22 +146,24 @@ io_decide_file () {
 }
 
 io_cmd=`basename $0`
+io_find=
 io_link=
 io_more=
 io_output=
 io_output_yn=n
 io_proc=io_summary
-io_find=
 
-while getopts df:ghlo:sV io_opt; do
+while getopts df:ghilo:suV io_opt; do
     case $io_opt in
         d)  io_more=-d　        ;;
         f)  io_find=$OPTARG     ;;
         g)  io_proc=io_grand    ;;
+        i)  io_proc=io_gen      ;;
         l)  io_link=-l          ;;
         o)  io_output=$OPTARG
             io_output_yn=y      ;;
         s)  io_output_yn=y      ;;
+        u)  io_more=-u          ;;
         V)  io_version          ;;
         ?)  io_usage            ;;
     esac
