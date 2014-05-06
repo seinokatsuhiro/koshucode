@@ -5,7 +5,7 @@ io_version () {
     exit
 }
 
-io_usage () {
+io_help () {
     echo "DESCRIPTION"
     echo "  Generate I/O list"
     echo
@@ -13,16 +13,15 @@ io_usage () {
     echo "  $io_cmd [OPTION ...] koshu FILE.k ..."
     echo
     echo "OPTION"
-    echo "  -d          show differences from last document"
-    echo "  -f FILE     take input files from FILE"
+    echo "  -d          show all differences against last I/O list"
+    echo "  -f FILE     take command lines from FILE"
     echo "  -g          glob input files by *.$io_glob_ext"
     echo "  -h          print help message"
-    echo "  -l          link to I/O list when -d specified"
+    echo "  -l          link to I/O list"
     echo "  -o FILE.md  save document to FILE.md"
     echo "  -r          save document to README.md"
     echo "  -s          save document to INOUT.md"
     echo "  -t          do not delete temporary files"
-    echo "  -u          update I/O list interactively"
     echo "  -x EXT      use EXTension instead of *.$io_glob_ext"
     echo
     echo "EXAMPLE"
@@ -33,8 +32,11 @@ io_usage () {
     exit
 }
 
+
+# ============================================  Utility
+
 stderr () {
-    if [ $io_error = output ]; then
+    if [ $io_error_yn = y ]; then
         echo "$*" 1>&2
     fi
 }
@@ -259,43 +261,9 @@ io_diff_body () {
 
     if io_diff_cmd $io_output_orig $io_output_work > $io_temp; then
         io_diff_result OK
-    elif [ $io_update_yn = y ]; then
-        io_diff_update
     else
-        io_diff_show
-        if [ $io_diff '<' 2 ]; then
-            echo "To show all differences, please give more -d flags."
-            echo "To examine this differences, type: cd `io_pwd`"
-            echo
-            return
-        fi
+        io_update
     fi
-}
-
-io_diff_update () {
-    io_diff_show
-
-    if [ $io_update = yes-all ]; then
-        io_diff_copy
-        return
-    fi
-
-    while [ $io_update = next ]; do
-        printf "Type [yes] [yes-all] [no] [quit], update? "
-        read io_update
-        case $io_update in
-            yes | yes-all ) io_diff_copy ;;
-            no            ) io_diff_status=0 ;;
-            quit          ) io_diff_status=2 ;;
-            *             ) io_update=next
-        esac
-    done
-    echo
-}
-
-io_diff_copy () {
-    cp $io_output_work $io_output_orig
-    io_diff_status=0
 }
 
 io_diff_show () {
@@ -350,6 +318,55 @@ io_pwd () {
 }
 
 
+# ============================================  Update I/O list
+
+io_update () {
+    io_diff_show
+
+    case $io_update in
+        update-all ) io_diff_copy ;;
+        diff       ) io_diff_status=0 ;;
+        *          ) io_update_prompt ;;
+    esac
+}
+
+io_update_prompt () {
+    while [ $io_update = prompt ]; do
+        printf "Type [update] [update-all] [skip] [quit] or [help]: "
+        read io_update
+        case $io_update in
+            update | update-all ) io_update_copy ;;
+            s | skip ) io_diff_status=0 ;;
+            q | quit ) io_update_quit     ;;
+            *        ) io_update_help     ;;
+        esac
+    done
+    echo
+}
+
+io_update_help () {
+    io_update=prompt
+    echo
+    echo "  update        update this I/O list because differences are right"
+    echo "  update-all    update all succeeding differences"
+    echo "  skip | s      skip this I/O list"
+    echo "  quit | q      quit $io_cmd"
+    echo
+}
+
+io_update_quit () {
+    io_diff_status=2
+    echo
+    echo "To show all differences, please give more -d flags."
+    echo "To examine this differences, type: cd `io_pwd`"
+}
+
+io_update_copy () {
+    cp $io_output_work $io_output_orig
+    io_diff_status=0
+}
+
+
 # ============================================  Command line
 
 io_cmd_line () {
@@ -376,26 +393,19 @@ io_cmd_check () {
 io_cmd=`basename $0`
 io_cmd_line=`io_cmd_line $io_cmd $*`
 io_cmd_status=0
-io_diff=0             # 0 | 1 | 2
 io_diff_status=0
-io_error=output       # output | inhibit
+io_error_yn=y         # y | n
 io_glob_ext=k
 io_glob_file=
 io_glob_type=args     # args | glob | file
 io_keep_temp_yn=n     # y | n
 io_link_yn=n          # y | n
 io_output_orig=
-io_update=next
-io_update_yn=n        # y | n
+io_update=prompt
 
-while getopts df:ghlo:rstux:V io_opt; do
+while getopts df:ghlo:rstx:V io_opt; do
     case $io_opt in
-        d)  case $io_diff in
-              2) io_diff=2 ;;
-              1) io_diff=2 ;;  # show all differences
-              *) io_diff=1 ;;  # show first differences shortly
-            esac
-            io_error=inhibit          ;;
+        d)  io_update=diff            ;;
         f)  io_glob_type=file
             io_glob_file=$OPTARG      ;;
         g)  io_glob_type=glob         ;;
@@ -404,10 +414,9 @@ while getopts df:ghlo:rstux:V io_opt; do
         r)  io_output_orig=README.md  ;;
         s)  io_output_orig=INOUT.md   ;;
         t)  io_keep_temp_yn=y         ;;
-        u)  io_update_yn=y            ;;
         x)  io_glob_ext=$OPTARG       ;;
         V)  io_version                ;;
-        ?)  io_usage                  ;;
+        *)  io_help                   ;;
     esac
 done
 
@@ -415,9 +424,8 @@ io_output_work=$io_output_orig
 shift $(($OPTIND - 1))
 
 # no command
-[ $io_glob_type != file -a $# = 0 ] && io_usage
+[ $io_glob_type != file -a $# = 0 ] && io_help
 
-stderr "$io_cmd_line"
 io_cmd_check
 
 
@@ -425,12 +433,14 @@ io_cmd_check
 
 io_temp=`io_create_temporary`
 
-if [ $io_diff = 0 ]; then
-    io_doc $@
-    io_status=$io_cmd_status
-else
+if [ -f "$io_output_orig" ]; then
+    io_error_yn=n
     io_diff $@
     io_status=$io_diff_status
+else
+    stderr "$io_cmd_line"
+    io_doc $@
+    io_status=$io_cmd_status
 fi
 
 # clean up

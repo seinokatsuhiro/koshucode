@@ -5,7 +5,7 @@ io_version () {
     exit
 }
 
-io_usage () {
+io_help () {
     echo "DESCRIPTION"
     echo "  Output summary report on I/O lists in subdirectories"
     echo
@@ -21,7 +21,6 @@ io_usage () {
     echo "  -l          link to each reports"
     echo "  -o FILE     save report to FILE"
     echo "  -s          save report to INOUT-[GRAND]-SUMMARY.md"
-    echo "  -u          update I/O list interactively"
     echo "  -V          print version"
     echo
     echo "FILENAME"
@@ -80,8 +79,8 @@ io_diff () {
     if grep koshu-inout.sh $sh > /dev/null; then
         (   io_path_split $sh
             cd $io_dir
-            ./$io_base -d $io_link $io_more
-        )   || exit $status
+            ./$io_base $io_link $io_more
+        )
     fi
 }
 
@@ -153,7 +152,7 @@ io_output=
 io_output_yn=n
 io_proc=io_summary
 
-while getopts df:ghilo:suV io_opt; do
+while getopts df:ghilo:sV io_opt; do
     case $io_opt in
         d)  io_more=-d　        ;;
         f)  io_find=$OPTARG     ;;
@@ -163,9 +162,8 @@ while getopts df:ghilo:suV io_opt; do
         o)  io_output=$OPTARG
             io_output_yn=y      ;;
         s)  io_output_yn=y      ;;
-        u)  io_more=-u          ;;
         V)  io_version          ;;
-        ?)  io_usage            ;;
+        *)  io_help             ;;
     esac
 done
 
