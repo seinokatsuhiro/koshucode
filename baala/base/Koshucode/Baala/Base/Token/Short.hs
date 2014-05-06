@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Data.Short
+module Koshucode.Baala.Base.Token.Short
 ( ShortDef,
   Short (..),
   shortMap,

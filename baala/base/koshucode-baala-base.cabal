@@ -60,7 +60,6 @@ library
         Koshucode.Baala.Base.Data.Output
         Koshucode.Baala.Base.Data.Rel
         Koshucode.Baala.Base.Data.Relhead
-        Koshucode.Baala.Base.Data.Short
         Koshucode.Baala.Base.Data.Term
 
         Koshucode.Baala.Base.Prelude
@@ -84,6 +83,7 @@ library
         Koshucode.Baala.Base.Text.Unicode
 
         Koshucode.Baala.Base.Token
+        Koshucode.Baala.Base.Token.Short
         Koshucode.Baala.Base.Token.Token
         Koshucode.Baala.Base.Token.TokenClause
         Koshucode.Baala.Base.Token.TokenLine

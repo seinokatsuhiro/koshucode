@@ -10,7 +10,6 @@ module Koshucode.Baala.Base.Data.Mono,
 module Koshucode.Baala.Base.Data.Output,
 module Koshucode.Baala.Base.Data.Rel,
 module Koshucode.Baala.Base.Data.Relhead,
-module Koshucode.Baala.Base.Data.Short,
 module Koshucode.Baala.Base.Data.Term,
 ) where
 
@@ -20,5 +19,4 @@ import Koshucode.Baala.Base.Data.Mono
 import Koshucode.Baala.Base.Data.Output
 import Koshucode.Baala.Base.Data.Rel
 import Koshucode.Baala.Base.Data.Relhead
-import Koshucode.Baala.Base.Data.Short
 import Koshucode.Baala.Base.Data.Term
