@@ -6,9 +6,13 @@ module Koshucode.Baala.Base.Prelude.Import
   (Control.Monad.>=>),
   Control.Monad.sequence,
 
+  -- * Data.Map
+  lookupMap,
+
   -- * Data.Maybe
   Data.Maybe.catMaybes,
   Data.Maybe.fromJust,
+  Data.Maybe.fromMaybe,
 
   -- * Data.Monoid
   Data.Monoid.Monoid,
@@ -25,6 +29,12 @@ module Koshucode.Baala.Base.Prelude.Import
 ) where
 
 import Control.Monad
+import Data.Map
 import Data.Maybe
 import Data.Monoid
 import Text.PrettyPrint
+
+-- | Same as 'Map.lookup' in @Data.Map@ module.
+lookupMap :: (Ord k) => k -> Data.Map.Map k a -> Maybe a
+lookupMap = Data.Map.lookup
+

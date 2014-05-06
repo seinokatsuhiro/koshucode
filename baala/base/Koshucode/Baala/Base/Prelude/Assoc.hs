@@ -9,8 +9,6 @@ module Koshucode.Baala.Base.Prelude.Assoc
   assocExist,
   namedMapM,
   lookupSatisfy,
-  lookupMap,
-  fromMaybe,
   -- $Assoc
 
   -- * Tuple-like operator
@@ -102,14 +100,6 @@ lookupSatisfy x = loop where
     loop ((p, v) : ps)
         | p x = Just v
         | otherwise = loop ps
-
--- | Same as 'Map.lookup' in @Data.Map@ module.
-lookupMap :: (Ord k) => k -> Map.Map k a -> Maybe a
-lookupMap = Map.lookup
-
--- | Same as 'Maybe.fromMaybe' in @Data.Maybe@ module.
-fromMaybe :: a -> Maybe a -> a
-fromMaybe = Maybe.fromMaybe
 
 
 
