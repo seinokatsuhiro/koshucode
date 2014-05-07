@@ -89,13 +89,13 @@ relkitUp n (Just he1)
 
 consJoinUp :: (Ord c) => C.RopCons c
 consJoinUp use =
-  do ns <- Op.getTerms use "-term"
-     Right $ relmapJoinUp use ns
+  do with <- Op.getWithTerms use "-term"
+     Right $ relmapJoinUp use with
 
-relmapJoinUp :: (Ord c) => C.RopUse c -> [B.TermName] -> C.Relmap c
-relmapJoinUp use ns = C.relmapWith use (zip ns ns) $ Op.relmapJoinList use rmaps where
-    rmaps = link `map` ns
-    link n = C.relmapLink use n []
+relmapJoinUp :: (Ord c) => C.RopUse c -> [B.Terminal String] -> C.Relmap c
+relmapJoinUp use with = C.relmapWith use with $ Op.relmapJoinList use rmaps where
+    rmaps = link `map` map snd with
+    link v = C.relmapLink use v []
 
 
 

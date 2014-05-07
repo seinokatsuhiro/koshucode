@@ -69,14 +69,14 @@ consFor :: (C.CRel c) => C.RopCons c
 consFor use =
   do n    <- Op.getTerm   use "-term"
      rmap <- Op.getRelmap use
-     with <- Op.getOption [] Op.getTerms use "-with"
+     with <- Op.getOption [] Op.getWithTerms use "-with"
      Right $ relmapFor use with n rmap
 
-relmapFor :: (C.CRel c) => C.RopUse c -> [B.TermName] -> B.TermName -> B.Map (C.Relmap c)
+relmapFor :: (C.CRel c) => C.RopUse c -> [B.Terminal String] -> B.TermName -> B.Map (C.Relmap c)
 relmapFor use with n rmap = relmapForInner use with n (Op.relmapUp use n `B.mappend` rmap)
 
-relmapForInner :: (C.CRel c) => C.RopUse c -> [B.TermName] -> B.TermName -> B.Map (C.Relmap c)
-relmapForInner use with n = C.relmapWith use (zip with with) . bin where
+relmapForInner :: (C.CRel c) => C.RopUse c -> [(B.TermName, String)] -> B.TermName -> B.Map (C.Relmap c)
+relmapForInner use with n = C.relmapWith use with . bin where
     bin = C.relmapBinary use $ relkitFor n
 
 relkitFor :: forall c. (C.CRel c) => B.TermName -> C.RelkitBinary c
@@ -172,22 +172,22 @@ relmapGroupBy use n rmap = C.relmapCopy use n rmapGroup where
 --
 --  Add nested relation in term @\/p@.
 --
---    > rel /p ( source P /a /b )
+--    > slice /p ( source P /a /b )
 --
 --  Add nested relation as meet of @\/p@ and @\/q@.
 --
---    > rel /r ( p | meet q ) -with /p /q
+--    > slice /r ( p | meet q ) -with /p /q
 --
 
 consSlice :: (C.CRel c) => C.RopCons c
 consSlice use =
   do n    <- Op.getTerm   use "-term"
      rmap <- Op.getRelmapOption use C.relmapId
-     with <- Op.getOption [] Op.getTerms use "-with"
+     with <- Op.getOption [] Op.getWithTerms use "-with"
      Right $ relmapSlice use with n rmap
 
-relmapSlice :: (C.CRel c) => C.RopUse c -> [B.TermName] -> B.TermName -> B.Map (C.Relmap c)
-relmapSlice use with n = C.relmapWith use (zip with with) . bin where
+relmapSlice :: (C.CRel c) => C.RopUse c -> [B.Terminal String] -> B.TermName -> B.Map (C.Relmap c)
+relmapSlice use with n = C.relmapWith use with . bin where
     bin = C.relmapBinary use $ relkitSlice n
 
 relkitSlice :: (C.CRel c) => B.TermName -> C.RelkitBinary c
@@ -206,11 +206,11 @@ relkitSlice _ _ _ = Right C.relkitNothing
 consSliceUp :: (C.CRel c) => C.RopCons c
 consSliceUp use =
   do rmap <- Op.getRelmapOption use C.relmapId
-     with <- Op.getOption [] Op.getTerms use "-with"
+     with <- Op.getOption [] Op.getWithTerms use "-with"
      Right $ relmapSliceUp use with rmap
 
-relmapSliceUp :: (C.CRel c) => C.RopUse c -> [B.TermName] -> B.Map (C.Relmap c)
-relmapSliceUp use with = C.relmapWith use (zip with with) . bin where
+relmapSliceUp :: (C.CRel c) => C.RopUse c -> [B.Terminal String] -> B.Map (C.Relmap c)
+relmapSliceUp use with = C.relmapWith use with . bin where
     bin = C.relmapBinary use relkitSliceUp
 
 relkitSliceUp :: (C.CRel c) => C.RelkitBinary c
@@ -258,7 +258,7 @@ consUnnest use =
 relmapUnnest :: (Ord c, C.CRel c) => C.RopUse c -> B.TermName -> C.Relmap c
 relmapUnnest use n = unnest where
     unnest  =  slice `B.mappend` cut
-    slice   =  relmapSliceUp use [n] meet
+    slice   =  relmapSliceUp use [(n, n)] meet
     meet    =  Op.relmapMeet use $ C.relmapLink use n []
     cut     =  Op.relmapCut use [n]
 

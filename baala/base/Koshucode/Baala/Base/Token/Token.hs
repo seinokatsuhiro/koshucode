@@ -11,10 +11,8 @@ module Koshucode.Baala.Base.Token.Token
   tokenWord,
 
   -- * Term name
-  TermName,
-  TermName2,
-  TermName3,
-  TermName4,
+  TermName, TermName2, TermName3, TermName4,
+  Terminal,
   TermPath,
 
   -- * Selectors
@@ -23,10 +21,8 @@ module Koshucode.Baala.Base.Token.Token
   tokenTypeText,
 
   -- * Predicates
-  isBlankToken,
-  isShortToken,
-  isOpenTokenOf,
-  isCloseTokenOf,
+  isBlankToken, isShortToken,
+  isOpenTokenOf, isCloseTokenOf,
 
   -- * Other function
   sweepToken,
@@ -42,7 +38,7 @@ import qualified Koshucode.Baala.Base.Token.TokenPos as B
 
 -- ----------------------  Token type
 
--- | There are eight types of tokens.
+-- | There are nine types of tokens.
 data Token
     = TWord    B.TokenPos Int String     -- ^ Word.
                                          --   'Int' represents quotation level, i.e.,
@@ -100,14 +96,18 @@ instance (TokenListing a) => TokenListing (Maybe a) where
 
 -- ---------------------- Term name
 
--- | Name of term, e.g., @\"file\"@ for the term @\/file@.
-type TermName  = String
-type TermName2 = (String, String)
-type TermName3 = (String, String, String)
-type TermName4 = (String, String, String, String)
+-- | Name of term, e.g., @\"file\"@ for the term name @\/file@.
+type TermName   = String
+type TermName2  = (String, String)
+type TermName3  = (String, String, String)
+type TermName4  = (String, String, String, String)
 
--- | Path of term, e.g., term @\/r\/x@ is correspond to path @["r", "x"]@.
-type TermPath = [TermName]
+-- | Pair of term name and something.
+type Terminal a = (TermName, a)
+
+-- | Path of term names, e.g., term name @\/r\/x@
+--   is correspond to path @[\"r\", \"x\"]@.
+type TermPath   = [TermName]
 
 
 -- ---------------------- Selector

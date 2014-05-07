@@ -18,6 +18,7 @@ module Koshucode.Baala.Op.Builtin.Get
   getTerm,
   getTerms,
   getTermPairs,
+  getWithTerms,
   getTermTrees,
 
   -- * Basic type
@@ -36,7 +37,7 @@ import qualified Koshucode.Baala.Op.Message      as Message
 -- ---------------------- Utility
 
 ab :: [B.TokenTree] -> B.Map (B.Ab b)
-ab = B.abortableTrees "@operand"
+ab = B.abortableTrees "operand"
 
 lookupOperand :: String -> C.RopUse c -> Maybe [B.TokenTree]
 lookupOperand name = lookup name . C.lexOperand . C.ropLexmap
@@ -145,6 +146,9 @@ getTerms = getAbortable Op.termNames
 -- | Get list of term-name pairs from named operand.
 getTermPairs :: RopGet c [(B.TermName, B.TermName)]
 getTermPairs = getAbortable Op.termNamePairs
+
+getWithTerms :: RopGet c [B.Terminal String]
+getWithTerms = getAbortable Op.withTerms
 
 getTermTrees :: RopGet c [B.Named B.TokenTree]
 getTermTrees = getAbortable Op.termTreePairs

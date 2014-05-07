@@ -6,6 +6,7 @@ module Koshucode.Baala.Op.Builtin.Term
 ( termName,
   termNames,
   termNamePairs,
+  withTerms,
   termTreePairs,
 ) where
 
@@ -44,7 +45,17 @@ termNamePairs = loop where
            xs' <- loop xs
            Right $ (a', b') : xs'
     loop [] = Right []
-    loop _ = Message.reqTermName
+    loop _  = Message.reqTermName
+
+withTerms :: [B.TokenTree] -> B.Ab [B.Terminal String]
+withTerms = loop where
+    loop (B.TreeL (B.TTerm _ [n]) : B.TreeL (B.TWord _ 0 v) : xs) = next (n, v) xs
+    loop (B.TreeL (B.TTerm _ [n]) : xs)                           = next (n, n) xs
+    loop [] = Right []
+    loop _  = Message.reqTermName
+
+    next p xs = do xs' <- loop xs
+                   Right $ p : xs'
 
 -- | Extract a list of name-and-tree pairs.
 -- 
