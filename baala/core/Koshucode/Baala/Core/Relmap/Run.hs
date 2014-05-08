@@ -12,7 +12,6 @@ module Koshucode.Baala.Core.Relmap.Run
   bmapAlign,
 ) where
 
-import qualified Control.Monad                        as Monad
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Core.Content         as C
 import qualified Koshucode.Baala.Core.Relmap.Operator as C
@@ -64,8 +63,8 @@ relkitRun global rs (B.Sourced toks core) bo1 =
        C.RelkitAbFull      u kitf kitbs ->  monad u $            kitf (bmaps kitbs)        bo1
        C.RelkitOneToAbOne  u kitf kitbs ->  monad u $            kitf (bmaps kitbs) `mapM` bo1
        C.RelkitOneToAbMany u kitf kitbs ->  right u . concat =<< kitf (bmaps kitbs) `mapM` bo1
-       C.RelkitAbSemi        kitf kitb  ->  Monad.filterM (semi kitf kitb) bo1
-       C.RelkitAbPred        kitf       ->  Monad.filterM kitf bo1
+       C.RelkitAbSemi        kitf kitb  ->  B.filterM (semi kitf kitb) bo1
+       C.RelkitAbPred        kitf       ->  B.filterM kitf bo1
 
        C.RelkitConst                 bo ->  Right bo
        C.RelkitId                       ->  Right bo1

@@ -96,16 +96,16 @@ makeConsLexmap lxs = consLex where
 type ConsRelmap c = C.Lexmap -> B.Ab (C.Relmap c)
 
 makeConsRelmap :: C.Global c -> [B.Named (C.RopCons c)] -> ConsRelmap c
-makeConsRelmap global fulls = consFull where
-    consFull lx =
-        let op    = C.lexOpText lx
-            od    = C.lexOperand lx
-            subHs = C.lexSubmap lx
-        in case lookup op fulls of
-             Nothing   -> Right $ C.RelmapLink lx op od
+makeConsRelmap global fulls = relmap where
+    relmap lx =
+        let rop  = C.lexOpText  lx
+            rod  = C.lexOperand lx
+            lxs  = C.lexSubmap  lx
+        in case lookup rop fulls of
+             Nothing   -> Right $ C.RelmapLink lx rop rod
              Just cons -> B.abortableFrom "relmap" lx $
-                          do subFs <- mapM consFull subHs
-                             cons $ C.RopUse global lx subFs
+                          do rmaps <- mapM relmap lxs
+                             cons $ C.RopUse global lx rmaps
 
 
 -- ----------------------

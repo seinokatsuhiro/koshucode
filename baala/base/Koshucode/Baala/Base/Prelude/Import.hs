@@ -5,6 +5,7 @@ module Koshucode.Baala.Base.Prelude.Import
   (Control.Monad.<=<),
   (Control.Monad.>=>),
   Control.Monad.sequence,
+  Control.Monad.filterM,
 
   -- * Data.Map
   lookupMap,

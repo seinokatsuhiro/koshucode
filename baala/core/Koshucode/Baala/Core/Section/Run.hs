@@ -37,8 +37,8 @@ runSectionBody global C.Section { C.secAssert = ass } =
       run2 = B.shortMap $ C.runAssertJudges global
 
 assembleRelmap :: forall c. B.AbMap (C.Section c)
-assembleRelmap s@C.Section { C.secSlot   = slot
-                           , C.secTokmap = tok
+assembleRelmap s@C.Section { C.secSlot   = gslot
+                           , C.secTokmap = tokmaps
                            , C.secAssert = ass
                            , C.secCons   = C.RelmapCons
                                            { C.consLexmap = lexmap
@@ -49,10 +49,10 @@ assembleRelmap s@C.Section { C.secSlot   = slot
       assemble :: B.AbMap (C.Assert c)
       assemble a =
           B.abortableFrom "assert" a $ do
-            trees <- slotTrees slot [] $ C.assTree a
+            trees <- slotTrees gslot [] $ C.assTree a
             lx    <- lexmap trees
             rmap  <- relmap lx
-            lxs   <- slotLexmap slot lexmap lx tok
+            lxs   <- slotLexmap lexmap gslot tokmaps lx
             parts <- B.sequenceSnd $ B.mapSndTo relmap lxs
             Right $ a { C.assRelmap = Just rmap
                       , C.assParts  = parts }
@@ -61,19 +61,18 @@ assembleRelmap s@C.Section { C.secSlot   = slot
 
 -- ----------------------  Slot substitution
 
-slotLexmap :: [B.NamedTrees] -> C.ConsLexmap -> C.Lexmap
-    -> [B.NamedTrees]
-    -> B.Ab [C.Rody C.Lexmap]
-slotLexmap slot cons lexmap def = loop lexmap where
-    loop lx = let rop = C.lexOpText lx
-                  rod = C.lexOperand lx
+slotLexmap :: C.ConsLexmap -> [B.NamedTrees] -> [B.NamedTrees]
+           -> C.Lexmap -> B.Ab [C.Rody C.Lexmap]
+slotLexmap lexmap gslot tokmaps = loop where
+    loop lx = let rop    = C.lexOpText  lx
+                  rod    = C.lexOperand lx
                   subuse = loops $ C.lexSubmap lx
               in B.abortableFrom "slot" lx $
-                 case lookup rop def of
+                 case lookup rop tokmaps of
                    Nothing    -> subuse
                    Just trees ->
-                       do trees' <- slotTrees slot rod trees
-                          lx2    <- cons trees'
+                       do trees' <- slotTrees gslot rod trees
+                          lx2    <- lexmap trees'
                           use2   <- loop lx2
                           use3   <- subuse
                           Right $ ((rop, rod), lx2) : use2 ++ use3
@@ -85,18 +84,18 @@ slotLexmap slot cons lexmap def = loop lexmap where
                           Right $ lx' ++ lxs'
 
 slotTrees :: [B.NamedTrees] -> C.Rod -> B.AbMap [B.TokenTree]
-slotTrees slot rod trees =
-    do trees' <- slotTree slot rod `mapM` trees
+slotTrees gslot rod trees =
+    do trees' <- slotTree gslot rod `mapM` trees
        Right $ concat trees'
 
 slotTree :: [B.NamedTrees] -> C.Rod -> B.TokenTree -> B.Ab [B.TokenTree]
-slotTree slot rod tree = B.abortableTree "slot" tree $ loop tree where
+slotTree gslot rod tree = B.abortableTree "slot" tree $ loop tree where
     loop (B.TreeB p q sub) = do sub' <- mapM loop sub
                                 Right [B.TreeB p q $ concat sub']
     loop (B.TreeL (B.TSlot _ n name))
         | n == 0    = replace n name "@trunk"     rod  (`pos` name)
         | n == 1    = replace n name ('-' : name) rod  Right
-        | n == 2    = replace n name name         slot Right
+        | n == 2    = replace n name name         gslot Right
         | otherwise = Message.noSlotName n name
     loop tk = Right [tk]
 
