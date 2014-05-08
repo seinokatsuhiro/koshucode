@@ -35,16 +35,9 @@ instance Show (RelmapCons c) where
 
 -- | Make a constructor pair of lexmap and relmap.
 relmapCons :: C.Global c -> (RelmapCons c)
-relmapCons global = make $ unzip $ map pair $ C.globalRops global where
-    make (lxs, fulls) =
-        let consLex  = makeConsLexmap lxs
-            consFull = makeConsRelmap global fulls
-        in RelmapCons consLex consFull
-
-    pair (C.Rop name _ sorter cons synopsis) =
-        let lx = (name, (synopsis, sorter))
-            full = (name, cons)
-        in (lx, full)
+relmapCons g = make $ unzip $ map pair $ C.globalRops g where
+    make (l, r) = RelmapCons (makeConsLexmap l) (makeConsRelmap g r)
+    pair (C.Rop n _ sorter cons _) = ((n, sorter), (n, cons))
 
 
 
@@ -54,7 +47,7 @@ relmapCons global = make $ unzip $ map pair $ C.globalRops global where
 --   make lexmap from source of relmap operator.
 type ConsLexmap = [B.TokenTree] -> B.Ab C.Lexmap
 
-makeConsLexmap :: [B.Named (String, C.RodSorter)] -> ConsLexmap
+makeConsLexmap :: [B.Named C.RodSorter] -> ConsLexmap
 makeConsLexmap lxs = consLex where
     consLex :: ConsLexmap
     consLex trees =
@@ -71,14 +64,14 @@ makeConsLexmap lxs = consLex where
         case lookup (B.tokenContent op) lxs of
           Nothing ->
               do sorted <- C.rodBranch trees
-                 Right $ lexmap op trees sorted "<derived>"
-          Just (usage, operandSorter) ->
+                 Right $ lexmap op trees sorted
+          Just operandSorter ->
               do sorted <- operandSorter trees
-                 submap $ lexmap op trees sorted usage
+                 submap $ lexmap op trees sorted
 
-    lexmap :: B.Token -> [B.TokenTree] -> [B.NamedTrees] -> String -> C.Lexmap
-    lexmap op trees sorted usage =
-        C.Lexmap op (("@operand", trees) : sorted) [] usage
+    lexmap :: B.Token -> [B.TokenTree] -> [B.NamedTrees] -> C.Lexmap
+    lexmap op trees sorted =
+        C.Lexmap op (("@operand", trees) : sorted) []
 
     submap :: B.AbMap C.Lexmap
     submap lx@C.Lexmap { C.lexOperand = od } =

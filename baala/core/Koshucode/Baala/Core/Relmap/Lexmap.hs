@@ -19,7 +19,6 @@ data Lexmap = Lexmap
     { lexOpToken  :: B.Token     -- ^ Token of operator
     , lexOperand  :: C.Rod       -- ^ Operand of relmap operator
     , lexSubmap   :: [Lexmap]    -- ^ Submaps in the operand
-    , lexUsage    :: String      -- ^ Usage description
     } deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance B.Pretty Lexmap where
