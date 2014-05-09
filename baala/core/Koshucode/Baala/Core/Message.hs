@@ -6,6 +6,7 @@ module Koshucode.Baala.Core.Message
 
   -- * Core package
   ambInfixes,
+  extraOperand,
   noFile,
   noSlotName,
   noSlotIndex,
@@ -34,6 +35,10 @@ import Koshucode.Baala.Base.Message
 -- | Ambiguous infix operators
 ambInfixes :: [String] -> B.Ab a
 ambInfixes = Left . B.abortLines "Ambiguous infix operators"
+
+-- | Extra operand
+extraOperand :: B.Ab a
+extraOperand = Left $ B.abortBecause "Extra operand"
 
 -- | File not found
 noFile :: String -> B.Ab a

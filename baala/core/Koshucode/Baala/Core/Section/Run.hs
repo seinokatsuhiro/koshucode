@@ -50,7 +50,7 @@ assembleRelmap s@C.Section { C.secSlot   = gslot
       assemble a =
           B.abortableFrom "assert" a $ do
             trees <- slotTrees gslot [] $ C.assTree a
-            lx    <- lexmap trees
+            lx    <- lexmap tokmaps [] trees
             rmap  <- relmap lx
             lxs   <- slotLexmap lexmap gslot tokmaps lx
             parts <- B.sequenceSnd $ B.mapSndTo relmap lxs
@@ -72,7 +72,7 @@ slotLexmap lexmap gslot tokmaps = loop where
                    Nothing    -> subuse
                    Just trees ->
                        do trees' <- slotTrees gslot rod trees
-                          lx2    <- lexmap trees'
+                          lx2    <- lexmap tokmaps [] trees'
                           use2   <- loop lx2
                           use3   <- subuse
                           Right $ ((rop, rod), lx2) : use2 ++ use3

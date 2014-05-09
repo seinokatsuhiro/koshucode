@@ -51,7 +51,7 @@ import qualified Koshucode.Baala.Op.Nest.Flow  as Op
 
 consCopy :: C.RopCons c
 consCopy use =
-  do n    <- Op.getWord   use "-name"
+  do n    <- Op.getWord   use "-with"
      rmap <- Op.getRelmap use
      Right $ C.relmapCopy use n rmap
 

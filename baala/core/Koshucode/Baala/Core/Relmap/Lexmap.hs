@@ -5,6 +5,7 @@
 
 module Koshucode.Baala.Core.Relmap.Lexmap
 ( Lexmap (..),
+  LexmapType (..),
   lexOpText,
 ) where
 
@@ -16,10 +17,17 @@ import qualified Koshucode.Baala.Core.Relmap.Operand as C
 --   Lexmap is constructed from a list of 'B.TokenTree',
 --   and generic relmap is constructed from a lexmap.
 data Lexmap = Lexmap
-    { lexOpToken  :: B.Token     -- ^ Token of operator
+    { lexType     :: LexmapType  -- ^ Type of lexmap
+    , lexOpToken  :: B.Token     -- ^ Token of operator
     , lexOperand  :: C.Rod       -- ^ Operand of relmap operator
     , lexSubmap   :: [Lexmap]    -- ^ Submaps in the operand
     } deriving (Show, Eq, Ord, G.Data, G.Typeable)
+
+data LexmapType
+    = LexmapLocal
+    | LexmapUser
+    | LexmapSystem
+      deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance B.Pretty Lexmap where
     doc Lexmap { lexOpToken = opTok, lexOperand = opd } =

@@ -18,7 +18,7 @@ nestRops = Op.ropList "nest"
     --  SYNOPSIS,
     --  CONSTRUCTOR, OPERAND
     [ ( "copy N R",
-        Op.consCopy, C.rodTwo "-name" "-relmap" [] )
+        Op.consCopy, C.rodTwo "-with" "-relmap" [] )
     , ( "down /N",
         Op.consDown, C.rodOne "-term" [] )
     , ( "for /N R [ -with /N ... ]",
