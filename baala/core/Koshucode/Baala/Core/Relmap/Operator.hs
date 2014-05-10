@@ -87,7 +87,7 @@ data Relmap c
 
     | RelmapCopy     C.Lexmap String (Relmap c)
       -- ^ Relmap for environment of input relation
-    | RelmapWith     C.Lexmap [(B.TermName, String)] (Relmap c)
+    | RelmapWith     C.Lexmap [B.Terminal String] (Relmap c)
       -- ^ Relmap for environment of nested relations
     | RelmapLink     C.Lexmap String C.Rod
       -- ^ Relmap reference

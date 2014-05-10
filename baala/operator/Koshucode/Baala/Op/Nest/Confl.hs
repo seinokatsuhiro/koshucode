@@ -75,7 +75,7 @@ consFor use =
 relmapFor :: (C.CRel c) => C.RopUse c -> [B.Terminal String] -> B.TermName -> B.Map (C.Relmap c)
 relmapFor use with n rmap = relmapForInner use with n (Op.relmapUp use n `B.mappend` rmap)
 
-relmapForInner :: (C.CRel c) => C.RopUse c -> [(B.TermName, String)] -> B.TermName -> B.Map (C.Relmap c)
+relmapForInner :: (C.CRel c) => C.RopUse c -> [B.Terminal String] -> B.TermName -> B.Map (C.Relmap c)
 relmapForInner use with n = C.relmapWith use with . bin where
     bin = C.relmapBinary use $ relkitFor n
 
@@ -162,7 +162,7 @@ consGroupBy use =
 relmapGroupBy :: (Ord c, C.CRel c) => C.RopUse c -> B.TermName -> B.Map (C.Relmap c)
 relmapGroupBy use n rmap = C.relmapCopy use n rmapGroup where
     rmapGroup = rmap `B.mappend` relmapGroup use n rmapCopy
-    rmapCopy  = C.relmapLink use n []
+    rmapCopy  = C.relmapWithVar use n
 
 
 
@@ -231,7 +231,7 @@ relkitSliceUp _ _ = Right C.relkitNothing
 consNest :: (Ord c, C.CRel c) => C.RopCons c
 consNest use =
   do ns <- Op.getTerms use "-term"
-     to <- Op.getTerm use "-to"
+     to <- Op.getTerm  use "-to"
      Right $ relmapNest use (ns, to)
 
 relmapNest :: (Ord c, C.CRel c) => C.RopUse c -> ([B.TermName], B.TermName) -> C.Relmap c
@@ -240,7 +240,7 @@ relmapNest use (ns, to) = nest where
     group  =  relmapGroupBy use to cut
     for    =  relmapFor use [] to pick
     pick   =  Op.relmapPick use ns
-    cut    =  Op.relmapCut use ns
+    cut    =  Op.relmapCut  use ns
 
 
 -- ----------------------  unnest
@@ -259,6 +259,6 @@ relmapUnnest :: (Ord c, C.CRel c) => C.RopUse c -> B.TermName -> C.Relmap c
 relmapUnnest use n = unnest where
     unnest  =  slice `B.mappend` cut
     slice   =  relmapSliceUp use [(n, n)] meet
-    meet    =  Op.relmapMeet use $ C.relmapLink use n []
-    cut     =  Op.relmapCut use [n]
+    meet    =  Op.relmapMeet use $ C.relmapWithVar use n
+    cut     =  Op.relmapCut  use [n]
 

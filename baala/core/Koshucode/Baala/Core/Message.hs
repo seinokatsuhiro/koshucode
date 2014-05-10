@@ -20,6 +20,7 @@ module Koshucode.Baala.Core.Message
   unkNestRel,
   unkRelmap,
   unkTerm,
+  unkWithVar,
   unkWord,
   unmatchType,
   unresPrefix,
@@ -99,6 +100,9 @@ unkTerm :: [B.TermName] -> B.Relhead -> B.Ab a
 unkTerm ns he1 =
     Left $ B.abortLines "Unknown term name"
          $ detailTermRel "Unknown" ns he1
+
+unkWithVar :: String -> B.Ab a
+unkWithVar = Left . B.abortLine "Unknown with-variable"
 
 -- | Unknown word
 unkWord :: String -> B.Ab a

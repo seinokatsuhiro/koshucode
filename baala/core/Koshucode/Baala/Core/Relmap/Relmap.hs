@@ -18,6 +18,7 @@ module Koshucode.Baala.Core.Relmap.Relmap
   relmapConfl,
   relmapCopy,
   relmapWith,
+  relmapWithVar,
   relmapLink,
 
   -- * Append relmaps
@@ -25,6 +26,7 @@ module Koshucode.Baala.Core.Relmap.Relmap
 ) where
 
 import qualified Koshucode.Baala.Base                 as B
+import qualified Koshucode.Baala.Core.Relmap.Lexmap   as C
 import qualified Koshucode.Baala.Core.Relmap.Operand  as C
 import qualified Koshucode.Baala.Core.Relmap.Operator as C
 
@@ -105,8 +107,15 @@ relmapConfl = C.RelmapCalc . C.ropLexmap
 relmapCopy :: C.RopUse c -> String -> B.Map (C.Relmap c)
 relmapCopy = C.RelmapCopy . C.ropLexmap
 
-relmapWith :: C.RopUse c -> [(B.TermName, String)] -> B.Map (C.Relmap c)
+relmapWith :: C.RopUse c -> [B.Terminal String] -> B.Map (C.Relmap c)
 relmapWith = C.RelmapWith . C.ropLexmap
+
+relmapWithVar :: C.RopUse c -> String -> C.Relmap c
+relmapWithVar use n = relmapLink (withVar use) n []
+
+withVar :: B.Map (C.RopUse c)
+withVar u@C.RopUse { C.ropLexmap = lx } =
+    u { C.ropLexmap = lx { C.lexType = C.LexmapWith }}
 
 relmapLink :: C.RopUse c -> String -> C.Rod -> C.Relmap c
 relmapLink = C.RelmapLink . C.ropLexmap

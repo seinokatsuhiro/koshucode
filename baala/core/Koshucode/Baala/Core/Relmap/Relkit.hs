@@ -25,9 +25,9 @@ module Koshucode.Baala.Core.Relmap.Relkit
   relkitConstSingleton,
   relkitConstBody,
   relkitSource,
-  relkitNest,
   relkitCopy,
   relkitWith,
+  relkitWithVar,
   relkitSetSource,
 ) where
 
@@ -138,10 +138,6 @@ relkitSource p ns = relkitJust he kit where
     he  = B.headFrom ns
     kit = RelkitSource p ns
 
-relkitNest :: String -> B.Relhead -> Relkit c
-relkitNest n he = kit where
-    kit = relkitJust he $ RelkitNest n
-
 relkitCopy :: String -> B.Map (Relkit c)
 relkitCopy n (Relkit he kitb) = kit2 where
     kit2 = relkit he $ RelkitCopy n kitb
@@ -149,6 +145,10 @@ relkitCopy n (Relkit he kitb) = kit2 where
 relkitWith :: [(String, Int)] -> B.Map (Relkit c)
 relkitWith with (Relkit he kitb) = kit2 where
     kit2 = relkit he $ RelkitWith with kitb
+
+relkitWithVar :: String -> B.Relhead -> Relkit c
+relkitWithVar n he = kit where
+    kit = relkitJust he $ RelkitNest n
 
 relkitSetSource :: (B.TokenListing a) => a -> B.Map (Relkit c)
 relkitSetSource src (Relkit he (B.Sourced _ core)) =
