@@ -6,6 +6,8 @@ module Koshucode.Baala.Base.Prelude.Import
   (Control.Monad.>=>),
   Control.Monad.sequence,
   Control.Monad.filterM,
+  Control.Monad.foldM,
+  concatMapM,
 
   -- * Data.Map
   lookupMap,
@@ -34,6 +36,9 @@ import Data.Map
 import Data.Maybe
 import Data.Monoid
 import Text.PrettyPrint
+
+concatMapM :: (Monad m) => (a -> m [b]) -> [a] -> m [b]
+concatMapM f = return . concat Control.Monad.<=< mapM f
 
 -- | Same as 'Map.lookup' in @Data.Map@ module.
 lookupMap :: (Ord k) => k -> Data.Map.Map k a -> Maybe a

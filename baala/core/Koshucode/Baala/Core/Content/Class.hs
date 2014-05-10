@@ -26,7 +26,6 @@ module Koshucode.Baala.Core.Content.Class
   isMember,
 ) where
 
-import qualified Control.Monad                as Monad
 import qualified Koshucode.Baala.Base         as B
 import qualified Koshucode.Baala.Core.Message as Message
 
@@ -45,7 +44,7 @@ class (Ord c, B.Pretty c, PrimContent c,
     appendContent :: c -> c -> B.Ab c
 
     joinContent :: [c] -> B.Ab c
-    joinContent = Monad.foldM appendContent nil
+    joinContent = B.foldM appendContent nil
 
 -- | Delete empty list ('null') from content list.
 nonNullFilter :: B.Map [[a]]
