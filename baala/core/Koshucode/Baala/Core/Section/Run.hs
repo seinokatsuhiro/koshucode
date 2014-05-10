@@ -39,9 +39,7 @@ assembleRelmap :: forall c. B.AbMap (C.Section c)
 assembleRelmap s@C.Section { C.secSlot   = gslot
                            , C.secTokmap = tokmaps
                            , C.secAssert = ass
-                           , C.secCons   = C.RelmapCons
-                                           { C.consLexmap = lexmap
-                                           , C.consRelmap = relmap }} =
+                           , C.secCons   = C.RelmapCons lexmap relmap } =
     do ass2 <- mapM assemble `B.shortMapM` ass
        Right $ s { C.secAssert = ass2 }
     where
@@ -49,36 +47,8 @@ assembleRelmap s@C.Section { C.secSlot   = gslot
       assemble a =
           B.abortableFrom "assert" a $ do
             trees     <- C.slotTrees gslot [] $ C.assTree a
-            (lx, lxs) <- lexmap gslot tokmaps [] trees
-            --lxs     <- slotLexmap lexmap gslot tokmaps lx
+            (lx, lxs) <- lexmap gslot tokmaps trees
             parts     <- B.sequenceSnd $ B.mapSndTo relmap lxs
             rmap      <- relmap lx
             Right $ a { C.assRelmap = Just rmap
                       , C.assParts  = parts }
-
-
-
--- ----------------------  Slot substitution
-
-slotLexmap :: C.ConsLexmap -> [B.NamedTrees] -> [B.NamedTrees]
-           -> C.Lexmap -> B.Ab [C.Rody C.Lexmap]
-slotLexmap lexmap gslot tokmaps = loop where
-    loop lx = let rop    = C.lexOpText  lx
-                  rod    = C.lexOperand lx
-                  subuse = loops $ C.lexSubmap lx
-              in B.abortableFrom "slot" lx $
-                 case lookup rop tokmaps of
-                   Nothing    -> subuse
-                   Just trees ->
-                       do trees'   <- C.slotTrees gslot rod trees
-                          (lx2, _) <- lexmap gslot tokmaps [] trees'
-                          use2     <- loop lx2
-                          use3     <- subuse
-                          Right $ ((rop, rod), lx2) : use2 ++ use3
-
-    loops :: [C.Lexmap] -> B.Ab [C.Rody C.Lexmap]
-    loops [] = Right []
-    loops (lx : lxs) = do lx'  <- loop lx
-                          lxs' <- loops lxs
-                          Right $ lx' ++ lxs'
-

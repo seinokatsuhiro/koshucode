@@ -24,9 +24,9 @@ data Lexmap = Lexmap
     } deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 data LexmapType
-    = LexmapLocal
-    | LexmapUser
-    | LexmapSystem
+    = LexmapBase         -- ^ Built-in relmap
+    | LexmapDerived      -- ^ User-defined relmap
+    | LexmapWith         -- ^ @-with@ variable
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance B.Pretty Lexmap where

@@ -44,7 +44,8 @@ data Token
                                          --   'Int' represents quotation level, i.e.,
                                          --   0 for non-quoted,
                                          --   1 for single-quoted,
-                                         --   2 for double-quoted.
+                                         --   2 for double-quoted,
+                                         --   3 for @-with@ variable.
     | TShort   B.TokenPos String String  -- ^ Abbreviated word.
     | TTerm    B.TokenPos TermPath       -- ^ Term name.
     | TSlot    B.TokenPos Int String     -- ^ Slot name.
