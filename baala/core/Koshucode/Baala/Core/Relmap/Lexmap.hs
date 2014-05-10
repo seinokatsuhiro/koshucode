@@ -6,7 +6,9 @@
 module Koshucode.Baala.Core.Relmap.Lexmap
 ( Lexmap (..),
   LexmapType (..),
-  lexOpText,
+  lexOpName,
+  lexAddMessage,
+  lexMessageList,
 ) where
 
 import qualified Data.Generics        as G
@@ -21,6 +23,7 @@ data Lexmap = Lexmap
     , lexOpToken  :: B.Token     -- ^ Token of operator
     , lexOperand  :: C.Rod       -- ^ Operand of relmap operator
     , lexSubmap   :: [Lexmap]    -- ^ Submaps in the operand
+    , lexMessage  :: [String]    -- ^ Messages on lexmap
     } deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 data LexmapType
@@ -40,6 +43,14 @@ instance B.TokenListing Lexmap where
     tokenListing Lexmap { lexOpToken = op } = [op]
 
 -- | Name of relmap operator
-lexOpText :: Lexmap -> String
-lexOpText = B.tokenContent . lexOpToken
+lexOpName :: Lexmap -> String
+lexOpName = B.tokenContent . lexOpToken
 
+lexAddMessage :: String -> B.Map Lexmap
+lexAddMessage msg lx = lx { lexMessage = msg : lexMessage lx }
+
+lexMessageList :: Lexmap -> [String]
+lexMessageList Lexmap { lexOpToken = tok, lexMessage = msg }
+    | null msg  = []
+    | otherwise = msg ++ src
+    where src = map (("  " ++) . fst) $ B.tokenPosDisplay "" $ B.tokenPos tok

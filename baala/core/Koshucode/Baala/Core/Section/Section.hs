@@ -11,6 +11,8 @@ module Koshucode.Baala.Core.Section.Section
   -- * Constructors
   emptySection,
   consSection,
+  addMessage,
+  addMessages,
 
   -- * Process
   -- $Process
@@ -38,6 +40,7 @@ data Section c = Section {
     , secJudge    :: [B.Judge c]         -- ^ Affirmative or denial judgements
     , secResource :: B.Resource          -- ^ Resource name
     , secCons     :: C.RelmapCons c      -- ^ Relmap constructor for this section
+    , secMessage  :: [String]            -- ^ Collection of messages
     } deriving (Show)
 
 instance (Ord c, B.Pretty c) => B.Pretty (Section c) where
@@ -63,10 +66,15 @@ appendSection s1 s2 =
 
 -- | Section that has no contents.
 emptySection :: Section c
-emptySection = Section Nothing [] [] [] [] [] [] [] res cons where
+emptySection = Section Nothing [] [] [] [] [] [] [] res cons [] where
     res  = B.ResourceText ""
     cons = C.relmapCons C.global
 
+addMessage :: String -> B.Map (Section c)
+addMessage msg sec = sec { secMessage = msg : secMessage sec }
+
+addMessages :: [String] -> B.Map (Section c)
+addMessages msg sec = sec { secMessage = msg ++ secMessage sec }
 
 
 

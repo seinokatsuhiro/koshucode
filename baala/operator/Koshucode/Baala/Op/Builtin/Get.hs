@@ -144,7 +144,7 @@ getTerms :: RopGet c [B.TermName]
 getTerms = getAbortable Op.termNames
 
 -- | Get list of term-name pairs from named operand.
-getTermPairs :: RopGet c [(B.TermName, B.TermName)]
+getTermPairs :: RopGet c [B.TermName2]
 getTermPairs = getAbortable Op.termNamePairs
 
 getWithTerms :: RopGet c [B.Terminal String]

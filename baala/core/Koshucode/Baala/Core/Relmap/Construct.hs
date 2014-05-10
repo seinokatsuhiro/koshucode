@@ -61,15 +61,16 @@ consLexmap sorters gslot tokmaps = lexmap where
            [(B.TreeL rop@(B.TWord _ 3 _) : trees)] -> user C.LexmapWith rop trees
            [[B.TreeB 1 _ trees]] -> lexmap trees
            [[B.TreeB _ _ _]]     -> Message.adlib "bracket"
-           [_]                   -> Message.unkRelmap "?"
-           trees2                -> derived (B.tokenWord "append") $ map B.treeWrap trees2
+           [_]                   -> Message.unkRelmap "???"
+           trees2                -> base "append" (B.tokenWord "append")
+                                    $ map B.treeWrap trees2
 
     derived :: B.Token -> ConsLexmapBody
     derived rop trees =
         let name = B.tokenContent rop
         in case lookup name tokmaps of
-          Just _  -> user C.LexmapDerived rop trees
-          Nothing -> base name rop trees
+             Just _  -> user C.LexmapDerived rop trees
+             Nothing -> base name rop trees
 
     base :: String -> B.Token -> ConsLexmapBody
     base name rop trees =
@@ -85,10 +86,21 @@ consLexmap sorters gslot tokmaps = lexmap where
                            submap $ cons ty rop rod trees
 
     cons :: C.LexmapType -> B.Token -> [B.NamedTrees] -> [B.TokenTree] -> C.Lexmap
-    cons ty rop rod trees = C.Lexmap { C.lexType    = ty
-                                     , C.lexOpToken = rop
-                                     , C.lexOperand = (("@operand", trees) : rod)
-                                     , C.lexSubmap  = [] }
+    cons ty rop rod trees =
+        check $ C.Lexmap { C.lexType    = ty
+                         , C.lexOpToken = rop
+                         , C.lexOperand = (("@operand", trees) : rod)
+                         , C.lexSubmap  = []
+                         , C.lexMessage = [] }
+
+    check :: B.Map C.Lexmap
+    check lx | C.lexType lx == C.LexmapDerived
+                 = let name = C.lexOpName lx
+                       msg  = "Same name as base relmap operator '" ++ name ++ "'"
+                   in case lookup name sorters of
+                        Just _  -> C.lexAddMessage msg lx
+                        Nothing -> lx
+    check lx = lx
 
     submap :: C.Lexmap -> B.Ab (C.Lexmap, [C.Rody C.Lexmap])
     submap lx@C.Lexmap { C.lexOperand = rod } =
@@ -103,7 +115,7 @@ consLexmap sorters gslot tokmaps = lexmap where
     slot :: C.Lexmap -> B.Ab [C.Rody C.Lexmap]
     slot lx | C.lexType lx /= C.LexmapDerived = Right []
             | otherwise
-                 = let n   = C.lexOpText  lx
+                 = let n   = C.lexOpName  lx
                        rod = C.lexOperand lx
                        sub = C.lexSubmap  lx
                    in B.abortableFrom "slot" lx $ case lookup n tokmaps of
@@ -192,7 +204,7 @@ type ConsRelmap c = C.Lexmap -> B.Ab (C.Relmap c)
 consRelmap :: C.Global c -> [B.Named (C.RopCons c)] -> ConsRelmap c
 consRelmap global conses = relmap where
     relmap lx =
-        let rop  = C.lexOpText  lx
+        let rop  = C.lexOpName  lx
             rod  = C.lexOperand lx
             lxs  = C.lexSubmap  lx
         in case C.lexType lx of

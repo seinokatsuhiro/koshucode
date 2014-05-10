@@ -36,7 +36,7 @@ termNames trees =
 -- 
 --   >>> termNamePairs . B.tt $ "/a /x /b /y"
 --   Right [("/a", "/x"), ("/b", "/y")]
-termNamePairs :: [B.TokenTree] -> B.Ab [(B.TermName, B.TermName)]
+termNamePairs :: [B.TokenTree] -> B.Ab [B.TermName2]
 termNamePairs = loop where
     loop (a : b : xs) =
         do a'  <- termName a

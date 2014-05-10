@@ -108,8 +108,7 @@ consTypename use =
   do np <- Op.getTermPairs use "-term"
      Right $ C.relmapFlow use $ relkitTypename np
 
-relkitTypename
-  :: (C.CText c) => [(B.TermName, B.TermName)] -> C.RelkitCalc c
+relkitTypename :: (C.CText c) => [B.TermName2] -> C.RelkitCalc c
 relkitTypename _ Nothing = Right C.relkitNothing
 relkitTypename np (Just he1) = Right kit2 where
     ns, ps :: [B.TermName]

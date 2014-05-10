@@ -131,12 +131,12 @@ relmapId :: Relmap c
 relmapId = RelmapCalc lexid (const $ Right . C.relkitId) []
 
 lexid :: C.Lexmap
-lexid = C.Lexmap C.LexmapBase (B.tokenWord "id") [("@operand", [])] []
+lexid = C.Lexmap C.LexmapBase (B.tokenWord "id") [("@operand", [])] [] []
 
 instance B.Name (Relmap c) where
     name (RelmapSource _ _ _)   = "source"
-    name (RelmapConst  h _)     = C.lexOpText h
-    name (RelmapCalc   h _ _)   = C.lexOpText h
+    name (RelmapConst  h _)     = C.lexOpName h
+    name (RelmapCalc   h _ _)   = C.lexOpName h
     name (RelmapAppend _ _)     = "append"
     name _ = undefined
 

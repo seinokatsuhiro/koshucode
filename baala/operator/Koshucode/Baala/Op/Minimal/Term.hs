@@ -148,10 +148,10 @@ consRename use =
   do np <- Op.getTermPairs use "-term"
      Right $ relmapRename use np
 
-relmapRename :: C.RopUse c -> [(B.TermName, B.TermName)] -> C.Relmap c
+relmapRename :: C.RopUse c -> [B.TermName2] -> C.Relmap c
 relmapRename use = C.relmapFlow use . relkitRename
 
-relkitRename :: [(B.TermName, B.TermName)] -> C.RelkitCalc c
+relkitRename :: [B.TermName2] -> C.RelkitCalc c
 relkitRename _ Nothing = Right C.relkitNothing
 relkitRename np (Just he1)
     | nsShare /= [] = Message.reqNewTerm nsShare he1

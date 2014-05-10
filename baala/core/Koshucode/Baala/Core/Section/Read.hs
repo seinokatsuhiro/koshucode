@@ -14,10 +14,6 @@ import qualified Koshucode.Baala.Core.Section.Section as C
 import qualified Koshucode.Baala.Core.Section.Clause  as C
 import qualified Koshucode.Baala.Core.Message         as Message
 
-
-
--- --------------------------------------------  Read
-
 -- | Read section from certain resource.
 readSection :: (C.CContent c) => C.Section c -> B.Resource -> IO (B.Ab (C.Section c))
 readSection root res = dispatch res where
@@ -36,9 +32,9 @@ readSection root res = dispatch res where
 
 readSectionCode
     :: (C.CContent c)
-    => C.Section c  -- ^ Root section
-    -> B.Resource   -- ^ Resource name
-    -> String       -- ^ Source text
+    => C.Section c         -- ^ Root section
+    -> B.Resource          -- ^ Resource name
+    -> String              -- ^ Source text
     -> B.Ab (C.Section c)  -- ^ Resulting section
 readSectionCode root res code =
     do let clauses = C.consClause $ B.tokenLines res code
@@ -46,8 +42,7 @@ readSectionCode root res code =
 
 -- | Read section from text.
 readSectionText :: (C.CContent c) => C.Section c -> String -> B.Ab (C.Section c)
-readSectionText root code =
-    readSectionCode root (B.ResourceText code) code
+readSectionText root code = readSectionCode root (B.ResourceText code) code
 
 -- | Read judges from text.
 readJudges :: (C.CContent c) => String -> B.Ab [B.Judge c]
