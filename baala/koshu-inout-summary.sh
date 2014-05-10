@@ -177,7 +177,6 @@ if [ ! -z "$io_output" -a $io_output_yn = y ]; then
     echo
     echo "(Copy of this report is saved to $io_output)"
 else
-    $io_proc
-    echo
+    time $io_proc
 fi
 
