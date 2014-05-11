@@ -16,6 +16,7 @@ module Koshucode.Baala.Base.Prelude.Assoc
   assocCut,
   assocCut1,
   assocRename1,
+  assocRehead,
   -- $TupleLike
 
   -- * Once/more list
@@ -150,6 +151,11 @@ assocRename1 new old = map r where
     r (k, x) | k == old  = (new, x)
              | otherwise = (k, x)
 
+assocRehead :: (Eq k) => [(k,k)] -> [(k,v)] -> [(k,v)]
+assocRehead new = map rehead where
+    rehead (k1,v) = case lookup k1 new of
+                      Nothing -> (k1,v)
+                      Just k2 -> (k2,v)
 
 
 -- ----------------------  Once/more list

@@ -62,12 +62,12 @@ relmapSpecialize global parts = spec [] [] where
                      Right (kdef2, C.relkitCopy n kit2)
 
               C.RelmapWith lx with1 rmap1 ->
-                  do let terms    = map fst with1
+                  do let (terms, vars) = unzip with1
                          heJust   = B.fromJust he1
                          heWith   = B.assocPick terms $ B.headNested heJust
                          heInd    = terms `B.snipIndex` B.headNames heJust
-                         with'    = heWith ++ with
-                         withInd  = zip terms heInd
+                         with'    = B.assocRehead with1 heWith ++ with
+                         withInd  = zip vars heInd
                      (kdef2, kit2) <- post lx $ spec with' keys kdef he1 rmap1
                      Right (kdef2, C.relkitWith withInd kit2)
 
