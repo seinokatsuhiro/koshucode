@@ -3,16 +3,13 @@
 
 -- | Tokenizer of koshucode.
 
-module Koshucode.Baala.Base.Token.TokenLine
+module Koshucode.Baala.Base.Tree.TokenLine
 (
   -- * Library
   TokenLine,
   tokenLines,
   tokens,
   isSimpleWord, isSimpleChar,
-  commentLine,
-  putCommentLines, hPutCommentLines,
-  trimLeft, trimRight, trimBoth,
 
   -- * Document
 
@@ -27,7 +24,6 @@ module Koshucode.Baala.Base.Token.TokenLine
 ) where
 
 import qualified Data.Char                           as Ch
-import qualified System.IO                           as IO
 import qualified Koshucode.Baala.Base.Prelude        as B
 import qualified Koshucode.Baala.Base.Syntax         as B
 import qualified Koshucode.Baala.Base.Text           as B
@@ -56,7 +52,7 @@ nextToken res line txt =
     case txt of
       ('*' : '*' : '*' : '*' : cs) -> tokD cs (B.TWord pos 0 "****")
       ('*' : '*' : _)         ->  tokD "" $ B.TComment pos txt
-      ('\'' : '\'' : cs)      ->  tokD "" $ B.TWord pos 1 (trimLeft cs)
+      ('\'' : '\'' : cs)      ->  tokD "" $ B.TWord pos 1 (B.trimLeft cs)
       ('(' : ')' : cs)        ->  tokD cs $ B.TWord pos 0 "()"  -- nil
       ('#' : c : cs)
           | c == '!'          ->  tokD "" $ B.TComment pos txt
@@ -66,7 +62,7 @@ nextToken res line txt =
           | c `elem` "[{<("   ->  tokD cs $ B.TOpen pos [c, '|']
       ('|' : c : cs)
           | c `elem` "]}>)"   ->  tokD cs $ B.TClose pos ['|', c]
-          | c == '|'          ->  tokD (trimLeft cs) $ B.TWord pos 0 "||" -- newline
+          | c == '|'          ->  tokD (B.trimLeft cs) $ B.TWord pos 0 "||" -- newline
 
       (c : cs)
           | isOpen    c       ->  tokD cs $ B.TOpen  pos [c]
@@ -178,30 +174,6 @@ isSimpleChar c =
 
 isShort :: Char -> Bool
 isShort = Ch.isAlpha
-
-commentLine :: String -> String
-commentLine "" = "**"
-commentLine s  = "**  " ++ s
-
-putCommentLines :: [String] -> IO ()
-putCommentLines = putStr . unlines . map commentLine
-
-hPutCommentLines :: IO.Handle -> [String] -> IO ()
-hPutCommentLines h = IO.hPutStr h . unlines . map commentLine
-
-trimLeft :: B.Map String
-trimLeft = dropWhile isSpace
-
-trimRight :: B.Map String
-trimRight [] = []
-trimRight (x : xs) =
-    case x : trimRight xs of
-      [y] | isSpace y -> []
-      ys -> ys
-
-trimBoth :: B.Map String
-trimBoth = trimRight . trimLeft
-
 
 
 -- ------------------------------------------------------------------

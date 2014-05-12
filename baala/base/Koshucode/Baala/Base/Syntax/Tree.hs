@@ -18,7 +18,8 @@ module Koshucode.Baala.Base.Syntax.Tree
   parenTable
 ) where
 
-import qualified Data.Generics as G
+import qualified Data.Generics                as G
+import qualified Koshucode.Baala.Base.Abort   as B
 import qualified Koshucode.Baala.Base.Prelude as B
 
 

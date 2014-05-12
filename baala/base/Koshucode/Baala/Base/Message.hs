@@ -9,8 +9,8 @@ module Koshucode.Baala.Base.Message
   (<!!>),
 ) where
 
-import qualified Koshucode.Baala.Base.Prelude      as B
-import qualified Koshucode.Baala.Base.Abort.Report as B
+import qualified Koshucode.Baala.Base.Prelude  as B
+import qualified Koshucode.Baala.Base.Abort    as B
 
 
 -- | AD-LIB: reason

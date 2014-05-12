@@ -19,14 +19,13 @@ module Koshucode.Baala.Base.Token.TokenPos
 
 import qualified Data.Generics                 as G
 import qualified Koshucode.Baala.Base.Prelude  as B
-import qualified Koshucode.Baala.Base.Syntax   as B
 
 
--- ----------------------  TokenPos
+-- ----------------------  Data type
 
 data TokenPos = TokenPos
       { tokenPosResource :: Resource
-      , tokenPosLine     :: B.NumberedLine  -- ^ Line number and content
+      , tokenPosLine     :: (Int, String)   -- ^ Line number and content
       , tokenPosText     :: String          -- ^ Text at which begins token
       } deriving (Show, Eq, G.Data, G.Typeable)
 
@@ -66,6 +65,7 @@ shorten :: B.Map String
 shorten s | length s > 48 = take 45 s ++ "..."
           | otherwise     = s
 
+
 -- ----------------------  Resource
 
 data Resource
@@ -82,6 +82,4 @@ resourceType (ResourceURL _)  = "url"
 resourceName :: Resource -> String
 resourceName (ResourceFile path) = path
 resourceName (ResourceText text) = text
-resourceName (ResourceURL url)   = url
-
-
+resourceName (ResourceURL  url)  = url

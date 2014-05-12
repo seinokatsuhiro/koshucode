@@ -2,10 +2,9 @@
 
 -- | Parened tree of tokens
 
-module Koshucode.Baala.Base.Token.TokenTree
+module Koshucode.Baala.Base.Tree.TokenTree
 (
   -- * Library
-  Sourced (..),
   TokenTree,
   NamedTrees,
   tokenTrees,
@@ -23,28 +22,26 @@ module Koshucode.Baala.Base.Token.TokenTree
   divideTreesByBar,
   divideTreesByColon,
 
+  abortableTree,
+  abortableTrees,
+  abortTokens,
+
   -- * Examples
   -- $Example
 ) where
 
 import qualified Text.PrettyPrint as P
+import qualified Koshucode.Baala.Base.Abort           as B
 import qualified Koshucode.Baala.Base.Prelude         as B
 import qualified Koshucode.Baala.Base.Syntax          as B
 import qualified Koshucode.Baala.Base.Text            as B
 import qualified Koshucode.Baala.Base.Token.Token     as B
-import qualified Koshucode.Baala.Base.Token.TokenLine as B
+import qualified Koshucode.Baala.Base.Tree.TokenLine as B
 import qualified Koshucode.Baala.Base.Token.TokenPos  as B
 
+
+
 -- ----------------------
-
-data Sourced a = Sourced
-    { source    :: [B.Token]
-    , unsourced :: a
-    } deriving (Show, Eq, Ord)
-
-instance Functor Sourced where
-    fmap f (Sourced src x) = Sourced src $ f x
-
 
 -- | Tree of tokens.
 type TokenTree = B.CodeTree B.Token
@@ -157,6 +154,22 @@ divideTreesByBar = divideTreesBy "|"
 --
 divideTreesByColon :: [TokenTree] -> [[TokenTree]]
 divideTreesByColon = divideTreesBy ":"
+
+-- ----------------------  Abortable
+
+abortTokens :: String -> [B.Token] -> B.AbortReason
+abortTokens reason tokens =
+    (B.abortBecause reason) { B.abortDetail = map B.tokenContent tokens }
+
+-- | Same as 'abortable' except for using 'B.TokenTree'
+--   instead of list of 'B.Token'.
+abortableTree :: String -> TokenTree -> B.Map (B.Ab b)
+abortableTree tag = B.abortable tag . B.untree
+
+-- | Same as 'abortable' except for using list of 'B.TokenTree'
+--   instead of list of 'B.Token'.
+abortableTrees :: String -> [TokenTree] -> B.Map (B.Ab b)
+abortableTrees tag = B.abortable tag . B.untrees
 
 
 

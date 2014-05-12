@@ -5,7 +5,11 @@ module Koshucode.Baala.Base.Text.Comment
   CommentDoc (..),
   CommentSec (..),
   emacsModeComment,
+  commentLine,
+  putCommentLines, hPutCommentLines,
 ) where
+
+import qualified System.IO as IO
 
 -- | Something that can become a string list.
 class Texts a where
@@ -45,3 +49,12 @@ prepend a b xs = a ++ b ++ xs
 emacsModeComment :: String
 emacsModeComment = "** -*- koshu -*-"
 
+commentLine :: String -> String
+commentLine "" = "**"
+commentLine s  = "**  " ++ s
+
+putCommentLines :: [String] -> IO ()
+putCommentLines = putStr . unlines . map commentLine
+
+hPutCommentLines :: IO.Handle -> [String] -> IO ()
+hPutCommentLines h = IO.hPutStr h . unlines . map commentLine

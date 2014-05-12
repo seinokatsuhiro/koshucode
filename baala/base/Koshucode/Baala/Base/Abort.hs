@@ -4,10 +4,12 @@
 
 module Koshucode.Baala.Base.Abort
 (
+module Koshucode.Baala.Base.Abort.Abortable,
+module Koshucode.Baala.Base.Abort.Reason,
 module Koshucode.Baala.Base.Abort.Report,
-module Koshucode.Baala.Base.Abort.Process,
 ) where
 
+import Koshucode.Baala.Base.Abort.Abortable
+import Koshucode.Baala.Base.Abort.Reason
 import Koshucode.Baala.Base.Abort.Report
-import Koshucode.Baala.Base.Abort.Process
 
