@@ -18,7 +18,6 @@ module Koshucode.Baala.Core.Section.Clause
 
 import qualified Data.Generics                 as G
 import qualified Koshucode.Baala.Base          as B
-import qualified Koshucode.Baala.Core.Relmap   as C
 import qualified Koshucode.Baala.Core.Assert   as C
 
 
@@ -38,7 +37,7 @@ data ClauseBody
     | CExport     String                         -- ^ Exporting relmap name
     | CShort      [B.ShortDef]                   -- ^ Short signs
     | CTokmap     String [B.Token]               -- ^ Source of relmap
-    | CAssert     C.AssertType B.JudgePat C.AssertOption [B.Token] -- ^ (Intermediate data)
+    | CAssert     C.AssertType B.JudgePat [B.Token] [B.Token] -- ^ (Intermediate data)
     | CJudge      Bool B.JudgePat [B.Token]  -- ^ Judge
     | CSlot       String [B.Token]               -- ^ Global slot
     | CComment                                   -- ^ Clause comment
@@ -134,9 +133,7 @@ consPreclause' src = dispatch $ B.clauseTokens src where
         case B.splitTokensBy isDelim xs of
           Right (opt, _, expr)  ->  a expr opt
           Left  expr            ->  a expr []
-        where a expr opt =
-                  let opt' = C.rod $ B.tokenTrees opt
-                  in c1 $ CAssert t p opt' expr
+        where a expr opt = c1 $ CAssert t p opt expr
     assert _ _             =  unk
 
     rmap n xs              =  c1 $ CTokmap n xs

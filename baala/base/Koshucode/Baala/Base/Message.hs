@@ -2,6 +2,8 @@
 
 module Koshucode.Baala.Base.Message
 ( adlib,
+  extraCloseParen,
+  extraOpenParen,
   notFound,
   divideByZero,
   heteroDecimal,
@@ -16,6 +18,14 @@ import qualified Koshucode.Baala.Base.Abort    as B
 -- | AD-LIB: reason
 adlib :: String -> B.Ab a
 adlib reason = Left $ B.abortBecause $ "AD-LIB: " ++ reason
+
+-- | Extra close paren
+extraCloseParen :: B.Ab a
+extraCloseParen = Left $ B.abortBecause "Extra close paren"
+
+-- | Unclosed open paren
+extraOpenParen :: B.Ab a
+extraOpenParen = Left $ B.abortBecause "Unclosed open paren"
 
 -- | Different decimal length
 heteroDecimal :: String -> String -> B.Ab a

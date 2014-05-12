@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Syntax.Tree
@@ -21,6 +22,7 @@ module Koshucode.Baala.Base.Syntax.Tree
 import qualified Data.Generics                as G
 import qualified Koshucode.Baala.Base.Abort   as B
 import qualified Koshucode.Baala.Base.Prelude as B
+import qualified Koshucode.Baala.Base.Message as Message
 
 
 
@@ -49,27 +51,31 @@ instance Functor CodeTree where
 -- treeG xs = TreeB 1 Nothing xs
 
 -- | Convert a list of elements to a single tree.
-tree :: (Show a) => GetParenType a -> [a] -> CodeTree a
-tree p = treeWrap . trees p
+tree :: (Show a) => GetParenType a -> [a] -> B.Ab (CodeTree a)
+tree p = Right . treeWrap B.<=< trees p
 
 -- |  Convert a list of elements to trees.
-trees :: (Show a) => GetParenType a -> [a] -> [CodeTree a]
-trees parenType xs = fst $ loop xs 0 where
-    add a xs2 p = B.mapFst (a :) $ loop xs2 p
+trees :: forall a. GetParenType a -> [a] -> B.Ab [CodeTree a]
+trees parenType xs = result where
+    result       = do (ts, _) <- loop xs 0
+                      Right ts
+    add a xs2 p  = do (ts, xs3) <- loop xs2 p
+                      Right (a : ts, xs3)
 
-    loop [] _ = ([], [])
+    loop :: [a] -> Int -> B.Ab ([CodeTree a], [a])
+    loop [] 0        = Right ([], [])
+    loop [] _        = Message.extraOpenParen
     loop (x : xs2) p
-        -- non paren
-        | px == 0  = add (TreeL x) xs2 p
-        -- open paren
-        | px > 0   = let (trees2, c : xs3) = loop xs2 px
-                     in  add (TreeB px (Just (x, c)) trees2) xs3 p
-        -- close paren
-        | px < 0 && px == -p = ([], x : xs2)
-        -- unknown token
-        | otherwise = error $ "mismatched paren: " ++ show x
-
-        where px = parenType x
+        | ground     = add (TreeL x) xs2 p
+        | open       = do (trees2, c : xs3) <- loop xs2 px
+                          add (TreeB px (Just (x, c)) trees2) xs3 p
+        | close      = Right ([], x : xs2)
+        | otherwise  = Message.extraCloseParen
+        where 
+          open   = ( px >  0 )
+          ground = ( px == 0 )
+          close  = ( px == - p )
+          px     = parenType x
 
 
 

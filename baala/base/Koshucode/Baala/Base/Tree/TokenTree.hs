@@ -8,8 +8,6 @@ module Koshucode.Baala.Base.Tree.TokenTree
   TokenTree,
   NamedTrees,
   tokenTrees,
-  treeTokens,
-  treesTokens,
 
   -- * Abbreviation
   tt,
@@ -30,13 +28,13 @@ module Koshucode.Baala.Base.Tree.TokenTree
   -- $Example
 ) where
 
-import qualified Text.PrettyPrint as P
+import qualified Text.PrettyPrint                     as P
 import qualified Koshucode.Baala.Base.Abort           as B
 import qualified Koshucode.Baala.Base.Prelude         as B
 import qualified Koshucode.Baala.Base.Syntax          as B
 import qualified Koshucode.Baala.Base.Text            as B
 import qualified Koshucode.Baala.Base.Token.Token     as B
-import qualified Koshucode.Baala.Base.Tree.TokenLine as B
+import qualified Koshucode.Baala.Base.Tree.TokenLine  as B
 import qualified Koshucode.Baala.Base.Token.TokenPos  as B
 
 
@@ -62,15 +60,10 @@ type NamedTrees = B.Named [TokenTree]
 --   3. Curely braces @{ .. }@ for termset.
 --
 --   4. Curely-bar braces @{| .. |}@ for relation.
---
-tokenTrees :: [B.Token] -> [TokenTree]
-tokenTrees = map (B.undouble (== 0)) . B.trees parenType
 
-treesTokens :: [TokenTree] -> [B.Token]
-treesTokens = B.untrees
-
-treeTokens :: TokenTree -> [B.Token]
-treeTokens = B.untree
+tokenTrees :: [B.Token] -> B.Ab [TokenTree]
+tokenTrees = Right .und B.<=< B.trees parenType where
+    und = map (B.undouble (== 0))
 
 parenType :: B.GetParenType B.Token
 parenType = B.parenTable
@@ -86,11 +79,11 @@ parenType = B.parenTable
 -- ----------------------  Abbreviation
 
 {-| Convert text to token trees. -}
-tt :: String -> [TokenTree]
+tt :: String -> B.Ab [TokenTree]
 tt s = tokenTrees $ B.sweepToken $ B.tokens (B.ResourceText s) s
 
-tt1 :: String -> TokenTree
-tt1 = B.treeWrap . tt
+tt1 :: String -> B.Ab TokenTree
+tt1 = Right . B.treeWrap B.<=< tt
 
 {-| Get 'B.Doc' value of token trees for pretty printing. -}
 ttDoc :: [TokenTree] -> B.Doc
@@ -154,6 +147,7 @@ divideTreesByBar = divideTreesBy "|"
 --
 divideTreesByColon :: [TokenTree] -> [[TokenTree]]
 divideTreesByColon = divideTreesBy ":"
+
 
 -- ----------------------  Abortable
 

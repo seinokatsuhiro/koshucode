@@ -98,15 +98,18 @@ consSectionEach root resource (B.Short shorts xs) =
        _        <-  forM isCUnres   unres
        imports  <-  forM isCImport  impt
        judges   <-  forM isCJudge   judge
+       slots    <-  forM isCSlot    slot
+       tokmaps  <-  forM isCTokmap  tokmap
+       asserts  <-  forM isCAssert  assert
 
        Right $ root
            { secName      =  name xs
            , secImport    =  imports
            , secExport    =  for isCExport expt
            , secShort     =  for isCShort  short
-           , secSlot      =  for isCSlot   slot
-           , secTokmap    =  for isCTokmap tokmap
-           , secAssert    =  [B.Short shorts $ for isCAssert assert]
+           , secSlot      =  slots
+           , secTokmap    =  tokmaps
+           , secAssert    =  [B.Short shorts asserts]
            , secJudge     =  judges
            , secResource  =  resource }
     where
@@ -132,18 +135,24 @@ consSectionEach root resource (B.Short shorts xs) =
       short :: Cl [B.Named String]
       short _ (C.CShort ps) = ps
 
-      slot :: Cl B.NamedTrees
-      slot _ (C.CSlot n toks) = (n, B.tokenTrees toks)
+      slot :: Clab B.NamedTrees
+      slot _ (C.CSlot n toks) = ntrees (n, toks)
 
-      tokmap :: Cl B.NamedTrees
-      tokmap _ (C.CTokmap n toks) = (n, B.tokenTrees toks)
+      tokmap :: Clab B.NamedTrees
+      tokmap _ (C.CTokmap n toks) = ntrees (n, toks)
+
+      ntrees (n, toks) = do trees <- B.tokenTrees toks
+                            Right (n, trees)
 
       judge :: Clab (B.Judge c)
-      judge _ (C.CJudge q p toks) = C.litJudge q p $ B.tokenTrees toks
+      judge _ (C.CJudge q p toks) =
+          C.litJudge q p =<< B.tokenTrees toks
 
-      assert :: Cl (C.Assert c)
+      assert :: Clab (C.Assert c)
       assert src (C.CAssert typ pat opt toks) =
-          C.Assert typ pat opt src (B.tokenTrees toks) Nothing []
+          do optTrees  <- B.tokenTrees opt
+             rmapTrees <- B.tokenTrees toks
+             Right $ C.Assert typ pat (C.rod optTrees) src rmapTrees Nothing []
 
       unk   _ (C.CUnknown) = Message.unkClause
       unres _ (C.CUnres _) = Message.unresPrefix
