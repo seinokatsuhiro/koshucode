@@ -27,10 +27,8 @@ module Koshucode.Baala.Base.Token.Token
   -- * Other function
   sweepToken,
   tokenIndent,
-  trimLeft, trimRight, trimBoth,
 ) where
 
-import qualified Data.Char                           as Ch
 import qualified Data.Generics                       as G
 import qualified Koshucode.Baala.Base.Prelude        as B
 import qualified Koshucode.Baala.Base.Text           as B
@@ -215,18 +213,3 @@ tokenIndent :: Token -> Int
 tokenIndent (TSpace _ n) = n
 tokenIndent _ = 0
 
-isSpace :: Char -> Bool
-isSpace c = Ch.isSpace c    -- UnicodeSeprator | UnicodeOther
-
-trimLeft :: B.Map String
-trimLeft = dropWhile isSpace
-
-trimRight :: B.Map String
-trimRight [] = []
-trimRight (x : xs) =
-    case x : trimRight xs of
-      [y] | isSpace y -> []
-      ys -> ys
-
-trimBoth :: B.Map String
-trimBoth = trimRight . trimLeft

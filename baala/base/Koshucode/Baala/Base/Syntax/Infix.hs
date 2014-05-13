@@ -10,7 +10,7 @@ module Koshucode.Baala.Base.Syntax.Infix
 ) where
 
 import qualified Data.Map   as Map
-import qualified Data.Maybe as Maybe
+import qualified Koshucode.Baala.Base.Prelude     as B
 import qualified Koshucode.Baala.Base.Syntax.Tree as B
 
 
@@ -42,7 +42,7 @@ heightValue (Right h) = h
 
 {-| Make the height function from a height table of operators. -}
 infixHeight :: (Ord b) => (a -> Maybe b) -> [(b, InfixHeight)] -> a -> InfixHeight
-infixHeight extract htab a = Maybe.fromMaybe (Left 0) ht where
+infixHeight extract htab a = B.fromMaybe (Left 0) ht where
     hmap = Map.fromList htab
     ht   = case extract a of
              Nothing  -> Nothing

@@ -83,6 +83,7 @@ library
         Koshucode.Baala.Base.Text.Resource
         Koshucode.Baala.Base.Text.TextTable
         Koshucode.Baala.Base.Text.Unicode
+        Koshucode.Baala.Base.Text.Utility
 
         Koshucode.Baala.Base.Token
         Koshucode.Baala.Base.Token.Short

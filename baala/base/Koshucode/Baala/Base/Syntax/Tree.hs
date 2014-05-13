@@ -22,7 +22,7 @@ module Koshucode.Baala.Base.Syntax.Tree
 import qualified Data.Generics                as G
 import qualified Koshucode.Baala.Base.Abort   as B
 import qualified Koshucode.Baala.Base.Prelude as B
-import qualified Koshucode.Baala.Base.Token   as B
+import qualified Koshucode.Baala.Base.Text    as B
 import qualified Koshucode.Baala.Base.Message as Message
 
 
@@ -52,11 +52,11 @@ instance Functor CodeTree where
 -- treeG xs = TreeB 1 Nothing xs
 
 -- | Convert a list of elements to a single tree.
-tree :: (B.TokenList a) => GetParenType a -> [a] -> B.Ab (CodeTree a)
+tree :: (B.CodePointer a) => GetParenType a -> [a] -> B.Ab (CodeTree a)
 tree p = Right . treeWrap B.<=< trees p
 
 -- |  Convert a list of elements to trees.
-trees :: forall a. (B.TokenList a) => GetParenType a -> [a] -> B.Ab [CodeTree a]
+trees :: forall a. (B.CodePointer a) => GetParenType a -> [a] -> B.Ab [CodeTree a]
 trees parenType xs = result where
     result       = do (ts, _) <- loop xs 0
                       Right ts
@@ -78,7 +78,7 @@ trees parenType xs = result where
           ground = ( px == 0 )
           close  = ( px == - p )
           px     = parenType x
-          abort  = B.abortableFrom "tree" x
+          abort  = B.abortable "tree" [x]
 
 
 

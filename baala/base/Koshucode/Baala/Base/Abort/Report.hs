@@ -12,7 +12,6 @@ import qualified System.Exit                        as Sys
 import qualified Koshucode.Baala.Base.Abort.Reason  as B
 import qualified Koshucode.Baala.Base.Prelude       as B
 import qualified Koshucode.Baala.Base.Text          as B
-import qualified Koshucode.Baala.Base.Token         as B
 
 
 -- | Command name and its arguments.
