@@ -36,7 +36,7 @@ abortMessage cmd a = B.squeezeEmptyLines $ map B.trimRight texts where
     p text = (text, "")
     rows   = concatMap row
              [ ("Detail"  , map p  $ B.abortDetail a)
-             , ("Source"  , source $ B.abortSource a)
+             , ("Source"  , source $ B.abortPoint a)
              , ("Command" , map p  $ cmd)
              ]
 
@@ -59,10 +59,9 @@ abortMessage cmd a = B.squeezeEmptyLines $ map B.trimRight texts where
     sandwich :: a -> a -> B.Map [a]
     sandwich open close xs = open : xs ++ [close]
 
-source :: [(String, B.Token)] -> [(String, String)]
+source :: [(String, B.CodePoint)] -> [(String, String)]
 source = concatMap text . reverse where
-    text :: (String, B.Token) -> [(String, String)]
-    text (tag, token) = B.codePointDisplay tag $ B.codePoint token
+    text (tag, pt) = B.codePointDisplay tag pt
 
 -- | Stop on error @'BUG DISCOVERED'@
 bug :: String -> a

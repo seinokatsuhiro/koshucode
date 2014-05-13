@@ -34,7 +34,6 @@ import qualified Data.Char                           as Ch
 import qualified Data.Generics                       as G
 import qualified Koshucode.Baala.Base.Prelude        as B
 import qualified Koshucode.Baala.Base.Text           as B
-import qualified Koshucode.Baala.Base.Token.Resource as B
 
 
 -- ----------------------  Token type

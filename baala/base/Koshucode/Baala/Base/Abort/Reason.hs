@@ -13,13 +13,13 @@ module Koshucode.Baala.Base.Abort.Reason
   abortPage,
 ) where
 
-import qualified Koshucode.Baala.Base.Token as B
+import qualified Koshucode.Baala.Base.Text  as B
 
 data AbortReason = AbortReason
     { abortReason :: String               -- ^ Reason in one line
     , abortDetail :: [String]             -- ^ Detailed description
     , abortNote   :: [String]             -- ^ Additional notes for long description
-    , abortSource :: [(String, B.Token)]  -- ^ Tag and aborting token
+    , abortPoint  :: [(String, B.CodePoint)]  -- ^ Tag and aborting point
     } deriving (Show, Eq, Ord)
 
 -- | Abortable result, i.e., either of right result or abort reason.

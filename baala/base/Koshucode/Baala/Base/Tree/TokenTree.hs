@@ -23,6 +23,7 @@ module Koshucode.Baala.Base.Tree.TokenTree
   abortableTree,
   abortableTrees,
   abortTokens,
+  abortableSourced,
 
   -- * Examples
   -- $Example
@@ -35,7 +36,6 @@ import qualified Koshucode.Baala.Base.Syntax          as B
 import qualified Koshucode.Baala.Base.Text            as B
 import qualified Koshucode.Baala.Base.Token.Token     as B
 import qualified Koshucode.Baala.Base.Tree.TokenLine  as B
-import qualified Koshucode.Baala.Base.Token.Resource  as B
 
 
 
@@ -164,6 +164,12 @@ abortableTree tag = B.abortable tag . B.untree
 --   instead of list of 'B.Token'.
 abortableTrees :: String -> [TokenTree] -> B.Map (B.Ab b)
 abortableTrees tag = B.abortable tag . B.untrees
+
+abortableSourced :: String -> (a -> B.Ab b) -> B.Sourced a -> B.Ab (B.Sourced b)
+abortableSourced tag f (B.Sourced toks x) =
+    B.abortable tag toks $ do
+      y <- f x
+      Right $ B.Sourced toks y
 
 
 

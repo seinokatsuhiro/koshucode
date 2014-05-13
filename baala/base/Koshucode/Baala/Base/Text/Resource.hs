@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Token.Resource
+module Koshucode.Baala.Base.Text.Resource
 (
   -- * Resource
   Resource (..),

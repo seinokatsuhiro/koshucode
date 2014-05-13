@@ -10,7 +10,7 @@ import qualified Koshucode.Baala.Base.Prelude         as B
 import qualified Koshucode.Baala.Base.Syntax          as B
 import qualified Koshucode.Baala.Base.Text            as B
 import qualified Koshucode.Baala.Base.Token.Token     as B
-import qualified Koshucode.Baala.Base.Tree.TokenLine as B
+import qualified Koshucode.Baala.Base.Tree.TokenLine  as B
 
 
 

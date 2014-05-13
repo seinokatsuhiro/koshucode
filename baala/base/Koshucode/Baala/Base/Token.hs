@@ -6,9 +6,7 @@ module Koshucode.Baala.Base.Token
 (
 module Koshucode.Baala.Base.Token.Short,
 module Koshucode.Baala.Base.Token.Token,
-module Koshucode.Baala.Base.Token.Resource,
 ) where
 
 import Koshucode.Baala.Base.Token.Short
 import Koshucode.Baala.Base.Token.Token
-import Koshucode.Baala.Base.Token.Resource
