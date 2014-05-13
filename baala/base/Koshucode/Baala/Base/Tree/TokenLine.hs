@@ -28,7 +28,7 @@ import qualified Koshucode.Baala.Base.Prelude        as B
 import qualified Koshucode.Baala.Base.Syntax         as B
 import qualified Koshucode.Baala.Base.Text           as B
 import qualified Koshucode.Baala.Base.Token.Token    as B
-import qualified Koshucode.Baala.Base.Token.TokenPos as B
+import qualified Koshucode.Baala.Base.Token.Resource as B
 
 
 
@@ -80,7 +80,7 @@ nextToken res line txt =
       _                       ->  tokD [] $ B.TUnknown pos []
 
     where
-      pos                             = B.TokenPos res line txt
+      pos                             = B.CodePoint res line txt
 
       tokD :: String -> B.Token -> (B.Token, String)
       tokD cs token                   = (token, cs)

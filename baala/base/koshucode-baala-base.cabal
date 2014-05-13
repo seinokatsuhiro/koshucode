@@ -84,9 +84,9 @@ library
         Koshucode.Baala.Base.Text.Unicode
 
         Koshucode.Baala.Base.Token
+        Koshucode.Baala.Base.Token.Resource
         Koshucode.Baala.Base.Token.Short
         Koshucode.Baala.Base.Token.Token
-        Koshucode.Baala.Base.Token.TokenPos
 
         Koshucode.Baala.Base.Tree.TokenClause
         Koshucode.Baala.Base.Tree.TokenLine

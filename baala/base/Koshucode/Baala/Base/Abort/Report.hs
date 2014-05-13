@@ -62,7 +62,7 @@ abortMessage cmd a = B.squeezeEmptyLines $ map B.trimRight texts where
 source :: [(String, B.Token)] -> [(String, String)]
 source = concatMap text . reverse where
     text :: (String, B.Token) -> [(String, String)]
-    text (tag, token) = B.tokenPosDisplay tag $ B.tokenPos token
+    text (tag, token) = B.codePointDisplay tag $ B.codePoint token
 
 -- | Stop on error @'BUG DISCOVERED'@
 bug :: String -> a

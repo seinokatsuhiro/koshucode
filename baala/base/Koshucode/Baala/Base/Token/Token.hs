@@ -17,7 +17,6 @@ module Koshucode.Baala.Base.Token.Token
   TermPath,
 
   -- * Selectors
-  tokenPos,
   tokenContent,
   tokenTypeText,
 
@@ -35,31 +34,31 @@ import qualified Data.Char                           as Ch
 import qualified Data.Generics                       as G
 import qualified Koshucode.Baala.Base.Prelude        as B
 import qualified Koshucode.Baala.Base.Text           as B
-import qualified Koshucode.Baala.Base.Token.TokenPos as B
+import qualified Koshucode.Baala.Base.Token.Resource as B
 
 
 -- ----------------------  Token type
 
 -- | There are nine types of tokens.
 data Token
-    = TWord    B.TokenPos Int String     -- ^ Word.
+    = TWord    B.CodePoint Int String     -- ^ Word.
                                          --   'Int' represents quotation level, i.e.,
                                          --   0 for non-quoted,
                                          --   1 for single-quoted,
                                          --   2 for double-quoted,
                                          --   3 for @-with@ variable.
-    | TShort   B.TokenPos String String  -- ^ Abbreviated word.
-    | TTerm    B.TokenPos TermPath       -- ^ Term name.
-    | TSlot    B.TokenPos Int String     -- ^ Slot name.
+    | TShort   B.CodePoint String String  -- ^ Abbreviated word.
+    | TTerm    B.CodePoint TermPath       -- ^ Term name.
+    | TSlot    B.CodePoint Int String     -- ^ Slot name.
                                          --   'Int' represents slot level, i.e.,
                                          --   0 for positional slots,
                                          --   1 for named slots,
                                          --   2 for global slots.
-    | TOpen    B.TokenPos String         -- ^ Opening paren.
-    | TClose   B.TokenPos String         -- ^ Closing paren.
-    | TSpace   B.TokenPos Int            -- ^ /N/ space characters.
-    | TComment B.TokenPos String         -- ^ Comment text.
-    | TUnknown B.TokenPos String         -- ^ Unknown text.
+    | TOpen    B.CodePoint String         -- ^ Opening paren.
+    | TClose   B.CodePoint String         -- ^ Closing paren.
+    | TSpace   B.CodePoint Int            -- ^ /N/ space characters.
+    | TComment B.CodePoint String         -- ^ Comment text.
+    | TUnknown B.CodePoint String         -- ^ Unknown text.
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance B.Name Token where
@@ -83,11 +82,11 @@ instance B.Pretty Token where
         d (TComment pos s)   = pretty "TComment" pos [show s]
         d (TUnknown pos s)   = pretty "TUnknown" pos [show s]
         pretty k pos xs = B.doch $ k : lineCol pos : xs
-        lineCol pos = (show $ B.tokenPosLineNumber pos)
-                      ++ ":" ++ (show $ B.tokenPosColumn pos)
+        lineCol pos = (show $ B.codePointLineNumber pos)
+                      ++ ":" ++ (show $ B.codePointColumn pos)
 
 tokenWord :: String -> Token
-tokenWord = TWord B.tokenPosZero 0
+tokenWord = TWord B.codePointZero 0
 
 class TokenList a where
     tokenList :: a -> [Token]
@@ -99,6 +98,17 @@ instance (TokenList a) => TokenList (Maybe a) where
 instance TokenList Token where
     tokenList tok = [tok]
 
+instance B.CodePointer Token where
+    codePoint (TWord    p _ _)  = p
+    codePoint (TShort   p _ _)  = p
+    codePoint (TTerm    p _)    = p
+    codePoint (TSlot    p _ _)  = p
+    codePoint (TOpen    p _)    = p
+    codePoint (TClose   p _)    = p
+    codePoint (TSpace   p _)    = p
+    codePoint (TComment p _)    = p
+    codePoint (TUnknown p _)    = p
+
 data Sourced a = Sourced
     { source    :: [Token]
     , unsourced :: a
@@ -106,6 +116,7 @@ data Sourced a = Sourced
 
 instance Functor Sourced where
     fmap f (Sourced src x) = Sourced src $ f x
+
 
 -- ---------------------- Term name
 
@@ -124,17 +135,6 @@ type TermPath   = [TermName]
 
 
 -- ---------------------- Selector
-
-tokenPos :: Token -> B.TokenPos
-tokenPos (TWord    p _ _)  = p
-tokenPos (TShort   p _ _)  = p
-tokenPos (TTerm    p _)    = p
-tokenPos (TSlot    p _ _)  = p
-tokenPos (TOpen    p _)    = p
-tokenPos (TClose   p _)    = p
-tokenPos (TSpace   p _)    = p
-tokenPos (TComment p _)    = p
-tokenPos (TUnknown p _)    = p
 
 -- | Get the content of token.
 --
