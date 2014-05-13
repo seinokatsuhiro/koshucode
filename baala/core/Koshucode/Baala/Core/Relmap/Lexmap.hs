@@ -39,8 +39,8 @@ instance B.Pretty Lexmap where
           Just xs -> B.doch [op, show xs]
         where op = B.tokenContent opTok
 
-instance B.TokenListing Lexmap where
-    tokenListing Lexmap { lexOpToken = op } = [op]
+instance B.TokenList Lexmap where
+    tokenList Lexmap { lexOpToken = op } = [op]
 
 -- | Name of relmap operator
 lexOpName :: Lexmap -> String

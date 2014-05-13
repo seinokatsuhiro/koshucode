@@ -150,7 +150,7 @@ relkitWithVar :: String -> B.Relhead -> Relkit c
 relkitWithVar n he = kit where
     kit = relkitJust he $ RelkitNest n
 
-relkitSetSource :: (B.TokenListing a) => a -> B.Map (Relkit c)
+relkitSetSource :: (B.TokenList a) => a -> B.Map (Relkit c)
 relkitSetSource src (Relkit he (B.Sourced _ core)) =
-    Relkit he $ B.Sourced (B.tokenListing src) core
+    Relkit he $ B.Sourced (B.tokenList src) core
 

@@ -18,10 +18,10 @@ import qualified Koshucode.Baala.Base.Abort.Reason   as B
 abortable :: String -> [B.Token] -> B.Map (B.Ab b)
 abortable tag toks = either (Left . push tag toks) Right
 
--- | Same as 'abortable' except for using 'B.TokenListing'
+-- | Same as 'abortable' except for using 'B.TokenList'
 --   instead of list of 'B.Token'.
-abortableFrom :: (B.TokenListing src) => String -> src -> B.Map (B.Ab b)
-abortableFrom tag = abortable tag . B.tokenListing
+abortableFrom :: (B.TokenList src) => String -> src -> B.Map (B.Ab b)
+abortableFrom tag = abortable tag . B.tokenList
 
 abortableSourced :: String -> (a -> B.Ab b) -> B.Sourced a -> B.Ab (B.Sourced b)
 abortableSourced tag f (B.Sourced toks x) =

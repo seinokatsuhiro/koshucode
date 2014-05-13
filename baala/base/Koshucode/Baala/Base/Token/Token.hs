@@ -7,7 +7,7 @@ module Koshucode.Baala.Base.Token.Token
 (
   -- * Token type
   Token (..),
-  TokenListing (..),
+  TokenList (..),
   tokenWord,
   Sourced (..),
 
@@ -89,13 +89,15 @@ instance B.Pretty Token where
 tokenWord :: String -> Token
 tokenWord = TWord B.tokenPosZero 0
 
-class TokenListing a where
-    tokenListing :: a -> [Token]
+class TokenList a where
+    tokenList :: a -> [Token]
 
-instance (TokenListing a) => TokenListing (Maybe a) where
-    tokenListing (Nothing) = []
-    tokenListing (Just a)  = tokenListing a
+instance (TokenList a) => TokenList (Maybe a) where
+    tokenList (Nothing) = []
+    tokenList (Just a)  = tokenList a
 
+instance TokenList Token where
+    tokenList tok = [tok]
 
 data Sourced a = Sourced
     { source    :: [Token]

@@ -22,6 +22,7 @@ module Koshucode.Baala.Base.Syntax.Tree
 import qualified Data.Generics                as G
 import qualified Koshucode.Baala.Base.Abort   as B
 import qualified Koshucode.Baala.Base.Prelude as B
+import qualified Koshucode.Baala.Base.Token   as B
 import qualified Koshucode.Baala.Base.Message as Message
 
 
@@ -51,11 +52,11 @@ instance Functor CodeTree where
 -- treeG xs = TreeB 1 Nothing xs
 
 -- | Convert a list of elements to a single tree.
-tree :: (Show a) => GetParenType a -> [a] -> B.Ab (CodeTree a)
+tree :: (B.TokenList a) => GetParenType a -> [a] -> B.Ab (CodeTree a)
 tree p = Right . treeWrap B.<=< trees p
 
 -- |  Convert a list of elements to trees.
-trees :: forall a. GetParenType a -> [a] -> B.Ab [CodeTree a]
+trees :: forall a. (B.TokenList a) => GetParenType a -> [a] -> B.Ab [CodeTree a]
 trees parenType xs = result where
     result       = do (ts, _) <- loop xs 0
                       Right ts
@@ -63,19 +64,21 @@ trees parenType xs = result where
                       Right (a : ts, xs3)
 
     loop :: [a] -> Int -> B.Ab ([CodeTree a], [a])
-    loop [] 0        = Right ([], [])
-    loop [] _        = Message.extraOpenParen
+    loop [] _        = Right ([], [])
     loop (x : xs2) p
         | ground     = add (TreeL x) xs2 p
-        | open       = do (trees2, c : xs3) <- loop xs2 px
-                          add (TreeB px (Just (x, c)) trees2) xs3 p
+        | open       = do (trees2, cxs3) <- loop xs2 px
+                          case cxs3 of
+                            c : xs3 -> add (TreeB px (Just (x, c)) trees2) xs3 p
+                            _       -> abort Message.extraOpenParen
         | close      = Right ([], x : xs2)
-        | otherwise  = Message.extraCloseParen
+        | otherwise  = abort Message.extraCloseParen
         where 
           open   = ( px >  0 )
           ground = ( px == 0 )
           close  = ( px == - p )
           px     = parenType x
+          abort  = B.abortableFrom "tree" x
 
 
 

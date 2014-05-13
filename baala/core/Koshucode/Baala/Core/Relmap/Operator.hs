@@ -63,8 +63,8 @@ data RopUse c = RopUse
     , ropSubrelmap :: [Relmap c]   -- ^ Subrelmaps
     } deriving (Show)
 
-instance B.TokenListing (RopUse c) where
-    tokenListing = B.tokenListing . ropLexmap
+instance B.TokenList (RopUse c) where
+    tokenList = B.tokenList . ropLexmap
 
 
 
@@ -162,8 +162,8 @@ relmapAppendList = expand where
     expand (RelmapAppend r1 r2) = expand r1 ++ expand r2
     expand r = [r]
 
-instance B.TokenListing (Relmap c) where
-    tokenListing = B.tokenListing . relmapLex
+instance B.TokenList (Relmap c) where
+    tokenList = B.tokenList . relmapLex
 
 instance Ord (Relmap c) where
     r1 `compare` r2 = relmapLexList r1 `compare` relmapLexList r2

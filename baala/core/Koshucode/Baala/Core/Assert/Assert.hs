@@ -40,8 +40,8 @@ data Assert c = Assert
 -- | Option for assertions.
 type AssertOption = [B.NamedTrees]
 
-instance B.TokenListing (Assert c) where
-    tokenListing = assToken
+instance B.TokenList (Assert c) where
+    tokenList = assToken
 
 instance B.Pretty (Assert c) where
     doc (Assert q pat _ toks _ _ _) =
