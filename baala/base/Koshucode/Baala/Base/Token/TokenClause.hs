@@ -1,7 +1,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# OPTIONS_GHC -Wall -fno-warn-orphans #-}
 
-module Koshucode.Baala.Base.Tree.TokenClause
+module Koshucode.Baala.Base.Token.TokenClause
 ( TokenClause,
   tokenClauses,
 ) where
@@ -10,7 +10,7 @@ import qualified Koshucode.Baala.Base.Prelude         as B
 import qualified Koshucode.Baala.Base.Syntax          as B
 import qualified Koshucode.Baala.Base.Text            as B
 import qualified Koshucode.Baala.Base.Token.Token     as B
-import qualified Koshucode.Baala.Base.Tree.TokenLine  as B
+import qualified Koshucode.Baala.Base.Token.TokenLine as B
 
 
 

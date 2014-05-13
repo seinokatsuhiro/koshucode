@@ -86,12 +86,12 @@ library
         Koshucode.Baala.Base.Text.Utility
 
         Koshucode.Baala.Base.Token
+        Koshucode.Baala.Base.Token.Abortable
         Koshucode.Baala.Base.Token.Short
         Koshucode.Baala.Base.Token.Token
-
-        Koshucode.Baala.Base.Tree.TokenClause
-        Koshucode.Baala.Base.Tree.TokenLine
-        Koshucode.Baala.Base.Tree.TokenTree
+        Koshucode.Baala.Base.Token.TokenClause
+        Koshucode.Baala.Base.Token.TokenLine
+        Koshucode.Baala.Base.Token.TokenTree
 
   -- Modules included in this library but not exported.
   --other-modules:       

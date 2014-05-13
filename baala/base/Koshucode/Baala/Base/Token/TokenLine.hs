@@ -3,7 +3,7 @@
 
 -- | Tokenizer of koshucode.
 
-module Koshucode.Baala.Base.Tree.TokenLine
+module Koshucode.Baala.Base.Token.TokenLine
 (
   -- * Library
   TokenLine,
