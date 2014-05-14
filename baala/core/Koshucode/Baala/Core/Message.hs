@@ -12,6 +12,8 @@ module Koshucode.Baala.Core.Message
   noSlotIndex,
   oddRelation,
   reqFlatName,
+  reqOperand,
+  reqOperandName,
   reqTermName,
   unexpOperand,
   unkClause,
@@ -66,6 +68,14 @@ oddRelation = Left $ B.abortBecause "Odd relation literal"
 reqFlatName :: B.Token -> B.Ab a
 reqFlatName tok = Left $ B.abortLine "Require flat name" n where
     n = B.tokenContent tok
+
+-- | Require operand
+reqOperand :: String -> B.Ab a
+reqOperand = Left . B.abortLine "Require operand"
+
+-- | Require operand
+reqOperandName :: String -> B.Ab a
+reqOperandName = Left . B.abortLine "Require operand name, e.g., -xxx"
 
 -- | Require term name
 reqTermName :: B.Ab a

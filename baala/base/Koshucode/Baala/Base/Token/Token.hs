@@ -109,7 +109,7 @@ instance B.CodePointer Token where
 data Sourced a = Sourced
     { source    :: [Token]
     , unsourced :: a
-    } deriving (Show, Eq, Ord)
+    } deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance Functor Sourced where
     fmap f (Sourced src x) = Sourced src $ f x
