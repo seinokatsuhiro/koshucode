@@ -1,8 +1,12 @@
-{-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Text.Utility
-( trimLeft, trimRight, trimBoth,
+( -- * Trim
+  trimLeft, trimRight, trimBoth,
+  -- * Padding
+  padRight, padLeft,
+  -- * Put
+  putShow, putShowLn, putLines,
 ) where
 
 import qualified Data.Char                     as Ch
@@ -23,3 +27,37 @@ trimRight (x : xs) =
 
 trimBoth :: B.Map String
 trimBoth = trimRight . trimLeft
+
+-- | Add spaces to right.
+--
+--   >>> padRight 10 "abc"
+--   "abc       "
+padRight :: Int -> B.Map String
+padRight n s = s ++ replicate rest ' ' where
+    rest = max 0 (n - stringWidth s)
+
+-- | Add spaces to left.
+--
+--   >>> padLeft 10 "abc"
+--   "       abc"
+padLeft :: Int -> B.Map String
+padLeft n s = replicate rest ' ' ++ s where
+    rest = max 0 (n - stringWidth s)
+
+stringWidth :: String -> Int
+stringWidth = sum . map charWidth
+
+charWidth :: Char -> Int
+charWidth c
+    | Ch.ord c >= 256 = 2
+    | otherwise         = 1
+
+putShow :: (Show a) => a -> IO ()
+putShow = putStr . show
+
+putShowLn :: (Show a) => a -> IO ()
+putShowLn = putStrLn . show
+
+putLines :: [String] -> IO ()
+putLines = putStr . unlines
+

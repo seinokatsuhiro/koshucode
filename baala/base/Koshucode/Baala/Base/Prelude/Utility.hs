@@ -26,18 +26,9 @@ module Koshucode.Baala.Base.Prelude.Utility
   squeeze, squeezeEmptyLines,
   mapWithLast,
   notNull,
-
-  -- * String
-  padRight, padLeft,
-
-  -- * Put
-  putShow,
-  putShowLn,
-  putLines,
 ) where
 
 import Control.Applicative
-import qualified Data.Char as Char
 import qualified Data.List as List
 import qualified Data.Set  as Set
 
@@ -147,14 +138,6 @@ divideBy p = loop where
                 (x, _ : xs2) -> x : loop xs2
                 (x, [])      -> [x]
 
-stringWidth :: String -> Int
-stringWidth = sum . map charWidth
-
-charWidth :: Char -> Int
-charWidth c
-    | Char.ord c >= 256 = 2
-    | otherwise         = 1
-
 maybeEmpty :: Maybe a -> (a -> [b]) -> [b]
 maybeEmpty m f = maybe [] f m
 
@@ -176,36 +159,5 @@ mapWithLast f g = loop where
 
 notNull :: [a] -> Bool
 notNull = not . null
-
-
--- ----------------------  String
-
--- | Add spaces to right.
---
---   >>> padRight 10 "abc"
---   "abc       "
-padRight :: Int -> B.Map String
-padRight n s = s ++ replicate rest ' ' where
-    rest = max 0 (n - stringWidth s)
-
--- | Add spaces to left.
---
---   >>> padLeft 10 "abc"
---   "       abc"
-padLeft :: Int -> B.Map String
-padLeft n s = replicate rest ' ' ++ s where
-    rest = max 0 (n - stringWidth s)
-
-
--- ----------------------  Put
-
-putShow :: (Show a) => a -> IO ()
-putShow = putStr . show
-
-putShowLn :: (Show a) => a -> IO ()
-putShowLn = putStrLn . show
-
-putLines :: [String] -> IO ()
-putLines = putStr . unlines
 
 

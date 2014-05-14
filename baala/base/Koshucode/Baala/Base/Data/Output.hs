@@ -19,7 +19,6 @@ module Koshucode.Baala.Base.Data.Output
 import qualified Control.Monad                     as M
 import qualified Data.Map                          as Map
 import qualified System.IO                         as IO
-import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
 import qualified Koshucode.Baala.Base.Token        as B
 import qualified Koshucode.Baala.Base.Data.Judge   as B
