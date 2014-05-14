@@ -35,7 +35,7 @@ data Section c = Section {
     , secExport   :: [String]            -- ^ Exporting relmap names
     , secShort    :: [[B.Named String]]  -- ^ Prefix for short signs
     , secSlot     :: [B.NamedTrees]      -- ^ Global slots
-    , secTokmap   :: [B.NamedTrees]      -- ^ Source of relmaps
+    , secRelmap   :: [C.RelmapSource]    -- ^ Source of relmaps
     , secAssert   :: [C.ShortAssert c]   -- ^ Assertions of relmaps
     , secJudge    :: [B.Judge c]         -- ^ Affirmative or denial judgements
     , secResource :: B.Resource          -- ^ Resource name
@@ -60,7 +60,7 @@ appendSection s1 s2 =
        , secExport  = union secExport
        , secSlot    = union secSlot
        , secAssert  = union secAssert
-       , secTokmap  = union secTokmap
+       , secRelmap  = union secRelmap
        , secJudge   = union secJudge
        } where union f = f s1 ++ f s2
 
@@ -99,7 +99,7 @@ consSectionEach root resource (B.Short shorts xs) =
        imports  <-  forM isCImport  impt
        judges   <-  forM isCJudge   judge
        slots    <-  forM isCSlot    slot
-       tokmaps  <-  forM isCTokmap  tokmap
+       tokmaps  <-  forM isCRelmap  tokmap
        asserts  <-  forM isCAssert  assert
 
        Right $ root
@@ -108,7 +108,7 @@ consSectionEach root resource (B.Short shorts xs) =
            , secExport    =  for isCExport expt
            , secShort     =  for isCShort  short
            , secSlot      =  slots
-           , secTokmap    =  tokmaps
+           , secRelmap    =  tokmaps
            , secAssert    =  [B.Short shorts asserts]
            , secJudge     =  judges
            , secResource  =  resource }
@@ -138,11 +138,19 @@ consSectionEach root resource (B.Short shorts xs) =
       slot :: Clab B.NamedTrees
       slot _ (C.CSlot n toks) = ntrees (n, toks)
 
-      tokmap :: Clab B.NamedTrees
-      tokmap _ (C.CTokmap n toks) = ntrees (n, toks)
-
       ntrees (n, toks) = do trees <- B.tokenTrees toks
                             Right (n, trees)
+
+      tokmap :: Clab C.RelmapSource
+      tokmap _ (C.CRelmap n toks) =
+          case B.splitTokensBy (== "---") toks of
+            Left  _         -> ntrees2 n toks []
+            Right (r, _, e) -> ntrees2 n r e
+
+      ntrees2 n toks1 toks2 =
+          do trees1 <- B.tokenTrees toks1
+             trees2 <- B.tokenTrees toks2
+             Right (n, (trees1, trees2))
 
       judge :: Clab (B.Judge c)
       judge _ (C.CJudge q p toks) =
@@ -164,7 +172,7 @@ type Clab a = Cl (B.Ab a)
 -- ----------------------  Clause type
 
 isCImport, isCExport, isCShort,
-  isCSlot, isCTokmap, isCAssert, isCJudge,
+  isCSlot, isCRelmap, isCAssert, isCJudge,
   isCUnknown, isCUnres :: C.ClauseBody -> Bool
 
 isCImport (C.CImport _ _)      = True
@@ -179,8 +187,8 @@ isCShort _                     = False
 isCSlot (C.CSlot _ _)          = True
 isCSlot _                      = False
 
-isCTokmap (C.CTokmap _ _)      = True
-isCTokmap _                    = False
+isCRelmap (C.CRelmap _ _)      = True
+isCRelmap _                    = False
 
 isCAssert (C.CAssert _ _ _ _)  = True
 isCAssert _                    = False

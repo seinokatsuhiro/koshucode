@@ -39,7 +39,7 @@ runSectionBody global C.Section { C.secAssert = ass, C.secMessage = msg } =
 
 assembleRelmap :: forall c. B.AbMap (C.Section c)
 assembleRelmap sec@C.Section { C.secSlot   = gslot
-                             , C.secTokmap = tokmaps
+                             , C.secRelmap = tokmaps
                              , C.secAssert = ass
                              , C.secCons   = C.RelmapCons lexmap relmap } =
     do result <- mapM assemble `B.shortMapM` ass

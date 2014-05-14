@@ -6,6 +6,7 @@ module Koshucode.Baala.Core.Relmap.Construct
 ( -- * Data type
   RelmapCons (..),
   ConsLexmap,
+  RelmapSource,
   ConsLexmapBody,
   ConsRelmap,
 
@@ -45,7 +46,9 @@ relmapCons g = make $ unzip $ map pair $ C.globalRops g where
 
 -- | First step of constructing relmap,
 --   make lexmap from source of relmap operator.
-type ConsLexmap = [B.NamedTrees] -> [B.NamedTrees] -> ConsLexmapBody
+type ConsLexmap = [B.NamedTrees] -> [RelmapSource] -> ConsLexmapBody
+
+type RelmapSource = B.Named ([B.TokenTree], [B.TokenTree])
 
 -- | Construct lexmap and its submaps from source of lexmap
 type ConsLexmapBody = [B.TokenTree] -> B.Ab (C.Lexmap, [C.Rody C.Lexmap])
@@ -119,11 +122,12 @@ consLexmap sorters gslot tokmaps = lexmap where
                        rod = C.lexOperand lx
                        sub = C.lexSubmap  lx
                    in B.abortableFrom "slot" lx $ case lookup n tokmaps of
-                        Nothing    -> B.concatMapM slot sub
-                        Just trees -> do trees2     <- slotTrees gslot rod trees
-                                         (lx2, lxs) <- lexmap trees2
-                                         sub2       <- B.concatMapM slot sub
-                                         Right $ ((n, rod), lx2) : lxs ++ sub2
+                        Nothing -> B.concatMapM slot sub
+                        Just (trees, _) ->
+                            do trees2     <- slotTrees gslot rod trees
+                               (lx2, lxs) <- lexmap trees2
+                               sub2       <- B.concatMapM slot sub
+                               Right $ ((n, rod), lx2) : lxs ++ sub2
 
     withTrees :: [String] -> B.Map [B.TokenTree]
     withTrees ws = map loop where

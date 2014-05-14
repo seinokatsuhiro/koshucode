@@ -36,7 +36,7 @@ data ClauseBody
     | CImport     [B.Token] (Maybe Clause)       -- ^ Importing section name
     | CExport     String                         -- ^ Exporting relmap name
     | CShort      [B.ShortDef]                   -- ^ Short signs
-    | CTokmap     String [B.Token]               -- ^ Source of relmap
+    | CRelmap     String [B.Token]               -- ^ Source of relmap
     | CAssert     C.AssertType B.JudgePat [B.Token] [B.Token] -- ^ (Intermediate data)
     | CJudge      Bool B.JudgePat [B.Token]  -- ^ Judge
     | CSlot       String [B.Token]               -- ^ Global slot
@@ -53,7 +53,7 @@ clauseTypeText (Clause _ body) =
       CImport    _ _       ->  "Import"
       CExport    _         ->  "Export"
       CShort     _         ->  "Short"
-      CTokmap    _ _       ->  "Tokmap"
+      CRelmap    _ _       ->  "Relmap"
       CAssert    _ _ _ _   ->  "Assert"
       CJudge     _ _ _     ->  "Judge"
       CSlot      _ _       ->  "Slot"
@@ -67,7 +67,7 @@ clauseTypeText (Clause _ body) =
 
 -- | Convert token list into clause list.
 --   Result clause list does not contain
---   'CTokmap' and 'CAssert'. Instead of them,
+--   'CRelmap' and 'CAssert'. Instead of them,
 --   'TTokmap' and 'CAssert' are contained.
 --   This function does not depend on 'C.ConsLexmap'.
 --
@@ -136,7 +136,7 @@ consPreclause' src = dispatch $ B.clauseTokens src where
         where a expr opt = c1 $ CAssert t p opt expr
     assert _ _             =  unk
 
-    rmap n xs              =  c1 $ CTokmap n xs
+    rmap n xs              =  c1 $ CRelmap n xs
     slot n xs              =  c1 $ CSlot   n xs
 
     sec [B.TWord _ _ n]    =  c1 $ CSection (Just n)
@@ -201,7 +201,7 @@ shortToLong sh = map clause where
         Clause src $ case bo of
           CJudge  q p     xs  ->  body (CJudge  q p)     xs
           CAssert q p opt xs  ->  body (CAssert q p opt) xs
-          CTokmap n       xs  ->  body (CTokmap n)       xs
+          CRelmap n       xs  ->  body (CRelmap n)       xs
           CSlot   n       xs  ->  body (CSlot   n)       xs
           _                   ->  bo
 
