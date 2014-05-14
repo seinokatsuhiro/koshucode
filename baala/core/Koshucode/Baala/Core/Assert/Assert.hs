@@ -16,8 +16,8 @@ module Koshucode.Baala.Core.Assert.Assert
   assertViolated,
 ) where
 
-import qualified Data.Generics as G
-import qualified Koshucode.Baala.Base as B
+import qualified Data.Generics               as G
+import qualified Koshucode.Baala.Base        as B
 import qualified Koshucode.Baala.Core.Relmap as C
 
 
@@ -34,7 +34,7 @@ data Assert c = Assert
     , assToken   :: [B.Token]           -- ^ Source token list
     , assTree    :: [B.TokenTree]       -- ^ Token relmap
     , assRelmap  :: Maybe (C.Relmap c)  -- ^ Relmap
-    , assParts   :: [C.Rodmap c]
+    , assParts   :: [C.Rody (C.Relmap c)]
     } deriving (Show)
 
 -- | Option for assertions.

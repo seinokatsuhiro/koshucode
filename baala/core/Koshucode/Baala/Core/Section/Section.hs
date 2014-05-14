@@ -99,7 +99,7 @@ consSectionEach root resource (B.Short shorts xs) =
        imports  <-  forM isCImport  impt
        judges   <-  forM isCJudge   judge
        slots    <-  forM isCSlot    slot
-       tokmaps  <-  forM isCRelmap  tokmap
+       relmaps  <-  forM isCRelmap  relmap
        asserts  <-  forM isCAssert  assert
 
        Right $ root
@@ -108,7 +108,7 @@ consSectionEach root resource (B.Short shorts xs) =
            , secExport    =  for isCExport expt
            , secShort     =  for isCShort  short
            , secSlot      =  slots
-           , secRelmap    =  tokmaps
+           , secRelmap    =  relmaps
            , secAssert    =  [B.Short shorts asserts]
            , secJudge     =  judges
            , secResource  =  resource }
@@ -141,8 +141,8 @@ consSectionEach root resource (B.Short shorts xs) =
       ntrees (n, toks) = do trees <- B.tokenTrees toks
                             Right (n, trees)
 
-      tokmap :: Clab C.RelmapSource
-      tokmap _ (C.CRelmap n toks) =
+      relmap :: Clab C.RelmapSource
+      relmap _ (C.CRelmap n toks) =
           case B.splitTokensBy (== "---") toks of
             Left  _         -> ntrees2 n toks []
             Right (r, _, e) -> ntrees2 n r e
@@ -150,7 +150,8 @@ consSectionEach root resource (B.Short shorts xs) =
       ntrees2 n toks1 toks2 =
           do trees1 <- B.tokenTrees toks1
              trees2 <- B.tokenTrees toks2
-             Right (n, (trees1, trees2))
+             rodmap <- C.rodmap trees2
+             Right (n, (trees1, rodmap))
 
       judge :: Clab (B.Judge c)
       judge _ (C.CJudge q p toks) =

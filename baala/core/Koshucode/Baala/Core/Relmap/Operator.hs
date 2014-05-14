@@ -10,7 +10,6 @@ module Koshucode.Baala.Core.Relmap.Operator
 
   -- * Relmap
   Relmap (..),
-  Rodmap,
   relmapId,
   mapToRelmap,
   relmapLexList,
@@ -69,9 +68,6 @@ instance B.TokenList (RopUse c) where
 
 
 -- ----------------------  Relmap
-
--- | Relmap with operand.
-type Rodmap c = C.Rody (Relmap c)
 
 -- | Generic relmap.
 data Relmap c

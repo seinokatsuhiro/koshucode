@@ -23,6 +23,7 @@ import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Core.Relmap.Lexmap    as C
 import qualified Koshucode.Baala.Core.Relmap.Operand   as C
 import qualified Koshucode.Baala.Core.Relmap.Operator  as C
+import qualified Koshucode.Baala.Core.Relmap.Rodmap    as C
 import qualified Koshucode.Baala.Core.Message          as Message
 
 
@@ -48,13 +49,14 @@ relmapCons g = make $ unzip $ map pair $ C.globalRops g where
 --   make lexmap from source of relmap operator.
 type ConsLexmap = [B.NamedTrees] -> [RelmapSource] -> ConsLexmapBody
 
-type RelmapSource = B.Named ([B.TokenTree], [B.TokenTree])
+-- | Source of relmap: its name, replacement, and operand editor.
+type RelmapSource = B.Named ([B.TokenTree], C.Rodmap)
 
 -- | Construct lexmap and its submaps from source of lexmap
 type ConsLexmapBody = [B.TokenTree] -> B.Ab (C.Lexmap, [C.Rody C.Lexmap])
 
 consLexmap :: [B.Named C.RodSorter] -> ConsLexmap
-consLexmap sorters gslot tokmaps = lexmap where
+consLexmap sorters gslot derives = lexmap where
 
     lexmap :: ConsLexmapBody
     lexmap source =
@@ -70,14 +72,14 @@ consLexmap sorters gslot tokmaps = lexmap where
 
     derived :: B.Token -> ConsLexmapBody
     derived rop trees =
-        let name = B.tokenContent rop
-        in case lookup name tokmaps of
+        let n = B.tokenContent rop
+        in case lookup n derives of
              Just _  -> user C.LexmapDerived rop trees
-             Nothing -> base name rop trees
+             Nothing -> base n rop trees
 
     base :: String -> B.Token -> ConsLexmapBody
-    base name rop trees =
-        case lookup name sorters of
+    base n rop trees =
+        case lookup n sorters of
           Nothing     ->  user C.LexmapDerived rop trees
           Just sorter ->  do rod <- sorter trees
                              submap $ cons C.LexmapBase rop rod trees
@@ -98,9 +100,9 @@ consLexmap sorters gslot tokmaps = lexmap where
 
     check :: B.Map C.Lexmap
     check lx | C.lexType lx == C.LexmapDerived
-                 = let name = C.lexOpName lx
-                       msg  = "Same name as base relmap operator '" ++ name ++ "'"
-                   in case lookup name sorters of
+                 = let n = C.lexOpName lx
+                       msg  = "Same name as base relmap operator '" ++ n ++ "'"
+                   in case lookup n sorters of
                         Just _  -> C.lexAddMessage msg lx
                         Nothing -> lx
     check lx = lx
@@ -118,13 +120,14 @@ consLexmap sorters gslot tokmaps = lexmap where
     slot :: C.Lexmap -> B.Ab [C.Rody C.Lexmap]
     slot lx | C.lexType lx /= C.LexmapDerived = Right []
             | otherwise
-                 = let n   = C.lexOpName  lx
-                       rod = C.lexOperand lx
-                       sub = C.lexSubmap  lx
-                   in B.abortableFrom "slot" lx $ case lookup n tokmaps of
-                        Nothing -> B.concatMapM slot sub
-                        Just (trees, _) ->
-                            do trees2     <- slotTrees gslot rod trees
+                = let n   = C.lexOpName  lx
+                      rod = C.lexOperand lx
+                      sub = C.lexSubmap  lx
+                  in B.abortableFrom "slot" lx $ case lookup n derives of
+                      Nothing -> B.concatMapM slot sub
+                      Just (trees, rodmap) ->
+                            do rod2       <- C.rodmapRun rodmap rod
+                               trees2     <- slotTrees gslot rod2 trees
                                (lx2, lxs) <- lexmap trees2
                                sub2       <- B.concatMapM slot sub
                                Right $ ((n, rod), lx2) : lxs ++ sub2

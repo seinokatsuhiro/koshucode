@@ -10,6 +10,7 @@ module Koshucode.Baala.Core.Relmap.Operand,
 module Koshucode.Baala.Core.Relmap.Operator,
 module Koshucode.Baala.Core.Relmap.Relkit,
 module Koshucode.Baala.Core.Relmap.Relmap,
+module Koshucode.Baala.Core.Relmap.Rodmap,
 module Koshucode.Baala.Core.Relmap.Run,
 module Koshucode.Baala.Core.Relmap.Specialize,
 
@@ -23,6 +24,7 @@ import Koshucode.Baala.Core.Relmap.Operand
 import Koshucode.Baala.Core.Relmap.Operator
 import Koshucode.Baala.Core.Relmap.Relkit
 import Koshucode.Baala.Core.Relmap.Relmap
+import Koshucode.Baala.Core.Relmap.Rodmap
 import Koshucode.Baala.Core.Relmap.Run
 import Koshucode.Baala.Core.Relmap.Specialize
 

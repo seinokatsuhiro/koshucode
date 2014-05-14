@@ -9,13 +9,14 @@ module Koshucode.Baala.Core.Relmap.Specialize
 
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Core.Relmap.Lexmap   as C
+import qualified Koshucode.Baala.Core.Relmap.Operand  as C
 import qualified Koshucode.Baala.Core.Relmap.Operator as C
 import qualified Koshucode.Baala.Core.Relmap.Relkit   as C
 import qualified Koshucode.Baala.Core.Message         as Message
 
 
 
-relmapSpecialize :: forall c. C.Global c -> [C.Rodmap c]
+relmapSpecialize :: forall c. C.Global c -> [C.Rody (C.Relmap c)]
   -> [C.RelkitDef c] -> Maybe B.Relhead -> C.Relmap c -> B.Ab ([C.RelkitDef c], C.Relkit c)
 relmapSpecialize global parts = spec [] [] where
     spec :: [(String, B.Relhead)] -- name of nested relation, and its heading
