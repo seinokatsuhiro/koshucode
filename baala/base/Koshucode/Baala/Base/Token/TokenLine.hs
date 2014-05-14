@@ -47,39 +47,42 @@ tokens res = concatMap B.lineTokens . tokenLines res
 
 -- | Split a next token from source text.
 nextToken :: B.Resource -> B.NextToken B.Token
-nextToken res line txt =
+nextToken res (num, line) txt =
     case txt of
-      ('*' : '*' : '*' : '*' : cs) -> tokD cs (B.TWord pos 0 "****")
-      ('*' : '*' : _)         ->  tokD "" $ B.TComment pos txt
-      ('\'' : '\'' : cs)      ->  tokD "" $ B.TWord pos 1 (B.trimLeft cs)
-      ('(' : ')' : cs)        ->  tokD cs $ B.TWord pos 0 "()"  -- nil
+      ('*' : '*' : '*' : '*' : cs)
+                             ->  tokD cs          $ B.TWord     p 0 "****"
+      ('*' : '*' : _)        ->  tokD ""          $ B.TComment  p txt
+      ('\'' : '\'' : cs)     ->  let cs2 = B.trimLeft cs
+                                 in tokD ""       $ B.TWord     p 1 cs2
+      ('(' : ')' : cs)       ->  tokD cs          $ B.TWord     p 0 "()"  -- nil
       ('#' : c : cs)
-          | c == '!'          ->  tokD "" $ B.TComment pos txt
-          | isWord c          ->  word cs [c, '#'] $ B.TWord pos 0
-          | otherwise         ->  tokD cs $ B.TWord pos 1 [c]
+          | c == '!'         ->  tokD ""          $ B.TComment  p txt
+          | isWord c         ->  word cs [c, '#'] $ B.TWord     p 0
+          | otherwise        ->  tokD cs          $ B.TWord     p 1 [c]
       (c : '|' : cs)
-          | c `elem` "[{<("   ->  tokD cs $ B.TOpen pos [c, '|']
+          | c `elem` "[{<("  ->  tokD cs          $ B.TOpen     p [c, '|']
       ('|' : c : cs)
-          | c `elem` "]}>)"   ->  tokD cs $ B.TClose pos ['|', c]
-          | c == '|'          ->  tokD (B.trimLeft cs) $ B.TWord pos 0 "||" -- newline
+          | c `elem` "]}>)"  ->  tokD cs          $ B.TClose    p ['|', c]
+          | c == '|'         ->  let cs2 = B.trimLeft cs  -- newline
+                                 in tokD cs2      $ B.TWord     p 0 "||"
 
       (c : cs)
-          | isOpen    c       ->  tokD cs $ B.TOpen  pos [c]
-          | isClose   c       ->  tokD cs $ B.TClose pos [c]
-          | isSingle  c       ->  tokD cs $ B.TWord  pos 0 [c]
-          | isTerm    c       ->  term cs [] []
-          | isQQ      c       ->  qq   cs
-          | isQ       c       ->  word cs []  $ B.TWord pos 1
-          | isSlot    c       ->  let (n, cs2) = slot 1 cs
-                                  in word cs2 [] $ B.TSlot pos n
-          | isShort   c       ->  short cs [c]
-          | isWord    c       ->  word cs [c] $ B.TWord pos 0
-          | isSpace   c       ->  space 1 cs
+          | isOpen    c      ->  tokD cs          $ B.TOpen     p [c]
+          | isClose   c      ->  tokD cs          $ B.TClose    p [c]
+          | isSingle  c      ->  tokD cs          $ B.TWord     p 0 [c]
+          | isTerm    c      ->  term cs [] []
+          | isQQ      c      ->  qq   cs
+          | isQ       c      ->  word cs []       $ B.TWord     p 1
+          | isSlot    c      ->  let (n, cs2) = slot 1 cs
+                                 in word cs2 []   $ B.TSlot     p n
+          | isShort   c      ->  short cs [c]
+          | isWord    c      ->  word cs [c]      $ B.TWord     p 0
+          | isSpace   c      ->  space 1 cs
 
-      _                       ->  tokD [] $ B.TUnknown pos []
+      _                      ->  tokD []          $ B.TUnknown  p []
 
     where
-      pos                             = B.CodePoint res line txt
+      p = B.CodePoint res num line txt
 
       tokD :: String -> B.Token -> (B.Token, String)
       tokD cs token                   = (token, cs)
@@ -88,9 +91,9 @@ nextToken res line txt =
       tokR cs k xs                    = (k $ reverse xs, cs)
 
       short :: String -> String -> (B.Token, String)
-      short (c:cs) xs | c == '.'      = word cs [] (B.TShort pos $ reverse xs)
+      short (c:cs) xs | c == '.'      = word cs [] (B.TShort p $ reverse xs)
                       | isShort c     = short cs (c:xs)
-      short ccs xs                    = word ccs xs (B.TWord pos 0)
+      short ccs xs                    = word ccs xs (B.TWord p 0)
 
       slot :: Int -> String -> (Int, String)
       slot n ('@'  : cs) = slot (n + 1) cs
@@ -108,16 +111,16 @@ nextToken res line txt =
 
       qq :: String -> (B.Token, String)
       qq cs                           = case qqText cs [] of
-                                          Just (text, cs2) -> tokR cs2 (B.TWord pos 2) text
-                                          Nothing -> tokD [] $ B.TUnknown pos cs
+                                          Just (text, cs2) -> tokR cs2 (B.TWord p 2) text
+                                          Nothing -> tokD [] $ B.TUnknown p cs
 
       term :: String -> String -> [String] -> (B.Token, String)
       term (c:cs) xs ns | isTerm c    = term cs [] $ termUp xs ns
                         | isWord c    = term cs (c:xs) ns
                         | isQQ   c    = case qqText cs xs of
                                           Just (text, cs2) -> term cs2 [] $ termUp text ns
-                                          Nothing -> tokD [] $ B.TUnknown pos (c:cs)
-      term ccs xs ns                  = tokR ccs (B.TTerm pos) $ termUp xs ns
+                                          Nothing -> tokD [] $ B.TUnknown p (c:cs)
+      term ccs xs ns                  = tokR ccs (B.TTerm p) $ termUp xs ns
 
       termUp :: String -> [String] -> [String]
       termUp [] ns = ns 
@@ -125,7 +128,7 @@ nextToken res line txt =
 
       space :: Int -> String -> (B.Token, String)
       space i (c:cs) | isSpace c      = space (i + 1) cs
-      space i ccs                     = tokD ccs (B.TSpace pos i)
+      space i ccs                     = tokD ccs $ B.TSpace p i
 
 
 
@@ -144,7 +147,7 @@ isQ       =  (== '\'')        -- UnicodePunctuation
 isQQ      =  (== '"')         -- UnicodePunctuation
 isSlot    =  (== '@')         -- UnicodePunctuation
 isPunct c =  isOpen c || isClose c || isSingle c ||
-             isQ c || isQQ c || c == '#'
+             isQ c    || isQQ c    || c == '#'
 
 isTerm, isSpace, isWord  :: B.Pred Char
 

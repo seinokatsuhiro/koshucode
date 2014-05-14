@@ -11,8 +11,6 @@ module Koshucode.Baala.Base.Text.Resource
   -- * CodePoint
   CodePoint (..),
   CodePointer (..),
-  codePointLineNumber,
-  codePointLineText,
   codePointColumn,
   codePointDisplay,
   codePointZero,
@@ -45,9 +43,10 @@ resourceName (ResourceURL  url)   =  url
 -- ----------------------  CodePoint
 
 data CodePoint = CodePoint
-      { codePointResource :: Resource
-      , codePointLine     :: (Int, String)   -- ^ Line number and content
-      , codePointText     :: String          -- ^ Text at which begins token
+      { codePointResource   :: Resource    -- ^ Resource of code
+      , codePointLineNumber :: Int         -- ^ Line number
+      , codePointLineText   :: String      -- ^ Line content
+      , codePointText       :: String      -- ^ Text at which begins token
       } deriving (Show, Eq, G.Data, G.Typeable)
 
 instance Ord CodePoint where
@@ -58,17 +57,11 @@ instance Ord CodePoint where
 class CodePointer a where
     codePoint :: a -> CodePoint
 
-codePointLineNumber :: CodePoint -> Int
-codePointLineNumber = fst . codePointLine
-
-codePointLineText   :: CodePoint -> String
-codePointLineText   = snd . codePointLine
-
 codePointTextLength :: CodePoint -> Int
 codePointTextLength = length . codePointText
 
 codePointColumn :: CodePoint -> Int
-codePointColumn CodePoint { codePointLine = (_, line), codePointText = subline }
+codePointColumn CodePoint { codePointLineText = line, codePointText = subline }
     = length line - length subline
 
 codePointDisplay :: String -> CodePoint -> [(String, String)]
@@ -83,7 +76,7 @@ codePointDisplay tag p
       text = codePointText p
 
 codePointZero :: CodePoint
-codePointZero = CodePoint (ResourceText "") (0, "") ""
+codePointZero = CodePoint (ResourceText "") 0 "" ""
 
 shorten :: B.Map String
 shorten s | length s > 48 = take 45 s ++ "..."
