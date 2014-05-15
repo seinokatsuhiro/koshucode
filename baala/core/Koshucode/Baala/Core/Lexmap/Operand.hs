@@ -2,7 +2,7 @@
 
 -- | Operand sorters for relmap operators.
 
-module Koshucode.Baala.Core.Relmap.Operand
+module Koshucode.Baala.Core.Lexmap.Operand
 ( -- * Data type
   Rod,
   Rody,

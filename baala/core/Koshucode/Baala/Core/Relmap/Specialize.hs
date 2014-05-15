@@ -8,8 +8,7 @@ module Koshucode.Baala.Core.Relmap.Specialize
 ) where
 
 import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Core.Relmap.Lexmap   as C
-import qualified Koshucode.Baala.Core.Relmap.Operand  as C
+import qualified Koshucode.Baala.Core.Lexmap          as C
 import qualified Koshucode.Baala.Core.Relmap.Operator as C
 import qualified Koshucode.Baala.Core.Relmap.Relkit   as C
 import qualified Koshucode.Baala.Core.Message         as Message

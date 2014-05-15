@@ -3,7 +3,7 @@
 
 -- | Lexical relmap.
 
-module Koshucode.Baala.Core.Relmap.Lexmap
+module Koshucode.Baala.Core.Lexmap.Lexmap
 ( Lexmap (..),
   LexmapType (..),
   lexOpName,
@@ -13,7 +13,7 @@ module Koshucode.Baala.Core.Relmap.Lexmap
 
 import qualified Data.Generics        as G
 import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Core.Relmap.Operand as C
+import qualified Koshucode.Baala.Core.Lexmap.Operand as C
 
 -- | Intermediate data that represents use of relmap operator.
 --   Lexmap is constructed from a list of 'B.TokenTree',

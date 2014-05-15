@@ -5,14 +5,10 @@
 module Koshucode.Baala.Core.Relmap
 (
 module Koshucode.Baala.Core.Relmap.Construct,
-module Koshucode.Baala.Core.Relmap.Lexmap,
-module Koshucode.Baala.Core.Relmap.Operand,
 module Koshucode.Baala.Core.Relmap.Operator,
 module Koshucode.Baala.Core.Relmap.Relkit,
 module Koshucode.Baala.Core.Relmap.Relmap,
-module Koshucode.Baala.Core.Relmap.Rodmap,
 module Koshucode.Baala.Core.Relmap.Run,
-module Koshucode.Baala.Core.Relmap.Slot,
 module Koshucode.Baala.Core.Relmap.Specialize,
 
 -- * Datatypes
@@ -20,14 +16,10 @@ module Koshucode.Baala.Core.Relmap.Specialize,
 ) where
 
 import Koshucode.Baala.Core.Relmap.Construct
-import Koshucode.Baala.Core.Relmap.Lexmap
-import Koshucode.Baala.Core.Relmap.Operand
 import Koshucode.Baala.Core.Relmap.Operator
 import Koshucode.Baala.Core.Relmap.Relkit
 import Koshucode.Baala.Core.Relmap.Relmap
-import Koshucode.Baala.Core.Relmap.Rodmap
 import Koshucode.Baala.Core.Relmap.Run
-import Koshucode.Baala.Core.Relmap.Slot
 import Koshucode.Baala.Core.Relmap.Specialize
 
 

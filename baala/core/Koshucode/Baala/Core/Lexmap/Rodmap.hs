@@ -3,7 +3,7 @@
 
 -- | Mapping from operand to operand, aka., operand editor.
 
-module Koshucode.Baala.Core.Relmap.Rodmap
+module Koshucode.Baala.Core.Lexmap.Rodmap
 ( Rodmap,
   RodmapBody (..),
   rodmapCons,
@@ -12,8 +12,8 @@ module Koshucode.Baala.Core.Relmap.Rodmap
 
 import qualified Data.Generics                        as G
 import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Core.Relmap.Operand  as C
-import qualified Koshucode.Baala.Core.Relmap.Slot     as C
+import qualified Koshucode.Baala.Core.Lexmap.Operand  as C
+import qualified Koshucode.Baala.Core.Lexmap.Slot     as C
 import qualified Koshucode.Baala.Core.Message         as Message
 
 

@@ -18,6 +18,7 @@ module Koshucode.Baala.Core.Assert.Assert
 
 import qualified Data.Generics               as G
 import qualified Koshucode.Baala.Base        as B
+import qualified Koshucode.Baala.Core.Lexmap as C
 import qualified Koshucode.Baala.Core.Relmap as C
 
 

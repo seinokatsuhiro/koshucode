@@ -3,12 +3,12 @@
 
 -- | Slot substitution.
 
-module Koshucode.Baala.Core.Relmap.Slot
+module Koshucode.Baala.Core.Lexmap.Slot
 ( slotTrees
 ) where
 
 import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Core.Relmap.Operand  as C
+import qualified Koshucode.Baala.Core.Lexmap.Operand  as C
 import qualified Koshucode.Baala.Core.Message         as Message
 
 
