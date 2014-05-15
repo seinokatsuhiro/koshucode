@@ -12,7 +12,6 @@ module Koshucode.Baala.Core.Relmap.Construct
 
   -- * Function
   relmapCons,
-  slotTrees,
   withTerms,
 
   -- * Construction process
@@ -24,6 +23,7 @@ import qualified Koshucode.Baala.Core.Relmap.Lexmap    as C
 import qualified Koshucode.Baala.Core.Relmap.Operand   as C
 import qualified Koshucode.Baala.Core.Relmap.Operator  as C
 import qualified Koshucode.Baala.Core.Relmap.Rodmap    as C
+import qualified Koshucode.Baala.Core.Relmap.Slot      as C
 import qualified Koshucode.Baala.Core.Message          as Message
 
 
@@ -66,9 +66,9 @@ consLexmap sorters gslot derives = lexmap where
            [(B.TreeL rop@(B.TWord _ 3 _) : trees)] -> user C.LexmapWith rop trees
            [[B.TreeB 1 _ trees]] -> lexmap trees
            [[B.TreeB _ _ _]]     -> Message.adlib "bracket"
+           [[]]                  -> baseOf "id" []
            [_]                   -> Message.unkRelmap "???"
-           trees2                -> base "append" (B.tokenWord "append")
-                                    $ map B.treeWrap trees2
+           trees2                -> baseOf "append" $ map B.treeWrap trees2
 
     derived :: B.Token -> ConsLexmapBody
     derived rop trees =
@@ -76,6 +76,8 @@ consLexmap sorters gslot derives = lexmap where
         in case lookup n derives of
              Just _  -> user C.LexmapDerived rop trees
              Nothing -> base n rop trees
+
+    baseOf n = base n (B.tokenWord n)
 
     base :: String -> B.Token -> ConsLexmapBody
     base n rop trees =
@@ -127,7 +129,7 @@ consLexmap sorters gslot derives = lexmap where
                       Nothing -> B.concatMapM slot sub
                       Just (trees, rodmap) ->
                             do rod2       <- C.rodmapRun rodmap rod
-                               trees2     <- slotTrees gslot rod2 trees
+                               trees2     <- C.slotTrees gslot rod2 trees
                                (lx2, lxs) <- lexmap trees2
                                sub2       <- B.concatMapM slot sub
                                Right $ ((n, rod), lx2) : lxs ++ sub2
@@ -160,47 +162,6 @@ withTerms = loop where
 
     next p xs = do xs' <- loop xs
                    Right $ p : xs'
-
-
--- ----------------------  Slot substitution
-
-slotTrees :: [B.NamedTrees] -> C.Rod -> B.AbMap [B.TokenTree]
-slotTrees gslot rod trees =
-    do trees' <- slotTree gslot rod `mapM` trees
-       Right $ concat trees'
-
-slotTree :: [B.NamedTrees] -> C.Rod -> B.TokenTree -> B.Ab [B.TokenTree]
-slotTree gslot rod tree = B.abortableTree "slot" tree $ loop tree where
-    loop (B.TreeB p q sub) = do sub' <- mapM loop sub
-                                Right [B.TreeB p q $ concat sub']
-    loop (B.TreeL (B.TSlot _ n name))
-        | n == 0    = replace n name "@trunk"     rod  (`pos` name)
-        | n == 1    = replace n name ('-' : name) rod  Right
-        | n == 2    = replace n name name         gslot Right
-        | otherwise = Message.noSlotName n name
-    loop tk = Right [tk]
-
-    replace n name key assoc f =
-        case lookup key assoc of
-          Just od -> f od
-          Nothing -> Message.noSlotName n name
-
-    pos :: [B.TokenTree] -> String -> B.Ab [B.TokenTree]
-    pos od "all" = Right od
-    pos od n     = case (reads :: ReadS Int) n of
-                     [(i, "")] -> Right . B.singleton =<< od `at` i
-                     _         -> Message.noSlotName 0 n
-
-    at = slotIndex $ unwords . map B.tokenContent . B.untree
-
-slotIndex :: (a -> String) -> [a] -> Int -> B.Ab a
-slotIndex toString xxs n = loop xxs n where
-    loop (x : _)  1 = Right x
-    loop (_ : xs) i = loop xs $ i - 1
-    loop _ _        = Message.noSlotIndex (number $ map toString xxs) n
-    number xs = map pair $ zip [1 :: Int ..] xs
-    pair (i, x) = "@'" ++ show i ++ " = " ++ x
-
 
 
 -- ----------------------  Generic relmap

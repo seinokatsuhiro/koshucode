@@ -150,7 +150,7 @@ consSectionEach root resource (B.Short shorts xs) =
       ntrees2 n toks1 toks2 =
           do trees1 <- B.tokenTrees toks1
              trees2 <- B.tokenTrees toks2
-             rodmap <- C.rodmap trees2
+             rodmap <- C.rodmapCons trees2
              Right (n, (trees1, rodmap))
 
       judge :: Clab (B.Judge c)

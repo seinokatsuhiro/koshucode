@@ -71,6 +71,7 @@ library
         Koshucode.Baala.Core.Relmap.Relmap
         Koshucode.Baala.Core.Relmap.Rodmap
         Koshucode.Baala.Core.Relmap.Run
+        Koshucode.Baala.Core.Relmap.Slot
         Koshucode.Baala.Core.Relmap.Specialize
 
         Koshucode.Baala.Core.Section

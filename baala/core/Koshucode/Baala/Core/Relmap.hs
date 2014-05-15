@@ -12,6 +12,7 @@ module Koshucode.Baala.Core.Relmap.Relkit,
 module Koshucode.Baala.Core.Relmap.Relmap,
 module Koshucode.Baala.Core.Relmap.Rodmap,
 module Koshucode.Baala.Core.Relmap.Run,
+module Koshucode.Baala.Core.Relmap.Slot,
 module Koshucode.Baala.Core.Relmap.Specialize,
 
 -- * Datatypes
@@ -26,6 +27,7 @@ import Koshucode.Baala.Core.Relmap.Relkit
 import Koshucode.Baala.Core.Relmap.Relmap
 import Koshucode.Baala.Core.Relmap.Rodmap
 import Koshucode.Baala.Core.Relmap.Run
+import Koshucode.Baala.Core.Relmap.Slot
 import Koshucode.Baala.Core.Relmap.Specialize
 
 
