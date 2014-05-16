@@ -63,9 +63,9 @@ library
         Koshucode.Baala.Core.Content.Literal
 
         Koshucode.Baala.Core.Lexmap
+        Koshucode.Baala.Core.Lexmap.Attribute
         Koshucode.Baala.Core.Lexmap.Lexmap
-        Koshucode.Baala.Core.Lexmap.Operand
-        Koshucode.Baala.Core.Lexmap.Rodmap
+        Koshucode.Baala.Core.Lexmap.Roamap
         Koshucode.Baala.Core.Lexmap.Slot
 
         Koshucode.Baala.Core.Relmap

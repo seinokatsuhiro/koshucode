@@ -25,7 +25,7 @@ runRelmapDataset
     :: (Ord c, C.CRel c, C.CNil c)
     => C.Global c
     -> C.Dataset c     -- ^ Judges read from @source@ operator
-    -> [C.Rody (C.Relmap c)]
+    -> [C.Roal (C.Relmap c)]
     -> C.Relmap c      -- ^ Mapping from 'Rel' to 'Rel'
     -> B.Rel c         -- ^ Input relation
     -> B.Ab (B.Rel c)  -- ^ Output relation
@@ -33,7 +33,7 @@ runRelmapDataset global dataset parts = runRelmapViaRelkit g2 parts where
     g2 = global { C.globalSelect = C.selectRelation dataset }
 
 runRelmapViaRelkit :: (Ord c, C.CRel c)
-  => C.Global c -> [C.Rody (C.Relmap c)]
+  => C.Global c -> [C.Roal (C.Relmap c)]
   -> C.Relmap c -> B.AbMap (B.Rel c)
 runRelmapViaRelkit global parts r (B.Rel he1 bo1) =
     do (kdef, C.Relkit he2' f2') <- C.relmapSpecialize global parts [] (Just he1) r

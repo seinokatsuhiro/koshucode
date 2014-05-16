@@ -13,15 +13,15 @@ import qualified Koshucode.Baala.Op.Meta.Meta    as Op
 metaRops :: (C.CContent c) => [C.Rop c]
 metaRops = Op.ropList "meta"
     --  SYNOPSIS,
-    --  CONSTRUCTOR, OPERAND
+    --  CONSTRUCTOR, ATTRIBUTE
     [ ( "koshu-cop /N",
-        Op.consKoshuCop, C.rodList "-name" [] )
+        Op.consKoshuCop, C.roaList "-name" [] )
     , ( "koshu-cop-infix /N [ -height /N ][ -dir /N ]",
-        Op.consKoshuCopInfix, C.rodOne "-name" ["-height", "-dir"] )
+        Op.consKoshuCopInfix, C.roaOne "-name" ["-height", "-dir"] )
     , ( "koshu-rop /N /N",
-        Op.consKoshuRop, C.rodList "-name" ["-group", "-usage"] )
+        Op.consKoshuRop, C.roaList "-name" ["-group", "-usage"] )
     , ( "koshu-version /N",
-        Op.consKoshuVersion, C.rodOneList "-term" "-version" [] )
+        Op.consKoshuVersion, C.roaOneList "-term" "-version" [] )
     ]
 
 -- ----------------------

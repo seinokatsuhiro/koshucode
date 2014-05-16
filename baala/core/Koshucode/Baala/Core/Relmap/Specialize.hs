@@ -13,9 +13,7 @@ import qualified Koshucode.Baala.Core.Relmap.Operator as C
 import qualified Koshucode.Baala.Core.Relmap.Relkit   as C
 import qualified Koshucode.Baala.Core.Message         as Message
 
-
-
-relmapSpecialize :: forall c. C.Global c -> [C.Rody (C.Relmap c)]
+relmapSpecialize :: forall c. C.Global c -> [C.Roal (C.Relmap c)]
   -> [C.RelkitDef c] -> Maybe B.Relhead -> C.Relmap c -> B.Ab ([C.RelkitDef c], C.Relkit c)
 relmapSpecialize global parts = spec [] [] where
     spec :: [(String, B.Relhead)] -- name of nested relation, and its heading
@@ -45,13 +43,13 @@ relmapSpecialize global parts = spec [] [] where
                      kit <- makeKit global he1
                      Right (kdef, kit)
 
-              C.RelmapLink lx n rod
+              C.RelmapLink lx n roa
                   | C.lexType lx == C.LexmapWith ->
                       post lx $ case lookup n with of
                            Just he    -> Right (kdef, C.relkitWithVar n he)
                            Nothing    -> Message.unkWithVar n
                   | otherwise ->
-                      post lx $ case lookup (n, rod) parts of
+                      post lx $ case lookup (n, roa) parts of
                            Just rmap1 -> link n rmap1 (he1, C.relmapLexList rmap1)
                            Nothing    -> Message.unkRelmap n
 
@@ -97,3 +95,4 @@ relmapSpecialize global parts = spec [] [] where
               cyclic       =  C.Relkit Nothing             body
               acyclic kit1 =  C.Relkit (C.relkitHead kit1) body
               body         =  B.Sourced [] $ C.RelkitLink n key1 Nothing
+

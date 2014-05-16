@@ -151,8 +151,8 @@ consSectionEach root resource (B.Short shorts xs) =
       ntrees2 n toks1 toks2 =
           do trees1 <- B.tokenTrees toks1
              trees2 <- B.tokenTrees toks2
-             rodmap <- C.rodmapCons trees2
-             Right (n, (trees1, rodmap))
+             roamap <- C.roamapCons trees2
+             Right (n, (trees1, roamap))
 
       judge :: Clab (B.Judge c)
       judge _ (C.CJudge q p toks) =
@@ -162,7 +162,7 @@ consSectionEach root resource (B.Short shorts xs) =
       assert src (C.CAssert typ pat opt toks) =
           do optTrees  <- B.tokenTrees opt
              rmapTrees <- B.tokenTrees toks
-             Right $ C.Assert typ pat (C.rod optTrees) src rmapTrees Nothing []
+             Right $ C.Assert typ pat (C.roa optTrees) src rmapTrees Nothing []
 
       unk   _ (C.CUnknown) = Message.unkClause
       unres _ (C.CUnres _) = Message.unresPrefix

@@ -8,24 +8,24 @@ module Koshucode.Baala.Core.Lexmap.Slot
   slotTrees,
 ) where
 
-import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Core.Lexmap.Operand  as C
-import qualified Koshucode.Baala.Core.Message         as Message
+import qualified Koshucode.Baala.Base                   as B
+import qualified Koshucode.Baala.Core.Lexmap.Attribute  as C
+import qualified Koshucode.Baala.Core.Message           as Message
 
 type GlobalSlot = B.NamedTrees
 
-slotTrees :: [GlobalSlot] -> C.Rod -> B.AbMap [B.TokenTree]
-slotTrees gslot rod trees =
-    do trees' <- slotTree gslot rod `mapM` trees
+slotTrees :: [GlobalSlot] -> C.Roa -> B.AbMap [B.TokenTree]
+slotTrees gslot roa trees =
+    do trees' <- slotTree gslot roa `mapM` trees
        Right $ concat trees'
 
-slotTree :: [GlobalSlot] -> C.Rod -> B.TokenTree -> B.Ab [B.TokenTree]
-slotTree gslot rod tree = B.abortableTree "slot" tree $ loop tree where
+slotTree :: [GlobalSlot] -> C.Roa -> B.TokenTree -> B.Ab [B.TokenTree]
+slotTree gslot roa tree = B.abortableTree "slot" tree $ loop tree where
     loop (B.TreeB p q sub) = do sub' <- mapM loop sub
                                 Right [B.TreeB p q $ concat sub']
     loop (B.TreeL (B.TSlot _ n name))
-        | n == 0    = replace n name "@trunk"     rod  (`pos` name)
-        | n == 1    = replace n name ('-' : name) rod  Right
+        | n == 0    = replace n name "@trunk"     roa  (`pos` name)
+        | n == 1    = replace n name ('-' : name) roa  Right
         | n == 2    = replace n name name         gslot Right
         | otherwise = Message.noSlotName n name
     loop tk = Right [tk]

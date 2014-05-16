@@ -6,16 +6,16 @@ module Koshucode.Baala.Core.Message
 
   -- * Core package
   ambInfixes,
-  extraOperand,
+  extraAttr,
   noFile,
   noSlotName,
   noSlotIndex,
   oddRelation,
   reqFlatName,
-  reqOperand,
-  reqOperandName,
+  reqAttr,
+  reqAttrName,
   reqTermName,
-  unexpOperand,
+  unexpAttr,
   unkClause,
   unkCop,
   unkCox,
@@ -39,9 +39,9 @@ import Koshucode.Baala.Base.Message
 ambInfixes :: [String] -> B.Ab a
 ambInfixes = Left . B.abortLines "Ambiguous infix operators"
 
--- | Extra operand
-extraOperand :: B.Ab a
-extraOperand = Left $ B.abortBecause "Extra operand"
+-- | Extra attribute
+extraAttr :: B.Ab a
+extraAttr = Left $ B.abortBecause "Extra attribute"
 
 -- | File not found
 noFile :: String -> B.Ab a
@@ -50,10 +50,10 @@ noFile = Left . B.abortLine "File not found"
 -- | No slot content
 noSlotName :: Int -> String -> B.Ab a
 noSlotName n name = Left $ B.abortLine "No slot content" $ detail n where
-    detail 0 = "Positional operand @'" ++ name
-    detail 1 = "Named operand -"       ++ name
-    detail 2 = "Global slot @@"        ++ name
-    detail a = "Unknown slot level "   ++ show a
+    detail 0 = "Positional attribute @'" ++ name
+    detail 1 = "Named attribute -"       ++ name
+    detail 2 = "Global slot @@"          ++ name
+    detail a = "Unknown slot level "     ++ show a
 
 -- | No slot content
 noSlotIndex :: [String] -> Int -> B.Ab a
@@ -69,21 +69,21 @@ reqFlatName :: B.Token -> B.Ab a
 reqFlatName tok = Left $ B.abortLine "Require flat name" n where
     n = B.tokenContent tok
 
--- | Require operand
-reqOperand :: String -> B.Ab a
-reqOperand = Left . B.abortLine "Require operand"
+-- | Require attribute
+reqAttr :: String -> B.Ab a
+reqAttr = Left . B.abortLine "Require attribute"
 
--- | Require operand
-reqOperandName :: String -> B.Ab a
-reqOperandName = Left . B.abortLine "Require operand name, e.g., -xxx"
+-- | Require attribute
+reqAttrName :: String -> B.Ab a
+reqAttrName = Left . B.abortLine "Require attribute name, e.g., -xxx"
 
 -- | Require term name
 reqTermName :: B.Ab a
 reqTermName = Left $ B.abortBecause "Require term name"
 
--- | Unexpected operand
-unexpOperand :: String -> B.Ab a
-unexpOperand = Left . B.abortLine "Unexpected operand"
+-- | Unexpected attribute
+unexpAttr :: String -> B.Ab a
+unexpAttr = Left . B.abortLine "Unexpected attribute"
 
 -- | Unknown clause
 unkClause :: B.Ab a

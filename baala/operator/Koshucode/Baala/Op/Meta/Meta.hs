@@ -106,7 +106,7 @@ consKoshuVersion use =
        []      -> Right $ C.relmapGlobal use $ relkitKoshuVersion n
        [f]     -> check n f f
        [f, t]  -> check n f t
-       _       -> Message.unexpOperand ""
+       _       -> Message.unexpAttr ""
   where
     check n f t = do
       from <- C.litContent f

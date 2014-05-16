@@ -68,7 +68,7 @@ copMinus [a, b] =
        b' <- copDec b
        c' <- B.decimalSub a' b'
        Right $ C.pDec c'
-copMinus _ = Message.unexpOperand "-"
+copMinus _ = Message.unexpAttr "-"
 
 copQuo :: (C.CText c, C.CDec c) => C.CopFun c
 copQuo [a, b] =
@@ -76,7 +76,7 @@ copQuo [a, b] =
        b' <- copDec b
        c' <- B.decimalQuo a' b'
        Right $ C.pDec c'
-copQuo _ = Message.unexpOperand "quo"
+copQuo _ = Message.unexpAttr "quo"
 
 copRem :: (C.CText c, C.CDec c) => C.CopFun c
 copRem arg =
@@ -89,9 +89,9 @@ copRem arg =
 copAbs :: (C.CList c, C.CDec c) => C.CopFun c
 copAbs [Right c] | C.isList c = Right . C.pList =<< mapM copAbs1 (C.gList c)
                  | otherwise  = copAbs1 c
-copAbs _ = Message.unexpOperand "abs"
+copAbs _ = Message.unexpAttr "abs"
 
 copAbs1 :: (C.CDec c) => B.AbMap c
 copAbs1 c | C.isDec c = C.putDec $ B.decimalAbs $ C.gDec c
-copAbs1 _ = Message.unexpOperand "abc"
+copAbs1 _ = Message.unexpAttr "abc"
 

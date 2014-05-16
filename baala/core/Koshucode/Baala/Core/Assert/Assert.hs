@@ -35,7 +35,7 @@ data Assert c = Assert
     , assToken   :: [B.Token]           -- ^ Source token list
     , assTree    :: [B.TokenTree]       -- ^ Token relmap
     , assRelmap  :: Maybe (C.Relmap c)  -- ^ Relmap
-    , assParts   :: [C.Rody (C.Relmap c)]
+    , assParts   :: [C.Roal (C.Relmap c)]
     } deriving (Show)
 
 -- | Option for assertions.

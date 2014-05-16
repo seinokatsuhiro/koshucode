@@ -114,7 +114,7 @@ relmapMove use = C.relmapFlow use . relkitMove
 relkitMove :: ([B.TermName], [B.TermName]) -> C.RelkitCalc c
 relkitMove _ Nothing = Right C.relkitNothing
 relkitMove (ps, ns) (Just he1)
-    | B.notSameLength ps ns = Message.oddOperand
+    | B.notSameLength ps ns = Message.oddAttr
     | dup     /= []         = Message.dupTerm dup he2
     | psLeft  /= []         = Message.unkTerm psLeft he1
     | otherwise             = Right kit2

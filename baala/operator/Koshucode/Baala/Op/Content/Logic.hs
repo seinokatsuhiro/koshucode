@@ -137,5 +137,5 @@ synIf trees = folding $ filter (/= []) $ B.divideTreesBy ":" trees where
 
     abortSyntax xs msg =
         B.abortableTrees "if" xs $
-         Message.unexpOperand msg
+         Message.unexpAttr msg
 

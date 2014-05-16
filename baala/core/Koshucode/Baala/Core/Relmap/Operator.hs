@@ -42,7 +42,7 @@ import qualified Koshucode.Baala.Core.Relmap.Relkit     as C
 data Rop c = Rop
     { ropName     :: String        -- ^ Operator name
     , ropGroup    :: String        -- ^ Operator group
-    , ropSorter   :: C.RodSorter   -- ^ Operand sorter
+    , ropSorter   :: C.RoaSorter   -- ^ Attribute sorter
     , ropCons     :: RopCons c     -- ^ Constructor of operator
     , ropUsage    :: String        -- ^ Usage of operator
     }
@@ -84,7 +84,7 @@ data Relmap c
       -- ^ Relmap for environment of input relation
     | RelmapWith     C.Lexmap [B.Terminal String] (Relmap c)
       -- ^ Relmap for environment of nested relations
-    | RelmapLink     C.Lexmap String C.Rod
+    | RelmapLink     C.Lexmap String C.Roa
       -- ^ Relmap reference
 
     | RelmapAppend   (Relmap c) (Relmap c)
@@ -126,7 +126,7 @@ relmapId :: Relmap c
 relmapId = RelmapCalc lexid (const $ Right . C.relkitId) []
 
 lexid :: C.Lexmap
-lexid = C.Lexmap C.LexmapBase (B.tokenWord "id") [("@operand", [])] [] []
+lexid = C.Lexmap C.LexmapBase (B.tokenWord "id") [("@attr", [])] [] []
 
 instance B.Name (Relmap c) where
     name (RelmapSource _ _ _)   = "source"

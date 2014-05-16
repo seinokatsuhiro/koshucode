@@ -9,9 +9,9 @@ module Koshucode.Baala.Op.Message
   diffHead,
   dupTerm,
   dumpRel,
-  noOperand,
+  noAttr,
   notNestRel,
-  oddOperand,
+  oddAttr,
   reqBool,
   reqRel,
   reqCollection,
@@ -43,13 +43,13 @@ dupTerm ns he =
     Left $ B.abortLines "Duplicate term name"
          $ detailTermRel "Duplicated" ns he
 
--- | Odd operand
-oddOperand :: B.Ab a
-oddOperand = Left $ B.abortBecause "Odd operand"
+-- | Odd attribute
+oddAttr :: B.Ab a
+oddAttr = Left $ B.abortBecause "Odd attribute"
 
--- | Operand not found
-noOperand :: B.Ab a
-noOperand = Left $ B.abortBecause "Operand not found"
+-- | Attribute not found
+noAttr :: B.Ab a
+noAttr = Left $ B.abortBecause "Attribute not found"
 
 -- | Not a nested relation
 notNestRel :: [B.TermName] -> B.Relhead -> B.Ab a

@@ -15,7 +15,7 @@ import qualified Koshucode.Baala.Core as C
 -- | Built-in relmap operator.
 builtinRops :: [C.Rop c]
 builtinRops = ropList "builtin"
-    [ ("append R ...", ropConsConcat, C.rodList "-relmap" []) ]
+    [ ("append R ...", ropConsConcat, C.roaList "-relmap" []) ]
 
 -- TODO
 ropConsConcat :: C.RopCons c
@@ -24,14 +24,14 @@ ropConsConcat = Right . foldl B.mappend B.mempty . C.ropSubrelmap
 -- | Make implementations of relation-mapping operators.
 ropList
     :: String      -- ^ Operator group
-    -> [(String, C.RopCons c, C.RodSpec)]
-                   -- ^ Synopsis, constructor, and operand sorter
+    -> [(String, C.RopCons c, C.RoaSpec)]
+                   -- ^ Synopsis, constructor, and attribute sorter
     -> [C.Rop c]   -- ^ List of relation-mapping operators
 ropList group = map rop where
-    rop :: (String, C.RopCons c, C.RodSpec) -> C.Rop c
-    rop (usage, cons, rod) =
+    rop :: (String, C.RopCons c, C.RoaSpec) -> C.Rop c
+    rop (usage, cons, roa) =
         let name   = head $ words usage
-            sorter = C.rodSorter rod
+            sorter = C.roaSorter roa
         in C.Rop name group sorter cons usage
 
 

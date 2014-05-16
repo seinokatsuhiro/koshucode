@@ -20,61 +20,61 @@ import qualified Koshucode.Baala.Op.Vanilla.Order   as Op
 vanillaRops :: (C.CContent c) => [C.Rop c]
 vanillaRops = Op.ropList "vanilla"
     --  SYNOPSIS,
-    --  CONSTRUCTOR, OPERAND
+    --  CONSTRUCTOR, ATTRIBUTE
     [ ( "add /N E ...",
-        Op.consAdd, C.rodList "-in" ["-let"] )
+        Op.consAdd, C.roaList "-in" ["-let"] )
     , ( "check-term [ -just /N ... | -has /N ... | -but /N ... ]",
-        Op.consCheckTerm, C.rodNone ["-just", "-has", "-but"] )
+        Op.consCheckTerm, C.roaNone ["-just", "-has", "-but"] )
     , ( "compose R",
-        Op.consCompose, C.rodOne "-relmap" [] )
+        Op.consCompose, C.roaOne "-relmap" [] )
     , ( "const R",
-        Op.consConst, C.rodOne "-lit" [] )
+        Op.consConst, C.roaOne "-lit" [] )
     , ( "dump",
-        Op.consDump, C.rodNone [] )
+        Op.consDump, C.roaNone [] )
     , ( "duplicate /N ...",
-        Op.consDuplicate, C.rodList "-term" [] )
+        Op.consDuplicate, C.roaList "-term" [] )
     , ( "fix R",
-        Op.consFix, C.rodOne "-relmap" [] )
+        Op.consFix, C.roaOne "-relmap" [] )
     , ( "fix-join R",
-        Op.consFixJoin, C.rodOne "-relmap" [] )
+        Op.consFixJoin, C.roaOne "-relmap" [] )
     , ( "both R",
-        Op.consBoth, C.rodOne "-relmap" [] )
+        Op.consBoth, C.roaOne "-relmap" [] )
     , ( "if R ...",
-        Op.consIf, C.rodList "-relmap" [] )
+        Op.consIf, C.roaList "-relmap" [] )
     , ( "keep E",
-        Op.consFilter True, C.rodList "-in" ["-let"] )
+        Op.consFilter True, C.roaList "-in" ["-let"] )
     , ( "maybe R",
-        Op.consMaybe, C.rodOne "-relmap" [] )
+        Op.consMaybe, C.roaOne "-relmap" [] )
     , ( "member /N /N",
-        Op.consMember, C.rodEnum ["-1", "-2"] [] )
+        Op.consMember, C.roaEnum ["-1", "-2"] [] )
     , ( "number /N -order /N ...",
-        Op.consNumber, C.rodOne "-term" ["-order", "-from"] )
+        Op.consNumber, C.roaOne "-term" ["-order", "-from"] )
     , ( "omit E",
-        Op.consFilter False, C.rodList "-in" ["-let"] )
+        Op.consFilter False, C.roaList "-in" ["-let"] )
     , ( "prefix /P /N ...",
-        Op.consPrefix, C.rodOneList "-prefix" "-term" [] )
+        Op.consPrefix, C.roaOneList "-prefix" "-term" [] )
     , ( "prefix-change /P /Q",
-        Op.consPrefixChange, C.rodTwo "-new" "-old" [] )
+        Op.consPrefixChange, C.roaTwo "-new" "-old" [] )
     , ( "range /N -from E -to E",
-        Op.consRange, C.rodOne "-term" ["-from", "-to"] )
+        Op.consRange, C.roaOne "-term" ["-from", "-to"] )
     , ( "rank /N -order /N ...",
-        Op.consRank, C.rodOne "-term" ["-order", "-dense"] )
+        Op.consRank, C.roaOne "-term" ["-order", "-dense"] )
     , ( "rdf P /S /O",
-        Op.consRdf, C.rodOneList "-pattern" "-term" [] )
+        Op.consRdf, C.roaOneList "-pattern" "-term" [] )
     , ( "repeat N R",
-        Op.consRepeat, C.rodTwo "-count" "-relmap" [] )
+        Op.consRepeat, C.roaTwo "-count" "-relmap" [] )
     , ( "size /N",
-        Op.consSize, C.rodOne "-term" [] )
+        Op.consSize, C.roaOne "-term" [] )
     , ( "subst /N E ...",
-        Op.consSubst, C.rodList "-in" ["-let"] )
+        Op.consSubst, C.roaList "-in" ["-let"] )
     , ( "typename /N /P ...",
-        Op.consTypename, C.rodList "-term" [] )
+        Op.consTypename, C.roaList "-term" [] )
     , ( "unless R R",
-        Op.consUnless, C.rodList "-relmap" [] )
+        Op.consUnless, C.roaList "-relmap" [] )
     , ( "unprefix /P",
-        Op.consUnprefix, C.rodOne "-prefix" [] )
+        Op.consUnprefix, C.roaOne "-prefix" [] )
     , ( "when R R",
-        Op.consWhen, C.rodList "-relmap" [] )
+        Op.consWhen, C.roaList "-relmap" [] )
     ]
 
 -- ----------------------

@@ -37,7 +37,7 @@ consCheckTerm use =
        (Just ns, Nothing, Nothing) -> Right $ relmapCheckTermJust use ns
        (Nothing, Just ns, Nothing) -> Right $ relmapCheckTermHas  use ns
        (Nothing, Nothing, Just ns) -> Right $ relmapCheckTermBut  use ns
-       _ -> Message.unexpOperand "require one of -just / -has / -but"
+       _ -> Message.unexpAttr "require one of -just / -has / -but"
 
 relmapCheckTermJust :: C.RopUse c -> [B.TermName] -> C.Relmap c
 relmapCheckTermHas  :: C.RopUse c -> [B.TermName] -> C.Relmap c

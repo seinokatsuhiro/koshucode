@@ -16,31 +16,31 @@ import qualified Koshucode.Baala.Op.Nest.Flow       as Op
 nestRops :: (C.CContent c) => [C.Rop c]
 nestRops = Op.ropList "nest"
     --  SYNOPSIS,
-    --  CONSTRUCTOR, OPERAND
+    --  CONSTRUCTOR, ATTRIBUTE
     [ ( "copy N R",
-        Op.consCopy, C.rodTwo "-with" "-relmap" [] )
+        Op.consCopy, C.roaTwo "-with" "-relmap" [] )
     , ( "down /N",
-        Op.consDown, C.rodOne "-term" [] )
+        Op.consDown, C.roaOne "-term" [] )
     , ( "for /N R [ -with /N ... ]",
-        Op.consFor, C.rodTwo "-term" "-relmap" ["-with"] )
+        Op.consFor, C.roaTwo "-term" "-relmap" ["-with"] )
     , ( "group /N R",
-        Op.consGroup, C.rodTwo "-term" "-relmap" [] )
+        Op.consGroup, C.roaTwo "-term" "-relmap" [] )
     , ( "group-by /N R",
-        Op.consGroupBy, C.rodTwo "-term" "-relmap" [] )
+        Op.consGroupBy, C.roaTwo "-term" "-relmap" [] )
     , ( "join-up /P ...",
-        Op.consJoinUp, C.rodList "-term" [] )
+        Op.consJoinUp, C.roaList "-term" [] )
     , ( "nest /P ... -to /N",
-        Op.consNest, C.rodList "-term" ["-to"] )
+        Op.consNest, C.roaList "-term" ["-to"] )
     , ( "unnest /P",
-        Op.consUnnest, C.rodList "-term" [] )
+        Op.consUnnest, C.roaList "-term" [] )
     , ( "slice /N [R] [ -with /N ... ]",
-        Op.consSlice, C.rodOneOpt "-term" "-relmap" ["-with"] )
+        Op.consSlice, C.roaOneOpt "-term" "-relmap" ["-with"] )
     , ( "slice-up R [ -with /N ... ]",
-        Op.consSliceUp, C.rodOne "-relmap" ["-with"] )
+        Op.consSliceUp, C.roaOne "-relmap" ["-with"] )
     , ( "split /N E ...",
-        Op.consSplit, C.rodList "-in" ["-let"] )
+        Op.consSplit, C.roaList "-in" ["-let"] )
     , ( "up /N",
-        Op.consUp, C.rodOne "-term" [] )
+        Op.consUp, C.roaOne "-term" [] )
     ]
 
 

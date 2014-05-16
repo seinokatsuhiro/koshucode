@@ -18,26 +18,26 @@ import qualified Koshucode.Baala.Op.Minimal.Tropashko as Op
 -- | Minimal implementations of relmap operators.
 minimalRops :: (Ord c) => [C.Rop c]
 minimalRops = Op.ropList "minimal"  -- GROUP
-    [ ( "contents /N"       , Op.consContents   , C.rodList "-term" [] )
-    , ( "cut /P ..."        , Op.consCut        , C.rodList "-term" [] )
-    , ( "cut-term /R"       , Op.consCutTerm    , C.rodOne  "-relmap" [] )
-    , ( "dee"               , Op.consDee        , C.rodNone [] )
-    , ( "dum"               , Op.consDum        , C.rodNone [] )
-    , ( "empty"             , Op.consEmpty      , C.rodNone [] )
-    , ( "equal"             , Op.consEqual      , C.rodOne  "-relmap" [] )
-    , ( "id"                , Op.consId         , C.rodNone [] )
-    , ( "join R"            , Op.consJoin       , C.rodOne  "-relmap" [] )
-    , ( "meet R"            , Op.consMeet       , C.rodOne  "-relmap" [] )
-    , ( "none R"            , Op.consNone       , C.rodOne  "-relmap" [] )
-    , ( "pick /P ..."       , Op.consPick       , C.rodList "-term"   [] )
-    , ( "pick-term /R"      , Op.consPickTerm   , C.rodOne  "-relmap" [] )
-    , ( "rename /N /P ..."  , Op.consRename     , C.rodList "-term"   [] )
-    , ( "move /P ... -to /N ...", Op.consMove   , C.rodList "-term" ["-to"] )
-    , ( "some R"            , Op.consSome       , C.rodOne  "-relmap" [] )
-    , ( "source P /T ..."   , Op.consSource     , C.rodOneList "-pattern" "-term" [] )
-    , ( "source-term P R"   , Op.consSourceTerm , C.rodTwo "-pattern" "-relmap" [] )
-    , ( "sub R"             , Op.consSub        , C.rodOne  "-relmap" [] )
-    --   USAGE                CONSTRUCTOR         OPERAND
+    [ ( "contents /N"       , Op.consContents   , C.roaList "-term" [] )
+    , ( "cut /P ..."        , Op.consCut        , C.roaList "-term" [] )
+    , ( "cut-term /R"       , Op.consCutTerm    , C.roaOne  "-relmap" [] )
+    , ( "dee"               , Op.consDee        , C.roaNone [] )
+    , ( "dum"               , Op.consDum        , C.roaNone [] )
+    , ( "empty"             , Op.consEmpty      , C.roaNone [] )
+    , ( "equal"             , Op.consEqual      , C.roaOne  "-relmap" [] )
+    , ( "id"                , Op.consId         , C.roaNone [] )
+    , ( "join R"            , Op.consJoin       , C.roaOne  "-relmap" [] )
+    , ( "meet R"            , Op.consMeet       , C.roaOne  "-relmap" [] )
+    , ( "none R"            , Op.consNone       , C.roaOne  "-relmap" [] )
+    , ( "pick /P ..."       , Op.consPick       , C.roaList "-term"   [] )
+    , ( "pick-term /R"      , Op.consPickTerm   , C.roaOne  "-relmap" [] )
+    , ( "rename /N /P ..."  , Op.consRename     , C.roaList "-term"   [] )
+    , ( "move /P ... -to /N ...", Op.consMove   , C.roaList "-term" ["-to"] )
+    , ( "some R"            , Op.consSome       , C.roaOne  "-relmap" [] )
+    , ( "source P /T ..."   , Op.consSource     , C.roaOneList "-pattern" "-term" [] )
+    , ( "source-term P R"   , Op.consSourceTerm , C.roaTwo "-pattern" "-relmap" [] )
+    , ( "sub R"             , Op.consSub        , C.roaOne  "-relmap" [] )
+    --   USAGE                CONSTRUCTOR         ATTRIBUTE
     ]
 
 
