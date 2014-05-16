@@ -1,12 +1,10 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
--- | Specialized relmap.
+-- | Link and run relmaps.
 
 module Koshucode.Baala.Core.Relmap.Run
-( 
-  -- * Run
-  relkitLink,
+( relkitLink,
   relkitRun,
   fixedRelation,
   bmapAlign,
@@ -17,8 +15,6 @@ import qualified Koshucode.Baala.Core.Content         as C
 import qualified Koshucode.Baala.Core.Relmap.Operator as C
 import qualified Koshucode.Baala.Core.Relmap.Relkit   as C
 import qualified Koshucode.Baala.Core.Message         as Message
-
-
 
 relkitLink :: forall c. (Ord c) => [C.RelkitDef c] -> B.Map (C.Relkit c)
 relkitLink kits = linkKit where

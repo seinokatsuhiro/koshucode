@@ -7,7 +7,6 @@ module Koshucode.Baala.Core.Relmap
 module Koshucode.Baala.Core.Relmap.Construct,
 module Koshucode.Baala.Core.Relmap.Operator,
 module Koshucode.Baala.Core.Relmap.Relkit,
-module Koshucode.Baala.Core.Relmap.Relmap,
 module Koshucode.Baala.Core.Relmap.Run,
 module Koshucode.Baala.Core.Relmap.Specialize,
 
@@ -18,7 +17,6 @@ module Koshucode.Baala.Core.Relmap.Specialize,
 import Koshucode.Baala.Core.Relmap.Construct
 import Koshucode.Baala.Core.Relmap.Operator
 import Koshucode.Baala.Core.Relmap.Relkit
-import Koshucode.Baala.Core.Relmap.Relmap
 import Koshucode.Baala.Core.Relmap.Run
 import Koshucode.Baala.Core.Relmap.Specialize
 

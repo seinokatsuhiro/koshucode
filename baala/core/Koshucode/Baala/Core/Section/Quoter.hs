@@ -14,7 +14,6 @@ import qualified Language.Haskell.TH.Quote as TH
 
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Core.Lexmap          as C
-import qualified Koshucode.Baala.Core.Relmap          as C
 import qualified Koshucode.Baala.Core.Section.Clause  as C
 import qualified Koshucode.Baala.Core.Section.Section as C
 

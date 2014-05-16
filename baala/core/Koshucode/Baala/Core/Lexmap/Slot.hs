@@ -4,20 +4,22 @@
 -- | Slot substitution.
 
 module Koshucode.Baala.Core.Lexmap.Slot
-( slotTrees
+( GlobalSlot,
+  slotTrees,
 ) where
 
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Core.Lexmap.Operand  as C
 import qualified Koshucode.Baala.Core.Message         as Message
 
+type GlobalSlot = B.NamedTrees
 
-slotTrees :: [B.NamedTrees] -> C.Rod -> B.AbMap [B.TokenTree]
+slotTrees :: [GlobalSlot] -> C.Rod -> B.AbMap [B.TokenTree]
 slotTrees gslot rod trees =
     do trees' <- slotTree gslot rod `mapM` trees
        Right $ concat trees'
 
-slotTree :: [B.NamedTrees] -> C.Rod -> B.TokenTree -> B.Ab [B.TokenTree]
+slotTree :: [GlobalSlot] -> C.Rod -> B.TokenTree -> B.Ab [B.TokenTree]
 slotTree gslot rod tree = B.abortableTree "slot" tree $ loop tree where
     loop (B.TreeB p q sub) = do sub' <- mapM loop sub
                                 Right [B.TreeB p q $ concat sub']
