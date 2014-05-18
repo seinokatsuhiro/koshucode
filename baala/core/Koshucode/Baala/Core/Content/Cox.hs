@@ -52,9 +52,6 @@ data CoxCore c
 instance (B.ShortDoc c) => Show (CoxCore c) where
     show = show . B.doc
 
-instance (B.ShortDoc c) => B.Pretty (CoxCore c) where
-    doc = docCore []
-
 instance (B.ShortDoc c) => B.ShortDoc (CoxCore c) where
     shortDoc = docCore
 

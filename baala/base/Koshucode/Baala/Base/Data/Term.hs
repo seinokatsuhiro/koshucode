@@ -37,9 +37,6 @@ instance B.Name Term where
     name (TermFlat s)   = s
     name (TermNest s _) = s
 
-instance B.Pretty Term where
-    doc = B.shortDoc []
-
 instance B.ShortDoc Term where
     shortDoc sh term =
         case term of

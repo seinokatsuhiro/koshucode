@@ -54,9 +54,6 @@ instance B.Monoid Relhead where
     mappend (Relhead t1) (Relhead t2) =
         Relhead $ B.unionUp t1 t2
 
-instance B.Pretty Relhead where
-    doc = B.shortDoc []
-
 instance B.ShortDoc Relhead where
     shortDoc sh (Relhead ts) = B.shortDocColon sh $ map (B.showTermName . B.termName) ts
 

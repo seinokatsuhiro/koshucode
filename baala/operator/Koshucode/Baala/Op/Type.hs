@@ -71,11 +71,6 @@ instance C.CContent VContent where
     appendContent (VText x) (VText y) = Right . VText $ x ++ y
     appendContent x y = Message.unmatchType (show (x, y))
 
--- | >>> B.doc $ VText "abc"
---   'abc
-instance B.Pretty VContent where
-    doc = B.shortDoc []
-
 instance B.ShortDoc VContent where
     shortDoc sh a =
         case a of

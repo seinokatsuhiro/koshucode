@@ -67,9 +67,6 @@ instance B.Name Token where
     name (TComment _ s) = s
     name x = error $ "unknown name: " ++ show x
 
-instance B.Pretty Token where
-    doc = B.shortDoc []
-
 instance B.ShortDoc Token where
     shortDoc sh = d where
         d (TWord    pos q w) = pretty "TWord"    pos [show q, show w]

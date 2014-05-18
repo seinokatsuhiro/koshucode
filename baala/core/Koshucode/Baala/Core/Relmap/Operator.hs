@@ -135,9 +135,6 @@ instance B.Name (Relmap c) where
     name (RelmapAppend _ _)     = "append"
     name _ = undefined
 
-instance B.Pretty (Relmap c) where
-    doc = B.shortDoc []
-
 instance B.ShortDoc (Relmap c) where
     shortDoc sh (RelmapSource lx _ _)  = B.shortDoc sh lx
     shortDoc sh (RelmapConst  lx _)    = B.shortDoc sh lx

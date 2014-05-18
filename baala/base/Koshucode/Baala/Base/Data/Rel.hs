@@ -40,11 +40,6 @@ instance (Ord c) => Eq (Rel c) where
 --   Tuple is list of contents.
 type Relbody c = [[c]]
 
--- | >>> doc $ rel ["/a", "/b"] [[10, 20], [30, 40 :: Int]]
---   {| /a /b | 10 : 20 | 30 : 40 |}
-instance (B.ShortDoc c) => B.Pretty (Rel c) where
-    doc = B.shortDoc []
-
 instance (B.ShortDoc c) => B.ShortDoc (Rel c) where
     shortDoc sh (Rel h1 b1) = B.docWraps "{|" "|}" $ h2 B.<+> b2
         where h2    = B.shortDoc  sh h1

@@ -42,9 +42,6 @@ data CodeClause a = CodeClause
     , clauseTokens    :: [a]           -- ^ Source tokens of clause
     } deriving (Show, G.Data, G.Typeable)
 
-instance B.Pretty (CodeLine a) where
-    doc = B.shortDoc []
-
 instance B.ShortDoc (CodeLine a) where
     shortDoc sh (CodeLine _ line _) = B.shortDoc sh line
 

@@ -3,7 +3,9 @@
 
 module Koshucode.Baala.Base.Text.Pretty
 ( -- * Class
-  Pretty (..),
+  doc,
+  doch,
+  docv,
 
   -- * Function
   docColon,
@@ -18,50 +20,16 @@ module Koshucode.Baala.Base.Text.Pretty
 
 import qualified Data.List as L
 import qualified Text.PrettyPrint as D
+import qualified Koshucode.Baala.Base.Text.ShortDoc as B
 
+doc :: (B.ShortDoc a) => a -> D.Doc
+doc = B.shortDoc []
 
+docv :: (B.ShortDoc a) => [a] -> D.Doc
+docv = B.shortDocV []
 
--- ----------------------  Class
-
--- | Type that has a pretty printer.
-class Pretty a where
-    -- | 'D.Doc' of @a@.
-    doc :: a -> D.Doc
-
-    -- | 'D.Doc' joined by 'vcat'.
-    docv :: [a] -> D.Doc
-    docv = D.vcat . map doc
-
-    -- | 'D.Doc' joined by 'hsep'.
-    doch :: [a] -> D.Doc
-    doch = D.hsep . map doc
-
--- | 'D.Doc' itself.
-instance Pretty D.Doc where
-    doc = id
-
--- | Same as 'D.int'.
-instance Pretty Int where
-    doc = D.int
-
--- | Same as 'D.text'.
-instance Pretty String where
-    doc = D.text
-
--- | >>> doch [True, False]
---   #true #false
-instance Pretty Bool where
-    doc True  = D.text "#true"
-    doc False = D.text "#false"
-
--- | >>> doc ("/a", "xxx")
---   /a xxx
-instance (Pretty a) => Pretty (String, a) where
-    doc (n, x) = D.text n D.<+> doc x
-
-
-
--- ----------------------  Function
+doch :: (B.ShortDoc a) => [a] -> D.Doc
+doch = B.shortDocH []
 
 docEmpty :: D.Doc
 docEmpty = D.empty
@@ -76,11 +44,11 @@ docZero = D.zeroWidthText
 --
 --   >>> docBracket $ docColon [True, False]
 --   [ #true : #false ]
-docColon :: (Pretty a) => [a] -> D.Doc
+docColon :: (B.ShortDoc a) => [a] -> D.Doc
 docColon = D.hsep . docColons
 
 -- | Colon-seperated list.
-docColons :: (Pretty a) => [a] -> [D.Doc]
+docColons :: (B.ShortDoc a) => [a] -> [D.Doc]
 docColons = L.intersperse (D.text ":") . map doc
 
 -- | Wrap in open and close brackets.
@@ -88,13 +56,13 @@ docColons = L.intersperse (D.text ":") . map doc
 --
 --   >>> docWraps "(" ")" "abc"
 --   ( abc )
-docWraps :: (Pretty a) => String -> String -> a -> D.Doc
+docWraps :: (B.ShortDoc a) => String -> String -> a -> D.Doc
 docWraps open close a = D.text open D.<+> doc a D.<+> D.text close
 
 -- | Wrap in open and close brackets.
 --
 --   >>> docWrap "(" ")" "abc"
 --   (abc)
-docWrap :: (Pretty a) => String -> String -> a -> D.Doc
+docWrap :: (B.ShortDoc a) => String -> String -> a -> D.Doc
 docWrap open close a = D.text open D.<> doc a D.<> D.text close
 

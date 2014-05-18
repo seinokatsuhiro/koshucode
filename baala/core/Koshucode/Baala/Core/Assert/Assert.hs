@@ -44,9 +44,6 @@ type AssertOption = [B.NamedTrees]
 instance B.TokenList (Assert c) where
     tokenList = assToken
 
-instance B.Pretty (Assert c) where
-    doc = B.shortDoc []
-
 instance B.ShortDoc (Assert c) where
     shortDoc sh (Assert q pat _ toks _ _ _) =
         let qs = B.shortDocH sh [assertText q, pat]

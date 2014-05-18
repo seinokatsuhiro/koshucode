@@ -12,12 +12,7 @@ import qualified Koshucode.Baala.Base.Text            as B
 import qualified Koshucode.Baala.Base.Token.Token     as B
 import qualified Koshucode.Baala.Base.Token.TokenLine as B
 
-
-
 type TokenClause = B.CodeClause B.Token
-
-instance B.Pretty TokenClause where
-    doc = docTokenClause []
 
 instance B.ShortDoc TokenClause where
     shortDoc = docTokenClause

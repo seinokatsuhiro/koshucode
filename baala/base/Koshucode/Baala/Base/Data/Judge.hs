@@ -58,11 +58,6 @@ instance Functor Judge where
     fmap f (Judge q p a) = Judge q p $ map g a
         where g (n, v) = (n, f v)
 
--- | >>> doc $ Judge True "P" [("/a", 10), ("/b", 20 :: Int)]
---   |-- P  /a 10  /b 20
-instance (Ord c, B.ShortDoc c) => B.Pretty (Judge c) where
-    doc = judgeDoc []
-
 instance (Ord c, B.ShortDoc c) => B.ShortDoc (Judge c) where
     shortDoc = judgeDoc 
 
