@@ -88,6 +88,7 @@ library
 
         Koshucode.Baala.Base.Token
         Koshucode.Baala.Base.Token.Abortable
+        Koshucode.Baala.Base.Token.HashWord
         Koshucode.Baala.Base.Token.Short
         Koshucode.Baala.Base.Token.Token
         Koshucode.Baala.Base.Token.TokenClause

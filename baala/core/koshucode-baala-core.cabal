@@ -59,7 +59,6 @@ library
         Koshucode.Baala.Core.Content.Cox
         Koshucode.Baala.Core.Content.Class
         Koshucode.Baala.Core.Content.Extension
-        Koshucode.Baala.Core.Content.HashWord
         Koshucode.Baala.Core.Content.Literal
 
         Koshucode.Baala.Core.Lexmap

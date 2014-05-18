@@ -5,6 +5,7 @@
 module Koshucode.Baala.Base.Token
 (
 module Koshucode.Baala.Base.Token.Abortable,
+module Koshucode.Baala.Base.Token.HashWord,
 module Koshucode.Baala.Base.Token.Short,
 module Koshucode.Baala.Base.Token.Token,
 module Koshucode.Baala.Base.Token.TokenClause,
@@ -13,6 +14,7 @@ module Koshucode.Baala.Base.Token.TokenTree,
 ) where
 
 import Koshucode.Baala.Base.Token.Abortable
+import Koshucode.Baala.Base.Token.HashWord
 import Koshucode.Baala.Base.Token.Short
 import Koshucode.Baala.Base.Token.Token
 import Koshucode.Baala.Base.Token.TokenClause

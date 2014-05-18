@@ -76,7 +76,7 @@ instance B.ShortDoc VContent where
         case a of
           VText s | s == ""           ->  B.doc $ "#empty"
                   | B.isSimpleWord s  ->  B.doc $ B.shortText sh s
-                  | otherwise         ->  B.doc $ C.hashWord s
+                  | otherwise         ->  B.doc $ B.hashWord s
           VDec  n          ->  B.doc $ B.decimalString n
           VBool b          ->  B.doc b
           VNil             ->  B.doc "()"

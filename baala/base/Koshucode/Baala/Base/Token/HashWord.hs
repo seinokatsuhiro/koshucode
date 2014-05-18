@@ -1,13 +1,14 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Core.Content.HashWord
+module Koshucode.Baala.Base.Token.HashWord
 ( -- $HashWord
   hashWordTable,
   hashWord,
 ) where
 
 import qualified Data.Char as Ch
-import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.Base.Prelude as B
+import qualified Koshucode.Baala.Base.Text    as B
 
 infixr 0 -:-
 (-:-) :: a -> b -> (a, b)

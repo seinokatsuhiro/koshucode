@@ -33,7 +33,6 @@ module Koshucode.Baala.Core.Content.Literal
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core.Message          as Message
 import qualified Koshucode.Baala.Core.Content.Class    as C
-import qualified Koshucode.Baala.Core.Content.HashWord as C
 
 
 -- ----------------------  Type
@@ -139,7 +138,7 @@ hashAssoc =
     [ ("true"  , C.putBool True)
     , ("false" , C.putBool False)
     , ("nil"   , Right C.nil)
-    ] ++ map f C.hashWordTable where
+    ] ++ map f B.hashWordTable where
     f (key, text) = (key, C.putText text)
 
 
