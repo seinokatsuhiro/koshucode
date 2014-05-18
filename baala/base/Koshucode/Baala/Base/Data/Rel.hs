@@ -18,7 +18,6 @@ module Koshucode.Baala.Base.Data.Rel
 import qualified Data.List                         as List
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
-import qualified Koshucode.Baala.Base.Token        as B
 import qualified Koshucode.Baala.Base.Data.Relhead as B
 
 
@@ -43,17 +42,14 @@ type Relbody c = [[c]]
 
 -- | >>> doc $ rel ["/a", "/b"] [[10, 20], [30, 40 :: Int]]
 --   {| /a /b | 10 : 20 | 30 : 40 |}
-instance (B.Pretty c) => B.Pretty (Rel c) where
-    doc (Rel h1 b1) = B.docWraps "{|" "|}" $ h2 B.<+> b2
-        where h2    = B.doc h1
-              b2    = B.doch $ map d b1
-              d xs  = B.doc "|" B.<+> B.docColon xs
+instance (B.ShortDoc c) => B.Pretty (Rel c) where
+    doc = B.shortDoc []
 
 instance (B.ShortDoc c) => B.ShortDoc (Rel c) where
     shortDoc sh (Rel h1 b1) = B.docWraps "{|" "|}" $ h2 B.<+> b2
-        where h2    = B.doc h1
-              b2    = B.doch $ map d b1
-              d xs  = B.doc "|" B.<+> B.shortDocColon sh xs
+        where h2    = B.shortDoc  sh h1
+              b2    = B.shortDocH sh $ map d b1
+              d xs  = B.shortDoc  sh "|" B.<+> B.shortDocColon sh xs
 
 
 

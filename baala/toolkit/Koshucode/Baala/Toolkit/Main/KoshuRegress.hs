@@ -250,7 +250,7 @@ reportCount = message where
 theLength :: (C.CDec c) => [a] -> c
 theLength = C.pDecFromInt . length
 
-putDoc :: (B.Pretty p) => p -> IO ()
+putDoc :: (B.ShortDoc p) => p -> IO ()
 putDoc = print . B.doc
 
 judgeOf :: String -> B.Judge c -> Maybe (B.Judge c)

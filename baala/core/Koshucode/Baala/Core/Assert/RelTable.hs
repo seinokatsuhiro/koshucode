@@ -18,10 +18,10 @@ import qualified Koshucode.Baala.Core.Content as C
 
 -- --------------------------------------------  Rel table
 
-relTable :: (B.Pretty c, C.CRel c) => B.Rel c -> String
+relTable :: (B.ShortDoc c, C.CRel c) => B.Rel c -> String
 relTable = unlines . relTableLines
 
-relTableLines :: (B.Pretty c, C.CRel c) => B.Rel c -> [String]
+relTableLines :: (B.ShortDoc c, C.CRel c) => B.Rel c -> [String]
 relTableLines r = render $ relCells 2 size [] text where
     text = relText r
     size = maxTermSize text
@@ -43,10 +43,10 @@ relCells pad m path (B.Rel (B.Relhead ts) bo) = table where
     text   = B.textCell B.Front
     rule _ = B.textRuleCell '-'
 
-relText :: (B.Pretty c, C.CRel c) => B.Rel c -> B.RelText
+relText :: (B.ShortDoc c, C.CRel c) => B.Rel c -> B.RelText
 relText (B.Rel he bo) = B.Rel he $ map (map content) bo where
     content c | C.isRel c  = B.MonoNest $ relText $ C.gRel c
-              | otherwise  = B.MonoType $ show $ B.doc c
+              | otherwise  = B.MonoType $ show $ B.shortDoc [] c
 
 render :: [[B.Cell]] -> [String]
 render = B.squeezeEmptyLines . B.renderTable " " . B.alignTable

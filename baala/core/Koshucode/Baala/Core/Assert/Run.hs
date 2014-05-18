@@ -54,14 +54,14 @@ just s Nothing  = Message.adlib s
 -- ----------------------  Assert
 
 -- | Calculate assertion list.
-runAssertJudges :: (Ord c, B.Pretty c, C.CRel c, C.CNil c)
+runAssertJudges :: (Ord c, B.ShortDoc c, C.CRel c, C.CNil c)
   => C.Global c -> [C.Assert c] -> B.Ab [B.OutputChunk c]
 runAssertJudges global asserts =
     runAssertDataset global asserts ds where
         ds = C.dataset $ C.globalJudges global
 
 -- | Calculate assertion list.
-runAssertDataset :: forall c. (Ord c, B.Pretty c, C.CRel c, C.CNil c)
+runAssertDataset :: forall c. (Ord c, B.ShortDoc c, C.CRel c, C.CNil c)
   => C.Global c -> [C.Assert c] -> C.Dataset c -> B.Ab [B.OutputChunk c]
 runAssertDataset global asserts dataset = Right . concat =<< mapM each asserts where
     each (C.Assert _ _ _ _ _ Nothing _) = B.bug "runAssertDataset"
@@ -99,7 +99,7 @@ flatnames trees =
 
 -- ---------------------------------  Option
 
-assertOptionProcess :: (Ord c, B.Pretty c, C.CRel c)
+assertOptionProcess :: (Ord c, B.ShortDoc c, C.CRel c)
   => Bool -> B.JudgePat -> C.AssertOption -> B.Rel c -> B.Ab [B.OutputChunk c]
 assertOptionProcess q pat opt r1 =
     do assertOptionCheck opt
@@ -128,7 +128,7 @@ assertOptionFore opt r1 =
 assertOptionOrder :: (Ord c) => [B.TokenTree] ->  B.AbMap (B.Rel c)
 assertOptionOrder _ r1 = Right r1
 
-assertOptionComment :: (B.Pretty c, C.CRel c) =>
+assertOptionComment :: (B.ShortDoc c, C.CRel c) =>
     B.JudgePat -> C.AssertOption -> B.Rel c -> [String]
 assertOptionComment p opt r =
     case lookup "-with-table" opt of

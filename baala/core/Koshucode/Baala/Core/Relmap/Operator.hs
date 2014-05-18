@@ -136,20 +136,23 @@ instance B.Name (Relmap c) where
     name _ = undefined
 
 instance B.Pretty (Relmap c) where
-    doc (RelmapSource lx _ _)  = B.doc lx
-    doc (RelmapConst  lx _)    = B.doc lx
+    doc = B.shortDoc []
 
-    doc (RelmapGlobal lx _)    = B.doc lx -- hang (text $ name m) 2 (doch (map doc ms))
-    doc (RelmapCalc   lx _ _)  = B.doc lx -- hang (text $ name m) 2 (doch (map doc ms))
+instance B.ShortDoc (Relmap c) where
+    shortDoc sh (RelmapSource lx _ _)  = B.shortDoc sh lx
+    shortDoc sh (RelmapConst  lx _)    = B.shortDoc sh lx
 
-    doc (RelmapCopy   _ _ r1)  = B.doc r1
-    doc (RelmapWith   _ _ r1)  = B.doc r1
-    doc (RelmapLink   lx _ _)  = B.doc lx
-    doc (RelmapAppend r1 r2)   = B.docHang (B.doc r1) 2 (docRelmapAppend r2)
+    shortDoc sh (RelmapGlobal lx _)    = B.shortDoc sh lx -- hang (text $ name m) 2 (shortDoch (map shortDoc ms))
+    shortDoc sh (RelmapCalc   lx _ _)  = B.shortDoc sh lx -- hang (text $ name m) 2 (shortDoch (map shortDoc ms))
 
-docRelmapAppend :: Relmap c -> B.Doc
-docRelmapAppend = B.docv . map pipe . relmapAppendList where
-    pipe m = B.doc "|" B.<+> B.doc m
+    shortDoc sh (RelmapCopy   _ _ r1)  = B.shortDoc sh r1
+    shortDoc sh (RelmapWith   _ _ r1)  = B.shortDoc sh r1
+    shortDoc sh (RelmapLink   lx _ _)  = B.shortDoc sh lx
+    shortDoc sh (RelmapAppend r1 r2)   = B.docHang (B.shortDoc sh r1) 2 (docRelmapAppend sh r2)
+
+docRelmapAppend :: [B.ShortDef] -> Relmap c -> B.Doc
+docRelmapAppend sh = B.shortDocV sh . map pipe . relmapAppendList where
+    pipe m = B.shortDoc sh "|" B.<+> B.shortDoc sh m
 
 {-| Expand 'RelmapAppend' to list of 'Relmap' -}
 relmapAppendList :: Relmap c -> [Relmap c]

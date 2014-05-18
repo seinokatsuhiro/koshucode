@@ -38,9 +38,7 @@ instance B.Name Term where
     name (TermNest s _) = s
 
 instance B.Pretty Term where
-    doc (TermFlat n)    = B.doc (showTermName n)
-    doc (TermNest n xs) = B.docWraps "(" ")"
-                         (B.doch $ B.doc (showTermName n) : map B.doc xs)
+    doc = B.shortDoc []
 
 instance B.ShortDoc Term where
     shortDoc sh term =

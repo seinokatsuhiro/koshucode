@@ -44,10 +44,13 @@ data LexmapType
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance B.Pretty Lexmap where
-    doc Lexmap { lexOpToken = opTok, lexAttr = opd } =
+    doc = B.shortDoc []
+
+instance B.ShortDoc Lexmap where
+    shortDoc sh Lexmap { lexOpToken = opTok, lexAttr = opd } =
         case lookup "@attr" opd of
-          Nothing -> B.doch [op, "..."]
-          Just xs -> B.doch [op, show xs]
+          Nothing -> B.shortDocH sh [op, "..."]
+          Just xs -> B.shortDocH sh [op, show xs]
         where op = B.tokenContent opTok
 
 instance B.TokenList Lexmap where

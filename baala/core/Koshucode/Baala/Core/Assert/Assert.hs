@@ -45,9 +45,7 @@ instance B.TokenList (Assert c) where
     tokenList = assToken
 
 instance B.Pretty (Assert c) where
-    doc (Assert q pat _ toks _ _ _) =
-        let qs = B.doch [assertText q, pat]
-        in B.docHang qs 2 (B.doch toks)
+    doc = B.shortDoc []
 
 instance B.ShortDoc (Assert c) where
     shortDoc sh (Assert q pat _ toks _ _ _) =

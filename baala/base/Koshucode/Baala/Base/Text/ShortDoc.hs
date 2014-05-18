@@ -13,11 +13,10 @@ module Koshucode.Baala.Base.Text.ShortDoc
 import qualified Data.List                         as L
 import qualified Text.PrettyPrint                  as D
 import qualified Koshucode.Baala.Base.Prelude      as B
-import qualified Koshucode.Baala.Base.Text.Pretty  as B
 
 type ShortDef = B.Named String
 
-class (B.Pretty a) => ShortDoc a where
+class ShortDoc a where
     shortDoc :: [ShortDef] -> a -> B.Doc
 
 instance ShortDoc B.Doc where
