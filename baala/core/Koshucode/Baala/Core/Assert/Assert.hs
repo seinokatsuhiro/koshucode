@@ -49,6 +49,11 @@ instance B.Pretty (Assert c) where
         let qs = B.doch [assertText q, pat]
         in B.docHang qs 2 (B.doch toks)
 
+instance B.ShortDoc (Assert c) where
+    shortDoc sh (Assert q pat _ toks _ _ _) =
+        let qs = B.shortDocH sh [assertText q, pat]
+        in B.docHang qs 2 (B.shortDocH sh toks)
+
 data AssertType
     = AssertAffirm    -- ^ @|==@ /pattern/ @:@ /relmap/
     | AssertDeny      -- ^ @|=X@ /pattern/ @:@ /relmap/

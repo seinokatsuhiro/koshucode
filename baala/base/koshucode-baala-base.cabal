@@ -81,6 +81,7 @@ library
         Koshucode.Baala.Base.Text.Comment
         Koshucode.Baala.Base.Text.Pretty
         Koshucode.Baala.Base.Text.Resource
+        Koshucode.Baala.Base.Text.ShortDoc
         Koshucode.Baala.Base.Text.TextTable
         Koshucode.Baala.Base.Text.Unicode
         Koshucode.Baala.Base.Text.Utility

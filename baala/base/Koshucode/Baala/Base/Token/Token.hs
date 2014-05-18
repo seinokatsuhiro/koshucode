@@ -68,7 +68,10 @@ instance B.Name Token where
     name x = error $ "unknown name: " ++ show x
 
 instance B.Pretty Token where
-    doc = d where
+    doc = B.shortDoc []
+
+instance B.ShortDoc Token where
+    shortDoc sh = d where
         d (TWord    pos q w) = pretty "TWord"    pos [show q, show w]
         d (TShort   pos a b) = pretty "TShort"   pos [show a, show b]
         d (TTerm    pos ns)  = pretty "TTerm"    pos [show ns]
@@ -78,7 +81,7 @@ instance B.Pretty Token where
         d (TSpace   pos c)   = pretty "TSpace"   pos [show c]
         d (TComment pos s)   = pretty "TComment" pos [show s]
         d (TUnknown pos s)   = pretty "TUnknown" pos [show s]
-        pretty k pos xs = B.doch $ k : lineCol pos : xs
+        pretty k pos xs = B.shortDocH sh $ k : lineCol pos : xs
         lineCol pos = (show $ B.codePointLineNumber pos)
                       ++ ":" ++ (show $ B.codePointColumn pos)
 

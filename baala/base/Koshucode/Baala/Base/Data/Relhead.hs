@@ -57,6 +57,9 @@ instance B.Monoid Relhead where
 instance B.Pretty Relhead where
     doc (Relhead ts) = B.docColon $ map (B.showTermName . B.termName) ts
 
+instance B.ShortDoc Relhead where
+    shortDoc sh (Relhead ts) = B.shortDocColon sh $ map (B.showTermName . B.termName) ts
+
 headExplain :: Relhead -> String
 headExplain = show . headExplainDoc
 

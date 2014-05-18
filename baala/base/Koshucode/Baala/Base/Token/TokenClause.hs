@@ -17,17 +17,21 @@ import qualified Koshucode.Baala.Base.Token.TokenLine as B
 type TokenClause = B.CodeClause B.Token
 
 instance B.Pretty TokenClause where
-    doc = docTokenClause
+    doc = docTokenClause []
 
-docTokenClause :: TokenClause -> B.Doc
-docTokenClause (B.CodeClause ls toks) = d where
+instance B.ShortDoc TokenClause where
+    shortDoc = docTokenClause
+
+docTokenClause :: [B.ShortDef] -> TokenClause -> B.Doc
+docTokenClause sh (B.CodeClause ls toks) = d where
     d      = B.docHang k 2 $ B.docv [dls, dtoks]
-    k      = B.doc "TokenClause"
+    k      = B.shortDoc sh "TokenClause"
     dtoks  = labeled toks "[Token]"
     dls    = labeled ls   "[TokenLine]"
     labeled xs name = B.docHang (label xs name) 2 $ B.docv xs
-    label   xs name = B.doch [ B.doc name
-                             , B.doc $ length xs, B.doc "elements" ]
+    label   xs name = B.shortDocH sh [ B.shortDoc sh name
+                                     , B.shortDoc sh $ length xs
+                                     , B.shortDoc sh "elements" ]
 
 -- | Convert token lines into token clauses
 tokenClauses :: [B.TokenLine] -> [TokenClause]

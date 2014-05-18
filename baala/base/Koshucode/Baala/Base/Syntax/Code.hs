@@ -45,6 +45,9 @@ data CodeClause a = CodeClause
 instance B.Pretty (CodeLine a) where
     doc (CodeLine _ line _) = B.doc line
 
+instance B.ShortDoc (CodeLine a) where
+    shortDoc sh (CodeLine _ line _) = B.shortDoc sh line
+
 indentLineBy :: (a -> Int) -> CodeLine a -> (Int, CodeLine a)
 indentLineBy ind ln@(CodeLine _ _ (tk : _)) = (ind tk, ln)
 indentLineBy _   ln@(CodeLine _ _ [])       = (0, ln)

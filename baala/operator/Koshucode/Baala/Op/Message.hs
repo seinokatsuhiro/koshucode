@@ -34,7 +34,7 @@ diffHead :: [B.Relhead] -> B.Ab a
 diffHead = Left . B.abortLines "Different headings" . map showHead
 
 -- | Dump relation
-dumpRel :: (B.Pretty c, C.CRel c) => B.Rel c -> B.Ab a
+dumpRel :: (B.ShortDoc c, C.CRel c) => B.Rel c -> B.Ab a
 dumpRel r = Left $ B.abortPage "Dump relation" $ C.relTableLines r
 
 -- | Duplicate term name

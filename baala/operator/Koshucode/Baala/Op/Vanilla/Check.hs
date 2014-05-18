@@ -126,10 +126,10 @@ relkitTypename np (Just he1) = Right kit2 where
 
 -- ----------------------  dump
 
-consDump :: (B.Pretty c, C.CRel c) => C.RopCons c
+consDump :: (B.ShortDoc c, C.CRel c) => C.RopCons c
 consDump use = Right $ C.relmapFlow use $ relkitDump
 
-relkitDump :: (B.Pretty c, C.CRel c) => C.RelkitCalc c
+relkitDump :: (B.ShortDoc c, C.CRel c) => C.RelkitCalc c
 relkitDump Nothing = Right C.relkitNothing
 relkitDump (Just he1) = Right kit2 where
     kit2 = C.relkitJust he1 $ C.RelkitAbFull False kitf2 []
