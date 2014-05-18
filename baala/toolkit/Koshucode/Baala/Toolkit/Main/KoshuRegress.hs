@@ -212,7 +212,7 @@ reportMatch file =
        return True
 
 reportUnmatch
-    :: (Ord c, B.Pretty c) =>
+    :: (Ord c, B.ShortDoc c) =>
        String -> [B.Judge c] -> (Int, Int) -> IO Bool
 reportUnmatch file js (add, del) =
     do putDoc $ reportJudge
@@ -224,7 +224,7 @@ reportUnmatch file js (add, del) =
        _ <- writeJudgesToFile path js
        return False
 
-writeJudgesToFile :: (Ord c, B.Pretty c) => FilePath -> [B.Judge c] -> IO Int
+writeJudgesToFile :: (Ord c, B.ShortDoc c) => FilePath -> [B.Judge c] -> IO Int
 writeJudgesToFile path js =
     withFile path WriteMode writer where
     writer h = do hSetEncoding h utf8

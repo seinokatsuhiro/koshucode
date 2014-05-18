@@ -19,6 +19,7 @@ module Koshucode.Baala.Base.Data.Judge
 import qualified Data.List                         as List
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
+import qualified Koshucode.Baala.Base.Token        as B
 import qualified Koshucode.Baala.Base.Data.Term    as B
 
 
@@ -60,20 +61,28 @@ instance Functor Judge where
 
 -- | >>> doc $ Judge True "P" [("/a", 10), ("/b", 20 :: Int)]
 --   |-- P  /a 10  /b 20
-instance (Ord c, B.Pretty c) => B.Pretty (Judge c) where
-    doc (Judge q p a) = quality q B.<+> sign B.<+> arg a
-        where
-          -- Frege's judgement stroke, content line,
-          -- and logical quality
-          quality True  = B.doc "|--"
-          quality False = B.doc "|-X"
-          -- pattern
-          sign | ':' `elem` p = B.docWrap "\"" "\"" p
-               | otherwise    = B.doc p
-          -- term name and term value
-          arg ((n,v) : a2) = B.doc " " B.<> B.doc (B.showTermName n)
-                             B.<+> B.doc v B.<+> arg a2
-          arg [] = B.docEmpty
+instance (Ord c, B.ShortDoc c) => B.Pretty (Judge c) where
+    doc = judgeDoc []
+
+instance (Ord c, B.ShortDoc c) => B.ShortDoc (Judge c) where
+    shortDoc = judgeDoc 
+
+judgeDoc :: (B.ShortDoc c) => [B.ShortDef] -> Judge c -> B.Doc
+judgeDoc shorts (Judge q p a) = quality q B.<+> sign B.<+> arg a where
+
+    -- Frege's judgement stroke, content line,
+    -- and logical quality
+    quality True  = B.doc "|--"
+    quality False = B.doc "|-X"
+
+    -- pattern
+    sign | ':' `elem` p = B.docWrap "\"" "\"" p
+         | otherwise    = B.doc p
+
+    -- term name and term value
+    arg ((n,c) : a2) = B.doc " " B.<> B.doc (B.showTermName n)
+                       B.<+> B.shortDoc shorts c B.<+> arg a2
+    arg [] = B.docEmpty
 
 -- | Sort terms in alphabetical order.
 abcJudge :: (Ord c) => B.Map (Judge c)

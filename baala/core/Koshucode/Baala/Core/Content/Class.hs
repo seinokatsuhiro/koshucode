@@ -36,7 +36,7 @@ import qualified Koshucode.Baala.Core.Message as Message
 class (Show c) => PrimContent c where
     typename :: c -> String
 
-class (Ord c, B.Pretty c, PrimContent c,
+class (Ord c, B.ShortDoc c, PrimContent c,
        CBool c, CText c, CDec c, CList c,
        CNil c , CSet c, CTermset c, CRel c) =>
     CContent c where

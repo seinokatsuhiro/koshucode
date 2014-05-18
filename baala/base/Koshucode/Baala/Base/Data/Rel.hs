@@ -18,6 +18,7 @@ module Koshucode.Baala.Base.Data.Rel
 import qualified Data.List                         as List
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
+import qualified Koshucode.Baala.Base.Token        as B
 import qualified Koshucode.Baala.Base.Data.Relhead as B
 
 
@@ -47,6 +48,12 @@ instance (B.Pretty c) => B.Pretty (Rel c) where
         where h2    = B.doc h1
               b2    = B.doch $ map d b1
               d xs  = B.doc "|" B.<+> B.docColon xs
+
+instance (B.ShortDoc c) => B.ShortDoc (Rel c) where
+    shortDoc sh (Rel h1 b1) = B.docWraps "{|" "|}" $ h2 B.<+> b2
+        where h2    = B.doc h1
+              b2    = B.doch $ map d b1
+              d xs  = B.doc "|" B.<+> B.shortDocColon sh xs
 
 
 

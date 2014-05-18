@@ -100,7 +100,7 @@ koshuMain global =
            | has OptHelp         -> L.putSuccess usage
            | has OptVersion      -> L.putSuccess $ version ++ "\n"
            | has OptShowEncoding -> L.putSuccess =<< L.currentEncodings
-           | has OptPretty       -> prettySection sec
+           -- | has OptPretty       -> prettySection sec
            | has OptStdin        -> runStdin   sec
            | has OptListRop      -> putRop     $ C.globalRops g2
            | has OptElement      -> putElems   sec
@@ -118,7 +118,7 @@ koshuMain global =
 
        (_, _, errs) -> L.putFailure $ concat errs
 
-putRop :: (Ord c, B.Pretty c, C.CText c) => [C.Rop c] -> IO Int
+putRop :: (Ord c, B.ShortDoc c, C.CText c) => [C.Rop c] -> IO Int
 putRop rops =
     do B.putJudges 0 $ map f rops
     where
@@ -154,21 +154,21 @@ putElems src =
 
 -- ----------------------  Pretty printing
 
-prettySection :: (C.CContent c) => C.SectionBundle c -> IO Int
-prettySection (C.SectionBundle root _ files _) =
-    case files of
-      [file] -> do md <- C.readSection root (B.ResourceFile file)
-                   prettyPrint md
-                   return 0
-      []     -> do text <- getContents
-                   md <- C.readSection root (B.ResourceText text)
-                   prettyPrint md
-                   return 0
-      _      -> L.putSuccess usage
-    where prettyPrint md' =
-              case md' of
-                Left a   -> B.abort [] a
-                Right md -> print $ B.doc md
+-- prettySection :: (C.CContent c) => C.SectionBundle c -> IO Int
+-- prettySection (C.SectionBundle root _ files _) =
+--     case files of
+--       [file] -> do md <- C.readSection root (B.ResourceFile file)
+--                    prettyPrint md
+--                    return 0
+--       []     -> do text <- getContents
+--                    md <- C.readSection root (B.ResourceText text)
+--                    prettyPrint md
+--                    return 0
+--       _      -> L.putSuccess usage
+--     where prettyPrint md' =
+--               case md' of
+--                 Left a   -> B.abort [] a
+--                 Right md -> print $ B.doc md
 
 
 

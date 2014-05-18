@@ -44,11 +44,11 @@ data Section c = Section {
     , secMessage  :: [String]            -- ^ Collection of messages
     } deriving (Show)
 
-instance (Ord c, B.Pretty c) => B.Pretty (Section c) where
-    doc sec = dSection where
-        dSection = B.docv [dAssert, dJudge]
-        dJudge   = B.docv $ secJudge sec
-        dAssert  = B.docv $ concatMap B.shortBody $ secAssert sec
+-- instance (Ord c, B.Pretty c) => B.Pretty (Section c) where
+--     doc sec = dSection where
+--         dSection = B.docv [dAssert, dJudge]
+--         dJudge   = B.docv $ secJudge sec
+--         dAssert  = B.docv $ concatMap B.shortBody $ secAssert sec
 
 instance B.Monoid (Section c) where
     mempty  = emptySection
