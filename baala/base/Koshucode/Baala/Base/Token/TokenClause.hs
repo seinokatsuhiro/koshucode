@@ -38,11 +38,10 @@ tokenClauses = map clause . split where
     split = B.gather B.splitClause . map indent . sweep
 
     sweep :: B.Map [B.TokenLine]
-    sweep = filter (not . blank)
+    sweep = B.omit blank
 
     blank :: B.TokenLine -> Bool
     blank = all B.isBlankToken . B.lineTokens
 
     indent :: B.TokenLine -> (Int, B.TokenLine)
     indent = B.indentLineBy B.tokenIndent
-

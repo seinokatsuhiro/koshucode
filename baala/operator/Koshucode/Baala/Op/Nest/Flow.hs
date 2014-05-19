@@ -137,7 +137,7 @@ relkitSplit (base, deriv, bodies) (Just he1)
       split (x : xs2) bo1 =
           do bo2 <- run x `mapM` bo1
              let first = filter fst bo2
-                 rest = map snd $ filter (not . fst) bo2
+                 rest = map snd $ B.omit fst bo2
              rest' <- split xs2 rest
              let rel = B.Rel he1 $ map snd first
              Right $ C.pRel rel : rest'

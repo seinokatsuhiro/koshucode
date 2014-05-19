@@ -11,6 +11,7 @@ module Koshucode.Baala.Core.Content.Class
 
   -- * Haskell data
   CBool       (..),
+  true, false,
   CText       (..),
   pTextList,
   pTextSet,
@@ -48,11 +49,11 @@ class (Ord c, B.ShortDoc c, PrimContent c,
 
 -- | Delete empty list ('null') from content list.
 nonNullFilter :: B.Map [[a]]
-nonNullFilter = filter (not . null)
+nonNullFilter = B.omit null
 
 -- | Delete 'nil' from content list.
 nonNilFilter :: (CNil c) => B.Map [c]
-nonNilFilter = filter (not . isNil)
+nonNilFilter = B.omit isNil
 
 getAbAb :: PrimContent c => (c -> Bool) -> (c -> b) -> B.Ab c -> B.Ab b
 getAbAb _ _ (Left reason) =  Left reason
@@ -74,6 +75,10 @@ class (PrimContent c) => CBool c where
 
     putBool     ::    Bool -> B.Ab c
     putBool     =    Right . pBool
+
+true, false :: (CBool c) => c
+true  = pBool True
+false = pBool False
 
 class (PrimContent c) => CText c where
     isText      ::       c -> Bool

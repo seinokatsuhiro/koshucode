@@ -239,7 +239,7 @@ subst = su [] where
     su args e@(B.Sourced src core) =
         let s = B.Sourced src
         in case core of
-             CoxVar _ i    -> B.fromMaybe e $ args !! (i - 1)
+             CoxVar _ i    -> B.fromMaybe e $ args !!! (i - 1)
              CoxDeriv v b  -> s $ CoxDeriv v $ su (Nothing : args) b
              CoxApplyL _ _ -> app args $ s $ mapToCox (su args) core
              _             -> e
@@ -308,7 +308,7 @@ coxRun args = run 0 where
         in B.abortable "calc" src $
            case core of
              CoxLit c       -> Right c
-             CoxTerm _ [p]  -> Right $ args !! p
+             CoxTerm _ [p]  -> Right $ args !!! p
              CoxTerm _ ps   -> term ps args
              CoxApplyL e [] -> run' e
              CoxApplyL (B.Sourced _ (CoxBase _ f)) xs -> f $ map run' xs
@@ -318,7 +318,7 @@ coxRun args = run 0 where
     term []       _ = Message.notFound "term"
     term (-1 : _) _ = Message.notFound "term"
     term (p : ps) args2 =
-        let c = args2 !! p
+        let c = args2 !!! p
         in if C.isRel c
            then rel ps $ C.gRel c
            else Right c
@@ -342,6 +342,10 @@ irreducible (B.Sourced _ core) =
       CoxBase _ _     ->  True
       CoxApplyL f xs  ->  all irreducible $ f : xs
       _               ->  False
+
+(!!!) :: [a] -> Int -> a
+xs !!! i | i >= 0    = xs !! i
+         | otherwise = error "Cox !!!"
 
 
 -- ----------------------

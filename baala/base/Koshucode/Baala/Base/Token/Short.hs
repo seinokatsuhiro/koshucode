@@ -34,7 +34,7 @@ shortMapM :: (Monad m) => (a -> m b) -> [Short a] -> m [Short b]
 shortMapM f = mapM $ shortM . fmap f
 
 shortTrim :: B.Map [Short [a]]
-shortTrim = filter $ not . null . shortBody
+shortTrim = B.omit $ null . shortBody
 
 shortText :: [B.ShortDef] -> B.Map String
 shortText = loop where

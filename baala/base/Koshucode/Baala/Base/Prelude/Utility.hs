@@ -15,6 +15,7 @@ module Koshucode.Baala.Base.Prelude.Utility
 
   -- * List
   front,
+  omit,
   unique,
   unionUp,
   singleton,
@@ -71,6 +72,9 @@ sequenceSnd xs =
 front :: [a] -> [a]
 front [] = []
 front (x : _) = [x]
+
+omit :: (a -> Bool) -> [a] -> [a]
+omit f = filter $ not . f
 
 {-| Remove duplicate elements. -}
 unique :: (Ord a) => [a] -> [a]

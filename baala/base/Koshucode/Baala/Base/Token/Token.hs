@@ -207,7 +207,7 @@ isCloseTokenOf _ _              = False
 
 -- | Remove blank tokens.
 sweepToken :: B.Map [Token]
-sweepToken = filter (not . isBlankToken)
+sweepToken = B.omit isBlankToken
 
 tokenIndent :: Token -> Int
 tokenIndent (TSpace _ n) = n

@@ -89,7 +89,14 @@ consPreclause :: [B.TokenLine] -> [Clause]
 consPreclause = concatMap consPreclause' . B.tokenClauses
 
 consPreclause' :: B.TokenClause -> [Clause]
-consPreclause' src = dispatch $ B.clauseTokens src where
+consPreclause' src = dispatch $ liaison $ B.clauseTokens src where
+
+    liaison :: B.Map [B.Token]
+    liaison [] = []
+    liaison (B.TWord p1 q1 w1 : B.TWord _ q2 w2 : xs)
+        | q1 > 0 && q2 > 0 = let tok = B.TWord p1 (max q1 q2) (w1 ++ w2)
+                             in liaison $ tok : xs
+    liaison (x : xs) = x : liaison xs
 
     dispatch :: [B.Token] -> [Clause]
     dispatch (B.TWord _ 0 "|" : B.TWord _ 0 k : xs) =

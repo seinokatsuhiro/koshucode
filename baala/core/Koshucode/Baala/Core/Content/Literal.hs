@@ -72,6 +72,11 @@ litContentBy ops tree = B.abortableTree "literal" tree $ lit tree where
     word w = case w of
           '#' : s  ->  litHash s
           "()"     ->  Right C.nil
+          "nil"    ->  Right C.nil
+          "t"      ->  Right C.true
+          "f"      ->  Right C.false
+          "true"   ->  Right C.true
+          "false"  ->  Right C.false
           _        ->  Message.unkWord w
 
     paren :: [B.TokenTree] -> B.Ab c
@@ -135,8 +140,8 @@ litHash key =
 
 hashAssoc :: (C.CContent c) => [B.Named (B.Ab c)]
 hashAssoc =
-    [ ("true"  , C.putBool True)
-    , ("false" , C.putBool False)
+    [ ("true"  , Right C.true)
+    , ("false" , Right C.false)
     , ("nil"   , Right C.nil)
     ]
 

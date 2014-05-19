@@ -37,14 +37,14 @@ import qualified Koshucode.Baala.Base.Token.HashWord as B
 -- | Token list on a line.
 type TokenLine = B.CodeLine B.Token
 
--- | Tokenize text.
-tokenLines :: B.Resource -> String -> [TokenLine]
-tokenLines res = B.codeLines $ nextToken res
-
 -- | Split string into list of tokens.
 --   Result token list does not contain newline characters.
 tokens :: B.Resource -> String -> [B.Token]
 tokens res = concatMap B.lineTokens . tokenLines res
+
+-- | Tokenize text.
+tokenLines :: B.Resource -> String -> [TokenLine]
+tokenLines res = B.codeLines $ nextToken res
 
 -- | Split a next token from source text.
 nextToken :: B.Resource -> B.NextToken B.Token
