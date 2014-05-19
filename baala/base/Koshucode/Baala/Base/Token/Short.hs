@@ -43,8 +43,8 @@ shortText = loop where
               | otherwise        = B.hashWord s
     loop ((prefix, long) : sh) s =
         case L.stripPrefix long s of
-          Just s2 | s2 /= "" -> prefix ++ "." ++ text2 s2
-          _                  -> loop sh s
+          Just s2 -> prefix ++ "." ++ text2 s2
+          _       -> loop sh s
 
     text2 s   | B.isSimpleWord s = s
               | otherwise        = B.hashWord s

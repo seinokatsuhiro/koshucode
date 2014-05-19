@@ -51,89 +51,91 @@ nextToken :: B.Resource -> B.NextToken B.Token
 nextToken res (num, line) txt =
     case txt of
       ('*' : '*' : '*' : '*' : cs)
-                             ->  tokD cs          $ B.TWord     p 0 "****"
-      ('*' : '*' : _)        ->  tokD ""          $ B.TComment  p txt
-      ('\'' : '\'' : cs)     ->  let cs2 = B.trimLeft cs
-                                 in tokD ""       $ B.TWord     p 1 cs2
-      ('(' : ')' : cs)       ->  tokD cs          $ B.TWord     p 0 "()"  -- nil
+                         ->  token cs         $ B.TWord     p 0 "****"
+      ('*' : '*' : _)    ->  token ""         $ B.TComment  p txt
+      ('\'' : '\'' : cs) ->  let cs2          = B.trimLeft cs
+                             in token ""      $ B.TWord     p 1 cs2
+      ('(' : ')' : cs)   ->  token cs         $ B.TWord     p 0 "()"  -- nil
+      ('<' : '<' : cs)   ->  token cs         $ B.TOpen     p "<<"
+      ('>' : '>' : cs)   ->  token cs         $ B.TClose    p ">>"
       ('#' : c : cs)
-          | c == '!'         ->  tokD ""          $ B.TComment  p txt
-          | otherwise        ->  word cs [c]      hash
-                                   
+          | c == '!'     ->  token ""         $ B.TComment  p txt
+          | otherwise    ->  word cs [c]      hash
+                               
       (c : '|' : cs)
-          | c `elem` "[{<("  ->  tokD cs          $ B.TOpen     p [c, '|']
+          | open c       ->  token cs         $ B.TOpen     p [c, '|']
       ('|' : c : cs)
-          | c `elem` "]}>)"  ->  tokD cs          $ B.TClose    p ['|', c]
-          | c == '|'         ->  let cs2 = B.trimLeft cs  -- newline
-                                 in tokD cs2      $ B.TWord     p 0 "||"
-
+          | close c      ->  token cs         $ B.TClose    p ['|', c]
+          | c == '|'     ->  let cs2          = B.trimLeft cs  -- newline
+                             in token cs2     $ B.TWord     p 0 "||"
       (c : cs)
-          | isOpen    c      ->  tokD cs          $ B.TOpen     p [c]
-          | isClose   c      ->  tokD cs          $ B.TClose    p [c]
-          | isSingle  c      ->  tokD cs          $ B.TWord     p 0 [c]
-          | isTerm    c      ->  term cs [] []
-          | isQQ      c      ->  qq   cs
-          | isQ       c      ->  word cs []       $ B.TWord     p 1
-          | isSlot    c      ->  let (n, cs2) = slot 1 cs
-                                 in word cs2 []   $ B.TSlot     p n
-          | isShort   c      ->  short cs [c]
-          | isWord    c      ->  word cs [c]      $ B.TWord     p 0
-          | isSpace   c      ->  space 1 cs
+          | isOpen   c   ->  token cs         $ B.TOpen     p [c]
+          | isClose  c   ->  token cs         $ B.TClose    p [c]
+          | isSingle c   ->  token cs         $ B.TWord     p 0 [c]
+          | isTerm   c   ->  term cs [] []
+          | isQQ     c   ->  qq   cs
+          | isQ      c   ->  word cs []       $ B.TWord     p 1
+          | isSlot   c   ->  let (n, cs2)     = slot 1 cs
+                             in word cs2 []   $ B.TSlot     p n
+          | isShort  c   ->  short cs [c]
+          | isWord   c   ->  word  cs [c]     $ B.TWord     p 0
+          | isSpace  c   ->  space 1 cs
 
-      _                      ->  tokD []          $ B.TUnknown  p []
+      _                  ->  token []         $ B.TUnknown  p []
 
     where
-      p = B.CodePoint res num line txt
-
+      p      = B.CodePoint res num line txt
+      open   = (`elem` "[{<(")
+      close  = (`elem` "]}>)")
       hash s = case lookup s B.hashWordTable of
                  Nothing -> B.TWord p 0 $ '#' : s
-                 Just t  -> B.TWord p 3 t
+                 Just t  -> B.TWord p 3 t  -- quotation level 3
 
-      tokD :: String -> B.Token -> (B.Token, String)
-      tokD cs token                   = (token, cs)
+      token :: String -> B.Token -> (B.Token, String)
+      token cs tok                    = (tok, cs)
 
-      tokR :: String -> ([a] -> B.Token) -> [a] -> (B.Token, String)
-      tokR cs k xs                    = (k $ reverse xs, cs)
+      tokenFrom :: String -> [a] -> ([a] -> B.Token) -> (B.Token, String)
+      tokenFrom cs xs k               = (k $ reverse xs, cs)
 
       short :: String -> String -> (B.Token, String)
-      short (c:cs) xs | c == '.'      = word cs [] (B.TShort p $ reverse xs)
-                      | isShort c     = short cs (c:xs)
-      short ccs xs                    = word ccs xs (B.TWord p 0)
+      short (c:cs) pre | c == '.'     = word  cs []  $ B.TShort p (reverse pre)
+                       | isShort c    = short cs (c : pre)
+      short cs     pre                = word  cs pre $ B.TWord p 0
 
       slot :: Int -> String -> (Int, String)
-      slot n ('@'  : cs) = slot (n + 1) cs
-      slot _ ('\'' : cs) = (0, cs)
-      slot n cs          = (n, cs)
+      slot n ('@'  : cs)              = slot (n + 1) cs
+      slot _ ('\'' : cs)              = (0, cs) -- positional slots
+      slot n cs                       = (n, cs)
 
       word :: String -> String -> (String -> B.Token) -> (B.Token, String)
       word (c:cs) text k | isWord c   = word cs (c : text) k
-      word ccs    text k              = tokR ccs k text
-
-      qqText :: String -> String -> Maybe (String, String)
-      qqText [] _                     = Nothing
-      qqText (c:cs) text | isQQ c     = Just (text, cs)
-                         | otherwise  = qqText cs (c : text)
+      word cs     text k              = tokenFrom cs text k
 
       qq :: String -> (B.Token, String)
-      qq cs                           = case qqText cs [] of
-                                          Just (text, cs2) -> tokR cs2 (B.TWord p 2) text
-                                          Nothing -> tokD [] $ B.TUnknown p cs
+      qq cs = case qqText cs [] of
+                Just (text, cs2) -> tokenFrom cs2 text $ B.TWord p 2
+                Nothing -> token [] $ B.TUnknown p cs
+
+      qqText :: String -> String -> Maybe (String, String)
+      qqText []     _                 = Nothing
+      qqText (c:cs) text | isQQ c     = Just (text, cs)
+                         | otherwise  = qqText cs (c : text)
 
       term :: String -> String -> [String] -> (B.Token, String)
       term (c:cs) xs ns | isTerm c    = term cs [] $ termUp xs ns
                         | isWord c    = term cs (c:xs) ns
                         | isQQ   c    = case qqText cs xs of
                                           Just (text, cs2) -> term cs2 [] $ termUp text ns
-                                          Nothing -> tokD [] $ B.TUnknown p (c:cs)
-      term ccs xs ns                  = tokR ccs (B.TTerm p) $ termUp xs ns
+                                          Nothing -> token [] $ B.TUnknown p (c:cs)
+      term cs     xs ns               = tokenFrom cs (termUp xs ns) $ B.TTerm p
 
       termUp :: String -> [String] -> [String]
-      termUp [] ns = ns 
-      termUp xs ns = reverse xs : ns
+      termUp [] ns                    = ns 
+      termUp xs ns                    = reverse xs : ns
 
       space :: Int -> String -> (B.Token, String)
       space i (c:cs) | isSpace c      = space (i + 1) cs
-      space i ccs                     = tokD ccs $ B.TSpace p i
+      space i cs                      = token cs $ B.TSpace p i
 
 
 

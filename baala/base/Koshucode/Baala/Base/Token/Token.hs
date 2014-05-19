@@ -29,9 +29,9 @@ module Koshucode.Baala.Base.Token.Token
   tokenIndent,
 ) where
 
-import qualified Data.Generics                       as G
-import qualified Koshucode.Baala.Base.Prelude        as B
-import qualified Koshucode.Baala.Base.Text           as B
+import qualified Data.Generics                  as G
+import qualified Koshucode.Baala.Base.Prelude   as B
+import qualified Koshucode.Baala.Base.Text      as B
 
 
 -- ----------------------  Token type
@@ -39,18 +39,18 @@ import qualified Koshucode.Baala.Base.Text           as B
 -- | There are nine types of tokens.
 data Token
     = TWord    B.CodePoint Int String     -- ^ Word.
-                                         --   'Int' represents quotation level, i.e.,
-                                         --   0 for non-quoted,
-                                         --   1 for single-quoted,
-                                         --   2 for double-quoted,
-                                         --   3 for @-with@ variable.
+                                          --   'Int' represents quotation level, i.e.,
+                                          --   0 for non-quoted,
+                                          --   1 for single-quoted,
+                                          --   2 for double-quoted,
+                                          --   3 for @-with@ variable.
+    | TSlot    B.CodePoint Int String     -- ^ Slot name.
+                                          --   'Int' represents slot level, i.e.,
+                                          --   0 for positional slots,
+                                          --   1 for named slots,
+                                          --   2 for global slots.
     | TShort   B.CodePoint String String  -- ^ Abbreviated word.
     | TTerm    B.CodePoint TermPath       -- ^ Term name.
-    | TSlot    B.CodePoint Int String     -- ^ Slot name.
-                                         --   'Int' represents slot level, i.e.,
-                                         --   0 for positional slots,
-                                         --   1 for named slots,
-                                         --   2 for global slots.
     | TOpen    B.CodePoint String         -- ^ Opening paren.
     | TClose   B.CodePoint String         -- ^ Closing paren.
     | TSpace   B.CodePoint Int            -- ^ /N/ space characters.
@@ -69,18 +69,18 @@ instance B.Name Token where
 
 instance B.ShortDoc Token where
     shortDoc sh = d where
-        d (TWord    pos q w) = pretty "TWord"    pos [show q, show w]
-        d (TShort   pos a b) = pretty "TShort"   pos [show a, show b]
-        d (TTerm    pos ns)  = pretty "TTerm"    pos [show ns]
-        d (TSlot    pos n w) = pretty "TSlot"    pos [show n, show w]
-        d (TOpen    pos p)   = pretty "TOpen"    pos [show p]
-        d (TClose   pos p)   = pretty "TClose"   pos [show p]
-        d (TSpace   pos c)   = pretty "TSpace"   pos [show c]
-        d (TComment pos s)   = pretty "TComment" pos [show s]
-        d (TUnknown pos s)   = pretty "TUnknown" pos [show s]
-        pretty k pos xs = B.shortDocH sh $ k : lineCol pos : xs
-        lineCol pos = (show $ B.codePointLineNumber pos)
-                      ++ ":" ++ (show $ B.codePointColumn pos)
+        d (TWord    pt q w) = pretty "TWord"    pt [show q, show w]
+        d (TShort   pt a b) = pretty "TShort"   pt [show a, show b]
+        d (TTerm    pt ns)  = pretty "TTerm"    pt [show ns]
+        d (TSlot    pt n w) = pretty "TSlot"    pt [show n, show w]
+        d (TOpen    pt p)   = pretty "TOpen"    pt [show p]
+        d (TClose   pt p)   = pretty "TClose"   pt [show p]
+        d (TSpace   pt c)   = pretty "TSpace"   pt [show c]
+        d (TComment pt s)   = pretty "TComment" pt [show s]
+        d (TUnknown pt s)   = pretty "TUnknown" pt [show s]
+        pretty k pt xs      = B.shortDocH sh $ k : lineCol pt : xs
+        lineCol pt          = (show $ B.codePointLineNumber pt)
+                              ++ ":" ++ (show $ B.codePointColumn pt)
 
 tokenWord :: String -> Token
 tokenWord = TWord B.codePointZero 0
@@ -118,17 +118,17 @@ instance Functor Sourced where
 -- ---------------------- Term name
 
 -- | Name of term, e.g., @\"file\"@ for the term name @\/file@.
-type TermName   = String
-type TermName2  = (String, String)
-type TermName3  = (String, String, String)
-type TermName4  = (String, String, String, String)
+type TermName    =  String
+type TermName2   =  (String, String)
+type TermName3   =  (String, String, String)
+type TermName4   =  (String, String, String, String)
 
 -- | Pair of term name and something.
-type Terminal a = (TermName, a)
+type Terminal a  =  (TermName, a)
 
 -- | Path of term names, e.g., term name @\/r\/x@
 --   is correspond to path @[\"r\", \"x\"]@.
-type TermPath   = [TermName]
+type TermPath    =  [TermName]
 
 
 -- ---------------------- Selector
@@ -138,15 +138,15 @@ type TermPath   = [TermName]
 --   >>> let tok = TTerm 20 ["/r", "/x"] in tokenContent tok
 --   "/r/x"
 tokenContent :: Token -> String
-tokenContent (TWord  _ _ s)   = s
-tokenContent (TShort _ a b)   = a ++ "." ++ b
-tokenContent (TTerm    _ ns)  = concat $ map ('/':) ns
-tokenContent (TSlot  _ _ s)   = s
-tokenContent (TOpen    _ s)   = s
-tokenContent (TClose   _ s)   = s
-tokenContent (TSpace   _ n)   = replicate n ' '
-tokenContent (TComment _ s)   = s
-tokenContent (TUnknown _ s)   = s
+tokenContent (TWord  _ _ s)   =  s
+tokenContent (TShort _ a b)   =  a ++ "." ++ b
+tokenContent (TTerm    _ ns)  =  concat $ map ('/':) ns
+tokenContent (TSlot  _ _ s)   =  s
+tokenContent (TOpen    _ s)   =  s
+tokenContent (TClose   _ s)   =  s
+tokenContent (TSpace   _ n)   =  replicate n ' '
+tokenContent (TComment _ s)   =  s
+tokenContent (TUnknown _ s)   =  s
 
 -- | Text of token type, i.e., one of
 --   @\"Word\"@, @\"Term\"@, @\"Open\"@, @\"Close\"@,
@@ -155,15 +155,15 @@ tokenContent (TUnknown _ s)   = s
 --   >>> tokenTypeText $ TWord 25 0 "flower"
 --   "Word"
 tokenTypeText :: Token -> String
-tokenTypeText (TWord  _ _ _)  = "Word"
-tokenTypeText (TShort _ _ _)  = "Short"
-tokenTypeText (TTerm    _ _)  = "TermN"
-tokenTypeText (TSlot  _ _ _)  = "Slot"
-tokenTypeText (TOpen    _ _)  = "Open"
-tokenTypeText (TClose   _ _)  = "Close"
-tokenTypeText (TSpace   _ _)  = "Space"
-tokenTypeText (TComment _ _)  = "Comment"
-tokenTypeText (TUnknown _ _)  = "Unknown"
+tokenTypeText (TWord  _ _ _)  =  "Word"
+tokenTypeText (TShort _ _ _)  =  "Short"
+tokenTypeText (TTerm    _ _)  =  "TermN"
+tokenTypeText (TSlot  _ _ _)  =  "Slot"
+tokenTypeText (TOpen    _ _)  =  "Open"
+tokenTypeText (TClose   _ _)  =  "Close"
+tokenTypeText (TSpace   _ _)  =  "Space"
+tokenTypeText (TComment _ _)  =  "Comment"
+tokenTypeText (TUnknown _ _)  =  "Unknown"
 
 
 
@@ -180,11 +180,6 @@ isShortToken :: B.Pred Token
 isShortToken (TShort _ _ _)  = True
 isShortToken _               = False
 
--- {-| Test the token is a term, i.e., 'TTerm'. -}
--- isTermToken :: Token -> Bool
--- isTermToken (TTerm _ _)     = True
--- isTermToken _               = False
-
 -- | Check token is a 'TOpen' of the specific paren.
 --
 --   >>> let tok = TOpen 0 "(" in isOpenTokenOf "(" tok
@@ -193,8 +188,8 @@ isShortToken _               = False
 --   >>> let tok = TOpen 0 "{" in isOpenTokenOf "(" tok
 --   False
 isOpenTokenOf :: String -> B.Pred Token
-isOpenTokenOf p1 (TOpen _ p2) = p1 == p2
-isOpenTokenOf _ _             = False
+isOpenTokenOf p1 (TOpen _ p2)   = p1 == p2
+isOpenTokenOf _ _               = False
 
 -- | Check token is a 'TClose' of the specific paren.
 isCloseTokenOf :: String -> B.Pred Token

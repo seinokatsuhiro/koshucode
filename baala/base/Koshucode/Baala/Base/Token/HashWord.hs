@@ -6,7 +6,7 @@ module Koshucode.Baala.Base.Token.HashWord
   hashWord,
 ) where
 
-import qualified Data.Char as Ch
+import qualified Data.Char                    as Ch
 import qualified Koshucode.Baala.Base.Prelude as B
 import qualified Koshucode.Baala.Base.Text    as B
 
