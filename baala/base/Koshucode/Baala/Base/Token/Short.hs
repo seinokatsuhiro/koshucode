@@ -7,10 +7,14 @@ module Koshucode.Baala.Base.Token.Short
   shortMapM,
   shortM,
   shortTrim,
+  shortText,
 ) where
 
-import qualified Koshucode.Baala.Base.Prelude as B
-import qualified Koshucode.Baala.Base.Text    as B
+import qualified Data.List                            as L
+import qualified Koshucode.Baala.Base.Prelude         as B
+import qualified Koshucode.Baala.Base.Text            as B
+import qualified Koshucode.Baala.Base.Token.HashWord  as B
+import qualified Koshucode.Baala.Base.Token.TokenLine as B
 
 data Short a =
     Short { shortHead :: [B.ShortDef]
@@ -31,3 +35,17 @@ shortMapM f = mapM $ shortM . fmap f
 
 shortTrim :: B.Map [Short [a]]
 shortTrim = filter $ not . null . shortBody
+
+shortText :: [B.ShortDef] -> B.Map String
+shortText = loop where
+    loop [] s | null s           = "#empty"
+              | B.isSimpleWord s = '\'' : s
+              | otherwise        = B.hashWord s
+    loop ((prefix, long) : sh) s =
+        case L.stripPrefix long s of
+          Just s2 | s2 /= "" -> prefix ++ "." ++ text2 s2
+          _                  -> loop sh s
+
+    text2 s   | B.isSimpleWord s = s
+              | otherwise        = B.hashWord s
+

@@ -4,10 +4,12 @@
 module Koshucode.Baala.Base.Text.ShortDoc
 ( ShortDoc (..),
   ShortDef,
-  shortText,
-  shortDocH,
-  shortDocV,
+  shortDocH, shortDocV,
   shortDocColon,
+
+  doc, doch, docv,
+  docColon, docWrap, docWraps,
+  docEmpty,docHang, docZero,
 ) where
 
 import qualified Data.List                         as L
@@ -35,14 +37,6 @@ instance ShortDoc Bool where
 instance (ShortDoc a) => ShortDoc (B.Named a) where
     shortDoc sh (n, x) = D.text n D.<+> shortDoc sh x
 
-shortText :: [ShortDef] -> B.Map String
-shortText = loop where
-    loop [] s = '\'' : s
-    loop ((prefix, long) : sh) s =
-        case L.stripPrefix long s of
-          Just s2 | s2 /= "" -> prefix ++ "." ++ s2
-          _ -> loop sh s
-
 shortDocColon :: (ShortDoc a) => [ShortDef] -> [a] -> D.Doc
 shortDocColon sh = D.hsep . shortDocColons sh
 
@@ -54,4 +48,48 @@ shortDocH sh = D.hsep . map (shortDoc sh)
 
 shortDocV :: (ShortDoc a) => [ShortDef] -> [a] -> D.Doc
 shortDocV sh = D.vcat . map (shortDoc sh)
+
+doc :: (ShortDoc a) => a -> D.Doc
+doc = shortDoc []
+
+docv :: (ShortDoc a) => [a] -> D.Doc
+docv = shortDocV []
+
+doch :: (ShortDoc a) => [a] -> D.Doc
+doch = shortDocH []
+
+docEmpty :: D.Doc
+docEmpty = D.empty
+
+docHang :: D.Doc -> Int -> D.Doc -> D.Doc
+docHang = D.hang
+
+docZero :: String -> D.Doc
+docZero = D.zeroWidthText
+
+-- | Colon-seperated document.
+--
+--   >>> docBracket $ docColon [True, False]
+--   [ #true : #false ]
+docColon :: (ShortDoc a) => [a] -> D.Doc
+docColon = D.hsep . docColons
+
+-- | Colon-seperated list.
+docColons :: (ShortDoc a) => [a] -> [D.Doc]
+docColons = L.intersperse (D.text ":") . map doc
+
+-- | Wrap in open and close brackets.
+--   Put spaces between content and brackets.
+--
+--   >>> docWraps "(" ")" "abc"
+--   ( abc )
+docWraps :: (ShortDoc a) => String -> String -> a -> D.Doc
+docWraps open close a = D.text open D.<+> doc a D.<+> D.text close
+
+-- | Wrap in open and close brackets.
+--
+--   >>> docWrap "(" ")" "abc"
+--   (abc)
+docWrap :: (ShortDoc a) => String -> String -> a -> D.Doc
+docWrap open close a = D.text open D.<> doc a D.<> D.text close
 

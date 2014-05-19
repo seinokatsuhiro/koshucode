@@ -72,18 +72,15 @@ instance C.CContent VContent where
     appendContent x y = Message.unmatchType (show (x, y))
 
 instance B.ShortDoc VContent where
-    shortDoc sh a =
-        case a of
-          VText s | s == ""           ->  B.doc $ "#empty"
-                  | B.isSimpleWord s  ->  B.doc $ B.shortText sh s
-                  | otherwise         ->  B.doc $ B.hashWord s
-          VDec  n          ->  B.doc $ B.decimalString n
-          VBool b          ->  B.doc b
-          VNil             ->  B.doc "()"
-          VList    xs      ->  B.docWraps "["   "]" $ B.shortDocColon sh xs
-          VSet     xs      ->  B.docWraps "{"   "}" $ B.shortDocColon sh xs
-          VTermset xs      ->  B.docWraps "<|" "|>" $ B.shortDocH     sh xs
-          VRel r           ->  B.shortDoc sh r
+    shortDoc sh a = case a of
+        VText s      ->  B.doc $ B.shortText sh s
+        VDec  n      ->  B.doc $ B.decimalString n
+        VBool b      ->  B.doc b
+        VNil         ->  B.doc "()"
+        VList    xs  ->  B.docWraps "["   "]" $ B.shortDocColon sh xs
+        VSet     xs  ->  B.docWraps "{"   "}" $ B.shortDocColon sh xs
+        VTermset xs  ->  B.docWraps "<|" "|>" $ B.shortDocH     sh xs
+        VRel r       ->  B.shortDoc sh r
 
 type VCop = C.CopFun VContent
 

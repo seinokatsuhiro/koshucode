@@ -28,6 +28,7 @@ import qualified Koshucode.Baala.Base.Prelude        as B
 import qualified Koshucode.Baala.Base.Syntax         as B
 import qualified Koshucode.Baala.Base.Text           as B
 import qualified Koshucode.Baala.Base.Token.Token    as B
+import qualified Koshucode.Baala.Base.Token.HashWord as B
 
 
 
@@ -57,8 +58,8 @@ nextToken res (num, line) txt =
       ('(' : ')' : cs)       ->  tokD cs          $ B.TWord     p 0 "()"  -- nil
       ('#' : c : cs)
           | c == '!'         ->  tokD ""          $ B.TComment  p txt
-          | isWord c         ->  word cs [c, '#'] $ B.TWord     p 0
-          | otherwise        ->  tokD cs          $ B.TWord     p 1 [c]
+          | otherwise        ->  word cs [c]      hash
+                                   
       (c : '|' : cs)
           | c `elem` "[{<("  ->  tokD cs          $ B.TOpen     p [c, '|']
       ('|' : c : cs)
@@ -83,6 +84,10 @@ nextToken res (num, line) txt =
 
     where
       p = B.CodePoint res num line txt
+
+      hash s = case lookup s B.hashWordTable of
+                 Nothing -> B.TWord p 0 $ '#' : s
+                 Just t  -> B.TWord p 3 t
 
       tokD :: String -> B.Token -> (B.Token, String)
       tokD cs token                   = (token, cs)

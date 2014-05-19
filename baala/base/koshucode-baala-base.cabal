@@ -79,7 +79,6 @@ library
 
         Koshucode.Baala.Base.Text
         Koshucode.Baala.Base.Text.Comment
-        Koshucode.Baala.Base.Text.Pretty
         Koshucode.Baala.Base.Text.Resource
         Koshucode.Baala.Base.Text.ShortDoc
         Koshucode.Baala.Base.Text.TextTable
