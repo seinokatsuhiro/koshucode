@@ -4,6 +4,7 @@
 module Koshucode.Baala.Base.Text.ShortDoc
 ( ShortDoc (..),
   ShortDef,
+  StringMap,
   shortDocH, shortDocV,
   shortDocColon,
 
@@ -18,8 +19,10 @@ import qualified Koshucode.Baala.Base.Prelude      as B
 
 type ShortDef = B.Named String
 
+type StringMap = B.Map String
+
 class ShortDoc a where
-    shortDoc :: [ShortDef] -> a -> B.Doc
+    shortDoc :: StringMap -> a -> B.Doc
 
 instance ShortDoc B.Doc where
     shortDoc _ x = x
@@ -37,26 +40,26 @@ instance ShortDoc Bool where
 instance (ShortDoc a) => ShortDoc (B.Named a) where
     shortDoc sh (n, x) = D.text n D.<+> shortDoc sh x
 
-shortDocColon :: (ShortDoc a) => [ShortDef] -> [a] -> D.Doc
+shortDocColon :: (ShortDoc a) => StringMap -> [a] -> D.Doc
 shortDocColon sh = D.hsep . shortDocColons sh
 
-shortDocColons :: (ShortDoc a) => [ShortDef] -> [a] -> [D.Doc]
+shortDocColons :: (ShortDoc a) => StringMap -> [a] -> [D.Doc]
 shortDocColons sh = L.intersperse (D.text ":") . map (shortDoc sh)
 
-shortDocH :: (ShortDoc a) => [ShortDef] -> [a] -> D.Doc
+shortDocH :: (ShortDoc a) => StringMap -> [a] -> D.Doc
 shortDocH sh = D.hsep . map (shortDoc sh)
 
-shortDocV :: (ShortDoc a) => [ShortDef] -> [a] -> D.Doc
+shortDocV :: (ShortDoc a) => StringMap -> [a] -> D.Doc
 shortDocV sh = D.vcat . map (shortDoc sh)
 
 doc :: (ShortDoc a) => a -> D.Doc
-doc = shortDoc []
+doc = shortDoc id
 
 docv :: (ShortDoc a) => [a] -> D.Doc
-docv = shortDocV []
+docv = shortDocV id
 
 doch :: (ShortDoc a) => [a] -> D.Doc
-doch = shortDocH []
+doch = shortDocH id
 
 docEmpty :: D.Doc
 docEmpty = D.empty

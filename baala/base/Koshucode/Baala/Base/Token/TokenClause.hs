@@ -17,7 +17,7 @@ type TokenClause = B.CodeClause B.Token
 instance B.ShortDoc TokenClause where
     shortDoc = docTokenClause
 
-docTokenClause :: [B.ShortDef] -> TokenClause -> B.Doc
+docTokenClause :: B.StringMap -> TokenClause -> B.Doc
 docTokenClause sh (B.CodeClause ls toks) = d where
     d      = B.docHang k 2 $ B.docv [dls, dtoks]
     k      = B.shortDoc sh "TokenClause"

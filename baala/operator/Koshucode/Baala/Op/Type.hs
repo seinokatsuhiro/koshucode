@@ -73,7 +73,7 @@ instance C.CContent VContent where
 
 instance B.ShortDoc VContent where
     shortDoc sh a = case a of
-        VText s      ->  B.doc $ B.shortText sh s
+        VText s      ->  B.doc $ sh s
         VDec  n      ->  B.doc $ B.decimalString n
         VBool b      ->  B.doc b
         VNil         ->  B.doc "()"

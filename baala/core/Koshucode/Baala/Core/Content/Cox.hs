@@ -55,7 +55,7 @@ instance (B.ShortDoc c) => Show (CoxCore c) where
 instance (B.ShortDoc c) => B.ShortDoc (CoxCore c) where
     shortDoc = docCore
 
-docCore :: (B.ShortDoc c) => [B.ShortDef] -> CoxCore c -> B.Doc
+docCore :: (B.ShortDoc c) => B.StringMap -> CoxCore c -> B.Doc
 docCore sh = d (0 :: Int) where
     d 10 _ = B.shortDoc sh "..."
     d n e =

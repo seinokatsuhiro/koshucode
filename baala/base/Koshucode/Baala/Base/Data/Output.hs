@@ -44,12 +44,12 @@ putJudges = hPutJudges IO.stdout
 
 hPutJudges :: (Ord c, B.ShortDoc c) => IO.Handle -> Int -> [B.Judge c] -> IO Int
 hPutJudges h status js =
-    do cnt <- judges h [] js initialCounter
+    do cnt <- judges h B.shortEmpty js initialCounter
        hPutLines h $ summary status cnt
        return status
 
 judges :: forall c. (Ord c, B.ShortDoc c) =>
-    IO.Handle -> [B.ShortDef] -> [B.Judge c] -> Counter -> IO Counter
+    IO.Handle -> B.StringMap -> [B.Judge c] -> Counter -> IO Counter
 judges h sh = loop where
     loop (j : js) cnt  = loop js =<< put j cnt
     loop [] cnt@(c, _) = do M.when (c > 0) $ hPutEmptyLine h
@@ -129,17 +129,19 @@ shortList h status sh =
        return status
 
 short :: (Ord c, B.ShortDoc c) => IO.Handle -> Counter -> OutputChunks c -> IO Counter
-short h cnt (B.Short [] output) =
-    do chunks h [] output cnt
-short h cnt (B.Short sh output) =
-    do hPutLines h $ "short" : map shortLine sh
+short h cnt (B.Short []  output) = chunks h B.shortEmpty output cnt
+short h cnt (B.Short def output) =
+    do hPutLines h $ "short" : map shortLine def
        hPutEmptyLine h
        chunks h sh output cnt
     where
+      sh :: B.StringMap
+      sh = B.shortText def
+
       shortLine :: (String, String) -> String
       shortLine (a, b) = "  " ++ a ++ " " ++ show b
 
-chunks :: (Ord c, B.ShortDoc c) => IO.Handle -> [B.ShortDef]
+chunks :: (Ord c, B.ShortDoc c) => IO.Handle -> B.StringMap
        -> [OutputChunk c] -> Counter -> IO Counter
 chunks h sh = loop where
     loop [] cnt = return cnt

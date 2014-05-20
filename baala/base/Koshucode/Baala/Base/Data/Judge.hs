@@ -61,7 +61,7 @@ instance Functor Judge where
 instance (Ord c, B.ShortDoc c) => B.ShortDoc (Judge c) where
     shortDoc = judgeDoc 
 
-judgeDoc :: (B.ShortDoc c) => [B.ShortDef] -> Judge c -> B.Doc
+judgeDoc :: (B.ShortDoc c) => B.StringMap -> Judge c -> B.Doc
 judgeDoc shorts (Judge q p a) = quality q B.<+> sign B.<+> arg a where
 
     -- Frege's judgement stroke, content line,

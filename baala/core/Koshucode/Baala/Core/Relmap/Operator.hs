@@ -147,7 +147,7 @@ instance B.ShortDoc (Relmap c) where
     shortDoc sh (RelmapLink   lx _ _)  = B.shortDoc sh lx
     shortDoc sh (RelmapAppend r1 r2)   = B.docHang (B.shortDoc sh r1) 2 (docRelmapAppend sh r2)
 
-docRelmapAppend :: [B.ShortDef] -> Relmap c -> B.Doc
+docRelmapAppend :: B.StringMap -> Relmap c -> B.Doc
 docRelmapAppend sh = B.shortDocV sh . map pipe . relmapAppendList where
     pipe m = B.shortDoc sh "|" B.<+> B.shortDoc sh m
 

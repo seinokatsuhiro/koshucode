@@ -46,7 +46,7 @@ relCells pad m path (B.Rel (B.Relhead ts) bo) = table where
 relText :: (B.ShortDoc c, C.CRel c) => B.Rel c -> B.RelText
 relText (B.Rel he bo) = B.Rel he $ map (map content) bo where
     content c | C.isRel c  = B.MonoNest $ relText $ C.gRel c
-              | otherwise  = B.MonoType $ show $ B.shortDoc [] c
+              | otherwise  = B.MonoType $ show $ B.shortDoc B.shortEmpty c
 
 render :: [[B.Cell]] -> [String]
 render = B.squeezeEmptyLines . B.renderTable " " . B.alignTable

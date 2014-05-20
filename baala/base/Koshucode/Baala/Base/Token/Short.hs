@@ -7,6 +7,8 @@ module Koshucode.Baala.Base.Token.Short
   shortMapM,
   shortM,
   shortTrim,
+
+  shortEmpty,
   shortText,
 ) where
 
@@ -36,7 +38,10 @@ shortMapM f = mapM $ shortM . fmap f
 shortTrim :: B.Map [Short [a]]
 shortTrim = B.omit $ null . shortBody
 
-shortText :: [B.ShortDef] -> B.Map String
+shortEmpty :: B.StringMap
+shortEmpty = shortText []
+
+shortText :: [B.ShortDef] -> B.StringMap
 shortText = loop where
     loop [] s | null s           = "#empty"
               | B.isSimpleWord s = '\'' : s
