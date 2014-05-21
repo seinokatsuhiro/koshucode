@@ -42,8 +42,8 @@ data CodeClause a = CodeClause
     , clauseTokens    :: [a]           -- ^ Source tokens of clause
     } deriving (Show, G.Data, G.Typeable)
 
-instance B.ShortDoc (CodeLine a) where
-    shortDoc sh (CodeLine _ line _) = B.shortDoc sh line
+instance B.Write (CodeLine a) where
+    write sh (CodeLine _ line _) = B.write sh line
 
 indentLineBy :: (a -> Int) -> CodeLine a -> (Int, CodeLine a)
 indentLineBy ind ln@(CodeLine _ _ (tk : _)) = (ind tk, ln)

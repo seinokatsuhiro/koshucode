@@ -58,10 +58,10 @@ instance Functor Judge where
     fmap f (Judge q p a) = Judge q p $ map g a
         where g (n, v) = (n, f v)
 
-instance (Ord c, B.ShortDoc c) => B.ShortDoc (Judge c) where
-    shortDoc = judgeDoc 
+instance (Ord c, B.Write c) => B.Write (Judge c) where
+    write = judgeDoc 
 
-judgeDoc :: (B.ShortDoc c) => B.StringMap -> Judge c -> B.Doc
+judgeDoc :: (B.Write c) => B.StringMap -> Judge c -> B.Doc
 judgeDoc shorts (Judge q p a) = quality q B.<+> sign B.<+> arg a where
 
     -- Frege's judgement stroke, content line,
@@ -75,7 +75,7 @@ judgeDoc shorts (Judge q p a) = quality q B.<+> sign B.<+> arg a where
 
     -- term name and term value
     arg ((n,c) : a2) = B.doc " " B.<> B.doc (B.showTermName n)
-                       B.<+> B.shortDoc shorts c B.<+> arg a2
+                       B.<+> B.write shorts c B.<+> arg a2
     arg [] = B.docEmpty
 
 -- | Sort terms in alphabetical order.

@@ -19,7 +19,7 @@ runSection global sects =
        let g2 = global { C.globalJudges = C.secJudge s2 }
        runSectionBody g2 s2
 
-runSectionBody :: forall c. (Ord c, B.ShortDoc c, C.CRel c, C.CNil c) =>
+runSectionBody :: forall c. (Ord c, B.Write c, C.CRel c, C.CNil c) =>
     C.Global c -> C.Section c -> B.Ab (B.OutputResult c)
 runSectionBody global C.Section { C.secAssert = ass, C.secMessage = msg } =
     do js1 <- run $ C.assertViolated ass

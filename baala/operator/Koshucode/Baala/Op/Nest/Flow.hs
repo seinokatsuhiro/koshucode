@@ -110,11 +110,11 @@ consSplit use =
        let base = C.globalFunction $ C.ropGlobal use
        Right $ relmapSplit use (base, coxLet, coxIn)
 
-relmapSplit :: (C.CList c, C.CRel c, B.ShortDoc c, C.CBool c)
+relmapSplit :: (C.CList c, C.CRel c, B.Write c, C.CBool c)
   => C.RopUse c -> ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.Relmap c
 relmapSplit use = C.relmapFlow use . relkitSplit
 
-relkitSplit :: forall c. (C.CList c, C.CRel c, B.ShortDoc c, C.CBool c)
+relkitSplit :: forall c. (C.CList c, C.CRel c, B.Write c, C.CBool c)
   => ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.RelkitCalc c
 relkitSplit _ Nothing = Right C.relkitNothing
 relkitSplit (base, deriv, bodies) (Just he1)

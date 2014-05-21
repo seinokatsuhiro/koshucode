@@ -67,8 +67,8 @@ instance B.Name Token where
     name (TComment _ s) = s
     name x = error $ "unknown name: " ++ show x
 
-instance B.ShortDoc Token where
-    shortDoc sh = d where
+instance B.Write Token where
+    write sh = d where
         d (TWord    pt q w) = pretty "TWord"    pt [show q, show w]
         d (TShort   pt a b) = pretty "TShort"   pt [show a, show b]
         d (TTerm    pt ns)  = pretty "TTerm"    pt [show ns]
@@ -78,7 +78,7 @@ instance B.ShortDoc Token where
         d (TSpace   pt c)   = pretty "TSpace"   pt [show c]
         d (TComment pt s)   = pretty "TComment" pt [show s]
         d (TUnknown pt s)   = pretty "TUnknown" pt [show s]
-        pretty k pt xs      = B.shortDocH sh $ k : lineCol pt : xs
+        pretty k pt xs      = B.writeH sh $ k : lineCol pt : xs
         lineCol pt          = (show $ B.codePointLineNumber pt)
                               ++ ":" ++ (show $ B.codePointColumn pt)
 

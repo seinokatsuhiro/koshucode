@@ -39,16 +39,16 @@ initialCounter :: Counter
 initialCounter = (0, Map.empty)
 
 -- | Print judges to `IO.stdout`.
-putJudges :: (Ord c, B.ShortDoc c) => Int -> [B.Judge c] -> IO Int
+putJudges :: (Ord c, B.Write c) => Int -> [B.Judge c] -> IO Int
 putJudges = hPutJudges IO.stdout
 
-hPutJudges :: (Ord c, B.ShortDoc c) => IO.Handle -> Int -> [B.Judge c] -> IO Int
+hPutJudges :: (Ord c, B.Write c) => IO.Handle -> Int -> [B.Judge c] -> IO Int
 hPutJudges h status js =
     do cnt <- judges h B.shortEmpty js initialCounter
        hPutLines h $ summary status cnt
        return status
 
-judges :: forall c. (Ord c, B.ShortDoc c) =>
+judges :: forall c. (Ord c, B.Write c) =>
     IO.Handle -> B.StringMap -> [B.Judge c] -> Counter -> IO Counter
 judges h sh = loop where
     loop (j : js) cnt  = loop js =<< put j cnt
@@ -62,7 +62,7 @@ judges h sh = loop where
         do M.when (mod5 c && c > 0) $
             do M.when (mod25 c) $ progress c
                hPutEmptyLine h
-           IO.hPutStrLn h $ show $ B.shortDoc sh judge
+           IO.hPutStrLn h $ show $ B.write sh judge
            let c' = c + 1
            return (c', Map.alter inc pat tab)
 
@@ -109,7 +109,7 @@ data OutputChunk c
       deriving (Show, Eq, Ord)
 
 -- | Print result of calculation, and return status.
-hPutOutputResult :: forall c. (Ord c, B.ShortDoc c) => IO.Handle -> OutputResult c -> IO Int
+hPutOutputResult :: forall c. (Ord c, B.Write c) => IO.Handle -> OutputResult c -> IO Int
 hPutOutputResult h (vio, jud)
     | null vio2  = shortList h 0 jud
     | otherwise  = shortList h 1 vio2
@@ -122,13 +122,13 @@ hPutOutputResult h (vio, jud)
       existJudge (OutputJudge [])  = False
       existJudge _                 = True
 
-shortList :: (Ord c, B.ShortDoc c) => IO.Handle -> Int -> [OutputChunks c] -> IO Int
+shortList :: (Ord c, B.Write c) => IO.Handle -> Int -> [OutputChunks c] -> IO Int
 shortList h status sh =
     do cnt <- M.foldM (short h) initialCounter sh
        hPutLines h $ summary status cnt
        return status
 
-short :: (Ord c, B.ShortDoc c) => IO.Handle -> Counter -> OutputChunks c -> IO Counter
+short :: (Ord c, B.Write c) => IO.Handle -> Counter -> OutputChunks c -> IO Counter
 short h cnt (B.Short []  output) = chunks h B.shortEmpty output cnt
 short h cnt (B.Short def output) =
     do hPutLines h $ "short" : map shortLine def
@@ -141,7 +141,7 @@ short h cnt (B.Short def output) =
       shortLine :: (String, String) -> String
       shortLine (a, b) = "  " ++ a ++ " " ++ show b
 
-chunks :: (Ord c, B.ShortDoc c) => IO.Handle -> B.StringMap
+chunks :: (Ord c, B.Write c) => IO.Handle -> B.StringMap
        -> [OutputChunk c] -> Counter -> IO Counter
 chunks h sh = loop where
     loop [] cnt = return cnt

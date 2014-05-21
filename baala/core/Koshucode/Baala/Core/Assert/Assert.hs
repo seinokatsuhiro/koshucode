@@ -44,10 +44,10 @@ type AssertOption = [B.NamedTrees]
 instance B.TokenList (Assert c) where
     tokenList = assToken
 
-instance B.ShortDoc (Assert c) where
-    shortDoc sh (Assert q pat _ toks _ _ _) =
-        let qs = B.shortDocH sh [assertText q, pat]
-        in B.docHang qs 2 (B.shortDocH sh toks)
+instance B.Write (Assert c) where
+    write sh (Assert q pat _ toks _ _ _) =
+        let qs = B.writeH sh [assertText q, pat]
+        in B.docHang qs 2 (B.writeH sh toks)
 
 data AssertType
     = AssertAffirm    -- ^ @|==@ /pattern/ @:@ /relmap/

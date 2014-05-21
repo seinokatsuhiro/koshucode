@@ -37,14 +37,14 @@ instance B.Name Term where
     name (TermFlat s)   = s
     name (TermNest s _) = s
 
-instance B.ShortDoc Term where
-    shortDoc sh term =
+instance B.Write Term where
+    write sh term =
         case term of
           TermFlat n    -> sd1 (showTermName n)
           TermNest n xs -> B.docWraps "(" ")"
-                           $ B.shortDocH sh $ sd1 (showTermName n) : map sd2 xs
-        where sd1 = B.shortDoc sh
-              sd2 = B.shortDoc sh
+                           $ B.writeH sh $ sd1 (showTermName n) : map sd2 xs
+        where sd1 = B.write sh
+              sd2 = B.write sh
 
 -- | Test that term is nested.
 isTermNest :: Term -> Bool

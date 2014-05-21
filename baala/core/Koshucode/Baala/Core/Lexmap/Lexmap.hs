@@ -43,11 +43,11 @@ data LexmapType
     | LexmapWith         -- ^ @-with@ variable
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
-instance B.ShortDoc Lexmap where
-    shortDoc sh Lexmap { lexOpToken = opTok, lexAttr = opd } =
+instance B.Write Lexmap where
+    write sh Lexmap { lexOpToken = opTok, lexAttr = opd } =
         case lookup "@attr" opd of
-          Nothing -> B.shortDocH sh [op, "..."]
-          Just xs -> B.shortDocH sh [op, show xs]
+          Nothing -> B.writeH sh [op, "..."]
+          Just xs -> B.writeH sh [op, show xs]
         where op = B.tokenContent opTok
 
 instance B.TokenList Lexmap where

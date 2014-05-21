@@ -54,8 +54,8 @@ instance B.Monoid Relhead where
     mappend (Relhead t1) (Relhead t2) =
         Relhead $ B.unionUp t1 t2
 
-instance B.ShortDoc Relhead where
-    shortDoc sh (Relhead ts) = B.shortDocColon sh $ map (B.showTermName . B.termName) ts
+instance B.Write Relhead where
+    write sh (Relhead ts) = B.writeColon sh $ map (B.showTermName . B.termName) ts
 
 headExplain :: Relhead -> String
 headExplain = show . headExplainDoc

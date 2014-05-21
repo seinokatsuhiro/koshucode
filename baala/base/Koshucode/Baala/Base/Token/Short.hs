@@ -3,6 +3,7 @@
 
 module Koshucode.Baala.Base.Token.Short
 ( Short (..),
+  ShortDef,
   shortMap,
   shortMapM,
   shortM,
@@ -19,9 +20,11 @@ import qualified Koshucode.Baala.Base.Token.HashWord  as B
 import qualified Koshucode.Baala.Base.Token.TokenLine as B
 
 data Short a =
-    Short { shortHead :: [B.ShortDef]
+    Short { shortHead :: [ShortDef]
           , shortBody :: a }
     deriving (Show, Ord, Eq)
+
+type ShortDef = B.Named String
 
 instance Functor Short where
     fmap f (Short a b) = Short a $ f b
@@ -41,7 +44,7 @@ shortTrim = B.omit $ null . shortBody
 shortEmpty :: B.StringMap
 shortEmpty = shortText []
 
-shortText :: [B.ShortDef] -> B.StringMap
+shortText :: [ShortDef] -> B.StringMap
 shortText = loop where
     loop [] s | null s           = "#empty"
               | B.isSimpleWord s = '\'' : s

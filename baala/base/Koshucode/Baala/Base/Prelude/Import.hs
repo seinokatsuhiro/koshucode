@@ -29,6 +29,9 @@ module Koshucode.Baala.Base.Prelude.Import
   (Text.PrettyPrint.<+>),
   (Text.PrettyPrint.$$),
   Text.PrettyPrint.nest,
+  docEmpty,
+  docHang,
+  docZero,
 ) where
 
 import Control.Monad
@@ -43,4 +46,13 @@ concatMapM f = return . concat Control.Monad.<=< mapM f
 -- | Same as 'Map.lookup' in @Data.Map@ module.
 lookupMap :: (Ord k) => k -> Data.Map.Map k a -> Maybe a
 lookupMap = Data.Map.lookup
+
+docEmpty :: Text.PrettyPrint.Doc
+docEmpty = Text.PrettyPrint.empty
+
+docHang :: Text.PrettyPrint.Doc -> Int -> Text.PrettyPrint.Doc -> Text.PrettyPrint.Doc
+docHang = Text.PrettyPrint.hang
+
+docZero :: String -> Text.PrettyPrint.Doc
+docZero = Text.PrettyPrint.zeroWidthText
 

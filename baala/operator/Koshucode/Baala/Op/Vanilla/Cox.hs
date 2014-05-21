@@ -30,11 +30,11 @@ consAdd use =
        let base = C.globalFunction $ C.ropGlobal use
        Right $ relmapAdd use (base, coxLet, coxIn)
 
-relmapAdd :: (C.CList c, C.CRel c, B.ShortDoc c)
+relmapAdd :: (C.CList c, C.CRel c, B.Write c)
   => C.RopUse c -> ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.Relmap c
 relmapAdd use = C.relmapFlow use . relkitAdd
 
-relkitAdd :: (C.CList c, C.CRel c, B.ShortDoc c)
+relkitAdd :: (C.CList c, C.CRel c, B.Write c)
   => ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.RelkitCalc c
 relkitAdd _ Nothing = Right C.relkitNothing
 relkitAdd (base, deriv, bodies) (Just he1)
@@ -62,11 +62,11 @@ consSubst use =
        let base = C.globalFunction $ C.ropGlobal use
        Right $ relmapSubst use (base, coxLet, coxIn)
 
-relmapSubst :: (C.CList c, C.CRel c, B.ShortDoc c)
+relmapSubst :: (C.CList c, C.CRel c, B.Write c)
   => C.RopUse c -> ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.Relmap c
 relmapSubst use = C.relmapFlow use . relkitSubst
 
-relkitSubst :: (C.CList c, C.CRel c, B.ShortDoc c)
+relkitSubst :: (C.CList c, C.CRel c, B.Write c)
   => ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.RelkitCalc c
 relkitSubst _ Nothing = Right C.relkitNothing
 relkitSubst (base, deriv, bodies) (Just he1)
@@ -96,11 +96,11 @@ consFilter b use =
        let base = C.globalFunction $ C.ropGlobal use
        Right $ relmapFilter use (b, base, coxLet, coxIn)
 
-relmapFilter :: (C.CList c, C.CRel c, C.CBool c, B.ShortDoc c)
+relmapFilter :: (C.CList c, C.CRel c, C.CBool c, B.Write c)
   => C.RopUse c -> (Bool, [C.Cop c], [C.NamedCox c], C.Cox c) -> C.Relmap c
 relmapFilter use = C.relmapFlow use . relkitFilter
 
-relkitFilter :: (C.CList c, C.CRel c, C.CBool c, B.ShortDoc c)
+relkitFilter :: (C.CList c, C.CRel c, C.CBool c, B.Write c)
   => (Bool, [C.Cop c], [C.NamedCox c], C.Cox c) -> C.RelkitCalc c
 relkitFilter _ Nothing = Right C.relkitNothing
 relkitFilter (which, base, deriv, body) (Just he1) = Right kit2 where

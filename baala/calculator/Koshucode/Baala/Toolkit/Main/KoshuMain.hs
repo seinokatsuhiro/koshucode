@@ -118,7 +118,7 @@ koshuMain global =
 
        (_, _, errs) -> L.putFailure $ concat errs
 
-putRop :: (Ord c, B.ShortDoc c, C.CText c) => [C.Rop c] -> IO Int
+putRop :: (Ord c, B.Write c, C.CText c) => [C.Rop c] -> IO Int
 putRop rops =
     do B.putJudges 0 $ map f rops
     where

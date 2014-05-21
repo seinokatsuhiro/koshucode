@@ -49,28 +49,28 @@ data CoxCore c
 
     | CoxDerivL [String] (Cox c)   -- ^ C:   Derived function (multiple variables)
 
-instance (B.ShortDoc c) => Show (CoxCore c) where
+instance (B.Write c) => Show (CoxCore c) where
     show = show . B.doc
 
-instance (B.ShortDoc c) => B.ShortDoc (CoxCore c) where
-    shortDoc = docCore
+instance (B.Write c) => B.Write (CoxCore c) where
+    write = docCore
 
-docCore :: (B.ShortDoc c) => B.StringMap -> CoxCore c -> B.Doc
+docCore :: (B.Write c) => B.StringMap -> CoxCore c -> B.Doc
 docCore sh = d (0 :: Int) where
-    d 10 _ = B.shortDoc sh "..."
+    d 10 _ = B.write sh "..."
     d n e =
         case e of
-          CoxLit c       -> B.shortDoc sh c
-          CoxTerm ns _   -> B.shortDocH sh ns
-          CoxBase name _ -> B.shortDoc sh name
-          CoxVar v i     -> B.shortDoc sh v B.<> B.shortDoc sh "/" B.<> B.shortDoc sh i
+          CoxLit c       -> B.write sh c
+          CoxTerm ns _   -> B.writeH sh ns
+          CoxBase name _ -> B.write sh name
+          CoxVar v i     -> B.write sh v B.<> B.write sh "/" B.<> B.write sh i
           CoxApplyL (B.Sourced _ f) xs ->
-              (B.shortDoc sh "ap" B.<+> d' f) B.$$ (B.nest 3 $ B.shortDocV sh (map (d' . B.unsourced) xs))
-          CoxDeriv  v  (B.Sourced _ b) -> fn (B.shortDoc  sh v)   (d' b)
-          CoxDerivL vs (B.Sourced _ b) -> fn (B.shortDocH sh vs) (d' b)
+              (B.write sh "ap" B.<+> d' f) B.$$ (B.nest 3 $ B.writeV sh (map (d' . B.unsourced) xs))
+          CoxDeriv  v  (B.Sourced _ b) -> fn (B.write  sh v)   (d' b)
+          CoxDerivL vs (B.Sourced _ b) -> fn (B.writeH sh vs) (d' b)
         where
           d' = d $ n + 1
-          fn v b = B.docWraps "(|" "|)" $ v B.<+> B.shortDoc sh "|" B.<+> b
+          fn v b = B.docWraps "(|" "|)" $ v B.<+> B.write sh "|" B.<+> b
 
 mapToCox :: B.Map (Cox c) -> B.Map (CoxCore c)
 mapToCox g (CoxApplyL f xs) = CoxApplyL (g f) (map g xs)
@@ -296,7 +296,7 @@ getArg3 _ = Message.unmatchType ""
 
 -- | Calculate content expression.
 coxRun
-  :: forall c. (C.CRel c, C.CList c, B.ShortDoc c)
+  :: forall c. (C.CRel c, C.CList c, B.Write c)
   => [c]           -- ^ Tuple in body of relation
   -> Cox c         -- ^ Content expression
   -> B.Ab c        -- ^ Calculated literal content

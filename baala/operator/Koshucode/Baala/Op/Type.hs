@@ -71,16 +71,16 @@ instance C.CContent VContent where
     appendContent (VText x) (VText y) = Right . VText $ x ++ y
     appendContent x y = Message.unmatchType (show (x, y))
 
-instance B.ShortDoc VContent where
-    shortDoc sh a = case a of
+instance B.Write VContent where
+    write sh a = case a of
         VText s      ->  B.doc $ sh s
         VDec  n      ->  B.doc $ B.decimalString n
         VBool b      ->  B.doc b
         VNil         ->  B.doc "()"
-        VList    xs  ->  B.docWraps "["   "]" $ B.shortDocColon sh xs
-        VSet     xs  ->  B.docWraps "{"   "}" $ B.shortDocColon sh xs
-        VTermset xs  ->  B.docWraps "<|" "|>" $ B.shortDocH     sh xs
-        VRel r       ->  B.shortDoc sh r
+        VList    xs  ->  B.docWraps "["   "]" $ B.writeColon sh xs
+        VSet     xs  ->  B.docWraps "{"   "}" $ B.writeColon sh xs
+        VTermset xs  ->  B.docWraps "<|" "|>" $ B.writeH     sh xs
+        VRel r       ->  B.write sh r
 
 type VCop = C.CopFun VContent
 

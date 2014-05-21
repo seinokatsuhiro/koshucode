@@ -40,11 +40,11 @@ instance (Ord c) => Eq (Rel c) where
 --   Tuple is list of contents.
 type Relbody c = [[c]]
 
-instance (B.ShortDoc c) => B.ShortDoc (Rel c) where
-    shortDoc sh (Rel h1 b1) = B.docWraps "{|" "|}" $ h2 B.<+> b2
-        where h2    = B.shortDoc  sh h1
-              b2    = B.shortDocH sh $ map d b1
-              d xs  = B.shortDoc  sh "|" B.<+> B.shortDocColon sh xs
+instance (B.Write c) => B.Write (Rel c) where
+    write sh (Rel h1 b1) = B.docWraps "{|" "|}" $ h2 B.<+> b2
+        where h2    = B.write  sh h1
+              b2    = B.writeH sh $ map d b1
+              d xs  = B.write  sh "|" B.<+> B.writeColon sh xs
 
 
 
