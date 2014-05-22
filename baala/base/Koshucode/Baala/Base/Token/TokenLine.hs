@@ -10,6 +10,7 @@ module Koshucode.Baala.Base.Token.TokenLine
   tokenLines,
   tokens,
   isSimpleWord, isSimpleChar,
+  isShortString,
 
   -- * Document
 
@@ -183,6 +184,9 @@ isSimpleChar c =
 
 isShort :: Char -> Bool
 isShort = Ch.isAlpha
+
+isShortString :: String -> Bool
+isShortString = all isShort
 
 
 -- ------------------------------------------------------------------

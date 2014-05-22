@@ -16,6 +16,7 @@ module Koshucode.Baala.Base.Prelude.Utility
   -- * List
   front,
   omit,
+  duplicates,
   unique,
   unionUp,
   singleton,
@@ -76,7 +77,14 @@ front (x : _) = [x]
 omit :: (a -> Bool) -> [a] -> [a]
 omit f = filter $ not . f
 
-{-| Remove duplicate elements. -}
+duplicates :: (Ord a) => [a] -> [a]
+duplicates xs = loop xs Set.empty where
+    loop [] _ = []
+    loop (x:xs2) set
+        | Set.member x set = x : loop xs2 set
+        | otherwise        = loop xs2 (Set.insert x set)
+
+-- | Remove duplicate elements.
 unique :: (Ord a) => [a] -> [a]
 unique xs = loop xs Set.empty where
     loop [] _ = []

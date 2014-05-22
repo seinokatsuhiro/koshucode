@@ -7,6 +7,8 @@ module Koshucode.Baala.Base.Prelude.Import
   Control.Monad.sequence,
   Control.Monad.filterM,
   Control.Monad.foldM,
+  Control.Monad.when,
+  Control.Monad.unless,
   concatMapM,
 
   -- * Data.Map

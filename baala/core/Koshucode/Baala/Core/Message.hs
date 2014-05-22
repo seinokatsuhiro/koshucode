@@ -6,7 +6,10 @@ module Koshucode.Baala.Core.Message
 
   -- * Core package
   ambInfixes,
+  dupPrefix,
+  dupReplacement,
   extraAttr,
+  invalidPrefix,
   noFile,
   noSlotName,
   noSlotIndex,
@@ -39,9 +42,21 @@ import Koshucode.Baala.Base.Message
 ambInfixes :: [String] -> B.Ab a
 ambInfixes = Left . B.abortLines "Ambiguous infix operators"
 
+-- | Duplicate prefix
+dupPrefix :: [String] -> B.Ab a
+dupPrefix = Left . B.abortLine "Duplicate prefix" . unwords
+
+-- | Duplicate replacement
+dupReplacement :: [String] -> B.Ab a
+dupReplacement = Left . B.abortLine "Duplicate replacement" . unwords
+
 -- | Extra attribute
 extraAttr :: B.Ab a
 extraAttr = Left $ B.abortBecause "Extra attribute"
+
+-- | Invalid prefix character
+invalidPrefix :: [String] -> B.Ab a
+invalidPrefix = Left . B.abortLine "Invalid prefix character" . unwords
 
 -- | File not found
 noFile :: String -> B.Ab a

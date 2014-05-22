@@ -34,7 +34,6 @@ data Section c = Section {
       secName     :: Maybe String        -- ^ Section name
     , secImport   :: [Section c]         -- ^ Importing section
     , secExport   :: [String]            -- ^ Exporting relmap names
-    , secShort    :: [[B.Named String]]  -- ^ Prefix for short signs
     , secSlot     :: [B.NamedTrees]      -- ^ Global slots
     , secRelmap   :: [C.RelmapSource]    -- ^ Source of relmaps
     , secAssert   :: [C.ShortAssert c]   -- ^ Assertions of relmaps
@@ -61,7 +60,7 @@ appendSection s1 s2 =
 
 -- | Section that has no contents.
 emptySection :: Section c
-emptySection = Section Nothing [] [] [] [] [] [] [] res cons [] where
+emptySection = Section Nothing [] [] [] [] [] [] res cons [] where
     res  = B.ResourceText ""
     cons = C.relmapCons C.global
 
@@ -97,11 +96,12 @@ consSectionEach root resource (B.Short shorts xs) =
        relmaps  <-  forM isCRelmap  relmap
        asserts  <-  forM isCAssert  assert
 
+       checkShort shorts
+
        Right $ root
            { secName      =  name xs
            , secImport    =  imports
            , secExport    =  for isCExport expt
-           , secShort     =  for isCShort  short
            , secSlot      =  slots
            , secRelmap    =  relmaps
            , secAssert    =  [B.Short shorts asserts]
@@ -126,9 +126,6 @@ consSectionEach root resource (B.Short shorts xs) =
       impt :: Clab (Section c)
       impt _ (C.CImport _ (Nothing)) = Right emptySection
       impt _ (C.CImport _ (Just _))  = consSec []
-
-      short :: Cl [B.Named String]
-      short _ (C.CShort ps) = ps
 
       slot :: Clab B.NamedTrees
       slot _ (C.CSlot n toks) = ntrees (n, toks)
@@ -158,6 +155,17 @@ consSectionEach root resource (B.Short shorts xs) =
              rmapTrees <- B.tokenTrees toks
              Right $ C.Assert typ pat (C.roa optTrees) src rmapTrees Nothing []
 
+      checkShort :: [B.ShortDef] -> B.Ab ()
+      checkShort sh =
+          do let (ss, rs) = unzip sh
+                 prefix   = B.duplicate ss
+                 replace  = B.duplicate rs
+                 invalid  = B.omit B.isShortString ss
+             B.unless (null prefix)  $ Message.dupPrefix prefix
+             B.unless (null replace) $ Message.dupReplacement replace
+             B.unless (null invalid) $ Message.invalidPrefix invalid
+             Right ()
+
       unk   _ (C.CUnknown) = Message.unkClause
       unres _ (C.CUnres _) = Message.unresPrefix
 
@@ -167,7 +175,7 @@ type Clab a = Cl (B.Ab a)
 
 -- ----------------------  Clause type
 
-isCImport, isCExport, isCShort,
+isCImport, isCExport,
   isCSlot, isCRelmap, isCAssert, isCJudge,
   isCUnknown, isCUnres :: C.ClauseBody -> Bool
 
@@ -176,9 +184,6 @@ isCImport _                    = False
 
 isCExport (C.CExport _)        = True
 isCExport _                    = False
-
-isCShort (C.CShort _)          = True
-isCShort _                     = False
 
 isCSlot (C.CSlot _ _)          = True
 isCSlot _                      = False

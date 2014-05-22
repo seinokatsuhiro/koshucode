@@ -44,13 +44,18 @@ shortTrim = B.omit $ null . shortBody
 shortEmpty :: B.StringMap
 shortEmpty = shortText []
 
+sortWith :: (Ord a, Ord b) => (a -> b) -> [a] -> [a]
+sortWith f = map snd . L.sort . map g where
+    g x = (f x, x)
+
 shortText :: [ShortDef] -> B.StringMap
-shortText = loop where
+shortText = loop . reverse . sortWith len where
+    len = length . snd
     loop [] s | null s           = "#empty"
               | B.isSimpleWord s = '\'' : s
               | otherwise        = B.hashWord s
-    loop ((prefix, long) : sh) s =
-        case L.stripPrefix long s of
+    loop ((prefix, replace) : sh) s =
+        case L.stripPrefix replace s of
           Just s2 -> prefix ++ "." ++ text2 s2
           _       -> loop sh s
 
