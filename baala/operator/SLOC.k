@@ -1,7 +1,7 @@
 ** -*- koshu -*-
 
 |-- DIR  /code 17   /comment 6    /dir "operator/Koshucode/Baala"
-|-- DIR  /code 240  /comment 136  /dir "operator/Koshucode/Baala/Op"
+|-- DIR  /code 238  /comment 134  /dir "operator/Koshucode/Baala/Op"
 |-- DIR  /code 161  /comment 117  /dir "operator/Koshucode/Baala/Op/Builtin"
 |-- DIR  /code 352  /comment 198  /dir "operator/Koshucode/Baala/Op/Content"
 |-- DIR  /code 111  /comment 66   /dir "operator/Koshucode/Baala/Op/Meta"
@@ -9,7 +9,7 @@
 |-- DIR  /code 267  /comment 223  /dir "operator/Koshucode/Baala/Op/Nest"
 |-- DIR  /code 595  /comment 352  /dir "operator/Koshucode/Baala/Op/Vanilla"
 
-|-- DIR-TOTAL  /code 2074  /comment 1429
+|-- DIR-TOTAL  /code 2072  /comment 1427
 
 |-- FILE  /code 17   /comment 6    /file "Op.hs"          /dir "operator/Koshucode/Baala"
 |-- FILE  /code 9    /comment 6    /file "Builtin.hs"     /dir "operator/Koshucode/Baala/Op"
@@ -37,7 +37,7 @@
 |-- FILE  /code 97   /comment 62   /file "Flow.hs"        /dir "operator/Koshucode/Baala/Op/Nest"
 |-- FILE  /code 34   /comment 33   /file "Rop.hs"         /dir "operator/Koshucode/Baala/Op/Nest"
 |-- FILE  /code 12   /comment 11   /file "Quoter.hs"      /dir "operator/Koshucode/Baala/Op"
-|-- FILE  /code 113  /comment 39   /file "Type.hs"        /dir "operator/Koshucode/Baala/Op"
+|-- FILE  /code 111  /comment 37   /file "Type.hs"        /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 13   /comment 6    /file "Vanilla.hs"     /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 87   /comment 49   /file "Check.hs"       /dir "operator/Koshucode/Baala/Op/Vanilla"
 |-- FILE  /code 150  /comment 73   /file "Confl.hs"       /dir "operator/Koshucode/Baala/Op/Vanilla"
@@ -47,4 +47,4 @@
 |-- FILE  /code 50   /comment 23   /file "Order.hs"       /dir "operator/Koshucode/Baala/Op/Vanilla"
 |-- FILE  /code 68   /comment 56   /file "Rop.hs"         /dir "operator/Koshucode/Baala/Op/Vanilla"
 
-|-- FILE-TOTAL  /code 2074  /comment 1429
+|-- FILE-TOTAL  /code 2072  /comment 1427
