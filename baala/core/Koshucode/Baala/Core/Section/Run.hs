@@ -30,8 +30,8 @@ runSectionBody global C.Section { C.secAssert = ass, C.secMessage = msg } =
       run = mapM $ C.runAssertJudges global
 
       msgChunk :: B.OutputChunks c
-      msgChunk | null msg  = B.Short [] []
-               | otherwise = B.Short [] [B.OutputComment message]
+      msgChunk | null msg  = B.Short [] [] []
+               | otherwise = B.Short [] [] [B.OutputComment message]
 
       message = "" : "MESSAGE" : map ("  " ++) msg ++ [""]
 

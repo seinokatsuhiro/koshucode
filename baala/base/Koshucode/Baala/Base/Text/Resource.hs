@@ -57,6 +57,9 @@ instance Ord CodePoint where
 class CodePointer a where
     codePoint :: a -> CodePoint
 
+instance CodePointer CodePoint where
+    codePoint pt = pt
+
 codePointTextLength :: CodePoint -> Int
 codePointTextLength = length . codePointText
 

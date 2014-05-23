@@ -87,7 +87,7 @@ consSection root resource xss =
 
 consSectionEach :: forall c. (C.CContent c) =>
     Section c -> B.Resource -> C.ShortClause -> B.Ab (Section c)
-consSectionEach root resource (B.Short shorts xs) =
+consSectionEach root resource (B.Short pt shorts xs) =
     do _        <-  forM isCUnknown unk
        _        <-  forM isCUnres   unres
        imports  <-  forM isCImport  impt
@@ -104,7 +104,7 @@ consSectionEach root resource (B.Short shorts xs) =
            , secExport    =  for isCExport expt
            , secSlot      =  slots
            , secRelmap    =  relmaps
-           , secAssert    =  [B.Short shorts asserts]
+           , secAssert    =  [B.Short pt shorts asserts]
            , secJudge     =  judges
            , secResource  =  resource }
     where
@@ -157,14 +157,15 @@ consSectionEach root resource (B.Short shorts xs) =
 
       checkShort :: [B.ShortDef] -> B.Ab ()
       checkShort sh =
-          do let (ss, rs) = unzip sh
-                 prefix   = B.duplicate ss
-                 replace  = B.duplicate rs
-                 invalid  = B.omit B.isShortString ss
-             B.unless (null prefix)  $ Message.dupPrefix prefix
-             B.unless (null replace) $ Message.dupReplacement replace
-             B.unless (null invalid) $ Message.invalidPrefix invalid
-             Right ()
+          B.abortable "short" pt $ do
+            let (ss, rs) = unzip sh
+                prefix   = B.duplicate ss
+                replace  = B.duplicate rs
+                invalid  = B.omit B.isShortString ss
+            B.unless (null prefix)  $ Message.dupPrefix prefix
+            B.unless (null replace) $ Message.dupReplacement replace
+            B.unless (null invalid) $ Message.invalidPrefix invalid
+            Right ()
 
       unk   _ (C.CUnknown) = Message.unkClause
       unres _ (C.CUnres _) = Message.unresPrefix

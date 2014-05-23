@@ -45,6 +45,9 @@ data ClauseBody
     | CUnres      [B.Token]                      -- ^ Unresolved short sign
       deriving (Show, G.Data, G.Typeable)
 
+instance B.CodePointer Clause where
+    codePoint (Clause src _) = B.codePoint src
+
 -- | Name of clause type. e.g., @\"Relmap\"@, @\"Assert\"@.
 clauseTypeText :: Clause -> String
 clauseTypeText (Clause _ body) =
@@ -186,10 +189,12 @@ shortClause ccs@(c : cs)
     | isCShort c = scope cs  $ shorts c
     | otherwise  = scope ccs []
     where
+      pt = [B.codePoint c]
+
       scope :: [Clause] -> [B.ShortDef] -> [ShortClause]
       scope cs12 sh =
           let (cs1, cs2) = span (not . isCShort) cs12
-              short      = B.Short sh $ shortToLong sh cs1
+              short      = B.Short pt sh $ shortToLong sh cs1
           in  short : shortClause cs2
 
       shorts :: Clause -> [B.ShortDef]

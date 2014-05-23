@@ -129,8 +129,8 @@ shortList h status sh =
        return status
 
 short :: (Ord c, B.Write c) => IO.Handle -> Counter -> OutputChunks c -> IO Counter
-short h cnt (B.Short []  output) = chunks h B.shortEmpty output cnt
-short h cnt (B.Short def output) =
+short h cnt (B.Short _ []  output) = chunks h B.shortEmpty output cnt
+short h cnt (B.Short _ def output) =
     do hPutLines h $ "short" : map shortLine def
        hPutEmptyLine h
        chunks h sh output cnt

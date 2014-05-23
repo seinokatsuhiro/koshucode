@@ -20,20 +20,21 @@ import qualified Koshucode.Baala.Base.Token.HashWord  as B
 import qualified Koshucode.Baala.Base.Token.TokenLine as B
 
 data Short a =
-    Short { shortHead :: [ShortDef]
-          , shortBody :: a }
+    Short { shortSource :: [B.CodePoint]
+          , shortHead   :: [ShortDef]
+          , shortBody   :: a }
     deriving (Show, Ord, Eq)
 
 type ShortDef = B.Named String
 
 instance Functor Short where
-    fmap f (Short a b) = Short a $ f b
+    fmap f (Short pt he bo) = Short pt he $ f bo
 
 shortMap :: (Functor f) => (a -> b) -> [f a] -> [f b]
 shortMap = map . fmap
 
 shortM :: (Monad m) => Short (m a) -> m (Short a)
-shortM (Short he bo) = return . Short he =<< bo
+shortM (Short pt he bo) = return . Short pt he =<< bo
 
 shortMapM :: (Monad m) => (a -> m b) -> [Short a] -> m [Short b]
 shortMapM f = mapM $ shortM . fmap f

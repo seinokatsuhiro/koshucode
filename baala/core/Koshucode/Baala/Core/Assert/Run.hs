@@ -56,15 +56,15 @@ just s Nothing  = Message.adlib s
 -- | Calculate assertion list.
 runAssertJudges :: (Ord c, B.Write c, C.CRel c, C.CNil c)
   => C.Global c -> C.ShortAssert c -> B.Ab (B.OutputChunks c)
-runAssertJudges global a@(B.Short sh _) =
+runAssertJudges global a@(B.Short pt sh _) =
     do chunks <- runAssertDataset global a ds
-       Right $ B.Short sh chunks
+       Right $ B.Short pt sh chunks
     where ds = C.dataset $ C.globalJudges global
 
 -- | Calculate assertion list.
 runAssertDataset :: forall c. (Ord c, B.Write c, C.CRel c, C.CNil c)
   => C.Global c -> C.ShortAssert c -> C.Dataset c -> B.Ab [B.OutputChunk c]
-runAssertDataset global (B.Short sh asserts) dataset = Right . concat =<< mapM each asserts where
+runAssertDataset global (B.Short _ sh asserts) dataset = Right . concat =<< mapM each asserts where
     each (C.Assert _ _ _ _ _ Nothing _) = B.bug "runAssertDataset"
     each a@(C.Assert quo pat opt _ _ (Just relmap) libs) =
         B.abortableFrom "assert" a $ do
