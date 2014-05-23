@@ -55,21 +55,22 @@ just s Nothing  = Message.adlib s
 
 -- | Calculate assertion list.
 runAssertJudges :: (Ord c, B.Write c, C.CRel c, C.CNil c)
-  => C.Global c -> [C.Assert c] -> B.Ab [B.OutputChunk c]
-runAssertJudges global asserts =
-    runAssertDataset global asserts ds where
-        ds = C.dataset $ C.globalJudges global
+  => C.Global c -> C.ShortAssert c -> B.Ab (B.OutputChunks c)
+runAssertJudges global a@(B.Short sh _) =
+    do chunks <- runAssertDataset global a ds
+       Right $ B.Short sh chunks
+    where ds = C.dataset $ C.globalJudges global
 
 -- | Calculate assertion list.
 runAssertDataset :: forall c. (Ord c, B.Write c, C.CRel c, C.CNil c)
-  => C.Global c -> [C.Assert c] -> C.Dataset c -> B.Ab [B.OutputChunk c]
-runAssertDataset global asserts dataset = Right . concat =<< mapM each asserts where
+  => C.Global c -> C.ShortAssert c -> C.Dataset c -> B.Ab [B.OutputChunk c]
+runAssertDataset global (B.Short sh asserts) dataset = Right . concat =<< mapM each asserts where
     each (C.Assert _ _ _ _ _ Nothing _) = B.bug "runAssertDataset"
     each a@(C.Assert quo pat opt _ _ (Just relmap) libs) =
         B.abortableFrom "assert" a $ do
           r1 <- runRelmapDataset global dataset libs relmap B.reldee
           let q = C.assertQuality quo
-          assertOptionProcess q pat opt r1
+          assertOptionProcess sh q pat opt r1
 
 -- | Convert relation to list of judges.
 judgesFromRel :: Bool -> B.JudgePat -> B.Rel c -> [B.Judge c]
@@ -100,12 +101,12 @@ flatnames trees =
 -- ---------------------------------  Option
 
 assertOptionProcess :: (Ord c, B.Write c, C.CRel c)
-  => Bool -> B.JudgePat -> C.AssertOption -> B.Rel c -> B.Ab [B.OutputChunk c]
-assertOptionProcess q pat opt r1 =
+  => [B.ShortDef] -> Bool -> B.JudgePat -> C.AssertOption -> B.Rel c -> B.Ab [B.OutputChunk c]
+assertOptionProcess sh q pat opt r1 =
     do assertOptionCheck opt
        r2 <- assertOptionRelmap opt r1
        let js = judgesFromRel q pat r2
-           cm = assertOptionComment pat opt r2
+           cm = assertOptionComment sh pat opt r2
        assertOptionJudges opt js cm
 
 assertOptionCheck :: C.AssertOption -> B.Ab ()
@@ -129,14 +130,14 @@ assertOptionOrder :: (Ord c) => [B.TokenTree] ->  B.AbMap (B.Rel c)
 assertOptionOrder _ r1 = Right r1
 
 assertOptionComment :: (B.Write c, C.CRel c) =>
-    B.JudgePat -> C.AssertOption -> B.Rel c -> [String]
-assertOptionComment p opt r =
+    [B.ShortDef] -> B.JudgePat -> C.AssertOption -> B.Rel c -> [String]
+assertOptionComment sh p opt r =
     case lookup "-with-table" opt of
       Nothing -> []
       Just _  -> title : "" : table
     where
       title = "TABLE : " ++ p
-      table = map ("  " ++) $ C.relTableLines r
+      table = map ("  " ++) $ C.relTableLines sh r
     
 
 assertOptionJudges :: C.AssertOption -> [B.Judge c] -> [String] -> B.Ab [B.OutputChunk c]

@@ -18,12 +18,12 @@ import qualified Koshucode.Baala.Core.Content as C
 
 -- --------------------------------------------  Rel table
 
-relTable :: (B.Write c, C.CRel c) => B.Rel c -> String
-relTable = unlines . relTableLines
+relTable :: (B.Write c, C.CRel c) => [B.ShortDef] -> B.Rel c -> String
+relTable sh = unlines . relTableLines sh
 
-relTableLines :: (B.Write c, C.CRel c) => B.Rel c -> [String]
-relTableLines r = render $ relCells 2 size [] text where
-    text = relText r
+relTableLines :: (B.Write c, C.CRel c) => [B.ShortDef] -> B.Rel c -> [String]
+relTableLines sh r = render $ relCells 2 size [] text where
+    text = relText sh r
     size = maxTermSize text
 
 relCells :: Int -> TermSize -> B.TermPath -> B.RelText -> [[B.Cell]]
@@ -43,10 +43,10 @@ relCells pad m path (B.Rel (B.Relhead ts) bo) = table where
     text   = B.textCell B.Front
     rule _ = B.textRuleCell '-'
 
-relText :: (B.Write c, C.CRel c) => B.Rel c -> B.RelText
-relText (B.Rel he bo) = B.Rel he $ map (map content) bo where
-    content c | C.isRel c  = B.MonoNest $ relText $ C.gRel c
-              | otherwise  = B.MonoType $ show $ B.write B.shortEmpty c
+relText :: (B.Write c, C.CRel c) => [B.ShortDef] -> B.Rel c -> B.RelText
+relText sh (B.Rel he bo) = B.Rel he $ map (map content) bo where
+    content c | C.isRel c  = B.MonoNest $ relText sh $ C.gRel c
+              | otherwise  = B.MonoType $ show $ B.write (B.shortText sh) c
 
 render :: [[B.Cell]] -> [String]
 render = B.squeezeEmptyLines . B.renderTable " " . B.alignTable

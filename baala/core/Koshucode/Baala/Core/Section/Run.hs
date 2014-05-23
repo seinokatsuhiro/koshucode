@@ -27,10 +27,7 @@ runSectionBody global C.Section { C.secAssert = ass, C.secMessage = msg } =
        Right (B.shortTrim js1, msgChunk : B.shortTrim js2)
     where
       run :: [C.ShortAssert c] -> B.Ab [B.OutputChunks c]
-      run = mapM B.shortM . run2
-
-      run2 :: [C.ShortAssert c] -> [B.Short (B.Ab [B.OutputChunk c])]
-      run2 = B.shortMap $ C.runAssertJudges global
+      run = mapM $ C.runAssertJudges global
 
       msgChunk :: B.OutputChunks c
       msgChunk | null msg  = B.Short [] []

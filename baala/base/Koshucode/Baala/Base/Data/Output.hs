@@ -139,7 +139,11 @@ short h cnt (B.Short def output) =
       sh = B.shortText def
 
       shortLine :: (String, String) -> String
-      shortLine (a, b) = "  " ++ a ++ " " ++ show b
+      shortLine (a, b) = "  " ++ B.padRight width a ++
+                         " "  ++ show b
+
+      width :: Int
+      width = maximum $ map (length . fst) def
 
 chunks :: (Ord c, B.Write c) => IO.Handle -> B.StringMap
        -> [OutputChunk c] -> Counter -> IO Counter
