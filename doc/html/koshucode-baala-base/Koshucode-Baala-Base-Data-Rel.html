@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.48.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.59.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -103,18 +103,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Relbody</a
 	    > c = [[c]]</li
 	  ><li class="src short"
-	  ><a href="#v:relPosHere"
-	    >relPosHere</a
-	    > ::  <a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
-	    >Rel</a
-	    > c -&gt; [<a href="Koshucode-Baala-Base-Token-Token.html#t:Termname"
-	    >Termname</a
-	    >] -&gt; ([<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
-	    >TermPos</a
-	    >], [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    >])</li
-	  ><li class="src short"
 	  ><a href="#v:relSort"
 	    >relSort</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
@@ -125,26 +113,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Rel</a
 	    > c)</li
 	  ><li class="src short"
-	  ><a href="#v:headArrange"
-	    >headArrange</a
-	    > ::  <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
-	    >Relhead</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
-	    >Relhead</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > [c]</li
-	  ><li class="src short"
-	  ><a href="#v:bodyArrange"
-	    >bodyArrange</a
-	    > ::  <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
-	    >Relhead</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
-	    >Relhead</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > [[c]]</li
-	  ><li class="src short"
 	  ><a href="#v:reldum"
 	    >reldum</a
 	    > ::  <a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
@@ -153,6 +121,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ><li class="src short"
 	  ><a href="#v:reldee"
 	    >reldee</a
+	    > ::  <a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
+	    >Rel</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:reldau"
+	    >reldau</a
 	    > ::  <a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
 	    >Rel</a
 	    > c</li
@@ -218,7 +192,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 			> c</dt
 		      ><dd class="doc"
 		      ><p
-			>Body of relbody
+			>Body of relation
 </p
 			></dd
 		      ></dl
@@ -272,25 +246,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  ></tr
 		><tr
 		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
-		    >Pretty</a
-		    > c =&gt; <a href="Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
-		    >Pretty</a
+		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
+		    >Write</a
+		    > c =&gt; <a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
+		    >Write</a
 		    > (<a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
 		    >Rel</a
 		    > c)</td
-		  ><td class="doc"
-		  ><pre class="screen"
-		    ><code class="prompt"
-		      >&gt;&gt;&gt; </code
-		      ><strong class="userinput"
-		      ><code
-			>doc $ rel [&quot;/a&quot;, &quot;/b&quot;] [[10, 20], [30, 40 :: Int]]
-</code
-			></strong
-		      >  {| /a /b | 10 : 20 | 30 : 40 |}
-</pre
-		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
 		  ></tr
 		></table
 	      ></div
@@ -314,31 +278,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:relPosHere" class="def"
-	    >relPosHere</a
-	    > ::  <a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
-	    >Rel</a
-	    > c -&gt; [<a href="Koshucode-Baala-Base-Token-Token.html#t:Termname"
-	    >Termname</a
-	    >] -&gt; ([<a href="Koshucode-Baala-Base-Data-TermPos.html#t:TermPos"
-	    >TermPos</a
-	    >], [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    >])<a href="src/Koshucode-Baala-Base-Data-Rel.html#relPosHere" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Relational version of <code
-	      ><a href="Koshucode-Baala-Base-Data-TermPos.html#v:posHere"
-		>posHere</a
-		></code
-	      >. 
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
 	  ><a name="v:relSort" class="def"
 	    >relSort</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
@@ -348,34 +287,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    > (<a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
 	    >Rel</a
 	    > c)<a href="src/Koshucode-Baala-Base-Data-Rel.html#relSort" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:headArrange" class="def"
-	    >headArrange</a
-	    > ::  <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
-	    >Relhead</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
-	    >Relhead</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > [c]<a href="src/Koshucode-Baala-Base-Data-Rel.html#headArrange" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:bodyArrange" class="def"
-	    >bodyArrange</a
-	    > ::  <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
-	    >Relhead</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
-	    >Relhead</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > [[c]]<a href="src/Koshucode-Baala-Base-Data-Rel.html#bodyArrange" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -397,16 +308,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
    In other words, relational constant
    that has no terms and no tuples.
 </p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>B.doc (reldum :: Rel Bool)
-</code
-		></strong
-	      >{| |}
-</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -424,17 +325,50 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
    In other words, relational constant
    that has no terms and the empty tuple.
 </p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>B.doc (reldee :: Rel Bool)
-</code
-		></strong
-	      >{| | |}
-</pre
 	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:reldau" class="def"
+	    >reldau</a
+	    > ::  <a href="Koshucode-Baala-Base-Data-Rel.html#t:Rel"
+	    >Rel</a
+	    > c<a href="src/Koshucode-Baala-Base-Data-Rel.html#reldau" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >The empty relation with all terms.
+   This is fake.
+</p
+	    ></div
+	  ></div
+	><div class="doc"
+	><p
+	  ><em
+	    >Examples</em
+	    >
+</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >B.doc (reldum :: Rel Bool)
+</code
+	      ></strong
+	    >{| |}
+</pre
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >B.doc (reldee :: Rel Bool)
+</code
+	      ></strong
+	    >{| | |}
+</pre
 	  ></div
 	></div
       ></div

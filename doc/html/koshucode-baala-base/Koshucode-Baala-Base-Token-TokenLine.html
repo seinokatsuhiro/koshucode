@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.48.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.59.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -104,7 +104,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ><li class="src short"
 	  ><a href="#v:tokenLines"
 	    >tokenLines</a
-	    > :: <a href="Koshucode-Baala-Base-Token-TokenPos.html#t:Resource"
+	    > :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:Resource"
 	    >Resource</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
@@ -112,33 +112,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >TokenLine</a
 	    >]</li
 	  ><li class="src short"
-	  ><a href="#v:trimLeft"
-	    >trimLeft</a
-	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:trimRight"
-	    >trimRight</a
-	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:trimBoth"
-	    >trimBoth</a
-	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    ></li
-	  ><li class="src short"
 	  ><a href="#v:tokens"
 	    >tokens</a
-	    > :: <a href="Koshucode-Baala-Base-Token-TokenPos.html#t:Resource"
+	    > :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:Resource"
 	    >Resource</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
@@ -162,21 +138,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Char</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:commentLine"
-	    >commentLine</a
+	  ><a href="#v:isShortString"
+	    >isShortString</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
 	    ></li
-	  ><li class="src short"
-	  ><a href="#v:putCommentLines"
-	    >putCommentLines</a
-	    > :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
-	    >IO</a
-	    > ()</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -206,7 +174,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><p class="src"
 	  ><a name="v:tokenLines" class="def"
 	    >tokenLines</a
-	    > :: <a href="Koshucode-Baala-Base-Token-TokenPos.html#t:Resource"
+	    > :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:Resource"
 	    >Resource</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
@@ -223,45 +191,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:trimLeft" class="def"
-	    >trimLeft</a
-	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    ><a href="src/Koshucode-Baala-Base-Token-TokenLine.html#trimLeft" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:trimRight" class="def"
-	    >trimRight</a
-	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    ><a href="src/Koshucode-Baala-Base-Token-TokenLine.html#trimRight" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:trimBoth" class="def"
-	    >trimBoth</a
-	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    ><a href="src/Koshucode-Baala-Base-Token-TokenLine.html#trimBoth" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
 	  ><a name="v:tokens" class="def"
 	    >tokens</a
-	    > :: <a href="Koshucode-Baala-Base-Token-TokenPos.html#t:Resource"
+	    > :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:Resource"
 	    >Resource</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
@@ -303,25 +235,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:commentLine" class="def"
-	    >commentLine</a
+	  ><a name="v:isShortString" class="def"
+	    >isShortString</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    ><a href="src/Koshucode-Baala-Base-Token-TokenLine.html#commentLine" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:putCommentLines" class="def"
-	    >putCommentLines</a
-	    > :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
-	    >IO</a
-	    > ()<a href="src/Koshucode-Baala-Base-Token-TokenLine.html#putCommentLines" class="link"
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ><a href="src/Koshucode-Baala-Base-Token-TokenLine.html#isShortString" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -374,7 +294,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      >
 </dd
 	    ><dt
-	    >Termname</dt
+	    >TermName</dt
 	    ><dd
 	    >  Words beginning with slash, e.g., <code
 	      >/aa</code

@@ -1,0 +1,769 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Base.Text.Resource</title
+    ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-Text-Resource.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a href="src/Koshucode-Baala-Base-Text-Resource.html"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-base-0.59.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Base.Text.Resource</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Resource
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >CodePoint
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Sourced
+</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a href="#t:Resource"
+	    >Resource</a
+	    > <ul class="subs"
+	    ><li
+	      >= <a href="#v:ResourceFile"
+		>ResourceFile</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		>  </li
+	      ><li
+	      >| <a href="#v:ResourceText"
+		>ResourceText</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		>  </li
+	      ><li
+	      >| <a href="#v:ResourceURL"
+		>ResourceURL</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		>  </li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:resourceType"
+	    >resourceType</a
+	    > :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:Resource"
+	    >Resource</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:resourceName"
+	    >resourceName</a
+	    > :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:Resource"
+	    >Resource</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a href="#t:CodePoint"
+	    >CodePoint</a
+	    >  = <a href="#v:CodePoint"
+	    >CodePoint</a
+	    > {<ul class="subs"
+	    ><li
+	      ><a href="#v:codePointResource"
+		>codePointResource</a
+		> :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:Resource"
+		>Resource</a
+		></li
+	      ><li
+	      ><a href="#v:codePointLineNumber"
+		>codePointLineNumber</a
+		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+		>Int</a
+		></li
+	      ><li
+	      ><a href="#v:codePointLineText"
+		>codePointLineText</a
+		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		></li
+	      ><li
+	      ><a href="#v:codePointText"
+		>codePointText</a
+		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		></li
+	      ></ul
+	    >}</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >class</span
+	    >  <a href="#t:CodePointer"
+	    >CodePointer</a
+	    > a  <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:codePoint"
+		>codePoint</a
+		> :: a -&gt; [<a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
+		>CodePoint</a
+		>]</li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:codePointColumn"
+	    >codePointColumn</a
+	    > :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
+	    >CodePoint</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:codePointDisplay"
+	    >codePointDisplay</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
+	    >CodePoint</a
+	    > -&gt; [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >)]</li
+	  ><li class="src short"
+	  ><a href="#v:codePointZero"
+	    >codePointZero</a
+	    > :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
+	    >CodePoint</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a href="#t:Sourced"
+	    >Sourced</a
+	    > a = <a href="#v:Sourced"
+	    >Sourced</a
+	    > {<ul class="subs"
+	    ><li
+	      ><a href="#v:source"
+		>source</a
+		> :: [<a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
+		>CodePoint</a
+		>]</li
+	      ><li
+	      ><a href="#v:unsourced"
+		>unsourced</a
+		> :: a</li
+	      ></ul
+	    >}</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Resource
+</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a name="t:Resource" class="def"
+	    >Resource</a
+	    >  <a href="src/Koshucode-Baala-Base-Text-Resource.html#Resource" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:ResourceFile" class="def"
+		  >ResourceFile</a
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:ResourceText" class="def"
+		  >ResourceText</a
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:ResourceURL" class="def"
+		  >ResourceURL</a
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Resource" class="caption collapser" onclick="toggleSection('i:Resource')"
+	    >Instances</p
+	    ><div id="section.i:Resource" class="show"
+	    ><table
+	      ><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		    >Eq</a
+		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:Resource"
+		    >Resource</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
+		    >Data</a
+		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:Resource"
+		    >Resource</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		    >Ord</a
+		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:Resource"
+		    >Resource</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		    >Show</a
+		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:Resource"
+		    >Resource</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
+		    >Typeable</a
+		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:Resource"
+		    >Resource</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:resourceType" class="def"
+	    >resourceType</a
+	    > :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:Resource"
+	    >Resource</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ><a href="src/Koshucode-Baala-Base-Text-Resource.html#resourceType" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:resourceName" class="def"
+	    >resourceName</a
+	    > :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:Resource"
+	    >Resource</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ><a href="src/Koshucode-Baala-Base-Text-Resource.html#resourceName" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:2"
+	>CodePoint
+</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a name="t:CodePoint" class="def"
+	    >CodePoint</a
+	    >  <a href="src/Koshucode-Baala-Base-Text-Resource.html#CodePoint" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:CodePoint" class="def"
+		  >CodePoint</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td colspan="2"
+		><div class="subs fields"
+		  ><p class="caption"
+		    >Fields</p
+		    ><dl
+		    ><dt class="src"
+		      ><a name="v:codePointResource" class="def"
+			>codePointResource</a
+			> :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:Resource"
+			>Resource</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Resource of code
+</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:codePointLineNumber" class="def"
+			>codePointLineNumber</a
+			> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+			>Int</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Line number
+</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:codePointLineText" class="def"
+			>codePointLineText</a
+			> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+			>String</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Line content
+</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:codePointText" class="def"
+			>codePointText</a
+			> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+			>String</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Text at which begins token
+</p
+			></dd
+		      ></dl
+		    ><div class="clear"
+		    ></div
+		    ></div
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:CodePoint" class="caption collapser" onclick="toggleSection('i:CodePoint')"
+	    >Instances</p
+	    ><div id="section.i:CodePoint" class="show"
+	    ><table
+	      ><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		    >Eq</a
+		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
+		    >CodePoint</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
+		    >Data</a
+		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
+		    >CodePoint</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		    >Ord</a
+		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
+		    >CodePoint</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		    >Show</a
+		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
+		    >CodePoint</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
+		    >Typeable</a
+		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
+		    >CodePoint</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePointer"
+		    >CodePointer</a
+		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
+		    >CodePoint</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >class</span
+	    >  <a name="t:CodePointer" class="def"
+	    >CodePointer</a
+	    > a  <span class="keyword"
+	    >where</span
+	    ><a href="src/Koshucode-Baala-Base-Text-Resource.html#CodePointer" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs methods"
+	  ><p class="caption"
+	    >Methods</p
+	    ><p class="src"
+	    ><a name="v:codePoint" class="def"
+	      >codePoint</a
+	      > :: a -&gt; [<a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
+	      >CodePoint</a
+	      >]<a href="src/Koshucode-Baala-Base-Text-Resource.html#codePoint" class="link"
+	      >Source</a
+	      ></p
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:CodePointer" class="caption collapser" onclick="toggleSection('i:CodePointer')"
+	    >Instances</p
+	    ><div id="section.i:CodePointer" class="show"
+	    ><table
+	      ><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePointer"
+		    >CodePointer</a
+		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
+		    >CodePoint</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePointer"
+		    >CodePointer</a
+		    > <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+		    >Token</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePointer"
+		    >CodePointer</a
+		    > (<a href="Koshucode-Baala-Base-Text-Resource.html#t:Sourced"
+		    >Sourced</a
+		    > a)</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePointer"
+		    >CodePointer</a
+		    > a =&gt; <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePointer"
+		    >CodePointer</a
+		    > (<a href="Koshucode-Baala-Base-Syntax-Code.html#t:CodeClause"
+		    >CodeClause</a
+		    > a)</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePointer"
+		    >CodePointer</a
+		    > a =&gt; <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePointer"
+		    >CodePointer</a
+		    > (<a href="Koshucode-Baala-Base-Syntax-Code.html#t:CodeLine"
+		    >CodeLine</a
+		    > a)</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:codePointColumn" class="def"
+	    >codePointColumn</a
+	    > :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
+	    >CodePoint</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    ><a href="src/Koshucode-Baala-Base-Text-Resource.html#codePointColumn" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:codePointDisplay" class="def"
+	    >codePointDisplay</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
+	    >CodePoint</a
+	    > -&gt; [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >)]<a href="src/Koshucode-Baala-Base-Text-Resource.html#codePointDisplay" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:codePointZero" class="def"
+	    >codePointZero</a
+	    > :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
+	    >CodePoint</a
+	    ><a href="src/Koshucode-Baala-Base-Text-Resource.html#codePointZero" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:3"
+	>Sourced
+</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a name="t:Sourced" class="def"
+	    >Sourced</a
+	    > a <a href="src/Koshucode-Baala-Base-Text-Resource.html#Sourced" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:Sourced" class="def"
+		  >Sourced</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td colspan="2"
+		><div class="subs fields"
+		  ><p class="caption"
+		    >Fields</p
+		    ><dl
+		    ><dt class="src"
+		      ><a name="v:source" class="def"
+			>source</a
+			> :: [<a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
+			>CodePoint</a
+			>]</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ><dt class="src"
+		      ><a name="v:unsourced" class="def"
+			>unsourced</a
+			> :: a</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ></dl
+		    ><div class="clear"
+		    ></div
+		    ></div
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Sourced" class="caption collapser" onclick="toggleSection('i:Sourced')"
+	    >Instances</p
+	    ><div id="section.i:Sourced" class="show"
+	    ><table
+	      ><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Functor"
+		    >Functor</a
+		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:Sourced"
+		    >Sourced</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable1"
+		    >Typeable1</a
+		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:Sourced"
+		    >Sourced</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		    >Eq</a
+		    > a =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		    >Eq</a
+		    > (<a href="Koshucode-Baala-Base-Text-Resource.html#t:Sourced"
+		    >Sourced</a
+		    > a)</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
+		    >Data</a
+		    > a =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
+		    >Data</a
+		    > (<a href="Koshucode-Baala-Base-Text-Resource.html#t:Sourced"
+		    >Sourced</a
+		    > a)</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		    >Ord</a
+		    > a =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		    >Ord</a
+		    > (<a href="Koshucode-Baala-Base-Text-Resource.html#t:Sourced"
+		    >Sourced</a
+		    > a)</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		    >Show</a
+		    > a =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		    >Show</a
+		    > (<a href="Koshucode-Baala-Base-Text-Resource.html#t:Sourced"
+		    >Sourced</a
+		    > a)</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePointer"
+		    >CodePointer</a
+		    > (<a href="Koshucode-Baala-Base-Text-Resource.html#t:Sourced"
+		    >Sourced</a
+		    > a)</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.13.2</p
+      ></div
+    ></body
+  ></html
+>
