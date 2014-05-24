@@ -67,7 +67,7 @@ runAssertDataset :: forall c. (Ord c, B.Write c, C.CRel c, C.CNil c)
 runAssertDataset global (B.Short _ sh asserts) dataset = Right . concat =<< mapM each asserts where
     each (C.Assert _ _ _ _ _ Nothing _) = B.bug "runAssertDataset"
     each a@(C.Assert quo pat opt _ _ (Just relmap) libs) =
-        B.abortableFrom "assert" a $ do
+        B.abortable "assert" [a] $ do
           r1 <- runRelmapDataset global dataset libs relmap B.reldee
           let q = C.assertQuality quo
           assertOptionProcess sh q pat opt r1

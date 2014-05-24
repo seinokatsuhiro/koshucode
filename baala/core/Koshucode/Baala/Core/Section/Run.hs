@@ -48,7 +48,7 @@ assembleRelmap sec@C.Section { C.secSlot   = gslot
     where
       assemble :: C.Assert c -> B.Ab (C.Assert c, [String])
       assemble a =
-          B.abortableFrom "assert" a $ do
+          B.abortable "assert" [a] $ do
             trees     <- C.slotTrees gslot [] $ C.assTree a
             (lx, lxs) <- lexmap gslot tokmaps trees
             parts     <- B.sequenceSnd $ B.mapSndTo relmap lxs

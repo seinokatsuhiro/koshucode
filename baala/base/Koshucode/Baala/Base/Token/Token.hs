@@ -7,7 +7,6 @@ module Koshucode.Baala.Base.Token.Token
 (
   -- * Token type
   Token (..),
-  TokenList (..),
   tokenWord,
   Sourced (..),
 
@@ -85,29 +84,19 @@ instance B.Write Token where
 tokenWord :: String -> Token
 tokenWord = TWord B.codePointZero 0
 
-class TokenList a where
-    tokenList :: a -> [Token]
-
-instance (TokenList a) => TokenList (Maybe a) where
-    tokenList (Nothing) = []
-    tokenList (Just a)  = tokenList a
-
-instance TokenList Token where
-    tokenList tok = [tok]
-
 instance B.CodePointer Token where
-    codePoint (TWord    p _ _)  = p
-    codePoint (TShort   p _ _)  = p
-    codePoint (TTerm    p _)    = p
-    codePoint (TSlot    p _ _)  = p
-    codePoint (TOpen    p _)    = p
-    codePoint (TClose   p _)    = p
-    codePoint (TSpace   p _)    = p
-    codePoint (TComment p _)    = p
-    codePoint (TUnknown p _)    = p
+    codePoint (TWord    p _ _)  = [p]
+    codePoint (TShort   p _ _)  = [p]
+    codePoint (TTerm    p _)    = [p]
+    codePoint (TSlot    p _ _)  = [p]
+    codePoint (TOpen    p _)    = [p]
+    codePoint (TClose   p _)    = [p]
+    codePoint (TSpace   p _)    = [p]
+    codePoint (TComment p _)    = [p]
+    codePoint (TUnknown p _)    = [p]
 
 data Sourced a = Sourced
-    { source    :: [Token]
+    { source    :: [B.CodePoint]
     , unsourced :: a
     } deriving (Show, Eq, Ord, G.Data, G.Typeable)
 

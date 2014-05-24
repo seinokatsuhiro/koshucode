@@ -189,7 +189,7 @@ shortClause ccs@(c : cs)
     | isCShort c = scope cs  $ shorts c
     | otherwise  = scope ccs []
     where
-      pt = [B.codePoint c]
+      pt = B.codePoint c
 
       scope :: [Clause] -> [B.ShortDef] -> [ShortClause]
       scope cs12 sh =

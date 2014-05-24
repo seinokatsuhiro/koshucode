@@ -50,8 +50,8 @@ instance B.Write Lexmap where
           Just xs -> B.writeH sh [op, show xs]
         where op = B.tokenContent opTok
 
-instance B.TokenList Lexmap where
-    tokenList Lexmap { lexOpToken = op } = [op]
+instance B.CodePointer Lexmap where
+    codePoint = B.codePoint . lexOpToken
 
 -- | Name of relmap operator
 lexOpName :: Lexmap -> String
@@ -64,7 +64,7 @@ lexMessageList :: Lexmap -> [String]
 lexMessageList Lexmap { lexOpToken = tok, lexMessage = msg }
     | null msg  = []
     | otherwise = msg ++ src
-    where src = map (("  " ++) . fst) $ B.codePointDisplay "" $ B.codePoint tok
+    where src = map (("  " ++) . fst) $ B.codePointDisplay "" $ head $ B.codePoint tok
 
 
 -- ----------------------  Constructor
@@ -149,7 +149,7 @@ consLexmap sorters gslot derives = lexmap where
                 = let n   = lexOpName  lx
                       roa = lexAttr    lx
                       sub = lexSubmap  lx
-                  in B.abortableFrom "slot" lx $ case lookup n derives of
+                  in B.abortable "slot" [lx] $ case lookup n derives of
                       Nothing -> B.concatMapM slot sub
                       Just (trees, roamap) ->
                             do roa2       <- C.roamapRun roamap roa

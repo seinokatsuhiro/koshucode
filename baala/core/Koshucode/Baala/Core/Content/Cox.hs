@@ -149,7 +149,7 @@ cox = expr where
     expr tree = 
         B.abortableTree "cox" tree $
          let src = B.front $ B.untree tree
-         in Right . B.Sourced src =<< core tree
+         in Right . B.Sourced (concatMap B.codePoint src) =<< core tree
 
     -- function application
     core :: B.TokenTree -> B.Ab (CoxCore c)

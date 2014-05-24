@@ -55,10 +55,10 @@ instance Ord CodePoint where
           `B.mappend` (codePointTextLength p2 `compare` codePointTextLength p1)
 
 class CodePointer a where
-    codePoint :: a -> CodePoint
+    codePoint :: a -> [CodePoint]
 
 instance CodePointer CodePoint where
-    codePoint pt = pt
+    codePoint pt = [pt]
 
 codePointTextLength :: CodePoint -> Int
 codePointTextLength = length . codePointText

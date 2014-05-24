@@ -61,8 +61,8 @@ data RopUse c = RopUse
     , ropSubrelmap :: [Relmap c]   -- ^ Subrelmaps
     } deriving (Show)
 
-instance B.TokenList (RopUse c) where
-    tokenList = B.tokenList . ropLexmap
+instance B.CodePointer (RopUse c) where
+    codePoint = B.codePoint . ropLexmap
 
 
 
@@ -157,8 +157,8 @@ relmapAppendList = expand where
     expand (RelmapAppend r1 r2) = expand r1 ++ expand r2
     expand r = [r]
 
-instance B.TokenList (Relmap c) where
-    tokenList = B.tokenList . relmapLex
+instance B.CodePointer (Relmap c) where
+    codePoint = concatMap B.codePoint . relmapLexList
 
 instance Ord (Relmap c) where
     r1 `compare` r2 = relmapLexList r1 `compare` relmapLexList r2
@@ -166,10 +166,10 @@ instance Ord (Relmap c) where
 instance Eq (Relmap c) where
     r1 == r2  =  compare r1 r2 == EQ
 
-relmapLex :: Relmap c -> Maybe C.Lexmap
-relmapLex r = case relmapLexList r of
-                []       -> Nothing
-                (lx : _) -> Just lx
+-- relmapLex :: Relmap c -> Maybe C.Lexmap
+-- relmapLex r = case relmapLexList r of
+--                 []       -> Nothing
+--                 (lx : _) -> Just lx
 
 relmapLexList :: Relmap c -> [C.Lexmap]
 relmapLexList = collect where
