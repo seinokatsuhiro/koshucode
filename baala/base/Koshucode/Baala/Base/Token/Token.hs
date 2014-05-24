@@ -8,7 +8,6 @@ module Koshucode.Baala.Base.Token.Token
   -- * Token type
   Token (..),
   tokenWord,
-  Sourced (..),
 
   -- * Term name
   TermName, TermName2, TermName3, TermName4,
@@ -85,23 +84,16 @@ tokenWord :: String -> Token
 tokenWord = TWord B.codePointZero 0
 
 instance B.CodePointer Token where
-    codePoint (TWord    p _ _)  = [p]
-    codePoint (TShort   p _ _)  = [p]
-    codePoint (TTerm    p _)    = [p]
-    codePoint (TSlot    p _ _)  = [p]
-    codePoint (TOpen    p _)    = [p]
-    codePoint (TClose   p _)    = [p]
-    codePoint (TSpace   p _)    = [p]
-    codePoint (TComment p _)    = [p]
-    codePoint (TUnknown p _)    = [p]
+    codePoint (TWord    p _ _)  =  [p]
+    codePoint (TShort   p _ _)  =  [p]
+    codePoint (TTerm    p _)    =  [p]
+    codePoint (TSlot    p _ _)  =  [p]
+    codePoint (TOpen    p _)    =  [p]
+    codePoint (TClose   p _)    =  [p]
+    codePoint (TSpace   p _)    =  [p]
+    codePoint (TComment p _)    =  [p]
+    codePoint (TUnknown p _)    =  [p]
 
-data Sourced a = Sourced
-    { source    :: [B.CodePoint]
-    , unsourced :: a
-    } deriving (Show, Eq, Ord, G.Data, G.Typeable)
-
-instance Functor Sourced where
-    fmap f (Sourced src x) = Sourced src $ f x
 
 
 -- ---------------------- Term name

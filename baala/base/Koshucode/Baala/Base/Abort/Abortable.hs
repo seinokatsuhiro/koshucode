@@ -4,6 +4,7 @@
 
 module Koshucode.Baala.Base.Abort.Abortable
 ( abortable,
+  abortableSourced,
 ) where
 
 import qualified Koshucode.Baala.Base.Prelude        as B
@@ -24,4 +25,10 @@ push tag ps abort@B.AbortReason { B.abortPoint = src } =
        []      -> abort
        [p]     -> abort { B.abortPoint = (tag, p) : src }
        (p : _) -> push tag [p] abort
+
+abortableSourced :: String -> (a -> B.Ab b) -> B.Sourced a -> B.Ab (B.Sourced b)
+abortableSourced tag f (B.Sourced pt x) =
+    abortable tag pt $ do
+      y <- f x
+      Right $ B.Sourced pt y
 

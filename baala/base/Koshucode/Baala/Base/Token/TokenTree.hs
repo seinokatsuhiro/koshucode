@@ -3,22 +3,23 @@
 -- | Parened tree of tokens
 
 module Koshucode.Baala.Base.Token.TokenTree
-(
-  -- * Library
+( -- * Library
   TokenTree,
   NamedTrees,
   tokenTrees,
 
   -- * Abbreviation
-  tt,
-  tt1,
-  ttDoc,
-
+  tt, tt1, ttDoc,
+    
   -- * Divide trees
   splitTokensBy,
   divideTreesBy,
   divideTreesByBar,
   divideTreesByColon,
+
+  -- * Abortable
+  abortableTree,
+  abortableTrees,
 
   -- * Examples
   -- $Example
@@ -143,6 +144,18 @@ divideTreesByBar = divideTreesBy "|"
 divideTreesByColon :: [TokenTree] -> [[TokenTree]]
 divideTreesByColon = divideTreesBy ":"
 
+
+-- ----------------------  Abortable
+
+-- | Same as 'abortable' except for using 'B.TokenTree'
+--   instead of list of 'B.Token'.
+abortableTree :: String -> TokenTree -> B.Map (B.Ab b)
+abortableTree tag = B.abortable tag . B.untree
+
+-- | Same as 'abortable' except for using list of 'B.TokenTree'
+--   instead of list of 'B.Token'.
+abortableTrees :: String -> [TokenTree] -> B.Map (B.Ab b)
+abortableTrees tag = B.abortable tag . B.untrees
 
 
 -- ------------------------------------------------------------------

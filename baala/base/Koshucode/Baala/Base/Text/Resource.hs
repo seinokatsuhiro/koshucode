@@ -15,6 +15,8 @@ module Koshucode.Baala.Base.Text.Resource
   codePointDisplay,
   codePointZero,
 
+  -- * Sourced
+  Sourced (..),
 ) where
 
 import qualified Data.Generics                 as G
@@ -85,3 +87,16 @@ shorten :: B.Map String
 shorten s | length s > 48 = take 45 s ++ "..."
           | otherwise     = s
 
+
+-- ----------------------  Sourced
+
+data Sourced a =
+    Sourced { source    :: [CodePoint]
+            , unsourced :: a
+            } deriving (Show, Eq, Ord, G.Data, G.Typeable)
+
+instance Functor Sourced where
+    fmap f (Sourced src x) = Sourced src $ f x
+
+instance CodePointer (Sourced a) where
+    codePoint = source
