@@ -268,7 +268,9 @@ io_diff_body () {
 
 io_diff_show () {
     echo
+    echo "**********************************************************************"
     io_diff_result DIFF
+    echo "**********************************************************************"
     echo
     echo "Differences are found:"
     echo
