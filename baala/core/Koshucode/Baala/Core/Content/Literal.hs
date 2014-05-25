@@ -64,7 +64,7 @@ litContentBy ops tree = B.abortableTree "literal" tree $ lit tree where
     lit x@(B.TreeL tok)
         | isDecimal x = C.putDec =<< B.litDecimal cont
         | otherwise   = case tok of
-              B.TWord _ 0 w -> word w
+              B.TWord _ n w | n <= 0 -> word w
               B.TWord _ _ w -> C.putText w  -- quoted text
               _             -> Message.unkWord cont
         where cont = B.tokenContent tok
@@ -73,8 +73,8 @@ litContentBy ops tree = B.abortableTree "literal" tree $ lit tree where
           '#' : s  ->  litHash s
           "()"     ->  Right C.nil
           "nil"    ->  Right C.nil
-          "t"      ->  Right C.true
-          "f"      ->  Right C.false
+          "0"      ->  Right C.false
+          "1"      ->  Right C.true
           "true"   ->  Right C.true
           "false"  ->  Right C.false
           _        ->  Message.unkWord w

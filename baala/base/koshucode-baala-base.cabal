@@ -86,7 +86,7 @@ library
         Koshucode.Baala.Base.Text.Write
 
         Koshucode.Baala.Base.Token
-        Koshucode.Baala.Base.Token.HashWord
+        Koshucode.Baala.Base.Token.Bracket
         Koshucode.Baala.Base.Token.Short
         Koshucode.Baala.Base.Token.Token
         Koshucode.Baala.Base.Token.TokenClause

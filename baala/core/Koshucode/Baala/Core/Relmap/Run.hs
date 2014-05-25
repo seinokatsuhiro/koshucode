@@ -37,11 +37,10 @@ relkitLink kits = linkKit where
            C.RelkitAppend        b1 b2   ->  C.RelkitAppend (link b1) (link b2)
            C.RelkitWith          with b  ->  C.RelkitWith       with $ link  b
            C.RelkitCopy          copy b  ->  C.RelkitCopy       copy $ link  b
-
            C.RelkitLink n key _ ->
                case lookup key kitsRec of
-                 Nothing                 ->  core
                  Just (C.Relkit _ b)     ->  C.RelkitLink n key $ Just b
+                 Nothing                 ->  core
            _                             ->  core
 
 -- todo: optimization
@@ -65,11 +64,11 @@ relkitRun global rs (B.Sourced toks core) bo1 =
        C.RelkitId                  ->  Right bo1
 
        C.RelkitAppend b1@(B.Sourced toks1 _) b2
-                                   -> do bo2 <- relkitRun global rs b1 bo1
-                                         ab toks1 $ relkitRun global rs b2 bo2
+                                   ->  do bo2 <- relkitRun global rs b1 bo1
+                                          ab toks1 $ relkitRun global rs b2 bo2
 
-       C.RelkitSource p ns         -> let r = C.globalSelect global p ns
-                                      in Right $ B.relBody r
+       C.RelkitSource p ns         ->  let r = C.globalSelect global p ns
+                                       in Right $ B.relBody r
 
        C.RelkitLink _ _ (Just b2)  ->  relkitRun global rs b2 bo1
        C.RelkitLink n _ (Nothing)  ->  Message.unkRelmap n

@@ -38,8 +38,8 @@ instance Write String where
     write _ = D.text
 
 instance Write Bool where
-    write _ True  = D.text "#true"
-    write _ False = D.text "#false"
+    write _ True  = D.text "<1>"
+    write _ False = D.text "<0>"
 
 instance (Write a) => Write (B.Named a) where
     write sh (n, x) = D.text n D.<+> write sh x

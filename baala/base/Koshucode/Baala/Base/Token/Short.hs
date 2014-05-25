@@ -16,7 +16,7 @@ module Koshucode.Baala.Base.Token.Short
 import qualified Data.List                            as L
 import qualified Koshucode.Baala.Base.Prelude         as B
 import qualified Koshucode.Baala.Base.Text            as B
-import qualified Koshucode.Baala.Base.Token.HashWord  as B
+import qualified Koshucode.Baala.Base.Token.Bracket   as B
 import qualified Koshucode.Baala.Base.Token.TokenLine as B
 
 data Short a =
@@ -52,14 +52,14 @@ sortWith f = map snd . L.sort . map g where
 shortText :: [ShortDef] -> B.StringMap
 shortText = loop . reverse . sortWith len where
     len = length . snd
-    loop [] s | null s           = "#empty"
+    loop [] s | null s           = "<empty>"
               | B.isSimpleWord s = '\'' : s
-              | otherwise        = B.hashWord s
+              | otherwise        = B.bracketQuote s
     loop ((prefix, replace) : sh) s =
         case L.stripPrefix replace s of
           Just s2 -> prefix ++ "." ++ text2 s2
           _       -> loop sh s
 
     text2 s   | B.isSimpleWord s = s
-              | otherwise        = B.hashWord s
+              | otherwise        = B.bracketQuote s
 

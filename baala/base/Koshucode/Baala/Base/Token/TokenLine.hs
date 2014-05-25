@@ -29,7 +29,7 @@ import qualified Koshucode.Baala.Base.Prelude        as B
 import qualified Koshucode.Baala.Base.Syntax         as B
 import qualified Koshucode.Baala.Base.Text           as B
 import qualified Koshucode.Baala.Base.Token.Token    as B
-import qualified Koshucode.Baala.Base.Token.HashWord as B
+import qualified Koshucode.Baala.Base.Token.Bracket  as B
 
 
 
@@ -59,9 +59,6 @@ nextToken res (num, line) txt =
       ('(' : ')' : cs)   ->  token cs         $ B.TWord     p 0 "()"  -- nil
       ('<' : '<' : cs)   ->  token cs         $ B.TOpen     p "<<"
       ('>' : '>' : cs)   ->  token cs         $ B.TClose    p ">>"
-      ('#' : c : cs)
-          | c == '!'     ->  token ""         $ B.TComment  p txt
-          | otherwise    ->  word cs [c]      hash
                                
       (c : '|' : cs)
           | open c       ->  token cs         $ B.TOpen     p [c, '|']
@@ -69,6 +66,12 @@ nextToken res (num, line) txt =
           | close c      ->  token cs         $ B.TClose    p ['|', c]
           | c == '|'     ->  let cs2          = B.trimLeft cs  -- newline
                              in token cs2     $ B.TWord     p 0 "||"
+
+      ('<' : cs)         ->  angle cs []
+      ('#' : c : cs)
+          | c == '!'     ->  token ""         $ B.TComment  p txt
+          | otherwise    ->  word cs [c]      hash
+
       (c : cs)
           | isOpen   c   ->  token cs         $ B.TOpen     p [c]
           | isClose  c   ->  token cs         $ B.TClose    p [c]
@@ -88,7 +91,7 @@ nextToken res (num, line) txt =
       p      = B.CodePoint res num line txt
       open   = (`elem` "[{<(")
       close  = (`elem` "]}>)")
-      hash s = case lookup s B.hashWordTable of
+      hash s = case lookup s B.bracketTable of
                  Nothing -> B.TWord p 0 $ '#' : s
                  Just t  -> B.TWord p 3 t  -- quotation level 3
 
@@ -121,6 +124,15 @@ nextToken res (num, line) txt =
       qqText []     _                 = Nothing
       qqText (c:cs) text | isQQ c     = Just (text, cs)
                          | otherwise  = qqText cs (c : text)
+
+      angle (c:cs) text | c == '>'    = angleToken cs $ reverse text
+                        | isWord c    = angle cs (c : text)
+      angle cs     text               = token cs $ B.TWord p 0 ('<' : reverse text)
+
+      angleToken cs text | null text = token cs $ B.TWord p 0 "<>"
+                         | otherwise = case lookup text B.bracketTable of
+                                         Nothing -> token cs $ B.TWord p (-1) text
+                                         Just t  -> token cs $ B.TWord p 3 t
 
       term :: String -> String -> [String] -> (B.Token, String)
       term (c:cs) xs ns | isTerm c    = term cs [] $ termUp xs ns
