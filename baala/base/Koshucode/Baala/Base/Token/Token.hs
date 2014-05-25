@@ -78,7 +78,7 @@ instance B.Write Token where
         d (TUnknown pt s)   = pretty "TUnknown" pt [show s]
         pretty k pt xs      = B.writeH sh $ k : lineCol pt : xs
         lineCol pt          = (show $ B.codePointLineNumber pt)
-                              ++ ":" ++ (show $ B.codePointColumn pt)
+                              ++ ":" ++ (show $ B.codePointColumnNumber pt)
 
 tokenWord :: String -> Token
 tokenWord = TWord B.codePointZero 0

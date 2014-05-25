@@ -64,7 +64,8 @@ lexMessageList :: Lexmap -> [String]
 lexMessageList Lexmap { lexOpToken = tok, lexMessage = msg }
     | null msg  = []
     | otherwise = msg ++ src
-    where src = map (("  " ++) . fst) $ B.codePointDisplay "" $ head $ B.codePoint tok
+    where src = map (("  " ++) . fst) $ B.codePointDisplay ("", pt)
+          pt  = head $ B.codePoint tok
 
 
 -- ----------------------  Constructor

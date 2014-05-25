@@ -10,10 +10,12 @@ module Koshucode.Baala.Base.Text.Resource
 
   -- * CodePoint
   CodePoint (..),
-  CodePointer (..),
-  codePointColumn,
-  codePointDisplay,
   codePointZero,
+  codePointColumnNumber,
+  codePointDisplay,
+
+  -- * CodePointer
+  CodePointer (..),
 
   -- * Sourced
   Sourced (..),
@@ -31,6 +33,7 @@ data Resource
     | ResourceURL  String
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
+-- | Name of resourcd type, i.e., @\"file\"@, @\"text\"@, @\"url\"@.
 resourceType :: Resource -> String
 resourceType (ResourceFile _)     = "file"
 resourceType (ResourceText _)     = "text"
@@ -52,40 +55,46 @@ data CodePoint = CodePoint
       } deriving (Show, Eq, G.Data, G.Typeable)
 
 instance Ord CodePoint where
-    compare p1 p2
-        = (codePointLineNumber p1 `compare` codePointLineNumber p2)
-          `B.mappend` (codePointTextLength p2 `compare` codePointTextLength p1)
+    compare = codePointCompare
+
+codePointCompare :: CodePoint -> CodePoint -> Ordering
+codePointCompare p1 p2 = line `B.mappend` column where
+    line   = codePointLineNumber p1 `compare` codePointLineNumber p2
+    column = size p2 `compare` size p1
+    size   = length . codePointText
+
+-- | Empty code point, i.e., empty content and zero line number.
+codePointZero :: CodePoint
+codePointZero = CodePoint (ResourceText "") 0 "" ""
+
+-- | Column number at which code starts.
+codePointColumnNumber :: CodePoint -> Int
+codePointColumnNumber CodePoint { codePointLineText = line, codePointText = subline }
+    = length line - length subline
+
+codePointDisplay :: (String, CodePoint) -> [(String, String)]
+codePointDisplay (tag, p)
+    | lno > 0   = [ (pos, ""), ("> " ++ shorten text, tag) ]
+    | otherwise = []
+    where
+      pos  = show lno ++ " " ++ show cno ++ " " ++ res
+      lno  = codePointLineNumber p
+      cno  = codePointColumnNumber p
+      res  = resourceName $ codePointResource p
+      text = codePointText p
+
+      shorten :: B.Map String
+      shorten s | length s > 48 = take 45 s ++ "..."
+                | otherwise     = s
+
+
+-- ----------------------  CodePointer
 
 class CodePointer a where
     codePoint :: a -> [CodePoint]
 
 instance CodePointer CodePoint where
     codePoint pt = [pt]
-
-codePointTextLength :: CodePoint -> Int
-codePointTextLength = length . codePointText
-
-codePointColumn :: CodePoint -> Int
-codePointColumn CodePoint { codePointLineText = line, codePointText = subline }
-    = length line - length subline
-
-codePointDisplay :: String -> CodePoint -> [(String, String)]
-codePointDisplay tag p
-    | lno > 0   = [(pos, ""), ("> " ++ shorten text, tag)]
-    | otherwise = []
-    where
-      pos  = show lno ++ " " ++ show cno ++ " " ++ res
-      lno  = codePointLineNumber p
-      cno  = codePointColumn p
-      res  = resourceName $ codePointResource p
-      text = codePointText p
-
-codePointZero :: CodePoint
-codePointZero = CodePoint (ResourceText "") 0 "" ""
-
-shorten :: B.Map String
-shorten s | length s > 48 = take 45 s ++ "..."
-          | otherwise     = s
 
 
 -- ----------------------  Sourced

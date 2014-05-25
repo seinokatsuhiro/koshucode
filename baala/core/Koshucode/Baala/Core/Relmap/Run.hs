@@ -30,20 +30,19 @@ relkitLink kits = linkKit where
     link (B.Sourced src core) =
         B.Sourced src $
          case core of
-           C.RelkitAbFull      u kitf kitbs  -> C.RelkitAbFull      u kitf $ links kitbs
-           C.RelkitOneToAbMany u kitf kitbs  -> C.RelkitOneToAbMany u kitf $ links kitbs
-           C.RelkitOneToAbOne  u kitf kitbs  -> C.RelkitOneToAbOne  u kitf $ links kitbs
-           C.RelkitAbSemi        kitf kitb   -> C.RelkitAbSemi        kitf $ link  kitb
-           C.RelkitAppend        kitb1 kitb2 -> C.RelkitAppend (link kitb1) (link kitb2)
-           C.RelkitWith          with kitb   -> C.RelkitWith          with $ link  kitb
-           C.RelkitCopy          copy kitb   -> C.RelkitCopy          copy $ link  kitb
+           C.RelkitAbFull      u f bs    ->  C.RelkitAbFull      u f $ links bs
+           C.RelkitOneToAbMany u f bs    ->  C.RelkitOneToAbMany u f $ links bs
+           C.RelkitOneToAbOne  u f bs    ->  C.RelkitOneToAbOne  u f $ links bs
+           C.RelkitAbSemi        f b     ->  C.RelkitAbSemi        f $ link  b
+           C.RelkitAppend        b1 b2   ->  C.RelkitAppend (link b1) (link b2)
+           C.RelkitWith          with b  ->  C.RelkitWith       with $ link  b
+           C.RelkitCopy          copy b  ->  C.RelkitCopy       copy $ link  b
 
-           C.RelkitLink n key _ 
-               -> case lookup key kitsRec of
-                    Nothing -> core
-                    Just (C.Relkit _ kitb) ->
-                        C.RelkitLink n key $ Just kitb
-           _ -> core
+           C.RelkitLink n key _ ->
+               case lookup key kitsRec of
+                 Nothing                 ->  core
+                 Just (C.Relkit _ b)     ->  C.RelkitLink n key $ Just b
+           _                             ->  core
 
 -- todo: optimization
 relkitRun :: forall c. (Ord c, C.CRel c)
@@ -51,44 +50,44 @@ relkitRun :: forall c. (Ord c, C.CRel c)
 relkitRun global rs (B.Sourced toks core) bo1 =
     ab toks $
      case core of
-       C.RelkitFull        u kitf       ->  right u $ kitf             bo1
-       C.RelkitOneToMany   u kitf       ->  right u $ kitf `concatMap` bo1
-       C.RelkitOneToOne    u kitf       ->  right u $ kitf `map`       bo1
-       C.RelkitPred          kitf       ->  Right   $ filter kitf      bo1
+       C.RelkitFull        u f     ->  right u $ f             bo1
+       C.RelkitOneToMany   u f     ->  right u $ f `concatMap` bo1
+       C.RelkitOneToOne    u f     ->  right u $ f `map`       bo1
+       C.RelkitPred          f     ->  Right   $ filter f      bo1
 
-       C.RelkitAbFull      u kitf kitbs ->  monad u $            kitf (bmaps kitbs)        bo1
-       C.RelkitOneToAbOne  u kitf kitbs ->  monad u $            kitf (bmaps kitbs) `mapM` bo1
-       C.RelkitOneToAbMany u kitf kitbs ->  right u . concat =<< kitf (bmaps kitbs) `mapM` bo1
-       C.RelkitAbSemi        kitf kitb  ->  B.filterM (semi kitf kitb) bo1
-       C.RelkitAbPred        kitf       ->  B.filterM kitf bo1
+       C.RelkitAbFull      u f bs  ->  monad u $            f (bmaps bs)        bo1
+       C.RelkitOneToAbOne  u f bs  ->  monad u $            f (bmaps bs) `mapM` bo1
+       C.RelkitOneToAbMany u f bs  ->  right u . concat =<< f (bmaps bs) `mapM` bo1
+       C.RelkitAbSemi        f b   ->  B.filterM (semi f b) bo1
+       C.RelkitAbPred        f     ->  B.filterM f bo1
 
-       C.RelkitConst                 bo ->  Right bo
-       C.RelkitId                       ->  Right bo1
+       C.RelkitConst           bo  ->  Right bo
+       C.RelkitId                  ->  Right bo1
 
-       C.RelkitAppend kitb1@(B.Sourced toks1 _) kitb2
-           -> do bo2 <- relkitRun global rs kitb1 bo1
-                 ab toks1 $ relkitRun global rs kitb2 bo2
+       C.RelkitAppend b1@(B.Sourced toks1 _) b2
+                                   -> do bo2 <- relkitRun global rs b1 bo1
+                                         ab toks1 $ relkitRun global rs b2 bo2
 
-       C.RelkitSource p ns -> let r = C.globalSelect global p ns
-                              in Right $ B.relBody r
+       C.RelkitSource p ns         -> let r = C.globalSelect global p ns
+                                      in Right $ B.relBody r
 
-       C.RelkitLink _ _ (Just kitb2) -> relkitRun global rs kitb2 bo1
-       C.RelkitLink n _ (Nothing)    -> Message.unkRelmap n
+       C.RelkitLink _ _ (Just b2)  ->  relkitRun global rs b2 bo1
+       C.RelkitLink n _ (Nothing)  ->  Message.unkRelmap n
 
-       C.RelkitNest n         -> case lookup n rs of
-                                   Just bo2 -> Right bo2
-                                   Nothing  -> Message.unkNestRel n
+       C.RelkitNest n              ->  case lookup n rs of
+                                         Just bo2 -> Right bo2
+                                         Nothing  -> Message.unkNestRel n
 
-       C.RelkitCopy n kitb    -> do bo2 <- relkitRun global ((n, bo1) : rs) kitb bo1
-                                    right True $ bo2
-       C.RelkitWith with kitb -> do bo2 <- withRel with kitb `mapM` bo1
-                                    right True $ concat bo2
+       C.RelkitCopy n b            ->  do bo2 <- relkitRun global ((n, bo1) : rs) b bo1
+                                          right True $ bo2
+       C.RelkitWith with b         ->  do bo2 <- withRel with b `mapM` bo1
+                                          right True $ concat bo2
     where
       ab    = B.abortable "run"
       bmaps = map $ relkitRun global rs
 
       semi :: ([[c]] -> B.Ab Bool) -> C.RelkitBody c -> [c] -> B.Ab Bool
-      semi kitf kitb cs = kitf =<< relkitRun global rs kitb [cs]
+      semi f b cs = f =<< relkitRun global rs b [cs]
 
       right :: (Ord b) => Bool -> [b] -> B.Ab [b]
       right u = Right . uif u
@@ -101,9 +100,9 @@ relkitRun global rs (B.Sourced toks core) bo1 =
       uif False  = id
 
       withRel :: [(String, Int)] -> C.RelkitBody c -> [c] -> B.Ab [[c]]
-      withRel with kitb cs =
+      withRel with b cs =
           let nest = pickup cs `map` with
-          in relkitRun global (nest ++ rs) kitb [cs]
+          in relkitRun global (nest ++ rs) b [cs]
 
       pickup :: [c] -> (String, Int) -> B.Named [[c]]
       pickup cs (name, ind) = (name, B.relBody $ C.gRel $ cs !! ind)
