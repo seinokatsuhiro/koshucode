@@ -74,17 +74,17 @@ relkitConst (B.Rel he bo) _ = Right kit2 where
 --    add term @\/x@ as member of @\/xs@.
 --
 
-consMember :: (Ord c, C.CSet c, C.CList c) => C.RopCons c
+consMember :: (Ord c, C.CSet c, C.CList c, C.CText c) => C.RopCons c
 consMember use =
   do x    <- Op.getTerm use "-1"
      xs   <- Op.getTerm use "-2"
      Right $ relmapMember use (x, xs)
 
-relmapMember :: (Ord c, C.CSet c, C.CList c)
+relmapMember :: (Ord c, C.CSet c, C.CList c, C.CText c)
   => C.RopUse c -> B.TermName2 -> C.Relmap c
 relmapMember use = C.relmapFlow use . relkitMember
 
-relkitMember :: (Ord c, C.CSet c, C.CList c)
+relkitMember :: (Ord c, C.CSet c, C.CList c, C.CText c)
   => B.TermName2 -> C.RelkitCalc c
 relkitMember _ Nothing = Right C.relkitNothing
 relkitMember (x, xs) he1'@(Just he1) = kit2 where
@@ -100,7 +100,7 @@ relkitMemberCheck xi xsi he1' = Right kit2 where
     kitf2 cs = let [xc, xsc] = [xi, xsi] `B.snipFrom` cs
                in xc `C.isMember` xsc
 
-relkitMemberExpand :: (Ord c, C.CSet c, C.CList c)
+relkitMemberExpand :: (Ord c, C.CSet c, C.CList c, C.CText c)
   => B.TermName -> Int -> C.RelkitCalc c
 relkitMemberExpand _ _ Nothing = Right C.relkitNothing
 relkitMemberExpand x xsi (Just he1) = Right kit2 where
@@ -110,6 +110,8 @@ relkitMemberExpand x xsi (Just he1) = Right kit2 where
                in case xsc of
                     _ | C.isSet  xsc -> map (: cs) $ C.gSet xsc
                     _ | C.isList xsc -> map (: cs) $ B.unique $ C.gList xsc
+                    _ | C.isText xsc -> map (: cs) $ map (C.pText . B.singleton)
+                                                   $ B.unique $ C.gText xsc
                     _                -> [xsc : cs]
 
 

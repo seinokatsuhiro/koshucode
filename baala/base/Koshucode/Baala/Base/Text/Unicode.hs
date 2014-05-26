@@ -3,6 +3,7 @@
 module Koshucode.Baala.Base.Text.Unicode
 ( GeneralCategoryGroup (..),
   generalCategoryLetter,
+  generalCategoryName,
   generalCategoryGroup,
 ) where
 
@@ -19,13 +20,22 @@ data GeneralCategoryGroup
       deriving (Show, Eq, Ord, Bounded)
 
 generalCategoryLetter :: GeneralCategoryGroup -> Char
-generalCategoryLetter UnicodeLetter      = 'L'
-generalCategoryLetter UnicodeMark        = 'M'
-generalCategoryLetter UnicodeNumber      = 'N'
-generalCategoryLetter UnicodePunctuation = 'P'
-generalCategoryLetter UnicodeSymbol      = 'S'
-generalCategoryLetter UnicodeSeperator   = 'Z'
-generalCategoryLetter UnicodeOther       = 'C'
+generalCategoryLetter UnicodeLetter       = 'L'
+generalCategoryLetter UnicodeMark         = 'M'
+generalCategoryLetter UnicodeNumber       = 'N'
+generalCategoryLetter UnicodePunctuation  = 'P'
+generalCategoryLetter UnicodeSymbol       = 'S'
+generalCategoryLetter UnicodeSeperator    = 'Z'
+generalCategoryLetter UnicodeOther        = 'C'
+
+generalCategoryName   :: GeneralCategoryGroup -> String
+generalCategoryName   UnicodeLetter       = "letter"
+generalCategoryName   UnicodeMark         = "mark"
+generalCategoryName   UnicodeNumber       = "number"
+generalCategoryName   UnicodePunctuation  = "punct"
+generalCategoryName   UnicodeSymbol       = "symbol"
+generalCategoryName   UnicodeSeperator    = "seperator"
+generalCategoryName   UnicodeOther        = "other"
 
 generalCategoryGroup :: Char -> GeneralCategoryGroup
 generalCategoryGroup c =

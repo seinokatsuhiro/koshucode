@@ -8,6 +8,7 @@ module Koshucode.Baala.Op.Content.List
 ) where
 
 import qualified Data.List                     as List
+import qualified Data.Char                     as Char
 import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Core          as C
 import qualified Koshucode.Baala.Op.Message    as Message
@@ -37,18 +38,21 @@ import qualified Koshucode.Baala.Op.Message    as Message
 
 copsList :: (C.CContent c) => [C.Cop c]
 copsList =
-    [ C.CopFun  "++"          copAppend
-    , C.CopFun  "intersect"   copIntersect
-    , C.CopFun  "length"      copLength
-    , C.CopFun  "list"        copList
-    , C.CopFun  "max"         copMax
-    , C.CopFun  "min"         copMin
-    , C.CopFun  "minus"       copMinus
-    , C.CopFun  "push"        copPush
-    , C.CopFun  "reverse"     copReverse
-    , C.CopFun  "total"       copTotal
-    , C.CopFun  "sub-index"   copSubIndex
-    , C.CopFun  "sub-length"  copSubLength
+    [ C.CopFun  "++"            copAppend
+    , C.CopFun  "char"          copChar
+    , C.CopFun  "char-group"    copCharGroup
+    , C.CopFun  "char-group-1"  copCharGroup1
+    , C.CopFun  "intersect"     copIntersect
+    , C.CopFun  "length"        copLength
+    , C.CopFun  "list"          copList
+    , C.CopFun  "max"           copMax
+    , C.CopFun  "min"           copMin
+    , C.CopFun  "minus"         copMinus
+    , C.CopFun  "push"          copPush
+    , C.CopFun  "reverse"       copReverse
+    , C.CopFun  "total"         copTotal
+    , C.CopFun  "sub-index"     copSubIndex
+    , C.CopFun  "sub-length"    copSubLength
     ]
 
 copList :: (C.CList c) => C.CopFun c
@@ -174,4 +178,27 @@ copPush arg =
              | C.isSet cs -> C.putSet $ c : C.gSet cs
              | otherwise  -> Message.reqCollection
          _ -> typeUnmatch arg
+
+
+-- ----------------------  text
+
+copChar :: (C.CContent c) => C.CopFun c
+copChar = op where
+    op [Right c] | C.isDec c = C.putText [Char.chr $ B.decimalNum $ C.gDec c]
+    op xs = typeUnmatch xs
+
+copCharGroup :: (C.CContent c) => C.CopFun c
+copCharGroup = op where
+    op [Right t] | C.isText t = C.putList $ map (C.pText . charGroup) $ C.gText t
+    op xs = typeUnmatch xs
+
+copCharGroup1 :: (C.CContent c) => C.CopFun c
+copCharGroup1 = op where
+    op [Right t] | C.isText t = case C.gText t of
+                                  (c : _) -> C.putText $ charGroup c
+                                  _       -> Right C.nil
+    op xs = typeUnmatch xs
+
+charGroup :: Char -> String
+charGroup = B.generalCategoryName . B.generalCategoryGroup
 
