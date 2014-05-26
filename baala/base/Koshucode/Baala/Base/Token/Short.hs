@@ -46,7 +46,7 @@ shortEmpty :: B.StringMap
 shortEmpty = shortText []
 
 sortWith :: (Ord a, Ord b) => (a -> b) -> [a] -> [a]
-sortWith f = map snd . L.sort . map g where
+sortWith f = map snd . B.sort . map g where
     g x = (f x, x)
 
 shortText :: [ShortDef] -> B.StringMap

@@ -11,6 +11,9 @@ module Koshucode.Baala.Base.Prelude.Import
   Control.Monad.unless,
   concatMapM,
 
+  -- * Data.List
+  Data.List.sort,
+
   -- * Data.Map
   lookupMap,
 
@@ -37,6 +40,7 @@ module Koshucode.Baala.Base.Prelude.Import
 ) where
 
 import Control.Monad
+import Data.List
 import Data.Map
 import Data.Maybe
 import Data.Monoid

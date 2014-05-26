@@ -11,8 +11,8 @@ module Koshucode.Baala.Base.Prelude.Order
   gapRankFrom,
 ) where
 
-import qualified Data.List                            as List
 import qualified Koshucode.Baala.Base.Prelude.Class   as B
+import qualified Koshucode.Baala.Base.Prelude.Import  as B
 import qualified Koshucode.Baala.Base.Prelude.Snip    as B
 import qualified Koshucode.Baala.Base.Prelude.Utility as B
 
@@ -44,7 +44,7 @@ caps ords = zipWith ($) (ords ++ repeat Asc)
 
 sortBy :: (Ord a, Ord b) =>
   [OrderCapSign a] -> [([a], b)] -> [([OrderCap a], b)]
-sortBy ords = List.sort . B.mapFstTo (caps ords)
+sortBy ords = B.sort . B.mapFstTo (caps ords)
 
 sortByName :: (Ord a, Eq n) => [OrderCap n] -> [n] -> B.Map [[a]]
 sortByName ords ns = map snd . sortByNameOrder ords ns

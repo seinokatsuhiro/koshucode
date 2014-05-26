@@ -15,17 +15,13 @@ module Koshucode.Baala.Base.Prelude.Utility
 
   -- * List
   front,
-  omit,
-  duplicates,
-  unique,
-  unionUp,
-  singleton,
-  isSingleton,
-  splitBy,
-  divide,
-  divideBy,
+  omit, duplicates,
+  unique, unionUp,
+  singleton, isSingleton,
+  splitBy, divide, divideBy,
   maybeEmpty,
   squeeze, squeezeEmptyLines,
+  map2,
   mapWithLast,
   notNull,
 ) where
@@ -162,6 +158,9 @@ squeeze p = loop where
 
 squeezeEmptyLines :: B.Map [String]
 squeezeEmptyLines = squeeze $ null . dropWhile (== ' ')
+
+map2 :: (a -> b) -> [[a]] -> [[b]]
+map2 = map . map
 
 mapWithLast :: (a -> b) -> (a -> b) -> [a] -> [b]
 mapWithLast f g = loop where

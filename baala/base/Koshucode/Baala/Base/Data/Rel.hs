@@ -15,7 +15,6 @@ module Koshucode.Baala.Base.Data.Rel
   -- $ConstantExample
 ) where
 
-import qualified Data.List                         as List
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
 import qualified Koshucode.Baala.Base.Data.Relhead as B
@@ -59,11 +58,11 @@ relSort = relSortBody . relSortHead
 
 relSortHead :: B.Map (Rel c)
 relSortHead (Rel he1 bo1) = Rel he2 bo2 where
-    he2 = B.headChange List.sort he1
+    he2 = B.headChange B.sort he1
     bo2 = B.headAlign he2 he1 `map` bo1
 
 relSortBody :: (Ord c) => B.Map (Rel c)
-relSortBody (Rel he1 bo1) = Rel he1 $ B.unique $ List.sort bo1
+relSortBody (Rel he1 bo1) = Rel he1 $ B.unique $ B.sort bo1
 
 
 

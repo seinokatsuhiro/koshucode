@@ -36,7 +36,6 @@ module Koshucode.Baala.Base.Data.Relhead
   -- $UtilityExample
 ) where
 
-import qualified Data.List                         as L
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
 import qualified Koshucode.Baala.Base.Token        as B
@@ -118,7 +117,7 @@ headDegree = length . headTerms
 -- ----------------------  Predicate
 
 headEquiv :: Relhead -> Relhead -> Bool
-headEquiv (Relhead a) (Relhead b) = L.sort a == L.sort b
+headEquiv (Relhead a) (Relhead b) = B.sort a == B.sort b
 
 isSubhead :: Relhead -> Relhead -> Bool
 isSubhead h1 h2 = null $ headNames h1 `B.snipLeft` headNames h2 

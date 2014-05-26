@@ -16,7 +16,6 @@ module Koshucode.Baala.Base.Data.Judge
   isAffirmed, isDenied,
 ) where
 
-import qualified Data.List                         as List
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
 import qualified Koshucode.Baala.Base.Data.Term    as B
@@ -80,7 +79,7 @@ judgeDoc shorts (Judge q p a) = quality q B.<+> sign B.<+> arg a where
 
 -- | Sort terms in alphabetical order.
 abcJudge :: (Ord c) => B.Map (Judge c)
-abcJudge (Judge q p a) = Judge q p $ List.sort a
+abcJudge (Judge q p a) = Judge q p $ B.sort a
 
 
 

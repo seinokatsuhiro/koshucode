@@ -22,7 +22,8 @@ module Koshucode.Baala.Base.Prelude.Snip
 ) where
 
 import qualified Data.List as List
-import qualified Koshucode.Baala.Base.Prelude.Class as B
+import qualified Koshucode.Baala.Base.Prelude.Import as B
+import qualified Koshucode.Baala.Base.Prelude.Class  as B
 
 type Snip a = [Int] -> B.Map [a]
 
@@ -69,7 +70,7 @@ snipIndex ks xs = filter (>= 0) $ snipFull ks xs
 snipPair :: (Ord a) => [a] -> [a] -> ([Int], [Int])
 snipPair xs1 xs2 = (snipIndex sh xs1, snipIndex sh xs2) where
     ind = snipIndex xs1 xs2
-    sh  = List.sort $ snipFrom ind xs2
+    sh  = B.sort $ snipFrom ind xs2
 
 -- | Pair of picking-up and cutting-off elements.
 snipBoth :: [Int] -> [a] -> ([a], [a])

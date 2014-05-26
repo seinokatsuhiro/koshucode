@@ -7,7 +7,7 @@ module Koshucode.Baala.Core.Assert.Run
 ( runAssertJudges,
 ) where
 
-import qualified Koshucode.Baala.Base as B
+import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Core.Content         as C
 import qualified Koshucode.Baala.Core.Lexmap          as C
 import qualified Koshucode.Baala.Core.Relmap          as C
@@ -110,9 +110,9 @@ assertOptionProcess sh q pat opt r1 =
        assertOptionJudges opt js cm
 
 assertOptionCheck :: C.AssertOption -> B.Ab ()
-assertOptionCheck = optionUnkCheck ["-fore", "-order", "-align", "-with-table"]
+assertOptionCheck = optionUnkCheck ["-fore", "-order", "-align", "-table"]
 
-assertOptionRelmap :: (Ord c) => C.AssertOption -> B.Rel c -> B.Ab (B.Rel c)
+assertOptionRelmap :: (Ord c, C.CRel c) => C.AssertOption -> B.Rel c -> B.Ab (B.Rel c)
 assertOptionRelmap opt r1 =
     Right r1  >>= call "-fore"  assertOptionFore
               >>= call "-order" assertOptionOrder
@@ -126,13 +126,18 @@ assertOptionFore opt r1 =
     do ns <- flatnames opt
        snipRelRaw B.snipFore2 ns r1
 
-assertOptionOrder :: (Ord c) => [B.TokenTree] ->  B.AbMap (B.Rel c)
-assertOptionOrder _ r1 = Right r1
+assertOptionOrder :: (Ord c, C.CRel c) => [B.TokenTree] ->  B.AbMap (B.Rel c)
+assertOptionOrder _ r1 = Right $ relSortDeep r1
+
+relSortDeep :: (Ord c, C.CRel c) => B.Map (B.Rel c)
+relSortDeep (B.Rel he bo) = B.Rel he $ B.unique $ B.sort $ B.map2 nest bo where
+    nest c | C.isRel c = C.pRel $ relSortDeep $ C.gRel c
+           | otherwise = c
 
 assertOptionComment :: (B.Write c, C.CRel c) =>
     [B.ShortDef] -> B.JudgePat -> C.AssertOption -> B.Rel c -> [String]
 assertOptionComment sh p opt r =
-    case lookup "-with-table" opt of
+    case lookup "-table" opt of
       Nothing -> []
       Just _  -> title : "" : table
     where
