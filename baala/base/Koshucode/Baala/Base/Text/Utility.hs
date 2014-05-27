@@ -7,10 +7,15 @@ module Koshucode.Baala.Base.Text.Utility
   padRight, padLeft,
   -- * Put
   putShow, putShowLn, putLines,
+  -- * Read
+  readInt,
 ) where
 
 import qualified Data.Char                     as Ch
 import qualified Koshucode.Baala.Base.Prelude  as B
+
+
+-- ----------------------  Trim
 
 isSpace :: Char -> Bool
 isSpace c = Ch.isSpace c    -- UnicodeSeprator | UnicodeOther
@@ -27,6 +32,9 @@ trimRight (x : xs) =
 
 trimBoth :: B.Map String
 trimBoth = trimRight . trimLeft
+
+
+-- ----------------------  Padding
 
 -- | Add spaces to right.
 --
@@ -52,6 +60,9 @@ charWidth c
     | Ch.ord c >= 256 = 2
     | otherwise         = 1
 
+
+-- ----------------------  Put
+
 putShow :: (Show a) => a -> IO ()
 putShow = putStr . show
 
@@ -60,4 +71,12 @@ putShowLn = putStrLn . show
 
 putLines :: [String] -> IO ()
 putLines = putStr . unlines
+
+
+-- ----------------------  Read
+
+readInt :: String -> Maybe Int
+readInt s = case (reads :: ReadS Int) s of
+              [(n, "")] -> Just n
+              _         -> Nothing
 

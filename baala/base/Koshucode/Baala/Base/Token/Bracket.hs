@@ -69,7 +69,7 @@ bracketSplit (c : cs)
         other '\r'           =  cr cs
         other '\n'           =  just cs "lf"
         other '\t'           =  just cs "tab"
-        other _              =  just cs $ "u" ++ show code
+        other _              =  just cs $ "c" ++ show code
 
         cr ('\n' : cs2)      =  just cs2 "crlf"
         cr _                 =  just cs  "cr"

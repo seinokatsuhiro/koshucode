@@ -37,9 +37,9 @@ slotTree gslot roa tree = B.abortableTree "slot" tree $ loop tree where
 
     pos :: [B.TokenTree] -> String -> B.Ab [B.TokenTree]
     pos od "all" = Right od
-    pos od n     = case (reads :: ReadS Int) n of
-                     [(i, "")] -> Right . B.singleton =<< od `at` i
-                     _         -> Message.noSlotName 0 n
+    pos od n     = case B.readInt n of
+                     Just i  -> Right . B.singleton =<< od `at` i
+                     Nothing -> Message.noSlotName 0 n
 
     at = slotIndex $ unwords . map B.tokenContent . B.untree
 

@@ -120,10 +120,7 @@ isSingleton  _  = False
 --
 --   >>> splitBy (== '|') "a | b | c"
 --   Right ("a ", '|', " b | c")
-splitBy
-    :: (a -> Bool)
-    -> [a]
-    -> Either [a] ([a], a, [a])
+splitBy :: (a -> Bool) -> [a] -> Either [a] ([a], a, [a])
 splitBy p xs =
     case break p xs of
       (a, x : b) -> Right (a, x, b)

@@ -129,10 +129,18 @@ nextToken res (num, line) txt =
                         | isWord c    = angle cs (c : text)
       angle cs     text               = token cs $ B.TWord p 0 ('<' : reverse text)
 
-      angleToken cs text | null text = token cs $ B.TWord p 0 "<>"
-                         | otherwise = case lookup text B.bracketTable of
-                                         Nothing -> token cs $ B.TWord p (-1) text
-                                         Just t  -> token cs $ B.TWord p 3 t
+      angleToken cs ('c' : code)
+          | all isCode code           = case mapM B.readInt $ B.omit null $ B.divide '-' code of
+                                          Just ns  -> token cs $ B.TWord p 3 $ map Ch.chr ns
+                                          Nothing  -> token cs $ B.TWord p (-1) code
+      angleToken cs text | null text  = token cs $ B.TWord p 0 "<>"
+                         | otherwise  = case lookup text B.bracketTable of
+                                          Just w  -> token cs $ B.TWord p 3 w
+                                          Nothing -> token cs $ B.TWord p (-1) text
+
+      isCode :: Char -> Bool
+      isCode '-' = True
+      isCode c   = Ch.isDigit c
 
       term :: String -> String -> [String] -> (B.Token, String)
       term (c:cs) xs ns | isTerm c    = term cs [] $ termUp xs ns
