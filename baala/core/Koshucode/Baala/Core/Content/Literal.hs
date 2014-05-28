@@ -2,21 +2,21 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
--- | Literalizer: Make literal contents from token tree.
+-- | Make literal contents from token tree.
 
 module Koshucode.Baala.Core.Content.Literal
 (
-  -- * Library
-
-  -- ** Types
-  Literalize,
+  -- * Types
+  LitTree,
   LitTrees,
   LitOperators,
 
-  -- ** Functions
-  litContentBy,
-  litTermset,
+  -- * Functions
+  litOperators,
+  litContent,
   litNamedTrees,
+  litJudge,
+  -- $Function
 
   -- * Document
 
@@ -35,134 +35,115 @@ import qualified Koshucode.Baala.Core.Content.Class  as C
 import qualified Koshucode.Baala.Core.Message        as Message
 
 
+
 -- ----------------------  Type
 
-{-| Transform 'B.TokenTree' to something. -}
-type Literalize a = B.TokenTree -> B.Ab a
+-- | Convert 'B.TokenTree' to content.
+type LitTree c = B.TokenTree -> B.Ab c
 
-{-| Transform list of 'B.TokenTree' to something. -}
-type LitTrees a = [B.TokenTree] -> B.Ab a
+-- | Convert list of 'B.TokenTree' to content.
+type LitTrees c = [B.TokenTree] -> B.Ab c
 
-type LitOperators c = [B.Named (Literalize c -> LitTrees c)]
+type LitOperators c = [B.Named (LitTree c -> LitTrees c)]
 
 
 
 -- ----------------------  Content
 
--- | Transform 'B.TokenTree' into
---   internal form of content.
-litContentBy :: forall c. (C.CContent c) => LitOperators c -> Literalize c
+litOperators :: (C.CContent c) => LitOperators c
+litOperators = []
+
+litContent :: (C.CContent c) => LitTree c
+litContent = litContentBy []
+
+-- | Convert 'B.TokenTree' into internal form of content.
+litContentBy :: forall c. (C.CContent c) => LitOperators c -> LitTree c
 litContentBy ops tree = B.abortableTree "literal" tree $ lit tree where
-    lit (B.TreeB typ _ xs) = case typ of
-          1  ->  paren xs
-          2  ->  C.putList    =<< litList    lit xs
-          3  ->  C.putSet     =<< litList    lit xs
-          4  ->  C.putTermset =<< litTermset lit xs
-          5  ->  C.putRel     =<< litRel     lit xs
-          _  ->  B.bug "litContentBy"
-
+    lit :: LitTree c
     lit x@(B.TreeL tok)
-        | isDecimal x = C.putDec =<< B.litDecimal cont
-        | otherwise   = case tok of
-              B.TWord _ n w | n <= 0 -> word w
-              B.TWord _ _ w -> C.putText w  -- quoted text
-              _             -> Message.unkWord cont
-        where cont = B.tokenContent tok
+        | isDecimal x = C.putDec =<< B.litDecimal =<< naked x
+        | otherwise = case tok of
+              B.TWord _ (-1) w  ->  bracketKeyword w
+              B.TWord _ 0    w  ->  nakedKeyword   w
+              B.TWord _ _    w  ->  C.putText      w
+              _                 ->  Message.unkWord $ B.tokenContent tok
 
-    word w = case w of
-          '#' : s  ->  litHash s
-          "()"     ->  Right C.nil
-          "nil"    ->  Right C.nil
-          "0"      ->  Right C.false
-          "1"      ->  Right C.true
-          "true"   ->  Right C.true
-          "false"  ->  Right C.false
-          _        ->  Message.unkWord w
+    lit (B.TreeB n _ xs) = case n of
+        1  ->  paren xs
+        2  ->  C.putList     =<<  litList    lit xs
+        3  ->  C.putSet      =<<  litList    lit xs
+        4  ->  C.putTermset  =<<  litTermset lit xs
+        5  ->  C.putRel      =<<  litRel     lit xs
+        _  ->  B.bug "litContentBy"
 
-    paren :: [B.TokenTree] -> B.Ab c
+    paren :: LitTrees c
     paren xs@(x : _)
-        -- quoted sequence is text
-        | isQuotedOrHashed x =
-            C.joinContent =<< mapM lit xs
-        -- decimal
-        | isDecimal x =
-            do xs2 <- mapM litUnquoted xs
-               dec <- B.litDecimal $ concat xs2
-               C.putDec dec
+        | isDecimal x = do xs2 <- mapM naked xs
+                           dec <- B.litDecimal $ concat xs2
+                           C.putDec dec
 
     -- tagged sequence
     paren (B.TreeL (B.TWord _ 0 tag) : xs) =
         case lookup tag ops of
           Just f  -> f lit xs
           Nothing -> Message.unkCop tag
+    
+    paren [] = Right C.nil                        -- empty sequence is nil
+    paren xs = Message.unkWord $ treesContent xs  -- unknown sequence
 
-    -- empty sequence is nil
-    paren [] = Right C.nil
+    naked :: LitTree String
+    naked (B.TreeL (B.TWord _ 0 w)) = Right w
+    naked x                         = Message.unkWord $ treeContent x
 
-    -- unknown sequence
-    paren x  = Message.unkWord (show x)
+    treeContent  = concatMap B.tokenContent . B.untree
+    treesContent = concatMap B.tokenContent . B.untrees
 
--- First letters of decimals
-isDecimalChar :: Char -> Bool
-isDecimalChar = (`elem` "0123456789+-.")
+bracketKeyword :: (C.CNil c, C.CBool c) => String -> B.Ab c
+bracketKeyword "0"    =  Right C.false     -- <0>
+bracketKeyword "1"    =  Right C.true      -- <1>
+bracketKeyword "nil"  =  Right C.nil       -- <nil>
+bracketKeyword w      =  Message.unkWord w
+
+nakedKeyword :: (C.CNil c) => String -> B.Ab c
+nakedKeyword "()"     =  Right C.nil       -- ()
+nakedKeyword w        =  Message.unkWord w
 
 isDecimal :: B.TokenTree -> Bool
 isDecimal (B.TreeL (B.TWord _ 0 (c : _))) = isDecimalChar c
 isDecimal _ = False
 
--- | Check token tree is a quoted word,
---   i.e., (1) token tree includes 'B.TWord' token,
---         (2) the quotation level is more than zero.
-isQuoted :: B.TokenTree -> Bool
-isQuoted (B.TreeL (B.TWord _ q _)) | q > 0 = True
-isQuoted _ = False
+-- First letters of decimals
+isDecimalChar :: Char -> Bool
+isDecimalChar = (`elem` "0123456789+-.")
 
--- | Check token tree is an hashed word.
---   i.e., (1) token tree includes 'B.TWord' token,
---         (2) the quotation level is zero,
---   and   (3) the first character is hashsign.
-isHashed :: B.TokenTree -> Bool
-isHashed (B.TreeL (B.TWord _ 0 ('#' : _))) = True
-isHashed _ = False
-
-isQuotedOrHashed :: B.TokenTree -> Bool
-isQuotedOrHashed x = isQuoted x || isHashed x
-
-litUnquoted :: Literalize String
-litUnquoted x@(B.TreeL (B.TWord _ 0 w)) | not $ isHashed x = Right w
-litUnquoted x = Message.unkWord (show x)
-
-litHash :: (C.CContent c) => B.LitString c
-litHash key =
-    case lookup key hashAssoc of
-      Just c  -> c
-      Nothing -> Message.unkWord ('#' : key)
-
-hashAssoc :: (C.CContent c) => [B.Named (B.Ab c)]
-hashAssoc =
-    [ ("true"  , Right C.true)
-    , ("false" , Right C.false)
-    , ("nil"   , Right C.nil)
-    ]
 
 
 -- ----------------------  Complex data
 
+-- $Function
+--
+--  /Example/
+--
+--  >>> litNamedTrees =<< B.tt "/a 'A3 /b 10"
+--  Right [("/a", TreeB 1 [TreeL (TWord 3 0 "'"), TreeL (TWord 4 0 "A3")]),
+--         ("/b", TreeL (TWord 8 0 "10"))]
+--
+
 -- | Get single term name.
 --   If 'TokenTree' contains nested term name, this function failed.
-litFlatname :: Literalize String
+litFlatname :: LitTree String
 litFlatname (B.TreeL (B.TTerm _ [n])) = Right n
 litFlatname (B.TreeL t) = Message.reqFlatName t
 litFlatname _ = Message.reqTermName
 
-litList :: (C.CContent c) => Literalize c -> LitTrees [c]
+litList :: (C.CContent c) => LitTree c -> LitTrees [c]
 litList _   [] = Right []
 litList lit cs = mapM lt $ B.divideTreesByColon cs where
     lt []  = Right C.nil
     lt [x] = lit x
     lt xs  = lit $ B.TreeB 1 Nothing xs
 
-litRel :: (C.CContent c) => Literalize c -> LitTrees (B.Rel c)
+litRel :: (C.CContent c) => LitTree c -> LitTrees (B.Rel c)
 litRel lit cs =
     do let (h1 : b1) = B.divideTreesByBar cs
        h2 <- mapM litFlatname $ concat $ B.divideTreesByColon h1
@@ -173,17 +154,12 @@ litRel lit cs =
           else Right $ B.Rel (B.headFrom h2) b3
 
 -- | Collect term name and content.
-litTermset :: (C.CContent c) => Literalize c -> LitTrees [B.Named c]
+litTermset :: (C.CContent c) => LitTree c -> LitTrees [B.Named c]
 litTermset lit xs = namedC where
     namedC   = mapM p       =<< litNamedTrees xs
     p (n, c) = Right . (n,) =<< lit c
 
--- | Read list of term name and its content.
---
---   >>> litNamedTrees . B.tokenTrees . B.tokens $ "/a 'A3 /b 10"
---   Right [("/a", TreeB 1 [TreeL (TWord 3 0 "'"), TreeL (TWord 4 0 "A3")]),
---          ("/b", TreeL (TWord 8 0 "10"))]
---
+-- | Convert token trees into a list of named token trees.
 litNamedTrees :: LitTrees [B.Named B.TokenTree]
 litNamedTrees = name where
     name [] = Right []
@@ -197,6 +173,14 @@ litNamedTrees = name where
     cont [] = ([], [])
     cont (x : xs) = B.cons1 x $ cont xs
 
+-- | Convert token trees into a judge.
+--   Judges itself are not content type.
+--   It can be only used in the top-level of sections.
+litJudge :: (C.CContent c) => Bool -> B.JudgePat -> LitTrees (B.Judge c)
+litJudge = litJudgeBy []
+
+litJudgeBy :: (C.CContent c) => LitOperators c -> Bool -> B.JudgePat -> LitTrees (B.Judge c)
+litJudgeBy ops q p = Right . B.Judge q p B.<=< litTermset (litContentBy ops)
 
 
 -- ------------------------------------------------------------------

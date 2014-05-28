@@ -126,7 +126,7 @@ instance C.CNil VContent where
     isNil _                  =  False
 
 instance C.CSet VContent where
-    pSet                     =  VSet . C.nonNilFilter . B.unique
+    pSet                     =  VSet . B.omit C.isNil . B.unique
     gSet (VSet x)            =  x
     gSet _                   =  B.bug "gSet"
     isSet  (VSet _)          =  True

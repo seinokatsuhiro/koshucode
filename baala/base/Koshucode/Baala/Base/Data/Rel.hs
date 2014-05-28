@@ -6,6 +6,7 @@ module Koshucode.Baala.Base.Data.Rel
 ( -- * Datatype
   Rel (..),
   Relbody,
+  MapRel,
   relSort,
 
   -- * Constant
@@ -38,6 +39,8 @@ instance (Ord c) => Eq (Rel c) where
 -- | Body of relation, i.e., a list of tuples.
 --   Tuple is list of contents.
 type Relbody c = [[c]]
+
+type MapRel c = B.Map (Rel c)
 
 instance (B.Write c) => B.Write (Rel c) where
     write sh (Rel h1 b1) = B.docWraps "{|" "|}" $ h2 B.<+> b2

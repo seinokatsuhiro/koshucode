@@ -75,8 +75,11 @@ putLines = putStr . unlines
 
 -- ----------------------  Read
 
-readInt :: String -> Maybe Int
-readInt s = case (reads :: ReadS Int) s of
-              [(n, "")] -> Just n
+readJust :: (Read a) => String -> Maybe a
+readJust s = case reads s of
+              [(x, "")] -> Just x
               _         -> Nothing
+
+readInt :: String -> Maybe Int
+readInt = readJust
 

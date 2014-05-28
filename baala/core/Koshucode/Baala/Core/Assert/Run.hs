@@ -129,9 +129,13 @@ assertOptionFore opt r1 =
 assertOptionOrder :: (Ord c, C.CRel c) => [B.TokenTree] ->  B.AbMap (B.Rel c)
 assertOptionOrder _ r1 = Right $ relSortDeep r1
 
-relSortDeep :: (Ord c, C.CRel c) => B.Map (B.Rel c)
-relSortDeep (B.Rel he bo) = B.Rel he $ B.unique $ B.sort $ B.map2 nest bo where
-    nest c | C.isRel c = C.pRel $ relSortDeep $ C.gRel c
+relSortDeep :: (Ord c, C.CRel c) => B.MapRel c
+relSortDeep = relApply f where
+    f (B.Rel he bo) = B.Rel he $ B.sort bo
+
+relApply :: (C.CRel c) => B.Map (B.MapRel c)
+relApply f (B.Rel he bo) = f $ B.Rel he $ B.map2 nest bo where
+    nest c | C.isRel c = C.pRel $ relApply f $ C.gRel c
            | otherwise = c
 
 assertOptionComment :: (B.Write c, C.CRel c) =>

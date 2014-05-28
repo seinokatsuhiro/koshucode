@@ -53,5 +53,5 @@ termNamePairs = loop where
 --         , ("/b", TreeL (TWord 7 0 "10"))
 --         , ("/c", TreeB 1 []) ]
 termTreePairs :: [B.TokenTree] -> B.Ab [B.Named B.TokenTree]
-termTreePairs xs = C.litNamedTrees xs
+termTreePairs = C.litNamedTrees
 

@@ -1,30 +1,21 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Core.Content.Class
-(
-  -- * Generic content
+( -- * Generic content
   PrimContent (..),
   CContent    (..),
 
-  nonNullFilter,
-  nonNilFilter,
-
   -- * Haskell data
-  CBool       (..),
-  true, false,
-  CText       (..),
-  pTextList,
-  pTextSet,
+  CBool       (..), true, false,
+  CText       (..), pTextList, pTextSet,
   CList       (..),
 
   -- * Koshu data
   CNil        (..),
-  CDec        (..),
-  pDecFromInt,
+  CDec        (..), pDecFromInt,
   CSet        (..),
   CTermset    (..),
-  CRel        (..),
-  isMember,
+  CRel        (..), isMember,
 ) where
 
 import qualified Koshucode.Baala.Base         as B
@@ -46,14 +37,6 @@ class (Ord c, B.Write c, PrimContent c,
 
     joinContent :: [c] -> B.Ab c
     joinContent = B.foldM appendContent nil
-
--- | Delete empty list ('null') from content list.
-nonNullFilter :: B.Map [[a]]
-nonNullFilter = B.omit null
-
--- | Delete 'nil' from content list.
-nonNilFilter :: (CNil c) => B.Map [c]
-nonNilFilter = B.omit isNil
 
 getAbAb :: PrimContent c => (c -> Bool) -> (c -> b) -> B.Ab c -> B.Ab b
 getAbAb _ _ (Left reason) =  Left reason
