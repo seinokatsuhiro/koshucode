@@ -3,13 +3,13 @@
 |-- DIR  /code 17   /comment 6    /dir "operator/Koshucode/Baala"
 |-- DIR  /code 238  /comment 134  /dir "operator/Koshucode/Baala/Op"
 |-- DIR  /code 161  /comment 117  /dir "operator/Koshucode/Baala/Op/Builtin"
-|-- DIR  /code 352  /comment 198  /dir "operator/Koshucode/Baala/Op/Content"
+|-- DIR  /code 372  /comment 205  /dir "operator/Koshucode/Baala/Op/Content"
 |-- DIR  /code 111  /comment 66   /dir "operator/Koshucode/Baala/Op/Meta"
 |-- DIR  /code 331  /comment 331  /dir "operator/Koshucode/Baala/Op/Minimal"
 |-- DIR  /code 267  /comment 223  /dir "operator/Koshucode/Baala/Op/Nest"
-|-- DIR  /code 595  /comment 352  /dir "operator/Koshucode/Baala/Op/Vanilla"
+|-- DIR  /code 597  /comment 352  /dir "operator/Koshucode/Baala/Op/Vanilla"
 
-|-- DIR-TOTAL  /code 2072  /comment 1427
+|-- DIR-TOTAL  /code 2094  /comment 1434
 
 |-- FILE  /code 17   /comment 6    /file "Op.hs"          /dir "operator/Koshucode/Baala"
 |-- FILE  /code 9    /comment 6    /file "Builtin.hs"     /dir "operator/Koshucode/Baala/Op"
@@ -19,7 +19,7 @@
 |-- FILE  /code 13   /comment 7    /file "Content.hs"     /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 62   /comment 35   /file "Arith.hs"       /dir "operator/Koshucode/Baala/Op/Content"
 |-- FILE  /code 54   /comment 21   /file "Cops.hs"        /dir "operator/Koshucode/Baala/Op/Content"
-|-- FILE  /code 117  /comment 60   /file "List.hs"        /dir "operator/Koshucode/Baala/Op/Content"
+|-- FILE  /code 137  /comment 67   /file "List.hs"        /dir "operator/Koshucode/Baala/Op/Content"
 |-- FILE  /code 90   /comment 51   /file "Logic.hs"       /dir "operator/Koshucode/Baala/Op/Content"
 |-- FILE  /code 29   /comment 31   /file "Order.hs"       /dir "operator/Koshucode/Baala/Op/Content"
 |-- FILE  /code 53   /comment 30   /file "Message.hs"     /dir "operator/Koshucode/Baala/Op"
@@ -42,9 +42,9 @@
 |-- FILE  /code 87   /comment 49   /file "Check.hs"       /dir "operator/Koshucode/Baala/Op/Vanilla"
 |-- FILE  /code 150  /comment 73   /file "Confl.hs"       /dir "operator/Koshucode/Baala/Op/Vanilla"
 |-- FILE  /code 89   /comment 33   /file "Cox.hs"         /dir "operator/Koshucode/Baala/Op/Vanilla"
-|-- FILE  /code 91   /comment 86   /file "Flow.hs"        /dir "operator/Koshucode/Baala/Op/Vanilla"
+|-- FILE  /code 93   /comment 86   /file "Flow.hs"        /dir "operator/Koshucode/Baala/Op/Vanilla"
 |-- FILE  /code 60   /comment 32   /file "Naming.hs"      /dir "operator/Koshucode/Baala/Op/Vanilla"
 |-- FILE  /code 50   /comment 23   /file "Order.hs"       /dir "operator/Koshucode/Baala/Op/Vanilla"
 |-- FILE  /code 68   /comment 56   /file "Rop.hs"         /dir "operator/Koshucode/Baala/Op/Vanilla"
 
-|-- FILE-TOTAL  /code 2072  /comment 1427
+|-- FILE-TOTAL  /code 2094  /comment 1434
