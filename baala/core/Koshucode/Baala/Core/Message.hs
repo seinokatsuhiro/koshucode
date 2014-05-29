@@ -8,6 +8,7 @@ module Koshucode.Baala.Core.Message
   ambInfixes,
   dupPrefix,
   dupReplacement,
+  emptyLiteral,
   extraAttr,
   invalidPrefix,
   noFile,
@@ -49,6 +50,10 @@ dupPrefix = Left . B.abortLine "Duplicate prefix" . unwords
 -- | Duplicate replacement
 dupReplacement :: [String] -> B.Ab a
 dupReplacement = Left . B.abortLine "Duplicate replacement" . unwords
+
+-- | Empty literal
+emptyLiteral :: B.Ab a
+emptyLiteral = Left $ B.abortBecause "Empty literal"
 
 -- | Extra attribute
 extraAttr :: B.Ab a

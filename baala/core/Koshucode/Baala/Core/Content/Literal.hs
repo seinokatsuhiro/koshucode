@@ -88,7 +88,8 @@ litContentBy ops tree = B.abortableTree "literal" tree $ lit tree where
           Just f  -> f lit xs
           Nothing -> Message.unkCop tag
     
-    paren [] = Right C.nil                        -- empty sequence is nil
+    paren [] = Message.emptyLiteral
+    -- paren [] = Right C.nil
     paren xs = Message.unkWord $ treesContent xs  -- unknown sequence
 
     naked :: LitTree String
@@ -139,7 +140,7 @@ litFlatname _ = Message.reqTermName
 litList :: (C.CContent c) => LitTree c -> LitTrees [c]
 litList _   [] = Right []
 litList lit cs = mapM lt $ B.divideTreesByColon cs where
-    lt []  = Right C.nil
+    lt []  = Message.emptyLiteral
     lt [x] = lit x
     lt xs  = lit $ B.TreeB 1 Nothing xs
 
