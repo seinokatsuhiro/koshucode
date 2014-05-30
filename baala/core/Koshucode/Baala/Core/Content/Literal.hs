@@ -46,9 +46,22 @@ type LitTrees c = [B.TokenTree] -> B.Ab c
 
 type LitOperators c = [B.Named (LitTree c -> LitTrees c)]
 
+-- | Convert token trees into a list of named token trees.
+litNamedTrees :: LitTrees [B.Named B.TokenTree]
+litNamedTrees = name where
+    name [] = Right []
+    name (x : xs) = let (c, xs2) = cont xs
+                    in do n    <- litFlatname x
+                          xs2' <- name xs2
+                          Right $ (n, B.treeWrap c) : xs2'
+
+    cont :: [B.TokenTree] -> ([B.TokenTree], [B.TokenTree])
+    cont xs@(B.TreeL (B.TTerm _ _) : _) = ([], xs)
+    cont [] = ([], [])
+    cont (x : xs) = B.cons1 x $ cont xs
 
 
--- ----------------------  Content
+-- ----------------------  General content
 
 litOperators :: (C.CContent c) => LitOperators c
 litOperators = []
@@ -70,11 +83,11 @@ litContentBy ops tree = B.abortableTree "literal" tree $ lit tree where
 
     lit (B.TreeB n _ xs) = case n of
         1  ->  paren xs
-        2  ->  C.putList     =<<  litList    lit xs
-        3  ->  C.putSet      =<<  litList    lit xs
-        4  ->  C.putTermset  =<<  litTermset lit xs
-        5  ->  C.putRel      =<<  litRel     lit xs
-        _  ->  B.bug "litContentBy"
+        2  ->  C.putList =<< litContents lit xs
+        3  ->  C.putSet  =<< litContents lit xs
+        4  ->                litBracket  lit xs
+        5  ->  C.putRel  =<< litRel      lit xs
+        _  ->  Message.adlib "Unknown paren type"
 
     paren :: LitTrees c
     paren xs@(x : _)
@@ -118,8 +131,7 @@ isDecimalChar :: Char -> Bool
 isDecimalChar = (`elem` "0123456789+-.")
 
 
-
--- ----------------------  Complex data
+-- ----------------------  Particular content
 
 -- $Function
 --
@@ -130,6 +142,63 @@ isDecimalChar = (`elem` "0123456789+-.")
 --         ("/b", TreeL (TWord 8 0 "10"))]
 --
 
+litBracket :: (C.CContent c) => LitTree c -> LitTrees c
+litBracket lit xs@(B.TreeL (B.TTerm _ _) : _) = C.putTermset =<< litTermset lit xs
+litBracket _ [] = C.putTermset []
+litBracket _ xs =
+    do toks <- tokenList xs
+       ws   <- wordList toks
+       makeDate ws
+
+tokenList :: [B.TokenTree] -> B.Ab [B.Token]
+tokenList = mapM token where
+    token (B.TreeL t) = Right t
+    token _ = Message.adlib "not token"
+
+wordList :: [B.Token] -> B.Ab [String]
+wordList = mapM word where
+    word (B.TWord _ 0 w) = Right w
+    word _ = Message.adlib "not word"
+
+makeDate :: (C.CList c, C.CDec c) => [String] -> B.Ab c
+makeDate xs = date B.<|> time B.<|> unk where
+    date = put3 $ parseDate s
+    time = put3 $ parseTime s
+    unk  = Message.adlib "malformed date/time literal"
+    s    = unwords xs
+
+    put3 (Nothing)        = unk
+    put3 (Just (a, b, c)) = C.putList [ C.pDecFromInt a
+                                      , C.pDecFromInt b
+                                      , C.pDecFromInt c ]
+
+parseDate :: String -> Maybe (Int, Int, Int)
+parseDate s = date '/' s B.<|> date '-' s where
+    date = parseInt3 (9999, 12, 31)
+
+parseTime :: String -> Maybe (Int, Int, Int)
+parseTime = parseInt3 (23, 59, 59) ':'
+
+parseInt3 :: (Int, Int, Int) -> Char -> String -> Maybe (Int, Int, Int)
+parseInt3 m delim s =
+    case B.divide delim s of
+      [n1, n2, n3] -> int3 m (n1, n2, n3)
+      _            -> Nothing
+
+int3 :: (Int, Int, Int) -> (String, String, String) -> Maybe (Int, Int, Int)
+int3 (ma, mb, mc) (a, b, c) =
+    do a' <- B.readInt $ B.trimBoth a
+       b' <- B.readInt $ B.trimBoth b
+       c' <- B.readInt $ B.trimBoth c
+
+       rangeCheck ma a'
+       rangeCheck mb b'
+       rangeCheck mc c'
+
+       Just (a', b', c')
+    where
+      rangeCheck m x = B.guard $ x >= 0 && x <= m
+
 -- | Get single term name.
 --   If 'TokenTree' contains nested term name, this function failed.
 litFlatname :: LitTree String
@@ -137,42 +206,26 @@ litFlatname (B.TreeL (B.TTerm _ [n])) = Right n
 litFlatname (B.TreeL t) = Message.reqFlatName t
 litFlatname _ = Message.reqTermName
 
-litList :: (C.CContent c) => LitTree c -> LitTrees [c]
-litList _   [] = Right []
-litList lit cs = mapM lt $ B.divideTreesByColon cs where
+litContents :: (C.CContent c) => LitTree c -> LitTrees [c]
+litContents _   [] = Right []
+litContents lit cs = mapM lt $ B.divideTreesByColon cs where
     lt []  = Message.emptyLiteral
     lt [x] = lit x
     lt xs  = lit $ B.TreeB 1 Nothing xs
+
+litTermset :: (C.CContent c) => LitTree c -> LitTrees [B.Named c]
+litTermset lit = mapM p B.<=< litNamedTrees where
+    p (n, c) = Right . (n,) =<< lit c
 
 litRel :: (C.CContent c) => LitTree c -> LitTrees (B.Rel c)
 litRel lit cs =
     do let (h1 : b1) = B.divideTreesByBar cs
        h2 <- mapM litFlatname $ concat $ B.divideTreesByColon h1
-       b2 <- mapM (litList lit) b1
+       b2 <- mapM (litContents lit) b1
        let b3 = B.unique b2
        if any (length h2 /=) $ map length b3
           then Message.oddRelation
           else Right $ B.Rel (B.headFrom h2) b3
-
--- | Collect term name and content.
-litTermset :: (C.CContent c) => LitTree c -> LitTrees [B.Named c]
-litTermset lit xs = namedC where
-    namedC   = mapM p       =<< litNamedTrees xs
-    p (n, c) = Right . (n,) =<< lit c
-
--- | Convert token trees into a list of named token trees.
-litNamedTrees :: LitTrees [B.Named B.TokenTree]
-litNamedTrees = name where
-    name [] = Right []
-    name (x : xs) = let (c, xs2) = cont xs
-                    in do n    <- litFlatname x
-                          xs2' <- name xs2
-                          Right $ (n, B.treeWrap c) : xs2'
-
-    cont :: [B.TokenTree] -> ([B.TokenTree], [B.TokenTree])
-    cont xs@(B.TreeL (B.TTerm _ _) : _) = ([], xs)
-    cont [] = ([], [])
-    cont (x : xs) = B.cons1 x $ cont xs
 
 -- | Convert token trees into a judge.
 --   Judges itself are not content type.
@@ -236,7 +289,7 @@ litJudgeBy ops q p = Right . B.Judge q p B.<=< litTermset (litContentBy ops)
 --  >>> :m +Koshucode.Baala.Op.Vanilla.Type
 --  >>> let trees = B.tokenTrees . B.tokens
 --  >>> let lit  = litContentBy [] :: B.TokenTree -> B.Ab VContent
---  >>> let lits = litList lit . trees
+--  >>> let lits = litContents lit . trees
 --
 --  Boolean.
 --

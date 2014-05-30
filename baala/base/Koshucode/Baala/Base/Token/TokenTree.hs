@@ -67,6 +67,7 @@ parenType = B.parenTable
     , o 2  "["   "]"   -- list
     , o 3  "{"   "}"   -- set
     , o 4  "<|" "|>"   -- termset
+    , o 4  "<<" ">>"   -- termset (tuple)
     , o 5  "{|" "|}"   -- relation
     , o 6  "(|" "|)"   -- function
     ] where o n a b = (n, B.isOpenTokenOf a, B.isCloseTokenOf b)

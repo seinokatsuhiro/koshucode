@@ -9,6 +9,7 @@ module Koshucode.Baala.Base.Prelude.Import
   Control.Monad.foldM,
   Control.Monad.when,
   Control.Monad.unless,
+  Control.Monad.guard,
   concatMapM,
 
   -- * Data.List

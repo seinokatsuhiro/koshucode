@@ -9,6 +9,7 @@ module Koshucode.Baala.Base.Prelude.Class
   Map,
   Pred,
   YesNo (..),
+  Choose (..),
 ) where
 
 -- | Types that has name
@@ -29,4 +30,17 @@ type Pred a = a -> Bool
 
 data YesNo a = Yes a | No a
                deriving (Show, Eq, Ord)
+
+-- ----------------------  Choose
+
+class Choose m where
+    (<|>) :: m a -> m a -> m a
+
+instance Choose Maybe where
+    (Just a)  <|> _  =  Just a
+    (Nothing) <|> b  =  b
+
+instance Choose (Either a) where
+    (Right a)  <|> _  =  Right a
+    (Left _)   <|> b  =  b
 

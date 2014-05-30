@@ -20,6 +20,7 @@ module Koshucode.Baala.Core.Message
   reqAttrName,
   reqTermName,
   unexpAttr,
+  unkBracket,
   unkClause,
   unkCop,
   unkCox,
@@ -104,6 +105,10 @@ reqTermName = Left $ B.abortBecause "Require term name"
 -- | Unexpected attribute
 unexpAttr :: String -> B.Ab a
 unexpAttr = Left . B.abortLine "Unexpected attribute"
+
+-- | Unknown bracket
+unkBracket :: B.Ab a
+unkBracket = Left $ B.abortBecause "Unknown bracket"
 
 -- | Unknown clause
 unkClause :: B.Ab a
