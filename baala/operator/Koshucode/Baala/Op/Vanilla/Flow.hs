@@ -177,3 +177,4 @@ relkitSize n _ = Right kit2 where
     kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
     kitf2 bo1 = [[ C.pDecFromInt $ length bo1 ]]
 
+

@@ -14,6 +14,7 @@ module Koshucode.Baala.Base.Prelude.Import
 
   -- * Data.List
   Data.List.sort,
+  Data.List.transpose,
 
   -- * Data.Map
   lookupMap,

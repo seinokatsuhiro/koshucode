@@ -24,6 +24,8 @@ module Koshucode.Baala.Base.Prelude.Utility
   map2,
   mapWithLast,
   notNull,
+  chunks,
+  ceilingRem,
 ) where
 
 import Control.Applicative
@@ -168,4 +170,14 @@ mapWithLast f g = loop where
 notNull :: [a] -> Bool
 notNull = not . null
 
+chunks :: Int -> [a] -> [[a]]
+chunks n = loop where
+    loop xs = case splitAt n xs of
+                ([], _)      -> []
+                (taked, xs2) -> taked : loop xs2
 
+ceilingRem :: (Integral a) => a -> a -> a
+ceilingRem a b =
+    case a `quotRem` b of
+      (q, 0) -> q
+      (q, _) -> q + 1
