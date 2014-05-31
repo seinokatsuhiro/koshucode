@@ -15,7 +15,7 @@ module Koshucode.Baala.Core.Relmap.Operator
   relmapLexList,
 
   -- * Relkit
-  RelkitCalc,
+  RelkitFlow,
   RelkitGlobal,
   RelkitBinary,
   RelkitConfl,
@@ -75,7 +75,7 @@ data Relmap c
     | RelmapConst    C.Lexmap (B.Rel c)
       -- ^ Constant relation
 
-    | RelmapGlobal   C.Lexmap (Global c -> RelkitCalc c)
+    | RelmapGlobal   C.Lexmap (Global c -> RelkitFlow c)
       -- ^ Relmap that maps relations to a relation with globals
     | RelmapCalc     C.Lexmap (RelkitConfl c) [Relmap c]
       -- ^ Relmap that maps relations to a relation
@@ -189,16 +189,16 @@ relmapLexList = collect where
 -- ----------------------  Relkit
 
 -- | Make 'C.Relkit' from heading of input relation.
-type RelkitCalc c   = Maybe B.Relhead -> B.Ab (C.Relkit c)
+type RelkitFlow c   = Maybe B.Relhead -> B.Ab (C.Relkit c)
 
 -- | Make 'C.Relkit' from globals and input heading.
-type RelkitGlobal c = Global c -> RelkitCalc c
+type RelkitGlobal c = Global c -> RelkitFlow c
 
 -- | Make 'C.Relkit' from one subrelmap and input heading.
-type RelkitBinary c = C.Relkit c -> RelkitCalc c
+type RelkitBinary c = C.Relkit c -> RelkitFlow c
 
 -- | Make 'C.Relkit' from multiple subrelmaps and input heading.
-type RelkitConfl c  = [(C.Relkit c)] -> RelkitCalc c
+type RelkitConfl c  = [(C.Relkit c)] -> RelkitFlow c
 
 
 

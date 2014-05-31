@@ -112,6 +112,7 @@ nextToken res (num, line) txt =
       slot n cs                       = (n, cs)
 
       word :: String -> String -> (String -> B.Token) -> (B.Token, String)
+      word cs@('>' : '>' : _) text k  = tokenFrom cs text k
       word (c:cs) text k | isWord c   = word cs (c : text) k
       word cs     text k              = tokenFrom cs text k
 

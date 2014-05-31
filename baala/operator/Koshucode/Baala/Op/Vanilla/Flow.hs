@@ -53,7 +53,7 @@ consConst use =
 relmapConst :: C.RopUse c -> B.Rel c -> C.Relmap c
 relmapConst use = C.relmapFlow use . relkitConst
 
-relkitConst :: B.Rel c -> C.RelkitCalc c
+relkitConst :: B.Rel c -> C.RelkitFlow c
 relkitConst _ Nothing = Right C.relkitNothing
 relkitConst (B.Rel he bo) _ = Right kit2 where
     kit2 = C.relkitJust he $ C.RelkitConst bo
@@ -85,7 +85,7 @@ relmapMember :: (Ord c, C.CSet c, C.CList c, C.CText c)
 relmapMember use = C.relmapFlow use . relkitMember
 
 relkitMember :: (Ord c, C.CSet c, C.CList c, C.CText c)
-  => B.TermName2 -> C.RelkitCalc c
+  => B.TermName2 -> C.RelkitFlow c
 relkitMember _ Nothing = Right C.relkitNothing
 relkitMember (x, xs) he1'@(Just he1) = kit2 where
     kit2 | B.operand [xi, xsi] [] = relkitMemberCheck  xi xsi he1'
@@ -94,14 +94,14 @@ relkitMember (x, xs) he1'@(Just he1) = kit2 where
     [xi, xsi] = [x, xs] `B.snipFull` B.headNames he1
 
 relkitMemberCheck :: (Eq c, C.CSet c, C.CList c)
-  => Int -> Int -> C.RelkitCalc c
+  => Int -> Int -> C.RelkitFlow c
 relkitMemberCheck xi xsi he1' = Right kit2 where
     kit2 = C.relkit he1' $ C.RelkitPred kitf2
     kitf2 cs = let [xc, xsc] = [xi, xsi] `B.snipFrom` cs
                in xc `C.isMember` xsc
 
 relkitMemberExpand :: (Ord c, C.CSet c, C.CList c, C.CText c)
-  => B.TermName -> Int -> C.RelkitCalc c
+  => B.TermName -> Int -> C.RelkitFlow c
 relkitMemberExpand _ _ Nothing = Right C.relkitNothing
 relkitMemberExpand x xsi (Just he1) = Right kit2 where
     he2      = B.headCons x he1
@@ -134,7 +134,7 @@ consRange use =
 relmapRange :: (C.CDec c) => C.RopUse c -> (B.TermName, Int, Int) -> C.Relmap c
 relmapRange use = C.relmapFlow use . relkitRange
 
-relkitRange :: (C.CDec c) => (B.TermName, Int, Int) -> C.RelkitCalc c
+relkitRange :: (C.CDec c) => (B.TermName, Int, Int) -> C.RelkitFlow c
 relkitRange _ Nothing = Right C.relkitNothing
 relkitRange (n, low, high) (Just he1) = Right kit2 where
     he2      = B.headCons n he1
@@ -171,7 +171,7 @@ consSize use =
 relmapSize :: (C.CDec c) => C.RopUse c -> B.TermName -> C.Relmap c
 relmapSize use n = C.relmapFlow use $ relkitSize n
 
-relkitSize :: (C.CDec c) => B.TermName -> C.RelkitCalc c
+relkitSize :: (C.CDec c) => B.TermName -> C.RelkitFlow c
 relkitSize n _ = Right kit2 where
     he2       = B.headFrom [n]
     kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2

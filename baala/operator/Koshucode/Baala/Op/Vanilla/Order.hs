@@ -8,9 +8,6 @@ module Koshucode.Baala.Op.Vanilla.Order
   consRank,
   relmapGapRank, relkitGapRank,
   relmapDenseRank, relkitDenseRank,
-
-  -- * chunk
-  consChunk, relmapChunk, relkitChunk,
 ) where
 
 import qualified Koshucode.Baala.Base         as B
@@ -31,13 +28,13 @@ consNumber use =
 relmapNumber :: (C.CDec c, Ord c) => C.RopUse c -> (B.TermName, [B.TermName], Int) -> C.Relmap c
 relmapNumber use = C.relmapFlow use . relkitNumber
 
-relkitNumber :: (Ord c, C.CDec c) => (B.TermName, [B.TermName], Int) -> C.RelkitCalc c
+relkitNumber :: (Ord c, C.CDec c) => (B.TermName, [B.TermName], Int) -> C.RelkitFlow c
 relkitNumber = relkitRanking B.sortByNameNumbering
 
 relkitRanking
     :: (Ord c, C.CDec c)
     => B.Ranking B.TermName c
-    -> (B.TermName, [B.TermName], Int) -> C.RelkitCalc c
+    -> (B.TermName, [B.TermName], Int) -> C.RelkitFlow c
 relkitRanking _ _ Nothing = Right C.relkitNothing
 relkitRanking ranking (n, ns, from) (Just he1) = Right kit2 where
     he2   = B.headCons n he1
@@ -64,39 +61,12 @@ relmapDenseRank :: (C.CDec c, Ord c) =>
    C.RopUse c -> (B.TermName, [B.TermName], Int) -> C.Relmap c
 relmapDenseRank use = C.relmapFlow use . relkitDenseRank
 
-relkitDenseRank :: (Ord c, C.CDec c) => (B.TermName, [B.TermName], Int) -> C.RelkitCalc c
+relkitDenseRank :: (Ord c, C.CDec c) => (B.TermName, [B.TermName], Int) -> C.RelkitFlow c
 relkitDenseRank = relkitRanking B.sortByNameDenseRank
 
 relmapGapRank :: (C.CDec c, Ord c) =>
    C.RopUse c -> (B.TermName, [B.TermName], Int) -> C.Relmap c
 relmapGapRank use = C.relmapFlow use . relkitGapRank
 
-relkitGapRank :: (Ord c, C.CDec c) => (B.TermName, [B.TermName], Int) -> C.RelkitCalc c
+relkitGapRank :: (Ord c, C.CDec c) => (B.TermName, [B.TermName], Int) -> C.RelkitFlow c
 relkitGapRank = relkitRanking B.sortByNameGapRank
-
-
-
--- ----------------------  chunk
-
---  > chunk /a /b /c
-
-consChunk :: (Ord c, C.CRel c) => C.RopCons c
-consChunk use =
-  do ns  <- Op.getTerms use "-term"
-     ord <- Op.getOption [] Op.getTerms use "-order"
-     Right $ relmapChunk use ns ord
-
-relmapChunk :: (Ord c, C.CRel c) => C.RopUse c -> [B.TermName] -> [B.TermName] -> C.Relmap c
-relmapChunk use ns ord = C.relmapFlow use $ relkitChunk ns ord
-
-relkitChunk :: (Ord c, C.CRel c) => [B.TermName] -> [B.TermName] -> C.RelkitCalc c
-relkitChunk _ _ Nothing = Right C.relkitNothing
-relkitChunk ns ord (Just he1) = Right kit2 where
-    he2     = B.Relhead $ map nest ns
-    nest n  = B.TermNest n $ B.headTerms he1
-    kit2    = C.relkitJust he2 $ C.RelkitFull False f2
-    f2 bo1  = let deg    = length bo1 `B.ceilingRem` length ns
-                  bo1'   = B.sortByName (map B.Asc ord) ns bo1
-                  ch     = B.chunks deg bo1'
-                  rels   = (C.pRel . B.Rel he1) `map` ch
-              in [rels]

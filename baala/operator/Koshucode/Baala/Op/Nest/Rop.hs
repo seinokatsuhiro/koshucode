@@ -17,7 +17,9 @@ nestRops :: (C.CContent c) => [C.Rop c]
 nestRops = Op.ropList "nest"
     --  SYNOPSIS,
     --  CONSTRUCTOR, ATTRIBUTE
-    [ ( "copy N R",
+    [ ( "chunk /T ... [-order /P ...]",
+        Op.consChunk, C.roaList "-term" ["-order"] )
+    , ( "copy N R",
         Op.consCopy, C.roaTwo "-with" "-relmap" [] )
     , ( "down /N",
         Op.consDown, C.roaOne "-term" [] )

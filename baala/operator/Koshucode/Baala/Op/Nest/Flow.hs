@@ -2,20 +2,18 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.Nest.Flow
-( 
-  -- * down
+( -- * down
   consDown, relmapDown, relkitDown,
   -- $DownExample
-
   -- * up
   consUp, relmapUp, relkitUp,
   -- $UpExample
-
   -- * join-up
   consJoinUp, relmapJoinUp,
-
   -- * split
   consSplit, relmapSplit, relkitSplit,
+  -- * chunk
+  consChunk, relmapChunk, relkitChunk,
 ) where
 
 import qualified Koshucode.Baala.Base          as B
@@ -43,7 +41,7 @@ consDown use =
 relmapDown :: (C.CRel c) => C.RopUse c -> B.TermName -> C.Relmap c
 relmapDown use = C.relmapFlow use . relkitDown
 
-relkitDown :: (C.CRel c) => B.TermName -> C.RelkitCalc c
+relkitDown :: (C.CRel c) => B.TermName -> C.RelkitFlow c
 relkitDown _ Nothing = Right C.relkitNothing
 relkitDown n (Just he1) = Right kit2 where
     he2       = B.Relhead [B.TermNest n $ B.headTerms he1]
@@ -68,7 +66,7 @@ consUp use =
 relmapUp :: (C.CRel c) => C.RopUse c -> B.TermName -> C.Relmap c
 relmapUp use = C.relmapFlow use . relkitUp
 
-relkitUp :: (C.CRel c) => B.TermName -> C.RelkitCalc c
+relkitUp :: (C.CRel c) => B.TermName -> C.RelkitFlow c
 relkitUp _ Nothing = Right C.relkitNothing
 relkitUp n (Just he1)
     | null ind1       = Message.unkTerm [n] he1
@@ -115,7 +113,7 @@ relmapSplit :: (C.CList c, C.CRel c, B.Write c, C.CBool c)
 relmapSplit use = C.relmapFlow use . relkitSplit
 
 relkitSplit :: forall c. (C.CList c, C.CRel c, B.Write c, C.CBool c)
-  => ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.RelkitCalc c
+  => ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.RelkitFlow c
 relkitSplit _ Nothing = Right C.relkitNothing
 relkitSplit (base, deriv, bodies) (Just he1)
     | null ind  = Right kit2
@@ -157,3 +155,28 @@ alpha = C.coxAlpha . C.globalSyntax . C.ropGlobal
 alphas :: (C.CContent c) => C.RopUse c -> [B.Named B.TokenTree] -> B.Ab [C.NamedCox c]
 alphas use = mapM (B.namedMapM $ alpha use)
 
+
+-- ----------------------  chunk
+
+--  > chunk /a /b /c
+
+consChunk :: (Ord c, C.CRel c) => C.RopCons c
+consChunk use =
+  do ns  <- Op.getTerms use "-term"
+     ord <- Op.getOption [] Op.getTerms use "-order"
+     Right $ relmapChunk use ns ord
+
+relmapChunk :: (Ord c, C.CRel c) => C.RopUse c -> [B.TermName] -> [B.TermName] -> C.Relmap c
+relmapChunk use ns ord = C.relmapFlow use $ relkitChunk ns ord
+
+relkitChunk :: (Ord c, C.CRel c) => [B.TermName] -> [B.TermName] -> C.RelkitFlow c
+relkitChunk _ _ Nothing = Right C.relkitNothing
+relkitChunk ns ord (Just he1) = Right kit2 where
+    he2     = B.Relhead $ map nest ns
+    nest n  = B.TermNest n $ B.headTerms he1
+    kit2    = C.relkitJust he2 $ C.RelkitFull False f2
+    f2 bo1  = let deg    = length bo1 `B.ceilingRem` length ns
+                  bo1'   = B.sortByName (map B.Asc ord) ns bo1
+                  ch     = B.chunks deg bo1'
+                  rels   = (C.pRel . B.Rel he1) `map` ch
+              in [rels]

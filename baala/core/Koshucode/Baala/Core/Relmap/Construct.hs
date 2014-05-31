@@ -79,7 +79,7 @@ relmapConst = C.RelmapConst . C.ropLexmap
 
 -- | Make a flow relmap.
 --   Flow relmaps take no subrelmaps.
-relmapFlow :: C.RopUse c -> C.RelkitCalc c -> C.Relmap c
+relmapFlow :: C.RopUse c -> C.RelkitFlow c -> C.Relmap c
 relmapFlow use relkit = relmapConfl use (const relkit) []
 
 -- | Make a global relmap.

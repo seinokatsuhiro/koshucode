@@ -28,7 +28,7 @@ relmapPrefix :: C.RopUse c -> String -> [String] -> C.Relmap c
 relmapPrefix use pre ns = C.relmapFlow use $ relkitPrefix pre ns
 
 -- | Add prefix to specified terms.
-relkitPrefix :: String -> [String] -> C.RelkitCalc c
+relkitPrefix :: String -> [String] -> C.RelkitFlow c
 relkitPrefix _ _ Nothing = Right C.relkitNothing
 relkitPrefix pre ns (Just he1) = Right kit2 where
     he2 =  B.headRename f he1
@@ -53,7 +53,7 @@ relmapUnprefix :: C.RopUse c -> String -> C.Relmap c
 relmapUnprefix use = C.relmapFlow use . relkitUnprefix
 
 -- | Remove prefix
-relkitUnprefix :: String -> C.RelkitCalc c
+relkitUnprefix :: String -> C.RelkitFlow c
 relkitUnprefix _ Nothing = Right C.relkitNothing
 relkitUnprefix pre (Just he1) = Right kit2 where
     he2  = B.headRename (unprefixName pre) he1
@@ -79,7 +79,7 @@ relmapPrefixChange :: C.RopUse c -> (String, String) -> C.Relmap c
 relmapPrefixChange use = C.relmapFlow use . relkitPrefixChange
 
 -- | Change prefix
-relkitPrefixChange :: (String, String) -> C.RelkitCalc c
+relkitPrefixChange :: (String, String) -> C.RelkitFlow c
 relkitPrefixChange _ Nothing = Right C.relkitNothing
 relkitPrefixChange (new, old) (Just he1) = Right kit2 where
     he2  = B.headRename f he1

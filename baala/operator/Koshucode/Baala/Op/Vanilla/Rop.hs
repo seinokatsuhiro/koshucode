@@ -25,8 +25,6 @@ vanillaRops = Op.ropList "vanilla"
         Op.consAdd, C.roaList "-in" ["-let"] )
     , ( "check-term [ -just /N ... | -has /N ... | -but /N ... ]",
         Op.consCheckTerm, C.roaNone ["-just", "-has", "-but"] )
-    , ( "chunk /T ... [-order /P ...]",
-        Op.consChunk, C.roaList "-term" ["-order"] )
     , ( "compose R",
         Op.consCompose, C.roaOne "-relmap" [] )
     , ( "const R",

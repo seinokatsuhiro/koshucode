@@ -46,14 +46,14 @@ relmapCheckTermJust use = C.relmapFlow use . relkitCheckTermJust
 relmapCheckTermHas  use = C.relmapFlow use . relkitCheckTermHas
 relmapCheckTermBut  use = C.relmapFlow use . relkitCheckTermBut
 
-relkitCheckTermJust :: [B.TermName] -> C.RelkitCalc c
-relkitCheckTermHas  :: [B.TermName] -> C.RelkitCalc c
-relkitCheckTermBut  :: [B.TermName] -> C.RelkitCalc c
+relkitCheckTermJust :: [B.TermName] -> C.RelkitFlow c
+relkitCheckTermHas  :: [B.TermName] -> C.RelkitFlow c
+relkitCheckTermBut  :: [B.TermName] -> C.RelkitFlow c
 relkitCheckTermJust = checkTerm "Just" (\ns he1 -> B.headFrom ns `B.headEquiv` he1)
 relkitCheckTermHas  = checkTerm "Has"  (\ns he1 -> B.headFrom ns `B.isSubhead` he1)
 relkitCheckTermBut  = checkTerm "But"  (\ns he1 -> null $ ns `B.snipShare` B.headNames he1)
 
-checkTerm :: String -> ([B.TermName] -> B.Relhead -> Bool) -> [B.TermName] -> C.RelkitCalc c
+checkTerm :: String -> ([B.TermName] -> B.Relhead -> Bool) -> [B.TermName] -> C.RelkitFlow c
 checkTerm _ _ _ Nothing = Right C.relkitNothing
 checkTerm opt check ns (Just he1)
     | check ns he1 = Right $ C.relkitJust he1 C.RelkitId
@@ -78,7 +78,7 @@ consDuplicate use =
 relmapDuplicate :: (Ord c) => C.RopUse c -> [B.TermName] -> C.Relmap c
 relmapDuplicate use = C.relmapFlow use . relkitDuplicate
 
-relkitDuplicate :: (Ord c) => [B.TermName] -> C.RelkitCalc c
+relkitDuplicate :: (Ord c) => [B.TermName] -> C.RelkitFlow c
 relkitDuplicate _ Nothing = Right C.relkitNothing
 relkitDuplicate ns (Just he1)
     | null nsLeft = Right kit2
@@ -108,7 +108,7 @@ consTypename use =
   do np <- Op.getTermPairs use "-term"
      Right $ C.relmapFlow use $ relkitTypename np
 
-relkitTypename :: (C.CText c) => [B.TermName2] -> C.RelkitCalc c
+relkitTypename :: (C.CText c) => [B.TermName2] -> C.RelkitFlow c
 relkitTypename _ Nothing = Right C.relkitNothing
 relkitTypename np (Just he1) = Right kit2 where
     ns, ps :: [B.TermName]
@@ -129,7 +129,7 @@ relkitTypename np (Just he1) = Right kit2 where
 consDump :: (B.Write c, C.CRel c) => C.RopCons c
 consDump use = Right $ C.relmapFlow use $ relkitDump
 
-relkitDump :: (B.Write c, C.CRel c) => C.RelkitCalc c
+relkitDump :: (B.Write c, C.CRel c) => C.RelkitFlow c
 relkitDump Nothing = Right C.relkitNothing
 relkitDump (Just he1) = Right kit2 where
     kit2 = C.relkitJust he1 $ C.RelkitAbFull False kitf2 []

@@ -39,7 +39,7 @@ consPick use =
 relmapPick :: C.RopUse c -> [B.TermName] -> C.Relmap c
 relmapPick use = C.relmapFlow use . relkitPick
 
-relkitPick :: [B.TermName] -> C.RelkitCalc c
+relkitPick :: [B.TermName] -> C.RelkitFlow c
 relkitPick = relkitSnip B.snipFrom B.snipFrom
 
 consCut :: C.RopCons c
@@ -50,7 +50,7 @@ consCut use =
 relmapCut :: C.RopUse c -> [B.TermName] -> C.Relmap c
 relmapCut use = C.relmapFlow use . relkitCut
 
-relkitCut :: [B.TermName] -> C.RelkitCalc c
+relkitCut :: [B.TermName] -> C.RelkitFlow c
 relkitCut = relkitSnip B.snipOff B.snipOff
 
 
@@ -86,7 +86,7 @@ relkitSnipTerm _ _ (C.Relkit Nothing _) = const $ Right C.relkitNothing
 relkitSnipTerm heSnip boSnip (C.Relkit (Just he2) _) =
     relkitSnip heSnip boSnip $ B.headNames he2
 
-relkitSnip :: B.Snip B.Term -> B.Snip c -> [B.TermName] -> C.RelkitCalc c
+relkitSnip :: B.Snip B.Term -> B.Snip c -> [B.TermName] -> C.RelkitFlow c
 relkitSnip _ _ _ Nothing = Right C.relkitNothing
 relkitSnip heSnip boSnip ns (Just he1)
     | B.sameLength ns ind1 = Right kit2
@@ -111,7 +111,7 @@ consMove use =
 relmapMove :: C.RopUse c -> ([B.TermName], [B.TermName]) -> C.Relmap c
 relmapMove use = C.relmapFlow use . relkitMove
 
-relkitMove :: ([B.TermName], [B.TermName]) -> C.RelkitCalc c
+relkitMove :: ([B.TermName], [B.TermName]) -> C.RelkitFlow c
 relkitMove _ Nothing = Right C.relkitNothing
 relkitMove (ps, ns) (Just he1)
     | B.notSameLength ps ns = Message.oddAttr
@@ -151,7 +151,7 @@ consRename use =
 relmapRename :: C.RopUse c -> [B.TermName2] -> C.Relmap c
 relmapRename use = C.relmapFlow use . relkitRename
 
-relkitRename :: [B.TermName2] -> C.RelkitCalc c
+relkitRename :: [B.TermName2] -> C.RelkitFlow c
 relkitRename _ Nothing = Right C.relkitNothing
 relkitRename np (Just he1)
     | nsShare /= [] = Message.reqNewTerm nsShare he1

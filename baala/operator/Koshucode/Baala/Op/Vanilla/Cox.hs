@@ -35,7 +35,7 @@ relmapAdd :: (C.CList c, C.CRel c, B.Write c)
 relmapAdd use = C.relmapFlow use . relkitAdd
 
 relkitAdd :: (C.CList c, C.CRel c, B.Write c)
-  => ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.RelkitCalc c
+  => ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.RelkitFlow c
 relkitAdd _ Nothing = Right C.relkitNothing
 relkitAdd (base, deriv, bodies) (Just he1)
     | null ind  = Right kit2
@@ -67,7 +67,7 @@ relmapSubst :: (C.CList c, C.CRel c, B.Write c)
 relmapSubst use = C.relmapFlow use . relkitSubst
 
 relkitSubst :: (C.CList c, C.CRel c, B.Write c)
-  => ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.RelkitCalc c
+  => ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.RelkitFlow c
 relkitSubst _ Nothing = Right C.relkitNothing
 relkitSubst (base, deriv, bodies) (Just he1)
     | B.sameLength ns ind = Right kit2
@@ -101,7 +101,7 @@ relmapFilter :: (C.CList c, C.CRel c, C.CBool c, B.Write c)
 relmapFilter use = C.relmapFlow use . relkitFilter
 
 relkitFilter :: (C.CList c, C.CRel c, C.CBool c, B.Write c)
-  => (Bool, [C.Cop c], [C.NamedCox c], C.Cox c) -> C.RelkitCalc c
+  => (Bool, [C.Cop c], [C.NamedCox c], C.Cox c) -> C.RelkitFlow c
 relkitFilter _ Nothing = Right C.relkitNothing
 relkitFilter (which, base, deriv, body) (Just he1) = Right kit2 where
     kit2 = C.relkitJust he1 $ C.RelkitAbPred p

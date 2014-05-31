@@ -95,7 +95,7 @@ relmapEmpty :: C.RopUse c -> C.Relmap c
 relmapEmpty use = C.relmapFlow use relkitEmpty
 
 -- | Throw away all tuples in a relation.
-relkitEmpty :: C.RelkitCalc c
+relkitEmpty :: C.RelkitFlow c
 relkitEmpty he1 = Right $ C.relkit he1 $ C.RelkitConst []
 
 
@@ -109,7 +109,7 @@ consContents use =
 relmapContents :: (Ord c) => C.RopUse c -> B.TermName -> C.Relmap c
 relmapContents use = C.relmapFlow use . relkitContents
 
-relkitContents :: (Ord c) => B.TermName -> C.RelkitCalc c
+relkitContents :: (Ord c) => B.TermName -> C.RelkitFlow c
 relkitContents n _ = Right $ C.relkitJust he2 $ C.RelkitFull False kitf where
     he2  = B.headFrom [n]
     kitf = map B.singleton . B.unique . concat
