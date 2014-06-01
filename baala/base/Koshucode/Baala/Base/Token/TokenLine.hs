@@ -24,7 +24,7 @@ module Koshucode.Baala.Base.Token.TokenLine
   -- $Examples
 ) where
 
-import qualified Data.Char                           as Ch
+import qualified Data.Char                           as Char
 import qualified Koshucode.Baala.Base.Prelude        as B
 import qualified Koshucode.Baala.Base.Syntax         as B
 import qualified Koshucode.Baala.Base.Text           as B
@@ -51,70 +51,67 @@ tokenLines res = B.codeLines $ nextToken res
 nextToken :: B.Resource -> B.NextToken B.Token
 nextToken res (num, line) txt =
     case txt of
-      ('*' : '*' : '*' : '*' : cs)
-                         ->  token cs         $ B.TWord     p 0 "****"
-      ('*' : '*' : _)    ->  token ""         $ B.TComment  p txt
-      ('\'' : '\'' : cs) ->  let cs2          = B.trimLeft cs
-                             in token ""      $ B.TWord     p 1 cs2
-      ('(' : ')' : cs)   ->  token cs         $ B.TWord     p 0 "()"  -- nil
-      ('<' : '<' : cs)   ->  token cs         $ B.TOpen     p "<<"
-      ('>' : '>' : cs)   ->  token cs         $ B.TClose    p ">>"
-                               
-      (c : '|' : cs)
-          | open c       ->  token cs         $ B.TOpen     p [c, '|']
-      ('|' : c : cs)
-          | close c      ->  token cs         $ B.TClose    p ['|', c]
-          | c == '|'     ->  let cs2          = B.trimLeft cs  -- newline
-                             in token cs2     $ B.TWord     p 0 "||"
+      '*' : '*' : '*' : '*' : cs
+                      ->  token cs        $ B.TWord     p 0 "****"
+      '*' : '*' : _   ->  token ""        $ B.TComment  p txt
+      '(' : ')' : cs  ->  token cs        $ B.TWord     p 0 "()"  -- nil
+      '<' : '<' : cs  ->  token cs        $ B.TOpen     p "<<"
+      '>' : '>' : cs  ->  token cs        $ B.TClose    p ">>"
+                              
+      c : '|' : cs
+          | open c    ->  token cs        $ B.TOpen     p [c, '|']
+      '|' : c : cs
+          | close c   ->  token cs        $ B.TClose    p ['|', c]
+          | c == '|'  ->  let cs2         = B.trimLeft cs  -- newline
+                          in token cs2    $ B.TWord     p 0 "||"
 
-      ('<' : cs)         ->  angle cs []
-      ('#' : c : cs)
-          | c == '!'     ->  token ""         $ B.TComment  p txt
-          | otherwise    ->  word cs [c]      hash
+      '<' : cs        ->  angle cs []
+      '#' : c : cs
+        | c == '!'    ->  token ""        $ B.TComment  p txt
+        | otherwise   ->  word cs [c]     hash
+      '@' : cs        ->  let (n, cs2)    = slot 1 cs
+                          in word cs2 []  $ B.TSlot     p n
+      c : cs
+        | isOpen   c  ->  token cs        $ B.TOpen     p   [c]
+        | isClose  c  ->  token cs        $ B.TClose    p   [c]
+        | isSingle c  ->  token cs        $ B.TWord     p 0 [c]
+        | isTerm   c  ->  term  cs [] []
+        | isQQ     c  ->  qq    cs
+        | isQ      c  ->  word  cs []     $ B.TWord     p 1
+        | isShort  c  ->  short cs [c]
+        | isWord   c  ->  word  cs [c]    $ B.TWord     p 0
+        | isSpace  c  ->  space 1 cs
 
-      (c : cs)
-          | isOpen   c   ->  token cs         $ B.TOpen     p [c]
-          | isClose  c   ->  token cs         $ B.TClose    p [c]
-          | isSingle c   ->  token cs         $ B.TWord     p 0 [c]
-          | isTerm   c   ->  term cs [] []
-          | isQQ     c   ->  qq   cs
-          | isQ      c   ->  word cs []       $ B.TWord     p 1
-          | isSlot   c   ->  let (n, cs2)     = slot 1 cs
-                             in word cs2 []   $ B.TSlot     p n
-          | isShort  c   ->  short cs [c]
-          | isWord   c   ->  word  cs [c]     $ B.TWord     p 0
-          | isSpace  c   ->  space 1 cs
-
-      _                  ->  token []         $ B.TUnknown  p []
+      _               ->  token []        $ B.TUnknown  p []
 
     where
       p      = B.CodePoint res num line txt
-      open   = (`elem` "[{<(")
-      close  = (`elem` "]}>)")
+      open   = ( `elem` "[{<(" )
+      close  = ( `elem` "]}>)" )
       hash s = case lookup s B.bracketTable of
                  Nothing -> B.TWord p 0 $ '#' : s
                  Just t  -> B.TWord p 3 t  -- quotation level 3
 
       token :: String -> B.Token -> (B.Token, String)
-      token cs tok                    = (tok, cs)
+      token cs tok                    =  (tok, cs)
 
       tokenFrom :: String -> [a] -> ([a] -> B.Token) -> (B.Token, String)
-      tokenFrom cs xs k               = (k $ reverse xs, cs)
+      tokenFrom cs xs k               =  (k $ reverse xs, cs)
 
       short :: String -> String -> (B.Token, String)
-      short (c:cs) pre | c == '.'     = word  cs []  $ B.TShort p (reverse pre)
-                       | isShort c    = short cs (c : pre)
-      short cs     pre                = word  cs pre $ B.TWord p 0
+      short (c:cs) pre | c == '.'     =  word  cs []  $ B.TShort p (reverse pre)
+                       | isShort c    =  short cs (c : pre)
+      short cs     pre                =  word  cs pre $ B.TWord p 0
 
       slot :: Int -> String -> (Int, String)
-      slot n ('@'  : cs)              = slot (n + 1) cs
-      slot _ ('\'' : cs)              = (0, cs) -- positional slots
-      slot n cs                       = (n, cs)
+      slot n ('@'  : cs)              =  slot (n + 1) cs
+      slot _ ('\'' : cs)              =  (0, cs) -- positional slots
+      slot n cs                       =  (n, cs)
 
       word :: String -> String -> (String -> B.Token) -> (B.Token, String)
-      word cs@('>' : '>' : _) text k  = tokenFrom cs text k
-      word (c:cs) text k | isWord c   = word cs (c : text) k
-      word cs     text k              = tokenFrom cs text k
+      word cs@('>' : '>' : _) text k  =  tokenFrom cs text k
+      word (c:cs) text k | isWord c   =  word cs (c : text) k
+      word cs     text k              =  tokenFrom cs text k
 
       qq :: String -> (B.Token, String)
       qq cs = case qqText cs [] of
@@ -122,42 +119,42 @@ nextToken res (num, line) txt =
                 Nothing -> token [] $ B.TUnknown p cs
 
       qqText :: String -> String -> Maybe (String, String)
-      qqText []     _                 = Nothing
-      qqText (c:cs) text | isQQ c     = Just (text, cs)
-                         | otherwise  = qqText cs (c : text)
+      qqText []     _                 =  Nothing
+      qqText (c:cs) text | isQQ c     =  Just (text, cs)
+                         | otherwise  =  qqText cs (c : text)
 
-      angle (c:cs) text | c == '>'    = angleToken cs $ reverse text
-                        | isWord c    = angle cs (c : text)
-      angle cs     text               = token cs $ B.TWord p 0 ('<' : reverse text)
+      angle (c:cs) text | c == '>'    =  angleToken cs $ reverse text
+                        | isWord c    =  angle cs (c : text)
+      angle cs     text               =  token cs $ B.TWord p 0 ('<' : reverse text)
 
       angleToken cs ('c' : code)
-          | all isCode code           = case mapM B.readInt $ B.omit null $ B.divide '-' code of
-                                          Just ns  -> token cs $ B.TWord p 3 $ map Ch.chr ns
-                                          Nothing  -> token cs $ B.TWord p (-1) code
-      angleToken cs text | null text  = token cs $ B.TWord p 0 "<>"
-                         | otherwise  = case lookup text B.bracketTable of
-                                          Just w  -> token cs $ B.TWord p 3 w
-                                          Nothing -> token cs $ B.TWord p (-1) text
+          | all isCode code           =  case mapM B.readInt $ B.omit null $ B.divide '-' code of
+                                           Just ns  ->  token cs $ B.TWord p 3 $ map Char.chr ns
+                                           Nothing  ->  token cs $ B.TWord p (-1) code
+      angleToken cs text | null text  =  token cs $ B.TWord p 0 "<>"
+                         | otherwise  =  case lookup text B.bracketTable of
+                                           Just w   ->  token cs $ B.TWord p 3 w
+                                           Nothing  ->  token cs $ B.TWord p (-1) text
 
       isCode :: Char -> Bool
       isCode '-' = True
-      isCode c   = Ch.isDigit c
+      isCode c   = Char.isDigit c
 
       term :: String -> String -> [String] -> (B.Token, String)
-      term (c:cs) xs ns | isTerm c    = term cs [] $ termUp xs ns
-                        | isWord c    = term cs (c:xs) ns
-                        | isQQ   c    = case qqText cs xs of
-                                          Just (text, cs2) -> term cs2 [] $ termUp text ns
-                                          Nothing -> token [] $ B.TUnknown p (c:cs)
-      term cs     xs ns               = tokenFrom cs (termUp xs ns) $ B.TTerm p
+      term (c:cs) xs ns | isTerm c    =  term cs [] $ termUp xs ns
+                        | isWord c    =  term cs (c:xs) ns
+                        | isQQ   c    =  case qqText cs xs of
+                                           Just (text, cs2) -> term cs2 [] $ termUp text ns
+                                           Nothing          -> token [] $ B.TUnknown p (c:cs)
+      term cs     xs ns               =  tokenFrom cs (termUp xs ns) $ B.TTerm p
 
       termUp :: String -> [String] -> [String]
-      termUp [] ns                    = ns 
-      termUp xs ns                    = reverse xs : ns
+      termUp [] ns                    =  ns 
+      termUp xs ns                    =  reverse xs : ns
 
       space :: Int -> String -> (B.Token, String)
-      space i (c:cs) | isSpace c      = space (i + 1) cs
-      space i cs                      = token cs $ B.TSpace p i
+      space i (c:cs) | isSpace c      =  space (i + 1) cs
+      space i cs                      =  token cs $ B.TSpace p i
 
 
 
@@ -167,29 +164,28 @@ nextToken res (num, line) txt =
 --  O C O C O C S S Q Q H T
 
 -- Punctuations
-isOpen, isClose, isSingle, isQ, isQQ, isSlot, isPunct :: B.Pred Char
+isOpen, isClose, isSingle, isQ, isQQ, isPunct :: B.Pred Char
 
-isOpen    =  (`elem` "([{")   -- UnicodePunctuation
-isClose   =  (`elem` "}])")   -- UnicodePunctuation
-isSingle  =  (`elem` ":|")    -- UnicodePunctuation | UnicodeSymbol
-isQ       =  (== '\'')        -- UnicodePunctuation
-isQQ      =  (== '"')         -- UnicodePunctuation
-isSlot    =  (== '@')         -- UnicodePunctuation
-isPunct c =  isOpen c || isClose c || isSingle c ||
-             isQ c    || isQQ c    || c == '#'
+isOpen     =  ( `elem` "([{" )  --  UnicodePunctuation
+isClose    =  ( `elem` "}])" )  --  UnicodePunctuation
+isSingle   =  ( `elem` ":|"  )  --  UnicodePunctuation | UnicodeSymbol
+isQ        =  (    ==  '\''  )  --  UnicodePunctuation
+isQQ       =  (    ==  '"'   )  --  UnicodePunctuation
+isPunct c  =  isOpen c || isClose c || isSingle c ||
+              isQ c    || isQQ c    || c == '#'
 
 isTerm, isSpace, isWord  :: B.Pred Char
 
-isTerm     =  (== '/')        -- UnicodePunctuation
-isSpace c  =  Ch.isSpace c    -- UnicodeSeprator | UnicodeOther
-isWord  c  =  test $ B.generalCategoryGroup c where
-    test B.UnicodeLetter      = True
-    test B.UnicodeNumber      = True
-    test B.UnicodeMark        = True
-    test B.UnicodeSymbol      = not $ c == '|'
-    test B.UnicodePunctuation = not $ isPunct c
-    test B.UnicodeSeperator   = False
-    test B.UnicodeOther       = False
+isTerm     =  ( == '/' )      --  UnicodePunctuation
+isSpace    =  Char.isSpace    --  UnicodeSeprator | UnicodeOther
+isWord  c  =  case B.generalCategoryGroup c of
+                B.UnicodeLetter       ->  True
+                B.UnicodeNumber       ->  True
+                B.UnicodeMark         ->  True
+                B.UnicodeSymbol       ->  c /= '|'
+                B.UnicodePunctuation  ->  not $ isPunct c
+                B.UnicodeSeperator    ->  False
+                B.UnicodeOther        ->  False
 
 isSimpleWord :: B.Pred String
 isSimpleWord = all isSimpleChar
@@ -197,14 +193,14 @@ isSimpleWord = all isSimpleChar
 isSimpleChar :: B.Pred Char
 isSimpleChar c =
     case B.generalCategoryGroup c of
-      B.UnicodeLetter      -> True
-      B.UnicodeNumber      -> True
-      B.UnicodeSymbol      -> c `elem` "+<=>"
-      B.UnicodePunctuation -> c `elem` "-_.,!?"
-      _                    -> False
+      B.UnicodeLetter       ->  True
+      B.UnicodeNumber       ->  True
+      B.UnicodeSymbol       ->  c `elem` "+<=>"
+      B.UnicodePunctuation  ->  c `elem` "-_.,!?"
+      _                     ->  False
 
 isShort :: Char -> Bool
-isShort = Ch.isAlpha
+isShort = Char.isAlpha
 
 isShortString :: String -> Bool
 isShortString = all isShort
