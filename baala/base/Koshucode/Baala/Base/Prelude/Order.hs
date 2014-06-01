@@ -9,6 +9,7 @@ module Koshucode.Baala.Base.Prelude.Order
   sortByNameNumbering,
   denseRankFrom,
   gapRankFrom,
+  sortWith,
 ) where
 
 import qualified Koshucode.Baala.Base.Prelude.Class   as B
@@ -103,4 +104,8 @@ gapRankFrom start xs = rank xs start start where
 --     ord ('+' : '/' : n) = Asc  $ '/' : n
 --     ord ('-' : '/' : n) = Desc $ '/' : n
 --     ord n               = error $ "unknown name: " ++ n
+
+sortWith :: (Ord a, Ord b) => (a -> b) -> [a] -> [a]
+sortWith f = map snd . B.sort . map g where
+    g x = (f x, x)
 

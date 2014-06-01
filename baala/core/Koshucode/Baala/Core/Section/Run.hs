@@ -40,9 +40,9 @@ assembleRelmap sec@C.Section { C.secSlot   = gslot
                              , C.secRelmap = tokmaps
                              , C.secAssert = ass
                              , C.secCons   = C.RelmapCons lexmap relmap } =
-    do result <- mapM assemble `B.shortMapM` ass
-       let ass2 = B.shortMap (map fst) result
-           msg  = B.shortMap (map snd) result
+    do result <- B.shortListM $ mapM assemble `B.map2` ass
+       let ass2 = map fst `B.map2` result
+           msg  = map snd `B.map2` result
            msg2 = concat $ concat $ map B.shortBody msg
        Right $ C.addMessages msg2 $ sec { C.secAssert = ass2 }
     where

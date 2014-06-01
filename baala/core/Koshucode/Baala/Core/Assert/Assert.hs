@@ -73,11 +73,11 @@ type ShortAssert c = B.Short [Assert c]
 
 -- | Select affirmative or denial assertions.
 assertNormal :: B.Map [ShortAssert c]
-assertNormal = B.shortMap $ B.omit violated
+assertNormal = B.map2 $ B.omit violated
 
 -- | Select violated assertions.
 assertViolated :: B.Map [ShortAssert c]
-assertViolated = B.shortMap $ filter violated
+assertViolated = B.map2 $ filter violated
 
 violated :: Assert c -> Bool
 violated = (== AssertViolate) . assType

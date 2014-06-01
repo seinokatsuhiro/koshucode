@@ -158,8 +158,11 @@ squeeze p = loop where
 squeezeEmptyLines :: B.Map [String]
 squeezeEmptyLines = squeeze $ null . dropWhile (== ' ')
 
-map2 :: (a -> b) -> [[a]] -> [[b]]
-map2 = map . map
+map2 :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
+map2 = fmap . fmap
+
+-- map2 :: (a -> b) -> [[a]] -> [[b]]
+-- map2 = map . map
 
 mapWithLast :: (a -> b) -> (a -> b) -> [a] -> [b]
 mapWithLast f g = loop where

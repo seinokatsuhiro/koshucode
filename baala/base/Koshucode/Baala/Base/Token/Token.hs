@@ -11,8 +11,7 @@ module Koshucode.Baala.Base.Token.Token
 
   -- * Term name
   TermName, TermName2, TermName3, TermName4,
-  Terminal,
-  TermPath,
+  Terminal, TermPath,
 
   -- * Selectors
   tokenContent,

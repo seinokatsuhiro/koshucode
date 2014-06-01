@@ -161,7 +161,7 @@ consSectionEach root resource (B.Short pt shorts xs) =
             let (ss, rs) = unzip sh
                 prefix   = B.duplicate ss
                 replace  = B.duplicate rs
-                invalid  = B.omit B.isShortString ss
+                invalid  = B.omit B.isShortPrefix ss
             B.unless (null prefix)  $ Message.dupPrefix prefix
             B.unless (null replace) $ Message.dupReplacement replace
             B.unless (null invalid) $ Message.invalidPrefix invalid

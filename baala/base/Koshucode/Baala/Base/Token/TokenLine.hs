@@ -9,8 +9,7 @@ module Koshucode.Baala.Base.Token.TokenLine
   TokenLine,
   tokenLines,
   tokens,
-  isSimpleWord, isSimpleChar,
-  isShortString,
+  isShortPrefix,
 
   -- * Document
 
@@ -66,9 +65,7 @@ nextToken res (num, line) txt =
                           in token cs2    $ B.TText     p 0 "||"
 
       '<' : cs        ->  angle cs []
-      '#' : c : cs
-        | c == '!'    ->  token ""        $ B.TComment  p txt
-        | otherwise   ->  word cs [c]     hash
+      '#' : '!' : _   ->  token ""        $ B.TComment  p txt
       '@' : cs        ->  let (n, cs2)    = slot 1 cs
                           in word cs2 []  $ B.TSlot     p n
       c : cs
@@ -88,9 +85,6 @@ nextToken res (num, line) txt =
       p      = B.CodePoint res num line txt
       open   = ( `elem` "[{<(" )
       close  = ( `elem` "]}>)" )
-      hash s = case lookup s B.bracketTable of
-                 Nothing -> B.TText p 0 $ '#' : s
-                 Just t  -> B.TText p 3 t  -- quotation level 3
 
       token :: String -> B.Token -> (B.Token, String)
       token cs tok                    =  (tok, cs)
@@ -187,23 +181,11 @@ isWord  c  =  case B.generalCategoryGroup c of
                 B.UnicodeSeperator    ->  False
                 B.UnicodeOther        ->  False
 
-isSimpleWord :: B.Pred String
-isSimpleWord = all isSimpleChar
-
-isSimpleChar :: B.Pred Char
-isSimpleChar c =
-    case B.generalCategoryGroup c of
-      B.UnicodeLetter       ->  True
-      B.UnicodeNumber       ->  True
-      B.UnicodeSymbol       ->  c `elem` "+<=>"
-      B.UnicodePunctuation  ->  c `elem` "-_.,!?"
-      _                     ->  False
+isShortPrefix :: String -> Bool
+isShortPrefix = all isShort
 
 isShort :: Char -> Bool
 isShort = Char.isAlpha
-
-isShortString :: String -> Bool
-isShortString = all isShort
 
 
 -- ------------------------------------------------------------------
