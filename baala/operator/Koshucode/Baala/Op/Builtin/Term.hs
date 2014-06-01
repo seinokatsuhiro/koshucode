@@ -49,8 +49,8 @@ termNamePairs = loop where
 -- | Extract a list of name-and-tree pairs.
 -- 
 --   >>> termTreePairs . B.tt $ "/a 'A3 /b 10 /c"
---   Right [ ("/a", TreeL (TWord 3 1 "A3"))
---         , ("/b", TreeL (TWord 7 0 "10"))
+--   Right [ ("/a", TreeL (TText 3 1 "A3"))
+--         , ("/b", TreeL (TText 7 0 "10"))
 --         , ("/c", TreeB 1 []) ]
 termTreePairs :: [B.TokenTree] -> B.Ab [B.Named B.TokenTree]
 termTreePairs = C.litNamedTrees

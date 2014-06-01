@@ -45,7 +45,7 @@ roamapCons = loop where
     notKeyword ('-' : _) = False
     notKeyword _         = True
 
-    fill (B.TreeL (B.TWord _ 0 "*") : xs) = Nothing : fill xs
+    fill (B.TreeL (B.TText _ 0 "*") : xs) = Nothing : fill xs
     fill (x : xs)                         = Just x  : fill xs
     fill []                               = []
 
@@ -54,17 +54,17 @@ roamapCons = loop where
 
     loop trees =
         B.abortableTrees "attr" trees $ case B.divideTreesByBar trees of
-          [ B.TreeL (B.TWord _ 0 op) : xs ]
+          [ B.TreeL (B.TText _ 0 op) : xs ]
             | op == "id"        ->  right trees $ RoamapId
             | op == "fill"      ->  right trees $ RoamapFill $ fill xs
 
-          [ B.TreeL (B.TWord _ 0 op) : B.TreeL (B.TWord _ 0 k) : xs ]
+          [ B.TreeL (B.TText _ 0 op) : B.TreeL (B.TText _ 0 k) : xs ]
             | notKeyword k      ->  Message.reqAttrName k
             | op == "add"       ->  right trees $ RoamapAdd False k xs
             | op == "opt"       ->  right trees $ RoamapAdd True  k xs
 
-          [ B.TreeL (B.TWord _ 0 op) : B.TreeL (B.TWord _ 0 k')
-                : B.TreeL (B.TWord _ 0 k) : _ ]
+          [ B.TreeL (B.TText _ 0 op) : B.TreeL (B.TText _ 0 k')
+                : B.TreeL (B.TText _ 0 k) : _ ]
             | notKeyword k'     ->  Message.reqAttrName k'
             | notKeyword k      ->  Message.reqAttrName k
             | op == "rename"    ->  right trees $ RoamapRename (k', k)

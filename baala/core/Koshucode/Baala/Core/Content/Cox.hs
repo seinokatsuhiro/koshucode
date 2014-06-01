@@ -170,7 +170,7 @@ cox = expr where
     core tree@(B.TreeL tok) =
         case tok of
           B.TTerm _ ns   ->  Right $ CoxTerm ns []
-          B.TWord _ _ v  ->  case C.litContent tree of
+          B.TText _ _ v  ->  case C.litContent tree of
                                Right c -> Right $ CoxLit c
                                Left _  -> Right $ CoxVar v 0
           _              ->  B.bug "core/leaf"
@@ -190,7 +190,7 @@ prefix htab tree =
       ht = B.infixHeight wordText htab
 
       wordText :: B.Token -> Maybe String
-      wordText (B.TWord _ 0 w) = Just w
+      wordText (B.TText _ 0 w) = Just w
       wordText _ = Nothing
 
       detail (Right n, tok) = detailText tok "right" n
@@ -206,7 +206,7 @@ syntax syn = expand where
 
     expand tree@(B.TreeB 1 p subtrees) =
         case subtrees of
-          op@(B.TreeL (B.TWord _ 0 name)) : args
+          op@(B.TreeL (B.TText _ 0 name)) : args
               -> B.abortableTree "syntax" tree $
                  case lookup name assoc of
                    Just (CopSyn _ f) -> expand =<< f args

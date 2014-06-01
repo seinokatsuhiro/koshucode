@@ -52,9 +52,9 @@ nextToken :: B.Resource -> B.NextToken B.Token
 nextToken res (num, line) txt =
     case txt of
       '*' : '*' : '*' : '*' : cs
-                      ->  token cs        $ B.TWord     p 0 "****"
+                      ->  token cs        $ B.TText     p 0 "****"
       '*' : '*' : _   ->  token ""        $ B.TComment  p txt
-      '(' : ')' : cs  ->  token cs        $ B.TWord     p 0 "()"  -- nil
+      '(' : ')' : cs  ->  token cs        $ B.TText     p 0 "()"  -- nil
       '<' : '<' : cs  ->  token cs        $ B.TOpen     p "<<"
       '>' : '>' : cs  ->  token cs        $ B.TClose    p ">>"
                               
@@ -63,7 +63,7 @@ nextToken res (num, line) txt =
       '|' : c : cs
           | close c   ->  token cs        $ B.TClose    p ['|', c]
           | c == '|'  ->  let cs2         = B.trimLeft cs  -- newline
-                          in token cs2    $ B.TWord     p 0 "||"
+                          in token cs2    $ B.TText     p 0 "||"
 
       '<' : cs        ->  angle cs []
       '#' : c : cs
@@ -74,12 +74,12 @@ nextToken res (num, line) txt =
       c : cs
         | isOpen   c  ->  token cs        $ B.TOpen     p   [c]
         | isClose  c  ->  token cs        $ B.TClose    p   [c]
-        | isSingle c  ->  token cs        $ B.TWord     p 0 [c]
+        | isSingle c  ->  token cs        $ B.TText     p 0 [c]
         | isTerm   c  ->  term  cs [] []
         | isQQ     c  ->  qq    cs
-        | isQ      c  ->  word  cs []     $ B.TWord     p 1
+        | isQ      c  ->  word  cs []     $ B.TText     p 1
         | isShort  c  ->  short cs [c]
-        | isWord   c  ->  word  cs [c]    $ B.TWord     p 0
+        | isWord   c  ->  word  cs [c]    $ B.TText     p 0
         | isSpace  c  ->  space 1 cs
 
       _               ->  token []        $ B.TUnknown  p []
@@ -89,8 +89,8 @@ nextToken res (num, line) txt =
       open   = ( `elem` "[{<(" )
       close  = ( `elem` "]}>)" )
       hash s = case lookup s B.bracketTable of
-                 Nothing -> B.TWord p 0 $ '#' : s
-                 Just t  -> B.TWord p 3 t  -- quotation level 3
+                 Nothing -> B.TText p 0 $ '#' : s
+                 Just t  -> B.TText p 3 t  -- quotation level 3
 
       token :: String -> B.Token -> (B.Token, String)
       token cs tok                    =  (tok, cs)
@@ -101,7 +101,7 @@ nextToken res (num, line) txt =
       short :: String -> String -> (B.Token, String)
       short (c:cs) pre | c == '.'     =  word  cs []  $ B.TShort p (reverse pre)
                        | isShort c    =  short cs (c : pre)
-      short cs     pre                =  word  cs pre $ B.TWord p 0
+      short cs     pre                =  word  cs pre $ B.TText p 0
 
       slot :: Int -> String -> (Int, String)
       slot n ('@'  : cs)              =  slot (n + 1) cs
@@ -115,7 +115,7 @@ nextToken res (num, line) txt =
 
       qq :: String -> (B.Token, String)
       qq cs = case qqText cs [] of
-                Just (text, cs2) -> tokenFrom cs2 text $ B.TWord p 2
+                Just (text, cs2) -> tokenFrom cs2 text $ B.TText p 2
                 Nothing -> token [] $ B.TUnknown p cs
 
       qqText :: String -> String -> Maybe (String, String)
@@ -125,16 +125,16 @@ nextToken res (num, line) txt =
 
       angle (c:cs) text | c == '>'    =  angleToken cs $ reverse text
                         | isWord c    =  angle cs (c : text)
-      angle cs     text               =  token cs $ B.TWord p 0 ('<' : reverse text)
+      angle cs     text               =  token cs $ B.TText p 0 ('<' : reverse text)
 
       angleToken cs ('c' : code)
           | all isCode code           =  case mapM B.readInt $ B.omit null $ B.divide '-' code of
-                                           Just ns  ->  token cs $ B.TWord p 3 $ map Char.chr ns
-                                           Nothing  ->  token cs $ B.TWord p (-1) code
-      angleToken cs text | null text  =  token cs $ B.TWord p 0 "<>"
+                                           Just ns  ->  token cs $ B.TText p 3 $ map Char.chr ns
+                                           Nothing  ->  token cs $ B.TText p (-1) code
+      angleToken cs text | null text  =  token cs $ B.TText p 0 "<>"
                          | otherwise  =  case lookup text B.bracketTable of
-                                           Just w   ->  token cs $ B.TWord p 3 w
-                                           Nothing  ->  token cs $ B.TWord p (-1) text
+                                           Just w   ->  token cs $ B.TText p 3 w
+                                           Nothing  ->  token cs $ B.TText p (-1) text
 
       isCode :: Char -> Bool
       isCode '-' = True
@@ -277,26 +277,26 @@ isShortString = all isShort
 --  Words and quotations.
 --
 --  >>> tokens "aa\n'bb'\n\"cc\""
---  [ TWord 1 0 "aa", TWord 2 1 "bb", TWord 3 1 "", TWord 4 2 "cc" ]
+--  [ TText 1 0 "aa", TText 2 1 "bb", TText 3 1 "", TText 4 2 "cc" ]
 --
 --  Judgement.
 --
 --  >>> tokens "|-- R  /a A0 /b 31"
---  [ TWord 1 0 "|", TWord 2 0 "--", TSpace 3 1, TWord 4 0 "R"
---  , TSpace 5 2, TTerm 6 ["/a"], TSpace 7 1, TWord 8 0 "A0"
---  , TSpace 9 1, TTerm 10 ["/b"], TSpace 11 1, TWord 12 0 "31" ]
+--  [ TText 1 0 "|", TText 2 0 "--", TSpace 3 1, TText 4 0 "R"
+--  , TSpace 5 2, TTerm 6 ["/a"], TSpace 7 1, TText 8 0 "A0"
+--  , TSpace 9 1, TTerm 10 ["/b"], TSpace 11 1, TText 12 0 "31" ]
 --
 --  Parens.
 --
 --  >>> tokens "aa (bb x y (z))"
---  [ TWord 1 0 "aa", TSpace 2 1
---  , TOpen 3 "(", TWord 4 0 "bb", TSpace 5 1
---     , TWord 6 0 "x", TSpace 7 1, TWord 8 0 "y", TSpace 9 1
---     , TOpen 10 "(", TWord 11 0 "z", TClose 12 ")", TClose 13 ")" ]
+--  [ TText 1 0 "aa", TSpace 2 1
+--  , TOpen 3 "(", TText 4 0 "bb", TSpace 5 1
+--     , TText 6 0 "x", TSpace 7 1, TText 8 0 "y", TSpace 9 1
+--     , TOpen 10 "(", TText 11 0 "z", TClose 12 ")", TClose 13 ")" ]
 --
 --  A comment.
 --
 --  >>> tokens "abc ** this is a comment\ndef\n"
---  [ TWord 1 0 "abc", TSpace 2 1, TComment 3 "** this is a comment"
---  , TWord 4 0 "def"]
+--  [ TText 1 0 "abc", TSpace 2 1, TComment 3 "** this is a comment"
+--  , TText 4 0 "def"]
 --

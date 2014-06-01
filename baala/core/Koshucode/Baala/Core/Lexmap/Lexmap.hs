@@ -87,8 +87,8 @@ consLexmap sorters gslot derives = lexmap where
     lexmap source =
         B.abortableTrees "lexmap" source $
          case B.divideTreesByBar source of
-           [(B.TreeL rop@(B.TWord _ 0 _) : trees)] -> derived rop trees
-           [(B.TreeL rop@(B.TWord _ 3 _) : trees)] -> user LexmapWith rop trees
+           [(B.TreeL rop@(B.TText _ 0 _) : trees)] -> derived rop trees
+           [(B.TreeL rop@(B.TText _ 3 _) : trees)] -> user LexmapWith rop trees
            [[B.TreeB 1 _ trees]] -> lexmap trees
            [[B.TreeB _ _ _]]     -> Message.adlib "bracket"
            [[]]                  -> baseOf "id" []
@@ -102,7 +102,7 @@ consLexmap sorters gslot derives = lexmap where
              Just _  -> user LexmapDerived rop trees
              Nothing -> base n rop trees
 
-    baseOf n = base n (B.tokenWord n)
+    baseOf n = base n $ B.textToken n
 
     base :: String -> B.Token -> ConsLexmapBody
     base n rop trees =
@@ -162,7 +162,7 @@ consLexmap sorters gslot derives = lexmap where
     withTrees :: [String] -> B.Map [B.TokenTree]
     withTrees ws = map loop where
         loop (B.TreeB t p trees) = B.TreeB t p $ map loop trees
-        loop (B.TreeL (B.TWord p 0 w)) | w `elem` ws = B.TreeL (B.TWord p 3 w)
+        loop (B.TreeL (B.TText p 0 w)) | w `elem` ws = B.TreeL (B.TText p 3 w)
         loop tree = tree
 
     withVars :: C.Roa -> B.Ab [String]
@@ -179,9 +179,9 @@ consLexmap sorters gslot derives = lexmap where
 withTerms :: [B.TokenTree] -> B.Ab [B.Terminal String]
 withTerms = loop where
     loop (B.TreeL (B.TTerm _ [n]) :
-          B.TreeL (B.TWord _ 0 v) : xs)  =  next (n, v) xs
+          B.TreeL (B.TText _ 0 v) : xs)  =  next (n, v) xs
     loop (B.TreeL (B.TTerm _ [n]) : xs)  =  next (n, n) xs
-    loop (B.TreeL (B.TWord _ 0 v) : xs)  =  next (v, v) xs
+    loop (B.TreeL (B.TText _ 0 v) : xs)  =  next (v, v) xs
     loop [] = Right []
     loop _  = Message.reqTermName
 

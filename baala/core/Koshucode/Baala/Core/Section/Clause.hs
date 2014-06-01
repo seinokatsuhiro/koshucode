@@ -76,10 +76,10 @@ clauseTypeText (Clause _ body) =
 --
 --   >>> consPreclause . B.tokenize $ "a : source A /x /y"
 --   [ TTokmap ( TokenClause
---                [TWord 1 0 "a", TSpace 2 1, ..., TTerm 11 ["/y"]]
---                [CodeLine 1 "a : source A /x /y" [TWord 1 0 "a", ...]] )
---            "a" [ TWord 5 0 "source"
---                , TWord 7 0 "A"
+--                [TText 1 0 "a", TSpace 2 1, ..., TTerm 11 ["/y"]]
+--                [CodeLine 1 "a : source A /x /y" [TText 1 0 "a", ...]] )
+--            "a" [ TText 5 0 "source"
+--                , TText 7 0 "A"
 --                , TTerm 9 ["/x"]
 --                , TTerm 11 ["/y"]
 --                ]]
@@ -96,17 +96,17 @@ consPreclause' src = dispatch $ liaison $ B.clauseTokens src where
 
     liaison :: B.Map [B.Token]
     liaison [] = []
-    liaison (B.TWord p1 q1 w1 : B.TWord _ q2 w2 : xs)
-        | q1 > 0 && q2 > 0 = let tok = B.TWord p1 (max q1 q2) (w1 ++ w2)
+    liaison (B.TText p1 q1 w1 : B.TText _ q2 w2 : xs)
+        | q1 > 0 && q2 > 0 = let tok = B.TText p1 (max q1 q2) (w1 ++ w2)
                              in liaison $ tok : xs
     liaison (x : xs) = x : liaison xs
 
     dispatch :: [B.Token] -> [Clause]
-    dispatch (B.TWord _ 0 "|" : B.TWord _ 0 k : xs) =
+    dispatch (B.TText _ 0 "|" : B.TText _ 0 k : xs) =
         frege k xs  -- Frege's judgement stroke
-    dispatch (B.TWord _ 0 name : B.TWord _ 0 colon : xs)
+    dispatch (B.TText _ 0 name : B.TText _ 0 colon : xs)
         | isDelim colon   =  rmap name xs
-    dispatch (B.TWord _ 0 k : xs)
+    dispatch (B.TText _ 0 k : xs)
         | k == "section"  =  sec xs
         | k == "import"   =  impt xs
         | k == "export"   =  expt xs
@@ -136,10 +136,10 @@ consPreclause' src = dispatch $ liaison $ B.clauseTokens src where
 
     frege _     =  const unk
 
-    judge q (B.TWord _ _ p : xs)  =  c1 $ CJudge q p xs
+    judge q (B.TText _ _ p : xs)  =  c1 $ CJudge q p xs
     judge _ _                     =  unk
 
-    assert t (B.TWord _ _ p : xs) =
+    assert t (B.TText _ _ p : xs) =
         case B.splitTokensBy isDelim xs of
           Right (opt, _, expr)  ->  a expr opt
           Left  expr            ->  a expr []
@@ -149,13 +149,13 @@ consPreclause' src = dispatch $ liaison $ B.clauseTokens src where
     rmap n xs              =  c1 $ CRelmap n xs
     slot n xs              =  c1 $ CSlot   n xs
 
-    sec [B.TWord _ _ n]    =  c1 $ CSection (Just n)
+    sec [B.TText _ _ n]    =  c1 $ CSection (Just n)
     sec []                 =  c1 $ CSection Nothing
     sec _                  =  unk
 
-    expt (B.TWord _ _ n : B.TWord _ _ ":" : xs)
+    expt (B.TText _ _ n : B.TText _ _ ":" : xs)
                            =  c0 (CExport n) : rmap n xs
-    expt [B.TWord _ _ n]   =  c1 $ CExport n
+    expt [B.TText _ _ n]   =  c1 $ CExport n
     expt _                 =  unk
 
     impt xs                =  c1 $ CImport xs Nothing
@@ -176,7 +176,7 @@ wordPairs toks =
        mapM wordPair p
     where
       wordPair :: (B.Token, B.Token) -> Maybe (String, String)
-      wordPair (B.TWord _ _ a, B.TWord _ _ b) = Just (a, b)
+      wordPair (B.TText _ _ a, B.TText _ _ b) = Just (a, b)
       wordPair _ = Nothing
 
 
@@ -228,7 +228,7 @@ shortToLong sh = map clause where
     long :: B.Map B.Token
     long token@(B.TShort n a b) =
         case lookup a sh of
-          Just l  -> B.TWord n 2 $ l ++ b
+          Just l  -> B.TText n 2 $ l ++ b
           Nothing -> token
     long token = token
 

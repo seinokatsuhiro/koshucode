@@ -126,7 +126,7 @@ relmapId :: Relmap c
 relmapId = RelmapCalc lexid (const $ Right . C.relkitId) []
 
 lexid :: C.Lexmap
-lexid = C.Lexmap C.LexmapBase (B.tokenWord "id") [("@attr", [])] [] []
+lexid = C.Lexmap C.LexmapBase (B.textToken "id") [("@attr", [])] [] []
 
 instance B.Name (Relmap c) where
     name (RelmapSource _ _ _)   = "source"

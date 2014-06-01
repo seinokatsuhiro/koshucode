@@ -76,9 +76,9 @@ litContentBy ops tree = B.abortableTree "literal" tree $ lit tree where
     lit x@(B.TreeL tok)
         | isDecimal x = C.putDec =<< B.litDecimal =<< naked x
         | otherwise = case tok of
-              B.TWord _ (-1) w  ->  bracketKeyword w
-              B.TWord _ 0    w  ->  nakedKeyword   w
-              B.TWord _ _    w  ->  C.putText      w
+              B.TText _ (-1) w  ->  bracketKeyword w
+              B.TText _ 0    w  ->  nakedKeyword   w
+              B.TText _ _    w  ->  C.putText      w
               _                 ->  Message.unkWord $ B.tokenContent tok
 
     lit (B.TreeB n _ xs) = case n of
@@ -96,7 +96,7 @@ litContentBy ops tree = B.abortableTree "literal" tree $ lit tree where
                            C.putDec dec
 
     -- tagged sequence
-    paren (B.TreeL (B.TWord _ 0 tag) : xs) =
+    paren (B.TreeL (B.TText _ 0 tag) : xs) =
         case lookup tag ops of
           Just f  -> f lit xs
           Nothing -> Message.unkCop tag
@@ -106,7 +106,7 @@ litContentBy ops tree = B.abortableTree "literal" tree $ lit tree where
     paren xs = Message.unkWord $ treesContent xs  -- unknown sequence
 
     naked :: LitTree String
-    naked (B.TreeL (B.TWord _ 0 w)) = Right w
+    naked (B.TreeL (B.TText _ 0 w)) = Right w
     naked x                         = Message.unkWord $ treeContent x
 
     treeContent  = concatMap B.tokenContent . B.untree
@@ -123,7 +123,7 @@ nakedKeyword "()"     =  Right C.nil       -- ()
 nakedKeyword w        =  Message.unkWord w
 
 isDecimal :: B.TokenTree -> Bool
-isDecimal (B.TreeL (B.TWord _ 0 (c : _))) = isDecimalChar c
+isDecimal (B.TreeL (B.TText _ 0 (c : _))) = isDecimalChar c
 isDecimal _ = False
 
 -- First letters of decimals
@@ -138,8 +138,8 @@ isDecimalChar = (`elem` "0123456789+-.")
 --  /Example/
 --
 --  >>> litNamedTrees =<< B.tt "/a 'A3 /b 10"
---  Right [("/a", TreeB 1 [TreeL (TWord 3 0 "'"), TreeL (TWord 4 0 "A3")]),
---         ("/b", TreeL (TWord 8 0 "10"))]
+--  Right [("/a", TreeB 1 [TreeL (TText 3 0 "'"), TreeL (TText 4 0 "A3")]),
+--         ("/b", TreeL (TText 8 0 "10"))]
 --
 
 litBracket :: (C.CContent c) => LitTree c -> LitTrees c
@@ -157,7 +157,7 @@ tokenList = mapM token where
 
 wordList :: [B.Token] -> B.Ab [String]
 wordList = mapM word where
-    word (B.TWord _ 0 w) = Right w
+    word (B.TText _ 0 w) = Right w
     word _ = Message.adlib "not word"
 
 makeDate :: (C.CList c, C.CDec c) => [String] -> B.Ab c

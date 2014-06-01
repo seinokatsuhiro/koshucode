@@ -63,13 +63,13 @@ type RoaSpec =
 --   are name of group.
 --
 --   >>> roa $ B.tt "a b -x /c 'd -y e"
---   [ ("@trunk", [TreeL (TWord 1 0 "a"), TreeL (TWord 3 0 "b")])
---   , ("-x", [TreeL (TTerm 7 ["/c"]), TreeL (TWord 9 1 "d")])
---   , ("-y", [TreeL (TWord 14 0 "e")]) ]
+--   [ ("@trunk", [TreeL (TText 1 0 "a"), TreeL (TText 3 0 "b")])
+--   , ("-x", [TreeL (TTerm 7 ["/c"]), TreeL (TText 9 1 "d")])
+--   , ("-y", [TreeL (TText 14 0 "e")]) ]
 --
 roa :: [B.TokenTree] -> Roa
 roa = B.assocBy branchName "@trunk" where
-    branchName (B.TreeL (B.TWord _ 0 n@('-' : _))) = Just n
+    branchName (B.TreeL (B.TText _ 0 n@('-' : _))) = Just n
     branchName _ = Nothing
 
 roaSorter :: RoaSpec -> RoaSorter

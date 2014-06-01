@@ -80,7 +80,7 @@ copOr  =  copN False (||)
 -- ----------------------  if
 
 treeOp :: String -> B.TokenTree
-treeOp = B.TreeL . B.tokenWord
+treeOp = B.TreeL . B.textToken
 
 treeIf :: B.TokenTree -> B.TokenTree -> B.TokenTree -> B.TokenTree
 treeIf test con alt = B.treeWrap [ treeOp "/if" , test, con , alt ]
@@ -105,7 +105,7 @@ copIf arg =
 synIf :: C.CopSyn
 synIf trees = folding $ filter (/= []) $ B.divideTreesBy ":" trees where
     folding :: [[B.TokenTree]] -> B.Ab B.TokenTree
-    folding []        = Right $ B.TreeL $ B.tokenWord "()"
+    folding []        = Right $ B.TreeL $ B.textToken "()"
     folding (x : xs)  = fore x =<< folding xs
 
     fore :: [B.TokenTree] -> B.AbMap B.TokenTree

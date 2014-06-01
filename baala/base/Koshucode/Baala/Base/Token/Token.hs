@@ -7,7 +7,7 @@ module Koshucode.Baala.Base.Token.Token
 (
   -- * Token type
   Token (..),
-  tokenWord,
+  textToken,
 
   -- * Term name
   TermName, TermName2, TermName3, TermName4,
@@ -24,7 +24,6 @@ module Koshucode.Baala.Base.Token.Token
 
   -- * Other function
   sweepToken,
-  tokenIndent,
 ) where
 
 import qualified Data.Generics                  as G
@@ -36,7 +35,7 @@ import qualified Koshucode.Baala.Base.Text      as B
 
 -- | There are nine types of tokens.
 data Token
-    = TWord    B.CodePoint Int String     -- ^ Word.
+    = TText    B.CodePoint Int String     -- ^ Word.
                                           --   'Int' represents quotation level, i.e.,
                                           --   0 for non-quoted,
                                           --   1 for single-quoted,
@@ -59,7 +58,7 @@ data Token
 instance B.Name Token where
     name (TTerm   _ ns) = concat ns
     name (TSlot  _ _ s) = s
-    name (TWord  _ _ s) = s
+    name (TText  _ _ s) = s
     name (TOpen    _ s) = s
     name (TClose   _ s) = s
     name (TComment _ s) = s
@@ -67,7 +66,7 @@ instance B.Name Token where
 
 instance B.Write Token where
     write sh = d where
-        d (TWord    pt q w) = pretty "TWord"    pt [show q, show w]
+        d (TText    pt q w) = pretty "TText"    pt [show q, show w]
         d (TShort   pt a b) = pretty "TShort"   pt [show a, show b]
         d (TTerm    pt ns)  = pretty "TTerm"    pt [show ns]
         d (TSlot    pt n w) = pretty "TSlot"    pt [show n, show w]
@@ -80,11 +79,11 @@ instance B.Write Token where
         lineCol pt          = (show $ B.codePointLineNumber pt)
                               ++ ":" ++ (show $ B.codePointColumnNumber pt)
 
-tokenWord :: String -> Token
-tokenWord = TWord B.codePointZero 0
+textToken :: String -> Token
+textToken = TText B.codePointZero 0
 
 instance B.CodePointer Token where
-    codePoint (TWord    p _ _)  =  [p]
+    codePoint (TText    p _ _)  =  [p]
     codePoint (TShort   p _ _)  =  [p]
     codePoint (TTerm    p _)    =  [p]
     codePoint (TSlot    p _ _)  =  [p]
@@ -116,12 +115,12 @@ type TermPath    =  [TermName]
 
 -- | Get the content of token.
 --
---   >>> let tok = TTerm 20 ["/r", "/x"] in tokenContent tok
+--   >>> let tok = TTerm B.codePointZero ["r", "x"] in tokenContent tok
 --   "/r/x"
 tokenContent :: Token -> String
-tokenContent (TWord  _ _ s)   =  s
+tokenContent (TText  _ _ s)   =  s
 tokenContent (TShort _ a b)   =  a ++ "." ++ b
-tokenContent (TTerm    _ ns)  =  concat $ map ('/':) ns
+tokenContent (TTerm    _ ns)  =  concatMap ('/':) ns
 tokenContent (TSlot  _ _ s)   =  s
 tokenContent (TOpen    _ s)   =  s
 tokenContent (TClose   _ s)   =  s
@@ -133,10 +132,10 @@ tokenContent (TUnknown _ s)   =  s
 --   @\"Word\"@, @\"Term\"@, @\"Open\"@, @\"Close\"@,
 --   @\"Space\"@, @\"Comment\"@, or @\"Unknown\"@.
 --
---   >>> tokenTypeText $ TWord 25 0 "flower"
+--   >>> tokenTypeText $ TText 25 0 "flower"
 --   "Word"
 tokenTypeText :: Token -> String
-tokenTypeText (TWord  _ _ _)  =  "Word"
+tokenTypeText (TText  _ _ _)  =  "Word"
 tokenTypeText (TShort _ _ _)  =  "Short"
 tokenTypeText (TTerm    _ _)  =  "TermN"
 tokenTypeText (TSlot  _ _ _)  =  "Slot"
@@ -157,6 +156,10 @@ isBlankToken (TSpace _ _)    = True
 isBlankToken (TComment _ _)  = True
 isBlankToken _               = False
 
+-- | Remove blank tokens.
+sweepToken :: B.Map [Token]
+sweepToken = B.omit isBlankToken
+
 isShortToken :: B.Pred Token
 isShortToken (TShort _ _ _)  = True
 isShortToken _               = False
@@ -176,16 +179,4 @@ isOpenTokenOf _ _               = False
 isCloseTokenOf :: String -> B.Pred Token
 isCloseTokenOf p1 (TClose _ p2) = p1 == p2
 isCloseTokenOf _ _              = False
-
-
-
--- ---------------------- Other functions
-
--- | Remove blank tokens.
-sweepToken :: B.Map [Token]
-sweepToken = B.omit isBlankToken
-
-tokenIndent :: Token -> Int
-tokenIndent (TSpace _ n) = n
-tokenIndent _ = 0
 

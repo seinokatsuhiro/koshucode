@@ -100,7 +100,7 @@ wordTrees (w : tree : xs) =
        Right $ (w', tree) : xs'
 
 word :: B.TokenTree -> B.Ab String
-word (B.TreeL (B.TWord _ _ w)) = Right w
+word (B.TreeL (B.TText _ _ w)) = Right w
 word _ = Message.unexpAttr "Require one word"
 
 
@@ -169,11 +169,11 @@ getSwitch u name = getAbortableOption False get u name where
 --   >   ...
 getWord :: RopGet c String
 getWord = getAbortable get where
-    get [B.TreeL (B.TWord _ _ s)] = Right s
+    get [B.TreeL (B.TText _ _ s)] = Right s
     get _ = Message.unexpAttr "Require one word"
 
 getInt :: RopGet c Int
 getInt = getAbortable get where
-    get [B.TreeL (B.TWord _ _ i)] = Right (read i :: Int)
+    get [B.TreeL (B.TText _ _ i)] = Right (read i :: Int)
     get _ = Message.unexpAttr "Require one integer"
 
