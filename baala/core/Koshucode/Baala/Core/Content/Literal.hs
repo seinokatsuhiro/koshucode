@@ -143,8 +143,8 @@ isDecimalChar = (`elem` "0123456789+-.")
 --
 
 litBracket :: (C.CContent c) => LitTree c -> LitTrees c
-litBracket lit xs@(B.TreeL (B.TTerm _ _) : _) = C.putTermset =<< litTermset lit xs
-litBracket _ [] = C.putTermset []
+litBracket lit xs@(B.TreeL (B.TTerm _ _) : _) = C.putAssn =<< litAssn lit xs
+litBracket _ [] = C.putAssn []
 litBracket _ xs =
     do toks <- tokenList xs
        ws   <- wordList toks
@@ -213,8 +213,8 @@ litContents lit cs = mapM lt $ B.divideTreesByColon cs where
     lt [x] = lit x
     lt xs  = lit $ B.TreeB 1 Nothing xs
 
-litTermset :: (C.CContent c) => LitTree c -> LitTrees [B.Named c]
-litTermset lit = mapM p B.<=< litNamedTrees where
+litAssn :: (C.CContent c) => LitTree c -> LitTrees [B.Named c]
+litAssn lit = mapM p B.<=< litNamedTrees where
     p (n, c) = Right . (n,) =<< lit c
 
 litRel :: (C.CContent c) => LitTree c -> LitTrees (B.Rel c)
@@ -234,7 +234,7 @@ litJudge :: (C.CContent c) => Bool -> B.JudgePat -> LitTrees (B.Judge c)
 litJudge = litJudgeBy []
 
 litJudgeBy :: (C.CContent c) => LitOperators c -> Bool -> B.JudgePat -> LitTrees (B.Judge c)
-litJudgeBy ops q p = Right . B.Judge q p B.<=< litTermset (litContentBy ops)
+litJudgeBy ops q p = Right . B.Judge q p B.<=< litAssn (litContentBy ops)
 
 
 -- ------------------------------------------------------------------
@@ -268,7 +268,7 @@ litJudgeBy ops q p = Right . B.Judge q p B.<=< litTermset (litContentBy ops)
 --              delimited by colon, enclosed in square brackets:
 --              @[ \'abc : \'def ]@.
 --
---  [Termset]   Termset is a set of terms,
+--  [Assn]      Assn is an association of terms,
 --              i.e., a list of named contents.
 --              Textual form is a sequence of terms
 --              with bar-angles: @\<| \/a 10 \/b 20 |\>@.
@@ -325,10 +325,10 @@ litJudgeBy ops q p = Right . B.Judge q p B.<=< litTermset (litContentBy ops)
 --    >>> lits "[ 'a : '10 : 20 ]"
 --    Right [VList [VText "a", VText "10", VDec (Decimal (20, 1), 0, False)]]
 --
---  Termset.
+--  Assn.
 --
 --    >>> lits "<| /a 'x  /b { 'y : 'z } |>"
---    Right [VTermset
+--    Right [VAssn
 --      [ ("/a", VText "x")
 --      , ("/b", VSet [VText "y", VText "z"])]]
 --

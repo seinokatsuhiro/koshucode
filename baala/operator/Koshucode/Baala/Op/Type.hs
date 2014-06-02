@@ -25,7 +25,7 @@ data VContent
     | VNil                        -- ^ Sign of no ordinary type
     | VList    [VContent]         -- ^ List type (objective collection)
     | VSet     [VContent]         -- ^ Set type (informative collection)
-    | VTermset [B.Named VContent] -- ^ Termset type (set of terms)
+    | VAssn    [B.Named VContent] -- ^ Assn type (set of terms)
     | VRel     (B.Rel VContent)   -- ^ Relation type
       deriving (Show)
 
@@ -40,7 +40,7 @@ instance Ord VContent where
     compare (VNil      ) (VNil      )  =  EQ
     compare (VList    x) (VList    y)  =  compare x y
     compare (VSet     x) (VSet     y)  =  compareAsSet x y
-    compare (VTermset x) (VTermset y)  =  compareAsSet x y
+    compare (VAssn    x) (VAssn    y)  =  compareAsSet x y
     compare (VRel     x) (VRel     y)  =  compare x y
 
     compare (VBool    _) _             =  LT
@@ -49,7 +49,7 @@ instance Ord VContent where
     compare (VNil      ) _             =  LT
     compare (VList    _) _             =  LT
     compare (VSet     _) _             =  LT
-    compare (VTermset _) _             =  LT
+    compare (VAssn    _) _             =  LT
     compare (VRel     _) _             =  LT
 
 compareAsSet :: (Ord a) => [a] -> [a] -> Ordering
@@ -62,7 +62,7 @@ instance C.PrimContent VContent where
     typename (VNil)        =  "nil"
     typename (VList    _)  =  "list"
     typename (VSet     _)  =  "set"
-    typename (VTermset _)  =  "termset"
+    typename (VAssn    _)  =  "assn"
     typename (VRel     _)  =  "rel"
 
 instance C.CContent VContent where
@@ -79,7 +79,7 @@ instance B.Write VContent where
         VNil         ->  B.doc "()"
         VList    xs  ->  B.docWraps "["   "]" $ B.writeColon sh xs
         VSet     xs  ->  B.docWraps "{"   "}" $ B.writeColon sh xs
-        VTermset xs  ->  B.docWraps "<<" ">>" $ B.writeH     sh xs
+        VAssn    xs  ->  B.docWraps "<<" ">>" $ B.writeH     sh xs
         VRel r       ->  B.write sh r
 
 type VCop = C.CopFun VContent
@@ -132,12 +132,12 @@ instance C.CSet VContent where
     isSet  (VSet _)          =  True
     isSet  _                 =  False
 
-instance C.CTermset VContent where
-    pTermset                 =  VTermset
-    gTermset (VTermset x)    =  x
-    gTermset _               =  B.bug "gTermset"
-    isTermset  (VTermset _)  =  True
-    isTermset  _             =  False
+instance C.CAssn VContent where
+    pAssn                    =  VAssn
+    gAssn (VAssn x)          =  x
+    gAssn _                  =  B.bug "gAssn"
+    isAssn  (VAssn _)        =  True
+    isAssn  _                =  False
 
 instance C.CRel VContent where
     pRel                     =  VRel

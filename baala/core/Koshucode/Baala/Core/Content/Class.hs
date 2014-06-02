@@ -14,7 +14,7 @@ module Koshucode.Baala.Core.Content.Class
   CNil        (..),
   CDec        (..), pDecFromInt,
   CSet        (..),
-  CTermset    (..),
+  CAssn       (..),
   CRel        (..), isMember,
 ) where
 
@@ -30,7 +30,7 @@ class (Show c) => PrimContent c where
 
 class (Ord c, B.Write c, PrimContent c,
        CBool c, CText c, CDec c, CList c,
-       CNil c , CSet c, CTermset c, CRel c) =>
+       CNil c , CSet c, CAssn c, CRel c) =>
     CContent c where
 
     appendContent :: c -> c -> B.Ab c
@@ -125,16 +125,16 @@ class (PrimContent c) => CSet c where
     putSet      ::        [c] -> B.Ab c
     putSet      =       Right . pSet
 
-class (PrimContent c) => CTermset c where
-    isTermset   ::           c -> Bool
-    gTermset    ::           c -> [B.Named c]
-    pTermset    :: [B.Named c] -> c
+class (PrimContent c) => CAssn c where
+    isAssn      ::           c -> Bool
+    gAssn       ::           c -> [B.Named c]
+    pAssn       :: [B.Named c] -> c
 
-    getTermset  ::      B.Ab c -> B.Ab [B.Named c]
-    getTermset  =       getAbAb isTermset gTermset
+    getAssn     ::      B.Ab c -> B.Ab [B.Named c]
+    getAssn     =       getAbAb isAssn gAssn
 
-    putTermset  :: [B.Named c] -> B.Ab c
-    putTermset  =  Right . pTermset
+    putAssn     :: [B.Named c] -> B.Ab c
+    putAssn     =  Right . pAssn
 
 class (PrimContent c) => CRel c where
     isRel       ::           c -> Bool

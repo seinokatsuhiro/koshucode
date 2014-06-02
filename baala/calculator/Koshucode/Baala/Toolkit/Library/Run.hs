@@ -99,7 +99,7 @@ theContent :: (C.CContent c) => String -> [B.Named c] -> Maybe c
 theContent = lookup
 
 theContents :: (C.CContent c) => [String] -> [B.Named c] -> Maybe [c]
-theContents ns termset = mapM (`theContent` termset) ns
+theContents ns assn = mapM (`theContent` assn) ns
 
 theStrings :: (C.CContent c) => c -> [String]
 theStrings c | C.isText c  =  [C.gText c]

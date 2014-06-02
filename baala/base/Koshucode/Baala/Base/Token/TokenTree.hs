@@ -53,7 +53,7 @@ type NamedTrees = B.Named [TokenTree]
 --
 --   2. Squared brackets @[ .. ]@ for list.
 --
---   3. Curely braces @{ .. }@ for termset.
+--   3. Double brackets @\<\< .. \>\>@ for assn.
 --
 --   4. Curely-bar braces @{| .. |}@ for relation.
 

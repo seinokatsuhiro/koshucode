@@ -186,16 +186,16 @@ relkitSize n _ = Right kit2 where
 
 --    > assn /x /y /z -to /a
 
-consAssn :: (C.CTermset c) => C.RopCons c
+consAssn :: (C.CAssn c) => C.RopCons c
 consAssn use =
   do ns <- Op.getTerms use "-term"
      to <- Op.getTerm  use "-to"
      Right $ relmapAssn use (ns, to)
 
-relmapAssn :: (C.CTermset c) => C.RopUse c -> ([B.TermName], B.TermName) -> C.Relmap c
+relmapAssn :: (C.CAssn c) => C.RopUse c -> ([B.TermName], B.TermName) -> C.Relmap c
 relmapAssn use = C.relmapFlow use . relkitAssn
 
-relkitAssn :: (C.CTermset c) => ([B.TermName], B.TermName) -> C.RelkitFlow c
+relkitAssn :: (C.CAssn c) => ([B.TermName], B.TermName) -> C.RelkitFlow c
 relkitAssn _ Nothing = Right C.relkitNothing
 relkitAssn (ns, to) (Just he1) = Right kit2 where
     ns1       =  B.headNames he1
@@ -203,7 +203,7 @@ relkitAssn (ns, to) (Just he1) = Right kit2 where
     he2       =  B.headCons to he1
     kit2      =  C.relkitJust he2 $ C.RelkitOneToOne False f2
     f2 cs1    =  let cs   = B.snipFrom ind cs1
-                     assn = C.pTermset $ zip ns cs
+                     assn = C.pAssn $ zip ns cs
                  in assn : cs1
 
 
@@ -211,16 +211,16 @@ relkitAssn (ns, to) (Just he1) = Right kit2 where
 
 --    > unassn /a
 
-consUnassn :: (C.CTermset c) => C.RopCons c
+consUnassn :: (C.CAssn c) => C.RopCons c
 consUnassn use =
   do from <- Op.getTerm  use "-from"
      ns   <- Op.getTerms use "-only"
      Right $ relmapUnassn use (from, ns)
 
-relmapUnassn :: (C.CTermset c) => C.RopUse c -> (B.TermName, [B.TermName]) -> C.Relmap c
+relmapUnassn :: (C.CAssn c) => C.RopUse c -> (B.TermName, [B.TermName]) -> C.Relmap c
 relmapUnassn use = C.relmapFlow use . relkitUnassn
 
-relkitUnassn :: (C.CTermset c) => (B.TermName, [B.TermName]) -> C.RelkitFlow c
+relkitUnassn :: (C.CAssn c) => (B.TermName, [B.TermName]) -> C.RelkitFlow c
 relkitUnassn _ Nothing = Right C.relkitNothing
 relkitUnassn (from, ns) (Just he1) = Right kit2 where
     ns1       =  B.headNames he1
@@ -228,7 +228,7 @@ relkitUnassn (from, ns) (Just he1) = Right kit2 where
     he2       =  B.headAppend ns he1
     kit2      =  C.relkitJust he2 $ C.RelkitOneToAbOne False f2 []
     f2 _ cs1  =  do let [assn] = B.snipFrom ind cs1
-                    cs <- assnPick ns $ C.gTermset assn
+                    cs <- assnPick ns $ C.gAssn assn
                     Right $ cs ++ cs1
 
 assnPick :: (Eq a) => [a] -> [(a, b)] -> B.Ab [b]

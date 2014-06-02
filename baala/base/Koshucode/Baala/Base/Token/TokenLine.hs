@@ -193,7 +193,7 @@ isShort = Char.isAlpha
 --              @(@ /group/ @)@ ,
 --              @{@ /set/ @}@ ,
 --              @[@ /list/ @]@ ,
---              @\<|@ /termset/ @\|>@ , and
+--              @\<\<@ /assn/ @\>\>@ , and
 --              @{|@ /relation/ @|}@
 --
 --  [TermName]  Words beginning with slash, e.g., @\/aa@.
