@@ -16,10 +16,14 @@ module Koshucode.Baala.Op.Vanilla.Flow
 
   -- * RDF
   consRdf,
-
   -- * size
   consSize, relmapSize, relkitSize,
   -- $size
+
+  -- * assn
+  consAssn, relmapAssn, relkitAssn,
+  -- * unassn
+  consUnassn, relmapUnassn, relkitUnassn,
 ) where
 
 import qualified Koshucode.Baala.Base         as B
@@ -177,4 +181,59 @@ relkitSize n _ = Right kit2 where
     kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
     kitf2 bo1 = [[ C.pDecFromInt $ length bo1 ]]
 
+
+-- ----------------------  assn
+
+--    > assn /x /y /z -to /a
+
+consAssn :: (C.CTermset c) => C.RopCons c
+consAssn use =
+  do ns <- Op.getTerms use "-term"
+     to <- Op.getTerm  use "-to"
+     Right $ relmapAssn use (ns, to)
+
+relmapAssn :: (C.CTermset c) => C.RopUse c -> ([B.TermName], B.TermName) -> C.Relmap c
+relmapAssn use = C.relmapFlow use . relkitAssn
+
+relkitAssn :: (C.CTermset c) => ([B.TermName], B.TermName) -> C.RelkitFlow c
+relkitAssn _ Nothing = Right C.relkitNothing
+relkitAssn (ns, to) (Just he1) = Right kit2 where
+    ns1       =  B.headNames he1
+    ind       =  B.snipIndex ns ns1
+    he2       =  B.headCons to he1
+    kit2      =  C.relkitJust he2 $ C.RelkitOneToOne False f2
+    f2 cs1    =  let cs   = B.snipFrom ind cs1
+                     assn = C.pTermset $ zip ns cs
+                 in assn : cs1
+
+
+-- ----------------------  unassn
+
+--    > unassn /a
+
+consUnassn :: (C.CTermset c) => C.RopCons c
+consUnassn use =
+  do from <- Op.getTerm  use "-from"
+     ns   <- Op.getTerms use "-only"
+     Right $ relmapUnassn use (from, ns)
+
+relmapUnassn :: (C.CTermset c) => C.RopUse c -> (B.TermName, [B.TermName]) -> C.Relmap c
+relmapUnassn use = C.relmapFlow use . relkitUnassn
+
+relkitUnassn :: (C.CTermset c) => (B.TermName, [B.TermName]) -> C.RelkitFlow c
+relkitUnassn _ Nothing = Right C.relkitNothing
+relkitUnassn (from, ns) (Just he1) = Right kit2 where
+    ns1       =  B.headNames he1
+    ind       =  B.snipIndex [from] ns1
+    he2       =  B.headAppend ns he1
+    kit2      =  C.relkitJust he2 $ C.RelkitOneToAbOne False f2 []
+    f2 _ cs1  =  do let [assn] = B.snipFrom ind cs1
+                    cs <- assnPick ns $ C.gTermset assn
+                    Right $ cs ++ cs1
+
+assnPick :: (Eq a) => [a] -> [(a, b)] -> B.Ab [b]
+assnPick ns assn = mapM pick ns where
+    pick n = case lookup n assn of
+               Just c   ->  Right c
+               Nothing  ->  Message.adlib "no term"
 

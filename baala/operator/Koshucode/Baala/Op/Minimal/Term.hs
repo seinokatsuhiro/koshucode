@@ -3,19 +3,14 @@
 module Koshucode.Baala.Op.Minimal.Term
 ( -- * pick
   consPick, relmapPick, relkitPick,
-
   -- * cut
   consCut, relmapCut, relkitCut,
-
   -- * pick-term
   consPickTerm, relmapPickTerm, relkitPickTerm,
-
   -- * cut-term
   consCutTerm, relmapCutTerm, relkitCutTerm,
-
   -- * move
   consMove, relmapMove, relkitMove,
-
   -- * rename
   consRename, relmapRename, relkitRename,
 ) where
@@ -92,12 +87,12 @@ relkitSnip heSnip boSnip ns (Just he1)
     | B.sameLength ns ind1 = Right kit2
     | otherwise = Message.unkTerm non he1
     where
-      he2   = B.headChange (heSnip ind1) he1
-      kit2  = C.relkitJust he2 $ C.RelkitOneToOne True $ boSnip ind1
-      ns1   = B.headNames he1
-      non   = B.snipOff ind ns
-      ind1  = ns  `B.snipIndex` ns1
-      ind   = ns1 `B.snipIndex` ns
+      he2   =  B.headChange (heSnip ind1) he1
+      kit2  =  C.relkitJust he2 $ C.RelkitOneToOne True $ boSnip ind1
+      ns1   =  B.headNames he1
+      non   =  B.snipOff ind ns
+      ind1  =  ns  `B.snipIndex` ns1
+      ind   =  ns1 `B.snipIndex` ns
 
 
 -- ----------------------  move

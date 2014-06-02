@@ -23,6 +23,8 @@ vanillaRops = Op.ropList "vanilla"
     --  CONSTRUCTOR, ATTRIBUTE
     [ ( "add /N E ...",
         Op.consAdd, C.roaList "-in" ["-let"] )
+    , ( "assn /P ... -to N.",
+        Op.consAssn, C.roaList "-term" ["-to"] )
     , ( "check-term [ -just /N ... | -has /N ... | -but /N ... ]",
         Op.consCheckTerm, C.roaNone ["-just", "-has", "-but"] )
     , ( "compose R",
@@ -69,6 +71,8 @@ vanillaRops = Op.ropList "vanilla"
         Op.consSubst, C.roaList "-in" ["-let"] )
     , ( "typename /N /P ...",
         Op.consTypename, C.roaList "-term" [] )
+    , ( "unassn /P -only /P ...",
+        Op.consUnassn, C.roaOne "-from" ["-only"] )
     , ( "unless R R",
         Op.consUnless, C.roaList "-relmap" [] )
     , ( "unprefix /P",

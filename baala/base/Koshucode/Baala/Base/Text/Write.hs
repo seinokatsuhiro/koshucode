@@ -42,7 +42,7 @@ instance Write Bool where
     write _ False = D.text "<0>"
 
 instance (Write a) => Write (B.Named a) where
-    write sh (n, x) = D.text n D.<+> write sh x
+    write sh (n, x) = D.text ('/' : n) D.<+> write sh x
 
 
 
