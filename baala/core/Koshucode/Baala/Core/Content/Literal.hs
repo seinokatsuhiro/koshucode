@@ -145,6 +145,8 @@ isDecimalChar = (`elem` "0123456789+-.")
 litBracket :: (C.CContent c) => LitTree c -> LitTrees c
 litBracket lit xs@(B.TreeL (B.TTerm _ _) : _) = C.putAssn =<< litAssn lit xs
 litBracket _ [] = C.putAssn []
+litBracket _ [B.TreeL (B.TText _ 0 "words"), B.TreeL (B.TText _ 2 ws)] =
+    C.putList $ map C.pText $ words ws
 litBracket _ xs =
     do toks <- tokenList xs
        ws   <- wordList toks

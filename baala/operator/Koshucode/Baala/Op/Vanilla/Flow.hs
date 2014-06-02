@@ -209,7 +209,7 @@ relkitAssn (ns, to) (Just he1) = Right kit2 where
 
 -- ----------------------  unassn
 
---    > unassn /a
+--    > unassn /a -only /x /y
 
 consUnassn :: (C.CAssn c) => C.RopCons c
 consUnassn use =
@@ -231,7 +231,7 @@ relkitUnassn (from, ns) (Just he1) = Right kit2 where
                     cs <- assnPick ns $ C.gAssn assn
                     Right $ cs ++ cs1
 
-assnPick :: (Eq a) => [a] -> [(a, b)] -> B.Ab [b]
+assnPick :: [B.TermName] -> [B.Named c] -> B.Ab [c]
 assnPick ns assn = mapM pick ns where
     pick n = case lookup n assn of
                Just c   ->  Right c
