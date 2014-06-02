@@ -10,6 +10,7 @@ module Koshucode.Baala.Op.Content.Cops
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Core              as C
 import qualified Koshucode.Baala.Op.Builtin        as OpBase
+import qualified Koshucode.Baala.Op.Cox            as OpBase
 import qualified Koshucode.Baala.Op.Minimal        as OpBase
 import qualified Koshucode.Baala.Op.Meta           as OpBase
 import qualified Koshucode.Baala.Op.Nest           as OpBase
@@ -23,6 +24,7 @@ vanillaGlobal :: (C.CContent c) => C.Global c
 vanillaGlobal =
     C.global { C.globalCops = vanillaCops
              , C.globalRops = OpBase.metaRops ++
+                              OpBase.coxRops ++
                               OpBase.vanillaRops ++
                               OpBase.minimalRops ++
                               OpBase.builtinRops ++

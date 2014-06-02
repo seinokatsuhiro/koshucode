@@ -3,7 +3,7 @@
 
 -- | Relmap operators using term-content expressions.
 
-module Koshucode.Baala.Op.Vanilla.Cox
+module Koshucode.Baala.Op.Cox.Cox
 (
   -- * add
   consAdd, relmapAdd,
@@ -11,6 +11,9 @@ module Koshucode.Baala.Op.Vanilla.Cox
   consSubst, relmapSubst,
   -- * filter
   consFilter, relmapFilter, relkitFilter,
+  -- * range
+  consRange, relmapRange,
+  -- $range
 ) where
 
 import qualified Koshucode.Baala.Base       as B
@@ -120,3 +123,29 @@ alpha = C.coxAlpha . C.globalSyntax . C.ropGlobal
 alphas :: (C.CContent c) => C.RopUse c -> [B.Named B.TokenTree] -> B.Ab [C.NamedCox c]
 alphas use = mapM (B.namedMapM $ alpha use)
 
+
+-- ----------------------  range
+
+-- $range
+--
+--  Add term @\/n@ @0@, @\/n@ @1@, ..., and @\/n@ @9@.
+--  
+--    > range /n -from 0 -to 9
+
+consRange :: (C.CDec c) => C.RopCons c
+consRange use =
+  do term <- Op.getTerm use "-term"
+     low  <- Op.getInt  use "-from"
+     high <- Op.getInt  use "-to"
+     Right $ relmapRange use (term, low, high)
+
+relmapRange :: (C.CDec c) => C.RopUse c -> (B.TermName, Int, Int) -> C.Relmap c
+relmapRange use = C.relmapFlow use . relkitRange
+
+relkitRange :: (C.CDec c) => (B.TermName, Int, Int) -> C.RelkitFlow c
+relkitRange _ Nothing = Right C.relkitNothing
+relkitRange (n, low, high) (Just he1) = Right kit2 where
+    he2      = B.headCons n he1
+    kit2     = C.relkitJust he2 $ C.RelkitOneToMany False kitf2
+    kitf2 cs = map (: cs) decs
+    decs     = map C.pDecFromInt [low .. high]

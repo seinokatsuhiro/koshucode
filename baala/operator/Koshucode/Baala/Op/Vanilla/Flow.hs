@@ -10,10 +10,6 @@ module Koshucode.Baala.Op.Vanilla.Flow
   consMember, relmapMember, relkitMember,
   -- $member
 
-  -- * range
-  consRange, relmapRange,
-  -- $range
-
   -- * RDF
   consRdf,
   -- * size
@@ -117,35 +113,6 @@ relkitMemberExpand x xsi (Just he1) = Right kit2 where
                     _ | C.isText xsc -> map (: cs) $ map (C.pText . B.singleton)
                                                    $ B.unique $ C.gText xsc
                     _                -> [xsc : cs]
-
-
-
--- ----------------------  range
-
--- $range
---
---  Add term @\/n@ @0@, @\/n@ @1@, ..., and @\/n@ @9@.
---  
---    > range /n -from 0 -to 9
-
-consRange :: (C.CDec c) => C.RopCons c
-consRange use =
-  do term <- Op.getTerm use "-term"
-     low  <- Op.getInt  use "-from"
-     high <- Op.getInt  use "-to"
-     Right $ relmapRange use (term, low, high)
-
-relmapRange :: (C.CDec c) => C.RopUse c -> (B.TermName, Int, Int) -> C.Relmap c
-relmapRange use = C.relmapFlow use . relkitRange
-
-relkitRange :: (C.CDec c) => (B.TermName, Int, Int) -> C.RelkitFlow c
-relkitRange _ Nothing = Right C.relkitNothing
-relkitRange (n, low, high) (Just he1) = Right kit2 where
-    he2      = B.headCons n he1
-    kit2     = C.relkitJust he2 $ C.RelkitOneToMany False kitf2
-    kitf2 cs = map (: cs) decs
-    decs     = map C.pDecFromInt [low .. high]
-
 
 
 -- ----------------------  RDF

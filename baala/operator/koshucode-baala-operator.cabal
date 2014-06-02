@@ -63,6 +63,10 @@ library
         Koshucode.Baala.Op.Content.Logic
         Koshucode.Baala.Op.Content.Order
 
+        Koshucode.Baala.Op.Cox
+        Koshucode.Baala.Op.Cox.Cox
+        Koshucode.Baala.Op.Cox.Rop
+
         Koshucode.Baala.Op.Minimal
         Koshucode.Baala.Op.Minimal.Origin
         Koshucode.Baala.Op.Minimal.Restrict
@@ -82,7 +86,6 @@ library
         Koshucode.Baala.Op.Vanilla
         Koshucode.Baala.Op.Vanilla.Check
         Koshucode.Baala.Op.Vanilla.Confl
-        Koshucode.Baala.Op.Vanilla.Cox
         Koshucode.Baala.Op.Vanilla.Flow
         Koshucode.Baala.Op.Vanilla.Naming
         Koshucode.Baala.Op.Vanilla.Order
