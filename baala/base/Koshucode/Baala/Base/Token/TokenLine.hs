@@ -58,9 +58,9 @@ nextToken res (num, line) txt =
       '>' : '>' : cs  ->  token cs        $ B.TClose    p ">>"
                               
       c : '|' : cs
-          | open c    ->  token cs        $ B.TOpen     p [c, '|']
+          | isOpen c  ->  token cs        $ B.TOpen     p [c, '|']
       '|' : c : cs
-          | close c   ->  token cs        $ B.TClose    p ['|', c]
+          | isClose c ->  token cs        $ B.TClose    p ['|', c]
           | c == '|'  ->  let cs2         = B.trimLeft cs  -- newline
                           in token cs2    $ B.TText     p 0 "||"
 
@@ -83,8 +83,6 @@ nextToken res (num, line) txt =
 
     where
       p      = B.CodePoint res num line txt
-      open   = ( `elem` "[{<(" )
-      close  = ( `elem` "]}>)" )
 
       token :: String -> B.Token -> (B.Token, String)
       token cs tok                    =  (tok, cs)

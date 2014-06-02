@@ -79,7 +79,7 @@ instance B.Write VContent where
         VNil         ->  B.doc "()"
         VList    xs  ->  B.docWraps "["   "]" $ B.writeColon sh xs
         VSet     xs  ->  B.docWraps "{"   "}" $ B.writeColon sh xs
-        VTermset xs  ->  B.docWraps "<|" "|>" $ B.writeH     sh xs
+        VTermset xs  ->  B.docWraps "<<" ">>" $ B.writeH     sh xs
         VRel r       ->  B.write sh r
 
 type VCop = C.CopFun VContent
