@@ -132,20 +132,32 @@ alphas use = mapM (B.namedMapM $ alpha use)
 --  
 --    > range /n -from 0 -to 9
 
-consRange :: (C.CDec c) => C.RopCons c
+consRange :: (C.CContent c) => C.RopCons c
 consRange use =
-  do term <- Op.getTerm use "-term"
-     low  <- Op.getInt  use "-from"
-     high <- Op.getInt  use "-to"
-     Right $ relmapRange use (term, low, high)
+  do term      <-  Op.getTerm  use "-term"
+     treeLow   <-  Op.getTrees use "-from"
+     treeHigh  <-  Op.getTrees use "-to"
+     coxLow    <-  alpha use $ B.treeWrap treeLow
+     coxHigh   <-  alpha use $ B.treeWrap treeHigh
+     let base = C.globalFunction $ C.ropGlobal use
+     Right $ relmapRange use (term, base, coxLow, coxHigh)
 
-relmapRange :: (C.CDec c) => C.RopUse c -> (B.TermName, Int, Int) -> C.Relmap c
+relmapRange :: (C.CContent c) => C.RopUse c -> (B.TermName, [C.Cop c], C.Cox c, C.Cox c) -> C.Relmap c
 relmapRange use = C.relmapFlow use . relkitRange
 
-relkitRange :: (C.CDec c) => (B.TermName, Int, Int) -> C.RelkitFlow c
+relkitRange :: (C.CContent c) => (B.TermName, [C.Cop c], C.Cox c, C.Cox c) -> C.RelkitFlow c
 relkitRange _ Nothing = Right C.relkitNothing
-relkitRange (n, low, high) (Just he1) = Right kit2 where
+relkitRange (n, base, coxLow, coxHigh) (Just he1) = Right kit2 where
     he2      = B.headCons n he1
-    kit2     = C.relkitJust he2 $ C.RelkitOneToMany False kitf2
-    kitf2 cs = map (: cs) decs
-    decs     = map C.pDecFromInt [low .. high]
+    kit2     = C.relkitJust he2 $ C.RelkitOneToAbMany False f2 []
+    f2 _ cs  = do coxLow'   <-  C.coxBeta base [] he1 coxLow
+                  coxHigh'  <-  C.coxBeta base [] he1 coxHigh
+                  decLow    <-  C.getDec $ C.coxRun cs coxLow'
+                  decHigh   <-  C.getDec $ C.coxRun cs coxHigh'
+
+                  let low  = B.decimalNum decLow
+                      high = B.decimalNum decHigh
+                      decs = map C.pDecFromInt [low .. high]
+
+                  Right $ map (: cs) decs
+
