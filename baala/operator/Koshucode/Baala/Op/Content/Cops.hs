@@ -14,6 +14,7 @@ import qualified Koshucode.Baala.Op.Cox            as OpBase
 import qualified Koshucode.Baala.Op.Minimal        as OpBase
 import qualified Koshucode.Baala.Op.Meta           as OpBase
 import qualified Koshucode.Baala.Op.Nest           as OpBase
+import qualified Koshucode.Baala.Op.Peripheral     as OpBase
 import qualified Koshucode.Baala.Op.Vanilla        as OpBase
 import qualified Koshucode.Baala.Op.Content.Arith  as Op
 import qualified Koshucode.Baala.Op.Content.List   as Op
@@ -24,6 +25,7 @@ vanillaGlobal :: (C.CContent c) => C.Global c
 vanillaGlobal =
     C.global { C.globalCops = vanillaCops
              , C.globalRops = OpBase.metaRops ++
+                              OpBase.peripheralRops ++
                               OpBase.coxRops ++
                               OpBase.vanillaRops ++
                               OpBase.minimalRops ++

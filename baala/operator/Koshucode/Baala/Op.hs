@@ -10,6 +10,7 @@ module Koshucode.Baala.Op.Cox,
 module Koshucode.Baala.Op.Minimal,
 module Koshucode.Baala.Op.Meta,
 module Koshucode.Baala.Op.Nest,
+module Koshucode.Baala.Op.Peripheral,
 module Koshucode.Baala.Op.Type,
 module Koshucode.Baala.Op.Vanilla,
 ) where
@@ -20,6 +21,7 @@ import Koshucode.Baala.Op.Cox
 import Koshucode.Baala.Op.Minimal
 import Koshucode.Baala.Op.Meta
 import Koshucode.Baala.Op.Nest
+import Koshucode.Baala.Op.Peripheral
 import Koshucode.Baala.Op.Type
 import Koshucode.Baala.Op.Vanilla
 

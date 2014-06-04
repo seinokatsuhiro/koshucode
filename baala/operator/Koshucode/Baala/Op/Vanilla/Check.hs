@@ -11,9 +11,6 @@ module Koshucode.Baala.Op.Vanilla.Check
   -- $duplicate
   consDuplicate, relmapDuplicate,
 
-  -- * typename
-  consTypename,
-
   -- * dump
   consDump,
 ) where
@@ -98,30 +95,6 @@ relkitDuplicate ns (Just he1)
       kv cs1    = (share1 cs1, cs1)
       dup       = not . B.isSingleton
 
-
-
--- ----------------------  typename
-
--- | Get typename.
-consTypename :: (C.CContent c) => C.RopCons c
-consTypename use =
-  do np <- Op.getTermPairs use "-term"
-     Right $ C.relmapFlow use $ relkitTypename np
-
-relkitTypename :: (C.CText c) => [B.TermName2] -> C.RelkitFlow c
-relkitTypename _ Nothing = Right C.relkitNothing
-relkitTypename np (Just he1) = Right kit2 where
-    ns, ps :: [B.TermName]
-    (ns, ps)  = unzip np
-
-    ns1       = B.headNames he1
-    ind1      = ps `B.snipIndex` ns1
-    share1    = B.snipFrom ind1
-
-    he2       = ns `B.headAppend` he1
-    kit2      = C.relkitJust he2 $ C.RelkitOneToOne False kitf2
-    kitf2 cs1 = let cs2 = share1 cs1 in map typetext cs2 ++ cs1
-    typetext  = C.pText . C.typename
 
 
 -- ----------------------  dump

@@ -20,9 +20,7 @@ vanillaRops :: (C.CContent c) => [C.Rop c]
 vanillaRops = Op.ropList "vanilla"
     --  SYNOPSIS,
     --  CONSTRUCTOR, ATTRIBUTE
-    [ ( "assn /P ... -to N.",
-        Op.consAssn, C.roaList "-term" ["-to"] )
-    , ( "check-term [ -just /N ... | -has /N ... | -but /N ... ]",
+    [ ( "check-term [ -just /N ... | -has /N ... | -but /N ... ]",
         Op.consCheckTerm, C.roaNone ["-just", "-has", "-but"] )
     , ( "compose R",
         Op.consCompose, C.roaOne "-relmap" [] )
@@ -42,8 +40,6 @@ vanillaRops = Op.ropList "vanilla"
         Op.consIf, C.roaList "-relmap" [] )
     , ( "maybe R",
         Op.consMaybe, C.roaOne "-relmap" [] )
-    , ( "member /N /N",
-        Op.consMember, C.roaEnum ["-1", "-2"] [] )
     , ( "number /N -order /N ...",
         Op.consNumber, C.roaOne "-term" ["-order", "-from"] )
     , ( "prefix /P /N ...",
@@ -52,16 +48,10 @@ vanillaRops = Op.ropList "vanilla"
         Op.consPrefixChange, C.roaTwo "-new" "-old" [] )
     , ( "rank /N -order /N ...",
         Op.consRank, C.roaOne "-term" ["-order", "-dense"] )
-    , ( "rdf P /S /O",
-        Op.consRdf, C.roaOneList "-pattern" "-term" [] )
     , ( "repeat N R",
         Op.consRepeat, C.roaTwo "-count" "-relmap" [] )
     , ( "size /N",
         Op.consSize, C.roaOne "-term" [] )
-    , ( "typename /N /P ...",
-        Op.consTypename, C.roaList "-term" [] )
-    , ( "unassn /P -only /P ...",
-        Op.consUnassn, C.roaOne "-from" ["-only"] )
     , ( "unless R R",
         Op.consUnless, C.roaList "-relmap" [] )
     , ( "unprefix /P",

@@ -91,6 +91,10 @@ library
         Koshucode.Baala.Op.Vanilla.Order
         Koshucode.Baala.Op.Vanilla.Rop
 
+        Koshucode.Baala.Op.Peripheral
+        Koshucode.Baala.Op.Peripheral.Flow
+        Koshucode.Baala.Op.Peripheral.Rop
+
   -- Modules included in this library but not exported.
   --other-modules:       
   

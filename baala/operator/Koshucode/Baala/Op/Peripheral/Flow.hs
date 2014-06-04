@@ -1,25 +1,18 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Op.Vanilla.Flow
+module Koshucode.Baala.Op.Peripheral.Flow
 ( 
-  -- * const
-  consConst, relmapConst, relkitConst,
-  -- $const
-
   -- * member
   consMember, relmapMember, relkitMember,
   -- $member
-
   -- * RDF
   consRdf,
-  -- * size
-  consSize, relmapSize, relkitSize,
-  -- $size
-
   -- * assn
   consAssn, relmapAssn, relkitAssn,
   -- * unassn
   consUnassn, relmapUnassn, relkitUnassn,
+  -- * typename
+  consTypename,
 ) where
 
 import qualified Koshucode.Baala.Base         as B
@@ -27,36 +20,6 @@ import qualified Koshucode.Baala.Core         as C
 import qualified Koshucode.Baala.Op.Builtin   as Op
 import qualified Koshucode.Baala.Op.Minimal   as Op
 import qualified Koshucode.Baala.Op.Message   as Message
-
-
-
--- ----------------------  const
-
--- $const
---
---  Same as relmap @dee@
---  
---    > const {| | |}
---
---  Same as relmap @dum@
---  
---    > const {| |}
-
-consConst :: (C.CContent c) => C.RopCons c
-consConst use =
-    do tree <- Op.getTree use "-lit"
-       lit  <- C.litContent tree
-       case C.isRel lit of
-         True  -> Right $ relmapConst use $ C.gRel lit
-         False -> Message.reqRel
-
-relmapConst :: C.RopUse c -> B.Rel c -> C.Relmap c
-relmapConst use = C.relmapFlow use . relkitConst
-
-relkitConst :: B.Rel c -> C.RelkitFlow c
-relkitConst _ Nothing = Right C.relkitNothing
-relkitConst (B.Rel he bo) _ = Right kit2 where
-    kit2 = C.relkitJust he $ C.RelkitConst bo
 
 
 -- ----------------------  member
@@ -126,29 +89,6 @@ consRdf use =
 
 
 
--- ----------------------  size
-
--- $size
---
---  Count number of tuples in the output of relmap @a@.
---  
---    > a | size /c
-
-consSize :: (C.CDec c) => C.RopCons c
-consSize use =
-  do n <- Op.getTerm use "-term"
-     Right $ relmapSize use n
-
-relmapSize :: (C.CDec c) => C.RopUse c -> B.TermName -> C.Relmap c
-relmapSize use n = C.relmapFlow use $ relkitSize n
-
-relkitSize :: (C.CDec c) => B.TermName -> C.RelkitFlow c
-relkitSize n _ = Right kit2 where
-    he2       = B.headFrom [n]
-    kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
-    kitf2 bo1 = [[ C.pDecFromInt $ length bo1 ]]
-
-
 -- ----------------------  assn
 
 --    > assn /x /y /z -to /a
@@ -203,4 +143,29 @@ assnPick ns assn = mapM pick ns where
     pick n = case lookup n assn of
                Just c   ->  Right c
                Nothing  ->  Message.adlib "no term"
+
+
+-- ----------------------  typename
+
+-- | Get typename.
+consTypename :: (C.CContent c) => C.RopCons c
+consTypename use =
+  do np <- Op.getTermPairs use "-term"
+     Right $ C.relmapFlow use $ relkitTypename np
+
+relkitTypename :: (C.CText c) => [B.TermName2] -> C.RelkitFlow c
+relkitTypename _ Nothing = Right C.relkitNothing
+relkitTypename np (Just he1) = Right kit2 where
+    ns, ps :: [B.TermName]
+    (ns, ps)  = unzip np
+
+    ns1       = B.headNames he1
+    ind1      = ps `B.snipIndex` ns1
+    share1    = B.snipFrom ind1
+
+    he2       = ns `B.headAppend` he1
+    kit2      = C.relkitJust he2 $ C.RelkitOneToOne False kitf2
+    kitf2 cs1 = let cs2 = share1 cs1 in map typetext cs2 ++ cs1
+    typetext  = C.pText . C.typename
+
 
