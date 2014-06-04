@@ -1,0 +1,357 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Core.Lexmap.Roamap</title
+    ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-Lexmap-Roamap.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a href="src/Koshucode-Baala-Core-Lexmap-Roamap.html"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-core-0.61.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Core.Lexmap.Roamap</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Mapping from attributes to attributes, aka., attribute editor.
+</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:Roamap"
+	    >Roamap</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:Sourced"
+	    >Sourced</a
+	    > <a href="Koshucode-Baala-Core-Lexmap-Roamap.html#t:RoamapBody"
+	    >RoamapBody</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a href="#t:RoamapBody"
+	    >RoamapBody</a
+	    > <ul class="subs"
+	    ><li
+	      >= <a href="#v:RoamapId"
+		>RoamapId</a
+		>  </li
+	      ><li
+	      >| <a href="#v:RoamapAdd"
+		>RoamapAdd</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		>Bool</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+		>TokenTree</a
+		>]  </li
+	      ><li
+	      >| <a href="#v:RoamapRename"
+		>RoamapRename</a
+		> (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		>, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		>)  </li
+	      ><li
+	      >| <a href="#v:RoamapFill"
+		>RoamapFill</a
+		> [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+		>Maybe</a
+		> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+		>TokenTree</a
+		>]  </li
+	      ><li
+	      >| <a href="#v:RoamapAppend"
+		>RoamapAppend</a
+		> [<a href="Koshucode-Baala-Core-Lexmap-Roamap.html#t:Roamap"
+		>Roamap</a
+		>]  </li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:roamapCons"
+	    >roamapCons</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > <a href="Koshucode-Baala-Core-Lexmap-Roamap.html#t:Roamap"
+	    >Roamap</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:roamapRun"
+	    >roamapRun</a
+	    > :: <a href="Koshucode-Baala-Core-Lexmap-Roamap.html#t:Roamap"
+	    >Roamap</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
+	    >AbMap</a
+	    > <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:Roa"
+	    >Roa</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:Roamap" class="def"
+	    >Roamap</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:Sourced"
+	    >Sourced</a
+	    > <a href="Koshucode-Baala-Core-Lexmap-Roamap.html#t:RoamapBody"
+	    >RoamapBody</a
+	    ><a href="src/Koshucode-Baala-Core-Lexmap-Roamap.html#Roamap" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Roamap with source code information.
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a name="t:RoamapBody" class="def"
+	    >RoamapBody</a
+	    >  <a href="src/Koshucode-Baala-Core-Lexmap-Roamap.html#RoamapBody" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Roamap operators.
+</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:RoamapId" class="def"
+		  >RoamapId</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Identity roamap.
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:RoamapAdd" class="def"
+		  >RoamapAdd</a
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+		  >Bool</a
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+		  >TokenTree</a
+		  >]</td
+		><td class="doc"
+		><p
+		  >Add attribute.
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:RoamapRename" class="def"
+		  >RoamapRename</a
+		  > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  >)</td
+		><td class="doc"
+		><p
+		  >Rename attribute keyword.
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:RoamapFill" class="def"
+		  >RoamapFill</a
+		  > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+		  >Maybe</a
+		  > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+		  >TokenTree</a
+		  >]</td
+		><td class="doc"
+		><p
+		  >Fill positional attributes.
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:RoamapAppend" class="def"
+		  >RoamapAppend</a
+		  > [<a href="Koshucode-Baala-Core-Lexmap-Roamap.html#t:Roamap"
+		  >Roamap</a
+		  >]</td
+		><td class="doc"
+		><p
+		  >Append roamaps.
+</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:RoamapBody" class="caption collapser" onclick="toggleSection('i:RoamapBody')"
+	    >Instances</p
+	    ><div id="section.i:RoamapBody" class="show"
+	    ><table
+	      ><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		    >Eq</a
+		    > <a href="Koshucode-Baala-Core-Lexmap-Roamap.html#t:RoamapBody"
+		    >RoamapBody</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
+		    >Data</a
+		    > <a href="Koshucode-Baala-Core-Lexmap-Roamap.html#t:RoamapBody"
+		    >RoamapBody</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		    >Ord</a
+		    > <a href="Koshucode-Baala-Core-Lexmap-Roamap.html#t:RoamapBody"
+		    >RoamapBody</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		    >Show</a
+		    > <a href="Koshucode-Baala-Core-Lexmap-Roamap.html#t:RoamapBody"
+		    >RoamapBody</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
+		    >Typeable</a
+		    > <a href="Koshucode-Baala-Core-Lexmap-Roamap.html#t:RoamapBody"
+		    >RoamapBody</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:roamapCons" class="def"
+	    >roamapCons</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > <a href="Koshucode-Baala-Core-Lexmap-Roamap.html#t:Roamap"
+	    >Roamap</a
+	    ><a href="src/Koshucode-Baala-Core-Lexmap-Roamap.html#roamapCons" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Construct roamap.
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:roamapRun" class="def"
+	    >roamapRun</a
+	    > :: <a href="Koshucode-Baala-Core-Lexmap-Roamap.html#t:Roamap"
+	    >Roamap</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
+	    >AbMap</a
+	    > <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:Roa"
+	    >Roa</a
+	    ><a href="src/Koshucode-Baala-Core-Lexmap-Roamap.html#roamapRun" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Run roamap.
+</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.13.2</p
+      ></div
+    ></body
+  ></html
+>

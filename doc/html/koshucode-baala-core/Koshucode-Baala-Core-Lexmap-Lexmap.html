@@ -1,0 +1,681 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Core.Lexmap.Lexmap</title
+    ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-Lexmap-Lexmap.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a href="src/Koshucode-Baala-Core-Lexmap-Lexmap.html"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-core-0.61.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Core.Lexmap.Lexmap</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Data type
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Constructor
+</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Lexical relmap.
+</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a href="#t:Lexmap"
+	    >Lexmap</a
+	    >  = <a href="#v:Lexmap"
+	    >Lexmap</a
+	    > {<ul class="subs"
+	    ><li
+	      ><a href="#v:lexType"
+		>lexType</a
+		> :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:LexmapType"
+		>LexmapType</a
+		></li
+	      ><li
+	      ><a href="#v:lexOpToken"
+		>lexOpToken</a
+		> :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Token"
+		>Token</a
+		></li
+	      ><li
+	      ><a href="#v:lexAttr"
+		>lexAttr</a
+		> :: <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:Roa"
+		>Roa</a
+		></li
+	      ><li
+	      ><a href="#v:lexSubmap"
+		>lexSubmap</a
+		> :: [<a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
+		>Lexmap</a
+		>]</li
+	      ><li
+	      ><a href="#v:lexMessage"
+		>lexMessage</a
+		> :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		>]</li
+	      ></ul
+	    >}</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a href="#t:LexmapType"
+	    >LexmapType</a
+	    > <ul class="subs"
+	    ><li
+	      >= <a href="#v:LexmapBase"
+		>LexmapBase</a
+		>  </li
+	      ><li
+	      >| <a href="#v:LexmapDerived"
+		>LexmapDerived</a
+		>  </li
+	      ><li
+	      >| <a href="#v:LexmapWith"
+		>LexmapWith</a
+		>  </li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:lexOpName"
+	    >lexOpName</a
+	    > :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
+	    >Lexmap</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:lexAddMessage"
+	    >lexAddMessage</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
+	    >Lexmap</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:lexMessageList"
+	    >lexMessageList</a
+	    > :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
+	    >Lexmap</a
+	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >]</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:ConsLexmap"
+	    >ConsLexmap</a
+	    > = [<a href="Koshucode-Baala-Core-Lexmap-Slot.html#t:GlobalSlot"
+	    >GlobalSlot</a
+	    >] -&gt; [<a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:RelmapSource"
+	    >RelmapSource</a
+	    >] -&gt; <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:ConsLexmapBody"
+	    >ConsLexmapBody</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:ConsLexmapBody"
+	    >ConsLexmapBody</a
+	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
+	    >Lexmap</a
+	    >, [<a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:Roal"
+	    >Roal</a
+	    > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
+	    >Lexmap</a
+	    >])</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:RelmapSource"
+	    >RelmapSource</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+	    >Named</a
+	    > ([<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >], <a href="Koshucode-Baala-Core-Lexmap-Roamap.html#t:Roamap"
+	    >Roamap</a
+	    >)</li
+	  ><li class="src short"
+	  ><a href="#v:consLexmap"
+	    >consLexmap</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+	    >Named</a
+	    > <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:RoaSorter"
+	    >RoaSorter</a
+	    >] -&gt; <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:ConsLexmap"
+	    >ConsLexmap</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:withTerms"
+	    >withTerms</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Terminal"
+	    >Terminal</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >]</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1 id="g:1"
+	>Data type
+</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a name="t:Lexmap" class="def"
+	    >Lexmap</a
+	    >  <a href="src/Koshucode-Baala-Core-Lexmap-Lexmap.html#Lexmap" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Intermediate data that represents use of relmap operator.
+   Lexmap is constructed from a list of <code
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+		>TokenTree</a
+		></code
+	      >,
+   and generic relmap is constructed from a lexmap.
+</p
+	    ></div
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:Lexmap" class="def"
+		  >Lexmap</a
+		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
+		></tr
+	      ><tr
+	      ><td colspan="2"
+		><div class="subs fields"
+		  ><p class="caption"
+		    >Fields</p
+		    ><dl
+		    ><dt class="src"
+		      ><a name="v:lexType" class="def"
+			>lexType</a
+			> :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:LexmapType"
+			>LexmapType</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Type of lexmap
+</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:lexOpToken" class="def"
+			>lexOpToken</a
+			> :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Token"
+			>Token</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Token of operator
+</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:lexAttr" class="def"
+			>lexAttr</a
+			> :: <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:Roa"
+			>Roa</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Attribute of relmap operation
+</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:lexSubmap" class="def"
+			>lexSubmap</a
+			> :: [<a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
+			>Lexmap</a
+			>]</dt
+		      ><dd class="doc"
+		      ><p
+			>Submaps in the attribute
+</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:lexMessage" class="def"
+			>lexMessage</a
+			> :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+			>String</a
+			>]</dt
+		      ><dd class="doc"
+		      ><p
+			>Messages on lexmap
+</p
+			></dd
+		      ></dl
+		    ><div class="clear"
+		    ></div
+		    ></div
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:Lexmap" class="caption collapser" onclick="toggleSection('i:Lexmap')"
+	    >Instances</p
+	    ><div id="section.i:Lexmap" class="show"
+	    ><table
+	      ><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		    >Eq</a
+		    > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
+		    >Lexmap</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
+		    >Data</a
+		    > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
+		    >Lexmap</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		    >Ord</a
+		    > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
+		    >Lexmap</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		    >Show</a
+		    > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
+		    >Lexmap</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
+		    >Typeable</a
+		    > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
+		    >Lexmap</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Write.html#t:Write"
+		    >Write</a
+		    > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
+		    >Lexmap</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:CodePointer"
+		    >CodePointer</a
+		    > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
+		    >Lexmap</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a name="t:LexmapType" class="def"
+	    >LexmapType</a
+	    >  <a href="src/Koshucode-Baala-Core-Lexmap-Lexmap.html#LexmapType" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:LexmapBase" class="def"
+		  >LexmapBase</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Built-in relmap
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:LexmapDerived" class="def"
+		  >LexmapDerived</a
+		  ></td
+		><td class="doc"
+		><p
+		  >User-defined relmap
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:LexmapWith" class="def"
+		  >LexmapWith</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><code
+		    >-with</code
+		    > variable
+</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:LexmapType" class="caption collapser" onclick="toggleSection('i:LexmapType')"
+	    >Instances</p
+	    ><div id="section.i:LexmapType" class="show"
+	    ><table
+	      ><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		    >Eq</a
+		    > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:LexmapType"
+		    >LexmapType</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
+		    >Data</a
+		    > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:LexmapType"
+		    >LexmapType</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		    >Ord</a
+		    > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:LexmapType"
+		    >LexmapType</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		    >Show</a
+		    > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:LexmapType"
+		    >LexmapType</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
+		    >Typeable</a
+		    > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:LexmapType"
+		    >LexmapType</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:lexOpName" class="def"
+	    >lexOpName</a
+	    > :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
+	    >Lexmap</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ><a href="src/Koshucode-Baala-Core-Lexmap-Lexmap.html#lexOpName" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Name of relmap operator
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:lexAddMessage" class="def"
+	    >lexAddMessage</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
+	    >Lexmap</a
+	    ><a href="src/Koshucode-Baala-Core-Lexmap-Lexmap.html#lexAddMessage" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:lexMessageList" class="def"
+	    >lexMessageList</a
+	    > :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
+	    >Lexmap</a
+	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >]<a href="src/Koshucode-Baala-Core-Lexmap-Lexmap.html#lexMessageList" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:2"
+	>Constructor
+</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:ConsLexmap" class="def"
+	    >ConsLexmap</a
+	    > = [<a href="Koshucode-Baala-Core-Lexmap-Slot.html#t:GlobalSlot"
+	    >GlobalSlot</a
+	    >] -&gt; [<a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:RelmapSource"
+	    >RelmapSource</a
+	    >] -&gt; <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:ConsLexmapBody"
+	    >ConsLexmapBody</a
+	    ><a href="src/Koshucode-Baala-Core-Lexmap-Lexmap.html#ConsLexmap" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >First step of constructing relmap,
+   make lexmap from source of relmap operator.
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:ConsLexmapBody" class="def"
+	    >ConsLexmapBody</a
+	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
+	    >Lexmap</a
+	    >, [<a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:Roal"
+	    >Roal</a
+	    > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
+	    >Lexmap</a
+	    >])<a href="src/Koshucode-Baala-Core-Lexmap-Lexmap.html#ConsLexmapBody" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Construct lexmap and its submaps from source of lexmap
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:RelmapSource" class="def"
+	    >RelmapSource</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+	    >Named</a
+	    > ([<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >], <a href="Koshucode-Baala-Core-Lexmap-Roamap.html#t:Roamap"
+	    >Roamap</a
+	    >)<a href="src/Koshucode-Baala-Core-Lexmap-Lexmap.html#RelmapSource" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Source of relmap: its name, replacement, and attribute editor.
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consLexmap" class="def"
+	    >consLexmap</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+	    >Named</a
+	    > <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:RoaSorter"
+	    >RoaSorter</a
+	    >] -&gt; <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:ConsLexmap"
+	    >ConsLexmap</a
+	    ><a href="src/Koshucode-Baala-Core-Lexmap-Lexmap.html#consLexmap" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:withTerms" class="def"
+	    >withTerms</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Terminal"
+	    >Terminal</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >]<a href="src/Koshucode-Baala-Core-Lexmap-Lexmap.html#withTerms" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Parse <code
+	      >-with</code
+	      > attribute.
+</p
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.13.2</p
+      ></div
+    ></body
+  ></html
+>

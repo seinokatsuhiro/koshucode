@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.48.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.61.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -51,17 +51,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Assert
+	    >Data type
 </a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >AssertType
-</a
-	    ></li
-	  ><li
-	  ><a href="#g:3"
-	    >Constructor
+	    >Short assertion
 </a
 	    ></li
 	  ></ul
@@ -88,67 +83,53 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	    >Assert</a
 	    > {<ul class="subs"
 	    ><li
-	      ><a href="#v:assertType"
-		>assertType</a
+	      ><a href="#v:assType"
+		>assType</a
 		> :: <a href="Koshucode-Baala-Core-Assert-Assert.html#t:AssertType"
 		>AssertType</a
 		></li
 	      ><li
-	      ><a href="#v:assertPattern"
-		>assertPattern</a
-		> :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgePattern"
-		>JudgePattern</a
+	      ><a href="#v:assPattern"
+		>assPattern</a
+		> :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgePat"
+		>JudgePat</a
 		></li
 	      ><li
-	      ><a href="#v:assertOption"
-		>assertOption</a
+	      ><a href="#v:assOption"
+		>assOption</a
 		> :: <a href="Koshucode-Baala-Core-Assert-Assert.html#t:AssertOption"
 		>AssertOption</a
 		></li
 	      ><li
-	      ><a href="#v:assertRelmap"
-		>assertRelmap</a
-		> :: <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
-		>Relmap</a
-		> c</li
-	      ><li
-	      ><a href="#v:assertSource"
-		>assertSource</a
+	      ><a href="#v:assToken"
+		>assToken</a
 		> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Token"
 		>Token</a
 		>]</li
+	      ><li
+	      ><a href="#v:assTree"
+		>assTree</a
+		> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+		>TokenTree</a
+		>]</li
+	      ><li
+	      ><a href="#v:assRelmap"
+		>assRelmap</a
+		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+		>Maybe</a
+		> (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+		>Relmap</a
+		> c)</li
+	      ><li
+	      ><a href="#v:assParts"
+		>assParts</a
+		> :: [<a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:Roal"
+		>Roal</a
+		> (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+		>Relmap</a
+		> c)]</li
 	      ></ul
 	    >}</li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:AssertOption"
-	    >AssertOption</a
-	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >]]</li
-	  ><li class="src short"
-	  ><a href="#v:assertMap"
-	    >assertMap</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > (<a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
-	    >Relmap</a
-	    > c) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > (<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
-	    >Assert</a
-	    > c)</li
-	  ><li class="src short"
-	  ><a href="#v:isViolateAssert"
-	    >isViolateAssert</a
-	    > ::  <a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
-	    >Assert</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    ></li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
@@ -170,6 +151,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	      ></ul
 	    ></li
 	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:AssertOption"
+	    >AssertOption</a
+	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:NamedTrees"
+	    >NamedTrees</a
+	    >]</li
+	  ><li class="src short"
 	  ><a href="#v:assertQuality"
 	    >assertQuality</a
 	    > :: <a href="Koshucode-Baala-Core-Assert-Assert.html#t:AssertType"
@@ -178,38 +167,36 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	    >Bool</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:affirm"
-	    >affirm</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgePattern"
-	    >JudgePattern</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Assert-Assert.html#t:AssertOption"
-	    >AssertOption</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
-	    >Relmap</a
-	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Token"
-	    >Token</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:ShortAssert"
+	    >ShortAssert</a
+	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Short.html#t:Short"
+	    >Short</a
+	    > [<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
 	    >Assert</a
-	    > c</li
+	    > c]</li
 	  ><li class="src short"
-	  ><a href="#v:deny"
-	    >deny</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgePattern"
-	    >JudgePattern</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Assert-Assert.html#t:AssertOption"
-	    >AssertOption</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
-	    >Relmap</a
-	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Token"
-	    >Token</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
-	    >Assert</a
-	    > c</li
+	  ><a href="#v:assertNormal"
+	    >assertNormal</a
+	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > [<a href="Koshucode-Baala-Core-Assert-Assert.html#t:ShortAssert"
+	    >ShortAssert</a
+	    > c]</li
+	  ><li class="src short"
+	  ><a href="#v:assertViolated"
+	    >assertViolated</a
+	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > [<a href="Koshucode-Baala-Core-Assert-Assert.html#t:ShortAssert"
+	    >ShortAssert</a
+	    > c]</li
 	  ></ul
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Assert
+	>Data type
 </h1
 	><div class="top"
 	><p class="src"
@@ -250,8 +237,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 		    >Fields</p
 		    ><dl
 		    ><dt class="src"
-		      ><a name="v:assertType" class="def"
-			>assertType</a
+		      ><a name="v:assType" class="def"
+			>assType</a
 			> :: <a href="Koshucode-Baala-Core-Assert-Assert.html#t:AssertType"
 			>AssertType</a
 			></dt
@@ -261,10 +248,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 </p
 			></dd
 		      ><dt class="src"
-		      ><a name="v:assertPattern" class="def"
-			>assertPattern</a
-			> :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgePattern"
-			>JudgePattern</a
+		      ><a name="v:assPattern" class="def"
+			>assPattern</a
+			> :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgePat"
+			>JudgePat</a
 			></dt
 		      ><dd class="doc"
 		      ><p
@@ -272,8 +259,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 </p
 			></dd
 		      ><dt class="src"
-		      ><a name="v:assertOption" class="def"
-			>assertOption</a
+		      ><a name="v:assOption" class="def"
+			>assOption</a
 			> :: <a href="Koshucode-Baala-Core-Assert-Assert.html#t:AssertOption"
 			>AssertOption</a
 			></dt
@@ -283,27 +270,50 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 </p
 			></dd
 		      ><dt class="src"
-		      ><a name="v:assertRelmap" class="def"
-			>assertRelmap</a
-			> :: <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
+		      ><a name="v:assToken" class="def"
+			>assToken</a
+			> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Token"
+			>Token</a
+			>]</dt
+		      ><dd class="doc"
+		      ><p
+			>Source token list
+</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:assTree" class="def"
+			>assTree</a
+			> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+			>TokenTree</a
+			>]</dt
+		      ><dd class="doc"
+		      ><p
+			>Token relmap
+</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:assRelmap" class="def"
+			>assRelmap</a
+			> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+			>Maybe</a
+			> (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
 			>Relmap</a
-			> c</dt
+			> c)</dt
 		      ><dd class="doc"
 		      ><p
 			>Relmap
 </p
 			></dd
 		      ><dt class="src"
-		      ><a name="v:assertSource" class="def"
-			>assertSource</a
-			> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Token"
-			>Token</a
-			>]</dt
-		      ><dd class="doc"
-		      ><p
-			>Source code information
-</p
-			></dd
+		      ><a name="v:assParts" class="def"
+			>assParts</a
+			> :: [<a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:Roal"
+			>Roal</a
+			> (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+			>Relmap</a
+			> c)]</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
 		      ></dl
 		    ><div class="clear"
 		    ></div
@@ -329,8 +339,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 		  ></tr
 		><tr
 		><td class="src"
-		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TokenListing"
-		    >TokenListing</a
+		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Write.html#t:Write"
+		    >Write</a
 		    > (<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
 		    >Assert</a
 		    > c)</td
@@ -339,8 +349,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 		  ></tr
 		><tr
 		><td class="src"
-		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Pretty.html#t:Pretty"
-		    >Pretty</a
+		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:CodePointer"
+		    >CodePointer</a
 		    > (<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
 		    >Assert</a
 		    > c)</td
@@ -351,61 +361,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	      ></div
 	    ></div
 	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:AssertOption" class="def"
-	    >AssertOption</a
-	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >]]<a href="src/Koshucode-Baala-Core-Assert-Assert.html#AssertOption" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Option for assertions.
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:assertMap" class="def"
-	    >assertMap</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > (<a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
-	    >Relmap</a
-	    > c) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > (<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
-	    >Assert</a
-	    > c)<a href="src/Koshucode-Baala-Core-Assert-Assert.html#assertMap" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Apply function to relamp in assert.
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:isViolateAssert" class="def"
-	    >isViolateAssert</a
-	    > ::  <a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
-	    >Assert</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    ><a href="src/Koshucode-Baala-Core-Assert-Assert.html#isViolateAssert" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><h1 id="g:2"
-	>AssertType
-</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -539,6 +494,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	  ></div
 	><div class="top"
 	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:AssertOption" class="def"
+	    >AssertOption</a
+	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:NamedTrees"
+	    >NamedTrees</a
+	    >]<a href="src/Koshucode-Baala-Core-Assert-Assert.html#AssertOption" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Option for assertions.
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
 	  ><a name="v:assertQuality" class="def"
 	    >assertQuality</a
 	    > :: <a href="Koshucode-Baala-Core-Assert-Assert.html#t:AssertType"
@@ -549,52 +521,59 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	    >Source</a
 	    ></p
 	  ></div
-	><h1 id="g:3"
-	>Constructor
+	><h1 id="g:2"
+	>Short assertion
 </h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:affirm" class="def"
-	    >affirm</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgePattern"
-	    >JudgePattern</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Assert-Assert.html#t:AssertOption"
-	    >AssertOption</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
-	    >Relmap</a
-	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Token"
-	    >Token</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:ShortAssert" class="def"
+	    >ShortAssert</a
+	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Short.html#t:Short"
+	    >Short</a
+	    > [<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
 	    >Assert</a
-	    > c<a href="src/Koshucode-Baala-Core-Assert-Assert.html#affirm" class="link"
+	    > c]<a href="src/Koshucode-Baala-Core-Assert-Assert.html#ShortAssert" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Make affirmed assertion.
+	    >Assertion list with short signs.
 </p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:deny" class="def"
-	    >deny</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgePattern"
-	    >JudgePattern</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Assert-Assert.html#t:AssertOption"
-	    >AssertOption</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Relmap"
-	    >Relmap</a
-	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Token"
-	    >Token</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert"
-	    >Assert</a
-	    > c<a href="src/Koshucode-Baala-Core-Assert-Assert.html#deny" class="link"
+	  ><a name="v:assertNormal" class="def"
+	    >assertNormal</a
+	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > [<a href="Koshucode-Baala-Core-Assert-Assert.html#t:ShortAssert"
+	    >ShortAssert</a
+	    > c]<a href="src/Koshucode-Baala-Core-Assert-Assert.html#assertNormal" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Make denied assertion.
+	    >Select affirmative or denial assertions.
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:assertViolated" class="def"
+	    >assertViolated</a
+	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > [<a href="Koshucode-Baala-Core-Assert-Assert.html#t:ShortAssert"
+	    >ShortAssert</a
+	    > c]<a href="src/Koshucode-Baala-Core-Assert-Assert.html#assertViolated" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Select violated assertions.
 </p
 	    ></div
 	  ></div
