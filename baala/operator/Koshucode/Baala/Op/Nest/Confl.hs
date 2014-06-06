@@ -230,15 +230,16 @@ relkitSliceUp _ _ = Right C.relkitNothing
 
 consNest :: (Ord c, C.CRel c) => C.RopCons c
 consNest use =
-  do ns <- Op.getTerms use "-term"
-     to <- Op.getTerm  use "-to"
-     Right $ relmapNest use (ns, to)
+  do (co, ns) <- Op.getTermsCo use "-term"
+     to       <- Op.getTerm    use "-to"
+     Right $ relmapNest use (co, ns, to)
 
-relmapNest :: (Ord c, C.CRel c) => C.RopUse c -> ([B.TermName], B.TermName) -> C.Relmap c
-relmapNest use (ns, to) = nest where
-    nest   =  group `B.mappend` for
-    group  =  relmapGroupBy use to cut
-    for    =  relmapFor use [] to pick
+relmapNest :: (Ord c, C.CRel c) => C.RopUse c -> (Bool, [B.TermName], B.TermName) -> C.Relmap c
+relmapNest use (co, ns, to) = group `B.mappend` for where
+    group  =  relmapGroupBy use to key
+    for    =  relmapFor use [] to nest
+    key    =  if co then pick else cut
+    nest   =  if co then cut  else pick
     pick   =  Op.relmapPick use ns
     cut    =  Op.relmapCut  use ns
 

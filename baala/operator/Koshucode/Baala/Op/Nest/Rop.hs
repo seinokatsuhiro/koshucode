@@ -31,13 +31,13 @@ nestRops = Op.ropList "nest"
         Op.consGroupBy, C.roaTwo "-term" "-relmap" [] )
     , ( "join-up /P ...",
         Op.consJoinUp, C.roaList "-term" [] )
-    , ( "nest /P ... -to /N",
+    , ( "nest [~] /P ... -to /N",
         Op.consNest, C.roaList "-term" ["-to"] )
     , ( "unnest /P",
         Op.consUnnest, C.roaList "-term" [] )
-    , ( "slice /N [R] [ -with /N ... ]",
+    , ( "slice /N [R] [-with /N ...]",
         Op.consSlice, C.roaOneOpt "-term" "-relmap" ["-with"] )
-    , ( "slice-up R [ -with /N ... ]",
+    , ( "slice-up R [-with /N ...]",
         Op.consSliceUp, C.roaOne "-relmap" ["-with"] )
     , ( "split /N E ...",
         Op.consSplit, C.roaList "-in" ["-let"] )

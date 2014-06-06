@@ -16,7 +16,7 @@ module Koshucode.Baala.Op.Builtin.Get
 
   -- * Term
   getTerm,
-  getTerms,
+  getTerms, getTermsCo,
   getTermPairs,
   getWithTerms,
   getTermTrees,
@@ -142,6 +142,9 @@ getTerm = getAbortable get where
 -- | Get list of term names from named attribute.
 getTerms :: RopGet c [B.TermName]
 getTerms = getAbortable Op.termNames
+
+getTermsCo :: RopGet c (Bool, [B.TermName])
+getTermsCo = getAbortable Op.termNamesCo
 
 -- | Get list of term-name pairs from named attribute.
 getTermPairs :: RopGet c [B.TermName2]
