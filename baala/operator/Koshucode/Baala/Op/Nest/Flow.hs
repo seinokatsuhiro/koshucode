@@ -17,7 +17,7 @@ module Koshucode.Baala.Op.Nest.Flow
 import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Core          as C
 import qualified Koshucode.Baala.Op.Builtin    as Op
-import qualified Koshucode.Baala.Op.Minimal    as Op
+import qualified Koshucode.Baala.Op.Lattice    as Op
 import qualified Koshucode.Baala.Op.Message    as Message
 
 

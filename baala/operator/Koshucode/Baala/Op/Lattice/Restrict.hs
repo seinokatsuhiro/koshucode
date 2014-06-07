@@ -2,7 +2,7 @@
 
 -- | Restrict by relmap
 
-module Koshucode.Baala.Op.Minimal.Restrict
+module Koshucode.Baala.Op.Lattice.Restrict
 ( -- * some
   consSome, relmapSome, relkitSome,
   -- * none
@@ -16,7 +16,7 @@ module Koshucode.Baala.Op.Minimal.Restrict
 import qualified Koshucode.Baala.Base    as B
 import qualified Koshucode.Baala.Core    as C
 import qualified Koshucode.Baala.Op.Builtin           as Op
-import qualified Koshucode.Baala.Op.Minimal.Tropashko as Op
+import qualified Koshucode.Baala.Op.Lattice.Tropashko as Op
 
 
 

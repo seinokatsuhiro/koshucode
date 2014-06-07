@@ -1,7 +1,14 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Op.Vanilla.Flow
-( 
+module Koshucode.Baala.Op.Gadget
+( gadgetRops,
+
+  -- * empty
+  consEmpty, relmapEmpty,
+
+  -- * contents
+  consContents, relmapContents,
+
   -- * size
   consSize, relmapSize, relkitSize,
   -- $size
@@ -15,9 +22,66 @@ module Koshucode.Baala.Op.Vanilla.Flow
   relmapDenseRank, relkitDenseRank,
 ) where
 
-import qualified Koshucode.Baala.Base         as B
-import qualified Koshucode.Baala.Core         as C
-import qualified Koshucode.Baala.Op.Builtin   as Op
+import qualified Koshucode.Baala.Base    as B
+import qualified Koshucode.Baala.Core    as C
+import qualified Koshucode.Baala.Op.Builtin as Op
+
+
+-- | Gadgets
+--
+--   [@contents@]
+--     Make nary relation of all contetnts.
+--
+--   [@number \/N \[ -order \/P ... \]@]
+--     Add numbering term @\/N@ ordered by @\/P@ ...
+-- 
+--   [@rank \/N -order \/P ... \[ -dense \]@]
+--     Add term @\/N@ for ranking ordered by @\/P@ ...
+-- 
+--  [@size \/N@]
+--    Calculate cardinality of input relation.
+--
+gadgetRops :: (C.CContent c) => [C.Rop c]
+gadgetRops = Op.ropList "gadget"  -- GROUP
+    --   USAGE              , CONSTRUCTOR    , ATTRIBUTE
+    [ ( "contents /N"       , consContents   , C.roaList "-term" [] )
+    , ( "empty"             , consEmpty      , C.roaNone [] )
+    , ( "number /N -order /N ...",
+        consNumber, C.roaOne "-term" ["-order", "-from"] )
+    , ( "rank /N -order /N ...",
+        consRank, C.roaOne "-term" ["-order", "-dense"] )
+    , ( "size /N",
+        consSize, C.roaOne "-term" [] )
+    ]
+
+
+-- ----------------------  empty
+
+consEmpty :: C.RopCons c
+consEmpty use = Right $ relmapEmpty use
+
+relmapEmpty :: C.RopUse c -> C.Relmap c
+relmapEmpty use = C.relmapFlow use relkitEmpty
+
+-- | Throw away all tuples in a relation.
+relkitEmpty :: C.RelkitFlow c
+relkitEmpty he1 = Right $ C.relkit he1 $ C.RelkitConst []
+
+
+-- ----------------------  contents
+
+consContents :: (Ord c) => C.RopCons c
+consContents use =
+    do n <- Op.getTerm use "-term"
+       Right $ relmapContents use n
+
+relmapContents :: (Ord c) => C.RopUse c -> B.TermName -> C.Relmap c
+relmapContents use = C.relmapFlow use . relkitContents
+
+relkitContents :: (Ord c) => B.TermName -> C.RelkitFlow c
+relkitContents n _ = Right $ C.relkitJust he2 $ C.RelkitFull False kitf where
+    he2  = B.headFrom [n]
+    kitf = map B.singleton . B.unique . concat
 
 
 -- ----------------------  size

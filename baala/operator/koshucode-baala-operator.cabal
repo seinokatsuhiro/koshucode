@@ -56,6 +56,8 @@ library
         Koshucode.Baala.Op.Builtin.Rop
         Koshucode.Baala.Op.Builtin.Term
 
+        Koshucode.Baala.Op.Check
+
         Koshucode.Baala.Op.Content
         Koshucode.Baala.Op.Content.Arith
         Koshucode.Baala.Op.Content.Cops
@@ -66,14 +68,13 @@ library
         Koshucode.Baala.Op.Control
 
         Koshucode.Baala.Op.Cox
-        Koshucode.Baala.Op.Cox.Cox
-        Koshucode.Baala.Op.Cox.Rop
+        Koshucode.Baala.Op.Gadget
 
-        Koshucode.Baala.Op.Minimal
-        Koshucode.Baala.Op.Minimal.Origin
-        Koshucode.Baala.Op.Minimal.Restrict
-        Koshucode.Baala.Op.Minimal.Rop
-        Koshucode.Baala.Op.Minimal.Tropashko
+        Koshucode.Baala.Op.Lattice
+        Koshucode.Baala.Op.Lattice.Confl
+        Koshucode.Baala.Op.Lattice.Restrict
+        Koshucode.Baala.Op.Lattice.Rop
+        Koshucode.Baala.Op.Lattice.Tropashko
 
         Koshucode.Baala.Op.Nest
         Koshucode.Baala.Op.Nest.Flow
@@ -81,18 +82,9 @@ library
         Koshucode.Baala.Op.Nest.Rop
 
         Koshucode.Baala.Op.Meta
+        Koshucode.Baala.Op.Peripheral
         Koshucode.Baala.Op.Source
         Koshucode.Baala.Op.Term
-
-        Koshucode.Baala.Op.Vanilla
-        Koshucode.Baala.Op.Vanilla.Check
-        Koshucode.Baala.Op.Vanilla.Confl
-        Koshucode.Baala.Op.Vanilla.Flow
-        Koshucode.Baala.Op.Vanilla.Rop
-
-        Koshucode.Baala.Op.Peripheral
-        Koshucode.Baala.Op.Peripheral.Flow
-        Koshucode.Baala.Op.Peripheral.Rop
 
   -- Modules included in this library but not exported.
   --other-modules:       

@@ -1,18 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Op.Vanilla.Check
-( 
-  -- * check-term
-  consCheckTerm,
-  relmapCheckTermJust, relmapCheckTermHas, relmapCheckTermBut,
-  relkitCheckTermJust, relkitCheckTermHas, relkitCheckTermBut,
-
-  -- * duplicate
-  -- $duplicate
-  consDuplicate, relmapDuplicate,
-
-  -- * dump
-  consDump,
+module Koshucode.Baala.Op.Check
+( checkRops,
 ) where
 
 import qualified Data.Map                    as Map
@@ -21,6 +10,26 @@ import qualified Koshucode.Baala.Core        as C
 import qualified Koshucode.Baala.Op.Builtin  as Op
 import qualified Koshucode.Baala.Op.Message  as Message
 
+
+-- | Implementation of relational operators.
+--
+--   [@check-term \[ -just \/P ... | -has \/P ... | -but \/N ... \]@]
+--     Check occurences of terms for input relation.
+--
+--   [@duplicate \/P ...@]
+--     Pass duplicate tuples on @\/P@ ...
+-- 
+checkRops :: (C.CContent c) => [C.Rop c]
+checkRops = Op.ropList "check"
+    --  SYNOPSIS,
+    --  CONSTRUCTOR, ATTRIBUTE
+    [ ( "check-term [-just /N ... | -has /N ... | -but /N ...]",
+        consCheckTerm, C.roaNone ["-just", "-has", "-but"] )
+    , ( "dump",
+        consDump, C.roaNone [] )
+    , ( "duplicate /N ...",
+        consDuplicate, C.roaList "-term" [] )
+    ]
 
 
 -- ----------------------  check-term
@@ -107,3 +116,4 @@ relkitDump Nothing = Right C.relkitNothing
 relkitDump (Just he1) = Right kit2 where
     kit2 = C.relkitJust he1 $ C.RelkitAbFull False kitf2 []
     kitf2 _ bo1 = Message.dumpRel $ B.Rel he1 bo1
+

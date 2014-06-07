@@ -1,8 +1,0 @@
-from2  .  .  .  .  .  [TermPos {termPosName = "/b", termPos = 1},TermPos {termPosName = "/x", termPos = -1}]
-from1  .  .  .  .  .  [TermPos {termPosName = "/a", termPos = -1},TermPos {termPosName = "/b", termPos = 0},TermPos {termPosName = "/c", termPos = -1}]
-inner  .  .  .  .  .  [["/b"]]
-outer  .  .  .  .  .  [["/x"]]
-inner1  .  .  .  .  . [TermPos {termPosName = "/b", termPos = 1}]
-inner2  .  .  .  .  . [TermPos {termPosName = "/b", termPos = 0}]
-pick  .  .  .  .  .   Relhead {headTerms = [Term "/b"]}
-

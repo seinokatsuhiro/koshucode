@@ -7,9 +7,9 @@ module Koshucode.Baala.Op.Quoter
 ( koshu
 ) where
 
-import qualified Koshucode.Baala.Core as C
-import qualified Koshucode.Baala.Op.Vanilla as Op
-import qualified Koshucode.Baala.Op.Type as Op
+import qualified Koshucode.Baala.Core       as C
+import qualified Koshucode.Baala.Op.Content as Op
+import qualified Koshucode.Baala.Op.Type    as Op
 
 -- | Quasiquoter for @[koshu| ... |]@.
 koshu :: C.QuasiQuoter

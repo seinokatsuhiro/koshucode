@@ -5,7 +5,10 @@
 module Koshucode.Baala.Op.Builtin.Rop
 ( builtinRops,
   ropList,
-  -- $ListOfOperator
+
+  -- * id
+  consId, relmapId,
+  -- $id
 ) where
 
 import qualified Koshucode.Baala.Base as B
@@ -13,13 +16,17 @@ import qualified Koshucode.Baala.Core as C
 
 
 -- | Built-in relmap operator.
+--
+--   [/r/ @|@ /s/]   Append relmaps
+--
+--   [@id@]          Identity relmap
+--
 builtinRops :: [C.Rop c]
 builtinRops = ropList "builtin"
-    [ ("append R ...", ropConsConcat, C.roaList "-relmap" []) ]
+    [ ("append R ..." , consAppend  , C.roaList "-relmap" [])
+    , ( "id"          , consId      , C.roaNone [] )
+    ]
 
--- TODO
-ropConsConcat :: C.RopCons c
-ropConsConcat = Right . foldl B.mappend B.mempty . C.ropSubrelmap
 
 -- | Make implementations of relation-mapping operators.
 ropList
@@ -35,8 +42,23 @@ ropList group = map rop where
         in C.Rop name group sorter cons usage
 
 
--- ----------------------
--- $ListOfOperator
+-- ----------------------  append
+
+consAppend :: C.RopCons c
+consAppend = Right . foldl B.mappend B.mempty . C.ropSubrelmap
+
+
+-- ----------------------  id
+
+-- $id
 --
---  [/r/ @|@ /s/]   Append relmaps
+--  Identity mapping, i.e., do nothing.
+--
+--    > pick /a /b | id
+
+consId :: C.RopCons c
+consId use = Right $ relmapId use
+
+relmapId :: C.RopUse c -> C.Relmap c
+relmapId use = C.relmapFlow use $ Right . C.relkitId
 

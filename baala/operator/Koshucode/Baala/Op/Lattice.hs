@@ -1,23 +1,19 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Minimal relmap operators.
+-- | Lattice relmap operators.
 
-module Koshucode.Baala.Op.Minimal
+module Koshucode.Baala.Op.Lattice
 (
--- * Relation-mapping operators
-module Koshucode.Baala.Op.Minimal.Origin,
-module Koshucode.Baala.Op.Minimal.Restrict,
-module Koshucode.Baala.Op.Minimal.Rop,
-module Koshucode.Baala.Op.Minimal.Tropashko,
-
+module Koshucode.Baala.Op.Lattice.Restrict,
+module Koshucode.Baala.Op.Lattice.Rop,
+module Koshucode.Baala.Op.Lattice.Tropashko,
 -- * Naming conventions
 -- $NamingConventions
 ) where
 
-import Koshucode.Baala.Op.Minimal.Origin
-import Koshucode.Baala.Op.Minimal.Restrict
-import Koshucode.Baala.Op.Minimal.Rop
-import Koshucode.Baala.Op.Minimal.Tropashko
+import Koshucode.Baala.Op.Lattice.Restrict
+import Koshucode.Baala.Op.Lattice.Rop
+import Koshucode.Baala.Op.Lattice.Tropashko
 
 
 -- ----------------------

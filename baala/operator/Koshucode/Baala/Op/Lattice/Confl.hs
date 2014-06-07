@@ -1,7 +1,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Op.Vanilla.Confl
+module Koshucode.Baala.Op.Lattice.Confl
 ( 
   -- * both
   consBoth, relmapBoth,
@@ -11,11 +11,11 @@ module Koshucode.Baala.Op.Vanilla.Confl
   consMaybe, relmapMaybe, relkitMaybe,
 ) where
 
-import qualified Koshucode.Baala.Base       as B
-import qualified Koshucode.Baala.Core       as C
-import qualified Koshucode.Baala.Op.Builtin as Op
-import qualified Koshucode.Baala.Op.Minimal as Op
-import qualified Koshucode.Baala.Op.Term    as Op
+import qualified Koshucode.Baala.Base                 as B
+import qualified Koshucode.Baala.Core                 as C
+import qualified Koshucode.Baala.Op.Builtin           as Op
+import qualified Koshucode.Baala.Op.Term              as Op
+import qualified Koshucode.Baala.Op.Lattice.Tropashko as Op
 
 
 
