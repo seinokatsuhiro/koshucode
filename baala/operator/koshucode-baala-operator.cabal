@@ -71,17 +71,18 @@ library
         Koshucode.Baala.Op.Gadget
 
         Koshucode.Baala.Op.Lattice
-        Koshucode.Baala.Op.Lattice.Confl
         Koshucode.Baala.Op.Lattice.Restrict
         Koshucode.Baala.Op.Lattice.Rop
         Koshucode.Baala.Op.Lattice.Tropashko
+
+        Koshucode.Baala.Op.Meta
 
         Koshucode.Baala.Op.Nest
         Koshucode.Baala.Op.Nest.Flow
         Koshucode.Baala.Op.Nest.Confl
         Koshucode.Baala.Op.Nest.Rop
 
-        Koshucode.Baala.Op.Meta
+        Koshucode.Baala.Op.Nil
         Koshucode.Baala.Op.Peripheral
         Koshucode.Baala.Op.Source
         Koshucode.Baala.Op.Term

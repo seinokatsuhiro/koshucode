@@ -18,6 +18,7 @@ import qualified Koshucode.Baala.Op.Lattice        as Rops
 import qualified Koshucode.Baala.Op.Gadget         as Rops
 import qualified Koshucode.Baala.Op.Meta           as Rops
 import qualified Koshucode.Baala.Op.Nest           as Rops
+import qualified Koshucode.Baala.Op.Nil            as Rops
 import qualified Koshucode.Baala.Op.Peripheral     as Rops
 import qualified Koshucode.Baala.Op.Source         as Rops
 import qualified Koshucode.Baala.Op.Term           as Rops
@@ -41,6 +42,7 @@ vanillaRops = Rops.metaRops
               ++ Rops.controlRops
               ++ Rops.coxRops
               ++ Rops.gadgetRops
+              ++ Rops.nilRops
               ++ Rops.termRops
               ++ Rops.latticeRops
               ++ Rops.sourceRops

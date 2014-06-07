@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Restrict by relmap
@@ -9,14 +10,15 @@ module Koshucode.Baala.Op.Lattice.Restrict
   consNone, relmapNone, relkitNone,
   -- * sub
   consSub, relmapSub, relkitSub,
-  -- * equal
-  consEqual, relmapEqual, relkitEqual,
+  -- * compose
+  consCompose, relmapCompose, relkitCompose,
 ) where
 
-import qualified Koshucode.Baala.Base    as B
-import qualified Koshucode.Baala.Core    as C
+import qualified Koshucode.Baala.Base                 as B
+import qualified Koshucode.Baala.Core                 as C
 import qualified Koshucode.Baala.Op.Builtin           as Op
 import qualified Koshucode.Baala.Op.Lattice.Tropashko as Op
+import qualified Koshucode.Baala.Op.Term              as Op
 
 
 
@@ -77,23 +79,24 @@ relkitSub _ _ = Right C.relkitNothing
 
 
 
--- ----------------------  equal
+-- ----------------------  compose
 
-consEqual :: (Ord c) => C.RopCons c
-consEqual use =
+consCompose :: (Ord c) => C.RopCons c
+consCompose use =
     do rmap <- Op.getRelmap use
-       Right $ relmapEqual use rmap
+       Right $ relmapCompose use rmap
 
-relmapEqual :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
-relmapEqual use = C.relmapBinary use relkitEqual
+relmapCompose :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
+relmapCompose use = C.relmapBinary use relkitCompose
 
-relkitEqual :: (Ord c) => C.RelkitBinary c
-relkitEqual (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
-    kit3 = C.relkitJust B.headEmpty $ C.RelkitAbFull False kitf3 [kitb2]
-    kitf3 bmaps bo1 =
-        do let [bmap2] = bmaps
-           bo2 <- bmap2 bo1
-           Right $ if B.Rel he1 bo1 == B.Rel he2 bo2
-                   then [[]] else []
-relkitEqual _ _ = Right C.relkitNothing
-
+relkitCompose :: forall c. (Ord c) => C.RelkitBinary c
+relkitCompose kit2@(C.Relkit (Just he2) _) (Just he1) =
+    do kitMeet <- Op.relkitMeet kit2 (Just he1)
+       kitCut  <- Op.relkitCut shared $ C.relkitHead kitMeet
+       Right $ kitMeet `B.mappend` kitCut
+    where
+      ns1    = B.headNames he1
+      ns2    = B.headNames he2
+      ind    = B.snipIndex ns1 ns2
+      shared = B.snipFrom  ind ns2
+relkitCompose _ _ = Right C.relkitNothing

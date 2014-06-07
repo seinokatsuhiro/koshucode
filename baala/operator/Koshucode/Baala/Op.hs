@@ -9,10 +9,11 @@ module Koshucode.Baala.Op.Check,
 module Koshucode.Baala.Op.Content,
 module Koshucode.Baala.Op.Control,
 module Koshucode.Baala.Op.Cox,
-module Koshucode.Baala.Op.Lattice,
 module Koshucode.Baala.Op.Gadget,
+module Koshucode.Baala.Op.Lattice,
 module Koshucode.Baala.Op.Meta,
 module Koshucode.Baala.Op.Nest,
+module Koshucode.Baala.Op.Nil,
 module Koshucode.Baala.Op.Peripheral,
 module Koshucode.Baala.Op.Source,
 module Koshucode.Baala.Op.Term,
@@ -28,6 +29,7 @@ import Koshucode.Baala.Op.Lattice
 import Koshucode.Baala.Op.Gadget
 import Koshucode.Baala.Op.Meta
 import Koshucode.Baala.Op.Nest
+import Koshucode.Baala.Op.Nil
 import Koshucode.Baala.Op.Peripheral
 import Koshucode.Baala.Op.Source
 import Koshucode.Baala.Op.Term

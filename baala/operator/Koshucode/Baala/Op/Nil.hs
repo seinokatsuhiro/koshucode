@@ -1,12 +1,10 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Op.Lattice.Confl
-( 
+module Koshucode.Baala.Op.Nil
+( nilRops,
   -- * both
   consBoth, relmapBoth,
-  -- * compose
-  consCompose, relmapCompose, relkitCompose,
   -- * maybe
   consMaybe, relmapMaybe, relkitMaybe,
 ) where
@@ -14,9 +12,23 @@ module Koshucode.Baala.Op.Lattice.Confl
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Core                 as C
 import qualified Koshucode.Baala.Op.Builtin           as Op
-import qualified Koshucode.Baala.Op.Term              as Op
 import qualified Koshucode.Baala.Op.Lattice.Tropashko as Op
 
+
+-- | Relmap operators that handles nils.
+--
+--   [@both R@]
+--
+--   [@maybe R@]
+--     Meet input and given relation.
+--     It keeps input tuples of which counterparts are totally negated.
+-- 
+nilRops :: (Ord c, C.CRel c, C.CNil c) => [C.Rop c]
+nilRops = Op.ropList "nil"  -- GROUP
+    --   USAGE     , CONSTRUCTOR  , ATTRIBUTE
+    [ ( "both R"   , consBoth     , C.roaOne "-relmap" [] )
+    , ( "maybe R"  , consMaybe    , C.roaOne "-relmap" [] )
+    ]
 
 
 -- ----------------------  both
@@ -32,30 +44,6 @@ relmapBoth use rmap = C.relmapCopy use "i" rmapBoth where
     rmapR    = rmap  `B.mappend` relmapMaybe use rmapIn
     rmapL    = relmapMaybe use rmap
     rmapIn   = C.relmapWithVar use "i"
-
-
-
--- ----------------------  compose
-
-consCompose :: (Ord c, C.CNil c) => C.RopCons c
-consCompose use =
-    do rmap <- Op.getRelmap use
-       Right $ relmapCompose use rmap
-
-relmapCompose :: (Ord c, C.CNil c) => C.RopUse c -> B.Map (C.Relmap c)
-relmapCompose use = C.relmapBinary use relkitCompose
-
-relkitCompose :: forall c. (Ord c, C.CNil c) => C.RelkitBinary c
-relkitCompose kit2@(C.Relkit (Just he2) _) (Just he1) =
-    do kitMeet <- Op.relkitMeet kit2 (Just he1)
-       kitCut  <- Op.relkitCut shared $ C.relkitHead kitMeet
-       Right $ kitMeet `B.mappend` kitCut
-    where
-      ns1    = B.headNames he1
-      ns2    = B.headNames he2
-      ind    = B.snipIndex ns1 ns2
-      shared = B.snipFrom  ind ns2
-relkitCompose _ _ = Right C.relkitNothing
 
 
 

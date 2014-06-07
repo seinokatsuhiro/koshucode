@@ -15,6 +15,9 @@ module Koshucode.Baala.Op.Control
 
   -- * repeat
   consRepeat,
+
+  -- * equal
+  consEqual, relmapEqual, relkitEqual,
 ) where
 
 import qualified Koshucode.Baala.Base       as B
@@ -28,7 +31,8 @@ import qualified Koshucode.Baala.Op.Message as Message
 controlRops :: (C.CContent c) => [C.Rop c]
 controlRops = Op.ropList "control"
     --  SYNOPSIS     , CONSTRUCTOR , ATTRIBUTE
-    [ ( "fix R"      , consFix     , C.roaOne  "-relmap" [] )
+    [ ( "equal"      , consEqual   , C.roaOne "-relmap" [] )
+    , ( "fix R"      , consFix     , C.roaOne  "-relmap" [] )
     , ( "fix-join R" , consFixJoin , C.roaOne  "-relmap" [] )
     , ( "if R ..."   , consIf      , C.roaList "-relmap" [] )
     , ( "repeat N R" , consRepeat  , C.roaTwo  "-count" "-relmap" [] )
@@ -149,3 +153,23 @@ relkitRepeat cnt (C.Relkit (Just he2) kitb2) (Just he1)
 
 relkitRepeat _ _ _ = Right C.relkitNothing
 
+
+-- ----------------------  equal
+
+consEqual :: (Ord c) => C.RopCons c
+consEqual use =
+    do rmap <- Op.getRelmap use
+       Right $ relmapEqual use rmap
+
+relmapEqual :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
+relmapEqual use = C.relmapBinary use relkitEqual
+
+relkitEqual :: (Ord c) => C.RelkitBinary c
+relkitEqual (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
+    kit3 = C.relkitJust B.headEmpty $ C.RelkitAbFull False kitf3 [kitb2]
+    kitf3 bmaps bo1 =
+        do let [bmap2] = bmaps
+           bo2 <- bmap2 bo1
+           Right $ if B.Rel he1 bo1 == B.Rel he2 bo2
+                   then [[]] else []
+relkitEqual _ _ = Right C.relkitNothing
