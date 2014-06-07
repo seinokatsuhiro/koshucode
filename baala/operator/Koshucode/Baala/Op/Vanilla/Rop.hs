@@ -12,7 +12,6 @@ import qualified Koshucode.Baala.Op.Builtin         as Op
 import qualified Koshucode.Baala.Op.Vanilla.Check   as Op
 import qualified Koshucode.Baala.Op.Vanilla.Confl   as Op
 import qualified Koshucode.Baala.Op.Vanilla.Flow    as Op
-import qualified Koshucode.Baala.Op.Vanilla.Naming  as Op
 
 -- | Implementation of relational operators.
 vanillaRops :: (C.CContent c) => [C.Rop c]
@@ -33,16 +32,10 @@ vanillaRops = Op.ropList "vanilla"
         Op.consMaybe, C.roaOne "-relmap" [] )
     , ( "number /N -order /N ...",
         Op.consNumber, C.roaOne "-term" ["-order", "-from"] )
-    , ( "prefix /P /N ...",
-        Op.consPrefix, C.roaOneList "-prefix" "-term" [] )
-    , ( "prefix-change /P /Q",
-        Op.consPrefixChange, C.roaTwo "-new" "-old" [] )
     , ( "rank /N -order /N ...",
         Op.consRank, C.roaOne "-term" ["-order", "-dense"] )
     , ( "size /N",
         Op.consSize, C.roaOne "-term" [] )
-    , ( "unprefix /P",
-        Op.consUnprefix, C.roaOne "-prefix" [] )
     ]
 
 -- ----------------------
@@ -64,12 +57,6 @@ vanillaRops = Op.ropList "vanilla"
 --  [@number \/N \[ -order \/P ... \]@]
 --    Add numbering term @\/N@ ordered by @\/P@ ...
 -- 
---  [@prefix \/P \/N ...@]
---    Add prefix @\/P@ to terms @\/N@ ...
--- 
---  [@prefix-change \/P \/Q@]
---    Change prefix from @\/P@ to @\/Q@.
--- 
 --  [@rank \/N -order \/P ... \[ -dense \]@]
 --    Add term @\/N@ for ranking ordered by @\/P@ ...
 --
@@ -78,6 +65,4 @@ vanillaRops = Op.ropList "vanilla"
 -- 
 --  [@size \/N@]
 --    Calculate cardinality of input relation.
--- 
---  [@unprefix \/P@]
---    Remove prefix @\/P@ from term name.
+

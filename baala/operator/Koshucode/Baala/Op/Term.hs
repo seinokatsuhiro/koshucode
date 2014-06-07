@@ -1,7 +1,8 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Op.Minimal.Term
-( -- * pick
+module Koshucode.Baala.Op.Term
+( termRops,
+  -- * pick
   consPick, relmapPick, relkitPick,
   -- * cut
   consCut, relmapCut, relkitCut,
@@ -13,8 +14,15 @@ module Koshucode.Baala.Op.Minimal.Term
   consMove, relmapMove, relkitMove,
   -- * rename
   consRename, relmapRename, relkitRename,
+  -- * prefix
+  consPrefix, relmapPrefix, relkitPrefix,
+  -- * unprefix
+  consUnprefix, relmapUnprefix, relkitUnprefix,
+  -- * prefix-change
+  consPrefixChange, relmapPrefixChange, relkitPrefixChange,
 ) where
 
+import qualified Data.List                  as List
 import qualified Data.Maybe                 as Maybe
 import qualified Data.Tuple                 as Tuple
 import qualified Koshucode.Baala.Base       as B
@@ -22,6 +30,43 @@ import qualified Koshucode.Baala.Core       as C
 import qualified Koshucode.Baala.Op.Builtin as Op
 import qualified Koshucode.Baala.Op.Message as Message
 
+
+-- | Relmap operators for manipulating term names.
+--
+--   [@cut@]        Project relation to unspecified terms.
+--
+--   [@cut-term@]   Project relation to terms not in relmap output.
+--
+--   [@pick@]       Project relation to specified terms.
+--
+--   [@pick-term@]  Project relation to terms in relmap output.
+--
+--   [@rename@]     Change term name.
+--
+--   [@move@]       Change heading.
+--
+--   [@prefix \/P \/N ...@]
+--     Add prefix @\/P@ to terms @\/N@ ...
+-- 
+--   [@prefix-change \/P \/Q@]
+--     Change prefix from @\/P@ to @\/Q@.
+-- 
+--   [@unprefix \/P@]
+--     Remove prefix @\/P@ from term name.
+-- 
+termRops :: (Ord c) => [C.Rop c]
+termRops = Op.ropList "term"  -- GROUP
+    --   USAGE                   , CONSTRUCTOR      , ATTRIBUTE
+    [ ( "cut /P ..."             , consCut          , C.roaList "-term" [] )
+    , ( "cut-term /R"            , consCutTerm      , C.roaOne  "-relmap" [] )
+    , ( "pick /P ..."            , consPick         , C.roaList "-term"   [] )
+    , ( "pick-term /R"           , consPickTerm     , C.roaOne  "-relmap" [] )
+    , ( "rename /N /P ..."       , consRename       , C.roaList "-term"   [] )
+    , ( "move /P ... -to /N ..." , consMove         , C.roaList "-term" ["-to"] )
+    , ( "prefix /P /N ..."       , consPrefix       , C.roaOneList "-prefix" "-term" [] )
+    , ( "prefix-change /P /Q"    , consPrefixChange , C.roaTwo "-new" "-old" [] )
+    , ( "unprefix /P"            , consUnprefix     , C.roaOne "-prefix" [] )
+    ]
 
 
 -- ----------------------  pick & cut
@@ -164,4 +209,78 @@ relkitRename np (Just he1)
       he2      = B.headRename ren he1
       kit2     = C.relkitJust he2 C.RelkitId
 
+
+-- ----------------------  prefix
+
+consPrefix :: C.RopCons c
+consPrefix use =
+    do pre <- Op.getTerm  use "-prefix"
+       ns  <- Op.getTerms use "-term"
+       Right $ relmapPrefix use pre ns
+
+relmapPrefix :: C.RopUse c -> String -> [String] -> C.Relmap c
+relmapPrefix use pre ns = C.relmapFlow use $ relkitPrefix pre ns
+
+-- | Add prefix to specified terms.
+relkitPrefix :: String -> [String] -> C.RelkitFlow c
+relkitPrefix _ _ Nothing = Right C.relkitNothing
+relkitPrefix pre ns (Just he1) = Right kit2 where
+    he2 =  B.headRename f he1
+    kit2 = C.relkitId $ Just he2
+    f n | n `elem` ns  = prefixName pre n
+        | otherwise    = n
+
+prefixName :: String -> String -> String
+prefixName pre ('/' : ns) = pre ++ "-" ++ ns
+prefixName _ _ = undefined
+
+
+
+-- ----------------------  unprefix
+
+consUnprefix :: C.RopCons c
+consUnprefix use =
+    do pre <- Op.getTerm use "-prefix"
+       Right $ relmapUnprefix use pre
+
+relmapUnprefix :: C.RopUse c -> String -> C.Relmap c
+relmapUnprefix use = C.relmapFlow use . relkitUnprefix
+
+-- | Remove prefix
+relkitUnprefix :: String -> C.RelkitFlow c
+relkitUnprefix _ Nothing = Right C.relkitNothing
+relkitUnprefix pre (Just he1) = Right kit2 where
+    he2  = B.headRename (unprefixName pre) he1
+    kit2 = C.relkitId $ Just he2
+
+unprefixName :: String -> String -> String
+unprefixName pre n =
+    case List.stripPrefix pre n of
+      Just ('-' : n2) -> '/' : n2
+      _ -> n
+
+
+
+-- ----------------------  prefix-change
+
+consPrefixChange :: C.RopCons c
+consPrefixChange use =
+    do new <- Op.getTerm use "-new"
+       old <- Op.getTerm use "-old"
+       Right $ relmapPrefixChange use (new, old)
+
+relmapPrefixChange :: C.RopUse c -> (String, String) -> C.Relmap c
+relmapPrefixChange use = C.relmapFlow use . relkitPrefixChange
+
+-- | Change prefix
+relkitPrefixChange :: (String, String) -> C.RelkitFlow c
+relkitPrefixChange _ Nothing = Right C.relkitNothing
+relkitPrefixChange (new, old) (Just he1) = Right kit2 where
+    he2  = B.headRename f he1
+    kit2 = C.relkitId $ Just he2
+    new' = new ++ "-"
+    old' = old ++ "-"
+    f n' = case List.stripPrefix old' n' of
+             Just n2 -> new' ++ n2
+             Nothing -> n'
 

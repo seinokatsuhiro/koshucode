@@ -73,7 +73,6 @@ library
         Koshucode.Baala.Op.Minimal.Origin
         Koshucode.Baala.Op.Minimal.Restrict
         Koshucode.Baala.Op.Minimal.Rop
-        Koshucode.Baala.Op.Minimal.Term
         Koshucode.Baala.Op.Minimal.Tropashko
 
         Koshucode.Baala.Op.Nest
@@ -83,12 +82,12 @@ library
 
         Koshucode.Baala.Op.Meta
         Koshucode.Baala.Op.Source
+        Koshucode.Baala.Op.Term
 
         Koshucode.Baala.Op.Vanilla
         Koshucode.Baala.Op.Vanilla.Check
         Koshucode.Baala.Op.Vanilla.Confl
         Koshucode.Baala.Op.Vanilla.Flow
-        Koshucode.Baala.Op.Vanilla.Naming
         Koshucode.Baala.Op.Vanilla.Rop
 
         Koshucode.Baala.Op.Peripheral

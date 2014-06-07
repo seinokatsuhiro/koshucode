@@ -18,6 +18,7 @@ import qualified Koshucode.Baala.Op.Meta           as Rops
 import qualified Koshucode.Baala.Op.Nest           as Rops
 import qualified Koshucode.Baala.Op.Peripheral     as Rops
 import qualified Koshucode.Baala.Op.Source         as Rops
+import qualified Koshucode.Baala.Op.Term           as Rops
 import qualified Koshucode.Baala.Op.Vanilla        as Rops
 
 import qualified Koshucode.Baala.Op.Content.Arith  as Op
@@ -34,6 +35,7 @@ vanillaGlobal =
                               Rops.controlRops ++
                               Rops.coxRops ++
                               Rops.vanillaRops ++
+                              Rops.termRops ++
                               Rops.minimalRops ++
                               Rops.sourceRops ++
                               Rops.builtinRops }

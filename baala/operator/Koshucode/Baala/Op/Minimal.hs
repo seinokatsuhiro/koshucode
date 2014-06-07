@@ -8,7 +8,6 @@ module Koshucode.Baala.Op.Minimal
 module Koshucode.Baala.Op.Minimal.Origin,
 module Koshucode.Baala.Op.Minimal.Restrict,
 module Koshucode.Baala.Op.Minimal.Rop,
-module Koshucode.Baala.Op.Minimal.Term,
 module Koshucode.Baala.Op.Minimal.Tropashko,
 
 -- * Naming conventions
@@ -18,7 +17,6 @@ module Koshucode.Baala.Op.Minimal.Tropashko,
 import Koshucode.Baala.Op.Minimal.Origin
 import Koshucode.Baala.Op.Minimal.Restrict
 import Koshucode.Baala.Op.Minimal.Rop
-import Koshucode.Baala.Op.Minimal.Term
 import Koshucode.Baala.Op.Minimal.Tropashko
 
 

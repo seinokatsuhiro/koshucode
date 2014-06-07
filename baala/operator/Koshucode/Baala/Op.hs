@@ -13,6 +13,7 @@ module Koshucode.Baala.Op.Meta,
 module Koshucode.Baala.Op.Nest,
 module Koshucode.Baala.Op.Peripheral,
 module Koshucode.Baala.Op.Source,
+module Koshucode.Baala.Op.Term,
 module Koshucode.Baala.Op.Type,
 module Koshucode.Baala.Op.Vanilla,
 ) where
@@ -26,6 +27,7 @@ import Koshucode.Baala.Op.Meta
 import Koshucode.Baala.Op.Nest
 import Koshucode.Baala.Op.Peripheral
 import Koshucode.Baala.Op.Source
+import Koshucode.Baala.Op.Term
 import Koshucode.Baala.Op.Type
 import Koshucode.Baala.Op.Vanilla
 
