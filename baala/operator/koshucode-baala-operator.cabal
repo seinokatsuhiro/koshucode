@@ -80,15 +80,13 @@ library
         Koshucode.Baala.Op.Nest.Rop
 
         Koshucode.Baala.Op.Meta
-        Koshucode.Baala.Op.Meta.Meta
-        Koshucode.Baala.Op.Meta.Rop
+        Koshucode.Baala.Op.Source
 
         Koshucode.Baala.Op.Vanilla
         Koshucode.Baala.Op.Vanilla.Check
         Koshucode.Baala.Op.Vanilla.Confl
         Koshucode.Baala.Op.Vanilla.Flow
         Koshucode.Baala.Op.Vanilla.Naming
-        Koshucode.Baala.Op.Vanilla.Order
         Koshucode.Baala.Op.Vanilla.Rop
 
         Koshucode.Baala.Op.Peripheral

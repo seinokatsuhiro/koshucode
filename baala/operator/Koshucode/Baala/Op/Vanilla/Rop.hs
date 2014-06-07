@@ -13,7 +13,6 @@ import qualified Koshucode.Baala.Op.Vanilla.Check   as Op
 import qualified Koshucode.Baala.Op.Vanilla.Confl   as Op
 import qualified Koshucode.Baala.Op.Vanilla.Flow    as Op
 import qualified Koshucode.Baala.Op.Vanilla.Naming  as Op
-import qualified Koshucode.Baala.Op.Vanilla.Order   as Op
 
 -- | Implementation of relational operators.
 vanillaRops :: (C.CContent c) => [C.Rop c]
@@ -24,8 +23,6 @@ vanillaRops = Op.ropList "vanilla"
         Op.consCheckTerm, C.roaNone ["-just", "-has", "-but"] )
     , ( "compose R",
         Op.consCompose, C.roaOne "-relmap" [] )
-    , ( "const R",
-        Op.consConst, C.roaOne "-lit" [] )
     , ( "dump",
         Op.consDump, C.roaNone [] )
     , ( "duplicate /N ...",

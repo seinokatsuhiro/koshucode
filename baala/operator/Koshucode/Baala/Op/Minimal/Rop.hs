@@ -21,8 +21,6 @@ minimalRops = Op.ropList "minimal"  -- GROUP
     [ ( "contents /N"       , Op.consContents   , C.roaList "-term" [] )
     , ( "cut /P ..."        , Op.consCut        , C.roaList "-term" [] )
     , ( "cut-term /R"       , Op.consCutTerm    , C.roaOne  "-relmap" [] )
-    , ( "dee"               , Op.consDee        , C.roaNone [] )
-    , ( "dum"               , Op.consDum        , C.roaNone [] )
     , ( "empty"             , Op.consEmpty      , C.roaNone [] )
     , ( "equal"             , Op.consEqual      , C.roaOne  "-relmap" [] )
     , ( "id"                , Op.consId         , C.roaNone [] )
@@ -34,8 +32,6 @@ minimalRops = Op.ropList "minimal"  -- GROUP
     , ( "rename /N /P ..."  , Op.consRename     , C.roaList "-term"   [] )
     , ( "move /P ... -to /N ...", Op.consMove   , C.roaList "-term" ["-to"] )
     , ( "some R"            , Op.consSome       , C.roaOne  "-relmap" [] )
-    , ( "source P /T ..."   , Op.consSource     , C.roaOneList "-pattern" "-term" [] )
-    , ( "source-term P R"   , Op.consSourceTerm , C.roaTwo "-pattern" "-relmap" [] )
     , ( "sub R"             , Op.consSub        , C.roaOne  "-relmap" [] )
     --   USAGE                CONSTRUCTOR         ATTRIBUTE
     ]
@@ -62,17 +58,11 @@ minimalRops = Op.ropList "minimal"  -- GROUP
 --
 --  [@pick-term@]  Project relation to terms in relmap output.
 --
---  [@dee@]        Nullary full relation.
---
---  [@dum@]        Nullary empty relation.
---
 --  [@rename@]     Change term name.
 --
 --  [@rehead@]     Change heading.
 --
 --  [@some@]       Restriction by relmaps.
---
---  [@source@]     Read relation from data source.
 --
 --  [@sub@]        Restriction to subrelation.
 

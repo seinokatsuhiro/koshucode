@@ -39,8 +39,6 @@ nestRops = Op.ropList "nest"
         Op.consSlice, C.roaOneOpt "-term" "-relmap" ["-with"] )
     , ( "slice-up R [-with /N ...]",
         Op.consSliceUp, C.roaOne "-relmap" ["-with"] )
-    , ( "split /N E ...",
-        Op.consSplit, C.roaList "-in" ["-let"] )
     , ( "up /N",
         Op.consUp, C.roaOne "-term" [] )
     ]

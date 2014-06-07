@@ -22,6 +22,8 @@ coxRops = Op.ropList "cox"
         Op.consFilter False, C.roaList "-in" ["-let"] )
     , ( "range /N -from E -to E",
         Op.consRange, C.roaOne "-term" ["-from", "-to"] )
+    , ( "split /N E ...",
+        Op.consSplit, C.roaList "-in" ["-let"] )
     , ( "subst /N E ...",
         Op.consSubst, C.roaList "-in" ["-let"] )
     ]

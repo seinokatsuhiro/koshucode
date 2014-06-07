@@ -14,22 +14,33 @@ module Koshucode.Baala.Op.Cox.Cox
   -- * range
   consRange, relmapRange,
   -- $range
+  -- * split
+  consSplit, relmapSplit, relkitSplit,
 ) where
 
-import qualified Koshucode.Baala.Base       as B
-import qualified Koshucode.Baala.Core       as C
-import qualified Koshucode.Baala.Op.Builtin as Op
-import qualified Koshucode.Baala.Op.Message as Message
+import qualified Koshucode.Baala.Base        as B
+import qualified Koshucode.Baala.Core        as C
+import qualified Koshucode.Baala.Op.Builtin  as Op
+import qualified Koshucode.Baala.Op.Message  as Message
+
+
+-- ----------------------  alpha
+
+alphas :: (C.CContent c) => C.RopUse c -> [B.Named B.TokenTree] -> B.Ab [C.NamedCox c]
+alphas use = mapM (B.namedMapM $ alpha use)
+
+alpha :: (C.CContent c) => C.RopUse c -> B.TokenTree -> B.Ab (C.Cox c)
+alpha = C.coxAlpha . C.globalSyntax . C.ropGlobal
 
 
 -- ----------------------  add
 
 consAdd :: (C.CContent c) => C.RopCons c
 consAdd use =
-    do treesLet <- Op.getOption [] Op.getWordTrees use "-let"
-       treesIn  <- Op.getTermTrees use "-in"
-       coxLet   <- alphas use treesLet
-       coxIn    <- alphas use treesIn
+    do treesLet  <-  Op.getOption [] Op.getWordTrees use "-let"
+       treesIn   <-  Op.getTermTrees use "-in"
+       coxLet    <-  alphas use treesLet
+       coxIn     <-  alphas use treesIn
        let base = C.globalFunction $ C.ropGlobal use
        Right $ relmapAdd use (base, coxLet, coxIn)
 
@@ -44,14 +55,14 @@ relkitAdd (base, deriv, bodies) (Just he1)
     | null ind  = Right kit2
     | otherwise = Message.unexpTermName
     where
-      (ns, xs)    = unzip bodies            -- names and expressions
-      ns1         = B.headNames he1         -- term names of input relation
-      ind         = ns `B.snipIndex` ns1    -- indicies for ns on input relation
-      he2         = ns `B.headAppend` he1
-      kit2        = C.relkitJust he2 $ C.RelkitOneToAbOne False kitf2 []
-      kitf2 _ cs1 = do xs2 <- C.coxBeta base deriv he1 `mapM` xs
-                       cs2 <- C.coxRun cs1 `mapM` xs2
-                       Right $ cs2 ++ cs1
+      (ns, xs)    =  unzip bodies            -- names and expressions
+      ns1         =  B.headNames he1         -- term names of input relation
+      ind         =  ns `B.snipIndex` ns1    -- indicies for ns on input relation
+      he2         =  ns `B.headAppend` he1
+      kit2        =  C.relkitJust he2 $ C.RelkitOneToAbOne False kitf2 []
+      kitf2 _ cs1 =  do xs2 <- C.coxBeta base deriv he1 `mapM` xs
+                        cs2 <- C.coxRun cs1 `mapM` xs2
+                        Right $ cs2 ++ cs1
 
 
 -- ----------------------  subst
@@ -76,26 +87,26 @@ relkitSubst (base, deriv, bodies) (Just he1)
     | B.sameLength ns ind = Right kit2
     | otherwise           = Message.unexpTermName
     where
-      (ns, xs)    = unzip bodies               -- names and expressions
-      ns1         = B.headNames he1            -- term names of input relation
-      ind         = ns `B.snipIndex` ns1       -- indicies for ns on input relation
-      cut         = B.snipOff  ind             -- cutting-ns function
-      fore        = B.snipFore ind             -- cutting-ns function
-      he2         = B.headChange fore he1      -- heading of output relation
-      kit2        = C.relkitJust he2 $ C.RelkitOneToAbOne True kitf2 []
-      kitf2 _ cs1 = do xs2 <- C.coxBeta base deriv he1 `mapM` xs
-                       cs2 <- C.coxRun cs1 `mapM` xs2
-                       Right $ cs2 ++ cut cs1
+      (ns, xs)    =  unzip bodies               -- names and expressions
+      ns1         =  B.headNames he1            -- term names of input relation
+      ind         =  ns `B.snipIndex` ns1       -- indicies for ns on input relation
+      cut         =  B.snipOff  ind             -- cutting-ns function
+      fore        =  B.snipFore ind             -- cutting-ns function
+      he2         =  B.headChange fore he1      -- heading of output relation
+      kit2        =  C.relkitJust he2 $ C.RelkitOneToAbOne True kitf2 []
+      kitf2 _ cs1 =  do xs2 <- C.coxBeta base deriv he1 `mapM` xs
+                        cs2 <- C.coxRun cs1 `mapM` xs2
+                        Right $ cs2 ++ cut cs1
 
 
 -- ----------------------  filter
 
 consFilter :: (C.CContent c) => Bool -> C.RopCons c
 consFilter b use =
-    do treesLet <- Op.getOption [] Op.getWordTrees use "-let"
-       treesIn  <- Op.getTrees use "-in"
-       coxLet   <- alphas use treesLet
-       coxIn    <- alpha  use $ B.treeWrap treesIn
+    do treesLet  <-  Op.getOption [] Op.getWordTrees use "-let"
+       treesIn   <-  Op.getTrees use "-in"
+       coxLet    <-  alphas use treesLet
+       coxIn     <-  alpha  use $ B.treeWrap treesIn
        let base = C.globalFunction $ C.ropGlobal use
        Right $ relmapFilter use (b, base, coxLet, coxIn)
 
@@ -107,21 +118,12 @@ relkitFilter :: (C.CList c, C.CRel c, C.CBool c, B.Write c)
   => (Bool, [C.Cop c], [C.NamedCox c], C.Cox c) -> C.RelkitFlow c
 relkitFilter _ Nothing = Right C.relkitNothing
 relkitFilter (which, base, deriv, body) (Just he1) = Right kit2 where
-    kit2 = C.relkitJust he1 $ C.RelkitAbPred p
+    kit2  = C.relkitJust he1 $ C.RelkitAbPred p
     p cs1 = do e <- C.coxBeta base deriv he1 body
                c <- C.coxRun cs1 e
                case C.isBool c of
                  True  -> Right $ C.gBool c == which
                  False -> Message.reqBool
-
-
--- ----------------------  alpha
-
-alpha :: (C.CContent c) => C.RopUse c -> B.TokenTree -> B.Ab (C.Cox c)
-alpha = C.coxAlpha . C.globalSyntax . C.ropGlobal
-
-alphas :: (C.CContent c) => C.RopUse c -> [B.Named B.TokenTree] -> B.Ab [C.NamedCox c]
-alphas use = mapM (B.namedMapM $ alpha use)
 
 
 -- ----------------------  range
@@ -155,9 +157,58 @@ relkitRange (n, base, coxLow, coxHigh) (Just he1) = Right kit2 where
                   decLow    <-  C.getDec $ C.coxRun cs coxLow'
                   decHigh   <-  C.getDec $ C.coxRun cs coxHigh'
 
-                  let low  = B.decimalNum decLow
-                      high = B.decimalNum decHigh
-                      decs = map C.pDecFromInt [low .. high]
+                  let low   =   B.decimalNum decLow
+                      high  =   B.decimalNum decHigh
+                      decs  =   map C.pDecFromInt [low .. high]
 
                   Right $ map (: cs) decs
 
+
+-- ----------------------  split
+
+consSplit :: (C.CContent c) => C.RopCons c
+consSplit use =
+    do treesLet  <-  Op.getOption [] Op.getWordTrees use "-let"
+       treesIn   <-  Op.getTermTrees use "-in"
+       coxLet    <-  alphas use treesLet
+       coxIn     <-  alphas use treesIn
+       let base = C.globalFunction $ C.ropGlobal use
+       Right $ relmapSplit use (base, coxLet, coxIn)
+
+relmapSplit :: (C.CList c, C.CRel c, B.Write c, C.CBool c)
+  => C.RopUse c -> ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.Relmap c
+relmapSplit use = C.relmapFlow use . relkitSplit
+
+relkitSplit :: forall c. (C.CList c, C.CRel c, B.Write c, C.CBool c)
+  => ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.RelkitFlow c
+relkitSplit _ Nothing = Right C.relkitNothing
+relkitSplit (base, deriv, bodies) (Just he1)
+    | null ind  = Right kit2
+    | otherwise = Message.unexpTermName
+    where
+      (ns, xs)    =  unzip bodies            -- names and expressions
+      ns1         =  B.headNames he1         -- term names
+      ind         =  ns `B.snipIndex` ns1    -- shared indicies
+
+      he2         =  B.Relhead $ map term ns
+      term n      =  B.TermNest n $ B.headTerms he1
+      kit2        =  C.relkitJust he2 $ C.RelkitAbFull False kitf2 []
+      kitf2 _ bo1 =  do xs2 <- C.coxBeta base deriv he1 `mapM` xs
+                        cs2 <- split xs2 bo1
+                        Right [cs2]
+
+      split :: [C.Cox c] -> [[c]] -> B.Ab [c]
+      split [] _ = Right []
+      split (x : xs2) bo1 =
+          do bo2 <- run x `mapM` bo1
+             let first = filter fst bo2
+                 rest  = map snd $ B.omit fst bo2
+             rest' <- split xs2 rest
+             let rel = B.Rel he1 $ map snd first
+             Right $ C.pRel rel : rest'
+
+      run :: C.Cox c -> [c] -> B.Ab (Bool, [c])
+      run x cs = do c <- C.coxRun cs x
+                    case C.isBool c of
+                      True  -> Right (C.gBool c, cs)
+                      False -> Message.reqBool
