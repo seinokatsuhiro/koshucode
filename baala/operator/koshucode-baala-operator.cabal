@@ -63,6 +63,8 @@ library
         Koshucode.Baala.Op.Content.Logic
         Koshucode.Baala.Op.Content.Order
 
+        Koshucode.Baala.Op.Control
+
         Koshucode.Baala.Op.Cox
         Koshucode.Baala.Op.Cox.Cox
         Koshucode.Baala.Op.Cox.Rop

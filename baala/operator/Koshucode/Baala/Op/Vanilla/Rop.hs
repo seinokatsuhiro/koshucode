@@ -27,14 +27,8 @@ vanillaRops = Op.ropList "vanilla"
         Op.consDump, C.roaNone [] )
     , ( "duplicate /N ...",
         Op.consDuplicate, C.roaList "-term" [] )
-    , ( "fix R",
-        Op.consFix, C.roaOne "-relmap" [] )
-    , ( "fix-join R",
-        Op.consFixJoin, C.roaOne "-relmap" [] )
     , ( "both R",
         Op.consBoth, C.roaOne "-relmap" [] )
-    , ( "if R ...",
-        Op.consIf, C.roaList "-relmap" [] )
     , ( "maybe R",
         Op.consMaybe, C.roaOne "-relmap" [] )
     , ( "number /N -order /N ...",
@@ -45,16 +39,10 @@ vanillaRops = Op.ropList "vanilla"
         Op.consPrefixChange, C.roaTwo "-new" "-old" [] )
     , ( "rank /N -order /N ...",
         Op.consRank, C.roaOne "-term" ["-order", "-dense"] )
-    , ( "repeat N R",
-        Op.consRepeat, C.roaTwo "-count" "-relmap" [] )
     , ( "size /N",
         Op.consSize, C.roaOne "-term" [] )
-    , ( "unless R R",
-        Op.consUnless, C.roaList "-relmap" [] )
     , ( "unprefix /P",
         Op.consUnprefix, C.roaOne "-prefix" [] )
-    , ( "when R R",
-        Op.consWhen, C.roaList "-relmap" [] )
     ]
 
 -- ----------------------

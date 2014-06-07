@@ -10,14 +10,15 @@ module Koshucode.Baala.Op.Content.Cops
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Core              as C
 
-import qualified Koshucode.Baala.Op.Builtin        as OpBase
-import qualified Koshucode.Baala.Op.Cox            as OpBase
-import qualified Koshucode.Baala.Op.Minimal        as OpBase
-import qualified Koshucode.Baala.Op.Meta           as OpBase
-import qualified Koshucode.Baala.Op.Nest           as OpBase
-import qualified Koshucode.Baala.Op.Peripheral     as OpBase
-import qualified Koshucode.Baala.Op.Source         as OpBase
-import qualified Koshucode.Baala.Op.Vanilla        as OpBase
+import qualified Koshucode.Baala.Op.Builtin        as Rops
+import qualified Koshucode.Baala.Op.Cox            as Rops
+import qualified Koshucode.Baala.Op.Control        as Rops
+import qualified Koshucode.Baala.Op.Minimal        as Rops
+import qualified Koshucode.Baala.Op.Meta           as Rops
+import qualified Koshucode.Baala.Op.Nest           as Rops
+import qualified Koshucode.Baala.Op.Peripheral     as Rops
+import qualified Koshucode.Baala.Op.Source         as Rops
+import qualified Koshucode.Baala.Op.Vanilla        as Rops
 
 import qualified Koshucode.Baala.Op.Content.Arith  as Op
 import qualified Koshucode.Baala.Op.Content.List   as Op
@@ -27,14 +28,15 @@ import qualified Koshucode.Baala.Op.Content.Order  as Op
 vanillaGlobal :: (C.CContent c) => C.Global c
 vanillaGlobal =
     C.global { C.globalCops = vanillaCops
-             , C.globalRops = OpBase.metaRops ++
-                              OpBase.nestRops ++
-                              OpBase.peripheralRops ++
-                              OpBase.coxRops ++
-                              OpBase.vanillaRops ++
-                              OpBase.minimalRops ++
-                              OpBase.sourceRops ++
-                              OpBase.builtinRops }
+             , C.globalRops = Rops.metaRops ++
+                              Rops.nestRops ++
+                              Rops.peripheralRops ++
+                              Rops.controlRops ++
+                              Rops.coxRops ++
+                              Rops.vanillaRops ++
+                              Rops.minimalRops ++
+                              Rops.sourceRops ++
+                              Rops.builtinRops }
 
 -- | Term-content operators and its height table.
 vanillaCops :: (C.CContent c) => ([C.Cop c], [B.Named B.InfixHeight])
