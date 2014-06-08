@@ -71,20 +71,6 @@ executable koshu-rdf
        , koshucode-baala-operator   == 0.62.*
        , koshucode-baala-calculator == 0.62.*
 
-executable koshu-regress
-  main-is:
-        koshu-regress.hs
-  other-modules:
-        Koshucode.Baala.Toolkit.Main.KoshuRegress
-  build-depends:
-         base                       == 4.6.*
-       , containers                 == 0.5.*
-       , directory                  == 1.2.*
-       , koshucode-baala-base       == 0.62.*
-       , koshucode-baala-core       == 0.62.*
-       , koshucode-baala-operator   == 0.62.*
-       , koshucode-baala-calculator == 0.62.*
-
 executable koshu-syntax
   main-is:
         koshu-syntax.hs
@@ -103,7 +89,6 @@ library
   exposed-modules:
         Koshucode.Baala.Toolkit.Main.KoshuChange
         Koshucode.Baala.Toolkit.Main.KoshuRdf
-        Koshucode.Baala.Toolkit.Main.KoshuRegress
         Koshucode.Baala.Toolkit.Main.KoshuSyntax
         Koshucode.Baala.Toolkit.Library.Change
         Koshucode.Baala.Toolkit.Library.Input
