@@ -1,16 +1,21 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.Peripheral
-( peripheralRops,
+( ropsPeripheral,
+
   -- * member
   consMember, relmapMember, relkitMember,
   -- $member
+
   -- * RDF
   consRdf,
+
   -- * assn
   consAssn, relmapAssn, relkitAssn,
+
   -- * unassn
   consUnassn, relmapUnassn, relkitUnassn,
+
   -- * typename
   consTypename,
 ) where
@@ -29,20 +34,14 @@ import qualified Koshucode.Baala.Op.Message   as Message
 --   [@rdf P \/S \/O@]
 --     Retrieve relation from RDF-like judgements.
 -- 
-peripheralRops :: (C.CContent c) => [C.Rop c]
-peripheralRops = Op.ropList "peripheral"
-    --  SYNOPSIS,
-    --  CONSTRUCTOR, ATTRIBUTE
-    [ ( "assn /P ... -to N.",
-        consAssn, C.roaList "-term" ["-to"] )
-    , ( "member /N /N",
-        consMember, C.roaEnum ["-1", "-2"] [] )
-    , ( "rdf P /S /O",
-        consRdf, C.roaOneList "-pattern" "-term" [] )
-    , ( "typename /N /P ...",
-        consTypename, C.roaList "-term" [] )
-    , ( "unassn /P -only /P ...",
-        consUnassn, C.roaOne "-from" ["-only"] )
+ropsPeripheral :: (C.CContent c) => [C.Rop c]
+ropsPeripheral = Op.ropList "peripheral"
+    --   SYNOPSIS                , CONSTRUCTOR  , ATTRIBUTE
+    [ ( "assn /P ... -to N."     , consAssn     , C.roaList "-term" ["-to"] )
+    , ( "member /N /N"           , consMember   , C.roaEnum ["-1", "-2"] [] )
+    , ( "rdf P /S /O"            , consRdf      , C.roaOneList "-pattern" "-term" [] )
+    , ( "typename /N /P ..."     , consTypename , C.roaList "-term" [] )
+    , ( "unassn /P -only /P ..." , consUnassn   , C.roaOne "-from" ["-only"] )
     ]
 
 -- ----------------------  member

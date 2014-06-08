@@ -2,7 +2,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module Koshucode.Baala.Op.Cox
-( coxRops,
+( ropsCox,
 
   -- * add
   consAdd, relmapAdd,
@@ -38,22 +38,15 @@ import qualified Koshucode.Baala.Op.Message  as Message
 --   [@omit E@]
 --     Omit tuples @E@ equals true.
 -- 
-coxRops :: (C.CContent c) => [C.Rop c]
-coxRops = Op.ropList "cox"
-    --  SYNOPSIS,
-    --  CONSTRUCTOR, ATTRIBUTE
-    [ ( "add /N E ...",
-        consAdd, C.roaList "-in" ["-let"] )
-    , ( "keep E",
-        consFilter True, C.roaList "-in" ["-let"] )
-    , ( "omit E",
-        consFilter False, C.roaList "-in" ["-let"] )
-    , ( "range /N -from E -to E",
-        consRange, C.roaOne "-term" ["-from", "-to"] )
-    , ( "split /N E ...",
-        consSplit, C.roaList "-in" ["-let"] )
-    , ( "subst /N E ...",
-        consSubst, C.roaList "-in" ["-let"] )
+ropsCox :: (C.CContent c) => [C.Rop c]
+ropsCox = Op.ropList "cox"
+    --  SYNOPSIS                 , CONSTRUCTOR      , ATTRIBUTE
+    [ ( "add /N E ..."           , consAdd          , C.roaList "-in"   ["-let"] )
+    , ( "keep E"                 , consFilter True  , C.roaList "-in"   ["-let"] )
+    , ( "omit E"                 , consFilter False , C.roaList "-in"   ["-let"] )
+    , ( "range /N -from E -to E" , consRange        , C.roaOne  "-term" ["-from", "-to"] )
+    , ( "split /N E ..."         , consSplit        , C.roaList "-in"   ["-let"] )
+    , ( "subst /N E ..."         , consSubst        , C.roaList "-in"   ["-let"] )
     ]
 
 

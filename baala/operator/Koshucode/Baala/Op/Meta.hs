@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.Meta
-( metaRops,
+( ropsMeta,
   -- * koshu-cop
   consKoshuCop, relkitKoshuCop,
   -- * koshu-cop-infix
@@ -33,13 +33,13 @@ import qualified Koshucode.Baala.Op.Message    as Message
 --   [@koshu-version /N@]
 --     Get version number of the koshu calculator.
 -- 
-metaRops :: (C.CContent c) => [C.Rop c]
-metaRops = Op.ropList "meta"
+ropsMeta :: (C.CContent c) => [C.Rop c]
+ropsMeta = Op.ropList "meta"
     --  SYNOPSIS,
     --  CONSTRUCTOR, ATTRIBUTE
     [ ( "koshu-cop /N",
         consKoshuCop, C.roaList "-name" [] )
-    , ( "koshu-cop-infix /N [ -height /N ][ -dir /N ]",
+    , ( "koshu-cop-infix /N [-height /N][-dir /N]",
         consKoshuCopInfix, C.roaOne "-name" ["-height", "-dir"] )
     , ( "koshu-rop /N /N",
         consKoshuRop, C.roaList "-name" ["-group", "-usage"] )

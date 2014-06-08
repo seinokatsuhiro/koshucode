@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.Check
-( checkRops,
+( ropsCheck,
 ) where
 
 import qualified Data.Map                    as Map
@@ -18,9 +18,9 @@ import qualified Koshucode.Baala.Op.Message  as Message
 --
 --   [@duplicate \/P ...@]
 --     Pass duplicate tuples on @\/P@ ...
--- 
-checkRops :: (C.CContent c) => [C.Rop c]
-checkRops = Op.ropList "check"
+
+ropsCheck :: (C.CContent c) => [C.Rop c]
+ropsCheck = Op.ropList "check"
     --  SYNOPSIS,
     --  CONSTRUCTOR, ATTRIBUTE
     [ ( "check-term [-just /N ... | -has /N ... | -but /N ...]",

@@ -35,18 +35,18 @@ vanillaGlobal =
              , C.globalRops = vanillaRops }
 
 vanillaRops :: (C.CContent c) => [C.Rop c]
-vanillaRops = Rops.metaRops
-              ++ Rops.nestRops
-              ++ Rops.checkRops
-              ++ Rops.peripheralRops
-              ++ Rops.controlRops
-              ++ Rops.coxRops
-              ++ Rops.gadgetRops
-              ++ Rops.nilRops
-              ++ Rops.termRops
-              ++ Rops.latticeRops
-              ++ Rops.sourceRops
-              ++ Rops.builtinRops
+vanillaRops = Rops.ropsMeta
+           ++ Rops.ropsNest
+           ++ Rops.ropsCheck
+           ++ Rops.ropsPeripheral
+           ++ Rops.ropsControl
+           ++ Rops.ropsCox
+           ++ Rops.ropsGadget
+           ++ Rops.ropsNil
+           ++ Rops.ropsTerm
+           ++ Rops.ropsLattice
+           ++ Rops.ropsSource
+           ++ Rops.ropsBuiltin
 
 -- | Term-content operators and its height table.
 vanillaCops :: (C.CContent c) => ([C.Cop c], [B.Named B.InfixHeight])

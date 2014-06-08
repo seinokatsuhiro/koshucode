@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.Gadget
-( gadgetRops,
+( ropsGadget,
 
   -- * empty
   consEmpty, relmapEmpty,
@@ -41,17 +41,14 @@ import qualified Koshucode.Baala.Op.Builtin as Op
 --  [@size \/N@]
 --    Calculate cardinality of input relation.
 --
-gadgetRops :: (C.CContent c) => [C.Rop c]
-gadgetRops = Op.ropList "gadget"  -- GROUP
-    --   USAGE              , CONSTRUCTOR    , ATTRIBUTE
-    [ ( "contents /N"       , consContents   , C.roaList "-term" [] )
-    , ( "empty"             , consEmpty      , C.roaNone [] )
-    , ( "number /N -order /N ...",
-        consNumber, C.roaOne "-term" ["-order", "-from"] )
-    , ( "rank /N -order /N ...",
-        consRank, C.roaOne "-term" ["-order", "-dense"] )
-    , ( "size /N",
-        consSize, C.roaOne "-term" [] )
+ropsGadget :: (C.CContent c) => [C.Rop c]
+ropsGadget = Op.ropList "gadget"  -- GROUP
+    --   USAGE                    , CONSTRUCTOR    , ATTRIBUTE
+    [ ( "contents /N"             , consContents   , C.roaList "-term" [] )
+    , ( "empty"                   , consEmpty      , C.roaNone [] )
+    , ( "number /N -order /N ..." , consNumber     , C.roaOne "-term" ["-order", "-from"] )
+    , ( "rank /N -order /N ..."   , consRank       , C.roaOne "-term" ["-order", "-dense"] )
+    , ( "size /N"                 , consSize       , C.roaOne "-term" [] )
     ]
 
 

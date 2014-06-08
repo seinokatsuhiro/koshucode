@@ -2,7 +2,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.Nil
-( nilRops,
+( ropsNil,
   -- * both
   consBoth, relmapBoth,
   -- * maybe
@@ -23,8 +23,8 @@ import qualified Koshucode.Baala.Op.Lattice.Tropashko as Op
 --     Meet input and given relation.
 --     It keeps input tuples of which counterparts are totally negated.
 -- 
-nilRops :: (Ord c, C.CRel c, C.CNil c) => [C.Rop c]
-nilRops = Op.ropList "nil"  -- GROUP
+ropsNil :: (Ord c, C.CRel c, C.CNil c) => [C.Rop c]
+ropsNil = Op.ropList "nil"  -- GROUP
     --   USAGE     , CONSTRUCTOR  , ATTRIBUTE
     [ ( "both R"   , consBoth     , C.roaOne "-relmap" [] )
     , ( "maybe R"  , consMaybe    , C.roaOne "-relmap" [] )

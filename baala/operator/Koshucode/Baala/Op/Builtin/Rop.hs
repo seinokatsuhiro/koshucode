@@ -3,7 +3,7 @@
 -- | Built-in relmap operator.
 
 module Koshucode.Baala.Op.Builtin.Rop
-( builtinRops,
+( ropsBuiltin,
   ropList,
 
   -- * id
@@ -21,8 +21,8 @@ import qualified Koshucode.Baala.Core as C
 --
 --   [@id@]          Identity relmap
 --
-builtinRops :: [C.Rop c]
-builtinRops = ropList "builtin"
+ropsBuiltin :: [C.Rop c]
+ropsBuiltin = ropList "builtin"
     [ ("append R ..." , consAppend  , C.roaList "-relmap" [])
     , ( "id"          , consId      , C.roaNone [] )
     ]

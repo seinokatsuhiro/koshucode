@@ -2,7 +2,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.Source
-( sourceRops,
+( ropsSource,
 
   -- * const
   consConst, relmapConst, relkitConst,
@@ -35,10 +35,9 @@ import qualified Koshucode.Baala.Op.Message  as Message
 --
 --   [@source@]     Read relation from data source.
 --
-sourceRops :: (C.CContent c) => [C.Rop c]
-sourceRops = Op.ropList "source"
-    --  SYNOPSIS,
-    --  CONSTRUCTOR, ATTRIBUTE
+ropsSource :: (C.CContent c) => [C.Rop c]
+ropsSource = Op.ropList "source"
+    --  SYNOPSIS            , CONSTRUCTOR    , ATTRIBUTE
     [ ( "const R"           , consConst      , C.roaOne "-lit" [] )
     , ( "dee"               , consDee        , C.roaNone [] )
     , ( "dum"               , consDum        , C.roaNone [] )

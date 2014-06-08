@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.Term
-( termRops,
+( ropsTerm,
   -- * pick
   consPick, relmapPick, relkitPick,
   -- * cut
@@ -54,8 +54,8 @@ import qualified Koshucode.Baala.Op.Message as Message
 --   [@unprefix \/P@]
 --     Remove prefix @\/P@ from term name.
 -- 
-termRops :: (Ord c) => [C.Rop c]
-termRops = Op.ropList "term"  -- GROUP
+ropsTerm :: (Ord c) => [C.Rop c]
+ropsTerm = Op.ropList "term"  -- GROUP
     --   USAGE                   , CONSTRUCTOR      , ATTRIBUTE
     [ ( "cut /P ..."             , consCut          , C.roaList "-term" [] )
     , ( "cut-term /R"            , consCutTerm      , C.roaOne  "-relmap" [] )

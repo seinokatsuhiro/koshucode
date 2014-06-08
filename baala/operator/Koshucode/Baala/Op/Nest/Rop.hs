@@ -3,8 +3,7 @@
 -- | Relational operators for nested relations.
 
 module Koshucode.Baala.Op.Nest.Rop
-( nestRops,
-  -- $Operators
+( ropsNest,
 ) where
 
 import qualified Koshucode.Baala.Core               as C
@@ -13,8 +12,27 @@ import qualified Koshucode.Baala.Op.Nest.Confl      as Op
 import qualified Koshucode.Baala.Op.Nest.Flow       as Op
 
 -- | Implementation of relational operators.
-nestRops :: (C.CContent c) => [C.Rop c]
-nestRops = Op.ropList "nest"
+--
+--  [@copy N R@]
+--    Naming input relation as @N@ in relmap @R@.
+--
+--  [@down \/N@]
+--    Enclose input relation in a term @\/N@.
+--
+--  [@for \/P R@]
+--    Convert nested relation @\/P@ by relmap @R@.
+--
+--  [@group \/N R@]
+--    Group tuples in @R@ by input relation.
+--
+--  [@slice \/N R@]
+--    Add nested relation as output of relmap @R@.
+--
+--  [@up \/P@]
+--    Lift up nested relation.
+
+ropsNest :: (C.CContent c) => [C.Rop c]
+ropsNest = Op.ropList "nest"
     --  SYNOPSIS,
     --  CONSTRUCTOR, ATTRIBUTE
     [ ( "chunk /T ... [-order /P ...]",
@@ -23,7 +41,7 @@ nestRops = Op.ropList "nest"
         Op.consCopy, C.roaTwo "-with" "-relmap" [] )
     , ( "down /N",
         Op.consDown, C.roaOne "-term" [] )
-    , ( "for /N R [ -with /N ... ]",
+    , ( "for /N R [-with /N ...]",
         Op.consFor, C.roaTwo "-term" "-relmap" ["-with"] )
     , ( "group /N R",
         Op.consGroup, C.roaTwo "-term" "-relmap" [] )
@@ -43,25 +61,3 @@ nestRops = Op.ropList "nest"
         Op.consUp, C.roaOne "-term" [] )
     ]
 
-
--- ----------------------
--- $Operators
---
---  [@copy N R@]
---    Naming input relation as @N@ in relmap @R@.
---
---  [@down \/N@]
---    Enclose input relation in a term @\/N@.
---
---  [@for \/P R@]
---    Convert nested relation @\/P@ by relmap @R@.
---
---  [@group \/N R@]
---    Group tuples in @R@ by input relation.
---
---  [@slice \/N R@]
---    Add nested relation as output of relmap @R@.
---
---  [@up \/P@]
---    Lift up nested relation.
---

@@ -3,7 +3,7 @@
 -- | Relmap operators on relational lattice.
 
 module Koshucode.Baala.Op.Lattice.Rop
-( latticeRops,
+( ropsLattice,
 ) where
 
 import qualified Koshucode.Baala.Core                 as C
@@ -24,8 +24,8 @@ import qualified Koshucode.Baala.Op.Lattice.Tropashko as Op
 --
 --   [@sub@]     Restriction to subrelation.
 --
-latticeRops :: (Ord c, C.CRel c) => [C.Rop c]
-latticeRops = Op.ropList "lattice"  -- GROUP
+ropsLattice :: (Ord c, C.CRel c) => [C.Rop c]
+ropsLattice = Op.ropList "lattice"  -- GROUP
     --   USAGE     , CONSTRUCTOR    , ATTRIBUTE
     [ ( "compose R", Op.consCompose , C.roaOne "-relmap" [] )
     , ( "join R"   , Op.consJoin    , C.roaOne "-relmap" [] )

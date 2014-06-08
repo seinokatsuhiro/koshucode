@@ -2,7 +2,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.Control
-( controlRops,
+( ropsControl,
 
   -- * if
   consIf, relmapIf, relkitIf,
@@ -28,8 +28,8 @@ import qualified Koshucode.Baala.Op.Message as Message
 
 
 -- | Implementation of relational operators.
-controlRops :: (C.CContent c) => [C.Rop c]
-controlRops = Op.ropList "control"
+ropsControl :: (C.CContent c) => [C.Rop c]
+ropsControl = Op.ropList "control"
     --  SYNOPSIS     , CONSTRUCTOR , ATTRIBUTE
     [ ( "equal"      , consEqual   , C.roaOne "-relmap" [] )
     , ( "fix R"      , consFix     , C.roaOne  "-relmap" [] )
