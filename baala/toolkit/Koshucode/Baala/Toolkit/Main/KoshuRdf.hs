@@ -4,16 +4,14 @@
 
 module Koshucode.Baala.Toolkit.Main.KoshuRdf
 ( koshuRdfMain
-
   -- * koshu-rdf.hs
   -- $koshu-rdf.hs
 ) where
 
 import qualified Data.List                as List
+import qualified Data.Map                 as Map
 import qualified Data.RDF                 as RDF
 import qualified Data.Text                as Text
-import qualified Data.Text.IO             as Text
-import qualified Text.RDF.RDF4H.XmlParser as RDF
 import System.Console.GetOpt
 
 import qualified Koshucode.Baala.Base                    as B
@@ -93,64 +91,63 @@ parseCommand (prog, argv) =
 
 convert :: [Option] -> FilePath -> IO ()
 convert opts path
-    | OptXml `elem` opts = writeRdf opts $ readXmlRdf path
-    | otherwise          = writeRdf opts $ readRdfGraph turtleParser path
+    | OptXml `elem` opts = write RDF.XmlParser
+    | otherwise          = write RDF.TurtleParser
+    where
+      write parser = writeRdf opts $ readRdfGraph (parser Nothing Nothing) path
 
 type Graph = RDF.MGraph
 
 writeRdf :: [Option] -> IO Graph -> IO ()
-writeRdf opts graph = do
-  g <- graph
-  let js = L.judgesFromRdf (tupleType opts) g
-  writeJudges js
+writeRdf opts graph =
+  do g <- graph
+     let js  = L.judgesFromRdf (tupleType opts) g
+         RDF.PrefixMappings pmap = RDF.prefixMappings g
+         pre = map unpackPair $ Map.toList pmap
+     writeJudges pre js
+
+unpackPair :: (Text.Text, Text.Text) -> (String, String)
+unpackPair (a, b) = (Text.unpack a, Text.unpack b)
 
 tupleType :: [Option] -> L.RDFTupleType
 tupleType opts
-    | Opt3 `elem` opts = L.RDFTuple3
-    | otherwise        = L.RDFTuple2
+    | Opt2 `elem` opts = L.RDFTuple2
+    | otherwise        = L.RDFTuple3
 
 readRdfGraph :: (RDF.RdfParser p) => p -> String -> IO Graph
-readRdfGraph parser "-" = do
-  str <- getContents
-  let rdf = RDF.parseString parser $ Text.pack str
-  return $ RDF.fromEither rdf
-readRdfGraph parser path = do
-  rdf <- RDF.parseFile parser path
-  return $ RDF.fromEither rdf
+readRdfGraph parser "-" =
+    do str <- getContents
+       let rdf = RDF.parseString parser $ Text.pack str
+       return $ RDF.fromEither rdf
+readRdfGraph parser path =
+    do rdf <- RDF.parseFile parser path
+       return $ RDF.fromEither rdf
 
-readXmlRdf :: FilePath -> IO Graph
-readXmlRdf "-" = do
-  str <- getContents
-  let rdf = xmlParser $ Text.pack str
-  return $ RDF.fromEither rdf
-readXmlRdf path = do
-  txt <- Text.readFile path
-  let rdf = xmlParser txt
-  return $ RDF.fromEither rdf
+writeJudges :: [B.ShortDef] -> [B.Judge Op.VContent] -> IO ()
+writeJudges sh js =
+    do putStrLn B.emacsModeComment
+       putStrLn ""
+       writeShort sh
+       print $ B.docv $ map (B.write $ B.shortText sh) js
 
-writeJudges :: [B.Judge Op.VContent] -> IO ()
-writeJudges js = print $ B.docv js
-
-
-
--- ----------------------  Parsers
-
-turtleParser :: RDF.TurtleParser
-turtleParser = RDF.TurtleParser Nothing Nothing
-
-xmlParser :: (RDF.RDF g) => Text.Text -> Either RDF.ParseFailure g
-xmlParser = RDF.parseXmlRDF Nothing Nothing
+writeShort :: [B.ShortDef] -> IO ()
+writeShort [] = return ()
+writeShort sh =
+    do putStrLn "short"
+       mapM_ putShort sh
+       putStrLn ""
+    where
+      putShort (short, long) = putStrLn $ "  " ++ short ++ " " ++ show long
 
 
 
 -- ----------------------
-{- $koshu-rdf.hs
-
-   @koshu-rdf@ command is implemented using 'koshuRdfMain'.
-
-   > import Koshucode.Baala.Toolkit.Main.KoshuRdf
-   > 
-   > main :: IO ()
-   > main = koshuRdfMain
--}
+-- $koshu-rdf.hs
+--
+-- @koshu-rdf@ command is implemented using 'koshuRdfMain'.
+--
+-- > import Koshucode.Baala.Toolkit.Main.KoshuRdf
+-- > 
+-- > main :: IO ()
+-- > main = koshuRdfMain
 

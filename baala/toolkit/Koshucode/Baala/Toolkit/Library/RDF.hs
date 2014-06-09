@@ -9,7 +9,7 @@ module Koshucode.Baala.Toolkit.Library.RDF
   RDFTupleType (..),
 ) where
 
-import Data.RDF
+import qualified Data.RDF as RDF
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 import qualified Data.Text as T
@@ -21,30 +21,30 @@ data RDFTupleType
       deriving (Show, Eq, Ord, Enum, Bounded)
 
 -- | Convert RDF graph to list of judges.
-judgesFromRdf :: (RDF g, C.CText c) => RDFTupleType -> g -> [B.Judge c]
-judgesFromRdf k g = map (judgeFromTriple k) $ triplesOf g
+judgesFromRdf :: (RDF.RDF g, C.CText c) => RDFTupleType -> g -> [B.Judge c]
+judgesFromRdf k g = map (judgeFromTriple k) $ RDF.triplesOf g
 
 -- | Convert RDF triple to affirmed judge.
-judgeFromTriple :: (C.CText c) => RDFTupleType -> Triple -> B.Judge c
-judgeFromTriple RDFTuple2 (Triple s p o) =
-    B.Judge True (nodeString p) [("/s", the s), ("/o", the o)]
-judgeFromTriple RDFTuple3 (Triple s p o) =
-    B.Judge True "RDF" [("/s", the s), ("/p", the p), ("/o", the o)]
+judgeFromTriple :: (C.CText c) => RDFTupleType -> RDF.Triple -> B.Judge c
+judgeFromTriple RDFTuple2 (RDF.Triple s p o) =
+    B.Judge True (nodeString p) [("s", the s), ("o", the o)]
+judgeFromTriple RDFTuple3 (RDF.Triple s p o) =
+    B.Judge True "RDF" [("s", the s), ("p", the p), ("o", the o)]
 
-the :: (C.CText c) => Node -> c
+the :: (C.CText c) => RDF.Node -> c
 the = C.pText . nodeString
 
-nodeString :: Node -> String
+nodeString :: RDF.Node -> String
 nodeString = T.unpack . nodeText
 
-nodeText :: Node -> T.Text
-nodeText (UNode t)    = t
-nodeText (BNode t)    = t
-nodeText (BNodeGen _) = ""
-nodeText (LNode c)    = literalText c
+nodeText :: RDF.Node -> T.Text
+nodeText (RDF.UNode t)    = t
+nodeText (RDF.BNode t)    = t
+nodeText (RDF.BNodeGen _) = ""
+nodeText (RDF.LNode c)    = literalText c
 
-literalText :: LValue -> T.Text
-literalText (PlainL  t)   = t
-literalText (PlainLL t _) = t
-literalText (TypedL  t _) = t
+literalText :: RDF.LValue -> T.Text
+literalText (RDF.PlainL  t)   = t
+literalText (RDF.PlainLL t _) = t
+literalText (RDF.TypedL  t _) = t
 
