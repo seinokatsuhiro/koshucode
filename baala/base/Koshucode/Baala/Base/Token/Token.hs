@@ -16,6 +16,7 @@ module Koshucode.Baala.Base.Token.Token
   -- * Selectors
   tokenContent,
   tokenTypeText,
+  tokenPoint,
 
   -- * Predicates
   isBlankToken, isShortToken,
@@ -34,7 +35,7 @@ import qualified Koshucode.Baala.Base.Text      as B
 
 -- | There are nine types of tokens.
 data Token
-    = TText    B.CodePoint Int String     -- ^ Word.
+    = TText    B.CodePoint Int String     -- ^ Text.
                                           --   'Int' represents quotation level, i.e.,
                                           --   0 for non-quoted,
                                           --   1 for single-quoted,
@@ -45,7 +46,7 @@ data Token
                                           --   0 for positional slots,
                                           --   1 for named slots,
                                           --   2 for global slots.
-    | TShort   B.CodePoint String String  -- ^ Abbreviated word.
+    | TShort   B.CodePoint String String  -- ^ Abbreviated text.
     | TTerm    B.CodePoint TermPath       -- ^ Term name.
     | TOpen    B.CodePoint String         -- ^ Opening paren.
     | TClose   B.CodePoint String         -- ^ Closing paren.
@@ -112,6 +113,17 @@ type TermPath    =  [TermName]
 
 -- ---------------------- Selector
 
+tokenPoint :: Token -> B.CodePoint
+tokenPoint (TText    pt _ _)  =  pt
+tokenPoint (TShort   pt _ _)  =  pt
+tokenPoint (TTerm    pt _)    =  pt
+tokenPoint (TSlot    pt _ _)  =  pt
+tokenPoint (TOpen    pt _)    =  pt
+tokenPoint (TClose   pt _)    =  pt
+tokenPoint (TSpace   pt _)    =  pt
+tokenPoint (TComment pt _)    =  pt
+tokenPoint (TUnknown pt _)    =  pt
+
 -- | Get the content of token.
 --
 --   >>> let tok = TTerm B.codePointZero ["r", "x"] in tokenContent tok
@@ -119,7 +131,7 @@ type TermPath    =  [TermName]
 tokenContent :: Token -> String
 tokenContent (TText  _ _ s)   =  s
 tokenContent (TShort _ a b)   =  a ++ "." ++ b
-tokenContent (TTerm    _ ns)  =  concatMap ('/':) ns
+tokenContent (TTerm    _ ns)  =  concatMap ('/' :) ns
 tokenContent (TSlot  _ _ s)   =  s
 tokenContent (TOpen    _ s)   =  s
 tokenContent (TClose   _ s)   =  s
@@ -128,22 +140,21 @@ tokenContent (TComment _ s)   =  s
 tokenContent (TUnknown _ s)   =  s
 
 -- | Text of token type, i.e., one of
---   @\"Word\"@, @\"Term\"@, @\"Open\"@, @\"Close\"@,
+--   @\"Text\"@, @\"Term\"@, @\"Open\"@, @\"Close\"@,
 --   @\"Space\"@, @\"Comment\"@, or @\"Unknown\"@.
 --
---   >>> tokenTypeText $ TText 25 0 "flower"
---   "Word"
+--   >>> tokenTypeText $ textToken "flower"
+--   "Text"
 tokenTypeText :: Token -> String
-tokenTypeText (TText  _ _ _)  =  "Word"
-tokenTypeText (TShort _ _ _)  =  "Short"
-tokenTypeText (TTerm    _ _)  =  "TermN"
-tokenTypeText (TSlot  _ _ _)  =  "Slot"
-tokenTypeText (TOpen    _ _)  =  "Open"
-tokenTypeText (TClose   _ _)  =  "Close"
-tokenTypeText (TSpace   _ _)  =  "Space"
-tokenTypeText (TComment _ _)  =  "Comment"
-tokenTypeText (TUnknown _ _)  =  "Unknown"
-
+tokenTypeText (TText  _ _ _)  =  "text"
+tokenTypeText (TShort _ _ _)  =  "short"
+tokenTypeText (TTerm    _ _)  =  "term"
+tokenTypeText (TSlot  _ _ _)  =  "slot"
+tokenTypeText (TOpen    _ _)  =  "open"
+tokenTypeText (TClose   _ _)  =  "close"
+tokenTypeText (TSpace   _ _)  =  "space"
+tokenTypeText (TComment _ _)  =  "comment"
+tokenTypeText (TUnknown _ _)  =  "unknown"
 
 
 -- ----------------------  Predicate

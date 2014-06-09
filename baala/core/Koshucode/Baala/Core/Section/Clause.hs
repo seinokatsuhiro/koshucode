@@ -52,17 +52,17 @@ instance B.CodePointer Clause where
 clauseTypeText :: Clause -> String
 clauseTypeText (Clause _ body) =
     case body of
-      CSection   _         ->  "Section"
-      CImport    _ _       ->  "Import"
-      CExport    _         ->  "Export"
-      CShort     _         ->  "Short"
-      CRelmap    _ _       ->  "Relmap"
-      CAssert    _ _ _ _   ->  "Assert"
-      CJudge     _ _ _     ->  "Judge"
-      CSlot      _ _       ->  "Slot"
-      CComment             ->  "Comment"
-      CUnknown             ->  "Unknown"
-      CUnres     _         ->  "Unres"
+      CSection   _         ->  "section"
+      CImport    _ _       ->  "import"
+      CExport    _         ->  "export"
+      CShort     _         ->  "short"
+      CRelmap    _ _       ->  "relmap"
+      CAssert    _ _ _ _   ->  "assert"
+      CJudge     _ _ _     ->  "judge"
+      CSlot      _ _       ->  "slot"
+      CComment             ->  "comment"
+      CUnknown             ->  "unknown"
+      CUnres     _         ->  "unres"
 
 
 
