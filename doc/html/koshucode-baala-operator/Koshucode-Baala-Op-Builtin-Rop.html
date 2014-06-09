@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Bui
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-operator-0.48.0.0: Relational operators in Koshucode</p
+      >koshucode-baala-operator-0.62.0.0: Relational operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -44,6 +44,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Bui
 	  ></table
 	><p class="caption"
 	>Koshucode.Baala.Op.Builtin.Rop</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >id
+</a
+	    ></li
+	  ></ul
 	></div
       ><div id="description"
       ><p class="caption"
@@ -59,9 +70,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Bui
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
-	  ><a href="#v:builtinRops"
-	    >builtinRops</a
-	    > ::  [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:Rop"
+	  ><a href="#v:ropsBuiltin"
+	    >ropsBuiltin</a
+	    > ::  [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Rop"
 	    >Rop</a
 	    > c]</li
 	  ><li class="src short"
@@ -71,13 +82,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Bui
 	    >String</a
 	    > -&gt; [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopCons"
+	    >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
 	    >RopCons</a
-	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandSorter"
-	    >RopOperandSorter</a
-	    >)] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:Rop"
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Lexmap-Attribute.html#t:RoaSpec"
+	    >RoaSpec</a
+	    >)] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Rop"
 	    >Rop</a
 	    > c]</li
+	  ><li class="src short"
+	  ><a href="#v:consId"
+	    >consId</a
+	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
+	    >RopCons</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapId"
+	    >relmapId</a
+	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
+	    >RopUse</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+	    >Relmap</a
+	    > c</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -85,17 +110,37 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Bui
 	>Documentation</h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:builtinRops" class="def"
-	    >builtinRops</a
-	    > ::  [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:Rop"
+	  ><a name="v:ropsBuiltin" class="def"
+	    >ropsBuiltin</a
+	    > ::  [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Rop"
 	    >Rop</a
-	    > c]<a href="src/Koshucode-Baala-Op-Builtin-Rop.html#builtinRops" class="link"
+	    > c]<a href="src/Koshucode-Baala-Op-Builtin-Rop.html#ropsBuiltin" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Built-in relmap operator. 
+	    >Built-in relmap operator.
 </p
+	    ><dl
+	    ><dt
+	      ><em
+		>r</em
+		> <code
+		>|</code
+		> <em
+		>s</em
+		></dt
+	      ><dd
+	      >   Append relmaps
+</dd
+	      ><dt
+	      ><code
+		>id</code
+		></dt
+	      ><dd
+	      >          Identity relmap
+</dd
+	      ></dl
 	    ></div
 	  ></div
 	><div class="top"
@@ -124,20 +169,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Bui
 	      ><td class="src"
 		>-&gt; [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
-		  >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopCons"
+		  >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
 		  >RopCons</a
-		  > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operand.html#t:RopOperandSorter"
-		  >RopOperandSorter</a
+		  > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Lexmap-Attribute.html#t:RoaSpec"
+		  >RoaSpec</a
 		  >)]</td
 		><td class="doc"
 		><p
-		  >Synopsis, constructor, and operand sorter
+		  >Synopsis, constructor, and attribute sorter
 </p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:Rop"
+		>-&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Rop"
 		  >Rop</a
 		  > c]</td
 		><td class="doc"
@@ -150,24 +195,42 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Bui
 	    ></div
 	  ><div class="doc"
 	  ><p
-	    >Make implementations of relation-mapping operators. 
+	    >Make implementations of relation-mapping operators.
 </p
 	    ></div
 	  ></div
+	><h1 id="g:1"
+	>id
+</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consId" class="def"
+	    >consId</a
+	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
+	    >RopCons</a
+	    > c<a href="src/Koshucode-Baala-Op-Builtin-Rop.html#consId" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapId" class="def"
+	    >relmapId</a
+	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
+	    >RopUse</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+	    >Relmap</a
+	    > c<a href="src/Koshucode-Baala-Op-Builtin-Rop.html#relmapId" class="link"
+	    >Source</a
+	    ></p
+	  ></div
 	><div class="doc"
-	><dl
-	  ><dt
-	    ><em
-	      >r</em
-	      > <code
-	      >|</code
-	      > <em
-	      >s</em
-	      ></dt
-	    ><dd
-	    >   Append relmaps
-</dd
-	    ></dl
+	><p
+	  >Identity mapping, i.e., do nothing.
+</p
+	  ><pre
+	  > pick /a /b | id
+</pre
 	  ></div
 	></div
       ></div

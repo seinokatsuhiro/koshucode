@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Bui
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-operator-0.48.0.0: Relational operators in Koshucode</p
+      >koshucode-baala-operator-0.62.0.0: Relational operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -50,7 +50,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Bui
 	>Description</p
 	><div class="doc"
 	><p
-	  >Parsing list of terms. 
+	  >Parsing list of terms.
 </p
 	  ></div
 	></div
@@ -59,37 +59,47 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Bui
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
-	  ><a href="#v:termname"
-	    >termname</a
+	  ><a href="#v:termName"
+	    >termName</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Termname"
-	    >Termname</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    >TermName</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:termnames"
-	    >termnames</a
+	  ><a href="#v:termNames"
+	    >termNames</a
 	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Termname"
-	    >Termname</a
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    >TermName</a
 	    >]</li
 	  ><li class="src short"
-	  ><a href="#v:termnamePairs"
-	    >termnamePairs</a
+	  ><a href="#v:termNamesCo"
+	    >termNamesCo</a
 	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > [(<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Termname"
-	    >Termname</a
-	    >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Termname"
-	    >Termname</a
-	    >)]</li
+	    > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    >, [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    >TermName</a
+	    >])</li
+	  ><li class="src short"
+	  ><a href="#v:termNamePairs"
+	    >termNamePairs</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName2"
+	    >TermName2</a
+	    >]</li
 	  ><li class="src short"
 	  ><a href="#v:termTreePairs"
 	    >termTreePairs</a
@@ -109,34 +119,34 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Bui
 	>Documentation</h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:termname" class="def"
-	    >termname</a
+	  ><a name="v:termName" class="def"
+	    >termName</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Termname"
-	    >Termname</a
-	    ><a href="src/Koshucode-Baala-Op-Builtin-Term.html#termname" class="link"
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    >TermName</a
+	    ><a href="src/Koshucode-Baala-Op-Builtin-Term.html#termName" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Extract a term name. 
+	    >Extract a term name.
 </p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:termnames" class="def"
-	    >termnames</a
+	  ><a name="v:termNames" class="def"
+	    >termNames</a
 	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Termname"
-	    >Termname</a
-	    >]<a href="src/Koshucode-Baala-Op-Builtin-Term.html#termnames" class="link"
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    >TermName</a
+	    >]<a href="src/Koshucode-Baala-Op-Builtin-Term.html#termNames" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -148,26 +158,40 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Bui
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>termnames . B.tt $ &quot;/a /b /c&quot;
+		>termNames B.&lt;=&lt; B.tt $ &quot;/a /b /c&quot;
 </code
 		></strong
-	      >Right [&quot;/a&quot;, &quot;/b&quot;, &quot;/c&quot;]
+	      >Right [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]
 </pre
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:termnamePairs" class="def"
-	    >termnamePairs</a
+	  ><a name="v:termNamesCo" class="def"
+	    >termNamesCo</a
 	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > [(<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Termname"
-	    >Termname</a
-	    >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Termname"
-	    >Termname</a
-	    >)]<a href="src/Koshucode-Baala-Op-Builtin-Term.html#termnamePairs" class="link"
+	    > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    >, [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    >TermName</a
+	    >])<a href="src/Koshucode-Baala-Op-Builtin-Term.html#termNamesCo" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:termNamePairs" class="def"
+	    >termNamePairs</a
+	    > :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName2"
+	    >TermName2</a
+	    >]<a href="src/Koshucode-Baala-Op-Builtin-Term.html#termNamePairs" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -179,7 +203,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Bui
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>termnamePairs . B.tt $ &quot;/a /x /b /y&quot;
+		>termNamePairs . B.tt $ &quot;/a /x /b /y&quot;
 </code
 		></strong
 	      >Right [(&quot;/a&quot;, &quot;/x&quot;), (&quot;/b&quot;, &quot;/y&quot;)]
@@ -210,12 +234,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Bui
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>termTreePairs . B.tt $ &quot;/a 'A3 /b 10 /c&quot;
+		>termTreePairs B.&lt;=&lt; B.tt $ &quot;/a 'A3 /b 10 /c&quot;
 </code
 		></strong
-	      >Right [ (&quot;/a&quot;, TreeL (TWord 3 1 &quot;A3&quot;))
-      , (&quot;/b&quot;, TreeL (TWord 7 0 &quot;10&quot;))
-      , (&quot;/c&quot;, TreeB 1 []) ]
+	      >Right [ (&quot;a&quot;, TreeL (TText 3 1 &quot;A3&quot;))
+      , (&quot;b&quot;, TreeL (TText 7 0 &quot;10&quot;))
+      , (&quot;c&quot;, TreeB 1 []) ]
 </pre
 	    ></div
 	  ></div

@@ -9,65 +9,62 @@
 <body>
 <pre><a name="line-1"></a><span class='hs-comment'>{-# OPTIONS_GHC -Wall #-}</span>
 <a name="line-2"></a>
-<a name="line-3"></a><span class='hs-comment'>{-| Parsing list of terms. -}</span>
+<a name="line-3"></a><span class='hs-comment'>-- | Parsing list of terms.</span>
 <a name="line-4"></a>
 <a name="line-5"></a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-conid'>Builtin</span><span class='hs-varop'>.</span><span class='hs-conid'>Term</span>
-<a name="line-6"></a><span class='hs-layout'>(</span> <span class='hs-varid'>termname</span><span class='hs-layout'>,</span>
-<a name="line-7"></a>  <span class='hs-varid'>termnames</span><span class='hs-layout'>,</span>
-<a name="line-8"></a>  <span class='hs-varid'>termnamePairs</span><span class='hs-layout'>,</span>
-<a name="line-9"></a>  <span class='hs-varid'>termTreePairs</span><span class='hs-layout'>,</span>
-<a name="line-10"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
-<a name="line-11"></a>
-<a name="line-12"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
-<a name="line-13"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>C</span>
-<a name="line-14"></a>
-<a name="line-15"></a>
-<a name="line-16"></a>
-<a name="line-17"></a><span class='hs-comment'>-- ----------------------  Term</span>
+<a name="line-6"></a><span class='hs-layout'>(</span> <span class='hs-varid'>termName</span><span class='hs-layout'>,</span> <span class='hs-varid'>termNames</span><span class='hs-layout'>,</span> <span class='hs-varid'>termNamesCo</span><span class='hs-layout'>,</span>
+<a name="line-7"></a>  <span class='hs-varid'>termNamePairs</span><span class='hs-layout'>,</span> <span class='hs-varid'>termTreePairs</span><span class='hs-layout'>,</span>
+<a name="line-8"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a name="line-9"></a>
+<a name="line-10"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span>         <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
+<a name="line-11"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span>         <span class='hs-keyword'>as</span> <span class='hs-conid'>C</span>
+<a name="line-12"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span><span class='hs-varop'>.</span><span class='hs-conid'>Message</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>Message</span>
+<a name="line-13"></a>
+<a name="line-14"></a><a name="termName"></a><span class='hs-comment'>-- | Extract a term name.</span>
+<a name="line-15"></a><span class='hs-definition'>termName</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TokenTree</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TermName</span>
+<a name="line-16"></a><span class='hs-definition'>termName</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TreeL</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TTerm</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>n</span><span class='hs-keyglyph'>]</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varid'>n</span>
+<a name="line-17"></a><span class='hs-definition'>termName</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Message</span><span class='hs-varop'>.</span><span class='hs-varid'>reqTermName</span>
 <a name="line-18"></a>
-<a name="line-19"></a><a name="abortReqTermName"></a><span class='hs-definition'>abortReqTermName</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>AbortReason</span>
-<a name="line-20"></a><span class='hs-definition'>abortReqTermName</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>AbortAnalysis</span> <span class='hs-conid'>[]</span> <span class='hs-varop'>$</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>AAReqTermName</span>
-<a name="line-21"></a>
-<a name="line-22"></a><a name="termname"></a><span class='hs-comment'>{-| Extract a term name. -}</span>
-<a name="line-23"></a><span class='hs-definition'>termname</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TokenTree</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Termname</span>
-<a name="line-24"></a><span class='hs-definition'>termname</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TreeL</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TTerm</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>n</span><span class='hs-keyglyph'>]</span><span class='hs-layout'>)</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-varid'>n</span>
-<a name="line-25"></a><span class='hs-definition'>termname</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-varid'>abortReqTermName</span>
-<a name="line-26"></a>
-<a name="line-27"></a><a name="termnames"></a><span class='hs-comment'>{-| Extract a list of term names.
-<a name="line-28"></a> 
-<a name="line-29"></a>    &gt;&gt;&gt; termnames . B.tt $ "/a /b /c"
-<a name="line-30"></a>    Right ["/a", "/b", "/c"]
-<a name="line-31"></a>-}</span>
-<a name="line-32"></a><span class='hs-definition'>termnames</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Termname</span><span class='hs-keyglyph'>]</span>
-<a name="line-33"></a><span class='hs-definition'>termnames</span> <span class='hs-varid'>trees</span> <span class='hs-keyglyph'>=</span>
-<a name="line-34"></a>    <span class='hs-keyword'>case</span> <span class='hs-varid'>mapM</span> <span class='hs-varid'>termname</span> <span class='hs-varid'>trees</span> <span class='hs-keyword'>of</span>
-<a name="line-35"></a>      <span class='hs-conid'>Right</span> <span class='hs-varid'>ns</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Right</span> <span class='hs-varid'>ns</span>
-<a name="line-36"></a>      <span class='hs-conid'>Left</span>  <span class='hs-keyword'>_</span>  <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-varid'>abortReqTermName</span>
-<a name="line-37"></a>
-<a name="line-38"></a><a name="termnamePairs"></a><span class='hs-comment'>{-| Extract a list of name-and-name pairs.
-<a name="line-39"></a> 
-<a name="line-40"></a>    &gt;&gt;&gt; termnamePairs . B.tt $ "/a /x /b /y"
-<a name="line-41"></a>    Right [("/a", "/x"), ("/b", "/y")]
-<a name="line-42"></a>-}</span>
-<a name="line-43"></a><span class='hs-definition'>termnamePairs</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-keyglyph'>[</span><span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Termname</span><span class='hs-layout'>,</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Termname</span><span class='hs-layout'>)</span><span class='hs-keyglyph'>]</span>
-<a name="line-44"></a><span class='hs-definition'>termnamePairs</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-keyword'>where</span>
-<a name="line-45"></a>    <span class='hs-varid'>loop</span> <span class='hs-layout'>(</span><span class='hs-varid'>a</span> <span class='hs-conop'>:</span> <span class='hs-varid'>b</span> <span class='hs-conop'>:</span> <span class='hs-varid'>xs</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span>
-<a name="line-46"></a>        <span class='hs-keyword'>do</span> <span class='hs-varid'>a'</span>  <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>termname</span> <span class='hs-varid'>a</span>
-<a name="line-47"></a>           <span class='hs-varid'>b'</span>  <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>termname</span> <span class='hs-varid'>b</span>
-<a name="line-48"></a>           <span class='hs-varid'>xs'</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>loop</span> <span class='hs-varid'>xs</span>
-<a name="line-49"></a>           <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-layout'>(</span><span class='hs-varid'>a'</span><span class='hs-layout'>,</span> <span class='hs-varid'>b'</span><span class='hs-layout'>)</span> <span class='hs-conop'>:</span> <span class='hs-varid'>xs'</span>
-<a name="line-50"></a>    <span class='hs-varid'>loop</span> <span class='hs-conid'>[]</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-conid'>[]</span>
-<a name="line-51"></a>    <span class='hs-varid'>loop</span> <span class='hs-keyword'>_</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Left</span> <span class='hs-varop'>$</span> <span class='hs-varid'>abortReqTermName</span>
-<a name="line-52"></a>
-<a name="line-53"></a><a name="termTreePairs"></a><span class='hs-comment'>{-| Extract a list of name-and-tree pairs.
-<a name="line-54"></a> 
-<a name="line-55"></a>    &gt;&gt;&gt; termTreePairs . B.tt $ "/a 'A3 /b 10 /c"
-<a name="line-56"></a>    Right [ ("/a", TreeL (TWord 3 1 "A3"))
-<a name="line-57"></a>          , ("/b", TreeL (TWord 7 0 "10"))
-<a name="line-58"></a>          , ("/c", TreeB 1 []) ]
-<a name="line-59"></a>  -}</span>
-<a name="line-60"></a><span class='hs-definition'>termTreePairs</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Named</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span>
-<a name="line-61"></a><span class='hs-definition'>termTreePairs</span> <span class='hs-varid'>xs</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>litNamedTrees</span> <span class='hs-varid'>xs</span>
-<a name="line-62"></a>
+<a name="line-19"></a><a name="termNames"></a><span class='hs-comment'>-- | Extract a list of term names.</span>
+<a name="line-20"></a><span class='hs-comment'>-- </span>
+<a name="line-21"></a><span class='hs-comment'>--   &gt;&gt;&gt; termNames B.&lt;=&lt; B.tt $ "/a /b /c"</span>
+<a name="line-22"></a><span class='hs-comment'>--   Right ["a", "b", "c"]</span>
+<a name="line-23"></a><span class='hs-definition'>termNames</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TermName</span><span class='hs-keyglyph'>]</span>
+<a name="line-24"></a><span class='hs-definition'>termNames</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>mapM</span> <span class='hs-varid'>termName</span>
+<a name="line-25"></a>
+<a name="line-26"></a><a name="termNamesCo"></a><span class='hs-definition'>termNamesCo</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-layout'>(</span><span class='hs-conid'>Bool</span><span class='hs-layout'>,</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TermName</span><span class='hs-keyglyph'>]</span><span class='hs-layout'>)</span>
+<a name="line-27"></a><span class='hs-definition'>termNamesCo</span> <span class='hs-varid'>trees</span> <span class='hs-keyglyph'>=</span>
+<a name="line-28"></a>    <span class='hs-keyword'>do</span> <span class='hs-layout'>(</span><span class='hs-varid'>co</span><span class='hs-layout'>,</span> <span class='hs-varid'>trees2</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>termCo</span> <span class='hs-varid'>trees</span>
+<a name="line-29"></a>       <span class='hs-varid'>ns</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>mapM</span> <span class='hs-varid'>termName</span> <span class='hs-varid'>trees2</span>
+<a name="line-30"></a>       <span class='hs-conid'>Right</span> <span class='hs-layout'>(</span><span class='hs-varid'>co</span><span class='hs-layout'>,</span> <span class='hs-varid'>ns</span><span class='hs-layout'>)</span>
+<a name="line-31"></a>
+<a name="line-32"></a><a name="termCo"></a><span class='hs-comment'>-- Term complement symbol</span>
+<a name="line-33"></a><span class='hs-definition'>termCo</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-layout'>(</span><span class='hs-conid'>Bool</span><span class='hs-layout'>,</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span><span class='hs-layout'>)</span>
+<a name="line-34"></a><span class='hs-definition'>termCo</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TreeL</span> <span class='hs-layout'>(</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TText</span> <span class='hs-keyword'>_</span> <span class='hs-num'>0</span> <span class='hs-str'>"~"</span><span class='hs-layout'>)</span> <span class='hs-conop'>:</span> <span class='hs-varid'>trees</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-layout'>(</span><span class='hs-conid'>True</span><span class='hs-layout'>,</span> <span class='hs-varid'>trees</span><span class='hs-layout'>)</span>
+<a name="line-35"></a><span class='hs-definition'>termCo</span> <span class='hs-varid'>trees</span>                               <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-layout'>(</span><span class='hs-conid'>False</span><span class='hs-layout'>,</span> <span class='hs-varid'>trees</span><span class='hs-layout'>)</span>
+<a name="line-36"></a>
+<a name="line-37"></a><a name="termNamePairs"></a><span class='hs-comment'>-- | Extract a list of name-and-name pairs.</span>
+<a name="line-38"></a><span class='hs-comment'>-- </span>
+<a name="line-39"></a><span class='hs-comment'>--   &gt;&gt;&gt; termNamePairs . B.tt $ "/a /x /b /y"</span>
+<a name="line-40"></a><span class='hs-comment'>--   Right [("/a", "/x"), ("/b", "/y")]</span>
+<a name="line-41"></a><span class='hs-definition'>termNamePairs</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TermName2</span><span class='hs-keyglyph'>]</span>
+<a name="line-42"></a><span class='hs-definition'>termNamePairs</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>loop</span> <span class='hs-keyword'>where</span>
+<a name="line-43"></a>    <span class='hs-varid'>loop</span> <span class='hs-layout'>(</span><span class='hs-varid'>a</span> <span class='hs-conop'>:</span> <span class='hs-varid'>b</span> <span class='hs-conop'>:</span> <span class='hs-varid'>xs</span><span class='hs-layout'>)</span> <span class='hs-keyglyph'>=</span>
+<a name="line-44"></a>        <span class='hs-keyword'>do</span> <span class='hs-varid'>a'</span>  <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>termName</span> <span class='hs-varid'>a</span>
+<a name="line-45"></a>           <span class='hs-varid'>b'</span>  <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>termName</span> <span class='hs-varid'>b</span>
+<a name="line-46"></a>           <span class='hs-varid'>xs'</span> <span class='hs-keyglyph'>&lt;-</span> <span class='hs-varid'>loop</span> <span class='hs-varid'>xs</span>
+<a name="line-47"></a>           <span class='hs-conid'>Right</span> <span class='hs-varop'>$</span> <span class='hs-layout'>(</span><span class='hs-varid'>a'</span><span class='hs-layout'>,</span> <span class='hs-varid'>b'</span><span class='hs-layout'>)</span> <span class='hs-conop'>:</span> <span class='hs-varid'>xs'</span>
+<a name="line-48"></a>    <span class='hs-varid'>loop</span> <span class='hs-conid'>[]</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Right</span> <span class='hs-conid'>[]</span>
+<a name="line-49"></a>    <span class='hs-varid'>loop</span> <span class='hs-keyword'>_</span>  <span class='hs-keyglyph'>=</span> <span class='hs-conid'>Message</span><span class='hs-varop'>.</span><span class='hs-varid'>reqTermName</span>
+<a name="line-50"></a>
+<a name="line-51"></a><a name="termTreePairs"></a><span class='hs-comment'>-- | Extract a list of name-and-tree pairs.</span>
+<a name="line-52"></a><span class='hs-comment'>-- </span>
+<a name="line-53"></a><span class='hs-comment'>--   &gt;&gt;&gt; termTreePairs B.&lt;=&lt; B.tt $ "/a 'A3 /b 10 /c"</span>
+<a name="line-54"></a><span class='hs-comment'>--   Right [ ("a", TreeL (TText 3 1 "A3"))</span>
+<a name="line-55"></a><span class='hs-comment'>--         , ("b", TreeL (TText 7 0 "10"))</span>
+<a name="line-56"></a><span class='hs-comment'>--         , ("c", TreeB 1 []) ]</span>
+<a name="line-57"></a><span class='hs-definition'>termTreePairs</span> <span class='hs-keyglyph'>::</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Ab</span> <span class='hs-keyglyph'>[</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>Named</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-conid'>TokenTree</span><span class='hs-keyglyph'>]</span>
+<a name="line-58"></a><span class='hs-definition'>termTreePairs</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>litNamedTrees</span>
+<a name="line-59"></a>
 </pre></body>
 </html>

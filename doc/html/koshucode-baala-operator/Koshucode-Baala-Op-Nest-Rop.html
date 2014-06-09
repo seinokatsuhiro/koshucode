@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Op.Nest.Rop</title
+    ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nest-Rop.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a href="src/Koshucode-Baala-Op-Nest-Rop.html"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-operator-0.62.0.0: Relational operators in Koshucode</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >None</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Op.Nest.Rop</p
+	></div
+      ><div id="description"
+      ><p class="caption"
+	>Description</p
+	><div class="doc"
+	><p
+	  >Relational operators for nested relations.
+</p
+	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:ropsNest"
+	    >ropsNest</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Rop"
+	    >Rop</a
+	    > c]</li
+	  ></ul
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:ropsNest" class="def"
+	    >ropsNest</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Rop"
+	    >Rop</a
+	    > c]<a href="src/Koshucode-Baala-Op-Nest-Rop.html#ropsNest" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Implementation of relational operators.
+</p
+	    ><dl
+	    ><dt
+	      ><code
+		>copy N R</code
+		></dt
+	      ><dd
+	      >
+    Naming input relation as <code
+		>N</code
+		> in relmap <code
+		>R</code
+		>.
+</dd
+	      ><dt
+	      ><code
+		>down /N</code
+		></dt
+	      ><dd
+	      >
+    Enclose input relation in a term <code
+		>/N</code
+		>.
+</dd
+	      ><dt
+	      ><code
+		>for /P R</code
+		></dt
+	      ><dd
+	      >
+    Convert nested relation <code
+		>/P</code
+		> by relmap <code
+		>R</code
+		>.
+</dd
+	      ><dt
+	      ><code
+		>group /N R</code
+		></dt
+	      ><dd
+	      >
+    Group tuples in <code
+		>R</code
+		> by input relation.
+</dd
+	      ><dt
+	      ><code
+		>slice /N R</code
+		></dt
+	      ><dd
+	      >
+    Add nested relation as output of relmap <code
+		>R</code
+		>.
+</dd
+	      ><dt
+	      ><code
+		>up /P</code
+		></dt
+	      ><dd
+	      >
+    Lift up nested relation.
+</dd
+	      ></dl
+	    ></div
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.13.2</p
+      ></div
+    ></body
+  ></html
+>
