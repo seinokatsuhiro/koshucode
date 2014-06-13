@@ -4,18 +4,16 @@
 
 module Koshucode.Baala.Toolkit.Main.KoshuChange
 ( koshuChangeMain
-
--- * koshu-change.hs
--- $main
+  -- * koshu-change.hs
+  -- $main
 ) where
 
 import System.Console.GetOpt
 
-import Koshucode.Baala.Toolkit.Library.Input
-import Koshucode.Baala.Toolkit.Library.Change
-import Koshucode.Baala.Toolkit.Library.Exit
+import qualified Koshucode.Baala.Toolkit.Library.Input   as L
+import qualified Koshucode.Baala.Toolkit.Library.Change  as L
+import qualified Koshucode.Baala.Toolkit.Library.Exit    as L
 import qualified Koshucode.Baala.Toolkit.Library.Version as V
-
 
 
 -- ----------------------  Option
@@ -66,42 +64,39 @@ header = unlines
     ] ++ "OPTIONS"
 
 
-
 -- ----------------------  Main
 
 {-| The main function for @koshu-change@ command. -}
 koshuChangeMain :: IO Int
-koshuChangeMain = koshuChangeMain' =<< prelude
+koshuChangeMain = koshuChangeMain' =<< L.prelude
 
 koshuChangeMain' :: (String, [String]) -> IO Int
 koshuChangeMain' (_, argv) =
     case getOpt Permute koshuOptions argv of
       (opts, [p1, p2], [])
-          -> run opts (File p1) (File p2)
+          -> run opts (L.File p1) (L.File p2)
 
       (opts, [p], [])
-          | has OptLeft  -> run opts Stdin (File p)
-          | has OptRight -> run opts (File p) Stdin
+          | has OptLeft  -> run opts L.Stdin (L.File p)
+          | has OptRight -> run opts (L.File p) L.Stdin
           where has = (`elem` opts)
 
       (opts, _, [])
-          | has OptHelp         -> putSuccess usage
-          | has OptVersion      -> putSuccess $ version ++ "\n"
-          | has OptShowEncoding -> putSuccess =<< currentEncodings
+          | has OptHelp         -> L.putSuccess usage
+          | has OptVersion      -> L.putSuccess $ version ++ "\n"
+          | has OptShowEncoding -> L.putSuccess =<< L.currentEncodings
           where has = (`elem` opts)
 
-      (_, _, errs) -> putFailure $ concat errs ++ usage
+      (_, _, errs) -> L.putFailure $ concat errs ++ usage
 
     where
       run opts left right
-          | has OptFrom    = left  `minusInput`  right
-          | has OptTo      = right `minusInput`  left
-          | has OptMinus   = left  `minusInput`  right
-          | has OptUpdate  = left  `updateInput` right
-          | otherwise      = putFailure usage
+          | has OptFrom    = left  `L.minusInput`  right
+          | has OptTo      = right `L.minusInput`  left
+          | has OptMinus   = left  `L.minusInput`  right
+          | has OptUpdate  = left  `L.updateInput` right
+          | otherwise      = L.putFailure usage
           where has = (`elem` opts)
-
-
 
 
 -- ----------------------
