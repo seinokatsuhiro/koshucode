@@ -236,7 +236,8 @@ litJudge :: (C.CContent c) => Bool -> B.JudgePat -> LitTrees (B.Judge c)
 litJudge = litJudgeBy []
 
 litJudgeBy :: (C.CContent c) => LitOperators c -> Bool -> B.JudgePat -> LitTrees (B.Judge c)
-litJudgeBy ops q p = Right . B.Judge q p B.<=< litAssn (litContentBy ops)
+litJudgeBy ops True  p = Right . B.JudgeAffirm p B.<=< litAssn (litContentBy ops)
+litJudgeBy ops False p = Right . B.JudgeDeny   p B.<=< litAssn (litContentBy ops)
 
 
 -- ------------------------------------------------------------------

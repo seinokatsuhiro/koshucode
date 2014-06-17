@@ -15,21 +15,18 @@ infixr 0 -:-
 -- | Retrive constituents of sections.
 sectionElem :: (C.CContent c) => C.Section c -> [B.Judge c]
 sectionElem sec = map res js where
-    res = judgeCons ("/res" -:- C.pText $ B.resourceName $ C.secResource sec)
+    res = B.judgeCons ("/res" -:- C.pText $ B.resourceName $ C.secResource sec)
     js  = concat [ elemJudge       $ C.secJudge  sec
                  , elemAssert      $ concatMap B.shortBody $ C.secAssert sec
                  , elemNamedRelmap [] ]
 
-judgeCons :: B.Named c -> B.Map (B.Judge c)
-judgeCons x (B.Judge q p xs) = B.Judge q p $ x : xs
-
 elemJudge :: (C.CContent c) => B.Map [B.Judge c]
 elemJudge = B.unique . concatMap f where
-    f (B.Judge _ p xs) = map (term p) xs
+    f j = map (term $ B.judgePat j) (B.judgeTerms j)
     term p (n, c) = B.affirm "KOSHU-JUDGE-TERM"
-                    [ "/pat"     -:- C.pText p
-                    , "/name"    -:- C.pText n
-                    , "/content" -:- c ]
+                    [ "pat"     -:- C.pText p
+                    , "name"    -:- C.pText n
+                    , "content" -:- c ]
 
 elemAssert :: (C.CContent c) => [C.Assert c] -> [B.Judge c]
 elemAssert = B.unique . concatMap f where
@@ -43,7 +40,7 @@ elemAssert = B.unique . concatMap f where
 
 elemNamedRelmap :: (C.CContent c) => [C.Roal (C.Relmap c)] -> [B.Judge c]
 elemNamedRelmap = B.unique . concatMap f where
-    f ((name, _), relmap) = map (judgeCons ("/name" -:- C.pText name))
+    f ((name, _), relmap) = map (B.judgeCons ("/name" -:- C.pText name))
                             $ elemRelmap relmap
 
 elemRelmap :: (C.CContent c) => C.Relmap c -> [B.Judge c]

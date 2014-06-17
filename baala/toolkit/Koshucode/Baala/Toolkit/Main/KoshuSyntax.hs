@@ -116,7 +116,7 @@ putClause p@(clseq, c) =
      M.foldM_ (putToken clseq) 1 ls
 
 clauseJudge :: (Int, C.Clause) -> B.Judge Op.VContent
-clauseJudge (clseq, c) = B.Judge True "CLAUSE" args where
+clauseJudge (clseq, c) = B.affirm "CLAUSE" args where
     args = [ ("clause"      , C.pDecFromInt clseq)
            , ("clause-type" , C.pText $ C.clauseTypeText c)]
 
@@ -129,7 +129,7 @@ putToken clseq tn (B.CodeLine ln line toks) =
 
 tokenJudge :: Int -> Int -> B.Token -> B.Judge Op.VContent
 tokenJudge clseq ln tok
-    = B.Judge True "TOKEN"
+    = B.affirm "TOKEN"
       [ ("clause" , C.pDecFromInt clseq)
       , ("line"   , C.pDecFromInt ln)
       , ("col"    , C.pDecFromInt $ B.codePointColumnNumber $ B.tokenPoint tok)
@@ -154,7 +154,7 @@ dumpTokenText (n, ys) (B.CodeLine l line ts) = (n + length ts, ys ++ xs) where
     dump = judgeText . dumpTokenJudge l
 
 dumpTokenJudge :: Int -> B.Token -> B.Judge Op.VContent
-dumpTokenJudge l t = B.Judge True "TOKEN" xs where
+dumpTokenJudge l t = B.affirm "TOKEN" xs where
     xs = [ ("line"   , C.pDecFromInt l)
          , ("type"   , C.pText $ B.tokenTypeText t)
          , ("cont"   , C.pText $ B.tokenContent  t) ]

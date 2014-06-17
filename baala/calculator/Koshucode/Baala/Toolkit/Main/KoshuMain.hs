@@ -124,9 +124,9 @@ putRop rops =
     where
       f :: (C.CText c) => C.Rop c -> B.Judge c
       f C.Rop { C.ropName = n, C.ropGroup = g } =
-          B.Judge True "KOSHU-ROP"
-               [ ("/group" , C.pText g)
-               , ("/name"  , C.pText n) ]
+          B.JudgeAffirm "KOSHU-ROP"
+               [ ("group" , C.pText g)
+               , ("name"  , C.pText n) ]
 
 runStdin :: (C.CContent c) => C.SectionBundle c -> IO Int
 runStdin sec =

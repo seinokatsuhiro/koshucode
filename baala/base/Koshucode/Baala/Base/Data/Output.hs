@@ -59,12 +59,13 @@ judges h sh = loop where
                             return cnt
 
     put :: B.Judge c -> Counter -> IO Counter
-    put judge@(B.Judge _ pat _) (c, tab) =
+    put judge (c, tab) =
         do M.when (mod5 c && c > 0) $
             do M.when (mod25 c) $ progress c
                hPutEmptyLine h
            IO.hPutStrLn h $ show $ B.write sh judge
-           let c' = c + 1
+           let c'  = c + 1
+               pat = B.judgePat judge
            return (c', Map.alter inc pat tab)
 
     mod25 n       = (n `mod` 25 == 0)

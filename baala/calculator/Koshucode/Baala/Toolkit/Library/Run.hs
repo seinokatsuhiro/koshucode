@@ -72,7 +72,7 @@ runCalcSec dir root sec =
        return 0
 
 runCalcJudge :: (C.CContent c) => String -> C.Section c -> B.Judge c -> IO Int
-runCalcJudge dir root (B.Judge True "KOSHU-CALC" xs) =
+runCalcJudge dir root (B.JudgeAffirm "KOSHU-CALC" xs) =
     case theContents ["/input", "/output"] xs of
       Just [input, output] ->
           do let inputFiles = theStrings input

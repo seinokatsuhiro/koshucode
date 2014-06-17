@@ -76,7 +76,8 @@ runAssertDataset global (B.Short _ sh asserts) dataset = Right . concat =<< mapM
 judgesFromRel :: Bool -> B.JudgePat -> B.Rel c -> [B.Judge c]
 judgesFromRel q pat = judges where
     judges (B.Rel h b) = map (judge h) b
-    judge h = B.Judge q pat . zip (B.headNames h)
+    judge h | q     = B.JudgeAffirm pat . zip (B.headNames h)
+            | not q = B.JudgeDeny   pat . zip (B.headNames h)
 
 optionUnkCheck :: [String] -> [B.NamedTrees] -> B.Ab ()
 optionUnkCheck ns xs =

@@ -27,9 +27,9 @@ judgesFromRdf k g = map (judgeFromTriple k) $ RDF.triplesOf g
 -- | Convert RDF triple to affirmed judge.
 judgeFromTriple :: (C.CText c) => RDFTupleType -> RDF.Triple -> B.Judge c
 judgeFromTriple RDFTuple2 (RDF.Triple s p o) =
-    B.Judge True (nodeString p) [("s", the s), ("o", the o)]
+    B.affirm (nodeString p) [("s", the s), ("o", the o)]
 judgeFromTriple RDFTuple3 (RDF.Triple s p o) =
-    B.Judge True "RDF" [("s", the s), ("p", the p), ("o", the o)]
+    B.affirm "RDF" [("s", the s), ("p", the p), ("o", the o)]
 
 the :: (C.CText c) => RDF.Node -> c
 the = C.pText . nodeString

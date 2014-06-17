@@ -38,10 +38,10 @@ addJudges js ds1 = foldr addJudge ds1 js
 
 -- | Add a judge to dataset.
 addJudge :: B.Judge c -> Dataset c -> Dataset c
-addJudge (B.Judge True sign xs) (Dataset ds1) = Dataset ds2 where
+addJudge (B.JudgeAffirm sign xs) (Dataset ds1) = Dataset ds2 where
     ds2 = Map.insertWith add sign [xs] ds1
     add new old = new ++ old
-addJudge (B.Judge False _ _) _ = undefined
+addJudge _ _ = undefined
 
 -- | Select relation from dataset.
 --   If a giving term is not in judges, 'CNil' sign is used.
