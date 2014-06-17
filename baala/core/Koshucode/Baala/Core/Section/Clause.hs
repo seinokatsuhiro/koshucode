@@ -38,7 +38,7 @@ data ClauseBody
     | CShort      [B.ShortDef]                   -- ^ Short signs
     | CRelmap     String [B.Token]               -- ^ Source of relmap
     | CAssert     C.AssertType B.JudgePat [B.Token] [B.Token] -- ^ (Intermediate data)
-    | CJudge      Bool B.JudgePat [B.Token]  -- ^ Judge
+    | CJudge      Char B.JudgePat [B.Token]      -- ^ Judge
     | CSlot       String [B.Token]               -- ^ Global slot
     | CComment                                   -- ^ Clause comment
     | CUnknown                                   -- ^ Unknown clause
@@ -122,10 +122,12 @@ consPreclause' src = dispatch $ liaison $ B.clauseTokens src where
 
     isDelim     =  (`elem` ["|", ":"])
 
-    frege "--"  =  judge True
-    frege "-"   =  judge True
-    frege "-X"  =  judge False
-    frege "-x"  =  judge False
+    frege "--"  =  judge 'O'
+    frege "-"   =  judge 'O'
+    frege "-X"  =  judge 'X'
+    frege "-x"  =  judge 'X'
+    frege "-V"  =  judge 'V'
+    frege "-v"  =  judge 'V'
 
     frege "=="  =  assert C.AssertAffirm
     frege "="   =  assert C.AssertAffirm

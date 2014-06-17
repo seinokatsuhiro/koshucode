@@ -80,8 +80,8 @@ updateInput inputB inputC =
 updateJudge :: (Ord c) => [B.Judge c] -> [B.Judge c] -> [B.Judge c]
 updateJudge judB judC = judA where
     setB = S.fromList $ judB
-    denC = S.fromList $ map B.affirmJudge $ filter B.isDenied judC
-    affC = S.fromList $ filter B.isAffirmed judC
+    denC = S.fromList $ map B.affirmJudge $ filter B.isDenial judC
+    affC = S.fromList $ filter B.isAffirmative judC
     judA = S.toList $ setB `S.difference` denC `S.union` affC
 
 updateHead :: L.Input -> L.Input -> B.CommentDoc

@@ -18,7 +18,7 @@ module Koshucode.Baala.Base.Data.Judge
   -- * Logical quality
   affirm, deny,
   affirmJudge, denyJudge,
-  isAffirmed, isDenied,
+  isAffirmative, isDenial, isViolative,
 ) where
 
 import qualified Koshucode.Baala.Base.Abort        as B
@@ -115,36 +115,38 @@ judgeTermsMap f (JudgeAlter   p xs ys zs) = JudgeAlter   p (f xs) (f ys) (f zs)
 judgeCons :: B.Named c -> B.Map (Judge c)
 judgeCons x = judgeTermsMap (x :)
 
+
 -- ----------------------  Logical quality
 
--- | Construct affirmed judgement.
-affirm :: JudgePat -> [B.Named c] -> Judge c
+-- | Construct affirmative judgement.
+affirm :: JudgeOf c
 affirm = JudgeAffirm
 
--- | Construct denied judgement.
-deny :: JudgePat -> [B.Named c] -> Judge c
+-- | Construct denial judgement.
+deny :: JudgeOf c
 deny = JudgeDeny
 
--- | Affirm judgement, i.e., change logical quality to 'True'.
+-- | Affirm judgement, i.e., change logical quality to affirmative.
 affirmJudge :: B.Map (Judge c)
 affirmJudge (JudgeDeny p xs) = JudgeAffirm p xs
 affirmJudge _ = B.bug "denyJudge"
 
--- | Deny judgement, i.e., change logical quality to 'False'.
+-- | Deny judgement, i.e., change logical quality to denial.
 denyJudge :: B.Map (Judge c)
 denyJudge (JudgeAffirm p xs) = JudgeDeny p xs
 denyJudge _ = B.bug "denyJudge"
 
 -- | Test that judgement is affirmd.
-isAffirmed :: Judge c -> Bool
-isAffirmed (JudgeAffirm _ _) = True
-isAffirmed _                 = False
+isAffirmative :: Judge c -> Bool
+isAffirmative (JudgeAffirm _ _) = True
+isAffirmative _                 = False
 
 -- | Test that judgement is denied.
---
---   >>> isDenied $ Judge True "A" []
---   False
-isDenied :: Judge c -> Bool
-isDenied (JudgeDeny _ _) = True
-isDenied _               = False
+isDenial :: Judge c -> Bool
+isDenial (JudgeDeny _ _) = True
+isDenial _               = False
+
+isViolative :: Judge c -> Bool
+isViolative (JudgeViolate _ _) = True
+isViolative _                  = False
 

@@ -232,12 +232,17 @@ litRel lit cs =
 -- | Convert token trees into a judge.
 --   Judges itself are not content type.
 --   It can be only used in the top-level of sections.
-litJudge :: (C.CContent c) => Bool -> B.JudgePat -> LitTrees (B.Judge c)
+litJudge :: (C.CContent c) => Char -> B.JudgePat -> LitTrees (B.Judge c)
 litJudge = litJudgeBy []
 
-litJudgeBy :: (C.CContent c) => LitOperators c -> Bool -> B.JudgePat -> LitTrees (B.Judge c)
-litJudgeBy ops True  p = Right . B.JudgeAffirm p B.<=< litAssn (litContentBy ops)
-litJudgeBy ops False p = Right . B.JudgeDeny   p B.<=< litAssn (litContentBy ops)
+litJudgeBy :: (C.CContent c) => LitOperators c -> Char -> B.JudgePat -> LitTrees (B.Judge c)
+litJudgeBy ops q p = Right . (judgeHead q) p B.<=< litAssn (litContentBy ops)
+
+judgeHead :: Char -> B.JudgeOf c
+judgeHead 'O' = B.JudgeAffirm
+judgeHead 'X' = B.JudgeDeny
+judgeHead 'V' = B.JudgeViolate
+judgeHead _   = B.bug "judgeHead"
 
 
 -- ------------------------------------------------------------------

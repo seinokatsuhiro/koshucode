@@ -16,8 +16,11 @@ import qualified Koshucode.Baala.Core.Section.Section as C
 runSection :: (C.CContent c) => C.Global c -> [C.Section c] -> B.Ab (B.OutputResult c)
 runSection global sects =
     do s2 <- assembleRelmap $ B.mconcat sects
-       let g2 = global { C.globalJudges = C.secJudge s2 }
-       runSectionBody g2 s2
+       let js = C.secJudge s2
+           g2 = global { C.globalJudges = js }
+       case filter B.isViolative js of
+         []  -> runSectionBody g2 s2
+         jsV -> Right ([B.Short [] [] [B.OutputJudge jsV]], [])
 
 runSectionBody :: forall c. (Ord c, B.Write c, C.CRel c, C.CNil c) =>
     C.Global c -> C.Section c -> B.Ab (B.OutputResult c)
