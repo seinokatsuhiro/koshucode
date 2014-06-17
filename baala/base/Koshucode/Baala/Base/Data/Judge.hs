@@ -7,6 +7,7 @@ module Koshucode.Baala.Base.Data.Judge
 (
   -- * Datatype
   Judge (..),
+  JudgeOf,
   JudgePat,
   judgePat,
   judgeTerms,
@@ -68,6 +69,8 @@ judgeTerms (JudgeDeny    _ xs)      =  xs
 judgeTerms (JudgeViolate _ xs)      =  xs
 judgeTerms (JudgeAlter   _ xs _ _)  =  xs
 
+type JudgeOf c = JudgePat -> [B.Named c] -> Judge c
+
 -- | Name of judgement pattern.
 type JudgePat = String
 
@@ -85,7 +88,7 @@ judgeDoc shorts j =
       -- Frege's judgement stroke, content line,
       JudgeAffirm  p xs -> B.doc "|--" B.<+> pat p B.<+> arg xs
       JudgeDeny    p xs -> B.doc "|-X" B.<+> pat p B.<+> arg xs
-      JudgeViolate p xs -> B.doc "|--" B.<+> pat p B.<+> arg xs
+      JudgeViolate p xs -> B.doc "|-V" B.<+> pat p B.<+> arg xs
       JudgeAlter   p key den aff -> B.doc "|-Y" B.<+> pat p B.<+> arg key
                                     B.<+> B.doc "|-X" B.<+> arg den
                                     B.<+> B.doc "|--" B.<+> arg aff

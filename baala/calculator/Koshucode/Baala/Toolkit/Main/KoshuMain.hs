@@ -124,7 +124,7 @@ putRop rops =
     where
       f :: (C.CText c) => C.Rop c -> B.Judge c
       f C.Rop { C.ropName = n, C.ropGroup = g } =
-          B.JudgeAffirm "KOSHU-ROP"
+          B.affirm "KOSHU-ROP"
                [ ("group" , C.pText g)
                , ("name"  , C.pText n) ]
 

@@ -32,11 +32,12 @@ elemAssert :: (C.CContent c) => [C.Assert c] -> [B.Judge c]
 elemAssert = B.unique . concatMap f where
     f (C.Assert _ _ _ _ _ Nothing _) = B.bug "elemAssert"
     f (C.Assert t pat _ _ _ (Just r) _) =
-        B.affirm (name $ C.assertQuality t) [ "/pat" -:- C.pText pat ]
+        B.affirm (quality t) [ "/pat" -:- C.pText pat ]
              : elemRelmap r
 
-    name True  = "KOSHU-AFFIRM"
-    name False = "KOSHU-DENY"
+    quality C.AssertAffirm  = "KOSHU-AFFIRM"
+    quality C.AssertDeny    = "KOSHU-DENY"
+    quality C.AssertViolate = "KOSHU-VIOLATE"
 
 elemNamedRelmap :: (C.CContent c) => [C.Roal (C.Relmap c)] -> [B.Judge c]
 elemNamedRelmap = B.unique . concatMap f where

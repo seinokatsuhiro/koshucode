@@ -73,11 +73,10 @@ runAssertDataset global (B.Short _ sh asserts) dataset = Right . concat =<< mapM
           assertOptionProcess sh q pat opt r1
 
 -- | Convert relation to list of judges.
-judgesFromRel :: Bool -> B.JudgePat -> B.Rel c -> [B.Judge c]
+judgesFromRel :: B.JudgeOf c -> B.JudgePat -> B.Rel c -> [B.Judge c]
 judgesFromRel q pat = judges where
     judges (B.Rel h b) = map (judge h) b
-    judge h | q     = B.JudgeAffirm pat . zip (B.headNames h)
-            | not q = B.JudgeDeny   pat . zip (B.headNames h)
+    judge h = q pat . zip (B.headNames h)
 
 optionUnkCheck :: [String] -> [B.NamedTrees] -> B.Ab ()
 optionUnkCheck ns xs =
@@ -102,7 +101,7 @@ flatnames trees =
 -- ---------------------------------  Option
 
 assertOptionProcess :: (Ord c, B.Write c, C.CRel c)
-  => [B.ShortDef] -> Bool -> B.JudgePat -> C.AssertOption -> B.Rel c -> B.Ab [B.OutputChunk c]
+  => [B.ShortDef] -> B.JudgeOf c -> B.JudgePat -> C.AssertOption -> B.Rel c -> B.Ab [B.OutputChunk c]
 assertOptionProcess sh q pat opt r1 =
     do assertOptionCheck opt
        r2 <- assertOptionRelmap opt r1

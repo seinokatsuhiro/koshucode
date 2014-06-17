@@ -55,10 +55,10 @@ data AssertType
     | AssertViolate   -- ^ @|=V@ /pattern/ @:@ /relmap/
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
-assertQuality :: AssertType -> Bool
-assertQuality AssertAffirm   = True
-assertQuality AssertDeny     = False
-assertQuality AssertViolate  = True
+assertQuality :: AssertType -> B.JudgeOf c
+assertQuality AssertAffirm   = B.JudgeAffirm
+assertQuality AssertDeny     = B.JudgeDeny
+assertQuality AssertViolate  = B.JudgeViolate
 
 assertText :: AssertType -> String
 assertText AssertAffirm   = "|=="

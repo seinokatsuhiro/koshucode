@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wall #-}
 
-{-| RDF-to-Koshucode conversion -}
+-- | RDF-to-Koshucode conversion
 
 module Koshucode.Baala.Toolkit.Library.RDF
 ( judgesFromRdf,
