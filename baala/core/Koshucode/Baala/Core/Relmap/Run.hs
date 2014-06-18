@@ -10,11 +10,12 @@ module Koshucode.Baala.Core.Relmap.Run
   bmapAlign,
 ) where
 
-import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Core.Content         as C
-import qualified Koshucode.Baala.Core.Relmap.Operator as C
-import qualified Koshucode.Baala.Core.Relmap.Relkit   as C
-import qualified Koshucode.Baala.Core.Message         as Message
+import qualified Koshucode.Baala.Base                  as B
+import qualified Koshucode.Baala.Core.Content          as C
+import qualified Koshucode.Baala.Core.Relmap.Global    as C
+import qualified Koshucode.Baala.Core.Relmap.Operator  as C
+import qualified Koshucode.Baala.Core.Relmap.Relkit    as C
+import qualified Koshucode.Baala.Core.Message          as Message
 
 relkitLink :: forall c. (Ord c) => [C.RelkitDef c] -> B.Map (C.Relkit c)
 relkitLink kits = linkKit where

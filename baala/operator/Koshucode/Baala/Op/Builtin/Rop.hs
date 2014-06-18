@@ -23,8 +23,8 @@ import qualified Koshucode.Baala.Core as C
 --
 ropsBuiltin :: [C.Rop c]
 ropsBuiltin = ropList "builtin"
-    [ ("append R ..." , consAppend  , C.roaList "-relmap" [])
-    , ( "id"          , consId      , C.roaNone [] )
+    [ ( "append R ..." , consAppend  , C.roaList "-relmap" [] )
+    , ( "id"           , consId      , C.roaNone [] )
     ]
 
 

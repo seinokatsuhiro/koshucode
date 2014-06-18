@@ -130,6 +130,7 @@ consSectionEach root resource (B.Short pt shorts xs) =
       slot :: Clab B.NamedTrees
       slot _ (C.CSlot n toks) = ntrees (n, toks)
 
+      ntrees :: (String, [B.Token]) -> B.Ab (String, [B.TokenTree])
       ntrees (n, toks) = do trees <- B.tokenTrees toks
                             Right (n, trees)
 
@@ -139,6 +140,7 @@ consSectionEach root resource (B.Short pt shorts xs) =
             Left  _         -> ntrees2 n toks []
             Right (r, _, e) -> ntrees2 n r e
 
+      ntrees2 :: String -> [B.Token] -> [B.Token] -> B.Ab (String, ([B.TokenTree], C.Roamap))
       ntrees2 n toks1 toks2 =
           do trees1 <- B.tokenTrees toks1
              trees2 <- B.tokenTrees toks2

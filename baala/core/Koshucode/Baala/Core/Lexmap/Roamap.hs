@@ -91,7 +91,7 @@ roamapRun = loop where
 
     add roa opt k xs =
         case lookup k roa of
-          Nothing             ->  do xs' <- C.slotTrees [] roa xs
+          Nothing             ->  do xs' <- C.substSlot [] roa xs
                                      Right $ (k, xs') : roa
           Just _ | opt        ->  Right roa
                  | otherwise  ->  Message.extraAttr

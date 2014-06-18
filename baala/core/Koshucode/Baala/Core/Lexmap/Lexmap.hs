@@ -154,7 +154,7 @@ consLexmap sorters gslot derives = lexmap where
                       Nothing -> B.concatMapM slot sub
                       Just (trees, roamap) ->
                             do roa2       <- C.roamapRun roamap roa
-                               trees2     <- C.slotTrees gslot roa2 trees
+                               trees2     <- C.substSlot gslot roa2 trees
                                (lx2, lxs) <- lexmap trees2
                                sub2       <- B.concatMapM slot sub
                                Right $ ((n, roa), lx2) : lxs ++ sub2

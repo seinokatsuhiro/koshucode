@@ -5,7 +5,7 @@
 
 module Koshucode.Baala.Core.Lexmap.Slot
 ( GlobalSlot,
-  slotTrees,
+  substSlot,
 ) where
 
 import qualified Koshucode.Baala.Base                   as B
@@ -14,13 +14,12 @@ import qualified Koshucode.Baala.Core.Message           as Message
 
 type GlobalSlot = B.NamedTrees
 
-slotTrees :: [GlobalSlot] -> C.Roa -> B.AbMap [B.TokenTree]
-slotTrees gslot roa trees =
-    do trees' <- slotTree gslot roa `mapM` trees
-       Right $ concat trees'
+-- | Substitute slots by global and attribute slots.
+substSlot :: [GlobalSlot] -> C.Roa -> B.AbMap [B.TokenTree]
+substSlot gslot roa = Right . concat B.<=< mapM (substTree gslot roa)
 
-slotTree :: [GlobalSlot] -> C.Roa -> B.TokenTree -> B.Ab [B.TokenTree]
-slotTree gslot roa tree = B.abortableTree "slot" tree $ loop tree where
+substTree :: [GlobalSlot] -> C.Roa -> B.TokenTree -> B.Ab [B.TokenTree]
+substTree gslot roa tree = B.abortableTree "slot" tree $ loop tree where
     loop (B.TreeB p q sub) = do sub' <- mapM loop sub
                                 Right [B.TreeB p q $ concat sub']
     loop (B.TreeL (B.TSlot _ n name))
@@ -41,10 +40,10 @@ slotTree gslot roa tree = B.abortableTree "slot" tree $ loop tree where
                      Just i  -> Right . B.singleton =<< od `at` i
                      Nothing -> Message.noSlotName 0 n
 
-    at = slotIndex $ unwords . map B.tokenContent . B.untree
+    at = substIndex $ unwords . map B.tokenContent . B.untree
 
-slotIndex :: (a -> String) -> [a] -> Int -> B.Ab a
-slotIndex toString xxs n = loop xxs n where
+substIndex :: (a -> String) -> [a] -> Int -> B.Ab a
+substIndex toString xxs n = loop xxs n where
     loop (x : _)  1 = Right x
     loop (_ : xs) i = loop xs $ i - 1
     loop _ _        = Message.noSlotIndex (number $ map toString xxs) n
