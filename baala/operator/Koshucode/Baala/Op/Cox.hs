@@ -13,6 +13,9 @@ module Koshucode.Baala.Op.Cox
   -- * filter
   consFilter, relmapFilter, relkitFilter,
 
+  -- * omit-all
+  consOmitAll, relmapOmitAll,
+
   -- * range
   consRange, relmapRange,
   -- $range
@@ -40,13 +43,14 @@ import qualified Koshucode.Baala.Op.Message  as Message
 -- 
 ropsCox :: (C.CContent c) => [C.Rop c]
 ropsCox = Op.ropList "cox"
-    --  SYNOPSIS                 , CONSTRUCTOR      , ATTRIBUTE
-    [ ( "add /N E ..."           , consAdd          , C.roaList "-in"   ["-let"] )
-    , ( "keep E"                 , consFilter True  , C.roaList "-in"   ["-let"] )
-    , ( "omit E"                 , consFilter False , C.roaList "-in"   ["-let"] )
-    , ( "range /N -from E -to E" , consRange        , C.roaOne  "-term" ["-from", "-to"] )
-    , ( "split /N E ..."         , consSplit        , C.roaList "-in"   ["-let"] )
-    , ( "subst /N E ..."         , consSubst        , C.roaList "-in"   ["-let"] )
+    --  SYNOPSIS                  , CONSTRUCTOR      , ATTRIBUTE
+    [ ( "add /N E ..."            , consAdd          , C.roaList "-in"   ["-let"] )
+    , ( "keep E"                  , consFilter True  , C.roaList "-in"   ["-let"] )
+    , ( "omit E"                  , consFilter False , C.roaList "-in"   ["-let"] )
+    , ( "omit-all"                , consOmitAll      , C.roaNone [] )
+    , ( "range /N -from E -to E"  , consRange        , C.roaOne  "-term" ["-from", "-to"] )
+    , ( "split /N E ..."          , consSplit        , C.roaList "-in"   ["-let"] )
+    , ( "subst /N E ..."          , consSubst        , C.roaList "-in"   ["-let"] )
     ]
 
 
@@ -150,6 +154,19 @@ relkitFilter (which, base, deriv, body) (Just he1) = Right kit2 where
                case C.isBool c of
                  True  -> Right $ C.gBool c == which
                  False -> Message.reqBool
+
+
+-- ----------------------  omit-all
+
+consOmitAll :: C.RopCons c
+consOmitAll use = Right $ relmapOmitAll use
+
+relmapOmitAll :: C.RopUse c -> C.Relmap c
+relmapOmitAll use = C.relmapFlow use relkitOmitAll
+
+-- | Throw away all tuples in a relation.
+relkitOmitAll :: C.RelkitFlow c
+relkitOmitAll he1 = Right $ C.relkit he1 $ C.RelkitConst []
 
 
 -- ----------------------  range

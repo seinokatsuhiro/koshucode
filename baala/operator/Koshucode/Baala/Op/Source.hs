@@ -12,6 +12,9 @@ module Koshucode.Baala.Op.Source
   consDee, consDum,
   -- $deedum
 
+  -- * empty
+  consEmpty, relmapEmpty,
+
   -- * source
   consSource,
   -- $source
@@ -33,6 +36,8 @@ import qualified Koshucode.Baala.Op.Message  as Message
 --
 --   [@dum@]        Nullary empty relation.
 --
+--   [@empty@]      Make empty relation.
+--
 --   [@source@]     Read relation from data source.
 --
 ropsSource :: (C.CContent c) => [C.Rop c]
@@ -41,7 +46,8 @@ ropsSource = Op.ropList "source"
     [ ( "const R"           , consConst      , C.roaOne "-lit" [] )
     , ( "dee"               , consDee        , C.roaNone [] )
     , ( "dum"               , consDum        , C.roaNone [] )
-    , ( "source P /T ..."   , consSource     , C.roaOneList "-pattern" "-term" [] )
+    , ( "empty /N ..."      , consEmpty      , C.roaList "-term" [] )
+    , ( "source P /N ..."   , consSource     , C.roaOneList "-pattern" "-term" [] )
     , ( "source-term P R"   , consSourceTerm , C.roaTwo "-pattern" "-relmap" [] )
     ]
 
@@ -73,6 +79,21 @@ relkitConst :: B.Rel c -> C.RelkitFlow c
 relkitConst _ Nothing = Right C.relkitNothing
 relkitConst (B.Rel he bo) _ = Right kit2 where
     kit2 = C.relkitJust he $ C.RelkitConst bo
+
+
+-- ----------------------  empty
+
+consEmpty :: C.RopCons c
+consEmpty use =
+    do ns <- Op.getTerms use "-term"
+       Right $ relmapEmpty use ns
+
+relmapEmpty :: C.RopUse c -> [B.TermName] -> C.Relmap c
+relmapEmpty use = C.relmapFlow use . relkitEmpty
+
+relkitEmpty :: [B.TermName] -> C.RelkitFlow c
+relkitEmpty ns _ = Right $ C.relkit he2 $ C.RelkitConst [] where
+    he2 = Just $ B.headFrom ns
 
 
 -- ----------------------  source

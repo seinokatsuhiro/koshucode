@@ -3,9 +3,6 @@
 module Koshucode.Baala.Op.Gadget
 ( ropsGadget,
 
-  -- * empty
-  consEmpty, relmapEmpty,
-
   -- * contents
   consContents, relmapContents,
 
@@ -38,31 +35,17 @@ import qualified Koshucode.Baala.Op.Builtin as Op
 --   [@rank \/N -order \/P ... \[ -dense \]@]
 --     Add term @\/N@ for ranking ordered by @\/P@ ...
 -- 
---  [@size \/N@]
---    Calculate cardinality of input relation.
+--   [@size \/N@]
+--     Calculate cardinality of input relation.
 --
 ropsGadget :: (C.CContent c) => [C.Rop c]
 ropsGadget = Op.ropList "gadget"  -- GROUP
     --   USAGE                    , CONSTRUCTOR    , ATTRIBUTE
     [ ( "contents /N"             , consContents   , C.roaList "-term" [] )
-    , ( "empty"                   , consEmpty      , C.roaNone [] )
     , ( "number /N -order /N ..." , consNumber     , C.roaOne "-term" ["-order", "-from"] )
     , ( "rank /N -order /N ..."   , consRank       , C.roaOne "-term" ["-order", "-dense"] )
     , ( "size /N"                 , consSize       , C.roaOne "-term" [] )
     ]
-
-
--- ----------------------  empty
-
-consEmpty :: C.RopCons c
-consEmpty use = Right $ relmapEmpty use
-
-relmapEmpty :: C.RopUse c -> C.Relmap c
-relmapEmpty use = C.relmapFlow use relkitEmpty
-
--- | Throw away all tuples in a relation.
-relkitEmpty :: C.RelkitFlow c
-relkitEmpty he1 = Right $ C.relkit he1 $ C.RelkitConst []
 
 
 -- ----------------------  contents
