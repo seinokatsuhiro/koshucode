@@ -13,7 +13,7 @@ module Koshucode.Baala.Op.Term
   -- * move
   consMove, relmapMove, relkitMove,
   -- * rename
-  consRename, relmapRename, relkitRename,
+  consRename, relmapRename,
   -- * prefix
   consPrefix, relmapPrefix, relkitPrefix,
   -- * unprefix
@@ -23,8 +23,6 @@ module Koshucode.Baala.Op.Term
 ) where
 
 import qualified Data.List                  as List
-import qualified Data.Maybe                 as Maybe
-import qualified Data.Tuple                 as Tuple
 import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Core       as C
 import qualified Koshucode.Baala.Op.Builtin as Op
@@ -62,7 +60,7 @@ ropsTerm = Op.ropList "term"  -- GROUP
     , ( "pick /P ..."            , consPick         , C.roaList "-term"   [] )
     , ( "pick-term /R"           , consPickTerm     , C.roaOne  "-relmap" [] )
     , ( "rename /N /P ..."       , consRename       , C.roaList "-term"   [] )
-    , ( "move /P ... -to /N ..." , consMove         , C.roaList "-term" ["-to"] )
+    , ( "move /P ... -to /N ..." , consMove         , C.roaList "-from" ["-to"] )
     , ( "prefix /P /N ..."       , consPrefix       , C.roaOneList "-prefix" "-term" [] )
     , ( "prefix-change /P /Q"    , consPrefixChange , C.roaTwo "-new" "-old" [] )
     , ( "unprefix /P"            , consUnprefix     , C.roaOne "-prefix" [] )
@@ -140,11 +138,22 @@ relkitSnip heSnip boSnip ns (Just he1)
       ind   =  ns1 `B.snipIndex` ns
 
 
+-- ----------------------  rename
+
+consRename :: C.RopCons c
+consRename use =
+  do np <- Op.getTermPairs use "-term"
+     Right $ relmapRename use np
+
+relmapRename :: C.RopUse c -> [B.TermName2] -> C.Relmap c
+relmapRename use = C.relmapFlow use . relkitMove . unzip . map B.swap
+
+
 -- ----------------------  move
 
 consMove :: C.RopCons c
 consMove use =
-  do ps <- Op.getTerms use "-term"
+  do ps <- Op.getTerms use "-from"
      ns <- Op.getTerms use "-to"
      Right $ relmapMove use (ps, ns)
 
@@ -155,59 +164,28 @@ relkitMove :: ([B.TermName], [B.TermName]) -> C.RelkitFlow c
 relkitMove _ Nothing = Right C.relkitNothing
 relkitMove (ps, ns) (Just he1)
     | B.notSameLength ps ns = Message.oddAttr
-    | dup     /= []         = Message.dupTerm dup he2
+    | psDup   /= []         = Message.dupTerm psDup he1
+    | ns2Dup  /= []         = Message.dupTerm ns2Dup he2
     | psLeft  /= []         = Message.unkTerm psLeft he1
     | otherwise             = Right kit2
     where
-      ns1      = B.headNames he1
-      ns2      = B.headNames he2
-      dup      = B.duplicate ns2
+      ns1        =  B.headNames he1
+      ns2        =  B.headNames he2
 
-      psLeft   = ps `B.snipLeft`  ns1
-      psInd    = ps `B.snipIndex` ns1
+      ns2Dup     =  B.duplicate ns2
+      psDup      =  B.duplicate ps
 
-      he2      = B.headChange move he1
-      kit2     = C.relkitJust he2 C.RelkitId
+      psLeft     =  ps `B.snipLeft`  ns1
+      psIndex    =  ps `B.snipIndex` ns1
 
-      move ts  = foldr mv ts mvlist
-      mv (i,n) = B.termChange (const n) `at` i
-      mvlist   = zip psInd ns
+      he2        =  B.headChange mvAll he1
+      kit2       =  C.relkitJust he2 C.RelkitId
 
-at :: (B.Map a) -> Int -> B.Map [a]
-at f = loop where
-    loop 0 (x : xs) = f x : xs
-    loop i (x : xs) = x : loop (i - 1) xs
-    loop _ []       = []
+      mvAll :: B.Map [B.Term]
+      mvAll ts   =  foldr mv ts $ zip psIndex ns
 
-
-
--- ----------------------  rename
-
-consRename :: C.RopCons c
-consRename use =
-  do np <- Op.getTermPairs use "-term"
-     Right $ relmapRename use np
-
-relmapRename :: C.RopUse c -> [B.TermName2] -> C.Relmap c
-relmapRename use = C.relmapFlow use . relkitRename
-
-relkitRename :: [B.TermName2] -> C.RelkitFlow c
-relkitRename _ Nothing = Right C.relkitNothing
-relkitRename np (Just he1)
-    | nsShare /= [] = Message.reqNewTerm nsShare he1
-    | psLeft  /= [] = Message.unkTerm    psLeft  he1
-    | otherwise     = Right kit2
-    where
-      (ns, ps) = unzip np
-      ns1      = B.headNames he1
-      nsShare  = ns `B.snipShare` ns1
-      psLeft   = ps `B.snipLeft`  ns1
-
-      pn       = map Tuple.swap np
-      ren p    = Maybe.fromMaybe p $ lookup p pn
-
-      he2      = B.headRename ren he1
-      kit2     = C.relkitJust he2 C.RelkitId
+      mv :: (Int, B.TermName) -> B.Map [B.Term]
+      mv (i, n)  =  B.termChange (const n) `B.mapAt` i
 
 
 -- ----------------------  prefix

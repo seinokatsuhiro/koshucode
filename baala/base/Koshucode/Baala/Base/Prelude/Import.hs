@@ -30,6 +30,9 @@ module Koshucode.Baala.Base.Prelude.Import
   Data.Monoid.mconcat,
   Data.Monoid.mempty,
 
+  -- * Data.Tuple
+  Data.Tuple.swap,
+
   -- * Text.PrettyPrint
   Text.PrettyPrint.Doc,
   (Text.PrettyPrint.<>),
@@ -43,6 +46,7 @@ module Koshucode.Baala.Base.Prelude.Import
 
 import Control.Monad
 import Data.List
+import Data.Tuple
 import Data.Map
 import Data.Maybe
 import Data.Monoid

@@ -21,8 +21,7 @@ module Koshucode.Baala.Base.Prelude.Utility
   splitBy, divide, divideBy,
   maybeEmpty,
   squeeze, squeezeEmptyLines,
-  map2,
-  mapWithLast,
+  map2, mapAt, mapWithLast,
   notNull,
   chunks,
   ceilingRem,
@@ -163,6 +162,12 @@ map2 = fmap . fmap
 
 -- map2 :: (a -> b) -> [[a]] -> [[b]]
 -- map2 = map . map
+
+mapAt :: (B.Map a) -> Int -> B.Map [a]
+mapAt f = loop where
+    loop 0 (x : xs) = f x : xs
+    loop i (x : xs) = x : loop (i - 1) xs
+    loop _ []       = []
 
 mapWithLast :: (a -> b) -> (a -> b) -> [a] -> [b]
 mapWithLast f g = loop where
