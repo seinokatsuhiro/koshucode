@@ -172,8 +172,8 @@ relkitMove (ps, ns) (Just he1)
       ns1        =  B.headNames he1
       ns2        =  B.headNames he2
 
-      ns2Dup     =  B.duplicate ns2
-      psDup      =  B.duplicate ps
+      ns2Dup     =  B.duplicates ns2
+      psDup      =  B.duplicates ps
 
       psLeft     =  ps `B.snipLeft`  ns1
       psIndex    =  ps `B.snipIndex` ns1

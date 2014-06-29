@@ -155,7 +155,7 @@ relmapId :: Relmap c
 relmapId = RelmapCalc lexId (const $ Right . C.relkitId) []
 
 lexId :: C.Lexmap
-lexId = C.Lexmap C.LexmapBase (B.textToken "id") [("@attr", [])] [] []
+lexId = C.Lexmap C.LexmapBase (B.textToken "id") [(C.attrNameAttr, [])] [] []
 
 relmapLexList :: Relmap c -> [C.Lexmap]
 relmapLexList = collect where

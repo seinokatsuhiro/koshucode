@@ -32,8 +32,6 @@ module Koshucode.Baala.Base.Prelude.Assoc
   gather,
   gatherWith,
   gatherToMap,
-  duplicate,
-  -- $Gather
 ) where
 
 import qualified Data.Map   as Map
@@ -231,15 +229,6 @@ assocMore = loop where
 
 -- ----------------------  Gather
 
--- $Gather
---
---  /Examples/
---
---  Duplicate elements
---
---    >>> duplicate "apples and bananas"
---    " anps"
-
 type Gather a b = a -> (b, a)
 
 -- | Gather what is gotten by splitter.
@@ -264,11 +253,4 @@ gatherToMap xs = loop xs Map.empty where
         case Map.lookup k m of
           Just vs -> loop xs2 $ Map.insert k (v:vs) m
           Nothing -> loop xs2 $ Map.insert k [v] m
-
-duplicate :: (Ord k) => [k] -> [k]
-duplicate ks = Map.keys $ Map.filter (> 1) $ countToMap ks
-
-countToMap :: (Ord k) => [k] -> Map.Map k Int
-countToMap ks = foldr add Map.empty ks where
-    add k = Map.insertWith (+) k 1
 

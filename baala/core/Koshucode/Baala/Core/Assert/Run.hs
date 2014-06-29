@@ -80,7 +80,7 @@ judgesFromRel q pat = judges where
 
 optionUnkCheck :: [String] -> [B.NamedTrees] -> B.Ab ()
 optionUnkCheck ns xs =
-    let rest = B.assocCut ("@trunk" : ns) xs
+    let rest = B.assocCut (C.attrNameTrunk : ns) xs
     in if null rest
        then Right ()
        else Message.unkWord (fst . head $ rest)

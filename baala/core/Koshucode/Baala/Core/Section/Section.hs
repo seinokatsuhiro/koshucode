@@ -155,14 +155,15 @@ consSectionEach root resource (B.Short pt shorts xs) =
       assert src (C.CAssert typ pat opt toks) =
           do optTrees  <- B.tokenTrees opt
              rmapTrees <- B.tokenTrees toks
-             Right $ C.Assert typ pat (C.roa optTrees) src rmapTrees Nothing []
+             roa       <- C.roaFrom optTrees
+             Right $ C.Assert typ pat roa src rmapTrees Nothing []
 
       checkShort :: [B.ShortDef] -> B.Ab ()
       checkShort sh =
           B.abortable "short" pt $ do
             let (ss, rs) = unzip sh
-                prefix   = B.duplicate ss
-                replace  = B.duplicate rs
+                prefix   = B.duplicates ss
+                replace  = B.duplicates rs
                 invalid  = B.omit B.isShortPrefix ss
             B.unless (null prefix)  $ Message.dupPrefix prefix
             B.unless (null replace) $ Message.dupReplacement replace

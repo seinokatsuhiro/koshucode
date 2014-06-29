@@ -44,11 +44,11 @@ data LexmapType
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance B.Write Lexmap where
-    write sh Lexmap { lexOpToken = opTok, lexAttr = opd } =
-        case lookup "@attr" opd of
+    write sh Lexmap { lexOpToken = opToken, lexAttr = attr } =
+        case lookup C.attrNameAttr attr of
           Nothing -> B.writeH sh [op, "..."]
           Just xs -> B.writeH sh [op, show xs]
-        where op = B.tokenContent opTok
+        where op = B.tokenContent opToken
 
 instance B.CodePointer Lexmap where
     codePoint = B.codePoint . lexOpToken
@@ -121,7 +121,7 @@ consLexmap sorters gslot derives = lexmap where
     cons ty rop roa trees =
         check $ Lexmap { lexType    = ty
                        , lexOpToken = rop
-                       , lexAttr    = (("@attr", trees) : roa)
+                       , lexAttr    = ((C.attrNameAttr, trees) : roa)
                        , lexSubmap  = []
                        , lexMessage = [] }
 

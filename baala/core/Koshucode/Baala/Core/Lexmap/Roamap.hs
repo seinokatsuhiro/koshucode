@@ -80,13 +80,13 @@ roamapCons = loop where
 roamapRun :: Roamap -> B.AbMap C.Roa
 roamapRun = loop where
     loop (B.Sourced toks rmap) roa =
-        let Just pos = lookup "@trunk" roa
+        let Just pos = lookup C.attrNameTrunk roa
         in B.abortable "attr" toks $ case rmap of
           RoamapId              ->  Right  roa
           RoamapAdd opt k xs    ->  add    roa opt k xs
           RoamapRename (k', k)  ->  rename roa k' k
           RoamapFill xs         ->  do xs2 <- fill pos xs
-                                       Right $ ("@trunk", xs2) : roa
+                                       Right $ (C.attrNameTrunk, xs2) : roa
           RoamapAppend rs       ->  B.foldM (flip loop) roa rs
 
     add roa opt k xs =
