@@ -65,6 +65,7 @@ library
         Koshucode.Baala.Core.Lexmap.Lexmap
         Koshucode.Baala.Core.Lexmap.Roamap
         Koshucode.Baala.Core.Lexmap.Slot
+        Koshucode.Baala.Core.Lexmap.Sorter
 
         Koshucode.Baala.Core.Relmap
         Koshucode.Baala.Core.Relmap.Construct
