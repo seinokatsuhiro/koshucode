@@ -95,7 +95,7 @@ relkitMemberExpand x xsi (Just he1) = Right kit2 where
                in case xsc of
                     _ | C.isSet  xsc -> map (: cs) $ C.gSet xsc
                     _ | C.isList xsc -> map (: cs) $ B.unique $ C.gList xsc
-                    _ | C.isText xsc -> map (: cs) $ map (C.pText . B.singleton)
+                    _ | C.isText xsc -> map (: cs) $ map (C.pText . B.li1)
                                                    $ B.unique $ C.gText xsc
                     _                -> [xsc : cs]
 

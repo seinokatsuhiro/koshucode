@@ -60,7 +60,7 @@ relmapKoshuCop use = C.relmapGlobal use . relkitKoshuCop
 
 relkitKoshuCop :: (C.CContent c) => B.TermName -> C.RelkitGlobal c
 relkitKoshuCop name C.Global { C.globalCops = (cops, _) } _ =
-    Right $ C.relkitConstBody [name] $ map (B.singleton . C.pText . B.name) cops
+    Right $ C.relkitConstBody [name] $ map (B.li1 . C.pText . B.name) cops
 
 
 -- ----------------------  koshu-cop-infix
@@ -78,7 +78,7 @@ relmapKoshuCopInfix use = C.relmapGlobal use . relkitKoshuCopInfix
 relkitKoshuCopInfix :: (C.CContent c) => (B.TermName, Maybe B.TermName, Maybe B.TermName) -> C.RelkitGlobal c
 relkitKoshuCopInfix (name, height, dir) C.Global { C.globalCops = (_, htab) } _ = Right kit2 where
     kit2 = C.relkitJust he2 $ C.RelkitConst (map put htab)
-    he2  = B.headFrom $ [name] ++ heightMaybe B.singleton     ++ dirMaybe B.singleton
+    he2  = B.headFrom $ [name] ++ heightMaybe B.li1           ++ dirMaybe B.li1
     put (n, ih)  = [C.pText n] ++ heightMaybe (heightTerm ih) ++ dirMaybe (dirTerm ih)
 
     heightMaybe = B.maybeEmpty height

@@ -61,7 +61,7 @@ relmapContents use = C.relmapFlow use . relkitContents
 relkitContents :: (Ord c) => B.TermName -> C.RelkitFlow c
 relkitContents n _ = Right $ C.relkitJust he2 $ C.RelkitFull False kitf where
     he2  = B.headFrom [n]
-    kitf = map B.singleton . B.unique . concat
+    kitf = map B.li1 . B.unique . concat
 
 
 -- ----------------------  size

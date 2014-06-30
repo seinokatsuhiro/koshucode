@@ -118,7 +118,7 @@ consPreclause' src = dispatch $ liaison $ B.clauseTokens src where
 
     unk                   =  c1 CUnknown
     c0                    =  Clause src
-    c1                    =  B.singleton . c0
+    c1                    =  B.li1 . c0
 
     isDelim     =  (`elem` ["|", ":"])
 

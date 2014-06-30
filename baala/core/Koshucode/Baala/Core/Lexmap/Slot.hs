@@ -37,7 +37,7 @@ substTree gslot roa tree = B.abortableTree "slot" tree $ loop tree where
     pos :: [B.TokenTree] -> String -> B.Ab [B.TokenTree]
     pos od "all" = Right od
     pos od n     = case B.readInt n of
-                     Just i  -> Right . B.singleton =<< od `at` i
+                     Just i  -> Right . B.li1 =<< od `at` i
                      Nothing -> Message.noSlotName 0 n
 
     at = substIndex $ unwords . map B.tokenContent . B.untree

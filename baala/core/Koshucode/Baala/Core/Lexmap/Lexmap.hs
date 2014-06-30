@@ -140,7 +140,7 @@ consLexmap sorters gslot derives = lexmap where
           Nothing    -> do lxs <- slot lx   -- no submaps
                            Right (lx, lxs)
           Just trees -> do ws   <- withVars roa
-                           subs <- mapM (lexmap . B.singleton) $ withTrees ws trees
+                           subs <- mapM (lexmap . B.li1) $ withTrees ws trees
                            Right ( lx { lexSubmap = map fst subs }
                                  , concatMap snd subs )
 

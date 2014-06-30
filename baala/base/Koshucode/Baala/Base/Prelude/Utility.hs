@@ -17,7 +17,8 @@ module Koshucode.Baala.Base.Prelude.Utility
   front,
   omit, duplicates,
   unique, unionUp,
-  singleton, isSingleton,
+  li1, li2, li3,
+  isSingleton,
   splitBy, divide, divideBy,
   maybeEmpty,
   squeeze, squeezeEmptyLines,
@@ -104,8 +105,14 @@ unionUp
 unionUp xs ys = (xs List.\\ ys) ++ ys
 
 -- | Make singleton list.
-singleton :: a -> [a]
-singleton x = [x]
+li1 :: a -> [a]
+li1 x = [x]
+
+li2 :: a -> a -> [a]
+li2 x y = [x, y]
+
+li3 :: a -> a -> a -> [a]
+li3 x y z = [x, y, z]
 
 isSingleton :: [a] -> Bool
 isSingleton [_] = True
