@@ -15,10 +15,8 @@ module Koshucode.Baala.Base.Prelude.Order
 import qualified Koshucode.Baala.Base.Prelude.Class   as B
 import qualified Koshucode.Baala.Base.Prelude.Import  as B
 import qualified Koshucode.Baala.Base.Prelude.Snip    as B
-import qualified Koshucode.Baala.Base.Prelude.Utility as B
+import qualified Koshucode.Baala.Base.Prelude.Pair    as B
 
-
--- ----------------------  Order
 
 data OrderCap a
     = Asc a | Desc a

@@ -67,9 +67,10 @@ library
         Koshucode.Baala.Base.Prelude.Assoc
         Koshucode.Baala.Base.Prelude.Class
         Koshucode.Baala.Base.Prelude.Import
+        Koshucode.Baala.Base.Prelude.List
         Koshucode.Baala.Base.Prelude.Order
+        Koshucode.Baala.Base.Prelude.Pair
         Koshucode.Baala.Base.Prelude.Snip
-        Koshucode.Baala.Base.Prelude.Utility
 
         Koshucode.Baala.Base.Syntax
         Koshucode.Baala.Base.Syntax.Code

@@ -1,20 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | General utilities
-
-module Koshucode.Baala.Base.Prelude.Utility
-(
-  -- * Pair
-  mapFst,
-  mapSnd,
-  cons1,
-  mapFstTo,
-  mapSndTo,
-  maybePairs,
-  sequenceSnd,
-
-  -- * List
-  front,
+module Koshucode.Baala.Base.Prelude.List
+( front,
   omit, duplicates,
   unique, unionUp,
   li1, li2, li3,
@@ -28,45 +15,9 @@ module Koshucode.Baala.Base.Prelude.Utility
   ceilingRem,
 ) where
 
-import Control.Applicative
 import qualified Data.List as List
 import qualified Data.Set  as Set
-
 import qualified Koshucode.Baala.Base.Prelude.Class as B
-
-
-
--- ----------------------  Pair
-
-mapFst :: (a -> c) -> (a, b) -> (c, b)
-mapFst f (x, y) = (f x, y)
-
-mapSnd :: (b -> c) -> (a, b) -> (a, c)
-mapSnd f (x, y) = (x, f y)
-
-cons1 :: a -> ([a], b) -> ([a], b)
-cons1 x = mapFst (x:)
-
-mapFstTo :: (Functor m) => (a -> c) -> m (a, b) -> m (c, b)
-mapFstTo = fmap . mapFst
-
-mapSndTo :: (Functor m) => (b -> c) -> m (a, b) -> m  (a, c)
-mapSndTo = fmap . fmap
-
-maybePairs :: [a] -> Maybe [(a, a)]
-maybePairs (a:b:xs) = liftA ((a, b):) $ maybePairs xs
-maybePairs []       = Just []
-maybePairs _        = Nothing
-
-sequenceSnd :: (Monad m) => [(a, m b)] -> m [(a, b)]
-sequenceSnd xs =
-    do let (fs, ss) = unzip xs
-       ss' <- sequence ss
-       return $ zip fs ss'
-
-
-
--- ----------------------  List
 
 front :: [a] -> [a]
 front [] = []
@@ -196,3 +147,4 @@ ceilingRem a b =
     case a `quotRem` b of
       (q, 0) -> q
       (q, _) -> q + 1
+
