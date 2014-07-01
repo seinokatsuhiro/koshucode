@@ -54,17 +54,18 @@ import qualified Koshucode.Baala.Op.Message as Message
 -- 
 ropsTerm :: (Ord c) => [C.Rop c]
 ropsTerm = Op.ropList "term"  -- GROUP
-    --   USAGE                   , CONSTRUCTOR      , ATTRIBUTE
-    [ ( "cut /P ..."             , consCut          , C.roaList "-term" [] )
-    , ( "cut-term /R"            , consCutTerm      , C.roaOne  "-relmap" [] )
-    , ( "pick /P ..."            , consPick         , C.roaList "-term"   [] )
-    , ( "pick-term /R"           , consPickTerm     , C.roaOne  "-relmap" [] )
-    , ( "rename /N /P ..."       , consRename       , C.roaList "-term"   [] )
-    , ( "move /P ... -to /N ..." , consMove         , C.roaList "-from" ["-to"] )
-    , ( "prefix /P /N ..."       , consPrefix       , C.roaOneList "-prefix" "-term" [] )
-    , ( "prefix-change /P /Q"    , consPrefixChange , C.roaTwo "-new" "-old" [] )
-    , ( "unprefix /P"            , consUnprefix     , C.roaOne "-prefix" [] )
+    --          CONSTRUCTOR        USAGE                      ATTRIBUTE
+    [ Op.ropV   consCut            "cut /P ..."               "-term"
+    , Op.ropI   consCutTerm        "cut-term /R"              "-relmap"
+    , Op.ropV   consPick           "pick /P ..."              "-term"
+    , Op.ropI   consPickTerm       "pick-term /R"             "-relmap"
+    , Op.ropV   consRename         "rename /N /P ..."         "-term"
+    , Op.ropV   consMove           "move /P ... -to /N ..."   "-from | -to"
+    , Op.ropIV  consPrefix         "prefix /P /N ..."         "-prefix -term"
+    , Op.ropII  consPrefixChange   "prefix-change /P /Q"      "-new -old"
+    , Op.ropI   consUnprefix       "unprefix /P"              "-prefix"
     ]
+
 
 
 -- ----------------------  pick & cut

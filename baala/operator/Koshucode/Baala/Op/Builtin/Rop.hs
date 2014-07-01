@@ -5,6 +5,7 @@
 module Koshucode.Baala.Op.Builtin.Rop
 ( ropsBuiltin,
   ropList,
+  ropN, ropI, ropII, ropV, ropIV,
 
   -- * id
   consId, relmapId,
@@ -23,8 +24,8 @@ import qualified Koshucode.Baala.Core as C
 --
 ropsBuiltin :: [C.Rop c]
 ropsBuiltin = ropList "builtin"
-    [ ( "append R ..." , consAppend  , C.roaList "-relmap" [] )
-    , ( "id"           , consId      , C.roaNone [] )
+    [ ropV consAppend  "append R ..."   "-relmap"
+    , ropN consId      "id"
     ]
 
 
@@ -40,6 +41,38 @@ ropList group = map rop where
         let name   = head $ words usage
             sorter = C.roaSorter roa
         in C.Rop name group sorter cons usage
+
+ropBase :: ([String] -> [String] -> C.RoaSpec) -> C.RopCons c -> String -> String -> (String, C.RopCons c, C.RoaSpec)
+ropBase a cons usage attr = (usage, cons, attr') where
+    attr' = case B.divideBy (== '|') attr of
+              [trunk]         -> a (words trunk) []
+              [trunk, branch] -> a (words trunk) (words branch)
+              _               -> B.bug $ "malformed attribute: " ++ attr
+
+ropN :: C.RopCons c -> String -> (String, C.RopCons c, C.RoaSpec)
+ropN cons usage = ropBase a cons usage "" where
+    a []      =  C.roaNone
+    a _       =  B.bug "ropI"
+
+ropI :: C.RopCons c -> String -> String -> (String, C.RopCons c, C.RoaSpec)
+ropI = ropBase a where
+    a [x]     =  C.roaOne x
+    a _       =  B.bug "ropI"
+
+ropII :: C.RopCons c -> String -> String -> (String, C.RopCons c, C.RoaSpec)
+ropII = ropBase a where
+    a [x1,x2] =  C.roaTwo x1 x2
+    a _       =  B.bug "ropI"
+
+ropV :: C.RopCons c -> String -> String -> (String, C.RopCons c, C.RoaSpec)
+ropV = ropBase a where
+    a [x1]    =  C.roaList x1
+    a _       =  B.bug "ropI"
+
+ropIV :: C.RopCons c -> String -> String -> (String, C.RopCons c, C.RoaSpec)
+ropIV = ropBase a where
+    a [x1,x2] =  C.roaOneList x1 x2
+    a _       =  B.bug "ropI"
 
 
 -- ----------------------  append

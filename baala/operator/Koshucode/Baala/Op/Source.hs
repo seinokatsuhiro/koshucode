@@ -42,13 +42,13 @@ import qualified Koshucode.Baala.Op.Message  as Message
 --
 ropsSource :: (C.CContent c) => [C.Rop c]
 ropsSource = Op.ropList "source"
-    --  SYNOPSIS            , CONSTRUCTOR    , ATTRIBUTE
-    [ ( "const R"           , consConst      , C.roaOne "-lit" [] )
-    , ( "dee"               , consDee        , C.roaNone [] )
-    , ( "dum"               , consDum        , C.roaNone [] )
-    , ( "empty /N ..."      , consEmpty      , C.roaList "-term" [] )
-    , ( "source P /N ..."   , consSource     , C.roaOneList "-pattern" "-term" [] )
-    , ( "source-term P R"   , consSourceTerm , C.roaTwo "-pattern" "-relmap" [] )
+    --          CONSTRUCTOR     USAGE               ATTRIBUTE
+    [ Op.ropI   consConst       "const R"           "-lit"
+    , Op.ropN   consDee         "dee"
+    , Op.ropN   consDum         "dum"
+    , Op.ropV   consEmpty       "empty /N ..."      "-term"
+    , Op.ropIV  consSource      "source P /N ..."   "-pattern -term"
+    , Op.ropII  consSourceTerm  "source-term P R"   "-pattern -relmap"
     ]
 
 
