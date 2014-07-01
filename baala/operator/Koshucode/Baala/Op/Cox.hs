@@ -43,14 +43,14 @@ import qualified Koshucode.Baala.Op.Message  as Message
 -- 
 ropsCox :: (C.CContent c) => [C.Rop c]
 ropsCox = Op.ropList "cox"
-    --  SYNOPSIS                  , CONSTRUCTOR      , ATTRIBUTE
-    [ ( "add /N E ..."            , consAdd          , C.roaList "-in"   ["-let"] )
-    , ( "keep E"                  , consFilter True  , C.roaList "-in"   ["-let"] )
-    , ( "omit E"                  , consFilter False , C.roaList "-in"   ["-let"] )
-    , ( "omit-all"                , consOmitAll      , C.roaNone [] )
-    , ( "range /N -from E -to E"  , consRange        , C.roaOne  "-term" ["-from", "-to"] )
-    , ( "split /N E ..."          , consSplit        , C.roaList "-in"   ["-let"] )
-    , ( "subst /N E ..."          , consSubst        , C.roaList "-in"   ["-let"] )
+    --        CONSTRUCTOR         USAGE                     ATTRIBUTE
+    [ Op.ropV consAdd             "add /N E ..."            "-in | -let"
+    , Op.ropV (consFilter True)   "keep E"                  "-in | -let"
+    , Op.ropV (consFilter False)  "omit E"                  "-in | -let"
+    , Op.ropN consOmitAll         "omit-all"                ""
+    , Op.ropI consRange           "range /N -from E -to E"  "-term | -from -to"
+    , Op.ropV consSplit           "split /N E ..."          "-in | -let"
+    , Op.ropV consSubst           "subst /N E ..."          "-in | -let"
     ]
 
 

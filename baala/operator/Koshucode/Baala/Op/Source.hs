@@ -44,8 +44,8 @@ ropsSource :: (C.CContent c) => [C.Rop c]
 ropsSource = Op.ropList "source"
     --          CONSTRUCTOR     USAGE               ATTRIBUTE
     [ Op.ropI   consConst       "const R"           "-lit"
-    , Op.ropN   consDee         "dee"
-    , Op.ropN   consDum         "dum"
+    , Op.ropN   consDee         "dee"               ""
+    , Op.ropN   consDum         "dum"               ""
     , Op.ropV   consEmpty       "empty /N ..."      "-term"
     , Op.ropIV  consSource      "source P /N ..."   "-pattern -term"
     , Op.ropII  consSourceTerm  "source-term P R"   "-pattern -relmap"

@@ -33,31 +33,18 @@ import qualified Koshucode.Baala.Op.Nest.Flow       as Op
 
 ropsNest :: (C.CContent c) => [C.Rop c]
 ropsNest = Op.ropList "nest"
-    --  SYNOPSIS,
-    --  CONSTRUCTOR, ATTRIBUTE
-    [ ( "chunk /T ... [-order /P ...]",
-        Op.consChunk, C.roaList "-term" ["-order"] )
-    , ( "copy N R",
-        Op.consCopy, C.roaTwo "-with" "-relmap" [] )
-    , ( "down /N",
-        Op.consDown, C.roaOne "-term" [] )
-    , ( "for /N R [-with /N ...]",
-        Op.consFor, C.roaTwo "-term" "-relmap" ["-with"] )
-    , ( "group /N R",
-        Op.consGroup, C.roaTwo "-term" "-relmap" [] )
-    , ( "group-by /N R",
-        Op.consGroupBy, C.roaTwo "-term" "-relmap" [] )
-    , ( "join-up /P ...",
-        Op.consJoinUp, C.roaList "-term" [] )
-    , ( "nest [~] /P ... -to /N",
-        Op.consNest, C.roaList "-term" ["-to"] )
-    , ( "unnest /P",
-        Op.consUnnest, C.roaList "-term" [] )
-    , ( "slice /N [R] [-with /N ...]",
-        Op.consSlice, C.roaOneOpt "-term" "-relmap" ["-with"] )
-    , ( "slice-up R [-with /N ...]",
-        Op.consSliceUp, C.roaOne "-relmap" ["-with"] )
-    , ( "up /N",
-        Op.consUp, C.roaOne "-term" [] )
+    --          CONSTRUCTOR     USAGE                          ATTRIBUTE
+    [ Op.ropV   Op.consChunk    "chunk /T ... [-order /P ...]" "-term | -order"
+    , Op.ropII  Op.consCopy     "copy N R"                     "-with -relmap"
+    , Op.ropI   Op.consDown     "down /N"                      "-term"
+    , Op.ropII  Op.consFor      "for /N R [-with /N ...]"      "-term -relmap | -with"
+    , Op.ropII  Op.consGroup    "group /N R"                   "-term -relmap"
+    , Op.ropII  Op.consGroupBy  "group-by /N R"                "-term -relmap"
+    , Op.ropV   Op.consJoinUp   "join-up /P ..."               "-term"
+    , Op.ropV   Op.consNest     "nest [~] /P ... -to /N"       "-term | -to"
+    , Op.ropV   Op.consUnnest   "unnest /P"                    "-term"
+    , Op.ropIJ  Op.consSlice    "slice /N [R] [-with /N ...]"  "-term -relmap | -with"
+    , Op.ropI   Op.consSliceUp  "slice-up R [-with /N ...]"    "-relmap | -with"
+    , Op.ropI   Op.consUp       "up /N"                        "-term"
     ]
 

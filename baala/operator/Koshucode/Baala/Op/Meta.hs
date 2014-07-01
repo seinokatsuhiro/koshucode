@@ -35,16 +35,12 @@ import qualified Koshucode.Baala.Op.Message    as Message
 -- 
 ropsMeta :: (C.CContent c) => [C.Rop c]
 ropsMeta = Op.ropList "meta"
-    --  SYNOPSIS,
-    --  CONSTRUCTOR, ATTRIBUTE
-    [ ( "koshu-cop /N",
-        consKoshuCop, C.roaList "-name" [] )
-    , ( "koshu-cop-infix /N [-height /N][-dir /N]",
-        consKoshuCopInfix, C.roaOne "-name" ["-height", "-dir"] )
-    , ( "koshu-rop /N /N",
-        consKoshuRop, C.roaList "-name" ["-group", "-usage"] )
-    , ( "koshu-version /N",
-        consKoshuVersion, C.roaOneList "-term" "-version" [] )
+    --         CONSTRUCTOR       USAGE                ATTRIBUTE
+    [ Op.ropV  consKoshuCop      "koshu-cop /N"       "-name"
+    , Op.ropI  consKoshuCopInfix "koshu-cop-infix /N [-height /N][-dir /N]"
+                                                      "-name | -height -dir"
+    , Op.ropV  consKoshuRop      "koshu-rop /N /N"    "-name | -group -usage"
+    , Op.ropV  consKoshuVersion  "koshu-version /N"   "-term | -version"
     ]
 
 

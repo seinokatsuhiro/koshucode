@@ -40,11 +40,11 @@ import qualified Koshucode.Baala.Op.Builtin as Op
 --
 ropsGadget :: (C.CContent c) => [C.Rop c]
 ropsGadget = Op.ropList "gadget"  -- GROUP
-    --   USAGE                    , CONSTRUCTOR    , ATTRIBUTE
-    [ ( "contents /N"             , consContents   , C.roaList "-term" [] )
-    , ( "number /N -order /N ..." , consNumber     , C.roaOne "-term" ["-order", "-from"] )
-    , ( "rank /N -order /N ..."   , consRank       , C.roaOne "-term" ["-order", "-dense"] )
-    , ( "size /N"                 , consSize       , C.roaOne "-term" [] )
+    --         CONSTRUCTOR  USAGE                      ATTRIBUTE
+    [ Op.ropV consContents  "contents /N"              "-term"
+    , Op.ropI consNumber    "number /N -order /N ..."  "-term | -order -from"
+    , Op.ropI consRank      "rank /N -order /N ..."    "-term | -order -dense"
+    , Op.ropI consSize      "size /N"                  "-term"
     ]
 
 

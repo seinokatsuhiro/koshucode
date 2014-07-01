@@ -36,12 +36,12 @@ import qualified Koshucode.Baala.Op.Message   as Message
 -- 
 ropsPeripheral :: (C.CContent c) => [C.Rop c]
 ropsPeripheral = Op.ropList "peripheral"
-    --   SYNOPSIS                , CONSTRUCTOR  , ATTRIBUTE
-    [ ( "assn /P ... -to N."     , consAssn     , C.roaList "-term" ["-to"] )
-    , ( "member /N /N"           , consMember   , C.roaEnum ["-1", "-2"] [] )
-    , ( "rdf P /S /O"            , consRdf      , C.roaOneList "-pattern" "-term" [] )
-    , ( "typename /N /P ..."     , consTypename , C.roaList "-term" [] )
-    , ( "unassn /P -only /P ..." , consUnassn   , C.roaOne "-from" ["-only"] )
+    --         CONSTRUCTOR   USAGE                     ATTRIBUTE
+    [ Op.ropV  consAssn      "assn /P ... -to N"       "-term | -to"
+    , Op.ropE  consMember    "member /N /N"            "-1 -2"
+    , Op.ropIV consRdf       "rdf P /S /O"             "-pattern -term"
+    , Op.ropV  consTypename  "typename /N /P ..."      "-term"
+    , Op.ropI  consUnassn    "unassn /P -only /P ..."  "-from | -only"
     ]
 
 -- ----------------------  member

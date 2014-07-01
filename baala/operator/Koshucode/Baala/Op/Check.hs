@@ -21,14 +21,10 @@ import qualified Koshucode.Baala.Op.Message  as Message
 
 ropsCheck :: (C.CContent c) => [C.Rop c]
 ropsCheck = Op.ropList "check"
-    --  SYNOPSIS,
-    --  CONSTRUCTOR, ATTRIBUTE
-    [ ( "check-term [-just /N ... | -has /N ... | -but /N ...]",
-        consCheckTerm, C.roaNone ["-just", "-has", "-but"] )
-    , ( "dump",
-        consDump, C.roaNone [] )
-    , ( "duplicate /N ...",
-        consDuplicate, C.roaList "-term" [] )
+    [ Op.ropN consCheckTerm  "check-term [-just /N ... | -has /N ... | -but /N ...]"
+                                                 "| -just -has -but"
+    , Op.ropN consDump       "dump"              ""
+    , Op.ropV consDuplicate  "duplicate /N ..."  "-term"
     ]
 
 

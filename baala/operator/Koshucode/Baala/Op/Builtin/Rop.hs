@@ -5,7 +5,7 @@
 module Koshucode.Baala.Op.Builtin.Rop
 ( ropsBuiltin,
   ropList,
-  ropN, ropI, ropII, ropV, ropIV,
+  ropN, ropE, ropI, ropII, ropIJ, ropV, ropIV,
 
   -- * id
   consId, relmapId,
@@ -25,7 +25,7 @@ import qualified Koshucode.Baala.Core as C
 ropsBuiltin :: [C.Rop c]
 ropsBuiltin = ropList "builtin"
     [ ropV consAppend  "append R ..."   "-relmap"
-    , ropN consId      "id"
+    , ropN consId      "id"             ""
     ]
 
 
@@ -49,30 +49,42 @@ ropBase a cons usage attr = (usage, cons, attr') where
               [trunk, branch] -> a (words trunk) (words branch)
               _               -> B.bug $ "malformed attribute: " ++ attr
 
-ropN :: C.RopCons c -> String -> (String, C.RopCons c, C.RoaSpec)
-ropN cons usage = ropBase a cons usage "" where
+ropBug :: [String] -> a
+ropBug xs = B.bug $ "malformed attribute: " ++ unwords xs
+
+ropN :: C.RopCons c -> String -> String -> (String, C.RopCons c, C.RoaSpec)
+ropN = ropBase a where
     a []      =  C.roaNone
-    a _       =  B.bug "ropI"
+    a xs      =  ropBug xs
+
+ropE :: C.RopCons c -> String -> String -> (String, C.RopCons c, C.RoaSpec)
+ropE = ropBase a where
+    a xs      =  C.roaEnum xs
 
 ropI :: C.RopCons c -> String -> String -> (String, C.RopCons c, C.RoaSpec)
 ropI = ropBase a where
     a [x]     =  C.roaOne x
-    a _       =  B.bug "ropI"
+    a xs      =  ropBug xs
 
 ropII :: C.RopCons c -> String -> String -> (String, C.RopCons c, C.RoaSpec)
 ropII = ropBase a where
     a [x1,x2] =  C.roaTwo x1 x2
-    a _       =  B.bug "ropI"
+    a xs      =  ropBug xs
 
 ropV :: C.RopCons c -> String -> String -> (String, C.RopCons c, C.RoaSpec)
 ropV = ropBase a where
     a [x1]    =  C.roaList x1
-    a _       =  B.bug "ropI"
+    a xs      =  ropBug xs
 
 ropIV :: C.RopCons c -> String -> String -> (String, C.RopCons c, C.RoaSpec)
 ropIV = ropBase a where
     a [x1,x2] =  C.roaOneList x1 x2
-    a _       =  B.bug "ropI"
+    a xs      =  ropBug xs
+
+ropIJ :: C.RopCons c -> String -> String -> (String, C.RopCons c, C.RoaSpec)
+ropIJ = ropBase a where
+    a [x1,x2] =  C.roaOneOpt x1 x2
+    a xs      =  ropBug xs
 
 
 -- ----------------------  append

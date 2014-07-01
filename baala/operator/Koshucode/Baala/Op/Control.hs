@@ -30,14 +30,14 @@ import qualified Koshucode.Baala.Op.Message as Message
 -- | Implementation of relational operators.
 ropsControl :: (C.CContent c) => [C.Rop c]
 ropsControl = Op.ropList "control"
-    --  SYNOPSIS     , CONSTRUCTOR , ATTRIBUTE
-    [ ( "equal"      , consEqual   , C.roaOne "-relmap" [] )
-    , ( "fix R"      , consFix     , C.roaOne  "-relmap" [] )
-    , ( "fix-join R" , consFixJoin , C.roaOne  "-relmap" [] )
-    , ( "if R ..."   , consIf      , C.roaList "-relmap" [] )
-    , ( "repeat N R" , consRepeat  , C.roaTwo  "-count" "-relmap" [] )
-    , ( "unless R R" , consUnless  , C.roaList "-relmap" [] )
-    , ( "when R R"   , consWhen    , C.roaList "-relmap" [] )
+    --         CONSTRUCTOR   USAGE          ATTRIBUTE
+    [ Op.ropI  consEqual     "equal"        "-relmap"
+    , Op.ropI  consFix       "fix R"        "-relmap"
+    , Op.ropI  consFixJoin   "fix-join R"   "-relmap"
+    , Op.ropV  consIf        "if R ..."     "-relmap"
+    , Op.ropII consRepeat    "repeat N R"   "-count -relmap"
+    , Op.ropV  consUnless    "unless R R"   "-relmap"
+    , Op.ropV  consWhen      "when R R"     "-relmap"
     ]
 
 
