@@ -26,8 +26,8 @@ import qualified Koshucode.Baala.Op.Lattice.Tropashko as Op
 ropsNil :: (Ord c, C.CRel c, C.CNil c) => [C.Rop c]
 ropsNil = Op.ropList "nil"  -- GROUP
     --         CONSTRUCTOR USAGE      ATTRIBUTE
-    [ Op.ropI  consBoth    "both R"   "-relmap"
-    , Op.ropI  consMaybe   "maybe R"  "-relmap"
+    [ Op.ropI  consBoth    "both R"   "-relmap/"
+    , Op.ropI  consMaybe   "maybe R"  "-relmap/"
     ]
 
 

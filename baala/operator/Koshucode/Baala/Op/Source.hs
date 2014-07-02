@@ -48,7 +48,7 @@ ropsSource = Op.ropList "source"
     , Op.ropN   consDum         "dum"               ""
     , Op.ropV   consEmpty       "empty /N ..."      "-term"
     , Op.ropIV  consSource      "source P /N ..."   "-pattern -term"
-    , Op.ropII  consSourceTerm  "source-term P R"   "-pattern -relmap"
+    , Op.ropII  consSourceTerm  "source-term P R"   "-pattern -relmap/"
     ]
 
 

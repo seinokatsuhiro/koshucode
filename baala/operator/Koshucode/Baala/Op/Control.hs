@@ -31,13 +31,13 @@ import qualified Koshucode.Baala.Op.Message as Message
 ropsControl :: (C.CContent c) => [C.Rop c]
 ropsControl = Op.ropList "control"
     --         CONSTRUCTOR   USAGE          ATTRIBUTE
-    [ Op.ropI  consEqual     "equal"        "-relmap"
-    , Op.ropI  consFix       "fix R"        "-relmap"
-    , Op.ropI  consFixJoin   "fix-join R"   "-relmap"
-    , Op.ropV  consIf        "if R ..."     "-relmap"
-    , Op.ropII consRepeat    "repeat N R"   "-count -relmap"
-    , Op.ropV  consUnless    "unless R R"   "-relmap"
-    , Op.ropV  consWhen      "when R R"     "-relmap"
+    [ Op.ropI  consEqual     "equal"        "-relmap/"
+    , Op.ropI  consFix       "fix R"        "-relmap/"
+    , Op.ropI  consFixJoin   "fix-join R"   "-relmap/"
+    , Op.ropV  consIf        "if R ..."     "-relmap/"
+    , Op.ropII consRepeat    "repeat N R"   "-count -relmap/"
+    , Op.ropV  consUnless    "unless R R"   "-relmap/"
+    , Op.ropV  consWhen      "when R R"     "-relmap/"
     ]
 
 

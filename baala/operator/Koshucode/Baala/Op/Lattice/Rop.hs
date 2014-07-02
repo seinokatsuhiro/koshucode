@@ -27,11 +27,11 @@ import qualified Koshucode.Baala.Op.Lattice.Tropashko as Op
 ropsLattice :: (Ord c, C.CRel c) => [C.Rop c]
 ropsLattice = Op.ropList "lattice"  -- GROUP
     --         CONSTRUCTOR     USAGE        ATTRIBUTE
-    [ Op.ropI  Op.consCompose  "compose R"  "-relmap"
-    , Op.ropI  Op.consJoin     "join R"     "-relmap"
-    , Op.ropI  Op.consMeet     "meet R"     "-relmap"
-    , Op.ropI  Op.consNone     "none R"     "-relmap"
-    , Op.ropI  Op.consSome     "some R"     "-relmap"
-    , Op.ropI  Op.consSub      "sub R"      "-relmap"
+    [ Op.ropI  Op.consCompose  "compose R"  "-relmap/"
+    , Op.ropI  Op.consJoin     "join R"     "-relmap/"
+    , Op.ropI  Op.consMeet     "meet R"     "-relmap/"
+    , Op.ropI  Op.consNone     "none R"     "-relmap/"
+    , Op.ropI  Op.consSome     "some R"     "-relmap/"
+    , Op.ropI  Op.consSub      "sub R"      "-relmap/"
     ]
 

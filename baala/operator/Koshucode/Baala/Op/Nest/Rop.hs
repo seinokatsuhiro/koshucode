@@ -35,16 +35,16 @@ ropsNest :: (C.CContent c) => [C.Rop c]
 ropsNest = Op.ropList "nest"
     --          CONSTRUCTOR     USAGE                          ATTRIBUTE
     [ Op.ropV   Op.consChunk    "chunk /T ... [-order /P ...]" "-term | -order"
-    , Op.ropII  Op.consCopy     "copy N R"                     "-with -relmap"
+    , Op.ropII  Op.consCopy     "copy N R"                     "-with -relmap/"
     , Op.ropI   Op.consDown     "down /N"                      "-term"
-    , Op.ropII  Op.consFor      "for /N R [-with /N ...]"      "-term -relmap | -with"
-    , Op.ropII  Op.consGroup    "group /N R"                   "-term -relmap"
-    , Op.ropII  Op.consGroupBy  "group-by /N R"                "-term -relmap"
+    , Op.ropII  Op.consFor      "for /N R [-with /N ...]"      "-term -relmap/ | -with"
+    , Op.ropII  Op.consGroup    "group /N R"                   "-term -relmap/"
+    , Op.ropII  Op.consGroupBy  "group-by /N R"                "-term -relmap/"
     , Op.ropV   Op.consJoinUp   "join-up /P ..."               "-term"
     , Op.ropV   Op.consNest     "nest [~] /P ... -to /N"       "-term | -to"
     , Op.ropV   Op.consUnnest   "unnest /P"                    "-term"
-    , Op.ropIJ  Op.consSlice    "slice /N [R] [-with /N ...]"  "-term -relmap | -with"
-    , Op.ropI   Op.consSliceUp  "slice-up R [-with /N ...]"    "-relmap | -with"
+    , Op.ropIJ  Op.consSlice    "slice /N [R] [-with /N ...]"  "-term -relmap/ | -with"
+    , Op.ropI   Op.consSliceUp  "slice-up R [-with /N ...]"    "-relmap/ | -with"
     , Op.ropI   Op.consUp       "up /N"                        "-term"
     ]
 

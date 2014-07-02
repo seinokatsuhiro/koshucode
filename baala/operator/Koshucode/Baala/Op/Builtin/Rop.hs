@@ -24,67 +24,77 @@ import qualified Koshucode.Baala.Core as C
 --
 ropsBuiltin :: [C.Rop c]
 ropsBuiltin = ropList "builtin"
-    [ ropV consAppend  "append R ..."   "-relmap"
-    , ropN consId      "id"             ""
+    --     CONSTRUCTOR  USAGE            ATTRIBUTE
+    [ ropV consAppend   "append R ..."   "-relmap/"
+    , ropN consId       "id"             ""
     ]
 
+-- | Usage, constructor, and attribute sorter
+type RopDef c = (String, C.RopCons c, C.RoaSpec)
 
 -- | Make implementations of relation-mapping operators.
 ropList
     :: String      -- ^ Operator group
-    -> [(String, C.RopCons c, C.RoaSpec)]
-                   -- ^ Synopsis, constructor, and attribute sorter
+    -> [RopDef c]  -- ^ List of operator definitions
     -> [C.Rop c]   -- ^ List of relation-mapping operators
 ropList group = map rop where
-    rop :: (String, C.RopCons c, C.RoaSpec) -> C.Rop c
+    rop :: RopDef c -> C.Rop c
     rop (usage, cons, roa) =
         let name   = head $ words usage
             sorter = C.roaSorter roa
         in C.Rop name group sorter cons usage
 
-ropBase :: ([String] -> [String] -> C.RoaSpec) -> C.RopCons c -> String -> String -> (String, C.RopCons c, C.RoaSpec)
+ropBase :: ([String] -> [String] -> C.RoaSpec) -> C.RopCons c -> String -> String -> RopDef c
 ropBase a cons usage attr = (usage, cons, attr') where
     attr' = case B.divideBy (== '|') attr of
-              [trunk]         -> a (words trunk) []
-              [trunk, branch] -> a (words trunk) (words branch)
-              _               -> B.bug $ "malformed attribute: " ++ attr
+              [trunk]         -> a (names trunk) []
+              [trunk, branch] -> a (names trunk) (names branch)
+              _               -> ropBug attr
+    names = map classify . words
 
-ropBug :: [String] -> a
-ropBug xs = B.bug $ "malformed attribute: " ++ unwords xs
+    classify n@('-' : _) | last n == '/' = init n
+                         | otherwise     = n
+    classify n = ropBug n
 
-ropN :: C.RopCons c -> String -> String -> (String, C.RopCons c, C.RoaSpec)
+ropBug :: String -> a
+ropBug x = B.bug $ "malformed attribute: " ++ x
+
+ropBugUnwords :: [String] -> a
+ropBugUnwords = ropBug . unwords
+
+ropN :: C.RopCons c -> String -> String -> RopDef c
 ropN = ropBase a where
-    a []      =  C.roaNone
-    a xs      =  ropBug xs
+    a []       =  C.roaNone
+    a xs       =  ropBugUnwords xs
 
-ropE :: C.RopCons c -> String -> String -> (String, C.RopCons c, C.RoaSpec)
+ropE :: C.RopCons c -> String -> String -> RopDef c
 ropE = ropBase a where
-    a xs      =  C.roaEnum xs
+    a xs       =  C.roaEnum xs
 
-ropI :: C.RopCons c -> String -> String -> (String, C.RopCons c, C.RoaSpec)
+ropI :: C.RopCons c -> String -> String -> RopDef c
 ropI = ropBase a where
-    a [x]     =  C.roaOne x
-    a xs      =  ropBug xs
+    a [x]      =  C.roaOne x
+    a xs       =  ropBugUnwords xs
 
-ropII :: C.RopCons c -> String -> String -> (String, C.RopCons c, C.RoaSpec)
+ropII :: C.RopCons c -> String -> String -> RopDef c
 ropII = ropBase a where
-    a [x1,x2] =  C.roaTwo x1 x2
-    a xs      =  ropBug xs
+    a [x1,x2]  =  C.roaTwo x1 x2
+    a xs       =  ropBugUnwords xs
 
-ropV :: C.RopCons c -> String -> String -> (String, C.RopCons c, C.RoaSpec)
+ropV :: C.RopCons c -> String -> String -> RopDef c
 ropV = ropBase a where
-    a [x1]    =  C.roaList x1
-    a xs      =  ropBug xs
+    a [x1]     =  C.roaList x1
+    a xs       =  ropBugUnwords xs
 
-ropIV :: C.RopCons c -> String -> String -> (String, C.RopCons c, C.RoaSpec)
+ropIV :: C.RopCons c -> String -> String -> RopDef c
 ropIV = ropBase a where
-    a [x1,x2] =  C.roaOneList x1 x2
-    a xs      =  ropBug xs
+    a [x1,x2]  =  C.roaOneList x1 x2
+    a xs       =  ropBugUnwords xs
 
-ropIJ :: C.RopCons c -> String -> String -> (String, C.RopCons c, C.RoaSpec)
+ropIJ :: C.RopCons c -> String -> String -> RopDef c
 ropIJ = ropBase a where
     a [x1,x2] =  C.roaOneOpt x1 x2
-    a xs      =  ropBug xs
+    a xs      =  ropBugUnwords xs
 
 
 -- ----------------------  append

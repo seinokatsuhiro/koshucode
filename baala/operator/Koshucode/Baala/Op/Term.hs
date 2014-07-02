@@ -56,9 +56,9 @@ ropsTerm :: (Ord c) => [C.Rop c]
 ropsTerm = Op.ropList "term"  -- GROUP
     --          CONSTRUCTOR        USAGE                      ATTRIBUTE
     [ Op.ropV   consCut            "cut /P ..."               "-term"
-    , Op.ropI   consCutTerm        "cut-term /R"              "-relmap"
+    , Op.ropI   consCutTerm        "cut-term /R"              "-relmap/"
     , Op.ropV   consPick           "pick /P ..."              "-term"
-    , Op.ropI   consPickTerm       "pick-term /R"             "-relmap"
+    , Op.ropI   consPickTerm       "pick-term /R"             "-relmap/"
     , Op.ropV   consRename         "rename /N /P ..."         "-term"
     , Op.ropV   consMove           "move /P ... -to /N ..."   "-from | -to"
     , Op.ropIV  consPrefix         "prefix /P /N ..."         "-prefix -term"
