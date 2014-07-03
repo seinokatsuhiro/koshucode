@@ -43,7 +43,9 @@ name f roa = case lookup C.attrNameTrunk roa of
 
 -- | Attribute sorter for no-attribute trunk.
 roaNone :: [C.AttrName] -> C.RoaSpec
-roaNone ns = (Right, [], ns)
+roaNone ns = (name f, [], ns) where
+    f []            = Right []
+    f _             = Message.unexpAttr "Attributes not required"
 
 -- | Attribute sorter for enumerating trunk,
 --   i.e., @-1@, @-2@, ...
