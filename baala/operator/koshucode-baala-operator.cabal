@@ -52,6 +52,7 @@ library
         Koshucode.Baala.Op.Type
 
         Koshucode.Baala.Op.Builtin
+        Koshucode.Baala.Op.Builtin.Define
         Koshucode.Baala.Op.Builtin.Get
         Koshucode.Baala.Op.Builtin.Rop
         Koshucode.Baala.Op.Builtin.Term
