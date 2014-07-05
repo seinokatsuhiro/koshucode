@@ -29,7 +29,7 @@ ropList group = map rop where
             sorter = C.roaSorter roa
         in C.Rop name group sorter cons usage
 
-ropBy :: ([String] -> [String] -> C.RoaSpec)
+ropBy :: ([C.AttrName] -> [C.AttrName] -> C.RoaSpec)
         -> C.RopCons c -> RopUsage -> String -> RopDefine c
 ropBy a cons usage attr = (cons, usage, attr') where
     attr' = case B.divideBy (== '|') attr of
@@ -38,15 +38,15 @@ ropBy a cons usage attr = (cons, usage, attr') where
               _               -> ropBug attr
     names = map classify . words
 
-    classify n@('-' : _) | last n == '/' = init n
-                         | otherwise     = n
+    classify n@('-' : _) | last n == '/' = C.AttrRelmap $ init n
+                         | otherwise     = C.AttrTree n
     classify n = ropBug n
 
 ropBug :: String -> a
 ropBug x = B.bug $ "malformed attribute: " ++ x
 
-ropBugUnwords :: [String] -> a
-ropBugUnwords = ropBug . unwords
+ropBugUnwords :: [C.AttrName] -> a
+ropBugUnwords = ropBug . unwords . map C.attrNameText
 
 -- | No attributes
 ropN :: C.RopCons c -> RopUsage -> String -> RopDefine c
@@ -74,7 +74,6 @@ ropII = ropBy a where
 -- | One and optional attributes
 ropIJ :: C.RopCons c -> RopUsage -> String -> RopDefine c
 ropIJ = ropBy a where
-    a [x1]     =  C.roaOneOpt x1 []
     a [x1,x2]  =  C.roaOneOpt x1 x2
     a xs       =  ropBugUnwords xs
 

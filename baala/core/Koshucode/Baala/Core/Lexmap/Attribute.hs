@@ -1,3 +1,4 @@
+{-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Relmap operator attributes.
@@ -8,7 +9,8 @@ module Koshucode.Baala.Core.Lexmap.Attribute
   Roal,
   RoaSorter,
   RoaSpec,
-  AttrName,
+  AttrName (..),
+  attrNameText,
   attrNameAttr,
   attrNameTrunk,
 
@@ -20,6 +22,7 @@ module Koshucode.Baala.Core.Lexmap.Attribute
 
 ) where
 
+import qualified Data.Generics                as G
 import qualified Data.List                    as List
 import qualified Koshucode.Baala.Base         as B
 import qualified Koshucode.Baala.Core.Message as Message
@@ -28,13 +31,20 @@ import qualified Koshucode.Baala.Core.Message as Message
 
 -- ----------------------  Data type
 
-type AttrName = String
+data AttrName
+    = AttrTree   String
+    | AttrRelmap String
+      deriving (Show, Eq, Ord, G.Data, G.Typeable)
+
+attrNameText :: AttrName -> String
+attrNameText (AttrTree   text) = text
+attrNameText (AttrRelmap text) = text
 
 attrNameTrunk :: AttrName
-attrNameTrunk = "@trunk"
+attrNameTrunk = AttrTree "@trunk"
 
 attrNameAttr :: AttrName
-attrNameAttr = "@attr"
+attrNameAttr = AttrTree "@attr"
 
 -- | Relmap operation attributes as association list.
 type Roa = [(AttrName, [B.TokenTree])]
@@ -72,7 +82,7 @@ type RoaSpec =
 
 roaFrom :: RoaSorter
 roaFrom = Right . B.assocBy attrhName attrNameTrunk where
-    attrhName (B.TreeL (B.TText _ 0 n@('-' : _))) = Just n
+    attrhName (B.TreeL (B.TText _ 0 n@('-' : _))) = Just $ AttrTree n
     attrhName _ = Nothing
 
 roaSorter :: RoaSpec -> RoaSorter
@@ -81,8 +91,9 @@ roaSorter spec = roaBranch B.>=> roaTrunk spec
 roaBranch :: RoaSorter
 roaBranch trees =
     do roa <- roaFrom trees
-       let dup = B.duplicates $ map fst roa
-       B.when (B.notNull dup) $ Message.unexpAttr $ "Duplicate " ++ unwords dup
+       let dup  = B.duplicates $ map fst roa
+           dupt = map attrNameText dup
+       B.when (B.notNull dup) $ Message.unexpAttr $ "Duplicate " ++ unwords dupt
        Right roa
 
 roaTrunk :: RoaSpec -> B.AbMap Roa
@@ -91,10 +102,11 @@ roaTrunk (trunkSorter, trunkNames, branchNames) roa = sorted where
     alls  = attrNameTrunk : trunkNames ++ branchNames
     given = map fst roa
     unk   = given  List.\\  alls
+    unkt  = map attrNameText unk
     wrap  = given `List.intersect` trunkNames
 
     sorted :: B.Ab Roa
-    sorted | B.notNull unk  = Message.unexpAttr $ "Unknown " ++ unwords unk
+    sorted | B.notNull unk  = Message.unexpAttr $ "Unknown " ++ unwords unkt
            | B.notNull wrap = Right roa
            | otherwise      = trunkSorter roa
 

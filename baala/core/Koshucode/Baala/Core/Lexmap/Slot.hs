@@ -24,7 +24,7 @@ substTree gslot roa tree = B.abortableTree "slot" tree $ loop tree where
                                 Right [B.TreeB p q $ concat sub']
     loop (B.TreeL (B.TSlot _ n name))
         | n == 0    = replace n name C.attrNameTrunk roa (`pos` name)
-        | n == 1    = replace n name ('-' : name)    roa   Right
+        | n == 1    = replace n name (C.AttrTree $ '-' : name) roa   Right
         | n == 2    = replace n name name            gslot Right
         | otherwise = Message.noSlotName n name
     loop tk = Right [tk]

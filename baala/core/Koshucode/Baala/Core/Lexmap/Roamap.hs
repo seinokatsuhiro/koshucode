@@ -83,8 +83,8 @@ roamapRun = loop where
         let Just pos = lookup C.attrNameTrunk roa
         in B.abortable "attr" toks $ case rmap of
           RoamapId              ->  Right  roa
-          RoamapAdd opt k xs    ->  add    roa opt k xs
-          RoamapRename (k', k)  ->  rename roa k' k
+          RoamapAdd opt k xs    ->  add    roa opt (C.AttrTree k) xs
+          RoamapRename (k', k)  ->  rename roa (C.AttrTree k') (C.AttrTree k)
           RoamapFill xs         ->  do xs2 <- fill pos xs
                                        Right $ (C.attrNameTrunk, xs2) : roa
           RoamapAppend rs       ->  B.foldM (flip loop) roa rs
@@ -96,10 +96,11 @@ roamapRun = loop where
           Just _ | opt        ->  Right roa
                  | otherwise  ->  Message.extraAttr
 
+    rename :: C.Roa -> C.AttrName -> C.AttrName -> B.Ab C.Roa
     rename roa k' k =
         case lookup k roa of
           Just _              ->  Right $ B.assocRename1 k' k roa
-          Nothing             ->  Message.reqAttr k
+          Nothing             ->  Message.reqAttr $ C.attrNameText k
 
     fill :: [B.TokenTree] -> [Maybe B.TokenTree] -> B.Ab [B.TokenTree]
     fill (p : ps) (Nothing : xs)  =  Right . (p:) =<< fill ps xs

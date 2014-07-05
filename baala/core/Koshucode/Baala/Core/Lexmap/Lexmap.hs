@@ -136,7 +136,7 @@ consLexmap sorters gslot derives = lexmap where
 
     submap :: Lexmap -> B.Ab (Lexmap, [C.Roal Lexmap])
     submap lx@Lexmap { lexAttr = roa } =
-        case lookup "-relmap" $ B.mapFstTo (take 7) roa of
+        case lookup (C.AttrRelmap "-relmap") roa of
           Nothing    -> do lxs <- slot lx   -- no submaps
                            Right (lx, lxs)
           Just trees -> do ws   <- withVars roa
@@ -167,7 +167,7 @@ consLexmap sorters gslot derives = lexmap where
 
     withVars :: C.Roa -> B.Ab [String]
     withVars roa =
-        case lookup "-with" roa of
+        case lookup (C.AttrTree "-with") roa of
           Nothing -> Right []
           Just ws -> withNames ws
 

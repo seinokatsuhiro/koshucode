@@ -39,8 +39,12 @@ import qualified Koshucode.Baala.Op.Message      as Message
 ab :: [B.TokenTree] -> B.Map (B.Ab b)
 ab = B.abortableTrees "attr"
 
-lookupAttr :: String -> C.RopUse c -> Maybe [B.TokenTree]
-lookupAttr name = lookup name . C.lexAttr . C.ropLexmap
+lookupTree, lookupRelmap :: String -> C.RopUse c -> Maybe [B.TokenTree]
+lookupTree   = lookupAttr C.AttrTree
+lookupRelmap = lookupAttr C.AttrRelmap
+
+lookupAttr :: (String -> C.AttrName) -> String -> C.RopUse c -> Maybe [B.TokenTree]
+lookupAttr c name = lookup (c name) . C.lexAttr . C.ropLexmap
 
 getAbortable :: ([B.TokenTree] -> B.Ab b) -> RopGet c b
 getAbortable f u name =
@@ -64,19 +68,19 @@ type RopGet c b
 
 getMaybe :: RopGet c b -> RopGet c (Maybe b)
 getMaybe get u name =
-    case lookupAttr name u of
+    case lookupTree name u of
       Nothing -> Right Nothing
       Just _  -> Right . Just =<< get u name
 
 getOption :: b -> RopGet c b -> RopGet c b
 getOption y get u name =
-    case lookupAttr name u of
+    case lookupTree name u of
       Nothing -> Right y
       Just _  -> get u name
 
 getTrees :: RopGet c [B.TokenTree]
 getTrees u name =
-    case lookupAttr name u of
+    case lookupTree name u of
       Just trees -> Right trees
       Nothing    -> Message.noAttr
 
@@ -87,7 +91,7 @@ getTree u name =
 
 getWordTrees :: RopGet c [B.Named B.TokenTree]
 getWordTrees u name =
-    case lookupAttr name u of
+    case lookupTree name u of
       Just trees -> wordTrees trees
       Nothing    -> Message.noAttr
 
@@ -115,10 +119,17 @@ word _ = Message.unexpAttr "Require one word"
 getRelmap :: C.RopUse c -> B.Ab (C.Relmap c)
 getRelmap u =
     do ms    <- getRelmaps u
-       trees <- getTrees   u "-relmap"
+       trees <- getRelmapRaw u "-relmap"
        ab trees $ case ms of
          [m] -> Right m
          _   -> Message.unexpAttr "Require one relmap"
+
+getRelmapRaw :: RopGet c [B.TokenTree]
+getRelmapRaw u name =
+    case lookupRelmap name u of
+      Just trees -> Right trees
+      Nothing    -> Message.noAttr
+
 
 -- | Get relmaps from operator use.
 getRelmaps :: C.RopUse c -> B.Ab [C.Relmap c]

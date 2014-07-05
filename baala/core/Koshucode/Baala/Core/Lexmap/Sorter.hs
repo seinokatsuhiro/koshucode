@@ -53,8 +53,8 @@ roaEnum :: [C.AttrName] -> [C.AttrName] -> C.RoaSpec
 roaEnum ks ns = (name f, ks, ns) where
     f = Right . zip enumAttr . map B.li1
 
-enumAttr :: [String]
-enumAttr = map (('-' :) . show) [1 :: Int ..]
+enumAttr :: [C.AttrName]
+enumAttr = map (C.AttrTree . ('-' :) . show) [1 :: Int ..]
 
 -- | Attribute sorter for multiple-attribute trunk.
 roaList :: C.AttrName -> [C.AttrName] -> C.RoaSpec
