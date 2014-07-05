@@ -122,8 +122,8 @@ consSource use =
 
 consSourceTerm :: C.RopCons c
 consSourceTerm use =
-  do pat   <- Op.getWord  use "-pattern"
-     rmap  <- Op.getRelmap use
+  do pat   <- Op.getWord   use "-pattern"
+     rmap  <- Op.getRelmap use "-relmap"
      Right $ relmapSourceTerm use pat rmap
 
 relmapSourceTerm :: C.RopUse c -> String -> B.Map (C.Relmap c)

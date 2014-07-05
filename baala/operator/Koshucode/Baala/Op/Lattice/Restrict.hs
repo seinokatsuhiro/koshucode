@@ -26,7 +26,7 @@ import qualified Koshucode.Baala.Op.Term              as Op
 
 consSome :: (Ord c) => C.RopCons c
 consSome use = 
-    do rmap <- Op.getRelmap use
+    do rmap <- Op.getRelmap use "-relmap"
        Right $ relmapSome use rmap
 
 relmapSome :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
@@ -46,7 +46,7 @@ relkitSemi isEmpty (C.Relkit _ kitb2) he1 =
 
 consNone :: (Ord c) => C.RopCons c
 consNone use =
-    do rmap <- Op.getRelmap use
+    do rmap <- Op.getRelmap use "-relmap"
        Right $ relmapNone use rmap
 
 relmapNone :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
@@ -61,7 +61,7 @@ relkitNone = relkitSemi True
 
 consSub :: (Ord c) => C.RopCons c
 consSub use =
-    do rmap <- Op.getRelmap use
+    do rmap <- Op.getRelmap use "-relmap"
        Right $ relmapSub use rmap
 
 relmapSub :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
@@ -83,7 +83,7 @@ relkitSub _ _ = Right C.relkitNothing
 
 consCompose :: (Ord c) => C.RopCons c
 consCompose use =
-    do rmap <- Op.getRelmap use
+    do rmap <- Op.getRelmap use "-relmap"
        Right $ relmapCompose use rmap
 
 relmapCompose :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)

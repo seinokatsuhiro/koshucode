@@ -12,7 +12,7 @@ module Koshucode.Baala.Op.Builtin.Get
   -- * Relmap
   getRelmap,
   getRelmaps,
-  getRelmapOption,
+  getOptRelmap,
 
   -- * Term
   getTerm,
@@ -116,10 +116,10 @@ word _ = Message.unexpAttr "Require one word"
 --   > consMeet u = do
 --   >   m <- getRelmap u
 --   >   Right $ relmapMeet u m
-getRelmap :: C.RopUse c -> B.Ab (C.Relmap c)
-getRelmap u =
+getRelmap :: C.RopUse c -> String -> B.Ab (C.Relmap c)
+getRelmap u name =
     do ms    <- getRelmaps u
-       trees <- getRelmapRaw u "-relmap"
+       trees <- getRelmapRaw u name
        ab trees $ case ms of
          [m] -> Right m
          _   -> Message.unexpAttr "Require one relmap"
@@ -135,11 +135,8 @@ getRelmapRaw u name =
 getRelmaps :: C.RopUse c -> B.Ab [C.Relmap c]
 getRelmaps = Right . C.ropSubrelmap
 
-getRelmapOption :: C.RopUse c -> C.Relmap c -> B.Ab (C.Relmap c)
-getRelmapOption u rmapDefault =
-    case getRelmap u of
-      Right rmap -> Right rmap
-      Left _     -> Right rmapDefault
+getOptRelmap :: C.Relmap c -> C.RopUse c -> String -> B.Ab (C.Relmap c)
+getOptRelmap rmap0 u = B.right rmap0 . getRelmap u
 
 
 -- ----------------------  Term

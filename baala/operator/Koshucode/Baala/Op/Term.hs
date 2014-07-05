@@ -97,7 +97,7 @@ relkitCut = relkitSnip B.snipOff B.snipOff
 
 consPickTerm :: C.RopCons c
 consPickTerm use =
-  do rmap <- Op.getRelmap use
+  do rmap <- Op.getRelmap use "-relmap"
      Right $ relmapPickTerm use rmap
 
 relmapPickTerm :: C.RopUse c -> C.Relmap c -> C.Relmap c
@@ -108,7 +108,7 @@ relkitPickTerm = relkitSnipTerm B.snipFrom B.snipFrom
 
 consCutTerm :: C.RopCons c
 consCutTerm use =
-  do rmap <- Op.getRelmap use
+  do rmap <- Op.getRelmap use "-relmap"
      Right $ relmapCutTerm use rmap
 
 relmapCutTerm :: C.RopUse c -> C.Relmap c -> C.Relmap c

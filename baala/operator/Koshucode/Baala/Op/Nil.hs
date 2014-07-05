@@ -35,7 +35,7 @@ ropsNil = Op.ropList "nil"  -- GROUP
 
 consBoth :: (Ord c, C.CRel c, C.CNil c) => C.RopCons c
 consBoth use =
-    do rmap <- Op.getRelmap use
+    do rmap <- Op.getRelmap use "-relmap"
        Right $ relmapBoth use rmap
 
 relmapBoth :: (Ord c, C.CRel c, C.CNil c) => C.RopUse c -> B.Map (C.Relmap c)
@@ -51,7 +51,7 @@ relmapBoth use rmap = C.relmapCopy use "i" rmapBoth where
 
 consMaybe :: (Ord c, C.CNil c) => C.RopCons c
 consMaybe use =
-    do rmap <- Op.getRelmap use
+    do rmap <- Op.getRelmap use "-relmap"
        Right $ relmapMaybe use rmap
 
 relmapMaybe :: (Ord c, C.CNil c) => C.RopUse c -> B.Map (C.Relmap c)

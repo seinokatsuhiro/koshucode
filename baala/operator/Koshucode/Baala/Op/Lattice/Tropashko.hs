@@ -37,7 +37,7 @@ import qualified Koshucode.Baala.Op.Builtin as Op
 
 consMeet :: (Ord c) => C.RopCons c
 consMeet use =
-  do rmap <- Op.getRelmap use
+  do rmap <- Op.getRelmap use "-relmap"
      Right $ relmapMeet use rmap
 
 -- | Meet two relations.
@@ -82,7 +82,7 @@ relkitMeet _ _ = Right C.relkitNothing
 
 consJoin :: (Ord c) => C.RopCons c
 consJoin use =
-    do rmap <- Op.getRelmap use
+    do rmap <- Op.getRelmap use "-relmap"
        Right $ relmapJoin use rmap
 
 -- | Join two relations.

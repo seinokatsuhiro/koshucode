@@ -53,7 +53,7 @@ import qualified Koshucode.Baala.Op.Nest.Flow  as Op
 consCopy :: C.RopCons c
 consCopy use =
   do n    <- Op.getWord   use "-with"
-     rmap <- Op.getRelmap use
+     rmap <- Op.getRelmap use "-relmap"
      Right $ C.relmapCopy use n rmap
 
 
@@ -69,7 +69,7 @@ consCopy use =
 consFor :: (C.CRel c) => C.RopCons c
 consFor use =
   do n    <- Op.getTerm   use "-term"
-     rmap <- Op.getRelmap use
+     rmap <- Op.getRelmap use "-relmap"
      with <- Op.getOption [] Op.getWithTerms use "-with"
      Right $ relmapFor use with n rmap
 
@@ -110,7 +110,7 @@ relkitFor _ _ _ = Right C.relkitNothing
 consGroup :: (Ord c, C.CRel c) => C.RopCons c
 consGroup use =
   do n    <- Op.getTerm   use "-term"
-     rmap <- Op.getRelmap use
+     rmap <- Op.getRelmap use "-relmap"
      Right $ relmapGroup use n rmap
 
 relmapGroup :: (Ord c, C.CRel c) => C.RopUse c -> B.TermName -> B.Map (C.Relmap c)
@@ -157,7 +157,7 @@ relkitGroup _ _ _ = Right C.relkitNothing
 consGroupBy :: (Ord c, C.CRel c) => C.RopCons c
 consGroupBy use =
   do n    <- Op.getTerm   use "-term"
-     rmap <- Op.getRelmap use
+     rmap <- Op.getRelmap use "-relmap"
      Right $ relmapGroupBy use n rmap
 
 relmapGroupBy :: (Ord c, C.CRel c) => C.RopUse c -> B.TermName -> B.Map (C.Relmap c)
@@ -183,7 +183,7 @@ relmapGroupBy use n rmap = C.relmapCopy use n rmapGroup where
 consSlice :: (C.CRel c) => C.RopCons c
 consSlice use =
   do n    <- Op.getTerm   use "-term"
-     rmap <- Op.getRelmapOption use C.relmapId
+     rmap <- Op.getOptRelmap C.relmapId use "-relmap"
      with <- Op.getOption [] Op.getWithTerms use "-with"
      Right $ relmapSlice use with n rmap
 
@@ -206,7 +206,7 @@ relkitSlice _ _ _ = Right C.relkitNothing
 
 consSliceUp :: (C.CRel c) => C.RopCons c
 consSliceUp use =
-  do rmap <- Op.getRelmapOption use C.relmapId
+  do rmap <- Op.getOptRelmap C.relmapId use "-relmap"
      with <- Op.getOption [] Op.getWithTerms use "-with"
      Right $ relmapSliceUp use with rmap
 

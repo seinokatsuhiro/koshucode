@@ -101,12 +101,12 @@ consUnless use =
 
 consFix :: (Ord c) => C.RopCons c
 consFix use =
-  do rmap <- Op.getRelmap use
+  do rmap <- Op.getRelmap use "-relmap"
      Right $ relmapFix use rmap
 
 consFixJoin :: (Ord c) => C.RopCons c
 consFixJoin use =
-  do rmap <- Op.getRelmap use
+  do rmap <- Op.getRelmap use "-relmap"
      Right $ relmapFix use (Op.relmapJoin use rmap)
 
 relmapFix :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
@@ -129,7 +129,7 @@ relkitFix _ _ = Right C.relkitNothing
 consRepeat :: (Ord c) => C.RopCons c
 consRepeat use =
   do cnt  <- Op.getInt    use "-count"
-     rmap <- Op.getRelmap use
+     rmap <- Op.getRelmap use "-relmap"
      Right $ relmapRepeat use cnt rmap
 
 relmapRepeat :: (Ord c) => C.RopUse c -> Int -> B.Map (C.Relmap c)
@@ -158,7 +158,7 @@ relkitRepeat _ _ _ = Right C.relkitNothing
 
 consEqual :: (Ord c) => C.RopCons c
 consEqual use =
-    do rmap <- Op.getRelmap use
+    do rmap <- Op.getRelmap use "-relmap"
        Right $ relmapEqual use rmap
 
 relmapEqual :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)

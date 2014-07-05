@@ -13,6 +13,7 @@ module Koshucode.Baala.Base.Prelude.List
   notNull,
   chunks,
   ceilingRem,
+  right,
 ) where
 
 import qualified Data.List as List
@@ -148,3 +149,6 @@ ceilingRem a b =
       (q, 0) -> q
       (q, _) -> q + 1
 
+right :: b -> B.Map (Either a b)
+right _ (Right x) = Right x
+right x (Left _)  = Right x
