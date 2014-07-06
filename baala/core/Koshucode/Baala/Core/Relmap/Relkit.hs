@@ -132,7 +132,7 @@ relkitConstBody ns bo = kit where
     he  = B.headFrom ns
     kit = relkitJust he $ RelkitConst bo
 
-relkitSource :: String -> [B.TermName] -> Relkit c
+relkitSource :: B.JudgePat -> [B.TermName] -> Relkit c
 relkitSource p ns = relkitJust he kit where
     he  = B.headFrom ns
     kit = RelkitSource p ns

@@ -6,6 +6,7 @@ module Koshucode.Baala.Core.Message
 
   -- * Core package
   ambInfixes,
+  dupAttr,
   dupPrefix,
   dupReplacement,
   emptyLiteral,
@@ -43,6 +44,10 @@ import Koshucode.Baala.Base.Message
 -- | Ambiguous infix operators
 ambInfixes :: [String] -> B.Ab a
 ambInfixes = Left . B.abortLines "Ambiguous infix operators"
+
+-- | Unexpected attribute / Duplicate
+dupAttr :: [String] -> B.Ab a
+dupAttr ns = unexpAttr $ "Duplicate" ++ unwords ns
 
 -- | Duplicate prefix
 dupPrefix :: [String] -> B.Ab a

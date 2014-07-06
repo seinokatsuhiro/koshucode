@@ -40,11 +40,11 @@ type RopUsage = String
 
 -- | Implementation of relmap operator
 data Rop c = Rop
-    { ropName     :: String        -- ^ Operator name
-    , ropGroup    :: String        -- ^ Operator group
-    , ropSorter   :: C.RoaSorter   -- ^ Attribute sorter
-    , ropCons     :: RopCons c     -- ^ Constructor of operator
-    , ropUsage    :: RopUsage        -- ^ Usage of operator
+    { ropName     :: C.RopName      -- ^ Operator name
+    , ropGroup    :: String         -- ^ Operator group
+    , ropSorter   :: C.AttrSort     -- ^ Attribute sorter
+    , ropCons     :: RopCons c      -- ^ Constructor of operator
+    , ropUsage    :: RopUsage       -- ^ Usage of operator
     }
 
 instance Show (Rop c) where
@@ -101,7 +101,7 @@ data Relmap c
       -- ^ Relmap for environment of input relation
     | RelmapWith     C.Lexmap [B.Terminal String] (Relmap c)
       -- ^ Relmap for environment of nested relations
-    | RelmapLink     C.Lexmap String C.Roa
+    | RelmapLink     C.Lexmap String C.AttrTrees
       -- ^ Relmap reference
 
     | RelmapAppend   (Relmap c) (Relmap c)

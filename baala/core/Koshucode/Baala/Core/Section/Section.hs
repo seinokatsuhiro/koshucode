@@ -153,10 +153,10 @@ consSectionEach root resource (B.Short pt shorts xs) =
 
       assert :: Clab (C.Assert c)
       assert src (C.CAssert typ pat opt toks) =
-          do optTrees  <- B.tokenTrees opt
-             rmapTrees <- B.tokenTrees toks
-             roa       <- C.roaFrom optTrees
-             Right $ C.Assert typ pat roa src rmapTrees Nothing []
+          do optTrees   <- B.tokenTrees opt
+             rmapTrees  <- B.tokenTrees toks
+             let optAssc = C.hyphenAssc optTrees
+             Right $ C.Assert typ pat optAssc src rmapTrees Nothing []
 
       checkShort :: [B.ShortDef] -> B.Ab ()
       checkShort sh =

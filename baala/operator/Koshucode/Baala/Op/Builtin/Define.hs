@@ -12,7 +12,7 @@ import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 
 -- | Constructor, usage, and attribute sorter
-type RopDefine c = (C.RopCons c, C.RopUsage, C.RoaSpec)
+type RopDefine c = (C.RopCons c, C.RopUsage, C.AttrDefine)
 
 -- | Make implementations of relmap operators.
 ropList
@@ -23,10 +23,10 @@ ropList group = map rop where
     rop :: RopDefine c -> C.Rop c
     rop (cons, usage, roa) =
         let name   = head $ words usage
-            sorter = C.roaSorter roa
+            sorter = C.attrSort roa
         in C.Rop name group sorter cons usage
 
-ropBy :: ([C.AttrName] -> [C.AttrName] -> C.RoaSpec)
+ropBy :: ([C.AttrName] -> [C.AttrName] -> C.AttrDefine)
         -> C.RopCons c -> C.RopUsage -> String -> RopDefine c
 ropBy a cons usage attr = (cons, usage, attr') where
     attr' = case B.divideBy (== '|') attr of

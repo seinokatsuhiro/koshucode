@@ -1,29 +1,29 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
--- | Attributes of Relmap operator.
+-- | Attributes of relmap operator.
 
 module Koshucode.Baala.Core.Lexmap.Attribute
 ( -- * Attribute name
   AttrName (..),
+  isAttrRelmap,
   attrNameText,
   attrNameAttr,
   attrNameTrunk,
-  isAttrRelmap,
 
-  -- * Data type
-  Roa,
+  -- * Attribute trees
+  AttrDefine (..),
+  AttrTrees,
+  AttrSort,
+  TreeSort,
+  RopName,
   Roal,
-  RoaSpec,
-  RoaSorter,
-  TreeSorter,
 
-  -- * Branch sorter
-  roaFrom,
-  roaBranch,
-  roaSorter,
-  -- $BranchSorter
-
+  -- * Attribute sorter
+  attrSort,
+  attrSortBranch,
+  hyphenAssc,
+  -- $AttributeSorter
 ) where
 
 import qualified Data.Generics                as G
@@ -39,98 +39,89 @@ data AttrName
     | AttrRelmap String
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
-attrNameText :: AttrName -> String
-attrNameText (AttrTree   text) = text
-attrNameText (AttrRelmap text) = text
-
-attrNameTrunk :: AttrName
-attrNameTrunk = AttrTree "@trunk"
-
-attrNameAttr :: AttrName
-attrNameAttr = AttrTree "@attr"
-
+-- | Test attribute name is for relmap.
 isAttrRelmap :: AttrName -> Bool
 isAttrRelmap (AttrRelmap _) = True
 isAttrRelmap _              = False
 
+-- | String part of attribute names.
+attrNameText :: AttrName -> String
+attrNameText (AttrTree   text) = text
+attrNameText (AttrRelmap text) = text
 
--- ----------------------  Data type
+-- | Constant for attribute name @\@trunk@.
+attrNameTrunk :: AttrName
+attrNameTrunk = AttrTree "@trunk"
 
--- | Relmap operation attributes as association list.
-type Roa = [(AttrName, [B.TokenTree])]
+-- | Constant for attribute name @\@attr@.
+attrNameAttr :: AttrName
+attrNameAttr = AttrTree "@attr"
 
--- | Association of operator use and something.
---   Operator use is represented as pair of operator name and attributes.
-type Roal a = ((String, Roa), a)
+
+-- ----------------------  Attribute trees
+
+-- | Definition of attribute sorter.
+data AttrDefine = AttrDefine
+    { attrTrunkSorter :: B.AbMap AttrTrees   -- Trunk sorter
+    , attrClassifier  :: B.AbMap AttrTrees   -- Attribute classifier
+    , attrTrunkNames  :: [AttrName]          -- Trunk names
+    , attrBranchNames :: [AttrName]          -- Branch names
+    }
+
+-- | List of attribute name and its contents.
+type AttrTrees = [ (AttrName, [B.TokenTree]) ]
 
 -- | Sorter for attribute of relmap operator.
 --   Sorters docompose attribute trees,
 --   and give a name to subattribute.
-type RoaSorter = [B.TokenTree] -> B.Ab Roa
+type AttrSort = [B.TokenTree] -> B.Ab AttrTrees
 
-type TreeSorter = [B.TokenTree] -> B.Ab [B.NamedTrees]
+type TreeSort = [B.TokenTree] -> [B.NamedTrees]
 
--- | Attribute sorter for relmap operator.
---   It consists of trunk sorter, trunk names, and branch names.
-type RoaSpec =
-    ( B.AbMap Roa  -- Trunk sorter
-    , [AttrName]   -- Trunk names
-    , [AttrName]   -- Branch names
-    )
+-- | Name of relmap operator.
+type RopName = String
+
+-- | Association of operator use and something.
+--   Operator use is represented as pair of operator name and attributes.
+type Roal a = ((RopName, AttrTrees), a)
 
 
--- ----------------------  Branch sorter
+-- ----------------------  Attribute sorter
 
--- $BranchSorter
+-- $AttributeSorter
 --
 --   Split attribute into named group.
 --   Non quoted words beginning with hyphen, e.g., @-x@,
 --   are name of group.
 --
---   >>> Right . roaFrom =<< B.tt "a b -x /c 'd -y e"
+--   >>> Right . hyphenAssc =<< B.tt "a b -x /c 'd -y e"
 --   [ ("@trunk", [TreeL (TText 1 0 "a"), TreeL (TText 3 0 "b")])
 --   , ("-x", [TreeL (TTerm 7 ["/c"]), TreeL (TText 9 1 "d")])
 --   , ("-y", [TreeL (TText 14 0 "e")]) ]
 
-roaSorter :: RoaSpec -> RoaSorter
-roaSorter spec = roaBranch B.>=> roaTrunk spec
+attrSort :: AttrDefine -> AttrSort
+attrSort spec = attrSortBranch B.>=> attrTrunk spec
 
-roaBranch :: RoaSorter
-roaBranch trees =
-    do roa <- roaFrom trees
-       let dup = B.duplicates $ map fst roa
-       B.when (B.notNull dup) $ Message.unexpAttr $ "Duplicate " ++ unwords dup
-       Right $ B.mapFstTo AttrTree roa
+attrSortBranch :: AttrSort
+attrSortBranch trees =
+    do let assc = hyphenAssc trees
+           dup  = B.duplicates $ map fst assc
+       B.when (B.notNull dup) $ Message.dupAttr dup
+       Right $ B.mapFstTo AttrTree assc
 
-roaFrom :: TreeSorter
-roaFrom = Right . B.assocBy name "@trunk" where
+hyphenAssc :: TreeSort
+hyphenAssc = B.assocBy name "@trunk" where
     name (B.TreeL (B.TText _ 0 n@('-' : _))) = Just n
     name _ = Nothing
 
-roaTrunk :: RoaSpec -> B.AbMap Roa
-roaTrunk spec@(trunkSorter, trunkNames, _) roa = roa3 where
-    roa3, roa2 :: B.Ab Roa
-    roa3 = attrClassify spec =<< roa2
-    roa2 | B.notNull wrap = Right roa
-         | otherwise      = trunkSorter roa
+attrTrunk :: AttrDefine -> B.AbMap AttrTrees
+attrTrunk (AttrDefine sorter classify trunkNames _) roa = roa3 where
+    roa3, roa2 :: B.Ab AttrTrees
+    roa3 = classify =<< roa2
+    roa2 | B.notNull wrap = Right  roa
+         | otherwise      = sorter roa
 
     wrap, given :: [AttrName]
     wrap  = given `List.intersect` trunkNames
     given = map fst roa
-
-attrClassify :: RoaSpec -> B.AbMap Roa
-attrClassify (_, trunkNames, branchNames) roa = roa2 where
-    roa2     :: B.Ab Roa
-    roa2     = B.sequenceFst $ B.mapFstTo relmap roa
-
-    relmap :: B.AbMap AttrName
-    relmap n = let name = attrNameText n
-               in case lookup name pairs of
-                 Just k  -> Right k
-                 Nothing -> Message.unexpAttr $ "Unknown " ++ name
-
-    pairs    :: [B.Named AttrName]
-    pairs    = map pair alls
-    pair n   = (attrNameText n, n)
-    alls     = attrNameTrunk : trunkNames ++ branchNames
 

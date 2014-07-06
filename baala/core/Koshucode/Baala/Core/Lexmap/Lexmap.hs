@@ -30,11 +30,11 @@ import qualified Koshucode.Baala.Core.Message           as Message
 --   Lexmap is constructed from a list of 'B.TokenTree',
 --   and generic relmap is constructed from a lexmap.
 data Lexmap = Lexmap
-    { lexType     :: LexmapType  -- ^ Type of lexmap
-    , lexOpToken  :: B.Token     -- ^ Token of operator
-    , lexAttr     :: C.Roa       -- ^ Attribute of relmap operation
-    , lexSubmap   :: [Lexmap]    -- ^ Submaps in the attribute
-    , lexMessage  :: [String]    -- ^ Messages on lexmap
+    { lexType     :: LexmapType    -- ^ Type of lexmap
+    , lexOpToken  :: B.Token       -- ^ Token of operator
+    , lexAttr     :: C.AttrTrees   -- ^ Attribute of relmap operation
+    , lexSubmap   :: [Lexmap]      -- ^ Submaps in the attribute
+    , lexMessage  :: [String]      -- ^ Messages on lexmap
     } deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 data LexmapType
@@ -54,7 +54,7 @@ instance B.CodePointer Lexmap where
     codePoint = B.codePoint . lexOpToken
 
 -- | Name of relmap operator
-lexOpName :: Lexmap -> String
+lexOpName :: Lexmap -> C.RopName
 lexOpName = B.tokenContent . lexOpToken
 
 lexAddMessage :: String -> B.Map Lexmap
@@ -80,7 +80,7 @@ type RelmapSource = B.Named ([B.TokenTree], C.Roamap)
 -- | Construct lexmap and its submaps from source of lexmap
 type ConsLexmapBody = [B.TokenTree] -> B.Ab (Lexmap, [C.Roal Lexmap])
 
-consLexmap :: [B.Named C.RoaSorter] -> ConsLexmap
+consLexmap :: [B.Named C.AttrSort] -> ConsLexmap
 consLexmap sorters gslot derives = lexmap where
 
     lexmap :: ConsLexmapBody
@@ -102,9 +102,10 @@ consLexmap sorters gslot derives = lexmap where
              Just _  -> user LexmapDerived rop trees
              Nothing -> base n rop trees
 
+    baseOf :: C.RopName -> ConsLexmapBody
     baseOf n = base n $ B.textToken n
 
-    base :: String -> B.Token -> ConsLexmapBody
+    base :: C.RopName -> B.Token -> ConsLexmapBody
     base n rop trees =
         case lookup n sorters of
           Nothing     ->  user LexmapDerived rop trees
@@ -114,10 +115,10 @@ consLexmap sorters gslot derives = lexmap where
     user :: LexmapType -> B.Token -> ConsLexmapBody
     user LexmapWith rop [] = submap $ cons LexmapWith rop [] []
     user LexmapWith _ _ = Message.extraAttr
-    user ty rop trees = do roa <- C.roaBranch trees
+    user ty rop trees = do roa <- C.attrSortBranch trees
                            submap $ cons ty rop roa trees
 
-    cons :: LexmapType -> B.Token -> C.Roa -> [B.TokenTree] -> Lexmap
+    cons :: LexmapType -> B.Token -> C.AttrTrees -> [B.TokenTree] -> Lexmap
     cons ty rop roa trees =
         check $ Lexmap { lexType    = ty
                        , lexOpToken = rop
@@ -165,7 +166,7 @@ consLexmap sorters gslot derives = lexmap where
         loop (B.TreeL (B.TText p 0 w)) | w `elem` ws = B.TreeL (B.TText p 3 w)
         loop tree = tree
 
-    withVars :: C.Roa -> B.Ab [String]
+    withVars :: C.AttrTrees -> B.Ab [String]
     withVars roa =
         case lookup (C.AttrTree "-with") roa of
           Nothing -> Right []
