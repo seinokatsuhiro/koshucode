@@ -156,8 +156,7 @@ consSectionEach root resource (B.Short pt shorts xs) =
           do optTrees  <- B.tokenTrees opt
              rmapTrees <- B.tokenTrees toks
              roa       <- C.roaFrom optTrees
-             let roa'   = B.mapFstTo C.attrNameText roa
-             Right $ C.Assert typ pat roa' src rmapTrees Nothing []
+             Right $ C.Assert typ pat roa src rmapTrees Nothing []
 
       checkShort :: [B.ShortDef] -> B.Ab ()
       checkShort sh =

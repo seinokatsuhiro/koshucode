@@ -1,8 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.Builtin.Define
-( RopUsage,
-  RopDefine,
+( RopDefine,
   ropList,
   ropN, ropE,
   ropI, ropII, ropIJ,
@@ -12,10 +11,8 @@ module Koshucode.Baala.Op.Builtin.Define
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 
-type RopUsage = String
-
 -- | Constructor, usage, and attribute sorter
-type RopDefine c = (C.RopCons c, RopUsage, C.RoaSpec)
+type RopDefine c = (C.RopCons c, C.RopUsage, C.RoaSpec)
 
 -- | Make implementations of relmap operators.
 ropList
@@ -30,7 +27,7 @@ ropList group = map rop where
         in C.Rop name group sorter cons usage
 
 ropBy :: ([C.AttrName] -> [C.AttrName] -> C.RoaSpec)
-        -> C.RopCons c -> RopUsage -> String -> RopDefine c
+        -> C.RopCons c -> C.RopUsage -> String -> RopDefine c
 ropBy a cons usage attr = (cons, usage, attr') where
     attr' = case B.divideBy (== '|') attr of
               [trunk]         -> a (names trunk) []
@@ -49,42 +46,42 @@ ropBugUnwords :: [C.AttrName] -> a
 ropBugUnwords = ropBug . unwords . map C.attrNameText
 
 -- | No attributes
-ropN :: C.RopCons c -> RopUsage -> String -> RopDefine c
+ropN :: C.RopCons c -> C.RopUsage -> String -> RopDefine c
 ropN = ropBy a where
     a []       =  C.roaNone
     a xs       =  ropBugUnwords xs
 
 -- | Enumerating attributes
-ropE :: C.RopCons c -> RopUsage -> String -> RopDefine c
+ropE :: C.RopCons c -> C.RopUsage -> String -> RopDefine c
 ropE = ropBy a where
     a xs       =  C.roaEnum xs
 
 -- | One attribute
-ropI :: C.RopCons c -> RopUsage -> String -> RopDefine c
+ropI :: C.RopCons c -> C.RopUsage -> String -> RopDefine c
 ropI = ropBy a where
     a [x]      =  C.roaOne x
     a xs       =  ropBugUnwords xs
 
 -- | Two attributes
-ropII :: C.RopCons c -> RopUsage -> String -> RopDefine c
+ropII :: C.RopCons c -> C.RopUsage -> String -> RopDefine c
 ropII = ropBy a where
     a [x1,x2]  =  C.roaTwo x1 x2
     a xs       =  ropBugUnwords xs
 
 -- | One and optional attributes
-ropIJ :: C.RopCons c -> RopUsage -> String -> RopDefine c
+ropIJ :: C.RopCons c -> C.RopUsage -> String -> RopDefine c
 ropIJ = ropBy a where
     a [x1,x2]  =  C.roaOneOpt x1 x2
     a xs       =  ropBugUnwords xs
 
 -- | Variable-length attributes
-ropV :: C.RopCons c -> RopUsage -> String -> RopDefine c
+ropV :: C.RopCons c -> C.RopUsage -> String -> RopDefine c
 ropV = ropBy a where
     a [x1]     =  C.roaList x1
     a xs       =  ropBugUnwords xs
 
 -- | One and variable-length attributes
-ropIV :: C.RopCons c -> RopUsage -> String -> RopDefine c
+ropIV :: C.RopCons c -> C.RopUsage -> String -> RopDefine c
 ropIV = ropBy a where
     a [x1,x2]  =  C.roaOneList x1 x2
     a xs       =  ropBugUnwords xs

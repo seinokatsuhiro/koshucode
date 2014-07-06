@@ -8,6 +8,8 @@ import qualified Data.Map                    as Map
 import qualified Koshucode.Baala.Base        as B
 import qualified Koshucode.Baala.Core        as C
 import qualified Koshucode.Baala.Op.Builtin  as Op
+import qualified Koshucode.Baala.Op.Lattice  as Op
+import qualified Koshucode.Baala.Op.Term     as Op
 import qualified Koshucode.Baala.Op.Message  as Message
 
 
@@ -22,9 +24,10 @@ import qualified Koshucode.Baala.Op.Message  as Message
 ropsCheck :: (C.CContent c) => [C.Rop c]
 ropsCheck = Op.ropList "check"
     [ Op.ropN consCheckTerm  "check-term [-just /N ... | -has /N ... | -but /N ...]"
-                                                 "| -just -has -but"
-    , Op.ropN consDump       "dump"              ""
-    , Op.ropV consDuplicate  "duplicate /N ..."  "-term"
+                                                       "| -just -has -but"
+    , Op.ropN consDump       "dump"                    ""
+    , Op.ropV consDuplicate  "duplicate /N ..."        "-term"
+    , Op.ropV consExclude    "exclude /N ... -from R"  "-term | -from/"
     ]
 
 
@@ -100,6 +103,23 @@ relkitDuplicate ns (Just he1)
       kv cs1    = (share1 cs1, cs1)
       dup       = not . B.isSingleton
 
+
+
+-- ----------------------  exclude
+
+-- exclude : none ( pick @'all | meet ( @from | pick @'all ))
+
+consExclude :: (Ord c) => C.RopCons c
+consExclude use =
+  do ns <- Op.getTerms  use "-term"
+     m  <- Op.getRelmap use "-from"
+     Right $ relmapExclude use (ns, m)
+
+relmapExclude :: (Ord c) => C.RopUse c -> ([B.TermName], C.Relmap c) -> C.Relmap c
+relmapExclude use (ns, m) = excl where
+    excl = Op.relmapNone use (pick `B.mappend` meet)
+    pick = Op.relmapPick use ns
+    meet = Op.relmapMeet use (m `B.mappend` pick)
 
 
 -- ----------------------  dump

@@ -5,6 +5,7 @@
 module Koshucode.Baala.Core.Relmap.Operator
 ( -- * Rop
   Global,
+  RopUsage,
   Rop (..),
 
   -- * RopUse
@@ -35,13 +36,15 @@ import qualified Koshucode.Baala.Core.Relmap.Relkit     as C
 -- | Global parameters
 type Global c = C.GlobalWith Rop c
 
+type RopUsage = String
+
 -- | Implementation of relmap operator
 data Rop c = Rop
     { ropName     :: String        -- ^ Operator name
     , ropGroup    :: String        -- ^ Operator group
     , ropSorter   :: C.RoaSorter   -- ^ Attribute sorter
     , ropCons     :: RopCons c     -- ^ Constructor of operator
-    , ropUsage    :: String        -- ^ Usage of operator
+    , ropUsage    :: RopUsage        -- ^ Usage of operator
     }
 
 instance Show (Rop c) where
@@ -63,6 +66,21 @@ data RopUse c = RopUse
 
 instance B.CodePointer (RopUse c) where
     codePoint = B.codePoint . ropLexmap
+
+
+-- ----------------------  Relkit
+
+-- | Make 'C.Relkit' from heading of input relation.
+type RelkitFlow c   = Maybe B.Relhead -> B.Ab (C.Relkit c)
+
+-- | Make 'C.Relkit' from globals and input heading.
+type RelkitGlobal c = Global c -> RelkitFlow c
+
+-- | Make 'C.Relkit' from one subrelmap and input heading.
+type RelkitBinary c = C.Relkit c -> RelkitFlow c
+
+-- | Make 'C.Relkit' from multiple subrelmaps and input heading.
+type RelkitConfl c  = [(C.Relkit c)] -> RelkitFlow c
 
 
 -- ----------------------  Relmap
@@ -169,19 +187,4 @@ relmapLexList = collect where
     collect (RelmapWith    lx _ _)  = [lx]
     collect (RelmapLink    lx _ _)  = [lx]
     collect (RelmapAppend  r1 r2)   = collect r1 ++ collect r2
-
-
--- ----------------------  Relkit
-
--- | Make 'C.Relkit' from heading of input relation.
-type RelkitFlow c   = Maybe B.Relhead -> B.Ab (C.Relkit c)
-
--- | Make 'C.Relkit' from globals and input heading.
-type RelkitGlobal c = Global c -> RelkitFlow c
-
--- | Make 'C.Relkit' from one subrelmap and input heading.
-type RelkitBinary c = C.Relkit c -> RelkitFlow c
-
--- | Make 'C.Relkit' from multiple subrelmaps and input heading.
-type RelkitConfl c  = [(C.Relkit c)] -> RelkitFlow c
 

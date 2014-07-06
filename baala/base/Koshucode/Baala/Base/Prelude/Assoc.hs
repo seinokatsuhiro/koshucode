@@ -8,6 +8,7 @@ module Koshucode.Baala.Base.Prelude.Assoc
   assocBy,
   assocExist,
   namedMapM,
+  lookupBy,
   lookupSatisfy,
   -- $Assoc
 
@@ -91,6 +92,13 @@ namedMapM :: (Monad m) => (b -> m c) -> (a, b) -> m (a, c)
 namedMapM f (a, b) =
     do c <- f b
        return (a, c)
+
+lookupBy :: (a -> Bool) -> [(a, b)] -> Maybe b
+lookupBy p = loop where
+    loop [] = Nothing
+    loop ((k, v) : xs)
+        | p k = Just v
+        | otherwise = loop xs
 
 -- | Lookup assoc list that keys are truth-valued functions.
 lookupSatisfy :: a -> [(a -> Bool, b)] -> Maybe b

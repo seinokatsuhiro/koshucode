@@ -1,13 +1,11 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Prelude.Pair
-( mapFst,
-  mapSnd,
+( mapFst, mapSnd,
   cons1,
-  mapFstTo,
-  mapSndTo,
+  mapFstTo, mapSndTo,
   maybePairs,
-  sequenceSnd,
+  sequenceFst, sequenceSnd,
 ) where
 
 import qualified Control.Applicative as A
@@ -31,6 +29,12 @@ maybePairs :: [a] -> Maybe [(a, a)]
 maybePairs (a:b:xs) = A.liftA ((a, b):) $ maybePairs xs
 maybePairs []       = Just []
 maybePairs _        = Nothing
+
+sequenceFst :: (Monad m) => [(m a, b)] -> m [(a, b)]
+sequenceFst xs =
+    do let (fs, ss) = unzip xs
+       fs' <- sequence fs
+       return $ zip fs' ss
 
 sequenceSnd :: (Monad m) => [(a, m b)] -> m [(a, b)]
 sequenceSnd xs =
