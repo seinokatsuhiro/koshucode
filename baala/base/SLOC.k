@@ -1,15 +1,15 @@
 ** -*- koshu -*-
 
 |-- DIR  /code 15   /comment 4    /dir "base/Koshucode/Baala"
-|-- DIR  /code 114  /comment 50   /dir "base/Koshucode/Baala/Base"
+|-- DIR  /code 116  /comment 50   /dir "base/Koshucode/Baala/Base"
 |-- DIR  /code 95   /comment 52   /dir "base/Koshucode/Baala/Base/Abort"
 |-- DIR  /code 601  /comment 414  /dir "base/Koshucode/Baala/Base/Data"
-|-- DIR  /code 449  /comment 408  /dir "base/Koshucode/Baala/Base/Prelude"
+|-- DIR  /code 469  /comment 391  /dir "base/Koshucode/Baala/Base/Prelude"
 |-- DIR  /code 212  /comment 179  /dir "base/Koshucode/Baala/Base/Syntax"
 |-- DIR  /code 384  /comment 227  /dir "base/Koshucode/Baala/Base/Text"
 |-- DIR  /code 439  /comment 507  /dir "base/Koshucode/Baala/Base/Token"
 
-|-- DIR-TOTAL  /code 2309  /comment 1841
+|-- DIR-TOTAL  /code 2331  /comment 1824
 
 |-- FILE  /code 15   /comment 4    /file "Base.hs"        /dir "base/Koshucode/Baala"
 |-- FILE  /code 9    /comment 6    /file "Abort.hs"       /dir "base/Koshucode/Baala/Base"
@@ -25,13 +25,14 @@
 |-- FILE  /code 85   /comment 128  /file "Relhead.hs"     /dir "base/Koshucode/Baala/Base/Data"
 |-- FILE  /code 65   /comment 44   /file "Term.hs"        /dir "base/Koshucode/Baala/Base/Data"
 |-- FILE  /code 31   /comment 21   /file "Message.hs"     /dir "base/Koshucode/Baala/Base"
-|-- FILE  /code 15   /comment 3    /file "Prelude.hs"     /dir "base/Koshucode/Baala/Base"
-|-- FILE  /code 119  /comment 155  /file "Assoc.hs"       /dir "base/Koshucode/Baala/Base/Prelude"
+|-- FILE  /code 17   /comment 3    /file "Prelude.hs"     /dir "base/Koshucode/Baala/Base"
+|-- FILE  /code 120  /comment 144  /file "Assoc.hs"       /dir "base/Koshucode/Baala/Base/Prelude"
 |-- FILE  /code 28   /comment 18   /file "Class.hs"       /dir "base/Koshucode/Baala/Base/Prelude"
-|-- FILE  /code 46   /comment 20   /file "Import.hs"      /dir "base/Koshucode/Baala/Base/Prelude"
-|-- FILE  /code 75   /comment 36   /file "Order.hs"       /dir "base/Koshucode/Baala/Base/Prelude"
+|-- FILE  /code 48   /comment 22   /file "Import.hs"      /dir "base/Koshucode/Baala/Base/Prelude"
+|-- FILE  /code 99   /comment 55   /file "List.hs"        /dir "base/Koshucode/Baala/Base/Prelude"
+|-- FILE  /code 75   /comment 34   /file "Order.hs"       /dir "base/Koshucode/Baala/Base/Prelude"
+|-- FILE  /code 32   /comment 11   /file "Pair.hs"        /dir "base/Koshucode/Baala/Base/Prelude"
 |-- FILE  /code 67   /comment 107  /file "Snip.hs"        /dir "base/Koshucode/Baala/Base/Prelude"
-|-- FILE  /code 114  /comment 72   /file "Utility.hs"     /dir "base/Koshucode/Baala/Base/Prelude"
 |-- FILE  /code 11   /comment 6    /file "Syntax.hs"      /dir "base/Koshucode/Baala/Base"
 |-- FILE  /code 54   /comment 44   /file "Code.hs"        /dir "base/Koshucode/Baala/Base/Syntax"
 |-- FILE  /code 55   /comment 49   /file "Infix.hs"       /dir "base/Koshucode/Baala/Base/Syntax"
@@ -52,4 +53,4 @@
 |-- FILE  /code 124  /comment 158  /file "TokenLine.hs"   /dir "base/Koshucode/Baala/Base/Token"
 |-- FILE  /code 66   /comment 157  /file "TokenTree.hs"   /dir "base/Koshucode/Baala/Base/Token"
 
-|-- FILE-TOTAL  /code 2309  /comment 1841
+|-- FILE-TOTAL  /code 2331  /comment 1824
