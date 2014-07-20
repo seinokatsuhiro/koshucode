@@ -22,6 +22,9 @@ module Koshucode.Baala.Op.Cox
 
   -- * split
   consSplit, relmapSplit, relkitSplit,
+
+  -- * unary
+  consUnary, relmapUnary,
 ) where
 
 import qualified Koshucode.Baala.Base        as B
@@ -43,14 +46,15 @@ import qualified Koshucode.Baala.Op.Message  as Message
 -- 
 ropsCox :: (C.CContent c) => [C.Rop c]
 ropsCox = Op.ropList "cox"
-    --        CONSTRUCTOR         USAGE                     ATTRIBUTE
-    [ Op.ropV consAdd             "add /N E ..."            "-in | -let"
-    , Op.ropV (consFilter True)   "keep E"                  "-in | -let"
-    , Op.ropV (consFilter False)  "omit E"                  "-in | -let"
-    , Op.ropN consOmitAll         "omit-all"                ""
-    , Op.ropI consRange           "range /N -from E -to E"  "-term | -from -to"
-    , Op.ropV consSplit           "split /N E ..."          "-in | -let"
-    , Op.ropV consSubst           "subst /N E ..."          "-in | -let"
+    --         CONSTRUCTOR         USAGE                     ATTRIBUTE
+    [ Op.ropV  consAdd             "add /N E ..."            "-in | -let"
+    , Op.ropV  (consFilter True)   "keep E"                  "-in | -let"
+    , Op.ropV  (consFilter False)  "omit E"                  "-in | -let"
+    , Op.ropN  consOmitAll         "omit-all"                ""
+    , Op.ropI  consRange           "range /N -from E -to E"  "-term | -from -to"
+    , Op.ropV  consSplit           "split /N E ..."          "-in | -let"
+    , Op.ropV  consSubst           "subst /N E ..."          "-in | -let"
+    , Op.ropIV consUnary           "unary /N E ..."          "-term -expr"
     ]
 
 
@@ -255,4 +259,26 @@ relkitSplit (base, deriv, bodies) (Just he1)
                     case C.isBool c of
                       True  -> Right (C.gBool c, cs)
                       False -> Message.reqBool
+
+
+-- ----------------------  unary
+
+consUnary :: (C.CContent c) => C.RopCons c
+consUnary use =
+    do n     <- Op.getTerm  use "-term"
+       trees <- Op.getTrees use "-expr"
+       coxes <- alpha use `mapM` trees
+       let base = C.globalFunction $ C.ropGlobal use
+       Right $ relmapUnary use (n, base, coxes)
+
+relmapUnary :: (C.CContent c) => C.RopUse c -> (B.TermName, [C.Cop c], [C.Cox c]) -> C.Relmap c
+relmapUnary use = C.relmapFlow use . relkitUnary
+
+relkitUnary :: (C.CContent c) => (B.TermName, [C.Cop c], [C.Cox c]) -> C.RelkitFlow c
+relkitUnary (n, base, coxes) _ = Right kit2 where
+    he2    = B.headFrom [n]
+    kit2   = C.relkitJust he2 $ C.RelkitAbFull True f2 []
+    f2 _ _ = do cx <- C.coxBeta base [] B.mempty `mapM` coxes
+                cs <- C.coxRun [] `mapM` cx
+                Right $ map B.li1 cs
 
