@@ -41,8 +41,8 @@ consBoth use =
 relmapBoth :: (Ord c, C.CRel c, C.CNil c) => C.RopUse c -> B.Map (C.Relmap c)
 relmapBoth use rmap = C.relmapCopy use "i" rmapBoth where
     rmapBoth = rmapL `B.mappend` Op.relmapJoin use rmapR
-    rmapR    = rmap  `B.mappend` relmapMaybe use rmapIn
-    rmapL    = relmapMaybe use rmap
+    rmapR    = rmap  `B.mappend` relmapMaybe use C.nil rmapIn
+    rmapL    = relmapMaybe use C.nil rmap
     rmapIn   = C.relmapWithVar use "i"
 
 
@@ -52,13 +52,13 @@ relmapBoth use rmap = C.relmapCopy use "i" rmapBoth where
 consMaybe :: (Ord c, C.CNil c) => C.RopCons c
 consMaybe use =
     do rmap <- Op.getRelmap use "-relmap"
-       Right $ relmapMaybe use rmap
+       Right $ relmapMaybe use C.nil rmap
 
-relmapMaybe :: (Ord c, C.CNil c) => C.RopUse c -> B.Map (C.Relmap c)
-relmapMaybe use = C.relmapBinary use relkitMaybe
+relmapMaybe :: (Ord c) => C.RopUse c -> c -> B.Map (C.Relmap c)
+relmapMaybe use = C.relmapBinary use . relkitMaybe
 
-relkitMaybe :: forall c. (Ord c, C.CNil c) => C.RelkitBinary c
-relkitMaybe (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
+relkitMaybe :: forall c. (Ord c) => c -> C.RelkitBinary c
+relkitMaybe fill (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
 
     ind1, ind2 :: [Int]
     (ind1, ind2) = B.headNames he1 `B.snipPair` B.headNames he2
@@ -79,10 +79,10 @@ relkitMaybe (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
            let b2map = B.gatherToMap $ map kv bo2
            Right $ step b2map `concatMap` bo1
 
-    nils = replicate (B.headDegree he3 - B.headDegree he1) C.nil
+    fills = replicate (B.headDegree he3 - B.headDegree he1) fill
     step b2map cs1 = case B.lookupMap (share1 cs1) b2map of
                        Just b2side -> map (++ cs1) b2side
-                       Nothing     -> [nils ++ cs1]
+                       Nothing     -> [fills ++ cs1]
 
-relkitMaybe _ _ = Right C.relkitNothing
+relkitMaybe _ _ _ = Right C.relkitNothing
 
