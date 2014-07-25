@@ -9,10 +9,11 @@ module Koshucode.Baala.Op.Nil
   consMaybe, relmapMaybe, relkitMaybe,
 ) where
 
-import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Core                 as C
-import qualified Koshucode.Baala.Op.Builtin           as Op
-import qualified Koshucode.Baala.Op.Lattice.Tropashko as Op
+import qualified Koshucode.Baala.Base       as B
+import qualified Koshucode.Baala.Core       as C
+import qualified Koshucode.Baala.Op.Builtin as Op
+import qualified Koshucode.Baala.Op.Lattice as Op
+import qualified Koshucode.Baala.Op.Cox     as Op
 
 
 -- | Relmap operators that handles nils.
@@ -23,36 +24,38 @@ import qualified Koshucode.Baala.Op.Lattice.Tropashko as Op
 --     Meet input and given relation.
 --     It keeps input tuples of which counterparts are totally negated.
 -- 
-ropsNil :: (Ord c, C.CRel c, C.CNil c) => [C.Rop c]
+ropsNil :: (C.CContent c) => [C.Rop c]
 ropsNil = Op.ropList "nil"  -- GROUP
     --         CONSTRUCTOR USAGE      ATTRIBUTE
-    [ Op.ropI  consBoth    "both R"   "-relmap/"
-    , Op.ropI  consMaybe   "maybe R"  "-relmap/"
+    [ Op.ropI  consBoth    "both R"   "-relmap/ | -fill"
+    , Op.ropI  consMaybe   "maybe R"  "-relmap/ | -fill"
     ]
 
 
 -- ----------------------  both
 
-consBoth :: (Ord c, C.CRel c, C.CNil c) => C.RopCons c
+consBoth :: (C.CContent c) => C.RopCons c
 consBoth use =
     do rmap <- Op.getRelmap use "-relmap"
-       Right $ relmapBoth use rmap
+       fill <- Op.getFiller use "-fill"
+       Right $ relmapBoth use fill rmap
 
-relmapBoth :: (Ord c, C.CRel c, C.CNil c) => C.RopUse c -> B.Map (C.Relmap c)
-relmapBoth use rmap = C.relmapCopy use "i" rmapBoth where
+relmapBoth :: (Ord c) => C.RopUse c -> c -> B.Map (C.Relmap c)
+relmapBoth use fill rmap = C.relmapCopy use "i" rmapBoth where
     rmapBoth = rmapL `B.mappend` Op.relmapJoin use rmapR
-    rmapR    = rmap  `B.mappend` relmapMaybe use C.nil rmapIn
-    rmapL    = relmapMaybe use C.nil rmap
+    rmapR    = rmap  `B.mappend` relmapMaybe use fill rmapIn
+    rmapL    = relmapMaybe use fill rmap
     rmapIn   = C.relmapWithVar use "i"
 
 
 
 -- ----------------------  maybe
 
-consMaybe :: (Ord c, C.CNil c) => C.RopCons c
+consMaybe :: (C.CContent c) => C.RopCons c
 consMaybe use =
     do rmap <- Op.getRelmap use "-relmap"
-       Right $ relmapMaybe use C.nil rmap
+       fill <- Op.getFiller use "-fill"
+       Right $ relmapMaybe use fill rmap
 
 relmapMaybe :: (Ord c) => C.RopUse c -> c -> B.Map (C.Relmap c)
 relmapMaybe use = C.relmapBinary use . relkitMaybe

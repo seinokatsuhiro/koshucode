@@ -3,6 +3,8 @@
 
 module Koshucode.Baala.Op.Cox
 ( ropsCox,
+  getContent,
+  getFiller,
 
   -- * add
   consAdd, relmapAdd,
@@ -60,11 +62,31 @@ ropsCox = Op.ropList "cox"
 
 -- ----------------------  alpha
 
-alphas :: (C.CContent c) => C.RopUse c -> [B.Named B.TokenTree] -> B.Ab [C.NamedCox c]
-alphas use = mapM (B.namedMapM $ alpha use)
+ropAlpha :: (C.CContent c) => C.RopUse c -> B.TokenTree -> B.Ab (C.Cox c)
+ropAlpha = C.coxAlpha . C.globalSyntax . C.ropGlobal
 
-alpha :: (C.CContent c) => C.RopUse c -> B.TokenTree -> B.Ab (C.Cox c)
-alpha = C.coxAlpha . C.globalSyntax . C.ropGlobal
+ropAlphas :: (C.CContent c) => C.RopUse c -> [B.TokenTree] -> B.Ab [C.Cox c]
+ropAlphas = mapM . ropAlpha
+
+ropNamedAlphas :: (C.CContent c) => C.RopUse c -> [B.Named B.TokenTree] -> B.Ab [C.NamedCox c]
+ropNamedAlphas use = mapM (B.namedMapM $ ropAlpha use)
+
+runCoxTree :: (C.CContent c) => C.RopUse c -> B.TokenTree -> B.Ab c
+runCoxTree use tree =
+    do let base = C.globalFunction $ C.ropGlobal use
+       alpha <- ropAlpha use tree
+       beta  <- C.coxBeta base [] B.mempty alpha
+       C.coxRun [] beta
+
+getContent :: (C.CContent c) => c -> C.RopUse c -> String -> B.Ab c
+getContent opt use name =
+    do maybeTree <- Op.getMaybe Op.getTree use name
+       case maybeTree of
+         Nothing   -> Right opt
+         Just tree -> runCoxTree use tree
+
+getFiller :: (C.CContent c) => C.RopUse c -> String -> B.Ab c
+getFiller = getContent C.nil
 
 
 -- ----------------------  add
@@ -73,8 +95,8 @@ consAdd :: (C.CContent c) => C.RopCons c
 consAdd use =
     do treesLet  <-  Op.getOption [] Op.getWordTrees use "-let"
        treesIn   <-  Op.getTermTrees use "-in"
-       coxLet    <-  alphas use treesLet
-       coxIn     <-  alphas use treesIn
+       coxLet    <-  ropNamedAlphas use treesLet
+       coxIn     <-  ropNamedAlphas use treesIn
        let base = C.globalFunction $ C.ropGlobal use
        Right $ relmapAdd use (base, coxLet, coxIn)
 
@@ -105,8 +127,8 @@ consSubst :: (C.CContent c) => C.RopCons c
 consSubst use =
     do treesLet <- Op.getOption [] Op.getWordTrees use "-let"
        treesIn  <- Op.getTermTrees use "-in"
-       coxLet   <- alphas use treesLet
-       coxIn    <- alphas use treesIn
+       coxLet   <- ropNamedAlphas use treesLet
+       coxIn    <- ropNamedAlphas use treesIn
        let base = C.globalFunction $ C.ropGlobal use
        Right $ relmapSubst use (base, coxLet, coxIn)
 
@@ -139,8 +161,8 @@ consFilter :: (C.CContent c) => Bool -> C.RopCons c
 consFilter b use =
     do treesLet  <-  Op.getOption [] Op.getWordTrees use "-let"
        treesIn   <-  Op.getTrees use "-in"
-       coxLet    <-  alphas use treesLet
-       coxIn     <-  alpha  use $ B.treeWrap treesIn
+       coxLet    <-  ropNamedAlphas use treesLet
+       coxIn     <-  ropAlpha use $ B.treeWrap treesIn
        let base = C.globalFunction $ C.ropGlobal use
        Right $ relmapFilter use (b, base, coxLet, coxIn)
 
@@ -186,8 +208,8 @@ consRange use =
   do term      <-  Op.getTerm  use "-term"
      treeLow   <-  Op.getTrees use "-from"
      treeHigh  <-  Op.getTrees use "-to"
-     coxLow    <-  alpha use $ B.treeWrap treeLow
-     coxHigh   <-  alpha use $ B.treeWrap treeHigh
+     coxLow    <-  ropAlpha use $ B.treeWrap treeLow
+     coxHigh   <-  ropAlpha use $ B.treeWrap treeHigh
      let base = C.globalFunction $ C.ropGlobal use
      Right $ relmapRange use (term, base, coxLow, coxHigh)
 
@@ -217,8 +239,8 @@ consSplit :: (C.CContent c) => C.RopCons c
 consSplit use =
     do treesLet  <-  Op.getOption [] Op.getWordTrees use "-let"
        treesIn   <-  Op.getTermTrees use "-in"
-       coxLet    <-  alphas use treesLet
-       coxIn     <-  alphas use treesIn
+       coxLet    <-  ropNamedAlphas use treesLet
+       coxIn     <-  ropNamedAlphas use treesIn
        let base = C.globalFunction $ C.ropGlobal use
        Right $ relmapSplit use (base, coxLet, coxIn)
 
@@ -267,7 +289,7 @@ consUnary :: (C.CContent c) => C.RopCons c
 consUnary use =
     do n     <- Op.getTerm  use "-term"
        trees <- Op.getTrees use "-expr"
-       coxes <- alpha use `mapM` trees
+       coxes <- ropAlphas use trees
        let base = C.globalFunction $ C.ropGlobal use
        Right $ relmapUnary use (n, base, coxes)
 
