@@ -67,8 +67,10 @@ relkitMeet (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
            bo2 <- bmap2 bo1
-           let b2map = B.gatherToMap $ map kv bo2
-           Right $ step b2map `concatMap` bo1
+           case ind1 of
+             [] -> Right $ cartesian bo1 bo2
+             _  -> let b2map = B.gatherToMap $ map kv bo2
+                   in Right $ step b2map `concatMap` bo1
 
     step b2map cs1 = case B.lookupMap (share1 cs1) b2map of
                        Just b2side -> map (++ cs1) b2side
@@ -76,6 +78,11 @@ relkitMeet (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
 
 relkitMeet _ _ = Right C.relkitNothing
 
+cartesian :: [[c]] -> [[c]] -> [[c]]
+cartesian bo1 bo2 =
+    do cs1 <- bo1
+       cs2 <- bo2
+       return $ cs2 ++ cs1
 
 
 -- ----------------------  join
