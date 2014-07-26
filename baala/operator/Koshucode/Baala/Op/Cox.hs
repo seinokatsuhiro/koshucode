@@ -4,6 +4,8 @@
 module Koshucode.Baala.Op.Cox
 ( ropsCox,
   getContent,
+  getOptContent,
+  getContents,
   getFiller,
 
   -- * add
@@ -29,6 +31,7 @@ module Koshucode.Baala.Op.Cox
   consUnary, relmapUnary,
 ) where
 
+import Prelude hiding (getContents)
 import qualified Koshucode.Baala.Base        as B
 import qualified Koshucode.Baala.Core        as C
 import qualified Koshucode.Baala.Op.Builtin  as Op
@@ -65,9 +68,6 @@ ropsCox = Op.ropList "cox"
 ropAlpha :: (C.CContent c) => C.RopUse c -> B.TokenTree -> B.Ab (C.Cox c)
 ropAlpha = C.coxAlpha . C.globalSyntax . C.ropGlobal
 
-ropAlphas :: (C.CContent c) => C.RopUse c -> [B.TokenTree] -> B.Ab [C.Cox c]
-ropAlphas = mapM . ropAlpha
-
 ropNamedAlphas :: (C.CContent c) => C.RopUse c -> [B.Named B.TokenTree] -> B.Ab [C.NamedCox c]
 ropNamedAlphas use = mapM (B.namedMapM $ ropAlpha use)
 
@@ -78,15 +78,22 @@ runCoxTree use tree =
        beta  <- C.coxBeta base [] B.mempty alpha
        C.coxRun [] beta
 
-getContent :: (C.CContent c) => c -> C.RopUse c -> String -> B.Ab c
-getContent opt use name =
-    do maybeTree <- Op.getMaybe Op.getTree use name
-       case maybeTree of
-         Nothing   -> Right opt
-         Just tree -> runCoxTree use tree
+getContents :: (C.CContent c) => C.RopUse c -> String -> B.Ab [c]
+getContents use name =
+    do trees <- Op.getTrees use name
+       let trees2 = B.treeWrap `map` B.divideTreesByColon trees
+       runCoxTree use `mapM` trees2
+
+getContent :: (C.CContent c) => C.RopUse c -> String -> B.Ab c
+getContent use name =
+    do tree <- Op.getTree use name
+       runCoxTree use tree
+
+getOptContent :: (C.CContent c) => c -> C.RopUse c -> String -> B.Ab c
+getOptContent opt = Op.getOption opt getContent
 
 getFiller :: (C.CContent c) => C.RopUse c -> String -> B.Ab c
-getFiller = getContent C.nil
+getFiller = getOptContent C.nil
 
 
 -- ----------------------  add
@@ -285,22 +292,20 @@ relkitSplit (base, deriv, bodies) (Just he1)
 
 -- ----------------------  unary
 
+--  > unary /n 1 : 2 : 3
+
 consUnary :: (C.CContent c) => C.RopCons c
 consUnary use =
-    do n     <- Op.getTerm  use "-term"
-       trees <- Op.getTrees use "-expr"
-       coxes <- ropAlphas use trees
-       let base = C.globalFunction $ C.ropGlobal use
-       Right $ relmapUnary use (n, base, coxes)
+    do n  <- Op.getTerm  use "-term"
+       cs <- getContents use "-expr"
+       Right $ relmapUnary use (n, cs)
 
-relmapUnary :: (C.CContent c) => C.RopUse c -> (B.TermName, [C.Cop c], [C.Cox c]) -> C.Relmap c
+relmapUnary :: (C.CContent c) => C.RopUse c -> (B.TermName, [c]) -> C.Relmap c
 relmapUnary use = C.relmapFlow use . relkitUnary
 
-relkitUnary :: (C.CContent c) => (B.TermName, [C.Cop c], [C.Cox c]) -> C.RelkitFlow c
-relkitUnary (n, base, coxes) _ = Right kit2 where
+relkitUnary :: (C.CContent c) => (B.TermName, [c]) -> C.RelkitFlow c
+relkitUnary (n, cs) _ = Right kit2 where
     he2    = B.headFrom [n]
     kit2   = C.relkitJust he2 $ C.RelkitAbFull True f2 []
-    f2 _ _ = do cx <- C.coxBeta base [] B.mempty `mapM` coxes
-                cs <- C.coxRun [] `mapM` cx
-                Right $ map B.li1 cs
+    f2 _ _ = Right $ map B.li1 cs
 

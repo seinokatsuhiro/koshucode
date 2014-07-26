@@ -26,9 +26,9 @@ import qualified Koshucode.Baala.Op.Cox     as Op
 -- 
 ropsNil :: (C.CContent c) => [C.Rop c]
 ropsNil = Op.ropList "nil"  -- GROUP
-    --         CONSTRUCTOR USAGE      ATTRIBUTE
-    [ Op.ropI  consBoth    "both R"   "-relmap/ | -fill"
-    , Op.ropI  consMaybe   "maybe R"  "-relmap/ | -fill"
+    --         CONSTRUCTOR USAGE                ATTRIBUTE
+    [ Op.ropI  consBoth    "both R [-fill E]"   "-relmap/ | -fill"
+    , Op.ropI  consMaybe   "maybe R [-fill E]"  "-relmap/ | -fill"
     ]
 
 
