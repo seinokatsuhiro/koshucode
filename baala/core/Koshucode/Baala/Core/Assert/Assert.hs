@@ -8,7 +8,7 @@ module Koshucode.Baala.Core.Assert.Assert
   Assert (..),
   AssertType (..),
   AssertOption,
-  assertQuality,
+  assertAs,
 
   -- * Short assertion
   ShortAssert,
@@ -16,11 +16,10 @@ module Koshucode.Baala.Core.Assert.Assert
   assertViolated,
 ) where
 
-import qualified Data.Generics               as G
-import qualified Koshucode.Baala.Base        as B
-import qualified Koshucode.Baala.Core.Lexmap as C
-import qualified Koshucode.Baala.Core.Relmap as C
-
+import qualified Data.Generics                as G
+import qualified Koshucode.Baala.Base         as B
+import qualified Koshucode.Baala.Core.Lexmap  as C
+import qualified Koshucode.Baala.Core.Relmap  as C
 
 
 -- ----------------------  Assert
@@ -55,15 +54,15 @@ data AssertType
     | AssertViolate   -- ^ @|=V@ /pattern/ @:@ /relmap/
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
-assertQuality :: AssertType -> B.JudgeOf c
-assertQuality AssertAffirm   = B.JudgeAffirm
-assertQuality AssertDeny     = B.JudgeDeny
-assertQuality AssertViolate  = B.JudgeViolate
-
 assertText :: AssertType -> String
 assertText AssertAffirm   = "|=="
 assertText AssertDeny     = "|=X"
 assertText AssertViolate  = "|=V"
+
+assertAs :: AssertType -> B.JudgeOf c
+assertAs AssertAffirm   = B.JudgeAffirm
+assertAs AssertDeny     = B.JudgeDeny
+assertAs AssertViolate  = B.JudgeViolate
 
 
 -- ----------------------  Short assertion

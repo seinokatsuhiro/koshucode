@@ -17,40 +17,6 @@ import qualified Koshucode.Baala.Core.Assert.RelTable as C
 import qualified Koshucode.Baala.Core.Message         as Message
 
 
-
--- ----------------------  Relmap
-
--- | Calculate 'Relmap' for 'Rel'.
-runRelmapDataset
-    :: (Ord c, C.CRel c, C.CNil c)
-    => C.Global c
-    -> C.Dataset c     -- ^ Judges read from @source@ operator
-    -> [C.Roal (C.Relmap c)]
-    -> C.Relmap c      -- ^ Mapping from 'Rel' to 'Rel'
-    -> B.Rel c         -- ^ Input relation
-    -> B.Ab (B.Rel c)  -- ^ Output relation
-runRelmapDataset global dataset parts = runRelmapViaRelkit g2 parts where
-    g2 = global { C.globalSelect = C.selectRelation dataset }
-
-runRelmapViaRelkit :: (Ord c, C.CRel c)
-  => C.Global c -> [C.Roal (C.Relmap c)]
-  -> C.Relmap c -> B.AbMap (B.Rel c)
-runRelmapViaRelkit global parts r (B.Rel he1 bo1) =
-    do (kdef, C.Relkit he2' f2') <- C.relmapSpecialize global parts [] (Just he1) r
-       let C.Relkit mhe2 f2 = C.relkitLink kdef $ C.Relkit he2' f2'
-       he2 <- justRelhead mhe2
-       bo2 <- C.relkitRun global [] f2 bo1
-       Right $ B.Rel he2 bo2
-
-justRelhead :: Maybe B.Relhead -> B.Ab B.Relhead
-justRelhead = just "unknown relhead"
-
-just :: String -> Maybe a -> B.Ab a
-just _ (Just h) = Right h
-just s Nothing  = Message.adlib s
-
-
-
 -- ----------------------  Assert
 
 -- | Calculate assertion list.
@@ -64,31 +30,106 @@ runAssertJudges global a@(B.Short pt sh _) =
 -- | Calculate assertion list.
 runAssertDataset :: forall c. (Ord c, B.Write c, C.CRel c, C.CNil c)
   => C.Global c -> C.ShortAssert c -> C.Dataset c -> B.Ab [B.OutputChunk c]
-runAssertDataset global (B.Short _ sh asserts) dataset = Right . concat =<< mapM each asserts where
-    each (C.Assert _ _ _ _ _ Nothing _) = B.bug "runAssertDataset"
-    each a@(C.Assert quo pat opt _ _ (Just relmap) libs) =
-        B.abortable "assert" [a] $ do
-          r1 <- runRelmapDataset global dataset libs relmap B.reldee
-          let q = C.assertQuality quo
-          assertOptionProcess sh q pat opt r1
+runAssertDataset global (B.Short _ sh asserts) dataset =
+    Right . concat =<< mapM each asserts
+    where
+      each (C.Assert _ _ _ _ _ Nothing _) = B.bug "runAssertDataset"
+      each a@(C.Assert typ pat opt _ _ (Just relmap) libs) =
+          B.abortable "assert" [a] $ do
+            r1 <- runRelmapDataset global dataset libs relmap B.reldee
+            let judgeOf showEmpty = assert showEmpty typ
+            optionProcess sh judgeOf pat opt r1
 
--- | Convert relation to list of judges.
-judgesFromRel :: B.JudgeOf c -> B.JudgePat -> B.Rel c -> [B.Judge c]
-judgesFromRel q pat = judges where
-    judges (B.Rel h b) = map (judge h) b
-    judge h = q pat . zip (B.headNames h)
+      assert :: (C.CNil c) => Bool -> C.AssertType -> B.JudgeOf c
+      assert True  q p = C.assertAs q p
+      assert False q p = C.assertAs q p . omitNils
 
-optionUnkCheck :: [String] -> [B.NamedTrees] -> B.Ab ()
-optionUnkCheck ns xs =
+      omitNils :: (C.CNil c) => B.Map [B.Named c]
+      omitNils =  B.omit (C.isNil . snd)
+
+-- | Calculate 'Relmap' for 'Rel'.
+runRelmapDataset
+    :: (Ord c, C.CRel c, C.CNil c)
+    => C.Global c
+    -> C.Dataset c     -- ^ Judges read from @source@ operator
+    -> [C.Roal (C.Relmap c)]
+    -> C.Relmap c      -- ^ Mapping from 'Rel' to 'Rel'
+    -> B.Rel c         -- ^ Input relation
+    -> B.Ab (B.Rel c)  -- ^ Output relation
+runRelmapDataset global dataset = runRelmapViaRelkit g2 where
+    g2 = global { C.globalSelect = C.selectRelation dataset }
+
+runRelmapViaRelkit :: (Ord c, C.CRel c)
+  => C.Global c -> [C.Roal (C.Relmap c)]
+  -> C.Relmap c -> B.AbMap (B.Rel c)
+runRelmapViaRelkit g2 parts r (B.Rel he1 bo1) =
+    do (kdef, C.Relkit he2' f2') <- C.relmapSpecialize g2 parts [] (Just he1) r
+       let C.Relkit mhe2 f2 = C.relkitLink kdef $ C.Relkit he2' f2'
+       he2 <- just "unknown relhead" mhe2
+       bo2 <- C.relkitRun g2 [] f2 bo1
+       Right $ B.Rel he2 bo2
+    where
+      just :: String -> Maybe a -> B.Ab a
+      just _ (Just h) = Right h
+      just s Nothing  = Message.adlib s
+
+
+-- ---------------------------------  Options
+
+optionList :: [String]
+optionList = [ "-empty"  -- show empty filler
+             , "-fore"   -- move terms to front
+             , "-order"  -- sort list of judges by content
+             , "-align"  -- align terms vertically
+             , "-table"  -- output relation in tabular format
+             ]
+
+optionProcess :: (Ord c, B.Write c, C.CRel c)
+    => [B.ShortDef] -> (Bool -> B.JudgeOf c) -> B.JudgePat -> C.AssertOption
+    -> B.Rel c -> B.Ab [B.OutputChunk c]
+optionProcess sh judgeOf pat opt r1 =
+    do optionCheck optionList opt
+       r2 <- optionRelmap opt r1
+       let showEmpty = "-empty" `optionElem` opt
+           judges    = B.judgesFromRel (judgeOf showEmpty) pat r2
+           comment   = optionComment sh pat opt r2
+       Right [ B.OutputJudge judges, B.OutputComment comment ]
+
+optionCheck :: [String] -> [B.NamedTrees] -> B.Ab ()
+optionCheck ns xs =
     let rest = B.assocCut ("@trunk" : ns) xs
     in if null rest
        then Right ()
        else Message.unkWord (fst . head $ rest)
 
--- | Get term name as string only if term is flat.
-flatname :: B.TokenTree -> Maybe B.TermName
-flatname (B.TreeL (B.TTerm _ [n])) = Just n
-flatname _ = Nothing
+optionRelmap :: (Ord c, C.CRel c) => C.AssertOption -> B.AbMap (B.Rel c)
+optionRelmap opt r1 =
+    Right r1 >>= call optionFore  "-fore"
+             >>= call optionOrder "-order"
+    where call f name r2 = case lookup name opt of
+                             Nothing   -> Right r2
+                             Just opt2 -> f opt2 r2
+
+optionComment :: (B.Write c, C.CRel c) =>
+    [B.ShortDef] -> B.JudgePat -> C.AssertOption -> B.Rel c -> [String]
+optionComment sh p opt r =
+    case "-table" `optionElem` opt of
+      True  -> title : "" : table
+      False -> []
+    where
+      title = "TABLE : " ++ p
+      table = ("  " ++) `map` C.relTableLines sh r
+
+optionElem :: String -> [B.NamedTrees] -> Bool
+optionElem name opt = name `elem` map fst opt
+
+
+-- ---------------------------------  Option "-fore"
+
+optionFore :: (Ord c) => [B.TokenTree] -> B.AbMap (B.Rel c)
+optionFore opt2 r1 =
+    do ns <- flatnames opt2
+       snipRelRaw B.snipFore2 ns r1
 
 flatnames :: [B.TokenTree] -> B.Ab [B.TermName]
 flatnames trees =
@@ -96,61 +137,10 @@ flatnames trees =
       Just ns -> Right ns
       Nothing -> Message.reqTermName
 
-
-
--- ---------------------------------  Option
-
-assertOptionProcess :: (Ord c, B.Write c, C.CRel c)
-  => [B.ShortDef] -> B.JudgeOf c -> B.JudgePat -> C.AssertOption -> B.Rel c -> B.Ab [B.OutputChunk c]
-assertOptionProcess sh q pat opt r1 =
-    do assertOptionCheck opt
-       r2 <- assertOptionRelmap opt r1
-       let js = judgesFromRel q pat r2
-           cm = assertOptionComment sh pat opt r2
-       assertOptionJudges opt js cm
-
-assertOptionCheck :: C.AssertOption -> B.Ab ()
-assertOptionCheck = optionUnkCheck ["-fore", "-order", "-align", "-table"]
-
-assertOptionRelmap :: (Ord c, C.CRel c) => C.AssertOption -> B.Rel c -> B.Ab (B.Rel c)
-assertOptionRelmap opt r1 =
-    Right r1  >>= call "-fore"  assertOptionFore
-              >>= call "-order" assertOptionOrder
-    where call name f r =
-              case lookup name opt of
-                Just opt2 -> f opt2 r
-                Nothing   -> Right r
-
-assertOptionFore :: (Ord c) => [B.TokenTree] -> B.AbMap (B.Rel c)
-assertOptionFore opt r1 =
-    do ns <- flatnames opt
-       snipRelRaw B.snipFore2 ns r1
-
-assertOptionOrder :: (Ord c, C.CRel c) => [B.TokenTree] ->  B.AbMap (B.Rel c)
-assertOptionOrder _ r1 = Right $ relSortDeep r1
-
-relSortDeep :: (Ord c, C.CRel c) => B.MapRel c
-relSortDeep = relApply f where
-    f (B.Rel he bo) = B.Rel he $ B.sort bo
-
-relApply :: (C.CRel c) => B.Map (B.MapRel c)
-relApply f (B.Rel he bo) = f $ B.Rel he $ B.map2 nest bo where
-    nest c | C.isRel c = C.pRel $ relApply f $ C.gRel c
-           | otherwise = c
-
-assertOptionComment :: (B.Write c, C.CRel c) =>
-    [B.ShortDef] -> B.JudgePat -> C.AssertOption -> B.Rel c -> [String]
-assertOptionComment sh p opt r =
-    case lookup "-table" opt of
-      Nothing -> []
-      Just _  -> title : "" : table
-    where
-      title = "TABLE : " ++ p
-      table = map ("  " ++) $ C.relTableLines sh r
-    
-
-assertOptionJudges :: C.AssertOption -> [B.Judge c] -> [String] -> B.Ab [B.OutputChunk c]
-assertOptionJudges _ js cm = Right [ B.OutputJudge js, B.OutputComment cm ]
+-- | Get term name as string only if term is flat.
+flatname :: B.TokenTree -> Maybe B.TermName
+flatname (B.TreeL (B.TTerm _ [n])) = Just n
+flatname _ = Nothing
 
 snipRelRaw :: (Ord c) => B.SnipPair B.Term c -> [B.TermName] -> B.AbMap (B.Rel c)
 snipRelRaw (heSnip, boSnip) ns (B.Rel he1 bo1)
@@ -164,4 +154,19 @@ snipRelRaw (heSnip, boSnip) ns (B.Rel he1 bo1)
       r2   =  B.Rel he2 bo2
       he2  =  B.headChange (heSnip ind) he1
       bo2  =  boSnip ind `map` bo1
+
+
+-- ---------------------------------  Option "-order"
+
+optionOrder :: (Ord c, C.CRel c) => [B.TokenTree] ->  B.AbMap (B.Rel c)
+optionOrder _ r1 = Right $ relSortDeep r1
+
+relSortDeep :: (Ord c, C.CRel c) => B.MapRel c
+relSortDeep = relApply f where
+    f (B.Rel he bo) = B.Rel he $ B.sort bo
+
+relApply :: (C.CRel c) => B.Map (B.MapRel c)
+relApply f (B.Rel he bo) = f $ B.Rel he $ B.map2 nest bo where
+    nest c | C.isRel c = C.pRel $ relApply f $ C.gRel c
+           | otherwise = c
 

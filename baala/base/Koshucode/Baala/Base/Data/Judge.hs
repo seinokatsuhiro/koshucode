@@ -13,6 +13,7 @@ module Koshucode.Baala.Base.Data.Judge
   judgeTerms,
   judgeTermsMap,
   judgeCons,
+  judgesFromRel,
   abcJudge,
 
   -- * Logical quality
@@ -25,6 +26,9 @@ import qualified Koshucode.Baala.Base.Abort        as B
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
 import qualified Koshucode.Baala.Base.Data.Term    as B
+import qualified Koshucode.Baala.Base.Data.Rel     as B
+import qualified Koshucode.Baala.Base.Data.Relhead as B
+
 
 
 -- ----------------------  Datatype
@@ -86,21 +90,27 @@ judgeDoc :: (B.Write c) => B.StringMap -> Judge c -> B.Doc
 judgeDoc shorts j =
     case j of
       -- Frege's judgement stroke, content line,
-      JudgeAffirm  p xs -> B.doc "|--" B.<+> pat p B.<+> arg xs
-      JudgeDeny    p xs -> B.doc "|-X" B.<+> pat p B.<+> arg xs
-      JudgeViolate p xs -> B.doc "|-V" B.<+> pat p B.<+> arg xs
-      JudgeAlter   p key den aff -> B.doc "|-Y" B.<+> pat p B.<+> arg key
-                                    B.<+> B.doc "|-X" B.<+> arg den
-                                    B.<+> B.doc "|--" B.<+> arg aff
+      JudgeAffirm  p xs -> B.doc "|--" B.<+> pat p B.<+> terms xs
+      JudgeDeny    p xs -> B.doc "|-X" B.<+> pat p B.<+> terms xs
+      JudgeViolate p xs -> B.doc "|-V" B.<+> pat p B.<+> terms xs
+      JudgeAlter   p key den aff -> B.doc "|-Y" B.<+> pat p B.<+> terms key
+                                    B.<+> B.doc "|-X" B.<+> terms den
+                                    B.<+> B.doc "|--" B.<+> terms aff
     where
       -- pattern
       pat p | ':' `elem` p = B.docWrap "\"" "\"" p
             | otherwise    = B.doc p
 
-      -- term name and term value
-      arg ((n,c) : a2) = B.doc " " B.<> B.doc (B.showTermName n)
-                         B.<+> B.write shorts c B.<+> arg a2
-      arg [] = B.docEmpty
+      -- term name and content
+      terms [] = B.docEmpty
+      terms ((n, c) : xs) = B.doc " " B.<> B.doc (B.showTermName n)
+                            B.<+> B.write shorts c B.<+> terms xs
+
+-- | Convert relation to list of judges.
+judgesFromRel :: JudgeOf c -> JudgePat -> B.Rel c -> [Judge c]
+judgesFromRel judgeOf pat (B.Rel he bo) = map judge bo where
+    judge = judgeOf pat . zip names
+    names = B.headNames he
 
 -- | Sort terms in alphabetical order.
 abcJudge :: (Ord c) => B.Map (Judge c)
