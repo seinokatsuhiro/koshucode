@@ -57,7 +57,7 @@ shortEmpty = shortText []
 shortText :: [ShortDef] -> B.StringMap
 shortText = loop . reverse . B.sortWith len where
     len = length . snd
-    loop [] s | null s         =  "<empty>"
+    loop [] s | null s         =  "\"\""
               | isCodeText s   =  '\'' : s
               | otherwise      =  B.bracketQuote s
 

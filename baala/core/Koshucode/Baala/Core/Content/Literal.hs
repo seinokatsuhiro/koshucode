@@ -115,7 +115,6 @@ litContentBy ops tree = B.abortableTree "literal" tree $ lit tree where
 bracketKeyword :: (C.CEmpty c, C.CBool c) => String -> B.Ab c
 bracketKeyword "0"    =  Right C.false     -- <0>
 bracketKeyword "1"    =  Right C.true      -- <1>
-bracketKeyword "nil"  =  Right C.empty     -- <nil>
 bracketKeyword w      =  Message.unkWord w
 
 nakedKeyword :: (C.CEmpty c) => String -> B.Ab c
