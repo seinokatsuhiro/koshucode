@@ -22,7 +22,7 @@ runSection global sects =
          []  -> runSectionBody g2 s2
          jsV -> Right ([B.Short [] [] [B.OutputJudge jsV]], [])
 
-runSectionBody :: forall c. (Ord c, B.Write c, C.CRel c, C.CNil c) =>
+runSectionBody :: forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c) =>
     C.Global c -> C.Section c -> B.Ab (B.OutputResult c)
 runSectionBody global C.Section { C.secAssert = ass, C.secMessage = msg } =
     do js1 <- run $ C.assertViolated ass

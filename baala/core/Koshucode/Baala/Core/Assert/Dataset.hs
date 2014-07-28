@@ -44,9 +44,9 @@ addJudge (B.JudgeAffirm sign xs) (Dataset ds1) = Dataset ds2 where
 addJudge _ _ = undefined
 
 -- | Select relation from dataset.
---   If a giving term is not in judges, 'CNil' sign is used.
+--   If a giving term is not in judges, 'CEmpty' sign is used.
 selectRelation
-    :: (Ord c, C.CNil c)
+    :: (Ord c, C.CEmpty c)
     => Dataset c       -- ^ Dataset
     -> C.RelSelect c   -- ^ Relation selector
 selectRelation (Dataset m) sign ns = B.Rel h1 b1 where
@@ -55,7 +55,7 @@ selectRelation (Dataset m) sign ns = B.Rel h1 b1 where
       Just args -> B.unique $ map (subarg ns) args
       Nothing   -> []
 
-subarg :: (C.CNil c) => [String] -> [B.Named c] -> [c]
+subarg :: (C.CEmpty c) => [String] -> [B.Named c] -> [c]
 subarg ns arg = map pick ns where
-    pick n = Maybe.fromMaybe C.nil $ lookup n arg
+    pick n = Maybe.fromMaybe C.empty $ lookup n arg
 

@@ -11,7 +11,7 @@ module Koshucode.Baala.Core.Content.Class
   CList       (..),
 
   -- * Koshu data
-  CNil        (..),
+  CEmpty      (..),
   CDec        (..), pDecFromInt,
   CSet        (..),
   CAssn       (..),
@@ -30,13 +30,13 @@ class (Show c) => PrimContent c where
 
 class (Ord c, B.Write c, PrimContent c,
        CBool c, CText c, CDec c, CList c,
-       CNil c , CSet c, CAssn c, CRel c) =>
+       CEmpty c , CSet c, CAssn c, CRel c) =>
     CContent c where
 
     appendContent :: c -> c -> B.Ab c
 
     joinContent :: [c] -> B.Ab c
-    joinContent = B.foldM appendContent nil
+    joinContent = B.foldM appendContent empty
 
 getAbAb :: PrimContent c => (c -> Bool) -> (c -> b) -> B.Ab c -> B.Ab b
 getAbAb _ _ (Left reason) =  Left reason
@@ -95,10 +95,10 @@ class (PrimContent c) => CList c where
 
 -- ----------------------  Data in koshucode
 
--- | Types that can be nil
-class (PrimContent c) => CNil c where
-    isNil       ::          c -> Bool
-    nil         ::          c
+-- | Types that can be empty
+class (PrimContent c) => CEmpty c where
+    isEmpty     ::          c -> Bool
+    empty       ::          c
 
 class (PrimContent c) => CDec c where
     isDec       ::           c -> Bool

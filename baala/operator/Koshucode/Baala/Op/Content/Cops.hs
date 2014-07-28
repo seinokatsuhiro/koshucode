@@ -12,17 +12,17 @@ import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Core              as C
 
 import qualified Koshucode.Baala.Op.Builtin        as Rops
-import qualified Koshucode.Baala.Op.Cox            as Rops
+import qualified Koshucode.Baala.Op.Check          as Rops
 import qualified Koshucode.Baala.Op.Control        as Rops
-import qualified Koshucode.Baala.Op.Lattice        as Rops
+import qualified Koshucode.Baala.Op.Cox            as Rops
+import qualified Koshucode.Baala.Op.Empty          as Rops
 import qualified Koshucode.Baala.Op.Gadget         as Rops
+import qualified Koshucode.Baala.Op.Lattice        as Rops
 import qualified Koshucode.Baala.Op.Meta           as Rops
 import qualified Koshucode.Baala.Op.Nest           as Rops
-import qualified Koshucode.Baala.Op.Nil            as Rops
 import qualified Koshucode.Baala.Op.Peripheral     as Rops
 import qualified Koshucode.Baala.Op.Source         as Rops
 import qualified Koshucode.Baala.Op.Term           as Rops
-import qualified Koshucode.Baala.Op.Check          as Rops
 
 import qualified Koshucode.Baala.Op.Content.Arith  as Op
 import qualified Koshucode.Baala.Op.Content.List   as Op
@@ -42,7 +42,7 @@ vanillaRops = Rops.ropsMeta
            ++ Rops.ropsControl
            ++ Rops.ropsCox
            ++ Rops.ropsGadget
-           ++ Rops.ropsNil
+           ++ Rops.ropsEmpty
            ++ Rops.ropsTerm
            ++ Rops.ropsLattice
            ++ Rops.ropsSource

@@ -93,7 +93,7 @@ getOptContent :: (C.CContent c) => c -> C.RopUse c -> String -> B.Ab c
 getOptContent opt = Op.getOption opt getContent
 
 getFiller :: (C.CContent c) => C.RopUse c -> String -> B.Ab c
-getFiller = getOptContent C.nil
+getFiller = getOptContent C.empty
 
 
 -- ----------------------  add

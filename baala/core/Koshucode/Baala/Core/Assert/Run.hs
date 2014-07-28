@@ -20,7 +20,7 @@ import qualified Koshucode.Baala.Core.Message         as Message
 -- ----------------------  Assert
 
 -- | Calculate assertion list.
-runAssertJudges :: (Ord c, B.Write c, C.CRel c, C.CNil c)
+runAssertJudges :: (Ord c, B.Write c, C.CRel c, C.CEmpty c)
   => C.Global c -> C.ShortAssert c -> B.Ab (B.OutputChunks c)
 runAssertJudges global a@(B.Short pt sh _) =
     do chunks <- runAssertDataset global a ds
@@ -28,7 +28,7 @@ runAssertJudges global a@(B.Short pt sh _) =
     where ds = C.dataset $ C.globalJudges global
 
 -- | Calculate assertion list.
-runAssertDataset :: forall c. (Ord c, B.Write c, C.CRel c, C.CNil c)
+runAssertDataset :: forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c)
   => C.Global c -> C.ShortAssert c -> C.Dataset c -> B.Ab [B.OutputChunk c]
 runAssertDataset global (B.Short _ sh asserts) dataset =
     Right . concat =<< mapM each asserts
@@ -40,16 +40,16 @@ runAssertDataset global (B.Short _ sh asserts) dataset =
             let judgeOf showEmpty = assert showEmpty typ
             optionProcess sh judgeOf pat opt r1
 
-      assert :: (C.CNil c) => Bool -> C.AssertType -> B.JudgeOf c
+      assert :: (C.CEmpty c) => Bool -> C.AssertType -> B.JudgeOf c
       assert True  q p = C.assertAs q p
-      assert False q p = C.assertAs q p . omitNils
+      assert False q p = C.assertAs q p . omitEmpty
 
-      omitNils :: (C.CNil c) => B.Map [B.Named c]
-      omitNils =  B.omit (C.isNil . snd)
+      omitEmpty :: (C.CEmpty c) => B.Map [B.Named c]
+      omitEmpty =  B.omit (C.isEmpty . snd)
 
 -- | Calculate 'Relmap' for 'Rel'.
 runRelmapDataset
-    :: (Ord c, C.CRel c, C.CNil c)
+    :: (Ord c, C.CRel c, C.CEmpty c)
     => C.Global c
     -> C.Dataset c     -- ^ Judges read from @source@ operator
     -> [C.Roal (C.Relmap c)]

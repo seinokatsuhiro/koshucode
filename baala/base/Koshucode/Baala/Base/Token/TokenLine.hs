@@ -53,7 +53,7 @@ nextToken res (num, line) txt =
       '*' : '*' : '*' : '*' : cs
                       ->  token cs        $ B.TText     p 0 "****"
       '*' : '*' : _   ->  token ""        $ B.TComment  p txt
-      '(' : ')' : cs  ->  token cs        $ B.TText     p 0 "()"  -- nil
+      '(' : ')' : cs  ->  token cs        $ B.TText     p 0 "()"  -- empty
       '<' : '<' : cs  ->  token cs        $ B.TOpen     p "<<"
       '>' : '>' : cs  ->  token cs        $ B.TClose    p ">>"
                               

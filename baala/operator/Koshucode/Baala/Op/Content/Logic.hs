@@ -29,7 +29,7 @@ import qualified Koshucode.Baala.Op.Message as Message
 --  [@if@]     Conditional expression.
 --
 
-copsLogic :: (C.CBool c, C.CNil c) => [C.Cop c]
+copsLogic :: (C.CBool c, C.CEmpty c) => [C.Cop c]
 copsLogic =
     [ C.CopFun  "not"   copNot
     , C.CopFun  "and"   copAnd
@@ -89,7 +89,7 @@ treeOrList :: [B.TokenTree] -> B.TokenTree
 treeOrList [x] = x
 treeOrList xs = B.treeWrap $ (treeOp "or") : xs
 
-copIf  :: (C.CBool c, C.CNil c) => C.CopFun c
+copIf  :: (C.CBool c, C.CEmpty c) => C.CopFun c
 copIf arg =
     do (testC, conC, altC) <- C.getArg3 arg
        test <- C.getBool testC

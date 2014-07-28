@@ -102,7 +102,7 @@ litContentBy ops tree = B.abortableTree "literal" tree $ lit tree where
           Nothing -> Message.unkCop tag
     
     paren [] = Message.emptyLiteral
-    -- paren [] = Right C.nil
+    -- paren [] = Right C.empty
     paren xs = Message.unkWord $ treesContent xs  -- unknown sequence
 
     naked :: LitTree String
@@ -112,14 +112,14 @@ litContentBy ops tree = B.abortableTree "literal" tree $ lit tree where
     treeContent  = concatMap B.tokenContent . B.untree
     treesContent = concatMap B.tokenContent . B.untrees
 
-bracketKeyword :: (C.CNil c, C.CBool c) => String -> B.Ab c
+bracketKeyword :: (C.CEmpty c, C.CBool c) => String -> B.Ab c
 bracketKeyword "0"    =  Right C.false     -- <0>
 bracketKeyword "1"    =  Right C.true      -- <1>
-bracketKeyword "nil"  =  Right C.nil       -- <nil>
+bracketKeyword "nil"  =  Right C.empty     -- <nil>
 bracketKeyword w      =  Message.unkWord w
 
-nakedKeyword :: (C.CNil c) => String -> B.Ab c
-nakedKeyword "()"     =  Right C.nil       -- ()
+nakedKeyword :: (C.CEmpty c) => String -> B.Ab c
+nakedKeyword "()"     =  Right C.empty     -- ()
 nakedKeyword w        =  Message.unkWord w
 
 isDecimal :: B.TokenTree -> Bool
@@ -253,7 +253,7 @@ judgeHead _   = B.bug "judgeHead"
 --  [Boolean]   Boolean used for something is hold or unhold.
 --              Textual forms: @\#true@, @\#fasle@.
 --
---  [Nil]       Nil means that there are no values.
+--  [Empty]     Empty means that there are no values.
 --              i.e., universal negation on the term holds.
 --              Textual form is the non-quoted parens: @()@.
 --
@@ -314,10 +314,10 @@ judgeHead _   = B.bug "judgeHead"
 --    >>> lits "12.0"
 --    Right [VDec (Decimal (120, 10), 1, False)]
 --
---  Nil as no ordinary value.
+--  Empty as no ordinary value.
 --
 --    >>> lits "()"
---    Right [VNil]
+--    Right [VEmpty]
 --
 
 -- ------------------------------------------------------------------

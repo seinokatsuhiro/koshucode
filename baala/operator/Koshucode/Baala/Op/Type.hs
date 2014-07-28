@@ -22,7 +22,7 @@ data VContent
     = VBool    Bool               -- ^ Boolean type
     | VText    String             -- ^ String type
     | VDec     B.Decimal          -- ^ Decimal number type
-    | VNil                        -- ^ Sign of no ordinary type
+    | VEmpty                        -- ^ Sign of no ordinary type
     | VList    [VContent]         -- ^ List type (objective collection)
     | VSet     [VContent]         -- ^ Set type (informative collection)
     | VAssn    [B.Named VContent] -- ^ Assn type (set of terms)
@@ -37,7 +37,7 @@ instance Ord VContent where
     compare (VBool    x) (VBool    y)  =  compare x y
     compare (VText    x) (VText    y)  =  compare x y
     compare (VDec     x) (VDec     y)  =  compare x y
-    compare (VNil      ) (VNil      )  =  EQ
+    compare (VEmpty    ) (VEmpty    )  =  EQ
     compare (VList    x) (VList    y)  =  compare x y
     compare (VSet     x) (VSet     y)  =  compareAsSet x y
     compare (VAssn    x) (VAssn    y)  =  compareAsSet x y
@@ -46,7 +46,7 @@ instance Ord VContent where
     compare (VBool    _) _             =  LT
     compare (VText    _) _             =  LT
     compare (VDec     _) _             =  LT
-    compare (VNil      ) _             =  LT
+    compare (VEmpty    ) _             =  LT
     compare (VList    _) _             =  LT
     compare (VSet     _) _             =  LT
     compare (VAssn    _) _             =  LT
@@ -59,15 +59,15 @@ instance C.PrimContent VContent where
     typename (VBool    _)  =  "boolean"
     typename (VText    _)  =  "text"
     typename (VDec     _)  =  "decimal"
-    typename (VNil)        =  "nil"
+    typename (VEmpty    )  =  "empty"
     typename (VList    _)  =  "list"
     typename (VSet     _)  =  "set"
     typename (VAssn    _)  =  "assn"
     typename (VRel     _)  =  "rel"
 
 instance C.CContent VContent where
-    appendContent (VNil) x = Right x
-    appendContent x (VNil) = Right x
+    appendContent (VEmpty) x = Right x
+    appendContent x (VEmpty) = Right x
     appendContent (VText x) (VText y) = Right . VText $ x ++ y
     appendContent x y = Message.unmatchType (show (x, y))
 
@@ -76,7 +76,7 @@ instance B.Write VContent where
         VText s      ->  B.doc $ sh s
         VDec  n      ->  B.doc $ B.decimalString n
         VBool b      ->  B.doc b
-        VNil         ->  B.doc "()"
+        VEmpty       ->  B.doc "()"
         VList    xs  ->  B.docWraps "["   "]" $ B.writeColon sh xs
         VSet     xs  ->  B.docWraps "{"   "}" $ B.writeColon sh xs
         VAssn    xs  ->  B.docWraps "<<" ">>" $ B.writeH     sh xs
@@ -120,13 +120,13 @@ instance C.CList VContent where
 
 -- ----------------------  koshu data
 
-instance C.CNil VContent where
-    nil                      =  VNil
-    isNil VNil               =  True
-    isNil _                  =  False
+instance C.CEmpty VContent where
+    empty                    =  VEmpty
+    isEmpty VEmpty           =  True
+    isEmpty _                =  False
 
 instance C.CSet VContent where
-    pSet                     =  VSet . B.omit C.isNil . B.unique
+    pSet                     =  VSet . B.omit C.isEmpty . B.unique
     gSet (VSet x)            =  x
     gSet _                   =  B.bug "gSet"
     isSet  (VSet _)          =  True

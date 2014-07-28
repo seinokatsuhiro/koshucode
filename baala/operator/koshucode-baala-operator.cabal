@@ -69,6 +69,7 @@ library
         Koshucode.Baala.Op.Control
 
         Koshucode.Baala.Op.Cox
+        Koshucode.Baala.Op.Empty
         Koshucode.Baala.Op.Gadget
 
         Koshucode.Baala.Op.Lattice
@@ -83,7 +84,6 @@ library
         Koshucode.Baala.Op.Nest.Confl
         Koshucode.Baala.Op.Nest.Rop
 
-        Koshucode.Baala.Op.Nil
         Koshucode.Baala.Op.Peripheral
         Koshucode.Baala.Op.Source
         Koshucode.Baala.Op.Term

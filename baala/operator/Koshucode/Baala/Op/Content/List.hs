@@ -92,7 +92,7 @@ typeUnmatch _ = Message.unmatchType ""
 -- ----------------------  set-like operation
 
 copAppend :: (C.CContent c) => C.CopFun c
-copAppend [] = Right C.nil
+copAppend [] = Right C.empty
 copAppend xs@(x : _) = op x where
     op (Right c) | C.isText c = C.putText . concat =<< mapM C.getText xs
                  | C.isSet  c = C.putSet  . concat =<< mapM C.getSet  xs
@@ -100,7 +100,7 @@ copAppend xs@(x : _) = op x where
     op _ = typeUnmatch xs
 
 copIntersect :: (C.CContent c) => C.CopFun c
-copIntersect [] = Right C.nil
+copIntersect [] = Right C.empty
 copIntersect xs@(x : _) = op x where
     op (Right c) | C.isSet  c = C.putSet  . intersectLists =<< mapM C.getSet  xs
                  | C.isList c = C.putList . intersectLists =<< mapM C.getList xs
@@ -196,7 +196,7 @@ copCharGroup1 :: (C.CContent c) => C.CopFun c
 copCharGroup1 = op where
     op [Right t] | C.isText t = case C.gText t of
                                   (c : _) -> C.putText $ charGroup c
-                                  _       -> Right C.nil
+                                  _       -> Right C.empty
     op xs = typeUnmatch xs
 
 charGroup :: Char -> String
