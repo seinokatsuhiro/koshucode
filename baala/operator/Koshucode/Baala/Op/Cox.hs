@@ -17,6 +17,9 @@ module Koshucode.Baala.Op.Cox
   -- * filter
   consFilter, relmapFilter, relkitFilter,
 
+  -- * contain
+  consContain, relmapContain, relkitContain,
+
   -- * omit-all
   consOmitAll, relmapOmitAll,
 
@@ -53,6 +56,7 @@ ropsCox :: (C.CContent c) => [C.Rop c]
 ropsCox = Op.ropList "cox"
     --         CONSTRUCTOR         USAGE                     ATTRIBUTE
     [ Op.ropV  consAdd             "add /N E ..."            "-in | -let"
+    , Op.ropI  consContain         "contain E"               "-expr"
     , Op.ropV  (consFilter True)   "keep E"                  "-in | -let"
     , Op.ropV  (consFilter False)  "omit E"                  "-in | -let"
     , Op.ropN  consOmitAll         "omit-all"                ""
@@ -187,6 +191,23 @@ relkitFilter (which, base, deriv, body) (Just he1) = Right kit2 where
                case C.isBool c of
                  True  -> Right $ C.gBool c == which
                  False -> Message.reqBool
+
+
+-- ----------------------  contain
+
+consContain :: (C.CContent c) => C.RopCons c
+consContain use =
+    do c <- getContent use "-expr"
+       Right $ relmapContain use c
+
+relmapContain :: (Eq c) => C.RopUse c -> c -> C.Relmap c
+relmapContain use = C.relmapFlow use . relkitContain
+
+relkitContain :: (Eq c) => c -> C.RelkitFlow c
+relkitContain _ Nothing = Right C.relkitNothing
+relkitContain c (Just he1) = Right kit2 where
+    kit2  = C.relkitJust he1 $ C.RelkitAbPred p
+    p cs1 = Right $ c `elem` cs1
 
 
 -- ----------------------  omit-all
