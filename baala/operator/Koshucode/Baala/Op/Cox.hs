@@ -3,6 +3,7 @@
 
 module Koshucode.Baala.Op.Cox
 ( ropsCox,
+  getCox,
   getContent,
   getOptContent,
   getContents,
@@ -26,6 +27,9 @@ module Koshucode.Baala.Op.Cox
   -- * range
   consRange, relmapRange,
   -- $range
+
+  -- * replace-all
+  consReplaceAll, relmapReplaceAll,
 
   -- * split
   consSplit, relmapSplit, relkitSplit,
@@ -54,16 +58,17 @@ import qualified Koshucode.Baala.Op.Message  as Message
 -- 
 ropsCox :: (C.CContent c) => [C.Rop c]
 ropsCox = Op.ropList "cox"
-    --         CONSTRUCTOR         USAGE                     ATTRIBUTE
-    [ Op.ropV  consAdd             "add /N E ..."            "-in | -let"
-    , Op.ropI  consContain         "contain E"               "-expr"
-    , Op.ropV  (consFilter True)   "keep E"                  "-in | -let"
-    , Op.ropV  (consFilter False)  "omit E"                  "-in | -let"
-    , Op.ropN  consOmitAll         "omit-all"                ""
-    , Op.ropI  consRange           "range /N -from E -to E"  "-term | -from -to"
-    , Op.ropV  consSplit           "split /N E ..."          "-in | -let"
-    , Op.ropV  consSubst           "subst /N E ..."          "-in | -let"
-    , Op.ropIV consUnary           "unary /N E ..."          "-term -expr"
+    --         CONSTRUCTOR         USAGE                        ATTRIBUTE
+    [ Op.ropV  consAdd             "add /N E ..."               "-in | -let"
+    , Op.ropI  consContain         "contain E"                  "-expr"
+    , Op.ropV  (consFilter True)   "keep E"                     "-in | -let"
+    , Op.ropV  (consFilter False)  "omit E"                     "-in | -let"
+    , Op.ropN  consOmitAll         "omit-all"                   ""
+    , Op.ropI  consRange           "range /N -from E -to E"     "-term | -from -to"
+    , Op.ropN  consReplaceAll      "replace-all -from E -to E"  "| -from -to"
+    , Op.ropV  consSplit           "split /N E ..."             "-in | -let"
+    , Op.ropV  consSubst           "subst /N E ..."             "-in | -let"
+    , Op.ropIV consUnary           "unary /N E ..."             "-term -expr"
     ]
 
 
@@ -81,6 +86,11 @@ runCoxTree use tree =
        alpha <- ropAlpha use tree
        beta  <- C.coxBeta base [] B.mempty alpha
        C.coxRun [] beta
+
+getCox :: (C.CContent c) => C.RopUse c -> String -> B.Ab (C.Cox c)
+getCox use name =
+    do trees <- Op.getTrees use name
+       ropAlpha use $ B.treeWrap trees
 
 getContents :: (C.CContent c) => C.RopUse c -> String -> B.Ab [c]
 getContents use name =
@@ -171,9 +181,8 @@ relkitSubst (base, deriv, bodies) (Just he1)
 consFilter :: (C.CContent c) => Bool -> C.RopCons c
 consFilter b use =
     do treesLet  <-  Op.getOption [] Op.getWordTrees use "-let"
-       treesIn   <-  Op.getTrees use "-in"
+       coxIn     <-  getCox use "-in"
        coxLet    <-  ropNamedAlphas use treesLet
-       coxIn     <-  ropAlpha use $ B.treeWrap treesIn
        let base = C.globalFunction $ C.ropGlobal use
        Right $ relmapFilter use (b, base, coxLet, coxIn)
 
@@ -233,11 +242,9 @@ relkitOmitAll he1 = Right $ C.relkit he1 $ C.RelkitConst []
 
 consRange :: (C.CContent c) => C.RopCons c
 consRange use =
-  do term      <-  Op.getTerm  use "-term"
-     treeLow   <-  Op.getTrees use "-from"
-     treeHigh  <-  Op.getTrees use "-to"
-     coxLow    <-  ropAlpha use $ B.treeWrap treeLow
-     coxHigh   <-  ropAlpha use $ B.treeWrap treeHigh
+  do term     <-  Op.getTerm  use "-term"
+     coxLow   <-  getCox use "-from"
+     coxHigh  <-  getCox use "-to"
      let base = C.globalFunction $ C.ropGlobal use
      Right $ relmapRange use (term, base, coxLow, coxHigh)
 
@@ -259,6 +266,33 @@ relkitRange (n, base, coxLow, coxHigh) (Just he1) = Right kit2 where
                       decs  =   map C.pDecFromInt [low .. high]
 
                   Right $ map (: cs) decs
+
+
+-- ----------------------  replace-all
+
+--    > replace-all -from () -to 0
+
+consReplaceAll :: (C.CContent c) => C.RopCons c
+consReplaceAll use =
+  do coxFrom <- getCox use "-from"
+     coxTo   <- getCox use "-to"
+     let base = C.globalFunction $ C.ropGlobal use
+     Right $ relmapReplaceAll use (base, coxFrom, coxTo)
+
+relmapReplaceAll :: (C.CContent c) => C.RopUse c -> ([C.Cop c], C.Cox c, C.Cox c) -> C.Relmap c
+relmapReplaceAll use = C.relmapFlow use . relkitReplaceAll
+
+relkitReplaceAll :: (C.CContent c) => ([C.Cop c], C.Cox c, C.Cox c) -> C.RelkitFlow c
+relkitReplaceAll _ Nothing = Right C.relkitNothing
+relkitReplaceAll (base, coxFrom, coxTo) (Just he1) = Right kit2 where
+    kit2     = C.relkitJust he1 $ C.RelkitOneToAbOne False f2 []
+    f2 _ cs  = do coxFrom' <-  C.coxBeta base [] he1 coxFrom
+                  coxTo'   <-  C.coxBeta base [] he1 coxTo
+                  cFrom    <-  C.coxRun cs coxFrom'
+                  cTo      <-  C.coxRun cs coxTo'
+                  let replace c | c == cFrom = cTo
+                                | otherwise  = c
+                  Right $ map replace cs
 
 
 -- ----------------------  split
