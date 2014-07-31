@@ -88,9 +88,13 @@ runCoxTree use tree =
        C.coxRun [] beta
 
 getCox :: (C.CContent c) => C.RopUse c -> String -> B.Ab (C.Cox c)
-getCox use name =
-    do trees <- Op.getTrees use name
-       ropAlpha use $ B.treeWrap trees
+getCox use = ropAlpha use . B.treeWrap B.<=< Op.getTrees use
+
+getNamedCoxes :: (C.CContent c) => C.RopUse c -> String -> B.Ab [C.NamedCox c]
+getNamedCoxes use = ropNamedAlphas use B.<=< Op.getWordTrees use 
+
+getTermCoxes :: (C.CContent c) => C.RopUse c -> String -> B.Ab [C.NamedCox c]
+getTermCoxes use = ropNamedAlphas use B.<=< Op.getTermTrees use
 
 getContents :: (C.CContent c) => C.RopUse c -> String -> B.Ab [c]
 getContents use name =
@@ -114,10 +118,8 @@ getFiller = getOptContent C.empty
 
 consAdd :: (C.CContent c) => C.RopCons c
 consAdd use =
-    do treesLet  <-  Op.getOption [] Op.getWordTrees use "-let"
-       treesIn   <-  Op.getTermTrees use "-in"
-       coxLet    <-  ropNamedAlphas use treesLet
-       coxIn     <-  ropNamedAlphas use treesIn
+    do coxLet <- Op.getOption [] getNamedCoxes use "-let"
+       coxIn  <- getTermCoxes use "-in"
        let base = C.globalFunction $ C.ropGlobal use
        Right $ relmapAdd use (base, coxLet, coxIn)
 
@@ -146,10 +148,8 @@ relkitAdd (base, deriv, bodies) (Just he1)
 
 consSubst :: (C.CContent c) => C.RopCons c
 consSubst use =
-    do treesLet <- Op.getOption [] Op.getWordTrees use "-let"
-       treesIn  <- Op.getTermTrees use "-in"
-       coxLet   <- ropNamedAlphas use treesLet
-       coxIn    <- ropNamedAlphas use treesIn
+    do coxLet <- Op.getOption [] getNamedCoxes use "-let"
+       coxIn  <- getTermCoxes use "-in"
        let base = C.globalFunction $ C.ropGlobal use
        Right $ relmapSubst use (base, coxLet, coxIn)
 
@@ -180,9 +180,8 @@ relkitSubst (base, deriv, bodies) (Just he1)
 
 consFilter :: (C.CContent c) => Bool -> C.RopCons c
 consFilter b use =
-    do treesLet  <-  Op.getOption [] Op.getWordTrees use "-let"
-       coxIn     <-  getCox use "-in"
-       coxLet    <-  ropNamedAlphas use treesLet
+    do coxLet  <- Op.getOption [] getNamedCoxes use "-let"
+       coxIn   <- getCox use "-in"
        let base = C.globalFunction $ C.ropGlobal use
        Right $ relmapFilter use (b, base, coxLet, coxIn)
 
@@ -242,9 +241,9 @@ relkitOmitAll he1 = Right $ C.relkit he1 $ C.RelkitConst []
 
 consRange :: (C.CContent c) => C.RopCons c
 consRange use =
-  do term     <-  Op.getTerm  use "-term"
-     coxLow   <-  getCox use "-from"
-     coxHigh  <-  getCox use "-to"
+  do term     <- Op.getTerm use "-term"
+     coxLow   <- getCox use "-from"
+     coxHigh  <- getCox use "-to"
      let base = C.globalFunction $ C.ropGlobal use
      Right $ relmapRange use (term, base, coxLow, coxHigh)
 
@@ -299,10 +298,8 @@ relkitReplaceAll (base, coxFrom, coxTo) (Just he1) = Right kit2 where
 
 consSplit :: (C.CContent c) => C.RopCons c
 consSplit use =
-    do treesLet  <-  Op.getOption [] Op.getWordTrees use "-let"
-       treesIn   <-  Op.getTermTrees use "-in"
-       coxLet    <-  ropNamedAlphas use treesLet
-       coxIn     <-  ropNamedAlphas use treesIn
+    do coxLet <- Op.getOption [] getNamedCoxes use "-let"
+       coxIn  <- getTermCoxes use "-in"
        let base = C.globalFunction $ C.ropGlobal use
        Right $ relmapSplit use (base, coxLet, coxIn)
 
