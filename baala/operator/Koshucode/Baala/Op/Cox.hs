@@ -74,6 +74,9 @@ ropsCox = Op.ropList "cox"
 
 -- ----------------------  alpha
 
+ropBase :: C.RopUse c -> [C.Cop c]
+ropBase = C.globalFunction . C.ropGlobal
+
 ropAlpha :: (C.CContent c) => C.RopUse c -> B.TokenTree -> B.Ab (C.Cox c)
 ropAlpha = C.coxAlpha . C.globalSyntax . C.ropGlobal
 
@@ -82,10 +85,14 @@ ropNamedAlphas use = mapM (B.namedMapM $ ropAlpha use)
 
 runCoxTree :: (C.CContent c) => C.RopUse c -> B.TokenTree -> B.Ab c
 runCoxTree use tree =
-    do let base = C.globalFunction $ C.ropGlobal use
-       alpha <- ropAlpha use tree
-       beta  <- C.coxBeta base [] B.mempty alpha
+    do alpha <- ropAlpha use tree
+       beta  <- C.coxBeta (ropBase use) [] B.mempty alpha
        C.coxRun [] beta
+
+coxRunBeta :: (B.Write c, C.CRel c, C.CList c) =>
+    [C.Cop c] -> [C.NamedCox c] -> B.Relhead -> [c] -> C.Cox c -> B.Ab c
+coxRunBeta base deriv he cs cox =
+    C.coxRun cs =<< C.coxBeta base deriv he cox
 
 getCox :: (C.CContent c) => C.RopUse c -> String -> B.Ab (C.Cox c)
 getCox use = ropAlpha use . B.treeWrap B.<=< Op.getTrees use
@@ -120,8 +127,7 @@ consAdd :: (C.CContent c) => C.RopCons c
 consAdd use =
     do coxLet <- Op.getOption [] getNamedCoxes use "-let"
        coxIn  <- getTermCoxes use "-in"
-       let base = C.globalFunction $ C.ropGlobal use
-       Right $ relmapAdd use (base, coxLet, coxIn)
+       Right $ relmapAdd use (ropBase use, coxLet, coxIn)
 
 relmapAdd :: (C.CList c, C.CRel c, B.Write c)
   => C.RopUse c -> ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.Relmap c
@@ -139,8 +145,7 @@ relkitAdd (base, deriv, bodies) (Just he1)
       ind         =  ns `B.snipIndex` ns1    -- indicies for ns on input relation
       he2         =  ns `B.headAppend` he1
       kit2        =  C.relkitJust he2 $ C.RelkitOneToAbOne False kitf2 []
-      kitf2 _ cs1 =  do xs2 <- C.coxBeta base deriv he1 `mapM` xs
-                        cs2 <- C.coxRun cs1 `mapM` xs2
+      kitf2 _ cs1 =  do cs2 <- coxRunBeta base deriv he1 cs1 `mapM` xs
                         Right $ cs2 ++ cs1
 
 
@@ -150,8 +155,7 @@ consSubst :: (C.CContent c) => C.RopCons c
 consSubst use =
     do coxLet <- Op.getOption [] getNamedCoxes use "-let"
        coxIn  <- getTermCoxes use "-in"
-       let base = C.globalFunction $ C.ropGlobal use
-       Right $ relmapSubst use (base, coxLet, coxIn)
+       Right $ relmapSubst use (ropBase use, coxLet, coxIn)
 
 relmapSubst :: (C.CList c, C.CRel c, B.Write c)
   => C.RopUse c -> ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.Relmap c
@@ -182,8 +186,7 @@ consFilter :: (C.CContent c) => Bool -> C.RopCons c
 consFilter b use =
     do coxLet  <- Op.getOption [] getNamedCoxes use "-let"
        coxIn   <- getCox use "-in"
-       let base = C.globalFunction $ C.ropGlobal use
-       Right $ relmapFilter use (b, base, coxLet, coxIn)
+       Right $ relmapFilter use (b, ropBase use, coxLet, coxIn)
 
 relmapFilter :: (C.CList c, C.CRel c, C.CBool c, B.Write c)
   => C.RopUse c -> (Bool, [C.Cop c], [C.NamedCox c], C.Cox c) -> C.Relmap c
@@ -244,8 +247,7 @@ consRange use =
   do term     <- Op.getTerm use "-term"
      coxLow   <- getCox use "-from"
      coxHigh  <- getCox use "-to"
-     let base = C.globalFunction $ C.ropGlobal use
-     Right $ relmapRange use (term, base, coxLow, coxHigh)
+     Right $ relmapRange use (term, ropBase use, coxLow, coxHigh)
 
 relmapRange :: (C.CContent c) => C.RopUse c -> (B.TermName, [C.Cop c], C.Cox c, C.Cox c) -> C.Relmap c
 relmapRange use = C.relmapFlow use . relkitRange
@@ -275,8 +277,7 @@ consReplaceAll :: (C.CContent c) => C.RopCons c
 consReplaceAll use =
   do coxFrom <- getCox use "-from"
      coxTo   <- getCox use "-to"
-     let base = C.globalFunction $ C.ropGlobal use
-     Right $ relmapReplaceAll use (base, coxFrom, coxTo)
+     Right $ relmapReplaceAll use (ropBase use, coxFrom, coxTo)
 
 relmapReplaceAll :: (C.CContent c) => C.RopUse c -> ([C.Cop c], C.Cox c, C.Cox c) -> C.Relmap c
 relmapReplaceAll use = C.relmapFlow use . relkitReplaceAll
@@ -285,10 +286,8 @@ relkitReplaceAll :: (C.CContent c) => ([C.Cop c], C.Cox c, C.Cox c) -> C.RelkitF
 relkitReplaceAll _ Nothing = Right C.relkitNothing
 relkitReplaceAll (base, coxFrom, coxTo) (Just he1) = Right kit2 where
     kit2     = C.relkitJust he1 $ C.RelkitOneToAbOne False f2 []
-    f2 _ cs  = do coxFrom' <-  C.coxBeta base [] he1 coxFrom
-                  coxTo'   <-  C.coxBeta base [] he1 coxTo
-                  cFrom    <-  C.coxRun cs coxFrom'
-                  cTo      <-  C.coxRun cs coxTo'
+    f2 _ cs  = do cFrom    <-  coxRunBeta base [] he1 cs coxFrom
+                  cTo      <-  coxRunBeta base [] he1 cs coxTo
                   let replace c | c == cFrom = cTo
                                 | otherwise  = c
                   Right $ map replace cs
@@ -300,8 +299,7 @@ consSplit :: (C.CContent c) => C.RopCons c
 consSplit use =
     do coxLet <- Op.getOption [] getNamedCoxes use "-let"
        coxIn  <- getTermCoxes use "-in"
-       let base = C.globalFunction $ C.ropGlobal use
-       Right $ relmapSplit use (base, coxLet, coxIn)
+       Right $ relmapSplit use (ropBase use, coxLet, coxIn)
 
 relmapSplit :: (C.CList c, C.CRel c, B.Write c, C.CBool c)
   => C.RopUse c -> ([C.Cop c], [C.NamedCox c], [C.NamedCox c]) -> C.Relmap c
