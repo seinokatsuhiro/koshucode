@@ -19,7 +19,7 @@ module Koshucode.Baala.Base.Token.Token
   tokenPoint,
 
   -- * Predicates
-  isBlankToken, isShortToken,
+  isBlankToken, isShortToken, isTermToken,
   isOpenTokenOf, isCloseTokenOf,
 
   -- * Other function
@@ -173,6 +173,10 @@ sweepToken = B.omit isBlankToken
 isShortToken :: B.Pred Token
 isShortToken (TShort _ _ _)  = True
 isShortToken _               = False
+
+isTermToken :: B.Pred Token
+isTermToken (TTerm _ _) = True
+isTermToken _           = False
 
 -- | Check token is a 'TOpen' of the specific paren.
 --

@@ -7,6 +7,7 @@ module Koshucode.Baala.Core.Lexmap.Sorter
   roaNone, roaEnum,
   roaList, roaOneList, roaOneOpt,
   roaOne, roaTwo, roaThree, roaFour,
+  roaTermsOne, roaTermsTwo,
   -- $TrunkSorter
 ) where
 
@@ -117,4 +118,20 @@ roaFour :: C.AttrName -> C.AttrName -> C.AttrName -> C.AttrName -> [C.AttrName] 
 roaFour a b c d ns  = spec (name f) [a,b,c,d] ns where
     f [a',b',c',d'] = Right [ (a, B.li1 a'), (b, B.li1 b'), (c, B.li1 c'), (d, B.li1 d') ]
     f _             = Message.unexpAttr "Require four attributes"
+
+roaTermsOne :: C.AttrName -> C.AttrName -> [C.AttrName] -> C.AttrDefine
+roaTermsOne a b ns = spec (name f) [a,b] ns where
+    f xs = case span isTermLeaf xs of
+             (a', [b']) -> Right [ (a, a'), (b, B.li1 b') ]
+             _          -> Message.unexpAttr "Require terms and one attribute"
+
+roaTermsTwo :: C.AttrName -> C.AttrName -> C.AttrName -> [C.AttrName] -> C.AttrDefine
+roaTermsTwo a b c ns = spec (name f) [a,b,c] ns where
+    f xs = case span isTermLeaf xs of
+             (a', [b',c']) -> Right [ (a, a'), (b, B.li1 b'), (c, B.li1 c') ]
+             _             -> Message.unexpAttr "Require terms and two attributes"
+
+isTermLeaf :: B.CodeTree B.Token -> Bool
+isTermLeaf (B.TreeL token) = B.isTermToken token
+isTermLeaf _               = False
 
