@@ -15,7 +15,7 @@ module Koshucode.Baala.Op.Cox
   -- * subst
   consSubst, relmapSubst,
 
-  -- * filter
+  -- * keep & omit
   consFilter, relmapFilter, relkitFilter,
 
   -- * contain
@@ -27,6 +27,9 @@ module Koshucode.Baala.Op.Cox
   -- * range
   consRange, relmapRange,
   -- $range
+
+  -- * fill
+  consFill, relmapFill,
 
   -- * replace
   consReplace, relmapReplace,
@@ -68,6 +71,7 @@ ropsCox = Op.ropList "cox"
     , Op.ropV   (consFilter False)  "omit E"                     "-in | -let"
     , Op.ropN   consOmitAll         "omit-all"                   ""
     , Op.ropI   consRange           "range /N -from E -to E"     "-term | -from -to"
+    , Op.ropTI  consFill            "fill /P E"                  "-term -to"
     , Op.ropTII consReplace         "replace /P E E"             "-term -from -to"
     , Op.ropN   consReplaceAll      "replace-all -from E -to E"  "| -from -to"
     , Op.ropV   consSplit           "split /N E ..."             "-in | -let"
@@ -268,6 +272,35 @@ relkitRange (n, base, coxLow, coxHigh) (Just he1) = Right kit2 where
                       decs  =   map C.pDecFromInt [low .. high]
 
                   Right $ map (: cs) decs
+
+
+-- ----------------------  fill
+
+--    > fill /a /b 0
+
+consFill :: (C.CContent c) => C.RopCons c
+consFill use =
+  do ns    <- Op.getTerms use "-term"
+     coxTo <- getCox use "-to"
+     Right $ relmapFill use (ns, ropBase use, coxTo)
+
+relmapFill :: (C.CContent c) => C.RopUse c -> ([B.TermName], [C.Cop c], C.Cox c) -> C.Relmap c
+relmapFill use = C.relmapFlow use . relkitFill
+
+relkitFill :: (C.CContent c) => ([B.TermName], [C.Cop c], C.Cox c) -> C.RelkitFlow c
+relkitFill _ Nothing = Right C.relkitNothing
+relkitFill (ns, base, coxTo) (Just he1) = Right kit2 where
+    ns1       =  B.headNames he1
+    ind       =  ns `B.snipIndex` ns1
+    pick      =  B.snipFrom ind
+    cut       =  B.snipOff  ind
+    fore      =  B.snipFore ind
+    he2       =  B.headChange fore he1
+    kit2      =  C.relkitJust he2 $ C.RelkitOneToAbOne True f2 []
+    f2 _ cs1  =  do cTo  <- coxRunBeta (base, []) he1 cs1 coxTo
+                    let fill c | C.isEmpty c = cTo
+                               | otherwise   = c
+                    Right $ map fill (pick cs1) ++ (cut cs1)
 
 
 -- ----------------------  replace

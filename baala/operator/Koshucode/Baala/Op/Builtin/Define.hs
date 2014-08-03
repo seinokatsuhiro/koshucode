@@ -6,7 +6,7 @@ module Koshucode.Baala.Op.Builtin.Define
   ropN, ropE,
   ropI, ropII, ropIJ, ropIII,
   ropV, ropIV,
-  ropTII,
+  ropTI, ropTII,
 ) where
 
 import qualified Koshucode.Baala.Base as B
@@ -92,6 +92,12 @@ ropIV :: C.RopCons c -> C.RopUsage -> String -> RopDefine c
 ropIV = ropBy a where
     a [x1,x2]  =  C.roaOneList x1 x2
     a xs       =  ropBugUnwords xs
+
+-- | Term list and one attribute
+ropTI :: C.RopCons c -> C.RopUsage -> String -> RopDefine c
+ropTI = ropBy a where
+    a [x1,x2]    =  C.roaTermsOne x1 x2
+    a xs         =  ropBugUnwords xs
 
 -- | Term list and two attributes
 ropTII :: C.RopCons c -> C.RopUsage -> String -> RopDefine c
