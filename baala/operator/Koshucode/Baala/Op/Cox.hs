@@ -32,7 +32,7 @@ module Koshucode.Baala.Op.Cox
   consFill, relmapFill,
 
   -- * replace
-  consReplace, relmapReplace,
+  consReplace,
 
   -- * replace-all
   consReplaceAll, relmapReplaceAll,
@@ -72,7 +72,7 @@ ropsCox = Op.ropList "cox"
     , Op.ropN   consOmitAll         "omit-all"                   ""
     , Op.ropI   consRange           "range /N -from E -to E"     "-term | -from -to"
     , Op.ropTI  consFill            "fill /P E"                  "-term -to"
-    , Op.ropTII consReplace         "replace /P E E"             "-term -from -to"
+    , Op.ropTI  consReplace         "replace /P E"               "-term -by"
     , Op.ropN   consReplaceAll      "replace-all -from E -to E"  "| -from -to"
     , Op.ropV   consSplit           "split /N E ..."             "-in | -let"
     , Op.ropV   consSubst           "subst /N E ..."             "-in | -let"
@@ -305,33 +305,17 @@ relkitFill (ns, base, coxTo) (Just he1) = Right kit2 where
 
 -- ----------------------  replace
 
---    > replace /a /b () 0
+--    > replace /a /b (| x | if x < 0 -> 0 : x |)
 
 consReplace :: (C.CContent c) => C.RopCons c
 consReplace use =
-  do ns      <- Op.getTerms use "-term"
-     coxFrom <- getCox use "-from"
-     coxTo   <- getCox use "-to"
-     Right $ relmapReplace use (ns, ropBase use, coxFrom, coxTo)
-
-relmapReplace :: (C.CContent c) => C.RopUse c -> ([B.TermName], [C.Cop c], C.Cox c, C.Cox c) -> C.Relmap c
-relmapReplace use = C.relmapFlow use . relkitReplace
-
-relkitReplace :: (C.CContent c) => ([B.TermName], [C.Cop c], C.Cox c, C.Cox c) -> C.RelkitFlow c
-relkitReplace _ Nothing = Right C.relkitNothing
-relkitReplace (ns, base, coxFrom, coxTo) (Just he1) = Right kit2 where
-    ns1       =  B.headNames he1
-    ind       =  ns `B.snipIndex` ns1
-    pick      =  B.snipFrom ind
-    cut       =  B.snipOff  ind
-    fore      =  B.snipFore ind
-    he2       =  B.headChange fore he1
-    kit2      =  C.relkitJust he2 $ C.RelkitOneToAbOne False f2 []
-    f2 _ cs1  =  do cFrom <- coxRunBeta (base, []) he1 cs1 coxFrom
-                    cTo   <- coxRunBeta (base, []) he1 cs1 coxTo
-                    let replace c | c == cFrom = cTo
-                                  | otherwise  = c
-                    Right $ map replace (pick cs1) ++ (cut cs1)
+    do ns     <- Op.getTerms use "-term"
+       coxBy  <- getCox use "-by"
+       B.unless (C.coxSyntacticArity coxBy == 1) $ do
+         B.abortable "relmap-replace" [coxBy] Message.reqUnaryFn
+       let src    = B.Sourced []
+           expr n = (n, src $ C.CoxApplyL coxBy [src $ C.CoxTerm [n] []])
+       Right $ relmapSubst use ((ropBase use, []), map expr ns)
 
 
 -- ----------------------  replace-all

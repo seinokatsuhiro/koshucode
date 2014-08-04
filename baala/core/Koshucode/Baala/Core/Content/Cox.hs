@@ -8,6 +8,9 @@ module Koshucode.Baala.Core.Content.Cox
 
   -- * Expression
   Cox, CoxCore (..),
+  coxSyntacticArity,
+  isCoxBase,
+  isCoxDeriv,
 
   -- * Operator
   Cop (..), CopFun, CopSyn,
@@ -30,7 +33,7 @@ import qualified Koshucode.Baala.Core.Content.Literal   as C
 import qualified Koshucode.Baala.Core.Message           as Message
 
 
--- ----------------------  expressions and operators
+-- ----------------------  Expression
 
 -- | Content expressions with source code.
 type Cox c = B.Sourced (CoxCore c)
@@ -38,16 +41,16 @@ type Cox c = B.Sourced (CoxCore c)
 type NamedCox c = B.Named (Cox c)
 
 -- | Content expressions.
+--   R: reduced form, R\/B: pre-beta form, R\/B\/A: pre-alpha form.
 data CoxCore c
-    = CoxLit c                     -- ^ A:   Literal content
-    | CoxTerm [B.TermName] [Int]   -- ^ A:   Term reference, its name and position
-    | CoxBase String (CopFun c)    -- ^ A:   Base function
-
-    | CoxVar String Int            -- ^ B:   Variable, its name and De Bruijn index
-    | CoxApplyL  (Cox c) [Cox c]   -- ^ A/B: Function application (multiple arguments)
-    | CoxDeriv   String  (Cox c)   -- ^ B:   Derived function
-
-    | CoxDerivL [String] (Cox c)   -- ^ C:   Derived function (multiple variables)
+    = CoxLit c                     -- ^ R:   Literal content
+    | CoxTerm [B.TermName] [Int]   -- ^ R:   Term reference, its name and position
+    | CoxBase String (CopFun c)    -- ^ R:   Base function
+    | CoxVar String Int            -- ^ B:   Local (> 0) or global (= 0) variable,
+                                   --        its name and De Bruijn index
+    | CoxApplyL  (Cox c) [Cox c]   -- ^ R/B: Function application (multiple arguments)
+    | CoxDeriv   String  (Cox c)   -- ^ B:   Derived function (single variable)
+    | CoxDerivL [String] (Cox c)   -- ^ A:   Derived function (multiple variables)
 
 instance (B.Write c) => Show (CoxCore c) where
     show = show . B.doc
@@ -73,12 +76,33 @@ docCore sh = d (0 :: Int) where
           fn v b = B.docWraps "(|" "|)" $ v B.<+> B.write sh "|" B.<+> b
 
 mapToCox :: B.Map (Cox c) -> B.Map (CoxCore c)
-mapToCox g (CoxApplyL f xs) = CoxApplyL (g f) (map g xs)
-mapToCox g (CoxDeriv v b)   = CoxDeriv v (g b)
-mapToCox g (CoxDerivL vs b) = CoxDerivL vs (g b)
+mapToCox g (CoxApplyL f  xs)   = CoxApplyL (g f) (map g xs)
+mapToCox g (CoxDeriv  v  body) = CoxDeriv  v  (g body)
+mapToCox g (CoxDerivL vs body) = CoxDerivL vs (g body)
 mapToCox _ e = e
 
--- | Term-content operator.
+isCoxBase :: Cox c -> Bool
+isCoxBase (B.Sourced _ (CoxBase  _ _))   = True
+isCoxBase _                              = False
+
+isCoxDeriv :: Cox c -> Bool
+isCoxDeriv (B.Sourced _ (CoxDeriv  _ _)) = True
+isCoxDeriv (B.Sourced _ (CoxDerivL _ _)) = True
+isCoxDeriv _                             = False
+
+coxSyntacticArity :: Cox c -> Int
+coxSyntacticArity = loop where
+    loop (B.Sourced _ (CoxDerivL vs cox))  = loop cox + length vs
+    loop (B.Sourced _ (CoxDeriv  _  cox))  = loop cox + 1
+    loop (B.Sourced _ (CoxApplyL cox xs))
+        | isCoxDeriv cox = loop cox - length xs
+        | otherwise      = 0
+    loop _ = 0
+
+
+-- ----------------------  Operator
+
+-- | Content operator.
 data Cop c
     = CopFun String (CopFun c)  -- ^ Function
     | CopSyn String (CopSyn)    -- ^ Syntax
@@ -99,23 +123,21 @@ isCopFunction (CopFun _ _) = True
 isCopFunction _            = False
 
 isCopSyntax :: Cop c -> Bool
-isCopSyntax (CopSyn _ _) = True
-isCopSyntax _            = False
+isCopSyntax (CopSyn _ _)   = True
+isCopSyntax _              = False
 
 
+-- ----------------------  Alpha construction
 
--- ----------------------  alpha construction
-
+-- | Construct content expression from token tree
 coxAlpha :: forall c. (C.CContent c)
   => ([Cop c], [B.Named B.InfixHeight]) -> B.TokenTree -> B.Ab (Cox c)
-coxAlpha (syn, htab) = body where
-    body :: B.TokenTree -> B.Ab (Cox c)
-    body tree =
-        Right . debruijn         -- attach De Bruijn indicies
-              . unlist           -- expand multiple variables/arguments
-            =<< cox              -- construct content expression from token tree
-            =<< prefix htab      -- convert infix operator to prefix
-            =<< syntax syn tree  -- expand syntax operator
+coxAlpha (syn, htab) =
+    Right . debruijn         -- attach De Bruijn indicies
+          . unlist           -- expand multiple variables/arguments
+          B.<=< construct    -- construct content expression from token tree
+          B.<=< prefix htab  -- convert infix operator to prefix
+          B.<=< syntax syn   -- expand syntax operator
 
 debruijn :: B.Map (Cox c)
 debruijn = de [] where
@@ -144,8 +166,8 @@ unlist = derivL . (mapToCox unlist `fmap`) where
           _ -> e
 
 -- construct content expression from token tree
-cox :: forall c. (C.CContent c) => B.TokenTree -> B.Ab (Cox c)
-cox = expr where
+construct :: forall c. (C.CContent c) => B.TokenTree -> B.Ab (Cox c)
+construct = expr where
     expr tree = 
         B.abortableTree "cox" tree $
          let src = B.front $ B.untree tree
@@ -154,13 +176,13 @@ cox = expr where
     -- function application
     core :: B.TokenTree -> B.Ab (CoxCore c)
     core (B.TreeB 1 _ (fun : args)) =
-        do fun'  <- cox fun
-           args' <- cox `mapM` args
+        do fun'  <- construct fun
+           args' <- construct `mapM` args
            Right $ CoxApplyL fun' args'
 
     -- function abstruction
     core (B.TreeB 6 _ [vars, b1]) =
-        do b2 <- cox b1
+        do b2 <- construct b1
            let vs = map B.tokenContent $ B.untree vars
            Right $ CoxDerivL vs b2
     core (B.TreeB 6 _ trees) =
@@ -224,13 +246,14 @@ syntax syn = expand where
 
 
 
--- ----------------------  beta construction
+-- ----------------------  Beta construction
 
-coxBeta :: forall c. [Cop c] -> [NamedCox c] -> B.Relhead -> Cox c -> B.Ab (Cox c)
-coxBeta base deriv h cox1 =
+-- | Reduce content expression.
+coxBeta :: [Cop c] -> [NamedCox c] -> B.Relhead -> B.AbMap (Cox c)
+coxBeta base deriv h =
     Right . subst             -- beta reduction
           . link base deriv   -- substitute free variables
-        =<< position h cox1
+          B.<=< position h
 
 -- beta reduction
 subst :: B.Map (Cox c)
@@ -327,7 +350,7 @@ coxRun args = run 0 where
     rel ps (B.Rel _ args2) =
         C.putList =<< mapM (term ps) args2
 
-checkIrreducible :: Cox c -> B.Ab (Cox c)
+checkIrreducible :: B.AbMap (Cox c)
 checkIrreducible e@(B.Sourced src _)
     | irreducible e = Right e
     | otherwise     = B.abortable "irrep" src $

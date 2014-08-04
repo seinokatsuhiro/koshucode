@@ -16,6 +16,7 @@ module Koshucode.Baala.Op.Message
   reqRel,
   reqCollection,
   reqNewTerm,
+  reqUnaryFn,
   unexpTermName,
 ) where
 
@@ -74,6 +75,10 @@ reqNewTerm :: [B.TermName] -> B.Relhead -> B.Ab a
 reqNewTerm ns he =
     Left $ B.abortLines "Require new term names"
          $ detailTermRel "Known" ns he
+
+-- | Require unary function
+reqUnaryFn :: B.Ab a
+reqUnaryFn = Left $ B.abortBecause "Require unary function"
 
 -- | Unexpected term names
 unexpTermName :: B.Ab a
