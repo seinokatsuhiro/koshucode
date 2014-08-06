@@ -313,8 +313,7 @@ consReplace use =
        coxBy  <- getCox use "-by"
        B.unless (C.coxSyntacticArity coxBy == 1) $ do
          B.abortable "relmap-replace" [coxBy] Message.reqUnaryFn
-       let src    = B.Sourced []
-           expr n = (n, src $ C.CoxApplyL coxBy [src $ C.CoxTerm [n] []])
+       let expr n = (n, C.CoxApplyL [] coxBy [C.CoxTerm [] [n] []])
        Right $ relmapSubst use ((ropBase use, []), map expr ns)
 
 
