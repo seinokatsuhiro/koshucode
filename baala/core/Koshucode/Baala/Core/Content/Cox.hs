@@ -13,13 +13,13 @@ module Koshucode.Baala.Core.Content.Cox
   isCoxDeriv,
 
   -- * Operator
-  Cop (..), CopFun, CopSyn,
+  Cop (..), CopFun, CopCox, CopSyn,
   isCopFunction,
   isCopSyntax,
 
   -- * Construction
   NamedCox,
-  coxAlpha, coxBeta,
+  coxAlpha, coxDebruijn, coxBeta,
   checkIrreducible,
 
   -- * Run
@@ -104,18 +104,22 @@ coxSyntacticArity = loop where
 
 -- | Content operator.
 data Cop c
-    = CopFun String (CopFun c)  -- ^ Function
-    | CopSyn String (CopSyn)    -- ^ Syntax
+    = CopFun String (CopFun c)   -- ^ Convert contents
+    | CopCox String (CopCox c)   -- ^ Convert coxes
+    | CopSyn String (CopSyn)     -- ^ Convert trees
 
 type CopFun c = [B.Ab c] -> B.Ab c
+type CopCox c = [Cox c] -> B.Ab (Cox c)
 type CopSyn   = [B.TokenTree] -> B.Ab B.TokenTree
 
 instance Show (Cop c) where
     show (CopFun n _) = "(CopFun " ++ show n ++ " _)"
+    show (CopCox n _) = "(CopCox " ++ show n ++ " _)"
     show (CopSyn n _) = "(CopSyn " ++ show n ++ " _)"
 
 instance B.Name (Cop c) where
     name (CopFun n _) = n
+    name (CopCox n _) = n
     name (CopSyn n _) = n
 
 isCopFunction :: Cop c -> Bool
@@ -124,6 +128,7 @@ isCopFunction _            = False
 
 isCopSyntax :: Cop c -> Bool
 isCopSyntax (CopSyn _ _)   = True
+isCopSyntax (CopCox _ _)   = True
 isCopSyntax _              = False
 
 
@@ -133,11 +138,13 @@ isCopSyntax _              = False
 coxAlpha :: forall c. (C.CContent c)
   => ([Cop c], [B.Named B.InfixHeight]) -> B.TokenTree -> B.Ab (Cox c)
 coxAlpha (syn, htab) =
-    Right . debruijn         -- attach De Bruijn indicies
-          . unlist           -- expand multiple variables/arguments
-          B.<=< construct    -- construct content expression from token tree
-          B.<=< prefix htab  -- convert infix operator to prefix
-          B.<=< syntax syn   -- expand syntax operator
+    convCox syn           -- convert cox to cox
+      B.<=< Right
+      . debruijn          -- attach De Bruijn indicies
+      . unlist            -- expand multiple variables/arguments
+      B.<=< construct     -- construct content expression from token tree
+      B.<=< prefix htab   -- convert infix operator to prefix
+      B.<=< convTree syn  -- convert token tree to token tree
 
 debruijn :: B.Map (Cox c)
 debruijn = de [] where
@@ -165,6 +172,29 @@ unlist = derivL . (mapToCox unlist `fmap`) where
                                 in B.Sourced src2 $ CoxDeriv v sub
           _ -> e
 
+convCox :: forall c. [Cop c] -> B.AbMap (Cox c)
+convCox syn = expand where
+    assn :: [B.Named (Cop c)]
+    assn = map B.named syn
+
+    expand :: B.AbMap (Cox c)
+    expand (B.Sourced src cox)
+        = let right = Right . B.Sourced src
+          in case cox of
+            CoxDeriv  n  x -> right . CoxDeriv  n  =<< expand x
+            CoxDerivL ns x -> right . CoxDerivL ns =<< expand x
+            CoxApplyL f@(B.Sourced _ (CoxVar n 0)) xs ->
+                case lookup n assn of
+                  Just (CopCox _ g) -> expand =<< g xs
+                  _                 -> expandApply right f xs
+            CoxApplyL f xs          -> expandApply right f xs
+            _                       -> right cox
+
+    expandApply right f xs =
+        do f'  <- expand f
+           xs' <- mapM expand xs
+           right $ CoxApplyL f' xs'
+    
 -- construct content expression from token tree
 construct :: forall c. (C.CContent c) => B.TokenTree -> B.Ab (Cox c)
 construct = expr where
@@ -221,8 +251,8 @@ prefix htab tree =
       detailText tok dir n = B.tokenContent tok ++ " : " ++ dir ++ " " ++ show n
 
 -- expand syntax operator
-syntax :: forall c. [Cop c] -> B.AbMap B.TokenTree
-syntax syn = expand where
+convTree :: forall c. [Cop c] -> B.AbMap B.TokenTree
+convTree syn = expand where
     assoc :: [B.Named (Cop c)]
     assoc = map B.named syn
 
@@ -244,6 +274,38 @@ syntax syn = expand where
           _ -> Message.unkCox "abstruction"
     expand tree = Right tree
 
+coxDebruijn :: B.Map (Cox c)
+coxDebruijn = comer . deepen . unlist where
+
+comer :: B.Map (Cox c)
+comer = de [] where
+    de :: [String] -> B.Map (Cox c)
+    de vars (B.Sourced src core) =
+        B.Sourced src $ case core of
+          CoxVar v i
+              | i >  0  -> CoxVar v i
+              | i == 0  -> maybe core (CoxVar v) $ indexFrom 1 v vars
+          CoxApplyL _ _ -> mapToCox (de vars) core
+          CoxDeriv v _  -> mapToCox (de $ v : vars) core
+          _             -> core
+
+deepen :: B.Map (Cox c)
+deepen = level (0 :: Int) where
+    level n (B.Sourced src (CoxDeriv v e))
+        = B.Sourced src (CoxDeriv v $ level (n + 1) e)
+    level n cox = de n [] cox
+
+    de :: Int -> [String] -> B.Map (Cox c)
+    de n vars (B.Sourced src core) =
+        B.Sourced src $ case core of
+          CoxVar v i
+              | i == 0  -> CoxVar v 0
+              | i >  0  -> if v `elem` vars
+                           then CoxVar v i        -- bound variable
+                           else CoxVar v (i + n)  -- free variable
+          CoxApplyL _ _ -> mapToCox (de n vars) core
+          CoxDeriv v _  -> mapToCox (de n $ v : vars) core
+          _             -> core
 
 
 -- ----------------------  Beta construction
@@ -263,7 +325,7 @@ subst = su [] where
         let s = B.Sourced src
         in case core of
              CoxVar _ i    -> B.fromMaybe e $ args !!! (i - 1)
-             CoxDeriv v b  -> s $ CoxDeriv v $ su (Nothing : args) b
+             CoxDeriv v e2 -> s $ CoxDeriv v $ su (Nothing : args) e2
              CoxApplyL _ _ -> app args $ s $ mapToCox (su args) core
              _             -> e
 
@@ -285,6 +347,7 @@ link base deriv = li where
 
     namedBase :: Cop c -> NamedCox c
     namedBase (CopFun n f) = (n, B.Sourced [] $ CoxBase n f)
+    namedBase (CopCox n _) = (n, B.Sourced [] $ CoxBase n undefined)
     namedBase (CopSyn n _) = (n, B.Sourced [] $ CoxBase n undefined)
 
 -- put term positions for actural heading
@@ -299,6 +362,8 @@ position he = spos where
     pos (CoxApplyL f xs) = do f'  <- spos f
                               xs' <- mapM spos xs
                               Right $ CoxApplyL f' xs'
+    pos (CoxDeriv v e)   = do e' <- spos e
+                              Right $ CoxDeriv v e'
     pos e = Right e
 
 
@@ -338,8 +403,8 @@ coxRun args = run 0 where
              _ -> Message.notFound $ "cox: " ++ show core
 
     term :: [Int] -> [c] -> B.Ab c
-    term []       _ = Message.notFound "term"
-    term (-1 : _) _ = Message.notFound "term"
+    term []       _ = Message.notFound "empty term"
+    term (-1 : _) _ = Message.notFound "negative term"
     term (p : ps) args2 =
         let c = args2 !!! p
         in if C.isRel c
@@ -367,8 +432,14 @@ irreducible (B.Sourced _ core) =
       _               ->  False
 
 (!!!) :: [a] -> Int -> a
-xs !!! i | i >= 0    = xs !! i
-         | otherwise = error "Cox !!!"
+list !!! index = loop index list where
+    loop 0 (x : _)  = x
+    loop i (_ : xs) = loop (i - 1) xs
+    loop _ _        = error $ "#" ++ show (length list)
+                                  ++ " !!! " ++ show index
+
+-- xs !!! i | i >= 0    = xs !! i
+--          | otherwise = error "Cox !!!"
 
 
 -- ----------------------
