@@ -7,26 +7,25 @@ module Koshucode.Baala.Core.Content.Cox
 ( -- $Process
 
   -- * Expression
-  Beta (..),
   Cox (..),
   coxSyntacticArity,
   isCoxBase,
   isCoxDeriv,
 
   -- * Operator
-  Cop (..), CopFun, CopCox, CopSyn,
+  Cop (..), CopBundle, NamedCox,
+  CopFun, CopCox, CopSyn,
   isCopFunction,
   isCopSyntax,
 
   -- * Construction
-  NamedCox,
-  coxAlpha, coxDebruijn, coxBeta,
+  coxAlpha, coxDebruijn,
   checkIrreducible,
 
   -- * Run
+  RunCox, RunList,
+  coxRunCox, coxRunList,
   getArg1, getArg2, getArg3,
-  coxRun2,
-  coxRun,
 ) where
 
 import qualified Koshucode.Baala.Base                   as B
@@ -36,8 +35,6 @@ import qualified Koshucode.Baala.Core.Message           as Message
 
 
 -- ----------------------  Expression
-
-type NamedCox c = B.Named (Cox c)
 
 -- | Content expressions.
 --   R: reduced form, R\/B: pre-beta form, R\/B\/A: pre-alpha form.
@@ -117,8 +114,13 @@ data Cop c
     | CopCox String (CopCox c)   -- ^ Convert coxes
     | CopSyn String (CopSyn)     -- ^ Convert trees
 
-type CopFun c = [B.Ab c] -> B.Ab c
-type CopCox c = [Cox c] -> B.Ab (Cox c)
+-- | Base and derived operators.
+type CopBundle c = ( [Cop c], [NamedCox c] )
+
+type NamedCox c = B.Named (Cox c)
+
+type CopFun c = [B.Ab c]      -> B.Ab c
+type CopCox c = [Cox c]       -> B.Ab (Cox c)
 type CopSyn   = [B.TokenTree] -> B.Ab B.TokenTree
 
 instance Show (Cop c) where
@@ -351,10 +353,10 @@ docBeta sh = d (0 :: Int) where
           d' = d $ n + 1
 
 -- | Reduce content expression.
-coxBeta :: [Cop c] -> [NamedCox c] -> B.Relhead -> Cox c -> B.Ab (Beta c)
-coxBeta base deriv h =
-    Right . subst             -- beta reduction
-          . link base deriv   -- substitute free variables
+coxBeta :: CopBundle c -> B.Relhead -> Cox c -> B.Ab (Beta c)
+coxBeta cops h =
+    Right . subst       -- beta reduction
+          . link cops   -- substitute free variables
           B.<=< position h
 
 -- beta reduction
@@ -370,37 +372,20 @@ subst = su [] where
           CoxVar    _ _ i     -> args !!! (i - 1)
           CoxApplyL _ f []    -> su args f
           CoxApplyL src fn xxs@(x: _) ->
-              let xxs' = su args `map` xxs
-              in case fn of
-                 CoxDeriv _ _ e ->
-                      let args' = su args x : args
-                      in BetaApplyL src (su args' e) xxs'
-                 CoxBase src2 n f ->
-                      BetaApplyL src (BetaBase src2 n f) xxs'
-                 _ -> let fn' = su args fn
-                      in BetaApplyL src fn' xxs'
+              app args src fn x $ su args `map` xxs
           CoxDeriv  _ _ e     -> su args e
           CoxDerivL _ _ _     -> B.bug "CoxDerivL"
 
--- beta reduction
--- subst2 :: B.Map (Cox c)
--- subst2 = su [] where
---     su :: [Maybe (Cox c)] -> B.Map (Cox c)
---     su args cox =
---         case cox of
---           CoxVar    _ _ i     -> B.fromMaybe cox $ args !!! (i - 1)
---           CoxDeriv  src v e2  -> CoxDeriv src v $ su (Nothing : args) e2
---           CoxApplyL _ _ _     -> app args $ mapToCox (su args) cox
---           _                   -> cox
+    app args src fn x xxs' =
+        case fn of
+          CoxBase src2 n f -> BetaApplyL src (BetaBase src2 n f) xxs'
+          CoxDeriv _ _ e   -> let args' = su args x : args
+                              in BetaApplyL src (su args' e) xxs'
+          _                -> let fn' = su args fn
+                              in BetaApplyL src fn' xxs'
 
---     app :: [Maybe (Cox c)] -> B.Map (Cox c)
---     app args (CoxApplyL src (CoxDeriv _ _ b) (x:xs)) =
---         app (Just x : args) (CoxApplyL src b xs)
---     app args (CoxApplyL _ f []) = su args f
---     app _ e2 = e2
-
-link :: forall c. [Cop c] -> [NamedCox c] -> B.Map (Cox c)
-link base deriv = li where
+link :: forall c. CopBundle c -> B.Map (Cox c)
+link (base, deriv) = li where
     li cox =
         case cox of
           CoxVar _ n 0 -> B.fromMaybe cox $ lookup n fs
@@ -446,6 +431,17 @@ getArg3 :: [B.Ab c] -> B.Ab (B.Ab c, B.Ab c, B.Ab c)
 getArg3 [x, y, z] = Right (x, y, z)
 getArg3 _         = Message.unmatchType ""
 
+type RunCox  c = Cox c -> B.Ab c
+type RunList c = [c]   -> B.Ab c
+
+coxRunCox :: (B.Write c, C.CRel c, C.CList c) =>
+    CopBundle c -> B.Relhead -> [c] -> RunCox c
+coxRunCox cops he cs cox = coxRunList cops he cox cs
+
+coxRunList :: (B.Write c, C.CRel c, C.CList c) =>
+    CopBundle c -> B.Relhead -> Cox c -> RunList c
+coxRunList cops he cox cs = coxRun cs =<< coxBeta cops he cox
+
 -- | Calculate content expression.
 coxRun
   :: forall c. (C.CRel c, C.CList c, B.Write c)
@@ -463,39 +459,6 @@ coxRun args = run 0 where
              BetaTerm   _ _ ps    -> term ps args
              BetaApplyL _ e []    -> run' e
              BetaApplyL _ (BetaBase _ _ f) xs -> f $ map run' xs
-             _ -> Message.notFound $ "cox: " ++ show cox
-
-    term :: [Int] -> [c] -> B.Ab c
-    term []       _ = Message.notFound "empty term"
-    term (-1 : _) _ = Message.notFound "negative term"
-    term (p : ps) args2 =
-        let c = args2 !!! p
-        in if C.isRel c
-           then rel ps $ C.gRel c
-           else Right c
-
-    rel :: [Int] -> B.Rel c -> B.Ab c
-    rel ps (B.Rel _ args2) =
-        C.putList =<< mapM (term ps) args2
-
--- | Calculate content expression.
-coxRun2
-  :: forall c. (C.CRel c, C.CList c, B.Write c)
-  => [c]           -- ^ Tuple in body of relation
-  -> Cox c         -- ^ Content expression
-  -> B.Ab c        -- ^ Calculated literal content
-coxRun2 args = run 0 where
-    run :: Int -> Cox c -> B.Ab c
-    run 1000 _ = B.bug "Too deep expression"
-    run lv cox =
-        let run' = run $ lv + 1
-        in B.abortable "calc" [cox] $
-           case cox of
-             CoxLit    _ c       -> Right c
-             CoxTerm   _ _ [p]   -> Right $ args !!! p
-             CoxTerm   _ _ ps    -> term ps args
-             CoxApplyL _ e []    -> run' e
-             CoxApplyL _ (CoxBase _ _ f) xs -> f $ map run' xs
              _ -> Message.notFound $ "cox: " ++ show cox
 
     term :: [Int] -> [c] -> B.Ab c

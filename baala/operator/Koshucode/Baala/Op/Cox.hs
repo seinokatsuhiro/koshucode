@@ -114,14 +114,7 @@ getContent use name =
 runCoxTree :: (C.CContent c) => C.RopUse c -> B.TokenTree -> B.Ab c
 runCoxTree use tree =
     do alpha <- ropAlpha use tree
-       coxRunBeta (ropBase use, []) B.mempty [] alpha
-
-type CopLet c = ( [C.Cop c], [C.NamedCox c] )
-
-coxRunBeta :: (B.Write c, C.CRel c, C.CList c) =>
-    CopLet c -> B.Relhead -> [c] -> C.Cox c -> B.Ab c
-coxRunBeta (base, deriv) he cs cox =
-    C.coxRun cs =<< C.coxBeta base deriv he cox
+       C.coxRunCox (ropBase use, []) B.mempty [] alpha
 
 getOptContent :: (C.CContent c) => c -> C.RopUse c -> String -> B.Ab c
 getOptContent opt = Op.getOption opt getContent
@@ -139,13 +132,13 @@ consAdd use =
        Right $ relmapAdd use ((ropBase use, coxLet), coxIn)
 
 relmapAdd :: (C.CList c, C.CRel c, B.Write c)
-  => C.RopUse c -> (CopLet c, [C.NamedCox c]) -> C.Relmap c
+  => C.RopUse c -> (C.CopBundle c, [C.NamedCox c]) -> C.Relmap c
 relmapAdd use = C.relmapFlow use . relkitAdd
 
 relkitAdd :: (C.CList c, C.CRel c, B.Write c)
-  => (CopLet c, [C.NamedCox c]) -> C.RelkitFlow c
+  => (C.CopBundle c, [C.NamedCox c]) -> C.RelkitFlow c
 relkitAdd _ Nothing = Right C.relkitNothing
-relkitAdd (coplet, bodies) (Just he1)
+relkitAdd (cops, bodies) (Just he1)
     | null ind  = Right kit2
     | otherwise = Message.unexpTermName
     where
@@ -154,7 +147,7 @@ relkitAdd (coplet, bodies) (Just he1)
       ind         =  ns `B.snipIndex` ns1    -- indicies for ns on input relation
       he2         =  ns `B.headAppend` he1
       kit2        =  C.relkitJust he2 $ C.RelkitOneToAbOne False kitf2 []
-      kitf2 _ cs1 =  do cs2 <- coxRunBeta coplet he1 cs1 `mapM` xs
+      kitf2 _ cs1 =  do cs2 <- C.coxRunCox cops he1 cs1 `mapM` xs
                         Right $ cs2 ++ cs1
 
 
@@ -167,13 +160,13 @@ consSubst use =
        Right $ relmapSubst use ((ropBase use, coxLet), coxIn)
 
 relmapSubst :: (C.CList c, C.CRel c, B.Write c)
-  => C.RopUse c -> (CopLet c, [C.NamedCox c]) -> C.Relmap c
+  => C.RopUse c -> (C.CopBundle c, [C.NamedCox c]) -> C.Relmap c
 relmapSubst use = C.relmapFlow use . relkitSubst
 
 relkitSubst :: (C.CList c, C.CRel c, B.Write c)
-  => (CopLet c, [C.NamedCox c]) -> C.RelkitFlow c
+  => (C.CopBundle c, [C.NamedCox c]) -> C.RelkitFlow c
 relkitSubst _ Nothing = Right C.relkitNothing
-relkitSubst (coplet, bodies) (Just he1)
+relkitSubst (cops, bodies) (Just he1)
     | B.sameLength ns ind = Right kit2
     | otherwise           = Message.unexpTermName
     where
@@ -184,7 +177,7 @@ relkitSubst (coplet, bodies) (Just he1)
       fore      =  B.snipFore ind             -- cutting-ns function
       he2       =  B.headChange fore he1      -- heading of output relation
       kit2      =  C.relkitJust he2 $ C.RelkitOneToAbOne True f2 []
-      f2 _ cs1  =  do cs2 <- coxRunBeta coplet he1 cs1 `mapM` xs
+      f2 _ cs1  =  do cs2 <- C.coxRunCox cops he1 cs1 `mapM` xs
                       Right $ cs2 ++ cut cs1
 
 
@@ -197,15 +190,15 @@ consFilter b use =
        Right $ relmapFilter use (b, (ropBase use, coxLet), coxIn)
 
 relmapFilter :: (C.CList c, C.CRel c, C.CBool c, B.Write c)
-  => C.RopUse c -> (Bool, CopLet c, C.Cox c) -> C.Relmap c
+  => C.RopUse c -> (Bool, C.CopBundle c, C.Cox c) -> C.Relmap c
 relmapFilter use = C.relmapFlow use . relkitFilter
 
 relkitFilter :: (C.CList c, C.CRel c, C.CBool c, B.Write c)
-  => (Bool, CopLet c, C.Cox c) -> C.RelkitFlow c
+  => (Bool, C.CopBundle c, C.Cox c) -> C.RelkitFlow c
 relkitFilter _ Nothing = Right C.relkitNothing
-relkitFilter (which, coplet, body) (Just he1) = Right kit2 where
+relkitFilter (which, cops, body) (Just he1) = Right kit2 where
     kit2  = C.relkitJust he1 $ C.RelkitAbPred p
-    p cs1 = do c <- coxRunBeta coplet he1 cs1 body
+    p cs1 = do c <- C.coxRunCox cops he1 cs1 body
                case C.isBool c of
                  True  -> Right $ C.gBool c == which
                  False -> Message.reqBool
@@ -264,8 +257,8 @@ relkitRange _ Nothing = Right C.relkitNothing
 relkitRange (n, base, coxLow, coxHigh) (Just he1) = Right kit2 where
     he2      = B.headCons n he1
     kit2     = C.relkitJust he2 $ C.RelkitOneToAbMany False f2 []
-    f2 _ cs  = do decLow    <-  C.getDec $ coxRunBeta (base, []) he1 cs coxLow
-                  decHigh   <-  C.getDec $ coxRunBeta (base, []) he1 cs coxHigh
+    f2 _ cs  = do decLow    <-  C.getDec $ C.coxRunCox (base, []) he1 cs coxLow
+                  decHigh   <-  C.getDec $ C.coxRunCox (base, []) he1 cs coxHigh
 
                   let low   =   B.decimalNum decLow
                       high  =   B.decimalNum decHigh
@@ -297,7 +290,7 @@ relkitFill (ns, base, coxTo) (Just he1) = Right kit2 where
     fore      =  B.snipFore ind
     he2       =  B.headChange fore he1
     kit2      =  C.relkitJust he2 $ C.RelkitOneToAbOne True f2 []
-    f2 _ cs1  =  do cTo  <- coxRunBeta (base, []) he1 cs1 coxTo
+    f2 _ cs1  =  do cTo  <- C.coxRunCox (base, []) he1 cs1 coxTo
                     let fill c | C.isEmpty c = cTo
                                | otherwise   = c
                     Right $ map fill (pick cs1) ++ (cut cs1)
@@ -334,8 +327,8 @@ relkitReplaceAll :: (C.CContent c) => ([C.Cop c], C.Cox c, C.Cox c) -> C.RelkitF
 relkitReplaceAll _ Nothing = Right C.relkitNothing
 relkitReplaceAll (base, coxFrom, coxTo) (Just he1) = Right kit2 where
     kit2     = C.relkitJust he1 $ C.RelkitOneToAbOne False f2 []
-    f2 _ cs  = do cFrom    <-  coxRunBeta (base, []) he1 cs coxFrom
-                  cTo      <-  coxRunBeta (base, []) he1 cs coxTo
+    f2 _ cs  = do cFrom    <-  C.coxRunCox (base, []) he1 cs coxFrom
+                  cTo      <-  C.coxRunCox (base, []) he1 cs coxTo
                   let replace c | c == cFrom = cTo
                                 | otherwise  = c
                   Right $ map replace cs
@@ -350,13 +343,13 @@ consSplit use =
        Right $ relmapSplit use ((ropBase use, coxLet), coxIn)
 
 relmapSplit :: (C.CList c, C.CRel c, B.Write c, C.CBool c)
-  => C.RopUse c -> (CopLet c, [C.NamedCox c]) -> C.Relmap c
+  => C.RopUse c -> (C.CopBundle c, [C.NamedCox c]) -> C.Relmap c
 relmapSplit use = C.relmapFlow use . relkitSplit
 
 relkitSplit :: forall c. (C.CList c, C.CRel c, B.Write c, C.CBool c)
-  => (CopLet c, [C.NamedCox c]) -> C.RelkitFlow c
+  => (C.CopBundle c, [C.NamedCox c]) -> C.RelkitFlow c
 relkitSplit _ Nothing = Right C.relkitNothing
-relkitSplit ((base, deriv), bodies) (Just he1)
+relkitSplit (cops, bodies) (Just he1)
     | null ind  = Right kit2
     | otherwise = Message.unexpTermName
     where
@@ -367,22 +360,22 @@ relkitSplit ((base, deriv), bodies) (Just he1)
       he2         =  B.Relhead $ map term ns
       term n      =  B.TermNest n $ B.headTerms he1
       kit2        =  C.relkitJust he2 $ C.RelkitAbFull False kitf2 []
-      kitf2 _ bo1 =  do xs2 <- C.coxBeta base deriv he1 `mapM` xs
-                        cs2 <- split xs2 bo1
+      kitf2 _ bo1 =  do let fs2 = C.coxRunList cops he1 `map` xs
+                        cs2 <- split fs2 bo1
                         Right [cs2]
 
-      split :: [C.Beta c] -> [[c]] -> B.Ab [c]
+      split :: [C.RunList c] -> [[c]] -> B.Ab [c]
       split [] _ = Right []
-      split (x : xs2) bo1 =
-          do bo2 <- run x `mapM` bo1
+      split (f : fs2) bo1 =
+          do bo2 <- run f `mapM` bo1
              let first = filter fst bo2
                  rest  = map snd $ B.omit fst bo2
-             rest' <- split xs2 rest
+             rest' <- split fs2 rest
              let rel = B.Rel he1 $ map snd first
              Right $ C.pRel rel : rest'
 
-      run :: C.Beta c -> [c] -> B.Ab (Bool, [c])
-      run x cs = do c <- C.coxRun cs x
+      run :: C.RunList c -> [c] -> B.Ab (Bool, [c])
+      run f cs = do c <- f cs
                     case C.isBool c of
                       True  -> Right (C.gBool c, cs)
                       False -> Message.reqBool
