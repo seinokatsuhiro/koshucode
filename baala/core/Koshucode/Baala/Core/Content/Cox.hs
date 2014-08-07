@@ -343,46 +343,45 @@ docBeta sh = d (0 :: Int) where
     d 10 _ = B.write sh "..."
     d n e =
         case e of
-          BetaLit    _ c      -> B.write sh c
-          BetaTerm   _ ns _   -> B.writeH sh ns
-          BetaBase   _ name _ -> B.write sh name
+          BetaLit    _ c      -> B.write  sh c
+          BetaTerm   _ ns _   -> B.writeH sh $ map ('/':) ns
+          BetaBase   _ name _ -> B.write  sh name
           BetaApplyL _ f xs   -> let f'  = B.write sh "ap" B.<+> d' f
                                      xs' = B.nest 3 $ B.writeV sh (map d' xs)
                                  in f' B.$$ xs'
-        where
-          d' = d $ n + 1
+        where d' = d $ n + 1
 
 -- | Reduce content expression.
-coxBeta :: CopBundle c -> B.Relhead -> Cox c -> B.Ab (Beta c)
-coxBeta cops h =
-    Right . subst       -- beta reduction
+beta :: (B.Write c) => CopBundle c -> B.Relhead -> Cox c -> B.Ab (Beta c)
+beta cops h =
+    Right . reduce      -- beta reduction
           . link cops   -- substitute free variables
           B.<=< position h
 
--- beta reduction
-subst :: forall c. Cox c -> Beta c
-subst = su [] where
-    su :: [Beta c] -> Cox c -> Beta c
-    su args cox =
+-- beta reduction, i.e., process CoxVar and CoxDeriv.
+reduce :: forall c. (B.Write c) => Cox c -> Beta c
+reduce = red [] where
+    red :: [Beta c] -> Cox c -> Beta c
+    red args cox =
         case cox of
-          CoxLit    src c     -> BetaLit  src c
-          CoxTerm   src n i   -> BetaTerm src n i
-          CoxBase   src n f   -> BetaBase src n f
-          CoxVar    _ _ 0     -> B.bug "global variable"
-          CoxVar    _ _ i     -> args !!! (i - 1)
-          CoxApplyL _ f []    -> su args f
-          CoxApplyL src fn xxs@(x: _) ->
-              app args src fn x $ su args `map` xxs
-          CoxDeriv  _ _ e     -> su args e
-          CoxDerivL _ _ _     -> B.bug "CoxDerivL"
+          CoxLit    src c       ->  BetaLit  src c
+          CoxTerm   src n i     ->  BetaTerm src n i
+          CoxBase   src n f     ->  BetaBase src n f
+          CoxVar    _ _ 0       ->  B.bug "global variable"
+          CoxVar    _ _ i       ->  args !!! (i - 1)
+          CoxApplyL src fn xs   ->  app args src fn xs
+          CoxDeriv  _ _ e       ->  red args e
+          CoxDerivL _ _ _       ->  B.bug "CoxDerivL"
 
-    app args src fn x xxs' =
-        case fn of
-          CoxBase src2 n f -> BetaApplyL src (BetaBase src2 n f) xxs'
-          CoxDeriv _ _ e   -> let args' = su args x : args
-                              in BetaApplyL src (su args' e) xxs'
-          _                -> let fn' = su args fn
-                              in BetaApplyL src fn' xxs'
+    app args _ fn [] = red args fn
+    app args src fn xxs@(x:xs) =
+        let xxs' = red args `map` xxs
+        in case fn of
+             CoxBase src2 n f   ->  BetaApplyL src (BetaBase src2 n f) xxs'
+             CoxDeriv _ _ e     ->  let args' = red args x : args
+                                    in red args' $ CoxApplyL src e xs
+             _                  ->  let fn' = red args fn
+                                    in BetaApplyL src fn' xxs'
 
 link :: forall c. CopBundle c -> B.Map (Cox c)
 link (base, deriv) = li where
@@ -440,7 +439,7 @@ coxRunCox cops he cs cox = coxRunList cops he cox cs
 
 coxRunList :: (B.Write c, C.CRel c, C.CList c) =>
     CopBundle c -> B.Relhead -> Cox c -> RunList c
-coxRunList cops he cox cs = coxRun cs =<< coxBeta cops he cox
+coxRunList cops he cox cs = coxRun cs =<< beta cops he cox
 
 -- | Calculate content expression.
 coxRun
@@ -459,7 +458,7 @@ coxRun args = run 0 where
              BetaTerm   _ _ ps    -> term ps args
              BetaApplyL _ e []    -> run' e
              BetaApplyL _ (BetaBase _ _ f) xs -> f $ map run' xs
-             _ -> Message.notFound $ "cox: " ++ show cox
+             _ -> Message.adlibs $ "Unknown cox" : (lines $ show cox)
 
     term :: [Int] -> [c] -> B.Ab c
     term []       _ = Message.notFound "empty term"
@@ -490,12 +489,12 @@ irreducible cox =
       CoxApplyL _ f xs  ->  all irreducible $ f : xs
       _                 ->  False
 
-(!!!) :: [a] -> Int -> a
+(!!!) :: (B.Write a) =>[a] -> Int -> a
 list !!! index = loop index list where
     loop 0 (x : _)  = x
     loop i (_ : xs) = loop (i - 1) xs
-    loop _ _        = error $ "#" ++ show (length list)
-                                  ++ " !!! " ++ show index
+    loop _ _        = error $ show (B.doch list)
+                              ++ " !!! " ++ show index
 
 
 -- ----------------------

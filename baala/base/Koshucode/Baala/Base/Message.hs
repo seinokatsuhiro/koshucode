@@ -2,6 +2,7 @@
 
 module Koshucode.Baala.Base.Message
 ( adlib,
+  adlibs,
   extraCloseParen,
   extraOpenParen,
   notFound,
@@ -18,6 +19,9 @@ import qualified Koshucode.Baala.Base.Abort    as B
 -- | AD-LIB: reason
 adlib :: String -> B.Ab a
 adlib reason = Left $ B.abortBecause $ "AD-LIB: " ++ reason
+
+adlibs :: [String] -> B.Ab a
+adlibs = Left . B.abortLines "AD-LIB"
 
 -- | Extra close paren
 extraCloseParen :: B.Ab a
