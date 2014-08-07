@@ -11,6 +11,8 @@ module Koshucode.Baala.Core.Content.Cox
   coxSyntacticArity,
   isCoxBase,
   isCoxDeriv,
+  mapToCox,
+  checkIrreducible,
 
   -- * Operator
   Cop (..), CopBundle, NamedCox,
@@ -20,12 +22,6 @@ module Koshucode.Baala.Core.Content.Cox
 
   -- * Construction
   coxAlpha, coxDebruijn,
-  checkIrreducible,
-
-  -- * Run
-  RunCox, RunList,
-  coxRunCox, coxRunList,
-  getArg1, getArg2, getArg3,
 ) where
 
 import qualified Koshucode.Baala.Base                   as B
@@ -81,12 +77,6 @@ docCox sh = d (0 :: Int) where
           d'     = d $ n + 1
           fn v b = B.docWraps "(|" "|)" $ v B.<+> B.write sh "|" B.<+> b
 
-mapToCox :: B.Map (Cox c) -> B.Map (Cox c)
-mapToCox g (CoxApplyL src f  xs)   = CoxApplyL src (g f) (map g xs)
-mapToCox g (CoxDeriv  src v  body) = CoxDeriv  src v  (g body)
-mapToCox g (CoxDerivL src vs body) = CoxDerivL src vs (g body)
-mapToCox _ e = e
-
 isCoxBase :: Cox c -> Bool
 isCoxBase (CoxBase _  _ _)   = True
 isCoxBase _                  = False
@@ -104,6 +94,28 @@ coxSyntacticArity = loop where
         | isCoxDeriv cox = loop cox - length xs
         | otherwise      = 0
     loop _ = 0
+
+mapToCox :: B.Map (Cox c) -> B.Map (Cox c)
+mapToCox g (CoxApplyL src f  xs)   = CoxApplyL src (g f) (map g xs)
+mapToCox g (CoxDeriv  src v  body) = CoxDeriv  src v  (g body)
+mapToCox g (CoxDerivL src vs body) = CoxDerivL src vs (g body)
+mapToCox _ e = e
+
+checkIrreducible :: B.AbMap (Cox c)
+checkIrreducible e
+    | irreducible e = Right e
+    | otherwise     = B.abortable "irrep" [e] $
+                      Message.unkCox "Not irreducible"
+
+-- irreducible representation
+irreducible :: Cox c -> Bool
+irreducible cox =
+    case cox of
+      CoxLit  _ _       ->  True
+      CoxTerm _ _ _     ->  True
+      CoxBase _ _ _     ->  True
+      CoxApplyL _ f xs  ->  all irreducible $ f : xs
+      _                 ->  False
 
 
 -- ----------------------  Operator
@@ -316,185 +328,6 @@ deepen = level (0 :: Int) where
           CoxApplyL _ _ _ -> mapToCox (de n vars) cox
           CoxDeriv _ v _  -> mapToCox (de n $ v : vars) cox
           _               -> cox
-
-
--- ----------------------  Beta construction
-
-data Beta c
-    = BetaLit    [B.CodePoint] c                   -- ^ Literal content
-    | BetaTerm   [B.CodePoint] [B.TermName] [Int]  -- ^ Term reference, its name and position
-    | BetaBase   [B.CodePoint] String (CopFun c)   -- ^ Base function
-    | BetaApplyL [B.CodePoint] (Beta c) [Beta c]   -- ^ Function application (multiple arguments)
-
-instance B.CodePointer (Beta c) where
-    codePoint (BetaLit    pt _)   = pt
-    codePoint (BetaTerm   pt _ _) = pt
-    codePoint (BetaBase   pt _ _) = pt
-    codePoint (BetaApplyL pt _ _) = pt
-
-instance (B.Write c) => Show (Beta c) where
-    show = show . B.doc
-
-instance (B.Write c) => B.Write (Beta c) where
-    write = docBeta
-
-docBeta :: (B.Write c) => B.StringMap -> Beta c -> B.Doc
-docBeta sh = d (0 :: Int) where
-    d 10 _ = B.write sh "..."
-    d n e =
-        case e of
-          BetaLit    _ c      -> B.write  sh c
-          BetaTerm   _ ns _   -> B.writeH sh $ map ('/':) ns
-          BetaBase   _ name _ -> B.write  sh name
-          BetaApplyL _ f xs   -> let f'  = B.write sh "ap" B.<+> d' f
-                                     xs' = B.nest 3 $ B.writeV sh (map d' xs)
-                                 in f' B.$$ xs'
-        where d' = d $ n + 1
-
--- | Reduce content expression.
-beta :: (B.Write c) => CopBundle c -> B.Relhead -> Cox c -> B.Ab (Beta c)
-beta cops h =
-    Right . reduce      -- beta reduction
-          . link cops   -- substitute free variables
-          B.<=< position h
-
--- beta reduction, i.e., process CoxVar and CoxDeriv.
-reduce :: forall c. (B.Write c) => Cox c -> Beta c
-reduce = red [] where
-    red :: [Beta c] -> Cox c -> Beta c
-    red args cox =
-        case cox of
-          CoxLit    src c       ->  BetaLit  src c
-          CoxTerm   src n i     ->  BetaTerm src n i
-          CoxBase   src n f     ->  BetaBase src n f
-          CoxVar    _ _ 0       ->  B.bug "global variable"
-          CoxVar    _ _ i       ->  args !!! (i - 1)
-          CoxApplyL src fn xs   ->  app args src fn xs
-          CoxDeriv  _ _ e       ->  red args e
-          CoxDerivL _ _ _       ->  B.bug "CoxDerivL"
-
-    app args _ fn [] = red args fn
-    app args src fn xxs@(x:xs) =
-        let xxs' = red args `map` xxs
-        in case fn of
-             CoxBase src2 n f   ->  BetaApplyL src (BetaBase src2 n f) xxs'
-             CoxDeriv _ _ e     ->  let args' = red args x : args
-                                    in red args' $ CoxApplyL src e xs
-             _                  ->  let fn' = red args fn
-                                    in BetaApplyL src fn' xxs'
-
-link :: forall c. CopBundle c -> B.Map (Cox c)
-link (base, deriv) = li where
-    li cox =
-        case cox of
-          CoxVar _ n 0 -> B.fromMaybe cox $ lookup n fs
-          _            -> mapToCox li cox
-
-    fs :: [NamedCox c]
-    fs = map (fmap li) deriv ++ map namedBase base
-
-    namedBase :: Cop c -> NamedCox c
-    namedBase (CopFun n f) = (n, CoxBase [] n f)
-    namedBase (CopCox n _) = (n, CoxBase [] n undefined)
-    namedBase (CopSyn n _) = (n, CoxBase [] n undefined)
-
--- put term positions for actural heading
-position :: B.Relhead -> Cox c -> B.Ab (Cox c)
-position he = spos where
-    spos e = B.abortable "position" [e] $ pos e
-    pos (CoxTerm src ns _) =
-        let index = B.headIndex1 he ns
-        in if all (>= 0) index
-           then Right $ CoxTerm src ns index
-           else Message.unkTerm [B.showNestedTermName ns] he
-    pos (CoxApplyL src  f xs) = do f'  <- spos f
-                                   xs' <- mapM spos xs
-                                   Right $ CoxApplyL src f' xs'
-    pos (CoxDeriv src  v e)   = do e' <- spos e
-                                   Right $ CoxDeriv src v e'
-    pos e = Right e
-
-
-
--- ----------------------  Run
-
-getArg1 :: [B.Ab c] -> B.Ab (B.Ab c)
-getArg1 [x]       = Right x
-getArg1 _         = Message.unmatchType ""
-
-getArg2 :: [B.Ab c] -> B.Ab (B.Ab c, B.Ab c)
-getArg2 [x, y]    = Right (x, y)
-getArg2 _         = Message.unmatchType ""
-
-getArg3 :: [B.Ab c] -> B.Ab (B.Ab c, B.Ab c, B.Ab c)
-getArg3 [x, y, z] = Right (x, y, z)
-getArg3 _         = Message.unmatchType ""
-
-type RunCox  c = Cox c -> B.Ab c
-type RunList c = [c]   -> B.Ab c
-
-coxRunCox :: (B.Write c, C.CRel c, C.CList c) =>
-    CopBundle c -> B.Relhead -> [c] -> RunCox c
-coxRunCox cops he cs cox = coxRunList cops he cox cs
-
-coxRunList :: (B.Write c, C.CRel c, C.CList c) =>
-    CopBundle c -> B.Relhead -> Cox c -> RunList c
-coxRunList cops he cox cs = coxRun cs =<< beta cops he cox
-
--- | Calculate content expression.
-coxRun
-  :: forall c. (C.CRel c, C.CList c, B.Write c)
-  => [c]           -- ^ Tuple in body of relation
-  -> Beta c        -- ^ Content expression
-  -> B.Ab c        -- ^ Calculated literal content
-coxRun args = run 0 where
-    run :: Int -> Beta c -> B.Ab c
-    run 1000 _ = B.bug "Too deep expression"
-    run lv cox =
-        let run' = run $ lv + 1
-        in B.abortable "calc" [cox] $ case cox of
-             BetaLit    _ c       -> Right c
-             BetaTerm   _ _ [p]   -> Right $ args !!! p
-             BetaTerm   _ _ ps    -> term ps args
-             BetaApplyL _ e []    -> run' e
-             BetaApplyL _ (BetaBase _ _ f) xs -> f $ map run' xs
-             _ -> Message.adlibs $ "Unknown cox" : (lines $ show cox)
-
-    term :: [Int] -> [c] -> B.Ab c
-    term []       _ = Message.notFound "empty term"
-    term (-1 : _) _ = Message.notFound "negative term"
-    term (p : ps) args2 =
-        let c = args2 !!! p
-        in if C.isRel c
-           then rel ps $ C.gRel c
-           else Right c
-
-    rel :: [Int] -> B.Rel c -> B.Ab c
-    rel ps (B.Rel _ args2) =
-        C.putList =<< mapM (term ps) args2
-
-checkIrreducible :: B.AbMap (Cox c)
-checkIrreducible e
-    | irreducible e = Right e
-    | otherwise     = B.abortable "irrep" [e] $
-                      Message.unkCox "Not irreducible"
-
--- irreducible representation
-irreducible :: Cox c -> Bool
-irreducible cox =
-    case cox of
-      CoxLit  _ _       ->  True
-      CoxTerm _ _ _     ->  True
-      CoxBase _ _ _     ->  True
-      CoxApplyL _ f xs  ->  all irreducible $ f : xs
-      _                 ->  False
-
-(!!!) :: (B.Write a) =>[a] -> Int -> a
-list !!! index = loop index list where
-    loop 0 (x : _)  = x
-    loop i (_ : xs) = loop (i - 1) xs
-    loop _ _        = error $ show (B.doch list)
-                              ++ " !!! " ++ show index
 
 
 -- ----------------------
