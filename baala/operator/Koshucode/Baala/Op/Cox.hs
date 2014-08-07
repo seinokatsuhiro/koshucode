@@ -371,7 +371,7 @@ relkitSplit ((base, deriv), bodies) (Just he1)
                         cs2 <- split xs2 bo1
                         Right [cs2]
 
-      split :: [C.Cox c] -> [[c]] -> B.Ab [c]
+      split :: [C.Beta c] -> [[c]] -> B.Ab [c]
       split [] _ = Right []
       split (x : xs2) bo1 =
           do bo2 <- run x `mapM` bo1
@@ -381,7 +381,7 @@ relkitSplit ((base, deriv), bodies) (Just he1)
              let rel = B.Rel he1 $ map snd first
              Right $ C.pRel rel : rest'
 
-      run :: C.Cox c -> [c] -> B.Ab (Bool, [c])
+      run :: C.Beta c -> [c] -> B.Ab (Bool, [c])
       run x cs = do c <- C.coxRun cs x
                     case C.isBool c of
                       True  -> Right (C.gBool c, cs)

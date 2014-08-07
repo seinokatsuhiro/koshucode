@@ -7,6 +7,7 @@ module Koshucode.Baala.Core.Content.Cox
 ( -- $Process
 
   -- * Expression
+  Beta (..),
   Cox (..),
   coxSyntacticArity,
   isCoxBase,
@@ -24,6 +25,7 @@ module Koshucode.Baala.Core.Content.Cox
 
   -- * Run
   getArg1, getArg2, getArg3,
+  coxRun2,
   coxRun,
 ) where
 
@@ -316,29 +318,86 @@ deepen = level (0 :: Int) where
 
 -- ----------------------  Beta construction
 
+data Beta c
+    = BetaLit    [B.CodePoint] c                   -- ^ Literal content
+    | BetaTerm   [B.CodePoint] [B.TermName] [Int]  -- ^ Term reference, its name and position
+    | BetaBase   [B.CodePoint] String (CopFun c)   -- ^ Base function
+    | BetaApplyL [B.CodePoint] (Beta c) [Beta c]   -- ^ Function application (multiple arguments)
+
+instance B.CodePointer (Beta c) where
+    codePoint (BetaLit    pt _)   = pt
+    codePoint (BetaTerm   pt _ _) = pt
+    codePoint (BetaBase   pt _ _) = pt
+    codePoint (BetaApplyL pt _ _) = pt
+
+instance (B.Write c) => Show (Beta c) where
+    show = show . B.doc
+
+instance (B.Write c) => B.Write (Beta c) where
+    write = docBeta
+
+docBeta :: (B.Write c) => B.StringMap -> Beta c -> B.Doc
+docBeta sh = d (0 :: Int) where
+    d 10 _ = B.write sh "..."
+    d n e =
+        case e of
+          BetaLit    _ c      -> B.write sh c
+          BetaTerm   _ ns _   -> B.writeH sh ns
+          BetaBase   _ name _ -> B.write sh name
+          BetaApplyL _ f xs   -> let f'  = B.write sh "ap" B.<+> d' f
+                                     xs' = B.nest 3 $ B.writeV sh (map d' xs)
+                                 in f' B.$$ xs'
+        where
+          d' = d $ n + 1
+
 -- | Reduce content expression.
-coxBeta :: [Cop c] -> [NamedCox c] -> B.Relhead -> B.AbMap (Cox c)
+coxBeta :: [Cop c] -> [NamedCox c] -> B.Relhead -> Cox c -> B.Ab (Beta c)
 coxBeta base deriv h =
     Right . subst             -- beta reduction
           . link base deriv   -- substitute free variables
           B.<=< position h
 
 -- beta reduction
-subst :: B.Map (Cox c)
+subst :: forall c. Cox c -> Beta c
 subst = su [] where
-    su :: [Maybe (Cox c)] -> B.Map (Cox c)
+    su :: [Beta c] -> Cox c -> Beta c
     su args cox =
         case cox of
-          CoxVar    _ _ i     -> B.fromMaybe cox $ args !!! (i - 1)
-          CoxDeriv  src v e2  -> CoxDeriv src v $ su (Nothing : args) e2
-          CoxApplyL _ _ _     -> app args $ mapToCox (su args) cox
-          _                   -> cox
+          CoxLit    src c     -> BetaLit  src c
+          CoxTerm   src n i   -> BetaTerm src n i
+          CoxBase   src n f   -> BetaBase src n f
+          CoxVar    _ _ 0     -> B.bug "global variable"
+          CoxVar    _ _ i     -> args !!! (i - 1)
+          CoxApplyL _ f []    -> su args f
+          CoxApplyL src fn xxs@(x: _) ->
+              let xxs' = su args `map` xxs
+              in case fn of
+                 CoxDeriv _ _ e ->
+                      let args' = su args x : args
+                      in BetaApplyL src (su args' e) xxs'
+                 CoxBase src2 n f ->
+                      BetaApplyL src (BetaBase src2 n f) xxs'
+                 _ -> let fn' = su args fn
+                      in BetaApplyL src fn' xxs'
+          CoxDeriv  _ _ e     -> su args e
+          CoxDerivL _ _ _     -> B.bug "CoxDerivL"
 
-    app :: [Maybe (Cox c)] -> B.Map (Cox c)
-    app args (CoxApplyL src (CoxDeriv _ _ b) (x:xs)) =
-        app (Just x : args) (CoxApplyL src b xs)
-    app args (CoxApplyL _ f []) = su args f
-    app _ e2 = e2
+-- beta reduction
+-- subst2 :: B.Map (Cox c)
+-- subst2 = su [] where
+--     su :: [Maybe (Cox c)] -> B.Map (Cox c)
+--     su args cox =
+--         case cox of
+--           CoxVar    _ _ i     -> B.fromMaybe cox $ args !!! (i - 1)
+--           CoxDeriv  src v e2  -> CoxDeriv src v $ su (Nothing : args) e2
+--           CoxApplyL _ _ _     -> app args $ mapToCox (su args) cox
+--           _                   -> cox
+
+--     app :: [Maybe (Cox c)] -> B.Map (Cox c)
+--     app args (CoxApplyL src (CoxDeriv _ _ b) (x:xs)) =
+--         app (Just x : args) (CoxApplyL src b xs)
+--     app args (CoxApplyL _ f []) = su args f
+--     app _ e2 = e2
 
 link :: forall c. [Cop c] -> [NamedCox c] -> B.Map (Cox c)
 link base deriv = li where
@@ -391,9 +450,41 @@ getArg3 _         = Message.unmatchType ""
 coxRun
   :: forall c. (C.CRel c, C.CList c, B.Write c)
   => [c]           -- ^ Tuple in body of relation
-  -> Cox c         -- ^ Content expression
+  -> Beta c        -- ^ Content expression
   -> B.Ab c        -- ^ Calculated literal content
 coxRun args = run 0 where
+    run :: Int -> Beta c -> B.Ab c
+    run 1000 _ = B.bug "Too deep expression"
+    run lv cox =
+        let run' = run $ lv + 1
+        in B.abortable "calc" [cox] $ case cox of
+             BetaLit    _ c       -> Right c
+             BetaTerm   _ _ [p]   -> Right $ args !!! p
+             BetaTerm   _ _ ps    -> term ps args
+             BetaApplyL _ e []    -> run' e
+             BetaApplyL _ (BetaBase _ _ f) xs -> f $ map run' xs
+             _ -> Message.notFound $ "cox: " ++ show cox
+
+    term :: [Int] -> [c] -> B.Ab c
+    term []       _ = Message.notFound "empty term"
+    term (-1 : _) _ = Message.notFound "negative term"
+    term (p : ps) args2 =
+        let c = args2 !!! p
+        in if C.isRel c
+           then rel ps $ C.gRel c
+           else Right c
+
+    rel :: [Int] -> B.Rel c -> B.Ab c
+    rel ps (B.Rel _ args2) =
+        C.putList =<< mapM (term ps) args2
+
+-- | Calculate content expression.
+coxRun2
+  :: forall c. (C.CRel c, C.CList c, B.Write c)
+  => [c]           -- ^ Tuple in body of relation
+  -> Cox c         -- ^ Content expression
+  -> B.Ab c        -- ^ Calculated literal content
+coxRun2 args = run 0 where
     run :: Int -> Cox c -> B.Ab c
     run 1000 _ = B.bug "Too deep expression"
     run lv cox =
