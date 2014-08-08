@@ -29,11 +29,17 @@ import qualified Koshucode.Baala.Op.Message as Message
 copsOrder :: (C.CBool c, Eq c, Ord c) => [C.Cop c]
 copsOrder =
     [ C.CopFun  "="    copEq
+    , C.CopFun  "&="   copEq
     , C.CopFun  "<>"   copNeq
+    , C.CopFun  "&<>"  copNeq
     , C.CopFun  "<"    copLt
+    , C.CopFun  "&<"   copLt
     , C.CopFun  "<="   copLte
+    , C.CopFun  "&<="  copLte
     , C.CopFun  ">"    copGt
+    , C.CopFun  "&>"   copGt
     , C.CopFun  ">="   copGte
+    , C.CopFun  "&>="  copGte
     ]
 
 copBy :: (C.CBool c) => (c -> c -> Bool) -> C.CopFun c

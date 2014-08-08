@@ -114,10 +114,15 @@ construct = expr where
 prefix :: [B.Named B.InfixHeight] -> B.AbMap (B.TokenTree)
 prefix htab tree =
     B.abortableTree "prefix" tree $
-     case B.infixToPrefix ht tree of
+     case B.infixToPrefix conv ht tree of
        Right tree3 -> Right $ B.undouble (== 1) tree3
        Left  xs    -> Message.ambInfixes $ map detail xs
     where
+      conv :: B.Map B.Token
+      conv (B.TText cp i s) = B.TText cp i $ ("&" ++) s
+      conv x = x
+
+      ht :: B.Token -> B.InfixHeight
       ht = B.infixHeight wordText htab
 
       wordText :: B.Token -> Maybe String

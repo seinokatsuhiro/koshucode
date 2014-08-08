@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Convert infixed-operator trees
@@ -40,7 +41,7 @@ heightValue :: InfixHeight -> Int
 heightValue (Left  h) = h
 heightValue (Right h) = h
 
-{-| Make the height function from a height table of operators. -}
+-- | Make the height function from a height table of operators.
 infixHeight :: (Ord b) => (a -> Maybe b) -> [(b, InfixHeight)] -> a -> InfixHeight
 infixHeight extract htab a = B.fromMaybe (Left 0) ht where
     hmap = Map.fromList htab
@@ -51,14 +52,22 @@ infixHeight extract htab a = B.fromMaybe (Left 0) ht where
 
 -- ----------------------  Conversion
 
-{-| Split branches in a given tree at infixed binary operators -}
-infixToPrefix :: (a -> InfixHeight) -> B.CodeTree a -> Either [(InfixHeight, a)] (B.CodeTree a)
-infixToPrefix ht tree =
+type InfixTree a = B.CodeTree (InfixHeight, a)
+
+-- | Split branches in a given tree at infixed binary operators.
+infixToPrefix :: forall a. B.Map a -> (a -> InfixHeight)
+              -> B.CodeTree a -> Either [(InfixHeight, a)] (B.CodeTree a)
+infixToPrefix conv ht tree =
     do tree2 <- toPrefix $ fmap height tree
        Right $ fmap snd tree2
     where
+      conv' :: B.Map (InfixTree a)
+      conv' = fmap $ B.mapSnd conv
+
+      height :: a -> (InfixHeight, a)
       height x = (ht x, x)
 
+      toPrefix :: InfixTree a -> Either [(InfixHeight, a)] (InfixTree a)
       toPrefix x@(B.TreeL _) = Right x
       toPrefix   (B.TreeB n pp xs) =
           case infixPos $ map treeHeight xs of
@@ -68,11 +77,15 @@ infixToPrefix ht tree =
                            Right $ B.TreeB n pp s
             Left xi -> Left $ B.untrees $ map (xs !!) xi
 
+      subtrees :: B.ParenType -> [InfixTree a] -> InfixTree a -> [InfixTree a]
+                  -> Either [(InfixHeight, a)] [InfixTree a]
       subtrees n left r ight | null ight = do lt <- sub n left
                                               Right [r, lt]
                              | otherwise = do lt <- sub n left
                                               rt <- sub n ight
-                                              Right [r, lt, rt]
+                                              Right [conv' r, lt, rt]
+
+      sub :: B.ParenType -> [InfixTree a] -> Either [(InfixHeight, a)] (InfixTree a) 
       sub _ [x] = toPrefix x
       sub n xs  = toPrefix $ B.TreeB n Nothing xs
 
