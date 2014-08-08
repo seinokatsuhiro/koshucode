@@ -31,13 +31,13 @@ import qualified Koshucode.Baala.Op.Message as Message
 
 copsLogic :: (C.CBool c, C.CEmpty c) => [C.Cop c]
 copsLogic =
-    [ C.CopFun  "not"   copNot
-    , C.CopFun  "and"   copAnd
-    , C.CopFun  "or"    copOr
-    , C.CopFun  "then"  copImp
-    , C.CopFun  "when"  copWhen
-    , C.CopFun  "/if"   copIf
-    , C.CopSyn  "if"    synIf
+    [ C.CopFun   "not"   copNot
+    , C.CopFun   "and"   copAnd
+    , C.CopFun   "or"    copOr
+    , C.CopFun   "then"  copImp
+    , C.CopFun   "when"  copWhen
+    , C.CopFun   "/if"   copIf
+    , C.CopTree  "if"    synIf
     ]
 
 cop1 :: (C.CBool c) => (Bool -> Bool) -> C.CopFun c
@@ -102,7 +102,7 @@ copIf arg =
 --  if TEST -> CON : TEST -> CON : TEST -> CON
 --  if : TEST -> CON : TEST -> CON : TEST -> CON
 
-synIf :: C.CopSyn
+synIf :: C.CopTree
 synIf trees = folding $ filter (/= []) $ B.divideTreesBy ":" trees where
     folding :: [[B.TokenTree]] -> B.Ab B.TokenTree
     folding []        = Right $ B.TreeL $ B.textToken "()"

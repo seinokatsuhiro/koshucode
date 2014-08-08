@@ -85,14 +85,14 @@ ropsCox = Op.ropList "cox"
 ropBase :: C.RopUse c -> [C.Cop c]
 ropBase = C.globalFunction . C.ropGlobal
 
-ropAlpha :: (C.CContent c) => C.RopUse c -> B.TokenTree -> B.Ab (C.Cox c)
-ropAlpha = C.coxAlpha . C.globalSyntax . C.ropGlobal
+ropBuild :: (C.CContent c) => C.RopUse c -> B.TokenTree -> B.Ab (C.Cox c)
+ropBuild = C.coxBuild . C.globalSyntax . C.ropGlobal
 
 ropNamedAlphas :: (C.CContent c) => C.RopUse c -> [B.Named B.TokenTree] -> B.Ab [C.NamedCox c]
-ropNamedAlphas use = mapM (B.namedMapM $ ropAlpha use)
+ropNamedAlphas use = mapM (B.namedMapM $ ropBuild use)
 
 getCox :: (C.CContent c) => C.RopUse c -> String -> B.Ab (C.Cox c)
-getCox use = ropAlpha use . B.treeWrap B.<=< Op.getTrees use
+getCox use = ropBuild use . B.treeWrap B.<=< Op.getTrees use
 
 getNamedCoxes :: (C.CContent c) => C.RopUse c -> String -> B.Ab [C.NamedCox c]
 getNamedCoxes use = ropNamedAlphas use B.<=< Op.getWordTrees use 
@@ -113,7 +113,7 @@ getContent use name =
 
 runCoxTree :: (C.CContent c) => C.RopUse c -> B.TokenTree -> B.Ab c
 runCoxTree use tree =
-    do alpha <- ropAlpha use tree
+    do alpha <- ropBuild use tree
        C.coxRunCox (ropBase use, []) B.mempty [] alpha
 
 getOptContent :: (C.CContent c) => c -> C.RopUse c -> String -> B.Ab c

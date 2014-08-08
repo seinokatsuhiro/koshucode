@@ -89,9 +89,9 @@ link (base, deriv) = li where
     fs = map (fmap li) deriv ++ map namedBase base
 
     namedBase :: C.Cop c -> C.NamedCox c
-    namedBase (C.CopFun n f) = (n, C.CoxBase [] n f)
-    namedBase (C.CopCox n _) = (n, C.CoxBase [] n undefined)
-    namedBase (C.CopSyn n _) = (n, C.CoxBase [] n undefined)
+    namedBase (C.CopFun  n f) = (n, C.CoxBase [] n f)
+    namedBase (C.CopCox  n _) = (n, C.CoxBase [] n undefined)
+    namedBase (C.CopTree n _) = (n, C.CoxBase [] n undefined)
 
 -- put term positions for actural heading
 position :: B.Relhead -> C.Cox c -> B.Ab (C.Cox c)

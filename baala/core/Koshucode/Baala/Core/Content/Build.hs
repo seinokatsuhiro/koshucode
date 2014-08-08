@@ -4,7 +4,7 @@
 -- | Term-content calcutation.
 
 module Koshucode.Baala.Core.Content.Build
-( coxAlpha, coxDebruijn,
+( coxBuild, coxDebruijn,
 ) where
 
 import qualified Koshucode.Baala.Base                   as B
@@ -15,9 +15,9 @@ import qualified Koshucode.Baala.Core.Message           as Message
 
 
 -- | Construct content expression from token tree
-coxAlpha :: forall c. (C.CContent c)
+coxBuild :: forall c. (C.CContent c)
   => ([C.Cop c], [B.Named B.InfixHeight]) -> B.TokenTree -> B.Ab (C.Cox c)
-coxAlpha (syn, htab) =
+coxBuild (syn, htab) =
     convCox syn           -- convert cox to cox
       B.<=< Right
       . debruijn          -- attach De Bruijn indicies
@@ -140,9 +140,9 @@ convTree syn = expand where
           op@(B.TreeL (B.TText _ 0 name)) : args
               -> B.abortableTree "syntax" tree $
                  case lookup name assoc of
-                   Just (C.CopSyn _ f) -> expand =<< f args
-                   _                   -> do args2 <- mapM expand args
-                                             Right $ B.TreeB 1 p (op : args2)
+                   Just (C.CopTree _ f) -> expand =<< f args
+                   _                    -> do args2 <- mapM expand args
+                                              Right $ B.TreeB 1 p (op : args2)
           _ -> do sub2 <- mapM expand subtrees
                   Right $ B.TreeB 1 p sub2
 

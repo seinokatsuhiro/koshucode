@@ -16,7 +16,7 @@ module Koshucode.Baala.Core.Content.Cox
 
   -- * Operator
   Cop (..), CopBundle, NamedCox,
-  CopFun, CopCox, CopSyn,
+  CopFun, CopCox, CopTree,
   isCopFunction,
   isCopSyntax,
 ) where
@@ -35,8 +35,8 @@ data Cox c
     | CoxBase   [B.CodePoint] String (CopFun c)   -- ^ R:   Base function
     | CoxVar    [B.CodePoint] String Int          -- ^ B:   Local (> 0) or global (= 0) variable,
                                                   --        its name and De Bruijn index
-    | CoxApplyL [B.CodePoint] (Cox c) [Cox c]     -- ^ R/B: Function application (multiple arguments)
-    | CoxDeriv  [B.CodePoint] String  (Cox c)     -- ^ B:   Derived function (single variable)
+    | CoxApplyL [B.CodePoint] (Cox c)  [Cox c]    -- ^ R/B: Function application (multiple arguments)
+    | CoxDeriv  [B.CodePoint]  String  (Cox c)    -- ^ B:   Derived function (single variable)
     | CoxDerivL [B.CodePoint] [String] (Cox c)    -- ^ A:   Derived function (multiple variables)
 
 instance B.CodePointer (Cox c) where
@@ -117,9 +117,9 @@ irreducible cox =
 
 -- | Content operator.
 data Cop c
-    = CopFun String (CopFun c)   -- ^ Convert contents
-    | CopCox String (CopCox c)   -- ^ Convert coxes
-    | CopSyn String (CopSyn)     -- ^ Convert trees
+    = CopFun  String (CopFun c)   -- ^ Convert contents
+    | CopCox  String (CopCox c)   -- ^ Convert coxes
+    | CopTree String (CopTree)    -- ^ Convert trees
 
 -- | Base and derived operators.
 type CopBundle c = ( [Cop c], [NamedCox c] )
@@ -128,25 +128,25 @@ type NamedCox c = B.Named (Cox c)
 
 type CopFun c = [B.Ab c]      -> B.Ab c
 type CopCox c = [Cox c]       -> B.Ab (Cox c)
-type CopSyn   = [B.TokenTree] -> B.Ab B.TokenTree
+type CopTree  = [B.TokenTree] -> B.Ab B.TokenTree
 
 instance Show (Cop c) where
-    show (CopFun n _) = "(CopFun " ++ show n ++ " _)"
-    show (CopCox n _) = "(CopCox " ++ show n ++ " _)"
-    show (CopSyn n _) = "(CopSyn " ++ show n ++ " _)"
+    show (CopFun  n _) = "(CopFun "  ++ show n ++ " _)"
+    show (CopCox  n _) = "(CopCox "  ++ show n ++ " _)"
+    show (CopTree n _) = "(CopTree " ++ show n ++ " _)"
 
 instance B.Name (Cop c) where
-    name (CopFun n _) = n
-    name (CopCox n _) = n
-    name (CopSyn n _) = n
+    name (CopFun  n _) = n
+    name (CopCox  n _) = n
+    name (CopTree n _) = n
 
 isCopFunction :: Cop c -> Bool
 isCopFunction (CopFun _ _) = True
 isCopFunction _            = False
 
 isCopSyntax :: Cop c -> Bool
-isCopSyntax (CopSyn _ _)   = True
-isCopSyntax (CopCox _ _)   = True
+isCopSyntax (CopTree _ _)  = True
+isCopSyntax (CopCox  _ _)  = True
 isCopSyntax _              = False
 
 
