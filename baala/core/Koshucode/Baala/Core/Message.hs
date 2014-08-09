@@ -12,6 +12,7 @@ module Koshucode.Baala.Core.Message
   emptyLiteral,
   extraAttr,
   invalidPrefix,
+  lackArg,
   noFile,
   noSlotName,
   noSlotIndex,
@@ -25,7 +26,9 @@ module Koshucode.Baala.Core.Message
   unkClause,
   unkCop,
   unkCox,
+  unkGlobalVar,
   unkNestRel,
+  unkRefVar,
   unkRelmap,
   unkTerm,
   unkWithVar,
@@ -107,6 +110,10 @@ reqAttrName = Left . B.abortLine "Require attribute name, e.g., -xxx"
 reqTermName :: B.Ab a
 reqTermName = Left $ B.abortBecause "Require term name"
 
+-- | Lack of argument
+lackArg :: String -> B.Ab a
+lackArg = Left . B.abortLine "Lack of argument"
+
 -- | Unexpected attribute
 unexpAttr :: String -> B.Ab a
 unexpAttr = Left . B.abortLine "Unexpected attribute"
@@ -127,9 +134,17 @@ unkCox = Left . B.abortLine "Unknown expression"
 unkCop :: String -> B.Ab a
 unkCop = Left . B.abortLine "Unknown content operator"
 
+-- | Unknown global variable
+unkGlobalVar :: String -> B.Ab a
+unkGlobalVar = Left . B.abortLine "Unknown global variable"
+
 -- | Unknown nested relation
 unkNestRel :: String -> B.Ab a
 unkNestRel = Left . B.abortLine "Unknown nested relation"
+
+-- | Unknown reference for variable
+unkRefVar :: String -> B.Ab a
+unkRefVar = Left . B.abortLine "Unknown reference for variable"
 
 -- | Unknown relmap operator
 unkRelmap :: String -> B.Ab a

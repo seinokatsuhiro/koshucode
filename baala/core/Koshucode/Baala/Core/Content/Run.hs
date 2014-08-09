@@ -49,34 +49,43 @@ docBeta sh = d (0 :: Int) where
 -- | Reduce content expression.
 beta :: (B.Write c) => C.CopBundle c -> B.Relhead -> C.Cox c -> B.Ab (Beta c)
 beta cops h =
-    Right . reduce      -- beta reduction
-          . link cops   -- substitute free variables
-          B.<=< position h
+    reduce          -- beta reduction
+      . link cops   -- substitute free variables
+      B.<=< position h
 
 -- beta reduction, i.e., process CoxVar and CoxDeriv.
-reduce :: forall c. (B.Write c) => C.Cox c -> Beta c
+reduce :: forall c. (B.Write c) => C.Cox c -> B.Ab (Beta c)
 reduce = red [] where
-    red :: [Beta c] -> C.Cox c -> Beta c
-    red args cox =
-        case cox of
-          C.CoxLit    src c       ->  BetaLit  src c
-          C.CoxTerm   src n i     ->  BetaTerm src n i
-          C.CoxBase   src n f     ->  BetaBase src n f
-          C.CoxVar    _ _ 0       ->  B.bug "global variable"
-          C.CoxVar    _ _ i       ->  args !!! (i - 1)
-          C.CoxApplyL src fn xs   ->  app args src fn xs
-          C.CoxDeriv  _ _ e       ->  red args e
-          C.CoxDerivL _ _ _       ->  B.bug "CoxDerivL"
+    ab = B.abortable "cox-reduce"
 
-    app args _ fn [] = red args fn
-    app args src fn xxs@(x:xs) =
-        let xxs' = red args `map` xxs
-        in case fn of
-             C.CoxBase src2 n f   ->  BetaApplyL src (BetaBase src2 n f) xxs'
-             C.CoxDeriv _ _ e     ->  let args' = red args x : args
-                                      in red args' $ C.CoxApplyL src e xs
-             _                    ->  let fn' = red args fn
-                                      in BetaApplyL src fn' xxs'
+    red :: [Beta c] -> C.Cox c -> B.Ab (Beta c)
+    red args cox = case cox of
+        C.CoxLit    cp c      ->  Right $ BetaLit  cp c
+        C.CoxTerm   cp n i    ->  Right $ BetaTerm cp n i
+        C.CoxBase   cp n f    ->  Right $ BetaBase cp n f
+        C.CoxVar    cp n 0    ->  ab cp $ Message.unkGlobalVar n
+        C.CoxVar    cp v k    ->  ab cp $ kth v k args
+        C.CoxApplyL cp fn xs  ->  ab cp $ app args fn xs
+        C.CoxDeriv  _ _ e     ->  red args e
+        C.CoxDerivL cp _ _    ->  ab cp $ Message.adlib "Bug"
+
+    kth :: String -> Int -> [Beta c] -> B.Ab (Beta c)
+    kth _ 1 (c : _)           =   Right c
+    kth v k (_ : cs)          =   kth v (k - 1) cs
+    kth v _ []                =   Message.unkRefVar v
+
+    app :: [Beta c] -> C.Cox c -> [C.Cox c] -> B.Ab (Beta c)
+    app args fn  []           = case fn of
+        C.CoxDeriv cp v _     ->  ab cp $ Message.lackArg v
+        _                     ->  red args fn
+    app args fn xxs@(x:xs)    = case fn of
+        C.CoxBase cp n f      ->  do xxs' <- red args `mapM` xxs
+                                     Right $ BetaApplyL [] (BetaBase cp n f) xxs'
+        C.CoxDeriv cp _ e     ->  do x'   <- red args x
+                                     red (x' : args) $ C.CoxApplyL cp e xs
+        _                     ->  do fn'  <- red args fn
+                                     xxs' <- red args `mapM` xxs
+                                     Right $ BetaApplyL [] fn' xxs'
 
 link :: forall c. C.CopBundle c -> B.Map (C.Cox c)
 link (base, deriv) = li where
@@ -96,7 +105,7 @@ link (base, deriv) = li where
 -- put term positions for actural heading
 position :: B.Relhead -> C.Cox c -> B.Ab (C.Cox c)
 position he = spos where
-    spos e = B.abortable "position" [e] $ pos e
+    spos e = B.abortable "cox-position" [e] $ pos e
     pos (C.CoxTerm src ns _) =
         let index = B.headIndex1 he ns
         in if all (>= 0) index
@@ -146,7 +155,7 @@ coxRun args = run 0 where
     run 1000 _ = B.bug "Too deep expression"
     run lv cox =
         let run' = run $ lv + 1
-        in B.abortable "calc" [cox] $ case cox of
+        in B.abortable "cox-calc" [cox] $ case cox of
              BetaLit    _ c       -> Right c
              BetaTerm   _ _ [p]   -> Right $ args !!! p
              BetaTerm   _ _ ps    -> term ps args
