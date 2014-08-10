@@ -59,7 +59,7 @@ docCox sh = d (0 :: Int) where
     d 10 _ = B.write sh "..."
     d n e =
         case e of
-          CoxLit    _ c      -> B.write sh c
+          CoxLit    _ c      -> B.write sh "lit" B.<+> B.write sh c
           CoxTerm   _ ns _   -> B.writeH sh ns
           CoxBase   _ name _ -> B.write sh name
           CoxVar    _ v i    -> B.write sh v B.<> B.write sh "/" B.<> B.write sh i

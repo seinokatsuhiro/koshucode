@@ -30,6 +30,7 @@ module Koshucode.Baala.Core.Message
   unkNestRel,
   unkRefVar,
   unkRelmap,
+  unkShow,
   unkTerm,
   unkWithVar,
   unkWord,
@@ -143,12 +144,17 @@ unkNestRel :: String -> B.Ab a
 unkNestRel = Left . B.abortLine "Unknown nested relation"
 
 -- | Unknown reference for variable
-unkRefVar :: String -> B.Ab a
-unkRefVar = Left . B.abortLine "Unknown reference for variable"
+unkRefVar :: String -> Int -> Int -> B.Ab a
+unkRefVar v k n = Left $ B.abortLine "Unknown reference for variable"
+                                     (v ++ " " ++ show k ++ "/" ++ show n)
 
 -- | Unknown relmap operator
 unkRelmap :: String -> B.Ab a
 unkRelmap = Left . B.abortLine "Unknown relmap operator"
+
+-- | Unknown relmap operator
+unkShow :: (Show x) => x -> B.Ab a
+unkShow x = Left $ B.abortLines "Unknown object" $ lines $ show x
 
 -- | Unknown term name
 unkTerm :: [B.TermName] -> B.Relhead -> B.Ab a

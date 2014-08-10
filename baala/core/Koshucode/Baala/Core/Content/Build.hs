@@ -78,7 +78,7 @@ convCox syn = expand where
 construct :: forall c. (C.CContent c) => B.TokenTree -> B.Ab (C.Cox c)
 construct = expr where
     expr tree = 
-        B.abortableTree "cox" tree $
+        B.abortableTree "cox-build" tree $
          let src = concatMap B.codePoint $ B.front $ B.untree tree
          in cons src tree
 
@@ -113,7 +113,7 @@ construct = expr where
 -- convert from infix to prefix
 prefix :: [B.Named B.InfixHeight] -> B.AbMap (B.TokenTree)
 prefix htab tree =
-    B.abortableTree "prefix" tree $
+    B.abortableTree "cox-prefix" tree $
      case B.infixToPrefix conv ht tree of
        Right tree3 -> Right $ B.undouble (== 1) tree3
        Left  xs    -> Message.ambInfixes $ map detail xs
@@ -143,7 +143,7 @@ convTree syn = expand where
     expand tree@(B.TreeB 1 p subtrees) =
         case subtrees of
           op@(B.TreeL (B.TText _ 0 name)) : args
-              -> B.abortableTree "syntax" tree $
+              -> B.abortableTree "cox-syntax" tree $
                  case lookup name assoc of
                    Just (C.CopTree _ f) -> expand =<< f args
                    _                    -> do args2 <- mapM expand args

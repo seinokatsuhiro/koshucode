@@ -38,7 +38,7 @@ docBeta sh = d (0 :: Int) where
     d 10 _ = B.write sh "..."
     d n e =
         case e of
-          BetaLit    _ c      -> B.write  sh c
+          BetaLit    _ c      -> B.write  sh "lit" B.<+> B.write sh c
           BetaTerm   _ ns _   -> B.writeH sh $ map ('/':) ns
           BetaBase   _ name _ -> B.write  sh name
           BetaApplyL _ f xs   -> let f'  = B.write sh "ap" B.<+> d' f
@@ -56,36 +56,48 @@ beta cops h =
 -- beta reduction, i.e., process CoxVar and CoxDeriv.
 reduce :: forall c. (B.Write c) => C.Cox c -> B.Ab (Beta c)
 reduce = red [] where
-    ab = B.abortable "cox-reduce"
+    ab1 = B.abortable "cox-reduce"
+    ab2 = B.abortable "cox-apply"
 
-    red :: [Beta c] -> C.Cox c -> B.Ab (Beta c)
+    red :: [C.Cox c] -> C.Cox c -> B.Ab (Beta c)
     red args cox = case cox of
-        C.CoxLit    cp c      ->  Right $ BetaLit  cp c
-        C.CoxTerm   cp n i    ->  Right $ BetaTerm cp n i
-        C.CoxBase   cp n f    ->  Right $ BetaBase cp n f
-        C.CoxVar    cp n 0    ->  ab cp $ Message.unkGlobalVar n
-        C.CoxVar    cp v k    ->  ab cp $ kth v k args
-        C.CoxApplyL cp fn xs  ->  ab cp $ app args fn xs
-        C.CoxDeriv  _ _ e     ->  red args e
-        C.CoxDerivL cp _ _    ->  ab cp $ Message.adlib "Bug"
+        C.CoxLit    cp c       ->  Right $ BetaLit  cp c
+        C.CoxTerm   cp n i     ->  Right $ BetaTerm cp n i
+        C.CoxBase   cp n f     ->  Right $ BetaBase cp n f
+        C.CoxVar    cp v k     ->  ab1 cp $ red args =<< kth v k args
+        C.CoxApplyL cp fn xs   ->  ab1 cp $ do
+                                     xs' <- var args `mapM` xs
+                                     app args fn xs'
+        C.CoxDeriv  cp v _     ->  ab1 cp $ Message.lackArg v
+        C.CoxDerivL cp _ _     ->  ab1 cp $ Message.adlib "CoxDerivL"
 
-    kth :: String -> Int -> [Beta c] -> B.Ab (Beta c)
-    kth _ 1 (c : _)           =   Right c
-    kth v k (_ : cs)          =   kth v (k - 1) cs
-    kth v _ []                =   Message.unkRefVar v
+    app :: [C.Cox c] -> C.Cox c -> [C.Cox c] -> B.Ab (Beta c)
+    app args fn []             =  red args fn
+    app args fn xxs@(x:xs)     =  case fn of
+        C.CoxDeriv cp _ f2     ->  ab2 cp $ do app (x : args) f2 xs
+        C.CoxVar   cp v k      ->  ab2 cp $ do
+                                      fn'  <- kth v k args
+                                      xxs' <- var args `mapM` xxs
+                                      app args fn' xxs'
+        C.CoxBase  cp _ _      ->  ab2 cp $ do
+                                      fn'  <- red args fn
+                                      xxs' <- red args `mapM` xxs
+                                      Right $ BetaApplyL cp fn' xxs'
+        C.CoxApplyL cp f2 xs2  ->  ab2 cp $ do
+                                      xs2' <- var args `mapM` xs2
+                                      app args f2 $ xs2' ++ xxs
+        _                      ->  Message.unkShow fn
 
-    app :: [Beta c] -> C.Cox c -> [C.Cox c] -> B.Ab (Beta c)
-    app args fn  []           = case fn of
-        C.CoxDeriv cp v _     ->  ab cp $ Message.lackArg v
-        _                     ->  red args fn
-    app args fn xxs@(x:xs)    = case fn of
-        C.CoxBase cp n f      ->  do xxs' <- red args `mapM` xxs
-                                     Right $ BetaApplyL [] (BetaBase cp n f) xxs'
-        C.CoxDeriv cp _ e     ->  do x'   <- red args x
-                                     red (x' : args) $ C.CoxApplyL cp e xs
-        _                     ->  do fn'  <- red args fn
-                                     xxs' <- red args `mapM` xxs
-                                     Right $ BetaApplyL [] fn' xxs'
+    var :: [C.Cox c] -> B.AbMap (C.Cox c)
+    var args (C.CoxVar _ v k) = kth v k args
+    var _ x                   = Right x
+
+    kth :: String -> Int -> [C.Cox c] -> B.Ab (C.Cox c)
+    kth v 0  _    = Message.unkGlobalVar v
+    kth v k0 args = loop k0 args where
+      loop 1 (x : _)          =  Right x
+      loop k (_ : xs)         =  loop (k - 1) xs
+      loop _ []               =  Message.unkRefVar v k0 $ length args
 
 link :: forall c. C.CopBundle c -> B.Map (C.Cox c)
 link (base, deriv) = li where
