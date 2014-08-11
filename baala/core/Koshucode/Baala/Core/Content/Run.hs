@@ -55,44 +55,49 @@ reduce = red [] where
     ab1 = B.abortable "cox-reduce"
     ab2 = B.abortable "cox-apply"
 
-    red :: [C.Cox c] -> C.Cox c -> B.Ab (Beta c)
+    red :: [B.Named (C.Cox c)] -> C.Cox c -> B.Ab (Beta c)
     red args cox = case cox of
         C.CoxLit    cp c       ->  Right $ BetaLit  cp c
         C.CoxTerm   cp n i     ->  Right $ BetaTerm cp n i
         C.CoxVar    cp v k     ->  ab1 cp $ red args =<< kth v k args
         C.CoxApplyL cp fn xs   ->  ab1 cp $ do
-                                     xs' <- var args `mapM` xs
-                                     app args fn xs'
+                                     xs' <- fill args `mapM` xs
+                                     join args fn xs'
+        C.CoxBase   cp _ _     ->  ab1 cp $ join args cox []
         C.CoxDeriv  cp _ v _   ->  ab1 cp $ Message.lackArg v
         C.CoxDerivL cp _ _ _   ->  ab1 cp $ Message.adlib "CoxDerivL"
-        C.CoxBase   cp n _     ->  ab1 cp $ Message.adlib $ "CoxBase " ++ n
 
-    app :: [C.Cox c] -> C.Cox c -> [C.Cox c] -> B.Ab (Beta c)
-    app args fn []             =  red args fn
-    app args fn xxs@(x:xs)     =  case fn of
-        C.CoxDeriv cp _ _ f2   ->  ab2 cp $ do app (x : args) f2 xs
+    join :: [B.Named (C.Cox c)] -> C.Cox c -> [C.Cox c] -> B.Ab (Beta c)
+    join args fn []             =  red args fn
+    join args fn xxs@(x:xs)     =  case fn of
+        C.CoxDeriv cp _ v f2   ->  ab2 cp $ do join ((v,x) : args) f2 xs
         C.CoxVar   cp v k      ->  ab2 cp $ do
                                       fn'  <- kth v k args
-                                      xxs' <- var args `mapM` xxs
-                                      app args fn' xxs'
+                                      xxs' <- fill args `mapM` xxs
+                                      join args fn' xxs'
         C.CoxBase  cp n f      ->  ab2 cp $ do
                                       xxs' <- red args `mapM` xxs
                                       Right $ BetaApplyL cp n f xxs'
         C.CoxApplyL cp f2 xs2  ->  ab2 cp $ do
-                                      xs2' <- var args `mapM` xs2
-                                      app args f2 $ xs2' ++ xxs
+                                      xs2' <- fill args `mapM` xs2
+                                      join args f2 $ xs2' ++ xxs
         _                      ->  Message.unkShow fn
 
-    var :: [C.Cox c] -> B.AbMap (C.Cox c)
-    var args (C.CoxVar _ v k) = kth v k args
-    var _ x                   = Right x
+    fill :: [B.Named (C.Cox c)] -> B.AbMap (C.Cox c)
+    fill args (C.CoxVar _ v k)       = kth v k args
+    fill args (C.CoxApplyL cp fn xs) = do fn' <- fill args fn
+                                          xs' <- fill args `mapM` xs
+                                          Right $ C.CoxApplyL cp fn' xs'
+    fill _ x                         = Right x
 
-    kth :: String -> Int -> [C.Cox c] -> B.Ab (C.Cox c)
+    kth :: String -> Int -> [B.Named (C.Cox c)] -> B.Ab (C.Cox c)
     kth v 0  _    = Message.unkGlobalVar v
     kth v k0 args = loop k0 args where
-      loop 1 (x : _)          =  Right x
+      loop 1 ((v2, x) : _)
+          | v == v2           =  Right x
+          | otherwise         =  Message.unmatchVar v k0 v2
       loop k (_ : xs)         =  loop (k - 1) xs
-      loop _ []               =  Message.unkRefVar v k0 $ length args
+      loop _ []               =  Message.unkRefVar v k0
 
 link :: forall c. C.CopBundle c -> B.Map (C.Cox c)
 link (base, deriv) = li where

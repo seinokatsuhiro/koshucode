@@ -35,6 +35,7 @@ module Koshucode.Baala.Core.Message
   unkWithVar,
   unkWord,
   unmatchType,
+  unmatchVar,
   unresPrefix,
 
   -- * Utility
@@ -144,9 +145,9 @@ unkNestRel :: String -> B.Ab a
 unkNestRel = Left . B.abortLine "Unknown nested relation"
 
 -- | Unknown reference for variable
-unkRefVar :: String -> Int -> Int -> B.Ab a
-unkRefVar v k n = Left $ B.abortLine "Unknown reference for variable"
-                                     (v ++ " " ++ show k ++ "/" ++ show n)
+unkRefVar :: String -> Int -> B.Ab a
+unkRefVar v k = Left $ B.abortLine "Unknown reference for variable"
+                     $ var v k
 
 -- | Unknown relmap operator
 unkRelmap :: String -> B.Ab a
@@ -171,6 +172,14 @@ unkWord = Left . B.abortLine "Unknown word"
 
 unmatchType :: String -> B.Ab a
 unmatchType = Left . B.abortLine "Type unmatch"
+
+-- | Unmatch variable
+unmatchVar :: String -> Int -> String -> B.Ab a
+unmatchVar v k v2 = Left $ B.abortLine "Unmatch variable (bug)"
+                         $ "lookup " ++ var v k ++ ", but found " ++ v2
+
+var :: String -> Int -> String
+var v k = v ++ "/" ++ show k
 
 -- | Unresolved prefix
 unresPrefix :: B.Ab a
