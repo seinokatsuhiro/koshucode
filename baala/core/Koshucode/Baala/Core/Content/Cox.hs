@@ -35,18 +35,18 @@ data Cox c
     | CoxBase   [B.CodePoint] String (CopFun c)   -- ^ R:   Base function
     | CoxVar    [B.CodePoint] String Int          -- ^ B:   Local (> 0) or global (= 0) variable,
                                                   --        its name and De Bruijn index
-    | CoxApplyL [B.CodePoint] (Cox c)  [Cox c]    -- ^ R/B: Function application (multiple arguments)
-    | CoxDeriv  [B.CodePoint]  String  (Cox c)    -- ^ B:   Derived function (single variable)
-    | CoxDerivL [B.CodePoint] [String] (Cox c)    -- ^ A:   Derived function (multiple variables)
+    | CoxApplyL [B.CodePoint] (Cox c) [Cox c]     -- ^ R/B: Function application (multiple arguments)
+    | CoxDeriv  [B.CodePoint] (Maybe String)  String  (Cox c)  -- ^ B:   Derived function (single variable)
+    | CoxDerivL [B.CodePoint] (Maybe String) [String] (Cox c)  -- ^ A:   Derived function (multiple variables)
 
 instance B.CodePointer (Cox c) where
-    codePoint (CoxLit    pt _)   = pt
-    codePoint (CoxTerm   pt _ _) = pt
-    codePoint (CoxBase   pt _ _) = pt
-    codePoint (CoxVar    pt _ _) = pt
-    codePoint (CoxApplyL pt _ _) = pt
-    codePoint (CoxDeriv  pt _ _) = pt
-    codePoint (CoxDerivL pt _ _) = pt
+    codePoint (CoxLit    cp _)      =  cp
+    codePoint (CoxTerm   cp _ _)    =  cp
+    codePoint (CoxBase   cp _ _)    =  cp
+    codePoint (CoxVar    cp _ _)    =  cp
+    codePoint (CoxApplyL cp _ _)    =  cp
+    codePoint (CoxDeriv  cp _ _ _)  =  cp
+    codePoint (CoxDerivL cp _ _ _)  =  cp
 
 instance (B.Write c) => Show (Cox c) where
     show = show . B.doc
@@ -55,36 +55,47 @@ instance (B.Write c) => B.Write (Cox c) where
     write = docCox
 
 docCox :: (B.Write c) => B.StringMap -> Cox c -> B.Doc
-docCox sh = d (0 :: Int) where
+docCox sh = d (0 :: Int) . derivL where
     d 10 _ = B.write sh "..."
     d n e =
         case e of
-          CoxLit    _ c      -> B.write sh "lit" B.<+> B.write sh c
-          CoxTerm   _ ns _   -> B.writeH sh ns
-          CoxBase   _ name _ -> B.write sh name
-          CoxVar    _ v i    -> B.write sh v B.<> B.write sh "/" B.<> B.write sh i
-          CoxApplyL _ f xs   -> let f'  = B.write sh "ap" B.<+> d' f
-                                    xs' = B.nest 3 $ B.writeV sh (map d' xs)
-                                in f' B.$$ xs'
-          CoxDeriv  _ v  e2  -> fn (B.write  sh v)  (d' e2)
-          CoxDerivL _ vs e2  -> fn (B.writeH sh vs) (d' e2)
+          CoxLit    _ c        -> B.write sh "lit" B.<+> B.write sh c
+          CoxTerm   _ ns _     -> B.writeH sh ns
+          CoxBase   _ name _   -> B.write sh name
+          CoxVar    _ v i      -> B.write sh v B.<> B.write sh "/" B.<> B.write sh i
+          CoxApplyL _ f xs     -> let f'  = B.write sh "ap" B.<+> d' f
+                                      xs' = B.nest 3 $ B.writeV sh (map d' xs)
+                                  in f' B.$$ xs'
+          CoxDeriv  _ tag v  e2  -> fn tag (B.write  sh v)  (d' e2)
+          CoxDerivL _ tag vs e2  -> fn tag (B.writeH sh vs) (d' e2)
         where
-          d'     = d $ n + 1
-          fn v b = B.docWraps "(|" "|)" $ v B.<+> B.write sh "|" B.<+> b
+          d' = d $ n + 1
+          fn Nothing    v b  =  B.docWraps "(|" "|)" $ v B.<+> B.write sh "|" B.<+> b
+          fn (Just tag) v b  =  B.docWraps "(|" "|)" $ (B.write sh $ "'" ++ tag)
+                                                       B.<+> v B.<+> B.write sh "|" B.<+> b
+
+-- Convert CoxDeriv to CoxDerivL.
+derivL :: B.Map (Cox c)
+derivL (CoxDeriv cp1 tag1 v1 e1) =
+    case derivL e1 of
+      CoxDerivL _ tag2 vs e2 | tag1 == tag2  ->  CoxDerivL cp1 tag1 (v1:vs) e2
+      e2                                     ->  CoxDerivL cp1 tag1 [v1]    e2
+derivL (CoxApplyL cp f xs) = CoxApplyL cp (derivL f) (map derivL xs)
+derivL e = e
 
 isCoxBase :: Cox c -> Bool
 isCoxBase (CoxBase _  _ _)   = True
 isCoxBase _                  = False
 
 isCoxDeriv :: Cox c -> Bool
-isCoxDeriv (CoxDeriv  _ _ _) = True
-isCoxDeriv (CoxDerivL _ _ _) = True
-isCoxDeriv _                 = False
+isCoxDeriv (CoxDeriv  _ _ _ _) = True
+isCoxDeriv (CoxDerivL _ _ _ _) = True
+isCoxDeriv _                   = False
 
 coxSyntacticArity :: Cox c -> Int
 coxSyntacticArity = loop where
-    loop (CoxDerivL _ vs cox)  = loop cox + length vs
-    loop (CoxDeriv  _ _  cox)  = loop cox + 1
+    loop (CoxDerivL _ _ vs cox)  = loop cox + length vs
+    loop (CoxDeriv  _ _ _  cox)  = loop cox + 1
     loop (CoxApplyL _ cox xs)
         | isCoxDeriv cox = loop cox - length xs
         | otherwise      = 0
@@ -92,8 +103,8 @@ coxSyntacticArity = loop where
 
 mapToCox :: B.Map (Cox c) -> B.Map (Cox c)
 mapToCox g (CoxApplyL src f  xs)   = CoxApplyL src (g f) (map g xs)
-mapToCox g (CoxDeriv  src v  body) = CoxDeriv  src v  (g body)
-mapToCox g (CoxDerivL src vs body) = CoxDerivL src vs (g body)
+mapToCox g (CoxDeriv  src tag v  body) = CoxDeriv  src tag v  (g body)
+mapToCox g (CoxDerivL src tag vs body) = CoxDerivL src tag vs (g body)
 mapToCox _ e = e
 
 checkIrreducible :: B.AbMap (Cox c)

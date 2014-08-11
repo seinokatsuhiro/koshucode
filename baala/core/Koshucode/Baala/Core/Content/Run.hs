@@ -68,13 +68,13 @@ reduce = red [] where
         C.CoxApplyL cp fn xs   ->  ab1 cp $ do
                                      xs' <- var args `mapM` xs
                                      app args fn xs'
-        C.CoxDeriv  cp v _     ->  ab1 cp $ Message.lackArg v
-        C.CoxDerivL cp _ _     ->  ab1 cp $ Message.adlib "CoxDerivL"
+        C.CoxDeriv  cp _ v _   ->  ab1 cp $ Message.lackArg v
+        C.CoxDerivL cp _ _ _   ->  ab1 cp $ Message.adlib "CoxDerivL"
 
     app :: [C.Cox c] -> C.Cox c -> [C.Cox c] -> B.Ab (Beta c)
     app args fn []             =  red args fn
     app args fn xxs@(x:xs)     =  case fn of
-        C.CoxDeriv cp _ f2     ->  ab2 cp $ do app (x : args) f2 xs
+        C.CoxDeriv cp _ _ f2   ->  ab2 cp $ do app (x : args) f2 xs
         C.CoxVar   cp v k      ->  ab2 cp $ do
                                       fn'  <- kth v k args
                                       xxs' <- var args `mapM` xxs
@@ -123,11 +123,11 @@ position he = spos where
         in if all (>= 0) index
            then Right $ C.CoxTerm src ns index
            else Message.unkTerm [B.showNestedTermName ns] he
-    pos (C.CoxApplyL src  f xs) = do f'  <- spos f
-                                     xs' <- mapM spos xs
-                                     Right $ C.CoxApplyL src f' xs'
-    pos (C.CoxDeriv src  v e)   = do e' <- spos e
-                                     Right $ C.CoxDeriv src v e'
+    pos (C.CoxApplyL src  f xs)  = do f'  <- spos f
+                                      xs' <- mapM spos xs
+                                      Right $ C.CoxApplyL src f' xs'
+    pos (C.CoxDeriv src tag v e) = do e' <- spos e
+                                      Right $ C.CoxDeriv src tag v e'
     pos e = Right e
 
 
