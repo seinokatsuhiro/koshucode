@@ -14,18 +14,15 @@ import qualified Koshucode.Baala.Core.Content.Class     as C
 import qualified Koshucode.Baala.Core.Content.Cox       as C
 import qualified Koshucode.Baala.Core.Message           as Message
 
-
 data Beta c
     = BetaLit    [B.CodePoint] c                   -- ^ Literal content
     | BetaTerm   [B.CodePoint] [B.TermName] [Int]  -- ^ Term reference, its name and position
-    | BetaBase   [B.CodePoint] String (C.CopFun c) -- ^ Base function
-    | BetaApplyL [B.CodePoint] (Beta c) [Beta c]   -- ^ Function application (multiple arguments)
+    | BetaApplyL [B.CodePoint] String (C.CopFun c) [Beta c]  -- ^ Function application
 
 instance B.CodePointer (Beta c) where
-    codePoint (BetaLit    pt _)   = pt
-    codePoint (BetaTerm   pt _ _) = pt
-    codePoint (BetaBase   pt _ _) = pt
-    codePoint (BetaApplyL pt _ _) = pt
+    codePoint (BetaLit    cp _)      =  cp
+    codePoint (BetaTerm   cp _ _)    =  cp
+    codePoint (BetaApplyL cp _ _ _)  =  cp
 
 instance (B.Write c) => Show (Beta c) where
     show = show . B.doc
@@ -40,8 +37,7 @@ docBeta sh = d (0 :: Int) where
         case e of
           BetaLit    _ c      -> B.write  sh "lit" B.<+> B.write sh c
           BetaTerm   _ ns _   -> B.writeH sh $ map ('/':) ns
-          BetaBase   _ name _ -> B.write  sh name
-          BetaApplyL _ f xs   -> let f'  = B.write sh "ap" B.<+> d' f
+          BetaApplyL _ f _ xs -> let f'  = B.write sh "ap" B.<+> B.write sh f
                                      xs' = B.nest 3 $ B.writeV sh (map d' xs)
                                  in f' B.$$ xs'
         where d' = d $ n + 1
@@ -63,13 +59,13 @@ reduce = red [] where
     red args cox = case cox of
         C.CoxLit    cp c       ->  Right $ BetaLit  cp c
         C.CoxTerm   cp n i     ->  Right $ BetaTerm cp n i
-        C.CoxBase   cp n f     ->  Right $ BetaBase cp n f
         C.CoxVar    cp v k     ->  ab1 cp $ red args =<< kth v k args
         C.CoxApplyL cp fn xs   ->  ab1 cp $ do
                                      xs' <- var args `mapM` xs
                                      app args fn xs'
         C.CoxDeriv  cp _ v _   ->  ab1 cp $ Message.lackArg v
         C.CoxDerivL cp _ _ _   ->  ab1 cp $ Message.adlib "CoxDerivL"
+        C.CoxBase   cp n _     ->  ab1 cp $ Message.adlib $ "CoxBase " ++ n
 
     app :: [C.Cox c] -> C.Cox c -> [C.Cox c] -> B.Ab (Beta c)
     app args fn []             =  red args fn
@@ -79,10 +75,9 @@ reduce = red [] where
                                       fn'  <- kth v k args
                                       xxs' <- var args `mapM` xxs
                                       app args fn' xxs'
-        C.CoxBase  cp _ _      ->  ab2 cp $ do
-                                      fn'  <- red args fn
+        C.CoxBase  cp n f      ->  ab2 cp $ do
                                       xxs' <- red args `mapM` xxs
-                                      Right $ BetaApplyL cp fn' xxs'
+                                      Right $ BetaApplyL cp n f xxs'
         C.CoxApplyL cp f2 xs2  ->  ab2 cp $ do
                                       xs2' <- var args `mapM` xs2
                                       app args f2 $ xs2' ++ xxs
@@ -168,12 +163,10 @@ coxRun args = run 0 where
     run lv cox =
         let run' = run $ lv + 1
         in B.abortable "cox-calc" [cox] $ case cox of
-             BetaLit    _ c       -> Right c
-             BetaTerm   _ _ [p]   -> Right $ args !!! p
-             BetaTerm   _ _ ps    -> term ps args
-             BetaApplyL _ e []    -> run' e
-             BetaApplyL _ (BetaBase _ _ f) xs -> f $ map run' xs
-             _ -> Message.adlibs $ "Unknown cox" : (lines $ show cox)
+             BetaLit    _ c       ->  Right c
+             BetaTerm   _ _ [p]   ->  Right $ args !!! p
+             BetaTerm   _ _ ps    ->  term ps args
+             BetaApplyL _ _ f xs  ->  f $ map run' xs
 
     term :: [Int] -> [c] -> B.Ab c
     term []       _ = Message.notFound "empty term"
