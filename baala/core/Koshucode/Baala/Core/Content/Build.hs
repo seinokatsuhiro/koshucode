@@ -31,7 +31,7 @@ debruijn = de [] where
     de :: [String] -> B.Map (C.Cox c)
     de vars cox =
         case cox of
-          C.CoxVar src v _    ->  maybe cox (C.CoxVar src v) $ indexFrom 1 v vars
+          C.CoxVar cp v _     ->  maybe cox (C.CoxVar cp v) $ indexFrom 1 v vars
           C.CoxApplyL _ _ _   ->  C.mapToCox (de vars) cox
           C.CoxDeriv _ _ v _  ->  C.mapToCox (de $ v : vars) cox
           _                   ->  cox
@@ -48,9 +48,9 @@ unlist = derivL . (C.mapToCox unlist) where
     derivL e =
         case e of
           C.CoxDerivL _ _ []     b -> b
-          C.CoxDerivL src tag (v : vs) b
-              -> let sub = derivL $ C.CoxDerivL src tag vs b
-                 in C.CoxDeriv src tag v sub
+          C.CoxDerivL cp tag (v : vs) b
+              -> let sub = derivL $ C.CoxDerivL cp tag vs b
+                 in C.CoxDeriv cp tag v sub
           _ -> e
 
 convCox :: forall c. [C.Cop c] -> B.AbMap (C.Cox c)
@@ -61,55 +61,55 @@ convCox syn = expand where
     expand :: B.AbMap (C.Cox c)
     expand cox =
         case cox of
-            C.CoxDeriv  src tag n  x -> Right . C.CoxDeriv  src tag n  =<< expand x
-            C.CoxDerivL src tag ns x -> Right . C.CoxDerivL src tag ns =<< expand x
-            C.CoxApplyL src f@(C.CoxVar _ n 0) xs ->
+            C.CoxDeriv  cp tag n  x -> Right . C.CoxDeriv  cp tag n  =<< expand x
+            C.CoxDerivL cp tag ns x -> Right . C.CoxDerivL cp tag ns =<< expand x
+            C.CoxApplyL cp f@(C.CoxVar _ n 0) xs ->
                 case lookup n assn of
                   Just (C.CopCox _ g) -> expand =<< g xs
-                  _                   -> expandApply src f xs
-            C.CoxApplyL src f xs      -> expandApply src f xs
+                  _                   -> expandApply cp f xs
+            C.CoxApplyL cp f xs       -> expandApply cp f xs
             _                         -> Right cox
 
-    expandApply src f xs =
+    expandApply cp f xs =
         do f'  <- expand f
            xs' <- mapM expand xs
-           Right $ C.CoxApplyL src f' xs'
+           Right $ C.CoxApplyL cp f' xs'
     
 -- construct content expression from token tree
 construct :: forall c. (C.CContent c) => B.TokenTree -> B.Ab (C.Cox c)
 construct = expr where
     expr tree = 
         B.abortableTree "cox-build" tree $
-         let src = concatMap B.codePoint $ B.front $ B.untree tree
-         in cons src tree
+         let cp = concatMap B.codePoint $ B.front $ B.untree tree
+         in cons cp tree
 
     -- function application
     cons :: [B.CodePoint] -> B.TokenTree -> B.Ab (C.Cox c)
-    cons src (B.TreeB 1 _ (fun : args)) =
+    cons cp (B.TreeB 1 _ (fun : args)) =
         do fun'  <- expr fun
            args' <- expr `mapM` args
-           Right $ C.CoxApplyL src fun' args'
+           Right $ C.CoxApplyL cp fun' args'
 
     -- function abstruction
-    cons src (B.TreeB 6 _ [vars, b1]) =
+    cons cp (B.TreeB 6 _ [vars, b1]) =
         do b2 <- expr b1
            let (tag, vars') = untag vars
            let vs = map B.tokenContent $ B.untree vars'
-           Right $ C.CoxDerivL src tag vs b2
+           Right $ C.CoxDerivL cp tag vs b2
     cons _ (B.TreeB 6 _ trees) =
         B.bug $ "core/abstruction: " ++ show (length trees)
 
     -- literal or variable
-    cons src tree@(B.TreeL tok) =
+    cons cp tree@(B.TreeL tok) =
         case tok of
-          B.TTerm _ ns   ->  Right $ C.CoxTerm src ns []
+          B.TTerm _ ns   ->  Right $ C.CoxTerm cp ns []
           B.TText _ _ v  ->  case C.litContent tree of
-                               Right c -> Right $ C.CoxLit src c
-                               Left _  -> Right $ C.CoxVar src v 0
+                               Right c -> Right $ C.CoxLit cp c
+                               Left _  -> Right $ C.CoxVar cp v 0
           _              ->  B.bug "core/leaf"
 
     -- literal composite
-    cons src tree@(B.TreeB n _ _) | n > 1 = fmap (C.CoxLit src) $ C.litContent tree
+    cons cp tree@(B.TreeB n _ _) | n > 1 = fmap (C.CoxLit cp) $ C.litContent tree
     cons _ (B.TreeB n _ _) = Message.unkCox $ show n
 
     untag :: B.TokenTree -> (Maybe String, B.TokenTree)
@@ -173,27 +173,27 @@ comer = de [] where
     de :: [String] -> B.Map (C.Cox c)
     de vars cox =
         case cox of
-          C.CoxVar src v i
-              | i >  0        ->  C.CoxVar src v i
-              | i == 0        ->  maybe cox (C.CoxVar src v) $ indexFrom 1 v vars
+          C.CoxVar cp v i
+              | i >  0        ->  C.CoxVar cp v i
+              | i == 0        ->  maybe cox (C.CoxVar cp v) $ indexFrom 1 v vars
           C.CoxApplyL _ _ _   ->  C.mapToCox (de vars) cox
           C.CoxDeriv _ _ v _  ->  C.mapToCox (de $ v : vars) cox
           _                   ->  cox
 
 deepen :: B.Map (C.Cox c)
 deepen = level (0 :: Int) where
-    level n (C.CoxDeriv src tag v e)
-        = C.CoxDeriv src tag v $ level (n + 1) e
+    level n (C.CoxDeriv cp tag v e)
+        = C.CoxDeriv cp tag v $ level (n + 1) e
     level n cox = de n [] cox
 
     de :: Int -> [String] -> B.Map (C.Cox c)
     de n vars cox =
         case cox of
-          C.CoxVar src v i
-              | i == 0        ->  C.CoxVar src v 0
+          C.CoxVar cp v i
+              | i == 0        ->  C.CoxVar cp v 0
               | i >  0        ->  if v `elem` vars
-                                  then C.CoxVar src v i        -- bound variable
-                                  else C.CoxVar src v (i + n)  -- free variable
+                                  then C.CoxVar cp v i        -- bound variable
+                                  else C.CoxVar cp v (i + n)  -- free variable
           C.CoxApplyL _ _ _   ->  C.mapToCox (de n vars) cox
           C.CoxDeriv _ _ v _  ->  C.mapToCox (de n $ v : vars) cox
           _                   ->  cox

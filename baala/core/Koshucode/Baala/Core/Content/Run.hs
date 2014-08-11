@@ -118,16 +118,16 @@ link (base, deriv) = li where
 position :: B.Relhead -> C.Cox c -> B.Ab (C.Cox c)
 position he = spos where
     spos e = B.abortable "cox-position" [e] $ pos e
-    pos (C.CoxTerm src ns _) =
+    pos (C.CoxTerm cp ns _) =
         let index = B.headIndex1 he ns
         in if all (>= 0) index
-           then Right $ C.CoxTerm src ns index
+           then Right $ C.CoxTerm cp ns index
            else Message.unkTerm [B.showNestedTermName ns] he
-    pos (C.CoxApplyL src  f xs)  = do f'  <- spos f
-                                      xs' <- mapM spos xs
-                                      Right $ C.CoxApplyL src f' xs'
-    pos (C.CoxDeriv src tag v e) = do e' <- spos e
-                                      Right $ C.CoxDeriv src tag v e'
+    pos (C.CoxApplyL cp  f xs)  = do f'  <- spos f
+                                     xs' <- mapM spos xs
+                                     Right $ C.CoxApplyL cp f' xs'
+    pos (C.CoxDeriv cp tag v e) = do e' <- spos e
+                                     Right $ C.CoxDeriv cp tag v e'
     pos e = Right e
 
 

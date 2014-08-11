@@ -101,10 +101,10 @@ coxSyntacticArity = loop where
         | otherwise      = 0
     loop _ = 0
 
-mapToCox :: B.Map (Cox c) -> B.Map (Cox c)
-mapToCox g (CoxApplyL src f  xs)   = CoxApplyL src (g f) (map g xs)
-mapToCox g (CoxDeriv  src tag v  body) = CoxDeriv  src tag v  (g body)
-mapToCox g (CoxDerivL src tag vs body) = CoxDerivL src tag vs (g body)
+mapToCox :: B.Map (B.Map (Cox c))
+mapToCox g (CoxApplyL cp f xs)        = CoxApplyL cp (g f) (map g xs)
+mapToCox g (CoxDeriv  cp tag v  body) = CoxDeriv  cp tag v  (g body)
+mapToCox g (CoxDerivL cp tag vs body) = CoxDerivL cp tag vs (g body)
 mapToCox _ e = e
 
 checkIrreducible :: B.AbMap (Cox c)
