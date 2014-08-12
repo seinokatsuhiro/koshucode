@@ -153,7 +153,7 @@ unkRefVar v k = Left $ B.abortLine "Unknown reference for variable"
 unkRelmap :: String -> B.Ab a
 unkRelmap = Left . B.abortLine "Unknown relmap operator"
 
--- | Unknown relmap operator
+-- | Unknown object
 unkShow :: (Show x) => x -> B.Ab a
 unkShow x = Left $ B.abortLines "Unknown object" $ lines $ show x
 

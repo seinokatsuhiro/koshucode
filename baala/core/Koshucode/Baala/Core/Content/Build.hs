@@ -4,7 +4,7 @@
 -- | Term-content calcutation.
 
 module Koshucode.Baala.Core.Content.Build
-( coxBuild, coxDebruijn,
+( coxBuild, coxDebruijn, prefixName,
 ) where
 
 import qualified Koshucode.Baala.Base                   as B
@@ -53,7 +53,7 @@ unlist = derivL . (C.mapToCox unlist) where
                  in C.CoxDeriv cp tag v sub
           _ -> e
 
-convCox :: forall c. [C.Cop c] -> B.AbMap (C.Cox c)
+convCox :: forall c. (B.Write c) => [C.Cop c] -> B.AbMap (C.Cox c)
 convCox syn = expand where
     assn :: [B.Named (C.Cop c)]
     assn = map B.named syn
@@ -78,8 +78,7 @@ convCox syn = expand where
 -- construct content expression from token tree
 construct :: forall c. (C.CContent c) => B.TokenTree -> B.Ab (C.Cox c)
 construct = expr where
-    expr tree = 
-        B.abortableTree "cox-build" tree $
+    expr tree = B.abortableTree "cox-build" tree $
          let cp = concatMap B.codePoint $ B.front $ B.untree tree
          in cons cp tree
 
@@ -117,8 +116,8 @@ construct = expr where
                = (Just tag, B.TreeB l p $ vars)
     untag vars = (Nothing, vars)
 
--- convert from infix to prefix
-prefix :: [B.Named B.InfixHeight] -> B.AbMap (B.TokenTree)
+-- convert from infix operator to prefix
+prefix :: [B.Named B.InfixHeight] -> B.AbMap B.TokenTree
 prefix htab tree =
     B.abortableTree "cox-prefix" tree $
      case B.infixToPrefix conv ht tree of
@@ -126,7 +125,7 @@ prefix htab tree =
        Left  xs    -> Message.ambInfixes $ map detail xs
     where
       conv :: B.Map B.Token
-      conv (B.TText cp i s) = B.TText cp i $ ("&" ++) s
+      conv (B.TText cp i s) = B.TText cp i $ prefixName s
       conv x = x
 
       ht :: B.Token -> B.InfixHeight
@@ -140,6 +139,9 @@ prefix htab tree =
       detail (Left  n, tok) = detailText tok "left"  n
 
       detailText tok dir n = B.tokenContent tok ++ " : " ++ dir ++ " " ++ show n
+
+prefixName :: B.Map String
+prefixName = ('&' :)
 
 -- expand syntax operator
 convTree :: forall c. [C.Cop c] -> B.AbMap B.TokenTree

@@ -37,9 +37,9 @@ import qualified Koshucode.Baala.Base.Syntax.Tree as B
 --
 type InfixHeight = Either Int Int
 
-heightValue :: InfixHeight -> Int
-heightValue (Left  h) = h
-heightValue (Right h) = h
+heightOf :: InfixHeight -> Int
+heightOf (Left  ht)  =  ht
+heightOf (Right ht)  =  ht
 
 -- | Make the height function from a height table of operators.
 infixHeight :: (Ord b) => (a -> Maybe b) -> [(b, InfixHeight)] -> a -> InfixHeight
@@ -71,11 +71,18 @@ infixToPrefix conv ht tree =
       toPrefix x@(B.TreeL _) = Right x
       toPrefix   (B.TreeB n pp xs) =
           case infixPos $ map treeHeight xs of
-            Right xi | xi <= 0 -> Right . B.TreeB n pp =<< mapM toPrefix xs
-            Right xi -> do let (left, r:ight) = splitAt xi xs
-                           s <- subtrees n left r ight
-                           Right $ B.TreeB n pp s
             Left xi -> Left $ B.untrees $ map (xs !!) xi
+            Right (xi, hx)
+                | xi == 0 && hx > 0 ->
+                    do let ([op], right) = splitAt 1 xs
+                       rt <- sub n right
+                       Right $ B.TreeB n pp [conv' op, rt]
+                | xi <= 0 ->
+                    Right . B.TreeB n pp =<< mapM toPrefix xs
+                | otherwise ->
+                    do let (left, r:ight) = splitAt xi xs
+                       s <- subtrees n left r ight
+                       Right $ B.TreeB n pp s
 
       subtrees :: B.ParenType -> [InfixTree a] -> InfixTree a -> [InfixTree a]
                   -> Either [(InfixHeight, a)] [InfixTree a]
@@ -89,29 +96,30 @@ infixToPrefix conv ht tree =
       sub _ [x] = toPrefix x
       sub n xs  = toPrefix $ B.TreeB n Nothing xs
 
+-- Tree with height attribute.
 type HeightTree a = B.CodeTree (InfixHeight, a)
 
 treeHeight :: HeightTree a -> InfixHeight
-treeHeight (B.TreeL (ht, _)) = ht
-treeHeight (B.TreeB _ _ _)   = Left 0
+treeHeight (B.TreeL (ht, _))  =  ht
+treeHeight (B.TreeB _ _ _)    =  Left 0
 
-infixPos :: [InfixHeight] -> Either [Int] Int
-infixPos = pos (Right (-1)) (Left 0) . zip [0 ..] where
+infixPos :: [InfixHeight] -> Either [B.Index] (B.Index, Int)
+infixPos = pos (Right (-1, 0)) (Left 0) . zip [0 ..] where
     pos res _ [] = res
 
     -- different height
     -- /res result  /y highest-element  /xi current-index  /xs elements
     pos res y ((xi, x) : xs)
-        | hy > hx = pos res        y xs  -- remains y
-        | hy < hx = pos (Right xi) x xs  -- replaces y to x
-        where  hx = heightValue x
-               hy = heightValue y
+        | hy > hx = pos res              y xs  -- remains y
+        | hy < hx = pos (Right (xi, hx)) x xs  -- replaces y to x
+        where  hx = heightOf x
+               hy = heightOf y
 
     -- same height, same direction
-    pos _     (Right _) ((xi, x@(Right _)) : xs) = pos (Right xi) x xs -- replaces y to x
-    pos res y@(Left  _) ((_ ,   (Left  _)) : xs) = pos res y xs        -- remains y
+    pos _     (Right _) ((xi, x@(Right _)) : xs) = pos (Right (xi, 0)) x xs -- replaces y to x
+    pos res y@(Left  _) ((_ ,   (Left  _)) : xs) = pos res y xs             -- remains y
 
     -- ambiguous: same height, different direction
-    pos (Right yi) y ((xi, _) : xs) = pos (Left [xi, yi]) y xs
-    pos (Left ps)  y ((xi, _) : xs) = pos (Left $ xi : ps) y xs
+    pos (Right (yi, _)) y ((xi, _) : xs)  =  pos (Left [xi, yi])  y xs
+    pos (Left ps)       y ((xi, _) : xs)  =  pos (Left $ xi : ps) y xs
 

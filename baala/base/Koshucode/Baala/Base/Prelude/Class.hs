@@ -9,6 +9,7 @@ module Koshucode.Baala.Base.Prelude.Class
   Map,
   Pred,
   YesNo (..),
+  Index,
   Choose (..),
 ) where
 
@@ -30,6 +31,8 @@ type Pred a = a -> Bool
 
 data YesNo a = Yes a | No a
                deriving (Show, Eq, Ord)
+
+type Index = Int
 
 -- ----------------------  Choose
 
