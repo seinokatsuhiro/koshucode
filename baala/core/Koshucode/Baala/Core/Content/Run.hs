@@ -20,7 +20,7 @@ import qualified Koshucode.Baala.Core.Message           as Message
 data Beta c
     = BetaLit  [B.CodePoint] c                     -- ^ Literal content
     | BetaTerm [B.CodePoint] [B.TermName] [Int]    -- ^ Term reference, its name and position
-    | BetaCall [B.CodePoint] String (C.CopFun c) [Beta c]  -- ^ Function application
+    | BetaCall [B.CodePoint] String (C.CopFun c) [B.Ab (Beta c)]  -- ^ Function application
 
 instance B.CodePointer (Beta c) where
     codePoint (BetaLit  cp _)      =  cp
@@ -29,10 +29,13 @@ instance B.CodePointer (Beta c) where
 
 -- | Reduce content expression.
 beta :: (B.Write c) => C.CopBundle c -> B.Relhead -> C.Cox c -> B.Ab (Beta c)
-beta cops he =
-    reduce               -- beta reduction
-      . link cops        -- substitute free variables
-      B.<=< position he  -- put term index
+beta (base, deriv) he cox =
+    do deriv2  <- B.sequenceSnd $ B.mapSndTo pos deriv
+       cox2    <- pos cox                      -- put term index
+       let cox3 = link (base, deriv2) cox2     -- substitute free variables
+       reduce cox3                             -- beta reduction
+    where
+      pos = position he
 
 -- beta reduction, i.e., process CoxVar and CoxDeriv.
 reduce :: forall c. (B.Write c) => C.Cox c -> B.Ab (Beta c)
@@ -61,7 +64,7 @@ reduce = red [] where
                                        join args fn' xxs
         C.CoxBase  cp n f      ->  ab2 cp $ do
                                        xxs2 <- mapM id xxs
-                                       xxs3 <- red args `mapM` xxs2
+                                       let xxs3 = red args `map` xxs2
                                        Right $ BetaCall cp n f xxs3
         C.CoxApplyL cp f2 xs2  ->  ab2 cp $ join args f2 $ fills args xs2 ++ xxs
         _                      ->  Message.unkShow fn
@@ -145,7 +148,7 @@ coxRun args = run 0 where
              BetaLit  _ c       ->  Right c
              BetaTerm _ _ [p]   ->  Right $ args !!! p
              BetaTerm _ _ ps    ->  term ps args
-             BetaCall _ _ f xs  ->  f $ map run' xs
+             BetaCall _ _ f xs  ->  f . map run' =<< sequence xs
 
     term :: [Int] -> [c] -> B.Ab c
     term []       _ = Message.notFound "empty term"
