@@ -60,16 +60,17 @@ library
 
         Koshucode.Baala.Op.Control
 
-        Koshucode.Baala.Op.Cox.Empty
-        Koshucode.Baala.Op.Cox.Filter
         Koshucode.Baala.Op.Cox.Calc
         Koshucode.Baala.Op.Cox.Cop
         Koshucode.Baala.Op.Cox.Cop.Arith
-        Koshucode.Baala.Op.Cox.Cop.Coxhand
         Koshucode.Baala.Op.Cox.Cop.Cops
+        Koshucode.Baala.Op.Cox.Cop.Coxhand
         Koshucode.Baala.Op.Cox.Cop.List
         Koshucode.Baala.Op.Cox.Cop.Logic
         Koshucode.Baala.Op.Cox.Cop.Order
+        Koshucode.Baala.Op.Cox.Empty
+        Koshucode.Baala.Op.Cox.Filter
+        Koshucode.Baala.Op.Cox.Get
         Koshucode.Baala.Op.Cox.Quoter
 
         Koshucode.Baala.Op.Gadget

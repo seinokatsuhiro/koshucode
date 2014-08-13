@@ -3,11 +3,6 @@
 
 module Koshucode.Baala.Op.Cox.Calc
 ( ropsCoxCalc,
-  getCox,
-  getContent,
-  getOptContent,
-  getContents,
-  getFiller,
 
   -- * add
   consAdd, relmapAdd,
@@ -39,6 +34,7 @@ import Prelude hiding (getContents)
 import qualified Koshucode.Baala.Base        as B
 import qualified Koshucode.Baala.Core        as C
 import qualified Koshucode.Baala.Op.Builtin  as Op
+import qualified Koshucode.Baala.Op.Cox.Get  as Op
 import qualified Koshucode.Baala.Op.Message  as Message
 
 
@@ -61,56 +57,13 @@ ropsCoxCalc = Op.ropList "cox-calc"
     ]
 
 
--- ----------------------  alpha
-
-ropBase :: C.RopUse c -> [C.Cop c]
-ropBase = C.globalFunction . C.ropGlobal
-
-ropBuild :: (C.CContent c) => C.RopUse c -> B.TokenTree -> B.Ab (C.Cox c)
-ropBuild = C.coxBuild . C.globalSyntax . C.ropGlobal
-
-ropNamedAlphas :: (C.CContent c) => C.RopUse c -> [B.Named B.TokenTree] -> B.Ab [C.NamedCox c]
-ropNamedAlphas use = mapM (B.namedMapM $ ropBuild use)
-
-getCox :: (C.CContent c) => C.RopUse c -> String -> B.Ab (C.Cox c)
-getCox use = ropBuild use . B.treeWrap B.<=< Op.getTrees use
-
-getNamedCoxes :: (C.CContent c) => C.RopUse c -> String -> B.Ab [C.NamedCox c]
-getNamedCoxes use = ropNamedAlphas use B.<=< Op.getWordTrees use 
-
-getTermCoxes :: (C.CContent c) => C.RopUse c -> String -> B.Ab [C.NamedCox c]
-getTermCoxes use = ropNamedAlphas use B.<=< Op.getTermTrees use
-
-getContents :: (C.CContent c) => C.RopUse c -> String -> B.Ab [c]
-getContents use name =
-    do trees <- Op.getTrees use name
-       let trees2 = B.treeWrap `map` B.divideTreesByColon trees
-       runCoxTree use `mapM` trees2
-
-getContent :: (C.CContent c) => C.RopUse c -> String -> B.Ab c
-getContent use name =
-    do tree <- Op.getTree use name
-       runCoxTree use tree
-
-runCoxTree :: (C.CContent c) => C.RopUse c -> B.TokenTree -> B.Ab c
-runCoxTree use tree =
-    do alpha <- ropBuild use tree
-       C.coxRunCox (ropBase use, []) B.mempty [] alpha
-
-getOptContent :: (C.CContent c) => c -> C.RopUse c -> String -> B.Ab c
-getOptContent opt = Op.getOption opt getContent
-
-getFiller :: (C.CContent c) => C.RopUse c -> String -> B.Ab c
-getFiller = getOptContent C.empty
-
-
 -- ----------------------  add
 
 consAdd :: (C.CContent c) => C.RopCons c
 consAdd use =
-    do coxLet <- Op.getOption [] getNamedCoxes use "-let"
-       coxIn  <- getTermCoxes use "-in"
-       Right $ relmapAdd use ((ropBase use, coxLet), coxIn)
+    do coxLet <- Op.getOption [] Op.getNamedCoxes use "-let"
+       coxIn  <- Op.getTermCoxes use "-in"
+       Right $ relmapAdd use ((Op.ropBase use, coxLet), coxIn)
 
 relmapAdd :: (C.CList c, C.CRel c, B.Write c)
   => C.RopUse c -> (C.CopBundle c, [C.NamedCox c]) -> C.Relmap c
@@ -136,9 +89,9 @@ relkitAdd (cops, bodies) (Just he1)
 
 consSubst :: (C.CContent c) => C.RopCons c
 consSubst use =
-    do coxLet <- Op.getOption [] getNamedCoxes use "-let"
-       coxIn  <- getTermCoxes use "-in"
-       Right $ relmapSubst use ((ropBase use, coxLet), coxIn)
+    do coxLet <- Op.getOption [] Op.getNamedCoxes use "-let"
+       coxIn  <- Op.getTermCoxes use "-in"
+       Right $ relmapSubst use ((Op.ropBase use, coxLet), coxIn)
 
 relmapSubst :: (C.CList c, C.CRel c, B.Write c)
   => C.RopUse c -> (C.CopBundle c, [C.NamedCox c]) -> C.Relmap c
@@ -173,9 +126,9 @@ relkitSubst (cops, bodies) (Just he1)
 consRange :: (C.CContent c) => C.RopCons c
 consRange use =
   do term     <- Op.getTerm use "-term"
-     coxLow   <- getCox use "-from"
-     coxHigh  <- getCox use "-to"
-     Right $ relmapRange use (term, ropBase use, coxLow, coxHigh)
+     coxLow   <- Op.getCox use "-from"
+     coxHigh  <- Op.getCox use "-to"
+     Right $ relmapRange use (term, Op.ropBase use, coxLow, coxHigh)
 
 relmapRange :: (C.CContent c) => C.RopUse c -> (B.TermName, [C.Cop c], C.Cox c, C.Cox c) -> C.Relmap c
 relmapRange use = C.relmapFlow use . relkitRange
@@ -202,8 +155,8 @@ relkitRange (n, base, coxLow, coxHigh) (Just he1) = Right kit2 where
 consFill :: (C.CContent c) => C.RopCons c
 consFill use =
   do ns    <- Op.getTerms use "-term"
-     coxTo <- getCox use "-to"
-     Right $ relmapFill use (ns, ropBase use, coxTo)
+     coxTo <- Op.getCox use "-to"
+     Right $ relmapFill use (ns, Op.ropBase use, coxTo)
 
 relmapFill :: (C.CContent c) => C.RopUse c -> ([B.TermName], [C.Cop c], C.Cox c) -> C.Relmap c
 relmapFill use = C.relmapFlow use . relkitFill
@@ -231,11 +184,11 @@ relkitFill (ns, base, coxTo) (Just he1) = Right kit2 where
 consReplace :: (C.CContent c) => C.RopCons c
 consReplace use =
     do ns     <- Op.getTerms use "-term"
-       coxBy  <- getCox use "-by"
+       coxBy  <- Op.getCox use "-by"
        B.unless (C.coxSyntacticArity coxBy == 1) $ do
          B.abortable "relmap-replace" [coxBy] Message.reqUnaryFn
        let expr n = (n, C.CoxApplyL [] coxBy [C.CoxTerm [] [n] []])
-       Right $ relmapSubst use ((ropBase use, []), map expr ns)
+       Right $ relmapSubst use ((Op.ropBase use, []), map expr ns)
 
 
 -- ----------------------  replace-all
@@ -244,9 +197,9 @@ consReplace use =
 
 consReplaceAll :: (C.CContent c) => C.RopCons c
 consReplaceAll use =
-  do coxFrom <- getCox use "-from"
-     coxTo   <- getCox use "-to"
-     Right $ relmapReplaceAll use (ropBase use, coxFrom, coxTo)
+  do coxFrom <- Op.getCox use "-from"
+     coxTo   <- Op.getCox use "-to"
+     Right $ relmapReplaceAll use (Op.ropBase use, coxFrom, coxTo)
 
 relmapReplaceAll :: (C.CContent c) => C.RopUse c -> ([C.Cop c], C.Cox c, C.Cox c) -> C.Relmap c
 relmapReplaceAll use = C.relmapFlow use . relkitReplaceAll
@@ -266,9 +219,9 @@ relkitReplaceAll (base, coxFrom, coxTo) (Just he1) = Right kit2 where
 
 consSplit :: (C.CContent c) => C.RopCons c
 consSplit use =
-    do coxLet <- Op.getOption [] getNamedCoxes use "-let"
-       coxIn  <- getTermCoxes use "-in"
-       Right $ relmapSplit use ((ropBase use, coxLet), coxIn)
+    do coxLet <- Op.getOption [] Op.getNamedCoxes use "-let"
+       coxIn  <- Op.getTermCoxes use "-in"
+       Right $ relmapSplit use ((Op.ropBase use, coxLet), coxIn)
 
 relmapSplit :: (C.CList c, C.CRel c, B.Write c, C.CBool c)
   => C.RopUse c -> (C.CopBundle c, [C.NamedCox c]) -> C.Relmap c
@@ -316,7 +269,7 @@ relkitSplit (cops, bodies) (Just he1)
 consUnary :: (C.CContent c) => C.RopCons c
 consUnary use =
     do n  <- Op.getTerm  use "-term"
-       cs <- getContents use "-expr"
+       cs <- Op.getContents use "-expr"
        Right $ relmapUnary use (n, cs)
 
 relmapUnary :: (C.CContent c) => C.RopUse c -> (B.TermName, [c]) -> C.Relmap c
