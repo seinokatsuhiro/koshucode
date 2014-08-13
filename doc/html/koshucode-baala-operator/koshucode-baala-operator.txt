@@ -2,13 +2,13 @@
 -- See Hoogle, http://www.haskell.org/hoogle/
 
 
--- | Relational operators in Koshucode
+-- | Relation-mapping operators in Koshucode
 --   
---   An impelemntation of relational operators. Operators are used in the
---   <tt>koshu</tt> calculator that is contained in the
+--   An impelemntation of relation-mapping operators. Operators are used in
+--   the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-operator
-@version 0.62.0.0
+@version 0.67.0.0
 
 
 -- | Parsing list of terms.
@@ -44,6 +44,44 @@ termNamePairs :: [TokenTree] -> Ab [TermName2]
 --   </pre>
 termTreePairs :: [TokenTree] -> Ab [Named TokenTree]
 
+module Koshucode.Baala.Op.Builtin.Define
+
+-- | Constructor, usage, and attribute sorter
+type RopDefine c = (RopCons c, RopUsage, AttrDefine)
+
+-- | Make implementations of relmap operators.
+ropList :: String -> [RopDefine c] -> [Rop c]
+
+-- | No attributes
+ropN :: RopCons c -> RopUsage -> String -> RopDefine c
+
+-- | Enumerating attributes
+ropE :: RopCons c -> RopUsage -> String -> RopDefine c
+
+-- | One attribute
+ropI :: RopCons c -> RopUsage -> String -> RopDefine c
+
+-- | Two attributes
+ropII :: RopCons c -> RopUsage -> String -> RopDefine c
+
+-- | One and optional attributes
+ropIJ :: RopCons c -> RopUsage -> String -> RopDefine c
+
+-- | Three attributes
+ropIII :: RopCons c -> RopUsage -> String -> RopDefine c
+
+-- | Variable-length attributes
+ropV :: RopCons c -> RopUsage -> String -> RopDefine c
+
+-- | One and variable-length attributes
+ropIV :: RopCons c -> RopUsage -> String -> RopDefine c
+
+-- | Term list and one attribute
+ropTI :: RopCons c -> RopUsage -> String -> RopDefine c
+
+-- | Term list and two attributes
+ropTII :: RopCons c -> RopUsage -> String -> RopDefine c
+
 
 -- | Built-in relmap operator.
 module Koshucode.Baala.Op.Builtin.Rop
@@ -55,9 +93,6 @@ module Koshucode.Baala.Op.Builtin.Rop
 --   <li><i><tt>id</tt></i> Identity relmap</li>
 --   </ul>
 ropsBuiltin :: [Rop c]
-
--- | Make implementations of relation-mapping operators.
-ropList :: String -> [(String, RopCons c, RoaSpec)] -> [Rop c]
 consId :: RopCons c
 relmapId :: RopUse c -> Relmap c
 
@@ -96,6 +131,9 @@ reqCollection :: Ab a
 -- | Require new term names
 reqNewTerm :: [TermName] -> Relhead -> Ab a
 
+-- | Require unary function
+reqUnaryFn :: Ab a
+
 -- | Unexpected term names
 unexpTermName :: Ab a
 
@@ -117,11 +155,11 @@ getWordTrees :: RopGet c [Named TokenTree]
 --     m &lt;- getRelmap u
 --     Right $ relmapMeet u m
 --   </pre>
-getRelmap :: RopUse c -> Ab (Relmap c)
+getRelmap :: RopUse c -> String -> Ab (Relmap c)
 
 -- | Get relmaps from operator use.
 getRelmaps :: RopUse c -> Ab [Relmap c]
-getRelmapOption :: RopUse c -> Relmap c -> Ab (Relmap c)
+getOptRelmap :: Relmap c -> RopUse c -> String -> Ab (Relmap c)
 
 -- | Get a term name from named attribute.
 getTerm :: RopGet c TermName
@@ -148,26 +186,6 @@ getWord :: RopGet c String
 getInt :: RopGet c Int
 
 
--- | Content operators.
-module Koshucode.Baala.Op.Content.Arith
-copsArith :: (CDec c, CList c, CText c) => [Cop c]
-
-
--- | Content operators.
-module Koshucode.Baala.Op.Content.List
-copsList :: CContent c => [Cop c]
-
-
--- | Content operators.
-module Koshucode.Baala.Op.Content.Logic
-copsLogic :: (CBool c, CNil c) => [Cop c]
-
-
--- | Content operators.
-module Koshucode.Baala.Op.Content.Order
-copsOrder :: (CBool c, Eq c, Ord c) => [Cop c]
-
-
 -- | Content formula.
 module Koshucode.Baala.Op.Type
 
@@ -184,7 +202,7 @@ VText :: String -> VContent
 VDec :: Decimal -> VContent
 
 -- | Sign of no ordinary type
-VNil :: VContent
+VEmpty :: VContent
 
 -- | List type (objective collection)
 VList :: [VContent] -> VContent
@@ -202,7 +220,7 @@ instance Show VContent
 instance CRel VContent
 instance CAssn VContent
 instance CSet VContent
-instance CNil VContent
+instance CEmpty VContent
 instance CList VContent
 instance CText VContent
 instance CDec VContent
@@ -216,42 +234,6 @@ instance Eq VContent
 
 -- | Builtin relmap operator.
 module Koshucode.Baala.Op.Builtin
-
-module Koshucode.Baala.Op.Check
-
--- | Implementation of relational operators.
---   
---   <ul>
---   <li><i><tt>check-term [ -just /P ... | -has /P ... | -but /N ...
---   ]</tt></i> Check occurences of terms for input relation.</li>
---   <li><i><tt>duplicate /P ...</tt></i> Pass duplicate tuples on
---   <tt>/P</tt> ...</li>
---   </ul>
-ropsCheck :: CContent c => [Rop c]
-
-module Koshucode.Baala.Op.Cox
-
--- | Implementation of relational operators.
---   
---   <ul>
---   <li><i><tt>add /N E ...</tt></i> Add terms of name <tt>/N</tt> and
---   content <tt>E</tt> ...</li>
---   <li><i><tt>keep E</tt></i> Keep tuples <tt>E</tt> equals true.</li>
---   <li><i><tt>omit E</tt></i> Omit tuples <tt>E</tt> equals true.</li>
---   </ul>
-ropsCox :: CContent c => [Rop c]
-consAdd :: CContent c => RopCons c
-relmapAdd :: (CList c, CRel c, Write c) => RopUse c -> ([Cop c], [NamedCox c], [NamedCox c]) -> Relmap c
-consSubst :: CContent c => RopCons c
-relmapSubst :: (CList c, CRel c, Write c) => RopUse c -> ([Cop c], [NamedCox c], [NamedCox c]) -> Relmap c
-consFilter :: CContent c => Bool -> RopCons c
-relmapFilter :: (CList c, CRel c, CBool c, Write c) => RopUse c -> (Bool, [Cop c], [NamedCox c], Cox c) -> Relmap c
-relkitFilter :: (CList c, CRel c, CBool c, Write c) => (Bool, [Cop c], [NamedCox c], Cox c) -> RelkitFlow c
-consRange :: CContent c => RopCons c
-relmapRange :: CContent c => RopUse c -> (TermName, [Cop c], Cox c, Cox c) -> Relmap c
-consSplit :: CContent c => RopCons c
-relmapSplit :: (CList c, CRel c, Write c, CBool c) => RopUse c -> ([Cop c], [NamedCox c], [NamedCox c]) -> Relmap c
-relkitSplit :: (CList c, CRel c, Write c, CBool c) => ([Cop c], [NamedCox c], [NamedCox c]) -> RelkitFlow c
 
 module Koshucode.Baala.Op.Gadget
 
@@ -267,8 +249,6 @@ module Koshucode.Baala.Op.Gadget
 --   relation.</li>
 --   </ul>
 ropsGadget :: CContent c => [Rop c]
-consEmpty :: RopCons c
-relmapEmpty :: RopUse c -> Relmap c
 consContents :: Ord c => RopCons c
 relmapContents :: Ord c => RopUse c -> TermName -> Relmap c
 consSize :: CDec c => RopCons c
@@ -314,6 +294,7 @@ module Koshucode.Baala.Op.Source
 --   <ul>
 --   <li><i><tt>dee</tt></i> Nullary full relation.</li>
 --   <li><i><tt>dum</tt></i> Nullary empty relation.</li>
+--   <li><i><tt>empty</tt></i> Make empty relation.</li>
 --   <li><i><tt>source</tt></i> Read relation from data source.</li>
 --   </ul>
 ropsSource :: CContent c => [Rop c]
@@ -322,6 +303,8 @@ relmapConst :: RopUse c -> Rel c -> Relmap c
 relkitConst :: Rel c -> RelkitFlow c
 consDee :: RopCons c
 consDum :: RopCons c
+consEmpty :: RopCons c
+relmapEmpty :: RopUse c -> [TermName] -> Relmap c
 consSource :: RopCons c
 consSourceTerm :: RopCons c
 relmapSourceTerm :: RopUse c -> String -> Map (Relmap c)
@@ -364,7 +347,6 @@ relmapMove :: RopUse c -> ([TermName], [TermName]) -> Relmap c
 relkitMove :: ([TermName], [TermName]) -> RelkitFlow c
 consRename :: RopCons c
 relmapRename :: RopUse c -> [TermName2] -> Relmap c
-relkitRename :: [TermName2] -> RelkitFlow c
 consPrefix :: RopCons c
 relmapPrefix :: RopUse c -> String -> [String] -> Relmap c
 
@@ -430,22 +412,6 @@ relmapJoinList :: Ord c => RopUse c -> [Relmap c] -> Relmap c
 -- | Join two relations.
 relkitJoin :: RelkitBinary c
 
-module Koshucode.Baala.Op.Nil
-
--- | Relmap operators that handles nils.
---   
---   <ul>
---   <li><i><tt>both R</tt></i></li>
---   <li><i><tt>maybe R</tt></i> Meet input and given relation. It keeps
---   input tuples of which counterparts are totally negated.</li>
---   </ul>
-ropsNil :: (Ord c, CRel c, CNil c) => [Rop c]
-consBoth :: (Ord c, CRel c, CNil c) => RopCons c
-relmapBoth :: (Ord c, CRel c, CNil c) => RopUse c -> Map (Relmap c)
-consMaybe :: (Ord c, CNil c) => RopCons c
-relmapMaybe :: (Ord c, CNil c) => RopUse c -> Map (Relmap c)
-relkitMaybe :: (Ord c, CNil c) => RelkitBinary c
-
 
 -- | Restrict by relmap
 module Koshucode.Baala.Op.Lattice.Restrict
@@ -480,6 +446,18 @@ ropsLattice :: (Ord c, CRel c) => [Rop c]
 
 -- | Lattice relmap operators.
 module Koshucode.Baala.Op.Lattice
+
+module Koshucode.Baala.Op.Check
+
+-- | Implementation of relational operators.
+--   
+--   <ul>
+--   <li><i><tt>check-term [ -just /P ... | -has /P ... | -but /N ...
+--   ]</tt></i> Check occurences of terms for input relation.</li>
+--   <li><i><tt>duplicate /P ...</tt></i> Pass duplicate tuples on
+--   <tt>/P</tt> ...</li>
+--   </ul>
+ropsCheck :: CContent c => [Rop c]
 
 module Koshucode.Baala.Op.Control
 
@@ -554,26 +532,6 @@ ropsNest :: CContent c => [Rop c]
 
 -- | Relmap operators for nested relations.
 module Koshucode.Baala.Op.Nest
-
-
--- | Term-content operators.
-module Koshucode.Baala.Op.Content.Cops
-vanillaGlobal :: CContent c => Global c
-vanillaRops :: CContent c => [Rop c]
-
--- | Term-content operators and its height table.
-vanillaCops :: CContent c => ([Cop c], [Named InfixHeight])
-
-
--- | Term-content operators.
-module Koshucode.Baala.Op.Content
-
-
--- | Quasiquoter of Koshucode
-module Koshucode.Baala.Op.Quoter
-
--- | Quasiquoter for <tt>[koshu| ... |]</tt>.
-koshu :: QuasiQuoter
 
 
 -- | Operators in Koshucode.

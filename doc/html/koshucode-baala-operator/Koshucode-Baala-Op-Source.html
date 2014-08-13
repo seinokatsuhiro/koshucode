@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Sou
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-operator-0.62.0.0: Relational operators in Koshucode</p
+      >koshucode-baala-operator-0.67.0.0: Relation-mapping operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -61,11 +61,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Sou
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >source
+	    >empty
 </a
 	    ></li
 	  ><li
 	  ><a href="#g:4"
+	    >source
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:5"
 	    >source-term
 </a
 	    ></li
@@ -120,6 +125,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Sou
 	    >consDum</a
 	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
 	    >RopCons</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:consEmpty"
+	    >consEmpty</a
+	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
+	    >RopCons</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relmapEmpty"
+	    >relmapEmpty</a
+	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
+	    >RopUse</a
+	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    >TermName</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+	    >Relmap</a
 	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:consSource"
@@ -179,6 +200,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Sou
 		></dt
 	      ><dd
 	      >        Nullary empty relation.
+</dd
+	      ><dt
+	      ><code
+		>empty</code
+		></dt
+	      ><dd
+	      >      Make empty relation.
 </dd
 	      ><dt
 	      ><code
@@ -287,6 +315,33 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Sou
 </pre
 	  ></div
 	><h1 id="g:3"
+	>empty
+</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consEmpty" class="def"
+	    >consEmpty</a
+	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
+	    >RopCons</a
+	    > c<a href="src/Koshucode-Baala-Op-Source.html#consEmpty" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapEmpty" class="def"
+	    >relmapEmpty</a
+	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
+	    >RopUse</a
+	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    >TermName</a
+	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+	    >Relmap</a
+	    > c<a href="src/Koshucode-Baala-Op-Source.html#relmapEmpty" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:4"
 	>source
 </h1
 	><div class="top"
@@ -313,7 +368,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Sou
 	  > source P /a /b
 </pre
 	  ></div
-	><h1 id="g:4"
+	><h1 id="g:5"
 	>source-term
 </h1
 	><div class="top"
