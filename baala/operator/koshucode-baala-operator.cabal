@@ -61,6 +61,7 @@ library
 
         Koshucode.Baala.Op.Content
         Koshucode.Baala.Op.Content.Arith
+        Koshucode.Baala.Op.Content.Coxhand
         Koshucode.Baala.Op.Content.Cops
         Koshucode.Baala.Op.Content.List
         Koshucode.Baala.Op.Content.Logic

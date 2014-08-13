@@ -4,7 +4,7 @@
 -- | Term-content calcutation.
 
 module Koshucode.Baala.Core.Content.Build
-( coxBuild, coxDebruijn, prefixName,
+( coxBuild, coxInsert, prefixName,
 ) where
 
 import qualified Koshucode.Baala.Base                   as B
@@ -53,7 +53,7 @@ unlist = derivL . (C.mapToCox unlist) where
                  in C.CoxDeriv cp tag v sub
           _ -> e
 
-convCox :: forall c. (B.Write c) => [C.Cop c] -> B.AbMap (C.Cox c)
+convCox :: forall c. [C.Cop c] -> B.AbMap (C.Cox c)
 convCox syn = expand where
     assn :: [B.Named (C.Cop c)]
     assn = map B.named syn
@@ -167,8 +167,8 @@ convTree syn = expand where
           _ -> Message.unkCox "abstruction"
     expand tree = Right tree
 
-coxDebruijn :: B.Map (C.Cox c)
-coxDebruijn = comer . deepen . unlist where
+coxInsert :: B.Map (C.Cox c)
+coxInsert = comer . deepen . unlist where
 
 comer :: B.Map (C.Cox c)
 comer = de [] where

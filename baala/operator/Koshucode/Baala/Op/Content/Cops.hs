@@ -63,6 +63,7 @@ vanillaCops = (concat cops, htab) where
         [ 9 ! "then"
         , 9 ! "when"
         , 9 ! "unless"
+        , 9 ! "is"
 
         , 8 ! "or"
 

@@ -7,8 +7,9 @@ module Koshucode.Baala.Op.Content.Order
   -- $Operators
 ) where
 
-import qualified Koshucode.Baala.Core       as C
-import qualified Koshucode.Baala.Op.Message as Message
+import qualified Koshucode.Baala.Core               as C
+import qualified Koshucode.Baala.Op.Content.Coxhand as H
+import qualified Koshucode.Baala.Op.Message         as Message
 
 -- ----------------------
 -- $Operators
@@ -41,16 +42,17 @@ copsOrder =
     , C.CopFun  "&<="  copLte
     , C.CopFun  "&>"   copGt
     , C.CopFun  "&>="  copGte
+
+    , C.CopCox  "&is"  copIs
+    , C.CopCox  "all"  $ copCollect "&and"
+    , C.CopCox  "any"  $ copCollect "&or"
     ]
 
 orderCox :: String -> C.Cop c
 orderCox op = C.CopCox op $ cop where
     op'     = C.prefixName op
-    cop [x] = Right $ C.coxDebruijn $ fn "#1" (ap op' [var "#1", x])
+    cop [x] = Right $ H.f1 $ H.a op' [H.v1, x]
     cop _   = Message.adlib "require operand"
-    fn      = C.CoxDeriv  [] Nothing
-    ap  n   = C.CoxApplyL [] $ var n
-    var n   = C.CoxVar    [] n 0
 
 copBy :: (C.CBool c) => (c -> c -> Bool) -> C.CopFun c
 copBy p [Right x, Right y] = C.putBool $ x `p` y
@@ -73,4 +75,12 @@ copGt   =  copBy (>)
 
 copGte  :: (C.CBool c, Ord c) => C.CopFun c
 copGte  =  copBy (>=)
+
+copIs :: C.CopCox c
+copIs [x, f] = Right $ H.ax f [x]
+copIs _ = Message.unmatchType ""
+
+copCollect :: String -> C.CopCox c
+copCollect op fs = Right $ H.f1 $ H.a op (map ap fs) where
+    ap f = H.ax f [H.v1]
 

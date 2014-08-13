@@ -76,7 +76,7 @@ infixToPrefix conv ht tree =
                 | xi == 0 && hx > 0 ->
                     do let ([op], right) = splitAt 1 xs
                        rt <- sub n right
-                       Right $ B.TreeB n pp [conv' op, rt]
+                       Right $ B.TreeB n pp [op, rt]
                 | xi <= 0 ->
                     Right . B.TreeB n pp =<< mapM toPrefix xs
                 | otherwise ->
