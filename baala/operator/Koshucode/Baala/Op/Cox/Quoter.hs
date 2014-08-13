@@ -3,12 +3,12 @@
 
 -- | Quasiquoter of Koshucode
 
-module Koshucode.Baala.Op.Quoter
+module Koshucode.Baala.Op.Cox.Quoter
 ( koshu
 ) where
 
 import qualified Koshucode.Baala.Core       as C
-import qualified Koshucode.Baala.Op.Content as Op
+import qualified Koshucode.Baala.Op.Cox.Cop as Op
 import qualified Koshucode.Baala.Op.Type    as Op
 
 -- | Quasiquoter for @[koshu| ... |]@.

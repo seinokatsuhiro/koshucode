@@ -3,7 +3,7 @@
 
 -- | Content operators.
 
-module Koshucode.Baala.Op.Content.Arith
+module Koshucode.Baala.Op.Cox.Cop.Arith
 ( copsArith
   -- $Operators
 ) where

@@ -48,7 +48,6 @@ library
   exposed-modules:
         Koshucode.Baala.Op
         Koshucode.Baala.Op.Message
-        Koshucode.Baala.Op.Quoter
         Koshucode.Baala.Op.Type
 
         Koshucode.Baala.Op.Builtin
@@ -59,18 +58,20 @@ library
 
         Koshucode.Baala.Op.Check
 
-        Koshucode.Baala.Op.Content
-        Koshucode.Baala.Op.Content.Arith
-        Koshucode.Baala.Op.Content.Coxhand
-        Koshucode.Baala.Op.Content.Cops
-        Koshucode.Baala.Op.Content.List
-        Koshucode.Baala.Op.Content.Logic
-        Koshucode.Baala.Op.Content.Order
-
         Koshucode.Baala.Op.Control
 
-        Koshucode.Baala.Op.Cox
-        Koshucode.Baala.Op.Empty
+        Koshucode.Baala.Op.Cox.Empty
+        Koshucode.Baala.Op.Cox.Filter
+        Koshucode.Baala.Op.Cox.Calc
+        Koshucode.Baala.Op.Cox.Cop
+        Koshucode.Baala.Op.Cox.Cop.Arith
+        Koshucode.Baala.Op.Cox.Cop.Coxhand
+        Koshucode.Baala.Op.Cox.Cop.Cops
+        Koshucode.Baala.Op.Cox.Cop.List
+        Koshucode.Baala.Op.Cox.Cop.Logic
+        Koshucode.Baala.Op.Cox.Cop.Order
+        Koshucode.Baala.Op.Cox.Quoter
+
         Koshucode.Baala.Op.Gadget
 
         Koshucode.Baala.Op.Lattice

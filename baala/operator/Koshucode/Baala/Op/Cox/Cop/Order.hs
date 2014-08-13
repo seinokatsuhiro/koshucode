@@ -2,13 +2,13 @@
 
 -- | Content operators.
 
-module Koshucode.Baala.Op.Content.Order
+module Koshucode.Baala.Op.Cox.Cop.Order
 ( copsOrder
   -- $Operators
 ) where
 
 import qualified Koshucode.Baala.Core               as C
-import qualified Koshucode.Baala.Op.Content.Coxhand as H
+import qualified Koshucode.Baala.Op.Cox.Cop.Coxhand as H
 import qualified Koshucode.Baala.Op.Message         as Message
 
 -- ----------------------

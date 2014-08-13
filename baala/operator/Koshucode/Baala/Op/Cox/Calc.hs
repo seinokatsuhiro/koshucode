@@ -1,8 +1,8 @@
 {-# OPTIONS_GHC -Wall #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module Koshucode.Baala.Op.Cox
-( ropsCox,
+module Koshucode.Baala.Op.Cox.Calc
+( ropsCoxCalc,
   getCox,
   getContent,
   getOptContent,
@@ -14,15 +14,6 @@ module Koshucode.Baala.Op.Cox
 
   -- * subst
   consSubst, relmapSubst,
-
-  -- * keep & omit
-  consFilter, relmapFilter, relkitFilter,
-
-  -- * contain
-  consContain, relmapContain, relkitContain,
-
-  -- * omit-all
-  consOmitAll, relmapOmitAll,
 
   -- * range
   consRange, relmapRange,
@@ -55,21 +46,11 @@ import qualified Koshucode.Baala.Op.Message  as Message
 --
 --   [@add \/N E ...@]
 --     Add terms of name @\/N@ and content @E@ ...
---
---   [@keep E@]
---     Keep tuples @E@ equals true.
 -- 
---   [@omit E@]
---     Omit tuples @E@ equals true.
--- 
-ropsCox :: (C.CContent c) => [C.Rop c]
-ropsCox = Op.ropList "cox"
+ropsCoxCalc :: (C.CContent c) => [C.Rop c]
+ropsCoxCalc = Op.ropList "cox-calc"
     --          CONSTRUCTOR         USAGE                        ATTRIBUTE
     [ Op.ropV   consAdd             "add /N E ..."               "-in | -let"
-    , Op.ropI   consContain         "contain E"                  "-expr"
-    , Op.ropV   (consFilter True)   "keep E"                     "-in | -let"
-    , Op.ropV   (consFilter False)  "omit E"                     "-in | -let"
-    , Op.ropN   consOmitAll         "omit-all"                   ""
     , Op.ropI   consRange           "range /N -from E -to E"     "-term | -from -to"
     , Op.ropTI  consFill            "fill /P E"                  "-term -to"
     , Op.ropTI  consReplace         "replace /P E"               "-term -by"
@@ -179,59 +160,6 @@ relkitSubst (cops, bodies) (Just he1)
       kit2      =  C.relkitJust he2 $ C.RelkitOneToAbOne True f2 []
       f2 _ cs1  =  do cs2 <- C.coxRunCox cops he1 cs1 `mapM` xs
                       Right $ cs2 ++ cut cs1
-
-
--- ----------------------  filter
-
-consFilter :: (C.CContent c) => Bool -> C.RopCons c
-consFilter b use =
-    do coxLet  <- Op.getOption [] getNamedCoxes use "-let"
-       coxIn   <- getCox use "-in"
-       Right $ relmapFilter use (b, (ropBase use, coxLet), coxIn)
-
-relmapFilter :: (C.CList c, C.CRel c, C.CBool c, B.Write c)
-  => C.RopUse c -> (Bool, C.CopBundle c, C.Cox c) -> C.Relmap c
-relmapFilter use = C.relmapFlow use . relkitFilter
-
-relkitFilter :: (C.CList c, C.CRel c, C.CBool c, B.Write c)
-  => (Bool, C.CopBundle c, C.Cox c) -> C.RelkitFlow c
-relkitFilter _ Nothing = Right C.relkitNothing
-relkitFilter (which, cops, body) (Just he1) = Right kit2 where
-    kit2  = C.relkitJust he1 $ C.RelkitAbPred p
-    p cs1 = do c <- C.coxRunCox cops he1 cs1 body
-               case C.isBool c of
-                 True  -> Right $ C.gBool c == which
-                 False -> Message.reqBool
-
-
--- ----------------------  contain
-
-consContain :: (C.CContent c) => C.RopCons c
-consContain use =
-    do c <- getContent use "-expr"
-       Right $ relmapContain use c
-
-relmapContain :: (Eq c) => C.RopUse c -> c -> C.Relmap c
-relmapContain use = C.relmapFlow use . relkitContain
-
-relkitContain :: (Eq c) => c -> C.RelkitFlow c
-relkitContain _ Nothing = Right C.relkitNothing
-relkitContain c (Just he1) = Right kit2 where
-    kit2  = C.relkitJust he1 $ C.RelkitAbPred p
-    p cs1 = Right $ c `elem` cs1
-
-
--- ----------------------  omit-all
-
-consOmitAll :: C.RopCons c
-consOmitAll use = Right $ relmapOmitAll use
-
-relmapOmitAll :: C.RopUse c -> C.Relmap c
-relmapOmitAll use = C.relmapFlow use relkitOmitAll
-
--- | Throw away all tuples in a relation.
-relkitOmitAll :: C.RelkitFlow c
-relkitOmitAll he1 = Right $ C.relkit he1 $ C.RelkitConst []
 
 
 -- ----------------------  range

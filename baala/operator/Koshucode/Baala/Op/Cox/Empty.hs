@@ -1,19 +1,19 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Op.Empty
-( ropsEmpty,
+module Koshucode.Baala.Op.Cox.Empty
+( ropsCoxEmpty,
   -- * both
   consBoth, relmapBoth,
   -- * maybe
   consMaybe, relmapMaybe, relkitMaybe,
 ) where
 
-import qualified Koshucode.Baala.Base       as B
-import qualified Koshucode.Baala.Core       as C
-import qualified Koshucode.Baala.Op.Builtin as Op
-import qualified Koshucode.Baala.Op.Lattice as Op
-import qualified Koshucode.Baala.Op.Cox     as Op
+import qualified Koshucode.Baala.Base         as B
+import qualified Koshucode.Baala.Core         as C
+import qualified Koshucode.Baala.Op.Builtin   as Op
+import qualified Koshucode.Baala.Op.Lattice   as Op
+import qualified Koshucode.Baala.Op.Cox.Calc  as Op
 
 
 -- | Relmap operators that handles empties.
@@ -24,8 +24,8 @@ import qualified Koshucode.Baala.Op.Cox     as Op
 --     Meet input and given relation.
 --     It keeps input tuples of which counterparts are totally negated.
 -- 
-ropsEmpty :: (C.CContent c) => [C.Rop c]
-ropsEmpty = Op.ropList "empty"  -- GROUP
+ropsCoxEmpty :: (C.CContent c) => [C.Rop c]
+ropsCoxEmpty = Op.ropList "cox-empty"  -- GROUP
     --         CONSTRUCTOR USAGE                ATTRIBUTE
     [ Op.ropI  consBoth    "both R [-fill E]"   "-relmap/ | -fill"
     , Op.ropI  consMaybe   "maybe R [-fill E]"  "-relmap/ | -fill"

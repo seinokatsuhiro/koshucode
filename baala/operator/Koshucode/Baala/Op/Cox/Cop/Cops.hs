@@ -2,7 +2,7 @@
 
 -- | Term-content operators.
 
-module Koshucode.Baala.Op.Content.Cops
+module Koshucode.Baala.Op.Cox.Cop.Cops
 ( vanillaGlobal,
   vanillaRops,
   vanillaCops,
@@ -14,8 +14,6 @@ import qualified Koshucode.Baala.Core              as C
 import qualified Koshucode.Baala.Op.Builtin        as Rops
 import qualified Koshucode.Baala.Op.Check          as Rops
 import qualified Koshucode.Baala.Op.Control        as Rops
-import qualified Koshucode.Baala.Op.Cox            as Rops
-import qualified Koshucode.Baala.Op.Empty          as Rops
 import qualified Koshucode.Baala.Op.Gadget         as Rops
 import qualified Koshucode.Baala.Op.Lattice        as Rops
 import qualified Koshucode.Baala.Op.Meta           as Rops
@@ -24,10 +22,14 @@ import qualified Koshucode.Baala.Op.Peripheral     as Rops
 import qualified Koshucode.Baala.Op.Source         as Rops
 import qualified Koshucode.Baala.Op.Term           as Rops
 
-import qualified Koshucode.Baala.Op.Content.Arith  as Op
-import qualified Koshucode.Baala.Op.Content.List   as Op
-import qualified Koshucode.Baala.Op.Content.Logic  as Op
-import qualified Koshucode.Baala.Op.Content.Order  as Op
+import qualified Koshucode.Baala.Op.Cox.Calc       as Rops
+import qualified Koshucode.Baala.Op.Cox.Empty      as Rops
+import qualified Koshucode.Baala.Op.Cox.Filter     as Rops
+
+import qualified Koshucode.Baala.Op.Cox.Cop.Arith  as Op
+import qualified Koshucode.Baala.Op.Cox.Cop.List   as Op
+import qualified Koshucode.Baala.Op.Cox.Cop.Logic  as Op
+import qualified Koshucode.Baala.Op.Cox.Cop.Order  as Op
 
 vanillaGlobal :: (C.CContent c) => C.Global c
 vanillaGlobal =
@@ -35,18 +37,22 @@ vanillaGlobal =
              , C.globalRops = vanillaRops }
 
 vanillaRops :: (C.CContent c) => [C.Rop c]
-vanillaRops = Rops.ropsMeta
+vanillaRops = ropsCox
+           ++ Rops.ropsMeta
            ++ Rops.ropsNest
            ++ Rops.ropsCheck
            ++ Rops.ropsPeripheral
            ++ Rops.ropsControl
-           ++ Rops.ropsCox
            ++ Rops.ropsGadget
-           ++ Rops.ropsEmpty
            ++ Rops.ropsTerm
            ++ Rops.ropsLattice
            ++ Rops.ropsSource
            ++ Rops.ropsBuiltin
+
+ropsCox :: (C.CContent c) => [C.Rop c]
+ropsCox = Rops.ropsCoxCalc
+       ++ Rops.ropsCoxEmpty
+       ++ Rops.ropsCoxFilter
 
 -- | Term-content operators and its height table.
 vanillaCops :: (C.CContent c) => ([C.Cop c], [B.Named B.InfixHeight])
