@@ -2,7 +2,7 @@
 
 -- | Content operators.
 
-module Koshucode.Baala.Op.Cox.Cop.List
+module Koshucode.Baala.Op.Cop.List
 ( copsList
   -- $Operators
 ) where

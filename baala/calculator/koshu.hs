@@ -3,6 +3,7 @@
 
 import qualified Koshucode.Baala.Core    as C
 import qualified Koshucode.Baala.Op      as Op
+import qualified Koshucode.Baala.Op.Cop  as Op
 import qualified Koshucode.Baala.Toolkit.Main.KoshuMain   as Main
 import qualified Koshucode.Baala.Toolkit.Library.Exit     as Main
 import qualified Koshucode.Baala.Toolkit.Library.Version  as Main

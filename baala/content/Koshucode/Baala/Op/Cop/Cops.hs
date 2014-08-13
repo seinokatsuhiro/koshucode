@@ -2,7 +2,7 @@
 
 -- | Term-content operators.
 
-module Koshucode.Baala.Op.Cox.Cop.Cops
+module Koshucode.Baala.Op.Cop.Cops
 ( vanillaGlobal,
   vanillaRops,
   vanillaCops,
@@ -26,10 +26,10 @@ import qualified Koshucode.Baala.Op.Cox.Calc       as Rops
 import qualified Koshucode.Baala.Op.Cox.Empty      as Rops
 import qualified Koshucode.Baala.Op.Cox.Filter     as Rops
 
-import qualified Koshucode.Baala.Op.Cox.Cop.Arith  as Op
-import qualified Koshucode.Baala.Op.Cox.Cop.List   as Op
-import qualified Koshucode.Baala.Op.Cox.Cop.Logic  as Op
-import qualified Koshucode.Baala.Op.Cox.Cop.Order  as Op
+import qualified Koshucode.Baala.Op.Cop.Arith      as Op
+import qualified Koshucode.Baala.Op.Cop.List       as Op
+import qualified Koshucode.Baala.Op.Cop.Logic      as Op
+import qualified Koshucode.Baala.Op.Cop.Order      as Op
 
 vanillaGlobal :: (C.CContent c) => C.Global c
 vanillaGlobal =

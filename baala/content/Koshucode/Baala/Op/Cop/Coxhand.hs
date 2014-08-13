@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Op.Cox.Cop.Coxhand
+module Koshucode.Baala.Op.Cop.Coxhand
 ( -- * Application
   a, ax,
   -- * Function

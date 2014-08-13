@@ -43,6 +43,7 @@ usage () {
         echo "  $0 base              cabal for base package"
         echo "  $0 core              cabal for core package"
         echo "  $0 operator          cabal for operator package"
+        echo "  $0 content           cabal for content package"
         echo "  $0 calculator        cabal for calculator package"
         echo "  $0 toolkit           cabal for toolkit package"
         echo ""
@@ -85,6 +86,7 @@ main () {
         unreg)
             unregister toolkit
             unregister calculator
+            unregister content
             unregister operator
             unregister core
             unregister base
@@ -93,7 +95,7 @@ main () {
         update)
             cabal_cmd update ;;
 
-        '' | base* | core* | operator* | calculator* | toolkit* | koshu )
+        '' | base* | core* | operator* | content* | calculator* | toolkit* | koshu )
             cab_time=time
             cabal_for `directories "$1"`
             ;;
@@ -145,10 +147,11 @@ directories () {
         base)        echo base ;;
         core)        echo core ;;
         operator)    echo operator ;;
+        content)     echo content ;;
         calculator)  echo calculator ;;
         toolkit)     echo toolkit ;;
-        koshu)       echo base core operator calculator ;;
-        '')          echo base core operator calculator toolkit ;;
+        koshu)       echo base core operator content calculator ;;
+        '')          echo base core operator content calculator toolkit ;;
     esac
 }
 
@@ -186,7 +189,7 @@ cabal_for () {
 
 cabal_for_all () {
     cab_command=$1
-    cabal_for base core operator calculator toolkit
+    cabal_for base core operator content calculator toolkit
 }
 
 section () {
@@ -230,7 +233,8 @@ cabal_sandbox_add_source () {
     case $cab_dir in
         core)        cabal_cmd sandbox add-source ../base       ;;
         operator)    cabal_cmd sandbox add-source ../core       ;;
-        calculator)  cabal_cmd sandbox add-source ../operator   ;;
+        content)     cabal_cmd sandbox add-source ../operator   ;;
+        calculator)  cabal_cmd sandbox add-source ../content    ;;
         toolkit)     cabal_cmd sandbox add-source ../calculator ;;
     esac
 }
@@ -280,6 +284,7 @@ cabal_sdist () {
         --haddock-option=`if_file base` \
         --haddock-option=`if_file core` \
         --haddock-option=`if_file operator` \
+        --haddock-option=`if_file content` \
         --haddock-option=`if_file calculator` \
         --html-location=$CAB_URL
         # --executable \

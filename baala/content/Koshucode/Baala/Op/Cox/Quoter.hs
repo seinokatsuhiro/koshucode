@@ -8,7 +8,7 @@ module Koshucode.Baala.Op.Cox.Quoter
 ) where
 
 import qualified Koshucode.Baala.Core       as C
-import qualified Koshucode.Baala.Op.Cox.Cop as Op
+import qualified Koshucode.Baala.Op.Cop     as Op
 import qualified Koshucode.Baala.Op.Type    as Op
 
 -- | Quasiquoter for @[koshu| ... |]@.

@@ -56,6 +56,7 @@ executable koshu
        , koshucode-baala-base     == 0.67.*
        , koshucode-baala-core     == 0.67.*
        , koshucode-baala-operator == 0.67.*
+       , koshucode-baala-content  == 0.67.*
 
 library
   -- Modules exported by the library.
@@ -78,4 +79,5 @@ library
        , koshucode-baala-base     == 0.67.*
        , koshucode-baala-core     == 0.67.*
        , koshucode-baala-operator == 0.67.*
+       , koshucode-baala-content  == 0.67.*
 
