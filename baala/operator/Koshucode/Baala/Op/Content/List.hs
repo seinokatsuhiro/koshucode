@@ -38,13 +38,13 @@ import qualified Koshucode.Baala.Op.Message    as Message
 
 copsList :: (C.CContent c) => [C.Cop c]
 copsList =
-    [ C.CopFun  "++"            copAppend
-    , C.CopFun  "&++"           copAppend
+    [ C.CopFun  (C.copInfix "++")           copAppend
+    , C.CopFun  (C.copInfix "intersect")    copIntersect
+    , C.CopFun  "++"            copAppend
     , C.CopFun  "char"          copChar
     , C.CopFun  "char-group"    copCharGroup
     , C.CopFun  "char-group-1"  copCharGroup1
     , C.CopFun  "intersect"     copIntersect
-    , C.CopFun  "&intersect"    copIntersect
     , C.CopFun  "length"        copLength
     , C.CopFun  "list"          copList
     , C.CopFun  "max"           copMax

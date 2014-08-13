@@ -32,16 +32,17 @@ import qualified Koshucode.Baala.Op.Message as Message
 
 copsArith :: (C.CDec c, C.CList c, C.CText c) => [C.Cop c]
 copsArith =
-    [ C.CopFun  "+"     copPlus
-    , C.CopFun  "&+"    copPlus
+    [ C.CopFun  (C.copInfix "+")    copPlus
+    , C.CopFun  (C.copInfix "-")    copMinus
+    , C.CopFun  (C.copInfix "*")    copTimes
+    , C.CopFun  (C.copInfix "quo")  copQuo
+    , C.CopFun  (C.copInfix "rem")  copRem
+
+    , C.CopFun  "+"     copPlus
     , C.CopFun  "-"     copMinus
-    , C.CopFun  "&-"    copMinus
     , C.CopFun  "*"     copTimes
-    , C.CopFun  "&*"    copTimes
     , C.CopFun  "quo"   copQuo
-    , C.CopFun  "&quo"  copQuo
     , C.CopFun  "rem"   copRem
-    , C.CopFun  "&rem"  copRem
     , C.CopFun  "abs"   copAbs
     ]
 

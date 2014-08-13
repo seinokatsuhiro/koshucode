@@ -55,14 +55,14 @@ infixHeight extract htab a = B.fromMaybe (Left 0) ht where
 type InfixTree a = B.CodeTree (InfixHeight, a)
 
 -- | Split branches in a given tree at infixed binary operators.
-infixToPrefix :: forall a. B.Map a -> (a -> InfixHeight)
+infixToPrefix :: forall a. (B.Map a, B.Map a, B.Map a) -> (a -> InfixHeight)
               -> B.CodeTree a -> Either [(InfixHeight, a)] (B.CodeTree a)
-infixToPrefix conv ht tree =
+infixToPrefix (pre, inf, post) ht tree =
     do tree2 <- toPrefix $ fmap height tree
        Right $ fmap snd tree2
     where
-      conv' :: B.Map (InfixTree a)
-      conv' = fmap $ B.mapSnd conv
+      conv :: B.Map a -> B.Map (InfixTree a)
+      conv = fmap . B.mapSnd
 
       height :: a -> (InfixHeight, a)
       height x = (ht x, x)
@@ -73,24 +73,23 @@ infixToPrefix conv ht tree =
           case infixPos $ map treeHeight xs of
             Left xi -> Left $ B.untrees $ map (xs !!) xi
             Right (xi, hx)
-                | xi == 0 && hx > 0 ->
-                    do let ([op], right) = splitAt 1 xs
-                       rt <- sub n right
-                       Right $ B.TreeB n pp [op, rt]
-                | xi <= 0 ->
-                    Right . B.TreeB n pp =<< mapM toPrefix xs
-                | otherwise ->
-                    do let (left, r:ight) = splitAt xi xs
-                       s <- subtrees n left r ight
-                       Right $ B.TreeB n pp s
+                | xi == 0 && hx > 0 -> case xs of
+                    (op : right) -> do rt <- sub n right
+                                       Right $ B.TreeB n pp [conv pre op, rt]
+                    []           -> Right $ B.TreeB n pp []
+                | xi <= 0        -> Right . B.TreeB n pp =<< mapM toPrefix xs
+                | otherwise      -> do let (left, op : right) = splitAt xi xs
+                                       s <- subtrees n left op right
+                                       Right $ B.TreeB n pp s
 
       subtrees :: B.ParenType -> [InfixTree a] -> InfixTree a -> [InfixTree a]
                   -> Either [(InfixHeight, a)] [InfixTree a]
-      subtrees n left r ight | null ight = do lt <- sub n left
-                                              Right [r, lt]
-                             | otherwise = do lt <- sub n left
-                                              rt <- sub n ight
-                                              Right [conv' r, lt, rt]
+      subtrees n left op right
+          | null right = do lt <- sub n left
+                            Right [conv post op, lt]
+          | otherwise  = do lt <- sub n left
+                            rt <- sub n right
+                            Right [conv inf op, lt, rt]
 
       sub :: B.ParenType -> [InfixTree a] -> Either [(InfixHeight, a)] (InfixTree a) 
       sub _ [x] = toPrefix x

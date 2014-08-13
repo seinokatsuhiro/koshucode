@@ -4,7 +4,8 @@
 -- | Term-content calcutation.
 
 module Koshucode.Baala.Core.Content.Build
-( coxBuild, coxInsert, prefixName,
+( coxBuild, coxInsert,
+  copPrefix, copInfix, copPostfix,
 ) where
 
 import qualified Koshucode.Baala.Base                   as B
@@ -124,9 +125,11 @@ prefix htab tree =
        Right tree3 -> Right $ B.undouble (== 1) tree3
        Left  xs    -> Message.ambInfixes $ map detail xs
     where
-      conv :: B.Map B.Token
-      conv (B.TText cp i s) = B.TText cp i $ prefixName s
-      conv x = x
+      conv = (convWith copPrefix, convWith copInfix, convWith copPostfix)
+
+      convWith :: B.Map String -> B.Map B.Token
+      convWith f (B.TText cp i s) = B.TText cp i $ f s
+      convWith _ x = x
 
       ht :: B.Token -> B.InfixHeight
       ht = B.infixHeight wordText htab
@@ -140,8 +143,14 @@ prefix htab tree =
 
       detailText tok dir n = B.tokenContent tok ++ " : " ++ dir ++ " " ++ show n
 
-prefixName :: B.Map String
-prefixName = ('&' :)
+copPrefix  :: B.Map String
+copPrefix  = ("pre|" ++)
+
+copPostfix :: B.Map String
+copPostfix = ("post|" ++)
+
+copInfix   :: B.Map String
+copInfix   = ("in|" ++)
 
 -- expand syntax operator
 convTree :: forall c. [C.Cop c] -> B.AbMap B.TokenTree

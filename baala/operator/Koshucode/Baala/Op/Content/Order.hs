@@ -29,29 +29,40 @@ import qualified Koshucode.Baala.Op.Message         as Message
 
 copsOrder :: (C.CBool c, Eq c, Ord c) => [C.Cop c]
 copsOrder =
-    [ orderCox  "="
-    , orderCox  "<>"
-    , orderCox  "<"
-    , orderCox  "<="
-    , orderCox  ">"
-    , orderCox  ">="
+    [ orderPrefix    "="
+    , orderPrefix    "<>"
+    , orderPrefix    "<"
+    , orderPrefix    "<="
+    , orderPrefix    ">"
+    , orderPrefix    ">="
 
-    , C.CopFun  "&="   copEq
-    , C.CopFun  "&<>"  copNeq
-    , C.CopFun  "&<"   copLt
-    , C.CopFun  "&<="  copLte
-    , C.CopFun  "&>"   copGt
-    , C.CopFun  "&>="  copGte
+    , orderPostfix   "="
+    , orderPostfix   "<>"
+    , orderPostfix   "<"
+    , orderPostfix   "<="
+    , orderPostfix   ">"
+    , orderPostfix   ">="
 
-    , C.CopCox  "&is"  copIs
-    , C.CopCox  "all"  $ copCollect "&and"
-    , C.CopCox  "any"  $ copCollect "&or"
+    , C.CopFun  (C.copInfix "=")   copEq
+    , C.CopFun  (C.copInfix "<>")  copNeq
+    , C.CopFun  (C.copInfix "<")   copLt
+    , C.CopFun  (C.copInfix "<=")  copLte
+    , C.CopFun  (C.copInfix ">")   copGt
+    , C.CopFun  (C.copInfix ">=")  copGte
+
+    , C.CopCox  (C.copInfix "is")  copIs
+    , C.CopCox  "all"     $ copCollect (C.copInfix "and")
+    , C.CopCox  "any"     $ copCollect (C.copInfix "or")
     ]
 
-orderCox :: String -> C.Cop c
-orderCox op = C.CopCox op $ cop where
-    op'     = C.prefixName op
-    cop [x] = Right $ H.f1 $ H.a op' [H.v1, x]
+orderPrefix :: String -> C.Cop c
+orderPrefix op = C.CopCox (C.copPrefix op) $ cop where
+    cop [x] = Right $ H.f1 $ H.a (C.copInfix op) [H.v1, x]
+    cop _   = Message.adlib "require operand"
+
+orderPostfix :: String -> C.Cop c
+orderPostfix op = C.CopCox (C.copPostfix op) $ cop where
+    cop [x] = Right $ H.f1 $ H.a (C.copInfix op) [x, H.v1]
     cop _   = Message.adlib "require operand"
 
 copBy :: (C.CBool c) => (c -> c -> Bool) -> C.CopFun c
