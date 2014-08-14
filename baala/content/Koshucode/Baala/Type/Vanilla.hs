@@ -1,8 +1,8 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Content formula.
+-- | Vanilla type.
 
-module Koshucode.Baala.Op.Type
+module Koshucode.Baala.Type.Vanilla
 ( VContent (..),
   VCop,
 ) where

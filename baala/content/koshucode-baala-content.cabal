@@ -63,6 +63,8 @@ library
         Koshucode.Baala.Op.Cox.Filter
         Koshucode.Baala.Op.Cox.Get
 
+        Koshucode.Baala.Type.Vanilla
+
   -- Modules included in this library but not exported.
   --other-modules:       
   

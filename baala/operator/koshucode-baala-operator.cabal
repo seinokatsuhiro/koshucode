@@ -48,7 +48,6 @@ library
   exposed-modules:
         Koshucode.Baala.Op
         Koshucode.Baala.Op.Message
-        Koshucode.Baala.Op.Type
 
         Koshucode.Baala.Op.Builtin
         Koshucode.Baala.Op.Builtin.Define
