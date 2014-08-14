@@ -2,7 +2,7 @@
 
 module Koshucode.Baala.Op.Cop.Coxhand
 ( -- * Application
-  a, ax,
+  a, ai, ax,
   -- * Function
   f, f1, f2, f3,
   -- * Variable
@@ -17,6 +17,9 @@ import qualified Koshucode.Baala.Core   as C
 
 a :: String -> [C.Cox c] -> C.Cox c
 a = ax . v
+
+ai :: String -> [C.Cox c] -> C.Cox c
+ai = ax . v . C.copInfix
 
 ax :: C.Cox c -> [C.Cox c] -> C.Cox c
 ax = C.CoxApplyL []
