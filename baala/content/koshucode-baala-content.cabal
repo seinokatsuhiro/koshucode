@@ -47,9 +47,11 @@ extra-source-files:
 library
   -- Modules exported by the library.
   exposed-modules:
+        Koshucode.Baala.Op.Global
+        Koshucode.Baala.Op.Quoter
+
         Koshucode.Baala.Op.Cop
         Koshucode.Baala.Op.Cop.Arith
-        Koshucode.Baala.Op.Cop.Cops
         Koshucode.Baala.Op.Cop.Coxhand
         Koshucode.Baala.Op.Cop.List
         Koshucode.Baala.Op.Cop.Logic
@@ -60,7 +62,6 @@ library
         Koshucode.Baala.Op.Cox.Empty
         Koshucode.Baala.Op.Cox.Filter
         Koshucode.Baala.Op.Cox.Get
-        Koshucode.Baala.Op.Cox.Quoter
 
   -- Modules included in this library but not exported.
   --other-modules:       
