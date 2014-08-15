@@ -21,7 +21,7 @@ coxBuild (syn, htab) =
     convCox syn           -- convert cox to cox
       B.<=< Right
       . debruijn          -- attach De Bruijn indicies
-      . unlist            -- expand multiple variables/arguments
+      . coxUnfold         -- expand multiple-blank form
       B.<=< construct     -- construct content expression from token tree
       B.<=< prefix htab   -- convert infix operator to prefix
       B.<=< convTree syn  -- convert token tree to token tree
@@ -41,8 +41,8 @@ indexFrom origin key = loop origin where
     loop i (x:xs) | x == key  = Just i
                   | otherwise = loop (i + 1) xs
 
-unlist :: B.Map (C.Cox c)
-unlist = derivL . C.coxMap unlist where
+coxUnfold :: B.Map (C.Cox c)
+coxUnfold = derivL . C.coxMap coxUnfold where
     derivL :: B.Map (C.Cox c)
     derivL cox = case cox of
         C.CoxForm _ _ [] b -> b
@@ -165,7 +165,7 @@ convTree syn = expand where
 
 -- | Insert fresh form into indexed expression.
 coxInsert :: B.Map (C.Cox c)
-coxInsert = debruijn . deepen (0 :: Int) . unlist where
+coxInsert = debruijn . deepen (0 :: Int) . coxUnfold where
     deepen :: Int -> B.Map (C.Cox c)
     deepen n (C.CoxForm1 cp tag v e) = C.CoxForm1 cp tag v $ deepen (n + 1) e
     deepen n cox                     = de n [] cox

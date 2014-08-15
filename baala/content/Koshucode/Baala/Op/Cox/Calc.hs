@@ -54,6 +54,7 @@ ropsCoxCalc = Op.ropList "cox-calc"
     , Op.ropV   consSplit           "split /N E ..."             "-in | -let"
     , Op.ropV   consSubst           "subst /N E ..."             "-in | -let"
     , Op.ropIV  consUnary           "unary /N E ..."             "-term -expr"
+    , Op.ropV   consDumpCox         "dump-cox E"                 "-cox"
     ]
 
 
@@ -280,4 +281,15 @@ relkitUnary (n, cs) _ = Right kit2 where
     he2    = B.headFrom [n]
     kit2   = C.relkitJust he2 $ C.RelkitAbFull True f2 []
     f2 _ _ = Right $ map B.li1 cs
+
+
+
+-- ----------------------  dump-cox
+
+--  > dump-cox /x >= 0
+
+consDumpCox :: (C.CContent c) => C.RopCons c
+consDumpCox use =
+    do cox <- Op.getCox use "-cox"
+       Message.dumpCox cox
 

@@ -58,34 +58,40 @@ instance (B.Write c) => B.Write (Cox c) where
     write = docCox
 
 docCox :: (B.Write c) => B.StringMap -> Cox c -> B.Doc
-docCox sh = d (0 :: Int) . derivL where
-    d 10 _ = B.write sh "..."
-    d n e =
-        case e of
-          CoxLit    _ c        -> B.write sh "lit" B.<+> B.write sh c
-          CoxTerm   _ ns _     -> B.writeH sh ns
-          CoxBase   _ name _   -> B.write sh name
-          CoxLocal  _ v i      -> B.write sh v B.<> B.write sh "/" B.<> B.write sh i
-          CoxBlank  _ v        -> B.write sh v
-          CoxRefill _ f xs     -> let f'  = B.write sh "ap" B.<+> d' f
-                                      xs' = B.nest 3 $ B.writeV sh (map d' xs)
-                                  in f' B.$$ xs'
-          CoxForm1  _ tag v  e2  -> fn tag (B.write  sh v)  (d' e2)
-          CoxForm   _ tag vs e2  -> fn tag (B.writeH sh vs) (d' e2)
-        where
-          d' = d $ n + 1
-          fn Nothing    v b  =  B.docWraps "(|" "|)" $ v B.<+> B.write sh "|" B.<+> b
-          fn (Just tag) v b  =  B.docWraps "(|" "|)" $ (B.write sh $ "'" ++ tag)
-                                                       B.<+> v B.<+> B.write sh "|" B.<+> b
+docCox sh = d (0 :: Int) . coxFold where
+    wr           :: forall c. (B.Write c) => c -> B.Doc
+    wrH, wrV     :: forall c. (B.Write c) => [c] -> B.Doc
+    wr           = B.write  sh
+    wrH          = B.writeH sh
+    wrV          = B.writeV sh
 
+    d 10 _ = wr "..."
+    d n e  = case e of
+        CoxLit    _ c          ->  wr "lit" B.<+> wr c
+        CoxTerm   _ ns _       ->  wr $ concatMap ('/' :) ns
+        CoxBase   _ name _     ->  wr "base" B.<+> wr name
+        CoxLocal  _ v i        ->  wr "local" B.<+> wr v B.<> wr "/" B.<> wr i
+        CoxBlank  _ v          ->  wr "global" B.<+> wr v
+        CoxRefill _ f xs       ->  let f'  = wr ">>" B.<+> d' f
+                                       xs' = B.nest 3 $ wrV $ map arg xs
+                                   in f' B.$$ xs'
+        CoxForm1  _ tag v  e2  ->  form tag [v] $ d' e2
+        CoxForm   _ tag vs e2  ->  form tag vs  $ d' e2
+      where
+        d'                     =  d $ n + 1
+        arg                    =  (wr "-" B.<+>) . d'
+        form (Nothing)  vs     =  form2 vs
+        form (Just tag) vs     =  form2 $ ("'" ++ tag) : vs
+        form2 vs e2            =  B.docWraps "(|" "|)" $ wrH vs B.<+> wr "|" B.<+> e2
+                                          
 -- Convert CoxForm1 to CoxForm.
-derivL :: B.Map (Cox c)
-derivL (CoxForm1 cp1 tag1 v1 e1) =
-    case derivL e1 of
+coxFold :: B.Map (Cox c)
+coxFold (CoxForm1 cp1 tag1 v1 e1) =
+    case coxFold e1 of
       CoxForm _ tag2 vs e2 | tag1 == tag2  ->  CoxForm cp1 tag1 (v1:vs) e2
       e2                                   ->  CoxForm cp1 tag1 [v1]    e2
-derivL (CoxRefill cp f xs) = CoxRefill cp (derivL f) (map derivL xs)
-derivL e = e
+coxFold (CoxRefill cp f xs) = CoxRefill cp (coxFold f) (map coxFold xs)
+coxFold e = e
 
 isCoxBase :: Cox c -> Bool
 isCoxBase (CoxBase _  _ _)   = True
@@ -163,15 +169,15 @@ instance B.Name (Cop c) where
 
 -- | Convert operator name to prefix name
 copPrefix  :: B.Map String
-copPrefix  = ("pre|" ++)
+copPrefix  = ("pre::" ++)
 
 -- | Convert operator name to postfix name
 copPostfix :: B.Map String
-copPostfix = ("post|" ++)
+copPostfix = ("post::" ++)
 
 -- | Convert operator name to infix name
 copInfix   :: B.Map String
-copInfix   = ("in|" ++)
+copInfix   = ("in::" ++)
 
 isCopFunction :: Cop c -> Bool
 isCopFunction (CopFun _ _) = True

@@ -8,6 +8,7 @@ module Koshucode.Baala.Op.Message
   checkTerm,
   diffHead,
   dupTerm,
+  dumpCox,
   dumpRel,
   noAttr,
   notNestRel,
@@ -33,6 +34,11 @@ checkTerm label ns he =
 -- | Different headings
 diffHead :: [B.Relhead] -> B.Ab a
 diffHead = Left . B.abortLines "Different headings" . map showHead
+
+-- | Dump content expression
+dumpCox :: (Show c) => c -> B.Ab a
+dumpCox cox = Left $ B.abortLines "Dump content expression"
+                   $ lines $ show cox
 
 -- | Dump relation
 dumpRel :: (B.Write c, C.CRel c) => B.Rel c -> B.Ab a

@@ -40,7 +40,7 @@ copsLogic =
     , C.CopFun   "or"     copOr
     , C.CopFun   "then"   copImp
     , C.CopFun   "when"   copWhen
-    , C.CopFun   "/if"    copIf
+    , C.CopFun   "#if"    copIf
     , C.CopTree  "if"     synIf
     ]
 
@@ -87,7 +87,7 @@ treeOp :: String -> B.TokenTree
 treeOp = B.TreeL . B.textToken
 
 treeIf :: B.TokenTree -> B.TokenTree -> B.TokenTree -> B.TokenTree
-treeIf test con alt = B.treeWrap [ treeOp "/if" , test, con , alt ]
+treeIf test con alt = B.treeWrap [ treeOp "#if" , test, con , alt ]
 
 treeOrList :: [B.TokenTree] -> B.TokenTree
 treeOrList [x] = x
