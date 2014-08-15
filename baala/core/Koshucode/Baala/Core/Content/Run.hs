@@ -37,7 +37,7 @@ beta (base, deriv) he cox =
     where
       pos = position he
 
--- beta reduction, i.e., process CoxVar and CoxDeriv.
+-- beta reduction, i.e., process CoxBlank and CoxForm1.
 reduce :: forall c. (B.Write c) => C.Cox c -> B.Ab (Beta c)
 reduce = red [] where
     ab1 = B.abortable "cox-reduce"
@@ -47,36 +47,36 @@ reduce = red [] where
     red args cox = case cox of
         C.CoxLit    cp c       ->  Right $ BetaLit  cp c
         C.CoxTerm   cp n i     ->  Right $ BetaTerm cp n i
-        C.CoxVar    cp v k     ->  ab1 cp $ red args =<< kth v k args
-        C.CoxApplyL cp fn xs   ->  ab1 cp $ join args fn $ fills args xs
+        C.CoxBlank  cp v k     ->  ab1 cp $ red args =<< kth v k args
+        C.CoxRefill cp fn xs   ->  ab1 cp $ join args fn $ fills args xs
         C.CoxBase   cp _ _     ->  ab1 cp $ join args cox []
-        C.CoxDeriv  cp _ v _   ->  ab1 cp $ Message.lackArg v
-        C.CoxDerivL cp _ _ _   ->  ab1 cp $ Message.adlib "CoxDerivL"
+        C.CoxForm1  cp _ v _   ->  ab1 cp $ Message.lackArg v
+        C.CoxForm   cp _ _ _   ->  ab1 cp $ Message.adlib "CoxForm"
 
     join :: [B.Named (C.Cox c)] -> C.Cox c -> [B.Ab (C.Cox c)] -> B.Ab (Beta c)
     join args fn []             =  red args fn
     join args fn xxs@(x:xs)     =  case fn of
-        C.CoxDeriv cp _ v f2   ->  ab2 cp $ do
+        C.CoxForm1 cp _ v f2   ->  ab2 cp $ do
                                        x' <- x
                                        join ((v, x') : args) f2 xs
-        C.CoxVar   cp v k      ->  ab2 cp $ do
+        C.CoxBlank cp v k      ->  ab2 cp $ do
                                        fn' <- kth v k args
                                        join args fn' xxs
         C.CoxBase  cp n f      ->  ab2 cp $ do
                                        xxs2 <- mapM id xxs
                                        let xxs3 = red args `map` xxs2
                                        Right $ BetaCall cp n f xxs3
-        C.CoxApplyL cp f2 xs2  ->  ab2 cp $ join args f2 $ fills args xs2 ++ xxs
+        C.CoxRefill cp f2 xs2  ->  ab2 cp $ join args f2 $ fills args xs2 ++ xxs
         _                      ->  Message.unkShow fn
 
     fills :: [B.Named (C.Cox c)] -> [C.Cox c] -> [B.Ab (C.Cox c)]
     fills = map . fill
 
     fill :: [B.Named (C.Cox c)] -> B.AbMap (C.Cox c)
-    fill args (C.CoxVar _ v k)       = kth v k args
-    fill args (C.CoxApplyL cp fn xs) = do fn' <- fill args fn
+    fill args (C.CoxBlank _ v k)     = kth v k args
+    fill args (C.CoxRefill cp fn xs) = do fn' <- fill args fn
                                           xs' <- fill args `mapM` xs
-                                          Right $ C.CoxApplyL cp fn' xs'
+                                          Right $ C.CoxRefill cp fn' xs'
     fill _ x                         = Right x
 
     kth :: String -> Int -> [B.Named (C.Cox c)] -> B.Ab (C.Cox c)
@@ -92,8 +92,8 @@ link :: forall c. C.CopBundle c -> B.Map (C.Cox c)
 link (base, deriv) = li where
     li cox =
         case cox of
-          C.CoxVar _ n 0 -> B.fromMaybe cox $ lookup n fs
-          _              -> C.mapToCox li cox
+          C.CoxBlank _ n 0 -> B.fromMaybe cox $ lookup n fs
+          _                -> C.mapToCox li cox
 
     fs :: [C.NamedCox c]
     fs = map (fmap li) deriv ++ map namedBase base
@@ -112,11 +112,11 @@ position he = spos where
         in if all (>= 0) index
            then Right $ C.CoxTerm cp ns index
            else Message.unkTerm [B.showNestedTermName ns] he
-    pos (C.CoxApplyL cp  f xs)  = do f'  <- spos f
+    pos (C.CoxRefill cp  f xs)  = do f'  <- spos f
                                      xs' <- mapM spos xs
-                                     Right $ C.CoxApplyL cp f' xs'
-    pos (C.CoxDeriv cp tag v e) = do e' <- spos e
-                                     Right $ C.CoxDeriv cp tag v e'
+                                     Right $ C.CoxRefill cp f' xs'
+    pos (C.CoxForm1 cp tag v e) = do e' <- spos e
+                                     Right $ C.CoxForm1 cp tag v e'
     pos e = Right e
 
 

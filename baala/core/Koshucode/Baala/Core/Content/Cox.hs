@@ -7,15 +7,15 @@ module Koshucode.Baala.Core.Content.Cox
 ( -- $Process
 
   -- * Expression
-  Cox (..),
+  Cox (..), NamedCox,
   coxSyntacticArity,
   isCoxBase,
-  isCoxDeriv,
+  isCoxForm,
   mapToCox,
   checkIrreducible,
 
   -- * Operator
-  Cop (..), CopBundle, NamedCox,
+  Cop (..), CopBundle,
   CopFun, CopCox, CopTree,
   isCopFunction,
   isCopSyntax,
@@ -28,25 +28,26 @@ import qualified Koshucode.Baala.Core.Message    as Message
 -- ----------------------  Expression
 
 -- | Content expressions.
---   R: reduced form, R\/B: pre-beta form, R\/B\/A: pre-alpha form.
 data Cox c
-    = CoxLit    [B.CodePoint] c                   -- ^ R:   Literal content
-    | CoxTerm   [B.CodePoint] [B.TermName] [Int]  -- ^ R:   Term reference, its name and position
-    | CoxBase   [B.CodePoint] String (CopFun c)   -- ^ R:   Base function
-    | CoxVar    [B.CodePoint] String Int          -- ^ B:   Local (> 0) or global (= 0) variable,
-                                                  --        its name and De Bruijn index
-    | CoxApplyL [B.CodePoint] (Cox c) [Cox c]     -- ^ R/B: Function application (multiple arguments)
-    | CoxDeriv  [B.CodePoint] (Maybe String)  String  (Cox c)  -- ^ B:   Derived function (single variable)
-    | CoxDerivL [B.CodePoint] (Maybe String) [String] (Cox c)  -- ^ A:   Derived function (multiple variables)
+    = CoxLit    [B.CodePoint] c                   -- ^ Literal content
+    | CoxTerm   [B.CodePoint] [B.TermName] [Int]  -- ^ Term reference, its name and position
+    | CoxBase   [B.CodePoint] String (CopFun c)   -- ^ Base function
+    | CoxBlank  [B.CodePoint] String Int          -- ^ Local (> 0) or global (= 0) blanks,
+                                                  --   its name and De Bruijn index
+    | CoxRefill [B.CodePoint] (Cox c) [Cox c]     -- ^ Refill arguments in a form
+    | CoxForm1  [B.CodePoint] (Maybe String)  String  (Cox c)  -- ^ Form with single blank
+    | CoxForm   [B.CodePoint] (Maybe String) [String] (Cox c)  -- ^ Form with multiple blanks
+
+type NamedCox c = B.Named (Cox c)
 
 instance B.CodePointer (Cox c) where
     codePoint (CoxLit    cp _)      =  cp
     codePoint (CoxTerm   cp _ _)    =  cp
     codePoint (CoxBase   cp _ _)    =  cp
-    codePoint (CoxVar    cp _ _)    =  cp
-    codePoint (CoxApplyL cp _ _)    =  cp
-    codePoint (CoxDeriv  cp _ _ _)  =  cp
-    codePoint (CoxDerivL cp _ _ _)  =  cp
+    codePoint (CoxBlank  cp _ _)    =  cp
+    codePoint (CoxRefill cp _ _)    =  cp
+    codePoint (CoxForm1  cp _ _ _)  =  cp
+    codePoint (CoxForm   cp _ _ _)  =  cp
 
 instance (B.Write c) => Show (Cox c) where
     show = show . B.doc
@@ -62,49 +63,49 @@ docCox sh = d (0 :: Int) . derivL where
           CoxLit    _ c        -> B.write sh "lit" B.<+> B.write sh c
           CoxTerm   _ ns _     -> B.writeH sh ns
           CoxBase   _ name _   -> B.write sh name
-          CoxVar    _ v i      -> B.write sh v B.<> B.write sh "/" B.<> B.write sh i
-          CoxApplyL _ f xs     -> let f'  = B.write sh "ap" B.<+> d' f
+          CoxBlank  _ v i      -> B.write sh v B.<> B.write sh "/" B.<> B.write sh i
+          CoxRefill _ f xs     -> let f'  = B.write sh "ap" B.<+> d' f
                                       xs' = B.nest 3 $ B.writeV sh (map d' xs)
                                   in f' B.$$ xs'
-          CoxDeriv  _ tag v  e2  -> fn tag (B.write  sh v)  (d' e2)
-          CoxDerivL _ tag vs e2  -> fn tag (B.writeH sh vs) (d' e2)
+          CoxForm1  _ tag v  e2  -> fn tag (B.write  sh v)  (d' e2)
+          CoxForm   _ tag vs e2  -> fn tag (B.writeH sh vs) (d' e2)
         where
           d' = d $ n + 1
           fn Nothing    v b  =  B.docWraps "(|" "|)" $ v B.<+> B.write sh "|" B.<+> b
           fn (Just tag) v b  =  B.docWraps "(|" "|)" $ (B.write sh $ "'" ++ tag)
                                                        B.<+> v B.<+> B.write sh "|" B.<+> b
 
--- Convert CoxDeriv to CoxDerivL.
+-- Convert CoxForm1 to CoxForm.
 derivL :: B.Map (Cox c)
-derivL (CoxDeriv cp1 tag1 v1 e1) =
+derivL (CoxForm1 cp1 tag1 v1 e1) =
     case derivL e1 of
-      CoxDerivL _ tag2 vs e2 | tag1 == tag2  ->  CoxDerivL cp1 tag1 (v1:vs) e2
-      e2                                     ->  CoxDerivL cp1 tag1 [v1]    e2
-derivL (CoxApplyL cp f xs) = CoxApplyL cp (derivL f) (map derivL xs)
+      CoxForm _ tag2 vs e2 | tag1 == tag2  ->  CoxForm cp1 tag1 (v1:vs) e2
+      e2                                   ->  CoxForm cp1 tag1 [v1]    e2
+derivL (CoxRefill cp f xs) = CoxRefill cp (derivL f) (map derivL xs)
 derivL e = e
 
 isCoxBase :: Cox c -> Bool
 isCoxBase (CoxBase _  _ _)   = True
 isCoxBase _                  = False
 
-isCoxDeriv :: Cox c -> Bool
-isCoxDeriv (CoxDeriv  _ _ _ _) = True
-isCoxDeriv (CoxDerivL _ _ _ _) = True
-isCoxDeriv _                   = False
+isCoxForm :: Cox c -> Bool
+isCoxForm (CoxForm1  _ _ _ _) = True
+isCoxForm (CoxForm   _ _ _ _) = True
+isCoxForm _                   = False
 
 coxSyntacticArity :: Cox c -> Int
 coxSyntacticArity = loop where
-    loop (CoxDerivL _ _ vs cox)  = loop cox + length vs
-    loop (CoxDeriv  _ _ _  cox)  = loop cox + 1
-    loop (CoxApplyL _ cox xs)
-        | isCoxDeriv cox = loop cox - length xs
+    loop (CoxForm   _ _ vs cox)  = loop cox + length vs
+    loop (CoxForm1  _ _ _  cox)  = loop cox + 1
+    loop (CoxRefill _ cox xs)
+        | isCoxForm cox  = loop cox - length xs
         | otherwise      = 0
     loop _ = 0
 
 mapToCox :: B.Map (B.Map (Cox c))
-mapToCox g (CoxApplyL cp f xs)        = CoxApplyL cp (g f) (map g xs)
-mapToCox g (CoxDeriv  cp tag v  body) = CoxDeriv  cp tag v  (g body)
-mapToCox g (CoxDerivL cp tag vs body) = CoxDerivL cp tag vs (g body)
+mapToCox g (CoxRefill cp f xs)        = CoxRefill cp (g f) (map g xs)
+mapToCox g (CoxForm1  cp tag v  body) = CoxForm1  cp tag v  (g body)
+mapToCox g (CoxForm   cp tag vs body) = CoxForm   cp tag vs (g body)
 mapToCox _ e = e
 
 checkIrreducible :: B.AbMap (Cox c)
@@ -120,7 +121,7 @@ irreducible cox =
       CoxLit  _ _       ->  True
       CoxTerm _ _ _     ->  True
       CoxBase _ _ _     ->  True
-      CoxApplyL _ f xs  ->  all irreducible $ f : xs
+      CoxRefill _ f xs  ->  all irreducible $ f : xs
       _                 ->  False
 
 
@@ -135,10 +136,13 @@ data Cop c
 -- | Base and derived operators.
 type CopBundle c = ( [Cop c], [NamedCox c] )
 
-type NamedCox c = B.Named (Cox c)
+-- | Base function.
+type CopFun c = [B.Ab c] -> B.Ab c
 
-type CopFun c = [B.Ab c]      -> B.Ab c
-type CopCox c = [Cox c]       -> B.Ab (Cox c)
+-- | Expression-level syntax.
+type CopCox c = [Cox c] -> B.Ab (Cox c)
+
+-- | Tree-level syntax.
 type CopTree  = [B.TokenTree] -> B.Ab B.TokenTree
 
 instance Show (Cop c) where

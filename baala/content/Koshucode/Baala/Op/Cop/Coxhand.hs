@@ -19,7 +19,7 @@ import qualified Koshucode.Baala.Core   as C
 
 -- | Create a form with named blanks.
 f :: [String] -> B.Map (C.Cox c)
-f vs = C.coxInsert . C.CoxDerivL [] Nothing vs
+f vs = C.coxInsert . C.CoxForm [] Nothing vs
 
 -- | Shorthand for one-blank form — @f [\"\#1\"]@
 f1 :: B.Map (C.Cox c)
@@ -42,7 +42,7 @@ r = rx . b
 
 -- | Refill blanks in the given form.
 rx :: C.Cox c -> [C.Cox c] -> C.Cox c
-rx = C.CoxApplyL []
+rx = C.CoxRefill []
 
 -- | Refill two blanks in a named binary form.
 bin :: String -> C.Cox c -> C.Cox c -> C.Cox c
@@ -53,7 +53,7 @@ bin n x y = r (C.copInfix n) [x, y]
 
 -- | Create a named blank in a form.
 b :: String -> C.Cox c
-b n = C.CoxVar [] n 0
+b n = C.CoxBlank [] n 0
 
 -- | Shorthand for the first blank — @b \"\#1\"@
 b1 :: C.Cox c
