@@ -7,11 +7,12 @@ module Koshucode.Baala.Op.Cop.List
   -- $Operators
 ) where
 
-import qualified Data.List                     as List
-import qualified Data.Char                     as Char
-import qualified Koshucode.Baala.Base          as B
-import qualified Koshucode.Baala.Core          as C
-import qualified Koshucode.Baala.Op.Message    as Message
+import qualified Data.List                          as List
+import qualified Data.Char                          as Char
+import qualified Koshucode.Baala.Base               as B
+import qualified Koshucode.Baala.Core               as C
+import qualified Koshucode.Baala.Op.Cop.Coxhand     as H
+import qualified Koshucode.Baala.Op.Message         as Message
 
 
 
@@ -55,6 +56,9 @@ copsList =
     , C.CopFun  "total"         copTotal
     , C.CopFun  "sub-index"     copSubIndex
     , C.CopFun  "sub-length"    copSubLength
+
+    , C.CopFun  (C.copInfix  "in") copFunIn
+    , C.CopCox  (C.copPrefix "in") copCoxIn
     ]
 
 copList :: (C.CList c) => C.CopFun c
@@ -180,6 +184,24 @@ copPush arg =
              | C.isSet cs -> C.putSet $ c : C.gSet cs
              | otherwise  -> Message.reqCollection
          _ -> typeUnmatch arg
+
+
+-- --------------------------------------------  in
+
+copFunIn :: (C.CContent c) => C.CopFun c
+copFunIn arg =
+    do arg2 <- C.getArg2 arg
+       case arg2 of
+         (Right c, Right cs)
+             | C.isSet  cs -> C.putBool $ c `elem` C.gSet  cs
+             | C.isList cs -> C.putBool $ c `elem` C.gList cs
+             | otherwise   -> Message.reqCollection
+         _ -> typeUnmatch arg
+
+copCoxIn :: C.CopCox c
+copCoxIn [xs]    = Right $ H.f1 $ H.ai "in" [H.v1, xs]
+copCoxIn [x, xs] = Right $ H.f1 $ H.ai "in" [x,    xs]
+copCoxIn _       = Message.adlib "require operand"
 
 
 -- ----------------------  text

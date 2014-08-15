@@ -62,6 +62,7 @@ vanillaCops = (concat cops, htab) where
 
         , 7 ! "and"
 
+        , 6 ! "in"
         , 6 ! "="
         , 6 ! "<>"
         , 6 ! "<"
