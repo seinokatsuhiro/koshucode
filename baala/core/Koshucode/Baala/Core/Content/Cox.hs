@@ -11,12 +11,13 @@ module Koshucode.Baala.Core.Content.Cox
   coxSyntacticArity,
   isCoxBase,
   isCoxForm,
-  mapToCox,
+  coxMap, coxCall,
   checkIrreducible,
 
   -- * Operator
   Cop (..), CopBundle,
   CopFun, CopCox, CopTree,
+  copPrefix, copInfix, copPostfix,
   isCopFunction,
   isCopSyntax,
 ) where
@@ -32,8 +33,8 @@ data Cox c
     = CoxLit    [B.CodePoint] c                   -- ^ Literal content
     | CoxTerm   [B.CodePoint] [B.TermName] [Int]  -- ^ Term reference, its name and position
     | CoxBase   [B.CodePoint] String (CopFun c)   -- ^ Base function
-    | CoxBlank  [B.CodePoint] String Int          -- ^ Local (> 0) or global (= 0) blanks,
-                                                  --   its name and De Bruijn index
+    | CoxLocal  [B.CodePoint] String Int          -- ^ Local blank, its name and De Bruijn index
+    | CoxBlank  [B.CodePoint] String              -- ^ Blank in form
     | CoxRefill [B.CodePoint] (Cox c) [Cox c]     -- ^ Refill arguments in a form
     | CoxForm1  [B.CodePoint] (Maybe String)  String  (Cox c)  -- ^ Form with single blank
     | CoxForm   [B.CodePoint] (Maybe String) [String] (Cox c)  -- ^ Form with multiple blanks
@@ -44,7 +45,8 @@ instance B.CodePointer (Cox c) where
     codePoint (CoxLit    cp _)      =  cp
     codePoint (CoxTerm   cp _ _)    =  cp
     codePoint (CoxBase   cp _ _)    =  cp
-    codePoint (CoxBlank  cp _ _)    =  cp
+    codePoint (CoxLocal  cp _ _)    =  cp
+    codePoint (CoxBlank  cp _)      =  cp
     codePoint (CoxRefill cp _ _)    =  cp
     codePoint (CoxForm1  cp _ _ _)  =  cp
     codePoint (CoxForm   cp _ _ _)  =  cp
@@ -63,7 +65,8 @@ docCox sh = d (0 :: Int) . derivL where
           CoxLit    _ c        -> B.write sh "lit" B.<+> B.write sh c
           CoxTerm   _ ns _     -> B.writeH sh ns
           CoxBase   _ name _   -> B.write sh name
-          CoxBlank  _ v i      -> B.write sh v B.<> B.write sh "/" B.<> B.write sh i
+          CoxLocal  _ v i      -> B.write sh v B.<> B.write sh "/" B.<> B.write sh i
+          CoxBlank  _ v        -> B.write sh v
           CoxRefill _ f xs     -> let f'  = B.write sh "ap" B.<+> d' f
                                       xs' = B.nest 3 $ B.writeV sh (map d' xs)
                                   in f' B.$$ xs'
@@ -102,11 +105,14 @@ coxSyntacticArity = loop where
         | otherwise      = 0
     loop _ = 0
 
-mapToCox :: B.Map (B.Map (Cox c))
-mapToCox g (CoxRefill cp f xs)        = CoxRefill cp (g f) (map g xs)
-mapToCox g (CoxForm1  cp tag v  body) = CoxForm1  cp tag v  (g body)
-mapToCox g (CoxForm   cp tag vs body) = CoxForm   cp tag vs (g body)
-mapToCox _ e = e
+coxMap :: B.Map (B.Map (Cox c))
+coxMap g (CoxRefill cp f xs)        = CoxRefill cp (g f) (map g xs)
+coxMap g (CoxForm1  cp tag v  body) = CoxForm1  cp tag v  (g body)
+coxMap g (CoxForm   cp tag vs body) = CoxForm   cp tag vs (g body)
+coxMap _ e = e
+
+coxCall :: Cox c -> (B.Map (Cox c)) -> Cox c
+coxCall cox g = coxMap g cox
 
 checkIrreducible :: B.AbMap (Cox c)
 checkIrreducible e
@@ -154,6 +160,18 @@ instance B.Name (Cop c) where
     name (CopFun  n _) = n
     name (CopCox  n _) = n
     name (CopTree n _) = n
+
+-- | Convert operator name to prefix name
+copPrefix  :: B.Map String
+copPrefix  = ("pre|" ++)
+
+-- | Convert operator name to postfix name
+copPostfix :: B.Map String
+copPostfix = ("post|" ++)
+
+-- | Convert operator name to infix name
+copInfix   :: B.Map String
+copInfix   = ("in|" ++)
 
 isCopFunction :: Cop c -> Bool
 isCopFunction (CopFun _ _) = True

@@ -47,11 +47,12 @@ reduce = red [] where
     red args cox = case cox of
         C.CoxLit    cp c       ->  Right $ BetaLit  cp c
         C.CoxTerm   cp n i     ->  Right $ BetaTerm cp n i
-        C.CoxBlank  cp v k     ->  ab1 cp $ red args =<< kth v k args
+        C.CoxLocal  cp v k     ->  ab1 cp $ red args =<< kth v k args
         C.CoxRefill cp fn xs   ->  ab1 cp $ join args fn $ fills args xs
         C.CoxBase   cp _ _     ->  ab1 cp $ join args cox []
         C.CoxForm1  cp _ v _   ->  ab1 cp $ Message.lackArg v
         C.CoxForm   cp _ _ _   ->  ab1 cp $ Message.adlib "CoxForm"
+        C.CoxBlank  cp v       ->  ab1 cp $ Message.unkGlobalVar v
 
     join :: [B.Named (C.Cox c)] -> C.Cox c -> [B.Ab (C.Cox c)] -> B.Ab (Beta c)
     join args fn []             =  red args fn
@@ -59,7 +60,7 @@ reduce = red [] where
         C.CoxForm1 cp _ v f2   ->  ab2 cp $ do
                                        x' <- x
                                        join ((v, x') : args) f2 xs
-        C.CoxBlank cp v k      ->  ab2 cp $ do
+        C.CoxLocal cp v k      ->  ab2 cp $ do
                                        fn' <- kth v k args
                                        join args fn' xxs
         C.CoxBase  cp n f      ->  ab2 cp $ do
@@ -73,7 +74,7 @@ reduce = red [] where
     fills = map . fill
 
     fill :: [B.Named (C.Cox c)] -> B.AbMap (C.Cox c)
-    fill args (C.CoxBlank _ v k)     = kth v k args
+    fill args (C.CoxLocal _ v k)     = kth v k args
     fill args (C.CoxRefill cp fn xs) = do fn' <- fill args fn
                                           xs' <- fill args `mapM` xs
                                           Right $ C.CoxRefill cp fn' xs'
@@ -90,18 +91,16 @@ reduce = red [] where
 
 link :: forall c. C.CopBundle c -> B.Map (C.Cox c)
 link (base, deriv) = li where
-    li cox =
-        case cox of
-          C.CoxBlank _ n 0 -> B.fromMaybe cox $ lookup n fs
-          _                -> C.mapToCox li cox
+    li cox@(C.CoxBlank _ n)   =  B.fromMaybe cox $ lookup n fs
+    li cox                    =  C.coxCall cox li
 
     fs :: [C.NamedCox c]
-    fs = map (fmap li) deriv ++ map namedBase base
+    fs = map (fmap li) deriv ++ map named base
 
-    namedBase :: C.Cop c -> C.NamedCox c
-    namedBase (C.CopFun  n f) = (n, C.CoxBase [] n f)
-    namedBase (C.CopCox  n _) = (n, C.CoxBase [] n undefined)
-    namedBase (C.CopTree n _) = (n, C.CoxBase [] n undefined)
+    named :: C.Cop c -> C.NamedCox c
+    named (C.CopFun  n f) = (n, C.CoxBase [] n f)
+    named (C.CopCox  n _) = (n, C.CoxBase [] n undefined)
+    named (C.CopTree n _) = (n, C.CoxBase [] n undefined)
 
 -- put term positions for actural heading
 position :: B.Relhead -> C.Cox c -> B.Ab (C.Cox c)

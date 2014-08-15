@@ -53,7 +53,7 @@ bin n x y = r (C.copInfix n) [x, y]
 
 -- | Create a named blank in a form.
 b :: String -> C.Cox c
-b n = C.CoxBlank [] n 0
+b = C.CoxBlank []
 
 -- | Shorthand for the first blank — @b \"\#1\"@
 b1 :: C.Cox c
