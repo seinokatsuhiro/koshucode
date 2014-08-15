@@ -44,7 +44,7 @@ list () {
 }
 
 main () {
-    for pkg in base core operator calculator toolkit; do
+    for pkg in base core operator content calculator toolkit; do
         count $pkg
     done
 }
