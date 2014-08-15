@@ -14,7 +14,7 @@ module Koshucode.Baala.Toolkit.Library.Input
 
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
-import qualified Koshucode.Baala.Op   as Op
+import qualified Koshucode.Baala.Type.Vanilla   as Type
 
 
 -- ----------------------  Input
@@ -33,9 +33,9 @@ readInput (File p) = readFile p
 readInputs :: [Input] -> IO [String]
 readInputs = mapM readInput
 
-readJudge :: String -> [B.Judge Op.VContent]
+readJudge :: String -> [B.Judge Type.VContent]
 readJudge src =
-    let root = C.emptySection :: C.Section Op.VContent
+    let root = C.emptySection :: C.Section Type.VContent
     in case C.readSectionText root src of
          Right sec -> C.secJudge sec
          Left _    -> []

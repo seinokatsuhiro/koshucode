@@ -55,6 +55,7 @@ executable koshu-change
        , koshucode-baala-base       == 0.67.*
        , koshucode-baala-core       == 0.67.*
        , koshucode-baala-operator   == 0.67.*
+       , koshucode-baala-content    == 0.67.*
        , koshucode-baala-calculator == 0.67.*
 
 executable koshu-rdf
@@ -70,6 +71,7 @@ executable koshu-rdf
        , koshucode-baala-base       == 0.67.*
        , koshucode-baala-core       == 0.67.*
        , koshucode-baala-operator   == 0.67.*
+       , koshucode-baala-content    == 0.67.*
        , koshucode-baala-calculator == 0.67.*
 
 executable koshu-syntax
@@ -82,6 +84,7 @@ executable koshu-syntax
        , koshucode-baala-base       == 0.67.*
        , koshucode-baala-core       == 0.67.*
        , koshucode-baala-operator   == 0.67.*
+       , koshucode-baala-content    == 0.67.*
        , koshucode-baala-calculator == 0.67.*
 
 
@@ -108,5 +111,6 @@ library
        , koshucode-baala-base       == 0.67.*
        , koshucode-baala-core       == 0.67.*
        , koshucode-baala-operator   == 0.67.*
+       , koshucode-baala-content    == 0.67.*
        , koshucode-baala-calculator == 0.67.*
 

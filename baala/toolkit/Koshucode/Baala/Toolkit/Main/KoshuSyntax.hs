@@ -8,11 +8,11 @@ module Koshucode.Baala.Toolkit.Main.KoshuSyntax
   -- $koshu-syntax.hs
 ) where
 
-import qualified Control.Monad          as M
-import qualified System.Console.GetOpt  as G
-import qualified Koshucode.Baala.Base   as B
-import qualified Koshucode.Baala.Core   as C
-import qualified Koshucode.Baala.Op     as Op
+import qualified Control.Monad                  as M
+import qualified System.Console.GetOpt          as G
+import qualified Koshucode.Baala.Base           as B
+import qualified Koshucode.Baala.Core           as C
+import qualified Koshucode.Baala.Type.Vanilla   as Type
 
 import qualified Koshucode.Baala.Toolkit.Library.Exit    as L
 import qualified Koshucode.Baala.Toolkit.Library.Version as L
@@ -115,7 +115,7 @@ putClause p@(clseq, c) =
          ls  = B.clauseLines src
      M.foldM_ (putToken clseq) 1 ls
 
-clauseJudge :: (Int, C.Clause) -> B.Judge Op.VContent
+clauseJudge :: (Int, C.Clause) -> B.Judge Type.VContent
 clauseJudge (clseq, c) = B.affirm "CLAUSE" args where
     args = [ ("clause"      , C.pDecFromInt clseq)
            , ("clause-type" , C.pText $ C.clauseTypeText c)]
@@ -127,7 +127,7 @@ putToken clseq tn (B.CodeLine ln line toks) =
      putJudges $ map (tokenJudge clseq ln) toks
      return    $ tn + length toks
 
-tokenJudge :: Int -> Int -> B.Token -> B.Judge Op.VContent
+tokenJudge :: Int -> Int -> B.Token -> B.Judge Type.VContent
 tokenJudge clseq ln tok
     = B.affirm "TOKEN"
       [ ("clause" , C.pDecFromInt clseq)
@@ -153,7 +153,7 @@ dumpTokenText (n, ys) (B.CodeLine l line ts) = (n + length ts, ys ++ xs) where
     xs   = h ++ map dump ts
     dump = judgeText . dumpTokenJudge l
 
-dumpTokenJudge :: Int -> B.Token -> B.Judge Op.VContent
+dumpTokenJudge :: Int -> B.Token -> B.Judge Type.VContent
 dumpTokenJudge l t = B.affirm "TOKEN" xs where
     xs = [ ("line"   , C.pDecFromInt l)
          , ("type"   , C.pText $ B.tokenTypeText t)

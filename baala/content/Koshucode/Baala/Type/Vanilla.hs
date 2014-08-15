@@ -4,7 +4,6 @@
 
 module Koshucode.Baala.Type.Vanilla
 ( VContent (..),
-  VCop,
 ) where
 
 import qualified Data.Set                   as Set
@@ -81,9 +80,6 @@ instance B.Write VContent where
         VSet     xs  ->  B.docWraps "{"   "}" $ B.writeColon sh xs
         VAssn    xs  ->  B.docWraps "<<" ">>" $ B.writeH     sh xs
         VRel r       ->  B.write sh r
-
-type VCop = C.CopFun VContent
-
 
 
 -- ----------------------  haskell data
