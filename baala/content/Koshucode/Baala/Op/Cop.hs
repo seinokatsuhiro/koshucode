@@ -14,5 +14,3 @@ import Koshucode.Baala.Op.Cop.Arith
 import Koshucode.Baala.Op.Cop.List
 import Koshucode.Baala.Op.Cop.Logic
 import Koshucode.Baala.Op.Cop.Order
-
-

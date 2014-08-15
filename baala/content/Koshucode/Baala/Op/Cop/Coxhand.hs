@@ -1,48 +1,69 @@
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Helper functions to construct content expressions.
+
 module Koshucode.Baala.Op.Cop.Coxhand
-( -- * Application
-  a, ai, ax,
-  -- * Function
+( -- * Form
   f, f1, f2, f3,
-  -- * Variable
-  v, v1, v2, v3,
+  -- * Refill
+  r, rx, bin,
+  -- * Blank
+  b, b1, b2, b3,
 ) where
 
 import qualified Koshucode.Baala.Base   as B
 import qualified Koshucode.Baala.Core   as C
 
 
--- --------------------------------------------  Application
+-- --------------------------------------------  Form
 
-a :: String -> [C.Cox c] -> C.Cox c
-a = ax . v
-
-ai :: String -> [C.Cox c] -> C.Cox c
-ai = ax . v . C.copInfix
-
-ax :: C.Cox c -> [C.Cox c] -> C.Cox c
-ax = C.CoxApplyL []
-
-
--- --------------------------------------------  Function
-
+-- | Create a form with named blanks.
 f :: [String] -> B.Map (C.Cox c)
 f vs = C.coxInsert . C.CoxDerivL [] Nothing vs
 
-f1, f2, f3 :: B.Map (C.Cox c)
+-- | Shorthand for one-blank form — @f [\"\#1\"]@
+f1 :: B.Map (C.Cox c)
 f1 = f ["#1"]
+
+-- | Shorthand for two-blanks form — @f [\"\#1\", \"\#2\"]@
+f2 :: B.Map (C.Cox c)
 f2 = f ["#1", "#2"]
+
+-- | Shorthand for three-blanks form — @f [\"\#1\", \"\#2\", \"\#3\"]@
+f3 :: B.Map (C.Cox c)
 f3 = f ["#1", "#2", "#3"]
 
 
--- --------------------------------------------  Variable
+-- --------------------------------------------  Refill
 
-v :: String -> C.Cox c
-v n = C.CoxVar [] n 0
+-- | Refill blanks in a named form.
+r :: String -> [C.Cox c] -> C.Cox c
+r = rx . b
 
-v1, v2, v3 :: C.Cox c
-v1 = v "#1"
-v2 = v "#2"
-v3 = v "#3"
+-- | Refill blanks in the given form.
+rx :: C.Cox c -> [C.Cox c] -> C.Cox c
+rx = C.CoxApplyL []
+
+-- | Refill two blanks in a named binary form.
+bin :: String -> C.Cox c -> C.Cox c -> C.Cox c
+bin n x y = r (C.copInfix n) [x, y]
+
+
+-- --------------------------------------------  Blank
+
+-- | Create a named blank in a form.
+b :: String -> C.Cox c
+b n = C.CoxVar [] n 0
+
+-- | Shorthand for the first blank — @b \"\#1\"@
+b1 :: C.Cox c
+b1 = b "#1"
+
+-- | Shorthand for the second blank — @b \"\#2\"@
+b2 :: C.Cox c
+b2 = b "#2"
+
+-- | Shorthand for the third blank — @b \"\#3\"@
+b3 :: C.Cox c
+b3 = b "#3"
 

@@ -29,12 +29,12 @@ import qualified Koshucode.Baala.Op.Message         as Message
 
 copsOrder :: (C.CBool c, Eq c, Ord c) => [C.Cop c]
 copsOrder =
-    [ C.CopFun  (C.copInfix "=")   copEq
-    , C.CopFun  (C.copInfix "<>")  copNeq
-    , C.CopFun  (C.copInfix "<")   copLt
-    , C.CopFun  (C.copInfix "<=")  copLte
-    , C.CopFun  (C.copInfix ">")   copGt
-    , C.CopFun  (C.copInfix ">=")  copGte
+    [ orderInfix     "="   (==)
+    , orderInfix     "<>"  (/=)
+    , orderInfix     "<"   (<)
+    , orderInfix     "<="  (<=)
+    , orderInfix     ">"   (>)
+    , orderInfix     ">="  (>=)
 
     , orderPrefix    "="
     , orderPrefix    "<>"
@@ -56,49 +56,35 @@ copsOrder =
     , C.CopCox  "any"     $ copCollect "or"
     ]
 
-copBy :: (C.CBool c) => (c -> c -> Bool) -> C.CopFun c
-copBy p [Right x, Right y] = C.putBool $ x `p` y
-copBy _ _  = Message.notFound ""
-
-copEq   :: (C.CBool c, Eq c) => C.CopFun c
-copEq   =  copBy (==)
-
-copNeq  :: (C.CBool c, Eq c) => C.CopFun c
-copNeq  =  copBy (/=)
-
-copLt   :: (C.CBool c, Ord c) => C.CopFun c
-copLt   =  copBy (<)
-
-copLte  :: (C.CBool c, Ord c) => C.CopFun c
-copLte  =  copBy (<=)
-
-copGt   :: (C.CBool c, Ord c) => C.CopFun c
-copGt   =  copBy (>)
-
-copGte  :: (C.CBool c, Ord c) => C.CopFun c
-copGte  =  copBy (>=)
-
-copIs :: C.CopCox c
-copIs [x, f] = Right $ H.ax f [x]
-copIs _      = Message.unmatchType ""
+orderInfix :: (C.CBool c) => String -> (c -> c -> Bool) -> C.Cop c
+orderInfix n f = C.CopFun (C.copInfix n) g where
+    g [Right x, Right y] = C.putBool $ x `f` y
+    g _                  = Message.notFound ""
 
 orderPrefix :: String -> C.Cop c
-orderPrefix op = C.CopCox (C.copPrefix op) $ cop where
-    cop [x] = Right $ H.f1 $ H.ai op [H.v1, x]
+orderPrefix n = C.CopCox (C.copPrefix n) $ cop where
+    cop [x] = Right $ H.f1 (H.b1 `op` x)
     cop _   = Message.adlib "require operand"
+    op      = H.bin n
 
 orderPostfix :: String -> C.Cop c
-orderPostfix op = C.CopCox (C.copPostfix op) $ cop where
-    cop [x] = Right $ H.f1 $ H.ai op [x, H.v1]
+orderPostfix n = C.CopCox (C.copPostfix n) $ cop where
+    cop [x] = Right $ H.f1 (x `op` H.b1)
     cop _   = Message.adlib "require operand"
+    op      = H.bin n
+
+copIs :: C.CopCox c
+copIs [x, f] = Right $ H.rx f [x]
+copIs _      = Message.unmatchType ""
 
 copBetween :: C.CopCox c
 copBetween [low, high] = Right between where
-    between = H.f1 $ H.ai "and" [asc [low, H.v1], asc [H.v1, high]]
-    asc     = H.ai "<="
+    between = H.f1 $ (low `opAsc` H.b1) `opAnd` (H.b1 `opAsc` high)
+    opAnd   = H.bin "and"
+    opAsc   = H.bin "<="
 copBetween _ = Message.adlib "require operand"
 
 copCollect :: String -> C.CopCox c
-copCollect op fs = Right $ H.f1 $ H.ai op (map ap fs) where
-    ap f = H.ax f [H.v1]
+copCollect n fs = Right $ H.f1 $ H.r (C.copInfix n) (map refill fs) where
+    refill f = H.rx f [H.b1]
 

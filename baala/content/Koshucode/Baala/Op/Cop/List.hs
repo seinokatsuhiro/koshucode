@@ -199,8 +199,8 @@ copFunIn arg =
          _ -> typeUnmatch arg
 
 copCoxIn :: C.CopCox c
-copCoxIn [xs]    = Right $ H.f1 $ H.ai "in" [H.v1, xs]
-copCoxIn [x, xs] = Right $ H.f1 $ H.ai "in" [x,    xs]
+copCoxIn [xs]    = Right $ H.f1 $ H.bin "in" H.b1 xs
+copCoxIn [x, xs] = Right $ H.f1 $ H.bin "in" x    xs
 copCoxIn _       = Message.adlib "require operand"
 
 
