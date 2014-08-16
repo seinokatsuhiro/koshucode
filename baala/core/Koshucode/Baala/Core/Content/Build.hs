@@ -4,7 +4,7 @@
 -- | Term-content calcutation.
 
 module Koshucode.Baala.Core.Content.Build
-( coxBuild, coxInsert,
+( coxBuild, coxForm,
 ) where
 
 import qualified Koshucode.Baala.Base                   as B
@@ -164,19 +164,14 @@ convTree syn = expand where
     expand tree = Right tree
 
 -- | Insert fresh form into indexed expression.
-coxInsert :: B.Map (C.Cox c)
-coxInsert = debruijn . deepen (0 :: Int) . coxUnfold where
-    deepen :: Int -> B.Map (C.Cox c)
-    deepen n (C.CoxForm1 cp tag v e) = C.CoxForm1 cp tag v $ deepen (n + 1) e
-    deepen n cox                     = de n [] cox
-
-    de :: Int -> [String] -> B.Map (C.Cox c)
-    de n vars cox = case cox of
-       C.CoxBlank cp v      ->  C.CoxBlank cp v
+coxForm :: [B.CodePoint] -> Maybe String -> [String] -> B.Map (C.Cox c)
+coxForm cp0 tag vs = debruijn . outside [] . coxUnfold . C.CoxForm cp0 tag vs where
+    n = length vs
+    outside vars cox = case cox of
        C.CoxLocal cp v i    
            | v `elem` vars  ->  C.CoxLocal cp v i        -- inside blank
            | otherwise      ->  C.CoxLocal cp v (i + n)  -- outside blank
-       C.CoxRefill _ _ _    ->  C.coxCall cox (de n vars)
-       C.CoxForm1 _ _ v _   ->  C.coxCall cox (de n $ v : vars)
+       C.CoxRefill _ _ _    ->  C.coxCall cox (outside vars)
+       C.CoxForm1 _ _ v _   ->  C.coxCall cox (outside $ v : vars)
        _                    ->  cox
 

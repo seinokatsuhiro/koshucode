@@ -70,7 +70,7 @@ getWhereClause u trees =
        let cp = B.codePoints $ head $ B.untrees trees
        case vs of
          [] -> Right (n, cox)
-         _  -> Right (n, C.coxInsert $ C.CoxForm cp (Just n) vs cox)
+         _  -> Right (n, C.coxForm cp (Just n) vs cox)
 
 getWhereHead :: [B.TokenTree] -> B.Ab (String, [String])
 getWhereHead [] = Message.adlib "getWhereHead"

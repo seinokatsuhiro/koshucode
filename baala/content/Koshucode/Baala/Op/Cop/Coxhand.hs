@@ -19,7 +19,7 @@ import qualified Koshucode.Baala.Core   as C
 
 -- | Create a form with named blanks.
 f :: [String] -> B.Map (C.Cox c)
-f vs = C.coxInsert . C.CoxForm [] Nothing vs
+f vs = C.coxForm [] Nothing vs
 
 -- | Shorthand for one-blank form — @f [\"\#1\"]@
 f1 :: B.Map (C.Cox c)
