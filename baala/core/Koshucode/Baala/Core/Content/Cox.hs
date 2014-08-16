@@ -36,8 +36,9 @@ data Cox c
     | CoxLocal  [B.CodePoint] String Int          -- ^ Local blank, its name and De Bruijn index
     | CoxBlank  [B.CodePoint] String              -- ^ Blank in form
     | CoxRefill [B.CodePoint] (Cox c) [Cox c]     -- ^ Refill arguments in a form
-    | CoxForm1  [B.CodePoint] (Maybe String)  String  (Cox c)  -- ^ Form with single blank
-    | CoxForm   [B.CodePoint] (Maybe String) [String] (Cox c)  -- ^ Form with multiple blanks
+    | CoxForm1  [B.CodePoint] (Maybe String)  String  (Cox c) -- ^ Form with single blank
+    | CoxForm   [B.CodePoint] (Maybe String) [String] (Cox c) -- ^ Form with multiple blanks
+    | CoxWith   [B.CodePoint] [NamedCox c] (Cox c)            -- ^ Cox with outside arguments
 
 type NamedCox c = B.Named (Cox c)
 
@@ -50,6 +51,7 @@ instance B.CodePointer (Cox c) where
     codePoint (CoxRefill cp _ _)    =  cp
     codePoint (CoxForm1  cp _ _ _)  =  cp
     codePoint (CoxForm   cp _ _ _)  =  cp
+    codePoint (CoxWith   cp _ _)    =  cp
 
 instance (B.Write c) => Show (Cox c) where
     show = show . B.doc
@@ -77,6 +79,7 @@ docCox sh = d (0 :: Int) . coxFold where
                                    in f' B.$$ xs'
         CoxForm1  _ tag v  e2  ->  form tag [v] $ d' e2
         CoxForm   _ tag vs e2  ->  form tag vs  $ d' e2
+        CoxWith   _ _ e2       ->  d' e2
       where
         d'                     =  d $ n + 1
         arg                    =  (wr "-" B.<+>) . d'
