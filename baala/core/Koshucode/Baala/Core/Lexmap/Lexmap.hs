@@ -51,7 +51,7 @@ instance B.Write Lexmap where
         where op = B.tokenContent opToken
 
 instance B.CodePointer Lexmap where
-    codePoint = B.codePoint . lexOpToken
+    codePoints = B.codePoints . lexOpToken
 
 -- | Name of relmap operator
 lexOpName :: Lexmap -> C.RopName
@@ -65,7 +65,7 @@ lexMessageList Lexmap { lexOpToken = tok, lexMessage = msg }
     | null msg  = []
     | otherwise = msg ++ src
     where src = map (("  " ++) . fst) $ B.codePointDisplay ("", pt)
-          pt  = head $ B.codePoint tok
+          pt  = head $ B.codePoints tok
 
 
 -- ----------------------  Constructor

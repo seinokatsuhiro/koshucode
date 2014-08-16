@@ -43,15 +43,15 @@ data Cox c
 type NamedCox c = B.Named (Cox c)
 
 instance B.CodePointer (Cox c) where
-    codePoint (CoxLit    cp _)      =  cp
-    codePoint (CoxTerm   cp _ _)    =  cp
-    codePoint (CoxBase   cp _ _)    =  cp
-    codePoint (CoxLocal  cp _ _)    =  cp
-    codePoint (CoxBlank  cp _)      =  cp
-    codePoint (CoxRefill cp _ _)    =  cp
-    codePoint (CoxForm1  cp _ _ _)  =  cp
-    codePoint (CoxForm   cp _ _ _)  =  cp
-    codePoint (CoxWith   cp _ _)    =  cp
+    codePoints (CoxLit    cp _)      =  cp
+    codePoints (CoxTerm   cp _ _)    =  cp
+    codePoints (CoxBase   cp _ _)    =  cp
+    codePoints (CoxLocal  cp _ _)    =  cp
+    codePoints (CoxBlank  cp _)      =  cp
+    codePoints (CoxRefill cp _ _)    =  cp
+    codePoints (CoxForm1  cp _ _ _)  =  cp
+    codePoints (CoxForm   cp _ _ _)  =  cp
+    codePoints (CoxWith   cp _ _)    =  cp
 
 instance (B.Write c) => Show (Cox c) where
     show = show . B.doc

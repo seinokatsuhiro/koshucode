@@ -83,15 +83,15 @@ textToken :: String -> Token
 textToken = TText B.codePointZero 0
 
 instance B.CodePointer Token where
-    codePoint (TText    p _ _)  =  [p]
-    codePoint (TShort   p _ _)  =  [p]
-    codePoint (TTerm    p _)    =  [p]
-    codePoint (TSlot    p _ _)  =  [p]
-    codePoint (TOpen    p _)    =  [p]
-    codePoint (TClose   p _)    =  [p]
-    codePoint (TSpace   p _)    =  [p]
-    codePoint (TComment p _)    =  [p]
-    codePoint (TUnknown p _)    =  [p]
+    codePoints (TText    p _ _)  =  [p]
+    codePoints (TShort   p _ _)  =  [p]
+    codePoints (TTerm    p _)    =  [p]
+    codePoints (TSlot    p _ _)  =  [p]
+    codePoints (TOpen    p _)    =  [p]
+    codePoints (TClose   p _)    =  [p]
+    codePoints (TSpace   p _)    =  [p]
+    codePoints (TComment p _)    =  [p]
+    codePoints (TUnknown p _)    =  [p]
 
 
 

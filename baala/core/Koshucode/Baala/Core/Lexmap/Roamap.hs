@@ -50,7 +50,7 @@ roamapCons = loop where
     fill []                               = []
 
     right :: [B.TokenTree] -> RoamapBody -> B.Ab Roamap
-    right trees = Right . B.Sourced (concatMap B.codePoint $ B.untrees trees)
+    right trees = Right . B.Sourced (concatMap B.codePoints $ B.untrees trees)
 
     loop trees =
         B.abortableTrees "attr" trees $ case B.divideTreesByBar trees of

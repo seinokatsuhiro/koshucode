@@ -151,5 +151,5 @@ relkitWithVar n he = kit where
 
 relkitSetSource :: (B.CodePointer a) => a -> B.Map (Relkit c)
 relkitSetSource src (Relkit he (B.Sourced _ core)) =
-    Relkit he $ B.Sourced (B.codePoint src) core
+    Relkit he $ B.Sourced (B.codePoints src) core
 

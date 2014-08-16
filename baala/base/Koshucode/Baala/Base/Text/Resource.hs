@@ -91,10 +91,10 @@ codePointDisplay (tag, p)
 -- ----------------------  CodePointer
 
 class CodePointer a where
-    codePoint :: a -> [CodePoint]
+    codePoints :: a -> [CodePoint]
 
 instance CodePointer CodePoint where
-    codePoint pt = [pt]
+    codePoints pt = [pt]
 
 
 -- ----------------------  Sourced
@@ -108,4 +108,4 @@ instance Functor Sourced where
     fmap f (Sourced src x) = Sourced src $ f x
 
 instance CodePointer (Sourced a) where
-    codePoint = source
+    codePoints = source
