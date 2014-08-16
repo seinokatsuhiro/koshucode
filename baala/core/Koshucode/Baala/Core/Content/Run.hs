@@ -41,51 +41,48 @@ beta (base, deriv) he cox =
 reduce :: forall c. (B.Write c) => C.Cox c -> B.Ab (Beta c)
 reduce = red [] where
     ab1 = B.abortable "cox-reduce"
-    ab2 = B.abortable "cox-apply"
+    ab2 = B.abortable "cox-refill"
 
     red :: [B.Named (C.Cox c)] -> C.Cox c -> B.Ab (Beta c)
     red args cox = case cox of
         C.CoxLit    cp c       ->  Right $ BetaLit  cp c
         C.CoxTerm   cp n i     ->  Right $ BetaTerm cp n i
         C.CoxLocal  cp v k     ->  ab1 cp $ red args =<< kth v k args
-        C.CoxRefill cp fn xs   ->  ab1 cp $ join args fn $ fills args xs
-        C.CoxBase   cp _ _     ->  ab1 cp $ join args cox []
+        C.CoxRefill cp fn xs   ->  ab1 cp $ refill args fn $ substL args xs
+        C.CoxBase   cp _ _     ->  ab1 cp $ refill args cox []
         C.CoxForm1  cp _ v _   ->  ab1 cp $ Message.lackArg v
         C.CoxForm   cp _ _ _   ->  ab1 cp $ Message.adlib "CoxForm"
         C.CoxBlank  cp v       ->  ab1 cp $ Message.unkGlobalVar v
 
-    join :: [B.Named (C.Cox c)] -> C.Cox c -> [B.Ab (C.Cox c)] -> B.Ab (Beta c)
-    join args fn []             =  red args fn
-    join args fn xxs@(x:xs)     =  case fn of
-        C.CoxForm1 cp _ v f2   ->  ab2 cp $ do
-                                       x' <- x
-                                       join ((v, x') : args) f2 xs
-        C.CoxLocal cp v k      ->  ab2 cp $ do
-                                       fn' <- kth v k args
-                                       join args fn' xxs
-        C.CoxBase  cp n f      ->  ab2 cp $ do
-                                       xxs2 <- mapM id xxs
-                                       let xxs3 = red args `map` xxs2
-                                       Right $ BetaCall cp n f xxs3
-        C.CoxRefill cp f2 xs2  ->  ab2 cp $ join args f2 $ fills args xs2 ++ xxs
+    refill :: [B.Named (C.Cox c)] -> C.Cox c -> [B.Ab (C.Cox c)] -> B.Ab (Beta c)
+    refill args fn []          =   red args fn
+    refill args fn xxs@(x:xs)  =   case fn of
+        C.CoxForm1 cp _ v f2   ->  ab2 cp $ do x' <- x
+                                               refill ((v, x') : args) f2 xs
+        C.CoxLocal cp v k      ->  ab2 cp $ do fn' <- kth v k args
+                                               refill args fn' xxs
+        C.CoxBase  cp n f      ->  ab2 cp $ do xxs2 <- mapM id xxs
+                                               let xxs3 = red args `map` xxs2
+                                               Right $ BetaCall cp n f xxs3
+        C.CoxRefill cp f2 xs2  ->  ab2 cp $ refill args f2 $ substL args xs2 ++ xxs
         _                      ->  Message.unkShow fn
 
-    fills :: [B.Named (C.Cox c)] -> [C.Cox c] -> [B.Ab (C.Cox c)]
-    fills = map . fill
+    substL :: [B.Named (C.Cox c)] -> [C.Cox c] -> [B.Ab (C.Cox c)]
+    substL = map . subst
 
-    fill :: [B.Named (C.Cox c)] -> B.AbMap (C.Cox c)
-    fill args (C.CoxLocal _ v k)     = kth v k args
-    fill args (C.CoxRefill cp fn xs) = do fn' <- fill args fn
-                                          xs' <- fill args `mapM` xs
-                                          Right $ C.CoxRefill cp fn' xs'
-    fill _ x                         = Right x
+    subst :: [B.Named (C.Cox c)] -> B.AbMap (C.Cox c)
+    subst args (C.CoxLocal _ v k)     = kth v k args
+    subst args (C.CoxRefill cp fn xs) = do fn' <- subst args fn
+                                           xs' <- subst args `mapM` xs
+                                           Right $ C.CoxRefill cp fn' xs'
+    subst _ x                         = Right x
 
     kth :: String -> Int -> [B.Named (C.Cox c)] -> B.Ab (C.Cox c)
     kth v 0  _    = Message.unkGlobalVar v
     kth v k0 args = loop k0 args where
       loop 1 ((v2, x) : _)
           | v == v2           =  Right x
-          | otherwise         =  Message.unmatchVar v k0 v2
+          | otherwise         =  Message.unmatchBlank v k0 v2 $ map fst args
       loop k (_ : xs)         =  loop (k - 1) xs
       loop _ []               =  Message.unkRefVar v k0
 
