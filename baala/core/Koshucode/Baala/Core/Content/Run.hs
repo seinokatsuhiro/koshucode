@@ -50,7 +50,7 @@ reduce = red [] where
         C.CoxLocal  cp v k      ->  a1 cp $ red args =<< kth v k args
         C.CoxRefill cp fn xs    ->  a1 cp $ refill args fn $ substL args xs
         C.CoxBase   cp _ _      ->  a1 cp $ refill args cox []
-        C.CoxWith   cp arg2 e   ->  a1 cp $ red arg2 e
+        C.CoxWith   cp arg2 e   ->  a1 cp $ red (arg2 ++ args) e
         C.CoxForm1  cp _ v _    ->  a1 cp $ Message.lackArg v
         C.CoxForm   cp _ _ _    ->  a1 cp $ Message.adlib "CoxForm"
         C.CoxBlank  cp v        ->  a1 cp $ Message.unkGlobalVar v
@@ -67,7 +67,7 @@ reduce = red [] where
                                                let xxs3 = red args `map` xxs2
                                                Right $ BetaCall cp n f2 xxs3
         C.CoxRefill cp f2 xs2   ->  a2 cp $ refill args f2 $ substL args xs2 ++ xxs
-        C.CoxWith   cp arg2 e2  ->  a2 cp $ refill arg2 e2 xxs
+        C.CoxWith   cp arg2 e2  ->  a2 cp $ refill (arg2 ++ args) e2 xxs
         _                       ->  Message.unkShow f1
 
     substL :: [C.NamedCox c] -> [C.Cox c] -> [B.Ab (C.Cox c)]
@@ -85,9 +85,11 @@ reduce = red [] where
     kth v k0 args = loop k0 args where
       loop 1 ((v2, x) : _)
           | v == v2           =  Right x
-          | otherwise         =  Message.unmatchBlank v k0 v2 $ map fst args
+          | otherwise         =  Message.unmatchBlank v k0 v2 vs
       loop k (_ : xs)         =  loop (k - 1) xs
-      loop _ []               =  Message.unkRefVar v k0
+      loop _ []               =  Message.unkRefVar (v, k0) vs
+
+      vs = map fst args
 
 link :: forall c. C.CopBundle c -> B.Map (C.Cox c)
 link (base, deriv) = li where

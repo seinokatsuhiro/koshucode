@@ -8,6 +8,7 @@ module Koshucode.Baala.Op.Cox.Get
   getCox,
   getTermCoxes,
   getNamedCoxes,
+  getWhere,
 
   -- * Content
   getContent,
@@ -20,6 +21,7 @@ import Prelude hiding (getContents)
 import qualified Koshucode.Baala.Base        as B
 import qualified Koshucode.Baala.Core        as C
 import qualified Koshucode.Baala.Op.Builtin  as Op
+import qualified Koshucode.Baala.Op.Message  as Message
 
 -- | Get list of content operators.
 ropBase :: C.RopUse c -> [C.Cop c]
@@ -46,6 +48,48 @@ ropBuild = C.coxBuild . C.globalSyntax . C.ropGlobal
 
 ropNamedAlphas :: (C.CContent c) => C.RopUse c -> [B.Named B.TokenTree] -> B.Ab [C.NamedCox c]
 ropNamedAlphas use = mapM (B.namedMapM $ ropBuild use)
+
+
+-- --------------------------------------------  Where
+
+getWhere :: (C.CContent c) => C.RopUse c -> String -> B.Ab ([C.Cop c], [C.NamedCox c])
+getWhere u name =
+    do wh <- Op.getOption [] getWhereBody u name
+       Right (ropBase u, wh)
+
+getWhereBody :: (C.CContent c) => C.RopUse c -> String -> B.Ab [C.NamedCox c]
+getWhereBody u name =
+    do xs <- Op.getTreesByColon u name
+       getWhereClause u `mapM` xs
+
+getWhereClause :: (C.CContent c) => C.RopUse c -> [B.TokenTree] -> B.Ab (C.NamedCox c)
+getWhereClause u trees =
+    do (he, bo) <- getTreesByEqual trees
+       (n, vs)  <- getWhereHead he
+       cox      <- ropBuild u $ B.treeWrap bo
+       let cp = B.codePoint $ head $ B.untrees trees
+       case vs of
+         [] -> Right (n, cox)
+         _  -> Right (n, C.coxInsert $ C.CoxForm cp (Just n) vs cox)
+
+getWhereHead :: [B.TokenTree] -> B.Ab (String, [String])
+getWhereHead [] = Message.adlib "getWhereHead"
+getWhereHead (n : vs) =
+    do n'  <- getTextFromTree n
+       vs' <- mapM getTextFromTree vs
+       Right (n', vs')
+
+getTreesByEqual :: [B.TokenTree] -> B.Ab ([B.TokenTree], [B.TokenTree])
+getTreesByEqual trees =
+    case B.divideTreesByEqual trees of
+      [left, right] -> Right (left, right)
+      _             -> Message.adlib "getTreesByEqual"
+
+getTextFromTree :: B.TokenTree -> B.Ab String
+getTextFromTree (B.TreeL (B.TText _ 0 n)) = Right n
+getTextFromTree _ = Message.adlib "getTextFromTree"
+
+
 
 
 -- --------------------------------------------  Content

@@ -12,14 +12,11 @@ module Koshucode.Baala.Base.Token.TokenTree
   tt, tt1, ttDoc,
     
   -- * Divide trees
-  splitTokensBy,
-  divideTreesBy,
-  divideTreesByBar,
-  divideTreesByColon,
+  splitTokensBy, divideTreesBy,
+  divideTreesByBar, divideTreesByColon, divideTreesByEqual,
 
   -- * Abortable
-  abortableTree,
-  abortableTrees,
+  abortableTree, abortableTrees,
 
   -- * Examples
   -- $Example
@@ -143,6 +140,9 @@ divideTreesByBar = divideTreesBy "|"
 --
 divideTreesByColon :: [TokenTree] -> [[TokenTree]]
 divideTreesByColon = divideTreesBy ":"
+
+divideTreesByEqual :: [TokenTree] -> [[TokenTree]]
+divideTreesByEqual = divideTreesBy "="
 
 
 -- ----------------------  Abortable

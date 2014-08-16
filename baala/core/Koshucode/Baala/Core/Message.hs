@@ -145,9 +145,10 @@ unkNestRel :: String -> B.Ab a
 unkNestRel = Left . B.abortLine "Unknown nested relation"
 
 -- | Unknown reference for variable
-unkRefVar :: String -> Int -> B.Ab a
-unkRefVar v k = Left $ B.abortLine "Unknown reference for variable"
-                     $ var (v, k)
+unkRefVar :: (String, Int) -> [String] -> B.Ab a
+unkRefVar (v, k) vs = Left $ B.abortLines "Unknown reference for variable"
+                [ "look up " ++ var (v, k)
+                , "in " ++ args vs ]
 
 -- | Unknown relmap operator
 unkRelmap :: String -> B.Ab a
@@ -178,10 +179,13 @@ unmatchBlank :: String -> Int -> String -> [String] -> B.Ab a
 unmatchBlank v k _ vs =
     Left $ B.abortLines "Unmatch blank (bug)"
            [ "look up " ++ var (v, k)
-           , "in " ++ (unwords $ map var $ zip vs [1..]) ]
+           , "in " ++ args vs ]
 
 var :: (String, Int) -> String
 var (v, k) = v ++ "/" ++ show k
+
+args :: [String] -> String
+args vs = unwords $ map var $ zip vs [1..]
 
 -- | Unresolved prefix
 unresPrefix :: B.Ab a

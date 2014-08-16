@@ -8,6 +8,7 @@ module Koshucode.Baala.Op.Builtin.Get
   getMaybe, getOption,
   getTree, getTrees,
   getWordTrees,
+  getTreesByColon,
 
   -- * Relmap
   getRelmap,
@@ -106,6 +107,11 @@ wordTrees (w : tree : xs) =
 word :: B.TokenTree -> B.Ab String
 word (B.TreeL (B.TText _ _ w)) = Right w
 word _ = Message.unexpAttr "Require one word"
+
+getTreesByColon :: RopGet c [[B.TokenTree]]
+getTreesByColon u name =
+    do trees <- getTrees u name
+       Right $ B.omit null $ B.divideTreesByColon trees
 
 
 -- ----------------------  Relmap

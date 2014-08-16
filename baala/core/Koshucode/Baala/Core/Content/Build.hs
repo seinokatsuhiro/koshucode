@@ -42,12 +42,12 @@ indexFrom origin key = loop origin where
                   | otherwise = loop (i + 1) xs
 
 coxUnfold :: B.Map (C.Cox c)
-coxUnfold = derivL . C.coxMap coxUnfold where
-    derivL :: B.Map (C.Cox c)
-    derivL cox = case cox of
-        C.CoxForm _ _ [] b -> b
+coxUnfold = unfold . C.coxMap coxUnfold where
+    unfold :: B.Map (C.Cox c)
+    unfold cox = case cox of
+        C.CoxForm _ _ [] b -> unfold b
         C.CoxForm cp tag (v : vs) b
-            -> let sub = derivL $ C.CoxForm cp tag vs b
+            -> let sub = unfold $ C.CoxForm cp tag vs b
                in C.CoxForm1 cp tag v sub
         _   -> cox
 
