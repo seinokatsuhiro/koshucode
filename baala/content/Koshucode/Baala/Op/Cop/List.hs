@@ -39,23 +39,23 @@ import qualified Koshucode.Baala.Op.Message         as Message
 
 copsList :: (C.CContent c) => [C.Cop c]
 copsList =
-    [ C.CopFun  (C.copInfix "++")           copAppend
-    , C.CopFun  (C.copInfix "intersect")    copIntersect
-    , C.CopFun  "++"            copAppend
-    , C.CopFun  "char"          copChar
-    , C.CopFun  "char-group"    copCharGroup
-    , C.CopFun  "char-group-1"  copCharGroup1
-    , C.CopFun  "intersect"     copIntersect
-    , C.CopFun  "length"        copLength
-    , C.CopFun  "list"          copList
-    , C.CopFun  "max"           copMax
-    , C.CopFun  "min"           copMin
-    , C.CopFun  "minus"         copMinus
-    , C.CopFun  "push"          copPush
-    , C.CopFun  "reverse"       copReverse
-    , C.CopFun  "total"         copTotal
-    , C.CopFun  "sub-index"     copSubIndex
-    , C.CopFun  "sub-length"    copSubLength
+    [ C.CopFun  (C.copInfix "++")             copAppend
+    , C.CopFun  (C.copInfix "intersect")      copIntersect
+    , C.CopFun  (C.copNormal "++")            copAppend
+    , C.CopFun  (C.copNormal "char")          copChar
+    , C.CopFun  (C.copNormal "char-group")    copCharGroup
+    , C.CopFun  (C.copNormal "char-group-1")  copCharGroup1
+    , C.CopFun  (C.copNormal "intersect")     copIntersect
+    , C.CopFun  (C.copNormal "length")        copLength
+    , C.CopFun  (C.copNormal "list")          copList
+    , C.CopFun  (C.copNormal "max")           copMax
+    , C.CopFun  (C.copNormal "min")           copMin
+    , C.CopFun  (C.copNormal "minus")         copMinus
+    , C.CopFun  (C.copNormal "push")          copPush
+    , C.CopFun  (C.copNormal "reverse")       copReverse
+    , C.CopFun  (C.copNormal "total")         copTotal
+    , C.CopFun  (C.copNormal "sub-index")     copSubIndex
+    , C.CopFun  (C.copNormal "sub-length")    copSubLength
 
     , C.CopFun  (C.copInfix  "in") copFunIn
     , C.CopCox  (C.copPrefix "in") copCoxIn

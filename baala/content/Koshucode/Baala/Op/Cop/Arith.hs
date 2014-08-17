@@ -38,12 +38,12 @@ copsArith =
     , C.CopFun  (C.copInfix "quo")  copQuo
     , C.CopFun  (C.copInfix "rem")  copRem
 
-    , C.CopFun  "+"     copPlus
-    , C.CopFun  "-"     copMinus
-    , C.CopFun  "*"     copTimes
-    , C.CopFun  "quo"   copQuo
-    , C.CopFun  "rem"   copRem
-    , C.CopFun  "abs"   copAbs
+    , C.CopFun  (C.copNormal "+")     copPlus
+    , C.CopFun  (C.copNormal "-")     copMinus
+    , C.CopFun  (C.copNormal "*")     copTimes
+    , C.CopFun  (C.copNormal "quo")   copQuo
+    , C.CopFun  (C.copNormal "rem")   copRem
+    , C.CopFun  (C.copNormal "abs")   copAbs
     ]
 
 copDec :: (Show c, C.CText c, C.CDec c) => B.Ab c -> B.Ab B.Decimal

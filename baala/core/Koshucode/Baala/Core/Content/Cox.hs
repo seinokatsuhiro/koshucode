@@ -17,7 +17,7 @@ module Koshucode.Baala.Core.Content.Cox
   -- * Operator
   Cop (..), CopBundle,
   CopFun, CopCox, CopTree,
-  copPrefix, copInfix, copPostfix,
+  copNormal, copPrefix, copInfix, copPostfix,
   isCopFunction,
   isCopSyntax,
 ) where
@@ -170,15 +170,19 @@ instance B.Name (Cop c) where
     name (CopCox  n _) = n
     name (CopTree n _) = n
 
--- | Convert operator name to prefix name
+-- | Non-binary operator.
+copNormal  :: B.Map String
+copNormal  = id
+
+-- | Convert operator name to prefix name.
 copPrefix  :: B.Map String
 copPrefix  = ("pre::" ++)
 
--- | Convert operator name to postfix name
+-- | Convert operator name to postfix name.
 copPostfix :: B.Map String
 copPostfix = ("post::" ++)
 
--- | Convert operator name to infix name
+-- | Convert operator name to infix name.
 copInfix   :: B.Map String
 copInfix   = ("in::" ++)
 

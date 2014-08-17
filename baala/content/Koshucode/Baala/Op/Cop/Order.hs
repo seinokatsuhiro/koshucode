@@ -51,9 +51,9 @@ copsOrder =
     , orderPostfix   ">="
 
     , C.CopCox  (C.copInfix "is")  copIs
-    , C.CopCox  "between" copBetween
-    , C.CopCox  "all"     $ copCollect "and"
-    , C.CopCox  "any"     $ copCollect "or"
+    , C.CopCox  (C.copNormal "between") copBetween
+    , C.CopCox  (C.copNormal "all")     $ copCollect "and"
+    , C.CopCox  (C.copNormal "any")     $ copCollect "or"
     ]
 
 orderInfix :: (C.CBool c) => String -> (c -> c -> Bool) -> C.Cop c

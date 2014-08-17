@@ -31,17 +31,17 @@ import qualified Koshucode.Baala.Op.Message as Message
 
 copsLogic :: (C.CBool c, C.CEmpty c) => [C.Cop c]
 copsLogic =
-    [ C.CopFun   (C.copInfix "and")   copAnd
-    , C.CopFun   (C.copInfix "or")    copOr
-    , C.CopFun   (C.copInfix "then")  copImp
-    , C.CopFun   (C.copInfix "when")  copWhen
-    , C.CopFun   "not"    copNot
-    , C.CopFun   "and"    copAnd
-    , C.CopFun   "or"     copOr
-    , C.CopFun   "then"   copImp
-    , C.CopFun   "when"   copWhen
-    , C.CopFun   "#if"    copIf
-    , C.CopTree  "if"     synIf
+    [ C.CopFun   (C.copInfix "and")     copAnd
+    , C.CopFun   (C.copInfix "or")      copOr
+    , C.CopFun   (C.copInfix "then")    copImp
+    , C.CopFun   (C.copInfix "when")    copWhen
+    , C.CopFun   (C.copNormal "not")    copNot
+    , C.CopFun   (C.copNormal "and")    copAnd
+    , C.CopFun   (C.copNormal "or")     copOr
+    , C.CopFun   (C.copNormal "then")   copImp
+    , C.CopFun   (C.copNormal "when")   copWhen
+    , C.CopFun   (C.copNormal "#if")    copIf
+    , C.CopTree  (C.copNormal "if")     synIf
     ]
 
 cop1 :: (C.CBool c) => (Bool -> Bool) -> C.CopFun c
