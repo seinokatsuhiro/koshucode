@@ -50,8 +50,10 @@ copsOrder =
     , orderPostfix   ">"
     , orderPostfix   ">="
 
+    , C.CopCox  (C.copInfix  "between") betweenInfix
+    , C.CopCox  (C.copPrefix "between") betweenPrefix
+
     , C.CopCox  (C.copInfix "is")  copIs
-    , C.CopCox  (C.copNormal "between") copBetween
     , C.CopCox  (C.copNormal "all")     $ copCollect "and"
     , C.CopCox  (C.copNormal "any")     $ copCollect "or"
     ]
@@ -73,16 +75,25 @@ orderPostfix n = C.CopCox (C.copPostfix n) $ cop where
     cop _   = Message.adlib "require operand"
     op      = H.bin n
 
+betweenPrefix :: C.CopCox c
+betweenPrefix [C.CoxRefill _ low [high]] = Right between where
+    between = H.f1 $ (low `binAsc` H.b1) `binAnd` (H.b1 `binAsc` high)
+betweenPrefix _ = Message.adlib "require operand"
+
+betweenInfix :: C.CopCox c
+betweenInfix [x, C.CoxRefill _ low [high]] = Right between where
+    between = (low `binAsc` x) `binAnd` (x `binAsc` high)
+betweenInfix _ = Message.adlib "require operand"
+
+binAnd :: C.Cox c -> C.Cox c -> C.Cox c
+binAnd  = H.bin "and"
+
+binAsc :: C.Cox c -> C.Cox c -> C.Cox c
+binAsc  = H.bin "<="
+
 copIs :: C.CopCox c
 copIs [x, f] = Right $ H.rx f [x]
 copIs _      = Message.unmatchType ""
-
-copBetween :: C.CopCox c
-copBetween [low, high] = Right between where
-    between = H.f1 $ (low `opAsc` H.b1) `opAnd` (H.b1 `opAsc` high)
-    opAnd   = H.bin "and"
-    opAsc   = H.bin "<="
-copBetween _ = Message.adlib "require operand"
 
 copCollect :: String -> C.CopCox c
 copCollect n fs = Right $ H.f1 $ H.r (C.copInfix n) (map refill fs) where
