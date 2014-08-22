@@ -15,6 +15,8 @@ module Koshucode.Baala.Op.Cox.Get
   getContents,
   getOptContent,
   getFiller,
+
+  getInt2,
 ) where
 
 import Prelude hiding (getContents)
@@ -119,4 +121,9 @@ getOptContent opt = Op.getOption opt getContent
 -- | Get relmap attribute as filler content, i.e., given content or empty.
 getFiller :: (C.CContent c) => C.RopUse c -> String -> B.Ab c
 getFiller = getOptContent C.empty
+
+getInt2 :: (C.CContent c) => C.RopUse c -> String -> B.Ab Int
+getInt2 use name =
+    do dec <- C.getDec $ getContent use name
+       Right $ B.decimalNum dec
 

@@ -61,6 +61,7 @@ library
         Koshucode.Baala.Op.Cox.Calc
         Koshucode.Baala.Op.Cox.Empty
         Koshucode.Baala.Op.Cox.Filter
+        Koshucode.Baala.Op.Cox.Gadget
         Koshucode.Baala.Op.Cox.Get
 
         Koshucode.Baala.Type.Vanilla

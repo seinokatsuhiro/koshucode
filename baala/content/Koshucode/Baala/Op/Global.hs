@@ -28,6 +28,7 @@ ropsCox :: (C.CContent c) => [C.Rop c]
 ropsCox    = Rop.ropsCoxCalc
           ++ Rop.ropsCoxEmpty
           ++ Rop.ropsCoxFilter
+          ++ Rop.ropsCoxGadget
 
 ropsNonCox :: (C.CContent c) => [C.Rop c]
 ropsNonCox = Rop.ropsMeta
