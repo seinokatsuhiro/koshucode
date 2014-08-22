@@ -11,6 +11,9 @@ module Koshucode.Baala.Op.Cox.Gadget
   consRank,
   relmapGapRank, relkitGapRank,
   relmapDenseRank, relkitDenseRank,
+
+  -- * repeat
+  consRepeat,
 ) where
 
 import Prelude hiding (getContents)
@@ -18,14 +21,16 @@ import qualified Koshucode.Baala.Base        as B
 import qualified Koshucode.Baala.Core        as C
 import qualified Koshucode.Baala.Op.Builtin  as Op
 import qualified Koshucode.Baala.Op.Cox.Get  as Op
+import qualified Koshucode.Baala.Op.Message  as Message
 
 
 -- | Implementation of relational operators.
 ropsCoxGadget :: (C.CContent c) => [C.Rop c]
 ropsCoxGadget = Op.ropList "cox-gadget"
-    --          CONSTRUCTOR         USAGE         ATTRIBUTE
-    [ Op.ropI consNumber    "number /N -order /N ..."  "-term | -order -from"
-    , Op.ropI consRank      "rank /N -order /N ..."    "-term | -order -dense"
+    --         CONSTRUCTOR   USAGE                      ATTRIBUTE
+    [ Op.ropI  consNumber    "number /N -order /N ..."  "-term | -order -from"
+    , Op.ropI  consRank      "rank /N -order /N ..."    "-term | -order -dense"
+    , Op.ropII consRepeat    "repeat N R"               "-count -relmap/"
     ]
 
 
@@ -35,7 +40,7 @@ consNumber :: (Ord c, C.CContent c) => C.RopCons c
 consNumber use =
     do n    <- Op.getTerm use "-term"
        ns   <- Op.getOption [] Op.getTerms use "-order"
-       from <- Op.getOption 0  Op.getInt2 use "-from"
+       from <- Op.getOption 0  Op.getInt   use "-from"
        Right $ relmapNumber use (n, ns, from)
 
 relmapNumber :: (C.CDec c, Ord c) => C.RopUse c -> (B.TermName, [B.TermName], Int) -> C.Relmap c
@@ -82,3 +87,33 @@ relmapGapRank use = C.relmapFlow use . relkitGapRank
 
 relkitGapRank :: (Ord c, C.CDec c) => (B.TermName, [B.TermName], Int) -> C.RelkitFlow c
 relkitGapRank = relkitRanking B.sortByNameGapRank
+
+
+-- ----------------------  repeat
+
+consRepeat :: (Ord c, C.CContent c) => C.RopCons c
+consRepeat use =
+  do cnt  <- Op.getInt    use "-count"
+     rmap <- Op.getRelmap use "-relmap"
+     Right $ relmapRepeat use cnt rmap
+
+relmapRepeat :: (Ord c) => C.RopUse c -> Int -> B.Map (C.Relmap c)
+relmapRepeat use cnt = C.relmapBinary use $ relkitRepeat cnt
+
+relkitRepeat :: forall c. (Ord c) => Int -> C.RelkitBinary c
+relkitRepeat cnt (C.Relkit (Just he2) kitb2) (Just he1)
+    | B.headEquiv he1 he2 = Right $ kit3
+    | otherwise = Message.diffHead [he1, he2]
+    where
+    kit3 = C.relkitJust he1 $ C.RelkitAbFull True kitf3 [kitb2]
+    kitf3 bmaps bo1 =
+        do let [bmap2] = bmaps
+               bmap2'  = C.bmapAlign he2 he1 bmap2
+           bo2 <- rep bmap2' cnt bo1
+           Right bo2
+
+    rep bmap2' = loop where
+        loop c bo | c > 0     = loop (c - 1) =<< bmap2' bo
+                  | otherwise = Right bo
+
+relkitRepeat _ _ _ = Right C.relkitNothing

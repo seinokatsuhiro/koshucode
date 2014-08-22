@@ -13,9 +13,6 @@ module Koshucode.Baala.Op.Control
   -- * fix & fix-join
   consFix, consFixJoin,
 
-  -- * repeat
-  consRepeat,
-
   -- * equal
   consEqual, relmapEqual, relkitEqual,
 ) where
@@ -35,7 +32,6 @@ ropsControl = Op.ropList "control"
     , Op.ropI  consFix       "fix R"        "-relmap/"
     , Op.ropI  consFixJoin   "fix-join R"   "-relmap/"
     , Op.ropV  consIf        "if R ..."     "-relmap/"
-    , Op.ropII consRepeat    "repeat N R"   "-count -relmap/"
     , Op.ropV  consUnless    "unless R R"   "-relmap/"
     , Op.ropV  consWhen      "when R R"     "-relmap/"
     ]
@@ -122,36 +118,6 @@ relkitFix (C.Relkit (Just he2) kitb2) (Just he1)
                         bmap2'  = C.bmapAlign he2 he1 bmap2
                     in C.fixedRelation bmap2'
 relkitFix _ _ = Right C.relkitNothing
-
-
--- ----------------------  repeat
-
-consRepeat :: (Ord c) => C.RopCons c
-consRepeat use =
-  do cnt  <- Op.getInt    use "-count"
-     rmap <- Op.getRelmap use "-relmap"
-     Right $ relmapRepeat use cnt rmap
-
-relmapRepeat :: (Ord c) => C.RopUse c -> Int -> B.Map (C.Relmap c)
-relmapRepeat use cnt = C.relmapBinary use $ relkitRepeat cnt
-
-relkitRepeat :: forall c. (Ord c) => Int -> C.RelkitBinary c
-relkitRepeat cnt (C.Relkit (Just he2) kitb2) (Just he1)
-    | B.headEquiv he1 he2 = Right $ kit3
-    | otherwise = Message.diffHead [he1, he2]
-    where
-    kit3 = C.relkitJust he1 $ C.RelkitAbFull True kitf3 [kitb2]
-    kitf3 bmaps bo1 =
-        do let [bmap2] = bmaps
-               bmap2'  = C.bmapAlign he2 he1 bmap2
-           bo2 <- rep bmap2' cnt bo1
-           Right bo2
-
-    rep bmap2' = loop where
-        loop c bo | c > 0     = loop (c - 1) =<< bmap2' bo
-                  | otherwise = Right bo
-
-relkitRepeat _ _ _ = Right C.relkitNothing
 
 
 -- ----------------------  equal

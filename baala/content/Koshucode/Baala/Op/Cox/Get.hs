@@ -16,7 +16,7 @@ module Koshucode.Baala.Op.Cox.Get
   getOptContent,
   getFiller,
 
-  getInt2,
+  getInt,
 ) where
 
 import Prelude hiding (getContents)
@@ -122,8 +122,8 @@ getOptContent opt = Op.getOption opt getContent
 getFiller :: (C.CContent c) => C.RopUse c -> String -> B.Ab c
 getFiller = getOptContent C.empty
 
-getInt2 :: (C.CContent c) => C.RopUse c -> String -> B.Ab Int
-getInt2 use name =
+getInt :: (C.CContent c) => C.RopUse c -> String -> B.Ab Int
+getInt use name =
     do dec <- C.getDec $ getContent use name
        Right $ B.decimalNum dec
 

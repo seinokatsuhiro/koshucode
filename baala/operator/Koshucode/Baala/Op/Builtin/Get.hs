@@ -25,7 +25,6 @@ module Koshucode.Baala.Op.Builtin.Get
   -- * Basic type
   getSwitch,
   getWord,
-  getInt,
 ) where
 
 import qualified Koshucode.Baala.Base as B
@@ -188,9 +187,4 @@ getWord :: RopGet c String
 getWord = getAbortable get where
     get [B.TreeL (B.TText _ _ s)] = Right s
     get _ = Message.unexpAttr "Require one word"
-
-getInt :: RopGet c Int
-getInt = getAbortable get where
-    get [B.TreeL (B.TText _ _ i)] = Right (read i :: Int)
-    get _ = Message.unexpAttr "Require one integer"
 
