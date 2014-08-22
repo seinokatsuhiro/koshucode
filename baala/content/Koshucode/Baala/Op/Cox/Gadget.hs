@@ -29,7 +29,7 @@ ropsCoxGadget :: (C.CContent c) => [C.Rop c]
 ropsCoxGadget = Op.ropList "cox-gadget"
     --         CONSTRUCTOR   USAGE                      ATTRIBUTE
     [ Op.ropI  consNumber    "number /N -order /N ..."  "-term | -order -from"
-    , Op.ropI  consRank      "rank /N -order /N ..."    "-term | -order -dense"
+    , Op.ropI  consRank      "rank /N -order /N ..."    "-term | -order -from -dense"
     , Op.ropII consRepeat    "repeat N R"               "-count -relmap/"
     ]
 
@@ -64,15 +64,16 @@ relkitRanking ranking (n, ns, from) (Just he1) = Right kit2 where
 
 -- ----------------------  rank
 
-consRank :: (Ord c, C.CDec c) => C.RopCons c
+consRank :: (Ord c, C.CContent c) => C.RopCons c
 consRank use =
     do n     <- Op.getTerm   use "-term"
        ns    <- Op.getTerms  use "-order"
+       from  <- Op.getOption 0 Op.getInt use "-from"
        dense <- Op.getSwitch use "-dense"
        let relmapRank = if dense
                         then relmapDenseRank
                         else relmapGapRank
-       Right $ relmapRank use (n, ns, 0)
+       Right $ relmapRank use (n, ns, from)
 
 relmapDenseRank :: (C.CDec c, Ord c) =>
    C.RopUse c -> (B.TermName, [B.TermName], Int) -> C.Relmap c

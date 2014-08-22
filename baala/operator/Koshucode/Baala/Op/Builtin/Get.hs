@@ -1,40 +1,43 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Extract attribute from use of relmap
+-- | Attribute getters: Extract attribute from use of relmap.
 
 module Koshucode.Baala.Op.Builtin.Get
 ( -- * Datatype
   RopGet,
-  getMaybe, getOption,
+
+  -- * Basic
+  getOption, getMaybe,
+  getSwitch, getWord,
+
+  -- * Tree
   getTree, getTrees,
   getWordTrees,
   getTreesByColon,
 
   -- * Relmap
-  getRelmap,
-  getRelmaps,
-  getOptRelmap,
+  getRelmap, getRelmaps, getOptRelmap,
 
   -- * Term
-  getTerm,
-  getTerms, getTermsCo,
+  getTerm, getTerms,
+  getTermsCo,
   getTermPairs,
   getWithTerms,
   getTermTrees,
-
-  -- * Basic type
-  getSwitch,
-  getWord,
 ) where
 
-import qualified Koshucode.Baala.Base as B
-import qualified Koshucode.Baala.Core as C
+import qualified Koshucode.Baala.Base            as B
+import qualified Koshucode.Baala.Core            as C
 import qualified Koshucode.Baala.Op.Builtin.Term as Op
 import qualified Koshucode.Baala.Op.Message      as Message
 
 
+-- ----------------------  Datatype
 
--- ---------------------- Utility
+type RopGet c a
+    = C.RopUse c    -- ^ Use of relmap operator
+    -> String       -- ^ Name of keyword, e.g., @\"-term\"@
+    -> B.Ab a       -- ^ Attribute of relmap
 
 ab :: [B.TokenTree] -> B.Map (B.Ab b)
 ab = B.abortableTrees "attr"
@@ -59,24 +62,39 @@ getAbortableOption y f u name =
          Just trees -> ab trees $ f trees
 
 
--- ----------------------  Datatype
+-- ----------------------  Basic
 
-type RopGet c b
-    = C.RopUse c    -- ^ Use of relmap operator
-    -> String       -- ^ Name of keyword, e.g., @\"-term\"@
-    -> B.Ab b       -- ^ Attribute
+getOption :: a -> RopGet c a -> RopGet c a
+getOption y get u name =
+    case lookupTree name u of
+      Nothing -> Right y
+      Just _  -> get u name
 
-getMaybe :: RopGet c b -> RopGet c (Maybe b)
+getMaybe :: RopGet c a -> RopGet c (Maybe a)
 getMaybe get u name =
     case lookupTree name u of
       Nothing -> Right Nothing
       Just _  -> Right . Just =<< get u name
 
-getOption :: b -> RopGet c b -> RopGet c b
-getOption y get u name =
-    case lookupTree name u of
-      Nothing -> Right y
-      Just _  -> get u name
+-- | Get @True@ when attribute is given, @False@ otherwise.
+getSwitch :: C.RopUse c -> String -> B.Ab Bool
+getSwitch u name = getAbortableOption False get u name where
+    get [] = Right True
+    get _  = Message.unexpAttr $ "Just type only " ++ name
+
+-- | Get word from named attribute.
+--
+--   > consXxx :: RopCons c
+--   > consXxx u = do
+--   >   sign <- getWord u "-sign"
+--   >   ...
+getWord :: RopGet c String
+getWord = getAbortable get where
+    get [B.TreeL (B.TText _ _ s)] = Right s
+    get _ = Message.unexpAttr "Require one word"
+
+
+-- ----------------------  Tree
 
 getTrees :: RopGet c [B.TokenTree]
 getTrees u name =
@@ -156,6 +174,7 @@ getTerm = getAbortable get where
 getTerms :: RopGet c [B.TermName]
 getTerms = getAbortable Op.termNames
 
+-- | Get term names and complement sign (@~@) .
 getTermsCo :: RopGet c (Bool, [B.TermName])
 getTermsCo = getAbortable Op.termNamesCo
 
@@ -168,23 +187,3 @@ getWithTerms = getAbortable C.withTerms
 
 getTermTrees :: RopGet c [B.Named B.TokenTree]
 getTermTrees = getAbortable Op.termTreePairs
-
-
--- ----------------------  Basic type
-
-getSwitch :: C.RopUse c -> String -> B.Ab Bool
-getSwitch u name = getAbortableOption False get u name where
-    get [] = Right True
-    get _  = Message.unexpAttr $ "Just type only " ++ name
-
--- | Get word from named attribute.
---
---   > consXxx :: RopCons c
---   > consXxx u = do
---   >   sign <- getWord u "-sign"
---   >   ...
-getWord :: RopGet c String
-getWord = getAbortable get where
-    get [B.TreeL (B.TText _ _ s)] = Right s
-    get _ = Message.unexpAttr "Require one word"
-
