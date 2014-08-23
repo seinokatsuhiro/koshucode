@@ -32,7 +32,7 @@ debruijn = index [] where
     index vars cox = case cox of
        C.CoxBlank cp n     ->  let v = B.name n
                                in maybe cox (C.CoxLocal cp v) $ indexFrom 1 v vars
-       C.CoxRefill _ _ _   ->  C.coxCall cox (index vars)
+       C.CoxFill _ _ _     ->  C.coxCall cox (index vars)
        C.CoxForm1 _ _ v _  ->  C.coxCall cox (index $ v : vars)
        _                   ->  cox
 
@@ -64,17 +64,17 @@ convCox syn = expand where
         case cox of
             C.CoxForm1  cp tag n  x -> Right . C.CoxForm1  cp tag n  =<< expand x
             C.CoxForm   cp tag ns x -> Right . C.CoxForm   cp tag ns =<< expand x
-            C.CoxRefill cp f@(C.CoxBlank _ n) xs ->
+            C.CoxFill cp f@(C.CoxBlank _ n) xs ->
                 case lookup n assn of
                   Just (C.CopCox _ g) -> expand =<< g xs
                   _                   -> expandApply cp f xs
-            C.CoxRefill cp f xs       -> expandApply cp f xs
+            C.CoxFill cp f xs         -> expandApply cp f xs
             _                         -> Right cox
 
     expandApply cp f xs =
         do f'  <- expand f
            xs' <- mapM expand xs
-           Right $ C.CoxRefill cp f' xs'
+           Right $ C.CoxFill cp f' xs'
     
 -- construct content expression from token tree
 construct :: forall c. (C.CContent c) => B.TokenTree -> B.Ab (C.Cox c)
@@ -88,7 +88,7 @@ construct = expr where
     cons cp (B.TreeB 1 _ (fun : args)) =
         do fun'  <- expr fun
            args' <- expr `mapM` args
-           Right $ C.CoxRefill cp fun' args'
+           Right $ C.CoxFill cp fun' args'
 
     -- form with blanks (function)
     cons cp (B.TreeB 6 _ [vars, b1]) =
@@ -184,7 +184,7 @@ coxForm cp0 tag vs = debruijn . outside [] . coxUnfold . C.CoxForm cp0 tag vs wh
        C.CoxLocal cp v i    
            | v `elem` vars  ->  C.CoxLocal cp v i        -- inside blank
            | otherwise      ->  C.CoxLocal cp v (i + n)  -- outside blank
-       C.CoxRefill _ _ _    ->  C.coxCall cox (outside vars)
+       C.CoxFill _ _ _      ->  C.coxCall cox (outside vars)
        C.CoxForm1 _ _ v _   ->  C.coxCall cox (outside $ v : vars)
        _                    ->  cox
 

@@ -30,15 +30,15 @@ import qualified Koshucode.Baala.Core.Message    as Message
 
 -- | Content expressions.
 data Cox c
-    = CoxLit    [B.CodePt] c                       -- ^ Literal content
-    | CoxTerm   [B.CodePt] [B.TermName] [Int]      -- ^ Term reference, its name and position
-    | CoxBase   [B.CodePt] (Cop c)                 -- ^ Base function
-    | CoxLocal  [B.CodePt] String Int              -- ^ Local blank, its name and De Bruijn index
-    | CoxBlank  [B.CodePt] B.BlankName             -- ^ Blank in form
-    | CoxRefill [B.CodePt] (Cox c) [Cox c]         -- ^ Refill arguments in a form
-    | CoxForm1  [B.CodePt] (Maybe String)  String  (Cox c) -- ^ Form with single blank
-    | CoxForm   [B.CodePt] (Maybe String) [String] (Cox c) -- ^ Form with multiple blanks
-    | CoxWith   [B.CodePt] [NamedCox c] (Cox c)            -- ^ Cox with outside arguments
+    = CoxLit   [B.CodePt] c                       -- ^ Literal content
+    | CoxTerm  [B.CodePt] [B.TermName] [Int]      -- ^ Term reference, its name and position
+    | CoxBase  [B.CodePt] (Cop c)                 -- ^ Base function
+    | CoxLocal [B.CodePt] String Int              -- ^ Local blank, its name and De Bruijn index
+    | CoxBlank [B.CodePt] B.BlankName             -- ^ Blank in form
+    | CoxFill  [B.CodePt] (Cox c) [Cox c]         -- ^ Fill args in a form
+    | CoxForm1 [B.CodePt] (Maybe String)  String  (Cox c) -- ^ Form with single blank
+    | CoxForm  [B.CodePt] (Maybe String) [String] (Cox c) -- ^ Form with multiple blanks
+    | CoxWith  [B.CodePt] [NamedCox c] (Cox c)            -- ^ Cox with outside arguments
 
 type CoxAssn c  = (B.BlankName, Cox c)
 type NamedCox c = B.Named (Cox c)
@@ -49,7 +49,7 @@ instance B.CodePtr (Cox c) where
     codePoints (CoxBase   cp _)      =  cp
     codePoints (CoxLocal  cp _ _)    =  cp
     codePoints (CoxBlank  cp _)      =  cp
-    codePoints (CoxRefill cp _ _)    =  cp
+    codePoints (CoxFill   cp _ _)    =  cp
     codePoints (CoxForm1  cp _ _ _)  =  cp
     codePoints (CoxForm   cp _ _ _)  =  cp
     codePoints (CoxWith   cp _ _)    =  cp
@@ -75,7 +75,7 @@ docCox sh = d (0 :: Int) . coxFold where
         CoxBase   _ cop        ->  wr "base" B.<+> wr (B.name cop)
         CoxLocal  _ v i        ->  wr "local" B.<+> wr v B.<> wr "/" B.<> wr i
         CoxBlank  _ v          ->  wr "global" B.<+> wr v
-        CoxRefill _ f xs       ->  let f'  = wr ">>" B.<+> d' f
+        CoxFill   _ f xs       ->  let f'  = wr ">>" B.<+> d' f
                                        xs' = B.nest 3 $ wrV $ map arg xs
                                    in f' B.$$ xs'
         CoxForm1  _ tag v  e2  ->  form tag [v] $ d' e2
@@ -94,7 +94,7 @@ coxFold (CoxForm1 cp1 tag1 v1 e1) =
     case coxFold e1 of
       CoxForm _ tag2 vs e2 | tag1 == tag2  ->  CoxForm cp1 tag1 (v1:vs) e2
       e2                                   ->  CoxForm cp1 tag1 [v1]    e2
-coxFold (CoxRefill cp f xs) = CoxRefill cp (coxFold f) (map coxFold xs)
+coxFold (CoxFill cp f xs) = CoxFill cp (coxFold f) (map coxFold xs)
 coxFold e = e
 
 isCoxBase :: Cox c -> Bool
@@ -110,15 +110,15 @@ coxSyntacticArity :: Cox c -> Int
 coxSyntacticArity = loop where
     loop (CoxForm   _ _ vs cox)  = loop cox + length vs
     loop (CoxForm1  _ _ _  cox)  = loop cox + 1
-    loop (CoxRefill _ cox xs)
+    loop (CoxFill _ cox xs)
         | isCoxForm cox  = loop cox - length xs
         | otherwise      = 0
     loop _ = 0
 
 coxMap :: B.Map (B.Map (Cox c))
-coxMap g (CoxRefill cp f xs)        = CoxRefill cp (g f) (map g xs)
-coxMap g (CoxForm1  cp tag v  body) = CoxForm1  cp tag v  (g body)
-coxMap g (CoxForm   cp tag vs body) = CoxForm   cp tag vs (g body)
+coxMap g (CoxFill  cp f xs)        = CoxFill  cp (g f) (map g xs)
+coxMap g (CoxForm1 cp tag v  body) = CoxForm1 cp tag v  (g body)
+coxMap g (CoxForm  cp tag vs body) = CoxForm  cp tag vs (g body)
 coxMap _ e = e
 
 coxCall :: Cox c -> (B.Map (Cox c)) -> Cox c
@@ -137,7 +137,7 @@ irreducible cox =
       CoxLit  _ _       ->  True
       CoxTerm _ _ _     ->  True
       CoxBase _ _       ->  True
-      CoxRefill _ f xs  ->  all irreducible $ f : xs
+      CoxFill _ f xs    ->  all irreducible $ f : xs
       _                 ->  False
 
 

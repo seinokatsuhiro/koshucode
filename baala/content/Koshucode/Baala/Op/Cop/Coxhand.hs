@@ -5,8 +5,8 @@
 module Koshucode.Baala.Op.Cop.Coxhand
 ( -- * Form
   f, f1, f2, f3,
-  -- * Refill
-  r, rn, rx, bin,
+  -- * Fill
+  i, ib, ix, bin,
   -- * Blank
   b, b1, b2, b3,
 ) where
@@ -34,22 +34,22 @@ f3 :: B.Map (C.Cox c)
 f3 = f ["#1", "#2", "#3"]
 
 
--- --------------------------------------------  Refill
+-- --------------------------------------------  Fill
 
--- | Refill blanks in a named form.
-r :: String -> [C.Cox c] -> C.Cox c
-r = rx . b
+-- | Fill blanks in a named form.
+i :: String -> [C.Cox c] -> C.Cox c
+i = ix . b
 
-rn :: B.BlankName -> [C.Cox c] -> C.Cox c
-rn = rx . C.CoxBlank []
+ib :: B.BlankName -> [C.Cox c] -> C.Cox c
+ib = ix . C.CoxBlank []
 
--- | Refill blanks in the given form.
-rx :: C.Cox c -> [C.Cox c] -> C.Cox c
-rx = C.CoxRefill []
+-- | Fill blanks in the given form.
+ix :: C.Cox c -> [C.Cox c] -> C.Cox c
+ix = C.CoxFill []
 
--- | Refill two blanks in a named binary form.
+-- | Fill two blanks in a named binary form.
 bin :: String -> C.Cox c -> C.Cox c -> C.Cox c
-bin n x y = rn (C.copInfix n) [x, y]
+bin n x y = ib (C.copInfix n) [x, y]
 
 
 -- --------------------------------------------  Blank

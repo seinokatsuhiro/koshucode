@@ -79,12 +79,12 @@ orderPostfix n = C.CopCox (C.copPostfix n) $ cop where
     op      = H.bin n
 
 betweenPrefix :: C.CopCox c
-betweenPrefix [C.CoxRefill _ low [high]] = Right between where
+betweenPrefix [C.CoxFill _ low [high]] = Right between where
     between = H.f1 $ (low `binAsc` H.b1) `binAnd` (H.b1 `binAsc` high)
 betweenPrefix _ = Message.adlib "require operand"
 
 betweenInfix :: C.CopCox c
-betweenInfix [x, C.CoxRefill _ low [high]] = Right between where
+betweenInfix [x, C.CoxFill _ low [high]] = Right between where
     between = (low `binAsc` x) `binAnd` (x `binAsc` high)
 betweenInfix _ = Message.adlib "require operand"
 
@@ -95,18 +95,18 @@ binAsc :: C.Cox c -> C.Cox c -> C.Cox c
 binAsc  = H.bin "<="
 
 copIs :: C.CopCox c
-copIs [x, f] = Right $ H.rx f [x]
+copIs [x, f] = Right $ H.ix f [x]
 copIs _      = Message.unmatchType ""
 
 copCollect :: String -> C.CopCox c
-copCollect n fs = Right $ H.f1 $ H.rn (C.copInfix n) (map refill fs) where
-    refill f = H.rx f [H.b1]
+copCollect n fs = Right $ H.f1 $ H.ib (C.copInfix n) (map fill fs) where
+    fill f = H.ix f [H.b1]
 
 ofInfix :: C.CopCox c
-ofInfix [f, x] = Right $ H.rx f [x]
+ofInfix [f, x] = Right $ H.ix f [x]
 ofInfix _ = Message.adlib "require operand"
 
 toInfix :: C.CopCox c
-toInfix [x, f] = Right $ H.rx f [x]
+toInfix [x, f] = Right $ H.ix f [x]
 toInfix _ = Message.adlib "require operand"
 
