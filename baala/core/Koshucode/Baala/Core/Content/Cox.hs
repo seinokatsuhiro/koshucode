@@ -33,7 +33,7 @@ import qualified Koshucode.Baala.Core.Message    as Message
 data Cox c
     = CoxLit    [B.CodePoint] c                       -- ^ Literal content
     | CoxTerm   [B.CodePoint] [B.TermName] [Int]      -- ^ Term reference, its name and position
-    | CoxBase   [B.CodePoint] B.BlankName (CopFun c)  -- ^ Base function
+    | CoxBase   [B.CodePoint] (Cop c)                 -- ^ Base function
     | CoxLocal  [B.CodePoint] String Int              -- ^ Local blank, its name and De Bruijn index
     | CoxBlank  [B.CodePoint] B.BlankName             -- ^ Blank in form
     | CoxRefill [B.CodePoint] (Cox c) [Cox c]         -- ^ Refill arguments in a form
@@ -47,7 +47,7 @@ type NamedCox c = B.Named (Cox c)
 instance B.CodePointer (Cox c) where
     codePoints (CoxLit    cp _)      =  cp
     codePoints (CoxTerm   cp _ _)    =  cp
-    codePoints (CoxBase   cp _ _)    =  cp
+    codePoints (CoxBase   cp _)      =  cp
     codePoints (CoxLocal  cp _ _)    =  cp
     codePoints (CoxBlank  cp _)      =  cp
     codePoints (CoxRefill cp _ _)    =  cp
@@ -73,7 +73,7 @@ docCox sh = d (0 :: Int) . coxFold where
     d n e  = case e of
         CoxLit    _ c          ->  wr "lit" B.<+> wr c
         CoxTerm   _ ns _       ->  wr $ concatMap ('/' :) ns
-        CoxBase   _ name _     ->  wr "base" B.<+> wr name
+        CoxBase   _ cop        ->  wr "base" B.<+> wr (B.name cop)
         CoxLocal  _ v i        ->  wr "local" B.<+> wr v B.<> wr "/" B.<> wr i
         CoxBlank  _ v          ->  wr "global" B.<+> wr v
         CoxRefill _ f xs       ->  let f'  = wr ">>" B.<+> d' f
@@ -99,8 +99,8 @@ coxFold (CoxRefill cp f xs) = CoxRefill cp (coxFold f) (map coxFold xs)
 coxFold e = e
 
 isCoxBase :: Cox c -> Bool
-isCoxBase (CoxBase _  _ _)   = True
-isCoxBase _                  = False
+isCoxBase (CoxBase _ _)   = True
+isCoxBase _               = False
 
 isCoxForm :: Cox c -> Bool
 isCoxForm (CoxForm1  _ _ _ _) = True
@@ -137,7 +137,7 @@ irreducible cox =
     case cox of
       CoxLit  _ _       ->  True
       CoxTerm _ _ _     ->  True
-      CoxBase _ _ _     ->  True
+      CoxBase _ _       ->  True
       CoxRefill _ f xs  ->  all irreducible $ f : xs
       _                 ->  False
 

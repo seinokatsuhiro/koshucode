@@ -49,7 +49,7 @@ reduce = red [] where
         C.CoxTerm   cp n i      ->  Right $ BetaTerm cp n i
         C.CoxLocal  cp v k      ->  a1 cp $ red args =<< kth v k args
         C.CoxRefill cp fn xs    ->  a1 cp $ refill args fn $ substL args xs
-        C.CoxBase   cp _ _      ->  a1 cp $ refill args cox []
+        C.CoxBase   cp _        ->  a1 cp $ refill args cox []
         C.CoxWith   cp arg2 e   ->  a1 cp $ red (arg2 ++ args) e
         C.CoxForm1  cp _ v _    ->  a1 cp $ Message.lackArg v
         C.CoxForm   cp _ _ _    ->  a1 cp $ Message.adlib "CoxForm"
@@ -63,7 +63,8 @@ reduce = red [] where
                                                refill (vx : args) f2 xs
         C.CoxLocal  cp v k      ->  a2 cp $ do fn' <- kth v k args
                                                refill args fn' xxs
-        C.CoxBase   cp n f2     ->  a2 cp $ do xxs2 <- mapM id xxs
+        C.CoxBase   cp (C.CopFun n f2)  ->  a2 cp $ do
+                                               xxs2 <- mapM id xxs
                                                let xxs3 = red args `map` xxs2
                                                Right $ BetaCall cp n f2 xxs3
         C.CoxRefill cp f2 xs2   ->  a2 cp $ refill args f2 $ substL args xs2 ++ xxs
@@ -102,9 +103,7 @@ link (base, deriv) = li where
     assn (n, cop) = (B.BlankNormal n, cop)
 
     named :: C.Cop c -> C.CoxAssn c
-    named (C.CopFun  n f) = (n, C.CoxBase [] n f)
-    named (C.CopCox  n _) = (n, C.CoxBase [] n undefined)
-    named (C.CopTree n _) = (n, C.CoxBase [] n undefined)
+    named cop = (C.copName cop, C.CoxBase [] cop)
 
 -- put term positions for actural heading
 position :: B.Relhead -> C.Cox c -> B.Ab (C.Cox c)
