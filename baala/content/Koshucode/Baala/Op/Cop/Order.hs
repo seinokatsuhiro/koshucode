@@ -53,9 +53,12 @@ copsOrder =
     , C.CopCox  (C.copInfix  "between") betweenInfix
     , C.CopCox  (C.copPrefix "between") betweenPrefix
 
-    , C.CopCox  (C.copInfix "is")  copIs
-    , C.CopCox  (C.copNormal "all")     $ copCollect "and"
-    , C.CopCox  (C.copNormal "any")     $ copCollect "or"
+    , C.CopCox  (C.copNormal  "all")    $ copCollect "and"
+    , C.CopCox  (C.copNormal  "any")    $ copCollect "or"
+
+    , C.CopCox   (C.copInfix  "is")     copIs
+    , C.CopCox   (C.copInfix  "of")     ofInfix
+    , C.CopCox   (C.copInfix  "to")     toInfix
     ]
 
 orderInfix :: (C.CBool c) => String -> (c -> c -> Bool) -> C.Cop c
@@ -98,4 +101,12 @@ copIs _      = Message.unmatchType ""
 copCollect :: String -> C.CopCox c
 copCollect n fs = Right $ H.f1 $ H.rn (C.copInfix n) (map refill fs) where
     refill f = H.rx f [H.b1]
+
+ofInfix :: C.CopCox c
+ofInfix [f, x] = Right $ H.rx f [x]
+ofInfix _ = Message.adlib "require operand"
+
+toInfix :: C.CopCox c
+toInfix [x, f] = Right $ H.rx f [x]
+toInfix _ = Message.adlib "require operand"
 
