@@ -170,8 +170,8 @@ convTree syn = expand where
 
     expand (B.TreeB 6 p trees) =
         case B.divideTreesByBar trees of
-          [vars, b1] -> do b2 <- expand $ B.treeWrap b1
-                           Right $ B.TreeB 6 p [B.treeWrap vars, b2]
+          [vars, b1] -> do b2 <- expand $ B.treeWrap 1 b1
+                           Right $ B.TreeB 6 p [B.treeWrap 1 vars, b2]
           _ -> Message.unkCox "abstruction"
 
     expand tree = Right tree

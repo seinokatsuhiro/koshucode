@@ -35,7 +35,7 @@ import qualified Koshucode.Baala.Base.Token.TokenLine as B
 -- ----------------------
 
 -- | Tree of tokens.
-type TokenTree = B.CodeTree B.Token
+type TokenTree = B.CodeTree Int B.Token
 
 -- | Pair of token trees and its name.
 type NamedTrees = B.Named [TokenTree]
@@ -55,11 +55,11 @@ type NamedTrees = B.Named [TokenTree]
 --   4. Curely-bar braces @{| .. |}@ for relation.
 
 tokenTrees :: [B.Token] -> B.Ab [TokenTree]
-tokenTrees = Right .und B.<=< B.trees parenType where
+tokenTrees = Right .und B.<=< B.trees parenType 0 negate where
     und = map (B.undouble (== 0))
 
-parenType :: B.GetParenType B.Token
-parenType = B.parenTable
+parenType :: B.GetParenType Int B.Token
+parenType = B.parenTable 0 negate
     [ o 1  "("    ")"   -- grouping
     , o 2  "["    "]"   -- list
     , o 3  "{"    "}"   -- set
@@ -76,7 +76,7 @@ tt :: String -> B.Ab [TokenTree]
 tt s = tokenTrees $ B.sweepToken $ B.tokens (B.ResourceText s) s
 
 tt1 :: String -> B.Ab TokenTree
-tt1 = Right . B.treeWrap B.<=< tt
+tt1 = Right . B.treeWrap 1 B.<=< tt
 
 -- | Get 'B.Doc' value of token trees for pretty printing.
 ttDoc :: [TokenTree] -> B.Doc

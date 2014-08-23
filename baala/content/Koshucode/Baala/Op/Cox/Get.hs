@@ -35,7 +35,7 @@ ropBase = C.globalFunction . C.ropGlobal
 
 -- | Get relmap attribute as single cox.
 getCox :: (C.CContent c) => C.RopUse c -> String -> B.Ab (C.Cox c)
-getCox use = ropBuild use . B.treeWrap B.<=< Op.getTrees use
+getCox use = ropBuild use . B.treeWrap 1 B.<=< Op.getTrees use
 
 -- | Get relmap attribute as cox list with name.
 getNamedCoxes :: (C.CContent c) => C.RopUse c -> String -> B.Ab [C.NamedCox c]
@@ -68,7 +68,7 @@ getWhereClause :: (C.CContent c) => C.RopUse c -> [B.TokenTree] -> B.Ab (C.Named
 getWhereClause u trees =
     do (he, bo) <- getTreesByEqual trees
        (n, vs)  <- getWhereHead he
-       cox      <- ropBuild u $ B.treeWrap bo
+       cox      <- ropBuild u $ B.treeWrap 1 bo
        let cp = B.codePoints $ head $ B.untrees trees
        case vs of
          [] -> Right (n, cox)
@@ -106,7 +106,7 @@ getContent use name =
 getContents :: (C.CContent c) => C.RopUse c -> String -> B.Ab [c]
 getContents use name =
     do trees <- Op.getTrees use name
-       let trees2 = B.treeWrap `map` B.divideTreesByColon trees
+       let trees2 = B.treeWrap 1 `map` B.divideTreesByColon trees
        runCoxTree use `mapM` trees2
 
 runCoxTree :: (C.CContent c) => C.RopUse c -> B.TokenTree -> B.Ab c

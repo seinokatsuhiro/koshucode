@@ -93,7 +93,7 @@ consLexmap sorters gslot derives = lexmap where
            [[B.TreeB _ _ _]]     -> Message.adlib "bracket"
            [[]]                  -> baseOf "id" []
            [_]                   -> Message.unkRelmap "???"
-           trees2                -> baseOf "append" $ map B.treeWrap trees2
+           trees2                -> baseOf "append" $ map (B.treeWrap 1) trees2
 
     derived :: B.Token -> ConsLexmapBody
     derived rop trees =

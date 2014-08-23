@@ -88,11 +88,11 @@ nameLeaf :: B.BlankName -> B.TokenTree
 nameLeaf = B.TreeL . B.TName B.codePointZero
 
 treeIf :: B.TokenTree -> B.TokenTree -> B.TokenTree -> B.TokenTree
-treeIf test con alt = B.treeWrap [ nameLeaf $ C.copInternal "#if" , test, con , alt ]
+treeIf test con alt = B.treeWrap 1 [ nameLeaf $ C.copInternal "#if" , test, con , alt ]
 
 treeOrList :: [B.TokenTree] -> B.TokenTree
 treeOrList [x] = x
-treeOrList xs = B.treeWrap $ (nameLeaf $ C.copNormal "or") : xs
+treeOrList xs = B.treeWrap 1 $ (nameLeaf $ C.copNormal "or") : xs
 
 copFunIf  :: (C.CBool c, C.CEmpty c) => C.CopFun c
 copFunIf arg =
@@ -118,21 +118,21 @@ copTreeIf trees = folding $ filter (/= []) $ B.divideTreesBy ":" trees where
         case B.divideTreesBy "->" trees2 of
           [_]         -> back trees2 alt
           [test, con] -> do test2 <- stairs ">>" "<<" test
-                            Right $ treeIf test2 (B.treeWrap con) alt
+                            Right $ treeIf test2 (B.treeWrap 1 con) alt
           _           -> abortSyntax trees2 "Expect E -> E"
 
     back :: [B.TokenTree] -> B.AbMap B.TokenTree
     back trees2 alt =
         case B.divideTreesBy "<-" trees2 of
-          [alt2]      -> Right $ B.treeWrap alt2
+          [alt2]      -> Right $ B.treeWrap 1 alt2
           [con, test] -> do test2 <- stairs "<<" ">>" test
-                            Right $ treeIf test2 (B.treeWrap con) alt
+                            Right $ treeIf test2 (B.treeWrap 1 con) alt
           _           -> abortSyntax trees2 "Expect E <- E"
 
     stairs :: String -> String -> [B.TokenTree] -> B.Ab B.TokenTree
     stairs del del2 xs =
         do notInclude del2 xs
-           Right $ treeOrList $ map B.treeWrap $ B.divideTreesBy del xs
+           Right $ treeOrList $ map (B.treeWrap 1) $ B.divideTreesBy del xs
 
     notInclude :: String -> [B.TokenTree] -> B.Ab ()
     notInclude del xs =

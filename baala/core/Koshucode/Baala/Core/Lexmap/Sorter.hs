@@ -131,7 +131,7 @@ roaTermsTwo a b c ns = spec (name f) [a,b,c] ns where
              (a', [b',c']) -> Right [ (a, a'), (b, B.li1 b'), (c, B.li1 c') ]
              _             -> Message.unexpAttr "Require terms and two attributes"
 
-isTermLeaf :: B.CodeTree B.Token -> Bool
+isTermLeaf :: B.TokenTree -> Bool
 isTermLeaf (B.TreeL token) = B.isTermToken token
 isTermLeaf _               = False
 
