@@ -82,11 +82,11 @@ litContentBy ops tree = B.abortableTree "literal" tree $ lit tree where
               _                 ->  Message.unkWord $ B.tokenContent tok
 
     lit (B.TreeB n _ xs) = case n of
-        B.ParenOpen B.ParenGroup  ->  paren xs
-        B.ParenOpen B.ParenList   ->  C.putList =<< litContents lit xs
-        B.ParenOpen B.ParenSet    ->  C.putSet  =<< litContents lit xs
-        B.ParenOpen B.ParenAssn   ->                litBracket  lit xs
-        B.ParenOpen B.ParenRel    ->  C.putRel  =<< litRel      lit xs
+        B.ParenGroup  ->  paren xs
+        B.ParenList   ->  C.putList =<< litContents lit xs
+        B.ParenSet    ->  C.putSet  =<< litContents lit xs
+        B.ParenAssn   ->                litBracket  lit xs
+        B.ParenRel    ->  C.putRel  =<< litRel      lit xs
         _  ->  Message.adlib "Unknown paren type"
 
     paren :: LitTrees c
@@ -212,7 +212,7 @@ litContents _   [] = Right []
 litContents lit cs = mapM lt $ B.divideTreesByColon cs where
     lt []  = Message.emptyLiteral
     lt [x] = lit x
-    lt xs  = lit $ B.TreeB B.ParenNon Nothing xs
+    lt xs  = lit $ B.TreeB B.ParenGroup Nothing xs
 
 litAssn :: (C.CContent c) => LitTree c -> LitTrees [B.Named c]
 litAssn lit = mapM p B.<=< litNamedTrees where

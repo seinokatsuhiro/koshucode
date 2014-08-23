@@ -5,9 +5,8 @@
 module Koshucode.Baala.Base.Syntax.Tree
 ( 
   -- * Data type
-  CodeTree (..),
   Paren (..),
-  closeParen,
+  CodeTree (..),
 
   -- * Parsing
   tree, trees,
@@ -28,17 +27,28 @@ import qualified Koshucode.Baala.Base.Message as Message
 
 
 
--- ----------------------  Tree
+-- ----------------------  Paren
 
-data Paren a
-    = ParenClose a
-    | ParenNon
-    | ParenOpen a
+data Paren p
+    = ParenNon
+    | ParenOpen  p
+    | ParenClose p
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
-closeParen :: B.Map (Paren a)
-closeParen (ParenOpen a) = ParenClose a
-closeParen p             = p
+isNotParen :: B.Pred (Paren p)
+isNotParen (ParenNon)       = True
+isNotParen _                = False
+
+isOpenParen :: B.Pred (Paren p)
+isOpenParen (ParenOpen _)   = True
+isOpenParen _               = False
+
+isCloseParen :: B.Pred (Paren p)
+isCloseParen (ParenClose _) = True
+isCloseParen _              = False
+
+
+-- ----------------------  Tree
 
 -- | Tree of leaf and branch.
 data CodeTree p a
@@ -57,34 +67,31 @@ instance Functor (CodeTree p) where
 -- treeG xs = TreeB 1 Nothing xs
 
 -- | Convert a list of elements to a single tree.
-tree :: (Ord p, B.CodePtr a) => GetParenType p a -> p -> p -> B.Map p -> [a] -> B.Ab (CodeTree p a)
-tree parenType zero one close =
-    Right . treeWrap one B.<=< trees parenType zero close
+tree :: (Ord p, B.CodePtr a) => GetParenType p a -> Paren p -> p -> [a] -> B.Ab (CodeTree p a)
+tree parenType zero one =
+    Right . treeWrap one B.<=< trees parenType zero
 
 -- |  Convert a list of elements to trees.
 trees :: forall a. forall p. (Ord p, B.CodePtr a)
-         => GetParenType p a -> p -> B.Map p -> [a] -> B.Ab [CodeTree p a]
-trees parenType zero close xs = result where
+         => GetParenType p a -> Paren p -> [a] -> B.Ab [CodeTree p a]
+trees parenType zero xs = result where
     result :: B.Ab [CodeTree p a]
     result       = do (ts, _) <- loop xs zero
                       Right ts
     add a xs2 p  = do (ts, xs3) <- loop xs2 p
                       Right (a : ts, xs3)
 
-    loop :: [a] -> p -> B.Ab ([CodeTree p a], [a])
+    loop :: [a] -> Paren p -> B.Ab ([CodeTree p a], [a])
     loop [] _        = Right ([], [])
     loop (x : xs2) p
-        | isGround   = add (TreeL x) xs2 p
-        | isOpen     = do (trees2, cxs3) <- loop xs2 px
-                          case cxs3 of
-                            c : xs3 -> add (TreeB px (Just (x, c)) trees2) xs3 p
-                            _       -> abort Message.extraOpenParen
-        | isClose    = Right ([], x : xs2)
-        | otherwise  = abort Message.extraCloseParen
+        | isNotParen   px = add (TreeL x) xs2 p
+        | isOpenParen  px = do (trees2, cxs3) <- loop xs2 px
+                               case (px, cxs3) of
+                                 (ParenOpen p2, c : xs3) -> add (TreeB p2 (Just (x, c)) trees2) xs3 p
+                                 _       -> abort Message.extraOpenParen
+        | isCloseParen px = Right ([], x : xs2)
+        | otherwise       = abort Message.extraCloseParen
         where 
-          isGround = ( px == zero )
-          isOpen   = ( px >  zero )
-          isClose  = ( px == close p )
           px       = parenType x
           abort    = B.abortable "tree" [x]
 
@@ -131,7 +138,7 @@ undouble p = loop where
 -- ----------------------  Paren table
 
 -- | Get a paren type.
-type GetParenType p a = a -> p
+type GetParenType p a = a -> Paren p
 
 -- | Make 'GetParenType' functions
 --   from a type-open-close table.
@@ -150,15 +157,14 @@ type GetParenType p a = a -> p
 --
 parenTable
     :: (Eq a)
-    => p -> (p -> p)
-    -> [(p, B.Pred a, B.Pred a)] -- ^ List of (/type/, /open/, /close/)
+    => [(p, B.Pred a, B.Pred a)] -- ^ List of (/type/, /open/, /close/)
     -> GetParenType p a
-parenTable zero close xs = parenType where
+parenTable xs = parenType where
     parenTypeTable = map parenOpen xs ++ map parenClose xs
-    parenOpen  (n, isOpen, _)  = (isOpen,        n)
-    parenClose (n, _, isClose) = (isClose, close n)
+    parenOpen  (n, isOpen, _)  = (isOpen,  ParenOpen n)
+    parenClose (n, _, isClose) = (isClose, ParenClose n)
     parenType a =
         case B.lookupSatisfy a parenTypeTable of
           Just p  -> p
-          Nothing -> zero
+          Nothing -> ParenNon
 

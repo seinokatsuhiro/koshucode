@@ -11,8 +11,7 @@ module Koshucode.Baala.Base.Token.TokenTree
   wrapTrees,
 
   -- * Paren type
-  ParenType,
-  ParenTypeName (..),
+  ParenType (..),
 
   -- * Abbreviation
   tt, tt1, ttDoc,
@@ -62,25 +61,23 @@ type NamedTrees = B.Named [TokenTree]
 --   4. Curely-bar braces @{| .. |}@ for relation.
 
 tokenTrees :: [B.Token] -> B.Ab [TokenTree]
-tokenTrees = Right . und B.<=< B.trees parenType B.ParenNon B.closeParen where
-    und = map (B.undouble (== B.ParenNon))
+tokenTrees = B.trees parenType B.ParenNon where
+    --und = map (B.undouble (== ParenGroup))
 
 wrapTrees :: [TokenTree] -> TokenTree
-wrapTrees = B.treeWrap $ B.ParenOpen ParenGroup
+wrapTrees = B.treeWrap ParenGroup
 
 parenType :: B.GetParenType ParenType B.Token
-parenType = B.parenTable B.ParenNon B.closeParen
+parenType = B.parenTable
     [ o ParenGroup  "("    ")"   -- grouping
     , o ParenForm   "(|"  "|)"   -- function
     , o ParenList   "["    "]"   -- list
     , o ParenSet    "{"    "}"   -- set
     , o ParenAssn   "<<"  ">>"   -- assn (association)
     , o ParenRel    "{|"  "|}"   -- relation
-    ] where o n a b = (B.ParenOpen n, B.isOpenTokenOf a, B.isCloseTokenOf b)
+    ] where o n a b = (n, B.isOpenTokenOf a, B.isCloseTokenOf b)
 
-type ParenType = B.Paren ParenTypeName
-
-data ParenTypeName
+data ParenType
     = ParenGroup
     | ParenForm
     | ParenList
