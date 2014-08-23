@@ -100,14 +100,17 @@ construct = expr where
     cons cp tree@(B.TreeL tok) =
         case tok of
           B.TTerm _ ns   ->  Right $ C.CoxTerm cp ns []
-          B.TText _ _ v  ->  case C.litContent tree of
-                               Right c -> Right $ C.CoxLit cp c
-                               Left _  -> Right $ C.CoxBlank cp v
+          B.TText _ _ v  ->  text tree cp v
+          B.TName _ v    ->  text tree cp v
           _              ->  B.bug "core/leaf"
 
     -- literal composite
     cons cp tree@(B.TreeB n _ _) | n > 1 = fmap (C.CoxLit cp) $ C.litContent tree
     cons _ (B.TreeB n _ _) = Message.unkCox $ show n
+
+    text tree cp v = case C.litContent tree of
+                       Right c -> Right $ C.CoxLit cp c
+                       Left _  -> Right $ C.CoxBlank cp v
 
     untag :: B.TokenTree -> (Maybe String, B.TokenTree)
     untag (B.TreeB l p (B.TreeL (B.TText _ 1 tag) : vars))
@@ -124,7 +127,7 @@ prefix htab tree =
     where
       conv = (c C.copPrefix, c C.copInfix, c C.copPostfix)
       c :: B.Map String -> B.Map B.Token
-      c f (B.TText cp i s) = B.TText cp i $ f s
+      c f (B.TText cp 0 s) = B.TName cp $ f s
       c _ x = x
 
       ht :: B.Token -> B.InfixHeight

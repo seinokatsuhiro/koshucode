@@ -16,7 +16,6 @@ module Koshucode.Baala.Base.Token.Token
   -- * Selectors
   tokenContent,
   tokenTypeText,
-  tokenPoint,
 
   -- * Predicates
   isBlankToken, isShortToken, isTermToken,
@@ -41,6 +40,7 @@ data Token
                                           --   1 for single-quoted,
                                           --   2 for double-quoted,
                                           --   3 for @-with@ variable.
+    | TName    B.CodePoint String         -- ^ Operator name.
     | TSlot    B.CodePoint Int String     -- ^ Slot name.
                                           --   'Int' represents slot level, i.e.,
                                           --   0 for positional slots,
@@ -67,6 +67,7 @@ instance B.Name Token where
 instance B.Write Token where
     write sh = d where
         d (TText    pt q w) = pretty "TText"    pt [show q, show w]
+        d (TName    pt w)   = pretty "TName"    pt [show w]
         d (TShort   pt a b) = pretty "TShort"   pt [show a, show b]
         d (TTerm    pt ns)  = pretty "TTerm"    pt [show ns]
         d (TSlot    pt n w) = pretty "TSlot"    pt [show n, show w]
@@ -83,15 +84,16 @@ textToken :: String -> Token
 textToken = TText B.codePointZero 0
 
 instance B.CodePointer Token where
-    codePoints (TText    p _ _)  =  [p]
-    codePoints (TShort   p _ _)  =  [p]
-    codePoints (TTerm    p _)    =  [p]
-    codePoints (TSlot    p _ _)  =  [p]
-    codePoints (TOpen    p _)    =  [p]
-    codePoints (TClose   p _)    =  [p]
-    codePoints (TSpace   p _)    =  [p]
-    codePoints (TComment p _)    =  [p]
-    codePoints (TUnknown p _)    =  [p]
+    codePoints (TText    cp _ _)  =  [cp]
+    codePoints (TName    cp _)    =  [cp]
+    codePoints (TShort   cp _ _)  =  [cp]
+    codePoints (TTerm    cp _)    =  [cp]
+    codePoints (TSlot    cp _ _)  =  [cp]
+    codePoints (TOpen    cp _)    =  [cp]
+    codePoints (TClose   cp _)    =  [cp]
+    codePoints (TSpace   cp _)    =  [cp]
+    codePoints (TComment cp _)    =  [cp]
+    codePoints (TUnknown cp _)    =  [cp]
 
 
 
@@ -113,23 +115,13 @@ type TermPath    =  [TermName]
 
 -- ---------------------- Selector
 
-tokenPoint :: Token -> B.CodePoint
-tokenPoint (TText    pt _ _)  =  pt
-tokenPoint (TShort   pt _ _)  =  pt
-tokenPoint (TTerm    pt _)    =  pt
-tokenPoint (TSlot    pt _ _)  =  pt
-tokenPoint (TOpen    pt _)    =  pt
-tokenPoint (TClose   pt _)    =  pt
-tokenPoint (TSpace   pt _)    =  pt
-tokenPoint (TComment pt _)    =  pt
-tokenPoint (TUnknown pt _)    =  pt
-
 -- | Get the content of token.
 --
 --   >>> let tok = TTerm B.codePointZero ["r", "x"] in tokenContent tok
 --   "/r/x"
 tokenContent :: Token -> String
 tokenContent (TText  _ _ s)   =  s
+tokenContent (TName    _ s)   =  s
 tokenContent (TShort _ a b)   =  a ++ "." ++ b
 tokenContent (TTerm    _ ns)  =  concatMap ('/' :) ns
 tokenContent (TSlot  _ _ s)   =  s
@@ -147,6 +139,7 @@ tokenContent (TUnknown _ s)   =  s
 --   "Text"
 tokenTypeText :: Token -> String
 tokenTypeText (TText  _ _ _)  =  "text"
+tokenTypeText (TName    _ _)  =  "name"
 tokenTypeText (TShort _ _ _)  =  "short"
 tokenTypeText (TTerm    _ _)  =  "term"
 tokenTypeText (TSlot  _ _ _)  =  "slot"
