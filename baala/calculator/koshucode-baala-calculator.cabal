@@ -7,7 +7,7 @@ name:                koshucode-baala-calculator
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:             0.68.0.0
+version:             0.69.0.0
 
 -- A short (one-line) description of the package.
 synopsis:            A portable relational calculator
@@ -53,10 +53,10 @@ executable koshu
          base                     == 4.6.*
        , directory                == 1.2.*
        , filepath                 == 1.3.*
-       , koshucode-baala-base     == 0.68.*
-       , koshucode-baala-core     == 0.68.*
-       , koshucode-baala-operator == 0.68.*
-       , koshucode-baala-content  == 0.68.*
+       , koshucode-baala-base     == 0.69.*
+       , koshucode-baala-core     == 0.69.*
+       , koshucode-baala-operator == 0.69.*
+       , koshucode-baala-content  == 0.69.*
 
 library
   -- Modules exported by the library.
@@ -76,8 +76,8 @@ library
          base                     == 4.6.*
        , directory                == 1.2.*
        , filepath                 == 1.3.*
-       , koshucode-baala-base     == 0.68.*
-       , koshucode-baala-core     == 0.68.*
-       , koshucode-baala-operator == 0.68.*
-       , koshucode-baala-content  == 0.68.*
+       , koshucode-baala-base     == 0.69.*
+       , koshucode-baala-core     == 0.69.*
+       , koshucode-baala-operator == 0.69.*
+       , koshucode-baala-content  == 0.69.*
 
