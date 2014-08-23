@@ -18,11 +18,11 @@ import qualified Koshucode.Baala.Core.Message           as Message
 -- --------------------------------------------  Beta reduction
 
 data Beta c
-    = BetaLit  [B.CodePoint] c                     -- ^ Literal content
-    | BetaTerm [B.CodePoint] [B.TermName] [Int]    -- ^ Term reference, its name and position
-    | BetaCall [B.CodePoint] B.BlankName (C.CopFun c) [B.Ab (Beta c)]  -- ^ Function application
+    = BetaLit  [B.CodePt] c                     -- ^ Literal content
+    | BetaTerm [B.CodePt] [B.TermName] [Int]    -- ^ Term reference, its name and position
+    | BetaCall [B.CodePt] B.BlankName (C.CopFun c) [B.Ab (Beta c)]  -- ^ Function application
 
-instance B.CodePointer (Beta c) where
+instance B.CodePtr (Beta c) where
     codePoints (BetaLit  cp _)      =  cp
     codePoints (BetaTerm cp _ _)    =  cp
     codePoints (BetaCall cp _ _ _)  =  cp

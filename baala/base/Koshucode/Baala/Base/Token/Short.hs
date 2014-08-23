@@ -26,7 +26,7 @@ import qualified Koshucode.Baala.Base.Token.Bracket   as B
 
 -- | Something with short definition.
 data Short a =
-    Short { shortSource :: [B.CodePoint]
+    Short { shortSource :: [B.CodePt]
           , shortHead   :: [ShortDef]
           , shortBody   :: a }
     deriving (Show, Ord, Eq)

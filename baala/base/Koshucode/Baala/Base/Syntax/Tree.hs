@@ -52,11 +52,11 @@ instance Functor CodeTree where
 -- treeG xs = TreeB 1 Nothing xs
 
 -- | Convert a list of elements to a single tree.
-tree :: (B.CodePointer a) => GetParenType a -> [a] -> B.Ab (CodeTree a)
+tree :: (B.CodePtr a) => GetParenType a -> [a] -> B.Ab (CodeTree a)
 tree p = Right . treeWrap B.<=< trees p
 
 -- |  Convert a list of elements to trees.
-trees :: forall a. (B.CodePointer a) => GetParenType a -> [a] -> B.Ab [CodeTree a]
+trees :: forall a. (B.CodePtr a) => GetParenType a -> [a] -> B.Ab [CodeTree a]
 trees parenType xs = result where
     result       = do (ts, _) <- loop xs 0
                       Right ts

@@ -38,25 +38,25 @@ import qualified Koshucode.Baala.Base.Text      as B
 
 -- | There are nine types of tokens.
 data Token
-    = TText    B.CodePoint Int String     -- ^ Text.
+    = TText    B.CodePt Int String     -- ^ Text.
                                           --   'Int' represents quotation level, i.e.,
                                           --   0 for non-quoted,
                                           --   1 for single-quoted,
                                           --   2 for double-quoted,
                                           --   3 for @-with@ variable.
-    | TName    B.CodePoint BlankName      -- ^ Blank name.
-    | TSlot    B.CodePoint Int String     -- ^ Slot name.
+    | TName    B.CodePt BlankName      -- ^ Blank name.
+    | TSlot    B.CodePt Int String     -- ^ Slot name.
                                           --   'Int' represents slot level, i.e.,
                                           --   0 for positional slots,
                                           --   1 for named slots,
                                           --   2 for global slots.
-    | TShort   B.CodePoint String String  -- ^ Abbreviated text.
-    | TTerm    B.CodePoint TermPath       -- ^ Term name.
-    | TOpen    B.CodePoint String         -- ^ Opening paren.
-    | TClose   B.CodePoint String         -- ^ Closing paren.
-    | TSpace   B.CodePoint Int            -- ^ /N/ space characters.
-    | TComment B.CodePoint String         -- ^ Comment text.
-    | TUnknown B.CodePoint String         -- ^ Unknown text.
+    | TShort   B.CodePt String String  -- ^ Abbreviated text.
+    | TTerm    B.CodePt TermPath       -- ^ Term name.
+    | TOpen    B.CodePt String         -- ^ Opening paren.
+    | TClose   B.CodePt String         -- ^ Closing paren.
+    | TSpace   B.CodePt Int            -- ^ /N/ space characters.
+    | TComment B.CodePt String         -- ^ Comment text.
+    | TUnknown B.CodePt String         -- ^ Unknown text.
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance B.Name Token where
@@ -90,7 +90,7 @@ textToken = TText B.codePointZero 0
 nameToken :: String -> Token
 nameToken = TName B.codePointZero . BlankNormal
 
-instance B.CodePointer Token where
+instance B.CodePtr Token where
     codePoints (TText    cp _ _)  =  [cp]
     codePoints (TName    cp _)    =  [cp]
     codePoints (TShort   cp _ _)  =  [cp]

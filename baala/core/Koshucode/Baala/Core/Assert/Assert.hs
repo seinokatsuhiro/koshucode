@@ -40,7 +40,7 @@ data Assert c = Assert
 -- | Option for assertions.
 type AssertOption = [B.NamedTrees]
 
-instance B.CodePointer (Assert c) where
+instance B.CodePtr (Assert c) where
     codePoints = concatMap B.codePoints . assToken
 
 instance B.Write (Assert c) where

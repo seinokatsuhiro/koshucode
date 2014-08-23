@@ -84,7 +84,7 @@ construct = expr where
          in cons cp tree
 
     -- fill args in the blanks (application)
-    cons :: [B.CodePoint] -> B.TokenTree -> B.Ab (C.Cox c)
+    cons :: [B.CodePt] -> B.TokenTree -> B.Ab (C.Cox c)
     cons cp (B.TreeB 1 _ (fun : args)) =
         do fun'  <- expr fun
            args' <- expr `mapM` args
@@ -177,7 +177,7 @@ convTree syn = expand where
     expand tree = Right tree
 
 -- | Insert fresh form into indexed expression.
-coxForm :: [B.CodePoint] -> Maybe String -> [String] -> B.Map (C.Cox c)
+coxForm :: [B.CodePt] -> Maybe String -> [String] -> B.Map (C.Cox c)
 coxForm cp0 tag vs = debruijn . outside [] . coxUnfold . C.CoxForm cp0 tag vs where
     n = length vs
     outside vars cox = case cox of

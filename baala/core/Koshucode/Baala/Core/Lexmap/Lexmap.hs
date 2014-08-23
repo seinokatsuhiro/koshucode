@@ -50,7 +50,7 @@ instance B.Write Lexmap where
           Just xs -> B.writeH sh [op, show xs]
         where op = B.tokenContent opToken
 
-instance B.CodePointer Lexmap where
+instance B.CodePtr Lexmap where
     codePoints = B.codePoints . lexOpToken
 
 -- | Name of relmap operator

@@ -8,14 +8,14 @@ module Koshucode.Baala.Base.Text.Resource
   resourceType,
   resourceName,
 
-  -- * CodePoint
-  CodePoint (..),
+  -- * Code point
+  CodePt (..),
   codePointZero,
   codePointColumnNumber,
   codePointDisplay,
 
-  -- * CodePointer
-  CodePointer (..),
+  -- * Code pointer
+  CodePtr (..),
 
   -- * Sourced
   Sourced (..),
@@ -45,34 +45,34 @@ resourceName (ResourceText text)  =  text
 resourceName (ResourceURL  url)   =  url
 
 
--- ----------------------  CodePoint
+-- ----------------------  CodePt
 
-data CodePoint = CodePoint
+data CodePt = CodePt
       { codePointResource   :: Resource    -- ^ Resource of code
       , codePointLineNumber :: Int         -- ^ Line number
       , codePointLineText   :: String      -- ^ Line content
       , codePointText       :: String      -- ^ Text at which begins token
       } deriving (Show, Eq, G.Data, G.Typeable)
 
-instance Ord CodePoint where
+instance Ord CodePt where
     compare = codePointCompare
 
-codePointCompare :: CodePoint -> CodePoint -> Ordering
+codePointCompare :: CodePt -> CodePt -> Ordering
 codePointCompare p1 p2 = line `B.mappend` column where
     line   = codePointLineNumber p1 `compare` codePointLineNumber p2
     column = size p2 `compare` size p1
     size   = length . codePointText
 
 -- | Empty code point, i.e., empty content and zero line number.
-codePointZero :: CodePoint
-codePointZero = CodePoint (ResourceText "") 0 "" ""
+codePointZero :: CodePt
+codePointZero = CodePt (ResourceText "") 0 "" ""
 
 -- | Column number at which code starts.
-codePointColumnNumber :: CodePoint -> Int
-codePointColumnNumber CodePoint { codePointLineText = line, codePointText = subline }
+codePointColumnNumber :: CodePt -> Int
+codePointColumnNumber CodePt { codePointLineText = line, codePointText = subline }
     = length line - length subline
 
-codePointDisplay :: (String, CodePoint) -> [(String, String)]
+codePointDisplay :: (String, CodePt) -> [(String, String)]
 codePointDisplay (tag, p)
     | lno > 0   = [ (pos, ""), ("> " ++ shorten text, tag) ]
     | otherwise = []
@@ -88,24 +88,24 @@ codePointDisplay (tag, p)
                 | otherwise     = s
 
 
--- ----------------------  CodePointer
+-- ----------------------  CodePtr
 
-class CodePointer a where
-    codePoints :: a -> [CodePoint]
+class CodePtr a where
+    codePoints :: a -> [CodePt]
 
-instance CodePointer CodePoint where
+instance CodePtr CodePt where
     codePoints pt = [pt]
 
 
 -- ----------------------  Sourced
 
 data Sourced a =
-    Sourced { source    :: [CodePoint]
+    Sourced { source    :: [CodePt]
             , unsourced :: a
             } deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance Functor Sourced where
     fmap f (Sourced src x) = Sourced src $ f x
 
-instance CodePointer (Sourced a) where
+instance CodePtr (Sourced a) where
     codePoints = source

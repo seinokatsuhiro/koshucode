@@ -58,7 +58,7 @@ abortMessage cmd a = B.squeezeEmptyLines $ map B.trimRight texts where
     sandwich :: a -> a -> B.Map [a]
     sandwich open close xs = open : xs ++ [close]
 
-source :: [(String, B.CodePoint)] -> [(String, String)]
+source :: [(String, B.CodePt)] -> [(String, String)]
 source = concatMap B.codePointDisplay . B.unique . reverse
 
 -- | Stop on error @'BUG DISCOVERED'@

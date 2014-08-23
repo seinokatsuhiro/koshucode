@@ -82,7 +82,7 @@ nextToken res (num, line) txt =
       _               ->  token []        $ B.TUnknown  p []
 
     where
-      p      = B.CodePoint res num line txt
+      p = B.CodePt res num line txt
 
       token :: String -> B.Token -> (B.Token, String)
       token cs tok                    =  (tok, cs)

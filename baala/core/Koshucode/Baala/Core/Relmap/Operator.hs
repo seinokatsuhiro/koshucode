@@ -64,7 +64,7 @@ data RopUse c = RopUse
     , ropSubrelmap :: [Relmap c]   -- ^ Subrelmaps
     } deriving (Show)
 
-instance B.CodePointer (RopUse c) where
+instance B.CodePtr (RopUse c) where
     codePoints = B.codePoints . ropLexmap
 
 
@@ -159,7 +159,7 @@ relmapAppendList = expand where
     expand (RelmapAppend r1 r2) = expand r1 ++ expand r2
     expand r = [r]
 
-instance B.CodePointer (Relmap c) where
+instance B.CodePtr (Relmap c) where
     codePoints = concatMap B.codePoints . relmapLexList
 
 instance Ord (Relmap c) where

@@ -19,7 +19,7 @@ data AbortReason = AbortReason
     { abortReason :: String               -- ^ Reason in one line
     , abortDetail :: [String]             -- ^ Detailed description
     , abortNote   :: [String]             -- ^ Additional notes for long description
-    , abortPoint  :: [(String, B.CodePoint)]  -- ^ Tag and aborting point
+    , abortPoint  :: [(String, B.CodePt)]  -- ^ Tag and aborting point
     } deriving (Show, Eq, Ord)
 
 -- | Abortable result, i.e., either of right result or abort reason.

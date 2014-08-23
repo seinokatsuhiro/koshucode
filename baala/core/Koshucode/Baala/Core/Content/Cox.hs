@@ -30,20 +30,20 @@ import qualified Koshucode.Baala.Core.Message    as Message
 
 -- | Content expressions.
 data Cox c
-    = CoxLit    [B.CodePoint] c                       -- ^ Literal content
-    | CoxTerm   [B.CodePoint] [B.TermName] [Int]      -- ^ Term reference, its name and position
-    | CoxBase   [B.CodePoint] (Cop c)                 -- ^ Base function
-    | CoxLocal  [B.CodePoint] String Int              -- ^ Local blank, its name and De Bruijn index
-    | CoxBlank  [B.CodePoint] B.BlankName             -- ^ Blank in form
-    | CoxRefill [B.CodePoint] (Cox c) [Cox c]         -- ^ Refill arguments in a form
-    | CoxForm1  [B.CodePoint] (Maybe String)  String  (Cox c) -- ^ Form with single blank
-    | CoxForm   [B.CodePoint] (Maybe String) [String] (Cox c) -- ^ Form with multiple blanks
-    | CoxWith   [B.CodePoint] [NamedCox c] (Cox c)            -- ^ Cox with outside arguments
+    = CoxLit    [B.CodePt] c                       -- ^ Literal content
+    | CoxTerm   [B.CodePt] [B.TermName] [Int]      -- ^ Term reference, its name and position
+    | CoxBase   [B.CodePt] (Cop c)                 -- ^ Base function
+    | CoxLocal  [B.CodePt] String Int              -- ^ Local blank, its name and De Bruijn index
+    | CoxBlank  [B.CodePt] B.BlankName             -- ^ Blank in form
+    | CoxRefill [B.CodePt] (Cox c) [Cox c]         -- ^ Refill arguments in a form
+    | CoxForm1  [B.CodePt] (Maybe String)  String  (Cox c) -- ^ Form with single blank
+    | CoxForm   [B.CodePt] (Maybe String) [String] (Cox c) -- ^ Form with multiple blanks
+    | CoxWith   [B.CodePt] [NamedCox c] (Cox c)            -- ^ Cox with outside arguments
 
 type CoxAssn c  = (B.BlankName, Cox c)
 type NamedCox c = B.Named (Cox c)
 
-instance B.CodePointer (Cox c) where
+instance B.CodePtr (Cox c) where
     codePoints (CoxLit    cp _)      =  cp
     codePoints (CoxTerm   cp _ _)    =  cp
     codePoints (CoxBase   cp _)      =  cp

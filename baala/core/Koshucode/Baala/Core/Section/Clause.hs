@@ -45,7 +45,7 @@ data ClauseBody
     | CUnres      [B.Token]                      -- ^ Unresolved short sign
       deriving (Show, G.Data, G.Typeable)
 
-instance B.CodePointer Clause where
+instance B.CodePtr Clause where
     codePoints (Clause src _) = B.codePoints src
 
 -- | Name of clause type. e.g., @\"Relmap\"@, @\"Assert\"@.
