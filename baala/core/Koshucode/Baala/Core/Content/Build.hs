@@ -83,14 +83,14 @@ construct = expr where
          let cp = concatMap B.codePoints $ B.front $ B.untree tree
          in cons cp tree
 
-    -- function application
+    -- fill args in the blanks (application)
     cons :: [B.CodePoint] -> B.TokenTree -> B.Ab (C.Cox c)
     cons cp (B.TreeB 1 _ (fun : args)) =
         do fun'  <- expr fun
            args' <- expr `mapM` args
            Right $ C.CoxRefill cp fun' args'
 
-    -- function abstruction
+    -- form with blanks (function)
     cons cp (B.TreeB 6 _ [vars, b1]) =
         do b2 <- expr b1
            let (tag, vars') = untag vars
@@ -99,27 +99,32 @@ construct = expr where
     cons _ (B.TreeB 6 _ trees) =
         B.bug $ "core/abstruction: " ++ show (length trees)
 
+    -- compound literal
+    cons cp tree@(B.TreeB _ _ _) = fmap (C.CoxLit cp) $ C.litContent tree
+
     -- literal or variable
-    cons cp tree@(B.TreeL tok) =
-        case tok of
-          B.TTerm _ ns   ->  Right $ C.CoxTerm cp ns []
-          B.TText _ _ v  ->  text tree cp $ B.BlankNormal v
-          B.TName _ op   ->  text tree cp op
-          _              ->  B.bug "core/leaf"
-
-    -- literal composite
-    cons cp tree@(B.TreeB n _ _) | n > 1 = fmap (C.CoxLit cp) $ C.litContent tree
-    cons _ (B.TreeB n _ _) = Message.unkCox $ show n
-
-    text tree cp n =
-        case C.litContent tree of
-          Right c -> Right $ C.CoxLit cp c
-          Left _  -> Right $ C.CoxBlank cp n
+    cons cp tree@(B.TreeL tok) = case tok of
+        B.TTerm _ ns   ->  Right $ C.CoxTerm  cp ns []
+        B.TName _ op   ->  Right $ C.CoxBlank cp op
+        B.TText _ 0 n | isName n ->  Right $ C.CoxBlank cp $ B.BlankNormal n
+        B.TText _ _ _  ->  Right . C.CoxLit cp =<< C.litContent tree
+        _              ->  B.bug "core/leaf"
 
     untag :: B.TokenTree -> (Maybe String, B.TokenTree)
     untag (B.TreeB l p (B.TreeL (B.TText _ 1 tag) : vars))
                = (Just tag, B.TreeB l p $ vars)
     untag vars = (Nothing, vars)
+
+isName :: B.Pred String
+isName (c:_)  = isNameFirst c
+isName _      = False
+
+isNameFirst :: B.Pred Char
+isNameFirst c = case B.generalCategoryGroup c of
+                  B.UnicodeLetter     ->  True
+                  B.UnicodeMark       ->  True
+                  B.UnicodeSymbol     ->  True
+                  _                   ->  False
 
 -- convert from infix operator to prefix
 prefix :: [B.Named B.InfixHeight] -> B.AbMap B.TokenTree
@@ -139,14 +144,14 @@ prefix htab tree =
 
       wordText :: B.Token -> Maybe String
       wordText (B.TText _ 0 w) = Just w
-      wordText _ = Nothing
+      wordText _               = Nothing
 
       detail (Right n, tok) = detailText tok "right" n
       detail (Left  n, tok) = detailText tok "left"  n
 
       detailText tok dir n = B.tokenContent tok ++ " : " ++ dir ++ " " ++ show n
 
--- expand syntax operator
+-- expand tree-level syntax
 convTree :: forall c. [C.Cop c] -> B.AbMap B.TokenTree
 convTree syn = expand where
     assoc :: [B.Named (C.Cop c)]
@@ -164,10 +169,11 @@ convTree syn = expand where
                   Right $ B.TreeB 1 p sub2
 
     expand (B.TreeB 6 p trees) =
-        case B.divideTreesBy "|" trees of
+        case B.divideTreesByBar trees of
           [vars, b1] -> do b2 <- expand $ B.treeWrap b1
                            Right $ B.TreeB 6 p [B.treeWrap vars, b2]
           _ -> Message.unkCox "abstruction"
+
     expand tree = Right tree
 
 -- | Insert fresh form into indexed expression.

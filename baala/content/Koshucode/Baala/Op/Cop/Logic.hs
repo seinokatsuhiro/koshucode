@@ -31,17 +31,17 @@ import qualified Koshucode.Baala.Op.Message as Message
 
 copsLogic :: (C.CBool c, C.CEmpty c) => [C.Cop c]
 copsLogic =
-    [ C.CopFun   (C.copInfix  "and")    copAnd
-    , C.CopFun   (C.copInfix  "or")     copOr
-    , C.CopFun   (C.copInfix  "then")   copImp
-    , C.CopFun   (C.copInfix  "when")   copWhen
-    , C.CopFun   (C.copNormal "not")    copNot
-    , C.CopFun   (C.copNormal "and")    copAnd
-    , C.CopFun   (C.copNormal "or")     copOr
-    , C.CopFun   (C.copNormal "then")   copImp
-    , C.CopFun   (C.copNormal "when")   copWhen
-    , C.CopFun   (C.copNormal "#if")    copIf
-    , C.CopTree  (C.copNormal "if")     synIf
+    [ C.CopFun   (C.copInfix    "and")    copAnd
+    , C.CopFun   (C.copInfix    "or")     copOr
+    , C.CopFun   (C.copInfix    "then")   copImp
+    , C.CopFun   (C.copInfix    "when")   copWhen
+    , C.CopFun   (C.copNormal   "not")    copNot
+    , C.CopFun   (C.copNormal   "and")    copAnd
+    , C.CopFun   (C.copNormal   "or")     copOr
+    , C.CopFun   (C.copNormal   "then")   copImp
+    , C.CopFun   (C.copNormal   "when")   copWhen
+    , C.CopFun   (C.copInternal "#if")    copFunIf
+    , C.CopTree  (C.copNormal   "if")     copTreeIf
     ]
 
 cop1 :: (C.CBool c) => (Bool -> Bool) -> C.CopFun c
@@ -81,20 +81,21 @@ copAnd =  copN True (&&)
 copOr  :: (C.CBool c) => C.CopFun c
 copOr  =  copN False (||)
 
+
 -- ----------------------  if
 
-treeOp :: String -> B.TokenTree
-treeOp = B.TreeL . B.textToken
+nameLeaf :: B.BlankName -> B.TokenTree
+nameLeaf = B.TreeL . B.TName B.codePointZero
 
 treeIf :: B.TokenTree -> B.TokenTree -> B.TokenTree -> B.TokenTree
-treeIf test con alt = B.treeWrap [ treeOp "#if" , test, con , alt ]
+treeIf test con alt = B.treeWrap [ nameLeaf $ C.copInternal "#if" , test, con , alt ]
 
 treeOrList :: [B.TokenTree] -> B.TokenTree
 treeOrList [x] = x
-treeOrList xs = B.treeWrap $ (treeOp "or") : xs
+treeOrList xs = B.treeWrap $ (nameLeaf $ C.copNormal "or") : xs
 
-copIf  :: (C.CBool c, C.CEmpty c) => C.CopFun c
-copIf arg =
+copFunIf  :: (C.CBool c, C.CEmpty c) => C.CopFun c
+copFunIf arg =
     do (testC, conC, altC) <- C.getArg3 arg
        test <- C.getBool testC
        case test of
@@ -106,8 +107,8 @@ copIf arg =
 --  if TEST -> CON : TEST -> CON : TEST -> CON
 --  if : TEST -> CON : TEST -> CON : TEST -> CON
 
-synIf :: C.CopTree
-synIf trees = folding $ filter (/= []) $ B.divideTreesBy ":" trees where
+copTreeIf :: C.CopTree
+copTreeIf trees = folding $ filter (/= []) $ B.divideTreesBy ":" trees where
     folding :: [[B.TokenTree]] -> B.Ab B.TokenTree
     folding []        = Right $ B.TreeL $ B.textToken "()"
     folding (x : xs)  = fore x =<< folding xs

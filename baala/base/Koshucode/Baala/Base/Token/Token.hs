@@ -6,9 +6,12 @@
 module Koshucode.Baala.Base.Token.Token
 (
   -- * Token type
-  BlankName (..),
   Token (..),
   textToken,
+  nameToken,
+
+  -- * Blank name
+  BlankName (..),
 
   -- * Term name
   TermName, TermName2, TermName3, TermName4,
@@ -29,28 +32,6 @@ module Koshucode.Baala.Base.Token.Token
 import qualified Data.Generics                  as G
 import qualified Koshucode.Baala.Base.Prelude   as B
 import qualified Koshucode.Baala.Base.Text      as B
-
-
--- ----------------------  BlankName
-
-data BlankName
-    = BlankNormal   String
-    | BlankPrefix   String
-    | BlankInfix    String
-    | BlankPostfix  String
-    deriving (Show, Eq, Ord, G.Data, G.Typeable)
-
-instance B.Name BlankName where
-    name (BlankNormal  n) = n
-    name (BlankPrefix  n) = n
-    name (BlankInfix   n) = n
-    name (BlankPostfix n) = n
-
-instance B.Write BlankName where
-    write sh (BlankNormal  n) = B.write sh n
-    write sh (BlankPrefix  n) = B.write sh n B.<+> B.doc "(prefix)"
-    write sh (BlankInfix   n) = B.write sh n B.<+> B.doc "(infix)"
-    write sh (BlankPostfix n) = B.write sh n B.<+> B.doc "(postfix)"
 
 
 -- ----------------------  Token type
@@ -106,6 +87,9 @@ instance B.Write Token where
 textToken :: String -> Token
 textToken = TText B.codePointZero 0
 
+nameToken :: String -> Token
+nameToken = TName B.codePointZero . BlankNormal
+
 instance B.CodePointer Token where
     codePoints (TText    cp _ _)  =  [cp]
     codePoints (TName    cp _)    =  [cp]
@@ -118,6 +102,30 @@ instance B.CodePointer Token where
     codePoints (TComment cp _)    =  [cp]
     codePoints (TUnknown cp _)    =  [cp]
 
+
+-- ----------------------  Blank name
+
+data BlankName
+    = BlankNormal   String
+    | BlankInternal String
+    | BlankPrefix   String
+    | BlankInfix    String
+    | BlankPostfix  String
+    deriving (Show, Eq, Ord, G.Data, G.Typeable)
+
+instance B.Name BlankName where
+    name (BlankNormal   n)  =  n
+    name (BlankInternal n)  =  n
+    name (BlankPrefix   n)  =  n
+    name (BlankInfix    n)  =  n
+    name (BlankPostfix  n)  =  n
+
+instance B.Write BlankName where
+    write sh (BlankNormal   n)  =  B.write sh n
+    write sh (BlankInternal n)  =  B.write sh n
+    write sh (BlankPrefix   n)  =  B.write sh n B.<+> B.doc "(prefix)"
+    write sh (BlankInfix    n)  =  B.write sh n B.<+> B.doc "(infix)"
+    write sh (BlankPostfix  n)  =  B.write sh n B.<+> B.doc "(postfix)"
 
 
 -- ---------------------- Term name

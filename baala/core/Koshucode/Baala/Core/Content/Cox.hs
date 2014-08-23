@@ -18,9 +18,8 @@ module Koshucode.Baala.Core.Content.Cox
   Cop (..), CopBundle,
   CopFun, CopCox, CopTree,
   copName,
-  copNormal, copPrefix, copInfix, copPostfix,
-  isCopFunction,
-  isCopSyntax,
+  copNormal, copInternal, copPrefix, copInfix, copPostfix,
+  isCopFunction, isCopSyntax,
 ) where
 
 import qualified Koshucode.Baala.Base            as B
@@ -177,19 +176,22 @@ copName (CopTree  n _) = n
 
 -- | Non-binary operator.
 copNormal :: String -> B.BlankName
-copNormal n = B.BlankNormal n
+copNormal = B.BlankNormal
+
+copInternal :: String -> B.BlankName
+copInternal = B.BlankInternal
 
 -- | Convert operator name to prefix name.
 copPrefix :: String -> B.BlankName
-copPrefix n = B.BlankPrefix n
+copPrefix = B.BlankPrefix
 
 -- | Convert operator name to postfix name.
 copPostfix :: String -> B.BlankName
-copPostfix n = B.BlankPostfix n
+copPostfix = B.BlankPostfix
 
 -- | Convert operator name to infix name.
 copInfix :: String -> B.BlankName
-copInfix n = B.BlankInfix n
+copInfix = B.BlankInfix
 
 isCopFunction :: Cop c -> Bool
 isCopFunction (CopFun _ _) = True
