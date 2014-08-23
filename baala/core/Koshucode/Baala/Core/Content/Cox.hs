@@ -7,7 +7,7 @@ module Koshucode.Baala.Core.Content.Cox
 ( -- $Process
 
   -- * Expression
-  Cox (..), NamedCox,
+  Cox (..), CoxAssn, NamedCox,
   coxSyntacticArity,
   isCoxBase,
   isCoxForm,
@@ -17,6 +17,7 @@ module Koshucode.Baala.Core.Content.Cox
   -- * Operator
   Cop (..), CopBundle,
   CopFun, CopCox, CopTree,
+  copName,
   copNormal, copPrefix, copInfix, copPostfix,
   isCopFunction,
   isCopSyntax,
@@ -30,16 +31,17 @@ import qualified Koshucode.Baala.Core.Message    as Message
 
 -- | Content expressions.
 data Cox c
-    = CoxLit    [B.CodePoint] c                   -- ^ Literal content
-    | CoxTerm   [B.CodePoint] [B.TermName] [Int]  -- ^ Term reference, its name and position
-    | CoxBase   [B.CodePoint] String (CopFun c)   -- ^ Base function
-    | CoxLocal  [B.CodePoint] String Int          -- ^ Local blank, its name and De Bruijn index
-    | CoxBlank  [B.CodePoint] String              -- ^ Blank in form
-    | CoxRefill [B.CodePoint] (Cox c) [Cox c]     -- ^ Refill arguments in a form
+    = CoxLit    [B.CodePoint] c                       -- ^ Literal content
+    | CoxTerm   [B.CodePoint] [B.TermName] [Int]      -- ^ Term reference, its name and position
+    | CoxBase   [B.CodePoint] B.BlankName (CopFun c)  -- ^ Base function
+    | CoxLocal  [B.CodePoint] String Int              -- ^ Local blank, its name and De Bruijn index
+    | CoxBlank  [B.CodePoint] B.BlankName             -- ^ Blank in form
+    | CoxRefill [B.CodePoint] (Cox c) [Cox c]         -- ^ Refill arguments in a form
     | CoxForm1  [B.CodePoint] (Maybe String)  String  (Cox c) -- ^ Form with single blank
     | CoxForm   [B.CodePoint] (Maybe String) [String] (Cox c) -- ^ Form with multiple blanks
     | CoxWith   [B.CodePoint] [NamedCox c] (Cox c)            -- ^ Cox with outside arguments
 
+type CoxAssn c  = (B.BlankName, Cox c)
 type NamedCox c = B.Named (Cox c)
 
 instance B.CodePointer (Cox c) where
@@ -144,9 +146,9 @@ irreducible cox =
 
 -- | Content operator.
 data Cop c
-    = CopFun  String (CopFun c)   -- ^ Convert contents
-    | CopCox  String (CopCox c)   -- ^ Convert coxes
-    | CopTree String (CopTree)    -- ^ Convert trees
+    = CopFun  B.BlankName (CopFun c)   -- ^ Convert contents
+    | CopCox  B.BlankName (CopCox c)   -- ^ Convert coxes
+    | CopTree B.BlankName (CopTree)    -- ^ Convert trees
 
 -- | Base and derived operators.
 type CopBundle c = ( [Cop c], [NamedCox c] )
@@ -166,25 +168,28 @@ instance Show (Cop c) where
     show (CopTree n _) = "(CopTree " ++ show n ++ " _)"
 
 instance B.Name (Cop c) where
-    name (CopFun  n _) = n
-    name (CopCox  n _) = n
-    name (CopTree n _) = n
+    name = B.name . copName
+
+copName :: Cop c -> B.BlankName
+copName (CopFun   n _) = n
+copName (CopCox   n _) = n
+copName (CopTree  n _) = n
 
 -- | Non-binary operator.
-copNormal  :: B.Map String
-copNormal  = id
+copNormal :: String -> B.BlankName
+copNormal n = B.BlankNormal n
 
 -- | Convert operator name to prefix name.
-copPrefix  :: B.Map String
-copPrefix  = ("pre::" ++)
+copPrefix :: String -> B.BlankName
+copPrefix n = B.BlankPrefix n
 
 -- | Convert operator name to postfix name.
-copPostfix :: B.Map String
-copPostfix = ("post::" ++)
+copPostfix :: String -> B.BlankName
+copPostfix n = B.BlankPostfix n
 
 -- | Convert operator name to infix name.
-copInfix   :: B.Map String
-copInfix   = ("in::" ++)
+copInfix :: String -> B.BlankName
+copInfix n = B.BlankInfix n
 
 isCopFunction :: Cop c -> Bool
 isCopFunction (CopFun _ _) = True

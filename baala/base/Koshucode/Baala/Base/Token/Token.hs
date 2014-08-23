@@ -6,6 +6,7 @@
 module Koshucode.Baala.Base.Token.Token
 (
   -- * Token type
+  BlankName (..),
   Token (..),
   textToken,
 
@@ -30,6 +31,28 @@ import qualified Koshucode.Baala.Base.Prelude   as B
 import qualified Koshucode.Baala.Base.Text      as B
 
 
+-- ----------------------  BlankName
+
+data BlankName
+    = BlankNormal   String
+    | BlankPrefix   String
+    | BlankInfix    String
+    | BlankPostfix  String
+    deriving (Show, Eq, Ord, G.Data, G.Typeable)
+
+instance B.Name BlankName where
+    name (BlankNormal  n) = n
+    name (BlankPrefix  n) = n
+    name (BlankInfix   n) = n
+    name (BlankPostfix n) = n
+
+instance B.Write BlankName where
+    write sh (BlankNormal  n) = B.write sh n
+    write sh (BlankPrefix  n) = B.write sh n B.<+> B.doc "(prefix)"
+    write sh (BlankInfix   n) = B.write sh n B.<+> B.doc "(infix)"
+    write sh (BlankPostfix n) = B.write sh n B.<+> B.doc "(postfix)"
+
+
 -- ----------------------  Token type
 
 -- | There are nine types of tokens.
@@ -40,7 +63,7 @@ data Token
                                           --   1 for single-quoted,
                                           --   2 for double-quoted,
                                           --   3 for @-with@ variable.
-    | TName    B.CodePoint String         -- ^ Operator name.
+    | TName    B.CodePoint BlankName      -- ^ Blank name.
     | TSlot    B.CodePoint Int String     -- ^ Slot name.
                                           --   'Int' represents slot level, i.e.,
                                           --   0 for positional slots,
@@ -121,7 +144,7 @@ type TermPath    =  [TermName]
 --   "/r/x"
 tokenContent :: Token -> String
 tokenContent (TText  _ _ s)   =  s
-tokenContent (TName    _ s)   =  s
+tokenContent (TName    _ op)  =  B.name op
 tokenContent (TShort _ a b)   =  a ++ "." ++ b
 tokenContent (TTerm    _ ns)  =  concatMap ('/' :) ns
 tokenContent (TSlot  _ _ s)   =  s

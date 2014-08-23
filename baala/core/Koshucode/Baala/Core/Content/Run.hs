@@ -20,7 +20,7 @@ import qualified Koshucode.Baala.Core.Message           as Message
 data Beta c
     = BetaLit  [B.CodePoint] c                     -- ^ Literal content
     | BetaTerm [B.CodePoint] [B.TermName] [Int]    -- ^ Term reference, its name and position
-    | BetaCall [B.CodePoint] String (C.CopFun c) [B.Ab (Beta c)]  -- ^ Function application
+    | BetaCall [B.CodePoint] B.BlankName (C.CopFun c) [B.Ab (Beta c)]  -- ^ Function application
 
 instance B.CodePointer (Beta c) where
     codePoints (BetaLit  cp _)      =  cp
@@ -53,7 +53,7 @@ reduce = red [] where
         C.CoxWith   cp arg2 e   ->  a1 cp $ red (arg2 ++ args) e
         C.CoxForm1  cp _ v _    ->  a1 cp $ Message.lackArg v
         C.CoxForm   cp _ _ _    ->  a1 cp $ Message.adlib "CoxForm"
-        C.CoxBlank  cp v        ->  a1 cp $ Message.unkGlobalVar v
+        C.CoxBlank  cp v        ->  a1 cp $ Message.unkGlobalVar $ B.name v
 
     refill :: [C.NamedCox c] -> C.Cox c -> [B.Ab (C.Cox c)] -> B.Ab (Beta c)
     refill args f1 []           =   red args f1
@@ -96,10 +96,12 @@ link (base, deriv) = li where
     li cox@(C.CoxBlank _ n)   =  B.fromMaybe cox $ lookup n fs
     li cox                    =  C.coxCall cox li
 
-    fs :: [C.NamedCox c]
-    fs = map (fmap li) deriv ++ map named base
+    fs :: [C.CoxAssn c]
+    fs = map (fmap li . assn) deriv ++ map named base
 
-    named :: C.Cop c -> C.NamedCox c
+    assn (n, cop) = (B.BlankNormal n, cop)
+
+    named :: C.Cop c -> C.CoxAssn c
     named (C.CopFun  n f) = (n, C.CoxBase [] n f)
     named (C.CopCox  n _) = (n, C.CoxBase [] n undefined)
     named (C.CopTree n _) = (n, C.CoxBase [] n undefined)

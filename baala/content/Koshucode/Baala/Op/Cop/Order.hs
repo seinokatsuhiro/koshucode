@@ -96,6 +96,6 @@ copIs [x, f] = Right $ H.rx f [x]
 copIs _      = Message.unmatchType ""
 
 copCollect :: String -> C.CopCox c
-copCollect n fs = Right $ H.f1 $ H.r (C.copInfix n) (map refill fs) where
+copCollect n fs = Right $ H.f1 $ H.rn (C.copInfix n) (map refill fs) where
     refill f = H.rx f [H.b1]
 

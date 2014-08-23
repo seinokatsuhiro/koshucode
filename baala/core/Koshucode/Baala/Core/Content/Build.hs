@@ -30,7 +30,8 @@ debruijn :: B.Map (C.Cox c)
 debruijn = index [] where
     index :: [String] -> B.Map (C.Cox c)
     index vars cox = case cox of
-       C.CoxBlank cp v     ->  maybe cox (C.CoxLocal cp v) $ indexFrom 1 v vars
+       C.CoxBlank cp n     ->  let v = B.name n
+                               in maybe cox (C.CoxLocal cp v) $ indexFrom 1 v vars
        C.CoxRefill _ _ _   ->  C.coxCall cox (index vars)
        C.CoxForm1 _ _ v _  ->  C.coxCall cox (index $ v : vars)
        _                   ->  cox
@@ -53,8 +54,10 @@ coxUnfold = unfold . C.coxMap coxUnfold where
 
 convCox :: forall c. [C.Cop c] -> B.AbMap (C.Cox c)
 convCox syn = expand where
-    assn :: [B.Named (C.Cop c)]
-    assn = map B.named syn
+    assn :: [(B.BlankName, C.Cop c)]
+    assn = map name syn
+
+    name cop = (C.copName cop, cop)
 
     expand :: B.AbMap (C.Cox c)
     expand cox =
@@ -100,17 +103,18 @@ construct = expr where
     cons cp tree@(B.TreeL tok) =
         case tok of
           B.TTerm _ ns   ->  Right $ C.CoxTerm cp ns []
-          B.TText _ _ v  ->  text tree cp v
-          B.TName _ v    ->  text tree cp v
+          B.TText _ _ v  ->  text tree cp $ B.BlankNormal v
+          B.TName _ op   ->  text tree cp op
           _              ->  B.bug "core/leaf"
 
     -- literal composite
     cons cp tree@(B.TreeB n _ _) | n > 1 = fmap (C.CoxLit cp) $ C.litContent tree
     cons _ (B.TreeB n _ _) = Message.unkCox $ show n
 
-    text tree cp v = case C.litContent tree of
-                       Right c -> Right $ C.CoxLit cp c
-                       Left _  -> Right $ C.CoxBlank cp v
+    text tree cp n =
+        case C.litContent tree of
+          Right c -> Right $ C.CoxLit cp c
+          Left _  -> Right $ C.CoxBlank cp n
 
     untag :: B.TokenTree -> (Maybe String, B.TokenTree)
     untag (B.TreeB l p (B.TreeL (B.TText _ 1 tag) : vars))
@@ -126,7 +130,7 @@ prefix htab tree =
        Left  xs    -> Message.ambInfixes $ map detail xs
     where
       conv = (c C.copPrefix, c C.copInfix, c C.copPostfix)
-      c :: B.Map String -> B.Map B.Token
+      c :: (String -> B.BlankName) -> B.Map B.Token
       c f (B.TText cp 0 s) = B.TName cp $ f s
       c _ x = x
 
