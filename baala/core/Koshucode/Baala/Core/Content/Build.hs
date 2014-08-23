@@ -85,18 +85,18 @@ construct = expr where
 
     -- fill args in the blanks (application)
     cons :: [B.CodePt] -> B.TokenTree -> B.Ab (C.Cox c)
-    cons cp (B.TreeB 1 _ (fun : args)) =
+    cons cp (B.TreeB (B.ParenOpen B.ParenGroup) _ (fun : args)) =
         do fun'  <- expr fun
            args' <- expr `mapM` args
            Right $ C.CoxFill cp fun' args'
 
     -- form with blanks (function)
-    cons cp (B.TreeB 6 _ [vars, b1]) =
+    cons cp (B.TreeB (B.ParenOpen B.ParenForm) _ [vars, b1]) =
         do b2 <- expr b1
            let (tag, vars') = untag vars
            let vs = map B.tokenContent $ B.untree vars'
            Right $ C.CoxForm cp tag vs b2
-    cons _ (B.TreeB 6 _ trees) =
+    cons _ (B.TreeB (B.ParenOpen B.ParenForm) _ trees) =
         B.bug $ "core/abstruction: " ++ show (length trees)
 
     -- compound literal
@@ -131,7 +131,7 @@ prefix :: [B.Named B.InfixHeight] -> B.AbMap B.TokenTree
 prefix htab tree =
     B.abortableTree "cox-prefix" tree $
      case B.infixToPrefix conv ht tree of
-       Right tree3 -> Right $ B.undouble (== 1) tree3
+       Right tree3 -> Right $ B.undouble (== B.ParenOpen B.ParenGroup) tree3
        Left  xs    -> Message.ambInfixes $ map detail xs
     where
       conv = (c C.copPrefix, c C.copInfix, c C.copPostfix)
@@ -157,21 +157,21 @@ convTree syn = expand where
     assoc :: [B.Named (C.Cop c)]
     assoc = map B.named syn
 
-    expand tree@(B.TreeB 1 p subtrees) =
+    expand tree@(B.TreeB (B.ParenOpen B.ParenGroup) p subtrees) =
         case subtrees of
           op@(B.TreeL (B.TText _ 0 name)) : args
               -> B.abortableTree "cox-syntax" tree $
                  case lookup name assoc of
                    Just (C.CopTree _ f) -> expand =<< f args
                    _                    -> do args2 <- mapM expand args
-                                              Right $ B.TreeB 1 p (op : args2)
+                                              Right $ B.TreeB (B.ParenOpen B.ParenGroup) p (op : args2)
           _ -> do sub2 <- mapM expand subtrees
-                  Right $ B.TreeB 1 p sub2
+                  Right $ B.TreeB (B.ParenOpen B.ParenGroup) p sub2
 
-    expand (B.TreeB 6 p trees) =
+    expand (B.TreeB (B.ParenOpen B.ParenForm) p trees) =
         case B.divideTreesByBar trees of
-          [vars, b1] -> do b2 <- expand $ B.treeWrap 1 b1
-                           Right $ B.TreeB 6 p [B.treeWrap 1 vars, b2]
+          [vars, b1] -> do b2 <- expand $ B.wrapTrees b1
+                           Right $ B.TreeB (B.ParenOpen B.ParenForm) p [B.wrapTrees vars, b2]
           _ -> Message.unkCox "abstruction"
 
     expand tree = Right tree

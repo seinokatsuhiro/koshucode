@@ -6,6 +6,8 @@ module Koshucode.Baala.Base.Syntax.Tree
 ( 
   -- * Data type
   CodeTree (..),
+  Paren (..),
+  closeParen,
 
   -- * Parsing
   tree, trees,
@@ -29,10 +31,14 @@ import qualified Koshucode.Baala.Base.Message as Message
 -- ----------------------  Tree
 
 data Paren a
-    = ParenNon a
+    = ParenClose a
+    | ParenNon
     | ParenOpen a
-    | ParenClose a
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
+
+closeParen :: B.Map (Paren a)
+closeParen (ParenOpen a) = ParenClose a
+closeParen p             = p
 
 -- | Tree of leaf and branch.
 data CodeTree p a
@@ -153,6 +159,6 @@ parenTable zero close xs = parenType where
     parenClose (n, _, isClose) = (isClose, close n)
     parenType a =
         case B.lookupSatisfy a parenTypeTable of
-          Just n  -> n
+          Just p  -> p
           Nothing -> zero
 

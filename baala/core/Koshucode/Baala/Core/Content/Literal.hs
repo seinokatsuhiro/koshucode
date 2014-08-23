@@ -53,7 +53,7 @@ litNamedTrees = name where
     name (x : xs) = let (c, xs2) = cont xs
                     in do n    <- litFlatname x
                           xs2' <- name xs2
-                          Right $ (n, B.treeWrap 1 c) : xs2'
+                          Right $ (n, B.wrapTrees c) : xs2'
 
     cont :: [B.TokenTree] -> ([B.TokenTree], [B.TokenTree])
     cont xs@(B.TreeL (B.TTerm _ _) : _) = ([], xs)
@@ -82,11 +82,11 @@ litContentBy ops tree = B.abortableTree "literal" tree $ lit tree where
               _                 ->  Message.unkWord $ B.tokenContent tok
 
     lit (B.TreeB n _ xs) = case n of
-        1  ->  paren xs
-        2  ->  C.putList =<< litContents lit xs
-        3  ->  C.putSet  =<< litContents lit xs
-        4  ->                litBracket  lit xs
-        5  ->  C.putRel  =<< litRel      lit xs
+        B.ParenOpen B.ParenGroup  ->  paren xs
+        B.ParenOpen B.ParenList   ->  C.putList =<< litContents lit xs
+        B.ParenOpen B.ParenSet    ->  C.putSet  =<< litContents lit xs
+        B.ParenOpen B.ParenAssn   ->                litBracket  lit xs
+        B.ParenOpen B.ParenRel    ->  C.putRel  =<< litRel      lit xs
         _  ->  Message.adlib "Unknown paren type"
 
     paren :: LitTrees c
@@ -212,7 +212,7 @@ litContents _   [] = Right []
 litContents lit cs = mapM lt $ B.divideTreesByColon cs where
     lt []  = Message.emptyLiteral
     lt [x] = lit x
-    lt xs  = lit $ B.TreeB 1 Nothing xs
+    lt xs  = lit $ B.TreeB B.ParenNon Nothing xs
 
 litAssn :: (C.CContent c) => LitTree c -> LitTrees [B.Named c]
 litAssn lit = mapM p B.<=< litNamedTrees where

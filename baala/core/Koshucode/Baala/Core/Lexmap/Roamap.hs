@@ -69,7 +69,7 @@ roamapCons = loop where
             | notKeyword k      ->  Message.reqAttrName k
             | op == "rename"    ->  right trees $ RoamapRename (k', k)
 
-          [[ B.TreeB 1 _ xs ]]  ->  loop xs
+          [[ B.TreeB (B.ParenOpen B.ParenGroup) _ xs ]]  ->  loop xs
 
           [[]]    ->  right [] RoamapId
           [_]     ->  Message.adlib "unknown roamap"

@@ -105,7 +105,7 @@ getTrees u name =
 getTree :: RopGet c B.TokenTree
 getTree u name =
     do trees <- getTrees u name
-       Right $ B.treeWrap 1 trees
+       Right $ B.wrapTrees trees
 
 getWordTrees :: RopGet c [B.Named B.TokenTree]
 getWordTrees u name =

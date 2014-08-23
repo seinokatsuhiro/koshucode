@@ -1,3 +1,4 @@
+{-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Parened tree of tokens
@@ -7,6 +8,11 @@ module Koshucode.Baala.Base.Token.TokenTree
   TokenTree,
   NamedTrees,
   tokenTrees,
+  wrapTrees,
+
+  -- * Paren type
+  ParenType,
+  ParenTypeName (..),
 
   -- * Abbreviation
   tt, tt1, ttDoc,
@@ -22,6 +28,7 @@ module Koshucode.Baala.Base.Token.TokenTree
   -- $Example
 ) where
 
+import qualified Data.Generics                        as G
 import qualified Text.PrettyPrint                     as P
 import qualified Koshucode.Baala.Base.Abort           as B
 import qualified Koshucode.Baala.Base.Prelude         as B
@@ -35,7 +42,7 @@ import qualified Koshucode.Baala.Base.Token.TokenLine as B
 -- ----------------------
 
 -- | Tree of tokens.
-type TokenTree = B.CodeTree Int B.Token
+type TokenTree = B.CodeTree ParenType B.Token
 
 -- | Pair of token trees and its name.
 type NamedTrees = B.Named [TokenTree]
@@ -55,19 +62,32 @@ type NamedTrees = B.Named [TokenTree]
 --   4. Curely-bar braces @{| .. |}@ for relation.
 
 tokenTrees :: [B.Token] -> B.Ab [TokenTree]
-tokenTrees = Right .und B.<=< B.trees parenType 0 negate where
-    und = map (B.undouble (== 0))
+tokenTrees = Right . und B.<=< B.trees parenType B.ParenNon B.closeParen where
+    und = map (B.undouble (== B.ParenNon))
 
-parenType :: B.GetParenType Int B.Token
-parenType = B.parenTable 0 negate
-    [ o 1  "("    ")"   -- grouping
-    , o 2  "["    "]"   -- list
-    , o 3  "{"    "}"   -- set
-    , o 4  "<<"  ">>"   -- assn (association)
-    , o 5  "{|"  "|}"   -- relation
-    , o 6  "(|"  "|)"   -- function
-    ] where o n a b = (n, B.isOpenTokenOf a, B.isCloseTokenOf b)
+wrapTrees :: [TokenTree] -> TokenTree
+wrapTrees = B.treeWrap $ B.ParenOpen ParenGroup
 
+parenType :: B.GetParenType ParenType B.Token
+parenType = B.parenTable B.ParenNon B.closeParen
+    [ o ParenGroup  "("    ")"   -- grouping
+    , o ParenForm   "(|"  "|)"   -- function
+    , o ParenList   "["    "]"   -- list
+    , o ParenSet    "{"    "}"   -- set
+    , o ParenAssn   "<<"  ">>"   -- assn (association)
+    , o ParenRel    "{|"  "|}"   -- relation
+    ] where o n a b = (B.ParenOpen n, B.isOpenTokenOf a, B.isCloseTokenOf b)
+
+type ParenType = B.Paren ParenTypeName
+
+data ParenTypeName
+    = ParenGroup
+    | ParenForm
+    | ParenList
+    | ParenSet
+    | ParenAssn
+    | ParenRel
+      deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 -- ----------------------  Abbreviation
 
@@ -76,7 +96,7 @@ tt :: String -> B.Ab [TokenTree]
 tt s = tokenTrees $ B.sweepToken $ B.tokens (B.ResourceText s) s
 
 tt1 :: String -> B.Ab TokenTree
-tt1 = Right . B.treeWrap 1 B.<=< tt
+tt1 = Right . wrapTrees B.<=< tt
 
 -- | Get 'B.Doc' value of token trees for pretty printing.
 ttDoc :: [TokenTree] -> B.Doc
