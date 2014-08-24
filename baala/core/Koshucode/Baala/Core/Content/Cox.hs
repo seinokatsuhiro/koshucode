@@ -44,15 +44,15 @@ type CoxAssn c  = (B.BlankName, Cox c)
 type NamedCox c = B.Named (Cox c)
 
 instance B.CodePtr (Cox c) where
-    codePoints (CoxLit    cp _)      =  cp
-    codePoints (CoxTerm   cp _ _)    =  cp
-    codePoints (CoxBase   cp _)      =  cp
-    codePoints (CoxLocal  cp _ _)    =  cp
-    codePoints (CoxBlank  cp _)      =  cp
-    codePoints (CoxFill   cp _ _)    =  cp
-    codePoints (CoxForm1  cp _ _ _)  =  cp
-    codePoints (CoxForm   cp _ _ _)  =  cp
-    codePoints (CoxWith   cp _ _)    =  cp
+    codePts (CoxLit    cp _)      =  cp
+    codePts (CoxTerm   cp _ _)    =  cp
+    codePts (CoxBase   cp _)      =  cp
+    codePts (CoxLocal  cp _ _)    =  cp
+    codePts (CoxBlank  cp _)      =  cp
+    codePts (CoxFill   cp _ _)    =  cp
+    codePts (CoxForm1  cp _ _ _)  =  cp
+    codePts (CoxForm   cp _ _ _)  =  cp
+    codePts (CoxWith   cp _ _)    =  cp
 
 instance (B.Write c) => Show (Cox c) where
     show = show . B.doc

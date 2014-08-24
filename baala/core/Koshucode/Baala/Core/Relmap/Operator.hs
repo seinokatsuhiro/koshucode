@@ -65,7 +65,7 @@ data RopUse c = RopUse
     } deriving (Show)
 
 instance B.CodePtr (RopUse c) where
-    codePoints = B.codePoints . ropLexmap
+    codePts = B.codePts . ropLexmap
 
 
 -- ----------------------  Relkit
@@ -160,7 +160,7 @@ relmapAppendList = expand where
     expand r = [r]
 
 instance B.CodePtr (Relmap c) where
-    codePoints = concatMap B.codePoints . relmapLexList
+    codePts = concatMap B.codePts . relmapLexList
 
 instance Ord (Relmap c) where
     r1 `compare` r2 = relmapLexList r1 `compare` relmapLexList r2

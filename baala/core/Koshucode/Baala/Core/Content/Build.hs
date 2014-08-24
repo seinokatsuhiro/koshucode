@@ -80,7 +80,7 @@ convCox syn = expand where
 construct :: forall c. (C.CContent c) => B.TokenTree -> B.Ab (C.Cox c)
 construct = expr where
     expr tree = B.abortableTree "cox-build" tree $
-         let cp = concatMap B.codePoints $ B.front $ B.untree tree
+         let cp = concatMap B.codePts $ B.front $ B.untree tree
          in cons cp tree
 
     -- fill args in the blanks (application)

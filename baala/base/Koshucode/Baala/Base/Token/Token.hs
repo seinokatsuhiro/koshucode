@@ -81,26 +81,26 @@ instance B.Write Token where
         d (TComment pt s)   = pretty "TComment" pt [show s]
         d (TUnknown pt s)   = pretty "TUnknown" pt [show s]
         pretty k pt xs      = B.writeH sh $ k : lineCol pt : xs
-        lineCol pt          = (show $ B.codePointLineNumber pt)
-                              ++ ":" ++ (show $ B.codePointColumnNumber pt)
+        lineCol pt          = (show $ B.codePtLineNumber pt)
+                              ++ ":" ++ (show $ B.codePtColumnNumber pt)
 
 textToken :: String -> Token
-textToken = TText B.codePointZero 0
+textToken = TText B.codePtZero 0
 
 nameToken :: String -> Token
-nameToken = TName B.codePointZero . BlankNormal
+nameToken = TName B.codePtZero . BlankNormal
 
 instance B.CodePtr Token where
-    codePoints (TText    cp _ _)  =  [cp]
-    codePoints (TName    cp _)    =  [cp]
-    codePoints (TShort   cp _ _)  =  [cp]
-    codePoints (TTerm    cp _)    =  [cp]
-    codePoints (TSlot    cp _ _)  =  [cp]
-    codePoints (TOpen    cp _)    =  [cp]
-    codePoints (TClose   cp _)    =  [cp]
-    codePoints (TSpace   cp _)    =  [cp]
-    codePoints (TComment cp _)    =  [cp]
-    codePoints (TUnknown cp _)    =  [cp]
+    codePts (TText    cp _ _)  =  [cp]
+    codePts (TName    cp _)    =  [cp]
+    codePts (TShort   cp _ _)  =  [cp]
+    codePts (TTerm    cp _)    =  [cp]
+    codePts (TSlot    cp _ _)  =  [cp]
+    codePts (TOpen    cp _)    =  [cp]
+    codePts (TClose   cp _)    =  [cp]
+    codePts (TSpace   cp _)    =  [cp]
+    codePts (TComment cp _)    =  [cp]
+    codePts (TUnknown cp _)    =  [cp]
 
 
 -- ----------------------  Blank name
@@ -148,7 +148,7 @@ type TermPath    =  [TermName]
 
 -- | Get the content of token.
 --
---   >>> let tok = TTerm B.codePointZero ["r", "x"] in tokenContent tok
+--   >>> let tok = TTerm B.codePtZero ["r", "x"] in tokenContent tok
 --   "/r/x"
 tokenContent :: Token -> String
 tokenContent (TText  _ _ s)   =  s

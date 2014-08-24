@@ -23,9 +23,9 @@ data Beta c
     | BetaCall [B.CodePt] B.BlankName (C.CopFun c) [B.Ab (Beta c)]  -- ^ Function application
 
 instance B.CodePtr (Beta c) where
-    codePoints (BetaLit  cp _)      =  cp
-    codePoints (BetaTerm cp _ _)    =  cp
-    codePoints (BetaCall cp _ _ _)  =  cp
+    codePts (BetaLit  cp _)      =  cp
+    codePts (BetaTerm cp _ _)    =  cp
+    codePts (BetaCall cp _ _ _)  =  cp
 
 -- | Reduce content expression.
 beta :: (B.Write c) => C.CopBundle c -> B.Relhead -> C.Cox c -> B.Ab (Beta c)

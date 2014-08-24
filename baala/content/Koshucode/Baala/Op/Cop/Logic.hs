@@ -85,7 +85,7 @@ copOr  =  copN False (||)
 -- ----------------------  if
 
 nameLeaf :: B.BlankName -> B.TokenTree
-nameLeaf = B.TreeL . B.TName B.codePointZero
+nameLeaf = B.TreeL . B.TName B.codePtZero
 
 treeIf :: B.TokenTree -> B.TokenTree -> B.TokenTree -> B.TokenTree
 treeIf test con alt = B.wrapTrees [ nameLeaf $ C.copInternal "#if" , test, con , alt ]

@@ -46,10 +46,10 @@ instance B.Write (CodeLine a) where
     write sh (CodeLine _ line _) = B.write sh line
 
 instance (B.CodePtr a) => B.CodePtr (CodeLine a) where
-    codePoints (CodeLine _ _ ts) = B.codePoints $ head ts
+    codePts (CodeLine _ _ ts) = B.codePts $ head ts
 
 instance (B.CodePtr a) => B.CodePtr (CodeClause a) where
-    codePoints (CodeClause _ ts) = B.codePoints $ head ts
+    codePts (CodeClause _ ts) = B.codePts $ head ts
 
 indentLineBy :: (a -> Int) -> CodeLine a -> (Int, CodeLine a)
 indentLineBy ind ln@(CodeLine _ _ (tk : _)) = (ind tk, ln)
