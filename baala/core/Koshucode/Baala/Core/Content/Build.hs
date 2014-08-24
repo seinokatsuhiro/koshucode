@@ -130,8 +130,8 @@ isNameFirst c = case B.generalCategoryGroup c of
 prefix :: [B.Named B.InfixHeight] -> B.AbMap B.TokenTree
 prefix htab tree =
     B.abortableTree "cox-prefix" tree $
-     case B.infixToPrefix conv ht tree of
-       Right tree3 -> Right $ B.undouble (== B.ParenGroup) tree3
+     case B.infixToPrefix conv ht (B.TreeB B.ParenGroup Nothing) mapper tree of
+       Right tree3 -> Right $ undoubleGroup tree3
        Left  xs    -> Message.ambInfixes $ map detail xs
     where
       conv = (c C.copPrefix, c C.copInfix, c C.copPostfix)
@@ -150,6 +150,19 @@ prefix htab tree =
       detail (Left  n, tok) = detailText tok "left"  n
 
       detailText tok dir n = B.tokenContent tok ++ " : " ++ dir ++ " " ++ show n
+
+mapper :: B.InfixMapper B.ParenType B.Token
+mapper f = loop where
+    loop (B.TreeB B.ParenGroup p xs) =
+        do xs' <- f xs
+           Right $ B.TreeB B.ParenGroup p xs'
+    loop (B.TreeB B.ParenForm p1 [vs, B.TreeB B.ParenGroup p2 body]) =
+        do body' <- f body
+           Right $ B.TreeB B.ParenForm p1 [vs, undoubleGroup $ B.TreeB B.ParenGroup p2 body']
+    loop tree = Right tree
+
+undoubleGroup :: B.Map (B.CodeTree B.ParenType a)
+undoubleGroup = B.undouble (== B.ParenGroup)
 
 -- expand tree-level syntax
 convTree :: forall c. [C.Cop c] -> B.AbMap B.TokenTree

@@ -1,16 +1,16 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
--- | Convert infixed-operator trees
---   into prefixed-operator trees
+-- | Convert infixed-operator trees into prefixed-operator trees.
 
 module Koshucode.Baala.Base.Syntax.Infix
 ( InfixHeight,
   infixHeight,
   infixToPrefix,
+  InfixAb, InfixAbMap, InfixTree, InfixMapper,
 ) where
 
-import qualified Data.Map   as Map
+import qualified Data.Map                         as Map
 import qualified Koshucode.Baala.Base.Prelude     as B
 import qualified Koshucode.Baala.Base.Syntax.Tree as B
 
@@ -52,58 +52,52 @@ infixHeight extract htab a = B.fromMaybe (Left 0) ht where
 
 -- ----------------------  Conversion
 
-type InfixTree p a = B.CodeTree p (InfixHeight, a)
+type InfixAb a x      =  Either [(InfixHeight, a)] x
+type InfixAbMap a x   =  x -> InfixAb a x
+type InfixTree p a    =  B.CodeTree p (InfixHeight, a)  -- tree with height
+type InfixMapper p a  =  InfixAbMap a [InfixTree p a] -> InfixAbMap a (InfixTree p a)
 
 -- | Split branches in a given tree at infixed binary operators.
-infixToPrefix :: forall p. forall a. (B.Map a, B.Map a, B.Map a) -> (a -> InfixHeight)
-              -> B.CodeTree p a -> Either [(InfixHeight, a)] (B.CodeTree p a)
-infixToPrefix (pre, inf, post) ht tree =
-    do tree2 <- toPrefix $ fmap height tree
+infixToPrefix :: forall p a.
+    (B.Map a, B.Map a, B.Map a)
+     -> (a -> InfixHeight)
+     -> B.Collect (InfixTree p a)
+     -> InfixMapper p a
+     -> InfixAbMap a (B.CodeTree p a)
+infixToPrefix (pre, inf, post) ht g mapper tree =
+    do let tree1 = fmap height tree
+       tree2 <- mapper binary tree1
        Right $ fmap snd tree2
     where
-      conv :: B.Map a -> B.Map (InfixTree p a)
-      conv = fmap . B.mapSnd
-
       height :: a -> (InfixHeight, a)
       height x = (ht x, x)
 
-      toPrefix :: InfixTree p a -> Either [(InfixHeight, a)] (InfixTree p a)
-      toPrefix x@(B.TreeL _) = Right x
-      toPrefix   (B.TreeB n pp xs) =
-          case infixPos $ map treeHeight xs of
-            Left xi -> Left $ B.untrees $ map (xs !!) xi
-            Right (xi, hx)
-                | xi == 0 && hx > 0 -> case xs of
-                    (op : right) -> do rt <- sub n right
-                                       Right $ B.TreeB n pp [conv pre op, rt]
-                    []           -> Right $ B.TreeB n pp []
-                | xi <= 0        -> Right . B.TreeB n pp =<< mapM toPrefix xs
-                | otherwise      -> do let (left, op : right) = splitAt xi xs
-                                       s <- subtrees n left op right
-                                       Right $ B.TreeB n pp s
+      binary :: InfixAbMap a [InfixTree p a]
+      binary xs = case infixPos $ map treeHeight xs of
+          Right xi
+              | xi < 0        ->  mapper binary `mapM` xs
+              | otherwise     ->  move $ splitAt xi xs
+          Left xi             ->  Left $ B.untrees $ map (xs !!) xi
 
-      subtrees :: p -> [InfixTree p a] -> InfixTree p a -> [InfixTree p a]
-                  -> Either [(InfixHeight, a)] [InfixTree p a]
-      subtrees n left op right
-          | null right = do lt <- sub n left
-                            Right [conv post op, lt]
-          | otherwise  = do lt <- sub n left
-                            rt <- sub n right
-                            Right [conv inf op, lt, rt]
+      move :: ([InfixTree p a], [InfixTree p a]) -> InfixAb a [InfixTree p a]
+      move ([], op : right)    =  do right' <- binary right
+                                     Right [conv pre op, g right']
+      move (left, op : [])     =  do left'  <- binary left
+                                     Right [conv post op, g left']
+      move (left, op : right)  =  do left'  <- binary left
+                                     right' <- binary right
+                                     Right [conv inf op, g left', g right']
+      move (_, _)              =  error "infixToPrefix"
 
-      sub :: p -> [InfixTree p a] -> Either [(InfixHeight, a)] (InfixTree p a)
-      sub _ [x] = toPrefix x
-      sub n xs  = toPrefix $ B.TreeB n Nothing xs
+conv :: B.Map a -> B.Map (InfixTree p a)
+conv = fmap . B.mapSnd
 
--- Tree with height attribute.
-type HeightTree p a = B.CodeTree p (InfixHeight, a)
-
-treeHeight :: HeightTree p a -> InfixHeight
+treeHeight :: InfixTree p a -> InfixHeight
 treeHeight (B.TreeL (ht, _))  =  ht
 treeHeight (B.TreeB _ _ _)    =  Left 0
 
-infixPos :: [InfixHeight] -> Either [B.Index] (B.Index, Int)
-infixPos = pos (Right (-1, 0)) (Left 0) . zip [0 ..] where
+infixPos :: [InfixHeight] -> Either [B.Index] B.Index
+infixPos = fmap fst . pos (Right (-1, 0)) (Left 0) . zip [0 ..] where
     pos res _ [] = res
 
     -- different height
