@@ -4,7 +4,7 @@
 -- | Parened tree of tokens
 
 module Koshucode.Baala.Base.Token.TokenTree
-( -- * Library
+( -- * Token tree
   TokenTree,
   NamedTrees,
   tokenTrees,
@@ -13,9 +13,6 @@ module Koshucode.Baala.Base.Token.TokenTree
   -- * Paren type
   ParenType (..),
 
-  -- * Abbreviation
-  tt, tt1, ttDoc,
-    
   -- * Divide trees
   splitTokensBy, divideTreesBy,
   divideTreesByBar, divideTreesByColon, divideTreesByEqual,
@@ -23,8 +20,8 @@ module Koshucode.Baala.Base.Token.TokenTree
   -- * Abortable
   abortableTree, abortableTrees,
 
-  -- * Examples
-  -- $Example
+  -- * Abbreviation
+  tt, tt1, ttDoc, ttPrint,
 ) where
 
 import qualified Data.Generics                        as G
@@ -37,8 +34,7 @@ import qualified Koshucode.Baala.Base.Token.Token     as B
 import qualified Koshucode.Baala.Base.Token.TokenLine as B
 
 
-
--- ----------------------
+-- ---------------------- Token tree
 
 -- | Tree of tokens.
 type TokenTree = B.CodeTree ParenType B.Token
@@ -48,63 +44,36 @@ type NamedTrees = B.Named [TokenTree]
 
 -- | Parse tokens into parened trees.
 --   Blank tokens and comments are excluded.
---
---   There are four types of parens -- 1, 2, 3, or 4.
---   Paren type is in 'TreeB' /type/ /parens/ /subtrees/.
---
---   1. Round parens @( .. )@ for grouping.
---
---   2. Squared brackets @[ .. ]@ for list.
---
---   3. Double brackets @\<\< .. \>\>@ for assn.
---
---   4. Curely-bar braces @{| .. |}@ for relation.
-
 tokenTrees :: [B.Token] -> B.Ab [TokenTree]
-tokenTrees = B.trees parenType B.ParenNon where
+tokenTrees = B.trees getParenType B.ParenNon where
     --und = map (B.undouble (== ParenGroup))
 
+-- | Wrap trees in group.
 wrapTrees :: [TokenTree] -> TokenTree
 wrapTrees = B.treeWrap ParenGroup
 
-parenType :: B.GetParenType ParenType B.Token
-parenType = B.parenTable
-    [ o ParenGroup  "("    ")"   -- grouping
-    , o ParenForm   "(|"  "|)"   -- function
-    , o ParenList   "["    "]"   -- list
-    , o ParenSet    "{"    "}"   -- set
-    , o ParenAssn   "<<"  ">>"   -- assn (association)
-    , o ParenRel    "{|"  "|}"   -- relation
-    ] where o n a b = (n, B.isOpenTokenOf a, B.isCloseTokenOf b)
 
+-- ----------------------  Paren type
+
+-- | There are six types of parens
 data ParenType
-    = ParenGroup
-    | ParenForm
-    | ParenList
-    | ParenSet
-    | ParenAssn
-    | ParenRel
+    = ParenGroup   -- ^ Round parens for grouping: @( E ... )@
+    | ParenForm    -- ^ Round-bar parens for form with blanks: @(| V ... | E ... |)@
+    | ParenList    -- ^ Square brackets for lists: @[ C : ... ]@
+    | ParenSet     -- ^ Curely braces for sets: @{ C : .... }@
+    | ParenAssn    -- ^ Double-angle brackets for associations etc.: @\<\< /N C .... \>\>@
+    | ParenRel     -- ^ Curely-bar braces for relations: @{| /N : ... | C : ... | C : ... |}@
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
--- ----------------------  Abbreviation
-
--- | Convert text to token trees.
-tt :: String -> B.Ab [TokenTree]
-tt s = tokenTrees $ B.sweepToken $ B.tokens (B.ResourceText s) s
-
-tt1 :: String -> B.Ab TokenTree
-tt1 = Right . wrapTrees B.<=< tt
-
--- | Get 'B.Doc' value of token trees for pretty printing.
-ttDoc :: [TokenTree] -> B.Doc
-ttDoc = dv where
-    dv = B.docv . map d
-    d (B.TreeL x) = B.doc "TreeL :" B.<+> B.doc x
-    d (B.TreeB n pp xs) =
-        let treeB = B.doch ["TreeB", show n] B.<+> parens pp
-        in P.hang treeB 2 (dv xs)
-    parens Nothing = B.doc "- -"
-    parens (Just (open, close)) = B.doch [open, close]
+getParenType :: B.GetParenType ParenType B.Token
+getParenType = B.parenTable
+    [ o ParenGroup  "("     ")"
+    , o ParenForm   "(|"   "|)"
+    , o ParenList   "["     "]"
+    , o ParenSet    "{"     "}"
+    , o ParenAssn   "<<"   ">>"
+    , o ParenRel    "{|"   "|}"
+    ] where o n a b = (n, B.isOpenTokenOf a, B.isCloseTokenOf b)
 
 
 -- ----------------------  Divide trees
@@ -133,31 +102,21 @@ splitTokensBy p = B.splitBy p2 where
     p2 (B.TText _ 0 x) = p x
     p2 _ = False
 
+-- | Divide token trees by quoteless token of given string.
 divideTreesBy :: String -> [TokenTree] -> [[TokenTree]]
-divideTreesBy w = B.divideBy p where
-    p (B.TreeL (B.TText _ 0 x)) = (w == x)
-    p _ = False
+divideTreesBy w1 = B.divideBy p where
+    p (B.TreeL (B.TText _ 0 w2))  =  w1 == w2
+    p _                           =  False
 
 -- | Divide token trees by vertical bar @\"|\"@.
---
---   >>> divideTreesByBar . tokenTrees . tokens $ "a | b | c"
---   [ [TreeL (TText 1 0 "a")]
---   , [TreeL (TText 5 0 "b")]
---   , [TreeL (TText 9 0 "c")] ]
---
 divideTreesByBar :: [TokenTree] -> [[TokenTree]]
 divideTreesByBar = divideTreesBy "|"
 
 -- | Divide token trees by colon @\":\"@.
---
---   >>> divideTreesByColon . tokenTrees . tokens $ "a : b : c"
---   [ [TreeL (TText 1 0 "a")]
---   , [TreeL (TText 5 0 "b")]
---   , [TreeL (TText 9 0 "c")] ]
---
 divideTreesByColon :: [TokenTree] -> [[TokenTree]]
 divideTreesByColon = divideTreesBy ":"
 
+-- | Divide token trees by equal sign @\"=\"@.
 divideTreesByEqual :: [TokenTree] -> [[TokenTree]]
 divideTreesByEqual = divideTreesBy "="
 
@@ -175,66 +134,29 @@ abortableTrees :: String -> [TokenTree] -> B.Map (B.Ab b)
 abortableTrees tag = B.abortable tag . B.untrees
 
 
--- ------------------------------------------------------------------
--- $Example
---
---  Judgement
---
---  >>> tt "|-- R /x 0 /y 1"
---  [TreeL (TText 1 0 "|--"),
---   TreeL (TText 3 0 "R"),
---   TreeL (TTerm 5 ["/x"]),
---   TreeL (TText 7 0 "0"),
---   TreeL (TTerm 9 ["/y"]),
---   TreeL (TText 11 0 "1")]
---
---  Relmap
---
---  >>> tt "r : source R /x /y"
---  [TreeL (TText 1 0 "r"),
---   TreeL (TText 3 0 ":"),
---   TreeL (TText 5 0 "source"),
---   TreeL (TText 7 0 "R"),
---   TreeL (TTerm 9 ["/x"]),
---   TreeL (TTerm 11 ["/y"])]
---
---  Nested relmap
---
---  >>> tt "meet (R | pick /a /b)"
---  [TreeL (TText 1 0 "meet"),
---   TreeB 1 [
---     TreeL (TText 4 0 "R"),
---     TreeL (TText 6 0 "|"),
---     TreeL (TText 8 0 "pick"),
---     TreeL (TTerm 10 ["/a"]),
---     TreeL (TTerm 12 ["/b"])]]
---
---  Double paren
---
---  >>> tt "(a ((b c)))"
---  [TreeB 1 [
---     TreeL (TText 2 0 "a"),
---     TreeB 1 [
---       TreeB 1 [
---         TreeL (TText 6 0 "b"),
---         TreeL (TText 8 0 "c")]]]]
---
---  List
---
---  >>> tt "[ 0 1 2 ]"
---  [TreeB 2 [
---    TreeL (TText 3 0 "0"),
---    TreeL (TText 5 0 "1"),
---    TreeL (TText 7 0 "2")]]
---
---  Relation
---
---  >>> tt "{| /a /b | 10 20 | 30 40 |}"
---  [TreeB 4 [
---     TreeL (TTerm 3 ["/a"]), TreeL (TTerm 5 ["/b"]),
---     TreeL (TText 7 0 "|"),
---     TreeL (TText 9 0 "10"), TreeL (TText 11 0 "20"),
---     TreeL (TText 13 0 "|"),
---     TreeL (TText 15 0 "30"), TreeL (TText 17 0 "40")]]
---
+-- ----------------------  Abbreviation
 
+-- | Convert text to token trees.
+tt :: String -> B.Ab [TokenTree]
+tt s = tokenTrees $ B.sweepToken $ B.tokens (B.ResourceText s) s
+
+tt1 :: String -> B.Ab TokenTree
+tt1 = Right . wrapTrees B.<=< tt
+
+-- | Get 'B.Doc' value of token trees for pretty printing.
+ttDoc :: [TokenTree] -> B.Doc
+ttDoc = dv where
+    dv = B.docv . map d
+    d (B.TreeL x) = B.doc "TreeL :" B.<+> B.doc x
+    d (B.TreeB n pp xs) =
+        let treeB = B.doch ["TreeB", show n] B.<+> parens pp
+        in P.hang treeB 2 (dv xs)
+
+    parens Nothing = B.doc "no parens"
+    parens (Just (open, close)) = B.doch [B.doc ":", B.doc open, B.doc "-", B.doc close]
+
+ttPrint :: String -> IO ()
+ttPrint s = case tt s of
+              Left msg    -> print msg
+              Right trees -> do print $ ttDoc trees
+                                return ()
