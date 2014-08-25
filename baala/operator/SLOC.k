@@ -1,12 +1,12 @@
 ** -*- koshu -*-
 
 |-- DIR  /code 23   /comment 6    /dir "operator/Koshucode/Baala"
-|-- DIR  /code 743  /comment 544  /dir "operator/Koshucode/Baala/Op"
+|-- DIR  /code 753  /comment 550  /dir "operator/Koshucode/Baala/Op"
 |-- DIR  /code 240  /comment 165  /dir "operator/Koshucode/Baala/Op/Builtin"
 |-- DIR  /code 159  /comment 165  /dir "operator/Koshucode/Baala/Op/Lattice"
 |-- DIR  /code 230  /comment 205  /dir "operator/Koshucode/Baala/Op/Nest"
 
-|-- DIR-TOTAL  /code 1395  /comment 1085
+|-- DIR-TOTAL  /code 1405  /comment 1091
 
 |-- FILE  /code 23   /comment 6    /file "Op.hs"          /dir "operator/Koshucode/Baala"
 |-- FILE  /code 11   /comment 6    /file "Builtin.hs"     /dir "operator/Koshucode/Baala/Op"
@@ -16,12 +16,12 @@
 |-- FILE  /code 31   /comment 28   /file "Term.hs"        /dir "operator/Koshucode/Baala/Op/Builtin"
 |-- FILE  /code 85   /comment 50   /file "Check.hs"       /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 93   /comment 48   /file "Control.hs"     /dir "operator/Koshucode/Baala/Op"
-|-- FILE  /code 34   /comment 45   /file "Gadget.hs"      /dir "operator/Koshucode/Baala/Op"
+|-- FILE  /code 40   /comment 49   /file "Gadget.hs"      /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 9    /comment 26   /file "Lattice.hs"     /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 64   /comment 38   /file "Restrict.hs"    /dir "operator/Koshucode/Baala/Op/Lattice"
 |-- FILE  /code 16   /comment 21   /file "Rop.hs"         /dir "operator/Koshucode/Baala/Op/Lattice"
 |-- FILE  /code 79   /comment 106  /file "Tropashko.hs"   /dir "operator/Koshucode/Baala/Op/Lattice"
-|-- FILE  /code 60   /comment 34   /file "Message.hs"     /dir "operator/Koshucode/Baala/Op"
+|-- FILE  /code 64   /comment 36   /file "Message.hs"     /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 102  /comment 58   /file "Meta.hs"        /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 7    /comment 6    /file "Nest.hs"        /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 138  /comment 128  /file "Confl.hs"       /dir "operator/Koshucode/Baala/Op/Nest"
@@ -31,4 +31,4 @@
 |-- FILE  /code 64   /comment 92   /file "Source.hs"      /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 161  /comment 104  /file "Term.hs"        /dir "operator/Koshucode/Baala/Op"
 
-|-- FILE-TOTAL  /code 1395  /comment 1085
+|-- FILE-TOTAL  /code 1405  /comment 1091
