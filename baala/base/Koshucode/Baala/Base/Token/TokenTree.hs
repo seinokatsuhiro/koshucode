@@ -153,7 +153,7 @@ ttDoc = dv where
         in P.hang treeB 2 (dv xs)
 
     parens Nothing = B.doc "no parens"
-    parens (Just (open, close)) = B.doch [B.doc ":", B.doc open, B.doc "-", B.doc close]
+    parens (Just (open, close)) = B.doch [B.doc ":", B.doc open, B.doc close]
 
 ttPrint :: String -> IO ()
 ttPrint s = case tt s of

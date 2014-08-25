@@ -80,9 +80,9 @@ instance B.Write Token where
         d (TSpace   pt c)   = pretty "TSpace"   pt [show c]
         d (TComment pt s)   = pretty "TComment" pt [show s]
         d (TUnknown pt s)   = pretty "TUnknown" pt [show s]
-        pretty k pt xs      = B.writeH sh $ k : lineCol pt : xs
+        pretty k pt xs      = B.writeH sh $ lineCol pt : k : xs
         lineCol pt          = (show $ B.codePtLineNumber pt)
-                              ++ ":" ++ (show $ B.codePtColumnNumber pt)
+                              ++ "." ++ (show $ B.codePtColumnNumber pt)
 
 textToken :: String -> Token
 textToken = TText B.codePtZero 0

@@ -10,6 +10,7 @@ module Koshucode.Baala.Op.Message
   dupTerm,
   dumpCox,
   dumpRel,
+  dumpTrees,
   noAttr,
   notNestRel,
   oddAttr,
@@ -43,6 +44,11 @@ dumpCox cox = Left $ B.abortLines "Dump content expression"
 -- | Dump relation
 dumpRel :: (B.Write c, C.CRel c) => B.Rel c -> B.Ab a
 dumpRel r = Left $ B.abortPage "Dump relation" $ C.relTableLines [] r
+
+-- | Dump token trees
+dumpTrees :: [B.TokenTree] -> B.Ab a
+dumpTrees trees = Left $ B.abortLines "Dump token trees"
+                   $ lines $ show $ B.ttDoc trees
 
 -- | Duplicate term name
 dupTerm :: [B.TermName] -> B.Relhead -> B.Ab a

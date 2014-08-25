@@ -11,9 +11,10 @@ module Koshucode.Baala.Op.Gadget
   -- $size
 ) where
 
-import qualified Koshucode.Baala.Base    as B
-import qualified Koshucode.Baala.Core    as C
+import qualified Koshucode.Baala.Base       as B
+import qualified Koshucode.Baala.Core       as C
 import qualified Koshucode.Baala.Op.Builtin as Op
+import qualified Koshucode.Baala.Op.Message as Message
 
 
 -- | Gadgets
@@ -34,6 +35,7 @@ ropsGadget :: (C.CContent c) => [C.Rop c]
 ropsGadget = Op.ropList "gadget"  -- GROUP
     --         CONSTRUCTOR  USAGE                      ATTRIBUTE
     [ Op.ropV consContents  "contents /N"              "-term"
+    , Op.ropV consDumpTree  "dump-tree X"              "-tree"
     , Op.ropI consSize      "size /N"                  "-term"
     ]
 
@@ -76,4 +78,12 @@ relkitSize n _ = Right kit2 where
     he2       = B.headFrom [n]
     kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
     kitf2 bo1 = [[ C.pDecFromInt $ length bo1 ]]
+
+
+-- ----------------------  dump-tree
+
+consDumpTree :: (C.CDec c) => C.RopCons c
+consDumpTree use =
+  do trees <- Op.getTrees use "-tree"
+     Message.dumpTrees trees
 
