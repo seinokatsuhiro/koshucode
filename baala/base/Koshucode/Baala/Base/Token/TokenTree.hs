@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
--- | Parened tree of tokens
+-- | Tree of tokens
 
 module Koshucode.Baala.Base.Token.TokenTree
 ( -- * Token tree
@@ -10,8 +10,8 @@ module Koshucode.Baala.Base.Token.TokenTree
   tokenTrees,
   wrapTrees,
 
-  -- * Paren type
-  ParenType (..),
+  -- * Bracket type
+  BracketType (..),
 
   -- * Divide trees
   splitTokensBy, divideTreesBy,
@@ -37,42 +37,42 @@ import qualified Koshucode.Baala.Base.Token.TokenLine as B
 -- ---------------------- Token tree
 
 -- | Tree of tokens.
-type TokenTree = B.CodeTree ParenType B.Token
+type TokenTree = B.CodeTree BracketType B.Token
 
 -- | Pair of token trees and its name.
 type NamedTrees = B.Named [TokenTree]
 
--- | Parse tokens into parened trees.
+-- | Parse tokens with brackets into trees.
 --   Blank tokens and comments are excluded.
 tokenTrees :: [B.Token] -> B.Ab [TokenTree]
-tokenTrees = B.trees getParenType B.ParenNon where
-    --und = map (B.undouble (== ParenGroup))
+tokenTrees = B.trees getBracketType B.BracketNone where
+    --und = map (B.undouble (== BracketGroup))
 
 -- | Wrap trees in group.
 wrapTrees :: [TokenTree] -> TokenTree
-wrapTrees = B.treeWrap ParenGroup
+wrapTrees = B.treeWrap BracketGroup
 
 
--- ----------------------  Paren type
+-- ----------------------  Bracket type
 
--- | There are six types of parens
-data ParenType
-    = ParenGroup   -- ^ Round parens for grouping: @( E ... )@
-    | ParenForm    -- ^ Round-bar parens for form with blanks: @(| V ... | E ... |)@
-    | ParenList    -- ^ Square brackets for lists: @[ C : ... ]@
-    | ParenSet     -- ^ Curely braces for sets: @{ C : .... }@
-    | ParenAssn    -- ^ Double-angle brackets for associations etc.: @\<\< /N C .... \>\>@
-    | ParenRel     -- ^ Curely-bar braces for relations: @{| /N : ... | C : ... | C : ... |}@
+-- | There are six types of brackets
+data BracketType
+    = BracketGroup   -- ^ Round brackets for grouping: @( E ... )@
+    | BracketForm    -- ^ Round-bar brackets for form with blanks: @(| V ... | E ... |)@
+    | BracketList    -- ^ Square brackets for lists: @[ C : ... ]@
+    | BracketSet     -- ^ Curely braces for sets: @{ C : .... }@
+    | BracketAssn    -- ^ Double-angle brackets for associations etc.: @\<\< /N C .... \>\>@
+    | BracketRel     -- ^ Curely-bar braces for relations: @{| /N : ... | C : ... | C : ... |}@
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
-getParenType :: B.GetParenType ParenType B.Token
-getParenType = B.parenTable
-    [ o ParenGroup  "("     ")"
-    , o ParenForm   "(|"   "|)"
-    , o ParenList   "["     "]"
-    , o ParenSet    "{"     "}"
-    , o ParenAssn   "<<"   ">>"
-    , o ParenRel    "{|"   "|}"
+getBracketType :: B.GetBracketType BracketType B.Token
+getBracketType = B.bracketTable
+    [ o BracketGroup  "("     ")"
+    , o BracketForm   "(|"   "|)"
+    , o BracketList   "["     "]"
+    , o BracketSet    "{"     "}"
+    , o BracketAssn   "<<"   ">>"
+    , o BracketRel    "{|"   "|}"
     ] where o n a b = (n, B.isOpenTokenOf a, B.isCloseTokenOf b)
 
 
@@ -149,11 +149,11 @@ ttDoc = dv where
     dv = B.docv . map d
     d (B.TreeL x) = B.doc "TreeL :" B.<+> B.doc x
     d (B.TreeB n pp xs) =
-        let treeB = B.doch ["TreeB", show n] B.<+> parens pp
+        let treeB = B.doch ["TreeB", show n] B.<+> brackets pp
         in P.hang treeB 2 (dv xs)
 
-    parens Nothing = B.doc "no parens"
-    parens (Just (open, close)) = B.doch [B.doc ":", B.doc open, B.doc close]
+    brackets Nothing = B.doc "no brackets"
+    brackets (Just (open, close)) = B.doch [B.doc ":", B.doc open, B.doc close]
 
 ttPrint :: String -> IO ()
 ttPrint s = case tt s of

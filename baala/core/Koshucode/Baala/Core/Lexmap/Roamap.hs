@@ -69,12 +69,12 @@ roamapCons = loop where
             | notKeyword k      ->  Message.reqAttrName k
             | op == "rename"    ->  right trees $ RoamapRename (k', k)
 
-          [[ B.TreeB B.ParenGroup _ xs ]]  ->  loop xs
+          [[ B.TreeB B.BracketGroup _ xs ]]  ->  loop xs
 
-          [[]]    ->  right [] RoamapId
-          [_]     ->  Message.adlib "unknown roamap"
-          trees2  ->  do subs <- mapM loop trees2
-                         right trees $ RoamapAppend subs
+          [[]]                  ->  right [] RoamapId
+          [_]                   ->  Message.adlib "unknown roamap"
+          trees2                ->  do subs <- mapM loop trees2
+                                       right trees $ RoamapAppend subs
 
 -- | Run roamap.
 roamapRun :: Roamap -> B.AbMap C.AttrTrees
@@ -91,16 +91,16 @@ roamapRun = loop where
 
     add roa opt k xs =
         case lookup k roa of
-          Nothing             ->  do xs' <- C.substSlot [] roa xs
-                                     Right $ (k, xs') : roa
-          Just _ | opt        ->  Right roa
-                 | otherwise  ->  Message.extraAttr
+          Nothing               ->  do xs' <- C.substSlot [] roa xs
+                                       Right $ (k, xs') : roa
+          Just _ | opt          ->  Right roa
+                 | otherwise    ->  Message.extraAttr
 
     rename :: C.AttrTrees -> C.AttrName -> C.AttrName -> B.Ab C.AttrTrees
     rename roa k' k =
         case lookup k roa of
-          Just _              ->  Right $ B.assocRename1 k' k roa
-          Nothing             ->  Message.reqAttr $ C.attrNameText k
+          Just _                ->  Right $ B.assocRename1 k' k roa
+          Nothing               ->  Message.reqAttr $ C.attrNameText k
 
     fill :: [B.TokenTree] -> [Maybe B.TokenTree] -> B.Ab [B.TokenTree]
     fill (p : ps) (Nothing : xs)  =  Right . (p:) =<< fill ps xs

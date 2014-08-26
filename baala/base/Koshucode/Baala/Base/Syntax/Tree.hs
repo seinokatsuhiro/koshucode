@@ -5,7 +5,7 @@
 module Koshucode.Baala.Base.Syntax.Tree
 ( 
   -- * Data type
-  Paren (..),
+  Bracket (..),
   CodeTree (..),
 
   -- * Parsing
@@ -14,9 +14,9 @@ module Koshucode.Baala.Base.Syntax.Tree
   untree, untrees,
   undouble,
 
-  -- * Paren table
-  GetParenType,
-  parenTable
+  -- * Bracket table
+  GetBracketType,
+  bracketTable
 ) where
 
 import qualified Data.Generics                as G
@@ -27,25 +27,25 @@ import qualified Koshucode.Baala.Base.Message as Message
 
 
 
--- ----------------------  Paren
+-- ----------------------  Bracket
 
-data Paren p
-    = ParenNon
-    | ParenOpen  p
-    | ParenClose p
+data Bracket p
+    = BracketNone
+    | BracketOpen  p
+    | BracketClose p
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
-isNotParen :: B.Pred (Paren p)
-isNotParen (ParenNon)       = True
-isNotParen _                = False
+isNotBracket :: B.Pred (Bracket p)
+isNotBracket (BracketNone)      = True
+isNotBracket _                  = False
 
-isOpenParen :: B.Pred (Paren p)
-isOpenParen (ParenOpen _)   = True
-isOpenParen _               = False
+isOpenBracket :: B.Pred (Bracket p)
+isOpenBracket (BracketOpen _)   = True
+isOpenBracket _                 = False
 
-isCloseParen :: B.Pred (Paren p)
-isCloseParen (ParenClose _) = True
-isCloseParen _              = False
+isCloseBracket :: B.Pred (Bracket p)
+isCloseBracket (BracketClose _) = True
+isCloseBracket _                = False
 
 
 -- ----------------------  Tree
@@ -53,7 +53,7 @@ isCloseParen _              = False
 -- | Tree of leaf and branch.
 data CodeTree p a
     = TreeL a       -- ^ Leaf. Terminal of tree.
-    | TreeB p (Maybe (a, a)) [CodeTree p a] -- ^ Branch. Paren-type and subtrees.
+    | TreeB p (Maybe (a, a)) [CodeTree p a] -- ^ Branch. Bracket-type and subtrees.
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance Functor (CodeTree p) where
@@ -67,32 +67,32 @@ instance Functor (CodeTree p) where
 -- treeG xs = TreeB 1 Nothing xs
 
 -- | Convert a list of elements to a single tree.
-tree :: (Ord p, B.CodePtr a) => GetParenType p a -> Paren p -> p -> [a] -> B.Ab (CodeTree p a)
-tree parenType zero one =
-    Right . treeWrap one B.<=< trees parenType zero
+tree :: (Ord p, B.CodePtr a) => GetBracketType p a -> Bracket p -> p -> [a] -> B.Ab (CodeTree p a)
+tree bracketType zero one =
+    Right . treeWrap one B.<=< trees bracketType zero
 
 -- |  Convert a list of elements to trees.
 trees :: forall a. forall p. (Ord p, B.CodePtr a)
-         => GetParenType p a -> Paren p -> [a] -> B.Ab [CodeTree p a]
-trees parenType zero xs = result where
+         => GetBracketType p a -> Bracket p -> [a] -> B.Ab [CodeTree p a]
+trees bracketType zero xs = result where
     result :: B.Ab [CodeTree p a]
     result       = do (ts, _) <- loop xs zero
                       Right ts
     add a xs2 p  = do (ts, xs3) <- loop xs2 p
                       Right (a : ts, xs3)
 
-    loop :: [a] -> Paren p -> B.Ab ([CodeTree p a], [a])
+    loop :: [a] -> Bracket p -> B.Ab ([CodeTree p a], [a])
     loop [] _        = Right ([], [])
     loop (x : xs2) p
-        | isNotParen   px = add (TreeL x) xs2 p
-        | isOpenParen  px = do (trees2, cxs3) <- loop xs2 px
-                               case (px, cxs3) of
-                                 (ParenOpen p2, c : xs3) -> add (TreeB p2 (Just (x, c)) trees2) xs3 p
-                                 _       -> abort Message.extraOpenParen
-        | isCloseParen px = Right ([], x : xs2)
-        | otherwise       = abort Message.extraCloseParen
+        | isNotBracket   px = add (TreeL x) xs2 p
+        | isOpenBracket  px = do (trees2, cxs3) <- loop xs2 px
+                                 case (px, cxs3) of
+                                   (BracketOpen p2, c : xs3) -> add (TreeB p2 (Just (x, c)) trees2) xs3 p
+                                   _       -> abort Message.extraOpenBracket
+        | isCloseBracket px = Right ([], x : xs2)
+        | otherwise         = abort Message.extraCloseBracket
         where 
-          px       = parenType x
+          px       = bracketType x
           abort    = B.abortable "tree" [x]
 
 
@@ -115,7 +115,7 @@ untree = loop where
     loop (TreeB _ (Just (open, close)) xs) =
         open : concatMap loop xs ++ [close]
 
--- | Simplify tree by removing double parens,
+-- | Simplify tree by removing double brackets,
 --   like @((a))@ to @(a)@.
 --
 --   >>> undouble (== 0) $ TreeB 0 Nothing [TreeB 0 Nothing [TreeL "A", TreeL "B"]]
@@ -135,36 +135,36 @@ undouble p = loop where
 
 
 
--- ----------------------  Paren table
+-- ----------------------  Bracket table
 
--- | Get a paren type.
-type GetParenType p a = a -> Paren p
+-- | Get a bracket type.
+type GetBracketType p a = a -> Bracket p
 
--- | Make 'GetParenType' functions
+-- | Make 'GetBracketType' functions
 --   from a type-open-close table.
 --
---   Make paren/type functions from @()@ and @[]@.
+--   Make bracket/type functions from @()@ and @[]@.
 --
---   >>> let paren n [a, b] = (n, (== a), (== b))
---   >>> let pt = parenTable [ paren 1 "()", paren 2 "[]" ]
+--   >>> let bracket n [a, b] = (n, (== a), (== b))
+--   >>> let pt = bracketTable [ bracket 1 "()", bracket 2 "[]" ]
 --
---   Get paren types for each chars.
---   Types of open parens are positive integer,
+--   Get bracket types for each chars.
+--   Types of open brackets are positive integer,
 --   and closes are negative.
 --
 --   >>> map pt "ab(cd[ef])g"
 --   [0, 0, 1, 0, 0, 2, 0, 0, -2, -1, 0]
 --
-parenTable
+bracketTable
     :: (Eq a)
     => [(p, B.Pred a, B.Pred a)] -- ^ List of (/type/, /open/, /close/)
-    -> GetParenType p a
-parenTable xs = parenType where
-    parenTypeTable = map parenOpen xs ++ map parenClose xs
-    parenOpen  (n, isOpen, _)  = (isOpen,  ParenOpen n)
-    parenClose (n, _, isClose) = (isClose, ParenClose n)
-    parenType a =
-        case B.lookupSatisfy a parenTypeTable of
+    -> GetBracketType p a
+bracketTable xs = bracketType where
+    bracketTypeTable = map bracketOpen xs ++ map bracketClose xs
+    bracketOpen  (n, isOpen, _)  = (isOpen,  BracketOpen n)
+    bracketClose (n, _, isClose) = (isClose, BracketClose n)
+    bracketType a =
+        case B.lookupSatisfy a bracketTypeTable of
           Just p  -> p
-          Nothing -> ParenNon
+          Nothing -> BracketNone
 

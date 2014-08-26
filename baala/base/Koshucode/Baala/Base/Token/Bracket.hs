@@ -6,7 +6,7 @@ module Koshucode.Baala.Base.Token.Bracket
 ( 
   -- ** Functions
   bracketQuote,
-  bracketTable,
+  bracketKeywords,
 
   -- ** Examples
   -- $Bracket
@@ -33,7 +33,7 @@ import qualified Koshucode.Baala.Base.Text    as B
 --
 --  Lookup keyword table.
 --
---    >>> lookup "lf" bracketTable
+--    >>> lookup "lf" bracketKeywords
 --    Just "\n"
 --
 
@@ -87,8 +87,8 @@ bracketSplit (c : cs)
 
 -- | Table of coresspondences of bracket keyword and its text.
 
-bracketTable :: [(String, String)]
-bracketTable =
+bracketKeywords :: [(String, String)]
+bracketKeywords =
     --  KEYWORD   REPLACEMENT
     [ o "cr"      "\r"
     , o "crlf"    "\r\n"

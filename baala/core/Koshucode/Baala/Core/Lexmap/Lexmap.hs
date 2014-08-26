@@ -89,7 +89,7 @@ consLexmap sorters gslot derives = lexmap where
          case B.divideTreesByBar source of
            [(B.TreeL rop@(B.TText _ 0 _) : trees)] -> derived rop trees
            [(B.TreeL rop@(B.TText _ 3 _) : trees)] -> user LexmapWith rop trees
-           [[B.TreeB B.ParenGroup _ trees]] -> lexmap trees
+           [[B.TreeB B.BracketGroup _ trees]]      -> lexmap trees
            [[B.TreeB _ _ _]]     -> Message.adlib "bracket"
            [[]]                  -> baseOf "id" []
            [_]                   -> Message.unkRelmap "???"

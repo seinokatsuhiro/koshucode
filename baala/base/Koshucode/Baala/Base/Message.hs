@@ -3,8 +3,8 @@
 module Koshucode.Baala.Base.Message
 ( adlib,
   adlibs,
-  extraCloseParen,
-  extraOpenParen,
+  extraCloseBracket,
+  extraOpenBracket,
   notFound,
   divideByZero,
   heteroDecimal,
@@ -23,13 +23,13 @@ adlib reason = Left $ B.abortBecause $ "AD-LIB: " ++ reason
 adlibs :: [String] -> B.Ab a
 adlibs = Left . B.abortLines "AD-LIB"
 
--- | Extra close paren
-extraCloseParen :: B.Ab a
-extraCloseParen = Left $ B.abortBecause "Extra close paren"
+-- | Extra close bracket
+extraCloseBracket :: B.Ab a
+extraCloseBracket = Left $ B.abortBecause "Extra close bracket"
 
--- | Unclosed open paren
-extraOpenParen :: B.Ab a
-extraOpenParen = Left $ B.abortBecause "Unclosed open paren"
+-- | Unclosed open bracket
+extraOpenBracket :: B.Ab a
+extraOpenBracket = Left $ B.abortBecause "Unclosed open bracket"
 
 -- | Different decimal length
 heteroDecimal :: String -> String -> B.Ab a

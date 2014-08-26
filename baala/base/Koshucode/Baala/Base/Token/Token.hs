@@ -52,8 +52,8 @@ data Token
                                           --   2 for global slots.
     | TShort   B.CodePt String String  -- ^ Abbreviated text.
     | TTerm    B.CodePt TermPath       -- ^ Term name.
-    | TOpen    B.CodePt String         -- ^ Opening paren.
-    | TClose   B.CodePt String         -- ^ Closing paren.
+    | TOpen    B.CodePt String         -- ^ Opening bracket.
+    | TClose   B.CodePt String         -- ^ Closing bracket.
     | TSpace   B.CodePt Int            -- ^ /N/ space characters.
     | TComment B.CodePt String         -- ^ Comment text.
     | TUnknown B.CodePt String         -- ^ Unknown text.
@@ -202,7 +202,7 @@ isTermToken :: B.Pred Token
 isTermToken (TTerm _ _) = True
 isTermToken _           = False
 
--- | Check token is a 'TOpen' of the specific paren.
+-- | Check token is a 'TOpen' of the specific bracket.
 --
 --   >>> let tok = TOpen 0 "(" in isOpenTokenOf "(" tok
 --   True
@@ -213,7 +213,7 @@ isOpenTokenOf :: String -> B.Pred Token
 isOpenTokenOf p1 (TOpen _ p2)   = p1 == p2
 isOpenTokenOf _ _               = False
 
--- | Check token is a 'TClose' of the specific paren.
+-- | Check token is a 'TClose' of the specific bracket.
 isCloseTokenOf :: String -> B.Pred Token
 isCloseTokenOf p1 (TClose _ p2) = p1 == p2
 isCloseTokenOf _ _              = False

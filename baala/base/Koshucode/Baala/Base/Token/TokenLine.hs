@@ -124,7 +124,7 @@ nextToken res (num, line) txt =
                                            Just ns  ->  token cs $ B.TText p 3 $ map Char.chr ns
                                            Nothing  ->  token cs $ B.TText p (-1) code
       angleToken cs text | null text  =  token cs $ B.TText p 0 "<>"
-                         | otherwise  =  case lookup text B.bracketTable of
+                         | otherwise  =  case lookup text B.bracketKeywords of
                                            Just w   ->  token cs $ B.TText p 3 w
                                            Nothing  ->  token cs $ B.TText p (-1) text
 
@@ -189,7 +189,7 @@ isShort = Char.isAlpha
 -- ------------------------------------------------------------------
 -- $TokenType
 --
---  [Paren]     Open and closed parens.
+--  [Bracket]   Open and closed brackets.
 --              @(@ /group/ @)@ ,
 --              @{@ /set/ @}@ ,
 --              @[@ /list/ @]@ ,
@@ -266,7 +266,7 @@ isShort = Char.isAlpha
 --  , TSpace 5 2, TTerm 6 ["/a"], TSpace 7 1, TText 8 0 "A0"
 --  , TSpace 9 1, TTerm 10 ["/b"], TSpace 11 1, TText 12 0 "31" ]
 --
---  Parens.
+--  Brackets.
 --
 --  >>> tokens "aa (bb x y (z))"
 --  [ TText 1 0 "aa", TSpace 2 1

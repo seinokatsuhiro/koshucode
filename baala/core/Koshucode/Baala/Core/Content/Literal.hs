@@ -82,28 +82,28 @@ litContentBy ops tree = B.abortableTree "literal" tree $ lit tree where
               _                 ->  Message.unkWord $ B.tokenContent tok
 
     lit (B.TreeB n _ xs) = case n of
-        B.ParenGroup  ->  paren xs
-        B.ParenList   ->  C.putList =<< litContents lit xs
-        B.ParenSet    ->  C.putSet  =<< litContents lit xs
-        B.ParenAssn   ->                litBracket  lit xs
-        B.ParenRel    ->  C.putRel  =<< litRel      lit xs
-        _  ->  Message.adlib "Unknown paren type"
+        B.BracketGroup  ->  bracket xs
+        B.BracketList   ->  C.putList =<< litContents lit xs
+        B.BracketSet    ->  C.putSet  =<< litContents lit xs
+        B.BracketAssn   ->                litBracket  lit xs
+        B.BracketRel    ->  C.putRel  =<< litRel      lit xs
+        _  ->  Message.adlib "Unknown bracket type"
 
-    paren :: LitTrees c
-    paren xs@(x : _)
+    bracket :: LitTrees c
+    bracket xs@(x : _)
         | isDecimal x = do xs2 <- mapM naked xs
                            dec <- B.litDecimal $ concat xs2
                            C.putDec dec
 
     -- tagged sequence
-    paren (B.TreeL (B.TText _ 0 tag) : xs) =
+    bracket (B.TreeL (B.TText _ 0 tag) : xs) =
         case lookup tag ops of
           Just f  -> f lit xs
           Nothing -> Message.unkCop tag
     
-    paren [] = Message.emptyLiteral
-    -- paren [] = Right C.empty
-    paren xs = Message.unkWord $ treesContent xs  -- unknown sequence
+    bracket [] = Message.emptyLiteral
+    -- bracket [] = Right C.empty
+    bracket xs = Message.unkWord $ treesContent xs  -- unknown sequence
 
     naked :: LitTree String
     naked (B.TreeL (B.TText _ 0 w)) = Right w
@@ -212,7 +212,7 @@ litContents _   [] = Right []
 litContents lit cs = mapM lt $ B.divideTreesByColon cs where
     lt []  = Message.emptyLiteral
     lt [x] = lit x
-    lt xs  = lit $ B.TreeB B.ParenGroup Nothing xs
+    lt xs  = lit $ B.TreeB B.BracketGroup Nothing xs
 
 litAssn :: (C.CContent c) => LitTree c -> LitTrees [B.Named c]
 litAssn lit = mapM p B.<=< litNamedTrees where
