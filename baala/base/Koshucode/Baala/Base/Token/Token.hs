@@ -51,7 +51,7 @@ data Token
                                           --   1 for named slots,
                                           --   2 for global slots.
     | TShort   B.CodePt String String  -- ^ Abbreviated text.
-    | TTerm    B.CodePt TermPath       -- ^ Term name.
+    | TTerm    B.CodePt Int TermPath   -- ^ Term name.
     | TOpen    B.CodePt String         -- ^ Opening bracket.
     | TClose   B.CodePt String         -- ^ Closing bracket.
     | TSpace   B.CodePt Int            -- ^ /N/ space characters.
@@ -60,29 +60,29 @@ data Token
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance B.Name Token where
-    name (TTerm   _ ns) = concat ns
-    name (TSlot  _ _ s) = s
-    name (TText  _ _ s) = s
-    name (TOpen    _ s) = s
-    name (TClose   _ s) = s
-    name (TComment _ s) = s
+    name (TTerm  _ _ ns) = concat ns
+    name (TSlot   _ _ s) = s
+    name (TText   _ _ s) = s
+    name (TOpen     _ s) = s
+    name (TClose    _ s) = s
+    name (TComment  _ s) = s
     name x = error $ "unknown name: " ++ show x
 
 instance B.Write Token where
     write sh = d where
-        d (TText    pt q w) = pretty "TText"    pt [show q, show w]
-        d (TName    pt w)   = pretty "TName"    pt [show w]
-        d (TShort   pt a b) = pretty "TShort"   pt [show a, show b]
-        d (TTerm    pt ns)  = pretty "TTerm"    pt [show ns]
-        d (TSlot    pt n w) = pretty "TSlot"    pt [show n, show w]
-        d (TOpen    pt p)   = pretty "TOpen"    pt [show p]
-        d (TClose   pt p)   = pretty "TClose"   pt [show p]
-        d (TSpace   pt c)   = pretty "TSpace"   pt [show c]
-        d (TComment pt s)   = pretty "TComment" pt [show s]
-        d (TUnknown pt s)   = pretty "TUnknown" pt [show s]
-        pretty k pt xs      = B.writeH sh $ lineCol pt : k : xs
-        lineCol pt          = (show $ B.codePtLineNumber pt)
-                              ++ "." ++ (show $ B.codePtColumnNumber pt)
+        d (TText    pt q w)  =  pretty "TText"    pt [show q, show w]
+        d (TName    pt w)    =  pretty "TName"    pt [show w]
+        d (TShort   pt a b)  =  pretty "TShort"   pt [show a, show b]
+        d (TTerm    pt q ns) =  pretty "TTerm"    pt [show q, show ns]
+        d (TSlot    pt n w)  =  pretty "TSlot"    pt [show n, show w]
+        d (TOpen    pt p)    =  pretty "TOpen"    pt [show p]
+        d (TClose   pt p)    =  pretty "TClose"   pt [show p]
+        d (TSpace   pt c)    =  pretty "TSpace"   pt [show c]
+        d (TComment pt s)    =  pretty "TComment" pt [show s]
+        d (TUnknown pt s)    =  pretty "TUnknown" pt [show s]
+        pretty k pt xs       =  B.writeH sh $ lineCol pt : k : xs
+        lineCol pt           =  (show $ B.codePtLineNumber pt)
+                                ++ "." ++ (show $ B.codePtColumnNumber pt)
 
 textToken :: String -> Token
 textToken = TText B.codePtZero 0
@@ -94,7 +94,7 @@ instance B.CodePtr Token where
     codePts (TText    cp _ _)  =  [cp]
     codePts (TName    cp _)    =  [cp]
     codePts (TShort   cp _ _)  =  [cp]
-    codePts (TTerm    cp _)    =  [cp]
+    codePts (TTerm    cp _ _)  =  [cp]
     codePts (TSlot    cp _ _)  =  [cp]
     codePts (TOpen    cp _)    =  [cp]
     codePts (TClose   cp _)    =  [cp]
@@ -154,7 +154,7 @@ tokenContent :: Token -> String
 tokenContent (TText  _ _ s)   =  s
 tokenContent (TName    _ op)  =  B.name op
 tokenContent (TShort _ a b)   =  a ++ "." ++ b
-tokenContent (TTerm    _ ns)  =  concatMap ('/' :) ns
+tokenContent (TTerm  _ _ ns)  =  concatMap ('/' :) ns
 tokenContent (TSlot  _ _ s)   =  s
 tokenContent (TOpen    _ s)   =  s
 tokenContent (TClose   _ s)   =  s
@@ -172,7 +172,7 @@ tokenTypeText :: Token -> String
 tokenTypeText (TText  _ _ _)  =  "text"
 tokenTypeText (TName    _ _)  =  "name"
 tokenTypeText (TShort _ _ _)  =  "short"
-tokenTypeText (TTerm    _ _)  =  "term"
+tokenTypeText (TTerm  _ _ _)  =  "term"
 tokenTypeText (TSlot  _ _ _)  =  "slot"
 tokenTypeText (TOpen    _ _)  =  "open"
 tokenTypeText (TClose   _ _)  =  "close"
@@ -199,8 +199,8 @@ isShortToken (TShort _ _ _)  = True
 isShortToken _               = False
 
 isTermToken :: B.Pred Token
-isTermToken (TTerm _ _) = True
-isTermToken _           = False
+isTermToken (TTerm _ _ _) = True
+isTermToken _             = False
 
 -- | Check token is a 'TOpen' of the specific bracket.
 --

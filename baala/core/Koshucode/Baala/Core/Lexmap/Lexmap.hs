@@ -179,10 +179,10 @@ consLexmap sorters gslot derives = lexmap where
 -- | Parse @-with@ attribute.
 withTerms :: [B.TokenTree] -> B.Ab [B.Terminal String]
 withTerms = loop where
-    loop (B.TreeL (B.TTerm _ [n]) :
-          B.TreeL (B.TText _ 0 v) : xs)  =  next (n, v) xs
-    loop (B.TreeL (B.TTerm _ [n]) : xs)  =  next (n, n) xs
-    loop (B.TreeL (B.TText _ 0 v) : xs)  =  next (v, v) xs
+    loop (B.TreeL (B.TTerm _ 0 [n]) :
+          B.TreeL (B.TText _ 0 v)   : xs)  =  next (n, v) xs
+    loop (B.TreeL (B.TTerm _ 0 [n]) : xs)  =  next (n, n) xs
+    loop (B.TreeL (B.TText _ 0 v)   : xs)  =  next (v, v) xs
     loop [] = Right []
     loop _  = Message.reqTermName
 

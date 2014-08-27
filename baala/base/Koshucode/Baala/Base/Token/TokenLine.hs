@@ -138,7 +138,7 @@ nextToken res (num, line) txt =
                         | isQQ   c    =  case qqText cs xs of
                                            Just (text, cs2) -> term cs2 [] $ termUp text ns
                                            Nothing          -> token [] $ B.TUnknown p (c:cs)
-      term cs     xs ns               =  tokenFrom cs (termUp xs ns) $ B.TTerm p
+      term cs     xs ns               =  tokenFrom cs (termUp xs ns) $ B.TTerm p 0
 
       termUp :: String -> [String] -> [String]
       termUp [] ns                    =  ns 

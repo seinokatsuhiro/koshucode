@@ -13,7 +13,7 @@ import qualified Koshucode.Baala.Core.Message as Message
 
 -- | Extract a term name.
 termName :: B.TokenTree -> B.Ab B.TermName
-termName (B.TreeL (B.TTerm _ [n])) = Right n
+termName (B.TreeL (B.TTerm _ _ [n])) = Right n
 termName _ = Message.reqTermName
 
 -- | Extract a list of term names.

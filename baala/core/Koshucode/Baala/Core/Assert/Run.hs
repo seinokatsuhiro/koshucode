@@ -139,7 +139,7 @@ flatnames trees =
 
 -- | Get term name as string only if term is flat.
 flatname :: B.TokenTree -> Maybe B.TermName
-flatname (B.TreeL (B.TTerm _ [n])) = Just n
+flatname (B.TreeL (B.TTerm _ _ [n])) = Just n
 flatname _ = Nothing
 
 snipRelRaw :: (Ord c) => B.SnipPair B.Term c -> [B.TermName] -> B.AbMap (B.Rel c)

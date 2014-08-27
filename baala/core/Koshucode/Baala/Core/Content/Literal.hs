@@ -56,7 +56,7 @@ litNamedTrees = name where
                           Right $ (n, B.wrapTrees c) : xs2'
 
     cont :: [B.TokenTree] -> ([B.TokenTree], [B.TokenTree])
-    cont xs@(B.TreeL (B.TTerm _ _) : _) = ([], xs)
+    cont xs@(B.TreeL (B.TTerm _ _ _) : _) = ([], xs)
     cont [] = ([], [])
     cont (x : xs) = B.cons1 x $ cont xs
 
@@ -142,7 +142,7 @@ isDecimalChar = (`elem` "0123456789+-.")
 --
 
 litBracket :: (C.CContent c) => LitTree c -> LitTrees c
-litBracket lit xs@(B.TreeL (B.TTerm _ _) : _) = C.putAssn =<< litAssn lit xs
+litBracket lit xs@(B.TreeL (B.TTerm _ _ _) : _) = C.putAssn =<< litAssn lit xs
 litBracket _ [] = C.putAssn []
 litBracket _ [B.TreeL (B.TText _ 0 "words"), B.TreeL (B.TText _ 2 ws)] =
     C.putList $ map C.pText $ words ws
@@ -203,9 +203,9 @@ int3 (ma, mb, mc) (a, b, c) =
 -- | Get single term name.
 --   If 'TokenTree' contains nested term name, this function failed.
 litFlatname :: LitTree String
-litFlatname (B.TreeL (B.TTerm _ [n])) = Right n
-litFlatname (B.TreeL t) = Message.reqFlatName t
-litFlatname _ = Message.reqTermName
+litFlatname (B.TreeL (B.TTerm _ _ [n])) = Right n
+litFlatname (B.TreeL t)                 = Message.reqFlatName t
+litFlatname _                           = Message.reqTermName
 
 litContents :: (C.CContent c) => LitTree c -> LitTrees [c]
 litContents _   [] = Right []
