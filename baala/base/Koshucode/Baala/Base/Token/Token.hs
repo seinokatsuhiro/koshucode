@@ -36,7 +36,7 @@ import qualified Koshucode.Baala.Base.Text      as B
 
 -- ----------------------  Token type
 
--- | There are nine types of tokens.
+-- | There are ten types of tokens.
 data Token
     = TText    B.CodePt Int String     -- ^ Text.
                                           --   'Int' represents quotation level, i.e.,

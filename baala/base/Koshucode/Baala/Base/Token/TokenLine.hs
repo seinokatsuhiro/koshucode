@@ -101,9 +101,10 @@ nextToken res (num, line) txt =
       slot n cs                       =  (n, cs)
 
       word :: String -> String -> (String -> B.Token) -> (B.Token, String)
-      word cs@('>' : '>' : _) text k  =  tokenFrom cs text k
+      word cs@('>' : '>' : _) text k  =  tokenFrom cs text  k
       word (c:cs) text k | isWord c   =  word cs (c : text) k
-      word cs     text k              =  tokenFrom cs text k
+      word cs     ""   k              =  tokenFrom cs "'"   k
+      word cs     text k              =  tokenFrom cs text  k
 
       qq :: String -> (B.Token, String)
       qq cs = case qqText cs [] of
@@ -164,7 +165,7 @@ isSingle   =  ( `elem` ":|"  )  --  UnicodePunctuation | UnicodeSymbol
 isQ        =  (    ==  '\''  )  --  UnicodePunctuation
 isQQ       =  (    ==  '"'   )  --  UnicodePunctuation
 isPunct c  =  isOpen c || isClose c || isSingle c ||
-              isQ c    || isQQ c    || c == '#'
+              isQ c    || isQQ c    || c == '#'   || c == '/'
 
 isTerm, isSpace, isWord  :: B.Pred Char
 

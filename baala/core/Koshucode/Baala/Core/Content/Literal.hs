@@ -7,8 +7,6 @@
 module Koshucode.Baala.Core.Content.Literal
 (
   -- * Types
-  LitTree,
-  LitTrees,
   LitOperators,
 
   -- * Functions
@@ -38,16 +36,10 @@ import qualified Koshucode.Baala.Core.Message        as Message
 
 -- ----------------------  Type
 
--- | Convert 'B.TokenTree' to content.
-type LitTree c = B.TokenTree -> B.Ab c
-
--- | Convert list of 'B.TokenTree' to content.
-type LitTrees c = [B.TokenTree] -> B.Ab c
-
-type LitOperators c = [B.Named (LitTree c -> LitTrees c)]
+type LitOperators a = [B.Named (B.TokenTreeToAb a -> B.TokenTreesToAb a)]
 
 -- | Convert token trees into a list of named token trees.
-litNamedTrees :: LitTrees [B.Named B.TokenTree]
+litNamedTrees :: B.TokenTreesToAb [B.Named B.TokenTree]
 litNamedTrees = name where
     name [] = Right []
     name (x : xs) = let (c, xs2) = cont xs
@@ -66,13 +58,13 @@ litNamedTrees = name where
 litOperators :: (C.CContent c) => LitOperators c
 litOperators = []
 
-litContent :: (C.CContent c) => LitTree c
+litContent :: (C.CContent c) => B.TokenTreeToAb c
 litContent = litContentBy []
 
 -- | Convert 'B.TokenTree' into internal form of content.
-litContentBy :: forall c. (C.CContent c) => LitOperators c -> LitTree c
+litContentBy :: forall c. (C.CContent c) => LitOperators c -> B.TokenTreeToAb c
 litContentBy ops tree = B.abortableTree "literal" tree $ lit tree where
-    lit :: LitTree c
+    lit :: B.TokenTreeToAb c
     lit x@(B.TreeL tok)
         | isDecimal x = C.putDec =<< B.litDecimal =<< naked x
         | otherwise = case tok of
@@ -82,30 +74,32 @@ litContentBy ops tree = B.abortableTree "literal" tree $ lit tree where
               _                 ->  Message.unkWord $ B.tokenContent tok
 
     lit (B.TreeB n _ xs) = case n of
-        B.BracketGroup  ->  bracket xs
+        B.BracketGroup  ->  group xs
         B.BracketList   ->  C.putList =<< litContents lit xs
         B.BracketSet    ->  C.putSet  =<< litContents lit xs
         B.BracketAssn   ->                litBracket  lit xs
         B.BracketRel    ->  C.putRel  =<< litRel      lit xs
         _  ->  Message.adlib "Unknown bracket type"
 
-    bracket :: LitTrees c
-    bracket xs@(x : _)
+    group :: B.TokenTreesToAb c
+    group (B.TreeL (B.TText _ 1 "'") : xs) = group xs
+    group xs@(x : _)
         | isDecimal x = do xs2 <- mapM naked xs
                            dec <- B.litDecimal $ concat xs2
                            C.putDec dec
 
     -- tagged sequence
-    bracket (B.TreeL (B.TText _ 0 tag) : xs) =
+    group (B.TreeL (B.TText _ 0 tag) : xs) =
         case lookup tag ops of
           Just f  -> f lit xs
           Nothing -> Message.unkCop tag
     
-    bracket [] = Message.emptyLiteral
-    -- bracket [] = Right C.empty
-    bracket xs = Message.unkWord $ treesContent xs  -- unknown sequence
+    group [B.TreeL (B.TTerm _ _ ns)] = C.putText $ concat ns
+    group [] = Message.emptyLiteral
+    -- group [] = Right C.empty
+    group xs = Message.unkWord $ treesContent xs  -- unknown sequence
 
-    naked :: LitTree String
+    naked :: B.TokenTreeToAb String
     naked (B.TreeL (B.TText _ 0 w)) = Right w
     naked x                         = Message.unkWord $ treeContent x
 
@@ -141,7 +135,7 @@ isDecimalChar = (`elem` "0123456789+-.")
 --         ("/b", TreeL (TText 8 0 "10"))]
 --
 
-litBracket :: (C.CContent c) => LitTree c -> LitTrees c
+litBracket :: (C.CContent c) => B.TokenTreeToAb c -> B.TokenTreesToAb c
 litBracket lit xs@(B.TreeL (B.TTerm _ _ _) : _) = C.putAssn =<< litAssn lit xs
 litBracket _ [] = C.putAssn []
 litBracket _ [B.TreeL (B.TText _ 0 "words"), B.TreeL (B.TText _ 2 ws)] =
@@ -202,23 +196,23 @@ int3 (ma, mb, mc) (a, b, c) =
 
 -- | Get single term name.
 --   If 'TokenTree' contains nested term name, this function failed.
-litFlatname :: LitTree String
+litFlatname :: B.TokenTreeToAb String
 litFlatname (B.TreeL (B.TTerm _ _ [n])) = Right n
 litFlatname (B.TreeL t)                 = Message.reqFlatName t
 litFlatname _                           = Message.reqTermName
 
-litContents :: (C.CContent c) => LitTree c -> LitTrees [c]
+litContents :: (C.CContent c) => B.TokenTreeToAb c -> B.TokenTreesToAb [c]
 litContents _   [] = Right []
 litContents lit cs = mapM lt $ B.divideTreesByColon cs where
     lt []  = Message.emptyLiteral
     lt [x] = lit x
     lt xs  = lit $ B.TreeB B.BracketGroup Nothing xs
 
-litAssn :: (C.CContent c) => LitTree c -> LitTrees [B.Named c]
+litAssn :: (C.CContent c) => B.TokenTreeToAb c -> B.TokenTreesToAb [B.Named c]
 litAssn lit = mapM p B.<=< litNamedTrees where
     p (n, c) = Right . (n,) =<< lit c
 
-litRel :: (C.CContent c) => LitTree c -> LitTrees (B.Rel c)
+litRel :: (C.CContent c) => B.TokenTreeToAb c -> B.TokenTreesToAb (B.Rel c)
 litRel lit cs =
     do let (h1 : b1) = B.divideTreesByBar cs
        h2 <- mapM litFlatname $ concat $ B.divideTreesByColon h1
@@ -231,10 +225,10 @@ litRel lit cs =
 -- | Convert token trees into a judge.
 --   Judges itself are not content type.
 --   It can be only used in the top-level of sections.
-litJudge :: (C.CContent c) => Char -> B.JudgePat -> LitTrees (B.Judge c)
+litJudge :: (C.CContent c) => Char -> B.JudgePat -> B.TokenTreesToAb (B.Judge c)
 litJudge = litJudgeBy []
 
-litJudgeBy :: (C.CContent c) => LitOperators c -> Char -> B.JudgePat -> LitTrees (B.Judge c)
+litJudgeBy :: (C.CContent c) => LitOperators c -> Char -> B.JudgePat -> B.TokenTreesToAb (B.Judge c)
 litJudgeBy ops q p = Right . (judgeHead q) p B.<=< litAssn (litContentBy ops)
 
 judgeHead :: Char -> B.JudgeOf c

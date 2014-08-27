@@ -7,6 +7,8 @@ module Koshucode.Baala.Base.Token.TokenTree
 ( -- * Token tree
   TokenTree,
   NamedTrees,
+  TokenTreeToAb,
+  TokenTreesToAb,
   tokenTrees,
   wrapTrees,
 
@@ -41,6 +43,12 @@ type TokenTree = B.CodeTree BracketType B.Token
 
 -- | Pair of token trees and its name.
 type NamedTrees = B.Named [TokenTree]
+
+-- | Convert 'TokenTree' to something.
+type TokenTreeToAb a = TokenTree -> B.Ab a
+
+-- | Convert list of 'TokenTree' to sometning.
+type TokenTreesToAb a = [TokenTree] -> B.Ab a
 
 -- | Parse tokens with brackets into trees.
 --   Blank tokens and comments are excluded.
