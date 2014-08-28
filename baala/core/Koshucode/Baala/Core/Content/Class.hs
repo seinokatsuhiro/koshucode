@@ -13,6 +13,7 @@ module Koshucode.Baala.Core.Content.Class
   -- * Koshu data
   CEmpty      (..),
   CDec        (..), pDecFromInt,
+  CTerm       (..),
   CSet        (..),
   CAssn       (..),
   CRel        (..), isMember,
@@ -29,7 +30,7 @@ class (Show c) => PrimContent c where
     typename :: c -> String
 
 class (Ord c, B.Write c, PrimContent c,
-       CBool c, CText c, CDec c, CList c,
+       CBool c, CText c, CTerm c, CDec c, CList c,
        CEmpty c , CSet c, CAssn c, CRel c) =>
     CContent c where
 
@@ -113,6 +114,17 @@ class (PrimContent c) => CDec c where
 
 pDecFromInt :: (CDec c) => Int -> c
 pDecFromInt = pDec . B.intDecimal
+
+class (PrimContent c) => CTerm c where
+    isTerm       ::           c -> Bool
+    gTerm        ::           c -> String
+    pTerm        ::      String -> c
+
+    getTerm      ::      B.Ab c -> B.Ab String
+    getTerm      =       getAbAb isTerm gTerm
+
+    putTerm      ::      String -> B.Ab c
+    putTerm      =       Right . pTerm
 
 class (PrimContent c) => CSet c where
     isSet       ::          c -> Bool

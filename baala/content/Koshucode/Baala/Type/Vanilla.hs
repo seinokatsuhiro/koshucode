@@ -20,6 +20,7 @@ import qualified Koshucode.Baala.Op.Message as Message
 data VContent
     = VBool    Bool               -- ^ Boolean type
     | VText    String             -- ^ String type
+    | VTerm    String             -- ^ Term name type
     | VDec     B.Decimal          -- ^ Decimal number type
     | VEmpty                        -- ^ Sign of no ordinary type
     | VList    [VContent]         -- ^ List type (objective collection)
@@ -35,6 +36,7 @@ instance Eq VContent where
 instance Ord VContent where
     compare (VBool    x) (VBool    y)  =  compare x y
     compare (VText    x) (VText    y)  =  compare x y
+    compare (VTerm    x) (VTerm    y)  =  compare x y
     compare (VDec     x) (VDec     y)  =  compare x y
     compare (VEmpty    ) (VEmpty    )  =  EQ
     compare (VList    x) (VList    y)  =  compare x y
@@ -44,6 +46,7 @@ instance Ord VContent where
 
     compare (VBool    _) _             =  LT
     compare (VText    _) _             =  LT
+    compare (VTerm    _) _             =  LT
     compare (VDec     _) _             =  LT
     compare (VEmpty    ) _             =  LT
     compare (VList    _) _             =  LT
@@ -57,6 +60,7 @@ compareAsSet x y = compare (Set.fromList x) (Set.fromList y)
 instance C.PrimContent VContent where        
     typename (VBool    _)  =  "boolean"
     typename (VText    _)  =  "text"
+    typename (VTerm    _)  =  "term"
     typename (VDec     _)  =  "decimal"
     typename (VEmpty    )  =  "empty"
     typename (VList    _)  =  "list"
@@ -73,12 +77,13 @@ instance C.CContent VContent where
 instance B.Write VContent where
     write sh a = case a of
         VText s      ->  B.doc $ sh s
+        VTerm s      ->  B.doc $ "'/" ++ s
         VDec  n      ->  B.doc $ B.decimalString n
         VBool b      ->  B.doc b
         VEmpty       ->  B.doc "()"
-        VList    xs  ->  B.docWraps "["   "]" $ B.writeColon sh xs
-        VSet     xs  ->  B.docWraps "{"   "}" $ B.writeColon sh xs
-        VAssn    xs  ->  B.docWraps "<<" ">>" $ B.writeH     sh xs
+        VList xs     ->  B.docWraps "["   "]" $ B.writeColon sh xs
+        VSet  xs     ->  B.docWraps "{"   "}" $ B.writeColon sh xs
+        VAssn xs     ->  B.docWraps "<<" ">>" $ B.writeH     sh xs
         VRel r       ->  B.write sh r
 
 
@@ -120,6 +125,13 @@ instance C.CEmpty VContent where
     empty                    =  VEmpty
     isEmpty VEmpty           =  True
     isEmpty _                =  False
+
+instance C.CTerm VContent where
+    pTerm                    =  VTerm
+    gTerm (VTerm s)          =  s
+    gTerm _                  =  B.bug "gTerm"
+    isTerm  (VTerm _)        =  True
+    isTerm  _                =  False
 
 instance C.CSet VContent where
     pSet                     =  VSet . B.omit C.isEmpty . B.unique

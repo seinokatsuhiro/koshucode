@@ -99,6 +99,9 @@ consPreclause' src = dispatch $ liaison $ B.clauseTokens src where
     liaison (B.TText p1 q1 w1 : B.TText _ q2 w2 : xs)
         | q1 > 0 && q2 > 0 = let tok = B.TText p1 (max q1 q2) (w1 ++ w2)
                              in liaison $ tok : xs
+    liaison (B.TText _ 1 "'" : B.TTerm p2 0 w2 : xs)
+        = let tok = B.TTerm p2 1 w2
+          in liaison $ tok : xs
     liaison (x : xs) = x : liaison xs
 
     dispatch :: [B.Token] -> [Clause]

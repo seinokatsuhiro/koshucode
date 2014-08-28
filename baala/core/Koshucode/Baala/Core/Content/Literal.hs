@@ -42,13 +42,13 @@ type LitOperators a = [B.Named (B.TokenTreeToAb a -> B.TokenTreesToAb a)]
 litNamedTrees :: B.TokenTreesToAb [B.Named B.TokenTree]
 litNamedTrees = name where
     name [] = Right []
-    name (x : xs) = let (c, xs2) = cont xs
-                    in do n    <- litFlatname x
-                          xs2' <- name xs2
-                          Right $ (n, B.wrapTrees c) : xs2'
+    name (x : xs) = do let (c, xs2) = cont xs
+                       n    <- litFlatname x
+                       xs2' <- name xs2
+                       Right $ (n, B.wrapTrees c) : xs2'
 
     cont :: [B.TokenTree] -> ([B.TokenTree], [B.TokenTree])
-    cont xs@(B.TreeL (B.TTerm _ _ _) : _) = ([], xs)
+    cont xs@(B.TreeL (B.TTerm _ 0 _) : _) = ([], xs)
     cont [] = ([], [])
     cont (x : xs) = B.cons1 x $ cont xs
 
@@ -68,10 +68,11 @@ litContentBy ops tree = B.abortableTree "literal" tree $ lit tree where
     lit x@(B.TreeL tok)
         | isDecimal x = C.putDec =<< B.litDecimal =<< naked x
         | otherwise = case tok of
-              B.TText _ (-1) w  ->  bracketKeyword w
-              B.TText _ 0    w  ->  nakedKeyword   w
-              B.TText _ _    w  ->  C.putText      w
-              _                 ->  Message.unkWord $ B.tokenContent tok
+              B.TText _ (-1) w   ->  bracketKeyword w
+              B.TText _ 0    w   ->  nakedKeyword   w
+              B.TText _ _    w   ->  C.putText      w
+              B.TTerm _ _   [n]  ->  C.putTerm      n
+              _                  ->  Message.unkWord $ B.tokenContent tok
 
     lit (B.TreeB n _ xs) = case n of
         B.BracketGroup  ->  group xs
@@ -82,7 +83,6 @@ litContentBy ops tree = B.abortableTree "literal" tree $ lit tree where
         _  ->  Message.adlib "Unknown bracket type"
 
     group :: B.TokenTreesToAb c
-    group (B.TreeL (B.TText _ 1 "'") : xs) = group xs
     group xs@(x : _)
         | isDecimal x = do xs2 <- mapM naked xs
                            dec <- B.litDecimal $ concat xs2
@@ -94,7 +94,6 @@ litContentBy ops tree = B.abortableTree "literal" tree $ lit tree where
           Just f  -> f lit xs
           Nothing -> Message.unkCop tag
     
-    group [B.TreeL (B.TTerm _ _ ns)] = C.putText $ concat ns
     group [] = Message.emptyLiteral
     -- group [] = Right C.empty
     group xs = Message.unkWord $ treesContent xs  -- unknown sequence
@@ -136,7 +135,7 @@ isDecimalChar = (`elem` "0123456789+-.")
 --
 
 litBracket :: (C.CContent c) => B.TokenTreeToAb c -> B.TokenTreesToAb c
-litBracket lit xs@(B.TreeL (B.TTerm _ _ _) : _) = C.putAssn =<< litAssn lit xs
+litBracket lit xs@(B.TreeL (B.TTerm _ 0 _) : _) = C.putAssn =<< litAssn lit xs
 litBracket _ [] = C.putAssn []
 litBracket _ [B.TreeL (B.TText _ 0 "words"), B.TreeL (B.TText _ 2 ws)] =
     C.putList $ map C.pText $ words ws
@@ -197,7 +196,7 @@ int3 (ma, mb, mc) (a, b, c) =
 -- | Get single term name.
 --   If 'TokenTree' contains nested term name, this function failed.
 litFlatname :: B.TokenTreeToAb String
-litFlatname (B.TreeL (B.TTerm _ _ [n])) = Right n
+litFlatname (B.TreeL (B.TTerm _ 0 [n])) = Right n
 litFlatname (B.TreeL t)                 = Message.reqFlatName t
 litFlatname _                           = Message.reqTermName
 
