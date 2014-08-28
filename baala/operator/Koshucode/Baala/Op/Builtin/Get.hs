@@ -186,4 +186,4 @@ getWithTerms :: RopGet c [B.Terminal String]
 getWithTerms = getAbortable C.withTerms
 
 getTermTrees :: RopGet c [B.Named B.TokenTree]
-getTermTrees = getAbortable Op.termTreePairs
+getTermTrees = getAbortable C.getTermedTrees

@@ -12,8 +12,8 @@ module Koshucode.Baala.Core.Content.Literal
   -- * Functions
   litOperators,
   litContent,
-  litNamedTrees,
   litJudge,
+  getTermedTrees,
   -- $Function
 
   -- * Document
@@ -33,24 +33,7 @@ import qualified Koshucode.Baala.Core.Content.Class  as C
 import qualified Koshucode.Baala.Core.Message        as Message
 
 
-
--- ----------------------  Type
-
 type LitOperators a = [B.Named (B.TokenTreeToAb a -> B.TokenTreesToAb a)]
-
--- | Convert token trees into a list of named token trees.
-litNamedTrees :: B.TokenTreesToAb [B.Named B.TokenTree]
-litNamedTrees = name where
-    name [] = Right []
-    name (x : xs) = do let (c, xs2) = cont xs
-                       n    <- litFlatname x
-                       xs2' <- name xs2
-                       Right $ (n, B.wrapTrees c) : xs2'
-
-    cont :: [B.TokenTree] -> ([B.TokenTree], [B.TokenTree])
-    cont xs@(B.TreeL (B.TTerm _ 0 _) : _) = ([], xs)
-    cont [] = ([], [])
-    cont (x : xs) = B.cons1 x $ cont xs
 
 
 -- ----------------------  General content
@@ -68,18 +51,17 @@ litContentBy ops tree = B.abortableTree "literal" tree $ lit tree where
     lit x@(B.TreeL tok)
         | isDecimal x = C.putDec =<< B.litDecimal =<< naked x
         | otherwise = case tok of
-              B.TText _ (-1) w   ->  bracketKeyword w
-              B.TText _ 0    w   ->  nakedKeyword   w
-              B.TText _ _    w   ->  C.putText      w
-              B.TTerm _ _   [n]  ->  C.putTerm      n
-              _                  ->  Message.unkWord $ B.tokenContent tok
+            B.TText _ n w | n <= 0  ->  keyword   w
+            B.TText _ _ w           ->  C.putText w
+            B.TTerm _ _ [n]         ->  C.putTerm n
+            _                       ->  Message.unkWord $ B.tokenContent tok
 
     lit (B.TreeB n _ xs) = case n of
         B.BracketGroup  ->  group xs
-        B.BracketList   ->  C.putList =<< litContents lit xs
-        B.BracketSet    ->  C.putSet  =<< litContents lit xs
-        B.BracketAssn   ->                litBracket  lit xs
-        B.BracketRel    ->  C.putRel  =<< litRel      lit xs
+        B.BracketList   ->  C.putList =<< literals  lit xs
+        B.BracketSet    ->  C.putSet  =<< literals  lit xs
+        B.BracketAssn   ->                litAngle  lit xs
+        B.BracketRel    ->  C.putRel  =<< litRel    lit xs
         _  ->  Message.adlib "Unknown bracket type"
 
     group :: B.TokenTreesToAb c
@@ -94,8 +76,7 @@ litContentBy ops tree = B.abortableTree "literal" tree $ lit tree where
           Just f  -> f lit xs
           Nothing -> Message.unkCop tag
     
-    group [] = Message.emptyLiteral
-    -- group [] = Right C.empty
+    group [] = Right C.empty
     group xs = Message.unkWord $ treesContent xs  -- unknown sequence
 
     naked :: B.TokenTreeToAb String
@@ -105,14 +86,17 @@ litContentBy ops tree = B.abortableTree "literal" tree $ lit tree where
     treeContent  = concatMap B.tokenContent . B.untree
     treesContent = concatMap B.tokenContent . B.untrees
 
-bracketKeyword :: (C.CEmpty c, C.CBool c) => String -> B.Ab c
-bracketKeyword "0"    =  Right C.false     -- <0>
-bracketKeyword "1"    =  Right C.true      -- <1>
-bracketKeyword w      =  Message.unkWord w
+literals :: (C.CContent c) => B.TokenTreeToAb c -> B.TokenTreesToAb [c]
+literals _   [] = Right []
+literals lit cs = lt `mapM` B.divideTreesByColon cs where
+    lt []  =  Right C.empty
+    lt [x] =  lit x
+    lt xs  =  lit $ B.TreeB B.BracketGroup Nothing xs
 
-nakedKeyword :: (C.CEmpty c) => String -> B.Ab c
-nakedKeyword "()"     =  Right C.empty     -- ()
-nakedKeyword w        =  Message.unkWord w
+keyword :: (C.CEmpty c, C.CBool c) => String -> B.Ab c
+keyword "0"  =  Right C.false
+keyword "1"  =  Right C.true
+keyword w    =  Message.unkWord w
 
 isDecimal :: B.TokenTree -> Bool
 isDecimal (B.TreeL (B.TText _ 0 (c : _))) = isDecimalChar c
@@ -129,22 +113,43 @@ isDecimalChar = (`elem` "0123456789+-.")
 --
 --  /Example/
 --
---  >>> litNamedTrees =<< B.tt "/a 'A3 /b 10"
+--  >>> getTermedTrees =<< B.tt "/a 'A3 /b 10"
 --  Right [("/a", TreeB 1 [TreeL (TText 3 0 "'"), TreeL (TText 4 0 "A3")]),
 --         ("/b", TreeL (TText 8 0 "10"))]
 --
 
-litBracket :: (C.CContent c) => B.TokenTreeToAb c -> B.TokenTreesToAb c
-litBracket lit xs@(B.TreeL (B.TTerm _ 0 _) : _) = C.putAssn =<< litAssn lit xs
-litBracket _ [] = C.putAssn []
-litBracket _ [B.TreeL (B.TText _ 0 "words"), B.TreeL (B.TText _ 2 ws)] =
+-- | Get flat term name from token tree.
+--   If the token tree contains nested term name, this function failed.
+getFlatName :: B.TokenTreeToAb String
+getFlatName (B.TreeL (B.TTerm _ 0 [n])) = Right n
+getFlatName (B.TreeL t)                 = Message.reqFlatName t
+getFlatName _                           = Message.reqTermName
+
+-- | Convert token trees into a list of named token trees.
+getTermedTrees :: B.TokenTreesToAb [B.NamedTree]
+getTermedTrees = name where
+    name [] = Right []
+    name (x : xs) = do let (c, xs2) = cont xs
+                       n    <- getFlatName x
+                       xs2' <- name xs2
+                       Right $ (n, B.wrapTrees c) : xs2'
+
+    cont :: B.TokenTreesTo ([B.TokenTree], [B.TokenTree])
+    cont xs@(B.TreeL (B.TTerm _ 0 _) : _) = ([], xs)
+    cont [] = ([], [])
+    cont (x : xs) = B.cons1 x $ cont xs
+
+litAngle :: (C.CContent c) => B.TokenTreeToAb c -> B.TokenTreesToAb c
+litAngle lit xs@(B.TreeL (B.TTerm _ 0 _) : _) = C.putAssn =<< litAssn lit xs
+litAngle _ [] = C.putAssn []
+litAngle _ [B.TreeL (B.TText _ 0 "words"), B.TreeL (B.TText _ 2 ws)] =
     C.putList $ map C.pText $ words ws
-litBracket _ xs =
+litAngle _ xs =
     do toks <- tokenList xs
        ws   <- wordList toks
        makeDate ws
 
-tokenList :: [B.TokenTree] -> B.Ab [B.Token]
+tokenList :: B.TokenTreesToAb [B.Token]
 tokenList = mapM token where
     token (B.TreeL t) = Right t
     token _ = Message.adlib "not token"
@@ -193,29 +198,15 @@ int3 (ma, mb, mc) (a, b, c) =
     where
       rangeCheck m x = B.guard $ x >= 0 && x <= m
 
--- | Get single term name.
---   If 'TokenTree' contains nested term name, this function failed.
-litFlatname :: B.TokenTreeToAb String
-litFlatname (B.TreeL (B.TTerm _ 0 [n])) = Right n
-litFlatname (B.TreeL t)                 = Message.reqFlatName t
-litFlatname _                           = Message.reqTermName
-
-litContents :: (C.CContent c) => B.TokenTreeToAb c -> B.TokenTreesToAb [c]
-litContents _   [] = Right []
-litContents lit cs = mapM lt $ B.divideTreesByColon cs where
-    lt []  = Message.emptyLiteral
-    lt [x] = lit x
-    lt xs  = lit $ B.TreeB B.BracketGroup Nothing xs
-
 litAssn :: (C.CContent c) => B.TokenTreeToAb c -> B.TokenTreesToAb [B.Named c]
-litAssn lit = mapM p B.<=< litNamedTrees where
-    p (n, c) = Right . (n,) =<< lit c
+litAssn lit = mapM p B.<=< getTermedTrees where
+    p (name, tree) = Right . (name,) =<< lit tree
 
 litRel :: (C.CContent c) => B.TokenTreeToAb c -> B.TokenTreesToAb (B.Rel c)
 litRel lit cs =
     do let (h1 : b1) = B.divideTreesByBar cs
-       h2 <- mapM litFlatname $ concat $ B.divideTreesByColon h1
-       b2 <- mapM (litContents lit) b1
+       h2 <- getFlatName `mapM` (concat $ B.divideTreesByColon h1)
+       b2 <- literals lit `mapM` b1
        let b3 = B.unique b2
        if any (length h2 /=) $ map length b3
           then Message.oddRelation
@@ -228,7 +219,7 @@ litJudge :: (C.CContent c) => Char -> B.JudgePat -> B.TokenTreesToAb (B.Judge c)
 litJudge = litJudgeBy []
 
 litJudgeBy :: (C.CContent c) => LitOperators c -> Char -> B.JudgePat -> B.TokenTreesToAb (B.Judge c)
-litJudgeBy ops q p = Right . (judgeHead q) p B.<=< litAssn (litContentBy ops)
+litJudgeBy ops q p = Right . judgeHead q p B.<=< litAssn (litContentBy ops)
 
 judgeHead :: Char -> B.JudgeOf c
 judgeHead 'O' = B.JudgeAffirm
@@ -289,7 +280,7 @@ judgeHead _   = B.bug "judgeHead"
 --  >>> :m +Koshucode.Baala.Op.Vanilla.Type
 --  >>> let trees = B.tokenTrees . B.tokens
 --  >>> let lit  = litContentBy [] :: B.TokenTree -> B.Ab VContent
---  >>> let lits = litContents lit . trees
+--  >>> let lits = literals lit . trees
 --
 --  Boolean.
 --

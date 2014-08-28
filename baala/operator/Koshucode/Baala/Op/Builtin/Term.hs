@@ -4,11 +4,10 @@
 
 module Koshucode.Baala.Op.Builtin.Term
 ( termName, termNames, termNamesCo,
-  termNamePairs, termTreePairs,
+  termNamePairs,
 ) where
 
 import qualified Koshucode.Baala.Base         as B
-import qualified Koshucode.Baala.Core         as C
 import qualified Koshucode.Baala.Core.Message as Message
 
 -- | Extract a term name.
@@ -47,13 +46,4 @@ termNamePairs = loop where
            Right $ (a', b') : xs'
     loop [] = Right []
     loop _  = Message.reqTermName
-
--- | Extract a list of name-and-tree pairs.
--- 
---   >>> termTreePairs B.<=< B.tt $ "/a 'A3 /b 10 /c"
---   Right [ ("a", TreeL (TText 3 1 "A3"))
---         , ("b", TreeL (TText 7 0 "10"))
---         , ("c", TreeB 1 []) ]
-termTreePairs :: [B.TokenTree] -> B.Ab [B.Named B.TokenTree]
-termTreePairs = C.litNamedTrees
 
