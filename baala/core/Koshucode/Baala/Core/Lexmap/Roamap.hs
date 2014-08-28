@@ -53,7 +53,7 @@ roamapCons = loop where
     right trees = Right . B.Sourced (concatMap B.codePts $ B.untrees trees)
 
     loop trees =
-        B.abortableTrees "attr" trees $ case B.divideTreesByBar trees of
+        Message.abAttrTrees trees $ case B.divideTreesByBar trees of
           [ B.TreeL (B.TText _ 0 op) : xs ]
             | op == "id"        ->  right trees $ RoamapId
             | op == "fill"      ->  right trees $ RoamapFill $ fill xs
@@ -81,7 +81,7 @@ roamapRun :: Roamap -> B.AbMap C.AttrTrees
 roamapRun = loop where
     loop (B.Sourced toks rmap) roa =
         let Just pos = lookup C.attrNameTrunk roa
-        in B.abortable "attr" toks $ case rmap of
+        in Message.abAttr toks $ case rmap of
           RoamapId              ->  Right  roa
           RoamapAdd opt k xs    ->  add    roa opt (C.AttrTree k) xs
           RoamapRename (k', k)  ->  rename roa (C.AttrTree k') (C.AttrTree k)

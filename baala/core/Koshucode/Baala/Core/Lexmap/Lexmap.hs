@@ -85,7 +85,7 @@ consLexmap sorters gslot derives = lexmap where
 
     lexmap :: ConsLexmapBody
     lexmap source =
-        B.abortableTrees "lexmap" source $
+        Message.abLexmap source $
          case B.divideTreesByBar source of
            [(B.TreeL rop@(B.TText _ 0 _) : trees)] -> derived rop trees
            [(B.TreeL rop@(B.TText _ 3 _) : trees)] -> user LexmapWith rop trees
@@ -151,7 +151,7 @@ consLexmap sorters gslot derives = lexmap where
                 = let n   = lexOpName  lx
                       roa = lexAttr    lx
                       sub = lexSubmap  lx
-                  in B.abortable "slot" [lx] $ case lookup n derives of
+                  in Message.abSlot [lx] $ case lookup n derives of
                       Nothing -> B.concatMapM slot sub
                       Just (trees, roamap) ->
                             do roa2       <- C.roamapRun roamap roa

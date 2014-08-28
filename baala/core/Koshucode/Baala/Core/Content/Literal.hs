@@ -46,7 +46,7 @@ litContent = litContentBy []
 
 -- | Convert 'B.TokenTree' into internal form of content.
 litContentBy :: forall c. (C.CContent c) => LitOperators c -> B.TokenTreeToAb c
-litContentBy ops tree = B.abortableTree "literal" tree $ lit tree where
+litContentBy ops tree = Message.abLiteral tree $ lit tree where
     lit :: B.TokenTreeToAb c
     lit x@(B.TreeL tok)
         | isDecimal x = C.putDec =<< B.litDecimal =<< naked x

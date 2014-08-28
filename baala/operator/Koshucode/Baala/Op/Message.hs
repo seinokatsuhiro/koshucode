@@ -26,6 +26,9 @@ import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 import Koshucode.Baala.Core.Message
 
+
+-- ----------------------  Op package
+
 -- | check-term failed
 checkTerm :: String -> [B.TermName] -> B.Relhead -> B.Ab a
 checkTerm label ns he =

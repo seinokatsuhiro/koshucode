@@ -40,35 +40,34 @@ beta (base, deriv) he cox =
 -- beta reduction, i.e., process CoxBlank and CoxForm1.
 reduce :: forall c. (B.Write c) => C.Cox c -> B.Ab (Beta c)
 reduce = red [] where
-    a1 = B.abortable "cox-reduce"
-    a2 = B.abortable "cox-fill"
-
     red :: [C.NamedCox c] -> C.Cox c -> B.Ab (Beta c)
     red args cox = case cox of
         C.CoxLit    cp c        ->  Right $ BetaLit  cp c
         C.CoxTerm   cp n i      ->  Right $ BetaTerm cp n i
-        C.CoxLocal  cp v k      ->  a1 cp $ red args =<< kth v k args
-        C.CoxFill   cp fn xs    ->  a1 cp $ fill args fn $ substL args xs
-        C.CoxBase   cp _        ->  a1 cp $ fill args cox []
-        C.CoxWith   cp arg2 e   ->  a1 cp $ red (arg2 ++ args) e
-        C.CoxForm1  cp _ v _    ->  a1 cp $ Message.lackArg v
-        C.CoxForm   cp _ _ _    ->  a1 cp $ Message.adlib "CoxForm"
-        C.CoxBlank  cp v        ->  a1 cp $ Message.unkGlobalVar $ B.name v
+        C.CoxLocal  cp v k      ->  Message.abCoxReduce cp $ red args =<< kth v k args
+        C.CoxFill   cp fn xs    ->  Message.abCoxReduce cp $ fill args fn $ substL args xs
+        C.CoxBase   cp _        ->  Message.abCoxReduce cp $ fill args cox []
+        C.CoxWith   cp arg2 e   ->  Message.abCoxReduce cp $ red (arg2 ++ args) e
+        C.CoxForm1  cp _ v _    ->  Message.abCoxReduce cp $ Message.lackArg v
+        C.CoxForm   cp _ _ _    ->  Message.abCoxReduce cp $ Message.adlib "CoxForm"
+        C.CoxBlank  cp v        ->  Message.abCoxReduce cp $ Message.unkGlobalVar $ B.name v
 
     fill :: [C.NamedCox c] -> C.Cox c -> [B.Ab (C.Cox c)] -> B.Ab (Beta c)
     fill args f1 []             =   red args f1
     fill args f1 xxs@(x:xs)     =   case f1 of
-        C.CoxForm1  cp _ v f2   ->  a2 cp $ do x' <- x
-                                               let vx = (v, C.CoxWith cp args x')
-                                               fill (vx : args) f2 xs
-        C.CoxLocal  cp v k      ->  a2 cp $ do fn' <- kth v k args
-                                               fill args fn' xxs
-        C.CoxBase   cp (C.CopFun n f2)  ->  a2 cp $ do
-                                               xxs2 <- mapM id xxs
-                                               let xxs3 = red args `map` xxs2
-                                               Right $ BetaCall cp n f2 xxs3
-        C.CoxFill   cp f2 xs2   ->  a2 cp $ fill args f2 $ substL args xs2 ++ xxs
-        C.CoxWith   cp arg2 e2  ->  a2 cp $ fill (arg2 ++ args) e2 xxs
+        C.CoxForm1  cp _ v f2   ->  Message.abCoxFill cp $ do
+                                        x' <- x
+                                        let vx = (v, C.CoxWith cp args x')
+                                        fill (vx : args) f2 xs
+        C.CoxLocal  cp v k      ->  Message.abCoxFill cp $ do
+                                        fn' <- kth v k args
+                                        fill args fn' xxs
+        C.CoxBase   cp (C.CopFun n f2)  ->  Message.abCoxFill cp $ do
+                                        xxs2 <- mapM id xxs
+                                        let xxs3 = red args `map` xxs2
+                                        Right $ BetaCall cp n f2 xxs3
+        C.CoxFill   cp f2 xs2   ->  Message.abCoxFill cp $ fill args f2 $ substL args xs2 ++ xxs
+        C.CoxWith   cp arg2 e2  ->  Message.abCoxFill cp $ fill (arg2 ++ args) e2 xxs
         _                       ->  Message.unkShow f1
 
     substL :: [C.NamedCox c] -> [C.Cox c] -> [B.Ab (C.Cox c)]
@@ -108,7 +107,7 @@ link (base, deriv) = li where
 -- put term positions for actural heading
 position :: B.Relhead -> C.Cox c -> B.Ab (C.Cox c)
 position he = spos where
-    spos e = B.abortable "cox-position" [e] $ pos e
+    spos e = Message.abCoxPosition [e] $ pos e
     pos (C.CoxTerm cp ns _) =
         let index = B.headIndex1 he ns
         in if all (>= 0) index
@@ -146,7 +145,7 @@ coxRun args = run 0 where
     run 1000 _ = B.bug "Too deep expression"
     run lv cox =
         let run' = run $ lv + 1
-        in B.abortable "cox-calc" [cox] $ case cox of
+        in Message.abCoxCalc [cox] $ case cox of
              BetaLit  _ c       ->  Right c
              BetaTerm _ _ [p]   ->  Right $ args !!! p
              BetaTerm _ _ ps    ->  term ps args

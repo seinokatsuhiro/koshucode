@@ -48,7 +48,7 @@ relkitLink kits = linkKit where
 relkitRun :: forall c. (Ord c, C.CRel c)
     => C.Global c -> [B.Named [[c]]] -> C.RelkitBody c -> B.AbMap [[c]]
 relkitRun global rs (B.Sourced toks core) bo1 =
-    ab toks $
+    Message.abRun toks $
      case core of
        C.RelkitFull        u f     ->  right u $ f             bo1
        C.RelkitOneToMany   u f     ->  right u $ f `concatMap` bo1
@@ -66,7 +66,7 @@ relkitRun global rs (B.Sourced toks core) bo1 =
 
        C.RelkitAppend b1@(B.Sourced toks1 _) b2
                                    ->  do bo2 <- relkitRun global rs b1 bo1
-                                          ab toks1 $ relkitRun global rs b2 bo2
+                                          Message.abRun toks1 $ relkitRun global rs b2 bo2
 
        C.RelkitSource p ns         ->  let r = C.globalSelect global p ns
                                        in Right $ B.relBody r
@@ -83,7 +83,6 @@ relkitRun global rs (B.Sourced toks core) bo1 =
        C.RelkitWith with b         ->  do bo2 <- withRel with b `mapM` bo1
                                           right True $ concat bo2
     where
-      ab    = B.abortable "run"
       bmaps = map $ relkitRun global rs
 
       semi :: ([[c]] -> B.Ab Bool) -> C.RelkitBody c -> [c] -> B.Ab Bool

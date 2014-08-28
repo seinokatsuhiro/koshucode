@@ -127,7 +127,7 @@ coxCall cox g = coxMap g cox
 checkIrreducible :: B.AbMap (Cox c)
 checkIrreducible e
     | irreducible e = Right e
-    | otherwise     = B.abortable "irrep" [e] $
+    | otherwise     = Message.abCoxIrrep [e] $
                       Message.unkCox "Not irreducible"
 
 -- irreducible representation

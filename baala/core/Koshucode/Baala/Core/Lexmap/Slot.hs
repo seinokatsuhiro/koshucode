@@ -19,7 +19,7 @@ substSlot :: [GlobalSlot] -> C.AttrTrees -> B.AbMap [B.TokenTree]
 substSlot gslot roa = Right . concat B.<=< mapM (substTree gslot roa)
 
 substTree :: [GlobalSlot] -> C.AttrTrees -> B.TokenTree -> B.Ab [B.TokenTree]
-substTree gslot roa tree = B.abortableTree "slot" tree $ loop tree where
+substTree gslot roa tree = Message.abSlotTree tree $ loop tree where
     loop (B.TreeB p q sub) = do sub' <- mapM loop sub
                                 Right [B.TreeB p q $ concat sub']
     loop (B.TreeL (B.TSlot _ n name))

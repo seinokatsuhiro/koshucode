@@ -71,7 +71,7 @@ relmapSpecialize global parts = spec [] [] where
 
         post :: C.Lexmap -> B.Map (B.Ab ([C.RelkitDef c], C.Relkit c))
         post lx result =
-            B.abortable "specialize" [lx] $ do
+            Message.abSpecialize [lx] $ do
                (kdef2, kit) <- result
                Right (kdef2, C.relkitSetSource lx kit)
 

@@ -4,6 +4,28 @@ module Koshucode.Baala.Core.Message
 ( -- * Base package
   module Koshucode.Baala.Base.Message,
 
+  -- * Abortables
+  abAssert,
+  abAttr,
+  abAttrTrees,
+  abClause,
+  abCoxBuild,
+  abCoxCalc,
+  abCoxFill,
+  abCoxIrrep,
+  abCoxPosition,
+  abCoxPrefix,
+  abCoxReduce,
+  abCoxSyntax,
+  abLexmap,
+  abLiteral,
+  abRelmap,
+  abRun,
+  abShort,
+  abSlot,
+  abSlotTree,
+  abSpecialize,
+
   -- * Core package
   ambInfixes,
   dupAttr,
@@ -45,6 +67,71 @@ module Koshucode.Baala.Core.Message
 import qualified Koshucode.Baala.Base as B
 import Koshucode.Baala.Base.Message
 
+
+-- ----------------------  Abortables
+
+abAssert :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abAssert = B.abortable "assert"
+
+abAttr :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abAttr = B.abortable "attr"
+
+abAttrTrees :: B.TokenTreesTo (B.Map (B.Ab b))
+abAttrTrees = B.abortableTrees "attr"
+
+abClause :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abClause = B.abortable "clause"
+
+abCoxBuild :: B.TokenTreeTo (B.Map (B.Ab b))
+abCoxBuild = B.abortableTree "cox-build"
+
+abCoxCalc :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abCoxCalc = B.abortable "cox-calc"
+
+abCoxFill :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abCoxFill = B.abortable "cox-fill"
+
+abCoxIrrep :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abCoxIrrep = B.abortable "cox-irrep"
+
+abCoxPosition :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abCoxPosition = B.abortable "cox-position"
+
+abCoxPrefix :: B.TokenTreeTo (B.Map (B.Ab b))
+abCoxPrefix = B.abortableTree "cox-prefix"
+
+abCoxReduce :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abCoxReduce = B.abortable "cox-reduce"
+
+abCoxSyntax :: B.TokenTreeTo (B.Map (B.Ab b))
+abCoxSyntax = B.abortableTree "cox-syntax"
+
+abLexmap :: B.TokenTreesTo (B.Map (B.Ab b))
+abLexmap = B.abortableTrees "lexmap"
+
+abLiteral :: B.TokenTreeTo (B.Map (B.Ab b))
+abLiteral = B.abortableTree "literal"
+
+abRelmap :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abRelmap = B.abortable "relmap"
+
+abRun :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abRun = B.abortable "run"
+
+abShort :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abShort = B.abortable "short"
+
+abSlot :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abSlot = B.abortable "slot"
+
+abSlotTree :: B.TokenTreeTo (B.Map (B.Ab b))
+abSlotTree = B.abortableTree "slot"
+
+abSpecialize :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abSpecialize = B.abortable "specialize"
+
+
+-- ----------------------  Core package
 
 -- | Ambiguous infix operators
 ambInfixes :: [String] -> B.Ab a

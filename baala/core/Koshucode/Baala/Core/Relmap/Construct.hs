@@ -63,7 +63,7 @@ consRelmap global conses = relmap where
              C.LexmapDerived -> Right $ C.RelmapLink lx rop roa
              C.LexmapBase    -> case lookup rop conses of
                                  Nothing   -> Message.unkRelmap rop
-                                 Just cons -> B.abortable "relmap" [lx] $
+                                 Just cons -> Message.abRelmap [lx] $
                                               do rmaps <- mapM relmap lxs
                                                  cons $ C.RopUse global lx rmaps
 

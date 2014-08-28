@@ -35,7 +35,7 @@ runAssertDataset global (B.Short _ sh asserts) dataset =
     where
       each (C.Assert _ _ _ _ _ Nothing _) = B.bug "runAssertDataset"
       each a@(C.Assert typ pat opt _ _ (Just relmap) libs) =
-          B.abortable "assert" [a] $ do
+          Message.abAssert [a] $ do
             r1 <- runRelmapDataset global dataset libs relmap B.reldee
             let judgeOf showEmpty = assert showEmpty typ
             optionProcess sh judgeOf pat opt r1

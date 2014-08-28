@@ -39,9 +39,6 @@ type RopGet c a
     -> String       -- ^ Name of keyword, e.g., @\"-term\"@
     -> B.Ab a       -- ^ Attribute of relmap
 
-ab :: [B.TokenTree] -> B.Map (B.Ab b)
-ab = B.abortableTrees "attr"
-
 lookupTree, lookupRelmap :: String -> C.RopUse c -> Maybe [B.TokenTree]
 lookupTree   = lookupAttr C.AttrTree
 lookupRelmap = lookupAttr C.AttrRelmap
@@ -52,14 +49,14 @@ lookupAttr c name = lookup (c name) . C.lexAttr . C.ropLexmap
 getAbortable :: ([B.TokenTree] -> B.Ab b) -> RopGet c b
 getAbortable f u name =
     do trees <- getTrees u name
-       ab trees $ f trees
+       Message.abAttrTrees trees $ f trees
 
 getAbortableOption :: b -> ([B.TokenTree] -> B.Ab b) -> RopGet c b
 getAbortableOption y f u name =
     do m <- getMaybe getTrees u name
        case m of
          Nothing    -> Right y
-         Just trees -> ab trees $ f trees
+         Just trees -> Message.abAttrTrees trees $ f trees
 
 
 -- ----------------------  Basic
@@ -143,7 +140,7 @@ getRelmap :: C.RopUse c -> String -> B.Ab (C.Relmap c)
 getRelmap u name =
     do ms    <- getRelmaps u
        trees <- getRelmapRaw u name
-       ab trees $ case ms of
+       Message.abAttrTrees trees $ case ms of
          [m] -> Right m
          _   -> Message.unexpAttr "Require one relmap"
 

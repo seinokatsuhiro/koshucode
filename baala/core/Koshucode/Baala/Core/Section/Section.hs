@@ -113,7 +113,7 @@ consSectionEach root resource (B.Short pt shorts xs) =
 
       pass f (C.Clause src body) = f (B.front $ B.clauseTokens src) body
       consSec = consSection root (B.ResourceText "")
-      ab f toks body = B.abortable "clause" toks $ f toks body
+      ab f toks body = Message.abClause toks $ f toks body
 
       -- todo: multiple section name
       name ((C.Clause _ (C.CSection n)) : _) = n
@@ -160,7 +160,7 @@ consSectionEach root resource (B.Short pt shorts xs) =
 
       checkShort :: [B.ShortDef] -> B.Ab ()
       checkShort sh =
-          B.abortable "short" pt $ do
+          Message.abShort pt $ do
             let (ss, rs) = unzip sh
                 prefix   = B.duplicates ss
                 replace  = B.duplicates rs

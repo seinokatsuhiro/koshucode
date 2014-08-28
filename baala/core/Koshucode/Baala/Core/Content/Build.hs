@@ -79,7 +79,7 @@ convCox syn = expand where
 -- construct content expression from token tree
 construct :: forall c. (C.CContent c) => B.TokenTree -> B.Ab (C.Cox c)
 construct = expr where
-    expr tree = B.abortableTree "cox-build" tree $
+    expr tree = Message.abCoxBuild tree $
          let cp = concatMap B.codePts $ B.front $ B.untree tree
          in cons cp tree
 
@@ -129,7 +129,7 @@ isNameFirst c = case B.generalCategoryGroup c of
 -- convert from infix operator to prefix
 prefix :: [B.Named B.InfixHeight] -> B.AbMap B.TokenTree
 prefix htab tree =
-    B.abortableTree "cox-prefix" tree $
+    Message.abCoxPrefix tree $
      case B.infixToPrefix conv ht (B.TreeB B.BracketGroup Nothing) mapper tree of
        Right tree3 -> Right $ undoubleGroup tree3
        Left  xs    -> Message.ambInfixes $ map detail xs
@@ -173,7 +173,7 @@ convTree syn = expand where
     expand tree@(B.TreeB B.BracketGroup p subtrees) =
         case subtrees of
           op@(B.TreeL (B.TText _ 0 name)) : args
-              -> B.abortableTree "cox-syntax" tree $
+              -> Message.abCoxSyntax tree $
                  case lookup name assoc of
                    Just (C.CopTree _ f) -> expand =<< f args
                    _                    -> do args2 <- mapM expand args
