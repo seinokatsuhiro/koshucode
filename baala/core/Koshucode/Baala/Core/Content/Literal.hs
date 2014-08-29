@@ -6,11 +6,8 @@
 
 module Koshucode.Baala.Core.Content.Literal
 (
-  -- * Types
-  LitOperators,
-
   -- * Functions
-  litOperators,
+  CalcContent,
   litContent,
   litJudge,
   getTermedTrees,
@@ -33,20 +30,13 @@ import qualified Koshucode.Baala.Core.Content.Class  as C
 import qualified Koshucode.Baala.Core.Message        as Message
 
 
-type LitOperators a = [B.Named (B.TokenTreeToAb a -> B.TokenTreesToAb a)]
-
-
 -- ----------------------  General content
 
-litOperators :: (C.CContent c) => LitOperators c
-litOperators = []
-
-litContent :: (C.CContent c) => B.TokenTreeToAb c
-litContent = litContentBy []
+type CalcContent c = B.TokenTreeToAb c
 
 -- | Convert 'B.TokenTree' into internal form of content.
-litContentBy :: forall c. (C.CContent c) => LitOperators c -> B.TokenTreeToAb c
-litContentBy ops tree = Message.abLiteral tree $ lit tree where
+litContent :: forall c. (C.CContent c) => CalcContent c -> B.TokenTreeToAb c
+litContent calc tree = Message.abLiteral tree $ lit tree where
     lit :: B.TokenTreeToAb c
     lit x@(B.TreeL tok)
         | isDecimal x = C.putDec =<< B.litDecimal =<< naked x
@@ -65,17 +55,11 @@ litContentBy ops tree = Message.abLiteral tree $ lit tree where
         _  ->  Message.adlib "Unknown bracket type"
 
     group :: B.TokenTreesToAb c
+    group [B.TreeL (B.TText _  _ "'"), e@(B.TreeB B.BracketGroup _ _)] = calc e
     group xs@(x : _)
         | isDecimal x = do xs2 <- mapM naked xs
                            dec <- B.litDecimal $ concat xs2
                            C.putDec dec
-
-    -- tagged sequence
-    group (B.TreeL (B.TText _ 0 tag) : xs) =
-        case lookup tag ops of
-          Just f  -> f lit xs
-          Nothing -> Message.unkCop tag
-    
     group [] = Right C.empty
     group xs = Message.unkWord $ treesContent xs  -- unknown sequence
 
@@ -215,11 +199,8 @@ litRel lit cs =
 -- | Convert token trees into a judge.
 --   Judges itself are not content type.
 --   It can be only used in the top-level of sections.
-litJudge :: (C.CContent c) => Char -> B.JudgePat -> B.TokenTreesToAb (B.Judge c)
-litJudge = litJudgeBy []
-
-litJudgeBy :: (C.CContent c) => LitOperators c -> Char -> B.JudgePat -> B.TokenTreesToAb (B.Judge c)
-litJudgeBy ops q p = Right . judgeHead q p B.<=< litAssn (litContentBy ops)
+litJudge :: (C.CContent c) => CalcContent c -> Char -> B.JudgePat -> B.TokenTreesToAb (B.Judge c)
+litJudge calc q p = Right . judgeHead q p B.<=< litAssn (litContent calc)
 
 judgeHead :: Char -> B.JudgeOf c
 judgeHead 'O' = B.JudgeAffirm
@@ -231,7 +212,7 @@ judgeHead _   = B.bug "judgeHead"
 -- ------------------------------------------------------------------
 -- $Types
 --
---  'litContentBy' recognizes the following types.
+--  'litContent' recognizes the following types.
 --
 --  [Boolean]   Boolean used for something is hold or unhold.
 --              Textual forms: @\#true@, @\#fasle@.
@@ -279,7 +260,7 @@ judgeHead _   = B.bug "judgeHead"
 --
 --  >>> :m +Koshucode.Baala.Op.Vanilla.Type
 --  >>> let trees = B.tokenTrees . B.tokens
---  >>> let lit  = litContentBy [] :: B.TokenTree -> B.Ab VContent
+--  >>> let lit  = litContent [] :: B.TokenTree -> B.Ab VContent
 --  >>> let lits = literals lit . trees
 --
 --  Boolean.

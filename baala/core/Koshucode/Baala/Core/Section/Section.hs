@@ -32,6 +32,7 @@ import qualified Koshucode.Baala.Core.Message         as Message
 
 data Section c = Section {
       secName     :: Maybe String        -- ^ Section name
+    , secGlobal   :: C.Global c          -- ^ Global parameter
     , secImport   :: [Section c]         -- ^ Importing section
     , secExport   :: [String]            -- ^ Exporting relmap names
     , secSlot     :: [B.NamedTrees]      -- ^ Global slots
@@ -60,7 +61,7 @@ appendSection s1 s2 =
 
 -- | Section that has no contents.
 emptySection :: Section c
-emptySection = Section Nothing [] [] [] [] [] [] res cons [] where
+emptySection = Section Nothing C.global [] [] [] [] [] [] res cons [] where
     res  = B.ResourceText ""
     cons = C.relmapCons C.global
 
@@ -149,7 +150,9 @@ consSectionEach root resource (B.Short pt shorts xs) =
 
       judge :: Clab (B.Judge c)
       judge _ (C.CJudge q p toks) =
-          C.litJudge q p =<< B.tokenTrees toks
+          C.litJudge calc q p =<< B.tokenTrees toks
+
+      calc = secCalc root
 
       assert :: Clab (C.Assert c)
       assert src (C.CAssert typ pat opt toks) =
@@ -175,6 +178,16 @@ consSectionEach root resource (B.Short pt shorts xs) =
 
 type Cl   a = [B.Token] -> C.ClauseBody -> a
 type Clab a = Cl (B.Ab a)
+
+secCalc :: (C.CContent c) => Section c -> C.CalcContent c
+secCalc = calcTree . secGlobal
+
+calcTree :: (C.CContent c) => C.Global c -> C.CalcContent c
+calcTree g = calc where
+    base       =  C.globalFunction g
+    syntax     =  C.globalSyntax   g
+    calc tree  =  do alpha <- C.coxBuild calc syntax tree
+                     C.coxRunCox (base, []) B.mempty [] alpha
 
 
 -- ----------------------  Clause type

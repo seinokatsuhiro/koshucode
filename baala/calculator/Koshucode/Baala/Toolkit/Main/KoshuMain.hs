@@ -111,7 +111,8 @@ koshuMain global =
              sec  = C.SectionBundle root text files []
              text = concatMap oneLiner opts
              cmd  = prog : argv
-             root = C.emptySection { C.secCons = C.relmapCons g2 }
+             root = C.emptySection { C.secGlobal = g2
+                                   , C.secCons   = C.relmapCons g2 }
              g2   = C.globalFill global
                     { C.globalProgram = prog
                     , C.globalArgs    = argv }

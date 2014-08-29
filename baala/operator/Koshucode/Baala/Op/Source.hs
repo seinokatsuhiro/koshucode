@@ -67,7 +67,7 @@ ropsSource = Op.ropList "source"
 consConst :: (C.CContent c) => C.RopCons c
 consConst use =
     do tree <- Op.getTree use "-lit"
-       lit  <- C.litContent tree
+       lit  <- C.litContent undefined tree
        case C.isRel lit of
          True  -> Right $ relmapConst use $ C.gRel lit
          False -> Message.reqRel

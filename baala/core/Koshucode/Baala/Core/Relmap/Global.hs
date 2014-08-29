@@ -50,7 +50,7 @@ global = Global
          , globalJudges   =  []
          , globalSelect   =  \_ _ -> B.reldee }
 
-globalSyntax :: GlobalWith rop c -> ([C.Cop c], [B.Named B.InfixHeight])
+globalSyntax :: GlobalWith rop c -> C.CoxSyntax c
 globalSyntax g = (syn, htab) where
     syn  = filter C.isCopSyntax $ fst cops
     htab = snd cops

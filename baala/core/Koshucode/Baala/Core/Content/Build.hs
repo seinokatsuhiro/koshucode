@@ -4,7 +4,7 @@
 -- | Term-content calcutation.
 
 module Koshucode.Baala.Core.Content.Build
-( coxBuild, coxForm,
+( CoxSyntax, coxBuild, coxForm,
 ) where
 
 import qualified Koshucode.Baala.Base                   as B
@@ -13,18 +13,19 @@ import qualified Koshucode.Baala.Core.Content.Cox       as C
 import qualified Koshucode.Baala.Core.Content.Literal   as C
 import qualified Koshucode.Baala.Core.Message           as Message
 
+type CoxSyntax c = ( [C.Cop c], [B.Named B.InfixHeight] )
 
 -- | Construct content expression from token tree
 coxBuild :: forall c. (C.CContent c)
-  => ([C.Cop c], [B.Named B.InfixHeight]) -> B.TokenTree -> B.Ab (C.Cox c)
-coxBuild (syn, htab) =
-    convCox syn           -- convert cox to cox
+  => C.CalcContent c -> CoxSyntax c -> B.TokenTreeToAb (C.Cox c)
+coxBuild calc (syn, htab) =
+    convCox syn             -- convert cox to cox
       B.<=< Right
-      . debruijn          -- attach De Bruijn indicies
-      . coxUnfold         -- expand multiple-blank form
-      B.<=< construct     -- construct content expression from token tree
-      B.<=< prefix htab   -- convert infix operator to prefix
-      B.<=< convTree syn  -- convert token tree to token tree
+      . debruijn            -- attach De Bruijn indicies
+      . coxUnfold           -- expand multiple-blank form
+      B.<=< construct calc  -- construct content expression from token tree
+      B.<=< prefix htab     -- convert infix operator to prefix
+      B.<=< convTree syn    -- convert token tree to token tree
 
 debruijn :: B.Map (C.Cox c)
 debruijn = index [] where
@@ -77,14 +78,14 @@ convCox syn = expand where
            Right $ C.CoxFill cp f' xs'
     
 -- construct content expression from token tree
-construct :: forall c. (C.CContent c) => B.TokenTree -> B.Ab (C.Cox c)
-construct = expr where
+construct :: forall c. (C.CContent c) => C.CalcContent c -> B.TokenTreeToAb (C.Cox c)
+construct calc = expr where
     expr tree = Message.abCoxBuild tree $
          let cp = concatMap B.codePts $ B.front $ B.untree tree
          in cons cp tree
 
     -- fill args in the blanks (application)
-    cons :: [B.CodePt] -> B.TokenTree -> B.Ab (C.Cox c)
+    cons :: [B.CodePt] -> B.TokenTreeToAb (C.Cox c)
     cons cp (B.TreeB B.BracketGroup _ (fun : args)) =
         do fun'  <- expr fun
            args' <- expr `mapM` args
@@ -100,17 +101,17 @@ construct = expr where
         B.bug $ "core/abstruction: " ++ show (length trees)
 
     -- compound literal
-    cons cp tree@(B.TreeB _ _ _) = fmap (C.CoxLit cp) $ C.litContent tree
+    cons cp tree@(B.TreeB _ _ _) = fmap (C.CoxLit cp) $ C.litContent calc tree
 
     -- literal or variable
     cons cp tree@(B.TreeL tok) = case tok of
         B.TTerm _ 0 ns ->  Right $ C.CoxTerm  cp ns []
         B.TName _ op   ->  Right $ C.CoxBlank cp op
         B.TText _ 0 n | isName n ->  Right $ C.CoxBlank cp $ B.BlankNormal n
-        B.TText _ _ _  ->  Right . C.CoxLit cp =<< C.litContent tree
+        B.TText _ _ _  ->  Right . C.CoxLit cp =<< C.litContent calc tree
         _              ->  B.bug "core/leaf"
 
-    untag :: B.TokenTree -> (Maybe String, B.TokenTree)
+    untag :: B.TokenTreeTo (Maybe String, B.TokenTree)
     untag (B.TreeB l p (B.TreeL (B.TText _ 1 tag) : vars))
                = (Just tag, B.TreeB l p $ vars)
     untag vars = (Nothing, vars)

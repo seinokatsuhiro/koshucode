@@ -45,10 +45,10 @@ getNamedCoxes use = ropNamedAlphas use B.<=< Op.getWordTrees use
 getTermCoxes :: (C.CContent c) => C.RopUse c -> String -> B.Ab [C.NamedCox c]
 getTermCoxes use = ropNamedAlphas use B.<=< Op.getTermTrees use
 
-ropBuild :: (C.CContent c) => C.RopUse c -> B.TokenTree -> B.Ab (C.Cox c)
-ropBuild = C.coxBuild . C.globalSyntax . C.ropGlobal
+ropBuild :: (C.CContent c) => C.RopUse c -> B.TokenTreeToAb (C.Cox c)
+ropBuild = C.coxBuild undefined . C.globalSyntax . C.ropGlobal
 
-ropNamedAlphas :: (C.CContent c) => C.RopUse c -> [B.Named B.TokenTree] -> B.Ab [C.NamedCox c]
+ropNamedAlphas :: (C.CContent c) => C.RopUse c -> [B.NamedTree] -> B.Ab [C.NamedCox c]
 ropNamedAlphas use = mapM (B.namedMapM $ ropBuild use)
 
 
@@ -109,7 +109,7 @@ getContents use name =
        let trees2 = B.wrapTrees `map` B.divideTreesByColon trees
        runCoxTree use `mapM` trees2
 
-runCoxTree :: (C.CContent c) => C.RopUse c -> B.TokenTree -> B.Ab c
+runCoxTree :: (C.CContent c) => C.RopUse c -> C.CalcContent c
 runCoxTree use tree =
     do alpha <- ropBuild use tree
        C.coxRunCox (ropBase use, []) B.mempty [] alpha
