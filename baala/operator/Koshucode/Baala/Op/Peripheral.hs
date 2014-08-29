@@ -16,8 +16,11 @@ module Koshucode.Baala.Op.Peripheral
   -- * unassn
   consUnassn, relmapUnassn, relkitUnassn,
 
-  -- * typename
-  consTypename,
+  -- * term-name
+  consTermName, relmapTermName, relkitTermName,
+
+  -- * type-name
+  consTypeName,
 ) where
 
 import qualified Koshucode.Baala.Base         as B
@@ -40,7 +43,8 @@ ropsPeripheral = Op.ropList "peripheral"
     [ Op.ropV  consAssn      "assn /P ... -to N"       "-term | -to"
     , Op.ropE  consMember    "member /N /N"            "-1 -2"
     , Op.ropIV consRdf       "rdf P /S /O"             "-pattern -term"
-    , Op.ropV  consTypename  "typename /N /P ..."      "-term"
+    , Op.ropI  consTermName  "term-name /N"            "-term"
+    , Op.ropV  consTypeName  "type-name /N /P ..."     "-term"
     , Op.ropI  consUnassn    "unassn /P -only /P ..."  "-from | -only"
     ]
 
@@ -167,11 +171,30 @@ assnPick ns assn = mapM pick ns where
                Nothing  ->  Message.adlib "no term"
 
 
--- ----------------------  typename
+-- ----------------------  term-name
+
+consTermName :: (C.CTerm c) => C.RopCons c
+consTermName use =
+  do n <- Op.getTerm use "-term"
+     Right $ relmapTermName use n
+
+relmapTermName :: (C.CTerm c) => C.RopUse c -> B.TermName -> C.Relmap c
+relmapTermName use n = C.relmapFlow use $ relkitTermName n
+
+relkitTermName :: (C.CTerm c) => B.TermName -> C.RelkitFlow c
+relkitTermName _ Nothing    = Message.noAttr
+relkitTermName n (Just he1) = Right kit2 where
+    he2       = B.headFrom [n]
+    kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
+    kitf2 _   = map term $ B.headNames he1
+    term t    = [C.pTerm t]
+
+
+-- ----------------------  type-name
 
 -- | Get typename.
-consTypename :: (C.CContent c) => C.RopCons c
-consTypename use =
+consTypeName :: (C.CContent c) => C.RopCons c
+consTypeName use =
   do np <- Op.getTermPairs use "-term"
      Right $ C.relmapFlow use $ relkitTypename np
 

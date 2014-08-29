@@ -9,6 +9,9 @@ module Koshucode.Baala.Op.Gadget
   -- * size
   consSize, relmapSize, relkitSize,
   -- $size
+
+  -- * dump-tree
+  consDumpTree,
 ) where
 
 import qualified Koshucode.Baala.Base       as B
