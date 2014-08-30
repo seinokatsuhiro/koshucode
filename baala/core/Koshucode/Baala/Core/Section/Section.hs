@@ -7,6 +7,8 @@ module Koshucode.Baala.Core.Section.Section
 (
   -- * Data type
   Section (..),
+  calcTreeUsing,
+  coxTreeUsing,
 
   -- * Constructors
   emptySection,
@@ -185,14 +187,17 @@ type Cl   a = [B.Token] -> C.ClauseBody -> a
 type Clab a = Cl (B.Ab a)
 
 secCalc :: (C.CContent c) => Section c -> C.CalcContent c
-secCalc = calcTree . secGlobal
+secCalc = calcTreeUsing . secGlobal
 
-calcTree :: (C.CContent c) => C.Global c -> C.CalcContent c
-calcTree g = calc where
+calcTreeUsing :: (C.CContent c) => C.Global c -> C.CalcContent c
+calcTreeUsing g = calc where
     base       =  C.globalFunction g
     syntax     =  C.globalSyntax   g
     calc tree  =  do alpha <- C.coxBuild calc syntax tree
                      C.coxRunCox (base, []) B.mempty [] alpha
+
+coxTreeUsing :: (C.CContent c) => C.Global c -> B.TokenTreeToAb (C.Cox c)
+coxTreeUsing = C.coxBuild undefined . C.globalSyntax
 
 
 -- ----------------------  Clause type

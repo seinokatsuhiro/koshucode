@@ -25,11 +25,6 @@ import qualified Koshucode.Baala.Core        as C
 import qualified Koshucode.Baala.Op.Builtin  as Op
 import qualified Koshucode.Baala.Op.Message  as Message
 
--- | Get list of content operators.
-ropBase :: C.RopUse c -> [C.Cop c]
-ropBase = C.globalFunction . C.ropGlobal
-
-
 
 -- --------------------------------------------  Cox
 
@@ -46,7 +41,7 @@ getTermCoxes :: (C.CContent c) => C.RopUse c -> String -> B.Ab [C.NamedCox c]
 getTermCoxes use = ropNamedAlphas use B.<=< Op.getTermTrees use
 
 ropBuild :: (C.CContent c) => C.RopUse c -> B.TokenTreeToAb (C.Cox c)
-ropBuild = C.coxBuild undefined . C.globalSyntax . C.ropGlobal
+ropBuild = C.coxTreeUsing . C.ropGlobal
 
 ropNamedAlphas :: (C.CContent c) => C.RopUse c -> [B.NamedTree] -> B.Ab [C.NamedCox c]
 ropNamedAlphas use = mapM (B.namedMapM $ ropBuild use)
@@ -58,6 +53,10 @@ getWhere :: (C.CContent c) => C.RopUse c -> String -> B.Ab ([C.Cop c], [C.NamedC
 getWhere u name =
     do wh <- Op.getOption [] getWhereBody u name
        Right (ropBase u, wh)
+
+-- | Get list of content operators.
+ropBase :: C.RopUse c -> [C.Cop c]
+ropBase = C.globalFunction . C.ropGlobal
 
 getWhereBody :: (C.CContent c) => C.RopUse c -> String -> B.Ab [C.NamedCox c]
 getWhereBody u name =
@@ -100,19 +99,17 @@ getTextFromTree _ = Message.adlib "getTextFromTree"
 getContent :: (C.CContent c) => C.RopUse c -> String -> B.Ab c
 getContent use name =
     do tree <- Op.getTree use name
-       runCoxTree use tree
+       calcTree use tree
 
 -- | Get relmap attribute as list of calculated contents.
 getContents :: (C.CContent c) => C.RopUse c -> String -> B.Ab [c]
 getContents use name =
     do trees <- Op.getTrees use name
        let trees2 = B.wrapTrees `map` B.divideTreesByColon trees
-       runCoxTree use `mapM` trees2
+       calcTree use `mapM` trees2
 
-runCoxTree :: (C.CContent c) => C.RopUse c -> C.CalcContent c
-runCoxTree use tree =
-    do alpha <- ropBuild use tree
-       C.coxRunCox (ropBase use, []) B.mempty [] alpha
+calcTree :: (C.CContent c) => C.RopUse c -> C.CalcContent c
+calcTree = C.calcTreeUsing . C.ropGlobal
 
 -- | Get relmap attribute as optional content.
 getOptContent :: (C.CContent c) => c -> C.RopUse c -> String -> B.Ab c

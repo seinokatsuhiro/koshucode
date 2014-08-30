@@ -4,10 +4,6 @@
 module Koshucode.Baala.Op.Source
 ( ropsSource,
 
-  -- * const
-  consConst, relmapConst, relkitConst,
-  -- $const
-
   -- * dee & dum
   consDee, consDum,
   -- $deedum
@@ -27,7 +23,6 @@ module Koshucode.Baala.Op.Source
 import qualified Koshucode.Baala.Base        as B
 import qualified Koshucode.Baala.Core        as C
 import qualified Koshucode.Baala.Op.Builtin  as Op
-import qualified Koshucode.Baala.Op.Message  as Message
 
 
 -- | Implementation of relational operators.
@@ -43,42 +38,12 @@ import qualified Koshucode.Baala.Op.Message  as Message
 ropsSource :: (C.CContent c) => [C.Rop c]
 ropsSource = Op.ropList "source"
     --          CONSTRUCTOR     USAGE               ATTRIBUTE
-    [ Op.ropI   consConst       "const R"           "-lit"
-    , Op.ropN   consDee         "dee"               ""
+    [ Op.ropN   consDee         "dee"               ""
     , Op.ropN   consDum         "dum"               ""
     , Op.ropV   consEmpty       "empty /N ..."      "-term"
     , Op.ropIV  consSource      "source P /N ..."   "-pattern -term"
     , Op.ropII  consSourceTerm  "source-term P R"   "-pattern -relmap/"
     ]
-
-
--- ----------------------  const
-
--- $const
---
---  Same as relmap @dee@
---  
---    > const {| | |}
---
---  Same as relmap @dum@
---  
---    > const {| |}
-
-consConst :: (C.CContent c) => C.RopCons c
-consConst use =
-    do tree <- Op.getTree use "-lit"
-       lit  <- C.literal undefined tree
-       case C.isRel lit of
-         True  -> Right $ relmapConst use $ C.gRel lit
-         False -> Message.reqRel
-
-relmapConst :: C.RopUse c -> B.Rel c -> C.Relmap c
-relmapConst use = C.relmapFlow use . relkitConst
-
-relkitConst :: B.Rel c -> C.RelkitFlow c
-relkitConst _ Nothing = Right C.relkitNothing
-relkitConst (B.Rel he bo) _ = Right kit2 where
-    kit2 = C.relkitJust he $ C.RelkitConst bo
 
 
 -- ----------------------  empty

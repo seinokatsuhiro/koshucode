@@ -28,10 +28,39 @@ import qualified Koshucode.Baala.Op.Message  as Message
 ropsCoxGadget :: (C.CContent c) => [C.Rop c]
 ropsCoxGadget = Op.ropList "cox-gadget"
     --         CONSTRUCTOR   USAGE                      ATTRIBUTE
-    [ Op.ropI  consNumber    "number /N -order /N ..."  "-term | -order -from"
+    [ Op.ropI  consConst     "const R"                  "-lit"
+    , Op.ropI  consNumber    "number /N -order /N ..."  "-term | -order -from"
     , Op.ropI  consRank      "rank /N -order /N ..."    "-term | -order -from -dense"
     , Op.ropII consRepeat    "repeat N R"               "-count -relmap/"
     ]
+
+
+-- ----------------------  const
+
+-- $const
+--
+--  Same as relmap @dee@
+--  
+--    > const {| | |}
+--
+--  Same as relmap @dum@
+--  
+--    > const {| |}
+
+consConst :: (C.CContent c) => C.RopCons c
+consConst use =
+    do lit <- Op.getContent use "-lit"
+       case C.isRel lit of
+         True  -> Right $ relmapConst use $ C.gRel lit
+         False -> Message.reqRel
+
+relmapConst :: C.RopUse c -> B.Rel c -> C.Relmap c
+relmapConst use = C.relmapFlow use . relkitConst
+
+relkitConst :: B.Rel c -> C.RelkitFlow c
+relkitConst _ Nothing = Right C.relkitNothing
+relkitConst (B.Rel he bo) _ = Right kit2 where
+    kit2 = C.relkitJust he $ C.RelkitConst bo
 
 
 -- ----------------------  number
