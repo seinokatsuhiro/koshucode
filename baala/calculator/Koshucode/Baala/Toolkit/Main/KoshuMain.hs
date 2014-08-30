@@ -97,25 +97,24 @@ koshuMain global =
   do (prog, argv) <- L.prelude
      case getOpt Permute koshuOptions argv of
        (opts, files, [])
-           | has OptHelp         -> L.putSuccess usage
-           | has OptVersion      -> L.putSuccess $ version ++ "\n"
-           | has OptShowEncoding -> L.putSuccess =<< L.currentEncodings
-           -- | has OptPretty       -> prettySection sec
-           | has OptStdin        -> runStdin   sec
-           | has OptListRop      -> putRop     $ C.globalRops g2
-           | has OptElement      -> putElems   sec
-           | has OptCalc         -> L.runCalc  cmd sec
-           | otherwise           -> L.runFiles g2 sec
+           | has OptHelp         ->  L.putSuccess usage
+           | has OptVersion      ->  L.putSuccess $ version ++ "\n"
+           | has OptShowEncoding ->  L.putSuccess =<< L.currentEncodings
+           -- | has OptPretty    ->  prettySection sec
+           | has OptStdin        ->  runStdin   sec
+           | has OptListRop      ->  putRop     $ C.globalRops g2
+           | has OptElement      ->  putElems   sec
+           | has OptCalc         ->  L.runCalc  cmd sec
+           | otherwise           ->  L.runFiles g2 sec
            where
-             has  = (`elem` opts)
-             sec  = C.SectionBundle root text files []
-             text = concatMap oneLiner opts
-             cmd  = prog : argv
-             root = C.emptySection { C.secGlobal = g2
-                                   , C.secCons   = C.relmapCons g2 }
-             g2   = C.globalFill global
-                    { C.globalProgram = prog
-                    , C.globalArgs    = argv }
+             has   =  (`elem` opts)
+             sec   =  C.SectionBundle root text files []
+             text  =  concatMap oneLiner opts
+             cmd   =  prog : argv
+             root  =  C.rootSection g2
+             g2    =  C.globalFill global
+                      { C.globalProgram = prog
+                      , C.globalArgs    = argv }
 
        (_, _, errs) -> L.putFailure $ concat errs
 

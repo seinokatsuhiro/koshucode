@@ -38,6 +38,7 @@ module Koshucode.Baala.Core.Message
   noFile,
   noSlotName,
   noSlotIndex,
+  nothing,
   oddRelation,
   reqFlatName,
   reqAttr,
@@ -161,6 +162,10 @@ extraAttr = Left $ B.abortBecause "Extra attribute"
 invalidPrefix :: [String] -> B.Ab a
 invalidPrefix = Left . B.abortLine "Invalid prefix character" . unwords
 
+-- | Lack of argument
+lackArg :: String -> B.Ab a
+lackArg = Left . B.abortLine "Lack of argument"
+
 -- | File not found
 noFile :: String -> B.Ab a
 noFile = Left . B.abortLine "File not found"
@@ -177,6 +182,10 @@ noSlotName n name = Left $ B.abortLine "No slot content" $ detail n where
 noSlotIndex :: [String] -> Int -> B.Ab a
 noSlotIndex xs n = Left $ B.abortLines "No slot content" $
                    ("No index @'" ++ show n ++ " in") : xs
+
+-- | Nothing
+nothing :: B.Ab a
+nothing = Left $ B.abortBecause "Nothing"
 
 -- | Odd relation literal
 oddRelation :: B.Ab a
@@ -198,10 +207,6 @@ reqAttrName = Left . B.abortLine "Require attribute name, e.g., -xxx"
 -- | Require term name
 reqTermName :: B.Ab a
 reqTermName = Left $ B.abortBecause "Require term name"
-
--- | Lack of argument
-lackArg :: String -> B.Ab a
-lackArg = Left . B.abortLine "Lack of argument"
 
 -- | Unexpected attribute
 unexpAttr :: String -> B.Ab a

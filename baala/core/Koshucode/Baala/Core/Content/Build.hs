@@ -101,14 +101,14 @@ construct calc = expr where
         B.bug $ "core/abstruction: " ++ show (length trees)
 
     -- compound literal
-    cons cp tree@(B.TreeB _ _ _) = fmap (C.CoxLit cp) $ C.litContent calc tree
+    cons cp tree@(B.TreeB _ _ _) = fmap (C.CoxLit cp) $ C.literal calc tree
 
     -- literal or variable
     cons cp tree@(B.TreeL tok) = case tok of
         B.TTerm _ 0 ns ->  Right $ C.CoxTerm  cp ns []
         B.TName _ op   ->  Right $ C.CoxBlank cp op
         B.TText _ 0 n | isName n ->  Right $ C.CoxBlank cp $ B.BlankNormal n
-        B.TText _ _ _  ->  Right . C.CoxLit cp =<< C.litContent calc tree
+        B.TText _ _ _  ->  Right . C.CoxLit cp =<< C.literal calc tree
         _              ->  B.bug "core/leaf"
 
     untag :: B.TokenTreeTo (Maybe String, B.TokenTree)

@@ -8,8 +8,8 @@ module Koshucode.Baala.Core.Content.Literal
 (
   -- * Functions
   CalcContent,
-  litContent,
-  litJudge,
+  literal,
+  getJudge,
   getTermedTrees,
   -- $Function
 
@@ -35,16 +35,17 @@ import qualified Koshucode.Baala.Core.Message        as Message
 type CalcContent c = B.TokenTreeToAb c
 
 -- | Convert 'B.TokenTree' into internal form of content.
-litContent :: forall c. (C.CContent c) => CalcContent c -> B.TokenTreeToAb c
-litContent calc tree = Message.abLiteral tree $ lit tree where
+literal :: forall c. (C.CContent c) => CalcContent c -> B.TokenTreeToAb c
+literal calc tree = Message.abLiteral tree $ lit tree where
     lit :: B.TokenTreeToAb c
     lit x@(B.TreeL tok)
-        | isDecimal x = C.putDec =<< B.litDecimal =<< naked x
-        | otherwise = case tok of
-            B.TText _ n w | n <= 0  ->  keyword   w
-            B.TText _ _ w           ->  C.putText w
-            B.TTerm _ _ [n]         ->  C.putTerm n
-            _                       ->  Message.unkWord $ B.tokenContent tok
+        = case getDecimalText [x] of
+            Right w -> C.putDec =<< B.litDecimal w
+            Left _  -> case tok of
+                         B.TText _ n w | n <= 0  ->  getKeyword w
+                         B.TText _ _ w           ->  C.putText w
+                         B.TTerm _ _ [n]         ->  C.putTerm n
+                         _                       ->  Message.unkWord $ B.tokenContent tok
 
     lit (B.TreeB n _ xs) = case n of
         B.BracketGroup  ->  group xs
@@ -55,20 +56,10 @@ litContent calc tree = Message.abLiteral tree $ lit tree where
         _  ->  Message.adlib "Unknown bracket type"
 
     group :: B.TokenTreesToAb c
-    group [B.TreeL (B.TText _  _ "'"), e@(B.TreeB B.BracketGroup _ _)] = calc e
-    group xs@(x : _)
-        | isDecimal x = do xs2 <- mapM naked xs
-                           dec <- B.litDecimal $ concat xs2
-                           C.putDec dec
     group [] = Right C.empty
-    group xs = Message.unkWord $ treesContent xs  -- unknown sequence
-
-    naked :: B.TokenTreeToAb String
-    naked (B.TreeL (B.TText _ 0 w)) = Right w
-    naked x                         = Message.unkWord $ treeContent x
-
-    treeContent  = concatMap B.tokenContent . B.untree
-    treesContent = concatMap B.tokenContent . B.untrees
+    group xs = case getDecimalText xs of
+                 Right w  ->  C.putDec =<< B.litDecimal w
+                 Left _   ->  calc $ B.TreeB B.BracketGroup Nothing xs
 
 literals :: (C.CContent c) => B.TokenTreeToAb c -> B.TokenTreesToAb [c]
 literals _   [] = Right []
@@ -77,18 +68,34 @@ literals lit cs = lt `mapM` B.divideTreesByColon cs where
     lt [x] =  lit x
     lt xs  =  lit $ B.TreeB B.BracketGroup Nothing xs
 
-keyword :: (C.CEmpty c, C.CBool c) => String -> B.Ab c
-keyword "0"  =  Right C.false
-keyword "1"  =  Right C.true
-keyword w    =  Message.unkWord w
+getKeyword :: (C.CEmpty c, C.CBool c) => String -> B.Ab c
+getKeyword "0"  =  Right C.false
+getKeyword "1"  =  Right C.true
+getKeyword w    =  Message.unkWord w
 
-isDecimal :: B.TokenTree -> Bool
-isDecimal (B.TreeL (B.TText _ 0 (c : _))) = isDecimalChar c
-isDecimal _ = False
+getDecimalText :: B.TokenTreesToAb String
+getDecimalText = getDecimalText2 B.<=< getTexts
 
--- First letters of decimals
-isDecimalChar :: Char -> Bool
-isDecimalChar = (`elem` "0123456789+-.")
+getDecimalText2 :: [String] -> B.Ab String
+getDecimalText2 = first where
+    first ((c : cs) : xs) | c `elem` "+-0123456789" = loop [[c]] $ cs : xs
+    first _ = Message.nothing
+
+    loop ss [] = Right $ concat $ reverse ss
+    loop ss (w : xs) | all (`elem` "0123456789.") w = loop (w:ss) xs
+    loop _ _ = Message.nothing
+
+getTexts :: B.TokenTreesToAb [String]
+getTexts = loop [] where
+    loop ss [] = Right $ reverse ss
+    loop ss (B.TreeL x : xs) =
+        do s <- getText 0 x
+           loop (s : ss) xs
+    loop _ _ = Message.nothing
+
+getText :: Int -> B.Token -> B.Ab String
+getText q0 (B.TText _ q w) | q == q0  =  Right w
+getText _ _  =  Message.nothing
 
 
 -- ----------------------  Particular content
@@ -199,8 +206,8 @@ litRel lit cs =
 -- | Convert token trees into a judge.
 --   Judges itself are not content type.
 --   It can be only used in the top-level of sections.
-litJudge :: (C.CContent c) => CalcContent c -> Char -> B.JudgePat -> B.TokenTreesToAb (B.Judge c)
-litJudge calc q p = Right . judgeHead q p B.<=< litAssn (litContent calc)
+getJudge :: (C.CContent c) => CalcContent c -> Char -> B.JudgePat -> B.TokenTreesToAb (B.Judge c)
+getJudge calc q p = Right . judgeHead q p B.<=< litAssn (literal calc)
 
 judgeHead :: Char -> B.JudgeOf c
 judgeHead 'O' = B.JudgeAffirm
@@ -212,7 +219,7 @@ judgeHead _   = B.bug "judgeHead"
 -- ------------------------------------------------------------------
 -- $Types
 --
---  'litContent' recognizes the following types.
+--  'literal' recognizes the following types.
 --
 --  [Boolean]   Boolean used for something is hold or unhold.
 --              Textual forms: @\#true@, @\#fasle@.
@@ -260,7 +267,7 @@ judgeHead _   = B.bug "judgeHead"
 --
 --  >>> :m +Koshucode.Baala.Op.Vanilla.Type
 --  >>> let trees = B.tokenTrees . B.tokens
---  >>> let lit  = litContent [] :: B.TokenTree -> B.Ab VContent
+--  >>> let lit  = literal [] :: B.TokenTree -> B.Ab VContent
 --  >>> let lits = literals lit . trees
 --
 --  Boolean.

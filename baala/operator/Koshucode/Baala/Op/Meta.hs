@@ -134,8 +134,8 @@ consKoshuVersion use =
        _       -> Message.unexpAttr ""
   where
     check n f t = do
-      from <- C.litContent undefined f
-      to   <- C.litContent undefined t
+      from <- C.literal undefined f
+      to   <- C.literal undefined t
       Right $ C.relmapGlobal use $ relkitKoshuVersionCheck (from, to) n
 
 relkitKoshuVersion :: (C.CContent c) => B.TermName -> C.Global c -> Maybe B.Relhead -> B.Ab (C.Relkit c)

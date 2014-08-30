@@ -11,6 +11,7 @@ module Koshucode.Baala.Core.Section.Section
   -- * Constructors
   emptySection,
   consSection,
+  rootSection,
   addMessage,
   addMessages,
 
@@ -64,6 +65,10 @@ emptySection :: Section c
 emptySection = Section Nothing C.global [] [] [] [] [] [] res cons [] where
     res  = B.ResourceText ""
     cons = C.relmapCons C.global
+
+rootSection :: C.Global c -> Section c
+rootSection g = emptySection { secGlobal = g
+                             , secCons   = C.relmapCons g }
 
 addMessage :: String -> B.Map (Section c)
 addMessage msg sec = sec { secMessage = msg : secMessage sec }
@@ -150,7 +155,7 @@ consSectionEach root resource (B.Short pt shorts xs) =
 
       judge :: Clab (B.Judge c)
       judge _ (C.CJudge q p toks) =
-          C.litJudge calc q p =<< B.tokenTrees toks
+          C.getJudge calc q p =<< B.tokenTrees toks
 
       calc = secCalc root
 
