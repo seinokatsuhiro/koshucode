@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.59.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.70.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -122,24 +122,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Token</a
 	    >]</li
 	  ><li class="src short"
-	  ><a href="#v:isSimpleWord"
-	    >isSimpleWord</a
-	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
-	    >Pred</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:isSimpleChar"
-	    >isSimpleChar</a
-	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
-	    >Pred</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
-	    >Char</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:isShortString"
-	    >isShortString</a
+	  ><a href="#v:isShortPrefix"
+	    >isShortPrefix</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
@@ -211,37 +195,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:isSimpleWord" class="def"
-	    >isSimpleWord</a
-	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
-	    >Pred</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    ><a href="src/Koshucode-Baala-Base-Token-TokenLine.html#isSimpleWord" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:isSimpleChar" class="def"
-	    >isSimpleChar</a
-	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
-	    >Pred</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
-	    >Char</a
-	    ><a href="src/Koshucode-Baala-Base-Token-TokenLine.html#isSimpleChar" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:isShortString" class="def"
-	    >isShortString</a
+	  ><a name="v:isShortPrefix" class="def"
+	    >isShortPrefix</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
-	    ><a href="src/Koshucode-Baala-Base-Token-TokenLine.html#isShortString" class="link"
+	    ><a href="src/Koshucode-Baala-Base-Token-TokenLine.html#isShortPrefix" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -254,9 +214,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><div class="doc"
 	><dl
 	  ><dt
-	    >Paren</dt
+	    >Bracket</dt
 	    ><dd
-	    >     Open and closed parens.
+	    >   Open and closed brackets.
               <code
 	      >(</code
 	      > <em
@@ -279,11 +239,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      >]</code
 	      > ,
               <code
-	      >&lt;|</code
+	      >&lt;&lt;</code
 	      > <em
-	      >termset</em
+	      >assn</em
 	      > <code
-	      >|&gt;</code
+	      >&gt;&gt;</code
 	      > , and
               <code
 	      >{|</code
@@ -458,7 +418,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      >tokens &quot;aa\n'bb'\n\&quot;cc\&quot;&quot;
 </code
 	      ></strong
-	    >[ TWord 1 0 &quot;aa&quot;, TWord 2 1 &quot;bb&quot;, TWord 3 1 &quot;&quot;, TWord 4 2 &quot;cc&quot; ]
+	    >[ TText 1 0 &quot;aa&quot;, TText 2 1 &quot;bb&quot;, TText 3 1 &quot;&quot;, TText 4 2 &quot;cc&quot; ]
 </pre
 	  ><p
 	  >Judgement.
@@ -471,12 +431,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      >tokens &quot;|-- R  /a A0 /b 31&quot;
 </code
 	      ></strong
-	    >[ TWord 1 0 &quot;|&quot;, TWord 2 0 &quot;--&quot;, TSpace 3 1, TWord 4 0 &quot;R&quot;
-, TSpace 5 2, TTerm 6 [&quot;/a&quot;], TSpace 7 1, TWord 8 0 &quot;A0&quot;
-, TSpace 9 1, TTerm 10 [&quot;/b&quot;], TSpace 11 1, TWord 12 0 &quot;31&quot; ]
+	    >[ TText 1 0 &quot;|&quot;, TText 2 0 &quot;--&quot;, TSpace 3 1, TText 4 0 &quot;R&quot;
+, TSpace 5 2, TTerm 6 [&quot;/a&quot;], TSpace 7 1, TText 8 0 &quot;A0&quot;
+, TSpace 9 1, TTerm 10 [&quot;/b&quot;], TSpace 11 1, TText 12 0 &quot;31&quot; ]
 </pre
 	  ><p
-	  >Parens.
+	  >Brackets.
 </p
 	  ><pre class="screen"
 	  ><code class="prompt"
@@ -486,10 +446,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      >tokens &quot;aa (bb x y (z))&quot;
 </code
 	      ></strong
-	    >[ TWord 1 0 &quot;aa&quot;, TSpace 2 1
-, TOpen 3 &quot;(&quot;, TWord 4 0 &quot;bb&quot;, TSpace 5 1
-   , TWord 6 0 &quot;x&quot;, TSpace 7 1, TWord 8 0 &quot;y&quot;, TSpace 9 1
-   , TOpen 10 &quot;(&quot;, TWord 11 0 &quot;z&quot;, TClose 12 &quot;)&quot;, TClose 13 &quot;)&quot; ]
+	    >[ TText 1 0 &quot;aa&quot;, TSpace 2 1
+, TOpen 3 &quot;(&quot;, TText 4 0 &quot;bb&quot;, TSpace 5 1
+   , TText 6 0 &quot;x&quot;, TSpace 7 1, TText 8 0 &quot;y&quot;, TSpace 9 1
+   , TOpen 10 &quot;(&quot;, TText 11 0 &quot;z&quot;, TClose 12 &quot;)&quot;, TClose 13 &quot;)&quot; ]
 </pre
 	  ><p
 	  >A comment.
@@ -502,8 +462,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      >tokens &quot;abc ** this is a comment\ndef\n&quot;
 </code
 	      ></strong
-	    >[ TWord 1 0 &quot;abc&quot;, TSpace 2 1, TComment 3 &quot;** this is a comment&quot;
-, TWord 4 0 &quot;def&quot;]
+	    >[ TText 1 0 &quot;abc&quot;, TSpace 2 1, TComment 3 &quot;** this is a comment&quot;
+, TText 4 0 &quot;def&quot;]
 </pre
 	  ></div
 	></div

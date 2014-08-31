@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><title
+    >Koshucode.Baala.Base.Prelude.Pair</title
+    ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
+     /><script src="haddock-util.js" type="text/javascript"
+    ></script
+    ><script type="text/javascript"
+    >//<![CDATA[
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-Prelude-Pair.html");};
+//]]>
+</script
+    ></head
+  ><body
+  ><div id="package-header"
+    ><ul class="links" id="page-menu"
+      ><li
+	><a href="src/Koshucode-Baala-Base-Prelude-Pair.html"
+	  >Source</a
+	  ></li
+	><li
+	><a href="index.html"
+	  >Contents</a
+	  ></li
+	><li
+	><a href="doc-index.html"
+	  >Index</a
+	  ></li
+	></ul
+      ><p class="caption"
+      >koshucode-baala-base-0.70.0.0: A notational system for relational model</p
+      ></div
+    ><div id="content"
+    ><div id="module-header"
+      ><table class="info"
+	><tr
+	  ><th
+	    >Safe Haskell</th
+	    ><td
+	    >Safe-Inferred</td
+	    ></tr
+	  ></table
+	><p class="caption"
+	>Koshucode.Baala.Base.Prelude.Pair</p
+	></div
+      ><div id="interface"
+      ><h1
+	>Documentation</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:mapFst" class="def"
+	    >mapFst</a
+	    > ::  (a -&gt; c) -&gt; (a, b) -&gt; (c, b)<a href="src/Koshucode-Baala-Base-Prelude-Pair.html#mapFst" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:mapSnd" class="def"
+	    >mapSnd</a
+	    > ::  (b -&gt; c) -&gt; (a, b) -&gt; (a, c)<a href="src/Koshucode-Baala-Base-Prelude-Pair.html#mapSnd" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:cons1" class="def"
+	    >cons1</a
+	    > ::  a -&gt; ([a], b) -&gt; ([a], b)<a href="src/Koshucode-Baala-Base-Prelude-Pair.html#cons1" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:mapFstTo" class="def"
+	    >mapFstTo</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Functor"
+	    >Functor</a
+	    > m =&gt; (a -&gt; c) -&gt; m (a, b) -&gt; m (c, b)<a href="src/Koshucode-Baala-Base-Prelude-Pair.html#mapFstTo" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:mapSndTo" class="def"
+	    >mapSndTo</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Functor"
+	    >Functor</a
+	    > m =&gt; (b -&gt; c) -&gt; m (a, b) -&gt; m (a, c)<a href="src/Koshucode-Baala-Base-Prelude-Pair.html#mapSndTo" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:maybePairs" class="def"
+	    >maybePairs</a
+	    > ::  [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > [(a, a)]<a href="src/Koshucode-Baala-Base-Prelude-Pair.html#maybePairs" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:sequenceFst" class="def"
+	    >sequenceFst</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
+	    >Monad</a
+	    > m =&gt; [(m a, b)] -&gt; m [(a, b)]<a href="src/Koshucode-Baala-Base-Prelude-Pair.html#sequenceFst" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:sequenceSnd" class="def"
+	    >sequenceSnd</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
+	    >Monad</a
+	    > m =&gt; [(a, m b)] -&gt; m [(a, b)]<a href="src/Koshucode-Baala-Base-Prelude-Pair.html#sequenceSnd" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	></div
+      ></div
+    ><div id="footer"
+    ><p
+      >Produced by <a href="http://www.haskell.org/haddock/"
+	>Haddock</a
+	> version 2.13.2</p
+      ></div
+    ></body
+  ></html
+>

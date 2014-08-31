@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.59.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.70.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -114,6 +114,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
 	    >Monad</a
 	    > m =&gt; (b -&gt; m c) -&gt; (a, b) -&gt; m (a, c)</li
+	  ><li class="src short"
+	  ><a href="#v:lookupBy"
+	    >lookupBy</a
+	    > ::  (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    >) -&gt; [(a, b)] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > b</li
 	  ><li class="src short"
 	  ><a href="#v:lookupSatisfy"
 	    >lookupSatisfy</a
@@ -232,12 +240,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    > k =&gt; [(k, v)] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Map-Lazy.html#t:Map"
 	    >Map</a
 	    > k [v]</li
-	  ><li class="src short"
-	  ><a href="#v:duplicate"
-	    >duplicate</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > k =&gt; [k] -&gt; [k]</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -297,6 +299,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
 	    >Monad</a
 	    > m =&gt; (b -&gt; m c) -&gt; (a, b) -&gt; m (a, c)<a href="src/Koshucode-Baala-Base-Prelude-Assoc.html#namedMapM" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:lookupBy" class="def"
+	    >lookupBy</a
+	    > ::  (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    >) -&gt; [(a, b)] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > b<a href="src/Koshucode-Baala-Base-Prelude-Assoc.html#lookupBy" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -801,36 +815,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	      >].
 </p
 	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:duplicate" class="def"
-	    >duplicate</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > k =&gt; [k] -&gt; [k]<a href="src/Koshucode-Baala-Base-Prelude-Assoc.html#duplicate" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="doc"
-	><p
-	  ><em
-	    >Examples</em
-	    >
-</p
-	  ><p
-	  >Duplicate elements
-</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >duplicate &quot;apples and bananas&quot;
-</code
-	      ></strong
-	    >&quot; anps&quot;
-</pre
 	  ></div
 	></div
       ></div

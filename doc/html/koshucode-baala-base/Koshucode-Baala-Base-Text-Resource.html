@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.59.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.70.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -56,11 +56,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >CodePoint
+	    >Code point
 </a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
+	    >Code pointer
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:4"
 	    >Sourced
 </a
 	    ></li
@@ -115,78 +120,78 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a href="#t:CodePoint"
-	    >CodePoint</a
-	    >  = <a href="#v:CodePoint"
-	    >CodePoint</a
+	    >  <a href="#t:CodePt"
+	    >CodePt</a
+	    >  = <a href="#v:CodePt"
+	    >CodePt</a
 	    > {<ul class="subs"
 	    ><li
-	      ><a href="#v:codePointResource"
-		>codePointResource</a
+	      ><a href="#v:codePtResource"
+		>codePtResource</a
 		> :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:Resource"
 		>Resource</a
 		></li
 	      ><li
-	      ><a href="#v:codePointLineNumber"
-		>codePointLineNumber</a
+	      ><a href="#v:codePtLineNumber"
+		>codePtLineNumber</a
 		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 		>Int</a
 		></li
 	      ><li
-	      ><a href="#v:codePointLineText"
-		>codePointLineText</a
+	      ><a href="#v:codePtLineText"
+		>codePtLineText</a
 		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
 		></li
 	      ><li
-	      ><a href="#v:codePointText"
-		>codePointText</a
+	      ><a href="#v:codePtText"
+		>codePtText</a
 		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
 		></li
 	      ></ul
 	    >}</li
 	  ><li class="src short"
-	  ><span class="keyword"
-	    >class</span
-	    >  <a href="#t:CodePointer"
-	    >CodePointer</a
-	    > a  <span class="keyword"
-	    >where</span
-	    ><ul class="subs"
-	    ><li
-	      ><a href="#v:codePoint"
-		>codePoint</a
-		> :: a -&gt; [<a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
-		>CodePoint</a
-		>]</li
-	      ></ul
+	  ><a href="#v:codePtZero"
+	    >codePtZero</a
+	    > :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+	    >CodePt</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:codePointColumn"
-	    >codePointColumn</a
-	    > :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
-	    >CodePoint</a
+	  ><a href="#v:codePtColumnNumber"
+	    >codePtColumnNumber</a
+	    > :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+	    >CodePt</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:codePointDisplay"
-	    >codePointDisplay</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	  ><a href="#v:codePtDisplay"
+	    >codePtDisplay</a
+	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
-	    >CodePoint</a
-	    > -&gt; [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >, <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+	    >CodePt</a
+	    >) -&gt; [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    >)]</li
 	  ><li class="src short"
-	  ><a href="#v:codePointZero"
-	    >codePointZero</a
-	    > :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
-	    >CodePoint</a
+	  ><span class="keyword"
+	    >class</span
+	    >  <a href="#t:CodePtr"
+	    >CodePtr</a
+	    > a  <span class="keyword"
+	    >where</span
+	    ><ul class="subs"
+	    ><li
+	      ><a href="#v:codePts"
+		>codePts</a
+		> :: a -&gt; [<a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		>CodePt</a
+		>]</li
+	      ></ul
 	    ></li
 	  ><li class="src short"
 	  ><span class="keyword"
@@ -199,8 +204,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ><li
 	      ><a href="#v:source"
 		>source</a
-		> :: [<a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
-		>CodePoint</a
+		> :: [<a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		>CodePt</a
 		>]</li
 	      ><li
 	      ><a href="#v:unsourced"
@@ -329,6 +334,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ><a href="src/Koshucode-Baala-Base-Text-Resource.html#resourceType" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Name of resourcd type, i.e., <code
+	      >&quot;file&quot;</code
+	      >, <code
+	      >&quot;text&quot;</code
+	      >, <code
+	      >&quot;url&quot;</code
+	      >.
+</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -343,15 +359,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ></p
 	  ></div
 	><h1 id="g:2"
-	>CodePoint
+	>Code point
 </h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a name="t:CodePoint" class="def"
-	    >CodePoint</a
-	    >  <a href="src/Koshucode-Baala-Base-Text-Resource.html#CodePoint" class="link"
+	    >  <a name="t:CodePt" class="def"
+	    >CodePt</a
+	    >  <a href="src/Koshucode-Baala-Base-Text-Resource.html#CodePt" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs constructors"
@@ -360,8 +376,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ><table
 	    ><tr
 	      ><td class="src"
-		><a name="v:CodePoint" class="def"
-		  >CodePoint</a
+		><a name="v:CodePt" class="def"
+		  >CodePt</a
 		  ></td
 		><td class="doc empty"
 		>&nbsp;</td
@@ -373,8 +389,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		    >Fields</p
 		    ><dl
 		    ><dt class="src"
-		      ><a name="v:codePointResource" class="def"
-			>codePointResource</a
+		      ><a name="v:codePtResource" class="def"
+			>codePtResource</a
 			> :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:Resource"
 			>Resource</a
 			></dt
@@ -384,8 +400,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 </p
 			></dd
 		      ><dt class="src"
-		      ><a name="v:codePointLineNumber" class="def"
-			>codePointLineNumber</a
+		      ><a name="v:codePtLineNumber" class="def"
+			>codePtLineNumber</a
 			> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 			>Int</a
 			></dt
@@ -395,8 +411,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 </p
 			></dd
 		      ><dt class="src"
-		      ><a name="v:codePointLineText" class="def"
-			>codePointLineText</a
+		      ><a name="v:codePtLineText" class="def"
+			>codePtLineText</a
 			> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 			>String</a
 			></dt
@@ -406,8 +422,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 </p
 			></dd
 		      ><dt class="src"
-		      ><a name="v:codePointText" class="def"
-			>codePointText</a
+		      ><a name="v:codePtText" class="def"
+			>codePtText</a
 			> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 			>String</a
 			></dt
@@ -425,16 +441,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      ></table
 	    ></div
 	  ><div class="subs instances"
-	  ><p id="control.i:CodePoint" class="caption collapser" onclick="toggleSection('i:CodePoint')"
+	  ><p id="control.i:CodePt" class="caption collapser" onclick="toggleSection('i:CodePt')"
 	    >Instances</p
-	    ><div id="section.i:CodePoint" class="show"
+	    ><div id="section.i:CodePt" class="show"
 	    ><table
 	      ><tr
 		><td class="src"
 		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
 		    >Eq</a
-		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
-		    >CodePoint</a
+		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		    >CodePt</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
@@ -443,8 +459,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		><td class="src"
 		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
 		    >Data</a
-		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
-		    >CodePoint</a
+		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		    >CodePt</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
@@ -453,8 +469,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		><td class="src"
 		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 		    >Ord</a
-		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
-		    >CodePoint</a
+		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		    >CodePt</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
@@ -463,8 +479,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		><td class="src"
 		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
 		    >Show</a
-		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
-		    >CodePoint</a
+		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		    >CodePt</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
@@ -473,18 +489,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		><td class="src"
 		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
 		    >Typeable</a
-		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
-		    >CodePoint</a
+		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		    >CodePt</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
 		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePointer"
-		    >CodePointer</a
-		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
-		    >CodePoint</a
+		  ><a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePtr"
+		    >CodePtr</a
+		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		    >CodePt</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
@@ -495,46 +511,97 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></div
 	><div class="top"
 	><p class="src"
+	  ><a name="v:codePtZero" class="def"
+	    >codePtZero</a
+	    > :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+	    >CodePt</a
+	    ><a href="src/Koshucode-Baala-Base-Text-Resource.html#codePtZero" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Empty code point, i.e., empty content and zero line number.
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:codePtColumnNumber" class="def"
+	    >codePtColumnNumber</a
+	    > :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+	    >CodePt</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    ><a href="src/Koshucode-Baala-Base-Text-Resource.html#codePtColumnNumber" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Column number at which code starts.
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:codePtDisplay" class="def"
+	    >codePtDisplay</a
+	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >, <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+	    >CodePt</a
+	    >) -&gt; [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    >)]<a href="src/Koshucode-Baala-Base-Text-Resource.html#codePtDisplay" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:3"
+	>Code pointer
+</h1
+	><div class="top"
+	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    >  <a name="t:CodePointer" class="def"
-	    >CodePointer</a
+	    >  <a name="t:CodePtr" class="def"
+	    >CodePtr</a
 	    > a  <span class="keyword"
 	    >where</span
-	    ><a href="src/Koshucode-Baala-Base-Text-Resource.html#CodePointer" class="link"
+	    ><a href="src/Koshucode-Baala-Base-Text-Resource.html#CodePtr" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs methods"
 	  ><p class="caption"
 	    >Methods</p
 	    ><p class="src"
-	    ><a name="v:codePoint" class="def"
-	      >codePoint</a
-	      > :: a -&gt; [<a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
-	      >CodePoint</a
-	      >]<a href="src/Koshucode-Baala-Base-Text-Resource.html#codePoint" class="link"
+	    ><a name="v:codePts" class="def"
+	      >codePts</a
+	      > :: a -&gt; [<a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+	      >CodePt</a
+	      >]<a href="src/Koshucode-Baala-Base-Text-Resource.html#codePts" class="link"
 	      >Source</a
 	      ></p
 	    ></div
 	  ><div class="subs instances"
-	  ><p id="control.i:CodePointer" class="caption collapser" onclick="toggleSection('i:CodePointer')"
+	  ><p id="control.i:CodePtr" class="caption collapser" onclick="toggleSection('i:CodePtr')"
 	    >Instances</p
-	    ><div id="section.i:CodePointer" class="show"
+	    ><div id="section.i:CodePtr" class="show"
 	    ><table
 	      ><tr
 		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePointer"
-		    >CodePointer</a
-		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
-		    >CodePoint</a
+		  ><a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePtr"
+		    >CodePtr</a
+		    > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		    >CodePt</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		><tr
 		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePointer"
-		    >CodePointer</a
+		  ><a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePtr"
+		    >CodePtr</a
 		    > <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 		    >Token</a
 		    ></td
@@ -543,8 +610,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ></tr
 		><tr
 		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePointer"
-		    >CodePointer</a
+		  ><a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePtr"
+		    >CodePtr</a
 		    > (<a href="Koshucode-Baala-Base-Text-Resource.html#t:Sourced"
 		    >Sourced</a
 		    > a)</td
@@ -553,10 +620,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ></tr
 		><tr
 		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePointer"
-		    >CodePointer</a
-		    > a =&gt; <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePointer"
-		    >CodePointer</a
+		  ><a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePtr"
+		    >CodePtr</a
+		    > a =&gt; <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePtr"
+		    >CodePtr</a
 		    > (<a href="Koshucode-Baala-Base-Syntax-Code.html#t:CodeClause"
 		    >CodeClause</a
 		    > a)</td
@@ -565,10 +632,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ></tr
 		><tr
 		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePointer"
-		    >CodePointer</a
-		    > a =&gt; <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePointer"
-		    >CodePointer</a
+		  ><a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePtr"
+		    >CodePtr</a
+		    > a =&gt; <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePtr"
+		    >CodePtr</a
 		    > (<a href="Koshucode-Baala-Base-Syntax-Code.html#t:CodeLine"
 		    >CodeLine</a
 		    > a)</td
@@ -579,45 +646,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      ></div
 	    ></div
 	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:codePointColumn" class="def"
-	    >codePointColumn</a
-	    > :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
-	    >CodePoint</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-	    >Int</a
-	    ><a href="src/Koshucode-Baala-Base-Text-Resource.html#codePointColumn" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:codePointDisplay" class="def"
-	    >codePointDisplay</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
-	    >CodePoint</a
-	    > -&gt; [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >)]<a href="src/Koshucode-Baala-Base-Text-Resource.html#codePointDisplay" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:codePointZero" class="def"
-	    >codePointZero</a
-	    > :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
-	    >CodePoint</a
-	    ><a href="src/Koshucode-Baala-Base-Text-Resource.html#codePointZero" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><h1 id="g:3"
+	><h1 id="g:4"
 	>Sourced
 </h1
 	><div class="top"
@@ -650,8 +679,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		    ><dt class="src"
 		      ><a name="v:source" class="def"
 			>source</a
-			> :: [<a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
-			>CodePoint</a
+			> :: [<a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+			>CodePt</a
 			>]</dt
 		      ><dd class="doc empty"
 		      >&nbsp;</dd
@@ -744,8 +773,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ></tr
 		><tr
 		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePointer"
-		    >CodePointer</a
+		  ><a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePtr"
+		    >CodePtr</a
 		    > (<a href="Koshucode-Baala-Base-Text-Resource.html#t:Sourced"
 		    >Sourced</a
 		    > a)</td

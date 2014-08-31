@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.59.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.70.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -45,9 +45,115 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><p class="caption"
 	>Koshucode.Baala.Base.Token.Short</p
 	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Data type
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Utility
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Shortener
+</a
+	    ></li
+	  ></ul
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    >  <a href="#t:Short"
+	    >Short</a
+	    > a = <a href="#v:Short"
+	    >Short</a
+	    > {<ul class="subs"
+	    ><li
+	      ><a href="#v:shortSource"
+		>shortSource</a
+		> :: [<a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		>CodePt</a
+		>]</li
+	      ><li
+	      ><a href="#v:shortHead"
+		>shortHead</a
+		> :: [<a href="Koshucode-Baala-Base-Token-Short.html#t:ShortDef"
+		>ShortDef</a
+		>]</li
+	      ><li
+	      ><a href="#v:shortBody"
+		>shortBody</a
+		> :: a</li
+	      ></ul
+	    >}</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:ShortDef"
+	    >ShortDef</a
+	    > = <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+	    >Named</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:shortTrim"
+	    >shortTrim</a
+	    > ::  <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > [<a href="Koshucode-Baala-Base-Token-Short.html#t:Short"
+	    >Short</a
+	    > [a]]</li
+	  ><li class="src short"
+	  ><a href="#v:shortM"
+	    >shortM</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
+	    >Monad</a
+	    > m =&gt; <a href="Koshucode-Baala-Base-Token-Short.html#t:Short"
+	    >Short</a
+	    > (m a) -&gt; m (<a href="Koshucode-Baala-Base-Token-Short.html#t:Short"
+	    >Short</a
+	    > a)</li
+	  ><li class="src short"
+	  ><a href="#v:shortListM"
+	    >shortListM</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
+	    >Monad</a
+	    > m =&gt; [<a href="Koshucode-Baala-Base-Token-Short.html#t:Short"
+	    >Short</a
+	    > (m a)] -&gt; m [<a href="Koshucode-Baala-Base-Token-Short.html#t:Short"
+	    >Short</a
+	    > a]</li
+	  ><li class="src short"
+	  ><a href="#v:shortEmpty"
+	    >shortEmpty</a
+	    > :: <a href="Koshucode-Baala-Base-Text-Write.html#t:StringMap"
+	    >StringMap</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:shortText"
+	    >shortText</a
+	    > :: [<a href="Koshucode-Baala-Base-Token-Short.html#t:ShortDef"
+	    >ShortDef</a
+	    >] -&gt; <a href="Koshucode-Baala-Base-Text-Write.html#t:StringMap"
+	    >StringMap</a
+	    ></li
+	  ></ul
+	></div
       ><div id="interface"
-      ><h1
-	>Documentation</h1
+      ><h1 id="g:1"
+	>Data type
+</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -57,6 +163,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    > a <a href="src/Koshucode-Baala-Base-Token-Short.html#Short" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Something with short definition.
+</p
+	    ></div
 	  ><div class="subs constructors"
 	  ><p class="caption"
 	    >Constructors</p
@@ -78,8 +189,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		    ><dt class="src"
 		      ><a name="v:shortSource" class="def"
 			>shortSource</a
-			> :: [<a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePoint"
-			>CodePoint</a
+			> :: [<a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+			>CodePt</a
 			>]</dt
 		      ><dd class="doc empty"
 		      >&nbsp;</dd
@@ -173,28 +284,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ><a href="src/Koshucode-Baala-Base-Token-Short.html#ShortDef" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Short prefix and replacement.
+</p
+	    ></div
 	  ></div
+	><h1 id="g:2"
+	>Utility
+</h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:shortMap" class="def"
-	    >shortMap</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Functor"
-	    >Functor</a
-	    > f =&gt; (a -&gt; b) -&gt; [f a] -&gt; [f b]<a href="src/Koshucode-Baala-Base-Token-Short.html#shortMap" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:shortMapM" class="def"
-	    >shortMapM</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
-	    >Monad</a
-	    > m =&gt; (a -&gt; m b) -&gt; [<a href="Koshucode-Baala-Base-Token-Short.html#t:Short"
+	  ><a name="v:shortTrim" class="def"
+	    >shortTrim</a
+	    > ::  <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > [<a href="Koshucode-Baala-Base-Token-Short.html#t:Short"
 	    >Short</a
-	    > a] -&gt; m [<a href="Koshucode-Baala-Base-Token-Short.html#t:Short"
-	    >Short</a
-	    > b]<a href="src/Koshucode-Baala-Base-Token-Short.html#shortMapM" class="link"
+	    > [a]]<a href="src/Koshucode-Baala-Base-Token-Short.html#shortTrim" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -214,16 +321,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:shortTrim" class="def"
-	    >shortTrim</a
-	    > ::  <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > [<a href="Koshucode-Baala-Base-Token-Short.html#t:Short"
+	  ><a name="v:shortListM" class="def"
+	    >shortListM</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
+	    >Monad</a
+	    > m =&gt; [<a href="Koshucode-Baala-Base-Token-Short.html#t:Short"
 	    >Short</a
-	    > [a]]<a href="src/Koshucode-Baala-Base-Token-Short.html#shortTrim" class="link"
+	    > (m a)] -&gt; m [<a href="Koshucode-Baala-Base-Token-Short.html#t:Short"
+	    >Short</a
+	    > a]<a href="src/Koshucode-Baala-Base-Token-Short.html#shortListM" class="link"
 	    >Source</a
 	    ></p
 	  ></div
+	><h1 id="g:3"
+	>Shortener
+</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:shortEmpty" class="def"
@@ -233,6 +345,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ><a href="src/Koshucode-Baala-Base-Token-Short.html#shortEmpty" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >String shortener with no short definition.
+</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -245,6 +362,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ><a href="src/Koshucode-Baala-Base-Token-Short.html#shortText" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >String shortener.
+</p
+	    ></div
 	  ></div
 	></div
       ></div

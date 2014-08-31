@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.59.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.70.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -56,21 +56,31 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Data.Map
+	    >Data.List
 </a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >Data.Maybe
+	    >Data.Map
 </a
 	    ></li
 	  ><li
 	  ><a href="#g:4"
-	    >Data.Monoid
+	    >Data.Maybe
 </a
 	    ></li
 	  ><li
 	  ><a href="#g:5"
+	    >Data.Monoid
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:6"
+	    >Data.Tuple
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:7"
 	    >Text.PrettyPrint
 </a
 	    ></li
@@ -129,11 +139,29 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >Bool</a
 	    > -&gt; m () -&gt; m ()</li
 	  ><li class="src short"
+	  ><a href="#v:guard"
+	    >guard</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:MonadPlus"
+	    >MonadPlus</a
+	    > m =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > -&gt; m ()</li
+	  ><li class="src short"
 	  ><a href="#v:concatMapM"
 	    >concatMapM</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
 	    >Monad</a
 	    > m =&gt; (a -&gt; m [b]) -&gt; [a] -&gt; m [b]</li
+	  ><li class="src short"
+	  ><a href="#v:sort"
+	    >sort</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [a] -&gt; [a]</li
+	  ><li class="src short"
+	  ><a href="#v:transpose"
+	    >transpose</a
+	    > ::  [[a]] -&gt; [[a]]</li
 	  ><li class="src short"
 	  ><a href="#v:lookupMap"
 	    >lookupMap</a
@@ -202,6 +230,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    > :: <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
 	    >Monoid</a
 	    > a =&gt; a</li
+	  ><li class="src short"
+	  ><a href="#v:swap"
+	    >swap</a
+	    > ::  (a, b) -&gt; (b, a)</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
@@ -446,6 +478,50 @@ and otherwise do nothing.
 	  ></div
 	><div class="top"
 	><p class="src"
+	  ><a name="v:guard" class="def"
+	    >guard</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:MonadPlus"
+	    >MonadPlus</a
+	    > m =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > -&gt; m ()</p
+	  ><div class="doc"
+	  ><p
+	    ><code
+	      ><code
+		><a href="Koshucode-Baala-Base-Prelude-Import.html#v:guard"
+		  >guard</a
+		  ></code
+		> b</code
+	      > is <code
+	      ><code
+		><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#v:return"
+		  >return</a
+		  ></code
+		> ()</code
+	      > if <code
+	      >b</code
+	      > is <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#v:True"
+		>True</a
+		></code
+	      >,
+ and <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#v:mzero"
+		>mzero</a
+		></code
+	      > if <code
+	      >b</code
+	      > is <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#v:False"
+		>False</a
+		></code
+	      >.
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
 	  ><a name="v:concatMapM" class="def"
 	    >concatMapM</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
@@ -455,6 +531,51 @@ and otherwise do nothing.
 	    ></p
 	  ></div
 	><h1 id="g:2"
+	>Data.List
+</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:sort" class="def"
+	    >sort</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+	    >Ord</a
+	    > a =&gt; [a] -&gt; [a]</p
+	  ><div class="doc"
+	  ><p
+	    >The <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:sort"
+		>sort</a
+		></code
+	      > function implements a stable sorting algorithm.
+ It is a special case of <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:sortBy"
+		>sortBy</a
+		></code
+	      >, which allows the programmer to supply
+ their own comparison function.
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:transpose" class="def"
+	    >transpose</a
+	    > ::  [[a]] -&gt; [[a]]</p
+	  ><div class="doc"
+	  ><p
+	    >The <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:transpose"
+		>transpose</a
+		></code
+	      > function transposes the rows and columns of its argument.
+ For example,
+</p
+	    ><pre
+	    > transpose [[1,2,3],[4,5,6]] == [[1,4],[2,5],[3,6]]
+</pre
+	    ></div
+	  ></div
+	><h1 id="g:3"
 	>Data.Map
 </h1
 	><div class="top"
@@ -482,7 +603,7 @@ and otherwise do nothing.
 </p
 	    ></div
 	  ></div
-	><h1 id="g:3"
+	><h1 id="g:4"
 	>Data.Maybe
 </h1
 	><div class="top"
@@ -572,7 +693,7 @@ and otherwise do nothing.
 </p
 	    ></div
 	  ></div
-	><h1 id="g:4"
+	><h1 id="g:5"
 	>Data.Monoid
 </h1
 	><div class="top"
@@ -1024,7 +1145,21 @@ and otherwise do nothing.
 </p
 	    ></div
 	  ></div
-	><h1 id="g:5"
+	><h1 id="g:6"
+	>Data.Tuple
+</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:swap" class="def"
+	    >swap</a
+	    > ::  (a, b) -&gt; (b, a)</p
+	  ><div class="doc"
+	  ><p
+	    >Swap the components of a pair.
+</p
+	    ></div
+	  ></div
+	><h1 id="g:7"
 	>Text.PrettyPrint
 </h1
 	><div class="top"
