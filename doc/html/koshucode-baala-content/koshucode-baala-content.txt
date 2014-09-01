@@ -9,30 +9,49 @@
 --   <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-content
-@version 0.67.0.0
+@version 0.70.0.0
 
 module Koshucode.Baala.Op.Cox.Get
-ropBase :: RopUse c -> [Cop c]
-ropBuild :: CContent c => RopUse c -> TokenTree -> Ab (Cox c)
-getCox :: CContent c => RopUse c -> String -> Ab (Cox c)
-getContent :: CContent c => RopUse c -> String -> Ab c
-getOptContent :: CContent c => c -> RopUse c -> String -> Ab c
-getContents :: CContent c => RopUse c -> String -> Ab [c]
-getFiller :: CContent c => RopUse c -> String -> Ab c
-getTermCoxes :: CContent c => RopUse c -> String -> Ab [NamedCox c]
-getNamedCoxes :: CContent c => RopUse c -> String -> Ab [NamedCox c]
 
-module Koshucode.Baala.Op.Cop.Coxhand
-a :: String -> [Cox c] -> Cox c
-ax :: Cox c -> [Cox c] -> Cox c
-f :: [String] -> Map (Cox c)
-f1 :: Map (Cox c)
-f2 :: Map (Cox c)
-f3 :: Map (Cox c)
-v :: String -> Cox c
-v1 :: Cox c
-v2 :: Cox c
-v3 :: Cox c
+-- | Get list of content operators.
+ropBase :: RopUse c -> [Cop c]
+
+-- | Get relmap attribute as single cox.
+getCox :: CContent c => RopUse c -> String -> Ab (Cox c)
+
+-- | Get relmap attribute as cox list with term name.
+getTermCoxes :: CContent c => RopUse c -> String -> Ab [NamedCox c]
+
+-- | Get relmap attribute as cox list with name.
+getNamedCoxes :: CContent c => RopUse c -> String -> Ab [NamedCox c]
+getWhere :: CContent c => RopUse c -> String -> Ab ([Cop c], [NamedCox c])
+
+-- | Get relmap attribute as calculated content.
+getContent :: CContent c => RopUse c -> String -> Ab c
+
+-- | Get relmap attribute as list of calculated contents.
+getContents :: CContent c => RopUse c -> String -> Ab [c]
+
+-- | Get relmap attribute as optional content.
+getOptContent :: CContent c => c -> RopUse c -> String -> Ab c
+
+-- | Get relmap attribute as filler content, i.e., given content or empty.
+getFiller :: CContent c => RopUse c -> String -> Ab c
+getInt :: CContent c => RopUse c -> String -> Ab Int
+
+module Koshucode.Baala.Op.Cox.Gadget
+
+-- | Implementation of relational operators.
+ropsCoxGadget :: CContent c => [Rop c]
+consNumber :: (Ord c, CContent c) => RopCons c
+relmapNumber :: (CDec c, Ord c) => RopUse c -> (TermName, [TermName], Int) -> Relmap c
+relkitNumber :: (Ord c, CDec c) => (TermName, [TermName], Int) -> RelkitFlow c
+consRank :: (Ord c, CContent c) => RopCons c
+relmapGapRank :: (CDec c, Ord c) => RopUse c -> (TermName, [TermName], Int) -> Relmap c
+relkitGapRank :: (Ord c, CDec c) => (TermName, [TermName], Int) -> RelkitFlow c
+relmapDenseRank :: (CDec c, Ord c) => RopUse c -> (TermName, [TermName], Int) -> Relmap c
+relkitDenseRank :: (Ord c, CDec c) => (TermName, [TermName], Int) -> RelkitFlow c
+consRepeat :: (Ord c, CContent c) => RopCons c
 
 module Koshucode.Baala.Op.Cox.Filter
 
@@ -95,6 +114,44 @@ consUnary :: CContent c => RopCons c
 relmapUnary :: CContent c => RopUse c -> (TermName, [c]) -> Relmap c
 
 
+-- | Helper functions to construct content expressions.
+module Koshucode.Baala.Op.Cop.Coxhand
+
+-- | Create a form with named blanks.
+f :: [String] -> Map (Cox c)
+
+-- | Shorthand for one-blank form — <tt>f ["#1"]</tt>
+f1 :: Map (Cox c)
+
+-- | Shorthand for two-blanks form — <tt>f ["#1", "#2"]</tt>
+f2 :: Map (Cox c)
+
+-- | Shorthand for three-blanks form — <tt>f ["#1", "#2", "#3"]</tt>
+f3 :: Map (Cox c)
+
+-- | Fill blanks in a named form.
+i :: String -> [Cox c] -> Cox c
+ib :: BlankName -> [Cox c] -> Cox c
+
+-- | Fill blanks in the given form.
+ix :: Cox c -> [Cox c] -> Cox c
+
+-- | Fill two blanks in a named binary form.
+bin :: String -> Cox c -> Cox c -> Cox c
+
+-- | Create a named blank in a form.
+b :: String -> Cox c
+
+-- | Shorthand for the first blank — <tt>b "#1"</tt>
+b1 :: Cox c
+
+-- | Shorthand for the second blank — <tt>b "#2"</tt>
+b2 :: Cox c
+
+-- | Shorthand for the third blank — <tt>b "#3"</tt>
+b3 :: Cox c
+
+
 -- | Content operators.
 module Koshucode.Baala.Op.Cop.Order
 copsOrder :: (CBool c, Eq c, Ord c) => [Cop c]
@@ -115,25 +172,78 @@ module Koshucode.Baala.Op.Cop.Arith
 copsArith :: (CDec c, CList c, CText c) => [Cop c]
 
 
--- | Term-content operators.
-module Koshucode.Baala.Op.Cop.Cops
-vanillaGlobal :: CContent c => Global c
-vanillaRops :: CContent c => [Rop c]
+-- | Vanilla type.
+module Koshucode.Baala.Type.Vanilla
 
--- | Term-content operators and its height table.
-vanillaCops :: CContent c => ([Cop c], [Named InfixHeight])
+-- | Vanilla type
+data VContent
+
+-- | Boolean type
+VBool :: Bool -> VContent
+
+-- | String type
+VText :: String -> VContent
+
+-- | Term name type
+VTerm :: String -> VContent
+
+-- | Decimal number type
+VDec :: Decimal -> VContent
+
+-- | Sign of no ordinary type
+VEmpty :: VContent
+
+-- | List type (objective collection)
+VList :: [VContent] -> VContent
+
+-- | Set type (informative collection)
+VSet :: [VContent] -> VContent
+
+-- | Assn type (set of terms)
+VAssn :: [Named VContent] -> VContent
+
+-- | Relation type
+VRel :: (Rel VContent) -> VContent
+instance Show VContent
+instance CRel VContent
+instance CAssn VContent
+instance CSet VContent
+instance CTerm VContent
+instance CEmpty VContent
+instance CList VContent
+instance CText VContent
+instance CDec VContent
+instance CBool VContent
+instance Write VContent
+instance CContent VContent
+instance PrimContent VContent
+instance Ord VContent
+instance Eq VContent
 
 
 -- | Term-content operators.
 module Koshucode.Baala.Op.Cop
 
 
+-- | Operators in Koshucode.
+module Koshucode.Baala.Op.Cox
+
+
+-- | Rops and cops.
+module Koshucode.Baala.Op.Global
+
+-- | Global with operators.
+vanillaGlobal :: CContent c => Global c
+
+-- | Relmap operators
+vanillaRops :: CContent c => [Rop c]
+
+-- | Term-content operators and its height table.
+vanillaCops :: CContent c => ([Cop c], [Named InfixHeight])
+
+
 -- | Quasiquoter of Koshucode
-module Koshucode.Baala.Op.Cox.Quoter
+module Koshucode.Baala.Op.Quoter
 
 -- | Quasiquoter for <tt>[koshu| ... |]</tt>.
 koshu :: QuasiQuoter
-
-
--- | Operators in Koshucode.
-module Koshucode.Baala.Op.Cox
