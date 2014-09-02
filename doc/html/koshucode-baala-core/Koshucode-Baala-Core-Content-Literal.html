@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.61.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.70.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -51,31 +51,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Types
-</a
-	    ></li
-	  ><li
-	  ><a href="#g:2"
 	    >Functions
 </a
 	    ></li
 	  ><li
-	  ><a href="#g:3"
+	  ><a href="#g:2"
 	    >Document
 </a
 	    ><ul
 	    ><li
-	      ><a href="#g:4"
+	      ><a href="#g:3"
 		>Types
 </a
 		></li
 	      ><li
-	      ><a href="#g:5"
+	      ><a href="#g:4"
 		>Simple data
 </a
 		></li
 	      ><li
-	      ><a href="#g:6"
+	      ><a href="#g:5"
 		>Compound data
 </a
 		></li
@@ -99,92 +94,78 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:LitTree"
-	    >LitTree</a
-	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
+	    > <a href="#t:CalcContent"
+	    >CalcContent</a
+	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTreeToAb"
+	    >TokenTreeToAb</a
 	    > c</li
 	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:LitTrees"
-	    >LitTrees</a
-	    > c = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
+	  ><a href="#v:literal"
+	    >literal</a
+	    > :: <span class="keyword"
+	    >forall</span
+	    > c. <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:CalcContent"
+	    >CalcContent</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTreeToAb"
+	    >TokenTreeToAb</a
 	    > c</li
 	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:LitOperators"
-	    >LitOperators</a
-	    > c = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > (<a href="Koshucode-Baala-Core-Content-Literal.html#t:LitTree"
-	    >LitTree</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:LitTrees"
-	    >LitTrees</a
-	    > c)]</li
-	  ><li class="src short"
-	  ><a href="#v:litOperators"
-	    >litOperators</a
+	  ><a href="#v:getJudge"
+	    >getJudge</a
 	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:LitOperators"
-	    >LitOperators</a
-	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:litContent"
-	    >litContent</a
-	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
-	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:LitTree"
-	    >LitTree</a
-	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:litNamedTrees"
-	    >litNamedTrees</a
-	    > :: <a href="Koshucode-Baala-Core-Content-Literal.html#t:LitTrees"
-	    >LitTrees</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >]</li
-	  ><li class="src short"
-	  ><a href="#v:litJudge"
-	    >litJudge</a
-	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
-	    >CContent</a
-	    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	    >Bool</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:CalcContent"
+	    >CalcContent</a
+	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
+	    >Char</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgePat"
 	    >JudgePat</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:LitTrees"
-	    >LitTrees</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTreesToAb"
+	    >TokenTreesToAb</a
 	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
 	    > c)</li
+	  ><li class="src short"
+	  ><a href="#v:getTermedTrees"
+	    >getTermedTrees</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTreesToAb"
+	    >TokenTreesToAb</a
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:NamedTree"
+	    >NamedTree</a
+	    >]</li
 	  ></ul
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Types
+	>Functions
 </h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:LitTree" class="def"
-	    >LitTree</a
-	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > c<a href="src/Koshucode-Baala-Core-Content-Literal.html#LitTree" class="link"
+	    > <a name="t:CalcContent" class="def"
+	    >CalcContent</a
+	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTreeToAb"
+	    >TokenTreeToAb</a
+	    > c<a href="src/Koshucode-Baala-Core-Content-Literal.html#CalcContent" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:literal" class="def"
+	    >literal</a
+	    > :: <span class="keyword"
+	    >forall</span
+	    > c. <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:CalcContent"
+	    >CalcContent</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTreeToAb"
+	    >TokenTreeToAb</a
+	    > c<a href="src/Koshucode-Baala-Core-Content-Literal.html#literal" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -193,110 +174,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 		>TokenTree</a
 		></code
-	      > to content.
+	      > into internal form of content.
 </p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:LitTrees" class="def"
-	    >LitTrees</a
-	    > c = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > c<a href="src/Koshucode-Baala-Core-Content-Literal.html#LitTrees" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Convert list of <code
-	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-		>TokenTree</a
-		></code
-	      > to content.
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:LitOperators" class="def"
-	    >LitOperators</a
-	    > c = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > (<a href="Koshucode-Baala-Core-Content-Literal.html#t:LitTree"
-	    >LitTree</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:LitTrees"
-	    >LitTrees</a
-	    > c)]<a href="src/Koshucode-Baala-Core-Content-Literal.html#LitOperators" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><h1 id="g:2"
-	>Functions
-</h1
-	><div class="top"
-	><p class="src"
-	  ><a name="v:litOperators" class="def"
-	    >litOperators</a
+	  ><a name="v:getJudge" class="def"
+	    >getJudge</a
 	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:LitOperators"
-	    >LitOperators</a
-	    > c<a href="src/Koshucode-Baala-Core-Content-Literal.html#litOperators" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:litContent" class="def"
-	    >litContent</a
-	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
-	    >CContent</a
-	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:LitTree"
-	    >LitTree</a
-	    > c<a href="src/Koshucode-Baala-Core-Content-Literal.html#litContent" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:litNamedTrees" class="def"
-	    >litNamedTrees</a
-	    > :: <a href="Koshucode-Baala-Core-Content-Literal.html#t:LitTrees"
-	    >LitTrees</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >]<a href="src/Koshucode-Baala-Core-Content-Literal.html#litNamedTrees" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Convert token trees into a list of named token trees.
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:litJudge" class="def"
-	    >litJudge</a
-	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
-	    >CContent</a
-	    > c =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	    >Bool</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:CalcContent"
+	    >CalcContent</a
+	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
+	    >Char</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgePat"
 	    >JudgePat</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:LitTrees"
-	    >LitTrees</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTreesToAb"
+	    >TokenTreesToAb</a
 	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > c)<a href="src/Koshucode-Baala-Core-Content-Literal.html#litJudge" class="link"
+	    > c)<a href="src/Koshucode-Baala-Core-Content-Literal.html#getJudge" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -304,6 +202,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >Convert token trees into a judge.
    Judges itself are not content type.
    It can be only used in the top-level of sections.
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:getTermedTrees" class="def"
+	    >getTermedTrees</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTreesToAb"
+	    >TokenTreesToAb</a
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:NamedTree"
+	    >NamedTree</a
+	    >]<a href="src/Koshucode-Baala-Core-Content-Literal.html#getTermedTrees" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Convert token trees into a list of named token trees.
 </p
 	    ></div
 	  ></div
@@ -318,23 +233,25 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >&gt;&gt;&gt; </code
 	    ><strong class="userinput"
 	    ><code
-	      >litNamedTrees =&lt;&lt; B.tt &quot;/a 'A3 /b 10&quot;
+	      >getTermedTrees =&lt;&lt; B.tt &quot;/a 'A3 /b 10&quot;
 </code
 	      ></strong
 	    >Right [(&quot;/a&quot;, TreeB 1 [TreeL (TText 3 0 &quot;'&quot;), TreeL (TText 4 0 &quot;A3&quot;)]),
        (&quot;/b&quot;, TreeL (TText 8 0 &quot;10&quot;))]
 </pre
 	  ></div
-	><h1 id="g:3"
+	><h1 id="g:2"
 	>Document
 </h1
-	><h2 id="g:4"
+	><h2 id="g:3"
 	>Types
 </h2
 	><div class="doc"
 	><p
 	  ><code
-	    >litContentBy</code
+	    ><a href="Koshucode-Baala-Core-Content-Literal.html#v:literal"
+	      >literal</a
+	      ></code
 	    > recognizes the following types.
 </p
 	  ><dl
@@ -349,9 +266,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	      >.
 </dd
 	    ><dt
-	    >Nil</dt
+	    >Empty</dt
 	    ><dd
-	    >       Nil means that there are no values.
+	    >     Empty means that there are no values.
               i.e., universal negation on the term holds.
               Textual form is the non-quoted parens: <code
 	      >()</code
@@ -426,7 +343,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 </dd
 	    ></dl
 	  ></div
-	><h2 id="g:5"
+	><h2 id="g:4"
 	>Simple data
 </h2
 	><div class="doc"
@@ -452,14 +369,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >&gt;&gt;&gt; </code
 	    ><strong class="userinput"
 	    ><code
-	      >let lit  = litContentBy [] :: B.TokenTree -&gt; B.Ab VContent
+	      >let lit  = literal [] :: B.TokenTree -&gt; B.Ab VContent
 </code
 	      ></strong
 	    ><code class="prompt"
 	    >&gt;&gt;&gt; </code
 	    ><strong class="userinput"
 	    ><code
-	      >let lits = litContents lit . trees
+	      >let lits = literals lit . trees
 </code
 	      ></strong
 	    ></pre
@@ -503,7 +420,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >Right [VDec (Decimal (120, 10), 1, False)]
 </pre
 	  ><p
-	  >Nil as no ordinary value.
+	  >Empty as no ordinary value.
 </p
 	  ><pre class="screen"
 	  ><code class="prompt"
@@ -513,10 +430,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	      >lits &quot;()&quot;
 </code
 	      ></strong
-	    >Right [VNil]
+	    >Right [VEmpty]
 </pre
 	  ></div
-	><h2 id="g:6"
+	><h2 id="g:5"
 	>Compound data
 </h2
 	><div class="doc"

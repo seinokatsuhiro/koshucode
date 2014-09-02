@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.61.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.70.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -54,6 +54,32 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 </p
 	  ></div
 	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:GlobalSlot"
+	    >GlobalSlot</a
+	    > = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:NamedTrees"
+	    >NamedTrees</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:substSlot"
+	    >substSlot</a
+	    > :: [<a href="Koshucode-Baala-Core-Lexmap-Slot.html#t:GlobalSlot"
+	    >GlobalSlot</a
+	    >] -&gt; <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrTrees"
+	    >AttrTrees</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
+	    >AbMap</a
+	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
+	    >TokenTree</a
+	    >]</li
+	  ></ul
+	></div
       ><div id="interface"
       ><h1
 	>Documentation</h1
@@ -71,19 +97,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:slotTrees" class="def"
-	    >slotTrees</a
+	  ><a name="v:substSlot" class="def"
+	    >substSlot</a
 	    > :: [<a href="Koshucode-Baala-Core-Lexmap-Slot.html#t:GlobalSlot"
 	    >GlobalSlot</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:Roa"
-	    >Roa</a
+	    >] -&gt; <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrTrees"
+	    >AttrTrees</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
 	    >AbMap</a
 	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
 	    >TokenTree</a
-	    >]<a href="src/Koshucode-Baala-Core-Lexmap-Slot.html#slotTrees" class="link"
+	    >]<a href="src/Koshucode-Baala-Core-Lexmap-Slot.html#substSlot" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Substitute slots by global and attribute slots.
+</p
+	    ></div
 	  ></div
 	></div
       ></div

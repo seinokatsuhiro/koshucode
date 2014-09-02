@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.61.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.70.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -56,17 +56,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Relmap
+	    >RopUse
 </a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >Relkit
+	    >Relmap
 </a
 	    ></li
 	  ><li
 	  ><a href="#g:4"
-	    >Global
+	    >Relkit
 </a
 	    ></li
 	  ></ul
@@ -86,6 +86,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
 	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:Global"
+	    >Global</a
+	    > c = <a href="Koshucode-Baala-Core-Relmap-Global.html#t:GlobalWith"
+	    >GlobalWith</a
+	    > <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Rop"
+	    >Rop</a
+	    > c</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:RopUsage"
+	    >RopUsage</a
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
 	    >data</span
 	    >  <a href="#t:Rop"
 	    >Rop</a
@@ -95,8 +113,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ><li
 	      ><a href="#v:ropName"
 		>ropName</a
-		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
+		> :: <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:RopName"
+		>RopName</a
 		></li
 	      ><li
 	      ><a href="#v:ropGroup"
@@ -107,8 +125,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      ><li
 	      ><a href="#v:ropSorter"
 		>ropSorter</a
-		> :: <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:RoaSorter"
-		>RoaSorter</a
+		> :: <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrSort"
+		>AttrSort</a
 		></li
 	      ><li
 	      ><a href="#v:ropCons"
@@ -119,11 +137,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      ><li
 	      ><a href="#v:ropUsage"
 		>ropUsage</a
-		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
+		> :: <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUsage"
+		>RopUsage</a
 		></li
 	      ></ul
 	    >}</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:RopCons"
+	    >RopCons</a
+	    > c = <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
+	    >RopUse</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+	    >Relmap</a
+	    > c)</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
@@ -154,18 +184,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >}</li
 	  ><li class="src short"
 	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:RopCons"
-	    >RopCons</a
-	    > c = <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c)</li
-	  ><li class="src short"
-	  ><span class="keyword"
 	    >data</span
 	    >  <a href="#t:Relmap"
 	    >Relmap</a
@@ -193,10 +211,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		>RelmapGlobal</a
 		> <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
 		>Lexmap</a
-		> (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
-		>Global</a
-		> c -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RelkitFlow"
-		>RelkitFlow</a
+		> (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RelkitGlobal"
+		>RelkitGlobal</a
 		> c)  </li
 	      ><li
 	      >| <a href="#v:RelmapCalc"
@@ -237,8 +253,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		>Lexmap</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
-		> <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:Roa"
-		>Roa</a
+		> <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrTrees"
+		>AttrTrees</a
 		>  </li
 	      ><li
 	      >| <a href="#v:RelmapAppend"
@@ -256,18 +272,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
 	    >Relmap</a
 	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:mapToRelmap"
-	    >mapToRelmap</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c)</li
 	  ><li class="src short"
 	  ><a href="#v:relmapLexList"
 	    >relmapLexList</a
@@ -320,112 +324,43 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > c] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RelkitFlow"
 	    >RelkitFlow</a
 	    > c</li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >data</span
-	    >  <a href="#t:Global"
-	    >Global</a
-	    > c = <a href="#v:Global"
-	    >Global</a
-	    > {<ul class="subs"
-	    ><li
-	      ><a href="#v:globalVersion"
-		>globalVersion</a
-		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Version.html#t:Version"
-		>Version</a
-		></li
-	      ><li
-	      ><a href="#v:globalRops"
-		>globalRops</a
-		> :: [<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Rop"
-		>Rop</a
-		> c]</li
-	      ><li
-	      ><a href="#v:globalCops"
-		>globalCops</a
-		> :: ([<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cop"
-		>Cop</a
-		> c], [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-		>Named</a
-		> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Infix.html#t:InfixHeight"
-		>InfixHeight</a
-		>])</li
-	      ><li
-	      ><a href="#v:globalProgram"
-		>globalProgram</a
-		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		></li
-	      ><li
-	      ><a href="#v:globalArgs"
-		>globalArgs</a
-		> :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>]</li
-	      ><li
-	      ><a href="#v:globalJudges"
-		>globalJudges</a
-		> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
-		>Judge</a
-		> c]</li
-	      ><li
-	      ><a href="#v:globalSelect"
-		>globalSelect</a
-		> :: <a href="Koshucode-Baala-Core-Relmap-Relkit.html#t:RelSelect"
-		>RelSelect</a
-		> c</li
-	      ></ul
-	    >}</li
-	  ><li class="src short"
-	  ><a href="#v:globalCommandLine"
-	    >globalCommandLine</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
-	    >Global</a
-	    > c -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >]</li
-	  ><li class="src short"
-	  ><a href="#v:globalFill"
-	    >globalFill</a
-	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
-	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
-	    >Global</a
-	    > c)</li
-	  ><li class="src short"
-	  ><a href="#v:global"
-	    >global</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
-	    >Global</a
-	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:globalSyntax"
-	    >globalSyntax</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
-	    >Global</a
-	    > c -&gt; ([<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cop"
-	    >Cop</a
-	    > c], [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Infix.html#t:InfixHeight"
-	    >InfixHeight</a
-	    >])</li
-	  ><li class="src short"
-	  ><a href="#v:globalFunction"
-	    >globalFunction</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
-	    >Global</a
-	    > c -&gt; [<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cop"
-	    >Cop</a
-	    > c]</li
 	  ></ul
 	></div
       ><div id="interface"
       ><h1 id="g:1"
 	>Rop
 </h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:Global" class="def"
+	    >Global</a
+	    > c = <a href="Koshucode-Baala-Core-Relmap-Global.html#t:GlobalWith"
+	    >GlobalWith</a
+	    > <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Rop"
+	    >Rop</a
+	    > c<a href="src/Koshucode-Baala-Core-Relmap-Operator.html#Global" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Global parameters
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:RopUsage" class="def"
+	    >RopUsage</a
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ><a href="src/Koshucode-Baala-Core-Relmap-Operator.html#RopUsage" class="link"
+	    >Source</a
+	    ></p
+	  ></div
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -461,8 +396,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		    ><dt class="src"
 		      ><a name="v:ropName" class="def"
 			>ropName</a
-			> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-			>String</a
+			> :: <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:RopName"
+			>RopName</a
 			></dt
 		      ><dd class="doc"
 		      ><p
@@ -483,8 +418,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      ><dt class="src"
 		      ><a name="v:ropSorter" class="def"
 			>ropSorter</a
-			> :: <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:RoaSorter"
-			>RoaSorter</a
+			> :: <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrSort"
+			>AttrSort</a
 			></dt
 		      ><dd class="doc"
 		      ><p
@@ -505,8 +440,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		      ><dt class="src"
 		      ><a name="v:ropUsage" class="def"
 			>ropUsage</a
-			> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-			>String</a
+			> :: <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUsage"
+			>RopUsage</a
 			></dt
 		      ><dd class="doc"
 		      ><p
@@ -538,6 +473,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  ></tr
 		></table
 	      ></div
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>RopUse
+</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:RopCons" class="def"
+	    >RopCons</a
+	    > c = <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
+	    >RopUse</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+	    >Relmap</a
+	    > c)<a href="src/Koshucode-Baala-Core-Relmap-Operator.html#RopCons" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Constructor of relmap operator
+</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -627,8 +586,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  ></tr
 		><tr
 		><td class="src"
-		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:CodePointer"
-		    >CodePointer</a
+		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:CodePtr"
+		    >CodePtr</a
 		    > (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
 		    >RopUse</a
 		    > c)</td
@@ -639,28 +598,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      ></div
 	    ></div
 	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:RopCons" class="def"
-	    >RopCons</a
-	    > c = <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c)<a href="src/Koshucode-Baala-Core-Relmap-Operator.html#RopCons" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Constructor of relmap operator
-</p
-	    ></div
-	  ></div
-	><h1 id="g:2"
+	><h1 id="g:3"
 	>Relmap
 </h1
 	><div class="top"
@@ -719,10 +657,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  >RelmapGlobal</a
 		  > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
 		  >Lexmap</a
-		  > (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
-		  >Global</a
-		  > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RelkitFlow"
-		  >RelkitFlow</a
+		  > (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RelkitGlobal"
+		  >RelkitGlobal</a
 		  > c)</td
 		><td class="doc"
 		><p
@@ -791,8 +727,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  >Lexmap</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
-		  > <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:Roa"
-		  >Roa</a
+		  > <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrTrees"
+		  >AttrTrees</a
 		  ></td
 		><td class="doc"
 		><p
@@ -874,8 +810,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		  ></tr
 		><tr
 		><td class="src"
-		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:CodePointer"
-		    >CodePointer</a
+		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:CodePtr"
+		    >CodePtr</a
 		    > (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
 		    >Relmap</a
 		    > c)</td
@@ -913,27 +849,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:mapToRelmap" class="def"
-	    >mapToRelmap</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c)<a href="src/Koshucode-Baala-Core-Relmap-Operator.html#mapToRelmap" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Map function to relmaps.
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
 	  ><a name="v:relmapLexList" class="def"
 	    >relmapLexList</a
 	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
@@ -944,7 +859,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >Source</a
 	    ></p
 	  ></div
-	><h1 id="g:3"
+	><h1 id="g:4"
 	>Relkit
 </h1
 	><div class="top"
@@ -1042,187 +957,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      > from multiple subrelmaps and input heading.
 </p
 	    ></div
-	  ></div
-	><h1 id="g:4"
-	>Global
-</h1
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >data</span
-	    >  <a name="t:Global" class="def"
-	    >Global</a
-	    > c <a href="src/Koshucode-Baala-Core-Relmap-Operator.html#Global" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="subs constructors"
-	  ><p class="caption"
-	    >Constructors</p
-	    ><table
-	    ><tr
-	      ><td class="src"
-		><a name="v:Global" class="def"
-		  >Global</a
-		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ><tr
-	      ><td colspan="2"
-		><div class="subs fields"
-		  ><p class="caption"
-		    >Fields</p
-		    ><dl
-		    ><dt class="src"
-		      ><a name="v:globalVersion" class="def"
-			>globalVersion</a
-			> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Version.html#t:Version"
-			>Version</a
-			></dt
-		      ><dd class="doc empty"
-		      >&nbsp;</dd
-		      ><dt class="src"
-		      ><a name="v:globalRops" class="def"
-			>globalRops</a
-			> :: [<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Rop"
-			>Rop</a
-			> c]</dt
-		      ><dd class="doc empty"
-		      >&nbsp;</dd
-		      ><dt class="src"
-		      ><a name="v:globalCops" class="def"
-			>globalCops</a
-			> :: ([<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cop"
-			>Cop</a
-			> c], [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-			>Named</a
-			> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Infix.html#t:InfixHeight"
-			>InfixHeight</a
-			>])</dt
-		      ><dd class="doc empty"
-		      >&nbsp;</dd
-		      ><dt class="src"
-		      ><a name="v:globalProgram" class="def"
-			>globalProgram</a
-			> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-			>String</a
-			></dt
-		      ><dd class="doc empty"
-		      >&nbsp;</dd
-		      ><dt class="src"
-		      ><a name="v:globalArgs" class="def"
-			>globalArgs</a
-			> :: [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-			>String</a
-			>]</dt
-		      ><dd class="doc empty"
-		      >&nbsp;</dd
-		      ><dt class="src"
-		      ><a name="v:globalJudges" class="def"
-			>globalJudges</a
-			> :: [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
-			>Judge</a
-			> c]</dt
-		      ><dd class="doc empty"
-		      >&nbsp;</dd
-		      ><dt class="src"
-		      ><a name="v:globalSelect" class="def"
-			>globalSelect</a
-			> :: <a href="Koshucode-Baala-Core-Relmap-Relkit.html#t:RelSelect"
-			>RelSelect</a
-			> c</dt
-		      ><dd class="doc empty"
-		      >&nbsp;</dd
-		      ></dl
-		    ><div class="clear"
-		    ></div
-		    ></div
-		  ></td
-		></tr
-	      ></table
-	    ></div
-	  ><div class="subs instances"
-	  ><p id="control.i:Global" class="caption collapser" onclick="toggleSection('i:Global')"
-	    >Instances</p
-	    ><div id="section.i:Global" class="show"
-	    ><table
-	      ><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
-		    >Show</a
-		    > (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
-		    >Global</a
-		    > c)</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		></table
-	      ></div
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:globalCommandLine" class="def"
-	    >globalCommandLine</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
-	    >Global</a
-	    > c -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    >]<a href="src/Koshucode-Baala-Core-Relmap-Operator.html#globalCommandLine" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:globalFill" class="def"
-	    >globalFill</a
-	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
-	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
-	    >Global</a
-	    > c)<a href="src/Koshucode-Baala-Core-Relmap-Operator.html#globalFill" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:global" class="def"
-	    >global</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
-	    >Global</a
-	    > c<a href="src/Koshucode-Baala-Core-Relmap-Operator.html#global" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:globalSyntax" class="def"
-	    >globalSyntax</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
-	    >Global</a
-	    > c -&gt; ([<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cop"
-	    >Cop</a
-	    > c], [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Infix.html#t:InfixHeight"
-	    >InfixHeight</a
-	    >])<a href="src/Koshucode-Baala-Core-Relmap-Operator.html#globalSyntax" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:globalFunction" class="def"
-	    >globalFunction</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
-	    >Global</a
-	    > c -&gt; [<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cop"
-	    >Cop</a
-	    > c]<a href="src/Koshucode-Baala-Core-Relmap-Operator.html#globalFunction" class="link"
-	    >Source</a
-	    ></p
 	  ></div
 	></div
       ></div

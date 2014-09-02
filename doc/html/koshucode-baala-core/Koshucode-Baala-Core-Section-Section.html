@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.61.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.70.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -96,6 +96,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 		>String</a
 		></li
 	      ><li
+	      ><a href="#v:secGlobal"
+		>secGlobal</a
+		> :: <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
+		>Global</a
+		> c</li
+	      ><li
 	      ><a href="#v:secImport"
 		>secImport</a
 		> :: [<a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
@@ -152,6 +158,28 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	      ></ul
 	    >}</li
 	  ><li class="src short"
+	  ><a href="#v:calcTreeUsing"
+	    >calcTreeUsing</a
+	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
+	    >Global</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:CalcContent"
+	    >CalcContent</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:coxTreeUsing"
+	    >coxTreeUsing</a
+	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
+	    >Global</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTreeToAb"
+	    >TokenTreeToAb</a
+	    > (<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
+	    >Cox</a
+	    > c)</li
+	  ><li class="src short"
 	  ><a href="#v:emptySection"
 	    >emptySection</a
 	    > ::  <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
@@ -175,6 +203,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	    > (<a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
 	    >Section</a
 	    > c)</li
+	  ><li class="src short"
+	  ><a href="#v:rootSection"
+	    >rootSection</a
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
+	    >Global</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
+	    >Section</a
+	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:addMessage"
 	    >addMessage</a
@@ -239,6 +275,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 		      ><dd class="doc"
 		      ><p
 			>Section name
+</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:secGlobal" class="def"
+			>secGlobal</a
+			> :: <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
+			>Global</a
+			> c</dt
+		      ><dd class="doc"
+		      ><p
+			>Global parameter
 </p
 			></dd
 		      ><dt class="src"
@@ -379,6 +426,36 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	      ></div
 	    ></div
 	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:calcTreeUsing" class="def"
+	    >calcTreeUsing</a
+	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
+	    >Global</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:CalcContent"
+	    >CalcContent</a
+	    > c<a href="src/Koshucode-Baala-Core-Section-Section.html#calcTreeUsing" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:coxTreeUsing" class="def"
+	    >coxTreeUsing</a
+	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
+	    >Global</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTreeToAb"
+	    >TokenTreeToAb</a
+	    > (<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
+	    >Cox</a
+	    > c)<a href="src/Koshucode-Baala-Core-Section-Section.html#coxTreeUsing" class="link"
+	    >Source</a
+	    ></p
+	  ></div
 	><h1 id="g:2"
 	>Constructors
 </h1
@@ -479,6 +556,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	      >.
 </p
 	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:rootSection" class="def"
+	    >rootSection</a
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
+	    >Global</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Section-Section.html#t:Section"
+	    >Section</a
+	    > c<a href="src/Koshucode-Baala-Core-Section-Section.html#rootSection" class="link"
+	    >Source</a
+	    ></p
 	  ></div
 	><div class="top"
 	><p class="src"
