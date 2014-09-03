@@ -38,28 +38,32 @@ type CalcContent c = B.TokenTreeToAb c
 literal :: forall c. (C.CContent c) => CalcContent c -> B.TokenTreeToAb c
 literal calc tree = Message.abLiteral tree $ lit tree where
     lit :: B.TokenTreeToAb c
-    lit x@(B.TreeL tok)
-        = case getDecimalText [x] of
-            Right w -> C.putDec =<< B.litDecimal w
-            Left _  -> case tok of
-                         B.TText _ n w | n <= 0  ->  getKeyword w
-                         B.TText _ _ w           ->  C.putText w
-                         B.TTerm _ _ [n]         ->  C.putTerm n
-                         _                       ->  Message.unkWord $ B.tokenContent tok
+    lit x@(B.TreeL t)
+        = either (const $ token t) decimal $ getDecimalText [x]
+    lit g@(B.TreeB b _ xs) = case b of
+        B.BracketGroup  ->  group g
+        B.BracketList   ->  C.putList =<< literals lit xs
+        B.BracketSet    ->  C.putSet  =<< literals lit xs
+        B.BracketAssn   ->                litAngle lit xs
+        B.BracketRel    ->  C.putRel  =<< litRel   lit xs
+        B.BracketForm   ->  Message.adlib "Unknown bracket type"
 
-    lit (B.TreeB n _ xs) = case n of
-        B.BracketGroup  ->  group xs
-        B.BracketList   ->  C.putList =<< literals  lit xs
-        B.BracketSet    ->  C.putSet  =<< literals  lit xs
-        B.BracketAssn   ->                litAngle  lit xs
-        B.BracketRel    ->  C.putRel  =<< litRel    lit xs
-        _  ->  Message.adlib "Unknown bracket type"
+    token :: B.Token -> B.Ab c
+    token (B.TText _ n w) | n <= 0  =  getKeyword w
+    token (B.TText _ _ w)           =  C.putText w
+    token (B.TTerm _ _ [n])         =  C.putTerm n
+    token t                         =  Message.unkWord $ B.tokenContent t
 
-    group :: B.TokenTreesToAb c
-    group [] = Right C.empty
-    group xs = case getDecimalText xs of
-                 Right w  ->  C.putDec =<< B.litDecimal w
-                 Left _   ->  calc $ B.TreeB B.BracketGroup Nothing xs
+    group :: B.TokenTreeToAb c
+    group g@(B.TreeB _ _ xs@(B.TreeL (B.TText _ n _) : _))
+        | n > 0   =  eith g text    $ getTexts True xs
+        | n == 0  =  eith g decimal $ getDecimalText xs
+    group (B.TreeB _ _ [])  = Right C.empty
+    group g                 = calc g
+
+    eith g   =  either (const $ calc g)
+    text     =  C.putText . concat
+    decimal  =  C.putDec B.<=< B.litDecimal
 
 literals :: (C.CContent c) => B.TokenTreeToAb c -> B.TokenTreesToAb [c]
 literals _   [] = Right []
@@ -74,7 +78,7 @@ getKeyword "1"  =  Right C.true
 getKeyword w    =  Message.unkWord w
 
 getDecimalText :: B.TokenTreesToAb String
-getDecimalText = getDecimalText2 B.<=< getTexts
+getDecimalText = getDecimalText2 B.<=< getTexts False
 
 getDecimalText2 :: [String] -> B.Ab String
 getDecimalText2 = first where
@@ -85,16 +89,17 @@ getDecimalText2 = first where
     loop ss (w : xs) | all (`elem` "0123456789.") w = loop (w:ss) xs
     loop _ _ = Message.nothing
 
-getTexts :: B.TokenTreesToAb [String]
-getTexts = loop [] where
+getTexts :: Bool -> B.TokenTreesToAb [String]
+getTexts quoted = loop [] where
     loop ss [] = Right $ reverse ss
     loop ss (B.TreeL x : xs) =
-        do s <- getText 0 x
+        do s <- getText quoted x
            loop (s : ss) xs
     loop _ _ = Message.nothing
 
-getText :: Int -> B.Token -> B.Ab String
-getText q0 (B.TText _ q w) | q == q0  =  Right w
+getText :: Bool -> B.Token -> B.Ab String
+getText True  (B.TText _ q w) | q > 0   =  Right w
+getText False (B.TText _ q w) | q == 0  =  Right w
 getText _ _  =  Message.nothing
 
 
