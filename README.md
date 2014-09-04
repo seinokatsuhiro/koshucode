@@ -1,15 +1,14 @@
 NAME
 ----------------------
 
-koshu — a portable data calculator
-
+koshucode — a notational system for relational data
 
 
 DESCRIPTION
 ----------------------
 
 This repository contains a computer program named `koshu`
-that processes data written in Koshucode.
+that processes data written in koshucode.
 Koshucode is a notation for people and computers
 who read, write, and calculate relational data.
 
@@ -35,18 +34,19 @@ DOCUMENTATION
 User manual is not written yet.
 Please see examples or elementary book.
 
-* [example/dictionary][example/dictionary]
+* [Examples][example] excerpt from [The Relational Database Dictionary][dictionary] by C. J. Date
 * [The ABC of Koshucode][abc-of-koshucode]
-  (I am translating the book from Japanese to English.)
+  (This book is written in Japanese)
 
 `koshu` is implemented using Haskell.
 Documentations of software libraries at
 
-* [koshucode-baala-base][koshucode-baala-base]
-* [koshucode-baala-core][koshucode-baala-core]
-* [koshucode-baala-operator][koshucode-baala-operator]
-* [koshucode-baala-calculator][koshucode-baala-calculator]
-* [koshucode-baala-toolkit][koshucode-baala-toolkit]
+* [koshucode-baala-base]
+* [koshucode-baala-core]
+* [koshucode-baala-operator]
+* [koshucode-baala-content]
+* [koshucode-baala-calculator]
+* [koshucode-baala-toolkit]
 
 
 
@@ -56,12 +56,14 @@ BUGS
 There are many bugs and potentials.
 
 
-[example/dictionary]:         https://github.com/seinokatsuhiro/koshucode-example/tree/master/dictionary
+[example]:                    https://github.com/seinokatsuhiro/koshucode-example/tree/master/dictionary
+[dictionary]:                 http://shop.oreilly.com/product/9780596527983.do
 [abc-of-koshucode]:           https://github.com/seinokatsuhiro/abc-of-koshucode/tree/master/draft/english
 
 [koshucode-baala-base]:       http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/
 [koshucode-baala-core]:       http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/
 [koshucode-baala-operator]:   http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/
+[koshucode-baala-content]:    http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-content/
 [koshucode-baala-calculator]: http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-calculator/
 [koshucode-baala-toolkit]:    http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-toolkit/
 

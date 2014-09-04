@@ -32,25 +32,22 @@ Files `*.k` are data itself and calculation in koshucode.
 
       / operator
          * koshucode-baala-operator.cabal
-         / Koshucode
-            / Baala
-               / Minimal
-               / Vanilla
+         / Koshucode / Baala / Op
+
+      / content
+         * koshucode-baala-content.cabal
+         / Koshucode / Baala / Op
+         / Koshucode / Baala / Type
 
       / calculator
          * koshucode-baala-calculator.cabal
          * koshu.hs
          / Koshucode / Baala / Toolkit
-         / example
-            / dictionary
-               * DATA.k
-               * natural-join.k
 
       / toolkit
          * koshucode-baala-toolkit.cabal
          * koshu-change.hs
          * koshu-rdf.hs
-         * koshu-regress.hs
          * koshu-syntax.hs
          / Koshucode / Baala / Toolkit
 ```
@@ -71,15 +68,16 @@ related libraries and tools like Cabal.
 Install koshu command
 ---------------------------------
 
-There are five Cabal packages.
+There are six Cabal packages.
 
 * `koshucode-baala-base`
 * `koshucode-baala-core`
 * `koshucode-baala-operator`
+* `koshucode-baala-content`
 * `koshucode-baala-calculator`
 * `koshucode-baala-toolkit` (optional)
 
-Install `koshucode-baala-base` package.
+First, install `koshucode-baala-base` package.
 Type `cabal install` under the `base` directory.
 This package contains `Koshucode.Baala.Base` module.
 
@@ -97,19 +95,18 @@ cd koshucode-master/baala/core
 cabal install
 ```
 
-Install `koshucode-baala-operator` package.
-This package contains `Koshucode.Baala.Minimal`
-and `Koshucode.Baala.Vanilla` modules.
-These packages provide relational operators.
+Install `koshucode-baala-operator` and `koshucode-baala-content` packages.
+These packages provides relational operators.
 
 ``` sh
 cd koshucode-master/baala/operator
 cabal install
+cd ../content
+cabal install
 ```
 
 Install `koshucode-baala-calculator` package.
-This package contains `koshu` command
-and `Koshucode.Baala.Toolkit` module.
+This package contains `koshu` command.
 
 ``` sh
 cd koshucode-master/baala/calculator
@@ -119,8 +116,7 @@ cabal install
 Optionally,
 you can install `koshucode-baala-toolkit` package.
 This package contains additional commands,
-e.g., `koshu-change`, `koshu-rdf`,
-`koshu-regress` and `koshu-syntax`.
+e.g., `koshu-change`, `koshu-rdf` and `koshu-syntax`.
 
 ``` sh
 # optional
@@ -133,51 +129,58 @@ Invoke koshu command
 ---------------------------------
 
 `koshu` command is a portable relational calculator.
-This calculator reads data and calculating formula in koshucode,
+This calculator reads data and formula in koshucode,
 and writes results of the calculations.
 The results are also written in koshucode.
 
 ``` sh
-cd koshucode-master/baala/calculator/example/dictionary
-koshu DATA.k natural-join.k
+cd koshucode-example/dictionary
+koshu DATA.k calc/N/natural-join.k
 ```
 
 The order of files is not significant.
-You can type also `koshu natural-join.k DATA.k`.
-With the `-i` option, `koshu` reads data file
-from the standard input.
+You can also type `koshu calc/N/natural-join.k DATA.k`.
+With the `-i` option, `koshu` reads data from the standard input.
 
 ``` sh
-koshu -i natural-join.k < DATA.k
+koshu -i calc/N/natural-join.k < DATA.k
 ```
 
-These commands calculates
-[`natural-join.k`](https://github.com/seinokatsuhiro/koshucode/blob/master/baala/calculator/example/dictionary/natural-join.k)
-for input [`DATA.k`](https://github.com/seinokatsuhiro/koshucode/blob/master/baala/calculator/example/dictionary/DATA.k),
-and writes the following output data.
+These commands calculate [`natural-join.k`][natural-join.k]
+for input [`DATA.k`][DATA.k] and writes the following output data.
 
 ``` text
 ** -*- koshu -*-
-**  
+**
 **  INPUT
 **    DATA.k
-**    natural-join.k
-**    
+**    calc/N/natural-join.k
+**
 
-|-- SSP  /pno P6  /qty 100  /sno S1  /sname Smith  /status 20  /city London
-|-- SSP  /pno P5  /qty 100  /sno S1  /sname Smith  /status 20  /city London
-|-- SSP  /pno P4  /qty 200  /sno S1  /sname Smith  /status 20  /city London
-|-- SSP  /pno P3  /qty 400  /sno S1  /sname Smith  /status 20  /city London
-|-- SSP  /pno P2  /qty 200  /sno S1  /sname Smith  /status 20  /city London
+|-- SSP  /pno 'P6  /qty 100  /sno 'S1  /sname 'Smith  /status 20  /city 'London
+|-- SSP  /pno 'P5  /qty 100  /sno 'S1  /sname 'Smith  /status 20  /city 'London
+|-- SSP  /pno 'P4  /qty 200  /sno 'S1  /sname 'Smith  /status 20  /city 'London
+|-- SSP  /pno 'P3  /qty 400  /sno 'S1  /sname 'Smith  /status 20  /city 'London
+|-- SSP  /pno 'P2  /qty 200  /sno 'S1  /sname 'Smith  /status 20  /city 'London
 
-|-- SSP  /pno P1  /qty 300  /sno S1  /sname Smith  /status 20  /city London
-|-- SSP  /pno P2  /qty 400  /sno S2  /sname Jones  /status 10  /city Paris
-|-- SSP  /pno P1  /qty 300  /sno S2  /sname Jones  /status 10  /city Paris
-|-- SSP  /pno P2  /qty 200  /sno S3  /sname Blake  /status 30  /city Paris
-|-- SSP  /pno P5  /qty 400  /sno S4  /sname Clark  /status 20  /city London
+|-- SSP  /pno 'P1  /qty 300  /sno 'S1  /sname 'Smith  /status 20  /city 'London
+|-- SSP  /pno 'P2  /qty 400  /sno 'S2  /sname 'Jones  /status 10  /city 'Paris
+|-- SSP  /pno 'P1  /qty 300  /sno 'S2  /sname 'Jones  /status 10  /city 'Paris
+|-- SSP  /pno 'P2  /qty 200  /sno 'S3  /sname 'Blake  /status 30  /city 'Paris
+|-- SSP  /pno 'P5  /qty 400  /sno 'S4  /sname 'Clark  /status 20  /city 'London
 
-|-- SSP  /pno P4  /qty 300  /sno S4  /sname Clark  /status 20  /city London
-|-- SSP  /pno P2  /qty 200  /sno S4  /sname Clark  /status 20  /city London
-**  (12 judges)
+|-- SSP  /pno 'P4  /qty 300  /sno 'S4  /sname 'Clark  /status 20  /city 'London
+|-- SSP  /pno 'P2  /qty 200  /sno 'S4  /sname 'Clark  /status 20  /city 'London
+
+*** 12 judges
+
+**
+**  SUMMARY
+**      12 judges on SSP
+**      12 judges in total
+**
 ```
 
+
+[DATA.k]:          https://github.com/seinokatsuhiro/koshucode-example/blob/master/dictionary/DATA.k
+[natural-join.k]:  https://github.com/seinokatsuhiro/koshucode-example/blob/master/dictionary/calc/N/natural-join.k
