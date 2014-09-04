@@ -8,7 +8,6 @@ module Koshucode.Baala.Op.Quoter
 ) where
 
 import qualified Koshucode.Baala.Core         as C
-import qualified Koshucode.Baala.Op.Global    as Op
 import qualified Koshucode.Baala.Type.Vanilla as Type
 
 -- | Quasiquoter for @[koshu| ... |]@.
@@ -19,5 +18,5 @@ koshu = C.koshuQuoter vanillaLex [| vanillaFull |]
 vanillaLex  :: C.ConsLexmap
 vanillaFull :: C.ConsRelmap Type.VContent
 (C.RelmapCons vanillaLex vanillaFull)
-    = C.relmapCons $ C.global { C.globalRops = Op.vanillaRops }
+    = C.relmapCons C.global
 

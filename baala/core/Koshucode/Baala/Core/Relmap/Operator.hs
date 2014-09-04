@@ -34,7 +34,7 @@ import qualified Koshucode.Baala.Core.Relmap.Relkit     as C
 -- ----------------------  Rop
 
 -- | Global parameters
-type Global c = C.GlobalWith Rop c
+type Global c = C.Global' Rop c
 
 type RopUsage = String
 

@@ -16,9 +16,8 @@ import qualified Koshucode.Baala.Op.Cop    as Cop
 
 -- | Global with operators.
 vanillaGlobal :: (C.CContent c) => C.Global c
-vanillaGlobal =
-    C.global { C.globalCops = vanillaCops
-             , C.globalRops = vanillaRops }
+vanillaGlobal = C.global { C.globalOpset = opset } where
+    opset = C.OpSet vanillaRops vanillaCops vanillaInfix
 
 -- | Relmap operators
 vanillaRops :: (C.CContent c) => [C.Rop c]
@@ -42,15 +41,16 @@ ropsNonCox = Rop.ropsMeta
           ++ Rop.ropsSource
           ++ Rop.ropsBuiltin
 
--- | Term-content operators and its height table.
-vanillaCops :: (C.CContent c) => ([C.Cop c], [B.Named B.InfixHeight])
-vanillaCops = (concat cops, htab) where
+-- | Term-content operators.
+vanillaCops :: (C.CContent c) => [C.Cop c]
+vanillaCops = concat [ Cop.copsArith
+                     , Cop.copsLogic
+                     , Cop.copsList
+                     , Cop.copsOrder ]
 
-    cops = [ Cop.copsArith
-           , Cop.copsLogic
-           , Cop.copsList
-           , Cop.copsOrder ]
-
+-- | Height table.
+vanillaInfix :: [B.Named B.InfixHeight]
+vanillaInfix = htab where
     h ! name = (name, Right h)
 
     htab =
@@ -88,4 +88,4 @@ vanillaCops = (concat cops, htab) where
         , ("<left-1>"  , Left 1)
         , ("<right-1>" , Right 1)
         ]
-    
+

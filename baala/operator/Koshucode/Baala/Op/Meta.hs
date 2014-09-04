@@ -55,8 +55,8 @@ relmapKoshuCop :: (C.CContent c) => C.RopUse c -> B.TermName -> C.Relmap c
 relmapKoshuCop use = C.relmapGlobal use . relkitKoshuCop
 
 relkitKoshuCop :: (C.CContent c) => B.TermName -> C.RelkitGlobal c
-relkitKoshuCop name C.Global { C.globalCops = (cops, _) } _ =
-    Right $ C.relkitConstBody [name] $ map (B.li1 . C.pText . B.name) cops
+relkitKoshuCop name g _ =
+    Right $ C.relkitConstBody [name] $ map (B.li1 . C.pText . B.name) $ C.globalCops g
 
 
 -- ----------------------  koshu-cop-infix
@@ -72,8 +72,8 @@ relmapKoshuCopInfix :: (C.CContent c) => C.RopUse c -> (B.TermName, Maybe B.Term
 relmapKoshuCopInfix use = C.relmapGlobal use . relkitKoshuCopInfix
 
 relkitKoshuCopInfix :: (C.CContent c) => (B.TermName, Maybe B.TermName, Maybe B.TermName) -> C.RelkitGlobal c
-relkitKoshuCopInfix (name, height, dir) C.Global { C.globalCops = (_, htab) } _ = Right kit2 where
-    kit2 = C.relkitJust he2 $ C.RelkitConst (map put htab)
+relkitKoshuCopInfix (name, height, dir) g _ = Right kit2 where
+    kit2 = C.relkitJust he2 $ C.RelkitConst (map put $ C.globalInfix g)
     he2  = B.headFrom $ [name] ++ heightMaybe B.li1           ++ dirMaybe B.li1
     put (n, ih)  = [C.pText n] ++ heightMaybe (heightTerm ih) ++ dirMaybe (dirTerm ih)
 
@@ -104,10 +104,10 @@ relmapKoshuRop use = C.relmapGlobal use . relkitKoshuRop
 relkitKoshuRop :: (C.CContent c)
     => (Maybe B.TermName, Maybe B.TermName, Maybe B.TermName)
     -> C.RelkitGlobal c
-relkitKoshuRop (name, group, usage) C.Global { C.globalRops = rops } _ = Right kit2 where
+relkitKoshuRop (name, group, usage) g _ = Right kit2 where
     kit2  = C.relkitConstBody ns bo2
     ns    = B.catMaybes [group, name, usage]
-    bo2   = map f rops
+    bo2   = map f $ C.globalRops g
     f rop = cond group C.ropGroup ++
             cond name  C.ropName  ++
             cond usage C.ropUsage
