@@ -192,13 +192,12 @@ secCalc = calcTreeUsing . secGlobal
 calcTreeUsing :: (C.CContent c) => C.Global c -> C.CalcContent c
 calcTreeUsing g = calc where
     base       =  C.globalFunction g
-    syntax     =  C.globalSyntax   g
     copset     =  C.globalCopset g
-    calc tree  =  do alpha <- C.coxBuild calc copset syntax tree
+    calc tree  =  do alpha <- C.coxBuild calc copset tree
                      C.coxRunCox (base, []) B.mempty [] alpha
 
 coxTreeUsing :: (C.CContent c) => C.Global c -> B.TokenTreeToAb (C.Cox c)
-coxTreeUsing g = C.coxBuild undefined (C.globalCopset g) $ C.globalSyntax g
+coxTreeUsing g = C.coxBuild undefined (C.globalCopset g)
 
 
 -- ----------------------  Clause type

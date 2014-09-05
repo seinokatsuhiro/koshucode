@@ -11,7 +11,6 @@ module Koshucode.Baala.Core.Relmap.Global
   globalCopset,
   globalInfix,
   globalFunction,
-  globalSyntax,
   global,
 
   OpSet' (..),
@@ -61,13 +60,6 @@ globalCopset = opsetCop . globalOpset
 
 globalFunction :: Global' rop c -> [C.Cop c]
 globalFunction = filter C.isCopFunction . C.copsetList . opsetCop . globalOpset
-
-globalSyntax :: Global' rop c -> C.CoxSyntax c
-globalSyntax g = (syn, htab) where
-    syn    =  filter C.isCopSyntax cops
-    htab   =  C.copsetInfixList $ opsetCop ops
-    cops   =  C.copsetList      $ opsetCop ops
-    ops    =  globalOpset g
 
 global :: Global' rop c
 global = Global

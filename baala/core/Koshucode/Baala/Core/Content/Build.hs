@@ -4,7 +4,7 @@
 -- | Term-content calcutation.
 
 module Koshucode.Baala.Core.Content.Build
-( CoxSyntax, coxBuild, coxForm,
+( coxBuild, coxForm,
 ) where
 
 import qualified Koshucode.Baala.Base                   as B
@@ -13,21 +13,21 @@ import qualified Koshucode.Baala.Core.Content.Cox       as C
 import qualified Koshucode.Baala.Core.Content.Literal   as C
 import qualified Koshucode.Baala.Core.Message           as Message
 
-type CoxSyntax c = ( [C.Cop c], [B.Named B.InfixHeight] )
-
 -- | Construct content expression from token tree
 coxBuild :: forall c. (C.CContent c)
-  => C.CalcContent c -> C.CopSet c -> CoxSyntax c -> B.TokenTreeToAb (C.Cox c)
-coxBuild calc copset (syn, htab) =
-    convCox findCox         -- convert cox to cox
+  => C.CalcContent c -> C.CopSet c -> B.TokenTreeToAb (C.Cox c)
+coxBuild calc copset =
+    convCox findCox            -- convert cox to cox
       B.<=< Right
-      . debruijn            -- attach De Bruijn indicies
-      . coxUnfold           -- expand multiple-blank form
-      B.<=< construct calc  -- construct content expression from token tree
-      B.<=< prefix htab     -- convert infix operator to prefix
-      B.<=< convTree syn    -- convert token tree to token tree
+      . debruijn               -- attach De Bruijn indicies
+      . coxUnfold              -- expand multiple-blank form
+      B.<=< construct calc     -- construct content expression from token tree
+      B.<=< prefix htab        -- convert infix operator to prefix
+      B.<=< convTree findTree  -- convert token tree to token tree
     where
-      findCox = C.copsetCoxFind copset
+      findCox  = C.copsetCoxFind   copset
+      findTree = C.copsetTreeFind  copset
+      htab     = C.copsetInfixList copset
 
 debruijn :: B.Map (C.Cox c)
 debruijn = index [] where
@@ -58,21 +58,18 @@ coxUnfold = unfold . C.coxMap coxUnfold where
 convCox :: forall c. C.CopFind (C.CopCox c) -> B.AbMap (C.Cox c)
 convCox find = expand where
     expand :: B.AbMap (C.Cox c)
-    expand cox =
-        case cox of
-            C.CoxForm1  cp tag n  x -> Right . C.CoxForm1  cp tag n  =<< expand x
-            C.CoxForm   cp tag ns x -> Right . C.CoxForm   cp tag ns =<< expand x
-            C.CoxFill cp f@(C.CoxBlank _ n) xs ->
-                case find n of
-                  Just g       -> expand =<< g xs
-                  _            -> expandApply cp f xs
-            C.CoxFill cp f xs  -> expandApply cp f xs
-            _                  -> Right cox
+    expand (C.CoxForm1 cp tag n  x) = Right . C.CoxForm1 cp tag n  =<< expand x
+    expand (C.CoxForm  cp tag ns x) = Right . C.CoxForm  cp tag ns =<< expand x
+    expand (C.CoxFill  cp f@(C.CoxBlank _ n) xs)
+                                    = case find n of
+                                        Just g -> expand =<< g xs
+                                        _      -> fill cp f xs
+    expand (C.CoxFill  cp f xs)     = fill cp f xs
+    expand cox                      =  Right cox
 
-    expandApply cp f xs =
-        do f'  <- expand f
-           xs' <- mapM expand xs
-           Right $ C.CoxFill cp f' xs'
+    fill cp f xs = do f'  <- expand f
+                      xs' <- mapM expand xs
+                      Right $ C.CoxFill cp f' xs'
     
 -- construct content expression from token tree
 construct :: forall c. (C.CContent c) => C.CalcContent c -> B.TokenTreeToAb (C.Cox c)
@@ -163,19 +160,16 @@ undoubleGroup :: B.Map (B.CodeTree B.BracketType a)
 undoubleGroup = B.undouble (== B.BracketGroup)
 
 -- expand tree-level syntax
-convTree :: forall c. [C.Cop c] -> B.AbMap B.TokenTree
-convTree syn = expand where
-    assoc :: [B.Named (C.Cop c)]
-    assoc = map B.named syn
-
+convTree :: C.CopFind C.CopTree -> B.AbMap B.TokenTree
+convTree find = expand where
     expand tree@(B.TreeB B.BracketGroup p subtrees) =
         case subtrees of
           op@(B.TreeL (B.TText _ 0 name)) : args
               -> Message.abCoxSyntax tree $
-                 case lookup name assoc of
-                   Just (C.CopTree _ f) -> expand =<< f args
-                   _                    -> do args2 <- mapM expand args
-                                              Right $ B.TreeB B.BracketGroup p (op : args2)
+                 case find $ B.BlankNormal name of
+                   Just f -> expand =<< f args
+                   _      -> do args2 <- mapM expand args
+                                Right $ B.TreeB B.BracketGroup p (op : args2)
           _ -> do sub2 <- mapM expand subtrees
                   Right $ B.TreeB B.BracketGroup p sub2
 
