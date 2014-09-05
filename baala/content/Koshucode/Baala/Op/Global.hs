@@ -16,8 +16,12 @@ import qualified Koshucode.Baala.Op.Cop    as Cop
 
 -- | Global with operators.
 vanillaGlobal :: (C.CContent c) => C.Global c
-vanillaGlobal = C.global { C.globalOpset = opset } where
-    opset = C.OpSet vanillaRops vanillaCops vanillaInfix
+vanillaGlobal = global where
+    global    = C.global { C.globalOpset     = C.opsetFill opset }
+    opset     = C.opset  { C.opsetRopList    = vanillaRops
+                         , C.opsetCop        = copset }
+    copset    = C.copset { C.copsetList      = vanillaCops
+                         , C.copsetInfixList = vanillaInfix }
 
 -- | Relmap operators
 vanillaRops :: (C.CContent c) => [C.Rop c]

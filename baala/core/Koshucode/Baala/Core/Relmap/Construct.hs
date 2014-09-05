@@ -46,7 +46,7 @@ instance Show (RelmapCons c) where
 -- | Make a constructor pair of lexmap and relmap.
 relmapCons :: C.Global c -> RelmapCons c
 relmapCons g = make $ unzip $ map pair rops where
-    rops = C.opsetRops $ C.globalOpset g
+    rops = C.globalRops g
     make (l, r) = RelmapCons (C.consLexmap l) (consRelmap g r)
     pair (C.Rop n _ sorter cons _) = ((n, sorter), (n, cons))
 

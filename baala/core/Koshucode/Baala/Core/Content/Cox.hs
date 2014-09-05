@@ -15,9 +15,9 @@ module Koshucode.Baala.Core.Content.Cox
   checkIrreducible,
 
   -- * Operator
-  Cop (..), CopBundle,
-  CopFun, CopCox, CopTree,
-  copName,
+  Cop (..), CopSet (..), CopBundle,
+  CopFun, CopTree, copName, 
+  CopCox, CopFind, copset, copsetFill,
   copNormal, copInternal, copPrefix, copInfix, copPostfix,
   isCopFunction, isCopSyntax,
 ) where
@@ -201,6 +201,51 @@ isCopSyntax :: Cop c -> Bool
 isCopSyntax (CopTree _ _)  = True
 isCopSyntax (CopCox  _ _)  = True
 isCopSyntax _              = False
+
+data CopSet c = CopSet
+    { copsetList       :: [Cop c]
+    , copsetInfixList  :: [B.Named B.InfixHeight]
+
+    , copsetContList   :: [B.Named (Cop c)]  -- CopFun
+    , copsetCoxList    :: [B.Named (Cop c)]  -- CopCox
+    , copsetTreeList   :: [B.Named (Cop c)]  -- CopTree
+
+    , copsetContFind   :: CopFind (CopFun c)
+    , copsetCoxFind    :: CopFind (CopCox c)
+    , copsetTreeFind   :: CopFind CopTree
+    }
+
+type CopFind f = B.BlankName -> Maybe f
+
+copset :: CopSet c
+copset = CopSet [] [] [] [] [] find find find where
+    find = const Nothing
+
+copsetFill :: B.Map (CopSet c)
+copsetFill opset = opset2 where
+
+    opset2 = opset { copsetContFind  =  contFind
+                   , copsetCoxFind   =  coxFind
+                   , copsetTreeFind  =  treeFind }
+
+    contFind n  =  lookup n contList
+    coxFind  n  =  lookup n coxList
+    treeFind n  =  lookup n treeList
+
+    contList    =  B.catMaybes $ map cont cops
+    coxList     =  B.catMaybes $ map cox  cops
+    treeList    =  B.catMaybes $ map tree cops
+
+    cont (CopFun n f)   =  Just (n, f)
+    cont _              =  Nothing
+
+    cox (CopCox n f)    =  Just (n, f)
+    cox _               =  Nothing
+
+    tree (CopTree n f)  =  Just (n, f)
+    tree _              =  Nothing
+
+    cops  = copsetList opset
 
 
 -- ----------------------

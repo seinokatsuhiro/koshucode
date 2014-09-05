@@ -17,15 +17,17 @@ type CoxSyntax c = ( [C.Cop c], [B.Named B.InfixHeight] )
 
 -- | Construct content expression from token tree
 coxBuild :: forall c. (C.CContent c)
-  => C.CalcContent c -> CoxSyntax c -> B.TokenTreeToAb (C.Cox c)
-coxBuild calc (syn, htab) =
-    convCox syn             -- convert cox to cox
+  => C.CalcContent c -> C.CopSet c -> CoxSyntax c -> B.TokenTreeToAb (C.Cox c)
+coxBuild calc copset (syn, htab) =
+    convCox findCox         -- convert cox to cox
       B.<=< Right
       . debruijn            -- attach De Bruijn indicies
       . coxUnfold           -- expand multiple-blank form
       B.<=< construct calc  -- construct content expression from token tree
       B.<=< prefix htab     -- convert infix operator to prefix
       B.<=< convTree syn    -- convert token tree to token tree
+    where
+      findCox = C.copsetCoxFind copset
 
 debruijn :: B.Map (C.Cox c)
 debruijn = index [] where
@@ -53,24 +55,19 @@ coxUnfold = unfold . C.coxMap coxUnfold where
                in C.CoxForm1 cp tag v sub
         _   -> cox
 
-convCox :: forall c. [C.Cop c] -> B.AbMap (C.Cox c)
-convCox syn = expand where
-    assn :: [(B.BlankName, C.Cop c)]
-    assn = map name syn
-
-    name cop = (C.copName cop, cop)
-
+convCox :: forall c. C.CopFind (C.CopCox c) -> B.AbMap (C.Cox c)
+convCox find = expand where
     expand :: B.AbMap (C.Cox c)
     expand cox =
         case cox of
             C.CoxForm1  cp tag n  x -> Right . C.CoxForm1  cp tag n  =<< expand x
             C.CoxForm   cp tag ns x -> Right . C.CoxForm   cp tag ns =<< expand x
             C.CoxFill cp f@(C.CoxBlank _ n) xs ->
-                case lookup n assn of
-                  Just (C.CopCox _ g) -> expand =<< g xs
-                  _                   -> expandApply cp f xs
-            C.CoxFill cp f xs         -> expandApply cp f xs
-            _                         -> Right cox
+                case find n of
+                  Just g       -> expand =<< g xs
+                  _            -> expandApply cp f xs
+            C.CoxFill cp f xs  -> expandApply cp f xs
+            _                  -> Right cox
 
     expandApply cp f xs =
         do f'  <- expand f

@@ -8,12 +8,15 @@ module Koshucode.Baala.Core.Relmap.Global
   globalFill,
   globalRops,
   globalCops,
+  globalCopset,
   globalInfix,
   globalFunction,
   globalSyntax,
   global,
 
   OpSet' (..),
+  opset,
+  opsetFill,
 ) where
 
 import qualified Data.Version                           as D
@@ -45,28 +48,31 @@ globalFill :: (C.CContent c) => B.Map (Global' rop c)
 globalFill g = g
 
 globalRops  :: Global' rop c -> [rop c]
-globalRops  = opsetRops . globalOpset
+globalRops  = opsetRopList . globalOpset
 
 globalCops  :: Global' rop c -> [C.Cop c]
-globalCops  = opsetCops . globalOpset
+globalCops  = C.copsetList . opsetCop . globalOpset
 
 globalInfix :: Global' rop c -> [B.Named B.InfixHeight]
-globalInfix = opsetInfix . globalOpset
+globalInfix = C.copsetInfixList . opsetCop . globalOpset
+
+globalCopset :: Global' rop c -> C.CopSet c
+globalCopset = opsetCop . globalOpset
 
 globalFunction :: Global' rop c -> [C.Cop c]
-globalFunction = filter C.isCopFunction . opsetCops . globalOpset
+globalFunction = filter C.isCopFunction . C.copsetList . opsetCop . globalOpset
 
 globalSyntax :: Global' rop c -> C.CoxSyntax c
 globalSyntax g = (syn, htab) where
     syn    =  filter C.isCopSyntax cops
-    htab   =  opsetInfix opset
-    cops   =  opsetCops  opset
-    opset  =  globalOpset g
+    htab   =  C.copsetInfixList $ opsetCop ops
+    cops   =  C.copsetList      $ opsetCop ops
+    ops    =  globalOpset g
 
 global :: Global' rop c
 global = Global
          { globalVersion  =  D.Version [] []
-         , globalOpset    =  B.mempty
+         , globalOpset    =  opset
          , globalProgram  =  ""
          , globalArgs     =  []
          , globalJudges   =  []
@@ -76,19 +82,15 @@ global = Global
 -- ----------------------  OpSet
 
 data OpSet' rop c = OpSet
-    { opsetRops  :: [rop c]
-    , opsetCops  :: [C.Cop c]
-    , opsetInfix :: [B.Named B.InfixHeight]
+    { opsetRopList  :: [rop c]
+    , opsetCop      :: C.CopSet c
     }
 
-instance B.Monoid (OpSet' rop c) where
-    mempty  = OpSet [] [] []
-    mappend = opsetAppend
+opset :: OpSet' rop c
+opset = OpSet [] C.copset
 
-opsetAppend :: OpSet' rop c -> OpSet' rop c -> OpSet' rop c
-opsetAppend (OpSet rops1 cops1 infix1) (OpSet rops2 cops2 infix2)
-    = OpSet rops3 cops3 infix3
-      where rops3   =  rops1  ++ rops2
-            cops3   =  cops1  ++ cops2
-            infix3  =  infix1 ++ infix2
+opsetFill :: B.Map (OpSet' rop c)
+opsetFill ops = ops2 where
+    ops2  = ops { opsetCop = copset2 }
+    copset2 = C.copsetFill $ opsetCop ops
 
