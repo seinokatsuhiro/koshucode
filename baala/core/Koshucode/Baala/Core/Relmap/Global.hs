@@ -3,7 +3,8 @@
 -- | Global parameters.
 
 module Koshucode.Baala.Core.Relmap.Global
-( Global' (..),
+( -- * Global
+  Global' (..),
   globalCommandLine,
   globalFill,
   globalRops,
@@ -12,6 +13,7 @@ module Koshucode.Baala.Core.Relmap.Global
   globalInfix,
   global,
 
+  -- * Operator set
   OpSet' (..),
   opset,
   opsetFill,
@@ -58,6 +60,7 @@ globalInfix  = C.copsetInfixList . opsetCop . globalOpset
 globalCopset :: Global' rop c -> C.CopSet c
 globalCopset = opsetCop . globalOpset
 
+-- | Empty global parameters.
 global :: Global' rop c
 global = Global
          { globalVersion  =  D.Version [] []
@@ -68,24 +71,26 @@ global = Global
          , globalSelect   =  \_ _ -> B.reldee }
 
 
--- ----------------------  OpSet
+-- ----------------------  Operator set
 
+-- | Set of relmap and content operators.
 data OpSet' rop c = OpSet
-    { opsetRopList  :: [rop c]
-    , opsetFindRop  :: C.RopName -> Maybe (rop c)
-    , opsetCop      :: C.CopSet c
+    { opsetRopList     :: [rop c]
+    , opsetFindRop     :: C.RopName -> Maybe (rop c)
+    , opsetCop         :: C.CopSet c
     }
 
+-- | Empty operator set.
 opset :: OpSet' rop c
 opset = OpSet [] find C.copset where
     find _ = Nothing
 
 opsetFill :: (B.Name (rop c)) => B.Map (OpSet' rop c)
 opsetFill ops = ops2 where
-    ops2    = ops { opsetCop = copset2, opsetFindRop = findRops }
-    copset2 = C.copsetFill $ opsetCop ops
-
-    findRops n = lookup n rops
+    ops2       = ops { opsetFindRop = findRop
+                     , opsetCop     = copset2 }
+    copset2    = C.copsetFill $ opsetCop ops
+    findRop n  = lookup n rops
     rops       = map name $ opsetRopList ops
     name rop   = (B.name rop, rop)
 

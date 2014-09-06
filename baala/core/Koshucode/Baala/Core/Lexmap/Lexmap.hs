@@ -80,8 +80,8 @@ type RelmapSource = B.Named ([B.TokenTree], C.Roamap)
 -- | Construct lexmap and its submaps from source of lexmap
 type ConsLexmapBody = [B.TokenTree] -> B.Ab (Lexmap, [C.Roal Lexmap])
 
-consLexmap :: [B.Named C.AttrSort] -> ConsLexmap
-consLexmap sorters gslot derives = lexmap where
+consLexmap :: (C.RopName -> Maybe C.AttrSort) -> ConsLexmap
+consLexmap find gslot derives = lexmap where
 
     lexmap :: ConsLexmapBody
     lexmap source =
@@ -107,7 +107,7 @@ consLexmap sorters gslot derives = lexmap where
 
     base :: C.RopName -> B.Token -> ConsLexmapBody
     base n rop trees =
-        case lookup n sorters of
+        case find n of
           Nothing     ->  user LexmapDerived rop trees
           Just sorter ->  do roa <- sorter trees
                              submap $ cons LexmapBase rop roa trees
@@ -130,7 +130,7 @@ consLexmap sorters gslot derives = lexmap where
     check lx | lexType lx == LexmapDerived
                  = let n = lexOpName lx
                        msg  = "Same name as base relmap operator '" ++ n ++ "'"
-                   in case lookup n sorters of
+                   in case find n of
                         Just _  -> lexAddMessage msg lx
                         Nothing -> lx
     check lx = lx

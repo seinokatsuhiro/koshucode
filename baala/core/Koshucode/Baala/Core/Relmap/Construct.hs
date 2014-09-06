@@ -45,15 +45,17 @@ instance Show (RelmapCons c) where
 
 -- | Make a constructor pair of lexmap and relmap.
 relmapCons :: C.Global c -> RelmapCons c
-relmapCons g = make $ map pair $ C.globalRops g where
-    make l = RelmapCons (C.consLexmap l) (consRelmap g)
-    pair (C.Rop n _ sorter _ _) = (n, sorter)
+relmapCons g = RelmapCons consL consR where
+    consL         =  C.consLexmap findSorter
+    consR         =  consRelmap findRop g
+    findSorter n  =  C.ropSorter `fmap` findRop n
+    findRop       =  C.opsetFindRop $ C.globalOpset g
 
 -- | Second step of constructing relmap, make relmap from lexmap.
 type ConsRelmap c = C.Lexmap -> B.Ab (C.Relmap c)
 
-consRelmap :: C.Global c -> ConsRelmap c
-consRelmap g = relmap where
+consRelmap :: (C.RopName -> Maybe (C.Rop c)) -> C.Global c -> ConsRelmap c
+consRelmap find g = relmap where
     relmap lx =
         case C.lexType lx of
           C.LexmapWith    -> Right $ C.RelmapLink lx n attr
@@ -63,7 +65,6 @@ consRelmap g = relmap where
                                Just rop -> Message.abRelmap [lx] $ cons rop
         where n        =  C.lexOpName lx
               attr     =  C.lexAttr   lx
-              find     =  C.opsetFindRop $ C.globalOpset g
               cons rop =  do sub <- mapM relmap $ C.lexSubmap lx
                              C.ropCons rop $ C.RopUse g lx sub
 
