@@ -10,6 +10,7 @@ module Koshucode.Baala.Base.Prelude.Assoc
   namedMapM,
   lookupBy,
   lookupSatisfy,
+  assocFinder,
   -- $Assoc
 
   -- * Tuple-like operator
@@ -108,6 +109,8 @@ lookupSatisfy x = loop where
         | p x = Just v
         | otherwise = loop ps
 
+assocFinder :: (Ord k) => [(k, v)] -> k -> Maybe v
+assocFinder xs k = Map.lookup k $ Map.fromList xs
 
 
 -- ----------------------  Tuple-like operator

@@ -4,13 +4,16 @@
 -- | Term-content expression.
 
 module Koshucode.Baala.Core.Content.Cox
-( -- $Process
+( -- * Data types
+  Cox (..), NamedCox, CopCalc, CoxTag,
 
-  -- * Expression
-  Cox (..), CopCalc, CoxTag, NamedCox,
+  -- * Functions
   coxSyntacticArity,
   coxMap, coxCall,
   checkIrreducible,
+
+  -- * Process
+  -- $Process
 ) where
 
 import qualified Koshucode.Baala.Base            as B
@@ -31,12 +34,12 @@ data Cox c
     | CoxForm  [B.CodePt] CoxTag [String] (Cox c)  -- ^ Form with multiple blanks
     | CoxWith  [B.CodePt] [NamedCox c] (Cox c)     -- ^ Cox with outside arguments
 
+type NamedCox c = B.Named (Cox c)
+
 -- | Term-content calculator.
 type CopCalc c = [B.Ab c] -> B.Ab c
 
 type CoxTag = Maybe String
-
-type NamedCox c = B.Named (Cox c)
 
 instance B.CodePtr (Cox c) where
     codePts (CoxLit    cp _)      =  cp
@@ -132,50 +135,51 @@ irreducible cox =
       _                 ->  False
 
 
-
-
 -- ----------------------
 -- $Process
 --
---  Phase 1. Convert input texts into token trees.
+--  /Phase 1/. Convert input string into token trees.
 --
---    [1. @String -> \[Token\]@]
---       Parse input string into list of token.
---       See 'B.tokens'.
+--    [1. 'String'@ -> \[@'B.Token'@\]@]
+--        Parse input string into a list of tokens.
 --
---    [2. @\[Token\] -> \[TokenTree\]@]
---       Analyze token list structure.
---       See 'B.tokenTrees'
+--    [2. @\[@'B.Token'@\] -> \[@'BTree.TokenTree'@\]@]
+--        Analyze token list structure.
 --
---    [3. @\[TokenTree\] -> TokenTree@]
---       Enclose list of token tree in 'B.TreeB'.
---       See 'B.treeWrap'.
+--    [3. @\[@'BTree.TokenTree'@\] -> @'BTree.TokenTree']
+--        Wrap the list of token trees in a tree.
 --
---  Phase 2. Transform token trees,
---           and convert into abstract syntax trees.
+--  /Phase 2/. Transform token trees,
+--             and convert into abstract syntax trees.
+--             See "Koshucode.Baala.Core.Content.Build" module.
 --
---    [4. @TokenTree -> TokenTree@]
---       Expand syntax operators.
+--    [4. 'BTree.TokenTree'@ -> @'BTree.TokenTree']
+--       Expand tree-level syntax operators.
 --
---    [5. @TokenTree -> TokenTree@]
---       Translate binary operators from infix to prefix.
---       See 'B.infixToPrefix'.
+--    [5. 'BTree.TokenTree'@ -> @'BTree.TokenTree']
+--       Transform binary operators from infix to prefix.
 --
---    [6. @TokenTree -> Cox c@]
---       Convert from token tree into abstract syntax trees.
+--    [6. 'BTree.TokenTree'@ -> @'Cox' @c@]
+--       Convert token tree into an abstract syntax tree.
 --
---  Phase 3. Calculate content expressions.
---
---    [7. @Cox c -> Cox c@]
+--    [7. 'Cox' @c -> @'Cox'@ c@]
 --       Attach De Bruijn indecies for bound variables.
 --
---    [8. @Relhead -> Cox c -> Cox c@]
+--    [8. 'Cox' @c -> @'Cox' @c@]
+--       Expand expression-level syntax operators.
+--
+--  /Phase 3/. Calculate content expressions.
+--             See "Koshucode.Baala.Core.Content.Run" module.
+--
+--    [9. 'B.Relhead'@ -> @'Cox'@ c -> @'Cox'@ c@]
 --       Attach term positions using actural heading of relation.
 --
---    [9. @Cox c -> Cox c@]
---       Reduce derived expressions into base expressions.
+--    [10. 'CopSet'@ c -> \[@'NamedCox'@ c\] -> @'Cox'@ c -> @'Cox'@ c@]
+--       Replace base and derived operators into its bodies.
 --
---    [10. @\[c\] -> Cox c -> c@]
---       Calculate content expression for each tuple of relation.
---       See 'coxRun'.
-
+--    [11. 'Cox'@ c -> Beta c@]
+--       Reduce derived expressions into beta expressions.
+--
+--    [12. @Beta c -> \[c\] -> c@]
+--       Run beta expression for each association of relation.
+--

@@ -75,7 +75,7 @@ data CopSet c = CopSet
     { copsetCopList    :: [Cop c]
     , copsetInfixList  :: [B.Named B.InfixHeight]
 
-    , copsetContList   :: [B.Named (Cop c)]  -- CopCalc
+    , copsetCalcList   :: [B.Named (Cop c)]  -- CopCalc
     , copsetCoxList    :: [B.Named (Cop c)]  -- CopCox
     , copsetTreeList   :: [B.Named (Cop c)]  -- CopTree
 
@@ -86,12 +86,13 @@ data CopSet c = CopSet
     , copsetDerived    :: [C.NamedCox c]
     }
 
+-- | Find content operator from its name.
 type CopFind f = B.BlankName -> Maybe f
 
 -- | Empty operator set.
 copset :: CopSet c
 copset = CopSet [] [] [] [] [] find find find [] where
-    find = const Nothing
+    find _ = Nothing
 
 copsetFill :: B.Map (CopSet c)
 copsetFill opset = opset2 where
@@ -100,9 +101,9 @@ copsetFill opset = opset2 where
                    , copsetFindCox   =  coxFind
                    , copsetFindTree  =  treeFind }
 
-    contFind n  =  lookup n contList
-    coxFind  n  =  lookup n coxList
-    treeFind n  =  lookup n treeList
+    contFind    =  B.assocFinder contList
+    coxFind     =  B.assocFinder coxList
+    treeFind    =  B.assocFinder treeList
 
     contList    =  B.catMaybes $ map cont cops
     coxList     =  B.catMaybes $ map cox  cops
@@ -118,3 +119,4 @@ copsetFill opset = opset2 where
     tree _               =  Nothing
 
     cops  = copsetCopList opset
+

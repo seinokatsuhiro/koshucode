@@ -13,11 +13,11 @@ module Koshucode.Baala.Core.Content.Run
 ) where
 
 import qualified Koshucode.Baala.Base                   as B
-import qualified Koshucode.Baala.Core.Content.Literal   as C
 import qualified Koshucode.Baala.Core.Content.Build     as C
 import qualified Koshucode.Baala.Core.Content.Class     as C
 import qualified Koshucode.Baala.Core.Content.Cop       as C
 import qualified Koshucode.Baala.Core.Content.Cox       as C
+import qualified Koshucode.Baala.Core.Content.Literal   as C
 import qualified Koshucode.Baala.Core.Message           as Message
 
 
@@ -38,9 +38,9 @@ beta :: (B.Write c) => C.CopSet c -> B.Relhead -> C.Cox c -> B.Ab (Beta c)
 beta copset he cox =
     do let deriv = C.copsetDerived copset
        deriv2  <- B.sequenceSnd $ B.mapSndTo pos deriv
-       cox2    <- pos cox                      -- put term index
+       cox2    <- pos cox                   -- put term index
        let cox3 = link copset deriv2 cox2   -- substitute free variables
-       reduce cox3                             -- beta reduction
+       reduce cox3                          -- beta reduction
     where
       pos = position he
 

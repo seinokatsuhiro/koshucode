@@ -87,10 +87,10 @@ opset = OpSet [] find C.copset where
 
 opsetFill :: (B.Name (rop c)) => B.Map (OpSet' rop c)
 opsetFill ops = ops2 where
-    ops2       = ops { opsetFindRop = findRop
-                     , opsetCop     = copset2 }
-    copset2    = C.copsetFill $ opsetCop ops
-    findRop n  = lookup n rops
-    rops       = map name $ opsetRopList ops
-    name rop   = (B.name rop, rop)
+    ops2      = ops { opsetFindRop = findRop
+                    , opsetCop     = copset2 }
+    copset2   = C.copsetFill $ opsetCop ops
+    findRop   = B.assocFinder rops
+    rops      = map name $ opsetRopList ops
+    name rop  = (B.name rop, rop)
 
