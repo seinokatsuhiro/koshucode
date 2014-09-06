@@ -11,6 +11,7 @@ module Koshucode.Baala.Core.Relmap.Operator
   -- * RopUse
   RopCons,
   RopUse (..),
+  ropCopset,
 
   -- * Relmap
   Relmap (..),
@@ -27,6 +28,7 @@ module Koshucode.Baala.Core.Relmap.Operator
 
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Core.Lexmap            as C
+import qualified Koshucode.Baala.Core.Content           as C
 import qualified Koshucode.Baala.Core.Relmap.Global     as C
 import qualified Koshucode.Baala.Core.Relmap.Relkit     as C
 
@@ -66,6 +68,11 @@ data RopUse c = RopUse
 
 instance B.CodePtr (RopUse c) where
     codePts = B.codePts . ropLexmap
+
+-- | Get operator set from 'RopUse'.
+ropCopset :: RopUse c -> C.CopSet c
+ropCopset = C.globalCopset . ropGlobal
+
 
 
 -- ----------------------  Relkit

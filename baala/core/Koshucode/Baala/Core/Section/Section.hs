@@ -7,8 +7,7 @@ module Koshucode.Baala.Core.Section.Section
 (
   -- * Data type
   Section (..),
-  calcTreeUsing,
-  coxTreeUsing,
+  coxBuildG,
 
   -- * Constructors
   emptySection,
@@ -159,7 +158,7 @@ consSectionEach root resource (B.Short pt shorts xs) =
       judge _ (C.CJudge q p toks) =
           C.getJudge calc q p =<< B.tokenTrees toks
 
-      calc = secCalc root
+      calc = calcContG $ secGlobal root
 
       assert :: Clab (C.Assert c)
       assert src (C.CAssert typ pat opt toks) =
@@ -186,17 +185,11 @@ consSectionEach root resource (B.Short pt shorts xs) =
 type Cl   a = [B.Token] -> C.ClauseBody -> a
 type Clab a = Cl (B.Ab a)
 
-secCalc :: (C.CContent c) => Section c -> C.CalcContent c
-secCalc = calcTreeUsing . secGlobal
+calcContG :: (C.CContent c) => C.Global c -> C.CalcContent c
+calcContG = C.calcContent . C.globalCopset
 
-calcTreeUsing :: (C.CContent c) => C.Global c -> C.CalcContent c
-calcTreeUsing g = calc where
-    copset     =  C.globalCopset g
-    calc tree  =  do alpha <- C.coxBuild calc copset tree
-                     C.coxRunCox copset B.mempty [] alpha
-
-coxTreeUsing :: (C.CContent c) => C.Global c -> B.TokenTreeToAb (C.Cox c)
-coxTreeUsing g = C.coxBuild undefined (C.globalCopset g)
+coxBuildG :: (C.CContent c) => C.Global c -> B.TokenTreeToAb (C.Cox c)
+coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)
 
 
 -- ----------------------  Clause type

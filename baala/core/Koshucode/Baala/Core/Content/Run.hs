@@ -6,10 +6,15 @@
 module Koshucode.Baala.Core.Content.Run
 ( RunCox, RunList,
   coxRunCox, coxRunList,
+  calcContent,
+
+  -- * Getting arguments
   getArg1, getArg2, getArg3,
 ) where
 
 import qualified Koshucode.Baala.Base                   as B
+import qualified Koshucode.Baala.Core.Content.Literal   as C
+import qualified Koshucode.Baala.Core.Content.Build     as C
 import qualified Koshucode.Baala.Core.Content.Class     as C
 import qualified Koshucode.Baala.Core.Content.Cop       as C
 import qualified Koshucode.Baala.Core.Content.Cox       as C
@@ -132,9 +137,16 @@ coxRunCox :: (B.Write c, C.CRel c, C.CList c) =>
     C.CopSet c -> B.Relhead -> [c] -> RunCox c
 coxRunCox cops he cs cox = coxRunList cops he cox cs
 
+coxRunPure :: (B.Write c, C.CRel c, C.CList c) => C.CopSet c -> RunCox c
+coxRunPure cops cox = coxRunList cops B.mempty cox []
+
 coxRunList :: (B.Write c, C.CRel c, C.CList c) =>
     C.CopSet c -> B.Relhead -> C.Cox c -> RunList c
 coxRunList cops he cox cs = coxRun cs =<< beta cops he cox
+
+calcContent :: (C.CContent c) => C.CopSet c -> C.CalcContent c
+calcContent cops = calc where
+    calc tree = coxRunPure cops =<< C.coxBuild calc cops tree
 
 -- | Calculate content expression.
 coxRun

@@ -39,7 +39,7 @@ getTermCoxes :: (C.CContent c) => C.RopUse c -> String -> B.Ab [C.NamedCox c]
 getTermCoxes use = ropNamedAlphas use B.<=< Op.getTermTrees use
 
 ropBuild :: (C.CContent c) => C.RopUse c -> B.TokenTreeToAb (C.Cox c)
-ropBuild = C.coxTreeUsing . C.ropGlobal
+ropBuild = C.coxBuildG . C.ropGlobal
 
 ropNamedAlphas :: (C.CContent c) => C.RopUse c -> [B.NamedTree] -> B.Ab [C.NamedCox c]
 ropNamedAlphas use = mapM (B.namedMapM $ ropBuild use)
@@ -104,7 +104,7 @@ getContents use name =
        calcTree use `mapM` trees2
 
 calcTree :: (C.CContent c) => C.RopUse c -> C.CalcContent c
-calcTree = C.calcTreeUsing . C.ropGlobal
+calcTree = C.calcContent . C.ropCopset
 
 -- | Get relmap attribute as optional content.
 getOptContent :: (C.CContent c) => c -> C.RopUse c -> String -> B.Ab c
