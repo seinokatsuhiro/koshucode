@@ -32,18 +32,18 @@ import qualified Koshucode.Baala.Op.Message as Message
 
 copsArith :: (C.CDec c, C.CList c, C.CText c) => [C.Cop c]
 copsArith =
-    [ C.CopFun  (C.copInfix "+")    copPlus
-    , C.CopFun  (C.copInfix "-")    copMinus
-    , C.CopFun  (C.copInfix "*")    copTimes
-    , C.CopFun  (C.copInfix "quo")  copQuo
-    , C.CopFun  (C.copInfix "rem")  copRem
+    [ C.CopCont  (C.copInfix "+")    copPlus
+    , C.CopCont  (C.copInfix "-")    copMinus
+    , C.CopCont  (C.copInfix "*")    copTimes
+    , C.CopCont  (C.copInfix "quo")  copQuo
+    , C.CopCont  (C.copInfix "rem")  copRem
 
-    , C.CopFun  (C.copNormal "+")     copPlus
-    , C.CopFun  (C.copNormal "-")     copMinus
-    , C.CopFun  (C.copNormal "*")     copTimes
-    , C.CopFun  (C.copNormal "quo")   copQuo
-    , C.CopFun  (C.copNormal "rem")   copRem
-    , C.CopFun  (C.copNormal "abs")   copAbs
+    , C.CopCont  (C.copNormal "+")     copPlus
+    , C.CopCont  (C.copNormal "-")     copMinus
+    , C.CopCont  (C.copNormal "*")     copTimes
+    , C.CopCont  (C.copNormal "quo")   copQuo
+    , C.CopCont  (C.copNormal "rem")   copRem
+    , C.CopCont  (C.copNormal "abs")   copAbs
     ]
 
 copDec :: (Show c, C.CText c, C.CDec c) => B.Ab c -> B.Ab B.Decimal
@@ -51,21 +51,21 @@ copDec (Right c) | C.isDec  c = Right $ C.gDec c
                  | C.isText c = B.litDecimal $ C.gText c
 copDec x = Message.notNumber (show x)
 
-copPlus :: (C.CText c, C.CDec c) => C.CopFun c
+copPlus :: (C.CText c, C.CDec c) => C.CopCont c
 copPlus xs = fmap C.pDec $ loop xs where
     loop [] = Right $ B.intDecimal 0
     loop (n : m) = do n' <- copDec n
                       m' <- loop m
                       B.decimalAdd n' m'
 
-copTimes :: (C.CText c, C.CDec c) => C.CopFun c
+copTimes :: (C.CText c, C.CDec c) => C.CopCont c
 copTimes xs = fmap C.pDec $ loop xs where
     loop [] = Right $ B.intDecimal 1
     loop (n : m) = do n' <- copDec n
                       m' <- loop m
                       B.decimalMul n' m'
 
-copMinus :: (C.CText c, C.CDec c) => C.CopFun c
+copMinus :: (C.CText c, C.CDec c) => C.CopCont c
 copMinus [a] =
     do a' <- copDec a
        Right $ C.pDec $ B.decimalRevsign a'
@@ -76,7 +76,7 @@ copMinus [a, b] =
        Right $ C.pDec c'
 copMinus _ = Message.unexpAttr "-"
 
-copQuo :: (C.CText c, C.CDec c) => C.CopFun c
+copQuo :: (C.CText c, C.CDec c) => C.CopCont c
 copQuo [a, b] =
     do a' <- copDec a
        b' <- copDec b
@@ -84,7 +84,7 @@ copQuo [a, b] =
        Right $ C.pDec c'
 copQuo _ = Message.unexpAttr "quo"
 
-copRem :: (C.CText c, C.CDec c) => C.CopFun c
+copRem :: (C.CText c, C.CDec c) => C.CopCont c
 copRem arg =
     do (ac, bc) <- C.getArg2 arg
        a <- copDec ac
@@ -92,7 +92,7 @@ copRem arg =
        c <- B.decimalRem a b
        C.putDec $ c
 
-copAbs :: (C.CList c, C.CDec c) => C.CopFun c
+copAbs :: (C.CList c, C.CDec c) => C.CopCont c
 copAbs [Right c] | C.isList c = Right . C.pList =<< mapM copAbs1 (C.gList c)
                  | otherwise  = copAbs1 c
 copAbs _ = Message.unexpAttr "abs"

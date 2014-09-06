@@ -56,13 +56,13 @@ copsOrder =
     , C.CopCox  (C.copNormal  "all")    $ copCollect "and"
     , C.CopCox  (C.copNormal  "any")    $ copCollect "or"
 
-    , C.CopCox   (C.copInfix  "is")     copIs
-    , C.CopCox   (C.copInfix  "of")     ofInfix
-    , C.CopCox   (C.copInfix  "to")     toInfix
+    , C.CopCox  (C.copInfix  "is")      copIs
+    , C.CopCox  (C.copInfix  "of")      ofInfix
+    , C.CopCox  (C.copInfix  "to")      toInfix
     ]
 
 orderInfix :: (C.CBool c) => String -> (c -> c -> Bool) -> C.Cop c
-orderInfix n f = C.CopFun (C.copInfix n) g where
+orderInfix n f = C.CopCont (C.copInfix n) g where
     g [Right x, Right y] = C.putBool $ x `f` y
     g _                  = Message.notFound ""
 

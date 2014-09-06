@@ -10,7 +10,6 @@ module Koshucode.Baala.Core.Relmap.Global
   globalCops,
   globalCopset,
   globalInfix,
-  globalFunction,
   global,
 
   OpSet' (..),
@@ -57,9 +56,6 @@ globalInfix = C.copsetInfixList . opsetCop . globalOpset
 
 globalCopset :: Global' rop c -> C.CopSet c
 globalCopset = opsetCop . globalOpset
-
-globalFunction :: Global' rop c -> [C.Cop c]
-globalFunction = filter C.isCopFunction . C.copsetList . opsetCop . globalOpset
 
 global :: Global' rop c
 global = Global

@@ -34,8 +34,8 @@ ropsCoxFilter :: (C.CContent c) => [C.Rop c]
 ropsCoxFilter = Op.ropList "cox-filter"
     --          CONSTRUCTOR         USAGE         ATTRIBUTE
     [ Op.ropI   consContain         "contain E"   "-expr"
-    , Op.ropV   (consFilter True)   "keep E"      "-in | -let"
-    , Op.ropV   (consFilter False)  "omit E"      "-in | -let"
+    , Op.ropV   (consFilter True)   "keep E"      "-in | -where"
+    , Op.ropV   (consFilter False)  "omit E"      "-in | -where"
     , Op.ropN   consOmitAll         "omit-all"    ""
     ]
 
@@ -44,9 +44,9 @@ ropsCoxFilter = Op.ropList "cox-filter"
 
 consFilter :: (C.CContent c) => Bool -> C.RopCons c
 consFilter b use =
-    do coxLet  <- Op.getOption [] Op.getNamedCoxes use "-let"
+    do bundle  <- Op.getWhere use "-where"
        coxIn   <- Op.getCox use "-in"
-       Right $ relmapFilter use (b, (Op.ropBase use, coxLet), coxIn)
+       Right $ relmapFilter use (b, bundle, coxIn)
 
 relmapFilter :: (C.CList c, C.CRel c, C.CBool c, B.Write c)
   => C.RopUse c -> (Bool, C.CopBundle c, C.Cox c) -> C.Relmap c

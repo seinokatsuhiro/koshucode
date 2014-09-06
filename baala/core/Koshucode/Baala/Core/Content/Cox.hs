@@ -16,10 +16,9 @@ module Koshucode.Baala.Core.Content.Cox
 
   -- * Operator
   Cop (..), CopSet (..), CopBundle,
-  CopFun, CopTree, copName, 
-  CopCox, CopFind, copset, copsetFill,
+  CopCont, CopCox, CopTree, copName, 
+  CopFind, copset, copsetFill,
   copNormal, copInternal, copPrefix, copInfix, copPostfix,
-  isCopFunction, isCopSyntax,
 ) where
 
 import qualified Koshucode.Baala.Base            as B
@@ -145,15 +144,15 @@ irreducible cox =
 
 -- | Content operator.
 data Cop c
-    = CopFun  B.BlankName (CopFun c)   -- ^ Convert contents
+    = CopCont B.BlankName (CopCont c)   -- ^ Convert contents
     | CopCox  B.BlankName (CopCox c)   -- ^ Convert coxes
     | CopTree B.BlankName (CopTree)    -- ^ Convert trees
 
 -- | Base and derived operators.
-type CopBundle c = ( [Cop c], [NamedCox c] )
+type CopBundle c = ( CopSet c, [NamedCox c] )
 
 -- | Base function.
-type CopFun c = [B.Ab c] -> B.Ab c
+type CopCont c = [B.Ab c] -> B.Ab c
 
 -- | Expression-level syntax.
 type CopCox c = [Cox c] -> B.Ab (Cox c)
@@ -162,7 +161,7 @@ type CopCox c = [Cox c] -> B.Ab (Cox c)
 type CopTree  = [B.TokenTree] -> B.Ab B.TokenTree
 
 instance Show (Cop c) where
-    show (CopFun  n _) = "(CopFun "  ++ show n ++ " _)"
+    show (CopCont n _) = "(CopCont " ++ show n ++ " _)"
     show (CopCox  n _) = "(CopCox "  ++ show n ++ " _)"
     show (CopTree n _) = "(CopTree " ++ show n ++ " _)"
 
@@ -170,7 +169,7 @@ instance B.Name (Cop c) where
     name = B.name . copName
 
 copName :: Cop c -> B.BlankName
-copName (CopFun   n _) = n
+copName (CopCont  n _) = n
 copName (CopCox   n _) = n
 copName (CopTree  n _) = n
 
@@ -193,24 +192,15 @@ copPostfix = B.BlankPostfix
 copInfix :: String -> B.BlankName
 copInfix = B.BlankInfix
 
-isCopFunction :: Cop c -> Bool
-isCopFunction (CopFun _ _) = True
-isCopFunction _            = False
-
-isCopSyntax :: Cop c -> Bool
-isCopSyntax (CopTree _ _)  = True
-isCopSyntax (CopCox  _ _)  = True
-isCopSyntax _              = False
-
 data CopSet c = CopSet
     { copsetList       :: [Cop c]
     , copsetInfixList  :: [B.Named B.InfixHeight]
 
-    , copsetContList   :: [B.Named (Cop c)]  -- CopFun
+    , copsetContList   :: [B.Named (Cop c)]  -- CopCont
     , copsetCoxList    :: [B.Named (Cop c)]  -- CopCox
     , copsetTreeList   :: [B.Named (Cop c)]  -- CopTree
 
-    , copsetContFind   :: CopFind (CopFun c)
+    , copsetContFind   :: CopFind (Cox c)
     , copsetCoxFind    :: CopFind (CopCox c)
     , copsetTreeFind   :: CopFind CopTree
     }
@@ -236,14 +226,14 @@ copsetFill opset = opset2 where
     coxList     =  B.catMaybes $ map cox  cops
     treeList    =  B.catMaybes $ map tree cops
 
-    cont (CopFun n f)   =  Just (n, f)
-    cont _              =  Nothing
+    cont p@(CopCont n _) =  Just (n, CoxBase [] p)
+    cont _               =  Nothing
 
-    cox (CopCox n f)    =  Just (n, f)
-    cox _               =  Nothing
+    cox (CopCox n f)     =  Just (n, f)
+    cox _                =  Nothing
 
-    tree (CopTree n f)  =  Just (n, f)
-    tree _              =  Nothing
+    tree (CopTree n f)   =  Just (n, f)
+    tree _               =  Nothing
 
     cops  = copsetList opset
 

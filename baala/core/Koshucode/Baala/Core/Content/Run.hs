@@ -20,7 +20,7 @@ import qualified Koshucode.Baala.Core.Message           as Message
 data Beta c
     = BetaLit  [B.CodePt] c                     -- ^ Literal content
     | BetaTerm [B.CodePt] [B.TermName] [Int]    -- ^ Term reference, its name and position
-    | BetaCall [B.CodePt] B.BlankName (C.CopFun c) [B.Ab (Beta c)]  -- ^ Function application
+    | BetaCall [B.CodePt] B.BlankName (C.CopCont c) [B.Ab (Beta c)]  -- ^ Function application
 
 instance B.CodePtr (Beta c) where
     codePts (BetaLit  cp _)      =  cp
@@ -29,10 +29,10 @@ instance B.CodePtr (Beta c) where
 
 -- | Reduce content expression.
 beta :: (B.Write c) => C.CopBundle c -> B.Relhead -> C.Cox c -> B.Ab (Beta c)
-beta (base, deriv) he cox =
+beta (copset, deriv) he cox =
     do deriv2  <- B.sequenceSnd $ B.mapSndTo pos deriv
        cox2    <- pos cox                      -- put term index
-       let cox3 = link (base, deriv2) cox2     -- substitute free variables
+       let cox3 = link (copset, deriv2) cox2   -- substitute free variables
        reduce cox3                             -- beta reduction
     where
       pos = position he
@@ -62,7 +62,7 @@ reduce = red [] where
         C.CoxLocal  cp v k      ->  Message.abCoxFill cp $ do
                                         fn' <- kth v k args
                                         fill args fn' xxs
-        C.CoxBase   cp (C.CopFun n f2)  ->  Message.abCoxFill cp $ do
+        C.CoxBase   cp (C.CopCont n f2)  ->  Message.abCoxFill cp $ do
                                         xxs2 <- mapM id xxs
                                         let xxs3 = red args `map` xxs2
                                         Right $ BetaCall cp n f2 xxs3
@@ -92,17 +92,17 @@ reduce = red [] where
       vs = map fst args
 
 link :: forall c. C.CopBundle c -> B.Map (C.Cox c)
-link (base, deriv) = li where
-    li cox@(C.CoxBlank _ n)   =  B.fromMaybe cox $ lookup n fs
+link (copset, deriv) = li where
+    li cox@(C.CoxBlank _ n)   =  B.fromMaybe cox $ find n
     li cox                    =  C.coxCall cox li
 
+    find n    = lookup n fs B.<|> findCont n
+    findCont  = C.copsetContFind copset
+
     fs :: [C.CoxAssn c]
-    fs = map (fmap li . assn) deriv ++ map named base
+    fs = map (fmap li . normal) deriv
 
-    assn (n, cop) = (B.BlankNormal n, cop)
-
-    named :: C.Cop c -> C.CoxAssn c
-    named cop = (C.copName cop, C.CoxBase [] cop)
+    normal (n, cop) = (B.BlankNormal n, cop)
 
 -- put term positions for actural heading
 position :: B.Relhead -> C.Cox c -> B.Ab (C.Cox c)

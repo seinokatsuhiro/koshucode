@@ -2,9 +2,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module Koshucode.Baala.Op.Cox.Get
-( ropBase,
-
-  -- * Cox
+( -- * Cox
   getCox,
   getTermCoxes,
   getNamedCoxes,
@@ -49,14 +47,10 @@ ropNamedAlphas use = mapM (B.namedMapM $ ropBuild use)
 
 -- --------------------------------------------  Where
 
-getWhere :: (C.CContent c) => C.RopUse c -> String -> B.Ab ([C.Cop c], [C.NamedCox c])
+getWhere :: (C.CContent c) => C.RopUse c -> String -> B.Ab (C.CopBundle c)
 getWhere u name =
     do wh <- Op.getOption [] getWhereBody u name
-       Right (ropBase u, wh)
-
--- | Get list of content operators.
-ropBase :: C.RopUse c -> [C.Cop c]
-ropBase = C.globalFunction . C.ropGlobal
+       Right (C.globalCopset $ C.ropGlobal u, wh)
 
 getWhereBody :: (C.CContent c) => C.RopUse c -> String -> B.Ab [C.NamedCox c]
 getWhereBody u name =
