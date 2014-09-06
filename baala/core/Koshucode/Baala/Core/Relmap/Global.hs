@@ -45,14 +45,14 @@ globalCommandLine Global { globalProgram = prog, globalArgs = args }
 globalFill :: (C.CContent c) => B.Map (Global' rop c)
 globalFill g = g
 
-globalRops  :: Global' rop c -> [rop c]
-globalRops  = opsetRopList . globalOpset
+globalRops   :: Global' rop c -> [rop c]
+globalRops   = opsetRopList . globalOpset
 
-globalCops  :: Global' rop c -> [C.Cop c]
-globalCops  = C.copsetList . opsetCop . globalOpset
+globalCops   :: Global' rop c -> [C.Cop c]
+globalCops   = C.copsetCopList . opsetCop . globalOpset
 
-globalInfix :: Global' rop c -> [B.Named B.InfixHeight]
-globalInfix = C.copsetInfixList . opsetCop . globalOpset
+globalInfix  :: Global' rop c -> [B.Named B.InfixHeight]
+globalInfix  = C.copsetInfixList . opsetCop . globalOpset
 
 globalCopset :: Global' rop c -> C.CopSet c
 globalCopset = opsetCop . globalOpset

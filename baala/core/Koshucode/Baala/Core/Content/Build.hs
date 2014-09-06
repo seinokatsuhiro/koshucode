@@ -9,6 +9,7 @@ module Koshucode.Baala.Core.Content.Build
 
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Core.Content.Class     as C
+import qualified Koshucode.Baala.Core.Content.Cop       as C
 import qualified Koshucode.Baala.Core.Content.Cox       as C
 import qualified Koshucode.Baala.Core.Content.Literal   as C
 import qualified Koshucode.Baala.Core.Message           as Message
@@ -25,8 +26,8 @@ coxBuild calc copset =
       B.<=< prefix htab        -- convert infix operator to prefix
       B.<=< convTree findTree  -- convert token tree to token tree
     where
-      findCox  = C.copsetCoxFind   copset
-      findTree = C.copsetTreeFind  copset
+      findCox  = C.copsetFindCox   copset
+      findTree = C.copsetFindTree  copset
       htab     = C.copsetInfixList copset
 
 debruijn :: B.Map (C.Cox c)
@@ -105,7 +106,7 @@ construct calc = expr where
         B.TText _ _ _  ->  Right . C.CoxLit cp =<< C.literal calc tree
         _              ->  B.bug "core/leaf"
 
-    untag :: B.TokenTreeTo (Maybe String, B.TokenTree)
+    untag :: B.TokenTreeTo (C.CoxTag, B.TokenTree)
     untag (B.TreeB l p (B.TreeL (B.TText _ 1 tag) : vars))
                = (Just tag, B.TreeB l p $ vars)
     untag vars = (Nothing, vars)
@@ -182,7 +183,7 @@ convTree find = expand where
     expand tree = Right tree
 
 -- | Insert fresh form into indexed expression.
-coxForm :: [B.CodePt] -> Maybe String -> [String] -> B.Map (C.Cox c)
+coxForm :: [B.CodePt] -> C.CoxTag -> [String] -> B.Map (C.Cox c)
 coxForm cp0 tag vs = debruijn . outside [] . coxUnfold . C.CoxForm cp0 tag vs where
     n = length vs
     outside vars cox = case cox of

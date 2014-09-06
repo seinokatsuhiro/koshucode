@@ -57,6 +57,7 @@ library
 
         Koshucode.Baala.Core.Content
         Koshucode.Baala.Core.Content.Build
+        Koshucode.Baala.Core.Content.Cop
         Koshucode.Baala.Core.Content.Cox
         Koshucode.Baala.Core.Content.Class
         Koshucode.Baala.Core.Content.Literal

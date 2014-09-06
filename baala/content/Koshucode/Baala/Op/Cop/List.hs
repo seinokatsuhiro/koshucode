@@ -39,51 +39,51 @@ import qualified Koshucode.Baala.Op.Message         as Message
 
 copsList :: (C.CContent c) => [C.Cop c]
 copsList =
-    [ C.CopCont  (C.copInfix "++")             copAppend
-    , C.CopCont  (C.copInfix "intersect")      copIntersect
-    , C.CopCont  (C.copNormal "++")            copAppend
-    , C.CopCont  (C.copNormal "char")          copChar
-    , C.CopCont  (C.copNormal "char-group")    copCharGroup
-    , C.CopCont  (C.copNormal "char-group-1")  copCharGroup1
-    , C.CopCont  (C.copNormal "intersect")     copIntersect
-    , C.CopCont  (C.copNormal "length")        copLength
-    , C.CopCont  (C.copNormal "list")          copList
-    , C.CopCont  (C.copNormal "max")           copMax
-    , C.CopCont  (C.copNormal "min")           copMin
-    , C.CopCont  (C.copNormal "minus")         copMinus
-    , C.CopCont  (C.copNormal "push")          copPush
-    , C.CopCont  (C.copNormal "reverse")       copReverse
-    , C.CopCont  (C.copNormal "total")         copTotal
-    , C.CopCont  (C.copNormal "sub-index")     copSubIndex
-    , C.CopCont  (C.copNormal "sub-length")    copSubLength
+    [ C.CopCalc  (C.copInfix "++")             copAppend
+    , C.CopCalc  (C.copInfix "intersect")      copIntersect
+    , C.CopCalc  (C.copNormal "++")            copAppend
+    , C.CopCalc  (C.copNormal "char")          copChar
+    , C.CopCalc  (C.copNormal "char-group")    copCharGroup
+    , C.CopCalc  (C.copNormal "char-group-1")  copCharGroup1
+    , C.CopCalc  (C.copNormal "intersect")     copIntersect
+    , C.CopCalc  (C.copNormal "length")        copLength
+    , C.CopCalc  (C.copNormal "list")          copList
+    , C.CopCalc  (C.copNormal "max")           copMax
+    , C.CopCalc  (C.copNormal "min")           copMin
+    , C.CopCalc  (C.copNormal "minus")         copMinus
+    , C.CopCalc  (C.copNormal "push")          copPush
+    , C.CopCalc  (C.copNormal "reverse")       copReverse
+    , C.CopCalc  (C.copNormal "total")         copTotal
+    , C.CopCalc  (C.copNormal "sub-index")     copSubIndex
+    , C.CopCalc  (C.copNormal "sub-length")    copSubLength
 
-    , C.CopCont  (C.copInfix  "in") copFunIn
+    , C.CopCalc  (C.copInfix  "in") copFunIn
     , C.CopCox   (C.copPrefix "in") copCoxIn
     ]
 
-copList :: (C.CList c) => C.CopCont c
+copList :: (C.CList c) => C.CopCalc c
 copList argC = do arg <- sequence argC
                   C.putList arg
 
 
 -- ----------------------  aggregation
 
-copTotal :: (C.CContent c) => C.CopCont c
+copTotal :: (C.CContent c) => C.CopCalc c
 copTotal = op where
     op [Right c] | C.isList c = C.putDec =<< B.decimalSum (map C.gDec $ C.gList c)
     op xs = typeUnmatch xs
 
-copMin :: (C.CContent c) => C.CopCont c
+copMin :: (C.CContent c) => C.CopCalc c
 copMin = op where
     op [Right c] | C.isList c = Right $ minimum (C.gList c)
     op xs = typeUnmatch xs
 
-copMax :: (C.CContent c) => C.CopCont c
+copMax :: (C.CContent c) => C.CopCalc c
 copMax = op where
     op [Right c] | C.isList c = Right $ maximum (C.gList c)
     op xs = typeUnmatch xs
 
-copLength :: (C.CContent c) => C.CopCont c
+copLength :: (C.CContent c) => C.CopCalc c
 copLength = op where
     op [Right c] | C.isList c  = Right . C.pDecFromInt $ length (C.gList c)
                  | C.isText c  = Right . C.pDecFromInt $ length (C.gText c)
@@ -97,7 +97,7 @@ typeUnmatch _ = Message.unmatchType ""
 
 -- ----------------------  set-like operation
 
-copAppend :: (C.CContent c) => C.CopCont c
+copAppend :: (C.CContent c) => C.CopCalc c
 copAppend [] = Right C.empty
 copAppend xs@(x : _) = op x where
     op (Right c) | C.isText c = C.putText . concat =<< mapM C.getText xs
@@ -105,14 +105,14 @@ copAppend xs@(x : _) = op x where
                  | C.isList c = C.putList . concat =<< mapM C.getList xs
     op _ = typeUnmatch xs
 
-copIntersect :: (C.CContent c) => C.CopCont c
+copIntersect :: (C.CContent c) => C.CopCalc c
 copIntersect [] = Right C.empty
 copIntersect xs@(x : _) = op x where
     op (Right c) | C.isSet  c = C.putSet  . intersectLists =<< mapM C.getSet  xs
                  | C.isList c = C.putList . intersectLists =<< mapM C.getList xs
     op _ = typeUnmatch xs
 
-copMinus :: (C.CContent c) => C.CopCont c
+copMinus :: (C.CContent c) => C.CopCalc c
 copMinus = op where
     op [Right a,  Right b]
         | C.isSet  a && C.isSet  b = C.putSet  (C.gSet  a List.\\ C.gSet  b)
@@ -128,13 +128,13 @@ intersectLists (a : b : xs) = intersectLists $ List.intersect a b : xs
 
 -- ----------------------  others
 
-copReverse :: (C.CContent c) => C.CopCont c
+copReverse :: (C.CContent c) => C.CopCalc c
 copReverse = op where
     op [Right c] | C.isText c = C.putText $ reverse (C.gText c)
                  | C.isList c = C.putList $ reverse (C.gList c)
     op xs = typeUnmatch xs
 
-copSubIndex :: (C.CContent c) => C.CopCont c
+copSubIndex :: (C.CContent c) => C.CopCalc c
 copSubIndex = op where
     op arg = do arg3 <- C.getArg3 arg
                 case arg3 of
@@ -146,7 +146,7 @@ copSubIndex = op where
                          in C.putText (subIndexDecimal from to xs)
                   _ -> typeUnmatch arg
 
-copSubLength :: (C.CContent c) => C.CopCont c
+copSubLength :: (C.CContent c) => C.CopCalc c
 copSubLength = op where
     op arg = do arg3 <- C.getArg3 arg
                 case arg3 of
@@ -176,7 +176,7 @@ subLength :: Int -> Int -> [a] -> [a]
 subLength from len xs = xs2 where
     xs2 = take len $ drop (from - 1) xs
 
-copPush :: (C.CContent c) => C.CopCont c
+copPush :: (C.CContent c) => C.CopCalc c
 copPush arg =
     do arg2 <- C.getArg2 arg
        case arg2 of
@@ -188,7 +188,7 @@ copPush arg =
 
 -- --------------------------------------------  in
 
-copFunIn :: (C.CContent c) => C.CopCont c
+copFunIn :: (C.CContent c) => C.CopCalc c
 copFunIn arg =
     do arg2 <- C.getArg2 arg
        case arg2 of
@@ -206,17 +206,17 @@ copCoxIn _       = Message.adlib "require operand"
 
 -- ----------------------  text
 
-copChar :: (C.CContent c) => C.CopCont c
+copChar :: (C.CContent c) => C.CopCalc c
 copChar = op where
     op [Right c] | C.isDec c = C.putText [Char.chr $ B.decimalNum $ C.gDec c]
     op xs = typeUnmatch xs
 
-copCharGroup :: (C.CContent c) => C.CopCont c
+copCharGroup :: (C.CContent c) => C.CopCalc c
 copCharGroup = op where
     op [Right t] | C.isText t = C.putList $ map (C.pText . charGroup) $ C.gText t
     op xs = typeUnmatch xs
 
-copCharGroup1 :: (C.CContent c) => C.CopCont c
+copCharGroup1 :: (C.CContent c) => C.CopCalc c
 copCharGroup1 = op where
     op [Right t] | C.isText t = case C.gText t of
                                   (c : _) -> C.putText $ charGroup c

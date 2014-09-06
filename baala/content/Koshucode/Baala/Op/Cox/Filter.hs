@@ -44,16 +44,16 @@ ropsCoxFilter = Op.ropList "cox-filter"
 
 consFilter :: (C.CContent c) => Bool -> C.RopCons c
 consFilter b use =
-    do bundle  <- Op.getWhere use "-where"
-       coxIn   <- Op.getCox use "-in"
-       Right $ relmapFilter use (b, bundle, coxIn)
+    do cops   <- Op.getWhere use "-where"
+       coxIn  <- Op.getCox use "-in"
+       Right $ relmapFilter use (b, cops, coxIn)
 
 relmapFilter :: (C.CList c, C.CRel c, C.CBool c, B.Write c)
-  => C.RopUse c -> (Bool, C.CopBundle c, C.Cox c) -> C.Relmap c
+  => C.RopUse c -> (Bool, C.CopSet c, C.Cox c) -> C.Relmap c
 relmapFilter use = C.relmapFlow use . relkitFilter
 
 relkitFilter :: (C.CList c, C.CRel c, C.CBool c, B.Write c)
-  => (Bool, C.CopBundle c, C.Cox c) -> C.RelkitFlow c
+  => (Bool, C.CopSet c, C.Cox c) -> C.RelkitFlow c
 relkitFilter _ Nothing = Right C.relkitNothing
 relkitFilter (which, cops, body) (Just he1) = Right kit2 where
     kit2  = C.relkitJust he1 $ C.RelkitAbPred p

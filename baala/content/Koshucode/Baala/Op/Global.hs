@@ -20,7 +20,7 @@ vanillaGlobal = global where
     global    = C.global { C.globalOpset     = C.opsetFill opset }
     opset     = C.opset  { C.opsetRopList    = vanillaRops
                          , C.opsetCop        = copset }
-    copset    = C.copset { C.copsetList      = vanillaCops
+    copset    = C.copset { C.copsetCopList   = vanillaCops
                          , C.copsetInfixList = vanillaInfix }
 
 -- | Relmap operators

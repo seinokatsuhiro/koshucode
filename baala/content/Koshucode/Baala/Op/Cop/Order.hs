@@ -62,7 +62,7 @@ copsOrder =
     ]
 
 orderInfix :: (C.CBool c) => String -> (c -> c -> Bool) -> C.Cop c
-orderInfix n f = C.CopCont (C.copInfix n) g where
+orderInfix n f = C.CopCalc (C.copInfix n) g where
     g [Right x, Right y] = C.putBool $ x `f` y
     g _                  = Message.notFound ""
 

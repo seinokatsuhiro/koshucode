@@ -193,7 +193,7 @@ calcTreeUsing :: (C.CContent c) => C.Global c -> C.CalcContent c
 calcTreeUsing g = calc where
     copset     =  C.globalCopset g
     calc tree  =  do alpha <- C.coxBuild calc copset tree
-                     C.coxRunCox (copset, []) B.mempty [] alpha
+                     C.coxRunCox copset B.mempty [] alpha
 
 coxTreeUsing :: (C.CContent c) => C.Global c -> B.TokenTreeToAb (C.Cox c)
 coxTreeUsing g = C.coxBuild undefined (C.globalCopset g)

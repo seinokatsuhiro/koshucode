@@ -1,24 +1,16 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
--- | Term-content calcutation.
+-- | Term-content expression.
 
 module Koshucode.Baala.Core.Content.Cox
 ( -- $Process
 
   -- * Expression
-  Cox (..), CoxAssn, NamedCox,
+  Cox (..), CopCalc, CoxTag, NamedCox,
   coxSyntacticArity,
-  isCoxBase,
-  isCoxForm,
   coxMap, coxCall,
   checkIrreducible,
-
-  -- * Operator
-  Cop (..), CopSet (..), CopBundle,
-  CopCont, CopCox, CopTree, copName, 
-  CopFind, copset, copsetFill,
-  copNormal, copInternal, copPrefix, copInfix, copPostfix,
 ) where
 
 import qualified Koshucode.Baala.Base            as B
@@ -27,25 +19,29 @@ import qualified Koshucode.Baala.Core.Message    as Message
 
 -- ----------------------  Expression
 
--- | Content expressions.
+-- | Term-content expressions.
 data Cox c
-    = CoxLit   [B.CodePt] c                       -- ^ Literal content
-    | CoxTerm  [B.CodePt] [B.TermName] [Int]      -- ^ Term reference, its name and position
-    | CoxBase  [B.CodePt] (Cop c)                 -- ^ Base function
-    | CoxLocal [B.CodePt] String Int              -- ^ Local blank, its name and De Bruijn index
-    | CoxBlank [B.CodePt] B.BlankName             -- ^ Blank in form
-    | CoxFill  [B.CodePt] (Cox c) [Cox c]         -- ^ Fill args in a form
-    | CoxForm1 [B.CodePt] (Maybe String)  String  (Cox c) -- ^ Form with single blank
-    | CoxForm  [B.CodePt] (Maybe String) [String] (Cox c) -- ^ Form with multiple blanks
-    | CoxWith  [B.CodePt] [NamedCox c] (Cox c)            -- ^ Cox with outside arguments
+    = CoxLit   [B.CodePt] c                        -- ^ Literal content
+    | CoxTerm  [B.CodePt] [B.TermName] [Int]       -- ^ Term reference, its name and position
+    | CoxCalc  [B.CodePt] B.BlankName (CopCalc c)  -- ^ Content calculator
+    | CoxLocal [B.CodePt] String Int               -- ^ Local blank, its name and De Bruijn index
+    | CoxBlank [B.CodePt] B.BlankName              -- ^ Blank in form
+    | CoxFill  [B.CodePt] (Cox c) [Cox c]          -- ^ Fill args in a form
+    | CoxForm1 [B.CodePt] CoxTag  String  (Cox c)  -- ^ Form with single blank
+    | CoxForm  [B.CodePt] CoxTag [String] (Cox c)  -- ^ Form with multiple blanks
+    | CoxWith  [B.CodePt] [NamedCox c] (Cox c)     -- ^ Cox with outside arguments
 
-type CoxAssn c  = (B.BlankName, Cox c)
+-- | Term-content calculator.
+type CopCalc c = [B.Ab c] -> B.Ab c
+
+type CoxTag = Maybe String
+
 type NamedCox c = B.Named (Cox c)
 
 instance B.CodePtr (Cox c) where
     codePts (CoxLit    cp _)      =  cp
     codePts (CoxTerm   cp _ _)    =  cp
-    codePts (CoxBase   cp _)      =  cp
+    codePts (CoxCalc   cp _ _)    =  cp
     codePts (CoxLocal  cp _ _)    =  cp
     codePts (CoxBlank  cp _)      =  cp
     codePts (CoxFill   cp _ _)    =  cp
@@ -71,7 +67,7 @@ docCox sh = d (0 :: Int) . coxFold where
     d n e  = case e of
         CoxLit    _ c          ->  wr "lit" B.<+> wr c
         CoxTerm   _ ns _       ->  wr $ concatMap ('/' :) ns
-        CoxBase   _ cop        ->  wr "base" B.<+> wr (B.name cop)
+        CoxCalc   _ op _       ->  wr "calc" B.<+> wr op
         CoxLocal  _ v i        ->  wr "local" B.<+> wr v B.<> wr "/" B.<> wr i
         CoxBlank  _ v          ->  wr "global" B.<+> wr v
         CoxFill   _ f xs       ->  let f'  = wr ">>" B.<+> d' f
@@ -95,10 +91,6 @@ coxFold (CoxForm1 cp1 tag1 v1 e1) =
       e2                                   ->  CoxForm cp1 tag1 [v1]    e2
 coxFold (CoxFill cp f xs) = CoxFill cp (coxFold f) (map coxFold xs)
 coxFold e = e
-
-isCoxBase :: Cox c -> Bool
-isCoxBase (CoxBase _ _)   = True
-isCoxBase _               = False
 
 isCoxForm :: Cox c -> Bool
 isCoxForm (CoxForm1  _ _ _ _) = True
@@ -135,107 +127,11 @@ irreducible cox =
     case cox of
       CoxLit  _ _       ->  True
       CoxTerm _ _ _     ->  True
-      CoxBase _ _       ->  True
+      CoxCalc _ _ _     ->  True
       CoxFill _ f xs    ->  all irreducible $ f : xs
       _                 ->  False
 
 
--- ----------------------  Operator
-
--- | Content operator.
-data Cop c
-    = CopCont B.BlankName (CopCont c)   -- ^ Convert contents
-    | CopCox  B.BlankName (CopCox c)   -- ^ Convert coxes
-    | CopTree B.BlankName (CopTree)    -- ^ Convert trees
-
--- | Base and derived operators.
-type CopBundle c = ( CopSet c, [NamedCox c] )
-
--- | Base function.
-type CopCont c = [B.Ab c] -> B.Ab c
-
--- | Expression-level syntax.
-type CopCox c = [Cox c] -> B.Ab (Cox c)
-
--- | Tree-level syntax.
-type CopTree  = [B.TokenTree] -> B.Ab B.TokenTree
-
-instance Show (Cop c) where
-    show (CopCont n _) = "(CopCont " ++ show n ++ " _)"
-    show (CopCox  n _) = "(CopCox "  ++ show n ++ " _)"
-    show (CopTree n _) = "(CopTree " ++ show n ++ " _)"
-
-instance B.Name (Cop c) where
-    name = B.name . copName
-
-copName :: Cop c -> B.BlankName
-copName (CopCont  n _) = n
-copName (CopCox   n _) = n
-copName (CopTree  n _) = n
-
--- | Non-binary operator.
-copNormal :: String -> B.BlankName
-copNormal = B.BlankNormal
-
-copInternal :: String -> B.BlankName
-copInternal = B.BlankInternal
-
--- | Convert operator name to prefix name.
-copPrefix :: String -> B.BlankName
-copPrefix = B.BlankPrefix
-
--- | Convert operator name to postfix name.
-copPostfix :: String -> B.BlankName
-copPostfix = B.BlankPostfix
-
--- | Convert operator name to infix name.
-copInfix :: String -> B.BlankName
-copInfix = B.BlankInfix
-
-data CopSet c = CopSet
-    { copsetList       :: [Cop c]
-    , copsetInfixList  :: [B.Named B.InfixHeight]
-
-    , copsetContList   :: [B.Named (Cop c)]  -- CopCont
-    , copsetCoxList    :: [B.Named (Cop c)]  -- CopCox
-    , copsetTreeList   :: [B.Named (Cop c)]  -- CopTree
-
-    , copsetContFind   :: CopFind (Cox c)
-    , copsetCoxFind    :: CopFind (CopCox c)
-    , copsetTreeFind   :: CopFind CopTree
-    }
-
-type CopFind f = B.BlankName -> Maybe f
-
-copset :: CopSet c
-copset = CopSet [] [] [] [] [] find find find where
-    find = const Nothing
-
-copsetFill :: B.Map (CopSet c)
-copsetFill opset = opset2 where
-
-    opset2 = opset { copsetContFind  =  contFind
-                   , copsetCoxFind   =  coxFind
-                   , copsetTreeFind  =  treeFind }
-
-    contFind n  =  lookup n contList
-    coxFind  n  =  lookup n coxList
-    treeFind n  =  lookup n treeList
-
-    contList    =  B.catMaybes $ map cont cops
-    coxList     =  B.catMaybes $ map cox  cops
-    treeList    =  B.catMaybes $ map tree cops
-
-    cont p@(CopCont n _) =  Just (n, CoxBase [] p)
-    cont _               =  Nothing
-
-    cox (CopCox n f)     =  Just (n, f)
-    cox _                =  Nothing
-
-    tree (CopTree n f)   =  Just (n, f)
-    tree _               =  Nothing
-
-    cops  = copsetList opset
 
 
 -- ----------------------

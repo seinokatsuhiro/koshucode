@@ -11,6 +11,7 @@ module Koshucode.Baala.Core.Content.Run
 
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Core.Content.Class     as C
+import qualified Koshucode.Baala.Core.Content.Cop       as C
 import qualified Koshucode.Baala.Core.Content.Cox       as C
 import qualified Koshucode.Baala.Core.Message           as Message
 
@@ -20,7 +21,7 @@ import qualified Koshucode.Baala.Core.Message           as Message
 data Beta c
     = BetaLit  [B.CodePt] c                     -- ^ Literal content
     | BetaTerm [B.CodePt] [B.TermName] [Int]    -- ^ Term reference, its name and position
-    | BetaCall [B.CodePt] B.BlankName (C.CopCont c) [B.Ab (Beta c)]  -- ^ Function application
+    | BetaCall [B.CodePt] B.BlankName (C.CopCalc c) [B.Ab (Beta c)]  -- ^ Function application
 
 instance B.CodePtr (Beta c) where
     codePts (BetaLit  cp _)      =  cp
@@ -28,11 +29,12 @@ instance B.CodePtr (Beta c) where
     codePts (BetaCall cp _ _ _)  =  cp
 
 -- | Reduce content expression.
-beta :: (B.Write c) => C.CopBundle c -> B.Relhead -> C.Cox c -> B.Ab (Beta c)
-beta (copset, deriv) he cox =
-    do deriv2  <- B.sequenceSnd $ B.mapSndTo pos deriv
+beta :: (B.Write c) => C.CopSet c -> B.Relhead -> C.Cox c -> B.Ab (Beta c)
+beta copset he cox =
+    do let deriv = C.copsetDerived copset
+       deriv2  <- B.sequenceSnd $ B.mapSndTo pos deriv
        cox2    <- pos cox                      -- put term index
-       let cox3 = link (copset, deriv2) cox2   -- substitute free variables
+       let cox3 = link copset deriv2 cox2   -- substitute free variables
        reduce cox3                             -- beta reduction
     where
       pos = position he
@@ -46,7 +48,7 @@ reduce = red [] where
         C.CoxTerm   cp n i      ->  Right $ BetaTerm cp n i
         C.CoxLocal  cp v k      ->  Message.abCoxReduce cp $ red args =<< kth v k args
         C.CoxFill   cp fn xs    ->  Message.abCoxReduce cp $ fill args fn $ substL args xs
-        C.CoxBase   cp _        ->  Message.abCoxReduce cp $ fill args cox []
+        C.CoxCalc   cp _ _      ->  Message.abCoxReduce cp $ fill args cox []
         C.CoxWith   cp arg2 e   ->  Message.abCoxReduce cp $ red (arg2 ++ args) e
         C.CoxForm1  cp _ v _    ->  Message.abCoxReduce cp $ Message.lackArg v
         C.CoxForm   cp _ _ _    ->  Message.abCoxReduce cp $ Message.adlib "CoxForm"
@@ -62,7 +64,7 @@ reduce = red [] where
         C.CoxLocal  cp v k      ->  Message.abCoxFill cp $ do
                                         fn' <- kth v k args
                                         fill args fn' xxs
-        C.CoxBase   cp (C.CopCont n f2)  ->  Message.abCoxFill cp $ do
+        C.CoxCalc   cp n f2     ->  Message.abCoxFill cp $ do
                                         xxs2 <- mapM id xxs
                                         let xxs3 = red args `map` xxs2
                                         Right $ BetaCall cp n f2 xxs3
@@ -91,15 +93,15 @@ reduce = red [] where
 
       vs = map fst args
 
-link :: forall c. C.CopBundle c -> B.Map (C.Cox c)
-link (copset, deriv) = li where
+link :: forall c. C.CopSet c -> [C.NamedCox c] -> B.Map (C.Cox c)
+link copset deriv = li where
     li cox@(C.CoxBlank _ n)   =  B.fromMaybe cox $ find n
     li cox                    =  C.coxCall cox li
 
     find n    = lookup n fs B.<|> findCont n
-    findCont  = C.copsetContFind copset
+    findCont  = C.copsetFindCalc copset
 
-    fs :: [C.CoxAssn c]
+    fs :: [(B.BlankName, C.Cox c)]
     fs = map (fmap li . normal) deriv
 
     normal (n, cop) = (B.BlankNormal n, cop)
@@ -127,11 +129,11 @@ type RunCox  c = C.Cox c -> B.Ab c
 type RunList c = [c]     -> B.Ab c
 
 coxRunCox :: (B.Write c, C.CRel c, C.CList c) =>
-    C.CopBundle c -> B.Relhead -> [c] -> RunCox c
+    C.CopSet c -> B.Relhead -> [c] -> RunCox c
 coxRunCox cops he cs cox = coxRunList cops he cox cs
 
 coxRunList :: (B.Write c, C.CRel c, C.CList c) =>
-    C.CopBundle c -> B.Relhead -> C.Cox c -> RunList c
+    C.CopSet c -> B.Relhead -> C.Cox c -> RunList c
 coxRunList cops he cox cs = coxRun cs =<< beta cops he cox
 
 -- | Calculate content expression.

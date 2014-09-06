@@ -31,33 +31,33 @@ import qualified Koshucode.Baala.Op.Message as Message
 
 copsLogic :: (C.CBool c, C.CEmpty c) => [C.Cop c]
 copsLogic =
-    [ C.CopCont  (C.copInfix    "and")    copAnd
-    , C.CopCont  (C.copInfix    "or")     copOr
-    , C.CopCont  (C.copInfix    "then")   copImp
-    , C.CopCont  (C.copInfix    "when")   copWhen
-    , C.CopCont  (C.copNormal   "not")    copNot
-    , C.CopCont  (C.copNormal   "and")    copAnd
-    , C.CopCont  (C.copNormal   "or")     copOr
-    , C.CopCont  (C.copNormal   "then")   copImp
-    , C.CopCont  (C.copNormal   "when")   copWhen
-    , C.CopCont  (C.copInternal "#if")    copFunIf
+    [ C.CopCalc  (C.copInfix    "and")    copAnd
+    , C.CopCalc  (C.copInfix    "or")     copOr
+    , C.CopCalc  (C.copInfix    "then")   copImp
+    , C.CopCalc  (C.copInfix    "when")   copWhen
+    , C.CopCalc  (C.copNormal   "not")    copNot
+    , C.CopCalc  (C.copNormal   "and")    copAnd
+    , C.CopCalc  (C.copNormal   "or")     copOr
+    , C.CopCalc  (C.copNormal   "then")   copImp
+    , C.CopCalc  (C.copNormal   "when")   copWhen
+    , C.CopCalc  (C.copInternal "#if")    copFunIf
     , C.CopTree  (C.copNormal   "if")     copTreeIf
     ]
 
-cop1 :: (C.CBool c) => (Bool -> Bool) -> C.CopCont c
+cop1 :: (C.CBool c) => (Bool -> Bool) -> C.CopCalc c
 cop1 p arg =
     do xc <- C.getArg1 arg
        x  <- C.getBool xc
        C.putBool $ p x
 
-cop2 :: (C.CBool c) => (Bool -> Bool -> Bool) -> C.CopCont c
+cop2 :: (C.CBool c) => (Bool -> Bool -> Bool) -> C.CopCalc c
 cop2 p arg =
     do (xc, yc) <- C.getArg2 arg
        x <- C.getBool xc
        y <- C.getBool yc
        C.putBool $ p x y
 
-copN :: (C.CBool c) => Bool -> (Bool -> Bool -> Bool) -> C.CopCont c
+copN :: (C.CBool c) => Bool -> (Bool -> Bool -> Bool) -> C.CopCalc c
 copN unit p = loop where
     loop []   = C.putBool unit
     loop [xc] = xc
@@ -66,19 +66,19 @@ copN unit p = loop where
            x2 <- C.getBool xc2
            loop $ C.putBool (p x1 x2) : xs
 
-copNot :: (C.CBool c) => C.CopCont c
+copNot :: (C.CBool c) => C.CopCalc c
 copNot =  cop1 not
 
-copWhen  :: (C.CBool c) => C.CopCont c
+copWhen  :: (C.CBool c) => C.CopCalc c
 copWhen  =  cop2 $ \x y -> x || not y
 
-copImp :: (C.CBool c) => C.CopCont c
+copImp :: (C.CBool c) => C.CopCalc c
 copImp =  cop2 $ \x y -> not x || y
 
-copAnd :: (C.CBool c) => C.CopCont c
+copAnd :: (C.CBool c) => C.CopCalc c
 copAnd =  copN True (&&)
 
-copOr  :: (C.CBool c) => C.CopCont c
+copOr  :: (C.CBool c) => C.CopCalc c
 copOr  =  copN False (||)
 
 
@@ -94,7 +94,7 @@ treeOrList :: [B.TokenTree] -> B.TokenTree
 treeOrList [x] = x
 treeOrList xs = B.wrapTrees $ (nameLeaf $ C.copNormal "or") : xs
 
-copFunIf  :: (C.CBool c, C.CEmpty c) => C.CopCont c
+copFunIf  :: (C.CBool c, C.CEmpty c) => C.CopCalc c
 copFunIf arg =
     do (testC, conC, altC) <- C.getArg3 arg
        test <- C.getBool testC

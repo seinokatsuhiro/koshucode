@@ -47,10 +47,11 @@ ropNamedAlphas use = mapM (B.namedMapM $ ropBuild use)
 
 -- --------------------------------------------  Where
 
-getWhere :: (C.CContent c) => C.RopUse c -> String -> B.Ab (C.CopBundle c)
+getWhere :: (C.CContent c) => C.RopUse c -> String -> B.Ab (C.CopSet c)
 getWhere u name =
     do wh <- Op.getOption [] getWhereBody u name
-       Right (C.globalCopset $ C.ropGlobal u, wh)
+       let copset = C.globalCopset $ C.ropGlobal u
+       Right $ copset { C.copsetDerived = wh }
 
 getWhereBody :: (C.CContent c) => C.RopUse c -> String -> B.Ab [C.NamedCox c]
 getWhereBody u name =
