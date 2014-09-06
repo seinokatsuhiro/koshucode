@@ -20,6 +20,7 @@ module Koshucode.Baala.Core.Relmap.Global
 import qualified Data.Version                           as D
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Core.Content           as C
+import qualified Koshucode.Baala.Core.Lexmap            as C
 import qualified Koshucode.Baala.Core.Relmap.Relkit     as C
 
 
@@ -71,14 +72,20 @@ global = Global
 
 data OpSet' rop c = OpSet
     { opsetRopList  :: [rop c]
+    , opsetFindRop  :: C.RopName -> Maybe (rop c)
     , opsetCop      :: C.CopSet c
     }
 
 opset :: OpSet' rop c
-opset = OpSet [] C.copset
+opset = OpSet [] find C.copset where
+    find _ = Nothing
 
-opsetFill :: B.Map (OpSet' rop c)
+opsetFill :: (B.Name (rop c)) => B.Map (OpSet' rop c)
 opsetFill ops = ops2 where
-    ops2  = ops { opsetCop = copset2 }
+    ops2    = ops { opsetCop = copset2, opsetFindRop = findRops }
     copset2 = C.copsetFill $ opsetCop ops
+
+    findRops n = lookup n rops
+    rops       = map name $ opsetRopList ops
+    name rop   = (B.name rop, rop)
 

@@ -45,28 +45,27 @@ instance Show (RelmapCons c) where
 
 -- | Make a constructor pair of lexmap and relmap.
 relmapCons :: C.Global c -> RelmapCons c
-relmapCons g = make $ unzip $ map pair rops where
-    rops = C.globalRops g
-    make (l, r) = RelmapCons (C.consLexmap l) (consRelmap g r)
-    pair (C.Rop n _ sorter cons _) = ((n, sorter), (n, cons))
+relmapCons g = make $ map pair $ C.globalRops g where
+    make l = RelmapCons (C.consLexmap l) (consRelmap g)
+    pair (C.Rop n _ sorter _ _) = (n, sorter)
 
 -- | Second step of constructing relmap, make relmap from lexmap.
 type ConsRelmap c = C.Lexmap -> B.Ab (C.Relmap c)
 
-consRelmap :: C.Global c -> [B.Named (C.RopCons c)] -> ConsRelmap c
-consRelmap global conses = relmap where
+consRelmap :: C.Global c -> ConsRelmap c
+consRelmap g = relmap where
     relmap lx =
-        let rop  = C.lexOpName  lx
-            roa  = C.lexAttr    lx
-            lxs  = C.lexSubmap  lx
-        in case C.lexType lx of
-             C.LexmapWith    -> Right $ C.RelmapLink lx rop roa
-             C.LexmapDerived -> Right $ C.RelmapLink lx rop roa
-             C.LexmapBase    -> case lookup rop conses of
-                                 Nothing   -> Message.unkRelmap rop
-                                 Just cons -> Message.abRelmap [lx] $
-                                              do rmaps <- mapM relmap lxs
-                                                 cons $ C.RopUse global lx rmaps
+        case C.lexType lx of
+          C.LexmapWith    -> Right $ C.RelmapLink lx n attr
+          C.LexmapDerived -> Right $ C.RelmapLink lx n attr
+          C.LexmapBase    -> case find n of
+                               Nothing  -> Message.unkRelmap n
+                               Just rop -> Message.abRelmap [lx] $ cons rop
+        where n        =  C.lexOpName lx
+              attr     =  C.lexAttr   lx
+              find     =  C.opsetFindRop $ C.globalOpset g
+              cons rop =  do sub <- mapM relmap $ C.lexSubmap lx
+                             C.ropCons rop $ C.RopUse g lx sub
 
 
 -- ----------------------  Construct

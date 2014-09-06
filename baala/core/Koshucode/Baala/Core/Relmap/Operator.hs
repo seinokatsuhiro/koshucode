@@ -51,7 +51,10 @@ data Rop c = Rop
 
 instance Show (Rop c) where
     show Rop { ropName = name, ropGroup = group }
-        = "Rop (" ++ group ++ "/" ++ name ++ ")"
+        = "Rop " ++ group ++ "/" ++ name
+
+instance B.Name (Rop c) where
+    name = ropName
 
 
 -- ----------------------  RopUse
