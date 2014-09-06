@@ -51,37 +51,39 @@ nextToken :: B.Resource -> B.NextToken B.Token
 nextToken res (num, line) txt =
     case txt of
       '*' : '*' : '*' : '*' : cs
-                      ->  token cs        $ B.TText     p 0 "****"
-      '*' : '*' : _   ->  token ""        $ B.TComment  p txt
-      '<' : '<' : cs  ->  token cs        $ B.TOpen     p "<<"
-      '>' : '>' : cs  ->  token cs        $ B.TClose    p ">>"
+                            ->  token cs  $ B.TText     cp 0 "****"
+      '*' : '*' : _         ->  token ""  $ B.TComment  cp txt
+      '<' : '<' : '<' : cs  ->  token cs  $ B.TOpen     cp "<<<"
+      '>' : '>' : '>' : cs  ->  token cs  $ B.TClose    cp ">>>"
+      '<' : '<' : cs        ->  token cs  $ B.TOpen     cp "<<"
+      '>' : '>' : cs        ->  token cs  $ B.TClose    cp ">>"
                               
       c : '|' : cs
-          | isOpen c  ->  token cs        $ B.TOpen     p [c, '|']
+          | isOpen c  ->  token cs        $ B.TOpen     cp [c, '|']
       '|' : c : cs
-          | isClose c ->  token cs        $ B.TClose    p ['|', c]
+          | isClose c ->  token cs        $ B.TClose    cp ['|', c]
           | c == '|'  ->  let cs2         = B.trimLeft cs  -- newline
-                          in token cs2    $ B.TText     p 0 "||"
+                          in token cs2    $ B.TText     cp 0 "||"
 
       '<' : cs        ->  angle cs []
-      '#' : '!' : _   ->  token ""        $ B.TComment  p txt
+      '#' : '!' : _   ->  token ""        $ B.TComment  cp txt
       '@' : cs        ->  let (n, cs2)    = slot 1 cs
-                          in word cs2 []  $ B.TSlot     p n
+                          in word cs2 []  $ B.TSlot     cp n
       c : cs
-        | isOpen   c  ->  token cs        $ B.TOpen     p   [c]
-        | isClose  c  ->  token cs        $ B.TClose    p   [c]
-        | isSingle c  ->  token cs        $ B.TText     p 0 [c]
+        | isOpen   c  ->  token cs        $ B.TOpen     cp   [c]
+        | isClose  c  ->  token cs        $ B.TClose    cp   [c]
+        | isSingle c  ->  token cs        $ B.TText     cp 0 [c]
         | isTerm   c  ->  term  cs [] []
         | isQQ     c  ->  qq    cs
-        | isQ      c  ->  word  cs []     $ B.TText     p 1
+        | isQ      c  ->  word  cs []     $ B.TText     cp 1
         | isShort  c  ->  short cs [c]
-        | isWord   c  ->  word  cs [c]    $ B.TText     p 0
+        | isWord   c  ->  word  cs [c]    $ B.TText     cp 0
         | isSpace  c  ->  space 1 cs
 
-      _               ->  token []        $ B.TUnknown  p []
+      _               ->  token []        $ B.TUnknown  cp []
 
     where
-      p = B.CodePt res num line txt
+      cp = B.CodePt res num line txt
 
       token :: String -> B.Token -> (B.Token, String)
       token cs tok                    =  (tok, cs)
@@ -90,9 +92,9 @@ nextToken res (num, line) txt =
       tokenFrom cs xs k               =  (k $ reverse xs, cs)
 
       short :: String -> String -> (B.Token, String)
-      short (c:cs) pre | c == '.'     =  word  cs []  $ B.TShort p (reverse pre)
+      short (c:cs) pre | c == '.'     =  word  cs []  $ B.TShort cp (reverse pre)
                        | isShort c    =  short cs (c : pre)
-      short cs     pre                =  word  cs pre $ B.TText p 0
+      short cs     pre                =  word  cs pre $ B.TText cp 0
 
       slot :: Int -> String -> (Int, String)
       slot n ('@'  : cs)              =  slot (n + 1) cs
@@ -107,8 +109,8 @@ nextToken res (num, line) txt =
 
       qq :: String -> (B.Token, String)
       qq cs = case qqText cs [] of
-                Just (text, cs2) -> tokenFrom cs2 text $ B.TText p 2
-                Nothing -> token [] $ B.TUnknown p cs
+                Just (text, cs2) -> tokenFrom cs2 text $ B.TText cp 2
+                Nothing -> token [] $ B.TUnknown cp cs
 
       qqText :: String -> String -> Maybe (String, String)
       qqText []     _                 =  Nothing
@@ -117,16 +119,16 @@ nextToken res (num, line) txt =
 
       angle (c:cs) text | c == '>'    =  angleToken cs $ reverse text
                         | isWord c    =  angle cs (c : text)
-      angle cs     text               =  token cs $ B.TText p 0 ('<' : reverse text)
+      angle cs     text               =  token cs $ B.TText cp 0 ('<' : reverse text)
 
       angleToken cs ('c' : code)
           | all isCode code           =  case mapM B.readInt $ B.omit null $ B.divide '-' code of
-                                           Just ns  ->  token cs $ B.TText p 3 $ map Char.chr ns
-                                           Nothing  ->  token cs $ B.TText p (-1) code
-      angleToken cs text | null text  =  token cs $ B.TText p 0 "<>"
+                                           Just ns  ->  token cs $ B.TText cp 3 $ map Char.chr ns
+                                           Nothing  ->  token cs $ B.TText cp (-1) code
+      angleToken cs text | null text  =  token cs $ B.TText cp 0 "<>"
                          | otherwise  =  case lookup text B.bracketKeywords of
-                                           Just w   ->  token cs $ B.TText p 3 w
-                                           Nothing  ->  token cs $ B.TText p (-1) text
+                                           Just w   ->  token cs $ B.TText cp 3 w
+                                           Nothing  ->  token cs $ B.TText cp (-1) text
 
       isCode :: Char -> Bool
       isCode '-' = True
@@ -137,8 +139,8 @@ nextToken res (num, line) txt =
                         | isWord c    =  term cs (c:xs) ns
                         | isQQ   c    =  case qqText cs xs of
                                            Just (text, cs2) -> term cs2 [] $ termUp text ns
-                                           Nothing          -> token [] $ B.TUnknown p (c:cs)
-      term cs     xs ns               =  tokenFrom cs (termUp xs ns) $ B.TTerm p 0
+                                           Nothing          -> token [] $ B.TUnknown cp (c:cs)
+      term cs     xs ns               =  tokenFrom cs (termUp xs ns) $ B.TTerm cp 0
 
       termUp :: String -> [String] -> [String]
       termUp [] ns                    =  ns 
@@ -146,7 +148,7 @@ nextToken res (num, line) txt =
 
       space :: Int -> String -> (B.Token, String)
       space i (c:cs) | isSpace c      =  space (i + 1) cs
-      space i cs                      =  token cs $ B.TSpace p i
+      space i cs                      =  token cs $ B.TSpace cp i
 
 
 

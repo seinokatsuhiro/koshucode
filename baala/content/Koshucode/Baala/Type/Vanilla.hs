@@ -22,11 +22,12 @@ data VContent
     | VText    String             -- ^ String type
     | VTerm    String             -- ^ Term name type
     | VDec     B.Decimal          -- ^ Decimal number type
-    | VEmpty                        -- ^ Sign of no ordinary type
+    | VEmpty                      -- ^ Sign of no ordinary type
     | VList    [VContent]         -- ^ List type (objective collection)
     | VSet     [VContent]         -- ^ Set type (informative collection)
     | VAssn    [B.Named VContent] -- ^ Assn type (set of terms)
     | VRel     (B.Rel VContent)   -- ^ Relation type
+    | VInterp  B.Interp           -- ^ Relation type
       deriving (Show)
 
 instance Eq VContent where
@@ -43,6 +44,7 @@ instance Ord VContent where
     compare (VSet     x) (VSet     y)  =  compareAsSet x y
     compare (VAssn    x) (VAssn    y)  =  compareAsSet x y
     compare (VRel     x) (VRel     y)  =  compare x y
+    compare (VInterp  x) (VInterp  y)  =  compare x y
 
     compare (VBool    _) _             =  LT
     compare (VText    _) _             =  LT
@@ -53,6 +55,7 @@ instance Ord VContent where
     compare (VSet     _) _             =  LT
     compare (VAssn    _) _             =  LT
     compare (VRel     _) _             =  LT
+    compare (VInterp  _) _             =  LT
 
 compareAsSet :: (Ord a) => [a] -> [a] -> Ordering
 compareAsSet x y = compare (Set.fromList x) (Set.fromList y)
@@ -67,6 +70,7 @@ instance C.PrimContent VContent where
     typename (VSet     _)  =  "set"
     typename (VAssn    _)  =  "assn"
     typename (VRel     _)  =  "rel"
+    typename (VInterp  _)  =  "interp"
 
 instance C.CContent VContent where
     appendContent (VEmpty) x = Right x
@@ -85,6 +89,7 @@ instance B.Write VContent where
         VSet  xs     ->  B.docWraps "{"   "}" $ B.writeColon sh xs
         VAssn xs     ->  B.docWraps "<<" ">>" $ B.writeH     sh xs
         VRel r       ->  B.write sh r
+        VInterp i    ->  B.write sh i
 
 
 -- ----------------------  haskell data
@@ -153,4 +158,11 @@ instance C.CRel VContent where
     gRel _                   =  B.bug "gRel"
     isRel  (VRel _)          =  True
     isRel  _                 =  False
+
+instance C.CInterp VContent where
+    pInterp                     =  VInterp
+    gInterp (VInterp r)         =  r
+    gInterp _                   =  B.bug "gInterp"
+    isInterp  (VInterp _)       =  True
+    isInterp  _                 =  False
 

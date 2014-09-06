@@ -42,10 +42,11 @@ literal calc tree = Message.abLiteral tree $ lit tree where
         = either (const $ token t) decimal $ getDecimalText [x]
     lit g@(B.TreeB b _ xs) = case b of
         B.BracketGroup  ->  group g
-        B.BracketList   ->  C.putList =<< literals lit xs
-        B.BracketSet    ->  C.putSet  =<< literals lit xs
-        B.BracketAssn   ->                litAngle lit xs
-        B.BracketRel    ->  C.putRel  =<< litRel   lit xs
+        B.BracketList   ->  C.putList   =<< literals lit xs
+        B.BracketSet    ->  C.putSet    =<< literals lit xs
+        B.BracketAssn   ->                  litAngle lit xs
+        B.BracketRel    ->  C.putRel    =<< litRel   lit xs
+        B.BracketInterp ->  C.putInterp =<< getInterp xs
         B.BracketForm   ->  Message.adlib "Unknown bracket type"
 
     token :: B.Token -> B.Ab c
@@ -102,6 +103,9 @@ getText True  (B.TText _ q w) | q > 0   =  Right w
 getText False (B.TText _ q w) | q == 0  =  Right w
 getText _ _  =  Message.nothing
 
+getInterp :: B.TokenTreesToAb B.Interp
+getInterp xs = do ws <- getTexts False xs
+                  Right $ B.Interp $ map B.InterpText ws
 
 -- ----------------------  Particular content
 

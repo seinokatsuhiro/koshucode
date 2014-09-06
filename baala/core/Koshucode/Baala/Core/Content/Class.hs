@@ -17,6 +17,7 @@ module Koshucode.Baala.Core.Content.Class
   CSet        (..),
   CAssn       (..),
   CRel        (..), isMember,
+  CInterp     (..),
 ) where
 
 import qualified Koshucode.Baala.Base         as B
@@ -31,7 +32,7 @@ class (Show c) => PrimContent c where
 
 class (Ord c, B.Write c, PrimContent c,
        CBool c, CText c, CTerm c, CDec c, CList c,
-       CEmpty c , CSet c, CAssn c, CRel c) =>
+       CEmpty c , CSet c, CAssn c, CRel c, CInterp c) =>
     CContent c where
 
     appendContent :: c -> c -> B.Ab c
@@ -157,7 +158,18 @@ class (PrimContent c) => CRel c where
     getRel      =       getAbAb isRel gRel
 
     putRel      ::     B.Rel c -> B.Ab c
-    putRel      =      Right. pRel
+    putRel      =      Right . pRel
+
+class (PrimContent c) => CInterp c where
+    isInterp    ::           c -> Bool
+    gInterp     ::           c -> B.Interp
+    pInterp     ::    B.Interp -> c
+
+    getInterp   ::      B.Ab c -> B.Ab B.Interp
+    getInterp   =       getAbAb isInterp gInterp
+
+    putInterp   ::    B.Interp -> B.Ab c
+    putInterp   =     Right . pInterp
 
 isMember :: (Eq c, CSet c, CList c) => c -> c -> Bool
 isMember x xs | isSet xs  = x `elem` gSet xs

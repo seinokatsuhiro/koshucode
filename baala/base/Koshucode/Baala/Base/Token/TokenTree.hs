@@ -80,16 +80,18 @@ data BracketType
     | BracketSet     -- ^ Curely braces for sets: @{ C : .... }@
     | BracketAssn    -- ^ Double-angle brackets for associations etc.: @\<\< /N C .... \>\>@
     | BracketRel     -- ^ Curely-bar braces for relations: @{| /N : ... | C : ... | C : ... |}@
+    | BracketInterp  -- ^ Triple-angle brackets for data interpretation: @<<< ... /N ... >>>@
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 getBracketType :: B.GetBracketType BracketType B.Token
 getBracketType = B.bracketTable
-    [ o BracketGroup  "("     ")"
-    , o BracketForm   "(|"   "|)"
-    , o BracketList   "["     "]"
-    , o BracketSet    "{"     "}"
-    , o BracketAssn   "<<"   ">>"
-    , o BracketRel    "{|"   "|}"
+    [ o BracketGroup   "("     ")"
+    , o BracketForm    "(|"   "|)"
+    , o BracketList    "["     "]"
+    , o BracketSet     "{"     "}"
+    , o BracketAssn    "<<"   ">>"
+    , o BracketRel     "{|"   "|}"
+    , o BracketInterp  "<<<"  ">>>"
     ] where o n a b = (n, B.isOpenTokenOf a, B.isCloseTokenOf b)
 
 

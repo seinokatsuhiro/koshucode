@@ -56,6 +56,7 @@ library
 
         Koshucode.Baala.Base.Data
         Koshucode.Baala.Base.Data.Decimal
+        Koshucode.Baala.Base.Data.Interp
         Koshucode.Baala.Base.Data.Judge
         Koshucode.Baala.Base.Data.Mono
         Koshucode.Baala.Base.Data.Output
