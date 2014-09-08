@@ -100,7 +100,7 @@ library
   
   -- Other library packages from which modules are imported.
   build-depends:
-         base             == 4.6.*
+         base             == 4.*
        , containers       == 0.5.*
        , pretty           == 1.1.*
        , syb              == 0.4.*

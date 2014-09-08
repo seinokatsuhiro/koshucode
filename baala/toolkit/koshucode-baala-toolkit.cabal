@@ -50,7 +50,7 @@ executable koshu-change
   other-modules:
         Koshucode.Baala.Toolkit.Main.KoshuChange
   build-depends:
-         base                       == 4.6.*
+         base                       == 4.*
        , containers                 == 0.5.*
        , koshucode-baala-base       == 0.72.*
        , koshucode-baala-core       == 0.72.*
@@ -64,7 +64,7 @@ executable koshu-rdf
   other-modules:
         Koshucode.Baala.Toolkit.Main.KoshuRdf
   build-depends:
-         base                       == 4.6.*
+         base                       == 4.*
        , containers                 == 0.5.*
        , rdf4h                      == 1.2.*
        , text                       == 1.1.*
@@ -80,7 +80,7 @@ executable koshu-syntax
   other-modules:
         Koshucode.Baala.Toolkit.Main.KoshuSyntax
   build-depends:
-         base                       == 4.6.*
+         base                       == 4.*
        , koshucode-baala-base       == 0.72.*
        , koshucode-baala-core       == 0.72.*
        , koshucode-baala-operator   == 0.72.*
@@ -103,7 +103,7 @@ library
   
   -- Other library packages from which modules are imported.
   build-depends:
-         base                       == 4.6.*
+         base                       == 4.*
        , containers                 == 0.5.*
        , directory                  == 1.2.*
        , rdf4h                      == 1.2.*
