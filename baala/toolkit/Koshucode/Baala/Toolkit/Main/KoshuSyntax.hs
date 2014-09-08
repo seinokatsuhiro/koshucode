@@ -132,7 +132,7 @@ tokenJudge clseq ln tok
     = B.affirm "TOKEN"
       [ ("clause" , C.pDecFromInt clseq)
       , ("line"   , C.pDecFromInt ln)
-      , ("col"    , C.pDecFromInt $ B.codePtColumnNumber $ B.tokenPoint tok)
+      , ("col"    , C.pDecFromInt $ B.codePtColumnNumber $ head $ B.codePts tok)
       , ("type"   , C.pText $ B.tokenTypeText tok)
       , ("cont"   , C.pText $ B.tokenContent  tok) ]
 
