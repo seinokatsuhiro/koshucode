@@ -9,12 +9,13 @@
 
 module Koshucode.Baala.Base.Syntax.Code
 ( CodeLine (..),
-  lineNumberContent,
   CodeClause (..),
-  indentLineBy,
+  lineIndentPair,
   splitClause,
   NextToken,
   codeLines,
+  Tokenize,
+  codeLines2,
 ) where
 
 import qualified Data.Generics as G
@@ -33,9 +34,6 @@ data CodeLine a = CodeLine
     , lineTokens  :: [a]           -- ^ Tokens in the line.
     } deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
-lineNumberContent :: CodeLine a -> String
-lineNumberContent c = show (lineNumber c) ++ " " ++ (lineContent c)
-
 -- | Tokens in clause.
 data CodeClause a = CodeClause
     { clauseLines     :: [CodeLine a]  -- ^ Source lines of clause
@@ -51,9 +49,9 @@ instance (B.CodePtr a) => B.CodePtr (CodeLine a) where
 instance (B.CodePtr a) => B.CodePtr (CodeClause a) where
     codePts (CodeClause _ ts) = B.codePts $ head ts
 
-indentLineBy :: (a -> Int) -> CodeLine a -> (Int, CodeLine a)
-indentLineBy ind ln@(CodeLine _ _ (tk : _)) = (ind tk, ln)
-indentLineBy _   ln@(CodeLine _ _ [])       = (0, ln)
+lineIndentPair :: (a -> Int) -> CodeLine a -> (Int, CodeLine a)
+lineIndentPair ind ln@(CodeLine _ _ (tk : _)) = (ind tk, ln)
+lineIndentPair _   ln@(CodeLine _ _ [])       = (0, ln)
 
 splitClause :: B.Gather [(Int, a)] [a]
 splitClause = first where
@@ -73,7 +71,7 @@ type NextToken a = B.NumberedLine -> B.Gather String a
 --
 --   2. Numbering lines from 1.
 --      Internally, this is represented as
---      a list of pairs @(@'LineNumber'@,@ 'String'@)@.
+--      a list of pairs @(@'B.LineNumber'@,@ 'String'@)@.
 --
 --   3. Tokenize each lines,
 --      and put tokens together in 'CodeLine'.
@@ -82,9 +80,10 @@ codeLines
     :: NextToken a     -- ^ Token splitter
     -> String          -- ^ Source text
     -> [CodeLine a]    -- ^ Token list per lines
-codeLines nextToken = codeLinesBy $ codeLine nextToken
+codeLines = codeLinesBy . codeLine
 
 type MakeCodeLine a = B.NumberedLine -> CodeLine a
+type Tokenize a = B.CodePt -> String -> [a]
 
 codeLinesBy :: MakeCodeLine a -> String -> [CodeLine a]
 codeLinesBy mkCline = loop . B.linesCrlfNumbered where
@@ -95,4 +94,11 @@ codeLine :: NextToken a -> MakeCodeLine a
 codeLine nextToken line@(lno, text) =
     let toks = B.gather (nextToken line) text
     in CodeLine lno text toks
+
+codeLines2 :: Tokenize a -> B.Resource -> String -> [CodeLine a]
+codeLines2 tokenize res = map cl . B.linesCrlfNumbered where
+    cp = B.codePtZero { B.codePtResource = res }
+    cl (num, line) =
+        let cp' = cp { B.codePtLineNumber = num, B.codePtLineText = line }
+        in CodeLine num line $ tokenize cp' line
 

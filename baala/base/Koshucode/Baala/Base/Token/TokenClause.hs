@@ -43,7 +43,7 @@ tokenClauses = map clause . split where
     blank = all B.isBlankToken . B.lineTokens
 
     indent :: B.TokenLine -> (Int, B.TokenLine)
-    indent = B.indentLineBy tokenIndent
+    indent = B.lineIndentPair tokenIndent
 
 tokenIndent :: B.Token -> Int
 tokenIndent (B.TSpace _ n) = n

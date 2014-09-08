@@ -78,9 +78,9 @@ data BracketType
     | BracketForm    -- ^ Round-bar brackets for form with blanks: @(| V ... | E ... |)@
     | BracketList    -- ^ Square brackets for lists: @[ C : ... ]@
     | BracketSet     -- ^ Curely braces for sets: @{ C : .... }@
-    | BracketAssn    -- ^ Double-angle brackets for associations etc.: @\<\< /N C .... \>\>@
     | BracketRel     -- ^ Curely-bar braces for relations: @{| /N : ... | C : ... | C : ... |}@
-    | BracketInterp  -- ^ Triple-angle brackets for data interpretation: @<<< ... /N ... >>>@
+    | BracketAssn    -- ^ Double-angle brackets for associations etc.: @\<\< /N C .... \>\>@
+    | BracketInterp  -- ^ Triple-angle brackets for data interpretation: @\<\<\< ... /N ... \>\>\>@
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 getBracketType :: B.GetBracketType BracketType B.Token
