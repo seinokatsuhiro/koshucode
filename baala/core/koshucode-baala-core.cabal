@@ -95,7 +95,7 @@ library
        , containers           == 0.5.*
        , directory            == 1.2.*
        , syb                  == 0.4.*
-       , template-haskell     == 2.8.*
+       , template-haskell     == 2.*
        , koshucode-baala-base == 0.72.*
 
   ghc-options:         -Wall
