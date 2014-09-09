@@ -28,5 +28,5 @@ interpDoc sh (Interp xs) = B.doc "<<<" B.<+> xsDoc B.<+> B.doc ">>>" where
 
 interpPhraseDoc :: B.StringMap -> InterpPhrase -> B.Doc
 interpPhraseDoc _ (InterpText w) = B.doc w
-interpPhraseDoc _ (InterpTerm n) = B.doc n
+interpPhraseDoc _ (InterpTerm n) = B.doc $ '/' : n
 
