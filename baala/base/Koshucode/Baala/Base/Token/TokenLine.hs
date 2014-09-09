@@ -44,10 +44,171 @@ tokens res = concatMap B.lineTokens . tokenLines res
 
 -- | Tokenize text.
 tokenLines :: B.Resource -> String -> [TokenLine]
-tokenLines = B.codeLines2 tokenize
+tokenLines = B.codeRollUp general
+
+-- tokenLines :: B.Resource -> String -> [TokenLine]
+-- tokenLines = B.codeLines2 tokenize
 
 -- tokenLines :: B.Resource -> String -> [TokenLine]
 -- tokenLines = B.codeLines . nextToken
+
+general :: B.Map (B.CodeRoll B.Token)
+general r@B.CodeRoll { B.codeInputPt = cp
+                     , B.codeInput   = cs0
+                     } = gen cs0 where
+
+    stop = inout r ""
+    next = inout r
+    rv   = reverse
+
+    gen ""                =  input r ""
+    gen (c:'|':cs)
+        | isOpen c        =  next cs            $ B.TOpen    cp [c, '|']
+    gen (c:cs)
+        | c == '*'        =  ast  cs [c]
+        | c == '<'        =  bra  cs [c]
+        | c == '>'        =  cket cs [c]
+        | c == '@'        =  slot cs [c]
+        | c == '|'        =  bar  cs [c]
+        | c == '#'        =  hash cs [c]
+        | isOpen c        =  next cs            $ B.TOpen    cp [c]
+        | isClose c       =  next cs            $ B.TClose   cp [c]
+        | isSingle c      =  next cs            $ B.TText    cp 0 [c]
+        | isTerm c        =  term  cs [] ""
+        | isQQ c          =  qq    cs ""
+        | isQ c           =  q     cs ""
+        | isShort c       =  short cs [c]
+        | isWord c        =  word  cs [c]
+        | isSpace c       =  space cs 1
+        | otherwise       =  next cs            $ B.TUnknown cp [c]
+
+    ast (c:cs) w
+        | w == "****"     =  next cs            $ B.TText    cp 0 w
+        | c == '*'        =  ast cs $ c:w
+    ast cs w
+        | w == "*"        =  next cs            $ B.TText    cp 0 w
+        | w == "**"       =  stop               $ B.TComment cp cs
+        | w == "***"      =  stop               $ B.TComment cp cs
+        | otherwise       =  next cs            $ B.TUnknown cp w
+
+    bra (c:cs) w
+        | c == '<'        =  bra cs $ c:w
+    bra cs w
+        | w == "<"        =  angle cs ""
+        | w == "<<"       =  next cs            $ B.TOpen    cp w
+        | w == "<<<"      =  (next cs           $ B.TOpen    cp w) `change` interp
+        | otherwise       =  next cs            $ B.TUnknown cp w
+
+    cket (c:cs) w
+        | c == '>'        =  cket cs $ c:w
+    cket cs w
+        | w == ">"        =  word cs w
+        | w == ">>"       =  next cs            $ B.TClose   cp w
+        | w == ">>>"      =  next cs            $ B.TClose   cp w
+        | otherwise       =  next cs            $ B.TUnknown cp w
+
+    slot (c:cs) w
+        | c == '@'        =  slot cs $ c:w
+        | c == '\''       =  slotName cs     0 ""
+        | w == "@"        =  slotName (c:cs) 1 ""
+        | w == "@@"       =  slotName (c:cs) 2 ""
+    slot cs w             =  next cs            $ B.TUnknown cp w
+
+    slotName (c:cs) n w
+        | isWord c        =  slotName cs n $ c:w
+    slotName cs n w       =  next cs            $ B.TSlot cp n $ rv w
+
+    hash ('!':cs) _       =  stop               $ B.TComment cp cs
+    hash cs w             =  next cs            $ B.TText cp 0 w
+
+    term (c:cs) ns w
+        | isTerm c        =  term cs (rv w : ns) ""
+        | isWord c        =  term cs ns $ c:w
+    term cs ns w          =  next cs            $ B.TTerm cp 0 $ rv (rv w : ns)
+
+    qq (c:cs) w
+        | isQQ c          =  next cs            $ B.TText cp 2 $ rv w
+        | otherwise       =  qq cs $ c:w
+    qq _ w                =  stop               $ B.TUnknown cp w
+
+    q (c:cs) w
+        | isWord c        =  q cs $ c:w
+    q cs w                =  next cs            $ B.TText cp 1 $ rv w
+
+    short (c:cs) w
+        | c == '.'        =  shortBody cs (rv w) ""
+        | isWord c        =  short cs $ c:w
+    short cs w            =  next cs            $ B.TText cp 0 $ rv w
+
+    shortBody (c:cs) pre w
+        | isWord c        =  shortBody cs pre $ c:w
+    shortBody cs pre w    = next cs             $ B.TShort cp pre $ rv w
+
+    word (c:cs) w
+        | isWord c        =  word cs $ c:w
+    word cs w             =  next cs            $ B.TText cp 0 $ rv w
+
+    space (c:cs) n
+        | isSpace c       =  space cs $ n + 1
+    space cs n            =  next cs            $ B.TSpace cp n
+
+    bar [] w              =  stop               $ B.TText cp 0 w
+    bar (c:cs) w
+        | c == '|'        =  bar cs $ c:w
+        | w == "||"       =  let cs' = B.trimLeft (c:cs)
+                            in next cs'         $ B.TText cp 0 w
+        | w == "|" &&
+          isClose c       =  next cs            $ B.TClose cp ['|', c]
+        | w == "|"        =  next (c:cs)        $ B.TText cp 0 w
+        | otherwise       =  next (c:cs)        $ B.TUnknown cp w
+
+    angle [] w            =  stop               $ B.TText cp 0 $ '<' : rv w
+    angle (c:cs) w
+        | c == '>'        =  angleToken cs $ rv w
+        | isWord c        =  angle cs $ c:w
+        | otherwise       =  next (c:cs)        $ B.TText cp 0 $ '<' : rv w
+
+    angleToken cs ('c' : char)
+        | all isCode char  = case mapM B.readInt $ B.omit null $ B.divide '-' char of
+                               Just ns  ->  next cs $ B.TText cp 3 $ map Char.chr ns
+                               Nothing  ->  next cs $ B.TText cp (-1) char
+    angleToken cs ""       = next cs $ B.TText cp 0 "<>"
+    angleToken cs key      = case lookup key B.bracketKeywords of
+                               Just w   ->  next cs $ B.TText cp 3 w
+                               Nothing  ->  next cs $ B.TText cp (-1) key
+
+interp :: B.Map (B.CodeRoll B.Token)
+interp r@B.CodeRoll { B.codeInputPt = cp
+                    , B.codeInput   = cs0
+                    } = int cs0 where
+
+    rv = reverse
+
+    int ""                     =  r
+    int (c:cs)
+        | isSpace c            =  space cs 1
+        | otherwise            =  word cs [c]
+
+    space (c:cs) n
+        | isSpace c            =  space cs $ n + 1
+    space cs n                 =  inout r cs $ B.TSpace cp n
+
+    word cs@('>':'>':'>':_) w  =  (inout r cs $ B.TText cp 0 (rv w)) `change` general
+    word (c:cs) w              =  word cs $ c:w
+    word cs w                  =  inout r cs $ B.TText cp 0 (rv w)
+
+change :: B.CodeRoll a -> B.Map (B.CodeRoll a) -> B.CodeRoll a
+change r f = r { B.codeMap = f }
+
+inout :: B.CodeRoll a -> String -> a -> B.CodeRoll a
+inout r cs tok = r `input` cs `output` tok
+
+input :: B.CodeRoll a -> String -> B.CodeRoll a
+input r cs = r { B.codeInput = cs }
+
+output :: B.CodeRoll a -> a -> B.CodeRoll a
+output r tok = r { B.codeOutput = tok : B.codeOutput r }
+
 
 -- | Split a next token from source text.
 nextToken :: B.Resource -> B.NextToken B.Token
@@ -148,130 +309,6 @@ nextToken res (num, line) txt =
       space :: Int -> String -> (B.Token, String)
       space i (c:cs) | isSpace c      =  space (i + 1) cs
       space i cs                      =  token cs $ B.TSpace cp i
-
-tokenize :: B.Tokenize B.Token
-tokenize res = call gen where
-
-    call f cs             =  f cs $ res { B.codePtText = cs }
-    next f cs tok         =  tok : call f cs
-    stop tok              =  [tok]
-    rv = reverse
-
-    gen [] _ = []
-    gen (c:'|':cs) cp
-        | isOpen c        =  next gen cs        $ B.TOpen    cp [c, '|']
-    gen (c:cs) cp
-        | c == '*'        =  ast  cs cp [c]
-        | c == '<'        =  bra  cs cp [c]
-        | c == '>'        =  cket cs cp [c]
-        | c == '@'        =  slot cs cp [c]
-        | c == '|'        =  bar  cs cp [c]
-        | c == '#'        =  hash cs cp [c]
-        | isOpen c        =  next gen cs        $ B.TOpen    cp [c]
-        | isClose c       =  next gen cs        $ B.TClose   cp [c]
-        | isSingle c      =  next gen cs        $ B.TText    cp 0 [c]
-        | isTerm c        =  term  cs cp [] ""
-        | isQQ c          =  qq    cs cp ""
-        | isQ c           =  q     cs cp ""
-        | isShort c       =  short cs cp [c]
-        | isWord c        =  word  cs cp [c]
-        | isSpace c       =  space cs cp 1
-        | otherwise       =  next gen cs        $ B.TUnknown cp [c]
-
-    ast (c:cs) cp w
-        | w == "****"     =  next gen cs        $ B.TText    cp 0 w
-        | c == '*'        =  ast cs cp $ c:w
-    ast cs cp w
-        | w == "*"        =  next gen cs        $ B.TText    cp 0 w
-        | w == "**"       =  stop               $ B.TComment cp cs
-        | w == "***"      =  stop               $ B.TComment cp cs
-        | otherwise       =  next gen cs        $ B.TUnknown cp w
-
-    bra (c:cs) cp w
-        | c == '<'        =  bra cs cp $ c:w
-    bra cs cp w
-        | w == "<"        =  angle cs cp ""
-        | w == "<<"       =  next gen cs        $ B.TOpen    cp w
-        | w == "<<<"      =  next gen cs        $ B.TOpen    cp w
-        | otherwise       =  next gen cs        $ B.TUnknown cp w
-
-    cket (c:cs) cp w
-        | c == '>'        =  cket cs cp $ c:w
-    cket cs cp w
-        | w == ">"        =  word cs cp w
-        | w == ">>"       =  next gen cs        $ B.TClose   cp w
-        | w == ">>>"      =  next gen cs        $ B.TClose   cp w
-        | otherwise       =  next gen cs        $ B.TUnknown cp w
-
-    slot (c:cs) cp w
-        | c == '@'        =  slot cs cp $ c:w
-        | c == '\''       =  slotName cs     cp 0 ""
-        | w == "@"        =  slotName (c:cs) cp 1 ""
-        | w == "@@"       =  slotName (c:cs) cp 2 ""
-    slot cs cp w          =  next gen cs        $ B.TUnknown cp w
-
-    slotName (c:cs) cp n w
-        | isWord c        =  slotName cs cp n $ c:w
-    slotName cs cp n w    =  next gen cs        $ B.TSlot cp n $ rv w
-
-    hash ('!':cs) cp _    =  stop               $ B.TComment cp cs
-    hash cs cp w          =  next gen cs        $ B.TText cp 0 w
-
-    term (c:cs) cp ns w
-        | isTerm c        =  term cs cp (rv w : ns) ""
-        | isWord c        =  term cs cp ns $ c:w
-    term cs cp ns w       =  next gen cs        $ B.TTerm cp 0 $ rv (rv w : ns)
-
-    qq (c:cs) cp w
-        | isQQ c          =  next gen cs        $ B.TText cp 2 $ rv w
-        | otherwise       =  qq cs cp $ c:w
-    qq _ cp w             =  stop               $ B.TUnknown cp w
-
-    q (c:cs) cp w
-        | isWord c        =  q cs cp $ c:w
-    q cs cp w             =  next gen cs        $ B.TText cp 1 $ rv w
-
-    short (c:cs) cp w
-        | c == '.'        =  shortBody cs cp (rv w) ""
-        | isWord c        =  short cs cp $ c:w
-    short cs cp w         =  next gen cs        $ B.TText cp 0 $ rv w
-
-    shortBody (c:cs) cp pre w
-        | isWord c        =  shortBody cs cp pre $ c:w
-    shortBody cs cp pre w = next gen cs         $ B.TShort cp pre $ rv w
-
-    word (c:cs) cp w
-        | isWord c        =  word cs cp $ c:w
-    word cs cp w          =  next gen cs        $ B.TText cp 0 $ rv w
-
-    space (c:cs) cp n
-        | isSpace c       =  space cs cp $ n + 1
-    space cs cp n         =  next gen cs        $ B.TSpace cp n
-
-    bar [] cp w           =  stop               $ B.TText cp 0 w
-    bar (c:cs) cp w
-        | c == '|'        =  bar cs cp $ c:w
-        | w == "||"       =  let cs' = B.trimLeft (c:cs)
-                            in next gen cs'     $ B.TText cp 0 w
-        | w == "|" &&
-          isClose c       =  next gen cs        $ B.TClose cp ['|', c]
-        | w == "|"        =  next gen (c:cs)    $ B.TText cp 0 w
-        | otherwise       =  next gen (c:cs)    $ B.TUnknown cp w
-
-    angle [] cp w        =  stop               $ B.TText cp 0 $ '<' : rv w
-    angle (c:cs) cp w
-        | c == '>'       =  angleToken cs cp $ rv w
-        | isWord c       =  angle cs cp $ c:w
-        | otherwise      =  next gen (c:cs)    $ B.TText cp 0 $ '<' : rv w
-
-    angleToken cs cp ('c' : char)
-        | all isCode char   = case mapM B.readInt $ B.omit null $ B.divide '-' char of
-                                Just ns  ->  next gen cs $ B.TText cp 3 $ map Char.chr ns
-                                Nothing  ->  next gen cs $ B.TText cp (-1) char
-    angleToken cs cp ""     = next gen cs $ B.TText cp 0 "<>"
-    angleToken cs cp key    = case lookup key B.bracketKeywords of
-                                Just w   ->  next gen cs $ B.TText cp 3 w
-                                Nothing  ->  next gen cs $ B.TText cp (-1) key
 
 
 -- ----------------------  Char category

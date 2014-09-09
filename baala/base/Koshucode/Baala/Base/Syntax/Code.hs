@@ -14,8 +14,8 @@ module Koshucode.Baala.Base.Syntax.Code
   splitClause,
   NextToken,
   codeLines,
-  Tokenize,
-  codeLines2,
+  CodeRoll (..),
+  codeRoll, codeRollUp,
 ) where
 
 import qualified Data.Generics as G
@@ -83,7 +83,6 @@ codeLines
 codeLines = codeLinesBy . codeLine
 
 type MakeCodeLine a = B.NumberedLine -> CodeLine a
-type Tokenize a = B.CodePt -> String -> [a]
 
 codeLinesBy :: MakeCodeLine a -> String -> [CodeLine a]
 codeLinesBy mkCline = loop . B.linesCrlfNumbered where
@@ -95,10 +94,29 @@ codeLine nextToken line@(lno, text) =
     let toks = B.gather (nextToken line) text
     in CodeLine lno text toks
 
-codeLines2 :: Tokenize a -> B.Resource -> String -> [CodeLine a]
-codeLines2 tokenize res = map cl . B.linesCrlfNumbered where
-    cp = B.codePtZero { B.codePtResource = res }
-    cl (num, line) =
-        let cp' = cp { B.codePtLineNumber = num, B.codePtLineText = line }
-        in CodeLine num line $ tokenize cp' line
+data CodeRoll a =
+    CodeRoll { codeMap     :: B.Map (CodeRoll a)
+             , codeInputPt :: B.CodePt
+             , codeInput   :: String
+             , codeOutput  :: [a]
+             }
+
+codeRoll :: B.Map (CodeRoll a)
+codeRoll r@CodeRoll { codeMap = f, codeInputPt = cp, codeInput = input }
+    | null input = r
+    | otherwise  = codeRoll $ f r { codeInputPt = cp { B.codePtText = input }}
+
+codeRollUp :: B.Map (CodeRoll a) -> B.Resource -> String -> [CodeLine a]
+codeRollUp f res = loop (CodeRoll f cp "" []) . B.linesCrlfNumbered where
+    cp    = B.codePtZero { B.codePtResource = res }
+
+    loop _ [] = []
+    loop roll ((num, line) : ls) =
+        let cp'   = cp { B.codePtLineNumber = num
+                       , B.codePtLineText   = line }
+            roll' = codeRoll roll { codeInputPt = cp'
+                                  , codeInput   = line
+                                  , codeOutput  = [] }
+            toks  = reverse $ codeOutput roll'
+        in CodeLine num line toks : loop roll' ls
 
