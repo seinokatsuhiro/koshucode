@@ -81,14 +81,14 @@ instance B.Write Token where
         d (TComment pt s)    =  pretty "TComment" pt [show s]
         d (TUnknown pt s)    =  pretty "TUnknown" pt [show s]
         pretty k pt xs       =  B.writeH sh $ lineCol pt : k : xs
-        lineCol pt           =  (show $ B.codePtLineNumber pt)
-                                ++ "." ++ (show $ B.codePtColumnNumber pt)
+        lineCol pt           =  (show $ B.codeLineNumber pt)
+                                ++ "." ++ (show $ B.codeColumnNumber pt)
 
 textToken :: String -> Token
-textToken = TText B.codePtZero 0
+textToken = TText B.codeZero 0
 
 nameToken :: String -> Token
-nameToken = TName B.codePtZero . BlankNormal
+nameToken = TName B.codeZero . BlankNormal
 
 instance B.CodePtr Token where
     codePts (TText    cp _ _)  =  [cp]
@@ -148,7 +148,7 @@ type TermPath    =  [TermName]
 
 -- | Get the content of token.
 --
---   >>> let tok = TTerm B.codePtZero ["r", "x"] in tokenContent tok
+--   >>> let tok = TTerm B.codeZero ["r", "x"] in tokenContent tok
 --   "/r/x"
 tokenContent :: Token -> String
 tokenContent (TText  _ _ s)   =  s

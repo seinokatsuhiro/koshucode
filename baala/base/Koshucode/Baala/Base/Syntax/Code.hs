@@ -104,16 +104,16 @@ data CodeRoll a =
 codeRoll :: B.Map (CodeRoll a)
 codeRoll r@CodeRoll { codeMap = f, codeInputPt = cp, codeInput = input }
     | null input = r
-    | otherwise  = codeRoll $ f r { codeInputPt = cp { B.codePtText = input }}
+    | otherwise  = codeRoll $ f r { codeInputPt = cp { B.codeText = input }}
 
 codeRollUp :: B.Map (CodeRoll a) -> B.Resource -> String -> [CodeLine a]
 codeRollUp f res = loop (CodeRoll f cp "" []) . B.linesCrlfNumbered where
-    cp    = B.codePtZero { B.codePtResource = res }
+    cp    = B.codeZero { B.codeResource = res }
 
     loop _ [] = []
     loop roll ((num, line) : ls) =
-        let cp'   = cp { B.codePtLineNumber = num
-                       , B.codePtLineText   = line }
+        let cp'   = cp { B.codeLineNumber = num
+                       , B.codeLineText   = line }
             roll' = codeRoll roll { codeInputPt = cp'
                                   , codeInput   = line
                                   , codeOutput  = [] }
