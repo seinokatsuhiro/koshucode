@@ -2,31 +2,46 @@
 
 module Koshucode.Baala.Base.Data.Interp
 ( Interp (..),
-  InterpPhrase (..),
+  InterpWord (..),
+  interp,
 ) where
 
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
+import qualified Koshucode.Baala.Base.Token        as B
 
-data Interp = Interp [InterpPhrase]
-    deriving (Show, Eq, Ord)
+data Interp =
+    Interp { interpWords :: [InterpWord]
+           , interpTerms :: [B.TermName]
+           } deriving (Show, Eq, Ord)
 
-data InterpPhrase
+data InterpWord
     = InterpText String
-    | InterpTerm String
+    | InterpTerm B.TermName
     deriving (Show, Eq, Ord)
 
 instance B.Write Interp where
     write = interpDoc
 
-instance B.Write InterpPhrase where
-    write = interpPhraseDoc
+instance B.Write InterpWord where
+    write = interpWordDoc
 
 interpDoc :: B.StringMap -> Interp -> B.Doc
-interpDoc sh (Interp xs) = B.doc "<<<" B.<+> xsDoc B.<+> B.doc ">>>" where
-    xsDoc = B.doch $ map (B.write sh) xs
+interpDoc sh Interp { interpWords = xs } = doc where
+    doc    = B.doc "<<<" B.<+> xsDoc B.<+> B.doc ">>>"
+    xsDoc  = B.doch $ map (B.write sh) xs
 
-interpPhraseDoc :: B.StringMap -> InterpPhrase -> B.Doc
-interpPhraseDoc _ (InterpText w) = B.doc w
-interpPhraseDoc _ (InterpTerm n) = B.doc $ '/' : n
+interpWordDoc :: B.StringMap -> InterpWord -> B.Doc
+interpWordDoc _ (InterpText w) = B.doc w
+interpWordDoc _ (InterpTerm n) = B.doc $ '/' : n
+
+interp :: [InterpWord] -> Interp
+interp ws = intp where
+    terms = B.unique $ B.catMaybes $ map getTermName ws
+    intp  = Interp { interpWords = ws
+                   , interpTerms = terms }
+
+getTermName :: InterpWord -> Maybe B.TermName
+getTermName (InterpTerm n) = Just n
+getTermName _              = Nothing
 

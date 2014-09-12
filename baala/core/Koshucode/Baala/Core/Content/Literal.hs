@@ -104,11 +104,11 @@ getText False (B.TText _ q w) | q == 0  =  Right w
 getText _ _  =  Message.nothing
 
 getInterp :: B.TokenTreesToAb B.Interp
-getInterp xs = Right . B.Interp =<< mapM getInterpPhrase xs
+getInterp = Right . B.interp B.<=< mapM getInterpWord
 
-getInterpPhrase :: B.TokenTreeToAb B.InterpPhrase
-getInterpPhrase (B.TreeB _ _ _) = Message.nothing
-getInterpPhrase (B.TreeL x) =
+getInterpWord :: B.TokenTreeToAb B.InterpWord
+getInterpWord (B.TreeB _ _ _) = Message.nothing
+getInterpWord (B.TreeL x) =
     case x of
       B.TText _ _ w    ->  Right $ B.InterpText w
       B.TTerm _ _ [n]  ->  Right $ B.InterpTerm n
