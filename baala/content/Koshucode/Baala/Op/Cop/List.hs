@@ -56,6 +56,7 @@ copsList =
     , C.CopCalc  (C.copNormal "total")         copTotal
     , C.CopCalc  (C.copNormal "sub-index")     copSubIndex
     , C.CopCalc  (C.copNormal "sub-length")    copSubLength
+    , C.CopCalc  (C.copNormal "term-set")      copTermSet
 
     , C.CopCalc  (C.copInfix  "in") copFunIn
     , C.CopCox   (C.copPrefix "in") copCoxIn
@@ -225,4 +226,12 @@ copCharGroup1 = op where
 
 charGroup :: Char -> String
 charGroup = B.generalCategoryName . B.generalCategoryGroup
+
+
+-- ----------------------  term-set
+
+copTermSet :: (C.CContent c) => C.CopCalc c
+copTermSet [Right c] | C.isInterp c = C.putSet ts where
+                     ts = map C.pTerm $ B.interpTerms $ C.gInterp c
+copTermSet xs = typeUnmatch xs
 
