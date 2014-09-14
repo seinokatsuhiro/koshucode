@@ -47,9 +47,6 @@ tokenLines :: B.Resource -> String -> [TokenLine]
 tokenLines = B.codeRollUp general
 
 -- tokenLines :: B.Resource -> String -> [TokenLine]
--- tokenLines = B.codeLines2 tokenize
-
--- tokenLines :: B.Resource -> String -> [TokenLine]
 -- tokenLines = B.codeLines . nextToken
 
 general :: B.Map (B.CodeRoll B.Token)
@@ -58,114 +55,94 @@ general r@B.CodeRoll { B.codeInputPt = cp
                      } = gen cs0 where
 
     io = inout r
-    rv   = reverse
 
-    gen ""                =  input r ""
-    gen (c:'|':cs)
-        | isOpen c        =  io cs            $ B.TOpen    cp [c, '|']
-    gen (c:cs)
-        | c == '*'        =  ast  cs [c]
-        | c == '<'        =  bra  cs [c]
-        | c == '>'        =  cket cs [c]
-        | c == '@'        =  slot cs [c]
-        | c == '|'        =  bar  cs [c]
-        | c == '#'        =  hash cs [c]
-        | isOpen c        =  io cs            $ B.TOpen    cp [c]
-        | isClose c       =  io cs            $ B.TClose   cp [c]
-        | isSingle c      =  io cs            $ B.TText    cp 0 [c]
-        | isTerm c        =  term  cs [] ""
-        | isQQ c          =  qq    cs ""
-        | isQ c           =  q     cs ""
-        | isShort c       =  short cs [c]
-        | isWord c        =  word  cs [c]
-        | isSpace c       =  space cs 1
-        | otherwise       =  io cs            $ B.TUnknown cp [c]
+    gen ""                           =  input r ""
+    gen (c:'|':cs) | isOpen c        =  io cs            $ B.TOpen    cp [c, '|']
+        
+    gen (c:cs)     | c == '*'        =  ast   cs [c]
+                   | c == '<'        =  bra   cs [c]
+                   | c == '>'        =  cket  cs [c]
+                   | c == '@'        =  slot  cs [c]
+                   | c == '|'        =  bar   cs [c]
+                   | c == '#'        =  hash  cs [c]
+                   | isOpen c        =  io    cs         $ B.TOpen    cp [c]
+                   | isClose c       =  io    cs         $ B.TClose   cp [c]
+                   | isSingle c      =  io    cs         $ B.TText    cp 0 [c]
+                   | isTerm c        =  term  cs [] ""
+                   | isQQ c          =  qq    cs ""
+                   | isQ c           =  q     cs ""
+                   | isShort c       =  short cs [c]
+                   | isWord c        =  word  cs [c]
+                   | isSpace c       =  space cs 1
+                   | otherwise       =  io    cs         $ B.TUnknown cp [c]
 
-    ast (c:cs) w
-        | w == "****"     =  io cs            $ B.TText    cp 0 w
-        | c == '*'        =  ast cs $ c:w
-    ast cs w
-        | w == "*"        =  io cs            $ B.TText    cp 0 w
-        | w == "**"       =  io ""            $ B.TComment cp cs
-        | w == "***"      =  io ""            $ B.TComment cp cs
-        | otherwise       =  io cs            $ B.TUnknown cp w
+    ast (c:cs) w   | w == "****"     =  io  cs           $ B.TText    cp 0 w
+                   | c == '*'        =  ast cs $ c:w
+    ast cs w       | w == "*"        =  io  cs           $ B.TText    cp 0 w
+                   | w == "**"       =  io  ""           $ B.TComment cp cs
+                   | w == "***"      =  io  ""           $ B.TComment cp cs
+                   | otherwise       =  io  cs           $ B.TUnknown cp w
 
-    bra (c:cs) w
-        | c == '<'        =  bra cs $ c:w
-    bra cs w
-        | w == "<"        =  angle cs ""
-        | w == "<<"       =  io cs            $ B.TOpen    cp w
-        | w == "<<<"      =  (io cs           $ B.TOpen    cp w) `change` interp
-        | otherwise       =  io cs            $ B.TUnknown cp w
+    bra (c:cs) w   | c == '<'        =  bra   cs $ c:w
+    bra cs w       | w == "<"        =  angle cs ""
+                   | w == "<<"       =  io    cs         $ B.TOpen    cp w
+                   | w == "<<<"      =  (io   cs         $ B.TOpen    cp w) `change` interp
+                   | otherwise       =  io    cs         $ B.TUnknown cp w
 
-    cket (c:cs) w
-        | c == '>'        =  cket cs $ c:w
-    cket cs w
-        | w == ">"        =  word cs w
-        | w == ">>"       =  io cs            $ B.TClose   cp w
-        | w == ">>>"      =  io cs            $ B.TClose   cp w
-        | otherwise       =  io cs            $ B.TUnknown cp w
+    cket (c:cs) w  | c == '>'        =  cket cs $ c:w
+    cket cs w      | w == ">"        =  word cs w
+                   | w == ">>"       =  io   cs          $ B.TClose   cp w
+                   | w == ">>>"      =  io   cs          $ B.TClose   cp w
+                   | otherwise       =  io   cs          $ B.TUnknown cp w
 
-    slot (c:cs) w
-        | c == '@'        =  slot cs $ c:w
-        | c == '\''       =  slotName cs     0 ""
-        | w == "@"        =  slotName (c:cs) 1 ""
-        | w == "@@"       =  slotName (c:cs) 2 ""
-    slot cs w             =  io cs            $ B.TUnknown cp w
+    slot (c:cs) w  | c == '@'        =  slot cs $ c:w
+                   | c == '\''       =  slotName cs     0 ""
+                   | w == "@"        =  slotName (c:cs) 1 ""
+                   | w == "@@"       =  slotName (c:cs) 2 ""
+    slot cs w                        =  io cs            $ B.TUnknown cp w
 
-    slotName (c:cs) n w
-        | isWord c        =  slotName cs n $ c:w
-    slotName cs n w       =  io cs            $ B.TSlot cp n $ rv w
+    slotName (c:cs) n w | isWord c   =  slotName cs n $ c:w
+    slotName cs n w                  =  io cs            $ B.TSlot cp n $ rv w
 
-    hash ('!':cs) _       =  io ""            $ B.TComment cp cs
-    hash cs w             =  io cs            $ B.TText cp 0 w
+    hash ('!':cs) _                  =  io ""            $ B.TComment cp cs
+    hash cs w                        =  io cs            $ B.TText    cp 0 w
 
-    term (c:cs) ns w
-        | isTerm c        =  term cs (rv w : ns) ""
-        | isWord c        =  term cs ns $ c:w
-    term cs ns w          =  io cs            $ B.TTerm cp 0 $ rv (rv w : ns)
+    term (c:cs) ns w | isTerm c      =  term cs (rv w : ns) ""
+                     | isWord c      =  term cs ns $ c:w
+    term cs ns w                     =  io   cs          $ B.TTerm cp 0 $ rv (rv w : ns)
 
-    qq (c:cs) w
-        | isQQ c          =  io cs            $ B.TText cp 2 $ rv w
-        | otherwise       =  qq cs $ c:w
-    qq _ w                =  io ""            $ B.TUnknown cp w
+    qq (c:cs) w      | isQQ c        =  io cs            $ B.TText cp 2 $ rv w
+                     | otherwise     =  qq cs $ c:w
+    qq _ w                           =  io ""            $ B.TUnknown cp w
 
-    q (c:cs) w
-        | isWord c        =  q cs $ c:w
-    q cs w                =  io cs            $ B.TText cp 1 $ rv w
+    q (c:cs) w       | isWord c      =  q cs $ c:w
+    q cs w                           =  io cs            $ B.TText cp 1 $ rv w
 
-    short (c:cs) w
-        | c == '.'        =  shortBody cs (rv w) ""
-        | isWord c        =  short cs $ c:w
-    short cs w            =  io cs            $ B.TText cp 0 $ rv w
+    short (c:cs) w   | c == '.'      =  shortBody cs (rv w) ""
+                     | isWord c      =  short cs $ c:w
+    short cs w                       =  io cs            $ B.TText cp 0 $ rv w
 
-    shortBody (c:cs) pre w
-        | isWord c        =  shortBody cs pre $ c:w
-    shortBody cs pre w    = io cs             $ B.TShort cp pre $ rv w
+    shortBody (c:cs) pre w | isWord c  = shortBody cs pre $ c:w
+    shortBody cs pre w                 = io cs           $ B.TShort cp pre $ rv w
 
-    word (c:cs) w
-        | isWord c        =  word cs $ c:w
-    word cs w             =  io cs            $ B.TText cp 0 $ rv w
+    word (c:cs) w    | isWord c      =  word cs $ c:w
+    word cs w                        =  io cs            $ B.TText cp 0 $ rv w
 
-    space (c:cs) n
-        | isSpace c       =  space cs $ n + 1
-    space cs n            =  io cs            $ B.TSpace cp n
+    space (c:cs) n   | isSpace c     =  space cs $ n + 1
+    space cs n                       =  io cs            $ B.TSpace cp n
 
-    bar [] w              =  io ""            $ B.TText cp 0 w
-    bar (c:cs) w
-        | c == '|'        =  bar cs $ c:w
-        | w == "||"       =  let cs' = B.trimLeft (c:cs)
-                            in io cs'         $ B.TText cp 0 w
-        | w == "|" &&
-          isClose c       =  io cs            $ B.TClose cp ['|', c]
-        | w == "|"        =  io (c:cs)        $ B.TText cp 0 w
-        | otherwise       =  io (c:cs)        $ B.TUnknown cp w
+    bar [] w                         =  io ""            $ B.TText cp 0 w
+    bar (c:cs) w | c == '|'          =  bar cs $ c:w
+                 | w == "||"         =  let cs' = B.trimLeft (c:cs)
+                                        in io cs'         $ B.TText cp 0 w
+                 | w == "|" &&
+                   isClose c         =  io cs            $ B.TClose   cp ['|', c]
+                 | w == "|"          =  io (c:cs)        $ B.TText    cp 0 w
+                 | otherwise         =  io (c:cs)        $ B.TUnknown cp w
 
-    angle [] w            =  io ""            $ B.TText cp 0 $ '<' : rv w
-    angle (c:cs) w
-        | c == '>'        =  angleToken cs $ rv w
-        | isWord c        =  angle cs $ c:w
-        | otherwise       =  io (c:cs)        $ B.TText cp 0 $ '<' : rv w
+    angle (c:cs) w | c == '>'        =  angleToken cs $ rv w
+                   | isWord c        =  angle cs $ c:w
+    angle cs w                       =  io cs            $ B.TText cp 0 $ '<' : rv w
 
     angleToken cs ('c' : char)
         | all isCode char  = case mapM B.readInt $ B.omit null $ B.divide '-' char of
@@ -181,39 +158,34 @@ interp r@B.CodeRoll { B.codeInputPt = cp
                     , B.codeInput   = cs0
                     } = int cs0 where
 
-    rv = reverse
     io = inout r
 
-    int ""                     =  r
-    int (c:cs)
-        | isSpace c            =  space cs 1
-        | isTerm c             =  term cs [] ""
-        | otherwise            =  word (c:cs) ""
+    int ""                               =  r
+    int (c:cs)    | isSpace c            =  space cs 1
+                  | isTerm c             =  term cs [] ""
+                  | otherwise            =  word (c:cs) ""
 
-    word cs@('>':'>':'>':_) w  =  (io cs    $ B.TText cp 0 (rv w)) `change` general
-    word (c:cs) w
-        | isSpace c            =  io (c:cs) $ B.TText cp 0 (rv w)
-        | isTerm c             =  io (c:cs) $ B.TText cp 0 (rv w)
-        | otherwise            =  word cs   $ c:w
-    word cs w                  =  io cs     $ B.TText cp 0 (rv w)
+    word cs@('>':'>':'>':_) w            =  (io cs    $ B.TText cp 0 (rv w)) `change` general
+    word (c:cs) w | isSpace c            =  io (c:cs) $ B.TText cp 0 (rv w)
+                  | isTerm c             =  io (c:cs) $ B.TText cp 0 (rv w)
+                  | otherwise            =  word cs   $ c:w
+    word cs w                            =  io cs     $ B.TText cp 0 (rv w)
 
-    term (c:cs) ns w
-        | isTerm c             =  term cs (rv w : ns) ""
-        | isWord c             =  term cs ns $ c:w
-    term cs ns w               =  io cs     $ B.TTerm cp 0 $ rv (rv w : ns)
+    term (c:cs) ns w | isTerm c          =  term cs (rv w : ns) ""
+                     | isWord c          =  term cs ns $ c:w
+    term cs ns w                         =  io cs     $ B.TTerm cp 0 $ rv (rv w : ns)
 
-    space (c:cs) n
-        | isSpace c            =  space cs  $ n + 1
-    space cs n                 =  io cs     $ B.TSpace cp n
+    space (c:cs) n   | isSpace c         =  space cs  $ n + 1
+    space cs n                           =  io cs     $ B.TSpace cp n
+
+rv :: B.Map [a]
+rv = reverse
 
 inout :: B.CodeRoll a -> String -> a -> B.CodeRoll a
-inout r cs tok = r `input` cs `output` tok
+inout r cs tok = r { B.codeInput = cs, B.codeOutput = tok : B.codeOutput r }
 
 input :: B.CodeRoll a -> String -> B.CodeRoll a
 input r cs = r { B.codeInput = cs }
-
-output :: B.CodeRoll a -> a -> B.CodeRoll a
-output r tok = r { B.codeOutput = tok : B.codeOutput r }
 
 change :: B.CodeRoll a -> B.Map (B.CodeRoll a) -> B.CodeRoll a
 change r f = r { B.codeMap = f }
