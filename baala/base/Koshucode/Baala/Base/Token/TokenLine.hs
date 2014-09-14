@@ -326,28 +326,18 @@ nextToken res (num, line) txt =
 --  O C O C O C S S Q Q H T
 
 -- Punctuations
-isOpen, isClose, isSingle, isQ, isQQ, isPunct :: B.Pred Char
-
+isOpen, isClose, isSingle, isQ, isQQ, isTerm, isSpace, isWord :: B.Pred Char
 isOpen     =  ( `elem` "([{" )  --  UnicodePunctuation
 isClose    =  ( `elem` "}])" )  --  UnicodePunctuation
 isSingle   =  ( `elem` ":|"  )  --  UnicodePunctuation | UnicodeSymbol
 isQ        =  (    ==  '\''  )  --  UnicodePunctuation
 isQQ       =  (    ==  '"'   )  --  UnicodePunctuation
-isPunct c  =  isOpen c || isClose c || isSingle c ||
-              isQ c    || isQQ c    || c == '#'   || c == '/'
-
-isTerm, isSpace, isWord  :: B.Pred Char
-
-isTerm     =  ( == '/' )      --  UnicodePunctuation
-isSpace    =  Char.isSpace    --  UnicodeSeprator | UnicodeOther
+isTerm     =  (    ==  '/'   )  --  UnicodePunctuation
+isSpace    =  Char.isSpace      --  UnicodeSeprator | UnicodeOther
 isWord  c  =  case B.generalCategoryGroup c of
-                B.UnicodeLetter       ->  True
-                B.UnicodeNumber       ->  True
-                B.UnicodeMark         ->  True
-                B.UnicodeSymbol       ->  c /= '|'
-                B.UnicodePunctuation  ->  not $ isPunct c
-                B.UnicodeSeperator    ->  False
-                B.UnicodeOther        ->  False
+                B.UnicodeLetter  ->  True
+                B.UnicodeNumber  ->  True
+                _                ->  c `elem` "-+=.~<#>_"
 
 isShortPrefix :: String -> Bool
 isShortPrefix = all isShort
