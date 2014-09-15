@@ -46,15 +46,13 @@ tokens res = concatMap B.lineTokens . tokenLines res
 tokenLines :: B.Resource -> String -> [TokenLine]
 tokenLines = B.codeRollUp general
 
--- tokenLines :: B.Resource -> String -> [TokenLine]
--- tokenLines = B.codeLines . nextToken
-
 general :: B.Map (B.CodeRoll B.Token)
 general r@B.CodeRoll { B.codeInputPt = cp
                      , B.codeInput   = cs0
                      } = gen cs0 where
 
     io = inout r
+    io' (cs, tok) = io cs tok
 
     gen ""                           =  input r ""
     gen (c:'|':cs) | isOpen c        =  io cs            $ B.TOpen    cp [c, '|']
@@ -68,9 +66,9 @@ general r@B.CodeRoll { B.codeInputPt = cp
                    | isOpen c        =  io    cs         $ B.TOpen    cp [c]
                    | isClose c       =  io    cs         $ B.TClose   cp [c]
                    | isSingle c      =  io    cs         $ B.TText    cp 0 [c]
-                   | isTerm c        =  term  cs [] ""
-                   | isQQ c          =  qq    cs ""
-                   | isQ c           =  q     cs ""
+                   | isTerm c        =  io'              $ scanTerm   cp cs
+                   | isQQ c          =  io'              $ scanQQ     cp cs
+                   | isQ c           =  io'              $ scanQ      cp cs
                    | isShort c       =  short cs [c]
                    | isWord c        =  word  cs [c]
                    | isSpace c       =  space cs 1
@@ -106,17 +104,6 @@ general r@B.CodeRoll { B.codeInputPt = cp
 
     hash ('!':cs) _                  =  io ""            $ B.TComment cp cs
     hash cs w                        =  io cs            $ B.TText    cp 0 w
-
-    term (c:cs) ns w | isTerm c      =  term cs (rv w : ns) ""
-                     | isWord c      =  term cs ns $ c:w
-    term cs ns w                     =  io   cs          $ B.TTerm cp 0 $ rv (rv w : ns)
-
-    qq (c:cs) w      | isQQ c        =  io cs            $ B.TText cp 2 $ rv w
-                     | otherwise     =  qq cs $ c:w
-    qq _ w                           =  io ""            $ B.TUnknown cp w
-
-    q (c:cs) w       | isWord c      =  q cs $ c:w
-    q cs w                           =  io cs            $ B.TText cp 1 $ rv w
 
     short (c:cs) w   | c == '.'      =  shortBody cs (rv w) ""
                      | isWord c      =  short cs $ c:w
@@ -159,10 +146,11 @@ interp r@B.CodeRoll { B.codeInputPt = cp
                     } = int cs0 where
 
     io = inout r
+    io' (cs, tok) = io cs tok
 
     int ""                               =  r
     int (c:cs)    | isSpace c            =  space cs 1
-                  | isTerm c             =  term cs [] ""
+                  | isTerm c             =  io' $ scanTerm cp cs
                   | otherwise            =  word (c:cs) ""
 
     word cs@('>':'>':'>':_) w            =  (io cs    $ B.TText cp 0 (rv w)) `change` general
@@ -171,12 +159,51 @@ interp r@B.CodeRoll { B.codeInputPt = cp
                   | otherwise            =  word cs   $ c:w
     word cs w                            =  io cs     $ B.TText cp 0 (rv w)
 
-    term (c:cs) ns w | isTerm c          =  term cs (rv w : ns) ""
-                     | isWord c          =  term cs ns $ c:w
-    term cs ns w                         =  io cs     $ B.TTerm cp 0 $ rv (rv w : ns)
-
     space (c:cs) n   | isSpace c         =  space cs  $ n + 1
     space cs n                           =  io cs     $ B.TSpace cp n
+
+
+-- ----------------------  
+
+type Next a = String -> Maybe (String, a)
+type Scan = B.CodePt -> String -> (String, B.Token)
+
+unknown :: B.CodePt -> (String, B.Token)
+unknown cp = ("", B.TUnknown cp "")
+
+nextWord :: Next String
+nextWord = loop "" where
+    loop w (c:cs) | isWord c      =  loop (c:w) cs
+    loop w cs                     =  Just (cs, rv w)
+
+nextQQ :: Next String
+nextQQ = loop "" where
+    loop w (c:cs) | isQQ c        =  Just (cs, rv w)
+                  | otherwise     =  loop (c:w) cs
+    loop _ _                      =  Nothing
+
+scanQ :: Scan
+scanQ cp cs = case nextWord cs of
+                Just (cs', w)  -> (cs', B.TText cp 1 w)
+                Nothing        -> unknown cp
+
+scanQQ :: Scan
+scanQQ cp cs = case nextQQ cs of
+                 Just (cs', w) -> (cs', B.TText cp 2 w)
+                 Nothing       -> unknown cp
+
+scanTerm :: Scan
+scanTerm cp = word [] where
+    word ns (c:cs) | isWord c  =  case nextWord (c:cs) of
+                                    Just (cs', w) -> term (w : ns) cs'
+                                    Nothing       -> unknown cp
+                   | isQQ c    =  case nextQQ cs of
+                                    Just (cs', w) -> term (w : ns) cs'
+                                    Nothing       -> unknown cp
+    word _ _                   =  unknown cp
+
+    term ns (c:cs) | isTerm c  =  word ns cs
+    term ns cs                 =  (cs, B.TTerm cp 0 $ rv ns)
 
 rv :: B.Map [a]
 rv = reverse
@@ -190,6 +217,8 @@ input r cs = r { B.codeInput = cs }
 change :: B.CodeRoll a -> B.Map (B.CodeRoll a) -> B.CodeRoll a
 change r f = r { B.codeMap = f }
 
+
+-- ----------------------  Old
 
 -- | Split a next token from source text.
 nextToken :: B.Resource -> B.NextToken B.Token
