@@ -3,17 +3,14 @@
 
 module Koshucode.Baala.Base.Token.Short
 ( -- * Data type
-  Short (..),
-  ShortDef,
+  Short (..), ShortDef,
 
   -- * Utility
-  shortTrim,
-  shortM,
-  shortListM,
+  shortTrim, shortM, shortListM,
 
   -- * Shortener
-  shortEmpty,
-  shortText,
+  shortEmpty, shortText,
+  isCodeText, isCodeChar,
 ) where
 
 import qualified Data.List                            as L
@@ -77,7 +74,7 @@ isCodeChar c =
     case B.generalCategoryGroup c of
       B.UnicodeLetter       ->  True
       B.UnicodeNumber       ->  True
-      B.UnicodeSymbol       ->  c `elem` "+<=>"
-      B.UnicodePunctuation  ->  c `elem` "-_.,!?"
+      B.UnicodeSymbol       ->  c `elem` "+<=>~"
+      B.UnicodePunctuation  ->  c `elem` "-_.#"
       _                     ->  False
 
