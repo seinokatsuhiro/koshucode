@@ -36,9 +36,8 @@ readSectionCode
     -> B.Resource          -- ^ Resource name
     -> String              -- ^ Source text
     -> B.Ab (C.Section c)  -- ^ Resulting section
-readSectionCode root res code =
-    do let clauses = C.consClause $ B.tokenLines res code
-       C.consSection root res clauses
+readSectionCode root res =
+    C.consSection root res . C.consClause B.<=< B.tokenLines res
 
 -- | Read section from text.
 readSectionText :: (C.CContent c) => C.Section c -> String -> B.Ab (C.Section c)

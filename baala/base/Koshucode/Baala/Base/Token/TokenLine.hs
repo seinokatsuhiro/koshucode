@@ -24,6 +24,7 @@ module Koshucode.Baala.Base.Token.TokenLine
 ) where
 
 import qualified Data.Char                           as Char
+import qualified Koshucode.Baala.Base.Abort          as B
 import qualified Koshucode.Baala.Base.Prelude        as B
 import qualified Koshucode.Baala.Base.Syntax         as B
 import qualified Koshucode.Baala.Base.Text           as B
@@ -40,23 +41,25 @@ type TokenLine = B.CodeLine B.Token
 
 -- | Split string into list of tokens.
 --   Result token list does not contain newline characters.
-tokens :: B.Resource -> String -> [B.Token]
-tokens res = concatMap B.lineTokens . tokenLines res
+tokens :: B.Resource -> String -> B.Ab [B.Token]
+tokens res cs = do toks <- tokenLines res cs
+                   Right $ concatMap B.lineTokens toks
 
 -- | Tokenize text.
-tokenLines :: B.Resource -> String -> [TokenLine]
+tokenLines :: B.Resource -> String -> B.Ab [TokenLine]
 tokenLines = B.codeRollUp general
 
 -- | Split a next token from source text.
-general :: B.Map (B.CodeRoll B.Token)
+general :: B.AbMap (B.CodeRoll B.Token)
 general r@B.CodeRoll { B.codeInputPt = cp
                      , B.codeInput   = cs0
                      } = gen cs0 where
 
     io = inout r
     io' (cs, tok) = io cs tok
+    int cs = change interp B.<=< io cs
 
-    gen ""                           =  input r ""
+    gen ""                           =  Right $ input r ""
     gen (c:'|':cs) | isOpen c        =  io cs            $ B.TOpen    cp [c, '|']
         
     gen (c:cs)     | c == '*'        =  ast   cs [c]
@@ -85,7 +88,7 @@ general r@B.CodeRoll { B.codeInputPt = cp
     bra (c:cs) w   | c == '<'        =  bra   cs $ c:w
     bra cs w       | w == "<"        =  angle cs ""
                    | w == "<<"       =  io    cs         $ B.TOpen    cp w
-                   | w == "<<<"      =  (io   cs         $ B.TOpen    cp w) `change` interp
+                   | w == "<<<"      =  int   cs         $ B.TOpen    cp w
                    | otherwise       =  io    cs         $ B.TUnknown cp w
 
     cket (c:cs) w  | c == '>'        =  cket cs $ c:w
@@ -129,20 +132,21 @@ general r@B.CodeRoll { B.codeInputPt = cp
                                Just w   ->  io cs $ B.TText cp 3 w
                                Nothing  ->  io cs $ B.TText cp (-1) key
 
-interp :: B.Map (B.CodeRoll B.Token)
+interp :: B.AbMap (B.CodeRoll B.Token)
 interp r@B.CodeRoll { B.codeInputPt = cp
                     , B.codeInput   = cs0
                     } = int cs0 where
 
     io = inout r
     io' (cs, tok) = io cs tok
+    gen cs = change general B.<=< io cs
 
-    int ""                               =  r
+    int ""                               =  Right r
     int (c:cs)    | isSpace c            =  io' $ scanSpace cp cs
                   | isTerm c             =  io' $ scanTerm cp cs
                   | otherwise            =  word (c:cs) ""
 
-    word cs@('>':'>':'>':_) w            =  (io cs    $ B.TText cp 0 (rv w)) `change` general
+    word cs@('>':'>':'>':_) w            =  gen cs    $ B.TText cp 0 (rv w)
     word (c:cs) w | isSpace c            =  io (c:cs) $ B.TText cp 0 (rv w)
                   | isTerm c             =  io (c:cs) $ B.TText cp 0 (rv w)
                   | otherwise            =  word cs   $ c:w
@@ -211,14 +215,14 @@ scanSlot n cp cs = case nextCode cs of
 rv :: B.Map [a]
 rv = reverse
 
-inout :: B.CodeRoll a -> String -> a -> B.CodeRoll a
-inout r cs tok = r { B.codeInput = cs, B.codeOutput = tok : B.codeOutput r }
+inout :: B.CodeRoll a -> String -> a -> B.Ab (B.CodeRoll a)
+inout r cs tok = Right $ r { B.codeInput = cs, B.codeOutput = tok : B.codeOutput r }
 
 input :: B.CodeRoll a -> String -> B.CodeRoll a
 input r cs = r { B.codeInput = cs }
 
-change :: B.CodeRoll a -> B.Map (B.CodeRoll a) -> B.CodeRoll a
-change r f = r { B.codeMap = f }
+change :: B.AbMap (B.CodeRoll a) -> B.AbMap (B.CodeRoll a)
+change f r = Right $ r { B.codeMap = f }
 
 
 -- ----------------------  Char category

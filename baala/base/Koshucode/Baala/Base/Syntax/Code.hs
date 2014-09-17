@@ -18,7 +18,8 @@ module Koshucode.Baala.Base.Syntax.Code
   codeRoll, codeRollUp,
 ) where
 
-import qualified Data.Generics as G
+import qualified Data.Generics                    as G
+import qualified Koshucode.Baala.Base.Abort       as B
 import qualified Koshucode.Baala.Base.Prelude     as B
 import qualified Koshucode.Baala.Base.Text        as B
 import qualified Koshucode.Baala.Base.Syntax.Line as B
@@ -94,29 +95,33 @@ codeLine nextToken line@(lno, text) =
     let toks = B.gather (nextToken line) text
     in CodeLine lno text toks
 
+
+-- ----------------------  CodeRoll
+
 data CodeRoll a =
-    CodeRoll { codeMap     :: B.Map (CodeRoll a)
+    CodeRoll { codeMap     :: B.AbMap (CodeRoll a)
              , codeInputPt :: B.CodePt
              , codeInput   :: String
              , codeOutput  :: [a]
              }
 
-codeRoll :: B.Map (CodeRoll a)
+codeRoll :: B.AbMap (CodeRoll a)
 codeRoll r@CodeRoll { codeMap = f, codeInputPt = cp, codeInput = input }
-    | null input = r
-    | otherwise  = codeRoll $ f r { codeInputPt = cp { B.codeText = input }}
+    | null input = Right r
+    | otherwise  = codeRoll =<< f r { codeInputPt = cp { B.codeText = input }}
 
-codeRollUp :: B.Map (CodeRoll a) -> B.Resource -> String -> [CodeLine a]
+codeRollUp :: B.AbMap (CodeRoll a) -> B.Resource -> String -> B.Ab [CodeLine a]
 codeRollUp f res = loop (CodeRoll f cp "" []) . B.linesCrlfNumbered where
     cp    = B.codeZero { B.codeResource = res }
 
-    loop _ [] = []
+    loop _ [] = Right []
     loop roll ((num, line) : ls) =
-        let cp'   = cp { B.codeLineNumber = num
-                       , B.codeLineText   = line }
-            roll' = codeRoll roll { codeInputPt = cp'
+        do let cp' = cp { B.codeLineNumber = num
+                        , B.codeLineText   = line }
+           roll' <- codeRoll roll { codeInputPt = cp'
                                   , codeInput   = line
                                   , codeOutput  = [] }
-            toks  = reverse $ codeOutput roll'
-        in CodeLine num line toks : loop roll' ls
+           let toks = reverse $ codeOutput roll'
+           ls' <- loop roll' ls
+           Right $ CodeLine num line toks : ls'
 
