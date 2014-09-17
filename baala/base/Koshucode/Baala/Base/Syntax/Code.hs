@@ -8,14 +8,16 @@
 --   as a list of 'CodeLine'.
 
 module Koshucode.Baala.Base.Syntax.Code
-( CodeLine (..),
+( -- * CodeLine
+  CodeLine (..),
   CodeClause (..),
   lineIndentPair,
   splitClause,
-  NextToken,
-  codeLines,
+
+  -- * CodeRoll
   CodeRoll (..),
-  codeRoll, codeRollUp,
+  codeRollUp,
+  codeUpdate, codeChange
 ) where
 
 import qualified Data.Generics                    as G
@@ -61,9 +63,15 @@ splitClause = first where
     continue i ((n, x) : xs) | n > i  = B.cons1 x $ continue i xs
     continue _ xs                     = ([], xs)
 
--- | Type of function that splits a next token from string.
---   Tokens can includes 'TokenNumber'.
-type NextToken a = B.NumberedLine -> B.Gather String a
+
+-- ----------------------  CodeRoll
+
+data CodeRoll a =
+    CodeRoll { codeMap     :: B.AbMap (CodeRoll a)
+             , codeInputPt :: B.CodePt
+             , codeInput   :: String
+             , codeOutput  :: [a]
+             }
 
 -- | Split source text into 'CodeLine' list.
 --
@@ -77,39 +85,6 @@ type NextToken a = B.NumberedLine -> B.Gather String a
 --   3. Tokenize each lines,
 --      and put tokens together in 'CodeLine'.
 --
-codeLines
-    :: NextToken a     -- ^ Token splitter
-    -> String          -- ^ Source text
-    -> [CodeLine a]    -- ^ Token list per lines
-codeLines = codeLinesBy . codeLine
-
-type MakeCodeLine a = B.NumberedLine -> CodeLine a
-
-codeLinesBy :: MakeCodeLine a -> String -> [CodeLine a]
-codeLinesBy mkCline = loop . B.linesCrlfNumbered where
-    loop [] = []
-    loop (line : rest) = mkCline line : loop rest
-
-codeLine :: NextToken a -> MakeCodeLine a
-codeLine nextToken line@(lno, text) =
-    let toks = B.gather (nextToken line) text
-    in CodeLine lno text toks
-
-
--- ----------------------  CodeRoll
-
-data CodeRoll a =
-    CodeRoll { codeMap     :: B.AbMap (CodeRoll a)
-             , codeInputPt :: B.CodePt
-             , codeInput   :: String
-             , codeOutput  :: [a]
-             }
-
-codeRoll :: B.AbMap (CodeRoll a)
-codeRoll r@CodeRoll { codeMap = f, codeInputPt = cp, codeInput = input }
-    | null input = Right r
-    | otherwise  = codeRoll =<< f r { codeInputPt = cp { B.codeText = input }}
-
 codeRollUp :: B.AbMap (CodeRoll a) -> B.Resource -> String -> B.Ab [CodeLine a]
 codeRollUp f res = loop (CodeRoll f cp "" []) . B.linesCrlfNumbered where
     cp    = B.codeZero { B.codeResource = res }
@@ -125,3 +100,13 @@ codeRollUp f res = loop (CodeRoll f cp "" []) . B.linesCrlfNumbered where
            ls' <- loop roll' ls
            Right $ CodeLine num line toks : ls'
 
+codeRoll :: B.AbMap (CodeRoll a)
+codeRoll r@CodeRoll { codeMap = f, codeInputPt = cp, codeInput = input }
+    | null input = Right r
+    | otherwise  = codeRoll =<< f r { codeInputPt = cp { B.codeText = input }}
+
+codeUpdate :: String -> a -> B.Map (CodeRoll a)
+codeUpdate cs tok r = r { codeInput = cs, codeOutput = tok : codeOutput r }
+
+codeChange :: B.AbMap (CodeRoll a) -> B.Map (CodeRoll a)
+codeChange f r = r { codeMap = f }

@@ -38,29 +38,30 @@ import qualified Koshucode.Baala.Base.Token.Token    as B
 
 -- | Token list on a line.
 type TokenLine = B.CodeLine B.Token
+type TokenRoll = B.CodeRoll B.Token
 
 -- | Split string into list of tokens.
 --   Result token list does not contain newline characters.
 tokens :: B.Resource -> String -> B.Ab [B.Token]
-tokens res cs = do toks <- tokenLines res cs
-                   Right $ concatMap B.lineTokens toks
+tokens res cs = do ls <- tokenLines res cs
+                   Right $ concatMap B.lineTokens ls
 
 -- | Tokenize text.
 tokenLines :: B.Resource -> String -> B.Ab [TokenLine]
 tokenLines = B.codeRollUp general
 
 -- | Split a next token from source text.
-general :: B.AbMap (B.CodeRoll B.Token)
+general :: B.AbMap TokenRoll
 general r@B.CodeRoll { B.codeInputPt = cp
                      , B.codeInput   = cs0
                      } = gen cs0 where
 
-    io = inout r
-    io' (cs, tok) = io cs tok
-    int cs = change interp B.<=< io cs
+    v (cs, tok) = u cs tok
+    u   cs tok  = Right $ B.codeUpdate cs tok r
+    int cs tok  = Right $ B.codeChange interp $ B.codeUpdate cs tok r
 
-    gen ""                           =  Right $ input r ""
-    gen (c:'|':cs) | isOpen c        =  io cs            $ B.TOpen    cp [c, '|']
+    gen ""                           =  Right r
+    gen (c:'|':cs) | isOpen c        =  u cs            $ B.TOpen    cp [c, '|']
         
     gen (c:cs)     | c == '*'        =  ast   cs [c]
                    | c == '<'        =  bra   cs [c]
@@ -68,95 +69,98 @@ general r@B.CodeRoll { B.codeInputPt = cp
                    | c == '@'        =  slot  cs 1
                    | c == '|'        =  bar   cs [c]
                    | c == '#'        =  hash  cs [c]
-                   | isOpen c        =  io    cs         $ B.TOpen    cp [c]
-                   | isClose c       =  io    cs         $ B.TClose   cp [c]
-                   | isSingle c      =  io    cs         $ B.TText    cp 0 [c]
-                   | isTerm c        =  io'              $ scanTerm   cp cs
-                   | isQQ c          =  io'              $ scanQQ     cp cs
-                   | isQ c           =  io'              $ scanQ      cp cs
+                   | isOpen c        =  u     cs        $ B.TOpen    cp [c]
+                   | isClose c       =  u     cs        $ B.TClose   cp [c]
+                   | isSingle c      =  u     cs        $ B.TText    cp 0 [c]
+                   | isTerm c        =  v               $ scanTerm   cp cs
+                   | isQQ c          =  v               $ scanQQ     cp cs
+                   | isQ c           =  v               $ scanQ      cp cs
                    | isShort c       =  short cs [c]
-                   | isCode c        =  io'              $ scanCode   cp (c:cs)
-                   | isSpace c       =  io'              $ scanSpace  cp cs
-                   | otherwise       =  io    cs         $ B.TUnknown cp [c]
+                   | isCode c        =  v               $ scanCode   cp (c:cs)
+                   | isSpace c       =  v               $ scanSpace  cp cs
+                   | otherwise       =  u     cs        $ B.TUnknown cp [c]
 
-    ast (c:cs) w   | w == "****"     =  io  (c:cs)       $ B.TText    cp 0 w
+    ast (c:cs) w   | w == "****"     =  u   (c:cs)      $ B.TText    cp 0 w
                    | c == '*'        =  ast cs $ c:w
-    ast cs w       | w == "**"       =  io  ""           $ B.TComment cp cs
-                   | w == "***"      =  io  ""           $ B.TComment cp cs
-                   | otherwise       =  io  cs           $ B.TText    cp 0 w
+    ast cs w       | w == "**"       =  u   ""          $ B.TComment cp cs
+                   | w == "***"      =  u   ""          $ B.TComment cp cs
+                   | otherwise       =  u   cs          $ B.TText    cp 0 w
 
     bra (c:cs) w   | c == '<'        =  bra   cs $ c:w
     bra cs w       | w == "<"        =  angle cs ""
-                   | w == "<<"       =  io    cs         $ B.TOpen    cp w
-                   | w == "<<<"      =  int   cs         $ B.TOpen    cp w
-                   | otherwise       =  io    cs         $ B.TUnknown cp w
+                   | w == "<<"       =  u     cs        $ B.TOpen    cp w
+                   | w == "<<<"      =  int   cs        $ B.TOpen    cp w
+                   | otherwise       =  u     cs        $ B.TUnknown cp w
 
     cket (c:cs) w  | c == '>'        =  cket cs $ c:w
-    cket cs w      | w == ">"        =  io'              $ scanCode   cp ('>':cs)
-                   | w == ">>"       =  io   cs          $ B.TClose   cp w
-                   | w == ">>>"      =  io   cs          $ B.TClose   cp w
-                   | otherwise       =  io   cs          $ B.TUnknown cp w
+    cket cs w      | w == ">"        =  v               $ scanCode   cp ('>':cs)
+                   | w == ">>"       =  u    cs         $ B.TClose   cp w
+                   | w == ">>>"      =  u    cs         $ B.TClose   cp w
+                   | otherwise       =  u    cs         $ B.TUnknown cp w
 
     slot (c:cs) n  | c == '@'        =  slot cs $ n + 1
-                   | c == '\''       =  io'              $ scanSlot 0 cp cs  -- positional
-    slot cs n                        =  io'              $ scanSlot n cp cs
+                   | c == '\''       =  v               $ scanSlot 0 cp cs  -- positional
+    slot cs n                        =  v               $ scanSlot n cp cs
 
-    hash ('!':cs) _                  =  io ""            $ B.TComment cp cs
-    hash cs w                        =  io cs            $ B.TText    cp 0 w
+    hash ('!':cs) _                  =  u ""            $ B.TComment cp cs
+    hash cs w                        =  u cs            $ B.TText    cp 0 w
 
     short (c:cs) w   | c == '.'      =  let pre = rv w
                                             Just (cs', body) = nextCode cs
-                                        in io cs' $ B.TShort cp pre body
+                                        in u cs' $ B.TShort cp pre body
                      | isCode c      =  short cs $ c:w
-    short cs w                       =  io cs            $ B.TText cp 0 $ rv w
+    short cs w                       =  u cs            $ B.TText cp 0 $ rv w
 
-    bar [] w                         =  io ""            $ B.TText cp 0 w
+    bar [] w                         =  u ""            $ B.TText cp 0 w
     bar (c:cs) w | c == '|'          =  bar cs $ c:w
                  | w == "||"         =  let cs' = B.trimLeft (c:cs)
-                                        in io cs'         $ B.TText cp 0 w
+                                        in u cs'        $ B.TText cp 0 w
                  | w == "|" &&
-                   isClose c         =  io cs            $ B.TClose   cp ['|', c]
-                 | w == "|"          =  io (c:cs)        $ B.TText    cp 0 w
-                 | otherwise         =  io (c:cs)        $ B.TUnknown cp w
+                   isClose c         =  u cs            $ B.TClose   cp ['|', c]
+                 | w == "|"          =  u (c:cs)        $ B.TText    cp 0 w
+                 | otherwise         =  u (c:cs)        $ B.TUnknown cp w
 
     angle (c:cs) w | c == '>'        =  angleToken cs $ rv w
                    | isCode c        =  angle cs $ c:w
-    angle cs w                       =  io cs            $ B.TText cp 0 $ '<' : rv w
+    angle cs w                       =  u cs            $ B.TText cp 0 $ '<' : rv w
 
     angleToken cs ('c' : char)
         | all isFigure char  = case mapM B.readInt $ B.omit null $ B.divide '-' char of
-                                 Just ns  ->  io cs $ B.TText cp 3 $ map Char.chr ns
-                                 Nothing  ->  io cs $ B.TText cp (-1) char
-    angleToken cs ""       = io cs $ B.TText cp 0 "<>"
-    angleToken cs key      = case lookup key B.bracketKeywords of
-                               Just w   ->  io cs $ B.TText cp 3 w
-                               Nothing  ->  io cs $ B.TText cp (-1) key
+                                 Just ns  ->  u cs $ B.TText cp 3 $ map Char.chr ns
+                                 Nothing  ->  u cs $ B.TText cp (-1) char
+    angleToken cs ""         = u cs $ B.TText cp 0 "<>"
+    angleToken cs key        = case lookup key B.bracketKeywords of
+                                 Just w   ->  u cs $ B.TText cp 3 w
+                                 Nothing  ->  u cs $ B.TText cp (-1) key
 
-interp :: B.AbMap (B.CodeRoll B.Token)
+interp :: B.AbMap TokenRoll
 interp r@B.CodeRoll { B.codeInputPt = cp
                     , B.codeInput   = cs0
                     } = int cs0 where
 
-    io = inout r
-    io' (cs, tok) = io cs tok
-    gen cs = change general B.<=< io cs
+    v (cs, tok) = u cs tok
+    u   cs tok  = Right $ B.codeUpdate cs tok r
+    gen cs tok  = Right $ B.codeChange general $ B.codeUpdate cs tok r
 
-    int ""                               =  Right r
-    int (c:cs)    | isSpace c            =  io' $ scanSpace cp cs
-                  | isTerm c             =  io' $ scanTerm cp cs
-                  | otherwise            =  word (c:cs) ""
+    int ""                           =  Right r
+    int (c:cs)    | isSpace c        =  v $ scanSpace cp cs
+                  | isTerm c         =  v $ scanTerm cp cs
+                  | otherwise        =  word (c:cs) ""
 
-    word cs@('>':'>':'>':_) w            =  gen cs    $ B.TText cp 0 (rv w)
-    word (c:cs) w | isSpace c            =  io (c:cs) $ B.TText cp 0 (rv w)
-                  | isTerm c             =  io (c:cs) $ B.TText cp 0 (rv w)
-                  | otherwise            =  word cs   $ c:w
-    word cs w                            =  io cs     $ B.TText cp 0 (rv w)
+    word cs@('>':'>':'>':_) w        =  gen cs    $ B.TText cp 0 (rv w)
+    word (c:cs) w | isSpace c        =  u (c:cs)  $ B.TText cp 0 (rv w)
+                  | isTerm c         =  u (c:cs)  $ B.TText cp 0 (rv w)
+                  | otherwise        =  word cs   $ c:w
+    word cs w                        =  u cs      $ B.TText cp 0 (rv w)
 
-
--- ----------------------  
+ 
+-- ----------------------  Scanner
 
 type Next a = String -> Maybe (String, a)
 type Scan = B.CodePt -> String -> (String, B.Token)
+
+rv :: B.Map [a]
+rv = reverse
 
 unknown :: B.CodePt -> (String, B.Token)
 unknown cp = ("", B.TUnknown cp "")
@@ -211,18 +215,6 @@ scanSlot :: Int -> Scan
 scanSlot n cp cs = case nextCode cs of
                      Just (cs', w) -> (cs', B.TSlot cp n w)
                      Nothing       -> unknown cp
-
-rv :: B.Map [a]
-rv = reverse
-
-inout :: B.CodeRoll a -> String -> a -> B.Ab (B.CodeRoll a)
-inout r cs tok = Right $ r { B.codeInput = cs, B.codeOutput = tok : B.codeOutput r }
-
-input :: B.CodeRoll a -> String -> B.CodeRoll a
-input r cs = r { B.codeInput = cs }
-
-change :: B.AbMap (B.CodeRoll a) -> B.AbMap (B.CodeRoll a)
-change f r = Right $ r { B.codeMap = f }
 
 
 -- ----------------------  Char category
