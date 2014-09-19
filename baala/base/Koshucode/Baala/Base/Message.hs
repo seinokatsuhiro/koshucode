@@ -16,8 +16,10 @@ module Koshucode.Baala.Base.Message
   (<!!>),
 
   -- * Tokenizer
-  forbiddenText,
+  forbiddenInput,
+  forbiddenTerm,
   unkBracketText,
+  quotNotEnd,
 ) where
 
 import qualified Koshucode.Baala.Base.Abort    as B
@@ -65,11 +67,19 @@ notFound = Left . B.abortLine "Not found"
     loop ((k,v) : kvs) | k == key  = Right v
                        | otherwise = loop kvs
 
--- | Forbidden text
-forbiddenText :: String -> B.Ab a
-forbiddenText = Left . B.abortLine "Forbidden text"
+-- | Forbidden input
+forbiddenInput :: String -> B.Ab a
+forbiddenInput = Left . B.abortLine "Forbidden input"
 
--- | Unknown bracket
+-- | Forbidden term name
+forbiddenTerm :: B.Ab a
+forbiddenTerm = Left $ B.abortBecause "Forbidden term name"
+
+-- | Unknown bracket text
 unkBracketText :: String -> B.Ab a
 unkBracketText = Left . B.abortLine "Unknown bracket text"
+
+-- | Quotation not end in line
+quotNotEnd :: B.Ab a
+quotNotEnd = Left $ B.abortBecause "Quotation not end in line"
 

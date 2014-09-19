@@ -56,7 +56,6 @@ data Token
     | TClose   B.CodePt String         -- ^ Closing bracket.
     | TSpace   B.CodePt Int            -- ^ /N/ space characters.
     | TComment B.CodePt String         -- ^ Comment text.
-    | TUnknown B.CodePt String         -- ^ Unknown text.
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance B.Name Token where
@@ -79,7 +78,6 @@ instance B.Write Token where
         d (TClose   pt p)    =  pretty "TClose"   pt [show p]
         d (TSpace   pt c)    =  pretty "TSpace"   pt [show c]
         d (TComment pt s)    =  pretty "TComment" pt [show s]
-        d (TUnknown pt s)    =  pretty "TUnknown" pt [show s]
         pretty k pt xs       =  B.writeH sh $ lineCol pt : k : xs
         lineCol pt           =  (show $ B.codeLineNumber pt)
                                 ++ "." ++ (show $ B.codeColumnNumber pt)
@@ -100,7 +98,6 @@ instance B.CodePtr Token where
     codePts (TClose   cp _)    =  [cp]
     codePts (TSpace   cp _)    =  [cp]
     codePts (TComment cp _)    =  [cp]
-    codePts (TUnknown cp _)    =  [cp]
 
 
 -- ----------------------  Blank name
@@ -160,11 +157,10 @@ tokenContent (TOpen    _ s)   =  s
 tokenContent (TClose   _ s)   =  s
 tokenContent (TSpace   _ n)   =  replicate n ' '
 tokenContent (TComment _ s)   =  s
-tokenContent (TUnknown _ s)   =  s
 
 -- | Text of token type, i.e., one of
 --   @\"Text\"@, @\"Term\"@, @\"Open\"@, @\"Close\"@,
---   @\"Space\"@, @\"Comment\"@, or @\"Unknown\"@.
+--   @\"Space\"@, or @\"Comment\"@.
 --
 --   >>> tokenTypeText $ textToken "flower"
 --   "Text"
@@ -178,7 +174,6 @@ tokenTypeText (TOpen    _ _)  =  "open"
 tokenTypeText (TClose   _ _)  =  "close"
 tokenTypeText (TSpace   _ _)  =  "space"
 tokenTypeText (TComment _ _)  =  "comment"
-tokenTypeText (TUnknown _ _)  =  "unknown"
 
 
 -- ----------------------  Predicate

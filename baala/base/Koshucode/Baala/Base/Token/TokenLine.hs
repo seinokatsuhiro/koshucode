@@ -55,9 +55,9 @@ tokenLines = B.codeRollUp general
 general :: B.AbMap TokenRoll
 general r@B.CodeRoll { B.codeInputPt = cp
                      , B.codeInput   = cs0
-                     } = gen cs0 where
+                     } = ab $ gen cs0 where
 
-    v (cs, tok) = u cs tok
+    v           = scan r
     u   cs tok  = Right $ B.codeUpdate cs tok r
     int cs tok  = Right $ B.codeChange interp $ B.codeUpdate cs tok r
     ab          = Message.abToken [cp]
@@ -80,27 +80,27 @@ general r@B.CodeRoll { B.codeInputPt = cp
                    | isShort c       =  short cs [c]
                    | isCode c        =  v               $ scanCode   cp (c:cs)
                    | isSpace c       =  v               $ scanSpace  cp cs
-                   | otherwise       =  ab              $ Message.forbiddenText $ B.shortEmpty [c]
+                   | otherwise       =  Message.forbiddenInput $ B.shortEmpty [c]
 
     ast (c:cs) w   | w == "****"     =  u   (c:cs)      $ B.TText    cp 0 w
-                   | c == '*'        =  ast cs $ c:w
+                   | c == '*'        =  ast cs          $ c:w
     ast cs w       | w == "**"       =  u   ""          $ B.TComment cp cs
                    | w == "***"      =  u   ""          $ B.TComment cp cs
                    | otherwise       =  u   cs          $ B.TText    cp 0 w
 
-    bra (c:cs) w   | c == '<'        =  bra   cs $ c:w
+    bra (c:cs) w   | c == '<'        =  bra   cs        $ c:w
     bra cs w       | w == "<"        =  angle cs ""
                    | w == "<<"       =  u     cs        $ B.TOpen    cp w
                    | w == "<<<"      =  int   cs        $ B.TOpen    cp w
-                   | otherwise       =  ab              $ Message.unkBracketText w
+                   | otherwise       =  Message.unkBracketText w
 
-    cket (c:cs) w  | c == '>'        =  cket cs $ c:w
+    cket (c:cs) w  | c == '>'        =  cket cs         $ c:w
     cket cs w      | w == ">"        =  v               $ scanCode   cp ('>':cs)
                    | w == ">>"       =  u    cs         $ B.TClose   cp w
                    | w == ">>>"      =  u    cs         $ B.TClose   cp w
-                   | otherwise       =  ab              $ Message.unkBracketText w
+                   | otherwise       =  Message.unkBracketText w
 
-    slot (c:cs) n  | c == '@'        =  slot cs $ n + 1
+    slot (c:cs) n  | c == '@'        =  slot cs         $ n + 1
                    | c == '\''       =  v               $ scanSlot 0 cp cs  -- positional
     slot cs n                        =  v               $ scanSlot n cp cs
 
@@ -108,28 +108,28 @@ general r@B.CodeRoll { B.codeInputPt = cp
     hash cs w                        =  u cs            $ B.TText    cp 0 w
 
     short (c:cs) w   | c == '.'      =  let pre = rv w
-                                            Just (cs', body) = nextCode cs
-                                        in u cs' $ B.TShort cp pre body
-                     | isCode c      =  short cs $ c:w
+                                            (cs', body) = nextCode cs
+                                        in u cs'        $ B.TShort cp pre body
+                     | isCode c      =  short cs        $ c:w
     short cs w                       =  u cs            $ B.TText cp 0 $ rv w
 
     bar [] w                         =  u ""            $ B.TText cp 0 w
-    bar (c:cs) w | c == '|'          =  bar cs $ c:w
+    bar (c:cs) w | c == '|'          =  bar cs          $ c:w
                  | w == "||"         =  let cs' = B.trimLeft (c:cs)
                                         in u cs'        $ B.TText cp 0 w
                  | w == "|" &&
                    isClose c         =  u cs            $ B.TClose   cp ['|', c]
                  | otherwise         =  u (c:cs)        $ B.TText    cp 0 w
 
-    angle (c:cs) w | c == '>'        =  angleToken cs $ rv w
-                   | isCode c        =  angle cs $ c:w
+    angle (c:cs) w | c == '>'        =  angleToken cs   $ rv w
+                   | isCode c        =  angle cs        $ c:w
     angle cs w                       =  u cs            $ B.TText cp 0 $ '<' : rv w
 
     angleToken cs ('c' : char)
         | all isFigure char  = case mapM B.readInt $ B.omit null $ B.divide '-' char of
                                  Just ns  ->  u cs $ B.TText cp 3 $ map Char.chr ns
                                  Nothing  ->  u cs $ B.TText cp (-1) char
-    angleToken cs ""         = u cs $ B.TText cp 0 "<>"
+    angleToken cs ""         =                u cs $ B.TText cp 0 "<>"
     angleToken cs key        = case lookup key B.bracketKeywords of
                                  Just w   ->  u cs $ B.TText cp 3 w
                                  Nothing  ->  u cs $ B.TText cp (-1) key
@@ -137,15 +137,16 @@ general r@B.CodeRoll { B.codeInputPt = cp
 interp :: B.AbMap TokenRoll
 interp r@B.CodeRoll { B.codeInputPt = cp
                     , B.codeInput   = cs0
-                    } = int cs0 where
+                    } = ab $ int cs0 where
 
-    v (cs, tok) = u cs tok
+    v           = scan r
     u   cs tok  = Right $ B.codeUpdate cs tok r
     gen cs tok  = Right $ B.codeChange general $ B.codeUpdate cs tok r
+    ab          = Message.abToken [cp]
 
     int ""                           =  Right r
-    int (c:cs)    | isSpace c        =  v $ scanSpace cp cs
-                  | isTerm c         =  v $ scanTerm cp cs
+    int (c:cs)    | isSpace c        =  v         $ scanSpace cp cs
+                  | isTerm c         =  v         $ scanTerm cp cs
                   | otherwise        =  word (c:cs) ""
 
     word cs@('>':'>':'>':_) w        =  gen cs    $ B.TText cp 0 (rv w)
@@ -157,65 +158,61 @@ interp r@B.CodeRoll { B.codeInputPt = cp
  
 -- ----------------------  Scanner
 
-type Next a = String -> Maybe (String, a)
-type Scan = B.CodePt -> String -> (String, B.Token)
+type Next   a = String -> (String, a)
+type AbNext a = String -> B.Ab (String, a)
+type Scan     = B.CodePt -> String -> B.Ab (String, B.Token)
 
 rv :: B.Map [a]
 rv = reverse
 
-unknown :: B.CodePt -> (String, B.Token)
-unknown cp = ("", B.TUnknown cp "")
+scan :: TokenRoll -> B.Ab (String, B.Token) -> B.Ab TokenRoll
+scan r (Right (cs, tok)) = Right $ B.codeUpdate cs tok r
+scan _ (Left message)    = Left message
 
 nextCode :: Next String
 nextCode = loop "" where
-    loop w cs@('>':'>':_)         =  Just (cs, rv w)
-    loop w cs@('<':'<':_)         =  Just (cs, rv w)
+    loop w cs@('>':'>':_)         =  (cs, rv w)
+    loop w cs@('<':'<':_)         =  (cs, rv w)
     loop w (c:cs) | isCode c      =  loop (c:w) cs
-    loop w cs                     =  Just (cs, rv w)
+    loop w cs                     =  (cs, rv w)
 
-nextQQ :: Next String
+nextQQ :: AbNext String
 nextQQ = loop "" where
-    loop w (c:cs) | isQQ c        =  Just (cs, rv w)
+    loop w (c:cs) | isQQ c        =  Right (cs, rv w)
                   | otherwise     =  loop (c:w) cs
-    loop _ _                      =  Nothing
+    loop _ _                      =  Message.quotNotEnd
 
 scanSpace :: Scan
 scanSpace cp = loop 1 where
     loop n (c:cs) | isSpace c     =  loop (n + 1) cs
-    loop n cs                     =  (cs, B.TSpace cp n)
+    loop n cs                     =  Right (cs, B.TSpace cp n)
 
 scanCode :: Scan
-scanCode cp cs = case nextCode cs of
-                   Just (cs', w)  -> (cs', B.TText cp 0 w)
-                   Nothing        -> unknown cp
+scanCode cp cs = let (cs', w) = nextCode cs
+                 in  Right (cs', B.TText cp 0 w)
 
 scanQ :: Scan
-scanQ cp cs = case nextCode cs of
-                Just (cs', w)  -> (cs', B.TText cp 1 w)
-                Nothing        -> unknown cp
+scanQ cp cs =    let (cs', w) = nextCode cs
+                 in Right (cs', B.TText cp 1 w)
 
 scanQQ :: Scan
-scanQQ cp cs = case nextQQ cs of
-                 Just (cs', w) -> (cs', B.TText cp 2 w)
-                 Nothing       -> unknown cp
+scanQQ cp cs = do (cs', w) <- nextQQ cs
+                  Right (cs', B.TText cp 2 w)
 
 scanTerm :: Scan
 scanTerm cp = word [] where
-    word ns (c:cs) | isCode c  =  case nextCode (c:cs) of
-                                    Just (cs', w) -> term (w : ns) cs'
-                                    Nothing       -> unknown cp
-                   | isQQ c    =  case nextQQ cs of
-                                    Just (cs', w) -> term (w : ns) cs'
-                                    Nothing       -> unknown cp
-    word _ _                   =  unknown cp
+    word ns (c:cs) | isCode c  =  let (cs', w) = nextCode (c:cs)
+                                  in term (w : ns) cs'
+                   | isQQ c    =  do (cs', w) <- nextQQ cs
+                                     term (w : ns) cs'
+    word _ _                   =  Message.forbiddenTerm
 
     term ns (c:cs) | isTerm c  =  word ns cs
-    term ns cs                 =  (cs, B.TTerm cp 0 $ rv ns)
+    term ns cs                 =  Right (cs, B.TTerm cp 0 $ rv ns)
 
 scanSlot :: Int -> Scan
-scanSlot n cp cs = case nextCode cs of
-                     Just (cs', w) -> (cs', B.TSlot cp n w)
-                     Nothing       -> unknown cp
+scanSlot n cp cs = let (cs', w) = nextCode cs
+                   in Right (cs', B.TSlot cp n w)
 
 
 -- ----------------------  Char category
@@ -274,8 +271,6 @@ isFigure c   = Char.isDigit c
 --              treated in 'Koshucode.Baala.Core.Section.Clause.Clause'.
 --
 --  [Space]     /space/ , @\\t@ (tab)
---
---  [Unknown]   Other than those above.
 --
 
 -- ------------------------------------------------------------------
