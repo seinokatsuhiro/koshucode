@@ -6,6 +6,9 @@
 **  IMPORT
 **    <<< Module named /module imports module /import. >>>
 **
+**  SUMMARY
+**    20 judges
+**
 
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Element"   /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Element"   /import "Koshucode.Baala.Core"
@@ -32,7 +35,3 @@
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuMain"    /import "Koshucode.Baala.Toolkit.Library.Run"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuMain"    /import "Koshucode.Baala.Toolkit.Library.Version"
 
-**
-**  SUMMARY
-**    20 judges
-**

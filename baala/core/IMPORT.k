@@ -6,6 +6,9 @@
 **  IMPORT
 **    <<< Module named /module imports module /import. >>>
 **
+**  SUMMARY
+**    160 judges
+**
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Data.Generics"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Base"
@@ -201,7 +204,3 @@
 |-- IMPORT  /module "Koshucode.Baala.Core"                      /import "Koshucode.Baala.Core.Relmap"
 |-- IMPORT  /module "Koshucode.Baala.Core"                      /import "Koshucode.Baala.Core.Section"
 
-**
-**  SUMMARY
-**    160 judges
-**

@@ -6,9 +6,9 @@
 |-- DIR  /code 755  /comment 468  /dir "core/Koshucode/Baala/Core/Content"
 |-- DIR  /code 405  /comment 233  /dir "core/Koshucode/Baala/Core/Lexmap"
 |-- DIR  /code 544  /comment 286  /dir "core/Koshucode/Baala/Core/Relmap"
-|-- DIR  /code 492  /comment 243  /dir "core/Koshucode/Baala/Core/Section"
+|-- DIR  /code 491  /comment 243  /dir "core/Koshucode/Baala/Core/Section"
 
-|-- DIR-TOTAL  /code 2733  /comment 1638
+|-- DIR-TOTAL  /code 2732  /comment 1638
 
 |-- FILE  /code 13   /comment 73   /file "Core.hs"        /dir "core/Koshucode/Baala"
 |-- FILE  /code 11   /comment 6    /file "Assert.hs"      /dir "core/Koshucode/Baala/Core"
@@ -41,8 +41,8 @@
 |-- FILE  /code 23   /comment 8    /file "Bundle.hs"      /dir "core/Koshucode/Baala/Core/Section"
 |-- FILE  /code 165  /comment 104  /file "Clause.hs"      /dir "core/Koshucode/Baala/Core/Section"
 |-- FILE  /code 51   /comment 20   /file "Quoter.hs"      /dir "core/Koshucode/Baala/Core/Section"
-|-- FILE  /code 38   /comment 14   /file "Read.hs"        /dir "core/Koshucode/Baala/Core/Section"
+|-- FILE  /code 37   /comment 14   /file "Read.hs"        /dir "core/Koshucode/Baala/Core/Section"
 |-- FILE  /code 54   /comment 10   /file "Run.hs"         /dir "core/Koshucode/Baala/Core/Section"
 |-- FILE  /code 161  /comment 87   /file "Section.hs"     /dir "core/Koshucode/Baala/Core/Section"
 
-|-- FILE-TOTAL  /code 2733  /comment 1638
+|-- FILE-TOTAL  /code 2732  /comment 1638
