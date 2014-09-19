@@ -35,12 +35,13 @@ import qualified Koshucode.Baala.Op.Message    as Message
 -- 
 ropsMeta :: (C.CContent c) => [C.Rop c]
 ropsMeta = Op.ropList "meta"
-    --         CONSTRUCTOR       USAGE                ATTRIBUTE
-    [ Op.ropV  consKoshuCop      "koshu-cop /N"       "-name"
-    , Op.ropI  consKoshuCopInfix "koshu-cop-infix /N [-height /N][-dir /N]"
-                                                      "-name | -height -dir"
-    , Op.ropV  consKoshuRop      "koshu-rop /N /N"    "-name | -group -usage"
-    , Op.ropV  consKoshuVersion  "koshu-version /N"   "-term | -version"
+    --          CONSTRUCTOR        USAGE                 ATTRIBUTE
+    [ Op.ropIJ  consKoshuAngleText "koshu-angle-text /N [/N]" "-name -text"
+    , Op.ropV   consKoshuCop       "koshu-cop /N"        "-name"
+    , Op.ropI   consKoshuCopInfix  "koshu-cop-infix /N [-height /N][-dir /N]"
+                                                         "-name | -height -dir"
+    , Op.ropV   consKoshuRop       "koshu-rop /N /N"     "-name | -group -usage"
+    , Op.ropV   consKoshuVersion   "koshu-version /N"    "-term | -version"
     ]
 
 
@@ -157,4 +158,30 @@ apiVersion V.Version { V.versionBranch = ver } =
       (a : b : _)     -> [a, b, 0]
       (a : _)         -> [a, 0, 0]
       (_)             -> [0, 0, 0]
+
+
+-- ----------------------  koshu-angle-text
+
+--  koshu-angle-text /name
+--  koshu-angle-text /name /text
+
+consKoshuAngleText :: (Ord c, C.CText c) => C.RopCons c
+consKoshuAngleText use =
+  do n <- Op.getTerm use "-name"
+     c <- Op.getMaybe Op.getTerm use "-text"
+     Right $ relmapKoshuAngleText use (n, c)
+
+relmapKoshuAngleText :: (Ord c, C.CText c) => C.RopUse c -> (B.TermName, Maybe B.TermName) -> C.Relmap c
+relmapKoshuAngleText use = C.relmapFlow use . relkitKoshuAngleText
+
+relkitKoshuAngleText :: (Ord c, C.CText c) => (B.TermName, Maybe B.TermName) -> Maybe B.Relhead -> B.Ab (C.Relkit c)
+relkitKoshuAngleText (n, Just c) _ = Right kit2 where
+    kit2 = C.relkitConstBody [n, c] $ map assn B.bracketKeywords
+    assn (name, text) = [C.pText $ "<" ++ name ++ ">", C.pText $ text]
+relkitKoshuAngleText (n, Nothing) _ = Right kit2 where
+    kit2 = koshuAngleTextBody [n] assn
+    assn (name, _) = [C.pText $ "<" ++ name ++ ">"]
+
+koshuAngleTextBody :: (Ord c, C.CText c) => [B.TermName] -> ((String, String) -> [c]) -> C.Relkit c
+koshuAngleTextBody he assn = C.relkitConstBody he $ B.sort $ map assn B.bracketKeywords
 
