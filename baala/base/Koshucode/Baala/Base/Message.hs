@@ -1,7 +1,11 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Message
-( adlib,
+( -- * Abortables
+  abToken,
+
+  -- * Base package
+  adlib,
   adlibs,
   extraCloseBracket,
   extraOpenBracket,
@@ -10,11 +14,18 @@ module Koshucode.Baala.Base.Message
   heteroDecimal,
   notNumber,
   (<!!>),
+
+  -- * Tokenizer
+  forbiddenText,
+  unkBracketText,
 ) where
 
-import qualified Koshucode.Baala.Base.Prelude  as B
 import qualified Koshucode.Baala.Base.Abort    as B
+import qualified Koshucode.Baala.Base.Prelude  as B
+import qualified Koshucode.Baala.Base.Text     as B
 
+abToken :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abToken = B.abortable "token"
 
 -- | AD-LIB: reason
 adlib :: String -> B.Ab a
@@ -53,4 +64,12 @@ notFound = Left . B.abortLine "Not found"
     loop [] = notFound key
     loop ((k,v) : kvs) | k == key  = Right v
                        | otherwise = loop kvs
+
+-- | Forbidden text
+forbiddenText :: String -> B.Ab a
+forbiddenText = Left . B.abortLine "Forbidden text"
+
+-- | Unknown bracket
+unkBracketText :: String -> B.Ab a
+unkBracketText = Left . B.abortLine "Unknown bracket text"
 

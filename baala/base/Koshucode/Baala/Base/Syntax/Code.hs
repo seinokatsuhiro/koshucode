@@ -25,6 +25,7 @@ import qualified Koshucode.Baala.Base.Abort       as B
 import qualified Koshucode.Baala.Base.Prelude     as B
 import qualified Koshucode.Baala.Base.Text        as B
 import qualified Koshucode.Baala.Base.Syntax.Line as B
+import qualified Koshucode.Baala.Base.Message     as Message
 
 
 
@@ -90,23 +91,35 @@ codeRollUp f res = loop (CodeRoll f cp "" []) . B.linesCrlfNumbered where
     cp    = B.codeZero { B.codeResource = res }
 
     loop _ [] = Right []
-    loop roll ((num, line) : ls) =
-        do let cp' = cp { B.codeLineNumber = num
-                        , B.codeLineText   = line }
-           roll' <- codeRoll roll { codeInputPt = cp'
-                                  , codeInput   = line
-                                  , codeOutput  = [] }
-           let toks = reverse $ codeOutput roll'
-           ls' <- loop roll' ls
-           Right $ CodeLine num line toks : ls'
+    loop r ((num, line) : ls) =
+       do let cp' = setLine num line cp
+          r' <- Message.abToken [cp'] $ codeRoll $ setRoll cp' line r
+          let toks = reverse $ codeOutput r'
+          ls' <- loop r' ls
+          Right $ CodeLine num line toks : ls'
 
 codeRoll :: B.AbMap (CodeRoll a)
 codeRoll r@CodeRoll { codeMap = f, codeInputPt = cp, codeInput = input }
     | null input = Right r
-    | otherwise  = codeRoll =<< f r { codeInputPt = cp { B.codeText = input }}
+    | otherwise  = codeRoll =<< f r { codeInputPt = setText input cp }
 
 codeUpdate :: String -> a -> B.Map (CodeRoll a)
 codeUpdate cs tok r = r { codeInput = cs, codeOutput = tok : codeOutput r }
 
 codeChange :: B.AbMap (CodeRoll a) -> B.Map (CodeRoll a)
 codeChange f r = r { codeMap = f }
+
+setLine :: Int -> String -> B.Map B.CodePt
+setLine num line cp =
+    cp { B.codeLineNumber = num
+       , B.codeLineText   = line
+       , B.codeText       = line }
+
+setText :: String -> B.Map B.CodePt
+setText text cp = cp { B.codeText = text }
+
+setRoll :: B.CodePt -> String -> CodeRoll a -> CodeRoll a
+setRoll cp line r = r { codeInputPt = cp
+                      , codeInput   = line
+                      , codeOutput  = [] }
+

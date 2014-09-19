@@ -31,6 +31,7 @@ import qualified Koshucode.Baala.Base.Text           as B
 import qualified Koshucode.Baala.Base.Token.Bracket  as B
 import qualified Koshucode.Baala.Base.Token.Short    as B
 import qualified Koshucode.Baala.Base.Token.Token    as B
+import qualified Koshucode.Baala.Base.Message        as Message
 
 
 
@@ -59,6 +60,7 @@ general r@B.CodeRoll { B.codeInputPt = cp
     v (cs, tok) = u cs tok
     u   cs tok  = Right $ B.codeUpdate cs tok r
     int cs tok  = Right $ B.codeChange interp $ B.codeUpdate cs tok r
+    ab          = Message.abToken [cp]
 
     gen ""                           =  Right r
     gen (c:'|':cs) | isOpen c        =  u cs            $ B.TOpen    cp [c, '|']
@@ -78,7 +80,7 @@ general r@B.CodeRoll { B.codeInputPt = cp
                    | isShort c       =  short cs [c]
                    | isCode c        =  v               $ scanCode   cp (c:cs)
                    | isSpace c       =  v               $ scanSpace  cp cs
-                   | otherwise       =  u     cs        $ B.TUnknown cp [c]
+                   | otherwise       =  ab              $ Message.forbiddenText $ B.shortEmpty [c]
 
     ast (c:cs) w   | w == "****"     =  u   (c:cs)      $ B.TText    cp 0 w
                    | c == '*'        =  ast cs $ c:w
@@ -90,13 +92,13 @@ general r@B.CodeRoll { B.codeInputPt = cp
     bra cs w       | w == "<"        =  angle cs ""
                    | w == "<<"       =  u     cs        $ B.TOpen    cp w
                    | w == "<<<"      =  int   cs        $ B.TOpen    cp w
-                   | otherwise       =  u     cs        $ B.TUnknown cp w
+                   | otherwise       =  ab              $ Message.unkBracketText w
 
     cket (c:cs) w  | c == '>'        =  cket cs $ c:w
     cket cs w      | w == ">"        =  v               $ scanCode   cp ('>':cs)
                    | w == ">>"       =  u    cs         $ B.TClose   cp w
                    | w == ">>>"      =  u    cs         $ B.TClose   cp w
-                   | otherwise       =  u    cs         $ B.TUnknown cp w
+                   | otherwise       =  ab              $ Message.unkBracketText w
 
     slot (c:cs) n  | c == '@'        =  slot cs $ n + 1
                    | c == '\''       =  v               $ scanSlot 0 cp cs  -- positional
@@ -117,8 +119,7 @@ general r@B.CodeRoll { B.codeInputPt = cp
                                         in u cs'        $ B.TText cp 0 w
                  | w == "|" &&
                    isClose c         =  u cs            $ B.TClose   cp ['|', c]
-                 | w == "|"          =  u (c:cs)        $ B.TText    cp 0 w
-                 | otherwise         =  u (c:cs)        $ B.TUnknown cp w
+                 | otherwise         =  u (c:cs)        $ B.TText    cp 0 w
 
     angle (c:cs) w | c == '>'        =  angleToken cs $ rv w
                    | isCode c        =  angle cs $ c:w
