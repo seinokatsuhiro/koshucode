@@ -28,7 +28,7 @@ import qualified Koshucode.Baala.Base.Abort          as B
 import qualified Koshucode.Baala.Base.Prelude        as B
 import qualified Koshucode.Baala.Base.Syntax         as B
 import qualified Koshucode.Baala.Base.Text           as B
-import qualified Koshucode.Baala.Base.Token.Bracket  as B
+import qualified Koshucode.Baala.Base.Token.AngleText  as B
 import qualified Koshucode.Baala.Base.Token.Short    as B
 import qualified Koshucode.Baala.Base.Token.Token    as B
 import qualified Koshucode.Baala.Base.Message        as Message
@@ -92,13 +92,13 @@ general r@B.CodeRoll { B.codeInputPt = cp
     bra cs w       | w == "<"        =  ang  cs ""
                    | w == "<<"       =  u    cs         $ B.TOpen    cp w
                    | w == "<<<"      =  int  cs         $ B.TOpen    cp w
-                   | otherwise       =  Message.unkBracketText w
+                   | otherwise       =  Message.unkAngleText w
 
     cket (c:cs) w  | c == '>'        =  cket cs         $ c:w
     cket cs w      | w == ">"        =  v               $ scanCode   cp ('>':cs)
                    | w == ">>"       =  u    cs         $ B.TClose   cp w
                    | w == ">>>"      =  u    cs         $ B.TClose   cp w
-                   | otherwise       =  Message.unkBracketText w
+                   | otherwise       =  Message.unkAngleText w
 
     slot (c:cs) n  | c == '@'        =  slot cs         $ n + 1
                    | c == '\''       =  v               $ scanSlot 0 cp cs  -- positional
@@ -130,7 +130,7 @@ general r@B.CodeRoll { B.codeInputPt = cp
                              Just ns  ->  B.TText cp 3 $ map Char.chr ns
                              Nothing  ->  B.TText cp (-1) s
     angle ""            =                 B.TText cp 0 "<>"
-    angle s             =  case lookup s B.bracketKeywords of
+    angle s             =  case lookup s B.angleTexts of
                              Just w   ->  B.TText cp 3 w
                              Nothing  ->  B.TText cp (-1) s
 

@@ -18,7 +18,7 @@ module Koshucode.Baala.Base.Message
   -- * Tokenizer
   forbiddenInput,
   forbiddenTerm,
-  unkBracketText,
+  unkAngleText,
   quotNotEnd,
 ) where
 
@@ -76,8 +76,8 @@ forbiddenTerm :: B.Ab a
 forbiddenTerm = Left $ B.abortBecause "Forbidden term name"
 
 -- | Unknown bracket text
-unkBracketText :: String -> B.Ab a
-unkBracketText = Left . B.abortLine "Unknown bracket text"
+unkAngleText :: String -> B.Ab a
+unkAngleText = Left . B.abortLine "Unknown bracket text"
 
 -- | Quotation not end in line
 quotNotEnd :: B.Ab a

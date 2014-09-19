@@ -13,10 +13,10 @@ module Koshucode.Baala.Base.Token.Short
   isCodeText, isCodeChar,
 ) where
 
-import qualified Data.List                            as L
-import qualified Koshucode.Baala.Base.Prelude         as B
-import qualified Koshucode.Baala.Base.Text            as B
-import qualified Koshucode.Baala.Base.Token.Bracket   as B
+import qualified Data.List                             as L
+import qualified Koshucode.Baala.Base.Prelude          as B
+import qualified Koshucode.Baala.Base.Text             as B
+import qualified Koshucode.Baala.Base.Token.AngleText  as B
 
 
 -- ----------------------  Data type
@@ -56,7 +56,7 @@ shortText = loop . reverse . B.sortWith len where
     len = length . snd
     loop [] s | null s         =  "\"\""
               | isCodeText s   =  '\'' : s
-              | otherwise      =  B.bracketQuote s
+              | otherwise      =  B.angleQuote s
 
     loop ((prefix, replace) : sh) s =
         case L.stripPrefix replace s of
@@ -64,7 +64,7 @@ shortText = loop . reverse . B.sortWith len where
           _                   ->  loop sh s
 
     text2 s   | isCodeText s   =  s
-              | otherwise      =  B.bracketQuote s
+              | otherwise      =  B.angleQuote s
 
 isCodeText :: B.Pred String
 isCodeText = all isCodeChar

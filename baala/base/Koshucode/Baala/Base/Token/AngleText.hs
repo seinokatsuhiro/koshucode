@@ -1,15 +1,15 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Keywords enclosed in angle brackets.
+-- | Text enclosed in angle brackets.
 
-module Koshucode.Baala.Base.Token.Bracket
+module Koshucode.Baala.Base.Token.AngleText
 ( 
   -- ** Functions
-  bracketQuote,
-  bracketKeywords,
+  angleQuote,
+  angleTexts,
 
   -- ** Examples
-  -- $Bracket
+  -- $Angle
 
   -- ** Keyword table
   -- $Table
@@ -19,31 +19,31 @@ import qualified Data.Char                    as Ch
 import qualified Koshucode.Baala.Base.Prelude as B
 import qualified Koshucode.Baala.Base.Text    as B
 
--- $Bracket
+-- $Angle
 --
 --  Simple word.
 --
---    >>> putStrLn $ bracketQuote "aaa"
+--    >>> putStrLn $ angleQuote "aaa"
 --    "aaa"
 --
 --  Text contains line feed.
 --
---    >>> putStrLn $ bracketQuote "aaa\nbbb"
+--    >>> putStrLn $ angleQuote "aaa\nbbb"
 --    "aaa" #lf "bbb"
 --
 --  Lookup keyword table.
 --
---    >>> lookup "lf" bracketKeywords
+--    >>> lookup "lf" angleTexts
 --    Just "\n"
 --
 
--- | Convert string into double-quoted and bracket-quoted form.
+-- | Convert string into double-quoted and angle-quoted form.
 
-bracketQuote :: B.Map String
-bracketQuote = open . loop where
+angleQuote :: B.Map String
+angleQuote = open . loop where
     loop "" = "\""
     loop ccs@(c : cs) =
-        case bracketSplit ccs of
+        case angleSplit ccs of
           Nothing       -> c : loop cs
           Just (w, cs2) -> "\" " ++ w ++ sp (open $ loop cs2)
 
@@ -56,15 +56,15 @@ bracketQuote = open . loop where
     trim (' ' : cs) = trim cs
     trim cs         = cs
 
---  >>> bracketSplit "abc"
+--  >>> angleSplit "abc"
 --  Nothing
 --
---  >>> bracketSplit "\nabc"
+--  >>> angleSplit "\nabc"
 --  Just ("<lf>", "abc")
 
-bracketSplit :: String -> Maybe (String, String)
-bracketSplit [] = Nothing
-bracketSplit (c : cs)
+angleSplit :: String -> Maybe (String, String)
+angleSplit [] = Nothing
+angleSplit (c : cs)
     = case B.generalCategoryGroup c of
         B.UnicodePunctuation -> punct c
         B.UnicodeOther       -> other c
@@ -85,11 +85,11 @@ bracketSplit (c : cs)
 
         code                 =  Ch.ord c
 
--- | Table of coresspondences of bracket keyword and its text.
+-- | Table of coresspondences of angle text and its replacement.
 
-bracketKeywords :: [(String, String)]
-bracketKeywords =
-    --  KEYWORD   REPLACEMENT
+angleTexts :: [(String, String)]
+angleTexts =
+    --  NAME         REPLACEMENT
     [ o "cr"         "\r"
     , o "crlf"       "\r\n"
     , o "lf"         "\n"
@@ -106,7 +106,7 @@ bracketKeywords =
 -- $Table
 --
 --  Some text literals are written
---  using the following bracket keywords.
+--  using the following angle text.
 --
 --  [@\<cr\>@]      Carriage return
 --

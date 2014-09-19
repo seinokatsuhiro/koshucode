@@ -176,12 +176,12 @@ relmapKoshuAngleText use = C.relmapFlow use . relkitKoshuAngleText
 
 relkitKoshuAngleText :: (Ord c, C.CText c) => (B.TermName, Maybe B.TermName) -> Maybe B.Relhead -> B.Ab (C.Relkit c)
 relkitKoshuAngleText (n, Just c) _ = Right kit2 where
-    kit2 = C.relkitConstBody [n, c] $ map assn B.bracketKeywords
+    kit2 = koshuAngleTextBody [n, c] assn
     assn (name, text) = [C.pText $ "<" ++ name ++ ">", C.pText $ text]
 relkitKoshuAngleText (n, Nothing) _ = Right kit2 where
     kit2 = koshuAngleTextBody [n] assn
-    assn (name, _) = [C.pText $ "<" ++ name ++ ">"]
+    assn (name, _)    = [C.pText $ "<" ++ name ++ ">"]
 
 koshuAngleTextBody :: (Ord c, C.CText c) => [B.TermName] -> ((String, String) -> [c]) -> C.Relkit c
-koshuAngleTextBody he assn = C.relkitConstBody he $ B.sort $ map assn B.bracketKeywords
+koshuAngleTextBody he assn = C.relkitConstBody he $ B.sort $ map assn B.angleTexts
 
