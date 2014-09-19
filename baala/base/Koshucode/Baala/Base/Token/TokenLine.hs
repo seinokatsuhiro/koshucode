@@ -82,16 +82,16 @@ general r@B.CodeRoll { B.codeInputPt = cp
                    | isSpace c       =  v               $ scanSpace  cp cs
                    | otherwise       =  Message.forbiddenInput $ B.shortEmpty [c]
 
-    ast (c:cs) w   | w == "****"     =  u   (c:cs)      $ B.TText    cp 0 w
-                   | c == '*'        =  ast cs          $ c:w
-    ast cs w       | w == "**"       =  u   ""          $ B.TComment cp cs
-                   | w == "***"      =  u   ""          $ B.TComment cp cs
-                   | otherwise       =  u   cs          $ B.TText    cp 0 w
+    ast (c:cs) w   | w == "****"     =  u    (c:cs)     $ B.TText    cp 0 w
+                   | c == '*'        =  ast  cs         $ c:w
+    ast cs w       | w == "**"       =  u    ""         $ B.TComment cp cs
+                   | w == "***"      =  u    ""         $ B.TComment cp cs
+                   | otherwise       =  u    cs         $ B.TText    cp 0 w
 
-    bra (c:cs) w   | c == '<'        =  bra   cs        $ c:w
-    bra cs w       | w == "<"        =  angle cs ""
-                   | w == "<<"       =  u     cs        $ B.TOpen    cp w
-                   | w == "<<<"      =  int   cs        $ B.TOpen    cp w
+    bra (c:cs) w   | c == '<'        =  bra  cs         $ c:w
+    bra cs w       | w == "<"        =  ang  cs ""
+                   | w == "<<"       =  u    cs         $ B.TOpen    cp w
+                   | w == "<<<"      =  int  cs         $ B.TOpen    cp w
                    | otherwise       =  Message.unkBracketText w
 
     cket (c:cs) w  | c == '>'        =  cket cs         $ c:w
@@ -108,31 +108,34 @@ general r@B.CodeRoll { B.codeInputPt = cp
     hash cs w                        =  u cs            $ B.TText    cp 0 w
 
     short (c:cs) w   | c == '.'      =  let pre = rv w
-                                            (cs', body) = nextCode cs
-                                        in u cs'        $ B.TShort cp pre body
+                                            (cs', body) = nextCode   cs
+                                        in u cs'        $ B.TShort   cp pre body
                      | isCode c      =  short cs        $ c:w
-    short cs w                       =  u cs            $ B.TText cp 0 $ rv w
+    short cs w                       =  u cs            $ B.TText    cp 0 $ rv w
 
-    bar [] w                         =  u ""            $ B.TText cp 0 w
+    bar [] w                         =  u ""            $ B.TText    cp 0 w
     bar (c:cs) w | c == '|'          =  bar cs          $ c:w
                  | w == "||"         =  let cs' = B.trimLeft (c:cs)
-                                        in u cs'        $ B.TText cp 0 w
+                                        in u cs'        $ B.TText    cp 0 w
                  | w == "|" &&
                    isClose c         =  u cs            $ B.TClose   cp ['|', c]
                  | otherwise         =  u (c:cs)        $ B.TText    cp 0 w
 
-    angle (c:cs) w | c == '>'        =  angleToken cs   $ rv w
-                   | isCode c        =  angle cs        $ c:w
-    angle cs w                       =  u cs            $ B.TText cp 0 $ '<' : rv w
+    ang (c:cs) w | c == '>'          =  u     cs        $ angle $ rv w
+                 | isCode c          =  ang   cs        $ c:w
+    ang cs w                         =  u     cs        $ B.TText    cp 0 $ '<' : rv w
 
-    angleToken cs ('c' : char)
-        | all isFigure char  = case mapM B.readInt $ B.omit null $ B.divide '-' char of
-                                 Just ns  ->  u cs $ B.TText cp 3 $ map Char.chr ns
-                                 Nothing  ->  u cs $ B.TText cp (-1) char
-    angleToken cs ""         =                u cs $ B.TText cp 0 "<>"
-    angleToken cs key        = case lookup key B.bracketKeywords of
-                                 Just w   ->  u cs $ B.TText cp 3 w
-                                 Nothing  ->  u cs $ B.TText cp (-1) key
+    angle ('c' : s)
+        | isCharCode s  =  case charCodes s of
+                             Just ns  ->  B.TText cp 3 $ map Char.chr ns
+                             Nothing  ->  B.TText cp (-1) s
+    angle ""            =                 B.TText cp 0 "<>"
+    angle s             =  case lookup s B.bracketKeywords of
+                             Just w   ->  B.TText cp 3 w
+                             Nothing  ->  B.TText cp (-1) s
+
+charCodes :: String -> Maybe [Int]
+charCodes = mapM B.readInt . B.omit null . B.divide '-'
 
 interp :: B.AbMap TokenRoll
 interp r@B.CodeRoll { B.codeInputPt = cp
@@ -236,6 +239,9 @@ isShortPrefix = all isShort
 
 isShort :: B.Pred Char
 isShort = Char.isAlpha
+
+isCharCode :: B.Pred String
+isCharCode = all isFigure
 
 isFigure :: B.Pred Char
 isFigure '-' = True

@@ -90,13 +90,17 @@ bracketSplit (c : cs)
 bracketKeywords :: [(String, String)]
 bracketKeywords =
     --  KEYWORD   REPLACEMENT
-    [ o "cr"      "\r"
-    , o "crlf"    "\r\n"
-    , o "lf"      "\n"
-    , o "q"       "'"
-    , o "qq"      "\""
-    , o "sp"      " "
-    , o "tab"     "\t"
+    [ o "cr"         "\r"
+    , o "crlf"       "\r\n"
+    , o "lf"         "\n"
+    , o "q"          "'"
+    , o "qq"         "\""
+    , o "sp"         " "
+    , o "tab"        "\t"
+    , o "dot"        "."
+    , o "comma"      ","
+    , o "colon"      ":"
+    , o "semicolon"  ";"
     ] where o = (,)
 
 -- $Table
