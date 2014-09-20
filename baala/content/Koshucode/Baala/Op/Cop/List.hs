@@ -45,6 +45,7 @@ copsList =
     , C.CopCalc  (C.copNormal "char")          copChar
     , C.CopCalc  (C.copNormal "char-group")    copCharGroup
     , C.CopCalc  (C.copNormal "char-group-1")  copCharGroup1
+    , C.CopCalc  (C.copNormal "code-list")     copCodeList
     , C.CopCalc  (C.copNormal "intersect")     copIntersect
     , C.CopCalc  (C.copNormal "length")        copLength
     , C.CopCalc  (C.copNormal "list")          copList
@@ -207,16 +208,34 @@ copCoxIn _       = Message.adlib "require operand"
 
 -- ----------------------  text
 
+contMapTextToList :: (C.CList c, C.CText c) => (Char -> c) -> c -> B.Ab c
+contMapTextToList = C.contMap C.gText C.putList
+
+-- char 70 => "F"
 copChar :: (C.CContent c) => C.CopCalc c
 copChar = op where
     op [Right c] | C.isDec c = C.putText [Char.chr $ B.decimalNum $ C.gDec c]
     op xs = typeUnmatch xs
 
-copCharGroup :: (C.CContent c) => C.CopCalc c
-copCharGroup = op where
-    op [Right t] | C.isText t = C.putList $ map (C.pText . charGroup) $ C.gText t
+-- code-list "abc" => [ 97 : 98 : 99 ]
+copCodeList :: (C.CContent c) => C.CopCalc c
+copCodeList = op where
+    op [Right t] | C.isText t = contMapTextToList contOrd t
     op xs = typeUnmatch xs
 
+    contOrd :: (C.CDec c) => Char -> c
+    contOrd = C.pDecFromInt . Char.ord
+
+-- char-group "a!" => [ 'letter : 'punct ]
+copCharGroup :: (C.CContent c) => C.CopCalc c
+copCharGroup = op where
+    op [Right t] | C.isText t = contMapTextToList contGroup t
+    op xs = typeUnmatch xs
+
+    contGroup :: (C.CText c) => Char -> c
+    contGroup = C.pText . charGroup
+
+-- char-group-1 "a!" => 'letter
 copCharGroup1 :: (C.CContent c) => C.CopCalc c
 copCharGroup1 = op where
     op [Right t] | C.isText t = case C.gText t of
@@ -230,6 +249,7 @@ charGroup = B.generalCategoryName . B.generalCategoryGroup
 
 -- ----------------------  term-set
 
+-- term-set <<< aaa /x bbb /y ccc => { '/x : '/y }
 copTermSet :: (C.CContent c) => C.CopCalc c
 copTermSet [Right c] | C.isInterp c = C.putSet ts where
                      ts = map C.pTerm $ B.interpTerms $ C.gInterp c

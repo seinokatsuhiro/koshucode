@@ -18,6 +18,8 @@ module Koshucode.Baala.Core.Content.Class
   CAssn       (..),
   CRel        (..), isMember,
   CInterp     (..),
+
+  contMap,
 ) where
 
 import qualified Koshucode.Baala.Base         as B
@@ -175,4 +177,7 @@ isMember :: (Eq c, CSet c, CList c) => c -> c -> Bool
 isMember x xs | isSet xs  = x `elem` gSet xs
 isMember x xs | isList xs = x `elem` gList xs
 isMember _ _ = False
+
+contMap :: (c -> [a]) -> ([b] -> d) -> (a -> b) -> c -> d
+contMap get put f = put . map f . get
 
