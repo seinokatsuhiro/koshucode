@@ -7,8 +7,8 @@ module Koshucode.Baala.Op.Builtin.Term
   termNamePairs,
 ) where
 
-import qualified Koshucode.Baala.Base         as B
-import qualified Koshucode.Baala.Core.Message as Message
+import qualified Koshucode.Baala.Base       as B
+import qualified Koshucode.Baala.Op.Message as Message
 
 -- | Extract a term name.
 termName :: B.TokenTree -> B.Ab B.TermName
