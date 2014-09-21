@@ -19,7 +19,9 @@ module Koshucode.Baala.Core.Content.Class
   CRel        (..), isMember,
   CInterp     (..),
 
-  contMap,
+  contAp, contMap,
+  contApTextToText,
+  contMapTextToList,
 ) where
 
 import qualified Koshucode.Baala.Base         as B
@@ -178,6 +180,14 @@ isMember x xs | isSet xs  = x `elem` gSet xs
 isMember x xs | isList xs = x `elem` gList xs
 isMember _ _ = False
 
-contMap :: (c -> [a]) -> ([b] -> d) -> (a -> b) -> c -> d
-contMap get put f = put . map f . get
+contAp :: (c -> a) -> (b -> d) -> (a -> b) -> c -> d
+contAp get put f = put . f . get
 
+contMap :: (c -> [a]) -> ([b] -> d) -> (a -> b) -> c -> d
+contMap get put f = contAp get put $ map f
+
+contApTextToText :: (CText c) => B.Map String -> B.AbMap c
+contApTextToText = contAp gText putText
+
+contMapTextToList :: (CList c, CText c) => (Char -> c) -> B.AbMap c
+contMapTextToList = contMap gText putList

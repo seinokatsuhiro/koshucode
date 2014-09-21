@@ -42,10 +42,12 @@ copsList =
     [ C.CopCalc  (C.copInfix "++")             copAppend
     , C.CopCalc  (C.copInfix "intersect")      copIntersect
     , C.CopCalc  (C.copNormal "++")            copAppend
+    , C.CopCalc  (C.copNormal "base-part")     copBasePart
     , C.CopCalc  (C.copNormal "char")          copChar
     , C.CopCalc  (C.copNormal "char-group")    copCharGroup
     , C.CopCalc  (C.copNormal "char-group-1")  copCharGroup1
     , C.CopCalc  (C.copNormal "code-list")     copCodeList
+    , C.CopCalc  (C.copNormal "dir-part")      copDirPart
     , C.CopCalc  (C.copNormal "intersect")     copIntersect
     , C.CopCalc  (C.copNormal "length")        copLength
     , C.CopCalc  (C.copNormal "list")          copList
@@ -208,9 +210,6 @@ copCoxIn _       = Message.adlib "require operand"
 
 -- ----------------------  text
 
-contMapTextToList :: (C.CList c, C.CText c) => (Char -> c) -> c -> B.Ab c
-contMapTextToList = C.contMap C.gText C.putList
-
 -- char 70 => "F"
 copChar :: (C.CContent c) => C.CopCalc c
 copChar = op where
@@ -220,7 +219,7 @@ copChar = op where
 -- code-list "abc" => [ 97 : 98 : 99 ]
 copCodeList :: (C.CContent c) => C.CopCalc c
 copCodeList = op where
-    op [Right t] | C.isText t = contMapTextToList contOrd t
+    op [Right t] | C.isText t = C.contMapTextToList contOrd t
     op xs = typeUnmatch xs
 
     contOrd :: (C.CDec c) => Char -> c
@@ -229,7 +228,7 @@ copCodeList = op where
 -- char-group "a!" => [ 'letter : 'punct ]
 copCharGroup :: (C.CContent c) => C.CopCalc c
 copCharGroup = op where
-    op [Right t] | C.isText t = contMapTextToList contGroup t
+    op [Right t] | C.isText t = C.contMapTextToList contGroup t
     op xs = typeUnmatch xs
 
     contGroup :: (C.CText c) => Char -> c
@@ -245,6 +244,30 @@ copCharGroup1 = op where
 
 charGroup :: Char -> String
 charGroup = B.generalCategoryName . B.generalCategoryGroup
+
+
+-- ----------------------  base-part / dir-part
+
+-- dir-part "/" "aa/bb/cc.k" => "aa/bb"
+copDirPart :: (C.CContent c) => C.CopCalc c
+copDirPart = copDirBasePart fst
+
+-- base-part "/" "aa/bb/cc.k" => "aa/bb"
+copBasePart :: (C.CContent c) => C.CopCalc c
+copBasePart = copDirBasePart snd
+
+copDirBasePart :: (C.CContent c) => ((String, String) -> String) -> C.CopCalc c
+copDirBasePart part = op where
+    op [Right sep, Right t]
+        | C.isText sep && C.isText t =
+            C.contApTextToText (part . dirBasePart (head $ C.gText sep)) t
+    op xs = typeUnmatch xs
+
+dirBasePart :: Char -> String -> (String, String)
+dirBasePart sep s =
+    case reverse $ B.divide sep s of
+      (base : dir) -> (B.intercalate [sep] $ reverse dir, base)
+      []           -> ("", "")
 
 
 -- ----------------------  term-set
