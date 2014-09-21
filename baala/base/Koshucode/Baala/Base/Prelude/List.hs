@@ -2,6 +2,7 @@
 
 module Koshucode.Baala.Base.Prelude.List
 ( front,
+  tails,
   omit, duplicates,
   unique, unionUp,
   li1, li2, li3,
@@ -23,6 +24,11 @@ import qualified Koshucode.Baala.Base.Prelude.Class as B
 front :: [a] -> [a]
 front [] = []
 front (x : _) = [x]
+
+tails :: [a] -> [[a]]
+tails = loop where
+    loop [] = []
+    loop xxs@(_:xs) = xxs : loop xs
 
 omit :: (a -> Bool) -> [a] -> [a]
 omit f = filter $ not . f

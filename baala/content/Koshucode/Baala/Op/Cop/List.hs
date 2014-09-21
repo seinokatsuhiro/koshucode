@@ -54,6 +54,7 @@ copsList =
     , C.CopCalc  (C.copNormal "max")           copMax
     , C.CopCalc  (C.copNormal "min")           copMin
     , C.CopCalc  (C.copNormal "minus")         copMinus
+    , C.CopCalc  (C.copNormal "part")          copPart
     , C.CopCalc  (C.copNormal "push")          copPush
     , C.CopCalc  (C.copNormal "reverse")       copReverse
     , C.CopCalc  (C.copNormal "total")         copTotal
@@ -268,6 +269,20 @@ dirBasePart sep s =
     case reverse $ B.divide sep s of
       (base : dir) -> (B.intercalate [sep] $ reverse dir, base)
       []           -> ("", "")
+
+
+-- ----------------------  part
+
+-- part "bc" "abcde" => <1>
+copPart :: (C.CContent c) => C.CopCalc c
+copPart = op where
+    op [Right part, Right whole]
+        | C.isText part && C.isText whole =
+            let p  = C.gText part
+                w  = C.gText whole
+                ws = B.tails w
+            in C.putBool $ List.isPrefixOf p `any` ws
+    op xs = typeUnmatch xs
 
 
 -- ----------------------  term-set
