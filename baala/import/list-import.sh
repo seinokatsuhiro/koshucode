@@ -45,7 +45,7 @@ imp_post () {
 
 imp_main () {
     for pkg in base core operator content calculator toolkit; do
-        imp_body $pkg
+        imp_body ../$pkg
     done
 }
 
