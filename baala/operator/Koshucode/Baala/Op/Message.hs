@@ -17,6 +17,7 @@ module Koshucode.Baala.Op.Message
   reqBool,
   reqRel,
   reqCollection,
+  reqInterp,
   reqNewTerm,
   reqUnaryFn,
   unexpTermName,
@@ -84,6 +85,10 @@ reqRel = Left $ B.abortBecause "Require relation"
 -- | Require collection type
 reqCollection :: B.Ab a
 reqCollection = Left $ B.abortBecause "Require collection type"
+
+-- | Require data interpretation
+reqInterp :: B.Ab a
+reqInterp = Left $ B.abortBecause "Require data interpretation"
 
 -- | Require new term names
 reqNewTerm :: [B.TermName] -> B.Relhead -> B.Ab a

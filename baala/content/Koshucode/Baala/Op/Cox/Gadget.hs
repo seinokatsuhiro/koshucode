@@ -29,6 +29,7 @@ ropsCoxGadget :: (C.CContent c) => [C.Rop c]
 ropsCoxGadget = Op.ropList "cox-gadget"
     --         CONSTRUCTOR   USAGE                      ATTRIBUTE
     [ Op.ropI  consConst     "const R"                  "-lit"
+    , Op.ropI  consInterp    "interp E"                 "-interp"
     , Op.ropI  consNumber    "number /N -order /N ..."  "-term | -order -from"
     , Op.ropI  consRank      "rank /N -order /N ..."    "-term | -order -from -dense"
     , Op.ropII consRepeat    "repeat N R"               "-count -relmap/"
@@ -61,6 +62,30 @@ relkitConst :: B.Rel c -> C.RelkitFlow c
 relkitConst _ Nothing = Right C.relkitNothing
 relkitConst (B.Rel he bo) _ = Right kit2 where
     kit2 = C.relkitJust he $ C.RelkitConst bo
+
+
+-- ----------------------  interp
+
+consInterp :: (C.CContent c) => C.RopCons c
+consInterp use =
+    do c <- Op.getContent use "-interp"
+       case C.isInterp c of
+         True  -> Right $ relmapInterp use $ C.gInterp c
+         False -> Msg.reqInterp
+
+relmapInterp :: (C.CContent c) => C.RopUse c -> B.Interp -> C.Relmap c
+relmapInterp use = C.relmapFlow use . relkitInterp
+
+relkitInterp :: (C.CContent c) => B.Interp -> C.RelkitFlow c
+relkitInterp _ Nothing = Right C.relkitNothing
+relkitInterp interp (Just he1)
+    | interpMatch interp he1 = Right $ C.relkitJust he1 C.RelkitId
+    | otherwise              = Msg.unkTerm (B.interpTerms interp) he1
+
+interpMatch :: B.Interp -> B.Relhead -> Bool
+interpMatch interp he = ns1 == ns2 where
+    ns1 = B.sort $ B.interpTerms interp
+    ns2 = B.sort $ B.headNames he
 
 
 -- ----------------------  number
