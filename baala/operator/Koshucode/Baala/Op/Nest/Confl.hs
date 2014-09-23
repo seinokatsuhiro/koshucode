@@ -26,8 +26,9 @@ module Koshucode.Baala.Op.Nest.Confl
   -- * slice-up
   consSliceUp, relmapSliceUp, relkitSliceUp,
 
-  -- * nest
-  consNest, relmapNest,
+  -- * nest / hang
+  consHang, consNest, relmapNest,
+  -- $Nest
 
   -- * unnest
   consUnnest, relmapUnnest,
@@ -222,12 +223,17 @@ relkitSliceUp (C.Relkit (Just he2) kitb2) _ = Right kit3 where
 relkitSliceUp _ _ = Right C.relkitNothing
 
 
--- ----------------------  nest
+-- ----------------------  nest / hang
 
 -- $Nest
 --
---  > nest /y /z -to /g
---  > group-by /g ( cut /y /z ) | for /g ( pick /y /z )
+--  Make nested relation @\/g@ that has term @\/y@ and @\/z@.
+--
+--    > nest /y /z -to /g
+--
+--  Hang nested relation @\/g@ on term @\/x@.
+--
+--    > hang /g -on /x
 
 consNest :: (Ord c, C.CRel c) => C.RopCons c
 consNest use =
@@ -243,6 +249,12 @@ relmapNest use (co, ns, to) = group `B.mappend` for where
     nest   =  if co then cut  else pick
     pick   =  Op.relmapPick use ns
     cut    =  Op.relmapCut  use ns
+
+consHang :: (Ord c, C.CRel c) => C.RopCons c
+consHang use =
+  do ns <- Op.getTerms use "-on"
+     to <- Op.getTerm  use "-term"
+     Right $ relmapNest use (True, ns, to)
 
 
 -- ----------------------  unnest
