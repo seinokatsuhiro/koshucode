@@ -39,23 +39,27 @@ depRankUpdateAll dr@(DepRank xs _) = foldr depRankUpdate dr xs
 
 -- | Update dependent rank for an element.
 depRankUpdate :: forall a. (Ord a) => a -> B.Map (DepRank a)
-depRankUpdate x0 (DepRank xs m0) = DepRank xs $ loop x0 m0 where
-    loop x m = case Map.lookup x m of
-                 Nothing             ->  Map.insert x zero m
-                 Just ([], Nothing)  ->  Map.update zerof x m
-                 Just (ys, Nothing)  ->  rank x ys $ foldr loop m ys
-                 Just (_,  Just _)   ->  m
+depRankUpdate x0 (DepRank xs m0) = DepRank xs $ loop [] x0 m0 where
+    loop cy x m
+        | x `elem` cy = Map.update neg x m
+        | otherwise   = case Map.lookup x m of
+                          Nothing             ->  Map.insert x zero m
+                          Just ([], Nothing)  ->  Map.update zerof x m
+                          Just (ys, Nothing)  ->  rank x ys $ foldr (loop $ x:cy) m ys
+                          Just (_,  Just _)   ->  m
 
     zero          =  p [] 0
     zerof _       =  Just zero
-    up r (ys, _)  =  Just $ p ys $ r + 1
+    neg  (ys, _)  =  Just $ p ys (-1)
+    up r (ys, _)  =  Just $ p ys (r + 1)
     p ys r        =  (ys, Just r)
 
     rank :: a -> [a] -> B.Map (DepRankMap a)
     rank x ys m = case get m `mapM` ys of
                     Nothing -> m
-                    Just rs -> let ymax = maximum rs
-                               in Map.update (up ymax) x m
+                    Just rs | -1 `elem` rs -> Map.update neg x m
+                            | otherwise -> let ymax = maximum rs
+                                           in Map.update (up ymax) x m
 
     get :: DepRankMap a -> a -> Maybe Int
     get m y     = case Map.lookup y m of
@@ -63,6 +67,6 @@ depRankUpdate x0 (DepRank xs m0) = DepRank xs $ loop x0 m0 where
                     _                -> Nothing
 
 -- dp :: DepRank Int
--- dp = depRankFromPairs [(1,0), (2,1), (3,1), (2,0)]
--- depRankList $ depRankUpdateAll dp
+-- dp = depRankUpdateAll $ depRankFromPairs [(0,1), (1,2), (2,3), (3,0)]
+-- depRankList dp
 
