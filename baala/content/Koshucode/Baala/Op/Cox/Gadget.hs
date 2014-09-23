@@ -29,7 +29,7 @@ ropsCoxGadget :: (C.CContent c) => [C.Rop c]
 ropsCoxGadget = Op.ropList "cox-gadget"
     --         CONSTRUCTOR   USAGE                      ATTRIBUTE
     [ Op.ropI  consConst     "const R"                  "-lit"
-    , Op.ropI  consInterp    "interp E"                 "-interp"
+    , Op.ropI  consInterp    "interp E"                 "-interp | -x"
     , Op.ropI  consNumber    "number /N -order /N ..."  "-term | -order -from"
     , Op.ropI  consRank      "rank /N -order /N ..."    "-term | -order -from -dense"
     , Op.ropII consRepeat    "repeat N R"               "-count -relmap/"
@@ -68,6 +68,13 @@ relkitConst (B.Rel he bo) _ = Right kit2 where
 
 consInterp :: (C.CContent c) => C.RopCons c
 consInterp use =
+    do skip <- Op.getSwitch use "-x"
+       case skip of
+         True  -> Right $ Op.relmapId use
+         False -> consInterp2 use
+
+consInterp2 :: (C.CContent c) => C.RopCons c
+consInterp2 use =
     do c <- Op.getContent use "-interp"
        case C.isInterp c of
          True  -> Right $ relmapInterp use $ C.gInterp c
