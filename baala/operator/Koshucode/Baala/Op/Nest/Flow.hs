@@ -112,8 +112,15 @@ relkitChunk ns ord (Just he1) = Right kit2 where
     he2     = B.Relhead $ map nest ns
     nest n  = B.TermNest n $ B.headTerms he1
     kit2    = C.relkitJust he2 $ C.RelkitFull False f2
-    f2 bo1  = let deg    = length bo1 `B.ceilingRem` length ns
+    f2 bo1  = let deg    = length bo1 `ceilingRem` length ns
                   bo1'   = B.sortByName (map B.Asc ord) ns bo1
                   ch     = B.chunks deg bo1'
                   rels   = (C.pRel . B.Rel he1) `map` ch
               in [rels]
+
+ceilingRem :: (Integral a) => a -> a -> a
+ceilingRem a b =
+    case a `quotRem` b of
+      (q, 0) -> q
+      (q, _) -> q + 1
+
