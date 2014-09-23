@@ -6,6 +6,9 @@ module Koshucode.Baala.Op.Gadget
   -- * contents
   consContents, relmapContents,
 
+  -- * dependent-rank
+  consDepRank, relmapDepRank,
+
   -- * size
   consSize, relmapSize, relkitSize,
   -- $size
@@ -17,6 +20,7 @@ module Koshucode.Baala.Op.Gadget
 import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Core       as C
 import qualified Koshucode.Baala.Op.Builtin as Op
+import qualified Koshucode.Baala.Op.DepRank as Op
 import qualified Koshucode.Baala.Op.Message as Message
 
 
@@ -37,9 +41,10 @@ import qualified Koshucode.Baala.Op.Message as Message
 ropsGadget :: (C.CContent c) => [C.Rop c]
 ropsGadget = Op.ropList "gadget"  -- GROUP
     --         CONSTRUCTOR  USAGE                      ATTRIBUTE
-    [ Op.ropV consContents  "contents /N"              "-term"
-    , Op.ropV consDumpTree  "dump-tree X"              "-tree"
-    , Op.ropI consSize      "size /N"                  "-term"
+    [ Op.ropV  consContents  "contents /N"              "-term"
+    , Op.ropV  consDumpTree  "dump-tree X"              "-tree"
+    , Op.ropII consDepRank   "dependent-rank /P /P -rank /N"  "-x -y | -rank"
+    , Op.ropI  consSize      "size /N"                  "-term"
     ]
 
 
@@ -57,6 +62,33 @@ relkitContents :: (Ord c) => B.TermName -> C.RelkitFlow c
 relkitContents n _ = Right $ C.relkitJust he2 $ C.RelkitFull False kitf where
     he2  = B.headFrom [n]
     kitf = map B.li1 . B.unique . concat
+
+
+-- ----------------------  dependent-rank
+
+--  dependent-rank /x /y -rank /r
+
+consDepRank :: (Ord c, C.CDec c) => C.RopCons c
+consDepRank use =
+    do x <- Op.getTerm use "-x"
+       y <- Op.getTerm use "-y"
+       r <- Op.getTerm use "-rank"
+       Right $ relmapDepRank use (x,y,r)
+
+relmapDepRank :: (Ord c, C.CDec c) => C.RopUse c -> B.TermName3 -> C.Relmap c
+relmapDepRank use = C.relmapFlow use . relkitDepRank
+
+relkitDepRank :: (Ord c, C.CDec c) => B.TermName3 -> C.RelkitFlow c
+relkitDepRank _  Nothing = Right C.relkitNothing
+relkitDepRank (x,y,r) (Just he1) = Right kit2 where
+    he2         =  B.headFrom [x,r]
+    kit2        =  C.relkitJust he2 $ C.RelkitFull False f2
+    ns1         =  B.headNames he1
+    ind         =  [x,y] `B.snipIndex` ns1
+    get cs      =  let [cx,cy] = B.snipFrom ind cs in (cx,cy)
+    f2 bo1      =  map put $ rank $ map get bo1
+    put (cx,i)  =  [cx, C.pDecFromInt i]
+    rank        =  Op.depRankList . Op.depRankUpdateAll . Op.depRankFromPairs
 
 
 -- ----------------------  size

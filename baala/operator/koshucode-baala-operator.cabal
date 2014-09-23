@@ -57,6 +57,7 @@ library
 
         Koshucode.Baala.Op.Check
         Koshucode.Baala.Op.Control
+        Koshucode.Baala.Op.DepRank
         Koshucode.Baala.Op.Gadget
 
         Koshucode.Baala.Op.Lattice

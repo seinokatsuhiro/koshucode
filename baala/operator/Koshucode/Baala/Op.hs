@@ -7,6 +7,7 @@ module Koshucode.Baala.Op
 module Koshucode.Baala.Op.Builtin,
 module Koshucode.Baala.Op.Check,
 module Koshucode.Baala.Op.Control,
+module Koshucode.Baala.Op.DepRank,
 module Koshucode.Baala.Op.Gadget,
 module Koshucode.Baala.Op.Lattice,
 module Koshucode.Baala.Op.Meta,
@@ -19,6 +20,7 @@ module Koshucode.Baala.Op.Term,
 import Koshucode.Baala.Op.Builtin
 import Koshucode.Baala.Op.Check
 import Koshucode.Baala.Op.Control
+import Koshucode.Baala.Op.DepRank
 import Koshucode.Baala.Op.Lattice
 import Koshucode.Baala.Op.Gadget
 import Koshucode.Baala.Op.Meta
