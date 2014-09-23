@@ -26,7 +26,7 @@ import qualified Data.List                  as List
 import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Core       as C
 import qualified Koshucode.Baala.Op.Builtin as Op
-import qualified Koshucode.Baala.Op.Message as Message
+import qualified Koshucode.Baala.Op.Message as Msg
 
 
 -- | Relmap operators for manipulating term names.
@@ -129,7 +129,7 @@ relkitSnip :: B.Snip B.Term -> B.Snip c -> [B.TermName] -> C.RelkitFlow c
 relkitSnip _ _ _ Nothing = Right C.relkitNothing
 relkitSnip heSnip boSnip ns (Just he1)
     | B.sameLength ns ind1 = Right kit2
-    | otherwise = Message.unkTerm non he1
+    | otherwise = Msg.unkTerm non he1
     where
       he2   =  B.headChange (heSnip ind1) he1
       kit2  =  C.relkitJust he2 $ C.RelkitOneToOne True $ boSnip ind1
@@ -164,10 +164,10 @@ relmapMove use = C.relmapFlow use . relkitMove
 relkitMove :: ([B.TermName], [B.TermName]) -> C.RelkitFlow c
 relkitMove _ Nothing = Right C.relkitNothing
 relkitMove (ps, ns) (Just he1)
-    | B.notSameLength ps ns = Message.oddAttr
-    | psDup   /= []         = Message.dupTerm psDup he1
-    | ns2Dup  /= []         = Message.dupTerm ns2Dup he2
-    | psLeft  /= []         = Message.unkTerm psLeft he1
+    | B.notSameLength ps ns = Msg.oddAttr
+    | psDup   /= []         = Msg.dupTerm psDup he1
+    | ns2Dup  /= []         = Msg.dupTerm ns2Dup he2
+    | psLeft  /= []         = Msg.unkTerm psLeft he1
     | otherwise             = Right kit2
     where
       ns1        =  B.headNames he1

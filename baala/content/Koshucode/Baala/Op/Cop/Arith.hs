@@ -10,7 +10,7 @@ module Koshucode.Baala.Op.Cop.Arith
 
 import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Core       as C
-import qualified Koshucode.Baala.Op.Message as Message
+import qualified Koshucode.Baala.Op.Message as Msg
 
 
 
@@ -49,7 +49,7 @@ copsArith =
 copDec :: (Show c, C.CText c, C.CDec c) => B.Ab c -> B.Ab B.Decimal
 copDec (Right c) | C.isDec  c = Right $ C.gDec c
                  | C.isText c = B.litDecimal $ C.gText c
-copDec x = Message.notNumber (show x)
+copDec x = Msg.notNumber (show x)
 
 copPlus :: (C.CText c, C.CDec c) => C.CopCalc c
 copPlus xs = fmap C.pDec $ loop xs where
@@ -74,7 +74,7 @@ copMinus [a, b] =
        b' <- copDec b
        c' <- B.decimalSub a' b'
        Right $ C.pDec c'
-copMinus _ = Message.unexpAttr "-"
+copMinus _ = Msg.unexpAttr "-"
 
 copQuo :: (C.CText c, C.CDec c) => C.CopCalc c
 copQuo [a, b] =
@@ -82,7 +82,7 @@ copQuo [a, b] =
        b' <- copDec b
        c' <- B.decimalQuo a' b'
        Right $ C.pDec c'
-copQuo _ = Message.unexpAttr "quo"
+copQuo _ = Msg.unexpAttr "quo"
 
 copRem :: (C.CText c, C.CDec c) => C.CopCalc c
 copRem arg =
@@ -95,9 +95,9 @@ copRem arg =
 copAbs :: (C.CList c, C.CDec c) => C.CopCalc c
 copAbs [Right c] | C.isList c = Right . C.pList =<< mapM copAbs1 (C.gList c)
                  | otherwise  = copAbs1 c
-copAbs _ = Message.unexpAttr "abs"
+copAbs _ = Msg.unexpAttr "abs"
 
 copAbs1 :: (C.CDec c) => B.AbMap c
 copAbs1 c | C.isDec c = C.putDec $ B.decimalAbs $ C.gDec c
-copAbs1 _ = Message.unexpAttr "abc"
+copAbs1 _ = Msg.unexpAttr "abc"
 

@@ -12,7 +12,7 @@ import qualified Koshucode.Baala.Core.Content.Class     as C
 import qualified Koshucode.Baala.Core.Content.Cop       as C
 import qualified Koshucode.Baala.Core.Content.Cox       as C
 import qualified Koshucode.Baala.Core.Content.Literal   as C
-import qualified Koshucode.Baala.Core.Message           as Message
+import qualified Koshucode.Baala.Core.Message           as Msg
 
 -- | Construct content expression from token tree
 coxBuild :: forall c. (C.CContent c)
@@ -75,7 +75,7 @@ convCox find = expand where
 -- construct content expression from token tree
 construct :: forall c. (C.CContent c) => C.CalcContent c -> B.TokenTreeToAb (C.Cox c)
 construct calc = expr where
-    expr tree = Message.abCoxBuild tree $
+    expr tree = Msg.abCoxBuild tree $
          let cp = concatMap B.codePts $ B.front $ B.untree tree
          in cons cp tree
 
@@ -125,10 +125,10 @@ isNameFirst c = case B.generalCategoryGroup c of
 -- convert from infix operator to prefix
 prefix :: [B.Named B.InfixHeight] -> B.AbMap B.TokenTree
 prefix htab tree =
-    Message.abCoxPrefix tree $
+    Msg.abCoxPrefix tree $
      case B.infixToPrefix conv ht (B.TreeB B.BracketGroup Nothing) mapper tree of
        Right tree3 -> Right $ undoubleGroup tree3
-       Left  xs    -> Message.ambInfixes $ map detail xs
+       Left  xs    -> Msg.ambInfixes $ map detail xs
     where
       conv = (c C.copPrefix, c C.copInfix, c C.copPostfix)
       c :: (String -> B.BlankName) -> B.Map B.Token
@@ -166,7 +166,7 @@ convTree find = expand where
     expand tree@(B.TreeB B.BracketGroup p subtrees) =
         case subtrees of
           op@(B.TreeL (B.TText _ 0 name)) : args
-              -> Message.abCoxSyntax tree $
+              -> Msg.abCoxSyntax tree $
                  case find $ B.BlankNormal name of
                    Just f -> expand =<< f args
                    _      -> do args2 <- mapM expand args
@@ -178,7 +178,7 @@ convTree find = expand where
         case B.divideTreesByBar trees of
           [vars, b1] -> do b2 <- expand $ B.wrapTrees b1
                            Right $ B.TreeB B.BracketForm p [B.wrapTrees vars, b2]
-          _ -> Message.unkCox "abstruction"
+          _ -> Msg.unkCox "abstruction"
 
     expand tree = Right tree
 

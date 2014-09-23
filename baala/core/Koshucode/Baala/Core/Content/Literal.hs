@@ -27,7 +27,7 @@ module Koshucode.Baala.Core.Content.Literal
 
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Core.Content.Class  as C
-import qualified Koshucode.Baala.Core.Message        as Message
+import qualified Koshucode.Baala.Core.Message        as Msg
 
 
 -- ----------------------  General content
@@ -36,7 +36,7 @@ type CalcContent c = B.TokenTreeToAb c
 
 -- | Convert 'B.TokenTree' into internal form of content.
 literal :: forall c. (C.CContent c) => CalcContent c -> B.TokenTreeToAb c
-literal calc tree = Message.abLiteral tree $ lit tree where
+literal calc tree = Msg.abLiteral tree $ lit tree where
     lit :: B.TokenTreeToAb c
     lit x@(B.TreeL t)
         = either (const $ token t) decimal $ getDecimalText [x]
@@ -47,13 +47,13 @@ literal calc tree = Message.abLiteral tree $ lit tree where
         B.BracketAssn   ->                  litAngle lit xs
         B.BracketRel    ->  C.putRel    =<< litRel   lit xs
         B.BracketInterp ->  C.putInterp =<< getInterp xs
-        B.BracketForm   ->  Message.adlib "Unknown bracket type"
+        B.BracketForm   ->  Msg.adlib "Unknown bracket type"
 
     token :: B.Token -> B.Ab c
     token (B.TText _ n w) | n <= 0  =  getKeyword w
     token (B.TText _ _ w)           =  C.putText w
     token (B.TTerm _ _ [n])         =  C.putTerm n
-    token t                         =  Message.unkWord $ B.tokenContent t
+    token t                         =  Msg.unkWord $ B.tokenContent t
 
     group :: B.TokenTreeToAb c
     group g@(B.TreeB _ _ xs@(B.TreeL (B.TText _ n _) : _))
@@ -76,7 +76,7 @@ literals lit cs = lt `mapM` B.divideTreesByColon cs where
 getKeyword :: (C.CEmpty c, C.CBool c) => String -> B.Ab c
 getKeyword "0"  =  Right C.false
 getKeyword "1"  =  Right C.true
-getKeyword w    =  Message.unkWord w
+getKeyword w    =  Msg.unkWord w
 
 getDecimalText :: B.TokenTreesToAb String
 getDecimalText = getDecimalText2 B.<=< getTexts False
@@ -84,11 +84,11 @@ getDecimalText = getDecimalText2 B.<=< getTexts False
 getDecimalText2 :: [String] -> B.Ab String
 getDecimalText2 = first where
     first ((c : cs) : xs) | c `elem` "+-0123456789" = loop [[c]] $ cs : xs
-    first _ = Message.nothing
+    first _ = Msg.nothing
 
     loop ss [] = Right $ concat $ reverse ss
     loop ss (w : xs) | all (`elem` "0123456789.") w = loop (w:ss) xs
-    loop _ _ = Message.nothing
+    loop _ _ = Msg.nothing
 
 getTexts :: Bool -> B.TokenTreesToAb [String]
 getTexts quoted = loop [] where
@@ -96,23 +96,23 @@ getTexts quoted = loop [] where
     loop ss (B.TreeL x : xs) =
         do s <- getText quoted x
            loop (s : ss) xs
-    loop _ _ = Message.nothing
+    loop _ _ = Msg.nothing
 
 getText :: Bool -> B.Token -> B.Ab String
 getText True  (B.TText _ q w) | q > 0   =  Right w
 getText False (B.TText _ q w) | q == 0  =  Right w
-getText _ _  =  Message.nothing
+getText _ _  =  Msg.nothing
 
 getInterp :: B.TokenTreesToAb B.Interp
 getInterp = Right . B.interp B.<=< mapM getInterpWord
 
 getInterpWord :: B.TokenTreeToAb B.InterpWord
-getInterpWord (B.TreeB _ _ _) = Message.nothing
+getInterpWord (B.TreeB _ _ _) = Msg.nothing
 getInterpWord (B.TreeL x) =
     case x of
       B.TText _ _ w    ->  Right $ B.InterpText w
       B.TTerm _ _ [n]  ->  Right $ B.InterpTerm n
-      _                ->  Message.nothing
+      _                ->  Msg.nothing
 
 
 -- ----------------------  Particular content
@@ -130,8 +130,8 @@ getInterpWord (B.TreeL x) =
 --   If the token tree contains nested term name, this function failed.
 getFlatName :: B.TokenTreeToAb String
 getFlatName (B.TreeL (B.TTerm _ 0 [n])) = Right n
-getFlatName (B.TreeL t)                 = Message.reqFlatName t
-getFlatName _                           = Message.reqTermName
+getFlatName (B.TreeL t)                 = Msg.reqFlatName t
+getFlatName _                           = Msg.reqTermName
 
 -- | Convert token trees into a list of named token trees.
 getTermedTrees :: B.TokenTreesToAb [B.NamedTree]
@@ -160,18 +160,18 @@ litAngle _ xs =
 tokenList :: B.TokenTreesToAb [B.Token]
 tokenList = mapM token where
     token (B.TreeL t) = Right t
-    token _ = Message.adlib "not token"
+    token _ = Msg.adlib "not token"
 
 wordList :: [B.Token] -> B.Ab [String]
 wordList = mapM word where
     word (B.TText _ 0 w) = Right w
-    word _ = Message.adlib "not word"
+    word _ = Msg.adlib "not word"
 
 makeDate :: (C.CList c, C.CDec c) => [String] -> B.Ab c
 makeDate xs = date B.<|> time B.<|> unk where
     date = put3 $ parseDate s
     time = put3 $ parseTime s
-    unk  = Message.adlib "malformed date/time literal"
+    unk  = Msg.adlib "malformed date/time literal"
     s    = unwords xs
 
     put3 (Nothing)        = unk
@@ -217,7 +217,7 @@ litRel lit cs =
        b2 <- literals lit `mapM` b1
        let b3 = B.unique b2
        if any (length h2 /=) $ map length b3
-          then Message.oddRelation
+          then Msg.oddRelation
           else Right $ B.Rel (B.headFrom h2) b3
 
 -- | Convert token trees into a judge.

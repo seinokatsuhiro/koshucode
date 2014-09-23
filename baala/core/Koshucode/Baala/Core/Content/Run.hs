@@ -18,7 +18,7 @@ import qualified Koshucode.Baala.Core.Content.Class     as C
 import qualified Koshucode.Baala.Core.Content.Cop       as C
 import qualified Koshucode.Baala.Core.Content.Cox       as C
 import qualified Koshucode.Baala.Core.Content.Literal   as C
-import qualified Koshucode.Baala.Core.Message           as Message
+import qualified Koshucode.Baala.Core.Message           as Msg
 
 
 -- --------------------------------------------  Beta reduction
@@ -51,31 +51,31 @@ reduce = red [] where
     red args cox = case cox of
         C.CoxLit    cp c        ->  Right $ BetaLit  cp c
         C.CoxTerm   cp n i      ->  Right $ BetaTerm cp n i
-        C.CoxLocal  cp v k      ->  Message.abCoxReduce cp $ red args =<< kth v k args
-        C.CoxFill   cp fn xs    ->  Message.abCoxReduce cp $ fill args fn $ substL args xs
-        C.CoxCalc   cp _ _      ->  Message.abCoxReduce cp $ fill args cox []
-        C.CoxWith   cp arg2 e   ->  Message.abCoxReduce cp $ red (arg2 ++ args) e
-        C.CoxForm1  cp _ v _    ->  Message.abCoxReduce cp $ Message.lackArg v
-        C.CoxForm   cp _ _ _    ->  Message.abCoxReduce cp $ Message.adlib "CoxForm"
-        C.CoxBlank  cp v        ->  Message.abCoxReduce cp $ Message.unkGlobalVar $ B.name v
+        C.CoxLocal  cp v k      ->  Msg.abCoxReduce cp $ red args =<< kth v k args
+        C.CoxFill   cp fn xs    ->  Msg.abCoxReduce cp $ fill args fn $ substL args xs
+        C.CoxCalc   cp _ _      ->  Msg.abCoxReduce cp $ fill args cox []
+        C.CoxWith   cp arg2 e   ->  Msg.abCoxReduce cp $ red (arg2 ++ args) e
+        C.CoxForm1  cp _ v _    ->  Msg.abCoxReduce cp $ Msg.lackArg v
+        C.CoxForm   cp _ _ _    ->  Msg.abCoxReduce cp $ Msg.adlib "CoxForm"
+        C.CoxBlank  cp v        ->  Msg.abCoxReduce cp $ Msg.unkGlobalVar $ B.name v
 
     fill :: [C.NamedCox c] -> C.Cox c -> [B.Ab (C.Cox c)] -> B.Ab (Beta c)
     fill args f1 []             =   red args f1
     fill args f1 xxs@(x:xs)     =   case f1 of
-        C.CoxForm1  cp _ v f2   ->  Message.abCoxFill cp $ do
+        C.CoxForm1  cp _ v f2   ->  Msg.abCoxFill cp $ do
                                         x' <- x
                                         let vx = (v, C.CoxWith cp args x')
                                         fill (vx : args) f2 xs
-        C.CoxLocal  cp v k      ->  Message.abCoxFill cp $ do
+        C.CoxLocal  cp v k      ->  Msg.abCoxFill cp $ do
                                         fn' <- kth v k args
                                         fill args fn' xxs
-        C.CoxCalc   cp n f2     ->  Message.abCoxFill cp $ do
+        C.CoxCalc   cp n f2     ->  Msg.abCoxFill cp $ do
                                         xxs2 <- mapM id xxs
                                         let xxs3 = red args `map` xxs2
                                         Right $ BetaCall cp n f2 xxs3
-        C.CoxFill   cp f2 xs2   ->  Message.abCoxFill cp $ fill args f2 $ substL args xs2 ++ xxs
-        C.CoxWith   cp arg2 e2  ->  Message.abCoxFill cp $ fill (arg2 ++ args) e2 xxs
-        _                       ->  Message.unkShow f1
+        C.CoxFill   cp f2 xs2   ->  Msg.abCoxFill cp $ fill args f2 $ substL args xs2 ++ xxs
+        C.CoxWith   cp arg2 e2  ->  Msg.abCoxFill cp $ fill (arg2 ++ args) e2 xxs
+        _                       ->  Msg.unkShow f1
 
     substL :: [C.NamedCox c] -> [C.Cox c] -> [B.Ab (C.Cox c)]
     substL = map . subst
@@ -88,13 +88,13 @@ reduce = red [] where
     subst _ x                        = Right x
 
     kth :: String -> Int -> [C.NamedCox c] -> B.Ab (C.Cox c)
-    kth v 0  _    = Message.unkGlobalVar v
+    kth v 0  _    = Msg.unkGlobalVar v
     kth v k0 args = loop k0 args where
       loop 1 ((v2, x) : _)
           | v == v2           =  Right x
-          | otherwise         =  Message.unmatchBlank v k0 v2 vs
+          | otherwise         =  Msg.unmatchBlank v k0 v2 vs
       loop k (_ : xs)         =  loop (k - 1) xs
-      loop _ []               =  Message.unkRefVar (v, k0) vs
+      loop _ []               =  Msg.unkRefVar (v, k0) vs
 
       vs = map fst args
 
@@ -114,12 +114,12 @@ link copset deriv = li where
 -- put term positions for actural heading
 position :: B.Relhead -> C.Cox c -> B.Ab (C.Cox c)
 position he = spos where
-    spos e = Message.abCoxPosition [e] $ pos e
+    spos e = Msg.abCoxPosition [e] $ pos e
     pos (C.CoxTerm cp ns _) =
         let index = B.headIndex1 he ns
         in if all (>= 0) index
            then Right $ C.CoxTerm cp ns index
-           else Message.unkTerm [B.showNestedTermName ns] he
+           else Msg.unkTerm [B.showNestedTermName ns] he
     pos (C.CoxFill cp  f xs)    = do f'  <- spos f
                                      xs' <- mapM spos xs
                                      Right $ C.CoxFill cp f' xs'
@@ -159,15 +159,15 @@ coxRun args = run 0 where
     run 1000 _ = B.bug "Too deep expression"
     run lv cox =
         let run' = run $ lv + 1
-        in Message.abCoxCalc [cox] $ case cox of
+        in Msg.abCoxCalc [cox] $ case cox of
              BetaLit  _ c       ->  Right c
              BetaTerm _ _ [p]   ->  Right $ args !!! p
              BetaTerm _ _ ps    ->  term ps args
              BetaCall _ _ f xs  ->  f . map run' =<< sequence xs
 
     term :: [Int] -> [c] -> B.Ab c
-    term []       _ = Message.notFound "empty term"
-    term (-1 : _) _ = Message.notFound "negative term"
+    term []       _ = Msg.notFound "empty term"
+    term (-1 : _) _ = Msg.notFound "negative term"
     term (p : ps) args2 =
         let c = args2 !!! p
         in if C.isRel c
@@ -190,13 +190,13 @@ list !!! index = loop index list where
 
 getArg1 :: [B.Ab c] -> B.Ab (B.Ab c)
 getArg1 [x]       = Right x
-getArg1 _         = Message.unmatchType ""
+getArg1 _         = Msg.unmatchType ""
 
 getArg2 :: [B.Ab c] -> B.Ab (B.Ab c, B.Ab c)
 getArg2 [x, y]    = Right (x, y)
-getArg2 _         = Message.unmatchType ""
+getArg2 _         = Msg.unmatchType ""
 
 getArg3 :: [B.Ab c] -> B.Ab (B.Ab c, B.Ab c, B.Ab c)
 getArg3 [x, y, z] = Right (x, y, z)
-getArg3 _         = Message.unmatchType ""
+getArg3 _         = Msg.unmatchType ""
 

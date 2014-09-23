@@ -12,7 +12,7 @@ import qualified Koshucode.Baala.Core.Lexmap          as C
 import qualified Koshucode.Baala.Core.Relmap          as C
 import qualified Koshucode.Baala.Core.Assert          as C
 import qualified Koshucode.Baala.Core.Section.Section as C
-import qualified Koshucode.Baala.Core.Message         as Message
+import qualified Koshucode.Baala.Core.Message         as Msg
 
 runSection :: (C.CContent c) => C.Global c -> [C.Section c] -> B.Ab (B.OutputResult c)
 runSection global sects =
@@ -52,7 +52,7 @@ assembleRelmap sec@C.Section { C.secSlot   = gslot
     where
       assemble :: C.Assert c -> B.Ab (C.Assert c, [String])
       assemble a =
-          Message.abAssert [a] $ do
+          Msg.abAssert [a] $ do
             trees     <- C.substSlot gslot [] $ C.assTree a
             (lx, lxs) <- lexmap gslot tokmaps trees
             parts     <- B.sequenceSnd $ B.mapSndTo relmap lxs

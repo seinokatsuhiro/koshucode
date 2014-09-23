@@ -12,7 +12,7 @@ import qualified Data.Char                          as Char
 import qualified Koshucode.Baala.Base               as B
 import qualified Koshucode.Baala.Core               as C
 import qualified Koshucode.Baala.Op.Cop.Coxhand     as H
-import qualified Koshucode.Baala.Op.Message         as Message
+import qualified Koshucode.Baala.Op.Message         as Msg
 
 
 
@@ -96,7 +96,7 @@ copLength = op where
     op xs = typeUnmatch xs
 
 typeUnmatch :: C.PrimContent a => [B.Ab a] -> B.Ab b
-typeUnmatch _ = Message.unmatchType ""
+typeUnmatch _ = Msg.unmatchType ""
 
 
 
@@ -187,7 +187,7 @@ copPush arg =
        case arg2 of
          (Right c, Right cs)
              | C.isSet cs -> C.putSet $ c : C.gSet cs
-             | otherwise  -> Message.reqCollection
+             | otherwise  -> Msg.reqCollection
          _ -> typeUnmatch arg
 
 
@@ -200,13 +200,13 @@ copFunIn arg =
          (Right c, Right cs)
              | C.isSet  cs -> C.putBool $ c `elem` C.gSet  cs
              | C.isList cs -> C.putBool $ c `elem` C.gList cs
-             | otherwise   -> Message.reqCollection
+             | otherwise   -> Msg.reqCollection
          _ -> typeUnmatch arg
 
 copCoxIn :: C.CopCox c
 copCoxIn [xs]    = Right $ H.f1 $ H.bin "in" H.b1 xs
 copCoxIn [x, xs] = Right $ H.f1 $ H.bin "in" x    xs
-copCoxIn _       = Message.adlib "require operand"
+copCoxIn _       = Msg.adlib "require operand"
 
 
 -- ----------------------  text

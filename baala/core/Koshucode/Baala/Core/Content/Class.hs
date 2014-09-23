@@ -25,7 +25,7 @@ module Koshucode.Baala.Core.Content.Class
 ) where
 
 import qualified Koshucode.Baala.Base         as B
-import qualified Koshucode.Baala.Core.Message as Message
+import qualified Koshucode.Baala.Core.Message as Msg
 
 
 
@@ -48,7 +48,7 @@ getAbAb :: PrimContent c => (c -> Bool) -> (c -> b) -> B.Ab c -> B.Ab b
 getAbAb _ _ (Left reason) =  Left reason
 getAbAb is get (Right x)
     | is x = Right $ get x
-    | otherwise = Message.unmatchType (typename x)
+    | otherwise = Msg.unmatchType (typename x)
 
 
 

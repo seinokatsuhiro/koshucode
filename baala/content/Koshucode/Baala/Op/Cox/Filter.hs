@@ -19,7 +19,7 @@ import qualified Koshucode.Baala.Base        as B
 import qualified Koshucode.Baala.Core        as C
 import qualified Koshucode.Baala.Op.Builtin  as Op
 import qualified Koshucode.Baala.Op.Cox.Get  as Op
-import qualified Koshucode.Baala.Op.Message  as Message
+import qualified Koshucode.Baala.Op.Message  as Msg
 
 
 -- | Implementation of relational operators.
@@ -60,7 +60,7 @@ relkitFilter (which, cops, body) (Just he1) = Right kit2 where
     p cs1 = do c <- C.coxRunCox cops he1 cs1 body
                case C.isBool c of
                  True  -> Right $ C.gBool c == which
-                 False -> Message.reqBool
+                 False -> Msg.reqBool
 
 
 -- ----------------------  contain

@@ -18,7 +18,7 @@ import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Core          as C
 import qualified Koshucode.Baala.Op.Builtin    as Op
 import qualified Koshucode.Baala.Op.Lattice    as Op
-import qualified Koshucode.Baala.Op.Message    as Message
+import qualified Koshucode.Baala.Op.Message    as Msg
 
 
 
@@ -67,9 +67,9 @@ relmapUp use = C.relmapFlow use . relkitUp
 relkitUp :: (C.CRel c) => B.TermName -> C.RelkitFlow c
 relkitUp _ Nothing = Right C.relkitNothing
 relkitUp n (Just he1)
-    | null ind1       = Message.unkTerm [n] he1
+    | null ind1       = Msg.unkTerm [n] he1
     | B.isTermNest t1 = Right kit2
-    | otherwise       = Message.notNestRel [n] he1
+    | otherwise       = Msg.notNestRel [n] he1
     where
       ns1   = B.headNames he1
       ind1  = [n] `B.snipIndex` ns1

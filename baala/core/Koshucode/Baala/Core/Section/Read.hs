@@ -12,7 +12,7 @@ import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Core.Content         as C
 import qualified Koshucode.Baala.Core.Section.Section as C
 import qualified Koshucode.Baala.Core.Section.Clause  as C
-import qualified Koshucode.Baala.Core.Message         as Message
+import qualified Koshucode.Baala.Core.Message         as Msg
 
 -- | Read section from certain resource.
 readSection :: (C.CContent c) => C.Section c -> B.Resource -> IO (B.Ab (C.Section c))
@@ -20,7 +20,7 @@ readSection root res = dispatch res where
     dispatch (B.ResourceFile path)
         = do exist <- Dir.doesFileExist path
              case exist of
-               False -> return $ Message.noFile path
+               False -> return $ Msg.noFile path
                True  -> do code <- readFile path
                            return $ readSectionCode root res code
 

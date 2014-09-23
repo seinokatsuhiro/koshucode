@@ -9,7 +9,7 @@ module Koshucode.Baala.Op.Cop.Logic
 
 import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Core       as C
-import qualified Koshucode.Baala.Op.Message as Message
+import qualified Koshucode.Baala.Op.Message as Msg
 
 
 
@@ -142,5 +142,5 @@ copTreeIf trees = folding $ filter (/= []) $ B.divideTreesBy ":" trees where
 
     abortSyntax xs msg =
         B.abortableTrees "if" xs $
-         Message.unexpAttr msg
+         Msg.unexpAttr msg
 

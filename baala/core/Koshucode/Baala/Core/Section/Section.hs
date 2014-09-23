@@ -26,7 +26,7 @@ import qualified Koshucode.Baala.Core.Lexmap          as C
 import qualified Koshucode.Baala.Core.Relmap          as C
 import qualified Koshucode.Baala.Core.Assert          as C
 import qualified Koshucode.Baala.Core.Section.Clause  as C
-import qualified Koshucode.Baala.Core.Message         as Message
+import qualified Koshucode.Baala.Core.Message         as Msg
 
 
 
@@ -120,7 +120,7 @@ consSectionEach root resource (B.Short pt shorts xs) =
 
       pass f (C.Clause src body) = f (B.front $ B.clauseTokens src) body
       consSec = consSection root (B.ResourceText "")
-      ab f toks body = Message.abClause toks $ f toks body
+      ab f toks body = Msg.abClause toks $ f toks body
 
       -- todo: multiple section name
       name ((C.Clause _ (C.CSection n)) : _) = n
@@ -169,18 +169,18 @@ consSectionEach root resource (B.Short pt shorts xs) =
 
       checkShort :: [B.ShortDef] -> B.Ab ()
       checkShort sh =
-          Message.abShort pt $ do
+          Msg.abShort pt $ do
             let (ss, rs) = unzip sh
                 prefix   = B.duplicates ss
                 replace  = B.duplicates rs
                 invalid  = B.omit B.isShortPrefix ss
-            B.unless (null prefix)  $ Message.dupPrefix prefix
-            B.unless (null replace) $ Message.dupReplacement replace
-            B.unless (null invalid) $ Message.invalidPrefix invalid
+            B.unless (null prefix)  $ Msg.dupPrefix prefix
+            B.unless (null replace) $ Msg.dupReplacement replace
+            B.unless (null invalid) $ Msg.invalidPrefix invalid
             Right ()
 
-      unk   _ (C.CUnknown) = Message.unkClause
-      unres _ (C.CUnres _) = Message.unresPrefix
+      unk   _ (C.CUnknown) = Msg.unkClause
+      unres _ (C.CUnres _) = Msg.unresPrefix
 
 type Cl   a = [B.Token] -> C.ClauseBody -> a
 type Clab a = Cl (B.Ab a)

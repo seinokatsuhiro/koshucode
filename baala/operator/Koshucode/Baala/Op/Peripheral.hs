@@ -27,7 +27,7 @@ import qualified Koshucode.Baala.Base         as B
 import qualified Koshucode.Baala.Core         as C
 import qualified Koshucode.Baala.Op.Builtin   as Op
 import qualified Koshucode.Baala.Op.Term      as Op
-import qualified Koshucode.Baala.Op.Message   as Message
+import qualified Koshucode.Baala.Op.Message   as Msg
 
 -- | Implementation of relational operators.
 --
@@ -79,7 +79,7 @@ relkitMember _ Nothing = Right C.relkitNothing
 relkitMember (x, xs) he1'@(Just he1) = kit2 where
     kit2 | B.operand [xi, xsi] [] = relkitMemberCheck  xi xsi he1'
          | B.operand [xsi] [xi]   = relkitMemberExpand x  xsi he1'
-         | otherwise              = Message.unkTerm [x, xs] he1
+         | otherwise              = Msg.unkTerm [x, xs] he1
     [xi, xsi] = [x, xs] `B.snipFull` B.headNames he1
 
 relkitMemberCheck :: (Eq c, C.CSet c, C.CList c)
@@ -168,7 +168,7 @@ assnPick :: [B.TermName] -> [B.Named c] -> B.Ab [c]
 assnPick ns assn = mapM pick ns where
     pick n = case lookup n assn of
                Just c   ->  Right c
-               Nothing  ->  Message.adlib "no term"
+               Nothing  ->  Msg.adlib "no term"
 
 
 -- ----------------------  term-name
@@ -182,7 +182,7 @@ relmapTermName :: (C.CTerm c) => C.RopUse c -> B.TermName -> C.Relmap c
 relmapTermName use n = C.relmapFlow use $ relkitTermName n
 
 relkitTermName :: (C.CTerm c) => B.TermName -> C.RelkitFlow c
-relkitTermName _ Nothing    = Message.noAttr
+relkitTermName _ Nothing    = Msg.noAttr
 relkitTermName n (Just he1) = Right kit2 where
     he2       = B.headFrom [n]
     kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2

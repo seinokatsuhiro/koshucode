@@ -14,7 +14,7 @@ import qualified Koshucode.Baala.Core.Relmap          as C
 import qualified Koshucode.Baala.Core.Assert.Assert   as C
 import qualified Koshucode.Baala.Core.Assert.Dataset  as C
 import qualified Koshucode.Baala.Core.Assert.RelTable as C
-import qualified Koshucode.Baala.Core.Message         as Message
+import qualified Koshucode.Baala.Core.Message         as Msg
 
 
 -- ----------------------  Assert
@@ -35,7 +35,7 @@ runAssertDataset global (B.Short _ sh asserts) dataset =
     where
       each (C.Assert _ _ _ _ _ Nothing _) = B.bug "runAssertDataset"
       each a@(C.Assert typ pat opt _ _ (Just relmap) libs) =
-          Message.abAssert [a] $ do
+          Msg.abAssert [a] $ do
             r1 <- runRelmapDataset global dataset libs relmap B.reldee
             let judgeOf showEmpty = assert showEmpty typ
             optionProcess sh judgeOf pat opt r1
@@ -71,7 +71,7 @@ runRelmapViaRelkit g2 parts r (B.Rel he1 bo1) =
     where
       just :: String -> Maybe a -> B.Ab a
       just _ (Just h) = Right h
-      just s Nothing  = Message.adlib s
+      just s Nothing  = Msg.adlib s
 
 
 -- ---------------------------------  Options
@@ -100,7 +100,7 @@ optionCheck ns xs =
     let rest = B.assocCut ("@trunk" : ns) xs
     in if null rest
        then Right ()
-       else Message.unkWord (fst . head $ rest)
+       else Msg.unkWord (fst . head $ rest)
 
 optionRelmap :: (Ord c, C.CRel c) => C.AssertOption -> B.AbMap (B.Rel c)
 optionRelmap opt r1 =
@@ -135,7 +135,7 @@ flatnames :: [B.TokenTree] -> B.Ab [B.TermName]
 flatnames trees =
     case mapM flatname trees of
       Just ns -> Right ns
-      Nothing -> Message.reqTermName
+      Nothing -> Msg.reqTermName
 
 -- | Get term name as string only if term is flat.
 flatname :: B.TokenTree -> Maybe B.TermName
@@ -145,7 +145,7 @@ flatname _ = Nothing
 snipRelRaw :: (Ord c) => B.SnipPair B.Term c -> [B.TermName] -> B.AbMap (B.Rel c)
 snipRelRaw (heSnip, boSnip) ns (B.Rel he1 bo1)
     | null left  = Right r2
-    | otherwise  = Message.unkTerm left he1
+    | otherwise  = Msg.unkTerm left he1
     where
       ns1  =  B.headNames he1
       ind  =  ns `B.snipIndex` ns1

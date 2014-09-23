@@ -9,7 +9,7 @@ module Koshucode.Baala.Type.Vanilla
 import qualified Data.Set                   as Set
 import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Core       as C
-import qualified Koshucode.Baala.Op.Message as Message
+import qualified Koshucode.Baala.Op.Message as Msg
 
 
 
@@ -76,7 +76,7 @@ instance C.CContent VContent where
     appendContent (VEmpty) x = Right x
     appendContent x (VEmpty) = Right x
     appendContent (VText x) (VText y) = Right . VText $ x ++ y
-    appendContent x y = Message.unmatchType (show (x, y))
+    appendContent x y = Msg.unmatchType (show (x, y))
 
 instance B.Write VContent where
     write sh a = case a of

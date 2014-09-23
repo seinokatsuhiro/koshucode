@@ -25,7 +25,7 @@ import qualified Koshucode.Baala.Base.Abort       as B
 import qualified Koshucode.Baala.Base.Prelude     as B
 import qualified Koshucode.Baala.Base.Text        as B
 import qualified Koshucode.Baala.Base.Syntax.Line as B
-import qualified Koshucode.Baala.Base.Message     as Message
+import qualified Koshucode.Baala.Base.Message     as Msg
 
 
 
@@ -93,7 +93,7 @@ codeRollUp f res = loop (CodeRoll f cp "" []) . B.linesCrlfNumbered where
     loop _ [] = Right []
     loop r ((num, line) : ls) =
        do let cp' = setLine num line cp
-          r' <- Message.abToken [cp'] $ codeRoll $ setRoll cp' line r
+          r' <- Msg.abToken [cp'] $ codeRoll $ setRoll cp' line r
           let toks = reverse $ codeOutput r'
           ls' <- loop r' ls
           Right $ CodeLine num line toks : ls'

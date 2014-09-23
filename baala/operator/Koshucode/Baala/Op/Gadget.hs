@@ -21,7 +21,7 @@ import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Core       as C
 import qualified Koshucode.Baala.Op.Builtin as Op
 import qualified Koshucode.Baala.Op.DepRank as Op
-import qualified Koshucode.Baala.Op.Message as Message
+import qualified Koshucode.Baala.Op.Message as Msg
 
 
 -- | Gadgets
@@ -120,5 +120,5 @@ relkitSize n _ = Right kit2 where
 consDumpTree :: (C.CDec c) => C.RopCons c
 consDumpTree use =
   do trees <- Op.getTrees use "-tree"
-     Message.dumpTrees trees
+     Msg.dumpTrees trees
 

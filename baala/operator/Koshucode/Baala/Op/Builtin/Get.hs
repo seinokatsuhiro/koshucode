@@ -29,7 +29,7 @@ module Koshucode.Baala.Op.Builtin.Get
 import qualified Koshucode.Baala.Base            as B
 import qualified Koshucode.Baala.Core            as C
 import qualified Koshucode.Baala.Op.Builtin.Term as Op
-import qualified Koshucode.Baala.Op.Message      as Message
+import qualified Koshucode.Baala.Op.Message      as Msg
 
 
 -- ----------------------  Datatype
@@ -49,14 +49,14 @@ lookupAttr c name = lookup (c name) . C.lexAttr . C.ropLexmap
 getAbortable :: ([B.TokenTree] -> B.Ab b) -> RopGet c b
 getAbortable f u name =
     do trees <- getTrees u name
-       Message.abAttrTrees trees $ f trees
+       Msg.abAttrTrees trees $ f trees
 
 getAbortableOption :: b -> ([B.TokenTree] -> B.Ab b) -> RopGet c b
 getAbortableOption y f u name =
     do m <- getMaybe getTrees u name
        case m of
          Nothing    -> Right y
-         Just trees -> Message.abAttrTrees trees $ f trees
+         Just trees -> Msg.abAttrTrees trees $ f trees
 
 
 -- ----------------------  Basic
@@ -77,7 +77,7 @@ getMaybe get u name =
 getSwitch :: C.RopUse c -> String -> B.Ab Bool
 getSwitch u name = getAbortableOption False get u name where
     get [] = Right True
-    get _  = Message.unexpAttr $ "Just type only " ++ name
+    get _  = Msg.unexpAttr $ "Just type only " ++ name
 
 -- | Get word from named attribute.
 --
@@ -88,7 +88,7 @@ getSwitch u name = getAbortableOption False get u name where
 getWord :: RopGet c String
 getWord = getAbortable get where
     get [B.TreeL (B.TText _ _ s)] = Right s
-    get _ = Message.unexpAttr "Require one word"
+    get _ = Msg.unexpAttr "Require one word"
 
 
 -- ----------------------  Tree
@@ -97,7 +97,7 @@ getTrees :: RopGet c [B.TokenTree]
 getTrees u name =
     case lookupTree name u of
       Just trees -> Right trees
-      Nothing    -> Message.noAttr
+      Nothing    -> Msg.noAttr
 
 getTree :: RopGet c B.TokenTree
 getTree u name =
@@ -108,11 +108,11 @@ getWordTrees :: RopGet c [B.Named B.TokenTree]
 getWordTrees u name =
     case lookupTree name u of
       Just trees -> wordTrees trees
-      Nothing    -> Message.noAttr
+      Nothing    -> Msg.noAttr
 
 wordTrees :: [B.TokenTree] -> B.Ab [B.Named B.TokenTree]
 wordTrees []  = Right []
-wordTrees [_] = Message.unexpAttr "Require word and tree"
+wordTrees [_] = Msg.unexpAttr "Require word and tree"
 wordTrees (w : tree : xs) =
     do w'  <- word w
        xs' <- wordTrees xs
@@ -120,7 +120,7 @@ wordTrees (w : tree : xs) =
 
 word :: B.TokenTree -> B.Ab String
 word (B.TreeL (B.TText _ _ w)) = Right w
-word _ = Message.unexpAttr "Require one word"
+word _ = Msg.unexpAttr "Require one word"
 
 getTreesByColon :: RopGet c [[B.TokenTree]]
 getTreesByColon u name =
@@ -140,15 +140,15 @@ getRelmap :: C.RopUse c -> String -> B.Ab (C.Relmap c)
 getRelmap u name =
     do ms    <- getRelmaps u
        trees <- getRelmapRaw u name
-       Message.abAttrTrees trees $ case ms of
+       Msg.abAttrTrees trees $ case ms of
          [m] -> Right m
-         _   -> Message.unexpAttr "Require one relmap"
+         _   -> Msg.unexpAttr "Require one relmap"
 
 getRelmapRaw :: RopGet c [B.TokenTree]
 getRelmapRaw u name =
     case lookupRelmap name u of
       Just trees -> Right trees
-      Nothing    -> Message.noAttr
+      Nothing    -> Msg.noAttr
 
 
 -- | Get relmaps from operator use.
@@ -165,7 +165,7 @@ getOptRelmap rmap0 u = B.right rmap0 . getRelmap u
 getTerm :: RopGet c B.TermName
 getTerm = getAbortable get where
     get [x] = Op.termName x
-    get _   = Message.unexpAttr "Require one term"
+    get _   = Msg.unexpAttr "Require one term"
 
 -- | Get list of term names from named attribute.
 getTerms :: RopGet c [B.TermName]

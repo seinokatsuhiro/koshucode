@@ -15,7 +15,7 @@ import qualified Koshucode.Baala.Core.Content          as C
 import qualified Koshucode.Baala.Core.Relmap.Global    as C
 import qualified Koshucode.Baala.Core.Relmap.Operator  as C
 import qualified Koshucode.Baala.Core.Relmap.Relkit    as C
-import qualified Koshucode.Baala.Core.Message          as Message
+import qualified Koshucode.Baala.Core.Message          as Msg
 
 relkitLink :: forall c. (Ord c) => [C.RelkitDef c] -> B.Map (C.Relkit c)
 relkitLink kits = linkKit where
@@ -48,7 +48,7 @@ relkitLink kits = linkKit where
 relkitRun :: forall c. (Ord c, C.CRel c)
     => C.Global c -> [B.Named [[c]]] -> C.RelkitBody c -> B.AbMap [[c]]
 relkitRun global rs (B.Sourced toks core) bo1 =
-    Message.abRun toks $
+    Msg.abRun toks $
      case core of
        C.RelkitFull        u f     ->  right u $ f             bo1
        C.RelkitOneToMany   u f     ->  right u $ f `concatMap` bo1
@@ -66,17 +66,17 @@ relkitRun global rs (B.Sourced toks core) bo1 =
 
        C.RelkitAppend b1@(B.Sourced toks1 _) b2
                                    ->  do bo2 <- relkitRun global rs b1 bo1
-                                          Message.abRun toks1 $ relkitRun global rs b2 bo2
+                                          Msg.abRun toks1 $ relkitRun global rs b2 bo2
 
        C.RelkitSource p ns         ->  let r = C.globalSelect global p ns
                                        in Right $ B.relBody r
 
        C.RelkitLink _ _ (Just b2)  ->  relkitRun global rs b2 bo1
-       C.RelkitLink n _ (Nothing)  ->  Message.unkRelmap n
+       C.RelkitLink n _ (Nothing)  ->  Msg.unkRelmap n
 
        C.RelkitNest n              ->  case lookup n rs of
                                          Just bo2 -> Right bo2
-                                         Nothing  -> Message.unkNestRel n
+                                         Nothing  -> Msg.unkNestRel n
 
        C.RelkitCopy n b            ->  do bo2 <- relkitRun global ((n, bo1) : rs) b bo1
                                           right True $ bo2

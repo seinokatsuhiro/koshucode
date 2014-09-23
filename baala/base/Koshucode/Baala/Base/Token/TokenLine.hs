@@ -23,15 +23,15 @@ module Koshucode.Baala.Base.Token.TokenLine
   -- $Examples
 ) where
 
-import qualified Data.Char                           as Char
-import qualified Koshucode.Baala.Base.Abort          as B
-import qualified Koshucode.Baala.Base.Prelude        as B
-import qualified Koshucode.Baala.Base.Syntax         as B
-import qualified Koshucode.Baala.Base.Text           as B
-import qualified Koshucode.Baala.Base.Token.AngleText  as B
-import qualified Koshucode.Baala.Base.Token.Short    as B
-import qualified Koshucode.Baala.Base.Token.Token    as B
-import qualified Koshucode.Baala.Base.Message        as Message
+import qualified Data.Char                            as Char
+import qualified Koshucode.Baala.Base.Abort           as B
+import qualified Koshucode.Baala.Base.Prelude         as B
+import qualified Koshucode.Baala.Base.Syntax          as B
+import qualified Koshucode.Baala.Base.Text            as B
+import qualified Koshucode.Baala.Base.Token.AngleText as B
+import qualified Koshucode.Baala.Base.Token.Short     as B
+import qualified Koshucode.Baala.Base.Token.Token     as B
+import qualified Koshucode.Baala.Base.Message         as Msg
 
 
 
@@ -60,7 +60,7 @@ general r@B.CodeRoll { B.codeInputPt = cp
     v           = scan r
     u   cs tok  = Right $ B.codeUpdate cs tok r
     int cs tok  = Right $ B.codeChange interp $ B.codeUpdate cs tok r
-    ab          = Message.abToken [cp]
+    ab          = Msg.abToken [cp]
 
     gen ""                           =  Right r
     gen (c:'|':cs) | isOpen c        =  u cs            $ B.TOpen    cp [c, '|']
@@ -80,7 +80,7 @@ general r@B.CodeRoll { B.codeInputPt = cp
                    | isShort c       =  short cs [c]
                    | isCode c        =  v               $ scanCode   cp (c:cs)
                    | isSpace c       =  v               $ scanSpace  cp cs
-                   | otherwise       =  Message.forbiddenInput $ B.shortEmpty [c]
+                   | otherwise       =  Msg.forbiddenInput $ B.shortEmpty [c]
 
     ast (c:cs) w   | w == "****"     =  u    (c:cs)     $ B.TText    cp 0 w
                    | c == '*'        =  ast  cs         $ c:w
@@ -92,13 +92,13 @@ general r@B.CodeRoll { B.codeInputPt = cp
     bra cs w       | w == "<"        =  ang  cs ""
                    | w == "<<"       =  u    cs         $ B.TOpen    cp w
                    | w == "<<<"      =  int  cs         $ B.TOpen    cp w
-                   | otherwise       =  Message.unkAngleText w
+                   | otherwise       =  Msg.unkAngleText w
 
     cket (c:cs) w  | c == '>'        =  cket cs         $ c:w
     cket cs w      | w == ">"        =  v               $ scanCode   cp ('>':cs)
                    | w == ">>"       =  u    cs         $ B.TClose   cp w
                    | w == ">>>"      =  u    cs         $ B.TClose   cp w
-                   | otherwise       =  Message.unkAngleText w
+                   | otherwise       =  Msg.unkAngleText w
 
     slot (c:cs) n  | c == '@'        =  slot cs         $ n + 1
                    | c == '\''       =  v               $ scanSlot 0 cp cs  -- positional
@@ -145,7 +145,7 @@ interp r@B.CodeRoll { B.codeInputPt = cp
     v           = scan r
     u   cs tok  = Right $ B.codeUpdate cs tok r
     gen cs tok  = Right $ B.codeChange general $ B.codeUpdate cs tok r
-    ab          = Message.abToken [cp]
+    ab          = Msg.abToken [cp]
 
     int ""                           =  Right r
     int (c:cs)    | isSpace c        =  v         $ scanSpace cp cs
@@ -183,7 +183,7 @@ nextQQ :: AbNext String
 nextQQ = loop "" where
     loop w (c:cs) | isQQ c        =  Right (cs, rv w)
                   | otherwise     =  loop (c:w) cs
-    loop _ _                      =  Message.quotNotEnd
+    loop _ _                      =  Msg.quotNotEnd
 
 scanSpace :: Scan
 scanSpace cp = loop 1 where
@@ -208,7 +208,7 @@ scanTerm cp = word [] where
                                   in term (w : ns) cs'
                    | isQQ c    =  do (cs', w) <- nextQQ cs
                                      term (w : ns) cs'
-    word _ _                   =  Message.forbiddenTerm
+    word _ _                   =  Msg.forbiddenTerm
 
     term ns (c:cs) | isTerm c  =  word ns cs
     term ns cs                 =  Right (cs, B.TTerm cp 0 $ rv ns)

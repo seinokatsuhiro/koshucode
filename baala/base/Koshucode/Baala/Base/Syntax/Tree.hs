@@ -23,7 +23,7 @@ import qualified Data.Generics                as G
 import qualified Koshucode.Baala.Base.Abort   as B
 import qualified Koshucode.Baala.Base.Prelude as B
 import qualified Koshucode.Baala.Base.Text    as B
-import qualified Koshucode.Baala.Base.Message as Message
+import qualified Koshucode.Baala.Base.Message as Msg
 
 
 
@@ -88,9 +88,9 @@ trees bracketType zero xs = result where
         | isOpenBracket  px = do (trees2, cxs3) <- loop xs2 px
                                  case (px, cxs3) of
                                    (BracketOpen p2, c : xs3) -> add (TreeB p2 (Just (x, c)) trees2) xs3 p
-                                   _       -> abort Message.extraOpenBracket
+                                   _       -> abort Msg.extraOpenBracket
         | isCloseBracket px = Right ([], x : xs2)
-        | otherwise         = abort Message.extraCloseBracket
+        | otherwise         = abort Msg.extraCloseBracket
         where 
           px       = bracketType x
           abort    = B.abortable "tree" [x]

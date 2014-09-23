@@ -35,7 +35,7 @@ import qualified Koshucode.Baala.Base        as B
 import qualified Koshucode.Baala.Core        as C
 import qualified Koshucode.Baala.Op.Builtin  as Op
 import qualified Koshucode.Baala.Op.Cox.Get  as Op
-import qualified Koshucode.Baala.Op.Message  as Message
+import qualified Koshucode.Baala.Op.Message  as Msg
 
 
 -- | Implementation of relational operators.
@@ -75,7 +75,7 @@ relkitAdd :: (C.CList c, C.CRel c, B.Write c)
 relkitAdd _ Nothing = Right C.relkitNothing
 relkitAdd (cops, cox) (Just he1)
     | null ind  = Right kit2
-    | otherwise = Message.unexpTermName
+    | otherwise = Msg.unexpTermName
     where
       (ns, xs)    =  unzip cox               -- names and expressions
       ns1         =  B.headNames he1         -- term names of input relation
@@ -103,7 +103,7 @@ relkitSubst :: (C.CList c, C.CRel c, B.Write c)
 relkitSubst _ Nothing = Right C.relkitNothing
 relkitSubst (cops, cox) (Just he1)
     | B.sameLength ns ind = Right kit2
-    | otherwise           = Message.unexpTermName
+    | otherwise           = Msg.unexpTermName
     where
       (ns, xs)  =  unzip cox                  -- names and expressions
       ns1       =  B.headNames he1            -- term names of input relation
@@ -189,7 +189,7 @@ consReplace use =
     do ns     <- Op.getTerms use "-term"
        coxBy  <- Op.getCox use "-by"
        B.unless (C.coxSyntacticArity coxBy == 1) $ do
-         B.abortable "relmap-replace" [coxBy] Message.reqUnaryFn
+         B.abortable "relmap-replace" [coxBy] Msg.reqUnaryFn
        let expr n = (n, C.CoxFill [] coxBy [C.CoxTerm [] [n] []])
            cops   = C.globalCopset $ C.ropGlobal use
        Right $ relmapSubst use (cops, map expr ns)
@@ -237,7 +237,7 @@ relkitSplit :: forall c. (C.CList c, C.CRel c, B.Write c, C.CBool c)
 relkitSplit _ Nothing = Right C.relkitNothing
 relkitSplit (cops, cox) (Just he1)
     | null ind  = Right kit2
-    | otherwise = Message.unexpTermName
+    | otherwise = Msg.unexpTermName
     where
       (ns, xs)    =  unzip cox               -- names and expressions
       ns1         =  B.headNames he1         -- term names
@@ -264,7 +264,7 @@ relkitSplit (cops, cox) (Just he1)
       run f cs = do c <- f cs
                     case C.isBool c of
                       True  -> Right (C.gBool c, cs)
-                      False -> Message.reqBool
+                      False -> Msg.reqBool
 
 
 -- ----------------------  unary
@@ -295,5 +295,5 @@ relkitUnary (n, cs) _ = Right kit2 where
 consDumpCox :: (C.CContent c) => C.RopCons c
 consDumpCox use =
     do cox <- Op.getCox use "-cox"
-       Message.dumpCox cox
+       Msg.dumpCox cox
 

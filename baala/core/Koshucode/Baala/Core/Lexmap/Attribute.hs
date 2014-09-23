@@ -29,7 +29,7 @@ module Koshucode.Baala.Core.Lexmap.Attribute
 import qualified Data.Generics                as G
 import qualified Data.List                    as List
 import qualified Koshucode.Baala.Base         as B
-import qualified Koshucode.Baala.Core.Message as Message
+import qualified Koshucode.Baala.Core.Message as Msg
 
 
 -- ----------------------  Attribute name
@@ -106,7 +106,7 @@ attrSortBranch :: AttrSort
 attrSortBranch trees =
     do let assc = hyphenAssc trees
            dup  = B.duplicates $ map fst assc
-       B.when (B.notNull dup) $ Message.dupAttr dup
+       B.when (B.notNull dup) $ Msg.dupAttr dup
        Right $ B.mapFstTo AttrTree assc
 
 hyphenAssc :: TreeSort

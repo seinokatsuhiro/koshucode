@@ -8,12 +8,12 @@ module Koshucode.Baala.Op.Builtin.Term
 ) where
 
 import qualified Koshucode.Baala.Base       as B
-import qualified Koshucode.Baala.Op.Message as Message
+import qualified Koshucode.Baala.Op.Message as Msg
 
 -- | Extract a term name.
 termName :: B.TokenTree -> B.Ab B.TermName
 termName (B.TreeL (B.TTerm _ _ [n])) = Right n
-termName _ = Message.reqTermName
+termName _ = Msg.reqTermName
 
 -- | Extract a list of term names.
 -- 
@@ -45,5 +45,5 @@ termNamePairs = loop where
            xs' <- loop xs
            Right $ (a', b') : xs'
     loop [] = Right []
-    loop _  = Message.reqTermName
+    loop _  = Msg.reqTermName
 

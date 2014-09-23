@@ -21,7 +21,7 @@ import qualified Koshucode.Baala.Base        as B
 import qualified Koshucode.Baala.Core        as C
 import qualified Koshucode.Baala.Op.Builtin  as Op
 import qualified Koshucode.Baala.Op.Cox.Get  as Op
-import qualified Koshucode.Baala.Op.Message  as Message
+import qualified Koshucode.Baala.Op.Message  as Msg
 
 
 -- | Implementation of relational operators.
@@ -52,7 +52,7 @@ consConst use =
     do lit <- Op.getContent use "-lit"
        case C.isRel lit of
          True  -> Right $ relmapConst use $ C.gRel lit
-         False -> Message.reqRel
+         False -> Msg.reqRel
 
 relmapConst :: C.RopUse c -> B.Rel c -> C.Relmap c
 relmapConst use = C.relmapFlow use . relkitConst
@@ -133,7 +133,7 @@ relmapRepeat use cnt = C.relmapBinary use $ relkitRepeat cnt
 relkitRepeat :: forall c. (Ord c) => Int -> C.RelkitBinary c
 relkitRepeat cnt (C.Relkit (Just he2) kitb2) (Just he1)
     | B.headEquiv he1 he2 = Right $ kit3
-    | otherwise = Message.diffHead [he1, he2]
+    | otherwise = Msg.diffHead [he1, he2]
     where
     kit3 = C.relkitJust he1 $ C.RelkitAbFull True kitf3 [kitb2]
     kitf3 bmaps bo1 =

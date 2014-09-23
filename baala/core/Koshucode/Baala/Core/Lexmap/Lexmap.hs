@@ -24,7 +24,7 @@ import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Core.Lexmap.Attribute  as C
 import qualified Koshucode.Baala.Core.Lexmap.Roamap     as C
 import qualified Koshucode.Baala.Core.Lexmap.Slot       as C
-import qualified Koshucode.Baala.Core.Message           as Message
+import qualified Koshucode.Baala.Core.Message           as Msg
 
 -- | Intermediate data that represents use of relmap operator.
 --   Lexmap is constructed from a list of 'B.TokenTree',
@@ -85,14 +85,14 @@ consLexmap find gslot derives = lexmap where
 
     lexmap :: ConsLexmapBody
     lexmap source =
-        Message.abLexmap source $
+        Msg.abLexmap source $
          case B.divideTreesByBar source of
            [(B.TreeL rop@(B.TText _ 0 _) : trees)] -> derived rop trees
            [(B.TreeL rop@(B.TText _ 3 _) : trees)] -> user LexmapWith rop trees
            [[B.TreeB B.BracketGroup _ trees]]      -> lexmap trees
-           [[B.TreeB _ _ _]]     -> Message.adlib "bracket"
+           [[B.TreeB _ _ _]]     -> Msg.adlib "bracket"
            [[]]                  -> baseOf "id" []
-           [_]                   -> Message.unkRelmap "???"
+           [_]                   -> Msg.unkRelmap "???"
            trees2                -> baseOf "append" $ map B.wrapTrees trees2
 
     derived :: B.Token -> ConsLexmapBody
@@ -114,7 +114,7 @@ consLexmap find gslot derives = lexmap where
 
     user :: LexmapType -> B.Token -> ConsLexmapBody
     user LexmapWith rop [] = submap $ cons LexmapWith rop [] []
-    user LexmapWith _ _ = Message.extraAttr
+    user LexmapWith _ _ = Msg.extraAttr
     user ty rop trees = do roa <- C.attrSortBranch trees
                            submap $ cons ty rop roa trees
 
@@ -151,7 +151,7 @@ consLexmap find gslot derives = lexmap where
                 = let n   = lexOpName  lx
                       roa = lexAttr    lx
                       sub = lexSubmap  lx
-                  in Message.abSlot [lx] $ case lookup n derives of
+                  in Msg.abSlot [lx] $ case lookup n derives of
                       Nothing -> B.concatMapM slot sub
                       Just (trees, roamap) ->
                             do roa2       <- C.roamapRun roamap roa
@@ -184,7 +184,7 @@ withTerms = loop where
     loop (B.TreeL (B.TTerm _ 0 [n]) : xs)  =  next (n, n) xs
     loop (B.TreeL (B.TText _ 0 v)   : xs)  =  next (v, v) xs
     loop [] = Right []
-    loop _  = Message.reqTermName
+    loop _  = Msg.reqTermName
 
     next p xs = do xs' <- loop xs
                    Right $ p : xs'

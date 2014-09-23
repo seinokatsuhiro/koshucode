@@ -14,7 +14,7 @@ import qualified Data.Generics                          as G
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Core.Lexmap.Attribute  as C
 import qualified Koshucode.Baala.Core.Lexmap.Slot       as C
-import qualified Koshucode.Baala.Core.Message           as Message
+import qualified Koshucode.Baala.Core.Message           as Msg
 
 
 -- ----------------------  Data type
@@ -53,26 +53,26 @@ roamapCons = loop where
     right trees = Right . B.Sourced (concatMap B.codePts $ B.untrees trees)
 
     loop trees =
-        Message.abAttrTrees trees $ case B.divideTreesByBar trees of
+        Msg.abAttrTrees trees $ case B.divideTreesByBar trees of
           [ B.TreeL (B.TText _ 0 op) : xs ]
             | op == "id"        ->  right trees $ RoamapId
             | op == "fill"      ->  right trees $ RoamapFill $ fill xs
 
           [ B.TreeL (B.TText _ 0 op) : B.TreeL (B.TText _ 0 k) : xs ]
-            | notKeyword k      ->  Message.reqAttrName k
+            | notKeyword k      ->  Msg.reqAttrName k
             | op == "add"       ->  right trees $ RoamapAdd False k xs
             | op == "opt"       ->  right trees $ RoamapAdd True  k xs
 
           [ B.TreeL (B.TText _ 0 op) : B.TreeL (B.TText _ 0 k')
                 : B.TreeL (B.TText _ 0 k) : _ ]
-            | notKeyword k'     ->  Message.reqAttrName k'
-            | notKeyword k      ->  Message.reqAttrName k
+            | notKeyword k'     ->  Msg.reqAttrName k'
+            | notKeyword k      ->  Msg.reqAttrName k
             | op == "rename"    ->  right trees $ RoamapRename (k', k)
 
           [[ B.TreeB B.BracketGroup _ xs ]]  ->  loop xs
 
           [[]]                  ->  right [] RoamapId
-          [_]                   ->  Message.adlib "unknown roamap"
+          [_]                   ->  Msg.adlib "unknown roamap"
           trees2                ->  do subs <- mapM loop trees2
                                        right trees $ RoamapAppend subs
 
@@ -81,7 +81,7 @@ roamapRun :: Roamap -> B.AbMap C.AttrTrees
 roamapRun = loop where
     loop (B.Sourced toks rmap) roa =
         let Just pos = lookup C.attrNameTrunk roa
-        in Message.abAttr toks $ case rmap of
+        in Msg.abAttr toks $ case rmap of
           RoamapId              ->  Right  roa
           RoamapAdd opt k xs    ->  add    roa opt (C.AttrTree k) xs
           RoamapRename (k', k)  ->  rename roa (C.AttrTree k') (C.AttrTree k)
@@ -94,18 +94,18 @@ roamapRun = loop where
           Nothing               ->  do xs' <- C.substSlot [] roa xs
                                        Right $ (k, xs') : roa
           Just _ | opt          ->  Right roa
-                 | otherwise    ->  Message.extraAttr
+                 | otherwise    ->  Msg.extraAttr
 
     rename :: C.AttrTrees -> C.AttrName -> C.AttrName -> B.Ab C.AttrTrees
     rename roa k' k =
         case lookup k roa of
           Just _                ->  Right $ B.assocRename1 k' k roa
-          Nothing               ->  Message.reqAttr $ C.attrNameText k
+          Nothing               ->  Msg.reqAttr $ C.attrNameText k
 
     fill :: [B.TokenTree] -> [Maybe B.TokenTree] -> B.Ab [B.TokenTree]
     fill (p : ps) (Nothing : xs)  =  Right . (p:) =<< fill ps xs
     fill (p : ps) (_       : xs)  =  Right . (p:) =<< fill ps xs
     fill []       (Just x  : xs)  =  Right . (x:) =<< fill [] xs
-    fill []       (Nothing : _ )  =  Message.reqAttr "*"
+    fill []       (Nothing : _ )  =  Msg.reqAttr "*"
     fill ps       []              =  Right $ ps
 

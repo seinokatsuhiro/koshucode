@@ -17,7 +17,7 @@ module Koshucode.Baala.Core.Content.Cox
 ) where
 
 import qualified Koshucode.Baala.Base            as B
-import qualified Koshucode.Baala.Core.Message    as Message
+import qualified Koshucode.Baala.Core.Message    as Msg
 
 
 -- ----------------------  Expression
@@ -121,8 +121,8 @@ coxCall cox g = coxMap g cox
 checkIrreducible :: B.AbMap (Cox c)
 checkIrreducible e
     | irreducible e = Right e
-    | otherwise     = Message.abCoxIrrep [e] $
-                      Message.unkCox "Not irreducible"
+    | otherwise     = Msg.abCoxIrrep [e] $
+                      Msg.unkCox "Not irreducible"
 
 -- irreducible representation
 irreducible :: Cox c -> Bool

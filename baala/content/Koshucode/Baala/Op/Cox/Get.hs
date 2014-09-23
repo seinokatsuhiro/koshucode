@@ -21,7 +21,7 @@ import Prelude hiding (getContents)
 import qualified Koshucode.Baala.Base        as B
 import qualified Koshucode.Baala.Core        as C
 import qualified Koshucode.Baala.Op.Builtin  as Op
-import qualified Koshucode.Baala.Op.Message  as Message
+import qualified Koshucode.Baala.Op.Message  as Msg
 
 
 -- --------------------------------------------  Cox
@@ -69,7 +69,7 @@ getWhereClause u trees =
          _  -> Right (n, C.coxForm cp (Just n) vs cox)
 
 getWhereHead :: [B.TokenTree] -> B.Ab (String, [String])
-getWhereHead [] = Message.adlib "getWhereHead"
+getWhereHead [] = Msg.adlib "getWhereHead"
 getWhereHead (n : vs) =
     do n'  <- getTextFromTree n
        vs' <- mapM getTextFromTree vs
@@ -79,11 +79,11 @@ getTreesByEqual :: [B.TokenTree] -> B.Ab ([B.TokenTree], [B.TokenTree])
 getTreesByEqual trees =
     case B.divideTreesByEqual trees of
       [left, right] -> Right (left, right)
-      _             -> Message.adlib "getTreesByEqual"
+      _             -> Msg.adlib "getTreesByEqual"
 
 getTextFromTree :: B.TokenTree -> B.Ab String
 getTextFromTree (B.TreeL (B.TText _ 0 n)) = Right n
-getTextFromTree _ = Message.adlib "getTextFromTree"
+getTextFromTree _ = Msg.adlib "getTextFromTree"
 
 
 

@@ -10,7 +10,7 @@ import qualified Koshucode.Baala.Core        as C
 import qualified Koshucode.Baala.Op.Builtin  as Op
 import qualified Koshucode.Baala.Op.Lattice  as Op
 import qualified Koshucode.Baala.Op.Term     as Op
-import qualified Koshucode.Baala.Op.Message  as Message
+import qualified Koshucode.Baala.Op.Message  as Msg
 
 
 -- | Implementation of relational operators.
@@ -42,7 +42,7 @@ consCheckTerm use =
        (Just ns, Nothing, Nothing) -> Right $ relmapCheckTermJust use ns
        (Nothing, Just ns, Nothing) -> Right $ relmapCheckTermHas  use ns
        (Nothing, Nothing, Just ns) -> Right $ relmapCheckTermBut  use ns
-       _ -> Message.unexpAttr "require one of -just / -has / -but"
+       _ -> Msg.unexpAttr "require one of -just / -has / -but"
 
 relmapCheckTermJust :: C.RopUse c -> [B.TermName] -> C.Relmap c
 relmapCheckTermHas  :: C.RopUse c -> [B.TermName] -> C.Relmap c
@@ -62,7 +62,7 @@ checkTerm :: String -> ([B.TermName] -> B.Relhead -> Bool) -> [B.TermName] -> C.
 checkTerm _ _ _ Nothing = Right C.relkitNothing
 checkTerm opt check ns (Just he1)
     | check ns he1 = Right $ C.relkitJust he1 C.RelkitId
-    | otherwise    = Message.checkTerm opt ns he1
+    | otherwise    = Msg.checkTerm opt ns he1
 
 
 
@@ -87,7 +87,7 @@ relkitDuplicate :: (Ord c) => [B.TermName] -> C.RelkitFlow c
 relkitDuplicate _ Nothing = Right C.relkitNothing
 relkitDuplicate ns (Just he1)
     | null nsLeft = Right kit2
-    | otherwise   = Message.unkTerm nsLeft he1
+    | otherwise   = Msg.unkTerm nsLeft he1
     where
       nsLeft :: [B.TermName]
       nsLeft = ns `B.snipLeft` ns1
@@ -131,5 +131,5 @@ relkitDump :: (B.Write c, C.CRel c) => C.RelkitFlow c
 relkitDump Nothing = Right C.relkitNothing
 relkitDump (Just he1) = Right kit2 where
     kit2 = C.relkitJust he1 $ C.RelkitAbFull False kitf2 []
-    kitf2 _ bo1 = Message.dumpRel $ B.Rel he1 bo1
+    kitf2 _ bo1 = Msg.dumpRel $ B.Rel he1 bo1
 

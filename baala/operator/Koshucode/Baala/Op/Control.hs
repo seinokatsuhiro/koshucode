@@ -21,7 +21,7 @@ import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Core       as C
 import qualified Koshucode.Baala.Op.Builtin as Op
 import qualified Koshucode.Baala.Op.Lattice as Op
-import qualified Koshucode.Baala.Op.Message as Message
+import qualified Koshucode.Baala.Op.Message as Msg
 
 
 -- | Implementation of relational operators.
@@ -53,7 +53,7 @@ relmapIf use = C.relmapConfl use relkitIf
 relkitIf :: (Ord c) => C.RelkitConfl c
 relkitIf [C.Relkit _ kitbT, C.Relkit (Just heA) kitbA, C.Relkit (Just heB) kitbB] _
     | B.headEquiv heA heB = Right $ kit3
-    | otherwise = Message.diffHead [heA, heB]
+    | otherwise = Msg.diffHead [heA, heB]
     where
       kit3 = C.relkitJust heA $ C.RelkitAbFull True kitf3 [kitbT, kitbA, kitbB]
       kitf3 bmaps bo1 =
@@ -69,7 +69,7 @@ relkitIf [kitT@(C.Relkit _ _), kitA@(C.Relkit heA' kitbA), kitB@(C.Relkit heB' k
     | isNothing2 heA' heB' = Right C.relkitNothing
     | isNothing heA'       = relkitIf [kitT, C.Relkit heB' kitbA, kitB] Nothing
     | isNothing heB'       = relkitIf [kitT, kitA, C.Relkit heA' kitbB] Nothing
-relkitIf _ _ = Message.unexpAttr "if T A b"
+relkitIf _ _ = Msg.unexpAttr "if T A b"
 
 isNothing :: Maybe B.Relhead -> Bool
 isNothing = (== Nothing)
@@ -111,7 +111,7 @@ relmapFix use = C.relmapBinary use relkitFix
 relkitFix :: forall c. (Ord c) => C.RelkitBinary c
 relkitFix (C.Relkit (Just he2) kitb2) (Just he1)
     | B.headEquiv he1 he2 = Right $ kit3
-    | otherwise = Message.diffHead [he1, he2]
+    | otherwise = Msg.diffHead [he1, he2]
     where
       kit3 = C.relkitJust he1 $ C.RelkitAbFull True kitf3 [kitb2]
       kitf3 bmaps = let [bmap2] = bmaps

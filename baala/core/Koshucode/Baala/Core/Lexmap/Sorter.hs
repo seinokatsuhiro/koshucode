@@ -13,7 +13,7 @@ module Koshucode.Baala.Core.Lexmap.Sorter
 
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Core.Lexmap.Attribute as C
-import qualified Koshucode.Baala.Core.Message          as Message
+import qualified Koshucode.Baala.Core.Message          as Msg
 
 
 -- $TrunkSorter
@@ -56,7 +56,7 @@ attrClassify trunkNames branchNames roa = roa2 where
     relmap n = let nam = C.attrNameText n
                in case lookup nam pairs of
                  Just k  -> Right k
-                 Nothing -> Message.unexpAttr $ "Unknown " ++ nam
+                 Nothing -> Msg.unexpAttr $ "Unknown " ++ nam
 
     pairs    :: [B.Named C.AttrName]
     pairs    = map pair alls
@@ -67,7 +67,7 @@ attrClassify trunkNames branchNames roa = roa2 where
 roaNone :: [C.AttrName] -> C.AttrDefine
 roaNone ns = spec (name f) [] ns where
     f []            = Right []
-    f _             = Message.unexpAttr "Attributes not required"
+    f _             = Msg.unexpAttr "Attributes not required"
 
 -- | Attribute sorter for enumerating trunk,
 --   i.e., @-1@, @-2@, ...
@@ -87,49 +87,49 @@ roaList a ns        = spec (name f) [a] ns where
 roaOneList :: C.AttrName -> C.AttrName -> [C.AttrName] -> C.AttrDefine
 roaOneList a b ns = spec (name f) [a,b] ns where
     f (a':b')       = Right [ (a, B.li1 a'), (b, b') ]
-    f _             = Message.unexpAttr "Require attributes"
+    f _             = Msg.unexpAttr "Require attributes"
 
 roaOneOpt :: C.AttrName -> C.AttrName -> [C.AttrName] -> C.AttrDefine
 roaOneOpt a b ns    = spec (name f) [a,b] ns where
     f [a']          = Right [ (a, B.li1 a'), (b, []) ]
     f [a',b']       = Right [ (a, B.li1 a'), (b, B.li1 b') ]
-    f _             = Message.unexpAttr "Require one or two attributes"
+    f _             = Msg.unexpAttr "Require one or two attributes"
 
 -- | Attribute sorter for one-attribute trunk.
 roaOne :: C.AttrName -> [C.AttrName] -> C.AttrDefine
 roaOne a ns         = spec (name f) [a] ns where
     f [a']          = Right [ (a, B.li1 a') ]
-    f _             = Message.unexpAttr "Require one attribute"
+    f _             = Msg.unexpAttr "Require one attribute"
 
 -- | Attribute sorter for two-attribute trunk.
 roaTwo :: C.AttrName -> C.AttrName -> [C.AttrName] -> C.AttrDefine
 roaTwo a b ns       = spec (name f) [a,b] ns where
     f [a',b']       = Right [ (a, B.li1 a'), (b, B.li1 b') ]
-    f _             = Message.unexpAttr "Require two attributes"
+    f _             = Msg.unexpAttr "Require two attributes"
 
 -- | Attribute sorter for three-attribute trunk.
 roaThree :: C.AttrName -> C.AttrName -> C.AttrName -> [C.AttrName] -> C.AttrDefine
 roaThree a b c ns   = spec (name f) [a,b,c] ns where
     f [a',b',c']    = Right [ (a, B.li1 a'), (b, B.li1 b'), (c, B.li1 c') ]
-    f _             = Message.unexpAttr "Require three attributes"
+    f _             = Msg.unexpAttr "Require three attributes"
 
 -- | Attribute sorter for four-attribute trunk.
 roaFour :: C.AttrName -> C.AttrName -> C.AttrName -> C.AttrName -> [C.AttrName] -> C.AttrDefine
 roaFour a b c d ns  = spec (name f) [a,b,c,d] ns where
     f [a',b',c',d'] = Right [ (a, B.li1 a'), (b, B.li1 b'), (c, B.li1 c'), (d, B.li1 d') ]
-    f _             = Message.unexpAttr "Require four attributes"
+    f _             = Msg.unexpAttr "Require four attributes"
 
 roaTermsOne :: C.AttrName -> C.AttrName -> [C.AttrName] -> C.AttrDefine
 roaTermsOne a b ns = spec (name f) [a,b] ns where
     f xs = case span isTermLeaf xs of
              (a', [b']) -> Right [ (a, a'), (b, B.li1 b') ]
-             _          -> Message.unexpAttr "Require terms and one attribute"
+             _          -> Msg.unexpAttr "Require terms and one attribute"
 
 roaTermsTwo :: C.AttrName -> C.AttrName -> C.AttrName -> [C.AttrName] -> C.AttrDefine
 roaTermsTwo a b c ns = spec (name f) [a,b,c] ns where
     f xs = case span isTermLeaf xs of
              (a', [b',c']) -> Right [ (a, a'), (b, B.li1 b'), (c, B.li1 c') ]
-             _             -> Message.unexpAttr "Require terms and two attributes"
+             _             -> Msg.unexpAttr "Require terms and two attributes"
 
 isTermLeaf :: B.TokenTree -> Bool
 isTermLeaf (B.TreeL token) = B.isTermToken token

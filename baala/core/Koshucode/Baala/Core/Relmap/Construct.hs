@@ -32,7 +32,7 @@ import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Core.Lexmap           as C
 import qualified Koshucode.Baala.Core.Relmap.Global    as C
 import qualified Koshucode.Baala.Core.Relmap.Operator  as C
-import qualified Koshucode.Baala.Core.Message          as Message
+import qualified Koshucode.Baala.Core.Message          as Msg
 
 
 -- ----------------------  Generic relmap
@@ -61,8 +61,8 @@ consRelmap find g = relmap where
           C.LexmapWith    -> Right $ C.RelmapLink lx n attr
           C.LexmapDerived -> Right $ C.RelmapLink lx n attr
           C.LexmapBase    -> case find n of
-                               Nothing  -> Message.unkRelmap n
-                               Just rop -> Message.abRelmap [lx] $ cons rop
+                               Nothing  -> Msg.unkRelmap n
+                               Just rop -> Msg.abRelmap [lx] $ cons rop
         where n        =  C.lexOpName lx
               attr     =  C.lexAttr   lx
               cons rop =  do sub <- mapM relmap $ C.lexSubmap lx
