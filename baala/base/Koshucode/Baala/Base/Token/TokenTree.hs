@@ -74,24 +74,28 @@ wrapTrees = B.treeWrap BracketGroup
 
 -- | There are six types of brackets
 data BracketType
-    = BracketGroup   -- ^ Round brackets for grouping: @( E ... )@
-    | BracketForm    -- ^ Round-bar brackets for form with blanks: @(| V ... | E ... |)@
-    | BracketList    -- ^ Square brackets for lists: @[ C : ... ]@
-    | BracketSet     -- ^ Curely braces for sets: @{ C : .... }@
-    | BracketRel     -- ^ Curely-bar braces for relations: @{| /N : ... | C : ... | C : ... |}@
-    | BracketAssn    -- ^ Double-angle brackets for associations etc.: @\<\< /N C .... \>\>@
-    | BracketInterp  -- ^ Triple-angle brackets for data interpretation: @\<\<\< ... /N ... \>\>\>@
+    = BracketGroup    -- ^ Round brackets for grouping: @( E ... )@
+    | BracketForm     -- ^ Round-bar brackets for form with blanks: @(| V ... | E ... |)@
+    | BracketList     -- ^ Square brackets for lists: @[ C : ... ]@
+    | BracketSet      -- ^ Curely braces for sets: @{ C : .... }@
+    | BracketRel      -- ^ Curely-bar braces for relations: @{| /N : ... | C : ... | C : ... |}@
+    | BracketAssn     -- ^ Double-angle brackets for associations etc.: @\<\< /N C .... \>\>@
+    | BracketInterp   -- ^ Triple-angle brackets for data interpretation: @\<\<\< ... /N ... \>\>\>@
+    | BracketType     -- ^ Square-hyphen brackets for data type: @[- ... -]@
+    | BracketUnknown  -- ^ Unknown bracket
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 getBracketType :: B.GetBracketType BracketType B.Token
 getBracketType = B.bracketTable
     [ o BracketGroup   "("     ")"
-    , o BracketForm    "(|"   "|)"
+    , o BracketForm    "(|"    "|)"
     , o BracketList    "["     "]"
     , o BracketSet     "{"     "}"
-    , o BracketAssn    "<<"   ">>"
-    , o BracketRel     "{|"   "|}"
-    , o BracketInterp  "<<<"  ">>>"
+    , o BracketAssn    "<<"    ">>"
+    , o BracketRel     "{|"    "|}"
+    , o BracketInterp  "<<<"   ">>>"
+    , o BracketType    "[-"    "-]"
+    , (BracketUnknown, B.isOpenToken, B.isCloseToken)
     ] where o n a b = (n, B.isOpenTokenOf a, B.isCloseTokenOf b)
 
 

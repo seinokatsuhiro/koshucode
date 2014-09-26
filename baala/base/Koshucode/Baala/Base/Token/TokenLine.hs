@@ -63,7 +63,11 @@ general r@B.CodeRoll { B.codeInputPt = cp
     ab          = Msg.abToken [cp]
 
     gen ""                           =  Right r
-    gen (c:'|':cs) | isOpen c        =  u cs            $ B.TOpen    cp [c, '|']
+        
+    gen (a:b:cs)   | isOpen a &&
+                     isGrip b        =  u cs            $ B.TOpen    cp [a,b]
+                   | isGrip a &&
+                     isClose b       =  u cs            $ B.TClose   cp [a,b]
         
     gen (c:cs)     | c == '*'        =  ast   cs [c]
                    | c == '<'        =  bra   cs [c]
@@ -107,22 +111,22 @@ general r@B.CodeRoll { B.codeInputPt = cp
     hash ('!':cs) _                  =  u ""            $ B.TComment cp cs
     hash cs w                        =  u cs            $ B.TText    cp 0 w
 
-    short (c:cs) w   | c == '.'      =  let pre = rv w
+    short (c:cs) w  | c == '.'       =  let pre = rv w
                                             (cs', body) = nextCode   cs
                                         in u cs'        $ B.TShort   cp pre body
-                     | isCode c      =  short cs        $ c:w
+                    | isCode c       =  short cs        $ c:w
     short cs w                       =  u cs            $ B.TText    cp 0 $ rv w
 
     bar [] w                         =  u ""            $ B.TText    cp 0 w
-    bar (c:cs) w | c == '|'          =  bar cs          $ c:w
-                 | w == "||"         =  let cs' = B.trimLeft (c:cs)
+    bar (c:cs) w    | c == '|'       =  bar cs          $ c:w
+                    | w == "||"      =  let cs' = B.trimLeft (c:cs)
                                         in u cs'        $ B.TText    cp 0 w
-                 | w == "|" &&
-                   isClose c         =  u cs            $ B.TClose   cp ['|', c]
-                 | otherwise         =  u (c:cs)        $ B.TText    cp 0 w
+                    | w == "|" &&
+                      isClose c      =  u cs            $ B.TClose   cp ['|', c]
+                    | otherwise      =  u (c:cs)        $ B.TText    cp 0 w
 
-    ang (c:cs) w | c == '>'          =  u     cs        $ angle $ rv w
-                 | isCode c          =  ang   cs        $ c:w
+    ang (c:cs) w    | c == '>'       =  u     cs        $ angle $ rv w
+                    | isCode c       =  ang   cs        $ c:w
     ang cs w                         =  u     cs        $ B.TText    cp 0 $ '<' : rv w
 
     angle ('c' : s)
@@ -224,13 +228,14 @@ scanSlot n cp cs = let (cs', w) = nextCode cs
 --  O C O C O C S S Q Q H T
 
 -- Punctuations
-isOpen, isClose, isSingle, isQ, isQQ, isTerm, isSpace, isCode :: B.Pred Char
-isOpen     =  ( `elem` "([{" )  --  UnicodePunctuation
-isClose    =  ( `elem` "}])" )  --  UnicodePunctuation
-isSingle   =  ( `elem` ":|"  )  --  UnicodePunctuation | UnicodeSymbol
-isQ        =  (    ==  '\''  )  --  UnicodePunctuation
-isQQ       =  (    ==  '"'   )  --  UnicodePunctuation
-isTerm     =  (    ==  '/'   )  --  UnicodePunctuation
+isOpen, isClose, isGrip, isSingle, isQ, isQQ, isTerm, isSpace, isCode :: B.Pred Char
+isOpen     =  ( `elem` "([{" )   --  UnicodePunctuation
+isClose    =  ( `elem` "}])" )   --  UnicodePunctuation
+isGrip     =  ( `elem` "|:*+-" )
+isSingle   =  ( `elem` ":|"  )   --  UnicodePunctuation | UnicodeSymbol
+isQ        =  (    ==  '\''  )   --  UnicodePunctuation
+isQQ       =  (    ==  '"'   )   --  UnicodePunctuation
+isTerm     =  (    ==  '/'   )   --  UnicodePunctuation
 isSpace    =  Char.isSpace
 isCode     =  B.isCodeChar
 

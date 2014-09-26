@@ -23,6 +23,7 @@ module Koshucode.Baala.Base.Token.Token
 
   -- * Predicates
   isBlankToken, isShortToken, isTermToken,
+  isOpenToken, isCloseToken,
   isOpenTokenOf, isCloseTokenOf,
 
   -- * Other function
@@ -196,6 +197,14 @@ isShortToken _               = False
 isTermToken :: B.Pred Token
 isTermToken (TTerm _ _ _) = True
 isTermToken _             = False
+
+isOpenToken :: B.Pred Token
+isOpenToken (TOpen _ _) = True
+isOpenToken _           = False
+
+isCloseToken :: B.Pred Token
+isCloseToken (TClose _ _) = True
+isCloseToken _           = False
 
 -- | Check token is a 'TOpen' of the specific bracket.
 --

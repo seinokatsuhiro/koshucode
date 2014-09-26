@@ -41,13 +41,14 @@ literal calc tree = Msg.abLiteral tree $ lit tree where
     lit x@(B.TreeL t)
         = either (const $ token t) decimal $ getDecimalText [x]
     lit g@(B.TreeB b _ xs) = case b of
-        B.BracketGroup  ->  group g
-        B.BracketList   ->  C.putList   =<< literals lit xs
-        B.BracketSet    ->  C.putSet    =<< literals lit xs
-        B.BracketAssn   ->                  litAngle lit xs
-        B.BracketRel    ->  C.putRel    =<< litRel   lit xs
-        B.BracketInterp ->  C.putInterp =<< getInterp xs
-        B.BracketForm   ->  Msg.adlib "Unknown bracket type"
+        B.BracketGroup   ->  group g
+        B.BracketList    ->  C.putList   =<< literals lit xs
+        B.BracketSet     ->  C.putSet    =<< literals lit xs
+        B.BracketAssn    ->                  litAngle lit xs
+        B.BracketRel     ->  C.putRel    =<< litRel   lit xs
+        B.BracketType    ->  C.putList   =<< literals lit xs
+        B.BracketInterp  ->  C.putInterp =<< getInterp xs
+        _                ->  Msg.unkBracket
 
     token :: B.Token -> B.Ab c
     token (B.TText _ n w) | n <= 0  =  getKeyword w
