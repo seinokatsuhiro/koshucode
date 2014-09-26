@@ -83,10 +83,9 @@ relkitDepRank _  Nothing = Right C.relkitNothing
 relkitDepRank (x,y,r) (Just he1) = Right kit2 where
     he2         =  B.headFrom [x,r]
     kit2        =  C.relkitJust he2 $ C.RelkitFull False f2
-    ns1         =  B.headNames he1
-    ind         =  [x,y] `B.snipIndex` ns1
-    get cs      =  let [cx,cy] = B.snipFrom ind cs in (cx,cy)
+    xyPick      =  Op.picker he1 [x,y]
     f2 bo1      =  map put $ rank $ map get bo1
+    get cs      =  let [cx,cy] = xyPick cs in (cx,cy)
     put (cx,i)  =  [cx, C.pDecFromInt i]
     rank        =  Op.depRankList . Op.depRankUpdateAll . Op.depRankFromPairs
 

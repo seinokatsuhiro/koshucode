@@ -131,12 +131,10 @@ relmapAssn use = C.relmapFlow use . relkitAssn
 relkitAssn :: (C.CAssn c) => ([B.TermName], B.TermName) -> C.RelkitFlow c
 relkitAssn _ Nothing = Right C.relkitNothing
 relkitAssn (ns, to) (Just he1) = Right kit2 where
-    ns1       =  B.headNames he1
-    ind       =  B.snipIndex ns ns1
+    pick      =  Op.picker he1 ns
     he2       =  B.headCons to he1
     kit2      =  C.relkitJust he2 $ C.RelkitOneToOne False f2
-    f2 cs1    =  let cs   = B.snipFrom ind cs1
-                     assn = C.pAssn $ zip ns cs
+    f2 cs1    =  let assn = C.pAssn $ zip ns $ pick cs1
                  in assn : cs1
 
 
@@ -156,11 +154,10 @@ relmapUnassn use = C.relmapFlow use . relkitUnassn
 relkitUnassn :: (C.CAssn c) => (B.TermName, [B.TermName]) -> C.RelkitFlow c
 relkitUnassn _ Nothing = Right C.relkitNothing
 relkitUnassn (from, ns) (Just he1) = Right kit2 where
-    ns1       =  B.headNames he1
-    ind       =  B.snipIndex [from] ns1
+    pick      =  Op.picker he1 [from]
     he2       =  B.headAppend ns he1
     kit2      =  C.relkitJust he2 $ C.RelkitOneToAbOne False f2 []
-    f2 _ cs1  =  do let [assn] = B.snipFrom ind cs1
+    f2 _ cs1  =  do let [assn] = pick cs1
                     cs <- assnPick ns $ C.gAssn assn
                     Right $ cs ++ cs1
 

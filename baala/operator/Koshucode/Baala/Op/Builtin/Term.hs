@@ -5,6 +5,7 @@
 module Koshucode.Baala.Op.Builtin.Term
 ( termName, termNames, termNamesCo,
   termNamePairs,
+  picker,
 ) where
 
 import qualified Koshucode.Baala.Base       as B
@@ -47,3 +48,6 @@ termNamePairs = loop where
     loop [] = Right []
     loop _  = Msg.reqTermName
 
+picker :: B.Relhead -> [B.TermName] -> B.Map [c]
+picker he ts = B.snipFrom ind where
+    ind = ts `B.snipIndex` B.headNames he
