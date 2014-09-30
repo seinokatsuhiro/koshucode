@@ -12,6 +12,7 @@ module Koshucode.Baala.Base.Data.Output,
 module Koshucode.Baala.Base.Data.Rel,
 module Koshucode.Baala.Base.Data.Relhead,
 module Koshucode.Baala.Base.Data.Term,
+module Koshucode.Baala.Base.Data.Type,
 ) where
 
 import Koshucode.Baala.Base.Data.Decimal
@@ -22,3 +23,4 @@ import Koshucode.Baala.Base.Data.Output
 import Koshucode.Baala.Base.Data.Rel
 import Koshucode.Baala.Base.Data.Relhead
 import Koshucode.Baala.Base.Data.Term
+import Koshucode.Baala.Base.Data.Type

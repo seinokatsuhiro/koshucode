@@ -63,6 +63,7 @@ library
         Koshucode.Baala.Base.Data.Rel
         Koshucode.Baala.Base.Data.Relhead
         Koshucode.Baala.Base.Data.Term
+        Koshucode.Baala.Base.Data.Type
 
         Koshucode.Baala.Base.Prelude
         Koshucode.Baala.Base.Prelude.Assoc
