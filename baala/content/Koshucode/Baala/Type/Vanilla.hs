@@ -27,7 +27,8 @@ data VContent
     | VSet     [VContent]         -- ^ Set type (informative collection)
     | VAssn    [B.Named VContent] -- ^ Assn type (set of terms)
     | VRel     (B.Rel VContent)   -- ^ Relation type
-    | VInterp  B.Interp           -- ^ Relation type
+    | VInterp  B.Interp           -- ^ Interpretation type
+    | VType    B.Type             -- ^ Type for type
       deriving (Show)
 
 instance Eq VContent where
@@ -45,6 +46,7 @@ instance Ord VContent where
     compare (VAssn    x) (VAssn    y)  =  compareAsSet x y
     compare (VRel     x) (VRel     y)  =  compare x y
     compare (VInterp  x) (VInterp  y)  =  compare x y
+    compare (VType    x) (VType    y)  =  compare x y
 
     compare (VBool    _) _             =  LT
     compare (VText    _) _             =  LT
@@ -56,6 +58,7 @@ instance Ord VContent where
     compare (VAssn    _) _             =  LT
     compare (VRel     _) _             =  LT
     compare (VInterp  _) _             =  LT
+    compare (VType    _) _             =  LT
 
 compareAsSet :: (Ord a) => [a] -> [a] -> Ordering
 compareAsSet x y = compare (Set.fromList x) (Set.fromList y)
@@ -71,6 +74,7 @@ instance C.PrimContent VContent where
     typename (VAssn    _)  =  "assn"
     typename (VRel     _)  =  "rel"
     typename (VInterp  _)  =  "interp"
+    typename (VType    _)  =  "type"
 
 instance C.CContent VContent where
     appendContent (VEmpty) x = Right x
@@ -90,6 +94,7 @@ instance B.Write VContent where
         VAssn xs     ->  B.docWraps "<<" ">>" $ B.writeH     sh xs
         VRel r       ->  B.write sh r
         VInterp i    ->  B.write sh i
+        VType t      ->  B.docWraps "[-" "-]" $ B.write sh t
 
 
 -- ----------------------  haskell data
@@ -165,4 +170,11 @@ instance C.CInterp VContent where
     gInterp _                   =  B.bug "gInterp"
     isInterp  (VInterp _)       =  True
     isInterp  _                 =  False
+
+instance C.CType VContent where
+    pType                     =  VType
+    gType (VType r)           =  r
+    gType _                   =  B.bug "gType"
+    isType  (VType _)         =  True
+    isType  _                 =  False
 

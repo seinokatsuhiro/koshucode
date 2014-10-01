@@ -8,7 +8,7 @@ module Koshucode.Baala.Base.Text.Write
 
   -- * Derivative
   writeH, writeV,
-  writeColon,
+  writeColon, writeBar, writeSep,
 
   -- * Simple writer
   doc, doch, docv,
@@ -59,11 +59,16 @@ writeV sh = D.vcat . map (write sh)
 --   >>> docBracket $ docColon [True, False]
 --   [ #true : #false ]
 writeColon :: (Write a) => StringMap -> [a] -> D.Doc
-writeColon sh = D.hsep . writeColons sh
+writeColon sh = writeSep ":" sh
 
--- | Colon-seperated list.
-writeColons :: (Write a) => StringMap -> [a] -> [D.Doc]
-writeColons sh = L.intersperse (D.text ":") . map (write sh)
+writeBar :: (Write a) => StringMap -> [a] -> D.Doc
+writeBar sh = writeSep "|" sh
+
+writeSep :: (Write a) => String -> StringMap -> [a] -> D.Doc
+writeSep sep sh = D.hsep . writeSeps sep sh
+
+writeSeps :: (Write a) => String -> StringMap -> [a] -> [D.Doc]
+writeSeps sep sh = L.intersperse (D.text sep) . map (write sh)
 
 
 

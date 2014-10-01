@@ -18,6 +18,7 @@ module Koshucode.Baala.Core.Content.Class
   CAssn       (..),
   CRel        (..), isMember,
   CInterp     (..),
+  CType       (..),
 
   contAp, contMap,
   contApTextToText,
@@ -174,6 +175,17 @@ class (PrimContent c) => CInterp c where
 
     putInterp   ::    B.Interp -> B.Ab c
     putInterp   =     Right . pInterp
+
+class (PrimContent c) => CType c where
+    isType      ::           c -> Bool
+    gType       ::           c -> B.Type
+    pType       ::      B.Type -> c
+
+    getType     ::      B.Ab c -> B.Ab B.Type
+    getType     =       getAbAb isType gType
+
+    putType     ::      B.Type -> B.Ab c
+    putType     =       Right . pType
 
 isMember :: (Eq c, CSet c, CList c) => c -> c -> Bool
 isMember x xs | isSet xs  = x `elem` gSet xs
