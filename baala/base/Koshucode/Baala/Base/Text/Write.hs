@@ -2,18 +2,22 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Text.Write
-( -- * Data type
-  Write (..),
-  StringMap,
+  ( -- * Class
+    StringMap,
+    Write (..),
 
-  -- * Derivative
-  writeH, writeV,
-  writeColon, writeBar, writeSep,
+    -- * Derivative
+    writeH, writeV,
+    writeColon, writeBar, writeSep,
+    writeSepsWith,
+    writeTerm, writeTerms,
+    -- $Derivative
 
-  -- * Simple writer
-  doc, doch, docv,
-  docWrap, docWraps,
-) where
+    -- * Simple writer
+    doc, doch, docv,
+    docWrap, docWraps,
+    -- $Simple
+  ) where
 
 import qualified Data.List                     as L
 import qualified Text.PrettyPrint              as D
@@ -23,10 +27,12 @@ import qualified Koshucode.Baala.Base.Prelude  as B
 
 -- ----------------------  Data type
 
+-- | Mapping from string to string.
+type StringMap = B.Map String
+
+-- | Writer with string mapping.
 class Write a where
     write :: StringMap -> a -> B.Doc
-
-type StringMap = B.Map String
 
 instance Write B.Doc where
     write _ x = x
@@ -42,59 +48,89 @@ instance Write Bool where
     write _ False = D.text "<0>"
 
 instance (Write a) => Write (B.Named a) where
-    write sh (n, x) = D.text ('/' : n) D.<+> write sh x
+    write sh = writeTerm $ write sh
 
 
 
 -- ----------------------  Derivative
 
-writeH :: (Write a) => StringMap -> [a] -> D.Doc
+-- $Derivative
+--
+--   /Examples/
+--
+--   Colon-seperated document.
+--
+--     >>> writeColon id [True, False]
+--     <1> : <0>
+--
+--   List of terms.
+--
+--     >>> writeTerms doc [("x", False), ("y", True)]
+--     /x <0> /y <1>
+
+writeH :: (Write a) => StringMap -> [a] -> B.Doc
 writeH sh = D.hsep . map (write sh)
 
-writeV :: (Write a) => StringMap -> [a] -> D.Doc
+writeV :: (Write a) => StringMap -> [a] -> B.Doc
 writeV sh = D.vcat . map (write sh)
 
--- | Colon-seperated document.
---
---   >>> docBracket $ docColon [True, False]
---   [ #true : #false ]
-writeColon :: (Write a) => StringMap -> [a] -> D.Doc
+writeColon :: (Write a) => StringMap -> [a] -> B.Doc
 writeColon sh = writeSep ":" sh
 
-writeBar :: (Write a) => StringMap -> [a] -> D.Doc
+writeBar :: (Write a) => StringMap -> [a] -> B.Doc
 writeBar sh = writeSep "|" sh
 
-writeSep :: (Write a) => String -> StringMap -> [a] -> D.Doc
+writeSep :: (Write a) => String -> StringMap -> [a] -> B.Doc
 writeSep sep sh = D.hsep . writeSeps sep sh
 
-writeSeps :: (Write a) => String -> StringMap -> [a] -> [D.Doc]
-writeSeps sep sh = L.intersperse (D.text sep) . map (write sh)
+writeSeps :: (Write a) => String -> StringMap -> [a] -> [B.Doc]
+writeSeps sep sh = writeSepsWith (write sh) sep
+
+writeSepsWith :: (Write a) => (a -> B.Doc) -> String -> [a] -> [B.Doc]
+writeSepsWith w sep = L.intersperse (D.text sep) . map w
+
+writeTerm :: (a -> B.Doc) -> B.Named a -> B.Doc
+writeTerm w (n, x) = D.text ('/' : n) B.<+> w x
+
+writeTerms :: (a -> B.Doc) -> [B.Named a] -> B.Doc
+writeTerms w = doch . (writeTerm w `map`)
 
 
 
 -- ----------------------  Simple writer
 
-doc :: (Write a) => a -> D.Doc
+-- $Simple
+--
+--  Simple writers are writers with identity string mapping.
+--  For example, @doc@ is equivalent for @write id@.
+--
+--  /Examples/
+--
+--  Wrap in open and close brackets.
+--
+--     >>> docWrap "[" "]" "abc"
+--     [abc]
+--
+--  Put spaces between content and brackets.
+--
+--     >>> docWraps "[" "]" "abc"
+--     [ abc ]
+
+doc :: (Write a) => a -> B.Doc
 doc = write id
 
-docv :: (Write a) => [a] -> D.Doc
+docv :: (Write a) => [a] -> B.Doc
 docv = writeV id
 
-doch :: (Write a) => [a] -> D.Doc
+doch :: (Write a) => [a] -> B.Doc
 doch = writeH id
 
--- | Wrap in open and close brackets.
---   Put spaces between content and brackets.
---
---   >>> docWraps "(" ")" "abc"
---   ( abc )
-docWraps :: (Write a) => String -> String -> a -> D.Doc
-docWraps open close a = D.text open D.<+> doc a D.<+> D.text close
+docWrap :: (Write a) => String -> String -> a -> B.Doc
+docWrap = docWrapBody (B.<>)
 
--- | Wrap in open and close brackets.
---
---   >>> docWrap "(" ")" "abc"
---   (abc)
-docWrap :: (Write a) => String -> String -> a -> D.Doc
-docWrap open close a = D.text open D.<> doc a D.<> D.text close
+docWraps :: (Write a) => String -> String -> a -> B.Doc
+docWraps = docWrapBody (B.<+>)
+
+docWrapBody :: (Write a) => (B.Doc -> B.Doc -> B.Doc) -> String -> String -> a -> B.Doc
+docWrapBody p open close a = D.text open `p` doc a `p` D.text close
 

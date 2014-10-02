@@ -46,7 +46,7 @@ literal calc tree = Msg.abLiteral tree $ lit tree where
         B.BracketSet     ->  C.putSet    =<< literals lit xs
         B.BracketAssn    ->                  litAngle lit xs
         B.BracketRel     ->  C.putRel    =<< litRel   lit xs
-        B.BracketType    ->  C.putList   =<< literals lit xs
+        B.BracketType    ->  C.putType   =<< litType  xs
         B.BracketInterp  ->  C.putInterp =<< getInterp xs
         _                ->  Msg.unkBracket
 
@@ -136,12 +136,16 @@ getFlatName _                           = Msg.reqTermName
 
 -- | Convert token trees into a list of named token trees.
 getTermedTrees :: B.TokenTreesToAb [B.NamedTree]
-getTermedTrees = name where
+getTermedTrees xs = do xs' <- getTermedTrees2 xs
+                       Right $ B.mapSndTo B.wrapTrees xs'
+
+getTermedTrees2 :: B.TokenTreesToAb [B.NamedTrees]
+getTermedTrees2 = name where
     name [] = Right []
     name (x : xs) = do let (c, xs2) = cont xs
                        n    <- getFlatName x
                        xs2' <- name xs2
-                       Right $ (n, B.wrapTrees c) : xs2'
+                       Right $ (n, c) : xs2'
 
     cont :: B.TokenTreesTo ([B.TokenTree], [B.TokenTree])
     cont xs@(B.TreeL (B.TTerm _ 0 _) : _) = ([], xs)
@@ -220,6 +224,27 @@ litRel lit cs =
        if any (length h2 /=) $ map length b3
           then Msg.oddRelation
           else Right $ B.Rel (B.headFrom h2) b3
+
+litType :: B.TokenTreesToAb B.Type
+litType = gen where
+    gen xs = case B.divideTreesByBar xs of
+               [x] ->  single x
+               xs2 ->  Right . B.TypeSum =<< mapM gen xs2
+
+    single [B.TreeB _ _ xs]  =  gen xs
+    single (B.TreeL (B.TText _ q n) : xs)
+        | q == 0             =  dispatch xs n
+        | otherwise          =  Msg.quoteType n
+    single []                =  Right $ B.TypeSum []
+    single _                 =  Msg.unkType ""
+
+    dispatch _  "empty"    =  Right B.TypeEmpty
+    dispatch _  "boolean"  =  Right B.TypeBool
+    dispatch _  "text"     =  Right B.TypeText
+    dispatch xs "rel"      =  do ts1 <- getTermedTrees2 xs
+                                 ts2 <- B.sequenceSnd $ B.mapSndTo gen ts1
+                                 Right $ B.TypeRel ts2
+    dispatch _ n           =  Msg.unkType n
 
 -- | Convert token trees into a judge.
 --   Judges itself are not content type.

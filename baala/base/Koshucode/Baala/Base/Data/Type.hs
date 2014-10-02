@@ -17,11 +17,19 @@ data Type
       deriving (Show, Eq, Ord)
 
 instance B.Write Type where
-    write sh a = case a of
-        TypeEmpty    ->  B.doc "empty"
-        TypeBool     ->  B.doc "boolean"
-        TypeText     ->  B.doc "text"
-        TypeRel ts   ->  let he = B.docWraps "{" "}" $ B.writeColon sh ts
-                         in B.doc "rel" B.<+> he
-        TypeSum ts   ->  B.docWraps "(" ")" $ B.writeBar sh ts
+    write = writeType
+
+writeType :: B.StringMap -> Type -> B.Doc
+writeType _ = wf where
+    wt = w True
+    wf = w False
+
+    w _ TypeEmpty         =  B.doc "empty"
+    w _ TypeBool          =  B.doc "boolean"
+    w _ TypeText          =  B.doc "text"
+    w _ (TypeRel ts)      =  B.doc "rel" B.<+> B.writeTerms wt ts
+    w False (TypeSum ts)  =  bar ts
+    w True  (TypeSum ts)  =  B.docWraps "(" ")" $ bar ts
+
+    bar ts                =  B.doch $ B.writeSepsWith wf "|" ts
 

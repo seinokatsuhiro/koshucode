@@ -40,6 +40,7 @@ module Koshucode.Baala.Core.Message
   noSlotIndex,
   nothing,
   oddRelation,
+  quoteType,
   reqFlatName,
   reqAttr,
   reqAttrName,
@@ -55,6 +56,7 @@ module Koshucode.Baala.Core.Message
   unkRelmap,
   unkShow,
   unkTerm,
+  unkType,
   unkWithVar,
   unkWord,
   unmatchType,
@@ -191,6 +193,10 @@ nothing = Left $ B.abortBecause "Nothing"
 oddRelation :: B.Ab a
 oddRelation = Left $ B.abortBecause "Odd relation literal"
 
+-- | Quoted type name
+quoteType :: String -> B.Ab a
+quoteType = Left . B.abortLine "Quoted type name"
+
 -- | Require flat name
 reqFlatName :: B.Token -> B.Ab a
 reqFlatName tok = Left $ B.abortLine "Require flat name" n where
@@ -255,6 +261,10 @@ unkTerm :: [B.TermName] -> B.Relhead -> B.Ab a
 unkTerm ns he1 =
     Left $ B.abortLines "Unknown term name"
          $ detailTermRel "Unknown" ns he1
+
+-- | Unknown type name
+unkType :: String -> B.Ab a
+unkType = Left . B.abortLine "Unknown type name"
 
 unkWithVar :: String -> B.Ab a
 unkWithVar = Left . B.abortLine "Unknown with-variable"

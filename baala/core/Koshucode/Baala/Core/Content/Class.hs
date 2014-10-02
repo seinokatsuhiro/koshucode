@@ -37,7 +37,7 @@ class (Show c) => PrimContent c where
 
 class (Ord c, B.Write c, PrimContent c,
        CBool c, CText c, CTerm c, CDec c, CList c,
-       CEmpty c , CSet c, CAssn c, CRel c, CInterp c) =>
+       CEmpty c , CSet c, CAssn c, CRel c, CInterp c, CType c) =>
     CContent c where
 
     appendContent :: c -> c -> B.Ab c
