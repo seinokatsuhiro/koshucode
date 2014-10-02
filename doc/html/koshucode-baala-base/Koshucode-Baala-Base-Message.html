@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-M
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.70.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.75.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -45,11 +45,42 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-M
 	><p class="caption"
 	>Koshucode.Baala.Base.Message</p
 	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Abortables
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Base package
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Tokenizer
+</a
+	    ></li
+	  ></ul
+	></div
       ><div id="synopsis"
       ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
+	  ><a href="#v:abToken"
+	    >abToken</a
+	    > :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePtr"
+	    >CodePtr</a
+	    > cp =&gt; [cp] -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > b)</li
+	  ><li class="src short"
 	  ><a href="#v:adlib"
 	    >adlib</a
 	    > ::  <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
@@ -119,11 +150,57 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-M
 	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
 	    > b</li
+	  ><li class="src short"
+	  ><a href="#v:forbiddenInput"
+	    >forbiddenInput</a
+	    > ::  <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:forbiddenTerm"
+	    >forbiddenTerm</a
+	    > ::  <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:unkAngleText"
+	    >unkAngleText</a
+	    > ::  <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a</li
+	  ><li class="src short"
+	  ><a href="#v:quotNotEnd"
+	    >quotNotEnd</a
+	    > ::  <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a</li
 	  ></ul
 	></div
       ><div id="interface"
-      ><h1
-	>Documentation</h1
+      ><h1 id="g:1"
+	>Abortables
+</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:abToken" class="def"
+	    >abToken</a
+	    > :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePtr"
+	    >CodePtr</a
+	    > cp =&gt; [cp] -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > b)<a href="src/Koshucode-Baala-Base-Message.html#abToken" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:2"
+	>Base package
+</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:adlib" class="def"
@@ -267,6 +344,73 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-M
 	  ><div class="doc"
 	  ><p
 	    >Lookup association list. This function may abort.
+</p
+	    ></div
+	  ></div
+	><h1 id="g:3"
+	>Tokenizer
+</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:forbiddenInput" class="def"
+	    >forbiddenInput</a
+	    > ::  <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a<a href="src/Koshucode-Baala-Base-Message.html#forbiddenInput" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Forbidden input
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:forbiddenTerm" class="def"
+	    >forbiddenTerm</a
+	    > ::  <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a<a href="src/Koshucode-Baala-Base-Message.html#forbiddenTerm" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Forbidden term name
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:unkAngleText" class="def"
+	    >unkAngleText</a
+	    > ::  <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a<a href="src/Koshucode-Baala-Base-Message.html#unkAngleText" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Unknown bracket text
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:quotNotEnd" class="def"
+	    >quotNotEnd</a
+	    > ::  <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a<a href="src/Koshucode-Baala-Base-Message.html#quotNotEnd" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Quotation not end in line
 </p
 	    ></div
 	  ></div

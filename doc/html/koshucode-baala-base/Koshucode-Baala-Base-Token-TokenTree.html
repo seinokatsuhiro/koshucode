@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.70.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.75.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -198,12 +198,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		>BracketSet</a
 		>  </li
 	      ><li
+	      >| <a href="#v:BracketRel"
+		>BracketRel</a
+		>  </li
+	      ><li
 	      >| <a href="#v:BracketAssn"
 		>BracketAssn</a
 		>  </li
 	      ><li
-	      >| <a href="#v:BracketRel"
-		>BracketRel</a
+	      >| <a href="#v:BracketInterp"
+		>BracketInterp</a
+		>  </li
+	      ><li
+	      >| <a href="#v:BracketType"
+		>BracketType</a
+		>  </li
+	      ><li
+	      >| <a href="#v:BracketUnknown"
+		>BracketUnknown</a
 		>  </li
 	      ></ul
 	    ></li
@@ -570,6 +582,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		></tr
 	      ><tr
 	      ><td class="src"
+		><a name="v:BracketRel" class="def"
+		  >BracketRel</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Curely-bar braces for relations: <code
+		    >{| /N : ... | C : ... | C : ... |}</code
+		    >
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
 		><a name="v:BracketAssn" class="def"
 		  >BracketAssn</a
 		  ></td
@@ -583,14 +608,38 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:BracketRel" class="def"
-		  >BracketRel</a
+		><a name="v:BracketInterp" class="def"
+		  >BracketInterp</a
 		  ></td
 		><td class="doc"
 		><p
-		  >Curely-bar braces for relations: <code
-		    >{| /N : ... | C : ... | C : ... |}</code
+		  >Triple-angle brackets for data interpretation: <code
+		    >&lt;&lt;&lt; ... /N ... &gt;&gt;&gt;</code
 		    >
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:BracketType" class="def"
+		  >BracketType</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Square-hyphen brackets for data type: <code
+		    >[- ... -]</code
+		    >
+</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:BracketUnknown" class="def"
+		  >BracketUnknown</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Unknown bracket
 </p
 		  ></td
 		></tr

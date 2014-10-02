@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.70.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.75.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -162,6 +162,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><a href="#v:transpose"
 	    >transpose</a
 	    > ::  [[a]] -&gt; [[a]]</li
+	  ><li class="src short"
+	  ><a href="#v:intercalate"
+	    >intercalate</a
+	    > ::  [a] -&gt; [[a]] -&gt; [a]</li
 	  ><li class="src short"
 	  ><a href="#v:lookupMap"
 	    >lookupMap</a
@@ -573,6 +577,39 @@ and otherwise do nothing.
 	    ><pre
 	    > transpose [[1,2,3],[4,5,6]] == [[1,4],[2,5],[3,6]]
 </pre
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:intercalate" class="def"
+	    >intercalate</a
+	    > ::  [a] -&gt; [[a]] -&gt; [a]</p
+	  ><div class="doc"
+	  ><p
+	    ><code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:intercalate"
+		>intercalate</a
+		></code
+	      > <code
+	      >xs xss</code
+	      > is equivalent to <code
+	      >(<code
+		><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:concat"
+		  >concat</a
+		  ></code
+		> (<code
+		><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:intersperse"
+		  >intersperse</a
+		  ></code
+		> xs xss))</code
+	      >.
+ It inserts the list <code
+	      >xs</code
+	      > in between the lists in <code
+	      >xss</code
+	      > and concatenates the
+ result.
+</p
 	    ></div
 	  ></div
 	><h1 id="g:3"

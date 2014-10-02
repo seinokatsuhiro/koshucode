@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.70.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.75.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -44,6 +44,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ></table
 	><p class="caption"
 	>Koshucode.Baala.Base.Syntax.Code</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >CodeLine
+</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >CodeRoll
+</a
+	    ></li
+	  ></ul
 	></div
       ><div id="description"
       ><p class="caption"
@@ -97,14 +113,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ></ul
 	    >}</li
 	  ><li class="src short"
-	  ><a href="#v:lineNumberContent"
-	    >lineNumberContent</a
-	    > ::  <a href="Koshucode-Baala-Base-Syntax-Code.html#t:CodeLine"
-	    >CodeLine</a
-	    > a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    ></li
-	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
 	    >  <a href="#t:CodeClause"
@@ -125,8 +133,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      ></ul
 	    >}</li
 	  ><li class="src short"
-	  ><a href="#v:indentLineBy"
-	    >indentLineBy</a
+	  ><a href="#v:lineIndentPair"
+	    >lineIndentPair</a
 	    > ::  (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
 	    >) -&gt; <a href="Koshucode-Baala-Base-Syntax-Code.html#t:CodeLine"
@@ -146,31 +154,82 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >, a)] [a]</li
 	  ><li class="src short"
 	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:NextToken"
-	    >NextToken</a
-	    > a = <a href="Koshucode-Baala-Base-Syntax-Line.html#t:NumberedLine"
-	    >NumberedLine</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Assoc.html#t:Gather"
-	    >Gather</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > a</li
+	    >data</span
+	    >  <a href="#t:CodeRoll"
+	    >CodeRoll</a
+	    > a = <a href="#v:CodeRoll"
+	    >CodeRoll</a
+	    > {<ul class="subs"
+	    ><li
+	      ><a href="#v:codeMap"
+		>codeMap</a
+		> :: <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
+		>AbMap</a
+		> (<a href="Koshucode-Baala-Base-Syntax-Code.html#t:CodeRoll"
+		>CodeRoll</a
+		> a)</li
+	      ><li
+	      ><a href="#v:codeInputPt"
+		>codeInputPt</a
+		> :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		>CodePt</a
+		></li
+	      ><li
+	      ><a href="#v:codeInput"
+		>codeInput</a
+		> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		></li
+	      ><li
+	      ><a href="#v:codeOutput"
+		>codeOutput</a
+		> :: [a]</li
+	      ></ul
+	    >}</li
 	  ><li class="src short"
-	  ><a href="#v:codeLines"
-	    >codeLines</a
-	    > ::  <a href="Koshucode-Baala-Base-Syntax-Code.html#t:NextToken"
-	    >NextToken</a
-	    > a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	  ><a href="#v:codeRollUp"
+	    >codeRollUp</a
+	    > ::  <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
+	    >AbMap</a
+	    > (<a href="Koshucode-Baala-Base-Syntax-Code.html#t:CodeRoll"
+	    >CodeRoll</a
+	    > a) -&gt; <a href="Koshucode-Baala-Base-Text-Resource.html#t:Resource"
+	    >Resource</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; [<a href="Koshucode-Baala-Base-Syntax-Code.html#t:CodeLine"
+	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > [<a href="Koshucode-Baala-Base-Syntax-Code.html#t:CodeLine"
 	    >CodeLine</a
 	    > a]</li
+	  ><li class="src short"
+	  ><a href="#v:codeUpdate"
+	    >codeUpdate</a
+	    > ::  <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; a -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Base-Syntax-Code.html#t:CodeRoll"
+	    >CodeRoll</a
+	    > a)</li
+	  ><li class="src short"
+	  ><a href="#v:codeChange"
+	    >codeChange</a
+	    > ::  <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
+	    >AbMap</a
+	    > (<a href="Koshucode-Baala-Base-Syntax-Code.html#t:CodeRoll"
+	    >CodeRoll</a
+	    > a) -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Base-Syntax-Code.html#t:CodeRoll"
+	    >CodeRoll</a
+	    > a)</li
 	  ></ul
 	></div
       ><div id="interface"
-      ><h1
-	>Documentation</h1
+      ><h1 id="g:1"
+	>CodeLine
+</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -333,18 +392,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:lineNumberContent" class="def"
-	    >lineNumberContent</a
-	    > ::  <a href="Koshucode-Baala-Base-Syntax-Code.html#t:CodeLine"
-	    >CodeLine</a
-	    > a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    ><a href="src/Koshucode-Baala-Base-Syntax-Code.html#lineNumberContent" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
 	  ><span class="keyword"
 	    >data</span
 	    >  <a name="t:CodeClause" class="def"
@@ -470,8 +517,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:indentLineBy" class="def"
-	    >indentLineBy</a
+	  ><a name="v:lineIndentPair" class="def"
+	    >lineIndentPair</a
 	    > ::  (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
 	    >) -&gt; <a href="Koshucode-Baala-Base-Syntax-Code.html#t:CodeLine"
@@ -480,7 +527,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >Int</a
 	    >, <a href="Koshucode-Baala-Base-Syntax-Code.html#t:CodeLine"
 	    >CodeLine</a
-	    > a)<a href="src/Koshucode-Baala-Base-Syntax-Code.html#indentLineBy" class="link"
+	    > a)<a href="src/Koshucode-Baala-Base-Syntax-Code.html#lineIndentPair" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -496,76 +543,96 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >Source</a
 	    ></p
 	  ></div
+	><h1 id="g:2"
+	>CodeRoll
+</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:NextToken" class="def"
-	    >NextToken</a
-	    > a = <a href="Koshucode-Baala-Base-Syntax-Line.html#t:NumberedLine"
-	    >NumberedLine</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Assoc.html#t:Gather"
-	    >Gather</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > a<a href="src/Koshucode-Baala-Base-Syntax-Code.html#NextToken" class="link"
+	    >data</span
+	    >  <a name="t:CodeRoll" class="def"
+	    >CodeRoll</a
+	    > a <a href="src/Koshucode-Baala-Base-Syntax-Code.html#CodeRoll" class="link"
 	    >Source</a
 	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Type of function that splits a next token from string.
-   Tokens can includes <code
-	      >TokenNumber</code
-	      >.
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:codeLines" class="def"
-	    >codeLines</a
-	    ><a href="src/Koshucode-Baala-Base-Syntax-Code.html#codeLines" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="subs arguments"
+	  ><div class="subs constructors"
 	  ><p class="caption"
-	    >Arguments</p
+	    >Constructors</p
 	    ><table
 	    ><tr
 	      ><td class="src"
-		>:: <a href="Koshucode-Baala-Base-Syntax-Code.html#t:NextToken"
-		  >NextToken</a
-		  > a</td
-		><td class="doc"
-		><p
-		  >Token splitter
-</p
+		><a name="v:CodeRoll" class="def"
+		  >CodeRoll</a
 		  ></td
+		><td class="doc empty"
+		>&nbsp;</td
 		></tr
 	      ><tr
-	      ><td class="src"
-		>-&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Source text
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		>-&gt; [<a href="Koshucode-Baala-Base-Syntax-Code.html#t:CodeLine"
-		  >CodeLine</a
-		  > a]</td
-		><td class="doc"
-		><p
-		  >Token list per lines
-</p
+	      ><td colspan="2"
+		><div class="subs fields"
+		  ><p class="caption"
+		    >Fields</p
+		    ><dl
+		    ><dt class="src"
+		      ><a name="v:codeMap" class="def"
+			>codeMap</a
+			> :: <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
+			>AbMap</a
+			> (<a href="Koshucode-Baala-Base-Syntax-Code.html#t:CodeRoll"
+			>CodeRoll</a
+			> a)</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ><dt class="src"
+		      ><a name="v:codeInputPt" class="def"
+			>codeInputPt</a
+			> :: <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+			>CodePt</a
+			></dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ><dt class="src"
+		      ><a name="v:codeInput" class="def"
+			>codeInput</a
+			> :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+			>String</a
+			></dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ><dt class="src"
+		      ><a name="v:codeOutput" class="def"
+			>codeOutput</a
+			> :: [a]</dt
+		      ><dd class="doc empty"
+		      >&nbsp;</dd
+		      ></dl
+		    ><div class="clear"
+		    ></div
+		    ></div
 		  ></td
 		></tr
 	      ></table
 	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:codeRollUp" class="def"
+	    >codeRollUp</a
+	    > ::  <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
+	    >AbMap</a
+	    > (<a href="Koshucode-Baala-Base-Syntax-Code.html#t:CodeRoll"
+	    >CodeRoll</a
+	    > a) -&gt; <a href="Koshucode-Baala-Base-Text-Resource.html#t:Resource"
+	    >Resource</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > [<a href="Koshucode-Baala-Base-Syntax-Code.html#t:CodeLine"
+	    >CodeLine</a
+	    > a]<a href="src/Koshucode-Baala-Base-Syntax-Code.html#codeRollUp" class="link"
+	    >Source</a
+	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Split source text into <code
@@ -589,7 +656,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
       a list of pairs <code
 		>(</code
 		><code
-		>LineNumber</code
+		><a href="Koshucode-Baala-Base-Syntax-Line.html#t:LineNumber"
+		  >LineNumber</a
+		  ></code
 		><code
 		>,</code
 		> <code
@@ -610,6 +679,36 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 </li
 	      ></ol
 	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:codeUpdate" class="def"
+	    >codeUpdate</a
+	    > ::  <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; a -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Base-Syntax-Code.html#t:CodeRoll"
+	    >CodeRoll</a
+	    > a)<a href="src/Koshucode-Baala-Base-Syntax-Code.html#codeUpdate" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:codeChange" class="def"
+	    >codeChange</a
+	    > ::  <a href="Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
+	    >AbMap</a
+	    > (<a href="Koshucode-Baala-Base-Syntax-Code.html#t:CodeRoll"
+	    >CodeRoll</a
+	    > a) -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > (<a href="Koshucode-Baala-Base-Syntax-Code.html#t:CodeRoll"
+	    >CodeRoll</a
+	    > a)<a href="src/Koshucode-Baala-Base-Syntax-Code.html#codeChange" class="link"
+	    >Source</a
+	    ></p
 	  ></div
 	></div
       ></div

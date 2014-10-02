@@ -3,13 +3,13 @@
 ><head
   ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
      /><title
-    >Koshucode.Baala.Base.Token.Bracket</title
+    >Koshucode.Baala.Base.Token.AngleText</title
     ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
      /><script src="haddock-util.js" type="text/javascript"
     ></script
     ><script type="text/javascript"
     >//<![CDATA[
-window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-Token-Bracket.html");};
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-Token-AngleText.html");};
 //]]>
 </script
     ></head
@@ -17,7 +17,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
   ><div id="package-header"
     ><ul class="links" id="page-menu"
       ><li
-	><a href="src/Koshucode-Baala-Base-Token-Bracket.html"
+	><a href="src/Koshucode-Baala-Base-Token-AngleText.html"
 	  >Source</a
 	  ></li
 	><li
@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.70.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.75.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -43,7 +43,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ></tr
 	  ></table
 	><p class="caption"
-	>Koshucode.Baala.Base.Token.Bracket</p
+	>Koshucode.Baala.Base.Token.AngleText</p
 	></div
       ><div id="table-of-contents"
       ><p class="caption"
@@ -71,7 +71,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	>Description</p
 	><div class="doc"
 	><p
-	  >Keywords enclosed in angle brackets.
+	  >Text enclosed in angle brackets.
 </p
 	  ></div
 	></div
@@ -80,16 +80,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
-	  ><a href="#v:bracketQuote"
-	    >bracketQuote</a
+	  ><a href="#v:angleQuote"
+	    >angleQuote</a
 	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
 	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:bracketKeywords"
-	    >bracketKeywords</a
+	  ><a href="#v:angleTexts"
+	    >angleTexts</a
 	    > :: [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
@@ -103,35 +103,35 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 </h2
 	><div class="top"
 	><p class="src"
-	  ><a name="v:bracketQuote" class="def"
-	    >bracketQuote</a
+	  ><a name="v:angleQuote" class="def"
+	    >angleQuote</a
 	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
 	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    ><a href="src/Koshucode-Baala-Base-Token-Bracket.html#bracketQuote" class="link"
+	    ><a href="src/Koshucode-Baala-Base-Token-AngleText.html#angleQuote" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Convert string into double-quoted and bracket-quoted form.
+	    >Convert string into double-quoted and angle-quoted form.
 </p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:bracketKeywords" class="def"
-	    >bracketKeywords</a
+	  ><a name="v:angleTexts" class="def"
+	    >angleTexts</a
 	    > :: [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >)]<a href="src/Koshucode-Baala-Base-Token-Bracket.html#bracketKeywords" class="link"
+	    >)]<a href="src/Koshucode-Baala-Base-Token-AngleText.html#angleTexts" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Table of coresspondences of bracket keyword and its text.
+	    >Table of coresspondences of angle text and its replacement.
 </p
 	    ></div
 	  ></div
@@ -147,7 +147,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >&gt;&gt;&gt; </code
 	    ><strong class="userinput"
 	    ><code
-	      >putStrLn $ bracketQuote &quot;aaa&quot;
+	      >putStrLn $ angleQuote &quot;aaa&quot;
 </code
 	      ></strong
 	    >&quot;aaa&quot;
@@ -160,7 +160,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >&gt;&gt;&gt; </code
 	    ><strong class="userinput"
 	    ><code
-	      >putStrLn $ bracketQuote &quot;aaa\nbbb&quot;
+	      >putStrLn $ angleQuote &quot;aaa\nbbb&quot;
 </code
 	      ></strong
 	    >&quot;aaa&quot; #lf &quot;bbb&quot;
@@ -173,7 +173,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >&gt;&gt;&gt; </code
 	    ><strong class="userinput"
 	    ><code
-	      >lookup &quot;lf&quot; bracketKeywords
+	      >lookup &quot;lf&quot; angleTexts
 </code
 	      ></strong
 	    >Just &quot;\n&quot;
@@ -185,7 +185,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><div class="doc"
 	><p
 	  >Some text literals are written
-  using the following bracket keywords.
+  using the following angle text.
 </p
 	  ><dl
 	  ><dt

@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.70.0.0
+@version 0.75.0.0
 
 module Koshucode.Baala.Base.Text.Unicode
 data GeneralCategoryGroup
@@ -172,6 +172,11 @@ sort :: Ord a => [a] -> [a]
 --   </pre>
 transpose :: [[a]] -> [[a]]
 
+-- | <a>intercalate</a> <tt>xs xss</tt> is equivalent to <tt>(<a>concat</a>
+--   (<a>intersperse</a> xs xss))</tt>. It inserts the list <tt>xs</tt> in
+--   between the lists in <tt>xss</tt> and concatenates the result.
+intercalate :: [a] -> [[a]] -> [a]
+
 -- | Same as <a>lookup</a> in <tt>Data.Map</tt> module.
 lookupMap :: Ord k => k -> Map k a -> Maybe a
 
@@ -321,73 +326,53 @@ instance Choose (Either a)
 instance Choose Maybe
 
 module Koshucode.Baala.Base.Prelude.List
+
+-- | Head or empty.
 front :: [a] -> [a]
-omit :: (a -> Bool) -> [a] -> [a]
+
+-- | Tails of list.
+tails :: [a] -> [[a]]
+
+-- | Test list has single element.
+isSingleton :: [a] -> Bool
+
+-- | Test list is not empty.
+notNull :: [a] -> Bool
+maybeEmpty :: Maybe a -> (a -> [b]) -> [b]
+right :: b -> Map (Either a b)
+
+-- | Keep duplicate elements.
 duplicates :: Ord a => [a] -> [a]
 
 -- | Remove duplicate elements.
 unique :: Ord a => [a] -> [a]
 
 -- | Union list to base list.
---   
---   <pre>
---   &gt;&gt;&gt; unionUp "cde" "abc"
---   "deabc"
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; List.union "cde" "abc"
---   "cdeab"
---   </pre>
 unionUp :: Eq a => [a] -> [a] -> [a]
 
 -- | Make singleton list.
 li1 :: a -> [a]
 li2 :: a -> a -> [a]
 li3 :: a -> a -> a -> [a]
-isSingleton :: [a] -> Bool
+map2 :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
+mapAt :: (Map a) -> Int -> Map [a]
+mapWithLast :: (a -> b) -> (a -> b) -> [a] -> [b]
+omit :: (a -> Bool) -> Map [a]
+squeeze :: (a -> Bool) -> Map [a]
+squeezeEmptyLines :: Map [String]
+chunks :: Int -> [a] -> [[a]]
 
 -- | Split list by predicate. If list contains an element that satisfies
 --   the predicate, <tt>(<i>before-list</i>, <i>the-element</i>,
 --   <i>after-list</i>)</tt> is returned. Otherwise, original list is
 --   returned.
---   
---   <pre>
---   &gt;&gt;&gt; splitBy (== '|') "b c"
---   Left "b c"
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; splitBy (== '|') "a | b | c"
---   Right ("a ", '|', " b | c")
---   </pre>
 splitBy :: (a -> Bool) -> [a] -> Either [a] ([a], a, [a])
 
 -- | Divide list.
---   
---   <pre>
---   &gt;&gt;&gt; divide '|' "a|bb||ccc|"
---   ["a", "bb", "", "ccc", ""]
---   </pre>
 divide :: Eq a => a -> [a] -> [[a]]
 
 -- | Divide list.
---   
---   <pre>
---   &gt;&gt;&gt; divideBy (== '|') "a|bb||ccc|"
---   ["a", "bb", "", "ccc", ""]
---   </pre>
 divideBy :: (a -> Bool) -> [a] -> [[a]]
-maybeEmpty :: Maybe a -> (a -> [b]) -> [b]
-squeeze :: (a -> Bool) -> Map [a]
-squeezeEmptyLines :: Map [String]
-map2 :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
-mapAt :: (Map a) -> Int -> Map [a]
-mapWithLast :: (a -> b) -> (a -> b) -> [a] -> [b]
-notNull :: [a] -> Bool
-chunks :: Int -> [a] -> [[a]]
-ceilingRem :: Integral a => a -> a -> a
-right :: b -> Map (Either a b)
 
 
 -- | Snipping elements.
@@ -462,6 +447,7 @@ lookupBy :: (a -> Bool) -> [(a, b)] -> Maybe b
 
 -- | Lookup assoc list that keys are truth-valued functions.
 lookupSatisfy :: a -> [(a -> Bool, b)] -> Maybe b
+assocFinder :: Ord k => [(k, v)] -> k -> Maybe v
 
 -- | Pick up associations that have given keys.
 assocPick :: Eq k => [k] -> Map [(k, a)]
@@ -515,23 +501,23 @@ data CodePt
 CodePt :: Resource -> Int -> String -> String -> CodePt
 
 -- | Resource of code
-codePtResource :: CodePt -> Resource
+codeResource :: CodePt -> Resource
 
 -- | Line number
-codePtLineNumber :: CodePt -> Int
+codeLineNumber :: CodePt -> Int
 
 -- | Line content
-codePtLineText :: CodePt -> String
+codeLineText :: CodePt -> String
 
 -- | Text at which begins token
-codePtText :: CodePt -> String
+codeText :: CodePt -> String
 
 -- | Empty code point, i.e., empty content and zero line number.
-codePtZero :: CodePt
+codeZero :: CodePt
 
 -- | Column number at which code starts.
-codePtColumnNumber :: CodePt -> Int
-codePtDisplay :: (String, CodePt) -> [(String, String)]
+codeColumnNumber :: CodePt -> Int
+codeDisplay :: (String, CodePt) -> [(String, String)]
 class CodePtr a
 codePts :: CodePtr a => a -> [CodePt]
 data Sourced a
@@ -626,6 +612,8 @@ writeV :: Write a => StringMap -> [a] -> Doc
 --   [ #true : #false ]
 --   </pre>
 writeColon :: Write a => StringMap -> [a] -> Doc
+writeBar :: Write a => StringMap -> [a] -> Doc
+writeSep :: Write a => String -> StringMap -> [a] -> Doc
 doc :: Write a => a -> Doc
 doch :: Write a => [a] -> Doc
 docv :: Write a => [a] -> Doc
@@ -715,75 +703,14 @@ abort :: CommandLine -> AbortReason -> IO c
 bug :: String -> a
 
 
--- | This module provides a container for tokens. No tokens in Koshucode
---   are in a extent of multiple lines. <a>CodeLine</a> includes whole
---   tokens in a line. You can represent tokenized source code as a list of
---   <a>CodeLine</a>.
-module Koshucode.Baala.Base.Syntax.Code
+-- | Text enclosed in angle brackets.
+module Koshucode.Baala.Base.Token.AngleText
 
--- | Tokens in line.
-data CodeLine a
-CodeLine :: LineNumber -> String -> [a] -> CodeLine a
+-- | Convert string into double-quoted and angle-quoted form.
+angleQuote :: Map String
 
--- | Line number, from 1.
-lineNumber :: CodeLine a -> LineNumber
-
--- | Line content without newline.
-lineContent :: CodeLine a -> String
-
--- | Tokens in the line.
-lineTokens :: CodeLine a -> [a]
-lineNumberContent :: CodeLine a -> String
-
--- | Tokens in clause.
-data CodeClause a
-CodeClause :: [CodeLine a] -> [a] -> CodeClause a
-
--- | Source lines of clause
-clauseLines :: CodeClause a -> [CodeLine a]
-
--- | Source tokens of clause
-clauseTokens :: CodeClause a -> [a]
-indentLineBy :: (a -> Int) -> CodeLine a -> (Int, CodeLine a)
-splitClause :: Gather [(Int, a)] [a]
-
--- | Type of function that splits a next token from string. Tokens can
---   includes <tt>TokenNumber</tt>.
-type NextToken a = NumberedLine -> Gather String a
-
--- | Split source text into <a>CodeLine</a> list.
---   
---   <ol>
---   <li>Split source text into lines by line delimiters (carriage return
---   <tt>\r</tt> or line feed <tt>\n</tt>).</li>
---   <li>Numbering lines from 1. Internally, this is represented as a list
---   of pairs <tt>(</tt><tt>LineNumber</tt><tt>,</tt>
---   <a>String</a><tt>)</tt>.</li>
---   <li>Tokenize each lines, and put tokens together in
---   <a>CodeLine</a>.</li>
---   </ol>
-codeLines :: NextToken a -> String -> [CodeLine a]
-instance Typeable1 CodeLine
-instance Typeable1 CodeClause
-instance Show a => Show (CodeLine a)
-instance Eq a => Eq (CodeLine a)
-instance Ord a => Ord (CodeLine a)
-instance Data a => Data (CodeLine a)
-instance Show a => Show (CodeClause a)
-instance Data a => Data (CodeClause a)
-instance CodePtr a => CodePtr (CodeClause a)
-instance CodePtr a => CodePtr (CodeLine a)
-instance Write (CodeLine a)
-
-
--- | Keywords enclosed in angle brackets.
-module Koshucode.Baala.Base.Token.Bracket
-
--- | Convert string into double-quoted and bracket-quoted form.
-bracketQuote :: Map String
-
--- | Table of coresspondences of bracket keyword and its text.
-bracketKeywords :: [(String, String)]
+-- | Table of coresspondences of angle text and its replacement.
+angleTexts :: [(String, String)]
 
 module Koshucode.Baala.Base.Token.Short
 
@@ -805,6 +732,8 @@ shortEmpty :: StringMap
 
 -- | String shortener.
 shortText :: [ShortDef] -> StringMap
+isCodeText :: Pred String
+isCodeChar :: Pred Char
 instance Show a => Show (Short a)
 instance Ord a => Ord (Short a)
 instance Eq a => Eq (Short a)
@@ -845,9 +774,6 @@ TSpace :: CodePt -> Int -> Token
 
 -- | Comment text.
 TComment :: CodePt -> String -> Token
-
--- | Unknown text.
-TUnknown :: CodePt -> String -> Token
 textToken :: String -> Token
 nameToken :: String -> Token
 data BlankName
@@ -873,14 +799,14 @@ type TermPath = [TermName]
 -- | Get the content of token.
 --   
 --   <pre>
---   &gt;&gt;&gt; let tok = TTerm B.codePtZero ["r", "x"] in tokenContent tok
+--   &gt;&gt;&gt; let tok = TTerm B.codeZero ["r", "x"] in tokenContent tok
 --   "/r/x"
 --   </pre>
 tokenContent :: Token -> String
 
 -- | Text of token type, i.e., one of <tt>"Text"</tt>, <tt>"Term"</tt>,
---   <tt>"Open"</tt>, <tt>"Close"</tt>, <tt>"Space"</tt>,
---   <tt>"Comment"</tt>, or <tt>"Unknown"</tt>.
+--   <tt>"Open"</tt>, <tt>"Close"</tt>, <tt>"Space"</tt>, or
+--   <tt>"Comment"</tt>.
 --   
 --   <pre>
 --   &gt;&gt;&gt; tokenTypeText $ textToken "flower"
@@ -892,6 +818,8 @@ tokenTypeText :: Token -> String
 isBlankToken :: Pred Token
 isShortToken :: Pred Token
 isTermToken :: Pred Token
+isOpenToken :: Pred Token
+isCloseToken :: Pred Token
 
 -- | Check token is a <a>TOpen</a> of the specific bracket.
 --   
@@ -932,6 +860,7 @@ instance Name Token
 module Koshucode.Baala.Base.Abort
 
 module Koshucode.Baala.Base.Message
+abToken :: CodePtr cp => [cp] -> Map (Ab b)
 
 -- | AD-LIB: reason
 adlib :: String -> Ab a
@@ -957,6 +886,18 @@ notNumber :: String -> Ab a
 
 -- | Lookup association list. This function may abort.
 (<!!>) :: [Named b] -> String -> Ab b
+
+-- | Forbidden input
+forbiddenInput :: String -> Ab a
+
+-- | Forbidden term name
+forbiddenTerm :: Ab a
+
+-- | Unknown bracket text
+unkAngleText :: String -> Ab a
+
+-- | Quotation not end in line
+quotNotEnd :: Ab a
 
 module Koshucode.Baala.Base.Data.Decimal
 data Decimal
@@ -989,6 +930,70 @@ decimalSum :: [Decimal] -> Ab Decimal
 instance Show Decimal
 instance Eq Decimal
 instance Ord Decimal
+
+
+-- | This module provides a container for tokens. No tokens in Koshucode
+--   are in a extent of multiple lines. <a>CodeLine</a> includes whole
+--   tokens in a line. You can represent tokenized source code as a list of
+--   <a>CodeLine</a>.
+module Koshucode.Baala.Base.Syntax.Code
+
+-- | Tokens in line.
+data CodeLine a
+CodeLine :: LineNumber -> String -> [a] -> CodeLine a
+
+-- | Line number, from 1.
+lineNumber :: CodeLine a -> LineNumber
+
+-- | Line content without newline.
+lineContent :: CodeLine a -> String
+
+-- | Tokens in the line.
+lineTokens :: CodeLine a -> [a]
+
+-- | Tokens in clause.
+data CodeClause a
+CodeClause :: [CodeLine a] -> [a] -> CodeClause a
+
+-- | Source lines of clause
+clauseLines :: CodeClause a -> [CodeLine a]
+
+-- | Source tokens of clause
+clauseTokens :: CodeClause a -> [a]
+lineIndentPair :: (a -> Int) -> CodeLine a -> (Int, CodeLine a)
+splitClause :: Gather [(Int, a)] [a]
+data CodeRoll a
+CodeRoll :: AbMap (CodeRoll a) -> CodePt -> String -> [a] -> CodeRoll a
+codeMap :: CodeRoll a -> AbMap (CodeRoll a)
+codeInputPt :: CodeRoll a -> CodePt
+codeInput :: CodeRoll a -> String
+codeOutput :: CodeRoll a -> [a]
+
+-- | Split source text into <a>CodeLine</a> list.
+--   
+--   <ol>
+--   <li>Split source text into lines by line delimiters (carriage return
+--   <tt>\r</tt> or line feed <tt>\n</tt>).</li>
+--   <li>Numbering lines from 1. Internally, this is represented as a list
+--   of pairs <tt>(</tt><a>LineNumber</a><tt>,</tt>
+--   <a>String</a><tt>)</tt>.</li>
+--   <li>Tokenize each lines, and put tokens together in
+--   <a>CodeLine</a>.</li>
+--   </ol>
+codeRollUp :: AbMap (CodeRoll a) -> Resource -> String -> Ab [CodeLine a]
+codeUpdate :: String -> a -> Map (CodeRoll a)
+codeChange :: AbMap (CodeRoll a) -> Map (CodeRoll a)
+instance Typeable1 CodeLine
+instance Typeable1 CodeClause
+instance Show a => Show (CodeLine a)
+instance Eq a => Eq (CodeLine a)
+instance Ord a => Ord (CodeLine a)
+instance Data a => Data (CodeLine a)
+instance Show a => Show (CodeClause a)
+instance Data a => Data (CodeClause a)
+instance CodePtr a => CodePtr (CodeClause a)
+instance CodePtr a => CodePtr (CodeLine a)
+instance Write (CodeLine a)
 
 module Koshucode.Baala.Base.Syntax.Tree
 data Bracket p
@@ -1105,12 +1110,12 @@ module Koshucode.Baala.Base.Token.TokenLine
 type TokenLine = CodeLine Token
 
 -- | Tokenize text.
-tokenLines :: Resource -> String -> [TokenLine]
+tokenLines :: Resource -> String -> Ab [TokenLine]
 
 -- | Split string into list of tokens. Result token list does not contain
 --   newline characters.
-tokens :: Resource -> String -> [Token]
-isShortPrefix :: String -> Bool
+tokens :: Resource -> String -> Ab [Token]
+isShortPrefix :: Pred String
 
 module Koshucode.Baala.Base.Token.TokenClause
 type TokenClause = CodeClause Token
@@ -1166,13 +1171,23 @@ BracketList :: BracketType
 -- | Curely braces for sets: <tt>{ C : .... }</tt>
 BracketSet :: BracketType
 
+-- | Curely-bar braces for relations: <tt>{| /N : ... | C : ... | C : ...
+--   |}</tt>
+BracketRel :: BracketType
+
 -- | Double-angle brackets for associations etc.: <tt>&lt;&lt; /N C ....
 --   &gt;&gt;</tt>
 BracketAssn :: BracketType
 
--- | Curely-bar braces for relations: <tt>{| /N : ... | C : ... | C : ...
---   |}</tt>
-BracketRel :: BracketType
+-- | Triple-angle brackets for data interpretation: <tt>&lt;&lt;&lt; ... /N
+--   ... &gt;&gt;&gt;</tt>
+BracketInterp :: BracketType
+
+-- | Square-hyphen brackets for data type: <tt>[- ... -]</tt>
+BracketType :: BracketType
+
+-- | Unknown bracket
+BracketUnknown :: BracketType
 
 -- | Split token list by unquoted word. If token list contains the word,
 --   pair of <i>before-list</i>, <i>the-word</i> and <i>after-list</i> is
@@ -1229,6 +1244,24 @@ instance Data BracketType
 
 -- | Tokens in Koshucode.
 module Koshucode.Baala.Base.Token
+
+module Koshucode.Baala.Base.Data.Interp
+data Interp
+Interp :: [InterpWord] -> [TermName] -> Interp
+interpWords :: Interp -> [InterpWord]
+interpTerms :: Interp -> [TermName]
+data InterpWord
+InterpText :: String -> InterpWord
+InterpTerm :: TermName -> InterpWord
+interp :: [InterpWord] -> Interp
+instance Show InterpWord
+instance Eq InterpWord
+instance Ord InterpWord
+instance Show Interp
+instance Eq Interp
+instance Ord Interp
+instance Write InterpWord
+instance Write Interp
 
 
 -- | Term names in relation.
@@ -1461,6 +1494,18 @@ pMonoType :: a -> Mono a
 instance Show a => Show (Mono a)
 instance Ord a => Eq (Mono a)
 instance Ord a => Ord (Mono a)
+
+module Koshucode.Baala.Base.Data.Type
+data Type
+TypeEmpty :: Type
+TypeBool :: Type
+TypeText :: Type
+TypeRel :: [(TermName, Type)] -> Type
+TypeSum :: [Type] -> Type
+instance Show Type
+instance Eq Type
+instance Ord Type
+instance Write Type
 
 
 -- | Definitions of data for Koshucode.

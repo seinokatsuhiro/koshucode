@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.70.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.75.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -175,14 +175,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      ><li
 	      >| <a href="#v:TComment"
 		>TComment</a
-		> <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
-		>CodePt</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
-	      ><li
-	      >| <a href="#v:TUnknown"
-		>TUnknown</a
 		> <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
 		>CodePt</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
@@ -339,6 +331,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ><li class="src short"
 	  ><a href="#v:isTermToken"
 	    >isTermToken</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isOpenToken"
+	    >isOpenToken</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isCloseToken"
+	    >isCloseToken</a
 	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
 	    >Pred</a
 	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
@@ -557,21 +565,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		><td class="doc"
 		><p
 		  >Comment text.
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:TUnknown" class="def"
-		  >TUnknown</a
-		  > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
-		  >CodePt</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Unknown text.
 </p
 		  ></td
 		></tr
@@ -981,7 +974,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      >&gt;&gt;&gt; </code
 	      ><strong class="userinput"
 	      ><code
-		>let tok = TTerm B.codePtZero [&quot;r&quot;, &quot;x&quot;] in tokenContent tok
+		>let tok = TTerm B.codeZero [&quot;r&quot;, &quot;x&quot;] in tokenContent tok
 </code
 		></strong
 	      >&quot;/r/x&quot;
@@ -1013,10 +1006,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      >,
    <code
 	      >&quot;Space&quot;</code
-	      >, <code
-	      >&quot;Comment&quot;</code
 	      >, or <code
-	      >&quot;Unknown&quot;</code
+	      >&quot;Comment&quot;</code
 	      >.
 </p
 	    ><pre class="screen"
@@ -1081,6 +1072,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
 	    ><a href="src/Koshucode-Baala-Base-Token-Token.html#isTermToken" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isOpenToken" class="def"
+	    >isOpenToken</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    ><a href="src/Koshucode-Baala-Base-Token-Token.html#isOpenToken" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isCloseToken" class="def"
+	    >isCloseToken</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
+	    >Pred</a
+	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    ><a href="src/Koshucode-Baala-Base-Token-Token.html#isCloseToken" class="link"
 	    >Source</a
 	    ></p
 	  ></div
