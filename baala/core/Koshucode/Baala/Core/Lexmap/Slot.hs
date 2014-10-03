@@ -15,10 +15,10 @@ import qualified Koshucode.Baala.Core.Message           as Msg
 type GlobalSlot = B.NamedTrees
 
 -- | Substitute slots by global and attribute slots.
-substSlot :: [GlobalSlot] -> C.AttrTrees -> B.AbMap [B.TokenTree]
+substSlot :: [GlobalSlot] -> C.AttrTrees -> B.AbMap [B.TTree]
 substSlot gslot roa = Right . concat B.<=< mapM (substTree gslot roa)
 
-substTree :: [GlobalSlot] -> C.AttrTrees -> B.TokenTree -> B.Ab [B.TokenTree]
+substTree :: [GlobalSlot] -> C.AttrTrees -> B.TTree -> B.Ab [B.TTree]
 substTree gslot roa tree = Msg.abSlotTree tree $ loop tree where
     loop (B.TreeB p q sub) = do sub' <- mapM loop sub
                                 Right [B.TreeB p q $ concat sub']
@@ -34,7 +34,7 @@ substTree gslot roa tree = Msg.abSlotTree tree $ loop tree where
           Just od -> f od
           Nothing -> Msg.noSlotName n name
 
-    pos :: [B.TokenTree] -> String -> B.Ab [B.TokenTree]
+    pos :: [B.TTree] -> String -> B.Ab [B.TTree]
     pos od "all" = Right od
     pos od n     = case B.readInt n of
                      Just i  -> Right . B.li1 =<< od `at` i

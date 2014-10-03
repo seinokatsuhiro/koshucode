@@ -16,7 +16,7 @@ import qualified Koshucode.Baala.Core.Message           as Msg
 
 -- | Construct content expression from token tree
 coxBuild :: forall c. (C.CContent c)
-  => C.CalcContent c -> C.CopSet c -> B.TokenTreeToAb (C.Cox c)
+  => C.CalcContent c -> C.CopSet c -> B.TTreeToAb (C.Cox c)
 coxBuild calc copset =
     convCox findCox            -- convert cox to cox
       B.<=< Right
@@ -73,14 +73,14 @@ convCox find = expand where
                       Right $ C.CoxFill cp f' xs'
     
 -- construct content expression from token tree
-construct :: forall c. (C.CContent c) => C.CalcContent c -> B.TokenTreeToAb (C.Cox c)
+construct :: forall c. (C.CContent c) => C.CalcContent c -> B.TTreeToAb (C.Cox c)
 construct calc = expr where
     expr tree = Msg.abCoxBuild tree $
          let cp = concatMap B.codePts $ B.front $ B.untree tree
          in cons cp tree
 
     -- fill args in the blanks (application)
-    cons :: [B.CodePt] -> B.TokenTreeToAb (C.Cox c)
+    cons :: [B.CodePt] -> B.TTreeToAb (C.Cox c)
     cons cp (B.TreeB B.BracketGroup _ (fun : args)) =
         do fun'  <- expr fun
            args' <- expr `mapM` args
@@ -106,7 +106,7 @@ construct calc = expr where
         B.TText _ _ _  ->  Right . C.CoxLit cp =<< C.literal calc tree
         _              ->  B.bug "core/leaf"
 
-    untag :: B.TokenTreeTo (C.CoxTag, B.TokenTree)
+    untag :: B.TTreeTo (C.CoxTag, B.TTree)
     untag (B.TreeB l p (B.TreeL (B.TText _ 1 tag) : vars))
                = (Just tag, B.TreeB l p $ vars)
     untag vars = (Nothing, vars)
@@ -123,7 +123,7 @@ isNameFirst c = case B.generalCategoryGroup c of
                   _                   ->  False
 
 -- convert from infix operator to prefix
-prefix :: [B.Named B.InfixHeight] -> B.AbMap B.TokenTree
+prefix :: [B.Named B.InfixHeight] -> B.AbMap B.TTree
 prefix htab tree =
     Msg.abCoxPrefix tree $
      case B.infixToPrefix conv ht (B.TreeB B.BracketGroup Nothing) mapper tree of
@@ -161,7 +161,7 @@ undoubleGroup :: B.Map (B.CodeTree B.BracketType a)
 undoubleGroup = B.undouble (== B.BracketGroup)
 
 -- expand tree-level syntax
-convTree :: C.CopFind C.CopTree -> B.AbMap B.TokenTree
+convTree :: C.CopFind C.CopTree -> B.AbMap B.TTree
 convTree find = expand where
     expand tree@(B.TreeB B.BracketGroup p subtrees) =
         case subtrees of

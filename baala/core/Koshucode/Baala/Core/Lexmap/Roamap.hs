@@ -26,11 +26,11 @@ type Roamap = B.Sourced RoamapBody
 data RoamapBody
     = RoamapId
       -- ^ Identity roamap.
-    | RoamapAdd     Bool String [B.TokenTree]
+    | RoamapAdd     Bool String [B.TTree]
       -- ^ Add attribute.
     | RoamapRename  (String, String)
       -- ^ Rename attribute keyword.
-    | RoamapFill    [Maybe B.TokenTree]
+    | RoamapFill    [Maybe B.TTree]
       -- ^ Fill positional attributes.
     | RoamapAppend  [Roamap]
       -- ^ Append roamaps.
@@ -40,7 +40,7 @@ data RoamapBody
 -- ----------------------  Cons and run
 
 -- | Construct roamap.
-roamapCons :: [B.TokenTree] -> B.Ab Roamap
+roamapCons :: [B.TTree] -> B.Ab Roamap
 roamapCons = loop where
     notKeyword ('-' : _) = False
     notKeyword _         = True
@@ -49,7 +49,7 @@ roamapCons = loop where
     fill (x : xs)                         = Just x  : fill xs
     fill []                               = []
 
-    right :: [B.TokenTree] -> RoamapBody -> B.Ab Roamap
+    right :: [B.TTree] -> RoamapBody -> B.Ab Roamap
     right trees = Right . B.Sourced (concatMap B.codePts $ B.untrees trees)
 
     loop trees =
@@ -102,7 +102,7 @@ roamapRun = loop where
           Just _                ->  Right $ B.assocRename1 k' k roa
           Nothing               ->  Msg.reqAttr $ C.attrNameText k
 
-    fill :: [B.TokenTree] -> [Maybe B.TokenTree] -> B.Ab [B.TokenTree]
+    fill :: [B.TTree] -> [Maybe B.TTree] -> B.Ab [B.TTree]
     fill (p : ps) (Nothing : xs)  =  Right . (p:) =<< fill ps xs
     fill (p : ps) (_       : xs)  =  Right . (p:) =<< fill ps xs
     fill []       (Just x  : xs)  =  Right . (x:) =<< fill [] xs

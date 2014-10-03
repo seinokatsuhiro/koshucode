@@ -143,23 +143,23 @@ irreducible cox =
 --    [1. 'String'@ -> \[@'B.Token'@\]@]
 --        Parse input string into a list of tokens.
 --
---    [2. @\[@'B.Token'@\] -> \[@'BTree.TokenTree'@\]@]
+--    [2. @\[@'B.Token'@\] -> \[@'BTree.TTree'@\]@]
 --        Analyze token list structure.
 --
---    [3. @\[@'BTree.TokenTree'@\] -> @'BTree.TokenTree']
+--    [3. @\[@'BTree.TTree'@\] -> @'BTree.TTree']
 --        Wrap the list of token trees in a tree.
 --
 --  /Phase 2/. Transform token trees,
 --             and convert into abstract syntax trees.
 --             See "Koshucode.Baala.Core.Content.Build" module.
 --
---    [4. 'BTree.TokenTree'@ -> @'BTree.TokenTree']
+--    [4. 'BTree.TTree'@ -> @'BTree.TTree']
 --       Expand tree-level syntax operators.
 --
---    [5. 'BTree.TokenTree'@ -> @'BTree.TokenTree']
+--    [5. 'BTree.TTree'@ -> @'BTree.TTree']
 --       Transform binary operators from infix to prefix.
 --
---    [6. 'BTree.TokenTree'@ -> @'Cox' @c@]
+--    [6. 'BTree.TTree'@ -> @'Cox' @c@]
 --       Convert token tree into an abstract syntax tree.
 --
 --    [7. 'Cox' @c -> @'Cox'@ c@]

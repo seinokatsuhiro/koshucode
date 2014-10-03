@@ -32,7 +32,7 @@ data Assert c = Assert
     , assPattern :: B.JudgePat          -- ^ Pattern of judgement
     , assOption  :: AssertOption        -- ^ Assert option
     , assToken   :: [B.Token]           -- ^ Source token list
-    , assTree    :: [B.TokenTree]       -- ^ Token relmap
+    , assTree    :: [B.TTree]           -- ^ Token relmap
     , assRelmap  :: Maybe (C.Relmap c)  -- ^ Relmap
     , assParts   :: [C.Roal (C.Relmap c)]
     } deriving (Show)

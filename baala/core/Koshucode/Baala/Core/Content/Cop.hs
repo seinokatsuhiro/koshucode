@@ -24,13 +24,13 @@ import qualified Koshucode.Baala.Core.Content.Cox  as C
 data Cop c
     = CopCalc B.BlankName (C.CopCalc c) -- ^ Convert @c@ (content)
     | CopCox  B.BlankName (CopCox c)    -- ^ Convert 'C.Cox' c
-    | CopTree B.BlankName (CopTree)     -- ^ Convert 'B.TokenTree'
+    | CopTree B.BlankName (CopTree)     -- ^ Convert 'B.TTree'
 
 -- | Expression-level syntax.
 type CopCox c = [C.Cox c] -> B.Ab (C.Cox c)
 
 -- | Tree-level syntax.
-type CopTree  = [B.TokenTree] -> B.Ab B.TokenTree
+type CopTree  = [B.TTree] -> B.Ab B.TTree
 
 instance Show (Cop c) where
     show (CopCalc n _) = "(CopCalc " ++ show n ++ " _)"

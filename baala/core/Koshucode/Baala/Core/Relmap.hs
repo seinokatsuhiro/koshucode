@@ -37,7 +37,7 @@ import Koshucode.Baala.Core.Relmap.Specialize
 --  * Data 'Lexmap' has
 --    'Lexmap' (recursive),
 --    'Koshucode.Baala.Base.Syntax.Tokenize.TokenLine' and
---    'Koshucode.Baala.Base.Syntax.TokenTree.TokenTree'.
+--    'Koshucode.Baala.Base.Syntax.TTree.TTree'.
 --
 --  Datatypes for implementing 'Relmap' operators.
 --
@@ -46,7 +46,7 @@ import Koshucode.Baala.Core.Relmap.Specialize
 --    'RopCons'.
 --
 --  * Data 'AttrSort' has
---    'Koshucode.Baala.Base.Syntax.TokenTree.TokenTree'.
+--    'Koshucode.Baala.Base.Syntax.TTree.TTree'.
 --
 --  * Data 'RopCons' has
 --    'RopUse' and
@@ -65,7 +65,7 @@ import Koshucode.Baala.Core.Relmap.Specialize
 --  * Type 'ConsLexmap' has
 --    'Lexmap',
 --    'Koshucode.Baala.Base.Syntax.Tokenize.TokenLine' and
---    'Koshucode.Baala.Base.Syntax.TokenTree.TokenTree'.
+--    'Koshucode.Baala.Base.Syntax.TTree.TTree'.
 --
 --  * Type 'ConsRelmap' has
 --    'Lexmap' and

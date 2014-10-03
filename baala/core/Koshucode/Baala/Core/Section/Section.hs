@@ -137,7 +137,7 @@ consSectionEach root resource (B.Short pt shorts xs) =
       slot :: Clab B.NamedTrees
       slot _ (C.CSlot n toks) = ntrees (n, toks)
 
-      ntrees :: (String, [B.Token]) -> B.Ab (String, [B.TokenTree])
+      ntrees :: (String, [B.Token]) -> B.Ab (String, [B.TTree])
       ntrees (n, toks) = do trees <- B.tokenTrees toks
                             Right (n, trees)
 
@@ -147,7 +147,7 @@ consSectionEach root resource (B.Short pt shorts xs) =
             Left  _         -> ntrees2 n toks []
             Right (r, _, e) -> ntrees2 n r e
 
-      ntrees2 :: String -> [B.Token] -> [B.Token] -> B.Ab (String, ([B.TokenTree], C.Roamap))
+      ntrees2 :: String -> [B.Token] -> [B.Token] -> B.Ab (String, ([B.TTree], C.Roamap))
       ntrees2 n toks1 toks2 =
           do trees1 <- B.tokenTrees toks1
              trees2 <- B.tokenTrees toks2
@@ -188,7 +188,7 @@ type Clab a = Cl (B.Ab a)
 calcContG :: (C.CContent c) => C.Global c -> C.CalcContent c
 calcContG = C.calcContent . C.globalCopset
 
-coxBuildG :: (C.CContent c) => C.Global c -> B.TokenTreeToAb (C.Cox c)
+coxBuildG :: (C.CContent c) => C.Global c -> B.TTreeToAb (C.Cox c)
 coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)
 
 

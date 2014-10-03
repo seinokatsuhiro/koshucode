@@ -84,13 +84,13 @@ copOr  =  copN False (||)
 
 -- ----------------------  if
 
-nameLeaf :: B.BlankName -> B.TokenTree
+nameLeaf :: B.BlankName -> B.TTree
 nameLeaf = B.TreeL . B.TName B.codeZero
 
-treeIf :: B.TokenTree -> B.TokenTree -> B.TokenTree -> B.TokenTree
+treeIf :: B.TTree -> B.TTree -> B.TTree -> B.TTree
 treeIf test con alt = B.wrapTrees [ nameLeaf $ C.copInternal "#if" , test, con , alt ]
 
-treeOrList :: [B.TokenTree] -> B.TokenTree
+treeOrList :: [B.TTree] -> B.TTree
 treeOrList [x] = x
 treeOrList xs = B.wrapTrees $ (nameLeaf $ C.copNormal "or") : xs
 
@@ -109,11 +109,11 @@ copFunIf arg =
 
 copTreeIf :: C.CopTree
 copTreeIf trees = folding $ filter (/= []) $ B.divideTreesBy ":" trees where
-    folding :: [[B.TokenTree]] -> B.Ab B.TokenTree
+    folding :: [[B.TTree]] -> B.Ab B.TTree
     folding []        = Right $ B.TreeL $ B.textToken "()"
     folding (x : xs)  = fore x =<< folding xs
 
-    fore :: [B.TokenTree] -> B.AbMap B.TokenTree
+    fore :: [B.TTree] -> B.AbMap B.TTree
     fore trees2 alt =
         case B.divideTreesBy "->" trees2 of
           [_]         -> back trees2 alt
@@ -121,7 +121,7 @@ copTreeIf trees = folding $ filter (/= []) $ B.divideTreesBy ":" trees where
                             Right $ treeIf test2 (B.wrapTrees con) alt
           _           -> abortSyntax trees2 "Expect E -> E"
 
-    back :: [B.TokenTree] -> B.AbMap B.TokenTree
+    back :: [B.TTree] -> B.AbMap B.TTree
     back trees2 alt =
         case B.divideTreesBy "<-" trees2 of
           [alt2]      -> Right $ B.wrapTrees alt2
@@ -129,12 +129,12 @@ copTreeIf trees = folding $ filter (/= []) $ B.divideTreesBy ":" trees where
                             Right $ treeIf test2 (B.wrapTrees con) alt
           _           -> abortSyntax trees2 "Expect E <- E"
 
-    stairs :: String -> String -> [B.TokenTree] -> B.Ab B.TokenTree
+    stairs :: String -> String -> [B.TTree] -> B.Ab B.TTree
     stairs del del2 xs =
         do notInclude del2 xs
            Right $ treeOrList $ map B.wrapTrees $ B.divideTreesBy del xs
 
-    notInclude :: String -> [B.TokenTree] -> B.Ab ()
+    notInclude :: String -> [B.TTree] -> B.Ab ()
     notInclude del xs =
         case B.divideTreesBy del xs of
           [_] -> Right ()

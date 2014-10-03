@@ -126,19 +126,19 @@ optionElem name opt = name `elem` map fst opt
 
 -- ---------------------------------  Option "-fore"
 
-optionFore :: (Ord c) => [B.TokenTree] -> B.AbMap (B.Rel c)
+optionFore :: (Ord c) => [B.TTree] -> B.AbMap (B.Rel c)
 optionFore opt2 r1 =
     do ns <- flatnames opt2
        snipRelRaw B.snipFore2 ns r1
 
-flatnames :: [B.TokenTree] -> B.Ab [B.TermName]
+flatnames :: [B.TTree] -> B.Ab [B.TermName]
 flatnames trees =
     case mapM flatname trees of
       Just ns -> Right ns
       Nothing -> Msg.reqTermName
 
 -- | Get term name as string only if term is flat.
-flatname :: B.TokenTree -> Maybe B.TermName
+flatname :: B.TTree -> Maybe B.TermName
 flatname (B.TreeL (B.TTerm _ _ [n])) = Just n
 flatname _ = Nothing
 
@@ -158,7 +158,7 @@ snipRelRaw (heSnip, boSnip) ns (B.Rel he1 bo1)
 
 -- ---------------------------------  Option "-order"
 
-optionOrder :: (Ord c, C.CRel c) => [B.TokenTree] ->  B.AbMap (B.Rel c)
+optionOrder :: (Ord c, C.CRel c) => [B.TTree] ->  B.AbMap (B.Rel c)
 optionOrder _ r1 = Right $ relSortDeep r1
 
 relSortDeep :: (Ord c, C.CRel c) => B.MapRel c

@@ -50,7 +50,7 @@ dumpRel :: (B.Write c, C.CRel c) => B.Rel c -> B.Ab a
 dumpRel r = Left $ B.abortPage "Dump relation" $ C.relTableLines [] r
 
 -- | Dump token trees
-dumpTrees :: [B.TokenTree] -> B.Ab a
+dumpTrees :: [B.TTree] -> B.Ab a
 dumpTrees trees = Left $ B.abortLines "Dump token trees"
                    $ lines $ show $ B.ttDoc trees
 

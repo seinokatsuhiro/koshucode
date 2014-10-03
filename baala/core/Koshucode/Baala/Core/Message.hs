@@ -79,13 +79,13 @@ abAssert = B.abortable "assert"
 abAttr :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abAttr = B.abortable "attr"
 
-abAttrTrees :: B.TokenTreesTo (B.Map (B.Ab b))
+abAttrTrees :: B.TTreesTo (B.Map (B.Ab b))
 abAttrTrees = B.abortableTrees "attr"
 
 abClause :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abClause = B.abortable "clause"
 
-abCoxBuild :: B.TokenTreeTo (B.Map (B.Ab b))
+abCoxBuild :: B.TTreeTo (B.Map (B.Ab b))
 abCoxBuild = B.abortableTree "cox-build"
 
 abCoxCalc :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
@@ -100,19 +100,19 @@ abCoxIrrep = B.abortable "cox-irrep"
 abCoxPosition :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abCoxPosition = B.abortable "cox-position"
 
-abCoxPrefix :: B.TokenTreeTo (B.Map (B.Ab b))
+abCoxPrefix :: B.TTreeTo (B.Map (B.Ab b))
 abCoxPrefix = B.abortableTree "cox-prefix"
 
 abCoxReduce :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abCoxReduce = B.abortable "cox-reduce"
 
-abCoxSyntax :: B.TokenTreeTo (B.Map (B.Ab b))
+abCoxSyntax :: B.TTreeTo (B.Map (B.Ab b))
 abCoxSyntax = B.abortableTree "cox-syntax"
 
-abLexmap :: B.TokenTreesTo (B.Map (B.Ab b))
+abLexmap :: B.TTreesTo (B.Map (B.Ab b))
 abLexmap = B.abortableTrees "lexmap"
 
-abLiteral :: B.TokenTreeTo (B.Map (B.Ab b))
+abLiteral :: B.TTreeTo (B.Map (B.Ab b))
 abLiteral = B.abortableTree "literal"
 
 abRelmap :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
@@ -127,7 +127,7 @@ abShort = B.abortable "short"
 abSlot :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abSlot = B.abortable "slot"
 
-abSlotTree :: B.TokenTreeTo (B.Map (B.Ab b))
+abSlotTree :: B.TTreeTo (B.Map (B.Ab b))
 abSlotTree = B.abortableTree "slot"
 
 abSpecialize :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)

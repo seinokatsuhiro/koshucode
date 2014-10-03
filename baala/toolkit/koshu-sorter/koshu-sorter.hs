@@ -55,7 +55,7 @@ lineDoc line = B.doc line P.$$ P.nest 2 body where
                             Nothing -> unk line
 
 sorterDoc :: [B.Named C.RopSorter]
-          -> String -> String -> [B.TokenTree] -> B.Doc
+          -> String -> String -> [B.TTree] -> B.Doc
 sorterDoc sorters line name tt =
     case lookup name sorters of
       Just s  -> namedTtDoc . s . C.sortOperand $ tt

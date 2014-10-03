@@ -27,7 +27,7 @@ import qualified Koshucode.Baala.Core.Lexmap.Slot       as C
 import qualified Koshucode.Baala.Core.Message           as Msg
 
 -- | Intermediate data that represents use of relmap operator.
---   Lexmap is constructed from a list of 'B.TokenTree',
+--   Lexmap is constructed from a list of 'B.TTree',
 --   and generic relmap is constructed from a lexmap.
 data Lexmap = Lexmap
     { lexType     :: LexmapType    -- ^ Type of lexmap
@@ -75,10 +75,10 @@ lexMessageList Lexmap { lexOpToken = tok, lexMessage = msg }
 type ConsLexmap = [C.GlobalSlot] -> [RelmapSource] -> ConsLexmapBody
 
 -- | Source of relmap: its name, replacement, and attribute editor.
-type RelmapSource = B.Named ([B.TokenTree], C.Roamap)
+type RelmapSource = B.Named ([B.TTree], C.Roamap)
 
 -- | Construct lexmap and its submaps from source of lexmap
-type ConsLexmapBody = [B.TokenTree] -> B.Ab (Lexmap, [C.Roal Lexmap])
+type ConsLexmapBody = [B.TTree] -> B.Ab (Lexmap, [C.Roal Lexmap])
 
 consLexmap :: (C.RopName -> Maybe C.AttrSort) -> ConsLexmap
 consLexmap find gslot derives = lexmap where
@@ -118,7 +118,7 @@ consLexmap find gslot derives = lexmap where
     user ty rop trees = do roa <- C.attrSortBranch trees
                            submap $ cons ty rop roa trees
 
-    cons :: LexmapType -> B.Token -> C.AttrTrees -> [B.TokenTree] -> Lexmap
+    cons :: LexmapType -> B.Token -> C.AttrTrees -> [B.TTree] -> Lexmap
     cons ty rop roa trees =
         check $ Lexmap { lexType    = ty
                        , lexOpToken = rop
@@ -160,7 +160,7 @@ consLexmap find gslot derives = lexmap where
                                sub2       <- B.concatMapM slot sub
                                Right $ ((n, roa), lx2) : lxs ++ sub2
 
-    withTrees :: [String] -> B.Map [B.TokenTree]
+    withTrees :: [String] -> B.Map [B.TTree]
     withTrees ws = map loop where
         loop (B.TreeB t p trees) = B.TreeB t p $ map loop trees
         loop (B.TreeL (B.TText p 0 w)) | w `elem` ws = B.TreeL (B.TText p 3 w)
@@ -172,12 +172,12 @@ consLexmap find gslot derives = lexmap where
           Nothing -> Right []
           Just ws -> withNames ws
 
-    withNames :: [B.TokenTree] -> B.Ab [String]
+    withNames :: [B.TTree] -> B.Ab [String]
     withNames ws = do ts <- withTerms ws
                       Right $ map snd ts
 
 -- | Parse @-with@ attribute.
-withTerms :: [B.TokenTree] -> B.Ab [B.Terminal String]
+withTerms :: [B.TTree] -> B.Ab [B.Terminal String]
 withTerms = loop where
     loop (B.TreeL (B.TTerm _ 0 [n]) :
           B.TreeL (B.TText _ 0 v)   : xs)  =  next (n, v) xs
@@ -196,11 +196,11 @@ withTerms = loop where
 --
 --  Construction process of lex relmaps from source trees.
 --
---  [@\[TokenTree\] -> \[\[TokenTree\]\]@]
---     Divide list of 'B.TokenTree' by vertical bar (@|@).
+--  [@\[TTree\] -> \[\[TTree\]\]@]
+--     Divide list of 'B.TTree' by vertical bar (@|@).
 --
---  [@\[\[TokenTree\]\] -> \[Lexmap\]@]
---     Construct each 'C.Lexmap' from lists of 'B.TokenTree'.
+--  [@\[\[TTree\]\] -> \[Lexmap\]@]
+--     Construct each 'C.Lexmap' from lists of 'B.TTree'.
 --     When there are submaps in token trees,
 --     constructs 'C.Lexmap' recursively.
 --

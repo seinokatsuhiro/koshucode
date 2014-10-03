@@ -69,14 +69,14 @@ data AttrDefine = AttrDefine
     }
 
 -- | List of attribute name and its contents.
-type AttrTrees = [ (AttrName, [B.TokenTree]) ]
+type AttrTrees = [ (AttrName, [B.TTree]) ]
 
 -- | Sorter for attribute of relmap operator.
 --   Sorters docompose attribute trees,
 --   and give a name to subattribute.
-type AttrSort = [B.TokenTree] -> B.Ab AttrTrees
+type AttrSort = [B.TTree] -> B.Ab AttrTrees
 
-type TreeSort = [B.TokenTree] -> [B.NamedTrees]
+type TreeSort = [B.TTree] -> [B.NamedTrees]
 
 -- | Name of relmap operator.
 type RopName = String

@@ -5,10 +5,10 @@
 
 module Koshucode.Baala.Base.Token.TokenTree
 ( -- * Token tree
-  TokenTree,
+  TTree,
   NamedTree, NamedTrees,
-  TokenTreeTo, TokenTreesTo,
-  TokenTreeToAb, TokenTreesToAb,
+  TTreeTo, TTreesTo,
+  TTreeToAb, TTreesToAb,
   tokenTrees,
   wrapTrees,
 
@@ -39,34 +39,34 @@ import qualified Koshucode.Baala.Base.Token.TokenLine as B
 -- ---------------------- Token tree
 
 -- | Tree of tokens.
-type TokenTree = B.CodeTree BracketType B.Token
+type TTree = B.CodeTree BracketType B.Token
 
 -- | Pair of token trees and its name.
-type NamedTrees = B.Named [TokenTree]
+type NamedTrees = B.Named [TTree]
 
 -- | Pair of token tree and its name.
-type NamedTree = B.Named TokenTree
+type NamedTree = B.Named TTree
 
 -- | Convert token tree to something.
-type TokenTreeTo a    = TokenTree -> a
+type TTreeTo a    = TTree -> a
 
 -- | Convert list of token tree to sometning.
-type TokenTreesTo a   = [TokenTree] -> a
+type TTreesTo a   = [TTree] -> a
 
 -- | Convert token tree to something, abortable.
-type TokenTreeToAb a  = TokenTree -> B.Ab a
+type TTreeToAb a  = TTree -> B.Ab a
 
 -- | Convert list of token tree to sometning, abortable.
-type TokenTreesToAb a = [TokenTree] -> B.Ab a
+type TTreesToAb a = [TTree] -> B.Ab a
 
 -- | Parse tokens with brackets into trees.
 --   Blank tokens and comments are excluded.
-tokenTrees :: [B.Token] -> B.Ab [TokenTree]
+tokenTrees :: [B.Token] -> B.Ab [TTree]
 tokenTrees = B.trees getBracketType B.BracketNone where
     --und = map (B.undouble (== BracketGroup))
 
 -- | Wrap trees in group.
-wrapTrees :: TokenTreesTo TokenTree
+wrapTrees :: TTreesTo TTree
 wrapTrees = B.treeWrap BracketGroup
 
 
@@ -126,49 +126,49 @@ splitTokensBy p = B.splitBy p2 where
     p2 _ = False
 
 -- | Divide token trees by quoteless token of given string.
-divideTreesBy :: String -> TokenTreesTo [[TokenTree]]
+divideTreesBy :: String -> TTreesTo [[TTree]]
 divideTreesBy w1 = B.divideBy p where
     p (B.TreeL (B.TText _ 0 w2))  =  w1 == w2
     p _                           =  False
 
 -- | Divide token trees by vertical bar @\"|\"@.
-divideTreesByBar :: TokenTreesTo [[TokenTree]]
+divideTreesByBar :: TTreesTo [[TTree]]
 divideTreesByBar = divideTreesBy "|"
 
 -- | Divide token trees by colon @\":\"@.
-divideTreesByColon :: TokenTreesTo [[TokenTree]]
+divideTreesByColon :: TTreesTo [[TTree]]
 divideTreesByColon = divideTreesBy ":"
 
 -- | Divide token trees by equal sign @\"=\"@.
-divideTreesByEqual :: TokenTreesTo [[TokenTree]]
+divideTreesByEqual :: TTreesTo [[TTree]]
 divideTreesByEqual = divideTreesBy "="
 
 
 -- ----------------------  Abortable
 
--- | Same as 'abortable' except for using 'B.TokenTree'
+-- | Same as 'abortable' except for using 'B.TTree'
 --   instead of list of 'B.Token'.
-abortableTree :: String -> TokenTreeTo (B.Map (B.Ab b))
+abortableTree :: String -> TTreeTo (B.Map (B.Ab b))
 abortableTree tag = B.abortable tag . B.untree
 
--- | Same as 'abortable' except for using list of 'B.TokenTree'
+-- | Same as 'abortable' except for using list of 'B.TTree'
 --   instead of list of 'B.Token'.
-abortableTrees :: String -> TokenTreesTo (B.Map (B.Ab b))
+abortableTrees :: String -> TTreesTo (B.Map (B.Ab b))
 abortableTrees tag = B.abortable tag . B.untrees
 
 
 -- ----------------------  Abbreviation
 
 -- | Convert text to token trees.
-tt :: String -> B.Ab [TokenTree]
+tt :: String -> B.Ab [TTree]
 tt s = do toks <- B.tokens (B.ResourceText s) s
           tokenTrees $ B.sweepToken toks
 
-tt1 :: String -> B.Ab TokenTree
+tt1 :: String -> B.Ab TTree
 tt1 = Right . wrapTrees B.<=< tt
 
 -- | Get 'B.Doc' value of token trees for pretty printing.
-ttDoc :: TokenTreesTo B.Doc
+ttDoc :: TTreesTo B.Doc
 ttDoc = dv where
     dv = B.docv . map d
     d (B.TreeL x) = B.doc "TreeL :" B.<+> B.doc x

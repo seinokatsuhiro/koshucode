@@ -39,19 +39,19 @@ type RopGet c a
     -> String       -- ^ Name of keyword, e.g., @\"-term\"@
     -> B.Ab a       -- ^ Attribute of relmap
 
-lookupTree, lookupRelmap :: String -> C.RopUse c -> Maybe [B.TokenTree]
+lookupTree, lookupRelmap :: String -> C.RopUse c -> Maybe [B.TTree]
 lookupTree   = lookupAttr C.AttrTree
 lookupRelmap = lookupAttr C.AttrRelmap
 
-lookupAttr :: (String -> C.AttrName) -> String -> C.RopUse c -> Maybe [B.TokenTree]
+lookupAttr :: (String -> C.AttrName) -> String -> C.RopUse c -> Maybe [B.TTree]
 lookupAttr c name = lookup (c name) . C.lexAttr . C.ropLexmap
 
-getAbortable :: ([B.TokenTree] -> B.Ab b) -> RopGet c b
+getAbortable :: ([B.TTree] -> B.Ab b) -> RopGet c b
 getAbortable f u name =
     do trees <- getTrees u name
        Msg.abAttrTrees trees $ f trees
 
-getAbortableOption :: b -> ([B.TokenTree] -> B.Ab b) -> RopGet c b
+getAbortableOption :: b -> ([B.TTree] -> B.Ab b) -> RopGet c b
 getAbortableOption y f u name =
     do m <- getMaybe getTrees u name
        case m of
@@ -93,24 +93,24 @@ getWord = getAbortable get where
 
 -- ----------------------  Tree
 
-getTrees :: RopGet c [B.TokenTree]
+getTrees :: RopGet c [B.TTree]
 getTrees u name =
     case lookupTree name u of
       Just trees -> Right trees
       Nothing    -> Msg.noAttr
 
-getTree :: RopGet c B.TokenTree
+getTree :: RopGet c B.TTree
 getTree u name =
     do trees <- getTrees u name
        Right $ B.wrapTrees trees
 
-getWordTrees :: RopGet c [B.Named B.TokenTree]
+getWordTrees :: RopGet c [B.Named B.TTree]
 getWordTrees u name =
     case lookupTree name u of
       Just trees -> wordTrees trees
       Nothing    -> Msg.noAttr
 
-wordTrees :: [B.TokenTree] -> B.Ab [B.Named B.TokenTree]
+wordTrees :: [B.TTree] -> B.Ab [B.Named B.TTree]
 wordTrees []  = Right []
 wordTrees [_] = Msg.unexpAttr "Require word and tree"
 wordTrees (w : tree : xs) =
@@ -118,11 +118,11 @@ wordTrees (w : tree : xs) =
        xs' <- wordTrees xs
        Right $ (w', tree) : xs'
 
-word :: B.TokenTree -> B.Ab String
+word :: B.TTree -> B.Ab String
 word (B.TreeL (B.TText _ _ w)) = Right w
 word _ = Msg.unexpAttr "Require one word"
 
-getTreesByColon :: RopGet c [[B.TokenTree]]
+getTreesByColon :: RopGet c [[B.TTree]]
 getTreesByColon u name =
     do trees <- getTrees u name
        Right $ B.omit null $ B.divideTreesByColon trees
@@ -144,7 +144,7 @@ getRelmap u name =
          [m] -> Right m
          _   -> Msg.unexpAttr "Require one relmap"
 
-getRelmapRaw :: RopGet c [B.TokenTree]
+getRelmapRaw :: RopGet c [B.TTree]
 getRelmapRaw u name =
     case lookupRelmap name u of
       Just trees -> Right trees
@@ -182,5 +182,5 @@ getTermPairs = getAbortable Op.termNamePairs
 getWithTerms :: RopGet c [B.Terminal String]
 getWithTerms = getAbortable C.withTerms
 
-getTermTrees :: RopGet c [B.Named B.TokenTree]
+getTermTrees :: RopGet c [B.Named B.TTree]
 getTermTrees = getAbortable C.getTermedTrees
