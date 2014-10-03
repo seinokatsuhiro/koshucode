@@ -20,7 +20,7 @@ module Koshucode.Baala.Op.Peripheral
   consTermName, relmapTermName, relkitTermName,
 
   -- * type-name
-  consTypeName,
+  consType,
 ) where
 
 import qualified Koshucode.Baala.Base         as B
@@ -44,7 +44,7 @@ ropsPeripheral = Op.ropList "peripheral"
     , Op.ropE  consMember    "member /N /N"            "-1 -2"
     , Op.ropIV consRdf       "rdf P /S /O"             "-pattern -term"
     , Op.ropI  consTermName  "term-name /N"            "-term"
-    , Op.ropV  consTypeName  "type-name /N /P ..."     "-term"
+    , Op.ropV  consType      "type /N /P ..."          "-term"
     , Op.ropI  consUnassn    "unassn /P -only /P ..."  "-from | -only"
     ]
 
@@ -187,17 +187,17 @@ relkitTermName n (Just he1) = Right kit2 where
     term t    = [C.pTerm t]
 
 
--- ----------------------  type-name
+-- ----------------------  type
 
 -- | Get typename.
-consTypeName :: (C.CContent c) => C.RopCons c
-consTypeName use =
+consType :: (C.CType c, C.CTypeOf c) => C.RopCons c
+consType use =
   do np <- Op.getTermPairs use "-term"
-     Right $ C.relmapFlow use $ relkitTypename np
+     Right $ C.relmapFlow use $ relkitType np
 
-relkitTypename :: (C.CText c) => [B.TermName2] -> C.RelkitFlow c
-relkitTypename _ Nothing = Right C.relkitNothing
-relkitTypename np (Just he1) = Right kit2 where
+relkitType :: (C.CType c, C.CTypeOf c) => [B.TermName2] -> C.RelkitFlow c
+relkitType _ Nothing = Right C.relkitNothing
+relkitType np (Just he1) = Right kit2 where
     ns, ps :: [B.TermName]
     (ns, ps)  = unzip np
 
@@ -206,7 +206,7 @@ relkitTypename np (Just he1) = Right kit2 where
     share1    = B.snipFrom ind1
 
     he2       = ns `B.headAppend` he1
-    kit2      = C.relkitJust he2 $ C.RelkitOneToOne False kitf2
-    kitf2 cs1 = let cs2 = share1 cs1 in map typetext cs2 ++ cs1
-    typetext  = C.pText . C.typename
+    kit2      = C.relkitJust he2 $ C.RelkitOneToOne False f2
+    f2 cs1    = let cs2 = share1 cs1 in map pTypeOf cs2 ++ cs1
+    pTypeOf   = C.pType . C.typeOf
 

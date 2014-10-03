@@ -63,6 +63,19 @@ instance Ord VContent where
 compareAsSet :: (Ord a) => [a] -> [a] -> Ordering
 compareAsSet x y = compare (Set.fromList x) (Set.fromList y)
 
+instance C.CTypeOf VContent where
+    typeOf (VBool    _)  =  B.TypeBool
+    typeOf (VText    _)  =  B.TypeText
+    typeOf (VTerm    _)  =  B.TypeText
+    typeOf (VDec     _)  =  B.TypeText
+    typeOf (VEmpty    )  =  B.TypeEmpty
+    typeOf (VList    _)  =  B.TypeEmpty
+    typeOf (VSet     _)  =  B.TypeEmpty
+    typeOf (VAssn    _)  =  B.TypeEmpty
+    typeOf (VRel     _)  =  B.TypeRel []
+    typeOf (VInterp  _)  =  B.TypeEmpty
+    typeOf (VType    _)  =  B.TypeEmpty
+
 instance C.PrimContent VContent where        
     typename (VBool    _)  =  "boolean"
     typename (VText    _)  =  "text"

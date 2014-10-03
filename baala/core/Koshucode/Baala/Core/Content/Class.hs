@@ -20,6 +20,8 @@ module Koshucode.Baala.Core.Content.Class
   CInterp     (..),
   CType       (..),
 
+  CTypeOf (..),
+
   contAp, contMap,
   contApTextToText,
   contMapTextToList,
@@ -37,7 +39,7 @@ class (Show c) => PrimContent c where
 
 class (Ord c, B.Write c, PrimContent c,
        CBool c, CText c, CTerm c, CDec c, CList c,
-       CEmpty c , CSet c, CAssn c, CRel c, CInterp c, CType c) =>
+       CEmpty c , CSet c, CAssn c, CRel c, CInterp c, CType c, CTypeOf c) =>
     CContent c where
 
     appendContent :: c -> c -> B.Ab c
@@ -186,6 +188,9 @@ class (PrimContent c) => CType c where
 
     putType     ::      B.Type -> B.Ab c
     putType     =       Right . pType
+
+class CTypeOf c where
+    typeOf :: c -> B.Type
 
 isMember :: (Eq c, CSet c, CList c) => c -> c -> Bool
 isMember x xs | isSet xs  = x `elem` gSet xs
