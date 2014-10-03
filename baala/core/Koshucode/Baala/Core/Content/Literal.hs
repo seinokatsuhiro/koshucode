@@ -245,6 +245,10 @@ litType = gen where
     dispatch _  "empty"    =  Right B.TypeEmpty
     dispatch _  "boolean"  =  Right B.TypeBool
     dispatch _  "text"     =  Right B.TypeText
+    dispatch _  "decimal"  =  Right B.TypeDec
+    dispatch _  "term"     =  Right B.TypeTerm
+    dispatch _  "type"     =  Right B.TypeType
+    dispatch _  "interp"   =  Right B.TypeInterp
     dispatch xs "rel"      =  do ts1 <- getTermedTrees2 xs
                                  ts2 <- B.sequenceSnd $ B.mapSndTo gen ts1
                                  Right $ B.TypeRel ts2

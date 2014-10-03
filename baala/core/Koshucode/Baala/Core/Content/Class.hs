@@ -42,14 +42,14 @@ class (Ord c, B.Write c, CTypeOf c,
     joinContent :: [c] -> B.Ab c
     joinContent = B.foldM appendContent empty
 
-class (Show c) => CTypeOf c where
+class (Show c, B.Write c) => CTypeOf c where
     typeOf :: c -> B.Type
 
 getAbAb :: CTypeOf c => (c -> Bool) -> (c -> b) -> B.Ab c -> B.Ab b
 getAbAb _ _ (Left reason) =  Left reason
 getAbAb is get (Right x)
     | is x = Right $ get x
-    | otherwise = Msg.unmatchType $ show (typeOf x)
+    | otherwise = Msg.unmatchType $ show $ B.doc $ typeOf x
 
 
 

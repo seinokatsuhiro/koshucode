@@ -66,15 +66,15 @@ compareAsSet x y = compare (Set.fromList x) (Set.fromList y)
 instance C.CTypeOf VContent where
     typeOf (VBool    _)  =  B.TypeBool
     typeOf (VText    _)  =  B.TypeText
-    typeOf (VTerm    _)  =  B.TypeText
-    typeOf (VDec     _)  =  B.TypeText
+    typeOf (VTerm    _)  =  B.TypeTerm
+    typeOf (VDec     _)  =  B.TypeDec
     typeOf (VEmpty    )  =  B.TypeEmpty
     typeOf (VList    _)  =  B.TypeEmpty
     typeOf (VSet     _)  =  B.TypeEmpty
     typeOf (VAssn    _)  =  B.TypeEmpty
     typeOf (VRel     _)  =  B.TypeRel []
-    typeOf (VInterp  _)  =  B.TypeEmpty
-    typeOf (VType    _)  =  B.TypeEmpty
+    typeOf (VInterp  _)  =  B.TypeInterp
+    typeOf (VType    _)  =  B.TypeType
 
 instance C.CContent VContent where
     appendContent (VEmpty) x = Right x
