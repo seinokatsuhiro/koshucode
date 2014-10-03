@@ -23,12 +23,13 @@ data VContent
     | VTerm    String             -- ^ Term name type
     | VDec     B.Decimal          -- ^ Decimal number type
     | VEmpty                      -- ^ Sign of no ordinary type
+    | VInterp  B.Interp           -- ^ Interpretation type
+    | VType    B.Type             -- ^ Type for type
+
     | VList    [VContent]         -- ^ List type (objective collection)
     | VSet     [VContent]         -- ^ Set type (informative collection)
     | VAssn    [B.Named VContent] -- ^ Assn type (set of terms)
     | VRel     (B.Rel VContent)   -- ^ Relation type
-    | VInterp  B.Interp           -- ^ Interpretation type
-    | VType    B.Type             -- ^ Type for type
       deriving (Show)
 
 instance Eq VContent where
@@ -41,24 +42,24 @@ instance Ord VContent where
     compare (VTerm    x) (VTerm    y)  =  compare x y
     compare (VDec     x) (VDec     y)  =  compare x y
     compare (VEmpty    ) (VEmpty    )  =  EQ
+    compare (VInterp  x) (VInterp  y)  =  compare x y
+    compare (VType    x) (VType    y)  =  compare x y
     compare (VList    x) (VList    y)  =  compare x y
     compare (VSet     x) (VSet     y)  =  compareAsSet x y
     compare (VAssn    x) (VAssn    y)  =  compareAsSet x y
     compare (VRel     x) (VRel     y)  =  compare x y
-    compare (VInterp  x) (VInterp  y)  =  compare x y
-    compare (VType    x) (VType    y)  =  compare x y
 
     compare (VBool    _) _             =  LT
     compare (VText    _) _             =  LT
     compare (VTerm    _) _             =  LT
     compare (VDec     _) _             =  LT
     compare (VEmpty    ) _             =  LT
+    compare (VInterp  _) _             =  LT
+    compare (VType    _) _             =  LT
     compare (VList    _) _             =  LT
     compare (VSet     _) _             =  LT
     compare (VAssn    _) _             =  LT
     compare (VRel     _) _             =  LT
-    compare (VInterp  _) _             =  LT
-    compare (VType    _) _             =  LT
 
 compareAsSet :: (Ord a) => [a] -> [a] -> Ordering
 compareAsSet x y = compare (Set.fromList x) (Set.fromList y)
@@ -69,12 +70,17 @@ instance C.CTypeOf VContent where
     typeOf (VTerm    _)  =  B.TypeTerm
     typeOf (VDec     _)  =  B.TypeDec
     typeOf (VEmpty    )  =  B.TypeEmpty
-    typeOf (VList    _)  =  B.TypeEmpty
-    typeOf (VSet     _)  =  B.TypeEmpty
-    typeOf (VAssn    _)  =  B.TypeEmpty
-    typeOf (VRel     _)  =  B.TypeRel []
     typeOf (VInterp  _)  =  B.TypeInterp
     typeOf (VType    _)  =  B.TypeType
+    typeOf (VList   cs)  =  B.TypeList $ typeSum cs
+    typeOf (VSet    cs)  =  B.TypeSet  $ typeSum cs
+    typeOf (VAssn   cs)  =  B.TypeAssn $ B.mapSndTo C.typeOf cs
+    typeOf (VRel     _)  =  B.TypeRel []
+
+typeSum :: C.CTypeOf c => [c] -> B.Type
+typeSum cs = case B.unique $ map C.typeOf cs of
+               [t] -> t
+               ts  -> B.TypeSum ts
 
 instance C.CContent VContent where
     appendContent (VEmpty) x = Right x
@@ -89,12 +95,12 @@ instance B.Write VContent where
         VDec  n      ->  B.doc $ B.decimalString n
         VBool b      ->  B.doc b
         VEmpty       ->  B.doc "()"
+        VInterp i    ->  B.write sh i
+        VType t      ->  B.docWraps "[-" "-]" $ B.write sh t
         VList xs     ->  B.docWraps "["   "]" $ B.writeColon sh xs
         VSet  xs     ->  B.docWraps "{"   "}" $ B.writeColon sh xs
         VAssn xs     ->  B.docWraps "<<" ">>" $ B.writeH     sh xs
         VRel r       ->  B.write sh r
-        VInterp i    ->  B.write sh i
-        VType t      ->  B.docWraps "[-" "-]" $ B.write sh t
 
 
 -- ----------------------  haskell data
@@ -143,6 +149,20 @@ instance C.CTerm VContent where
     isTerm  (VTerm _)        =  True
     isTerm  _                =  False
 
+instance C.CInterp VContent where
+    pInterp                     =  VInterp
+    gInterp (VInterp r)         =  r
+    gInterp _                   =  B.bug "gInterp"
+    isInterp  (VInterp _)       =  True
+    isInterp  _                 =  False
+
+instance C.CType VContent where
+    pType                     =  VType
+    gType (VType r)           =  r
+    gType _                   =  B.bug "gType"
+    isType  (VType _)         =  True
+    isType  _                 =  False
+
 instance C.CSet VContent where
     pSet                     =  VSet . B.omit C.isEmpty . B.unique
     gSet (VSet x)            =  x
@@ -163,18 +183,4 @@ instance C.CRel VContent where
     gRel _                   =  B.bug "gRel"
     isRel  (VRel _)          =  True
     isRel  _                 =  False
-
-instance C.CInterp VContent where
-    pInterp                     =  VInterp
-    gInterp (VInterp r)         =  r
-    gInterp _                   =  B.bug "gInterp"
-    isInterp  (VInterp _)       =  True
-    isInterp  _                 =  False
-
-instance C.CType VContent where
-    pType                     =  VType
-    gType (VType r)           =  r
-    gType _                   =  B.bug "gType"
-    isType  (VType _)         =  True
-    isType  _                 =  False
 

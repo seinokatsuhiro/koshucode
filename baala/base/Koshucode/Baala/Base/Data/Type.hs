@@ -1,27 +1,33 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Data.Type
-( Type (..),
-) where
+  ( Type (..),
+  ) where
 
 import qualified Koshucode.Baala.Base.Prelude  as B
 import qualified Koshucode.Baala.Base.Text     as B
 import qualified Koshucode.Baala.Base.Token    as B
 
 data Type
-    = TypeEmpty
-    | TypeBool
-    | TypeText
-    | TypeCode
-    | TypeDec
-    | TypeDate
-    | TypeTime
-    | TypeBin
-    | TypeTerm
-    | TypeType
-    | TypeInterp
-    | TypeRel     [(B.TermName, Type)]
-    | TypeSum     [Type]
+    = TypeEmpty                          -- ^ Empty
+    | TypeBool                           -- ^ Boolean
+    | TypeText                           -- ^ Text
+    | TypeCode                           -- ^ Code
+    | TypeDec                            -- ^ Decimal
+    | TypeDate                           -- ^ Date
+    | TypeTime                           -- ^ Time
+    | TypeBin                            -- ^ Binary data
+    | TypeTerm                           -- ^ Term name
+    | TypeType                           -- ^ Type of types
+    | TypeInterp                         -- ^ Data interpreation
+
+    | TypeTag     String Type            -- ^ Tagged type
+    | TypeList    Type                   -- ^ List
+    | TypeSet     Type                   -- ^ Set
+    | TypeTuple   [Type]                 -- ^ Tuple (Product type)
+    | TypeAssn    [(B.TermName, Type)]   -- ^ Association
+    | TypeRel     [(B.TermName, Type)]   -- ^ Relation
+    | TypeSum     [Type]                 -- ^ Sum type
       deriving (Show, Eq, Ord)
 
 instance B.Write Type where
@@ -43,7 +49,14 @@ writeType _ = wf where
     w _ TypeTerm          =  B.doc "term"
     w _ TypeType          =  B.doc "type"
     w _ TypeInterp        =  B.doc "interp"
-    w _ (TypeRel ts)      =  B.doc "rel" B.<+> B.writeTerms wt ts
+
+    w _ (TypeTag tag t)   =  B.doc (tag ++ ":") B.<+> wt t
+    w _ (TypeList   t)    =  B.doc "list"  B.<+> wt t
+    w _ (TypeSet    t)    =  B.doc "set"   B.<+> wt t
+    w _ (TypeTuple ts)    =  B.doc "tuple" B.<+> B.writeBar id ts
+    w _ (TypeAssn  ts)    =  B.doc "assn"  B.<+> B.writeTerms wt ts
+    w _ (TypeRel   ts)    =  B.doc "rel"   B.<+> B.writeTerms wt ts
+
     w False (TypeSum ts)  =  bar ts
     w True  (TypeSum ts)  =  B.docWraps "(" ")" $ bar ts
 
