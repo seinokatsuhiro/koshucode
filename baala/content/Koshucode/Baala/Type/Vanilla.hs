@@ -76,19 +76,6 @@ instance C.CTypeOf VContent where
     typeOf (VInterp  _)  =  B.TypeEmpty
     typeOf (VType    _)  =  B.TypeEmpty
 
-instance C.PrimContent VContent where        
-    typename (VBool    _)  =  "boolean"
-    typename (VText    _)  =  "text"
-    typename (VTerm    _)  =  "term"
-    typename (VDec     _)  =  "decimal"
-    typename (VEmpty    )  =  "empty"
-    typename (VList    _)  =  "list"
-    typename (VSet     _)  =  "set"
-    typename (VAssn    _)  =  "assn"
-    typename (VRel     _)  =  "rel"
-    typename (VInterp  _)  =  "interp"
-    typename (VType    _)  =  "type"
-
 instance C.CContent VContent where
     appendContent (VEmpty) x = Right x
     appendContent x (VEmpty) = Right x

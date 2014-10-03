@@ -95,7 +95,7 @@ copLength = op where
                  | C.isRel c   = Right . C.pDecFromInt $ length (B.relBody $ C.gRel c)
     op xs = typeUnmatch xs
 
-typeUnmatch :: C.PrimContent a => [B.Ab a] -> B.Ab b
+typeUnmatch :: C.CTypeOf c => [B.Ab c] -> B.Ab c
 typeUnmatch _ = Msg.unmatchType ""
 
 

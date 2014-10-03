@@ -189,7 +189,7 @@ relkitTermName n (Just he1) = Right kit2 where
 
 -- ----------------------  type
 
--- | Get typename.
+-- | Get type.
 consType :: (C.CType c, C.CTypeOf c) => C.RopCons c
 consType use =
   do np <- Op.getTermPairs use "-term"

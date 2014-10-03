@@ -2,8 +2,8 @@
 
 module Koshucode.Baala.Core.Content.Class
 ( -- * Generic content
-  PrimContent (..),
   CContent    (..),
+  CTypeOf     (..),
 
   -- * Haskell data
   CBool       (..), true, false,
@@ -20,8 +20,6 @@ module Koshucode.Baala.Core.Content.Class
   CInterp     (..),
   CType       (..),
 
-  CTypeOf (..),
-
   contAp, contMap,
   contApTextToText,
   contMapTextToList,
@@ -34,12 +32,9 @@ import qualified Koshucode.Baala.Core.Message as Msg
 
 -- ----------------------  Generic content
 
-class (Show c) => PrimContent c where
-    typename :: c -> String
-
-class (Ord c, B.Write c, PrimContent c,
-       CBool c, CText c, CTerm c, CDec c, CList c,
-       CEmpty c , CSet c, CAssn c, CRel c, CInterp c, CType c, CTypeOf c) =>
+class (Ord c, B.Write c, CTypeOf c,
+       CEmpty c, CBool c, CText c, CTerm c, CDec c, CType c, CInterp c,
+       CList c, CSet c, CAssn c, CRel c) =>
     CContent c where
 
     appendContent :: c -> c -> B.Ab c
@@ -47,17 +42,20 @@ class (Ord c, B.Write c, PrimContent c,
     joinContent :: [c] -> B.Ab c
     joinContent = B.foldM appendContent empty
 
-getAbAb :: PrimContent c => (c -> Bool) -> (c -> b) -> B.Ab c -> B.Ab b
+class (Show c) => CTypeOf c where
+    typeOf :: c -> B.Type
+
+getAbAb :: CTypeOf c => (c -> Bool) -> (c -> b) -> B.Ab c -> B.Ab b
 getAbAb _ _ (Left reason) =  Left reason
 getAbAb is get (Right x)
     | is x = Right $ get x
-    | otherwise = Msg.unmatchType (typename x)
+    | otherwise = Msg.unmatchType $ show (typeOf x)
 
 
 
 -- ----------------------  Haskell built-in data
 
-class (PrimContent c) => CBool c where
+class (CTypeOf c) => CBool c where
     isBool      ::       c -> Bool
     pBool       ::    Bool -> c
     gBool       ::       c -> Bool
@@ -72,7 +70,7 @@ true, false :: (CBool c) => c
 true  = pBool True
 false = pBool False
 
-class (PrimContent c) => CText c where
+class (CTypeOf c) => CText c where
     isText      ::       c -> Bool
     gText       ::       c -> String
     pText       ::  String -> c
@@ -89,7 +87,7 @@ pTextSet = pSet . map pText
 pTextList :: (CText c, CList c) => [String] -> c
 pTextList = pList . map pText
 
-class (PrimContent c) => CList c where
+class (CTypeOf c) => CList c where
     isList      ::       c -> Bool
     gList       ::       c -> [c]
     pList       ::     [c] -> c
@@ -105,11 +103,11 @@ class (PrimContent c) => CList c where
 -- ----------------------  Data in koshucode
 
 -- | Types that can be empty
-class (PrimContent c) => CEmpty c where
+class (CTypeOf c) => CEmpty c where
     isEmpty     ::          c -> Bool
     empty       ::          c
 
-class (PrimContent c) => CDec c where
+class (CTypeOf c) => CDec c where
     isDec       ::           c -> Bool
     gDec        ::           c -> B.Decimal
     pDec        ::   B.Decimal -> c
@@ -123,7 +121,7 @@ class (PrimContent c) => CDec c where
 pDecFromInt :: (CDec c) => Int -> c
 pDecFromInt = pDec . B.intDecimal
 
-class (PrimContent c) => CTerm c where
+class (CTypeOf c) => CTerm c where
     isTerm       ::           c -> Bool
     gTerm        ::           c -> String
     pTerm        ::      String -> c
@@ -134,7 +132,7 @@ class (PrimContent c) => CTerm c where
     putTerm      ::      String -> B.Ab c
     putTerm      =       Right . pTerm
 
-class (PrimContent c) => CSet c where
+class (CTypeOf c) => CSet c where
     isSet       ::          c -> Bool
     gSet        ::          c -> [c]
     pSet        ::        [c] -> c
@@ -145,7 +143,7 @@ class (PrimContent c) => CSet c where
     putSet      ::        [c] -> B.Ab c
     putSet      =       Right . pSet
 
-class (PrimContent c) => CAssn c where
+class (CTypeOf c) => CAssn c where
     isAssn      ::           c -> Bool
     gAssn       ::           c -> [B.Named c]
     pAssn       :: [B.Named c] -> c
@@ -156,7 +154,7 @@ class (PrimContent c) => CAssn c where
     putAssn     :: [B.Named c] -> B.Ab c
     putAssn     =  Right . pAssn
 
-class (PrimContent c) => CRel c where
+class (CTypeOf c) => CRel c where
     isRel       ::           c -> Bool
     gRel        ::           c -> B.Rel c
     pRel        ::     B.Rel c -> c
@@ -167,7 +165,7 @@ class (PrimContent c) => CRel c where
     putRel      ::     B.Rel c -> B.Ab c
     putRel      =      Right . pRel
 
-class (PrimContent c) => CInterp c where
+class (CTypeOf c) => CInterp c where
     isInterp    ::           c -> Bool
     gInterp     ::           c -> B.Interp
     pInterp     ::    B.Interp -> c
@@ -178,7 +176,7 @@ class (PrimContent c) => CInterp c where
     putInterp   ::    B.Interp -> B.Ab c
     putInterp   =     Right . pInterp
 
-class (PrimContent c) => CType c where
+class (CTypeOf c) => CType c where
     isType      ::           c -> Bool
     gType       ::           c -> B.Type
     pType       ::      B.Type -> c
@@ -188,9 +186,6 @@ class (PrimContent c) => CType c where
 
     putType     ::      B.Type -> B.Ab c
     putType     =       Right . pType
-
-class CTypeOf c where
-    typeOf :: c -> B.Type
 
 isMember :: (Eq c, CSet c, CList c) => c -> c -> Bool
 isMember x xs | isSet xs  = x `elem` gSet xs
