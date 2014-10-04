@@ -5,25 +5,24 @@
 -- | Make literal contents from token tree.
 
 module Koshucode.Baala.Core.Content.Literal
-(
-  -- * Functions
-  CalcContent,
-  literal,
-  getJudge,
-  getTermedTrees,
-  -- $Function
-
-  -- * Document
-
-  -- ** Types
-  -- $Types
-
-  -- ** Simple data
-  -- $SimpleData
-
-  -- ** Compound data
-  -- $CompoundData
-) where
+  ( -- * Functions
+    CalcContent,
+    literal,
+    getJudge,
+    getTermedTrees,
+    -- $Function
+  
+    -- * Document
+  
+    -- ** Types
+    -- $Types
+  
+    -- ** Simple data
+    -- $SimpleData
+  
+    -- ** Compound data
+    -- $CompoundData
+  ) where
 
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Core.Content.Class  as C
@@ -99,6 +98,11 @@ getTexts quoted = loop [] where
            loop (s : ss) xs
     loop _ _ = Msg.nothing
 
+treeText :: Bool -> B.TTreeToAb String
+treeText quoted (B.TreeL tok) = getText quoted tok
+treeText _ _ = Msg.nothing
+
+-- | Get quoted/unquoted text.
 getText :: Bool -> B.Token -> B.Ab String
 getText True  (B.TText _ q w) | q > 0   =  Right w
 getText False (B.TText _ q w) | q == 0  =  Right w
@@ -237,22 +241,41 @@ litType = gen where
 
     single [B.TreeB _ _ xs]  =  gen xs
     single (B.TreeL (B.TText _ q n) : xs)
-        | q == 0             =  dispatch xs n
+        | q == 0             =  dispatch n xs
         | otherwise          =  Msg.quoteType n
     single []                =  Right $ B.TypeSum []
     single _                 =  Msg.unkType ""
 
-    dispatch _  "empty"    =  Right B.TypeEmpty
-    dispatch _  "boolean"  =  Right B.TypeBool
-    dispatch _  "text"     =  Right B.TypeText
-    dispatch _  "decimal"  =  Right B.TypeDec
-    dispatch _  "term"     =  Right B.TypeTerm
-    dispatch _  "type"     =  Right B.TypeType
-    dispatch _  "interp"   =  Right B.TypeInterp
-    dispatch xs "rel"      =  do ts1 <- getTermedTrees2 xs
-                                 ts2 <- B.sequenceSnd $ B.mapSndTo gen ts1
-                                 Right $ B.TypeRel ts2
-    dispatch _ n           =  Msg.unkType n
+    dispatch "empty"   _     =  Right B.TypeEmpty
+    dispatch "boolean" _     =  Right B.TypeBool
+    dispatch "text"    _     =  Right B.TypeText
+    dispatch "code"    _     =  Right B.TypeCode
+    dispatch "decimal" _     =  Right B.TypeDec
+    dispatch "date"    _     =  Right B.TypeDate
+    dispatch "time"    _     =  Right B.TypeTime
+    dispatch "binary"  _     =  Right B.TypeBin
+    dispatch "term"    _     =  Right B.TypeTerm
+    dispatch "type"    _     =  Right B.TypeType
+    dispatch "interp"  _     =  Right B.TypeInterp
+
+    dispatch "tag"   xs      =  case xs of
+                                  [tag, colon, typ]
+                                      | treeText False colon == Right ":"
+                                        -> do tag' <- treeText False tag
+                                              typ' <- gen [typ]
+                                              Right $ B.TypeTag tag' typ'
+                                  _   -> Msg.unkType "tag"
+    dispatch "list"  xs      =  Right . B.TypeList =<< gen xs
+    dispatch "set"   xs      =  Right . B.TypeSet  =<< gen xs
+    dispatch "tuple" xs      =  do ts <- mapM (gen. B.li1) xs
+                                   Right $ B.TypeTuple ts
+    dispatch "assn"  xs      =  do ts1 <- getTermedTrees2 xs
+                                   ts2 <- B.sequenceSnd $ B.mapSndTo gen ts1
+                                   Right $ B.TypeAssn ts2
+    dispatch "rel"   xs      =  do ts1 <- getTermedTrees2 xs
+                                   ts2 <- B.sequenceSnd $ B.mapSndTo gen ts1
+                                   Right $ B.TypeRel ts2
+    dispatch n _             =  Msg.unkType n
 
 -- | Convert token trees into a judge.
 --   Judges itself are not content type.
