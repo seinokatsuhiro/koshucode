@@ -15,30 +15,17 @@ module Koshucode.Baala.Op.Nest.Confl
   consGroup, relmapGroup, relkitGroup,
   -- $GroupExample
 
-  -- * group-by
-  consGroupBy,
-  -- $GroupByExample
-
   -- * slice
   consSlice, relmapSlice, relkitSlice,
   -- $SliceExample
 
   -- * slice-up
   consSliceUp, relmapSliceUp, relkitSliceUp,
-
-  -- * nest / hang
-  consHang, consNest, relmapNest,
-  -- $Nest
-
-  -- * unnest
-  consUnnest, relmapUnnest,
 ) where
 
 import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Core          as C
 import qualified Koshucode.Baala.Op.Builtin    as Op
-import qualified Koshucode.Baala.Op.Lattice    as Op
-import qualified Koshucode.Baala.Op.Term       as Op
 import qualified Koshucode.Baala.Op.Nest.Flow  as Op
 
 
@@ -147,27 +134,6 @@ relkitGroup _ _ _ = Right C.relkitNothing
 
 
 
--- ----------------------  group-by
-
--- $GroupByExample
---
---  Grouping relation by relmap output.
---
---   > source P /a /b | group-by /g ( pick /a )
-
-consGroupBy :: (Ord c, C.CRel c) => C.RopCons c
-consGroupBy use =
-  do n    <- Op.getTerm   use "-term"
-     rmap <- Op.getRelmap use "-relmap"
-     Right $ relmapGroupBy use n rmap
-
-relmapGroupBy :: (Ord c, C.CRel c) => C.RopUse c -> B.TermName -> B.Map (C.Relmap c)
-relmapGroupBy use n rmap = C.relmapCopy use n rmapGroup where
-    rmapGroup = rmap `B.mappend` relmapGroup use n rmapCopy
-    rmapCopy  = C.relmapWithVar use n
-
-
-
 -- ----------------------  slice
 
 -- $SliceExample
@@ -221,58 +187,4 @@ relkitSliceUp (C.Relkit (Just he2) kitb2) _ = Right kit3 where
     kitf3 bmaps cs1 = do let [bmap2] = bmaps
                          bmap2 [cs1]
 relkitSliceUp _ _ = Right C.relkitNothing
-
-
--- ----------------------  nest / hang
-
--- $Nest
---
---  Make nested relation @\/g@ that has term @\/y@ and @\/z@.
---
---    > nest /y /z -to /g
---
---  Hang nested relation @\/g@ on term @\/x@.
---
---    > hang /g -on /x
-
-consNest :: (Ord c, C.CRel c) => C.RopCons c
-consNest use =
-  do (co, ns) <- Op.getTermsCo use "-term"
-     to       <- Op.getTerm    use "-to"
-     Right $ relmapNest use (co, ns, to)
-
-relmapNest :: (Ord c, C.CRel c) => C.RopUse c -> (Bool, [B.TermName], B.TermName) -> C.Relmap c
-relmapNest use (co, ns, to) = group `B.mappend` for where
-    group  =  relmapGroupBy use to key
-    for    =  relmapFor use [] to nest
-    key    =  if co then pick else cut
-    nest   =  if co then cut  else pick
-    pick   =  Op.relmapPick use ns
-    cut    =  Op.relmapCut  use ns
-
-consHang :: (Ord c, C.CRel c) => C.RopCons c
-consHang use =
-  do ns <- Op.getTerms use "-on"
-     to <- Op.getTerm  use "-term"
-     Right $ relmapNest use (True, ns, to)
-
-
--- ----------------------  unnest
-
--- $Unnest
---
---  > unnest /g
---  > slice-up ( meet g ) -with /g | cut /g
-
-consUnnest :: (Ord c, C.CRel c) => C.RopCons c
-consUnnest use =
-  do n <- Op.getTerm use "-term"
-     Right $ relmapUnnest use n
-
-relmapUnnest :: (Ord c, C.CRel c) => C.RopUse c -> B.TermName -> C.Relmap c
-relmapUnnest use n = unnest where
-    unnest  =  slice `B.mappend` cut
-    slice   =  relmapSliceUp use [(n, n)] meet
-    meet    =  Op.relmapMeet use $ C.relmapWithVar use n
-    cut     =  Op.relmapCut  use [n]
 

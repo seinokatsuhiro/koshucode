@@ -5,11 +5,11 @@ module Koshucode.Baala.Op.Nest.Flow
 ( -- * down
   consDown, relmapDown, relkitDown,
   -- $DownExample
+
   -- * up
   consUp, relmapUp, relkitUp,
   -- $UpExample
-  -- * join-up
-  consJoinUp, relmapJoinUp,
+
   -- * chunk
   consChunk, relmapChunk, relkitChunk,
 ) where
@@ -17,7 +17,6 @@ module Koshucode.Baala.Op.Nest.Flow
 import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Core          as C
 import qualified Koshucode.Baala.Op.Builtin    as Op
-import qualified Koshucode.Baala.Op.Lattice    as Op
 import qualified Koshucode.Baala.Op.Message    as Msg
 
 
@@ -78,19 +77,6 @@ relkitUp n (Just he1)
       he2   = B.Relhead $ B.termNest t1
       kit2  = C.relkitJust he2 $ C.RelkitOneToMany True kitf2
       kitf2 = B.relBody . C.gRel . head . pick1
-
-
--- ----------------------  join-up
-
-consJoinUp :: (Ord c) => C.RopCons c
-consJoinUp use =
-  do with <- Op.getWithTerms use "-term"
-     Right $ relmapJoinUp use with
-
-relmapJoinUp :: (Ord c) => C.RopUse c -> [B.Terminal String] -> C.Relmap c
-relmapJoinUp use with = C.relmapWith use with $ Op.relmapJoinList use rmaps where
-    rmaps = link `map` map snd with
-    link v = C.relmapLink use v []
 
 
 -- ----------------------  chunk
