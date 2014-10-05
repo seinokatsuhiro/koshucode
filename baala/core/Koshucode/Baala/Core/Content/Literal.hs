@@ -8,10 +8,8 @@ module Koshucode.Baala.Core.Content.Literal
   ( -- * Functions
     CalcContent,
     literal,
-    getJudge,
-    getTermedTrees,
-    -- $Function
-  
+    treesToJudge,
+
     -- * Document
   
     -- ** Types
@@ -26,135 +24,61 @@ module Koshucode.Baala.Core.Content.Literal
 
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Core.Content.Class  as C
+import qualified Koshucode.Baala.Core.Content.Tree   as C
 import qualified Koshucode.Baala.Core.Message        as Msg
+
 
 
 -- ----------------------  General content
 
+-- | Content calculator.
 type CalcContent c = B.TTreeToAb c
 
--- | Convert 'B.TTree' into internal form of content.
+-- | Convert token tree into internal form of content.
 literal :: forall c. (C.CContent c) => CalcContent c -> B.TTreeToAb c
 literal calc tree = Msg.abLiteral tree $ lit tree where
     lit :: B.TTreeToAb c
     lit x@(B.TreeL t)
-        = either (const $ token t) decimal $ getDecimalText [x]
+        = either (const $ token t) decimal $ C.treesToDigits [x]
     lit g@(B.TreeB b _ xs) = case b of
         B.BracketGroup   ->  group g
-        B.BracketList    ->  C.putList   =<< literals lit xs
-        B.BracketSet     ->  C.putSet    =<< literals lit xs
+        B.BracketList    ->  C.putList   =<< litColon lit xs
+        B.BracketSet     ->  C.putSet    =<< litColon lit xs
         B.BracketAssn    ->                  litAngle lit xs
         B.BracketRel     ->  C.putRel    =<< litRel   lit xs
         B.BracketType    ->  C.putType   =<< litType  xs
-        B.BracketInterp  ->  C.putInterp =<< getInterp xs
+        B.BracketInterp  ->  C.putInterp =<< C.treesToInterp xs
         _                ->  Msg.unkBracket
 
     token :: B.Token -> B.Ab c
-    token (B.TText _ n w) | n <= 0  =  getKeyword w
+    token (B.TText _ n w) | n <= 0  =  keyword w
     token (B.TText _ _ w)           =  C.putText w
     token (B.TTerm _ _ [n])         =  C.putTerm n
     token t                         =  Msg.unkWord $ B.tokenContent t
 
     group :: B.TTreeToAb c
     group g@(B.TreeB _ _ xs@(B.TreeL (B.TText _ n _) : _))
-        | n > 0   =  eith g text    $ getTexts True xs
-        | n == 0  =  eith g decimal $ getDecimalText xs
-    group (B.TreeB _ _ [])  = Right C.empty
-    group g                 = calc g
+        | n > 0             =  eith g text    $ C.treesToTexts True xs
+        | n == 0            =  eith g decimal $ C.treesToDigits xs
+    group (B.TreeB _ _ [])  =  Right C.empty
+    group g                 =  calc g
 
-    eith g   =  either (const $ calc g)
-    text     =  C.putText . concat
-    decimal  =  C.putDec B.<=< B.litDecimal
+    eith g       =  either (const $ calc g)
+    text         =  C.putText . concat
+    decimal      =  C.putDec B.<=< B.litDecimal
 
-literals :: (C.CContent c) => B.TTreeToAb c -> B.TTreesToAb [c]
-literals _   [] = Right []
-literals lit cs = lt `mapM` B.divideTreesByColon cs where
+    keyword :: (C.CEmpty c, C.CBool c) => String -> B.Ab c
+    keyword "0"  =  Right C.false
+    keyword "1"  =  Right C.true
+    keyword w    =  Msg.unkWord w
+
+-- | Colon-separated contents.
+litColon :: (C.CContent c) => B.TTreeToAb c -> B.TTreesToAb [c]
+litColon _   [] = Right []
+litColon lit cs = lt `mapM` B.divideTreesByColon cs where
     lt []  =  Right C.empty
     lt [x] =  lit x
     lt xs  =  lit $ B.TreeB B.BracketGroup Nothing xs
-
-getKeyword :: (C.CEmpty c, C.CBool c) => String -> B.Ab c
-getKeyword "0"  =  Right C.false
-getKeyword "1"  =  Right C.true
-getKeyword w    =  Msg.unkWord w
-
-getDecimalText :: B.TTreesToAb String
-getDecimalText = getDecimalText2 B.<=< getTexts False
-
-getDecimalText2 :: [String] -> B.Ab String
-getDecimalText2 = first where
-    first ((c : cs) : xs) | c `elem` "+-0123456789" = loop [[c]] $ cs : xs
-    first _ = Msg.nothing
-
-    loop ss [] = Right $ concat $ reverse ss
-    loop ss (w : xs) | all (`elem` "0123456789.") w = loop (w:ss) xs
-    loop _ _ = Msg.nothing
-
-getTexts :: Bool -> B.TTreesToAb [String]
-getTexts quoted = loop [] where
-    loop ss [] = Right $ reverse ss
-    loop ss (B.TreeL x : xs) =
-        do s <- getText quoted x
-           loop (s : ss) xs
-    loop _ _ = Msg.nothing
-
-treeText :: Bool -> B.TTreeToAb String
-treeText quoted (B.TreeL tok) = getText quoted tok
-treeText _ _ = Msg.nothing
-
--- | Get quoted/unquoted text.
-getText :: Bool -> B.Token -> B.Ab String
-getText True  (B.TText _ q w) | q > 0   =  Right w
-getText False (B.TText _ q w) | q == 0  =  Right w
-getText _ _  =  Msg.nothing
-
-getInterp :: B.TTreesToAb B.Interp
-getInterp = Right . B.interp B.<=< mapM getInterpWord
-
-getInterpWord :: B.TTreeToAb B.InterpWord
-getInterpWord (B.TreeB _ _ _) = Msg.nothing
-getInterpWord (B.TreeL x) =
-    case x of
-      B.TText _ _ w    ->  Right $ B.InterpText w
-      B.TTerm _ _ [n]  ->  Right $ B.InterpTerm n
-      _                ->  Msg.nothing
-
-
--- ----------------------  Particular content
-
--- $Function
---
---  /Example/
---
---  >>> getTermedTrees =<< B.tt "/a 'A3 /b 10"
---  Right [("/a", TreeB 1 [TreeL (TText 3 0 "'"), TreeL (TText 4 0 "A3")]),
---         ("/b", TreeL (TText 8 0 "10"))]
---
-
--- | Get flat term name from token tree.
---   If the token tree contains nested term name, this function failed.
-getFlatName :: B.TTreeToAb String
-getFlatName (B.TreeL (B.TTerm _ 0 [n])) = Right n
-getFlatName (B.TreeL t)                 = Msg.reqFlatName t
-getFlatName _                           = Msg.reqTermName
-
--- | Convert token trees into a list of named token trees.
-getTermedTrees :: B.TTreesToAb [B.NamedTree]
-getTermedTrees xs = do xs' <- getTermedTrees2 xs
-                       Right $ B.mapSndTo B.wrapTrees xs'
-
-getTermedTrees2 :: B.TTreesToAb [B.NamedTrees]
-getTermedTrees2 = name where
-    name [] = Right []
-    name (x : xs) = do let (c, xs2) = cont xs
-                       n    <- getFlatName x
-                       xs2' <- name xs2
-                       Right $ (n, c) : xs2'
-
-    cont :: B.TTreesTo ([B.TTree], [B.TTree])
-    cont xs@(B.TreeL (B.TTerm _ 0 _) : _) = ([], xs)
-    cont [] = ([], [])
-    cont (x : xs) = B.cons1 x $ cont xs
 
 -- | Literal reader for angled group.
 litAngle :: (C.CContent c) => B.TTreeToAb c -> B.TTreesToAb c
@@ -163,19 +87,93 @@ litAngle _ [] = C.putAssn []
 litAngle _ [B.TreeL (B.TText _ 0 "words"), B.TreeL (B.TText _ 2 ws)] =
     C.putList $ map C.pText $ words ws
 litAngle _ xs =
-    do toks <- tokenList xs
+    do toks <- C.treesToTokens xs
        ws   <- wordList toks
        makeDate ws
-
-tokenList :: B.TTreesToAb [B.Token]
-tokenList = mapM token where
-    token (B.TreeL t) = Right t
-    token _ = Msg.adlib "not token"
 
 wordList :: [B.Token] -> B.Ab [String]
 wordList = mapM word where
     word (B.TText _ 0 w) = Right w
     word _ = Msg.adlib "not word"
+
+-- | Literal reader for associations.
+litAssn :: (C.CContent c) => B.TTreeToAb c -> B.TTreesToAb [B.Named c]
+litAssn lit = mapM p B.<=< C.treesToTerms1 where
+    p (name, tree) = Right . (name,) =<< lit tree
+
+-- | Literal reader for relations.
+litRel :: (C.CContent c) => B.TTreeToAb c -> B.TTreesToAb (B.Rel c)
+litRel lit cs =
+    do let (h1 : b1) = B.divideTreesByBar cs
+       h2 <- C.treeToFlatTerm `mapM` (concat $ B.divideTreesByColon h1)
+       b2 <- litColon lit `mapM` b1
+       let b3 = B.unique b2
+       if any (length h2 /=) $ map length b3
+          then Msg.oddRelation
+          else Right $ B.Rel (B.headFrom h2) b3
+
+-- | Convert token trees into a judge.
+--   Judges itself are not content type.
+--   It can be only used in the top-level of sections.
+treesToJudge :: (C.CContent c) => CalcContent c -> Char -> B.JudgePat -> B.TTreesToAb (B.Judge c)
+treesToJudge calc q p = Right . symbol q p B.<=< litAssn (literal calc) where
+    symbol :: Char -> B.JudgeOf c
+    symbol 'O' = B.JudgeAffirm
+    symbol 'X' = B.JudgeDeny
+    symbol 'V' = B.JudgeViolate
+    symbol _   = B.bug "unknown judge type"
+
+
+-- ----------------------  Type
+
+-- | Literal reader for types.
+litType :: B.TTreesToAb B.Type
+litType = gen where
+    gen xs = case B.divideTreesByBar xs of
+               [x] ->  single x
+               xs2 ->  Right . B.TypeSum =<< mapM gen xs2
+
+    single [B.TreeB _ _ xs]  =  gen xs
+    single (B.TreeL (B.TText _ q n) : xs)
+        | q == 0             =  dispatch n xs
+        | otherwise          =  Msg.quoteType n
+    single []                =  Right $ B.TypeSum []
+    single _                 =  Msg.unkType ""
+
+    dispatch "empty"   _     =  Right B.TypeEmpty
+    dispatch "boolean" _     =  Right B.TypeBool
+    dispatch "text"    _     =  Right B.TypeText
+    dispatch "code"    _     =  Right B.TypeCode
+    dispatch "decimal" _     =  Right B.TypeDec
+    dispatch "date"    _     =  Right B.TypeDate
+    dispatch "time"    _     =  Right B.TypeTime
+    dispatch "binary"  _     =  Right B.TypeBin
+    dispatch "term"    _     =  Right B.TypeTerm
+    dispatch "type"    _     =  Right B.TypeType
+    dispatch "interp"  _     =  Right B.TypeInterp
+
+    dispatch "tag"   xs      =  case xs of
+                                  [tag, colon, typ]
+                                      | C.treeToText False colon == Right ":"
+                                        -> do tag' <- C.treeToText False tag
+                                              typ' <- gen [typ]
+                                              Right $ B.TypeTag tag' typ'
+                                  _   -> Msg.unkType "tag"
+    dispatch "list"  xs      =  Right . B.TypeList =<< gen xs
+    dispatch "set"   xs      =  Right . B.TypeSet  =<< gen xs
+    dispatch "tuple" xs      =  do ts <- mapM (gen. B.li1) xs
+                                   Right $ B.TypeTuple ts
+    dispatch "assn"  xs      =  do ts1 <- C.treesToTerms xs
+                                   ts2 <- B.sequenceSnd $ B.mapSndTo gen ts1
+                                   Right $ B.TypeAssn ts2
+    dispatch "rel"   xs      =  do ts1 <- C.treesToTerms xs
+                                   ts2 <- B.sequenceSnd $ B.mapSndTo gen ts1
+                                   Right $ B.TypeRel ts2
+    dispatch n _             =  Msg.unkType n
+
+
+
+-- ----------------------  Date
 
 makeDate :: (C.CList c, C.CDec c) => [String] -> B.Ab c
 makeDate xs = date B.<|> time B.<|> unk where
@@ -216,78 +214,6 @@ int3 (ma, mb, mc) (a, b, c) =
     where
       rangeCheck m x = B.guard $ x >= 0 && x <= m
 
--- | Literal reader for associations.
-litAssn :: (C.CContent c) => B.TTreeToAb c -> B.TTreesToAb [B.Named c]
-litAssn lit = mapM p B.<=< getTermedTrees where
-    p (name, tree) = Right . (name,) =<< lit tree
-
--- | Literal reader for relations.
-litRel :: (C.CContent c) => B.TTreeToAb c -> B.TTreesToAb (B.Rel c)
-litRel lit cs =
-    do let (h1 : b1) = B.divideTreesByBar cs
-       h2 <- getFlatName `mapM` (concat $ B.divideTreesByColon h1)
-       b2 <- literals lit `mapM` b1
-       let b3 = B.unique b2
-       if any (length h2 /=) $ map length b3
-          then Msg.oddRelation
-          else Right $ B.Rel (B.headFrom h2) b3
-
--- | Literal reader for types.
-litType :: B.TTreesToAb B.Type
-litType = gen where
-    gen xs = case B.divideTreesByBar xs of
-               [x] ->  single x
-               xs2 ->  Right . B.TypeSum =<< mapM gen xs2
-
-    single [B.TreeB _ _ xs]  =  gen xs
-    single (B.TreeL (B.TText _ q n) : xs)
-        | q == 0             =  dispatch n xs
-        | otherwise          =  Msg.quoteType n
-    single []                =  Right $ B.TypeSum []
-    single _                 =  Msg.unkType ""
-
-    dispatch "empty"   _     =  Right B.TypeEmpty
-    dispatch "boolean" _     =  Right B.TypeBool
-    dispatch "text"    _     =  Right B.TypeText
-    dispatch "code"    _     =  Right B.TypeCode
-    dispatch "decimal" _     =  Right B.TypeDec
-    dispatch "date"    _     =  Right B.TypeDate
-    dispatch "time"    _     =  Right B.TypeTime
-    dispatch "binary"  _     =  Right B.TypeBin
-    dispatch "term"    _     =  Right B.TypeTerm
-    dispatch "type"    _     =  Right B.TypeType
-    dispatch "interp"  _     =  Right B.TypeInterp
-
-    dispatch "tag"   xs      =  case xs of
-                                  [tag, colon, typ]
-                                      | treeText False colon == Right ":"
-                                        -> do tag' <- treeText False tag
-                                              typ' <- gen [typ]
-                                              Right $ B.TypeTag tag' typ'
-                                  _   -> Msg.unkType "tag"
-    dispatch "list"  xs      =  Right . B.TypeList =<< gen xs
-    dispatch "set"   xs      =  Right . B.TypeSet  =<< gen xs
-    dispatch "tuple" xs      =  do ts <- mapM (gen. B.li1) xs
-                                   Right $ B.TypeTuple ts
-    dispatch "assn"  xs      =  do ts1 <- getTermedTrees2 xs
-                                   ts2 <- B.sequenceSnd $ B.mapSndTo gen ts1
-                                   Right $ B.TypeAssn ts2
-    dispatch "rel"   xs      =  do ts1 <- getTermedTrees2 xs
-                                   ts2 <- B.sequenceSnd $ B.mapSndTo gen ts1
-                                   Right $ B.TypeRel ts2
-    dispatch n _             =  Msg.unkType n
-
--- | Convert token trees into a judge.
---   Judges itself are not content type.
---   It can be only used in the top-level of sections.
-getJudge :: (C.CContent c) => CalcContent c -> Char -> B.JudgePat -> B.TTreesToAb (B.Judge c)
-getJudge calc q p = Right . judgeHead q p B.<=< litAssn (literal calc)
-
-judgeHead :: Char -> B.JudgeOf c
-judgeHead 'O' = B.JudgeAffirm
-judgeHead 'X' = B.JudgeDeny
-judgeHead 'V' = B.JudgeViolate
-judgeHead _   = B.bug "judgeHead"
 
 
 -- ------------------------------------------------------------------
@@ -342,7 +268,7 @@ judgeHead _   = B.bug "judgeHead"
 --  >>> :m +Koshucode.Baala.Op.Vanilla.Type
 --  >>> let trees = B.tokenTrees . B.tokens
 --  >>> let lit  = literal [] :: B.TTree -> B.Ab VContent
---  >>> let lits = literals lit . trees
+--  >>> let lits = litColon lit . trees
 --
 --  Boolean.
 --

@@ -62,6 +62,7 @@ library
         Koshucode.Baala.Core.Content.Class
         Koshucode.Baala.Core.Content.Literal
         Koshucode.Baala.Core.Content.Run
+        Koshucode.Baala.Core.Content.Tree
 
         Koshucode.Baala.Core.Lexmap
         Koshucode.Baala.Core.Lexmap.Attribute

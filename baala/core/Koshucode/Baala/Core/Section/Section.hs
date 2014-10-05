@@ -156,7 +156,7 @@ consSectionEach root resource (B.Short pt shorts xs) =
 
       judge :: Clab (B.Judge c)
       judge _ (C.CJudge q p toks) =
-          C.getJudge calc q p =<< B.tokenTrees toks
+          C.treesToJudge calc q p =<< B.tokenTrees toks
 
       calc = calcContG $ secGlobal root
 
