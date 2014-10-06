@@ -2,6 +2,7 @@
 
 module Koshucode.Baala.Base.Data.Type
   ( Type (..),
+    typeDoc,
     -- $Types
   ) where
 
@@ -9,6 +10,7 @@ import qualified Koshucode.Baala.Base.Prelude  as B
 import qualified Koshucode.Baala.Base.Text     as B
 import qualified Koshucode.Baala.Base.Token    as B
 
+-- | Type for types.
 data Type
     = TypeAny                            -- ^ Everything
     | TypeType                           -- ^ Type of types
@@ -58,15 +60,32 @@ writeType = wf where
     w _ (TypeList    t)  =  B.doc "list"  B.<+> wt t
     w _ (TypeSet     t)  =  B.doc "set"   B.<+> wt t
     w _ (TypeTag tag t)  =  B.doc "tag"   B.<+> B.doc (tag ++ ":") B.<+> wt t
-    w _ (TypeTuple  ts)  =  B.doc "tuple" B.<+> B.doch (map wt ts)
 
     w q (TypeAssn   ts)  =  wrap q $ B.doc "assn"  B.<+> B.writeTerms wt ts
     w q (TypeRel    ts)  =  wrap q $ B.doc "rel"   B.<+> B.writeTerms wt ts
 
+    w _ (TypeTuple  ts)  =  B.doc "tuple" B.<+> B.doch (map wt ts)
     w q (TypeSum ts)     =  wrap q $ B.doch $ B.writeSepsWith wf "|" ts
 
     wrap False x         =  x
     wrap True  x         =  B.docWraps "(" ")" x
+
+-- | Print type as tree.
+typeDoc :: Type -> B.Doc
+typeDoc ty =
+    case ty of
+      TypeList     t  ->  B.doc "list"   B.<+>  typeDoc t
+      TypeSet      t  ->  B.doc "set"    B.<+>  typeDoc t
+      TypeTag  tag t  ->  B.doc "tag"    B.<+>  B.doc (tag ++ ":") B.<+> typeDoc t
+      TypeAssn    ts  ->  B.doc "assn"   B.<+>  vmap term ts
+      TypeRel     ts  ->  B.doc "rel"    B.<+>  vmap term ts
+      TypeTuple   ts  ->  B.doc "tuple"  B.<+>  vmap (item ":") ts
+      TypeSum     ts  ->  B.doc "sum"    B.<+>  vmap (item "|") ts
+      _               ->  writeType ty
+    where
+      term (n,t)  =  B.doc ('/' : n) B.<+> typeDoc t
+      item i t    =  B.doc i B.<+> typeDoc t
+      vmap f      =  B.docv . map f
 
 
 
