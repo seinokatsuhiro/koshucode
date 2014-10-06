@@ -2,6 +2,7 @@
 
 module Koshucode.Baala.Base.Data.Type
   ( Type (..),
+    -- $Types
   ) where
 
 import qualified Koshucode.Baala.Base.Prelude  as B
@@ -9,7 +10,8 @@ import qualified Koshucode.Baala.Base.Text     as B
 import qualified Koshucode.Baala.Base.Token    as B
 
 data Type
-    = TypeType                           -- ^ Type of types
+    = TypeAny                            -- ^ Everything
+    | TypeType                           -- ^ Type of types
     | TypeTerm                           -- ^ Term name
     | TypeInterp                         -- ^ Data interpreation
 
@@ -33,13 +35,14 @@ data Type
       deriving (Show, Eq, Ord)
 
 instance B.Write Type where
-    write = writeType
+    write _ = writeType
 
-writeType :: B.StringMap -> Type -> B.Doc
-writeType _ = wf where
+writeType :: Type -> B.Doc
+writeType = wf where
     wt = w True
     wf = w False
 
+    w _ TypeAny          =  B.doc "any"
     w _ TypeEmpty        =  B.doc "empty"
     w _ TypeBool         =  B.doc "boolean"
     w _ TypeText         =  B.doc "text"
@@ -65,3 +68,46 @@ writeType _ = wf where
     wrap False x         =  x
     wrap True  x         =  B.docWraps "(" ")" x
 
+
+
+-- ------------------------------------------------------------------
+-- $Types
+--
+--  [Empty]     Empty means that there are no values.
+--              i.e., universal negation on the term holds.
+--              Textual form is the non-quoted parens: @()@.
+--
+--  [Boolean]   Boolean used for something is hold or unhold.
+--              Textual forms: @\<0\>@ (false), @\<1\>@ (true).
+--
+--  [Text]      Sequence of characters.
+--              Textual forms is chars with apostrophe or
+--              doubly-quoted line: @\'abc@, @\"abc def\"@.
+--
+--  [Decimal]   Decimal number.
+--              Textual forms is sequence of digits:
+--              @100@, @99.50@, @hex AF@.
+--
+--  [Set]       Set is an unordered collection of contents.
+--              Duplication among contents is not significant.
+--              Textual form is a sequence of contents
+--              delimited by colon, enclosed in braces:
+--              @{ \'a : \'b : \'c }@.
+--
+--  [List]      List is an ordered list of contents.
+--              Textual form is a sequence of contents
+--              delimited by colon, enclosed in square brackets:
+--              @[ \'abc : \'def ]@.
+--
+--  [Assn]      Assn is an association of terms,
+--              i.e., a list of named contents.
+--              Textual form is a sequence of terms
+--              with bar-angles: @\<\< \/a 10 \/b 20 \>\>@.
+--
+--  [Relation]  Relation is a set of same-type tuples,
+--              Textual form is a sequence of tuples
+--              enclosed in bar-braces.
+--              The first tuple is a heading of relation,
+--              and succeeding tuples are delimited by vertical bar:
+--              @{| \/a : \/b | \'A1 : 20 | \'A3 : 40 |}@.
+--

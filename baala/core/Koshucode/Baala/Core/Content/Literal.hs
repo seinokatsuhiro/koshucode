@@ -12,9 +12,6 @@ module Koshucode.Baala.Core.Content.Literal
 
     -- * Document
   
-    -- ** Types
-    -- $Types
-  
     -- ** Simple data
     -- $SimpleData
   
@@ -140,6 +137,7 @@ litType = gen where
     single []                =  Right $ B.TypeSum []
     single _                 =  Msg.unkType ""
 
+    dispatch "any"     _     =  Right B.TypeAny
     dispatch "empty"   _     =  Right B.TypeEmpty
     dispatch "boolean" _     =  Right B.TypeBool
     dispatch "text"    _     =  Right B.TypeText
@@ -215,50 +213,6 @@ int3 (ma, mb, mc) (a, b, c) =
       rangeCheck m x = B.guard $ x >= 0 && x <= m
 
 
-
--- ------------------------------------------------------------------
--- $Types
---
---  'literal' recognizes the following types.
---
---  [Boolean]   Boolean used for something is hold or unhold.
---              Textual forms: @\#true@, @\#fasle@.
---
---  [Empty]     Empty means that there are no values.
---              i.e., universal negation on the term holds.
---              Textual form is the non-quoted parens: @()@.
---
---  [Text]      Sequence of characters.
---              Textual forms is chars with apostrophe or
---              doubly-quoted line: @\'abc@, @\"abc def\"@.
---
---  [Decimal]   Decimal number.
---              Textual forms is sequence of digits:
---              @100@, @99.50@, @hex AF@.
---
---  [Set]       Set is an unordered collection of contents.
---              Duplication among contents is not significant.
---              Textual form is a sequence of contents
---              delimited by colon, enclosed in braces:
---              @{ \'a : \'b : \'c }@.
---
---  [List]      List is an ordered list of contents.
---              Textual form is a sequence of contents
---              delimited by colon, enclosed in square brackets:
---              @[ \'abc : \'def ]@.
---
---  [Assn]      Assn is an association of terms,
---              i.e., a list of named contents.
---              Textual form is a sequence of terms
---              with bar-angles: @\<| \/a 10 \/b 20 |\>@.
---
---  [Relation]  Relation is a set of same-type tuples,
---              Textual form is a sequence of tuples
---              enclosed in bar-braces.
---              The first tuple is a heading of relation,
---              and succeeding tuples are delimited by vertical bar:
---              @{| \/a : \/b | \'A1 : 20 | \'A3 : 40 |}@.
---
 
 -- ------------------------------------------------------------------
 -- $SimpleData
