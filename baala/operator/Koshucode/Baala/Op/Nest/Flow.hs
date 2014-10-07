@@ -41,7 +41,7 @@ relmapDown use = C.relmapFlow use . relkitDown
 relkitDown :: (C.CRel c) => B.TermName -> C.RelkitFlow c
 relkitDown _ Nothing = Right C.relkitNothing
 relkitDown n (Just he1) = Right kit2 where
-    he2       = B.Relhead [B.TermNest n $ B.headTerms he1]
+    he2       = B.headEmpty { B.headTerms = [B.TermNest n $ B.headTerms he1] }
     kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
     kitf2 bo1 = [[ C.pRel $ B.Rel he1 bo1 ]]
 
@@ -74,7 +74,7 @@ relkitUp n (Just he1)
       ind1  = [n] `B.snipIndex` ns1
       pick1 = B.snipFrom ind1
       t1    = head $ pick1 $ B.headTerms he1
-      he2   = B.Relhead $ B.termNest t1
+      he2   = B.headEmpty { B.headTerms = B.termNest t1 }
       kit2  = C.relkitJust he2 $ C.RelkitOneToMany True kitf2
       kitf2 = B.relBody . C.gRel . head . pick1
 
@@ -95,7 +95,7 @@ relmapChunk use ns ord = C.relmapFlow use $ relkitChunk ns ord
 relkitChunk :: (Ord c, C.CRel c) => [B.TermName] -> [B.TermName] -> C.RelkitFlow c
 relkitChunk _ _ Nothing = Right C.relkitNothing
 relkitChunk ns ord (Just he1) = Right kit2 where
-    he2     = B.Relhead $ map nest ns
+    he2     = B.headEmpty { B.headTerms = map nest ns }
     nest n  = B.TermNest n $ B.headTerms he1
     kit2    = C.relkitJust he2 $ C.RelkitFull False f2
     f2 bo1  = let deg    = length bo1 `ceilingRem` length ns

@@ -243,7 +243,7 @@ relkitSplit (cops, cox) (Just he1)
       ns1         =  B.headNames he1         -- term names
       ind         =  ns `B.snipIndex` ns1    -- shared indicies
 
-      he2         =  B.Relhead $ map term ns
+      he2         =  B.headEmpty { B.headTerms = map term ns }
       term n      =  B.TermNest n $ B.headTerms he1
       kit2        =  C.relkitJust he2 $ C.RelkitAbFull False kitf2 []
       kitf2 _ bo1 =  do let fs2 = C.coxRunList cops he1 `map` xs
