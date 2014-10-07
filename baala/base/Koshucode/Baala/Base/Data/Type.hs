@@ -8,6 +8,8 @@ module Koshucode.Baala.Base.Data.Type
     typeConsRel,
     typeConsNest,
     typeAppendRel,
+    typeRelIndex,
+    typeRelIndexList,
     -- $Types
   ) where
 
@@ -92,6 +94,9 @@ typeDoc ty =
       item i t    =  B.doc i B.<+> typeDoc t
       vmap f      =  B.docv . map f
 
+
+-- ----------------------  Relation utilities
+
 typeFlatRel :: [B.TermName] -> Type
 typeFlatRel ns = TypeRel $ map term ns where
     term n = (n, TypeAny)
@@ -108,6 +113,31 @@ typeAppendRel :: [B.TermName] -> B.Map Type
 typeAppendRel ns (TypeRel ts) = TypeRel $ map (, TypeAny) ns ++ ts where
 typeAppendRel _ t = t
 
+-- | Term index
+--
+--   >>> typeRelIndex (typeFlatRel ["a", "b", "c"]) ["b"]
+--   [1]
+--
+--   >>> typeRelIndex (typeFlatRel ["a", "b", "c"]) ["e"]
+--   [-1]
+--
+--   >>> typeRelIndex (typeConsNest "r" (typeFlatRel ["a", "b"]) (typeFlatRel [])) ["r", "b"]
+--   [0, 1]
+--
+typeRelIndex :: Type -> B.TermPath -> [Int]
+typeRelIndex (TypeRel ts) p = loop ts p 0 where
+    loop _ [] _ = []
+    loop [] _ _ = [-1]
+    loop ((n1, TypeRel ts') : ts2) nns@(n2 : ns) i
+        | n1 == n2  = i : loop ts' ns 0
+        | otherwise = loop ts2 nns (i + 1)
+    loop ((n1, _) : ts2) nns@(n2 : _) i
+        | n1 == n2  = [i]
+        | otherwise = loop ts2 nns (i + 1)
+typeRelIndex _ _ = []
+
+typeRelIndexList :: Type -> [B.TermPath] -> [[Int]]
+typeRelIndexList = map . typeRelIndex
 
 
 

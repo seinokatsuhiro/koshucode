@@ -16,6 +16,8 @@ module Koshucode.Baala.Base.Token.Token
   -- * Term name
   TermName, TermName2, TermName3, TermName4,
   Terminal, TermPath,
+  showTermName,
+  showNestedTermName,
 
   -- * Selectors
   tokenContent,
@@ -140,6 +142,13 @@ type Terminal a  =  (TermName, a)
 -- | Path of term names, e.g., term name @\/r\/x@
 --   is correspond to path @[\"r\", \"x\"]@.
 type TermPath    =  [TermName]
+
+showTermName :: B.Map String
+showTermName n = ('/' : n)
+
+showNestedTermName :: [String] -> String
+showNestedTermName = concat . map showTermName
+
 
 
 -- ---------------------- Selector

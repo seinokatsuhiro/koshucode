@@ -25,7 +25,7 @@ module Koshucode.Baala.Base.Data.Judge
 import qualified Koshucode.Baala.Base.Abort        as B
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
-import qualified Koshucode.Baala.Base.Data.Term    as B
+import qualified Koshucode.Baala.Base.Token        as B
 import qualified Koshucode.Baala.Base.Data.Rel     as B
 import qualified Koshucode.Baala.Base.Data.Head    as B
 

@@ -203,11 +203,11 @@ headRename f = headChange (map $ B.termChange f)
 
 -- | Index of a term.
 headIndex1 :: Head -> B.TermPath -> [Int]
-headIndex1 = B.termIndex . headTerms
+headIndex1 = B.typeRelIndex . termsToType . headTerms
 
 -- | Indices of terms.
 headIndex :: Head -> [B.TermPath] -> [[Int]]
-headIndex = B.termsIndex . headTerms
+headIndex = B.typeRelIndexList . termsToType .headTerms
 
 headAlign :: Head -> Head -> B.Map [c]
 headAlign to from = B.snipOrder (headNames to) (headNames from)
