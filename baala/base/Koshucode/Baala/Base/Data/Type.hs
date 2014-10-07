@@ -3,6 +3,7 @@
 module Koshucode.Baala.Base.Data.Type
   ( Type (..),
     typeDoc,
+    typeFlatRel,
     -- $Types
   ) where
 
@@ -86,6 +87,10 @@ typeDoc ty =
       term (n,t)  =  B.doc ('/' : n) B.<+> typeDoc t
       item i t    =  B.doc i B.<+> typeDoc t
       vmap f      =  B.docv . map f
+
+typeFlatRel :: [B.TermName] -> Type
+typeFlatRel ns = TypeRel $ map term ns where
+    term n = (n, TypeAny)
 
 
 

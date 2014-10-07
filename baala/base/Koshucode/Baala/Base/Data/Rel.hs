@@ -18,7 +18,7 @@ module Koshucode.Baala.Base.Data.Rel
 
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
-import qualified Koshucode.Baala.Base.Data.Relhead as B
+import qualified Koshucode.Baala.Base.Data.Head    as B
 
 
 
@@ -29,7 +29,7 @@ import qualified Koshucode.Baala.Base.Data.Relhead as B
 --   Body is thoretically a set of tuples,
 --   but implemented using list of list.
 data Rel c = Rel
-    { relHead :: B.Relhead    -- ^ Heading of relation
+    { relHead :: B.Head       -- ^ Heading of relation
     , relBody :: Relbody c    -- ^ Body of relation
     } deriving (Show, Ord)
 

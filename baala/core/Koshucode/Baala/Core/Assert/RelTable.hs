@@ -27,7 +27,7 @@ relTableLines sh r = render $ relCells 2 size [] text where
     size = maxTermSize text
 
 relCells :: Int -> TermSize -> B.TermPath -> B.RelText -> [[B.Cell]]
-relCells pad m path (B.Rel B.Relhead { B.headTerms = ts } bo) = table where
+relCells pad m path (B.Rel B.Head { B.headTerms = ts } bo) = table where
     table = let ns = map B.termName ts
                 h  = map (text . B.showTermName) ns
             in h : map rule h : map (tuple ns) bo
@@ -63,7 +63,7 @@ maxTermSize = termMap B.gMonoNest (length . B.gMonoType) max
 
 termMap :: forall a. forall c.
     (c -> B.Rel c) -> (c -> a) -> (a -> a -> a) -> B.Rel c -> TermMap a
-termMap gRel from f (B.Rel B.Relhead { B.headTerms = ts } bo) = accum [] ts bo Map.empty where
+termMap gRel from f (B.Rel B.Head { B.headTerms = ts } bo) = accum [] ts bo Map.empty where
 
     accum :: B.TermPath -> [B.Term] -> [[c]] -> B.Map (TermMap a)
     accum path ts1 bo1 m = foldr (column path) m $ zip ts1 (List.transpose bo1)

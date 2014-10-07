@@ -139,7 +139,7 @@ consKoshuVersion use =
       to   <- C.literal undefined t
       Right $ C.relmapGlobal use $ relkitKoshuVersionCheck (from, to) n
 
-relkitKoshuVersion :: (C.CContent c) => B.TermName -> C.Global c -> Maybe B.Relhead -> B.Ab (C.Relkit c)
+relkitKoshuVersion :: (C.CContent c) => B.TermName -> C.Global c -> Maybe B.Head -> B.Ab (C.Relkit c)
 relkitKoshuVersion n C.Global { C.globalVersion = ver } _ =
     Right $ C.relkitConstSingleton [n] [ C.pList $ map C.pDecFromInt $ apiVersion ver ]
 
@@ -174,7 +174,7 @@ consKoshuAngleText use =
 relmapKoshuAngleText :: (Ord c, C.CText c) => C.RopUse c -> (B.TermName, Maybe B.TermName) -> C.Relmap c
 relmapKoshuAngleText use = C.relmapFlow use . relkitKoshuAngleText
 
-relkitKoshuAngleText :: (Ord c, C.CText c) => (B.TermName, Maybe B.TermName) -> Maybe B.Relhead -> B.Ab (C.Relkit c)
+relkitKoshuAngleText :: (Ord c, C.CText c) => (B.TermName, Maybe B.TermName) -> Maybe B.Head -> B.Ab (C.Relkit c)
 relkitKoshuAngleText (n, Just c) _ = Right kit2 where
     kit2 = koshuAngleTextBody [n, c] assn
     assn (name, text) = [C.pText $ "<" ++ name ++ ">", C.pText $ text]

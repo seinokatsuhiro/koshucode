@@ -71,10 +71,10 @@ relkitIf [kitT@(C.Relkit _ _), kitA@(C.Relkit heA' kitbA), kitB@(C.Relkit heB' k
     | isNothing heB'       = relkitIf [kitT, kitA, C.Relkit heA' kitbB] Nothing
 relkitIf _ _ = Msg.unexpAttr "if T A b"
 
-isNothing :: Maybe B.Relhead -> Bool
+isNothing :: Maybe B.Head -> Bool
 isNothing = (== Nothing)
 
-isNothing2 :: Maybe B.Relhead -> Maybe B.Relhead -> Bool
+isNothing2 :: Maybe B.Head -> Maybe B.Head -> Bool
 isNothing2 a b = isNothing a && isNothing b
 
 

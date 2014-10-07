@@ -14,13 +14,13 @@ import qualified Koshucode.Baala.Core.Relmap.Relkit   as C
 import qualified Koshucode.Baala.Core.Message         as Msg
 
 relmapSpecialize :: forall c. C.Global c -> [C.Roal (C.Relmap c)]
-  -> [C.RelkitDef c] -> Maybe B.Relhead -> C.Relmap c -> B.Ab ([C.RelkitDef c], C.Relkit c)
+  -> [C.RelkitDef c] -> Maybe B.Head -> C.Relmap c -> B.Ab ([C.RelkitDef c], C.Relkit c)
 relmapSpecialize global parts = spec [] [] where
-    spec :: [(String, B.Relhead)] -- name of nested relation, and its heading
-         -> [C.RelkitKey]         -- information for detecting cyclic relmap
-         -> [C.RelkitDef c]       -- list of known specialized relkits
-         -> Maybe B.Relhead       -- input head feeding into generic relmap
-         -> C.Relmap c            -- generic relmap to specialize
+    spec :: [(String, B.Head)]   -- name of nested relation, and its heading
+         -> [C.RelkitKey]        -- information for detecting cyclic relmap
+         -> [C.RelkitDef c]      -- list of known specialized relkits
+         -> Maybe B.Head         -- input head feeding into generic relmap
+         -> C.Relmap c           -- generic relmap to specialize
          -> B.Ab ([C.RelkitDef c], C.Relkit c)
     spec with keys kdef he1 rmap = s where
         s = case rmap of

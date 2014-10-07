@@ -111,7 +111,7 @@ fixedRelation f = fix where
     fix bo1 = do bo2 <- f bo1
                  if bo1 == bo2 then Right bo2 else fix bo2
 
-bmapAlign :: B.Relhead -> B.Relhead -> B.Map (B.AbMap [[c]])
+bmapAlign :: B.Head -> B.Head -> B.Map (B.AbMap [[c]])
 bmapAlign he1 he2 f = g where
     g bo1 = do bo2 <- f bo1
                Right $ B.bodyAlign he1 he2 bo2

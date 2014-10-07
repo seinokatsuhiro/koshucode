@@ -257,7 +257,7 @@ unkShow :: (Show x) => x -> B.Ab a
 unkShow x = Left $ B.abortLines "Unknown object" $ lines $ show x
 
 -- | Unknown term name
-unkTerm :: [B.TermName] -> B.Relhead -> B.Ab a
+unkTerm :: [B.TermName] -> B.Head -> B.Ab a
 unkTerm ns he1 =
     Left $ B.abortLines "Unknown term name"
          $ detailTermRel "Unknown" ns he1
@@ -293,7 +293,7 @@ args vs = unwords $ map var $ zip vs [1..]
 unresPrefix :: B.Ab a
 unresPrefix = Left $ B.abortBecause "Unresolved prefix"
 
-detailTermRel :: String -> [String] -> B.Relhead -> [String]
+detailTermRel :: String -> [String] -> B.Head -> [String]
 detailTermRel label ns he1 = detail where
     detail = [label] ++ indent ns' ++ ["Relation"] ++ indent ns1
     indent = map ("  " ++)

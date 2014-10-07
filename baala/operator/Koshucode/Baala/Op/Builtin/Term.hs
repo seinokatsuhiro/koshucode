@@ -48,6 +48,6 @@ termNamePairs = loop where
     loop [] = Right []
     loop _  = Msg.reqTermName
 
-picker :: B.Relhead -> [B.TermName] -> B.Map [c]
+picker :: B.Head -> [B.TermName] -> B.Map [c]
 picker he ts = B.snipFrom ind where
     ind = ts `B.snipIndex` B.headNames he

@@ -58,7 +58,7 @@ relkitCheckTermJust = checkTerm "Just" (\ns he1 -> B.headFrom ns `B.headEquiv` h
 relkitCheckTermHas  = checkTerm "Has"  (\ns he1 -> B.headFrom ns `B.isSubhead` he1)
 relkitCheckTermBut  = checkTerm "But"  (\ns he1 -> null $ ns `B.snipShare` B.headNames he1)
 
-checkTerm :: String -> ([B.TermName] -> B.Relhead -> Bool) -> [B.TermName] -> C.RelkitFlow c
+checkTerm :: String -> ([B.TermName] -> B.Head -> Bool) -> [B.TermName] -> C.RelkitFlow c
 checkTerm _ _ _ Nothing = Right C.relkitNothing
 checkTerm opt check ns (Just he1)
     | check ns he1 = Right $ C.relkitJust he1 C.RelkitId

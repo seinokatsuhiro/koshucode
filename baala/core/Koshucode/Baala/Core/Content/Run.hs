@@ -34,7 +34,7 @@ instance B.CodePtr (Beta c) where
     codePts (BetaCall cp _ _ _)  =  cp
 
 -- | Reduce content expression.
-beta :: (B.Write c) => C.CopSet c -> B.Relhead -> C.Cox c -> B.Ab (Beta c)
+beta :: (B.Write c) => C.CopSet c -> B.Head -> C.Cox c -> B.Ab (Beta c)
 beta copset he cox =
     do let deriv = C.copsetDerived copset
        deriv2  <- B.sequenceSnd $ B.mapSndTo pos deriv
@@ -112,7 +112,7 @@ link copset deriv = li where
     normal (n, cop) = (B.BlankNormal n, cop)
 
 -- put term positions for actural heading
-position :: B.Relhead -> C.Cox c -> B.Ab (C.Cox c)
+position :: B.Head -> C.Cox c -> B.Ab (C.Cox c)
 position he = spos where
     spos e = Msg.abCoxPosition [e] $ pos e
     pos (C.CoxTerm cp ns _) =
@@ -134,14 +134,14 @@ type RunCox  c = C.Cox c -> B.Ab c
 type RunList c = [c]     -> B.Ab c
 
 coxRunCox :: (B.Write c, C.CRel c, C.CList c) =>
-    C.CopSet c -> B.Relhead -> [c] -> RunCox c
+    C.CopSet c -> B.Head -> [c] -> RunCox c
 coxRunCox cops he cs cox = coxRunList cops he cox cs
 
 coxRunPure :: (B.Write c, C.CRel c, C.CList c) => C.CopSet c -> RunCox c
 coxRunPure cops cox = coxRunList cops B.mempty cox []
 
 coxRunList :: (B.Write c, C.CRel c, C.CList c) =>
-    C.CopSet c -> B.Relhead -> C.Cox c -> RunList c
+    C.CopSet c -> B.Head -> C.Cox c -> RunList c
 coxRunList cops he cox cs = coxRun cs =<< beta cops he cox
 
 calcContent :: (C.CContent c) => C.CopSet c -> C.CalcContent c

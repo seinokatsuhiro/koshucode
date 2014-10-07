@@ -89,7 +89,7 @@ relkitInterp interp (Just he1)
     | interpMatch interp he1 = Right $ C.relkitJust he1 C.RelkitId
     | otherwise              = Msg.unkTerm (B.interpTerms interp) he1
 
-interpMatch :: B.Interp -> B.Relhead -> Bool
+interpMatch :: B.Interp -> B.Head -> Bool
 interpMatch interp he = ns1 == ns2 where
     ns1 = B.sort $ B.interpTerms interp
     ns2 = B.sort $ B.headNames he

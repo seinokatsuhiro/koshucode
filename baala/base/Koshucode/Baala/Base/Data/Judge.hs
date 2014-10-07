@@ -27,7 +27,7 @@ import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
 import qualified Koshucode.Baala.Base.Data.Term    as B
 import qualified Koshucode.Baala.Base.Data.Rel     as B
-import qualified Koshucode.Baala.Base.Data.Relhead as B
+import qualified Koshucode.Baala.Base.Data.Head    as B
 
 
 

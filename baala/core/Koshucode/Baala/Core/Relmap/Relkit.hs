@@ -39,7 +39,7 @@ import qualified Koshucode.Baala.Core.Lexmap  as C
 
 -- | Specialized relmap.
 data Relkit c = Relkit
-    { relkitHead :: Maybe B.Relhead
+    { relkitHead :: Maybe B.Head
     , relkitBody :: RelkitBody c
     }
 
@@ -94,7 +94,7 @@ instance Show (RelkitCore c) where
     show (RelkitWith        _ _)   =  "RelkitWith "
 
 type RelkitBody c = B.Sourced (RelkitCore c)
-type RelkitKey    = (Maybe B.Relhead, [C.Lexmap])
+type RelkitKey    = (Maybe B.Head, [C.Lexmap])
 type RelkitDef c  = (RelkitKey, Relkit c)
 
 -- | Relation selector
@@ -106,16 +106,16 @@ type Relbmap c = [[c]] -> B.Ab [[c]]
 
 -- ----------------------  Constructor
 
-relkit :: Maybe B.Relhead -> RelkitCore c -> Relkit c
+relkit :: Maybe B.Head -> RelkitCore c -> Relkit c
 relkit he = Relkit he . B.Sourced []
 
-relkitJust :: B.Relhead -> RelkitCore c -> Relkit c
+relkitJust :: B.Head -> RelkitCore c -> Relkit c
 relkitJust he = relkit $ Just he
 
 relkitNothing :: Relkit c
 relkitNothing = relkit Nothing RelkitId
 
-relkitId :: Maybe B.Relhead -> Relkit c
+relkitId :: Maybe B.Head -> Relkit c
 relkitId he = relkit he RelkitId
 
 relkitConst :: B.Rel c -> Relkit c
@@ -145,7 +145,7 @@ relkitWith :: [(String, Int)] -> B.Map (Relkit c)
 relkitWith with (Relkit he kitb) = kit2 where
     kit2 = relkit he $ RelkitWith with kitb
 
-relkitWithVar :: String -> B.Relhead -> Relkit c
+relkitWithVar :: String -> B.Head -> Relkit c
 relkitWithVar n he = kit where
     kit = relkitJust he $ RelkitNest n
 

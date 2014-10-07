@@ -81,7 +81,7 @@ ropCopset = C.globalCopset . ropGlobal
 -- ----------------------  Relkit
 
 -- | Make 'C.Relkit' from heading of input relation.
-type RelkitFlow c   = Maybe B.Relhead -> B.Ab (C.Relkit c)
+type RelkitFlow c   = Maybe B.Head -> B.Ab (C.Relkit c)
 
 -- | Make 'C.Relkit' from globals and input heading.
 type RelkitGlobal c = Global c -> RelkitFlow c

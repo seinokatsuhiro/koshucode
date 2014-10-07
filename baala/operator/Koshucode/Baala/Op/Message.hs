@@ -31,13 +31,13 @@ import Koshucode.Baala.Core.Message
 -- ----------------------  Op package
 
 -- | check-term failed
-checkTerm :: String -> [B.TermName] -> B.Relhead -> B.Ab a
+checkTerm :: String -> [B.TermName] -> B.Head -> B.Ab a
 checkTerm label ns he =
     Left $ B.abortLines "check-term failed"
          $ detailTermRel label ns he
 
 -- | Different headings
-diffHead :: [B.Relhead] -> B.Ab a
+diffHead :: [B.Head] -> B.Ab a
 diffHead = Left . B.abortLines "Different headings" . map showHead
 
 -- | Dump content expression
@@ -55,7 +55,7 @@ dumpTrees trees = Left $ B.abortLines "Dump token trees"
                    $ lines $ show $ B.ttDoc trees
 
 -- | Duplicate term name
-dupTerm :: [B.TermName] -> B.Relhead -> B.Ab a
+dupTerm :: [B.TermName] -> B.Head -> B.Ab a
 dupTerm ns he =
     Left $ B.abortLines "Duplicate term name"
          $ detailTermRel "Duplicated" ns he
@@ -69,7 +69,7 @@ noAttr :: B.Ab a
 noAttr = Left $ B.abortBecause "Attribute not found"
 
 -- | Not a nested relation
-notNestRel :: [B.TermName] -> B.Relhead -> B.Ab a
+notNestRel :: [B.TermName] -> B.Head -> B.Ab a
 notNestRel ns he =
     Left $ B.abortLines "Not a nested relation"
          $ detailTermRel "Given" ns he
@@ -91,7 +91,7 @@ reqInterp :: B.Ab a
 reqInterp = Left $ B.abortBecause "Require data interpretation"
 
 -- | Require new term names
-reqNewTerm :: [B.TermName] -> B.Relhead -> B.Ab a
+reqNewTerm :: [B.TermName] -> B.Head -> B.Ab a
 reqNewTerm ns he =
     Left $ B.abortLines "Require new term names"
          $ detailTermRel "Known" ns he
@@ -104,5 +104,5 @@ reqUnaryFn = Left $ B.abortBecause "Require unary function"
 unexpTermName :: B.Ab a
 unexpTermName = Left $ B.abortBecause "Unexpected term names"
 
-showHead :: B.Relhead -> String
+showHead :: B.Head -> String
 showHead = unwords . B.headNames
