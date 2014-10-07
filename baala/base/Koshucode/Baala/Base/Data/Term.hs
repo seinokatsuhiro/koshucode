@@ -7,7 +7,6 @@ module Koshucode.Baala.Base.Data.Term
   Term (..),
   isTermNest,
   termName,
-  termNest,
   termChange,
 )
 where
@@ -47,11 +46,6 @@ isTermNest _              = False
 termName :: Term -> B.TermName
 termName (TermFlat n)   = n
 termName (TermNest n _) = n
-
--- | Get nested part from term.
-termNest :: Term -> [Term]
-termNest (TermNest _ ts) = ts
-termNest (TermFlat _)    = B.bug "flat term"
 
 termChange :: B.Map B.TermName -> B.Map Term
 termChange f (TermFlat n)    = TermFlat (f n)

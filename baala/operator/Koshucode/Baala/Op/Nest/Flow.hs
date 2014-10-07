@@ -74,7 +74,7 @@ relkitUp n (Just he1)
       ind1  = [n] `B.snipIndex` ns1
       pick1 = B.snipFrom ind1
       t1    = head $ pick1 $ B.headTerms he1
-      he2   = B.headEmpty { B.headTerms = B.termNest t1 }
+      he2   = B.headUp $ B.headChange pick1 he1
       kit2  = C.relkitJust he2 $ C.RelkitOneToMany True kitf2
       kitf2 = B.relBody . C.gRel . head . pick1
 

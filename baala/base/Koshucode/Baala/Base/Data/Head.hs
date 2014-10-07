@@ -34,6 +34,7 @@ module Koshucode.Baala.Base.Data.Head
   headIndex1, headIndex, 
   headAlign, bodyAlign,
   headNested,
+  headUp,
   -- $UtilityExample
 ) where
 
@@ -227,4 +228,8 @@ headNested :: Head -> [(String, Head)]
 headNested Head { headTerms = ts1 } = map h $ filter B.isTermNest ts1 where
     h (B.TermNest n ts2) = (n, headEmpty { headTerms = ts2 })
     h (B.TermFlat n)     = (n, headEmpty)
+
+headUp :: B.Map Head
+headUp Head { headTerms = [B.TermNest _ ts] } = headEmpty { headTerms = ts }
+headUp he = he
 
