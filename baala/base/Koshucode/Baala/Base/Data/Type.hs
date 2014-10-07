@@ -1,9 +1,12 @@
 {-# OPTIONS_GHC -Wall #-}
+{-# LANGUAGE TupleSections #-}
 
 module Koshucode.Baala.Base.Data.Type
   ( Type (..),
     typeDoc,
     typeFlatRel,
+    typeConsRel,
+    typeAppendRel,
     -- $Types
   ) where
 
@@ -91,6 +94,15 @@ typeDoc ty =
 typeFlatRel :: [B.TermName] -> Type
 typeFlatRel ns = TypeRel $ map term ns where
     term n = (n, TypeAny)
+
+typeConsRel :: B.TermName -> B.Map Type
+typeConsRel n (TypeRel ts) = TypeRel $ (n, TypeAny) : ts
+typeConsRel _ t = t
+
+typeAppendRel :: [B.TermName] -> B.Map Type
+typeAppendRel ns (TypeRel ts) = TypeRel $ map (, TypeAny) ns ++ ts where
+typeAppendRel _ t = t
+
 
 
 

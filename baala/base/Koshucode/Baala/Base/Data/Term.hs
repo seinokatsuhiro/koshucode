@@ -11,7 +11,6 @@ module Koshucode.Baala.Base.Data.Term
   termNest,
 
   -- * Utility
-  termExplainDoc,
   showTermName,
   showNestedTermName,
   termChange,
@@ -63,11 +62,6 @@ termNest (TermFlat _)    = B.bug "flat term"
 
 
 -- ---------------------------------  Doc
-
-termExplainDoc :: Term -> B.Doc
-termExplainDoc (TermFlat n)    = B.doc (showTermName n)
-termExplainDoc (TermNest n ts) = B.doc (showTermName n)
-                                B.<+> (B.docv $ map termExplainDoc ts)
 
 showTermName :: B.Map String
 showTermName n = ('/' : n)

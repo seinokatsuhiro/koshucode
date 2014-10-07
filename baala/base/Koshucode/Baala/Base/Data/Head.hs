@@ -23,7 +23,7 @@ module Koshucode.Baala.Base.Data.Head
 
   -- * Add terms
   headConsTerm,
-  headCons, headCons2, headCons3,
+  headCons,
   headAppend,
   -- $AddTermExample
 
@@ -60,14 +60,20 @@ instance B.Write Head where
     write sh Head { headTerms = ts } =
         B.writeColon sh $ map (B.showTermName . B.termName) ts
 
-headExplain :: Head -> String
-headExplain = show . headExplainDoc
-
 headExplainLines :: Head -> [String]
 headExplainLines = lines . headExplain
 
+headExplain :: Head -> String
+headExplain = show . headExplainDoc
+
 headExplainDoc :: Head -> B.Doc
-headExplainDoc Head { headTerms = ts } = B.docv $ map B.termExplainDoc ts
+headExplainDoc Head { headTerms = ts } = B.typeDoc $ termsToType ts
+
+termsToType :: [B.Term] -> B.Type
+termsToType = B.TypeRel . map term where
+    term (B.TermFlat n)    = (n, B.TypeAny)
+    term (B.TermNest n ts) = (n, termsToType ts)
+
 
 
 -- ----------------------  Constructor
@@ -100,7 +106,7 @@ headExplainDoc Head { headTerms = ts } = B.docv $ map B.termExplainDoc ts
 -- | Make head from term names.
 headFrom :: [B.TermName] -> Head
 headFrom ns = Head { headTerms = map B.TermFlat ns
-                      , headType  = B.typeFlatRel ns }
+                   , headType  = B.typeFlatRel ns }
 
 -- | Empty heading, i.e., no terms in heading.
 headEmpty :: Head
@@ -145,22 +151,17 @@ isSuperhead h1 h2 = isSubhead h2 h1
 headConsTerm :: B.Term -> B.Map Head
 headConsTerm t1 h@Head { headTerms = ns } = h { headTerms = t1 : ns }
 
--- | Add term to head.
+-- | Add term name to head.
 headCons :: B.TermName -> B.Map Head
-headCons n1 h@Head { headTerms = ns } =
-    h { headTerms = B.TermFlat n1 : ns }
+headCons n1 h@Head { headTerms = ns, headType = t } =
+    h { headTerms = B.TermFlat n1 : ns
+      , headType  = B.typeConsRel n1 t }
 
-headCons2 :: B.TermName2 -> B.Map Head
-headCons2 (n1, n2) h@Head { headTerms = ns } =
-    h { headTerms = B.TermFlat n1 : B.TermFlat n2 : ns }
-
-headCons3 :: B.TermName3 -> B.Map Head
-headCons3 (n1, n2, n3) h@Head { headTerms = ns } =
-    h { headTerms = B.TermFlat n1 : B.TermFlat n2 : B.TermFlat n3 : ns }
-
--- | Add any number of terms to head.
+-- | Add term names to head.
 headAppend :: [B.TermName] -> B.Map Head
-headAppend ns1 h@Head { headTerms = ns } = h { headTerms = map B.TermFlat ns1 ++ ns }
+headAppend ns1 h@Head { headTerms = ns, headType = t } =
+    h { headTerms = map B.TermFlat ns1 ++ ns
+      , headType  = B.typeAppendRel ns1 t }
 
 
 
