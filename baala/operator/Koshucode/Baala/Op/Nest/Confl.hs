@@ -73,8 +73,7 @@ relkitFor n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
     ns1   =  B.headNames he1
     ind1  =  [n] `B.snipIndex` ns1
     cut1  =  B.snipOff  ind1
-    he3   =  B.headConsNest n he2 he1'
-    he1'  =  B.headEmpty { B.headTerms = cut1 $ B.headTerms he1 }
+    he3   =  B.headConsNest n he2 $ B.headChange cut1 he1
     kit3  =  C.relkitJust he3 $ C.RelkitOneToAbOne False kitf3 [kitb2]
 
     kitf3 :: [C.Relbmap c] -> [c] -> B.Ab [c]

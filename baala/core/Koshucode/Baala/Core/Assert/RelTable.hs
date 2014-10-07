@@ -27,8 +27,8 @@ relTableLines sh r = render $ relCells 2 size [] text where
     size = maxTermSize text
 
 relCells :: Int -> TermSize -> B.TermPath -> B.RelText -> [[B.Cell]]
-relCells pad m path (B.Rel B.Head { B.headTerms = ts } bo) = table where
-    table = let ns = map B.termName ts
+relCells pad m path (B.Rel he bo) = table where
+    table = let ns = B.headNames he
                 h  = map (text . B.showTermName) ns
             in h : map rule h : map (tuple ns) bo
     tuple ns cs = map content $ zip ns cs

@@ -41,7 +41,7 @@ relmapDown use = C.relmapFlow use . relkitDown
 relkitDown :: (C.CRel c) => B.TermName -> C.RelkitFlow c
 relkitDown _ Nothing = Right C.relkitNothing
 relkitDown n (Just he1) = Right kit2 where
-    he2       = B.headEmpty { B.headTerms = [B.TermNest n $ B.headTerms he1] }
+    he2       = B.headConsNest n he1 $ B.headEmpty
     kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
     kitf2 bo1 = [[ C.pRel $ B.Rel he1 bo1 ]]
 
@@ -95,8 +95,7 @@ relmapChunk use ns ord = C.relmapFlow use $ relkitChunk ns ord
 relkitChunk :: (Ord c, C.CRel c) => [B.TermName] -> [B.TermName] -> C.RelkitFlow c
 relkitChunk _ _ Nothing = Right C.relkitNothing
 relkitChunk ns ord (Just he1) = Right kit2 where
-    he2     = B.headEmpty { B.headTerms = map nest ns }
-    nest n  = B.TermNest n $ B.headTerms he1
+    he2     = B.headNests ns he1
     kit2    = C.relkitJust he2 $ C.RelkitFull False f2
     f2 bo1  = let deg    = length bo1 `ceilingRem` length ns
                   bo1'   = B.sortByName (map B.Asc ord) ns bo1

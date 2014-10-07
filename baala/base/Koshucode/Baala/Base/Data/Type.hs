@@ -8,6 +8,8 @@ module Koshucode.Baala.Base.Data.Type
     typeConsRel,
     typeConsNest,
     typeAppendRel,
+    typeRelTermNames,
+    typeRelDegree,
     typeRelIndex,
     typeRelIndexList,
     -- $Types
@@ -112,6 +114,14 @@ typeConsNest _ _ t = t
 typeAppendRel :: [B.TermName] -> B.Map Type
 typeAppendRel ns (TypeRel ts) = TypeRel $ map (, TypeAny) ns ++ ts where
 typeAppendRel _ t = t
+
+typeRelTermNames :: Type -> [B.TermName]
+typeRelTermNames (TypeRel ts) = map fst ts
+typeRelTermNames _ = []
+
+typeRelDegree :: Type -> Int
+typeRelDegree (TypeRel ts) = length ts
+typeRelDegree _ = 0
 
 -- | Term index
 --

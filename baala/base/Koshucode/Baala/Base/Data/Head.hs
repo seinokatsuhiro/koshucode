@@ -25,6 +25,7 @@ module Koshucode.Baala.Base.Data.Head
   headConsNest,
   headCons,
   headAppend,
+  headNests,
   -- $AddTermExample
 
   -- * Utility
@@ -117,11 +118,11 @@ headWords = headFrom . words
 
 -- | List of term names.
 headNames :: Head -> [B.TermName]
-headNames = B.names . headTerms
+headNames = B.typeRelTermNames . termsToType . headTerms
 
 -- | Degree of relation, i.e., number of terms.
 headDegree :: Head -> Int
-headDegree = length . headTerms
+headDegree = B.typeRelDegree . termsToType . headTerms
 
 
 
@@ -131,10 +132,10 @@ headEquiv :: Head -> Head -> Bool
 headEquiv Head { headTerms = a } Head { headTerms = b } = B.sort a == B.sort b
 
 isSubhead :: Head -> Head -> Bool
-isSubhead h1 h2 = null $ headNames h1 `B.snipLeft` headNames h2 
+isSubhead he1 he2 = null $ headNames he1 `B.snipLeft` headNames he2 
 
 isSuperhead :: Head -> Head -> Bool
-isSuperhead h1 h2 = isSubhead h2 h1
+isSuperhead he1 he2 = isSubhead he2 he1
 
 
 
@@ -165,6 +166,13 @@ headAppend :: [B.TermName] -> B.Map Head
 headAppend ns1 h@Head { headTerms = ns, headType = t } =
     h { headTerms = map B.TermFlat ns1 ++ ns
       , headType  = B.typeAppendRel ns1 t }
+
+headNests :: [B.TermName] -> B.Map Head
+headNests ns1 Head { headTerms = ns, headType = t } =
+    Head { headTerms = map nest1 ns1
+         , headType  = B.TypeRel $ map nest2 ns1 }
+    where nest1 n = B.TermNest n ns
+          nest2 n = (n, t)
 
 
 
