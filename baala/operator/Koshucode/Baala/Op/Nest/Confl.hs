@@ -70,12 +70,12 @@ relmapForInner use with n = C.relmapWith use with . bin where
 
 relkitFor :: forall c. (C.CRel c) => B.TermName -> C.RelkitBinary c
 relkitFor n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
-    ns1   = B.headNames he1
-    ind1  = [n] `B.snipIndex` ns1
-    cut1  = B.snipOff  ind1
-    he3   = B.TermNest n (B.headTerms he2) `B.headConsTerm`
-            B.headEmpty { B.headTerms = cut1 $ B.headTerms he1 }
-    kit3  = C.relkitJust he3 $ C.RelkitOneToAbOne False kitf3 [kitb2]
+    ns1   =  B.headNames he1
+    ind1  =  [n] `B.snipIndex` ns1
+    cut1  =  B.snipOff  ind1
+    he3   =  B.headConsNest n he2 he1'
+    he1'  =  B.headEmpty { B.headTerms = cut1 $ B.headTerms he1 }
+    kit3  =  C.relkitJust he3 $ C.RelkitOneToAbOne False kitf3 [kitb2]
 
     kitf3 :: [C.Relbmap c] -> [c] -> B.Ab [c]
     kitf3 bmaps cs1 =
@@ -118,7 +118,7 @@ relkitGroup n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
     toMap2 bo2 = Right $ B.gatherToMap $ map kv bo2
     kv cs2     = (share2 cs2, cs2)
 
-    he3        = B.TermNest n (B.headTerms he2) `B.headConsTerm` he1
+    he3        = B.headConsNest n he2 he1
     kit3       = C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
@@ -161,7 +161,7 @@ relmapSlice use with n = C.relmapWith use with . bin where
 
 relkitSlice :: (C.CRel c) => B.TermName -> C.RelkitBinary c
 relkitSlice n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
-    he3   = B.TermNest n (B.headTerms he2) `B.headConsTerm` he1
+    he3   = B.headConsNest n he2 he1
     kit3  = C.relkitJust he3 $ C.RelkitOneToAbOne False kitf3 [kitb2]
     kitf3 bmaps cs1 =
         do let [bmap2] = bmaps

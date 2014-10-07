@@ -6,6 +6,7 @@ module Koshucode.Baala.Base.Data.Type
     typeDoc,
     typeFlatRel,
     typeConsRel,
+    typeConsNest,
     typeAppendRel,
     -- $Types
   ) where
@@ -98,6 +99,10 @@ typeFlatRel ns = TypeRel $ map term ns where
 typeConsRel :: B.TermName -> B.Map Type
 typeConsRel n (TypeRel ts) = TypeRel $ (n, TypeAny) : ts
 typeConsRel _ t = t
+
+typeConsNest :: B.TermName -> Type -> B.Map Type
+typeConsNest n t (TypeRel ts) = TypeRel $ (n, t) : ts
+typeConsNest _ _ t = t
 
 typeAppendRel :: [B.TermName] -> B.Map Type
 typeAppendRel ns (TypeRel ts) = TypeRel $ map (, TypeAny) ns ++ ts where

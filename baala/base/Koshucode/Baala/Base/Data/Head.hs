@@ -22,7 +22,7 @@ module Koshucode.Baala.Base.Data.Head
   isSubhead, isSuperhead,
 
   -- * Add terms
-  headConsTerm,
+  headConsNest,
   headCons,
   headAppend,
   -- $AddTermExample
@@ -148,8 +148,11 @@ isSuperhead h1 h2 = isSubhead h2 h1
 --    Head [TermFlat "c", TermFlat "a", TermFlat "b"]
 --
 
-headConsTerm :: B.Term -> B.Map Head
-headConsTerm t1 h@Head { headTerms = ns } = h { headTerms = t1 : ns }
+headConsNest :: B.TermName -> Head -> B.Map Head
+headConsNest n1 Head { headTerms = ns1, headType = t1 }
+                Head { headTerms = ns, headType = t } =
+    Head { headTerms = B.TermNest n1 ns1 : ns
+         , headType  = B.typeConsNest n1 t1 t }
 
 -- | Add term name to head.
 headCons :: B.TermName -> B.Map Head
