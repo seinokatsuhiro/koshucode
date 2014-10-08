@@ -59,8 +59,8 @@ instance B.Monoid Head where
         headEmpty { headTerms = B.unionUp t1 t2 }
 
 instance B.Write Head where
-    write sh Head { headTerms = ts } =
-        B.writeColon sh $ map (B.showTermName . B.termName) ts
+    write _ Head { headTerms = ts } =
+        B.typeTermDoc $ termsToType $ ts
 
 headExplainLines :: Head -> [String]
 headExplainLines = lines . headExplain
