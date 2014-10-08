@@ -13,6 +13,8 @@ module Koshucode.Baala.Base.Data.Type
     typeRelIndex,
     typeRelIndexList,
     typeTermDoc,
+    typeTerms,
+    isTypeRel,
     -- $Types
   ) where
 
@@ -154,6 +156,17 @@ typeTermDoc :: Type -> B.Doc
 typeTermDoc (TypeRel ts) = B.writeColon id $ map name ts where
     name (n, _) = B.doc $ B.showTermName n
 typeTermDoc _ = B.docEmpty
+
+typeTerms :: Type -> [(B.TermName, Type)]
+typeTerms (TypeRel  ts) = ts
+typeTerms (TypeAssn ts) = ts
+typeTerms _             = []
+
+isTypeRel :: Type -> Bool
+isTypeRel (TypeRel _)  =  True
+isTypeRel _            =  False
+
+
 
 -- ------------------------------------------------------------------
 -- $Types

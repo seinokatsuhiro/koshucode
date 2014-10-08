@@ -76,6 +76,12 @@ termsToType = B.TypeRel . map term where
     term (B.TermFlat n)    = (n, B.TypeAny)
     term (B.TermNest n ts) = (n, termsToType ts)
 
+typeToTerms :: B.Type -> [B.Term]
+typeToTerms (B.TypeRel ts) = map term ts where
+    term (n, B.TypeRel ts2) = B.TermNest n $ map term ts2
+    term (n, _) = B.TermFlat n
+typeToTerms _ = []
+
 
 
 -- ----------------------  Constructor
@@ -225,9 +231,9 @@ bodyAlign :: Head -> Head -> B.Map [[c]]
 bodyAlign h1 h2 = (headAlign h1 h2 `map`)
 
 headNested :: Head -> [(String, Head)]
-headNested Head { headTerms = ts1 } = map h $ filter B.isTermNest ts1 where
-    h (B.TermNest n ts2) = (n, headEmpty { headTerms = ts2 })
-    h (B.TermFlat n)     = (n, headEmpty)
+headNested Head { headTerms = ts1 } = ts2 where
+    ts2 = map h $ filter (B.isTypeRel . snd) $ B.typeTerms $ termsToType ts1
+    h (n, t) = (n, headEmpty { headTerms = typeToTerms t, headType = t })
 
 headUp :: B.Map Head
 headUp Head { headTerms = [B.TermNest _ ts] } = headEmpty { headTerms = ts }
