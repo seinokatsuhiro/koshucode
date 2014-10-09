@@ -15,6 +15,7 @@ module Koshucode.Baala.Base.Data.Type
     typeTermDoc,
     typeTerms,
     isTypeRel,
+    typeRelChangeTerm, typeRelChange,
     -- $Types
   ) where
 
@@ -166,6 +167,13 @@ isTypeRel :: Type -> Bool
 isTypeRel (TypeRel _)  =  True
 isTypeRel _            =  False
 
+typeRelChangeTerm :: B.Map (B.TermName, Type) -> B.Map Type
+typeRelChangeTerm f (TypeRel ts) = TypeRel $ map f ts
+typeRelChangeTerm _ t = t
+
+typeRelChange :: B.Map B.TermName -> B.Map Type
+typeRelChange f = typeRelChangeTerm g where
+    g (n, t) = (f n, t)
 
 
 -- ------------------------------------------------------------------

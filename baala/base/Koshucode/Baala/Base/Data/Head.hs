@@ -214,7 +214,10 @@ headChange :: B.Map [B.Term] -> B.Map Head
 headChange f h@Head { headTerms = ts } = h { headTerms = f ts }
 
 headRename :: B.Map B.TermName -> B.Map Head
-headRename f = headChange (map $ B.termChange f)
+headRename f h@Head { headTerms = ts } =
+    let ty = B.typeRelChange f $ termsToType ts
+    in h { headTerms = typeToTerms ty
+         , headType  = ty }
 
 -- | Index of a term.
 headIndex1 :: Head -> B.TermPath -> [Int]

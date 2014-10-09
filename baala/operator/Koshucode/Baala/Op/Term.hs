@@ -186,7 +186,12 @@ relkitMove (ps, ns) (Just he1)
       mvAll ts   =  foldr mv ts $ zip psIndex ns
 
       mv :: (Int, B.TermName) -> B.Map [B.Term]
-      mv (i, n)  =  B.termChange (const n) `B.mapAt` i
+      mv (i, n)  =  termChange (const n) `B.mapAt` i
+
+      termChange :: B.Map B.TermName -> B.Map B.Term
+      termChange f (B.TermFlat n)    = B.TermFlat (f n)
+      termChange f (B.TermNest n ts) = B.TermNest (f n) ts
+
 
 
 -- ----------------------  prefix
