@@ -63,14 +63,17 @@ maxTermSize = termMap B.gMonoNest (length . B.gMonoType) max
 
 termMap :: forall a. forall c.
     (c -> B.Rel c) -> (c -> a) -> (a -> a -> a) -> B.Rel c -> TermMap a
-termMap gRel from f (B.Rel B.Head { B.headTerms = ts } bo) = accum [] ts bo Map.empty where
+termMap gRel from f (B.Rel he bo) = accum [] ts bo Map.empty where
 
-    accum :: B.TermPath -> [B.Term] -> [[c]] -> B.Map (TermMap a)
+    ty = B.termsToType $ B.headTerms he
+    ts = B.typeTerms ty
+
+    accum :: B.TermPath -> [B.NamedType] -> [[c]] -> B.Map (TermMap a)
     accum path ts1 bo1 m = foldr (column path) m $ zip ts1 (List.transpose bo1)
 
-    column :: B.TermPath -> (B.Term, [c]) -> B.Map (TermMap a)
-    column path (B.TermFlat n,     cs2) m = foldr (add $ n : path) m cs2
-    column path (B.TermNest n ts2, cs2) m = accum (n : path) ts2 (bodies cs2) m
+    column :: B.TermPath -> (B.NamedType, [c]) -> B.Map (TermMap a)
+    column path ((n, B.TypeRel ts2), cs2) m = accum (n : path) ts2 (bodies cs2) m
+    column path ((n, _)            , cs2) m = foldr (add $ n : path) m cs2
 
     add :: B.TermPath -> c -> B.Map (TermMap a)
     add path c m = Map.insertWith f path (from c) m

@@ -120,18 +120,18 @@ relkitCutTerm = relkitSnipTerm B.snipOff B.snipOff
 
 -- ----------------------  snip
 
-relkitSnipTerm :: B.Snip B.Term -> B.Snip c -> C.RelkitBinary c
+relkitSnipTerm :: B.Snip B.NamedType -> B.Snip c -> C.RelkitBinary c
 relkitSnipTerm _ _ (C.Relkit Nothing _) = const $ Right C.relkitNothing
 relkitSnipTerm heSnip boSnip (C.Relkit (Just he2) _) =
     relkitSnip heSnip boSnip $ B.headNames he2
 
-relkitSnip :: B.Snip B.Term -> B.Snip c -> [B.TermName] -> C.RelkitFlow c
+relkitSnip :: B.Snip B.NamedType -> B.Snip c -> [B.TermName] -> C.RelkitFlow c
 relkitSnip _ _ _ Nothing = Right C.relkitNothing
 relkitSnip heSnip boSnip ns (Just he1)
     | B.sameLength ns ind1 = Right kit2
     | otherwise = Msg.unkTerm non he1
     where
-      he2   =  B.headChange (heSnip ind1) he1
+      he2   =  B.headMapTerms (heSnip ind1) he1
       kit2  =  C.relkitJust he2 $ C.RelkitOneToOne True $ boSnip ind1
       ns1   =  B.headNames he1
       non   =  B.snipOff ind ns

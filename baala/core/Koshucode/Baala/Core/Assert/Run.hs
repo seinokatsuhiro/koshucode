@@ -142,7 +142,7 @@ flatname :: B.TTree -> Maybe B.TermName
 flatname (B.TreeL (B.TTerm _ _ [n])) = Just n
 flatname _ = Nothing
 
-snipRelRaw :: (Ord c) => B.SnipPair B.Term c -> [B.TermName] -> B.AbMap (B.Rel c)
+snipRelRaw :: (Ord c) => B.SnipPair B.NamedType c -> [B.TermName] -> B.AbMap (B.Rel c)
 snipRelRaw (heSnip, boSnip) ns (B.Rel he1 bo1)
     | null left  = Right r2
     | otherwise  = Msg.unkTerm left he1
@@ -152,7 +152,7 @@ snipRelRaw (heSnip, boSnip) ns (B.Rel he1 bo1)
       left =  ns `B.snipLeft`  ns1
 
       r2   =  B.Rel he2 bo2
-      he2  =  B.headChange (heSnip ind) he1
+      he2  =  heSnip ind `B.headMapTerms` he1
       bo2  =  boSnip ind `map` bo1
 
 

@@ -8,6 +8,7 @@ module Koshucode.Baala.Base.Data.Head
   headExplain,
   headExplainLines,
   headExplainDoc,
+  termsToType,
 
   -- * Constructor
   headEmpty,
@@ -51,8 +52,8 @@ import qualified Koshucode.Baala.Base.Data.Type    as B
 -- | Heading of relation as a list of terms
 data Head =
     Head { headTerms :: [B.Term]
-            , headType  :: B.Type
-            } deriving (Show, Eq, Ord)
+         , headType  :: B.Type
+         } deriving (Show, Eq, Ord)
 
 instance B.Monoid Head where
     mempty = headEmpty
