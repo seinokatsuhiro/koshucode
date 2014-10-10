@@ -62,7 +62,6 @@ library
         Koshucode.Baala.Base.Data.Mono
         Koshucode.Baala.Base.Data.Output
         Koshucode.Baala.Base.Data.Rel
-        Koshucode.Baala.Base.Data.Term
         Koshucode.Baala.Base.Data.Type
 
         Koshucode.Baala.Base.Prelude
