@@ -3,6 +3,7 @@
 
 module Koshucode.Baala.Base.Data.Type
   ( Type (..),
+    NamedType,
     typeDoc,
     typeFlatRel,
     typeConsRel,
@@ -25,29 +26,31 @@ import qualified Koshucode.Baala.Base.Token    as B
 
 -- | Type for types.
 data Type
-    = TypeAny                            -- ^ Everything
-    | TypeType                           -- ^ Type of types
-    | TypeTerm                           -- ^ Term name
-    | TypeInterp                         -- ^ Data interpreation
+    = TypeAny                     -- ^ Everything
+    | TypeType                    -- ^ Type of types
+    | TypeTerm                    -- ^ Term name
+    | TypeInterp                  -- ^ Data interpreation
 
-    | TypeEmpty                          -- ^ Empty
-    | TypeBool                           -- ^ Boolean
-    | TypeText                           -- ^ Text
-    | TypeCode                           -- ^ Code
-    | TypeDec                            -- ^ Decimal
-    | TypeDate                           -- ^ Date
-    | TypeTime                           -- ^ Time
-    | TypeBin                            -- ^ Binary data
+    | TypeEmpty                   -- ^ Empty
+    | TypeBool                    -- ^ Boolean
+    | TypeText                    -- ^ Text
+    | TypeCode                    -- ^ Code
+    | TypeDec                     -- ^ Decimal
+    | TypeDate                    -- ^ Date
+    | TypeTime                    -- ^ Time
+    | TypeBin                     -- ^ Binary data
 
-    | TypeList    Type                   -- ^ List
-    | TypeSet     Type                   -- ^ Set
-    | TypeTag     String Type            -- ^ Tagged type
-    | TypeAssn    [(B.TermName, Type)]   -- ^ Association
-    | TypeRel     [(B.TermName, Type)]   -- ^ Relation
+    | TypeList    Type            -- ^ List
+    | TypeSet     Type            -- ^ Set
+    | TypeTag     String Type     -- ^ Tagged type
+    | TypeAssn    [NamedType]     -- ^ Association
+    | TypeRel     [NamedType]     -- ^ Relation
 
-    | TypeTuple   [Type]                 -- ^ Tuple (Product type)
-    | TypeSum     [Type]                 -- ^ Sum type
+    | TypeTuple   [Type]          -- ^ Tuple (Product type)
+    | TypeSum     [Type]          -- ^ Sum type
       deriving (Show, Eq, Ord)
+
+type NamedType = B.Named Type
 
 instance B.Write Type where
     write _ = writeType
@@ -158,7 +161,7 @@ typeTermDoc (TypeRel ts) = B.writeColon id $ map name ts where
     name (n, _) = B.doc $ B.showTermName n
 typeTermDoc _ = B.docEmpty
 
-typeTerms :: Type -> [(B.TermName, Type)]
+typeTerms :: Type -> [NamedType]
 typeTerms (TypeRel  ts) = ts
 typeTerms (TypeAssn ts) = ts
 typeTerms _             = []
@@ -167,7 +170,7 @@ isTypeRel :: Type -> Bool
 isTypeRel (TypeRel _)  =  True
 isTypeRel _            =  False
 
-typeRelChangeTerm :: B.Map (B.TermName, Type) -> B.Map Type
+typeRelChangeTerm :: B.Map NamedType -> B.Map Type
 typeRelChangeTerm f (TypeRel ts) = TypeRel $ map f ts
 typeRelChangeTerm _ t = t
 
