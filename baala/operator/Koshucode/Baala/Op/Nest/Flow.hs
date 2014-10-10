@@ -73,7 +73,7 @@ relkitUp n (Just he1)
       ns1    =  B.headNames he1
       ind1   =  [n] `B.snipIndex` ns1
       pick1  =  B.snipFrom ind1
-      he1'   =  B.headChange pick1 he1
+      he1'   =  B.headMap pick1 he1
       t1     =  B.headNested he1'
       he2    =  B.headUp he1'
       kit2   =  C.relkitJust he2 $ C.RelkitOneToMany True kitf2

@@ -117,7 +117,7 @@ relkitJoin (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
     share1 = B.snipFrom ind1
     share2 = B.snipFrom ind2
 
-    he3    =  B.headChange share1 he1
+    he3    =  B.headMap share1 he1
     kit3   =  C.relkitJust he3 $ C.RelkitAbFull True kitf3 [kitb2]
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps

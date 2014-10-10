@@ -152,7 +152,7 @@ snipRelRaw (heSnip, boSnip) ns (B.Rel he1 bo1)
       left =  ns `B.snipLeft`  ns1
 
       r2   =  B.Rel he2 bo2
-      he2  =  heSnip ind `B.headMapTerms` he1
+      he2  =  heSnip ind `B.headMap` he1
       bo2  =  boSnip ind `map` bo1
 
 

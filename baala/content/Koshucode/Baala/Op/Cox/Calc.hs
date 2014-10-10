@@ -110,7 +110,7 @@ relkitSubst (cops, cox) (Just he1)
       ind       =  ns `B.snipIndex` ns1       -- indicies for ns on input relation
       cut       =  B.snipOff  ind             -- cutting-ns function
       fore      =  B.snipFore ind             -- cutting-ns function
-      he2       =  B.headChange fore he1      -- heading of output relation
+      he2       =  B.headMap fore he1      -- heading of output relation
       kit2      =  C.relkitJust he2 $ C.RelkitOneToAbOne True f2 []
       f2 _ cs1  =  do cs2 <- C.coxRunCox cops he1 cs1 `mapM` xs
                       Right $ cs2 ++ cut cs1
@@ -172,7 +172,7 @@ relkitFill (ns, cops, coxTo) (Just he1) = Right kit2 where
     pick      =  B.snipFrom ind
     cut       =  B.snipOff  ind
     fore      =  B.snipFore ind
-    he2       =  B.headChange fore he1
+    he2       =  B.headMap fore he1
     kit2      =  C.relkitJust he2 $ C.RelkitOneToAbOne True f2 []
     f2 _ cs1  =  do cTo  <- C.coxRunCox cops he1 cs1 coxTo
                     let fill c | C.isEmpty c = cTo

@@ -30,8 +30,7 @@ module Koshucode.Baala.Base.Data.Head
   -- $AddTermExample
 
   -- * Utility
-  headMapTerms,
-  headChange,
+  headMap,
   headRename,
   headIndex1, headIndex, 
   headAlign, bodyAlign,
@@ -212,11 +211,8 @@ headNests ns1 Head { headTerms = ns, headType = t } =
 --
 
 -- | Reconstruct head.
-headChange :: B.Map [B.Term] -> B.Map Head
-headChange f h@Head { headTerms = ts } = h { headTerms = f ts }
-
-headMapTerms :: B.Map [B.NamedType] -> B.Map Head
-headMapTerms f h@Head { headTerms = ts } =
+headMap :: B.Map [B.NamedType] -> B.Map Head
+headMap f h@Head { headTerms = ts } =
     let ty = B.typeRelMapTerms f $ termsToType ts
     in h { headTerms = typeToTerms ty
          , headType  = ty }
