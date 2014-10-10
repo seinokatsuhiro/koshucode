@@ -179,18 +179,12 @@ relkitMove (ps, ns) (Just he1)
       psLeft     =  ps `B.snipLeft`  ns1
       psIndex    =  ps `B.snipIndex` ns1
 
-      he2        =  B.headChange mvAll he1
+      he2        =  B.headMapTerms moveTerms he1
       kit2       =  C.relkitJust he2 C.RelkitId
 
-      mvAll :: B.Map [B.Term]
-      mvAll ts   =  foldr mv ts $ zip psIndex ns
-
-      mv :: (Int, B.TermName) -> B.Map [B.Term]
-      mv (i, n)  =  termChange (const n) `B.mapAt` i
-
-      termChange :: B.Map B.TermName -> B.Map B.Term
-      termChange f (B.TermFlat n)    = B.TermFlat (f n)
-      termChange f (B.TermNest n ts) = B.TermNest (f n) ts
+      moveTerms ts       =  foldr moveTerm ts $ zip ns psIndex
+      moveTerm (n, i)    =  moveName n `B.mapAt` i
+      moveName n (_, t)  =  (n, t)
 
 
 
