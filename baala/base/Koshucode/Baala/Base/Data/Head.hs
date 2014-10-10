@@ -8,7 +8,6 @@ module Koshucode.Baala.Base.Data.Head
   headExplain,
   headExplainLines,
   headExplainDoc,
-  termsToType,
 
   -- * Constructor
   headEmpty,
@@ -32,7 +31,7 @@ module Koshucode.Baala.Base.Data.Head
   -- * Utility
   headMap,
   headRename,
-  headIndex1, headIndex, 
+  headIndex1,
   headAlign, bodyAlign,
   headNested,
   headUp,
@@ -47,25 +46,19 @@ import qualified Koshucode.Baala.Base.Data.Type    as B
 
 -- ---------------------- Type
 
-data Term
-    = TermFlat B.TermName          -- ^ Term name for non-relation
-    | TermNest B.TermName [Term]   -- ^ Term name for relation
-      deriving (Show, Eq, Ord)
-
 -- | Heading of relation as a list of terms
 data Head =
-    Head { headTerms :: [Term]
-         , headType  :: B.Type
+    Head { headType :: B.Type
          } deriving (Show, Eq, Ord)
 
 instance B.Monoid Head where
     mempty = headEmpty
-    mappend Head { headTerms = t1 } Head { headTerms = t2 } =
-        headEmpty { headTerms = B.unionUp t1 t2 }
+    mappend he1 he2 = headEmpty { headType = headType he1 `a` headType he2 }
+        where a (B.TypeRel xs1) (B.TypeRel xs2) = B.TypeRel $ B.unionUp xs1 xs2
+              a _ _ = B.TypeAny
 
 instance B.Write Head where
-    write _ Head { headTerms = ts } =
-        B.typeTermDoc $ termsToType $ ts
+    write _ = B.typeTermDoc . headType
 
 headExplainLines :: Head -> [String]
 headExplainLines = lines . headExplain
@@ -74,18 +67,7 @@ headExplain :: Head -> String
 headExplain = show . headExplainDoc
 
 headExplainDoc :: Head -> B.Doc
-headExplainDoc Head { headTerms = ts } = B.typeDoc $ termsToType ts
-
-termsToType :: [Term] -> B.Type
-termsToType = B.TypeRel . map term where
-    term (TermFlat n)    = (n, B.TypeAny)
-    term (TermNest n ts) = (n, termsToType ts)
-
-typeToTerms :: B.Type -> [Term]
-typeToTerms (B.TypeRel ts) = map term ts where
-    term (n, B.TypeRel ts2) = TermNest n $ map term ts2
-    term (n, _) = TermFlat n
-typeToTerms _ = []
+headExplainDoc = B.typeDoc . headType
 
 
 
@@ -118,8 +100,7 @@ typeToTerms _ = []
 
 -- | Make head from term names.
 headFrom :: [B.TermName] -> Head
-headFrom ns = Head { headTerms = map TermFlat ns
-                   , headType  = B.typeFlatRel ns }
+headFrom ns = Head { headType = B.typeFlatRel ns }
 
 -- | Empty heading, i.e., no terms in heading.
 headEmpty :: Head
@@ -130,18 +111,19 @@ headWords = headFrom . words
 
 -- | List of term names.
 headNames :: Head -> [B.TermName]
-headNames = B.typeRelTermNames . termsToType . headTerms
+headNames = B.typeRelTermNames . headType
 
 -- | Degree of relation, i.e., number of terms.
 headDegree :: Head -> Int
-headDegree = B.typeRelDegree . termsToType . headTerms
+headDegree = B.typeRelDegree . headType
 
 
 
 -- ----------------------  Predicate
 
 headEquiv :: Head -> Head -> Bool
-headEquiv Head { headTerms = a } Head { headTerms = b } = B.sort a == B.sort b
+headEquiv he1 he2 = ts he1 == ts he2 where
+    ts = B.sort . B.typeRelTermNames . headType
 
 isSubhead :: Head -> Head -> Bool
 isSubhead he1 he2 = null $ headNames he1 `B.snipLeft` headNames he2 
@@ -162,29 +144,23 @@ isSuperhead he1 he2 = isSubhead he2 he1
 --
 
 headConsNest :: B.TermName -> Head -> B.Map Head
-headConsNest n1 Head { headTerms = ns1, headType = t1 }
-                Head { headTerms = ns, headType = t } =
-    Head { headTerms = TermNest n1 ns1 : ns
-         , headType  = B.typeConsNest n1 t1 t }
+headConsNest n1 Head { headType = t1 } Head { headType = t } =
+    Head { headType = B.typeConsNest n1 t1 t }
 
 -- | Add term name to head.
 headCons :: B.TermName -> B.Map Head
-headCons n1 h@Head { headTerms = ns, headType = t } =
-    h { headTerms = TermFlat n1 : ns
-      , headType  = B.typeConsRel n1 t }
+headCons n1 h@Head { headType = t } =
+    h { headType = B.typeConsRel n1 t }
 
 -- | Add term names to head.
 headAppend :: [B.TermName] -> B.Map Head
-headAppend ns1 h@Head { headTerms = ns, headType = t } =
-    h { headTerms = map TermFlat ns1 ++ ns
-      , headType  = B.typeAppendRel ns1 t }
+headAppend ns1 h@Head { headType = t } =
+    h { headType = B.typeAppendRel ns1 t }
 
 headNests :: [B.TermName] -> B.Map Head
-headNests ns1 Head { headTerms = ns, headType = t } =
-    Head { headTerms = map nest1 ns1
-         , headType  = B.TypeRel $ map nest2 ns1 }
-    where nest1 n = TermNest n ns
-          nest2 n = (n, t)
+headNests ns1 Head { headType = t } =
+    Head { headType = B.TypeRel $ map nest ns1 }
+    where nest n = (n, t)
 
 
 
@@ -216,37 +192,31 @@ headNests ns1 Head { headTerms = ns, headType = t } =
 
 -- | Reconstruct head.
 headMap :: B.Map [B.NamedType] -> B.Map Head
-headMap f h@Head { headTerms = ts } =
-    let ty = B.typeRelMapTerms f $ termsToType ts
-    in h { headTerms = typeToTerms ty
-         , headType  = ty }
+headMap = headMapBy B.typeRelMapTerms
 
 headRename :: B.Map B.TermName -> B.Map Head
-headRename f h@Head { headTerms = ts } =
-    let ty = B.typeRelMapName f $ termsToType ts
-    in h { headTerms = typeToTerms ty
-         , headType  = ty }
+headRename = headMapBy B.typeRelMapName
+
+headMapBy :: (a -> B.Map B.Type) -> a -> B.Map Head
+headMapBy g f he = he { headType = g f $ headType he }
 
 -- | Index of a term.
 headIndex1 :: Head -> B.TermPath -> [Int]
-headIndex1 = B.typeRelIndex . termsToType . headTerms
-
--- | Indices of terms.
-headIndex :: Head -> [B.TermPath] -> [[Int]]
-headIndex = B.typeRelIndexList . termsToType .headTerms
+headIndex1 = B.typeRelIndex . headType
 
 headAlign :: Head -> Head -> B.Map [c]
 headAlign to from = B.snipOrder (headNames to) (headNames from)
 
 bodyAlign :: Head -> Head -> B.Map [[c]]
-bodyAlign h1 h2 = (headAlign h1 h2 `map`)
+bodyAlign he1 he2 = (headAlign he1 he2 `map`)
 
 headNested :: Head -> [(String, Head)]
-headNested Head { headTerms = ts1 } = ts2 where
-    ts2 = map h $ filter (B.isTypeRel . snd) $ B.typeTerms $ termsToType ts1
-    h (n, t) = (n, headEmpty { headTerms = typeToTerms t, headType = t })
+headNested Head { headType = ty } = ts2 where
+    ts2 = map h $ filter (B.isTypeRel . snd) $ B.typeTerms ty
+    h (n, t) = (n, headEmpty { headType = t })
 
 headUp :: B.Map Head
-headUp Head { headTerms = [TermNest _ ts] } = headEmpty { headTerms = ts }
-headUp he = he
-
+headUp Head { headType = ty } =
+    headEmpty { headType = up ty } where
+        up (B.TypeRel [(_, t)]) = t
+        up t                    = t

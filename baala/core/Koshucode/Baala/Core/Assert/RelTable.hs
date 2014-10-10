@@ -65,8 +65,7 @@ termMap :: forall a. forall c.
     (c -> B.Rel c) -> (c -> a) -> (a -> a -> a) -> B.Rel c -> TermMap a
 termMap gRel from f (B.Rel he bo) = accum [] ts bo Map.empty where
 
-    ty = B.termsToType $ B.headTerms he
-    ts = B.typeTerms ty
+    ts = B.typeTerms $ B.headType he
 
     accum :: B.TermPath -> [B.NamedType] -> [[c]] -> B.Map (TermMap a)
     accum path ts1 bo1 m = foldr (column path) m $ zip ts1 (List.transpose bo1)
