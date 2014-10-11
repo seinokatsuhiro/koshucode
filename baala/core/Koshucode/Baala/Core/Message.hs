@@ -298,5 +298,5 @@ detailTermRel label ns he1 = detail where
     detail = [label] ++ indent ns' ++ ["Relation"] ++ indent ns1
     indent = map ("  " ++)
     ns'    = map B.showTermName ns
-    ns1    = B.headExplainLines he1
+    ns1    = B.linesFrom $ B.headExplain he1
 

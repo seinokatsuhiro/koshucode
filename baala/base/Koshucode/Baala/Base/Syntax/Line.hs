@@ -7,6 +7,7 @@ module Koshucode.Baala.Base.Syntax.Line
   NumberedLine,
   linesCrlfNumbered,
   linesCrlf,
+  linesFrom,
 ) where
 
 -- | Line number.
@@ -29,3 +30,5 @@ linesCrlf s = ln : next s2 where
     next ('\n' : s3) = linesCrlf s3
     next s3          = linesCrlf s3
 
+linesFrom :: (Show a) => a -> [String]
+linesFrom = lines . show

@@ -63,7 +63,7 @@ relkitIf [C.Relkit _ kitbT, C.Relkit (Just heA) kitbA, C.Relkit (Just heB) kitbB
                [] -> align $ bmapB bo1
                _  -> bmapA bo1
       align :: B.Map (B.Ab [[c]])
-      align = fmap (B.headAlign heA heB `map`)
+      align = fmap $ B.bodyAlign heA heB
 
 relkitIf [kitT@(C.Relkit _ _), kitA@(C.Relkit heA' kitbA), kitB@(C.Relkit heB' kitbB)] _
     | isNothing2 heA' heB' = Right C.relkitNothing

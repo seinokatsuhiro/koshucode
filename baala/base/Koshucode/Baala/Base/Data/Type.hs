@@ -4,7 +4,7 @@
 module Koshucode.Baala.Base.Data.Type
   ( Type (..),
     NamedType,
-    typeDoc,
+    typeExplain,
     typeFlatRel,
     typeConsRel,
     typeConsNest,
@@ -87,20 +87,20 @@ writeType = wf where
     wrap True  x         =  B.docWraps "(" ")" x
 
 -- | Print type as tree.
-typeDoc :: Type -> B.Doc
-typeDoc ty =
+typeExplain :: Type -> B.Doc
+typeExplain ty =
     case ty of
-      TypeList     t  ->  B.doc "list"   B.<+>  typeDoc t
-      TypeSet      t  ->  B.doc "set"    B.<+>  typeDoc t
-      TypeTag  tag t  ->  B.doc "tag"    B.<+>  B.doc (tag ++ ":") B.<+> typeDoc t
+      TypeList     t  ->  B.doc "list"   B.<+>  typeExplain t
+      TypeSet      t  ->  B.doc "set"    B.<+>  typeExplain t
+      TypeTag  tag t  ->  B.doc "tag"    B.<+>  B.doc (tag ++ ":") B.<+> typeExplain t
       TypeAssn    ts  ->  B.doc "assn"   B.<+>  vmap term ts
       TypeRel     ts  ->  B.doc "rel"    B.<+>  vmap term ts
       TypeTuple   ts  ->  B.doc "tuple"  B.<+>  vmap (item ":") ts
       TypeSum     ts  ->  B.doc "sum"    B.<+>  vmap (item "|") ts
       _               ->  writeType ty
     where
-      term (n,t)  =  B.doc ('/' : n) B.<+> typeDoc t
-      item i t    =  B.doc i B.<+> typeDoc t
+      term (n,t)  =  B.doc ('/' : n) B.<+> typeExplain t
+      item i t    =  B.doc i B.<+> typeExplain t
       vmap f      =  B.docv . map f
 
 

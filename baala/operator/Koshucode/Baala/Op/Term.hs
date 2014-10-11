@@ -203,7 +203,7 @@ relmapPrefix use pre ns = C.relmapFlow use $ relkitPrefix pre ns
 relkitPrefix :: String -> [String] -> C.RelkitFlow c
 relkitPrefix _ _ Nothing = Right C.relkitNothing
 relkitPrefix pre ns (Just he1) = Right kit2 where
-    he2 =  B.headRename f he1
+    he2 =  B.headMapName f he1
     kit2 = C.relkitId $ Just he2
     f n | n `elem` ns  = prefixName pre n
         | otherwise    = n
@@ -228,7 +228,7 @@ relmapUnprefix use = C.relmapFlow use . relkitUnprefix
 relkitUnprefix :: String -> C.RelkitFlow c
 relkitUnprefix _ Nothing = Right C.relkitNothing
 relkitUnprefix pre (Just he1) = Right kit2 where
-    he2  = B.headRename (unprefixName pre) he1
+    he2  = B.headMapName (unprefixName pre) he1
     kit2 = C.relkitId $ Just he2
 
 unprefixName :: String -> String -> String
@@ -254,7 +254,7 @@ relmapPrefixChange use = C.relmapFlow use . relkitPrefixChange
 relkitPrefixChange :: (String, String) -> C.RelkitFlow c
 relkitPrefixChange _ Nothing = Right C.relkitNothing
 relkitPrefixChange (new, old) (Just he1) = Right kit2 where
-    he2  = B.headRename f he1
+    he2  = B.headMapName f he1
     kit2 = C.relkitId $ Just he2
     new' = new ++ "-"
     old' = old ++ "-"

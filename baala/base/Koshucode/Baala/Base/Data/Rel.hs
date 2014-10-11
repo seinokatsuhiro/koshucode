@@ -62,7 +62,7 @@ relSort = relSortBody . relSortHead
 relSortHead :: B.Map (Rel c)
 relSortHead (Rel he1 bo1) = Rel he2 bo2 where
     he2 = B.headMap B.sort he1
-    bo2 = B.headAlign he2 he1 `map` bo1
+    bo2 = B.bodyAlign he2 he1 bo1
 
 relSortBody :: (Ord c) => B.Map (Rel c)
 relSortBody (Rel he1 bo1) = Rel he1 $ B.unique $ B.sort bo1
