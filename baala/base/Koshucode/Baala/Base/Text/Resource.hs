@@ -2,24 +2,25 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Text.Resource
-(
-  -- * Resource
-  Resource (..),
-  resourceType,
-  resourceName,
-
-  -- * Code point
-  CodePt (..),
-  codeZero,
-  codeColumnNumber,
-  codeDisplay,
-
-  -- * Code pointer
-  CodePtr (..),
-
-  -- * Sourced
-  Sourced (..),
-) where
+  (
+    -- * Resource
+    Resource (..),
+    ResourceName (..),
+    resourceType,
+    resourceText,
+  
+    -- * Code point
+    CodePt (..),
+    codeZero,
+    codeColumnNumber,
+    codeDisplay,
+  
+    -- * Code pointer
+    CodePtr (..),
+  
+    -- * Sourced
+    Sourced (..),
+  ) where
 
 import qualified Data.Generics                 as G
 import qualified Koshucode.Baala.Base.Prelude  as B
@@ -28,6 +29,11 @@ import qualified Koshucode.Baala.Base.Prelude  as B
 -- ----------------------  Resource
 
 data Resource
+    = Resource { resourceNumber :: Int
+               , resourceName   :: ResourceName }
+      deriving (Show, Eq, Ord, G.Data, G.Typeable)
+
+data ResourceName
     = ResourceFile String
     | ResourceText String
     | ResourceURL  String
@@ -35,14 +41,20 @@ data Resource
 
 -- | Name of resourcd type, i.e., @\"file\"@, @\"text\"@, @\"url\"@.
 resourceType :: Resource -> String
-resourceType (ResourceFile _)     = "file"
-resourceType (ResourceText _)     = "text"
-resourceType (ResourceURL  _)     = "url"
+resourceType = resourceNameType . resourceName
 
-resourceName :: Resource -> String
-resourceName (ResourceFile file)  =  file
-resourceName (ResourceText text)  =  text
-resourceName (ResourceURL  url)   =  url
+resourceText :: Resource -> String
+resourceText = resourceNameText . resourceName
+
+resourceNameType :: ResourceName -> String
+resourceNameType (ResourceFile _)     = "file"
+resourceNameType (ResourceText _)     = "text"
+resourceNameType (ResourceURL  _)     = "url"
+
+resourceNameText :: ResourceName -> String
+resourceNameText (ResourceFile file)  =  file
+resourceNameText (ResourceText text)  =  text
+resourceNameText (ResourceURL  url)   =  url
 
 
 -- ----------------------  CodePt
@@ -65,7 +77,7 @@ codeCompare p1 p2 = line `B.mappend` column where
 
 -- | Empty code point, i.e., empty content and zero line number.
 codeZero :: CodePt
-codeZero = CodePt (ResourceText "") 0 "" ""
+codeZero = CodePt (Resource 0 $ ResourceText "") 0 "" ""
 
 -- | Column number at which code starts.
 codeColumnNumber :: CodePt -> Int
@@ -80,7 +92,7 @@ codeDisplay (tag, p)
       pos  = show lno ++ " " ++ show cno ++ " " ++ res
       lno  = codeLineNumber p
       cno  = codeColumnNumber p
-      res  = resourceName $ codeResource p
+      res  = resourceText $ codeResource p
       text = codeText p
 
       shorten :: B.Map String

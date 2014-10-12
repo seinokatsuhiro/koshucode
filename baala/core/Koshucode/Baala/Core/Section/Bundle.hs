@@ -25,7 +25,7 @@ readSectionBundle src =
 
 bundleResources :: SectionBundle c -> [B.Resource]
 bundleResources src = texts ++ files ++ urls where
-    texts = map B.ResourceText $ bundleTexts src
-    files = map B.ResourceFile $ bundleFiles src
-    urls  = map B.ResourceURL  $ bundleURLs  src
+    texts = (B.Resource 0 . B.ResourceText) `map` bundleTexts src
+    files = (B.Resource 0 . B.ResourceFile) `map` bundleFiles src
+    urls  = (B.Resource 0 . B.ResourceURL)  `map` bundleURLs  src
 

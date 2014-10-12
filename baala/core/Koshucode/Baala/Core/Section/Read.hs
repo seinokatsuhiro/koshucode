@@ -1,6 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Read section.
+
 module Koshucode.Baala.Core.Section.Read
 ( readSection,
   readSectionText,
@@ -17,17 +18,17 @@ import qualified Koshucode.Baala.Core.Message         as Msg
 -- | Read section from certain resource.
 readSection :: (C.CContent c) => C.Section c -> B.Resource -> IO (B.Ab (C.Section c))
 readSection root res = dispatch res where
-    dispatch (B.ResourceFile path)
+    dispatch (B.Resource _ (B.ResourceFile path))
         = do exist <- Dir.doesFileExist path
              case exist of
                False -> return $ Msg.noFile path
                True  -> do code <- readFile path
                            return $ readSectionCode root res code
 
-    dispatch (B.ResourceText code)
+    dispatch (B.Resource _ (B.ResourceText code))
         = return $ readSectionCode root res code
 
-    dispatch (B.ResourceURL _)
+    dispatch (B.Resource _ (B.ResourceURL _))
         = error "Not implemented read from URL"
 
 readSectionCode
@@ -41,7 +42,7 @@ readSectionCode root res =
 
 -- | Read section from text.
 readSectionText :: (C.CContent c) => C.Section c -> String -> B.Ab (C.Section c)
-readSectionText root code = readSectionCode root (B.ResourceText code) code
+readSectionText root code = readSectionCode root (B.Resource 0 $ B.ResourceText code) code
 
 -- | Read judges from text.
 readJudges :: (C.CContent c) => String -> B.Ab [B.Judge c]

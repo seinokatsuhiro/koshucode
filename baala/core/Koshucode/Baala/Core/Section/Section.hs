@@ -64,7 +64,7 @@ appendSection s1 s2 =
 -- | Section that has no contents.
 emptySection :: Section c
 emptySection = Section Nothing C.global [] [] [] [] [] [] res cons [] where
-    res  = B.ResourceText ""
+    res  = B.Resource 0 $ B.ResourceText ""
     cons = C.relmapCons C.global
 
 rootSection :: C.Global c -> Section c
@@ -119,7 +119,7 @@ consSectionEach root resource (B.Short pt shorts xs) =
       forM isX f = pass (ab f) `mapM` filter (isX . C.clauseBody) xs
 
       pass f (C.Clause src body) = f (B.front $ B.clauseTokens src) body
-      consSec = consSection root (B.ResourceText "")
+      consSec = consSection root (B.Resource 0 $ B.ResourceText "")
       ab f toks body = Msg.abClause toks $ f toks body
 
       -- todo: multiple section name
