@@ -1,12 +1,12 @@
 ** -*- koshu -*-
 
 |-- DIR  /code 25   /comment 6    /dir "operator/Koshucode/Baala"
-|-- DIR  /code 840  /comment 589  /dir "operator/Koshucode/Baala/Op"
+|-- DIR  /code 843  /comment 589  /dir "operator/Koshucode/Baala/Op"
 |-- DIR  /code 239  /comment 157  /dir "operator/Koshucode/Baala/Op/Builtin"
 |-- DIR  /code 159  /comment 165  /dir "operator/Koshucode/Baala/Op/Lattice"
-|-- DIR  /code 241  /comment 214  /dir "operator/Koshucode/Baala/Op/Nest"
+|-- DIR  /code 248  /comment 244  /dir "operator/Koshucode/Baala/Op/Nest"
 
-|-- DIR-TOTAL  /code 1504  /comment 1131
+|-- DIR-TOTAL  /code 1514  /comment 1161
 
 |-- FILE  /code 25   /comment 6    /file "Op.hs"          /dir "operator/Koshucode/Baala"
 |-- FILE  /code 11   /comment 6    /file "Builtin.hs"     /dir "operator/Koshucode/Baala/Op"
@@ -24,12 +24,13 @@
 |-- FILE  /code 79   /comment 106  /file "Tropashko.hs"   /dir "operator/Koshucode/Baala/Op/Lattice"
 |-- FILE  /code 67   /comment 41   /file "Message.hs"     /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 119  /comment 68   /file "Meta.hs"        /dir "operator/Koshucode/Baala/Op"
-|-- FILE  /code 7    /comment 6    /file "Nest.hs"        /dir "operator/Koshucode/Baala/Op"
-|-- FILE  /code 143  /comment 135  /file "Confl.hs"       /dir "operator/Koshucode/Baala/Op/Nest"
-|-- FILE  /code 75   /comment 51   /file "Flow.hs"        /dir "operator/Koshucode/Baala/Op/Nest"
-|-- FILE  /code 23   /comment 28   /file "Rop.hs"         /dir "operator/Koshucode/Baala/Op/Nest"
+|-- FILE  /code 11   /comment 6    /file "Nest.hs"        /dir "operator/Koshucode/Baala/Op"
+|-- FILE  /code 101  /comment 89   /file "Confl.hs"       /dir "operator/Koshucode/Baala/Op/Nest"
+|-- FILE  /code 58   /comment 59   /file "Deriv.hs"       /dir "operator/Koshucode/Baala/Op/Nest"
+|-- FILE  /code 65   /comment 47   /file "Flow.hs"        /dir "operator/Koshucode/Baala/Op/Nest"
+|-- FILE  /code 24   /comment 49   /file "Rop.hs"         /dir "operator/Koshucode/Baala/Op/Nest"
 |-- FILE  /code 129  /comment 83   /file "Peripheral.hs"  /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 48   /comment 73   /file "Source.hs"      /dir "operator/Koshucode/Baala/Op"
-|-- FILE  /code 161  /comment 104  /file "Term.hs"        /dir "operator/Koshucode/Baala/Op"
+|-- FILE  /code 160  /comment 104  /file "Term.hs"        /dir "operator/Koshucode/Baala/Op"
 
-|-- FILE-TOTAL  /code 1504  /comment 1131
+|-- FILE-TOTAL  /code 1514  /comment 1161
