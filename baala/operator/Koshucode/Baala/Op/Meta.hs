@@ -6,6 +6,8 @@ module Koshucode.Baala.Op.Meta
   consKoshuCop, relkitKoshuCop,
   -- * koshu-cop-infix
   consKoshuCopInfix, relkitKoshuCopInfix,
+  -- * koshu-resource
+  consKoshuResource, relmapKoshuResource,
   -- * koshu-rop
   consKoshuRop, relkitKoshuRop,
   -- * koshu-version
@@ -40,6 +42,8 @@ ropsMeta = Op.ropList "meta"
     , Op.ropV   consKoshuCop       "koshu-cop /N"        "-name"
     , Op.ropI   consKoshuCopInfix  "koshu-cop-infix /N [-height /N][-dir /N]"
                                                          "-name | -height -dir"
+    , Op.ropI   consKoshuResource  "koshu-resource /N [-name /N][-type /N]"
+                                                         "-number | -name -type"
     , Op.ropV   consKoshuRop       "koshu-rop /N /N"     "-name | -group -usage"
     , Op.ropV   consKoshuVersion   "koshu-version /N"    "-term | -version"
     ]
@@ -160,6 +164,35 @@ apiVersion V.Version { V.versionBranch = ver } =
       (_)             -> [0, 0, 0]
 
 
+-- ----------------------  koshu-resource
+
+--  koshu-resource /number -type /type -name /name
+
+consKoshuResource :: (C.CContent c) => C.RopCons c
+consKoshuResource use =
+  do num  <- Op.getTerm use "-number"
+     ty   <- Op.getMaybe Op.getTerm use "-type"
+     name <- Op.getMaybe Op.getTerm use "-name"
+     Right $ relmapKoshuResource use (num, ty, name)
+
+relmapKoshuResource :: (C.CContent c) => C.RopUse c -> (B.TermName, Maybe B.TermName, Maybe B.TermName) -> C.Relmap c
+relmapKoshuResource use = C.relmapGlobal use . relkitKoshuResource
+
+relkitKoshuResource :: (C.CContent c) => (B.TermName, Maybe B.TermName, Maybe B.TermName) -> (C.RelkitGlobal c)
+relkitKoshuResource (num, ty, name) C.Global { C.globalResources = res } _ = Right kit2 where
+    ns         =  B.catMaybes [Just num, ty, name]
+    kit2       =  C.relkitConstBody ns $ map assn res
+    assn r     =  B.catMaybes [resNum r, resType r, resName r]
+
+    resNum    =  Just         . C.pDecFromInt . B.resourceNumber
+    resType   =  maybeAs ty   . C.pText       . B.resourceType
+    resName   =  maybeAs name . C.pText       . B.resourceText
+
+maybeAs :: Maybe a -> b -> Maybe b
+maybeAs (Just _)  c  =  Just c
+maybeAs (Nothing) _  =  Nothing
+
+
 -- ----------------------  koshu-angle-text
 
 --  koshu-angle-text /name
@@ -184,4 +217,3 @@ relkitKoshuAngleText (n, Nothing) _ = Right kit2 where
 
 koshuAngleTextBody :: (Ord c, C.CText c) => [B.TermName] -> ((String, String) -> [c]) -> C.Relkit c
 koshuAngleTextBody he assn = C.relkitConstBody he $ B.sort $ map assn B.angleTexts
-
