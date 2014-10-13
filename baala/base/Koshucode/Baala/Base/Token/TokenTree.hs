@@ -161,7 +161,7 @@ abortableTrees tag = B.abortable tag . B.untrees
 
 -- | Convert text to token trees.
 tt :: String -> B.Ab [TTree]
-tt s = do toks <- B.tokens (B.Resource 0 $ B.ResourceText s) s
+tt s = do toks <- B.tokens (B.resourceOf s) s
           tokenTrees $ B.sweepToken toks
 
 tt1 :: String -> B.Ab TTree

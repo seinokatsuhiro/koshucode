@@ -50,6 +50,15 @@ instance B.Monoid (Section c) where
     mempty  = emptySection
     mappend = appendSection
 
+-- | Section that has no contents.
+emptySection :: Section c
+emptySection = Section Nothing C.global [] [] [] [] [] [] B.resourceZero cons [] where
+    cons = C.relmapCons C.global
+
+rootSection :: C.Global c -> Section c
+rootSection g = emptySection { secGlobal = g
+                             , secCons   = C.relmapCons g }
+
 appendSection :: Section c -> Section c -> Section c
 appendSection s1 s2 =
     s1 { secName    = Nothing
@@ -60,16 +69,6 @@ appendSection s1 s2 =
        , secRelmap  = union secRelmap
        , secJudge   = union secJudge
        } where union f = f s1 ++ f s2
-
--- | Section that has no contents.
-emptySection :: Section c
-emptySection = Section Nothing C.global [] [] [] [] [] [] res cons [] where
-    res  = B.Resource 0 $ B.ResourceText ""
-    cons = C.relmapCons C.global
-
-rootSection :: C.Global c -> Section c
-rootSection g = emptySection { secGlobal = g
-                             , secCons   = C.relmapCons g }
 
 addMessage :: String -> B.Map (Section c)
 addMessage msg sec = sec { secMessage = msg : secMessage sec }
@@ -119,7 +118,7 @@ consSectionEach root resource (B.Short pt shorts xs) =
       forM isX f = pass (ab f) `mapM` filter (isX . C.clauseBody) xs
 
       pass f (C.Clause src body) = f (B.front $ B.clauseTokens src) body
-      consSec = consSection root (B.Resource 0 $ B.ResourceText "")
+      consSec = consSection root (B.resourceZero)
       ab f toks body = Msg.abClause toks $ f toks body
 
       -- todo: multiple section name

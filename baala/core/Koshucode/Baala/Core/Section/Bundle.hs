@@ -19,13 +19,16 @@ data SectionBundle c = SectionBundle
     } deriving (Show)
 
 readSectionBundle :: (C.CContent c) => SectionBundle c -> IO [B.Ab (C.Section c)]
-readSectionBundle src =
-    do let root = bundleRoot src
-       mapM (C.readSection root) $ bundleResources src
+readSectionBundle bun =
+    do let root  = bundleRoot  bun
+           names = bundleNames bun
+       C.readSection root `mapM` resources names
 
-bundleResources :: SectionBundle c -> [B.Resource]
-bundleResources src = texts ++ files ++ urls where
-    texts = (B.Resource 0 . B.ResourceText) `map` bundleTexts src
-    files = (B.Resource 0 . B.ResourceFile) `map` bundleFiles src
-    urls  = (B.Resource 0 . B.ResourceURL)  `map` bundleURLs  src
+resources :: [B.ResourceName] -> [B.Resource]
+resources = zipWith B.Resource [1..]
 
+bundleNames :: SectionBundle c -> [B.ResourceName]
+bundleNames bun = texts ++ files ++ urls where
+    texts  =  B.ResourceText `map` bundleTexts bun
+    files  =  B.ResourceFile `map` bundleFiles bun
+    urls   =  B.ResourceURL  `map` bundleURLs  bun

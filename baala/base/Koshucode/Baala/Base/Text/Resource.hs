@@ -8,6 +8,8 @@ module Koshucode.Baala.Base.Text.Resource
     ResourceName (..),
     resourceType,
     resourceText,
+    resourceZero,
+    resourceOf,
   
     -- * Code point
     CodePt (..),
@@ -56,6 +58,12 @@ resourceNameText (ResourceFile file)  =  file
 resourceNameText (ResourceText text)  =  text
 resourceNameText (ResourceURL  url)   =  url
 
+resourceZero :: Resource
+resourceZero = resourceOf ""
+
+resourceOf :: String -> Resource
+resourceOf = Resource 0 . ResourceText
+
 
 -- ----------------------  CodePt
 
@@ -77,7 +85,7 @@ codeCompare p1 p2 = line `B.mappend` column where
 
 -- | Empty code point, i.e., empty content and zero line number.
 codeZero :: CodePt
-codeZero = CodePt (Resource 0 $ ResourceText "") 0 "" ""
+codeZero = CodePt resourceZero 0 "" ""
 
 -- | Column number at which code starts.
 codeColumnNumber :: CodePt -> Int
