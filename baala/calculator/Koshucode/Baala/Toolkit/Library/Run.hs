@@ -1,16 +1,16 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Toolkit.Library.Run
-( runFiles,
-  hRunFiles,
-  concatMM,
-  runCalc,
-  runCalcTo,
-  theContent,
-  readSec,
-  readSecList,
-  mkdir,
-) where
+  ( runFiles,
+    hRunFiles,
+    concatMM,
+    runCalc,
+    runCalcTo,
+    theContent,
+    readSec,
+    readSecList,
+    mkdir,
+  ) where
 
 import qualified System.IO            as IO
 import qualified System.FilePath      as Path
@@ -25,7 +25,7 @@ import qualified Koshucode.Baala.Core as C
 runFiles :: (C.CContent c) => C.Global c -> C.SectionBundle c -> IO Int
 runFiles = hRunFiles IO.stdout
 
-{-| Read and union sections from files, and run the section. -}
+-- | Read and union sections from files, and run the section.
 hRunFiles
     :: (C.CContent c)
     => IO.Handle          -- ^ File handle
@@ -80,8 +80,8 @@ runCalcJudge dir root (B.JudgeAffirm "KOSHU-CALC" xs) =
              putStrLn $ "**  Output to " ++ outputFile
              mkdir outputFile
              IO.withFile outputFile IO.WriteMode
-                          $ \ h -> hRunFiles h C.global
-                                   (C.SectionBundle root [] inputFiles [])
+                          $ \ h -> do let res = B.resourceList False [] inputFiles []
+                                      hRunFiles h C.global $ C.SectionBundle root res
       Just _       -> return 0
       Nothing      -> return 0
 runCalcJudge _ _ _ =  return 0

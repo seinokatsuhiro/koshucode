@@ -1,13 +1,13 @@
 {-# OPTIONS_GHC -Wall #-}
 
-{-| A portable relational calculator. -}
+-- | A portable relational calculator.
 
 module Koshucode.Baala.Toolkit.Main.KoshuMain
-( koshuMain
-
--- * koshu.hs
--- $koshu.hs
-) where
+  ( koshuMain
+  
+  -- * koshu.hs
+  -- $koshu.hs
+  ) where
 
 import System.Console.GetOpt
 import qualified Koshucode.Baala.Base as B
@@ -89,9 +89,9 @@ header = unlines
 
 -- ----------------------  Main
 
-{-| The main function for @koshu@ command.
-    See 'Koshucode.Baala.Op.Vanilla.Relmap.Implement.vanillaRops'
-    for default argument. -}
+-- | The main function for @koshu@ command.
+--   See 'Koshucode.Baala.Op.Vanilla.Relmap.Implement.vanillaRops'
+--   for default argument.
 koshuMain :: (C.CContent c) => C.Global c -> IO Int
 koshuMain global =
   do (prog, argv) <- L.prelude
@@ -100,21 +100,22 @@ koshuMain global =
            | has OptHelp         ->  L.putSuccess usage
            | has OptVersion      ->  L.putSuccess $ version ++ "\n"
            | has OptShowEncoding ->  L.putSuccess =<< L.currentEncodings
-           -- | has OptPretty    ->  prettySection sec
-           | has OptStdin        ->  runStdin   sec
+           -- has OptPretty    ->  prettySection sec
            | has OptListRop      ->  putRop     $ C.globalRops g2
            | has OptElement      ->  putElems   sec
            | has OptCalc         ->  L.runCalc  cmd sec
            | otherwise           ->  L.runFiles g2 sec
            where
              has   =  (`elem` opts)
-             sec   =  C.SectionBundle root text files []
+             sec   =  C.SectionBundle root res
              text  =  concatMap oneLiner opts
              cmd   =  prog : argv
              root  =  C.rootSection g2
+             res   =  B.resourceList (has OptStdin) text files []
              g2    =  C.globalFill global
-                      { C.globalProgram = prog
-                      , C.globalArgs    = argv }
+                        { C.globalProgram   = prog
+                        , C.globalArgs      = argv
+                        , C.globalResources = res }
 
        (_, _, errs) -> L.putFailure $ concat errs
 
@@ -127,11 +128,6 @@ putRop rops =
           B.affirm "KOSHU-ROP"
                [ ("group" , C.pText g)
                , ("name"  , C.pText n) ]
-
-runStdin :: (C.CContent c) => C.SectionBundle c -> IO Int
-runStdin sec =
-    do text <- getContents
-       L.runFiles C.global sec { C.bundleTexts = text : C.bundleTexts sec }
 
 oneLiner :: Option -> [String]
 oneLiner (OptSection sec) = [oneLinerPreprocess sec]

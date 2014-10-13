@@ -3,21 +3,21 @@
 -- | Global parameters.
 
 module Koshucode.Baala.Core.Relmap.Global
-( -- * Global
-  Global' (..),
-  globalCommandLine,
-  globalFill,
-  globalRops,
-  globalCops,
-  globalCopset,
-  globalInfix,
-  global,
-
-  -- * Operator set
-  OpSet' (..),
-  opset,
-  opsetFill,
-) where
+  ( -- * Global
+    Global' (..),
+    globalCommandLine,
+    globalFill,
+    globalRops,
+    globalCops,
+    globalCopset,
+    globalInfix,
+    global,
+  
+    -- * Operator set
+    OpSet' (..),
+    opset,
+    opsetFill,
+  ) where
 
 import qualified Data.Version                           as D
 import qualified Koshucode.Baala.Base                   as B
@@ -29,12 +29,13 @@ import qualified Koshucode.Baala.Core.Relmap.Relkit     as C
 -- ----------------------  Global
 
 data Global' rop c = Global
-      { globalVersion :: D.Version
-      , globalOpset   :: OpSet' rop c
-      , globalProgram :: String
-      , globalArgs    :: [String]
-      , globalJudges  :: [B.Judge c]
-      , globalSelect  :: C.RelSelect c
+      { globalVersion   :: D.Version
+      , globalOpset     :: OpSet' rop c
+      , globalProgram   :: String
+      , globalArgs      :: [String]
+      , globalResources :: [B.Resource]
+      , globalJudges    :: [B.Judge c]
+      , globalSelect    :: C.RelSelect c
       }
 
 instance Show (Global' opset c) where
@@ -63,12 +64,13 @@ globalCopset = opsetCop . globalOpset
 -- | Empty global parameters.
 global :: Global' rop c
 global = Global
-         { globalVersion  =  D.Version [] []
-         , globalOpset    =  opset
-         , globalProgram  =  ""
-         , globalArgs     =  []
-         , globalJudges   =  []
-         , globalSelect   =  \_ _ -> B.reldee }
+         { globalVersion   =  D.Version [] []
+         , globalOpset     =  opset
+         , globalProgram   =  ""
+         , globalArgs      =  []
+         , globalResources =  []
+         , globalJudges    =  []
+         , globalSelect    =  \_ _ -> B.reldee }
 
 
 -- ----------------------  Operator set

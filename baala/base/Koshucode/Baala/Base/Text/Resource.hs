@@ -10,6 +10,7 @@ module Koshucode.Baala.Base.Text.Resource
     resourceText,
     resourceZero,
     resourceOf,
+    resourceList,
   
     -- * Code point
     CodePt (..),
@@ -36,9 +37,10 @@ data Resource
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 data ResourceName
-    = ResourceFile String
-    | ResourceText String
-    | ResourceURL  String
+    = ResourceFile  String
+    | ResourceURL   String
+    | ResourceText  String
+    | ResourceStdin
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 -- | Name of resourcd type, i.e., @\"file\"@, @\"text\"@, @\"url\"@.
@@ -50,19 +52,29 @@ resourceText = resourceNameText . resourceName
 
 resourceNameType :: ResourceName -> String
 resourceNameType (ResourceFile _)     = "file"
-resourceNameType (ResourceText _)     = "text"
 resourceNameType (ResourceURL  _)     = "url"
+resourceNameType (ResourceText _)     = "text"
+resourceNameType (ResourceStdin)      = "stdin"
 
 resourceNameText :: ResourceName -> String
 resourceNameText (ResourceFile file)  =  file
-resourceNameText (ResourceText text)  =  text
 resourceNameText (ResourceURL  url)   =  url
+resourceNameText (ResourceText text)  =  text
+resourceNameText (ResourceStdin)      =  "(stdin)"
 
 resourceZero :: Resource
 resourceZero = resourceOf ""
 
 resourceOf :: String -> Resource
 resourceOf = Resource 0 . ResourceText
+
+resourceList :: Bool -> [String] -> [String] -> [String] -> [Resource]
+resourceList stdin texts files urls = zipWith Resource [1..] names where
+    input = if stdin then [ResourceStdin] else []
+    names = input ++
+            ResourceText `map` texts ++
+            ResourceFile `map` files ++
+            ResourceURL  `map` urls
 
 
 -- ----------------------  CodePt

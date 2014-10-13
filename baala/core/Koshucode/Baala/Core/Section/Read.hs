@@ -24,11 +24,15 @@ readSection root res = dispatch $ B.resourceName res where
                True  -> do code <- readFile path
                            return $ readSectionCode root res code
 
+    dispatch (B.ResourceURL _)
+        = error "Not implemented read from URL"
+
     dispatch (B.ResourceText code)
         = return $ readSectionCode root res code
 
-    dispatch (B.ResourceURL _)
-        = error "Not implemented read from URL"
+    dispatch B.ResourceStdin
+        = do code <- getContents
+             return $ readSectionCode root res code
 
 readSectionCode :: (C.CContent c)
     => C.Section c -> B.Resource -> String -> B.Ab (C.Section c)

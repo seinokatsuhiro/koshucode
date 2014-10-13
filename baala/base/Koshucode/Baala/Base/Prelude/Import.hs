@@ -1,49 +1,50 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Prelude.Import
-( -- * Control.Monad
-  (Control.Monad.<=<),
-  (Control.Monad.>=>),
-  Control.Monad.sequence,
-  Control.Monad.filterM,
-  Control.Monad.foldM,
-  Control.Monad.when,
-  Control.Monad.unless,
-  Control.Monad.guard,
-  concatMapM,
-
-  -- * Data.List
-  Data.List.sort,
-  Data.List.transpose,
-  Data.List.intercalate,
-
-  -- * Data.Map
-  lookupMap,
-
-  -- * Data.Maybe
-  Data.Maybe.catMaybes,
-  Data.Maybe.fromJust,
-  Data.Maybe.fromMaybe,
-
-  -- * Data.Monoid
-  Data.Monoid.Monoid,
-  Data.Monoid.mappend,
-  Data.Monoid.mconcat,
-  Data.Monoid.mempty,
-
-  -- * Data.Tuple
-  Data.Tuple.swap,
-
-  -- * Text.PrettyPrint
-  Text.PrettyPrint.Doc,
-  (Text.PrettyPrint.<>),
-  (Text.PrettyPrint.<+>),
-  (Text.PrettyPrint.$$),
-  Text.PrettyPrint.nest,
-  docEmpty,
-  docHang,
-  docZero,
-) where
+  ( -- * Control.Monad
+    (Control.Monad.<=<),
+    (Control.Monad.>=>),
+    Control.Monad.sequence,
+    Control.Monad.filterM,
+    Control.Monad.foldM,
+    Control.Monad.when,
+    Control.Monad.unless,
+    Control.Monad.guard,
+    concatMapM,
+  
+    -- * Data.List
+    Data.List.sort,
+    Data.List.transpose,
+    Data.List.intercalate,
+  
+    -- * Data.Map
+    lookupMap,
+  
+    -- * Data.Maybe
+    Data.Maybe.catMaybes,
+    Data.Maybe.mapMaybe,
+    Data.Maybe.fromJust,
+    Data.Maybe.fromMaybe,
+  
+    -- * Data.Monoid
+    Data.Monoid.Monoid,
+    Data.Monoid.mappend,
+    Data.Monoid.mconcat,
+    Data.Monoid.mempty,
+  
+    -- * Data.Tuple
+    Data.Tuple.swap,
+  
+    -- * Text.PrettyPrint
+    Text.PrettyPrint.Doc,
+    (Text.PrettyPrint.<>),
+    (Text.PrettyPrint.<+>),
+    (Text.PrettyPrint.$$),
+    Text.PrettyPrint.nest,
+    docEmpty,
+    docHang,
+    docZero,
+  ) where
 
 import Control.Monad
 import Data.List
