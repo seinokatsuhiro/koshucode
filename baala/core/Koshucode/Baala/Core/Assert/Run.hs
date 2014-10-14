@@ -161,11 +161,11 @@ snipRelRaw (heSnip, boSnip) ns (B.Rel he1 bo1)
 optionOrder :: (Ord c, C.CRel c) => [B.TTree] ->  B.AbMap (B.Rel c)
 optionOrder _ r1 = Right $ relSortDeep r1
 
-relSortDeep :: (Ord c, C.CRel c) => B.MapRel c
+relSortDeep :: (Ord c, C.CRel c) => B.Map (B.Rel c)
 relSortDeep = relApply f where
     f (B.Rel he bo) = B.Rel he $ B.sort bo
 
-relApply :: (C.CRel c) => B.Map (B.MapRel c)
+relApply :: (C.CRel c) => B.Map (B.Map (B.Rel c))
 relApply f (B.Rel he bo) = f $ B.Rel he $ B.map2 nest bo where
     nest c | C.isRel c = C.pRel $ relApply f $ C.gRel c
            | otherwise = c

@@ -3,17 +3,16 @@
 -- | Relation type
 
 module Koshucode.Baala.Base.Data.Rel
-( -- * Datatype
+( -- * Data type
   Rel (..),
-  Relbody,
-  MapRel,
+  Body,
   relSort,
 
   -- * Constant
   reldum,
   reldee,
   reldau,
-  -- $ConstantExample
+  -- $Constant
 ) where
 
 import qualified Koshucode.Baala.Base.Prelude      as B
@@ -30,48 +29,52 @@ import qualified Koshucode.Baala.Base.Data.Head    as B
 --   but implemented using list of list.
 data Rel c = Rel
     { relHead :: B.Head       -- ^ Heading of relation
-    , relBody :: Relbody c    -- ^ Body of relation
-    } deriving (Show, Ord)
-
-instance (Ord c) => Eq (Rel c) where
-    (==) = relEq
+    , relBody :: Body c    -- ^ Body of relation
+    } deriving (Show)
 
 -- | Body of relation, i.e., a list of tuples.
---   Tuple is list of contents.
-type Relbody c = [[c]]
+--   Tuple is a list of contents.
+type Body c = [[c]]
 
-type MapRel c = B.Map (Rel c)
+relPair :: Rel c -> (B.Head, Body c)
+relPair (Rel he bo) = (he, bo)
+
+-- This order is different from the order of relational lattice.
+instance (Ord c) => Ord (Rel c) where
+    compare r1 r2 = let r1' = relPair $ relSort r1
+                        r2' = relPair $ relSort r2
+                    in compare r1' r2'
+
+instance (Ord c) => Eq (Rel c) where
+    a == b = (compare a b == EQ)
 
 instance (B.Write c) => B.Write (Rel c) where
-    write sh (Rel h1 b1) = B.docWraps "{|" "|}" $ h2 B.<+> b2
-        where h2    = B.write  sh h1
-              b2    = B.writeH sh $ map d b1
-              d xs  = B.write  sh "|" B.<+> B.writeColon sh xs
+    write sh (Rel he bo) =
+        let he'  = B.write  sh he
+            bo'  = B.writeH sh $ map d bo
+            d xs = B.write  sh "|" B.<+> B.writeColon sh xs
+        in B.docWraps "{|" "|}" $ he' B.<+> bo'
 
 
 
--- ----------------------  Equality
-
-relEq :: (Ord c) => Rel c -> Rel c -> Bool
-relEq r1 r2 = pair (relSort r1) == pair (relSort r2) where
-    pair (Rel he bo) = (he, bo)
+-- ----------------------  Sort contents
 
 relSort :: (Ord c) => B.Map (Rel c)
 relSort = relSortBody . relSortHead
 
 relSortHead :: B.Map (Rel c)
-relSortHead (Rel he1 bo1) = Rel he2 bo2 where
-    he2 = B.headMap B.sort he1
-    bo2 = B.bodyAlign he2 he1 bo1
+relSortHead (Rel he bo) = Rel he' bo' where
+    he' = B.headMap B.sort he
+    bo' = B.bodyAlign he' he bo
 
 relSortBody :: (Ord c) => B.Map (Rel c)
-relSortBody (Rel he1 bo1) = Rel he1 $ B.unique $ B.sort bo1
+relSortBody (Rel he bo) = Rel he (B.sort $ B.unique bo)
 
 
 
 -- ----------------------  Constant
 
--- $ConstantExample
+-- $Constant
 --
 --  /Examples/
 --
