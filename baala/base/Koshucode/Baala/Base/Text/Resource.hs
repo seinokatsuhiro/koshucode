@@ -60,7 +60,7 @@ resourceNameText :: ResourceName -> String
 resourceNameText (ResourceFile file)  =  file
 resourceNameText (ResourceURL  url)   =  url
 resourceNameText (ResourceText text)  =  text
-resourceNameText (ResourceStdin)      =  "(stdin)"
+resourceNameText (ResourceStdin)      =  "<stdin>"
 
 resourceZero :: Resource
 resourceZero = resourceOf ""

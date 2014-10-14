@@ -3,7 +3,7 @@
 module Koshucode.Baala.Core.Section.Bundle
   ( SectionBundle (..),
     readSectionBundle,
-    bundleFiles,
+    bundleTexts,
   ) where
 
 import qualified Koshucode.Baala.Base                 as B
@@ -22,7 +22,6 @@ readSectionBundle bun =
     do let root = bundleRoot bun
        C.readSection root `mapM` bundleResources bun
 
-bundleFiles :: SectionBundle c -> [String]
-bundleFiles = B.mapMaybe path . map B.resourceName . bundleResources where
-    path (B.ResourceFile p) = Just p
-    path _                  = Nothing
+bundleTexts :: SectionBundle c -> [String]
+bundleTexts = map B.resourceText . bundleResources
+

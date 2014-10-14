@@ -46,7 +46,6 @@ data Option
     | OptStdin
     | OptSection String
     | OptCalc
-    | OptListRop
     | OptElement
       deriving (Show, Eq)
 
@@ -60,7 +59,6 @@ koshuOptions =
     , Option "i" ["stdin"]    (NoArg OptStdin)   "Read from stdin."
     , Option "s" ["section"]  (ReqArg OptSection "SEC") "One-line section"
     , Option ""  ["calc"]     (NoArg OptCalc)    "Run calculation list"
-    , Option ""  ["list-rop"] (NoArg OptListRop) "List relational operators"
     , Option ""  ["element"]  (NoArg OptElement) "Analize sections"
     ]
 
@@ -100,14 +98,13 @@ koshuMain global =
            | has OptHelp         ->  L.putSuccess usage
            | has OptVersion      ->  L.putSuccess $ version ++ "\n"
            | has OptShowEncoding ->  L.putSuccess =<< L.currentEncodings
-           -- has OptPretty    ->  prettySection sec
-           | has OptListRop      ->  putRop     $ C.globalRops g2
-           | has OptElement      ->  putElems   sec
-           | has OptCalc         ->  L.runCalc  cmd sec
-           | otherwise           ->  L.runFiles g2 sec
+           -- has OptPretty    ->  prettySection bun
+           | has OptElement      ->  putElems   bun
+           | has OptCalc         ->  L.runCalc  cmd bun
+           | otherwise           ->  L.runFiles g2 bun
            where
              has   =  (`elem` opts)
-             sec   =  C.SectionBundle root res
+             bun   =  C.SectionBundle root res
              text  =  concatMap oneLiner opts
              cmd   =  prog : argv
              root  =  C.rootSection g2
@@ -118,16 +115,6 @@ koshuMain global =
                         , C.globalResources = res }
 
        (_, _, errs) -> L.putFailure $ concat errs
-
-putRop :: (Ord c, B.Write c, C.CText c) => [C.Rop c] -> IO Int
-putRop rops =
-    do B.putJudges 0 $ map f rops
-    where
-      f :: (C.CText c) => C.Rop c -> B.Judge c
-      f C.Rop { C.ropName = n, C.ropGroup = g } =
-          B.affirm "KOSHU-ROP"
-               [ ("group" , C.pText g)
-               , ("name"  , C.pText n) ]
 
 oneLiner :: Option -> [String]
 oneLiner (OptSection sec) = [oneLinerPreprocess sec]
@@ -141,8 +128,8 @@ oneLinerPreprocess = loop where
     loop (x : xs) = x : loop xs
 
 putElems :: (C.CContent c) => C.SectionBundle c -> IO Int
-putElems src =
-    do ass <- L.readSecList src
+putElems bun =
+    do ass <- L.readSecList bun
        case ass of
          Right ss -> B.putJudges 0 $ concatMap L.sectionElem ss
          Left  _  -> B.bug "putElems"

@@ -20,19 +20,14 @@ readSection root res = dispatch $ B.resourceName res where
     dispatch (B.ResourceFile path)
         = do exist <- Dir.doesFileExist path
              case exist of
-               False -> return $ Msg.noFile path
-               True  -> do code <- readFile path
-                           return $ readSectionCode root res code
+               False  ->  return $ Msg.noFile path
+               True   ->  ioRead =<< readFile path
 
-    dispatch (B.ResourceURL _)
-        = error "Not implemented read from URL"
+    dispatch (B.ResourceText code)  =  ioRead code
+    dispatch (B.ResourceStdin)      =  ioRead =<< getContents
+    dispatch (B.ResourceURL _)      =  error "Not implemented read from URL"
 
-    dispatch (B.ResourceText code)
-        = return $ readSectionCode root res code
-
-    dispatch B.ResourceStdin
-        = do code <- getContents
-             return $ readSectionCode root res code
+    ioRead = return . readSectionCode root res
 
 readSectionCode :: (C.CContent c)
     => C.Section c -> B.Resource -> String -> B.Ab (C.Section c)

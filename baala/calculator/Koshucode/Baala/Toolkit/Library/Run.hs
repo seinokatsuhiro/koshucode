@@ -28,14 +28,14 @@ runFiles = hRunFiles IO.stdout
 -- | Read and union sections from files, and run the section.
 hRunFiles
     :: (C.CContent c)
-    => IO.Handle          -- ^ File handle
+    => IO.Handle          -- ^ Output file handle
     -> C.Global c         -- ^ Global parameters
     -> C.SectionBundle c  -- ^ Section source code
     -> IO Int
-hRunFiles h global src =
-    do abSects <- C.readSectionBundle src
-       let files = C.bundleFiles src
-           comm  = B.CommentDoc [ B.CommentSec "INPUT" files ]
+hRunFiles h global bun =
+    do abSects <- C.readSectionBundle bun
+       let inputs  =  C.bundleTexts bun
+           comm    =  B.CommentDoc [ B.CommentSec "INPUT" inputs ]
 
        IO.hSetEncoding h IO.utf8
        IO.hPutStrLn    h B.emacsModeComment
@@ -111,13 +111,13 @@ theStrings _               =  []
 -- ----------------------  Read
 
 readSec :: (C.CContent c) => C.SectionBundle c -> IO (B.Ab (C.Section c))
-readSec src =
-    do sects <- C.readSectionBundle src
+readSec bun =
+    do sects <- C.readSectionBundle bun
        return $ concatMM $ sects
 
 readSecList :: (C.CContent c) => C.SectionBundle c -> IO (B.Ab [C.Section c])
-readSecList src =
-    do sects <- C.readSectionBundle src
+readSecList bun =
+    do sects <- C.readSectionBundle bun
        return $ sequence $ sects
 
 concatMM :: (Monad m, B.Monoid a) => [m a] -> m a
