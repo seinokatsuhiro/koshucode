@@ -22,7 +22,7 @@ import qualified Koshucode.Baala.Core as C
 
 -- ----------------------
 
-runFiles :: (C.CContent c) => C.Global c -> C.SectionBundle c -> IO Int
+runFiles :: (C.CContent c) => C.Global c -> C.ResourceBundle c -> IO Int
 runFiles = hRunFiles IO.stdout
 
 -- | Read and union sections from files, and run the section.
@@ -30,10 +30,10 @@ hRunFiles
     :: (C.CContent c)
     => IO.Handle          -- ^ Output file handle
     -> C.Global c         -- ^ Global parameters
-    -> C.SectionBundle c  -- ^ Section source code
+    -> C.ResourceBundle c  -- ^ Section source code
     -> IO Int
 hRunFiles h global bun =
-    do abSects <- C.readSectionBundle bun
+    do abSects <- C.readResourceBundle bun
        let inputs  =  C.bundleTexts bun
            comm    =  B.CommentDoc [ B.CommentSec "INPUT" inputs ]
 
@@ -54,11 +54,11 @@ hRunFiles h global bun =
 
 -- ---------------------- Calculation list
 
-runCalc :: (C.CContent c) => B.CommandLine -> C.SectionBundle c -> IO Int
+runCalc :: (C.CContent c) => B.CommandLine -> C.ResourceBundle c -> IO Int
 runCalc = runCalcTo ""
 
 runCalcTo :: (C.CContent c) =>
-  FilePath -> B.CommandLine -> C.SectionBundle c -> IO Int
+  FilePath -> B.CommandLine -> C.ResourceBundle c -> IO Int
 runCalcTo dir cmd bundle =
     do union <- readSec bundle
        case union of
@@ -81,7 +81,7 @@ runCalcJudge dir root (B.JudgeAffirm "KOSHU-CALC" xs) =
              mkdir outputFile
              IO.withFile outputFile IO.WriteMode
                           $ \ h -> do let res = B.resourceList False [] inputFiles []
-                                      hRunFiles h C.global $ C.SectionBundle root res
+                                      hRunFiles h C.global $ C.ResourceBundle root res
       Just _       -> return 0
       Nothing      -> return 0
 runCalcJudge _ _ _ =  return 0
@@ -110,14 +110,14 @@ theStrings _               =  []
 
 -- ----------------------  Read
 
-readSec :: (C.CContent c) => C.SectionBundle c -> IO (B.Ab (C.Section c))
+readSec :: (C.CContent c) => C.ResourceBundle c -> IO (B.Ab (C.Section c))
 readSec bun =
-    do sects <- C.readSectionBundle bun
+    do sects <- C.readResourceBundle bun
        return $ concatMM $ sects
 
-readSecList :: (C.CContent c) => C.SectionBundle c -> IO (B.Ab [C.Section c])
+readSecList :: (C.CContent c) => C.ResourceBundle c -> IO (B.Ab [C.Section c])
 readSecList bun =
-    do sects <- C.readSectionBundle bun
+    do sects <- C.readResourceBundle bun
        return $ sequence $ sects
 
 concatMM :: (Monad m, B.Monoid a) => [m a] -> m a

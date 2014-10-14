@@ -4,20 +4,17 @@
 --   'Section' is bundle of calculation stuff.  
 
 module Koshucode.Baala.Core.Section
-(
--- * Modules
-module Koshucode.Baala.Core.Section.Bundle,
-module Koshucode.Baala.Core.Section.Clause,
-module Koshucode.Baala.Core.Section.Quoter,
-module Koshucode.Baala.Core.Section.Read,
-module Koshucode.Baala.Core.Section.Run,
-module Koshucode.Baala.Core.Section.Section,
+  ( -- * Modules
+    module Koshucode.Baala.Core.Section.Clause,
+    module Koshucode.Baala.Core.Section.Quoter,
+    module Koshucode.Baala.Core.Section.Read,
+    module Koshucode.Baala.Core.Section.Run,
+    module Koshucode.Baala.Core.Section.Section,
+  
+    -- * Data dependencies
+    -- $DataDependency
+  ) where
 
--- * Data dependencies
--- $DataDependency
-) where
-
-import Koshucode.Baala.Core.Section.Bundle
 import Koshucode.Baala.Core.Section.Clause
 import Koshucode.Baala.Core.Section.Quoter
 import Koshucode.Baala.Core.Section.Read

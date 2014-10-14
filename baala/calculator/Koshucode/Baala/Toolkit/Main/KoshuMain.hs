@@ -104,7 +104,7 @@ koshuMain global =
            | otherwise           ->  L.runFiles g2 bun
            where
              has   =  (`elem` opts)
-             bun   =  C.SectionBundle root res
+             bun   =  C.ResourceBundle root res
              text  =  concatMap oneLiner opts
              cmd   =  prog : argv
              root  =  C.rootSection g2
@@ -127,7 +127,7 @@ oneLinerPreprocess = loop where
     loop ('|' : '|' : xs) = '\n' : loop (B.trimLeft xs)
     loop (x : xs) = x : loop xs
 
-putElems :: (C.CContent c) => C.SectionBundle c -> IO Int
+putElems :: (C.CContent c) => C.ResourceBundle c -> IO Int
 putElems bun =
     do ass <- L.readSecList bun
        case ass of
@@ -137,8 +137,8 @@ putElems bun =
 
 -- ----------------------  Pretty printing
 
--- prettySection :: (C.CContent c) => C.SectionBundle c -> IO Int
--- prettySection (C.SectionBundle root _ files _) =
+-- prettySection :: (C.CContent c) => C.ResourceBundle c -> IO Int
+-- prettySection (C.ResourceBundle root _ files _) =
 --     case files of
 --       [file] -> do md <- C.readSection root (B.ResourceFile file)
 --                    prettyPrint md
