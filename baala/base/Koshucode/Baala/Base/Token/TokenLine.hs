@@ -4,24 +4,24 @@
 -- | Tokenizer of koshucode.
 
 module Koshucode.Baala.Base.Token.TokenLine
-(
-  -- * Library
-  TokenLine,
-  tokenLines,
-  tokens,
-  isShortPrefix,
-
-  -- * Document
-
-  -- ** Token type
-  -- $TokenType
-
-  -- ** Asterisks
-  -- $Asterisks
-
-  -- * Examples
-  -- $Examples
-) where
+  (
+    -- * Library
+    TokenLine,
+    tokenLines,
+    tokens,
+    isShortPrefix,
+  
+    -- * Document
+  
+    -- ** Token type
+    -- $TokenType
+  
+    -- ** Asterisks
+    -- $Asterisks
+  
+    -- * Examples
+    -- $Examples
+  ) where
 
 import qualified Data.Char                            as Char
 import qualified Koshucode.Baala.Base.Abort           as B
@@ -39,6 +39,7 @@ import qualified Koshucode.Baala.Base.Message         as Msg
 
 -- | Token list on a line.
 type TokenLine = B.CodeLine B.Token
+-- | Code roll for token.
 type TokenRoll = B.CodeRoll B.Token
 
 -- | Split string into list of tokens.
@@ -208,7 +209,11 @@ scanQQ cp cs = do (cs', w) <- nextQQ cs
 
 scanTerm :: Scan
 scanTerm cp = word [] where
-    word ns (c:cs) | isCode c  =  let (cs', w) = nextCode (c:cs)
+    word ns (c:cs) | c == '='  =  let (cs', w) = nextCode (c:cs)
+                                      n  = B.resourceNumber $ B.codeResource cp
+                                      w' = show n ++ w
+                                  in term (w' : ns) cs'
+                   | isCode c  =  let (cs', w) = nextCode (c:cs)
                                   in term (w : ns) cs'
                    | isQQ c    =  do (cs', w) <- nextQQ cs
                                      term (w : ns) cs'
@@ -229,13 +234,13 @@ scanSlot n cp cs = let (cs', w) = nextCode cs
 
 -- Punctuations
 isOpen, isClose, isGrip, isSingle, isQ, isQQ, isTerm, isSpace, isCode :: B.Pred Char
-isOpen     =  ( `elem` "([{" )   --  UnicodePunctuation
-isClose    =  ( `elem` "}])" )   --  UnicodePunctuation
+isOpen     =  ( `elem` "([{"   )  -- UnicodePunctuation
+isClose    =  ( `elem` "}])"   )  -- UnicodePunctuation
 isGrip     =  ( `elem` "|:*+-" )
-isSingle   =  ( `elem` ":|"  )   --  UnicodePunctuation | UnicodeSymbol
-isQ        =  (    ==  '\''  )   --  UnicodePunctuation
-isQQ       =  (    ==  '"'   )   --  UnicodePunctuation
-isTerm     =  (    ==  '/'   )   --  UnicodePunctuation
+isSingle   =  ( `elem` ":|"    )  -- UnicodePunctuation | UnicodeSymbol
+isQ        =  (    ==  '\''    )  -- UnicodePunctuation
+isQQ       =  (    ==  '"'     )  -- UnicodePunctuation
+isTerm     =  (    ==  '/'     )  -- UnicodePunctuation
 isSpace    =  Char.isSpace
 isCode     =  B.isCodeChar
 
