@@ -8,13 +8,14 @@ module Koshucode.Baala.Core.Section.Section
   -- * Data type
   Section (..),
   coxBuildG,
+  addMessage,
+  addMessages,
 
   -- * Constructors
   emptySection,
-  consSection,
   rootSection,
-  addMessage,
-  addMessages,
+  consSection,
+  concatSection,
 
   -- * Process
   -- $Process
@@ -46,35 +47,33 @@ data Section c = Section {
     , secMessage  :: [String]            -- ^ Collection of messages
     } deriving (Show)
 
-instance B.Monoid (Section c) where
-    mempty  = emptySection
-    mappend = appendSection
+addMessage :: String -> B.Map (Section c)
+addMessage msg sec = sec { secMessage = msg : secMessage sec }
+
+addMessages :: [String] -> B.Map (Section c)
+addMessages msg sec = sec { secMessage = msg ++ secMessage sec }
 
 -- | Section that has no contents.
 emptySection :: Section c
 emptySection = Section Nothing C.global [] [] [] [] [] [] B.resourceZero cons [] where
     cons = C.relmapCons C.global
 
+-- | Construct root section from global parameter.
 rootSection :: C.Global c -> Section c
 rootSection g = emptySection { secGlobal = g
                              , secCons   = C.relmapCons g }
 
-appendSection :: Section c -> Section c -> Section c
-appendSection s1 s2 =
-    s1 { secName    = Nothing
-       , secImport  = []
-       , secExport  = union secExport
-       , secSlot    = union secSlot
-       , secAssert  = union secAssert
-       , secRelmap  = union secRelmap
-       , secJudge   = union secJudge
-       } where union f = f s1 ++ f s2
-
-addMessage :: String -> B.Map (Section c)
-addMessage msg sec = sec { secMessage = msg : secMessage sec }
-
-addMessages :: [String] -> B.Map (Section c)
-addMessages msg sec = sec { secMessage = msg ++ secMessage sec }
+-- | Concatenate sections into united section.
+concatSection :: Section c -> [Section c] -> Section c
+concatSection root ss =
+    root { secName    =  Nothing
+         , secImport  =  []
+         , secExport  =  c secExport
+         , secSlot    =  c secSlot
+         , secAssert  =  c secAssert
+         , secRelmap  =  c secRelmap
+         , secJudge   =  c secJudge
+         } where c = (`concatMap` ss)
 
 
 
@@ -89,7 +88,7 @@ consSection
     -> B.Ab (Section c)   -- ^ Result section
 consSection root resource xss =
     do sects <- consSectionEach root resource `mapM` xss
-       Right $ B.mconcat sects
+       Right $ concatSection root sects
 
 consSectionEach :: forall c. (C.CContent c) =>
     Section c -> B.Resource -> C.ShortClause -> B.Ab (Section c)

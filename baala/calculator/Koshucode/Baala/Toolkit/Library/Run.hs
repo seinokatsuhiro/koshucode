@@ -3,11 +3,9 @@
 module Koshucode.Baala.Toolkit.Library.Run
   ( runFiles,
     hRunFiles,
-    concatMM,
     runCalc,
     runCalcTo,
     theContent,
-    readSec,
     readSecList,
     mkdir,
   ) where
@@ -33,7 +31,7 @@ hRunFiles
     -> C.ResourceBundle c  -- ^ Section source code
     -> IO Int
 hRunFiles h global bun =
-    do abSects <- C.readResourceBundle bun
+    do abSect <- C.bundleRead bun
        let inputs  =  C.bundleTexts bun
            comm    =  B.CommentDoc [ B.CommentSec "INPUT" inputs ]
 
@@ -43,8 +41,8 @@ hRunFiles h global bun =
        IO.hPutStrLn    h ""
 
        let cmd = C.globalCommandLine global
-           js' = do sects <- B.sequence abSects
-                    C.runSection global sects
+           js' = do sect <- abSect
+                    C.runSection global sect
 
        case js' of
          Left a   -> B.abort cmd a
@@ -112,17 +110,12 @@ theStrings _               =  []
 
 readSec :: (C.CContent c) => C.ResourceBundle c -> IO (B.Ab (C.Section c))
 readSec bun =
-    do sects <- C.readResourceBundle bun
-       return $ concatMM $ sects
+    do abSect <- C.bundleRead bun
+       return abSect
 
 readSecList :: (C.CContent c) => C.ResourceBundle c -> IO (B.Ab [C.Section c])
 readSecList bun =
-    do sects <- C.readResourceBundle bun
-       return $ sequence $ sects
+    do abSect <- C.bundleRead bun
+       return $ do sect <- abSect
+                   Right [sect]
 
-concatMM :: (Monad m, B.Monoid a) => [m a] -> m a
-concatMM [] = return B.mempty
-concatMM (s:ss) =
-    do s'  <- s
-       ss' <- concatMM ss
-       return $ B.mappend s' ss'

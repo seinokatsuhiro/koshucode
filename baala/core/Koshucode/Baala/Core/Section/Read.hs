@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Read section.
+-- | Read resource as section.
 
 module Koshucode.Baala.Core.Section.Read
   ( -- * Section
@@ -10,7 +10,7 @@ module Koshucode.Baala.Core.Section.Read
     -- * Bundle
     ResourceBundle (..),
     bundleTexts,
-    readResourceBundle,
+    bundleRead,
   ) where
 
 import qualified System.Directory                     as Dir
@@ -59,8 +59,10 @@ data ResourceBundle c = ResourceBundle
 bundleTexts :: ResourceBundle c -> [String]
 bundleTexts = map B.resourceText . bundleResources
 
-readResourceBundle :: (C.CContent c) => ResourceBundle c -> IO [B.Ab (C.Section c)]
-readResourceBundle bun =
+bundleRead :: (C.CContent c) => ResourceBundle c -> IO (B.Ab (C.Section c))
+bundleRead bun =
     do let root = bundleRoot bun
-       readSection root `mapM` bundleResources bun
+       abSects <- readSection root `mapM` bundleResources bun
+       return $ do sects <- B.sequence abSects
+                   return $ C.concatSection root sects
 

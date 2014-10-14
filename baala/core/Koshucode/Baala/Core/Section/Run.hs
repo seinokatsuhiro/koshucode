@@ -14,9 +14,9 @@ import qualified Koshucode.Baala.Core.Assert          as C
 import qualified Koshucode.Baala.Core.Section.Section as C
 import qualified Koshucode.Baala.Core.Message         as Msg
 
-runSection :: (C.CContent c) => C.Global c -> [C.Section c] -> B.Ab (B.OutputResult c)
-runSection global sects =
-    do s2 <- assembleRelmap $ B.mconcat sects
+runSection :: (C.CContent c) => C.Global c -> C.Section c -> B.Ab (B.OutputResult c)
+runSection global sect =
+    do s2 <- assembleRelmap sect
        let js = C.secJudge s2
            g2 = global { C.globalJudges = js }
        case filter B.isViolative js of
