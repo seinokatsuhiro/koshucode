@@ -1,7 +1,7 @@
 #!/bin/sh
 
 io_version () {
-    echo "koshu-inout-0.55"
+    echo "koshu-inout-0.77"
     exit
 }
 
@@ -10,7 +10,7 @@ io_help () {
     echo "  Generate I/O list"
     echo
     echo "USAGE"
-    echo "  $io_cmd [OPTION ...] koshu FILE.k ..."
+    echo "  $io_cmd [OPTION ...] COMMAND ARG ..."
     echo
     echo "OPTION"
     echo "  -d          show all differences against last I/O list"
@@ -22,6 +22,8 @@ io_help () {
     echo "  -r          save document to README.md"
     echo "  -s          save document to INOUT.md"
     echo "  -t          do not delete temporary files"
+    echo "  -V          print version of this program"
+    echo "  -u          update differences without prompt"
     echo "  -x EXT      use EXTension instead of *.$io_glob_ext"
     echo
     echo "EXAMPLE"
@@ -266,18 +268,6 @@ io_diff_body () {
     fi
 }
 
-io_diff_show () {
-    echo
-    echo "**********************************************************************"
-    io_diff_result DIFF
-    echo "**********************************************************************"
-    echo
-    echo "Differences are found:"
-    echo
-    io_list $io_temp
-    echo
-}
-
 io_diff_cmd () {
     diff \
         --old-line-format=' - %.4dn | %L' \
@@ -319,6 +309,18 @@ io_pwd () {
     fi
 }
 
+io_diff_show () {
+    echo
+    echo "**********************************************************************"
+    io_diff_result DIFF
+    echo "**********************************************************************"
+    echo
+    echo "Differences are found:"
+    echo
+    io_list $io_temp
+    echo
+}
+
 
 # ============================================  Update I/O list
 
@@ -326,34 +328,29 @@ io_update () {
     io_diff_show
 
     case $io_update in
-        update-all ) io_diff_copy ;;
-        diff       ) io_diff_status=0 ;;
-        *          ) io_update_prompt ;;
+        no-prompt ) io_update_copy   ;;
+        diff      ) io_diff_status=0 ;;
+        *         ) io_update_prompt ;;
     esac
 }
 
 io_update_prompt () {
     while [ $io_update = prompt ]; do
-        printf "Type [update] [update-all] [skip] [quit] or [help]: "
+        printf "Type [update] [skip] [quit] or [help]: "
         read io_update
         case $io_update in
-            update | update-all ) io_update_copy ;;
-            s | skip ) io_diff_status=0 ;;
-            q | quit ) io_update_quit     ;;
-            *        ) io_update_help     ;;
+            u | update ) io_update_copy   ;;
+            s | skip   ) io_diff_status=0 ;;
+            q | quit   ) io_update_quit   ;;
+            *          ) io_update_help   ;;
         esac
     done
     echo
 }
 
-io_update_help () {
-    io_update=prompt
-    echo
-    echo "  update        update this I/O list because differences are right"
-    echo "  update-all    update all succeeding differences"
-    echo "  skip | s      skip this I/O list"
-    echo "  quit | q      quit $io_cmd"
-    echo
+io_update_copy () {
+    cp $io_output_work $io_output_orig
+    io_diff_status=0
 }
 
 io_update_quit () {
@@ -363,9 +360,13 @@ io_update_quit () {
     echo "To examine this differences, type: cd `io_pwd`"
 }
 
-io_update_copy () {
-    cp $io_output_work $io_output_orig
-    io_diff_status=0
+io_update_help () {
+    io_update=prompt
+    echo
+    echo "  update | u    update this I/O list because differences are right"
+    echo "  skip | s      skip this I/O list"
+    echo "  quit | q      quit $io_cmd"
+    echo
 }
 
 
@@ -402,10 +403,10 @@ io_glob_file=
 io_glob_type=args     # args | glob | file
 io_keep_temp_yn=n     # y | n
 io_link_yn=n          # y | n
-io_output_orig=
-io_update=prompt
+io_output_orig=       # README.md | INOUT.md | ...
+io_update=prompt      # prompt | no-prompt | diff | ...
 
-while getopts df:ghlo:rstx:V io_opt; do
+while getopts df:ghlo:rstux:V io_opt; do
     case $io_opt in
         d)  io_update=diff            ;;
         f)  io_glob_type=file
@@ -416,6 +417,7 @@ while getopts df:ghlo:rstx:V io_opt; do
         r)  io_output_orig=README.md  ;;
         s)  io_output_orig=INOUT.md   ;;
         t)  io_keep_temp_yn=y         ;;
+        u)  io_update=no-prompt       ;;
         x)  io_glob_ext=$OPTARG       ;;
         V)  io_version                ;;
         *)  io_help                   ;;
@@ -436,10 +438,12 @@ io_cmd_check
 io_temp=`io_create_temporary`
 
 if [ -f "$io_output_orig" ]; then
+    # second invocation
     io_error_yn=n
     io_diff $@
     io_status=$io_diff_status
 else
+    # first invocation
     stderr "$io_cmd_line"
     io_doc $@
     io_status=$io_cmd_status
