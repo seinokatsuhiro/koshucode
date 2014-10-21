@@ -14,6 +14,8 @@ module Koshucode.Baala.Op.Term
   consMove, relmapMove, relkitMove,
   -- * rename
   consRename, relmapRename,
+  -- * wipe
+  consWipe, relmapWipe, relkitWipe,
   -- * prefix
   consPrefix, relmapPrefix, relkitPrefix,
   -- * unprefix
@@ -64,6 +66,7 @@ ropsTerm = Op.ropList "term"  -- GROUP
     , Op.ropIV  consPrefix         "prefix /P /N ..."         "-prefix -term"
     , Op.ropII  consPrefixChange   "prefix-change /P /Q"      "-new -old"
     , Op.ropI   consUnprefix       "unprefix /P"              "-prefix"
+    , Op.ropN   consWipe           "wipe"                     ""
     ]
 
 
@@ -188,6 +191,21 @@ relkitMove (ps, ns) (Just he1)
 
 
 
+-- ----------------------  wipe
+
+consWipe :: C.RopCons c
+consWipe = Right . relmapWipe
+
+relmapWipe :: C.RopUse c -> C.Relmap c
+relmapWipe use = C.relmapFlow use relkitWipe
+
+relkitWipe :: C.RelkitFlow c
+relkitWipe Nothing = Right C.relkitNothing
+relkitWipe (Just he1) = relkitCut ns1 (Just he1) where
+    ns1 = filter (elem '=') $ B.headNames he1
+    
+
+
 -- ----------------------  prefix
 
 consPrefix :: C.RopCons c
@@ -261,4 +279,3 @@ relkitPrefixChange (new, old) (Just he1) = Right kit2 where
     f n' = case List.stripPrefix old' n' of
              Just n2 -> new' ++ n2
              Nothing -> n'
-
