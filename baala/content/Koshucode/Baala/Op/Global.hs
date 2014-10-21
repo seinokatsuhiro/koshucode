@@ -41,6 +41,7 @@ ropsNonCox = Rop.ropsMeta
           ++ Rop.ropsControl
           ++ Rop.ropsGadget
           ++ Rop.ropsTerm
+          ++ Rop.ropsTermGadget
           ++ Rop.ropsLattice
           ++ Rop.ropsSource
           ++ Rop.ropsBuiltin

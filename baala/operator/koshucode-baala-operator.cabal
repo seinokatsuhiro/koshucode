@@ -76,6 +76,7 @@ library
         Koshucode.Baala.Op.Peripheral
         Koshucode.Baala.Op.Source
         Koshucode.Baala.Op.Term
+        Koshucode.Baala.Op.TermGadget
 
   -- Modules included in this library but not exported.
   --other-modules:       
