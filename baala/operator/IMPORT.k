@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    104 judges
+**    109 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Op.Builtin.Define"         /import "Koshucode.Baala.Base"
@@ -120,11 +120,16 @@
 |-- IMPORT  /module "Koshucode.Baala.Op.Source"                 /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Op.Source"                 /import "Koshucode.Baala.Op.Builtin"
 
-|-- IMPORT  /module "Koshucode.Baala.Op.Term"                   /import "Data.List"
 |-- IMPORT  /module "Koshucode.Baala.Op.Term"                   /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Op.Term"                   /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Op.Term"                   /import "Koshucode.Baala.Op.Builtin"
 |-- IMPORT  /module "Koshucode.Baala.Op.Term"                   /import "Koshucode.Baala.Op.Message"
+
+|-- IMPORT  /module "Koshucode.Baala.Op.TermGadget"             /import "Data.List"
+|-- IMPORT  /module "Koshucode.Baala.Op.TermGadget"             /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Op.TermGadget"             /import "Koshucode.Baala.Core"
+|-- IMPORT  /module "Koshucode.Baala.Op.TermGadget"             /import "Koshucode.Baala.Op.Builtin"
+|-- IMPORT  /module "Koshucode.Baala.Op.TermGadget"             /import "Koshucode.Baala.Op.Term"
 
 |-- IMPORT  /module "Koshucode.Baala.Op"                        /import "Koshucode.Baala.Op.Builtin"
 |-- IMPORT  /module "Koshucode.Baala.Op"                        /import "Koshucode.Baala.Op.Check"
@@ -137,4 +142,5 @@
 |-- IMPORT  /module "Koshucode.Baala.Op"                        /import "Koshucode.Baala.Op.Peripheral"
 |-- IMPORT  /module "Koshucode.Baala.Op"                        /import "Koshucode.Baala.Op.Source"
 |-- IMPORT  /module "Koshucode.Baala.Op"                        /import "Koshucode.Baala.Op.Term"
+|-- IMPORT  /module "Koshucode.Baala.Op"                        /import "Koshucode.Baala.Op.TermGadget"
 

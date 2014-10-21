@@ -413,7 +413,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    164 judges
+**    159 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Data.Generics"
@@ -562,11 +562,6 @@
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap"               /import "Koshucode.Baala.Core.Relmap.Run"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap"               /import "Koshucode.Baala.Core.Relmap.Specialize"
 
-|-- IMPORT  /module "Koshucode.Baala.Core.Section.Bundle"       /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Core.Section.Bundle"       /import "Koshucode.Baala.Core.Content"
-|-- IMPORT  /module "Koshucode.Baala.Core.Section.Bundle"       /import "Koshucode.Baala.Core.Section.Section"
-|-- IMPORT  /module "Koshucode.Baala.Core.Section.Bundle"       /import "Koshucode.Baala.Core.Section.Read"
-
 |-- IMPORT  /module "Koshucode.Baala.Core.Section.Clause"       /import "Data.Generics"
 |-- IMPORT  /module "Koshucode.Baala.Core.Section.Clause"       /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Section.Clause"       /import "Koshucode.Baala.Core.Assert"
@@ -602,7 +597,6 @@
 |-- IMPORT  /module "Koshucode.Baala.Core.Section.Section"      /import "Koshucode.Baala.Core.Section.Clause"
 |-- IMPORT  /module "Koshucode.Baala.Core.Section.Section"      /import "Koshucode.Baala.Core.Message"
 
-|-- IMPORT  /module "Koshucode.Baala.Core.Section"              /import "Koshucode.Baala.Core.Section.Bundle"
 |-- IMPORT  /module "Koshucode.Baala.Core.Section"              /import "Koshucode.Baala.Core.Section.Clause"
 |-- IMPORT  /module "Koshucode.Baala.Core.Section"              /import "Koshucode.Baala.Core.Section.Quoter"
 |-- IMPORT  /module "Koshucode.Baala.Core.Section"              /import "Koshucode.Baala.Core.Section.Read"
@@ -631,7 +625,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    104 judges
+**    109 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Op.Builtin.Define"         /import "Koshucode.Baala.Base"
@@ -744,11 +738,16 @@
 |-- IMPORT  /module "Koshucode.Baala.Op.Source"                 /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Op.Source"                 /import "Koshucode.Baala.Op.Builtin"
 
-|-- IMPORT  /module "Koshucode.Baala.Op.Term"                   /import "Data.List"
 |-- IMPORT  /module "Koshucode.Baala.Op.Term"                   /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Op.Term"                   /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Op.Term"                   /import "Koshucode.Baala.Op.Builtin"
 |-- IMPORT  /module "Koshucode.Baala.Op.Term"                   /import "Koshucode.Baala.Op.Message"
+
+|-- IMPORT  /module "Koshucode.Baala.Op.TermGadget"             /import "Data.List"
+|-- IMPORT  /module "Koshucode.Baala.Op.TermGadget"             /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Op.TermGadget"             /import "Koshucode.Baala.Core"
+|-- IMPORT  /module "Koshucode.Baala.Op.TermGadget"             /import "Koshucode.Baala.Op.Builtin"
+|-- IMPORT  /module "Koshucode.Baala.Op.TermGadget"             /import "Koshucode.Baala.Op.Term"
 
 |-- IMPORT  /module "Koshucode.Baala.Op"                        /import "Koshucode.Baala.Op.Builtin"
 |-- IMPORT  /module "Koshucode.Baala.Op"                        /import "Koshucode.Baala.Op.Check"
@@ -761,6 +760,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Op"                        /import "Koshucode.Baala.Op.Peripheral"
 |-- IMPORT  /module "Koshucode.Baala.Op"                        /import "Koshucode.Baala.Op.Source"
 |-- IMPORT  /module "Koshucode.Baala.Op"                        /import "Koshucode.Baala.Op.Term"
+|-- IMPORT  /module "Koshucode.Baala.Op"                        /import "Koshucode.Baala.Op.TermGadget"
 
 ```
 
@@ -937,68 +937,68 @@ Command `./import-rank.k ../base/IMPORT.k ../calculator/IMPORT.k ../content/IMPO
 
 |-- IMPORT-RANK  /rank 39  /module 'Koshucode.Baala.Core.Section.Read
 |-- IMPORT-RANK  /rank 39  /module 'Koshucode.Baala.Core.Section.Run
-|-- IMPORT-RANK  /rank 40  /module 'Koshucode.Baala.Core.Section.Bundle
-|-- IMPORT-RANK  /rank 41  /module 'Koshucode.Baala.Core.Section
-|-- IMPORT-RANK  /rank 42  /module 'Koshucode.Baala.Core
+|-- IMPORT-RANK  /rank 40  /module 'Koshucode.Baala.Core.Section
+|-- IMPORT-RANK  /rank 41  /module 'Koshucode.Baala.Core
+|-- IMPORT-RANK  /rank 42  /module 'Koshucode.Baala.Op.Builtin.Define
 
-|-- IMPORT-RANK  /rank 43  /module 'Koshucode.Baala.Op.Builtin.Define
-|-- IMPORT-RANK  /rank 43  /module 'Koshucode.Baala.Op.Cop.Coxhand
-|-- IMPORT-RANK  /rank 43  /module 'Koshucode.Baala.Op.Message
-|-- IMPORT-RANK  /rank 43  /module 'Koshucode.Baala.Toolkit.Library.Element
-|-- IMPORT-RANK  /rank 43  /module 'Koshucode.Baala.Toolkit.Library.RDF
+|-- IMPORT-RANK  /rank 42  /module 'Koshucode.Baala.Op.Cop.Coxhand
+|-- IMPORT-RANK  /rank 42  /module 'Koshucode.Baala.Op.Message
+|-- IMPORT-RANK  /rank 42  /module 'Koshucode.Baala.Toolkit.Library.Element
+|-- IMPORT-RANK  /rank 42  /module 'Koshucode.Baala.Toolkit.Library.RDF
+|-- IMPORT-RANK  /rank 42  /module 'Koshucode.Baala.Toolkit.Library.Run
 
-|-- IMPORT-RANK  /rank 43  /module 'Koshucode.Baala.Toolkit.Library.Run
-|-- IMPORT-RANK  /rank 44  /module 'Koshucode.Baala.Op.Builtin.Rop
-|-- IMPORT-RANK  /rank 44  /module 'Koshucode.Baala.Op.Builtin.Term
-|-- IMPORT-RANK  /rank 44  /module 'Koshucode.Baala.Op.Cop.Arith
-|-- IMPORT-RANK  /rank 44  /module 'Koshucode.Baala.Op.Cop.List
+|-- IMPORT-RANK  /rank 43  /module 'Koshucode.Baala.Op.Builtin.Rop
+|-- IMPORT-RANK  /rank 43  /module 'Koshucode.Baala.Op.Builtin.Term
+|-- IMPORT-RANK  /rank 43  /module 'Koshucode.Baala.Op.Cop.Arith
+|-- IMPORT-RANK  /rank 43  /module 'Koshucode.Baala.Op.Cop.List
+|-- IMPORT-RANK  /rank 43  /module 'Koshucode.Baala.Op.Cop.Logic
 
-|-- IMPORT-RANK  /rank 44  /module 'Koshucode.Baala.Op.Cop.Logic
-|-- IMPORT-RANK  /rank 44  /module 'Koshucode.Baala.Op.Cop.Order
-|-- IMPORT-RANK  /rank 44  /module 'Koshucode.Baala.Toolkit.Main.KoshuMain
-|-- IMPORT-RANK  /rank 44  /module 'Koshucode.Baala.Type.Vanilla
-|-- IMPORT-RANK  /rank 45  /module 'Koshucode.Baala.Op.Builtin.Get
+|-- IMPORT-RANK  /rank 43  /module 'Koshucode.Baala.Op.Cop.Order
+|-- IMPORT-RANK  /rank 43  /module 'Koshucode.Baala.Toolkit.Main.KoshuMain
+|-- IMPORT-RANK  /rank 43  /module 'Koshucode.Baala.Type.Vanilla
+|-- IMPORT-RANK  /rank 44  /module 'Koshucode.Baala.Op.Builtin.Get
+|-- IMPORT-RANK  /rank 44  /module 'Koshucode.Baala.Op.Cop
 
-|-- IMPORT-RANK  /rank 45  /module 'Koshucode.Baala.Op.Cop
-|-- IMPORT-RANK  /rank 45  /module 'Koshucode.Baala.Op.Quoter
-|-- IMPORT-RANK  /rank 45  /module 'Koshucode.Baala.Toolkit.Library.Input
-|-- IMPORT-RANK  /rank 45  /module 'Koshucode.Baala.Toolkit.Main.KoshuRdf
-|-- IMPORT-RANK  /rank 45  /module 'Koshucode.Baala.Toolkit.Main.KoshuSyntax
+|-- IMPORT-RANK  /rank 44  /module 'Koshucode.Baala.Op.Quoter
+|-- IMPORT-RANK  /rank 44  /module 'Koshucode.Baala.Toolkit.Library.Input
+|-- IMPORT-RANK  /rank 44  /module 'Koshucode.Baala.Toolkit.Main.KoshuRdf
+|-- IMPORT-RANK  /rank 44  /module 'Koshucode.Baala.Toolkit.Main.KoshuSyntax
+|-- IMPORT-RANK  /rank 45  /module 'Koshucode.Baala.Op.Builtin
 *** 100
 
-|-- IMPORT-RANK  /rank 46  /module 'Koshucode.Baala.Op.Builtin
-|-- IMPORT-RANK  /rank 46  /module 'Koshucode.Baala.Toolkit.Library.Change
-|-- IMPORT-RANK  /rank 47  /module 'Koshucode.Baala.Op.Cox.Get
-|-- IMPORT-RANK  /rank 47  /module 'Koshucode.Baala.Op.Gadget
-|-- IMPORT-RANK  /rank 47  /module 'Koshucode.Baala.Op.Lattice.Tropashko
+|-- IMPORT-RANK  /rank 45  /module 'Koshucode.Baala.Toolkit.Library.Change
+|-- IMPORT-RANK  /rank 46  /module 'Koshucode.Baala.Op.Cox.Get
+|-- IMPORT-RANK  /rank 46  /module 'Koshucode.Baala.Op.Gadget
+|-- IMPORT-RANK  /rank 46  /module 'Koshucode.Baala.Op.Lattice.Tropashko
+|-- IMPORT-RANK  /rank 46  /module 'Koshucode.Baala.Op.Meta
 
-|-- IMPORT-RANK  /rank 47  /module 'Koshucode.Baala.Op.Meta
-|-- IMPORT-RANK  /rank 47  /module 'Koshucode.Baala.Op.Nest.Flow
-|-- IMPORT-RANK  /rank 47  /module 'Koshucode.Baala.Op.Source
-|-- IMPORT-RANK  /rank 47  /module 'Koshucode.Baala.Op.Term
-|-- IMPORT-RANK  /rank 47  /module 'Koshucode.Baala.Toolkit.Main.KoshuChange
+|-- IMPORT-RANK  /rank 46  /module 'Koshucode.Baala.Op.Nest.Flow
+|-- IMPORT-RANK  /rank 46  /module 'Koshucode.Baala.Op.Source
+|-- IMPORT-RANK  /rank 46  /module 'Koshucode.Baala.Op.Term
+|-- IMPORT-RANK  /rank 46  /module 'Koshucode.Baala.Toolkit.Main.KoshuChange
+|-- IMPORT-RANK  /rank 47  /module 'Koshucode.Baala.Op.Cox.Calc
 
-|-- IMPORT-RANK  /rank 48  /module 'Koshucode.Baala.Op.Cox.Calc
-|-- IMPORT-RANK  /rank 48  /module 'Koshucode.Baala.Op.Cox.Filter
-|-- IMPORT-RANK  /rank 48  /module 'Koshucode.Baala.Op.Cox.Gadget
-|-- IMPORT-RANK  /rank 48  /module 'Koshucode.Baala.Op.Lattice.Restrict
-|-- IMPORT-RANK  /rank 48  /module 'Koshucode.Baala.Op.Nest.Confl
+|-- IMPORT-RANK  /rank 47  /module 'Koshucode.Baala.Op.Cox.Filter
+|-- IMPORT-RANK  /rank 47  /module 'Koshucode.Baala.Op.Cox.Gadget
+|-- IMPORT-RANK  /rank 47  /module 'Koshucode.Baala.Op.Lattice.Restrict
+|-- IMPORT-RANK  /rank 47  /module 'Koshucode.Baala.Op.Nest.Confl
+|-- IMPORT-RANK  /rank 47  /module 'Koshucode.Baala.Op.Peripheral
 
-|-- IMPORT-RANK  /rank 48  /module 'Koshucode.Baala.Op.Peripheral
-|-- IMPORT-RANK  /rank 49  /module 'Koshucode.Baala.Op.Lattice.Rop
-|-- IMPORT-RANK  /rank 50  /module 'Koshucode.Baala.Op.Lattice
-|-- IMPORT-RANK  /rank 51  /module 'Koshucode.Baala.Op.Check
-|-- IMPORT-RANK  /rank 51  /module 'Koshucode.Baala.Op.Control
+|-- IMPORT-RANK  /rank 47  /module 'Koshucode.Baala.Op.TermGadget
+|-- IMPORT-RANK  /rank 48  /module 'Koshucode.Baala.Op.Lattice.Rop
+|-- IMPORT-RANK  /rank 49  /module 'Koshucode.Baala.Op.Lattice
+|-- IMPORT-RANK  /rank 50  /module 'Koshucode.Baala.Op.Check
+|-- IMPORT-RANK  /rank 50  /module 'Koshucode.Baala.Op.Control
 
-|-- IMPORT-RANK  /rank 51  /module 'Koshucode.Baala.Op.Cox.Empty
-|-- IMPORT-RANK  /rank 51  /module 'Koshucode.Baala.Op.Nest.Deriv
-|-- IMPORT-RANK  /rank 52  /module 'Koshucode.Baala.Op.Cox
-|-- IMPORT-RANK  /rank 52  /module 'Koshucode.Baala.Op.Nest.Rop
-|-- IMPORT-RANK  /rank 53  /module 'Koshucode.Baala.Op.Nest
+|-- IMPORT-RANK  /rank 50  /module 'Koshucode.Baala.Op.Cox.Empty
+|-- IMPORT-RANK  /rank 50  /module 'Koshucode.Baala.Op.Nest.Deriv
+|-- IMPORT-RANK  /rank 51  /module 'Koshucode.Baala.Op.Cox
+|-- IMPORT-RANK  /rank 51  /module 'Koshucode.Baala.Op.Nest.Rop
+|-- IMPORT-RANK  /rank 52  /module 'Koshucode.Baala.Op.Nest
 *** 125
 
-|-- IMPORT-RANK  /rank 54  /module 'Koshucode.Baala.Op
-|-- IMPORT-RANK  /rank 55  /module 'Koshucode.Baala.Op.Global
+|-- IMPORT-RANK  /rank 53  /module 'Koshucode.Baala.Op
+|-- IMPORT-RANK  /rank 54  /module 'Koshucode.Baala.Op.Global
 
 *** 127 judges
 

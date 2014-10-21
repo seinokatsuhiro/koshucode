@@ -3,13 +3,13 @@
 |-- DIR  /code 15   /comment 4    /dir "base/Koshucode/Baala"
 |-- DIR  /code 138  /comment 63   /dir "base/Koshucode/Baala/Base"
 |-- DIR  /code 95   /comment 52   /dir "base/Koshucode/Baala/Base/Abort"
-|-- DIR  /code 711  /comment 485  /dir "base/Koshucode/Baala/Base/Data"
-|-- DIR  /code 473  /comment 454  /dir "base/Koshucode/Baala/Base/Prelude"
+|-- DIR  /code 713  /comment 486  /dir "base/Koshucode/Baala/Base/Data"
+|-- DIR  /code 474  /comment 454  /dir "base/Koshucode/Baala/Base/Prelude"
 |-- DIR  /code 257  /comment 190  /dir "base/Koshucode/Baala/Base/Syntax"
-|-- DIR  /code 398  /comment 254  /dir "base/Koshucode/Baala/Base/Text"
-|-- DIR  /code 551  /comment 470  /dir "base/Koshucode/Baala/Base/Token"
+|-- DIR  /code 424  /comment 260  /dir "base/Koshucode/Baala/Base/Text"
+|-- DIR  /code 555  /comment 471  /dir "base/Koshucode/Baala/Base/Token"
 
-|-- DIR-TOTAL  /code 2638  /comment 1972
+|-- DIR-TOTAL  /code 2671  /comment 1980
 
 |-- FILE  /code 15   /comment 4    /file "Base.hs"        /dir "base/Koshucode/Baala"
 |-- FILE  /code 9    /comment 6    /file "Abort.hs"       /dir "base/Koshucode/Baala/Base"
@@ -23,13 +23,13 @@
 |-- FILE  /code 99   /comment 63   /file "Judge.hs"       /dir "base/Koshucode/Baala/Base/Data"
 |-- FILE  /code 30   /comment 14   /file "Mono.hs"        /dir "base/Koshucode/Baala/Base/Data"
 |-- FILE  /code 117  /comment 45   /file "Output.hs"      /dir "base/Koshucode/Baala/Base/Data"
-|-- FILE  /code 43   /comment 57   /file "Rel.hs"         /dir "base/Koshucode/Baala/Base/Data"
+|-- FILE  /code 45   /comment 58   /file "Rel.hs"         /dir "base/Koshucode/Baala/Base/Data"
 |-- FILE  /code 133  /comment 91   /file "Type.hs"        /dir "base/Koshucode/Baala/Base/Data"
 |-- FILE  /code 51   /comment 34   /file "Message.hs"     /dir "base/Koshucode/Baala/Base"
 |-- FILE  /code 17   /comment 3    /file "Prelude.hs"     /dir "base/Koshucode/Baala/Base"
 |-- FILE  /code 123  /comment 144  /file "Assoc.hs"       /dir "base/Koshucode/Baala/Base/Prelude"
 |-- FILE  /code 32   /comment 20   /file "Class.hs"       /dir "base/Koshucode/Baala/Base/Prelude"
-|-- FILE  /code 49   /comment 22   /file "Import.hs"      /dir "base/Koshucode/Baala/Base/Prelude"
+|-- FILE  /code 50   /comment 22   /file "Import.hs"      /dir "base/Koshucode/Baala/Base/Prelude"
 |-- FILE  /code 95   /comment 116  /file "List.hs"        /dir "base/Koshucode/Baala/Base/Prelude"
 |-- FILE  /code 75   /comment 34   /file "Order.hs"       /dir "base/Koshucode/Baala/Base/Prelude"
 |-- FILE  /code 32   /comment 11   /file "Pair.hs"        /dir "base/Koshucode/Baala/Base/Prelude"
@@ -41,7 +41,7 @@
 |-- FILE  /code 94   /comment 76   /file "Tree.hs"        /dir "base/Koshucode/Baala/Base/Syntax"
 |-- FILE  /code 16   /comment 3    /file "Text.hs"        /dir "base/Koshucode/Baala/Base"
 |-- FILE  /code 36   /comment 24   /file "Comment.hs"     /dir "base/Koshucode/Baala/Base/Text"
-|-- FILE  /code 70   /comment 41   /file "Resource.hs"    /dir "base/Koshucode/Baala/Base/Text"
+|-- FILE  /code 96   /comment 47   /file "Resource.hs"    /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /code 124  /comment 57   /file "TextTable.hs"   /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /code 65   /comment 14   /file "Unicode.hs"     /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /code 45   /comment 40   /file "Utility.hs"     /dir "base/Koshucode/Baala/Base/Text"
@@ -51,7 +51,7 @@
 |-- FILE  /code 49   /comment 31   /file "Short.hs"       /dir "base/Koshucode/Baala/Base/Token"
 |-- FILE  /code 140  /comment 93   /file "Token.hs"       /dir "base/Koshucode/Baala/Base/Token"
 |-- FILE  /code 36   /comment 14   /file "TokenClause.hs"  /dir "base/Koshucode/Baala/Base/Token"
-|-- FILE  /code 177  /comment 170  /file "TokenLine.hs"   /dir "base/Koshucode/Baala/Base/Token"
+|-- FILE  /code 181  /comment 171  /file "TokenLine.hs"   /dir "base/Koshucode/Baala/Base/Token"
 |-- FILE  /code 96   /comment 90   /file "TokenTree.hs"   /dir "base/Koshucode/Baala/Base/Token"
 
-|-- FILE-TOTAL  /code 2638  /comment 1972
+|-- FILE-TOTAL  /code 2671  /comment 1980
