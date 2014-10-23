@@ -71,31 +71,32 @@ concatDigits = first where
 
 -- ----------------------  Time
 
-type TimeText = ((String, String, Maybe String), (Maybe String, Maybe String, Maybe String))
+type TimeText = ((Integer, Int, Maybe Int), (Maybe String, Maybe String, Maybe String))
 
 treesToTime :: B.TTreesToAb TimeText
 treesToTime = concatTime B.<=< treesToTexts False
 
 concatTime :: [String] -> B.Ab TimeText
 concatTime = year where
-    year ((a:b:c:d: '-' :x) : xs) | isDigit4 a b c d = month [a,b,c,d] (x : xs)
+    to (Just x)  f  =  f x
+    to (Nothing) _  =  Msg.nothing
+
+    year ((a:b:c:d: '-' :x) : xs) = B.readInteger [a,b,c,d] `to` \y -> month y (x : xs)
     year _  = Msg.nothing
 
-    month y ((a:b: '-' :x) : xs) | isDigit2 a b = day y [a,b] (x : xs)
-    month y [m@[a, b]] | isDigit2 a b = Right ((y, m, Nothing), (Nothing, Nothing, Nothing))
+    month y ((a:b: '-' :x) : xs) = B.readInt [a,b] `to` \m -> day y m (x : xs)
+    month y [mm] = B.readInt mm `to` \m -> Right ((y, m, Nothing), (Nothing, Nothing, Nothing))
     month _ _ = Msg.nothing
 
-    day y m (d@[a,b] : xs) | isDigit2 a b = hour (y, m, Just d) xs
+    day y m (dd : xs) = B.readInt dd `to` \d -> hour (y, m, Just d) xs
     day _ _ _ = Msg.nothing
 
-    hour ymd xs     = do (h, xs') <- ddc xs
-                         minute ymd h xs'
-    minute ymd h xs = do (i, xs') <- ddc xs
-                         second ymd h i xs'
+    hour ymd xs       = minute ymd   =<< ddc xs
+    minute ymd (h,xs) = second ymd h =<< ddc xs
 
-    second ymd h i (s@[a,b] : _) | isDigit2 a b = Right (ymd, (h, i, Just s))
-    second ymd h i [] = Right (ymd, (h, i, Nothing))
-    second _ _ _ _ = Msg.nothing
+    second ymd h (i, (s@[a,b] : _)) | isDigit2 a b = Right (ymd, (h, i, Just s))
+    second ymd h (i, []) = Right (ymd, (h, i, Nothing))
+    second _ _ _ = Msg.nothing
 
     ddc :: [String] -> B.Ab (Maybe String, [String])
     ddc (x@[a,b] : ":" : xs) | isDigit2 a b  =  Right (Just x, xs)
@@ -109,8 +110,6 @@ isDigit = (`elem` "0123456789")
 isDigit2 :: Char -> Char -> Bool
 isDigit2 a b = isDigit a && isDigit b
 
-isDigit4 :: Char -> Char -> Char -> Char -> Bool
-isDigit4 a b c d = isDigit2 a b && isDigit2 c d
 
 
 -- ----------------------  Term

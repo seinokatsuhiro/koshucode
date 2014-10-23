@@ -10,16 +10,21 @@ module Koshucode.Baala.Base.Data.Time
   ) where
 
 import qualified Data.Time.Calendar as T
+import qualified Koshucode.Baala.Base.Abort    as B
 import qualified Koshucode.Baala.Base.Prelude  as B
 import qualified Koshucode.Baala.Base.Text     as B
+import qualified Koshucode.Baala.Base.Message  as Msg
 
 data Time
     = TimeYMD T.Day
     | TimeYM T.Day
       deriving (Show, Eq, Ord)
 
-timeFromYMD :: Integer -> Int -> Int -> Maybe Time
-timeFromYMD y m d = fmap TimeYMD $ T.fromGregorianValid y m d
+timeFromYMD :: Integer -> Int -> Int -> B.Ab Time
+timeFromYMD y m d =
+    case T.fromGregorianValid y m d of
+      Just day -> Right $ TimeYMD day
+      Nothing  -> Msg.notDate y m d
 
 timeFromYMD' :: Integer -> Int -> Int -> Time
 timeFromYMD' y m d = TimeYMD $ T.fromGregorian y m d

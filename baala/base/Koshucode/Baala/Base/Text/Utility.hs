@@ -1,15 +1,15 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Text.Utility
-( -- * Trim
-  trimLeft, trimRight, trimBoth,
-  -- * Padding
-  padRight, padLeft,
-  -- * Put
-  putShow, putShowLn, putLines,
-  -- * Read
-  readInt,
-) where
+  ( -- * Trim
+    trimLeft, trimRight, trimBoth,
+    -- * Padding
+    padRight, padLeft,
+    -- * Put
+    putShow, putShowLn, putLines,
+    -- * Read
+    readInt, readInteger,
+  ) where
 
 import qualified Data.Char                     as Ch
 import qualified Koshucode.Baala.Base.Prelude  as B
@@ -82,4 +82,7 @@ readJust s = case reads s of
 
 readInt :: String -> Maybe Int
 readInt = readJust
+
+readInteger :: String -> Maybe Integer
+readInteger = readJust
 

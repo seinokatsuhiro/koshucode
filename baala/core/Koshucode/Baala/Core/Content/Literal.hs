@@ -71,9 +71,9 @@ literal calc tree = Msg.abLiteral tree $ lit tree where
 
     datetime ((y, m, Just d), t) =
         case time t of
-          Just t' -> C.putText $ y ++ m ++ d ++ " " ++ t'
-          Nothing -> C.putText $ y ++ m ++ d
-    datetime ((y, m, _), _) = C.putText $ y ++ m
+          Just _  -> C.putTime =<< B.timeFromYMD y m d
+          Nothing -> C.putTime =<< B.timeFromYMD y m d
+    datetime ((y, m, _), _) = C.putTime =<< B.timeFromYMD y m 1
 
     time (Just h, Just i, Just s)  =  Just $ h ++ i ++ s
     time (Just h, Just i, _)       =  Just $ h ++ i

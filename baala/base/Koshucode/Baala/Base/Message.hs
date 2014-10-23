@@ -1,26 +1,27 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Message
-( -- * Abortables
-  abToken,
-
-  -- * Base package
-  adlib,
-  adlibs,
-  extraCloseBracket,
-  extraOpenBracket,
-  notFound,
-  divideByZero,
-  heteroDecimal,
-  notNumber,
-  (<!!>),
-
-  -- * Tokenizer
-  forbiddenInput,
-  forbiddenTerm,
-  unkAngleText,
-  quotNotEnd,
-) where
+  ( -- * Abortables
+    abToken,
+  
+    -- * Base package
+    adlib,
+    adlibs,
+    extraCloseBracket,
+    extraOpenBracket,
+    notFound,
+    divideByZero,
+    heteroDecimal,
+    notDate,
+    notNumber,
+    (<!!>),
+  
+    -- * Tokenizer
+    forbiddenInput,
+    forbiddenTerm,
+    unkAngleText,
+    quotNotEnd,
+  ) where
 
 import qualified Koshucode.Baala.Base.Abort    as B
 import qualified Koshucode.Baala.Base.Prelude  as B
@@ -47,6 +48,13 @@ extraOpenBracket = Left $ B.abortBecause "Unclosed open bracket"
 -- | Different decimal length
 heteroDecimal :: String -> String -> B.Ab a
 heteroDecimal a b = Left $ B.abortLines "Different decimal length" [a, b]
+
+-- | Can't read as date
+notDate :: Integer -> Int -> Int -> B.Ab a
+notDate y m d = Left $ B.abortLines "Can't read as date"
+                [ "/year  " ++ show y
+                , "/month " ++ show m
+                , "/day   " ++ show d]
 
 -- | Can't read as number
 notNumber :: String -> B.Ab a
