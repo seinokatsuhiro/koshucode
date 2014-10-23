@@ -3,13 +3,14 @@
 module Koshucode.Baala.Base.Data.Time
   ( Time (..),
     timeFromYMD,
+    timeMJD,
     timeMapMJD,
     timeAddDay,
     timeTruncateDay, timeTruncateMonth,
     timeNextMonth, timeNextYear,
   ) where
 
-import qualified Data.Time.Calendar as T
+import qualified Data.Time.Calendar            as T
 import qualified Koshucode.Baala.Base.Abort    as B
 import qualified Koshucode.Baala.Base.Prelude  as B
 import qualified Koshucode.Baala.Base.Text     as B
@@ -42,6 +43,9 @@ writeDay = B.doc . show
 timeDay :: Time -> T.Day
 timeDay (TimeYMD day) = day
 timeDay (TimeYM  day) = day
+
+timeMJD :: Time -> Integer
+timeMJD = T.toModifiedJulianDay . timeDay
 
 timeMapMJD :: B.Map Integer -> B.Map Time
 timeMapMJD f time = timeMapDay g time where

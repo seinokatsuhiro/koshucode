@@ -56,6 +56,7 @@ library
         Koshucode.Baala.Op.Cop.List
         Koshucode.Baala.Op.Cop.Logic
         Koshucode.Baala.Op.Cop.Order
+        Koshucode.Baala.Op.Cop.Time
 
         Koshucode.Baala.Op.Cox
         Koshucode.Baala.Op.Cox.Calc

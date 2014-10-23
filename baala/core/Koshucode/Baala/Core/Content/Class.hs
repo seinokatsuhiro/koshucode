@@ -1,30 +1,30 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Core.Content.Class
-( -- * Generic content
-  CContent    (..),
-  CTypeOf     (..),
-
-  -- * Haskell data
-  CBool       (..), true, false,
-  CText       (..), pTextList, pTextSet,
-  CList       (..),
-
-  -- * Koshu data
-  CEmpty      (..),
-  CDec        (..), pDecFromInt,
-  CTime       (..),
-  CTerm       (..),
-  CSet        (..),
-  CAssn       (..),
-  CRel        (..), isMember,
-  CInterp     (..),
-  CType       (..),
-
-  contAp, contMap,
-  contApTextToText,
-  contMapTextToList,
-) where
+  ( -- * Generic content
+    CContent    (..),
+    CTypeOf     (..),
+  
+    -- * Haskell data
+    CBool       (..), true, false,
+    CText       (..), pTextList, pTextSet,
+    CList       (..),
+  
+    -- * Koshu data
+    CEmpty      (..),
+    CDec        (..), pDecFromInt, pDecFromInteger,
+    CTime       (..),
+    CTerm       (..),
+    CSet        (..),
+    CAssn       (..),
+    CRel        (..), isMember,
+    CInterp     (..),
+    CType       (..),
+  
+    contAp, contMap,
+    contApTextToText,
+    contMapTextToList,
+  ) where
 
 import qualified Koshucode.Baala.Base         as B
 import qualified Koshucode.Baala.Core.Message as Msg
@@ -122,6 +122,9 @@ class (CTypeOf c) => CDec c where
 
 pDecFromInt :: (CDec c) => Int -> c
 pDecFromInt = pDec . B.intDecimal
+
+pDecFromInteger :: (CDec c) => Integer -> c
+pDecFromInteger = pDec . B.intDecimal . fromInteger
 
 class (CTypeOf c) => CTime c where
     isTime       ::           c -> Bool
