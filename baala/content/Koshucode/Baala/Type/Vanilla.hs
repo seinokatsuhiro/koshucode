@@ -22,6 +22,7 @@ data VContent
     | VText    String             -- ^ String type
     | VTerm    String             -- ^ Term name type
     | VDec     B.Decimal          -- ^ Decimal number type
+    | VTime    B.Time             -- ^ Time type
     | VEmpty                      -- ^ Sign of no ordinary type
     | VInterp  B.Interp           -- ^ Interpretation type
     | VType    B.Type             -- ^ Type for type
@@ -41,6 +42,7 @@ instance Ord VContent where
     compare (VText    x) (VText    y)  =  compare x y
     compare (VTerm    x) (VTerm    y)  =  compare x y
     compare (VDec     x) (VDec     y)  =  compare x y
+    compare (VTime    x) (VTime    y)  =  compare x y
     compare (VEmpty    ) (VEmpty    )  =  EQ
     compare (VInterp  x) (VInterp  y)  =  compare x y
     compare (VType    x) (VType    y)  =  compare x y
@@ -53,6 +55,7 @@ instance Ord VContent where
     compare (VText    _) _             =  LT
     compare (VTerm    _) _             =  LT
     compare (VDec     _) _             =  LT
+    compare (VTime    _) _             =  LT
     compare (VEmpty    ) _             =  LT
     compare (VInterp  _) _             =  LT
     compare (VType    _) _             =  LT
@@ -69,6 +72,7 @@ instance C.CTypeOf VContent where
     typeOf (VText    _)  =  B.TypeText
     typeOf (VTerm    _)  =  B.TypeTerm
     typeOf (VDec     _)  =  B.TypeDec
+    typeOf (VTime    _)  =  B.TypeTime
     typeOf (VEmpty    )  =  B.TypeEmpty
     typeOf (VInterp  _)  =  B.TypeInterp
     typeOf (VType    _)  =  B.TypeType
@@ -93,6 +97,7 @@ instance B.Write VContent where
         VText s      ->  B.doc $ sh s
         VTerm s      ->  B.doc $ "'/" ++ s
         VDec  n      ->  B.doc $ B.decimalString n
+        VTime t      ->  B.doc t
         VBool b      ->  B.doc b
         VEmpty       ->  B.doc "()"
         VInterp i    ->  B.write sh i
@@ -118,6 +123,13 @@ instance C.CDec VContent where
     gDec _                   =  B.bug "gDec"
     isDec  (VDec _)          =  True
     isDec  _                 =  False
+
+instance C.CTime VContent where
+    pTime                    =  VTime
+    gTime  (VTime x)         =  x
+    gTime  _                 =  B.bug "gTime"
+    isTime (VTime _)         =  True
+    isTime _                 =  False
 
 instance C.CText VContent where
     pText                    =  VText
