@@ -3,8 +3,8 @@
 -- | Vanilla type.
 
 module Koshucode.Baala.Type.Vanilla
-( VContent (..),
-) where
+  ( VContent (..),
+  ) where
 
 import qualified Data.Set                   as Set
 import qualified Koshucode.Baala.Base       as B
@@ -50,19 +50,21 @@ instance Ord VContent where
     compare (VSet     x) (VSet     y)  =  compareAsSet x y
     compare (VAssn    x) (VAssn    y)  =  compareAsSet x y
     compare (VRel     x) (VRel     y)  =  compare x y
+    compare x y                        =  typeOrder x `compare` typeOrder y
 
-    compare (VBool    _) _             =  LT
-    compare (VText    _) _             =  LT
-    compare (VTerm    _) _             =  LT
-    compare (VDec     _) _             =  LT
-    compare (VTime    _) _             =  LT
-    compare (VEmpty    ) _             =  LT
-    compare (VInterp  _) _             =  LT
-    compare (VType    _) _             =  LT
-    compare (VList    _) _             =  LT
-    compare (VSet     _) _             =  LT
-    compare (VAssn    _) _             =  LT
-    compare (VRel     _) _             =  LT
+typeOrder :: VContent -> Int
+typeOrder (VBool    _)  =  1
+typeOrder (VText    _)  =  2
+typeOrder (VTerm    _)  =  3
+typeOrder (VDec     _)  =  4
+typeOrder (VTime    _)  =  5
+typeOrder (VEmpty    )  =  6
+typeOrder (VInterp  _)  =  7
+typeOrder (VType    _)  =  8
+typeOrder (VList    _)  =  9
+typeOrder (VSet     _)  =  10
+typeOrder (VAssn    _)  =  11
+typeOrder (VRel     _)  =  12
 
 compareAsSet :: (Ord a) => [a] -> [a] -> Ordering
 compareAsSet x y = compare (Set.fromList x) (Set.fromList y)
