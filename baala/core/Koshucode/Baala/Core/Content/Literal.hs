@@ -36,7 +36,9 @@ literal :: forall c. (C.CContent c) => CalcContent c -> B.TTreeToAb c
 literal calc tree = Msg.abLiteral tree $ lit tree where
     lit :: B.TTreeToAb c
     lit x@(B.TreeL t)
-        = either (const $ token t) decimal $ C.treesToDigits [x]
+        = eithcon (eithcon (token t)
+            datetime $ C.treesToTime   [x])
+            decimal  $ C.treesToDigits [x]
     lit g@(B.TreeB b _ xs) = case b of
         B.BracketGroup   ->  group g
         B.BracketList    ->  C.putList   =<< litColon lit xs
@@ -56,13 +58,27 @@ literal calc tree = Msg.abLiteral tree $ lit tree where
     group :: B.TTreeToAb c
     group g@(B.TreeB _ _ xs@(B.TreeL (B.TText _ n _) : _))
         | n > 0             =  eith g text    $ C.treesToTexts True xs
-        | n == 0            =  eith g decimal $ C.treesToDigits xs
+        | n == 0            =  eithcon (eith g
+                                 datetime $ C.treesToTime   xs)
+                                 decimal  $ C.treesToDigits xs
     group (B.TreeB _ _ [])  =  Right C.empty
     group g                 =  calc g
 
+    eithcon f    =  either (const f)
     eith g       =  either (const $ calc g)
     text         =  C.putText . concat
     decimal      =  C.putDec B.<=< B.litDecimal
+
+    datetime ((y, m, Just d), t) =
+        case time t of
+          Just t' -> C.putText $ y ++ m ++ d ++ " " ++ t'
+          Nothing -> C.putText $ y ++ m ++ d
+    datetime ((y, m, _), _) = C.putText $ y ++ m
+
+    time (Just h, Just i, Just s)  =  Just $ h ++ i ++ s
+    time (Just h, Just i, _)       =  Just $ h ++ i
+    time (Just h, _, _)            =  Just h
+    time _                         =  Nothing
 
     keyword :: (C.CEmpty c, C.CBool c) => String -> B.Ab c
     keyword "0"  =  Right C.false

@@ -7,6 +7,8 @@ module Koshucode.Baala.Core.Content.Tree
     treesToTexts,
     treeToText,
     treesToDigits,
+    TimeText,
+    treesToTime,
     treeToFlatTerm,
     treesToTerms,
     treesToTerms1,
@@ -26,12 +28,14 @@ import qualified Koshucode.Baala.Core.Message  as Msg
 --         ("/b", [TreeL ...])]
 --
 
+
 -- ----------------------  Token
 
 treesToTokens :: B.TTreesToAb [B.Token]
 treesToTokens = mapM token where
     token (B.TreeL t) = Right t
     token _ = Msg.adlib "not token"
+
 
 -- ----------------------  Text
 
@@ -53,7 +57,7 @@ tokenToText False (B.TText _ q w) | q == 0  =  Right w
 tokenToText _ _  =  Msg.nothing
 
 treesToDigits :: B.TTreesToAb String
-treesToDigits = concatDigits B.<=< treesToTexts False where
+treesToDigits = concatDigits B.<=< treesToTexts False
 
 concatDigits :: [String] -> B.Ab String
 concatDigits = first where
@@ -63,6 +67,51 @@ concatDigits = first where
     loop ss [] = Right $ concat $ reverse ss
     loop ss (w : xs) | all (`elem` "0123456789.") w = loop (w:ss) xs
     loop _ _ = Msg.nothing
+
+
+-- ----------------------  Time
+
+type TimeText = ((String, String, Maybe String), (Maybe String, Maybe String, Maybe String))
+
+treesToTime :: B.TTreesToAb TimeText
+treesToTime = concatTime B.<=< treesToTexts False
+
+concatTime :: [String] -> B.Ab TimeText
+concatTime = year where
+    year ((a:b:c:d: '-' :x) : xs) | isDigit4 a b c d = month [a,b,c,d] (x : xs)
+    year _  = Msg.nothing
+
+    month y ((a:b: '-' :x) : xs) | isDigit2 a b = day y [a,b] (x : xs)
+    month y [m@[a, b]] | isDigit2 a b = Right ((y, m, Nothing), (Nothing, Nothing, Nothing))
+    month _ _ = Msg.nothing
+
+    day y m (d@[a,b] : xs) | isDigit2 a b = hour (y, m, Just d) xs
+    day _ _ _ = Msg.nothing
+
+    hour ymd xs     = do (h, xs') <- ddc xs
+                         minute ymd h xs'
+    minute ymd h xs = do (i, xs') <- ddc xs
+                         second ymd h i xs'
+
+    second ymd h i (s@[a,b] : _) | isDigit2 a b = Right (ymd, (h, i, Just s))
+    second ymd h i [] = Right (ymd, (h, i, Nothing))
+    second _ _ _ _ = Msg.nothing
+
+    ddc :: [String] -> B.Ab (Maybe String, [String])
+    ddc (x@[a,b] : ":" : xs) | isDigit2 a b  =  Right (Just x, xs)
+    ddc (x@[a,b] : [])       | isDigit2 a b  =  Right (Just x, [])
+    ddc []                                   =  Right (Nothing, [])
+    ddc _                                    =  Msg.nothing
+
+isDigit :: Char -> Bool
+isDigit = (`elem` "0123456789")
+
+isDigit2 :: Char -> Char -> Bool
+isDigit2 a b = isDigit a && isDigit b
+
+isDigit4 :: Char -> Char -> Char -> Char -> Bool
+isDigit4 a b c d = isDigit2 a b && isDigit2 c d
+
 
 -- ----------------------  Term
 
@@ -90,6 +139,7 @@ treesToTerms = name where
 treesToTerms1 :: B.TTreesToAb [B.NamedTree]
 treesToTerms1 xs = do xs' <- treesToTerms xs
                       Right $ B.mapSndTo B.wrapTrees xs'
+
 
 -- ----------------------  Interp
 
