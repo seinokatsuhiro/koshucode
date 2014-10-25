@@ -5,9 +5,10 @@ module Koshucode.Baala.Base.Data.Time
     timeFromYMD,
     timeMJD,
     timeMapMJD,
-    timeAddDay,
     timeTruncateDay, timeTruncateMonth,
     timeNextMonth, timeNextYear,
+    -- * Add
+    timeAddDay, timeAddWeek, timeAddMonth, timeAddYear,
   ) where
 
 import qualified Data.Time.Calendar            as T
@@ -55,9 +56,6 @@ timeMapDay :: B.Map T.Day -> B.Map Time
 timeMapDay f (TimeYMD day) = TimeYMD $ f day
 timeMapDay f (TimeYM  day) = TimeYM  $ f day
 
-timeAddDay :: Integer -> B.Map Time
-timeAddDay d = timeMapMJD (+ d)
-
 timeTruncateDay :: B.Map Time
 timeTruncateDay time =
     let (y, m, _) = T.toGregorian $ timeDay time
@@ -79,3 +77,25 @@ timeNextYear :: B.Map Time
 timeNextYear time =
     let (y, _, _) = T.toGregorian $ timeDay time
     in timeFromYMD' (y + 1) 1 1
+
+
+-- ----------------------  Add
+
+timeAddDay :: Integer -> B.Map Time
+timeAddDay n = timeMapMJD (+ n)
+
+timeAddWeek :: Integer -> B.Map Time
+timeAddWeek n = timeAddDay (7 * n)
+
+timeAddMonth :: Integer -> B.Map Time
+timeAddMonth n time =
+    let (y, m, d) = T.toGregorian $ timeDay time
+        (yd, m')  = (toInteger m + n) `divMod` 12
+        y'        = y + yd
+    in timeFromYMD' y' (fromInteger m') d
+
+timeAddYear :: Integer -> B.Map Time
+timeAddYear n time =
+    let (y, m, d) = T.toGregorian $ timeDay time
+        y'        = y + n
+    in timeFromYMD' y' m d
