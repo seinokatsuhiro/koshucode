@@ -3,9 +3,10 @@
 module Koshucode.Baala.Base.Data.Time
   ( Time (..), MJD, Year, Month, Day,
     timeFromYMD,
+    timeFromMJD,
     timeMJD,
     timeMapMJD,
-    timeRangeDay,
+    timeRangeDay, timeRangeMonth,
     timeTruncateDay, timeTruncateMonth,
     timeNextMonth, timeNextYear,
     -- * Add
@@ -67,6 +68,22 @@ timeMapDay f (TimeYM  day) = TimeYM  $ f day
 
 timeRangeDay :: Time -> Time -> [Time]
 timeRangeDay from to = map timeFromMJD [timeMJD from .. timeMJD to]
+
+timeRangeMonth :: Time -> Time -> [Time]
+timeRangeMonth from to = times where
+    (y0, m0, d) = T.toGregorian $ timeDay from
+    (y1, m1, _) = T.toGregorian $ timeDay to
+    time (y, m) = TimeYMD $ T.fromGregorian y m d
+    times = map time $ rangeBy monthSucc (y0, m0) (y1, m1)
+
+monthSucc :: B.Map (Year, Month)
+monthSucc (y, m) | m == 12   = (y + 1, 1)
+                 | otherwise = (y, m + 1)
+
+rangeBy :: (Ord a) => B.Map a -> a -> a -> [a]
+rangeBy step from to = loop from where
+    loop f | f > to    = []
+           | otherwise = f : loop (step f)
 
 timeTruncateDay :: B.Map Time
 timeTruncateDay time =

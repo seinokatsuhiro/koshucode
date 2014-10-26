@@ -1,27 +1,30 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.Peripheral
-( ropsPeripheral,
-
-  -- * member
-  consMember, relmapMember, relkitMember,
-  -- $member
-
-  -- * RDF
-  consRdf,
-
-  -- * assn
-  consAssn, relmapAssn, relkitAssn,
-
-  -- * unassn
-  consUnassn, relmapUnassn, relkitUnassn,
-
-  -- * term-name
-  consTermName, relmapTermName, relkitTermName,
-
-  -- * type-name
-  consType,
-) where
+  ( ropsPeripheral,
+  
+    -- * member
+    consMember, relmapMember, relkitMember,
+    -- $member
+  
+    -- * RDF
+    consRdf,
+  
+    -- * assn
+    consAssn, relmapAssn, relkitAssn,
+  
+    -- * unassn
+    consUnassn, relmapUnassn, relkitUnassn,
+  
+    -- * term-name
+    consTermName, relmapTermName, relkitTermName,
+  
+    -- * today
+    relmapToday, relkitToday,
+  
+    -- * type
+    relkitType,
+  ) where
 
 import qualified Koshucode.Baala.Base         as B
 import qualified Koshucode.Baala.Core         as C
@@ -44,6 +47,7 @@ ropsPeripheral = Op.ropList "peripheral"
     , Op.ropE  consMember    "member /N /N"            "-1 -2"
     , Op.ropIV consRdf       "rdf P /S /O"             "-pattern -term"
     , Op.ropI  consTermName  "term-name /N"            "-term"
+    , Op.ropI  consToday     "today /N"                "-term"
     , Op.ropV  consType      "type /N /P ..."          "-term"
     , Op.ropI  consUnassn    "unassn /P -only /P ..."  "-from | -only"
     ]
@@ -185,6 +189,27 @@ relkitTermName n (Just he1) = Right kit2 where
     kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
     kitf2 _   = map term $ B.headNames he1
     term t    = [C.pTerm t]
+
+
+-- ----------------------  today
+
+--  today /day
+
+consToday :: (C.CTime c) => C.RopCons c
+consToday use =
+  do n <- Op.getTerm use "-term"
+     let t = C.globalTime $ C.ropGlobal use
+     Right $ relmapToday use (n, t)
+
+relmapToday :: (C.CTime c) => C.RopUse c -> (B.TermName, B.Time) -> C.Relmap c
+relmapToday use = C.relmapFlow use . relkitToday
+
+relkitToday :: (C.CTime c) => (B.TermName, B.Time) -> Maybe B.Head -> B.Ab (C.Relkit c)
+relkitToday _ Nothing = Right C.relkitNothing
+relkitToday (n, t) (Just he1) = Right kit2 where
+    he2   = B.headCons n he1
+    kit2  = C.relkitJust he2 $ C.RelkitOneToOne False f2
+    f2 cs = C.pTime t : cs
 
 
 -- ----------------------  type

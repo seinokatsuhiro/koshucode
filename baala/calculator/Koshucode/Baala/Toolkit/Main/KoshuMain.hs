@@ -10,6 +10,7 @@ module Koshucode.Baala.Toolkit.Main.KoshuMain
   ) where
 
 import System.Console.GetOpt
+import qualified Data.Time as T
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 import qualified Koshucode.Baala.Toolkit.Library.Element  as L
@@ -93,6 +94,8 @@ header = unlines
 koshuMain :: (C.CContent c) => C.Global c -> IO Int
 koshuMain global =
   do (prog, argv) <- L.prelude
+     time <- T.getZonedTime
+     let day = T.localDay $ T.zonedTimeToLocalTime time
      case getOpt Permute koshuOptions argv of
        (opts, files, [])
            | has OptHelp         ->  L.putSuccess usage
@@ -112,6 +115,7 @@ koshuMain global =
              g2    =  C.globalFill global
                         { C.globalProgram   = prog
                         , C.globalArgs      = argv
+                        , C.globalTime      = B.TimeYMD day
                         , C.globalResources = res }
 
        (_, _, errs) -> L.putFailure $ concat errs

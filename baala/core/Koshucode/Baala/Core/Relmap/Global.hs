@@ -33,6 +33,7 @@ data Global' rop c = Global
       , globalOpset     :: OpSet' rop c
       , globalProgram   :: String
       , globalArgs      :: [String]
+      , globalTime      :: B.Time
       , globalResources :: [B.Resource]
       , globalJudges    :: [B.Judge c]
       , globalSelect    :: C.RelSelect c
@@ -68,6 +69,7 @@ global = Global
          , globalOpset     =  opset
          , globalProgram   =  ""
          , globalArgs      =  []
+         , globalTime      =  B.timeFromMJD 0
          , globalResources =  []
          , globalJudges    =  []
          , globalSelect    =  \_ _ -> B.reldee }

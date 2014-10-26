@@ -53,6 +53,7 @@ executable koshu
          base                     == 4.*
        , directory                == 1.2.*
        , filepath                 == 1.3.*
+       , time                     == 1.5.*
        , koshucode-baala-base     == 0.78.*
        , koshucode-baala-core     == 0.78.*
        , koshucode-baala-operator == 0.78.*
@@ -76,6 +77,7 @@ library
          base                     == 4.*
        , directory                == 1.2.*
        , filepath                 == 1.3.*
+       , time                     == 1.5.*
        , koshucode-baala-base     == 0.78.*
        , koshucode-baala-core     == 0.78.*
        , koshucode-baala-operator == 0.78.*

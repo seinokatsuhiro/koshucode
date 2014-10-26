@@ -14,6 +14,11 @@ module Koshucode.Baala.Op.Cox.Calc
     consRange, relmapRange,
     -- $range
   
+    -- * range-day
+    relmapRangeDay, relkitRangeDay,
+    -- * range-month
+    relmapRangeMonth, relkitRangeMonth,
+
     -- * fill
     consFill, relmapFill,
   
@@ -45,17 +50,18 @@ import qualified Koshucode.Baala.Op.Message  as Msg
 -- 
 ropsCoxCalc :: (C.CContent c) => [C.Rop c]
 ropsCoxCalc = Op.ropList "cox-calc"
-    --          CONSTRUCTOR         USAGE                          ATTRIBUTE
-    [ Op.ropV   consAdd             "add /N E ..."                 "-cox | -where"
-    , Op.ropI   consRange           "range /N -from E -to E"       "-term | -from -to"
-    , Op.ropI   consRangeDay        "range-day /N -from /P to /P"  "-term | -from -to"
-    , Op.ropTI  consFill            "fill /P E"                    "-term -to"
-    , Op.ropTI  consReplace         "replace /P E"                 "-term -by"
-    , Op.ropN   consReplaceAll      "replace-all -from E -to E"    "| -from -to"
-    , Op.ropV   consSplit           "split /N E ..."               "-cox | -where"
-    , Op.ropV   consSubst           "subst /N E ..."               "-cox | -where"
-    , Op.ropIV  consUnary           "unary /N E ..."               "-term -expr"
-    , Op.ropV   consDumpCox         "dump-cox E"                   "-cox"
+    --          CONSTRUCTOR         USAGE                            ATTRIBUTE
+    [ Op.ropV   consAdd             "add /N E ..."                   "-cox | -where"
+    , Op.ropI   consRange           "range /N -from E -to E"         "-term | -from -to"
+    , Op.ropI   consRangeDay        "range-day /N -from /P to /P"    "-term | -from -to"
+    , Op.ropI   consRangeMonth      "range-month /N -from /P to /P"  "-term | -from -to"
+    , Op.ropTI  consFill            "fill /P E"                      "-term -to"
+    , Op.ropTI  consReplace         "replace /P E"                   "-term -by"
+    , Op.ropN   consReplaceAll      "replace-all -from E -to E"      "| -from -to"
+    , Op.ropV   consSplit           "split /N E ..."                 "-cox | -where"
+    , Op.ropV   consSubst           "subst /N E ..."                 "-cox | -where"
+    , Op.ropIV  consUnary           "unary /N E ..."                 "-term -expr"
+    , Op.ropV   consDumpCox         "dump-cox E"                     "-cox"
     ]
 
 
@@ -165,14 +171,29 @@ relmapRangeDay :: (C.CContent c) => C.RopUse c -> RangeAttr c -> C.Relmap c
 relmapRangeDay use = C.relmapFlow use . relkitRangeDay
 
 relkitRangeDay :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
-relkitRangeDay _ Nothing = Right C.relkitNothing
-relkitRangeDay (n, cops, from, to) (Just he1) = Right kit2 where
+relkitRangeDay = relkitRangeBy B.timeRangeDay
+
+relkitRangeBy :: (C.CContent c) => (B.Time -> B.Time -> [B.Time]) -> RangeAttr c -> C.RelkitFlow c
+relkitRangeBy _ _ Nothing = Right C.relkitNothing
+relkitRangeBy range (n, cops, from, to) (Just he1) = Right kit2 where
     he2      = B.headCons n he1
     kit2     = C.relkitJust he2 $ C.RelkitOneToAbMany False f2 []
     f2 _ cs  = do timeFrom  <-  C.getTime $ C.coxRunCox cops he1 cs from
                   timeTo    <-  C.getTime $ C.coxRunCox cops he1 cs to
-                  let ts    =   map C.pTime $ B.timeRangeDay timeFrom timeTo
+                  let ts    =   map C.pTime $ range timeFrom timeTo
                   Right $ map (: cs) ts
+
+
+-- ----------------------  range-month
+
+consRangeMonth :: (C.CContent c) => C.RopCons c
+consRangeMonth use = Right . relmapRangeMonth use =<< getRangeAttr use
+
+relmapRangeMonth :: (C.CContent c) => C.RopUse c -> RangeAttr c -> C.Relmap c
+relmapRangeMonth use = C.relmapFlow use . relkitRangeMonth
+
+relkitRangeMonth :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
+relkitRangeMonth = relkitRangeBy B.timeRangeMonth
 
 
 -- ----------------------  fill
