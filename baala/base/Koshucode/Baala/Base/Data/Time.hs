@@ -1,15 +1,21 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Data.Time
-  ( Time (..), MJD, Year, Month, Day,
-    timeFromYMD,
-    timeFromMJD,
-    timeMJD,
-    timeMapMJD,
-    timeTruncateDay, timeTruncateMonth,
-    timeNextMonth, timeNextYear,
+  ( -- * Type
+    Time (..), MJD, Year, Month, Day,
+
+    -- * Construct
+    timeFromYmdAb, timeFromMjd, timeMjd,
+    timeMapMjd,
+
+    -- * First day
+    timeFloorMonth, timeFloorYear,
+    timeCeilMonth, timeCeilYaer,
+    -- $FirstDay
+
     -- * Range
     timeRangeDay, timeRangeMonth, timeRangeYear,
+
     -- * Add
     timeAddDay, timeAddWeek, timeAddMonth, timeAddYear,
   ) where
@@ -25,20 +31,6 @@ data Time
     | TimeYM T.Day
       deriving (Show, Eq, Ord)
 
-type MJD   = Integer
-type Year  = Integer
-type Month = Int
-type Day   = Int
-
-timeFromYMD :: Year -> Month -> Day -> B.Ab Time
-timeFromYMD y m d =
-    case T.fromGregorianValid y m d of
-      Just day -> Right $ TimeYMD day
-      Nothing  -> Msg.notDate y m d
-
-timeFromYMD' :: Year -> Month -> Day -> Time
-timeFromYMD' y m d = TimeYMD $ T.fromGregorian y m d
-
 instance B.Write Time where
     write _ = writeTime
 
@@ -49,51 +41,99 @@ writeTime (TimeYM day)  = writeDay day
 writeDay :: T.Day -> B.Doc
 writeDay = B.doc . show
 
+type MJD   = Integer
+type Year  = Integer
+type Month = Int
+type Day   = Int
+
+
+-- ----------------------  Construct
+
+timeFromYmdAb :: Year -> Month -> Day -> B.Ab Time
+timeFromYmdAb y m d =
+    case T.fromGregorianValid y m d of
+      Just day -> Right $ TimeYMD day
+      Nothing  -> Msg.notDate y m d
+
+timeFromYmd :: Year -> Month -> Day -> Time
+timeFromYmd y m d = TimeYMD $ T.fromGregorian y m d
+
+timeFromYmdTuple :: (Year, Month, Day) -> Time
+timeFromYmdTuple = TimeYMD . fromGregorianTuple
+
+fromGregorianTuple :: (Year, Month, Day) -> T.Day
+fromGregorianTuple (y, m, d) = T.fromGregorian y m d
+
 timeDay :: Time -> T.Day
 timeDay (TimeYMD day) = day
 timeDay (TimeYM  day) = day
 
-timeMJD :: Time -> MJD
-timeMJD = T.toModifiedJulianDay . timeDay
+timeMjd :: Time -> MJD
+timeMjd = T.toModifiedJulianDay . timeDay
 
-timeFromMJD :: MJD -> Time
-timeFromMJD = TimeYMD . T.ModifiedJulianDay
+timeFromMjd :: MJD -> Time
+timeFromMjd = TimeYMD . T.ModifiedJulianDay
 
-timeMapMJD :: B.Map MJD -> B.Map Time
-timeMapMJD f time = timeMapDay g time where
+timeMapMjd :: B.Map MJD -> B.Map Time
+timeMapMjd f time = timeMapDay g time where
     g (T.ModifiedJulianDay d) = T.ModifiedJulianDay $ f d
 
 timeMapDay :: B.Map T.Day -> B.Map Time
 timeMapDay f (TimeYMD day) = TimeYMD $ f day
 timeMapDay f (TimeYM  day) = TimeYM  $ f day
 
-timeTruncateDay :: B.Map Time
-timeTruncateDay time =
-    let (y, m, _) = T.toGregorian $ timeDay time
-    in timeFromYMD' y m 1
 
-timeTruncateMonth :: B.Map Time
-timeTruncateMonth time =
-    let (y, _, _) = T.toGregorian $ timeDay time
-    in timeFromYMD' y 1 1
+-- ----------------------  First day
 
-timeNextMonth :: B.Map Time
-timeNextMonth time =
-    let (y, m, _) = T.toGregorian $ timeDay time
-    in if m == 12
-       then timeFromYMD' (y + 1) 1 1
-       else timeFromYMD' y (m + 1) 1
+-- $FirstDay
+--
+--  /Examples/
+--
+--  The first day of month.
+--
+--    >>> timeFloorMonth $ timeFromYmd 2014 11 3
+--    TimeYMD 2014-11-01
+--
+--  The first day of year.
+--
+--    >>> timeFloorYear $ timeFromYmd 2014 11 3
+--    TimeYMD 2014-01-01
+--
+--  The first day of next month.
+--
+--    >>> timeCeilMonth $ timeFromYmd 2014 11 3
+--    TimeYMD 2014-12-01
+--
+--  The first day of next year.
+--
+--    >>> timeCeilYaer $ timeFromYmd 2014 11 3
+--    TimeYMD 2015-01-01
 
-timeNextYear :: B.Map Time
-timeNextYear time =
-    let (y, _, _) = T.toGregorian $ timeDay time
-    in timeFromYMD' (y + 1) 1 1
+timeFloorMonth :: B.Map Time
+timeFloorMonth time =
+    case timeGregorian time of
+      (y, m, _) -> timeFromYmd y m 1
+
+timeFloorYear :: B.Map Time
+timeFloorYear time =
+    case timeGregorian time of
+      (y, _, _) -> timeFromYmd y 1 1
+
+timeCeilMonth :: B.Map Time
+timeCeilMonth time =
+    case timeGregorian time of
+      (y, m, _) -> timeFromYmdTuple $ monthStep (y, m, 1)
+
+timeCeilYaer :: B.Map Time
+timeCeilYaer time =
+    case T.toGregorian $ timeDay time of
+      (y, _, _) -> timeFromYmdTuple $ yearStep (y, 1, 1)
 
 
 -- ----------------------  Range
 
 timeRangeDay :: B.RangeBy Time
-timeRangeDay from to = map timeFromMJD [timeMJD from .. timeMJD to]
+timeRangeDay from to = map timeFromMjd [timeMjd from .. timeMjd to]
 
 timeRangeMonth :: B.RangeBy Time
 timeRangeMonth = timeRangeBy monthStep
@@ -116,14 +156,14 @@ yearStep :: B.Map (Year, Month, Day)
 yearStep (y, m, d)  | y == (-1) = (1, m, d)
                     | otherwise = (y + 1, m, d)
 
-fromGregorianTuple :: (Year, Month, Day) -> T.Day
-fromGregorianTuple (y, m, d) = T.fromGregorian y m d
+timeGregorian :: Time -> (Year, Month, Day)
+timeGregorian = T.toGregorian . timeDay
 
 
 -- ----------------------  Add
 
 timeAddDay :: MJD -> B.Map Time
-timeAddDay n = timeMapMJD (+ n)
+timeAddDay n = timeMapMjd (+ n)
 
 timeAddWeek :: MJD -> B.Map Time
 timeAddWeek n = timeAddDay (7 * n)
@@ -133,10 +173,10 @@ timeAddMonth n time =
     let (y, m, d) = T.toGregorian $ timeDay time
         (yd, m')  = (toInteger m + n) `divMod` 12
         y'        = y + yd
-    in timeFromYMD' y' (fromInteger m') d
+    in timeFromYmd y' (fromInteger m') d
 
 timeAddYear :: Year -> B.Map Time
 timeAddYear n time =
     let (y, m, d) = T.toGregorian $ timeDay time
         y'        = y + n
-    in timeFromYMD' y' m d
+    in timeFromYmd y' m d

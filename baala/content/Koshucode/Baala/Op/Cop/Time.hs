@@ -33,7 +33,7 @@ copsTime =
     , C.CopCalc  (C.copNormal "add-week")   $ copTimeAdd B.timeAddWeek
     , C.CopCalc  (C.copNormal "add-month")  $ copTimeAdd B.timeAddMonth
     , C.CopCalc  (C.copNormal "add-year")   $ copTimeAdd B.timeAddYear
-    , C.CopCalc  (C.copNormal "mjd")        copMJD
+    , C.CopCalc  (C.copNormal "mjd")        copMjd
     ]
 
 copTimeAdd :: (C.CTime c, C.CDec c) => (Integer -> B.Map B.Time) -> C.CopCalc c
@@ -45,7 +45,7 @@ copTimeAdd add [Right c1, Right c2]
                        in Right $ C.pTime $ add n t
 copTimeAdd _ _ = Msg.unexpAttr "add-time"
 
-copMJD :: (C.CTime c, C.CDec c) => C.CopCalc c
-copMJD [Right c] | C.isTime c = Right $ C.pDecFromInteger $ B.timeMJD $ C.gTime c
-copMJD _ = Msg.unexpAttr "mjd"
+copMjd :: (C.CTime c, C.CDec c) => C.CopCalc c
+copMjd [Right c] | C.isTime c = Right $ C.pDecFromInteger $ B.timeMjd $ C.gTime c
+copMjd _ = Msg.unexpAttr "mjd"
 
