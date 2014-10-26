@@ -2,33 +2,33 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module Koshucode.Baala.Op.Cox.Calc
-( ropsCoxCalc,
-
-  -- * add
-  consAdd, relmapAdd,
-
-  -- * subst
-  consSubst, relmapSubst,
-
-  -- * range
-  consRange, relmapRange,
-  -- $range
-
-  -- * fill
-  consFill, relmapFill,
-
-  -- * replace
-  consReplace,
-
-  -- * replace-all
-  consReplaceAll, relmapReplaceAll,
-
-  -- * split
-  consSplit, relmapSplit, relkitSplit,
-
-  -- * unary
-  consUnary, relmapUnary,
-) where
+  ( ropsCoxCalc,
+  
+    -- * add
+    consAdd, relmapAdd,
+  
+    -- * subst
+    consSubst, relmapSubst,
+  
+    -- * range
+    consRange, relmapRange,
+    -- $range
+  
+    -- * fill
+    consFill, relmapFill,
+  
+    -- * replace
+    consReplace,
+  
+    -- * replace-all
+    consReplaceAll, relmapReplaceAll,
+  
+    -- * split
+    consSplit, relmapSplit, relkitSplit,
+  
+    -- * unary
+    consUnary, relmapUnary,
+  ) where
 
 import Prelude hiding (getContents)
 import qualified Koshucode.Baala.Base        as B
@@ -45,16 +45,17 @@ import qualified Koshucode.Baala.Op.Message  as Msg
 -- 
 ropsCoxCalc :: (C.CContent c) => [C.Rop c]
 ropsCoxCalc = Op.ropList "cox-calc"
-    --          CONSTRUCTOR         USAGE                        ATTRIBUTE
-    [ Op.ropV   consAdd             "add /N E ..."               "-cox | -where"
-    , Op.ropI   consRange           "range /N -from E -to E"     "-term | -from -to"
-    , Op.ropTI  consFill            "fill /P E"                  "-term -to"
-    , Op.ropTI  consReplace         "replace /P E"               "-term -by"
-    , Op.ropN   consReplaceAll      "replace-all -from E -to E"  "| -from -to"
-    , Op.ropV   consSplit           "split /N E ..."             "-cox | -where"
-    , Op.ropV   consSubst           "subst /N E ..."             "-cox | -where"
-    , Op.ropIV  consUnary           "unary /N E ..."             "-term -expr"
-    , Op.ropV   consDumpCox         "dump-cox E"                 "-cox"
+    --          CONSTRUCTOR         USAGE                          ATTRIBUTE
+    [ Op.ropV   consAdd             "add /N E ..."                 "-cox | -where"
+    , Op.ropI   consRange           "range /N -from E -to E"       "-term | -from -to"
+    , Op.ropI   consRangeDay        "range-day /N -from /P to /P"  "-term | -from -to"
+    , Op.ropTI  consFill            "fill /P E"                    "-term -to"
+    , Op.ropTI  consReplace         "replace /P E"                 "-term -by"
+    , Op.ropN   consReplaceAll      "replace-all -from E -to E"    "| -from -to"
+    , Op.ropV   consSplit           "split /N E ..."               "-cox | -where"
+    , Op.ropV   consSubst           "subst /N E ..."               "-cox | -where"
+    , Op.ropIV  consUnary           "unary /N E ..."               "-term -expr"
+    , Op.ropV   consDumpCox         "dump-cox E"                   "-cox"
     ]
 
 
@@ -124,18 +125,23 @@ relkitSubst (cops, cox) (Just he1)
 --  
 --    > range /n -from 0 -to 9
 
-consRange :: (C.CContent c) => C.RopCons c
-consRange use =
-  do term     <- Op.getTerm use "-term"
-     coxLow   <- Op.getCox use "-from"
-     coxHigh  <- Op.getCox use "-to"
-     let cops = C.globalCopset $ C.ropGlobal use
-     Right $ relmapRange use (term, cops, coxLow, coxHigh)
+type RangeAttr c = (B.TermName, C.CopSet c, C.Cox c, C.Cox c)
 
-relmapRange :: (C.CContent c) => C.RopUse c -> (B.TermName, C.CopSet c, C.Cox c, C.Cox c) -> C.Relmap c
+getRangeAttr :: (C.CContent c) => C.RopUse c -> B.Ab (RangeAttr c)
+getRangeAttr use =
+  do term     <- Op.getTerm use "-term"
+     coxLow   <- Op.getCox  use "-from"
+     coxHigh  <- Op.getCox  use "-to"
+     let cops = C.globalCopset $ C.ropGlobal use
+     Right (term, cops, coxLow, coxHigh)
+
+consRange :: (C.CContent c) => C.RopCons c
+consRange use = Right . relmapRange use =<< getRangeAttr use
+
+relmapRange :: (C.CContent c) => C.RopUse c -> RangeAttr c -> C.Relmap c
 relmapRange use = C.relmapFlow use . relkitRange
 
-relkitRange :: (C.CContent c) => (B.TermName, C.CopSet c, C.Cox c, C.Cox c) -> C.RelkitFlow c
+relkitRange :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
 relkitRange _ Nothing = Right C.relkitNothing
 relkitRange (n, cops, coxLow, coxHigh) (Just he1) = Right kit2 where
     he2      = B.headCons n he1
@@ -148,6 +154,25 @@ relkitRange (n, cops, coxLow, coxHigh) (Just he1) = Right kit2 where
                       decs  =   map C.pDecFromInt [low .. high]
 
                   Right $ map (: cs) decs
+
+
+-- ----------------------  range-day
+
+consRangeDay :: (C.CContent c) => C.RopCons c
+consRangeDay use = Right . relmapRangeDay use =<< getRangeAttr use
+
+relmapRangeDay :: (C.CContent c) => C.RopUse c -> RangeAttr c -> C.Relmap c
+relmapRangeDay use = C.relmapFlow use . relkitRangeDay
+
+relkitRangeDay :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
+relkitRangeDay _ Nothing = Right C.relkitNothing
+relkitRangeDay (n, cops, from, to) (Just he1) = Right kit2 where
+    he2      = B.headCons n he1
+    kit2     = C.relkitJust he2 $ C.RelkitOneToAbMany False f2 []
+    f2 _ cs  = do timeFrom  <-  C.getTime $ C.coxRunCox cops he1 cs from
+                  timeTo    <-  C.getTime $ C.coxRunCox cops he1 cs to
+                  let ts    =   map C.pTime $ B.timeRangeDay timeFrom timeTo
+                  Right $ map (: cs) ts
 
 
 -- ----------------------  fill
