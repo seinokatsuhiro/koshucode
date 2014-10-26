@@ -99,15 +99,7 @@ litAngle lit xs@(B.TreeL (B.TTerm _ 0 _) : _) = C.putAssn =<< litAssn lit xs
 litAngle _ [] = C.putAssn []
 litAngle _ [B.TreeL (B.TText _ 0 "words"), B.TreeL (B.TText _ 2 ws)] =
     C.putList $ map C.pText $ words ws
-litAngle _ xs =
-    do toks <- C.treesToTokens xs
-       ws   <- wordList toks
-       makeDate ws
-
-wordList :: [B.Token] -> B.Ab [String]
-wordList = mapM word where
-    word (B.TText _ 0 w) = Right w
-    word _ = Msg.adlib "not word"
+litAngle _ _ = Msg.adlib "unknown angle bracket"
 
 -- | Literal reader for associations.
 litAssn :: (C.CContent c) => B.TTreeToAb c -> B.TTreesToAb [B.Named c]
@@ -184,50 +176,6 @@ litType = gen where
                                    ts2 <- B.sequenceSnd $ B.mapSndTo gen ts1
                                    Right $ B.TypeRel ts2
     dispatch n _             =  Msg.unkType n
-
-
-
--- ----------------------  Date
-
-makeDate :: (C.CList c, C.CDec c) => [String] -> B.Ab c
-makeDate xs = date B.<|> time B.<|> unk where
-    date = put3 $ parseDate s
-    time = put3 $ parseTime s
-    unk  = Msg.adlib "malformed date/time literal"
-    s    = unwords xs
-
-    put3 (Nothing)        = unk
-    put3 (Just (a, b, c)) = C.putList [ C.pDecFromInt a
-                                      , C.pDecFromInt b
-                                      , C.pDecFromInt c ]
-
-parseDate :: String -> Maybe (Int, Int, Int)
-parseDate s = date '/' s B.<|> date '-' s where
-    date = parseInt3 (9999, 12, 31)
-
-parseTime :: String -> Maybe (Int, Int, Int)
-parseTime = parseInt3 (23, 59, 59) ':'
-
-parseInt3 :: (Int, Int, Int) -> Char -> String -> Maybe (Int, Int, Int)
-parseInt3 m delim s =
-    case B.divide delim s of
-      [n1, n2, n3] -> int3 m (n1, n2, n3)
-      _            -> Nothing
-
-int3 :: (Int, Int, Int) -> (String, String, String) -> Maybe (Int, Int, Int)
-int3 (ma, mb, mc) (a, b, c) =
-    do a' <- B.readInt $ B.trimBoth a
-       b' <- B.readInt $ B.trimBoth b
-       c' <- B.readInt $ B.trimBoth c
-
-       rangeCheck ma a'
-       rangeCheck mb b'
-       rangeCheck mc c'
-
-       Just (a', b', c')
-    where
-      rangeCheck m x = B.guard $ x >= 0 && x <= m
-
 
 
 -- ------------------------------------------------------------------
