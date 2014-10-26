@@ -6,9 +6,10 @@ module Koshucode.Baala.Base.Data.Time
     timeFromMJD,
     timeMJD,
     timeMapMJD,
-    timeRangeDay, timeRangeMonth,
     timeTruncateDay, timeTruncateMonth,
     timeNextMonth, timeNextYear,
+    -- * Range
+    timeRangeDay, timeRangeMonth, timeRangeYear,
     -- * Add
     timeAddDay, timeAddWeek, timeAddMonth, timeAddYear,
   ) where
@@ -66,25 +67,6 @@ timeMapDay :: B.Map T.Day -> B.Map Time
 timeMapDay f (TimeYMD day) = TimeYMD $ f day
 timeMapDay f (TimeYM  day) = TimeYM  $ f day
 
-timeRangeDay :: Time -> Time -> [Time]
-timeRangeDay from to = map timeFromMJD [timeMJD from .. timeMJD to]
-
-timeRangeMonth :: Time -> Time -> [Time]
-timeRangeMonth from to = times where
-    (y0, m0, d) = T.toGregorian $ timeDay from
-    (y1, m1, _) = T.toGregorian $ timeDay to
-    time (y, m) = TimeYMD $ T.fromGregorian y m d
-    times = map time $ rangeBy monthSucc (y0, m0) (y1, m1)
-
-monthSucc :: B.Map (Year, Month)
-monthSucc (y, m) | m == 12   = (y + 1, 1)
-                 | otherwise = (y, m + 1)
-
-rangeBy :: (Ord a) => B.Map a -> a -> a -> [a]
-rangeBy step from to = loop from where
-    loop f | f > to    = []
-           | otherwise = f : loop (step f)
-
 timeTruncateDay :: B.Map Time
 timeTruncateDay time =
     let (y, m, _) = T.toGregorian $ timeDay time
@@ -106,6 +88,36 @@ timeNextYear :: B.Map Time
 timeNextYear time =
     let (y, _, _) = T.toGregorian $ timeDay time
     in timeFromYMD' (y + 1) 1 1
+
+
+-- ----------------------  Range
+
+timeRangeDay :: B.RangeBy Time
+timeRangeDay from to = map timeFromMJD [timeMJD from .. timeMJD to]
+
+timeRangeMonth :: B.RangeBy Time
+timeRangeMonth = timeRangeBy monthStep
+
+timeRangeYear :: B.RangeBy Time
+timeRangeYear = timeRangeBy yearStep
+
+timeRangeBy :: B.Map (Year, Month, Day) -> B.RangeBy Time
+timeRangeBy step from to = times where
+    dayFrom =  T.toGregorian $ timeDay from
+    dayTo   =  T.toGregorian $ timeDay to
+    time    =  TimeYMD . fromGregorianTuple
+    times   =  map time $ B.rangeBy step dayFrom dayTo
+
+monthStep :: B.Map (Year, Month, Day)
+monthStep (y, m, d) | m < 12    = (y, m + 1, d)
+                    | otherwise = (y + 1, 1, d)
+
+yearStep :: B.Map (Year, Month, Day)
+yearStep (y, m, d)  | y == (-1) = (1, m, d)
+                    | otherwise = (y + 1, m, d)
+
+fromGregorianTuple :: (Year, Month, Day) -> T.Day
+fromGregorianTuple (y, m, d) = T.fromGregorian y m d
 
 
 -- ----------------------  Add

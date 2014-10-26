@@ -1,32 +1,33 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Prelude.List
-( front,
-  tails,
-  isSingleton,
-  notNull,
-  maybeEmpty,
-  right,
-  -- $List
+  ( front,
+    tails,
+    isSingleton,
+    notNull,
+    maybeEmpty,
+    right,
+    -- $List
+  
+    -- * Uniqueness
+    duplicates,
+    unique, unionUp,
+    -- $Uniqueness
+  
+    -- * Construct
+    li1, li2, li3,
+    RangeBy, rangeBy,
 
-  -- * Uniqueness
-  duplicates,
-  unique, unionUp,
-  -- $Uniqueness
-
-  -- * Construct
-  li1, li2, li3,
-
-  -- * Map
-  map2, mapAt, mapWithLast,
-  omit, squeeze, squeezeEmptyLines,
-
-  -- * Divide
-  chunks,
-  splitBy,
-  divide, divideBy,
-  -- $Divide
-) where
+    -- * Map
+    map2, mapAt, mapWithLast,
+    omit, squeeze, squeezeEmptyLines,
+  
+    -- * Divide
+    chunks,
+    splitBy,
+    divide, divideBy,
+    -- $Divide
+  ) where
 
 import qualified Data.List as List
 import qualified Data.Set  as Set
@@ -128,6 +129,13 @@ li2 x y = [x, y]
 
 li3 :: a -> a -> a -> [a]
 li3 x y z = [x, y, z]
+
+type RangeBy a = a -> a -> [a]
+
+rangeBy :: (Ord a) => B.Map a -> RangeBy a
+rangeBy step from to = loop from where
+    loop f | f > to    = []
+           | otherwise = f : loop (step f)
 
 
 -- ----------------------  Map

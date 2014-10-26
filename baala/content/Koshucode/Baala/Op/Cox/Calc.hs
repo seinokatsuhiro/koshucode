@@ -18,6 +18,8 @@ module Koshucode.Baala.Op.Cox.Calc
     relmapRangeDay, relkitRangeDay,
     -- * range-month
     relmapRangeMonth, relkitRangeMonth,
+    -- * range-year
+    relmapRangeYear, relkitRangeYear,
 
     -- * fill
     consFill, relmapFill,
@@ -55,6 +57,7 @@ ropsCoxCalc = Op.ropList "cox-calc"
     , Op.ropI   consRange           "range /N -from E -to E"         "-term | -from -to"
     , Op.ropI   consRangeDay        "range-day /N -from /P to /P"    "-term | -from -to"
     , Op.ropI   consRangeMonth      "range-month /N -from /P to /P"  "-term | -from -to"
+    , Op.ropI   consRangeYear       "range-year /N -from /P to /P"   "-term | -from -to"
     , Op.ropTI  consFill            "fill /P E"                      "-term -to"
     , Op.ropTI  consReplace         "replace /P E"                   "-term -by"
     , Op.ropN   consReplaceAll      "replace-all -from E -to E"      "| -from -to"
@@ -173,7 +176,7 @@ relmapRangeDay use = C.relmapFlow use . relkitRangeDay
 relkitRangeDay :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
 relkitRangeDay = relkitRangeBy B.timeRangeDay
 
-relkitRangeBy :: (C.CContent c) => (B.Time -> B.Time -> [B.Time]) -> RangeAttr c -> C.RelkitFlow c
+relkitRangeBy :: (C.CContent c) => B.RangeBy B.Time -> RangeAttr c -> C.RelkitFlow c
 relkitRangeBy _ _ Nothing = Right C.relkitNothing
 relkitRangeBy range (n, cops, from, to) (Just he1) = Right kit2 where
     he2      = B.headCons n he1
@@ -194,6 +197,18 @@ relmapRangeMonth use = C.relmapFlow use . relkitRangeMonth
 
 relkitRangeMonth :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
 relkitRangeMonth = relkitRangeBy B.timeRangeMonth
+
+
+-- ----------------------  range-year
+
+consRangeYear :: (C.CContent c) => C.RopCons c
+consRangeYear use = Right . relmapRangeYear use =<< getRangeAttr use
+
+relmapRangeYear :: (C.CContent c) => C.RopUse c -> RangeAttr c -> C.Relmap c
+relmapRangeYear use = C.relmapFlow use . relkitRangeYear
+
+relkitRangeYear :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
+relkitRangeYear = relkitRangeBy B.timeRangeYear
 
 
 -- ----------------------  fill
