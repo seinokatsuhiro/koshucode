@@ -36,7 +36,7 @@ data Type
     | TypeText                    -- ^ Text
     | TypeCode                    -- ^ Code
     | TypeDec                     -- ^ Decimal
-    | TypeDate                    -- ^ Date
+    | TypeClock                   -- ^ Clock
     | TypeTime                    -- ^ Time
     | TypeBin                     -- ^ Binary data
 
@@ -66,7 +66,7 @@ writeType = wf where
     w _ TypeText         =  B.doc "text"
     w _ TypeCode         =  B.doc "code"
     w _ TypeDec          =  B.doc "decimal"
-    w _ TypeDate         =  B.doc "date"
+    w _ TypeClock        =  B.doc "clock"
     w _ TypeTime         =  B.doc "time"
     w _ TypeBin          =  B.doc "binary"
     w _ TypeTerm         =  B.doc "term"
