@@ -22,6 +22,7 @@ data VContent
     | VText    String             -- ^ String type
     | VTerm    String             -- ^ Term name type
     | VDec     B.Decimal          -- ^ Decimal number type
+    | VClock   B.Clock            -- ^ Clock type
     | VTime    B.Time             -- ^ Time type
     | VEmpty                      -- ^ Sign of no ordinary type
     | VInterp  B.Interp           -- ^ Interpretation type
@@ -42,6 +43,7 @@ instance Ord VContent where
     compare (VText    x) (VText    y)  =  compare x y
     compare (VTerm    x) (VTerm    y)  =  compare x y
     compare (VDec     x) (VDec     y)  =  compare x y
+    compare (VClock   x) (VClock   y)  =  compare x y
     compare (VTime    x) (VTime    y)  =  compare x y
     compare (VEmpty    ) (VEmpty    )  =  EQ
     compare (VInterp  x) (VInterp  y)  =  compare x y
@@ -57,14 +59,15 @@ typeOrder (VBool    _)  =  1
 typeOrder (VText    _)  =  2
 typeOrder (VTerm    _)  =  3
 typeOrder (VDec     _)  =  4
-typeOrder (VTime    _)  =  5
-typeOrder (VEmpty    )  =  6
-typeOrder (VInterp  _)  =  7
-typeOrder (VType    _)  =  8
-typeOrder (VList    _)  =  9
-typeOrder (VSet     _)  =  10
-typeOrder (VAssn    _)  =  11
-typeOrder (VRel     _)  =  12
+typeOrder (VClock   _)  =  6
+typeOrder (VTime    _)  =  7
+typeOrder (VEmpty    )  =  8
+typeOrder (VInterp  _)  =  9
+typeOrder (VType    _)  =  10
+typeOrder (VList    _)  =  11
+typeOrder (VSet     _)  =  13
+typeOrder (VAssn    _)  =  14
+typeOrder (VRel     _)  =  14
 
 compareAsSet :: (Ord a) => [a] -> [a] -> Ordering
 compareAsSet x y = compare (Set.fromList x) (Set.fromList y)
@@ -74,6 +77,7 @@ instance C.CTypeOf VContent where
     typeOf (VText    _)  =  B.TypeText
     typeOf (VTerm    _)  =  B.TypeTerm
     typeOf (VDec     _)  =  B.TypeDec
+    typeOf (VClock   _)  =  B.TypeClock
     typeOf (VTime    _)  =  B.TypeTime
     typeOf (VEmpty    )  =  B.TypeEmpty
     typeOf (VInterp  _)  =  B.TypeInterp
@@ -99,6 +103,7 @@ instance B.Write VContent where
         VText s      ->  B.doc $ sh s
         VTerm s      ->  B.doc $ "'/" ++ s
         VDec  n      ->  B.doc $ B.decimalString n
+        VClock c     ->  B.doc c
         VTime t      ->  B.doc t
         VBool b      ->  B.doc b
         VEmpty       ->  B.doc "()"
@@ -125,6 +130,13 @@ instance C.CDec VContent where
     gDec _                   =  B.bug "gDec"
     isDec  (VDec _)          =  True
     isDec  _                 =  False
+
+instance C.CClock VContent where
+    pClock                    =  VClock
+    gClock  (VClock x)        =  x
+    gClock  _                 =  B.bug "gClock"
+    isClock (VClock _)        =  True
+    isClock _                 =  False
 
 instance C.CTime VContent where
     pTime                    =  VTime

@@ -13,6 +13,7 @@ module Koshucode.Baala.Core.Content.Class
     -- * Koshu data
     CEmpty      (..),
     CDec        (..), pDecFromInt, pDecFromInteger,
+    CClock      (..),
     CTime       (..),
     CTerm       (..),
     CSet        (..),
@@ -34,7 +35,7 @@ import qualified Koshucode.Baala.Core.Message as Msg
 -- ----------------------  Generic content
 
 class (Ord c, B.Write c, CTypeOf c,
-       CEmpty c, CBool c, CText c, CTime c,
+       CEmpty c, CBool c, CText c, CClock c, CTime c,
        CTerm c, CDec c, CType c, CInterp c,
        CList c, CSet c, CAssn c, CRel c) =>
     CContent c where
@@ -125,6 +126,17 @@ pDecFromInt = pDec . B.intDecimal
 
 pDecFromInteger :: (CDec c) => Integer -> c
 pDecFromInteger = pDec . B.intDecimal . fromInteger
+
+class (CTypeOf c) => CClock c where
+    isClock      ::           c -> Bool
+    gClock       ::           c -> B.Clock
+    pClock       ::     B.Clock -> c
+
+    getClock     ::      B.Ab c -> B.Ab B.Clock
+    getClock     =       getAbAb isClock gClock
+
+    putClock     ::     B.Clock -> B.Ab c
+    putClock     =      Right . pClock
 
 class (CTypeOf c) => CTime c where
     isTime       ::           c -> Bool
