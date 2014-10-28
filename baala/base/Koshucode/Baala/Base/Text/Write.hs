@@ -40,6 +40,9 @@ instance Write B.Doc where
 instance Write Int where
     write _ = D.int
 
+instance Write Integer where
+    write _ = D.integer
+
 instance Write String where
     write _ = D.text
 
