@@ -58,6 +58,9 @@ ropsCoxCalc = Op.ropList "cox-calc"
     , Op.ropI   consRangeDay        "range-day /N -from /P to /P"    "-term | -from -to"
     , Op.ropI   consRangeMonth      "range-month /N -from /P to /P"  "-term | -from -to"
     , Op.ropI   consRangeYear       "range-year /N -from /P to /P"   "-term | -from -to"
+    , Op.ropI   consRangeHour       "range-hour /N -from /P to /P"   "-term | -from -to"
+    , Op.ropI   consRangeMinute     "range-minute /N -from /P to /P" "-term | -from -to"
+    , Op.ropI   consRangeSecond     "range-second /N -from /P to /P" "-term | -from -to"
     , Op.ropTI  consFill            "fill /P E"                      "-term -to"
     , Op.ropTI  consReplace         "replace /P E"                   "-term -by"
     , Op.ropN   consReplaceAll      "replace-all -from E -to E"      "| -from -to"
@@ -209,6 +212,52 @@ relmapRangeYear use = C.relmapFlow use . relkitRangeYear
 
 relkitRangeYear :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
 relkitRangeYear = relkitRangeBy B.timeRangeYear
+
+
+-- ----------------------  range-hour
+
+consRangeHour :: (C.CContent c) => C.RopCons c
+consRangeHour use = Right . relmapRangeHour use =<< getRangeAttr use
+
+relmapRangeHour :: (C.CContent c) => C.RopUse c -> RangeAttr c -> C.Relmap c
+relmapRangeHour use = C.relmapFlow use . relkitRangeHour
+
+relkitRangeHour :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
+relkitRangeHour = relkitRangeClock B.clockRangeHour
+
+
+-- ----------------------  range-minute
+
+consRangeMinute :: (C.CContent c) => C.RopCons c
+consRangeMinute use = Right . relmapRangeMinute use =<< getRangeAttr use
+
+relmapRangeMinute :: (C.CContent c) => C.RopUse c -> RangeAttr c -> C.Relmap c
+relmapRangeMinute use = C.relmapFlow use . relkitRangeMinute
+
+relkitRangeMinute :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
+relkitRangeMinute = relkitRangeClock B.clockRangeMinute
+
+
+-- ----------------------  range-second
+
+consRangeSecond :: (C.CContent c) => C.RopCons c
+consRangeSecond use = Right . relmapRangeSecond use =<< getRangeAttr use
+
+relmapRangeSecond :: (C.CContent c) => C.RopUse c -> RangeAttr c -> C.Relmap c
+relmapRangeSecond use = C.relmapFlow use . relkitRangeSecond
+
+relkitRangeSecond :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
+relkitRangeSecond = relkitRangeClock B.clockRangeSecond
+
+relkitRangeClock :: (C.CContent c) => B.RangeBy B.Clock -> RangeAttr c -> C.RelkitFlow c
+relkitRangeClock _ _ Nothing = Right C.relkitNothing
+relkitRangeClock range (n, cops, from, to) (Just he1) = Right kit2 where
+    he2      = B.headCons n he1
+    kit2     = C.relkitJust he2 $ C.RelkitOneToAbMany False f2 []
+    f2 _ cs  = do clockFrom  <-  C.getClock $ C.coxRunCox cops he1 cs from
+                  clockTo    <-  C.getClock $ C.coxRunCox cops he1 cs to
+                  let ts     =   map C.pClock $ range clockFrom clockTo
+                  Right $ map (: cs) ts
 
 
 -- ----------------------  fill
