@@ -18,18 +18,20 @@ type Min  = Int
 type Sec  = Int
 
 instance B.Write Clock where
-    write _ (Clock 0 sec)   = wrapBar $ secDoc sec
-    write _ (Clock day sec) = wrapBar $ B.doc day B.<> B.doc "'" B.<> secDoc sec
+    write _ (Clock day sec) =
+        let (d, doc) = secDoc sec
+        in wrapBar $ case day + d of
+                       0  -> doc
+                       d2 -> B.doc d2 B.<> B.doc "'" B.<> doc
 
 wrapBar :: B.Map B.Doc
 wrapBar = B.docWrap "|" "|"
 
-secDoc :: Sec -> B.Doc
-secDoc sec = B.doc d B.<> quote B.<> hms where
-    hms          = dd h B.<> colon B.<> dd m B.<> colon B.<> dd s
-    (d, h, m, s) = hmsFromSec sec
-    colon        = B.doc ":"
-    quote        = B.doc "'"
+secDoc :: Sec -> (DayCount, B.Doc)
+secDoc sec = (d, hms) where
+    hms             = dd h B.<> colon B.<> dd m B.<> colon B.<> dd s
+    (d, h, m, s)    = hmsFromSec sec
+    colon           = B.doc ":"
 
     dd :: Int -> B.Doc
     dd n | n < 10    = B.doc $ '0' : show n

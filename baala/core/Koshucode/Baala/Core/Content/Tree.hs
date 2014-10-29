@@ -8,6 +8,7 @@ module Koshucode.Baala.Core.Content.Tree
     treeToText,
     treesToDigits,
     TimeText,
+    tokenClock,
     treesToTime,
     treeToFlatTerm,
     treesToTerms,
@@ -67,6 +68,61 @@ concatDigits = first where
     loop ss [] = Right $ concat $ reverse ss
     loop ss (w : xs) | all (`elem` "0123456789.") w = loop (w:ss) xs
     loop _ _ = Msg.nothing
+
+
+-- ----------------------  Clock
+
+tokenClock :: B.Token -> B.Ab (B.DayCount, (B.Hour, B.Min, B.Sec))
+tokenClock (B.TText _ B.TextBar ('|' : w)) = textClock w
+tokenClock _ = Msg.nothing
+
+textClock :: String -> B.Ab (B.DayCount, (B.Hour, B.Min, B.Sec))
+textClock = dayOrHour where
+    dayOrHour cs     = case getInt cs of
+                         (h, ':'  : cs')  ->  minute 0 h cs'
+                         (d, '\'' : cs')  ->  hour (toInteger d) cs'
+                         (h, "|")         ->  clock 0 h 0 0
+                         _                ->  Msg.nothing
+
+    hour d cs        = case getInt cs of
+                         (h, ':' : cs')   ->  minute d h cs'
+                         (h, "|")         ->  clock d h 0 0
+                         _                ->  Msg.nothing
+
+    minute d h cs    = case getInt cs of
+                         (m, ':' : cs')   ->  second d h m cs'
+                         (m, "|")         ->  clock d h m 0
+                         _                ->  Msg.nothing
+
+    second d h m cs  = case getInt cs of
+                      (s, "|")         ->  clock d h m s
+                      _                ->  Msg.nothing
+
+    clock d h m s
+        | m >= 60    = Msg.nothing
+        | s >= 60    = Msg.nothing
+        | otherwise  = let (d', h') = h `divMod` 24
+                       in Right (d + toInteger d', (h', m, s))
+
+getInt :: String -> (Int, String)
+getInt = loop 0 where
+    loop n ""     = (n, "")
+    loop n (c:cs) = case fromDigit c of
+                      Just x  -> loop (10 * n + x) cs
+                      Nothing -> (n, c:cs)
+
+fromDigit :: Char -> Maybe Int
+fromDigit '0'  =  Just 0
+fromDigit '1'  =  Just 1
+fromDigit '2'  =  Just 2
+fromDigit '3'  =  Just 3
+fromDigit '4'  =  Just 4
+fromDigit '5'  =  Just 5
+fromDigit '6'  =  Just 6
+fromDigit '7'  =  Just 7
+fromDigit '8'  =  Just 8
+fromDigit '9'  =  Just 9
+fromDigit _    =  Nothing
 
 
 -- ----------------------  Time
