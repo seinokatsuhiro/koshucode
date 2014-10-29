@@ -87,8 +87,8 @@ consLexmap find gslot derives = lexmap where
     lexmap source =
         Msg.abLexmap source $
          case B.divideTreesByBar source of
-           [(B.TreeL rop@(B.TText _ 0 _) : trees)] -> derived rop trees
-           [(B.TreeL rop@(B.TText _ 3 _) : trees)] -> user LexmapWith rop trees
+           [(B.TreeL rop@(B.TText _ B.TextRaw _) : trees)] -> derived rop trees
+           [(B.TreeL rop@(B.TText _ B.TextKey _) : trees)] -> user LexmapWith rop trees
            [[B.TreeB B.BracketGroup _ trees]]      -> lexmap trees
            [[B.TreeB _ _ _]]     -> Msg.adlib "bracket"
            [[]]                  -> baseOf "id" []
@@ -163,7 +163,7 @@ consLexmap find gslot derives = lexmap where
     withTrees :: [String] -> B.Map [B.TTree]
     withTrees ws = map loop where
         loop (B.TreeB t p trees) = B.TreeB t p $ map loop trees
-        loop (B.TreeL (B.TText p 0 w)) | w `elem` ws = B.TreeL (B.TText p 3 w)
+        loop (B.TreeL (B.TText p B.TextRaw w)) | w `elem` ws = B.TreeL (B.TText p B.TextKey w)
         loop tree = tree
 
     withVars :: C.AttrTrees -> B.Ab [String]
@@ -180,9 +180,9 @@ consLexmap find gslot derives = lexmap where
 withTerms :: [B.TTree] -> B.Ab [B.Terminal String]
 withTerms = loop where
     loop (B.TreeL (B.TTerm _ 0 [n]) :
-          B.TreeL (B.TText _ 0 v)   : xs)  =  next (n, v) xs
+          B.TreeL (B.TText _ B.TextRaw v)   : xs)  =  next (n, v) xs
     loop (B.TreeL (B.TTerm _ 0 [n]) : xs)  =  next (n, n) xs
-    loop (B.TreeL (B.TText _ 0 v)   : xs)  =  next (v, v) xs
+    loop (B.TreeL (B.TText _ B.TextRaw v)   : xs)  =  next (v, v) xs
     loop [] = Right []
     loop _  = Msg.reqTermName
 

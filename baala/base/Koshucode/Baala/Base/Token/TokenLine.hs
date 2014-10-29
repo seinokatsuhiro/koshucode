@@ -78,7 +78,7 @@ general r@B.CodeRoll { B.codeInputPt = cp
                    | c == '#'        =  hash  cs [c]
                    | isOpen c        =  u     cs        $ B.TOpen    cp [c]
                    | isClose c       =  u     cs        $ B.TClose   cp [c]
-                   | isSingle c      =  u     cs        $ B.TText    cp 0 [c]
+                   | isSingle c      =  u     cs        $ B.TText    cp B.TextRaw [c]
                    | isTerm c        =  v               $ scanTerm   cp cs
                    | isQQ c          =  v               $ scanQQ     cp cs
                    | isQ c           =  v               $ scanQ      cp cs
@@ -87,11 +87,11 @@ general r@B.CodeRoll { B.codeInputPt = cp
                    | isSpace c       =  v               $ scanSpace  cp cs
                    | otherwise       =  Msg.forbiddenInput $ B.shortEmpty [c]
 
-    ast (c:cs) w   | w == "****"     =  u    (c:cs)     $ B.TText    cp 0 w
+    ast (c:cs) w   | w == "****"     =  u    (c:cs)     $ B.TText    cp B.TextRaw w
                    | c == '*'        =  ast  cs         $ c:w
     ast cs w       | w == "**"       =  u    ""         $ B.TComment cp cs
                    | w == "***"      =  u    ""         $ B.TComment cp cs
-                   | otherwise       =  u    cs         $ B.TText    cp 0 w
+                   | otherwise       =  u    cs         $ B.TText    cp B.TextRaw w
 
     bra (c:cs) w   | c == '<'        =  bra  cs         $ c:w
     bra cs w       | w == "<"        =  ang  cs ""
@@ -110,39 +110,39 @@ general r@B.CodeRoll { B.codeInputPt = cp
     slot cs n                        =  v               $ scanSlot n cp cs
 
     hash ('!':cs) _                  =  u ""            $ B.TComment cp cs
-    hash cs w                        =  u cs            $ B.TText    cp 0 w
+    hash cs w                        =  u cs            $ B.TText    cp B.TextRaw w
 
     short (c:cs) w  | c == '.'       =  let pre = rv w
                                             (cs', body) = nextCode   cs
                                         in u cs'        $ B.TShort   cp pre body
                     | isCode c       =  short cs        $ c:w
-    short cs w                       =  u cs            $ B.TText    cp 0 $ rv w
+    short cs w                       =  u cs            $ B.TText    cp B.TextRaw $ rv w
 
-    bar [] w                         =  u ""            $ B.TText    cp 0 w
+    bar [] w                         =  u ""            $ B.TText    cp B.TextRaw w
     bar (c:cs) w    | c == '|'       =  bar cs          $ c:w
                     | w == "||"      =  let cs' = B.trimLeft (c:cs)
-                                        in u cs'        $ B.TText    cp 0 w
+                                        in u cs'        $ B.TText    cp B.TextRaw w
                     | w == "|" && isCode  c = bar2 cs [c, '|']
                     | w == "|" && isClose c = u cs      $ B.TClose   cp ['|', c]
-                    | otherwise      =  u (c:cs)        $ B.TText    cp 0 w
+                    | otherwise      =  u (c:cs)        $ B.TText    cp B.TextRaw w
 
-    bar2 [] w                        =  u ""            $ B.TText    cp 0 $ rv w
-    bar2 (c:cs) w  | c == '|'        =  u cs            $ B.TText    cp 0 $ rv (c:w)
-                    | isSpace c      =  u (c:cs)        $ B.TText    cp 0 $ rv w
+    bar2 [] w                        =  u ""            $ B.TText    cp B.TextBar $ rv w
+    bar2 (c:cs) w  | c == '|'        =  u cs            $ B.TText    cp B.TextBar $ rv (c:w)
+                    | isSpace c      =  u (c:cs)        $ B.TText    cp B.TextBar $ rv w
                     | otherwise      =  bar2 cs (c:w)
 
     ang (c:cs) w    | c == '>'       =  u     cs        $ angle $ rv w
                     | isCode c       =  ang   cs        $ c:w
-    ang cs w                         =  u     cs        $ B.TText    cp 0 $ '<' : rv w
+    ang cs w                         =  u     cs        $ B.TText    cp B.TextRaw $ '<' : rv w
 
     angle ('c' : s)
         | isCharCode s  =  case charCodes s of
-                             Just ns  ->  B.TText cp 3 $ map Ch.chr ns
-                             Nothing  ->  B.TText cp (-1) s
-    angle ""            =                 B.TText cp 0 "<>"
+                             Just ns  ->  B.TText cp B.TextKey $ map Ch.chr ns
+                             Nothing  ->  B.TText cp B.TextUnk s
+    angle ""            =                 B.TText cp B.TextRaw "<>"
     angle s             =  case lookup s B.angleTexts of
-                             Just w   ->  B.TText cp 3 w
-                             Nothing  ->  B.TText cp (-1) s
+                             Just w   ->  B.TText cp B.TextKey w
+                             Nothing  ->  B.TText cp B.TextUnk s
 
 charCodes :: String -> Maybe [Int]
 charCodes = mapM B.readInt . B.omit null . B.divide '-'
@@ -162,11 +162,11 @@ interp r@B.CodeRoll { B.codeInputPt = cp
                   | isTerm c         =  v         $ scanTerm cp cs
                   | otherwise        =  word (c:cs) ""
 
-    word cs@('>':'>':'>':_) w        =  gen cs    $ B.TText cp 0 (rv w)
-    word (c:cs) w | isSpace c        =  u (c:cs)  $ B.TText cp 0 (rv w)
-                  | isTerm c         =  u (c:cs)  $ B.TText cp 0 (rv w)
+    word cs@('>':'>':'>':_) w        =  gen cs    $ B.TText cp B.TextRaw (rv w)
+    word (c:cs) w | isSpace c        =  u (c:cs)  $ B.TText cp B.TextRaw (rv w)
+                  | isTerm c         =  u (c:cs)  $ B.TText cp B.TextRaw (rv w)
                   | otherwise        =  word cs   $ c:w
-    word cs w                        =  u cs      $ B.TText cp 0 (rv w)
+    word cs w                        =  u cs      $ B.TText cp B.TextRaw (rv w)
 
  
 -- ----------------------  Scanner
@@ -202,15 +202,15 @@ scanSpace cp = loop 1 where
 
 scanCode :: Scan
 scanCode cp cs = let (cs', w) = nextCode cs
-                 in  Right (cs', B.TText cp 0 w)
+                 in  Right (cs', B.TText cp B.TextRaw w)
 
 scanQ :: Scan
 scanQ cp cs =    let (cs', w) = nextCode cs
-                 in Right (cs', B.TText cp 1 w)
+                 in Right (cs', B.TText cp B.TextQ w)
 
 scanQQ :: Scan
 scanQQ cp cs = do (cs', w) <- nextQQ cs
-                  Right (cs', B.TText cp 2 w)
+                  Right (cs', B.TText cp B.TextQQ w)
 
 scanTerm :: Scan
 scanTerm cp = word [] where

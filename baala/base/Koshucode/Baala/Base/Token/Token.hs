@@ -6,6 +6,7 @@
 module Koshucode.Baala.Base.Token.Token
 (
   -- * Token type
+  TextForm (..),
   Token (..),
   textToken,
   nameToken,
@@ -39,9 +40,19 @@ import qualified Koshucode.Baala.Base.Text      as B
 
 -- ----------------------  Token type
 
+data TextForm
+    = TextUnk     -- ^ Unknown keyword
+    | TextRaw     -- ^ Naked text
+    | TextQ       -- ^ Single-quoted text
+    | TextQQ      -- ^ Double-quoted text
+    | TextKey     -- ^ Keyword literal
+    | TextBar     -- ^ Text enclosed in bars
+    | TextName    -- ^ Text used as name
+      deriving (Show, Eq, Ord, G.Data, G.Typeable)
+
 -- | There are ten types of tokens.
 data Token
-    = TText    B.CodePt Int String     -- ^ Text.
+    = TText    B.CodePt TextForm String   -- ^ Text.
                                           --   'Int' represents quotation level, i.e.,
                                           --   0 for non-quoted,
                                           --   1 for single-quoted,
@@ -86,7 +97,7 @@ instance B.Write Token where
                                 ++ "." ++ (show $ B.codeColumnNumber pt)
 
 textToken :: String -> Token
-textToken = TText B.codeZero 0
+textToken = TText B.codeZero TextRaw
 
 nameToken :: String -> Token
 nameToken = TName B.codeZero . BlankNormal

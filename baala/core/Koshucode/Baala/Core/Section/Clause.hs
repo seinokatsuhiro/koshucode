@@ -96,17 +96,17 @@ consPreclause' src = dispatch $ liaison $ B.clauseTokens src where
 
     liaison :: B.Map [B.Token]
     liaison [] = []
-    liaison (B.TText _ 1 "'" : B.TTerm p2 0 w2 : xs)
+    liaison (B.TText _ B.TextQ "'" : B.TTerm p2 0 w2 : xs)
         = let tok = B.TTerm p2 1 w2
           in liaison $ tok : xs
     liaison (x : xs) = x : liaison xs
 
     dispatch :: [B.Token] -> [Clause]
-    dispatch (B.TText _ 0 ('|' : k) : xs) =
+    dispatch (B.TText _ B.TextBar ('|' : k) : xs) =
         frege k xs   -- Frege's judgement stroke
-    dispatch (B.TText _ 0 name : B.TText _ 0 colon : xs)
+    dispatch (B.TText _ B.TextRaw name : B.TText _ B.TextRaw colon : xs)
         | isDelim colon   =  rmap name xs
-    dispatch (B.TText _ 0 k : xs)
+    dispatch (B.TText _ B.TextRaw k : xs)
         | k == "section"  =  sec xs
         | k == "import"   =  impt xs
         | k == "export"   =  expt xs
@@ -230,7 +230,7 @@ shortToLong sh = map clause where
     long :: B.Map B.Token
     long token@(B.TShort n a b) =
         case lookup a sh of
-          Just l  -> B.TText n 2 $ l ++ b
+          Just l  -> B.TText n B.TextQQ $ l ++ b
           Nothing -> token
     long token = token
 

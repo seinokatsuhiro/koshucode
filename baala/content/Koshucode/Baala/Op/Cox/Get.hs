@@ -82,7 +82,7 @@ getTreesByEqual trees =
       _             -> Msg.adlib "getTreesByEqual"
 
 getTextFromTree :: B.TTree -> B.Ab String
-getTextFromTree (B.TreeL (B.TText _ 0 n)) = Right n
+getTextFromTree (B.TreeL (B.TText _ B.TextRaw n)) = Right n
 getTextFromTree _ = Msg.adlib "getTextFromTree"
 
 

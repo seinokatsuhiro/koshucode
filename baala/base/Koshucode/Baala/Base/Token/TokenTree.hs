@@ -122,13 +122,13 @@ splitTokensBy
     -> Either [B.Token] ([B.Token], B.Token, [B.Token])
        -- ^ Original-tokens or @(@before-list, the-word, after-list@)@
 splitTokensBy p = B.splitBy p2 where
-    p2 (B.TText _ 0 x) = p x
+    p2 (B.TText _ B.TextRaw x) = p x
     p2 _ = False
 
 -- | Divide token trees by quoteless token of given string.
 divideTreesBy :: String -> TTreesTo [[TTree]]
 divideTreesBy w1 = B.divideBy p where
-    p (B.TreeL (B.TText _ 0 w2))  =  w1 == w2
+    p (B.TreeL (B.TText _ B.TextRaw w2))  =  w1 == w2
     p _                           =  False
 
 -- | Divide token trees by vertical bar @\"|\"@.

@@ -111,7 +111,7 @@ attrSortBranch trees =
 
 hyphenAssc :: TreeSort
 hyphenAssc = B.assocBy name "@trunk" where
-    name (B.TreeL (B.TText _ 0 n@('-' : _))) = Just n
+    name (B.TreeL (B.TText _ B.TextRaw n@('-' : _))) = Just n
     name _ = Nothing
 
 attrTrunk :: AttrDefine -> B.AbMap AttrTrees

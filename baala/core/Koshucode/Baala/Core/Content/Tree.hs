@@ -52,8 +52,8 @@ treeToText _ _ = Msg.nothing
 
 -- | Get quoted/unquoted text.
 tokenToText :: Bool -> B.Token -> B.Ab String
-tokenToText True  (B.TText _ q w) | q > 0   =  Right w
-tokenToText False (B.TText _ q w) | q == 0  =  Right w
+tokenToText True  (B.TText _ q w) | q > B.TextRaw  =  Right w
+tokenToText False (B.TText _ B.TextRaw w)          =  Right w
 tokenToText _ _  =  Msg.nothing
 
 treesToDigits :: B.TTreesToAb String
