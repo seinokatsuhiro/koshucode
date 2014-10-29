@@ -102,8 +102,8 @@ consPreclause' src = dispatch $ liaison $ B.clauseTokens src where
     liaison (x : xs) = x : liaison xs
 
     dispatch :: [B.Token] -> [Clause]
-    dispatch (B.TText _ 0 "|" : B.TText _ 0 k : xs) =
-        frege k xs  -- Frege's judgement stroke
+    dispatch (B.TText _ 0 ('|' : k) : xs) =
+        frege k xs   -- Frege's judgement stroke
     dispatch (B.TText _ 0 name : B.TText _ 0 colon : xs)
         | isDelim colon   =  rmap name xs
     dispatch (B.TText _ 0 k : xs)

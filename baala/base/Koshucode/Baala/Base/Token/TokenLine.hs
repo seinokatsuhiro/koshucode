@@ -23,7 +23,7 @@ module Koshucode.Baala.Base.Token.TokenLine
     -- $Examples
   ) where
 
-import qualified Data.Char                            as Char
+import qualified Data.Char                            as Ch
 import qualified Koshucode.Baala.Base.Abort           as B
 import qualified Koshucode.Baala.Base.Prelude         as B
 import qualified Koshucode.Baala.Base.Syntax          as B
@@ -122,9 +122,14 @@ general r@B.CodeRoll { B.codeInputPt = cp
     bar (c:cs) w    | c == '|'       =  bar cs          $ c:w
                     | w == "||"      =  let cs' = B.trimLeft (c:cs)
                                         in u cs'        $ B.TText    cp 0 w
-                    | w == "|" &&
-                      isClose c      =  u cs            $ B.TClose   cp ['|', c]
+                    | w == "|" && isCode  c = bar2 cs [c, '|']
+                    | w == "|" && isClose c = u cs      $ B.TClose   cp ['|', c]
                     | otherwise      =  u (c:cs)        $ B.TText    cp 0 w
+
+    bar2 [] w                        =  u ""            $ B.TText    cp 0 $ rv w
+    bar2 (c:cs) w  | c == '|'        =  u cs            $ B.TText    cp 0 $ rv (c:w)
+                    | isSpace c      =  u (c:cs)        $ B.TText    cp 0 $ rv w
+                    | otherwise      =  bar2 cs (c:w)
 
     ang (c:cs) w    | c == '>'       =  u     cs        $ angle $ rv w
                     | isCode c       =  ang   cs        $ c:w
@@ -132,7 +137,7 @@ general r@B.CodeRoll { B.codeInputPt = cp
 
     angle ('c' : s)
         | isCharCode s  =  case charCodes s of
-                             Just ns  ->  B.TText cp 3 $ map Char.chr ns
+                             Just ns  ->  B.TText cp 3 $ map Ch.chr ns
                              Nothing  ->  B.TText cp (-1) s
     angle ""            =                 B.TText cp 0 "<>"
     angle s             =  case lookup s B.angleTexts of
@@ -241,21 +246,21 @@ isSingle   =  ( `elem` ":|"    )  -- UnicodePunctuation | UnicodeSymbol
 isQ        =  (    ==  '\''    )  -- UnicodePunctuation
 isQQ       =  (    ==  '"'     )  -- UnicodePunctuation
 isTerm     =  (    ==  '/'     )  -- UnicodePunctuation
-isSpace    =  Char.isSpace
+isSpace    =  Ch.isSpace
 isCode     =  B.isCodeChar
 
 isShortPrefix :: B.Pred String
 isShortPrefix = all isShort
 
 isShort :: B.Pred Char
-isShort = Char.isAlpha
+isShort = Ch.isAlpha
 
 isCharCode :: B.Pred String
 isCharCode = all isFigure
 
 isFigure :: B.Pred Char
 isFigure '-' = True
-isFigure c   = Char.isDigit c
+isFigure c   = Ch.isDigit c
 
 
 -- ------------------------------------------------------------------
