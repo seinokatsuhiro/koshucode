@@ -81,12 +81,12 @@ textClock = dayOrHour where
     dayOrHour cs     = case getInt cs of
                          (h, ':'  : cs')  ->  minute 0 h cs'
                          (d, '\'' : cs')  ->  hour (toInteger d) cs'
-                         (h, "|")         ->  clock B.ClockDhm 0 h 0 0
+                         (h, "|")         ->  clock B.ClockDh 0 h 0 0
                          _                ->  Msg.nothing
 
     hour d cs        = case getInt cs of
                          (h, ':' : cs')   ->  minute d h cs'
-                         (h, "|")         ->  clock B.ClockDhm d h 0 0
+                         (h, "|")         ->  clock B.ClockDh d h 0 0
                          _                ->  Msg.nothing
 
     minute d h cs    = case getInt cs of

@@ -14,6 +14,7 @@ import qualified Koshucode.Baala.Base.Text     as B
 data Clock
     = ClockDhms DayCount Sec
     | ClockDhm  DayCount Sec
+    | ClockDh   DayCount Sec
       deriving (Show, Eq, Ord)
 
 type DayCount = Integer
@@ -35,8 +36,9 @@ hmsFromSec sec =
 -- ----------------------  Writer
 
 instance B.Write Clock where
-    write _ (ClockDhms day sec) = clockDoc hmsDoc day sec
-    write _ (ClockDhm  day sec) = clockDoc hmDoc  day sec
+    write _ (ClockDhms day sec) = clockDoc dhmsDoc day sec
+    write _ (ClockDhm  day sec) = clockDoc dhmDoc  day sec
+    write _ (ClockDh   day sec) = clockDoc dhDoc   day sec
 
 clockDoc :: (Sec -> (DayCount, B.Doc)) -> DayCount -> Int -> B.Doc
 clockDoc secDoc day sec =
@@ -46,15 +48,20 @@ clockDoc secDoc day sec =
                0  -> doc
                d2 -> B.doc d2 B.<> B.doc "'" B.<> doc
 
-hmsDoc :: Sec -> (DayCount, B.Doc)
-hmsDoc sec = (d, hms) where
+dhmsDoc :: Sec -> (DayCount, B.Doc)
+dhmsDoc sec = (d, hms) where
     hms            = dd h B.<> colon B.<> dd m B.<> colon B.<> dd s
     (d, h, m, s)   = hmsFromSec sec
 
-hmDoc :: Sec -> (DayCount, B.Doc)
-hmDoc sec = (d, hm) where
+dhmDoc :: Sec -> (DayCount, B.Doc)
+dhmDoc sec = (d, hm) where
     hm             = dd h B.<> colon B.<> dd m
     (d, h, m, _)   = hmsFromSec sec
+
+dhDoc :: Sec -> (DayCount, B.Doc)
+dhDoc sec = (d, hm) where
+    hm             = dd h
+    (d, h, _, _)   = hmsFromSec sec
 
 colon :: B.Doc
 colon = B.doc ":"
@@ -84,6 +91,7 @@ clockRangeBy step from to = clocks where
 clockTuple :: Clock -> (DayCount, Sec)
 clockTuple (ClockDhms d s) = (d, s)
 clockTuple (ClockDhm  d s) = (d, s)
+clockTuple (ClockDh   d s) = (d, s)
 
 fromClockTuple :: (DayCount, Sec) -> Clock
 fromClockTuple (d, s) = ClockDhms d s
