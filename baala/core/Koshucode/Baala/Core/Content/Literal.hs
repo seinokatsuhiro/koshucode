@@ -37,9 +37,9 @@ literal calc tree = Msg.abLiteral tree $ lit tree where
     lit :: B.TTreeToAb c
     lit x@(B.TreeL t)
         = eithcon (eithcon (eithcon (token t)
-            clock    $ C.tokenClock t)
-            datetime $ C.treesToTime   [x])
-            decimal  $ C.treesToDigits [x]
+            C.putClock $ C.tokenClock t)
+            datetime   $ C.treesToTime   [x])
+            decimal    $ C.treesToDigits [x]
     lit g@(B.TreeB b _ xs) = case b of
         B.BracketGroup   ->  group g
         B.BracketList    ->  C.putList   =<< litColon lit xs
@@ -80,8 +80,6 @@ literal calc tree = Msg.abLiteral tree $ lit tree where
     time (Just h, Just i, _)       =  Just $ h ++ i
     time (Just h, _, _)            =  Just h
     time _                         =  Nothing
-
-    clock (d, hms) = C.putClock $ B.Clock d $ B.secFromHms hms
 
     keyword :: (C.CEmpty c, C.CBool c) => String -> B.Ab c
     keyword "0"  =  Right C.false

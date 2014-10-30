@@ -72,37 +72,37 @@ concatDigits = first where
 
 -- ----------------------  Clock
 
-tokenClock :: B.Token -> B.Ab (B.DayCount, (B.Hour, B.Min, B.Sec))
+tokenClock :: B.Token -> B.Ab B.Clock
 tokenClock (B.TText _ B.TextBar ('|' : w)) = textClock w
 tokenClock _ = Msg.nothing
 
-textClock :: String -> B.Ab (B.DayCount, (B.Hour, B.Min, B.Sec))
+textClock :: String -> B.Ab B.Clock
 textClock = dayOrHour where
     dayOrHour cs     = case getInt cs of
                          (h, ':'  : cs')  ->  minute 0 h cs'
                          (d, '\'' : cs')  ->  hour (toInteger d) cs'
-                         (h, "|")         ->  clock 0 h 0 0
+                         (h, "|")         ->  clock B.ClockDhm 0 h 0 0
                          _                ->  Msg.nothing
 
     hour d cs        = case getInt cs of
                          (h, ':' : cs')   ->  minute d h cs'
-                         (h, "|")         ->  clock d h 0 0
+                         (h, "|")         ->  clock B.ClockDhm d h 0 0
                          _                ->  Msg.nothing
 
     minute d h cs    = case getInt cs of
                          (m, ':' : cs')   ->  second d h m cs'
-                         (m, "|")         ->  clock d h m 0
+                         (m, "|")         ->  clock B.ClockDhm d h m 0
                          _                ->  Msg.nothing
 
     second d h m cs  = case getInt cs of
-                      (s, "|")         ->  clock d h m s
-                      _                ->  Msg.nothing
+                         (s, "|")         ->  clock B.ClockDhms d h m s
+                         _                ->  Msg.nothing
 
-    clock d h m s
+    clock k d h m s
         | m >= 60    = Msg.nothing
         | s >= 60    = Msg.nothing
         | otherwise  = let (d', h') = h `divMod` 24
-                       in Right (d + toInteger d', (h', m, s))
+                       in Right $ k (d + toInteger d') $ B.secFromHms (h', m, s)
 
 getInt :: String -> (Int, String)
 getInt = loop 0 where

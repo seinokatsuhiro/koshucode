@@ -12,33 +12,14 @@ import qualified Koshucode.Baala.Base.Prelude  as B
 import qualified Koshucode.Baala.Base.Text     as B
 
 data Clock
-    = Clock DayCount Sec
+    = ClockDhms DayCount Sec
+    | ClockDhm  DayCount Sec
       deriving (Show, Eq, Ord)
 
 type DayCount = Integer
 type Hour = Int
 type Min  = Int
 type Sec  = Int
-
-instance B.Write Clock where
-    write _ (Clock day sec) =
-        let (d, doc) = secDoc sec
-        in wrapBar $ case day + d of
-                       0  -> doc
-                       d2 -> B.doc d2 B.<> B.doc "'" B.<> doc
-
-wrapBar :: B.Map B.Doc
-wrapBar = B.docWrap "|" "|"
-
-secDoc :: Sec -> (DayCount, B.Doc)
-secDoc sec = (d, hms) where
-    hms             = dd h B.<> colon B.<> dd m B.<> colon B.<> dd s
-    (d, h, m, s)    = hmsFromSec sec
-    colon           = B.doc ":"
-
-    dd :: Int -> B.Doc
-    dd n | n < 10    = B.doc $ '0' : show n
-         | otherwise = B.doc n
 
 secFromHms :: (Hour, Min, Sec) -> Sec
 secFromHms (h, m, s) = (h * 60 + m) * 60 + s
@@ -49,6 +30,38 @@ hmsFromSec sec =
         (h', m)   =  m'  `divMod` 60
         (d,  h)   =  h'  `divMod` 24
     in (toInteger d, h, m, s)
+
+
+-- ----------------------  Writer
+
+instance B.Write Clock where
+    write _ (ClockDhms day sec) = clockDoc hmsDoc day sec
+    write _ (ClockDhm  day sec) = clockDoc hmDoc  day sec
+
+clockDoc :: (Sec -> (DayCount, B.Doc)) -> DayCount -> Int -> B.Doc
+clockDoc secDoc day sec =
+    let (d, doc) = secDoc sec
+    in B.docWrap "|" "|"
+           $ case day + d of
+               0  -> doc
+               d2 -> B.doc d2 B.<> B.doc "'" B.<> doc
+
+hmsDoc :: Sec -> (DayCount, B.Doc)
+hmsDoc sec = (d, hms) where
+    hms            = dd h B.<> colon B.<> dd m B.<> colon B.<> dd s
+    (d, h, m, s)   = hmsFromSec sec
+
+hmDoc :: Sec -> (DayCount, B.Doc)
+hmDoc sec = (d, hm) where
+    hm             = dd h B.<> colon B.<> dd m
+    (d, h, m, _)   = hmsFromSec sec
+
+colon :: B.Doc
+colon = B.doc ":"
+
+dd :: Int -> B.Doc
+dd n | n < 10    = B.doc $ '0' : show n
+     | otherwise = B.doc n
 
 
 -- ----------------------  Range
@@ -69,10 +82,11 @@ clockRangeBy step from to = clocks where
     clocks =  map fromClockTuple $ B.rangeBy step from' to'
 
 clockTuple :: Clock -> (DayCount, Sec)
-clockTuple (Clock d s) = (d, s)
+clockTuple (ClockDhms d s) = (d, s)
+clockTuple (ClockDhm  d s) = (d, s)
 
 fromClockTuple :: (DayCount, Sec) -> Clock
-fromClockTuple (d, s) = Clock d s
+fromClockTuple (d, s) = ClockDhms d s
 
 hourStep :: B.Map (DayCount, Sec)
 hourStep (d, s)   | s < 82800 = (d, s')
