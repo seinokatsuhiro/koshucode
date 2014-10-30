@@ -3,10 +3,10 @@
 -- | Rops and cops.
 
 module Koshucode.Baala.Op.Global
-( vanillaGlobal,
-  vanillaRops,
-  vanillaCops,
-) where
+  ( vanillaGlobal,
+    vanillaRops,
+    vanillaCops,
+  ) where
 
 import qualified Koshucode.Baala.Base      as B
 import qualified Koshucode.Baala.Core      as C
@@ -29,6 +29,7 @@ vanillaRops = ropsCox ++ ropsNonCox
 
 ropsCox :: (C.CContent c) => [C.Rop c]
 ropsCox    = Rop.ropsCoxCalc
+          ++ Rop.ropsCoxRange
           ++ Rop.ropsCoxEmpty
           ++ Rop.ropsCoxFilter
           ++ Rop.ropsCoxGadget
