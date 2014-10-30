@@ -3,13 +3,16 @@
 module Koshucode.Baala.Base.Data.Clock
   ( Clock (..), DayCount, Hour, Min, Sec,
     hmsFromSec, secFromHms,
+    clockAdd, clockSub,
     clockRangeHour,
     clockRangeMinute,
     clockRangeSecond,
   ) where
 
+import qualified Koshucode.Baala.Base.Abort    as B
 import qualified Koshucode.Baala.Base.Prelude  as B
 import qualified Koshucode.Baala.Base.Text     as B
+import qualified Koshucode.Baala.Base.Message  as Msg
 
 data Clock
     = ClockDhms DayCount Sec
@@ -76,6 +79,40 @@ dayDoc d = B.doc d B.<> B.doc "'"
 dd :: Int -> B.Doc
 dd n | n < 10    = B.doc $ '0' : show n
      | otherwise = B.doc n
+
+
+-- ----------------------  Arithmetic
+
+clockAdd :: Clock -> Clock -> B.Ab Clock
+clockAdd (ClockD    d1)    (ClockD    d2)      =  clockD    (d1 + d2)
+clockAdd (ClockDh   d1 s1) (ClockDh   d2 s2)   =  clockDh   (d1 + d2) (s1 + s2)
+clockAdd (ClockDhm  d1 s1) (ClockDhm  d2 s2)   =  clockDhm  (d1 + d2) (s1 + s2)
+clockAdd (ClockDhms d1 s1) (ClockDhms d2 s2)   =  clockDhms (d1 + d2) (s1 + s2)
+clockAdd _ _ = Msg.adlib "clock"
+
+clockSub :: Clock -> Clock -> B.Ab Clock
+clockSub (ClockD    d1)    (ClockD    d2)     =  clockD    (d1 - d2)
+clockSub (ClockDh   d1 s1) (ClockDh   d2 s2)  =  clockDh   (d1 - d2) (s1 - s2)
+clockSub (ClockDhm  d1 s1) (ClockDhm  d2 s2)  =  clockDhm  (d1 - d2) (s1 - s2)
+clockSub (ClockDhms d1 s1) (ClockDhms d2 s2)  =  clockDhms (d1 - d2) (s1 - s2)
+clockSub _ _ = Msg.adlib "clock"
+
+clockD :: DayCount -> B.Ab Clock
+clockD = Right . ClockD
+
+clockDh :: DayCount -> Sec -> B.Ab Clock
+clockDh = make ClockDh
+
+clockDhm :: DayCount -> Sec -> B.Ab Clock
+clockDhm = make ClockDhm
+
+clockDhms :: DayCount -> Sec -> B.Ab Clock
+clockDhms = make ClockDhms
+
+make :: (DayCount -> Sec -> Clock) -> DayCount -> Sec -> B.Ab Clock
+make k d s = let (d', s') = s `divMod` 86400
+             in Right $ k (d + toInteger d') s'
+
 
 
 -- ----------------------  Range

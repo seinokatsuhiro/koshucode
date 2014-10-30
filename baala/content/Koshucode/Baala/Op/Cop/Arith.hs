@@ -30,13 +30,13 @@ import qualified Koshucode.Baala.Op.Message as Msg
 --  [@abs@]   Absolute value.
 --
 
-copsArith :: (C.CDec c, C.CList c, C.CText c) => [C.Cop c]
+copsArith :: (C.CDec c, C.CList c, C.CText c, C.CClock c) => [C.Cop c]
 copsArith =
-    [ C.CopCalc  (C.copInfix "+")    copPlus
-    , C.CopCalc  (C.copInfix "-")    copMinus
-    , C.CopCalc  (C.copInfix "*")    copTimes
-    , C.CopCalc  (C.copInfix "quo")  copQuo
-    , C.CopCalc  (C.copInfix "rem")  copRem
+    [ C.CopCalc  (C.copInfix "+")      copPlus2
+    , C.CopCalc  (C.copInfix "-")      copMinus
+    , C.CopCalc  (C.copInfix "*")      copTimes
+    , C.CopCalc  (C.copInfix "quo")    copQuo
+    , C.CopCalc  (C.copInfix "rem")    copRem
 
     , C.CopCalc  (C.copNormal "+")     copPlus
     , C.CopCalc  (C.copNormal "-")     copMinus
@@ -58,6 +58,12 @@ copPlus xs = fmap C.pDec $ loop xs where
                       m' <- loop m
                       B.decimalAdd n' m'
 
+copPlus2 :: (C.CDec c, C.CClock c) => C.CopCalc c
+copPlus2 [Right xc, Right yc]
+    | C.isDec   xc && C.isDec   yc = C.putDec   =<< B.decimalAdd (C.gDec   xc) (C.gDec   yc)
+    | C.isClock xc && C.isClock yc = C.putClock =<< B.clockAdd   (C.gClock xc) (C.gClock yc)
+copPlus2 _ = Msg.unexpAttr "+"
+
 copTimes :: (C.CText c, C.CDec c) => C.CopCalc c
 copTimes xs = fmap C.pDec $ loop xs where
     loop [] = Right $ B.intDecimal 1
@@ -65,15 +71,13 @@ copTimes xs = fmap C.pDec $ loop xs where
                       m' <- loop m
                       B.decimalMul n' m'
 
-copMinus :: (C.CText c, C.CDec c) => C.CopCalc c
+copMinus :: (C.CText c, C.CDec c, C.CClock c) => C.CopCalc c
 copMinus [a] =
     do a' <- copDec a
        Right $ C.pDec $ B.decimalRevsign a'
-copMinus [a, b] =
-    do a' <- copDec a
-       b' <- copDec b
-       c' <- B.decimalSub a' b'
-       Right $ C.pDec c'
+copMinus [Right xc, Right yc]
+    | C.isDec   xc && C.isDec   yc = C.putDec   =<< B.decimalSub (C.gDec   xc) (C.gDec   yc)
+    | C.isClock xc && C.isClock yc = C.putClock =<< B.clockSub   (C.gClock xc) (C.gClock yc)
 copMinus _ = Msg.unexpAttr "-"
 
 copQuo :: (C.CText c, C.CDec c) => C.CopCalc c
