@@ -15,6 +15,7 @@ data Clock
     = ClockDhms DayCount Sec
     | ClockDhm  DayCount Sec
     | ClockDh   DayCount Sec
+    | ClockD    DayCount
       deriving (Show, Eq, Ord)
 
 type DayCount = Integer
@@ -36,17 +37,23 @@ hmsFromSec sec =
 -- ----------------------  Writer
 
 instance B.Write Clock where
-    write _ (ClockDhms day sec) = clockDoc dhmsDoc day sec
-    write _ (ClockDhm  day sec) = clockDoc dhmDoc  day sec
-    write _ (ClockDh   day sec) = clockDoc dhDoc   day sec
+    write _ (ClockDhms day sec)  =  clockDoc dhmsDoc day sec
+    write _ (ClockDhm  day sec)  =  clockDoc dhmDoc  day sec
+    write _ (ClockDh   day sec)  =  clockDoc dhDoc   day sec
+    write _ (ClockD    day)      =  bars $ dayDoc day
 
 clockDoc :: (Sec -> (DayCount, B.Doc)) -> DayCount -> Int -> B.Doc
 clockDoc secDoc day sec =
     let (d, doc) = secDoc sec
-    in B.docWrap "|" "|"
-           $ case day + d of
+    in bars$ case day + d of
                0  -> doc
-               d2 -> B.doc d2 B.<> B.doc "'" B.<> doc
+               d2 -> dayDoc d2 B.<> doc
+
+bars :: B.Map B.Doc
+bars = B.docWrap "|" "|"
+
+colon :: B.Doc
+colon = B.doc ":"
 
 dhmsDoc :: Sec -> (DayCount, B.Doc)
 dhmsDoc sec = (d, hms) where
@@ -63,8 +70,8 @@ dhDoc sec = (d, hm) where
     hm             = dd h
     (d, h, _, _)   = hmsFromSec sec
 
-colon :: B.Doc
-colon = B.doc ":"
+dayDoc :: DayCount -> B.Doc
+dayDoc d = B.doc d B.<> B.doc "'"
 
 dd :: Int -> B.Doc
 dd n | n < 10    = B.doc $ '0' : show n
@@ -89,9 +96,10 @@ clockRangeBy step from to = clocks where
     clocks =  map fromClockTuple $ B.rangeBy step from' to'
 
 clockTuple :: Clock -> (DayCount, Sec)
-clockTuple (ClockDhms d s) = (d, s)
-clockTuple (ClockDhm  d s) = (d, s)
-clockTuple (ClockDh   d s) = (d, s)
+clockTuple (ClockDhms d s)  =  (d, s)
+clockTuple (ClockDhm  d s)  =  (d, s)
+clockTuple (ClockDh   d s)  =  (d, s)
+clockTuple (ClockD    d)    =  (d, 0)
 
 fromClockTuple :: (DayCount, Sec) -> Clock
 fromClockTuple (d, s) = ClockDhms d s

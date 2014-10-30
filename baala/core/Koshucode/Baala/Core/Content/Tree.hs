@@ -80,8 +80,9 @@ textClock :: String -> B.Ab B.Clock
 textClock = dayOrHour where
     dayOrHour cs     = case getInt cs of
                          (h, ':'  : cs')  ->  minute 0 h cs'
-                         (d, '\'' : cs')  ->  hour (toInteger d) cs'
+                         (d, "'|")        ->  Right $ B.ClockD $ toInteger d
                          (h, "|")         ->  clock B.ClockDh 0 h 0 0
+                         (d, '\'' : cs')  ->  hour (toInteger d) cs'
                          _                ->  Msg.nothing
 
     hour d cs        = case getInt cs of
