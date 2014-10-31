@@ -115,7 +115,7 @@ koshuMain global =
              g2    =  C.globalFill global
                         { C.globalProgram   = prog
                         , C.globalArgs      = argv
-                        , C.globalTime      = B.TimeYMD day
+                        , C.globalTime      = B.TimeYmd day
                         , C.globalResources = res }
 
        (_, _, errs) -> L.putFailure $ concat errs

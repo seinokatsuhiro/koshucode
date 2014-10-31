@@ -2,7 +2,7 @@
 
 module Koshucode.Baala.Base.Data.Time
   ( -- * Type
-    Time (..), MJD, Year, Month, Day,
+    Time (..), Year, Month, Day,
 
     -- * Construct
     timeFromYmdAb, timeFromYmdcAb,
@@ -30,8 +30,8 @@ import qualified Koshucode.Baala.Base.Message     as Msg
 
 data Time
     = TimeYmdc T.Day B.Clock
-    | TimeYMD  T.Day
-    | TimeYM   T.Day
+    | TimeYmd  T.Day
+    | TimeYm   T.Day
       deriving (Show, Eq, Ord)
 
 instance B.Write Time where
@@ -39,13 +39,12 @@ instance B.Write Time where
 
 writeTime :: Time -> B.Doc
 writeTime (TimeYmdc day clock)  = writeDay day B.<+> B.writeClockBody clock
-writeTime (TimeYMD  day)        = writeDay day
-writeTime (TimeYM   day)        = writeDay day
+writeTime (TimeYmd  day)        = writeDay day
+writeTime (TimeYm   day)        = writeDay day
 
 writeDay :: T.Day -> B.Doc
 writeDay = B.doc . show
 
-type MJD   = Integer
 type Year  = Integer
 type Month = Int
 type Day   = Int
@@ -56,7 +55,7 @@ type Day   = Int
 timeFromYmdAb :: Year -> Month -> Day -> B.Ab Time
 timeFromYmdAb y m d =
     case T.fromGregorianValid y m d of
-      Just day -> Right $ TimeYMD day
+      Just day -> Right $ TimeYmd day
       Nothing  -> Msg.notDate y m d
 
 timeFromYmdcAb :: Year -> Month -> Day -> B.Clock -> B.Ab Time
@@ -66,33 +65,33 @@ timeFromYmdcAb y m d c =
       Nothing  -> Msg.notDate y m d
 
 timeFromYmd :: Year -> Month -> Day -> Time
-timeFromYmd y m d = TimeYMD $ T.fromGregorian y m d
+timeFromYmd y m d = TimeYmd $ T.fromGregorian y m d
 
 timeFromYmdTuple :: (Year, Month, Day) -> Time
-timeFromYmdTuple = TimeYMD . fromGregorianTuple
+timeFromYmdTuple = TimeYmd . fromGregorianTuple
 
 fromGregorianTuple :: (Year, Month, Day) -> T.Day
 fromGregorianTuple (y, m, d) = T.fromGregorian y m d
 
 timeDay :: Time -> T.Day
 timeDay (TimeYmdc day _)  = day
-timeDay (TimeYMD  day)    = day
-timeDay (TimeYM   day)    = day
+timeDay (TimeYmd  day)    = day
+timeDay (TimeYm   day)    = day
 
-timeMjd :: Time -> MJD
+timeMjd :: Time -> B.DayCount
 timeMjd = T.toModifiedJulianDay . timeDay
 
-timeFromMjd :: MJD -> Time
-timeFromMjd = TimeYMD . T.ModifiedJulianDay
+timeFromMjd :: B.DayCount -> Time
+timeFromMjd = TimeYmd . T.ModifiedJulianDay
 
-timeMapMjd :: B.Map MJD -> B.Map Time
+timeMapMjd :: B.Map B.DayCount -> B.Map Time
 timeMapMjd f time = timeMapDay g time where
     g (T.ModifiedJulianDay d) = T.ModifiedJulianDay $ f d
 
 timeMapDay :: B.Map T.Day -> B.Map Time
-timeMapDay f (TimeYmdc day _)  = TimeYMD $ f day
-timeMapDay f (TimeYMD  day)    = TimeYMD $ f day
-timeMapDay f (TimeYM   day)    = TimeYM  $ f day
+timeMapDay f (TimeYmdc day _)  = TimeYmd $ f day
+timeMapDay f (TimeYmd  day)    = TimeYmd $ f day
+timeMapDay f (TimeYm   day)    = TimeYm  $ f day
 
 
 -- ----------------------  First day
@@ -104,22 +103,22 @@ timeMapDay f (TimeYM   day)    = TimeYM  $ f day
 --  The first day of month.
 --
 --    >>> timeFloorMonth $ timeFromYmd 2014 11 3
---    TimeYMD 2014-11-01
+--    TimeYmd 2014-11-01
 --
 --  The first day of year.
 --
 --    >>> timeFloorYear $ timeFromYmd 2014 11 3
---    TimeYMD 2014-01-01
+--    TimeYmd 2014-01-01
 --
 --  The first day of next month.
 --
 --    >>> timeCeilMonth $ timeFromYmd 2014 11 3
---    TimeYMD 2014-12-01
+--    TimeYmd 2014-12-01
 --
 --  The first day of next year.
 --
 --    >>> timeCeilYaer $ timeFromYmd 2014 11 3
---    TimeYMD 2015-01-01
+--    TimeYmd 2015-01-01
 
 timeFloorMonth :: B.Map Time
 timeFloorMonth time =
@@ -157,7 +156,7 @@ timeRangeBy :: B.Map (Year, Month, Day) -> B.RangeBy Time
 timeRangeBy step from to = times where
     dayFrom =  T.toGregorian $ timeDay from
     dayTo   =  T.toGregorian $ timeDay to
-    time    =  TimeYMD . fromGregorianTuple
+    time    =  TimeYmd . fromGregorianTuple
     times   =  map time $ B.rangeBy step dayFrom dayTo
 
 monthStep :: B.Map (Year, Month, Day)
@@ -174,13 +173,13 @@ timeGregorian = T.toGregorian . timeDay
 
 -- ----------------------  Add
 
-timeAddDay :: MJD -> B.Map Time
+timeAddDay :: B.DayCount -> B.Map Time
 timeAddDay n = timeMapMjd (+ n)
 
-timeAddWeek :: MJD -> B.Map Time
+timeAddWeek :: B.DayCount -> B.Map Time
 timeAddWeek n = timeAddDay (7 * n)
 
-timeAddMonth :: MJD -> B.Map Time
+timeAddMonth :: B.DayCount -> B.Map Time
 timeAddMonth n time =
     let (y, m, d) = T.toGregorian $ timeDay time
         (yd, m')  = (toInteger m + n) `divMod` 12
