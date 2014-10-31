@@ -19,6 +19,7 @@ module Koshucode.Baala.Base.Data.Time
 
     -- * Add
     timeAddDay, timeAddWeek, timeAddMonth, timeAddYear,
+    timeDiff,
   ) where
 
 import qualified Data.Time.Calendar               as T
@@ -191,3 +192,14 @@ timeAddYear n time =
     let (y, m, d) = T.toGregorian $ timeDay time
         y'        = y + n
     in timeFromYmd y' m d
+
+timeDiff :: Time -> Time -> B.Ab B.Clock
+timeDiff (TimeYmdc d2 c2) (TimeYmdc d1 c1) =
+    do let d3 = T.toModifiedJulianDay d2 - T.toModifiedJulianDay d1
+       c3 <- B.clockSub c2 c1
+       Right $ B.clockAddDay d3 c3
+timeDiff (TimeYmd d2) (TimeYmd d1) =
+    Right $ B.ClockD $ T.toModifiedJulianDay d2 - T.toModifiedJulianDay d1
+timeDiff (TimeYm d2) (TimeYm d1) =
+    Right $ B.ClockD $ T.toModifiedJulianDay d2 - T.toModifiedJulianDay d1
+timeDiff _ _ = Msg.adlib "timeDiff"

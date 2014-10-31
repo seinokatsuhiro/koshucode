@@ -30,7 +30,7 @@ import qualified Koshucode.Baala.Op.Message as Msg
 --  [@abs@]   Absolute value.
 --
 
-copsArith :: (C.CDec c, C.CList c, C.CText c, C.CClock c) => [C.Cop c]
+copsArith :: (C.CContent c) => [C.Cop c]
 copsArith =
     [ C.CopCalc  (C.copInfix "+")      copPlus2
     , C.CopCalc  (C.copInfix "-")      copMinus
@@ -71,13 +71,14 @@ copTimes xs = fmap C.pDec $ loop xs where
                       m' <- loop m
                       B.decimalMul n' m'
 
-copMinus :: (C.CText c, C.CDec c, C.CClock c) => C.CopCalc c
+copMinus :: (C.CText c, C.CDec c, C.CClock c, C.CTime c) => C.CopCalc c
 copMinus [a] =
     do a' <- copDec a
        Right $ C.pDec $ B.decimalRevsign a'
 copMinus [Right xc, Right yc]
     | C.isDec   xc && C.isDec   yc = C.putDec   =<< B.decimalSub (C.gDec   xc) (C.gDec   yc)
     | C.isClock xc && C.isClock yc = C.putClock =<< B.clockSub   (C.gClock xc) (C.gClock yc)
+    | C.isTime  xc && C.isTime  yc = C.putClock =<< B.timeDiff   (C.gTime  xc) (C.gTime  yc)
 copMinus _ = Msg.unexpAttr "-"
 
 copQuo :: (C.CText c, C.CDec c) => C.CopCalc c

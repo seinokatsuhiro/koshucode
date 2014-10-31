@@ -12,6 +12,7 @@ module Koshucode.Baala.Base.Data.Clock
 
     -- * Calculation
     clockPos, clockNeg,
+    clockAddDay,
     clockAdd, clockSub,
     clockRangeBy, clockStep,
   ) where
@@ -149,6 +150,9 @@ clockNeg = clockMap neg neg
 neg :: (Ord a, Num a) => a -> a
 neg a | a > 0      = - a
       | otherwise  = a
+
+clockAddDay :: DayCount -> B.Map Clock
+clockAddDay d = clockMap (+ d) id
 
 clockAdd :: Clock -> Clock -> B.Ab Clock
 clockAdd (ClockD    d1)    (ClockD    d2)      =  clockD    (d1 + d2)
