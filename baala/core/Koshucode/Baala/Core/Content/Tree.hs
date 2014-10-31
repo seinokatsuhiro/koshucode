@@ -77,7 +77,11 @@ tokenClock (B.TText _ B.TextBar ('|' : w)) = textClock w
 tokenClock _ = Msg.nothing
 
 textClock :: String -> B.Ab B.Clock
-textClock = dayOrHour where
+textClock = sign where
+    sign ('-' : cs)  = B.clockNeg `fmap` dayOrHour cs
+    sign ('+' : cs)  = dayOrHour cs
+    sign cs          = dayOrHour cs
+
     dayOrHour cs     = case getInt cs of
                          (h, ':'  : cs')  ->  minute 0 h cs'
                          (d, "'|")        ->  Right $ B.ClockD $ toInteger d
