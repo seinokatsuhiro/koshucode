@@ -138,7 +138,7 @@ relmapRangeHour :: (C.CContent c) => C.RopUse c -> RangeAttr c -> C.Relmap c
 relmapRangeHour use = C.relmapFlow use . relkitRangeHour
 
 relkitRangeHour :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
-relkitRangeHour = relkitRangeClock B.clockRangeHour
+relkitRangeHour = relkitRangeClock 3600
 
 
 -- ----------------------  range-minute
@@ -150,7 +150,7 @@ relmapRangeMinute :: (C.CContent c) => C.RopUse c -> RangeAttr c -> C.Relmap c
 relmapRangeMinute use = C.relmapFlow use . relkitRangeMinute
 
 relkitRangeMinute :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
-relkitRangeMinute = relkitRangeClock B.clockRangeMinute
+relkitRangeMinute = relkitRangeClock 60
 
 
 -- ----------------------  range-second
@@ -162,14 +162,15 @@ relmapRangeSecond :: (C.CContent c) => C.RopUse c -> RangeAttr c -> C.Relmap c
 relmapRangeSecond use = C.relmapFlow use . relkitRangeSecond
 
 relkitRangeSecond :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
-relkitRangeSecond = relkitRangeClock B.clockRangeSecond
+relkitRangeSecond = relkitRangeClock 1
 
-relkitRangeClock :: (C.CContent c) => B.RangeBy B.Clock -> RangeAttr c -> C.RelkitFlow c
+relkitRangeClock :: (C.CContent c) => Int -> RangeAttr c -> C.RelkitFlow c
 relkitRangeClock _ _ Nothing = Right C.relkitNothing
-relkitRangeClock range (n, cops, from, to) (Just he1) = Right kit2 where
+relkitRangeClock sec (n, cops, from, to) (Just he1) = Right kit2 where
     he2      = B.headCons n he1
     kit2     = C.relkitJust he2 $ C.RelkitOneToAbMany False f2 []
-    f2 _ cs  = do clockFrom  <-  C.getClock $ C.coxRunCox cops he1 cs from
-                  clockTo    <-  C.getClock $ C.coxRunCox cops he1 cs to
-                  let ts     =   map C.pClock $ range clockFrom clockTo
-                  Right $ map (: cs) ts
+    f2 _ cs  = do clockFrom  <- C.getClock $ C.coxRunCox cops he1 cs from
+                  clockTo    <- C.getClock $ C.coxRunCox cops he1 cs to
+                  let range   = B.clockRangeBy $ B.clockStep sec
+                      clocks  = map C.pClock $ range clockFrom clockTo
+                  Right $ map (: cs) clocks

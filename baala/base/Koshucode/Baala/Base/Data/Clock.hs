@@ -11,9 +11,7 @@ module Koshucode.Baala.Base.Data.Clock
     -- * Calculation
     clockPos, clockNeg,
     clockAdd, clockSub,
-    clockRangeHour,
-    clockRangeMinute,
-    clockRangeSecond,
+    clockRangeBy, clockStep,
   ) where
 
 import qualified Koshucode.Baala.Base.Abort    as B
@@ -170,20 +168,15 @@ make k d s = let (d', s') = s `quotRem` 86400
 
 -- ----------------------  Range
 
-clockRangeSecond :: B.RangeBy Clock
-clockRangeSecond = clockRangeBy secondStep
-
-clockRangeMinute :: B.RangeBy Clock
-clockRangeMinute = clockRangeBy minuteStep
-
-clockRangeHour :: B.RangeBy Clock
-clockRangeHour = clockRangeBy hourStep
-
 clockRangeBy :: B.Map (DayCount, Sec) -> B.RangeBy Clock
 clockRangeBy step from to = clocks where
     from'  =  clockTuple from
     to'    =  clockTuple to
     clocks =  map fromClockTuple $ B.rangeBy step from' to'
+
+clockStep :: Int -> B.Map (DayCount, Sec)
+clockStep sec (d, s) = let (d', s') = (sec + s) `quotRem` 86400
+                       in (d + toInteger d', s')
 
 clockTuple :: Clock -> (DayCount, Sec)
 clockTuple (ClockDhms d s)  =  (d, s)
@@ -193,17 +186,3 @@ clockTuple (ClockD    d)    =  (d, 0)
 
 fromClockTuple :: (DayCount, Sec) -> Clock
 fromClockTuple (d, s) = ClockDhms d s
-
-hourStep :: B.Map (DayCount, Sec)
-hourStep (d, s)   | s < 82800 = (d, s')
-                  | otherwise = (d + 1, s' `mod` 86400)
-                  where s' = s + 3600
-
-minuteStep :: B.Map (DayCount, Sec)
-minuteStep (d, s) | s < 86340 = (d, s')
-                  | otherwise = (d + 1, s' `mod` 86400)
-                  where s' = s + 60
-
-secondStep :: B.Map (DayCount, Sec)
-secondStep (d, s) | s < 86400 = (d, s + 1)
-                  | otherwise = (d + 1, 0)
