@@ -38,7 +38,7 @@ literal calc tree = Msg.abLiteral tree $ lit tree where
     lit x@(B.TreeL t)
         = eithcon (eithcon (eithcon (token t)
             C.putClock $ C.tokenClock t)
-            datetime   $ C.treesToTime   [x])
+            time       $ C.treesToTime   [x])
             decimal    $ C.treesToDigits [x]
     lit g@(B.TreeB b _ xs) = case b of
         B.BracketGroup   ->  group g
@@ -60,7 +60,7 @@ literal calc tree = Msg.abLiteral tree $ lit tree where
     group g@(B.TreeB _ _ xs@(B.TreeL (B.TText _ n _) : _))
         | n  > B.TextRaw    =  eith g text $ C.treesToTexts True xs
         | n == B.TextRaw    =  eithcon (eith g
-                                 datetime $ C.treesToTime   xs)
+                                 time     $ C.treesToTime   xs)
                                  decimal  $ C.treesToDigits xs
     group (B.TreeB _ _ [])  =  Right C.empty
     group g                 =  calc g
@@ -70,16 +70,9 @@ literal calc tree = Msg.abLiteral tree $ lit tree where
     text         =  C.putText . concat
     decimal      =  C.putDec B.<=< B.litDecimal
 
-    datetime ((y, m, Just d), t) =
-        case time t of
-          Just _  -> C.putTime =<< B.timeFromYmdAb y m d
-          Nothing -> C.putTime =<< B.timeFromYmdAb y m d
-    datetime ((y, m, _), _) = C.putTime =<< B.timeFromYmdAb y m 1
-
-    time (Just h, Just i, Just s)  =  Just $ h ++ i ++ s
-    time (Just h, Just i, _)       =  Just $ h ++ i
-    time (Just h, _, _)            =  Just h
-    time _                         =  Nothing
+    time ((y, m, Just d), Just c)  = C.putTime =<< B.timeFromYmdcAb y m d c
+    time ((y, m, Just d), _)       = C.putTime =<< B.timeFromYmdAb  y m d
+    time ((y, m, _), _)            = C.putTime =<< B.timeFromYmdAb  y m 1
 
     keyword :: (C.CEmpty c, C.CBool c) => String -> B.Ab c
     keyword "0"  =  Right C.false

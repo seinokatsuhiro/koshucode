@@ -3,10 +3,12 @@
 module Koshucode.Baala.Base.Data.Clock
   ( -- * Data type
     Clock (..), DayCount, Hour, Min, Sec,
+    writeClock, writeClockBody,
 
     -- * Accessor
     clockDayCount, clockSec, clockSign,
     dhmsFromSec, secFromHms,
+    clockFromDhms, clockFromDhm, clockFromDh,
 
     -- * Calculation
     clockPos, clockNeg,
@@ -53,6 +55,15 @@ clockSign c | day  > 0 || sec  > 0  = 1
             where day = clockDayCount c
                   sec = clockSec      c
 
+clockFromDhms :: DayCount -> Hour -> Min -> Sec -> Clock
+clockFromDhms d h m s = ClockDhms d $ secFromHms (h, m, s)
+
+clockFromDhm :: DayCount -> Hour -> Min -> Clock
+clockFromDhm d h m = ClockDhm d $ secFromHms (h, m, 0)
+
+clockFromDh :: DayCount -> Hour -> Clock
+clockFromDh d h = ClockDh d $ secFromHms (h, 0, 0)
+
 -- | Aggregate hour, minute, and second into single second.
 secFromHms :: (Hour, Min, Sec) -> Sec
 secFromHms (h, m, s) = s + 60 * (m + 60 * h)
@@ -69,24 +80,29 @@ dhmsFromSec sec =
 -- ----------------------  Writer
 
 instance B.Write Clock where
-    write _ c = write2 (clockSign c) (clockPos c)
+    write _ = writeClock
 
-write2 :: Int -> Clock -> B.Doc
-write2 sign (ClockDhms day sec)  =  clockDoc sign dhmsDoc day sec
-write2 sign (ClockDhm  day sec)  =  clockDoc sign dhmDoc  day sec
-write2 sign (ClockDh   day sec)  =  clockDoc sign dhDoc   day sec
-write2 sign (ClockD    day)      =  bars     sign $ dayDoc day
+writeClock :: Clock -> B.Doc
+writeClock = B.docWrap "|" "|" . writeClockBody
 
-clockDoc :: Int -> (Sec -> (DayCount, B.Doc)) -> DayCount -> Int -> B.Doc
-clockDoc sign secDoc day sec =
+writeClockBody :: Clock -> B.Doc
+writeClockBody c = body $ clockPos c where
+    sign = signDoc $ clockSign c
+    body (ClockDhms day sec)  = sign $ clockDoc dhmsDoc day sec
+    body (ClockDhm  day sec)  = sign $ clockDoc dhmDoc  day sec
+    body (ClockDh   day sec)  = sign $ clockDoc dhDoc   day sec
+    body (ClockD    day)      = sign $ dayDoc day
+
+signDoc :: Int -> B.Map B.Doc
+signDoc (-1) doc = B.doc "-" B.<> doc
+signDoc _    doc = doc
+
+clockDoc :: (Sec -> (DayCount, B.Doc)) -> DayCount -> Int -> B.Doc
+clockDoc secDoc day sec =
     let (d, doc) = secDoc sec
-    in bars sign $ case day + d of
-                     0  -> doc
-                     d2 -> dayDoc d2 B.<> doc
-
-bars :: Int -> B.Map B.Doc
-bars (-1) = B.docWrap "|-" "|"
-bars _    = B.docWrap "|"  "|"
+    in case day + d of
+         0  -> doc
+         d2 -> dayDoc d2 B.<> doc
 
 colon :: B.Doc
 colon = B.doc ":"

@@ -132,45 +132,44 @@ fromDigit _    =  Nothing
 
 -- ----------------------  Time
 
-type TimeText = ((Integer, Int, Maybe Int), (Maybe String, Maybe String, Maybe String))
+type TimeText = ((Integer, Int, Maybe Int), Maybe B.Clock)
 
 treesToTime :: B.TTreesToAb TimeText
 treesToTime = concatTime B.<=< treesToTexts False
 
 concatTime :: [String] -> B.Ab TimeText
 concatTime = year where
-    to (Just x)  f  =  f x
-    to (Nothing) _  =  Msg.nothing
 
-    year ((a:b:c:d: '-' :x) : xs) = B.readInteger [a,b,c,d] `to` \y -> month y (x : xs)
-    year _  = Msg.nothing
+    year []             = Msg.nothing
+    year (cs : xs)      = case getInt cs of
+                            (y, '-'  : cs')  -> month (toInteger y) $ cs' : xs
+                            _                -> Msg.nothing
 
-    month y ((a:b: '-' :x) : xs) = B.readInt [a,b] `to` \m -> day y m (x : xs)
-    month y [mm] = B.readInt mm `to` \m -> Right ((y, m, Nothing), (Nothing, Nothing, Nothing))
-    month _ _ = Msg.nothing
+    month _ []          = Msg.nothing
+    month y (cs : xs)   = case getInt cs of
+                            (m, '-'  : cs')  -> day y m $ cs' : xs
+                            (m, "")          -> Right ((y, m, Nothing), Nothing)
+                            _                -> Msg.nothing
 
-    day y m (dd : xs) = B.readInt dd `to` \d -> hour (y, m, Just d) xs
-    day _ _ _ = Msg.nothing
+    day _ _ []          = Msg.nothing
+    day y m (cs : xs)   = case getInt cs of
+                            (d, "") | null xs    -> Right ((y, m, Just d), Nothing)
+                                    | otherwise  -> hour (y, m, Just d) $ concat xs
+                            _                    -> Msg.nothing
 
-    hour ymd xs       = minute ymd   =<< ddc xs
-    minute ymd (h,xs) = second ymd h =<< ddc xs
+    hour ymd cs         = case getInt cs of
+                            (h, "")          -> Right (ymd, Just $ B.clockFromDh 0 h)
+                            (h, ':' : cs')   -> minute ymd h cs'
+                            _                -> Msg.nothing
 
-    second ymd h (i, (s@[a,b] : _)) | isDigit2 a b = Right (ymd, (h, i, Just s))
-    second ymd h (i, []) = Right (ymd, (h, i, Nothing))
-    second _ _ _ = Msg.nothing
+    minute ymd h cs     = case getInt cs of
+                            (m, "")          -> Right (ymd, Just $ B.clockFromDhm 0 h m)
+                            (m, ':' : cs')   -> second ymd h m cs'
+                            _                -> Msg.nothing
 
-    ddc :: [String] -> B.Ab (Maybe String, [String])
-    ddc (x@[a,b] : ":" : xs) | isDigit2 a b  =  Right (Just x, xs)
-    ddc (x@[a,b] : [])       | isDigit2 a b  =  Right (Just x, [])
-    ddc []                                   =  Right (Nothing, [])
-    ddc _                                    =  Msg.nothing
-
-isDigit :: Char -> Bool
-isDigit = (`elem` "0123456789")
-
-isDigit2 :: Char -> Char -> Bool
-isDigit2 a b = isDigit a && isDigit b
-
+    second ymd h m cs   = case getInt cs of
+                            (s, "")          -> Right (ymd, Just $ B.clockFromDhms 0 h m s)
+                            _                -> Msg.nothing
 
 
 -- ----------------------  Term
