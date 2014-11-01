@@ -58,10 +58,12 @@ copPlus xs = fmap C.pDec $ loop xs where
                       m' <- loop m
                       B.decimalAdd n' m'
 
-copPlus2 :: (C.CDec c, C.CClock c) => C.CopCalc c
+copPlus2 :: (C.CDec c, C.CClock c, C.CTime c) => C.CopCalc c
 copPlus2 [Right xc, Right yc]
-    | C.isDec   xc && C.isDec   yc = C.putDec   =<< B.decimalAdd (C.gDec   xc) (C.gDec   yc)
-    | C.isClock xc && C.isClock yc = C.putClock =<< B.clockAdd   (C.gClock xc) (C.gClock yc)
+    | C.isDec   xc && C.isDec   yc = C.putDec   =<< B.decimalAdd   (C.gDec   xc) (C.gDec   yc)
+    | C.isClock xc && C.isClock yc = C.putClock =<< B.clockAdd     (C.gClock xc) (C.gClock yc)
+    | C.isTime  xc && C.isClock yc = C.putTime  =<< B.timeAddClock (C.gClock yc) (C.gTime  xc) 
+    | C.isClock xc && C.isTime  yc = C.putTime  =<< B.timeAddClock (C.gClock xc) (C.gTime  yc)
 copPlus2 _ = Msg.unexpAttr "+"
 
 copTimes :: (C.CText c, C.CDec c) => C.CopCalc c

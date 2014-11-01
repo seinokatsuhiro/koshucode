@@ -12,7 +12,7 @@ module Koshucode.Baala.Base.Data.Clock
 
     -- * Calculation
     clockPos, clockNeg,
-    clockAddDay,
+    clockCutDay, clockAddDay,
     clockAdd, clockSub,
     clockRangeBy, clockStep,
   ) where
@@ -49,10 +49,10 @@ clockSec (ClockDh   _ sec) = sec
 clockSec (ClockD    _)     = 0
 
 clockSign :: Clock -> Int
-clockSign c | day  > 0 || sec  > 0  = 1
-            | day  < 0 || sec  < 0  = (-1)
-            | day == 0 || sec == 0  = 1
-            | otherwise             = B.bug "inconsistent clock"
+clockSign c | day == 0 && sec == 0  = 0
+            | day >= 0 && sec >= 0  = 1
+            | day <= 0 && sec <= 0  = -1
+            | otherwise             = B.bug $ "inconsistent " ++ show c
             where day = clockDayCount c
                   sec = clockSec      c
 
@@ -98,7 +98,7 @@ signDoc :: Int -> B.Map B.Doc
 signDoc (-1) doc = B.doc "-" B.<> doc
 signDoc _    doc = doc
 
-clockDoc :: (Sec -> (DayCount, B.Doc)) -> DayCount -> Int -> B.Doc
+clockDoc :: (Sec -> (DayCount, B.Doc)) -> DayCount -> Sec -> B.Doc
 clockDoc secDoc day sec =
     let (d, doc) = secDoc sec
     in case day + d of
@@ -133,10 +133,20 @@ dd n | n < 10    = B.doc $ '0' : show n
 
 -- ----------------------  Calculation
 
+adjustAb :: (DayCount -> Sec -> Clock) -> DayCount -> Sec -> B.Ab Clock
+adjustAb k d s = Right $ adjust k d s
+
+adjust :: (DayCount -> Sec -> Clock) -> DayCount -> Sec -> Clock
+adjust k d s = let (d', s')  = s `divMod` daySeconds
+                   d2        = d + toInteger d'
+               in if d2 < 0 && s' > 0
+                  then k (d2 + 1) (s' - daySeconds)
+                  else k d2 s'
+
 clockMap :: B.Map DayCount -> B.Map Sec -> B.Map Clock
-clockMap f g (ClockDhms day sec)  = ClockDhms (f day) (g sec)
-clockMap f g (ClockDhm  day sec)  = ClockDhm  (f day) (g sec)
-clockMap f g (ClockDh   day sec)  = ClockDh   (f day) (g sec)
+clockMap f g (ClockDhms day sec)  = adjust ClockDhms (f day) (g sec)
+clockMap f g (ClockDhm  day sec)  = adjust ClockDhm  (f day) (g sec)
+clockMap f g (ClockDh   day sec)  = adjust ClockDh   (f day) (g sec)
 clockMap f _ (ClockD    day)      = ClockD    (f day)
 
 -- | Convert clock to positive clock.
@@ -151,39 +161,30 @@ neg :: (Ord a, Num a) => a -> a
 neg a | a > 0      = - a
       | otherwise  = a
 
+clockCutDay :: B.Map Clock
+clockCutDay = clockMap (const 0) id
+
 clockAddDay :: DayCount -> B.Map Clock
 clockAddDay d = clockMap (+ d) id
 
 clockAdd :: Clock -> Clock -> B.Ab Clock
-clockAdd (ClockD    d1)    (ClockD    d2)      =  clockD    (d1 + d2)
-clockAdd (ClockDh   d1 s1) (ClockDh   d2 s2)   =  clockDh   (d1 + d2) (s1 + s2)
-clockAdd (ClockDhm  d1 s1) (ClockDhm  d2 s2)   =  clockDhm  (d1 + d2) (s1 + s2)
-clockAdd (ClockDhms d1 s1) (ClockDhms d2 s2)   =  clockDhms (d1 + d2) (s1 + s2)
-clockAdd _ _ = Msg.adlib "clock"
+clockAdd = clockMap2 (+) (+)
 
 clockSub :: Clock -> Clock -> B.Ab Clock
-clockSub (ClockD    d1)    (ClockD    d2)     =  clockD    (d1 - d2)
-clockSub (ClockDh   d1 s1) (ClockDh   d2 s2)  =  clockDh   (d1 - d2) (s1 - s2)
-clockSub (ClockDhm  d1 s1) (ClockDhm  d2 s2)  =  clockDhm  (d1 - d2) (s1 - s2)
-clockSub (ClockDhms d1 s1) (ClockDhms d2 s2)  =  clockDhms (d1 - d2) (s1 - s2)
-clockSub _ _ = Msg.adlib "clock"
+clockSub = clockMap2 (-) (-)
 
-clockD :: DayCount -> B.Ab Clock
-clockD = Right . ClockD
+type Bin   a  = a -> a -> a
+type AbBin a  = a -> a -> B.Ab a
 
-clockDh :: DayCount -> Sec -> B.Ab Clock
-clockDh = make ClockDh
+clockMap2 :: Bin DayCount -> Bin Sec -> AbBin Clock
+clockMap2 f _ (ClockD    d)    (ClockD    e)     = Right  $ ClockD    (f d e)
+clockMap2 f g (ClockDh   d s) (ClockDh   e t)  = adjustAb ClockDh   (f d e) (g s t)
+clockMap2 f g (ClockDhm  d s) (ClockDhm  e t)  = adjustAb ClockDhm  (f d e) (g s t)
+clockMap2 f g (ClockDhms d s) (ClockDhms e t)  = adjustAb ClockDhms (f d e) (g s t)
+clockMap2 _ _ _ _ = Msg.adlib "clock"
 
-clockDhm :: DayCount -> Sec -> B.Ab Clock
-clockDhm = make ClockDhm
-
-clockDhms :: DayCount -> Sec -> B.Ab Clock
-clockDhms = make ClockDhms
-
-make :: (DayCount -> Sec -> Clock) -> DayCount -> Sec -> B.Ab Clock
-make k d s = let (d', s') = s `quotRem` 86400
-             in Right $ k (d + toInteger d') s'
-
+daySeconds :: (Num a) => a
+daySeconds = 86400
 
 
 -- ----------------------  Range
@@ -195,7 +196,7 @@ clockRangeBy step from to = clocks where
     clocks =  map fromClockTuple $ B.rangeBy step from' to'
 
 clockStep :: Int -> B.Map (DayCount, Sec)
-clockStep sec (d, s) = let (d', s') = (sec + s) `quotRem` 86400
+clockStep sec (d, s) = let (d', s') = (sec + s) `quotRem` daySeconds
                        in (d + toInteger d', s')
 
 clockTuple :: Clock -> (DayCount, Sec)

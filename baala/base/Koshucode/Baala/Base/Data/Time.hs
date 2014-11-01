@@ -19,7 +19,7 @@ module Koshucode.Baala.Base.Data.Time
 
     -- * Add
     timeAddDay, timeAddWeek, timeAddMonth, timeAddYear,
-    timeDiff,
+    timeAddClock, timeDiff,
   ) where
 
 import qualified Data.Time.Calendar               as T
@@ -90,9 +90,9 @@ timeMapMjd f time = timeMapDay g time where
     g (T.ModifiedJulianDay d) = T.ModifiedJulianDay $ f d
 
 timeMapDay :: B.Map T.Day -> B.Map Time
-timeMapDay f (TimeYmdc day _)  = TimeYmd $ f day
-timeMapDay f (TimeYmd  day)    = TimeYmd $ f day
-timeMapDay f (TimeYm   day)    = TimeYm  $ f day
+timeMapDay f (TimeYmdc day c)  = TimeYmdc (f day) c
+timeMapDay f (TimeYmd  day)    = TimeYmd  $ f day
+timeMapDay f (TimeYm   day)    = TimeYm   $ f day
 
 
 -- ----------------------  First day
@@ -193,6 +193,15 @@ timeAddYear n time =
         y'        = y + n
     in timeFromYmd y' m d
 
+timeAddClock :: B.Clock -> B.AbMap Time
+timeAddClock c1 (TimeYmdc d2 c2) =
+    do c3 <- B.clockAdd c1 c2
+       let d3 = B.clockDayCount c3
+           c4 = B.clockCutDay   c3
+       Right $ timeAddDay d3 $ TimeYmdc d2 c4
+timeAddClock (B.ClockD d) t@(TimeYmd _) = Right $ timeAddDay d t
+timeAddClock _ _ = Msg.adlib "clock-time"
+
 timeDiff :: Time -> Time -> B.Ab B.Clock
 timeDiff (TimeYmdc d2 c2) (TimeYmdc d1 c1) =
     do let d3 = T.toModifiedJulianDay d2 - T.toModifiedJulianDay d1
@@ -203,3 +212,4 @@ timeDiff (TimeYmd d2) (TimeYmd d1) =
 timeDiff (TimeYm d2) (TimeYm d1) =
     Right $ B.ClockD $ T.toModifiedJulianDay d2 - T.toModifiedJulianDay d1
 timeDiff _ _ = Msg.adlib "timeDiff"
+
