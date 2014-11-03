@@ -72,7 +72,7 @@ literal calc tree = Msg.abLiteral tree $ lit tree where
 
     time ((y, m, Just d), Just c)  = C.putTime =<< B.timeFromYmdcAb y m d c
     time ((y, m, Just d), _)       = C.putTime =<< B.timeFromYmdAb  y m d
-    time ((y, m, _), _)            = C.putTime =<< B.timeFromYmdAb  y m 1
+    time ((y, m, _), _)            = C.putTime =<< B.timeFromYmAb   y m
 
     keyword :: (C.CEmpty c, C.CBool c) => String -> B.Ab c
     keyword "0"  =  Right C.false

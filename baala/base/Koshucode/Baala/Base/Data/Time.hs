@@ -5,7 +5,7 @@ module Koshucode.Baala.Base.Data.Time
     Time (..), Year, Month, Day,
 
     -- * Construct
-    timeFromYmdAb, timeFromYmdcAb,
+    timeFromYmAb, timeFromYmdAb, timeFromYmdcAb,
     timeFromMjd, timeMjd,
     timeMapMjd,
 
@@ -41,10 +41,15 @@ instance B.Write Time where
 writeTime :: Time -> B.Doc
 writeTime (TimeYmdc day clock)  = writeDay day B.<+> B.writeClockBody clock
 writeTime (TimeYmd  day)        = writeDay day
-writeTime (TimeYm   day)        = writeDay day
+writeTime (TimeYm   day)        = case T.toGregorian day of
+                                    (y, m, _) -> B.doc y `h` B.doc02 m
 
 writeDay :: T.Day -> B.Doc
-writeDay = B.doc . show
+writeDay day = case T.toGregorian day of
+                 (y, m, d) -> B.doc y `h` B.doc02 m `h` B.doc02 d
+
+h :: B.Bin B.Doc
+h = B.docConcat "-"
 
 type Year  = Integer
 type Month = Int
@@ -52,6 +57,12 @@ type Day   = Int
 
 
 -- ----------------------  Construct
+
+timeFromYmAb :: Year -> Month -> B.Ab Time
+timeFromYmAb y m =
+    case T.fromGregorianValid y m 1 of
+      Just day -> Right $ TimeYm day
+      Nothing  -> Msg.notDate y m 1
 
 timeFromYmdAb :: Year -> Month -> Day -> B.Ab Time
 timeFromYmdAb y m d =

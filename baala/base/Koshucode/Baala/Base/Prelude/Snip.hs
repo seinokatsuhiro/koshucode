@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Base.Prelude.Snip
 ( -- * Type
-  Snip, SnipPair,
+  Snip, SnipPair, Bin,
 
   -- * Function
   snipFull, snipIndex, snipPair,
@@ -29,6 +29,7 @@ type Snip a = [Int] -> B.Map [a]
 
 type SnipPair a b = (Snip a, Snip b)
 
+type Bin a  = a -> a -> a
 
 -- --------------------------------------------  Function
 
@@ -144,15 +145,15 @@ snipFore2 :: SnipPair a b
 snipFore2 = (snipFore, snipFore)
 
 -- | Take left-side elements.
-snipLeft :: (Eq a) => [a] -> [a] -> [a]
+snipLeft :: (Eq a) => Bin [a]
 snipLeft xs ys = snipIndex ys xs `snipOff` xs
 
 -- | Take shared elements.
-snipShare :: (Eq a) => [a] -> [a] -> [a]
+snipShare :: (Eq a) => Bin [a]
 snipShare xs ys = snipIndex xs ys `snipFrom` ys
 
 -- | Take right-side elements.
-snipRight :: (Eq a) => [a] -> [a] -> [a]
+snipRight :: (Eq a) => Bin [a]
 snipRight xs ys = snipLeft ys xs
 
 snipOrder :: (Eq a) => [a] -> [a] -> B.Map [c]

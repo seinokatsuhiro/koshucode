@@ -16,6 +16,7 @@ module Koshucode.Baala.Base.Text.Write
     -- * Simple writer
     doc, doch, docv,
     docWrap, docWraps,
+    doc02, docConcat,
     -- $Simple
   ) where
 
@@ -136,4 +137,11 @@ docWraps = docWrapBody (B.<+>)
 
 docWrapBody :: (Write a) => (B.Doc -> B.Doc -> B.Doc) -> String -> String -> a -> B.Doc
 docWrapBody p open close a = D.text open `p` doc a `p` D.text close
+
+doc02 :: Int -> B.Doc
+doc02 n | n < 10    = doc $ '0' : show n
+        | otherwise = doc n
+
+docConcat :: String -> B.Bin B.Doc
+docConcat sep x y = x B.<> doc sep B.<> y
 
