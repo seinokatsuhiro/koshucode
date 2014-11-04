@@ -295,7 +295,7 @@ unresPrefix = Left $ B.abortBecause "Unresolved prefix"
 
 detailTermRel :: String -> [String] -> B.Head -> [String]
 detailTermRel label ns he1 = detail where
-    detail = [label] ++ indent ns' ++ ["Relation"] ++ indent ns1
+    detail = [label] ++ indent ns' ++ ["Input relation"] ++ indent ns1
     indent = map ("  " ++)
     ns'    = map B.showTermName ns
     ns1    = B.linesFrom $ B.headExplain he1

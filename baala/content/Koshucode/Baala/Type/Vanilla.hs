@@ -67,7 +67,7 @@ typeOrder (VType    _)  =  10
 typeOrder (VList    _)  =  11
 typeOrder (VSet     _)  =  13
 typeOrder (VAssn    _)  =  14
-typeOrder (VRel     _)  =  14
+typeOrder (VRel     _)  =  15
 
 compareAsSet :: (Ord a) => [a] -> [a] -> Ordering
 compareAsSet x y = compare (Set.fromList x) (Set.fromList y)

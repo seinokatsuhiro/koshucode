@@ -70,7 +70,7 @@ relkitAdd :: (C.CList c, C.CRel c, B.Write c)
 relkitAdd _ Nothing = Right C.relkitNothing
 relkitAdd (cops, cox) (Just he1)
     | null ind  = Right kit2
-    | otherwise = Msg.unexpTermName
+    | otherwise = Msg.reqNewTerm ns he1
     where
       (ns, xs)    =  unzip cox               -- names and expressions
       ns1         =  B.headNames he1         -- term names of input relation

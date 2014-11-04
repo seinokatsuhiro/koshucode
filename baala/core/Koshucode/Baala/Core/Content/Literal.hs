@@ -51,10 +51,10 @@ literal calc tree = Msg.abLiteral tree $ lit tree where
         _                ->  Msg.unkBracket
 
     token :: B.Token -> B.Ab c
-    token (B.TText _ n w) | n <= B.TextRaw  =  keyword w
-    token (B.TText _ _ w)           =  C.putText w
-    token (B.TTerm _ _ [n])         =  C.putTerm n
-    token t                         =  Msg.unkWord $ B.tokenContent t
+    token (B.TText _ n w) | n <= B.TextRaw  = keyword w
+    token (B.TText _ _ w)                   = C.putText w
+    token (B.TTerm _ _ [n])                 = C.putTerm n
+    token t                                 = Msg.unkWord $ B.tokenContent t
 
     group :: B.TTreeToAb c
     group g@(B.TreeB _ _ xs@(B.TreeL (B.TText _ n _) : _))

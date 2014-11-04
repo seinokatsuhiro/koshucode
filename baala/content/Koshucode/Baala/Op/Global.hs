@@ -72,7 +72,6 @@ vanillaInfix = htab where
 
         , 7 ! "and"
 
-        , 6 ! "between"
         , 6 ! "in"
         , 6 ! "="
         , 6 ! "<>"

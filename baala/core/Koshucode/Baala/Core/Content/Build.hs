@@ -79,12 +79,16 @@ construct calc = expr where
          let cp = concatMap B.codePts $ B.front $ B.untree tree
          in cons cp tree
 
-    -- fill args in the blanks (application)
     cons :: [B.CodePt] -> B.TTreeToAb (C.Cox c)
-    cons cp (B.TreeB B.BracketGroup _ (fun : args)) =
-        do fun'  <- expr fun
-           args' <- expr `mapM` args
-           Right $ C.CoxFill cp fun' args'
+    cons cp tree@(B.TreeB B.BracketGroup _ subtrees)
+         = case subtrees of
+             f@(B.TreeL (B.TText _ q w)) : xs
+                 | q == B.TextRaw && isName w -> fill cp f xs
+                 | otherwise -> lit cp tree
+
+             -- fill args in the blanks (application)
+             f : xs -> fill cp f xs
+             []     -> lit cp tree
 
     -- form with blanks (function)
     cons cp (B.TreeB B.BracketForm _ [vars, b1]) =
@@ -96,15 +100,23 @@ construct calc = expr where
         B.bug $ "core/abstruction: " ++ show (length trees)
 
     -- compound literal
-    cons cp tree@(B.TreeB _ _ _) = fmap (C.CoxLit cp) $ C.literal calc tree
+    cons cp tree@(B.TreeB _ _ _) = lit cp tree
 
     -- literal or variable
     cons cp tree@(B.TreeL tok) = case tok of
         B.TTerm _ 0 ns ->  Right $ C.CoxTerm  cp ns []
         B.TName _ op   ->  Right $ C.CoxBlank cp op
         B.TText _ B.TextRaw n | isName n ->  Right $ C.CoxBlank cp $ B.BlankNormal n
-        B.TText _ _ _  ->  Right . C.CoxLit cp =<< C.literal calc tree
+        B.TText _ _ _  ->  lit cp tree
+        B.TTerm _ 1 _  ->  lit cp tree
         _              ->  B.bug "core/leaf"
+
+    fill cp f xs =
+        do f'  <- expr f
+           xs' <- expr `mapM` xs
+           Right $ C.CoxFill cp f' xs'
+
+    lit cp tree = fmap (C.CoxLit cp) $ C.literal calc tree
 
     untag :: B.TTreeTo (C.CoxTag, B.TTree)
     untag (B.TreeB l p (B.TreeL (B.TText _ B.TextQ tag) : vars))

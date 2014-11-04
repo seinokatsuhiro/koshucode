@@ -7,6 +7,7 @@ module Koshucode.Baala.Op.Cop.Order
   -- $Operators
 ) where
 
+import qualified Koshucode.Baala.Base               as B
 import qualified Koshucode.Baala.Core               as C
 import qualified Koshucode.Baala.Op.Cop.Coxhand     as H
 import qualified Koshucode.Baala.Op.Message         as Msg
@@ -50,8 +51,7 @@ copsOrder =
     , orderPostfix   ">"
     , orderPostfix   ">="
 
-    , C.CopCox  (C.copInfix  "between") betweenInfix
-    , C.CopCox  (C.copPrefix "between") betweenPrefix
+    , C.CopCox  (C.copNormal "between") between
 
     , C.CopCox  (C.copNormal  "all")    $ copCollect "and"
     , C.CopCox  (C.copNormal  "any")    $ copCollect "or"
@@ -78,20 +78,14 @@ orderPostfix n = C.CopCox (C.copPostfix n) $ cop where
     cop _   = Msg.adlib "require operand"
     op      = H.bin n
 
-betweenPrefix :: C.CopCox c
-betweenPrefix [C.CoxFill _ low [high]] = Right between where
-    between = H.f1 $ (low `binAsc` H.b1) `binAnd` (H.b1 `binAsc` high)
-betweenPrefix _ = Msg.adlib "require operand"
+between :: C.CopCox c
+between [low, high] = Right $ H.f1 $ (low `binAsc` H.b1) `binAnd` (H.b1 `binAsc` high)
+between _ = Msg.adlib "require operand"
 
-betweenInfix :: C.CopCox c
-betweenInfix [x, C.CoxFill _ low [high]] = Right between where
-    between = (low `binAsc` x) `binAnd` (x `binAsc` high)
-betweenInfix _ = Msg.adlib "require operand"
-
-binAnd :: C.Cox c -> C.Cox c -> C.Cox c
+binAnd :: B.Bin (C.Cox c)
 binAnd  = H.bin "and"
 
-binAsc :: C.Cox c -> C.Cox c -> C.Cox c
+binAsc :: B.Bin (C.Cox c)
 binAsc  = H.bin "<="
 
 copIs :: C.CopCox c
