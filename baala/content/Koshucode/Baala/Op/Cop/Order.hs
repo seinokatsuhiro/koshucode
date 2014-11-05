@@ -12,6 +12,7 @@ import qualified Koshucode.Baala.Core               as C
 import qualified Koshucode.Baala.Op.Cop.Coxhand     as H
 import qualified Koshucode.Baala.Op.Message         as Msg
 
+
 -- ----------------------
 -- $Operators
 --
@@ -52,13 +53,6 @@ copsOrder =
     , orderPostfix   ">="
 
     , C.CopCox  (C.copNormal "between") between
-
-    , C.CopCox  (C.copNormal  "all")    $ copCollect "and"
-    , C.CopCox  (C.copNormal  "any")    $ copCollect "or"
-
-    , C.CopCox  (C.copInfix  "is")      copIs
-    , C.CopCox  (C.copInfix  "of")      ofInfix
-    , C.CopCox  (C.copInfix  "to")      toInfix
     ]
 
 orderInfix :: (C.CBool c) => String -> (c -> c -> Bool) -> C.Cop c
@@ -87,20 +81,4 @@ binAnd  = H.bin "and"
 
 binAsc :: B.Bin (C.Cox c)
 binAsc  = H.bin "<="
-
-copIs :: C.CopCox c
-copIs [x, f] = Right $ H.ix f [x]
-copIs _      = Msg.unmatchType ""
-
-copCollect :: String -> C.CopCox c
-copCollect n fs = Right $ H.f1 $ H.ib (C.copInfix n) (map fill fs) where
-    fill f = H.ix f [H.b1]
-
-ofInfix :: C.CopCox c
-ofInfix [f, x] = Right $ H.ix f [x]
-ofInfix _ = Msg.adlib "require operand"
-
-toInfix :: C.CopCox c
-toInfix [x, f] = Right $ H.ix f [x]
-toInfix _ = Msg.adlib "require operand"
 

@@ -2,85 +2,61 @@
 
 -- | Content operators.
 
-module Koshucode.Baala.Op.Cop.Logic
-( copsLogic
-  -- $Operators
-) where
+module Koshucode.Baala.Op.Cop.Misc
+  ( copsMisc
+    -- $Operators
+  ) where
 
-import qualified Koshucode.Baala.Base       as B
-import qualified Koshucode.Baala.Core       as C
-import qualified Koshucode.Baala.Op.Message as Msg
-
+import qualified Koshucode.Baala.Base            as B
+import qualified Koshucode.Baala.Core            as C
+import qualified Koshucode.Baala.Op.Cop.Coxhand  as H
+import qualified Koshucode.Baala.Op.Message      as Msg
 
 
 -- ----------------------
 -- $Operators
 --
---  [@not@]    Logical negation.
+--  [@if@]        Conditional expression.
 --
---  [@and@]    Logical conjunction.
+--  [@is@]        @x is f@ == @f x@.
 --
---  [@or@]     Logical disjunction.
+--  [@of@]        @f of x@ == @f x@.
 --
---  [@then@]   Logical implication.
+--  [@to@]        @x to f@ == @f x@.
 --
---  [@when@]   Inverse implication.
---
---  [@if@]     Conditional expression.
+--  [@type@]      Type of content.
 --
 
-copsLogic :: (C.CBool c, C.CEmpty c) => [C.Cop c]
-copsLogic =
-    [ C.CopCalc  (C.copInfix    "and")    copAnd
-    , C.CopCalc  (C.copInfix    "or")     copOr
-    , C.CopCalc  (C.copInfix    "then")   copImp
-    , C.CopCalc  (C.copInfix    "when")   copWhen
-    , C.CopCalc  (C.copNormal   "not")    copNot
-    , C.CopCalc  (C.copNormal   "and")    copAnd
-    , C.CopCalc  (C.copNormal   "or")     copOr
-    , C.CopCalc  (C.copNormal   "then")   copImp
-    , C.CopCalc  (C.copNormal   "when")   copWhen
-    , C.CopCalc  (C.copInternal "#if")    copFunIf
-    , C.CopTree  (C.copNormal   "if")     copTreeIf
+copsMisc :: (C.CBool c, C.CEmpty c, C.CType c) => [C.Cop c]
+copsMisc =
+    [ C.CopCalc  (C.copNormal   "type")    copType
+
+    , C.CopCox   (C.copInfix    "is")      toInfix
+    , C.CopCox   (C.copInfix    "of")      ofInfix
+    , C.CopCox   (C.copInfix    "to")      toInfix
+
+    , C.CopCalc  (C.copInternal "#if")     copFunIf
+    , C.CopTree  (C.copNormal   "if")      copTreeIf
     ]
 
-cop1 :: (C.CBool c) => (Bool -> Bool) -> C.CopCalc c
-cop1 p arg =
+
+-- ----------------------  type
+
+copType :: (C.CType c, C.CTypeOf c) => C.CopCalc c
+copType arg =
     do xc <- C.getArg1 arg
-       x  <- C.getBool xc
-       C.putBool $ p x
+       x  <- xc
+       C.putType $ C.typeOf x
 
-cop2 :: (C.CBool c) => (Bool -> Bool -> Bool) -> C.CopCalc c
-cop2 p arg =
-    do (xc, yc) <- C.getArg2 arg
-       x <- C.getBool xc
-       y <- C.getBool yc
-       C.putBool $ p x y
+-- ----------------------  is, of, to
 
-copN :: (C.CBool c) => Bool -> (Bool -> Bool -> Bool) -> C.CopCalc c
-copN unit p = loop where
-    loop []   = C.putBool unit
-    loop [xc] = xc
-    loop (xc1 : xc2 : xs) =
-        do x1 <- C.getBool xc1
-           x2 <- C.getBool xc2
-           loop $ C.putBool (p x1 x2) : xs
+ofInfix :: C.CopCox c
+ofInfix [f, x] = Right $ H.ix f [x]
+ofInfix _ = Msg.adlib "require operand"
 
-copNot :: (C.CBool c) => C.CopCalc c
-copNot =  cop1 not
-
-copWhen  :: (C.CBool c) => C.CopCalc c
-copWhen  =  cop2 $ \x y -> x || not y
-
-copImp :: (C.CBool c) => C.CopCalc c
-copImp =  cop2 $ \x y -> not x || y
-
-copAnd :: (C.CBool c) => C.CopCalc c
-copAnd =  copN True (&&)
-
-copOr  :: (C.CBool c) => C.CopCalc c
-copOr  =  copN False (||)
-
+toInfix :: C.CopCox c
+toInfix [x, f] = Right $ H.ix f [x]
+toInfix _ = Msg.adlib "require operand"
 
 -- ----------------------  if
 

@@ -52,6 +52,7 @@ vanillaCops :: (C.CContent c) => [C.Cop c]
 vanillaCops = concat [ Cop.copsArith
                      , Cop.copsLogic
                      , Cop.copsList
+                     , Cop.copsMisc
                      , Cop.copsOrder
                      , Cop.copsTime ]
 
