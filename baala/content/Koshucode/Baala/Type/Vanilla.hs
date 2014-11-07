@@ -78,7 +78,7 @@ instance C.CTypeOf VContent where
     typeOf (VTerm    _)  =  B.TypeTerm
     typeOf (VDec     _)  =  B.TypeDec
     typeOf (VClock   c)  =  B.TypeClock $ Just $ B.clockPrecision c
-    typeOf (VTime    _)  =  B.TypeTime
+    typeOf (VTime    t)  =  B.TypeTime  $ Just $ B.timePrecision t
     typeOf (VEmpty    )  =  B.TypeEmpty
     typeOf (VInterp  _)  =  B.TypeInterp
     typeOf (VType    _)  =  B.TypeType

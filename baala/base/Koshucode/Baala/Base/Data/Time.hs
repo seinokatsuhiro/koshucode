@@ -7,7 +7,7 @@ module Koshucode.Baala.Base.Data.Time
     -- * Construct
     timeFromYmAb, timeFromYmdAb, timeFromYmdcAb,
     timeFromMjd, timeMjd,
-    timeMapMjd,
+    timeMapMjd, timePrecision,
 
     -- * First day
     timeFloorMonth, timeFloorYear,
@@ -84,6 +84,11 @@ timeFromYmdTuple = TimeYmd . fromGregorianTuple
 
 fromGregorianTuple :: (Year, Month, Day) -> T.Day
 fromGregorianTuple (y, m, d) = T.fromGregorian y m d
+
+timePrecision :: Time -> String
+timePrecision (TimeYmdc _ c)  = B.clockPrecision c
+timePrecision (TimeYmd  _)    = "day"
+timePrecision (TimeYm   _)    = "month"
 
 timeDay :: Time -> T.Day
 timeDay (TimeYmdc day _)  = day

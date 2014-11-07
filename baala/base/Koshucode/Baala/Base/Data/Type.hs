@@ -37,7 +37,7 @@ data Type
     | TypeCode                    -- ^ Code
     | TypeDec                     -- ^ Decimal
     | TypeClock   (Maybe String)  -- ^ Clock
-    | TypeTime                    -- ^ Time
+    | TypeTime    (Maybe String)  -- ^ Time
     | TypeBin                     -- ^ Binary data
 
     | TypeList    Type            -- ^ List
@@ -68,7 +68,8 @@ writeType = wf where
     w _ TypeDec                = B.doc "decimal"
     w _ (TypeClock (Nothing))  = B.doc "clock"
     w _ (TypeClock (Just p))   = B.doc "clock" B.<+> B.doc p
-    w _ TypeTime               = B.doc "time"
+    w _ (TypeTime (Nothing))   = B.doc "time"
+    w _ (TypeTime (Just p))    = B.doc "time" B.<+> B.doc p
     w _ TypeBin                = B.doc "binary"
     w _ TypeTerm               = B.doc "term"
     w _ TypeType               = B.doc "type"
