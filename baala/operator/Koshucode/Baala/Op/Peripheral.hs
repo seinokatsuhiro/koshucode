@@ -21,9 +21,6 @@ module Koshucode.Baala.Op.Peripheral
   
     -- * today
     relmapToday, relkitToday,
-  
-    -- * type
-    relkitType,
   ) where
 
 import qualified Koshucode.Baala.Base         as B
@@ -48,7 +45,6 @@ ropsPeripheral = Op.ropList "peripheral"
     , Op.ropIV consRdf       "rdf P /S /O"             "-pattern -term"
     , Op.ropI  consTermName  "term-name /N"            "-term"
     , Op.ropI  consToday     "today /N"                "-term"
-    , Op.ropV  consType      "type /N /P ..."          "-term"
     , Op.ropI  consUnassn    "unassn /P -only /P ..."  "-from | -only"
     ]
 
@@ -210,28 +206,4 @@ relkitToday (n, t) (Just he1) = Right kit2 where
     he2   = B.headCons n he1
     kit2  = C.relkitJust he2 $ C.RelkitOneToOne False f2
     f2 cs = C.pTime t : cs
-
-
--- ----------------------  type
-
--- | Get type.
-consType :: (C.CType c, C.CTypeOf c) => C.RopCons c
-consType use =
-  do np <- Op.getTermPairs use "-term"
-     Right $ C.relmapFlow use $ relkitType np
-
-relkitType :: (C.CType c, C.CTypeOf c) => [B.TermName2] -> C.RelkitFlow c
-relkitType _ Nothing = Right C.relkitNothing
-relkitType np (Just he1) = Right kit2 where
-    ns, ps :: [B.TermName]
-    (ns, ps)  = unzip np
-
-    ns1       = B.headNames he1
-    ind1      = ps `B.snipIndex` ns1
-    share1    = B.snipFrom ind1
-
-    he2       = ns `B.headAppend` he1
-    kit2      = C.relkitJust he2 $ C.RelkitOneToOne False f2
-    f2 cs1    = let cs2 = share1 cs1 in map pTypeOf cs2 ++ cs1
-    pTypeOf   = C.pType . C.typeOf
 
