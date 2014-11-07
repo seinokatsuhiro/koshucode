@@ -139,13 +139,18 @@ litType = gen where
     single []                =  Right $ B.TypeSum []
     single _                 =  Msg.unkType ""
 
+    precision [B.TreeL (B.TText _ B.TextRaw w)]
+        | w `elem` ["sec", "min", "hour", "day"] = Right $ Just w
+    precision []  = Right Nothing
+    precision _   = Msg.unkType "precision"
+
     dispatch "any"     _     =  Right B.TypeAny
     dispatch "empty"   _     =  Right B.TypeEmpty
     dispatch "boolean" _     =  Right B.TypeBool
     dispatch "text"    _     =  Right B.TypeText
     dispatch "code"    _     =  Right B.TypeCode
     dispatch "decimal" _     =  Right B.TypeDec
-    dispatch "clock"   _     =  Right B.TypeClock
+    dispatch "clock"   xs    =  Right . B.TypeClock =<< precision xs
     dispatch "time"    _     =  Right B.TypeTime
     dispatch "binary"  _     =  Right B.TypeBin
     dispatch "term"    _     =  Right B.TypeTerm

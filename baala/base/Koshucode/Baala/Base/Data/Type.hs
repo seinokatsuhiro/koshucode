@@ -36,7 +36,7 @@ data Type
     | TypeText                    -- ^ Text
     | TypeCode                    -- ^ Code
     | TypeDec                     -- ^ Decimal
-    | TypeClock                   -- ^ Clock
+    | TypeClock   (Maybe String)  -- ^ Clock
     | TypeTime                    -- ^ Time
     | TypeBin                     -- ^ Binary data
 
@@ -60,31 +60,32 @@ writeType = wf where
     wt = w True
     wf = w False
 
-    w _ TypeAny          =  B.doc "any"
-    w _ TypeEmpty        =  B.doc "empty"
-    w _ TypeBool         =  B.doc "boolean"
-    w _ TypeText         =  B.doc "text"
-    w _ TypeCode         =  B.doc "code"
-    w _ TypeDec          =  B.doc "decimal"
-    w _ TypeClock        =  B.doc "clock"
-    w _ TypeTime         =  B.doc "time"
-    w _ TypeBin          =  B.doc "binary"
-    w _ TypeTerm         =  B.doc "term"
-    w _ TypeType         =  B.doc "type"
-    w _ TypeInterp       =  B.doc "interp"
+    w _ TypeAny                = B.doc "any"
+    w _ TypeEmpty              = B.doc "empty"
+    w _ TypeBool               = B.doc "boolean"
+    w _ TypeText               = B.doc "text"
+    w _ TypeCode               = B.doc "code"
+    w _ TypeDec                = B.doc "decimal"
+    w _ (TypeClock (Nothing))  = B.doc "clock"
+    w _ (TypeClock (Just p))   = B.doc "clock" B.<+> B.doc p
+    w _ TypeTime               = B.doc "time"
+    w _ TypeBin                = B.doc "binary"
+    w _ TypeTerm               = B.doc "term"
+    w _ TypeType               = B.doc "type"
+    w _ TypeInterp             = B.doc "interp"
 
-    w _ (TypeList    t)  =  B.doc "list"  B.<+> wt t
-    w _ (TypeSet     t)  =  B.doc "set"   B.<+> wt t
-    w _ (TypeTag tag t)  =  B.doc "tag"   B.<+> B.doc (tag ++ ":") B.<+> wt t
+    w _ (TypeList    t)        = B.doc "list"  B.<+> wt t
+    w _ (TypeSet     t)        = B.doc "set"   B.<+> wt t
+    w _ (TypeTag tag t)        = B.doc "tag"   B.<+> B.doc (tag ++ ":") B.<+> wt t
 
-    w q (TypeAssn   ts)  =  wrap q $ B.doc "assn"  B.<+> B.writeTerms wt ts
-    w q (TypeRel    ts)  =  wrap q $ B.doc "rel"   B.<+> B.writeTerms wt ts
+    w q (TypeAssn   ts)        = wrap q $ B.doc "assn"  B.<+> B.writeTerms wt ts
+    w q (TypeRel    ts)        = wrap q $ B.doc "rel"   B.<+> B.writeTerms wt ts
 
-    w _ (TypeTuple  ts)  =  B.doc "tuple" B.<+> B.doch (map wt ts)
-    w q (TypeSum ts)     =  wrap q $ B.doch $ B.writeSepsWith wf "|" ts
+    w _ (TypeTuple  ts)        = B.doc "tuple" B.<+> B.doch (map wt ts)
+    w q (TypeSum ts)           = wrap q $ B.doch $ B.writeSepsWith wf "|" ts
 
-    wrap False x         =  x
-    wrap True  x         =  B.docWraps "(" ")" x
+    wrap False x               = x
+    wrap True  x               = B.docWraps "(" ")" x
 
 -- | Print type as tree.
 typeExplain :: Type -> B.Doc

@@ -8,7 +8,8 @@ module Koshucode.Baala.Base.Data.Clock
 
     -- * Accessor
     clockFromDhms, clockFromDhm, clockFromDh,
-    clockDayCount, clockSec, clockSign,
+    clockDayCount, clockSec,
+    clockSign, clockPrecision,
     dhmsFromSec, secFromHms,
 
     -- * Calculation
@@ -46,17 +47,23 @@ clockFromDh d h = ClockDh d $ secFromHms (h, 0, 0)
 
 -- | Select day-count part from clock.
 clockDayCount :: Clock -> DayCount
-clockDayCount (ClockDhms day _) = day
-clockDayCount (ClockDhm  day _) = day
-clockDayCount (ClockDh   day _) = day
-clockDayCount (ClockD    day)   = day
+clockDayCount (ClockDhms day _)  = day
+clockDayCount (ClockDhm  day _)  = day
+clockDayCount (ClockDh   day _)  = day
+clockDayCount (ClockD    day)    = day
 
 -- | Select second part from clock.
 clockSec :: Clock -> Sec
-clockSec (ClockDhms _ sec) = sec
-clockSec (ClockDhm  _ sec) = sec
-clockSec (ClockDh   _ sec) = sec
-clockSec (ClockD    _)     = 0
+clockSec (ClockDhms _ sec)       = sec
+clockSec (ClockDhm  _ sec)       = sec
+clockSec (ClockDh   _ sec)       = sec
+clockSec (ClockD    _)           = 0
+
+clockPrecision :: Clock -> String
+clockPrecision (ClockDhms _ _)   = "sec"
+clockPrecision (ClockDhm  _ _)   = "min"
+clockPrecision (ClockDh   _ _)   = "hour"
+clockPrecision (ClockD    _)     = "day"
 
 clockSign :: Clock -> Int
 clockSign c | day == 0 && sec == 0  = 0

@@ -77,7 +77,7 @@ instance C.CTypeOf VContent where
     typeOf (VText    _)  =  B.TypeText
     typeOf (VTerm    _)  =  B.TypeTerm
     typeOf (VDec     _)  =  B.TypeDec
-    typeOf (VClock   _)  =  B.TypeClock
+    typeOf (VClock   c)  =  B.TypeClock $ Just $ B.clockPrecision c
     typeOf (VTime    _)  =  B.TypeTime
     typeOf (VEmpty    )  =  B.TypeEmpty
     typeOf (VInterp  _)  =  B.TypeInterp
