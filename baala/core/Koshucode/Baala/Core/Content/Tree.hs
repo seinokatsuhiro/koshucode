@@ -7,7 +7,6 @@ module Koshucode.Baala.Core.Content.Tree
     treesToTexts,
     treeToText,
     treesToDigits,
-    TimeText,
     tokenClock,
     treesToTime,
     treeToFlatTerm,
@@ -132,12 +131,10 @@ fromDigit _    =  Nothing
 
 -- ----------------------  Time
 
-type TimeText = ((Integer, Int, Maybe Int), Maybe B.Clock)
-
-treesToTime :: B.TTreesToAb TimeText
+treesToTime :: B.TTreesToAb B.Time
 treesToTime = concatTime B.<=< treesToTexts False
 
-concatTime :: [String] -> B.Ab TimeText
+concatTime :: [String] -> B.Ab B.Time
 concatTime = year where
 
     year []             = Msg.nothing
@@ -148,28 +145,46 @@ concatTime = year where
     month _ []          = Msg.nothing
     month y (cs : xs)   = case getInt cs of
                             (m, '-'  : cs')  -> day y m $ cs' : xs
-                            (m, "")          -> Right ((y, m, Nothing), Nothing)
+                            (m, "")          -> B.timeFromYmAb y m
                             _                -> Msg.nothing
 
     day _ _ []          = Msg.nothing
     day y m (cs : xs)   = case getInt cs of
-                            (d, "") | null xs    -> Right ((y, m, Just d), Nothing)
-                                    | otherwise  -> hour (y, m, Just d) $ concat xs
+                            (d, "") | null xs    -> B.timeFromYmdAb y m d
+                                    | otherwise  -> hour (B.timeFromYmdczAb y m d) $ concat xs
                             _                    -> Msg.nothing
 
-    hour ymd cs         = case getInt cs of
-                            (h, "")          -> Right (ymd, Just $ B.clockFromDh 0 h)
-                            (h, ':' : cs')   -> minute ymd h cs'
+    hour k cs           = case getInt cs of
+                            (h, "")          -> k (B.clockFromDh 0 h) Nothing
+                            (h, ':' : cs')   -> minute k h cs'
                             _                -> Msg.nothing
 
-    minute ymd h cs     = case getInt cs of
-                            (m, "")          -> Right (ymd, Just $ B.clockFromDhm 0 h m)
-                            (m, ':' : cs')   -> second ymd h m cs'
+    minute k h cs       = case getInt cs of
+                            (m, "")          -> k (B.clockFromDhm 0 h m) Nothing
+                            (m, ':' : cs')   -> second k h m cs'
+                            (m, cs')         -> zone1 k h m Nothing cs'
+
+    second k h m cs     = case getInt cs of
+                            (s, "")          -> k (B.clockFromDhms 0 h m s) Nothing
+                            (s, cs')         -> zone1 k h m (Just s) cs'
+
+    zone1 k h m s cs    = case cs of
+                            '+' : cs'        -> zone2 k h m s   1  cs'
+                            '-' : cs'        -> zone2 k h m s (-1) cs'
+                            "UTC"            -> zone4 k h m s 0 0
                             _                -> Msg.nothing
 
-    second ymd h m cs   = case getInt cs of
-                            (s, "")          -> Right (ymd, Just $ B.clockFromDhms 0 h m s)
+    zone2 k h m s pm cs = case getInt cs of
+                            (zh, ':' : cs')  -> zone3 k h m s (pm * zh) cs'
                             _                -> Msg.nothing
+
+    zone3 k h m s zh cs = case getInt cs of
+                            (zm, "")         -> zone4 k h m s zh zm
+                            _                -> Msg.nothing
+
+    zone4 k h m s zh zm = let c = B.clockFromHms (h - zh) (m - zm) s
+                              z = B.secFromHms (zh, zm, 0)
+                          in k c $ Just z
 
 
 -- ----------------------  Term

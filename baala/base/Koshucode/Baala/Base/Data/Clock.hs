@@ -7,14 +7,14 @@ module Koshucode.Baala.Base.Data.Clock
     writeClock, writeClockBody,
 
     -- * Accessor
-    clockFromDhms, clockFromDhm, clockFromDh,
+    clockFromDhms, clockFromDhm, clockFromDh, clockFromHms,
     clockDayCount, clockSec,
     clockSign, clockPrecision,
     dhmsFromSec, secFromHms,
 
     -- * Calculation
     clockPos, clockNeg,
-    clockCutDay, clockAddDay,
+    clockCutDay, clockAddDay, clockAddSec,
     clockAdd, clockSub,
     clockRangeBy, clockStep,
   ) where
@@ -25,10 +25,10 @@ import qualified Koshucode.Baala.Base.Text     as B
 import qualified Koshucode.Baala.Base.Message  as Msg
 
 data Clock
-    = ClockDhms DayCount Sec
-    | ClockDhm  DayCount Sec
-    | ClockDh   DayCount Sec
-    | ClockD    DayCount
+    = ClockDhms DayCount Sec    -- ^ Clock represented by multiple of second
+    | ClockDhm  DayCount Sec    -- ^ Clock represented by multiple of minute
+    | ClockDh   DayCount Sec    -- ^ Clock represented by multiple of hour
+    | ClockD    DayCount        -- ^ Clock represented by multiple of day
       deriving (Show, Eq, Ord)
 
 type DayCount = Integer
@@ -44,6 +44,10 @@ clockFromDhm d h m = ClockDhm d $ secFromHms (h, m, 0)
 
 clockFromDh :: DayCount -> Hour -> Clock
 clockFromDh d h = ClockDh d $ secFromHms (h, 0, 0)
+
+clockFromHms :: Hour -> Min -> Maybe Sec -> Clock
+clockFromHms h m (Nothing)  = clockFromDhm  0 h m
+clockFromHms h m (Just s)   = clockFromDhms 0 h m s
 
 -- | Select day-count part from clock.
 clockDayCount :: Clock -> DayCount
@@ -137,19 +141,20 @@ dayDoc d = B.doc d B.<> B.doc "'"
 
 -- ----------------------  Map
 
+-- | Type for abortable binary operator.
 type AbBin a  = a -> a -> B.Ab a
 
 clockMap :: B.Map DayCount -> B.Map Sec -> B.Map Clock
-clockMap f g (ClockDhms day sec)  = adjust ClockDhms (f day) (g sec)
-clockMap f g (ClockDhm  day sec)  = adjust ClockDhm  (f day) (g sec)
-clockMap f g (ClockDh   day sec)  = adjust ClockDh   (f day) (g sec)
-clockMap f _ (ClockD    day)      =        ClockD    (f day)
+clockMap f g (ClockDhms d s)  = adjust ClockDhms (f d) (g s)
+clockMap f g (ClockDhm  d s)  = adjust ClockDhm  (f d) (g s)
+clockMap f g (ClockDh   d s)  = adjust ClockDh   (f d) (g s)
+clockMap f _ (ClockD    d)    =        ClockD    (f d)
 
 clockMap2 :: B.Bin DayCount -> B.Bin Sec -> AbBin Clock
-clockMap2 f _ (ClockD    d)   (ClockD    e)    = Right  $ ClockD    (f d e)
-clockMap2 f g (ClockDh   d s) (ClockDh   e t)  = adjustAb ClockDh   (f d e) (g s t)
-clockMap2 f g (ClockDhm  d s) (ClockDhm  e t)  = adjustAb ClockDhm  (f d e) (g s t)
 clockMap2 f g (ClockDhms d s) (ClockDhms e t)  = adjustAb ClockDhms (f d e) (g s t)
+clockMap2 f g (ClockDhm  d s) (ClockDhm  e t)  = adjustAb ClockDhm  (f d e) (g s t)
+clockMap2 f g (ClockDh   d s) (ClockDh   e t)  = adjustAb ClockDh   (f d e) (g s t)
+clockMap2 f _ (ClockD    d)   (ClockD    e)    = Right  $ ClockD    (f d e)
 clockMap2 _ _ _ _ = Msg.adlib "clock"
 
 daySeconds :: (Num a) => a
@@ -187,6 +192,10 @@ clockCutDay = clockMap (const 0) id
 -- | Add day-count.
 clockAddDay :: DayCount -> B.Map Clock
 clockAddDay d = clockMap (+ d) id
+
+-- | Add second.
+clockAddSec :: Sec -> B.Map Clock
+clockAddSec s = clockMap id (+ s)
 
 -- | Calculation of clock plus clock.
 clockAdd :: AbBin Clock

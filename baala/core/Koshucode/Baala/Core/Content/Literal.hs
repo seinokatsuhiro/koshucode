@@ -37,9 +37,9 @@ literal calc tree = Msg.abLiteral tree $ lit tree where
     lit :: B.TTreeToAb c
     lit x@(B.TreeL t)
         = eithcon (eithcon (eithcon (token t)
-            C.putClock $ C.tokenClock t)
-            time       $ C.treesToTime   [x])
-            decimal    $ C.treesToDigits [x]
+            C.putClock  $ C.tokenClock t)
+            C.putTime   $ C.treesToTime   [x])
+            decimal     $ C.treesToDigits [x]
     lit g@(B.TreeB b _ xs) = case b of
         B.BracketGroup   ->  group g
         B.BracketList    ->  C.putList   =<< litColon lit xs
@@ -60,24 +60,20 @@ literal calc tree = Msg.abLiteral tree $ lit tree where
     group g@(B.TreeB _ _ xs@(B.TreeL (B.TText _ n _) : _))
         | n  > B.TextRaw    =  eith g text $ C.treesToTexts True xs
         | n == B.TextRaw    =  eithcon (eith g
-                                 time     $ C.treesToTime   xs)
-                                 decimal  $ C.treesToDigits xs
+                                 C.putTime $ C.treesToTime   xs)
+                                 decimal   $ C.treesToDigits xs
     group (B.TreeB _ _ [])  =  Right C.empty
     group g                 =  calc g
 
-    eithcon f    =  either (const f)
-    eith g       =  either (const $ calc g)
-    text         =  C.putText . concat
-    decimal      =  C.putDec B.<=< B.litDecimal
-
-    time ((y, m, Just d), Just c)  = C.putTime =<< B.timeFromYmdcAb y m d c
-    time ((y, m, Just d), _)       = C.putTime =<< B.timeFromYmdAb  y m d
-    time ((y, m, _), _)            = C.putTime =<< B.timeFromYmAb   y m
+    eithcon f    = either (const f)
+    eith g       = either (const $ calc g)
+    text         = C.putText . concat
+    decimal      = C.putDec B.<=< B.litDecimal
 
     keyword :: (C.CEmpty c, C.CBool c) => String -> B.Ab c
-    keyword "0"  =  Right C.false
-    keyword "1"  =  Right C.true
-    keyword w    =  Msg.unkWord w
+    keyword "0"  = Right C.false
+    keyword "1"  = Right C.true
+    keyword w    = Msg.unkWord w
 
 -- | Colon-separated contents.
 litColon :: (C.CContent c) => B.TTreeToAb c -> B.TTreesToAb [c]
