@@ -148,21 +148,21 @@ concatTime = year where
 
     month _ []          = Msg.nothing
     month y (cs : xs)   = case getInt cs of
-                            (m, '-'  : cs')  -> day y m $ cs' : xs
+                            (m, '-'  : cs')  -> day B.timeFromYmdAb y m $ cs' : xs
                             (m, "")          -> B.timeFromYmAb y m
                             _                -> Msg.nothing
 
     week _ []           = Msg.nothing
     week y (cs : xs)    = case getInt cs of
-                            (w, '-'  : cs')  -> day y w $ cs' : xs
+                            (w, '-'  : cs')  -> day B.timeFromYwdAb y w $ cs' : xs
                             (w, "")          -> B.timeFromYwAb y w
                             _                -> Msg.nothing
 
-    day _ _ []          = Msg.nothing
-    day y m (cs : xs)   = case getInt cs of
-                            (d, "") | null xs    -> B.timeFromYmdAb y m d
-                                    | otherwise  -> hour (B.timeFromYmdczAb y m d) $ concat xs
-                            _                    -> Msg.nothing
+    day _ _ _ []        = Msg.nothing
+    day f y m (cs : xs) = case getInt cs of
+                          (d, "") | null xs    -> f y m d
+                                  | otherwise  -> hour (B.timeFromYmdczAb y m d) $ concat xs
+                          _                    -> Msg.nothing
 
     hour k cs           = case getInt cs of
                             (h, "")          -> k (B.clockFromDh 0 h) Nothing

@@ -7,7 +7,8 @@ module Koshucode.Baala.Base.Data.Time
     timeYmd,
 
     -- * Construct
-    timeFromYmAb, timeFromYwAb, timeFromYmdAb,
+    timeFromYmAb, timeFromYwAb,
+    timeFromYmdAb, timeFromYwdAb,
     timeFromYmdcAb, timeFromYmdczAb,
     timeFromMjd, timeMjd,
     timeMapMjd, timePrecision,
@@ -27,6 +28,7 @@ module Koshucode.Baala.Base.Data.Time
 
 import qualified Data.Time.Calendar               as T
 import qualified Data.Time.Calendar.WeekDate      as T
+import qualified Data.Time.Calendar.OrdinalDate   as T
 import qualified Koshucode.Baala.Base.Abort       as B
 import qualified Koshucode.Baala.Base.Prelude     as B
 import qualified Koshucode.Baala.Base.Text        as B
@@ -71,30 +73,42 @@ instance B.Write Time where
     write _ = writeTime
 
 writeTime :: Time -> B.Doc
-writeTime (TimeYmdcz _ d c z) = body B.<+> szone where
-    body       = writeDateTime d $ B.clockAddSec z c
+writeTime (TimeYmdcz f d c z) = body B.<+> szone where
+    body       = writeDateTime f d $ B.clockAddSec z c
     (_,h,m,_)  = B.dhmsFromSec z
     zone       = B.docConcat ":" (B.doc02 h) (B.doc02 m)
     szone      = case z `compare` 0 of
                    EQ -> B.doc "UTC"
                    LT -> B.doc "-" B.<> zone
                    GT -> B.doc "+" B.<> zone
-writeTime (TimeYmdc  _ d c)   = writeDateTime d c
-writeTime (TimeYmd   _ d)     = writeDay d
+writeTime (TimeYmdc  f d c)   = writeDateTime f d c
+writeTime (TimeYmd   f d)     = writeDay f d
 writeTime (TimeYw      d)     = case T.toWeekDate d of
-                                  (y, w, _) -> B.doc y `hy` B.doc "#" B.<> B.doc w
+                                  (y, w, _) -> B.doc y `hyw` B.doc w
 writeTime (TimeYm      d)     = case T.toGregorian d of
                                   (y, m, _) -> B.doc y `hy` B.doc02 m
 
-writeDateTime :: T.Day -> B.Clock -> B.Doc
-writeDateTime d c = writeDay d B.<+> B.writeClockBody c
+writeDateTime :: DateForm -> T.Day -> B.Clock -> B.Doc
+writeDateTime f d c = writeDay f d B.<+> B.writeClockBody c
 
-writeDay :: T.Day -> B.Doc
-writeDay day = case T.toGregorian day of
-                 (y, m, d) -> B.doc y `hy` B.doc02 m `hy` B.doc02 d
+writeDay :: DateForm -> T.Day -> B.Doc
+writeDay DateMonth day  = let (y, m, d) = T.toGregorian   day in dateMonth y m d
+writeDay DateWeek  day  = let (y, w, d) = T.toWeekDate    day in dateWeek  y w d
+writeDay DateDay   day  = let (y, d)    = T.toOrdinalDate day in dateDay   y d
 
-hy :: B.Bin B.Doc
-hy = B.docConcat "-"
+dateMonth :: Year -> Month -> Day -> B.Doc
+dateMonth y m d = B.doc y `hy` B.doc02 m `hy` B.doc02 d
+
+dateWeek :: Year -> Week -> Day -> B.Doc
+dateWeek  y w d = B.doc y `hyw` B.doc w `hy` B.doc d
+
+dateDay :: Year -> Day -> B.Doc
+dateDay   y d = B.doc y `hyww` B.doc d
+
+hy, hyw, hyww :: B.Bin B.Doc
+hy    = B.docConcat "-"
+hyw   = B.docConcat "-#"
+hyww  = B.docConcat "-##"
 
 
 -- ----------------------  Construct
@@ -119,6 +133,13 @@ timeFromYmdAb y m d =
     case T.fromGregorianValid y m d of
       Just day -> Right $ timeYmd day
       Nothing  -> Msg.notDate y m d
+
+-- | Create time data from year, week, and day.
+timeFromYwdAb :: Year -> Week -> Day -> B.Ab Time
+timeFromYwdAb y w d =
+    case T.fromWeekDateValid y w d of
+      Just day -> Right $ TimeYmd DateWeek day
+      Nothing  -> Msg.notDate y w d
 
 -- | Create time data from year, month, day, and clock.
 timeFromYmdcAb :: Year -> Month -> Day -> B.Clock -> B.Ab Time
