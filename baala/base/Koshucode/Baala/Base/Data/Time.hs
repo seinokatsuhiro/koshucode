@@ -2,10 +2,10 @@
 
 module Koshucode.Baala.Base.Data.Time
   ( -- * Type
-    Time (..), Year, Month, Day,
+    Time (..), Year, Month, Week, Day,
 
     -- * Construct
-    timeFromYmAb, timeFromYmdAb,
+    timeFromYmAb, timeFromYwAb, timeFromYmdAb,
     timeFromYmdcAb, timeFromYmdczAb,
     timeFromMjd, timeMjd,
     timeMapMjd, timePrecision,
@@ -24,6 +24,7 @@ module Koshucode.Baala.Base.Data.Time
   ) where
 
 import qualified Data.Time.Calendar               as T
+import qualified Data.Time.Calendar.WeekDate      as T
 import qualified Koshucode.Baala.Base.Abort       as B
 import qualified Koshucode.Baala.Base.Prelude     as B
 import qualified Koshucode.Baala.Base.Text        as B
@@ -34,6 +35,7 @@ data Time
     = TimeYmdcz T.Day B.Clock B.Sec  -- ^ Date and time with time zone
     | TimeYmdc  T.Day B.Clock        -- ^ Date and time
     | TimeYmd   T.Day                -- ^ Year, month, and day
+    | TimeYw    T.Day                -- ^ Year and week
     | TimeYm    T.Day                -- ^ Year and month
       deriving (Show, Eq, Ord)
 
@@ -51,6 +53,8 @@ writeTime (TimeYmdcz d c z) = body B.<+> szone where
                    GT -> B.doc "+" B.<> zone
 writeTime (TimeYmdc  d c)   = writeDateTime d c
 writeTime (TimeYmd   d)     = writeDay d
+writeTime (TimeYw    d)     = case T.toWeekDate d of
+                                (y, w, _) -> B.doc y `hy` B.doc "#" B.<> B.doc w
 writeTime (TimeYm    d)     = case T.toGregorian d of
                                 (y, m, _) -> B.doc y `hy` B.doc02 m
 
@@ -64,32 +68,44 @@ writeDay day = case T.toGregorian day of
 hy :: B.Bin B.Doc
 hy = B.docConcat "-"
 
-type Year  = Integer
-type Month = Int
-type Day   = Int
+type Year   = Integer
+type Week   = Int
+type Month  = Int
+type Day    = Int
 
 
 -- ----------------------  Construct
 
+-- | Create time data from year and month.
 timeFromYmAb :: Year -> Month -> B.Ab Time
 timeFromYmAb y m =
     case T.fromGregorianValid y m 1 of
       Just day -> Right $ TimeYm day
       Nothing  -> Msg.notDate y m 1
 
+-- | Create time data from year and week.
+timeFromYwAb :: Year -> Week -> B.Ab Time
+timeFromYwAb y w =
+    case T.fromWeekDateValid y w 1 of
+      Just day -> Right $ TimeYw day
+      Nothing  -> Msg.notDate y w 1
+
+-- | Create time data from year, month, and day.
 timeFromYmdAb :: Year -> Month -> Day -> B.Ab Time
 timeFromYmdAb y m d =
     case T.fromGregorianValid y m d of
       Just day -> Right $ TimeYmd day
       Nothing  -> Msg.notDate y m d
 
+-- | Create time data from year, month, day, and clock.
 timeFromYmdcAb :: Year -> Month -> Day -> B.Clock -> B.Ab Time
 timeFromYmdcAb y m d c =
     case T.fromGregorianValid y m d of
       Just day -> Right $ TimeYmdc day c
       Nothing  -> Msg.notDate y m d
 
-timeFromYmdczAb :: Year -> Month -> Day -> B.Clock -> Maybe Int -> B.Ab Time
+-- | Create time data from year, month, day, clock, and time zone.
+timeFromYmdczAb :: Year -> Month -> Day -> B.Clock -> Maybe B.Sec -> B.Ab Time
 timeFromYmdczAb y m d c Nothing =
     case T.fromGregorianValid y m d of
       Just day -> Right $ TimeYmdc day c
@@ -112,17 +128,20 @@ timePrecision :: Time -> String
 timePrecision (TimeYmdcz _ c _)  = B.clockPrecision c ++ " zone"
 timePrecision (TimeYmdc  _ c)    = B.clockPrecision c
 timePrecision (TimeYmd   _)      = "day"
+timePrecision (TimeYw    _)      = "week"
 timePrecision (TimeYm    _)      = "month"
 
 timeDay :: Time -> T.Day
 timeDay (TimeYmdcz day _ _)  = day
 timeDay (TimeYmdc  day _)    = day
 timeDay (TimeYmd   day)      = day
+timeDay (TimeYw    day)      = day
 timeDay (TimeYm    day)      = day
 
 timeMjd :: Time -> B.DayCount
 timeMjd = T.toModifiedJulianDay . timeDay
 
+-- | Create time data form modified Julian date.
 timeFromMjd :: B.DayCount -> Time
 timeFromMjd = TimeYmd . T.ModifiedJulianDay
 
@@ -134,6 +153,7 @@ timeMapDay :: B.Map T.Day -> B.Map Time
 timeMapDay f (TimeYmdcz day c z)  = TimeYmdcz (f day) c z
 timeMapDay f (TimeYmdc  day c)    = TimeYmdc  (f day) c
 timeMapDay f (TimeYmd   day)      = TimeYmd  $ f day
+timeMapDay f (TimeYw    day)      = TimeYw   $ f day
 timeMapDay f (TimeYm    day)      = TimeYm   $ f day
 
 

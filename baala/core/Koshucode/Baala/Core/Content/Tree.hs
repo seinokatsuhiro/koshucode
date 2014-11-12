@@ -139,13 +139,23 @@ concatTime = year where
 
     year []             = Msg.nothing
     year (cs : xs)      = case getInt cs of
-                            (y, '-'  : cs')  -> month (toInteger y) $ cs' : xs
+                            (y, '-'  : cs')  -> mwd (toInteger y) $ cs' : xs
                             _                -> Msg.nothing
+
+    mwd _ []                 = Msg.nothing
+    mwd y (('#' : cs) : xs)  = week y $ cs : xs
+    mwd y xs                 = month y xs
 
     month _ []          = Msg.nothing
     month y (cs : xs)   = case getInt cs of
                             (m, '-'  : cs')  -> day y m $ cs' : xs
                             (m, "")          -> B.timeFromYmAb y m
+                            _                -> Msg.nothing
+
+    week _ []           = Msg.nothing
+    week y (cs : xs)    = case getInt cs of
+                            (w, '-'  : cs')  -> day y w $ cs' : xs
+                            (w, "")          -> B.timeFromYwAb y w
                             _                -> Msg.nothing
 
     day _ _ []          = Msg.nothing
