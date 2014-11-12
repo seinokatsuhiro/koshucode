@@ -55,7 +55,7 @@ dir    : dep
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    174 judges
+**    175 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Abortable"      /import "Koshucode.Baala.Base.Prelude"
@@ -119,6 +119,7 @@ dir    : dep
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Time"            /import "Koshucode.Baala.Base.Abort"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Time"            /import "Koshucode.Baala.Base.Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Time"            /import "Koshucode.Baala.Base.Text"
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Time"            /import "Koshucode.Baala.Base.Data.Clock"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Time"            /import "Koshucode.Baala.Base.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Type"            /import "Koshucode.Baala.Base.Prelude"
@@ -294,7 +295,7 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 |-- DIR-RANK  /dir-rank 11  /dir 'Koshucode.Baala.Base.Syntax  /base-rank {| /rank : /base | 0 : 'Line | 10 : 'Code | 10 : 'Tree | 11 : 'Infix |}
 |-- DIR-RANK  /dir-rank 14  /dir 'Koshucode.Baala.Base.Token  /base-rank {| /rank : /base | 6 : 'AngleText | 6 : 'Token | 7 : 'Short | 13 : 'TokenLine | 14 : 'TokenClause | 14 : 'TokenTree |}
 
-|-- DIR-RANK  /dir-rank 20  /dir 'Koshucode.Baala.Base.Data  /base-rank {| /rank : /base | 10 : 'Clock | 10 : 'Decimal | 10 : 'Time | 16 : 'Interp | 16 : 'Type | 17 : 'Head | 18 : 'Rel | 19 : 'Judge | 19 : 'Mono | 20 : 'Output |}
+|-- DIR-RANK  /dir-rank 20  /dir 'Koshucode.Baala.Base.Data  /base-rank {| /rank : /base | 10 : 'Clock | 10 : 'Decimal | 11 : 'Time | 16 : 'Interp | 16 : 'Type | 17 : 'Head | 18 : 'Rel | 19 : 'Judge | 19 : 'Mono | 20 : 'Output |}
 |-- DIR-RANK  /dir-rank 21  /dir 'Koshucode.Baala.Base  /base-rank {| /rank : /base | 3 : 'Prelude | 5 : 'Text | 8 : 'Abort | 9 : 'Message | 12 : 'Syntax | 15 : 'Token | 21 : 'Data |}
 |-- DIR-RANK  /dir-rank 22  /dir 'Koshucode.Baala  /base-rank {| /rank : /base | 22 : 'Base |}
 
@@ -349,7 +350,7 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 **                                              ----- --------------
 **                                              10    'Clock
 **                                              10    'Decimal
-**                                              10    'Time
+**                                              11    'Time
 **                                              16    'Interp
 **                                              16    'Type
 **                                              17    'Head
@@ -931,7 +932,7 @@ Command `./dir-rank.k ../operator/IMPORT.k` produces:
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    75 judges
+**    81 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Op.Cop.Arith"              /import "Koshucode.Baala.Base"
@@ -950,8 +951,14 @@ Command `./dir-rank.k ../operator/IMPORT.k` produces:
 
 |-- IMPORT  /module "Koshucode.Baala.Op.Cop.Logic"              /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Op.Cop.Logic"              /import "Koshucode.Baala.Core"
-|-- IMPORT  /module "Koshucode.Baala.Op.Cop.Logic"              /import "Koshucode.Baala.Op.Message"
+|-- IMPORT  /module "Koshucode.Baala.Op.Cop.Logic"              /import "Koshucode.Baala.Op.Cop.Coxhand"
 
+|-- IMPORT  /module "Koshucode.Baala.Op.Cop.Misc"               /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Op.Cop.Misc"               /import "Koshucode.Baala.Core"
+|-- IMPORT  /module "Koshucode.Baala.Op.Cop.Misc"               /import "Koshucode.Baala.Op.Cop.Coxhand"
+|-- IMPORT  /module "Koshucode.Baala.Op.Cop.Misc"               /import "Koshucode.Baala.Op.Message"
+
+|-- IMPORT  /module "Koshucode.Baala.Op.Cop.Order"              /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Op.Cop.Order"              /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Op.Cop.Order"              /import "Koshucode.Baala.Op.Cop.Coxhand"
 |-- IMPORT  /module "Koshucode.Baala.Op.Cop.Order"              /import "Koshucode.Baala.Op.Message"
@@ -963,6 +970,7 @@ Command `./dir-rank.k ../operator/IMPORT.k` produces:
 |-- IMPORT  /module "Koshucode.Baala.Op.Cop"                    /import "Koshucode.Baala.Op.Cop.Arith"
 |-- IMPORT  /module "Koshucode.Baala.Op.Cop"                    /import "Koshucode.Baala.Op.Cop.List"
 |-- IMPORT  /module "Koshucode.Baala.Op.Cop"                    /import "Koshucode.Baala.Op.Cop.Logic"
+|-- IMPORT  /module "Koshucode.Baala.Op.Cop"                    /import "Koshucode.Baala.Op.Cop.Misc"
 |-- IMPORT  /module "Koshucode.Baala.Op.Cop"                    /import "Koshucode.Baala.Op.Cop.Order"
 |-- IMPORT  /module "Koshucode.Baala.Op.Cop"                    /import "Koshucode.Baala.Op.Cop.Time"
 
@@ -1040,7 +1048,7 @@ Command `./dir-rank.k ../content/IMPORT.k` produces:
 
 |-- DIR-RANK  /dir-rank 0  /dir 'Koshucode.Baala  /base-rank {| /rank : /base | 0 : 'Base | 0 : 'Core | 0 : 'Op |}
 |-- DIR-RANK  /dir-rank 1  /dir 'Koshucode.Baala.Type  /base-rank {| /rank : /base | 1 : 'Vanilla |}
-|-- DIR-RANK  /dir-rank 2  /dir 'Koshucode.Baala.Op.Cop  /base-rank {| /rank : /base | 1 : 'Arith | 1 : 'Coxhand | 1 : 'Logic | 1 : 'Time | 2 : 'List | 2 : 'Order |}
+|-- DIR-RANK  /dir-rank 2  /dir 'Koshucode.Baala.Op.Cop  /base-rank {| /rank : /base | 1 : 'Arith | 1 : 'Coxhand | 1 : 'Time | 2 : 'List | 2 : 'Logic | 2 : 'Misc | 2 : 'Order |}
 |-- DIR-RANK  /dir-rank 2  /dir 'Koshucode.Baala.Op.Cox  /base-rank {| /rank : /base | 1 : 'Get | 2 : 'Calc | 2 : 'Empty | 2 : 'Filter | 2 : 'Gadget | 2 : 'Range |}
 |-- DIR-RANK  /dir-rank 4  /dir 'Koshucode.Baala.Op  /base-rank {| /rank : /base | 0 : 'Builtin | 0 : 'Lattice | 0 : 'Message | 2 : 'Quoter | 3 : 'Cop | 3 : 'Cox | 4 : 'Global |}
 
@@ -1064,9 +1072,10 @@ Command `./dir-rank.k ../content/IMPORT.k` produces:
 **                                        ----- ----------
 **                                        1     'Arith
 **                                        1     'Coxhand
-**                                        1     'Logic
 **                                        1     'Time
 **                                        2     'List
+**                                        2     'Logic
+**                                        2     'Misc
 **                                        2     'Order
 **                                        
 **    2         'Koshucode.Baala.Op.Cox   /rank /base
