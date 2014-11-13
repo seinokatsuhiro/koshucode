@@ -2,12 +2,10 @@
 
 module Koshucode.Baala.Base.Data.Time
   ( -- * Data type
-    Date (..), Time (..),
-    Year, Month, Week, Day,
+    Time (..),
     timeYmd,
 
     -- * Construct
-    dateFromYmdAb, dateFromYwdAb, dateFromYdAb,
     timeFromYmAb, timeFromYwAb,
     timeFromYmdAb, timeFromYwdAb, timeFromYdAb,
     timeFromYmdcAb, timeFromYmdczAb,
@@ -34,69 +32,25 @@ import qualified Koshucode.Baala.Base.Abort       as B
 import qualified Koshucode.Baala.Base.Prelude     as B
 import qualified Koshucode.Baala.Base.Text        as B
 import qualified Koshucode.Baala.Base.Data.Clock  as B
+import qualified Koshucode.Baala.Base.Data.Date   as B
 import qualified Koshucode.Baala.Base.Message     as Msg
-
-
--- ----------------------  Date
-
-data Date
-    = Monthly T.Day    -- ^ Date in /YYYY-MM-DD/
-    | Weekly  T.Day    -- ^ Date in /YYYY-#W-D/
-    | Yearly  T.Day    -- ^ Date in /YYYY-##D/
-      deriving (Show, Eq, Ord)
-
-dateDay :: Date -> T.Day
-dateDay (Monthly d)  = d
-dateDay (Weekly  d)  = d
-dateDay (Yearly  d)  = d
-
-dateMapDay :: B.Map T.Day -> B.Map Date
-dateMapDay f (Monthly d)  = Monthly $ f d
-dateMapDay f (Weekly  d)  = Weekly  $ f d
-dateMapDay f (Yearly  d)  = Yearly  $ f d
-
--- | Create date data from year, month, and day.
-dateFromYmdAb :: Year -> Month -> Day -> B.Ab Date
-dateFromYmdAb y m d =
-    case T.fromGregorianValid y m d of
-      Just day -> Right $ Monthly day
-      Nothing  -> Msg.notDate y m d
-
--- | Create date data from year, week, and day.
-dateFromYwdAb :: Year -> Week -> Day -> B.Ab Date
-dateFromYwdAb y w d =
-    case T.fromWeekDateValid y w d of
-      Just day -> Right $ Weekly day
-      Nothing  -> Msg.notDate y w d
-
--- | Create date data from year and day.
-dateFromYdAb :: Year -> Day -> B.Ab Date
-dateFromYdAb y d =
-    case T.fromOrdinalDateValid y d of
-      Just day -> Right $ Yearly day
-      Nothing  -> Msg.notDate y 0 d
 
 
 -- ----------------------  Time
 
 data Time
-    = TimeYmdcz Date B.Clock B.Sec  -- ^ Date and time with time zone
-    | TimeYmdc  Date B.Clock        -- ^ Date and time
-    | TimeYmd   Date                -- ^ Year, month, and day
-    | TimeYw    T.Day               -- ^ Year and week
-    | TimeYm    T.Day               -- ^ Year and month
+    = TimeYmdcz B.Date B.Clock B.Sec  -- ^ Date and time with time zone
+    | TimeYmdc  B.Date B.Clock        -- ^ Date and time
+    | TimeYmd   B.Date                -- ^ Year, month, and day
+    | TimeYw    T.Day                 -- ^ Year and week
+    | TimeYm    T.Day                 -- ^ Year and month
       deriving (Show, Eq, Ord)
 
 timeYmdc  :: T.Day -> B.Clock -> Time
-timeYmdc   = TimeYmdc . Monthly
+timeYmdc   = TimeYmdc . B.Monthly
 
 timeYmd   :: T.Day -> Time
-timeYmd    = TimeYmd . Monthly
-
-type Year   = Integer
-type Week   = Int
-type Month  = Int
-type Day    = Int
+timeYmd    = TimeYmd . B.Monthly
 
 
 -- ----------------------  Write
@@ -120,15 +74,15 @@ writeTime (TimeYw    d)     = case T.toWeekDate d of
 writeTime (TimeYm    d)     = case T.toGregorian d of
                                 (y, m, _) -> B.doc y `hy` B.doc02 m
 
-writeDateTime :: Date -> B.Clock -> B.Doc
+writeDateTime :: B.Date -> B.Clock -> B.Doc
 writeDateTime d c = writeDay d B.<+> B.writeClockBody c
 
-writeDay :: Date -> B.Doc
+writeDay :: B.Date -> B.Doc
 writeDay date =
     case date of
-      Monthly d   -> dateMonth $ T.toGregorian    d
-      Weekly  d   -> dateWeek  $ T.toWeekDate     d
-      Yearly  d   -> dateYear  $ T.toOrdinalDate  d
+      B.Monthly d   -> dateMonth $ T.toGregorian    d
+      B.Weekly  d   -> dateWeek  $ T.toWeekDate     d
+      B.Yearly  d   -> dateYear  $ T.toOrdinalDate  d
     where
       dateMonth (y, m, d)  = B.doc y `hy`   B.doc02 m `hy` B.doc02 d
       dateWeek  (y, w, d)  = B.doc y `hyw`  B.doc w   `hy` B.doc d
@@ -143,59 +97,59 @@ hyww  = B.docConcat "-##"
 -- ----------------------  Construct
 
 -- | Create time data from year and month.
-timeFromYmAb :: Year -> Month -> B.Ab Time
+timeFromYmAb :: B.Year -> B.Month -> B.Ab Time
 timeFromYmAb y m =
     case T.fromGregorianValid y m 1 of
       Just day -> Right $ TimeYm day
       Nothing  -> Msg.notDate y m 1
 
 -- | Create time data from year and week.
-timeFromYwAb :: Year -> Week -> B.Ab Time
+timeFromYwAb :: B.Year -> B.Week -> B.Ab Time
 timeFromYwAb y w =
     case T.fromWeekDateValid y w 1 of
       Just day -> Right $ TimeYw day
       Nothing  -> Msg.notDate y w 1
 
 -- | Create time data from year, month, and day.
-timeFromYmdAb :: Year -> Month -> Day -> B.Ab Time
+timeFromYmdAb :: B.Year -> B.Month -> B.Day -> B.Ab Time
 timeFromYmdAb y m d =
     case T.fromGregorianValid y m d of
       Just day -> Right $ timeYmd day
       Nothing  -> Msg.notDate y m d
 
 -- | Create time data from year, week, and day.
-timeFromYwdAb :: Year -> Week -> Day -> B.Ab Time
+timeFromYwdAb :: B.Year -> B.Week -> B.Day -> B.Ab Time
 timeFromYwdAb y w d =
     case T.fromWeekDateValid y w d of
-      Just day -> Right $ TimeYmd $ Weekly day
+      Just day -> Right $ TimeYmd $ B.Weekly day
       Nothing  -> Msg.notDate y w d
 
 -- | Create time data from year and day.
-timeFromYdAb :: Year -> a -> Day -> B.Ab Time
+timeFromYdAb :: B.Year -> a -> B.Day -> B.Ab Time
 timeFromYdAb y _ d =
     case T.fromOrdinalDateValid y d of
-      Just day -> Right $ TimeYmd $ Yearly day
+      Just day -> Right $ TimeYmd $ B.Yearly day
       Nothing  -> Msg.notDate y 0 d
 
 -- | Create time data from year, month, day, and clock.
-timeFromYmdcAb :: Year -> Month -> Day -> B.Clock -> B.Ab Time
+timeFromYmdcAb :: B.Year -> B.Month -> B.Day -> B.Clock -> B.Ab Time
 timeFromYmdcAb y m d c =
     case T.fromGregorianValid y m d of
       Just day -> Right $ timeYmdc day c
       Nothing  -> Msg.notDate y m d
 
 -- | Create time data from year, month, day, clock, and time zone.
-timeFromYmdczAb :: Date -> B.Clock -> Maybe B.Sec -> B.Ab Time
+timeFromYmdczAb :: B.Date -> B.Clock -> Maybe B.Sec -> B.Ab Time
 timeFromYmdczAb d c Nothing   = Right $ TimeYmdc  d c
 timeFromYmdczAb d c (Just z)  = Right $ TimeYmdcz d c z
 
-timeFromYmd :: Year -> Month -> Day -> Time
+timeFromYmd :: B.Year -> B.Month -> B.Day -> Time
 timeFromYmd y m d = timeYmd $ T.fromGregorian y m d
 
-timeFromYmdTuple :: (Year, Month, Day) -> Time
+timeFromYmdTuple :: (B.Year, B.Month, B.Day) -> Time
 timeFromYmdTuple = timeYmd . fromGregorianTuple
 
-fromGregorianTuple :: (Year, Month, Day) -> T.Day
+fromGregorianTuple :: (B.Year, B.Month, B.Day) -> T.Day
 fromGregorianTuple (y, m, d) = T.fromGregorian y m d
 
 timePrecision :: Time -> String
@@ -206,9 +160,9 @@ timePrecision (TimeYw    _)      = "week"
 timePrecision (TimeYm    _)      = "month"
 
 timeDay :: Time -> T.Day
-timeDay (TimeYmdcz d _ _)  = dateDay d
-timeDay (TimeYmdc  d _)    = dateDay d
-timeDay (TimeYmd   d)      = dateDay d
+timeDay (TimeYmdcz d _ _)  = B.dateDay d
+timeDay (TimeYmdc  d _)    = B.dateDay d
+timeDay (TimeYmd   d)      = B.dateDay d
 timeDay (TimeYw    d)      = d
 timeDay (TimeYm    d)      = d
 
@@ -224,9 +178,9 @@ timeMapMjd f time = timeMapDay g time where
     g (T.ModifiedJulianDay d) = T.ModifiedJulianDay $ f d
 
 timeMapDay :: B.Map T.Day -> B.Map Time
-timeMapDay g (TimeYmdcz d c z)  = TimeYmdcz (dateMapDay g d) c z
-timeMapDay g (TimeYmdc  d c)    = TimeYmdc  (dateMapDay g d) c
-timeMapDay g (TimeYmd   d)      = TimeYmd   (dateMapDay g d)
+timeMapDay g (TimeYmdcz d c z)  = TimeYmdcz (B.dateMapDay g d) c z
+timeMapDay g (TimeYmdc  d c)    = TimeYmdc  (B.dateMapDay g d) c
+timeMapDay g (TimeYmd   d)      = TimeYmd   (B.dateMapDay g d)
 timeMapDay g (TimeYw    d)      = TimeYw    (g d)
 timeMapDay g (TimeYm    d)      = TimeYm    (g d)
 
@@ -289,22 +243,22 @@ timeRangeMonth = timeRangeBy monthStep
 timeRangeYear :: B.RangeBy Time
 timeRangeYear = timeRangeBy yearStep
 
-timeRangeBy :: B.Map (Year, Month, Day) -> B.RangeBy Time
+timeRangeBy :: B.Map (B.Year, B.Month, B.Day) -> B.RangeBy Time
 timeRangeBy step from to = times where
     dayFrom =  T.toGregorian $ timeDay from
     dayTo   =  T.toGregorian $ timeDay to
     time    =  timeYmd . fromGregorianTuple
     times   =  map time $ B.rangeBy step dayFrom dayTo
 
-monthStep :: B.Map (Year, Month, Day)
+monthStep :: B.Map (B.Year, B.Month, B.Day)
 monthStep (y, m, d) | m < 12    = (y, m + 1, d)
                     | otherwise = (y + 1, 1, d)
 
-yearStep :: B.Map (Year, Month, Day)
+yearStep :: B.Map (B.Year, B.Month, B.Day)
 yearStep (y, m, d)  | y == (-1) = (1, m, d)
                     | otherwise = (y + 1, m, d)
 
-timeGregorian :: Time -> (Year, Month, Day)
+timeGregorian :: Time -> (B.Year, B.Month, B.Day)
 timeGregorian = T.toGregorian . timeDay
 
 
@@ -323,7 +277,7 @@ timeAddMonth n time =
         y'        = y + yd
     in timeFromYmd y' (fromInteger m') d
 
-timeAddYear :: Year -> B.Map Time
+timeAddYear :: B.Year -> B.Map Time
 timeAddYear n time =
     let (y, m, d) = T.toGregorian $ timeDay time
         y'        = y + n
@@ -349,7 +303,7 @@ timeDiff (TimeYm d2) (TimeYm d1) =
     Right $ B.ClockD $ T.toModifiedJulianDay d2 - T.toModifiedJulianDay d1
 timeDiff _ _ = Msg.adlib "timeDiff"
 
-timeDiffBody :: Date -> Date -> Integer
+timeDiffBody :: B.Date -> B.Date -> Integer
 timeDiffBody d2 d1 = d2' - d1' where
-    d2' = T.toModifiedJulianDay $ dateDay d2
-    d1' = T.toModifiedJulianDay $ dateDay d1
+    d2' = T.toModifiedJulianDay $ B.dateDay d2
+    d1' = T.toModifiedJulianDay $ B.dateDay d1
