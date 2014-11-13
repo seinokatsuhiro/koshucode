@@ -3,8 +3,9 @@
 module Koshucode.Baala.Base.Data.Date
   ( Date (..),
     Year, Month, Week, Day,
-    dateDay, dateMapDay,
     dateFromYmdAb, dateFromYwdAb, dateFromYdAb,
+    dateDay, dateMapDay,
+    monthly, weekly, yearly,
   ) where
 
 import qualified Data.Time.Calendar               as T
@@ -22,20 +23,10 @@ data Date
     = Monthly T.Day    -- ^ Date in /YYYY-MM-DD/
     | Weekly  T.Day    -- ^ Date in /YYYY-#W-D/
     | Yearly  T.Day    -- ^ Date in /YYYY-##D/
-      deriving (Show, Eq, Ord)
+      deriving (Show)
 
-dateDay :: Date -> T.Day
-dateDay (Monthly d)  = d
-dateDay (Weekly  d)  = d
-dateDay (Yearly  d)  = d
-
-dateMapDay :: B.Map T.Day -> B.Map Date
-dateMapDay f (Monthly d)  = Monthly $ f d
-dateMapDay f (Weekly  d)  = Weekly  $ f d
-dateMapDay f (Yearly  d)  = Yearly  $ f d
-
-
--- ----------------------  Construct
+instance Eq  Date where  a == b         = dateDay a == dateDay b
+instance Ord Date where  a `compare` b  = dateDay a `compare` dateDay b
 
 type Year   = Integer
 type Week   = Int
@@ -85,3 +76,24 @@ hy    = B.docConcat "-"
 hyw   = B.docConcat "-#"
 hyww  = B.docConcat "-##"
 
+
+-- ----------------------  Utility
+
+dateDay :: Date -> T.Day
+dateDay (Monthly d)  = d
+dateDay (Weekly  d)  = d
+dateDay (Yearly  d)  = d
+
+dateMapDay :: B.Map T.Day -> B.Map Date
+dateMapDay f (Monthly d)  = Monthly $ f d
+dateMapDay f (Weekly  d)  = Weekly  $ f d
+dateMapDay f (Yearly  d)  = Yearly  $ f d
+
+monthly :: B.Map Date
+monthly = Monthly . dateDay
+
+weekly :: B.Map Date
+weekly  = Weekly . dateDay
+
+yearly :: B.Map Date
+yearly  = Yearly . dateDay

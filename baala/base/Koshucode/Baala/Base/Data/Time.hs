@@ -10,7 +10,7 @@ module Koshucode.Baala.Base.Data.Time
     timeFromYmdAb, timeFromYwdAb, timeFromYdAb,
     timeFromYmdcAb, timeFromYmdczAb,
     timeFromMjd, timeMjd,
-    timeMapMjd, timePrecision,
+    timeMapDate, timeMapMjd, timePrecision,
 
     -- * First day
     timeFloorMonth, timeFloorYear,
@@ -67,31 +67,20 @@ writeTime (TimeYmdcz d c z) = body B.<+> szone where
                    EQ -> B.doc "UTC"
                    LT -> B.doc "-" B.<> zone
                    GT -> B.doc "+" B.<> zone
+
 writeTime (TimeYmdc  d c)   = writeDateTime d c
-writeTime (TimeYmd   d)     = writeDay d
+writeTime (TimeYmd   d)     = B.write id d
 writeTime (TimeYw    d)     = case T.toWeekDate d of
                                 (y, w, _) -> B.doc y `hyw` B.doc w
 writeTime (TimeYm    d)     = case T.toGregorian d of
                                 (y, m, _) -> B.doc y `hy` B.doc02 m
 
 writeDateTime :: B.Date -> B.Clock -> B.Doc
-writeDateTime d c = writeDay d B.<+> B.writeClockBody c
+writeDateTime d c = B.write id d B.<+> B.writeClockBody c
 
-writeDay :: B.Date -> B.Doc
-writeDay date =
-    case date of
-      B.Monthly d   -> dateMonth $ T.toGregorian    d
-      B.Weekly  d   -> dateWeek  $ T.toWeekDate     d
-      B.Yearly  d   -> dateYear  $ T.toOrdinalDate  d
-    where
-      dateMonth (y, m, d)  = B.doc y `hy`   B.doc02 m `hy` B.doc02 d
-      dateWeek  (y, w, d)  = B.doc y `hyw`  B.doc w   `hy` B.doc d
-      dateYear  (y, d)     = B.doc y `hyww` B.doc d
-
-hy, hyw, hyww :: B.Bin B.Doc
-hy    = B.docConcat "-"
-hyw   = B.docConcat "-#"
-hyww  = B.docConcat "-##"
+hy, hyw :: B.Bin B.Doc
+hy   = B.docConcat "-"
+hyw  = B.docConcat "-#"
 
 
 -- ----------------------  Construct
@@ -178,11 +167,18 @@ timeMapMjd f time = timeMapDay g time where
     g (T.ModifiedJulianDay d) = T.ModifiedJulianDay $ f d
 
 timeMapDay :: B.Map T.Day -> B.Map Time
-timeMapDay g (TimeYmdcz d c z)  = TimeYmdcz (B.dateMapDay g d) c z
-timeMapDay g (TimeYmdc  d c)    = TimeYmdc  (B.dateMapDay g d) c
-timeMapDay g (TimeYmd   d)      = TimeYmd   (B.dateMapDay g d)
-timeMapDay g (TimeYw    d)      = TimeYw    (g d)
-timeMapDay g (TimeYm    d)      = TimeYm    (g d)
+timeMapDay f (TimeYmdcz d c z)  = TimeYmdcz (B.dateMapDay f d) c z
+timeMapDay f (TimeYmdc  d c)    = TimeYmdc  (B.dateMapDay f d) c
+timeMapDay f (TimeYmd   d)      = TimeYmd   (B.dateMapDay f d)
+timeMapDay f (TimeYw    d)      = TimeYw    (f d)
+timeMapDay f (TimeYm    d)      = TimeYm    (f d)
+
+timeMapDate :: B.Map B.Date -> B.Map Time
+timeMapDate f (TimeYmdcz d c z)  = TimeYmdcz (f d) c z
+timeMapDate f (TimeYmdc  d c)    = TimeYmdc  (f d) c
+timeMapDate f (TimeYmd   d)      = TimeYmd   (f d)
+timeMapDate _ (TimeYw    d)      = TimeYw    d
+timeMapDate _ (TimeYm    d)      = TimeYm    d
 
 
 -- ----------------------  First day

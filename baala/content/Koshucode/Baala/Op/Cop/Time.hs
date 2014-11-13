@@ -34,6 +34,9 @@ copsTime =
     , C.CopCalc  (C.copNormal "add-month")  $ copTimeAdd B.timeAddMonth
     , C.CopCalc  (C.copNormal "add-year")   $ copTimeAdd B.timeAddYear
     , C.CopCalc  (C.copNormal "mjd")        copMjd
+    , C.CopCalc  (C.copNormal "weekly")     $ copDateForm B.weekly
+    , C.CopCalc  (C.copNormal "monthly")    $ copDateForm B.monthly
+    , C.CopCalc  (C.copNormal "yearly")     $ copDateForm B.yearly
     ]
 
 copTimeAdd :: (C.CTime c, C.CDec c) => (Integer -> B.Map B.Time) -> C.CopCalc c
@@ -48,4 +51,8 @@ copTimeAdd _ _ = Msg.unexpAttr "add-time"
 copMjd :: (C.CTime c, C.CDec c) => C.CopCalc c
 copMjd [Right c] | C.isTime c = Right $ C.pDecFromInteger $ B.timeMjd $ C.gTime c
 copMjd _ = Msg.unexpAttr "mjd"
+
+copDateForm :: (C.CTime c) => B.Map B.Date -> C.CopCalc c
+copDateForm f [Right c] | C.isTime c = C.putTime $ B.timeMapDate f $ C.gTime c
+copDateForm _ _ = Msg.unexpAttr "date"
 
