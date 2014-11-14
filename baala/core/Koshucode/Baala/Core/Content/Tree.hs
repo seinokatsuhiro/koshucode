@@ -161,10 +161,10 @@ concatTime = year where
 
     day _ []            = Msg.nothing
     day date (cs : xs)  = case getInt cs of
-                            (d, "") | null xs    -> do d2 <- date d
-                                                       Right $ B.TimeYmd d2
-                                    | otherwise  -> do d2 <- date d
-                                                       hour (B.timeFromYmdczAb d2) $ concat xs
+                            (d, "") | null xs    -> do d' <- date d
+                                                       Right $ B.TimeYmd d'
+                                    | otherwise  -> do d' <- date d
+                                                       hour (B.timeFromDczAb d') $ concat xs
                             _                    -> Msg.nothing
 
     hour k cs           = case getInt cs of

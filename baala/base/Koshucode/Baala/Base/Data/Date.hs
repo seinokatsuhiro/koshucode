@@ -3,7 +3,8 @@
 module Koshucode.Baala.Base.Data.Date
   ( Date (..),
     Year, Month, Week, Day,
-    dateFromYmdAb, dateFromYwdAb, dateFromYdAb,
+    dayFromYmd, dateFromYmdAb,
+    dateFromYwdAb, dateFromYdAb,
     dateDay, dateMapDay,
     monthly, weekly, yearly,
   ) where
@@ -32,6 +33,9 @@ type Year   = Integer
 type Week   = Int
 type Month  = Int
 type Day    = Int
+
+dayFromYmd :: (Year, Month, Day) -> T.Day
+dayFromYmd (y, m, d) = T.fromGregorian y m d
 
 -- | Create date from year, month, and day.
 dateFromYmdAb :: Year -> Month -> Day -> B.Ab Date
