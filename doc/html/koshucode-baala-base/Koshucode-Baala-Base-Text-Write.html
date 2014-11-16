@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.75.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.81.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -51,7 +51,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Data type
+	    >Class
 </a
 	    ></li
 	  ><li
@@ -72,6 +72,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
 	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:StringMap"
+	    >StringMap</a
+	    > = <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
 	    >class</span
 	    >  <a href="#t:Write"
 	    >Write</a
@@ -87,16 +97,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		>Doc</a
 		></li
 	      ></ul
-	    ></li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:StringMap"
-	    >StringMap</a
-	    > = <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:writeH"
@@ -151,6 +151,38 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Doc</a
 	    ></li
 	  ><li class="src short"
+	  ><a href="#v:writeSepsWith"
+	    >writeSepsWith</a
+	    > :: <a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
+	    >Write</a
+	    > a =&gt; (a -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+	    >Doc</a
+	    >) -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [a] -&gt; [<a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+	    >Doc</a
+	    >]</li
+	  ><li class="src short"
+	  ><a href="#v:writeTerm"
+	    >writeTerm</a
+	    > ::  (a -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+	    >Doc</a
+	    >) -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+	    >Named</a
+	    > a -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+	    >Doc</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:writeTerms"
+	    >writeTerms</a
+	    > ::  (a -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+	    >Doc</a
+	    >) -&gt; [<a href="Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+	    >Named</a
+	    > a] -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+	    >Doc</a
+	    ></li
+	  ><li class="src short"
 	  ><a href="#v:doc"
 	    >doc</a
 	    > :: <a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
@@ -198,12 +230,49 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    > -&gt; a -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
 	    ></li
+	  ><li class="src short"
+	  ><a href="#v:doc02"
+	    >doc02</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+	    >Doc</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:docConcat"
+	    >docConcat</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+	    >Doc</a
+	    ></li
 	  ></ul
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Data type
+	>Class
 </h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:StringMap" class="def"
+	    >StringMap</a
+	    > = <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ><a href="src/Koshucode-Baala-Base-Text-Write.html#StringMap" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Mapping from string to string.
+</p
+	    ></div
+	  ></div
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -215,6 +284,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ><a href="src/Koshucode-Baala-Base-Text-Write.html#Write" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Writer with string mapping.
+</p
+	    ></div
 	  ><div class="subs methods"
 	  ><p class="caption"
 	    >Methods</p
@@ -250,6 +324,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		    >Write</a
 		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 		    >Int</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
+		    >Write</a
+		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Integer"
+		    >Integer</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
@@ -298,6 +382,36 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		><td class="src"
 		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
 		    >Write</a
+		    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
+		    >Clock</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
+		    >Write</a
+		    > <a href="Koshucode-Baala-Base-Data-Date.html#t:Date"
+		    >Date</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
+		    >Write</a
+		    > <a href="Koshucode-Baala-Base-Data-Time.html#t:Time"
+		    >Time</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
+		    >Write</a
 		    > <a href="Koshucode-Baala-Base-Token-TokenClause.html#t:TokenClause"
 		    >TokenClause</a
 		    ></td
@@ -328,28 +442,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		><td class="src"
 		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
 		    >Write</a
-		    > <a href="Koshucode-Baala-Base-Data-Term.html#t:Term"
-		    >Term</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
-		    >Write</a
-		    > <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
-		    >Relhead</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
-		    >Write</a
 		    > <a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
 		    >Type</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
+		    >Write</a
+		    > <a href="Koshucode-Baala-Base-Data-Head.html#t:Head"
+		    >Head</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
@@ -406,20 +510,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      ></div
 	    ></div
 	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:StringMap" class="def"
-	    >StringMap</a
-	    > = <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    ><a href="src/Koshucode-Baala-Base-Text-Write.html#StringMap" class="link"
-	    >Source</a
-	    ></p
-	  ></div
 	><h1 id="g:2"
 	>Derivative
 </h1
@@ -464,21 +554,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ><a href="src/Koshucode-Baala-Base-Text-Write.html#writeColon" class="link"
 	    >Source</a
 	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Colon-seperated document.
-</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>docBracket $ docColon [True, False]
-</code
-		></strong
-	      >[ #true : #false ]
-</pre
-	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -509,6 +584,83 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ><a href="src/Koshucode-Baala-Base-Text-Write.html#writeSep" class="link"
 	    >Source</a
 	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:writeSepsWith" class="def"
+	    >writeSepsWith</a
+	    > :: <a href="Koshucode-Baala-Base-Text-Write.html#t:Write"
+	    >Write</a
+	    > a =&gt; (a -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+	    >Doc</a
+	    >) -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; [a] -&gt; [<a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+	    >Doc</a
+	    >]<a href="src/Koshucode-Baala-Base-Text-Write.html#writeSepsWith" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:writeTerm" class="def"
+	    >writeTerm</a
+	    > ::  (a -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+	    >Doc</a
+	    >) -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+	    >Named</a
+	    > a -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+	    >Doc</a
+	    ><a href="src/Koshucode-Baala-Base-Text-Write.html#writeTerm" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:writeTerms" class="def"
+	    >writeTerms</a
+	    > ::  (a -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+	    >Doc</a
+	    >) -&gt; [<a href="Koshucode-Baala-Base-Prelude-Class.html#t:Named"
+	    >Named</a
+	    > a] -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+	    >Doc</a
+	    ><a href="src/Koshucode-Baala-Base-Text-Write.html#writeTerms" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="doc"
+	><p
+	  ><em
+	    >Examples</em
+	    >
+</p
+	  ><p
+	  >Colon-seperated document.
+</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >writeColon id [True, False]
+</code
+	      ></strong
+	    >&lt;1&gt; : &lt;0&gt;
+</pre
+	  ><p
+	  >List of terms.
+</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >writeTerms doc [(&quot;x&quot;, False), (&quot;y&quot;, True)]
+</code
+	      ></strong
+	    >/x &lt;0&gt; /y &lt;1&gt;
+</pre
 	  ></div
 	><h1 id="g:3"
 	>Simple writer
@@ -564,21 +716,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ><a href="src/Koshucode-Baala-Base-Text-Write.html#docWrap" class="link"
 	    >Source</a
 	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Wrap in open and close brackets.
-</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>docWrap &quot;(&quot; &quot;)&quot; &quot;abc&quot;
-</code
-		></strong
-	      >(abc)
-</pre
-	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -595,22 +732,73 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    ><a href="src/Koshucode-Baala-Base-Text-Write.html#docWraps" class="link"
 	    >Source</a
 	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Wrap in open and close brackets.
-   Put spaces between content and brackets.
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:doc02" class="def"
+	    >doc02</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+	    >Doc</a
+	    ><a href="src/Koshucode-Baala-Base-Text-Write.html#doc02" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:docConcat" class="def"
+	    >docConcat</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Snip.html#t:Bin"
+	    >Bin</a
+	    > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
+	    >Doc</a
+	    ><a href="src/Koshucode-Baala-Base-Text-Write.html#docConcat" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="doc"
+	><p
+	  >Simple writers are writers with identity string mapping.
+  For example, <code
+	    >doc</code
+	    > is equivalent for <code
+	    >write id</code
+	    >.
 </p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>docWraps &quot;(&quot; &quot;)&quot; &quot;abc&quot;
+	  ><p
+	  ><em
+	    >Examples</em
+	    >
+</p
+	  ><p
+	  >Wrap in open and close brackets.
+</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >docWrap &quot;[&quot; &quot;]&quot; &quot;abc&quot;
 </code
-		></strong
-	      >( abc )
+	      ></strong
+	    >[abc]
 </pre
-	    ></div
+	  ><p
+	  >Put spaces between content and brackets.
+</p
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >docWraps &quot;[&quot; &quot;]&quot; &quot;abc&quot;
+</code
+	      ></strong
+	    >[ abc ]
+</pre
 	  ></div
 	></div
       ></div

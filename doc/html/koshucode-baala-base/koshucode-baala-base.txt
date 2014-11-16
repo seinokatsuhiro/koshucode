@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.75.0.0
+@version 0.81.0.0
 
 module Koshucode.Baala.Base.Text.Unicode
 data GeneralCategoryGroup
@@ -90,6 +90,7 @@ linesCrlfNumbered :: String -> [NumberedLine]
 -- | Split string into lines. The result strings do not contain carriage
 --   returns (<tt>\r</tt>) and line feeds (<tt>\n</tt>).
 linesCrlf :: String -> [String]
+linesFrom :: Show a => a -> [String]
 
 module Koshucode.Baala.Base.Prelude.Pair
 mapFst :: (a -> c) -> (a, b) -> (c, b)
@@ -183,6 +184,13 @@ lookupMap :: Ord k => k -> Map k a -> Maybe a
 -- | The <a>catMaybes</a> function takes a list of <a>Maybe</a>s and
 --   returns a list of all the <a>Just</a> values.
 catMaybes :: [Maybe a] -> [a]
+
+-- | The <a>mapMaybe</a> function is a version of <a>map</a> which can
+--   throw out elements. In particular, the functional argument returns
+--   something of type <tt><a>Maybe</a> b</tt>. If this is <a>Nothing</a>,
+--   no element is added on to the result list. If it just <tt><a>Just</a>
+--   b</tt>, then <tt>b</tt> is included in the result list.
+mapMaybe :: (a -> Maybe b) -> [a] -> [b]
 
 -- | The <a>fromJust</a> function extracts the element out of a <a>Just</a>
 --   and throws an error if its argument is <a>Nothing</a>.
@@ -354,6 +362,8 @@ unionUp :: Eq a => [a] -> [a] -> [a]
 li1 :: a -> [a]
 li2 :: a -> a -> [a]
 li3 :: a -> a -> a -> [a]
+type RangeBy a = a -> a -> [a]
+rangeBy :: Ord a => Map a -> RangeBy a
 map2 :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
 mapAt :: (Map a) -> Int -> Map [a]
 mapWithLast :: (a -> b) -> (a -> b) -> [a] -> [b]
@@ -379,6 +389,7 @@ divideBy :: (a -> Bool) -> [a] -> [[a]]
 module Koshucode.Baala.Base.Prelude.Snip
 type Snip a = [Int] -> Map [a]
 type SnipPair a b = (Snip a, Snip b)
+type Bin a = a -> a -> a
 snipFull :: Eq a => [a] -> [a] -> [Int]
 
 -- | Indices of shared elements.
@@ -399,13 +410,13 @@ snipFore :: Snip a
 snipFore2 :: SnipPair a b
 
 -- | Take left-side elements.
-snipLeft :: Eq a => [a] -> [a] -> [a]
+snipLeft :: Eq a => Bin [a]
 
 -- | Take shared elements.
-snipShare :: Eq a => [a] -> [a] -> [a]
+snipShare :: Eq a => Bin [a]
 
 -- | Take right-side elements.
-snipRight :: Eq a => [a] -> [a] -> [a]
+snipRight :: Eq a => Bin [a]
 snipOrder :: Eq a => [a] -> [a] -> Map [c]
 
 -- | Check lengths of two lists are same.
@@ -489,14 +500,22 @@ module Koshucode.Baala.Base.Prelude
 
 module Koshucode.Baala.Base.Text.Resource
 data Resource
-ResourceFile :: String -> Resource
-ResourceText :: String -> Resource
-ResourceURL :: String -> Resource
+Resource :: Int -> ResourceName -> Resource
+resourceNumber :: Resource -> Int
+resourceName :: Resource -> ResourceName
+data ResourceName
+ResourceFile :: String -> ResourceName
+ResourceURL :: String -> ResourceName
+ResourceText :: String -> ResourceName
+ResourceStdin :: ResourceName
 
 -- | Name of resourcd type, i.e., <tt>"file"</tt>, <tt>"text"</tt>,
 --   <tt>"url"</tt>.
 resourceType :: Resource -> String
-resourceName :: Resource -> String
+resourceText :: Resource -> String
+resourceZero :: Resource
+resourceOf :: String -> Resource
+resourceList :: Bool -> [String] -> [String] -> [String] -> [Resource]
 data CodePt
 CodePt :: Resource -> Int -> String -> String -> CodePt
 
@@ -524,9 +543,14 @@ data Sourced a
 Sourced :: [CodePt] -> a -> Sourced a
 source :: Sourced a -> [CodePt]
 unsourced :: Sourced a -> a
+instance Typeable ResourceName
 instance Typeable Resource
 instance Typeable CodePt
 instance Typeable1 Sourced
+instance Show ResourceName
+instance Eq ResourceName
+instance Ord ResourceName
+instance Data ResourceName
 instance Show Resource
 instance Eq Resource
 instance Ord Resource
@@ -597,46 +621,35 @@ putShow :: Show a => a -> IO ()
 putShowLn :: Show a => a -> IO ()
 putLines :: [String] -> IO ()
 readInt :: String -> Maybe Int
+readInteger :: String -> Maybe Integer
 
 module Koshucode.Baala.Base.Text.Write
+
+-- | Mapping from string to string.
+type StringMap = Map String
+
+-- | Writer with string mapping.
 class Write a
 write :: Write a => StringMap -> a -> Doc
-type StringMap = Map String
 writeH :: Write a => StringMap -> [a] -> Doc
 writeV :: Write a => StringMap -> [a] -> Doc
-
--- | Colon-seperated document.
---   
---   <pre>
---   &gt;&gt;&gt; docBracket $ docColon [True, False]
---   [ #true : #false ]
---   </pre>
 writeColon :: Write a => StringMap -> [a] -> Doc
 writeBar :: Write a => StringMap -> [a] -> Doc
 writeSep :: Write a => String -> StringMap -> [a] -> Doc
+writeSepsWith :: Write a => (a -> Doc) -> String -> [a] -> [Doc]
+writeTerm :: (a -> Doc) -> Named a -> Doc
+writeTerms :: (a -> Doc) -> [Named a] -> Doc
 doc :: Write a => a -> Doc
 doch :: Write a => [a] -> Doc
 docv :: Write a => [a] -> Doc
-
--- | Wrap in open and close brackets.
---   
---   <pre>
---   &gt;&gt;&gt; docWrap "(" ")" "abc"
---   (abc)
---   </pre>
 docWrap :: Write a => String -> String -> a -> Doc
-
--- | Wrap in open and close brackets. Put spaces between content and
---   brackets.
---   
---   <pre>
---   &gt;&gt;&gt; docWraps "(" ")" "abc"
---   ( abc )
---   </pre>
 docWraps :: Write a => String -> String -> a -> Doc
+doc02 :: Int -> Doc
+docConcat :: String -> Bin Doc
 instance Write a => Write (Named a)
 instance Write Bool
 instance Write String
+instance Write Integer
 instance Write Int
 instance Write Doc
 
@@ -742,13 +755,35 @@ instance Functor Short
 
 -- | Tokens in Koshucode.
 module Koshucode.Baala.Base.Token.Token
+data TextForm
+
+-- | Unknown keyword
+TextUnk :: TextForm
+
+-- | Naked text
+TextRaw :: TextForm
+
+-- | Single-quoted text
+TextQ :: TextForm
+
+-- | Double-quoted text
+TextQQ :: TextForm
+
+-- | Keyword literal
+TextKey :: TextForm
+
+-- | Text enclosed in bars
+TextBar :: TextForm
+
+-- | Text used as name
+TextName :: TextForm
 
 -- | There are ten types of tokens.
 data Token
 
 -- | Text. <a>Int</a> represents quotation level, i.e., 0 for non-quoted, 1
 --   for single-quoted, 2 for double-quoted, 3 for <tt>-with</tt> variable.
-TText :: CodePt -> Int -> String -> Token
+TText :: CodePt -> TextForm -> String -> Token
 
 -- | Blank name.
 TName :: CodePt -> BlankName -> Token
@@ -795,6 +830,8 @@ type Terminal a = (TermName, a)
 -- | Path of term names, e.g., term name <tt>/r/x</tt> is correspond to
 --   path <tt>["r", "x"]</tt>.
 type TermPath = [TermName]
+showTermName :: Map String
+showNestedTermName :: [String] -> String
 
 -- | Get the content of token.
 --   
@@ -839,8 +876,13 @@ isCloseTokenOf :: String -> Pred Token
 
 -- | Remove blank tokens.
 sweepToken :: Map [Token]
+instance Typeable TextForm
 instance Typeable BlankName
 instance Typeable Token
+instance Show TextForm
+instance Eq TextForm
+instance Ord TextForm
+instance Data TextForm
 instance Show BlankName
 instance Eq BlankName
 instance Ord BlankName
@@ -881,6 +923,9 @@ divideByZero :: Ab a
 -- | Different decimal length
 heteroDecimal :: String -> String -> Ab a
 
+-- | Can't read as date
+notDate :: Integer -> Int -> Int -> Ab a
+
 -- | Can't read as number
 notNumber :: String -> Ab a
 
@@ -898,6 +943,110 @@ unkAngleText :: String -> Ab a
 
 -- | Quotation not end in line
 quotNotEnd :: Ab a
+
+module Koshucode.Baala.Base.Data.Clock
+data Clock
+
+-- | Clock represented by multiple of second
+ClockDhms :: DayCount -> Sec -> Clock
+
+-- | Clock represented by multiple of minute
+ClockDhm :: DayCount -> Sec -> Clock
+
+-- | Clock represented by multiple of hour
+ClockDh :: DayCount -> Sec -> Clock
+
+-- | Clock represented by multiple of day
+ClockD :: DayCount -> Clock
+type DayCount = Integer
+type Hour = Int
+type Min = Int
+type Sec = Int
+
+-- | Type for abortable binary operator.
+type AbBin a = a -> a -> Ab a
+writeClock :: Clock -> Doc
+writeClockBody :: Clock -> Doc
+clockFromDhms :: DayCount -> Hour -> Min -> Sec -> Clock
+clockFromDhm :: DayCount -> Hour -> Min -> Clock
+clockFromDh :: DayCount -> Hour -> Clock
+clockFromHms :: Hour -> Min -> Maybe Sec -> Clock
+
+-- | Select day-count part from clock.
+clockDayCount :: Clock -> DayCount
+
+-- | Select second part from clock.
+clockSec :: Clock -> Sec
+clockSign :: Clock -> Int
+clockPrecision :: Clock -> String
+
+-- | Decompose second into day-count, hour, minute and second parts.
+dhmsFromSec :: Sec -> (DayCount, Hour, Min, Sec)
+
+-- | Aggregate hour, minute, and second into single second.
+secFromHms :: (Hour, Min, Sec) -> Sec
+
+-- | Convert clock to positive clock.
+clockPos :: Map Clock
+
+-- | Convert clock to negative clock.
+clockNeg :: Map Clock
+
+-- | Set day-count to zero.
+clockCutDay :: Map Clock
+
+-- | Add day-count.
+clockAddDay :: DayCount -> Map Clock
+
+-- | Add second.
+clockAddSec :: Sec -> Map Clock
+
+-- | Calculation of clock plus clock.
+clockAdd :: AbBin Clock
+
+-- | Calculation of clock minus clock.
+clockSub :: AbBin Clock
+clockRangeBy :: Map (DayCount, Sec) -> RangeBy Clock
+clockStep :: Sec -> Map (DayCount, Sec)
+instance Show Clock
+instance Eq Clock
+instance Ord Clock
+instance Write Clock
+
+module Koshucode.Baala.Base.Data.Date
+data Date
+
+-- | Date in <i>YYYY-MM-DD</i>
+Monthly :: Day -> Date
+
+-- | Date in <i>YYYY-#W-D</i>
+Weekly :: Day -> Date
+
+-- | Date in <i>YYYY-##D</i>
+Yearly :: Day -> Date
+type Year = Integer
+type Month = Int
+type Week = Int
+type Day = Int
+dayFromYmd :: (Year, Month, Day) -> Day
+
+-- | Create date from year, month, and day.
+dateFromYmdAb :: Year -> Month -> Day -> Ab Date
+
+-- | Create date from year, week, and day.
+dateFromYwdAb :: Year -> Week -> Day -> Ab Date
+
+-- | Create date from year and day.
+dateFromYdAb :: Year -> Day -> Ab Date
+dateDay :: Date -> Day
+dateMapDay :: Map Day -> Map Date
+monthly :: Map Date
+weekly :: Map Date
+yearly :: Map Date
+instance Show Date
+instance Write Date
+instance Ord Date
+instance Eq Date
 
 module Koshucode.Baala.Base.Data.Decimal
 data Decimal
@@ -930,6 +1079,71 @@ decimalSum :: [Decimal] -> Ab Decimal
 instance Show Decimal
 instance Eq Decimal
 instance Ord Decimal
+
+module Koshucode.Baala.Base.Data.Time
+data Time
+
+-- | Date and time with time zone
+TimeYmdcz :: Date -> Clock -> Sec -> Time
+
+-- | Date and time
+TimeYmdc :: Date -> Clock -> Time
+
+-- | Year, month, and day
+TimeYmd :: Date -> Time
+
+-- | Year and week
+TimeYw :: Day -> Time
+
+-- | Year and month
+TimeYm :: Day -> Time
+timeYmd :: Day -> Time
+timeYmdc :: Day -> Clock -> Time
+
+-- | Create time data from year and month.
+timeFromYmAb :: Year -> Month -> Ab Time
+
+-- | Create time data from year and week.
+timeFromYwAb :: Year -> Week -> Ab Time
+
+-- | Create time data from date, clock, and time zone.
+timeFromDczAb :: Date -> Clock -> Maybe Sec -> Ab Time
+
+-- | Create time data form modified Julian date.
+timeFromMjd :: DayCount -> Time
+timeMjd :: Time -> DayCount
+timeMapDate :: Map Date -> Map Time
+timeMapMjd :: Map DayCount -> Map Time
+timePrecision :: Time -> String
+timeFloorMonth :: Map Time
+timeFloorYear :: Map Time
+timeCeilMonth :: Map Time
+timeCeilYaer :: Map Time
+timeRangeDay :: RangeBy Time
+timeRangeMonth :: RangeBy Time
+timeRangeYear :: RangeBy Time
+
+-- | Add days to time.
+timeAddDay :: DayCount -> Map Time
+
+-- | Add weeks to time.
+timeAddWeek :: Integer -> Map Time
+
+-- | Add months to time.
+timeAddMonth :: Integer -> Map Time
+
+-- | Add years to time.
+timeAddYear :: Year -> Map Time
+
+-- | Add clock to time.
+timeAddClock :: Clock -> AbMap Time
+
+-- | Calculate clock from time to time.
+timeDiff :: Time -> Time -> Ab Clock
+instance Show Time
+instance Eq Time
+instance Ord Time
+instance Write Time
 
 
 -- | This module provides a container for tokens. No tokens in Koshucode
@@ -1129,32 +1343,32 @@ instance Write TokenClause
 module Koshucode.Baala.Base.Token.TokenTree
 
 -- | Tree of tokens.
-type TokenTree = CodeTree BracketType Token
+type TTree = CodeTree BracketType Token
 
 -- | Pair of token tree and its name.
-type NamedTree = Named TokenTree
+type NamedTree = Named TTree
 
 -- | Pair of token trees and its name.
-type NamedTrees = Named [TokenTree]
+type NamedTrees = Named [TTree]
 
 -- | Convert token tree to something.
-type TokenTreeTo a = TokenTree -> a
+type TTreeTo a = TTree -> a
 
 -- | Convert list of token tree to sometning.
-type TokenTreesTo a = [TokenTree] -> a
+type TTreesTo a = [TTree] -> a
 
 -- | Convert token tree to something, abortable.
-type TokenTreeToAb a = TokenTree -> Ab a
+type TTreeToAb a = TTree -> Ab a
 
 -- | Convert list of token tree to sometning, abortable.
-type TokenTreesToAb a = [TokenTree] -> Ab a
+type TTreesToAb a = [TTree] -> Ab a
 
 -- | Parse tokens with brackets into trees. Blank tokens and comments are
 --   excluded.
-tokenTrees :: [Token] -> Ab [TokenTree]
+tokenTrees :: [Token] -> Ab [TTree]
 
 -- | Wrap trees in group.
-wrapTrees :: TokenTreesTo TokenTree
+wrapTrees :: TTreesTo TTree
 
 -- | There are six types of brackets
 data BracketType
@@ -1209,31 +1423,31 @@ BracketUnknown :: BracketType
 splitTokensBy :: Pred String -> [Token] -> Either [Token] ([Token], Token, [Token])
 
 -- | Divide token trees by quoteless token of given string.
-divideTreesBy :: String -> TokenTreesTo [[TokenTree]]
+divideTreesBy :: String -> TTreesTo [[TTree]]
 
 -- | Divide token trees by vertical bar <tt>"|"</tt>.
-divideTreesByBar :: TokenTreesTo [[TokenTree]]
+divideTreesByBar :: TTreesTo [[TTree]]
 
 -- | Divide token trees by colon <tt>":"</tt>.
-divideTreesByColon :: TokenTreesTo [[TokenTree]]
+divideTreesByColon :: TTreesTo [[TTree]]
 
 -- | Divide token trees by equal sign <tt>"="</tt>.
-divideTreesByEqual :: TokenTreesTo [[TokenTree]]
+divideTreesByEqual :: TTreesTo [[TTree]]
 
--- | Same as <tt>abortable</tt> except for using <a>TokenTree</a> instead
---   of list of <a>Token</a>.
-abortableTree :: String -> TokenTreeTo (Map (Ab b))
+-- | Same as <tt>abortable</tt> except for using <a>TTree</a> instead of
+--   list of <a>Token</a>.
+abortableTree :: String -> TTreeTo (Map (Ab b))
 
--- | Same as <tt>abortable</tt> except for using list of <a>TokenTree</a>
+-- | Same as <tt>abortable</tt> except for using list of <a>TTree</a>
 --   instead of list of <a>Token</a>.
-abortableTrees :: String -> TokenTreesTo (Map (Ab b))
+abortableTrees :: String -> TTreesTo (Map (Ab b))
 
 -- | Convert text to token trees.
-tt :: String -> Ab [TokenTree]
-tt1 :: String -> Ab TokenTree
+tt :: String -> Ab [TTree]
+tt1 :: String -> Ab TTree
 
 -- | Get <a>Doc</a> value of token trees for pretty printing.
-ttDoc :: TokenTreesTo Doc
+ttDoc :: TTreesTo Doc
 ttPrint :: String -> IO ()
 instance Typeable BracketType
 instance Show BracketType
@@ -1263,108 +1477,160 @@ instance Ord Interp
 instance Write InterpWord
 instance Write Interp
 
+module Koshucode.Baala.Base.Data.Type
 
--- | Term names in relation.
-module Koshucode.Baala.Base.Data.Term
-data Term
+-- | Type for types.
+data Type
 
--- | Term name for non-relation
-TermFlat :: TermName -> Term
+-- | Everything
+TypeAny :: Type
 
--- | Term name for relation
-TermNest :: TermName -> [Term] -> Term
+-- | Type of types
+TypeType :: Type
 
--- | Test that term is nested.
-isTermNest :: Term -> Bool
+-- | Term name
+TypeTerm :: Type
 
--- | Get name part from term.
-termName :: Term -> TermName
+-- | Data interpreation
+TypeInterp :: Type
 
--- | Get nested part from term.
-termNest :: Term -> [Term]
-termExplainDoc :: Term -> Doc
-showTermName :: Map String
-showNestedTermName :: [String] -> String
-termChange :: (Map TermName) -> Map Term
-termsIndex :: [Term] -> [TermPath] -> [[Int]]
+-- | Empty
+TypeEmpty :: Type
 
--- | Term path to term position
+-- | Boolean
+TypeBool :: Type
+
+-- | Text
+TypeText :: Type
+
+-- | Code
+TypeCode :: Type
+
+-- | Decimal
+TypeDec :: Type
+
+-- | Clock
+TypeClock :: (Maybe String) -> Type
+
+-- | Time
+TypeTime :: (Maybe String) -> Type
+
+-- | Binary data
+TypeBin :: Type
+
+-- | List
+TypeList :: Type -> Type
+
+-- | Set
+TypeSet :: Type -> Type
+
+-- | Tagged type
+TypeTag :: String -> Type -> Type
+
+-- | Association
+TypeAssn :: [NamedType] -> Type
+
+-- | Relation
+TypeRel :: [NamedType] -> Type
+
+-- | Tuple (Product type)
+TypeTuple :: [Type] -> Type
+
+-- | Sum type
+TypeSum :: [Type] -> Type
+type NamedType = Named Type
+
+-- | Print type as tree.
+typeExplain :: Type -> Doc
+typeFlatRel :: [TermName] -> Type
+typeConsRel :: TermName -> Map Type
+typeConsNest :: TermName -> Type -> Map Type
+typeAppendRel :: [TermName] -> Map Type
+typeRelTermNames :: Type -> [TermName]
+typeRelDegree :: Type -> Int
+
+-- | Term index
 --   
 --   <pre>
---   &gt;&gt;&gt; termIndex [TermFlat "a", TermFlat "b", TermFlat "c"] ["b"]
+--   &gt;&gt;&gt; typeRelIndex (typeFlatRel ["a", "b", "c"]) ["b"]
 --   [1]
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; termIndex [TermFlat "a", TermFlat "b", TermFlat "c"] ["e"]
+--   &gt;&gt;&gt; typeRelIndex (typeFlatRel ["a", "b", "c"]) ["e"]
 --   [-1]
 --   </pre>
 --   
 --   <pre>
---   &gt;&gt;&gt; termIndex [TermNest "r" [TermFlat "a", TermFlat "b"]] ["r", "b"]
+--   &gt;&gt;&gt; typeRelIndex (typeConsNest "r" (typeFlatRel ["a", "b"]) (typeFlatRel [])) ["r", "b"]
 --   [0, 1]
 --   </pre>
-termIndex :: [Term] -> TermPath -> [Int]
-instance Show Term
-instance Eq Term
-instance Ord Term
-instance Write Term
-instance Name Term
+typeRelIndex :: Type -> TermPath -> [Int]
+typeRelIndexList :: Type -> [TermPath] -> [[Int]]
+typeTermDoc :: Type -> Doc
+typeTerms :: Type -> [NamedType]
+isTypeRel :: Type -> Bool
+typeRelMapTerms :: Map [NamedType] -> Map Type
+typeRelMapTerm :: Map NamedType -> Map Type
+typeRelMapName :: Map TermName -> Map Type
+instance Show Type
+instance Eq Type
+instance Ord Type
+instance Write Type
 
 
 -- | Heading of relations
-module Koshucode.Baala.Base.Data.Relhead
+module Koshucode.Baala.Base.Data.Head
 
--- | Heading of relation as a list of terms
-data Relhead
-Relhead :: [Term] -> Relhead
-headTerms :: Relhead -> [Term]
-headExplain :: Relhead -> String
-headExplainLines :: Relhead -> [String]
-headExplainDoc :: Relhead -> Doc
+-- | Heading of relations.
+data Head
+Head :: Type -> Head
+headType :: Head -> Type
+headExplain :: Head -> Doc
 
--- | Empty heading, i.e., no terms in heading.
-headEmpty :: Relhead
+-- | Make head of given type..
+headOf :: Type -> Head
 
 -- | Make head from term names.
-headFrom :: [TermName] -> Relhead
-headWords :: String -> Relhead
+headFrom :: [TermName] -> Head
+
+-- | Empty heading, i.e., no terms in heading.
+headEmpty :: Head
+headEquiv :: Head -> Head -> Bool
+isSubhead :: Head -> Head -> Bool
+isSuperhead :: Head -> Head -> Bool
 
 -- | List of term names.
-headNames :: Relhead -> [TermName]
+headNames :: Head -> [TermName]
 
 -- | Degree of relation, i.e., number of terms.
-headDegree :: Relhead -> Int
-headEquiv :: Relhead -> Relhead -> Bool
-isSubhead :: Relhead -> Relhead -> Bool
-isSuperhead :: Relhead -> Relhead -> Bool
-headConsTerm :: Term -> Map Relhead
+headDegree :: Head -> Int
 
--- | Add term to head.
-headCons :: TermName -> Map Relhead
-headCons2 :: TermName2 -> Map Relhead
-headCons3 :: TermName3 -> Map Relhead
-
--- | Add any number of terms to head.
-headAppend :: [TermName] -> Map Relhead
-
--- | Reconstruct head.
-headChange :: Map [Term] -> Map Relhead
-headRename :: Map TermName -> Map Relhead
+-- | Select nested terms.
+headNested :: Head -> [(TermName, Head)]
 
 -- | Index of a term.
-headIndex1 :: Relhead -> TermPath -> [Int]
+headIndex1 :: Head -> TermPath -> [Int]
 
--- | Indices of terms.
-headIndex :: Relhead -> [TermPath] -> [[Int]]
-headAlign :: Relhead -> Relhead -> Map [c]
-bodyAlign :: Relhead -> Relhead -> Map [[c]]
-headNested :: Relhead -> [(String, Relhead)]
-instance Show Relhead
-instance Eq Relhead
-instance Ord Relhead
-instance Write Relhead
-instance Monoid Relhead
+-- | Add term name to head.
+headCons :: TermName -> Map Head
+
+-- | Add term names to head.
+headAppend :: [TermName] -> Map Head
+headConsNest :: TermName -> Head -> Map Head
+headNests :: [TermName] -> Map Head
+
+-- | Reconstruct head.
+headMap :: Map [NamedType] -> Map Head
+headMapName :: Map TermName -> Map Head
+headUp :: Map Head
+headAlign :: Head -> Head -> Map [c]
+bodyAlign :: Head -> Head -> Map [[c]]
+instance Show Head
+instance Eq Head
+instance Ord Head
+instance Write Head
+instance Monoid Head
 
 
 -- | Relation type
@@ -1374,17 +1640,16 @@ module Koshucode.Baala.Base.Data.Rel
 --   Body is thoretically a set of tuples, but implemented using list of
 --   list.
 data Rel c
-Rel :: Relhead -> Relbody c -> Rel c
+Rel :: Head -> Body c -> Rel c
 
 -- | Heading of relation
-relHead :: Rel c -> Relhead
+relHead :: Rel c -> Head
 
 -- | Body of relation
-relBody :: Rel c -> Relbody c
+relBody :: Rel c -> Body c
 
--- | Body of relation, i.e., a list of tuples. Tuple is list of contents.
-type Relbody c = [[c]]
-type MapRel c = Map (Rel c)
+-- | Body of relation, i.e., a list of tuples. Tuple is a list of contents.
+type Body c = [[c]]
 relSort :: Ord c => Map (Rel c)
 
 -- | The nullary empty relation. In other words, relational constant that
@@ -1398,9 +1663,9 @@ reldee :: Rel c
 -- | The empty relation with all terms. This is fake.
 reldau :: Rel c
 instance Show c => Show (Rel c)
-instance Ord c => Ord (Rel c)
 instance Write c => Write (Rel c)
 instance Ord c => Eq (Rel c)
+instance Ord c => Ord (Rel c)
 
 
 -- | Judgements: a symbolic representations of affirmed or denied
@@ -1494,18 +1759,6 @@ pMonoType :: a -> Mono a
 instance Show a => Show (Mono a)
 instance Ord a => Eq (Mono a)
 instance Ord a => Ord (Mono a)
-
-module Koshucode.Baala.Base.Data.Type
-data Type
-TypeEmpty :: Type
-TypeBool :: Type
-TypeText :: Type
-TypeRel :: [(TermName, Type)] -> Type
-TypeSum :: [Type] -> Type
-instance Show Type
-instance Eq Type
-instance Ord Type
-instance Write Type
 
 
 -- | Definitions of data for Koshucode.

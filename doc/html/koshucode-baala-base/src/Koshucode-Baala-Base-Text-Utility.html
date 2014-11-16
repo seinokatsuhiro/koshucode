@@ -10,15 +10,15 @@
 <pre><a name="line-1"></a><span class='hs-comment'>{-# OPTIONS_GHC -Wall #-}</span>
 <a name="line-2"></a>
 <a name="line-3"></a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>Utility</span>
-<a name="line-4"></a><span class='hs-layout'>(</span> <span class='hs-comment'>-- * Trim</span>
-<a name="line-5"></a>  <span class='hs-varid'>trimLeft</span><span class='hs-layout'>,</span> <span class='hs-varid'>trimRight</span><span class='hs-layout'>,</span> <span class='hs-varid'>trimBoth</span><span class='hs-layout'>,</span>
-<a name="line-6"></a>  <span class='hs-comment'>-- * Padding</span>
-<a name="line-7"></a>  <span class='hs-varid'>padRight</span><span class='hs-layout'>,</span> <span class='hs-varid'>padLeft</span><span class='hs-layout'>,</span>
-<a name="line-8"></a>  <span class='hs-comment'>-- * Put</span>
-<a name="line-9"></a>  <span class='hs-varid'>putShow</span><span class='hs-layout'>,</span> <span class='hs-varid'>putShowLn</span><span class='hs-layout'>,</span> <span class='hs-varid'>putLines</span><span class='hs-layout'>,</span>
-<a name="line-10"></a>  <span class='hs-comment'>-- * Read</span>
-<a name="line-11"></a>  <span class='hs-varid'>readInt</span><span class='hs-layout'>,</span>
-<a name="line-12"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a name="line-4"></a>  <span class='hs-layout'>(</span> <span class='hs-comment'>-- * Trim</span>
+<a name="line-5"></a>    <span class='hs-varid'>trimLeft</span><span class='hs-layout'>,</span> <span class='hs-varid'>trimRight</span><span class='hs-layout'>,</span> <span class='hs-varid'>trimBoth</span><span class='hs-layout'>,</span>
+<a name="line-6"></a>    <span class='hs-comment'>-- * Padding</span>
+<a name="line-7"></a>    <span class='hs-varid'>padRight</span><span class='hs-layout'>,</span> <span class='hs-varid'>padLeft</span><span class='hs-layout'>,</span>
+<a name="line-8"></a>    <span class='hs-comment'>-- * Put</span>
+<a name="line-9"></a>    <span class='hs-varid'>putShow</span><span class='hs-layout'>,</span> <span class='hs-varid'>putShowLn</span><span class='hs-layout'>,</span> <span class='hs-varid'>putLines</span><span class='hs-layout'>,</span>
+<a name="line-10"></a>    <span class='hs-comment'>-- * Read</span>
+<a name="line-11"></a>    <span class='hs-varid'>readInt</span><span class='hs-layout'>,</span> <span class='hs-varid'>readInteger</span><span class='hs-layout'>,</span>
+<a name="line-12"></a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
 <a name="line-13"></a>
 <a name="line-14"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Char</span>                     <span class='hs-keyword'>as</span> <span class='hs-conid'>Ch</span>
 <a name="line-15"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Prelude</span>  <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
@@ -92,5 +92,8 @@
 <a name="line-83"></a><a name="readInt"></a><span class='hs-definition'>readInt</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Maybe</span> <span class='hs-conid'>Int</span>
 <a name="line-84"></a><span class='hs-definition'>readInt</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>readJust</span>
 <a name="line-85"></a>
+<a name="line-86"></a><a name="readInteger"></a><span class='hs-definition'>readInteger</span> <span class='hs-keyglyph'>::</span> <span class='hs-conid'>String</span> <span class='hs-keyglyph'>-&gt;</span> <span class='hs-conid'>Maybe</span> <span class='hs-conid'>Integer</span>
+<a name="line-87"></a><span class='hs-definition'>readInteger</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>readJust</span>
+<a name="line-88"></a>
 </pre></body>
 </html>

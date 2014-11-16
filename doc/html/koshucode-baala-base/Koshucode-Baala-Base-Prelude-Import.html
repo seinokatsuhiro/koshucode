@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.75.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.81.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -182,6 +182,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    > ::  [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > a] -&gt; [a]</li
+	  ><li class="src short"
+	  ><a href="#v:mapMaybe"
+	    >mapMaybe</a
+	    > ::  (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > b) -&gt; [a] -&gt; [b]</li
 	  ><li class="src short"
 	  ><a href="#v:fromJust"
 	    >fromJust</a
@@ -671,6 +677,49 @@ and otherwise do nothing.
 	  ></div
 	><div class="top"
 	><p class="src"
+	  ><a name="v:mapMaybe" class="def"
+	    >mapMaybe</a
+	    > ::  (a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > b) -&gt; [a] -&gt; [b]</p
+	  ><div class="doc"
+	  ><p
+	    >The <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:mapMaybe"
+		>mapMaybe</a
+		></code
+	      > function is a version of <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:map"
+		>map</a
+		></code
+	      > which can throw
+ out elements.  In particular, the functional argument returns
+ something of type <code
+	      ><code
+		><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+		  >Maybe</a
+		  ></code
+		> b</code
+	      >.  If this is <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#v:Nothing"
+		>Nothing</a
+		></code
+	      >, no element
+ is added on to the result list.  If it just <code
+	      ><code
+		><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#v:Just"
+		  >Just</a
+		  ></code
+		> b</code
+	      >, then <code
+	      >b</code
+	      > is
+ included in the result list.
+</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
 	  ><a name="v:fromJust" class="def"
 	    >fromJust</a
 	    > ::  <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
@@ -904,8 +953,8 @@ and otherwise do nothing.
 		><td class="src"
 		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
 		    >Monoid</a
-		    > <a href="Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
-		    >Relhead</a
+		    > <a href="Koshucode-Baala-Base-Data-Head.html#t:Head"
+		    >Head</a
 		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
