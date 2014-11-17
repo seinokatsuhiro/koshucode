@@ -8,9 +8,12 @@ module Koshucode.Baala.Base.Data.Clock
 
     -- * Accessor
     clockFromDhms, clockFromDhm, clockFromDh, clockFromHms,
-    clockDayCount, clockSec,
-    clockSign, clockPrecision,
     dhmsFromSec, secFromHms,
+
+    -- * Property
+    clockSign, clockDayCount, clockSec,
+    clockPrecision,
+    clockDhms,
 
     -- * Calculation
     clockPos, clockNeg,
@@ -23,6 +26,9 @@ import qualified Koshucode.Baala.Base.Abort    as B
 import qualified Koshucode.Baala.Base.Prelude  as B
 import qualified Koshucode.Baala.Base.Text     as B
 import qualified Koshucode.Baala.Base.Message  as Msg
+
+
+-- ----------------------  Data type
 
 data Clock
     = ClockDhms DayCount Sec    -- ^ Clock represented by multiple of second
@@ -49,14 +55,38 @@ clockFromHms :: Hour -> Min -> Maybe Sec -> Clock
 clockFromHms h m (Nothing)  = clockFromDhm  0 h m
 clockFromHms h m (Just s)   = clockFromDhms 0 h m s
 
--- | Select day-count part from clock.
+-- | Aggregate hour, minute, and second into single second.
+secFromHms :: (Hour, Min, Sec) -> Sec
+secFromHms (h, m, s) = s + 60 * (m + 60 * h)
+
+-- | Decompose second into day-count, hour, minute and second parts.
+dhmsFromSec :: Sec -> (DayCount, Hour, Min, Sec)
+dhmsFromSec sec =
+    let (m', s)   = sec `quotRem` 60
+        (h', m)   = m'  `quotRem` 60
+        (d,  h)   = h'  `quotRem` 24
+    in (toInteger d, h, m, s)
+
+
+-- ----------------------  Property
+
+-- | Sign of clock as @-1@, @0@, @1@.
+clockSign :: Clock -> Int
+clockSign c | day == 0 && sec == 0  = 0
+            | day >= 0 && sec >= 0  = 1
+            | day <= 0 && sec <= 0  = -1
+            | otherwise             = B.bug $ "inconsistent " ++ show c
+            where day = clockDayCount c
+                  sec = clockSec      c
+
+-- | Day-count part of clock.
 clockDayCount :: Clock -> DayCount
 clockDayCount (ClockDhms day _)  = day
 clockDayCount (ClockDhm  day _)  = day
 clockDayCount (ClockDh   day _)  = day
 clockDayCount (ClockD    day)    = day
 
--- | Select second part from clock.
+-- | Second part of clock.
 clockSec :: Clock -> Sec
 clockSec (ClockDhms _ sec)       = sec
 clockSec (ClockDhm  _ sec)       = sec
@@ -69,25 +99,17 @@ clockPrecision (ClockDhm  _ _)   = "min"
 clockPrecision (ClockDh   _ _)   = "hour"
 clockPrecision (ClockD    _)     = "day"
 
-clockSign :: Clock -> Int
-clockSign c | day == 0 && sec == 0  = 0
-            | day >= 0 && sec >= 0  = 1
-            | day <= 0 && sec <= 0  = -1
-            | otherwise             = B.bug $ "inconsistent " ++ show c
-            where day = clockDayCount c
-                  sec = clockSec      c
-
--- | Aggregate hour, minute, and second into single second.
-secFromHms :: (Hour, Min, Sec) -> Sec
-secFromHms (h, m, s) = s + 60 * (m + 60 * h)
-
--- | Decompose second into day-count, hour, minute and second parts.
-dhmsFromSec :: Sec -> (DayCount, Hour, Min, Sec)
-dhmsFromSec sec =
-    let (m', s)   = sec `quotRem` 60
-        (h', m)   = m'  `quotRem` 60
-        (d,  h)   = h'  `quotRem` 24
-    in (toInteger d, h, m, s)
+clockDhms :: Clock -> (DayCount, Maybe Hour, Maybe Min, Maybe Sec)
+clockDhms clock =
+    case clock of
+      ClockDhms _ _  -> (day + d, Just h, Just m, Just s)
+      ClockDhm  _ _  -> (day + d, Just h, Just m, Nothing)
+      ClockDh   _ _  -> (day + d, Just h, Nothing, Nothing)
+      ClockD    _    -> (day + d, Nothing, Nothing, Nothing)
+    where
+      day             = abs $ clockDayCount clock
+      sec             = abs $ clockSec clock
+      (d, h, m, s)    = dhmsFromSec $ abs sec
 
 
 -- ----------------------  Writer

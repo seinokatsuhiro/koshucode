@@ -19,8 +19,8 @@ module Koshucode.Baala.Op.Builtin.Get
   getRelmap, getRelmaps, getOptRelmap,
 
   -- * Term
-  getTerm, getTerms,
-  getTermsCo,
+  getTerm, getTermOpt,
+  getTerms, getTermsCo,
   getTermPairs,
   getWithTerms,
   getTermTrees,
@@ -166,6 +166,9 @@ getTerm :: RopGet c B.TermName
 getTerm = getAbortable get where
     get [x] = Op.termName x
     get _   = Msg.unexpAttr "Require one term"
+
+getTermOpt :: RopGet c (Maybe B.TermName)
+getTermOpt = getMaybe getTerm
 
 -- | Get list of term names from named attribute.
 getTerms :: RopGet c [B.TermName]

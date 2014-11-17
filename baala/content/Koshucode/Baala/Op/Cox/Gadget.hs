@@ -33,6 +33,7 @@ ropsCoxGadget = Op.ropList "cox-gadget"
     , Op.ropI  consNumber    "number /N -order /N ..."  "-term | -order -from"
     , Op.ropI  consRank      "rank /N -order /N ..."    "-term | -order -from -dense"
     , Op.ropII consRepeat    "repeat N R"               "-count -relmap/"
+    , Op.ropV  consClockGet  "clock-get C"              "-clock | -sign -day -hour -min -sec"
     ]
 
 
@@ -179,3 +180,41 @@ relkitRepeat cnt (C.Relkit (Just he2) kitb2) (Just he1)
                   | otherwise = Right bo
 
 relkitRepeat _ _ _ = Right C.relkitNothing
+
+
+-- ----------------------  clock-get
+
+consClockGet :: (C.CContent c) => C.RopCons c
+consClockGet use =
+  do cops     <- Op.getWhere   use "-where"
+     clock    <- Op.getCox     use "-clock"
+     sign     <- Op.getTermOpt use "-sign"
+     day      <- Op.getTermOpt use "-day"
+     hour     <- Op.getTermOpt use "-hour"
+     minute   <- Op.getTermOpt use "-min"
+     sec      <- Op.getTermOpt use "-sec"
+     let ns    = [sign, day, hour, minute, sec]
+     Right $ relmapClockGet use (cops, clock, ns)
+
+relmapClockGet :: (C.CContent c) =>
+  C.RopUse c -> (C.CopSet c, C.Cox c, [Maybe B.TermName]) -> C.Relmap c
+relmapClockGet use = C.relmapFlow use . relkitClockGet
+
+relkitClockGet :: (C.CContent c) =>
+  (C.CopSet c, C.Cox c, [Maybe B.TermName]) -> C.RelkitFlow c
+relkitClockGet _ Nothing = Right C.relkitNothing
+relkitClockGet (cops, cox, ns) (Just he1) = Right kit2 where
+      he2          = B.catMaybes ns `B.headAppend` he1
+      kit2         = C.relkitJust he2 $ C.RelkitOneToAbOne False kitf2 []
+      kitf2 _ cs1  = do clock <- C.getClock $ C.coxRunCox cops he1 cs1 cox
+                        let cs2 = B.zipMaybe2 ns $ clockProps clock
+                        Right $ cs2 ++ cs1
+
+clockProps :: (C.CContent c) => B.Clock -> [c]
+clockProps clock = [sign, day, hour, minute, sec] where
+    sign          = C.pDecFromInt $ B.clockSign clock
+    day           = C.pDecFromInteger d
+    hour          = C.maybeEmpty C.pDecFromInt h
+    minute        = C.maybeEmpty C.pDecFromInt m
+    sec           = C.maybeEmpty C.pDecFromInt s
+    (d, h, m, s)  = B.clockDhms clock

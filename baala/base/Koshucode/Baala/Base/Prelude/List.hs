@@ -17,6 +17,7 @@ module Koshucode.Baala.Base.Prelude.List
     -- * Construct
     li1, li2, li3,
     RangeBy, rangeBy,
+    zipMaybe, zipMaybe2,
 
     -- * Map
     map2, mapAt, mapWithLast,
@@ -136,6 +137,16 @@ rangeBy :: (Ord a) => B.Map a -> RangeBy a
 rangeBy step from to = loop from where
     loop f | f > to    = []
            | otherwise = f : loop (step f)
+
+zipMaybe :: [Maybe a] -> [b] -> [(a, b)]
+zipMaybe (Just a  : as) (b : bs)  = (a, b) : zipMaybe as bs
+zipMaybe (Nothing : as) (_ : bs)  =          zipMaybe as bs
+zipMaybe _  _                     = []
+
+zipMaybe2 :: [Maybe a] -> [b] -> [b]
+zipMaybe2 (Just _  : as) (b : bs)  = b : zipMaybe2 as bs
+zipMaybe2 (Nothing : as) (_ : bs)  =     zipMaybe2 as bs
+zipMaybe2 _  _                     = []
 
 
 -- ----------------------  Map
