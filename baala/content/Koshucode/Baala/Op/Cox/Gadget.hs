@@ -33,7 +33,8 @@ ropsCoxGadget = Op.ropList "cox-gadget"
     , Op.ropI  consNumber    "number /N -order /N ..."  "-term | -order -from"
     , Op.ropI  consRank      "rank /N -order /N ..."    "-term | -order -from -dense"
     , Op.ropII consRepeat    "repeat N R"               "-count -relmap/"
-    , Op.ropV  consClockGet  "clock-get C"              "-clock | -sign -day -hour -min -sec"
+    , Op.ropI  consClock     "clock /N -PROP E ..."     "-clock | -times -day -hour -min -sec"
+    , Op.ropV  consClockGet  "clock-get E -PROP /N"     "-clock | -sign -day -hour -min -sec"
     ]
 
 
@@ -180,6 +181,64 @@ relkitRepeat cnt (C.Relkit (Just he2) kitb2) (Just he1)
                   | otherwise = Right bo
 
 relkitRepeat _ _ _ = Right C.relkitNothing
+
+
+-- ----------------------  clock
+
+type MaybeCox c  = Maybe (C.Cox c)
+
+consClock :: (C.CContent c) => C.RopCons c
+consClock use =
+    do cops     <- Op.getWhere    use "-where"
+       clock    <- Op.getTerm     use "-clock"
+       times    <- Op.getOptionCox (C.pDecFromInt 1) use "-times"
+       day      <- Op.getOptionCox (C.pDecFromInt 0) use "-day"
+       hour     <- Op.getMaybeCox use "-hour"
+       minute   <- Op.getMaybeCox use "-min"
+       sec      <- Op.getMaybeCox use "-sec"
+       let hms   = fill (hour, minute, sec)
+
+       Right $ C.relmapFlow use $ relkitClock (cops, clock, (times, day, hms))
+    where
+      zero = C.coxLit $ C.pDecFromInt 0
+      fill (h, Nothing, Just s) = fill (h, Just zero, Just s)
+      fill (Nothing, Just m, s) = fill (Just zero, Just m, s)
+      fill hms = hms
+
+relkitClock :: (C.CContent c)
+  => (C.CopSet c, B.TermName, (C.Cox c, C.Cox c, (MaybeCox c, MaybeCox c, MaybeCox c)))
+  -> C.RelkitFlow c
+relkitClock _ Nothing = Right C.relkitNothing
+relkitClock (cops, n, (times, day, (hour, minute, sec))) (Just he1) = Right kit2 where
+      he2          = n `B.headCons` he1
+      kit2         = C.relkitJust he2 $ C.RelkitOneToAbOne False kitf2 []
+      kitf2 _ cs1  = do let run = C.coxRunCox cops he1 cs1
+                        t <- getInt     $ run times
+                        d <- getInteger $ run day
+                        h <- getMaybe (getInt . run) hour
+                        m <- getMaybe (getInt . run) minute
+                        s <- getMaybe (getInt . run) sec
+                        let clock = B.clockTimes t $ clockFrom d h m s
+                        Right $ C.pClock clock : cs1
+
+clockFrom :: Integer -> Maybe Int -> Maybe Int -> Maybe Int -> B.Clock
+clockFrom d (Just h)  (Just m)  (Just s)   = B.clockFromDhms d h m s
+clockFrom d (Just h)  (Just m)  (Nothing)  = B.clockFromDhm  d h m
+clockFrom d (Just h)  (Nothing) (Nothing)  = B.clockFromDh   d h
+clockFrom d (Nothing) (Nothing) (Nothing)  = B.clockFromD    d
+clockFrom _ _ _ _ = B.bug "clockFrom"
+
+getMaybe :: (c -> B.Ab a) -> Maybe c -> B.Ab (Maybe a)
+getMaybe f (Just c)  = return . Just =<< f c
+getMaybe _ _         = return Nothing
+
+getInt :: (C.CContent c) => B.Ab c -> B.Ab Int
+getInt c = do d <- C.getDec c
+              return $ B.decimalNum d
+
+getInteger :: (C.CContent c) => B.Ab c -> B.Ab Integer
+getInteger c = do i <- getInt c
+                  return $ toInteger i
 
 
 -- ----------------------  clock-get

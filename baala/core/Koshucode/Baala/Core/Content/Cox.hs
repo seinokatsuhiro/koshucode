@@ -4,17 +4,18 @@
 -- | Term-content expression.
 
 module Koshucode.Baala.Core.Content.Cox
-( -- * Data types
-  Cox (..), NamedCox, CopCalc, CoxTag,
-
-  -- * Functions
-  coxSyntacticArity,
-  coxMap, coxCall,
-  checkIrreducible,
-
-  -- * Process
-  -- $Process
-) where
+  ( -- * Data types
+    Cox (..), NamedCox, CopCalc, CoxTag,
+  
+    -- * Functions
+    coxLit,
+    coxSyntacticArity,
+    coxMap, coxCall,
+    checkIrreducible,
+  
+    -- * Process
+    -- $Process
+  ) where
 
 import qualified Koshucode.Baala.Base            as B
 import qualified Koshucode.Baala.Core.Message    as Msg
@@ -42,15 +43,15 @@ type CopCalc c = [B.Ab c] -> B.Ab c
 type CoxTag = Maybe String
 
 instance B.CodePtr (Cox c) where
-    codePts (CoxLit    cp _)      =  cp
-    codePts (CoxTerm   cp _ _)    =  cp
-    codePts (CoxCalc   cp _ _)    =  cp
-    codePts (CoxLocal  cp _ _)    =  cp
-    codePts (CoxBlank  cp _)      =  cp
-    codePts (CoxFill   cp _ _)    =  cp
-    codePts (CoxForm1  cp _ _ _)  =  cp
-    codePts (CoxForm   cp _ _ _)  =  cp
-    codePts (CoxWith   cp _ _)    =  cp
+    codePts (CoxLit    cp _)       = cp
+    codePts (CoxTerm   cp _ _)     = cp
+    codePts (CoxCalc   cp _ _)     = cp
+    codePts (CoxLocal  cp _ _)     = cp
+    codePts (CoxBlank  cp _)       = cp
+    codePts (CoxFill   cp _ _)     = cp
+    codePts (CoxForm1  cp _ _ _)   = cp
+    codePts (CoxForm   cp _ _ _)   = cp
+    codePts (CoxWith   cp _ _)     = cp
 
 instance (B.Write c) => Show (Cox c) where
     show = show . B.doc
@@ -68,24 +69,27 @@ docCox sh = d (0 :: Int) . coxFold where
 
     d 10 _ = wr "..."
     d n e  = case e of
-        CoxLit    _ c          ->  wr "lit" B.<+> wr c
-        CoxTerm   _ ns _       ->  wr $ concatMap ('/' :) ns
-        CoxCalc   _ op _       ->  wr "calc" B.<+> wr op
-        CoxLocal  _ v i        ->  wr "local" B.<+> wr v B.<> wr "/" B.<> wr i
-        CoxBlank  _ v          ->  wr "global" B.<+> wr v
-        CoxFill   _ f xs       ->  let f'  = wr ">>" B.<+> d' f
-                                       xs' = B.nest 3 $ wrV $ map arg xs
-                                   in f' B.$$ xs'
-        CoxForm1  _ tag v  e2  ->  form tag [v] $ d' e2
-        CoxForm   _ tag vs e2  ->  form tag vs  $ d' e2
-        CoxWith   _ _ e2       ->  d' e2
+        CoxLit    _ c          -> wr "lit" B.<+> wr c
+        CoxTerm   _ ns _       -> wr $ concatMap ('/' :) ns
+        CoxCalc   _ op _       -> wr "calc" B.<+> wr op
+        CoxLocal  _ v i        -> wr "local" B.<+> wr v B.<> wr "/" B.<> wr i
+        CoxBlank  _ v          -> wr "global" B.<+> wr v
+        CoxFill   _ f xs       -> let f'  = wr ">>" B.<+> d' f
+                                      xs' = B.nest 3 $ wrV $ map arg xs
+                                  in f' B.$$ xs'
+        CoxForm1  _ tag v  e2  -> form tag [v] $ d' e2
+        CoxForm   _ tag vs e2  -> form tag vs  $ d' e2
+        CoxWith   _ _ e2       -> d' e2
       where
-        d'                     =  d $ n + 1
-        arg                    =  (wr "-" B.<+>) . d'
-        form (Nothing)  vs     =  form2 vs
-        form (Just tag) vs     =  form2 $ ("'" ++ tag) : vs
-        form2 vs e2            =  B.docWraps "(|" "|)" $ wrH vs B.<+> wr "|" B.<+> e2
-                                          
+        d'                      = d $ n + 1
+        arg                     = (wr "-" B.<+>) . d'
+        form (Nothing)  vs      = form2 vs
+        form (Just tag) vs      = form2 $ ("'" ++ tag) : vs
+        form2 vs e2             = B.docWraps "(|" "|)" $ wrH vs B.<+> wr "|" B.<+> e2
+
+coxLit :: c -> Cox c
+coxLit = CoxLit []
+
 -- Convert CoxForm1 to CoxForm.
 coxFold :: B.Map (Cox c)
 coxFold (CoxForm1 cp1 tag1 v1 e1) =
@@ -96,9 +100,9 @@ coxFold (CoxFill cp f xs) = CoxFill cp (coxFold f) (map coxFold xs)
 coxFold e = e
 
 isCoxForm :: Cox c -> Bool
-isCoxForm (CoxForm1  _ _ _ _) = True
-isCoxForm (CoxForm   _ _ _ _) = True
-isCoxForm _                   = False
+isCoxForm (CoxForm1  _ _ _ _)  = True
+isCoxForm (CoxForm   _ _ _ _)  = True
+isCoxForm _                    = False
 
 coxSyntacticArity :: Cox c -> Int
 coxSyntacticArity = loop where
@@ -110,9 +114,9 @@ coxSyntacticArity = loop where
     loop _ = 0
 
 coxMap :: B.Map (B.Map (Cox c))
-coxMap g (CoxFill  cp f xs)        = CoxFill  cp (g f) (map g xs)
-coxMap g (CoxForm1 cp tag v  body) = CoxForm1 cp tag v  (g body)
-coxMap g (CoxForm  cp tag vs body) = CoxForm  cp tag vs (g body)
+coxMap g (CoxFill  cp f xs)         = CoxFill  cp (g f) (map g xs)
+coxMap g (CoxForm1 cp tag v  body)  = CoxForm1 cp tag v  (g body)
+coxMap g (CoxForm  cp tag vs body)  = CoxForm  cp tag vs (g body)
 coxMap _ e = e
 
 coxCall :: Cox c -> (B.Map (Cox c)) -> Cox c
@@ -120,19 +124,19 @@ coxCall cox g = coxMap g cox
 
 checkIrreducible :: B.AbMap (Cox c)
 checkIrreducible e
-    | irreducible e = Right e
-    | otherwise     = Msg.abCoxIrrep [e] $
-                      Msg.unkCox "Not irreducible"
+    | irreducible e  = Right e
+    | otherwise      = Msg.abCoxIrrep [e] $
+                       Msg.unkCox "Not irreducible"
 
 -- irreducible representation
 irreducible :: Cox c -> Bool
 irreducible cox =
     case cox of
-      CoxLit  _ _       ->  True
-      CoxTerm _ _ _     ->  True
-      CoxCalc _ _ _     ->  True
-      CoxFill _ f xs    ->  all irreducible $ f : xs
-      _                 ->  False
+      CoxLit  _ _       -> True
+      CoxTerm _ _ _     -> True
+      CoxCalc _ _ _     -> True
+      CoxFill _ f xs    -> all irreducible $ f : xs
+      _                 -> False
 
 
 -- ----------------------

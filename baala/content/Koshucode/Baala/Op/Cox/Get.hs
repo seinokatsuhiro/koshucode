@@ -3,7 +3,7 @@
 
 module Koshucode.Baala.Op.Cox.Get
   ( -- * Cox
-    getCox, getMaybeCox,
+    getCox, getMaybeCox, getOptionCox,
     getTermCoxes,
     getNamedCoxes,
     getWhere,
@@ -28,6 +28,9 @@ import qualified Koshucode.Baala.Op.Message  as Msg
 -- | Get relmap attribute as single cox.
 getCox :: (C.CContent c) => Op.RopGet c (C.Cox c)
 getCox use = ropBuild use . B.wrapTrees B.<=< Op.getTrees use
+
+getOptionCox :: (C.CContent c) => c -> Op.RopGet c (C.Cox c)
+getOptionCox c = Op.getOption (C.CoxLit [] c) getCox
 
 getMaybeCox :: (C.CContent c) => Op.RopGet c (Maybe (C.Cox c))
 getMaybeCox = Op.getMaybe getCox

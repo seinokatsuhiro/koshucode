@@ -7,7 +7,8 @@ module Koshucode.Baala.Base.Data.Clock
     writeClock, writeClockBody,
 
     -- * Accessor
-    clockFromDhms, clockFromDhm, clockFromDh, clockFromHms,
+    clockFromDhms, clockFromDhm, clockFromDh, clockFromD,
+    clockFromHms,
     dhmsFromSec, secFromHms,
 
     -- * Property
@@ -18,7 +19,7 @@ module Koshucode.Baala.Base.Data.Clock
     -- * Calculation
     clockPos, clockNeg,
     clockCutDay, clockAddDay, clockAddSec,
-    clockAdd, clockSub,
+    clockAdd, clockSub, clockTimes,
     clockRangeBy, clockStep,
   ) where
 
@@ -50,6 +51,9 @@ clockFromDhm d h m = ClockDhm d $ secFromHms (h, m, 0)
 
 clockFromDh :: DayCount -> Hour -> Clock
 clockFromDh d h = ClockDh d $ secFromHms (h, 0, 0)
+
+clockFromD :: DayCount -> Clock
+clockFromD = ClockD
 
 clockFromHms :: Hour -> Min -> Maybe Sec -> Clock
 clockFromHms h m (Nothing)  = clockFromDhm  0 h m
@@ -226,6 +230,9 @@ clockAdd = clockMap2 (+) (+)
 -- | Calculation of clock minus clock.
 clockSub :: AbBin Clock
 clockSub = clockMap2 (-) (-)
+
+clockTimes :: Int -> B.Map Clock
+clockTimes m = clockMap (* (toInteger m)) (* m)
 
 
 -- ----------------------  Range
