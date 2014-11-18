@@ -60,6 +60,7 @@ library
         Koshucode.Baala.Op.Cop.Time
 
         Koshucode.Baala.Op.Cox
+        Koshucode.Baala.Op.Cox.Accessor
         Koshucode.Baala.Op.Cox.Calc
         Koshucode.Baala.Op.Cox.Empty
         Koshucode.Baala.Op.Cox.Filter

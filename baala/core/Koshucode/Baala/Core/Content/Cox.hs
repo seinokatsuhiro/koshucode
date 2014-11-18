@@ -5,7 +5,7 @@
 
 module Koshucode.Baala.Core.Content.Cox
   ( -- * Data types
-    Cox (..), NamedCox, CopCalc, CoxTag,
+    Cox (..), MaybeCox, NamedCox, CopCalc, CoxTag,
   
     -- * Functions
     coxLit,
@@ -35,6 +35,7 @@ data Cox c
     | CoxForm  [B.CodePt] CoxTag [String] (Cox c)  -- ^ Form with multiple blanks
     | CoxWith  [B.CodePt] [NamedCox c] (Cox c)     -- ^ Cox with outside arguments
 
+type MaybeCox c = Maybe (Cox c)
 type NamedCox c = B.Named (Cox c)
 
 -- | Term-content calculator.

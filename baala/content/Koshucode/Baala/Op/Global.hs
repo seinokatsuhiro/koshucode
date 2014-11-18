@@ -28,11 +28,12 @@ vanillaRops :: (C.CContent c) => [C.Rop c]
 vanillaRops = ropsCox ++ ropsNonCox
 
 ropsCox :: (C.CContent c) => [C.Rop c]
-ropsCox    = Rop.ropsCoxCalc
-          ++ Rop.ropsCoxRange
+ropsCox    = Rop.ropsCoxAccessor
+          ++ Rop.ropsCoxCalc
           ++ Rop.ropsCoxEmpty
           ++ Rop.ropsCoxFilter
           ++ Rop.ropsCoxGadget
+          ++ Rop.ropsCoxRange
 
 ropsNonCox :: (C.CContent c) => [C.Rop c]
 ropsNonCox = Rop.ropsMeta
