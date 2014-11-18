@@ -14,7 +14,7 @@ module Koshucode.Baala.Base.Data.Clock
     -- * Property
     clockSign, clockDayCount, clockSec,
     clockPrecision,
-    clockDhms,
+    clockDhms, clockAlter,
 
     -- * Calculation
     clockPos, clockNeg,
@@ -114,6 +114,18 @@ clockDhms clock =
       day             = abs $ clockDayCount clock
       sec             = abs $ clockSec clock
       (d, h, m, s)    = dhmsFromSec $ abs sec
+
+clockAlter :: Maybe DayCount -> Maybe Hour -> Maybe Min -> Maybe Sec -> B.Map Clock
+clockAlter d' h' m' s' clock =
+    case clockDhms clock of
+      (d, Just h,  Just m,  Just s)  -> clockFromDhms (d' ! d) (h' ! h) (m' ! m) (s' ! s)
+      (d, Just h,  Just m,  Nothing) -> clockFromDhm  (d' ! d) (h' ! h) (m' ! m)
+      (d, Just h,  Nothing, Nothing) -> clockFromDh   (d' ! d) (h' ! h)
+      (d, Nothing, Nothing, Nothing) -> clockFromD    (d' ! d)
+      _                              -> B.bug "clockAlter"
+    where
+      Just x' ! _  = x'
+      Nothing ! x  = x
 
 
 -- ----------------------  Writer
