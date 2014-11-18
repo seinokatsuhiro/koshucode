@@ -112,6 +112,7 @@ consPreclause' src = dispatch $ liaison $ B.clauseTokens src where
         | k == "export"   =  expt xs
         | k == "short"    =  short xs
         | k == "****"     =  c1 CComment
+        | k == "=="       =  sec []
     dispatch (B.TSlot _ 2 n : xs) = slot n xs
     dispatch []           =  []
     dispatch _            =  unk

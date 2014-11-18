@@ -98,28 +98,34 @@ codeRollUp f res = loop (CodeRoll f cp "" []) . B.linesCrlfNumbered where
           ls' <- loop r' ls
           Right $ CodeLine num line toks : ls'
 
-codeRoll :: B.AbMap (CodeRoll a)
-codeRoll r@CodeRoll { codeMap = f, codeInputPt = cp, codeInput = input }
-    | null input = Right r
-    | otherwise  = codeRoll =<< f r { codeInputPt = setText input cp }
-
-codeUpdate :: String -> a -> B.Map (CodeRoll a)
-codeUpdate cs tok r = r { codeInput = cs, codeOutput = tok : codeOutput r }
-
-codeChange :: B.AbMap (CodeRoll a) -> B.Map (CodeRoll a)
-codeChange f r = r { codeMap = f }
-
 setLine :: Int -> String -> B.Map B.CodePt
 setLine num line cp =
     cp { B.codeLineNumber = num
        , B.codeLineText   = line
        , B.codeText       = line }
 
+setRoll :: B.CodePt -> String -> CodeRoll a -> CodeRoll a
+setRoll cp line roll =
+    roll { codeInputPt = cp
+         , codeInput   = line
+         , codeOutput  = [] }
+
+codeRoll :: B.AbMap (CodeRoll a)
+codeRoll roll@CodeRoll { codeMap = f, codeInputPt = cp, codeInput = input }
+    | null input  = call
+    | otherwise   = call >>= codeRoll
+    where call    = f roll { codeInputPt = setText input cp }
+
 setText :: String -> B.Map B.CodePt
 setText text cp = cp { B.codeText = text }
 
-setRoll :: B.CodePt -> String -> CodeRoll a -> CodeRoll a
-setRoll cp line r = r { codeInputPt = cp
-                      , codeInput   = line
-                      , codeOutput  = [] }
+-- | Update 'codeInput' and push result element to 'codeOutput'.
+codeUpdate :: String -> a -> B.Map (CodeRoll a)
+codeUpdate cs tok roll =
+    roll { codeInput  = cs
+         , codeOutput = tok : codeOutput roll }
+
+-- | Change mapper of code roll.
+codeChange :: B.AbMap (CodeRoll a) -> B.Map (CodeRoll a)
+codeChange f roll = roll { codeMap = f }
 

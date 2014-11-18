@@ -56,20 +56,25 @@ tokenLines = B.codeRollUp general
 general :: B.AbMap TokenRoll
 general r@B.CodeRoll { B.codeInputPt = cp
                      , B.codeInput   = cs0
+                     , B.codeOutput  = out
                      } = ab $ gen cs0 where
 
     v           = scan r
     u   cs tok  = Right $ B.codeUpdate cs tok r
-    int cs tok  = Right $ B.codeChange interp $ B.codeUpdate cs tok r
+    int cs tok  = Right $ B.codeChange interp  $ B.codeUpdate cs tok r
+    sec cs tok  = Right $ B.codeChange section $ B.codeUpdate cs tok r
     ab          = Msg.abToken [cp]
 
     gen ""                           =  Right r
-        
+
     gen (a:b:cs)   | isOpen a &&
                      isGrip b        =  u cs            $ B.TOpen    cp [a,b]
                    | isGrip a &&
                      isClose b       =  u cs            $ B.TClose   cp [a,b]
-        
+                   | null out &&     -- beginning of line
+                     a == '=' &&
+                     b == '='        =  sec cs          $ B.TText    cp B.TextRaw [a,b]
+
     gen (c:cs)     | c == '*'        =  ast   cs [c]
                    | c == '<'        =  bra   cs [c]
                    | c == '>'        =  cket  cs [c]
@@ -167,6 +172,31 @@ interp r@B.CodeRoll { B.codeInputPt = cp
                   | isTerm c         =  u (c:cs)  $ B.TText cp B.TextRaw (rv w)
                   | otherwise        =  word cs   $ c:w
     word cs w                        =  u cs      $ B.TText cp B.TextRaw (rv w)
+
+section :: B.AbMap TokenRoll
+section r@B.CodeRoll { B.codeInputPt = cp
+                     , B.codeInput   = cs0
+                     , B.codeOutput  = out
+                     } = ab $ sec cs0 where
+
+    v           = scan r
+    ab          = Msg.abToken [cp]
+
+    sec ""                           =  dispatch (reverse out)
+    sec (c:cs)    | isSpace c        =  v $ scanSpace cp cs
+                  | isCode c         =  v $ scanCode cp (c:cs)
+                  | otherwise        =  sec cs
+
+    dispatch (B.TText _ B.TextRaw "==" : B.TSpace _ _ : B.TText _ B.TextRaw name : _) =
+        case name of
+          "rel"   -> Right $ B.codeChange general r
+          "note"  -> Right $ B.codeChange general r
+          "text"  -> Right $ B.codeChange general r
+          "end"   -> Msg.notImplemented "end section"
+          "doc"   -> Msg.notImplemented "doc section"
+          "data"  -> Msg.notImplemented "data section"
+          _       -> Msg.unkSectType name
+    dispatch _     = Msg.unkSectType "???"
 
  
 -- ----------------------  Scanner

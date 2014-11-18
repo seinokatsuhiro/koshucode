@@ -14,13 +14,15 @@ module Koshucode.Baala.Base.Message
     heteroDecimal,
     notDate,
     notNumber,
+    notImplemented,
     (<!!>),
   
     -- * Tokenizer
     forbiddenInput,
     forbiddenTerm,
-    unkAngleText,
     quotNotEnd,
+    unkAngleText,
+    unkSectType,
   ) where
 
 import qualified Koshucode.Baala.Base.Abort    as B
@@ -68,12 +70,18 @@ divideByZero = Left $ B.abortBecause "Divide by zero"
 notFound :: String -> B.Ab a
 notFound = Left . B.abortLine "Not found"
 
+-- | Not implemented
+notImplemented :: String -> B.Ab a
+notImplemented = Left . B.abortLine "Not implemented"
+
 -- | Lookup association list. This function may abort.
 (<!!>) :: [B.Named b] -> String -> B.Ab b
 (<!!>) assoc key = loop assoc where
     loop [] = notFound key
     loop ((k,v) : kvs) | k == key  = Right v
                        | otherwise = loop kvs
+
+-- --------------------  Tokenizer
 
 -- | Forbidden input
 forbiddenInput :: String -> B.Ab a
@@ -83,11 +91,15 @@ forbiddenInput = Left . B.abortLine "Forbidden input"
 forbiddenTerm :: B.Ab a
 forbiddenTerm = Left $ B.abortBecause "Forbidden term name"
 
+-- | Quotation not end in line
+quotNotEnd :: B.Ab a
+quotNotEnd = Left $ B.abortBecause "Quotation not end in line"
+
 -- | Unknown bracket text
 unkAngleText :: String -> B.Ab a
 unkAngleText = Left . B.abortLine "Unknown bracket text"
 
--- | Quotation not end in line
-quotNotEnd :: B.Ab a
-quotNotEnd = Left $ B.abortBecause "Quotation not end in line"
+-- | Unknown section type
+unkSectType :: String -> B.Ab a
+unkSectType = Left . B.abortLine "Unknown section type"
 
