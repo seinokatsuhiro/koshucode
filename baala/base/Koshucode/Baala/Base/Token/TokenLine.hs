@@ -73,7 +73,7 @@ general r@B.CodeRoll { B.codeInputPt = cp
                      isClose b       =  u cs            $ B.TClose   cp [a,b]
                    | null out &&     -- beginning of line
                      a == '=' &&
-                     b == '='        =  sec cs          $ B.TText    cp B.TextRaw [a,b]
+                     b == '='        =  sec cs          $ B.TText    cp B.TextRaw "=="
 
     gen (c:cs)     | c == '*'        =  ast   cs [c]
                    | c == '<'        =  bra   cs [c]
@@ -190,13 +190,29 @@ section r@B.CodeRoll { B.codeInputPt = cp
     dispatch (B.TText _ B.TextRaw "==" : B.TSpace _ _ : B.TText _ B.TextRaw name : _) =
         case name of
           "rel"   -> Right $ B.codeChange general r
-          "note"  -> Right $ B.codeChange general r
+          "note"  -> Right $ B.codeChange note r
           "text"  -> Right $ B.codeChange general r
           "end"   -> Msg.notImplemented "end section"
           "doc"   -> Msg.notImplemented "doc section"
           "data"  -> Msg.notImplemented "data section"
           _       -> Msg.unkSectType name
     dispatch _     = Msg.unkSectType "???"
+
+note :: B.AbMap TokenRoll
+note r@B.CodeRoll { B.codeInputPt = cp
+                  , B.codeInput   = cs0
+                  , B.codeOutput  = out
+                  } = ab $ start cs0 where
+
+    ab  = Msg.abToken [cp]
+
+    start (a:b:cs)
+        | null out &&
+          a == '=' &&
+          b == '='   = let tok = B.TText cp B.TextRaw "=="
+                       in Right $ B.codeChange section $ B.codeUpdate cs tok r
+    start cs         = let tok = B.TComment cp cs
+                       in Right $ B.codeUpdate "" tok r
 
  
 -- ----------------------  Scanner
