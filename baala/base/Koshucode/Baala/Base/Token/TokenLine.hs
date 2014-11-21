@@ -50,20 +50,59 @@ tokens res cs = do ls <- tokenLines res cs
 
 -- | Tokenize text.
 tokenLines :: B.Resource -> String -> B.Ab [TokenLine]
-tokenLines = B.codeRollUp general
+tokenLines = B.codeRollUp relation
+
+start :: (String -> B.Ab TokenRoll) -> B.CodePt -> TokenRoll -> B.Ab TokenRoll
+start f cp r@B.CodeRoll { B.codeInput   = cs0
+                        , B.codeOutput  = out } = st out cs0 where
+    tok                 = B.TText cp B.TextRaw "=="
+    trim                = dropWhile (== '=')
+    st [] ('=':'=':cs)  = Right $ B.codeChange section $ B.codeUpdate (trim cs) tok r
+    st _ cs             = Msg.abToken [cp] $ f cs
+
+section :: B.AbMap TokenRoll
+section r@B.CodeRoll { B.codeInputPt = cp
+                     , B.codeOutput  = out
+                     } = start sec cp r where
+
+    v  = scan r
+
+    sec ""                     = dispatch $ reverse out
+    sec (c:cs)  | isSpace c    = v $ scanSpace cp cs
+                | isCode c     = v $ scanCode cp (c:cs)
+                | otherwise    = sec cs
+
+    dispatch (B.TText _ B.TextRaw "==" : B.TSpace _ _ : B.TText _ B.TextRaw name : _) =
+        case name of
+          "rel"    -> Right $ B.codeChange relation r
+          "note"   -> Right $ B.codeChange note r
+          "text"   -> Right $ B.codeChange relation r
+          "end"    -> Right $ B.codeChange end r
+          "local"  -> Msg.notImplemented "local section"
+          "doc"    -> Msg.notImplemented "doc section"
+          "data"   -> Msg.notImplemented "data section"
+          _        -> Msg.unkSectType name
+    dispatch _      = Msg.unkSectType "???"
+
+end :: B.AbMap TokenRoll
+end r@B.CodeRoll { B.codeInput = cs }     = comment r cs
+
+note :: B.AbMap TokenRoll
+note r@B.CodeRoll { B.codeInputPt = cp }  = start (comment r) cp r
+
+comment :: TokenRoll -> String -> B.Ab TokenRoll
+comment r "" = Right r
+comment r cs = Right $ B.codeUpdate "" tok r where
+    tok  = B.TComment cp cs
+    cp   = B.codeInputPt r
 
 -- | Split a next token from source text.
-general :: B.AbMap TokenRoll
-general r@B.CodeRoll { B.codeInputPt = cp
-                     , B.codeInput   = cs0
-                     , B.codeOutput  = out
-                     } = ab $ gen cs0 where
+relation :: B.AbMap TokenRoll
+relation r@B.CodeRoll { B.codeInputPt = cp } = start gen cp r where
 
     v           = scan r
     u   cs tok  = Right $ B.codeUpdate cs tok r
     int cs tok  = Right $ B.codeChange interp  $ B.codeUpdate cs tok r
-    sec cs tok  = Right $ B.codeChange section $ B.codeUpdate cs tok r
-    ab          = Msg.abToken [cp]
 
     gen ""                           =  Right r
 
@@ -71,9 +110,6 @@ general r@B.CodeRoll { B.codeInputPt = cp
                      isGrip b        =  u cs            $ B.TOpen    cp [a,b]
                    | isGrip a &&
                      isClose b       =  u cs            $ B.TClose   cp [a,b]
-                   | null out &&     -- beginning of line
-                     a == '=' &&
-                     b == '='        =  sec cs          $ B.TText    cp B.TextRaw "=="
 
     gen (c:cs)     | c == '*'        =  ast   cs [c]
                    | c == '<'        =  bra   cs [c]
@@ -153,18 +189,15 @@ charCodes :: String -> Maybe [Int]
 charCodes = mapM B.readInt . B.omit null . B.divide '-'
 
 interp :: B.AbMap TokenRoll
-interp r@B.CodeRoll { B.codeInputPt = cp
-                    , B.codeInput   = cs0
-                    } = ab $ int cs0 where
+interp r@B.CodeRoll { B.codeInputPt = cp } = start int cp r where
 
     v           = scan r
     u   cs tok  = Right $ B.codeUpdate cs tok r
-    gen cs tok  = Right $ B.codeChange general $ B.codeUpdate cs tok r
-    ab          = Msg.abToken [cp]
+    gen cs tok  = Right $ B.codeChange relation $ B.codeUpdate cs tok r
 
     int ""                           =  Right r
     int (c:cs)    | isSpace c        =  v         $ scanSpace cp cs
-                  | isTerm c         =  v         $ scanTerm cp cs
+                  | isTerm c         =  v         $ scanTerm  cp cs
                   | otherwise        =  word (c:cs) ""
 
     word cs@('>':'>':'>':_) w        =  gen cs    $ B.TText cp B.TextRaw (rv w)
@@ -172,56 +205,6 @@ interp r@B.CodeRoll { B.codeInputPt = cp
                   | isTerm c         =  u (c:cs)  $ B.TText cp B.TextRaw (rv w)
                   | otherwise        =  word cs   $ c:w
     word cs w                        =  u cs      $ B.TText cp B.TextRaw (rv w)
-
-section :: B.AbMap TokenRoll
-section r@B.CodeRoll { B.codeInputPt = cp
-                     , B.codeInput   = cs0
-                     , B.codeOutput  = out
-                     } = ab $ sec cs0 where
-
-    v           = scan r
-    ab          = Msg.abToken [cp]
-
-    sec ""                           =  dispatch (reverse out)
-    sec (c:cs)    | isSpace c        =  v $ scanSpace cp cs
-                  | isCode c         =  v $ scanCode cp (c:cs)
-                  | otherwise        =  sec cs
-
-    dispatch (B.TText _ B.TextRaw "==" : B.TSpace _ _ : B.TText _ B.TextRaw name : _) =
-        case name of
-          "rel"   -> Right $ B.codeChange general r
-          "note"  -> Right $ B.codeChange note r
-          "text"  -> Right $ B.codeChange general r
-          "end"   -> Right $ B.codeChange end r
-          "local" -> Msg.notImplemented "local section"
-          "doc"   -> Msg.notImplemented "doc section"
-          "data"  -> Msg.notImplemented "data section"
-          _       -> Msg.unkSectType name
-    dispatch _     = Msg.unkSectType "???"
-
-note :: B.AbMap TokenRoll
-note r@B.CodeRoll { B.codeInputPt = cp
-                  , B.codeInput   = cs0
-                  , B.codeOutput  = out
-                  } = ab $ start cs0 where
-
-    ab  = Msg.abToken [cp]
-
-    start (a:b:cs)
-        | null out &&
-          a == '=' &&
-          b == '='   = let tok = B.TText cp B.TextRaw "=="
-                       in Right $ B.codeChange section $ B.codeUpdate cs tok r
-    start cs         = comment r cs
-
-end :: B.AbMap TokenRoll
-end r@B.CodeRoll { B.codeInput = cs0 } = comment r cs0
-
-comment :: TokenRoll -> String -> B.Ab TokenRoll
-comment r "" = Right r
-comment r cs = Right $ B.codeUpdate "" tok r where
-    tok  = B.TComment cp cs
-    cp   = B.codeInputPt r
 
  
 -- ----------------------  Scanner
