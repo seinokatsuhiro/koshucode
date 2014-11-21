@@ -44,12 +44,12 @@ type TokenRoll = B.CodeRoll B.Token
 
 -- | Split string into list of tokens.
 --   Result token list does not contain newline characters.
-tokens :: B.Resource -> String -> B.Ab [B.Token]
+tokens :: B.Source -> String -> B.Ab [B.Token]
 tokens res cs = do ls <- tokenLines res cs
                    Right $ concatMap B.lineTokens ls
 
 -- | Tokenize text.
-tokenLines :: B.Resource -> String -> B.Ab [TokenLine]
+tokenLines :: B.Source -> String -> B.Ab [TokenLine]
 tokenLines = B.codeRollUp relation
 
 start :: (String -> B.Ab TokenRoll) -> B.CodePt -> TokenRoll -> B.Ab TokenRoll
@@ -253,7 +253,7 @@ scanQQ cp cs = do (cs', w) <- nextQQ cs
 scanTerm :: Scan
 scanTerm cp = word [] where
     word ns (c:cs) | c == '='  =  let (cs', w) = nextCode (c:cs)
-                                      n  = B.resourceNumber $ B.codeResource cp
+                                      n  = B.sourceNumber $ B.codeSource cp
                                       w' = show n ++ w
                                   in term (w' : ns) cs'
                    | isCode c  =  let (cs', w) = nextCode (c:cs)

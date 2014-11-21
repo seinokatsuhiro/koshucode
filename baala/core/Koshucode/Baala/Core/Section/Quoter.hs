@@ -4,9 +4,9 @@
 {-# OPTIONS_GHC -Wall -fno-warn-missing-fields #-}
 
 module Koshucode.Baala.Core.Section.Quoter
-( koshuQuoter,
-  TH.QuasiQuoter,
-) where
+  ( koshuQuoter,
+    TH.QuasiQuoter,
+  ) where
 
 import Data.Generics
 import qualified Language.Haskell.TH       as TH
@@ -28,7 +28,7 @@ koshuQuoter lx fullQ = TH.QuasiQuoter { TH.quoteExp = koshuQ lx fullQ }
 
 koshuQ :: C.ConsLexmap -> TH.ExpQ -> String -> TH.ExpQ
 koshuQ _ fullQ text =
-    dispatch $ B.tokenLines (B.resourceOf text) text
+    dispatch $ B.tokenLines (B.sourceOf text) text
     where
       dispatch src = sectionQ src -- relmapQ src
       sectionQ = consSectionQ fullQ . {- C.consClause -} undefined
@@ -43,7 +43,7 @@ consSectionQ
     -> TH.ExpQ      -- ^ ExpQ of 'Section'
 consSectionQ fullQ xs =
     [| either consError id
-         (C.consSection C.emptySection (B.resourceOf "qq")
+         (C.consSection C.emptySection (B.sourceOf "qq")
                $(TH.dataToExpQ plain xs)) |]
 
 {- construction error -}

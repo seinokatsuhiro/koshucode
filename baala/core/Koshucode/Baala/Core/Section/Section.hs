@@ -4,22 +4,22 @@
 -- | Section as bundle of relational expressions.
 
 module Koshucode.Baala.Core.Section.Section
-(
-  -- * Data type
-  Section (..),
-  coxBuildG,
-  addMessage,
-  addMessages,
-
-  -- * Constructors
-  emptySection,
-  rootSection,
-  consSection,
-  concatSection,
-
-  -- * Process
-  -- $Process
-) where
+  (
+    -- * Data type
+    Section (..),
+    coxBuildG,
+    addMessage,
+    addMessages,
+  
+    -- * Constructors
+    emptySection,
+    rootSection,
+    consSection,
+    concatSection,
+  
+    -- * Process
+    -- $Process
+  ) where
 
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Core.Content         as C
@@ -42,7 +42,7 @@ data Section c = Section {
     , secRelmap   :: [C.RelmapSource]    -- ^ Source of relmaps
     , secAssert   :: [C.ShortAssert c]   -- ^ Assertions of relmaps
     , secJudge    :: [B.Judge c]         -- ^ Affirmative or denial judgements
-    , secResource :: B.Resource          -- ^ Resource name
+    , secSource   :: B.Source            -- ^ Source name
     , secCons     :: C.RelmapCons c      -- ^ Relmap constructor for this section
     , secMessage  :: [String]            -- ^ Collection of messages
     } deriving (Show)
@@ -55,7 +55,7 @@ addMessages msg sec = sec { secMessage = msg ++ secMessage sec }
 
 -- | Section that has no contents.
 emptySection :: Section c
-emptySection = Section Nothing C.global [] [] [] [] [] [] B.resourceZero cons [] where
+emptySection = Section Nothing C.global [] [] [] [] [] [] B.sourceZero cons [] where
     cons = C.relmapCons C.global
 
 -- | Construct root section from global parameter.
@@ -83,16 +83,16 @@ concatSection root ss =
 consSection
     :: forall c. (C.CContent c)
     => Section c          -- ^ Root section
-    -> B.Resource         -- ^ Resource name
+    -> B.Source           -- ^ Source name
     -> [C.ShortClause]    -- ^ Output of 'C.consClause'
     -> B.Ab (Section c)   -- ^ Result section
-consSection root resource xss =
-    do sects <- consSectionEach root resource `mapM` xss
+consSection root source xss =
+    do sects <- consSectionEach root source `mapM` xss
        Right $ concatSection root sects
 
 consSectionEach :: forall c. (C.CContent c) =>
-    Section c -> B.Resource -> C.ShortClause -> B.Ab (Section c)
-consSectionEach root resource (B.Short pt shorts xs) =
+    Section c -> B.Source -> C.ShortClause -> B.Ab (Section c)
+consSectionEach root source (B.Short pt shorts xs) =
     do _        <-  forM isCUnknown unk
        _        <-  forM isCUnres   unres
        imports  <-  forM isCImport  impt
@@ -111,13 +111,13 @@ consSectionEach root resource (B.Short pt shorts xs) =
            , secRelmap    =  relmaps
            , secAssert    =  [B.Short pt shorts asserts]
            , secJudge     =  judges
-           , secResource  =  resource }
+           , secSource    =  source }
     where
       for  isX f = pass     f  `map`  filter (isX . C.clauseBody) xs
       forM isX f = pass (ab f) `mapM` filter (isX . C.clauseBody) xs
 
       pass f (C.Clause src body) = f (B.front $ B.clauseTokens src) body
-      consSec = consSection root (B.resourceZero)
+      consSec = consSection root (B.sourceZero)
       ab f toks body = Msg.abClause toks $ f toks body
 
       -- todo: multiple section name

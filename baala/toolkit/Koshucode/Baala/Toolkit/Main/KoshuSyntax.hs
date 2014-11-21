@@ -3,10 +3,10 @@
 -- | Koshucode syntactic tool.
 
 module Koshucode.Baala.Toolkit.Main.KoshuSyntax
-( koshuSyntaxMain
-  -- * koshu-syntax.hs
-  -- $koshu-syntax.hs
-) where
+  ( koshuSyntaxMain
+    -- * koshu-syntax.hs
+    -- $koshu-syntax.hs
+  ) where
 
 import qualified Control.Monad                  as M
 import qualified System.Console.GetOpt          as G
@@ -92,7 +92,7 @@ judgeText = show . B.write B.shortEmpty
 dumpClauseAndToken :: FilePath -> IO ()
 dumpClauseAndToken path = 
     do code <- readFile path
-       let ts = B.tokenLines (B.ResourceFile path) code
+       let ts = B.tokenLines (B.SourceFile path) code
            cs = C.consPreclause ts
        B.putLines $ B.texts h
        mapM_ putClause $ zip [1 ..] cs
@@ -143,7 +143,7 @@ tokenJudge clseq ln tok
 dumpToken :: FilePath -> IO ()
 dumpToken path =
     do code <- readFile path
-       let xs = B.tokenLines (B.ResourceFile path) code
+       let xs = B.tokenLines (B.SourceFile path) code
            (_, ls) = foldl dumpTokenText (0, []) xs
        B.putLines ls
 

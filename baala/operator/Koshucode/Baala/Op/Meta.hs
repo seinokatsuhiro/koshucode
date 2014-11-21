@@ -1,18 +1,18 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.Meta
-( ropsMeta,
-  -- * koshu-cop
-  consKoshuCop, relkitKoshuCop,
-  -- * koshu-cop-infix
-  consKoshuCopInfix, relkitKoshuCopInfix,
-  -- * koshu-resource
-  consKoshuResource, relmapKoshuResource,
-  -- * koshu-rop
-  consKoshuRop, relkitKoshuRop,
-  -- * koshu-version
-  consKoshuVersion, relkitKoshuVersion,
-) where
+  ( ropsMeta,
+    -- * koshu-cop
+    consKoshuCop, relkitKoshuCop,
+    -- * koshu-cop-infix
+    consKoshuCopInfix, relkitKoshuCopInfix,
+    -- * koshu-source
+    consKoshuSource, relmapKoshuSource,
+    -- * koshu-rop
+    consKoshuRop, relkitKoshuRop,
+    -- * koshu-version
+    consKoshuVersion, relkitKoshuVersion,
+  ) where
 
 import qualified Data.Version                  as V
 import qualified Koshucode.Baala.Base          as B
@@ -42,7 +42,7 @@ ropsMeta = Op.ropList "meta"
     , Op.ropV   consKoshuCop       "koshu-cop /N"        "-name"
     , Op.ropI   consKoshuCopInfix  "koshu-cop-infix /N [-height /N][-dir /N]"
                                                          "-name | -height -dir"
-    , Op.ropI   consKoshuResource  "koshu-resource /N [-name /N][-type /N]"
+    , Op.ropI   consKoshuSource    "koshu-source /N [-name /N][-type /N]"
                                                          "-number | -name -type"
     , Op.ropV   consKoshuRop       "koshu-rop /N /N"     "-name | -group -usage"
     , Op.ropV   consKoshuVersion   "koshu-version /N"    "-term | -version"
@@ -164,29 +164,29 @@ apiVersion V.Version { V.versionBranch = ver } =
       (_)             -> [0, 0, 0]
 
 
--- ----------------------  koshu-resource
+-- ----------------------  koshu-source
 
---  koshu-resource /number -type /type -name /name
+--  koshu-source /number -type /type -name /name
 
-consKoshuResource :: (C.CContent c) => C.RopCons c
-consKoshuResource use =
+consKoshuSource :: (C.CContent c) => C.RopCons c
+consKoshuSource use =
   do num  <- Op.getTerm use "-number"
      ty   <- Op.getMaybe Op.getTerm use "-type"
      name <- Op.getMaybe Op.getTerm use "-name"
-     Right $ relmapKoshuResource use (num, ty, name)
+     Right $ relmapKoshuSource use (num, ty, name)
 
-relmapKoshuResource :: (C.CContent c) => C.RopUse c -> (B.TermName, Maybe B.TermName, Maybe B.TermName) -> C.Relmap c
-relmapKoshuResource use = C.relmapGlobal use . relkitKoshuResource
+relmapKoshuSource :: (C.CContent c) => C.RopUse c -> (B.TermName, Maybe B.TermName, Maybe B.TermName) -> C.Relmap c
+relmapKoshuSource use = C.relmapGlobal use . relkitKoshuSource
 
-relkitKoshuResource :: (C.CContent c) => (B.TermName, Maybe B.TermName, Maybe B.TermName) -> (C.RelkitGlobal c)
-relkitKoshuResource (num, ty, name) C.Global { C.globalResources = res } _ = Right kit2 where
+relkitKoshuSource :: (C.CContent c) => (B.TermName, Maybe B.TermName, Maybe B.TermName) -> (C.RelkitGlobal c)
+relkitKoshuSource (num, ty, name) C.Global { C.globalSources = res } _ = Right kit2 where
     ns         =  B.catMaybes [Just num, ty, name]
     kit2       =  C.relkitConstBody ns $ map assn res
     assn r     =  B.catMaybes [resNum r, resType r, resName r]
 
-    resNum    =  Just         . C.pDecFromInt . B.resourceNumber
-    resType   =  maybeAs ty   . C.pText       . B.resourceType
-    resName   =  maybeAs name . C.pText       . B.resourceText
+    resNum    =  Just         . C.pDecFromInt . B.sourceNumber
+    resType   =  maybeAs ty   . C.pText       . B.sourceType
+    resName   =  maybeAs name . C.pText       . B.sourceText
 
 maybeAs :: Maybe a -> b -> Maybe b
 maybeAs (Just _)  c  =  Just c

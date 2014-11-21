@@ -4,17 +4,17 @@
 -- | Intermidiate structure between 'String' and 'Section'.
 
 module Koshucode.Baala.Core.Section.Clause
-( -- * Data type
-  -- $Documentation
-  ShortClause,
-  Clause (..),
-  ClauseBody (..),
-  clauseTypeText,
-
-  -- * Constructors
-  consClause,
-  consPreclause,
-) where
+  ( -- * Data type
+    -- $Documentation
+    ShortClause,
+    Clause (..),
+    ClauseBody (..),
+    clauseTypeText,
+  
+    -- * Constructors
+    consClause,
+    consPreclause,
+  ) where
 
 import qualified Data.Generics                 as G
 import qualified Koshucode.Baala.Base          as B

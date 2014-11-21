@@ -4,27 +4,27 @@
 -- | Tree of tokens
 
 module Koshucode.Baala.Base.Token.TokenTree
-( -- * Token tree
-  TTree,
-  NamedTree, NamedTrees,
-  TTreeTo, TTreesTo,
-  TTreeToAb, TTreesToAb,
-  tokenTrees,
-  wrapTrees,
-
-  -- * Bracket type
-  BracketType (..),
-
-  -- * Divide trees
-  splitTokensBy, divideTreesBy,
-  divideTreesByBar, divideTreesByColon, divideTreesByEqual,
-
-  -- * Abortable
-  abortableTree, abortableTrees,
-
-  -- * Abbreviation
-  tt, tt1, ttDoc, ttPrint,
-) where
+  ( -- * Token tree
+    TTree,
+    NamedTree, NamedTrees,
+    TTreeTo, TTreesTo,
+    TTreeToAb, TTreesToAb,
+    tokenTrees,
+    wrapTrees,
+  
+    -- * Bracket type
+    BracketType (..),
+  
+    -- * Divide trees
+    splitTokensBy, divideTreesBy,
+    divideTreesByBar, divideTreesByColon, divideTreesByEqual,
+  
+    -- * Abortable
+    abortableTree, abortableTrees,
+  
+    -- * Abbreviation
+    tt, tt1, ttDoc, ttPrint,
+  ) where
 
 import qualified Data.Generics                        as G
 import qualified Text.PrettyPrint                     as P
@@ -161,7 +161,7 @@ abortableTrees tag = B.abortable tag . B.untrees
 
 -- | Convert text to token trees.
 tt :: String -> B.Ab [TTree]
-tt s = do toks <- B.tokens (B.resourceOf s) s
+tt s = do toks <- B.tokens (B.sourceOf s) s
           tokenTrees $ B.sweepToken toks
 
 tt1 :: String -> B.Ab TTree

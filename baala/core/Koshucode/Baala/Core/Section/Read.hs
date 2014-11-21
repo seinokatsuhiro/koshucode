@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Read resource as section.
+-- | Read source as section.
 
 module Koshucode.Baala.Core.Section.Read
   ( -- * Section
@@ -8,7 +8,7 @@ module Koshucode.Baala.Core.Section.Read
     readSectionText,
 
     -- * Bundle
-    ResourceBundle (..),
+    SourceBundle (..),
     bundleTexts,
     bundleRead,
   ) where
@@ -23,46 +23,46 @@ import qualified Koshucode.Baala.Core.Message         as Msg
 
 -- ----------------------  Section
 
--- | Read section from certain resource.
-readSection :: (C.CContent c) => C.Section c -> B.Resource -> IO (B.Ab (C.Section c))
-readSection root res = dispatch $ B.resourceName res where
-    dispatch (B.ResourceFile path)
+-- | Read section from certain source.
+readSection :: (C.CContent c) => C.Section c -> B.Source -> IO (B.Ab (C.Section c))
+readSection root res = dispatch $ B.sourceName res where
+    dispatch (B.SourceFile path)
         = do exist <- Dir.doesFileExist path
              case exist of
                False  ->  return $ Msg.noFile path
                True   ->  ioRead =<< readFile path
 
-    dispatch (B.ResourceText code)  =  ioRead code
-    dispatch (B.ResourceStdin)      =  ioRead =<< getContents
-    dispatch (B.ResourceURL _)      =  error "Not implemented read from URL"
+    dispatch (B.SourceText code)  =  ioRead code
+    dispatch (B.SourceStdin)      =  ioRead =<< getContents
+    dispatch (B.SourceURL _)      =  error "Not implemented read from URL"
 
     ioRead = return . readSectionCode root res
 
 readSectionCode :: (C.CContent c)
-    => C.Section c -> B.Resource -> String -> B.Ab (C.Section c)
+    => C.Section c -> B.Source -> String -> B.Ab (C.Section c)
 readSectionCode root res =
     C.consSection root res . C.consClause B.<=< B.tokenLines res
 
 -- | Read section from text.
 readSectionText :: (C.CContent c) => C.Section c -> String -> B.Ab (C.Section c)
-readSectionText root code = readSectionCode root (B.resourceOf code) code
+readSectionText root code = readSectionCode root (B.sourceOf code) code
 
 
 -- ----------------------  Bundle
 
--- | Bundle of resources.
-data ResourceBundle c = ResourceBundle
+-- | Bundle of sources.
+data SourceBundle c = SourceBundle
     { bundleRoot      :: C.Section c
-    , bundleResources :: [B.Resource]
+    , bundleSources :: [B.Source]
     } deriving (Show)
 
-bundleTexts :: ResourceBundle c -> [String]
-bundleTexts = map B.resourceText . bundleResources
+bundleTexts :: SourceBundle c -> [String]
+bundleTexts = map B.sourceText . bundleSources
 
-bundleRead :: (C.CContent c) => ResourceBundle c -> IO (B.Ab (C.Section c))
+bundleRead :: (C.CContent c) => SourceBundle c -> IO (B.Ab (C.Section c))
 bundleRead bun =
     do let root = bundleRoot bun
-       abSects <- readSection root `mapM` bundleResources bun
+       abSects <- readSection root `mapM` bundleSources bun
        return $ do sects <- B.sequence abSects
                    return $ C.concatSection root sects
 

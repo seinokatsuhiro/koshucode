@@ -107,16 +107,16 @@ koshuMain global =
            | otherwise           ->  L.runFiles g2 bun
            where
              has   =  (`elem` opts)
-             bun   =  C.ResourceBundle root res
+             bun   =  C.SourceBundle root res
              text  =  concatMap oneLiner opts
              cmd   =  prog : argv
              root  =  C.rootSection g2
-             res   =  B.resourceList (has OptStdin) text files []
+             res   =  B.sourceList (has OptStdin) text files []
              g2    =  C.globalFill global
                         { C.globalProgram   = prog
                         , C.globalArgs      = argv
                         , C.globalTime      = B.timeYmd day
-                        , C.globalResources = res }
+                        , C.globalSources   = res }
 
        (_, _, errs) -> L.putFailure $ concat errs
 
@@ -131,7 +131,7 @@ oneLinerPreprocess = loop where
     loop ('|' : '|' : xs) = '\n' : loop (B.trimLeft xs)
     loop (x : xs) = x : loop xs
 
-putElems :: (C.CContent c) => C.ResourceBundle c -> IO Int
+putElems :: (C.CContent c) => C.SourceBundle c -> IO Int
 putElems bun =
     do ass <- L.readSecList bun
        case ass of
@@ -141,14 +141,14 @@ putElems bun =
 
 -- ----------------------  Pretty printing
 
--- prettySection :: (C.CContent c) => C.ResourceBundle c -> IO Int
--- prettySection (C.ResourceBundle root _ files _) =
+-- prettySection :: (C.CContent c) => C.SourceBundle c -> IO Int
+-- prettySection (C.SourceBundle root _ files _) =
 --     case files of
---       [file] -> do md <- C.readSection root (B.ResourceFile file)
+--       [file] -> do md <- C.readSection root (B.SourceFile file)
 --                    prettyPrint md
 --                    return 0
 --       []     -> do text <- getContents
---                    md <- C.readSection root (B.ResourceText text)
+--                    md <- C.readSection root (B.SourceText text)
 --                    prettyPrint md
 --                    return 0
 --       _      -> L.putSuccess usage

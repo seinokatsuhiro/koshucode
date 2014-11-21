@@ -1,16 +1,16 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Text.Resource
+module Koshucode.Baala.Base.Text.Source
   (
-    -- * Resource
-    Resource (..),
-    ResourceName (..),
-    resourceType,
-    resourceText,
-    resourceZero,
-    resourceOf,
-    resourceList,
+    -- * Source
+    Source (..),
+    SourceName (..),
+    sourceType,
+    sourceText,
+    sourceZero,
+    sourceOf,
+    sourceList,
   
     -- * Code point
     CodePt (..),
@@ -29,58 +29,58 @@ import qualified Data.Generics                 as G
 import qualified Koshucode.Baala.Base.Prelude  as B
 
 
--- ----------------------  Resource
+-- ----------------------  Source
 
-data Resource
-    = Resource { resourceNumber :: Int
-               , resourceName   :: ResourceName }
+data Source
+    = Source { sourceNumber :: Int
+             , sourceName   :: SourceName }
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
-data ResourceName
-    = ResourceFile  String
-    | ResourceURL   String
-    | ResourceText  String
-    | ResourceStdin
+data SourceName
+    = SourceFile  String
+    | SourceURL   String
+    | SourceText  String
+    | SourceStdin
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 -- | Name of resourcd type, i.e., @\"file\"@, @\"text\"@, @\"url\"@.
-resourceType :: Resource -> String
-resourceType = resourceNameType . resourceName
+sourceType :: Source -> String
+sourceType = sourceNameType . sourceName
 
-resourceText :: Resource -> String
-resourceText = resourceNameText . resourceName
+sourceText :: Source -> String
+sourceText = sourceNameText . sourceName
 
-resourceNameType :: ResourceName -> String
-resourceNameType (ResourceFile _)     = "file"
-resourceNameType (ResourceURL  _)     = "url"
-resourceNameType (ResourceText _)     = "text"
-resourceNameType (ResourceStdin)      = "stdin"
+sourceNameType :: SourceName -> String
+sourceNameType (SourceFile _)     = "file"
+sourceNameType (SourceURL  _)     = "url"
+sourceNameType (SourceText _)     = "text"
+sourceNameType (SourceStdin)      = "stdin"
 
-resourceNameText :: ResourceName -> String
-resourceNameText (ResourceFile file)  =  file
-resourceNameText (ResourceURL  url)   =  url
-resourceNameText (ResourceText text)  =  text
-resourceNameText (ResourceStdin)      =  "<stdin>"
+sourceNameText :: SourceName -> String
+sourceNameText (SourceFile file)  =  file
+sourceNameText (SourceURL  url)   =  url
+sourceNameText (SourceText text)  =  text
+sourceNameText (SourceStdin)      =  "<stdin>"
 
-resourceZero :: Resource
-resourceZero = resourceOf ""
+sourceZero :: Source
+sourceZero = sourceOf ""
 
-resourceOf :: String -> Resource
-resourceOf = Resource 0 . ResourceText
+sourceOf :: String -> Source
+sourceOf = Source 0 . SourceText
 
-resourceList :: Bool -> [String] -> [String] -> [String] -> [Resource]
-resourceList stdin texts files urls = zipWith Resource [1..] names where
-    input = if stdin then [ResourceStdin] else []
+sourceList :: Bool -> [String] -> [String] -> [String] -> [Source]
+sourceList stdin texts files urls = zipWith Source [1..] names where
+    input = if stdin then [SourceStdin] else []
     names = input ++
-            ResourceText `map` texts ++
-            ResourceFile `map` files ++
-            ResourceURL  `map` urls
+            SourceText `map` texts ++
+            SourceFile `map` files ++
+            SourceURL  `map` urls
 
 
 -- ----------------------  CodePt
 
 data CodePt = CodePt
-      { codeResource   :: Resource    -- ^ Resource of code
+      { codeSource     :: Source      -- ^ Source of code
       , codeLineNumber :: Int         -- ^ Line number
       , codeLineText   :: String      -- ^ Line content
       , codeText       :: String      -- ^ Text at which begins token
@@ -97,7 +97,7 @@ codeCompare p1 p2 = line `B.mappend` column where
 
 -- | Empty code point, i.e., empty content and zero line number.
 codeZero :: CodePt
-codeZero = CodePt resourceZero 0 "" ""
+codeZero = CodePt sourceZero 0 "" ""
 
 -- | Column number at which code starts.
 codeColumnNumber :: CodePt -> Int
@@ -112,7 +112,7 @@ codeDisplay (tag, p)
       pos  = show lno ++ " " ++ show cno ++ " " ++ res
       lno  = codeLineNumber p
       cno  = codeColumnNumber p
-      res  = resourceText $ codeResource p
+      res  = sourceText $ codeSource p
       text = codeText p
 
       shorten :: B.Map String

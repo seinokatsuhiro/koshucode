@@ -34,7 +34,7 @@ data Global' rop c = Global
       , globalProgram   :: String
       , globalArgs      :: [String]
       , globalTime      :: B.Time
-      , globalResources :: [B.Resource]
+      , globalSources   :: [B.Source]
       , globalJudges    :: [B.Judge c]
       , globalSelect    :: C.RelSelect c
       }
@@ -70,7 +70,7 @@ global = Global
          , globalProgram   =  ""
          , globalArgs      =  []
          , globalTime      =  B.timeFromMjd 0
-         , globalResources =  []
+         , globalSources   =  []
          , globalJudges    =  []
          , globalSelect    =  \_ _ -> B.reldee }
 
