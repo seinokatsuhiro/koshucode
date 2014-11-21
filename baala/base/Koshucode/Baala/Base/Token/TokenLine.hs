@@ -192,7 +192,8 @@ section r@B.CodeRoll { B.codeInputPt = cp
           "rel"   -> Right $ B.codeChange general r
           "note"  -> Right $ B.codeChange note r
           "text"  -> Right $ B.codeChange general r
-          "end"   -> Msg.notImplemented "end section"
+          "end"   -> Right $ B.codeChange end r
+          "local" -> Msg.notImplemented "local section"
           "doc"   -> Msg.notImplemented "doc section"
           "data"  -> Msg.notImplemented "data section"
           _       -> Msg.unkSectType name
@@ -211,8 +212,16 @@ note r@B.CodeRoll { B.codeInputPt = cp
           a == '=' &&
           b == '='   = let tok = B.TText cp B.TextRaw "=="
                        in Right $ B.codeChange section $ B.codeUpdate cs tok r
-    start cs         = let tok = B.TComment cp cs
-                       in Right $ B.codeUpdate "" tok r
+    start cs         = comment r cs
+
+end :: B.AbMap TokenRoll
+end r@B.CodeRoll { B.codeInput = cs0 } = comment r cs0
+
+comment :: TokenRoll -> String -> B.Ab TokenRoll
+comment r "" = Right r
+comment r cs = Right $ B.codeUpdate "" tok r where
+    tok  = B.TComment cp cs
+    cp   = B.codeInputPt r
 
  
 -- ----------------------  Scanner
