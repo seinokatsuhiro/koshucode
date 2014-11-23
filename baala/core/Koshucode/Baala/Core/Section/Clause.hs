@@ -27,12 +27,13 @@ import qualified Koshucode.Baala.Core.Assert   as C
 type ShortClause = B.Short [Clause]
 
 data Clause =
-    Clause { clauseSource :: B.TokenClause
-           , clauseBody   :: ClauseBody
+    Clause { clauseSource  :: B.TokenClause
+           , clauseSecNo   :: Int
+           , clauseBody    :: ClauseBody
            } deriving (Show, G.Data, G.Typeable)
 
 data ClauseBody
-    = CSection    (Maybe String)                 -- ^ Section name
+    = CSection    String                         -- ^ Section heading
     | CImport     [B.Token] (Maybe Clause)       -- ^ Importing section name
     | CExport     String                         -- ^ Exporting relmap name
     | CShort      [B.ShortDef]                   -- ^ Short signs
@@ -46,11 +47,11 @@ data ClauseBody
       deriving (Show, G.Data, G.Typeable)
 
 instance B.CodePtr Clause where
-    codePts (Clause src _) = B.codePts src
+    codePts (Clause src _ _) = B.codePts src
 
 -- | Name of clause type. e.g., @\"Relmap\"@, @\"Assert\"@.
 clauseTypeText :: Clause -> String
-clauseTypeText (Clause _ body) =
+clauseTypeText (Clause _ _ body) =
     case body of
       CSection   _         ->  "section"
       CImport    _ _       ->  "import"
@@ -89,83 +90,87 @@ consClause :: [B.TokenLine] -> [ShortClause]
 consClause = shortClause . consPreclause
 
 consPreclause :: [B.TokenLine] -> [Clause]
-consPreclause = concatMap consPreclause' . B.tokenClauses
+consPreclause = loop 0 . B.tokenClauses where
+    loop _ [] = []
+    loop n (x:xs) = let (n', cs) = consPreclause' n x
+                    in cs ++ loop n' xs
 
-consPreclause' :: B.TokenClause -> [Clause]
-consPreclause' src = dispatch $ liaison $ B.clauseTokens src where
+consPreclause' :: Int -> B.TokenClause -> (Int, [Clause])
+consPreclause' no src = dispatch $ liaison $ B.clauseTokens src where
 
     liaison :: B.Map [B.Token]
     liaison [] = []
     liaison (B.TText _ B.TextQ "" : B.TTerm p2 0 w2 : xs)
-        = let tok = B.TTerm p2 1 w2
-          in liaison $ tok : xs
-    liaison (x : xs) = x : liaison xs
+                       = let tok = B.TTerm p2 1 w2
+                         in liaison $ tok : xs
+    liaison (x : xs)   = x : liaison xs
 
-    dispatch :: [B.Token] -> [Clause]
+    dispatch :: [B.Token] -> (Int, [Clause])
     dispatch (B.TText _ B.TextBar ('|' : k) : xs) =
-        frege k xs   -- Frege's judgement stroke
+        same $ frege k xs   -- Frege's judgement stroke
     dispatch (B.TText _ B.TextRaw name : B.TText _ B.TextRaw colon : xs)
-        | isDelim colon   =  rmap name xs
+        | isDelim colon             = same $ rmap name xs
     dispatch (B.TText _ B.TextRaw k : xs)
-        | k == "section"  =  sec xs
-        | k == "import"   =  impt xs
-        | k == "export"   =  expt xs
-        | k == "short"    =  short xs
-        | k == "****"     =  c1 CComment
-        | k == "=="       =  sec []
-    dispatch (B.TSlot _ 2 n : xs) = slot n xs
-    dispatch []           =  []
-    dispatch _            =  unk
+        | k == "import"             = same $ impt xs
+        | k == "export"             = same $ expt xs
+        | k == "short"              = same $ short xs
+        | k == "****"               = same $ c1 CComment
+        | k == "=="                 = up   $ sec xs
+    dispatch (B.TSlot _ 2 n : xs)   = same $ slot n xs
+    dispatch []                     = same []
+    dispatch _                      = same unk
 
-    unk                   =  c1 CUnknown
-    c0                    =  Clause src
-    c1                    =  B.li1 . c0
+    same cs      = (no,     cs)
+    up   cs      = (no + 1, cs)
 
-    isDelim     =  (`elem` ["|", ":"])
+    unk          = c1 CUnknown
+    c0           = Clause src no
+    c1           = B.li1 . c0
 
-    frege "--"  =  judge 'O'
-    frege "-"   =  judge 'O'
-    frege "-X"  =  judge 'X'
-    frege "-x"  =  judge 'X'
-    frege "-V"  =  judge 'V'
-    frege "-v"  =  judge 'V'
+    isDelim      = (`elem` ["|", ":"])
 
-    frege "=="  =  assert C.AssertAffirm
-    frege "="   =  assert C.AssertAffirm
-    frege "=X"  =  assert C.AssertDeny
-    frege "=x"  =  assert C.AssertDeny
-    frege "=V"  =  assert C.AssertViolate
-    frege "=v"  =  assert C.AssertViolate
+    frege "--"   = judge 'O'
+    frege "-"    = judge 'O'
+    frege "-X"   = judge 'X'
+    frege "-x"   = judge 'X'
+    frege "-V"   = judge 'V'
+    frege "-v"   = judge 'V'
 
-    frege _     =  const unk
+    frege "=="   = assert C.AssertAffirm
+    frege "="    = assert C.AssertAffirm
+    frege "=X"   = assert C.AssertDeny
+    frege "=x"   = assert C.AssertDeny
+    frege "=V"   = assert C.AssertViolate
+    frege "=v"   = assert C.AssertViolate
 
-    judge q (B.TText _ _ p : xs)  =  c1 $ CJudge q p xs
-    judge _ _                     =  unk
+    frege _      = const unk
+
+    judge q (B.TText _ _ p : xs)  = c1 $ CJudge q p xs
+    judge _ _                     = unk
 
     assert t (B.TText _ _ p : xs) =
         case B.splitTokensBy isDelim xs of
-          Right (opt, _, expr)  ->  a expr opt
-          Left  expr            ->  a expr []
-        where a expr opt = c1 $ CAssert t p opt expr
-    assert _ _             =  unk
+          Right (opt, _, expr)  -> a expr opt
+          Left  expr            -> a expr []
+        where a expr opt        = c1 $ CAssert t p opt expr
+    assert _ _                  = unk
 
-    rmap n xs              =  c1 $ CRelmap n xs
-    slot n xs              =  c1 $ CSlot   n xs
+    rmap n xs                   = c1 $ CRelmap n xs
+    slot n xs                   = c1 $ CSlot   n xs
 
-    sec [B.TText _ _ n]    =  c1 $ CSection (Just n)
-    sec []                 =  c1 $ CSection Nothing
-    sec _                  =  unk
+    sec [B.TText _ _ n]         = c1 $ CSection n
+    sec _                       = unk
 
     expt (B.TText _ _ n : B.TText _ _ ":" : xs)
-                           =  c0 (CExport n) : rmap n xs
-    expt [B.TText _ _ n]   =  c1 $ CExport n
-    expt _                 =  unk
+                                = c0 (CExport n) : rmap n xs
+    expt [B.TText _ _ n]        = c1 $ CExport n
+    expt _                      = unk
 
-    impt xs                =  c1 $ CImport xs Nothing
+    impt xs                     = c1 $ CImport xs Nothing
 
-    short xs               =  case wordPairs xs of
-                                Nothing -> unk
-                                Just sh -> c1 $ CShort sh
+    short xs                    = case wordPairs xs of
+                                    Nothing  -> unk
+                                    Just sh  -> c1 $ CShort sh
 
 pairs :: [a] -> Maybe [(a, a)]
 pairs (a:b:cs) = do cs' <- pairs cs
@@ -201,19 +206,19 @@ shortClause ccs@(c : cs)
           in  short : shortClause cs2
 
       shorts :: Clause -> [B.ShortDef]
-      shorts (Clause _ (CShort sh)) = sh
-      shorts _                      = B.bug "shortClause"
+      shorts (Clause _  _ (CShort sh))  = sh
+      shorts _                          = B.bug "shortClause"
 
       isCShort :: Clause -> Bool
-      isCShort (Clause _ (CShort _)) = True
-      isCShort _                     = False
+      isCShort (Clause _ _ (CShort _))  = True
+      isCShort _                        = False
 
 shortToLong :: [B.ShortDef] -> B.Map [Clause]
 shortToLong [] = id
 shortToLong sh = map clause where
     clause :: B.Map Clause
-    clause (Clause src bo) =
-        Clause src $ case bo of
+    clause (Clause src sec bo) =
+        Clause src sec $ case bo of
           CJudge  q p     xs  ->  body (CJudge  q p)     xs
           CAssert q p opt xs  ->  body (CAssert q p opt) xs
           CRelmap n       xs  ->  body (CRelmap n)       xs

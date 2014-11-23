@@ -93,59 +93,59 @@ consSection root source xss =
 consSectionEach :: forall c. (C.CContent c) =>
     Section c -> B.Source -> C.ShortClause -> B.Ab (Section c)
 consSectionEach root source (B.Short pt shorts xs) =
-    do _        <-  forM isCUnknown unk
-       _        <-  forM isCUnres   unres
-       imports  <-  forM isCImport  impt
-       judges   <-  forM isCJudge   judge
-       slots    <-  forM isCSlot    slot
-       relmaps  <-  forM isCRelmap  relmap
-       asserts  <-  forM isCAssert  assert
+    do _        <- forM isCUnknown unk
+       _        <- forM isCUnres   unres
+       imports  <- forM isCImport  impt
+       judges   <- forM isCJudge   judge
+       slots    <- forM isCSlot    slot
+       relmaps  <- forM isCRelmap  relmap
+       asserts  <- forM isCAssert  assert
 
        checkShort shorts
 
        Right $ root
-           { secName      =  name xs
-           , secImport    =  imports
-           , secExport    =  for isCExport expt
-           , secSlot      =  slots
-           , secRelmap    =  relmaps
-           , secAssert    =  [B.Short pt shorts asserts]
-           , secJudge     =  judges
-           , secSource    =  source }
+           { secName      = name xs
+           , secImport    = imports
+           , secExport    = for isCExport expt
+           , secSlot      = slots
+           , secRelmap    = relmaps
+           , secAssert    = [B.Short pt shorts asserts]
+           , secJudge     = judges
+           , secSource    = source }
     where
       for  isX f = pass     f  `map`  filter (isX . C.clauseBody) xs
       forM isX f = pass (ab f) `mapM` filter (isX . C.clauseBody) xs
 
-      pass f (C.Clause src body) = f (B.front $ B.clauseTokens src) body
+      pass f (C.Clause src sec body) = f sec (B.front $ B.clauseTokens src) body
       consSec = consSection root (B.sourceZero)
-      ab f toks body = Msg.abClause toks $ f toks body
+      ab f sec toks body = Msg.abClause toks $ f sec toks body
 
       -- todo: multiple section name
-      name ((C.Clause _ (C.CSection n)) : _) = n
+      name ((C.Clause _ _ (C.CSection n)) : _) = Just n
       name (_ : xs2) = name xs2
       name [] = Nothing
 
       expt :: Cl String
-      expt _ (C.CExport n) = n
+      expt _ _ (C.CExport n) = n
 
       impt :: Clab (Section c)
-      impt _ (C.CImport _ (Nothing)) = Right emptySection
-      impt _ (C.CImport _ (Just _))  = consSec []
+      impt _ _ (C.CImport _ (Nothing)) = Right emptySection
+      impt _ _ (C.CImport _ (Just _))  = consSec []
 
       slot :: Clab B.NamedTrees
-      slot _ (C.CSlot n toks) = ntrees (n, toks)
+      slot _ _ (C.CSlot n toks) = ntrees (n, toks)
 
       ntrees :: (String, [B.Token]) -> B.Ab (String, [B.TTree])
       ntrees (n, toks) = do trees <- B.tokenTrees toks
                             Right (n, trees)
 
       relmap :: Clab C.RelmapSource
-      relmap _ (C.CRelmap n toks) =
+      relmap _ _ (C.CRelmap n toks) =
           case B.splitTokensBy (== "---") toks of
             Left  _         -> ntrees2 n toks []
             Right (r, _, e) -> ntrees2 n r e
 
-      ntrees2 :: String -> [B.Token] -> [B.Token] -> B.Ab (String, ([B.TTree], C.Roamap))
+      ntrees2 :: String -> [B.Token] -> [B.Token] -> B.Ab C.RelmapSource
       ntrees2 n toks1 toks2 =
           do trees1 <- B.tokenTrees toks1
              trees2 <- B.tokenTrees toks2
@@ -153,13 +153,13 @@ consSectionEach root source (B.Short pt shorts xs) =
              Right (n, (trees1, roamap))
 
       judge :: Clab (B.Judge c)
-      judge _ (C.CJudge q p toks) =
+      judge _ _ (C.CJudge q p toks) =
           C.treesToJudge calc q p =<< B.tokenTrees toks
 
       calc = calcContG $ secGlobal root
 
       assert :: Clab (C.Assert c)
-      assert src (C.CAssert typ pat opt toks) =
+      assert _ src (C.CAssert typ pat opt toks) =
           do optTrees   <- B.tokenTrees opt
              rmapTrees  <- B.tokenTrees toks
              let optAssc = C.hyphenAssc optTrees
@@ -177,11 +177,11 @@ consSectionEach root source (B.Short pt shorts xs) =
             B.unless (null invalid) $ Msg.invalidPrefix invalid
             Right ()
 
-      unk   _ (C.CUnknown) = Msg.unkClause
-      unres _ (C.CUnres _) = Msg.unresPrefix
+      unk   _ _ (C.CUnknown)  = Msg.unkClause
+      unres _ _ (C.CUnres _)  = Msg.unresPrefix
 
-type Cl   a = [B.Token] -> C.ClauseBody -> a
-type Clab a = Cl (B.Ab a)
+type Cl   a  = Int -> [B.Token] -> C.ClauseBody -> a
+type Clab a  = Cl (B.Ab a)
 
 calcContG :: (C.CContent c) => C.Global c -> C.CalcContent c
 calcContG = C.calcContent . C.globalCopset
