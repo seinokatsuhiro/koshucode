@@ -1,15 +1,15 @@
 ** -*- koshu -*-
 
 |-- DIR  /code 15   /comment 4    /dir "base/Koshucode/Baala"
-|-- DIR  /code 150  /comment 65   /dir "base/Koshucode/Baala/Base"
+|-- DIR  /code 154  /comment 71   /dir "base/Koshucode/Baala/Base"
 |-- DIR  /code 95   /comment 52   /dir "base/Koshucode/Baala/Base/Abort"
 |-- DIR  /code 1152  /comment 707  /dir "base/Koshucode/Baala/Base/Data"
 |-- DIR  /code 490  /comment 458  /dir "base/Koshucode/Baala/Base/Prelude"
-|-- DIR  /code 257  /comment 190  /dir "base/Koshucode/Baala/Base/Syntax"
+|-- DIR  /code 261  /comment 192  /dir "base/Koshucode/Baala/Base/Syntax"
 |-- DIR  /code 434  /comment 264  /dir "base/Koshucode/Baala/Base/Text"
-|-- DIR  /code 569  /comment 473  /dir "base/Koshucode/Baala/Base/Token"
+|-- DIR  /code 599  /comment 481  /dir "base/Koshucode/Baala/Base/Token"
 
-|-- DIR-TOTAL  /code 3162  /comment 2213
+|-- DIR-TOTAL  /code 3200  /comment 2229
 
 |-- FILE  /code 15   /comment 4    /file "Base.hs"        /dir "base/Koshucode/Baala"
 |-- FILE  /code 9    /comment 6    /file "Abort.hs"       /dir "base/Koshucode/Baala/Base"
@@ -28,7 +28,7 @@
 |-- FILE  /code 45   /comment 58   /file "Rel.hs"         /dir "base/Koshucode/Baala/Base/Data"
 |-- FILE  /code 179  /comment 107  /file "Time.hs"        /dir "base/Koshucode/Baala/Base/Data"
 |-- FILE  /code 135  /comment 91   /file "Type.hs"        /dir "base/Koshucode/Baala/Base/Data"
-|-- FILE  /code 57   /comment 36   /file "Message.hs"     /dir "base/Koshucode/Baala/Base"
+|-- FILE  /code 63   /comment 42   /file "Message.hs"     /dir "base/Koshucode/Baala/Base"
 |-- FILE  /code 17   /comment 3    /file "Prelude.hs"     /dir "base/Koshucode/Baala/Base"
 |-- FILE  /code 123  /comment 144  /file "Assoc.hs"       /dir "base/Koshucode/Baala/Base/Prelude"
 |-- FILE  /code 32   /comment 20   /file "Class.hs"       /dir "base/Koshucode/Baala/Base/Prelude"
@@ -38,13 +38,13 @@
 |-- FILE  /code 32   /comment 11   /file "Pair.hs"        /dir "base/Koshucode/Baala/Base/Prelude"
 |-- FILE  /code 68   /comment 107  /file "Snip.hs"        /dir "base/Koshucode/Baala/Base/Prelude"
 |-- FILE  /code 11   /comment 6    /file "Syntax.hs"      /dir "base/Koshucode/Baala/Base"
-|-- FILE  /code 75   /comment 50   /file "Code.hs"        /dir "base/Koshucode/Baala/Base/Syntax"
+|-- FILE  /code 79   /comment 52   /file "Code.hs"        /dir "base/Koshucode/Baala/Base/Syntax"
 |-- FILE  /code 68   /comment 50   /file "Infix.hs"       /dir "base/Koshucode/Baala/Base/Syntax"
 |-- FILE  /code 20   /comment 14   /file "Line.hs"        /dir "base/Koshucode/Baala/Base/Syntax"
 |-- FILE  /code 94   /comment 76   /file "Tree.hs"        /dir "base/Koshucode/Baala/Base/Syntax"
-|-- FILE  /code 16   /comment 3    /file "Text.hs"        /dir "base/Koshucode/Baala/Base"
+|-- FILE  /code 14   /comment 3    /file "Text.hs"        /dir "base/Koshucode/Baala/Base"
 |-- FILE  /code 36   /comment 24   /file "Comment.hs"     /dir "base/Koshucode/Baala/Base/Text"
-|-- FILE  /code 96   /comment 47   /file "Resource.hs"    /dir "base/Koshucode/Baala/Base/Text"
+|-- FILE  /code 96   /comment 47   /file "Source.hs"      /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /code 124  /comment 57   /file "TextTable.hs"   /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /code 65   /comment 14   /file "Unicode.hs"     /dir "base/Koshucode/Baala/Base/Text"
 |-- FILE  /code 47   /comment 41   /file "Utility.hs"     /dir "base/Koshucode/Baala/Base/Text"
@@ -54,7 +54,7 @@
 |-- FILE  /code 49   /comment 31   /file "Short.hs"       /dir "base/Koshucode/Baala/Base/Token"
 |-- FILE  /code 150  /comment 94   /file "Token.hs"       /dir "base/Koshucode/Baala/Base/Token"
 |-- FILE  /code 36   /comment 14   /file "TokenClause.hs"  /dir "base/Koshucode/Baala/Base/Token"
-|-- FILE  /code 185  /comment 172  /file "TokenLine.hs"   /dir "base/Koshucode/Baala/Base/Token"
+|-- FILE  /code 215  /comment 180  /file "TokenLine.hs"   /dir "base/Koshucode/Baala/Base/Token"
 |-- FILE  /code 96   /comment 90   /file "TokenTree.hs"   /dir "base/Koshucode/Baala/Base/Token"
 
-|-- FILE-TOTAL  /code 3162  /comment 2213
+|-- FILE-TOTAL  /code 3200  /comment 2229
