@@ -3,7 +3,7 @@
 
 -- | Resource as bundle of relational expressions.
 
-module Koshucode.Baala.Core.Section.Resource
+module Koshucode.Baala.Core.Resource.Resource
   (
     -- * Data type
     Resource (..),
@@ -21,13 +21,13 @@ module Koshucode.Baala.Core.Section.Resource
     -- $Process
   ) where
 
-import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Core.Content         as C
-import qualified Koshucode.Baala.Core.Lexmap          as C
-import qualified Koshucode.Baala.Core.Relmap          as C
-import qualified Koshucode.Baala.Core.Assert          as C
-import qualified Koshucode.Baala.Core.Section.Clause  as C
-import qualified Koshucode.Baala.Core.Message         as Msg
+import qualified Koshucode.Baala.Base                  as B
+import qualified Koshucode.Baala.Core.Content          as C
+import qualified Koshucode.Baala.Core.Lexmap           as C
+import qualified Koshucode.Baala.Core.Relmap           as C
+import qualified Koshucode.Baala.Core.Assert           as C
+import qualified Koshucode.Baala.Core.Resource.Clause  as C
+import qualified Koshucode.Baala.Core.Message          as Msg
 
 
 

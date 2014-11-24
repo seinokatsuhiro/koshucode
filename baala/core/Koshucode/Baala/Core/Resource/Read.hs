@@ -2,7 +2,7 @@
 
 -- | Read source as resource.
 
-module Koshucode.Baala.Core.Section.Read
+module Koshucode.Baala.Core.Resource.Read
   ( -- * Resource
     readResource,
     readResourceText,
@@ -13,12 +13,12 @@ module Koshucode.Baala.Core.Section.Read
     bundleRead,
   ) where
 
-import qualified System.Directory                      as Dir
-import qualified Koshucode.Baala.Base                  as B
-import qualified Koshucode.Baala.Core.Content          as C
-import qualified Koshucode.Baala.Core.Section.Resource as C
-import qualified Koshucode.Baala.Core.Section.Clause   as C
-import qualified Koshucode.Baala.Core.Message          as Msg
+import qualified System.Directory                       as Dir
+import qualified Koshucode.Baala.Base                   as B
+import qualified Koshucode.Baala.Core.Content           as C
+import qualified Koshucode.Baala.Core.Resource.Resource as C
+import qualified Koshucode.Baala.Core.Resource.Clause   as C
+import qualified Koshucode.Baala.Core.Message           as Msg
 
 
 -- ----------------------  Resource

@@ -3,7 +3,7 @@
 
 -- | Intermidiate structure between 'String' and 'Resource'.
 
-module Koshucode.Baala.Core.Section.Clause
+module Koshucode.Baala.Core.Resource.Clause
   ( -- * Data type
     -- $Documentation
     ShortClause,
@@ -49,7 +49,7 @@ data ClauseBody
 instance B.CodePtr Clause where
     codePts (Clause src _ _) = B.codePts src
 
--- | Name of clause type. e.g., @\"Relmap\"@, @\"Assert\"@.
+-- | Name of clause type. e.g., @\"relmap\"@, @\"assert\"@.
 clauseTypeText :: Clause -> String
 clauseTypeText (Clause _ _ body) =
     case body of

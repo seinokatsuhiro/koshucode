@@ -2,17 +2,17 @@
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Run resource.
-module Koshucode.Baala.Core.Section.Run
+module Koshucode.Baala.Core.Resource.Run
   ( runResource,
   ) where
 
-import qualified Koshucode.Baala.Base                  as B
-import qualified Koshucode.Baala.Core.Content          as C
-import qualified Koshucode.Baala.Core.Lexmap           as C
-import qualified Koshucode.Baala.Core.Relmap           as C
-import qualified Koshucode.Baala.Core.Assert           as C
-import qualified Koshucode.Baala.Core.Section.Resource as C
-import qualified Koshucode.Baala.Core.Message          as Msg
+import qualified Koshucode.Baala.Base                   as B
+import qualified Koshucode.Baala.Core.Content           as C
+import qualified Koshucode.Baala.Core.Lexmap            as C
+import qualified Koshucode.Baala.Core.Relmap            as C
+import qualified Koshucode.Baala.Core.Assert            as C
+import qualified Koshucode.Baala.Core.Resource.Resource as C
+import qualified Koshucode.Baala.Core.Message           as Msg
 
 runResource :: (C.CContent c) => C.Global c -> C.Resource c -> B.Ab (B.OutputResult c)
 runResource global sect =

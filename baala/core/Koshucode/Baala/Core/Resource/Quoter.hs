@@ -3,7 +3,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS_GHC -Wall -fno-warn-missing-fields #-}
 
-module Koshucode.Baala.Core.Section.Quoter
+module Koshucode.Baala.Core.Resource.Quoter
   ( koshuQuoter,
     TH.QuasiQuoter,
   ) where
@@ -12,17 +12,17 @@ import Data.Generics
 import qualified Language.Haskell.TH       as TH
 import qualified Language.Haskell.TH.Quote as TH
 
-import qualified Koshucode.Baala.Base                  as B
-import qualified Koshucode.Baala.Core.Lexmap           as C
-import qualified Koshucode.Baala.Core.Section.Clause   as C
-import qualified Koshucode.Baala.Core.Section.Resource as C
+import qualified Koshucode.Baala.Base                   as B
+import qualified Koshucode.Baala.Core.Lexmap            as C
+import qualified Koshucode.Baala.Core.Resource.Clause   as C
+import qualified Koshucode.Baala.Core.Resource.Resource as C
 
 {-| Make quasiquoter for @[koshu| ... |]@. -}
 koshuQuoter
     :: C.ConsLexmap     -- ^ Relmap lex constructor
     -> TH.ExpQ          -- ^ Quotation expression of 'ConsRelmap'
     -> TH.QuasiQuoter   -- ^ Quoter that outputs
-                        --  'Koshucode.Baala.Core.Section.Resource' or
+                        --  'Koshucode.Baala.Core.Resource.Resource' or
                         --  'Koshucode.Baala.Core.Relmap.Relmap'
 koshuQuoter lx fullQ = TH.QuasiQuoter { TH.quoteExp = koshuQ lx fullQ }
 
@@ -30,16 +30,16 @@ koshuQ :: C.ConsLexmap -> TH.ExpQ -> String -> TH.ExpQ
 koshuQ _ fullQ text =
     dispatch $ B.tokenLines (B.sourceOf text) text
     where
-      dispatch src = sectionQ src -- relmapQ src
-      sectionQ = consResourceQ fullQ . {- C.consClause -} undefined
+      dispatch src = resQ src -- relmapQ src
+      resQ = consResourceQ fullQ . {- C.consClause -} undefined
       --relmapQ  = consFullRelmapQ fullQ . lx [] . tokenTrees
 
 {- Construct ExpQ of Resource
-   Tokens like @name in section context and relmap context
+   Tokens like @name in resource context and relmap context
    are Haskell variables. -}
 consResourceQ
     :: TH.ExpQ      -- ^ Quotation expression of 'ConsRelmap'
-    -> [C.Clause]   -- ^ Materials of section
+    -> [C.Clause]   -- ^ Materials of resource
     -> TH.ExpQ      -- ^ ExpQ of 'Resource'
 consResourceQ fullQ xs =
     [| either consError id

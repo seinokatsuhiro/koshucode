@@ -3,23 +3,23 @@
 -- | Runtime structure for calculations written in Koshucode.
 --   'Resource' is bundle of calculation stuff.  
 
-module Koshucode.Baala.Core.Section
+module Koshucode.Baala.Core.Resource
   ( -- * Modules
-    module Koshucode.Baala.Core.Section.Clause,
-    module Koshucode.Baala.Core.Section.Quoter,
-    module Koshucode.Baala.Core.Section.Read,
-    module Koshucode.Baala.Core.Section.Run,
-    module Koshucode.Baala.Core.Section.Resource,
+    module Koshucode.Baala.Core.Resource.Clause,
+    module Koshucode.Baala.Core.Resource.Quoter,
+    module Koshucode.Baala.Core.Resource.Read,
+    module Koshucode.Baala.Core.Resource.Run,
+    module Koshucode.Baala.Core.Resource.Resource,
   
     -- * Data dependencies
     -- $DataDependency
   ) where
 
-import Koshucode.Baala.Core.Section.Clause
-import Koshucode.Baala.Core.Section.Quoter
-import Koshucode.Baala.Core.Section.Read
-import Koshucode.Baala.Core.Section.Run
-import Koshucode.Baala.Core.Section.Resource
+import Koshucode.Baala.Core.Resource.Clause
+import Koshucode.Baala.Core.Resource.Quoter
+import Koshucode.Baala.Core.Resource.Read
+import Koshucode.Baala.Core.Resource.Run
+import Koshucode.Baala.Core.Resource.Resource
 
 
 -- ----------------------

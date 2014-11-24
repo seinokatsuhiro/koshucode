@@ -1,35 +1,34 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Core
-(
--- * Modules
-module Koshucode.Baala.Core.Assert,
-module Koshucode.Baala.Core.Content,
-module Koshucode.Baala.Core.Lexmap,
-module Koshucode.Baala.Core.Relmap,
-module Koshucode.Baala.Core.Section,
-
--- * Dependencies
--- $ModuleDependency
-) where
+  ( -- * Modules
+    module Koshucode.Baala.Core.Assert,
+    module Koshucode.Baala.Core.Content,
+    module Koshucode.Baala.Core.Lexmap,
+    module Koshucode.Baala.Core.Relmap,
+    module Koshucode.Baala.Core.Resource,
+  
+    -- * Dependencies
+    -- $ModuleDependency
+  ) where
 
 import Koshucode.Baala.Core.Assert
 import Koshucode.Baala.Core.Content
 import Koshucode.Baala.Core.Lexmap
 import Koshucode.Baala.Core.Relmap
-import Koshucode.Baala.Core.Section
+import Koshucode.Baala.Core.Resource
 
 
 -- ----------------------
 -- $ModuleDependency
 --
 -- * @[Core]@ module is a union of
---   @Section@,
+--   @Resource@,
 --   @Assert@,
 --   @Relmap@, and
 --   @Content@ modules.
 --
--- * @Section@ module uses
+-- * @Resource@ module uses
 --   @Assert@,
 --   @Relmap@,
 --   @Content@, and
@@ -72,7 +71,7 @@ import Koshucode.Baala.Core.Section
 -- @
 --      [Core]             [Base]
 --        |                /    \\
---      Section           /     Abort
+--     Resource           /     Abort
 --        |              /        |
 --      Assert          Data    Token
 --        |              \\        |

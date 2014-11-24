@@ -109,7 +109,7 @@ litRel lit cs =
 
 -- | Convert token trees into a judge.
 --   Judges itself are not content type.
---   It can be only used in the top-level of sections.
+--   It can be only used in the top-level of resources.
 treesToJudge :: (C.CContent c) => CalcContent c -> Char -> B.JudgePat -> B.TTreesToAb (B.Judge c)
 treesToJudge calc q p = Right . symbol q p B.<=< litAssn (literal calc) where
     symbol :: Char -> B.JudgeOf c
