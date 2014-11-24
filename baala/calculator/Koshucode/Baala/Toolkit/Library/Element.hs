@@ -13,11 +13,11 @@ infixr 0 -:-
 (-:-) = (,)
 
 -- | Retrive constituents of sections.
-sectionElem :: (C.CContent c) => C.Section c -> [B.Judge c]
+sectionElem :: (C.CContent c) => C.Resource c -> [B.Judge c]
 sectionElem sec = map res js where
-    res = B.judgeCons ("/res" -:- C.pText $ B.sourceText $ C.secSource sec)
-    js  = concat [ elemJudge       $ C.secJudge  sec
-                 , elemAssert      $ concatMap B.shortBody $ C.secAssert sec
+    res = B.judgeCons ("/res" -:- C.pText $ B.sourceText $ C.resSource sec)
+    js  = concat [ elemJudge       $ C.resJudge  sec
+                 , elemAssert      $ concatMap B.shortBody $ C.resAssert sec
                  , elemNamedRelmap [] ]
 
 elemJudge :: (C.CContent c) => B.Map [B.Judge c]

@@ -37,6 +37,6 @@ readJudge :: String -> [B.Judge Type.VContent]
 readJudge src =
     let root = C.emptySection :: C.Section Type.VContent
     in case C.readSectionText root src of
-         Right sec -> C.secJudge sec
-         Left _    -> []
+         Right sec  -> C.resJudge sec
+         Left _     -> []
 

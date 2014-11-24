@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
--- | Intermidiate structure between 'String' and 'Section'.
+-- | Intermidiate structure between 'String' and 'Resource'.
 
 module Koshucode.Baala.Core.Section.Clause
   ( -- * Data type
@@ -34,7 +34,7 @@ data Clause =
 
 data ClauseBody
     = CSection    String                         -- ^ Section heading
-    | CImport     [B.Token] (Maybe Clause)       -- ^ Importing section name
+    | CImport     [B.Token] (Maybe Clause)       -- ^ Importing reosurce name
     | CExport     String                         -- ^ Exporting relmap name
     | CShort      [B.ShortDef]                   -- ^ Short signs
     | CRelmap     String [B.Token]               -- ^ Source of relmap
@@ -85,7 +85,7 @@ clauseTypeText (Clause _ _ body) =
 --                , TTerm 11 ["/y"]
 --                ]]
 
--- | First step of constructing 'Section'.
+-- | First step of constructing 'Resource'.
 consClause :: [B.TokenLine] -> [ShortClause]
 consClause = shortClause . consPreclause
 
@@ -246,8 +246,8 @@ shortToLong sh = map clause where
 -- $Documentation
 --
 --  There are eight types of 'Clause'.
---  Textual representation of 'Section' is a list of clauses.
---  'consClause' constructs clause list from section text.
+--  Textual representation of 'Resource' is a list of clauses.
+--  'consClause' constructs clause list from resource text.
 --
 --  [@short@ prefix full ...]
 --    Clause for declarations of short signs

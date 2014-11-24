@@ -1,21 +1,21 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall -fno-warn-incomplete-patterns #-}
 
--- | Section as bundle of relational expressions.
+-- | Resource as bundle of relational expressions.
 
-module Koshucode.Baala.Core.Section.Section
+module Koshucode.Baala.Core.Section.Resource
   (
     -- * Data type
-    Section (..),
+    Resource (..),
     coxBuildG,
     addMessage,
     addMessages,
   
     -- * Constructors
-    emptySection,
-    rootSection,
-    consSection,
-    concatSection,
+    emptyResource,
+    rootResource,
+    consResource,
+    concatResource,
   
     -- * Process
     -- $Process
@@ -33,66 +33,64 @@ import qualified Koshucode.Baala.Core.Message         as Msg
 
 -- ----------------------  Data type
 
-data Section c = Section {
-      secName     :: Maybe String        -- ^ Section name
-    , secGlobal   :: C.Global c          -- ^ Global parameter
-    , secImport   :: [Section c]         -- ^ Importing section
-    , secExport   :: [String]            -- ^ Exporting relmap names
-    , secSlot     :: [B.NamedTrees]      -- ^ Global slots
-    , secRelmap   :: [C.RelmapSource]    -- ^ Source of relmaps
-    , secAssert   :: [C.ShortAssert c]   -- ^ Assertions of relmaps
-    , secJudge    :: [B.Judge c]         -- ^ Affirmative or denial judgements
-    , secSource   :: B.Source            -- ^ Source name
-    , secCons     :: C.RelmapCons c      -- ^ Relmap constructor for this section
-    , secMessage  :: [String]            -- ^ Collection of messages
+data Resource c = Resource {
+      resGlobal   :: C.Global c          -- ^ Global parameter
+    , resImport   :: [Resource c]        -- ^ Importing resources
+    , resExport   :: [String]            -- ^ Exporting names
+    , resSlot     :: [B.NamedTrees]      -- ^ Global slots
+    , resRelmap   :: [C.RelmapSource]    -- ^ Source of relmaps
+    , resAssert   :: [C.ShortAssert c]   -- ^ Assertions of relmaps
+    , resJudge    :: [B.Judge c]         -- ^ Affirmative or denial judgements
+    , resSource   :: B.Source            -- ^ Source name
+    , resCons     :: C.RelmapCons c      -- ^ Relmap constructor for this resource
+    , resMessage  :: [String]            -- ^ Collection of messages
     } deriving (Show)
 
-addMessage :: String -> B.Map (Section c)
-addMessage msg sec = sec { secMessage = msg : secMessage sec }
+addMessage :: String -> B.Map (Resource c)
+addMessage msg res = res { resMessage = msg : resMessage res }
 
-addMessages :: [String] -> B.Map (Section c)
-addMessages msg sec = sec { secMessage = msg ++ secMessage sec }
+addMessages :: [String] -> B.Map (Resource c)
+addMessages msg res = res { resMessage = msg ++ resMessage res }
 
--- | Section that has no contents.
-emptySection :: Section c
-emptySection = Section Nothing C.global [] [] [] [] [] [] B.sourceZero cons [] where
+-- | Resource that has no contents.
+emptyResource :: Resource c
+emptyResource = Resource C.global [] [] [] [] [] [] B.sourceZero cons [] where
     cons = C.relmapCons C.global
 
--- | Construct root section from global parameter.
-rootSection :: C.Global c -> Section c
-rootSection g = emptySection { secGlobal = g
-                             , secCons   = C.relmapCons g }
+-- | Construct root resource from global parameter.
+rootResource :: C.Global c -> Resource c
+rootResource g = emptyResource { resGlobal  = g
+                               , resCons    = C.relmapCons g }
 
--- | Concatenate sections into united section.
-concatSection :: Section c -> [Section c] -> Section c
-concatSection root ss =
-    root { secName    =  Nothing
-         , secImport  =  []
-         , secExport  =  c secExport
-         , secSlot    =  c secSlot
-         , secAssert  =  c secAssert
-         , secRelmap  =  c secRelmap
-         , secJudge   =  c secJudge
+-- | Concatenate resources into united resource.
+concatResource :: Resource c -> [Resource c] -> Resource c
+concatResource root ss =
+    root { resImport  =  []
+         , resExport  =  c resExport
+         , resSlot    =  c resSlot
+         , resAssert  =  c resAssert
+         , resRelmap  =  c resRelmap
+         , resJudge   =  c resJudge
          } where c = (`concatMap` ss)
 
 
 
 -- ----------------------  Construction
 
--- | Second step of constructing 'Section'.
-consSection
+-- | Second step of constructing 'Resource'.
+consResource
     :: forall c. (C.CContent c)
-    => Section c          -- ^ Root section
-    -> B.Source           -- ^ Source name
-    -> [C.ShortClause]    -- ^ Output of 'C.consClause'
-    -> B.Ab (Section c)   -- ^ Result section
-consSection root source xss =
-    do sects <- consSectionEach root source `mapM` xss
-       Right $ concatSection root sects
+    => Resource c          -- ^ Root resource
+    -> B.Source            -- ^ Source name
+    -> [C.ShortClause]     -- ^ Output of 'C.consClause'
+    -> B.Ab (Resource c)   -- ^ Result resource
+consResource root source xss =
+    do rs <- consResourceEach root source `mapM` xss
+       Right $ concatResource root rs
 
-consSectionEach :: forall c. (C.CContent c) =>
-    Section c -> B.Source -> C.ShortClause -> B.Ab (Section c)
-consSectionEach root source (B.Short pt shorts xs) =
+consResourceEach :: forall c. (C.CContent c) =>
+    Resource c -> B.Source -> C.ShortClause -> B.Ab (Resource c)
+consResourceEach root source (B.Short pt shorts xs) =
     do _        <- forM isCUnknown unk
        _        <- forM isCUnres   unres
        imports  <- forM isCImport  impt
@@ -104,33 +102,26 @@ consSectionEach root source (B.Short pt shorts xs) =
        checkShort shorts
 
        Right $ root
-           { secName      = name xs
-           , secImport    = imports
-           , secExport    = for isCExport expt
-           , secSlot      = slots
-           , secRelmap    = relmaps
-           , secAssert    = [B.Short pt shorts asserts]
-           , secJudge     = judges
-           , secSource    = source }
+           { resImport    = imports
+           , resExport    = for isCExport expt
+           , resSlot      = slots
+           , resRelmap    = relmaps
+           , resAssert    = [B.Short pt shorts asserts]
+           , resJudge     = judges
+           , resSource    = source }
     where
       for  isX f = pass     f  `map`  filter (isX . C.clauseBody) xs
       forM isX f = pass (ab f) `mapM` filter (isX . C.clauseBody) xs
 
       pass f (C.Clause src sec body) = f sec (B.front $ B.clauseTokens src) body
-      consSec = consSection root (B.sourceZero)
       ab f sec toks body = Msg.abClause toks $ f sec toks body
-
-      -- todo: multiple section name
-      name ((C.Clause _ _ (C.CSection n)) : _) = Just n
-      name (_ : xs2) = name xs2
-      name [] = Nothing
 
       expt :: Cl String
       expt _ _ (C.CExport n) = n
 
-      impt :: Clab (Section c)
-      impt _ _ (C.CImport _ (Nothing)) = Right emptySection
-      impt _ _ (C.CImport _ (Just _))  = consSec []
+      impt :: Clab (Resource c)
+      impt _ _ (C.CImport _ (Nothing)) = Right emptyResource
+      impt _ _ (C.CImport _ (Just _))  = consResource root B.sourceZero []
 
       slot :: Clab B.NamedTrees
       slot _ _ (C.CSlot n toks) = ntrees (n, toks)
@@ -156,7 +147,7 @@ consSectionEach root source (B.Short pt shorts xs) =
       judge _ _ (C.CJudge q p toks) =
           C.treesToJudge calc q p =<< B.tokenTrees toks
 
-      calc = calcContG $ secGlobal root
+      calc = calcContG $ resGlobal root
 
       assert :: Clab (C.Assert c)
       assert _ src (C.CAssert typ pat opt toks) =
@@ -225,7 +216,7 @@ isCUnres _                     = False
 -- ----------------------
 -- $Process
 --  
---  Section is constructed using following steps.
+--  Resource is constructed using following steps.
 --  
 --  [1. @??? -> String@]
 --      Get string from something.
@@ -242,5 +233,5 @@ isCUnres _                     = False
 --  [5. @\[\[Token\]\] -> \[Clause\]@]
 --      Classify tokens.
 --
---  [6. @\[Clause\] -> Section a@]
---      Make section from list of clauses.
+--  [6. @\[Clause\] -> Resource a@]
+--      Make resource from list of clauses.

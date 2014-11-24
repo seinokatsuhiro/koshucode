@@ -12,17 +12,17 @@ import Data.Generics
 import qualified Language.Haskell.TH       as TH
 import qualified Language.Haskell.TH.Quote as TH
 
-import qualified Koshucode.Baala.Base                 as B
-import qualified Koshucode.Baala.Core.Lexmap          as C
-import qualified Koshucode.Baala.Core.Section.Clause  as C
-import qualified Koshucode.Baala.Core.Section.Section as C
+import qualified Koshucode.Baala.Base                  as B
+import qualified Koshucode.Baala.Core.Lexmap           as C
+import qualified Koshucode.Baala.Core.Section.Clause   as C
+import qualified Koshucode.Baala.Core.Section.Resource as C
 
 {-| Make quasiquoter for @[koshu| ... |]@. -}
 koshuQuoter
     :: C.ConsLexmap     -- ^ Relmap lex constructor
     -> TH.ExpQ          -- ^ Quotation expression of 'ConsRelmap'
     -> TH.QuasiQuoter   -- ^ Quoter that outputs
-                        --  'Koshucode.Baala.Core.Section.Section' or
+                        --  'Koshucode.Baala.Core.Section.Resource' or
                         --  'Koshucode.Baala.Core.Relmap.Relmap'
 koshuQuoter lx fullQ = TH.QuasiQuoter { TH.quoteExp = koshuQ lx fullQ }
 
@@ -31,19 +31,19 @@ koshuQ _ fullQ text =
     dispatch $ B.tokenLines (B.sourceOf text) text
     where
       dispatch src = sectionQ src -- relmapQ src
-      sectionQ = consSectionQ fullQ . {- C.consClause -} undefined
+      sectionQ = consResourceQ fullQ . {- C.consClause -} undefined
       --relmapQ  = consFullRelmapQ fullQ . lx [] . tokenTrees
 
-{- Construct ExpQ of Section
+{- Construct ExpQ of Resource
    Tokens like @name in section context and relmap context
    are Haskell variables. -}
-consSectionQ
+consResourceQ
     :: TH.ExpQ      -- ^ Quotation expression of 'ConsRelmap'
     -> [C.Clause]   -- ^ Materials of section
-    -> TH.ExpQ      -- ^ ExpQ of 'Section'
-consSectionQ fullQ xs =
+    -> TH.ExpQ      -- ^ ExpQ of 'Resource'
+consResourceQ fullQ xs =
     [| either consError id
-         (C.consSection C.emptySection (B.sourceOf "qq")
+         (C.consResource C.emptyResource (B.sourceOf "qq")
                $(TH.dataToExpQ plain xs)) |]
 
 {- construction error -}

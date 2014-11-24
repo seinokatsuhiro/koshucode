@@ -84,7 +84,7 @@ library
         Koshucode.Baala.Core.Section.Read
         Koshucode.Baala.Core.Section.Run
         Koshucode.Baala.Core.Section.Quoter
-        Koshucode.Baala.Core.Section.Section
+        Koshucode.Baala.Core.Section.Resource
 
   -- Modules included in this library but not exported.
   --other-modules:       

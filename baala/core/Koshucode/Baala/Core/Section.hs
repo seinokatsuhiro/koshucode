@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Runtime structure for calculations written in Koshucode.
---   'Section' is bundle of calculation stuff.  
+--   'Resource' is bundle of calculation stuff.  
 
 module Koshucode.Baala.Core.Section
   ( -- * Modules
@@ -9,7 +9,7 @@ module Koshucode.Baala.Core.Section
     module Koshucode.Baala.Core.Section.Quoter,
     module Koshucode.Baala.Core.Section.Read,
     module Koshucode.Baala.Core.Section.Run,
-    module Koshucode.Baala.Core.Section.Section,
+    module Koshucode.Baala.Core.Section.Resource,
   
     -- * Data dependencies
     -- $DataDependency
@@ -19,7 +19,7 @@ import Koshucode.Baala.Core.Section.Clause
 import Koshucode.Baala.Core.Section.Quoter
 import Koshucode.Baala.Core.Section.Read
 import Koshucode.Baala.Core.Section.Run
-import Koshucode.Baala.Core.Section.Section
+import Koshucode.Baala.Core.Section.Resource
 
 
 -- ----------------------
@@ -27,8 +27,8 @@ import Koshucode.Baala.Core.Section.Section
 --
 -- Dependencies of significant data types.
 --
--- * 'Section' uses
---   'Section',
+-- * 'Resource' uses
+--   'Resource',
 --   'Koshucode.Baala.Core.Relmap.Assert',
 --   'Koshucode.Baala.Core.Relmap.Relmap',
 --   'Koshucode.Baala.Base.Data.Judge.Judge' and

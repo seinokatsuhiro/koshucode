@@ -28,7 +28,7 @@ hRunFiles
     :: (C.CContent c)
     => IO.Handle          -- ^ Output file handle
     -> C.Global c         -- ^ Global parameters
-    -> C.SourceBundle c   -- ^ Section source code
+    -> C.SourceBundle c   -- ^ Resource source code
     -> IO Int
 hRunFiles h global bun =
     do abSect <- C.bundleRead bun
@@ -42,7 +42,7 @@ hRunFiles h global bun =
 
        let cmd = C.globalCommandLine global
            js' = do sect <- abSect
-                    C.runSection global sect
+                    C.runResource global sect
 
        case js' of
          Left a   -> B.abort cmd a
@@ -63,13 +63,13 @@ runCalcTo dir cmd bundle =
          Left a    -> B.abort cmd a
          Right sec -> runCalcSec dir (C.bundleRoot bundle) sec
 
-runCalcSec :: (C.CContent c) => String -> C.Section c -> C.Section c -> IO Int
+runCalcSec :: (C.CContent c) => String -> C.Resource c -> C.Resource c -> IO Int
 runCalcSec dir root sec =
-    do let js = C.secJudge sec
+    do let js = C.resJudge sec
        mapM_ (runCalcJudge dir root) js
        return 0
 
-runCalcJudge :: (C.CContent c) => String -> C.Section c -> B.Judge c -> IO Int
+runCalcJudge :: (C.CContent c) => String -> C.Resource c -> B.Judge c -> IO Int
 runCalcJudge dir root (B.JudgeAffirm "KOSHU-CALC" xs) =
     case theContents ["/input", "/output"] xs of
       Just [input, output] ->
@@ -108,12 +108,12 @@ theStrings _               =  []
 
 -- ----------------------  Read
 
-readSec :: (C.CContent c) => C.SourceBundle c -> IO (B.Ab (C.Section c))
+readSec :: (C.CContent c) => C.SourceBundle c -> IO (B.Ab (C.Resource c))
 readSec bun =
     do abSect <- C.bundleRead bun
        return abSect
 
-readSecList :: (C.CContent c) => C.SourceBundle c -> IO (B.Ab [C.Section c])
+readSecList :: (C.CContent c) => C.SourceBundle c -> IO (B.Ab [C.Resource c])
 readSecList bun =
     do abSect <- C.bundleRead bun
        return $ do sect <- abSect
