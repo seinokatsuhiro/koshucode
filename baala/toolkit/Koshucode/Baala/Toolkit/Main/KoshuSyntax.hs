@@ -8,11 +8,10 @@ module Koshucode.Baala.Toolkit.Main.KoshuSyntax
     -- $koshu-syntax.hs
   ) where
 
-import qualified System.Console.GetOpt          as G
-import qualified Koshucode.Baala.Base           as B
-import qualified Koshucode.Baala.Core           as C
-import qualified Koshucode.Baala.Type.Vanilla   as Type
-
+import qualified System.Console.GetOpt                   as G
+import qualified Koshucode.Baala.Base                    as B
+import qualified Koshucode.Baala.Core                    as C
+import qualified Koshucode.Baala.Type.Vanilla            as Type
 import qualified Koshucode.Baala.Toolkit.Library.Exit    as L
 import qualified Koshucode.Baala.Toolkit.Library.Version as L
 
@@ -29,11 +28,11 @@ data Option
 
 koshuSyntaxOptions :: [G.OptDescr Option]
 koshuSyntaxOptions =
-    [ G.Option "h" ["help"]          (G.NoArg OptHelp)       "Print help message."
-    , G.Option "V" ["version"]       (G.NoArg OptVersion)    "Print version number."
+    [ G.Option "h" ["help"]          (G.NoArg OptHelp)         "Print help message."
+    , G.Option "V" ["version"]       (G.NoArg OptVersion)      "Print version number."
     , G.Option ""  ["show-encoding"] (G.NoArg OptShowEncoding) "Show character encoding."
-    , G.Option "i" ["stdin"]         (G.NoArg OptStdin)      "Read from stdin."
-    , G.Option "b" ["omit-blank"]    (G.NoArg OptOmitBlank)  "Omit space and comment tokens."
+    , G.Option "i" ["stdin"]         (G.NoArg OptStdin)        "Read from stdin."
+    , G.Option "b" ["omit-blank"]    (G.NoArg OptOmitBlank)    "Omit space and comment tokens."
     ]
 
 version :: String
@@ -67,8 +66,8 @@ koshuSyntaxMain' (_, argv) =
           | has OptHelp          -> L.putSuccess usage
           | has OptVersion       -> L.putSuccess $ version ++ "\n"
           | has OptShowEncoding  -> L.putSuccess =<< L.currentEncodings
-          | length files == 0    -> B.bug "stdin"
-          | length files == 1    -> dump omit $ head files
+          | has OptStdin         -> dumpStdin omit
+          | length files == 1    -> dumpFile omit $ head files
           | otherwise            -> L.putFailure usage
           where has     = (`elem` opts)
                 omit    = has OptOmitBlank
@@ -78,19 +77,19 @@ koshuSyntaxMain' (_, argv) =
 
 -- ----------------------  Judges
 
-description :: String -> B.CommentDoc
-description path = B.CommentDoc [desc, input, js, interp] where
+description :: FilePath -> B.CommentDoc
+description path = B.CommentDoc [desc, input, js] where
     desc   = B.CommentSec "DESCRIPTION" [ "Clauses and tokens" ]
     input  = B.CommentSec "INPUT" [ path ]
     js     = B.CommentSec "JUDGES"
              [ "|-- CLAUSE /clause /clause-type"
              , "|-- LINE   /clause /line"
-             , "|-- TOKEN  /line /column /token-type /cont" ]
-    interp = B.CommentSec "INTERPRETATION"
-             [ "There is a clause numbered /clause on /line ."
-             , "Type of the clause is /clause-type ."
-             , "There is a token of content /cont at /line and /column ."
-             , "Type of the token is /token-type ." ]
+             , "|-- TOKEN  /line /column /token-type /cont"
+             , ""
+             , "<<< There is a clause numbered /clause on /line ."
+             , "    Type of the clause is /clause-type ."
+             , "    There is a token of content /cont at /line and /column ."
+             , "    Type of the token is /token-type . >>>" ]
 
 judgeClause :: Int -> C.Clause -> B.Judge Type.VContent
 judgeClause clseq c = B.affirm "CLAUSE" args where
@@ -121,6 +120,9 @@ putJudge = putStrLn . judgeText
 judgeText :: (Ord c, B.Write c) => B.Judge c -> String
 judgeText = show . B.write B.shortEmpty
 
+putNewline :: IO ()
+putNewline = putStrLn ""
+
 ab :: (a -> IO b) -> B.Ab a -> IO b
 ab _ (Left a)   = B.abort [] a
 ab f (Right b)  = f b
@@ -128,15 +130,19 @@ ab f (Right b)  = f b
 
 -- ----------------------  Dump
 
-dump :: Bool -> FilePath -> IO ()
-dump omit path = 
-    do code <- readFile path
-       ab f $ B.tokenLines (B.Source 0 $ B.SourceFile path) code
-    where
-      f ts = do let cs = C.consPreclause ts
-                B.putLines $ B.texts $ description path
-                dumpClause omit `mapM_` zip [1 ..] cs
-                putNewline
+dumpFile :: Bool -> FilePath -> IO ()
+dumpFile omit path = dumpCode omit path =<< readFile path
+
+dumpStdin :: Bool -> IO ()
+dumpStdin omit = dumpCode omit "(stdin)" =<< getContents
+
+dumpCode :: Bool -> FilePath -> String -> IO ()
+dumpCode omit path code = 
+    ab f $ B.tokenLines (B.Source 0 $ B.SourceFile path) code
+    where f ts = do let cs = C.consPreclause ts
+                    B.putLines $ B.texts $ description path
+                    dumpClause omit `mapM_` zip [1 ..] cs
+                    putNewline
 
 dumpClause :: Bool -> (Int, C.Clause) -> IO ()
 dumpClause omit (clseq, c) =
@@ -161,9 +167,6 @@ dumpToken omit (B.CodeLine ln _ toks) =
     where
       toks' | omit       = B.omit B.isBlankToken toks
             | otherwise  = toks
-
-putNewline :: IO ()
-putNewline = putStrLn ""
 
 
 -- ----------------------
