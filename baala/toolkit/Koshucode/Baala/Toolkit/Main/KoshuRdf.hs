@@ -3,10 +3,10 @@
 -- | RDF-to-Koshucode converter.
 
 module Koshucode.Baala.Toolkit.Main.KoshuRdf
-( koshuRdfMain
-  -- * koshu-rdf.hs
-  -- $koshu-rdf.hs
-) where
+  ( koshuRdfMain
+    -- * koshu-rdf.hs
+    -- $koshu-rdf.hs
+  ) where
 
 import qualified Data.List                as List
 import qualified Data.Map                 as Map

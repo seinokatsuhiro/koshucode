@@ -3,17 +3,17 @@
 -- | Text enclosed in angle brackets.
 
 module Koshucode.Baala.Base.Token.AngleText
-( 
-  -- ** Functions
-  angleQuote,
-  angleTexts,
-
-  -- ** Examples
-  -- $Angle
-
-  -- ** Keyword table
-  -- $Table
-) where
+  ( 
+    -- ** Functions
+    angleQuote,
+    angleTexts,
+  
+    -- ** Examples
+    -- $Angle
+  
+    -- ** Keyword table
+    -- $Table
+  ) where
 
 import qualified Data.Char                    as Ch
 import qualified Koshucode.Baala.Base.Prelude as B

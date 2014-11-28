@@ -3,24 +3,24 @@
 -- | Text table
 
 module Koshucode.Baala.Base.Text.TextTable
-( -- * Position of contents
-  Position (..),
-  textPos,
-
-  -- * Constructing cells
-  Cell (..),
-
-  textTable,
-  textTableWithHead,
-  textCell,
-  textRuleCell,
-  textBlockCell,
-  textBlockCellPlus,
-
-  -- * Rendering tables
-  alignTable,
-  renderTable,
-) where
+  ( -- * Position of contents
+    Position (..),
+    textPos,
+  
+    -- * Constructing cells
+    Cell (..),
+  
+    textTable,
+    textTableWithHead,
+    textCell,
+    textRuleCell,
+    textBlockCell,
+    textBlockCellPlus,
+  
+    -- * Rendering tables
+    alignTable,
+    renderTable,
+  ) where
 
 import qualified Data.Char as C
 import qualified Data.List as L

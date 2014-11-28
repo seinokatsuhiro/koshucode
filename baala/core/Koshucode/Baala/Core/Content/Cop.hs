@@ -4,15 +4,15 @@
 -- | Term-content operator.
 
 module Koshucode.Baala.Core.Content.Cop
-( -- * Operator
-  Cop (..), CopCox, CopTree, copName, 
-
-  -- * Operator name
-  copNormal, copInternal, copPrefix, copInfix, copPostfix,
-
-  -- * Operator set
-  CopSet (..), CopFind, copset, copsetFill,
-) where
+  ( -- * Operator
+    Cop (..), CopCox, CopTree, copName, 
+  
+    -- * Operator name
+    copNormal, copInternal, copPrefix, copInfix, copPostfix,
+  
+    -- * Operator set
+    CopSet (..), CopFind, copset, copsetFill,
+  ) where
 
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Core.Content.Cox  as C

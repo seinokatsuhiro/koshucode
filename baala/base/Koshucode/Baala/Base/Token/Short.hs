@@ -2,16 +2,16 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Token.Short
-( -- * Data type
-  Short (..), ShortDef,
-
-  -- * Utility
-  shortTrim, shortM, shortListM,
-
-  -- * Shortener
-  shortEmpty, shortText,
-  isCodeText, isCodeChar,
-) where
+  ( -- * Data type
+    Short (..), ShortDef,
+  
+    -- * Utility
+    shortTrim, shortM, shortListM,
+  
+    -- * Shortener
+    shortEmpty, shortText,
+    isCodeText, isCodeChar,
+  ) where
 
 import qualified Data.List                             as L
 import qualified Koshucode.Baala.Base.Prelude          as B

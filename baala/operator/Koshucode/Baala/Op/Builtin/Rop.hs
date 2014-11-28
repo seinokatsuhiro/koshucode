@@ -3,11 +3,11 @@
 -- | Built-in relmap operator.
 
 module Koshucode.Baala.Op.Builtin.Rop
-( ropsBuiltin,
-  -- * id
-  consId, relmapId,
-  -- $id
-) where
+  ( ropsBuiltin,
+    -- * id
+    consId, relmapId,
+    -- $id
+  ) where
 
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Core              as C

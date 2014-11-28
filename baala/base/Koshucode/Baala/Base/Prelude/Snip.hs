@@ -3,23 +3,23 @@
 -- | Snipping elements.
 
 module Koshucode.Baala.Base.Prelude.Snip
-( -- * Type
-  Snip, SnipPair, Bin,
-
-  -- * Function
-  snipFull, snipIndex, snipPair,
-  snipBoth, snipFrom, snipOff,
-  -- $FunctionExample
-
-  -- * Derivative
-  snipFore, snipFore2,
-  snipLeft, snipShare, snipRight,
-  snipOrder,
-  sameLength, notSameLength,
-  operand,
-  -- $DerivativeExample
-
-) where
+  ( -- * Type
+    Snip, SnipPair, Bin,
+  
+    -- * Function
+    snipFull, snipIndex, snipPair,
+    snipBoth, snipFrom, snipOff,
+    -- $FunctionExample
+  
+    -- * Derivative
+    snipFore, snipFore2,
+    snipLeft, snipShare, snipRight,
+    snipOrder,
+    sameLength, notSameLength,
+    operand,
+    -- $DerivativeExample
+  
+  ) where
 
 import qualified Data.List as List
 import qualified Koshucode.Baala.Base.Prelude.Import as B

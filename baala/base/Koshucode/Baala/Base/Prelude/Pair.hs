@@ -1,12 +1,12 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Prelude.Pair
-( mapFst, mapSnd,
-  cons1,
-  mapFstTo, mapSndTo,
-  maybePairs,
-  sequenceFst, sequenceSnd,
-) where
+  ( mapFst, mapSnd,
+    cons1,
+    mapFstTo, mapSndTo,
+    maybePairs,
+    sequenceFst, sequenceSnd,
+  ) where
 
 import qualified Control.Applicative as A
 

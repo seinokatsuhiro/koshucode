@@ -3,9 +3,9 @@
 -- | Content operators.
 
 module Koshucode.Baala.Op.Cop.Order
-( copsOrder
-  -- $Operators
-) where
+  ( copsOrder
+    -- $Operators
+  ) where
 
 import qualified Koshucode.Baala.Base               as B
 import qualified Koshucode.Baala.Core               as C

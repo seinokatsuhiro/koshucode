@@ -4,9 +4,9 @@
 -- | Slot substitution.
 
 module Koshucode.Baala.Core.Lexmap.Slot
-( GlobalSlot,
-  substSlot,
-) where
+  ( GlobalSlot,
+    substSlot,
+  ) where
 
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Core.Lexmap.Attribute  as C

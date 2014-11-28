@@ -4,11 +4,11 @@
 -- | Mapping from attributes to attributes, aka., attribute editor.
 
 module Koshucode.Baala.Core.Lexmap.Roamap
-( Roamap,
-  RoamapBody (..),
-  roamapCons,
-  roamapRun,
-) where
+  ( Roamap,
+    RoamapBody (..),
+    roamapCons,
+    roamapRun,
+  ) where
 
 import qualified Data.Generics                          as G
 import qualified Koshucode.Baala.Base                   as B

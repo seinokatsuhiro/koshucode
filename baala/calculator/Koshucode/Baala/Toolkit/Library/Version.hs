@@ -3,9 +3,9 @@
 -- When you use ghci, please :set -idist/build/autogen
 
 module Koshucode.Baala.Toolkit.Library.Version
-( version,
-  versionString,
-) where
+  ( version,
+    versionString,
+  ) where
 
 import qualified Data.Version as V
 import qualified Paths_koshucode_baala_calculator as V

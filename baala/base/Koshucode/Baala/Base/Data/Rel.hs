@@ -3,17 +3,17 @@
 -- | Relation type
 
 module Koshucode.Baala.Base.Data.Rel
-( -- * Data type
-  Rel (..),
-  Body,
-  relSort,
-
-  -- * Constant
-  reldum,
-  reldee,
-  reldau,
-  -- $Constant
-) where
+  ( -- * Data type
+    Rel (..),
+    Body,
+    relSort,
+  
+    -- * Constant
+    reldum,
+    reldee,
+    reldau,
+    -- $Constant
+  ) where
 
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B

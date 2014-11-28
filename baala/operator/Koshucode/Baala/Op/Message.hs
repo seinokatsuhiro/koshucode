@@ -1,27 +1,27 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.Message
-( -- * Core package
-  module Koshucode.Baala.Core.Message,
-
-  -- * Op package
-  checkTerm,
-  diffHead,
-  dupTerm,
-  dumpCox,
-  dumpRel,
-  dumpTrees,
-  noAttr,
-  notNestRel,
-  oddAttr,
-  reqBool,
-  reqRel,
-  reqCollection,
-  reqInterp,
-  reqNewTerm,
-  reqUnaryFn,
-  unexpTermName,
-) where
+  ( -- * Core package
+    module Koshucode.Baala.Core.Message,
+  
+    -- * Op package
+    checkTerm,
+    diffHead,
+    dupTerm,
+    dumpCox,
+    dumpRel,
+    dumpTrees,
+    noAttr,
+    notNestRel,
+    oddAttr,
+    reqBool,
+    reqRel,
+    reqCollection,
+    reqInterp,
+    reqNewTerm,
+    reqUnaryFn,
+    unexpTermName,
+  ) where
 
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C

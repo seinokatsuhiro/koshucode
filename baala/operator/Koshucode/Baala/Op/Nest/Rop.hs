@@ -3,8 +3,8 @@
 -- | Relational operators for nested relations.
 
 module Koshucode.Baala.Op.Nest.Rop
-( ropsNest,
-) where
+  ( ropsNest,
+  ) where
 
 import qualified Koshucode.Baala.Core               as C
 import qualified Koshucode.Baala.Op.Builtin         as Op

@@ -1,11 +1,11 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Text.Unicode
-( GeneralCategoryGroup (..),
-  generalCategoryLetter,
-  generalCategoryName,
-  generalCategoryGroup,
-) where
+  ( GeneralCategoryGroup (..),
+    generalCategoryLetter,
+    generalCategoryName,
+    generalCategoryGroup,
+  ) where
 
 import Data.Char
 

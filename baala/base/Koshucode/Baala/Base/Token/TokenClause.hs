@@ -2,9 +2,9 @@
 {-# OPTIONS_GHC -Wall -fno-warn-orphans #-}
 
 module Koshucode.Baala.Base.Token.TokenClause
-( TokenClause,
-  tokenClauses,
-) where
+  ( TokenClause,
+    tokenClauses,
+  ) where
 
 import qualified Koshucode.Baala.Base.Prelude         as B
 import qualified Koshucode.Baala.Base.Syntax          as B

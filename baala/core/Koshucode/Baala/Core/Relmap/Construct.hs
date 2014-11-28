@@ -3,30 +3,30 @@
 -- | Operations on 'C.Relmap'.
 
 module Koshucode.Baala.Core.Relmap.Construct
-(  -- * Generic relmap
-  RelmapCons (..),
-  ConsRelmap,
-  relmapCons,
-
-  -- * Constructor
-  relmapSource,
-  relmapConst,
-  relmapFlow,
-  relmapGlobal,
-  relmapBinary,
-  relmapConfl,
-  relmapCopy,
-  relmapWith,
-  relmapWithVar,
-  relmapLink,
-
-  -- * Select from relmap
-  relmapSourceList,
-  relmapNameList,
-
-  -- * Append relmaps
-  -- $AppendRelmaps
-) where
+  (  -- * Generic relmap
+    RelmapCons (..),
+    ConsRelmap,
+    relmapCons,
+  
+    -- * Constructor
+    relmapSource,
+    relmapConst,
+    relmapFlow,
+    relmapGlobal,
+    relmapBinary,
+    relmapConfl,
+    relmapCopy,
+    relmapWith,
+    relmapWithVar,
+    relmapLink,
+  
+    -- * Select from relmap
+    relmapSourceList,
+    relmapNameList,
+  
+    -- * Append relmaps
+    -- $AppendRelmaps
+  ) where
 
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Core.Lexmap           as C

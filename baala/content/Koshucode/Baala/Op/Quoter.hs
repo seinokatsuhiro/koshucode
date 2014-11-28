@@ -4,8 +4,8 @@
 -- | Quasiquoter of Koshucode
 
 module Koshucode.Baala.Op.Quoter
-( koshu
-) where
+  ( koshu
+  ) where
 
 import qualified Koshucode.Baala.Core         as C
 import qualified Koshucode.Baala.Type.Vanilla as Type

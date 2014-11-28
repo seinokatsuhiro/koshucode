@@ -3,38 +3,38 @@
 -- | Utilities for association lists.
 
 module Koshucode.Baala.Base.Prelude.Assoc
-( -- * Association list
-  Lookup,
-  assocBy,
-  assocExist,
-  namedMapM,
-  lookupBy,
-  lookupSatisfy,
-  assocFinder,
-  -- $Assoc
-
-  -- * Tuple-like operator
-  assocPick,
-  assocCut,
-  assocCut1,
-  assocRename1,
-  assocRehead,
-  -- $TupleLike
-
-  -- * Once/more list
-  OnceMore (..),
-  assocGather,
-  assocPush,
-  assocOnce,
-  assocMore,
-  -- $OnceMore
-
-  -- * Gather
-  Gather,
-  gather,
-  gatherWith,
-  gatherToMap,
-) where
+  ( -- * Association list
+    Lookup,
+    assocBy,
+    assocExist,
+    namedMapM,
+    lookupBy,
+    lookupSatisfy,
+    assocFinder,
+    -- $Assoc
+  
+    -- * Tuple-like operator
+    assocPick,
+    assocCut,
+    assocCut1,
+    assocRename1,
+    assocRehead,
+    -- $TupleLike
+  
+    -- * Once/more list
+    OnceMore (..),
+    assocGather,
+    assocPush,
+    assocOnce,
+    assocMore,
+    -- $OnceMore
+  
+    -- * Gather
+    Gather,
+    gather,
+    gatherWith,
+    gatherToMap,
+  ) where
 
 import qualified Data.Map   as Map
 import qualified Data.Maybe as Maybe

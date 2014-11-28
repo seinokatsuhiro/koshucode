@@ -2,20 +2,20 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.Control
-( ropsControl,
-
-  -- * if
-  consIf, relmapIf, relkitIf,
-
-  -- * when & unless
-  consWhen, consUnless,
-
-  -- * fix & fix-join
-  consFix, consFixJoin,
-
-  -- * equal
-  consEqual, relmapEqual, relkitEqual,
-) where
+  ( ropsControl,
+  
+    -- * if
+    consIf, relmapIf, relkitIf,
+  
+    -- * when & unless
+    consWhen, consUnless,
+  
+    -- * fix & fix-join
+    consFix, consFixJoin,
+  
+    -- * equal
+    consEqual, relmapEqual, relkitEqual,
+  ) where
 
 import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Core       as C

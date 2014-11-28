@@ -4,8 +4,8 @@
 -- | Running relational calculation.
 
 module Koshucode.Baala.Core.Assert.Run
-( runAssertJudges,
-) where
+  ( runAssertJudges,
+  ) where
 
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Core.Content         as C

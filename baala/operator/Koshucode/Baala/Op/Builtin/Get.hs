@@ -3,28 +3,28 @@
 -- | Attribute getters: Extract attribute from use of relmap.
 
 module Koshucode.Baala.Op.Builtin.Get
-( -- * Datatype
-  RopGet,
-
-  -- * Basic
-  getOption, getMaybe,
-  getSwitch, getWord,
-
-  -- * Tree
-  getTree, getTrees,
-  getWordTrees,
-  getTreesByColon,
-
-  -- * Relmap
-  getRelmap, getRelmaps, getOptRelmap,
-
-  -- * Term
-  getTerm, getTermOpt,
-  getTerms, getTermsCo,
-  getTermPairs,
-  getWithTerms,
-  getTermTrees,
-) where
+  ( -- * Datatype
+    RopGet,
+  
+    -- * Basic
+    getOption, getMaybe,
+    getSwitch, getWord,
+  
+    -- * Tree
+    getTree, getTrees,
+    getWordTrees,
+    getTreesByColon,
+  
+    -- * Relmap
+    getRelmap, getRelmaps, getOptRelmap,
+  
+    -- * Term
+    getTerm, getTermOpt,
+    getTerms, getTermsCo,
+    getTermPairs,
+    getWithTerms,
+    getTermTrees,
+  ) where
 
 import qualified Koshucode.Baala.Base            as B
 import qualified Koshucode.Baala.Core            as C

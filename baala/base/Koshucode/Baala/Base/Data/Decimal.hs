@@ -1,36 +1,36 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Data.Decimal
-( -- * Type
-  Decimal (..),
-  decimalNum,
-  intDecimal,
-  decimalSetPoint,
-  decimalDenom,
-  isDecimalZero,
-
-  -- * Reader
-  LitString,
-  LitDecimal,
-  litDecimal,  
-
-  -- * Writer
-  decimalString,
-
-  -- * Arithmetic
-  DecimalBinary,
-  decimalAdd,
-  decimalSub,
-  decimalMul,
-  decimalDiv,
-  decimalQuo,
-  decimalRem,
-
-  decimalRevsign,
-  decimalRevratio,
-  decimalAbs,
-  decimalSum,
-) where
+  ( -- * Type
+    Decimal (..),
+    decimalNum,
+    intDecimal,
+    decimalSetPoint,
+    decimalDenom,
+    isDecimalZero,
+  
+    -- * Reader
+    LitString,
+    LitDecimal,
+    litDecimal,  
+  
+    -- * Writer
+    decimalString,
+  
+    -- * Arithmetic
+    DecimalBinary,
+    decimalAdd,
+    decimalSub,
+    decimalMul,
+    decimalDiv,
+    decimalQuo,
+    decimalRem,
+  
+    decimalRevsign,
+    decimalRevratio,
+    decimalAbs,
+    decimalSum,
+  ) where
 
 import qualified Data.Char as Ch
 import Control.Monad

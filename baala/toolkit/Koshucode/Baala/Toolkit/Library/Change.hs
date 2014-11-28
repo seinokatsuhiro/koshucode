@@ -3,19 +3,19 @@
 {-| Functions for changes between two datasets. -}
 
 module Koshucode.Baala.Toolkit.Library.Change
-(
-  -- * Minus
-  minusInput,
-  minusInputJudge,
-  minusJudge,
-
-  -- * Update
-  updateInput,
-  updateJudge,
-
-  -- * Changeset
-  -- $Changeset
-) where
+  (
+    -- * Minus
+    minusInput,
+    minusInputJudge,
+    minusJudge,
+  
+    -- * Update
+    updateInput,
+    updateJudge,
+  
+    -- * Changeset
+    -- $Changeset
+  ) where
 
 import qualified Data.Set                              as S
 import qualified Koshucode.Baala.Base                  as B

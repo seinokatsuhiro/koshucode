@@ -2,13 +2,13 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.DepRank
-( DepRank (..),
-  DepRankMap,
-  depRankFromPairs,
-  depRankList,
-  depRankUpdateAll,
-  depRankUpdate,
-) where
+  ( DepRank (..),
+    DepRankMap,
+    depRankFromPairs,
+    depRankList,
+    depRankUpdateAll,
+    depRankUpdate,
+  ) where
 
 import qualified Data.Map             as Map
 import qualified Koshucode.Baala.Base as B

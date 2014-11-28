@@ -2,12 +2,12 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.Cox.Empty
-( ropsCoxEmpty,
-  -- * both
-  consBoth, relmapBoth,
-  -- * maybe
-  consMaybe, relmapMaybe, relkitMaybe,
-) where
+  ( ropsCoxEmpty,
+    -- * both
+    consBoth, relmapBoth,
+    -- * maybe
+    consMaybe, relmapMaybe, relkitMaybe,
+  ) where
 
 import qualified Koshucode.Baala.Base         as B
 import qualified Koshucode.Baala.Core         as C

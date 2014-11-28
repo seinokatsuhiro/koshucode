@@ -3,12 +3,12 @@
 -- | Content type for nested relations.
 
 module Koshucode.Baala.Base.Data.Mono
-( Mono (..),
-  RelText,
-  isMonoType, isMonoNest,
-  gMonoType, gMonoNest,
-  pMonoNest, pMonoType,
-) where
+  ( Mono (..),
+    RelText,
+    isMonoType, isMonoNest,
+    gMonoType, gMonoNest,
+    pMonoNest, pMonoType,
+  ) where
 
 import qualified Koshucode.Baala.Base.Data.Rel  as B
 import qualified Koshucode.Baala.Base.Abort     as B

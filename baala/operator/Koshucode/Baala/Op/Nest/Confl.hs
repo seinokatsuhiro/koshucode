@@ -2,26 +2,26 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.Nest.Confl
-( 
-  -- * copy
-  consCopy,
-  -- $CopyExample
-
-  -- * for
-  consFor, relmapFor, relkitFor,
-  -- $ForExample
-
-  -- * group
-  consGroup, relmapGroup, relkitGroup,
-  -- $GroupExample
-
-  -- * slice
-  consSlice, relmapSlice, relkitSlice,
-  -- $SliceExample
-
-  -- * slice-up
-  consSliceUp, relmapSliceUp, relkitSliceUp,
-) where
+  ( 
+    -- * copy
+    consCopy,
+    -- $CopyExample
+  
+    -- * for
+    consFor, relmapFor, relkitFor,
+    -- $ForExample
+  
+    -- * group
+    consGroup, relmapGroup, relkitGroup,
+    -- $GroupExample
+  
+    -- * slice
+    consSlice, relmapSlice, relkitSlice,
+    -- $SliceExample
+  
+    -- * slice-up
+    consSliceUp, relmapSliceUp, relkitSliceUp,
+  ) where
 
 import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Core          as C

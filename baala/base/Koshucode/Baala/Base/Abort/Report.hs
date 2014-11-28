@@ -3,10 +3,10 @@
 -- | Reporting abort reasons.
 
 module Koshucode.Baala.Base.Abort.Report
-( CommandLine,
-  abort,
-  bug,
-) where
+  ( CommandLine,
+    abort,
+    bug,
+  ) where
 
 import qualified System.Exit                        as Sys
 import qualified Koshucode.Baala.Base.Abort.Reason  as B

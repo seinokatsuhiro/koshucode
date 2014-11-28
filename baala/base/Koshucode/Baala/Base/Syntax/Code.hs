@@ -8,17 +8,17 @@
 --   as a list of 'CodeLine'.
 
 module Koshucode.Baala.Base.Syntax.Code
-( -- * CodeLine
-  CodeLine (..),
-  CodeClause (..),
-  lineIndentPair,
-  splitClause,
-
-  -- * CodeRoll
-  CodeRoll (..),
-  codeRollUp,
-  codeUpdate, codeChange
-) where
+  ( -- * CodeLine
+    CodeLine (..),
+    CodeClause (..),
+    lineIndentPair,
+    splitClause,
+  
+    -- * CodeRoll
+    CodeRoll (..),
+    codeRollUp,
+    codeUpdate, codeChange
+  ) where
 
 import qualified Data.Generics                    as G
 import qualified Koshucode.Baala.Base.Abort       as B

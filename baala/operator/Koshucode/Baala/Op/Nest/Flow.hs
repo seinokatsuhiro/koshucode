@@ -2,17 +2,17 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.Nest.Flow
-( -- * down
-  consDown, relmapDown, relkitDown,
-  -- $DownExample
-
-  -- * up
-  consUp, relmapUp, relkitUp,
-  -- $UpExample
-
-  -- * chunk
-  consChunk, relmapChunk, relkitChunk,
-) where
+  ( -- * down
+    consDown, relmapDown, relkitDown,
+    -- $DownExample
+  
+    -- * up
+    consUp, relmapUp, relkitUp,
+    -- $UpExample
+  
+    -- * chunk
+    consChunk, relmapChunk, relkitChunk,
+  ) where
 
 import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Core          as C

@@ -4,34 +4,34 @@
 -- | Tokens in Koshucode.
 
 module Koshucode.Baala.Base.Token.Token
-(
-  -- * Token type
-  TextForm (..),
-  Token (..),
-  textToken,
-  nameToken,
-
-  -- * Blank name
-  BlankName (..),
-
-  -- * Term name
-  TermName, TermName2, TermName3, TermName4,
-  Terminal, TermPath,
-  showTermName,
-  showNestedTermName,
-
-  -- * Selectors
-  tokenContent,
-  tokenTypeText,
-
-  -- * Predicates
-  isBlankToken, isShortToken, isTermToken,
-  isOpenToken, isCloseToken,
-  isOpenTokenOf, isCloseTokenOf,
-
-  -- * Other function
-  sweepToken,
-) where
+  (
+    -- * Token type
+    TextForm (..),
+    Token (..),
+    textToken,
+    nameToken,
+  
+    -- * Blank name
+    BlankName (..),
+  
+    -- * Term name
+    TermName, TermName2, TermName3, TermName4,
+    Terminal, TermPath,
+    showTermName,
+    showNestedTermName,
+  
+    -- * Selectors
+    tokenContent,
+    tokenTypeText,
+  
+    -- * Predicates
+    isBlankToken, isShortToken, isTermToken,
+    isOpenToken, isCloseToken,
+    isOpenTokenOf, isCloseTokenOf,
+  
+    -- * Other function
+    sweepToken,
+  ) where
 
 import qualified Data.Generics                  as G
 import qualified Koshucode.Baala.Base.Prelude   as B

@@ -3,9 +3,9 @@
 -- | Content operators.
 
 module Koshucode.Baala.Op.Cop.List
-( copsList
-  -- $Operators
-) where
+  ( copsList
+    -- $Operators
+  ) where
 
 import qualified Data.List                          as List
 import qualified Data.Char                          as Char

@@ -3,8 +3,8 @@
 -- | Relmap operators on relational lattice.
 
 module Koshucode.Baala.Op.Lattice.Rop
-( ropsLattice,
-) where
+  ( ropsLattice,
+  ) where
 
 import qualified Koshucode.Baala.Core                 as C
 import qualified Koshucode.Baala.Op.Builtin           as Op

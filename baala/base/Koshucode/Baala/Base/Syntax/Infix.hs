@@ -4,11 +4,11 @@
 -- | Convert infixed-operator trees into prefixed-operator trees.
 
 module Koshucode.Baala.Base.Syntax.Infix
-( InfixHeight,
-  infixHeight,
-  infixToPrefix,
-  InfixAb, InfixAbMap, InfixTree, InfixMapper,
-) where
+  ( InfixHeight,
+    infixHeight,
+    infixToPrefix,
+    InfixAb, InfixAbMap, InfixTree, InfixMapper,
+  ) where
 
 import qualified Data.Map                         as Map
 import qualified Koshucode.Baala.Base.Prelude     as B

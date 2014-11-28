@@ -3,21 +3,21 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Syntax.Tree
-( 
-  -- * Data type
-  Bracket (..),
-  CodeTree (..),
-
-  -- * Parsing
-  tree, trees,
-  treeWrap,
-  untree, untrees,
-  undouble,
-
-  -- * Bracket table
-  GetBracketType,
-  bracketTable
-) where
+  ( 
+    -- * Data type
+    Bracket (..),
+    CodeTree (..),
+  
+    -- * Parsing
+    tree, trees,
+    treeWrap,
+    untree, untrees,
+    undouble,
+  
+    -- * Bracket table
+    GetBracketType,
+    bracketTable
+  ) where
 
 import qualified Data.Generics                as G
 import qualified Koshucode.Baala.Base.Abort   as B

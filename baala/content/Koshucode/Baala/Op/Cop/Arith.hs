@@ -4,9 +4,9 @@
 -- | Content operators.
 
 module Koshucode.Baala.Op.Cop.Arith
-( copsArith
-  -- $Operators
-) where
+  ( copsArith
+    -- $Operators
+  ) where
 
 import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Core       as C

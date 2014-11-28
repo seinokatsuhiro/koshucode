@@ -4,11 +4,11 @@
 -- | Link and run relmaps.
 
 module Koshucode.Baala.Core.Relmap.Run
-( relkitLink,
-  relkitRun,
-  fixedRelation,
-  bmapAlign,
-) where
+  ( relkitLink,
+    relkitRun,
+    fixedRelation,
+    bmapAlign,
+  ) where
 
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Core.Content          as C

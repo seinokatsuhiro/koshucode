@@ -4,17 +4,17 @@
 -- | Data structure for mapping relation to judges
 
 module Koshucode.Baala.Core.Assert.Assert
-( -- * Data type
-  Assert (..),
-  AssertType (..),
-  AssertOption,
-  assertAs,
-
-  -- * Short assertion
-  ShortAssert,
-  assertNormal,
-  assertViolated,
-) where
+  ( -- * Data type
+    Assert (..),
+    AssertType (..),
+    AssertOption,
+    assertAs,
+  
+    -- * Short assertion
+    ShortAssert,
+    assertNormal,
+    assertViolated,
+  ) where
 
 import qualified Data.Generics                as G
 import qualified Koshucode.Baala.Base         as B

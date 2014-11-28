@@ -3,13 +3,12 @@
 -- | Lattice relmap operators.
 
 module Koshucode.Baala.Op.Lattice
-(
-module Koshucode.Baala.Op.Lattice.Restrict,
-module Koshucode.Baala.Op.Lattice.Rop,
-module Koshucode.Baala.Op.Lattice.Tropashko,
--- * Naming conventions
--- $NamingConventions
-) where
+  ( module Koshucode.Baala.Op.Lattice.Restrict,
+    module Koshucode.Baala.Op.Lattice.Rop,
+    module Koshucode.Baala.Op.Lattice.Tropashko,
+    -- * Naming conventions
+    -- $NamingConventions
+  ) where
 
 import Koshucode.Baala.Op.Lattice.Restrict
 import Koshucode.Baala.Op.Lattice.Rop

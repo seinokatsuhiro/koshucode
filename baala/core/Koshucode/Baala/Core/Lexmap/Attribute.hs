@@ -4,27 +4,27 @@
 -- | Attributes of relmap operator.
 
 module Koshucode.Baala.Core.Lexmap.Attribute
-( -- * Attribute name
-  AttrName (..),
-  isAttrRelmap,
-  attrNameText,
-  attrNameAttr,
-  attrNameTrunk,
-
-  -- * Attribute trees
-  AttrDefine (..),
-  AttrTrees,
-  AttrSort,
-  TreeSort,
-  RopName,
-  Roal,
-
-  -- * Attribute sorter
-  attrSort,
-  attrSortBranch,
-  hyphenAssc,
-  -- $AttributeSorter
-) where
+  ( -- * Attribute name
+    AttrName (..),
+    isAttrRelmap,
+    attrNameText,
+    attrNameAttr,
+    attrNameTrunk,
+  
+    -- * Attribute trees
+    AttrDefine (..),
+    AttrTrees,
+    AttrSort,
+    TreeSort,
+    RopName,
+    Roal,
+  
+    -- * Attribute sorter
+    attrSort,
+    attrSortBranch,
+    hyphenAssc,
+    -- $AttributeSorter
+  ) where
 
 import qualified Data.Generics                as G
 import qualified Data.List                    as List

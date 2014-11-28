@@ -2,23 +2,23 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.Source
-( ropsSource,
-
-  -- * dee & dum
-  consDee, consDum,
-  -- $deedum
-
-  -- * empty
-  consEmpty, relmapEmpty,
-
-  -- * source
-  consSource,
-  -- $source
-
-  -- * source-term
-  consSourceTerm, relmapSourceTerm,
-  -- $source-term
-) where
+  ( ropsSource,
+  
+    -- * dee & dum
+    consDee, consDum,
+    -- $deedum
+  
+    -- * empty
+    consEmpty, relmapEmpty,
+  
+    -- * source
+    consSource,
+    -- $source
+  
+    -- * source-term
+    consSourceTerm, relmapSourceTerm,
+    -- $source-term
+  ) where
 
 import qualified Koshucode.Baala.Base        as B
 import qualified Koshucode.Baala.Core        as C

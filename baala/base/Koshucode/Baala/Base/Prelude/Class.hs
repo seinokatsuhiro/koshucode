@@ -3,16 +3,16 @@
 -- | General utilities
 
 module Koshucode.Baala.Base.Prelude.Class
-( Name (..),
-  Named,
-  named,
-  Map,
-  Pred,
-  YesNo (..),
-  Index,
-  Collect,
-  Choose (..),
-) where
+  ( Name (..),
+    Named,
+    named,
+    Map,
+    Pred,
+    YesNo (..),
+    Index,
+    Collect,
+    Choose (..),
+  ) where
 
 -- | Types that has name
 class Name a where

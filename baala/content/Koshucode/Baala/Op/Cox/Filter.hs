@@ -2,17 +2,17 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module Koshucode.Baala.Op.Cox.Filter
-( ropsCoxFilter,
-
-  -- * keep & omit
-  consFilter, relmapFilter, relkitFilter,
-
-  -- * contain
-  consContain, relmapContain, relkitContain,
-
-  -- * omit-all
-  consOmitAll, relmapOmitAll,
-) where
+  ( ropsCoxFilter,
+  
+    -- * keep & omit
+    consFilter, relmapFilter, relkitFilter,
+  
+    -- * contain
+    consContain, relmapContain, relkitContain,
+  
+    -- * omit-all
+    consOmitAll, relmapOmitAll,
+  ) where
 
 import Prelude hiding (getContents)
 import qualified Koshucode.Baala.Base        as B

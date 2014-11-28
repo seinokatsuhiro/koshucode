@@ -4,20 +4,20 @@
 -- | Lexical relmap.
 
 module Koshucode.Baala.Core.Lexmap.Lexmap
-( -- * Data type
-  Lexmap (..),
-  LexmapType (..),
-  lexOpName,
-  lexAddMessage,
-  lexMessageList,
-
-  -- * Constructor
-  ConsLexmap,
-  ConsLexmapBody,
-  RelmapSource,
-  consLexmap,
-  withTerms,
-) where
+  ( -- * Data type
+    Lexmap (..),
+    LexmapType (..),
+    lexOpName,
+    lexAddMessage,
+    lexMessageList,
+  
+    -- * Constructor
+    ConsLexmap,
+    ConsLexmapBody,
+    RelmapSource,
+    consLexmap,
+    withTerms,
+  ) where
 
 import qualified Data.Generics                          as G
 import qualified Koshucode.Baala.Base                   as B

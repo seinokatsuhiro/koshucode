@@ -4,10 +4,10 @@
 -- | Convert relation to text table.
 
 module Koshucode.Baala.Core.Assert.RelTable
-( relTable,
-  relTableLines,
-  relText,
-) where
+  ( relTable,
+    relTableLines,
+    relText,
+  ) where
 
 import qualified Data.List                    as List
 import qualified Data.Map                     as Map

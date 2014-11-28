@@ -3,10 +3,10 @@
 {-| Changeset. -}
 
 module Koshucode.Baala.Toolkit.Main.KoshuChange
-( koshuChangeMain
-  -- * koshu-change.hs
-  -- $main
-) where
+  ( koshuChangeMain
+    -- * koshu-change.hs
+    -- $main
+  ) where
 
 import System.Console.GetOpt
 

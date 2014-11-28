@@ -3,15 +3,15 @@
 -- | Abort reasons.
 
 module Koshucode.Baala.Base.Abort.Reason
-( -- * Data type
-  AbortReason (..),
-  Ab, AbMap,
-
-  -- * Constructor
-  abortBecause,
-  abortLine, abortLines,
-  abortPage,
-) where
+  ( -- * Data type
+    AbortReason (..),
+    Ab, AbMap,
+  
+    -- * Constructor
+    abortBecause,
+    abortLine, abortLines,
+    abortPage,
+  ) where
 
 import qualified Koshucode.Baala.Base.Text  as B
 

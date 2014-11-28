@@ -4,17 +4,17 @@
 -- | Output judgements.
 
 module Koshucode.Baala.Base.Data.Output
-(
-  -- * Data type
-  OutputResult,
-  OutputChunks,
-  OutputChunk (..),
-
-  -- * Function
-  putJudges,
-  hPutJudges,
-  hPutOutputResult,
-) where
+  (
+    -- * Data type
+    OutputResult,
+    OutputChunks,
+    OutputChunk (..),
+  
+    -- * Function
+    putJudges,
+    hPutJudges,
+    hPutOutputResult,
+  ) where
 
 import qualified Control.Monad                     as M
 import qualified Data.Map                          as Map

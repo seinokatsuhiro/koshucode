@@ -4,15 +4,15 @@
 -- | Restrict by relmap
 
 module Koshucode.Baala.Op.Lattice.Restrict
-( -- * some
-  consSome, relmapSome, relkitSome,
-  -- * none
-  consNone, relmapNone, relkitNone,
-  -- * sub
-  consSub, relmapSub, relkitSub,
-  -- * compose
-  consCompose, relmapCompose, relkitCompose,
-) where
+  ( -- * some
+    consSome, relmapSome, relkitSome,
+    -- * none
+    consNone, relmapNone, relkitNone,
+    -- * sub
+    consSub, relmapSub, relkitSub,
+    -- * compose
+    consCompose, relmapCompose, relkitCompose,
+  ) where
 
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Core                 as C

@@ -3,9 +3,9 @@
 -- | Abortable process
 
 module Koshucode.Baala.Base.Abort.Abortable
-( abortable,
-  abortableSourced,
-) where
+  ( abortable,
+    abortableSourced,
+  ) where
 
 import qualified Koshucode.Baala.Base.Prelude        as B
 import qualified Koshucode.Baala.Base.Text           as B

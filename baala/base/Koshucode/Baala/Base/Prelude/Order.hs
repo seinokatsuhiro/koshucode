@@ -1,16 +1,16 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Prelude.Order
-( OrderCap (..),
-  Ranking,
-  sortByName,
-  sortByNameDenseRank,
-  sortByNameGapRank,
-  sortByNameNumbering,
-  denseRankFrom,
-  gapRankFrom,
-  sortWith,
-) where
+  ( OrderCap (..),
+    Ranking,
+    sortByName,
+    sortByNameDenseRank,
+    sortByNameGapRank,
+    sortByNameNumbering,
+    denseRankFrom,
+    gapRankFrom,
+    sortWith,
+  ) where
 
 import qualified Koshucode.Baala.Base.Prelude.Class   as B
 import qualified Koshucode.Baala.Base.Prelude.Import  as B

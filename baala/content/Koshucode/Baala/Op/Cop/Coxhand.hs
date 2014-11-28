@@ -3,13 +3,13 @@
 -- | Helper functions to construct content expressions.
 
 module Koshucode.Baala.Op.Cop.Coxhand
-( -- * Form
-  f, f1, f2, f3,
-  -- * Fill
-  i, ib, ix, bin,
-  -- * Blank
-  b, b1, b2, b3,
-) where
+  ( -- * Form
+    f, f1, f2, f3,
+    -- * Fill
+    i, ib, ix, bin,
+    -- * Blank
+    b, b1, b2, b3,
+  ) where
 
 import qualified Koshucode.Baala.Base   as B
 import qualified Koshucode.Baala.Core   as C

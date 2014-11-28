@@ -4,10 +4,10 @@
 -- | RDF-to-Koshucode conversion
 
 module Koshucode.Baala.Toolkit.Library.RDF
-( judgesFromRdf,
-  judgeFromTriple,
-  RDFTupleType (..),
-) where
+  ( judgesFromRdf,
+    judgeFromTriple,
+    RDFTupleType (..),
+  ) where
 
 import qualified Data.RDF as RDF
 import qualified Koshucode.Baala.Base as B

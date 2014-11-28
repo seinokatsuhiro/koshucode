@@ -1,10 +1,10 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Data.Interp
-( Interp (..),
-  InterpWord (..),
-  interp,
-) where
+  ( Interp (..),
+    InterpWord (..),
+    interp,
+  ) where
 
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B

@@ -3,12 +3,12 @@
 -- | Text lines delimited by carriage returns or line feeds.
 
 module Koshucode.Baala.Base.Syntax.Line
-( LineNumber,
-  NumberedLine,
-  linesCrlfNumbered,
-  linesCrlf,
-  linesFrom,
-) where
+  ( LineNumber,
+    NumberedLine,
+    linesCrlfNumbered,
+    linesCrlf,
+    linesFrom,
+  ) where
 
 -- | Line number.
 type LineNumber = Int

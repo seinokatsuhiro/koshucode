@@ -11,21 +11,21 @@
 --   other operators are derived.
 
 module Koshucode.Baala.Op.Lattice.Tropashko
-( -- * Fundamental operators
-  -- $FundamentalOperators
-
-  -- * meet (natural join)
-  consMeet,
-  relmapMeet,
-  relkitMeet,
-  -- $MeetImplementation
-
-  -- * join (inner union)
-  consJoin,
-  relmapJoin,
-  relmapJoinList,
-  relkitJoin,
-) where
+  ( -- * Fundamental operators
+    -- $FundamentalOperators
+  
+    -- * meet (natural join)
+    consMeet,
+    relmapMeet,
+    relkitMeet,
+    -- $MeetImplementation
+  
+    -- * join (inner union)
+    consJoin,
+    relmapJoin,
+    relmapJoinList,
+    relkitJoin,
+  ) where
 
 import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Core       as C

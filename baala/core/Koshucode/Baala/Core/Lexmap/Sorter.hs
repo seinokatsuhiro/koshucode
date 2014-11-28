@@ -3,13 +3,13 @@
 -- | Attribute sorters.
 
 module Koshucode.Baala.Core.Lexmap.Sorter
-( -- * Trunk sorter
-  roaNone, roaEnum,
-  roaList, roaOneList, roaOneOpt,
-  roaOne, roaTwo, roaThree, roaFour,
-  roaTermsOne, roaTermsTwo,
-  -- $TrunkSorter
-) where
+  ( -- * Trunk sorter
+    roaNone, roaEnum,
+    roaList, roaOneList, roaOneOpt,
+    roaOne, roaTwo, roaThree, roaFour,
+    roaTermsOne, roaTermsTwo,
+    -- $TrunkSorter
+  ) where
 
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Core.Lexmap.Attribute as C

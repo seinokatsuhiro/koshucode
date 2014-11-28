@@ -7,12 +7,12 @@
 --   that dataset is build from judges.
 
 module Koshucode.Baala.Core.Assert.Dataset
-( Dataset,
-  emptyDataset,
-  dataset,
-  addJudges,
-  selectRelation,
-) where
+  ( Dataset,
+    emptyDataset,
+    dataset,
+    addJudges,
+    selectRelation,
+  ) where
 
 import qualified Data.Map   as Map
 import qualified Data.Maybe as Maybe

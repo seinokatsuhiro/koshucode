@@ -3,14 +3,13 @@
 -- | Tokens in Koshucode.
 
 module Koshucode.Baala.Base.Token
-(
-module Koshucode.Baala.Base.Token.AngleText,
-module Koshucode.Baala.Base.Token.Short,
-module Koshucode.Baala.Base.Token.Token,
-module Koshucode.Baala.Base.Token.TokenClause,
-module Koshucode.Baala.Base.Token.TokenLine,
-module Koshucode.Baala.Base.Token.TokenTree,
-) where
+  ( module Koshucode.Baala.Base.Token.AngleText,
+    module Koshucode.Baala.Base.Token.Short,
+    module Koshucode.Baala.Base.Token.Token,
+    module Koshucode.Baala.Base.Token.TokenClause,
+    module Koshucode.Baala.Base.Token.TokenLine,
+    module Koshucode.Baala.Base.Token.TokenTree,
+  ) where
 
 import Koshucode.Baala.Base.Token.AngleText
 import Koshucode.Baala.Base.Token.Short

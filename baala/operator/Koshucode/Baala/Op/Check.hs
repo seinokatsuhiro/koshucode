@@ -1,8 +1,8 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.Check
-( ropsCheck,
-) where
+  ( ropsCheck,
+  ) where
 
 import qualified Data.Map                    as Map
 import qualified Koshucode.Baala.Base        as B

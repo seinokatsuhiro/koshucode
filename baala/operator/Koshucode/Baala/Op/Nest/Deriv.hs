@@ -4,21 +4,21 @@
 -- | Derived operators for nested relations.
 
 module Koshucode.Baala.Op.Nest.Deriv
-( 
-  -- * group-by
-  consGroupBy,
-  -- $GroupByExample
-
-  -- * join-up
-  consJoinUp, relmapJoinUp,
-
-  -- * nest / hang
-  consHang, consNest, relmapNest,
-  -- $Nest
-
-  -- * unnest
-  consUnnest, relmapUnnest,
-) where
+  ( 
+    -- * group-by
+    consGroupBy,
+    -- $GroupByExample
+  
+    -- * join-up
+    consJoinUp, relmapJoinUp,
+  
+    -- * nest / hang
+    consHang, consNest, relmapNest,
+    -- $Nest
+  
+    -- * unnest
+    consUnnest, relmapUnnest,
+  ) where
 
 import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Core          as C

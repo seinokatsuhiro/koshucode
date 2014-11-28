@@ -4,23 +4,23 @@
 --   affirmed or denied statements.
 
 module Koshucode.Baala.Base.Data.Judge
-(
-  -- * Datatype
-  Judge (..),
-  JudgeOf,
-  JudgePat,
-  judgePat,
-  judgeTerms,
-  judgeTermsMap,
-  judgeCons,
-  judgesFromRel,
-  abcJudge,
-
-  -- * Logical quality
-  affirm, deny,
-  affirmJudge, denyJudge,
-  isAffirmative, isDenial, isViolative,
-) where
+  (
+    -- * Datatype
+    Judge (..),
+    JudgeOf,
+    JudgePat,
+    judgePat,
+    judgeTerms,
+    judgeTermsMap,
+    judgeCons,
+    judgesFromRel,
+    abcJudge,
+  
+    -- * Logical quality
+    affirm, deny,
+    affirmJudge, denyJudge,
+    isAffirmative, isDenial, isViolative,
+  ) where
 
 import qualified Koshucode.Baala.Base.Abort        as B
 import qualified Koshucode.Baala.Base.Prelude      as B

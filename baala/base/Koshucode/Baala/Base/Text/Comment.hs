@@ -1,13 +1,13 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Text.Comment
-( Texts (..),
-  CommentDoc (..),
-  CommentSec (..),
-  emacsModeComment,
-  commentLine,
-  putCommentLines, hPutCommentLines,
-) where
+  ( Texts (..),
+    CommentDoc (..),
+    CommentSec (..),
+    emacsModeComment,
+    commentLine,
+    putCommentLines, hPutCommentLines,
+  ) where
 
 import qualified System.IO as IO
 

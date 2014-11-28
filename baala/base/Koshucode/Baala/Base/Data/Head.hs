@@ -3,38 +3,38 @@
 -- | Heading of relations
 
 module Koshucode.Baala.Base.Data.Head
-( -- * Type
-  Head (..),
-  headExplain,
-
-  -- * Constructor
-  headOf, headFrom, headEmpty,
-  -- $Constructor
-
-  -- * Selector
-  headEquiv,
-  isSubhead, isSuperhead,
-  headNames,
-  headDegree,
-  headNested,
-  headIndex1,
-  -- $Selector
-
-  -- * Add terms
-  headCons,
-  headAppend,
-  headConsNest,
-  headNests,
-  -- $AddTerm
-
-  -- * Mapping
-  headMap,
-  headMapName,
-  headUp,
-  headAlign,
-  bodyAlign,
-  -- $Mapping
-) where
+  ( -- * Type
+    Head (..),
+    headExplain,
+  
+    -- * Constructor
+    headOf, headFrom, headEmpty,
+    -- $Constructor
+  
+    -- * Selector
+    headEquiv,
+    isSubhead, isSuperhead,
+    headNames,
+    headDegree,
+    headNested,
+    headIndex1,
+    -- $Selector
+  
+    -- * Add terms
+    headCons,
+    headAppend,
+    headConsNest,
+    headNests,
+    -- $AddTerm
+  
+    -- * Mapping
+    headMap,
+    headMapName,
+    headUp,
+    headAlign,
+    bodyAlign,
+    -- $Mapping
+  ) where
 
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B

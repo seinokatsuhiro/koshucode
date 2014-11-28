@@ -3,28 +3,28 @@
 -- | Implementation of relmap operators.
 
 module Koshucode.Baala.Core.Relmap.Operator
-( -- * Rop
-  Global,
-  RopUsage,
-  Rop (..),
-
-  -- * RopUse
-  RopCons,
-  RopUse (..),
-  ropCopset,
-
-  -- * Relmap
-  Relmap (..),
-  relmapId,
-  relmapLexList,
-
-  -- * Relkit
-  RelkitFlow,
-  RelkitGlobal,
-  RelkitBinary,
-  RelkitConfl,
-
-) where
+  ( -- * Rop
+    Global,
+    RopUsage,
+    Rop (..),
+  
+    -- * RopUse
+    RopCons,
+    RopUse (..),
+    ropCopset,
+  
+    -- * Relmap
+    Relmap (..),
+    relmapId,
+    relmapLexList,
+  
+    -- * Relkit
+    RelkitFlow,
+    RelkitGlobal,
+    RelkitBinary,
+    RelkitConfl,
+  
+  ) where
 
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Core.Lexmap            as C

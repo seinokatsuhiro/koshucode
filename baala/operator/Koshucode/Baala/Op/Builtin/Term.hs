@@ -3,10 +3,10 @@
 -- | Parsing list of terms.
 
 module Koshucode.Baala.Op.Builtin.Term
-( termName, termNames, termNamesCo,
-  termNamePairs,
-  picker,
-) where
+  ( termName, termNames, termNamesCo,
+    termNamePairs,
+    picker,
+  ) where
 
 import qualified Koshucode.Baala.Base       as B
 import qualified Koshucode.Baala.Op.Message as Msg

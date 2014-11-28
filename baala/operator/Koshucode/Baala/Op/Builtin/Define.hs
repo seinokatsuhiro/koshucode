@@ -1,13 +1,13 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.Builtin.Define
-( RopDefine,
-  ropList,
-  ropN, ropE,
-  ropI, ropII, ropIJ, ropIII,
-  ropV, ropIV,
-  ropTI, ropTII,
-) where
+  ( RopDefine,
+    ropList,
+    ropN, ropE,
+    ropI, ropII, ropIJ, ropIII,
+    ropV, ropIV,
+    ropTI, ropTII,
+  ) where
 
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C

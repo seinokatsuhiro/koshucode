@@ -4,8 +4,8 @@
 -- | Term-content calcutation.
 
 module Koshucode.Baala.Core.Content.Build
-( coxBuild, coxForm,
-) where
+  ( coxBuild, coxForm,
+  ) where
 
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Core.Content.Class     as C
