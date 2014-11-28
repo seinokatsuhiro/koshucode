@@ -21,18 +21,20 @@ import qualified Koshucode.Baala.Toolkit.Library.Version as L
 data Option
     = OptHelp
     | OptVersion
-    | OptShowEncoding
     | OptStdin
     | OptOmitBlank
+    | OptDict
+    | OptEncoding
       deriving (Show, Eq, Ord, Enum, Bounded)
 
 koshuSyntaxOptions :: [G.OptDescr Option]
 koshuSyntaxOptions =
-    [ G.Option "h" ["help"]          (G.NoArg OptHelp)         "Print help message."
-    , G.Option "V" ["version"]       (G.NoArg OptVersion)      "Print version number."
-    , G.Option ""  ["show-encoding"] (G.NoArg OptShowEncoding) "Show character encoding."
-    , G.Option "i" ["stdin"]         (G.NoArg OptStdin)        "Read from stdin."
-    , G.Option "b" ["omit-blank"]    (G.NoArg OptOmitBlank)    "Omit space and comment tokens."
+    [ G.Option "h" ["help"]        (G.NoArg OptHelp)        "Print help message."
+    , G.Option "V" ["version"]     (G.NoArg OptVersion)     "Print version number."
+    , G.Option "i" ["stdin"]       (G.NoArg OptStdin)       "Read from stdin."
+    , G.Option "b" ["omit-blank"]  (G.NoArg OptOmitBlank)   "Omit space and comment tokens."
+    , G.Option ""  ["dict"]        (G.NoArg OptDict)        "Show dictionary."
+    , G.Option ""  ["encoding"]    (G.NoArg OptEncoding)    "Show character encoding."
     ]
 
 version :: String
@@ -65,7 +67,8 @@ koshuSyntaxMain' (_, argv) =
       (opts, files, [])
           | has OptHelp          -> L.putSuccess usage
           | has OptVersion       -> L.putSuccess $ version ++ "\n"
-          | has OptShowEncoding  -> L.putSuccess =<< L.currentEncodings
+          | has OptDict          -> dumpDict
+          | has OptEncoding      -> L.putSuccess =<< L.currentEncodings
           | has OptStdin         -> dumpStdin omit
           | length files == 1    -> dumpFile omit $ head files
           | otherwise            -> L.putFailure usage
@@ -75,16 +78,16 @@ koshuSyntaxMain' (_, argv) =
       (_, _, errs)    -> L.putFailure $ concat errs
 
 
--- ----------------------  Judges
+-- ----------------------  Dump
 
-description :: FilePath -> B.CommentDoc
-description path = B.CommentDoc [desc, input, js] where
+dumpDesc :: FilePath -> B.CommentDoc
+dumpDesc path = B.CommentDoc [desc, input, js] where
     desc   = B.CommentSec "DESCRIPTION" [ "Clauses and tokens" ]
     input  = B.CommentSec "INPUT" [ path ]
     js     = B.CommentSec "JUDGES"
-             [ "|-- CLAUSE /clause /clause-type"
-             , "|-- LINE   /clause /line"
-             , "|-- TOKEN  /line /column /token-type /cont"
+             [ "|-- CLAUSE  /clause /clause-type"
+             , "|-- LINE    /clause /line"
+             , "|-- TOKEN   /line /column /token-type /cont"
              , ""
              , "<<< There is a clause numbered /clause on /line ."
              , "    Type of the clause is /clause-type ."
@@ -108,8 +111,101 @@ judgeToken ln tok = B.affirm "TOKEN" args where
            , ("token-type"   , C.pText $ B.tokenTypeText tok)
            , ("cont"         , C.pText $ B.tokenContent  tok) ]
 
+dumpFile :: Bool -> FilePath -> IO ()
+dumpFile omit path = dumpCode omit path =<< readFile path
 
--- ----------------------  Print judges
+dumpStdin :: Bool -> IO ()
+dumpStdin omit = dumpCode omit "(stdin)" =<< getContents
+
+dumpCode :: Bool -> FilePath -> String -> IO ()
+dumpCode omit path code = 
+    ab f $ B.tokenLines (B.Source 0 $ B.SourceFile path) code
+    where f ts = do let cs = C.consPreclause ts
+                    B.putLines $ B.texts $ dumpDesc path
+                    dumpClause omit `mapM_` zip [1 ..] cs
+                    putNewline
+
+dumpClause :: Bool -> (Int, C.Clause) -> IO ()
+dumpClause omit (clseq, c) =
+    do let src = C.clauseSource c
+           ls  = B.clauseLines src
+       putNewline
+       B.putLines $ map comment ls
+       putNewline
+       putJudge $ judgeClause clseq c
+       dumpLine clseq ls
+       dumpToken omit `mapM_` ls
+    where
+      comment line = "*** " ++ B.lineContent line
+
+dumpLine :: Int -> [B.TokenLine] -> IO ()
+dumpLine clseq ls = putJudges $ map (judgeLine clseq) ls
+
+dumpToken :: Bool -> B.TokenLine -> IO ()
+dumpToken omit (B.CodeLine ln _ toks) =
+    do putNewline
+       putJudges $ map (judgeToken ln) toks'
+    where
+      toks' | omit       = B.omit B.isBlankToken toks
+            | otherwise  = toks
+
+
+-- ----------------------  Dictionary
+
+dumpDict :: IO ()
+dumpDict =
+    do B.putLines $ B.texts descDict
+       putNewline
+       putJudges judgesClauseType
+       putNewline
+       putJudges judgesTokenType
+       putNewline
+
+descDict :: B.CommentDoc
+descDict = B.CommentDoc [desc, js] where
+    desc   = B.CommentSec "DESCRIPTION" [ "Clauses and tokens" ]
+    js     = B.CommentSec "JUDGES"
+             [ "|-- CLAUSE-TYPE  /clause-type"
+             , "|-- TOKEN-TYPE   /token-type"
+             , ""
+             , "<<< /clause-type is one of cluase types."
+             , "    /token-type is one of token types. >>>" ]
+
+judgeClauseType :: C.Clause -> B.Judge Type.VContent
+judgeClauseType c = B.affirm "CLAUSE-TYPE" args where
+    args = [ ("clause-type", C.pText $ C.clauseTypeText c) ]
+
+judgeTokenType :: B.Token -> B.Judge Type.VContent
+judgeTokenType t = B.affirm "TOKEN-TYPE" args where
+    args = [ ("token-type", C.pText $ B.tokenTypeText t) ]
+
+judgesClauseType :: [B.Judge Type.VContent]
+judgesClauseType = map j cs where
+    j x = judgeClauseType $ C.Clause (B.CodeClause [] []) 0 x
+    cs  = [ C.CSection ""
+          , C.CShort []
+          , C.CRelmap "" []
+          , C.CAssert C.AssertAffirm "" [] []
+          , C.CJudge 'X' "" []
+          , C.CSlot "" []
+          , C.CUnknown
+          ]
+
+judgesTokenType :: [B.Judge Type.VContent]
+judgesTokenType = map j cs where
+    j x = judgeTokenType x
+    cs  = [ B.TText    B.codeZero B.TextRaw ""
+          , B.TSlot    B.codeZero 0 ""
+          , B.TShort   B.codeZero "" ""
+          , B.TTerm    B.codeZero 0 []
+          , B.TOpen    B.codeZero ""
+          , B.TClose   B.codeZero ""
+          , B.TSpace   B.codeZero 0
+          , B.TComment B.codeZero ""
+          ]
+
+
+-- ----------------------  Utility
 
 putJudges :: (Ord c, B.Write c) => [B.Judge c] -> IO ()
 putJudges = mapM_ putJudge
@@ -126,47 +222,6 @@ putNewline = putStrLn ""
 ab :: (a -> IO b) -> B.Ab a -> IO b
 ab _ (Left a)   = B.abort [] a
 ab f (Right b)  = f b
-
-
--- ----------------------  Dump
-
-dumpFile :: Bool -> FilePath -> IO ()
-dumpFile omit path = dumpCode omit path =<< readFile path
-
-dumpStdin :: Bool -> IO ()
-dumpStdin omit = dumpCode omit "(stdin)" =<< getContents
-
-dumpCode :: Bool -> FilePath -> String -> IO ()
-dumpCode omit path code = 
-    ab f $ B.tokenLines (B.Source 0 $ B.SourceFile path) code
-    where f ts = do let cs = C.consPreclause ts
-                    B.putLines $ B.texts $ description path
-                    dumpClause omit `mapM_` zip [1 ..] cs
-                    putNewline
-
-dumpClause :: Bool -> (Int, C.Clause) -> IO ()
-dumpClause omit (clseq, c) =
-    do let src = C.clauseSource c
-           ls  = B.clauseLines src
-       putNewline
-       B.putLines $ map comment ls
-       putNewline
-       putJudge $ judgeClause clseq c
-       dumpLine clseq ls
-       dumpToken omit `mapM_` ls
-    where
-      comment line = "**  " ++ B.lineContent line
-
-dumpLine :: Int -> [B.TokenLine] -> IO ()
-dumpLine clseq ls = putJudges $ map (judgeLine clseq) ls
-
-dumpToken :: Bool -> B.TokenLine -> IO ()
-dumpToken omit (B.CodeLine ln _ toks) =
-    do putNewline
-       putJudges $ map (judgeToken ln) toks'
-    where
-      toks' | omit       = B.omit B.isBlankToken toks
-            | otherwise  = toks
 
 
 -- ----------------------
