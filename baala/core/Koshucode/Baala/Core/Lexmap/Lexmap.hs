@@ -87,13 +87,18 @@ consLexmap find gslot derives = lexmap where
     lexmap source =
         Msg.abLexmap source $
          case B.divideTreesByBar source of
-           [(B.TreeL rop@(B.TText _ B.TextRaw _) : trees)] -> derived rop trees
-           [(B.TreeL rop@(B.TText _ B.TextKey _) : trees)] -> user LexmapWith rop trees
-           [[B.TreeB B.BracketGroup _ trees]]      -> lexmap trees
+           [B.TreeL rop@(B.TText _ B.TextRaw _) : trees] -> derived rop trees
+           [B.TreeL rop@(B.TText _ B.TextKey _) : trees] -> user LexmapWith rop trees
+           [n@(B.TreeL (B.TTerm cp _ [_])) : trees]      -> add cp n trees
+           [[B.TreeB B.BracketGroup _ trees]]            -> lexmap trees
            [[B.TreeB _ _ _]]     -> Msg.adlib "bracket"
            [[]]                  -> baseOf "id" []
            [_]                   -> Msg.unkRelmap "???"
            trees2                -> baseOf "append" $ map B.wrapTrees trees2
+
+    -- relmap "/N E" is equivalent to "add /N ( E )"
+    add cp n trees =
+        derived (B.TText cp B.TextRaw "add") $ n : [B.wrapTrees trees]
 
     derived :: B.Token -> ConsLexmapBody
     derived rop trees =
