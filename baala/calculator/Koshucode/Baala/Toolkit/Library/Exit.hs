@@ -1,17 +1,18 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Toolkit.Library.Exit
-( prelude,
-  putSuccess,
-  putFailure,
-  currentEncodings,
-  exit,
-) where
+  ( prelude,
+    putSuccess,
+    putFailure,
+    currentEncodings,
+    exit,
+  ) where
 
-import qualified GHC.IO.Encoding    as IO
-import qualified System.Environment as Sys
-import qualified System.Exit        as Sys
-import qualified System.IO          as IO
+import qualified GHC.IO.Encoding       as IO
+import qualified System.Environment    as Sys
+import qualified System.Exit           as Sys
+import qualified System.IO             as IO
+import qualified Koshucode.Baala.Base  as B
 
 prelude :: IO (String, [String])
 prelude = do
@@ -41,12 +42,14 @@ putFailure msg = do
   IO.hPutStr IO.stderr msg
   Sys.exitWith $ Sys.ExitFailure 1
 
-currentEncodings :: IO (String)
-currentEncodings = do
-  locale <- IO.getLocaleEncoding
-  file   <- IO.getFileSystemEncoding
-  return $ unlines [ "contents of file : " ++ show locale
-                   , "name of file     : " ++ show file ]
+currentEncodings :: IO String
+currentEncodings =
+    do locale  <- IO.getLocaleEncoding
+       file    <- IO.getFileSystemEncoding
+       let q    = ("'" ++)
+           j    = B.affirm "ENCODING" [ ("content", q $ show locale)
+                                      , ("file",    q $ show file) ]
+       return $ show (B.write B.shortEmpty j) ++ "\n"
 
 exit :: Int -> IO a
 exit = Sys.exitWith . exitStatus
