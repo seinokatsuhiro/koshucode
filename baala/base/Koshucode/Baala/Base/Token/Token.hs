@@ -20,7 +20,7 @@ module Koshucode.Baala.Base.Token.Token
   
     -- * Selectors
     tokenContent,
-    tokenTypeText, tokenTypeSubtext,
+    tokenTypeText, tokenSubtypeText,
     -- $Selector
   
     -- * Predicates
@@ -185,7 +185,7 @@ showNestedTermName = concat . map showTermName
 --   >>> let tok = TTerm B.codeZero 0 ["r", "x"] in tokenContent tok
 --   "/r/x"
 --
---   >>> let tok = textToken "flower" in (tokenTypeText tok, tokenTypeSubtext tok)
+--   >>> let tok = textToken "flower" in (tokenTypeText tok, tokenSubtypeText tok)
 --   ("text", Just "raw")
 
 -- | Get the content of token.
@@ -216,8 +216,8 @@ tokenTypeText tok =
       TSpace   _ _     -> "space"
       TComment _ _     -> "comment"
 
-tokenTypeSubtext :: Token -> Maybe String
-tokenTypeSubtext tok =
+tokenSubtypeText :: Token -> Maybe String
+tokenSubtypeText tok =
     case tok of
       TText    _ f _   -> Just $ textFormTypeText f
       TName    _ b     -> Just $ blankNameTypeText b

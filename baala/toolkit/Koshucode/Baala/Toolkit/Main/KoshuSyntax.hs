@@ -85,14 +85,15 @@ dumpDesc path = B.CommentDoc [desc, input, js] where
     desc   = B.CommentSec "DESCRIPTION" [ "Clauses and tokens" ]
     input  = B.CommentSec "INPUT" [ path ]
     js     = B.CommentSec "JUDGES"
-             [ "|-- CLAUSE  /clause /clause-type"
-             , "|-- LINE    /clause /line"
-             , "|-- TOKEN   /line /column /token-type /cont"
+             [ "|-- CLAUSE  /clause -> /clause-type"
+             , "|-- LINE    /line -> /clause"
+             , "|-- TOKEN   /line /column -> /token-type [/token-subtype] /cont"
              , ""
              , "<<< There is a clause numbered /clause on /line ."
              , "    Type of the clause is /clause-type ."
              , "    There is a token of content /cont at /line and /column ."
-             , "    Type of the token is /token-type . >>>" ]
+             , "    Type of the token is /token-type ."
+             , "    Some tokens are classified into /token-subtype . >>>" ]
 
 judgeClause :: Int -> C.Clause -> B.Judge Type.VContent
 judgeClause clseq c = B.affirm "CLAUSE" args where
@@ -101,15 +102,16 @@ judgeClause clseq c = B.affirm "CLAUSE" args where
 
 judgeLine :: Int -> B.TokenLine -> B.Judge Type.VContent
 judgeLine clseq (B.CodeLine ln _ _) = B.affirm "LINE" args where
-    args = [ ("clause"       , C.pDecFromInt clseq)
-           , ("line"         , C.pDecFromInt ln) ]
+    args = [ ("line"         , C.pDecFromInt ln)
+           , ("clause"       , C.pDecFromInt clseq) ]
 
 judgeToken :: Int -> B.Token -> B.Judge Type.VContent
-judgeToken ln tok = B.affirm "TOKEN" args where
-    args = [ ("line"         , C.pDecFromInt ln)
-           , ("column"       , C.pDecFromInt $ B.codeColumnNumber $ head $ B.codePts tok)
-           , ("token-type"   , C.pText $ B.tokenTypeText tok)
-           , ("cont"         , C.pText $ B.tokenContent  tok) ]
+judgeToken ln tok = B.affirm "TOKEN" $ C.omitEmpty args where
+    args = [ ("line"           , C.pDecFromInt ln)
+           , ("column"         , C.pDecFromInt $ B.codeColumnNumber $ head $ B.codePts tok)
+           , ("token-type"     , C.pText $ B.tokenTypeText tok)
+           , ("token-subtype"  , C.maybeEmpty C.pText $ B.tokenSubtypeText tok)
+           , ("cont"           , C.pText $ B.tokenContent  tok) ]
 
 dumpFile :: Bool -> FilePath -> IO ()
 dumpFile omit path = dumpCode omit path =<< readFile path

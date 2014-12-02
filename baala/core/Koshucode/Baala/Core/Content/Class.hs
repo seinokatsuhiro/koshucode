@@ -11,7 +11,7 @@ module Koshucode.Baala.Core.Content.Class
     CList       (..),
   
     -- * Koshu data
-    CEmpty      (..), maybeEmpty,
+    CEmpty      (..), maybeEmpty, omitEmpty,
     CDec        (..), pDecFromInt, pDecFromInteger,
     CClock      (..),
     CTime       (..),
@@ -113,6 +113,9 @@ class (CTypeOf c) => CEmpty c where
 maybeEmpty :: (CEmpty c) => (a -> c) -> Maybe a -> c
 maybeEmpty f (Just a)   = f a
 maybeEmpty _ (Nothing)  = empty
+
+omitEmpty :: (CEmpty c) => B.Map [(a, c)]
+omitEmpty = B.omit (isEmpty . snd)
 
 class (CTypeOf c) => CDec c where
     isDec       ::           c -> Bool
