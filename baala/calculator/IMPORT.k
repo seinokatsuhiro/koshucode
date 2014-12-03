@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    21 judges
+**    22 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Element"   /import "Koshucode.Baala.Base"
@@ -17,6 +17,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Exit"      /import "System.Environment"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Exit"      /import "System.Exit"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Exit"      /import "System.IO"
+|-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Exit"      /import "Koshucode.Baala.Base"
 
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Run"       /import "System.IO"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Run"       /import "System.FilePath"
