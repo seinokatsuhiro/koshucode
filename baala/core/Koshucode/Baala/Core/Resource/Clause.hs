@@ -34,14 +34,13 @@ data Clause =
 
 data ClauseBody
     = CSection    String                         -- ^ Section heading
-    | CImport     [B.Token] (Maybe Clause)       -- ^ Importing reosurce name
-    | CExport     String                         -- ^ Exporting relmap name
+    | CImport     [B.Token] (Maybe Clause)       -- ^ Importing resource name
+    | CExport     String                         -- ^ Exporting name
     | CShort      [B.ShortDef]                   -- ^ Short signs
     | CRelmap     String [B.Token]               -- ^ Source of relmap
-    | CAssert     C.AssertType B.JudgePat [B.Token] [B.Token] -- ^ (Intermediate data)
+    | CAssert     C.AssertType B.JudgePat [B.Token] [B.Token] -- ^ Assertion
     | CJudge      Char B.JudgePat [B.Token]      -- ^ Judge
     | CSlot       String [B.Token]               -- ^ Global slot
-    | CComment                                   -- ^ Clause comment
     | CUnknown                                   -- ^ Unknown clause
     | CUnres      [B.Token]                      -- ^ Unresolved short sign
       deriving (Show, G.Data, G.Typeable)
@@ -53,17 +52,16 @@ instance B.CodePtr Clause where
 clauseTypeText :: Clause -> String
 clauseTypeText (Clause _ _ body) =
     case body of
-      CSection   _         ->  "section"
-      CImport    _ _       ->  "import"
-      CExport    _         ->  "export"
-      CShort     _         ->  "short"
-      CRelmap    _ _       ->  "relmap"
-      CAssert    _ _ _ _   ->  "assert"
-      CJudge     _ _ _     ->  "judge"
-      CSlot      _ _       ->  "slot"
-      CComment             ->  "comment"
-      CUnknown             ->  "unknown"
-      CUnres     _         ->  "unres"
+      CSection   _         -> "section"
+      CImport    _ _       -> "import"
+      CExport    _         -> "export"
+      CShort     _         -> "short"
+      CRelmap    _ _       -> "relmap"
+      CAssert    _ _ _ _   -> "assert"
+      CJudge     _ _ _     -> "judge"
+      CSlot      _ _       -> "slot"
+      CUnknown             -> "unknown"
+      CUnres     _         -> "unres"
 
 
 
@@ -114,7 +112,7 @@ consPreclause' no src = dispatch $ liaison $ B.clauseTokens src where
         | k == "import"             = same $ impt xs
         | k == "export"             = same $ expt xs
         | k == "short"              = same $ short xs
-        | k == "****"               = same $ c1 CComment
+        | k == "****"               = same []
         | k == "=="                 = up   $ sec xs
     dispatch (B.TSlot _ 2 n : xs)   = same $ slot n xs
     dispatch []                     = same []
@@ -219,11 +217,11 @@ shortToLong sh = map clause where
     clause :: B.Map Clause
     clause (Clause src sec bo) =
         Clause src sec $ case bo of
-          CJudge  q p     xs  ->  body (CJudge  q p)     xs
-          CAssert q p opt xs  ->  body (CAssert q p opt) xs
-          CRelmap n       xs  ->  body (CRelmap n)       xs
-          CSlot   n       xs  ->  body (CSlot   n)       xs
-          _                   ->  bo
+          CJudge  q p     xs   -> body (CJudge  q p)     xs
+          CAssert q p opt xs   -> body (CAssert q p opt) xs
+          CRelmap n       xs   -> body (CRelmap n)       xs
+          CSlot   n       xs   -> body (CSlot   n)       xs
+          _                    -> bo
 
     body :: ([B.Token] -> ClauseBody) -> [B.Token] -> ClauseBody
     body k xs =
