@@ -107,7 +107,7 @@ library
        , containers       == 0.5.*
        , pretty           == 1.1.*
        , syb              == 0.4.*
-       , time             == 1.5.*
+       , time             == 1.4.*
 
   ghc-options:         -Wall
 
