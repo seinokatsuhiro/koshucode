@@ -14,7 +14,7 @@ module Koshucode.Baala.Core.Lexmap.Lexmap
     -- * Constructor
     ConsLexmap,
     ConsLexmapBody,
-    RelmapSource,
+    RelmapSource, NName, NNamed,
     consLexmap,
     withTerms,
   ) where
@@ -75,7 +75,13 @@ lexMessageList Lexmap { lexOpToken = tok, lexMessage = msg }
 type ConsLexmap = [C.GlobalSlot] -> [RelmapSource] -> ConsLexmapBody
 
 -- | Source of relmap: its name, replacement, and attribute editor.
-type RelmapSource = B.Named ([B.TTree], C.Roamap)
+type RelmapSource = NNamed ([B.TTree], C.Roamap)
+
+-- | Numbered name.
+type NName = (Int, String)
+
+-- | Pair which key is a numbered name.
+type NNamed a = (NName, a)
 
 -- | Construct lexmap and its submaps from source of lexmap
 type ConsLexmapBody = [B.TTree] -> B.Ab (Lexmap, [C.Roal Lexmap])
@@ -103,9 +109,16 @@ consLexmap find gslot derives = lexmap where
     derived :: B.Token -> ConsLexmapBody
     derived rop trees =
         let n = B.tokenContent rop
-        in case lookup n derives of
+        in case resolve 0 n derives of
              Just _  -> user LexmapDerived rop trees
              Nothing -> base n rop trees
+
+    resolve :: Int -> String -> [RelmapSource] -> Maybe ([B.TTree], C.Roamap)
+    resolve _ name = loop where
+        loop [] = Nothing
+        loop (((_, n), src) : xs)
+            | n == name    = Just src
+            | otherwise    = loop xs
 
     baseOf :: C.RopName -> ConsLexmapBody
     baseOf n = base n $ B.textToken n
@@ -156,7 +169,7 @@ consLexmap find gslot derives = lexmap where
                 = let n   = lexOpName  lx
                       roa = lexAttr    lx
                       sub = lexSubmap  lx
-                  in Msg.abSlot [lx] $ case lookup n derives of
+                  in Msg.abSlot [lx] $ case resolve 0 n derives of
                       Nothing -> B.concatMapM slot sub
                       Just (trees, roamap) ->
                             do roa2       <- C.roamapRun roamap roa

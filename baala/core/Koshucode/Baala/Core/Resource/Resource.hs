@@ -131,17 +131,17 @@ consResourceEach root source (B.Short pt shorts xs) =
                             Right (n, trees)
 
       relmap :: Clab C.RelmapSource
-      relmap _ _ (C.CRelmap n toks) =
+      relmap sec _ (C.CRelmap n toks) =
           case B.splitTokensBy (== "---") toks of
-            Left  _         -> ntrees2 n toks []
-            Right (r, _, e) -> ntrees2 n r e
+            Left  _         -> ntrees2 sec n toks []
+            Right (r, _, e) -> ntrees2 sec n r e
 
-      ntrees2 :: String -> [B.Token] -> [B.Token] -> B.Ab C.RelmapSource
-      ntrees2 n toks1 toks2 =
+      ntrees2 :: Int -> String -> [B.Token] -> [B.Token] -> B.Ab C.RelmapSource
+      ntrees2 sec n toks1 toks2 =
           do trees1 <- B.tokenTrees toks1
              trees2 <- B.tokenTrees toks2
              roamap <- C.roamapCons trees2
-             Right (n, (trees1, roamap))
+             Right ((sec, n), (trees1, roamap))
 
       judge :: Clab (B.Judge c)
       judge _ _ (C.CJudge q p toks) =

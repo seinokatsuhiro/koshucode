@@ -15,8 +15,8 @@ import qualified Koshucode.Baala.Core.Resource.Resource as C
 import qualified Koshucode.Baala.Core.Message           as Msg
 
 runResource :: (C.CContent c) => C.Global c -> C.Resource c -> B.Ab (B.OutputResult c)
-runResource global sect =
-    do s2 <- assembleRelmap sect
+runResource global res =
+    do s2 <- assembleRelmap res
        let js = C.resJudge s2
            g2 = global { C.globalJudges = js }
        case filter B.isViolative js of
@@ -41,7 +41,7 @@ runResourceBody global C.Resource { C.resAssert = ass, C.resMessage = msg } =
 
 assembleRelmap :: forall c. B.AbMap (C.Resource c)
 assembleRelmap sec@C.Resource { C.resSlot    = gslot
-                              , C.resRelmap  = tokmaps
+                              , C.resRelmap  = derives
                               , C.resAssert  = ass
                               , C.resCons    = C.RelmapCons lexmap relmap } =
     do result <- B.shortListM $ mapM assemble `B.map2` ass
@@ -54,7 +54,7 @@ assembleRelmap sec@C.Resource { C.resSlot    = gslot
       assemble a =
           Msg.abAssert [a] $ do
             trees     <- C.substSlot gslot [] $ C.assTree a
-            (lx, lxs) <- lexmap gslot tokmaps trees
+            (lx, lxs) <- lexmap gslot derives trees
             parts     <- B.sequenceSnd $ B.mapSndTo relmap lxs
             rmap      <- relmap lx
             let msg1  =  C.lexMessage lx
