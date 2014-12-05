@@ -1,5 +1,6 @@
-{-# LANGUAGE TupleSections #-}
+{-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TupleSections #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Make literal contents from token tree.
@@ -10,6 +11,11 @@ module Koshucode.Baala.Core.Content.Literal
     literal,
     treesToJudge,
 
+    -- * Assert type
+    AssertType (..),
+    assertAs,
+    assertSymbol,
+
     -- * Document
   
     -- ** Simple data
@@ -19,6 +25,7 @@ module Koshucode.Baala.Core.Content.Literal
     -- $CompoundData
   ) where
 
+import qualified Data.Generics                       as G
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Core.Content.Class  as C
 import qualified Koshucode.Baala.Core.Content.Tree   as C
@@ -110,13 +117,27 @@ litRel lit cs =
 -- | Convert token trees into a judge.
 --   Judges itself are not content type.
 --   It can be only used in the top-level of resources.
-treesToJudge :: (C.CContent c) => CalcContent c -> Char -> B.JudgePat -> B.TTreesToAb (B.Judge c)
-treesToJudge calc q p = Right . symbol q p B.<=< litAssn (literal calc) where
-    symbol :: Char -> B.JudgeOf c
-    symbol 'O' = B.JudgeAffirm
-    symbol 'X' = B.JudgeDeny
-    symbol 'V' = B.JudgeViolate
-    symbol _   = B.bug "unknown judge type"
+treesToJudge :: (C.CContent c) => CalcContent c -> AssertType -> B.JudgePat -> B.TTreesToAb (B.Judge c)
+treesToJudge calc q p = Right . assertAs q p B.<=< litAssn (literal calc) where
+
+
+-- ----------------------  Assert type
+
+data AssertType
+    = AssertAffirm    -- ^ @|==@ /pattern/ @:@ /relmap/
+    | AssertDeny      -- ^ @|=X@ /pattern/ @:@ /relmap/
+    | AssertViolate   -- ^ @|=V@ /pattern/ @:@ /relmap/
+      deriving (Show, Eq, Ord, G.Data, G.Typeable)
+
+assertSymbol :: AssertType -> String
+assertSymbol AssertAffirm    = "|=="
+assertSymbol AssertDeny      = "|=X"
+assertSymbol AssertViolate   = "|=V"
+
+assertAs :: AssertType -> B.JudgeOf c
+assertAs AssertAffirm      = B.JudgeAffirm
+assertAs AssertDeny        = B.JudgeDeny
+assertAs AssertViolate     = B.JudgeViolate
 
 
 -- ----------------------  Type
@@ -128,12 +149,12 @@ litType = gen where
                [x] ->  single x
                xs2 ->  Right . B.TypeSum =<< mapM gen xs2
 
-    single [B.TreeB _ _ xs]  =  gen xs
+    single [B.TreeB _ _ xs]  = gen xs
     single (B.TreeL (B.TText _ q n) : xs)
-        | q == B.TextRaw     =  dispatch n xs
-        | otherwise          =  Msg.quoteType n
-    single []                =  Right $ B.TypeSum []
-    single _                 =  Msg.unkType ""
+        | q == B.TextRaw     = dispatch n xs
+        | otherwise          = Msg.quoteType n
+    single []                = Right $ B.TypeSum []
+    single _                 = Msg.unkType ""
 
     precision ws [B.TreeL (B.TText _ B.TextRaw w)] | w `elem` ws = Right $ Just w
     precision _ []  = Right Nothing
@@ -142,37 +163,37 @@ litType = gen where
     clock = ["sec", "min", "hour", "day"]
     time  = "month" : clock
 
-    dispatch "any"     _     =  Right B.TypeAny
-    dispatch "empty"   _     =  Right B.TypeEmpty
-    dispatch "boolean" _     =  Right B.TypeBool
-    dispatch "text"    _     =  Right B.TypeText
-    dispatch "code"    _     =  Right B.TypeCode
-    dispatch "decimal" _     =  Right B.TypeDec
-    dispatch "clock"   xs    =  Right . B.TypeClock  =<< precision clock xs
-    dispatch "time"    xs    =  Right . B.TypeTime   =<< precision time  xs
-    dispatch "binary"  _     =  Right B.TypeBin
-    dispatch "term"    _     =  Right B.TypeTerm
-    dispatch "type"    _     =  Right B.TypeType
-    dispatch "interp"  _     =  Right B.TypeInterp
+    dispatch "any"     _    = Right B.TypeAny
+    dispatch "empty"   _    = Right B.TypeEmpty
+    dispatch "boolean" _    = Right B.TypeBool
+    dispatch "text"    _    = Right B.TypeText
+    dispatch "code"    _    = Right B.TypeCode
+    dispatch "decimal" _    = Right B.TypeDec
+    dispatch "clock"   xs   = Right . B.TypeClock  =<< precision clock xs
+    dispatch "time"    xs   = Right . B.TypeTime   =<< precision time  xs
+    dispatch "binary"  _    = Right B.TypeBin
+    dispatch "term"    _    = Right B.TypeTerm
+    dispatch "type"    _    = Right B.TypeType
+    dispatch "interp"  _    = Right B.TypeInterp
 
-    dispatch "tag"   xs      =  case xs of
-                                  [tag, colon, typ]
-                                      | C.treeToText False colon == Right ":"
-                                        -> do tag' <- C.treeToText False tag
-                                              typ' <- gen [typ]
-                                              Right $ B.TypeTag tag' typ'
-                                  _   -> Msg.unkType "tag"
-    dispatch "list"  xs      =  Right . B.TypeList =<< gen xs
-    dispatch "set"   xs      =  Right . B.TypeSet  =<< gen xs
-    dispatch "tuple" xs      =  do ts <- mapM (gen. B.li1) xs
-                                   Right $ B.TypeTuple ts
-    dispatch "assn"  xs      =  do ts1 <- C.treesToTerms xs
-                                   ts2 <- B.sequenceSnd $ B.mapSndTo gen ts1
-                                   Right $ B.TypeAssn ts2
-    dispatch "rel"   xs      =  do ts1 <- C.treesToTerms xs
-                                   ts2 <- B.sequenceSnd $ B.mapSndTo gen ts1
-                                   Right $ B.TypeRel ts2
-    dispatch n _             =  Msg.unkType n
+    dispatch "tag"   xs     = case xs of
+                                [tag, colon, typ]
+                                    | C.treeToText False colon == Right ":"
+                                      -> do tag' <- C.treeToText False tag
+                                            typ' <- gen [typ]
+                                            Right $ B.TypeTag tag' typ'
+                                _   -> Msg.unkType "tag"
+    dispatch "list"  xs     = Right . B.TypeList =<< gen xs
+    dispatch "set"   xs     = Right . B.TypeSet  =<< gen xs
+    dispatch "tuple" xs     = do ts <- mapM (gen. B.li1) xs
+                                 Right $ B.TypeTuple ts
+    dispatch "assn"  xs     = do ts1 <- C.treesToTerms xs
+                                 ts2 <- B.sequenceSnd $ B.mapSndTo gen ts1
+                                 Right $ B.TypeAssn ts2
+    dispatch "rel"   xs     = do ts1 <- C.treesToTerms xs
+                                 ts2 <- B.sequenceSnd $ B.mapSndTo gen ts1
+                                 Right $ B.TypeRel ts2
+    dispatch n _            = Msg.unkType n
 
 
 -- ------------------------------------------------------------------

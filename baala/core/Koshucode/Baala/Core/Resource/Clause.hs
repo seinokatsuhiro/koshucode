@@ -18,7 +18,7 @@ module Koshucode.Baala.Core.Resource.Clause
 
 import qualified Data.Generics                 as G
 import qualified Koshucode.Baala.Base          as B
-import qualified Koshucode.Baala.Core.Assert   as C
+import qualified Koshucode.Baala.Core.Content  as C
 
 
 
@@ -33,16 +33,16 @@ data Clause =
            } deriving (Show, G.Data, G.Typeable)
 
 data ClauseBody
-    = CSection    String                         -- ^ Section heading
-    | CImport     [B.Token] (Maybe Clause)       -- ^ Importing resource name
-    | CExport     String                         -- ^ Exporting name
-    | CShort      [B.ShortDef]                   -- ^ Short signs
-    | CRelmap     String [B.Token]               -- ^ Source of relmap
-    | CAssert     C.AssertType B.JudgePat [B.Token] [B.Token] -- ^ Assertion
-    | CJudge      Char B.JudgePat [B.Token]      -- ^ Judge
-    | CSlot       String [B.Token]               -- ^ Global slot
-    | CUnknown                                   -- ^ Unknown clause
-    | CUnres      [B.Token]                      -- ^ Unresolved short sign
+    = CSection  String                                      -- ^ Section heading
+    | CImport   [B.Token] (Maybe Clause)                    -- ^ Importing resource name
+    | CExport   String                                      -- ^ Exporting name
+    | CShort    [B.ShortDef]                                -- ^ Short signs
+    | CRelmap   String [B.Token]                            -- ^ Source of relmap
+    | CAssert   C.AssertType B.JudgePat [B.Token] [B.Token] -- ^ Assertion
+    | CJudge    C.AssertType B.JudgePat [B.Token]           -- ^ Judge
+    | CSlot     String [B.Token]                            -- ^ Global slot
+    | CUnknown                                              -- ^ Unknown clause
+    | CUnres    [B.Token]                                   -- ^ Unresolved short sign
       deriving (Show, G.Data, G.Typeable)
 
 instance B.CodePtr Clause where
@@ -127,12 +127,12 @@ consPreclause' no src = dispatch $ liaison $ B.clauseTokens src where
 
     isDelim      = (`elem` ["|", ":"])
 
-    frege "--"   = judge 'O'
-    frege "-"    = judge 'O'
-    frege "-X"   = judge 'X'
-    frege "-x"   = judge 'X'
-    frege "-V"   = judge 'V'
-    frege "-v"   = judge 'V'
+    frege "--"   = judge C.AssertAffirm
+    frege "-"    = judge C.AssertAffirm
+    frege "-X"   = judge C.AssertDeny
+    frege "-x"   = judge C.AssertDeny
+    frege "-V"   = judge C.AssertViolate
+    frege "-v"   = judge C.AssertViolate
 
     frege "=="   = assert C.AssertAffirm
     frege "="    = assert C.AssertAffirm
