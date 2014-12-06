@@ -70,48 +70,50 @@ lexMessageList Lexmap { lexOpToken = tok, lexMessage = msg }
 
 -- ----------------------  Constructor
 
--- | First step of constructing relmap,
---   make lexmap from source of relmap operator.
-type ConsLexmap = [C.GlobalSlot] -> [RelmapSource] -> ConsLexmapBody
-
--- | Source of relmap: its name, replacement, and attribute editor.
-type RelmapSource = NNamed ([B.TTree], C.Roamap)
-
 -- | Numbered name.
 type NName = (Int, String)
 
 -- | Pair which key is a numbered name.
 type NNamed a = (NName, a)
 
+-- | Source of relmap: its name, replacement, and attribute editor.
+type RelmapSource = NNamed ([B.TTree], C.Roamap)
+
+-- | First step of constructing relmap,
+--   make lexmap from source of relmap operator.
+type ConsLexmap = [C.GlobalSlot] -> [RelmapSource] -> ConsLexmapBody
+
 -- | Construct lexmap and its submaps from source of lexmap
 type ConsLexmapBody = [B.TTree] -> B.Ab (Lexmap, [C.Roal Lexmap])
 
 consLexmap :: (C.RopName -> Maybe C.AttrSort) -> ConsLexmap
-consLexmap find gslot derives = lexmap where
+consLexmap findSorter gslot derives = lexmap where
+
+    lexmap1 = lexmap . B.li1
 
     lexmap :: ConsLexmapBody
-    lexmap source =
-        Msg.abLexmap source $
-         case B.divideTreesByBar source of
-           [B.TreeL rop@(B.TText _ B.TextRaw _) : trees] -> derived rop trees
-           [B.TreeL rop@(B.TText _ B.TextKey _) : trees] -> user LexmapWith rop trees
-           [n@(B.TreeL (B.TTerm cp _ [_])) : trees]      -> add cp n trees
-           [[B.TreeB B.BracketGroup _ trees]]            -> lexmap trees
-           [[B.TreeB _ _ _]]     -> Msg.adlib "bracket"
-           [[]]                  -> baseOf "id" []
-           [_]                   -> Msg.unkRelmap "???"
-           trees2                -> baseOf "append" $ map B.wrapTrees trees2
+    lexmap source = Msg.abLexmap source $
+        case B.divideTreesByBar source of
+          []        -> Msg.bug "empty list @consLexmap"
+          [relmap]  -> single relmap
+          relmaps   -> baseOf "append" $ map B.wrapTrees relmaps
 
     -- relmap "/N E" is equivalent to "add /N ( E )"
-    add cp n trees =
-        derived (B.TText cp B.TextRaw "add") $ n : [B.wrapTrees trees]
+    -- relmap "| R | R" is equivalent to "id | R | R"
+    single (B.TreeL rop@(B.TText _ B.TextRaw _) : trees)  = dispatch rop trees
+    single (B.TreeL rop@(B.TText _ B.TextKey _) : trees)  = with rop trees
+    single [B.TreeB B.BracketGroup _ trees]               = lexmap trees
+    single [B.TreeB _ _ _]                                = Msg.reqGroup
+    single (n@(B.TreeL (B.TTerm _ _ [_])) : trees)        = baseOf "add" $ n : [B.wrapTrees trees]
+    single []                                             = baseOf "id" []
+    single _                                              = Msg.unkRelmap "???"
 
-    derived :: B.Token -> ConsLexmapBody
-    derived rop trees =
+    dispatch :: B.Token -> ConsLexmapBody
+    dispatch rop trees =
         let n = B.tokenContent rop
         in case resolve 0 n derives of
-             Just _  -> user LexmapDerived rop trees
              Nothing -> base n rop trees
+             Just _  -> deriv rop trees
 
     resolve :: Int -> String -> [RelmapSource] -> Maybe ([B.TTree], C.Roamap)
     resolve _ name = loop where
@@ -125,58 +127,70 @@ consLexmap find gslot derives = lexmap where
 
     base :: C.RopName -> B.Token -> ConsLexmapBody
     base n rop trees =
-        case find n of
-          Nothing     ->  user LexmapDerived rop trees
-          Just sorter ->  do roa <- sorter trees
-                             submap $ cons LexmapBase rop roa trees
+        case findSorter n of
+          Nothing     -> deriv rop trees
+          Just sorter -> do attr <- sorter trees
+                            submap $ cons LexmapBase rop attr trees
 
-    user :: LexmapType -> B.Token -> ConsLexmapBody
-    user LexmapWith rop [] = submap $ cons LexmapWith rop [] []
-    user LexmapWith _ _ = Msg.extraAttr
-    user ty rop trees = do roa <- C.attrSortBranch trees
-                           submap $ cons ty rop roa trees
+    deriv :: B.Token -> ConsLexmapBody
+    deriv rop trees  = do attr <- C.attrSortBranch trees
+                          submap $ cons LexmapDerived rop attr trees
 
+    -- construct lexmap except for submaps
     cons :: LexmapType -> B.Token -> C.AttrTrees -> [B.TTree] -> Lexmap
-    cons ty rop roa trees =
-        check $ Lexmap { lexType    = ty
-                       , lexOpToken = rop
-                       , lexAttr    = ((C.attrNameAttr, trees) : roa)
-                       , lexSubmap  = []
-                       , lexMessage = [] }
+    cons ty rop attr trees =
+        check $ Lexmap { lexType     = ty
+                       , lexOpToken  = rop
+                       , lexAttr     = ((C.attrNameAttr, trees) : attr)
+                       , lexSubmap   = []
+                       , lexMessage  = [] }
 
     check :: B.Map Lexmap
     check lx | lexType lx == LexmapDerived
-                 = let n = lexOpName lx
+                 = let n    = lexOpName lx
                        msg  = "Same name as base relmap operator '" ++ n ++ "'"
-                   in case find n of
+                   in case findSorter n of
                         Just _  -> lexAddMessage msg lx
                         Nothing -> lx
     check lx = lx
 
+    -- construct lexmaps of submaps
     submap :: Lexmap -> B.Ab (Lexmap, [C.Roal Lexmap])
-    submap lx@Lexmap { lexAttr = roa } =
-        case B.lookupBy C.isAttrRelmap roa of
-          Nothing    -> do lxs <- slot lx   -- no submaps
+    submap lx@Lexmap { lexAttr = attr } =
+        case B.lookupBy C.isAttrRelmap attr of
+          Nothing    -> do lxs   <- uses lx   -- no submaps
                            Right (lx, lxs)
-          Just trees -> do ws   <- withVars roa
-                           subs <- mapM (lexmap . B.li1) $ withTrees ws trees
-                           Right ( lx { lexSubmap = map fst subs }
-                                 , concatMap snd subs )
+          Just trees -> do ws    <- withVars attr
+                           subs  <- lexmap1 `mapM` withTrees ws trees
+                           let (sublx, us)  = unzip subs
+                               lx2          = lx { lexSubmap = sublx }
+                           Right (lx2, concat us)
 
-    slot :: Lexmap -> B.Ab [C.Roal Lexmap]
-    slot lx | lexType lx /= LexmapDerived = Right []
-            | otherwise
-                = let n   = lexOpName  lx
-                      roa = lexAttr    lx
-                      sub = lexSubmap  lx
-                  in Msg.abSlot [lx] $ case resolve 0 n derives of
-                      Nothing -> B.concatMapM slot sub
-                      Just (trees, roamap) ->
-                            do roa2       <- C.roamapRun roamap roa
-                               trees2     <- C.substSlot gslot roa2 trees
-                               (lx2, lxs) <- lexmap trees2
-                               sub2       <- B.concatMapM slot sub
-                               Right $ ((n, roa), lx2) : lxs ++ sub2
+    uses :: Lexmap -> B.Ab [C.Roal Lexmap]
+    uses lx | ty /= LexmapDerived = Right []
+            | otherwise = Msg.abSlot [lx] $
+                case resolve 0 name derives of
+                  Just def -> expand name attr def
+                  Nothing  -> Right []
+        where
+          ty    = lexType   lx
+          name  = lexOpName lx
+          attr  = lexAttr   lx
+
+    expand name attr (repl, edit) =
+        do attr2       <- C.roamapRun edit attr
+           repl2       <- C.substSlot gslot attr2 repl
+           (lx, lxs)   <- lexmap repl2
+           Right $ ((name, attr), lx) : lxs
+
+    with :: B.Token -> ConsLexmapBody
+    with rop []  = Right (cons LexmapWith rop [] [], [])
+    with _ _     = Msg.extraAttr
+
+    withVars :: C.AttrTrees -> B.Ab [String]
+    withVars att = case lookup (C.AttrTree "-with") att of
+                     Nothing  -> Right []
+                     Just ws  -> Right . map snd =<< withTerms ws
 
     withTrees :: [String] -> B.Map [B.TTree]
     withTrees ws = map loop where
@@ -184,25 +198,15 @@ consLexmap find gslot derives = lexmap where
         loop (B.TreeL (B.TText p B.TextRaw w)) | w `elem` ws = B.TreeL (B.TText p B.TextKey w)
         loop tree = tree
 
-    withVars :: C.AttrTrees -> B.Ab [String]
-    withVars roa =
-        case lookup (C.AttrTree "-with") roa of
-          Nothing -> Right []
-          Just ws -> withNames ws
-
-    withNames :: [B.TTree] -> B.Ab [String]
-    withNames ws = do ts <- withTerms ws
-                      Right $ map snd ts
-
 -- | Parse @-with@ attribute.
 withTerms :: [B.TTree] -> B.Ab [B.Terminal String]
 withTerms = loop where
     loop (B.TreeL (B.TTerm _ 0 [n]) :
-          B.TreeL (B.TText _ B.TextRaw v)   : xs)  =  next (n, v) xs
-    loop (B.TreeL (B.TTerm _ 0 [n]) : xs)  =  next (n, n) xs
-    loop (B.TreeL (B.TText _ B.TextRaw v)   : xs)  =  next (v, v) xs
-    loop [] = Right []
-    loop _  = Msg.reqTermName
+          B.TreeL (B.TText _ B.TextRaw v) : xs)  = next (n, v) xs
+    loop (B.TreeL (B.TTerm _ 0 [n]) : xs)        = next (n, n) xs
+    loop (B.TreeL (B.TText _ B.TextRaw v) : xs)  = next (v, v) xs
+    loop []                                      = Right []
+    loop _                                       = Msg.reqTermName
 
     next p xs = do xs' <- loop xs
                    Right $ p : xs'

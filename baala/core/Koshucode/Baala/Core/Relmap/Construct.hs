@@ -46,27 +46,27 @@ instance Show (RelmapCons c) where
 -- | Make a constructor pair of lexmap and relmap.
 relmapCons :: C.Global c -> RelmapCons c
 relmapCons g = RelmapCons consL consR where
-    consL         =  C.consLexmap findSorter
-    consR         =  consRelmap findRop g
-    findSorter n  =  C.ropSorter `fmap` findRop n
-    findRop       =  C.opsetFindRop $ C.globalOpset g
+    consL         = C.consLexmap findSorter
+    consR         = consRelmap findRop g
+    findSorter n  = C.ropSorter `fmap` findRop n
+    findRop       = C.opsetFindRop $ C.globalOpset g
 
 -- | Second step of constructing relmap, make relmap from lexmap.
 type ConsRelmap c = C.Lexmap -> B.Ab (C.Relmap c)
 
 consRelmap :: (C.RopName -> Maybe (C.Rop c)) -> C.Global c -> ConsRelmap c
-consRelmap find g = relmap where
+consRelmap findRop g = relmap where
     relmap lx =
         case C.lexType lx of
-          C.LexmapWith    -> Right $ C.RelmapLink lx n attr
-          C.LexmapDerived -> Right $ C.RelmapLink lx n attr
-          C.LexmapBase    -> case find n of
-                               Nothing  -> Msg.unkRelmap n
-                               Just rop -> Msg.abRelmap [lx] $ cons rop
-        where n        =  C.lexOpName lx
-              attr     =  C.lexAttr   lx
-              cons rop =  do sub <- mapM relmap $ C.lexSubmap lx
-                             C.ropCons rop $ C.RopUse g lx sub
+          C.LexmapWith     -> Right $ C.RelmapLink lx n attr
+          C.LexmapDerived  -> Right $ C.RelmapLink lx n attr
+          C.LexmapBase     -> case findRop n of
+                                Just rop -> Msg.abRelmap [lx] $ cons rop
+                                Nothing  -> Msg.bug "missing operator @consRelmap"
+        where n             = C.lexOpName lx
+              attr          = C.lexAttr   lx
+              cons rop      = do sub <- relmap `mapM` C.lexSubmap lx
+                                 C.ropCons rop $ C.RopUse g lx sub
 
 
 -- ----------------------  Construct

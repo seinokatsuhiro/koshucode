@@ -41,9 +41,10 @@ module Koshucode.Baala.Core.Message
     nothing,
     oddRelation,
     quoteType,
-    reqFlatName,
     reqAttr,
     reqAttrName,
+    reqFlatName,
+    reqGroup,
     reqTermName,
     unexpAttr,
     unkBracket,
@@ -197,11 +198,6 @@ oddRelation = Left $ B.abortBecause "Odd relation literal"
 quoteType :: String -> B.Ab a
 quoteType = Left . B.abortLine "Quoted type name"
 
--- | Require flat name
-reqFlatName :: B.Token -> B.Ab a
-reqFlatName tok = Left $ B.abortLine "Require flat name" n where
-    n = B.tokenContent tok
-
 -- | Require attribute
 reqAttr :: String -> B.Ab a
 reqAttr = Left . B.abortLine "Require attribute"
@@ -209,6 +205,15 @@ reqAttr = Left . B.abortLine "Require attribute"
 -- | Require attribute
 reqAttrName :: String -> B.Ab a
 reqAttrName = Left . B.abortLine "Require attribute name, e.g., -xxx"
+
+-- | Require flat name
+reqFlatName :: B.Token -> B.Ab a
+reqFlatName tok = Left $ B.abortLine "Require flat name" n where
+    n = B.tokenContent tok
+
+-- | Require grouping paren
+reqGroup :: B.Ab a
+reqGroup = Left $ B.abortBecause "Require grouping parens"
 
 -- | Require term name
 reqTermName :: B.Ab a

@@ -5,6 +5,7 @@ module Koshucode.Baala.Base.Message
     abToken,
   
     -- * Base package
+    bug,
     adlib,
     adlibs,
     extraCloseBracket,
@@ -31,6 +32,10 @@ import qualified Koshucode.Baala.Base.Text     as B
 
 abToken :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abToken = B.abortable "token"
+
+-- | BUG: reason
+bug :: String -> B.Ab a
+bug reason = Left $ B.abortBecause $ "BUG: " ++ reason
 
 -- | AD-LIB: reason
 adlib :: String -> B.Ab a
