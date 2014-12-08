@@ -42,7 +42,6 @@ data Resource c = Resource {
     , resAssert   :: [C.ShortAssert c]   -- ^ Assertions of relmaps
     , resJudge    :: [B.Judge c]         -- ^ Affirmative or denial judgements
     , resSource   :: B.Source            -- ^ Source name
-    , resCons     :: C.RelmapCons c      -- ^ Relmap constructor for this resource
     , resMessage  :: [String]            -- ^ Collection of messages
     } deriving (Show)
 
@@ -54,13 +53,11 @@ addMessages msg res = res { resMessage = msg ++ resMessage res }
 
 -- | Resource that has no contents.
 emptyResource :: Resource c
-emptyResource = Resource C.global [] [] [] [] [] [] B.sourceZero cons [] where
-    cons = C.relmapCons C.global
+emptyResource = Resource C.global [] [] [] [] [] [] B.sourceZero []
 
 -- | Construct root resource from global parameter.
 rootResource :: C.Global c -> Resource c
-rootResource g = emptyResource { resGlobal  = g
-                               , resCons    = C.relmapCons g }
+rootResource g = emptyResource { resGlobal = g }
 
 -- | Concatenate resources into united resource.
 concatResource :: Resource c -> [Resource c] -> Resource c

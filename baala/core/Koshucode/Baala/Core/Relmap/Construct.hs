@@ -4,25 +4,17 @@
 
 module Koshucode.Baala.Core.Relmap.Construct
   (  -- * Generic relmap
-    RelmapCons (..),
-    ConsRelmap,
-    relmapCons,
+    ConsRelmap, relmapCons,
   
     -- * Constructor
-    relmapSource,
-    relmapConst,
-    relmapFlow,
-    relmapGlobal,
-    relmapBinary,
-    relmapConfl,
-    relmapCopy,
-    relmapWith,
-    relmapWithVar,
+    relmapSource, relmapConst,
+    relmapFlow, relmapGlobal,
+    relmapBinary, relmapConfl,
+    relmapCopy, relmapWith, relmapWithVar,
     relmapLink,
   
     -- * Select from relmap
-    relmapSourceList,
-    relmapNameList,
+    relmapSourceList, relmapNameList,
   
     -- * Append relmaps
     -- $AppendRelmaps
@@ -37,15 +29,9 @@ import qualified Koshucode.Baala.Core.Message          as Msg
 
 -- ----------------------  Generic relmap
 
--- | Constructor of lexmap and relmap.
-data RelmapCons c = RelmapCons C.ConsLexmap (ConsRelmap c)
-
-instance Show (RelmapCons c) where
-    show _ = "RelmapCons <lex> <full>"
-
 -- | Make a constructor pair of lexmap and relmap.
-relmapCons :: C.Global c -> RelmapCons c
-relmapCons g = RelmapCons consL consR where
+relmapCons :: C.Global c -> (C.ConsLexmap, ConsRelmap c)
+relmapCons g = (consL, consR) where
     consL         = C.consLexmap findSorter
     consR         = consRelmap findRop g
     findSorter n  = C.ropSorter `fmap` findRop n

@@ -17,6 +17,6 @@ koshu = C.koshuQuoter vanillaLex [| vanillaFull |]
 -- relmap constructors
 vanillaLex  :: C.ConsLexmap
 vanillaFull :: C.ConsRelmap Type.VContent
-(C.RelmapCons vanillaLex vanillaFull)
+(vanillaLex, vanillaFull)
     = C.relmapCons C.global
 

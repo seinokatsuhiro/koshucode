@@ -40,26 +40,27 @@ runResourceBody global C.Resource { C.resAssert = ass, C.resMessage = msg } =
       message = "" : "MESSAGE" : map ("  " ++) msg ++ [""]
 
 assembleRelmap :: forall c. B.AbMap (C.Resource c)
-assembleRelmap res@C.Resource { C.resSlot    = gslot
+assembleRelmap res@C.Resource { C.resGlobal  = g
+                              , C.resSlot    = slots
                               , C.resRelmap  = derives
-                              , C.resAssert  = ass
-                              , C.resCons    = C.RelmapCons consLexmap consRelmap } =
-    do result <- B.shortListM $ mapM assemble `B.map2` ass
-       let ass2  = map fst `B.map2` result
-           msg   = map snd `B.map2` result
-           msg2  = concat $ concat $ map B.shortBody msg
-       Right $ C.addMessages msg2 $ res { C.resAssert = ass2 }
+                              , C.resAssert  = asserts } =
+    do result <- B.shortListM $ mapM assemble `B.map2` asserts
+       let asserts2  = map fst `B.map2` result
+           msg       = map snd `B.map2` result
+           msg2      = concat $ concat $ map B.shortBody msg
+       Right $ C.addMessages msg2 $ res { C.resAssert = asserts2 }
     where
+      (consLexmap, consRelmap) = C.relmapCons g
+
       assemble :: C.Assert c -> B.Ab (C.Assert c, [String])
-      assemble a =
-          Msg.abAssert [a] $ do
-            trees      <- C.substSlot gslot [] $ C.assTree a
-            (lx, lxs)  <- consLexmap gslot derives trees
+      assemble ass =
+          Msg.abAssert [ass] $ do
+            trees      <- C.substSlot slots [] $ C.assTree ass
+            (lx, lxs)  <- consLexmap slots derives trees
             relmap     <- consRelmap lx
             parts      <- B.sequenceSnd $ B.mapSndTo consRelmap lxs
             let msg1    = C.lexMessage lx
                 msg2    = concatMap C.lexMessageList $ map snd lxs
-            Right ( a { C.assRelmap  = Just relmap
-                      , C.assParts   = parts }
-                  , msg1 ++ msg2 )
-
+                ass2    = ass { C.assRelmap  = Just relmap
+                              , C.assParts   = parts }
+            Right (ass2, msg1 ++ msg2)
