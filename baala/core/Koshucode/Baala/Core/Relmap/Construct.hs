@@ -10,7 +10,7 @@ module Koshucode.Baala.Core.Relmap.Construct
     relmapSource, relmapConst,
     relmapFlow, relmapGlobal,
     relmapBinary, relmapConfl,
-    relmapCopy, relmapWith, relmapWithVar,
+    relmapCopy, relmapNest, relmapNestVar,
     relmapLink,
   
     -- * Select from relmap
@@ -88,11 +88,11 @@ relmapConfl = C.RelmapCalc . C.ropLexmap
 relmapCopy :: C.RopUse c -> String -> B.Map (C.Relmap c)
 relmapCopy = C.RelmapCopy . C.ropLexmap
 
-relmapWith :: C.RopUse c -> [B.Terminal String] -> B.Map (C.Relmap c)
-relmapWith = C.RelmapNest . C.ropLexmap
+relmapNest :: C.RopUse c -> [B.Terminal String] -> B.Map (C.Relmap c)
+relmapNest = C.RelmapNest . C.ropLexmap
 
-relmapWithVar :: C.RopUse c -> String -> C.Relmap c
-relmapWithVar use n = relmapLink (withVar use) n []
+relmapNestVar :: C.RopUse c -> String -> C.Relmap c
+relmapNestVar use n = relmapLink (withVar use) n []
 
 withVar :: B.Map (C.RopUse c)
 withVar u@C.RopUse { C.ropLexmap = lx } =

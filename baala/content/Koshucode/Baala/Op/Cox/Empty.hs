@@ -45,7 +45,7 @@ relmapBoth use fill rmap = C.relmapCopy use "i" rmapBoth where
     rmapBoth = rmapL `B.mappend` Op.relmapJoin use rmapR
     rmapR    = rmap  `B.mappend` relmapMaybe use fill rmapIn
     rmapL    = relmapMaybe use fill rmap
-    rmapIn   = C.relmapWithVar use "i"
+    rmapIn   = C.relmapNestVar use "i"
 
 
 

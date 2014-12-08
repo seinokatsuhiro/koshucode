@@ -22,7 +22,7 @@ module Koshucode.Baala.Op.Builtin.Get
     getTerm, getTermOpt,
     getTerms, getTermsCo,
     getTermPairs,
-    getWithTerms,
+    getNestTerms,
     getTermTrees,
   ) where
 
@@ -182,8 +182,8 @@ getTermsCo = getAbortable Op.termNamesCo
 getTermPairs :: RopGet c [B.TermName2]
 getTermPairs = getAbortable Op.termNamePairs
 
-getWithTerms :: RopGet c [B.Terminal String]
-getWithTerms = getAbortable C.withTerms
+getNestTerms :: RopGet c [B.Terminal C.RopName]
+getNestTerms = getAbortable C.nestTerms
 
 getTermTrees :: RopGet c [B.Named B.TTree]
 getTermTrees = getAbortable C.treesToTerms1

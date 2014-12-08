@@ -17,7 +17,7 @@ module Koshucode.Baala.Core.Lexmap.Lexmap
     LexmapTable,
     RelmapSource, NName, NNamed,
     consLexmap,
-    withTerms,
+    nestTerms,
   ) where
 
 import qualified Data.Generics                          as G
@@ -104,7 +104,7 @@ consLexmap findSorter gslot derives = lexmap where
     -- relmap "/N E" is equivalent to "add /N ( E )"
     -- relmap "| R | R" is equivalent to "id | R | R"
     single (B.TreeL rop@(B.TText _ B.TextRaw _) : trees)  = dispatch rop trees
-    single (B.TreeL rop@(B.TText _ B.TextKey _) : trees)  = with rop trees
+    single (B.TreeL rop@(B.TText _ B.TextKey _) : trees)  = nest rop trees
     single [B.TreeB B.BracketGroup _ trees]               = lexmap trees
     single [B.TreeB _ _ _]                                = Msg.reqGroup
     single (n@(B.TreeL (B.TTerm _ _ [_])) : trees)        = baseOf "add" $ n : [B.wrapTrees trees]
@@ -163,8 +163,8 @@ consLexmap findSorter gslot derives = lexmap where
         case B.lookupBy C.isAttrNameRelmap attr of
           Nothing    -> do lxs   <- uses lx   -- no submaps
                            Right (lx, lxs)
-          Just trees -> do ws    <- withVars attr
-                           subs  <- lexmap1 `mapM` withTrees ws trees
+          Just trees -> do ws    <- nestVars attr
+                           subs  <- lexmap1 `mapM` nestTrees ws trees
                            let (sublx, us)  = unzip subs
                                lx2          = lx { lexSubmap = sublx }
                            Right (lx2, concat us)
@@ -186,24 +186,24 @@ consLexmap findSorter gslot derives = lexmap where
            (lx, lxs)   <- lexmap repl2
            Right $ ((name, attr), lx) : lxs
 
-    with :: B.Token -> ConsLexmapBody
-    with rop []  = Right (cons LexmapNest rop [] [], [])
-    with _ _     = Msg.extraAttr
+    nest :: B.Token -> ConsLexmapBody
+    nest rop []  = Right (cons LexmapNest rop [] [], [])
+    nest _ _     = Msg.extraAttr
 
-    withVars :: [C.AttrTree] -> B.Ab [String]
-    withVars attr = case B.lookupBy C.isAttrNameNest attr of
+    nestVars :: [C.AttrTree] -> B.Ab [String]
+    nestVars attr = case B.lookupBy C.isAttrNameNest attr of
                       Nothing  -> Right []
-                      Just ws  -> Right . map snd =<< withTerms ws
+                      Just ws  -> Right . map snd =<< nestTerms ws
 
-    withTrees :: [String] -> B.Map [B.TTree]
-    withTrees ws = map loop where
+    nestTrees :: [String] -> B.Map [B.TTree]
+    nestTrees ws = map loop where
         loop (B.TreeB t p trees) = B.TreeB t p $ map loop trees
         loop (B.TreeL (B.TText p B.TextRaw w)) | w `elem` ws = B.TreeL (B.TText p B.TextKey w)
         loop tree = tree
 
--- | Parse @-with@ attribute.
-withTerms :: [B.TTree] -> B.Ab [B.Terminal String]
-withTerms = loop where
+-- | Parse nested relation attribute.
+nestTerms :: [B.TTree] -> B.Ab [B.Terminal String]
+nestTerms = loop where
     loop (B.TreeL (B.TTerm _ 0 [n]) :
           B.TreeL (B.TText _ B.TextRaw v) : xs)  = next (n, v) xs
     loop (B.TreeL (B.TTerm _ 0 [n]) : xs)        = next (n, n) xs
