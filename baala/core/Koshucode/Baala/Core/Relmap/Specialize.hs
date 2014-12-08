@@ -5,6 +5,7 @@
 
 module Koshucode.Baala.Core.Relmap.Specialize
   ( relmapSpecialize, 
+    RelmapTable,
   ) where
 
 import qualified Koshucode.Baala.Base                 as B
@@ -13,7 +14,9 @@ import qualified Koshucode.Baala.Core.Relmap.Operator as C
 import qualified Koshucode.Baala.Core.Relmap.Relkit   as C
 import qualified Koshucode.Baala.Core.Message         as Msg
 
-relmapSpecialize :: forall c. C.Global c -> [(C.RelmapKey, C.Relmap c)]
+type RelmapTable c = [(C.RelmapKey, C.Relmap c)]
+
+relmapSpecialize :: forall c. C.Global c -> RelmapTable c
   -> [C.RelkitDef c] -> Maybe B.Head -> C.Relmap c -> B.Ab ([C.RelkitDef c], C.Relkit c)
 relmapSpecialize global parts = spec [] [] where
     spec :: [(String, B.Head)]   -- name of nested relation, and its heading

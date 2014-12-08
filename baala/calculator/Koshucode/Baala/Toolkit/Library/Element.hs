@@ -39,7 +39,7 @@ elemAssert = B.unique . concatMap f where
     quality C.AssertDeny    = "KOSHU-DENY"
     quality C.AssertViolate = "KOSHU-VIOLATE"
 
-elemNamedRelmap :: (C.CContent c) => [(C.RelmapKey, C.Relmap c)] -> [B.Judge c]
+elemNamedRelmap :: (C.CContent c) => C.RelmapTable c -> [B.Judge c]
 elemNamedRelmap = B.unique . concatMap f where
     f ((name, _), relmap) = map (B.judgeCons ("/name" -:- C.pText name))
                             $ elemRelmap relmap

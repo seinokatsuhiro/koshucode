@@ -14,6 +14,7 @@ module Koshucode.Baala.Core.Lexmap.Lexmap
     -- * Constructor
     ConsLexmap,
     ConsLexmapBody,
+    LexmapTable,
     RelmapSource, NName, NNamed,
     consLexmap,
     withTerms,
@@ -79,12 +80,14 @@ type NNamed a = (NName, a)
 -- | Source of relmap: its name, replacement, and attribute editor.
 type RelmapSource = NNamed ([B.TTree], C.Roamap)
 
+type LexmapTable = [(C.RelmapKey, Lexmap)]
+
 -- | First step of constructing relmap,
 --   make lexmap from source of relmap operator.
 type ConsLexmap = [C.GlobalSlot] -> [RelmapSource] -> ConsLexmapBody
 
 -- | Construct lexmap and its submaps from source of lexmap
-type ConsLexmapBody = [B.TTree] -> B.Ab (Lexmap, [(C.RelmapKey, Lexmap)])
+type ConsLexmapBody = [B.TTree] -> B.Ab (Lexmap, LexmapTable)
 
 consLexmap :: (C.RopName -> Maybe C.AttrSort) -> ConsLexmap
 consLexmap findSorter gslot derives = lexmap where
@@ -155,7 +158,7 @@ consLexmap findSorter gslot derives = lexmap where
     check lx = lx
 
     -- construct lexmaps of submaps
-    submap :: Lexmap -> B.Ab (Lexmap, [(C.RelmapKey, Lexmap)])
+    submap :: Lexmap -> B.Ab (Lexmap, LexmapTable)
     submap lx@Lexmap { lexAttr = attr } =
         case B.lookupBy C.isAttrNameRelmap attr of
           Nothing    -> do lxs   <- uses lx   -- no submaps
@@ -166,7 +169,7 @@ consLexmap findSorter gslot derives = lexmap where
                                lx2          = lx { lexSubmap = sublx }
                            Right (lx2, concat us)
 
-    uses :: Lexmap -> B.Ab [(C.RelmapKey, Lexmap)]
+    uses :: Lexmap -> B.Ab LexmapTable
     uses lx | ty /= LexmapDerived = Right []
             | otherwise = Msg.abSlot [lx] $
                 case resolve 0 name derives of
