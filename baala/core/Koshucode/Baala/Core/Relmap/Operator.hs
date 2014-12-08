@@ -111,7 +111,7 @@ data Relmap c
       -- ^ Relmap for environment of input relation
     | RelmapWith     C.Lexmap [B.Terminal String] (Relmap c)
       -- ^ Relmap for environment of nested relations
-    | RelmapLink     C.Lexmap String C.AttrTrees
+    | RelmapLink     C.Lexmap String [C.AttrTree]
       -- ^ Relmap reference
 
     | RelmapAppend   (Relmap c) (Relmap c)

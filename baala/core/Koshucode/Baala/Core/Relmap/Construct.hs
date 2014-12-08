@@ -112,7 +112,7 @@ withVar :: B.Map (C.RopUse c)
 withVar u@C.RopUse { C.ropLexmap = lx } =
     u { C.ropLexmap = lx { C.lexType = C.LexmapWith }}
 
-relmapLink :: C.RopUse c -> String -> C.AttrTrees -> C.Relmap c
+relmapLink :: C.RopUse c -> String -> [C.AttrTree] -> C.Relmap c
 relmapLink = C.RelmapLink . C.ropLexmap
 
 

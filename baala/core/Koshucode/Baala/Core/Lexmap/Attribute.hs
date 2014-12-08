@@ -13,7 +13,7 @@ module Koshucode.Baala.Core.Lexmap.Attribute
   
     -- * Attribute trees
     AttrDefine (..),
-    AttrTrees,
+    AttrTree,
     AttrSort,
     TreeSort,
     RopName,
@@ -62,19 +62,19 @@ attrNameAttr = AttrNameNormal "@attr"
 
 -- | Definition of attribute sorter.
 data AttrDefine = AttrDefine
-    { attrTrunkSorter :: B.AbMap AttrTrees   -- Trunk sorter
-    , attrClassifier  :: B.AbMap AttrTrees   -- Attribute classifier
-    , attrTrunkNames  :: [AttrName]          -- Trunk names
-    , attrBranchNames :: [AttrName]          -- Branch names
+    { attrTrunkSorter :: B.AbMap [AttrTree]   -- Trunk sorter
+    , attrClassifier  :: B.AbMap [AttrTree]   -- Attribute classifier
+    , attrTrunkNames  :: [AttrName]           -- Trunk names
+    , attrBranchNames :: [AttrName]           -- Branch names
     }
 
 -- | List of attribute name and its contents.
-type AttrTrees = [ (AttrName, [B.TTree]) ]
+type AttrTree = (AttrName, [B.TTree])
 
 -- | Sorter for attribute of relmap operator.
 --   Sorters docompose attribute trees,
 --   and give a name to subattribute.
-type AttrSort = [B.TTree] -> B.Ab AttrTrees
+type AttrSort = [B.TTree] -> B.Ab [AttrTree]
 
 type TreeSort = [B.TTree] -> [B.NamedTrees]
 
@@ -82,7 +82,7 @@ type TreeSort = [B.TTree] -> [B.NamedTrees]
 type RopName = String
 
 -- | Search key for 'Lexmap' or 'Relmap'.
-type RelmapKey = (RopName, AttrTrees)
+type RelmapKey = (RopName, [AttrTree])
 
 
 -- ----------------------  Attribute sorter
@@ -113,9 +113,9 @@ hyphenAssc = B.assocBy name "@trunk" where
     name (B.TreeL (B.TText _ B.TextRaw n@('-' : _))) = Just n
     name _ = Nothing
 
-attrTrunk :: AttrDefine -> B.AbMap AttrTrees
+attrTrunk :: AttrDefine -> B.AbMap [AttrTree]
 attrTrunk (AttrDefine sorter classify trunkNames _) roa = roa3 where
-    roa3, roa2 :: B.Ab AttrTrees
+    roa3, roa2 :: B.Ab [AttrTree]
     roa3 = classify =<< roa2
     roa2 | B.notNull wrap = Right  roa
          | otherwise      = sorter roa

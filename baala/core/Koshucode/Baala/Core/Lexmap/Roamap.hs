@@ -77,7 +77,7 @@ roamapCons = loop where
                                        right trees $ RoamapAppend subs
 
 -- | Run roamap.
-roamapRun :: Roamap -> B.AbMap C.AttrTrees
+roamapRun :: Roamap -> B.AbMap [C.AttrTree]
 roamapRun = loop where
     loop (B.Sourced toks rmap) roa =
         let Just pos = lookup C.attrNameTrunk roa
@@ -96,7 +96,7 @@ roamapRun = loop where
           Just _ | opt          ->  Right roa
                  | otherwise    ->  Msg.extraAttr
 
-    rename :: C.AttrTrees -> C.AttrName -> C.AttrName -> B.Ab C.AttrTrees
+    rename :: [C.AttrTree] -> C.AttrName -> C.AttrName -> B.Ab [C.AttrTree]
     rename roa k' k =
         case lookup k roa of
           Just _                ->  Right $ B.assocRename1 k' k roa

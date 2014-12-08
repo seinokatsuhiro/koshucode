@@ -32,7 +32,7 @@ import qualified Koshucode.Baala.Core.Message           as Msg
 data Lexmap = Lexmap
     { lexType     :: LexmapType    -- ^ Type of lexmap
     , lexOpToken  :: B.Token       -- ^ Token of operator
-    , lexAttr     :: C.AttrTrees   -- ^ Attribute of relmap operation
+    , lexAttr     :: [C.AttrTree]  -- ^ Attribute of relmap operation
     , lexSubmap   :: [Lexmap]      -- ^ Submaps in the attribute
     , lexMessage  :: [String]      -- ^ Messages on lexmap
     } deriving (Show, Eq, Ord, G.Data, G.Typeable)
@@ -137,7 +137,7 @@ consLexmap findSorter gslot derives = lexmap where
                           submap $ cons LexmapDerived rop attr trees
 
     -- construct lexmap except for submaps
-    cons :: LexmapType -> B.Token -> C.AttrTrees -> [B.TTree] -> Lexmap
+    cons :: LexmapType -> B.Token -> [C.AttrTree] -> [B.TTree] -> Lexmap
     cons ty rop attr trees =
         check $ Lexmap { lexType     = ty
                        , lexOpToken  = rop
@@ -187,7 +187,7 @@ consLexmap findSorter gslot derives = lexmap where
     with rop []  = Right (cons LexmapWith rop [] [], [])
     with _ _     = Msg.extraAttr
 
-    withVars :: C.AttrTrees -> B.Ab [String]
+    withVars :: [C.AttrTree] -> B.Ab [String]
     withVars att = case lookup (C.AttrNameNormal "-with") att of
                      Nothing  -> Right []
                      Just ws  -> Right . map snd =<< withTerms ws

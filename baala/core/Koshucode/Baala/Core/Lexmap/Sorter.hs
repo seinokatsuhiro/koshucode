@@ -37,19 +37,19 @@ import qualified Koshucode.Baala.Core.Message          as Msg
 --    > roaOneList "-pattern" "-term" []
 
 -- | Give a name to unnamed attribute.
-name :: C.AttrSort -> B.AbMap C.AttrTrees
+name :: C.AttrSort -> B.AbMap [C.AttrTree]
 name f roa = case lookup C.attrNameTrunk roa of
                Just xs -> Right . (++ roa) =<< f xs
                Nothing -> Right roa
 
-spec :: B.AbMap C.AttrTrees -> [C.AttrName] -> [C.AttrName] -> C.AttrDefine
+spec :: B.AbMap [C.AttrTree] -> [C.AttrName] -> [C.AttrName] -> C.AttrDefine
 spec trunkSorter trunkNames branchNames =
     C.AttrDefine trunkSorter classify trunkNames branchNames where
         classify = attrClassify trunkNames branchNames
 
-attrClassify :: [C.AttrName] -> [C.AttrName] -> B.AbMap C.AttrTrees
+attrClassify :: [C.AttrName] -> [C.AttrName] -> B.AbMap [C.AttrTree]
 attrClassify trunkNames branchNames roa = roa2 where
-    roa2     :: B.Ab C.AttrTrees
+    roa2     :: B.Ab [C.AttrTree]
     roa2     = B.sequenceFst $ B.mapFstTo relmap roa
 
     relmap :: B.AbMap C.AttrName
