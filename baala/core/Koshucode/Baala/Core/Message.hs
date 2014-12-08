@@ -58,7 +58,7 @@ module Koshucode.Baala.Core.Message
     unkShow,
     unkTerm,
     unkType,
-    unkWithVar,
+    unkNestVar,
     unkWord,
     unmatchType,
     unmatchBlank,
@@ -271,8 +271,8 @@ unkTerm ns he1 =
 unkType :: String -> B.Ab a
 unkType = Left . B.abortLine "Unknown type name"
 
-unkWithVar :: String -> B.Ab a
-unkWithVar = Left . B.abortLine "Unknown with-variable"
+unkNestVar :: String -> B.Ab a
+unkNestVar = Left . B.abortLine "Unknown nested relation reference"
 
 -- | Unknown word
 unkWord :: String -> B.Ab a

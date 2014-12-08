@@ -36,7 +36,7 @@ relkitLink kits = linkKit where
            C.RelkitOneToAbOne  u f bs    ->  C.RelkitOneToAbOne  u f $ links bs
            C.RelkitAbSemi        f b     ->  C.RelkitAbSemi        f $ link  b
            C.RelkitAppend        b1 b2   ->  C.RelkitAppend (link b1) (link b2)
-           C.RelkitWith          with b  ->  C.RelkitWith       with $ link  b
+           C.RelkitNest          nest b  ->  C.RelkitNest       nest $ link  b
            C.RelkitCopy          copy b  ->  C.RelkitCopy       copy $ link  b
            C.RelkitLink n key _ ->
                case lookup key kitsRec of
@@ -74,13 +74,13 @@ relkitRun global rs (B.Sourced toks core) bo1 =
        C.RelkitLink _ _ (Just b2)  ->  relkitRun global rs b2 bo1
        C.RelkitLink n _ (Nothing)  ->  Msg.unkRelmap n
 
-       C.RelkitNest n              ->  case lookup n rs of
+       C.RelkitNestVar n           ->  case lookup n rs of
                                          Just bo2 -> Right bo2
                                          Nothing  -> Msg.unkNestRel n
 
        C.RelkitCopy n b            ->  do bo2 <- relkitRun global ((n, bo1) : rs) b bo1
                                           right True $ bo2
-       C.RelkitWith with b         ->  do bo2 <- withRel with b `mapM` bo1
+       C.RelkitNest nest b         ->  do bo2 <- nestRel nest b `mapM` bo1
                                           right True $ concat bo2
     where
       bmaps = map $ relkitRun global rs
@@ -98,10 +98,10 @@ relkitRun global rs (B.Sourced toks core) bo1 =
       uif True   = B.unique
       uif False  = id
 
-      withRel :: [(String, Int)] -> C.RelkitBody c -> [c] -> B.Ab [[c]]
-      withRel with b cs =
-          let nest = pickup cs `map` with
-          in relkitRun global (nest ++ rs) b [cs]
+      nestRel :: [(String, Int)] -> C.RelkitBody c -> [c] -> B.Ab [[c]]
+      nestRel nest b cs =
+          let cs2 = pickup cs `map` nest
+          in relkitRun global (cs2 ++ rs) b [cs]
 
       pickup :: [c] -> (String, Int) -> B.Named [[c]]
       pickup cs (name, ind) = (name, B.relBody $ C.gRel $ cs !! ind)

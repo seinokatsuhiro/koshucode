@@ -25,14 +25,14 @@ relmapSpecialize global parts = spec [] [] where
          -> Maybe B.Head         -- input head feeding into generic relmap
          -> C.Relmap c           -- generic relmap to specialize
          -> B.Ab ([C.RelkitDef c], C.Relkit c)
-    spec with keys kdef he1 rmap = s where
+    spec nest keys kdef he1 rmap = s where
         s = case rmap of
               C.RelmapSource lx p ns -> post lx $ Right (kdef, C.relkitSource p ns)
               C.RelmapConst  lx rel  -> post lx $ Right (kdef, C.relkitConst rel)
 
               C.RelmapAppend rmap1 rmap2 ->
-                  do (kdef2, kit2) <- spec with keys kdef he1 rmap1
-                     (kdef3, kit3) <- spec with keys kdef2 (C.relkitHead kit2) rmap2
+                  do (kdef2, kit2) <- spec nest keys kdef he1 rmap1
+                     (kdef3, kit3) <- spec nest keys kdef2 (C.relkitHead kit2) rmap2
                      Right (kdef3, B.mappend kit2 kit3)
 
               C.RelmapCalc lx makeKit rmaps ->
@@ -48,9 +48,9 @@ relmapSpecialize global parts = spec [] [] where
 
               C.RelmapLink lx n roa
                   | C.lexType lx == C.LexmapNest ->
-                      post lx $ case lookup n with of
-                           Just he    -> Right (kdef, C.relkitWithVar n he)
-                           Nothing    -> Msg.unkWithVar n
+                      post lx $ case lookup n nest of
+                           Just he    -> Right (kdef, C.relkitNestVar n he)
+                           Nothing    -> Msg.unkNestVar n
                   | otherwise ->
                       post lx $ case lookup (n, roa) parts of
                            Just rmap1 -> link n rmap1 (he1, C.relmapLexList rmap1)
@@ -58,19 +58,19 @@ relmapSpecialize global parts = spec [] [] where
 
               C.RelmapCopy lx n rmap1 ->
                   do let heJust = B.fromJust he1
-                         with' = (n, heJust) : with
-                     (kdef2, kit2) <- post lx $ spec with' keys kdef he1 rmap1
+                         nest' = (n, heJust) : nest
+                     (kdef2, kit2) <- post lx $ spec nest' keys kdef he1 rmap1
                      Right (kdef2, C.relkitCopy n kit2)
 
-              C.RelmapNest lx with1 rmap1 ->
-                  do let (terms, vars) = unzip with1
+              C.RelmapNest lx nest1 rmap1 ->
+                  do let (terms, vars) = unzip nest1
                          heJust   = B.fromJust he1
-                         heWith   = B.assocPick terms $ B.headNested heJust
+                         heNest   = B.assocPick terms $ B.headNested heJust
                          heInd    = terms `B.snipIndex` B.headNames heJust
-                         with'    = B.assocRehead with1 heWith ++ with
-                         withInd  = zip vars heInd
-                     (kdef2, kit2) <- post lx $ spec with' keys kdef he1 rmap1
-                     Right (kdef2, C.relkitWith withInd kit2)
+                         nest'    = B.assocRehead nest1 heNest ++ nest
+                         nestInd  = zip vars heInd
+                     (kdef2, kit2) <- post lx $ spec nest' keys kdef he1 rmap1
+                     Right (kdef2, C.relkitNest nestInd kit2)
 
         post :: C.Lexmap -> B.Map (B.Ab ([C.RelkitDef c], C.Relkit c))
         post lx result =
@@ -82,7 +82,7 @@ relmapSpecialize global parts = spec [] [] where
         list :: [C.RelkitDef c] -> [C.Relmap c] -> B.Ab ([C.RelkitDef c], [C.Relkit c])
         list kdef1 [] = Right (kdef1, [])
         list kdef1 (rmap1 : rmaps) =
-            do (kdef2, kit)  <- spec with keys kdef1 he1 rmap1
+            do (kdef2, kit)  <- spec nest keys kdef1 he1 rmap1
                (kdef3, kits) <- list kdef2 rmaps
                Right (kdef3, kit : kits)
 
@@ -91,7 +91,7 @@ relmapSpecialize global parts = spec [] [] where
             | key1 `elem` keys = Right (kdef, cyclic)
             | otherwise = case lookup key1 kdef of
                 Just kit -> Right (kdef, kit)
-                Nothing  -> do (kdef2, kit1) <- spec with (key1 : keys) kdef he1 rmap1
+                Nothing  -> do (kdef2, kit1) <- spec nest (key1 : keys) kdef he1 rmap1
                                let kdef3 = (key1, kit1) : kdef2
                                Right (kdef3, acyclic kit1)
             where

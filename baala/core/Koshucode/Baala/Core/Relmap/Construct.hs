@@ -92,10 +92,10 @@ relmapNest :: C.RopUse c -> [B.Terminal String] -> B.Map (C.Relmap c)
 relmapNest = C.RelmapNest . C.ropLexmap
 
 relmapNestVar :: C.RopUse c -> String -> C.Relmap c
-relmapNestVar use n = relmapLink (withVar use) n []
+relmapNestVar use n = relmapLink (nestVar use) n []
 
-withVar :: B.Map (C.RopUse c)
-withVar u@C.RopUse { C.ropLexmap = lx } =
+nestVar :: B.Map (C.RopUse c)
+nestVar u@C.RopUse { C.ropLexmap = lx } =
     u { C.ropLexmap = lx { C.lexType = C.LexmapNest }}
 
 relmapLink :: C.RopUse c -> String -> [C.AttrTree] -> C.Relmap c

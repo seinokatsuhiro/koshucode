@@ -25,8 +25,8 @@ module Koshucode.Baala.Core.Relmap.Relkit
     relkitConstBody,
     relkitSource,
     relkitCopy,
-    relkitWith,
-    relkitWithVar,
+    relkitNest,
+    relkitNestVar,
     relkitSetSource,
   ) where
 
@@ -67,31 +67,31 @@ data RelkitCore c
     | RelkitSource      String [B.TermName]
 
     | RelkitLink        String RelkitKey (Maybe (RelkitBody c))
-    | RelkitNest        String
+    | RelkitNestVar     String
     | RelkitCopy        String (RelkitBody c)
-    | RelkitWith        [(String, Int)] (RelkitBody c)
+    | RelkitNest        [(String, Int)] (RelkitBody c)
 
 instance Show (RelkitCore c) where
-    show (RelkitFull        _ _)   =  "RelkitFull"
-    show (RelkitOneToMany   _ _)   =  "RelkitOneToMany"
-    show (RelkitOneToOne    _ _)   =  "RelkitOneToOne"
-    show (RelkitPred          _)   =  "RelkitPred"
+    show (RelkitFull        _ _)   = "RelkitFull"
+    show (RelkitOneToMany   _ _)   = "RelkitOneToMany"
+    show (RelkitOneToOne    _ _)   = "RelkitOneToOne"
+    show (RelkitPred          _)   = "RelkitPred"
 
-    show (RelkitAbFull    _ _ _)   =  "RelkitAbFull"
-    show (RelkitOneToAbMany _ _ _) =  "RelkitOneToAbMany"
-    show (RelkitOneToAbOne _ _ _)  =  "RelkitOneToAbOne"
-    show (RelkitAbSemi      _ _)   =  "RelkitAbSemi"
-    show (RelkitAbPred        _)   =  "RelkitAbPred"
+    show (RelkitAbFull    _ _ _)   = "RelkitAbFull"
+    show (RelkitOneToAbMany _ _ _) = "RelkitOneToAbMany"
+    show (RelkitOneToAbOne _ _ _)  = "RelkitOneToAbOne"
+    show (RelkitAbSemi      _ _)   = "RelkitAbSemi"
+    show (RelkitAbPred        _)   = "RelkitAbPred"
 
-    show (RelkitConst         _)   =  "RelkitConst"
-    show (RelkitAppend      x y)   =  "RelkitAppend " ++ show [x,y]
-    show (RelkitId             )   =  "RelkitId"
+    show (RelkitConst         _)   = "RelkitConst"
+    show (RelkitAppend      x y)   = "RelkitAppend " ++ show [x,y]
+    show (RelkitId             )   = "RelkitId"
 
-    show (RelkitSource     p ns)   =  "RelkitSource " ++ p ++ " " ++ show ns
-    show (RelkitLink      n _ _)   =  "RelkitLink " ++ n
-    show (RelkitNest          n)   =  "RelkitNest " ++ n
-    show (RelkitCopy        _ _)   =  "RelkitCopy "
-    show (RelkitWith        _ _)   =  "RelkitWith "
+    show (RelkitSource     p ns)   = "RelkitSource " ++ p ++ " " ++ show ns
+    show (RelkitLink      n _ _)   = "RelkitLink " ++ n
+    show (RelkitNestVar       n)   = "RelkitNestVar " ++ n
+    show (RelkitCopy        _ _)   = "RelkitCopy "
+    show (RelkitNest        _ _)   = "RelkitNest "
 
 type RelkitBody c = B.Sourced (RelkitCore c)
 type RelkitKey    = (Maybe B.Head, [C.Lexmap])
@@ -141,13 +141,13 @@ relkitCopy :: String -> B.Map (Relkit c)
 relkitCopy n (Relkit he kitb) = kit2 where
     kit2 = relkit he $ RelkitCopy n kitb
 
-relkitWith :: [(String, Int)] -> B.Map (Relkit c)
-relkitWith with (Relkit he kitb) = kit2 where
-    kit2 = relkit he $ RelkitWith with kitb
+relkitNest :: [(String, Int)] -> B.Map (Relkit c)
+relkitNest nest (Relkit he kitb) = kit2 where
+    kit2 = relkit he $ RelkitNest nest kitb
 
-relkitWithVar :: String -> B.Head -> Relkit c
-relkitWithVar n he = kit where
-    kit = relkitJust he $ RelkitNest n
+relkitNestVar :: String -> B.Head -> Relkit c
+relkitNestVar n he = kit where
+    kit = relkitJust he $ RelkitNestVar n
 
 relkitSetSource :: (B.CodePtr a) => a -> B.Map (Relkit c)
 relkitSetSource src (Relkit he (B.Sourced _ core)) =
