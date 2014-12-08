@@ -84,7 +84,7 @@ type RelmapSource = NNamed ([B.TTree], C.Roamap)
 type ConsLexmap = [C.GlobalSlot] -> [RelmapSource] -> ConsLexmapBody
 
 -- | Construct lexmap and its submaps from source of lexmap
-type ConsLexmapBody = [B.TTree] -> B.Ab (Lexmap, [C.Roal Lexmap])
+type ConsLexmapBody = [B.TTree] -> B.Ab (Lexmap, [(C.RelmapKey, Lexmap)])
 
 consLexmap :: (C.RopName -> Maybe C.AttrSort) -> ConsLexmap
 consLexmap findSorter gslot derives = lexmap where
@@ -155,7 +155,7 @@ consLexmap findSorter gslot derives = lexmap where
     check lx = lx
 
     -- construct lexmaps of submaps
-    submap :: Lexmap -> B.Ab (Lexmap, [C.Roal Lexmap])
+    submap :: Lexmap -> B.Ab (Lexmap, [(C.RelmapKey, Lexmap)])
     submap lx@Lexmap { lexAttr = attr } =
         case B.lookupBy C.isAttrRelmap attr of
           Nothing    -> do lxs   <- uses lx   -- no submaps
@@ -166,7 +166,7 @@ consLexmap findSorter gslot derives = lexmap where
                                lx2          = lx { lexSubmap = sublx }
                            Right (lx2, concat us)
 
-    uses :: Lexmap -> B.Ab [C.Roal Lexmap]
+    uses :: Lexmap -> B.Ab [(C.RelmapKey, Lexmap)]
     uses lx | ty /= LexmapDerived = Right []
             | otherwise = Msg.abSlot [lx] $
                 case resolve 0 name derives of

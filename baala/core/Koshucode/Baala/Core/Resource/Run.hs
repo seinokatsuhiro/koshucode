@@ -40,25 +40,26 @@ runResourceBody global C.Resource { C.resAssert = ass, C.resMessage = msg } =
       message = "" : "MESSAGE" : map ("  " ++) msg ++ [""]
 
 assembleRelmap :: forall c. B.AbMap (C.Resource c)
-assembleRelmap sec@C.Resource { C.resSlot    = gslot
+assembleRelmap res@C.Resource { C.resSlot    = gslot
                               , C.resRelmap  = derives
                               , C.resAssert  = ass
-                              , C.resCons    = C.RelmapCons lexmap relmap } =
+                              , C.resCons    = C.RelmapCons consLexmap consRelmap } =
     do result <- B.shortListM $ mapM assemble `B.map2` ass
-       let ass2 = map fst `B.map2` result
-           msg  = map snd `B.map2` result
-           msg2 = concat $ concat $ map B.shortBody msg
-       Right $ C.addMessages msg2 $ sec { C.resAssert = ass2 }
+       let ass2  = map fst `B.map2` result
+           msg   = map snd `B.map2` result
+           msg2  = concat $ concat $ map B.shortBody msg
+       Right $ C.addMessages msg2 $ res { C.resAssert = ass2 }
     where
       assemble :: C.Assert c -> B.Ab (C.Assert c, [String])
       assemble a =
           Msg.abAssert [a] $ do
-            trees     <- C.substSlot gslot [] $ C.assTree a
-            (lx, lxs) <- lexmap gslot derives trees
-            parts     <- B.sequenceSnd $ B.mapSndTo relmap lxs
-            rmap      <- relmap lx
-            let msg1  =  C.lexMessage lx
-                msg2  =  concatMap C.lexMessageList $ map snd lxs
-            Right ( a { C.assRelmap = Just rmap
-                      , C.assParts  = parts }
+            trees      <- C.substSlot gslot [] $ C.assTree a
+            (lx, lxs)  <- consLexmap gslot derives trees
+            relmap     <- consRelmap lx
+            parts      <- B.sequenceSnd $ B.mapSndTo consRelmap lxs
+            let msg1    = C.lexMessage lx
+                msg2    = concatMap C.lexMessageList $ map snd lxs
+            Right ( a { C.assRelmap  = Just relmap
+                      , C.assParts   = parts }
                   , msg1 ++ msg2 )
+
