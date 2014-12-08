@@ -44,8 +44,8 @@ consRelmap :: (C.RopName -> Maybe (C.Rop c)) -> C.Global c -> ConsRelmap c
 consRelmap findRop g = relmap where
     relmap lx =
         case C.lexType lx of
-          C.LexmapWith     -> Right $ C.RelmapLink lx n attr
           C.LexmapDerived  -> Right $ C.RelmapLink lx n attr
+          C.LexmapNest     -> Right $ C.RelmapLink lx n attr
           C.LexmapBase     -> case findRop n of
                                 Just rop -> Msg.abRelmap [lx] $ cons rop
                                 Nothing  -> Msg.bug "missing operator @consRelmap"
@@ -89,14 +89,14 @@ relmapCopy :: C.RopUse c -> String -> B.Map (C.Relmap c)
 relmapCopy = C.RelmapCopy . C.ropLexmap
 
 relmapWith :: C.RopUse c -> [B.Terminal String] -> B.Map (C.Relmap c)
-relmapWith = C.RelmapWith . C.ropLexmap
+relmapWith = C.RelmapNest . C.ropLexmap
 
 relmapWithVar :: C.RopUse c -> String -> C.Relmap c
 relmapWithVar use n = relmapLink (withVar use) n []
 
 withVar :: B.Map (C.RopUse c)
 withVar u@C.RopUse { C.ropLexmap = lx } =
-    u { C.ropLexmap = lx { C.lexType = C.LexmapWith }}
+    u { C.ropLexmap = lx { C.lexType = C.LexmapNest }}
 
 relmapLink :: C.RopUse c -> String -> [C.AttrTree] -> C.Relmap c
 relmapLink = C.RelmapLink . C.ropLexmap

@@ -44,7 +44,7 @@ relmapSpecialize global parts = spec [] [] where
                      Right (kdef, kit)
 
               C.RelmapLink lx n roa
-                  | C.lexType lx == C.LexmapWith ->
+                  | C.lexType lx == C.LexmapNest ->
                       post lx $ case lookup n with of
                            Just he    -> Right (kdef, C.relkitWithVar n he)
                            Nothing    -> Msg.unkWithVar n
@@ -59,7 +59,7 @@ relmapSpecialize global parts = spec [] [] where
                      (kdef2, kit2) <- post lx $ spec with' keys kdef he1 rmap1
                      Right (kdef2, C.relkitCopy n kit2)
 
-              C.RelmapWith lx with1 rmap1 ->
+              C.RelmapNest lx with1 rmap1 ->
                   do let (terms, vars) = unzip with1
                          heJust   = B.fromJust he1
                          heWith   = B.assocPick terms $ B.headNested heJust

@@ -40,7 +40,7 @@ data Lexmap = Lexmap
 data LexmapType
     = LexmapBase         -- ^ Built-in relmap
     | LexmapDerived      -- ^ User-defined relmap
-    | LexmapWith         -- ^ @-with@ variable
+    | LexmapNest         -- ^ Nested relation reference
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance B.Write Lexmap where
@@ -184,7 +184,7 @@ consLexmap findSorter gslot derives = lexmap where
            Right $ ((name, attr), lx) : lxs
 
     with :: B.Token -> ConsLexmapBody
-    with rop []  = Right (cons LexmapWith rop [] [], [])
+    with rop []  = Right (cons LexmapNest rop [] [], [])
     with _ _     = Msg.extraAttr
 
     withVars :: [C.AttrTree] -> B.Ab [String]
