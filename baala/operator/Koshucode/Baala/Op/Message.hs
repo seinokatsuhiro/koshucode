@@ -65,8 +65,8 @@ oddAttr :: B.Ab a
 oddAttr = Left $ B.abortBecause "Odd attribute"
 
 -- | Attribute not found
-noAttr :: B.Ab a
-noAttr = Left $ B.abortBecause "Attribute not found"
+noAttr :: String -> B.Ab a
+noAttr n = Left $ B.abortLine "Attribute not found" n
 
 -- | Not a nested relation
 notNestRel :: [B.TermName] -> B.Head -> B.Ab a

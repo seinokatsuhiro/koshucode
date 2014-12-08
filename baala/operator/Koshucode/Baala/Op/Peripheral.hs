@@ -179,7 +179,7 @@ relmapTermName :: (C.CTerm c) => C.RopUse c -> B.TermName -> C.Relmap c
 relmapTermName use n = C.relmapFlow use $ relkitTermName n
 
 relkitTermName :: (C.CTerm c) => B.TermName -> C.RelkitFlow c
-relkitTermName _ Nothing    = Msg.noAttr
+relkitTermName n Nothing    = Msg.noAttr n
 relkitTermName n (Just he1) = Right kit2 where
     he2       = B.headFrom [n]
     kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2

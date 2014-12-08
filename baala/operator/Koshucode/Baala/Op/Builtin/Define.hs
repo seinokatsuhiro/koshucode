@@ -36,8 +36,10 @@ ropBy a cons usage attr = (cons, usage, attr') where
               _                -> ropBug attr
     names = map classify . words
 
-    classify n@('-' : _) | last n == '/'  = C.AttrNameRelmap $ init n
-                         | otherwise      = C.AttrNameNormal n
+    classify n@('-' : _) | l == '/'   = C.AttrNameRelmap $ init n
+                         | l == '<'   = C.AttrNameNest   $ init n
+                         | otherwise  = C.AttrNameNormal n
+                         where l = last n
     classify n = ropBug n
 
 ropBug :: String -> a

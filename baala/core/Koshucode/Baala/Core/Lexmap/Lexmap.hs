@@ -157,7 +157,7 @@ consLexmap findSorter gslot derives = lexmap where
     -- construct lexmaps of submaps
     submap :: Lexmap -> B.Ab (Lexmap, [(C.RelmapKey, Lexmap)])
     submap lx@Lexmap { lexAttr = attr } =
-        case B.lookupBy C.isAttrRelmap attr of
+        case B.lookupBy C.isAttrNameRelmap attr of
           Nothing    -> do lxs   <- uses lx   -- no submaps
                            Right (lx, lxs)
           Just trees -> do ws    <- withVars attr
@@ -188,9 +188,9 @@ consLexmap findSorter gslot derives = lexmap where
     with _ _     = Msg.extraAttr
 
     withVars :: [C.AttrTree] -> B.Ab [String]
-    withVars att = case lookup (C.AttrNameNormal "-with") att of
-                     Nothing  -> Right []
-                     Just ws  -> Right . map snd =<< withTerms ws
+    withVars attr = case B.lookupBy C.isAttrNameNest attr of
+                      Nothing  -> Right []
+                      Just ws  -> Right . map snd =<< withTerms ws
 
     withTrees :: [String] -> B.Map [B.TTree]
     withTrees ws = map loop where

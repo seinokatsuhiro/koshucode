@@ -40,7 +40,7 @@ type RopGet c a
     -> B.Ab a       -- ^ Attribute of relmap
 
 lookupTree, lookupRelmap :: String -> C.RopUse c -> Maybe [B.TTree]
-lookupTree    = lookupAttr C.AttrNameNormal
+lookupTree    = lookupAttr C.AttrNameNormal `B.mappend` lookupAttr C.AttrNameNest
 lookupRelmap  = lookupAttr C.AttrNameRelmap
 
 lookupAttr :: (String -> C.AttrName) -> String -> C.RopUse c -> Maybe [B.TTree]
@@ -97,7 +97,7 @@ getTrees :: RopGet c [B.TTree]
 getTrees u name =
     case lookupTree name u of
       Just trees -> Right trees
-      Nothing    -> Msg.noAttr
+      Nothing    -> Msg.noAttr name
 
 getTree :: RopGet c B.TTree
 getTree u name =
@@ -108,7 +108,7 @@ getWordTrees :: RopGet c [B.Named B.TTree]
 getWordTrees u name =
     case lookupTree name u of
       Just trees -> wordTrees trees
-      Nothing    -> Msg.noAttr
+      Nothing    -> Msg.noAttr name
 
 wordTrees :: [B.TTree] -> B.Ab [B.Named B.TTree]
 wordTrees []  = Right []
@@ -148,7 +148,7 @@ getRelmapRaw :: RopGet c [B.TTree]
 getRelmapRaw u name =
     case lookupRelmap name u of
       Just trees -> Right trees
-      Nothing    -> Msg.noAttr
+      Nothing    -> Msg.noAttr name
 
 
 -- | Get relmaps from operator use.

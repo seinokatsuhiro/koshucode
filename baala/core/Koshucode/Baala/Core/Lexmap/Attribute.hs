@@ -6,10 +6,9 @@
 module Koshucode.Baala.Core.Lexmap.Attribute
   ( -- * Attribute name
     AttrName (..),
-    isAttrRelmap,
+    isAttrNameRelmap, isAttrNameNest,
     attrNameText,
-    attrNameAttr,
-    attrNameTrunk,
+    attrNameAttr, attrNameTrunk,
   
     -- * Attribute trees
     AttrDefine (..),
@@ -34,28 +33,36 @@ import qualified Koshucode.Baala.Core.Message as Msg
 
 -- ----------------------  Attribute name
 
+-- | Attribute name for relmap operator.
 data AttrName
-    = AttrNameNormal String
-    | AttrNameRelmap String
+    = AttrNameNormal String    -- ^ Normal attribute
+    | AttrNameRelmap String    -- ^ Attribute for subrelmap
+    | AttrNameNest   String    -- ^ Attribute for nested relation reference
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
--- | Test attribute name is for relmap.
-isAttrRelmap :: AttrName -> Bool
-isAttrRelmap (AttrNameRelmap _)  = True
-isAttrRelmap _                   = False
+-- | Test attribute name is for subrelmap.
+isAttrNameRelmap :: AttrName -> Bool
+isAttrNameRelmap (AttrNameRelmap _)  = True
+isAttrNameRelmap _                   = False
+
+-- | Test attribute name is for nested relation reference.
+isAttrNameNest :: AttrName -> Bool
+isAttrNameNest (AttrNameNest _)      = True
+isAttrNameNest _                     = False
 
 -- | String part of attribute names.
 attrNameText :: AttrName -> String
-attrNameText (AttrNameNormal text)  = text
-attrNameText (AttrNameRelmap text)  = text
-
--- | Constant for attribute name @\@trunk@.
-attrNameTrunk :: AttrName
-attrNameTrunk = AttrNameNormal "@trunk"
+attrNameText (AttrNameNormal n)  = n
+attrNameText (AttrNameRelmap n)  = n
+attrNameText (AttrNameNest   n)  = n
 
 -- | Constant for attribute name @\@attr@.
 attrNameAttr :: AttrName
 attrNameAttr = AttrNameNormal "@attr"
+
+-- | Constant for attribute name @\@trunk@.
+attrNameTrunk :: AttrName
+attrNameTrunk = AttrNameNormal "@trunk"
 
 
 -- ----------------------  Attribute trees
