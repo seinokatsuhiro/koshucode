@@ -188,7 +188,7 @@ judgesClauseType = map j cs where
           , C.CShort []
           , C.CRelmap "" []
           , C.CAssert C.AssertAffirm "" [] []
-          , C.CJudge 'X' "" []
+          , C.CJudge  C.AssertAffirm "" []
           , C.CSlot "" []
           , C.CUnknown
           ]

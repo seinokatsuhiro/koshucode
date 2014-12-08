@@ -83,8 +83,8 @@ roamapRun = loop where
         let Just pos = lookup C.attrNameTrunk roa
         in Msg.abAttr toks $ case rmap of
           RoamapId              ->  Right  roa
-          RoamapAdd opt k xs    ->  add    roa opt (C.AttrTree k) xs
-          RoamapRename (k', k)  ->  rename roa (C.AttrTree k') (C.AttrTree k)
+          RoamapAdd opt k xs    ->  add    roa opt (C.AttrNameNormal k) xs
+          RoamapRename (k', k)  ->  rename roa (C.AttrNameNormal k') (C.AttrNameNormal k)
           RoamapFill xs         ->  do xs2 <- fill pos xs
                                        Right $ (C.attrNameTrunk, xs2) : roa
           RoamapAppend rs       ->  B.foldM (flip loop) roa rs

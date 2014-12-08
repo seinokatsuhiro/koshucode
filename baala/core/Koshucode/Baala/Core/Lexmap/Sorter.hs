@@ -76,7 +76,7 @@ roaEnum ks ns = spec (name f) ks ns where
     f = Right . zip enumAttr . map B.li1
 
 enumAttr :: [C.AttrName]
-enumAttr = map (C.AttrTree . ('-' :) . show) [1 :: Int ..]
+enumAttr = map (C.AttrNameNormal . ('-' :) . show) [1 :: Int ..]
 
 -- | Attribute sorter for multiple-attribute trunk.
 roaList :: C.AttrName -> [C.AttrName] -> C.AttrDefine

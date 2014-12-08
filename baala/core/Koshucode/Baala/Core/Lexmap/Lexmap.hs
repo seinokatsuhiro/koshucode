@@ -188,7 +188,7 @@ consLexmap findSorter gslot derives = lexmap where
     with _ _     = Msg.extraAttr
 
     withVars :: C.AttrTrees -> B.Ab [String]
-    withVars att = case lookup (C.AttrTree "-with") att of
+    withVars att = case lookup (C.AttrNameNormal "-with") att of
                      Nothing  -> Right []
                      Just ws  -> Right . map snd =<< withTerms ws
 

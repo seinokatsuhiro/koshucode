@@ -31,13 +31,13 @@ ropBy :: ([C.AttrName] -> [C.AttrName] -> C.AttrDefine)
         -> C.RopCons c -> C.RopUsage -> String -> RopDefine c
 ropBy a cons usage attr = (cons, usage, attr') where
     attr' = case B.divideBy (== '|') attr of
-              [trunk]         -> a (names trunk) []
-              [trunk, branch] -> a (names trunk) (names branch)
-              _               -> ropBug attr
+              [trunk]          -> a (names trunk) []
+              [trunk, branch]  -> a (names trunk) (names branch)
+              _                -> ropBug attr
     names = map classify . words
 
-    classify n@('-' : _) | last n == '/' = C.AttrRelmap $ init n
-                         | otherwise     = C.AttrTree n
+    classify n@('-' : _) | last n == '/'  = C.AttrNameRelmap $ init n
+                         | otherwise      = C.AttrNameNormal n
     classify n = ropBug n
 
 ropBug :: String -> a
@@ -49,59 +49,59 @@ ropBugUnwords = ropBug . unwords . map C.attrNameText
 -- | No attributes
 ropN :: C.RopCons c -> C.RopUsage -> String -> RopDefine c
 ropN = ropBy a where
-    a []       =  C.roaNone
-    a xs       =  ropBugUnwords xs
+    a []         = C.roaNone
+    a xs         = ropBugUnwords xs
 
 -- | Enumerating attributes
 ropE :: C.RopCons c -> C.RopUsage -> String -> RopDefine c
 ropE = ropBy a where
-    a xs       =  C.roaEnum xs
+    a xs         = C.roaEnum xs
 
 -- | One attribute
 ropI :: C.RopCons c -> C.RopUsage -> String -> RopDefine c
 ropI = ropBy a where
-    a [x]      =  C.roaOne x
-    a xs       =  ropBugUnwords xs
+    a [x]        = C.roaOne x
+    a xs         = ropBugUnwords xs
 
 -- | Two attributes
 ropII :: C.RopCons c -> C.RopUsage -> String -> RopDefine c
 ropII = ropBy a where
-    a [x1,x2]  =  C.roaTwo x1 x2
-    a xs       =  ropBugUnwords xs
+    a [x1,x2]    = C.roaTwo x1 x2
+    a xs         = ropBugUnwords xs
 
 -- | Three attributes
 ropIII :: C.RopCons c -> C.RopUsage -> String -> RopDefine c
 ropIII = ropBy a where
-    a [x1,x2,x3]  =  C.roaThree x1 x2 x3
-    a xs          =  ropBugUnwords xs
+    a [x1,x2,x3] = C.roaThree x1 x2 x3
+    a xs         = ropBugUnwords xs
 
 -- | One and optional attributes
 ropIJ :: C.RopCons c -> C.RopUsage -> String -> RopDefine c
 ropIJ = ropBy a where
-    a [x1,x2]  =  C.roaOneOpt x1 x2
-    a xs       =  ropBugUnwords xs
+    a [x1,x2]    = C.roaOneOpt x1 x2
+    a xs         = ropBugUnwords xs
 
 -- | Variable-length attributes
 ropV :: C.RopCons c -> C.RopUsage -> String -> RopDefine c
 ropV = ropBy a where
-    a [x1]     =  C.roaList x1
-    a xs       =  ropBugUnwords xs
+    a [x1]       = C.roaList x1
+    a xs         = ropBugUnwords xs
 
 -- | One and variable-length attributes
 ropIV :: C.RopCons c -> C.RopUsage -> String -> RopDefine c
 ropIV = ropBy a where
-    a [x1,x2]  =  C.roaOneList x1 x2
-    a xs       =  ropBugUnwords xs
+    a [x1,x2]    = C.roaOneList x1 x2
+    a xs         = ropBugUnwords xs
 
 -- | Term list and one attribute
 ropTI :: C.RopCons c -> C.RopUsage -> String -> RopDefine c
 ropTI = ropBy a where
-    a [x1,x2]    =  C.roaTermsOne x1 x2
-    a xs         =  ropBugUnwords xs
+    a [x1,x2]    = C.roaTermsOne x1 x2
+    a xs         = ropBugUnwords xs
 
 -- | Term list and two attributes
 ropTII :: C.RopCons c -> C.RopUsage -> String -> RopDefine c
 ropTII = ropBy a where
-    a [x1,x2,x3] =  C.roaTermsTwo x1 x2 x3
-    a xs         =  ropBugUnwords xs
+    a [x1,x2,x3] = C.roaTermsTwo x1 x2 x3
+    a xs         = ropBugUnwords xs
 

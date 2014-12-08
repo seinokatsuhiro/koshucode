@@ -35,27 +35,27 @@ import qualified Koshucode.Baala.Core.Message as Msg
 -- ----------------------  Attribute name
 
 data AttrName
-    = AttrTree   String
-    | AttrRelmap String
+    = AttrNameNormal String
+    | AttrNameRelmap String
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 -- | Test attribute name is for relmap.
 isAttrRelmap :: AttrName -> Bool
-isAttrRelmap (AttrRelmap _) = True
-isAttrRelmap _              = False
+isAttrRelmap (AttrNameRelmap _)  = True
+isAttrRelmap _                   = False
 
 -- | String part of attribute names.
 attrNameText :: AttrName -> String
-attrNameText (AttrTree   text) = text
-attrNameText (AttrRelmap text) = text
+attrNameText (AttrNameNormal text)  = text
+attrNameText (AttrNameRelmap text)  = text
 
 -- | Constant for attribute name @\@trunk@.
 attrNameTrunk :: AttrName
-attrNameTrunk = AttrTree "@trunk"
+attrNameTrunk = AttrNameNormal "@trunk"
 
 -- | Constant for attribute name @\@attr@.
 attrNameAttr :: AttrName
-attrNameAttr = AttrTree "@attr"
+attrNameAttr = AttrNameNormal "@attr"
 
 
 -- ----------------------  Attribute trees
@@ -106,7 +106,7 @@ attrSortBranch trees =
     do let assc = hyphenAssc trees
            dup  = B.duplicates $ map fst assc
        B.when (B.notNull dup) $ Msg.dupAttr dup
-       Right $ B.mapFstTo AttrTree assc
+       Right $ B.mapFstTo AttrNameNormal assc
 
 hyphenAssc :: TreeSort
 hyphenAssc = B.assocBy name "@trunk" where
