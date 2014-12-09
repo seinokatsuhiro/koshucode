@@ -7,12 +7,11 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    159 judges
+**    158 judges
 **
 
-|-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Data.Generics"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Core.Lexmap"
+|-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Core.Content"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Core.Relmap"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Dataset"       /import "Data.Map"
@@ -28,7 +27,6 @@
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Core.Content"
-|-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Core.Lexmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Core.Relmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Core.Assert.Assert"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Core.Assert.Dataset"
@@ -56,6 +54,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Core.Content.Cox"          /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Content.Cox"          /import "Koshucode.Baala.Core.Message"
 
+|-- IMPORT  /module "Koshucode.Baala.Core.Content.Literal"      /import "Data.Generics"
 |-- IMPORT  /module "Koshucode.Baala.Core.Content.Literal"      /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Content.Literal"      /import "Koshucode.Baala.Core.Content.Class"
 |-- IMPORT  /module "Koshucode.Baala.Core.Content.Literal"      /import "Koshucode.Baala.Core.Content.Tree"
@@ -158,7 +157,7 @@
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Clause"      /import "Data.Generics"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Clause"      /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Clause"      /import "Koshucode.Baala.Core.Assert"
+|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Clause"      /import "Koshucode.Baala.Core.Content"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Quoter"      /import "Data.Generics"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Quoter"      /import "Language.Haskell.TH"
