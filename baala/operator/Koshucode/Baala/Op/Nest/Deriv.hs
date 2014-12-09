@@ -101,7 +101,7 @@ consHang use =
 -- $Unnest
 --
 --  > unnest /g
---  > slice-up ( meet g ) -with /g | cut /g
+--  > slice-up ( meet g ) -< /g | cut /g
 
 consUnnest :: (Ord c, C.CRel c) => C.RopCons c
 consUnnest use =

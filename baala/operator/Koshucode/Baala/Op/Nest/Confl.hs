@@ -40,7 +40,7 @@ import qualified Koshucode.Baala.Op.Nest.Flow  as Op
 
 consCopy :: C.RopCons c
 consCopy use =
-  do n    <- Op.getWord   use "-with"
+  do n    <- Op.getWord   use "-<"
      rmap <- Op.getRelmap use "-relmap"
      Right $ C.relmapCopy use n rmap
 
@@ -58,7 +58,7 @@ consFor :: (C.CRel c) => C.RopCons c
 consFor use =
   do n    <- Op.getTerm   use "-term"
      rmap <- Op.getRelmap use "-relmap"
-     nest <- Op.getOption [] Op.getNestTerms use "-with"
+     nest <- Op.getOption [] Op.getNestTerms use "-<"
      Right $ relmapFor use nest n rmap
 
 relmapFor :: (C.CRel c) => C.RopUse c -> [B.Terminal String] -> B.TermName -> B.Map (C.Relmap c)
@@ -144,14 +144,14 @@ relkitGroup _ _ _ = Right C.relkitNothing
 --
 --  Add nested relation as meet of @\/p@ and @\/q@.
 --
---    > slice /r ( p | meet q ) -with /p /q
+--    > slice /r ( p | meet q ) -< /p /q
 --
 
 consSlice :: (C.CRel c) => C.RopCons c
 consSlice use =
   do n    <- Op.getTerm   use "-term"
      rmap <- Op.getOptRelmap C.relmapId use "-relmap"
-     nest <- Op.getOption [] Op.getNestTerms use "-with"
+     nest <- Op.getOption [] Op.getNestTerms use "-<"
      Right $ relmapSlice use nest n rmap
 
 relmapSlice :: (C.CRel c) => C.RopUse c -> [B.Terminal String] -> B.TermName -> B.Map (C.Relmap c)
@@ -174,7 +174,7 @@ relkitSlice _ _ _ = Right C.relkitNothing
 consSliceUp :: (C.CRel c) => C.RopCons c
 consSliceUp use =
   do rmap <- Op.getOptRelmap C.relmapId use "-relmap"
-     nest <- Op.getOption [] Op.getNestTerms use "-with"
+     nest <- Op.getOption [] Op.getNestTerms use "-<"
      Right $ relmapSliceUp use nest rmap
 
 relmapSliceUp :: (C.CRel c) => C.RopUse c -> [B.Terminal String] -> B.Map (C.Relmap c)
