@@ -128,6 +128,7 @@ consLexmap findSorter gslot derives = lexmap where
     baseOf :: C.RopName -> ConsLexmapBody
     baseOf n = base n $ B.textToken n
 
+    -- construct base lexmap
     base :: C.RopName -> B.Token -> ConsLexmapBody
     base n rop trees =
         case findSorter n of
@@ -135,9 +136,17 @@ consLexmap findSorter gslot derives = lexmap where
           Just sorter -> do attr <- sorter trees
                             submap $ cons LexmapBase rop attr trees
 
+    -- construct derived lexmap
     deriv :: B.Token -> ConsLexmapBody
     deriv rop trees  = do attr <- C.attrSortBranch trees
-                          submap $ cons LexmapDerived rop attr trees
+                          let lx = cons LexmapDerived rop attr trees
+                          tab <- table lx
+                          Right (lx, tab)
+
+    -- construct lexmap for nested relation reference
+    nest :: B.Token -> ConsLexmapBody
+    nest rop []  = Right (cons LexmapNest rop [] [], [])
+    nest _ _     = Msg.extraAttr
 
     -- construct lexmap except for submaps
     cons :: LexmapType -> B.Token -> [C.AttrTree] -> [B.TTree] -> Lexmap
@@ -161,34 +170,27 @@ consLexmap findSorter gslot derives = lexmap where
     submap :: Lexmap -> B.Ab (Lexmap, LexmapTable)
     submap lx@Lexmap { lexAttr = attr } =
         case B.lookupBy C.isAttrNameRelmap attr of
-          Nothing    -> do lxs   <- uses lx   -- no submaps
-                           Right (lx, lxs)
+          Nothing    -> Right (lx, [])
           Just trees -> do ws    <- nestVars attr
                            subs  <- lexmap1 `mapM` nestTrees ws trees
-                           let (sublx, us)  = unzip subs
-                               lx2          = lx { lexSubmap = sublx }
-                           Right (lx2, concat us)
+                           let (sublx, tabs) = unzip subs
+                               lx2           = lx { lexSubmap = sublx }
+                           Right (lx2, concat tabs)
 
-    uses :: Lexmap -> B.Ab LexmapTable
-    uses lx | ty /= LexmapDerived = Right []
-            | otherwise = Msg.abSlot [lx] $
-                case resolve 0 name derives of
-                  Just def -> expand name attr def
-                  Nothing  -> Right []
+    table :: Lexmap -> B.Ab LexmapTable
+    table lx = Msg.abSlot [lx] $
+                 case resolve 0 name derives of
+                   Just def  -> expand name attr def
+                   Nothing   -> Right []
         where
-          ty    = lexType   lx
           name  = lexOpName lx
           attr  = lexAttr   lx
 
     expand name attr (repl, edit) =
         do attr2       <- C.roamapRun edit attr
            repl2       <- C.substSlot gslot attr2 repl
-           (lx, lxs)   <- lexmap repl2
-           Right $ ((name, attr), lx) : lxs
-
-    nest :: B.Token -> ConsLexmapBody
-    nest rop []  = Right (cons LexmapNest rop [] [], [])
-    nest _ _     = Msg.extraAttr
+           (lx, tab)   <- lexmap repl2
+           Right $ ((name, attr), lx) : tab
 
     nestVars :: [C.AttrTree] -> B.Ab [String]
     nestVars attr = case B.lookupBy C.isAttrNameNest attr of
