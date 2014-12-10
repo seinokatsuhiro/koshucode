@@ -1,3 +1,4 @@
+{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Utilities for token trees.
@@ -52,8 +53,8 @@ treeToText _ _ = Msg.nothing
 
 -- | Get quoted/unquoted text.
 tokenToText :: Bool -> B.Token -> B.Ab String
-tokenToText True  (B.TText _ q w) | q > B.TextRaw  =  Right w
-tokenToText False (B.TText _ B.TextRaw w)          =  Right w
+tokenToText True  (B.TText _ q w) | q > B.TextRaw  = Right w
+tokenToText False (B.TTextRaw _ w)                 = Right w
 tokenToText _ _  =  Msg.nothing
 
 treesToDigits :: B.TTreesToAb String
@@ -72,7 +73,7 @@ concatDigits = first where
 -- ----------------------  Clock
 
 tokenClock :: B.Token -> B.Ab B.Clock
-tokenClock (B.TText _ B.TextBar ('|' : w)) = textClock w
+tokenClock (B.TTextBar _ ('|' : w)) = textClock w
 tokenClock _ = Msg.nothing
 
 textClock :: String -> B.Ab B.Clock

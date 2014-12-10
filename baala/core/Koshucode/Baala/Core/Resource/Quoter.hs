@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS_GHC -Wall -fno-warn-missing-fields #-}
@@ -61,7 +62,7 @@ consFullRelmapQ
     -> TH.ExpQ     -- ^ ExpQ of 'Relmap' v
 consFullRelmapQ fullQ = make where
     make = TH.dataToExpQ (plain `extQ` custom)
-    custom (C.Lexmap _ (B.TText _ B.TextRaw ('@':op)) _ _ _) =
+    custom (C.Lexmap _ (B.TTextRaw _ ('@':op)) _ _ _) =
         Just $ TH.varE $ TH.mkName op
     custom h@(C.Lexmap _ op opd subs _) =
         Just $ [| either consError id

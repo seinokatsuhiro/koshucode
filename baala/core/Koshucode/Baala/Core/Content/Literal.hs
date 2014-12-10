@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TupleSections #-}
 {-# OPTIONS_GHC -Wall #-}
@@ -94,7 +95,7 @@ litColon lit cs = lt `mapM` B.divideTreesByColon cs where
 litAngle :: (C.CContent c) => B.TTreeToAb c -> B.TTreesToAb c
 litAngle lit xs@(B.TreeL (B.TTerm _ 0 _) : _) = C.putAssn =<< litAssn lit xs
 litAngle _ [] = C.putAssn []
-litAngle _ [B.TreeL (B.TText _ B.TextRaw "words"), B.TreeL (B.TText _ B.TextQQ ws)] =
+litAngle _ [B.TreeL (B.TTextRaw _ "words"), B.TreeL (B.TTextQQ _ ws)] =
     C.putList $ map C.pText $ words ws
 litAngle _ _ = Msg.adlib "unknown angle bracket"
 
@@ -156,7 +157,7 @@ litType = gen where
     single []                = Right $ B.TypeSum []
     single _                 = Msg.unkType ""
 
-    precision ws [B.TreeL (B.TText _ B.TextRaw w)] | w `elem` ws = Right $ Just w
+    precision ws [B.TreeL (B.TTextRaw _ w)] | w `elem` ws = Right $ Just w
     precision _ []  = Right Nothing
     precision _ _   = Msg.unkType "precision"
 

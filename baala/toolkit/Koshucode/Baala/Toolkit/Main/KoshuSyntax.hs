@@ -196,7 +196,7 @@ judgesClauseType = map j cs where
 judgesTokenType :: [B.Judge Type.VContent]
 judgesTokenType = map j cs where
     j x = judgeTokenType x
-    cs  = [ B.TText    B.codeZero B.TextRaw ""
+    cs  = [ B.TTextRaw B.codeZero ""
           , B.TSlot    B.codeZero 0 ""
           , B.TShort   B.codeZero "" ""
           , B.TTerm    B.codeZero 0 []

@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Lexical relmap.
@@ -103,13 +104,13 @@ consLexmap findSorter gslot derives = lexmap where
 
     -- relmap "/N E" is equivalent to "add /N ( E )"
     -- relmap "| R | R" is equivalent to "id | R | R"
-    single (B.TreeL rop@(B.TText _ B.TextRaw _) : trees)  = dispatch rop trees
-    single (B.TreeL rop@(B.TText _ B.TextKey _) : trees)  = nest rop trees
-    single [B.TreeB B.BracketGroup _ trees]               = lexmap trees
-    single [B.TreeB _ _ _]                                = Msg.reqGroup
-    single (n@(B.TreeL (B.TTerm _ _ [_])) : trees)        = baseOf "add" $ n : [B.wrapTrees trees]
-    single []                                             = baseOf "id" []
-    single _                                              = Msg.unkRelmap "???"
+    single (B.TreeL rop@(B.TTextRaw _ _) : trees)    = dispatch rop trees
+    single (B.TreeL rop@(B.TTextKey _ _) : trees)    = nest rop trees
+    single [B.TreeB B.BracketGroup _ trees]          = lexmap trees
+    single [B.TreeB _ _ _]                           = Msg.reqGroup
+    single (n@(B.TreeL (B.TTerm _ _ [_])) : trees)   = baseOf "add" $ n : [B.wrapTrees trees]
+    single []                                        = baseOf "id" []
+    single _                                         = Msg.unkRelmap "???"
 
     dispatch :: B.Token -> ConsLexmapBody
     dispatch rop trees =
@@ -200,18 +201,18 @@ consLexmap findSorter gslot derives = lexmap where
     nestTrees :: [String] -> B.Map [B.TTree]
     nestTrees ws = map loop where
         loop (B.TreeB t p trees) = B.TreeB t p $ map loop trees
-        loop (B.TreeL (B.TText p B.TextRaw w)) | w `elem` ws = B.TreeL (B.TText p B.TextKey w)
+        loop (B.TreeL (B.TTextRaw p w)) | w `elem` ws = B.TreeL (B.TTextKey p w)
         loop tree = tree
 
 -- | Parse nested relation attribute.
 nestTerms :: [B.TTree] -> B.Ab [B.Terminal String]
 nestTerms = loop where
     loop (B.TreeL (B.TTerm _ 0 [n]) :
-          B.TreeL (B.TText _ B.TextRaw v) : xs)  = next (n, v) xs
-    loop (B.TreeL (B.TTerm _ 0 [n]) : xs)        = next (n, n) xs
-    loop (B.TreeL (B.TText _ B.TextRaw v) : xs)  = next (v, v) xs
-    loop []                                      = Right []
-    loop _                                       = Msg.reqTermName
+          B.TreeL (B.TTextRaw _ v) : xs)   = next (n, v) xs
+    loop (B.TreeL (B.TTerm _ 0 [n]) : xs)  = next (n, n) xs
+    loop (B.TreeL (B.TTextRaw _ v) : xs)   = next (v, v) xs
+    loop []                                = Right []
+    loop _                                 = Msg.reqTermName
 
     next p xs = do xs' <- loop xs
                    Right $ p : xs'

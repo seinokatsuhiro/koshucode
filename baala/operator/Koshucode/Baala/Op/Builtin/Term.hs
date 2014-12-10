@@ -1,3 +1,4 @@
+{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Parsing list of terms.
@@ -31,8 +32,8 @@ termNamesCo trees =
 
 -- Term complement symbol
 termCo :: [B.TTree] -> B.Ab (Bool, [B.TTree])
-termCo (B.TreeL (B.TText _ B.TextRaw "~") : trees) = Right (True, trees)
-termCo trees                               = Right (False, trees)
+termCo (B.TreeL (B.TTextRaw _ "~") : trees)  = Right (True, trees)
+termCo trees                                 = Right (False, trees)
 
 -- | Extract a list of name-and-name pairs.
 -- 

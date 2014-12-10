@@ -1,5 +1,6 @@
-{-# OPTIONS_GHC -Wall #-}
+{-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.Cox.Get
   ( -- * Cox
@@ -87,7 +88,7 @@ getTreesByEqual trees =
       _             -> Msg.adlib "getTreesByEqual"
 
 getTextFromTree :: B.TTree -> B.Ab String
-getTextFromTree (B.TreeL (B.TText _ B.TextRaw n)) = Right n
+getTextFromTree (B.TreeL (B.TTextRaw _ n)) = Right n
 getTextFromTree _ = Msg.adlib "getTextFromTree"
 
 

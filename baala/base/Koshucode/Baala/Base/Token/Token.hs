@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Tokens in Koshucode.
@@ -7,11 +8,20 @@ module Koshucode.Baala.Base.Token.Token
   (
     -- * Token
     Token (..),
-    TextForm (..),
     BlankName (..),
     textToken,
     nameToken,
   
+    -- * TextForm
+    TextForm (..),
+    pattern TTextUnk,
+    pattern TTextRaw,
+    pattern TTextQ,
+    pattern TTextQQ,
+    pattern TTextKey,
+    pattern TTextBar,
+    pattern TTextName,
+
     -- * Term name
     TermName, TermName2, TermName3, TermName4,
     Terminal, TermPath,
@@ -108,6 +118,14 @@ data TextForm
     | TextBar     -- ^ Text enclosed in bars
     | TextName    -- ^ Text used as name
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
+
+pattern TTextUnk  cp w   = TText cp TextUnk  w
+pattern TTextRaw  cp w   = TText cp TextRaw  w
+pattern TTextQ    cp w   = TText cp TextQ    w
+pattern TTextQQ   cp w   = TText cp TextQQ   w
+pattern TTextKey  cp w   = TText cp TextKey  w
+pattern TTextBar  cp w   = TText cp TextBar  w
+pattern TTextName cp w   = TText cp TextName w
 
 textFormTypeText :: TextForm -> String
 textFormTypeText form =

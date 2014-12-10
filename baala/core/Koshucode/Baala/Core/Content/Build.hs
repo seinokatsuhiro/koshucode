@@ -1,4 +1,5 @@
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Term-content calcutation.
@@ -106,7 +107,7 @@ construct calc = expr where
     cons cp tree@(B.TreeL tok) = case tok of
         B.TTerm _ 0 ns ->  Right $ C.CoxTerm  cp ns []
         B.TName _ op   ->  Right $ C.CoxBlank cp op
-        B.TText _ B.TextRaw n | isName n ->  Right $ C.CoxBlank cp $ B.BlankNormal n
+        B.TTextRaw _ n | isName n ->  Right $ C.CoxBlank cp $ B.BlankNormal n
         B.TText _ _ _  ->  lit cp tree
         B.TTerm _ 1 _  ->  lit cp tree
         _              ->  B.bug "core/leaf"
@@ -119,7 +120,7 @@ construct calc = expr where
     lit cp tree = fmap (C.CoxLit cp) $ C.literal calc tree
 
     untag :: B.TTreeTo (C.CoxTag, B.TTree)
-    untag (B.TreeB l p (B.TreeL (B.TText _ B.TextQ tag) : vars))
+    untag (B.TreeB l p (B.TreeL (B.TTextQ _ tag) : vars))
                = (Just tag, B.TreeB l p $ vars)
     untag vars = (Nothing, vars)
 
@@ -144,14 +145,14 @@ prefix htab tree =
     where
       conv = (c C.copPrefix, c C.copInfix, c C.copPostfix)
       c :: (String -> B.BlankName) -> B.Map B.Token
-      c f (B.TText cp B.TextRaw s) = B.TName cp $ f s
+      c f (B.TTextRaw cp s) = B.TName cp $ f s
       c _ x = x
 
       ht :: B.Token -> B.InfixHeight
       ht = B.infixHeight wordText htab
 
       wordText :: B.Token -> Maybe String
-      wordText (B.TText _ B.TextRaw w) = Just w
+      wordText (B.TTextRaw _ w) = Just w
       wordText _               = Nothing
 
       detail (Right n, tok) = detailText tok "right" n
@@ -177,7 +178,7 @@ convTree :: C.CopFind C.CopTree -> B.AbMap B.TTree
 convTree find = expand where
     expand tree@(B.TreeB B.BracketGroup p subtrees) =
         case subtrees of
-          op@(B.TreeL (B.TText _ B.TextRaw name)) : args
+          op@(B.TreeL (B.TTextRaw _ name)) : args
               -> Msg.abCoxSyntax tree $
                  case find $ B.BlankNormal name of
                    Just f -> expand =<< f args

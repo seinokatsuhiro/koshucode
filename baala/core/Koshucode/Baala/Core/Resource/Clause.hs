@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Intermidiate structure between 'String' and 'Resource'.
@@ -98,17 +99,17 @@ consPreclause' no src = dispatch $ liaison $ B.clauseTokens src where
 
     liaison :: B.Map [B.Token]
     liaison [] = []
-    liaison (B.TText _ B.TextQ "" : B.TTerm p2 0 w2 : xs)
+    liaison (B.TTextQ _ "" : B.TTerm p2 0 w2 : xs)
                        = let tok = B.TTerm p2 1 w2
                          in liaison $ tok : xs
     liaison (x : xs)   = x : liaison xs
 
     dispatch :: [B.Token] -> (Int, [Clause])
-    dispatch (B.TText _ B.TextBar ('|' : k) : xs) =
+    dispatch (B.TTextBar _ ('|' : k) : xs) =
         same $ frege k xs   -- Frege's judgement stroke
-    dispatch (B.TText _ B.TextRaw name : B.TText _ B.TextRaw colon : xs)
+    dispatch (B.TTextRaw _ name : B.TTextRaw _ colon : xs)
         | isDelim colon             = same $ rmap name xs
-    dispatch (B.TText _ B.TextRaw k : xs)
+    dispatch (B.TTextRaw _ k : xs)
         | k == "import"             = same $ impt xs
         | k == "export"             = same $ expt xs
         | k == "short"              = same $ short xs
@@ -234,7 +235,7 @@ shortToLong sh = map clause where
     long :: B.Map B.Token
     long token@(B.TShort n a b) =
         case lookup a sh of
-          Just l  -> B.TText n B.TextQQ $ l ++ b
+          Just l  -> B.TTextQQ n $ l ++ b
           Nothing -> token
     long token = token
 
