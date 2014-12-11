@@ -65,9 +65,9 @@ literal calc tree = Msg.abLiteral tree $ lit tree where
     token t                                 = Msg.unkWord $ B.tokenContent t
 
     group :: B.TTreeToAb c
-    group g@(B.TreeB _ _ xs@(B.TreeL (B.TText _ n _) : _))
-        | n  > B.TextRaw    =  eith g text $ C.treesToTexts True xs
-        | n == B.TextRaw    =  eithcon (eith g
+    group g@(B.TreeB _ _ xs@(B.TextLeaf f _ _ : _))
+        | f  > B.TextRaw    =  eith g text $ C.treesToTexts True xs
+        | f == B.TextRaw    =  eithcon (eith g
                                  C.putTime $ C.treesToTime   xs)
                                  decimal   $ C.treesToDigits xs
     group (B.TreeB _ _ [])  =  Right C.empty
@@ -95,7 +95,7 @@ litColon lit cs = lt `mapM` B.divideTreesByColon cs where
 litAngle :: (C.CContent c) => B.TTreeToAb c -> B.TTreesToAb c
 litAngle lit xs@(B.TreeL (B.TTerm _ 0 _) : _) = C.putAssn =<< litAssn lit xs
 litAngle _ [] = C.putAssn []
-litAngle _ [B.TreeL (B.TTextRaw _ "words"), B.TreeL (B.TTextQQ _ ws)] =
+litAngle _ [B.TextLeafRaw _ "words", B.TextLeafQQ _ ws] =
     C.putList $ map C.pText $ words ws
 litAngle _ _ = Msg.adlib "unknown angle bracket"
 
@@ -151,13 +151,13 @@ litType = gen where
                xs2 ->  Right . B.TypeSum =<< mapM gen xs2
 
     single [B.TreeB _ _ xs]  = gen xs
-    single (B.TreeL (B.TText _ q n) : xs)
-        | q == B.TextRaw     = dispatch n xs
+    single (B.TextLeaf f _ n : xs)
+        | f == B.TextRaw     = dispatch n xs
         | otherwise          = Msg.quoteType n
     single []                = Right $ B.TypeSum []
     single _                 = Msg.unkType ""
 
-    precision ws [B.TreeL (B.TTextRaw _ w)] | w `elem` ws = Right $ Just w
+    precision ws [B.TextLeafRaw _ w] | w `elem` ws = Right $ Just w
     precision _ []  = Right Nothing
     precision _ _   = Msg.unkType "precision"
 

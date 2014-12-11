@@ -201,16 +201,16 @@ consLexmap findSorter gslot derives = lexmap where
     nestTrees :: [String] -> B.Map [B.TTree]
     nestTrees ws = map loop where
         loop (B.TreeB t p trees) = B.TreeB t p $ map loop trees
-        loop (B.TreeL (B.TTextRaw p w)) | w `elem` ws = B.TreeL (B.TTextKey p w)
+        loop (B.TextLeafRaw p w) | w `elem` ws = B.TextLeafKey p w
         loop tree = tree
 
 -- | Parse nested relation attribute.
 nestTerms :: [B.TTree] -> B.Ab [B.Terminal String]
 nestTerms = loop where
     loop (B.TreeL (B.TTerm _ 0 [n]) :
-          B.TreeL (B.TTextRaw _ v) : xs)   = next (n, v) xs
+          B.TextLeafRaw _ v : xs)          = next (n, v) xs
     loop (B.TreeL (B.TTerm _ 0 [n]) : xs)  = next (n, n) xs
-    loop (B.TreeL (B.TTextRaw _ v) : xs)   = next (v, v) xs
+    loop (B.TextLeafRaw _ v : xs)          = next (v, v) xs
     loop []                                = Right []
     loop _                                 = Msg.reqTermName
 

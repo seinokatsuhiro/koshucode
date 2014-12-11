@@ -83,7 +83,7 @@ construct calc = expr where
     cons :: [B.CodePt] -> B.TTreeToAb (C.Cox c)
     cons cp tree@(B.TreeB B.BracketGroup _ subtrees)
          = case subtrees of
-             f@(B.TreeL (B.TText _ q w)) : xs
+             f@(B.TextLeaf q _ w) : xs
                  | q == B.TextRaw && isName w -> fill cp f xs
                  | otherwise -> lit cp tree
 
@@ -117,12 +117,12 @@ construct calc = expr where
            xs' <- expr `mapM` xs
            Right $ C.CoxFill cp f' xs'
 
-    lit cp tree = fmap (C.CoxLit cp) $ C.literal calc tree
+    lit cp tree  = fmap (C.CoxLit cp) $ C.literal calc tree
 
     untag :: B.TTreeTo (C.CoxTag, B.TTree)
-    untag (B.TreeB l p (B.TreeL (B.TTextQ _ tag) : vars))
-               = (Just tag, B.TreeB l p $ vars)
-    untag vars = (Nothing, vars)
+    untag (B.TreeB l p (B.TextLeafQ _ tag : vars))
+                = (Just tag, B.TreeB l p $ vars)
+    untag vars  = (Nothing, vars)
 
 isName :: B.Pred String
 isName (c:_)  = isNameFirst c
@@ -178,7 +178,7 @@ convTree :: C.CopFind C.CopTree -> B.AbMap B.TTree
 convTree find = expand where
     expand tree@(B.TreeB B.BracketGroup p subtrees) =
         case subtrees of
-          op@(B.TreeL (B.TTextRaw _ name)) : args
+          op@(B.TextLeafRaw _ name) : args
               -> Msg.abCoxSyntax tree $
                  case find $ B.BlankNormal name of
                    Just f -> expand =<< f args

@@ -12,7 +12,14 @@ module Koshucode.Baala.Base.Token.TokenTree
     TTreeToAb, TTreesToAb,
     tokenTrees,
     wrapTrees,
-  
+
+    -- * Pattern
+    pattern TextLeaf,
+    pattern TextLeafRaw,
+    pattern TextLeafQ,
+    pattern TextLeafQQ,
+    pattern TextLeafKey,
+
     -- * Bracket type
     BracketType (..),
   
@@ -59,6 +66,12 @@ type TTreeToAb a  = TTree -> B.Ab a
 
 -- | Convert list of token tree to sometning, abortable.
 type TTreesToAb a = [TTree] -> B.Ab a
+
+pattern TextLeaf form cp w   = B.TreeL (B.TText   cp form w)
+pattern TextLeafRaw   cp w   = TextLeaf B.TextRaw cp w
+pattern TextLeafQ     cp w   = TextLeaf B.TextQ   cp w
+pattern TextLeafQQ    cp w   = TextLeaf B.TextQQ  cp w
+pattern TextLeafKey   cp w   = TextLeaf B.TextKey cp w
 
 -- | Parse tokens with brackets into trees.
 --   Blank tokens and comments are excluded.
@@ -123,14 +136,14 @@ splitTokensBy
     -> Either [B.Token] ([B.Token], B.Token, [B.Token])
        -- ^ Original-tokens or @(@before-list, the-word, after-list@)@
 splitTokensBy p = B.splitBy p2 where
-    p2 (B.TTextRaw _ x) = p x
+    p2 (B.TTextRaw _ x)  = p x
     p2 _ = False
 
 -- | Divide token trees by quoteless token of given string.
 divideTreesBy :: String -> TTreesTo [[TTree]]
 divideTreesBy w1 = B.divideBy p where
-    p (B.TreeL (B.TTextRaw _ w2))  = w1 == w2
-    p _                            = False
+    p (TextLeafRaw _ w2)  = w1 == w2
+    p _                   = False
 
 -- | Divide token trees by vertical bar @\"|\"@.
 divideTreesByBar :: TTreesTo [[TTree]]

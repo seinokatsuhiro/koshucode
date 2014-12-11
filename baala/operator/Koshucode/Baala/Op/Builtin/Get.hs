@@ -1,3 +1,4 @@
+{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Attribute getters: Extract attribute from use of relmap.
@@ -87,7 +88,7 @@ getSwitch u name = getAbortableOption False get u name where
 --   >   ...
 getWord :: RopGet c String
 getWord = getAbortable get where
-    get [B.TreeL (B.TText _ _ s)] = Right s
+    get [B.TextLeaf _ _ s] = Right s
     get _ = Msg.unexpAttr "Require one word"
 
 
@@ -119,7 +120,7 @@ wordTrees (w : tree : xs) =
        Right $ (w', tree) : xs'
 
 word :: B.TTree -> B.Ab String
-word (B.TreeL (B.TText _ _ w)) = Right w
+word (B.TextLeaf _ _ w) = Right w
 word _ = Msg.unexpAttr "Require one word"
 
 getTreesByColon :: RopGet c [[B.TTree]]
