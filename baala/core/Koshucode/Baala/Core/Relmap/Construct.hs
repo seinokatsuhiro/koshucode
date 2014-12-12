@@ -44,13 +44,13 @@ consRelmap :: (C.RopName -> Maybe (C.Rop c)) -> C.Global c -> ConsRelmap c
 consRelmap findRop g = relmap where
     relmap lx =
         case C.lexType lx of
-          C.LexmapDerived  -> Right $ C.RelmapLink lx n attr
-          C.LexmapNest     -> Right $ C.RelmapLink lx n attr
+          C.LexmapDerived  -> Right $ C.RelmapLink lx key
+          C.LexmapNest     -> Right $ C.RelmapLink lx key
           C.LexmapBase     -> case findRop n of
                                 Just rop -> Msg.abRelmap [lx] $ cons rop
                                 Nothing  -> Msg.bug "missing operator @consRelmap"
-        where n             = C.lexOpName lx
-              attr          = C.lexAttr   lx
+        where key           = C.lexKey    lx
+              n             = C.lexOpName lx
               cons rop      = do sub <- relmap `mapM` C.lexSubmap lx
                                  C.ropCons rop $ C.RopUse g lx sub
 
@@ -92,13 +92,13 @@ relmapNest :: C.RopUse c -> [B.Terminal String] -> B.Map (C.Relmap c)
 relmapNest = C.RelmapNest . C.ropLexmap
 
 relmapNestVar :: C.RopUse c -> String -> C.Relmap c
-relmapNestVar use n = relmapLink (nestVar use) n []
+relmapNestVar use n = relmapLink (nestVar use) (n, [])
 
 nestVar :: B.Map (C.RopUse c)
 nestVar u@C.RopUse { C.ropLexmap = lx } =
     u { C.ropLexmap = lx { C.lexType = C.LexmapNest }}
 
-relmapLink :: C.RopUse c -> String -> [C.AttrTree] -> C.Relmap c
+relmapLink :: C.RopUse c -> (String, [C.AttrTree]) -> C.Relmap c
 relmapLink = C.RelmapLink . C.ropLexmap
 
 
@@ -113,7 +113,7 @@ relmapSourceList = relmapList f where
 -- | List of name in 'C.RelmapLink'
 relmapNameList :: C.Relmap c -> [String]
 relmapNameList = relmapList f where
-    f (C.RelmapLink _ n _) = [n]
+    f (C.RelmapLink _ (n, _)) = [n]
     f _ = []
 
 relmapList :: B.Map (C.Relmap c -> [a])

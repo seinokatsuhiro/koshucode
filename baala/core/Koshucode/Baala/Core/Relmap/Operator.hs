@@ -111,7 +111,7 @@ data Relmap c
       -- ^ Relmap for environment of input relation
     | RelmapNest     C.Lexmap [B.Terminal String] (Relmap c)
       -- ^ Relmap for environment of nested relations
-    | RelmapLink     C.Lexmap String [C.AttrTree]
+    | RelmapLink     C.Lexmap C.RelmapKey
       -- ^ Relmap reference
 
     | RelmapAppend   (Relmap c) (Relmap c)
@@ -130,7 +130,7 @@ showRelmap r = sh r where
 
     sh (RelmapCopy _ n r1)    = "RelmapCopy "   ++ show n  ++ joinSubs [r1]
     sh (RelmapNest _ ns r1)   = "RelmapNest "   ++ show ns ++ joinSubs [r1]
-    sh (RelmapLink _ n _)     = "RelmapLink "   ++ show n
+    sh (RelmapLink _ (n, _))  = "RelmapLink "   ++ show n
     sh (RelmapAppend r1 r2)   = "RelmapAppend"  ++ joinSubs [r1, r2]
 
     joinSubs = concatMap sub
@@ -156,7 +156,7 @@ instance B.Write (Relmap c) where
 
     write sh (RelmapCopy   _ _ r1)  = B.write sh r1
     write sh (RelmapNest   _ _ r1)  = B.write sh r1
-    write sh (RelmapLink   lx _ _)  = B.write sh lx
+    write sh (RelmapLink   lx _)    = B.write sh lx
     write sh (RelmapAppend r1 r2)   = B.docHang (B.write sh r1) 2 (docRelmapAppend sh r2)
 
 docRelmapAppend :: B.StringMap -> Relmap c -> B.Doc
@@ -183,7 +183,9 @@ relmapId :: Relmap c
 relmapId = RelmapCalc lexId (const $ Right . C.relkitId) []
 
 lexId :: C.Lexmap
-lexId = C.Lexmap C.LexmapBase (B.textToken "id") [(C.attrNameAttr, [])] [] []
+lexId = C.Lexmap C.LexmapBase name attr [] [] where
+    name = B.textToken "id"
+    attr = [(C.attrNameAttr, [])]
 
 relmapLexList :: Relmap c -> [C.Lexmap]
 relmapLexList = collect where
@@ -195,6 +197,6 @@ relmapLexList = collect where
 
     collect (RelmapCopy    lx _ _)  = [lx]
     collect (RelmapNest    lx _ _)  = [lx]
-    collect (RelmapLink    lx _ _)  = [lx]
+    collect (RelmapLink    lx _)    = [lx]
     collect (RelmapAppend  r1 r2)   = collect r1 ++ collect r2
 

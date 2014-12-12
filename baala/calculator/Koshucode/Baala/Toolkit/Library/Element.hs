@@ -53,14 +53,14 @@ elemRelmap relmap = name : f relmap where
                [ "/pat"   -:- C.pText p
                , "/terms" -:- C.pTextSet xs ]
 
-    f (C.RelmapAppend r1 r2)   =  f r1 ++ f r2
-    f (C.RelmapSource _ p xs)  =  [ rop "source", src p xs ]
-    f (C.RelmapLink   _ n _)   =  [ ref n ]
-    f (C.RelmapCalc   _ _ rs)  =  rop (B.name relmap) : concatMap f rs
-    f (C.RelmapGlobal _ _)     =  [ rop (B.name relmap) ]
-    f (C.RelmapConst  _ _)     =  [ rop (B.name relmap) ]
-    f (C.RelmapCopy   _ _ r1)  =  f r1
-    f (C.RelmapNest   _ _ r1)  =  f r1
+    f (C.RelmapAppend r1 r2)     = f r1 ++ f r2
+    f (C.RelmapSource _ p xs)    = [ rop "source", src p xs ]
+    f (C.RelmapLink   _ (n, _))  = [ ref n ]
+    f (C.RelmapCalc   _ _ rs)    = rop (B.name relmap) : concatMap f rs
+    f (C.RelmapGlobal _ _)       = [ rop (B.name relmap) ]
+    f (C.RelmapConst  _ _)       = [ rop (B.name relmap) ]
+    f (C.RelmapCopy   _ _ r1)    = f r1
+    f (C.RelmapNest   _ _ r1)    = f r1
 
 
 -- ------------------------------------------------------------------

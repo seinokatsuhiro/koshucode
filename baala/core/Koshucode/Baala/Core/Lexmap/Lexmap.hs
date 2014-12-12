@@ -8,7 +8,7 @@ module Koshucode.Baala.Core.Lexmap.Lexmap
   ( -- * Data type
     Lexmap (..),
     LexmapType (..),
-    lexOpName,
+    lexOpName, lexKey,
     lexAddMessage,
     lexMessageList,
   
@@ -58,6 +58,9 @@ instance B.CodePtr Lexmap where
 -- | Name of relmap operator
 lexOpName :: Lexmap -> C.RopName
 lexOpName = B.tokenContent . lexOpToken
+
+lexKey :: Lexmap -> C.RelmapKey
+lexKey lx = (lexOpName lx, lexAttr lx)
 
 lexAddMessage :: String -> B.Map Lexmap
 lexAddMessage msg lx = lx { lexMessage = msg : lexMessage lx }

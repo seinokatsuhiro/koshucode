@@ -46,13 +46,13 @@ relmapSpecialize global parts = spec [] [] where
                      kit <- makeKit global he1
                      Right (kdef, kit)
 
-              C.RelmapLink lx n roa
+              C.RelmapLink lx key@(n, _)
                   | C.lexType lx == C.LexmapNest ->
                       post lx $ case lookup n nest of
                            Just he    -> Right (kdef, C.relkitNestVar n he)
                            Nothing    -> Msg.unkNestVar n
                   | otherwise ->
-                      post lx $ case lookup (n, roa) parts of
+                      post lx $ case lookup key parts of
                            Just rmap1 -> link n rmap1 (he1, C.relmapLexList rmap1)
                            Nothing    -> Msg.unkRelmap n
 
