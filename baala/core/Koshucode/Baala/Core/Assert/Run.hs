@@ -1,3 +1,4 @@
+{-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -138,8 +139,8 @@ flatnames trees =
 
 -- | Get term name as string only if term is flat.
 flatname :: B.TTree -> Maybe B.TermName
-flatname (B.TreeL (B.TTerm _ _ [n])) = Just n
-flatname _ = Nothing
+flatname (B.TermLeaf _ _ [n])  = Just n
+flatname _                     = Nothing
 
 snipRelRaw :: (Ord c) => B.SnipPair B.NamedType c -> [B.TermName] -> B.AbMap (B.Rel c)
 snipRelRaw (heSnip, boSnip) ns (B.Rel he1 bo1)

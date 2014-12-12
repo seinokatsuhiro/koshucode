@@ -14,7 +14,7 @@ import qualified Koshucode.Baala.Op.Message as Msg
 
 -- | Extract a term name.
 termName :: B.TTree -> B.Ab B.TermName
-termName (B.TreeL (B.TTerm _ _ [n])) = Right n
+termName (B.TermLeaf _ _ [n]) = Right n
 termName _ = Msg.reqTermName
 
 -- | Extract a list of term names.
