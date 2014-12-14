@@ -118,6 +118,8 @@ decide_command () {
             echo "html -- open html documents" ;;
         install.link)
             cab_command=cabal_install
+            echo "Using" `ghc -V`
+            echo
             echo "install -- installs packages" ;;
         sdist.link)
             cab_command=cabal_sdist
