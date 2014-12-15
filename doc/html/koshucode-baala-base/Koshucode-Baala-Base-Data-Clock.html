@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.81.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.85.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -40,6 +40,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Safe Haskell</th
 	    ><td
 	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
 	    ></tr
 	  ></table
 	><p class="caption"
@@ -51,18 +57,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Data type
-</a
+	    >Data type</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Accessor
-</a
+	    >Accessor</a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >Calculation
-</a
+	    >Property</a
+	    ></li
+	  ><li
+	  ><a href="#g:4"
+	    >Calculation</a
 	    ></li
 	  ></ul
 	></div
@@ -73,9 +80,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><li class="src short"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a href="#t:Clock"
+	    > <a href="#t:Clock"
 	    >Clock</a
-	    > <ul class="subs"
+	    ><ul class="subs"
 	    ><li
 	      >= <a href="#v:ClockDhms"
 		>ClockDhms</a
@@ -83,7 +90,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		>DayCount</a
 		> <a href="Koshucode-Baala-Base-Data-Clock.html#t:Sec"
 		>Sec</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:ClockDhm"
 		>ClockDhm</a
@@ -91,7 +98,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		>DayCount</a
 		> <a href="Koshucode-Baala-Base-Data-Clock.html#t:Sec"
 		>Sec</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:ClockDh"
 		>ClockDh</a
@@ -99,13 +106,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		>DayCount</a
 		> <a href="Koshucode-Baala-Base-Data-Clock.html#t:Sec"
 		>Sec</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:ClockD"
 		>ClockD</a
 		> <a href="Koshucode-Baala-Base-Data-Clock.html#t:DayCount"
 		>DayCount</a
-		>  </li
+		></li
 	      ></ul
 	    ></li
 	  ><li class="src short"
@@ -201,6 +208,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Clock</a
 	    ></li
 	  ><li class="src short"
+	  ><a href="#v:clockFromD"
+	    >clockFromD</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Clock.html#t:DayCount"
+	    >DayCount</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
+	    >Clock</a
+	    ></li
+	  ><li class="src short"
 	  ><a href="#v:clockFromHms"
 	    >clockFromHms</a
 	    > :: <a href="Koshucode-Baala-Base-Data-Clock.html#t:Hour"
@@ -213,38 +228,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Sec</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
 	    >Clock</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:clockDayCount"
-	    >clockDayCount</a
-	    > :: <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
-	    >Clock</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Data-Clock.html#t:DayCount"
-	    >DayCount</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:clockSec"
-	    >clockSec</a
-	    > :: <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
-	    >Clock</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Data-Clock.html#t:Sec"
-	    >Sec</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:clockSign"
-	    >clockSign</a
-	    > :: <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
-	    >Clock</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-	    >Int</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:clockPrecision"
-	    >clockPrecision</a
-	    > :: <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
-	    >Clock</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:dhmsFromSec"
@@ -271,6 +254,82 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Sec</a
 	    >) -&gt; <a href="Koshucode-Baala-Base-Data-Clock.html#t:Sec"
 	    >Sec</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clockSign"
+	    >clockSign</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
+	    >Clock</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clockDayCount"
+	    >clockDayCount</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
+	    >Clock</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Clock.html#t:DayCount"
+	    >DayCount</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clockSec"
+	    >clockSec</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
+	    >Clock</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Clock.html#t:Sec"
+	    >Sec</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clockPrecision"
+	    >clockPrecision</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
+	    >Clock</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:clockDhms"
+	    >clockDhms</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
+	    >Clock</a
+	    > -&gt; (<a href="Koshucode-Baala-Base-Data-Clock.html#t:DayCount"
+	    >DayCount</a
+	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Hour"
+	    >Hour</a
+	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Min"
+	    >Min</a
+	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Sec"
+	    >Sec</a
+	    >)</li
+	  ><li class="src short"
+	  ><a href="#v:clockAlter"
+	    >clockAlter</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:DayCount"
+	    >DayCount</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Hour"
+	    >Hour</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Min"
+	    >Min</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Sec"
+	    >Sec</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
+	    >Clock</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:clockPos"
@@ -333,6 +392,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Clock</a
 	    ></li
 	  ><li class="src short"
+	  ><a href="#v:clockTimes"
+	    >clockTimes</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
+	    >Clock</a
+	    ></li
+	  ><li class="src short"
 	  ><a href="#v:clockRangeBy"
 	    >clockRangeBy</a
 	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
@@ -362,15 +431,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Data type
-</h1
+	>Data type</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a name="t:Clock" class="def"
+	    > <a name="t:Clock" class="def"
 	    >Clock</a
-	    >  <a href="src/Koshucode-Baala-Base-Data-Clock.html#Clock" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#Clock" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs constructors"
@@ -388,8 +456,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  ></td
 		><td class="doc"
 		><p
-		  >Clock represented by multiple of second
-</p
+		  >Clock represented by multiple of second</p
 		  ></td
 		></tr
 	      ><tr
@@ -403,8 +470,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  ></td
 		><td class="doc"
 		><p
-		  >Clock represented by multiple of minute
-</p
+		  >Clock represented by multiple of minute</p
 		  ></td
 		></tr
 	      ><tr
@@ -418,8 +484,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  ></td
 		><td class="doc"
 		><p
-		  >Clock represented by multiple of hour
-</p
+		  >Clock represented by multiple of hour</p
 		  ></td
 		></tr
 	      ><tr
@@ -431,8 +496,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  ></td
 		><td class="doc"
 		><p
-		  >Clock represented by multiple of day
-</p
+		  >Clock represented by multiple of day</p
 		  ></td
 		></tr
 	      ></table
@@ -494,7 +558,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >DayCount</a
 	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#t:Integer"
 	    >Integer</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Clock.html#DayCount" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#DayCount" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -506,7 +570,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Hour</a
 	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Clock.html#Hour" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#Hour" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -518,7 +582,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Min</a
 	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Clock.html#Min" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#Min" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -530,7 +594,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Sec</a
 	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Clock.html#Sec" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#Sec" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -542,13 +606,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >AbBin</a
 	    > a = a -&gt; a -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > a<a href="src/Koshucode-Baala-Base-Data-Clock.html#AbBin" class="link"
+	    > a <a href="src/Koshucode-Baala-Base-Data-Clock.html#AbBin" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Type for abortable binary operator.
-</p
+	    >Type for abortable binary operator.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -559,7 +622,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Clock</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Clock.html#writeClock" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#writeClock" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -571,13 +634,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Clock</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Clock.html#writeClockBody" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#writeClockBody" class="link"
 	    >Source</a
 	    ></p
 	  ></div
 	><h1 id="g:2"
-	>Accessor
-</h1
+	>Accessor</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:clockFromDhms" class="def"
@@ -592,7 +654,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Sec</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
 	    >Clock</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Clock.html#clockFromDhms" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#clockFromDhms" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -608,7 +670,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Min</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
 	    >Clock</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Clock.html#clockFromDhm" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#clockFromDhm" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -622,7 +684,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Hour</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
 	    >Clock</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Clock.html#clockFromDh" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#clockFromDh" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clockFromD" class="def"
+	    >clockFromD</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Clock.html#t:DayCount"
+	    >DayCount</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
+	    >Clock</a
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#clockFromD" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -640,65 +714,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Sec</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
 	    >Clock</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Clock.html#clockFromHms" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:clockDayCount" class="def"
-	    >clockDayCount</a
-	    > :: <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
-	    >Clock</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Data-Clock.html#t:DayCount"
-	    >DayCount</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Clock.html#clockDayCount" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Select day-count part from clock.
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:clockSec" class="def"
-	    >clockSec</a
-	    > :: <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
-	    >Clock</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Data-Clock.html#t:Sec"
-	    >Sec</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Clock.html#clockSec" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Select second part from clock.
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:clockSign" class="def"
-	    >clockSign</a
-	    > :: <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
-	    >Clock</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-	    >Int</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Clock.html#clockSign" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:clockPrecision" class="def"
-	    >clockPrecision</a
-	    > :: <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
-	    >Clock</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Clock.html#clockPrecision" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#clockFromHms" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -716,13 +732,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Min</a
 	    >, <a href="Koshucode-Baala-Base-Data-Clock.html#t:Sec"
 	    >Sec</a
-	    >)<a href="src/Koshucode-Baala-Base-Data-Clock.html#dhmsFromSec" class="link"
+	    >) <a href="src/Koshucode-Baala-Base-Data-Clock.html#dhmsFromSec" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Decompose second into day-count, hour, minute and second parts.
-</p
+	    >Decompose second into day-count, hour, minute and second parts.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -737,18 +752,136 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Sec</a
 	    >) -&gt; <a href="Koshucode-Baala-Base-Data-Clock.html#t:Sec"
 	    >Sec</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Clock.html#secFromHms" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#secFromHms" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Aggregate hour, minute, and second into single second.
-</p
+	    >Aggregate hour, minute, and second into single second.</p
 	    ></div
 	  ></div
 	><h1 id="g:3"
-	>Calculation
-</h1
+	>Property</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clockSign" class="def"
+	    >clockSign</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
+	    >Clock</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#clockSign" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Sign of clock as <code
+	      >-1</code
+	      >, <code
+	      >0</code
+	      >, <code
+	      >1</code
+	      >.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clockDayCount" class="def"
+	    >clockDayCount</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
+	    >Clock</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Clock.html#t:DayCount"
+	    >DayCount</a
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#clockDayCount" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Day-count part of clock.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clockSec" class="def"
+	    >clockSec</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
+	    >Clock</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Clock.html#t:Sec"
+	    >Sec</a
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#clockSec" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Second part of clock.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clockPrecision" class="def"
+	    >clockPrecision</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
+	    >Clock</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#clockPrecision" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clockDhms" class="def"
+	    >clockDhms</a
+	    > :: <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
+	    >Clock</a
+	    > -&gt; (<a href="Koshucode-Baala-Base-Data-Clock.html#t:DayCount"
+	    >DayCount</a
+	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Hour"
+	    >Hour</a
+	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Min"
+	    >Min</a
+	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Sec"
+	    >Sec</a
+	    >) <a href="src/Koshucode-Baala-Base-Data-Clock.html#clockDhms" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clockAlter" class="def"
+	    >clockAlter</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:DayCount"
+	    >DayCount</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Hour"
+	    >Hour</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Min"
+	    >Min</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Sec"
+	    >Sec</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
+	    >Clock</a
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#clockAlter" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:4"
+	>Calculation</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:clockPos" class="def"
@@ -757,13 +890,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
 	    >Clock</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Clock.html#clockPos" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#clockPos" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Convert clock to positive clock.
-</p
+	    >Convert clock to positive clock.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -774,13 +906,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
 	    >Clock</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Clock.html#clockNeg" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#clockNeg" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Convert clock to negative clock.
-</p
+	    >Convert clock to negative clock.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -791,13 +922,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
 	    >Clock</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Clock.html#clockCutDay" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#clockCutDay" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Set day-count to zero.
-</p
+	    >Set day-count to zero.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -810,13 +940,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
 	    >Clock</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Clock.html#clockAddDay" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#clockAddDay" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Add day-count.
-</p
+	    >Add day-count.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -829,13 +958,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
 	    >Clock</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Clock.html#clockAddSec" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#clockAddSec" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Add second.
-</p
+	    >Add second.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -846,13 +974,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >AbBin</a
 	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
 	    >Clock</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Clock.html#clockAdd" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#clockAdd" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Calculation of clock plus clock.
-</p
+	    >Calculation of clock plus clock.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -863,14 +990,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >AbBin</a
 	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
 	    >Clock</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Clock.html#clockSub" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#clockSub" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Calculation of clock minus clock.
-</p
+	    >Calculation of clock minus clock.</p
 	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:clockTimes" class="def"
+	    >clockTimes</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    >Int</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
+	    >Clock</a
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#clockTimes" class="link"
+	    >Source</a
+	    ></p
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -886,7 +1026,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >RangeBy</a
 	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
 	    >Clock</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Clock.html#clockRangeBy" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Clock.html#clockRangeBy" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -902,7 +1042,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >DayCount</a
 	    >, <a href="Koshucode-Baala-Base-Data-Clock.html#t:Sec"
 	    >Sec</a
-	    >)<a href="src/Koshucode-Baala-Base-Data-Clock.html#clockStep" class="link"
+	    >) <a href="src/Koshucode-Baala-Base-Data-Clock.html#clockStep" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -912,7 +1052,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html

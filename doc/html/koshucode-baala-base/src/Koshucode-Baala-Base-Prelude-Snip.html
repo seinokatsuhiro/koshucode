@@ -12,23 +12,23 @@
 <a name="line-3"></a><span class='hs-comment'>-- | Snipping elements.</span>
 <a name="line-4"></a>
 <a name="line-5"></a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Prelude</span><span class='hs-varop'>.</span><span class='hs-conid'>Snip</span>
-<a name="line-6"></a><span class='hs-layout'>(</span> <span class='hs-comment'>-- * Type</span>
-<a name="line-7"></a>  <span class='hs-conid'>Snip</span><span class='hs-layout'>,</span> <span class='hs-conid'>SnipPair</span><span class='hs-layout'>,</span> <span class='hs-conid'>Bin</span><span class='hs-layout'>,</span>
-<a name="line-8"></a>
-<a name="line-9"></a>  <span class='hs-comment'>-- * Function</span>
-<a name="line-10"></a>  <span class='hs-varid'>snipFull</span><span class='hs-layout'>,</span> <span class='hs-varid'>snipIndex</span><span class='hs-layout'>,</span> <span class='hs-varid'>snipPair</span><span class='hs-layout'>,</span>
-<a name="line-11"></a>  <span class='hs-varid'>snipBoth</span><span class='hs-layout'>,</span> <span class='hs-varid'>snipFrom</span><span class='hs-layout'>,</span> <span class='hs-varid'>snipOff</span><span class='hs-layout'>,</span>
-<a name="line-12"></a>  <span class='hs-comment'>-- $FunctionExample</span>
-<a name="line-13"></a>
-<a name="line-14"></a>  <span class='hs-comment'>-- * Derivative</span>
-<a name="line-15"></a>  <span class='hs-varid'>snipFore</span><span class='hs-layout'>,</span> <span class='hs-varid'>snipFore2</span><span class='hs-layout'>,</span>
-<a name="line-16"></a>  <span class='hs-varid'>snipLeft</span><span class='hs-layout'>,</span> <span class='hs-varid'>snipShare</span><span class='hs-layout'>,</span> <span class='hs-varid'>snipRight</span><span class='hs-layout'>,</span>
-<a name="line-17"></a>  <span class='hs-varid'>snipOrder</span><span class='hs-layout'>,</span>
-<a name="line-18"></a>  <span class='hs-varid'>sameLength</span><span class='hs-layout'>,</span> <span class='hs-varid'>notSameLength</span><span class='hs-layout'>,</span>
-<a name="line-19"></a>  <span class='hs-varid'>operand</span><span class='hs-layout'>,</span>
-<a name="line-20"></a>  <span class='hs-comment'>-- $DerivativeExample</span>
-<a name="line-21"></a>
-<a name="line-22"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a name="line-6"></a>  <span class='hs-layout'>(</span> <span class='hs-comment'>-- * Type</span>
+<a name="line-7"></a>    <span class='hs-conid'>Snip</span><span class='hs-layout'>,</span> <span class='hs-conid'>SnipPair</span><span class='hs-layout'>,</span> <span class='hs-conid'>Bin</span><span class='hs-layout'>,</span>
+<a name="line-8"></a>  
+<a name="line-9"></a>    <span class='hs-comment'>-- * Function</span>
+<a name="line-10"></a>    <span class='hs-varid'>snipFull</span><span class='hs-layout'>,</span> <span class='hs-varid'>snipIndex</span><span class='hs-layout'>,</span> <span class='hs-varid'>snipPair</span><span class='hs-layout'>,</span>
+<a name="line-11"></a>    <span class='hs-varid'>snipBoth</span><span class='hs-layout'>,</span> <span class='hs-varid'>snipFrom</span><span class='hs-layout'>,</span> <span class='hs-varid'>snipOff</span><span class='hs-layout'>,</span>
+<a name="line-12"></a>    <span class='hs-comment'>-- $FunctionExample</span>
+<a name="line-13"></a>  
+<a name="line-14"></a>    <span class='hs-comment'>-- * Derivative</span>
+<a name="line-15"></a>    <span class='hs-varid'>snipFore</span><span class='hs-layout'>,</span> <span class='hs-varid'>snipFore2</span><span class='hs-layout'>,</span>
+<a name="line-16"></a>    <span class='hs-varid'>snipLeft</span><span class='hs-layout'>,</span> <span class='hs-varid'>snipShare</span><span class='hs-layout'>,</span> <span class='hs-varid'>snipRight</span><span class='hs-layout'>,</span>
+<a name="line-17"></a>    <span class='hs-varid'>snipOrder</span><span class='hs-layout'>,</span>
+<a name="line-18"></a>    <span class='hs-varid'>sameLength</span><span class='hs-layout'>,</span> <span class='hs-varid'>notSameLength</span><span class='hs-layout'>,</span>
+<a name="line-19"></a>    <span class='hs-varid'>operand</span><span class='hs-layout'>,</span>
+<a name="line-20"></a>    <span class='hs-comment'>-- $DerivativeExample</span>
+<a name="line-21"></a>  
+<a name="line-22"></a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
 <a name="line-23"></a>
 <a name="line-24"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>List</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>List</span>
 <a name="line-25"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Prelude</span><span class='hs-varop'>.</span><span class='hs-conid'>Import</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>

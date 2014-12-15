@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.81.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.85.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -41,6 +41,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    ><td
 	    >None</td
 	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
 	  ></table
 	><p class="caption"
 	>Koshucode.Baala.Base.Syntax.Infix</p
@@ -50,8 +56,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	>Description</p
 	><div class="doc"
 	><p
-	  >Convert infixed-operator trees into prefixed-operator trees.
-</p
+	  >Convert infixed-operator trees into prefixed-operator trees.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -87,7 +92,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >infixToPrefix</a
 	    > :: <span class="keyword"
 	    >forall</span
-	    > p a.  (<a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    > p a. (<a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
 	    > a, <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -165,13 +170,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >Int</a
 	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    ><a href="src/Koshucode-Baala-Base-Syntax-Infix.html#InfixHeight" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Syntax-Infix.html#InfixHeight" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Direction and height for binary splitting.
-</p
+	    >Direction and height for binary splitting.</p
 	    ><dl
 	    ><dt
 	      ><code
@@ -180,7 +184,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 		>H</em
 		></dt
 	      ><dd
-	      > Splits first the left-most operator,
+	      >Splits first the left-most operator,
    and operator height is <em
 		>H</em
 		>.
@@ -196,8 +200,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 		>
    and then <code
 		>(: a (: b c))</code
-		>.
-</dd
+		>.</dd
 	      ><dt
 	      ><code
 		>Right</code
@@ -205,7 +208,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 		>H</em
 		></dt
 	      ><dd
-	      > Right-most splitting and height <em
+	      >Right-most splitting and height <em
 		>H</em
 		>.
    For example, if the operator <code
@@ -237,8 +240,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 		>
    are <code
 		>(0 3 0 5 0)</code
-		>
-</dd
+		></dd
 	      ></dl
 	    ></div
 	  ></div
@@ -254,13 +256,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >InfixHeight</a
 	    >)] -&gt; a -&gt; <a href="Koshucode-Baala-Base-Syntax-Infix.html#t:InfixHeight"
 	    >InfixHeight</a
-	    ><a href="src/Koshucode-Baala-Base-Syntax-Infix.html#infixHeight" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Syntax-Infix.html#infixHeight" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Make the height function from a height table of operators.
-</p
+	    >Make the height function from a height table of operators.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -269,7 +270,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >infixToPrefix</a
 	    > :: <span class="keyword"
 	    >forall</span
-	    > p a.  (<a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    > p a. (<a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
 	    > a, <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
@@ -287,13 +288,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >InfixAbMap</a
 	    > a (<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
 	    >CodeTree</a
-	    > p a)<a href="src/Koshucode-Baala-Base-Syntax-Infix.html#infixToPrefix" class="link"
+	    > p a) <a href="src/Koshucode-Baala-Base-Syntax-Infix.html#infixToPrefix" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Split branches in a given tree at infixed binary operators.
-</p
+	    >Split branches in a given tree at infixed binary operators.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -306,7 +306,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >Either</a
 	    > [(<a href="Koshucode-Baala-Base-Syntax-Infix.html#t:InfixHeight"
 	    >InfixHeight</a
-	    >, a)] x<a href="src/Koshucode-Baala-Base-Syntax-Infix.html#InfixAb" class="link"
+	    >, a)] x <a href="src/Koshucode-Baala-Base-Syntax-Infix.html#InfixAb" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -318,7 +318,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >InfixAbMap</a
 	    > a x = x -&gt; <a href="Koshucode-Baala-Base-Syntax-Infix.html#t:InfixAb"
 	    >InfixAb</a
-	    > a x<a href="src/Koshucode-Baala-Base-Syntax-Infix.html#InfixAbMap" class="link"
+	    > a x <a href="src/Koshucode-Baala-Base-Syntax-Infix.html#InfixAbMap" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -332,7 +332,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >CodeTree</a
 	    > p (<a href="Koshucode-Baala-Base-Syntax-Infix.html#t:InfixHeight"
 	    >InfixHeight</a
-	    >, a)<a href="src/Koshucode-Baala-Base-Syntax-Infix.html#InfixTree" class="link"
+	    >, a) <a href="src/Koshucode-Baala-Base-Syntax-Infix.html#InfixTree" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -350,7 +350,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >InfixAbMap</a
 	    > a (<a href="Koshucode-Baala-Base-Syntax-Infix.html#t:InfixTree"
 	    >InfixTree</a
-	    > p a)<a href="src/Koshucode-Baala-Base-Syntax-Infix.html#InfixMapper" class="link"
+	    > p a) <a href="src/Koshucode-Baala-Base-Syntax-Infix.html#InfixMapper" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -360,7 +360,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html

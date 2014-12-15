@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.81.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.85.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -40,6 +40,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Safe Haskell</th
 	    ><td
 	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
 	    ></tr
 	  ></table
 	><p class="caption"
@@ -51,13 +57,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Datatype
-</a
+	    >Datatype</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Logical quality
-</a
+	    >Logical quality</a
 	    ></li
 	  ></ul
 	></div
@@ -67,8 +71,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><div class="doc"
 	><p
 	  >Judgements: a symbolic representations of
-   affirmed or denied statements.
-</p
+   affirmed or denied statements.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -78,7 +81,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><li class="src short"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a href="#t:Judge"
+	    > <a href="#t:Judge"
 	    >Judge</a
 	    > c<ul class="subs"
 	    ><li
@@ -88,7 +91,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		>JudgePat</a
 		> [<a href="Koshucode-Baala-Base-Prelude-Class.html#t:Named"
 		>Named</a
-		> c]  </li
+		> c]</li
 	      ><li
 	      >| <a href="#v:JudgeDeny"
 		>JudgeDeny</a
@@ -96,7 +99,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		>JudgePat</a
 		> [<a href="Koshucode-Baala-Base-Prelude-Class.html#t:Named"
 		>Named</a
-		> c]  </li
+		> c]</li
 	      ><li
 	      >| <a href="#v:JudgeViolate"
 		>JudgeViolate</a
@@ -104,7 +107,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		>JudgePat</a
 		> [<a href="Koshucode-Baala-Base-Prelude-Class.html#t:Named"
 		>Named</a
-		> c]  </li
+		> c]</li
 	      ><li
 	      >| <a href="#v:JudgeAlter"
 		>JudgeAlter</a
@@ -116,7 +119,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		>Named</a
 		> c] [<a href="Koshucode-Baala-Base-Prelude-Class.html#t:Named"
 		>Named</a
-		> c]  </li
+		> c]</li
 	      ></ul
 	    ></li
 	  ><li class="src short"
@@ -255,13 +258,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Datatype
-</h1
+	>Datatype</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a name="t:Judge" class="def"
+	    > <a name="t:Judge" class="def"
 	    >Judge</a
 	    > c <a href="src/Koshucode-Baala-Base-Data-Judge.html#Judge" class="link"
 	    >Source</a
@@ -270,8 +272,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ><p
 	    >Judgement on type <code
 	      >c</code
-	      >.
-</p
+	      >.</p
 	    ><p
 	    >Judgement (or judge for short) is divided into three parts:
    logical quality, name of pattern, and argument.
@@ -294,8 +295,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		></code
 	      > <code
 	      >c</code
-	      > in argument.
-</p
+	      > in argument.</p
 	    ></div
 	  ><div class="subs constructors"
 	  ><p class="caption"
@@ -436,7 +436,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Named</a
 	    > c] -&gt; <a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > c<a href="src/Koshucode-Baala-Base-Data-Judge.html#JudgeOf" class="link"
+	    > c <a href="src/Koshucode-Baala-Base-Data-Judge.html#JudgeOf" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -448,13 +448,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >JudgePat</a
 	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Judge.html#JudgePat" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Judge.html#JudgePat" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Name of judgement pattern.
-</p
+	    >Name of judgement pattern.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -465,7 +464,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Judge</a
 	    > c -&gt; <a href="Koshucode-Baala-Base-Data-Judge.html#t:JudgePat"
 	    >JudgePat</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Judge.html#judgePat" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Judge.html#judgePat" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -477,7 +476,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Judge</a
 	    > c -&gt; [<a href="Koshucode-Baala-Base-Prelude-Class.html#t:Named"
 	    >Named</a
-	    > c]<a href="src/Koshucode-Baala-Base-Data-Judge.html#judgeTerms" class="link"
+	    > c] <a href="src/Koshucode-Baala-Base-Data-Judge.html#judgeTerms" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -493,7 +492,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Judge</a
 	    > a -&gt; <a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > b<a href="src/Koshucode-Baala-Base-Data-Judge.html#judgeTermsMap" class="link"
+	    > b <a href="src/Koshucode-Baala-Base-Data-Judge.html#judgeTermsMap" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -507,7 +506,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > (<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > c)<a href="src/Koshucode-Baala-Base-Data-Judge.html#judgeCons" class="link"
+	    > c) <a href="src/Koshucode-Baala-Base-Data-Judge.html#judgeCons" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -523,13 +522,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Rel</a
 	    > c -&gt; [<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > c]<a href="src/Koshucode-Baala-Base-Data-Judge.html#judgesFromRel" class="link"
+	    > c] <a href="src/Koshucode-Baala-Base-Data-Judge.html#judgesFromRel" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Convert relation to list of judges.
-</p
+	    >Convert relation to list of judges.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -542,31 +540,28 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > (<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > c)<a href="src/Koshucode-Baala-Base-Data-Judge.html#abcJudge" class="link"
+	    > c) <a href="src/Koshucode-Baala-Base-Data-Judge.html#abcJudge" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Sort terms in alphabetical order.
-</p
+	    >Sort terms in alphabetical order.</p
 	    ></div
 	  ></div
 	><h1 id="g:2"
-	>Logical quality
-</h1
+	>Logical quality</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:affirm" class="def"
 	    >affirm</a
 	    > ::  <a href="Koshucode-Baala-Base-Data-Judge.html#t:JudgeOf"
 	    >JudgeOf</a
-	    > c<a href="src/Koshucode-Baala-Base-Data-Judge.html#affirm" class="link"
+	    > c <a href="src/Koshucode-Baala-Base-Data-Judge.html#affirm" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Construct affirmative judgement.
-</p
+	    >Construct affirmative judgement.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -575,13 +570,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >deny</a
 	    > ::  <a href="Koshucode-Baala-Base-Data-Judge.html#t:JudgeOf"
 	    >JudgeOf</a
-	    > c<a href="src/Koshucode-Baala-Base-Data-Judge.html#deny" class="link"
+	    > c <a href="src/Koshucode-Baala-Base-Data-Judge.html#deny" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Construct denial judgement.
-</p
+	    >Construct denial judgement.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -592,13 +586,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > (<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > c)<a href="src/Koshucode-Baala-Base-Data-Judge.html#affirmJudge" class="link"
+	    > c) <a href="src/Koshucode-Baala-Base-Data-Judge.html#affirmJudge" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Affirm judgement, i.e., change logical quality to affirmative.
-</p
+	    >Affirm judgement, i.e., change logical quality to affirmative.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -609,13 +602,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > (<a href="Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > c)<a href="src/Koshucode-Baala-Base-Data-Judge.html#denyJudge" class="link"
+	    > c) <a href="src/Koshucode-Baala-Base-Data-Judge.html#denyJudge" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Deny judgement, i.e., change logical quality to denial.
-</p
+	    >Deny judgement, i.e., change logical quality to denial.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -626,13 +618,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Judge</a
 	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Judge.html#isAffirmative" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Judge.html#isAffirmative" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Test that judgement is affirmd.
-</p
+	    >Test that judgement is affirmd.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -643,13 +634,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Judge</a
 	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Judge.html#isDenial" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Judge.html#isDenial" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Test that judgement is denied.
-</p
+	    >Test that judgement is denied.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -660,7 +650,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Judge</a
 	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Judge.html#isViolative" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Judge.html#isViolative" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -670,7 +660,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html

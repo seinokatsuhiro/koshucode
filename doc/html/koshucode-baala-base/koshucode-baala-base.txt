@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.81.0.0
+@version 0.85.0.0
 
 module Koshucode.Baala.Base.Text.Unicode
 data GeneralCategoryGroup
@@ -364,6 +364,8 @@ li2 :: a -> a -> [a]
 li3 :: a -> a -> a -> [a]
 type RangeBy a = a -> a -> [a]
 rangeBy :: Ord a => Map a -> RangeBy a
+zipMaybe :: [Maybe a] -> [b] -> [(a, b)]
+zipMaybe2 :: [Maybe a] -> [b] -> [b]
 map2 :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
 mapAt :: (Map a) -> Int -> Map [a]
 mapWithLast :: (a -> b) -> (a -> b) -> [a] -> [b]
@@ -498,29 +500,29 @@ instance Ord a => Ord (OnceMore a)
 
 module Koshucode.Baala.Base.Prelude
 
-module Koshucode.Baala.Base.Text.Resource
-data Resource
-Resource :: Int -> ResourceName -> Resource
-resourceNumber :: Resource -> Int
-resourceName :: Resource -> ResourceName
-data ResourceName
-ResourceFile :: String -> ResourceName
-ResourceURL :: String -> ResourceName
-ResourceText :: String -> ResourceName
-ResourceStdin :: ResourceName
+module Koshucode.Baala.Base.Text.Source
+data Source
+Source :: Int -> SourceName -> Source
+sourceNumber :: Source -> Int
+sourceName :: Source -> SourceName
+data SourceName
+SourceFile :: String -> SourceName
+SourceURL :: String -> SourceName
+SourceText :: String -> SourceName
+SourceStdin :: SourceName
 
 -- | Name of resourcd type, i.e., <tt>"file"</tt>, <tt>"text"</tt>,
 --   <tt>"url"</tt>.
-resourceType :: Resource -> String
-resourceText :: Resource -> String
-resourceZero :: Resource
-resourceOf :: String -> Resource
-resourceList :: Bool -> [String] -> [String] -> [String] -> [Resource]
+sourceType :: Source -> String
+sourceText :: Source -> String
+sourceZero :: Source
+sourceOf :: String -> Source
+sourceList :: Bool -> [String] -> [String] -> [String] -> [Source]
 data CodePt
-CodePt :: Resource -> Int -> String -> String -> CodePt
+CodePt :: Source -> Int -> String -> String -> CodePt
 
--- | Resource of code
-codeResource :: CodePt -> Resource
+-- | Source of code
+codeSource :: CodePt -> Source
 
 -- | Line number
 codeLineNumber :: CodePt -> Int
@@ -543,18 +545,18 @@ data Sourced a
 Sourced :: [CodePt] -> a -> Sourced a
 source :: Sourced a -> [CodePt]
 unsourced :: Sourced a -> a
-instance Typeable ResourceName
-instance Typeable Resource
+instance Typeable SourceName
+instance Typeable Source
 instance Typeable CodePt
-instance Typeable1 Sourced
-instance Show ResourceName
-instance Eq ResourceName
-instance Ord ResourceName
-instance Data ResourceName
-instance Show Resource
-instance Eq Resource
-instance Ord Resource
-instance Data Resource
+instance Typeable Sourced
+instance Show SourceName
+instance Eq SourceName
+instance Ord SourceName
+instance Data SourceName
+instance Show Source
+instance Eq Source
+instance Ord Source
+instance Data Source
 instance Show CodePt
 instance Eq CodePt
 instance Data CodePt
@@ -755,6 +757,45 @@ instance Functor Short
 
 -- | Tokens in Koshucode.
 module Koshucode.Baala.Base.Token.Token
+
+-- | There are nine types of tokens.
+data Token
+
+-- | Text.
+TText :: CodePt -> TextForm -> String -> Token
+
+-- | Blank name.
+TName :: CodePt -> BlankName -> Token
+
+-- | Slot name. <a>Int</a> represents slot level, i.e., 0 for local
+--   positional slots, 1 for local named slots, 2 for global slots.
+TSlot :: CodePt -> Int -> String -> Token
+
+-- | Prefixed shorten text.
+TShort :: CodePt -> String -> String -> Token
+
+-- | Term path.
+TTerm :: CodePt -> Int -> TermPath -> Token
+
+-- | Opening bracket.
+TOpen :: CodePt -> String -> Token
+
+-- | Closing bracket.
+TClose :: CodePt -> String -> Token
+
+-- | <i>N</i> space characters.
+TSpace :: CodePt -> Int -> Token
+
+-- | Comment.
+TComment :: CodePt -> String -> Token
+data BlankName
+BlankNormal :: String -> BlankName
+BlankInternal :: String -> BlankName
+BlankPrefix :: String -> BlankName
+BlankInfix :: String -> BlankName
+BlankPostfix :: String -> BlankName
+textToken :: String -> Token
+nameToken :: String -> Token
 data TextForm
 
 -- | Unknown keyword
@@ -778,46 +819,6 @@ TextBar :: TextForm
 -- | Text used as name
 TextName :: TextForm
 
--- | There are ten types of tokens.
-data Token
-
--- | Text. <a>Int</a> represents quotation level, i.e., 0 for non-quoted, 1
---   for single-quoted, 2 for double-quoted, 3 for <tt>-with</tt> variable.
-TText :: CodePt -> TextForm -> String -> Token
-
--- | Blank name.
-TName :: CodePt -> BlankName -> Token
-
--- | Slot name. <a>Int</a> represents slot level, i.e., 0 for positional
---   slots, 1 for named slots, 2 for global slots.
-TSlot :: CodePt -> Int -> String -> Token
-
--- | Abbreviated text.
-TShort :: CodePt -> String -> String -> Token
-
--- | Term name.
-TTerm :: CodePt -> Int -> TermPath -> Token
-
--- | Opening bracket.
-TOpen :: CodePt -> String -> Token
-
--- | Closing bracket.
-TClose :: CodePt -> String -> Token
-
--- | <i>N</i> space characters.
-TSpace :: CodePt -> Int -> Token
-
--- | Comment text.
-TComment :: CodePt -> String -> Token
-textToken :: String -> Token
-nameToken :: String -> Token
-data BlankName
-BlankNormal :: String -> BlankName
-BlankInternal :: String -> BlankName
-BlankPrefix :: String -> BlankName
-BlankInfix :: String -> BlankName
-BlankPostfix :: String -> BlankName
-
 -- | Name of term, e.g., <tt>"file"</tt> for the term name <tt>/file</tt>.
 type TermName = String
 type TermName2 = (String, String)
@@ -834,48 +835,27 @@ showTermName :: Map String
 showNestedTermName :: [String] -> String
 
 -- | Get the content of token.
---   
---   <pre>
---   &gt;&gt;&gt; let tok = TTerm B.codeZero ["r", "x"] in tokenContent tok
---   "/r/x"
---   </pre>
 tokenContent :: Token -> String
 
--- | Text of token type, i.e., one of <tt>"Text"</tt>, <tt>"Term"</tt>,
---   <tt>"Open"</tt>, <tt>"Close"</tt>, <tt>"Space"</tt>, or
---   <tt>"Comment"</tt>.
---   
---   <pre>
---   &gt;&gt;&gt; tokenTypeText $ textToken "flower"
---   "Text"
---   </pre>
+-- | Text of token type, e.g., <tt>"text"</tt>, <tt>"open"</tt>.
 tokenTypeText :: Token -> String
+tokenSubtypeText :: Token -> Maybe String
 
--- | Test the token is blank, i.e., <a>TComment</a> or <a>TSpace</a>.
+-- | Test the token is blank, i.e., comment or space.
 isBlankToken :: Pred Token
+
+-- | Remove blank tokens.
+sweepToken :: Map [Token]
 isShortToken :: Pred Token
 isTermToken :: Pred Token
 isOpenToken :: Pred Token
 isCloseToken :: Pred Token
 
 -- | Check token is a <a>TOpen</a> of the specific bracket.
---   
---   <pre>
---   &gt;&gt;&gt; let tok = TOpen 0 "(" in isOpenTokenOf "(" tok
---   True
---   </pre>
---   
---   <pre>
---   &gt;&gt;&gt; let tok = TOpen 0 "{" in isOpenTokenOf "(" tok
---   False
---   </pre>
 isOpenTokenOf :: String -> Pred Token
 
 -- | Check token is a <a>TClose</a> of the specific bracket.
 isCloseTokenOf :: String -> Pred Token
-
--- | Remove blank tokens.
-sweepToken :: Map [Token]
 instance Typeable TextForm
 instance Typeable BlankName
 instance Typeable Token
@@ -904,6 +884,9 @@ module Koshucode.Baala.Base.Abort
 module Koshucode.Baala.Base.Message
 abToken :: CodePtr cp => [cp] -> Map (Ab b)
 
+-- | BUG: reason
+bug :: String -> Ab a
+
 -- | AD-LIB: reason
 adlib :: String -> Ab a
 adlibs :: [String] -> Ab a
@@ -929,6 +912,9 @@ notDate :: Integer -> Int -> Int -> Ab a
 -- | Can't read as number
 notNumber :: String -> Ab a
 
+-- | Not implemented
+notImplemented :: String -> Ab a
+
 -- | Lookup association list. This function may abort.
 (<!!>) :: [Named b] -> String -> Ab b
 
@@ -938,11 +924,14 @@ forbiddenInput :: String -> Ab a
 -- | Forbidden term name
 forbiddenTerm :: Ab a
 
+-- | Quotation not end in line
+quotNotEnd :: Ab a
+
 -- | Unknown bracket text
 unkAngleText :: String -> Ab a
 
--- | Quotation not end in line
-quotNotEnd :: Ab a
+-- | Unknown section type
+unkSectType :: String -> Ab a
 
 module Koshucode.Baala.Base.Data.Clock
 data Clock
@@ -970,21 +959,26 @@ writeClockBody :: Clock -> Doc
 clockFromDhms :: DayCount -> Hour -> Min -> Sec -> Clock
 clockFromDhm :: DayCount -> Hour -> Min -> Clock
 clockFromDh :: DayCount -> Hour -> Clock
+clockFromD :: DayCount -> Clock
 clockFromHms :: Hour -> Min -> Maybe Sec -> Clock
-
--- | Select day-count part from clock.
-clockDayCount :: Clock -> DayCount
-
--- | Select second part from clock.
-clockSec :: Clock -> Sec
-clockSign :: Clock -> Int
-clockPrecision :: Clock -> String
 
 -- | Decompose second into day-count, hour, minute and second parts.
 dhmsFromSec :: Sec -> (DayCount, Hour, Min, Sec)
 
 -- | Aggregate hour, minute, and second into single second.
 secFromHms :: (Hour, Min, Sec) -> Sec
+
+-- | Sign of clock as <tt>-1</tt>, <tt>0</tt>, <tt>1</tt>.
+clockSign :: Clock -> Int
+
+-- | Day-count part of clock.
+clockDayCount :: Clock -> DayCount
+
+-- | Second part of clock.
+clockSec :: Clock -> Sec
+clockPrecision :: Clock -> String
+clockDhms :: Clock -> (DayCount, Maybe Hour, Maybe Min, Maybe Sec)
+clockAlter :: Maybe DayCount -> Maybe Hour -> Maybe Min -> Maybe Sec -> Map Clock
 
 -- | Convert clock to positive clock.
 clockPos :: Map Clock
@@ -1006,6 +1000,7 @@ clockAdd :: AbBin Clock
 
 -- | Calculation of clock minus clock.
 clockSub :: AbBin Clock
+clockTimes :: Int -> Map Clock
 clockRangeBy :: Map (DayCount, Sec) -> RangeBy Clock
 clockStep :: Sec -> Map (DayCount, Sec)
 instance Show Clock
@@ -1194,11 +1189,15 @@ codeOutput :: CodeRoll a -> [a]
 --   <li>Tokenize each lines, and put tokens together in
 --   <a>CodeLine</a>.</li>
 --   </ol>
-codeRollUp :: AbMap (CodeRoll a) -> Resource -> String -> Ab [CodeLine a]
+codeRollUp :: AbMap (CodeRoll a) -> Source -> String -> Ab [CodeLine a]
+
+-- | Update <a>codeInput</a> and push result element to <a>codeOutput</a>.
 codeUpdate :: String -> a -> Map (CodeRoll a)
+
+-- | Change mapper of code roll.
 codeChange :: AbMap (CodeRoll a) -> Map (CodeRoll a)
-instance Typeable1 CodeLine
-instance Typeable1 CodeClause
+instance Typeable CodeLine
+instance Typeable CodeClause
 instance Show a => Show (CodeLine a)
 instance Eq a => Eq (CodeLine a)
 instance Ord a => Ord (CodeLine a)
@@ -1267,8 +1266,8 @@ type GetBracketType p a = a -> Bracket p
 --   [0, 0, 1, 0, 0, 2, 0, 0, -2, -1, 0]
 --   </pre>
 bracketTable :: Eq a => [(p, Pred a, Pred a)] -> GetBracketType p a
-instance Typeable1 Bracket
-instance Typeable2 CodeTree
+instance Typeable Bracket
+instance Typeable CodeTree
 instance Show p => Show (Bracket p)
 instance Eq p => Eq (Bracket p)
 instance Ord p => Ord (Bracket p)
@@ -1324,11 +1323,11 @@ module Koshucode.Baala.Base.Token.TokenLine
 type TokenLine = CodeLine Token
 
 -- | Tokenize text.
-tokenLines :: Resource -> String -> Ab [TokenLine]
+tokenLines :: Source -> String -> Ab [TokenLine]
 
 -- | Split string into list of tokens. Result token list does not contain
 --   newline characters.
-tokens :: Resource -> String -> Ab [Token]
+tokens :: Source -> String -> Ab [Token]
 isShortPrefix :: Pred String
 
 module Koshucode.Baala.Base.Token.TokenClause

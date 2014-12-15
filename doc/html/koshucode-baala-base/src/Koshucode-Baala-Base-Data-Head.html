@@ -12,38 +12,38 @@
 <a name="line-3"></a><span class='hs-comment'>-- | Heading of relations</span>
 <a name="line-4"></a>
 <a name="line-5"></a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Head</span>
-<a name="line-6"></a><span class='hs-layout'>(</span> <span class='hs-comment'>-- * Type</span>
-<a name="line-7"></a>  <span class='hs-conid'>Head</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
-<a name="line-8"></a>  <span class='hs-varid'>headExplain</span><span class='hs-layout'>,</span>
-<a name="line-9"></a>
-<a name="line-10"></a>  <span class='hs-comment'>-- * Constructor</span>
-<a name="line-11"></a>  <span class='hs-varid'>headOf</span><span class='hs-layout'>,</span> <span class='hs-varid'>headFrom</span><span class='hs-layout'>,</span> <span class='hs-varid'>headEmpty</span><span class='hs-layout'>,</span>
-<a name="line-12"></a>  <span class='hs-comment'>-- $Constructor</span>
-<a name="line-13"></a>
-<a name="line-14"></a>  <span class='hs-comment'>-- * Selector</span>
-<a name="line-15"></a>  <span class='hs-varid'>headEquiv</span><span class='hs-layout'>,</span>
-<a name="line-16"></a>  <span class='hs-varid'>isSubhead</span><span class='hs-layout'>,</span> <span class='hs-varid'>isSuperhead</span><span class='hs-layout'>,</span>
-<a name="line-17"></a>  <span class='hs-varid'>headNames</span><span class='hs-layout'>,</span>
-<a name="line-18"></a>  <span class='hs-varid'>headDegree</span><span class='hs-layout'>,</span>
-<a name="line-19"></a>  <span class='hs-varid'>headNested</span><span class='hs-layout'>,</span>
-<a name="line-20"></a>  <span class='hs-varid'>headIndex1</span><span class='hs-layout'>,</span>
-<a name="line-21"></a>  <span class='hs-comment'>-- $Selector</span>
-<a name="line-22"></a>
-<a name="line-23"></a>  <span class='hs-comment'>-- * Add terms</span>
-<a name="line-24"></a>  <span class='hs-varid'>headCons</span><span class='hs-layout'>,</span>
-<a name="line-25"></a>  <span class='hs-varid'>headAppend</span><span class='hs-layout'>,</span>
-<a name="line-26"></a>  <span class='hs-varid'>headConsNest</span><span class='hs-layout'>,</span>
-<a name="line-27"></a>  <span class='hs-varid'>headNests</span><span class='hs-layout'>,</span>
-<a name="line-28"></a>  <span class='hs-comment'>-- $AddTerm</span>
-<a name="line-29"></a>
-<a name="line-30"></a>  <span class='hs-comment'>-- * Mapping</span>
-<a name="line-31"></a>  <span class='hs-varid'>headMap</span><span class='hs-layout'>,</span>
-<a name="line-32"></a>  <span class='hs-varid'>headMapName</span><span class='hs-layout'>,</span>
-<a name="line-33"></a>  <span class='hs-varid'>headUp</span><span class='hs-layout'>,</span>
-<a name="line-34"></a>  <span class='hs-varid'>headAlign</span><span class='hs-layout'>,</span>
-<a name="line-35"></a>  <span class='hs-varid'>bodyAlign</span><span class='hs-layout'>,</span>
-<a name="line-36"></a>  <span class='hs-comment'>-- $Mapping</span>
-<a name="line-37"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a name="line-6"></a>  <span class='hs-layout'>(</span> <span class='hs-comment'>-- * Type</span>
+<a name="line-7"></a>    <span class='hs-conid'>Head</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
+<a name="line-8"></a>    <span class='hs-varid'>headExplain</span><span class='hs-layout'>,</span>
+<a name="line-9"></a>  
+<a name="line-10"></a>    <span class='hs-comment'>-- * Constructor</span>
+<a name="line-11"></a>    <span class='hs-varid'>headOf</span><span class='hs-layout'>,</span> <span class='hs-varid'>headFrom</span><span class='hs-layout'>,</span> <span class='hs-varid'>headEmpty</span><span class='hs-layout'>,</span>
+<a name="line-12"></a>    <span class='hs-comment'>-- $Constructor</span>
+<a name="line-13"></a>  
+<a name="line-14"></a>    <span class='hs-comment'>-- * Selector</span>
+<a name="line-15"></a>    <span class='hs-varid'>headEquiv</span><span class='hs-layout'>,</span>
+<a name="line-16"></a>    <span class='hs-varid'>isSubhead</span><span class='hs-layout'>,</span> <span class='hs-varid'>isSuperhead</span><span class='hs-layout'>,</span>
+<a name="line-17"></a>    <span class='hs-varid'>headNames</span><span class='hs-layout'>,</span>
+<a name="line-18"></a>    <span class='hs-varid'>headDegree</span><span class='hs-layout'>,</span>
+<a name="line-19"></a>    <span class='hs-varid'>headNested</span><span class='hs-layout'>,</span>
+<a name="line-20"></a>    <span class='hs-varid'>headIndex1</span><span class='hs-layout'>,</span>
+<a name="line-21"></a>    <span class='hs-comment'>-- $Selector</span>
+<a name="line-22"></a>  
+<a name="line-23"></a>    <span class='hs-comment'>-- * Add terms</span>
+<a name="line-24"></a>    <span class='hs-varid'>headCons</span><span class='hs-layout'>,</span>
+<a name="line-25"></a>    <span class='hs-varid'>headAppend</span><span class='hs-layout'>,</span>
+<a name="line-26"></a>    <span class='hs-varid'>headConsNest</span><span class='hs-layout'>,</span>
+<a name="line-27"></a>    <span class='hs-varid'>headNests</span><span class='hs-layout'>,</span>
+<a name="line-28"></a>    <span class='hs-comment'>-- $AddTerm</span>
+<a name="line-29"></a>  
+<a name="line-30"></a>    <span class='hs-comment'>-- * Mapping</span>
+<a name="line-31"></a>    <span class='hs-varid'>headMap</span><span class='hs-layout'>,</span>
+<a name="line-32"></a>    <span class='hs-varid'>headMapName</span><span class='hs-layout'>,</span>
+<a name="line-33"></a>    <span class='hs-varid'>headUp</span><span class='hs-layout'>,</span>
+<a name="line-34"></a>    <span class='hs-varid'>headAlign</span><span class='hs-layout'>,</span>
+<a name="line-35"></a>    <span class='hs-varid'>bodyAlign</span><span class='hs-layout'>,</span>
+<a name="line-36"></a>    <span class='hs-comment'>-- $Mapping</span>
+<a name="line-37"></a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
 <a name="line-38"></a>
 <a name="line-39"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Prelude</span>      <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
 <a name="line-40"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Text</span>         <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>

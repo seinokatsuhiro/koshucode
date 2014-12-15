@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.81.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.85.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -40,6 +40,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >Safe Haskell</th
 	    ><td
 	    >Safe-Inferred</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
 	    ></tr
 	  ></table
 	><p class="caption"
@@ -51,38 +57,31 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Control.Monad
-</a
+	    >Control.Monad</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Data.List
-</a
+	    >Data.List</a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >Data.Map
-</a
+	    >Data.Map</a
 	    ></li
 	  ><li
 	  ><a href="#g:4"
-	    >Data.Maybe
-</a
+	    >Data.Maybe</a
 	    ></li
 	  ><li
 	  ><a href="#g:5"
-	    >Data.Monoid
-</a
+	    >Data.Monoid</a
 	    ></li
 	  ><li
 	  ><a href="#g:6"
-	    >Data.Tuple
-</a
+	    >Data.Tuple</a
 	    ></li
 	  ><li
 	  ><a href="#g:7"
-	    >Text.PrettyPrint
-</a
+	    >Text.PrettyPrint</a
 	    ></li
 	  ></ul
 	></div
@@ -203,9 +202,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >class</span
-	    >  <a href="#t:Monoid"
+	    > <a href="#t:Monoid"
 	    >Monoid</a
-	    > a  <span class="keyword"
+	    > a <span class="keyword"
 	    >where</span
 	    ><ul class="subs"
 	    ><li
@@ -247,9 +246,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a href="#t:Doc"
+	    > <a href="#t:Doc"
 	    >Doc</a
-	    > </li
+	    > :: *</li
 	  ><li class="src short"
 	  ><a href="#v:-60--62-"
 	    >(&lt;&gt;)</a
@@ -320,15 +319,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Control.Monad
-</h1
+	>Control.Monad</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:-60--61--60-" class="def"
 	    >(&lt;=&lt;)</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
 	    >Monad</a
-	    > m =&gt; (b -&gt; m c) -&gt; (a -&gt; m b) -&gt; a -&gt; m c</p
+	    > m =&gt; (b -&gt; m c) -&gt; (a -&gt; m b) -&gt; a -&gt; m c <span class="fixity"
+	    >infixr 1</span
+	    ><span class="rightedge"
+	    ></span
+	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Right-to-left Kleisli composition of monads. <code
@@ -337,8 +339,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 		  >&gt;=&gt;</a
 		  ></code
 		>)</code
-	      >, with the arguments flipped
-</p
+	      >, with the arguments flipped</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -347,11 +348,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >(&gt;=&gt;)</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
 	    >Monad</a
-	    > m =&gt; (a -&gt; m b) -&gt; (b -&gt; m c) -&gt; a -&gt; m c</p
+	    > m =&gt; (a -&gt; m b) -&gt; (b -&gt; m c) -&gt; a -&gt; m c <span class="fixity"
+	    >infixr 1</span
+	    ><span class="rightedge"
+	    ></span
+	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Left-to-right Kleisli composition of monads.
-</p
+	    >Left-to-right Kleisli composition of monads.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -364,8 +368,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><div class="doc"
 	  ><p
 	    >Evaluate each action in the sequence from left to right,
- and collect the results.
-</p
+ and collect the results.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -383,8 +386,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:filter"
 		>filter</a
 		></code
-	      > function.
-</p
+	      > function.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -417,24 +419,19 @@ the list arguments. This could be an issue where <code
 		  ></code
 		>)</code
 	      > and the `folded
-function' are not commutative.
-</p
+function' are not commutative.</p
 	    ><pre
-	    >       foldM f a1 [x1, x2, ..., xm]
-</pre
+	    >      foldM f a1 [x1, x2, ..., xm]</pre
 	    ><p
-	    >==  
-</p
+	    >==  </p
 	    ><pre
-	    >       do
-         a2 &lt;- f a1 x1
-         a3 &lt;- f a2 x2
-         ...
-         f am xm
-</pre
+	    >      do
+        a2 &lt;- f a1 x1
+        a3 &lt;- f a2 x2
+        ...
+        f am xm</pre
 	    ><p
-	    >If right-to-left evaluation is required, the input list should be reversed.
-</p
+	    >If right-to-left evaluation is required, the input list should be reversed.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -448,11 +445,9 @@ function' are not commutative.
 	    > -&gt; m () -&gt; m ()</p
 	  ><div class="doc"
 	  ><p
-	    >Conditional execution of monadic expressions. For example, 
-</p
+	    >Conditional execution of monadic expressions. For example, </p
 	    ><pre
-	    >       when debug (putStr &quot;Debugging\n&quot;)
-</pre
+	    >      when debug (putStr &quot;Debugging\n&quot;)</pre
 	    ><p
 	    >will output the string <code
 	      >Debugging\n</code
@@ -463,8 +458,7 @@ function' are not commutative.
 		>True</a
 		></code
 	      >,
-and otherwise do nothing.
-</p
+and otherwise do nothing.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -482,8 +476,7 @@ and otherwise do nothing.
 	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:when"
 		>when</a
 		></code
-	      >.
-</p
+	      >.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -526,8 +519,7 @@ and otherwise do nothing.
 	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#v:False"
 		>False</a
 		></code
-	      >.
-</p
+	      >.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -536,13 +528,12 @@ and otherwise do nothing.
 	    >concatMapM</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Monad"
 	    >Monad</a
-	    > m =&gt; (a -&gt; m [b]) -&gt; [a] -&gt; m [b]<a href="src/Koshucode-Baala-Base-Prelude-Import.html#concatMapM" class="link"
+	    > m =&gt; (a -&gt; m [b]) -&gt; [a] -&gt; m [b] <a href="src/Koshucode-Baala-Base-Prelude-Import.html#concatMapM" class="link"
 	    >Source</a
 	    ></p
 	  ></div
 	><h1 id="g:2"
-	>Data.List
-</h1
+	>Data.List</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:sort" class="def"
@@ -562,8 +553,7 @@ and otherwise do nothing.
 		>sortBy</a
 		></code
 	      >, which allows the programmer to supply
- their own comparison function.
-</p
+ their own comparison function.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -578,11 +568,9 @@ and otherwise do nothing.
 		>transpose</a
 		></code
 	      > function transposes the rows and columns of its argument.
- For example,
-</p
+ For example,</p
 	    ><pre
-	    > transpose [[1,2,3],[4,5,6]] == [[1,4],[2,5],[3,6]]
-</pre
+	    >transpose [[1,2,3],[4,5,6]] == [[1,4],[2,5],[3,6]]</pre
 	    ></div
 	  ></div
 	><div class="top"
@@ -614,13 +602,11 @@ and otherwise do nothing.
 	      > in between the lists in <code
 	      >xss</code
 	      > and concatenates the
- result.
-</p
+ result.</p
 	    ></div
 	  ></div
 	><h1 id="g:3"
-	>Data.Map
-</h1
+	>Data.Map</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:lookupMap" class="def"
@@ -631,24 +617,22 @@ and otherwise do nothing.
 	    >Map</a
 	    > k a -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
-	    > a<a href="src/Koshucode-Baala-Base-Prelude-Import.html#lookupMap" class="link"
+	    > a <a href="src/Koshucode-Baala-Base-Prelude-Import.html#lookupMap" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Same as <code
-	      ><a href="Map.html#t:lookup"
+	      ><a href="Map.html#v:lookup"
 		>lookup</a
 		></code
 	      > in <code
 	      >Data.Map</code
-	      > module.
-</p
+	      > module.</p
 	    ></div
 	  ></div
 	><h1 id="g:4"
-	>Data.Maybe
-</h1
+	>Data.Maybe</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:catMaybes" class="def"
@@ -671,8 +655,7 @@ and otherwise do nothing.
 	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#v:Just"
 		>Just</a
 		></code
-	      > values. 
-</p
+	      > values. </p
 	    ></div
 	  ></div
 	><div class="top"
@@ -714,8 +697,7 @@ and otherwise do nothing.
 	      >, then <code
 	      >b</code
 	      > is
- included in the result list.
-</p
+ included in the result list.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -740,8 +722,7 @@ and otherwise do nothing.
 	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#v:Nothing"
 		>Nothing</a
 		></code
-	      >.
-</p
+	      >.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -775,27 +756,24 @@ and otherwise do nothing.
 	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
 		>Maybe</a
 		></code
-	      >.
-</p
+	      >.</p
 	    ></div
 	  ></div
 	><h1 id="g:5"
-	>Data.Monoid
-</h1
+	>Data.Monoid</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >class</span
-	    >  <a name="t:Monoid" class="def"
+	    > <a name="t:Monoid" class="def"
 	    >Monoid</a
-	    > a  <span class="keyword"
+	    > a <span class="keyword"
 	    >where</span
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >The class of monoids (types with an associative binary operation that
- has an identity).  Instances should satisfy the following laws:
-</p
+ has an identity).  Instances should satisfy the following laws:</p
 	    ><ul
 	    ><li
 	      ><pre
@@ -820,8 +798,7 @@ and otherwise do nothing.
 	      ></ul
 	    ><p
 	    >The method names refer to the monoid of lists under concatenation,
- but there are many other instances.
-</p
+ but there are many other instances.</p
 	    ><p
 	    >Minimal complete definition: <code
 	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:mempty"
@@ -831,8 +808,7 @@ and otherwise do nothing.
 	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:mappend"
 		>mappend</a
 		></code
-	      >.
-</p
+	      >.</p
 	    ><p
 	    >Some types can be viewed as a monoid in more than one way,
  e.g. both addition and multiplication on numbers.
@@ -851,8 +827,17 @@ and otherwise do nothing.
 	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Monoid.html#t:Product"
 		>Product</a
 		></code
-	      >.
-</p
+	      >.</p
+	    ></div
+	  ><div class="subs minimal"
+	  ><p class="caption"
+	    >Minimal complete definition</p
+	    ><p class="src"
+	    ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:mempty"
+	      >mempty</a
+	      >, <a href="Koshucode-Baala-Base-Prelude-Import.html#v:mappend"
+	      >mappend</a
+	      ></p
 	    ></div
 	  ><div class="subs methods"
 	  ><p class="caption"
@@ -867,8 +852,7 @@ and otherwise do nothing.
 		><a href="Koshucode-Baala-Base-Prelude-Import.html#v:mappend"
 		  >mappend</a
 		  ></code
-		>
-</p
+		></p
 	      ></div
 	    ><p class="src"
 	    ><a name="v:mappend" class="def"
@@ -876,8 +860,7 @@ and otherwise do nothing.
 	      > :: a -&gt; a -&gt; a</p
 	    ><div class="doc"
 	    ><p
-	      >An associative operation
-</p
+	      >An associative operation</p
 	      ></div
 	    ><p class="src"
 	    ><a name="v:mconcat" class="def"
@@ -892,8 +875,7 @@ and otherwise do nothing.
 		  ></code
 		> will be
  used, but the function is included in the class definition so
- that an optimized version can be provided for specific types.
-</p
+ that an optimized version can be provided for specific types.</p
 	      ></div
 	    ></div
 	  ><div class="subs instances"
@@ -1079,8 +1061,7 @@ and otherwise do nothing.
 		      ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
 			>Monoid</a
 			></code
-		      > instead.
-</p
+		      > instead.</p
 		    ></td
 		  ></tr
 		><tr
@@ -1119,6 +1100,28 @@ and otherwise do nothing.
 		  ></tr
 		><tr
 		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		    >Monoid</a
+		    > a =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		    >Monoid</a
+		    > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Applicative.html#t:Const"
+		    >Const</a
+		    > a b)</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		    >Monoid</a
+		    > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Proxy.html#t:Proxy"
+		    >Proxy</a
+		    > * s)</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
 		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 		    >Ord</a
 		    > k =&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
@@ -1126,6 +1129,18 @@ and otherwise do nothing.
 		    > (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Map-Lazy.html#t:Map"
 		    >Map</a
 		    > k v)</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
+		    >Typeable</a
+		    > (* -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/GHC-Exts.html#t:Constraint"
+		    >Constraint</a
+		    >) <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		    >Monoid</a
+		    ></td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
@@ -1190,8 +1205,7 @@ and otherwise do nothing.
 	    > a =&gt; a -&gt; a -&gt; a</p
 	  ><div class="doc"
 	  ><p
-	    >An associative operation
-</p
+	    >An associative operation</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -1210,8 +1224,7 @@ and otherwise do nothing.
 		></code
 	      > will be
  used, but the function is included in the class definition so
- that an optimized version can be provided for specific types.
-</p
+ that an optimized version can be provided for specific types.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -1227,13 +1240,11 @@ and otherwise do nothing.
 	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:mappend"
 		>mappend</a
 		></code
-	      >
-</p
+	      ></p
 	    ></div
 	  ></div
 	><h1 id="g:6"
-	>Data.Tuple
-</h1
+	>Data.Tuple</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:swap" class="def"
@@ -1241,26 +1252,23 @@ and otherwise do nothing.
 	    > ::  (a, b) -&gt; (b, a)</p
 	  ><div class="doc"
 	  ><p
-	    >Swap the components of a pair.
-</p
+	    >Swap the components of a pair.</p
 	    ></div
 	  ></div
 	><h1 id="g:7"
-	>Text.PrettyPrint
-</h1
+	>Text.PrettyPrint</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a name="t:Doc" class="def"
+	    > <a name="t:Doc" class="def"
 	    >Doc</a
-	    >  </p
+	    > :: *</p
 	  ><div class="doc"
 	  ><p
 	    >The abstract type of documents.
  A Doc represents a *set* of layouts. A Doc with
- no occurrences of Union or NoDoc represents just one layout.
-</p
+ no occurrences of Union or NoDoc represents just one layout.</p
 	    ></div
 	  ><div class="subs instances"
 	  ><p id="control.i:Doc" class="caption collapser" onclick="toggleSection('i:Doc')"
@@ -1321,6 +1329,10 @@ and otherwise do nothing.
 	    >Doc</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
+	    > <span class="fixity"
+	    >infixl 6</span
+	    ><span class="rightedge"
+	    ></span
 	    ></p
 	  ><div class="doc"
 	  ><p
@@ -1333,8 +1345,7 @@ and otherwise do nothing.
 	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#v:empty"
 		>empty</a
 		></code
-	      >.
-</p
+	      >.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -1347,6 +1358,10 @@ and otherwise do nothing.
 	    >Doc</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
+	    > <span class="fixity"
+	    >infixl 6</span
+	    ><span class="rightedge"
+	    ></span
 	    ></p
 	  ><div class="doc"
 	  ><p
@@ -1363,8 +1378,7 @@ and otherwise do nothing.
 	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#v:empty"
 		>empty</a
 		></code
-	      >.
-</p
+	      >.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -1377,29 +1391,27 @@ and otherwise do nothing.
 	    >Doc</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
+	    > <span class="fixity"
+	    >infixl 5</span
+	    ><span class="rightedge"
+	    ></span
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Above, except that if the last line of the first argument stops
  at least one position before the first line of the second begins,
- these two lines are overlapped.  For example:
-</p
+ these two lines are overlapped.  For example:</p
 	    ><pre
-	    >    text &quot;hi&quot; $$ nest 5 (text &quot;there&quot;)
-</pre
+	    >   text &quot;hi&quot; $$ nest 5 (text &quot;there&quot;)</pre
 	    ><p
-	    >lays out as
-</p
+	    >lays out as</p
 	    ><pre
-	    >    hi   there
-</pre
+	    >   hi   there</pre
 	    ><p
-	    >rather than
-</p
+	    >rather than</p
 	    ><pre
-	    >    hi
-         there
-</pre
+	    >   hi
+        there</pre
 	    ><p
 	    ><code
 	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:-36--36-"
@@ -1409,11 +1421,10 @@ and otherwise do nothing.
 	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-PrettyPrint.html#v:empty"
 		>empty</a
 		></code
-	      >, and also satisfies
-</p
+	      >, and also satisfies</p
 	    ><ul
 	    ><li
-	      > <code
+	      ><code
 		>(x <code
 		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:-36--36-"
 		    >$$</a
@@ -1433,8 +1444,7 @@ and otherwise do nothing.
 		  > z)</code
 		>, if <code
 		>y</code
-		> non-empty.
-</li
+		> non-empty.</li
 	      ></ul
 	    ></div
 	  ></div
@@ -1456,8 +1466,7 @@ and otherwise do nothing.
 	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:nest"
 		>nest</a
 		></code
-	      > satisfies the laws:
-</p
+	      > satisfies the laws:</p
 	    ><ul
 	    ><li
 	      ><pre
@@ -1548,7 +1557,7 @@ and otherwise do nothing.
 		  ></pre
 		></li
 	      ><li
-	      > <code
+	      ><code
 		>x <code
 		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:-60--62-"
 		    >&lt;&gt;</a
@@ -1564,8 +1573,7 @@ and otherwise do nothing.
 		  > y</code
 		>, if <code
 		>x</code
-		> non-empty
-</li
+		> non-empty</li
 	      ></ul
 	    ><p
 	    >The side condition on the last law is needed because
@@ -1577,8 +1585,7 @@ and otherwise do nothing.
 	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:-60--62-"
 		>&lt;&gt;</a
 		></code
-	      >.
-</p
+	      >.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -1587,7 +1594,7 @@ and otherwise do nothing.
 	    >docEmpty</a
 	    > :: <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
-	    ><a href="src/Koshucode-Baala-Base-Prelude-Import.html#docEmpty" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Prelude-Import.html#docEmpty" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -1603,7 +1610,7 @@ and otherwise do nothing.
 	    >Doc</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
-	    ><a href="src/Koshucode-Baala-Base-Prelude-Import.html#docHang" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Prelude-Import.html#docHang" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -1615,7 +1622,7 @@ and otherwise do nothing.
 	    >String</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
-	    ><a href="src/Koshucode-Baala-Base-Prelude-Import.html#docZero" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Prelude-Import.html#docZero" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -1625,7 +1632,7 @@ and otherwise do nothing.
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html

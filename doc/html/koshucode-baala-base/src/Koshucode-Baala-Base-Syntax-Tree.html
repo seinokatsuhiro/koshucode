@@ -12,21 +12,21 @@
 <a name="line-3"></a><span class='hs-comment'>{-# OPTIONS_GHC -Wall #-}</span>
 <a name="line-4"></a>
 <a name="line-5"></a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Syntax</span><span class='hs-varop'>.</span><span class='hs-conid'>Tree</span>
-<a name="line-6"></a><span class='hs-layout'>(</span> 
-<a name="line-7"></a>  <span class='hs-comment'>-- * Data type</span>
-<a name="line-8"></a>  <span class='hs-conid'>Bracket</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
-<a name="line-9"></a>  <span class='hs-conid'>CodeTree</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
-<a name="line-10"></a>
-<a name="line-11"></a>  <span class='hs-comment'>-- * Parsing</span>
-<a name="line-12"></a>  <span class='hs-varid'>tree</span><span class='hs-layout'>,</span> <span class='hs-varid'>trees</span><span class='hs-layout'>,</span>
-<a name="line-13"></a>  <span class='hs-varid'>treeWrap</span><span class='hs-layout'>,</span>
-<a name="line-14"></a>  <span class='hs-varid'>untree</span><span class='hs-layout'>,</span> <span class='hs-varid'>untrees</span><span class='hs-layout'>,</span>
-<a name="line-15"></a>  <span class='hs-varid'>undouble</span><span class='hs-layout'>,</span>
-<a name="line-16"></a>
-<a name="line-17"></a>  <span class='hs-comment'>-- * Bracket table</span>
-<a name="line-18"></a>  <span class='hs-conid'>GetBracketType</span><span class='hs-layout'>,</span>
-<a name="line-19"></a>  <span class='hs-varid'>bracketTable</span>
-<a name="line-20"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a name="line-6"></a>  <span class='hs-layout'>(</span> 
+<a name="line-7"></a>    <span class='hs-comment'>-- * Data type</span>
+<a name="line-8"></a>    <span class='hs-conid'>Bracket</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
+<a name="line-9"></a>    <span class='hs-conid'>CodeTree</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
+<a name="line-10"></a>  
+<a name="line-11"></a>    <span class='hs-comment'>-- * Parsing</span>
+<a name="line-12"></a>    <span class='hs-varid'>tree</span><span class='hs-layout'>,</span> <span class='hs-varid'>trees</span><span class='hs-layout'>,</span>
+<a name="line-13"></a>    <span class='hs-varid'>treeWrap</span><span class='hs-layout'>,</span>
+<a name="line-14"></a>    <span class='hs-varid'>untree</span><span class='hs-layout'>,</span> <span class='hs-varid'>untrees</span><span class='hs-layout'>,</span>
+<a name="line-15"></a>    <span class='hs-varid'>undouble</span><span class='hs-layout'>,</span>
+<a name="line-16"></a>  
+<a name="line-17"></a>    <span class='hs-comment'>-- * Bracket table</span>
+<a name="line-18"></a>    <span class='hs-conid'>GetBracketType</span><span class='hs-layout'>,</span>
+<a name="line-19"></a>    <span class='hs-varid'>bracketTable</span>
+<a name="line-20"></a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
 <a name="line-21"></a>
 <a name="line-22"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Generics</span>                <span class='hs-keyword'>as</span> <span class='hs-conid'>G</span>
 <a name="line-23"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Abort</span>   <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>

@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.81.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.85.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -40,6 +40,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Safe Haskell</th
 	    ><td
 	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
 	    ></tr
 	  ></table
 	><p class="caption"
@@ -52,45 +58,45 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><li class="src short"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a href="#t:Type"
+	    > <a href="#t:Type"
 	    >Type</a
-	    > <ul class="subs"
+	    ><ul class="subs"
 	    ><li
 	      >= <a href="#v:TypeAny"
 		>TypeAny</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:TypeType"
 		>TypeType</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:TypeTerm"
 		>TypeTerm</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:TypeInterp"
 		>TypeInterp</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:TypeEmpty"
 		>TypeEmpty</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:TypeBool"
 		>TypeBool</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:TypeText"
 		>TypeText</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:TypeCode"
 		>TypeCode</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:TypeDec"
 		>TypeDec</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:TypeClock"
 		>TypeClock</a
@@ -98,7 +104,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		>Maybe</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
-		>)  </li
+		>)</li
 	      ><li
 	      >| <a href="#v:TypeTime"
 		>TypeTime</a
@@ -106,23 +112,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		>Maybe</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
-		>)  </li
+		>)</li
 	      ><li
 	      >| <a href="#v:TypeBin"
 		>TypeBin</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:TypeList"
 		>TypeList</a
 		> <a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
 		>Type</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:TypeSet"
 		>TypeSet</a
 		> <a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
 		>Type</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:TypeTag"
 		>TypeTag</a
@@ -130,31 +136,31 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		>String</a
 		> <a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
 		>Type</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:TypeAssn"
 		>TypeAssn</a
 		> [<a href="Koshucode-Baala-Base-Data-Type.html#t:NamedType"
 		>NamedType</a
-		>]  </li
+		>]</li
 	      ><li
 	      >| <a href="#v:TypeRel"
 		>TypeRel</a
 		> [<a href="Koshucode-Baala-Base-Data-Type.html#t:NamedType"
 		>NamedType</a
-		>]  </li
+		>]</li
 	      ><li
 	      >| <a href="#v:TypeTuple"
 		>TypeTuple</a
 		> [<a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
 		>Type</a
-		>]  </li
+		>]</li
 	      ><li
 	      >| <a href="#v:TypeSum"
 		>TypeSum</a
 		> [<a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
 		>Type</a
-		>]  </li
+		>]</li
 	      ></ul
 	    ></li
 	  ><li class="src short"
@@ -320,15 +326,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><p class="src"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a name="t:Type" class="def"
+	    > <a name="t:Type" class="def"
 	    >Type</a
-	    >  <a href="src/Koshucode-Baala-Base-Data-Type.html#Type" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Type.html#Type" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Type for types.
-</p
+	    >Type for types.</p
 	    ></div
 	  ><div class="subs constructors"
 	  ><p class="caption"
@@ -341,8 +346,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  ></td
 		><td class="doc"
 		><p
-		  >Everything
-</p
+		  >Everything</p
 		  ></td
 		></tr
 	      ><tr
@@ -352,8 +356,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  ></td
 		><td class="doc"
 		><p
-		  >Type of types
-</p
+		  >Type of types</p
 		  ></td
 		></tr
 	      ><tr
@@ -363,8 +366,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  ></td
 		><td class="doc"
 		><p
-		  >Term name
-</p
+		  >Term name</p
 		  ></td
 		></tr
 	      ><tr
@@ -374,8 +376,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  ></td
 		><td class="doc"
 		><p
-		  >Data interpreation
-</p
+		  >Data interpreation</p
 		  ></td
 		></tr
 	      ><tr
@@ -385,8 +386,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  ></td
 		><td class="doc"
 		><p
-		  >Empty
-</p
+		  >Empty</p
 		  ></td
 		></tr
 	      ><tr
@@ -396,8 +396,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  ></td
 		><td class="doc"
 		><p
-		  >Boolean
-</p
+		  >Boolean</p
 		  ></td
 		></tr
 	      ><tr
@@ -407,8 +406,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  ></td
 		><td class="doc"
 		><p
-		  >Text
-</p
+		  >Text</p
 		  ></td
 		></tr
 	      ><tr
@@ -418,8 +416,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  ></td
 		><td class="doc"
 		><p
-		  >Code
-</p
+		  >Code</p
 		  ></td
 		></tr
 	      ><tr
@@ -429,8 +426,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  ></td
 		><td class="doc"
 		><p
-		  >Decimal
-</p
+		  >Decimal</p
 		  ></td
 		></tr
 	      ><tr
@@ -444,8 +440,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  >)</td
 		><td class="doc"
 		><p
-		  >Clock
-</p
+		  >Clock</p
 		  ></td
 		></tr
 	      ><tr
@@ -459,8 +454,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  >)</td
 		><td class="doc"
 		><p
-		  >Time
-</p
+		  >Time</p
 		  ></td
 		></tr
 	      ><tr
@@ -470,8 +464,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  ></td
 		><td class="doc"
 		><p
-		  >Binary data
-</p
+		  >Binary data</p
 		  ></td
 		></tr
 	      ><tr
@@ -483,8 +476,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  ></td
 		><td class="doc"
 		><p
-		  >List
-</p
+		  >List</p
 		  ></td
 		></tr
 	      ><tr
@@ -496,8 +488,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  ></td
 		><td class="doc"
 		><p
-		  >Set
-</p
+		  >Set</p
 		  ></td
 		></tr
 	      ><tr
@@ -511,8 +502,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  ></td
 		><td class="doc"
 		><p
-		  >Tagged type
-</p
+		  >Tagged type</p
 		  ></td
 		></tr
 	      ><tr
@@ -524,8 +514,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  >]</td
 		><td class="doc"
 		><p
-		  >Association
-</p
+		  >Association</p
 		  ></td
 		></tr
 	      ><tr
@@ -537,8 +526,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  >]</td
 		><td class="doc"
 		><p
-		  >Relation
-</p
+		  >Relation</p
 		  ></td
 		></tr
 	      ><tr
@@ -550,8 +538,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  >]</td
 		><td class="doc"
 		><p
-		  >Tuple (Product type)
-</p
+		  >Tuple (Product type)</p
 		  ></td
 		></tr
 	      ><tr
@@ -563,8 +550,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  >]</td
 		><td class="doc"
 		><p
-		  >Sum type
-</p
+		  >Sum type</p
 		  ></td
 		></tr
 	      ></table
@@ -628,7 +614,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Named</a
 	    > <a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
 	    >Type</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Type.html#NamedType" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Type.html#NamedType" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -640,13 +626,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Type</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Type.html#typeExplain" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Type.html#typeExplain" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Print type as tree.
-</p
+	    >Print type as tree.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -657,7 +642,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >TermName</a
 	    >] -&gt; <a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
 	    >Type</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Type.html#typeFlatRel" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Type.html#typeFlatRel" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -671,7 +656,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > <a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
 	    >Type</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Type.html#typeConsRel" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Type.html#typeConsRel" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -687,7 +672,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > <a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
 	    >Type</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Type.html#typeConsNest" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Type.html#typeConsNest" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -701,7 +686,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > <a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
 	    >Type</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Type.html#typeAppendRel" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Type.html#typeAppendRel" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -713,7 +698,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Type</a
 	    > -&gt; [<a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
 	    >TermName</a
-	    >]<a href="src/Koshucode-Baala-Base-Data-Type.html#typeRelTermNames" class="link"
+	    >] <a href="src/Koshucode-Baala-Base-Data-Type.html#typeRelTermNames" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -725,7 +710,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Type</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Type.html#typeRelDegree" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Type.html#typeRelDegree" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -739,13 +724,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >TermPath</a
 	    > -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    >]<a href="src/Koshucode-Baala-Base-Data-Type.html#typeRelIndex" class="link"
+	    >] <a href="src/Koshucode-Baala-Base-Data-Type.html#typeRelIndex" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Term index
-</p
+	    >Term index</p
 	    ><pre class="screen"
 	    ><code class="prompt"
 	      >&gt;&gt;&gt; </code
@@ -788,7 +772,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >TermPath</a
 	    >] -&gt; [[<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    >]]<a href="src/Koshucode-Baala-Base-Data-Type.html#typeRelIndexList" class="link"
+	    >]] <a href="src/Koshucode-Baala-Base-Data-Type.html#typeRelIndexList" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -800,7 +784,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Type</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 	    >Doc</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Type.html#typeTermDoc" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Type.html#typeTermDoc" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -812,7 +796,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Type</a
 	    > -&gt; [<a href="Koshucode-Baala-Base-Data-Type.html#t:NamedType"
 	    >NamedType</a
-	    >]<a href="src/Koshucode-Baala-Base-Data-Type.html#typeTerms" class="link"
+	    >] <a href="src/Koshucode-Baala-Base-Data-Type.html#typeTerms" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -824,7 +808,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Type</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Type.html#isTypeRel" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Type.html#isTypeRel" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -840,7 +824,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > <a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
 	    >Type</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Type.html#typeRelMapTerms" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Type.html#typeRelMapTerms" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -856,7 +840,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > <a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
 	    >Type</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Type.html#typeRelMapTerm" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Type.html#typeRelMapTerm" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -872,7 +856,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > <a href="Koshucode-Baala-Base-Data-Type.html#t:Type"
 	    >Type</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Type.html#typeRelMapName" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Type.html#typeRelMapName" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -881,37 +865,34 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ><dt
 	    >Empty</dt
 	    ><dd
-	    >     Empty means that there are no values.
+	    >Empty means that there are no values.
               i.e., universal negation on the term holds.
               Textual form is the non-quoted parens: <code
 	      >()</code
-	      >.
-</dd
+	      >.</dd
 	    ><dt
 	    >Boolean</dt
 	    ><dd
-	    >   Boolean used for something is hold or unhold.
+	    >Boolean used for something is hold or unhold.
               Textual forms: <code
 	      >&lt;0&gt;</code
 	      > (false), <code
 	      >&lt;1&gt;</code
-	      > (true).
-</dd
+	      > (true).</dd
 	    ><dt
 	    >Text</dt
 	    ><dd
-	    >      Sequence of characters.
+	    >Sequence of characters.
               Textual forms is chars with apostrophe or
               doubly-quoted line: <code
 	      >'abc</code
 	      >, <code
 	      >&quot;abc def&quot;</code
-	      >.
-</dd
+	      >.</dd
 	    ><dt
 	    >Decimal</dt
 	    ><dd
-	    >   Decimal number.
+	    >Decimal number.
               Textual forms is sequence of digits:
               <code
 	      >100</code
@@ -919,51 +900,46 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	      >99.50</code
 	      >, <code
 	      >hex AF</code
-	      >.
-</dd
+	      >.</dd
 	    ><dt
 	    >Set</dt
 	    ><dd
-	    >       Set is an unordered collection of contents.
+	    >Set is an unordered collection of contents.
               Duplication among contents is not significant.
               Textual form is a sequence of contents
               delimited by colon, enclosed in braces:
               <code
 	      >{ 'a : 'b : 'c }</code
-	      >.
-</dd
+	      >.</dd
 	    ><dt
 	    >List</dt
 	    ><dd
-	    >      List is an ordered list of contents.
+	    >List is an ordered list of contents.
               Textual form is a sequence of contents
               delimited by colon, enclosed in square brackets:
               <code
 	      >[ 'abc : 'def ]</code
-	      >.
-</dd
+	      >.</dd
 	    ><dt
 	    >Assn</dt
 	    ><dd
-	    >      Assn is an association of terms,
+	    >Assn is an association of terms,
               i.e., a list of named contents.
               Textual form is a sequence of terms
               with bar-angles: <code
 	      >&lt;&lt; /a 10 /b 20 &gt;&gt;</code
-	      >.
-</dd
+	      >.</dd
 	    ><dt
 	    >Relation</dt
 	    ><dd
-	    >  Relation is a set of same-type tuples,
+	    >Relation is a set of same-type tuples,
               Textual form is a sequence of tuples
               enclosed in bar-braces.
               The first tuple is a heading of relation,
               and succeeding tuples are delimited by vertical bar:
               <code
 	      >{| /a : /b | 'A1 : 20 | 'A3 : 40 |}</code
-	      >.
-</dd
+	      >.</dd
 	    ></dl
 	  ></div
 	></div
@@ -972,7 +948,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html

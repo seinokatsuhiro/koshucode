@@ -12,24 +12,24 @@
 <a name="line-3"></a><span class='hs-comment'>-- | Text table</span>
 <a name="line-4"></a>
 <a name="line-5"></a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Text</span><span class='hs-varop'>.</span><span class='hs-conid'>TextTable</span>
-<a name="line-6"></a><span class='hs-layout'>(</span> <span class='hs-comment'>-- * Position of contents</span>
-<a name="line-7"></a>  <span class='hs-conid'>Position</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
-<a name="line-8"></a>  <span class='hs-varid'>textPos</span><span class='hs-layout'>,</span>
-<a name="line-9"></a>
-<a name="line-10"></a>  <span class='hs-comment'>-- * Constructing cells</span>
-<a name="line-11"></a>  <span class='hs-conid'>Cell</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
-<a name="line-12"></a>
-<a name="line-13"></a>  <span class='hs-varid'>textTable</span><span class='hs-layout'>,</span>
-<a name="line-14"></a>  <span class='hs-varid'>textTableWithHead</span><span class='hs-layout'>,</span>
-<a name="line-15"></a>  <span class='hs-varid'>textCell</span><span class='hs-layout'>,</span>
-<a name="line-16"></a>  <span class='hs-varid'>textRuleCell</span><span class='hs-layout'>,</span>
-<a name="line-17"></a>  <span class='hs-varid'>textBlockCell</span><span class='hs-layout'>,</span>
-<a name="line-18"></a>  <span class='hs-varid'>textBlockCellPlus</span><span class='hs-layout'>,</span>
-<a name="line-19"></a>
-<a name="line-20"></a>  <span class='hs-comment'>-- * Rendering tables</span>
-<a name="line-21"></a>  <span class='hs-varid'>alignTable</span><span class='hs-layout'>,</span>
-<a name="line-22"></a>  <span class='hs-varid'>renderTable</span><span class='hs-layout'>,</span>
-<a name="line-23"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a name="line-6"></a>  <span class='hs-layout'>(</span> <span class='hs-comment'>-- * Position of contents</span>
+<a name="line-7"></a>    <span class='hs-conid'>Position</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
+<a name="line-8"></a>    <span class='hs-varid'>textPos</span><span class='hs-layout'>,</span>
+<a name="line-9"></a>  
+<a name="line-10"></a>    <span class='hs-comment'>-- * Constructing cells</span>
+<a name="line-11"></a>    <span class='hs-conid'>Cell</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
+<a name="line-12"></a>  
+<a name="line-13"></a>    <span class='hs-varid'>textTable</span><span class='hs-layout'>,</span>
+<a name="line-14"></a>    <span class='hs-varid'>textTableWithHead</span><span class='hs-layout'>,</span>
+<a name="line-15"></a>    <span class='hs-varid'>textCell</span><span class='hs-layout'>,</span>
+<a name="line-16"></a>    <span class='hs-varid'>textRuleCell</span><span class='hs-layout'>,</span>
+<a name="line-17"></a>    <span class='hs-varid'>textBlockCell</span><span class='hs-layout'>,</span>
+<a name="line-18"></a>    <span class='hs-varid'>textBlockCellPlus</span><span class='hs-layout'>,</span>
+<a name="line-19"></a>  
+<a name="line-20"></a>    <span class='hs-comment'>-- * Rendering tables</span>
+<a name="line-21"></a>    <span class='hs-varid'>alignTable</span><span class='hs-layout'>,</span>
+<a name="line-22"></a>    <span class='hs-varid'>renderTable</span><span class='hs-layout'>,</span>
+<a name="line-23"></a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
 <a name="line-24"></a>
 <a name="line-25"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Char</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>C</span>
 <a name="line-26"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>List</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>L</span>

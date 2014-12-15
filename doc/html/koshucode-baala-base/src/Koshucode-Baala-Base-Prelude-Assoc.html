@@ -12,38 +12,38 @@
 <a name="line-3"></a><span class='hs-comment'>-- | Utilities for association lists.</span>
 <a name="line-4"></a>
 <a name="line-5"></a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Prelude</span><span class='hs-varop'>.</span><span class='hs-conid'>Assoc</span>
-<a name="line-6"></a><span class='hs-layout'>(</span> <span class='hs-comment'>-- * Association list</span>
-<a name="line-7"></a>  <span class='hs-conid'>Lookup</span><span class='hs-layout'>,</span>
-<a name="line-8"></a>  <span class='hs-varid'>assocBy</span><span class='hs-layout'>,</span>
-<a name="line-9"></a>  <span class='hs-varid'>assocExist</span><span class='hs-layout'>,</span>
-<a name="line-10"></a>  <span class='hs-varid'>namedMapM</span><span class='hs-layout'>,</span>
-<a name="line-11"></a>  <span class='hs-varid'>lookupBy</span><span class='hs-layout'>,</span>
-<a name="line-12"></a>  <span class='hs-varid'>lookupSatisfy</span><span class='hs-layout'>,</span>
-<a name="line-13"></a>  <span class='hs-varid'>assocFinder</span><span class='hs-layout'>,</span>
-<a name="line-14"></a>  <span class='hs-comment'>-- $Assoc</span>
-<a name="line-15"></a>
-<a name="line-16"></a>  <span class='hs-comment'>-- * Tuple-like operator</span>
-<a name="line-17"></a>  <span class='hs-varid'>assocPick</span><span class='hs-layout'>,</span>
-<a name="line-18"></a>  <span class='hs-varid'>assocCut</span><span class='hs-layout'>,</span>
-<a name="line-19"></a>  <span class='hs-varid'>assocCut1</span><span class='hs-layout'>,</span>
-<a name="line-20"></a>  <span class='hs-varid'>assocRename1</span><span class='hs-layout'>,</span>
-<a name="line-21"></a>  <span class='hs-varid'>assocRehead</span><span class='hs-layout'>,</span>
-<a name="line-22"></a>  <span class='hs-comment'>-- $TupleLike</span>
-<a name="line-23"></a>
-<a name="line-24"></a>  <span class='hs-comment'>-- * Once/more list</span>
-<a name="line-25"></a>  <span class='hs-conid'>OnceMore</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
-<a name="line-26"></a>  <span class='hs-varid'>assocGather</span><span class='hs-layout'>,</span>
-<a name="line-27"></a>  <span class='hs-varid'>assocPush</span><span class='hs-layout'>,</span>
-<a name="line-28"></a>  <span class='hs-varid'>assocOnce</span><span class='hs-layout'>,</span>
-<a name="line-29"></a>  <span class='hs-varid'>assocMore</span><span class='hs-layout'>,</span>
-<a name="line-30"></a>  <span class='hs-comment'>-- $OnceMore</span>
-<a name="line-31"></a>
-<a name="line-32"></a>  <span class='hs-comment'>-- * Gather</span>
-<a name="line-33"></a>  <span class='hs-conid'>Gather</span><span class='hs-layout'>,</span>
-<a name="line-34"></a>  <span class='hs-varid'>gather</span><span class='hs-layout'>,</span>
-<a name="line-35"></a>  <span class='hs-varid'>gatherWith</span><span class='hs-layout'>,</span>
-<a name="line-36"></a>  <span class='hs-varid'>gatherToMap</span><span class='hs-layout'>,</span>
-<a name="line-37"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a name="line-6"></a>  <span class='hs-layout'>(</span> <span class='hs-comment'>-- * Association list</span>
+<a name="line-7"></a>    <span class='hs-conid'>Lookup</span><span class='hs-layout'>,</span>
+<a name="line-8"></a>    <span class='hs-varid'>assocBy</span><span class='hs-layout'>,</span>
+<a name="line-9"></a>    <span class='hs-varid'>assocExist</span><span class='hs-layout'>,</span>
+<a name="line-10"></a>    <span class='hs-varid'>namedMapM</span><span class='hs-layout'>,</span>
+<a name="line-11"></a>    <span class='hs-varid'>lookupBy</span><span class='hs-layout'>,</span>
+<a name="line-12"></a>    <span class='hs-varid'>lookupSatisfy</span><span class='hs-layout'>,</span>
+<a name="line-13"></a>    <span class='hs-varid'>assocFinder</span><span class='hs-layout'>,</span>
+<a name="line-14"></a>    <span class='hs-comment'>-- $Assoc</span>
+<a name="line-15"></a>  
+<a name="line-16"></a>    <span class='hs-comment'>-- * Tuple-like operator</span>
+<a name="line-17"></a>    <span class='hs-varid'>assocPick</span><span class='hs-layout'>,</span>
+<a name="line-18"></a>    <span class='hs-varid'>assocCut</span><span class='hs-layout'>,</span>
+<a name="line-19"></a>    <span class='hs-varid'>assocCut1</span><span class='hs-layout'>,</span>
+<a name="line-20"></a>    <span class='hs-varid'>assocRename1</span><span class='hs-layout'>,</span>
+<a name="line-21"></a>    <span class='hs-varid'>assocRehead</span><span class='hs-layout'>,</span>
+<a name="line-22"></a>    <span class='hs-comment'>-- $TupleLike</span>
+<a name="line-23"></a>  
+<a name="line-24"></a>    <span class='hs-comment'>-- * Once/more list</span>
+<a name="line-25"></a>    <span class='hs-conid'>OnceMore</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
+<a name="line-26"></a>    <span class='hs-varid'>assocGather</span><span class='hs-layout'>,</span>
+<a name="line-27"></a>    <span class='hs-varid'>assocPush</span><span class='hs-layout'>,</span>
+<a name="line-28"></a>    <span class='hs-varid'>assocOnce</span><span class='hs-layout'>,</span>
+<a name="line-29"></a>    <span class='hs-varid'>assocMore</span><span class='hs-layout'>,</span>
+<a name="line-30"></a>    <span class='hs-comment'>-- $OnceMore</span>
+<a name="line-31"></a>  
+<a name="line-32"></a>    <span class='hs-comment'>-- * Gather</span>
+<a name="line-33"></a>    <span class='hs-conid'>Gather</span><span class='hs-layout'>,</span>
+<a name="line-34"></a>    <span class='hs-varid'>gather</span><span class='hs-layout'>,</span>
+<a name="line-35"></a>    <span class='hs-varid'>gatherWith</span><span class='hs-layout'>,</span>
+<a name="line-36"></a>    <span class='hs-varid'>gatherToMap</span><span class='hs-layout'>,</span>
+<a name="line-37"></a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
 <a name="line-38"></a>
 <a name="line-39"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span>   <span class='hs-keyword'>as</span> <span class='hs-conid'>Map</span>
 <a name="line-40"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Maybe</span> <span class='hs-keyword'>as</span> <span class='hs-conid'>Maybe</span>

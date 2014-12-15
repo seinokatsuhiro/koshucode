@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.81.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.85.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -40,6 +40,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Safe Haskell</th
 	    ><td
 	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
 	    ></tr
 	  ></table
 	><p class="caption"
@@ -51,33 +57,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Token type
-</a
+	    >Token</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Blank name
-</a
+	    >TextForm</a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >Term name
-</a
+	    >Term name</a
 	    ></li
 	  ><li
 	  ><a href="#g:4"
-	    >Selectors
-</a
+	    >Selectors</a
 	    ></li
 	  ><li
 	  ><a href="#g:5"
-	    >Predicates
-</a
-	    ></li
-	  ><li
-	  ><a href="#g:6"
-	    >Other function
-</a
+	    >Predicates</a
 	    ></li
 	  ></ul
 	></div
@@ -86,8 +82,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	>Description</p
 	><div class="doc"
 	><p
-	  >Tokens in Koshucode.
-</p
+	  >Tokens in Koshucode.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -97,125 +92,127 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	><li class="src short"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a href="#t:TextForm"
-	    >TextForm</a
-	    > <ul class="subs"
-	    ><li
-	      >= <a href="#v:TextUnk"
-		>TextUnk</a
-		>  </li
-	      ><li
-	      >| <a href="#v:TextRaw"
-		>TextRaw</a
-		>  </li
-	      ><li
-	      >| <a href="#v:TextQ"
-		>TextQ</a
-		>  </li
-	      ><li
-	      >| <a href="#v:TextQQ"
-		>TextQQ</a
-		>  </li
-	      ><li
-	      >| <a href="#v:TextKey"
-		>TextKey</a
-		>  </li
-	      ><li
-	      >| <a href="#v:TextBar"
-		>TextBar</a
-		>  </li
-	      ><li
-	      >| <a href="#v:TextName"
-		>TextName</a
-		>  </li
-	      ></ul
-	    ></li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >data</span
-	    >  <a href="#t:Token"
+	    > <a href="#t:Token"
 	    >Token</a
-	    > <ul class="subs"
+	    ><ul class="subs"
 	    ><li
 	      >= <a href="#v:TText"
 		>TText</a
-		> <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		> <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		>CodePt</a
 		> <a href="Koshucode-Baala-Base-Token-Token.html#t:TextForm"
 		>TextForm</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:TName"
 		>TName</a
-		> <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		> <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		>CodePt</a
 		> <a href="Koshucode-Baala-Base-Token-Token.html#t:BlankName"
 		>BlankName</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:TSlot"
 		>TSlot</a
-		> <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		> <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		>CodePt</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 		>Int</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:TShort"
 		>TShort</a
-		> <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		> <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		>CodePt</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:TTerm"
 		>TTerm</a
-		> <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		> <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		>CodePt</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 		>Int</a
 		> <a href="Koshucode-Baala-Base-Token-Token.html#t:TermPath"
 		>TermPath</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:TOpen"
 		>TOpen</a
-		> <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		> <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		>CodePt</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:TClose"
 		>TClose</a
-		> <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		> <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		>CodePt</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:TSpace"
 		>TSpace</a
-		> <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		> <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		>CodePt</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 		>Int</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:TComment"
 		>TComment</a
-		> <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		> <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		>CodePt</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
-		>  </li
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:BlankName"
+	    >BlankName</a
+	    ><ul class="subs"
+	    ><li
+	      >= <a href="#v:BlankNormal"
+		>BlankNormal</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		></li
+	      ><li
+	      >| <a href="#v:BlankInternal"
+		>BlankInternal</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		></li
+	      ><li
+	      >| <a href="#v:BlankPrefix"
+		>BlankPrefix</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		></li
+	      ><li
+	      >| <a href="#v:BlankInfix"
+		>BlankInfix</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		></li
+	      ><li
+	      >| <a href="#v:BlankPostfix"
+		>BlankPostfix</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		></li
 	      ></ul
 	    ></li
 	  ><li class="src short"
@@ -237,40 +234,108 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a href="#t:BlankName"
-	    >BlankName</a
-	    > <ul class="subs"
+	    > <a href="#t:TextForm"
+	    >TextForm</a
+	    ><ul class="subs"
 	    ><li
-	      >= <a href="#v:BlankNormal"
-		>BlankNormal</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
+	      >= <a href="#v:TextUnk"
+		>TextUnk</a
+		></li
 	      ><li
-	      >| <a href="#v:BlankInternal"
-		>BlankInternal</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
+	      >| <a href="#v:TextRaw"
+		>TextRaw</a
+		></li
 	      ><li
-	      >| <a href="#v:BlankPrefix"
-		>BlankPrefix</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
+	      >| <a href="#v:TextQ"
+		>TextQ</a
+		></li
 	      ><li
-	      >| <a href="#v:BlankInfix"
-		>BlankInfix</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
+	      >| <a href="#v:TextQQ"
+		>TextQQ</a
+		></li
 	      ><li
-	      >| <a href="#v:BlankPostfix"
-		>BlankPostfix</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>  </li
+	      >| <a href="#v:TextKey"
+		>TextKey</a
+		></li
+	      ><li
+	      >| <a href="#v:TextBar"
+		>TextBar</a
+		></li
+	      ><li
+	      >| <a href="#v:TextName"
+		>TextName</a
+		></li
 	      ></ul
+	    ></li
+	  ><li class="src short"
+	  >pattern  <a href="#v:TTextUnk"
+	    >TTextUnk</a
+	    > <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
+	    >CodePt</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > ::  <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  >pattern  <a href="#v:TTextRaw"
+	    >TTextRaw</a
+	    > <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
+	    >CodePt</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > ::  <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  >pattern  <a href="#v:TTextQ"
+	    >TTextQ</a
+	    > <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
+	    >CodePt</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > ::  <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  >pattern  <a href="#v:TTextQQ"
+	    >TTextQQ</a
+	    > <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
+	    >CodePt</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > ::  <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  >pattern  <a href="#v:TTextKey"
+	    >TTextKey</a
+	    > <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
+	    >CodePt</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > ::  <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  >pattern  <a href="#v:TTextBar"
+	    >TTextBar</a
+	    > <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
+	    >CodePt</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > ::  <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    ></li
+	  ><li class="src short"
+	  >pattern  <a href="#v:TTextName"
+	    >TTextName</a
+	    > <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
+	    >CodePt</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > ::  <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
 	    ></li
 	  ><li class="src short"
 	  ><span class="keyword"
@@ -365,6 +430,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >String</a
 	    ></li
 	  ><li class="src short"
+	  ><a href="#v:tokenSubtypeText"
+	    >tokenSubtypeText</a
+	    > :: <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
 	  ><a href="#v:isBlankToken"
 	    >isBlankToken</a
 	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Pred"
@@ -372,6 +447,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
 	    ></li
+	  ><li class="src short"
+	  ><a href="#v:sweepToken"
+	    >sweepToken</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    >]</li
 	  ><li class="src short"
 	  ><a href="#v:isShortToken"
 	    >isShortToken</a
@@ -424,184 +507,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
 	    ></li
-	  ><li class="src short"
-	  ><a href="#v:sweepToken"
-	    >sweepToken</a
-	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
-	    >Token</a
-	    >]</li
 	  ></ul
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Token type
-</h1
+	>Token</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a name="t:TextForm" class="def"
-	    >TextForm</a
-	    >  <a href="src/Koshucode-Baala-Base-Token-Token.html#TextForm" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="subs constructors"
-	  ><p class="caption"
-	    >Constructors</p
-	    ><table
-	    ><tr
-	      ><td class="src"
-		><a name="v:TextUnk" class="def"
-		  >TextUnk</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Unknown keyword
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:TextRaw" class="def"
-		  >TextRaw</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Naked text
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:TextQ" class="def"
-		  >TextQ</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Single-quoted text
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:TextQQ" class="def"
-		  >TextQQ</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Double-quoted text
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:TextKey" class="def"
-		  >TextKey</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Keyword literal
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:TextBar" class="def"
-		  >TextBar</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Text enclosed in bars
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:TextName" class="def"
-		  >TextName</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Text used as name
-</p
-		  ></td
-		></tr
-	      ></table
-	    ></div
-	  ><div class="subs instances"
-	  ><p id="control.i:TextForm" class="caption collapser" onclick="toggleSection('i:TextForm')"
-	    >Instances</p
-	    ><div id="section.i:TextForm" class="show"
-	    ><table
-	      ><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
-		    >Eq</a
-		    > <a href="Koshucode-Baala-Base-Token-Token.html#t:TextForm"
-		    >TextForm</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
-		    >Data</a
-		    > <a href="Koshucode-Baala-Base-Token-Token.html#t:TextForm"
-		    >TextForm</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-		    >Ord</a
-		    > <a href="Koshucode-Baala-Base-Token-Token.html#t:TextForm"
-		    >TextForm</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
-		    >Show</a
-		    > <a href="Koshucode-Baala-Base-Token-Token.html#t:TextForm"
-		    >TextForm</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
-		    >Typeable</a
-		    > <a href="Koshucode-Baala-Base-Token-Token.html#t:TextForm"
-		    >TextForm</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		></table
-	      ></div
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >data</span
-	    >  <a name="t:Token" class="def"
+	    > <a name="t:Token" class="def"
 	    >Token</a
-	    >  <a href="src/Koshucode-Baala-Base-Token-Token.html#Token" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Token-Token.html#Token" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >There are ten types of tokens.
-</p
+	    >There are nine types of tokens.</p
 	    ></div
 	  ><div class="subs constructors"
 	  ><p class="caption"
@@ -611,7 +533,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      ><td class="src"
 		><a name="v:TText" class="def"
 		  >TText</a
-		  > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		  > <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		  >CodePt</a
 		  > <a href="Koshucode-Baala-Base-Token-Token.html#t:TextForm"
 		  >TextForm</a
@@ -620,41 +542,28 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ></td
 		><td class="doc"
 		><p
-		  >Text.
-   <code
-		    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
-		      >Int</a
-		      ></code
-		    > represents quotation level, i.e.,
-   0 for non-quoted,
-   1 for single-quoted,
-   2 for double-quoted,
-   3 for <code
-		    >-with</code
-		    > variable.
-</p
+		  >Text.</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
 		><a name="v:TName" class="def"
 		  >TName</a
-		  > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		  > <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		  >CodePt</a
 		  > <a href="Koshucode-Baala-Base-Token-Token.html#t:BlankName"
 		  >BlankName</a
 		  ></td
 		><td class="doc"
 		><p
-		  >Blank name.
-</p
+		  >Blank name.</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
 		><a name="v:TSlot" class="def"
 		  >TSlot</a
-		  > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		  > <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		  >CodePt</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 		  >Int</a
@@ -669,17 +578,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		      >Int</a
 		      ></code
 		    > represents slot level, i.e.,
-   0 for positional slots,
-   1 for named slots,
-   2 for global slots.
-</p
+   0 for local positional slots,
+   1 for local named slots,
+   2 for global slots.</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
 		><a name="v:TShort" class="def"
 		  >TShort</a
-		  > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		  > <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		  >CodePt</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
@@ -688,15 +596,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ></td
 		><td class="doc"
 		><p
-		  >Abbreviated text.
-</p
+		  >Prefixed shorten text.</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
 		><a name="v:TTerm" class="def"
 		  >TTerm</a
-		  > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		  > <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		  >CodePt</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 		  >Int</a
@@ -705,45 +612,42 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ></td
 		><td class="doc"
 		><p
-		  >Term name.
-</p
+		  >Term path.</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
 		><a name="v:TOpen" class="def"
 		  >TOpen</a
-		  > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		  > <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		  >CodePt</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
 		  ></td
 		><td class="doc"
 		><p
-		  >Opening bracket.
-</p
+		  >Opening bracket.</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
 		><a name="v:TClose" class="def"
 		  >TClose</a
-		  > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		  > <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		  >CodePt</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
 		  ></td
 		><td class="doc"
 		><p
-		  >Closing bracket.
-</p
+		  >Closing bracket.</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
 		><a name="v:TSpace" class="def"
 		  >TSpace</a
-		  > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		  > <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		  >CodePt</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 		  >Int</a
@@ -752,23 +656,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		><p
 		  ><em
 		    >N</em
-		    > space characters.
-</p
+		    > space characters.</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
 		><a name="v:TComment" class="def"
 		  >TComment</a
-		  > <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		  > <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		  >CodePt</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
 		  ></td
 		><td class="doc"
 		><p
-		  >Comment text.
-</p
+		  >Comment.</p
 		  ></td
 		></tr
 	      ></table
@@ -820,16 +722,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ></tr
 		><tr
 		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
-		    >Typeable</a
-		    > <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
-		    >Token</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
 		  ><a href="Koshucode-Baala-Base-Prelude-Class.html#t:Name"
 		    >Name</a
 		    > <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
@@ -840,7 +732,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ></tr
 		><tr
 		><td class="src"
-		  ><a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePtr"
+		  ><a href="Koshucode-Baala-Base-Text-Source.html#t:CodePtr"
 		    >CodePtr</a
 		    > <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 		    >Token</a
@@ -868,44 +760,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
+		    >Typeable</a
+		    > * <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+		    >Token</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
 		></table
 	      ></div
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:textToken" class="def"
-	    >textToken</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
-	    >Token</a
-	    ><a href="src/Koshucode-Baala-Base-Token-Token.html#textToken" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:nameToken" class="def"
-	    >nameToken</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
-	    >Token</a
-	    ><a href="src/Koshucode-Baala-Base-Token-Token.html#nameToken" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><h1 id="g:2"
-	>Blank name
-</h1
-	><div class="top"
-	><p class="src"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a name="t:BlankName" class="def"
+	    > <a name="t:BlankName" class="def"
 	    >BlankName</a
-	    >  <a href="src/Koshucode-Baala-Base-Token-Token.html#BlankName" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Token-Token.html#BlankName" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs constructors"
@@ -1011,16 +886,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ></tr
 		><tr
 		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
-		    >Typeable</a
-		    > <a href="Koshucode-Baala-Base-Token-Token.html#t:BlankName"
-		    >BlankName</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
 		  ><a href="Koshucode-Baala-Base-Prelude-Class.html#t:Name"
 		    >Name</a
 		    > <a href="Koshucode-Baala-Base-Token-Token.html#t:BlankName"
@@ -1039,13 +904,290 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
+		    >Typeable</a
+		    > * <a href="Koshucode-Baala-Base-Token-Token.html#t:BlankName"
+		    >BlankName</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
 		></table
 	      ></div
 	    ></div
 	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:textToken" class="def"
+	    >textToken</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a href="src/Koshucode-Baala-Base-Token-Token.html#textToken" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:nameToken" class="def"
+	    >nameToken</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a href="src/Koshucode-Baala-Base-Token-Token.html#nameToken" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:2"
+	>TextForm</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:TextForm" class="def"
+	    >TextForm</a
+	    > <a href="src/Koshucode-Baala-Base-Token-Token.html#TextForm" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:TextUnk" class="def"
+		  >TextUnk</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Unknown keyword</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:TextRaw" class="def"
+		  >TextRaw</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Naked text</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:TextQ" class="def"
+		  >TextQ</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Single-quoted text</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:TextQQ" class="def"
+		  >TextQQ</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Double-quoted text</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:TextKey" class="def"
+		  >TextKey</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Keyword literal</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:TextBar" class="def"
+		  >TextBar</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Text enclosed in bars</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:TextName" class="def"
+		  >TextName</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Text used as name</p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:TextForm" class="caption collapser" onclick="toggleSection('i:TextForm')"
+	    >Instances</p
+	    ><div id="section.i:TextForm" class="show"
+	    ><table
+	      ><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		    >Eq</a
+		    > <a href="Koshucode-Baala-Base-Token-Token.html#t:TextForm"
+		    >TextForm</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
+		    >Data</a
+		    > <a href="Koshucode-Baala-Base-Token-Token.html#t:TextForm"
+		    >TextForm</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		    >Ord</a
+		    > <a href="Koshucode-Baala-Base-Token-Token.html#t:TextForm"
+		    >TextForm</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		    >Show</a
+		    > <a href="Koshucode-Baala-Base-Token-Token.html#t:TextForm"
+		    >TextForm</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
+		    >Typeable</a
+		    > * <a href="Koshucode-Baala-Base-Token-Token.html#t:TextForm"
+		    >TextForm</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  >pattern  <a name="v:TTextUnk" class="def"
+	    >TTextUnk</a
+	    > <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
+	    >CodePt</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > ::  <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a href="src/Koshucode-Baala-Base-Token-Token.html#TTextUnk" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  >pattern  <a name="v:TTextRaw" class="def"
+	    >TTextRaw</a
+	    > <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
+	    >CodePt</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > ::  <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a href="src/Koshucode-Baala-Base-Token-Token.html#TTextRaw" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  >pattern  <a name="v:TTextQ" class="def"
+	    >TTextQ</a
+	    > <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
+	    >CodePt</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > ::  <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a href="src/Koshucode-Baala-Base-Token-Token.html#TTextQ" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  >pattern  <a name="v:TTextQQ" class="def"
+	    >TTextQQ</a
+	    > <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
+	    >CodePt</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > ::  <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a href="src/Koshucode-Baala-Base-Token-Token.html#TTextQQ" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  >pattern  <a name="v:TTextKey" class="def"
+	    >TTextKey</a
+	    > <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
+	    >CodePt</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > ::  <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a href="src/Koshucode-Baala-Base-Token-Token.html#TTextKey" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  >pattern  <a name="v:TTextBar" class="def"
+	    >TTextBar</a
+	    > <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
+	    >CodePt</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > ::  <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a href="src/Koshucode-Baala-Base-Token-Token.html#TTextBar" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  >pattern  <a name="v:TTextName" class="def"
+	    >TTextName</a
+	    > <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
+	    >CodePt</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > ::  <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    > <a href="src/Koshucode-Baala-Base-Token-Token.html#TTextName" class="link"
+	    >Source</a
+	    ></p
+	  ></div
 	><h1 id="g:3"
-	>Term name
-</h1
+	>Term name</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -1054,7 +1196,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >TermName</a
 	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    ><a href="src/Koshucode-Baala-Base-Token-Token.html#TermName" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Token-Token.html#TermName" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -1063,8 +1205,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      >&quot;file&quot;</code
 	      > for the term name <code
 	      >/file</code
-	      >.
-</p
+	      >.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -1077,7 +1218,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >String</a
 	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >)<a href="src/Koshucode-Baala-Base-Token-Token.html#TermName2" class="link"
+	    >) <a href="src/Koshucode-Baala-Base-Token-Token.html#TermName2" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -1093,7 +1234,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >String</a
 	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >)<a href="src/Koshucode-Baala-Base-Token-Token.html#TermName3" class="link"
+	    >) <a href="src/Koshucode-Baala-Base-Token-Token.html#TermName3" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -1111,7 +1252,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >String</a
 	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >)<a href="src/Koshucode-Baala-Base-Token-Token.html#TermName4" class="link"
+	    >) <a href="src/Koshucode-Baala-Base-Token-Token.html#TermName4" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -1123,13 +1264,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Terminal</a
 	    > a = (<a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
 	    >TermName</a
-	    >, a)<a href="src/Koshucode-Baala-Base-Token-Token.html#Terminal" class="link"
+	    >, a) <a href="src/Koshucode-Baala-Base-Token-Token.html#Terminal" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Pair of term name and something.
-</p
+	    >Pair of term name and something.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -1140,7 +1280,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >TermPath</a
 	    > = [<a href="Koshucode-Baala-Base-Token-Token.html#t:TermName"
 	    >TermName</a
-	    >]<a href="src/Koshucode-Baala-Base-Token-Token.html#TermPath" class="link"
+	    >] <a href="src/Koshucode-Baala-Base-Token-Token.html#TermPath" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -1150,8 +1290,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      >
    is correspond to path <code
 	      >[&quot;r&quot;, &quot;x&quot;]</code
-	      >.
-</p
+	      >.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -1162,7 +1301,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Map</a
 	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    ><a href="src/Koshucode-Baala-Base-Token-Token.html#showTermName" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Token-Token.html#showTermName" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -1174,13 +1313,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >String</a
 	    >] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    ><a href="src/Koshucode-Baala-Base-Token-Token.html#showNestedTermName" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Token-Token.html#showNestedTermName" class="link"
 	    >Source</a
 	    ></p
 	  ></div
 	><h1 id="g:4"
-	>Selectors
-</h1
+	>Selectors</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:tokenContent" class="def"
@@ -1189,23 +1327,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Token</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    ><a href="src/Koshucode-Baala-Base-Token-Token.html#tokenContent" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Token-Token.html#tokenContent" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Get the content of token.
-</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>let tok = TTerm B.codeZero [&quot;r&quot;, &quot;x&quot;] in tokenContent tok
-</code
-		></strong
-	      >&quot;/r/x&quot;
-</pre
+	    >Get the content of token.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -1216,42 +1343,56 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Token</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    ><a href="src/Koshucode-Baala-Base-Token-Token.html#tokenTypeText" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Token-Token.html#tokenTypeText" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Text of token type, i.e., one of
-   <code
-	      >&quot;Text&quot;</code
+	    >Text of token type, e.g., <code
+	      >&quot;text&quot;</code
 	      >, <code
-	      >&quot;Term&quot;</code
-	      >, <code
-	      >&quot;Open&quot;</code
-	      >, <code
-	      >&quot;Close&quot;</code
-	      >,
-   <code
-	      >&quot;Space&quot;</code
-	      >, or <code
-	      >&quot;Comment&quot;</code
-	      >.
-</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>tokenTypeText $ textToken &quot;flower&quot;
-</code
-		></strong
-	      >&quot;Text&quot;
-</pre
+	      >&quot;open&quot;</code
+	      >.</p
 	    ></div
 	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:tokenSubtypeText" class="def"
+	    >tokenSubtypeText</a
+	    > :: <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > <a href="src/Koshucode-Baala-Base-Token-Token.html#tokenSubtypeText" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="doc"
+	><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >let tok = TTerm B.codeZero 0 [&quot;r&quot;, &quot;x&quot;] in tokenContent tok
+</code
+	      ></strong
+	    >&quot;/r/x&quot;
+</pre
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >let tok = textToken &quot;flower&quot; in (tokenTypeText tok, tokenSubtypeText tok)
+</code
+	      ></strong
+	    >(&quot;text&quot;, Just &quot;raw&quot;)
+</pre
+	  ></div
 	><h1 id="g:5"
-	>Predicates
-</h1
+	>Predicates</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:isBlankToken" class="def"
@@ -1260,22 +1401,28 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Pred</a
 	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
-	    ><a href="src/Koshucode-Baala-Base-Token-Token.html#isBlankToken" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Token-Token.html#isBlankToken" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Test the token is blank,
-   i.e., <code
-	      ><a href="Koshucode-Baala-Base-Token-Token.html#v:TComment"
-		>TComment</a
-		></code
-	      > or <code
-	      ><a href="Koshucode-Baala-Base-Token-Token.html#v:TSpace"
-		>TSpace</a
-		></code
-	      >.
-</p
+	    >Test the token is blank, i.e., comment or space.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:sweepToken" class="def"
+	    >sweepToken</a
+	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
+	    >Map</a
+	    > [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
+	    >Token</a
+	    >] <a href="src/Koshucode-Baala-Base-Token-Token.html#sweepToken" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Remove blank tokens.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -1286,7 +1433,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Pred</a
 	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
-	    ><a href="src/Koshucode-Baala-Base-Token-Token.html#isShortToken" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Token-Token.html#isShortToken" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -1298,7 +1445,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Pred</a
 	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
-	    ><a href="src/Koshucode-Baala-Base-Token-Token.html#isTermToken" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Token-Token.html#isTermToken" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -1310,7 +1457,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Pred</a
 	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
-	    ><a href="src/Koshucode-Baala-Base-Token-Token.html#isOpenToken" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Token-Token.html#isOpenToken" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -1322,7 +1469,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Pred</a
 	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
-	    ><a href="src/Koshucode-Baala-Base-Token-Token.html#isCloseToken" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Token-Token.html#isCloseToken" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -1336,7 +1483,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Pred</a
 	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
-	    ><a href="src/Koshucode-Baala-Base-Token-Token.html#isOpenTokenOf" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Token-Token.html#isOpenTokenOf" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -1345,28 +1492,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      ><a href="Koshucode-Baala-Base-Token-Token.html#v:TOpen"
 		>TOpen</a
 		></code
-	      > of the specific bracket.
-</p
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>let tok = TOpen 0 &quot;(&quot; in isOpenTokenOf &quot;(&quot; tok
-</code
-		></strong
-	      >True
-</pre
-	    ><pre class="screen"
-	    ><code class="prompt"
-	      >&gt;&gt;&gt; </code
-	      ><strong class="userinput"
-	      ><code
-		>let tok = TOpen 0 &quot;{&quot; in isOpenTokenOf &quot;(&quot; tok
-</code
-		></strong
-	      >False
-</pre
+	      > of the specific bracket.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -1379,7 +1505,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	    >Pred</a
 	    > <a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
 	    >Token</a
-	    ><a href="src/Koshucode-Baala-Base-Token-Token.html#isCloseTokenOf" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Token-Token.html#isCloseTokenOf" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -1388,29 +1514,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
 	      ><a href="Koshucode-Baala-Base-Token-Token.html#v:TClose"
 		>TClose</a
 		></code
-	      > of the specific bracket.
-</p
+	      > of the specific bracket.</p
 	    ></div
 	  ></div
-	><h1 id="g:6"
-	>Other function
-</h1
-	><div class="top"
-	><p class="src"
-	  ><a name="v:sweepToken" class="def"
-	    >sweepToken</a
-	    > :: <a href="Koshucode-Baala-Base-Prelude-Class.html#t:Map"
-	    >Map</a
-	    > [<a href="Koshucode-Baala-Base-Token-Token.html#t:Token"
-	    >Token</a
-	    >]<a href="src/Koshucode-Baala-Base-Token-Token.html#sweepToken" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Remove blank tokens.
-</p
-	    ></div
+	><div class="doc"
+	><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >let tok = TOpen B.codeZero &quot;(&quot; in isOpenTokenOf &quot;(&quot; tok
+</code
+	      ></strong
+	    >True
+</pre
+	  ><pre class="screen"
+	  ><code class="prompt"
+	    >&gt;&gt;&gt; </code
+	    ><strong class="userinput"
+	    ><code
+	      >let tok = TOpen B.codeZero &quot;{&quot; in isOpenTokenOf &quot;(&quot; tok
+</code
+	      ></strong
+	    >False
+</pre
 	  ></div
 	></div
       ></div
@@ -1418,7 +1545,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-T
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html

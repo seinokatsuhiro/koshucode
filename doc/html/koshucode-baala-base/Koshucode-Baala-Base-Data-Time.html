@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.81.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.85.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -40,6 +40,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Safe Haskell</th
 	    ><td
 	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
 	    ></tr
 	  ></table
 	><p class="caption"
@@ -51,28 +57,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Data type
-</a
+	    >Data type</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Construct
-</a
+	    >Construct</a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >First day
-</a
+	    >First day</a
 	    ></li
 	  ><li
 	  ><a href="#g:4"
-	    >Range
-</a
+	    >Range</a
 	    ></li
 	  ><li
 	  ><a href="#g:5"
-	    >Arithmetic
-</a
+	    >Arithmetic</a
 	    ></li
 	  ></ul
 	></div
@@ -83,9 +84,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><li class="src short"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a href="#t:Time"
+	    > <a href="#t:Time"
 	    >Time</a
-	    > <ul class="subs"
+	    ><ul class="subs"
 	    ><li
 	      >= <a href="#v:TimeYmdcz"
 		>TimeYmdcz</a
@@ -95,7 +96,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		>Clock</a
 		> <a href="Koshucode-Baala-Base-Data-Clock.html#t:Sec"
 		>Sec</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:TimeYmdc"
 		>TimeYmdc</a
@@ -103,33 +104,41 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		>Date</a
 		> <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
 		>Clock</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:TimeYmd"
 		>TimeYmd</a
 		> <a href="Koshucode-Baala-Base-Data-Date.html#t:Date"
 		>Date</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:TimeYw"
 		>TimeYw</a
-		> Day  </li
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Time-Calendar.html#t:Day"
+		>Day</a
+		></li
 	      ><li
 	      >| <a href="#v:TimeYm"
 		>TimeYm</a
-		> Day  </li
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Time-Calendar.html#t:Day"
+		>Day</a
+		></li
 	      ></ul
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:timeYmd"
 	    >timeYmd</a
-	    > :: Day -&gt; <a href="Koshucode-Baala-Base-Data-Time.html#t:Time"
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Time-Calendar.html#t:Day"
+	    >Day</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Time.html#t:Time"
 	    >Time</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:timeYmdc"
 	    >timeYmdc</a
-	    > :: Day -&gt; <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Time-Calendar.html#t:Day"
+	    >Day</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
 	    >Clock</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Data-Time.html#t:Time"
 	    >Time</a
@@ -344,15 +353,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Data type
-</h1
+	>Data type</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a name="t:Time" class="def"
+	    > <a name="t:Time" class="def"
 	    >Time</a
-	    >  <a href="src/Koshucode-Baala-Base-Data-Time.html#Time" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Time.html#Time" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs constructors"
@@ -372,8 +380,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  ></td
 		><td class="doc"
 		><p
-		  >Date and time with time zone
-</p
+		  >Date and time with time zone</p
 		  ></td
 		></tr
 	      ><tr
@@ -387,8 +394,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  ></td
 		><td class="doc"
 		><p
-		  >Date and time
-</p
+		  >Date and time</p
 		  ></td
 		></tr
 	      ><tr
@@ -400,30 +406,31 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 		  ></td
 		><td class="doc"
 		><p
-		  >Year, month, and day
-</p
+		  >Year, month, and day</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
 		><a name="v:TimeYw" class="def"
 		  >TimeYw</a
-		  > Day</td
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Time-Calendar.html#t:Day"
+		  >Day</a
+		  ></td
 		><td class="doc"
 		><p
-		  >Year and week
-</p
+		  >Year and week</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
 		><a name="v:TimeYm" class="def"
 		  >TimeYm</a
-		  > Day</td
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Time-Calendar.html#t:Day"
+		  >Day</a
+		  ></td
 		><td class="doc"
 		><p
-		  >Year and month
-</p
+		  >Year and month</p
 		  ></td
 		></tr
 	      ></table
@@ -478,15 +485,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    ></div
 	  ></div
 	><h1 id="g:2"
-	>Construct
-</h1
+	>Construct</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:timeYmd" class="def"
 	    >timeYmd</a
-	    > :: Day -&gt; <a href="Koshucode-Baala-Base-Data-Time.html#t:Time"
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Time-Calendar.html#t:Day"
+	    >Day</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Time.html#t:Time"
 	    >Time</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Time.html#timeYmd" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Time.html#timeYmd" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -494,11 +502,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><p class="src"
 	  ><a name="v:timeYmdc" class="def"
 	    >timeYmdc</a
-	    > :: Day -&gt; <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Time-Calendar.html#t:Day"
+	    >Day</a
+	    > -&gt; <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
 	    >Clock</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Data-Time.html#t:Time"
 	    >Time</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Time.html#timeYmdc" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Time.html#timeYmdc" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -514,13 +524,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Ab</a
 	    > <a href="Koshucode-Baala-Base-Data-Time.html#t:Time"
 	    >Time</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Time.html#timeFromYmAb" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Time.html#timeFromYmAb" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Create time data from year and month.
-</p
+	    >Create time data from year and month.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -535,13 +544,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Ab</a
 	    > <a href="Koshucode-Baala-Base-Data-Time.html#t:Time"
 	    >Time</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Time.html#timeFromYwAb" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Time.html#timeFromYwAb" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Create time data from year and week.
-</p
+	    >Create time data from year and week.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -560,13 +568,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Ab</a
 	    > <a href="Koshucode-Baala-Base-Data-Time.html#t:Time"
 	    >Time</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Time.html#timeFromDczAb" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Time.html#timeFromDczAb" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Create time data from date, clock, and time zone.
-</p
+	    >Create time data from date, clock, and time zone.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -577,13 +584,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >DayCount</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Data-Time.html#t:Time"
 	    >Time</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Time.html#timeFromMjd" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Time.html#timeFromMjd" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Create time data form modified Julian date.
-</p
+	    >Create time data form modified Julian date.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -594,7 +600,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Time</a
 	    > -&gt; <a href="Koshucode-Baala-Base-Data-Clock.html#t:DayCount"
 	    >DayCount</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Time.html#timeMjd" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Time.html#timeMjd" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -610,7 +616,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > <a href="Koshucode-Baala-Base-Data-Time.html#t:Time"
 	    >Time</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Time.html#timeMapDate" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Time.html#timeMapDate" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -626,7 +632,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > <a href="Koshucode-Baala-Base-Data-Time.html#t:Time"
 	    >Time</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Time.html#timeMapMjd" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Time.html#timeMapMjd" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -638,13 +644,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Time</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Time.html#timePrecision" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Time.html#timePrecision" class="link"
 	    >Source</a
 	    ></p
 	  ></div
 	><h1 id="g:3"
-	>First day
-</h1
+	>First day</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:timeFloorMonth" class="def"
@@ -653,7 +658,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > <a href="Koshucode-Baala-Base-Data-Time.html#t:Time"
 	    >Time</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Time.html#timeFloorMonth" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Time.html#timeFloorMonth" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -665,7 +670,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > <a href="Koshucode-Baala-Base-Data-Time.html#t:Time"
 	    >Time</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Time.html#timeFloorYear" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Time.html#timeFloorYear" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -677,7 +682,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > <a href="Koshucode-Baala-Base-Data-Time.html#t:Time"
 	    >Time</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Time.html#timeCeilMonth" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Time.html#timeCeilMonth" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -689,7 +694,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > <a href="Koshucode-Baala-Base-Data-Time.html#t:Time"
 	    >Time</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Time.html#timeCeilYaer" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Time.html#timeCeilYaer" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -697,11 +702,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	><p
 	  ><em
 	    >Examples</em
-	    >
-</p
+	    ></p
 	  ><p
-	  >The first day of month.
-</p
+	  >The first day of month.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -713,8 +716,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >TimeYmd 2014-11-01
 </pre
 	  ><p
-	  >The first day of year.
-</p
+	  >The first day of year.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -726,8 +728,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >TimeYmd 2014-01-01
 </pre
 	  ><p
-	  >The first day of next month.
-</p
+	  >The first day of next month.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -739,8 +740,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >TimeYmd 2014-12-01
 </pre
 	  ><p
-	  >The first day of next year.
-</p
+	  >The first day of next year.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -753,8 +753,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 </pre
 	  ></div
 	><h1 id="g:4"
-	>Range
-</h1
+	>Range</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:timeRangeDay" class="def"
@@ -763,7 +762,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >RangeBy</a
 	    > <a href="Koshucode-Baala-Base-Data-Time.html#t:Time"
 	    >Time</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Time.html#timeRangeDay" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Time.html#timeRangeDay" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -775,7 +774,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >RangeBy</a
 	    > <a href="Koshucode-Baala-Base-Data-Time.html#t:Time"
 	    >Time</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Time.html#timeRangeMonth" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Time.html#timeRangeMonth" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -787,13 +786,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >RangeBy</a
 	    > <a href="Koshucode-Baala-Base-Data-Time.html#t:Time"
 	    >Time</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Time.html#timeRangeYear" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Time.html#timeRangeYear" class="link"
 	    >Source</a
 	    ></p
 	  ></div
 	><h1 id="g:5"
-	>Arithmetic
-</h1
+	>Arithmetic</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:timeAddDay" class="def"
@@ -804,13 +802,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > <a href="Koshucode-Baala-Base-Data-Time.html#t:Time"
 	    >Time</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Time.html#timeAddDay" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Time.html#timeAddDay" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Add days to time.
-</p
+	    >Add days to time.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -823,13 +820,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > <a href="Koshucode-Baala-Base-Data-Time.html#t:Time"
 	    >Time</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Time.html#timeAddWeek" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Time.html#timeAddWeek" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Add weeks to time.
-</p
+	    >Add weeks to time.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -842,13 +838,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > <a href="Koshucode-Baala-Base-Data-Time.html#t:Time"
 	    >Time</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Time.html#timeAddMonth" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Time.html#timeAddMonth" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Add months to time.
-</p
+	    >Add months to time.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -861,13 +856,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Map</a
 	    > <a href="Koshucode-Baala-Base-Data-Time.html#t:Time"
 	    >Time</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Time.html#timeAddYear" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Time.html#timeAddYear" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Add years to time.
-</p
+	    >Add years to time.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -880,13 +874,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >AbMap</a
 	    > <a href="Koshucode-Baala-Base-Data-Time.html#t:Time"
 	    >Time</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Time.html#timeAddClock" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Time.html#timeAddClock" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Add clock to time.
-</p
+	    >Add clock to time.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -901,13 +894,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
 	    >Ab</a
 	    > <a href="Koshucode-Baala-Base-Data-Clock.html#t:Clock"
 	    >Clock</a
-	    ><a href="src/Koshucode-Baala-Base-Data-Time.html#timeDiff" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Data-Time.html#timeDiff" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Calculate clock from time to time.
-</p
+	    >Calculate clock from time to time.</p
 	    ></div
 	  ></div
 	></div
@@ -916,7 +908,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-D
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html

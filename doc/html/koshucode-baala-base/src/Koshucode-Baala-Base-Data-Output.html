@@ -13,17 +13,17 @@
 <a name="line-4"></a><span class='hs-comment'>-- | Output judgements.</span>
 <a name="line-5"></a>
 <a name="line-6"></a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span><span class='hs-varop'>.</span><span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Output</span>
-<a name="line-7"></a><span class='hs-layout'>(</span>
-<a name="line-8"></a>  <span class='hs-comment'>-- * Data type</span>
-<a name="line-9"></a>  <span class='hs-conid'>OutputResult</span><span class='hs-layout'>,</span>
-<a name="line-10"></a>  <span class='hs-conid'>OutputChunks</span><span class='hs-layout'>,</span>
-<a name="line-11"></a>  <span class='hs-conid'>OutputChunk</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
-<a name="line-12"></a>
-<a name="line-13"></a>  <span class='hs-comment'>-- * Function</span>
-<a name="line-14"></a>  <span class='hs-varid'>putJudges</span><span class='hs-layout'>,</span>
-<a name="line-15"></a>  <span class='hs-varid'>hPutJudges</span><span class='hs-layout'>,</span>
-<a name="line-16"></a>  <span class='hs-varid'>hPutOutputResult</span><span class='hs-layout'>,</span>
-<a name="line-17"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a name="line-7"></a>  <span class='hs-layout'>(</span>
+<a name="line-8"></a>    <span class='hs-comment'>-- * Data type</span>
+<a name="line-9"></a>    <span class='hs-conid'>OutputResult</span><span class='hs-layout'>,</span>
+<a name="line-10"></a>    <span class='hs-conid'>OutputChunks</span><span class='hs-layout'>,</span>
+<a name="line-11"></a>    <span class='hs-conid'>OutputChunk</span> <span class='hs-layout'>(</span><span class='hs-keyglyph'>..</span><span class='hs-layout'>)</span><span class='hs-layout'>,</span>
+<a name="line-12"></a>  
+<a name="line-13"></a>    <span class='hs-comment'>-- * Function</span>
+<a name="line-14"></a>    <span class='hs-varid'>putJudges</span><span class='hs-layout'>,</span>
+<a name="line-15"></a>    <span class='hs-varid'>hPutJudges</span><span class='hs-layout'>,</span>
+<a name="line-16"></a>    <span class='hs-varid'>hPutOutputResult</span><span class='hs-layout'>,</span>
+<a name="line-17"></a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
 <a name="line-18"></a>
 <a name="line-19"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Control</span><span class='hs-varop'>.</span><span class='hs-conid'>Monad</span>                     <span class='hs-keyword'>as</span> <span class='hs-conid'>M</span>
 <a name="line-20"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Data</span><span class='hs-varop'>.</span><span class='hs-conid'>Map</span>                          <span class='hs-keyword'>as</span> <span class='hs-conid'>Map</span>

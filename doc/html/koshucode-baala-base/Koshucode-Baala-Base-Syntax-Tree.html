@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.81.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.85.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -40,6 +40,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >Safe Haskell</th
 	    ><td
 	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
 	    ></tr
 	  ></table
 	><p class="caption"
@@ -51,18 +57,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Data type
-</a
+	    >Data type</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Parsing
-</a
+	    >Parsing</a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >Bracket table
-</a
+	    >Bracket table</a
 	    ></li
 	  ></ul
 	></div
@@ -73,33 +76,33 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	><li class="src short"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a href="#t:Bracket"
+	    > <a href="#t:Bracket"
 	    >Bracket</a
 	    > p<ul class="subs"
 	    ><li
 	      >= <a href="#v:BracketNone"
 		>BracketNone</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:BracketOpen"
 		>BracketOpen</a
-		> p  </li
+		> p</li
 	      ><li
 	      >| <a href="#v:BracketClose"
 		>BracketClose</a
-		> p  </li
+		> p</li
 	      ></ul
 	    ></li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a href="#t:CodeTree"
+	    > <a href="#t:CodeTree"
 	    >CodeTree</a
 	    > p a<ul class="subs"
 	    ><li
 	      >= <a href="#v:TreeL"
 		>TreeL</a
-		> a  </li
+		> a</li
 	      ><li
 	      >| <a href="#v:TreeB"
 		>TreeB</a
@@ -107,7 +110,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 		>Maybe</a
 		> (a, a)) [<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
 		>CodeTree</a
-		> p a]  </li
+		> p a]</li
 	      ></ul
 	    ></li
 	  ><li class="src short"
@@ -115,7 +118,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >tree</a
 	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > p, <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePtr"
+	    > p, <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePtr"
 	    >CodePtr</a
 	    > a) =&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:GetBracketType"
 	    >GetBracketType</a
@@ -133,7 +136,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >forall</span
 	    > a p. (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > p, <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePtr"
+	    > p, <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePtr"
 	    >CodePtr</a
 	    > a) =&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:GetBracketType"
 	    >GetBracketType</a
@@ -198,13 +201,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Data type
-</h1
+	>Data type</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a name="t:Bracket" class="def"
+	    > <a name="t:Bracket" class="def"
 	    >Bracket</a
 	    > p <a href="src/Koshucode-Baala-Base-Syntax-Tree.html#Bracket" class="link"
 	    >Source</a
@@ -245,16 +247,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    ><div id="section.i:Bracket" class="show"
 	    ><table
 	      ><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable1"
-		    >Typeable1</a
-		    > <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Bracket"
-		    >Bracket</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
 		><td class="src"
 		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
 		    >Eq</a
@@ -302,6 +294,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
+		    >Typeable</a
+		    > (* -&gt; *) <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Bracket"
+		    >Bracket</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
 		></table
 	      ></div
 	    ></div
@@ -310,15 +312,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	><p class="src"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a name="t:CodeTree" class="def"
+	    > <a name="t:CodeTree" class="def"
 	    >CodeTree</a
 	    > p a <a href="src/Koshucode-Baala-Base-Syntax-Tree.html#CodeTree" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Tree of leaf and branch.
-</p
+	    >Tree of leaf and branch.</p
 	    ></div
 	  ><div class="subs constructors"
 	  ><p class="caption"
@@ -331,8 +332,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 		  > a</td
 		><td class="doc"
 		><p
-		  >Leaf. Terminal of tree.
-</p
+		  >Leaf. Terminal of tree.</p
 		  ></td
 		></tr
 	      ><tr
@@ -346,8 +346,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 		  > p a]</td
 		><td class="doc"
 		><p
-		  >Branch. Bracket-type and subtrees.
-</p
+		  >Branch. Bracket-type and subtrees.</p
 		  ></td
 		></tr
 	      ></table
@@ -358,16 +357,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    ><div id="section.i:CodeTree" class="show"
 	    ><table
 	      ><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable2"
-		    >Typeable2</a
-		    > <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
-		    >CodeTree</a
-		    ></td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
 		><td class="src"
 		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Control-Monad.html#t:Functor"
 		    >Functor</a
@@ -433,20 +422,29 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
+		    >Typeable</a
+		    > (* -&gt; * -&gt; *) <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
+		    >CodeTree</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
 		></table
 	      ></div
 	    ></div
 	  ></div
 	><h1 id="g:2"
-	>Parsing
-</h1
+	>Parsing</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:tree" class="def"
 	    >tree</a
 	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > p, <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePtr"
+	    > p, <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePtr"
 	    >CodePtr</a
 	    > a) =&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:GetBracketType"
 	    >GetBracketType</a
@@ -456,13 +454,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >Ab</a
 	    > (<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
 	    >CodeTree</a
-	    > p a)<a href="src/Koshucode-Baala-Base-Syntax-Tree.html#tree" class="link"
+	    > p a) <a href="src/Koshucode-Baala-Base-Syntax-Tree.html#tree" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Convert a list of elements to a single tree.
-</p
+	    >Convert a list of elements to a single tree.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -473,7 +470,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >forall</span
 	    > a p. (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > p, <a href="Koshucode-Baala-Base-Text-Resource.html#t:CodePtr"
+	    > p, <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePtr"
 	    >CodePtr</a
 	    > a) =&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:GetBracketType"
 	    >GetBracketType</a
@@ -483,13 +480,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >Ab</a
 	    > [<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
 	    >CodeTree</a
-	    > p a]<a href="src/Koshucode-Baala-Base-Syntax-Tree.html#trees" class="link"
+	    > p a] <a href="src/Koshucode-Baala-Base-Syntax-Tree.html#trees" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Convert a list of elements to trees.
-</p
+	    >Convert a list of elements to trees.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -500,7 +496,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >CodeTree</a
 	    > p a] -&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
 	    >CodeTree</a
-	    > p a<a href="src/Koshucode-Baala-Base-Syntax-Tree.html#treeWrap" class="link"
+	    > p a <a href="src/Koshucode-Baala-Base-Syntax-Tree.html#treeWrap" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -510,13 +506,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >untree</a
 	    > ::  <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
 	    >CodeTree</a
-	    > p a -&gt; [a]<a href="src/Koshucode-Baala-Base-Syntax-Tree.html#untree" class="link"
+	    > p a -&gt; [a] <a href="src/Koshucode-Baala-Base-Syntax-Tree.html#untree" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Convert tree to list of tokens.
-</p
+	    >Convert tree to list of tokens.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -525,13 +520,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >untrees</a
 	    > ::  [<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
 	    >CodeTree</a
-	    > p a] -&gt; [a]<a href="src/Koshucode-Baala-Base-Syntax-Tree.html#untrees" class="link"
+	    > p a] -&gt; [a] <a href="src/Koshucode-Baala-Base-Syntax-Tree.html#untrees" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Convert tree to list of tokens.
-</p
+	    >Convert tree to list of tokens.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -544,7 +538,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >Map</a
 	    > (<a href="Koshucode-Baala-Base-Syntax-Tree.html#t:CodeTree"
 	    >CodeTree</a
-	    > p a)<a href="src/Koshucode-Baala-Base-Syntax-Tree.html#undouble" class="link"
+	    > p a) <a href="src/Koshucode-Baala-Base-Syntax-Tree.html#undouble" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -554,8 +548,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	      >((a))</code
 	      > to <code
 	      >(a)</code
-	      >.
-</p
+	      >.</p
 	    ><pre class="screen"
 	    ><code class="prompt"
 	      >&gt;&gt;&gt; </code
@@ -569,8 +562,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    ></div
 	  ></div
 	><h1 id="g:3"
-	>Bracket table
-</h1
+	>Bracket table</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -579,20 +571,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    >GetBracketType</a
 	    > p a = a -&gt; <a href="Koshucode-Baala-Base-Syntax-Tree.html#t:Bracket"
 	    >Bracket</a
-	    > p<a href="src/Koshucode-Baala-Base-Syntax-Tree.html#GetBracketType" class="link"
+	    > p <a href="src/Koshucode-Baala-Base-Syntax-Tree.html#GetBracketType" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Get a bracket type.
-</p
+	    >Get a bracket type.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:bracketTable" class="def"
 	    >bracketTable</a
-	    ><a href="src/Koshucode-Baala-Base-Syntax-Tree.html#bracketTable" class="link"
+	    > <a href="src/Koshucode-Baala-Base-Syntax-Tree.html#bracketTable" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs arguments"
@@ -622,8 +613,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 		    >open</em
 		    >, <em
 		    >close</em
-		    >)
-</p
+		    >)</p
 		  ></td
 		></tr
 	      ><tr
@@ -643,15 +633,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 		>GetBracketType</a
 		></code
 	      > functions
-   from a type-open-close table.
-</p
+   from a type-open-close table.</p
 	    ><p
 	    >Make bracket/type functions from <code
 	      >()</code
 	      > and <code
 	      >[]</code
-	      >.
-</p
+	      >.</p
 	    ><pre class="screen"
 	    ><code class="prompt"
 	      >&gt;&gt;&gt; </code
@@ -671,8 +659,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
 	    ><p
 	    >Get bracket types for each chars.
    Types of open brackets are positive integer,
-   and closes are negative.
-</p
+   and closes are negative.</p
 	    ><pre class="screen"
 	    ><code class="prompt"
 	      >&gt;&gt;&gt; </code
@@ -691,7 +678,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-S
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html
