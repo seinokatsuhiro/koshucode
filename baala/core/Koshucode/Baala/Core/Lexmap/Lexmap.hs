@@ -8,7 +8,7 @@ module Koshucode.Baala.Core.Lexmap.Lexmap
   ( -- * Data type
     Lexmap (..),
     LexmapType (..),
-    lexOpName, lexKey,
+    lexRopName, lexKey,
     lexAddMessage,
     lexMessageList,
   
@@ -32,11 +32,11 @@ import qualified Koshucode.Baala.Core.Message           as Msg
 --   Lexmap is constructed from a list of 'B.TTree',
 --   and generic relmap is constructed from a lexmap.
 data Lexmap = Lexmap
-    { lexType     :: LexmapType    -- ^ Type of lexmap
-    , lexOpToken  :: B.Token       -- ^ Token of operator
-    , lexAttr     :: [C.AttrTree]  -- ^ Attribute of relmap operation
-    , lexSubmap   :: [Lexmap]      -- ^ Submaps in the attribute
-    , lexMessage  :: [String]      -- ^ Messages on lexmap
+    { lexType      :: LexmapType    -- ^ Type of lexmap
+    , lexRopToken  :: B.Token       -- ^ Token of operator
+    , lexAttr      :: [C.AttrTree]  -- ^ Attribute of relmap operation
+    , lexSubmap    :: [Lexmap]      -- ^ Submaps in the attribute
+    , lexMessage   :: [String]      -- ^ Messages on lexmap
     } deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 data LexmapType
@@ -46,27 +46,27 @@ data LexmapType
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance B.Write Lexmap where
-    write sh Lexmap { lexOpToken = opToken, lexAttr = attr } =
+    write sh Lexmap { lexRopToken = opToken, lexAttr = attr } =
         case lookup C.attrNameAttr attr of
           Nothing -> B.writeH sh [op, "..."]
           Just xs -> B.writeH sh [op, show xs]
         where op = B.tokenContent opToken
 
 instance B.CodePtr Lexmap where
-    codePts = B.codePts . lexOpToken
+    codePts = B.codePts . lexRopToken
 
 -- | Name of relmap operator
-lexOpName :: Lexmap -> C.RopName
-lexOpName = B.tokenContent . lexOpToken
+lexRopName :: Lexmap -> C.RopName
+lexRopName = B.tokenContent . lexRopToken
 
 lexKey :: Lexmap -> C.RelmapKey
-lexKey lx = (lexOpName lx, lexAttr lx)
+lexKey lx = (lexRopName lx, lexAttr lx)
 
 lexAddMessage :: String -> B.Map Lexmap
 lexAddMessage msg lx = lx { lexMessage = msg : lexMessage lx }
 
 lexMessageList :: Lexmap -> [String]
-lexMessageList Lexmap { lexOpToken = tok, lexMessage = msg }
+lexMessageList Lexmap { lexRopToken = tok, lexMessage = msg }
     | null msg  = []
     | otherwise = msg ++ src
     where src = map (("  " ++) . fst) $ B.codeDisplay ("", pt)
@@ -155,15 +155,15 @@ consLexmap findSorter gslot derives = lexmap where
     -- construct lexmap except for submaps
     cons :: LexmapType -> B.Token -> [C.AttrTree] -> [B.TTree] -> Lexmap
     cons ty rop attr trees =
-        check $ Lexmap { lexType     = ty
-                       , lexOpToken  = rop
-                       , lexAttr     = ((C.attrNameAttr, trees) : attr)
-                       , lexSubmap   = []
-                       , lexMessage  = [] }
+        check $ Lexmap { lexType      = ty
+                       , lexRopToken  = rop
+                       , lexAttr      = ((C.attrNameAttr, trees) : attr)
+                       , lexSubmap    = []
+                       , lexMessage   = [] }
 
     check :: B.Map Lexmap
     check lx | lexType lx == LexmapDerived
-                 = let n    = lexOpName lx
+                 = let n    = lexRopName lx
                        msg  = "Same name as base relmap operator '" ++ n ++ "'"
                    in case findSorter n of
                         Just _  -> lexAddMessage msg lx
@@ -187,8 +187,8 @@ consLexmap findSorter gslot derives = lexmap where
                    Just def  -> expand name attr def
                    Nothing   -> Right []
         where
-          name  = lexOpName lx
-          attr  = lexAttr   lx
+          name  = lexRopName lx
+          attr  = lexAttr    lx
 
     expand name attr (repl, edit) =
         do attr2       <- C.roamapRun edit attr
@@ -208,7 +208,7 @@ consLexmap findSorter gslot derives = lexmap where
         loop tree = tree
 
 -- | Parse nested relation attribute.
-nestTerms :: [B.TTree] -> B.Ab [B.Terminal String]
+nestTerms :: [B.TTree] -> B.Ab [B.Terminal C.RopName]
 nestTerms = loop where
     loop (B.TermLeaf _ 0 [n] :
           B.TextLeafRaw _ v : xs)   = next (n, v) xs

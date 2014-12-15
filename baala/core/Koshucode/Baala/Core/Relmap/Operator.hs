@@ -141,10 +141,10 @@ instance B.Monoid (Relmap c) where
     mappend = RelmapAppend
 
 instance B.Name (Relmap c) where
-    name (RelmapSource _ _ _)   = "source"
-    name (RelmapConst  h _)     = C.lexOpName h
-    name (RelmapCalc   h _ _)   = C.lexOpName h
-    name (RelmapAppend _ _)     = "append"
+    name (RelmapSource _ _ _)       = "source"
+    name (RelmapConst  lx _)        = C.lexRopName lx
+    name (RelmapCalc   lx _ _)      = C.lexRopName lx
+    name (RelmapAppend _ _)         = "append"
     name _ = undefined
 
 instance B.Write (Relmap c) where

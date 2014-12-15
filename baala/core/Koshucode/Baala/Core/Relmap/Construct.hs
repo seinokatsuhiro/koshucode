@@ -49,8 +49,8 @@ consRelmap findRop g = relmap where
           C.LexmapBase     -> case findRop n of
                                 Just rop -> Msg.abRelmap [lx] $ cons rop
                                 Nothing  -> Msg.bug "missing operator @consRelmap"
-        where key           = C.lexKey    lx
-              n             = C.lexOpName lx
+        where key           = C.lexKey     lx
+              n             = C.lexRopName lx
               cons rop      = do sub <- relmap `mapM` C.lexSubmap lx
                                  C.ropCons rop $ C.RopUse g lx sub
 
