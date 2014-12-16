@@ -51,19 +51,19 @@ runAssertDataset global (B.Short _ sh asserts) dataset =
 runRelmapDataset
     :: (Ord c, C.CRel c, C.CEmpty c)
     => C.Global c
-    -> C.Dataset c     -- ^ Judges read from @source@ operator
-    -> C.RelmapTable c
-    -> C.Relmap c      -- ^ Mapping from 'Rel' to 'Rel'
-    -> B.Rel c         -- ^ Input relation
-    -> B.Ab (B.Rel c)  -- ^ Output relation
+    -> C.Dataset c          -- ^ Judges read from @source@ operator
+    -> C.RelmapLinkTable c
+    -> C.Relmap c           -- ^ Mapping from 'Rel' to 'Rel'
+    -> B.Rel c              -- ^ Input relation
+    -> B.Ab (B.Rel c)       -- ^ Output relation
 runRelmapDataset global dataset = runRelmapViaRelkit g2 where
     g2 = global { C.globalSelect = C.selectRelation dataset }
 
 runRelmapViaRelkit :: (Ord c, C.CRel c)
-  => C.Global c -> C.RelmapTable c
+  => C.Global c -> C.RelmapLinkTable c
   -> C.Relmap c -> B.AbMap (B.Rel c)
-runRelmapViaRelkit g2 parts r (B.Rel he1 bo1) =
-    do (kdef, C.Relkit he2' f2') <- C.relmapSpecialize g2 parts [] (Just he1) r
+runRelmapViaRelkit g2 links r (B.Rel he1 bo1) =
+    do (kdef, C.Relkit he2' f2') <- C.relmapSpecialize g2 links [] (Just he1) r
        let C.Relkit mhe2 f2 = C.relkitLink kdef $ C.Relkit he2' f2'
        he2 <- just "unknown relhead" mhe2
        bo2 <- C.relkitRun g2 [] f2 bo1

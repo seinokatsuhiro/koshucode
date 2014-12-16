@@ -58,9 +58,9 @@ assembleRelmap res@C.Resource { C.resGlobal  = g
             trees      <- C.substSlot slots [] $ C.assTree ass
             (lx, lxs)  <- consLexmap slots derives trees
             relmap     <- consRelmap lx
-            parts      <- B.sequenceSnd $ B.mapSndTo consRelmap lxs
+            links      <- B.sequenceSnd $ B.mapSndTo consRelmap lxs
             let msg1    = C.lexMessage lx
                 msg2    = concatMap C.lexMessageList $ map snd lxs
                 ass2    = ass { C.assRelmap  = Just relmap
-                              , C.assParts   = parts }
+                              , C.assLinks   = links }
             Right (ass2, msg1 ++ msg2)

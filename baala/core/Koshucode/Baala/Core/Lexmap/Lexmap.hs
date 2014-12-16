@@ -17,7 +17,7 @@ module Koshucode.Baala.Core.Lexmap.Lexmap
     nestTerms,
     ConsLexmap,
     ConsLexmapBody,
-    LexmapTable,
+    LexmapLinkTable,
     RelmapSource, NName, NNamed,
   ) where
 
@@ -74,9 +74,9 @@ lexMessageList Lexmap { lexRopToken = tok, lexMessage = msg }
 
 type ConsLexmap = [C.GlobalSlot] -> [RelmapSource] -> ConsLexmapBody
 
-type ConsLexmapBody = [B.TTree] -> B.Ab (Lexmap, LexmapTable)
+type ConsLexmapBody = [B.TTree] -> B.Ab (Lexmap, LexmapLinkTable)
 
-type LexmapTable = [(Lexmap, Lexmap)]
+type LexmapLinkTable = [(Lexmap, Lexmap)]
 
 -- | Source of relmap: its name, replacement, and attribute editor.
 type RelmapSource = NNamed ([B.TTree], C.Roamap)
@@ -168,7 +168,7 @@ consLexmap findSorter gslot derives = lexmap where
     check lx = lx
 
     -- construct lexmaps of submaps
-    submap :: Lexmap -> B.Ab (Lexmap, LexmapTable)
+    submap :: Lexmap -> B.Ab (Lexmap, LexmapLinkTable)
     submap lx@Lexmap { lexAttr = attr } =
         case B.lookupBy C.isAttrNameRelmap attr of
           Nothing    -> Right (lx, [])
@@ -178,7 +178,7 @@ consLexmap findSorter gslot derives = lexmap where
                                lx2           = lx { lexSubmap = sublx }
                            Right (lx2, concat tabs)
 
-    table :: Lexmap -> B.Ab LexmapTable
+    table :: Lexmap -> B.Ab LexmapLinkTable
     table lx = Msg.abSlot [lx] $
                  case resolve 0 name derives of
                    Just def  -> expand lx attr def

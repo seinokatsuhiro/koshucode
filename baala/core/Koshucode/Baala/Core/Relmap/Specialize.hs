@@ -5,7 +5,7 @@
 
 module Koshucode.Baala.Core.Relmap.Specialize
   ( relmapSpecialize, 
-    RelmapTable,
+    RelmapLinkTable,
   ) where
 
 import qualified Koshucode.Baala.Base                 as B
@@ -14,11 +14,11 @@ import qualified Koshucode.Baala.Core.Relmap.Operator as C
 import qualified Koshucode.Baala.Core.Relmap.Relkit   as C
 import qualified Koshucode.Baala.Core.Message         as Msg
 
-type RelmapTable c = [(C.Lexmap, C.Relmap c)]
+type RelmapLinkTable c = [(C.Lexmap, C.Relmap c)]
 
-relmapSpecialize :: forall c. C.Global c -> RelmapTable c
+relmapSpecialize :: forall c. C.Global c -> RelmapLinkTable c
   -> [C.RelkitDef c] -> Maybe B.Head -> C.Relmap c -> B.Ab ([C.RelkitDef c], C.Relkit c)
-relmapSpecialize global parts = spec [] [] where
+relmapSpecialize global links = spec [] [] where
     spec :: [(String, B.Head)]   -- name of nested relation, and its heading
          -> [C.RelkitKey]        -- information for detecting cyclic relmap
          -> [C.RelkitDef c]      -- list of known specialized relkits
@@ -52,7 +52,7 @@ relmapSpecialize global parts = spec [] [] where
                            Just he    -> Right (kdef, C.relkitNestVar n he)
                            Nothing    -> Msg.unkNestVar n
                   | otherwise ->
-                      post lx $ case lookup lx parts of
+                      post lx $ case lookup lx links of
                            Just rmap1 -> link n rmap1 (he1, C.relmapLexList rmap1)
                            Nothing    -> Msg.unkRelmap n
                   where
