@@ -17,7 +17,6 @@ module Koshucode.Baala.Core.Lexmap.Attribute
     AttrSort,
     TreeSort,
     RopName,
-    RelmapKey,
   
     -- * Attribute sorter
     attrSort,
@@ -88,9 +87,6 @@ type TreeSort = [B.TTree] -> [B.NamedTrees]
 
 -- | Name of relmap operator.
 type RopName = String
-
--- | Search key for 'Lexmap' or 'Relmap'.
-type RelmapKey = (RopName, [AttrTree])
 
 
 -- ----------------------  Attribute sorter

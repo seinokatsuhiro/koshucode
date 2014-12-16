@@ -41,7 +41,7 @@ elemAssert = B.unique . concatMap f where
 
 elemNamedRelmap :: (C.CContent c) => C.RelmapTable c -> [B.Judge c]
 elemNamedRelmap = B.unique . concatMap f where
-    f ((name, _), relmap) = map (B.judgeCons ("/name" -:- C.pText name))
+    f (lx, relmap) = map (B.judgeCons ("/name" -:- C.pText $ C.lexRopName lx))
                             $ elemRelmap relmap
 
 elemRelmap :: (C.CContent c) => C.Relmap c -> [B.Judge c]
@@ -55,7 +55,7 @@ elemRelmap relmap = name : f relmap where
 
     f (C.RelmapAppend r1 r2)     = f r1 ++ f r2
     f (C.RelmapSource _ p xs)    = [ rop "source", src p xs ]
-    f (C.RelmapLink   _ (n, _))  = [ ref n ]
+    f (C.RelmapLink   lx)        = [ ref $ C.lexRopName lx ]
     f (C.RelmapCalc   _ _ rs)    = rop (B.name relmap) : concatMap f rs
     f (C.RelmapGlobal _ _)       = [ rop (B.name relmap) ]
     f (C.RelmapConst  _ _)       = [ rop (B.name relmap) ]

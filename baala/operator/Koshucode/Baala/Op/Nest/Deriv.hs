@@ -59,7 +59,7 @@ consJoinUp use =
 relmapJoinUp :: (Ord c) => C.RopUse c -> [B.Terminal String] -> C.Relmap c
 relmapJoinUp use nest = C.relmapNest use nest $ Op.relmapJoinList use rmaps where
     rmaps   = link `map` map snd nest
-    link v  = C.relmapLink use (v, [])
+    link n  = C.relmapNestVar use n
 
 
 -- ----------------------  nest / hang

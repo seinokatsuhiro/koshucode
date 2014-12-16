@@ -14,7 +14,7 @@ import qualified Koshucode.Baala.Core.Relmap.Operator as C
 import qualified Koshucode.Baala.Core.Relmap.Relkit   as C
 import qualified Koshucode.Baala.Core.Message         as Msg
 
-type RelmapTable c = [(C.RelmapKey, C.Relmap c)]
+type RelmapTable c = [(C.Lexmap, C.Relmap c)]
 
 relmapSpecialize :: forall c. C.Global c -> RelmapTable c
   -> [C.RelkitDef c] -> Maybe B.Head -> C.Relmap c -> B.Ab ([C.RelkitDef c], C.Relkit c)
@@ -46,15 +46,17 @@ relmapSpecialize global parts = spec [] [] where
                      kit <- makeKit global he1
                      Right (kdef, kit)
 
-              C.RelmapLink lx key@(n, _)
+              C.RelmapLink lx
                   | C.lexType lx == C.LexmapNest ->
                       post lx $ case lookup n nest of
                            Just he    -> Right (kdef, C.relkitNestVar n he)
                            Nothing    -> Msg.unkNestVar n
                   | otherwise ->
-                      post lx $ case lookup key parts of
+                      post lx $ case lookup lx parts of
                            Just rmap1 -> link n rmap1 (he1, C.relmapLexList rmap1)
                            Nothing    -> Msg.unkRelmap n
+                  where
+                    n = C.lexRopName lx
 
               C.RelmapCopy lx n rmap1 ->
                   do let heJust = B.fromJust he1

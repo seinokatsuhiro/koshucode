@@ -8,17 +8,17 @@ module Koshucode.Baala.Core.Lexmap.Lexmap
   ( -- * Data type
     Lexmap (..),
     LexmapType (..),
-    lexRopName, lexKey,
+    lexRopName,
     lexAddMessage,
     lexMessageList,
   
     -- * Constructor
+    consLexmap,
+    nestTerms,
     ConsLexmap,
     ConsLexmapBody,
     LexmapTable,
     RelmapSource, NName, NNamed,
-    consLexmap,
-    nestTerms,
   ) where
 
 import qualified Data.Generics                          as G
@@ -59,9 +59,6 @@ instance B.CodePtr Lexmap where
 lexRopName :: Lexmap -> C.RopName
 lexRopName = B.tokenContent . lexRopToken
 
-lexKey :: Lexmap -> C.RelmapKey
-lexKey lx = (lexRopName lx, lexAttr lx)
-
 lexAddMessage :: String -> B.Map Lexmap
 lexAddMessage msg lx = lx { lexMessage = msg : lexMessage lx }
 
@@ -75,24 +72,24 @@ lexMessageList Lexmap { lexRopToken = tok, lexMessage = msg }
 
 -- ----------------------  Constructor
 
+type ConsLexmap = [C.GlobalSlot] -> [RelmapSource] -> ConsLexmapBody
+
+type ConsLexmapBody = [B.TTree] -> B.Ab (Lexmap, LexmapTable)
+
+type LexmapTable = [(Lexmap, Lexmap)]
+
+-- | Source of relmap: its name, replacement, and attribute editor.
+type RelmapSource = NNamed ([B.TTree], C.Roamap)
+
 -- | Numbered name.
 type NName = (Int, String)
 
 -- | Pair which key is a numbered name.
 type NNamed a = (NName, a)
 
--- | Source of relmap: its name, replacement, and attribute editor.
-type RelmapSource = NNamed ([B.TTree], C.Roamap)
-
-type LexmapTable = [(C.RelmapKey, Lexmap)]
-
 -- | First step of constructing relmap,
---   make lexmap from source of relmap operator.
-type ConsLexmap = [C.GlobalSlot] -> [RelmapSource] -> ConsLexmapBody
-
--- | Construct lexmap and its submaps from source of lexmap
-type ConsLexmapBody = [B.TTree] -> B.Ab (Lexmap, LexmapTable)
-
+--   construct lexmap from token trees.
+--   The function returns lexmap and related lexmap links.
 consLexmap :: (C.RopName -> Maybe C.AttrSort) -> ConsLexmap
 consLexmap findSorter gslot derives = lexmap where
 
@@ -184,17 +181,17 @@ consLexmap findSorter gslot derives = lexmap where
     table :: Lexmap -> B.Ab LexmapTable
     table lx = Msg.abSlot [lx] $
                  case resolve 0 name derives of
-                   Just def  -> expand name attr def
+                   Just def  -> expand lx attr def
                    Nothing   -> Right []
         where
           name  = lexRopName lx
           attr  = lexAttr    lx
 
-    expand name attr (repl, edit) =
+    expand lx attr (form, edit) =
         do attr2       <- C.roamapRun edit attr
-           repl2       <- C.substSlot gslot attr2 repl
-           (lx, tab)   <- lexmap repl2
-           Right $ ((name, attr), lx) : tab
+           form2       <- C.substSlot gslot attr2 form
+           (lx2, tab)  <- lexmap form2
+           Right $ (lx, lx2) : tab
 
     nestVars :: [C.AttrTree] -> B.Ab [String]
     nestVars attr = case B.lookupBy C.isAttrNameNest attr of
