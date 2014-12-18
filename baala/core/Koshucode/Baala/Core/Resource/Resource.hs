@@ -135,10 +135,10 @@ consResourceEach root source (B.Short pt shorts xs) =
 
       ntrees2 :: Int -> String -> [B.Token] -> [B.Token] -> B.Ab C.RelmapSource
       ntrees2 sec n toks1 toks2 =
-          do trees1 <- B.tokenTrees toks1
-             trees2 <- B.tokenTrees toks2
-             roamap <- C.roamapCons trees2
-             Right ((sec, n), (trees1, roamap))
+          do form    <- B.tokenTrees  toks1
+             trees2  <- B.tokenTrees  toks2
+             edit    <- C.consAttrmap trees2
+             Right ((sec, n), (form, edit))
 
       judge :: Clab (B.Judge c)
       judge _ _ (C.CJudge q p toks) =

@@ -23,8 +23,8 @@ module Koshucode.Baala.Core.Lexmap.Lexmap
 
 import qualified Data.Generics                          as G
 import qualified Koshucode.Baala.Base                   as B
+import qualified Koshucode.Baala.Core.Lexmap.Attrmap    as C
 import qualified Koshucode.Baala.Core.Lexmap.Attribute  as C
-import qualified Koshucode.Baala.Core.Lexmap.Roamap     as C
 import qualified Koshucode.Baala.Core.Lexmap.Slot       as C
 import qualified Koshucode.Baala.Core.Message           as Msg
 
@@ -79,7 +79,7 @@ type ConsLexmapBody = [B.TTree] -> B.Ab (Lexmap, LexmapLinkTable)
 type LexmapLinkTable = [(Lexmap, Lexmap)]
 
 -- | Source of relmap: its name, replacement, and attribute editor.
-type RelmapSource = NNamed ([B.TTree], C.Roamap)
+type RelmapSource = NNamed ([B.TTree], C.Attrmap)
 
 -- | Numbered name.
 type NName = (Int, String)
@@ -119,7 +119,7 @@ consLexmap findSorter gslot derives = lexmap where
              Nothing -> base n rop trees
              Just _  -> deriv rop trees
 
-    resolve :: Int -> String -> [RelmapSource] -> Maybe ([B.TTree], C.Roamap)
+    resolve :: Int -> String -> [RelmapSource] -> Maybe ([B.TTree], C.Attrmap)
     resolve _ name = loop where
         loop [] = Nothing
         loop (((_, n), src) : xs)
@@ -188,7 +188,7 @@ consLexmap findSorter gslot derives = lexmap where
           attr  = lexAttr    lx
 
     expand lx attr (form, edit) =
-        do attr2       <- C.roamapRun edit attr
+        do attr2       <- C.runAttrmap edit attr
            form2       <- C.substSlot gslot attr2 form
            (lx2, tab)  <- lexmap form2
            Right $ (lx, lx2) : tab
