@@ -147,11 +147,11 @@ consResourceEach root source (B.Short pt shorts xs) =
       calc = calcContG $ resGlobal root
 
       assert :: Clab (C.Assert c)
-      assert _ src (C.CAssert typ pat opt toks) =
+      assert sec src (C.CAssert typ pat opt toks) =
           do optTrees   <- B.tokenTrees opt
              rmapTrees  <- B.tokenTrees toks
              let optAssc = C.hyphenAssc optTrees
-             Right $ C.Assert typ pat optAssc src rmapTrees Nothing []
+             Right $ C.Assert sec typ pat optAssc src rmapTrees Nothing []
 
       checkShort :: [B.ShortDef] -> B.Ab ()
       checkShort sh =

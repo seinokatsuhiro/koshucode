@@ -33,8 +33,8 @@ runAssertDataset :: forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c)
 runAssertDataset global (B.Short _ sh asserts) dataset =
     Right . concat =<< mapM each asserts
     where
-      each (C.Assert _ _ _ _ _ Nothing _) = B.bug "runAssertDataset"
-      each a@(C.Assert typ pat opt _ _ (Just relmap) libs) =
+      each (C.Assert _ _ _ _ _ _ Nothing _) = B.bug "runAssertDataset"
+      each a@(C.Assert _ typ pat opt _ _ (Just relmap) libs) =
           Msg.abAssert [a] $ do
             r1 <- runRelmapDataset global dataset libs relmap B.reldee
             let judgeOf showEmpty = assert showEmpty typ
