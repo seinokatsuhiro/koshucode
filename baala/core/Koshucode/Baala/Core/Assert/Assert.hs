@@ -24,7 +24,7 @@ import qualified Koshucode.Baala.Core.Relmap    as C
 --   It consists of logical quality, judgement pattern, and relmap.
 --   See also 'B.Judge'
 data Assert c = Assert
-    { assSectio   :: Int                 -- ^ Section number
+    { assSection  :: Int                 -- ^ Section number
     , assType     :: C.AssertType        -- ^ Logical quality
     , assPattern  :: B.JudgePat          -- ^ Pattern of judgement
     , assOption   :: AssertOption        -- ^ Assert option

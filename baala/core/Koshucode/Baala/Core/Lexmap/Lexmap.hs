@@ -17,6 +17,7 @@ module Koshucode.Baala.Core.Lexmap.Lexmap
     nestTerms,
     ConsLexmap,
     ConsLexmapBody,
+    FindRelmap,
     LexmapLinkTable,
     RelmapSource, NName, NNamed,
   ) where
@@ -72,9 +73,11 @@ lexMessageList Lexmap { lexRopToken = tok, lexMessage = msg }
 
 -- ----------------------  Constructor
 
-type ConsLexmap = [C.GlobalSlot] -> [RelmapSource] -> ConsLexmapBody
+type ConsLexmap = [C.GlobalSlot] -> FindRelmap -> ConsLexmapBody
 
-type ConsLexmapBody = [B.TTree] -> B.Ab (Lexmap, LexmapLinkTable)
+type FindRelmap = Int -> C.RopName -> [RelmapSource]
+
+type ConsLexmapBody = Int -> [B.TTree] -> B.Ab (Lexmap, LexmapLinkTable)
 
 type LexmapLinkTable = [(Lexmap, Lexmap)]
 
@@ -91,63 +94,58 @@ type NNamed a = (NName, a)
 --   construct lexmap from token trees.
 --   The function returns lexmap and related lexmap links.
 consLexmap :: (C.RopName -> Maybe C.AttrSort) -> ConsLexmap
-consLexmap findSorter gslot derives = lexmap where
+consLexmap findSorter gslot findRelmap = lexmap where
 
-    lexmap1 = lexmap . B.li1
+    lexmap1 sec = lexmap sec . B.li1
 
     lexmap :: ConsLexmapBody
-    lexmap source = Msg.abLexmap source $
+    lexmap sec source = Msg.abLexmap source $
         case B.divideTreesByBar source of
           []        -> Msg.bug "empty list @consLexmap"
-          [relmap]  -> single relmap
-          relmaps   -> baseOf "append" $ map B.wrapTrees relmaps
+          [relmap]  -> single sec relmap
+          relmaps   -> baseOf "append" sec $ map B.wrapTrees relmaps
 
     -- relmap "/N E" is equivalent to "add /N ( E )"
     -- relmap "| R | R" is equivalent to "id | R | R"
-    single (B.TreeL rop@(B.TTextRaw _ _) : trees)  = dispatch rop trees
-    single (B.TreeL rop@(B.TTextKey _ _) : trees)  = nest rop trees
-    single [B.TreeB B.BracketGroup _ trees]        = lexmap trees
-    single [B.TreeB _ _ _]                         = Msg.reqGroup
-    single (n@(B.TermLeaf _ _ [_]) : trees)        = baseOf "add" $ n : [B.wrapTrees trees]
-    single []                                      = baseOf "id" []
-    single _                                       = Msg.unkRelmap "???"
+    single sec (B.TreeL rop@(B.TTextRaw _ _) : trees)  = dispatch rop sec trees
+    single sec (B.TreeL rop@(B.TTextKey _ _) : trees)  = nest     rop sec trees
+    single sec [B.TreeB B.BracketGroup _ trees]        = lexmap       sec trees
+    single _   [B.TreeB _ _ _]                         = Msg.reqGroup
+    single sec (n@(B.TermLeaf _ _ [_]) : trees)        = baseOf "add" sec $ n : [B.wrapTrees trees]
+    single sec []                                      = baseOf "id"  sec []
+    single _ _                                         = Msg.unkRelmap "???"
 
     dispatch :: B.Token -> ConsLexmapBody
-    dispatch rop trees =
-        let n = B.tokenContent rop
-        in case resolve 0 n derives of
-             Nothing -> base n rop trees
-             Just _  -> deriv rop trees
-
-    resolve :: Int -> String -> [RelmapSource] -> Maybe ([B.TTree], C.Attrmap)
-    resolve _ name = loop where
-        loop [] = Nothing
-        loop (((_, n), src) : xs)
-            | n == name    = Just src
-            | otherwise    = loop xs
+    dispatch rop sec trees =
+        let name = B.tokenContent rop
+        in case findRelmap sec name of
+             [_]  -> deriv rop sec trees
+             []   -> base name rop sec trees
+             ds   -> Msg.ambRelmap name ds
 
     baseOf :: C.RopName -> ConsLexmapBody
-    baseOf n = base n $ B.textToken n
+    baseOf n = base n (B.textToken n)
 
     -- construct base lexmap
     base :: C.RopName -> B.Token -> ConsLexmapBody
-    base n rop trees =
-        case findSorter n of
-          Nothing     -> deriv rop trees
+    base name rop sec trees =
+        case findSorter name of
+          Nothing     -> deriv rop sec trees
           Just sorter -> do attr <- sorter trees
-                            submap $ cons LexmapBase rop attr trees
+                            submap sec $ cons LexmapBase rop attr trees
 
     -- construct derived lexmap
     deriv :: B.Token -> ConsLexmapBody
-    deriv rop trees  = do attr <- C.attrSortBranch trees
-                          let lx = cons LexmapDerived rop attr trees
-                          tab <- table lx
-                          Right (lx, tab)
+    deriv rop sec trees =
+        do attr <- C.attrSortBranch trees
+           let lx = cons LexmapDerived rop attr trees
+           tab <- table sec lx
+           Right (lx, tab)
 
     -- construct lexmap for nested relation reference
     nest :: B.Token -> ConsLexmapBody
-    nest rop []  = Right (cons LexmapNest rop [] [], [])
-    nest _ _     = Msg.extraAttr
+    nest rop _ []  = Right (cons LexmapNest rop [] [], [])
+    nest _ _ _     = Msg.extraAttr
 
     -- construct lexmap except for submaps
     cons :: LexmapType -> B.Token -> [C.AttrTree] -> [B.TTree] -> Lexmap
@@ -168,29 +166,30 @@ consLexmap findSorter gslot derives = lexmap where
     check lx = lx
 
     -- construct lexmaps of submaps
-    submap :: Lexmap -> B.Ab (Lexmap, LexmapLinkTable)
-    submap lx@Lexmap { lexAttr = attr } =
+    submap :: Int -> Lexmap -> B.Ab (Lexmap, LexmapLinkTable)
+    submap sec lx@Lexmap { lexAttr = attr } =
         case B.lookupBy C.isAttrNameRelmap attr of
           Nothing    -> Right (lx, [])
           Just trees -> do ws    <- nestVars attr
-                           subs  <- lexmap1 `mapM` nestTrees ws trees
+                           subs  <- lexmap1 sec `mapM` nestTrees ws trees
                            let (sublx, tabs) = unzip subs
                                lx2           = lx { lexSubmap = sublx }
                            Right (lx2, concat tabs)
 
-    table :: Lexmap -> B.Ab LexmapLinkTable
-    table lx = Msg.abSlot [lx] $
-                 case resolve 0 name derives of
-                   Just def  -> expand lx attr def
-                   Nothing   -> Right []
+    table :: Int -> Lexmap -> B.Ab LexmapLinkTable
+    table sec lx = Msg.abSlot [lx] $
+                 case findRelmap sec name of
+                   [((sec2, _), def)] -> expand sec2 lx attr def
+                   []                 -> Right []
+                   ds                 -> Msg.ambRelmap name ds
         where
           name  = lexRopName lx
           attr  = lexAttr    lx
 
-    expand lx attr (form, edit) =
+    expand sec2 lx attr (form, edit) =
         do attr2       <- C.runAttrmap edit attr
            form2       <- C.substSlot gslot attr2 form
-           (lx2, tab)  <- lexmap form2
+           (lx2, tab)  <- lexmap sec2 form2
            Right $ (lx, lx2) : tab
 
     nestVars :: [C.AttrTree] -> B.Ab [String]

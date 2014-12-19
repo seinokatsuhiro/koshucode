@@ -28,6 +28,7 @@ module Koshucode.Baala.Core.Message
   
     -- * Core package
     ambInfixes,
+    ambRelmap,
     dupAttr,
     dupPrefix,
     dupReplacement,
@@ -140,6 +141,11 @@ abSpecialize = B.abortable "specialize"
 -- | Ambiguous infix operators
 ambInfixes :: [String] -> B.Ab a
 ambInfixes = Left . B.abortLines "Ambiguous infix operators"
+
+-- | Ambiguous relmaps
+ambRelmap :: String -> [d] -> B.Ab a
+ambRelmap name ds = Left $ B.abortLine "Ambiguous relmaps"
+                         $ name ++ " (" ++ show (length ds) ++ ")"
 
 -- | Unexpected attribute / Duplicate
 dupAttr :: [String] -> B.Ab a

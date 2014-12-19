@@ -53,10 +53,10 @@ assembleRelmap res@C.Resource { C.resGlobal  = g
       (consLexmap, consRelmap) = C.relmapCons g
 
       assemble :: C.Assert c -> B.Ab (C.Assert c, [String])
-      assemble ass =
+      assemble ass@C.Assert { C.assSection = sec } =
           Msg.abAssert [ass] $ do
             trees      <- C.substSlot slots [] $ C.assTree ass
-            (lx, lxs)  <- consLexmap slots derives trees
+            (lx, lxs)  <- consLexmap slots (findRelmap derives) sec trees
             relmap     <- consRelmap lx
             links      <- B.sequenceSnd $ B.mapSndTo consRelmap lxs
             let msg1    = C.lexMessage lx
@@ -64,3 +64,24 @@ assembleRelmap res@C.Resource { C.resGlobal  = g
                 ass2    = ass { C.assRelmap  = Just relmap
                               , C.assLinks   = links }
             Right (ass2, msg1 ++ msg2)
+
+findRelmap :: [C.RelmapSource] -> C.FindRelmap
+findRelmap derives sec name =
+    case findRelmapName derives name of
+      [def]  -> [def]
+      ds     -> findRelmapSec sec ds
+
+findRelmapName :: [C.RelmapSource] -> String -> [C.RelmapSource]
+findRelmapName derives name = find derives where
+    find [] = []
+    find (def@((_, n), _) : ds)
+         | n == name   = def : find ds
+         | otherwise   = find ds
+
+findRelmapSec :: Int -> B.Map [C.RelmapSource]
+findRelmapSec sec = find where
+    find [] = []
+    find (def@((s, _), _) : ds)
+         | s == sec    = def : find ds
+         | otherwise   = find ds
+
