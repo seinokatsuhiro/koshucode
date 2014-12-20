@@ -109,12 +109,12 @@ consPreclause' no src = dispatch $ liaison $ B.clauseTokens src where
         same $ frege k xs   -- Frege's judgement stroke
     dispatch (B.TTextRaw _ name : B.TTextRaw _ colon : xs)
         | isDelim colon             = same $ rmap name xs
+    dispatch (B.TTextSect _ : xs)   = up   $ sec xs
     dispatch (B.TTextRaw _ k : xs)
         | k == "import"             = same $ impt xs
         | k == "export"             = same $ expt xs
         | k == "short"              = same $ short xs
         | k == "****"               = same []
-        | k == "=="                 = up   $ sec xs
     dispatch (B.TSlot _ 2 n : xs)   = same $ slot n xs
     dispatch []                     = same []
     dispatch _                      = same unk

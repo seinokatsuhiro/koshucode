@@ -22,8 +22,8 @@ module Koshucode.Baala.Base.Message
     forbiddenInput,
     forbiddenTerm,
     quotNotEnd,
+    unexpSect,
     unkAngleText,
-    unkSectType,
   ) where
 
 import qualified Koshucode.Baala.Base.Abort    as B
@@ -100,11 +100,10 @@ forbiddenTerm = Left $ B.abortBecause "Forbidden term name"
 quotNotEnd :: B.Ab a
 quotNotEnd = Left $ B.abortBecause "Quotation not end in line"
 
+-- | Unexpedted section delimiter
+unexpSect :: [String] -> B.Ab a
+unexpSect = Left . B.abortLines "Unexpedted section delimiter"
+
 -- | Unknown bracket text
 unkAngleText :: String -> B.Ab a
 unkAngleText = Left . B.abortLine "Unknown bracket text"
-
--- | Unknown section type
-unkSectType :: String -> B.Ab a
-unkSectType = Left . B.abortLine "Unknown section type"
-

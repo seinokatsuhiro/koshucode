@@ -53,49 +53,57 @@ tokens res cs = do ls <- tokenLines res cs
 tokenLines :: B.Source -> String -> B.Ab [TokenLine]
 tokenLines = B.codeRollUp relation
 
+-- Line begins with the equal sign is treated as section delimter.
 start :: (String -> B.Ab TokenRoll) -> B.CodePt -> TokenRoll -> B.Ab TokenRoll
-start f cp r@B.CodeRoll { B.codeInput   = cs0
-                        , B.codeOutput  = out } = st out cs0 where
-    tok                 = B.TTextRaw cp "=="
-    trim                = dropWhile (== '=')
-    st [] ('=':'=':cs)  = Right $ B.codeChange section $ B.codeUpdate (trim cs) tok r
-    st _ cs             = Msg.abToken [cp] $ f cs
+start f cp r@B.CodeRoll { B.codeInput = cs0, B.codeOutput = out } = st out cs0
+    where st [] ('=' : _)     = Right $ B.codeChange section r
+          st _ cs             = Msg.abToken [cp] $ f cs
 
 section :: B.AbMap TokenRoll
-section r@B.CodeRoll { B.codeInputPt = cp
-                     , B.codeOutput  = out
-                     } = start sec cp r where
+section r@B.CodeRoll { B.codeInputPt  = cp
+                     , B.codeInput    = cs0
+                     , B.codeOutput   = out
+                     } = sec cs0 where
+    v = scan r
 
-    v  = scan r
+    sec ""                    = dispatch $ reverse out
+    sec (c:cs)  | isSpace c   = v $ scanSpace cp cs
+                | isCode c    = v $ scanCode cp (c:cs)
+                | otherwise   = sec cs
 
-    sec ""                     = dispatch $ reverse out
-    sec (c:cs)  | isSpace c    = v $ scanSpace cp cs
-                | isCode c     = v $ scanCode cp (c:cs)
-                | otherwise    = sec cs
-
-    dispatch (B.TTextRaw _ "==" : B.TSpace _ _ : B.TTextRaw _ name : _) =
+    dispatch [B.TTextSect _, B.TSpace _ _, B.TTextRaw _ name] =
         case name of
           "rel"    -> Right $ B.codeChange relation r
           "note"   -> Right $ B.codeChange note r
-          "text"   -> Right $ B.codeChange relation r
           "end"    -> Right $ B.codeChange end r
           "local"  -> Msg.notImplemented "local section"
+          "attr"   -> Msg.notImplemented "attr section"
+          "text"   -> Msg.notImplemented "text section"
           "doc"    -> Msg.notImplemented "doc section"
           "data"   -> Msg.notImplemented "data section"
-          _        -> Msg.unkSectType name
-    dispatch _      = Msg.unkSectType "???"
+          _        -> Msg.unexpSect help
+    dispatch _      = Msg.unexpSect help
 
+    help = [ "=== rel    for relational calculation"
+           , "=== note   for commentary section"
+           , "=== end    for ending of input" ]
+
+-- Tokenizer for end section.
 end :: B.AbMap TokenRoll
-end r@B.CodeRoll { B.codeInput = cs }     = comment r cs
+end r@B.CodeRoll { B.codeInput = cs } = comment r cs
 
+-- Tokenizer for note section.
 note :: B.AbMap TokenRoll
-note r@B.CodeRoll { B.codeInputPt = cp }  = start (comment r) cp r
+note r@B.CodeRoll { B.codeInputPt = cp } = start (comment r) cp r
 
 comment :: TokenRoll -> String -> B.Ab TokenRoll
 comment r "" = Right r
 comment r cs = Right $ B.codeUpdate "" tok r where
     tok  = B.TComment cp cs
     cp   = B.codeInputPt r
+
+
+-- ----------------------  Relational section
 
 -- | Split a next token from source text.
 relation :: B.AbMap TokenRoll
@@ -207,7 +215,7 @@ interp r@B.CodeRoll { B.codeInputPt = cp } = start int cp r where
                   | otherwise        =  word cs   $ c:w
     word cs w                        =  u cs      $ B.TTextRaw cp $ rv w
 
- 
+
 -- ----------------------  Scanner
 
 type Next   a = String -> (String, a)

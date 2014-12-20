@@ -21,6 +21,7 @@ module Koshucode.Baala.Base.Token.Token
     pattern TTextKey,
     pattern TTextBar,
     pattern TTextName,
+    pattern TTextSect,
 
     -- * Term name
     TermName, TermName2, TermName3, TermName4,
@@ -126,6 +127,7 @@ pattern TTextQQ   cp w   = TText cp TextQQ   w
 pattern TTextKey  cp w   = TText cp TextKey  w
 pattern TTextBar  cp w   = TText cp TextBar  w
 pattern TTextName cp w   = TText cp TextName w
+pattern TTextSect cp     = TTextRaw cp "==="
 
 textFormTypeText :: TextForm -> String
 textFormTypeText form =
