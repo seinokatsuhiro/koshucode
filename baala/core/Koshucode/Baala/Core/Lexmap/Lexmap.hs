@@ -119,9 +119,9 @@ consLexmap findSorter gslot findRelmap = lexmap where
     dispatch rop sec trees =
         let name = B.tokenContent rop
         in case findRelmap sec name of
-             [_]  -> deriv rop sec trees
-             []   -> base name rop sec trees
-             ds   -> Msg.ambRelmap name ds
+             [src] -> deriv rop src sec trees
+             []    -> base name rop sec trees
+             ds    -> Msg.ambRelmap name ds
 
     baseOf :: C.RopName -> ConsLexmapBody
     baseOf n = base n (B.textToken n)
@@ -130,16 +130,16 @@ consLexmap findSorter gslot findRelmap = lexmap where
     base :: C.RopName -> B.Token -> ConsLexmapBody
     base name rop sec trees =
         case findSorter name of
-          Nothing     -> deriv rop sec trees
+          Nothing     -> Msg.unkRelmap name
           Just sorter -> do attr <- sorter trees
                             submap sec $ cons LexmapBase rop attr trees
 
     -- construct derived lexmap
-    deriv :: B.Token -> ConsLexmapBody
-    deriv rop sec trees =
+    deriv :: B.Token -> RelmapSource -> ConsLexmapBody
+    deriv rop src _ trees =
         do attr <- C.attrSortBranch trees
            let lx = cons LexmapDerived rop attr trees
-           tab <- table sec lx
+           tab <- table lx src
            Right (lx, tab)
 
     -- construct lexmap for nested relation reference
@@ -176,21 +176,13 @@ consLexmap findSorter gslot findRelmap = lexmap where
                                lx2           = lx { lexSubmap = sublx }
                            Right (lx2, concat tabs)
 
-    table :: Int -> Lexmap -> B.Ab LexmapLinkTable
-    table sec lx = Msg.abSlot [lx] $
-                 case findRelmap sec name of
-                   [((sec2, _), def)] -> expand sec2 lx attr def
-                   []                 -> Right []
-                   ds                 -> Msg.ambRelmap name ds
-        where
-          name  = lexRopName lx
-          attr  = lexAttr    lx
-
-    expand sec2 lx attr (form, edit) =
-        do attr2       <- C.runAttrmap edit attr
-           form2       <- C.substSlot gslot attr2 form
-           (lx2, tab)  <- lexmap sec2 form2
-           Right $ (lx, lx2) : tab
+    table :: Lexmap -> RelmapSource -> B.Ab LexmapLinkTable
+    table lx ((sec, _), (form, edit)) =
+        Msg.abSlot [lx] $ do
+          attr2       <- C.runAttrmap edit $ lexAttr lx
+          form2       <- C.substSlot gslot attr2 form
+          (lx2, tab)  <- lexmap sec form2
+          Right $ (lx, lx2) : tab
 
     nestVars :: [C.AttrTree] -> B.Ab [String]
     nestVars attr = case B.lookupBy C.isAttrNameNest attr of
