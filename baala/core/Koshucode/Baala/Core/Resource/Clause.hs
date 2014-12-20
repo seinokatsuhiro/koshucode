@@ -19,6 +19,7 @@ module Koshucode.Baala.Core.Resource.Clause
 
 import qualified Data.Generics                 as G
 import qualified Koshucode.Baala.Base          as B
+import qualified Koshucode.Baala.Core.Lexmap   as C
 import qualified Koshucode.Baala.Core.Content  as C
 
 
@@ -29,7 +30,7 @@ type ShortClause = B.Short [Clause]
 
 data Clause =
     Clause { clauseSource  :: B.TokenClause
-           , clauseSecNo   :: Int
+           , clauseSecNo   :: C.SecNo
            , clauseBody    :: ClauseBody
            } deriving (Show, G.Data, G.Typeable)
 
@@ -94,7 +95,7 @@ consPreclause = loop 0 . B.tokenClauses where
     loop n (x:xs) = let (n', cs) = consPreclause' n x
                     in cs ++ loop n' xs
 
-consPreclause' :: Int -> B.TokenClause -> (Int, [Clause])
+consPreclause' :: C.SecNo -> B.TokenClause -> (C.SecNo, [Clause])
 consPreclause' no src = dispatch $ liaison $ B.clauseTokens src where
 
     liaison :: B.Map [B.Token]
@@ -104,7 +105,7 @@ consPreclause' no src = dispatch $ liaison $ B.clauseTokens src where
                          in liaison $ tok : xs
     liaison (x : xs)   = x : liaison xs
 
-    dispatch :: [B.Token] -> (Int, [Clause])
+    dispatch :: [B.Token] -> (C.SecNo, [Clause])
     dispatch (B.TTextBar _ ('|' : k) : xs) =
         same $ frege k xs   -- Frege's judgement stroke
     dispatch (B.TTextRaw _ name : B.TTextRaw _ colon : xs)

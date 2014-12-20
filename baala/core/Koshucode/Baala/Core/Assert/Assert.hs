@@ -15,6 +15,7 @@ module Koshucode.Baala.Core.Assert.Assert
 
 import qualified Koshucode.Baala.Base           as B
 import qualified Koshucode.Baala.Core.Content   as C
+import qualified Koshucode.Baala.Core.Lexmap    as C
 import qualified Koshucode.Baala.Core.Relmap    as C
 
 
@@ -24,7 +25,7 @@ import qualified Koshucode.Baala.Core.Relmap    as C
 --   It consists of logical quality, judgement pattern, and relmap.
 --   See also 'B.Judge'
 data Assert c = Assert
-    { assSection  :: Int                 -- ^ Section number
+    { assSection  :: C.SecNo             -- ^ Section number
     , assType     :: C.AssertType        -- ^ Logical quality
     , assPattern  :: B.JudgePat          -- ^ Pattern of judgement
     , assOption   :: AssertOption        -- ^ Assert option

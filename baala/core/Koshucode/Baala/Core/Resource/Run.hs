@@ -78,7 +78,7 @@ findRelmapName derives name = find derives where
          | n == name   = def : find ds
          | otherwise   = find ds
 
-findRelmapSec :: Int -> B.Map [C.RelmapSource]
+findRelmapSec :: C.SecNo -> B.Map [C.RelmapSource]
 findRelmapSec sec = find where
     find [] = []
     find (def@((s, _), _) : ds)

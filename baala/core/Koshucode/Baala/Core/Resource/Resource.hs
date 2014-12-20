@@ -133,7 +133,7 @@ consResourceEach root source (B.Short pt shorts xs) =
             Left  _         -> ntrees2 sec n toks []
             Right (r, _, e) -> ntrees2 sec n r e
 
-      ntrees2 :: Int -> String -> [B.Token] -> [B.Token] -> B.Ab C.RelmapSource
+      ntrees2 :: C.SecNo -> String -> [B.Token] -> [B.Token] -> B.Ab C.RelmapSource
       ntrees2 sec n toks1 toks2 =
           do form    <- B.tokenTrees  toks1
              trees2  <- B.tokenTrees  toks2
@@ -168,7 +168,7 @@ consResourceEach root source (B.Short pt shorts xs) =
       unk   _ _ (C.CUnknown)  = Msg.unkClause
       unres _ _ (C.CUnres _)  = Msg.unresPrefix
 
-type Cl   a  = Int -> [B.Token] -> C.ClauseBody -> a
+type Cl   a  = C.SecNo -> [B.Token] -> C.ClauseBody -> a
 type Clab a  = Cl (B.Ab a)
 
 calcContG :: (C.CContent c) => C.Global c -> C.CalcContent c

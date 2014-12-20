@@ -17,6 +17,7 @@ module Koshucode.Baala.Core.Lexmap.Lexmap
     nestTerms,
     ConsLexmap,
     ConsLexmapBody,
+    SecNo,
     FindRelmap,
     LexmapLinkTable,
     RelmapSource, NName, NNamed,
@@ -75,17 +76,20 @@ lexMessageList Lexmap { lexRopToken = tok, lexMessage = msg }
 
 type ConsLexmap = [C.GlobalSlot] -> FindRelmap -> ConsLexmapBody
 
-type FindRelmap = Int -> C.RopName -> [RelmapSource]
+type FindRelmap = SecNo -> C.RopName -> [RelmapSource]
 
-type ConsLexmapBody = Int -> [B.TTree] -> B.Ab (Lexmap, LexmapLinkTable)
+type ConsLexmapBody = SecNo -> [B.TTree] -> B.Ab (Lexmap, LexmapLinkTable)
 
 type LexmapLinkTable = [(Lexmap, Lexmap)]
 
 -- | Source of relmap: its name, replacement, and attribute editor.
 type RelmapSource = NNamed ([B.TTree], C.Attrmap)
 
+-- | Section number.
+type SecNo = Int
+
 -- | Numbered name.
-type NName = (Int, String)
+type NName = (SecNo, String)
 
 -- | Pair which key is a numbered name.
 type NNamed a = (NName, a)
@@ -166,7 +170,7 @@ consLexmap findSorter gslot findRelmap = lexmap where
     check lx = lx
 
     -- construct lexmaps of submaps
-    submap :: Int -> Lexmap -> B.Ab (Lexmap, LexmapLinkTable)
+    submap :: SecNo -> Lexmap -> B.Ab (Lexmap, LexmapLinkTable)
     submap sec lx@Lexmap { lexAttr = attr } =
         case B.lookupBy C.isAttrNameRelmap attr of
           Nothing    -> Right (lx, [])
