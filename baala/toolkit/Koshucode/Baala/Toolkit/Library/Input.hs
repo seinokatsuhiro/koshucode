@@ -32,7 +32,7 @@ readInputs = mapM readInput
 
 readJudge :: String -> [B.Judge Type.VContent]
 readJudge src =
-    let root = C.emptyResource :: C.Resource Type.VContent
+    let root = C.resEmpty :: C.Resource Type.VContent
     in case C.readResourceText root src of
          Right sec  -> C.resJudge sec
          Left _     -> []

@@ -110,7 +110,7 @@ koshuMain global =
              bun   =  C.SourceBundle root res
              text  =  concatMap oneLiner opts
              cmd   =  prog : argv
-             root  =  C.rootResource g2
+             root  =  C.resEmpty { C.resGlobal = g2 }
              res   =  B.sourceList (has OptStdin) text files []
              g2    =  C.globalFill global
                         { C.globalProgram   = prog

@@ -32,19 +32,19 @@ koshuQ _ fullQ text =
     dispatch $ B.tokenLines (B.sourceOf text) text
     where
       dispatch src = resQ src -- relmapQ src
-      resQ = consResourceQ fullQ . {- C.consClause -} undefined
+      resQ = resIncludeQ fullQ . {- C.consClause -} undefined
       --relmapQ  = consFullRelmapQ fullQ . lx [] . tokenTrees
 
 {- Construct ExpQ of Resource
    Tokens like @name in resource context and relmap context
    are Haskell variables. -}
-consResourceQ
+resIncludeQ
     :: TH.ExpQ      -- ^ Quotation expression of 'ConsRelmap'
     -> [C.Clause]   -- ^ Materials of resource
     -> TH.ExpQ      -- ^ ExpQ of 'Resource'
-consResourceQ fullQ xs =
+resIncludeQ fullQ xs =
     [| either consError id
-         (C.consResource C.emptyResource (B.sourceOf "qq")
+         (C.resInclude C.resEmpty (B.sourceOf "qq")
                $(TH.dataToExpQ plain xs)) |]
 
 {- construction error -}

@@ -12,10 +12,8 @@ module Koshucode.Baala.Core.Resource.Resource
     addMessages,
   
     -- * Constructors
-    emptyResource,
-    rootResource,
-    consResource,
-    concatResource,
+    resEmpty,
+    resInclude,
   
     -- * Process
     -- $Process
@@ -52,42 +50,24 @@ addMessages :: [String] -> B.Map (Resource c)
 addMessages msg res = res { resMessage = msg ++ resMessage res }
 
 -- | Resource that has no contents.
-emptyResource :: Resource c
-emptyResource = Resource C.global [] [] [] [] [] [] B.sourceZero [] 0
-
--- | Construct root resource from global parameter.
-rootResource :: C.Global c -> Resource c
-rootResource g = emptyResource { resGlobal = g }
-
--- | Concatenate resources into united resource.
-concatResource :: Resource c -> [Resource c] -> Resource c
-concatResource root rs =
-    root { resImport      = []
-         , resExport      = cat resExport
-         , resSlot        = cat resSlot
-         , resAssert      = cat resAssert
-         , resRelmap      = cat resRelmap
-         , resJudge       = cat resJudge
-         , resLastSecNo   = maximum $ map resLastSecNo rs
-         } where cat = (`concatMap` rs)
+resEmpty :: Resource c
+resEmpty = Resource C.global [] [] [] [] [] [] B.sourceZero [] 0
 
 
 -- ----------------------  Construction
 
 -- | Second step of constructing 'Resource'.
-consResource
+resInclude
     :: forall c. (C.CContent c)
-    => Resource c          -- ^ Root resource
-    -> B.Source            -- ^ Source name
+    => Resource c          -- ^ Base resource
+    -> B.Source            -- ^ Source of resource
     -> [C.ShortClause]     -- ^ Output of 'C.consClause'
-    -> B.Ab (Resource c)   -- ^ Result resource
-consResource root source xss =
-    do rs <- consResourceEach root source `mapM` xss
-       Right $ concatResource root rs
+    -> B.Ab (Resource c)   -- ^ Included resource
+resInclude res src = B.foldM (resIncludeEach src) res
 
-consResourceEach :: forall c. (C.CContent c) =>
-    Resource c -> B.Source -> C.ShortClause -> B.Ab (Resource c)
-consResourceEach root source (B.Short pt shorts xs) =
+resIncludeEach :: forall c. (C.CContent c) =>
+    B.Source -> Resource c -> C.ShortClause -> B.Ab (Resource c)
+resIncludeEach source res (B.Short pt shorts xs) =
     do _        <- forM isCUnknown unk
        _        <- forM isCUnres   unres
        imports  <- forM isCImport  impt
@@ -98,16 +78,17 @@ consResourceEach root source (B.Short pt shorts xs) =
 
        checkShort shorts
 
-       Right $ root
-           { resImport     = imports
-           , resExport     = for isCExport expt
-           , resSlot       = slots
-           , resRelmap     = relmaps
-           , resAssert     = [B.Short pt shorts asserts]
-           , resJudge      = judges
+       Right $ res
+           { resImport     = resImport  << imports
+           , resExport     = resExport  << for isCExport expt
+           , resSlot       = resSlot    << slots
+           , resRelmap     = resRelmap  << relmaps
+           , resAssert     = resAssert  << [B.Short pt shorts asserts]
+           , resJudge      = resJudge   << judges
            , resSource     = source
            , resLastSecNo  = lastSecNo xs }
     where
+      f << ys    = ys ++ f res
       for  isX f = pass     f  `map`  filter (isX . C.clauseBody) xs
       forM isX f = pass (ab f) `mapM` filter (isX . C.clauseBody) xs
 
@@ -122,8 +103,8 @@ consResourceEach root source (B.Short pt shorts xs) =
       expt _ _ (C.CExport n) = n
 
       impt :: Clab (Resource c)
-      impt _ _ (C.CImport _ (Nothing)) = Right emptyResource
-      impt _ _ (C.CImport _ (Just _))  = consResource root B.sourceZero []
+      impt _ _ (C.CImport _ (Nothing)) = Right resEmpty
+      impt _ _ (C.CImport _ (Just _))  = resInclude res B.sourceZero []
 
       slot :: Clab B.NamedTrees
       slot _ _ (C.CSlot n toks) = ntrees (n, toks)
@@ -149,7 +130,7 @@ consResourceEach root source (B.Short pt shorts xs) =
       judge _ _ (C.CJudge q p toks) =
           C.treesToJudge calc q p =<< B.tokenTrees toks
 
-      calc = calcContG $ resGlobal root
+      calc = calcContG $ resGlobal res
 
       assert :: Clab (C.Assert c)
       assert sec src (C.CAssert typ pat opt toks) =
