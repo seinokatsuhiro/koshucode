@@ -86,11 +86,11 @@ clauseTypeText (Clause _ _ body) =
 --                ]]
 
 -- | First step of constructing 'Resource'.
-consClause :: [B.TokenLine] -> [ShortClause]
-consClause = shortClause . consPreclause
+consClause :: C.SecNo -> [B.TokenLine] -> [ShortClause]
+consClause sec = shortClause . consPreclause sec
 
-consPreclause :: [B.TokenLine] -> [Clause]
-consPreclause = loop 0 . B.tokenClauses where
+consPreclause :: C.SecNo -> [B.TokenLine] -> [Clause]
+consPreclause sec = loop sec . B.tokenClauses where
     loop _ [] = []
     loop n (x:xs) = let (n', cs) = consPreclause' n x
                     in cs ++ loop n' xs

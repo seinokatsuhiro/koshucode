@@ -30,19 +30,19 @@ import qualified Koshucode.Baala.Core.Resource.Clause  as C
 import qualified Koshucode.Baala.Core.Message          as Msg
 
 
-
 -- ----------------------  Data type
 
 data Resource c = Resource {
-      resGlobal   :: C.Global c          -- ^ Global parameter
-    , resImport   :: [Resource c]        -- ^ Importing resources
-    , resExport   :: [String]            -- ^ Exporting names
-    , resSlot     :: [B.NamedTrees]      -- ^ Global slots
-    , resRelmap   :: [C.RelmapSource]    -- ^ Source of relmaps
-    , resAssert   :: [C.ShortAssert c]   -- ^ Assertions of relmaps
-    , resJudge    :: [B.Judge c]         -- ^ Affirmative or denial judgements
-    , resSource   :: B.Source            -- ^ Source name
-    , resMessage  :: [String]            -- ^ Collection of messages
+      resGlobal    :: C.Global c          -- ^ Global parameter
+    , resImport    :: [Resource c]        -- ^ Importing resources
+    , resExport    :: [String]            -- ^ Exporting names
+    , resSlot      :: [B.NamedTrees]      -- ^ Global slots
+    , resRelmap    :: [C.RelmapSource]    -- ^ Source of relmaps
+    , resAssert    :: [C.ShortAssert c]   -- ^ Assertions of relmaps
+    , resJudge     :: [B.Judge c]         -- ^ Affirmative or denial judgements
+    , resSource    :: B.Source            -- ^ Source name
+    , resMessage   :: [String]            -- ^ Collection of messages
+    , resLastSecNo :: C.SecNo             -- ^ Last section number
     } deriving (Show)
 
 addMessage :: String -> B.Map (Resource c)
@@ -53,7 +53,7 @@ addMessages msg res = res { resMessage = msg ++ resMessage res }
 
 -- | Resource that has no contents.
 emptyResource :: Resource c
-emptyResource = Resource C.global [] [] [] [] [] [] B.sourceZero []
+emptyResource = Resource C.global [] [] [] [] [] [] B.sourceZero [] 0
 
 -- | Construct root resource from global parameter.
 rootResource :: C.Global c -> Resource c
@@ -61,15 +61,15 @@ rootResource g = emptyResource { resGlobal = g }
 
 -- | Concatenate resources into united resource.
 concatResource :: Resource c -> [Resource c] -> Resource c
-concatResource root ss =
-    root { resImport  =  []
-         , resExport  =  c resExport
-         , resSlot    =  c resSlot
-         , resAssert  =  c resAssert
-         , resRelmap  =  c resRelmap
-         , resJudge   =  c resJudge
-         } where c = (`concatMap` ss)
-
+concatResource root rs =
+    root { resImport      = []
+         , resExport      = cat resExport
+         , resSlot        = cat resSlot
+         , resAssert      = cat resAssert
+         , resRelmap      = cat resRelmap
+         , resJudge       = cat resJudge
+         , resLastSecNo   = maximum $ map resLastSecNo rs
+         } where cat = (`concatMap` rs)
 
 
 -- ----------------------  Construction
@@ -99,19 +99,24 @@ consResourceEach root source (B.Short pt shorts xs) =
        checkShort shorts
 
        Right $ root
-           { resImport    = imports
-           , resExport    = for isCExport expt
-           , resSlot      = slots
-           , resRelmap    = relmaps
-           , resAssert    = [B.Short pt shorts asserts]
-           , resJudge     = judges
-           , resSource    = source }
+           { resImport     = imports
+           , resExport     = for isCExport expt
+           , resSlot       = slots
+           , resRelmap     = relmaps
+           , resAssert     = [B.Short pt shorts asserts]
+           , resJudge      = judges
+           , resSource     = source
+           , resLastSecNo  = lastSecNo xs }
     where
       for  isX f = pass     f  `map`  filter (isX . C.clauseBody) xs
       forM isX f = pass (ab f) `mapM` filter (isX . C.clauseBody) xs
 
       pass f (C.Clause src sec body) = f sec (B.front $ B.clauseTokens src) body
       ab f sec toks body = Msg.abClause toks $ f sec toks body
+
+      lastSecNo :: [C.Clause] -> Int
+      lastSecNo []   = 0
+      lastSecNo xs2  = C.clauseSecNo $ last xs2
 
       expt :: Cl String
       expt _ _ (C.CExport n) = n
@@ -207,7 +212,6 @@ isCUnknown _                   = False
 
 isCUnres (C.CUnres _)          = True
 isCUnres _                     = False
-
 
 
 -- ----------------------

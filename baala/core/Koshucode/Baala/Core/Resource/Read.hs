@@ -40,8 +40,8 @@ readResource root res = dispatch $ B.sourceName res where
 
 readResourceCode :: (C.CContent c)
     => C.Resource c -> B.Source -> String -> B.Ab (C.Resource c)
-readResourceCode root res =
-    C.consResource root res . C.consClause B.<=< B.tokenLines res
+readResourceCode root src =
+    C.consResource root src . C.consClause 0 B.<=< B.tokenLines src
 
 -- | Read resource from text.
 readResourceText :: (C.CContent c) => C.Resource c -> String -> B.Ab (C.Resource c)
