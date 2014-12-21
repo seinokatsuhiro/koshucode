@@ -17,7 +17,6 @@ import qualified System.Directory                       as Dir
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Core.Content           as C
 import qualified Koshucode.Baala.Core.Resource.Resource as C
-import qualified Koshucode.Baala.Core.Resource.Clause   as C
 import qualified Koshucode.Baala.Core.Message           as Msg
 
 
@@ -36,17 +35,11 @@ readResource res src = dispatch $ B.sourceName src where
     dispatch (B.SourceStdin)      =  ioRead =<< getContents
     dispatch (B.SourceURL _)      =  error "Not implemented read from URL"
 
-    ioRead = return . readResourceCode res src
+    ioRead = return . C.resInclude res src
 
 -- | Read resource from text.
 readResourceText :: (C.CContent c) => C.Resource c -> String -> B.Ab (C.Resource c)
-readResourceText res code = readResourceCode res (B.sourceOf code) code
-
-readResourceCode :: (C.CContent c)
-    => C.Resource c -> B.Source -> String -> B.Ab (C.Resource c)
-readResourceCode res src =
-    C.resInclude res src . C.consClause sec B.<=< B.tokenLines src where
-        sec = C.resLastSecNo res + 1
+readResourceText res code = C.resInclude res (B.sourceOf code) code
 
 
 -- ----------------------  Bundle

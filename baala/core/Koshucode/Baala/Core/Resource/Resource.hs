@@ -56,14 +56,21 @@ resEmpty = Resource C.global [] [] [] [] [] [] B.sourceZero [] 0
 
 -- ----------------------  Construction
 
--- | Second step of constructing 'Resource'.
-resInclude
-    :: forall c. (C.CContent c)
+-- | Include source code into resource.
+resInclude :: forall c. (C.CContent c)
     => Resource c          -- ^ Base resource
-    -> B.Source            -- ^ Source of resource
-    -> [C.ShortClause]     -- ^ Output of 'C.consClause'
+    -> B.Source            -- ^ Source name
+    -> String              -- ^ Source code
     -> B.Ab (Resource c)   -- ^ Included resource
-resInclude res src = B.foldM (resIncludeEach src) res
+resInclude res src code =
+    do ls <- B.tokenLines src code
+       let include  = resIncludeEach src
+           sec      = resLastSecNo res + 1
+           shorts   = C.consClause sec ls
+       B.foldM include res shorts
+
+type Cl   a  = C.SecNo -> [B.Token] -> C.ClauseBody -> a
+type Clab a  = Cl (B.Ab a)
 
 resIncludeEach :: forall c. (C.CContent c) =>
     B.Source -> Resource c -> C.ShortClause -> B.Ab (Resource c)
@@ -153,9 +160,6 @@ resIncludeEach source res (B.Short pt shorts xs) =
 
       unk   _ _ (C.CUnknown)  = Msg.unkClause
       unres _ _ (C.CUnres _)  = Msg.unresPrefix
-
-type Cl   a  = C.SecNo -> [B.Token] -> C.ClauseBody -> a
-type Clab a  = Cl (B.Ab a)
 
 calcContG :: (C.CContent c) => C.Global c -> C.CalcContent c
 calcContG = C.calcContent . C.globalCopset
