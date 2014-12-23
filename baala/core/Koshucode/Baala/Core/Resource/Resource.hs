@@ -9,12 +9,14 @@ module Koshucode.Baala.Core.Resource.Resource
     Resource (..), coxBuildG,
     addMessage, addMessages,
 
-    -- * Hook
-    Assert, Global, Relmap, ShortAssert,
-
     -- * Constructors
     resEmpty, resInclude,
   
+    -- * Hook
+    Assert, ConsRelmap, Global,
+    RelkitGlobal, Relmap, RelmapLinkTable,
+    Rop, RopCons, RopUse, ShortAssert,
+
     -- * Process
     -- $Process
   ) where
@@ -29,11 +31,6 @@ import qualified Koshucode.Baala.Core.Message          as Msg
 
 
 -- ----------------------  Data type
-
-type Assert c        = C.Assert'      (Resource c) c
-type Global c        = C.Global'      (Resource c) c
-type Relmap c        = C.Relmap'      (Resource c) c
-type ShortAssert c   = C.ShortAssert' (Resource c) c
 
 data Resource c = Resource {
       resGlobal    :: Global c           -- ^ Global parameter
@@ -202,6 +199,20 @@ isCUnknown _                   = False
 
 isCUnres (C.CUnres _)          = True
 isCUnres _                     = False
+
+
+-- ----------------------  Hook
+
+type Assert c           = C.Assert'          (Resource c) c
+type ConsRelmap c       = C.ConsRelmap'      (Resource c) c
+type Global c           = C.Global'          (Resource c) c
+type Relmap c           = C.Relmap'          (Resource c) c
+type RelkitGlobal c     = C.RelkitGlobal'    (Resource c) c
+type RelmapLinkTable c  = C.RelmapLinkTable' (Resource c) c
+type Rop c              = C.Rop'             (Resource c) c
+type RopCons c          = C.RopCons'         (Resource c) c
+type RopUse c           = C.RopUse'          (Resource c) c
+type ShortAssert c      = C.ShortAssert'     (Resource c) c
 
 
 -- ----------------------

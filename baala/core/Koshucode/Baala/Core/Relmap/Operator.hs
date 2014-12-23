@@ -6,11 +6,11 @@ module Koshucode.Baala.Core.Relmap.Operator
   ( -- * Rop
     Global',
     RopUsage,
-    Rop (..),
+    Rop' (..),
   
     -- * RopUse
-    RopCons,
-    RopUse (..),
+    RopCons',
+    RopUse' (..),
     ropCopset,
   
     -- * Relmap
@@ -20,7 +20,7 @@ module Koshucode.Baala.Core.Relmap.Operator
   
     -- * Relkit
     RelkitFlow,
-    RelkitGlobal,
+    RelkitGlobal',
     RelkitBinary,
     RelkitConfl,
   
@@ -36,44 +36,44 @@ import qualified Koshucode.Baala.Core.Relmap.Relkit     as C
 -- ----------------------  Rop
 
 -- | Global parameters
-type Global' h c = C.Global'' (Rop h) c
+type Global' h c = C.Global'' (Rop' h) c
 
 type RopUsage = String
 
 -- | Implementation of relmap operator
-data Rop h c = Rop
+data Rop' h c = Rop
     { ropName     :: C.RopName      -- ^ Operator name
     , ropGroup    :: String         -- ^ Operator group
     , ropSorter   :: C.AttrSort     -- ^ Attribute sorter
-    , ropCons     :: RopCons h c    -- ^ Constructor of operator
+    , ropCons     :: RopCons' h c   -- ^ Constructor of operator
     , ropUsage    :: RopUsage       -- ^ Usage of operator
     }
 
-instance Show (Rop h c) where
+instance Show (Rop' h c) where
     show Rop { ropName = name, ropGroup = group }
         = "Rop " ++ group ++ "/" ++ name
 
-instance B.Name (Rop h c) where
+instance B.Name (Rop' h c) where
     name = ropName
 
 
 -- ----------------------  RopUse
 
 -- | Constructor of relmap operator
-type RopCons h c = RopUse h c -> B.Ab (Relmap' h c)
+type RopCons' h c = RopUse' h c -> B.Ab (Relmap' h c)
 
 -- | Use of relmap operator
-data RopUse h c = RopUse
+data RopUse' h c = RopUse
     { ropGlobal    :: Global' h c
     , ropLexmap    :: C.Lexmap       -- ^ Syntactic data of operator use
     , ropSubrelmap :: [Relmap' h c]   -- ^ Subrelmaps
     } deriving (Show)
 
-instance B.CodePtr (RopUse h c) where
+instance B.CodePtr (RopUse' h c) where
     codePts = B.codePts . ropLexmap
 
 -- | Get operator set from 'RopUse'.
-ropCopset :: RopUse h c -> C.CopSet c
+ropCopset :: RopUse' h c -> C.CopSet c
 ropCopset = C.globalCopset . ropGlobal
 
 
@@ -84,7 +84,7 @@ ropCopset = C.globalCopset . ropGlobal
 type RelkitFlow c   = Maybe B.Head -> B.Ab (C.Relkit c)
 
 -- | Make 'C.Relkit' from globals and input heading.
-type RelkitGlobal h c = Global' h c -> RelkitFlow c
+type RelkitGlobal' h c = Global' h c -> RelkitFlow c
 
 -- | Make 'C.Relkit' from one subrelmap and input heading.
 type RelkitBinary c = C.Relkit c -> RelkitFlow c
@@ -102,7 +102,7 @@ data Relmap' h c
     | RelmapConst    C.Lexmap (B.Rel c)
       -- ^ Constant relation
 
-    | RelmapGlobal   C.Lexmap (RelkitGlobal h c)
+    | RelmapGlobal   C.Lexmap (RelkitGlobal' h c)
       -- ^ Relmap that maps relations to a relation with globals
     | RelmapCalc     C.Lexmap (RelkitConfl c) [Relmap' h c]
       -- ^ Relmap that maps relations to a relation
