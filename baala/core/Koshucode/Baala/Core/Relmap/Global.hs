@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Core.Relmap.Global
   ( -- * Global
-    Global' (..),
+    Global'' (..),
     globalCommandLine,
     globalFill,
     globalRops,
@@ -28,7 +28,7 @@ import qualified Koshucode.Baala.Core.Relmap.Relkit     as C
 
 -- ----------------------  Global
 
-data Global' rop c = Global
+data Global'' rop c = Global
       { globalVersion   :: D.Version
       , globalOpset     :: OpSet' rop c
       , globalProgram   :: String
@@ -39,31 +39,31 @@ data Global' rop c = Global
       , globalSelect    :: C.RelSelect c
       }
 
-instance Show (Global' opset c) where
+instance Show (Global'' opset c) where
     show Global { globalVersion = ver }
         = "Global (" ++ show ver ++ ")"
 
-globalCommandLine :: Global' rop c -> [String]
+globalCommandLine :: Global'' rop c -> [String]
 globalCommandLine Global { globalProgram = prog, globalArgs = args }
     = prog : args
 
-globalFill :: (C.CContent c) => B.Map (Global' rop c)
+globalFill :: (C.CContent c) => B.Map (Global'' rop c)
 globalFill g = g
 
-globalRops   :: Global' rop c -> [rop c]
+globalRops   :: Global'' rop c -> [rop c]
 globalRops   = opsetRopList . globalOpset
 
-globalCops   :: Global' rop c -> [C.Cop c]
+globalCops   :: Global'' rop c -> [C.Cop c]
 globalCops   = C.copsetCopList . opsetCop . globalOpset
 
-globalInfix  :: Global' rop c -> [B.Named B.InfixHeight]
+globalInfix  :: Global'' rop c -> [B.Named B.InfixHeight]
 globalInfix  = C.copsetInfixList . opsetCop . globalOpset
 
-globalCopset :: Global' rop c -> C.CopSet c
+globalCopset :: Global'' rop c -> C.CopSet c
 globalCopset = opsetCop . globalOpset
 
 -- | Empty global parameters.
-global :: Global' rop c
+global :: Global'' rop c
 global = Global
          { globalVersion   =  D.Version [] []
          , globalOpset     =  opset

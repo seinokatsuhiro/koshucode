@@ -13,6 +13,7 @@ module Koshucode.Baala.Core.Resource.Resource
 
     -- * Hook
     Assert,
+    Global,
     ShortAssert,
 
     -- * Constructors
@@ -35,19 +36,20 @@ import qualified Koshucode.Baala.Core.Message          as Msg
 -- ----------------------  Data type
 
 type Assert c        = C.Assert'      (Resource c) c
+type Global c        = C.Global'      (Resource c) c
 type ShortAssert c   = C.ShortAssert' (Resource c) c
 
 data Resource c = Resource {
-      resGlobal    :: C.Global (Resource c) c   -- ^ Global parameter
-    , resImport    :: [Resource c]              -- ^ Importing resources
-    , resExport    :: [String]                  -- ^ Exporting names
-    , resSlot      :: [B.NamedTrees]            -- ^ Global slots
-    , resRelmap    :: [C.RelmapSource]          -- ^ Source of relmaps
-    , resAssert    :: [ShortAssert c]           -- ^ Assertions of relmaps
-    , resJudge     :: [B.Judge c]               -- ^ Affirmative or denial judgements
-    , resSource    :: B.Source                  -- ^ Source name
-    , resMessage   :: [String]                  -- ^ Collection of messages
-    , resLastSecNo :: C.SecNo                   -- ^ Last section number
+      resGlobal    :: Global c           -- ^ Global parameter
+    , resImport    :: [Resource c]       -- ^ Importing resources
+    , resExport    :: [String]           -- ^ Exporting names
+    , resSlot      :: [B.NamedTrees]     -- ^ Global slots
+    , resRelmap    :: [C.RelmapSource]   -- ^ Source of relmaps
+    , resAssert    :: [ShortAssert c]    -- ^ Assertions of relmaps
+    , resJudge     :: [B.Judge c]        -- ^ Affirmative or denial judgements
+    , resSource    :: B.Source           -- ^ Source name
+    , resMessage   :: [String]           -- ^ Collection of messages
+    , resLastSecNo :: C.SecNo            -- ^ Last section number
     } deriving (Show)
 
 addMessage :: String -> B.Map (Resource c)
@@ -168,10 +170,10 @@ resIncludeEach source res (B.Short pt shorts xs) =
       unk   _ _ (C.CUnknown)  = Msg.unkClause
       unres _ _ (C.CUnres _)  = Msg.unresPrefix
 
-calcContG :: (C.CContent c) => C.Global h c -> C.CalcContent c
+calcContG :: (C.CContent c) => Global c -> C.CalcContent c
 calcContG = C.calcContent . C.globalCopset
 
-coxBuildG :: (C.CContent c) => C.Global h c -> B.TTreeToAb (C.Cox c)
+coxBuildG :: (C.CContent c) => Global c -> B.TTreeToAb (C.Cox c)
 coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)
 
 

@@ -14,7 +14,7 @@ import qualified Koshucode.Baala.Core.Assert             as C
 import qualified Koshucode.Baala.Core.Resource.Resource  as C
 import qualified Koshucode.Baala.Core.Message            as Msg
 
-runResource :: (C.CContent c) => C.Global (C.Resource c) c -> C.Resource c -> B.Ab (B.OutputResult c)
+runResource :: (C.CContent c) => C.Global c -> C.Resource c -> B.Ab (B.OutputResult c)
 runResource global res =
     do s2 <- assembleRelmap res
        let js = C.resJudge s2
@@ -24,7 +24,7 @@ runResource global res =
          jsV -> Right ([B.Short [] [] [B.OutputJudge jsV]], [])
 
 runResourceBody :: forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c) =>
-    C.Global (C.Resource c) c -> C.Resource c -> B.Ab (B.OutputResult c)
+    C.Global c -> C.Resource c -> B.Ab (B.OutputResult c)
 runResourceBody global C.Resource { C.resAssert = ass, C.resMessage = msg } =
     do js1 <- run $ C.assertViolated ass
        js2 <- run $ C.assertNormal   ass

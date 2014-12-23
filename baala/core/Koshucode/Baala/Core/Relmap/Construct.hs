@@ -30,7 +30,7 @@ import qualified Koshucode.Baala.Core.Message          as Msg
 -- ----------------------  Generic relmap
 
 -- | Make a constructor pair of lexmap and relmap.
-relmapCons :: C.Global h c -> (C.ConsLexmap, ConsRelmap h c)
+relmapCons :: C.Global' h c -> (C.ConsLexmap, ConsRelmap h c)
 relmapCons g = (consL, consR) where
     consL         = C.consLexmap findSorter
     consR         = consRelmap findRop g
@@ -40,7 +40,7 @@ relmapCons g = (consL, consR) where
 -- | Second step of constructing relmap, make relmap from lexmap.
 type ConsRelmap h c = C.Lexmap -> B.Ab (C.Relmap h c)
 
-consRelmap :: (C.RopName -> Maybe (C.Rop h c)) -> C.Global h c -> ConsRelmap h c
+consRelmap :: (C.RopName -> Maybe (C.Rop h c)) -> C.Global' h c -> ConsRelmap h c
 consRelmap findRop g = relmap where
     relmap lx =
         case C.lexType lx of

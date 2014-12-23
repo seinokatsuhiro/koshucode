@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Core.Relmap.Operator
   ( -- * Rop
-    Global,
+    Global',
     RopUsage,
     Rop (..),
   
@@ -36,7 +36,7 @@ import qualified Koshucode.Baala.Core.Relmap.Relkit     as C
 -- ----------------------  Rop
 
 -- | Global parameters
-type Global h c = C.Global' (Rop h) c
+type Global' h c = C.Global'' (Rop h) c
 
 type RopUsage = String
 
@@ -64,7 +64,7 @@ type RopCons h c = RopUse h c -> B.Ab (Relmap h c)
 
 -- | Use of relmap operator
 data RopUse h c = RopUse
-    { ropGlobal    :: Global h c
+    { ropGlobal    :: Global' h c
     , ropLexmap    :: C.Lexmap       -- ^ Syntactic data of operator use
     , ropSubrelmap :: [Relmap h c]   -- ^ Subrelmaps
     } deriving (Show)
@@ -84,7 +84,7 @@ ropCopset = C.globalCopset . ropGlobal
 type RelkitFlow c   = Maybe B.Head -> B.Ab (C.Relkit c)
 
 -- | Make 'C.Relkit' from globals and input heading.
-type RelkitGlobal h c = Global h c -> RelkitFlow c
+type RelkitGlobal h c = Global' h c -> RelkitFlow c
 
 -- | Make 'C.Relkit' from one subrelmap and input heading.
 type RelkitBinary c = C.Relkit c -> RelkitFlow c
