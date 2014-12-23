@@ -36,44 +36,44 @@ import qualified Koshucode.Baala.Core.Relmap.Relkit     as C
 -- ----------------------  Rop
 
 -- | Global parameters
-type Global c = C.Global' Rop c
+type Global h c = C.Global' (Rop h) c
 
 type RopUsage = String
 
 -- | Implementation of relmap operator
-data Rop c = Rop
+data Rop h c = Rop
     { ropName     :: C.RopName      -- ^ Operator name
     , ropGroup    :: String         -- ^ Operator group
     , ropSorter   :: C.AttrSort     -- ^ Attribute sorter
-    , ropCons     :: RopCons c      -- ^ Constructor of operator
+    , ropCons     :: RopCons h c    -- ^ Constructor of operator
     , ropUsage    :: RopUsage       -- ^ Usage of operator
     }
 
-instance Show (Rop c) where
+instance Show (Rop h c) where
     show Rop { ropName = name, ropGroup = group }
         = "Rop " ++ group ++ "/" ++ name
 
-instance B.Name (Rop c) where
+instance B.Name (Rop h c) where
     name = ropName
 
 
 -- ----------------------  RopUse
 
 -- | Constructor of relmap operator
-type RopCons c = RopUse c -> B.Ab (Relmap c)
+type RopCons h c = RopUse h c -> B.Ab (Relmap h c)
 
 -- | Use of relmap operator
-data RopUse c = RopUse
-    { ropGlobal    :: Global c
-    , ropLexmap    :: C.Lexmap     -- ^ Syntactic data of operator use
-    , ropSubrelmap :: [Relmap c]   -- ^ Subrelmaps
+data RopUse h c = RopUse
+    { ropGlobal    :: Global h c
+    , ropLexmap    :: C.Lexmap       -- ^ Syntactic data of operator use
+    , ropSubrelmap :: [Relmap h c]   -- ^ Subrelmaps
     } deriving (Show)
 
-instance B.CodePtr (RopUse c) where
+instance B.CodePtr (RopUse h c) where
     codePts = B.codePts . ropLexmap
 
 -- | Get operator set from 'RopUse'.
-ropCopset :: RopUse c -> C.CopSet c
+ropCopset :: RopUse h c -> C.CopSet c
 ropCopset = C.globalCopset . ropGlobal
 
 
@@ -84,7 +84,7 @@ ropCopset = C.globalCopset . ropGlobal
 type RelkitFlow c   = Maybe B.Head -> B.Ab (C.Relkit c)
 
 -- | Make 'C.Relkit' from globals and input heading.
-type RelkitGlobal c = Global c -> RelkitFlow c
+type RelkitGlobal h c = Global h c -> RelkitFlow c
 
 -- | Make 'C.Relkit' from one subrelmap and input heading.
 type RelkitBinary c = C.Relkit c -> RelkitFlow c
@@ -96,31 +96,31 @@ type RelkitConfl c  = [(C.Relkit c)] -> RelkitFlow c
 -- ----------------------  Relmap
 
 -- | Generic relmap.
-data Relmap c
+data Relmap h c
     = RelmapSource   C.Lexmap B.JudgePat [B.TermName]
       -- ^ Retrieve a relation from a dataset
     | RelmapConst    C.Lexmap (B.Rel c)
       -- ^ Constant relation
 
-    | RelmapGlobal   C.Lexmap (RelkitGlobal c)
+    | RelmapGlobal   C.Lexmap (RelkitGlobal h c)
       -- ^ Relmap that maps relations to a relation with globals
-    | RelmapCalc     C.Lexmap (RelkitConfl c) [Relmap c]
+    | RelmapCalc     C.Lexmap (RelkitConfl c) [Relmap h c]
       -- ^ Relmap that maps relations to a relation
 
-    | RelmapCopy     C.Lexmap String (Relmap c)
+    | RelmapCopy     C.Lexmap String (Relmap h c)
       -- ^ Relmap for environment of input relation
-    | RelmapNest     C.Lexmap [B.Terminal String] (Relmap c)
+    | RelmapNest     C.Lexmap [B.Terminal String] (Relmap h c)
       -- ^ Relmap for environment of nested relations
     | RelmapLink     C.Lexmap
       -- ^ Relmap reference
 
-    | RelmapAppend   (Relmap c) (Relmap c)
+    | RelmapAppend   (Relmap h c) (Relmap h c)
       -- ^ Connect two relmaps
 
-instance Show (Relmap c) where
+instance Show (Relmap h c) where
     show = showRelmap
 
-showRelmap :: Relmap c -> String
+showRelmap :: Relmap h c -> String
 showRelmap r = sh r where
     sh (RelmapSource _ p xs)  = "RelmapSource " ++ show p ++ " " ++ show xs
     sh (RelmapConst  _ _)     = "RelmapConst "  ++ show (B.name r) ++ " _"
@@ -136,18 +136,18 @@ showRelmap r = sh r where
     joinSubs = concatMap sub
     sub r2 = " (" ++ sh r2 ++ ")"
 
-instance B.Monoid (Relmap c) where
+instance B.Monoid (Relmap h c) where
     mempty  = relmapId
     mappend = RelmapAppend
 
-instance B.Name (Relmap c) where
+instance B.Name (Relmap h c) where
     name (RelmapSource _ _ _)       = "source"
     name (RelmapConst  lx _)        = C.lexRopName lx
     name (RelmapCalc   lx _ _)      = C.lexRopName lx
     name (RelmapAppend _ _)         = "append"
     name _ = undefined
 
-instance B.Write (Relmap c) where
+instance B.Write (Relmap h c) where
     write sh (RelmapSource lx _ _)  = B.write sh lx
     write sh (RelmapConst  lx _)    = B.write sh lx
 
@@ -159,27 +159,27 @@ instance B.Write (Relmap c) where
     write sh (RelmapLink   lx)      = B.write sh lx
     write sh (RelmapAppend r1 r2)   = B.docHang (B.write sh r1) 2 (docRelmapAppend sh r2)
 
-docRelmapAppend :: B.StringMap -> Relmap c -> B.Doc
+docRelmapAppend :: B.StringMap -> Relmap h c -> B.Doc
 docRelmapAppend sh = B.writeV sh . map pipe . relmapAppendList where
     pipe m = B.write sh "|" B.<+> B.write sh m
 
 -- | Expand 'RelmapAppend' to list of 'Relmap'
-relmapAppendList :: Relmap c -> [Relmap c]
+relmapAppendList :: Relmap h c -> [Relmap h c]
 relmapAppendList = expand where
     expand (RelmapAppend r1 r2) = expand r1 ++ expand r2
     expand r = [r]
 
-instance B.CodePtr (Relmap c) where
+instance B.CodePtr (Relmap h c) where
     codePts = concatMap B.codePts . relmapLexList
 
-instance Ord (Relmap c) where
+instance Ord (Relmap h c) where
     r1 `compare` r2 = relmapLexList r1 `compare` relmapLexList r2
 
-instance Eq (Relmap c) where
+instance Eq (Relmap h c) where
     r1 == r2  =  compare r1 r2 == EQ
 
 -- | Identity relmap.
-relmapId :: Relmap c
+relmapId :: Relmap h c
 relmapId = RelmapCalc lexId (const $ Right . C.relkitId) []
 
 lexId :: C.Lexmap
@@ -187,7 +187,7 @@ lexId = C.Lexmap C.LexmapBase name attr [] [] where
     name = B.textToken "id"
     attr = [(C.attrNameAttr, [])]
 
-relmapLexList :: Relmap c -> [C.Lexmap]
+relmapLexList :: Relmap h c -> [C.Lexmap]
 relmapLexList = collect where
     collect (RelmapSource  lx _ _)  = [lx]
     collect (RelmapConst   lx _)    = [lx]

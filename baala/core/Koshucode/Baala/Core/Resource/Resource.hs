@@ -31,16 +31,16 @@ import qualified Koshucode.Baala.Core.Message          as Msg
 -- ----------------------  Data type
 
 data Resource c = Resource {
-      resGlobal    :: C.Global c          -- ^ Global parameter
-    , resImport    :: [Resource c]        -- ^ Importing resources
-    , resExport    :: [String]            -- ^ Exporting names
-    , resSlot      :: [B.NamedTrees]      -- ^ Global slots
-    , resRelmap    :: [C.RelmapSource]    -- ^ Source of relmaps
-    , resAssert    :: [C.ShortAssert c]   -- ^ Assertions of relmaps
-    , resJudge     :: [B.Judge c]         -- ^ Affirmative or denial judgements
-    , resSource    :: B.Source            -- ^ Source name
-    , resMessage   :: [String]            -- ^ Collection of messages
-    , resLastSecNo :: C.SecNo             -- ^ Last section number
+      resGlobal    :: C.Global (Resource c) c         -- ^ Global parameter
+    , resImport    :: [Resource c]                    -- ^ Importing resources
+    , resExport    :: [String]                        -- ^ Exporting names
+    , resSlot      :: [B.NamedTrees]                  -- ^ Global slots
+    , resRelmap    :: [C.RelmapSource]                -- ^ Source of relmaps
+    , resAssert    :: [C.ShortAssert (Resource c) c]  -- ^ Assertions of relmaps
+    , resJudge     :: [B.Judge c]                     -- ^ Affirmative or denial judgements
+    , resSource    :: B.Source                        -- ^ Source name
+    , resMessage   :: [String]                        -- ^ Collection of messages
+    , resLastSecNo :: C.SecNo                         -- ^ Last section number
     } deriving (Show)
 
 addMessage :: String -> B.Map (Resource c)
@@ -139,7 +139,7 @@ resIncludeEach source res (B.Short pt shorts xs) =
 
       calc = calcContG $ resGlobal res
 
-      assert :: Clab (C.Assert c)
+      assert :: Clab (C.Assert h c)
       assert sec src (C.CAssert typ pat opt toks) =
           do optTrees   <- B.tokenTrees opt
              rmapTrees  <- B.tokenTrees toks
@@ -161,10 +161,10 @@ resIncludeEach source res (B.Short pt shorts xs) =
       unk   _ _ (C.CUnknown)  = Msg.unkClause
       unres _ _ (C.CUnres _)  = Msg.unresPrefix
 
-calcContG :: (C.CContent c) => C.Global c -> C.CalcContent c
+calcContG :: (C.CContent c) => C.Global h c -> C.CalcContent c
 calcContG = C.calcContent . C.globalCopset
 
-coxBuildG :: (C.CContent c) => C.Global c -> B.TTreeToAb (C.Cox c)
+coxBuildG :: (C.CContent c) => C.Global h c -> B.TTreeToAb (C.Cox c)
 coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)
 
 

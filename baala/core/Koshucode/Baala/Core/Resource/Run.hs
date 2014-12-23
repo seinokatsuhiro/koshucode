@@ -14,7 +14,7 @@ import qualified Koshucode.Baala.Core.Assert            as C
 import qualified Koshucode.Baala.Core.Resource.Resource as C
 import qualified Koshucode.Baala.Core.Message           as Msg
 
-runResource :: (C.CContent c) => C.Global c -> C.Resource c -> B.Ab (B.OutputResult c)
+runResource :: (C.CContent c) => C.Global (C.Resource c) c -> C.Resource c -> B.Ab (B.OutputResult c)
 runResource global res =
     do s2 <- assembleRelmap res
        let js = C.resJudge s2
@@ -24,13 +24,13 @@ runResource global res =
          jsV -> Right ([B.Short [] [] [B.OutputJudge jsV]], [])
 
 runResourceBody :: forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c) =>
-    C.Global c -> C.Resource c -> B.Ab (B.OutputResult c)
+    C.Global (C.Resource c) c -> C.Resource c -> B.Ab (B.OutputResult c)
 runResourceBody global C.Resource { C.resAssert = ass, C.resMessage = msg } =
     do js1 <- run $ C.assertViolated ass
        js2 <- run $ C.assertNormal   ass
        Right (B.shortTrim js1, msgChunk : B.shortTrim js2)
     where
-      run :: [C.ShortAssert c] -> B.Ab [B.OutputChunks c]
+      run :: [C.ShortAssert (C.Resource c) c] -> B.Ab [B.OutputChunks c]
       run = mapM $ C.runAssertJudges global
 
       msgChunk :: B.OutputChunks c
@@ -52,7 +52,7 @@ assembleRelmap res@C.Resource { C.resGlobal  = g
     where
       (consLexmap, consRelmap) = C.relmapCons g
 
-      assemble :: C.Assert c -> B.Ab (C.Assert c, [String])
+      assemble :: C.Assert (C.Resource c) c -> B.Ab (C.Assert (C.Resource c) c, [String])
       assemble ass@C.Assert { C.assSection = sec } =
           Msg.abAssert [ass] $ do
             trees      <- C.substSlot slots [] $ C.assTree ass

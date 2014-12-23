@@ -45,8 +45,8 @@ relkitLink kits = linkKit where
            _                             ->  core
 
 -- todo: optimization
-relkitRun :: forall c. (Ord c, C.CRel c)
-    => C.Global c -> [B.Named [[c]]] -> C.RelkitBody c -> B.AbMap [[c]]
+relkitRun :: forall h. forall c. (Ord c, C.CRel c)
+    => C.Global h c -> [B.Named [[c]]] -> C.RelkitBody c -> B.AbMap [[c]]
 relkitRun global rs (B.Sourced toks core) bo1 =
     Msg.abRun toks $
      case core of
