@@ -43,7 +43,15 @@ data Resource c = Resource {
     , resSource    :: B.Source           -- ^ Source name
     , resMessage   :: [String]           -- ^ Collection of messages
     , resLastSecNo :: C.SecNo            -- ^ Last section number
-    } deriving (Show)
+    , resSelect    :: C.RelSelect c
+    }
+
+instance Show (Resource c) where
+    show Resource { resSource = src }
+        = "Resources (" ++ show src ++ ")"
+
+instance B.SelectRel Resource where
+    selectRel Resource { resSelect = sel } = sel
 
 addMessage :: String -> B.Map (Resource c)
 addMessage msg res = res { resMessage = msg : resMessage res }
@@ -53,7 +61,19 @@ addMessages msg res = res { resMessage = msg ++ resMessage res }
 
 -- | Resource that has no contents.
 resEmpty :: Resource c
-resEmpty = Resource C.global [] [] [] [] [] [] B.sourceZero [] 0
+resEmpty = Resource
+           { resGlobal     = C.global
+           , resImport     = []
+           , resExport     = []
+           , resSlot       = []
+           , resRelmap     = []
+           , resAssert     = []
+           , resJudge      = []
+           , resSource     = B.sourceZero
+           , resMessage    = []
+           , resLastSecNo  = 0
+           , resSelect     = \_ _ -> B.reldee
+           }
 
 
 -- ----------------------  Construction
@@ -87,7 +107,7 @@ resIncludeEach source res (B.Short pt shorts xs) =
 
        checkShort shorts
 
-       Right $ res
+       Right $ up $ res
            { resImport     = resImport  << imports
            , resExport     = resExport  << for isCExport expt
            , resSlot       = resSlot    << slots
@@ -107,6 +127,11 @@ resIncludeEach source res (B.Short pt shorts xs) =
       lastSecNo :: [C.Clause] -> Int
       lastSecNo []   = 0
       lastSecNo xs2  = C.clauseSecNo $ last xs2
+
+      up res2@Resource { resJudge = js }
+          = res2 { resSelect = C.selectRelation $ C.dataset js }
+
+      -- Type of clauses
 
       expt :: Cl String
       expt _ _ (C.CExport n) = n
@@ -203,17 +228,17 @@ isCUnres _                     = False
 
 -- ----------------------  Hook
 
-type Assert c           = C.Assert'          (Resource c) c
-type ConsRelmap c       = C.ConsRelmap'      (Resource c) c
-type Global c           = C.Global'          (Resource c) c
-type Relmap c           = C.Relmap'          (Resource c) c
-type RelkitGlobal c     = C.RelkitGlobal'    (Resource c) c
-type RelkitHook c       = C.RelkitHook'      (Resource c) c
-type RelmapLinkTable c  = C.RelmapLinkTable' (Resource c) c
-type Rop c              = C.Rop'             (Resource c) c
-type RopCons c          = C.RopCons'         (Resource c) c
-type RopUse c           = C.RopUse'          (Resource c) c
-type ShortAssert c      = C.ShortAssert'     (Resource c) c
+type Assert c           = C.Assert'          Resource c
+type ConsRelmap c       = C.ConsRelmap'      Resource c
+type Global c           = C.Global'          Resource c
+type Relmap c           = C.Relmap'          Resource c
+type RelkitGlobal c     = C.RelkitGlobal'    Resource c
+type RelkitHook c       = C.RelkitHook'      Resource c
+type RelmapLinkTable c  = C.RelmapLinkTable' Resource c
+type Rop c              = C.Rop'             Resource c
+type RopCons c          = C.RopCons'         Resource c
+type RopUse c           = C.RopUse'          Resource c
+type ShortAssert c      = C.ShortAssert'     Resource c
 
 
 -- ----------------------

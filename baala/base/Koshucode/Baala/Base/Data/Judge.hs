@@ -9,6 +9,7 @@ module Koshucode.Baala.Base.Data.Judge
     Judge (..),
     JudgeOf,
     JudgePat,
+    SelectRel (..),
     judgePat,
     judgeTerms,
     judgeTermsMap,
@@ -85,6 +86,9 @@ instance Functor Judge where
 
 instance (Ord c, B.Write c) => B.Write (Judge c) where
     write = judgeDoc 
+
+class SelectRel r where
+    selectRel :: r c -> JudgePat -> [B.TermName] -> B.Rel c
 
 judgeDoc :: (B.Write c) => B.StringMap -> Judge c -> B.Doc
 judgeDoc shorts j =

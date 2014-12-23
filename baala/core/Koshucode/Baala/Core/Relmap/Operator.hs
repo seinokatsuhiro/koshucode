@@ -88,7 +88,7 @@ type RelkitFlow c   = Maybe B.Head -> B.Ab (C.Relkit c)
 type RelkitGlobal' h c = Global' h c -> RelkitFlow c
 
 -- | Make 'C.Relkit' from hook data and input heading.
-type RelkitHook' h c = h -> RelkitFlow c
+type RelkitHook' h c = h c -> RelkitFlow c
 
 -- | Make 'C.Relkit' from one subrelmap and input heading.
 type RelkitBinary c = C.Relkit c -> RelkitFlow c
