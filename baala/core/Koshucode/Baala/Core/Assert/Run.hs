@@ -21,22 +21,22 @@ import qualified Koshucode.Baala.Core.Message         as Msg
 
 -- | Calculate assertion list.
 runAssertJudges :: (Ord c, B.Write c, C.CRel c, C.CEmpty c)
-  => C.Global' h c -> C.ShortAssert' h c -> B.Ab (B.OutputChunks c)
-runAssertJudges global a@(B.Short pt sh _) =
-    do chunks <- runAssertDataset global a ds
+  => C.Global' h c -> h -> C.ShortAssert' h c -> B.Ab (B.OutputChunks c)
+runAssertJudges global hook a@(B.Short pt sh _) =
+    do chunks <- runAssertDataset global hook a ds
        Right $ B.Short pt sh chunks
     where ds = C.dataset $ C.globalJudges global
 
 -- | Calculate assertion list.
 runAssertDataset :: forall h. forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c)
-  => C.Global' h c -> C.ShortAssert' h c -> C.Dataset c -> B.Ab [B.OutputChunk c]
-runAssertDataset global (B.Short _ sh asserts) dataset =
+  => C.Global' h c -> h -> C.ShortAssert' h c -> C.Dataset c -> B.Ab [B.OutputChunk c]
+runAssertDataset global hook (B.Short _ sh asserts) dataset =
     Right . concat =<< mapM each asserts
     where
       each (C.Assert _ _ _ _ _ _ Nothing _) = B.bug "runAssertDataset"
       each a@(C.Assert _ typ pat opt _ _ (Just relmap) libs) =
           Msg.abAssert [a] $ do
-            r1 <- runRelmapDataset global dataset libs relmap B.reldee
+            r1 <- runRelmapDataset global hook dataset libs relmap B.reldee
             let judgeOf showEmpty = assert showEmpty typ
             optionProcess sh judgeOf pat opt r1
 
@@ -51,19 +51,20 @@ runAssertDataset global (B.Short _ sh asserts) dataset =
 runRelmapDataset
     :: (Ord c, C.CRel c, C.CEmpty c)
     => C.Global' h c
+    -> h
     -> C.Dataset c          -- ^ Judges read from @source@ operator
     -> C.RelmapLinkTable' h c
     -> C.Relmap' h c        -- ^ Mapping from 'Rel' to 'Rel'
     -> B.Rel c              -- ^ Input relation
     -> B.Ab (B.Rel c)       -- ^ Output relation
-runRelmapDataset global dataset = runRelmapViaRelkit g2 where
+runRelmapDataset global hook dataset = runRelmapViaRelkit g2 hook where
     g2 = global { C.globalSelect = C.selectRelation dataset }
 
 runRelmapViaRelkit :: (Ord c, C.CRel c)
-  => C.Global' h c -> C.RelmapLinkTable' h c
+  => C.Global' h c -> h -> C.RelmapLinkTable' h c
   -> C.Relmap' h c -> B.AbMap (B.Rel c)
-runRelmapViaRelkit g2 links r (B.Rel he1 bo1) =
-    do (kdef, C.Relkit he2' f2') <- C.relmapSpecialize g2 links [] (Just he1) r
+runRelmapViaRelkit g2 hook links r (B.Rel he1 bo1) =
+    do (kdef, C.Relkit he2' f2') <- C.relmapSpecialize g2 hook links [] (Just he1) r
        let C.Relkit mhe2 f2 = C.relkitLink kdef $ C.Relkit he2' f2'
        he2 <- just "unknown relhead" mhe2
        bo2 <- C.relkitRun g2 [] f2 bo1

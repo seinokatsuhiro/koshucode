@@ -25,13 +25,13 @@ runResource global res =
 
 runResourceBody :: forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c) =>
     C.Global c -> C.Resource c -> B.Ab (B.OutputResult c)
-runResourceBody global C.Resource { C.resAssert = ass, C.resMessage = msg } =
+runResourceBody global res@C.Resource { C.resAssert = ass, C.resMessage = msg } =
     do js1 <- run $ C.assertViolated ass
        js2 <- run $ C.assertNormal   ass
        Right (B.shortTrim js1, msgChunk : B.shortTrim js2)
     where
       run :: [C.ShortAssert c] -> B.Ab [B.OutputChunks c]
-      run = mapM $ C.runAssertJudges global
+      run = mapM $ C.runAssertJudges global res
 
       msgChunk :: B.OutputChunks c
       msgChunk | null msg  = B.Short [] [] []

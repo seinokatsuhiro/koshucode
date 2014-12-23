@@ -16,9 +16,9 @@ import qualified Koshucode.Baala.Core.Message         as Msg
 
 type RelmapLinkTable' h c = [(C.Lexmap, C.Relmap' h c)]
 
-relmapSpecialize :: forall h. forall c. C.Global' h c -> RelmapLinkTable' h c
+relmapSpecialize :: forall h. forall c. C.Global' h c -> h -> RelmapLinkTable' h c
   -> [C.RelkitDef c] -> Maybe B.Head -> C.Relmap' h c -> B.Ab ([C.RelkitDef c], C.Relkit c)
-relmapSpecialize global links = spec [] [] where
+relmapSpecialize global hook links = spec [] [] where
     spec :: [(String, B.Head)]   -- name of nested relation, and its heading
          -> [C.RelkitKey]        -- information for detecting cyclic relmap
          -> [C.RelkitDef c]      -- list of known specialized relkits
@@ -44,6 +44,11 @@ relmapSpecialize global links = spec [] [] where
               C.RelmapGlobal lx makeKit ->
                   post lx $ do
                      kit <- makeKit global he1
+                     Right (kdef, kit)
+
+              C.RelmapHook lx makeKit ->
+                  post lx $ do
+                     kit <- makeKit hook he1
                      Right (kdef, kit)
 
               C.RelmapLink lx
