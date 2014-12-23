@@ -14,16 +14,16 @@ import qualified Koshucode.Baala.Core.Relmap.Operator as C
 import qualified Koshucode.Baala.Core.Relmap.Relkit   as C
 import qualified Koshucode.Baala.Core.Message         as Msg
 
-type RelmapLinkTable h c = [(C.Lexmap, C.Relmap h c)]
+type RelmapLinkTable h c = [(C.Lexmap, C.Relmap' h c)]
 
 relmapSpecialize :: forall h. forall c. C.Global' h c -> RelmapLinkTable h c
-  -> [C.RelkitDef c] -> Maybe B.Head -> C.Relmap h c -> B.Ab ([C.RelkitDef c], C.Relkit c)
+  -> [C.RelkitDef c] -> Maybe B.Head -> C.Relmap' h c -> B.Ab ([C.RelkitDef c], C.Relkit c)
 relmapSpecialize global links = spec [] [] where
     spec :: [(String, B.Head)]   -- name of nested relation, and its heading
          -> [C.RelkitKey]        -- information for detecting cyclic relmap
          -> [C.RelkitDef c]      -- list of known specialized relkits
          -> Maybe B.Head         -- input head feeding into generic relmap
-         -> C.Relmap h c         -- generic relmap to specialize
+         -> C.Relmap' h c        -- generic relmap to specialize
          -> B.Ab ([C.RelkitDef c], C.Relkit c)
     spec nest keys kdef he1 rmap = s where
         s = case rmap of
@@ -81,14 +81,14 @@ relmapSpecialize global links = spec [] [] where
                Right (kdef2, C.relkitSetSource lx kit)
 
         -- specialize subrelmaps to subrelkits
-        list :: [C.RelkitDef c] -> [C.Relmap h c] -> B.Ab ([C.RelkitDef c], [C.Relkit c])
+        list :: [C.RelkitDef c] -> [C.Relmap' h c] -> B.Ab ([C.RelkitDef c], [C.Relkit c])
         list kdef1 [] = Right (kdef1, [])
         list kdef1 (rmap1 : rmaps) =
             do (kdef2, kit)  <- spec nest keys kdef1 he1 rmap1
                (kdef3, kits) <- list kdef2 rmaps
                Right (kdef3, kit : kits)
 
-        link :: String -> C.Relmap h c -> C.RelkitKey -> B.Ab ([C.RelkitDef c], C.Relkit c)
+        link :: String -> C.Relmap' h c -> C.RelkitKey -> B.Ab ([C.RelkitDef c], C.Relkit c)
         link n rmap1 key1
             | key1 `elem` keys = Right (kdef, cyclic)
             | otherwise = case lookup key1 kdef of

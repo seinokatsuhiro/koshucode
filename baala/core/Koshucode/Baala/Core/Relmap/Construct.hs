@@ -38,7 +38,7 @@ relmapCons g = (consL, consR) where
     findRop       = C.opsetFindRop $ C.globalOpset g
 
 -- | Second step of constructing relmap, make relmap from lexmap.
-type ConsRelmap h c = C.Lexmap -> B.Ab (C.Relmap h c)
+type ConsRelmap h c = C.Lexmap -> B.Ab (C.Relmap' h c)
 
 consRelmap :: (C.RopName -> Maybe (C.Rop h c)) -> C.Global' h c -> ConsRelmap h c
 consRelmap findRop g = relmap where
@@ -57,64 +57,64 @@ consRelmap findRop g = relmap where
 -- ----------------------  Construct
 
 -- | Retrieve relation from dataset.
-relmapSource :: C.RopUse h c -> B.JudgePat -> [B.TermName] -> (C.Relmap h c)
+relmapSource :: C.RopUse h c -> B.JudgePat -> [B.TermName] -> (C.Relmap' h c)
 relmapSource = C.RelmapSource . C.ropLexmap
 
 -- | Make a constant relmap.
-relmapConst :: C.RopUse h c -> B.Rel c -> C.Relmap h c
+relmapConst :: C.RopUse h c -> B.Rel c -> C.Relmap' h c
 relmapConst = C.RelmapConst . C.ropLexmap
 
 -- | Make a flow relmap.
 --   Flow relmaps take no subrelmaps.
-relmapFlow :: C.RopUse h c -> C.RelkitFlow c -> C.Relmap h c
+relmapFlow :: C.RopUse h c -> C.RelkitFlow c -> C.Relmap' h c
 relmapFlow use relkit = relmapConfl use (const relkit) []
 
 -- | Make a global relmap.
 --   Global relmaps are flow relmaps with globals.
-relmapGlobal :: C.RopUse h c -> C.RelkitGlobal h c -> C.Relmap h c
+relmapGlobal :: C.RopUse h c -> C.RelkitGlobal h c -> C.Relmap' h c
 relmapGlobal = C.RelmapGlobal . C.ropLexmap
 
 -- | Make a binary relmap.
 --   Binary relmaps take one subrelmap.
-relmapBinary :: C.RopUse h c -> C.RelkitBinary c -> C.Relmap h c -> C.Relmap h c
+relmapBinary :: C.RopUse h c -> C.RelkitBinary c -> C.Relmap' h c -> C.Relmap' h c
 relmapBinary use kit rmap = relmapConfl use (kit . head) [rmap]
 
 -- | Make a confluent relmap.
 --   Confluent relmaps take multiple subrelmaps.
-relmapConfl :: C.RopUse h c -> C.RelkitConfl c -> [C.Relmap h c] -> C.Relmap h c
+relmapConfl :: C.RopUse h c -> C.RelkitConfl c -> [C.Relmap' h c] -> C.Relmap' h c
 relmapConfl = C.RelmapCalc . C.ropLexmap
 
-relmapCopy :: C.RopUse h c -> String -> B.Map (C.Relmap h c)
+relmapCopy :: C.RopUse h c -> String -> B.Map (C.Relmap' h c)
 relmapCopy = C.RelmapCopy . C.ropLexmap
 
-relmapNest :: C.RopUse h c -> [B.Terminal String] -> B.Map (C.Relmap h c)
+relmapNest :: C.RopUse h c -> [B.Terminal String] -> B.Map (C.Relmap' h c)
 relmapNest = C.RelmapNest . C.ropLexmap
 
-relmapNestVar :: C.RopUse h c -> String -> C.Relmap h c
+relmapNestVar :: C.RopUse h c -> String -> C.Relmap' h c
 relmapNestVar u@C.RopUse { C.ropLexmap = lx } n = relmapLink u2 where
     u2   = u  { C.ropLexmap = lx2 }
     lx2  = lx { C.lexType     = C.LexmapNest
               , C.lexRopToken = B.textToken n }
 
-relmapLink :: C.RopUse h c -> C.Relmap h c
+relmapLink :: C.RopUse h c -> C.Relmap' h c
 relmapLink = C.RelmapLink . C.ropLexmap
 
 
 -- ----------------------  Select
 
 -- | List of 'C.RelmapSource'
-relmapSourceList :: C.Relmap h c -> [C.Relmap h c]
+relmapSourceList :: C.Relmap' h c -> [C.Relmap' h c]
 relmapSourceList = relmapList f where
     f rmap@(C.RelmapSource _ _ _) = [rmap]
     f _ = []
 
 -- | List of name in 'C.RelmapLink'
-relmapNameList :: C.Relmap h c -> [String]
+relmapNameList :: C.Relmap' h c -> [String]
 relmapNameList = relmapList f where
     f (C.RelmapLink lx) = [C.lexRopName lx]
     f _ = []
 
-relmapList :: B.Map (C.Relmap h c -> [a])
+relmapList :: B.Map (C.Relmap' h c -> [a])
 relmapList f = loop where
     loop (C.RelmapAppend rmap1 rmap2) = loop rmap1 ++ loop rmap2
     loop (C.RelmapCalc _ _ rmaps)     = concatMap loop rmaps

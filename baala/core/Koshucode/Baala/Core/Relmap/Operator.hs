@@ -14,7 +14,7 @@ module Koshucode.Baala.Core.Relmap.Operator
     ropCopset,
   
     -- * Relmap
-    Relmap (..),
+    Relmap' (..),
     relmapId,
     relmapLexList,
   
@@ -60,13 +60,13 @@ instance B.Name (Rop h c) where
 -- ----------------------  RopUse
 
 -- | Constructor of relmap operator
-type RopCons h c = RopUse h c -> B.Ab (Relmap h c)
+type RopCons h c = RopUse h c -> B.Ab (Relmap' h c)
 
 -- | Use of relmap operator
 data RopUse h c = RopUse
     { ropGlobal    :: Global' h c
     , ropLexmap    :: C.Lexmap       -- ^ Syntactic data of operator use
-    , ropSubrelmap :: [Relmap h c]   -- ^ Subrelmaps
+    , ropSubrelmap :: [Relmap' h c]   -- ^ Subrelmaps
     } deriving (Show)
 
 instance B.CodePtr (RopUse h c) where
@@ -96,7 +96,7 @@ type RelkitConfl c  = [(C.Relkit c)] -> RelkitFlow c
 -- ----------------------  Relmap
 
 -- | Generic relmap.
-data Relmap h c
+data Relmap' h c
     = RelmapSource   C.Lexmap B.JudgePat [B.TermName]
       -- ^ Retrieve a relation from a dataset
     | RelmapConst    C.Lexmap (B.Rel c)
@@ -104,23 +104,23 @@ data Relmap h c
 
     | RelmapGlobal   C.Lexmap (RelkitGlobal h c)
       -- ^ Relmap that maps relations to a relation with globals
-    | RelmapCalc     C.Lexmap (RelkitConfl c) [Relmap h c]
+    | RelmapCalc     C.Lexmap (RelkitConfl c) [Relmap' h c]
       -- ^ Relmap that maps relations to a relation
 
-    | RelmapCopy     C.Lexmap String (Relmap h c)
+    | RelmapCopy     C.Lexmap String (Relmap' h c)
       -- ^ Relmap for environment of input relation
-    | RelmapNest     C.Lexmap [B.Terminal String] (Relmap h c)
+    | RelmapNest     C.Lexmap [B.Terminal String] (Relmap' h c)
       -- ^ Relmap for environment of nested relations
     | RelmapLink     C.Lexmap
       -- ^ Relmap reference
 
-    | RelmapAppend   (Relmap h c) (Relmap h c)
+    | RelmapAppend   (Relmap' h c) (Relmap' h c)
       -- ^ Connect two relmaps
 
-instance Show (Relmap h c) where
+instance Show (Relmap' h c) where
     show = showRelmap
 
-showRelmap :: Relmap h c -> String
+showRelmap :: Relmap' h c -> String
 showRelmap r = sh r where
     sh (RelmapSource _ p xs)  = "RelmapSource " ++ show p ++ " " ++ show xs
     sh (RelmapConst  _ _)     = "RelmapConst "  ++ show (B.name r) ++ " _"
@@ -136,18 +136,18 @@ showRelmap r = sh r where
     joinSubs = concatMap sub
     sub r2 = " (" ++ sh r2 ++ ")"
 
-instance B.Monoid (Relmap h c) where
+instance B.Monoid (Relmap' h c) where
     mempty  = relmapId
     mappend = RelmapAppend
 
-instance B.Name (Relmap h c) where
+instance B.Name (Relmap' h c) where
     name (RelmapSource _ _ _)       = "source"
     name (RelmapConst  lx _)        = C.lexRopName lx
     name (RelmapCalc   lx _ _)      = C.lexRopName lx
     name (RelmapAppend _ _)         = "append"
     name _ = undefined
 
-instance B.Write (Relmap h c) where
+instance B.Write (Relmap' h c) where
     write sh (RelmapSource lx _ _)  = B.write sh lx
     write sh (RelmapConst  lx _)    = B.write sh lx
 
@@ -159,27 +159,27 @@ instance B.Write (Relmap h c) where
     write sh (RelmapLink   lx)      = B.write sh lx
     write sh (RelmapAppend r1 r2)   = B.docHang (B.write sh r1) 2 (docRelmapAppend sh r2)
 
-docRelmapAppend :: B.StringMap -> Relmap h c -> B.Doc
+docRelmapAppend :: B.StringMap -> Relmap' h c -> B.Doc
 docRelmapAppend sh = B.writeV sh . map pipe . relmapAppendList where
     pipe m = B.write sh "|" B.<+> B.write sh m
 
 -- | Expand 'RelmapAppend' to list of 'Relmap'
-relmapAppendList :: Relmap h c -> [Relmap h c]
+relmapAppendList :: Relmap' h c -> [Relmap' h c]
 relmapAppendList = expand where
     expand (RelmapAppend r1 r2) = expand r1 ++ expand r2
     expand r = [r]
 
-instance B.CodePtr (Relmap h c) where
+instance B.CodePtr (Relmap' h c) where
     codePts = concatMap B.codePts . relmapLexList
 
-instance Ord (Relmap h c) where
+instance Ord (Relmap' h c) where
     r1 `compare` r2 = relmapLexList r1 `compare` relmapLexList r2
 
-instance Eq (Relmap h c) where
+instance Eq (Relmap' h c) where
     r1 == r2  =  compare r1 r2 == EQ
 
 -- | Identity relmap.
-relmapId :: Relmap h c
+relmapId :: Relmap' h c
 relmapId = RelmapCalc lexId (const $ Right . C.relkitId) []
 
 lexId :: C.Lexmap
@@ -187,7 +187,7 @@ lexId = C.Lexmap C.LexmapBase name attr [] [] where
     name = B.textToken "id"
     attr = [(C.attrNameAttr, [])]
 
-relmapLexList :: Relmap h c -> [C.Lexmap]
+relmapLexList :: Relmap' h c -> [C.Lexmap]
 relmapLexList = collect where
     collect (RelmapSource  lx _ _)  = [lx]
     collect (RelmapConst   lx _)    = [lx]

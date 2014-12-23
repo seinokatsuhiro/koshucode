@@ -25,13 +25,13 @@ import qualified Koshucode.Baala.Core.Relmap    as C
 --   It consists of logical quality, judgement pattern, and relmap.
 --   See also 'B.Judge'
 data Assert' h c = Assert
-    { assSection  :: C.SecNo               -- ^ Section number
-    , assType     :: C.AssertType          -- ^ Logical quality
-    , assPattern  :: B.JudgePat            -- ^ Pattern of judgement
-    , assOption   :: AssertOption          -- ^ Assert option
-    , assToken    :: [B.Token]             -- ^ Source token list
-    , assTree     :: [B.TTree]             -- ^ Token relmap
-    , assRelmap   :: Maybe (C.Relmap h c)  -- ^ Relmap
+    { assSection  :: C.SecNo                -- ^ Section number
+    , assType     :: C.AssertType           -- ^ Logical quality
+    , assPattern  :: B.JudgePat             -- ^ Pattern of judgement
+    , assOption   :: AssertOption           -- ^ Assert option
+    , assToken    :: [B.Token]              -- ^ Source token list
+    , assTree     :: [B.TTree]              -- ^ Token relmap
+    , assRelmap   :: Maybe (C.Relmap' h c)  -- ^ Relmap
     , assLinks    :: C.RelmapLinkTable h c
     } deriving (Show)
 

@@ -6,19 +6,14 @@
 module Koshucode.Baala.Core.Resource.Resource
   (
     -- * Data type
-    Resource (..),
-    coxBuildG,
-    addMessage,
-    addMessages,
+    Resource (..), coxBuildG,
+    addMessage, addMessages,
 
     -- * Hook
-    Assert,
-    Global,
-    ShortAssert,
+    Assert, Global, Relmap, ShortAssert,
 
     -- * Constructors
-    resEmpty,
-    resInclude,
+    resEmpty, resInclude,
   
     -- * Process
     -- $Process
@@ -37,6 +32,7 @@ import qualified Koshucode.Baala.Core.Message          as Msg
 
 type Assert c        = C.Assert'      (Resource c) c
 type Global c        = C.Global'      (Resource c) c
+type Relmap c        = C.Relmap'      (Resource c) c
 type ShortAssert c   = C.ShortAssert' (Resource c) c
 
 data Resource c = Resource {
