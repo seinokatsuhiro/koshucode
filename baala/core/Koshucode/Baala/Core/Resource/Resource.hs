@@ -129,7 +129,7 @@ resIncludeEach source res (B.Short pt shorts xs) =
       lastSecNo xs2  = C.clauseSecNo $ last xs2
 
       up res2@Resource { resJudge = js }
-          = res2 { resSelect = C.selectRelation $ C.dataset js }
+          = res2 { resSelect = C.datasetSelect $ C.dataset js }
 
       -- Type of clauses
 

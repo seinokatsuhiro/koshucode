@@ -12,7 +12,6 @@ import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Core.Content         as C
 import qualified Koshucode.Baala.Core.Relmap          as C
 import qualified Koshucode.Baala.Core.Assert.Assert   as C
-import qualified Koshucode.Baala.Core.Assert.Dataset  as C
 import qualified Koshucode.Baala.Core.Assert.RelTable as C
 import qualified Koshucode.Baala.Core.Message         as Msg
 
@@ -23,20 +22,19 @@ import qualified Koshucode.Baala.Core.Message         as Msg
 runAssertJudges :: (Ord c, B.Write c, C.CRel c, C.CEmpty c, B.SelectRel h)
   => C.Global' h c -> h c -> C.ShortAssert' h c -> B.Ab (B.OutputChunks c)
 runAssertJudges global hook a@(B.Short pt sh _) =
-    do chunks <- runAssertDataset global hook a ds
+    do chunks <- runAssertDataset global hook a
        Right $ B.Short pt sh chunks
-    where ds = C.dataset $ C.globalJudges global
 
 -- | Calculate assertion list.
 runAssertDataset :: forall h. forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c, B.SelectRel h)
-  => C.Global' h c -> h c -> C.ShortAssert' h c -> C.Dataset c -> B.Ab [B.OutputChunk c]
-runAssertDataset global hook (B.Short _ sh asserts) dataset =
+  => C.Global' h c -> h c -> C.ShortAssert' h c -> B.Ab [B.OutputChunk c]
+runAssertDataset global hook (B.Short _ sh asserts) =
     Right . concat =<< mapM each asserts
     where
       each (C.Assert _ _ _ _ _ _ Nothing _) = B.bug "runAssertDataset"
       each a@(C.Assert _ typ pat opt _ _ (Just relmap) libs) =
           Msg.abAssert [a] $ do
-            r1 <- runRelmapDataset global hook dataset libs relmap B.reldee
+            r1 <- runRelmapViaRelkit global hook libs relmap B.reldee
             let judgeOf showEmpty = assert showEmpty typ
             optionProcess sh judgeOf pat opt r1
 
@@ -46,19 +44,6 @@ runAssertDataset global hook (B.Short _ sh asserts) dataset =
 
       omitEmpty :: (C.CEmpty c) => B.Map [B.Named c]
       omitEmpty =  B.omit (C.isEmpty . snd)
-
--- | Calculate 'Relmap' for 'Rel'.
-runRelmapDataset
-    :: (Ord c, C.CRel c, C.CEmpty c, B.SelectRel h)
-    => C.Global' h c
-    -> h c
-    -> C.Dataset c          -- ^ Judges read from @source@ operator
-    -> C.RelmapLinkTable' h c
-    -> C.Relmap' h c        -- ^ Mapping from 'Rel' to 'Rel'
-    -> B.Rel c              -- ^ Input relation
-    -> B.Ab (B.Rel c)       -- ^ Output relation
-runRelmapDataset global hook dataset = runRelmapViaRelkit g2 hook where
-    g2 = global { C.globalSelect = C.selectRelation dataset }
 
 runRelmapViaRelkit :: (Ord c, C.CRel c, B.SelectRel h)
   => C.Global' h c -> h c -> C.RelmapLinkTable' h c

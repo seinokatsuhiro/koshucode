@@ -181,7 +181,7 @@ putElems bun =
 --     output (Assert _ s r) = output2 s r
 --     output2 k m = outputSign k : outputTerms k m
 --     outputSign k = affirm "OUTPUT-SIGN" [("/sign", k)]
---     outputTerms k m = outputHead k $ runRelmap emptyDataset m reldee
+--     outputTerms k m = outputHead k $ runRelmap datasetEmpty m reldee
 --     outputHead k (Rel h _) = map (outputTerm k) (headTerms h)
 --     outputTerm k t = affirm "OUTPUT-TERM" [("/sign", k), ("/term", name t)]
 

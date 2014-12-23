@@ -8,15 +8,15 @@
 
 module Koshucode.Baala.Core.Assert.Dataset
   ( Dataset,
-    emptyDataset,
+    datasetEmpty,
     dataset,
-    addJudges,
-    selectRelation,
+    datasetAdd,
+    datasetSelect,
   ) where
 
-import qualified Data.Map   as Map
-import qualified Data.Maybe as Maybe
-import qualified Koshucode.Baala.Base as B
+import qualified Data.Map                     as Map
+import qualified Data.Maybe                   as Maybe
+import qualified Koshucode.Baala.Base         as B
 import qualified Koshucode.Baala.Core.Content as C
 import qualified Koshucode.Baala.Core.Relmap  as C
 
@@ -25,16 +25,16 @@ import qualified Koshucode.Baala.Core.Relmap  as C
 data Dataset c = Dataset (Map.Map B.JudgePat [[B.Named c]])
 
 -- | Dataset that has no judges.
-emptyDataset :: Dataset c
-emptyDataset = Dataset Map.empty
+datasetEmpty :: Dataset c
+datasetEmpty = Dataset Map.empty
 
 -- | Gather judges into a dataset.
 dataset :: [B.Judge c] -> Dataset c
-dataset js = addJudges js emptyDataset
+dataset js = datasetAdd js datasetEmpty
 
 -- | Add judges to dataset.
-addJudges :: [B.Judge c] -> Dataset c -> Dataset c
-addJudges js ds1 = foldr addJudge ds1 js
+datasetAdd :: [B.Judge c] -> Dataset c -> Dataset c
+datasetAdd js ds1 = foldr addJudge ds1 js
 
 -- | Add a judge to dataset.
 addJudge :: B.Judge c -> Dataset c -> Dataset c
@@ -45,11 +45,11 @@ addJudge _ _ = undefined
 
 -- | Select relation from dataset.
 --   If a giving term is not in judges, 'CEmpty' sign is used.
-selectRelation
+datasetSelect
     :: (Ord c, C.CEmpty c)
     => Dataset c       -- ^ Dataset
     -> C.RelSelect c   -- ^ Relation selector
-selectRelation (Dataset m) sign ns = B.Rel h1 b1 where
+datasetSelect (Dataset m) sign ns = B.Rel h1 b1 where
     h1 = B.headFrom ns
     b1 = case Map.lookup sign m of
       Just args -> B.unique $ map (subarg ns) args

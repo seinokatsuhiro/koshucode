@@ -23,7 +23,6 @@ import qualified Data.Version                           as D
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Core.Content           as C
 import qualified Koshucode.Baala.Core.Lexmap            as C
-import qualified Koshucode.Baala.Core.Relmap.Relkit     as C
 
 
 -- ----------------------  Global
@@ -36,7 +35,6 @@ data Global'' rop c = Global
       , globalTime      :: B.Time
       , globalSources   :: [B.Source]
       , globalJudges    :: [B.Judge c]
-      , globalSelect    :: C.RelSelect c
       }
 
 instance Show (Global'' opset c) where
@@ -71,8 +69,7 @@ global = Global
          , globalArgs      =  []
          , globalTime      =  B.timeFromMjd 0
          , globalSources   =  []
-         , globalJudges    =  []
-         , globalSelect    =  \_ _ -> B.reldee }
+         , globalJudges    =  [] }
 
 
 -- ----------------------  Operator set
