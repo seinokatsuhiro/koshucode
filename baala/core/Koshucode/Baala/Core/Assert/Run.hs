@@ -21,7 +21,7 @@ import qualified Koshucode.Baala.Core.Message         as Msg
 
 -- | Calculate assertion list.
 runAssertJudges :: (Ord c, B.Write c, C.CRel c, C.CEmpty c)
-  => C.Global h c -> C.ShortAssert h c -> B.Ab (B.OutputChunks c)
+  => C.Global h c -> C.ShortAssert' h c -> B.Ab (B.OutputChunks c)
 runAssertJudges global a@(B.Short pt sh _) =
     do chunks <- runAssertDataset global a ds
        Right $ B.Short pt sh chunks
@@ -29,7 +29,7 @@ runAssertJudges global a@(B.Short pt sh _) =
 
 -- | Calculate assertion list.
 runAssertDataset :: forall h. forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c)
-  => C.Global h c -> C.ShortAssert h c -> C.Dataset c -> B.Ab [B.OutputChunk c]
+  => C.Global h c -> C.ShortAssert' h c -> C.Dataset c -> B.Ab [B.OutputChunk c]
 runAssertDataset global (B.Short _ sh asserts) dataset =
     Right . concat =<< mapM each asserts
     where

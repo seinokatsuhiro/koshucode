@@ -4,11 +4,11 @@
 
 module Koshucode.Baala.Core.Assert.Assert
   ( -- * Data type
-    Assert (..),
+    Assert' (..),
     AssertOption,
   
     -- * Short assertion
-    ShortAssert,
+    ShortAssert',
     assertNormal,
     assertViolated,
   ) where
@@ -24,7 +24,7 @@ import qualified Koshucode.Baala.Core.Relmap    as C
 -- | Affirming or denying relation.
 --   It consists of logical quality, judgement pattern, and relmap.
 --   See also 'B.Judge'
-data Assert h c = Assert
+data Assert' h c = Assert
     { assSection  :: C.SecNo               -- ^ Section number
     , assType     :: C.AssertType          -- ^ Logical quality
     , assPattern  :: B.JudgePat            -- ^ Pattern of judgement
@@ -38,10 +38,10 @@ data Assert h c = Assert
 -- | Option for assertions.
 type AssertOption = [B.NamedTrees]
 
-instance B.CodePtr (Assert h c) where
+instance B.CodePtr (Assert' h c) where
     codePts = concatMap B.codePts . assToken
 
-instance B.Write (Assert h c) where
+instance B.Write (Assert' h c) where
     write sh (Assert _ q pat _ toks _ _ _) =
         let qs = B.writeH sh [C.assertSymbol q, pat]
         in B.docHang qs 2 (B.writeH sh toks)
@@ -50,16 +50,16 @@ instance B.Write (Assert h c) where
 -- ----------------------  Short assertion
 
 -- | Assertion list with short signs.
-type ShortAssert h c = B.Short [Assert h c]
+type ShortAssert' h c = B.Short [Assert' h c]
 
 -- | Select affirmative or denial assertions.
-assertNormal :: B.Map [ShortAssert h c]
+assertNormal :: B.Map [ShortAssert' h c]
 assertNormal = B.map2 $ B.omit violated
 
 -- | Select violated assertions.
-assertViolated :: B.Map [ShortAssert h c]
+assertViolated :: B.Map [ShortAssert' h c]
 assertViolated = B.map2 $ filter violated
 
-violated :: Assert h c -> Bool
+violated :: Assert' h c -> Bool
 violated = (== C.AssertViolate) . assType
 

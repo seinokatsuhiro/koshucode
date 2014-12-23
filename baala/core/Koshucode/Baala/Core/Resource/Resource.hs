@@ -10,7 +10,11 @@ module Koshucode.Baala.Core.Resource.Resource
     coxBuildG,
     addMessage,
     addMessages,
-  
+
+    -- * Hook
+    Assert,
+    ShortAssert,
+
     -- * Constructors
     resEmpty,
     resInclude,
@@ -30,17 +34,20 @@ import qualified Koshucode.Baala.Core.Message          as Msg
 
 -- ----------------------  Data type
 
+type Assert c        = C.Assert'      (Resource c) c
+type ShortAssert c   = C.ShortAssert' (Resource c) c
+
 data Resource c = Resource {
-      resGlobal    :: C.Global (Resource c) c         -- ^ Global parameter
-    , resImport    :: [Resource c]                    -- ^ Importing resources
-    , resExport    :: [String]                        -- ^ Exporting names
-    , resSlot      :: [B.NamedTrees]                  -- ^ Global slots
-    , resRelmap    :: [C.RelmapSource]                -- ^ Source of relmaps
-    , resAssert    :: [C.ShortAssert (Resource c) c]  -- ^ Assertions of relmaps
-    , resJudge     :: [B.Judge c]                     -- ^ Affirmative or denial judgements
-    , resSource    :: B.Source                        -- ^ Source name
-    , resMessage   :: [String]                        -- ^ Collection of messages
-    , resLastSecNo :: C.SecNo                         -- ^ Last section number
+      resGlobal    :: C.Global (Resource c) c   -- ^ Global parameter
+    , resImport    :: [Resource c]              -- ^ Importing resources
+    , resExport    :: [String]                  -- ^ Exporting names
+    , resSlot      :: [B.NamedTrees]            -- ^ Global slots
+    , resRelmap    :: [C.RelmapSource]          -- ^ Source of relmaps
+    , resAssert    :: [ShortAssert c]           -- ^ Assertions of relmaps
+    , resJudge     :: [B.Judge c]               -- ^ Affirmative or denial judgements
+    , resSource    :: B.Source                  -- ^ Source name
+    , resMessage   :: [String]                  -- ^ Collection of messages
+    , resLastSecNo :: C.SecNo                   -- ^ Last section number
     } deriving (Show)
 
 addMessage :: String -> B.Map (Resource c)
@@ -139,7 +146,7 @@ resIncludeEach source res (B.Short pt shorts xs) =
 
       calc = calcContG $ resGlobal res
 
-      assert :: Clab (C.Assert h c)
+      assert :: Clab (C.Assert' h c)
       assert sec src (C.CAssert typ pat opt toks) =
           do optTrees   <- B.tokenTrees opt
              rmapTrees  <- B.tokenTrees toks
