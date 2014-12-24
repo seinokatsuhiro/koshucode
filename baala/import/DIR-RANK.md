@@ -407,7 +407,7 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    159 judges
+**    156 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Base"
@@ -430,7 +430,6 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Core.Content"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Core.Relmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Core.Assert.Assert"
-|-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Core.Assert.Dataset"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Core.Assert.RelTable"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Core.Message"
 
@@ -525,7 +524,6 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Global"        /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Global"        /import "Koshucode.Baala.Core.Content"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Global"        /import "Koshucode.Baala.Core.Lexmap"
-|-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Global"        /import "Koshucode.Baala.Core.Relmap.Relkit"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Operator"      /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Operator"      /import "Koshucode.Baala.Core.Lexmap"
@@ -538,7 +536,6 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Run"           /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Run"           /import "Koshucode.Baala.Core.Content"
-|-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Run"           /import "Koshucode.Baala.Core.Relmap.Global"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Run"           /import "Koshucode.Baala.Core.Relmap.Operator"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Run"           /import "Koshucode.Baala.Core.Relmap.Relkit"
 |-- IMPORT  /module "Koshucode.Baala.Core.Relmap.Run"           /import "Koshucode.Baala.Core.Message"
@@ -618,12 +615,12 @@ Command `./dir-rank.k ../core/IMPORT.k` produces:
 |-- DIR-RANK  /dir-rank 0  /dir 'Koshucode.Baala.Base  /base-rank {| /rank : /base | 0 : 'Message |}
 |-- DIR-RANK  /dir-rank 5  /dir 'Koshucode.Baala.Core.Content  /base-rank {| /rank : /base | 2 : 'Class | 2 : 'Cox | 2 : 'Tree | 3 : 'Cop | 3 : 'Literal | 4 : 'Build | 5 : 'Run |}
 |-- DIR-RANK  /dir-rank 5  /dir 'Koshucode.Baala.Core.Lexmap  /base-rank {| /rank : /base | 2 : 'Attribute | 3 : 'Slot | 3 : 'Sorter | 4 : 'Attrmap | 5 : 'Lexmap |}
-|-- DIR-RANK  /dir-rank 10  /dir 'Koshucode.Baala.Core.Relmap  /base-rank {| /rank : /base | 7 : 'Relkit | 8 : 'Global | 9 : 'Operator | 10 : 'Construct | 10 : 'Run | 10 : 'Specialize |}
-|-- DIR-RANK  /dir-rank 13  /dir 'Koshucode.Baala.Core.Assert  /base-rank {| /rank : /base | 7 : 'RelTable | 12 : 'Assert | 12 : 'Dataset | 13 : 'Run |}
+|-- DIR-RANK  /dir-rank 9  /dir 'Koshucode.Baala.Core.Relmap  /base-rank {| /rank : /base | 7 : 'Global | 7 : 'Relkit | 8 : 'Operator | 9 : 'Construct | 9 : 'Run | 9 : 'Specialize |}
+|-- DIR-RANK  /dir-rank 12  /dir 'Koshucode.Baala.Core.Assert  /base-rank {| /rank : /base | 7 : 'RelTable | 11 : 'Assert | 11 : 'Dataset | 12 : 'Run |}
 
-|-- DIR-RANK  /dir-rank 16  /dir 'Koshucode.Baala.Core.Resource  /base-rank {| /rank : /base | 7 : 'Clause | 15 : 'Resource | 16 : 'Quoter | 16 : 'Read | 16 : 'Run |}
-|-- DIR-RANK  /dir-rank 17  /dir 'Koshucode.Baala.Core  /base-rank {| /rank : /base | 1 : 'Message | 6 : 'Content | 6 : 'Lexmap | 11 : 'Relmap | 14 : 'Assert | 17 : 'Resource |}
-|-- DIR-RANK  /dir-rank 18  /dir 'Koshucode.Baala  /base-rank {| /rank : /base | 0 : 'Base | 18 : 'Core |}
+|-- DIR-RANK  /dir-rank 15  /dir 'Koshucode.Baala.Core.Resource  /base-rank {| /rank : /base | 7 : 'Clause | 14 : 'Resource | 15 : 'Quoter | 15 : 'Read | 15 : 'Run |}
+|-- DIR-RANK  /dir-rank 16  /dir 'Koshucode.Baala.Core  /base-rank {| /rank : /base | 1 : 'Message | 6 : 'Content | 6 : 'Lexmap | 10 : 'Relmap | 13 : 'Assert | 16 : 'Resource |}
+|-- DIR-RANK  /dir-rank 17  /dir 'Koshucode.Baala  /base-rank {| /rank : /base | 0 : 'Base | 17 : 'Core |}
 
 *** 8 judges
 
@@ -653,43 +650,43 @@ Command `./dir-rank.k ../core/IMPORT.k` produces:
 **                                               4     'Attrmap
 **                                               5     'Lexmap
 **                                               
-**    10        'Koshucode.Baala.Core.Relmap     /rank /base
+**    9         'Koshucode.Baala.Core.Relmap     /rank /base
 **                                               ----- -------------
+**                                               7     'Global
 **                                               7     'Relkit
-**                                               8     'Global
-**                                               9     'Operator
-**                                               10    'Construct
-**                                               10    'Run
-**                                               10    'Specialize
+**                                               8     'Operator
+**                                               9     'Construct
+**                                               9     'Run
+**                                               9     'Specialize
 **                                               
-**    13        'Koshucode.Baala.Core.Assert     /rank /base
+**    12        'Koshucode.Baala.Core.Assert     /rank /base
 **                                               ----- -------------
 **                                               7     'RelTable
-**                                               12    'Assert
-**                                               12    'Dataset
-**                                               13    'Run
+**                                               11    'Assert
+**                                               11    'Dataset
+**                                               12    'Run
 **                                               
-**    16        'Koshucode.Baala.Core.Resource   /rank /base
+**    15        'Koshucode.Baala.Core.Resource   /rank /base
 **                                               ----- -------------
 **                                               7     'Clause
-**                                               15    'Resource
-**                                               16    'Quoter
-**                                               16    'Read
-**                                               16    'Run
+**                                               14    'Resource
+**                                               15    'Quoter
+**                                               15    'Read
+**                                               15    'Run
 **                                               
-**    17        'Koshucode.Baala.Core            /rank /base
+**    16        'Koshucode.Baala.Core            /rank /base
 **                                               ----- -------------
 **                                               1     'Message
 **                                               6     'Content
 **                                               6     'Lexmap
-**                                               11    'Relmap
-**                                               14    'Assert
-**                                               17    'Resource
+**                                               10    'Relmap
+**                                               13    'Assert
+**                                               16    'Resource
 **                                               
-**    18        'Koshucode.Baala                 /rank /base
+**    17        'Koshucode.Baala                 /rank /base
 **                                               ----- -------------
 **                                               0     'Base
-**                                               18    'Core
+**                                               17    'Core
 **                                               
 
 **
