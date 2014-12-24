@@ -39,8 +39,7 @@ runResourceBody res@C.Resource { C.resAssert = ass, C.resMessage = msg } =
       message = "" : "MESSAGE" : map ("  " ++) msg ++ [""]
 
 assembleRelmap :: forall c. B.AbMap (C.Resource c)
-assembleRelmap res@C.Resource { C.resGlobal  = g
-                              , C.resSlot    = slots
+assembleRelmap res@C.Resource { C.resSlot    = slots
                               , C.resRelmap  = derives
                               , C.resAssert  = asserts } = res'
     where
@@ -50,7 +49,7 @@ assembleRelmap res@C.Resource { C.resGlobal  = g
                     msg2      = concat $ concat $ map B.shortBody msg
                 Right $ C.addMessages msg2 $ res { C.resAssert = asserts2 }
 
-      (consLexmap, consRelmap) = C.relmapCons g res
+      (consLexmap, consRelmap) = C.relmapCons res
 
       assemble :: C.Assert c -> B.Ab (C.Assert c, [String])
       assemble ass@C.Assert { C.assSection = sec } =

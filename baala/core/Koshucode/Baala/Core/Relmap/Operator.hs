@@ -10,6 +10,7 @@ module Koshucode.Baala.Core.Relmap.Operator
     -- * RopUse
     RopCons',
     RopUse' (..),
+    ropGlobal,
     ropCopset,
   
     -- * Relmap
@@ -67,16 +68,18 @@ type RopCons' h c = RopUse' h c -> B.Ab (Relmap' h c)
 -- | Use of relmap operator
 data RopUse' h c = RopUse
     { ropHook      :: h c
-    , ropGlobal    :: Global' h c
     , ropLexmap    :: C.Lexmap       -- ^ Syntactic data of operator use
-    , ropSubrelmap :: [Relmap' h c]   -- ^ Subrelmaps
+    , ropSubrelmap :: [Relmap' h c]  -- ^ Subrelmaps
     } deriving (Show)
 
 instance B.CodePtr (RopUse' h c) where
     codePts = B.codePts . ropLexmap
 
+ropGlobal :: (GetGlobal h) => RopUse' h c -> Global' h c
+ropGlobal = getGlobal . ropHook
+
 -- | Get operator set from 'RopUse'.
-ropCopset :: RopUse' h c -> C.CopSet c
+ropCopset :: (GetGlobal h) => RopUse' h c -> C.CopSet c
 ropCopset = C.globalCopset . ropGlobal
 
 
