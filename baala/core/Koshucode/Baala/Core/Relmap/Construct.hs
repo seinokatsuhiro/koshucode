@@ -8,7 +8,7 @@ module Koshucode.Baala.Core.Relmap.Construct
   
     -- * Constructor
     relmapSource, relmapConst,
-    relmapFlow, relmapGlobal, relmapHook,
+    relmapFlow, relmapHook,
     relmapBinary, relmapConfl,
     relmapCopy, relmapNest, relmapNestVar,
     relmapLink,
@@ -68,11 +68,6 @@ relmapConst = C.RelmapConst . C.ropLexmap
 --   Flow relmaps take no subrelmaps.
 relmapFlow :: C.RopUse' h c -> C.RelkitFlow c -> C.Relmap' h c
 relmapFlow use relkit = relmapConfl use (const relkit) []
-
--- | Make a global relmap.
---   Global relmaps are flow relmaps with globals.
-relmapGlobal :: C.RopUse' h c -> C.RelkitGlobal' h c -> C.Relmap' h c
-relmapGlobal = C.RelmapGlobal . C.ropLexmap
 
 relmapHook :: C.RopUse' h c -> C.RelkitHook' h c -> C.Relmap' h c
 relmapHook = C.RelmapHook . C.ropLexmap

@@ -42,11 +42,6 @@ relmapSpecialize hook links = spec [] [] where
                      kit <- makeKit kits he1
                      Right (kdef2, kit)
 
-              C.RelmapGlobal lx makeKit ->
-                  post lx $ do
-                     kit <- makeKit (C.getGlobal hook) he1
-                     Right (kdef, kit)
-
               C.RelmapHook lx makeKit ->
                   post lx $ do
                      kit <- makeKit hook he1

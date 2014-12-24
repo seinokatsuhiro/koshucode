@@ -57,7 +57,6 @@ elemRelmap relmap = name : f relmap where
     f (C.RelmapSource _ p xs)    = [ rop "source", src p xs ]
     f (C.RelmapLink   lx)        = [ ref $ C.lexRopName lx ]
     f (C.RelmapCalc   _ _ rs)    = rop (B.name relmap) : concatMap f rs
-    f (C.RelmapGlobal _ _)       = [ rop (B.name relmap) ]
     f (C.RelmapHook   _ _)       = [ rop (B.name relmap) ]
     f (C.RelmapConst  _ _)       = [ rop (B.name relmap) ]
     f (C.RelmapCopy   _ _ r1)    = f r1

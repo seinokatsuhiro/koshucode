@@ -14,7 +14,7 @@ module Koshucode.Baala.Core.Resource.Resource
   
     -- * Hook
     Assert, ConsRelmap, Global,
-    RelkitGlobal, RelkitHook, Relmap, RelmapLinkTable,
+    RelkitHook, Relmap, RelmapLinkTable,
     Rop, RopCons, RopUse, ShortAssert,
 
     -- * Process
@@ -235,7 +235,6 @@ type Assert c           = C.Assert'          Resource c
 type ConsRelmap c       = C.ConsRelmap'      Resource c
 type Global c           = C.Global'          Resource c
 type Relmap c           = C.Relmap'          Resource c
-type RelkitGlobal c     = C.RelkitGlobal'    Resource c
 type RelkitHook c       = C.RelkitHook'      Resource c
 type RelmapLinkTable c  = C.RelmapLinkTable' Resource c
 type Rop c              = C.Rop'             Resource c

@@ -19,7 +19,6 @@ module Koshucode.Baala.Core.Relmap.Operator
   
     -- * Relkit
     RelkitFlow,
-    RelkitGlobal',
     RelkitHook',
     RelkitBinary,
     RelkitConfl,
@@ -86,9 +85,6 @@ ropCopset = C.globalCopset . ropGlobal
 -- | Make 'C.Relkit' from heading of input relation.
 type RelkitFlow c   = Maybe B.Head -> B.Ab (C.Relkit c)
 
--- | Make 'C.Relkit' from globals and input heading.
-type RelkitGlobal' h c = Global' h c -> RelkitFlow c
-
 -- | Make 'C.Relkit' from hook data and input heading.
 type RelkitHook' h c = h c -> RelkitFlow c
 
@@ -108,8 +104,6 @@ data Relmap' h c
     | RelmapConst    C.Lexmap (B.Rel c)
       -- ^ Constant relation
 
-    | RelmapGlobal   C.Lexmap (RelkitGlobal' h c)
-      -- ^ Relmap that maps relations to a relation with globals
     | RelmapHook     C.Lexmap (RelkitHook' h c)
       -- ^ Relmap that maps relations to a relation with hook data
     | RelmapCalc     C.Lexmap (RelkitConfl c) [Relmap' h c]
@@ -133,7 +127,6 @@ showRelmap r = sh r where
     sh (RelmapSource _ p xs)  = "RelmapSource " ++ show p ++ " " ++ show xs
     sh (RelmapConst  _ _)     = "RelmapConst "  ++ show (B.name r) ++ " _"
 
-    sh (RelmapGlobal _ _)     = "RelmapGlobal " ++ show (B.name r)
     sh (RelmapHook _ _)       = "RelmapHook "   ++ show (B.name r)
     sh (RelmapCalc   _ _ rs)  = "RelmapCalc "   ++ show (B.name r) ++ " _" ++ joinSubs rs
 
@@ -160,7 +153,6 @@ instance B.Write (Relmap' h c) where
     write sh (RelmapSource lx _ _)  = B.write sh lx
     write sh (RelmapConst  lx _)    = B.write sh lx
 
-    write sh (RelmapGlobal lx _)    = B.write sh lx -- hang (text $ name m) 2 (writeh (map write ms))
     write sh (RelmapHook   lx _)    = B.write sh lx -- hang (text $ name m) 2 (writeh (map write ms))
     write sh (RelmapCalc   lx _ _)  = B.write sh lx -- hang (text $ name m) 2 (writeh (map write ms))
 
@@ -202,7 +194,6 @@ relmapLexList = collect where
     collect (RelmapSource  lx _ _)  = [lx]
     collect (RelmapConst   lx _)    = [lx]
 
-    collect (RelmapGlobal  lx _)    = [lx]
     collect (RelmapHook    lx _)    = [lx]
     collect (RelmapCalc    lx _ _)  = [lx]
 

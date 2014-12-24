@@ -58,11 +58,12 @@ consKoshuCop use =
      Right $ relmapKoshuCop use name
 
 relmapKoshuCop :: (C.CContent c) => C.RopUse c -> B.TermName -> C.Relmap c
-relmapKoshuCop use = C.relmapGlobal use . relkitKoshuCop
+relmapKoshuCop use = C.relmapHook use . relkitKoshuCop
 
-relkitKoshuCop :: (C.CContent c) => B.TermName -> C.RelkitGlobal c
-relkitKoshuCop name g _ =
+relkitKoshuCop :: (C.CContent c) => B.TermName -> C.RelkitHook c
+relkitKoshuCop name res _ =
     Right $ C.relkitConstBody [name] $ map (B.li1 . C.pText . B.name) $ C.globalCops g
+          where g = C.getGlobal res
 
 
 -- ----------------------  koshu-cop-infix
@@ -75,12 +76,13 @@ consKoshuCopInfix use =
      Right $ relmapKoshuCopInfix use (name, height, dir)
 
 relmapKoshuCopInfix :: (C.CContent c) => C.RopUse c -> (B.TermName, Maybe B.TermName, Maybe B.TermName) -> C.Relmap c
-relmapKoshuCopInfix use = C.relmapGlobal use . relkitKoshuCopInfix
+relmapKoshuCopInfix use = C.relmapHook use . relkitKoshuCopInfix
 
-relkitKoshuCopInfix :: (C.CContent c) => (B.TermName, Maybe B.TermName, Maybe B.TermName) -> C.RelkitGlobal c
-relkitKoshuCopInfix (name, height, dir) g _ = Right kit2 where
-    kit2 = C.relkitJust he2 $ C.RelkitConst (map put $ C.globalInfix g)
-    he2  = B.headFrom $ [name] ++ heightMaybe B.li1           ++ dirMaybe B.li1
+relkitKoshuCopInfix :: (C.CContent c) => (B.TermName, Maybe B.TermName, Maybe B.TermName) -> C.RelkitHook c
+relkitKoshuCopInfix (name, height, dir) res _ = Right kit2 where
+    g     = C.getGlobal res
+    kit2  = C.relkitJust he2 $ C.RelkitConst (map put $ C.globalInfix g)
+    he2   = B.headFrom $ [name] ++ heightMaybe B.li1           ++ dirMaybe B.li1
     put (n, ih)  = [C.pText n] ++ heightMaybe (heightTerm ih) ++ dirMaybe (dirTerm ih)
 
     heightMaybe = B.maybeEmpty height
@@ -105,12 +107,13 @@ consKoshuRop use =
 relmapKoshuRop :: (C.CContent c)
     => C.RopUse c -> (Maybe B.TermName, Maybe B.TermName, Maybe B.TermName)
     -> C.Relmap c
-relmapKoshuRop use = C.relmapGlobal use . relkitKoshuRop
+relmapKoshuRop use = C.relmapHook use . relkitKoshuRop
 
 relkitKoshuRop :: (C.CContent c)
     => (Maybe B.TermName, Maybe B.TermName, Maybe B.TermName)
-    -> C.RelkitGlobal c
-relkitKoshuRop (name, group, usage) g _ = Right kit2 where
+    -> C.RelkitHook c
+relkitKoshuRop (name, group, usage) res _ = Right kit2 where
+    g     = C.getGlobal res
     kit2  = C.relkitConstBody ns bo2
     ns    = B.catMaybes [group, name, usage]
     bo2   = map f $ C.globalRops g
@@ -156,7 +159,7 @@ consKoshuVersion use =
   do n   <- Op.getTerm  use "-term"
      ver <- Op.getTrees use "-version"
      case ver of
-       []      -> Right $ C.relmapGlobal use $ relkitKoshuVersion n
+       []      -> Right $ C.relmapHook use $ relkitKoshuVersion n
        [f]     -> check n f f
        [f, t]  -> check n f t
        _       -> Msg.unexpAttr ""
@@ -164,17 +167,19 @@ consKoshuVersion use =
     check n f t = do
       from <- C.literal undefined f
       to   <- C.literal undefined t
-      Right $ C.relmapGlobal use $ relkitKoshuVersionCheck (from, to) n
+      Right $ C.relmapHook use $ relkitKoshuVersionCheck (from, to) n
 
-relkitKoshuVersion :: (C.CContent c) => B.TermName -> C.Global c -> Maybe B.Head -> B.Ab (C.Relkit c)
-relkitKoshuVersion n C.Global { C.globalVersion = ver } _ =
-    Right $ C.relkitConstSingleton [n] [ C.pList $ map C.pDecFromInt $ apiVersion ver ]
+relkitKoshuVersion :: (C.CContent c) => B.TermName -> C.RelkitHook c
+relkitKoshuVersion n h _ =
+    Right $ C.relkitConstSingleton [n] [ C.pList $ map C.pDecFromInt $ apiVersion ver ] where
+        ver = C.globalVersion $ C.getGlobal h
 
-relkitKoshuVersionCheck :: (C.CContent c) => (c, c) -> B.TermName -> C.RelkitGlobal c
-relkitKoshuVersionCheck (from, to) n C.Global { C.globalVersion = ver } _
+relkitKoshuVersionCheck :: (C.CContent c) => (c, c) -> B.TermName -> C.RelkitHook c
+relkitKoshuVersionCheck (from, to) n h _
     | verC >= from && verC <= to  = Right kitV
     | otherwise                   = Right kitE
-    where verC = C.pList $ map C.pDecFromInt $ apiVersion ver
+    where ver  = C.globalVersion $ C.getGlobal h
+          verC = C.pList $ map C.pDecFromInt $ apiVersion ver
           kitV = C.relkitConstSingleton [n] [verC] -- todo
           kitE = C.relkitConstEmpty [n]
 
@@ -199,17 +204,18 @@ consKoshuSource use =
      Right $ relmapKoshuSource use (num, ty, name)
 
 relmapKoshuSource :: (C.CContent c) => C.RopUse c -> (B.TermName, Maybe B.TermName, Maybe B.TermName) -> C.Relmap c
-relmapKoshuSource use = C.relmapGlobal use . relkitKoshuSource
+relmapKoshuSource use = C.relmapHook use . relkitKoshuSource
 
-relkitKoshuSource :: (C.CContent c) => (B.TermName, Maybe B.TermName, Maybe B.TermName) -> (C.RelkitGlobal c)
-relkitKoshuSource (num, ty, name) C.Global { C.globalSources = res } _ = Right kit2 where
-    ns         =  B.catMaybes [Just num, ty, name]
-    kit2       =  C.relkitConstBody ns $ map assn res
-    assn r     =  B.catMaybes [resNum r, resType r, resName r]
+relkitKoshuSource :: (C.CContent c) => (B.TermName, Maybe B.TermName, Maybe B.TermName) -> C.RelkitHook c
+relkitKoshuSource (num, ty, name) h _ = Right kit2 where
+    res        = C.globalSources $ C.getGlobal h
+    ns         = B.catMaybes [Just num, ty, name]
+    kit2       = C.relkitConstBody ns $ map assn res
+    assn r     = B.catMaybes [resNum r, resType r, resName r]
 
-    resNum    =  Just         . C.pDecFromInt . B.sourceNumber
-    resType   =  maybeAs ty   . C.pText       . B.sourceType
-    resName   =  maybeAs name . C.pText       . B.sourceText
+    resNum     = Just         . C.pDecFromInt . B.sourceNumber
+    resType    = maybeAs ty   . C.pText       . B.sourceType
+    resName    = maybeAs name . C.pText       . B.sourceText
 
 maybeAs :: Maybe a -> b -> Maybe b
 maybeAs (Just _)  c  =  Just c
