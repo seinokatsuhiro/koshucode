@@ -4,14 +4,11 @@
 
 module Koshucode.Baala.Core.Relmap.Operator
   ( -- * Rop
-    Global', GetGlobal (..),
     RopUsage, Rop' (..),
   
     -- * RopUse
     RopCons',
     RopUse' (..),
-    ropGlobal,
-    ropCopset,
   
     -- * Relmap
     Relmap' (..),
@@ -28,18 +25,10 @@ module Koshucode.Baala.Core.Relmap.Operator
 
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Core.Lexmap            as C
-import qualified Koshucode.Baala.Core.Content           as C
-import qualified Koshucode.Baala.Core.Relmap.Global     as C
 import qualified Koshucode.Baala.Core.Relmap.Relkit     as C
 
 
 -- ----------------------  Rop
-
--- | Global parameters
-type Global' h c = C.Global'' (Rop' h) c
-
-class GetGlobal h where
-    getGlobal :: h c -> Global' h c
 
 type RopUsage = String
 
@@ -74,14 +63,6 @@ data RopUse' h c = RopUse
 
 instance B.CodePtr (RopUse' h c) where
     codePts = B.codePts . ropLexmap
-
-ropGlobal :: (GetGlobal h) => RopUse' h c -> Global' h c
-ropGlobal = getGlobal . ropHook
-
--- | Get operator set from 'RopUse'.
-ropCopset :: (GetGlobal h) => RopUse' h c -> C.CopSet c
-ropCopset = C.globalCopset . ropGlobal
-
 
 
 -- ----------------------  Relkit

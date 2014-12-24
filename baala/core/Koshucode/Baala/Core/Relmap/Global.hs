@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Core.Relmap.Global
   ( -- * Global
-    Global'' (..),
+    Global' (..),
     globalCommandLine,
     globalFill,
     globalRops,
@@ -12,6 +12,10 @@ module Koshucode.Baala.Core.Relmap.Global
     globalCopset,
     globalInfix,
     global,
+
+    GetGlobal (..),
+    ropGlobal,
+    ropCopset,
   
     -- * Operator set
     OpSet' (..),
@@ -23,13 +27,28 @@ import qualified Data.Version                           as D
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Core.Content           as C
 import qualified Koshucode.Baala.Core.Lexmap            as C
+import qualified Koshucode.Baala.Core.Relmap.Operator   as C
+
+
+-- ----------------------  GetGlobal
+
+class GetGlobal h where
+    getGlobal :: h c -> Global' h c
+
+ropGlobal :: (GetGlobal h) => C.RopUse' h c -> Global' h c
+ropGlobal = getGlobal . C.ropHook
+
+-- | Get operator set from 'RopUse'.
+ropCopset :: (GetGlobal h) => C.RopUse' h c -> C.CopSet c
+ropCopset = globalCopset . ropGlobal
 
 
 -- ----------------------  Global
 
-data Global'' rop c = Global
+-- | Global parameters
+data Global' h c = Global
       { globalVersion   :: D.Version
-      , globalOpset     :: OpSet' rop c
+      , globalOpset     :: OpSet' (C.Rop' h) c
       , globalProgram   :: String
       , globalArgs      :: [String]
       , globalTime      :: B.Time
@@ -37,31 +56,31 @@ data Global'' rop c = Global
       , globalJudges    :: [B.Judge c]
       }
 
-instance Show (Global'' opset c) where
+instance Show (Global' h c) where
     show Global { globalVersion = ver }
         = "Global (" ++ show ver ++ ")"
 
-globalCommandLine :: Global'' rop c -> [String]
+globalCommandLine :: Global' h c -> [String]
 globalCommandLine Global { globalProgram = prog, globalArgs = args }
     = prog : args
 
-globalFill :: (C.CContent c) => B.Map (Global'' rop c)
+globalFill :: (C.CContent c) => B.Map (Global' h c)
 globalFill g = g
 
-globalRops   :: Global'' rop c -> [rop c]
-globalRops   = opsetRopList . globalOpset
+globalRops   :: Global' h c -> [C.Rop' h c]
+globalRops    = opsetRopList . globalOpset
 
-globalCops   :: Global'' rop c -> [C.Cop c]
-globalCops   = C.copsetCopList . opsetCop . globalOpset
+globalCops   :: Global' h c -> [C.Cop c]
+globalCops    = C.copsetCopList . opsetCop . globalOpset
 
-globalInfix  :: Global'' rop c -> [B.Named B.InfixHeight]
-globalInfix  = C.copsetInfixList . opsetCop . globalOpset
+globalInfix  :: Global' h c -> [B.Named B.InfixHeight]
+globalInfix   = C.copsetInfixList . opsetCop . globalOpset
 
-globalCopset :: Global'' rop c -> C.CopSet c
-globalCopset = opsetCop . globalOpset
+globalCopset :: Global' h c -> C.CopSet c
+globalCopset  = opsetCop . globalOpset
 
 -- | Empty global parameters.
-global :: Global'' rop c
+global :: Global' h c
 global = Global
          { globalVersion   =  D.Version [] []
          , globalOpset     =  opset
