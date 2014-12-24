@@ -42,14 +42,15 @@ assembleRelmap :: forall c. B.AbMap (C.Resource c)
 assembleRelmap res@C.Resource { C.resGlobal  = g
                               , C.resSlot    = slots
                               , C.resRelmap  = derives
-                              , C.resAssert  = asserts } =
-    do result <- B.shortListM $ mapM assemble `B.map2` asserts
-       let asserts2  = map fst `B.map2` result
-           msg       = map snd `B.map2` result
-           msg2      = concat $ concat $ map B.shortBody msg
-       Right $ C.addMessages msg2 $ res { C.resAssert = asserts2 }
+                              , C.resAssert  = asserts } = res'
     where
-      (consLexmap, consRelmap) = C.relmapCons g
+      res' = do result <- B.shortListM $ mapM assemble `B.map2` asserts
+                let asserts2  = map fst `B.map2` result
+                    msg       = map snd `B.map2` result
+                    msg2      = concat $ concat $ map B.shortBody msg
+                Right $ C.addMessages msg2 $ res { C.resAssert = asserts2 }
+
+      (consLexmap, consRelmap) = C.relmapCons g res
 
       assemble :: C.Assert c -> B.Ab (C.Assert c, [String])
       assemble ass@C.Assert { C.assSection = sec } =

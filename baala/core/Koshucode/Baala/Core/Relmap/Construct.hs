@@ -30,28 +30,27 @@ import qualified Koshucode.Baala.Core.Message          as Msg
 -- ----------------------  Generic relmap
 
 -- | Make a constructor pair of lexmap and relmap.
-relmapCons :: C.Global' h c -> (C.ConsLexmap, ConsRelmap' h c)
-relmapCons g = (consL, consR) where
+relmapCons :: C.Global' h c -> h c -> (C.ConsLexmap, ConsRelmap' h c)
+relmapCons g hook = (consL, consR) where
     consL         = C.consLexmap findSorter
-    consR         = consRelmap findRop g
+    consR         = consRelmap findRop g hook
     findSorter n  = C.ropSorter `fmap` findRop n
     findRop       = C.opsetFindRop $ C.globalOpset g
 
 -- | Second step of constructing relmap, make relmap from lexmap.
 type ConsRelmap' h c = C.Lexmap -> B.Ab (C.Relmap' h c)
 
-consRelmap :: (C.RopName -> Maybe (C.Rop' h c)) -> C.Global' h c -> ConsRelmap' h c
-consRelmap findRop g = relmap where
+consRelmap :: (C.RopName -> Maybe (C.Rop' h c)) -> C.Global' h c -> h c -> ConsRelmap' h c
+consRelmap findRop g hook = relmap where
     relmap lx =
         case C.lexType lx of
           C.LexmapDerived  -> Right $ C.RelmapLink lx
           C.LexmapNest     -> Right $ C.RelmapLink lx
-          C.LexmapBase     -> case findRop n of
+          C.LexmapBase     -> case findRop $ C.lexRopName lx of
                                 Just rop -> Msg.abRelmap [lx] $ cons rop
                                 Nothing  -> Msg.bug "missing operator @consRelmap"
-        where n             = C.lexRopName lx
-              cons rop      = do sub <- relmap `mapM` C.lexSubmap lx
-                                 C.ropCons rop $ C.RopUse g lx sub
+        where cons rop      = do sub <- relmap `mapM` C.lexSubmap lx
+                                 C.ropCons rop $ C.RopUse hook g lx sub
 
 
 -- ----------------------  Construct

@@ -66,7 +66,8 @@ type RopCons' h c = RopUse' h c -> B.Ab (Relmap' h c)
 
 -- | Use of relmap operator
 data RopUse' h c = RopUse
-    { ropGlobal    :: Global' h c
+    { ropHook      :: h c
+    , ropGlobal    :: Global' h c
     , ropLexmap    :: C.Lexmap       -- ^ Syntactic data of operator use
     , ropSubrelmap :: [Relmap' h c]   -- ^ Subrelmaps
     } deriving (Show)
