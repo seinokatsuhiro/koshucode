@@ -4,9 +4,8 @@
 
 module Koshucode.Baala.Core.Relmap.Operator
   ( -- * Rop
-    Global',
-    RopUsage,
-    Rop' (..),
+    Global', GetGlobal (..),
+    RopUsage, Rop' (..),
   
     -- * RopUse
     RopCons',
@@ -38,6 +37,9 @@ import qualified Koshucode.Baala.Core.Relmap.Relkit     as C
 
 -- | Global parameters
 type Global' h c = C.Global'' (Rop' h) c
+
+class GetGlobal h where
+    getGlobal :: h c -> Global' h c
 
 type RopUsage = String
 

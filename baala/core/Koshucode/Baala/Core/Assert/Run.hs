@@ -19,22 +19,22 @@ import qualified Koshucode.Baala.Core.Message         as Msg
 -- ----------------------  Assert
 
 -- | Calculate assertion list.
-runAssertJudges :: (Ord c, B.Write c, C.CRel c, C.CEmpty c, B.SelectRel h)
-  => C.Global' h c -> h c -> C.ShortAssert' h c -> B.Ab (B.OutputChunks c)
-runAssertJudges global hook a@(B.Short pt sh _) =
-    do chunks <- runAssertDataset global hook a
+runAssertJudges :: (Ord c, B.Write c, C.CRel c, C.CEmpty c, B.SelectRel h, C.GetGlobal h)
+  => h c -> C.ShortAssert' h c -> B.Ab (B.OutputChunks c)
+runAssertJudges hook a@(B.Short pt sh _) =
+    do chunks <- runAssertDataset hook a
        Right $ B.Short pt sh chunks
 
 -- | Calculate assertion list.
-runAssertDataset :: forall h. forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c, B.SelectRel h)
-  => C.Global' h c -> h c -> C.ShortAssert' h c -> B.Ab [B.OutputChunk c]
-runAssertDataset global hook (B.Short _ sh asserts) =
+runAssertDataset :: forall h. forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c, B.SelectRel h, C.GetGlobal h)
+  => h c -> C.ShortAssert' h c -> B.Ab [B.OutputChunk c]
+runAssertDataset hook (B.Short _ sh asserts) =
     Right . concat =<< mapM each asserts
     where
       each (C.Assert _ _ _ _ _ _ Nothing _) = B.bug "runAssertDataset"
       each a@(C.Assert _ typ pat opt _ _ (Just relmap) libs) =
           Msg.abAssert [a] $ do
-            r1 <- runRelmapViaRelkit global hook libs relmap B.reldee
+            r1 <- runRelmapViaRelkit hook libs relmap B.reldee
             let judgeOf showEmpty = assert showEmpty typ
             optionProcess sh judgeOf pat opt r1
 
@@ -45,14 +45,14 @@ runAssertDataset global hook (B.Short _ sh asserts) =
       omitEmpty :: (C.CEmpty c) => B.Map [B.Named c]
       omitEmpty =  B.omit (C.isEmpty . snd)
 
-runRelmapViaRelkit :: (Ord c, C.CRel c, B.SelectRel h)
-  => C.Global' h c -> h c -> C.RelmapLinkTable' h c
+runRelmapViaRelkit :: (Ord c, C.CRel c, B.SelectRel h, C.GetGlobal h)
+  => h c -> C.RelmapLinkTable' h c
   -> C.Relmap' h c -> B.AbMap (B.Rel c)
-runRelmapViaRelkit g2 hook links r (B.Rel he1 bo1) =
-    do (kdef, C.Relkit he2' f2') <- C.relmapSpecialize g2 hook links [] (Just he1) r
+runRelmapViaRelkit hook links r (B.Rel he1 bo1) =
+    do (kdef, C.Relkit he2' f2') <- C.relmapSpecialize hook links [] (Just he1) r
        let C.Relkit mhe2 f2 = C.relkitLink kdef $ C.Relkit he2' f2'
        he2 <- just "unknown relhead" mhe2
-       bo2 <- C.relkitRun g2 hook [] f2 bo1
+       bo2 <- C.relkitRun hook [] f2 bo1
        Right $ B.Rel he2 bo2
     where
       just :: String -> Maybe a -> B.Ab a

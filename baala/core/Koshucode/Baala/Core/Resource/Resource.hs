@@ -53,6 +53,9 @@ instance Show (Resource c) where
 instance B.SelectRel Resource where
     selectRel Resource { resSelect = sel } = sel
 
+instance C.GetGlobal Resource where
+    getGlobal Resource { resGlobal = g } = g
+
 addMessage :: String -> B.Map (Resource c)
 addMessage msg res = res { resMessage = msg : resMessage res }
 

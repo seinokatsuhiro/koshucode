@@ -31,7 +31,7 @@ hRunFiles
     -> C.SourceBundle c   -- ^ Resource source code
     -> IO Int
 hRunFiles h global bun =
-    do abSect <- C.bundleRead bun
+    do abRes <- C.bundleRead bun
        let inputs  =  C.bundleTexts bun
            comm    =  B.CommentDoc [ B.CommentSec "INPUT" inputs ]
 
@@ -41,8 +41,8 @@ hRunFiles h global bun =
        IO.hPutStrLn    h ""
 
        let cmd = C.globalCommandLine global
-           js' = do sect <- abSect
-                    C.runResource global sect
+           js' = do res <- abRes
+                    C.runResource res
 
        case js' of
          Left a   -> B.abort cmd a

@@ -44,9 +44,9 @@ relkitLink kits = linkKit where
            _                          -> core
 
 -- todo: optimization
-relkitRun :: forall h. forall c. (Ord c, C.CRel c, B.SelectRel h)
-    => C.Global' h c -> h c -> [B.Named [[c]]] -> C.RelkitBody c -> B.AbMap [[c]]
-relkitRun global hook rs (B.Sourced toks core) bo1 =
+relkitRun :: forall h. forall c. (Ord c, C.CRel c, B.SelectRel h, C.GetGlobal h)
+    => h c -> [B.Named [[c]]] -> C.RelkitBody c -> B.AbMap [[c]]
+relkitRun hook rs (B.Sourced toks core) bo1 =
     Msg.abRun toks $
      case core of
        C.RelkitFull        u f     -> right u $ f             bo1
@@ -64,28 +64,28 @@ relkitRun global hook rs (B.Sourced toks core) bo1 =
        C.RelkitId                  -> Right bo1
 
        C.RelkitAppend b1@(B.Sourced toks1 _) b2
-                                   -> do bo2 <- relkitRun global hook rs b1 bo1
-                                         Msg.abRun toks1 $ relkitRun global hook rs b2 bo2
+                                   -> do bo2 <- relkitRun hook rs b1 bo1
+                                         Msg.abRun toks1 $ relkitRun hook rs b2 bo2
 
        C.RelkitSource pat ns       -> let r = B.selectRel hook pat ns
                                       in Right $ B.relBody r
 
-       C.RelkitLink _ _ (Just b2)  -> relkitRun global hook rs b2 bo1
+       C.RelkitLink _ _ (Just b2)  -> relkitRun hook rs b2 bo1
        C.RelkitLink n _ (Nothing)  -> Msg.unkRelmap n
 
        C.RelkitNestVar n           -> case lookup n rs of
                                         Just bo2 -> Right bo2
                                         Nothing  -> Msg.unkNestRel n
 
-       C.RelkitCopy n b            -> do bo2 <- relkitRun global hook ((n, bo1) : rs) b bo1
+       C.RelkitCopy n b            -> do bo2 <- relkitRun hook ((n, bo1) : rs) b bo1
                                          right True $ bo2
        C.RelkitNest nest b         -> do bo2 <- nestRel nest b `mapM` bo1
                                          right True $ concat bo2
     where
-      bmaps = map $ relkitRun global hook rs
+      bmaps  = map $ relkitRun hook rs
 
       semi :: ([[c]] -> B.Ab Bool) -> C.RelkitBody c -> [c] -> B.Ab Bool
-      semi f b cs = f =<< relkitRun global hook rs b [cs]
+      semi f b cs = f =<< relkitRun hook rs b [cs]
 
       right :: (Ord b) => Bool -> [b] -> B.Ab [b]
       right u = Right . uif u
@@ -100,7 +100,7 @@ relkitRun global hook rs (B.Sourced toks core) bo1 =
       nestRel :: [(String, Int)] -> C.RelkitBody c -> [c] -> B.Ab [[c]]
       nestRel nest b cs =
           let cs2 = pickup cs `map` nest
-          in relkitRun global hook (cs2 ++ rs) b [cs]
+          in relkitRun hook (cs2 ++ rs) b [cs]
 
       pickup :: [c] -> (String, Int) -> B.Named [[c]]
       pickup cs (name, ind) = (name, B.relBody $ C.gRel $ cs !! ind)

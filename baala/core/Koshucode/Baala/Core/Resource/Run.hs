@@ -14,24 +14,23 @@ import qualified Koshucode.Baala.Core.Assert             as C
 import qualified Koshucode.Baala.Core.Resource.Resource  as C
 import qualified Koshucode.Baala.Core.Message            as Msg
 
-runResource :: (C.CContent c) => C.Global c -> C.Resource c -> B.Ab (B.OutputResult c)
-runResource global res =
+runResource :: (C.CContent c) => C.Resource c -> B.Ab (B.OutputResult c)
+runResource res =
     do s2 <- assembleRelmap res
        let js = C.resJudge s2
-           g2 = global { C.globalJudges = js }
        case filter B.isViolative js of
-         []  -> runResourceBody g2 s2
+         []  -> runResourceBody s2
          jsV -> Right ([B.Short [] [] [B.OutputJudge jsV]], [])
 
 runResourceBody :: forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c) =>
-    C.Global c -> C.Resource c -> B.Ab (B.OutputResult c)
-runResourceBody global res@C.Resource { C.resAssert = ass, C.resMessage = msg } =
+    C.Resource c -> B.Ab (B.OutputResult c)
+runResourceBody res@C.Resource { C.resAssert = ass, C.resMessage = msg } =
     do js1 <- run $ C.assertViolated ass
        js2 <- run $ C.assertNormal   ass
        Right (B.shortTrim js1, msgChunk : B.shortTrim js2)
     where
       run :: [C.ShortAssert c] -> B.Ab [B.OutputChunks c]
-      run = mapM $ C.runAssertJudges global res
+      run = mapM $ C.runAssertJudges res
 
       msgChunk :: B.OutputChunks c
       msgChunk | null msg  = B.Short [] [] []
