@@ -184,8 +184,7 @@ judgeTokenType t = B.affirm "TOKEN-TYPE" args where
 judgesClauseType :: [B.Judge Type.VContent]
 judgesClauseType = map j cs where
     j x = judgeClauseType $ C.Clause (B.CodeClause [] []) 0 x
-    cs  = [ C.CSection ""
-          , C.CShort []
+    cs  = [ C.CShort []
           , C.CRelmap "" []
           , C.CAssert C.AssertAffirm "" [] []
           , C.CJudge  C.AssertAffirm "" []

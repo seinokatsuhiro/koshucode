@@ -55,15 +55,17 @@ tokenLines = B.codeRollUp relation
 
 -- Line begins with the equal sign is treated as section delimter.
 start :: (String -> B.Ab TokenRoll) -> B.CodePt -> TokenRoll -> B.Ab TokenRoll
-start f cp r@B.CodeRoll { B.codeInput = cs0, B.codeOutput = out } = st out cs0
-    where st [] ('=' : _)     = Right $ B.codeChange section r
-          st _ cs             = Msg.abToken [cp] $ f cs
+start f cp r@B.CodeRoll { B.codeMap    = prev
+                        , B.codeInput  = cs0
+                        , B.codeOutput = out } = st out cs0 where
+    st [] ('=' : _) = Right $ B.codeChange (section prev) r
+    st _ cs         = Msg.abToken [cp] $ f cs
 
-section :: B.AbMap TokenRoll
-section r@B.CodeRoll { B.codeInputPt  = cp
-                     , B.codeInput    = cs0
-                     , B.codeOutput   = out
-                     } = sec cs0 where
+section :: B.AbMap TokenRoll -> B.AbMap TokenRoll
+section prev r@B.CodeRoll { B.codeInputPt  = cp
+                          , B.codeInput    = cs0
+                          , B.codeOutput   = out
+                          } = sec cs0 where
     v = scan r
 
     sec ""                    = dispatch $ reverse out
@@ -71,6 +73,7 @@ section r@B.CodeRoll { B.codeInputPt  = cp
                 | isCode c    = v $ scanCode cp (c:cs)
                 | otherwise   = sec cs
 
+    dispatch [B.TTextSect _] = Right $ B.codeChange prev r
     dispatch [B.TTextSect _, B.TSpace _ _, B.TTextRaw _ name] =
         case name of
           "rel"    -> Right $ B.codeChange relation r

@@ -36,8 +36,7 @@ data Clause =
            } deriving (Show, G.Data, G.Typeable)
 
 data ClauseBody
-    = CSection  String                                      -- ^ Section heading
-    | CInclude  [B.Token] (Maybe Clause)                    -- ^ Includeing source
+    = CInclude  [B.Token] (Maybe Clause)                    -- ^ Includeing source
     | CExport   String                                      -- ^ Exporting name
     | CShort    [B.ShortDef]                                -- ^ Short signs
     | CRelmap   String [B.Token]                            -- ^ Source of relmap
@@ -55,16 +54,15 @@ instance B.CodePtr Clause where
 clauseTypeText :: Clause -> String
 clauseTypeText (Clause _ _ body) =
     case body of
-      CSection   _         -> "section"
-      CInclude   _ _       -> "include"
-      CExport    _         -> "export"
-      CShort     _         -> "short"
-      CRelmap    _ _       -> "relmap"
-      CAssert    _ _ _ _   -> "assert"
-      CJudge     _ _ _     -> "judge"
-      CSlot      _ _       -> "slot"
-      CUnknown             -> "unknown"
-      CUnres     _         -> "unres"
+      CInclude  _ _       -> "include"
+      CExport   _         -> "export"
+      CShort    _         -> "short"
+      CRelmap   _ _       -> "relmap"
+      CAssert   _ _ _ _   -> "assert"
+      CJudge    _ _ _     -> "judge"
+      CSlot     _ _       -> "slot"
+      CUnknown            -> "unknown"
+      CUnres    _         -> "unres"
 
 
 
@@ -111,7 +109,7 @@ consPreclause' no src = dispatch $ liaison $ B.clauseTokens src where
         same $ frege (map Char.toUpper k) xs   -- Frege's judgement stroke
     dispatch (B.TTextRaw _ name : B.TTextRaw _ is : body)
         | isDelim is                = same $ rmap name body
-    dispatch (B.TTextSect _ : xs)   = up   $ sec xs
+    dispatch (B.TTextSect _ : _)    = up   []
     dispatch (B.TTextRaw _ k : xs)
         | k == "include"            = same $ incl xs
         | k == "export"             = same $ expt xs
@@ -152,9 +150,6 @@ consPreclause' no src = dispatch $ liaison $ B.clauseTokens src where
 
     rmap n xs                   = c1 $ CRelmap n xs
     slot n xs                   = c1 $ CSlot   n xs
-
-    sec [B.TTextRaw _ n]        = c1 $ CSection n
-    sec _                       = unk
 
     expt (B.TText _ _ n : B.TText _ _ ":" : xs)
                                 = c0 (CExport n) : rmap n xs
