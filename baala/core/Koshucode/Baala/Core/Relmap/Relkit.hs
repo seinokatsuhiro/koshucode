@@ -14,6 +14,11 @@ module Koshucode.Baala.Core.Relmap.Relkit
     Relbmap,
     RelSelect,
   
+    RelkitFlow,
+    RelkitHook',
+    RelkitBinary,
+    RelkitConfl,
+
     -- * Constructor
     relkit,
     relkitJust,
@@ -49,27 +54,27 @@ instance B.Monoid (Relkit c) where
         relkit he2 $ RelkitAppend bo1 bo2
 
 data RelkitCore c
-    = RelkitFull         Bool ( [[c]] -> [[c]] )
-    | RelkitOneToMany    Bool (  [c]  -> [[c]] )
-    | RelkitOneToOne     Bool (  [c]  ->  [c]  )
-    | RelkitPred              (  [c]  -> Bool  )
+    = RelkitFull         Bool (                [[c]] -> [[c]] )
+    | RelkitOneToMany    Bool (                 [c]  -> [[c]] )
+    | RelkitOneToOne     Bool (                 [c]  ->  [c]  )
+    | RelkitPred              (                 [c]  -> Bool  )
 
     | RelkitAbFull       Bool ( [Relbmap c] -> [[c]] -> B.Ab [[c]] ) [RelkitBody c]
     | RelkitOneToAbMany  Bool ( [Relbmap c] ->  [c]  -> B.Ab [[c]] ) [RelkitBody c]
     | RelkitOneToAbOne   Bool ( [Relbmap c] ->  [c]  -> B.Ab  [c]  ) [RelkitBody c]
-    | RelkitAbSemi                           ( [[c]] -> B.Ab Bool )  (RelkitBody c)
-    | RelkitAbPred                           (  [c]  -> B.Ab Bool )
+    | RelkitAbSemi            (                [[c]] -> B.Ab Bool  ) (RelkitBody c)
+    | RelkitAbPred            (                 [c]  -> B.Ab Bool  )
 
-    | RelkitConst             [[c]]
-    | RelkitAppend            (RelkitBody c) (RelkitBody c)
+    | RelkitAppend       (RelkitBody c) (RelkitBody c)
+    | RelkitConst        [[c]]
     | RelkitId
 
-    | RelkitSource      String [B.TermName]
+    | RelkitSource       B.JudgePat [B.TermName]
 
-    | RelkitLink        String RelkitKey (Maybe (RelkitBody c))
-    | RelkitNestVar     String
-    | RelkitCopy        String (RelkitBody c)
-    | RelkitNest        [(String, Int)] (RelkitBody c)
+    | RelkitLink         C.RopName RelkitKey (Maybe (RelkitBody c))
+    | RelkitNestVar      C.RopName
+    | RelkitCopy         C.RopName (RelkitBody c)
+    | RelkitNest         [(String, Int)] (RelkitBody c)
 
 instance Show (RelkitCore c) where
     show (RelkitFull        _ _)   = "RelkitFull"
@@ -102,6 +107,18 @@ type RelSelect c = B.JudgePat -> [String] -> B.Rel c
 
 -- | Mapping for body of relation.
 type Relbmap c = [[c]] -> B.Ab [[c]]
+
+-- | Make 'C.Relkit' from heading of input relation.
+type RelkitFlow c     = Maybe B.Head -> B.Ab (Relkit c)
+
+-- | Make 'C.Relkit' from hook data and input heading.
+type RelkitHook' h c  = h c -> RelkitFlow c
+
+-- | Make 'C.Relkit' from one subrelmap and input heading.
+type RelkitBinary c   = Relkit c -> RelkitFlow c
+
+-- | Make 'C.Relkit' from multiple subrelmaps and input heading.
+type RelkitConfl c    = [Relkit c] -> RelkitFlow c
 
 
 -- ----------------------  Constructor

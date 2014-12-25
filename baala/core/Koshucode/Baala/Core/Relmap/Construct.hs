@@ -23,7 +23,9 @@ module Koshucode.Baala.Core.Relmap.Construct
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Core.Lexmap           as C
 import qualified Koshucode.Baala.Core.Relmap.Global    as C
-import qualified Koshucode.Baala.Core.Relmap.Operator  as C
+import qualified Koshucode.Baala.Core.Relmap.Relkit    as C
+import qualified Koshucode.Baala.Core.Relmap.Relmap    as C
+import qualified Koshucode.Baala.Core.Relmap.Rop       as C
 import qualified Koshucode.Baala.Core.Message          as Msg
 
 

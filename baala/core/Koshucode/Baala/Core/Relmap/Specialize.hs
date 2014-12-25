@@ -11,8 +11,8 @@ module Koshucode.Baala.Core.Relmap.Specialize
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Core.Lexmap          as C
 import qualified Koshucode.Baala.Core.Relmap.Global   as C
-import qualified Koshucode.Baala.Core.Relmap.Operator as C
 import qualified Koshucode.Baala.Core.Relmap.Relkit   as C
+import qualified Koshucode.Baala.Core.Relmap.Relmap   as C
 import qualified Koshucode.Baala.Core.Message         as Msg
 
 type RelmapLinkTable' h c = [(C.Lexmap, C.Relmap' h c)]
@@ -55,7 +55,7 @@ relmapSpecialize hook links = spec [] [] where
                            Nothing    -> Msg.unkNestVar n
                   | otherwise ->
                       post lx $ case lookup lx links of
-                           Just rmap1 -> link n rmap1 (he1, C.relmapLexList rmap1)
+                           Just rmap1 -> link n rmap1 (he1, C.relmapLexmaps rmap1)
                            Nothing    -> Msg.unkRelmap n
                   where
                     n = C.lexRopName lx
