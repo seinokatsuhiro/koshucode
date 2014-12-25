@@ -102,7 +102,7 @@ resIncludeEach :: forall c. (C.CContent c) =>
 resIncludeEach source res (B.Short pt shorts xs) =
     do _        <- forM isCUnknown unk
        _        <- forM isCUnres   unres
-       imports  <- forM isCImport  impt
+       imports  <- forM isCInclude  impt
        judges   <- forM isCJudge   judge
        slots    <- forM isCSlot    slot
        relmaps  <- forM isCRelmap  relmap
@@ -140,8 +140,8 @@ resIncludeEach source res (B.Short pt shorts xs) =
       expt _ _ (C.CExport n) = n
 
       impt :: Clab (Resource c)
-      impt _ _ (C.CImport _ (Nothing)) = Right resEmpty
-      impt _ _ (C.CImport _ (Just _))  = resInclude res B.sourceZero []
+      impt _ _ (C.CInclude _ (Nothing)) = Right resEmpty
+      impt _ _ (C.CInclude _ (Just _))  = resInclude res B.sourceZero []
 
       slot :: Clab B.NamedTrees
       slot _ _ (C.CSlot n toks) = ntrees (n, toks)
@@ -200,12 +200,12 @@ coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)
 
 -- ----------------------  Clause type
 
-isCImport, isCExport,
+isCInclude, isCExport,
   isCSlot, isCRelmap, isCAssert, isCJudge,
   isCUnknown, isCUnres :: C.ClauseBody -> Bool
 
-isCImport (C.CImport _ _)      = True
-isCImport _                    = False
+isCInclude (C.CInclude _ _)    = True
+isCInclude _                   = False
 
 isCExport (C.CExport _)        = True
 isCExport _                    = False

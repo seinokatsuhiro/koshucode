@@ -18,6 +18,7 @@ module Koshucode.Baala.Core.Resource.Clause
   ) where
 
 import qualified Data.Generics                 as G
+import qualified Data.Char                     as Char
 import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Core.Lexmap   as C
 import qualified Koshucode.Baala.Core.Content  as C
@@ -36,7 +37,7 @@ data Clause =
 
 data ClauseBody
     = CSection  String                                      -- ^ Section heading
-    | CImport   [B.Token] (Maybe Clause)                    -- ^ Importing resource name
+    | CInclude  [B.Token] (Maybe Clause)                    -- ^ Includeing source
     | CExport   String                                      -- ^ Exporting name
     | CShort    [B.ShortDef]                                -- ^ Short signs
     | CRelmap   String [B.Token]                            -- ^ Source of relmap
@@ -55,7 +56,7 @@ clauseTypeText :: Clause -> String
 clauseTypeText (Clause _ _ body) =
     case body of
       CSection   _         -> "section"
-      CImport    _ _       -> "import"
+      CInclude   _ _       -> "include"
       CExport    _         -> "export"
       CShort     _         -> "short"
       CRelmap    _ _       -> "relmap"
@@ -91,7 +92,7 @@ consClause sec = shortClause . consPreclause sec
 
 consPreclause :: C.SecNo -> [B.TokenLine] -> [Clause]
 consPreclause sec = loop sec . B.tokenClauses where
-    loop _ [] = []
+    loop _ []     = []
     loop n (x:xs) = let (n', cs) = consPreclause' n x
                     in cs ++ loop n' xs
 
@@ -107,12 +108,12 @@ consPreclause' no src = dispatch $ liaison $ B.clauseTokens src where
 
     dispatch :: [B.Token] -> (C.SecNo, [Clause])
     dispatch (B.TTextBar _ ('|' : k) : xs) =
-        same $ frege k xs   -- Frege's judgement stroke
-    dispatch (B.TTextRaw _ name : B.TTextRaw _ colon : xs)
-        | isDelim colon             = same $ rmap name xs
+        same $ frege (map Char.toUpper k) xs   -- Frege's judgement stroke
+    dispatch (B.TTextRaw _ name : B.TTextRaw _ is : body)
+        | isDelim is                = same $ rmap name body
     dispatch (B.TTextSect _ : xs)   = up   $ sec xs
     dispatch (B.TTextRaw _ k : xs)
-        | k == "import"             = same $ impt xs
+        | k == "include"            = same $ incl xs
         | k == "export"             = same $ expt xs
         | k == "short"              = same $ short xs
         | k == "****"               = same []
@@ -127,21 +128,15 @@ consPreclause' no src = dispatch $ liaison $ B.clauseTokens src where
     c0           = Clause src no
     c1           = B.li1 . c0
 
-    isDelim      = (`elem` ["|", ":"])
+    isDelim      = ( `elem` ["=", ":", "|"] )
 
     frege "--"   = judge C.AssertAffirm
-    frege "-"    = judge C.AssertAffirm
     frege "-X"   = judge C.AssertDeny
-    frege "-x"   = judge C.AssertDeny
     frege "-V"   = judge C.AssertViolate
-    frege "-v"   = judge C.AssertViolate
 
     frege "=="   = assert C.AssertAffirm
-    frege "="    = assert C.AssertAffirm
     frege "=X"   = assert C.AssertDeny
-    frege "=x"   = assert C.AssertDeny
     frege "=V"   = assert C.AssertViolate
-    frege "=v"   = assert C.AssertViolate
 
     frege _      = const unk
 
@@ -158,7 +153,7 @@ consPreclause' no src = dispatch $ liaison $ B.clauseTokens src where
     rmap n xs                   = c1 $ CRelmap n xs
     slot n xs                   = c1 $ CSlot   n xs
 
-    sec [B.TText _ _ n]         = c1 $ CSection n
+    sec [B.TTextRaw _ n]        = c1 $ CSection n
     sec _                       = unk
 
     expt (B.TText _ _ n : B.TText _ _ ":" : xs)
@@ -166,17 +161,17 @@ consPreclause' no src = dispatch $ liaison $ B.clauseTokens src where
     expt [B.TText _ _ n]        = c1 $ CExport n
     expt _                      = unk
 
-    impt xs                     = c1 $ CImport xs Nothing
+    incl xs                     = c1 $ CInclude xs Nothing
 
     short xs                    = case wordPairs xs of
                                     Nothing  -> unk
                                     Just sh  -> c1 $ CShort sh
 
 pairs :: [a] -> Maybe [(a, a)]
-pairs (a:b:cs) = do cs' <- pairs cs
-                    Just $ (a, b) : cs'
-pairs [] = Just []
-pairs _  = Nothing
+pairs (a:b:cs)  = do cs' <- pairs cs
+                     Just $ (a, b) : cs'
+pairs []        = Just []
+pairs _         = Nothing
 
 wordPairs :: [B.Token] -> Maybe [(String, String)]
 wordPairs toks =
