@@ -45,7 +45,6 @@ ropsMeta = Op.ropList "meta"
     , Op.ropI   consKoshuSource    "koshu-source /N [-name /N][-type /N]"
                                                          "-number | -name -type"
     , Op.ropV   consKoshuRop       "koshu-rop /N /N"     "-name | -group -usage"
-    , Op.ropII  consKoshuRopRes    "koshu-rop-res /N /N" "-sec -name"
     , Op.ropV   consKoshuVersion   "koshu-version /N"    "-term | -version"
     ]
 
@@ -123,29 +122,6 @@ relkitKoshuRop (name, group, usage) res _ = Right kit2 where
         where
           cond (Just _) get = [C.pText $ get rop]
           cond _ _ = []
-
-
--- ----------------------  koshu-rop-res
-
-consKoshuRopRes :: (C.CContent c) => C.RopCons c
-consKoshuRopRes use =
-  do sec   <- Op.getTerm use "-sec"
-     name  <- Op.getTerm use "-name"
-     Right $ relmapKoshuRopRes use (sec, name)
-
-relmapKoshuRopRes :: (C.CContent c)
-    => C.RopUse c -> (B.TermName, B.TermName)
-    -> C.Relmap c
-relmapKoshuRopRes use = C.relmapHook use . relkitKoshuRopRes
-
-relkitKoshuRopRes :: (C.CContent c)
-    => (B.TermName, B.TermName)
-    -> C.RelkitHook c
-relkitKoshuRopRes (sec, name) res _ = Right kit2 where
-    kit2  = C.relkitConstBody ns bo2
-    ns    = [sec, name]
-    bo2   = map f $ C.resRelmap res
-    f ((s, n), _) = [C.pDecFromInt s, C.pText n]
 
 
 -- ----------------------  koshu-version

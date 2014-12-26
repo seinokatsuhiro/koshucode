@@ -74,6 +74,7 @@ library
         Koshucode.Baala.Op.Nest.Rop
 
         Koshucode.Baala.Op.Peripheral
+        Koshucode.Baala.Op.Resource
         Koshucode.Baala.Op.Source
         Koshucode.Baala.Op.Term
         Koshucode.Baala.Op.TermGadget
