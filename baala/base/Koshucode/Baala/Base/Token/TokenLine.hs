@@ -64,17 +64,19 @@ start f cp r@B.CodeRoll { B.codeMap    = prev
 section :: B.AbMap TokenRoll -> B.AbMap TokenRoll
 section prev r@B.CodeRoll { B.codeInputPt  = cp
                           , B.codeInput    = cs0
-                          , B.codeOutput   = out
                           } = sec cs0 where
-    v = scan r
+    v    = scan r
+    out  = reverse $ B.sweepToken $ B.codeOutput r
 
-    sec ""                    = dispatch $ reverse out
+    sec ""                    = dispatch out
+    sec ('*' : '*' : _)       = dispatch out
     sec (c:cs)  | isSpace c   = v $ scanSpace cp cs
                 | isCode c    = v $ scanCode cp (c:cs)
-                | otherwise   = sec cs
+                | otherwise   = Msg.unexpSect help
 
+    dispatch :: [B.Token] -> B.Ab TokenRoll
     dispatch [B.TTextSect _] = Right $ B.codeChange prev r
-    dispatch [B.TTextSect _, B.TSpace _ _, B.TTextRaw _ name] =
+    dispatch [B.TTextSect _, B.TTextRaw _ name] =
         case name of
           "rel"    -> Right $ B.codeChange relation r
           "note"   -> Right $ B.codeChange note r
