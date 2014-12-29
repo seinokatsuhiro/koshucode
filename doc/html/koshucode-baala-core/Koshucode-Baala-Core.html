@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.70.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.89.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -40,6 +40,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	    >Safe Haskell</th
 	    ><td
 	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
 	    ></tr
 	  ></table
 	><p class="caption"
@@ -51,13 +57,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Modules
-</a
+	    >Modules</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Dependencies
-</a
+	    >Dependencies</a
 	    ></li
 	  ></ul
 	></div
@@ -82,15 +86,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	    >Koshucode.Baala.Core.Relmap</a
 	    ></li
 	  ><li class="src short"
-	  >module <a href="Koshucode-Baala-Core-Section.html"
-	    >Koshucode.Baala.Core.Section</a
+	  >module <a href="Koshucode-Baala-Core-Resource.html"
+	    >Koshucode.Baala.Core.Resource</a
 	    ></li
 	  ></ul
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Modules
-</h1
+	>Modules</h1
 	><div class="top"
 	><p class="src"
 	  >module <a href="Koshucode-Baala-Core-Assert.html"
@@ -117,21 +120,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	  ></div
 	><div class="top"
 	><p class="src"
-	  >module <a href="Koshucode-Baala-Core-Section.html"
-	    >Koshucode.Baala.Core.Section</a
+	  >module <a href="Koshucode-Baala-Core-Resource.html"
+	    >Koshucode.Baala.Core.Resource</a
 	    ></p
 	  ></div
 	><h1 id="g:2"
-	>Dependencies
-</h1
+	>Dependencies</h1
 	><div class="doc"
 	><ul
 	  ><li
-	    > <code
+	    ><code
 	      >[Core]</code
 	      > module is a union of
    <code
-	      >Section</code
+	      >Resource</code
 	      >,
    <code
 	      >Assert</code
@@ -141,11 +143,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	      >, and
    <code
 	      >Content</code
-	      > modules.
-</li
+	      > modules.</li
 	    ><li
-	    > <code
-	      >Section</code
+	    ><code
+	      >Resource</code
 	      > module uses
    <code
 	      >Assert</code
@@ -158,10 +159,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	      >, and
    <code
 	      >[Base]</code
-	      > modules.
-</li
+	      > modules.</li
 	    ><li
-	    > <code
+	    ><code
 	      >Assert</code
 	      > module uses
    <code
@@ -172,10 +172,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	      >, and
    <code
 	      >[Base]</code
-	      > modules.
-</li
+	      > modules.</li
 	    ><li
-	    > <code
+	    ><code
 	      >Relmap</code
 	      > module uses
    <code
@@ -183,10 +182,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	      >, and
    <code
 	      >[Base]</code
-	      > modules.
-</li
+	      > modules.</li
 	    ><li
-	    > <code
+	    ><code
 	      >Content</code
 	      > module uses
    <code
@@ -194,10 +192,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	      >, and
    <code
 	      >[Base]</code
-	      > modules.
-</li
+	      > modules.</li
 	    ><li
-	    > <code
+	    ><code
 	      >[Base]</code
 	      > module is a union of
    <code
@@ -211,10 +208,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	      >, and
    <code
 	      >Prelude</code
-	      > modules.
-</li
+	      > modules.</li
 	    ><li
-	    > <code
+	    ><code
 	      >Abort</code
 	      > module uses
    <code
@@ -222,47 +218,41 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	      > and
    <code
 	      >Prelude</code
-	      > modules.
-</li
+	      > modules.</li
 	    ><li
-	    > <code
+	    ><code
 	      >Syntax</code
 	      > module uses
    <code
 	      >Prelude</code
-	      > module.
-</li
+	      > module.</li
 	    ><li
-	    > <code
+	    ><code
 	      >Data</code
 	      > module uses
    <code
 	      >Prelude</code
-	      > module.
-</li
+	      > module.</li
 	    ><li
-	    > <code
+	    ><code
 	      >Prelude</code
 	      > module uses
-   no modules in Koshucode.
-</li
+   no modules in Koshucode.</li
 	    ></ul
 	  ><p
-	  >Following picture shows reduced dependencies.
-</p
+	  >Following picture shows reduced dependencies.</p
 	  ><pre
-	  >
-      [Core]             [Base]
-        |                /    \
-      Section           /     Abort
-        |              /        |
-      Assert          Data    Token
-        |              \        |
-      Relmap            \     Syntax
-        |                \     /
-      Content             Prelude
-        |
-      [Base]
+	  >     [Core]             [Base]
+       |                /    \
+    Resource           /     Abort
+       |              /        |
+     Assert          Data    Token
+       |              \        |
+     Relmap            \     Syntax
+       |                \     /
+     Content             Prelude
+       |
+     [Base]
 </pre
 	  ></div
 	></div
@@ -271,7 +261,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html

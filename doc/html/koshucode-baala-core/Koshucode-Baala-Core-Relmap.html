@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.70.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.89.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -40,6 +40,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >Safe Haskell</th
 	    ><td
 	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
 	    ></tr
 	  ></table
 	><p class="caption"
@@ -51,8 +57,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Datatypes
-</a
+	    >Datatypes</a
 	    ></li
 	  ></ul
 	></div
@@ -61,8 +66,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	>Description</p
 	><div class="doc"
 	><p
-	  >Relation-to-relation mapping.
-</p
+	  >Relation-to-relation mapping.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -78,12 +82,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >Koshucode.Baala.Core.Relmap.Global</a
 	    ></li
 	  ><li class="src short"
-	  >module <a href="Koshucode-Baala-Core-Relmap-Operator.html"
-	    >Koshucode.Baala.Core.Relmap.Operator</a
-	    ></li
-	  ><li class="src short"
 	  >module <a href="Koshucode-Baala-Core-Relmap-Relkit.html"
 	    >Koshucode.Baala.Core.Relmap.Relkit</a
+	    ></li
+	  ><li class="src short"
+	  >module <a href="Koshucode-Baala-Core-Relmap-Relmap.html"
+	    >Koshucode.Baala.Core.Relmap.Relmap</a
+	    ></li
+	  ><li class="src short"
+	  >module <a href="Koshucode-Baala-Core-Relmap-Rop.html"
+	    >Koshucode.Baala.Core.Relmap.Rop</a
 	    ></li
 	  ><li class="src short"
 	  >module <a href="Koshucode-Baala-Core-Relmap-Run.html"
@@ -112,14 +120,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></div
 	><div class="top"
 	><p class="src"
-	  >module <a href="Koshucode-Baala-Core-Relmap-Operator.html"
-	    >Koshucode.Baala.Core.Relmap.Operator</a
+	  >module <a href="Koshucode-Baala-Core-Relmap-Relkit.html"
+	    >Koshucode.Baala.Core.Relmap.Relkit</a
 	    ></p
 	  ></div
 	><div class="top"
 	><p class="src"
-	  >module <a href="Koshucode-Baala-Core-Relmap-Relkit.html"
-	    >Koshucode.Baala.Core.Relmap.Relkit</a
+	  >module <a href="Koshucode-Baala-Core-Relmap-Relmap.html"
+	    >Koshucode.Baala.Core.Relmap.Relmap</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  >module <a href="Koshucode-Baala-Core-Relmap-Rop.html"
+	    >Koshucode.Baala.Core.Relmap.Rop</a
 	    ></p
 	  ></div
 	><div class="top"
@@ -135,23 +149,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ></p
 	  ></div
 	><h1 id="g:1"
-	>Datatypes
-</h1
+	>Datatypes</h1
 	><div class="doc"
 	><p
-	  >Dependencies of significant datatypes.
-</p
+	  >Dependencies of significant datatypes.</p
 	  ><ul
 	  ><li
-	    > Data <code
-	      ><a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-		>Relmap</a
-		></code
+	    >Data <code
+	      >Relmap</code
 	      > has
     <code
-	      ><a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-		>Relmap</a
-		></code
+	      >Relmap</code
 	      > (recursive),
     <code
 	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
@@ -160,10 +168,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      >, and
     <code
 	      >Lexmap</code
-	      >.
-</li
+	      >.</li
 	    ><li
-	    > Data <code
+	    >Data <code
 	      >Lexmap</code
 	      > has
     <code
@@ -175,23 +182,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		></code
 	      > and
     <code
-	      ><a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
-		>TokenTree</a
+	      ><a href="Koshucode-Baala-Base-Syntax-TTree.html#t:TTree"
+		>TTree</a
 		></code
-	      >.
-</li
+	      >.</li
 	    ></ul
 	  ><p
 	  >Datatypes for implementing <code
-	    ><a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	      >Relmap</a
-	      ></code
-	    > operators.
-</p
+	    >Relmap</code
+	    > operators.</p
 	  ><ul
 	  ><li
-	    > Data <code
-	      ><a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Rop"
+	    >Data <code
+	      ><a href="Koshucode-Baala-Core-Relmap-Rop.html#v:Rop"
 		>Rop</a
 		></code
 	      > has
@@ -199,41 +202,32 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      >AttrSort</code
 	      > and
     <code
-	      ><a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
-		>RopCons</a
-		></code
-	      >.
-</li
+	      >RopCons</code
+	      >.</li
 	    ><li
-	    > Data <code
+	    >Data <code
 	      >AttrSort</code
 	      > has
     <code
-	      ><a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
-		>TokenTree</a
+	      ><a href="Koshucode-Baala-Base-Syntax-TTree.html#t:TTree"
+		>TTree</a
 		></code
-	      >.
-</li
+	      >.</li
 	    ><li
-	    > Data <code
-	      ><a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
-		>RopCons</a
-		></code
+	    >Data <code
+	      >RopCons</code
 	      > has
     <code
-	      ><a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
+	      ><a href="Koshucode-Baala-Core-Relmap-Rop.html#v:RopUse"
 		>RopUse</a
 		></code
 	      > and
     <code
-	      ><a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-		>Relmap</a
-		></code
-	      >.
-</li
+	      >Relmap</code
+	      >.</li
 	    ><li
-	    > Data <code
-	      ><a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
+	    >Data <code
+	      ><a href="Koshucode-Baala-Core-Relmap-Rop.html#v:RopUse"
 		>RopUse</a
 		></code
 	      > has
@@ -241,37 +235,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      >Lexmap</code
 	      > and
     <code
-	      ><a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-		>Relmap</a
-		></code
-	      >.
-</li
+	      >Relmap</code
+	      >.</li
 	    ></ul
 	  ><p
 	  >Datatypes for constructing <code
-	    ><a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	      >Relmap</a
-	      ></code
-	    >.
-</p
+	    >Relmap</code
+	    >.</p
 	  ><ul
 	  ><li
-	    > Data <code
-	      ><a href="Koshucode-Baala-Core-Relmap-Construct.html#t:RelmapCons"
-		>RelmapCons</a
-		></code
-	      > has
-    <code
-	      >ConsLexmap</code
-	      > and
-    <code
-	      ><a href="Koshucode-Baala-Core-Relmap-Construct.html#t:ConsRelmap"
-		>ConsRelmap</a
-		></code
-	      >.
-</li
-	    ><li
-	    > Type <code
+	    >Type <code
 	      >ConsLexmap</code
 	      > has
     <code
@@ -283,26 +256,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		></code
 	      > and
     <code
-	      ><a href="Koshucode-Baala-Base-Syntax-TokenTree.html#t:TokenTree"
-		>TokenTree</a
+	      ><a href="Koshucode-Baala-Base-Syntax-TTree.html#t:TTree"
+		>TTree</a
 		></code
-	      >.
-</li
+	      >.</li
 	    ><li
-	    > Type <code
-	      ><a href="Koshucode-Baala-Core-Relmap-Construct.html#t:ConsRelmap"
-		>ConsRelmap</a
-		></code
+	    >Type <code
+	      >ConsRelmap</code
 	      > has
     <code
 	      >Lexmap</code
 	      > and
     <code
-	      ><a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-		>Relmap</a
-		></code
-	      >.
-</li
+	      >Relmap</code
+	      >.</li
 	    ></ul
 	  ></div
 	></div
@@ -311,7 +278,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html

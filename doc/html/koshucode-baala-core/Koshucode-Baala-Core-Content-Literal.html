@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.70.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.89.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -40,6 +40,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >Safe Haskell</th
 	    ><td
 	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
 	    ></tr
 	  ></table
 	><p class="caption"
@@ -51,28 +57,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Functions
-</a
+	    >Functions</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Document
-</a
+	    >Assert type</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Document</a
 	    ><ul
 	    ><li
-	      ><a href="#g:3"
-		>Types
-</a
-		></li
-	      ><li
 	      ><a href="#g:4"
-		>Simple data
-</a
+		>Simple data</a
 		></li
 	      ><li
 	      ><a href="#g:5"
-		>Compound data
-</a
+		>Compound data</a
 		></li
 	      ></ul
 	    ></li
@@ -83,8 +84,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	>Description</p
 	><div class="doc"
 	><p
-	  >Make literal contents from token tree.
-</p
+	  >Make literal contents from token tree.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -96,8 +96,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >type</span
 	    > <a href="#t:CalcContent"
 	    >CalcContent</a
-	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTreeToAb"
-	    >TokenTreeToAb</a
+	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TTreeToAb"
+	    >TTreeToAb</a
 	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:literal"
@@ -108,50 +108,81 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >CContent</a
 	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:CalcContent"
 	    >CalcContent</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTreeToAb"
-	    >TokenTreeToAb</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TTreeToAb"
+	    >TTreeToAb</a
 	    > c</li
 	  ><li class="src short"
-	  ><a href="#v:getJudge"
-	    >getJudge</a
+	  ><a href="#v:treesToJudge"
+	    >treesToJudge</a
 	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:CalcContent"
 	    >CalcContent</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
-	    >Char</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:AssertType"
+	    >AssertType</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgePat"
 	    >JudgePat</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTreesToAb"
-	    >TokenTreesToAb</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TTreesToAb"
+	    >TTreesToAb</a
 	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
 	    > c)</li
 	  ><li class="src short"
-	  ><a href="#v:getTermedTrees"
-	    >getTermedTrees</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTreesToAb"
-	    >TokenTreesToAb</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:NamedTree"
-	    >NamedTree</a
-	    >]</li
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:AssertType"
+	    >AssertType</a
+	    ><ul class="subs"
+	    ><li
+	      >= <a href="#v:AssertAffirm"
+		>AssertAffirm</a
+		></li
+	      ><li
+	      >| <a href="#v:AssertDeny"
+		>AssertDeny</a
+		></li
+	      ><li
+	      >| <a href="#v:AssertViolate"
+		>AssertViolate</a
+		></li
+	      ></ul
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:assertAs"
+	    >assertAs</a
+	    > ::  <a href="Koshucode-Baala-Core-Content-Literal.html#t:AssertType"
+	    >AssertType</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgeOf"
+	    >JudgeOf</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:assertSymbol"
+	    >assertSymbol</a
+	    > :: <a href="Koshucode-Baala-Core-Content-Literal.html#t:AssertType"
+	    >AssertType</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
 	  ></ul
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Functions
-</h1
+	>Functions</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
 	    > <a name="t:CalcContent" class="def"
 	    >CalcContent</a
-	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTreeToAb"
-	    >TokenTreeToAb</a
-	    > c<a href="src/Koshucode-Baala-Core-Content-Literal.html#CalcContent" class="link"
+	    > c = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TTreeToAb"
+	    >TTreeToAb</a
+	    > c <a href="src/Koshucode-Baala-Core-Content-Literal.html#CalcContent" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Content calculator.</p
+	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -163,193 +194,203 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >CContent</a
 	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:CalcContent"
 	    >CalcContent</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTreeToAb"
-	    >TokenTreeToAb</a
-	    > c<a href="src/Koshucode-Baala-Core-Content-Literal.html#literal" class="link"
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TTreeToAb"
+	    >TTreeToAb</a
+	    > c <a href="src/Koshucode-Baala-Core-Content-Literal.html#literal" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Convert <code
-	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-		>TokenTree</a
-		></code
-	      > into internal form of content.
-</p
+	    >Convert token tree into internal form of content.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:getJudge" class="def"
-	    >getJudge</a
+	  ><a name="v:treesToJudge" class="def"
+	    >treesToJudge</a
 	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
 	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:CalcContent"
 	    >CalcContent</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html#t:Char"
-	    >Char</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:AssertType"
+	    >AssertType</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgePat"
 	    >JudgePat</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTreesToAb"
-	    >TokenTreesToAb</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TTreesToAb"
+	    >TTreesToAb</a
 	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > c)<a href="src/Koshucode-Baala-Core-Content-Literal.html#getJudge" class="link"
+	    > c) <a href="src/Koshucode-Baala-Core-Content-Literal.html#treesToJudge" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Convert token trees into a judge.
    Judges itself are not content type.
-   It can be only used in the top-level of sections.
-</p
+   It can be only used in the top-level of resources.</p
+	    ></div
+	  ></div
+	><h1 id="g:2"
+	>Assert type</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >data</span
+	    > <a name="t:AssertType" class="def"
+	    >AssertType</a
+	    > <a href="src/Koshucode-Baala-Core-Content-Literal.html#AssertType" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="subs constructors"
+	  ><p class="caption"
+	    >Constructors</p
+	    ><table
+	    ><tr
+	      ><td class="src"
+		><a name="v:AssertAffirm" class="def"
+		  >AssertAffirm</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><code
+		    >|==</code
+		    > <em
+		    >pattern</em
+		    > <code
+		    >:</code
+		    > <em
+		    >relmap</em
+		    ></p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AssertDeny" class="def"
+		  >AssertDeny</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><code
+		    >|=X</code
+		    > <em
+		    >pattern</em
+		    > <code
+		    >:</code
+		    > <em
+		    >relmap</em
+		    ></p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AssertViolate" class="def"
+		  >AssertViolate</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><code
+		    >|=V</code
+		    > <em
+		    >pattern</em
+		    > <code
+		    >:</code
+		    > <em
+		    >relmap</em
+		    ></p
+		  ></td
+		></tr
+	      ></table
+	    ></div
+	  ><div class="subs instances"
+	  ><p id="control.i:AssertType" class="caption collapser" onclick="toggleSection('i:AssertType')"
+	    >Instances</p
+	    ><div id="section.i:AssertType" class="show"
+	    ><table
+	      ><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+		    >Eq</a
+		    > <a href="Koshucode-Baala-Core-Content-Literal.html#t:AssertType"
+		    >AssertType</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Data.html#t:Data"
+		    >Data</a
+		    > <a href="Koshucode-Baala-Core-Content-Literal.html#t:AssertType"
+		    >AssertType</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
+		    >Ord</a
+		    > <a href="Koshucode-Baala-Core-Content-Literal.html#t:AssertType"
+		    >AssertType</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
+		    >Show</a
+		    > <a href="Koshucode-Baala-Core-Content-Literal.html#t:AssertType"
+		    >AssertType</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
+		    >Typeable</a
+		    > * <a href="Koshucode-Baala-Core-Content-Literal.html#t:AssertType"
+		    >AssertType</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		></table
+	      ></div
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:getTermedTrees" class="def"
-	    >getTermedTrees</a
-	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTreesToAb"
-	    >TokenTreesToAb</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:NamedTree"
-	    >NamedTree</a
-	    >]<a href="src/Koshucode-Baala-Core-Content-Literal.html#getTermedTrees" class="link"
+	  ><a name="v:assertAs" class="def"
+	    >assertAs</a
+	    > ::  <a href="Koshucode-Baala-Core-Content-Literal.html#t:AssertType"
+	    >AssertType</a
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgeOf"
+	    >JudgeOf</a
+	    > c <a href="src/Koshucode-Baala-Core-Content-Literal.html#assertAs" class="link"
 	    >Source</a
 	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Convert token trees into a list of named token trees.
-</p
-	    ></div
 	  ></div
-	><div class="doc"
-	><p
-	  ><em
-	    >Example</em
-	    >
-</p
-	  ><pre class="screen"
-	  ><code class="prompt"
-	    >&gt;&gt;&gt; </code
-	    ><strong class="userinput"
-	    ><code
-	      >getTermedTrees =&lt;&lt; B.tt &quot;/a 'A3 /b 10&quot;
-</code
-	      ></strong
-	    >Right [(&quot;/a&quot;, TreeB 1 [TreeL (TText 3 0 &quot;'&quot;), TreeL (TText 4 0 &quot;A3&quot;)]),
-       (&quot;/b&quot;, TreeL (TText 8 0 &quot;10&quot;))]
-</pre
+	><div class="top"
+	><p class="src"
+	  ><a name="v:assertSymbol" class="def"
+	    >assertSymbol</a
+	    > :: <a href="Koshucode-Baala-Core-Content-Literal.html#t:AssertType"
+	    >AssertType</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > <a href="src/Koshucode-Baala-Core-Content-Literal.html#assertSymbol" class="link"
+	    >Source</a
+	    ></p
 	  ></div
-	><h1 id="g:2"
-	>Document
-</h1
-	><h2 id="g:3"
-	>Types
-</h2
-	><div class="doc"
-	><p
-	  ><code
-	    ><a href="Koshucode-Baala-Core-Content-Literal.html#v:literal"
-	      >literal</a
-	      ></code
-	    > recognizes the following types.
-</p
-	  ><dl
-	  ><dt
-	    >Boolean</dt
-	    ><dd
-	    >   Boolean used for something is hold or unhold.
-              Textual forms: <code
-	      >#true</code
-	      >, <code
-	      >#fasle</code
-	      >.
-</dd
-	    ><dt
-	    >Empty</dt
-	    ><dd
-	    >     Empty means that there are no values.
-              i.e., universal negation on the term holds.
-              Textual form is the non-quoted parens: <code
-	      >()</code
-	      >.
-</dd
-	    ><dt
-	    >Text</dt
-	    ><dd
-	    >      Sequence of characters.
-              Textual forms is chars with apostrophe or
-              doubly-quoted line: <code
-	      >'abc</code
-	      >, <code
-	      >&quot;abc def&quot;</code
-	      >.
-</dd
-	    ><dt
-	    >Decimal</dt
-	    ><dd
-	    >   Decimal number.
-              Textual forms is sequence of digits:
-              <code
-	      >100</code
-	      >, <code
-	      >99.50</code
-	      >, <code
-	      >hex AF</code
-	      >.
-</dd
-	    ><dt
-	    >Set</dt
-	    ><dd
-	    >       Set is an unordered collection of contents.
-              Duplication among contents is not significant.
-              Textual form is a sequence of contents
-              delimited by colon, enclosed in braces:
-              <code
-	      >{ 'a : 'b : 'c }</code
-	      >.
-</dd
-	    ><dt
-	    >List</dt
-	    ><dd
-	    >      List is an ordered list of contents.
-              Textual form is a sequence of contents
-              delimited by colon, enclosed in square brackets:
-              <code
-	      >[ 'abc : 'def ]</code
-	      >.
-</dd
-	    ><dt
-	    >Assn</dt
-	    ><dd
-	    >      Assn is an association of terms,
-              i.e., a list of named contents.
-              Textual form is a sequence of terms
-              with bar-angles: <code
-	      >&lt;| /a 10 /b 20 |&gt;</code
-	      >.
-</dd
-	    ><dt
-	    >Relation</dt
-	    ><dd
-	    >  Relation is a set of same-type tuples,
-              Textual form is a sequence of tuples
-              enclosed in bar-braces.
-              The first tuple is a heading of relation,
-              and succeeding tuples are delimited by vertical bar:
-              <code
-	      >{| /a : /b | 'A1 : 20 | 'A3 : 40 |}</code
-	      >.
-</dd
-	    ></dl
-	  ></div
+	><h1 id="g:3"
+	>Document</h1
 	><h2 id="g:4"
-	>Simple data
-</h2
+	>Simple data</h2
 	><div class="doc"
 	><p
-	  >Prepere some definitions.
-</p
+	  >Prepere some definitions.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -369,20 +410,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >&gt;&gt;&gt; </code
 	    ><strong class="userinput"
 	    ><code
-	      >let lit  = literal [] :: B.TokenTree -&gt; B.Ab VContent
+	      >let lit  = literal [] :: B.TTree -&gt; B.Ab VContent
 </code
 	      ></strong
 	    ><code class="prompt"
 	    >&gt;&gt;&gt; </code
 	    ><strong class="userinput"
 	    ><code
-	      >let lits = literals lit . trees
+	      >let lits = litColon lit . trees
 </code
 	      ></strong
 	    ></pre
 	  ><p
-	  >Boolean.
-</p
+	  >Boolean.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -394,8 +434,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >Right [VBool True, VBool False]
 </pre
 	  ><p
-	  >Words.
-</p
+	  >Words.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -407,8 +446,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >Right [VText &quot;a&quot;, VText &quot;b c&quot;]
 </pre
 	  ><p
-	  >Decimal.
-</p
+	  >Decimal.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -420,8 +458,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >Right [VDec (Decimal (120, 10), 1, False)]
 </pre
 	  ><p
-	  >Empty as no ordinary value.
-</p
+	  >Empty as no ordinary value.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -434,12 +471,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 </pre
 	  ></div
 	><h2 id="g:5"
-	>Compound data
-</h2
+	>Compound data</h2
 	><div class="doc"
 	><p
-	  >Set.
-</p
+	  >Set.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -451,8 +486,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >Right [VSet [VText &quot;b&quot;, VText &quot;a&quot;, VText &quot;c&quot;]]
 </pre
 	  ><p
-	  >List.
-</p
+	  >List.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -464,8 +498,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >Right [VList [VText &quot;a&quot;, VText &quot;10&quot;, VDec (Decimal (20, 1), 0, False)]]
 </pre
 	  ><p
-	  >Assn.
-</p
+	  >Assn.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -479,8 +512,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
   , (&quot;/b&quot;, VSet [VText &quot;y&quot;, VText &quot;z&quot;])]]
 </pre
 	  ><p
-	  >Relation.
-</p
+	  >Relation.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -502,7 +534,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html

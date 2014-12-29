@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.70.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.89.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -41,6 +41,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	    ><td
 	    >None</td
 	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
 	  ></table
 	><p class="caption"
 	>Koshucode.Baala.Core.Assert.Run</p
@@ -50,8 +56,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	>Description</p
 	><div class="doc"
 	><p
-	  >Running relational calculation.
-</p
+	  >Running relational calculation.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -69,11 +74,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	    >CRel</a
 	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CEmpty"
 	    >CEmpty</a
-	    > c) =&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
-	    >Global</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Assert-Assert.html#t:ShortAssert"
-	    >ShortAssert</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:SelectRel"
+	    >SelectRel</a
+	    > h, <a href="Koshucode-Baala-Core-Relmap-Global.html#t:GetGlobal"
+	    >GetGlobal</a
+	    > h) =&gt; h c -&gt; <a href="Koshucode-Baala-Core-Assert-Assert.html#t:ShortAssert-39-"
+	    >ShortAssert'</a
+	    > h c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
 	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Output.html#t:OutputChunks"
 	    >OutputChunks</a
@@ -95,21 +102,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	    >CRel</a
 	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CEmpty"
 	    >CEmpty</a
-	    > c) =&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
-	    >Global</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Assert-Assert.html#t:ShortAssert"
-	    >ShortAssert</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:SelectRel"
+	    >SelectRel</a
+	    > h, <a href="Koshucode-Baala-Core-Relmap-Global.html#t:GetGlobal"
+	    >GetGlobal</a
+	    > h) =&gt; h c -&gt; <a href="Koshucode-Baala-Core-Assert-Assert.html#t:ShortAssert-39-"
+	    >ShortAssert'</a
+	    > h c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
 	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Output.html#t:OutputChunks"
 	    >OutputChunks</a
-	    > c)<a href="src/Koshucode-Baala-Core-Assert-Run.html#runAssertJudges" class="link"
+	    > c) <a href="src/Koshucode-Baala-Core-Assert-Run.html#runAssertJudges" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Calculate assertion list.
-</p
+	    >Calculate assertion list.</p
 	    ></div
 	  ></div
 	></div
@@ -118,7 +126,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html

@@ -3,13 +3,13 @@
 ><head
   ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
      /><title
-    >Koshucode.Baala.Core.Section.Quoter</title
+    >Koshucode.Baala.Core.Resource.Quoter</title
     ><link href="ocean.css" rel="stylesheet" type="text/css" title="Ocean"
      /><script src="haddock-util.js" type="text/javascript"
     ></script
     ><script type="text/javascript"
     >//<![CDATA[
-window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-Section-Quoter.html");};
+window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-Resource-Quoter.html");};
 //]]>
 </script
     ></head
@@ -17,7 +17,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
   ><div id="package-header"
     ><ul class="links" id="page-menu"
       ><li
-	><a href="src/Koshucode-Baala-Core-Section-Quoter.html"
+	><a href="src/Koshucode-Baala-Core-Resource-Quoter.html"
 	  >Source</a
 	  ></li
 	><li
@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.70.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.89.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -41,9 +41,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	    ><td
 	    >None</td
 	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
 	  ></table
 	><p class="caption"
-	>Koshucode.Baala.Core.Section.Quoter</p
+	>Koshucode.Baala.Core.Resource.Quoter</p
 	></div
       ><div id="synopsis"
       ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
@@ -56,15 +62,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	    >ConsLexmap</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Language-Haskell-TH-Lib.html#t:ExpQ"
 	    >ExpQ</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Section-Quoter.html#t:QuasiQuoter"
+	    > -&gt; <a href="Koshucode-Baala-Core-Resource-Quoter.html#t:QuasiQuoter"
 	    >QuasiQuoter</a
 	    ></li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a href="#t:QuasiQuoter"
+	    > <a href="#t:QuasiQuoter"
 	    >QuasiQuoter</a
-	    > </li
+	    > :: *</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -74,7 +80,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	><p class="src"
 	  ><a name="v:koshuQuoter" class="def"
 	    >koshuQuoter</a
-	    ><a href="src/Koshucode-Baala-Core-Section-Quoter.html#koshuQuoter" class="link"
+	    > <a href="src/Koshucode-Baala-Core-Resource-Quoter.html#koshuQuoter" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs arguments"
@@ -88,8 +94,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 		  ></td
 		><td class="doc"
 		><p
-		  >Relmap lex constructor
-</p
+		  >Relmap lex constructor</p
 		  ></td
 		></tr
 	      ><tr
@@ -101,29 +106,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 		><p
 		  >Quotation expression of <code
 		    >ConsRelmap</code
-		    >
-</p
+		    ></p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; <a href="Koshucode-Baala-Core-Section-Quoter.html#t:QuasiQuoter"
+		>-&gt; <a href="Koshucode-Baala-Core-Resource-Quoter.html#t:QuasiQuoter"
 		  >QuasiQuoter</a
 		  ></td
 		><td class="doc"
 		><p
 		  >Quoter that outputs
   <code
-		    ><a href="Koshucode-Baala-Core-Section.html#t:Section"
-		      >Section</a
+		    ><a href="Koshucode-Baala-Core-Resource.html#t:Resource"
+		      >Resource</a
 		      ></code
 		    > or
   <code
 		    ><a href="Koshucode-Baala-Core-Relmap.html#t:Relmap"
 		      >Relmap</a
 		      ></code
-		    >
-</p
+		    ></p
 		  ></td
 		></tr
 	      ></table
@@ -132,17 +135,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
 	  ><p
 	    >Make quasiquoter for <code
 	      >[koshu| ... |]</code
-	      >. 
-</p
+	      >. </p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a name="t:QuasiQuoter" class="def"
+	    > <a name="t:QuasiQuoter" class="def"
 	    >QuasiQuoter</a
-	    >  </p
+	    > :: *</p
 	  ></div
 	></div
       ></div
@@ -150,7 +152,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-S
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html

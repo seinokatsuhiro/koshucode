@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.70.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.89.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -41,6 +41,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	    ><td
 	    >None</td
 	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
 	  ></table
 	><p class="caption"
 	>Koshucode.Baala.Core.Assert.Dataset</p
@@ -50,13 +56,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	>Description</p
 	><div class="doc"
 	><p
-	  >Dataset as a set of judges.
-</p
+	  >Dataset as a set of judges.</p
 	  ><p
 	  >Dataset is like a bridge of judges and relations.
    We can get a relation from a dataset,
-   that dataset is build from judges.
-</p
+   that dataset is build from judges.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -66,12 +70,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	><li class="src short"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a href="#t:Dataset"
+	    > <a href="#t:Dataset"
 	    >Dataset</a
 	    > c</li
 	  ><li class="src short"
-	  ><a href="#v:emptyDataset"
-	    >emptyDataset</a
+	  ><a href="#v:datasetEmpty"
+	    >datasetEmpty</a
 	    > ::  <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
 	    >Dataset</a
 	    > c</li
@@ -84,8 +88,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	    >Dataset</a
 	    > c</li
 	  ><li class="src short"
-	  ><a href="#v:addJudges"
-	    >addJudges</a
+	  ><a href="#v:datasetAdd"
+	    >datasetAdd</a
 	    > ::  [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
 	    > c] -&gt; <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
@@ -94,8 +98,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	    >Dataset</a
 	    > c</li
 	  ><li class="src short"
-	  ><a href="#v:selectRelation"
-	    >selectRelation</a
+	  ><a href="#v:datasetSelect"
+	    >datasetSelect</a
 	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
 	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CEmpty"
@@ -114,30 +118,28 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	><p class="src"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a name="t:Dataset" class="def"
+	    > <a name="t:Dataset" class="def"
 	    >Dataset</a
 	    > c <a href="src/Koshucode-Baala-Core-Assert-Dataset.html#Dataset" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Dataset is a set of judges.
-</p
+	    >Dataset is a set of judges.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:emptyDataset" class="def"
-	    >emptyDataset</a
+	  ><a name="v:datasetEmpty" class="def"
+	    >datasetEmpty</a
 	    > ::  <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
 	    >Dataset</a
-	    > c<a href="src/Koshucode-Baala-Core-Assert-Dataset.html#emptyDataset" class="link"
+	    > c <a href="src/Koshucode-Baala-Core-Assert-Dataset.html#datasetEmpty" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Dataset that has no judges.
-</p
+	    >Dataset that has no judges.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -148,39 +150,37 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	    >Judge</a
 	    > c] -&gt; <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
 	    >Dataset</a
-	    > c<a href="src/Koshucode-Baala-Core-Assert-Dataset.html#dataset" class="link"
+	    > c <a href="src/Koshucode-Baala-Core-Assert-Dataset.html#dataset" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Gather judges into a dataset.
-</p
+	    >Gather judges into a dataset.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:addJudges" class="def"
-	    >addJudges</a
+	  ><a name="v:datasetAdd" class="def"
+	    >datasetAdd</a
 	    > ::  [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
 	    > c] -&gt; <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
 	    >Dataset</a
 	    > c -&gt; <a href="Koshucode-Baala-Core-Assert-Dataset.html#t:Dataset"
 	    >Dataset</a
-	    > c<a href="src/Koshucode-Baala-Core-Assert-Dataset.html#addJudges" class="link"
+	    > c <a href="src/Koshucode-Baala-Core-Assert-Dataset.html#datasetAdd" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Add judges to dataset.
-</p
+	    >Add judges to dataset.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:selectRelation" class="def"
-	    >selectRelation</a
-	    ><a href="src/Koshucode-Baala-Core-Assert-Dataset.html#selectRelation" class="link"
+	  ><a name="v:datasetSelect" class="def"
+	    >datasetSelect</a
+	    > <a href="src/Koshucode-Baala-Core-Assert-Dataset.html#datasetSelect" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs arguments"
@@ -204,8 +204,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 		  > c</td
 		><td class="doc"
 		><p
-		  >Dataset
-</p
+		  >Dataset</p
 		  ></td
 		></tr
 	      ><tr
@@ -215,8 +214,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 		  > c</td
 		><td class="doc"
 		><p
-		  >Relation selector
-</p
+		  >Relation selector</p
 		  ></td
 		></tr
 	      ></table
@@ -226,8 +224,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	    >Select relation from dataset.
    If a giving term is not in judges, <code
 	      >CEmpty</code
-	      > sign is used.
-</p
+	      > sign is used.</p
 	    ></div
 	  ></div
 	></div
@@ -236,7 +233,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html

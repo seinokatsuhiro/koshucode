@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.70.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.89.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -40,6 +40,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	    >Safe Haskell</th
 	    ><td
 	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
 	    ></tr
 	  ></table
 	><p class="caption"
@@ -51,18 +57,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Attribute name
-</a
+	    >Attribute name</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Attribute trees
-</a
+	    >Attribute trees</a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >Attribute sorter
-</a
+	    >Attribute sorter</a
 	    ></li
 	  ></ul
 	></div
@@ -71,8 +74,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	>Description</p
 	><div class="doc"
 	><p
-	  >Attributes of relmap operator.
-</p
+	  >Attributes of relmap operator.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -82,26 +84,40 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	><li class="src short"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a href="#t:AttrName"
+	    > <a href="#t:AttrName"
 	    >AttrName</a
-	    > <ul class="subs"
+	    ><ul class="subs"
 	    ><li
-	      >= <a href="#v:AttrTree"
-		>AttrTree</a
+	      >= <a href="#v:AttrNameNormal"
+		>AttrNameNormal</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
-		>  </li
+		></li
 	      ><li
-	      >| <a href="#v:AttrRelmap"
-		>AttrRelmap</a
+	      >| <a href="#v:AttrNameRelmap"
+		>AttrNameRelmap</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
-		>  </li
+		></li
+	      ><li
+	      >| <a href="#v:AttrNameNest"
+		>AttrNameNest</a
+		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		></li
 	      ></ul
 	    ></li
 	  ><li class="src short"
-	  ><a href="#v:isAttrRelmap"
-	    >isAttrRelmap</a
+	  ><a href="#v:isAttrNameRelmap"
+	    >isAttrNameRelmap</a
+	    > :: <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrName"
+	    >AttrName</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:isAttrNameNest"
+	    >isAttrNameNest</a
 	    > :: <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrName"
 	    >AttrName</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
@@ -130,9 +146,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a href="#t:AttrDefine"
+	    > <a href="#t:AttrDefine"
 	    >AttrDefine</a
-	    >  = <a href="#v:AttrDefine"
+	    > = <a href="#v:AttrDefine"
 	    >AttrDefine</a
 	    > {<ul class="subs"
 	    ><li
@@ -140,17 +156,17 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 		>attrTrunkSorter</a
 		> :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
 		>AbMap</a
-		> <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrTrees"
-		>AttrTrees</a
-		></li
+		> [<a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrTree"
+		>AttrTree</a
+		>]</li
 	      ><li
 	      ><a href="#v:attrClassifier"
 		>attrClassifier</a
 		> :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
 		>AbMap</a
-		> <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrTrees"
-		>AttrTrees</a
-		></li
+		> [<a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrTree"
+		>AttrTree</a
+		>]</li
 	      ><li
 	      ><a href="#v:attrTrunkNames"
 		>attrTrunkNames</a
@@ -168,32 +184,32 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:AttrTrees"
-	    >AttrTrees</a
-	    > = [(<a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrName"
+	    > <a href="#t:AttrTree"
+	    >AttrTree</a
+	    > = (<a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrName"
 	    >AttrName</a
-	    >, [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >])]</li
+	    >, [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TTree"
+	    >TTree</a
+	    >])</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
 	    > <a href="#t:AttrSort"
 	    >AttrSort</a
-	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
+	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TTree"
+	    >TTree</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrTrees"
-	    >AttrTrees</a
-	    ></li
+	    > [<a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrTree"
+	    >AttrTree</a
+	    >]</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
 	    > <a href="#t:TreeSort"
 	    >TreeSort</a
-	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
+	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TTree"
+	    >TTree</a
 	    >] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:NamedTrees"
 	    >NamedTrees</a
 	    >]</li
@@ -205,16 +221,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    ></li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:Roal"
-	    >Roal</a
-	    > a = ((<a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:RopName"
-	    >RopName</a
-	    >, <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrTrees"
-	    >AttrTrees</a
-	    >), a)</li
 	  ><li class="src short"
 	  ><a href="#v:attrSort"
 	    >attrSort</a
@@ -239,40 +245,59 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Attribute name
-</h1
+	>Attribute name</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a name="t:AttrName" class="def"
+	    > <a name="t:AttrName" class="def"
 	    >AttrName</a
-	    >  <a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#AttrName" class="link"
+	    > <a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#AttrName" class="link"
 	    >Source</a
 	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Attribute name for relmap operator.</p
+	    ></div
 	  ><div class="subs constructors"
 	  ><p class="caption"
 	    >Constructors</p
 	    ><table
 	    ><tr
 	      ><td class="src"
-		><a name="v:AttrTree" class="def"
-		  >AttrTree</a
+		><a name="v:AttrNameNormal" class="def"
+		  >AttrNameNormal</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
 		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
+		><td class="doc"
+		><p
+		  >Normal attribute</p
+		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:AttrRelmap" class="def"
-		  >AttrRelmap</a
+		><a name="v:AttrNameRelmap" class="def"
+		  >AttrNameRelmap</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
 		  ></td
-		><td class="doc empty"
-		>&nbsp;</td
+		><td class="doc"
+		><p
+		  >Attribute for subrelmap</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AttrNameNest" class="def"
+		  >AttrNameNest</a
+		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >String</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Attribute for nested relation reference</p
+		  ></td
 		></tr
 	      ></table
 	    ></div
@@ -325,7 +350,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 		><td class="src"
 		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Typeable-Internal.html#t:Typeable"
 		    >Typeable</a
-		    > <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrName"
+		    > * <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrName"
 		    >AttrName</a
 		    ></td
 		  ><td class="doc empty"
@@ -337,19 +362,34 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:isAttrRelmap" class="def"
-	    >isAttrRelmap</a
+	  ><a name="v:isAttrNameRelmap" class="def"
+	    >isAttrNameRelmap</a
 	    > :: <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrName"
 	    >AttrName</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 	    >Bool</a
-	    ><a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#isAttrRelmap" class="link"
+	    > <a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#isAttrNameRelmap" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Test attribute name is for relmap.
-</p
+	    >Test attribute name is for subrelmap.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isAttrNameNest" class="def"
+	    >isAttrNameNest</a
+	    > :: <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrName"
+	    >AttrName</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#isAttrNameNest" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test attribute name is for nested relation reference.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -360,13 +400,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	    >AttrName</a
 	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    ><a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#attrNameText" class="link"
+	    > <a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#attrNameText" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >String part of attribute names.
-</p
+	    >String part of attribute names.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -375,15 +414,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	    >attrNameAttr</a
 	    > :: <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrName"
 	    >AttrName</a
-	    ><a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#attrNameAttr" class="link"
+	    > <a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#attrNameAttr" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Constant for attribute name <code
 	      >@attr</code
-	      >.
-</p
+	      >.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -392,33 +430,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	    >attrNameTrunk</a
 	    > :: <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrName"
 	    >AttrName</a
-	    ><a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#attrNameTrunk" class="link"
+	    > <a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#attrNameTrunk" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Constant for attribute name <code
 	      >@trunk</code
-	      >.
-</p
+	      >.</p
 	    ></div
 	  ></div
 	><h1 id="g:2"
-	>Attribute trees
-</h1
+	>Attribute trees</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a name="t:AttrDefine" class="def"
+	    > <a name="t:AttrDefine" class="def"
 	    >AttrDefine</a
-	    >  <a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#AttrDefine" class="link"
+	    > <a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#AttrDefine" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Definition of attribute sorter.
-</p
+	    >Definition of attribute sorter.</p
 	    ></div
 	  ><div class="subs constructors"
 	  ><p class="caption"
@@ -443,9 +478,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 			>attrTrunkSorter</a
 			> :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
 			>AbMap</a
-			> <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrTrees"
-			>AttrTrees</a
-			></dt
+			> [<a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrTree"
+			>AttrTree</a
+			>]</dt
 		      ><dd class="doc empty"
 		      >&nbsp;</dd
 		      ><dt class="src"
@@ -453,9 +488,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 			>attrClassifier</a
 			> :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:AbMap"
 			>AbMap</a
-			> <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrTrees"
-			>AttrTrees</a
-			></dt
+			> [<a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrTree"
+			>AttrTree</a
+			>]</dt
 		      ><dd class="doc empty"
 		      >&nbsp;</dd
 		      ><dt class="src"
@@ -487,19 +522,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:AttrTrees" class="def"
-	    >AttrTrees</a
-	    > = [(<a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrName"
+	    > <a name="t:AttrTree" class="def"
+	    >AttrTree</a
+	    > = (<a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrName"
 	    >AttrName</a
-	    >, [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >])]<a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#AttrTrees" class="link"
+	    >, [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TTree"
+	    >TTree</a
+	    >]) <a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#AttrTree" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >List of attribute name and its contents.
-</p
+	    >List of attribute name and its contents.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -508,21 +542,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	    >type</span
 	    > <a name="t:AttrSort" class="def"
 	    >AttrSort</a
-	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
+	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TTree"
+	    >TTree</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrTrees"
-	    >AttrTrees</a
-	    ><a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#AttrSort" class="link"
+	    > [<a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrTree"
+	    >AttrTree</a
+	    >] <a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#AttrSort" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Sorter for attribute of relmap operator.
    Sorters docompose attribute trees,
-   and give a name to subattribute.
-</p
+   and give a name to subattribute.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -531,11 +564,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	    >type</span
 	    > <a name="t:TreeSort" class="def"
 	    >TreeSort</a
-	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
+	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TTree"
+	    >TTree</a
 	    >] -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:NamedTrees"
 	    >NamedTrees</a
-	    >]<a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#TreeSort" class="link"
+	    >] <a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#TreeSort" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -547,38 +580,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	    >RopName</a
 	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    ><a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#RopName" class="link"
+	    > <a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#RopName" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Name of relmap operator.
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:Roal" class="def"
-	    >Roal</a
-	    > a = ((<a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:RopName"
-	    >RopName</a
-	    >, <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrTrees"
-	    >AttrTrees</a
-	    >), a)<a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#Roal" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Association of operator use and something.
-   Operator use is represented as pair of operator name and attributes.
-</p
+	    >Name of relmap operator.</p
 	    ></div
 	  ></div
 	><h1 id="g:3"
-	>Attribute sorter
-</h1
+	>Attribute sorter</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:attrSort" class="def"
@@ -587,7 +598,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	    >AttrDefine</a
 	    > -&gt; <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrSort"
 	    >AttrSort</a
-	    ><a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#attrSort" class="link"
+	    > <a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#attrSort" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -597,7 +608,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	    >attrSortBranch</a
 	    > :: <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrSort"
 	    >AttrSort</a
-	    ><a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#attrSortBranch" class="link"
+	    > <a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#attrSortBranch" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -607,7 +618,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
 	    >hyphenAssc</a
 	    > :: <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:TreeSort"
 	    >TreeSort</a
-	    ><a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#hyphenAssc" class="link"
+	    > <a href="src/Koshucode-Baala-Core-Lexmap-Attribute.html#hyphenAssc" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -617,8 +628,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
    Non quoted words beginning with hyphen, e.g., <code
 	    >-x</code
 	    >,
-   are name of group.
-</p
+   are name of group.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -638,7 +648,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-L
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html

@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.70.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.89.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -40,6 +40,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >Safe Haskell</th
 	    ><td
 	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
 	    ></tr
 	  ></table
 	><p class="caption"
@@ -51,13 +57,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Expression
-</a
+	    >Data types</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Operator
-</a
+	    >Functions</a
+	    ></li
+	  ><li
+	  ><a href="#g:3"
+	    >Process</a
 	    ></li
 	  ></ul
 	></div
@@ -66,8 +74,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	>Description</p
 	><div class="doc"
 	><p
-	  >Term-content calcutation.
-</p
+	  >Term-content expression.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -77,109 +84,107 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	><li class="src short"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a href="#t:Cox"
+	    > <a href="#t:Cox"
 	    >Cox</a
 	    > c<ul class="subs"
 	    ><li
 	      >= <a href="#v:CoxLit"
 		>CoxLit</a
-		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		>CodePt</a
-		>] c  </li
+		>] c</li
 	      ><li
 	      >| <a href="#v:CoxTerm"
 		>CoxTerm</a
-		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		>CodePt</a
 		>] [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
 		>TermName</a
 		>] [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 		>Int</a
-		>]  </li
+		>]</li
 	      ><li
-	      >| <a href="#v:CoxBase"
-		>CoxBase</a
-		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+	      >| <a href="#v:CoxCalc"
+		>CoxCalc</a
+		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		>CodePt</a
-		>] (<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cop"
-		>Cop</a
-		> c)  </li
+		>] <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:BlankName"
+		>BlankName</a
+		> (<a href="Koshucode-Baala-Core-Content-Cox.html#t:CopCalc"
+		>CopCalc</a
+		> c)</li
 	      ><li
 	      >| <a href="#v:CoxLocal"
 		>CoxLocal</a
-		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		>CodePt</a
 		>] <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 		>Int</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:CoxBlank"
 		>CoxBlank</a
-		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		>CodePt</a
 		>] <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:BlankName"
 		>BlankName</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:CoxFill"
 		>CoxFill</a
-		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		>CodePt</a
 		>] (<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
 		>Cox</a
 		> c) [<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
 		>Cox</a
-		> c]  </li
+		> c]</li
 	      ><li
 	      >| <a href="#v:CoxForm1"
 		>CoxForm1</a
-		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		>CodePt</a
-		>] (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
-		>Maybe</a
+		>] <a href="Koshucode-Baala-Core-Content-Cox.html#t:CoxTag"
+		>CoxTag</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>) <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
 		> (<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
 		>Cox</a
-		> c)  </li
+		> c)</li
 	      ><li
 	      >| <a href="#v:CoxForm"
 		>CoxForm</a
-		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		>CodePt</a
-		>] (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
-		>Maybe</a
-		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		>String</a
-		>) [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>] <a href="Koshucode-Baala-Core-Content-Cox.html#t:CoxTag"
+		>CoxTag</a
+		> [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
 		>] (<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
 		>Cox</a
-		> c)  </li
+		> c)</li
 	      ><li
 	      >| <a href="#v:CoxWith"
 		>CoxWith</a
-		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		> [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		>CodePt</a
 		>] [<a href="Koshucode-Baala-Core-Content-Cox.html#t:NamedCox"
 		>NamedCox</a
 		> c] (<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
 		>Cox</a
-		> c)  </li
+		> c)</li
 	      ></ul
 	    ></li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:CoxAssn"
-	    >CoxAssn</a
-	    > c = (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:BlankName"
-	    >BlankName</a
-	    >, <a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
+	    > <a href="#t:MaybeCox"
+	    >MaybeCox</a
+	    > c = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
 	    >Cox</a
 	    > c)</li
 	  ><li class="src short"
@@ -193,28 +198,38 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >Cox</a
 	    > c)</li
 	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:CopCalc"
+	    >CopCalc</a
+	    > c = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > c</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:CoxTag"
+	    >CoxTag</a
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:coxLit"
+	    >coxLit</a
+	    > ::  c -&gt; <a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
+	    >Cox</a
+	    > c</li
+	  ><li class="src short"
 	  ><a href="#v:coxSyntacticArity"
 	    >coxSyntacticArity</a
 	    > ::  <a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
 	    >Cox</a
 	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:isCoxBase"
-	    >isCoxBase</a
-	    > ::  <a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
-	    >Cox</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:isCoxForm"
-	    >isCoxForm</a
-	    > ::  <a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
-	    >Cox</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	    >Bool</a
 	    ></li
 	  ><li class="src short"
 	  ><a href="#v:coxMap"
@@ -246,292 +261,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    > (<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
 	    >Cox</a
 	    > c)</li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >data</span
-	    >  <a href="#t:Cop"
-	    >Cop</a
-	    > c<ul class="subs"
-	    ><li
-	      >= <a href="#v:CopFun"
-		>CopFun</a
-		> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:BlankName"
-		>BlankName</a
-		> (<a href="Koshucode-Baala-Core-Content-Cox.html#t:CopFun"
-		>CopFun</a
-		> c)  </li
-	      ><li
-	      >| <a href="#v:CopCox"
-		>CopCox</a
-		> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:BlankName"
-		>BlankName</a
-		> (<a href="Koshucode-Baala-Core-Content-Cox.html#t:CopCox"
-		>CopCox</a
-		> c)  </li
-	      ><li
-	      >| <a href="#v:CopTree"
-		>CopTree</a
-		> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:BlankName"
-		>BlankName</a
-		> <a href="Koshucode-Baala-Core-Content-Cox.html#t:CopTree"
-		>CopTree</a
-		>  </li
-	      ></ul
-	    ></li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:CopBundle"
-	    >CopBundle</a
-	    > c = ([<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cop"
-	    >Cop</a
-	    > c], [<a href="Koshucode-Baala-Core-Content-Cox.html#t:NamedCox"
-	    >NamedCox</a
-	    > c])</li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:CopFun"
-	    >CopFun</a
-	    > c = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > c</li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:CopCox"
-	    >CopCox</a
-	    > c = [<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
-	    >Cox</a
-	    > c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > (<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
-	    >Cox</a
-	    > c)</li
-	  ><li class="src short"
-	  ><span class="keyword"
-	    >type</span
-	    > <a href="#t:CopTree"
-	    >CopTree</a
-	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:copName"
-	    >copName</a
-	    > ::  <a href="Koshucode-Baala-Core-Content-Cox.html#t:Cop"
-	    >Cop</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:BlankName"
-	    >BlankName</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:copNormal"
-	    >copNormal</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:BlankName"
-	    >BlankName</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:copInternal"
-	    >copInternal</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:BlankName"
-	    >BlankName</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:copPrefix"
-	    >copPrefix</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:BlankName"
-	    >BlankName</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:copInfix"
-	    >copInfix</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:BlankName"
-	    >BlankName</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:copPostfix"
-	    >copPostfix</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:BlankName"
-	    >BlankName</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:isCopFunction"
-	    >isCopFunction</a
-	    > ::  <a href="Koshucode-Baala-Core-Content-Cox.html#t:Cop"
-	    >Cop</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    ></li
-	  ><li class="src short"
-	  ><a href="#v:isCopSyntax"
-	    >isCopSyntax</a
-	    > ::  <a href="Koshucode-Baala-Core-Content-Cox.html#t:Cop"
-	    >Cop</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    ></li
 	  ></ul
 	></div
       ><div id="interface"
-      ><h1
-	>Documentation</h1
-	><div class="doc"
-	><p
-	  >Phase 1. Convert input texts into token trees.
-</p
-	  ><dl
-	  ><dt
-	    >1. <code
-	      >String -&gt; [Token]</code
-	      ></dt
-	    ><dd
-	    >
-       Parse input string into list of token.
-       See <code
-	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenLine.html#v:tokens"
-		>tokens</a
-		></code
-	      >.
-</dd
-	    ><dt
-	    >2. <code
-	      >[Token] -&gt; [TokenTree]</code
-	      ></dt
-	    ><dd
-	    >
-       Analyze token list structure.
-       See <code
-	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#v:tokenTrees"
-		>tokenTrees</a
-		></code
-	      >
-</dd
-	    ><dt
-	    >3. <code
-	      >[TokenTree] -&gt; TokenTree</code
-	      ></dt
-	    ><dd
-	    >
-       Enclose list of token tree in <code
-	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tree.html#v:TreeB"
-		>TreeB</a
-		></code
-	      >.
-       See <code
-	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Tree.html#v:treeWrap"
-		>treeWrap</a
-		></code
-	      >.
-</dd
-	    ></dl
-	  ><p
-	  >Phase 2. Transform token trees,
-           and convert into abstract syntax trees.
-</p
-	  ><dl
-	  ><dt
-	    >4. <code
-	      >TokenTree -&gt; TokenTree</code
-	      ></dt
-	    ><dd
-	    >
-       Expand syntax operators.
-</dd
-	    ><dt
-	    >5. <code
-	      >TokenTree -&gt; TokenTree</code
-	      ></dt
-	    ><dd
-	    >
-       Translate binary operators from infix to prefix.
-       See <code
-	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Infix.html#v:infixToPrefix"
-		>infixToPrefix</a
-		></code
-	      >.
-</dd
-	    ><dt
-	    >6. <code
-	      >TokenTree -&gt; Cox c</code
-	      ></dt
-	    ><dd
-	    >
-       Convert from token tree into abstract syntax trees.
-</dd
-	    ></dl
-	  ><p
-	  >Phase 3. Calculate content expressions.
-</p
-	  ><dl
-	  ><dt
-	    >7. <code
-	      >Cox c -&gt; Cox c</code
-	      ></dt
-	    ><dd
-	    >
-       Attach De Bruijn indecies for bound variables.
-</dd
-	    ><dt
-	    >8. <code
-	      >Relhead -&gt; Cox c -&gt; Cox c</code
-	      ></dt
-	    ><dd
-	    >
-       Attach term positions using actural heading of relation.
-</dd
-	    ><dt
-	    >9. <code
-	      >Cox c -&gt; Cox c</code
-	      ></dt
-	    ><dd
-	    >
-       Reduce derived expressions into base expressions.
-</dd
-	    ><dt
-	    >10. <code
-	      >[c] -&gt; Cox c -&gt; c</code
-	      ></dt
-	    ><dd
-	    >
-       Calculate content expression for each tuple of relation.
-       See <code
-	      >coxRun</code
-	      >.
-</dd
-	    ></dl
-	  ></div
-	><h1 id="g:1"
-	>Expression
-</h1
+      ><h1 id="g:1"
+	>Data types</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a name="t:Cox" class="def"
+	    > <a name="t:Cox" class="def"
 	    >Cox</a
 	    > c <a href="src/Koshucode-Baala-Core-Content-Cox.html#Cox" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Content expressions.
-</p
+	    >Term-content expressions.</p
 	    ></div
 	  ><div class="subs constructors"
 	  ><p class="caption"
@@ -541,20 +287,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	      ><td class="src"
 		><a name="v:CoxLit" class="def"
 		  >CoxLit</a
-		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		  >CodePt</a
 		  >] c</td
 		><td class="doc"
 		><p
-		  >Literal content
-</p
+		  >Literal content</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
 		><a name="v:CoxTerm" class="def"
 		  >CoxTerm</a
-		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		  >CodePt</a
 		  >] [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
 		  >TermName</a
@@ -563,30 +308,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 		  >]</td
 		><td class="doc"
 		><p
-		  >Term reference, its name and position
-</p
+		  >Term reference, its name and position</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
-		><a name="v:CoxBase" class="def"
-		  >CoxBase</a
-		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		><a name="v:CoxCalc" class="def"
+		  >CoxCalc</a
+		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		  >CodePt</a
-		  >] (<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cop"
-		  >Cop</a
+		  >] <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:BlankName"
+		  >BlankName</a
+		  > (<a href="Koshucode-Baala-Core-Content-Cox.html#t:CopCalc"
+		  >CopCalc</a
 		  > c)</td
 		><td class="doc"
 		><p
-		  >Base function
-</p
+		  >Content calculator</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
 		><a name="v:CoxLocal" class="def"
 		  >CoxLocal</a
-		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		  >CodePt</a
 		  >] <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
@@ -595,30 +340,28 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 		  ></td
 		><td class="doc"
 		><p
-		  >Local blank, its name and De Bruijn index
-</p
+		  >Local blank, its name and De Bruijn index</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
 		><a name="v:CoxBlank" class="def"
 		  >CoxBlank</a
-		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		  >CodePt</a
 		  >] <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:BlankName"
 		  >BlankName</a
 		  ></td
 		><td class="doc"
 		><p
-		  >Blank in form
-</p
+		  >Blank in form</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
 		><a name="v:CoxFill" class="def"
 		  >CoxFill</a
-		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		  >CodePt</a
 		  >] (<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
 		  >Cox</a
@@ -627,57 +370,50 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 		  > c]</td
 		><td class="doc"
 		><p
-		  >Fill args in a form
-</p
+		  >Fill args in a form</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
 		><a name="v:CoxForm1" class="def"
 		  >CoxForm1</a
-		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		  >CodePt</a
-		  >] (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
-		  >Maybe</a
+		  >] <a href="Koshucode-Baala-Core-Content-Cox.html#t:CoxTag"
+		  >CoxTag</a
 		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  >) <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
 		  > (<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
 		  >Cox</a
 		  > c)</td
 		><td class="doc"
 		><p
-		  >Form with single blank
-</p
+		  >Form with single blank</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
 		><a name="v:CoxForm" class="def"
 		  >CoxForm</a
-		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		  >CodePt</a
-		  >] (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
-		  >Maybe</a
-		  > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-		  >String</a
-		  >) [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		  >] <a href="Koshucode-Baala-Core-Content-Cox.html#t:CoxTag"
+		  >CoxTag</a
+		  > [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		  >String</a
 		  >] (<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
 		  >Cox</a
 		  > c)</td
 		><td class="doc"
 		><p
-		  >Form with multiple blanks
-</p
+		  >Form with multiple blanks</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
 		><a name="v:CoxWith" class="def"
 		  >CoxWith</a
-		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:CodePt"
+		  > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Source.html#t:CodePt"
 		  >CodePt</a
 		  >] [<a href="Koshucode-Baala-Core-Content-Cox.html#t:NamedCox"
 		  >NamedCox</a
@@ -686,8 +422,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 		  > c)</td
 		><td class="doc"
 		><p
-		  >Cox with outside arguments
-</p
+		  >Cox with outside arguments</p
 		  ></td
 		></tr
 	      ></table
@@ -723,7 +458,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 		  ></tr
 		><tr
 		><td class="src"
-		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Resource.html#t:CodePtr"
+		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Source.html#t:CodePtr"
 		    >CodePtr</a
 		    > (<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
 		    >Cox</a
@@ -739,13 +474,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:CoxAssn" class="def"
-	    >CoxAssn</a
-	    > c = (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:BlankName"
-	    >BlankName</a
-	    >, <a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
+	    > <a name="t:MaybeCox" class="def"
+	    >MaybeCox</a
+	    > c = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
 	    >Cox</a
-	    > c)<a href="src/Koshucode-Baala-Core-Content-Cox.html#CoxAssn" class="link"
+	    > c) <a href="src/Koshucode-Baala-Core-Content-Cox.html#MaybeCox" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -759,7 +494,51 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >Named</a
 	    > (<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
 	    >Cox</a
-	    > c)<a href="src/Koshucode-Baala-Core-Content-Cox.html#NamedCox" class="link"
+	    > c) <a href="src/Koshucode-Baala-Core-Content-Cox.html#NamedCox" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:CopCalc" class="def"
+	    >CopCalc</a
+	    > c = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > c <a href="src/Koshucode-Baala-Core-Content-Cox.html#CopCalc" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Term-content calculator.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:CoxTag" class="def"
+	    >CoxTag</a
+	    > = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    >String</a
+	    > <a href="src/Koshucode-Baala-Core-Content-Cox.html#CoxTag" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:2"
+	>Functions</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:coxLit" class="def"
+	    >coxLit</a
+	    > ::  c -&gt; <a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
+	    >Cox</a
+	    > c <a href="src/Koshucode-Baala-Core-Content-Cox.html#coxLit" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -771,31 +550,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >Cox</a
 	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    ><a href="src/Koshucode-Baala-Core-Content-Cox.html#coxSyntacticArity" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:isCoxBase" class="def"
-	    >isCoxBase</a
-	    > ::  <a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
-	    >Cox</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    ><a href="src/Koshucode-Baala-Core-Content-Cox.html#isCoxBase" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:isCoxForm" class="def"
-	    >isCoxForm</a
-	    > ::  <a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
-	    >Cox</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    ><a href="src/Koshucode-Baala-Core-Content-Cox.html#isCoxForm" class="link"
+	    > <a href="src/Koshucode-Baala-Core-Content-Cox.html#coxSyntacticArity" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -809,7 +564,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >Map</a
 	    > (<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
 	    >Cox</a
-	    > c))<a href="src/Koshucode-Baala-Core-Content-Cox.html#coxMap" class="link"
+	    > c)) <a href="src/Koshucode-Baala-Core-Content-Cox.html#coxMap" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -825,7 +580,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >Cox</a
 	    > c) -&gt; <a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
 	    >Cox</a
-	    > c<a href="src/Koshucode-Baala-Core-Content-Cox.html#coxCall" class="link"
+	    > c <a href="src/Koshucode-Baala-Core-Content-Cox.html#coxCall" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -837,302 +592,229 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >AbMap</a
 	    > (<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
 	    >Cox</a
-	    > c)<a href="src/Koshucode-Baala-Core-Content-Cox.html#checkIrreducible" class="link"
+	    > c) <a href="src/Koshucode-Baala-Core-Content-Cox.html#checkIrreducible" class="link"
 	    >Source</a
 	    ></p
 	  ></div
-	><h1 id="g:2"
-	>Operator
-</h1
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >data</span
-	    >  <a name="t:Cop" class="def"
-	    >Cop</a
-	    > c <a href="src/Koshucode-Baala-Core-Content-Cox.html#Cop" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
+	><h1 id="g:3"
+	>Process</h1
+	><div class="doc"
+	><p
+	  ><em
+	    >Phase 1</em
+	    >. Convert input string into token trees.</p
+	  ><dl
+	  ><dt
+	    >1. <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+		>String</a
+		></code
+	      ><code
+	      > -&gt; [</code
+	      ><code
+	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Token"
+		>Token</a
+		></code
+	      >@\</dt
+	    ><dd
+	    >@]
+        Parse input string into a list of tokens.<dl
+	      ><dt
+		>2. <code
+		  >[</code
+		  ><code
+		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Token"
+		    >Token</a
+		    ></code
+		  >@\</dt
+		><dd
+		>-&gt; [<code
+		  ><code
+		    ><a href="BTree.html#t:TTree"
+		      >TTree</a
+		      ></code
+		    ></code
+		  >]@]
+    Analyze token list structure.</dd
+		><dt
+		>3. <code
+		  >[</code
+		  ><code
+		  ><a href="BTree.html#t:TTree"
+		    >TTree</a
+		    ></code
+		  >@\</dt
+		><dd
+		>-&gt; @<code
+		  ><a href="BTree.html#t:TTree"
+		    >TTree</a
+		    ></code
+		  >]
+    Wrap the list of token trees in a tree.</dd
+		></dl
+	      ></dd
+	    ></dl
 	  ><p
-	    >Content operator.
-</p
-	    ></div
-	  ><div class="subs constructors"
-	  ><p class="caption"
-	    >Constructors</p
-	    ><table
-	    ><tr
-	      ><td class="src"
-		><a name="v:CopFun" class="def"
-		  >CopFun</a
-		  > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:BlankName"
-		  >BlankName</a
-		  > (<a href="Koshucode-Baala-Core-Content-Cox.html#t:CopFun"
-		  >CopFun</a
-		  > c)</td
-		><td class="doc"
-		><p
-		  >Convert contents
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:CopCox" class="def"
-		  >CopCox</a
-		  > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:BlankName"
-		  >BlankName</a
-		  > (<a href="Koshucode-Baala-Core-Content-Cox.html#t:CopCox"
-		  >CopCox</a
-		  > c)</td
-		><td class="doc"
-		><p
-		  >Convert coxes
-</p
-		  ></td
-		></tr
-	      ><tr
-	      ><td class="src"
-		><a name="v:CopTree" class="def"
-		  >CopTree</a
-		  > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:BlankName"
-		  >BlankName</a
-		  > <a href="Koshucode-Baala-Core-Content-Cox.html#t:CopTree"
-		  >CopTree</a
-		  ></td
-		><td class="doc"
-		><p
-		  >Convert trees
-</p
-		  ></td
-		></tr
-	      ></table
-	    ></div
-	  ><div class="subs instances"
-	  ><p id="control.i:Cop" class="caption collapser" onclick="toggleSection('i:Cop')"
-	    >Instances</p
-	    ><div id="section.i:Cop" class="show"
-	    ><table
-	      ><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
-		    >Show</a
-		    > (<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cop"
-		    >Cop</a
-		    > c)</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		><tr
-		><td class="src"
-		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Name"
-		    >Name</a
-		    > (<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cop"
-		    >Cop</a
-		    > c)</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		></table
-	      ></div
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:CopBundle" class="def"
-	    >CopBundle</a
-	    > c = ([<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cop"
-	    >Cop</a
-	    > c], [<a href="Koshucode-Baala-Core-Content-Cox.html#t:NamedCox"
-	    >NamedCox</a
-	    > c])<a href="src/Koshucode-Baala-Core-Content-Cox.html#CopBundle" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
+	  ><em
+	    >Phase 2</em
+	    >. Transform token trees,
+             and convert into abstract syntax trees.
+             See <a href="Koshucode-Baala-Core-Content-Build.html"
+	    >Koshucode.Baala.Core.Content.Build</a
+	    > module.</p
+	  ><dl
+	  ><dt
+	    >4. <code
+	      ><a href="BTree.html#t:TTree"
+		>TTree</a
+		></code
+	      ><code
+	      > -&gt; </code
+	      ><code
+	      ><a href="BTree.html#t:TTree"
+		>TTree</a
+		></code
+	      ></dt
+	    ><dd
+	    >Expand tree-level syntax operators.<dl
+	      ><dt
+		>5. <code
+		  ><a href="BTree.html#t:TTree"
+		    >TTree</a
+		    ></code
+		  ><code
+		  > -&gt; </code
+		  ><code
+		  ><a href="BTree.html#t:TTree"
+		    >TTree</a
+		    ></code
+		  ></dt
+		><dd
+		>Transform binary operators from infix to prefix.</dd
+		><dt
+		>6. <code
+		  ><a href="BTree.html#t:TTree"
+		    >TTree</a
+		    ></code
+		  ><code
+		  > -&gt; </code
+		  ><code
+		  ><a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
+		    >Cox</a
+		    ></code
+		  > <code
+		  >c</code
+		  ></dt
+		><dd
+		>Convert token tree into an abstract syntax tree.</dd
+		><dt
+		>7. <code
+		  ><a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
+		    >Cox</a
+		    ></code
+		  > <code
+		  >c -&gt; </code
+		  ><code
+		  ><a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
+		    >Cox</a
+		    ></code
+		  ><code
+		  > c</code
+		  ></dt
+		><dd
+		>Attach De Bruijn indecies for bound variables.</dd
+		><dt
+		>8. <code
+		  ><a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
+		    >Cox</a
+		    ></code
+		  > <code
+		  >c -&gt; </code
+		  ><code
+		  ><a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
+		    >Cox</a
+		    ></code
+		  > <code
+		  >c</code
+		  ></dt
+		><dd
+		>Expand expression-level syntax operators.</dd
+		></dl
+	      ></dd
+	    ></dl
 	  ><p
-	    >Base and derived operators.
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:CopFun" class="def"
-	    >CopFun</a
-	    > c = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > c<a href="src/Koshucode-Baala-Core-Content-Cox.html#CopFun" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Base function.
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:CopCox" class="def"
-	    >CopCox</a
-	    > c = [<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
-	    >Cox</a
-	    > c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > (<a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
-	    >Cox</a
-	    > c)<a href="src/Koshucode-Baala-Core-Content-Cox.html#CopCox" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Expression-level syntax.
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:CopTree" class="def"
-	    >CopTree</a
-	    > = [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-TokenTree.html#t:TokenTree"
-	    >TokenTree</a
-	    ><a href="src/Koshucode-Baala-Core-Content-Cox.html#CopTree" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Tree-level syntax.
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:copName" class="def"
-	    >copName</a
-	    > ::  <a href="Koshucode-Baala-Core-Content-Cox.html#t:Cop"
-	    >Cop</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:BlankName"
-	    >BlankName</a
-	    ><a href="src/Koshucode-Baala-Core-Content-Cox.html#copName" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:copNormal" class="def"
-	    >copNormal</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:BlankName"
-	    >BlankName</a
-	    ><a href="src/Koshucode-Baala-Core-Content-Cox.html#copNormal" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Non-binary operator.
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:copInternal" class="def"
-	    >copInternal</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:BlankName"
-	    >BlankName</a
-	    ><a href="src/Koshucode-Baala-Core-Content-Cox.html#copInternal" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:copPrefix" class="def"
-	    >copPrefix</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:BlankName"
-	    >BlankName</a
-	    ><a href="src/Koshucode-Baala-Core-Content-Cox.html#copPrefix" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Convert operator name to prefix name.
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:copInfix" class="def"
-	    >copInfix</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:BlankName"
-	    >BlankName</a
-	    ><a href="src/Koshucode-Baala-Core-Content-Cox.html#copInfix" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Convert operator name to infix name.
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:copPostfix" class="def"
-	    >copPostfix</a
-	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:BlankName"
-	    >BlankName</a
-	    ><a href="src/Koshucode-Baala-Core-Content-Cox.html#copPostfix" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Convert operator name to postfix name.
-</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:isCopFunction" class="def"
-	    >isCopFunction</a
-	    > ::  <a href="Koshucode-Baala-Core-Content-Cox.html#t:Cop"
-	    >Cop</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    ><a href="src/Koshucode-Baala-Core-Content-Cox.html#isCopFunction" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:isCopSyntax" class="def"
-	    >isCopSyntax</a
-	    > ::  <a href="Koshucode-Baala-Core-Content-Cox.html#t:Cop"
-	    >Cop</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    ><a href="src/Koshucode-Baala-Core-Content-Cox.html#isCopSyntax" class="link"
-	    >Source</a
-	    ></p
+	  ><em
+	    >Phase 3</em
+	    >. Calculate content expressions.
+             See <a href="Koshucode-Baala-Core-Content-Run.html"
+	    >Koshucode.Baala.Core.Content.Run</a
+	    > module.</p
+	  ><dl
+	  ><dt
+	    >9. <code
+	      ><a href="B.html#t:Relhead"
+		>Relhead</a
+		></code
+	      ><code
+	      > -&gt; </code
+	      ><code
+	      ><a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
+		>Cox</a
+		></code
+	      ><code
+	      > c -&gt; </code
+	      ><code
+	      ><a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
+		>Cox</a
+		></code
+	      ><code
+	      > c</code
+	      ></dt
+	    ><dd
+	    >Attach term positions using actural heading of relation.<dl
+	      ><dt
+		>10. <code
+		  >CopSet</code
+		  ><code
+		  > c -&gt; [</code
+		  ><code
+		  ><a href="Koshucode-Baala-Core-Content-Cox.html#t:NamedCox"
+		    >NamedCox</a
+		    ></code
+		  >@ c\</dt
+		><dd
+		>-&gt; <code
+		  ><code
+		    ><a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
+		      >Cox</a
+		      ></code
+		    ></code
+		  > c -&gt; <code
+		  ><code
+		    ><a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
+		      >Cox</a
+		      ></code
+		    ></code
+		  > c@]
+   Replace base and derived operators into its bodies.</dd
+		><dt
+		>11. <code
+		  ><a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
+		    >Cox</a
+		    ></code
+		  ><code
+		  > c -&gt; Beta c</code
+		  ></dt
+		><dd
+		>Reduce derived expressions into beta expressions.</dd
+		><dt
+		>12. @Beta c -&gt; [c\</dt
+		><dd
+		>-&gt; c@]
+   Run beta expression for each association of relation.</dd
+		></dl
+	      ></dd
+	    ></dl
 	  ></div
 	></div
       ></div
@@ -1140,7 +822,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html

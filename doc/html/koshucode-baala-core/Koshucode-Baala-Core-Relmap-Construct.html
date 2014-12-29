@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.70.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.89.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -40,6 +40,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >Safe Haskell</th
 	    ><td
 	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
 	    ></tr
 	  ></table
 	><p class="caption"
@@ -51,23 +57,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Generic relmap
-</a
+	    >Generic relmap</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Constructor
-</a
+	    >Constructor</a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >Select from relmap
-</a
+	    >Select from relmap</a
 	    ></li
 	  ><li
 	  ><a href="#g:4"
-	    >Append relmaps
-</a
+	    >Append relmaps</a
 	    ></li
 	  ></ul
 	></div
@@ -77,11 +79,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><div class="doc"
 	><p
 	  >Operations on <code
-	    ><a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+	    ><a href="C.html#t:Relmap"
 	      >Relmap</a
 	      ></code
-	    >.
-</p
+	    >.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -90,433 +91,355 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
 	  ><span class="keyword"
-	    >data</span
-	    >  <a href="#t:RelmapCons"
-	    >RelmapCons</a
-	    > c = <a href="#v:RelmapCons"
-	    >RelmapCons</a
-	    > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:ConsLexmap"
-	    >ConsLexmap</a
-	    > (<a href="Koshucode-Baala-Core-Relmap-Construct.html#t:ConsRelmap"
-	    >ConsRelmap</a
-	    > c)</li
-	  ><li class="src short"
-	  ><span class="keyword"
 	    >type</span
-	    > <a href="#t:ConsRelmap"
-	    >ConsRelmap</a
-	    > c = <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
+	    > <a href="#t:ConsRelmap-39-"
+	    >ConsRelmap'</a
+	    > h c = <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
 	    >Lexmap</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c)</li
+	    > (<a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c)</li
 	  ><li class="src short"
 	  ><a href="#v:relmapCons"
 	    >relmapCons</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
-	    >Global</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Construct.html#t:RelmapCons"
-	    >RelmapCons</a
-	    > c</li
+	    > :: <a href="Koshucode-Baala-Core-Relmap-Global.html#t:GetGlobal"
+	    >GetGlobal</a
+	    > h =&gt; h c -&gt; (<a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:ConsLexmap"
+	    >ConsLexmap</a
+	    >, <a href="Koshucode-Baala-Core-Relmap-Construct.html#t:ConsRelmap-39-"
+	    >ConsRelmap'</a
+	    > h c)</li
 	  ><li class="src short"
 	  ><a href="#v:relmapSource"
 	    >relmapSource</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgePat"
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse-39-"
+	    >RopUse'</a
+	    > h c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgePat"
 	    >JudgePat</a
 	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
 	    >TermName</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c</li
+	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c</li
 	  ><li class="src short"
 	  ><a href="#v:relmapConst"
 	    >relmapConst</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse-39-"
+	    >RopUse'</a
+	    > h c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
 	    >Rel</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c</li
+	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c</li
 	  ><li class="src short"
 	  ><a href="#v:relmapFlow"
 	    >relmapFlow</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RelkitFlow"
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse-39-"
+	    >RopUse'</a
+	    > h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relkit.html#t:RelkitFlow"
 	    >RelkitFlow</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c</li
+	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c</li
 	  ><li class="src short"
-	  ><a href="#v:relmapGlobal"
-	    >relmapGlobal</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RelkitGlobal"
-	    >RelkitGlobal</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c</li
+	  ><a href="#v:relmapHook"
+	    >relmapHook</a
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse-39-"
+	    >RopUse'</a
+	    > h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relkit.html#t:RelkitHook-39-"
+	    >RelkitHook'</a
+	    > h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c</li
 	  ><li class="src short"
 	  ><a href="#v:relmapBinary"
 	    >relmapBinary</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RelkitBinary"
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse-39-"
+	    >RopUse'</a
+	    > h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relkit.html#t:RelkitBinary"
 	    >RelkitBinary</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c</li
+	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c</li
 	  ><li class="src short"
 	  ><a href="#v:relmapConfl"
 	    >relmapConfl</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RelkitConfl"
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse-39-"
+	    >RopUse'</a
+	    > h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relkit.html#t:RelkitConfl"
 	    >RelkitConfl</a
-	    > c -&gt; [<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c</li
+	    > c -&gt; [<a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c] -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c</li
 	  ><li class="src short"
 	  ><a href="#v:relmapCopy"
 	    >relmapCopy</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse-39-"
+	    >RopUse'</a
+	    > h c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c)</li
+	    > (<a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c)</li
 	  ><li class="src short"
-	  ><a href="#v:relmapWith"
-	    >relmapWith</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Terminal"
+	  ><a href="#v:relmapNest"
+	    >relmapNest</a
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse-39-"
+	    >RopUse'</a
+	    > h c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Terminal"
 	    >Terminal</a
 	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c)</li
+	    > (<a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c)</li
 	  ><li class="src short"
-	  ><a href="#v:relmapWithVar"
-	    >relmapWithVar</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	  ><a href="#v:relmapNestVar"
+	    >relmapNestVar</a
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse-39-"
+	    >RopUse'</a
+	    > h c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c</li
+	    > -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c</li
 	  ><li class="src short"
 	  ><a href="#v:relmapLink"
 	    >relmapLink</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrTrees"
-	    >AttrTrees</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c</li
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse-39-"
+	    >RopUse'</a
+	    > h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c</li
 	  ><li class="src short"
 	  ><a href="#v:relmapSourceList"
 	    >relmapSourceList</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c -&gt; [<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c]</li
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c -&gt; [<a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c]</li
 	  ><li class="src short"
 	  ><a href="#v:relmapNameList"
 	    >relmapNameList</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    >]</li
 	  ></ul
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Generic relmap
-</h1
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >data</span
-	    >  <a name="t:RelmapCons" class="def"
-	    >RelmapCons</a
-	    > c <a href="src/Koshucode-Baala-Core-Relmap-Construct.html#RelmapCons" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Constructor of lexmap and relmap.
-</p
-	    ></div
-	  ><div class="subs constructors"
-	  ><p class="caption"
-	    >Constructors</p
-	    ><table
-	    ><tr
-	      ><td class="src"
-		><a name="v:RelmapCons" class="def"
-		  >RelmapCons</a
-		  > <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:ConsLexmap"
-		  >ConsLexmap</a
-		  > (<a href="Koshucode-Baala-Core-Relmap-Construct.html#t:ConsRelmap"
-		  >ConsRelmap</a
-		  > c)</td
-		><td class="doc empty"
-		>&nbsp;</td
-		></tr
-	      ></table
-	    ></div
-	  ><div class="subs instances"
-	  ><p id="control.i:RelmapCons" class="caption collapser" onclick="toggleSection('i:RelmapCons')"
-	    >Instances</p
-	    ><div id="section.i:RelmapCons" class="show"
-	    ><table
-	      ><tr
-		><td class="src"
-		  ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
-		    >Show</a
-		    > (<a href="Koshucode-Baala-Core-Relmap-Construct.html#t:RelmapCons"
-		    >RelmapCons</a
-		    > c)</td
-		  ><td class="doc empty"
-		  >&nbsp;</td
-		  ></tr
-		></table
-	      ></div
-	    ></div
-	  ></div
+	>Generic relmap</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >type</span
-	    > <a name="t:ConsRelmap" class="def"
-	    >ConsRelmap</a
-	    > c = <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
+	    > <a name="t:ConsRelmap-39-" class="def"
+	    >ConsRelmap'</a
+	    > h c = <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
 	    >Lexmap</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c)<a href="src/Koshucode-Baala-Core-Relmap-Construct.html#ConsRelmap" class="link"
+	    > (<a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c) <a href="src/Koshucode-Baala-Core-Relmap-Construct.html#ConsRelmap%27" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Second step of constructing relmap, make relmap from lexmap.
-</p
+	    >Second step of constructing relmap, make relmap from lexmap.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:relmapCons" class="def"
 	    >relmapCons</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
-	    >Global</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Construct.html#t:RelmapCons"
-	    >RelmapCons</a
-	    > c<a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapCons" class="link"
+	    > :: <a href="Koshucode-Baala-Core-Relmap-Global.html#t:GetGlobal"
+	    >GetGlobal</a
+	    > h =&gt; h c -&gt; (<a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:ConsLexmap"
+	    >ConsLexmap</a
+	    >, <a href="Koshucode-Baala-Core-Relmap-Construct.html#t:ConsRelmap-39-"
+	    >ConsRelmap'</a
+	    > h c) <a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapCons" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Make a constructor pair of lexmap and relmap.
-</p
+	    >Make a constructor pair of lexmap and relmap.</p
 	    ></div
 	  ></div
 	><h1 id="g:2"
-	>Constructor
-</h1
+	>Constructor</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:relmapSource" class="def"
 	    >relmapSource</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgePat"
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse-39-"
+	    >RopUse'</a
+	    > h c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:JudgePat"
 	    >JudgePat</a
 	    > -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
 	    >TermName</a
-	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c<a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapSource" class="link"
+	    >] -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c <a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapSource" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Retrieve relation from dataset.
-</p
+	    >Retrieve relation from dataset.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:relmapConst" class="def"
 	    >relmapConst</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse-39-"
+	    >RopUse'</a
+	    > h c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Rel.html#t:Rel"
 	    >Rel</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c<a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapConst" class="link"
+	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c <a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapConst" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Make a constant relmap.
-</p
+	    >Make a constant relmap.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:relmapFlow" class="def"
 	    >relmapFlow</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RelkitFlow"
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse-39-"
+	    >RopUse'</a
+	    > h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relkit.html#t:RelkitFlow"
 	    >RelkitFlow</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c<a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapFlow" class="link"
+	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c <a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapFlow" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Make a flow relmap.
-   Flow relmaps take no subrelmaps.
-</p
+   Flow relmaps take no subrelmaps.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:relmapGlobal" class="def"
-	    >relmapGlobal</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RelkitGlobal"
-	    >RelkitGlobal</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c<a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapGlobal" class="link"
+	  ><a name="v:relmapHook" class="def"
+	    >relmapHook</a
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse-39-"
+	    >RopUse'</a
+	    > h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relkit.html#t:RelkitHook-39-"
+	    >RelkitHook'</a
+	    > h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c <a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapHook" class="link"
 	    >Source</a
 	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Make a global relmap.
-   Global relmaps are flow relmaps with globals.
-</p
-	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:relmapBinary" class="def"
 	    >relmapBinary</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RelkitBinary"
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse-39-"
+	    >RopUse'</a
+	    > h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relkit.html#t:RelkitBinary"
 	    >RelkitBinary</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c<a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapBinary" class="link"
+	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c <a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapBinary" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Make a binary relmap.
-   Binary relmaps take one subrelmap.
-</p
+   Binary relmaps take one subrelmap.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:relmapConfl" class="def"
 	    >relmapConfl</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RelkitConfl"
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse-39-"
+	    >RopUse'</a
+	    > h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relkit.html#t:RelkitConfl"
 	    >RelkitConfl</a
-	    > c -&gt; [<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c] -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c<a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapConfl" class="link"
+	    > c -&gt; [<a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c] -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c <a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapConfl" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >Make a confluent relmap.
-   Confluent relmaps take multiple subrelmaps.
-</p
+   Confluent relmaps take multiple subrelmaps.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:relmapCopy" class="def"
 	    >relmapCopy</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse-39-"
+	    >RopUse'</a
+	    > h c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c)<a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapCopy" class="link"
+	    > (<a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c) <a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapCopy" class="link"
 	    >Source</a
 	    ></p
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:relmapWith" class="def"
-	    >relmapWith</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Terminal"
+	  ><a name="v:relmapNest" class="def"
+	    >relmapNest</a
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse-39-"
+	    >RopUse'</a
+	    > h c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Terminal"
 	    >Terminal</a
 	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c)<a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapWith" class="link"
+	    > (<a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c) <a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapNest" class="link"
 	    >Source</a
 	    ></p
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:relmapWithVar" class="def"
-	    >relmapWithVar</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	  ><a name="v:relmapNestVar" class="def"
+	    >relmapNestVar</a
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse-39-"
+	    >RopUse'</a
+	    > h c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c<a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapWithVar" class="link"
+	    > -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c <a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapNestVar" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -524,30 +447,25 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><p class="src"
 	  ><a name="v:relmapLink" class="def"
 	    >relmapLink</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrTrees"
-	    >AttrTrees</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c<a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapLink" class="link"
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse-39-"
+	    >RopUse'</a
+	    > h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c <a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapLink" class="link"
 	    >Source</a
 	    ></p
 	  ></div
 	><h1 id="g:3"
-	>Select from relmap
-</h1
+	>Select from relmap</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:relmapSourceList" class="def"
 	    >relmapSourceList</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c -&gt; [<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c]<a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapSourceList" class="link"
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c -&gt; [<a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c] <a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapSourceList" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
@@ -556,42 +474,37 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      ><a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:RelmapSource"
 		>RelmapSource</a
 		></code
-	      >
-</p
+	      ></p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:relmapNameList" class="def"
 	    >relmapNameList</a
-	    > ::  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
+	    > ::  <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c -&gt; [<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 	    >String</a
-	    >]<a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapNameList" class="link"
+	    >] <a href="src/Koshucode-Baala-Core-Relmap-Construct.html#relmapNameList" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
 	    >List of name in <code
-	      ><a href="Koshucode-Baala-Core-Relmap-Operator.html#v:RelmapLink"
+	      ><a href="Koshucode-Baala-Core-Relmap-Relmap.html#v:RelmapLink"
 		>RelmapLink</a
 		></code
-	      >
-</p
+	      ></p
 	    ></div
 	  ></div
 	><h1 id="g:4"
-	>Append relmaps
-</h1
+	>Append relmaps</h1
 	><div class="doc"
 	><p
 	  >This picture represents calculation
-  of mapping input relation to output relation.
-</p
+  of mapping input relation to output relation.</p
 	  ><pre
-	  > input -[ relmap ]- output
-</pre
+	  >input -[ relmap ]- output</pre
 	  ><p
 	  >Relmap <em
 	    >A</em
@@ -606,12 +519,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >R2</em
 	    > to <em
 	    >R3</em
-	    >.
-</p
+	    >.</p
 	  ><pre
-	  > R1 -[ A ]- R2
- R2 -[ B ]- R3
-</pre
+	  >R1 -[ A ]- R2
+R2 -[ B ]- R3</pre
 	  ><p
 	  >Two relmaps <em
 	    >A</em
@@ -620,22 +531,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > are jointed
   with intermidiate relation <em
 	    >R2</em
-	    >.
-</p
+	    >.</p
 	  ><pre
-	  > R1 -[ A ]- R2 -[ B ]- R3
-</pre
+	  >R1 -[ A ]- R2 -[ B ]- R3</pre
 	  ><p
 	  >Or, we can draw a directly jointed picture.
   This whole structure is also <code
 	    >RelmapAppend</code
 	    > <em
 	    >A B</em
-	    >.
-</p
+	    >.</p
 	  ><pre
-	  > R1 -[ A ]--[ B ]- R3
-</pre
+	  >R1 -[ A ]--[ B ]- R3</pre
 	  ></div
 	></div
       ></div
@@ -643,7 +550,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html

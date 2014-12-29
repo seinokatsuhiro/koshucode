@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.70.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.89.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -41,6 +41,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ><td
 	    >None</td
 	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
 	  ></table
 	><p class="caption"
 	>Koshucode.Baala.Core.Relmap.Specialize</p
@@ -50,8 +56,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	>Description</p
 	><div class="doc"
 	><p
-	  >Specialize generic relmaps to specific relmaps
-</p
+	  >Specialize generic relmaps to specific relmaps</p
 	  ></div
 	></div
       ><div id="interface"
@@ -63,27 +68,39 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    >relmapSpecialize</a
 	    > :: <span class="keyword"
 	    >forall</span
-	    > c.  <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
-	    >Global</a
-	    > c -&gt; [<a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:Roal"
-	    >Roal</a
-	    > (<a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c)] -&gt; [<a href="Koshucode-Baala-Core-Relmap-Relkit.html#t:RelkitDef"
+	    > h c. <a href="Koshucode-Baala-Core-Relmap-Global.html#t:GetGlobal"
+	    >GetGlobal</a
+	    > h =&gt; h c -&gt; <a href="Koshucode-Baala-Core-Relmap-Specialize.html#t:RelmapLinkTable-39-"
+	    >RelmapLinkTable'</a
+	    > h c -&gt; [<a href="Koshucode-Baala-Core-Relmap-Relkit.html#t:RelkitDef"
 	    >RelkitDef</a
 	    > c] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
-	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
-	    >Relhead</a
-	    > -&gt; <a href="Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
 	    > ([<a href="Koshucode-Baala-Core-Relmap-Relkit.html#t:RelkitDef"
 	    >RelkitDef</a
 	    > c], <a href="Koshucode-Baala-Core-Relmap-Relkit.html#t:Relkit"
 	    >Relkit</a
-	    > c)<a href="src/Koshucode-Baala-Core-Relmap-Specialize.html#relmapSpecialize" class="link"
+	    > c) <a href="src/Koshucode-Baala-Core-Relmap-Specialize.html#relmapSpecialize" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:RelmapLinkTable-39-" class="def"
+	    >RelmapLinkTable'</a
+	    > h c = [(<a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
+	    >Lexmap</a
+	    >, <a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c)] <a href="src/Koshucode-Baala-Core-Relmap-Specialize.html#RelmapLinkTable%27" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -93,7 +110,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html

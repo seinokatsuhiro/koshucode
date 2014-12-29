@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.70.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.89.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -41,18 +41,137 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    ><td
 	    >None</td
 	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
 	  ></table
 	><p class="caption"
 	>Koshucode.Baala.Core.Content.Run</p
+	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Getting arguments</a
+	    ></li
+	  ></ul
 	></div
       ><div id="description"
       ><p class="caption"
 	>Description</p
 	><div class="doc"
 	><p
-	  >Term-content calcutation.
-</p
+	  >Term-content calcutation.</p
 	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:RunCox"
+	    >RunCox</a
+	    > c = <a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
+	    >Cox</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > c</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:RunList"
+	    >RunList</a
+	    > c = [c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:coxRunCox"
+	    >coxRunCox</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Write.html#t:Write"
+	    >Write</a
+	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CRel"
+	    >CRel</a
+	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CList"
+	    >CList</a
+	    > c) =&gt; <a href="Koshucode-Baala-Core-Content-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; [c] -&gt; <a href="Koshucode-Baala-Core-Content-Run.html#t:RunCox"
+	    >RunCox</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:coxRunList"
+	    >coxRunList</a
+	    > :: (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-Write.html#t:Write"
+	    >Write</a
+	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CRel"
+	    >CRel</a
+	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CList"
+	    >CList</a
+	    > c) =&gt; <a href="Koshucode-Baala-Core-Content-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Head.html#t:Head"
+	    >Head</a
+	    > -&gt; <a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
+	    >Cox</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Content-Run.html#t:RunList"
+	    >RunList</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:calcContent"
+	    >calcContent</a
+	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:CalcContent"
+	    >CalcContent</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:getArg1"
+	    >getArg1</a
+	    > ::  [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > c)</li
+	  ><li class="src short"
+	  ><a href="#v:getArg2"
+	    >getArg2</a
+	    > ::  [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > c)</li
+	  ><li class="src short"
+	  ><a href="#v:getArg3"
+	    >getArg3</a
+	    > ::  [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > c)</li
+	  ></ul
 	></div
       ><div id="interface"
       ><h1
@@ -67,7 +186,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >Cox</a
 	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > c<a href="src/Koshucode-Baala-Core-Content-Run.html#RunCox" class="link"
+	    > c <a href="src/Koshucode-Baala-Core-Content-Run.html#RunCox" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -79,7 +198,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >RunList</a
 	    > c = [c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > c<a href="src/Koshucode-Baala-Core-Content-Run.html#RunList" class="link"
+	    > c <a href="src/Koshucode-Baala-Core-Content-Run.html#RunList" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -93,13 +212,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >CRel</a
 	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CList"
 	    >CList</a
-	    > c) =&gt; <a href="Koshucode-Baala-Core-Content-Cox.html#t:CopBundle"
-	    >CopBundle</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
-	    >Relhead</a
+	    > c) =&gt; <a href="Koshucode-Baala-Core-Content-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Head.html#t:Head"
+	    >Head</a
 	    > -&gt; [c] -&gt; <a href="Koshucode-Baala-Core-Content-Run.html#t:RunCox"
 	    >RunCox</a
-	    > c<a href="src/Koshucode-Baala-Core-Content-Run.html#coxRunCox" class="link"
+	    > c <a href="src/Koshucode-Baala-Core-Content-Run.html#coxRunCox" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -113,18 +232,34 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >CRel</a
 	    > c, <a href="Koshucode-Baala-Core-Content-Class.html#t:CList"
 	    >CList</a
-	    > c) =&gt; <a href="Koshucode-Baala-Core-Content-Cox.html#t:CopBundle"
-	    >CopBundle</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Relhead.html#t:Relhead"
-	    >Relhead</a
+	    > c) =&gt; <a href="Koshucode-Baala-Core-Content-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Head.html#t:Head"
+	    >Head</a
 	    > -&gt; <a href="Koshucode-Baala-Core-Content-Cox.html#t:Cox"
 	    >Cox</a
 	    > c -&gt; <a href="Koshucode-Baala-Core-Content-Run.html#t:RunList"
 	    >RunList</a
-	    > c<a href="src/Koshucode-Baala-Core-Content-Run.html#coxRunList" class="link"
+	    > c <a href="src/Koshucode-Baala-Core-Content-Run.html#coxRunList" class="link"
 	    >Source</a
 	    ></p
 	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:calcContent" class="def"
+	    >calcContent</a
+	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Content-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c -&gt; <a href="Koshucode-Baala-Core-Content-Literal.html#t:CalcContent"
+	    >CalcContent</a
+	    > c <a href="src/Koshucode-Baala-Core-Content-Run.html#calcContent" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:1"
+	>Getting arguments</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:getArg1" class="def"
@@ -135,7 +270,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >Ab</a
 	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > c)<a href="src/Koshucode-Baala-Core-Content-Run.html#getArg1" class="link"
+	    > c) <a href="src/Koshucode-Baala-Core-Content-Run.html#getArg1" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -151,7 +286,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >Ab</a
 	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > c)<a href="src/Koshucode-Baala-Core-Content-Run.html#getArg2" class="link"
+	    > c) <a href="src/Koshucode-Baala-Core-Content-Run.html#getArg2" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -169,7 +304,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >Ab</a
 	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
-	    > c)<a href="src/Koshucode-Baala-Core-Content-Run.html#getArg3" class="link"
+	    > c) <a href="src/Koshucode-Baala-Core-Content-Run.html#getArg3" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -179,7 +314,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html
