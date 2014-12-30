@@ -65,22 +65,12 @@ assembleRelmap res@C.Resource { C.resSlot    = slots
             Right (ass2, msg1 ++ msg2)
 
 findRelmap :: [C.RelmapSource] -> C.FindRelmap
-findRelmap derives sec name =
-    case findRelmapName derives name of
+findRelmap ds sec name =
+    case filter isSameName ds of
       [def]  -> [def]
-      ds     -> findRelmapSec sec ds
-
-findRelmapName :: [C.RelmapSource] -> String -> [C.RelmapSource]
-findRelmapName derives name = find derives where
-    find [] = []
-    find (def@((_, n), _) : ds)
-         | n == name   = def : find ds
-         | otherwise   = find ds
-
-findRelmapSec :: C.SecNo -> B.Map [C.RelmapSource]
-findRelmapSec sec = find where
-    find [] = []
-    find (def@((s, _), _) : ds)
-         | s == sec    = def : find ds
-         | otherwise   = find ds
-
+      ds2    -> case filter isSameSec ds2 of
+                  [def]  -> [def]
+                  _      -> ds2
+    where
+      isSameName ((_, n), _)  = (n == name)
+      isSameSec  ((s, _), _)  = (s == sec)
