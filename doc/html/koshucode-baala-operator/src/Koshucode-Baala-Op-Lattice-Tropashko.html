@@ -20,21 +20,21 @@
 <a name="line-11"></a><span class='hs-comment'>--   other operators are derived.</span>
 <a name="line-12"></a>
 <a name="line-13"></a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-conid'>Lattice</span><span class='hs-varop'>.</span><span class='hs-conid'>Tropashko</span>
-<a name="line-14"></a><span class='hs-layout'>(</span> <span class='hs-comment'>-- * Fundamental operators</span>
-<a name="line-15"></a>  <span class='hs-comment'>-- $FundamentalOperators</span>
-<a name="line-16"></a>
-<a name="line-17"></a>  <span class='hs-comment'>-- * meet (natural join)</span>
-<a name="line-18"></a>  <span class='hs-varid'>consMeet</span><span class='hs-layout'>,</span>
-<a name="line-19"></a>  <span class='hs-varid'>relmapMeet</span><span class='hs-layout'>,</span>
-<a name="line-20"></a>  <span class='hs-varid'>relkitMeet</span><span class='hs-layout'>,</span>
-<a name="line-21"></a>  <span class='hs-comment'>-- $MeetImplementation</span>
-<a name="line-22"></a>
-<a name="line-23"></a>  <span class='hs-comment'>-- * join (inner union)</span>
-<a name="line-24"></a>  <span class='hs-varid'>consJoin</span><span class='hs-layout'>,</span>
-<a name="line-25"></a>  <span class='hs-varid'>relmapJoin</span><span class='hs-layout'>,</span>
-<a name="line-26"></a>  <span class='hs-varid'>relmapJoinList</span><span class='hs-layout'>,</span>
-<a name="line-27"></a>  <span class='hs-varid'>relkitJoin</span><span class='hs-layout'>,</span>
-<a name="line-28"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a name="line-14"></a>  <span class='hs-layout'>(</span> <span class='hs-comment'>-- * Fundamental operators</span>
+<a name="line-15"></a>    <span class='hs-comment'>-- $FundamentalOperators</span>
+<a name="line-16"></a>  
+<a name="line-17"></a>    <span class='hs-comment'>-- * meet (natural join)</span>
+<a name="line-18"></a>    <span class='hs-varid'>consMeet</span><span class='hs-layout'>,</span>
+<a name="line-19"></a>    <span class='hs-varid'>relmapMeet</span><span class='hs-layout'>,</span>
+<a name="line-20"></a>    <span class='hs-varid'>relkitMeet</span><span class='hs-layout'>,</span>
+<a name="line-21"></a>    <span class='hs-comment'>-- $MeetImplementation</span>
+<a name="line-22"></a>  
+<a name="line-23"></a>    <span class='hs-comment'>-- * join (inner union)</span>
+<a name="line-24"></a>    <span class='hs-varid'>consJoin</span><span class='hs-layout'>,</span>
+<a name="line-25"></a>    <span class='hs-varid'>relmapJoin</span><span class='hs-layout'>,</span>
+<a name="line-26"></a>    <span class='hs-varid'>relmapJoinList</span><span class='hs-layout'>,</span>
+<a name="line-27"></a>    <span class='hs-varid'>relkitJoin</span><span class='hs-layout'>,</span>
+<a name="line-28"></a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
 <a name="line-29"></a>
 <a name="line-30"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span>       <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
 <a name="line-31"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span>       <span class='hs-keyword'>as</span> <span class='hs-conid'>C</span>
@@ -126,7 +126,7 @@
 <a name="line-117"></a>    <span class='hs-varid'>share1</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>snipFrom</span> <span class='hs-varid'>ind1</span>
 <a name="line-118"></a>    <span class='hs-varid'>share2</span> <span class='hs-keyglyph'>=</span> <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>snipFrom</span> <span class='hs-varid'>ind2</span>
 <a name="line-119"></a>
-<a name="line-120"></a>    <span class='hs-varid'>he3</span>    <span class='hs-keyglyph'>=</span>  <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>headChange</span> <span class='hs-varid'>share1</span> <span class='hs-varid'>he1</span>
+<a name="line-120"></a>    <span class='hs-varid'>he3</span>    <span class='hs-keyglyph'>=</span>  <span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>headMap</span> <span class='hs-varid'>share1</span> <span class='hs-varid'>he1</span>
 <a name="line-121"></a>    <span class='hs-varid'>kit3</span>   <span class='hs-keyglyph'>=</span>  <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relkitJust</span> <span class='hs-varid'>he3</span> <span class='hs-varop'>$</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-conid'>RelkitAbFull</span> <span class='hs-conid'>True</span> <span class='hs-varid'>kitf3</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>kitb2</span><span class='hs-keyglyph'>]</span>
 <a name="line-122"></a>    <span class='hs-varid'>kitf3</span> <span class='hs-varid'>bmaps</span> <span class='hs-varid'>bo1</span> <span class='hs-keyglyph'>=</span>
 <a name="line-123"></a>        <span class='hs-keyword'>do</span> <span class='hs-keyword'>let</span> <span class='hs-keyglyph'>[</span><span class='hs-varid'>bmap2</span><span class='hs-keyglyph'>]</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>bmaps</span>

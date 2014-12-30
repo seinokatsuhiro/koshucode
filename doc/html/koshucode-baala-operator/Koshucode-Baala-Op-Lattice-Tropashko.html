@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Lat
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-operator-0.67.0.0: Relation-mapping operators in Koshucode</p
+      >koshucode-baala-operator-0.89.0.0: Relation-mapping operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -40,6 +40,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Lat
 	    >Safe Haskell</th
 	    ><td
 	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
 	    ></tr
 	  ></table
 	><p class="caption"
@@ -51,18 +57,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Lat
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Fundamental operators
-</a
+	    >Fundamental operators</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >meet (natural join)
-</a
+	    >meet (natural join)</a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >join (inner union)
-</a
+	    >join (inner union)</a
 	    ></li
 	  ></ul
 	></div
@@ -71,16 +74,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Lat
 	>Description</p
 	><div class="doc"
 	><p
-	  >Fundamental operators in relational algebra.
-</p
+	  >Fundamental operators in relational algebra.</p
 	  ><p
 	  >Tropashko's relational lattice is a kind of relational algebra.
    Relational algebra is an algebraic formulation for relational model.
    In constrast to Codd's original relational algebra,
    Tropashko lattice is in more conventional and strict ways.
    The lattice has fundamental operators from which
-   other operators are derived.
-</p
+   other operators are derived.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -92,7 +93,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Lat
 	    >consMeet</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
 	    >RopCons</a
 	    > c</li
 	  ><li class="src short"
@@ -100,11 +101,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Lat
 	    >relmapMeet</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopUse"
 	    >RopUse</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
 	    > c</li
 	  ><li class="src short"
@@ -114,7 +115,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Lat
 	    >forall</span
 	    > c. <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RelkitBinary"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relkit.html#t:RelkitBinary"
 	    >RelkitBinary</a
 	    > c</li
 	  ><li class="src short"
@@ -122,7 +123,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Lat
 	    >consJoin</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
 	    >RopCons</a
 	    > c</li
 	  ><li class="src short"
@@ -130,11 +131,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Lat
 	    >relmapJoin</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopUse"
 	    >RopUse</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
 	    > c</li
 	  ><li class="src short"
@@ -142,38 +143,36 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Lat
 	    >relmapJoinList</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopUse"
 	    >RopUse</a
-	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
-	    > c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+	    > c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
 	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:relkitJoin"
 	    >relkitJoin</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RelkitBinary"
+	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relkit.html#t:RelkitBinary"
 	    >RelkitBinary</a
 	    > c</li
 	  ></ul
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Fundamental operators
-</h1
+	>Fundamental operators</h1
 	><div class="doc"
 	><p
 	  >In lattice theory, there are two operators <em
 	    >meet</em
 	    > and <em
 	    >join</em
-	    >.
-</p
+	    >.</p
 	  ><dl
 	  ><dt
 	    >R1 ^ R2</dt
 	    ><dd
-	    >  Meet of <em
+	    >Meet of <em
 	      >R1</em
 	      > and <em
 	      >R2</em
@@ -191,44 +190,43 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Lat
 	      > tuple and <em
 	      >R2</em
 	      > tuple
-               are same contents.
-</dd
-	    ><dt
-	    >R1 v R2</dt
-	    ><dd
-	    >  Join of <em
-	      >R1</em
-	      > and <em
-	      >R2</em
-	      >.
-               This operator is one of generalized union,
-               as it were, a less-speaking-and-more-mentioning operation.
-               Toropashko calls it ''inner union''.
-               Join of <em
-	      >R1</em
-	      > and <em
-	      >R2</em
-	      > is ordinary union of
-               shared-term-projection tuples in <em
-	      >R1</em
-	      > and <em
-	      >R2</em
-	      >.
-</dd
+               are same contents.<dl
+	      ><dt
+		>R1 v R2</dt
+		><dd
+		>Join of <em
+		  >R1</em
+		  > and <em
+		  >R2</em
+		  >.
+           This operator is one of generalized union,
+           as it were, a less-speaking-and-more-mentioning operation.
+           Toropashko calls it ''inner union''.
+           Join of <em
+		  >R1</em
+		  > and <em
+		  >R2</em
+		  > is ordinary union of
+           shared-term-projection tuples in <em
+		  >R1</em
+		  > and <em
+		  >R2</em
+		  >.</dd
+		></dl
+	      ></dd
 	    ></dl
 	  ></div
 	><h1 id="g:2"
-	>meet (natural join)
-</h1
+	>meet (natural join)</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:consMeet" class="def"
 	    >consMeet</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
 	    >RopCons</a
-	    > c<a href="src/Koshucode-Baala-Op-Lattice-Tropashko.html#consMeet" class="link"
+	    > c <a href="src/Koshucode-Baala-Op-Lattice-Tropashko.html#consMeet" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -236,7 +234,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Lat
 	><p class="src"
 	  ><a name="v:relmapMeet" class="def"
 	    >relmapMeet</a
-	    ><a href="src/Koshucode-Baala-Op-Lattice-Tropashko.html#relmapMeet" class="link"
+	    > <a href="src/Koshucode-Baala-Op-Lattice-Tropashko.html#relmapMeet" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs arguments"
@@ -253,43 +251,39 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Lat
 		></tr
 	      ><tr
 	      ><td class="src"
-		>=&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
+		>=&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopUse"
 		  >RopUse</a
 		  > c</td
 		><td class="doc"
 		><p
-		  >Source infomation
-</p
+		  >Source infomation</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 		  >Relmap</a
 		  > c</td
 		><td class="doc"
 		><p
-		  >Subrelmap of meet operator
-</p
+		  >Subrelmap of meet operator</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 		  >Relmap</a
 		  > c</td
 		><td class="doc"
 		><p
-		  >Relmap of meet operator
-</p
+		  >Relmap of meet operator</p
 		  ></td
 		></tr
 	      ></table
 	    ></div
 	  ><div class="doc"
 	  ><p
-	    >Meet two relations.
-</p
+	    >Meet two relations.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -300,15 +294,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Lat
 	    >forall</span
 	    > c. <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RelkitBinary"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relkit.html#t:RelkitBinary"
 	    >RelkitBinary</a
-	    > c<a href="src/Koshucode-Baala-Op-Lattice-Tropashko.html#relkitMeet" class="link"
+	    > c <a href="src/Koshucode-Baala-Op-Lattice-Tropashko.html#relkitMeet" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Meet two relations.
-</p
+	    >Meet two relations.</p
 	    ></div
 	  ></div
 	><div class="doc"
@@ -330,115 +323,105 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Lat
 	    >/a</code
 	    >, and right-sided term is <code
 	    >/d</code
-	    >.
-</p
+	    >.</p
 	  ><dl
 	  ><dt
 	    >Input</dt
 	    ><dd
-	    >    Relations <code
+	    >Relations <code
 	      >(Rel he1 bo1)</code
 	      > and <code
 	      >(Rel he2 bo2)</code
-	      >
-</dd
-	    ><dt
-	    >Output</dt
-	    ><dd
-	    >   Relation <code
-	      >(Rel he3 b3)</code
-	      >
-</dd
+	      ><dl
+	      ><dt
+		>Output</dt
+		><dd
+		>Relation <code
+		  >(Rel he3 b3)</code
+		  ></dd
+		></dl
+	      ><ol
+	      ><li
+		>Let <code
+		  >s1</code
+		  > be shared-term information of <code
+		  >he1</code
+		  >.</li
+		><li
+		>Let <code
+		  >s2</code
+		  > be shared-term information of <code
+		  >he2</code
+		  >.</li
+		><li
+		>Let <code
+		  >cs1</code
+		  > :: <code
+		  >[c]</code
+		  > be element of <code
+		  >bo1</code
+		  >.</li
+		><li
+		>Let <code
+		  >cs2</code
+		  > :: <code
+		  >[c]</code
+		  > be element of <code
+		  >bo2</code
+		  >.</li
+		><li
+		>Split each <code
+		  >cs2</code
+		  >, by <code
+		  >s2</code
+		  >,
+   into shared and sided terms :: <code
+		  >([c], [c])</code
+		  >.</li
+		><li
+		>For each same shared terms, collect the sided terms.
+   Let it be <code
+		  >(share2, sides2)</code
+		  > :: <code
+		  >([c], [[c]])</code
+		  >.</li
+		><li
+		>Pick shared terms <code
+		  >share1</code
+		  > :: <code
+		  >[c]</code
+		  >,
+   by <code
+		  >s1</code
+		  >, from each <code
+		  >cs1</code
+		  >.</li
+		><li
+		>Concat <code
+		  >cs1</code
+		  > and each of <code
+		  >sides2</code
+		  >
+   where <code
+		  >share1</code
+		  > equals <code
+		  >share2</code
+		  >,</li
+		></ol
+	      ></dd
 	    ></dl
-	  ><ol
-	  ><li
-	    > Let <code
-	      >s1</code
-	      > be shared-term information of <code
-	      >he1</code
-	      >.
-</li
-	    ><li
-	    > Let <code
-	      >s2</code
-	      > be shared-term information of <code
-	      >he2</code
-	      >.
-</li
-	    ><li
-	    > Let <code
-	      >cs1</code
-	      > :: <code
-	      >[c]</code
-	      > be element of <code
-	      >bo1</code
-	      >.
-</li
-	    ><li
-	    > Let <code
-	      >cs2</code
-	      > :: <code
-	      >[c]</code
-	      > be element of <code
-	      >bo2</code
-	      >.
-</li
-	    ><li
-	    > Split each <code
-	      >cs2</code
-	      >, by <code
-	      >s2</code
-	      >,
-       into shared and sided terms :: <code
-	      >([c], [c])</code
-	      >.
-</li
-	    ><li
-	    > For each same shared terms, collect the sided terms.
-       Let it be <code
-	      >(share2, sides2)</code
-	      > :: <code
-	      >([c], [[c]])</code
-	      >.
-</li
-	    ><li
-	    > Pick shared terms <code
-	      >share1</code
-	      > :: <code
-	      >[c]</code
-	      >,
-       by <code
-	      >s1</code
-	      >, from each <code
-	      >cs1</code
-	      >.
-</li
-	    ><li
-	    > Concat <code
-	      >cs1</code
-	      > and each of <code
-	      >sides2</code
-	      >
-       where <code
-	      >share1</code
-	      > equals <code
-	      >share2</code
-	      >,
-</li
-	    ></ol
 	  ></div
 	><h1 id="g:3"
-	>join (inner union)
-</h1
+	>join (inner union)</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:consJoin" class="def"
 	    >consJoin</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
 	    >RopCons</a
-	    > c<a href="src/Koshucode-Baala-Op-Lattice-Tropashko.html#consJoin" class="link"
+	    > c <a href="src/Koshucode-Baala-Op-Lattice-Tropashko.html#consJoin" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -446,7 +429,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Lat
 	><p class="src"
 	  ><a name="v:relmapJoin" class="def"
 	    >relmapJoin</a
-	    ><a href="src/Koshucode-Baala-Op-Lattice-Tropashko.html#relmapJoin" class="link"
+	    > <a href="src/Koshucode-Baala-Op-Lattice-Tropashko.html#relmapJoin" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="subs arguments"
@@ -463,43 +446,39 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Lat
 		></tr
 	      ><tr
 	      ><td class="src"
-		>=&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
+		>=&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopUse"
 		  >RopUse</a
 		  > c</td
 		><td class="doc"
 		><p
-		  >Source infomation
-</p
+		  >Source infomation</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 		  >Relmap</a
 		  > c</td
 		><td class="doc"
 		><p
-		  >Subrelmap of join operator
-</p
+		  >Subrelmap of join operator</p
 		  ></td
 		></tr
 	      ><tr
 	      ><td class="src"
-		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+		>-&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 		  >Relmap</a
 		  > c</td
 		><td class="doc"
 		><p
-		  >Relmap of join operator
-</p
+		  >Relmap of join operator</p
 		  ></td
 		></tr
 	      ></table
 	    ></div
 	  ><div class="doc"
 	  ><p
-	    >Join two relations.
-</p
+	    >Join two relations.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -508,13 +487,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Lat
 	    >relmapJoinList</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
 	    >Ord</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopUse"
 	    >RopUse</a
-	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
-	    > c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+	    > c] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
-	    > c<a href="src/Koshucode-Baala-Op-Lattice-Tropashko.html#relmapJoinList" class="link"
+	    > c <a href="src/Koshucode-Baala-Op-Lattice-Tropashko.html#relmapJoinList" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -522,15 +501,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Lat
 	><p class="src"
 	  ><a name="v:relkitJoin" class="def"
 	    >relkitJoin</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RelkitBinary"
+	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relkit.html#t:RelkitBinary"
 	    >RelkitBinary</a
-	    > c<a href="src/Koshucode-Baala-Op-Lattice-Tropashko.html#relkitJoin" class="link"
+	    > c <a href="src/Koshucode-Baala-Op-Lattice-Tropashko.html#relkitJoin" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Join two relations.
-</p
+	    >Join two relations.</p
 	    ></div
 	  ></div
 	></div
@@ -539,7 +517,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Lat
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html

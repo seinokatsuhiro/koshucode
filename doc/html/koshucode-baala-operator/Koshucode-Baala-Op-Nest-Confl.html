@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-operator-0.67.0.0: Relation-mapping operators in Koshucode</p
+      >koshucode-baala-operator-0.89.0.0: Relation-mapping operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -40,6 +40,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >Safe Haskell</th
 	    ><td
 	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
 	    ></tr
 	  ></table
 	><p class="caption"
@@ -51,43 +57,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >copy
-</a
+	    >copy</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >for
-</a
+	    >for</a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >group
-</a
+	    >group</a
 	    ></li
 	  ><li
 	  ><a href="#g:4"
-	    >group-by
-</a
+	    >slice</a
 	    ></li
 	  ><li
 	  ><a href="#g:5"
-	    >slice
-</a
-	    ></li
-	  ><li
-	  ><a href="#g:6"
-	    >slice-up
-</a
-	    ></li
-	  ><li
-	  ><a href="#g:7"
-	    >nest
-</a
-	    ></li
-	  ><li
-	  ><a href="#g:8"
-	    >unnest
-</a
+	    >slice-up</a
 	    ></li
 	  ></ul
 	></div
@@ -98,7 +84,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	><li class="src short"
 	  ><a href="#v:consCopy"
 	    >consCopy</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
+	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
 	    >RopCons</a
 	    > c</li
 	  ><li class="src short"
@@ -106,7 +92,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >consFor</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
 	    >CRel</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
 	    >RopCons</a
 	    > c</li
 	  ><li class="src short"
@@ -114,7 +100,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >relmapFor</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
 	    >CRel</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopUse"
 	    >RopUse</a
 	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Terminal"
 	    >Terminal</a
@@ -124,7 +110,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >TermName</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
 	    > c)</li
 	  ><li class="src short"
@@ -136,7 +122,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >CRel</a
 	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
 	    >TermName</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RelkitBinary"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relkit.html#t:RelkitBinary"
 	    >RelkitBinary</a
 	    > c</li
 	  ><li class="src short"
@@ -146,7 +132,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >Ord</a
 	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
 	    >CRel</a
-	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
 	    >RopCons</a
 	    > c</li
 	  ><li class="src short"
@@ -156,13 +142,13 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >Ord</a
 	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
 	    >CRel</a
-	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopUse"
 	    >RopUse</a
 	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
 	    >TermName</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
 	    > c)</li
 	  ><li class="src short"
@@ -176,25 +162,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >CRel</a
 	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
 	    >TermName</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RelkitBinary"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relkit.html#t:RelkitBinary"
 	    >RelkitBinary</a
-	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:consGroupBy"
-	    >consGroupBy</a
-	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
-	    >CRel</a
-	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
-	    >RopCons</a
 	    > c</li
 	  ><li class="src short"
 	  ><a href="#v:consSlice"
 	    >consSlice</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
 	    >CRel</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
 	    >RopCons</a
 	    > c</li
 	  ><li class="src short"
@@ -202,7 +178,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >relmapSlice</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
 	    >CRel</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopUse"
 	    >RopUse</a
 	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Terminal"
 	    >Terminal</a
@@ -212,7 +188,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >TermName</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
 	    > c)</li
 	  ><li class="src short"
@@ -222,7 +198,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >CRel</a
 	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
 	    >TermName</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RelkitBinary"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relkit.html#t:RelkitBinary"
 	    >RelkitBinary</a
 	    > c</li
 	  ><li class="src short"
@@ -230,7 +206,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >consSliceUp</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
 	    >CRel</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
 	    >RopCons</a
 	    > c</li
 	  ><li class="src short"
@@ -238,7 +214,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >relmapSliceUp</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
 	    >CRel</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopUse"
 	    >RopUse</a
 	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Terminal"
 	    >Terminal</a
@@ -246,7 +222,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >String</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
 	    > c)</li
 	  ><li class="src short"
@@ -254,74 +230,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >relkitSliceUp</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
 	    >CRel</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RelkitBinary"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relkit.html#t:RelkitBinary"
 	    >RelkitBinary</a
-	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:consNest"
-	    >consNest</a
-	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
-	    >CRel</a
-	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
-	    >RopCons</a
-	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:relmapNest"
-	    >relmapNest</a
-	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
-	    >CRel</a
-	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    >, [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
-	    >TermName</a
-	    >], <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
-	    >TermName</a
-	    >) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:consUnnest"
-	    >consUnnest</a
-	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
-	    >CRel</a
-	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
-	    >RopCons</a
-	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:relmapUnnest"
-	    >relmapUnnest</a
-	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
-	    >CRel</a
-	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
-	    >TermName</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
 	    > c</li
 	  ></ul
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>copy
-</h1
+	>copy</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:consCopy" class="def"
 	    >consCopy</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
+	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
 	    >RopCons</a
-	    > c<a href="src/Koshucode-Baala-Op-Nest-Confl.html#consCopy" class="link"
+	    > c <a href="src/Koshucode-Baala-Op-Nest-Confl.html#consCopy" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -331,24 +254,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >down</code
 	    > <code
 	    >/r</code
-	    >.
-</p
+	    >.</p
 	  ><pre
-	  > copy r ( dee | slice /r r )
-</pre
+	  >copy r ( dee | slice /r r )</pre
 	  ></div
 	><h1 id="g:2"
-	>for
-</h1
+	>for</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:consFor" class="def"
 	    >consFor</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
 	    >CRel</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
 	    >RopCons</a
-	    > c<a href="src/Koshucode-Baala-Op-Nest-Confl.html#consFor" class="link"
+	    > c <a href="src/Koshucode-Baala-Op-Nest-Confl.html#consFor" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -358,7 +278,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >relmapFor</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
 	    >CRel</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopUse"
 	    >RopUse</a
 	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Terminal"
 	    >Terminal</a
@@ -368,9 +288,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >TermName</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
-	    > c)<a href="src/Koshucode-Baala-Op-Nest-Confl.html#relmapFor" class="link"
+	    > c) <a href="src/Koshucode-Baala-Op-Nest-Confl.html#relmapFor" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -384,9 +304,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >CRel</a
 	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
 	    >TermName</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RelkitBinary"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relkit.html#t:RelkitBinary"
 	    >RelkitBinary</a
-	    > c<a href="src/Koshucode-Baala-Op-Nest-Confl.html#relkitFor" class="link"
+	    > c <a href="src/Koshucode-Baala-Op-Nest-Confl.html#relkitFor" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -396,15 +316,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >/c</code
 	    > from a nested relation in term <code
 	    >/r</code
-	    >.
-</p
+	    >.</p
 	  ><pre
-	  > for /r ( cut /c )
-</pre
+	  >for /r ( cut /c )</pre
 	  ></div
 	><h1 id="g:3"
-	>group
-</h1
+	>group</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:consGroup" class="def"
@@ -413,9 +330,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >Ord</a
 	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
 	    >CRel</a
-	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
 	    >RopCons</a
-	    > c<a href="src/Koshucode-Baala-Op-Nest-Confl.html#consGroup" class="link"
+	    > c <a href="src/Koshucode-Baala-Op-Nest-Confl.html#consGroup" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -427,15 +344,15 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >Ord</a
 	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
 	    >CRel</a
-	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
+	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopUse"
 	    >RopUse</a
 	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
 	    >TermName</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
-	    > c)<a href="src/Koshucode-Baala-Op-Nest-Confl.html#relmapGroup" class="link"
+	    > c) <a href="src/Koshucode-Baala-Op-Nest-Confl.html#relmapGroup" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -451,9 +368,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >CRel</a
 	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
 	    >TermName</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RelkitBinary"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relkit.html#t:RelkitBinary"
 	    >RelkitBinary</a
-	    > c<a href="src/Koshucode-Baala-Op-Nest-Confl.html#relkitGroup" class="link"
+	    > c <a href="src/Koshucode-Baala-Op-Nest-Confl.html#relkitGroup" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -471,49 +388,21 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >.
   Result relations are nested in term <code
 	    >/r</code
-	    >.
-</p
+	    >.</p
 	  ><pre
-	  > a | group /r b
-</pre
+	  >a | group /r b</pre
 	  ></div
 	><h1 id="g:4"
-	>group-by
-</h1
-	><div class="top"
-	><p class="src"
-	  ><a name="v:consGroupBy" class="def"
-	    >consGroupBy</a
-	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
-	    >CRel</a
-	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
-	    >RopCons</a
-	    > c<a href="src/Koshucode-Baala-Op-Nest-Confl.html#consGroupBy" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="doc"
-	><p
-	  >Grouping relation by relmap output.
-</p
-	  ><pre
-	  > source P /a /b | group-by /g ( pick /a )
-</pre
-	  ></div
-	><h1 id="g:5"
-	>slice
-</h1
+	>slice</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:consSlice" class="def"
 	    >consSlice</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
 	    >CRel</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
 	    >RopCons</a
-	    > c<a href="src/Koshucode-Baala-Op-Nest-Confl.html#consSlice" class="link"
+	    > c <a href="src/Koshucode-Baala-Op-Nest-Confl.html#consSlice" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -523,7 +412,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >relmapSlice</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
 	    >CRel</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopUse"
 	    >RopUse</a
 	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Terminal"
 	    >Terminal</a
@@ -533,9 +422,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >TermName</a
 	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
-	    > c)<a href="src/Koshucode-Baala-Op-Nest-Confl.html#relmapSlice" class="link"
+	    > c) <a href="src/Koshucode-Baala-Op-Nest-Confl.html#relmapSlice" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -547,9 +436,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >CRel</a
 	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
 	    >TermName</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RelkitBinary"
+	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relkit.html#t:RelkitBinary"
 	    >RelkitBinary</a
-	    > c<a href="src/Koshucode-Baala-Op-Nest-Confl.html#relkitSlice" class="link"
+	    > c <a href="src/Koshucode-Baala-Op-Nest-Confl.html#relkitSlice" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -557,34 +446,29 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	><p
 	  >Add nested relation in term <code
 	    >/p</code
-	    >.
-</p
+	    >.</p
 	  ><pre
-	  > slice /p ( source P /a /b )
-</pre
+	  >slice /p ( source P /a /b )</pre
 	  ><p
 	  >Add nested relation as meet of <code
 	    >/p</code
 	    > and <code
 	    >/q</code
-	    >.
-</p
+	    >.</p
 	  ><pre
-	  > slice /r ( p | meet q ) -with /p /q
-</pre
+	  >slice /r ( p | meet q ) -&lt; /p /q</pre
 	  ></div
-	><h1 id="g:6"
-	>slice-up
-</h1
+	><h1 id="g:5"
+	>slice-up</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:consSliceUp" class="def"
 	    >consSliceUp</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
 	    >CRel</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
 	    >RopCons</a
-	    > c<a href="src/Koshucode-Baala-Op-Nest-Confl.html#consSliceUp" class="link"
+	    > c <a href="src/Koshucode-Baala-Op-Nest-Confl.html#consSliceUp" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -594,7 +478,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >relmapSliceUp</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
 	    >CRel</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopUse"
 	    >RopUse</a
 	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:Terminal"
 	    >Terminal</a
@@ -602,9 +486,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >String</a
 	    >] -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Map"
 	    >Map</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Relmap"
 	    >Relmap</a
-	    > c)<a href="src/Koshucode-Baala-Op-Nest-Confl.html#relmapSliceUp" class="link"
+	    > c) <a href="src/Koshucode-Baala-Op-Nest-Confl.html#relmapSliceUp" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -614,83 +498,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
 	    >relkitSliceUp</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
 	    >CRel</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RelkitBinary"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Relkit.html#t:RelkitBinary"
 	    >RelkitBinary</a
-	    > c<a href="src/Koshucode-Baala-Op-Nest-Confl.html#relkitSliceUp" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><h1 id="g:7"
-	>nest
-</h1
-	><div class="top"
-	><p class="src"
-	  ><a name="v:consNest" class="def"
-	    >consNest</a
-	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
-	    >CRel</a
-	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
-	    >RopCons</a
-	    > c<a href="src/Koshucode-Baala-Op-Nest-Confl.html#consNest" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:relmapNest" class="def"
-	    >relmapNest</a
-	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
-	    >CRel</a
-	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
-	    >Bool</a
-	    >, [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
-	    >TermName</a
-	    >], <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
-	    >TermName</a
-	    >) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c<a href="src/Koshucode-Baala-Op-Nest-Confl.html#relmapNest" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><h1 id="g:8"
-	>unnest
-</h1
-	><div class="top"
-	><p class="src"
-	  ><a name="v:consUnnest" class="def"
-	    >consUnnest</a
-	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
-	    >CRel</a
-	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopCons"
-	    >RopCons</a
-	    > c<a href="src/Koshucode-Baala-Op-Nest-Confl.html#consUnnest" class="link"
-	    >Source</a
-	    ></p
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:relmapUnnest" class="def"
-	    >relmapUnnest</a
-	    > :: (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
-	    >Ord</a
-	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CRel"
-	    >CRel</a
-	    > c) =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
-	    >TermName</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Relmap"
-	    >Relmap</a
-	    > c<a href="src/Koshucode-Baala-Op-Nest-Confl.html#relmapUnnest" class="link"
+	    > c <a href="src/Koshucode-Baala-Op-Nest-Confl.html#relkitSliceUp" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -700,7 +510,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Nes
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html
