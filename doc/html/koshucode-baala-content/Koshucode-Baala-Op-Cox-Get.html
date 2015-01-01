@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Cox
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-content-0.70.0.0: Term-content operators in Koshucode</p
+      >koshucode-baala-content-0.89.0.0: Term-content operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -40,6 +40,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Cox
 	    >Safe Haskell</th
 	    ><td
 	    >None</td
+	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
 	    ></tr
 	  ></table
 	><p class="caption"
@@ -51,13 +57,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Cox
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Cox
-</a
+	    >Cox</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Content
-</a
+	    >Content</a
 	    ></li
 	  ></ul
 	></div
@@ -66,25 +70,35 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Cox
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
-	  ><a href="#v:ropBase"
-	    >ropBase</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:Cop"
-	    >Cop</a
-	    > c]</li
-	  ><li class="src short"
 	  ><a href="#v:getCox"
 	    >getCox</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Op-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:Cox"
+	    >Cox</a
+	    > c)</li
+	  ><li class="src short"
+	  ><a href="#v:getMaybeCox"
+	    >getMaybeCox</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Op-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
 	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:Cox"
+	    >Cox</a
+	    > c))</li
+	  ><li class="src short"
+	  ><a href="#v:getOptionCox"
+	    >getOptionCox</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Op-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:Cox"
 	    >Cox</a
 	    > c)</li
 	  ><li class="src short"
@@ -92,13 +106,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Cox
 	    >getTermCoxes</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:NamedCox"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Op-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:NamedCox"
 	    >NamedCox</a
 	    > c]</li
 	  ><li class="src short"
@@ -106,13 +116,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Cox
 	    >getNamedCoxes</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:NamedCox"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Op-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:NamedCox"
 	    >NamedCox</a
 	    > c]</li
 	  ><li class="src short"
@@ -120,126 +126,105 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Cox
 	    >getWhere</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > ([<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:Cop"
-	    >Cop</a
-	    > c], [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:NamedCox"
-	    >NamedCox</a
-	    > c])</li
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Op-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c)</li
 	  ><li class="src short"
 	  ><a href="#v:getContent"
 	    >getContent</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > c</li
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Op-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c c</li
 	  ><li class="src short"
 	  ><a href="#v:getContents"
 	    >getContents</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > [c]</li
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Op-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c [c]</li
 	  ><li class="src short"
 	  ><a href="#v:getOptContent"
 	    >getOptContent</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > c</li
+	    > c =&gt; c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Op-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c c</li
 	  ><li class="src short"
 	  ><a href="#v:getFiller"
 	    >getFiller</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > c</li
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Op-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c c</li
 	  ><li class="src short"
 	  ><a href="#v:getInt"
 	    >getInt</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Op-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
 	    ></li
 	  ></ul
 	></div
       ><div id="interface"
-      ><h1
-	>Documentation</h1
-	><div class="top"
-	><p class="src"
-	  ><a name="v:ropBase" class="def"
-	    >ropBase</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:Cop"
-	    >Cop</a
-	    > c]<a href="src/Koshucode-Baala-Op-Cox-Get.html#ropBase" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Get list of content operators.
-</p
-	    ></div
-	  ></div
-	><h1 id="g:1"
-	>Cox
-</h1
+      ><h1 id="g:1"
+	>Cox</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:getCox" class="def"
 	    >getCox</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:Cox"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Op-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:Cox"
 	    >Cox</a
-	    > c)<a href="src/Koshucode-Baala-Op-Cox-Get.html#getCox" class="link"
+	    > c) <a href="src/Koshucode-Baala-Op-Cox-Get.html#getCox" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Get relmap attribute as single cox.
-</p
+	    >Get relmap attribute as single cox.</p
 	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:getMaybeCox" class="def"
+	    >getMaybeCox</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Op-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:Cox"
+	    >Cox</a
+	    > c)) <a href="src/Koshucode-Baala-Op-Cox-Get.html#getMaybeCox" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:getOptionCox" class="def"
+	    >getOptionCox</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Op-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:Cox"
+	    >Cox</a
+	    > c) <a href="src/Koshucode-Baala-Op-Cox-Get.html#getOptionCox" class="link"
+	    >Source</a
+	    ></p
 	  ></div
 	><div class="top"
 	><p class="src"
@@ -247,21 +232,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Cox
 	    >getTermCoxes</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:NamedCox"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Op-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:NamedCox"
 	    >NamedCox</a
-	    > c]<a href="src/Koshucode-Baala-Op-Cox-Get.html#getTermCoxes" class="link"
+	    > c] <a href="src/Koshucode-Baala-Op-Cox-Get.html#getTermCoxes" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Get relmap attribute as cox list with term name.
-</p
+	    >Get relmap attribute as cox list with term name.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -270,21 +250,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Cox
 	    >getNamedCoxes</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:NamedCox"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Op-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:NamedCox"
 	    >NamedCox</a
-	    > c]<a href="src/Koshucode-Baala-Op-Cox-Get.html#getNamedCoxes" class="link"
+	    > c] <a href="src/Koshucode-Baala-Op-Cox-Get.html#getNamedCoxes" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Get relmap attribute as cox list with name.
-</p
+	    >Get relmap attribute as cox list with name.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -293,42 +268,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Cox
 	    >getWhere</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > ([<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:Cop"
-	    >Cop</a
-	    > c], [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:NamedCox"
-	    >NamedCox</a
-	    > c])<a href="src/Koshucode-Baala-Op-Cox-Get.html#getWhere" class="link"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Op-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cop.html#t:CopSet"
+	    >CopSet</a
+	    > c) <a href="src/Koshucode-Baala-Op-Cox-Get.html#getWhere" class="link"
 	    >Source</a
 	    ></p
 	  ></div
 	><h1 id="g:2"
-	>Content
-</h1
+	>Content</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:getContent" class="def"
 	    >getContent</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > c<a href="src/Koshucode-Baala-Op-Cox-Get.html#getContent" class="link"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Op-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c c <a href="src/Koshucode-Baala-Op-Cox-Get.html#getContent" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Get relmap attribute as calculated content.
-</p
+	    >Get relmap attribute as calculated content.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -337,19 +300,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Cox
 	    >getContents</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > [c]<a href="src/Koshucode-Baala-Op-Cox-Get.html#getContents" class="link"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Op-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c [c] <a href="src/Koshucode-Baala-Op-Cox-Get.html#getContents" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Get relmap attribute as list of calculated contents.
-</p
+	    >Get relmap attribute as list of calculated contents.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -358,19 +316,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Cox
 	    >getOptContent</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > c<a href="src/Koshucode-Baala-Op-Cox-Get.html#getOptContent" class="link"
+	    > c =&gt; c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Op-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c c <a href="src/Koshucode-Baala-Op-Cox-Get.html#getOptContent" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Get relmap attribute as optional content.
-</p
+	    >Get relmap attribute as optional content.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -379,19 +332,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Cox
 	    >getFiller</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > c<a href="src/Koshucode-Baala-Op-Cox-Get.html#getFiller" class="link"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Op-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c c <a href="src/Koshucode-Baala-Op-Cox-Get.html#getFiller" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Get relmap attribute as filler content, i.e., given content or empty.
-</p
+	    >Get relmap attribute as filler content, i.e., given content or empty.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -400,15 +348,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Cox
 	    >getInt</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:RopUse"
-	    >RopUse</a
-	    > c -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-operator/Koshucode-Baala-Op-Builtin-Get.html#t:RopGet"
+	    >RopGet</a
+	    > c <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Int.html#t:Int"
 	    >Int</a
-	    ><a href="src/Koshucode-Baala-Op-Cox-Get.html#getInt" class="link"
+	    > <a href="src/Koshucode-Baala-Op-Cox-Get.html#getInt" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -418,7 +362,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Cox
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html

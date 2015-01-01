@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-content-0.70.0.0: Term-content operators in Koshucode</p
+      >koshucode-baala-content-0.89.0.0: Term-content operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -41,6 +41,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 	    ><td
 	    >None</td
 	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
 	  ></table
 	><p class="caption"
 	>Koshucode.Baala.Type.Vanilla</p
@@ -50,8 +56,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 	>Description</p
 	><div class="doc"
 	><p
-	  >Vanilla type.
-</p
+	  >Vanilla type.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -61,49 +66,73 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 	><li class="src short"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a href="#t:VContent"
+	    > <a href="#t:VContent"
 	    >VContent</a
-	    > <ul class="subs"
+	    ><ul class="subs"
 	    ><li
 	      >= <a href="#v:VBool"
 		>VBool</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
 		>Bool</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:VText"
 		>VText</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:VTerm"
 		>VTerm</a
 		> <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
-		>  </li
+		></li
 	      ><li
 	      >| <a href="#v:VDec"
 		>VDec</a
 		> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Decimal.html#t:Decimal"
 		>Decimal</a
-		>  </li
+		></li
+	      ><li
+	      >| <a href="#v:VClock"
+		>VClock</a
+		> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Clock.html#t:Clock"
+		>Clock</a
+		></li
+	      ><li
+	      >| <a href="#v:VTime"
+		>VTime</a
+		> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Time.html#t:Time"
+		>Time</a
+		></li
 	      ><li
 	      >| <a href="#v:VEmpty"
 		>VEmpty</a
-		>  </li
+		></li
+	      ><li
+	      >| <a href="#v:VInterp"
+		>VInterp</a
+		> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Interp.html#t:Interp"
+		>Interp</a
+		></li
+	      ><li
+	      >| <a href="#v:VType"
+		>VType</a
+		> <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Type.html#t:Type"
+		>Type</a
+		></li
 	      ><li
 	      >| <a href="#v:VList"
 		>VList</a
 		> [<a href="Koshucode-Baala-Type-Vanilla.html#t:VContent"
 		>VContent</a
-		>]  </li
+		>]</li
 	      ><li
 	      >| <a href="#v:VSet"
 		>VSet</a
 		> [<a href="Koshucode-Baala-Type-Vanilla.html#t:VContent"
 		>VContent</a
-		>]  </li
+		>]</li
 	      ><li
 	      >| <a href="#v:VAssn"
 		>VAssn</a
@@ -111,7 +140,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 		>Named</a
 		> <a href="Koshucode-Baala-Type-Vanilla.html#t:VContent"
 		>VContent</a
-		>]  </li
+		>]</li
 	      ><li
 	      >| <a href="#v:VRel"
 		>VRel</a
@@ -119,7 +148,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 		>Rel</a
 		> <a href="Koshucode-Baala-Type-Vanilla.html#t:VContent"
 		>VContent</a
-		>)  </li
+		>)</li
 	      ></ul
 	    ></li
 	  ></ul
@@ -131,15 +160,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 	><p class="src"
 	  ><span class="keyword"
 	    >data</span
-	    >  <a name="t:VContent" class="def"
+	    > <a name="t:VContent" class="def"
 	    >VContent</a
-	    >  <a href="src/Koshucode-Baala-Type-Vanilla.html#VContent" class="link"
+	    > <a href="src/Koshucode-Baala-Type-Vanilla.html#VContent" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Vanilla type
-</p
+	    >Vanilla type</p
 	    ></div
 	  ><div class="subs constructors"
 	  ><p class="caption"
@@ -154,8 +182,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 		  ></td
 		><td class="doc"
 		><p
-		  >Boolean type
-</p
+		  >Boolean type</p
 		  ></td
 		></tr
 	      ><tr
@@ -167,8 +194,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 		  ></td
 		><td class="doc"
 		><p
-		  >String type
-</p
+		  >String type</p
 		  ></td
 		></tr
 	      ><tr
@@ -180,8 +206,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 		  ></td
 		><td class="doc"
 		><p
-		  >Term name type
-</p
+		  >Term name type</p
 		  ></td
 		></tr
 	      ><tr
@@ -193,8 +218,31 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 		  ></td
 		><td class="doc"
 		><p
-		  >Decimal number type
-</p
+		  >Decimal number type</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:VClock" class="def"
+		  >VClock</a
+		  > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Clock.html#t:Clock"
+		  >Clock</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Clock type</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:VTime" class="def"
+		  >VTime</a
+		  > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Time.html#t:Time"
+		  >Time</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Time type</p
 		  ></td
 		></tr
 	      ><tr
@@ -204,8 +252,31 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 		  ></td
 		><td class="doc"
 		><p
-		  >Sign of no ordinary type
-</p
+		  >Sign of no ordinary type</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:VInterp" class="def"
+		  >VInterp</a
+		  > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Interp.html#t:Interp"
+		  >Interp</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Interpretation type</p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:VType" class="def"
+		  >VType</a
+		  > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Type.html#t:Type"
+		  >Type</a
+		  ></td
+		><td class="doc"
+		><p
+		  >Type for type</p
 		  ></td
 		></tr
 	      ><tr
@@ -217,8 +288,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 		  >]</td
 		><td class="doc"
 		><p
-		  >List type (objective collection)
-</p
+		  >List type (objective collection)</p
 		  ></td
 		></tr
 	      ><tr
@@ -230,8 +300,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 		  >]</td
 		><td class="doc"
 		><p
-		  >Set type (informative collection)
-</p
+		  >Set type (informative collection)</p
 		  ></td
 		></tr
 	      ><tr
@@ -245,8 +314,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 		  >]</td
 		><td class="doc"
 		><p
-		  >Assn type (set of terms)
-</p
+		  >Assn type (set of terms)</p
 		  ></td
 		></tr
 	      ><tr
@@ -260,8 +328,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 		  >)</td
 		><td class="doc"
 		><p
-		  >Relation type
-</p
+		  >Relation type</p
 		  ></td
 		></tr
 	      ></table
@@ -313,8 +380,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 		  ></tr
 		><tr
 		><td class="src"
-		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:PrimContent"
-		    >PrimContent</a
+		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
+		    >CContent</a
 		    > <a href="Koshucode-Baala-Type-Vanilla.html#t:VContent"
 		    >VContent</a
 		    ></td
@@ -323,8 +390,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 		  ></tr
 		><tr
 		><td class="src"
-		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
-		    >CContent</a
+		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CTypeOf"
+		    >CTypeOf</a
 		    > <a href="Koshucode-Baala-Type-Vanilla.html#t:VContent"
 		    >VContent</a
 		    ></td
@@ -383,6 +450,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 		  ></tr
 		><tr
 		><td class="src"
+		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CClock"
+		    >CClock</a
+		    > <a href="Koshucode-Baala-Type-Vanilla.html#t:VContent"
+		    >VContent</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CTime"
+		    >CTime</a
+		    > <a href="Koshucode-Baala-Type-Vanilla.html#t:VContent"
+		    >VContent</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
 		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CTerm"
 		    >CTerm</a
 		    > <a href="Koshucode-Baala-Type-Vanilla.html#t:VContent"
@@ -421,6 +508,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CInterp"
+		    >CInterp</a
+		    > <a href="Koshucode-Baala-Type-Vanilla.html#t:VContent"
+		    >VContent</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CType"
+		    >CType</a
+		    > <a href="Koshucode-Baala-Type-Vanilla.html#t:VContent"
+		    >VContent</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
 		></table
 	      ></div
 	    ></div
@@ -431,7 +538,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Type-V
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html

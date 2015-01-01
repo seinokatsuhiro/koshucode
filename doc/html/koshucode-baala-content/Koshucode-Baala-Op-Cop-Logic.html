@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Cop
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-content-0.70.0.0: Term-content operators in Koshucode</p
+      >koshucode-baala-content-0.89.0.0: Term-content operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -41,6 +41,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Cop
 	    ><td
 	    >None</td
 	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
 	  ></table
 	><p class="caption"
 	>Koshucode.Baala.Op.Cop.Logic</p
@@ -50,8 +56,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Cop
 	>Description</p
 	><div class="doc"
 	><p
-	  >Content operators.
-</p
+	  >Content operators.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -65,7 +70,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Cop
 	    >CBool</a
 	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CEmpty"
 	    >CEmpty</a
-	    > c) =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:Cop"
+	    > c) =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cop.html#t:Cop"
 	    >Cop</a
 	    > c]</li
 	  ></ul
@@ -81,9 +86,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Cop
 	    >CBool</a
 	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CEmpty"
 	    >CEmpty</a
-	    > c) =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:Cop"
+	    > c) =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cop.html#t:Cop"
 	    >Cop</a
-	    > c]<a href="src/Koshucode-Baala-Op-Cop-Logic.html#copsLogic" class="link"
+	    > c] <a href="src/Koshucode-Baala-Op-Cop-Logic.html#copsLogic" class="link"
 	    >Source</a
 	    ></p
 	  ></div
@@ -91,46 +96,54 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Cop
 	><dl
 	  ><dt
 	    ><code
-	      >not</code
+	      >all</code
 	      ></dt
 	    ><dd
-	    >    Logical negation.
-</dd
+	    ><code
+	      >x is all f g h</code
+	      > == <code
+	      >f x and g x and h x</code
+	      >.</dd
 	    ><dt
 	    ><code
 	      >and</code
 	      ></dt
 	    ><dd
-	    >    Logical conjunction.
-</dd
+	    >Logical conjunction.</dd
+	    ><dt
+	    ><code
+	      >any</code
+	      ></dt
+	    ><dd
+	    ><code
+	      >x is any f g h</code
+	      > == <code
+	      >f x or g x or h x</code
+	      >.</dd
+	    ><dt
+	    ><code
+	      >not</code
+	      ></dt
+	    ><dd
+	    >Logical negation.</dd
 	    ><dt
 	    ><code
 	      >or</code
 	      ></dt
 	    ><dd
-	    >     Logical disjunction.
-</dd
+	    >Logical disjunction.</dd
 	    ><dt
 	    ><code
 	      >then</code
 	      ></dt
 	    ><dd
-	    >   Logical implication.
-</dd
+	    >Logical implication.</dd
 	    ><dt
 	    ><code
 	      >when</code
 	      ></dt
 	    ><dd
-	    >   Inverse implication.
-</dd
-	    ><dt
-	    ><code
-	      >if</code
-	      ></dt
-	    ><dd
-	    >     Conditional expression.
-</dd
+	    >Inverse implication.</dd
 	    ></dl
 	  ></div
 	></div
@@ -139,7 +152,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Cop
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html

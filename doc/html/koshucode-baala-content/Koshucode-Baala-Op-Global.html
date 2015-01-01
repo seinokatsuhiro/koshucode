@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Glo
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-content-0.70.0.0: Term-content operators in Koshucode</p
+      >koshucode-baala-content-0.89.0.0: Term-content operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -41,6 +41,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Glo
 	    ><td
 	    >None</td
 	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
 	  ></table
 	><p class="caption"
 	>Koshucode.Baala.Op.Global</p
@@ -50,8 +56,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Glo
 	>Description</p
 	><div class="doc"
 	><p
-	  >Rops and cops.
-</p
+	  >Rops and cops.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -63,7 +68,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Glo
 	    >vanillaGlobal</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Global"
 	    >Global</a
 	    > c</li
 	  ><li class="src short"
@@ -71,7 +76,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Glo
 	    >vanillaRops</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Rop"
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Rop"
 	    >Rop</a
 	    > c]</li
 	  ><li class="src short"
@@ -79,13 +84,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Glo
 	    >vanillaCops</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; ([<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:Cop"
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cop.html#t:Cop"
 	    >Cop</a
-	    > c], [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Infix.html#t:InfixHeight"
-	    >InfixHeight</a
-	    >])</li
+	    > c]</li
 	  ></ul
 	></div
       ><div id="interface"
@@ -97,15 +98,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Glo
 	    >vanillaGlobal</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Global"
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Global"
 	    >Global</a
-	    > c<a href="src/Koshucode-Baala-Op-Global.html#vanillaGlobal" class="link"
+	    > c <a href="src/Koshucode-Baala-Op-Global.html#vanillaGlobal" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Global with operators.
-</p
+	    >Global with operators.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -114,15 +114,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Glo
 	    >vanillaRops</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Operator.html#t:Rop"
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Rop"
 	    >Rop</a
-	    > c]<a href="src/Koshucode-Baala-Op-Global.html#vanillaRops" class="link"
+	    > c] <a href="src/Koshucode-Baala-Op-Global.html#vanillaRops" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Relmap operators
-</p
+	    >Relmap operators</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -131,19 +130,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Glo
 	    >vanillaCops</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; ([<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cox.html#t:Cop"
+	    > c =&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Cop.html#t:Cop"
 	    >Cop</a
-	    > c], [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Prelude-Class.html#t:Named"
-	    >Named</a
-	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Syntax-Infix.html#t:InfixHeight"
-	    >InfixHeight</a
-	    >])<a href="src/Koshucode-Baala-Op-Global.html#vanillaCops" class="link"
+	    > c] <a href="src/Koshucode-Baala-Op-Global.html#vanillaCops" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Term-content operators and its height table.
-</p
+	    >Term-content operators.</p
 	    ></div
 	  ></div
 	></div
@@ -152,7 +146,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Glo
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html

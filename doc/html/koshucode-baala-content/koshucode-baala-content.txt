@@ -9,35 +9,54 @@
 --   <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-content
-@version 0.70.0.0
+@version 0.89.0.0
 
 module Koshucode.Baala.Op.Cox.Get
 
--- | Get list of content operators.
-ropBase :: RopUse c -> [Cop c]
-
 -- | Get relmap attribute as single cox.
-getCox :: CContent c => RopUse c -> String -> Ab (Cox c)
+getCox :: CContent c => RopGet c (Cox c)
+getMaybeCox :: CContent c => RopGet c (Maybe (Cox c))
+getOptionCox :: CContent c => c -> RopGet c (Cox c)
 
 -- | Get relmap attribute as cox list with term name.
-getTermCoxes :: CContent c => RopUse c -> String -> Ab [NamedCox c]
+getTermCoxes :: CContent c => RopGet c [NamedCox c]
 
 -- | Get relmap attribute as cox list with name.
-getNamedCoxes :: CContent c => RopUse c -> String -> Ab [NamedCox c]
-getWhere :: CContent c => RopUse c -> String -> Ab ([Cop c], [NamedCox c])
+getNamedCoxes :: CContent c => RopGet c [NamedCox c]
+getWhere :: CContent c => RopGet c (CopSet c)
 
 -- | Get relmap attribute as calculated content.
-getContent :: CContent c => RopUse c -> String -> Ab c
+getContent :: CContent c => RopGet c c
 
 -- | Get relmap attribute as list of calculated contents.
-getContents :: CContent c => RopUse c -> String -> Ab [c]
+getContents :: CContent c => RopGet c [c]
 
 -- | Get relmap attribute as optional content.
-getOptContent :: CContent c => c -> RopUse c -> String -> Ab c
+getOptContent :: CContent c => c -> RopGet c c
 
 -- | Get relmap attribute as filler content, i.e., given content or empty.
-getFiller :: CContent c => RopUse c -> String -> Ab c
-getInt :: CContent c => RopUse c -> String -> Ab Int
+getFiller :: CContent c => RopGet c c
+getInt :: CContent c => RopGet c Int
+
+module Koshucode.Baala.Op.Cox.Range
+
+-- | Implementation of relational operators.
+ropsCoxRange :: CContent c => [Rop c]
+type RangeAttr c = (TermName, CopSet c, Cox c, Cox c)
+consRange :: CContent c => RopCons c
+relmapRange :: CContent c => RopUse c -> RangeAttr c -> Relmap c
+relmapRangeYear :: CContent c => RopUse c -> RangeAttr c -> Relmap c
+relkitRangeYear :: CContent c => RangeAttr c -> RelkitFlow c
+relmapRangeMonth :: CContent c => RopUse c -> RangeAttr c -> Relmap c
+relkitRangeMonth :: CContent c => RangeAttr c -> RelkitFlow c
+relmapRangeDay :: CContent c => RopUse c -> RangeAttr c -> Relmap c
+relkitRangeDay :: CContent c => RangeAttr c -> RelkitFlow c
+relmapRangeHour :: CContent c => RopUse c -> RangeAttr c -> Relmap c
+relkitRangeHour :: CContent c => RangeAttr c -> RelkitFlow c
+relmapRangeMinute :: CContent c => RopUse c -> RangeAttr c -> Relmap c
+relkitRangeMinute :: CContent c => RangeAttr c -> RelkitFlow c
+relmapRangeSecond :: CContent c => RopUse c -> RangeAttr c -> Relmap c
+relkitRangeSecond :: CContent c => RangeAttr c -> RelkitFlow c
 
 module Koshucode.Baala.Op.Cox.Gadget
 
@@ -63,8 +82,8 @@ module Koshucode.Baala.Op.Cox.Filter
 --   </ul>
 ropsCoxFilter :: CContent c => [Rop c]
 consFilter :: CContent c => Bool -> RopCons c
-relmapFilter :: (CList c, CRel c, CBool c, Write c) => RopUse c -> (Bool, CopBundle c, Cox c) -> Relmap c
-relkitFilter :: (CList c, CRel c, CBool c, Write c) => (Bool, CopBundle c, Cox c) -> RelkitFlow c
+relmapFilter :: (CList c, CRel c, CBool c, Write c) => RopUse c -> (Bool, CopSet c, Cox c) -> Relmap c
+relkitFilter :: (CList c, CRel c, CBool c, Write c) => (Bool, CopSet c, Cox c) -> RelkitFlow c
 consContain :: CContent c => RopCons c
 relmapContain :: Eq c => RopUse c -> c -> Relmap c
 relkitContain :: Eq c => c -> RelkitFlow c
@@ -97,21 +116,30 @@ module Koshucode.Baala.Op.Cox.Calc
 --   </ul>
 ropsCoxCalc :: CContent c => [Rop c]
 consAdd :: CContent c => RopCons c
-relmapAdd :: (CList c, CRel c, Write c) => RopUse c -> (CopBundle c, [NamedCox c]) -> Relmap c
+relmapAdd :: (CList c, CRel c, Write c) => RopUse c -> (CopSet c, [NamedCox c]) -> Relmap c
 consSubst :: CContent c => RopCons c
-relmapSubst :: (CList c, CRel c, Write c) => RopUse c -> (CopBundle c, [NamedCox c]) -> Relmap c
-consRange :: CContent c => RopCons c
-relmapRange :: CContent c => RopUse c -> (TermName, [Cop c], Cox c, Cox c) -> Relmap c
+relmapSubst :: (CList c, CRel c, Write c) => RopUse c -> (CopSet c, [NamedCox c]) -> Relmap c
 consFill :: CContent c => RopCons c
-relmapFill :: CContent c => RopUse c -> ([TermName], [Cop c], Cox c) -> Relmap c
+relmapFill :: CContent c => RopUse c -> ([TermName], CopSet c, Cox c) -> Relmap c
 consReplace :: CContent c => RopCons c
 consReplaceAll :: CContent c => RopCons c
-relmapReplaceAll :: CContent c => RopUse c -> ([Cop c], Cox c, Cox c) -> Relmap c
+relmapReplaceAll :: CContent c => RopUse c -> (CopSet c, Cox c, Cox c) -> Relmap c
 consSplit :: CContent c => RopCons c
-relmapSplit :: (CList c, CRel c, Write c, CBool c) => RopUse c -> (CopBundle c, [NamedCox c]) -> Relmap c
-relkitSplit :: (CList c, CRel c, Write c, CBool c) => (CopBundle c, [NamedCox c]) -> RelkitFlow c
+relmapSplit :: (CList c, CRel c, Write c, CBool c) => RopUse c -> (CopSet c, [NamedCox c]) -> Relmap c
+relkitSplit :: (CList c, CRel c, Write c, CBool c) => (CopSet c, [NamedCox c]) -> RelkitFlow c
 consUnary :: CContent c => RopCons c
 relmapUnary :: CContent c => RopUse c -> (TermName, [c]) -> Relmap c
+
+module Koshucode.Baala.Op.Cox.Accessor
+
+-- | Implementation of relational operators.
+ropsCoxAccessor :: CContent c => [Rop c]
+relmapClock :: CContent c => RopUse c -> (CopSet c, TermName, (Cox c, Cox c, (MaybeCox c, MaybeCox c, MaybeCox c))) -> Relmap c
+relkitClock :: CContent c => (CopSet c, TermName, (Cox c, Cox c, (MaybeCox c, MaybeCox c, MaybeCox c))) -> RelkitFlow c
+relmapClockGet :: CContent c => RopUse c -> (CopSet c, Cox c, [Maybe TermName]) -> Relmap c
+relkitClockGet :: CContent c => (CopSet c, Cox c, [Maybe TermName]) -> RelkitFlow c
+relmapClockAlter :: CContent c => RopUse c -> (CopSet c, TermName, (MaybeCox c, MaybeCox c, MaybeCox c, MaybeCox c)) -> Relmap c
+relkitClockAlter :: CContent c => (CopSet c, TermName, (MaybeCox c, MaybeCox c, MaybeCox c, MaybeCox c)) -> RelkitFlow c
 
 
 -- | Helper functions to construct content expressions.
@@ -153,8 +181,18 @@ b3 :: Cox c
 
 
 -- | Content operators.
+module Koshucode.Baala.Op.Cop.Time
+copsTime :: (CTime c, CDec c) => [Cop c]
+
+
+-- | Content operators.
 module Koshucode.Baala.Op.Cop.Order
 copsOrder :: (CBool c, Eq c, Ord c) => [Cop c]
+
+
+-- | Content operators.
+module Koshucode.Baala.Op.Cop.Misc
+copsMisc :: (CBool c, CEmpty c, CType c) => [Cop c]
 
 
 -- | Content operators.
@@ -169,7 +207,7 @@ copsList :: CContent c => [Cop c]
 
 -- | Content operators.
 module Koshucode.Baala.Op.Cop.Arith
-copsArith :: (CDec c, CList c, CText c) => [Cop c]
+copsArith :: CContent c => [Cop c]
 
 
 -- | Vanilla type.
@@ -190,8 +228,20 @@ VTerm :: String -> VContent
 -- | Decimal number type
 VDec :: Decimal -> VContent
 
+-- | Clock type
+VClock :: Clock -> VContent
+
+-- | Time type
+VTime :: Time -> VContent
+
 -- | Sign of no ordinary type
 VEmpty :: VContent
+
+-- | Interpretation type
+VInterp :: Interp -> VContent
+
+-- | Type for type
+VType :: Type -> VContent
 
 -- | List type (objective collection)
 VList :: [VContent] -> VContent
@@ -208,17 +258,28 @@ instance Show VContent
 instance CRel VContent
 instance CAssn VContent
 instance CSet VContent
+instance CType VContent
+instance CInterp VContent
 instance CTerm VContent
 instance CEmpty VContent
 instance CList VContent
 instance CText VContent
+instance CTime VContent
+instance CClock VContent
 instance CDec VContent
 instance CBool VContent
 instance Write VContent
 instance CContent VContent
-instance PrimContent VContent
+instance CTypeOf VContent
 instance Ord VContent
 instance Eq VContent
+
+
+-- | Quasiquoter of Koshucode
+module Koshucode.Baala.Op.Quoter
+
+-- | Quasiquoter for <tt>[koshu| ... |]</tt>.
+koshu :: QuasiQuoter
 
 
 -- | Term-content operators.
@@ -238,12 +299,5 @@ vanillaGlobal :: CContent c => Global c
 -- | Relmap operators
 vanillaRops :: CContent c => [Rop c]
 
--- | Term-content operators and its height table.
-vanillaCops :: CContent c => ([Cop c], [Named InfixHeight])
-
-
--- | Quasiquoter of Koshucode
-module Koshucode.Baala.Op.Quoter
-
--- | Quasiquoter for <tt>[koshu| ... |]</tt>.
-koshu :: QuasiQuoter
+-- | Term-content operators.
+vanillaCops :: CContent c => [Cop c]

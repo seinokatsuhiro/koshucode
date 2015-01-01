@@ -11,12 +11,12 @@
 <a name="line-2"></a><span class='hs-comment'>{-# OPTIONS_GHC -Wall #-}</span>
 <a name="line-3"></a>
 <a name="line-4"></a><span class='hs-keyword'>module</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-conid'>Cox</span><span class='hs-varop'>.</span><span class='hs-conid'>Empty</span>
-<a name="line-5"></a><span class='hs-layout'>(</span> <span class='hs-varid'>ropsCoxEmpty</span><span class='hs-layout'>,</span>
-<a name="line-6"></a>  <span class='hs-comment'>-- * both</span>
-<a name="line-7"></a>  <span class='hs-varid'>consBoth</span><span class='hs-layout'>,</span> <span class='hs-varid'>relmapBoth</span><span class='hs-layout'>,</span>
-<a name="line-8"></a>  <span class='hs-comment'>-- * maybe</span>
-<a name="line-9"></a>  <span class='hs-varid'>consMaybe</span><span class='hs-layout'>,</span> <span class='hs-varid'>relmapMaybe</span><span class='hs-layout'>,</span> <span class='hs-varid'>relkitMaybe</span><span class='hs-layout'>,</span>
-<a name="line-10"></a><span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
+<a name="line-5"></a>  <span class='hs-layout'>(</span> <span class='hs-varid'>ropsCoxEmpty</span><span class='hs-layout'>,</span>
+<a name="line-6"></a>    <span class='hs-comment'>-- * both</span>
+<a name="line-7"></a>    <span class='hs-varid'>consBoth</span><span class='hs-layout'>,</span> <span class='hs-varid'>relmapBoth</span><span class='hs-layout'>,</span>
+<a name="line-8"></a>    <span class='hs-comment'>-- * maybe</span>
+<a name="line-9"></a>    <span class='hs-varid'>consMaybe</span><span class='hs-layout'>,</span> <span class='hs-varid'>relmapMaybe</span><span class='hs-layout'>,</span> <span class='hs-varid'>relkitMaybe</span><span class='hs-layout'>,</span>
+<a name="line-10"></a>  <span class='hs-layout'>)</span> <span class='hs-keyword'>where</span>
 <a name="line-11"></a>
 <a name="line-12"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Base</span>         <span class='hs-keyword'>as</span> <span class='hs-conid'>B</span>
 <a name="line-13"></a><span class='hs-keyword'>import</span> <span class='hs-keyword'>qualified</span> <span class='hs-conid'>Koshucode</span><span class='hs-varop'>.</span><span class='hs-conid'>Baala</span><span class='hs-varop'>.</span><span class='hs-conid'>Core</span>         <span class='hs-keyword'>as</span> <span class='hs-conid'>C</span>
@@ -54,7 +54,7 @@
 <a name="line-45"></a>    <span class='hs-varid'>rmapBoth</span> <span class='hs-keyglyph'>=</span> <span class='hs-varid'>rmapL</span> <span class='hs-varop'>`</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mappend</span><span class='hs-varop'>`</span> <span class='hs-conid'>Op</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapJoin</span> <span class='hs-varid'>use</span> <span class='hs-varid'>rmapR</span>
 <a name="line-46"></a>    <span class='hs-varid'>rmapR</span>    <span class='hs-keyglyph'>=</span> <span class='hs-varid'>rmap</span>  <span class='hs-varop'>`</span><span class='hs-conid'>B</span><span class='hs-varop'>.</span><span class='hs-varid'>mappend</span><span class='hs-varop'>`</span> <span class='hs-varid'>relmapMaybe</span> <span class='hs-varid'>use</span> <span class='hs-varid'>fill</span> <span class='hs-varid'>rmapIn</span>
 <a name="line-47"></a>    <span class='hs-varid'>rmapL</span>    <span class='hs-keyglyph'>=</span> <span class='hs-varid'>relmapMaybe</span> <span class='hs-varid'>use</span> <span class='hs-varid'>fill</span> <span class='hs-varid'>rmap</span>
-<a name="line-48"></a>    <span class='hs-varid'>rmapIn</span>   <span class='hs-keyglyph'>=</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapWithVar</span> <span class='hs-varid'>use</span> <span class='hs-str'>"i"</span>
+<a name="line-48"></a>    <span class='hs-varid'>rmapIn</span>   <span class='hs-keyglyph'>=</span> <span class='hs-conid'>C</span><span class='hs-varop'>.</span><span class='hs-varid'>relmapNestVar</span> <span class='hs-varid'>use</span> <span class='hs-str'>"i"</span>
 <a name="line-49"></a>
 <a name="line-50"></a>
 <a name="line-51"></a>
