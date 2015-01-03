@@ -4,6 +4,8 @@ module Koshucode.Baala.Op.Resource
   ( ropsResource,
     -- * koshu-res-rop
     consKoshuResRop, relkitKoshuResRop,
+    -- * koshu-res-sink
+    consKoshuResSink, relkitKoshuResSink,
   ) where
 
 import qualified Koshucode.Baala.Base          as B
@@ -11,24 +13,19 @@ import qualified Koshucode.Baala.Core          as C
 import qualified Koshucode.Baala.Op.Builtin    as Op
 
 
--- | Implementation of relational operators.
+-- | Relmap operators about resources.
 --
---   [@koshu-cop \/N@]
---     Retrieve list of content operators.
+--   [@koshu-res-rop \/N \/N@]
+--     Derived relmap operators in the current resource.
 -- 
---   [@koshu-cop-infix \/N \[ -height \/N \]\[ -dir \/N \]@]
---     Retrieve list of infix specifications.
--- 
---   [@koshu-rop /N@]
---     Retrieve list of relmap operators.
--- 
---   [@koshu-version /N@]
---     Get version number of the koshu calculator.
+--   [@koshu-res-sink \/N \/N@]
+--     Judgement patterns of sinks in the current resource.
 -- 
 ropsResource :: (C.CContent c) => [C.Rop c]
 ropsResource = Op.ropList "resource"
-    --          CONSTRUCTOR        USAGE                 ATTRIBUTE
-    [ Op.ropII  consKoshuResRop    "koshu-res-rop /N /N" "-sec -name"
+    --          CONSTRUCTOR        USAGE                   ATTRIBUTE
+    [ Op.ropII  consKoshuResRop    "koshu-res-rop /N /N"   "-sec -name"
+    , Op.ropII  consKoshuResSink   "koshu-res-sink /N /N"  "-sec -pat"
     ]
 
 
@@ -54,4 +51,27 @@ relkitKoshuResRop (sec, name) res _ = Right kit2 where
     bo2   = map f $ C.resRelmap res
     f ((s, n), _) = [C.pDecFromInt s, C.pText n]
 
+
+-- ----------------------  koshu-res-sink
+
+consKoshuResSink :: (C.CContent c) => C.RopCons c
+consKoshuResSink use =
+  do sec   <- Op.getTerm use "-sec"
+     pat   <- Op.getTerm use "-pat"
+     Right $ relmapKoshuResSink use (sec, pat)
+
+relmapKoshuResSink :: (C.CContent c)
+    => C.RopUse c -> (B.TermName, B.TermName)
+    -> C.Relmap c
+relmapKoshuResSink use = C.relmapHook use . relkitKoshuResSink
+
+relkitKoshuResSink :: (C.CContent c)
+    => (B.TermName, B.TermName)
+    -> C.RelkitHook c
+relkitKoshuResSink (sec, pat) res _ = Right kit2 where
+    kit2  = C.relkitConstBody ns bo2
+    ns    = [sec, pat]
+    bo2   = concatMap f $ C.resAssert res
+    f     = map g . B.shortBody
+    g a   = [C.pDecFromInt $ C.assSection a, C.pText $ C.assPattern a]
 
