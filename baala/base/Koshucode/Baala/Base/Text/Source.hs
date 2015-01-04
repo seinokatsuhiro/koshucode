@@ -125,8 +125,12 @@ codeDisplay (tag, p)
 class CodePtr a where
     codePts :: a -> [CodePt]
 
+    codePt :: a ->  CodePt
+    codePt p = B.headOr codeZero $ codePts p
+
 instance CodePtr CodePt where
-    codePts pt = [pt]
+    codePts cp  = [cp]
+    codePt  cp  =  cp
 
 
 -- ----------------------  Sourced

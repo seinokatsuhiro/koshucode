@@ -1,7 +1,8 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Prelude.List
-  ( front,
+  ( headOr,
+    front,
     tails,
     isSingleton,
     notNull,
@@ -50,6 +51,10 @@ import qualified Koshucode.Baala.Base.Prelude.Class as B
 --   >>> tails "abc"
 --   ["abc", "bc", "c"]
 --
+
+headOr :: a -> [a] -> a
+headOr x []       = x
+headOr _ (x : _)  = x
 
 -- | Head or empty.
 front :: [a] -> [a]
