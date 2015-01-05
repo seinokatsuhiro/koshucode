@@ -135,7 +135,7 @@ putElems :: (C.CContent c) => C.SourceBundle c -> IO Int
 putElems bun =
     do ass <- L.readSecList bun
        case ass of
-         Right ss -> B.putJudges 0 $ concatMap L.sectionElem ss
+         Right ss -> B.putJudges 0 $ concatMap L.resourceElem ss
          Left  _  -> B.bug "putElems"
 
 

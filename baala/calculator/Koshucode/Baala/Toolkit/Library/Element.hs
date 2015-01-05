@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Toolkit.Library.Element
-  ( sectionElem
+  ( resourceElem
     -- $Pattern
   ) where
 
@@ -13,9 +13,9 @@ infixr 0 -:-
 (-:-) = (,)
 
 -- | Retrive constituents of sections.
-sectionElem :: (C.CContent c) => C.Resource c -> [B.Judge c]
-sectionElem sec = map res js where
-    res = B.judgeCons ("/res" -:- C.pText $ B.sourceText $ C.resSource sec)
+resourceElem :: (C.CContent c) => C.Resource c -> [B.Judge c]
+resourceElem sec = map src js where
+    src = B.judgeCons ("/source" -:- C.pText $ B.sourceText $ head $ C.resSource sec)
     js  = concat [ elemJudge       $ C.resJudge  sec
                  , elemAssert      $ concatMap B.shortBody $ C.resAssert sec
                  , elemNamedRelmap [] ]
@@ -66,7 +66,7 @@ elemRelmap relmap = name : f relmap where
 -- ------------------------------------------------------------------
 -- $Pattern
 --
--- 'sectionElem' may output judges of the following patterns.
+-- 'resourceElem' may output judges of the following patterns.
 --
 -- [@KOSHU-AFFIRM@]
 --   There is affirmed relmap for pattern @\/pat@

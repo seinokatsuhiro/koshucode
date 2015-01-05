@@ -40,7 +40,7 @@ data Resource c = Resource {
     , resRelmap    :: [C.RelmapSource]   -- ^ Source of relmaps
     , resAssert    :: [ShortAssert c]    -- ^ Assertions of relmaps
     , resJudge     :: [B.Judge c]        -- ^ Affirmative or denial judgements
-    , resSource    :: B.Source           -- ^ Source name
+    , resSource    :: [B.Source]         -- ^ Source name
     , resMessage   :: [String]           -- ^ Collection of messages
     , resLastSecNo :: C.SecNo            -- ^ Last section number
     , resSelect    :: C.RelSelect c
@@ -72,7 +72,7 @@ resEmpty = Resource
            , resRelmap     = []
            , resAssert     = []
            , resJudge      = []
-           , resSource     = B.sourceZero
+           , resSource     = []
            , resMessage    = []
            , resLastSecNo  = 0
            , resSelect     = \_ _ -> B.reldee
@@ -117,10 +117,12 @@ resIncludeEach source res (B.Short pt shorts xs) =
            , resRelmap     = resRelmap  << relmaps
            , resAssert     = resAssert  << [B.Short pt shorts asserts]
            , resJudge      = resJudge   << judges
-           , resSource     = source
+           , resSource     = resSource  <: source
            , resLastSecNo  = lastSecNo xs }
     where
       f << ys    = ys ++ f res
+      f <: y     = y  :  f res
+
       for  isX f = pass     f  `map`  filter (isX . C.clauseBody) xs
       forM isX f = pass (ab f) `mapM` filter (isX . C.clauseBody) xs
 
