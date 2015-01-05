@@ -1,11 +1,11 @@
 ** -*- koshu -*-
 
-|-- DIR  /code 117  /comment 45   /dir "content/Koshucode/Baala/Op"
+|-- DIR  /code 118  /comment 45   /dir "content/Koshucode/Baala/Op"
 |-- DIR  /code 506  /comment 323  /dir "content/Koshucode/Baala/Op/Cop"
 |-- DIR  /code 719  /comment 376  /dir "content/Koshucode/Baala/Op/Cox"
 |-- DIR  /code 170  /comment 42   /dir "content/Koshucode/Baala/Type"
 
-|-- DIR-TOTAL  /code 1512  /comment 786
+|-- DIR-TOTAL  /code 1513  /comment 786
 
 |-- FILE  /code 14   /comment 5    /file "Cop.hs"         /dir "content/Koshucode/Baala/Op"
 |-- FILE  /code 73   /comment 37   /file "Arith.hs"       /dir "content/Koshucode/Baala/Op/Cop"
@@ -23,8 +23,8 @@
 |-- FILE  /code 120  /comment 61   /file "Gadget.hs"      /dir "content/Koshucode/Baala/Op/Cox"
 |-- FILE  /code 81   /comment 46   /file "Get.hs"         /dir "content/Koshucode/Baala/Op/Cox"
 |-- FILE  /code 104  /comment 72   /file "Range.hs"       /dir "content/Koshucode/Baala/Op/Cox"
-|-- FILE  /code 76   /comment 23   /file "Global.hs"      /dir "content/Koshucode/Baala/Op"
+|-- FILE  /code 77   /comment 23   /file "Global.hs"      /dir "content/Koshucode/Baala/Op"
 |-- FILE  /code 11   /comment 11   /file "Quoter.hs"      /dir "content/Koshucode/Baala/Op"
 |-- FILE  /code 170  /comment 42   /file "Vanilla.hs"     /dir "content/Koshucode/Baala/Type"
 
-|-- FILE-TOTAL  /code 1512  /comment 786
+|-- FILE-TOTAL  /code 1513  /comment 786

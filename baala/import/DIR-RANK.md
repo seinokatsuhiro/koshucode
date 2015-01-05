@@ -55,7 +55,7 @@ dir    : dep
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    185 judges
+**    188 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Abortable"      /import "Koshucode.Baala.Base.Prelude"
@@ -211,10 +211,13 @@ dir    : dep
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax"               /import "Koshucode.Baala.Base.Syntax.Line"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax"               /import "Koshucode.Baala.Base.Syntax.Tree"
 
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.CodePt"          /import "Data.Generics"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.CodePt"          /import "Koshucode.Baala.Base.Prelude"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.CodePt"          /import "Koshucode.Baala.Base.Text.Source"
+
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Comment"         /import "System.IO"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Source"          /import "Data.Generics"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.Source"          /import "Koshucode.Baala.Base.Prelude"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.TextTable"       /import "Data.Char"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.TextTable"       /import "Data.List"
@@ -229,6 +232,7 @@ dir    : dep
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Write"           /import "Text.PrettyPrint"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Write"           /import "Koshucode.Baala.Base.Prelude"
 
+|-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.CodePt"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.Comment"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.Source"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.TextTable"
@@ -301,7 +305,7 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 **
 
 |-- DIR-RANK  /dir-rank 2  /dir 'Koshucode.Baala.Base.Prelude  /base-rank {| /rank : /base | 0 : 'Class | 0 : 'Import | 0 : 'Pair | 1 : 'Assoc | 1 : 'List | 1 : 'Snip | 2 : 'Order |}
-|-- DIR-RANK  /dir-rank 4  /dir 'Koshucode.Baala.Base.Text  /base-rank {| /rank : /base | 0 : 'Comment | 0 : 'Unicode | 4 : 'Source | 4 : 'TextTable | 4 : 'Utility | 4 : 'Write |}
+|-- DIR-RANK  /dir-rank 4  /dir 'Koshucode.Baala.Base.Text  /base-rank {| /rank : /base | 0 : 'Comment | 0 : 'Source | 0 : 'Unicode | 4 : 'CodePt | 4 : 'TextTable | 4 : 'Utility | 4 : 'Write |}
 |-- DIR-RANK  /dir-rank 7  /dir 'Koshucode.Baala.Base.Abort  /base-rank {| /rank : /base | 6 : 'Reason | 7 : 'Abortable | 7 : 'Report |}
 |-- DIR-RANK  /dir-rank 11  /dir 'Koshucode.Baala.Base.Syntax  /base-rank {| /rank : /base | 0 : 'Line | 10 : 'Code | 10 : 'Tree | 11 : 'Infix |}
 |-- DIR-RANK  /dir-rank 14  /dir 'Koshucode.Baala.Base.Token  /base-rank {| /rank : /base | 6 : 'AngleText | 6 : 'Token | 7 : 'Short | 13 : 'TokenLine | 14 : 'TokenClause | 14 : 'TokenTree |}
@@ -329,8 +333,9 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 **    4         'Koshucode.Baala.Base.Text      /rank /base
 **                                              ----- --------------
 **                                              0     'Comment
+**                                              0     'Source
 **                                              0     'Unicode
-**                                              4     'Source
+**                                              4     'CodePt
 **                                              4     'TextTable
 **                                              4     'Utility
 **                                              4     'Write
@@ -407,7 +412,7 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    163 judges
+**    171 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Base"
@@ -566,6 +571,15 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Clause"      /import "Koshucode.Baala.Core.Lexmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Clause"      /import "Koshucode.Baala.Core.Content"
 
+|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Include"     /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Include"     /import "Koshucode.Baala.Core.Content"
+|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Include"     /import "Koshucode.Baala.Core.Lexmap"
+|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Include"     /import "Koshucode.Baala.Core.Relmap"
+|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Include"     /import "Koshucode.Baala.Core.Assert"
+|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Include"     /import "Koshucode.Baala.Core.Resource.Clause"
+|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Include"     /import "Koshucode.Baala.Core.Resource.Resource"
+|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Include"     /import "Koshucode.Baala.Core.Message"
+
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Quoter"      /import "Data.Generics"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Quoter"      /import "Language.Haskell.TH"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Quoter"      /import "Language.Haskell.TH.Quote"
@@ -573,20 +587,19 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Quoter"      /import "Koshucode.Baala.Core.Lexmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Quoter"      /import "Koshucode.Baala.Core.Resource.Clause"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Quoter"      /import "Koshucode.Baala.Core.Resource.Resource"
+|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Quoter"      /import "Koshucode.Baala.Core.Resource.Include"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Read"        /import "System.Directory"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Read"        /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Read"        /import "Koshucode.Baala.Core.Content"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Read"        /import "Koshucode.Baala.Core.Resource.Resource"
+|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Read"        /import "Koshucode.Baala.Core.Resource.Include"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Read"        /import "Koshucode.Baala.Core.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Resource"    /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Resource"    /import "Koshucode.Baala.Core.Content"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Resource"    /import "Koshucode.Baala.Core.Lexmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Resource"    /import "Koshucode.Baala.Core.Relmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Resource"    /import "Koshucode.Baala.Core.Assert"
-|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Resource"    /import "Koshucode.Baala.Core.Resource.Clause"
-|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Resource"    /import "Koshucode.Baala.Core.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Run"         /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Run"         /import "Koshucode.Baala.Core.Content"
@@ -597,6 +610,7 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Run"         /import "Koshucode.Baala.Core.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource"             /import "Koshucode.Baala.Core.Resource.Clause"
+|-- IMPORT  /module "Koshucode.Baala.Core.Resource"             /import "Koshucode.Baala.Core.Resource.Include"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource"             /import "Koshucode.Baala.Core.Resource.Quoter"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource"             /import "Koshucode.Baala.Core.Resource.Read"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource"             /import "Koshucode.Baala.Core.Resource.Run"
@@ -626,9 +640,9 @@ Command `./dir-rank.k ../core/IMPORT.k` produces:
 |-- DIR-RANK  /dir-rank 11  /dir 'Koshucode.Baala.Core.Relmap  /base-rank {| /rank : /base | 7 : 'Relkit | 8 : 'Relmap | 9 : 'Rop | 10 : 'Global | 11 : 'Construct | 11 : 'Run | 11 : 'Specialize |}
 |-- DIR-RANK  /dir-rank 14  /dir 'Koshucode.Baala.Core.Assert  /base-rank {| /rank : /base | 7 : 'RelTable | 13 : 'Assert | 13 : 'Dataset | 14 : 'Run |}
 
-|-- DIR-RANK  /dir-rank 17  /dir 'Koshucode.Baala.Core.Resource  /base-rank {| /rank : /base | 7 : 'Clause | 16 : 'Resource | 17 : 'Quoter | 17 : 'Read | 17 : 'Run |}
-|-- DIR-RANK  /dir-rank 18  /dir 'Koshucode.Baala.Core  /base-rank {| /rank : /base | 1 : 'Message | 6 : 'Content | 6 : 'Lexmap | 12 : 'Relmap | 15 : 'Assert | 18 : 'Resource |}
-|-- DIR-RANK  /dir-rank 19  /dir 'Koshucode.Baala  /base-rank {| /rank : /base | 0 : 'Base | 19 : 'Core |}
+|-- DIR-RANK  /dir-rank 18  /dir 'Koshucode.Baala.Core.Resource  /base-rank {| /rank : /base | 7 : 'Clause | 16 : 'Resource | 17 : 'Include | 17 : 'Run | 18 : 'Quoter | 18 : 'Read |}
+|-- DIR-RANK  /dir-rank 19  /dir 'Koshucode.Baala.Core  /base-rank {| /rank : /base | 1 : 'Message | 6 : 'Content | 6 : 'Lexmap | 12 : 'Relmap | 15 : 'Assert | 19 : 'Resource |}
+|-- DIR-RANK  /dir-rank 20  /dir 'Koshucode.Baala  /base-rank {| /rank : /base | 0 : 'Base | 20 : 'Core |}
 
 *** 8 judges
 
@@ -675,27 +689,28 @@ Command `./dir-rank.k ../core/IMPORT.k` produces:
 **                                               13    'Dataset
 **                                               14    'Run
 **                                               
-**    17        'Koshucode.Baala.Core.Resource   /rank /base
+**    18        'Koshucode.Baala.Core.Resource   /rank /base
 **                                               ----- -------------
 **                                               7     'Clause
 **                                               16    'Resource
-**                                               17    'Quoter
-**                                               17    'Read
+**                                               17    'Include
 **                                               17    'Run
+**                                               18    'Quoter
+**                                               18    'Read
 **                                               
-**    18        'Koshucode.Baala.Core            /rank /base
+**    19        'Koshucode.Baala.Core            /rank /base
 **                                               ----- -------------
 **                                               1     'Message
 **                                               6     'Content
 **                                               6     'Lexmap
 **                                               12    'Relmap
 **                                               15    'Assert
-**                                               18    'Resource
+**                                               19    'Resource
 **                                               
-**    19        'Koshucode.Baala                 /rank /base
+**    20        'Koshucode.Baala                 /rank /base
 **                                               ----- -------------
 **                                               0     'Base
-**                                               19    'Core
+**                                               20    'Core
 **                                               
 
 **
@@ -719,7 +734,7 @@ Command `./dir-rank.k ../core/IMPORT.k` produces:
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    109 judges
+**    114 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Op.Builtin.Define"         /import "Koshucode.Baala.Base"
@@ -733,6 +748,7 @@ Command `./dir-rank.k ../core/IMPORT.k` produces:
 |-- IMPORT  /module "Koshucode.Baala.Op.Builtin.Rop"            /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Op.Builtin.Rop"            /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Op.Builtin.Rop"            /import "Koshucode.Baala.Op.Builtin.Define"
+|-- IMPORT  /module "Koshucode.Baala.Op.Builtin.Rop"            /import "Koshucode.Baala.Op.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Op.Builtin.Term"           /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Op.Builtin.Term"           /import "Koshucode.Baala.Op.Message"
@@ -828,6 +844,10 @@ Command `./dir-rank.k ../core/IMPORT.k` produces:
 |-- IMPORT  /module "Koshucode.Baala.Op.Peripheral"             /import "Koshucode.Baala.Op.Term"
 |-- IMPORT  /module "Koshucode.Baala.Op.Peripheral"             /import "Koshucode.Baala.Op.Message"
 
+|-- IMPORT  /module "Koshucode.Baala.Op.Resource"               /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Op.Resource"               /import "Koshucode.Baala.Core"
+|-- IMPORT  /module "Koshucode.Baala.Op.Resource"               /import "Koshucode.Baala.Op.Builtin"
+
 |-- IMPORT  /module "Koshucode.Baala.Op.Source"                 /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Op.Source"                 /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Op.Source"                 /import "Koshucode.Baala.Op.Builtin"
@@ -852,6 +872,7 @@ Command `./dir-rank.k ../core/IMPORT.k` produces:
 |-- IMPORT  /module "Koshucode.Baala.Op"                        /import "Koshucode.Baala.Op.Meta"
 |-- IMPORT  /module "Koshucode.Baala.Op"                        /import "Koshucode.Baala.Op.Nest"
 |-- IMPORT  /module "Koshucode.Baala.Op"                        /import "Koshucode.Baala.Op.Peripheral"
+|-- IMPORT  /module "Koshucode.Baala.Op"                        /import "Koshucode.Baala.Op.Resource"
 |-- IMPORT  /module "Koshucode.Baala.Op"                        /import "Koshucode.Baala.Op.Source"
 |-- IMPORT  /module "Koshucode.Baala.Op"                        /import "Koshucode.Baala.Op.Term"
 |-- IMPORT  /module "Koshucode.Baala.Op"                        /import "Koshucode.Baala.Op.TermGadget"
@@ -872,7 +893,7 @@ Command `./dir-rank.k ../operator/IMPORT.k` produces:
 |-- DIR-RANK  /dir-rank 3  /dir 'Koshucode.Baala.Op.Builtin  /base-rank {| /rank : /base | 1 : 'Define | 2 : 'Rop | 2 : 'Term | 3 : 'Get |}
 |-- DIR-RANK  /dir-rank 7  /dir 'Koshucode.Baala.Op.Lattice  /base-rank {| /rank : /base | 5 : 'Tropashko | 6 : 'Restrict | 7 : 'Rop |}
 |-- DIR-RANK  /dir-rank 10  /dir 'Koshucode.Baala.Op.Nest  /base-rank {| /rank : /base | 5 : 'Flow | 6 : 'Confl | 9 : 'Deriv | 10 : 'Rop |}
-|-- DIR-RANK  /dir-rank 11  /dir 'Koshucode.Baala.Op  /base-rank {| /rank : /base | 1 : 'DepRank | 1 : 'Message | 4 : 'Builtin | 5 : 'Gadget | 5 : 'Meta | 5 : 'Source | 5 : 'Term | 6 : 'Peripheral | 6 : 'TermGadget | 8 : 'Lattice | 9 : 'Check | 9 : 'Control | 11 : 'Nest |}
+|-- DIR-RANK  /dir-rank 11  /dir 'Koshucode.Baala.Op  /base-rank {| /rank : /base | 1 : 'DepRank | 1 : 'Message | 4 : 'Builtin | 5 : 'Gadget | 5 : 'Meta | 5 : 'Resource | 5 : 'Source | 5 : 'Term | 6 : 'Peripheral | 6 : 'TermGadget | 8 : 'Lattice | 9 : 'Check | 9 : 'Control | 11 : 'Nest |}
 
 |-- DIR-RANK  /dir-rank 12  /dir 'Koshucode.Baala  /base-rank {| /rank : /base | 0 : 'Base | 0 : 'Core | 12 : 'Op |}
 
@@ -913,6 +934,7 @@ Command `./dir-rank.k ../operator/IMPORT.k` produces:
 **                                            4     'Builtin
 **                                            5     'Gadget
 **                                            5     'Meta
+**                                            5     'Resource
 **                                            5     'Source
 **                                            5     'Term
 **                                            6     'Peripheral

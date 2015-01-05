@@ -1,14 +1,14 @@
 ** -*- koshu -*-
 
 |-- DIR  /code 13   /comment 72   /dir "core/Koshucode/Baala"
-|-- DIR  /code 269  /comment 209  /dir "core/Koshucode/Baala/Core"
+|-- DIR  /code 271  /comment 209  /dir "core/Koshucode/Baala/Core"
 |-- DIR  /code 241  /comment 125  /dir "core/Koshucode/Baala/Core/Assert"
 |-- DIR  /code 962  /comment 504  /dir "core/Koshucode/Baala/Core/Content"
 |-- DIR  /code 410  /comment 248  /dir "core/Koshucode/Baala/Core/Lexmap"
 |-- DIR  /code 549  /comment 274  /dir "core/Koshucode/Baala/Core/Relmap"
-|-- DIR  /code 496  /comment 258  /dir "core/Koshucode/Baala/Core/Resource"
+|-- DIR  /code 500  /comment 252  /dir "core/Koshucode/Baala/Core/Resource"
 
-|-- DIR-TOTAL  /code 2940  /comment 1690
+|-- DIR-TOTAL  /code 2946  /comment 1684
 
 |-- FILE  /code 13   /comment 72   /file "Core.hs"        /dir "core/Koshucode/Baala"
 |-- FILE  /code 10   /comment 6    /file "Assert.hs"      /dir "core/Koshucode/Baala/Core"
@@ -39,11 +39,12 @@
 |-- FILE  /code 30   /comment 17   /file "Rop.hs"         /dir "core/Koshucode/Baala/Core/Relmap"
 |-- FILE  /code 89   /comment 28   /file "Run.hs"         /dir "core/Koshucode/Baala/Core/Relmap"
 |-- FILE  /code 86   /comment 19   /file "Specialize.hs"  /dir "core/Koshucode/Baala/Core/Relmap"
-|-- FILE  /code 13   /comment 29   /file "Resource.hs"    /dir "core/Koshucode/Baala/Core"
+|-- FILE  /code 15   /comment 29   /file "Resource.hs"    /dir "core/Koshucode/Baala/Core"
 |-- FILE  /code 160  /comment 105  /file "Clause.hs"      /dir "core/Koshucode/Baala/Core/Resource"
-|-- FILE  /code 51   /comment 21   /file "Quoter.hs"      /dir "core/Koshucode/Baala/Core/Resource"
-|-- FILE  /code 40   /comment 24   /file "Read.hs"        /dir "core/Koshucode/Baala/Core/Resource"
-|-- FILE  /code 175  /comment 92   /file "Resource.hs"    /dir "core/Koshucode/Baala/Core/Resource"
-|-- FILE  /code 70   /comment 16   /file "Run.hs"         /dir "core/Koshucode/Baala/Core/Resource"
+|-- FILE  /code 123  /comment 65   /file "Include.hs"     /dir "core/Koshucode/Baala/Core/Resource"
+|-- FILE  /code 52   /comment 21   /file "Quoter.hs"      /dir "core/Koshucode/Baala/Core/Resource"
+|-- FILE  /code 41   /comment 24   /file "Read.hs"        /dir "core/Koshucode/Baala/Core/Resource"
+|-- FILE  /code 61   /comment 24   /file "Resource.hs"    /dir "core/Koshucode/Baala/Core/Resource"
+|-- FILE  /code 63   /comment 13   /file "Run.hs"         /dir "core/Koshucode/Baala/Core/Resource"
 
-|-- FILE-TOTAL  /code 2940  /comment 1690
+|-- FILE-TOTAL  /code 2946  /comment 1684
