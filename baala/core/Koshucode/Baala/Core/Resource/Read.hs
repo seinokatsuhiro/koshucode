@@ -13,11 +13,12 @@ module Koshucode.Baala.Core.Resource.Read
     bundleRead,
   ) where
 
-import qualified System.Directory                       as Dir
-import qualified Koshucode.Baala.Base                   as B
-import qualified Koshucode.Baala.Core.Content           as C
-import qualified Koshucode.Baala.Core.Resource.Resource as C
-import qualified Koshucode.Baala.Core.Message           as Msg
+import qualified System.Directory                        as Dir
+import qualified Koshucode.Baala.Base                    as B
+import qualified Koshucode.Baala.Core.Content            as C
+import qualified Koshucode.Baala.Core.Resource.Resource  as C
+import qualified Koshucode.Baala.Core.Resource.Include   as C
+import qualified Koshucode.Baala.Core.Message            as Msg
 
 
 -- ----------------------  Resource

@@ -82,6 +82,7 @@ library
 
         Koshucode.Baala.Core.Resource
         Koshucode.Baala.Core.Resource.Clause
+        Koshucode.Baala.Core.Resource.Include
         Koshucode.Baala.Core.Resource.Read
         Koshucode.Baala.Core.Resource.Run
         Koshucode.Baala.Core.Resource.Quoter

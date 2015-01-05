@@ -6,6 +6,7 @@
 module Koshucode.Baala.Core.Resource
   ( -- * Modules
     module Koshucode.Baala.Core.Resource.Clause,
+    module Koshucode.Baala.Core.Resource.Include,
     module Koshucode.Baala.Core.Resource.Quoter,
     module Koshucode.Baala.Core.Resource.Read,
     module Koshucode.Baala.Core.Resource.Run,
@@ -16,6 +17,7 @@ module Koshucode.Baala.Core.Resource
   ) where
 
 import Koshucode.Baala.Core.Resource.Clause
+import Koshucode.Baala.Core.Resource.Include
 import Koshucode.Baala.Core.Resource.Quoter
 import Koshucode.Baala.Core.Resource.Read
 import Koshucode.Baala.Core.Resource.Run
