@@ -26,9 +26,11 @@ import qualified Koshucode.Baala.Op.Builtin    as Op
 ropsResource :: (C.CContent c) => [C.Rop c]
 ropsResource = Op.ropList "resource"
     --          CONSTRUCTOR          USAGE                   ATTRIBUTE
-    [ Op.ropII  consKoshuResRop      "koshu-res-rop /N /N"   "-sec -name"
+    [ Op.ropI   consKoshuResArticle  "koshu-res-article /N"  "-name"
+    , Op.ropII  consKoshuResRop      "koshu-res-rop /N /N"   "-sec -name"
     , Op.ropII  consKoshuResSink     "koshu-res-sink /N /N"  "-sec -pat"
-    , Op.ropI   consKoshuResArticle  "koshu-res-article /N"  "-name"
+    , Op.ropI   Op.consXxx           "koshu-res-source /N"   "-pat"
+    , Op.ropII  Op.consXxx           "koshu-res-sink-source /N /N" "-sink -source"
     ]
 
 

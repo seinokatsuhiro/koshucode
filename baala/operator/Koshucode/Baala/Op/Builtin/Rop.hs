@@ -7,11 +7,15 @@ module Koshucode.Baala.Op.Builtin.Rop
     -- * id
     consId, relmapId,
     -- $id
+
+    -- * xxx
+    consXxx
   ) where
 
 import qualified Koshucode.Baala.Base              as B
 import qualified Koshucode.Baala.Core              as C
 import qualified Koshucode.Baala.Op.Builtin.Define as Op
+import qualified Koshucode.Baala.Op.Message        as Msg
 
 
 -- | Built-in relmap operator.
@@ -47,4 +51,11 @@ consId use = Right $ relmapId use
 
 relmapId :: C.RopUse c -> C.Relmap c
 relmapId use = C.relmapFlow use $ Right . C.relkitId
+
+
+-- ---------------------- xxx
+
+-- | Placeholder for unimplemented operator.
+consXxx :: C.RopCons c
+consXxx _ = Msg.notImpl
 

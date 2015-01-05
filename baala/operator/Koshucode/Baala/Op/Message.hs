@@ -12,6 +12,7 @@ module Koshucode.Baala.Op.Message
     dumpRel,
     dumpTrees,
     noAttr,
+    notImpl,
     notNestRel,
     oddAttr,
     reqBool,
@@ -67,6 +68,10 @@ oddAttr = Left $ B.abortBecause "Odd attribute"
 -- | Attribute not found
 noAttr :: String -> B.Ab a
 noAttr n = Left $ B.abortLine "Attribute not found" n
+
+-- | Not implemented
+notImpl :: B.Ab a
+notImpl = Left $ B.abortBecause "Not implemented"
 
 -- | Not a nested relation
 notNestRel :: [B.TermName] -> B.Head -> B.Ab a
