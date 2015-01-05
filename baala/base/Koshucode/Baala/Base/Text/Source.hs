@@ -2,13 +2,9 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Text.Source
-  ( Source (..),
-    SourceName (..),
-    sourceType,
-    sourceText,
-    sourceZero,
-    sourceOf,
-    sourceList,
+  ( Source (..), SourceName (..),
+    sourceType, sourceText,
+    sourceZero, sourceOf, sourceList,
   ) where
 
 import qualified Data.Generics as G
@@ -19,7 +15,7 @@ data Source
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 data SourceName
-    = SourceFile  String
+    = SourceFile  FilePath
     | SourceURL   String
     | SourceText  String
     | SourceStdin
@@ -44,12 +40,15 @@ sourceNameText (SourceURL  url)   = url
 sourceNameText (SourceText text)  = text
 sourceNameText (SourceStdin)      = "<stdin>"
 
+-- | Empty source.
 sourceZero :: Source
 sourceZero = sourceOf ""
 
+-- | Create text source.
 sourceOf :: String -> Source
 sourceOf = Source 0 . SourceText
 
+-- | Create sources from using stdin, texts itself, filenames, and urls.
 sourceList :: Bool -> [String] -> [String] -> [String] -> [Source]
 sourceList stdin texts files urls = zipWith Source [1..] names where
     input = if stdin then [SourceStdin] else []

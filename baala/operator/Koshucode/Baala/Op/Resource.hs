@@ -6,6 +6,8 @@ module Koshucode.Baala.Op.Resource
     consKoshuResRop, relkitKoshuResRop,
     -- * koshu-res-sink
     consKoshuResSink, relkitKoshuResSink,
+    -- * koshu-res-article
+    consKoshuResArticle, relkitKoshuResArticle,
   ) where
 
 import qualified Koshucode.Baala.Base          as B
@@ -23,9 +25,10 @@ import qualified Koshucode.Baala.Op.Builtin    as Op
 -- 
 ropsResource :: (C.CContent c) => [C.Rop c]
 ropsResource = Op.ropList "resource"
-    --          CONSTRUCTOR        USAGE                   ATTRIBUTE
-    [ Op.ropII  consKoshuResRop    "koshu-res-rop /N /N"   "-sec -name"
-    , Op.ropII  consKoshuResSink   "koshu-res-sink /N /N"  "-sec -pat"
+    --          CONSTRUCTOR          USAGE                   ATTRIBUTE
+    [ Op.ropII  consKoshuResRop      "koshu-res-rop /N /N"   "-sec -name"
+    , Op.ropII  consKoshuResSink     "koshu-res-sink /N /N"  "-sec -pat"
+    , Op.ropI   consKoshuResArticle  "koshu-res-article /N"  "-name"
     ]
 
 
@@ -48,7 +51,7 @@ relkitKoshuResRop :: (C.CContent c)
 relkitKoshuResRop (sec, name) res _ = Right kit2 where
     kit2  = C.relkitConstBody ns bo2
     ns    = [sec, name]
-    bo2   = map f $ C.resRelmap res
+    bo2   = f `map` C.resRelmap res
     f ((s, n), _) = [C.pDecFromInt s, C.pText n]
 
 
@@ -71,7 +74,25 @@ relkitKoshuResSink :: (C.CContent c)
 relkitKoshuResSink (sec, pat) res _ = Right kit2 where
     kit2  = C.relkitConstBody ns bo2
     ns    = [sec, pat]
-    bo2   = concatMap f $ C.resAssert res
+    bo2   = f `concatMap` C.resAssert res
     f     = map g . B.shortBody
     g a   = [C.pDecFromInt $ C.assSection a, C.pText $ C.assPattern a]
+
+
+-- ----------------------  koshu-res-article
+
+consKoshuResArticle :: (C.CContent c) => C.RopCons c
+consKoshuResArticle use =
+  do name <- Op.getTerm use "-name"
+     Right $ relmapKoshuResArticle use name
+
+relmapKoshuResArticle :: (C.CContent c) => C.RopUse c -> B.TermName -> C.Relmap c
+relmapKoshuResArticle use = C.relmapHook use . relkitKoshuResArticle
+
+relkitKoshuResArticle :: (C.CContent c) => B.TermName -> C.RelkitHook c
+relkitKoshuResArticle name res _ = Right kit2 where
+    kit2  = C.relkitConstBody ns bo2
+    ns    = [name]
+    bo2   = f `map` C.resSource res
+    f s   = [C.pText $ B.sourceText s]
 
