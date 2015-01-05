@@ -40,15 +40,15 @@ data Resource c = Resource {
     , resRelmap    :: [C.RelmapSource]   -- ^ Source of relmaps
     , resAssert    :: [ShortAssert c]    -- ^ Assertions of relmaps
     , resJudge     :: [B.Judge c]        -- ^ Affirmative or denial judgements
-    , resSource    :: [B.Source]         -- ^ Source name
+    , resArticle   :: [B.Source]         -- ^ Articles of resource
     , resMessage   :: [String]           -- ^ Collection of messages
     , resLastSecNo :: C.SecNo            -- ^ Last section number
     , resSelect    :: C.RelSelect c
     }
 
 instance Show (Resource c) where
-    show Resource { resSource = src }
-        = "Resources (" ++ show src ++ ")"
+    show Resource { resArticle = art }
+        = "Resources " ++ show art
 
 instance B.SelectRel Resource where
     selectRel Resource { resSelect = sel } = sel
@@ -72,7 +72,7 @@ resEmpty = Resource
            , resRelmap     = []
            , resAssert     = []
            , resJudge      = []
-           , resSource     = []
+           , resArticle    = []
            , resMessage    = []
            , resLastSecNo  = 0
            , resSelect     = \_ _ -> B.reldee
@@ -111,13 +111,13 @@ resIncludeEach source res (B.Short pt shorts xs) =
        checkShort shorts
 
        Right $ up $ res
-           { resImport     = resImport  << imports
-           , resExport     = resExport  << for isCExport expt
-           , resSlot       = resSlot    << slots
-           , resRelmap     = resRelmap  << relmaps
-           , resAssert     = resAssert  << [B.Short pt shorts asserts]
-           , resJudge      = resJudge   << judges
-           , resSource     = resSource  <: source
+           { resImport     = resImport   << imports
+           , resExport     = resExport   << for isCExport expt
+           , resSlot       = resSlot     << slots
+           , resRelmap     = resRelmap   << relmaps
+           , resAssert     = resAssert   << [B.Short pt shorts asserts]
+           , resJudge      = resJudge    << judges
+           , resArticle    = resArticle  <: source
            , resLastSecNo  = lastSecNo xs }
     where
       f << ys    = ys ++ f res
@@ -233,16 +233,16 @@ isCUnres _                     = False
 
 -- ----------------------  Hook
 
-type Assert c           = C.Assert'          Resource c
-type ConsRelmap c       = C.ConsRelmap'      Resource c
-type Global c           = C.Global'          Resource c
-type Relmap c           = C.Relmap'          Resource c
-type RelkitHook c       = C.RelkitHook'      Resource c
-type RelmapLinkTable c  = C.RelmapLinkTable' Resource c
-type Rop c              = C.Rop'             Resource c
-type RopCons c          = C.RopCons'         Resource c
-type RopUse c           = C.RopUse'          Resource c
-type ShortAssert c      = C.ShortAssert'     Resource c
+type Assert          c   = C.Assert'          Resource c
+type ConsRelmap      c   = C.ConsRelmap'      Resource c
+type Global          c   = C.Global'          Resource c
+type Relmap          c   = C.Relmap'          Resource c
+type RelkitHook      c   = C.RelkitHook'      Resource c
+type RelmapLinkTable c   = C.RelmapLinkTable' Resource c
+type Rop             c   = C.Rop'             Resource c
+type RopCons         c   = C.RopCons'         Resource c
+type RopUse          c   = C.RopUse'          Resource c
+type ShortAssert     c   = C.ShortAssert'     Resource c
 
 
 -- ----------------------

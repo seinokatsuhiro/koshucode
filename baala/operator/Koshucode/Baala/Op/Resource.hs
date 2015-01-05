@@ -74,9 +74,9 @@ relkitKoshuResSink :: (C.CContent c)
 relkitKoshuResSink (sec, pat) res _ = Right kit2 where
     kit2  = C.relkitConstBody ns bo2
     ns    = [sec, pat]
-    bo2   = f `concatMap` C.resAssert res
-    f     = map g . B.shortBody
     g a   = [C.pDecFromInt $ C.assSection a, C.pText $ C.assPattern a]
+    f     = map g . B.shortBody
+    bo2   = f `concatMap` C.resAssert res
 
 
 -- ----------------------  koshu-res-article
@@ -93,6 +93,6 @@ relkitKoshuResArticle :: (C.CContent c) => B.TermName -> C.RelkitHook c
 relkitKoshuResArticle name res _ = Right kit2 where
     kit2  = C.relkitConstBody ns bo2
     ns    = [name]
-    bo2   = f `map` C.resSource res
     f s   = [C.pText $ B.sourceText s]
+    bo2   = f `map` C.resArticle res
 
