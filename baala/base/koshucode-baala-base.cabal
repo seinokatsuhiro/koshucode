@@ -83,6 +83,7 @@ library
         Koshucode.Baala.Base.Syntax.Tree
 
         Koshucode.Baala.Base.Text
+        Koshucode.Baala.Base.Text.CodePt
         Koshucode.Baala.Base.Text.Comment
         Koshucode.Baala.Base.Text.Source
         Koshucode.Baala.Base.Text.TextTable

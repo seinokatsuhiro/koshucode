@@ -1,7 +1,8 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Text
-  ( module Koshucode.Baala.Base.Text.Comment,
+  ( module Koshucode.Baala.Base.Text.CodePt,
+    module Koshucode.Baala.Base.Text.Comment,
     module Koshucode.Baala.Base.Text.Source,
     module Koshucode.Baala.Base.Text.TextTable,
     module Koshucode.Baala.Base.Text.Unicode,
@@ -9,6 +10,7 @@ module Koshucode.Baala.Base.Text
     module Koshucode.Baala.Base.Text.Write,
   ) where
 
+import Koshucode.Baala.Base.Text.CodePt
 import Koshucode.Baala.Base.Text.Comment
 import Koshucode.Baala.Base.Text.Source
 import Koshucode.Baala.Base.Text.TextTable
