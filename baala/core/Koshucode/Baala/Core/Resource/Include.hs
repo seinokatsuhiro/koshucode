@@ -55,11 +55,11 @@ resIncludeEach source res (B.Short pt shorts xs) =
            , C.resRelmap     = C.resRelmap   << relmaps
            , C.resAssert     = C.resAssert   << [B.Short pt shorts asserts]
            , C.resJudge      = C.resJudge    << judges
-           , C.resArticle    = C.resArticle  <: source
+           , C.resArticle    = C.resArticle  <. source
            , C.resLastSecNo  = lastSecNo xs }
     where
       f << ys    = ys ++ f res
-      f <: y     = y  :  f res
+      f <. y     = case f res of (todo, done) -> (todo, y : done)
 
       for  isX f = pass     f  `map`  filter (isX . C.clauseBody) xs
       forM isX f = pass (ab f) `mapM` filter (isX . C.clauseBody) xs

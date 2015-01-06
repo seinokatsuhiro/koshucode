@@ -6,7 +6,7 @@
 module Koshucode.Baala.Core.Resource.Resource
   ( -- * Data type
     Resource (..),
-    resEmpty,
+    resEmpty, resIncluded,
     addMessage, addMessages,
 
     -- * Hook
@@ -31,7 +31,7 @@ data Resource c = Resource
     , resRelmap    :: [C.RelmapSource]   -- ^ Source of relmaps
     , resAssert    :: [ShortAssert c]    -- ^ Assertions of relmaps
     , resJudge     :: [B.Judge c]        -- ^ Affirmative or denial judgements
-    , resArticle   :: [B.Source]         -- ^ Articles of resource
+    , resArticle   :: ([B.Source], [B.Source])  -- ^ Articles of resource
     , resMessage   :: [String]           -- ^ Collection of messages
     , resLastSecNo :: C.SecNo            -- ^ Last section number
     , resSelect    :: C.RelSelect c
@@ -47,11 +47,8 @@ instance B.SelectRel Resource where
 instance C.GetGlobal Resource where
     getGlobal Resource { resGlobal = g } = g
 
-addMessage :: String -> B.Map (Resource c)
-addMessage msg res = res { resMessage = msg : resMessage res }
-
-addMessages :: [String] -> B.Map (Resource c)
-addMessages msg res = res { resMessage = msg ++ resMessage res }
+resIncluded :: Resource c -> [B.Source]
+resIncluded Resource { resArticle = (_, done) } = done
 
 -- | Resource that has no contents.
 resEmpty :: Resource c
@@ -63,11 +60,17 @@ resEmpty = Resource
            , resRelmap     = []
            , resAssert     = []
            , resJudge      = []
-           , resArticle    = []
+           , resArticle    = ([], [])
            , resMessage    = []
            , resLastSecNo  = 0
            , resSelect     = \_ _ -> B.reldee
            }
+
+addMessage :: String -> B.Map (Resource c)
+addMessage msg res = res { resMessage = msg : resMessage res }
+
+addMessages :: [String] -> B.Map (Resource c)
+addMessages msg res = res { resMessage = msg ++ resMessage res }
 
 
 -- ----------------------  Hook

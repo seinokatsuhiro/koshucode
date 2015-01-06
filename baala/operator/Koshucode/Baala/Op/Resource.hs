@@ -96,5 +96,5 @@ relkitKoshuResArticle name res _ = Right kit2 where
     kit2  = C.relkitConstBody ns bo2
     ns    = [name]
     f s   = [C.pText $ B.sourceText s]
-    bo2   = f `map` C.resArticle res
+    bo2   = f `map` C.resIncluded res
 
