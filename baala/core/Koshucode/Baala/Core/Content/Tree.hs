@@ -222,7 +222,7 @@ treesToTerms = name where
     cont :: B.TTreesTo ([B.TTree], [B.TTree])
     cont xs@(B.TermLeaf _ 0 _ : _)  = ([], xs)
     cont []                         = ([], [])
-    cont (x : xs)                   = B.cons1 x $ cont xs
+    cont (x : xs)                   = B.consFst x $ cont xs
 
 treesToTerms1 :: B.TTreesToAb [B.NamedTree]
 treesToTerms1 xs = do xs' <- treesToTerms xs

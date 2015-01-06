@@ -2,13 +2,14 @@
 
 module Koshucode.Baala.Base.Prelude.Pair
   ( mapFst, mapSnd,
-    cons1,
+    consFst, consSnd,
     mapFstTo, mapSndTo,
     maybePairs,
     sequenceFst, sequenceSnd,
   ) where
 
 import qualified Control.Applicative as A
+import qualified Koshucode.Baala.Base.Prelude.Class as B
 
 mapFst :: (a -> c) -> (a, b) -> (c, b)
 mapFst f (x, y) = (f x, y)
@@ -16,8 +17,11 @@ mapFst f (x, y) = (f x, y)
 mapSnd :: (b -> c) -> (a, b) -> (a, c)
 mapSnd f (x, y) = (x, f y)
 
-cons1 :: a -> ([a], b) -> ([a], b)
-cons1 x = mapFst (x:)
+consFst :: a -> B.Map ([a], b)
+consFst x = mapFst (x:)
+
+consSnd :: b -> B.Map (a, [b])
+consSnd x = mapSnd (x:)
 
 mapFstTo :: (Functor m) => (a -> c) -> m (a, b) -> m (c, b)
 mapFstTo = fmap . mapFst

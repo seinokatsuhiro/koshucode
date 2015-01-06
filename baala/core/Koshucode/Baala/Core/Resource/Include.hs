@@ -27,20 +27,19 @@ resInclude :: forall c. (C.CContent c)
     -> B.Ab (C.Resource c)   -- ^ Included resource
 resInclude res src code =
     do ls <- B.tokenLines src code
-       let include  = resIncludeEach src
-           sec      = C.resLastSecNo res + 1
+       let sec      = C.resLastSecNo res + 1
            shorts   = C.consClause sec ls
-       B.foldM include res shorts
+       B.foldM resIncludeBody res shorts
 
 type Cl   a  = C.SecNo -> [B.Token] -> C.ClauseBody -> a
 type Clab a  = Cl (B.Ab a)
 
-resIncludeEach :: forall c. (C.CContent c) =>
-    B.Source -> C.Resource c -> C.ShortClause -> B.Ab (C.Resource c)
-resIncludeEach source res (B.Short pt shorts xs) =
+resIncludeBody :: forall c. (C.CContent c) =>
+    C.Resource c -> C.ShortClause -> B.Ab (C.Resource c)
+resIncludeBody res (B.Short pt shorts xs) =
     do _        <- forM isCUnknown unk
        _        <- forM isCUnres   unres
-       imports  <- forM isCInclude  impt
+       incs     <- forM isCInclude inc
        judges   <- forM isCJudge   judge
        slots    <- forM isCSlot    slot
        relmaps  <- forM isCRelmap  relmap
@@ -49,17 +48,16 @@ resIncludeEach source res (B.Short pt shorts xs) =
        checkShort shorts
 
        Right $ up $ res
-           { C.resImport     = C.resImport   << imports
-           , C.resExport     = C.resExport   << for isCExport expt
+           { C.resExport     = C.resExport   << for isCExport expt
            , C.resSlot       = C.resSlot     << slots
            , C.resRelmap     = C.resRelmap   << relmaps
            , C.resAssert     = C.resAssert   << [B.Short pt shorts asserts]
            , C.resJudge      = C.resJudge    << judges
-           , C.resArticle    = C.resArticle  <. source
+           , C.resArticle    = C.resArticle  <. incs
            , C.resLastSecNo  = lastSecNo xs }
     where
-      f << ys    = ys ++ f res
-      f <. y     = case f res of (todo, done) -> (todo, y : done)
+      f << ys   = ys ++ f res
+      f <. t    = case f res of (todo, done) -> (t ++ todo, done)
 
       for  isX f = pass     f  `map`  filter (isX . C.clauseBody) xs
       forM isX f = pass (ab f) `mapM` filter (isX . C.clauseBody) xs
@@ -79,9 +77,9 @@ resIncludeEach source res (B.Short pt shorts xs) =
       expt :: Cl String
       expt _ _ (C.CExport n) = n
 
-      impt :: Clab (C.Resource c)
-      impt _ _ (C.CInclude _ (Nothing)) = Right C.resEmpty
-      impt _ _ (C.CInclude _ (Just _))  = resInclude res B.sourceZero []
+      inc :: Clab B.Source
+      inc _ _ (C.CInclude _ (Just n))   = Right $ B.Source 0 $ B.SourceFile n
+      inc _ _ _                         = Msg.adlib "include"
 
       slot :: Clab B.NamedTrees
       slot _ _ (C.CSlot n toks) = ntrees (n, toks)

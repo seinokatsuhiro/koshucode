@@ -59,9 +59,9 @@ lineIndentPair _   ln@(CodeLine _ _ [])       = (0, ln)
 
 splitClause :: B.Gather [(Int, a)] [a]
 splitClause = first where
-    first    ((i, x) : xs)            = B.cons1 x $ continue i xs
+    first    ((i, x) : xs)            = B.consFst x $ continue i xs
     first    []                       = ([], [])
-    continue i ((n, x) : xs) | n > i  = B.cons1 x $ continue i xs
+    continue i ((n, x) : xs) | n > i  = B.consFst x $ continue i xs
     continue _ xs                     = ([], xs)
 
 

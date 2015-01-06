@@ -4,7 +4,6 @@
 
 module Koshucode.Baala.Core.Resource.Read
   ( -- * Resource
-    readResource,
     readResourceText,
 
     -- * Bundle
@@ -23,9 +22,22 @@ import qualified Koshucode.Baala.Core.Message            as Msg
 
 -- ----------------------  Resource
 
+readResource :: (C.CContent c) => C.Resource c -> IO (B.Ab (C.Resource c))
+readResource res@C.Resource { C.resArticle = (todo, _) } =
+    case todo of
+      []      -> return $ Right res
+      src : _ -> do abres' <- readResourceOne (pop res) src
+                    case abres' of
+                      Right res' -> readResource $ push src res'
+                      left       -> return left
+    where
+      pop        = call $ B.mapFst tail
+      push src   = call $ B.consSnd src
+      call f r   = r { C.resArticle = f $ C.resArticle r }
+
 -- | Read resource from certain source.
-readResource :: (C.CContent c) => C.Resource c -> B.Source -> IO (B.Ab (C.Resource c))
-readResource res src = dispatch $ B.sourceName src where
+readResourceOne :: (C.CContent c) => C.Resource c -> B.Source -> IO (B.Ab (C.Resource c))
+readResourceOne res src = dispatch $ B.sourceName src where
     dispatch (B.SourceFile path)
         = do exist <- Dir.doesFileExist path
              case exist of
@@ -55,11 +67,6 @@ bundleTexts :: SourceBundle c -> [String]
 bundleTexts = map B.sourceText . bundleSources
 
 bundleRead :: (C.CContent c) => SourceBundle c -> IO (B.Ab (C.Resource c))
-bundleRead SourceBundle { bundleRoot = root, bundleSources = ss } = result where
-    result             = merge root $ reverse ss
-    merge res []       = return $ Right res
-    merge res (s:src)  = do ab <- readResource res s
-                            case ab of
-                              Right res' -> merge res' src
-                              left       -> return left
+bundleRead SourceBundle { bundleRoot = res, bundleSources = src }
+    = readResource $ res { C.resArticle = (reverse src, []) }
 
