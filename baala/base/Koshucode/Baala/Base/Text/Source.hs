@@ -12,7 +12,13 @@ import qualified Data.Generics as G
 data Source
     = Source { sourceNumber :: Int
              , sourceName   :: SourceName }
-      deriving (Show, Eq, Ord, G.Data, G.Typeable)
+      deriving (Show, G.Data, G.Typeable)
+
+instance Eq Source where
+    x == y = sourceName x == sourceName y
+
+instance Ord Source where
+    x `compare` y = sourceName x `compare` sourceName y
 
 data SourceName
     = SourceFile  FilePath

@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Read source as resource.
+-- | Read resource.
 
 module Koshucode.Baala.Core.Resource.Read
   ( -- * Resource
@@ -23,13 +23,15 @@ import qualified Koshucode.Baala.Core.Message            as Msg
 -- ----------------------  Resource
 
 readResource :: (C.CContent c) => C.Resource c -> IO (B.Ab (C.Resource c))
-readResource res@C.Resource { C.resArticle = (todo, _) } =
+readResource res@C.Resource { C.resArticle = (todo, done) } =
     case todo of
-      []      -> return $ Right res
-      src : _ -> do abres' <- readResourceOne (pop res) src
-                    case abres' of
-                      Right res' -> readResource $ push src res'
-                      left       -> return left
+      []                          -> return $ Right res
+      src : _ | src `elem` done   -> readResource $ pop res
+              | otherwise         ->
+                  do abres' <- readResourceOne (pop res) src
+                     case abres' of
+                       Right res' -> readResource $ push src res'
+                       left       -> return left
     where
       pop        = call $ B.mapFst tail
       push src   = call $ B.consSnd src
@@ -41,12 +43,12 @@ readResourceOne res src = dispatch $ B.sourceName src where
     dispatch (B.SourceFile path)
         = do exist <- Dir.doesFileExist path
              case exist of
-               False  ->  return $ Msg.noFile path
-               True   ->  ioRead =<< readFile path
+               False  -> return $ Msg.noFile path
+               True   -> ioRead =<< readFile path
 
-    dispatch (B.SourceText code)  =  ioRead code
-    dispatch (B.SourceStdin)      =  ioRead =<< getContents
-    dispatch (B.SourceURL _)      =  error "Not implemented read from URL"
+    dispatch (B.SourceText code)  = ioRead code
+    dispatch (B.SourceStdin)      = ioRead =<< getContents
+    dispatch (B.SourceURL _)      = error "Not implemented read from URL"
 
     ioRead = return . C.resInclude res src
 
