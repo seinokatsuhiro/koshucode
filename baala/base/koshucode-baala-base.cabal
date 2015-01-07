@@ -109,6 +109,9 @@ library
        , pretty           == 1.1.*
        , syb              == 0.4.*
        , time             == 1.4.*
+       , bytestring       == 0.*
+       , http-conduit     == 2.*
+       , http-types       == 0.*
 
   ghc-options:         -Wall
 

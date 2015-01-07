@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Read resource.
@@ -38,19 +39,25 @@ readResource res@C.Resource { C.resArticle = (todo, done) } =
       call f r   = r { C.resArticle = f $ C.resArticle r }
 
 -- | Read resource from certain source.
-readResourceOne :: (C.CContent c) => C.Resource c -> B.Source -> IO (B.Ab (C.Resource c))
+readResourceOne :: forall c. (C.CContent c) =>
+    C.Resource c -> B.Source -> IO (B.Ab (C.Resource c))
 readResourceOne res src = dispatch $ B.sourceName src where
     dispatch (B.SourceFile path)
         = do exist <- Dir.doesFileExist path
              case exist of
                False  -> return $ Msg.noFile path
-               True   -> ioRead =<< readFile path
+               True   -> include =<< readFile path
 
-    dispatch (B.SourceText code)  = ioRead code
-    dispatch (B.SourceStdin)      = ioRead =<< getContents
-    dispatch (B.SourceURL _)      = error "Not implemented read from URL"
+    dispatch (B.SourceText text)  = include text
+    dispatch (B.SourceStdin)      = include =<< getContents
+    dispatch (B.SourceURL url)    =
+        do abcode <- B.urlContent url
+           case abcode of
+             Right text       -> include text
+             Left (code, msg) -> return $ Msg.httpStatus url code msg
 
-    ioRead = return . C.resInclude res src
+    include :: String -> IO (B.Ab (C.Resource c))
+    include = return . C.resInclude res src
 
 -- | Read resource from text.
 readResourceText :: (C.CContent c) => C.Resource c -> String -> B.Ab (C.Resource c)

@@ -13,9 +13,10 @@ module Koshucode.Baala.Base.Prelude.Import
     concatMapM,
   
     -- * Data.List
+    Data.List.intercalate,
+    Data.List.isPrefixOf,
     Data.List.sort,
     Data.List.transpose,
-    Data.List.intercalate,
   
     -- * Data.Map
     lookupMap,

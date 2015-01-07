@@ -5,9 +5,16 @@ module Koshucode.Baala.Base.Text.Source
   ( Source (..), SourceName (..),
     sourceType, sourceText,
     sourceZero, sourceOf, sourceList,
+    urlContent,
   ) where
 
 import qualified Data.Generics as G
+import qualified Control.Exception               as HTTP
+import qualified Network.HTTP.Types.Status       as HTTP
+import qualified Data.ByteString.Lazy.Char8      as Lazy
+import qualified Data.ByteString.Char8           as Byte
+import qualified Network.HTTP.Conduit            as HTTP
+import qualified Koshucode.Baala.Base.Prelude    as B
 
 data Source
     = Source { sourceNumber :: Int
@@ -62,4 +69,17 @@ sourceList stdin texts files urls = zipWith Source [1..] names where
             SourceText `map` texts ++
             SourceFile `map` files ++
             SourceURL  `map` urls
+
+urlContent :: String -> IO (Either (Int, String) String)
+urlContent url =
+    do req <- HTTP.parseUrl url
+       catchHttpException $ do
+         res <- HTTP.withManager $ HTTP.httpLbs req
+         return $ Right $ Lazy.unpack $ HTTP.responseBody res
+
+catchHttpException :: B.Map (IO (Either (Int, String) String))
+catchHttpException = ( `HTTP.catch` handler ) where
+    handler (HTTP.StatusCodeException (HTTP.Status code msg) _ _)
+        = return $ Left (code, Byte.unpack msg)
+    handler _ = error "http"
 
