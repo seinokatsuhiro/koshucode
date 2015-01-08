@@ -56,7 +56,7 @@ readResourceOne res src = dispatch $ B.sourceName src where
     dispatch (B.SourceText text)  = include text
     dispatch (B.SourceStdin)      = include =<< getContents
     dispatch (B.SourceURL url)    =
-        do abcode <- B.urlContent url
+        do abcode <- B.uriContent url
            case abcode of
              Right text       -> include text
              Left (code, msg) -> return $ Msg.httpStatus url code msg

@@ -112,6 +112,7 @@ library
        , bytestring       == 0.*
        , http-conduit     == 2.*
        , http-types       == 0.*
+       , uri              == 0.*
 
   ghc-options:         -Wall
 

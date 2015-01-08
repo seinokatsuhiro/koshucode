@@ -1,7 +1,13 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall -fno-warn-incomplete-patterns #-}
 
--- | Data resource.
+-- | Internal representation of data resource.
+--   Data resource bundles data themselves and calculation stuffs.
+--   In Koshucode, data is represented as set of judgements,
+--   and calculation is as relation-to-relation mapping.
+--   This internal representation is usually constructed from
+--   computer files or web resources addressed by URI.
+--   Result of calculation on some resource becomes also data resource.
 
 module Koshucode.Baala.Core.Resource.Resource
   ( -- * Data type
