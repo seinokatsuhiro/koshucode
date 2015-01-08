@@ -53,11 +53,11 @@ resIncludeBody res (B.Short pt shorts xs) =
            , C.resRelmap     = C.resRelmap   << relmaps
            , C.resAssert     = C.resAssert   << [B.Short pt shorts asserts]
            , C.resJudge      = C.resJudge    << judges
-           , C.resArticle    = C.resArticle  <. incs
+           , C.resArticle    = C.resArticle  <: reverse incs
            , C.resLastSecNo  = lastSecNo xs }
     where
       f << ys   = ys ++ f res
-      f <. t    = case f res of (todo, done) -> (t ++ todo, done)
+      f <: t    = case f res of (todo1, todo2, done) -> (t ++ todo1, todo2, done)
 
       for  isX f = pass     f  `map`  filter (isX . C.clauseBody) xs
       forM isX f = pass (ab f) `mapM` filter (isX . C.clauseBody) xs

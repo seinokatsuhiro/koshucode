@@ -31,7 +31,7 @@ data Resource c = Resource
     , resRelmap    :: [C.RelmapSource]   -- ^ Source of relmaps
     , resAssert    :: [ShortAssert c]    -- ^ Assertions of relmaps
     , resJudge     :: [B.Judge c]        -- ^ Affirmative or denial judgements
-    , resArticle   :: ([B.Source], [B.Source])  -- ^ Articles of resource
+    , resArticle   :: ([B.Source], [B.Source], [B.Source])  -- ^ Scores of resource
     , resMessage   :: [String]           -- ^ Collection of messages
     , resLastSecNo :: C.SecNo            -- ^ Last section number
     , resSelect    :: C.RelSelect c
@@ -48,7 +48,7 @@ instance C.GetGlobal Resource where
     getGlobal Resource { resGlobal = g } = g
 
 resIncluded :: Resource c -> [B.Source]
-resIncluded Resource { resArticle = (_, done) } = done
+resIncluded Resource { resArticle = (_, _, done) } = done
 
 -- | Resource that has no contents.
 resEmpty :: Resource c
@@ -60,7 +60,7 @@ resEmpty = Resource
            , resRelmap     = []
            , resAssert     = []
            , resJudge      = []
-           , resArticle    = ([], [])
+           , resArticle    = ([], [], [])
            , resMessage    = []
            , resLastSecNo  = 0
            , resSelect     = \_ _ -> B.reldee

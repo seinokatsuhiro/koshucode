@@ -108,12 +108,12 @@ theStrings _               =  []
 
 -- ----------------------  Read
 
-readSec :: (C.CContent c) => C.SourceBundle c -> IO (B.Ab (C.Resource c))
+readSec :: (C.CContent c) => C.SourceBundle c -> B.IOAb (C.Resource c)
 readSec bun =
     do abSect <- C.bundleRead bun
        return abSect
 
-readSecList :: (C.CContent c) => C.SourceBundle c -> IO (B.Ab [C.Resource c])
+readSecList :: (C.CContent c) => C.SourceBundle c -> B.IOAb [C.Resource c]
 readSecList bun =
     do abSect <- C.bundleRead bun
        return $ do sect <- abSect
