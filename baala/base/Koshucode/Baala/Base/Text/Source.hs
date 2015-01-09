@@ -7,7 +7,8 @@ module Koshucode.Baala.Base.Text.Source
     sourceZero, sourceOf, sourceList,
   ) where
 
-import qualified Data.Generics as G
+import qualified Data.Generics                as G
+import qualified Koshucode.Baala.Base.Prelude as B
 
 data Source
     = Source { sourceNumber :: Int
@@ -56,10 +57,9 @@ sourceOf = Source 0 . SourceText
 
 -- | Create sources from using stdin, texts itself, filenames, and urls.
 sourceList :: Bool -> [String] -> [String] -> [String] -> [Source]
-sourceList stdin texts files urls = zipWith Source [1..] names where
-    input = if stdin then [SourceStdin] else []
-    names = input ++
-            SourceText `map` texts ++
-            SourceFile `map` files ++
-            SourceURL  `map` urls
+sourceList stdin texts files urls = Source 0 `map` list where
+    list = B.consIf stdin SourceStdin $
+              SourceText `map` texts ++
+              SourceFile `map` files ++
+              SourceURL  `map` urls
 

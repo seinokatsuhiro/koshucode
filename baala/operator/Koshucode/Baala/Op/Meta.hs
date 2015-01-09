@@ -184,7 +184,7 @@ relmapKoshuSource use = C.relmapHook use . relkitKoshuSource
 
 relkitKoshuSource :: (C.CContent c) => (B.TermName, Maybe B.TermName, Maybe B.TermName) -> C.RelkitHook c
 relkitKoshuSource (num, ty, name) h _ = Right kit2 where
-    res        = C.globalSources $ C.getGlobal h
+    res        = C.resIncluded h
     ns         = B.catMaybes [Just num, ty, name]
     kit2       = C.relkitConstBody ns $ map assn res
     assn r     = B.catMaybes [resNum r, resType r, resName r]

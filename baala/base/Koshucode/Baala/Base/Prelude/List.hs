@@ -17,6 +17,7 @@ module Koshucode.Baala.Base.Prelude.List
   
     -- * Construct
     li1, li2, li3,
+    consIf,
     RangeBy, rangeBy,
     zipMaybe, zipMaybe2,
 
@@ -135,6 +136,10 @@ li2 x y = [x, y]
 
 li3 :: a -> a -> a -> [a]
 li3 x y z = [x, y, z]
+
+consIf :: Bool -> a -> [a] -> [a]
+consIf True  x xs  = x : xs
+consIf False _ xs  = xs
 
 type RangeBy a = a -> a -> [a]
 

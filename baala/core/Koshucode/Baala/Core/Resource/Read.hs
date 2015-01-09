@@ -1,4 +1,3 @@
-{-# LANGUAGE PatternSynonyms #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
@@ -24,18 +23,21 @@ import qualified Koshucode.Baala.Core.Message            as Msg
 
 -- ----------------------  Resource
 
-readResource :: (C.CContent c) => C.Resource c -> B.IOAb (C.Resource c)
-readResource res@C.Resource { C.resArticle = (todo, srclist, done) }
+readResource :: (C.CContent c) => Int -> C.Resource c -> B.IOAb (C.Resource c)
+readResource n res@C.Resource { C.resArticle = (todo, srclist, done) }
     = case (todo, srclist, done) of
         ([], [], _)            -> return $ Right res
-        (_ , [], _)            -> readResource res { C.resArticle = ([], todo', done) }
+        (_ , [], _)            -> readDitto res { C.resArticle = ([], todo', done) }
         (_ , src : _, _)
-            | src `elem` done  -> readResource $ pop res
-            | otherwise        -> do abres' <- readResourceOne (pop res) src
+            | src `elem` done  -> readDitto $ pop res
+            | otherwise        -> do let src' = src { B.sourceNumber = n }
+                                     abres' <- readResourceOne (pop res) src'
                                      case abres' of
-                                       Right res' -> readResource $ push src res'
+                                       Right res' -> readUp $ push src' res'
                                        left       -> return left
       where
+        readDitto               = readResource $ n
+        readUp                  = readResource $ n + 1
         todo'                   = reverse todo
         pop                     = call $ map2 tail
         push                    = call . cons3
@@ -47,19 +49,20 @@ readResource res@C.Resource { C.resArticle = (todo, srclist, done) }
 readResourceOne :: forall c. (C.CContent c) =>
     C.Resource c -> B.Source -> B.IOAb (C.Resource c)
 readResourceOne res src = dispatch $ B.sourceName src where
-    dispatch (B.SourceFile path)
-        = do exist <- Dir.doesFileExist path
-             case exist of
-               False  -> return $ Msg.noFile path
-               True   -> include =<< readFile path
+    dispatch (B.SourceFile path) =
+        do exist <- Dir.doesFileExist path
+           case exist of
+             True   -> include =<< readFile path
+             False  -> return $ Msg.noFile path
+
+    dispatch (B.SourceURL url) =
+        do abcode <- B.uriContent url
+           case abcode of
+             Right code       -> include code
+             Left (code, msg) -> return $ Msg.httpError url code msg
 
     dispatch (B.SourceText text)  = include text
     dispatch (B.SourceStdin)      = include =<< getContents
-    dispatch (B.SourceURL url)    =
-        do abcode <- B.uriContent url
-           case abcode of
-             Right text       -> include text
-             Left (code, msg) -> return $ Msg.httpError url code msg
 
     include :: String -> B.IOAb (C.Resource c)
     include = return . C.resInclude res src
@@ -82,5 +85,5 @@ bundleTexts = map B.sourceText . bundleSources
 
 bundleRead :: (C.CContent c) => SourceBundle c -> B.IOAb (C.Resource c)
 bundleRead SourceBundle { bundleRoot = res, bundleSources = src }
-    = readResource $ res { C.resArticle = ([], reverse src, []) }
+    = readResource 1 $ res { C.resArticle = ([], reverse src, []) }
 

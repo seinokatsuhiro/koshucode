@@ -1,7 +1,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall -fno-warn-incomplete-patterns #-}
 
--- | Internal representation of data resource.
+-- | Internal representation of relational data resource.
 --   Data resource bundles data themselves and calculation stuffs.
 --   In Koshucode, data is represented as set of judgements,
 --   and calculation is as relation-to-relation mapping.
