@@ -85,6 +85,7 @@ library
         Koshucode.Baala.Base.Text
         Koshucode.Baala.Base.Text.CodePt
         Koshucode.Baala.Base.Text.Comment
+        Koshucode.Baala.Base.Text.Http
         Koshucode.Baala.Base.Text.Source
         Koshucode.Baala.Base.Text.TextTable
         Koshucode.Baala.Base.Text.Unicode
