@@ -3,6 +3,7 @@
 
 module Koshucode.Baala.Base.Text.Http
   ( uriContent,
+    httpExceptionSummary,
   ) where
 
 import qualified Data.ByteString.Char8           as Byte
@@ -52,4 +53,32 @@ catchHttpException :: B.Map (IO (Either (Int, String) String))
 catchHttpException = ( `Ex.catch` handler ) where
     handler (H.StatusCodeException (H.Status code msg) _ _)
         = return $ Left (code, Byte.unpack msg)
-    handler e = return $ Left (0, show e)
+    handler e = return $ Left (0, httpExceptionSummary e)
+
+httpExceptionSummary :: H.HttpException -> String
+httpExceptionSummary e = case e of
+    H.StatusCodeException (H.Status _ m) _ _  -> Byte.unpack m
+    H.InvalidUrlException _ _                 -> "Invalid URL"
+    H.TooManyRedirects    _                   -> "Too many redirects"
+    H.UnparseableRedirect _                   -> "Unparseable redirect"
+    H.TooManyRetries                          -> "Too many retries"
+    H.HttpParserException _                   -> "Could not parse HTTP message"
+    H.HandshakeFailed                         -> "Handshake failed"
+    H.OverlongHeaders                         -> "Overlong headers"
+    H.ResponseTimeout                         -> "Response timeout"
+    H.FailedConnectionException  _ _          -> "Connection failed"
+    H.FailedConnectionException2 _ _ _ _      -> "Connection failed"
+    H.ExpectedBlankAfter100Continue           -> "Expected blank after 100"
+    H.InvalidStatusLine _                     -> "Invalid status line"
+    H.InvalidHeader _                         -> "Invalid header"
+    H.ProxyConnectException _ _ _             -> "Proxy connection error"
+    H.NoResponseDataReceived                  -> "No response data received"
+    H.TlsException _                          -> "TLS error"
+    H.TlsNotSupported                         -> "TLS not supported"
+    H.ResponseBodyTooShort _ _                -> "Response body too short"
+    H.InvalidChunkHeaders                     -> "Invalid chunk headers"
+    H.IncompleteHeaders                       -> "Incomplete headers"
+    H.InvalidDestinationHost _                -> "Invalid destination host"
+    H.HttpZlibException _                     -> "Zlib error"
+    H.InternalIOException _                   -> "Internal I/O error"
+

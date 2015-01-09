@@ -59,7 +59,7 @@ readResourceOne res src = dispatch $ B.sourceName src where
         do abcode <- B.uriContent url
            case abcode of
              Right text       -> include text
-             Left (code, msg) -> return $ Msg.httpStatus url code msg
+             Left (code, msg) -> return $ Msg.httpError url code msg
 
     include :: String -> B.IOAb (C.Resource c)
     include = return . C.resInclude res src

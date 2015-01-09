@@ -34,7 +34,7 @@ module Koshucode.Baala.Core.Message
     dupReplacement,
     emptyLiteral,
     extraAttr,
-    httpStatus,
+    httpError,
     invalidPrefix,
     lackArg,
     noFile,
@@ -169,9 +169,10 @@ extraAttr :: B.Ab a
 extraAttr = Left $ B.abortBecause "Extra attribute"
 
 -- | HTTP Error
-httpStatus :: String -> Int -> String -> B.Ab a
-httpStatus url code msg = Left $ B.abortLines "HTTP Error"
-                          [ show code ++ " " ++ msg, url ]
+httpError :: String -> Int -> String -> B.Ab a
+httpError url code msg = Left $ B.abortLines "HTTP Error" detail where
+    detail | code == 0  = [msg, url]
+           | otherwise  = [show code ++ " " ++ msg, url]
 
 -- | Invalid prefix character
 invalidPrefix :: [String] -> B.Ab a
