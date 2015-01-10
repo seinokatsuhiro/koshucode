@@ -11,6 +11,7 @@ module Koshucode.Baala.Toolkit.Main.KoshuMain
 
 import System.Console.GetOpt
 import qualified Data.Time as T
+import qualified System.Environment   as Env
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 import qualified Koshucode.Baala.Toolkit.Library.Element  as L
@@ -94,8 +95,12 @@ header = unlines
 koshuMain :: (C.CContent c) => C.Global c -> IO Int
 koshuMain global =
   do (prog, argv) <- L.prelude
+
      time <- T.getZonedTime
      let day = T.localDay $ T.zonedTimeToLocalTime time
+
+     proxy <- getProxies
+
      case getOpt Permute koshuOptions argv of
        (opts, files, [])
            | has OptHelp         ->  L.putSuccess usage
@@ -115,10 +120,20 @@ koshuMain global =
              g2    =  C.globalFill global
                         { C.globalProgram   = prog
                         , C.globalArgs      = argv
+                        , C.globalProxy     = proxy
                         , C.globalTime      = B.timeYmd day
                         , C.globalSources   = res }
 
        (_, _, errs) -> L.putFailure $ concat errs
+
+getProxies :: IO [(String, Maybe String)]
+getProxies =
+    do httpProxy  <- Env.lookupEnv "http_proxy"
+       httpsProxy <- Env.lookupEnv "https_proxy"
+       ftpProxy   <- Env.lookupEnv "ftp_proxy"
+       return [ ("http",  httpProxy)
+              , ("https", httpsProxy)
+              , ("ftp",   ftpProxy) ]
 
 oneLiner :: Option -> [String]
 oneLiner (OptSection sec) = [oneLinerPreprocess sec]

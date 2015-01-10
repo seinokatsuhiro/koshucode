@@ -10,6 +10,8 @@ module Koshucode.Baala.Op.Meta
     consKoshuSource, relmapKoshuSource,
     -- * koshu-rop
     consKoshuRop, relkitKoshuRop,
+    -- * koshu-proxy
+    consKoshuProxy, relkitKoshuProxy,
     -- * koshu-version
     consKoshuVersion, relkitKoshuVersion,
   ) where
@@ -37,15 +39,16 @@ import qualified Koshucode.Baala.Op.Message    as Msg
 -- 
 ropsMeta :: (C.CContent c) => [C.Rop c]
 ropsMeta = Op.ropList "meta"
-    --          CONSTRUCTOR        USAGE                 ATTRIBUTE
+    --          CONSTRUCTOR        USAGE                       ATTRIBUTE
     [ Op.ropIJ  consKoshuAngleText "koshu-angle-text /N [/N]" "-name -text"
-    , Op.ropV   consKoshuCop       "koshu-cop /N"        "-name"
+    , Op.ropV   consKoshuCop       "koshu-cop /N"              "-name"
     , Op.ropI   consKoshuCopInfix  "koshu-cop-infix /N [-height /N][-dir /N]"
-                                                         "-name | -height -dir"
+                                                               "-name | -height -dir"
     , Op.ropI   consKoshuSource    "koshu-source /N [-name /N][-type /N]"
-                                                         "-number | -name -type"
-    , Op.ropV   consKoshuRop       "koshu-rop /N /N"     "-name | -group -usage"
-    , Op.ropV   consKoshuVersion   "koshu-version /N"    "-term | -version"
+                                                               "-number | -name -type"
+    , Op.ropV   consKoshuRop       "koshu-rop /N /N"           "-name | -group -usage"
+    , Op.ropII  consKoshuProxy     "koshu-proxy /N /N"         "-proto -uri"
+    , Op.ropV   consKoshuVersion   "koshu-version /N"          "-term | -version"
     ]
 
 
@@ -122,6 +125,34 @@ relkitKoshuRop (name, group, usage) res _ = Right kit2 where
         where
           cond (Just _) get = [C.pText $ get rop]
           cond _ _ = []
+
+
+-- ----------------------  koshu-proxy
+
+consKoshuProxy :: (C.CContent c) => C.RopCons c
+consKoshuProxy use =
+  do proto  <- Op.getTerm use "-proto"
+     uri    <- Op.getTerm use "-uri"
+     Right $ relmapKoshuProxy use (Just proto, Just uri)
+
+relmapKoshuProxy :: (C.CContent c)
+    => C.RopUse c -> (Maybe B.TermName, Maybe B.TermName)
+    -> C.Relmap c
+relmapKoshuProxy use = C.relmapHook use . relkitKoshuProxy
+
+relkitKoshuProxy :: (C.CContent c)
+    => (Maybe B.TermName, Maybe B.TermName)
+    -> C.RelkitHook c
+relkitKoshuProxy (proto, uri) res _ = Right kit2 where
+    g     = C.getGlobal res
+    kit2  = C.relkitConstBody ns bo2
+    ns    = B.catMaybes [proto, uri]
+    bo2   = map f $ C.globalProxy g
+    f proxy = the proto (C.pText . fst) ++
+              the uri   (C.maybeEmpty C.pText . snd)
+        where
+          the (Just _) get  = [get proxy]
+          the _ _           = []
 
 
 -- ----------------------  koshu-version

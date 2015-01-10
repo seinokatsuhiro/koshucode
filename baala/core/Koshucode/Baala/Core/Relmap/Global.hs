@@ -51,6 +51,7 @@ data Global' h c = Global
       , globalOpset     :: OpSet' (C.Rop' h) c
       , globalProgram   :: String
       , globalArgs      :: [String]
+      , globalProxy     :: [B.Named (Maybe String)]
       , globalTime      :: B.Time
       , globalSources   :: [B.Source]
       , globalJudges    :: [B.Judge c]
@@ -86,6 +87,7 @@ global = Global
          , globalOpset     =  opset
          , globalProgram   =  ""
          , globalArgs      =  []
+         , globalProxy     =  []
          , globalTime      =  B.timeFromMjd 0
          , globalSources   =  []
          , globalJudges    =  [] }
