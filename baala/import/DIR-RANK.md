@@ -55,7 +55,7 @@ dir    : dep
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    188 judges
+**    199 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Abortable"      /import "Koshucode.Baala.Base.Prelude"
@@ -175,6 +175,7 @@ dir    : dep
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Order"        /import "Koshucode.Baala.Base.Prelude.Pair"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Pair"         /import "Control.Applicative"
+|-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Pair"         /import "Koshucode.Baala.Base.Prelude.Class"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Snip"         /import "Data.List"
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude.Snip"         /import "Koshucode.Baala.Base.Prelude.Import"
@@ -217,7 +218,17 @@ dir    : dep
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Comment"         /import "System.IO"
 
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.Http"            /import "Data.ByteString.Char8"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.Http"            /import "Data.ByteString.Lazy.Char8"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.Http"            /import "System.Environment"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.Http"            /import "Control.Exception"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.Http"            /import "Network.HTTP.Conduit"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.Http"            /import "Network.HTTP.Types.Status"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.Http"            /import "Text.URI"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.Http"            /import "Koshucode.Baala.Base.Prelude"
+
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Source"          /import "Data.Generics"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.Source"          /import "Koshucode.Baala.Base.Prelude"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.TextTable"       /import "Data.Char"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.TextTable"       /import "Data.List"
@@ -234,6 +245,7 @@ dir    : dep
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.CodePt"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.Comment"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.Http"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.Source"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.TextTable"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.Unicode"
@@ -304,15 +316,15 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 **    ../base/IMPORT.k
 **
 
-|-- DIR-RANK  /dir-rank 2  /dir 'Koshucode.Baala.Base.Prelude  /base-rank {| /rank : /base | 0 : 'Class | 0 : 'Import | 0 : 'Pair | 1 : 'Assoc | 1 : 'List | 1 : 'Snip | 2 : 'Order |}
-|-- DIR-RANK  /dir-rank 4  /dir 'Koshucode.Baala.Base.Text  /base-rank {| /rank : /base | 0 : 'Comment | 0 : 'Source | 0 : 'Unicode | 4 : 'CodePt | 4 : 'TextTable | 4 : 'Utility | 4 : 'Write |}
-|-- DIR-RANK  /dir-rank 7  /dir 'Koshucode.Baala.Base.Abort  /base-rank {| /rank : /base | 6 : 'Reason | 7 : 'Abortable | 7 : 'Report |}
-|-- DIR-RANK  /dir-rank 11  /dir 'Koshucode.Baala.Base.Syntax  /base-rank {| /rank : /base | 0 : 'Line | 10 : 'Code | 10 : 'Tree | 11 : 'Infix |}
-|-- DIR-RANK  /dir-rank 14  /dir 'Koshucode.Baala.Base.Token  /base-rank {| /rank : /base | 6 : 'AngleText | 6 : 'Token | 7 : 'Short | 13 : 'TokenLine | 14 : 'TokenClause | 14 : 'TokenTree |}
+|-- DIR-RANK  /dir-rank 2  /dir 'Koshucode.Baala.Base.Prelude  /base-rank {| /rank : /base | 0 : 'Class | 0 : 'Import | 1 : 'Assoc | 1 : 'List | 1 : 'Pair | 1 : 'Snip | 2 : 'Order |}
+|-- DIR-RANK  /dir-rank 5  /dir 'Koshucode.Baala.Base.Text  /base-rank {| /rank : /base | 0 : 'Comment | 0 : 'Unicode | 4 : 'Http | 4 : 'Source | 4 : 'TextTable | 4 : 'Utility | 4 : 'Write | 5 : 'CodePt |}
+|-- DIR-RANK  /dir-rank 8  /dir 'Koshucode.Baala.Base.Abort  /base-rank {| /rank : /base | 7 : 'Reason | 8 : 'Abortable | 8 : 'Report |}
+|-- DIR-RANK  /dir-rank 12  /dir 'Koshucode.Baala.Base.Syntax  /base-rank {| /rank : /base | 0 : 'Line | 11 : 'Code | 11 : 'Tree | 12 : 'Infix |}
+|-- DIR-RANK  /dir-rank 15  /dir 'Koshucode.Baala.Base.Token  /base-rank {| /rank : /base | 7 : 'AngleText | 7 : 'Token | 8 : 'Short | 14 : 'TokenLine | 15 : 'TokenClause | 15 : 'TokenTree |}
 
-|-- DIR-RANK  /dir-rank 20  /dir 'Koshucode.Baala.Base.Data  /base-rank {| /rank : /base | 10 : 'Clock | 10 : 'Date | 10 : 'Decimal | 11 : 'Time | 16 : 'Interp | 16 : 'Type | 17 : 'Head | 18 : 'Rel | 19 : 'Judge | 19 : 'Mono | 20 : 'Output |}
-|-- DIR-RANK  /dir-rank 21  /dir 'Koshucode.Baala.Base  /base-rank {| /rank : /base | 3 : 'Prelude | 5 : 'Text | 8 : 'Abort | 9 : 'Message | 12 : 'Syntax | 15 : 'Token | 21 : 'Data |}
-|-- DIR-RANK  /dir-rank 22  /dir 'Koshucode.Baala  /base-rank {| /rank : /base | 22 : 'Base |}
+|-- DIR-RANK  /dir-rank 21  /dir 'Koshucode.Baala.Base.Data  /base-rank {| /rank : /base | 11 : 'Clock | 11 : 'Date | 11 : 'Decimal | 12 : 'Time | 17 : 'Interp | 17 : 'Type | 18 : 'Head | 19 : 'Rel | 20 : 'Judge | 20 : 'Mono | 21 : 'Output |}
+|-- DIR-RANK  /dir-rank 22  /dir 'Koshucode.Baala.Base  /base-rank {| /rank : /base | 3 : 'Prelude | 6 : 'Text | 9 : 'Abort | 10 : 'Message | 13 : 'Syntax | 16 : 'Token | 22 : 'Data |}
+|-- DIR-RANK  /dir-rank 23  /dir 'Koshucode.Baala  /base-rank {| /rank : /base | 23 : 'Base |}
 
 *** 8 judges
 
@@ -324,71 +336,72 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 **                                              ----- --------------
 **                                              0     'Class
 **                                              0     'Import
-**                                              0     'Pair
 **                                              1     'Assoc
 **                                              1     'List
+**                                              1     'Pair
 **                                              1     'Snip
 **                                              2     'Order
 **                                              
-**    4         'Koshucode.Baala.Base.Text      /rank /base
+**    5         'Koshucode.Baala.Base.Text      /rank /base
 **                                              ----- --------------
 **                                              0     'Comment
-**                                              0     'Source
 **                                              0     'Unicode
-**                                              4     'CodePt
+**                                              4     'Http
+**                                              4     'Source
 **                                              4     'TextTable
 **                                              4     'Utility
 **                                              4     'Write
+**                                              5     'CodePt
 **                                              
-**    7         'Koshucode.Baala.Base.Abort     /rank /base
+**    8         'Koshucode.Baala.Base.Abort     /rank /base
 **                                              ----- --------------
-**                                              6     'Reason
-**                                              7     'Abortable
-**                                              7     'Report
+**                                              7     'Reason
+**                                              8     'Abortable
+**                                              8     'Report
 **                                              
-**    11        'Koshucode.Baala.Base.Syntax    /rank /base
+**    12        'Koshucode.Baala.Base.Syntax    /rank /base
 **                                              ----- --------------
 **                                              0     'Line
-**                                              10    'Code
-**                                              10    'Tree
-**                                              11    'Infix
+**                                              11    'Code
+**                                              11    'Tree
+**                                              12    'Infix
 **                                              
-**    14        'Koshucode.Baala.Base.Token     /rank /base
+**    15        'Koshucode.Baala.Base.Token     /rank /base
 **                                              ----- --------------
-**                                              6     'AngleText
-**                                              6     'Token
-**                                              7     'Short
-**                                              13    'TokenLine
-**                                              14    'TokenClause
-**                                              14    'TokenTree
+**                                              7     'AngleText
+**                                              7     'Token
+**                                              8     'Short
+**                                              14    'TokenLine
+**                                              15    'TokenClause
+**                                              15    'TokenTree
 **                                              
-**    20        'Koshucode.Baala.Base.Data      /rank /base
+**    21        'Koshucode.Baala.Base.Data      /rank /base
 **                                              ----- --------------
-**                                              10    'Clock
-**                                              10    'Date
-**                                              10    'Decimal
-**                                              11    'Time
-**                                              16    'Interp
-**                                              16    'Type
-**                                              17    'Head
-**                                              18    'Rel
-**                                              19    'Judge
-**                                              19    'Mono
-**                                              20    'Output
+**                                              11    'Clock
+**                                              11    'Date
+**                                              11    'Decimal
+**                                              12    'Time
+**                                              17    'Interp
+**                                              17    'Type
+**                                              18    'Head
+**                                              19    'Rel
+**                                              20    'Judge
+**                                              20    'Mono
+**                                              21    'Output
 **                                              
-**    21        'Koshucode.Baala.Base           /rank /base
+**    22        'Koshucode.Baala.Base           /rank /base
 **                                              ----- --------------
 **                                              3     'Prelude
-**                                              5     'Text
-**                                              8     'Abort
-**                                              9     'Message
-**                                              12    'Syntax
-**                                              15    'Token
-**                                              21    'Data
+**                                              6     'Text
+**                                              9     'Abort
+**                                              10    'Message
+**                                              13    'Syntax
+**                                              16    'Token
+**                                              22    'Data
 **                                              
-**    22        'Koshucode.Baala                /rank /base
+**    23        'Koshucode.Baala                /rank /base
 **                                              ----- --------------
-**                                              22    'Base
+**                                              23    'Base
 **                                              
 
 **
@@ -1166,7 +1179,7 @@ Command `./dir-rank.k ../content/IMPORT.k` produces:
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    22 judges
+**    23 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Element"   /import "Koshucode.Baala.Base"
@@ -1189,6 +1202,7 @@ Command `./dir-rank.k ../content/IMPORT.k` produces:
 
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuMain"    /import "System.Console.GetOpt"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuMain"    /import "Data.Time"
+|-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuMain"    /import "System.Environment"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuMain"    /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuMain"    /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuMain"    /import "Koshucode.Baala.Toolkit.Library.Element"
