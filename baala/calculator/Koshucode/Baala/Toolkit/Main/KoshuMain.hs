@@ -95,45 +95,42 @@ header = unlines
 koshuMain :: (C.CContent c) => C.Global c -> IO Int
 koshuMain global =
   do (prog, argv) <- L.prelude
-
-     time <- T.getZonedTime
-     let day = T.localDay $ T.zonedTimeToLocalTime time
-
-     proxy <- getProxies
-
+     proxy        <- getProxies
+     time         <- T.getZonedTime
+     let day       = T.localDay $ T.zonedTimeToLocalTime time
      case getOpt Permute koshuOptions argv of
-       (opts, files, [])
-           | has OptHelp         ->  L.putSuccess usage
-           | has OptVersion      ->  L.putSuccess $ version ++ "\n"
-           | has OptShowEncoding ->  L.putSuccess =<< L.currentEncodings
+       (opts, paths, [])
+           | has OptHelp         -> L.putSuccess usage
+           | has OptVersion      -> L.putSuccess $ version ++ "\n"
+           | has OptShowEncoding -> L.putSuccess =<< L.currentEncodings
            -- has OptPretty    ->  prettySection bun
-           | has OptElement      ->  putElems   bun
-           | has OptCalc         ->  L.runCalc  cmd bun
-           | otherwise           ->  L.runFiles g2 bun
+           | has OptElement      -> putElems   bun
+           | has OptCalc         -> L.runCalc  cmd bun
+           | otherwise           -> L.runFiles g2 bun
            where
-             has   =  (`elem` opts)
-             bun   =  C.SourceBundle root res
-             text  =  concatMap oneLiner opts
-             cmd   =  prog : argv
-             root  =  C.resEmpty { C.resGlobal = g2 }
-             res   =  B.sourceList (has OptStdin) text files []
-             g2    =  C.globalFill global
-                        { C.globalProgram   = prog
-                        , C.globalArgs      = argv
-                        , C.globalProxy     = proxy
-                        , C.globalTime      = B.timeYmd day
-                        , C.globalSources   = res }
+             has   = (`elem` opts)
+             bun   = C.SourceBundle root src
+             text  = concatMap oneLiner opts
+             cmd   = prog : argv
+             root  = C.resEmpty { C.resGlobal = g2 }
+             src   = B.sourceList (has OptStdin) text paths
+             g2    = C.globalFill global
+                       { C.globalProgram   = prog
+                       , C.globalArgs      = argv
+                       , C.globalProxy     = proxy
+                       , C.globalTime      = B.timeYmd day
+                       , C.globalSources   = src }
 
        (_, _, errs) -> L.putFailure $ concat errs
 
 getProxies :: IO [(String, Maybe String)]
 getProxies =
-    do httpProxy  <- Env.lookupEnv "http_proxy"
-       httpsProxy <- Env.lookupEnv "https_proxy"
-       ftpProxy   <- Env.lookupEnv "ftp_proxy"
-       return [ ("http",  httpProxy)
-              , ("https", httpsProxy)
-              , ("ftp",   ftpProxy) ]
+    do httpProxy   <- Env.lookupEnv "http_proxy"
+       httpsProxy  <- Env.lookupEnv "https_proxy"
+       ftpProxy    <- Env.lookupEnv "ftp_proxy"
+       return [ ("http"  , httpProxy)
+              , ("https" , httpsProxy)
+              , ("ftp"   , ftpProxy) ]
 
 oneLiner :: Option -> [String]
 oneLiner (OptSection sec) = [oneLinerPreprocess sec]

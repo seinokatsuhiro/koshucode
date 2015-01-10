@@ -78,12 +78,8 @@ resIncludeBody res (B.Short pt shorts xs) =
       expt _ _ (C.CExport n) = n
 
       inc :: Clab B.Source
-      inc _ _ (C.CInclude _ (Just n))
-          | B.isPrefixOf "http://"  n   = Right $ B.Source 0 $ B.SourceURL n
-          | B.isPrefixOf "https://" n   = Right $ B.Source 0 $ B.SourceURL n
-          | B.isPrefixOf "ftp://"   n   = Right $ B.Source 0 $ B.SourceURL n
-          | otherwise                   = Right $ B.Source 0 $ B.SourceFile n
-      inc _ _ _                         = Msg.adlib "include"
+      inc _ _ (C.CInclude _ (Just path))  = Right $ B.sourceFrom path
+      inc _ _ _                           = Msg.adlib "include"
 
       slot :: Clab B.NamedTrees
       slot _ _ (C.CSlot n toks) = ntrees (n, toks)

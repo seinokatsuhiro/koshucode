@@ -1,10 +1,8 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Toolkit.Library.Run
-  ( runFiles,
-    hRunFiles,
-    runCalc,
-    runCalcTo,
+  ( runFiles, hRunFiles,
+    runCalc, runCalcTo,
     theContent,
     readSecList,
     mkdir,
@@ -78,7 +76,7 @@ runCalcJudge dir root (B.JudgeAffirm "KOSHU-CALC" xs) =
              putStrLn $ "**  Output to " ++ outputFile
              mkdir outputFile
              IO.withFile outputFile IO.WriteMode
-                          $ \ h -> do let res = B.sourceList False [] inputFiles []
+                          $ \ h -> do let res = B.sourceList False [] inputFiles
                                       hRunFiles h C.global $ C.SourceBundle root res
       Just _       -> return 0
       Nothing      -> return 0
