@@ -8,8 +8,7 @@ module Koshucode.Baala.Core.Relmap.Global
     globalCommandLine,
     globalFill,
     globalRops,
-    globalCops,
-    globalCopset,
+    globalCops, globalCopset,
     globalInfix,
     global,
 
@@ -19,8 +18,7 @@ module Koshucode.Baala.Core.Relmap.Global
   
     -- * Operator set
     OpSet' (..),
-    opset,
-    opsetFill,
+    opset, opsetFill,
   ) where
 
 import qualified Data.Version                        as D
@@ -51,7 +49,7 @@ data Global' h c = Global
       , globalOpset     :: OpSet' (C.Rop' h) c
       , globalProgram   :: String
       , globalArgs      :: [String]
-      , globalProxy     :: [B.Named (Maybe String)]
+      , globalProxy     :: [B.HttpProxy]
       , globalTime      :: B.Time
       , globalSources   :: [B.Source]
       , globalJudges    :: [B.Judge c]
@@ -83,14 +81,14 @@ globalCopset  = opsetCop . globalOpset
 -- | Empty global parameters.
 global :: Global' h c
 global = Global
-         { globalVersion   =  D.Version [] []
-         , globalOpset     =  opset
-         , globalProgram   =  ""
-         , globalArgs      =  []
-         , globalProxy     =  []
-         , globalTime      =  B.timeFromMjd 0
-         , globalSources   =  []
-         , globalJudges    =  [] }
+         { globalVersion   = D.Version [] []
+         , globalOpset     = opset
+         , globalProgram   = ""
+         , globalArgs      = []
+         , globalProxy     = []
+         , globalTime      = B.timeFromMjd 0
+         , globalSources   = []
+         , globalJudges    = [] }
 
 
 -- ----------------------  Operator set

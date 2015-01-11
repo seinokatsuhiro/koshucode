@@ -2,33 +2,37 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Text.Http
-  ( uriContent,
+  ( UriText, HttpProxy,
+    uriContent,
     httpExceptionSummary,
   ) where
 
 import qualified Data.ByteString.Char8           as Byte
 import qualified Data.ByteString.Lazy.Char8      as Lazy
-import qualified System.Environment              as Env
 import qualified Control.Exception               as Ex
 import qualified Network.HTTP.Conduit            as H
 import qualified Network.HTTP.Types.Status       as H
 import qualified Text.URI                        as H
 import qualified Koshucode.Baala.Base.Prelude    as B
 
+type UriText = String
 
-uriContent :: String -> IO (Either (Int, String) String)
-uriContent uriText =
-    do req <- requestFromURI uriText
+-- | Pair of protocol name and proxy URI.
+type HttpProxy = (String, Maybe UriText)
+
+uriContent :: [HttpProxy] -> UriText -> IO (Either (Int, String) String)
+uriContent proxies uriText =
+    do req <- requestFromURI proxies uriText
        catchHttpException $ do
          res <- H.withManager $ H.httpLbs req
          return $ Right $ Lazy.unpack $ H.responseBody res
 
-requestFromURI :: String -> IO H.Request
-requestFromURI uriText =
+requestFromURI :: [HttpProxy] -> UriText -> IO H.Request
+requestFromURI proxies uriText =
     do req <- H.parseUrl uriText
        case H.parseURI uriText of
          Nothing  -> return req
-         Just uri -> do proxy <- selectProxy uri
+         Just uri -> do let proxy = selectProxy proxies uri
                         return $ add proxy req
     where 
       add :: Maybe String -> B.Map H.Request
@@ -41,13 +45,11 @@ requestFromURI uriText =
               port'  = fromInteger port :: Int
           Just $ H.addProxy host' port' req
 
-selectProxy :: H.URI -> IO (Maybe String)
-selectProxy uri =
-    case H.uriScheme uri of
-      Just "http"  -> Env.lookupEnv "http_proxy"
-      Just "https" -> Env.lookupEnv "https_proxy"
-      Just "ftp"   -> Env.lookupEnv "ftp_proxy"
-      _            -> return Nothing
+selectProxy :: [HttpProxy] -> H.URI -> Maybe UriText
+selectProxy proxies uri =
+    do uriText <- H.uriScheme uri
+       proxy <- lookup uriText proxies
+       proxy
 
 catchHttpException :: B.Map (IO (Either (Int, String) String))
 catchHttpException = ( `Ex.catch` handler ) where

@@ -17,6 +17,7 @@ import qualified System.Directory                        as Dir
 import qualified Control.Monad.State                     as M
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Core.Content            as C
+import qualified Koshucode.Baala.Core.Relmap             as C
 import qualified Koshucode.Baala.Core.Resource.Resource  as C
 import qualified Koshucode.Baala.Core.Resource.Include   as C
 import qualified Koshucode.Baala.Core.Message            as Msg
@@ -51,21 +52,23 @@ readResource n res@C.Resource { C.resArticle = (todo, srclist, done) }
 -- | Read resource from certain source.
 readResourceOne :: forall c. (C.CContent c) =>
     C.Resource c -> B.Source -> ResourceIO c
-readResourceOne res src = io $ dispatch $ B.sourceName src where
+readResourceOne res src = dispatch $ B.sourceName src where
     dispatch (B.SourceFile path) =
-        do exist <- Dir.doesFileExist path
-           case exist of
-             True   -> include =<< readFile path
-             False  -> return $ Msg.noFile path
+        io $ do exist <- Dir.doesFileExist path
+                case exist of
+                  True   -> include =<< readFile path
+                  False  -> return $ Msg.noFile path
 
     dispatch (B.SourceURL url) =
-        do abcode <- B.uriContent url
-           case abcode of
+        do g <- M.get
+           let proxy = C.globalProxy g
+           abcode <- io $ B.uriContent proxy url
+           io $ case abcode of
              Right code       -> include code
              Left (code, msg) -> return $ Msg.httpError url code msg
 
-    dispatch (B.SourceText text)  = include text
-    dispatch (B.SourceStdin)      = include =<< getContents
+    dispatch (B.SourceText text)  = io $ include text
+    dispatch (B.SourceStdin)      = io $ include =<< getContents
 
     include :: String -> B.IOAb (C.Resource c)
     include = return . C.resInclude res src
