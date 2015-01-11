@@ -5,7 +5,7 @@
 
 module Koshucode.Baala.Core.Resource.Read
   ( -- * Resource
-    readResourceText,
+    ResourceIO, readResourceText,
 
     -- * Bundle
     SourceBundle (..),
@@ -14,6 +14,7 @@ module Koshucode.Baala.Core.Resource.Read
   ) where
 
 import qualified System.Directory                        as Dir
+import qualified Control.Monad.State                     as M
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Core.Content            as C
 import qualified Koshucode.Baala.Core.Resource.Resource  as C
@@ -23,7 +24,9 @@ import qualified Koshucode.Baala.Core.Message            as Msg
 
 -- ----------------------  Resource
 
-readResource :: (C.CContent c) => Int -> C.Resource c -> B.IOAb (C.Resource c)
+type ResourceIO c = M.StateT (C.Global c) IO (B.Ab (C.Resource c))
+
+readResource :: (C.CContent c) => Int -> C.Resource c -> ResourceIO c
 readResource n res@C.Resource { C.resArticle = (todo, srclist, done) }
     = case (todo, srclist, done) of
         ([], [], _)            -> return $ Right res
@@ -47,8 +50,8 @@ readResource n res@C.Resource { C.resArticle = (todo, srclist, done) }
 
 -- | Read resource from certain source.
 readResourceOne :: forall c. (C.CContent c) =>
-    C.Resource c -> B.Source -> B.IOAb (C.Resource c)
-readResourceOne res src = dispatch $ B.sourceName src where
+    C.Resource c -> B.Source -> ResourceIO c
+readResourceOne res src = io $ dispatch $ B.sourceName src where
     dispatch (B.SourceFile path) =
         do exist <- Dir.doesFileExist path
            case exist of
@@ -67,6 +70,9 @@ readResourceOne res src = dispatch $ B.sourceName src where
     include :: String -> B.IOAb (C.Resource c)
     include = return . C.resInclude res src
 
+io :: IO a -> M.StateT (C.Global c) IO a
+io = M.liftIO
+
 -- | Read resource from text.
 readResourceText :: (C.CContent c) => C.Resource c -> String -> B.Ab (C.Resource c)
 readResourceText res code = C.resInclude res (B.sourceOf code) code
@@ -83,7 +89,11 @@ data SourceBundle c = SourceBundle
 bundleTexts :: SourceBundle c -> [String]
 bundleTexts = map B.sourceText . bundleSources
 
-bundleRead :: (C.CContent c) => SourceBundle c -> B.IOAb (C.Resource c)
-bundleRead SourceBundle { bundleRoot = res, bundleSources = src }
-    = readResource 1 $ res { C.resArticle = ([], reverse src, []) }
+bundleRead :: forall c. (C.CContent c) => SourceBundle c -> B.IOAb (C.Resource c)
+bundleRead SourceBundle { bundleRoot = res, bundleSources = src } =
+    do (res', _) <- M.runStateT proc $ C.resGlobal res
+       return res'
+    where
+      proc :: ResourceIO c
+      proc  = readResource 1 $ res { C.resArticle = ([], reverse src, []) }
 
