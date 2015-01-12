@@ -4,8 +4,8 @@
 -- | Read resource.
 
 module Koshucode.Baala.Core.Resource.Read
-  ( -- * Resource
-    ResourceIO,
+  ( GlobalIO, ResourceIO,
+    gio, gioResource,
     readResourceText,
     readSources,
   ) where
@@ -21,26 +21,43 @@ import qualified Koshucode.Baala.Core.Message            as Msg
 
 
 -- | I/O with global state.
-type ResourceIO c = M.StateT (C.Global c) IO (B.Ab (C.Resource c))
+type GlobalIO a c = M.StateT (C.Global c) IO a
 
-io :: IO a -> M.StateT (C.Global c) IO a
-io = M.liftIO
+-- | Calculation that returns abortable resource.
+type ResourceIO c = GlobalIO (B.Ab (C.Resource c)) c
 
-readResource :: (C.CContent c) => Int -> C.Resource c -> ResourceIO c
-readResource n res@C.Resource { C.resArticle = (todo, srclist, done) }
+gio :: IO a -> GlobalIO a c
+gio = M.liftIO
+
+gioResource :: ResourceIO c -> C.Global c -> IO (B.Ab (C.Resource c), C.Global c)
+gioResource = M.runStateT
+
+getRootResoruce :: GlobalIO (C.Resource c) c
+getRootResoruce = return . C.globalHook =<< M.get
+
+nextSourceCount :: GlobalIO Int c
+nextSourceCount =
+    do g <- M.get
+       let n = 1 + C.globalSourceCount g
+       M.put $ g { C.globalSourceCount = n }
+       return n
+
+readResource :: (C.CContent c) => C.Resource c -> ResourceIO c
+readResource res@C.Resource { C.resArticle = (todo, srclist, done) }
     = case (todo, srclist, done) of
         ([], [], _)            -> return $ Right res
         (_ , [], _)            -> readDitto res { C.resArticle = ([], todo', done) }
         (_ , src : _, _)
             | src `elem` done  -> readDitto $ pop res
-            | otherwise        -> do let src' = src { B.sourceNumber = n }
+            | otherwise        -> do c <- nextSourceCount
+                                     let src' = src { B.sourceNumber = c }
                                      abres' <- readResourceOne (pop res) src'
                                      case abres' of
                                        Right res' -> readUp $ push src' res'
                                        left       -> return left
       where
-        readDitto               = readResource $ n
-        readUp                  = readResource $ n + 1
+        readDitto               = readResource
+        readUp                  = readResource
         todo'                   = reverse todo
         pop                     = call $ map2 tail
         push                    = call . cons3
@@ -53,21 +70,21 @@ readResourceOne :: forall c. (C.CContent c) =>
     C.Resource c -> B.Source -> ResourceIO c
 readResourceOne res src = dispatch $ B.sourceName src where
     dispatch (B.SourceFile path) =
-        io $ do exist <- Dir.doesFileExist path
-                case exist of
-                  True   -> include =<< readFile path
-                  False  -> return $ Msg.noFile path
+        gio $ do exist <- Dir.doesFileExist path
+                 case exist of
+                   True   -> include =<< readFile path
+                   False  -> return $ Msg.noFile path
 
     dispatch (B.SourceURL url) =
         do g <- M.get
            let proxy = C.globalProxy g
-           abcode <- io $ B.uriContent proxy url
-           io $ case abcode of
+           abcode <- gio $ B.uriContent proxy url
+           gio $ case abcode of
              Right code       -> include code
              Left (code, msg) -> return $ Msg.httpError url code msg
 
-    dispatch (B.SourceText text)  = io $ include text
-    dispatch (B.SourceStdin)      = io $ include =<< getContents
+    dispatch (B.SourceText text)  = gio $ include text
+    dispatch (B.SourceStdin)      = gio $ include =<< getContents
 
     include :: String -> B.IOAb (C.Resource c)
     include = return . C.resInclude res src
@@ -76,12 +93,8 @@ readResourceOne res src = dispatch $ B.sourceName src where
 readResourceText :: (C.CContent c) => C.Resource c -> String -> B.Ab (C.Resource c)
 readResourceText res code = C.resInclude res (B.sourceOf code) code
 
-readSources :: forall c. (C.CContent c) => C.Global c -> [B.Source] -> B.IOAb (C.Resource c)
-readSources g src =
-    do (res', _) <- M.runStateT proc g
-       return res'
-    where
-      proc :: ResourceIO c
-      proc  = readResource 1 $ res { C.resArticle = ([], reverse src, []) }
-      res   = C.globalHook g
+readSources :: forall c. (C.CContent c) => [B.Source] -> ResourceIO c
+readSources src =
+    do res <- getRootResoruce
+       readResource $ res { C.resArticle = ([], reverse src, []) }
 

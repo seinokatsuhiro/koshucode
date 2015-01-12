@@ -4,7 +4,6 @@ module Koshucode.Baala.Toolkit.Library.Run
   ( runFiles, hRunFiles,
     --runCalc, runCalcTo,
     theContent,
-    readSecList,
     --mkdir,
   ) where
 
@@ -27,7 +26,7 @@ hRunFiles
     -> [B.Source]         -- ^ Resource source code
     -> IO Int
 hRunFiles h g src =
-    do abRes <- C.readSources g src
+    do (abRes, _) <- C.gioResource (C.readSources src) g
        let inputs  = B.sourceText `map` src
            comm    = B.CommentDoc [ B.CommentSec "INPUT" inputs ]
 
@@ -99,19 +98,4 @@ theContent = lookup
 -- theStrings c | C.isText c  =  [C.gText c]
 -- theStrings c | C.isList c  =  map C.gText $ C.gList c
 -- theStrings _               =  []
-
-
-
--- ----------------------  Read
-
--- readSec :: (C.CContent c) => C.SourceBundle c -> B.IOAb (C.Resource c)
--- readSec bun =
---     do abSect <- C.readSources bun
---        return abSect
-
-readSecList :: (C.CContent c) => C.Global c -> [B.Source] -> B.IOAb [C.Resource c]
-readSecList g src =
-    do abSect <- C.readSources g src
-       return $ do sect <- abSect
-                   Right [sect]
 

@@ -45,15 +45,16 @@ ropCopset = globalCopset . ropGlobal
 
 -- | Global parameters
 data Global' h c = Global
-      { globalVersion   :: D.Version
-      , globalOpset     :: OpSet' (C.Rop' h) c
-      , globalProgram   :: String
-      , globalArgs      :: [String]
-      , globalProxy     :: [B.HttpProxy]
-      , globalTime      :: B.Time
-      , globalSources   :: [B.Source]
-      , globalJudges    :: [B.Judge c]
-      , globalHook      :: h c
+      { globalVersion      :: D.Version
+      , globalOpset        :: OpSet' (C.Rop' h) c
+      , globalProgram      :: String
+      , globalArgs         :: [String]
+      , globalProxy        :: [B.HttpProxy]
+      , globalTime         :: B.Time
+      , globalSourceCount  :: Int
+      , globalSources      :: [B.Source]
+      , globalJudges       :: [B.Judge c]
+      , globalHook         :: h c
       }
 
 instance Show (Global' h c) where
@@ -82,15 +83,16 @@ globalCopset  = opsetCop . globalOpset
 -- | Empty global parameters.
 global' :: h c -> Global' h c
 global' h = Global
-    { globalVersion   = D.Version [] []
-    , globalOpset     = opset
-    , globalProgram   = ""
-    , globalArgs      = []
-    , globalProxy     = []
-    , globalTime      = B.timeFromMjd 0
-    , globalSources   = []
-    , globalJudges    = []
-    , globalHook      = h }
+    { globalVersion      = D.Version [] []
+    , globalOpset        = opset
+    , globalProgram      = ""
+    , globalArgs         = []
+    , globalProxy        = []
+    , globalTime         = B.timeFromMjd 0
+    , globalSourceCount  = 0
+    , globalSources      = []
+    , globalJudges       = []
+    , globalHook         = h }
 
 
 -- ----------------------  Operator set

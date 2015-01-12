@@ -140,10 +140,10 @@ oneLinerPreprocess = loop where
 
 putElems :: (C.CContent c) => C.Global c -> [B.Source] -> IO Int
 putElems g src =
-    do ass <- L.readSecList g src
-       case ass of
-         Right ss -> B.putJudges 0 $ concatMap L.resourceElem ss
-         Left  _  -> B.bug "putElems"
+    do (abres, _) <- C.gioResource (C.readSources src) g
+       case abres of
+         Right res -> B.putJudges 0 $ L.resourceElem res
+         Left  _   -> B.bug "putElems"
 
 
 -- ----------------------  Pretty printing
