@@ -11,7 +11,7 @@
 
 module Koshucode.Baala.Core.Resource.Resource
   ( -- * Data type
-    Resource (..),
+    Resource (..), AbResource,
     resEmpty, resIncluded,
     addMessage, addMessages,
 
@@ -54,6 +54,9 @@ instance B.SelectRel Resource where
 
 instance C.GetGlobal Resource where
     getGlobal Resource { resGlobal = g } = g
+
+-- | Abort or resource.
+type AbResource c = B.Ab (Resource c)
 
 resIncluded :: Resource c -> [B.Source]
 resIncluded Resource { resArticle = (_, _, done) } = done

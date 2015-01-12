@@ -21,10 +21,10 @@ import qualified Koshucode.Baala.Core.Message            as Msg
 
 -- | Include source code into resource.
 resInclude :: forall c. (C.CContent c)
-    => C.Resource c          -- ^ Base resource
-    -> B.Source              -- ^ Source name
-    -> String                -- ^ Source code
-    -> B.Ab (C.Resource c)   -- ^ Included resource
+    => C.Resource c     -- ^ Base resource
+    -> B.Source         -- ^ Source name
+    -> String           -- ^ Source code
+    -> C.AbResource c   -- ^ Included resource
 resInclude res src code =
     do ls <- B.tokenLines src code
        let sec      = C.resLastSecNo res + 1
@@ -35,7 +35,7 @@ type Cl   a  = C.SecNo -> [B.Token] -> C.ClauseBody -> a
 type Clab a  = Cl (B.Ab a)
 
 resIncludeBody :: forall c. (C.CContent c) =>
-    C.Resource c -> C.ShortClause -> B.Ab (C.Resource c)
+    C.Resource c -> C.ShortClause -> C.AbResource c
 resIncludeBody res (B.Short pt shorts xs) =
     do _        <- forM isCUnknown unk
        _        <- forM isCUnres   unres

@@ -24,12 +24,12 @@ import qualified Koshucode.Baala.Core.Message            as Msg
 type GlobalIO a c = M.StateT (C.Global c) IO a
 
 -- | Calculation that returns abortable resource.
-type ResourceIO c = GlobalIO (B.Ab (C.Resource c)) c
+type ResourceIO c = GlobalIO (C.AbResource c) c
 
 gio :: IO a -> GlobalIO a c
 gio = M.liftIO
 
-gioResource :: ResourceIO c -> C.Global c -> IO (B.Ab (C.Resource c), C.Global c)
+gioResource :: ResourceIO c -> C.Global c -> IO (C.AbResource c, C.Global c)
 gioResource = M.runStateT
 
 getRootResoruce :: GlobalIO (C.Resource c) c
@@ -43,21 +43,19 @@ nextSourceCount =
        return n
 
 readResource :: (C.CContent c) => C.Resource c -> ResourceIO c
-readResource res@C.Resource { C.resArticle = (todo, srclist, done) }
-    = case (todo, srclist, done) of
+readResource res@C.Resource { C.resArticle = article@(todo, _, done) }
+    = case article of
         ([], [], _)            -> return $ Right res
-        (_ , [], _)            -> readDitto res { C.resArticle = ([], todo', done) }
+        (_ , [], _)            -> readResource res { C.resArticle = ([], todo', done) }
         (_ , src : _, _)
-            | src `elem` done  -> readDitto $ pop res
+            | src `elem` done  -> readResource $ pop res
             | otherwise        -> do c <- nextSourceCount
                                      let src' = src { B.sourceNumber = c }
                                      abres' <- readResourceOne (pop res) src'
                                      case abres' of
-                                       Right res' -> readUp $ push src' res'
+                                       Right res' -> readResource $ push src' res'
                                        left       -> return left
       where
-        readDitto               = readResource
-        readUp                  = readResource
         todo'                   = reverse todo
         pop                     = call $ map2 tail
         push                    = call . cons3
@@ -86,11 +84,11 @@ readResourceOne res src = dispatch $ B.sourceName src where
     dispatch (B.SourceText text)  = gio $ include text
     dispatch (B.SourceStdin)      = gio $ include =<< getContents
 
-    include :: String -> B.IOAb (C.Resource c)
+    include :: String -> IO (C.AbResource c)
     include = return . C.resInclude res src
 
 -- | Read resource from text.
-readResourceText :: (C.CContent c) => C.Resource c -> String -> B.Ab (C.Resource c)
+readResourceText :: (C.CContent c) => C.Resource c -> String -> C.AbResource c
 readResourceText res code = C.resInclude res (B.sourceOf code) code
 
 readSources :: forall c. (C.CContent c) => [B.Source] -> ResourceIO c
