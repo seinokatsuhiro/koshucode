@@ -48,9 +48,10 @@ readResource res@C.Resource { C.resArticle = article@(todo, _, done) }
         ([], [], _)            -> return $ Right res
         (_ , [], _)            -> readResource res { C.resArticle = ([], todo', done) }
         (_ , src : _, _)
-            | src `elem` done  -> readResource $ pop res
-            | otherwise        -> do c <- nextSourceCount
-                                     let src' = src { B.sourceNumber = c }
+            | B.Source 0 src `elem` done
+                               -> readResource $ pop res
+            | otherwise        -> do n <- nextSourceCount
+                                     let src' = B.Source n src
                                      abres' <- readResourceOne (pop res) src'
                                      case abres' of
                                        Right res' -> readResource $ push src' res'
@@ -91,7 +92,7 @@ readResourceOne res src = dispatch $ B.sourceName src where
 readResourceText :: (C.CContent c) => C.Resource c -> String -> C.AbResource c
 readResourceText res code = C.resInclude res (B.sourceOf code) code
 
-readSources :: forall c. (C.CContent c) => [B.Source] -> ResourceIO c
+readSources :: forall c. (C.CContent c) => [B.SourceName] -> ResourceIO c
 readSources src =
     do res <- getRootResoruce
        readResource $ res { C.resArticle = ([], reverse src, []) }

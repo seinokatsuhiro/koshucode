@@ -107,13 +107,12 @@ koshuMain global =
              has   = (`elem` opts)
              text  = concatMap oneLiner opts
              root  = C.resEmpty { C.resGlobal = g2 }
-             src   = B.sourceList (has OptStdin) text paths
+             src   = B.sourceNameList (has OptStdin) text paths
              g2    = C.globalFill global
                        { C.globalProgram   = prog
                        , C.globalArgs      = argv
                        , C.globalProxy     = proxy
                        , C.globalTime      = B.timeYmd day
-                       , C.globalSources   = src
                        , C.globalHook      = root }
 
        (_, _, errs) -> L.putFailure $ concat errs
@@ -138,7 +137,7 @@ oneLinerPreprocess = loop where
     loop ('|' : '|' : xs) = '\n' : loop (B.trimLeft xs)
     loop (x : xs) = x : loop xs
 
-putElems :: (C.CContent c) => C.Global c -> [B.Source] -> IO Int
+putElems :: (C.CContent c) => C.Global c -> [B.SourceName] -> IO Int
 putElems g src =
     do (abres, _) <- C.gioResource (C.readSources src) g
        case abres of

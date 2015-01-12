@@ -3,8 +3,9 @@
 
 module Koshucode.Baala.Base.Text.Source
   ( Source (..), SourceName (..),
-    sourceType, sourceText,
-    sourceZero, sourceFrom, sourceOf, sourceList,
+    sourceType, sourceText, sourceNameText,
+    sourceZero, sourceFrom, sourceNameFrom,
+    sourceOf, sourceList, sourceNameList,
   ) where
 
 import qualified Data.Generics                as G
@@ -56,11 +57,14 @@ sourceOf :: String -> Source
 sourceOf = Source 0 . SourceText
 
 sourceFrom :: String -> Source
-sourceFrom path
-    | B.isPrefixOf "http://"  path  = Source 0 $ SourceURL  path
-    | B.isPrefixOf "https://" path  = Source 0 $ SourceURL  path
-    | B.isPrefixOf "ftp://"   path  = Source 0 $ SourceURL  path
-    | otherwise                     = Source 0 $ SourceFile path
+sourceFrom = Source 0 . sourceNameFrom
+
+sourceNameFrom :: String -> SourceName
+sourceNameFrom path
+    | B.isPrefixOf "http://"  path  = SourceURL  path
+    | B.isPrefixOf "https://" path  = SourceURL  path
+    | B.isPrefixOf "ftp://"   path  = SourceURL  path
+    | otherwise                     = SourceFile path
 
 sourceStdin :: Source
 sourceStdin = Source 0 SourceStdin
@@ -71,4 +75,10 @@ sourceList stdin texts paths =
     B.consIf stdin sourceStdin $
          sourceOf   `map` texts ++
          sourceFrom `map` paths
+
+sourceNameList :: Bool -> [String] -> [String] -> [SourceName]
+sourceNameList stdin texts paths =
+    B.consIf stdin SourceStdin $
+         SourceText     `map` texts ++
+         sourceNameFrom `map` paths
 

@@ -77,8 +77,8 @@ resIncludeBody res (B.Short pt shorts xs) =
       expt :: Cl String
       expt _ _ (C.CExport n) = n
 
-      inc :: Clab B.Source
-      inc _ _ (C.CInclude _ (Just path))  = Right $ B.sourceFrom path
+      inc :: Clab B.SourceName
+      inc _ _ (C.CInclude _ (Just path))  = Right $ B.sourceNameFrom path
       inc _ _ _                           = Msg.adlib "include"
 
       slot :: Clab B.NamedTrees

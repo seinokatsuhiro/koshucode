@@ -15,7 +15,7 @@ import qualified Koshucode.Baala.Core as C
 
 -- ----------------------
 
-runFiles :: (C.CContent c) => C.Global c -> [B.Source] -> IO Int
+runFiles :: (C.CContent c) => C.Global c -> [B.SourceName] -> IO Int
 runFiles = hRunFiles IO.stdout
 
 -- | Read and union sections from files, and run the section.
@@ -23,11 +23,11 @@ hRunFiles
     :: (C.CContent c)
     => IO.Handle          -- ^ Output file handle
     -> C.Global c         -- ^ Global parameters
-    -> [B.Source]         -- ^ Resource source code
+    -> [B.SourceName]     -- ^ Resource source code
     -> IO Int
 hRunFiles h g src =
     do (abRes, _) <- C.gioResource (C.readSources src) g
-       let inputs  = B.sourceText `map` src
+       let inputs  = B.sourceNameText `map` src
            comm    = B.CommentDoc [ B.CommentSec "INPUT" inputs ]
 
        IO.hSetEncoding h IO.utf8

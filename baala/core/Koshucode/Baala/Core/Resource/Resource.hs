@@ -39,7 +39,7 @@ data Resource c = Resource
     , resRelmap    :: [C.RelmapSource]   -- ^ Source of relmaps
     , resAssert    :: [ShortAssert c]    -- ^ Assertions of relmaps
     , resJudge     :: [B.Judge c]        -- ^ Affirmative or denial judgements
-    , resArticle   :: ([B.Source], [B.Source], [B.Source])  -- ^ Scores of resource
+    , resArticle   :: ([B.SourceName], [B.SourceName], [B.Source])  -- ^ Scores of resource
     , resMessage   :: [String]           -- ^ Collection of messages
     , resLastSecNo :: C.SecNo            -- ^ Last section number
     , resSelect    :: C.RelSelect c
