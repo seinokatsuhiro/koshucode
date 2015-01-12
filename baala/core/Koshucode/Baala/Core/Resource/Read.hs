@@ -5,12 +5,9 @@
 
 module Koshucode.Baala.Core.Resource.Read
   ( -- * Resource
-    ResourceIO, readResourceText,
-
-    -- * Bundle
-    SourceBundle (..),
-    bundleTexts,
-    bundleRead,
+    ResourceIO,
+    readResourceText,
+    readSources,
   ) where
 
 import qualified System.Directory                        as Dir
@@ -23,9 +20,11 @@ import qualified Koshucode.Baala.Core.Resource.Include   as C
 import qualified Koshucode.Baala.Core.Message            as Msg
 
 
--- ----------------------  Resource
-
+-- | I/O with global state.
 type ResourceIO c = M.StateT (C.Global c) IO (B.Ab (C.Resource c))
+
+io :: IO a -> M.StateT (C.Global c) IO a
+io = M.liftIO
 
 readResource :: (C.CContent c) => Int -> C.Resource c -> ResourceIO c
 readResource n res@C.Resource { C.resArticle = (todo, srclist, done) }
@@ -73,26 +72,12 @@ readResourceOne res src = dispatch $ B.sourceName src where
     include :: String -> B.IOAb (C.Resource c)
     include = return . C.resInclude res src
 
-io :: IO a -> M.StateT (C.Global c) IO a
-io = M.liftIO
-
 -- | Read resource from text.
 readResourceText :: (C.CContent c) => C.Resource c -> String -> B.Ab (C.Resource c)
 readResourceText res code = C.resInclude res (B.sourceOf code) code
 
-
--- ----------------------  Bundle
-
--- | Bundle of sources.
-data SourceBundle c = SourceBundle
-    { bundleSources  :: [B.Source]
-    } deriving (Show)
-
-bundleTexts :: SourceBundle c -> [String]
-bundleTexts = map B.sourceText . bundleSources
-
-bundleRead :: forall c. (C.CContent c) => C.Global c -> SourceBundle c -> B.IOAb (C.Resource c)
-bundleRead g SourceBundle { bundleSources = src } =
+readSources :: forall c. (C.CContent c) => C.Global c -> [B.Source] -> B.IOAb (C.Resource c)
+readSources g src =
     do (res', _) <- M.runStateT proc g
        return res'
     where

@@ -101,11 +101,10 @@ koshuMain global =
            | has OptHelp         -> L.putSuccess usage
            | has OptVersion      -> L.putSuccess $ version ++ "\n"
            | has OptShowEncoding -> L.putSuccess =<< L.currentEncodings
-           | has OptElement      -> putElems   g2 bun
-           | otherwise           -> L.runFiles g2 bun
+           | has OptElement      -> putElems   g2 src
+           | otherwise           -> L.runFiles g2 src
            where
              has   = (`elem` opts)
-             bun   = C.SourceBundle src
              text  = concatMap oneLiner opts
              root  = C.resEmpty { C.resGlobal = g2 }
              src   = B.sourceList (has OptStdin) text paths
@@ -139,9 +138,9 @@ oneLinerPreprocess = loop where
     loop ('|' : '|' : xs) = '\n' : loop (B.trimLeft xs)
     loop (x : xs) = x : loop xs
 
-putElems :: (C.CContent c) => C.Global c -> C.SourceBundle c -> IO Int
-putElems g bun =
-    do ass <- L.readSecList g bun
+putElems :: (C.CContent c) => C.Global c -> [B.Source] -> IO Int
+putElems g src =
+    do ass <- L.readSecList g src
        case ass of
          Right ss -> B.putJudges 0 $ concatMap L.resourceElem ss
          Left  _  -> B.bug "putElems"

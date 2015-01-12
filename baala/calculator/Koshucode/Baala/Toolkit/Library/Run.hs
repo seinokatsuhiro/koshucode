@@ -16,7 +16,7 @@ import qualified Koshucode.Baala.Core as C
 
 -- ----------------------
 
-runFiles :: (C.CContent c) => C.Global c -> C.SourceBundle c -> IO Int
+runFiles :: (C.CContent c) => C.Global c -> [B.Source] -> IO Int
 runFiles = hRunFiles IO.stdout
 
 -- | Read and union sections from files, and run the section.
@@ -24,12 +24,12 @@ hRunFiles
     :: (C.CContent c)
     => IO.Handle          -- ^ Output file handle
     -> C.Global c         -- ^ Global parameters
-    -> C.SourceBundle c   -- ^ Resource source code
+    -> [B.Source]         -- ^ Resource source code
     -> IO Int
-hRunFiles h g bun =
-    do abRes <- C.bundleRead g bun
-       let inputs  =  C.bundleTexts bun
-           comm    =  B.CommentDoc [ B.CommentSec "INPUT" inputs ]
+hRunFiles h g src =
+    do abRes <- C.readSources g src
+       let inputs  = B.sourceText `map` src
+           comm    = B.CommentDoc [ B.CommentSec "INPUT" inputs ]
 
        IO.hSetEncoding h IO.utf8
        IO.hPutStrLn    h B.emacsModeComment
@@ -106,12 +106,12 @@ theContent = lookup
 
 -- readSec :: (C.CContent c) => C.SourceBundle c -> B.IOAb (C.Resource c)
 -- readSec bun =
---     do abSect <- C.bundleRead bun
+--     do abSect <- C.readSources bun
 --        return abSect
 
-readSecList :: (C.CContent c) => C.Global c -> C.SourceBundle c -> B.IOAb [C.Resource c]
-readSecList g bun =
-    do abSect <- C.bundleRead g bun
+readSecList :: (C.CContent c) => C.Global c -> [B.Source] -> B.IOAb [C.Resource c]
+readSecList g src =
+    do abSect <- C.readSources g src
        return $ do sect <- abSect
                    Right [sect]
 
