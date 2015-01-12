@@ -47,7 +47,6 @@ data Option
     | OptPretty
     | OptStdin
     | OptSection String
-    | OptCalc
     | OptElement
       deriving (Show, Eq)
 
@@ -60,7 +59,6 @@ koshuOptions =
     , Option ""  ["pretty"]   (NoArg OptPretty)  "Pretty print section."
     , Option "i" ["stdin"]    (NoArg OptStdin)   "Read from stdin."
     , Option "s" ["section"]  (ReqArg OptSection "SEC") "One-line section"
-    , Option ""  ["calc"]     (NoArg OptCalc)    "Run calculation list"
     , Option ""  ["element"]  (NoArg OptElement) "Analize sections"
     ]
 
@@ -103,15 +101,12 @@ koshuMain global =
            | has OptHelp         -> L.putSuccess usage
            | has OptVersion      -> L.putSuccess $ version ++ "\n"
            | has OptShowEncoding -> L.putSuccess =<< L.currentEncodings
-           -- has OptPretty    ->  prettySection bun
-           | has OptElement      -> putElems   bun
-           | has OptCalc         -> L.runCalc  cmd bun
+           | has OptElement      -> putElems   g2 bun
            | otherwise           -> L.runFiles g2 bun
            where
              has   = (`elem` opts)
-             bun   = C.SourceBundle root src
+             bun   = C.SourceBundle src
              text  = concatMap oneLiner opts
-             cmd   = prog : argv
              root  = C.resEmpty { C.resGlobal = g2 }
              src   = B.sourceList (has OptStdin) text paths
              g2    = C.globalFill global
@@ -119,7 +114,8 @@ koshuMain global =
                        , C.globalArgs      = argv
                        , C.globalProxy     = proxy
                        , C.globalTime      = B.timeYmd day
-                       , C.globalSources   = src }
+                       , C.globalSources   = src
+                       , C.globalHook      = root }
 
        (_, _, errs) -> L.putFailure $ concat errs
 
@@ -143,9 +139,9 @@ oneLinerPreprocess = loop where
     loop ('|' : '|' : xs) = '\n' : loop (B.trimLeft xs)
     loop (x : xs) = x : loop xs
 
-putElems :: (C.CContent c) => C.SourceBundle c -> IO Int
-putElems bun =
-    do ass <- L.readSecList bun
+putElems :: (C.CContent c) => C.Global c -> C.SourceBundle c -> IO Int
+putElems g bun =
+    do ass <- L.readSecList g bun
        case ass of
          Right ss -> B.putJudges 0 $ concatMap L.resourceElem ss
          Left  _  -> B.bug "putElems"

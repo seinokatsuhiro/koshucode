@@ -85,18 +85,18 @@ readResourceText res code = C.resInclude res (B.sourceOf code) code
 
 -- | Bundle of sources.
 data SourceBundle c = SourceBundle
-    { bundleRoot     :: C.Resource c
-    , bundleSources  :: [B.Source]
+    { bundleSources  :: [B.Source]
     } deriving (Show)
 
 bundleTexts :: SourceBundle c -> [String]
 bundleTexts = map B.sourceText . bundleSources
 
-bundleRead :: forall c. (C.CContent c) => SourceBundle c -> B.IOAb (C.Resource c)
-bundleRead SourceBundle { bundleRoot = res, bundleSources = src } =
-    do (res', _) <- M.runStateT proc $ C.resGlobal res
+bundleRead :: forall c. (C.CContent c) => C.Global c -> SourceBundle c -> B.IOAb (C.Resource c)
+bundleRead g SourceBundle { bundleSources = src } =
+    do (res', _) <- M.runStateT proc g
        return res'
     where
       proc :: ResourceIO c
       proc  = readResource 1 $ res { C.resArticle = ([], reverse src, []) }
+      res   = C.globalHook g
 

@@ -10,7 +10,7 @@ module Koshucode.Baala.Core.Relmap.Global
     globalRops,
     globalCops, globalCopset,
     globalInfix,
-    global,
+    global',
 
     GetGlobal (..),
     ropGlobal,
@@ -53,6 +53,7 @@ data Global' h c = Global
       , globalTime      :: B.Time
       , globalSources   :: [B.Source]
       , globalJudges    :: [B.Judge c]
+      , globalHook      :: h c
       }
 
 instance Show (Global' h c) where
@@ -79,16 +80,17 @@ globalCopset :: Global' h c -> C.CopSet c
 globalCopset  = opsetCop . globalOpset
 
 -- | Empty global parameters.
-global :: Global' h c
-global = Global
-         { globalVersion   = D.Version [] []
-         , globalOpset     = opset
-         , globalProgram   = ""
-         , globalArgs      = []
-         , globalProxy     = []
-         , globalTime      = B.timeFromMjd 0
-         , globalSources   = []
-         , globalJudges    = [] }
+global' :: h c -> Global' h c
+global' h = Global
+    { globalVersion   = D.Version [] []
+    , globalOpset     = opset
+    , globalProgram   = ""
+    , globalArgs      = []
+    , globalProxy     = []
+    , globalTime      = B.timeFromMjd 0
+    , globalSources   = []
+    , globalJudges    = []
+    , globalHook      = h }
 
 
 -- ----------------------  Operator set

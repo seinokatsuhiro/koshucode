@@ -19,6 +19,7 @@ module Koshucode.Baala.Core.Resource.Resource
     Assert, ConsRelmap, Global,
     RelkitHook, Relmap, RelmapLinkTable,
     Rop, RopCons, RopUse, ShortAssert,
+    global,
   ) where
 
 import qualified Koshucode.Baala.Base           as B
@@ -29,6 +30,7 @@ import qualified Koshucode.Baala.Core.Assert    as C
 
 -- ----------------------  Data type
 
+-- | Relational data resource
 data Resource c = Resource
     { resGlobal    :: Global c           -- ^ Global parameter
     , resImport    :: [Resource c]       -- ^ Importing resources
@@ -59,7 +61,7 @@ resIncluded Resource { resArticle = (_, _, done) } = done
 -- | Resource that has no contents.
 resEmpty :: Resource c
 resEmpty = Resource
-           { resGlobal     = C.global
+           { resGlobal     = global
            , resImport     = []
            , resExport     = []
            , resSlot       = []
@@ -92,3 +94,5 @@ type RopCons         c = C.RopCons'         Resource c
 type RopUse          c = C.RopUse'          Resource c
 type ShortAssert     c = C.ShortAssert'     Resource c
 
+global :: Global c
+global = C.global' resEmpty
