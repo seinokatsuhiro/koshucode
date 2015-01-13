@@ -168,5 +168,5 @@ relkitNestVar n he = kit where
 
 relkitSetSource :: (B.CodePtr a) => a -> B.Map (Relkit c)
 relkitSetSource src (Relkit he (B.Sourced _ core)) =
-    Relkit he $ B.Sourced (B.codePts src) core
+    Relkit he $ B.Sourced (B.codePtList src) core
 

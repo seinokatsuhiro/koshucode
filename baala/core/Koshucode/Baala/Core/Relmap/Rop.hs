@@ -40,7 +40,7 @@ data RopUse' h c = RopUse
     } deriving (Show)
 
 instance B.CodePtr (RopUse' h c) where
-    codePts = B.codePts . ropLexmap
+    codePtList = B.codePtList . ropLexmap
 
 -- | Constructor of relmap operator
 type RopCons' h c = RopUse' h c -> B.Ab (C.Relmap' h c)

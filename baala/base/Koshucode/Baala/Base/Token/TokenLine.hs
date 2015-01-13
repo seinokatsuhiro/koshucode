@@ -267,7 +267,7 @@ scanQQ cp cs = do (cs', w) <- nextQQ cs
 scanTerm :: Scan
 scanTerm cp = word [] where
     word ns (c:cs) | c == '='  =  let (cs', w) = nextCode (c:cs)
-                                      n  = B.sourceNumber $ B.codeSource cp
+                                      n  = B.sourceNumber $ B.codePtSource cp
                                       w' = show n ++ w
                                   in term (w' : ns) cs'
                    | isCode c  =  let (cs', w) = nextCode (c:cs)

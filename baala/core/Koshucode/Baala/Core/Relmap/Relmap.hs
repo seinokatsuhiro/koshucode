@@ -88,7 +88,7 @@ relmapAppendList = expand where
     expand r = [r]
 
 instance B.CodePtr (Relmap' h c) where
-    codePts = concatMap B.codePts . relmapLexmaps
+    codePtList = concatMap B.codePtList . relmapLexmaps
 
 instance Ord (Relmap' h c) where
     r1 `compare` r2  = relmapLexmaps r1 `compare` relmapLexmaps r2

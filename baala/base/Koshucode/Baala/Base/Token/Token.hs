@@ -87,25 +87,25 @@ instance B.Write Token where
         d (TSpace   pt c)      = pretty "TSpace"   pt [show c]
         d (TComment pt s)      = pretty "TComment" pt [show s]
         pretty k pt xs         = B.writeH sh $ lineCol pt : k : xs
-        lineCol pt             = (show $ B.codeLineNumber pt)
-                                 ++ "." ++ (show $ B.codeColumnNumber pt)
+        lineCol pt             = (show $ B.codePtLineNo pt)
+                                 ++ "." ++ (show $ B.codePtColumnNo pt)
 
 textToken :: String -> Token
-textToken = TText B.codeZero TextRaw
+textToken = TText B.codePtZero TextRaw
 
 nameToken :: String -> Token
-nameToken = TName B.codeZero . BlankNormal
+nameToken = TName B.codePtZero . BlankNormal
 
 instance B.CodePtr Token where
-    codePts (TText    cp _ _)   = [cp]
-    codePts (TName    cp _)     = [cp]
-    codePts (TShort   cp _ _)   = [cp]
-    codePts (TTerm    cp _ _)   = [cp]
-    codePts (TSlot    cp _ _)   = [cp]
-    codePts (TOpen    cp _)     = [cp]
-    codePts (TClose   cp _)     = [cp]
-    codePts (TSpace   cp _)     = [cp]
-    codePts (TComment cp _)     = [cp]
+    codePtList (TText    cp _ _)   = [cp]
+    codePtList (TName    cp _)     = [cp]
+    codePtList (TShort   cp _ _)   = [cp]
+    codePtList (TTerm    cp _ _)   = [cp]
+    codePtList (TSlot    cp _ _)   = [cp]
+    codePtList (TOpen    cp _)     = [cp]
+    codePtList (TClose   cp _)     = [cp]
+    codePtList (TSpace   cp _)     = [cp]
+    codePtList (TComment cp _)     = [cp]
 
 
 -- ----------------------  TextForm
@@ -202,7 +202,7 @@ showNestedTermName = concat . map showTermName
 
 -- $Selector
 --
---   >>> let tok = TTerm B.codeZero 0 ["r", "x"] in tokenContent tok
+--   >>> let tok = TTerm B.codePtZero 0 ["r", "x"] in tokenContent tok
 --   "/r/x"
 --
 --   >>> let tok = textToken "flower" in (tokenTypeText tok, tokenSubtypeText tok)
@@ -260,10 +260,10 @@ slotTypeText _   = "unknown"
 
 -- $Predicate
 --
---   >>> let tok = TOpen B.codeZero "(" in isOpenTokenOf "(" tok
+--   >>> let tok = TOpen B.codePtZero "(" in isOpenTokenOf "(" tok
 --   True
 --
---   >>> let tok = TOpen B.codeZero "{" in isOpenTokenOf "(" tok
+--   >>> let tok = TOpen B.codePtZero "{" in isOpenTokenOf "(" tok
 --   False
 
 -- | Test the token is blank, i.e., comment or space.

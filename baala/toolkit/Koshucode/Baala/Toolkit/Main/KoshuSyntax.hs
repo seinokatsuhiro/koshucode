@@ -108,7 +108,7 @@ judgeLine clseq (B.CodeLine ln _ _) = B.affirm "LINE" args where
 judgeToken :: Int -> B.Token -> B.Judge Type.VContent
 judgeToken ln tok = B.affirm "TOKEN" $ C.omitEmpty args where
     args = [ ("line"           , C.pDecFromInt ln)
-           , ("column"         , C.pDecFromInt $ B.codeColumnNumber $ head $ B.codePts tok)
+           , ("column"         , C.pDecFromInt $ B.codePtColumnNo $ head $ B.codePtList tok)
            , ("token-type"     , C.pText $ B.tokenTypeText tok)
            , ("token-subtype"  , C.maybeEmpty C.pText $ B.tokenSubtypeText tok)
            , ("cont"           , C.pText $ B.tokenContent  tok) ]
@@ -195,14 +195,14 @@ judgesClauseType = map j cs where
 judgesTokenType :: [B.Judge Type.VContent]
 judgesTokenType = map j cs where
     j x = judgeTokenType x
-    cs  = [ B.TTextRaw B.codeZero ""
-          , B.TSlot    B.codeZero 0 ""
-          , B.TShort   B.codeZero "" ""
-          , B.TTerm    B.codeZero 0 []
-          , B.TOpen    B.codeZero ""
-          , B.TClose   B.codeZero ""
-          , B.TSpace   B.codeZero 0
-          , B.TComment B.codeZero ""
+    cs  = [ B.TTextRaw B.codePtZero ""
+          , B.TSlot    B.codePtZero 0 ""
+          , B.TShort   B.codePtZero "" ""
+          , B.TTerm    B.codePtZero 0 []
+          , B.TOpen    B.codePtZero ""
+          , B.TClose   B.codePtZero ""
+          , B.TSpace   B.codePtZero 0
+          , B.TComment B.codePtZero ""
           ]
 
 

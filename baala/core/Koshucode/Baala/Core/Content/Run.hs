@@ -29,9 +29,9 @@ data Beta c
     | BetaCall [B.CodePt] B.BlankName (C.CopCalc c) [B.Ab (Beta c)]  -- ^ Function application
 
 instance B.CodePtr (Beta c) where
-    codePts (BetaLit  cp _)      =  cp
-    codePts (BetaTerm cp _ _)    =  cp
-    codePts (BetaCall cp _ _ _)  =  cp
+    codePtList (BetaLit  cp _)      = cp
+    codePtList (BetaTerm cp _ _)    = cp
+    codePtList (BetaCall cp _ _ _)  = cp
 
 -- | Reduce content expression.
 beta :: (B.Write c) => C.CopSet c -> B.Head -> C.Cox c -> B.Ab (Beta c)
@@ -49,33 +49,33 @@ reduce :: forall c. (B.Write c) => C.Cox c -> B.Ab (Beta c)
 reduce = red [] where
     red :: [C.NamedCox c] -> C.Cox c -> B.Ab (Beta c)
     red args cox = case cox of
-        C.CoxLit    cp c        ->  Right $ BetaLit  cp c
-        C.CoxTerm   cp n i      ->  Right $ BetaTerm cp n i
-        C.CoxLocal  cp v k      ->  Msg.abCoxReduce cp $ red args =<< kth v k args
-        C.CoxFill   cp fn xs    ->  Msg.abCoxReduce cp $ fill args fn $ substL args xs
-        C.CoxCalc   cp _ _      ->  Msg.abCoxReduce cp $ fill args cox []
-        C.CoxWith   cp arg2 e   ->  Msg.abCoxReduce cp $ red (arg2 ++ args) e
-        C.CoxForm1  cp _ v _    ->  Msg.abCoxReduce cp $ Msg.lackArg v
-        C.CoxForm   cp _ _ _    ->  Msg.abCoxReduce cp $ Msg.adlib "CoxForm"
-        C.CoxBlank  cp v        ->  Msg.abCoxReduce cp $ Msg.unkGlobalVar $ B.name v
+        C.CoxLit    cp c        -> Right $ BetaLit  cp c
+        C.CoxTerm   cp n i      -> Right $ BetaTerm cp n i
+        C.CoxLocal  cp v k      -> Msg.abCoxReduce cp $ red args =<< kth v k args
+        C.CoxFill   cp fn xs    -> Msg.abCoxReduce cp $ fill args fn $ substL args xs
+        C.CoxCalc   cp _ _      -> Msg.abCoxReduce cp $ fill args cox []
+        C.CoxWith   cp arg2 e   -> Msg.abCoxReduce cp $ red (arg2 ++ args) e
+        C.CoxForm1  cp _ v _    -> Msg.abCoxReduce cp $ Msg.lackArg v
+        C.CoxForm   cp _ _ _    -> Msg.abCoxReduce cp $ Msg.adlib "CoxForm"
+        C.CoxBlank  cp v        -> Msg.abCoxReduce cp $ Msg.unkGlobalVar $ B.name v
 
     fill :: [C.NamedCox c] -> C.Cox c -> [B.Ab (C.Cox c)] -> B.Ab (Beta c)
-    fill args f1 []             =   red args f1
-    fill args f1 xxs@(x:xs)     =   case f1 of
-        C.CoxForm1  cp _ v f2   ->  Msg.abCoxFill cp $ do
-                                        x' <- x
-                                        let vx = (v, C.CoxWith cp args x')
-                                        fill (vx : args) f2 xs
-        C.CoxLocal  cp v k      ->  Msg.abCoxFill cp $ do
-                                        fn' <- kth v k args
-                                        fill args fn' xxs
-        C.CoxCalc   cp n f2     ->  Msg.abCoxFill cp $ do
-                                        xxs2 <- mapM id xxs
-                                        let xxs3 = red args `map` xxs2
-                                        Right $ BetaCall cp n f2 xxs3
-        C.CoxFill   cp f2 xs2   ->  Msg.abCoxFill cp $ fill args f2 $ substL args xs2 ++ xxs
-        C.CoxWith   cp arg2 e2  ->  Msg.abCoxFill cp $ fill (arg2 ++ args) e2 xxs
-        _                       ->  Msg.unkShow f1
+    fill args f1 []              = red args f1
+    fill args f1 xxs@(x:xs)      = case f1 of
+        C.CoxForm1  cp _ v f2   -> Msg.abCoxFill cp $ do
+                                       x' <- x
+                                       let vx = (v, C.CoxWith cp args x')
+                                       fill (vx : args) f2 xs
+        C.CoxLocal  cp v k      -> Msg.abCoxFill cp $ do
+                                       fn' <- kth v k args
+                                       fill args fn' xxs
+        C.CoxCalc   cp n f2     -> Msg.abCoxFill cp $ do
+                                       xxs2 <- mapM id xxs
+                                       let xxs3 = red args `map` xxs2
+                                       Right $ BetaCall cp n f2 xxs3
+        C.CoxFill   cp f2 xs2   -> Msg.abCoxFill cp $ fill args f2 $ substL args xs2 ++ xxs
+        C.CoxWith   cp arg2 e2  -> Msg.abCoxFill cp $ fill (arg2 ++ args) e2 xxs
+        _                       -> Msg.unkShow f1
 
     substL :: [C.NamedCox c] -> [C.Cox c] -> [B.Ab (C.Cox c)]
     substL = map . subst

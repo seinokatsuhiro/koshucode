@@ -44,7 +44,7 @@ consAttrmap = loop where
     fill []                          = []
 
     right :: [B.TTree] -> AttrmapBody -> B.Ab Attrmap
-    right trees = Right . B.Sourced (concatMap B.codePts $ B.untrees trees)
+    right trees = Right . B.Sourced (concatMap B.codePtList $ B.untrees trees)
 
     loop trees =
         Msg.abAttrTrees trees $ case B.divideTreesByBar trees of

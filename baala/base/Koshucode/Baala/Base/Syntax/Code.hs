@@ -48,10 +48,10 @@ instance B.Write (CodeLine a) where
     write sh (CodeLine _ line _) = B.write sh line
 
 instance (B.CodePtr a) => B.CodePtr (CodeLine a) where
-    codePts (CodeLine _ _ ts) = B.codePts $ head ts
+    codePtList (CodeLine _ _ ts) = B.codePtList $ head ts
 
 instance (B.CodePtr a) => B.CodePtr (CodeClause a) where
-    codePts (CodeClause _ ts) = B.codePts $ head ts
+    codePtList (CodeClause _ ts) = B.codePtList $ head ts
 
 lineIndentPair :: (a -> Int) -> CodeLine a -> (Int, CodeLine a)
 lineIndentPair ind ln@(CodeLine _ _ (tk : _)) = (ind tk, ln)
@@ -88,7 +88,7 @@ data CodeRoll a =
 --
 codeRollUp :: B.AbMap (CodeRoll a) -> B.Source -> String -> B.Ab [CodeLine a]
 codeRollUp f res = loop (CodeRoll f cp "" []) . B.linesCrlfNumbered where
-    cp    = B.codeZero { B.codeSource = res }
+    cp    = B.codePtZero { B.codePtSource = res }
 
     loop _ [] = Right []
     loop r ((num, line) : ls) =
@@ -100,9 +100,9 @@ codeRollUp f res = loop (CodeRoll f cp "" []) . B.linesCrlfNumbered where
 
 setLine :: Int -> String -> B.Map B.CodePt
 setLine num line cp =
-    cp { B.codeLineNumber = num
-       , B.codeLineText   = line
-       , B.codeText       = line }
+    cp { B.codePtLineNo    = num
+       , B.codePtLineText  = line
+       , B.codePtText      = line }
 
 setRoll :: B.CodePt -> String -> CodeRoll a -> CodeRoll a
 setRoll cp line roll =
@@ -117,7 +117,7 @@ codeRoll roll@CodeRoll { codeMap = f, codeInputPt = cp, codeInput = input }
     where call    = f roll { codeInputPt = setText input cp }
 
 setText :: String -> B.Map B.CodePt
-setText text cp = cp { B.codeText = text }
+setText text cp = cp { B.codePtText = text }
 
 -- | Update 'codeInput' and push result element to 'codeOutput'.
 codeUpdate :: String -> a -> B.Map (CodeRoll a)

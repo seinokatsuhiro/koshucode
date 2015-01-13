@@ -77,7 +77,7 @@ convCox find = expand where
 construct :: forall c. (C.CContent c) => C.CalcContent c -> B.TTreeToAb (C.Cox c)
 construct calc = expr where
     expr tree = Msg.abCoxBuild tree $
-         let cp = concatMap B.codePts $ B.front $ B.untree tree
+         let cp = concatMap B.codePtList $ B.front $ B.untree tree
          in cons cp tree
 
     cons :: [B.CodePt] -> B.TTreeToAb (C.Cox c)

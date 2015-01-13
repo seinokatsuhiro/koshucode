@@ -61,7 +61,7 @@ toInfix _ = Msg.adlib "require operand"
 -- ----------------------  if
 
 nameLeaf :: B.BlankName -> B.TTree
-nameLeaf = B.TreeL . B.TName B.codeZero
+nameLeaf = B.TreeL . B.TName B.codePtZero
 
 treeIf :: B.TTree -> B.TTree -> B.TTree -> B.TTree
 treeIf test con alt = B.wrapTrees [ nameLeaf $ C.copInternal "#if" , test, con , alt ]

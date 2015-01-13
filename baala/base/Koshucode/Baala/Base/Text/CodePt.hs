@@ -4,9 +4,9 @@
 module Koshucode.Baala.Base.Text.CodePt
   ( -- * Code point
     CodePt (..),
-    codeZero,
-    codeColumnNumber,
-    codeDisplay,
+    codePtZero,
+    codePtColumnNo,
+    codePtDisplay,
   
     -- * Code pointer
     CodePtr (..),
@@ -23,40 +23,40 @@ import qualified Koshucode.Baala.Base.Text.Source  as B
 -- ----------------------  CodePt
 
 data CodePt = CodePt
-      { codeSource      :: B.Source    -- ^ Source of code
-      , codeLineNumber  :: Int         -- ^ Line number
-      , codeLineText    :: String      -- ^ Line content
-      , codeText        :: String      -- ^ Text at which begins token
+      { codePtSource     :: B.Source    -- ^ Source of code
+      , codePtLineNo     :: Int         -- ^ Line number
+      , codePtLineText   :: String      -- ^ Line content
+      , codePtText       :: String      -- ^ Text at which begins token
       } deriving (Show, Eq, G.Data, G.Typeable)
 
 instance Ord CodePt where
-    compare = codeCompare
+    compare = codePtCompare
 
-codeCompare :: CodePt -> CodePt -> Ordering
-codeCompare p1 p2 = line `B.mappend` column where
-    line   = codeLineNumber p1 `compare` codeLineNumber p2
+codePtCompare :: CodePt -> CodePt -> Ordering
+codePtCompare p1 p2 = line `B.mappend` column where
+    line   = codePtLineNo p1 `compare` codePtLineNo p2
     column = size p2 `compare` size p1
-    size   = length . codeText
+    size   = length . codePtText
 
 -- | Empty code point, i.e., empty content and zero line number.
-codeZero :: CodePt
-codeZero = CodePt B.sourceZero 0 "" ""
+codePtZero :: CodePt
+codePtZero = CodePt B.sourceZero 0 "" ""
 
 -- | Column number at which code starts.
-codeColumnNumber :: CodePt -> Int
-codeColumnNumber CodePt { codeLineText = line, codeText = subline }
+codePtColumnNo :: CodePt -> Int
+codePtColumnNo CodePt { codePtLineText = line, codePtText = subline }
     = length line - length subline
 
-codeDisplay :: (String, CodePt) -> [(String, String)]
-codeDisplay (tag, p)
+codePtDisplay :: (String, CodePt) -> [(String, String)]
+codePtDisplay (tag, p)
     | lno > 0   = [ (pos, ""), ("> " ++ shorten text, tag) ]
     | otherwise = []
     where
       pos       = show lno ++ " " ++ show cno ++ " " ++ res
-      lno       = codeLineNumber p
-      cno       = codeColumnNumber p
-      res       = B.sourceText $ codeSource p
-      text      = codeText p
+      lno       = codePtLineNo p
+      cno       = codePtColumnNo p
+      res       = B.sourceText $ codePtSource p
+      text      = codePtText p
 
       shorten :: B.Map String
       shorten s | length s > 48  = take 45 s ++ "..."
@@ -66,14 +66,14 @@ codeDisplay (tag, p)
 -- ----------------------  CodePtr
 
 class CodePtr a where
-    codePts :: a -> [CodePt]
+    codePtList :: a -> [CodePt]
 
     codePt :: a ->  CodePt
-    codePt p = B.headOr codeZero $ codePts p
+    codePt p = B.headOr codePtZero $ codePtList p
 
 instance CodePtr CodePt where
-    codePts cp  = [cp]
-    codePt  cp  =  cp
+    codePtList cp  = [cp]
+    codePt     cp  =  cp
 
 
 -- ----------------------  Sourced
@@ -87,5 +87,5 @@ instance Functor Sourced where
     fmap f (Sourced src x) = Sourced src $ f x
 
 instance CodePtr (Sourced a) where
-    codePts = source
+    codePtList = source
 

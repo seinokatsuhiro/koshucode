@@ -44,15 +44,15 @@ type CopCalc c = [B.Ab c] -> B.Ab c
 type CoxTag = Maybe String
 
 instance B.CodePtr (Cox c) where
-    codePts (CoxLit    cp _)       = cp
-    codePts (CoxTerm   cp _ _)     = cp
-    codePts (CoxCalc   cp _ _)     = cp
-    codePts (CoxLocal  cp _ _)     = cp
-    codePts (CoxBlank  cp _)       = cp
-    codePts (CoxFill   cp _ _)     = cp
-    codePts (CoxForm1  cp _ _ _)   = cp
-    codePts (CoxForm   cp _ _ _)   = cp
-    codePts (CoxWith   cp _ _)     = cp
+    codePtList (CoxLit    cp _)       = cp
+    codePtList (CoxTerm   cp _ _)     = cp
+    codePtList (CoxCalc   cp _ _)     = cp
+    codePtList (CoxLocal  cp _ _)     = cp
+    codePtList (CoxBlank  cp _)       = cp
+    codePtList (CoxFill   cp _ _)     = cp
+    codePtList (CoxForm1  cp _ _ _)   = cp
+    codePtList (CoxForm   cp _ _ _)   = cp
+    codePtList (CoxWith   cp _ _)     = cp
 
 instance (B.Write c) => Show (Cox c) where
     show = show . B.doc

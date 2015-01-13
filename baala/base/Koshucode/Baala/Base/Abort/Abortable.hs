@@ -14,7 +14,7 @@ import qualified Koshucode.Baala.Base.Abort.Reason   as B
 
 -- | Push source information when process is aborted.
 abortable :: (B.CodePtr p) => String -> [p] -> B.Map (B.Ab b)
-abortable tag ps = abortablePoints tag $ concatMap B.codePts ps
+abortable tag ps = abortablePoints tag $ concatMap B.codePtList ps
 
 abortablePoints :: String -> [B.CodePt] -> B.Map (B.Ab b)
 abortablePoints tag ps = either (Left . push tag ps) Right

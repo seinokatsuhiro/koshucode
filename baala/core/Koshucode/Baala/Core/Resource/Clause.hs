@@ -48,7 +48,7 @@ data ClauseBody
       deriving (Show, G.Data, G.Typeable)
 
 instance B.CodePtr Clause where
-    codePts (Clause src _ _) = B.codePts src
+    codePtList (Clause src _ _) = B.codePtList src
 
 -- | Name of clause type. e.g., @\"relmap\"@, @\"assert\"@.
 clauseTypeText :: Clause -> String
@@ -188,7 +188,7 @@ shortClause ccs@(c : cs)
     | isCShort c = scope cs  $ shorts c
     | otherwise  = scope ccs []
     where
-      pt = B.codePts c
+      pt = B.codePtList c
 
       scope :: [Clause] -> [B.ShortDef] -> [ShortClause]
       scope cs12 sh =

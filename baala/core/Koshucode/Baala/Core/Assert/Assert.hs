@@ -39,7 +39,7 @@ data Assert' h c = Assert
 type AssertOption = [B.NamedTrees]
 
 instance B.CodePtr (Assert' h c) where
-    codePts = concatMap B.codePts . assToken
+    codePtList = concatMap B.codePtList . assToken
 
 instance B.Write (Assert' h c) where
     write sh (Assert _ q pat _ toks _ _ _) =
