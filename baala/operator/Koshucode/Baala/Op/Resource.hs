@@ -95,6 +95,6 @@ relkitKoshuResArticle :: (C.CContent c) => B.TermName -> C.RelkitHook c
 relkitKoshuResArticle name res _ = Right kit2 where
     kit2  = C.relkitConstBody ns bo2
     ns    = [name]
-    f s   = [C.pText $ B.sourceText s]
+    f s   = [C.pText $ B.codeNameText $ B.codeName s]
     bo2   = f `map` C.resIncluded res
 

@@ -30,7 +30,7 @@ koshuQuoter lx fullQ = TH.QuasiQuoter { TH.quoteExp = koshuQ lx fullQ }
 
 koshuQ :: C.ConsLexmap -> TH.ExpQ -> String -> TH.ExpQ
 koshuQ _ fullQ text =
-    dispatch $ B.tokenLines (B.sourceOf text) text
+    dispatch $ B.tokenLines (B.codeTextOf text) text
     where
       dispatch src = resQ src -- relmapQ src
       resQ = resIncludeQ fullQ . {- C.consClause -} undefined
@@ -45,7 +45,7 @@ resIncludeQ
     -> TH.ExpQ      -- ^ ExpQ of 'Resource'
 resIncludeQ fullQ xs =
     [| either consError id
-         (C.resInclude C.resEmpty (B.sourceOf "qq")
+         (C.resInclude C.resEmpty (B.codeTextOf "qq")
                $(TH.dataToExpQ plain xs)) |]
 
 {- construction error -}

@@ -15,15 +15,15 @@ module Koshucode.Baala.Base.Text.CodePt
     Sourced (..),
   ) where
 
-import qualified Data.Generics                     as G
-import qualified Koshucode.Baala.Base.Prelude      as B
-import qualified Koshucode.Baala.Base.Text.Source  as B
+import qualified Data.Generics                       as G
+import qualified Koshucode.Baala.Base.Prelude        as B
+import qualified Koshucode.Baala.Base.Text.CodeName  as B
 
 
 -- ----------------------  CodePt
 
 data CodePt = CodePt
-      { codePtSource     :: B.Source    -- ^ Source of code
+      { codePtSource     :: B.CodePiece    -- ^ Source of code
       , codePtLineNo     :: Int         -- ^ Line number
       , codePtLineText   :: String      -- ^ Line content
       , codePtText       :: String      -- ^ Text at which begins token
@@ -40,7 +40,7 @@ codePtCompare p1 p2 = line `B.mappend` column where
 
 -- | Empty code point, i.e., empty content and zero line number.
 codePtZero :: CodePt
-codePtZero = CodePt B.sourceZero 0 "" ""
+codePtZero = CodePt B.codeEmpty 0 "" ""
 
 -- | Column number at which code starts.
 codePtColumnNo :: CodePt -> Int
@@ -52,10 +52,10 @@ codePtDisplay (tag, p)
     | lno > 0   = [ (pos, ""), ("> " ++ shorten text, tag) ]
     | otherwise = []
     where
-      pos       = show lno ++ " " ++ show cno ++ " " ++ res
+      pos       = show lno ++ " " ++ show cno ++ " " ++ code
       lno       = codePtLineNo p
       cno       = codePtColumnNo p
-      res       = B.sourceText $ codePtSource p
+      code      = B.codeNameText $ B.codeName $ codePtSource p
       text      = codePtText p
 
       shorten :: B.Map String

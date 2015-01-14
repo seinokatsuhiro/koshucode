@@ -52,7 +52,7 @@ data Global' h c = Global
       , globalProxy        :: [B.HttpProxy]
       , globalTime         :: B.Time
       , globalSourceCount  :: Int
-      , globalSources      :: [B.Source]
+      , globalSources      :: [B.CodePiece]
       , globalJudges       :: [B.Judge c]
       , globalHook         :: h c
       }

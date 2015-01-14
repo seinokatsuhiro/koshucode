@@ -15,7 +15,7 @@ infixr 0 -:-
 -- | Retrive constituents of sections.
 resourceElem :: (C.CContent c) => C.Resource c -> [B.Judge c]
 resourceElem res = map art js where
-    art = B.judgeCons ("/article" -:- C.pText $ B.sourceText $ head $ C.resIncluded res)
+    art = B.judgeCons ("/article" -:- C.pText $ B.codeNameText $ B.codeName $ head $ C.resIncluded res)
     js  = concat [ elemJudge       $ C.resJudge res
                  , elemAssert      $ concatMap B.shortBody $ C.resAssert res
                  , elemNamedRelmap [] ]

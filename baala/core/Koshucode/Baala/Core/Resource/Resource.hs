@@ -32,17 +32,17 @@ import qualified Koshucode.Baala.Core.Assert    as C
 
 -- | Relational data resource
 data Resource c = Resource
-    { resGlobal    :: Global c           -- ^ Global parameter
-    , resImport    :: [Resource c]       -- ^ Importing resources
-    , resExport    :: [String]           -- ^ Exporting names
-    , resSlot      :: [B.NamedTrees]     -- ^ Global slots
-    , resRelmap    :: [C.RelmapSource]   -- ^ Source of relmaps
-    , resAssert    :: [ShortAssert c]    -- ^ Assertions of relmaps
-    , resJudge     :: [B.Judge c]        -- ^ Affirmative or denial judgements
-    , resArticle   :: ([B.SourceName], [B.SourceName], [B.Source])  -- ^ Scores of resource
-    , resMessage   :: [String]           -- ^ Collection of messages
-    , resLastSecNo :: C.SecNo            -- ^ Last section number
-    , resSelect    :: C.RelSelect c
+    { resGlobal     :: Global c           -- ^ Global parameter
+    , resImport     :: [Resource c]       -- ^ Importing resources
+    , resExport     :: [String]           -- ^ Exporting names
+    , resSlot       :: [B.NamedTrees]     -- ^ Global slots
+    , resRelmap     :: [C.RelmapSource]   -- ^ Source of relmaps
+    , resAssert     :: [ShortAssert c]    -- ^ Assertions of relmaps
+    , resJudge      :: [B.Judge c]        -- ^ Affirmative or denial judgements
+    , resArticle    :: ([B.CodeName], [B.CodeName], [B.CodePiece])  -- ^ Codes of resource
+    , resMessage    :: [String]           -- ^ Collection of messages
+    , resLastSecNo  :: C.SecNo            -- ^ Last section number
+    , resSelect     :: C.RelSelect c
     }
 
 instance Show (Resource c) where
@@ -58,7 +58,7 @@ instance C.GetGlobal Resource where
 -- | Abort or resource.
 type AbResource c = B.Ab (Resource c)
 
-resIncluded :: Resource c -> [B.Source]
+resIncluded :: Resource c -> [B.CodePiece]
 resIncluded Resource { resArticle = (_, _, done) } = done
 
 -- | Resource that has no contents.

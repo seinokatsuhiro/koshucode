@@ -48,10 +48,10 @@ readResource res@C.Resource { C.resArticle = article@(todo, _, done) }
         ([], [], _)            -> return $ Right res
         (_ , [], _)            -> readResource res { C.resArticle = ([], todo', done) }
         (_ , src : _, _)
-            | B.Source 0 src `elem` done
+            | B.CodePiece 0 src `elem` done
                                -> readResource $ pop res
             | otherwise        -> do n <- nextSourceCount
-                                     let src' = B.Source n src
+                                     let src' = B.CodePiece n src
                                      abres' <- readResourceOne (pop res) src'
                                      case abres' of
                                        Right res' -> readResource $ push src' res'
@@ -66,15 +66,15 @@ readResource res@C.Resource { C.resArticle = article@(todo, _, done) }
 
 -- | Read resource from certain source.
 readResourceOne :: forall c. (C.CContent c) =>
-    C.Resource c -> B.Source -> ResourceIO c
-readResourceOne res src = dispatch $ B.sourceName src where
-    dispatch (B.SourceFile path) =
+    C.Resource c -> B.CodePiece -> ResourceIO c
+readResourceOne res src = dispatch $ B.codeName src where
+    dispatch (B.CodeFile path) =
         gio $ do exist <- Dir.doesFileExist path
                  case exist of
                    True   -> include =<< readFile path
                    False  -> return $ Msg.noFile path
 
-    dispatch (B.SourceURL url) =
+    dispatch (B.CodeUri url) =
         do g <- M.get
            let proxy = C.globalProxy g
            abcode <- gio $ B.uriContent proxy url
@@ -82,17 +82,17 @@ readResourceOne res src = dispatch $ B.sourceName src where
              Right code       -> include code
              Left (code, msg) -> return $ Msg.httpError url code msg
 
-    dispatch (B.SourceText text)  = gio $ include text
-    dispatch (B.SourceStdin)      = gio $ include =<< getContents
+    dispatch (B.CodeText text)  = gio $ include text
+    dispatch (B.CodeStdin)      = gio $ include =<< getContents
 
     include :: String -> IO (C.AbResource c)
     include = return . C.resInclude res src
 
 -- | Read resource from text.
 readResourceText :: (C.CContent c) => C.Resource c -> String -> C.AbResource c
-readResourceText res code = C.resInclude res (B.sourceOf code) code
+readResourceText res code = C.resInclude res (B.codeTextOf code) code
 
-readSources :: forall c. (C.CContent c) => [B.SourceName] -> ResourceIO c
+readSources :: forall c. (C.CContent c) => [B.CodeName] -> ResourceIO c
 readSources src =
     do res <- getRootResoruce
        readResource $ res { C.resArticle = ([], reverse src, []) }

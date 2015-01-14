@@ -45,12 +45,12 @@ type TokenRoll = B.CodeRoll B.Token
 
 -- | Split string into list of tokens.
 --   Result token list does not contain newline characters.
-tokens :: B.Source -> String -> B.Ab [B.Token]
+tokens :: B.CodePiece -> String -> B.Ab [B.Token]
 tokens res cs = do ls <- tokenLines res cs
                    Right $ concatMap B.lineTokens ls
 
 -- | Tokenize text.
-tokenLines :: B.Source -> String -> B.Ab [TokenLine]
+tokenLines :: B.CodePiece -> String -> B.Ab [TokenLine]
 tokenLines = B.codeRollUp relation
 
 -- Line begins with the equal sign is treated as section delimter.
@@ -267,7 +267,7 @@ scanQQ cp cs = do (cs', w) <- nextQQ cs
 scanTerm :: Scan
 scanTerm cp = word [] where
     word ns (c:cs) | c == '='  =  let (cs', w) = nextCode (c:cs)
-                                      n  = B.sourceNumber $ B.codePtSource cp
+                                      n  = B.codeNumber $ B.codePtSource cp
                                       w' = show n ++ w
                                   in term (w' : ns) cs'
                    | isCode c  =  let (cs', w) = nextCode (c:cs)

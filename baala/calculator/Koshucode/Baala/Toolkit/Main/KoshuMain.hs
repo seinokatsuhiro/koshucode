@@ -107,7 +107,7 @@ koshuMain global =
              has   = (`elem` opts)
              text  = concatMap oneLiner opts
              root  = C.resEmpty { C.resGlobal = g2 }
-             src   = B.sourceNameList (has OptStdin) text paths
+             src   = B.codeNameList (has OptStdin) text paths
              g2    = C.globalFill global
                        { C.globalProgram   = prog
                        , C.globalArgs      = argv
@@ -137,7 +137,7 @@ oneLinerPreprocess = loop where
     loop ('|' : '|' : xs) = '\n' : loop (B.trimLeft xs)
     loop (x : xs) = x : loop xs
 
-putElems :: (C.CContent c) => C.Global c -> [B.SourceName] -> IO Int
+putElems :: (C.CContent c) => C.Global c -> [B.CodeName] -> IO Int
 putElems g src =
     do (abres, _) <- C.gioResource (C.readSources src) g
        case abres of
@@ -150,11 +150,11 @@ putElems g src =
 -- prettySection :: (C.CContent c) => C.SourceBundle c -> IO Int
 -- prettySection (C.SourceBundle root _ files _) =
 --     case files of
---       [file] -> do md <- C.readSection root (B.SourceFile file)
+--       [file] -> do md <- C.readSection root (B.CodeFile file)
 --                    prettyPrint md
 --                    return 0
 --       []     -> do text <- getContents
---                    md <- C.readSection root (B.SourceText text)
+--                    md <- C.readSection root (B.CodeText text)
 --                    prettyPrint md
 --                    return 0
 --       _      -> L.putSuccess usage

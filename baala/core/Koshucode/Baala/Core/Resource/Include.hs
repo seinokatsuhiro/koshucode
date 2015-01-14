@@ -22,7 +22,7 @@ import qualified Koshucode.Baala.Core.Message            as Msg
 -- | Include source code into resource.
 resInclude :: forall c. (C.CContent c)
     => C.Resource c     -- ^ Base resource
-    -> B.Source         -- ^ Source name
+    -> B.CodePiece      -- ^ Source name
     -> String           -- ^ Source code
     -> C.AbResource c   -- ^ Included resource
 resInclude res src code =
@@ -77,8 +77,8 @@ resIncludeBody res (B.Short pt shorts xs) =
       expt :: Cl String
       expt _ _ (C.CExport n) = n
 
-      inc :: Clab B.SourceName
-      inc _ _ (C.CInclude _ (Just path))  = Right $ B.sourceNameFrom path
+      inc :: Clab B.CodeName
+      inc _ _ (C.CInclude _ (Just path))  = Right $ B.codeNameFrom path
       inc _ _ _                           = Msg.adlib "include"
 
       slot :: Clab B.NamedTrees

@@ -15,7 +15,7 @@ import qualified Koshucode.Baala.Core as C
 
 -- ----------------------
 
-runFiles :: (C.CContent c) => C.Global c -> [B.SourceName] -> IO Int
+runFiles :: (C.CContent c) => C.Global c -> [B.CodeName] -> IO Int
 runFiles = hRunFiles IO.stdout
 
 -- | Read and union sections from files, and run the section.
@@ -23,11 +23,11 @@ hRunFiles
     :: (C.CContent c)
     => IO.Handle          -- ^ Output file handle
     -> C.Global c         -- ^ Global parameters
-    -> [B.SourceName]     -- ^ Resource source code
+    -> [B.CodeName]       -- ^ Names of source codes
     -> IO Int
-hRunFiles h g src =
-    do (abRes, _) <- C.gioResource (C.readSources src) g
-       let inputs  = B.sourceNameText `map` src
+hRunFiles h g ns =
+    do (abRes, _) <- C.gioResource (C.readSources ns) g
+       let inputs  = B.codeNameText `map` ns
            comm    = B.CommentDoc [ B.CommentSec "INPUT" inputs ]
 
        IO.hSetEncoding h IO.utf8
@@ -46,38 +46,6 @@ hRunFiles h g src =
 
 
 -- ---------------------- Calculation list
-
--- runCalc :: (C.CContent c) => B.CommandLine -> C.SourceBundle c -> IO Int
--- runCalc = runCalcTo ""
-
--- runCalcTo :: (C.CContent c) =>
---   FilePath -> B.CommandLine -> C.SourceBundle c -> IO Int
--- runCalcTo dir cmd bundle =
---     do union <- readSec bundle
---        case union of
---          Left a    -> B.abort cmd a
---          Right sec -> runCalcSec dir (C.bundleRoot bundle) sec
-
--- runCalcSec :: (C.CContent c) => String -> C.Resource c -> C.Resource c -> IO Int
--- runCalcSec dir root sec =
---     do let js = C.resJudge sec
---        mapM_ (runCalcJudge dir root) js
---        return 0
-
--- runCalcJudge :: (C.CContent c) => String -> C.Resource c -> B.Judge c -> IO Int
--- runCalcJudge dir root (B.JudgeAffirm "KOSHU-CALC" xs) =
---     case theContents ["/input", "/output"] xs of
---       Just [input, output] ->
---           do let inputFiles = theStrings input
---                  outputFile = dir ++ C.gText output
---              putStrLn $ "**  Output to " ++ outputFile
---              mkdir outputFile
---              IO.withFile outputFile IO.WriteMode
---                           $ \ h -> do let res = B.sourceList False [] inputFiles
---                                       hRunFiles h C.global $ C.SourceBundle C.global root res
---       Just _       -> return 0
---       Nothing      -> return 0
--- runCalcJudge _ _ _ =  return 0
 
 -- mkdir :: FilePath -> IO ()
 -- mkdir path = 

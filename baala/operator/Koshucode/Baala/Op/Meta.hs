@@ -215,14 +215,14 @@ relmapKoshuSource use = C.relmapHook use . relkitKoshuSource
 
 relkitKoshuSource :: (C.CContent c) => (B.TermName, Maybe B.TermName, Maybe B.TermName) -> C.RelkitHook c
 relkitKoshuSource (num, ty, name) h _ = Right kit2 where
-    res        = C.resIncluded h
+    code       = C.resIncluded h
     ns         = B.catMaybes [Just num, ty, name]
-    kit2       = C.relkitConstBody ns $ map assn res
-    assn r     = B.catMaybes [resNum r, resType r, resName r]
+    kit2       = C.relkitConstBody ns $ map assn code
+    assn c     = B.catMaybes [codeNo c, codeType c, codeText c]
 
-    resNum     = Just         . C.pDecFromInt . B.sourceNumber
-    resType    = maybeAs ty   . C.pText       . B.sourceType
-    resName    = maybeAs name . C.pText       . B.sourceText
+    codeNo     = Just         . C.pDecFromInt . B.codeNumber
+    codeType   = maybeAs ty   . C.pText       . B.codeNameType . B.codeName
+    codeText   = maybeAs name . C.pText       . B.codeNameText . B.codeName
 
 maybeAs :: Maybe a -> b -> Maybe b
 maybeAs (Just _)  c  =  Just c

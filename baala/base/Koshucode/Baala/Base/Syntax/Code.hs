@@ -86,7 +86,7 @@ data CodeRoll a =
 --   3. Tokenize each lines,
 --      and put tokens together in 'CodeLine'.
 --
-codeRollUp :: B.AbMap (CodeRoll a) -> B.Source -> String -> B.Ab [CodeLine a]
+codeRollUp :: B.AbMap (CodeRoll a) -> B.CodePiece -> String -> B.Ab [CodeLine a]
 codeRollUp f res = loop (CodeRoll f cp "" []) . B.linesCrlfNumbered where
     cp    = B.codePtZero { B.codePtSource = res }
 
