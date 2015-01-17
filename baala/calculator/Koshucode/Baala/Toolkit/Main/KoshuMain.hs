@@ -87,7 +87,7 @@ header = unlines
 --   See 'Koshucode.Baala.Op.Vanilla.Relmap.Implement.vanillaRops'
 --   for default argument.
 koshuMain :: (C.CContent c) => C.Global c -> IO Int
-koshuMain global =
+koshuMain g =
   do (prog, argv) <- L.prelude
      proxy        <- getProxies
      time         <- T.getZonedTime
@@ -100,12 +100,12 @@ koshuMain global =
            | has OptElement      -> putElems   g2 src
            | otherwise           -> L.runFiles g2 src
            where
-             ver   = prog ++ " " ++ C.globalVersionText global
+             ver   = C.globalSynopsis g ++ " " ++ C.globalVersionText g
              has   = (`elem` opts)
              text  = concatMap oneLiner opts
              root  = C.resEmpty { C.resGlobal = g2 }
              src   = B.codeNameList (has OptStdin) text paths
-             g2    = C.globalFill global
+             g2    = C.globalFill g
                        { C.globalProgram   = prog
                        , C.globalArgs      = argv
                        , C.globalProxy     = proxy

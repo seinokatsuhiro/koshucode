@@ -12,5 +12,7 @@ main :: IO ()
 main = Main.exit =<< Main.koshuMain koshuGlobal
 
 koshuGlobal :: C.Global Type.VContent
-koshuGlobal = Op.vanillaGlobal { C.globalVersion = Main.version }
+koshuGlobal = Op.vanillaGlobal
+              { C.globalSynopsis  = "The Koshucode Baala Implementation"
+              , C.globalVersion   = Main.version }
 

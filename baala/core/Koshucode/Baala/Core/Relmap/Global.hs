@@ -46,7 +46,8 @@ ropCopset = globalCopset . ropGlobal
 
 -- | Global parameters
 data Global' h c = Global
-      { globalVersion      :: Ver.Version
+      { globalSynopsis     :: String
+      , globalVersion      :: Ver.Version
       , globalOpset        :: OpSet' (C.Rop' h) c
       , globalProgram      :: String
       , globalArgs         :: [String]
@@ -92,7 +93,8 @@ globalCopset  = opsetCop . globalOpset
 -- | Empty global parameters.
 global' :: h c -> Global' h c
 global' h = Global
-    { globalVersion      = Ver.Version [] []
+    { globalSynopsis     = "koshu"
+    , globalVersion      = Ver.Version [] []
     , globalOpset        = opset
     , globalProgram      = ""
     , globalArgs         = []
