@@ -5,9 +5,10 @@
 module Koshucode.Baala.Core.Relmap.Global
   ( -- * Global
     Global' (..),
+    globalVersionText,
     globalCommandLine,
     globalFill,
-    globalRops,
+    globalRops, globalRopsAdd,
     globalCops, globalCopset,
     globalInfix,
     global',
@@ -15,13 +16,13 @@ module Koshucode.Baala.Core.Relmap.Global
     GetGlobal (..),
     ropGlobal,
     ropCopset,
-  
+
     -- * Operator set
     OpSet' (..),
     opset, opsetFill,
   ) where
 
-import qualified Data.Version                        as D
+import qualified Data.Version                        as Ver
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Core.Content        as C
 import qualified Koshucode.Baala.Core.Lexmap         as C
@@ -45,7 +46,7 @@ ropCopset = globalCopset . ropGlobal
 
 -- | Global parameters
 data Global' h c = Global
-      { globalVersion      :: D.Version
+      { globalVersion      :: Ver.Version
       , globalOpset        :: OpSet' (C.Rop' h) c
       , globalProgram      :: String
       , globalArgs         :: [String]
@@ -61,6 +62,9 @@ instance Show (Global' h c) where
     show Global { globalVersion = ver }
         = "Global (" ++ show ver ++ ")"
 
+globalVersionText :: Global' h c -> String
+globalVersionText = Ver.showVersion . globalVersion
+  
 globalCommandLine :: Global' h c -> [String]
 globalCommandLine Global { globalProgram = prog, globalArgs = args }
     = prog : args
@@ -70,6 +74,11 @@ globalFill g = g
 
 globalRops   :: Global' h c -> [C.Rop' h c]
 globalRops    = opsetRopList . globalOpset
+
+globalRopsAdd :: Global' h c -> [C.Rop' h c] -> Global' h c
+globalRopsAdd g rops = g { globalOpset = opsetFill ops' } where
+    ops' = ops { opsetRopList = rops ++ opsetRopList opset }
+    ops  = globalOpset g
 
 globalCops   :: Global' h c -> [C.Cop c]
 globalCops    = C.copsetCopList . opsetCop . globalOpset
@@ -83,7 +92,7 @@ globalCopset  = opsetCop . globalOpset
 -- | Empty global parameters.
 global' :: h c -> Global' h c
 global' h = Global
-    { globalVersion      = D.Version [] []
+    { globalVersion      = Ver.Version [] []
     , globalOpset        = opset
     , globalProgram      = ""
     , globalArgs         = []

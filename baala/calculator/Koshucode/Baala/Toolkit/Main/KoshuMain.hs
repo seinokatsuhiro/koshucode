@@ -17,7 +17,6 @@ import qualified Koshucode.Baala.Core as C
 import qualified Koshucode.Baala.Toolkit.Library.Element  as L
 import qualified Koshucode.Baala.Toolkit.Library.Exit     as L
 import qualified Koshucode.Baala.Toolkit.Library.Run      as L
-import qualified Koshucode.Baala.Toolkit.Library.Version  as L
 
 
 -- Flow
@@ -62,9 +61,6 @@ koshuOptions =
     , Option ""  ["element"]  (NoArg OptElement) "Analize sections"
     ]
 
-version :: String
-version = "koshu-" ++ L.versionString
-
 usage :: String
 usage = usageInfo header koshuOptions
 
@@ -99,11 +95,12 @@ koshuMain global =
      case getOpt Permute koshuOptions argv of
        (opts, paths, [])
            | has OptHelp         -> L.putSuccess usage
-           | has OptVersion      -> L.putSuccess $ version ++ "\n"
+           | has OptVersion      -> L.putSuccess $ ver ++ "\n"
            | has OptShowEncoding -> L.putSuccess =<< L.currentEncodings
            | has OptElement      -> putElems   g2 src
            | otherwise           -> L.runFiles g2 src
            where
+             ver   = prog ++ " " ++ C.globalVersionText global
              has   = (`elem` opts)
              text  = concatMap oneLiner opts
              root  = C.resEmpty { C.resGlobal = g2 }
