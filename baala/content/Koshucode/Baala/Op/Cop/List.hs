@@ -57,6 +57,7 @@ copsList =
     , C.CopCalc  (C.copNormal "part")          copPart
     , C.CopCalc  (C.copNormal "push")          copPush
     , C.CopCalc  (C.copNormal "reverse")       copReverse
+    , C.CopCalc  (C.copNormal "sort")          copSort
     , C.CopCalc  (C.copNormal "total")         copTotal
     , C.CopCalc  (C.copNormal "sub-index")     copSubIndex
     , C.CopCalc  (C.copNormal "sub-length")    copSubLength
@@ -130,14 +131,23 @@ intersectLists [a] = a
 intersectLists (a : b : xs) = intersectLists $ List.intersect a b : xs
 
 
+-- ----------------------  arrangement
 
--- ----------------------  others
+copSort :: (C.CContent c) => C.CopCalc c
+copSort = op where
+    op [Right c] | C.isList c  = C.putList $ B.sort $ C.gList c
+                 | C.isSet  c  = C.putSet  $ B.sort $ C.gSet  c
+                 | otherwise   = Right c
+    op xs = typeUnmatch xs
 
 copReverse :: (C.CContent c) => C.CopCalc c
 copReverse = op where
-    op [Right c] | C.isText c = C.putText $ reverse (C.gText c)
-                 | C.isList c = C.putList $ reverse (C.gList c)
+    op [Right c] | C.isText c  = C.putText $ reverse $ C.gText c
+                 | C.isList c  = C.putList $ reverse $ C.gList c
     op xs = typeUnmatch xs
+
+
+-- ----------------------  others
 
 copSubIndex :: (C.CContent c) => C.CopCalc c
 copSubIndex = op where
