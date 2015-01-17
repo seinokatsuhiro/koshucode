@@ -48,6 +48,9 @@ Documentations of software libraries at
 * [koshucode-baala-calculator]
 * [koshucode-baala-toolkit]
 
+These libraries include Haskell modules for Koshucode.
+As an example of `koshu`, [a table of module dependencies][DIR-RANK-ALL]
+is calculated using [`dir-rank.k`][dir-rank].
 
 
 BUGS
@@ -67,3 +70,5 @@ There are many bugs and potentials.
 [koshucode-baala-calculator]: http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-calculator/
 [koshucode-baala-toolkit]:    http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-toolkit/
 
+[DIR-RANK-ALL]:               baala/import/DIR-RANK-ALL.k
+[dir-rank]:                   baala/import/dir-rank.k
