@@ -72,7 +72,7 @@ imp : source IMPORT /module /import
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    199 judges
+**    198 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Abortable"      /import "Koshucode.Baala.Base.Prelude"
@@ -229,23 +229,22 @@ imp : source IMPORT /module /import
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax"               /import "Koshucode.Baala.Base.Syntax.Line"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax"               /import "Koshucode.Baala.Base.Syntax.Tree"
 
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.CodeName"        /import "Data.Generics"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.CodeName"        /import "Koshucode.Baala.Base.Prelude"
+
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.CodePt"          /import "Data.Generics"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.CodePt"          /import "Koshucode.Baala.Base.Prelude"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.CodePt"          /import "Koshucode.Baala.Base.Text.Source"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.CodePt"          /import "Koshucode.Baala.Base.Text.CodeName"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Comment"         /import "System.IO"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Http"            /import "Data.ByteString.Char8"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Http"            /import "Data.ByteString.Lazy.Char8"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.Http"            /import "System.Environment"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Http"            /import "Control.Exception"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Http"            /import "Network.HTTP.Conduit"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Http"            /import "Network.HTTP.Types.Status"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Http"            /import "Text.URI"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Http"            /import "Koshucode.Baala.Base.Prelude"
-
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.Source"          /import "Data.Generics"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.Source"          /import "Koshucode.Baala.Base.Prelude"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.TextTable"       /import "Data.Char"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.TextTable"       /import "Data.List"
@@ -260,10 +259,10 @@ imp : source IMPORT /module /import
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Write"           /import "Text.PrettyPrint"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Write"           /import "Koshucode.Baala.Base.Prelude"
 
+|-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.CodeName"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.CodePt"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.Comment"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.Http"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.Source"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.TextTable"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.Unicode"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.Utility"
@@ -334,7 +333,7 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 **
 
 |-- DIR-RANK  /dir-rank 2  /dir 'Koshucode.Baala.Base.Prelude  /base-rank {| /rank : /base : /import-dir | 0 : 'Class : [ ] | 0 : 'Import : [ ] | 1 : 'Assoc : [ ] | 1 : 'List : [ ] | 1 : 'Pair : [ ] | 1 : 'Snip : [ ] | 2 : 'Order : [ ] |}
-|-- DIR-RANK  /dir-rank 5  /dir 'Koshucode.Baala.Base.Text  /base-rank {| /rank : /base : /import-dir | 0 : 'Comment : [ ] | 0 : 'Unicode : [ ] | 4 : 'Http : [ 'Prelude ] | 4 : 'Source : [ 'Prelude ] | 4 : 'TextTable : [ 'Prelude ] | 4 : 'Utility : [ 'Prelude ] | 4 : 'Write : [ 'Prelude ] | 5 : 'CodePt : [ 'Prelude ] |}
+|-- DIR-RANK  /dir-rank 5  /dir 'Koshucode.Baala.Base.Text  /base-rank {| /rank : /base : /import-dir | 0 : 'Comment : [ ] | 0 : 'Unicode : [ ] | 4 : 'CodeName : [ 'Prelude ] | 4 : 'Http : [ 'Prelude ] | 4 : 'TextTable : [ 'Prelude ] | 4 : 'Utility : [ 'Prelude ] | 4 : 'Write : [ 'Prelude ] | 5 : 'CodePt : [ 'Prelude ] |}
 |-- DIR-RANK  /dir-rank 8  /dir 'Koshucode.Baala.Base.Abort  /base-rank {| /rank : /base : /import-dir | 7 : 'Reason : [ 'Text ] | 8 : 'Abortable : [ 'Prelude : 'Text ] | 8 : 'Report : [ 'Prelude : 'Text ] |}
 |-- DIR-RANK  /dir-rank 12  /dir 'Koshucode.Baala.Base.Syntax  /base-rank {| /rank : /base : /import-dir | 0 : 'Line : [ ] | 11 : 'Code : [ 'Abort : 'Prelude : 'Text ] | 11 : 'Tree : [ 'Abort : 'Prelude : 'Text ] | 12 : 'Infix : [ 'Prelude ] |}
 |-- DIR-RANK  /dir-rank 15  /dir 'Koshucode.Baala.Base.Token  /base-rank {| /rank : /base : /import-dir | 7 : 'AngleText : [ 'Prelude : 'Text ] | 7 : 'Token : [ 'Prelude : 'Text ] | 8 : 'Short : [ 'Prelude : 'Text ] | 14 : 'TokenLine : [ 'Abort : 'Prelude : 'Syntax : 'Text ] | 15 : 'TokenClause : [ 'Prelude : 'Syntax : 'Text ] | 15 : 'TokenTree : [ 'Abort : 'Prelude : 'Syntax : 'Text ] |}
@@ -363,8 +362,8 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 **                                              ----- -------------- ----------------------------------------------------------
 **                                              0     'Comment       [ ]
 **                                              0     'Unicode       [ ]
+**                                              4     'CodeName      [ 'Prelude ]
 **                                              4     'Http          [ 'Prelude ]
-**                                              4     'Source        [ 'Prelude ]
 **                                              4     'TextTable     [ 'Prelude ]
 **                                              4     'Utility       [ 'Prelude ]
 **                                              4     'Write         [ 'Prelude ]
@@ -442,7 +441,7 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    171 judges
+**    173 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Base"
@@ -620,8 +619,10 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Quoter"      /import "Koshucode.Baala.Core.Resource.Include"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Read"        /import "System.Directory"
+|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Read"        /import "Control.Monad.State"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Read"        /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Read"        /import "Koshucode.Baala.Core.Content"
+|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Read"        /import "Koshucode.Baala.Core.Relmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Read"        /import "Koshucode.Baala.Core.Resource.Resource"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Read"        /import "Koshucode.Baala.Core.Resource.Include"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Read"        /import "Koshucode.Baala.Core.Message"
@@ -670,7 +671,7 @@ Command `./dir-rank.k ../core/IMPORT.k` produces:
 |-- DIR-RANK  /dir-rank 11  /dir 'Koshucode.Baala.Core.Relmap  /base-rank {| /rank : /base : /import-dir | 7 : 'Relkit : [ 'Lexmap ] | 8 : 'Relmap : [ 'Lexmap ] | 9 : 'Rop : [ 'Lexmap ] | 10 : 'Global : [ 'Content : 'Lexmap ] | 11 : 'Construct : [ 'Lexmap ] | 11 : 'Run : [ 'Content ] | 11 : 'Specialize : [ 'Lexmap ] |}
 |-- DIR-RANK  /dir-rank 14  /dir 'Koshucode.Baala.Core.Assert  /base-rank {| /rank : /base : /import-dir | 7 : 'RelTable : [ 'Content ] | 13 : 'Assert : [ 'Content : 'Lexmap : 'Relmap ] | 13 : 'Dataset : [ 'Content : 'Relmap ] | 14 : 'Run : [ 'Content : 'Relmap ] |}
 
-|-- DIR-RANK  /dir-rank 18  /dir 'Koshucode.Baala.Core.Resource  /base-rank {| /rank : /base : /import-dir | 7 : 'Clause : [ 'Content : 'Lexmap ] | 16 : 'Resource : [ 'Assert : 'Lexmap : 'Relmap ] | 17 : 'Include : [ 'Assert : 'Content : 'Lexmap : 'Relmap ] | 17 : 'Run : [ 'Assert : 'Content : 'Lexmap : 'Relmap ] | 18 : 'Quoter : [ 'Lexmap ] | 18 : 'Read : [ 'Content ] |}
+|-- DIR-RANK  /dir-rank 18  /dir 'Koshucode.Baala.Core.Resource  /base-rank {| /rank : /base : /import-dir | 7 : 'Clause : [ 'Content : 'Lexmap ] | 16 : 'Resource : [ 'Assert : 'Lexmap : 'Relmap ] | 17 : 'Include : [ 'Assert : 'Content : 'Lexmap : 'Relmap ] | 17 : 'Run : [ 'Assert : 'Content : 'Lexmap : 'Relmap ] | 18 : 'Quoter : [ 'Lexmap ] | 18 : 'Read : [ 'Content : 'Relmap ] |}
 |-- DIR-RANK  /dir-rank 19  /dir 'Koshucode.Baala.Core  /base-rank {| /rank : /base : /import-dir | 1 : 'Message : [ ] | 6 : 'Content : [ ] | 6 : 'Lexmap : [ ] | 12 : 'Relmap : [ ] | 15 : 'Assert : [ ] | 19 : 'Resource : [ ] |}
 |-- DIR-RANK  /dir-rank 20  /dir 'Koshucode.Baala  /base-rank {| /rank : /base : /import-dir | 0 : 'Base : [ ] | 20 : 'Core : [ 'Assert : 'Content : 'Lexmap : 'Relmap : 'Resource ] |}
 
@@ -726,7 +727,7 @@ Command `./dir-rank.k ../core/IMPORT.k` produces:
 **                                               17    'Include      [ 'Assert : 'Content : 'Lexmap : 'Relmap ]
 **                                               17    'Run          [ 'Assert : 'Content : 'Lexmap : 'Relmap ]
 **                                               18    'Quoter       [ 'Lexmap ]
-**                                               18    'Read         [ 'Content ]
+**                                               18    'Read         [ 'Content : 'Relmap ]
 **                                               
 **    19        'Koshucode.Baala.Core            /rank /base         /import-dir
 **                                               ----- ------------- --------------------------------------------------------
@@ -1196,7 +1197,7 @@ Command `./dir-rank.k ../content/IMPORT.k` produces:
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    23 judges
+**    20 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Element"   /import "Koshucode.Baala.Base"
@@ -1209,8 +1210,6 @@ Command `./dir-rank.k ../content/IMPORT.k` produces:
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Exit"      /import "Koshucode.Baala.Base"
 
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Run"       /import "System.IO"
-|-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Run"       /import "System.FilePath"
-|-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Run"       /import "System.Directory"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Run"       /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Run"       /import "Koshucode.Baala.Core"
 
@@ -1225,7 +1224,6 @@ Command `./dir-rank.k ../content/IMPORT.k` produces:
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuMain"    /import "Koshucode.Baala.Toolkit.Library.Element"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuMain"    /import "Koshucode.Baala.Toolkit.Library.Exit"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuMain"    /import "Koshucode.Baala.Toolkit.Library.Run"
-|-- IMPORT  /module "Koshucode.Baala.Toolkit.Main.KoshuMain"    /import "Koshucode.Baala.Toolkit.Library.Version"
 
 ```
 
@@ -1240,7 +1238,7 @@ Command `./dir-rank.k ../calculator/IMPORT.k` produces:
 **
 
 |-- DIR-RANK  /dir-rank 0  /dir 'Koshucode.Baala  /base-rank {| /rank : /base : /import-dir | 0 : 'Base : [ ] | 0 : 'Core : [ ] |}
-|-- DIR-RANK  /dir-rank 1  /dir 'Koshucode.Baala.Toolkit.Library  /base-rank {| /rank : /base : /import-dir | 0 : 'Version : [ ] | 1 : 'Element : [ ] | 1 : 'Exit : [ ] | 1 : 'Run : [ ] |}
+|-- DIR-RANK  /dir-rank 1  /dir 'Koshucode.Baala.Toolkit.Library  /base-rank {| /rank : /base : /import-dir | 1 : 'Element : [ ] | 1 : 'Exit : [ ] | 1 : 'Run : [ ] |}
 |-- DIR-RANK  /dir-rank 2  /dir 'Koshucode.Baala.Toolkit.Main  /base-rank {| /rank : /base : /import-dir | 2 : 'KoshuMain : [ ] |}
 
 *** 3 judges
@@ -1256,7 +1254,6 @@ Command `./dir-rank.k ../calculator/IMPORT.k` produces:
 **                                                 
 **    1         'Koshucode.Baala.Toolkit.Library   /rank /base        /import-dir
 **                                                 ----- ------------ -----------
-**                                                 0     'Version     [ ]
 **                                                 1     'Element     [ ]
 **                                                 1     'Exit        [ ]
 **                                                 1     'Run         [ ]
