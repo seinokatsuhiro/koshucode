@@ -9,19 +9,36 @@
 **    ./dir-rank.k ../*/IMPORT.k
 **
 
-dep    : source IMPORT /module /import
-       | keep part "Koshucode" /import
-       | dependent-rank /module /import -rank /rank
-       | interp <<< /module has dependent rank /rank . >>>
-
-dir    : dep
-       | add /dir  ( dir-part  <dot> /module )
-             /base ( base-part <dot> /module )
-       | pick /dir /rank /base
-       | hang /base-rank -on /dir
-       | add /dir-rank ( max /base-rank/rank )
-       | interp <<< Module directory /dir has dependent rank /dir-rank ,
-                    /base-rank exists under the /dir . >>>
-
 |== DIR-RANK -order -table -fore /dir-rank /dir
-       : dir
+    : dir
+
+dir : dep
+    | add /dir  ( dir-part  <dot> /module )
+          /base ( base-part <dot> /module )
+    | hang /base-rank -on /dir
+    | for /base-rank add-import-dir
+    | add /dir-rank ( max /base-rank/rank )
+    | interp <<< Module directory /dir has dependent rank /dir-rank ,
+                 /base-rank exists under the /dir . >>>
+
+dep : imp
+    | dependent-rank /module /import -rank /rank
+    | interp <<< /module has dependent rank /rank . >>>
+
+add-import-dir : group /import ( imp | meet imp-dir )
+    | add /import-dir ( sort /import/dirname )
+    | pick /rank /base /import-dir
+    | interp <<< Module whose base name is /base has
+                 dependent rank /rank , the module imports
+                 directory modules /import-dir . >>>
+
+imp-dir : imp
+    | pick /module
+    | add /import   ( dir-part  <dot> /module )
+    | add /dirname  ( base-part <dot> /import )
+    | pick /import /dirname
+    | interp <<< Module directory /import can be imported from other module.
+                 The base part of /import is /dirname . >>>
+
+imp : source IMPORT /module /import
+    | keep part "Koshucode" /import
