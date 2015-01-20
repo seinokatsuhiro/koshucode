@@ -30,21 +30,18 @@ dir : dep
     | add /dir  ( dir-part  <dot> /module )
           /base ( base-part <dot> /module )
     | hang /base-rank -on /dir
-    | for /base-rank add-import-dir
+    | for /base-rank ( pick /rank /base /import-dir )
     | add /dir-rank ( max /base-rank/rank )
     | interp <<< Module directory /dir has dependent rank /dir-rank ,
                  /base-rank exists under the /dir . >>>
 
 dep : imp
     | dependent-rank /module /import -rank /rank
-    | interp <<< /module has dependent rank /rank . >>>
-
-add-import-dir : group /import ( imp | meet imp-dir )
-    | add /import-dir ( sort /import/dirname )
-    | pick /rank /base /import-dir
-    | interp <<< Module whose base name is /base has
-                 dependent rank /rank , the module imports
-                 directory modules /import-dir . >>>
+    | group /=import ( imp | meet imp-dir )
+    | add /import-dir ( sort /=import/dirname )
+    | wipe
+    | interp <<< /module has dependent rank /rank .
+                 The module imports directory modules /import-dir . >>>
 
 imp-dir : imp
     | pick /module

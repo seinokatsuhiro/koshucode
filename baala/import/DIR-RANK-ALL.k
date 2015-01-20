@@ -1,7 +1,7 @@
 ** -*- koshu -*-
 **
 **  INPUT
-**    ./dir-rank.k
+**    dir-rank.k
 **    ../base/IMPORT.k
 **    ../calculator/IMPORT.k
 **    ../content/IMPORT.k
