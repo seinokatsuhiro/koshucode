@@ -2,26 +2,42 @@
 
 module Koshucode.Baala.Core.Content.Class
   ( -- * Generic content
-    CContent    (..),
-    CTypeOf     (..),
+    CContent (..),
+    CTypeOf (..),
   
-    -- * Haskell data
-    CBool       (..), true, false,
-    CText       (..), pTextList, pTextSet,
-    CList       (..),
+    -- * Haskell data type
+    -- ** Boolean
+    CBool (..), true, false,
+    -- ** Text
+    CText (..), pTextList, pTextSet,
+    -- ** List
+    CList (..),
   
-    -- * Koshu data
-    CEmpty      (..), maybeEmpty, omitEmpty,
-    CDec        (..), pDecFromInt, pDecFromInteger,
-    CClock      (..),
-    CTime       (..),
-    CTerm       (..),
-    CSet        (..),
-    CAssn       (..),
-    CRel        (..), isMember,
-    CInterp     (..),
-    CType       (..),
-  
+    -- * Koshu simple data type
+    -- ** Empty
+    CEmpty (..), maybeEmpty, omitEmpty,
+    -- ** Decimal
+    CDec (..), pDecFromInt, pDecFromInteger,
+    -- ** Clock
+    CClock (..),
+    -- ** Time
+    CTime (..),
+    -- ** Term
+    CTerm (..),
+
+    -- * Koshu complex data type
+    -- ** Set
+    CSet (..),
+    -- ** Association
+    CAssn (..),
+    -- ** Relation
+    CRel (..), isMember,
+    -- ** Interpretation
+    CInterp (..),
+    -- ** Type
+    CType (..),
+
+    -- * Utility
     contAp, contMap,
     contApTextToText,
     contMapTextToList,
