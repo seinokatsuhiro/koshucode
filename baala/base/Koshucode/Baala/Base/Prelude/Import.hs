@@ -17,6 +17,7 @@ module Koshucode.Baala.Base.Prelude.Import
     Data.List.isPrefixOf,
     Data.List.sort,
     Data.List.transpose,
+    (Data.List.\\),
   
     -- * Data.Map
     lookupMap,
