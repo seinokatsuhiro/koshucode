@@ -7,11 +7,17 @@ module Koshucode.Baala.Base.Data.Para
     para,
 
     -- * Types of parameters
-    ParaType (..),
-    paraType,
-    paraUnmatch,
+    ParaType (..), ParaPosType (..), 
 
-    -- * Getters for elements
+    -- * Creating parameter types
+    paraType, paraJust, paraMin, paraMax, paraRange,
+    paraReq, paraOpt, paraMult,
+
+    -- * Matching against parameters
+    ParaUnmatch (..),
+    paraSelect, paraMatch, paraUnmatch,
+
+    -- * Getting parameter elements
     paraGet, paraGetList, paraGetPos,
     paraGetFst, paraGetSnd, paraGetTrd,
     paraGetRest, paraGetRRest,
@@ -78,9 +84,25 @@ data ParaPosType
     | ParaPosRange Int Int
       deriving (Show, Eq, Ord)
 
-paraType :: ParaPosType -> [String] -> [String] -> [String] -> ParaType
-paraType pos req opt mul
-    | null dup   = ParaType pos req opt mul
+paraType :: ParaType
+paraType = ParaType (ParaPosJust 0) [] [] []
+
+paraJust, paraMin, paraMax :: ParaType -> Int -> ParaType
+paraJust  ty n = paraCheck $ ty { paraTypePos = ParaPosJust n }
+paraMin   ty n = paraCheck $ ty { paraTypePos = ParaPosMin  n }
+paraMax   ty n = paraCheck $ ty { paraTypePos = ParaPosMax  n }
+
+paraRange :: ParaType -> (Int, Int) -> ParaType
+paraRange ty (m, n) = paraCheck $ ty { paraTypePos = ParaPosRange m n }
+
+paraReq, paraOpt, paraMult :: ParaType -> [String] -> ParaType
+paraReq ty ns = paraCheck $ ty { paraTypeReq = ns }
+paraOpt ty ns = paraCheck $ ty { paraTypeOpt = ns }
+paraMult ty ns = paraCheck $ ty { paraTypeMult = ns }
+
+paraCheck :: B.Map ParaType
+paraCheck ty@(ParaType _ req opt mul)
+    | null dup   = ty
     | otherwise  = B.bug $ "duplicate para names: " ++ unwords dup
     where ns     = req ++ opt ++ mul
           dup    = B.duplicates ns
@@ -94,6 +116,9 @@ data ParaUnmatch
     | ParaMissing  [String]
     | ParaMultiple [String]
       deriving (Show, Eq, Ord)
+
+paraMatch :: Para a -> ParaType -> Bool
+paraMatch p t = paraUnmatch p t == Nothing
 
 paraUnmatch :: Para a -> ParaType -> Maybe ParaUnmatch
 paraUnmatch p (ParaType pos req opt mul)
@@ -119,6 +144,13 @@ paraPosUnmatch ps = match where
     match (ParaPosRange a b)  | n >= a && n <= b  = Nothing
     match p                                       = Just $ ParaOutOfRange n p
     n = length ps
+
+paraSelect :: b -> [(Para a -> b, ParaType)] -> Para a -> b
+paraSelect b ps p = loop ps where
+    loop [] = b
+    loop ((body, ty) : ps2)
+        | paraMatch p ty    = body p
+        | otherwise         = loop ps2
 
 
 -- ----------------------  Getters

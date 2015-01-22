@@ -1,4 +1,5 @@
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall -fno-warn-incomplete-patterns #-}
 
 -- | Resource as bundle of relational expressions.
@@ -78,8 +79,8 @@ resIncludeBody res (B.Short pt shorts xs) =
       expt _ _ (C.CExport n) = n
 
       inc :: Clab B.CodeName
-      inc _ _ (C.CInclude _ (Just path))  = Right $ B.codeNameFrom path
-      inc _ _ _                           = Msg.adlib "include"
+      inc _ _ (C.CInclude toks) =
+          tokenPara toks >>= paraToCodeName
 
       slot :: Clab B.NamedTrees
       slot _ _ (C.CSlot n toks) = ntrees (n, toks)
@@ -135,6 +136,34 @@ coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)
 calcContG :: (C.CContent c) => C.Global c -> C.CalcContent c
 calcContG = C.calcContent . C.globalCopset
 
+type TokenPara = B.Para B.TTree
+
+tokenPara :: [B.Token] -> B.Ab TokenPara
+tokenPara toks =
+    do trees <- B.tokenTrees toks
+       Right $ B.para maybeHyname trees
+
+maybeHyname :: B.TTreeTo (Maybe String)
+maybeHyname (B.TextLeafRaw _ n@('-' : _))  = Just n
+maybeHyname _                              = Nothing
+
+paraToCodeName :: TokenPara -> B.Ab B.CodeName
+paraToCodeName = B.paraSelect unmatch ps where
+    ps = [ (just1, B.paraType `B.paraJust` 1)
+         , (stdin, B.paraType `B.paraReq` ["-stdin"]) ]
+
+    just1 p = do arg <- B.paraGetFst p
+                 case arg of
+                   B.TextLeaf _ _ path -> Right $ B.codeNameFrom path
+                   _ -> Msg.adlib "include not text"
+
+    stdin p = do args <- B.paraGet p "-stdin"
+                 case args of
+                   [] -> Right B.CodeStdin
+                   _  -> Msg.adlib "include no args"
+
+    unmatch = Msg.adlib "include unknown"
+
 
 -- ----------------------  Clause type
 
@@ -142,7 +171,7 @@ isCInclude, isCExport,
   isCSlot, isCRelmap, isCAssert, isCJudge,
   isCUnknown, isCUnres :: C.ClauseBody -> Bool
 
-isCInclude (C.CInclude _ _)    = True
+isCInclude (C.CInclude _)      = True
 isCInclude _                   = False
 
 isCExport (C.CExport _)        = True

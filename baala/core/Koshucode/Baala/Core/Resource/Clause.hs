@@ -36,7 +36,7 @@ data Clause =
            } deriving (Show, G.Data, G.Typeable)
 
 data ClauseBody
-    = CInclude  [B.Token] (Maybe String)                    -- ^ Includeing source
+    = CInclude  [B.Token]                                   -- ^ Includeing source
     | CExport   String                                      -- ^ Exporting name
     | CShort    [B.ShortDef]                                -- ^ Short signs
     | CRelmap   String [B.Token]                            -- ^ Source of relmap
@@ -54,7 +54,7 @@ instance B.CodePtr Clause where
 clauseTypeText :: Clause -> String
 clauseTypeText (Clause _ _ body) =
     case body of
-      CInclude  _ _       -> "include"
+      CInclude  _         -> "include"
       CExport   _         -> "export"
       CShort    _         -> "short"
       CRelmap   _ _       -> "relmap"
@@ -156,8 +156,7 @@ consPreclause' no src = dispatch $ liaison $ B.clauseTokens src where
     expt [B.TText _ _ n]        = c1 $ CExport n
     expt _                      = unk
 
-    incl xs@[B.TText _ _ n]     = c1 $ CInclude xs $ Just n
-    incl xs                     = c1 $ CInclude xs Nothing
+    incl xs                     = c1 $ CInclude xs
 
     short xs                    = case wordPairs xs of
                                     Nothing  -> unk
