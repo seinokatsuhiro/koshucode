@@ -80,7 +80,7 @@ resIncludeBody res (B.Short pt shorts xs) =
 
       inc :: Clab B.CodeName
       inc _ _ (C.CInclude toks) =
-          tokenPara toks >>= paraToCodeName
+          C.tokenPara toks >>= paraToCodeName
 
       slot :: Clab B.NamedTrees
       slot _ _ (C.CSlot n toks) = ntrees (n, toks)
@@ -110,10 +110,9 @@ resIncludeBody res (B.Short pt shorts xs) =
 
       assert :: Clab (C.Assert' h c)
       assert sec src (C.CAssert typ pat opt toks) =
-          do optTrees   <- B.tokenTrees opt
+          do optPara    <- C.tokenPara opt
              rmapTrees  <- B.tokenTrees toks
-             let optAssc = C.hyphenAssc optTrees
-             Right $ C.Assert sec typ pat optAssc src rmapTrees Nothing []
+             Right $ C.Assert sec typ pat optPara src rmapTrees Nothing []
 
       checkShort :: [B.ShortDef] -> B.Ab ()
       checkShort sh =
@@ -136,18 +135,7 @@ coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)
 calcContG :: (C.CContent c) => C.Global c -> C.CalcContent c
 calcContG = C.calcContent . C.globalCopset
 
-type TokenPara = B.Para B.TTree
-
-tokenPara :: [B.Token] -> B.Ab TokenPara
-tokenPara toks =
-    do trees <- B.tokenTrees toks
-       Right $ B.para maybeHyname trees
-
-maybeHyname :: B.TTreeTo (Maybe String)
-maybeHyname (B.TextLeafRaw _ n@('-' : _))  = Just n
-maybeHyname _                              = Nothing
-
-paraToCodeName :: TokenPara -> B.Ab B.CodeName
+paraToCodeName :: C.TokenPara -> B.Ab B.CodeName
 paraToCodeName = B.paraSelect unmatch ps where
     ps = [ (just1, B.paraType `B.paraJust` 1)
          , (stdin, B.paraType `B.paraReq` ["-stdin"]) ]

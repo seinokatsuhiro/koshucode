@@ -55,6 +55,7 @@ module Koshucode.Baala.Core.Message
     unkCox,
     unkGlobalVar,
     unkNestRel,
+    unkOption,
     unkRefVar,
     unkRelmap,
     unkShow,
@@ -259,6 +260,22 @@ unkGlobalVar = Left . B.abortLine "Unknown global variable"
 -- | Unknown nested relation
 unkNestRel :: String -> B.Ab a
 unkNestRel = Left . B.abortLine "Unknown nested relation"
+
+-- | Unknown option
+unkOption :: B.ParaUnmatch -> B.Ab a
+unkOption un = Left $ B.abortLines "Unknown option" detail where
+    detail = case un of
+               B.ParaOutOfRange n p  -> ["Positional parameter out of range",
+                                         "Expect " ++ expect p ++
+                                         ", but actural " ++ show n]
+               B.ParaUnknown  ns     -> ["Unknown parameter name", unwords ns]
+               B.ParaMissing  ns     -> ["Missing parameter name", unwords ns]
+               B.ParaMultiple ns     -> ["Repeated parameter name", unwords ns]
+
+    expect (B.ParaPosJust n)     = "just " ++ show n
+    expect (B.ParaPosMin  n)     = "minimum " ++ show n
+    expect (B.ParaPosMax  n)     = "maximum " ++ show n
+    expect (B.ParaPosRange m n)  = "between " ++ show m ++ " and " ++ show n
 
 -- | Unknown reference for variable
 unkRefVar :: (String, Int) -> [String] -> B.Ab a

@@ -1,11 +1,13 @@
 {-# OPTIONS_GHC -Wall #-}
+{-# LANGUAGE PatternSynonyms #-}
 
 -- | Data structure for mapping relation to judges
 
 module Koshucode.Baala.Core.Assert.Assert
   ( -- * Data type
     Assert' (..),
-    AssertOption,
+    TokenPara,
+    tokenPara,
   
     -- * Short assertion
     ShortAssert',
@@ -25,18 +27,15 @@ import qualified Koshucode.Baala.Core.Relmap    as C
 --   It consists of logical quality, judgement pattern, and relmap.
 --   See also 'B.Judge'
 data Assert' h c = Assert
-    { assSection  :: C.SecNo                -- ^ Section number
-    , assType     :: C.AssertType           -- ^ Logical quality
-    , assPattern  :: B.JudgePat             -- ^ Pattern of judgement
-    , assOption   :: AssertOption           -- ^ Assert option
-    , assToken    :: [B.Token]              -- ^ Source token list
-    , assTree     :: [B.TTree]              -- ^ Token relmap
-    , assRelmap   :: Maybe (C.Relmap' h c)  -- ^ Relmap
-    , assLinks    :: C.RelmapLinkTable' h c
+    { assSection   :: C.SecNo                -- ^ Section number
+    , assType      :: C.AssertType           -- ^ Logical quality
+    , assPattern   :: B.JudgePat             -- ^ Pattern of judgement
+    , assOption    :: TokenPara              -- ^ Assert option
+    , assToken     :: [B.Token]              -- ^ Source token list
+    , assTree      :: [B.TTree]              -- ^ Token relmap
+    , assRelmap    :: Maybe (C.Relmap' h c)  -- ^ Relmap
+    , assLinks     :: C.RelmapLinkTable' h c
     } deriving (Show)
-
--- | Option for assertions.
-type AssertOption = [B.NamedTrees]
 
 instance B.CodePtr (Assert' h c) where
     codePtList = concatMap B.codePtList . assToken
@@ -45,6 +44,17 @@ instance B.Write (Assert' h c) where
     write sh (Assert _ q pat _ toks _ _ _) =
         let qs = B.writeH sh [C.assertSymbol q, pat]
         in B.docHang qs 2 (B.writeH sh toks)
+
+type TokenPara = B.Para B.TTree
+
+tokenPara :: [B.Token] -> B.Ab TokenPara
+tokenPara toks =
+    do trees <- B.tokenTrees toks
+       Right $ B.para maybeHyname trees
+
+maybeHyname :: B.TTreeTo (Maybe String)
+maybeHyname (B.TextLeafRaw _ n@('-' : _))  = Just n
+maybeHyname _                              = Nothing
 
 
 -- ----------------------  Short assertion

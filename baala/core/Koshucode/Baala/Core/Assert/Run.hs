@@ -62,8 +62,9 @@ runRelmapViaRelkit hook links r (B.Rel he1 bo1) =
 
 -- ---------------------------------  Options
 
-optionList :: [String]
-optionList = [ "-empty"  -- show empty filler
+optionType :: B.ParaType
+optionType = B.paraType `B.paraOpt`
+             [ "-empty"  -- show empty filler
              , "-fore"   -- move terms to front
              , "-order"  -- sort list of judges by content
              , "-align"  -- align terms vertically
@@ -71,43 +72,36 @@ optionList = [ "-empty"  -- show empty filler
              ]
 
 optionProcess :: (Ord c, B.Write c, C.CRel c)
-    => [B.ShortDef] -> (Bool -> B.JudgeOf c) -> B.JudgePat -> C.AssertOption
+    => [B.ShortDef] -> (Bool -> B.JudgeOf c) -> B.JudgePat -> C.TokenPara
     -> B.Rel c -> B.Ab [B.OutputChunk c]
 optionProcess sh judgeOf pat opt r1 =
-    do optionCheck optionList opt
+    do case B.paraUnmatch opt optionType of
+         Nothing  -> Right ()
+         Just un  -> Msg.unkOption un
+       showEmpty <- B.paraGetSwitch opt "-empty"
        r2 <- optionRelmap opt r1
-       let showEmpty = "-empty" `optionElem` opt
-           judges    = B.judgesFromRel (judgeOf showEmpty) pat r2
-           comment   = optionComment sh pat opt r2
+       let judges    = B.judgesFromRel (judgeOf showEmpty) pat r2
+       comment <- optionComment sh pat opt r2
        Right [ B.OutputJudge judges, B.OutputComment comment ]
 
-optionCheck :: [String] -> [B.NamedTrees] -> B.Ab ()
-optionCheck ns xs =
-    let rest = B.assocCut ("@trunk" : ns) xs
-    in if null rest
-       then Right ()
-       else Msg.unkWord (fst . head $ rest)
-
-optionRelmap :: (Ord c, C.CRel c) => C.AssertOption -> B.AbMap (B.Rel c)
+optionRelmap :: (Ord c, C.CRel c) => C.TokenPara -> B.AbMap (B.Rel c)
 optionRelmap opt r1 =
     Right r1 >>= call optionFore  "-fore"
              >>= call optionOrder "-order"
-    where call f name r2 = case lookup name opt of
-                             Nothing   -> Right r2
-                             Just opt2 -> f opt2 r2
+    where call f name r2 = case B.paraGet opt name of
+                             Right args -> f args r2
+                             Left _     -> Right r2
 
 optionComment :: (B.Write c, C.CRel c) =>
-    [B.ShortDef] -> B.JudgePat -> C.AssertOption -> B.Rel c -> [String]
+    [B.ShortDef] -> B.JudgePat -> C.TokenPara -> B.Rel c -> B.Ab [String]
 optionComment sh p opt r =
-    case "-table" `optionElem` opt of
-      True  -> title : "" : table
-      False -> []
+    do optTable <- B.paraGetSwitch opt "-table"
+       case optTable of
+         True  -> Right $ title : "" : table
+         False -> Right []
     where
       title = "TABLE : " ++ p
       table = ("  " ++) `map` C.relTableLines sh r
-
-optionElem :: String -> [B.NamedTrees] -> Bool
-optionElem name opt = name `elem` map fst opt
 
 
 -- ---------------------------------  Option "-fore"

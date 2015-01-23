@@ -18,8 +18,8 @@ module Koshucode.Baala.Base.Data.Para
     paraSelect, paraMatch, paraUnmatch,
 
     -- * Getting parameter elements
-    paraGet, paraGetList, paraGetPos,
-    paraGetFst, paraGetSnd, paraGetTrd,
+    paraGet, paraGetList, paraGetSwitch,
+    paraGetPos, paraGetFst, paraGetSnd, paraGetTrd,
     paraGetRest, paraGetRRest,
   ) where
 
@@ -167,6 +167,12 @@ paraGetList p n =
     case paraLookup n p of
       Just vss   -> Right vss
       Nothing    -> Msg.adlib "no named parameter"
+
+paraGetSwitch :: Para a -> String -> B.Ab Bool
+paraGetSwitch p n =
+    case paraLookup n p of
+      Just _     -> Right True
+      Nothing    -> Right False
 
 paraGetPos :: Para a -> B.Ab [a]
 paraGetPos = Right . paraPos
