@@ -262,7 +262,7 @@ unkNestRel :: String -> B.Ab a
 unkNestRel = Left . B.abortLine "Unknown nested relation"
 
 -- | Unknown option
-unkOption :: B.ParaUnmatch -> B.Ab a
+unkOption :: B.ParaUnmatch String -> B.Ab a
 unkOption un = Left $ B.abortLines "Unknown option" detail where
     detail = case un of
                B.ParaOutOfRange n p  -> ["Positional parameter out of range",
@@ -272,7 +272,7 @@ unkOption un = Left $ B.abortLines "Unknown option" detail where
                B.ParaMissing  ns     -> ["Missing parameter name", unwords ns]
                B.ParaMultiple ns     -> ["Repeated parameter name", unwords ns]
 
-    expect (B.ParaPosJust n)     = "just " ++ show n
+    expect (B.ParaPosJust n)     = "just "    ++ show n
     expect (B.ParaPosMin  n)     = "minimum " ++ show n
     expect (B.ParaPosMax  n)     = "maximum " ++ show n
     expect (B.ParaPosRange m n)  = "between " ++ show m ++ " and " ++ show n

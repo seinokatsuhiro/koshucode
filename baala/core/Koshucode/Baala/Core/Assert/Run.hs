@@ -62,7 +62,7 @@ runRelmapViaRelkit hook links r (B.Rel he1 bo1) =
 
 -- ---------------------------------  Options
 
-optionType :: B.ParaType
+optionType :: B.ParaType String
 optionType = B.paraType `B.paraOpt`
              [ "-empty"  -- show empty filler
              , "-fore"   -- move terms to front
