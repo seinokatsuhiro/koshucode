@@ -16,7 +16,7 @@
 |-- DIR-RANK  /dir-rank 12  /dir 'Koshucode.Baala.Base.Syntax  /base-rank {| /rank : /base : /import-dir | 0 : 'Line : [ ] | 11 : 'Code : [ 'Abort : 'Prelude : 'Text ] | 11 : 'Tree : [ 'Abort : 'Prelude : 'Text ] | 12 : 'Infix : [ 'Prelude ] |}
 |-- DIR-RANK  /dir-rank 15  /dir 'Koshucode.Baala.Base.Token  /base-rank {| /rank : /base : /import-dir | 7 : 'AngleText : [ 'Prelude : 'Text ] | 7 : 'Token : [ 'Prelude : 'Text ] | 8 : 'Short : [ 'Prelude : 'Text ] | 14 : 'TokenLine : [ 'Abort : 'Prelude : 'Syntax : 'Text ] | 15 : 'TokenClause : [ 'Prelude : 'Syntax : 'Text ] | 15 : 'TokenTree : [ 'Abort : 'Prelude : 'Syntax : 'Text ] |}
 
-|-- DIR-RANK  /dir-rank 21  /dir 'Koshucode.Baala.Base.Data  /base-rank {| /rank : /base : /import-dir | 11 : 'Clock : [ 'Abort : 'Prelude : 'Text ] | 11 : 'Date : [ 'Abort : 'Prelude : 'Text ] | 11 : 'Decimal : [ 'Abort : 'Prelude ] | 12 : 'Time : [ 'Abort : 'Prelude : 'Text ] | 17 : 'Interp : [ 'Prelude : 'Text : 'Token ] | 17 : 'Type : [ 'Prelude : 'Text : 'Token ] | 18 : 'Head : [ 'Prelude : 'Text : 'Token ] | 19 : 'Rel : [ 'Prelude : 'Text ] | 20 : 'Judge : [ 'Abort : 'Prelude : 'Text : 'Token ] | 20 : 'Mono : [ 'Abort ] | 21 : 'Output : [ 'Prelude : 'Text : 'Token ] |}
+|-- DIR-RANK  /dir-rank 21  /dir 'Koshucode.Baala.Base.Data  /base-rank {| /rank : /base : /import-dir | 11 : 'Clock : [ 'Abort : 'Prelude : 'Text ] | 11 : 'Date : [ 'Abort : 'Prelude : 'Text ] | 11 : 'Decimal : [ 'Abort : 'Prelude ] | 11 : 'Para : [ 'Abort : 'Prelude ] | 12 : 'Time : [ 'Abort : 'Prelude : 'Text ] | 17 : 'Interp : [ 'Prelude : 'Text : 'Token ] | 17 : 'Type : [ 'Prelude : 'Text : 'Token ] | 18 : 'Head : [ 'Prelude : 'Text : 'Token ] | 19 : 'Rel : [ 'Prelude : 'Text ] | 20 : 'Judge : [ 'Abort : 'Prelude : 'Text : 'Token ] | 20 : 'Mono : [ 'Abort ] | 21 : 'Output : [ 'Prelude : 'Text : 'Token ] |}
 |-- DIR-RANK  /dir-rank 22  /dir 'Koshucode.Baala.Base  /base-rank {| /rank : /base : /import-dir | 3 : 'Prelude : [ ] | 6 : 'Text : [ ] | 9 : 'Abort : [ ] | 10 : 'Message : [ 'Abort : 'Prelude : 'Text ] | 13 : 'Syntax : [ ] | 16 : 'Token : [ ] | 22 : 'Data : [ ] |}
 |-- DIR-RANK  /dir-rank 28  /dir 'Koshucode.Baala.Core.Content  /base-rank {| /rank : /base : /import-dir | 25 : 'Class : [ 'Base ] | 25 : 'Cox : [ 'Base ] | 25 : 'Tree : [ 'Base ] | 26 : 'Cop : [ 'Base ] | 26 : 'Literal : [ 'Base ] | 27 : 'Build : [ 'Base ] | 28 : 'Run : [ 'Base ] |}
 |-- DIR-RANK  /dir-rank 28  /dir 'Koshucode.Baala.Core.Lexmap  /base-rank {| /rank : /base : /import-dir | 25 : 'Attribute : [ 'Base ] | 26 : 'Slot : [ 'Base ] | 26 : 'Sorter : [ 'Base ] | 27 : 'Attrmap : [ 'Base ] | 28 : 'Lexmap : [ 'Base ] |}
@@ -92,6 +92,7 @@
 **                                                 11    'Clock         [ 'Abort : 'Prelude : 'Text ]
 **                                                 11    'Date          [ 'Abort : 'Prelude : 'Text ]
 **                                                 11    'Decimal       [ 'Abort : 'Prelude ]
+**                                                 11    'Para          [ 'Abort : 'Prelude ]
 **                                                 12    'Time          [ 'Abort : 'Prelude : 'Text ]
 **                                                 17    'Interp        [ 'Prelude : 'Text : 'Token ]
 **                                                 17    'Type          [ 'Prelude : 'Text : 'Token ]
