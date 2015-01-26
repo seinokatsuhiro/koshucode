@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-core
-@version 0.89.0.0
+@version 0.93.0.0
 
 module Koshucode.Baala.Core.Message
 abAssert :: CodePtr cp => [cp] -> Map (Ab b)
@@ -52,6 +52,9 @@ emptyLiteral :: Ab a
 
 -- | Extra attribute
 extraAttr :: Ab a
+
+-- | HTTP Error
+httpError :: String -> Int -> String -> Ab a
 
 -- | Invalid prefix character
 invalidPrefix :: [String] -> Ab a
@@ -112,6 +115,9 @@ unkGlobalVar :: String -> Ab a
 
 -- | Unknown nested relation
 unkNestRel :: String -> Ab a
+
+-- | Unknown option
+unkOption :: ParaUnmatch String -> Ab a
 
 -- | Unknown reference for variable
 unkRefVar :: (String, Int) -> [String] -> Ab a
@@ -794,23 +800,29 @@ module Koshucode.Baala.Core.Relmap.Global
 
 -- | Global parameters
 data Global' h c
-Global :: Version -> OpSet' (Rop' h) c -> String -> [String] -> Time -> [Source] -> [Judge c] -> Global' h c
+Global :: String -> Version -> OpSet' (Rop' h) c -> String -> [String] -> [HttpProxy] -> Time -> Int -> [CodePiece] -> [Judge c] -> h c -> Global' h c
+globalSynopsis :: Global' h c -> String
 globalVersion :: Global' h c -> Version
 globalOpset :: Global' h c -> OpSet' (Rop' h) c
 globalProgram :: Global' h c -> String
 globalArgs :: Global' h c -> [String]
+globalProxy :: Global' h c -> [HttpProxy]
 globalTime :: Global' h c -> Time
-globalSources :: Global' h c -> [Source]
+globalSourceCount :: Global' h c -> Int
+globalSources :: Global' h c -> [CodePiece]
 globalJudges :: Global' h c -> [Judge c]
+globalHook :: Global' h c -> h c
+globalVersionText :: Global' h c -> String
 globalCommandLine :: Global' h c -> [String]
 globalFill :: CContent c => Map (Global' h c)
 globalRops :: Global' h c -> [Rop' h c]
+globalRopsAdd :: Global' h c -> [Rop' h c] -> Global' h c
 globalCops :: Global' h c -> [Cop c]
 globalCopset :: Global' h c -> CopSet c
 globalInfix :: Global' h c -> [Named InfixHeight]
 
 -- | Empty global parameters.
-global :: Global' h c
+global' :: h c -> Global' h c
 class GetGlobal h
 getGlobal :: GetGlobal h => h c -> Global' h c
 ropGlobal :: GetGlobal h => RopUse' h c -> Global' h c
@@ -891,7 +903,7 @@ module Koshucode.Baala.Core.Assert.Assert
 -- | Affirming or denying relation. It consists of logical quality,
 --   judgement pattern, and relmap. See also <a>Judge</a>
 data Assert' h c
-Assert :: SecNo -> AssertType -> JudgePat -> AssertOption -> [Token] -> [TTree] -> Maybe (Relmap' h c) -> RelmapLinkTable' h c -> Assert' h c
+Assert :: SecNo -> AssertType -> JudgePat -> TokenPara -> [Token] -> [TTree] -> Maybe (Relmap' h c) -> RelmapLinkTable' h c -> Assert' h c
 
 -- | Section number
 assSection :: Assert' h c -> SecNo
@@ -903,7 +915,7 @@ assType :: Assert' h c -> AssertType
 assPattern :: Assert' h c -> JudgePat
 
 -- | Assert option
-assOption :: Assert' h c -> AssertOption
+assOption :: Assert' h c -> TokenPara
 
 -- | Source token list
 assToken :: Assert' h c -> [Token]
@@ -914,9 +926,8 @@ assTree :: Assert' h c -> [TTree]
 -- | Relmap
 assRelmap :: Assert' h c -> Maybe (Relmap' h c)
 assLinks :: Assert' h c -> RelmapLinkTable' h c
-
--- | Option for assertions.
-type AssertOption = [NamedTrees]
+type TokenPara = Para TTree
+tokenPara :: [Token] -> Ab TokenPara
 
 -- | Assertion list with short signs.
 type ShortAssert' h c = Short [Assert' h c]
@@ -972,7 +983,7 @@ clauseBody :: Clause -> ClauseBody
 data ClauseBody
 
 -- | Includeing source
-CInclude :: [Token] -> (Maybe Clause) -> ClauseBody
+CInclude :: [Token] -> ClauseBody
 
 -- | Exporting name
 CExport :: String -> ClauseBody
@@ -1034,10 +1045,17 @@ instance CodePtr Clause
 module Koshucode.Baala.Core.Assert
 
 
--- | Resource as bundle of relational expressions.
+-- | Internal representation of relational data resource. Data resource
+--   bundles data themselves and calculation stuffs. In Koshucode, data is
+--   represented as set of judgements, and calculation is as
+--   relation-to-relation mapping. This internal representation is usually
+--   constructed from computer files or web resources addressed by URI.
+--   Result of calculation on some resource becomes also data resource.
 module Koshucode.Baala.Core.Resource.Resource
+
+-- | Relational data resource
 data Resource c
-Resource :: Global c -> [Resource c] -> [String] -> [NamedTrees] -> [RelmapSource] -> [ShortAssert c] -> [Judge c] -> Source -> [String] -> SecNo -> RelSelect c -> Resource c
+Resource :: Global c -> [Resource c] -> [String] -> [NamedTrees] -> [RelmapSource] -> [ShortAssert c] -> [Judge c] -> ([CodeName], [CodeName], [CodePiece]) -> [String] -> SecNo -> RelSelect c -> Resource c
 
 -- | Global parameter
 resGlobal :: Resource c -> Global c
@@ -1060,8 +1078,8 @@ resAssert :: Resource c -> [ShortAssert c]
 -- | Affirmative or denial judgements
 resJudge :: Resource c -> [Judge c]
 
--- | Source name
-resSource :: Resource c -> Source
+-- | Codes of resource
+resArticle :: Resource c -> ([CodeName], [CodeName], [CodePiece])
 
 -- | Collection of messages
 resMessage :: Resource c -> [String]
@@ -1069,15 +1087,15 @@ resMessage :: Resource c -> [String]
 -- | Last section number
 resLastSecNo :: Resource c -> SecNo
 resSelect :: Resource c -> RelSelect c
-coxBuildG :: CContent c => Global c -> TTreeToAb (Cox c)
-addMessage :: String -> Map (Resource c)
-addMessages :: [String] -> Map (Resource c)
+
+-- | Abort or resource.
+type AbResource c = Ab (Resource c)
 
 -- | Resource that has no contents.
 resEmpty :: Resource c
-
--- | Include source code into resource.
-resInclude :: CContent c => Resource c -> Source -> String -> Ab (Resource c)
+resIncluded :: Resource c -> [CodePiece]
+addMessage :: String -> Map (Resource c)
+addMessages :: [String] -> Map (Resource c)
 type Assert c = Assert' Resource c
 type ConsRelmap c = ConsRelmap' Resource c
 type Global c = Global' Resource c
@@ -1088,9 +1106,18 @@ type Rop c = Rop' Resource c
 type RopCons c = RopCons' Resource c
 type RopUse c = RopUse' Resource c
 type ShortAssert c = ShortAssert' Resource c
+global :: Global c
 instance GetGlobal Resource
 instance SelectRel Resource
 instance Show (Resource c)
+
+
+-- | Resource as bundle of relational expressions.
+module Koshucode.Baala.Core.Resource.Include
+
+-- | Include source code into resource.
+resInclude :: CContent c => Resource c -> CodePiece -> String -> AbResource c
+coxBuildG :: CContent c => Global c -> TTreeToAb (Cox c)
 
 module Koshucode.Baala.Core.Resource.Quoter
 
@@ -1099,23 +1126,20 @@ koshuQuoter :: ConsLexmap -> ExpQ -> QuasiQuoter
 data QuasiQuoter :: *
 
 
--- | Read source as resource.
+-- | Read resource.
 module Koshucode.Baala.Core.Resource.Read
 
--- | Read resource from certain source.
-readResource :: CContent c => Resource c -> Source -> IO (Ab (Resource c))
+-- | I/O with global state.
+type GlobalIO a c = StateT (Global c) IO a
+
+-- | Calculation that returns abortable resource.
+type ResourceIO c = GlobalIO (AbResource c) c
+gio :: IO a -> GlobalIO a c
+gioResource :: ResourceIO c -> Global c -> IO (AbResource c, Global c)
 
 -- | Read resource from text.
-readResourceText :: CContent c => Resource c -> String -> Ab (Resource c)
-
--- | Bundle of sources.
-data SourceBundle c
-SourceBundle :: Resource c -> [Source] -> SourceBundle c
-bundleRoot :: SourceBundle c -> Resource c
-bundleSources :: SourceBundle c -> [Source]
-bundleTexts :: SourceBundle c -> [String]
-bundleRead :: CContent c => SourceBundle c -> IO (Ab (Resource c))
-instance Show (SourceBundle c)
+readResourceText :: CContent c => Resource c -> String -> AbResource c
+readSources :: CContent c => [CodeName] -> ResourceIO c
 
 
 -- | Run resource.
