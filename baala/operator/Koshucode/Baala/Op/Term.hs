@@ -38,13 +38,13 @@ import qualified Koshucode.Baala.Op.Message as Msg
 --
 ropsTerm :: (Ord c) => [C.Rop c]
 ropsTerm = Op.ropList "term"  -- GROUP
-    --          CONSTRUCTOR        USAGE                      ATTRIBUTE
-    [ Op.ropV   consCut            "cut /P ..."               "-term"
-    , Op.ropI   consCutTerm        "cut-term /R"              "-relmap/"
-    , Op.ropV   consPick           "pick /P ..."              "-term"
-    , Op.ropI   consPickTerm       "pick-term /R"             "-relmap/"
-    , Op.ropV   consRename         "rename /N /P ..."         "-term"
-    , Op.ropV   consMove           "move /P ... -to /N ..."   "-from | -to"
+    --         CONSTRUCTOR        USAGE                      ATTRIBUTE
+    [ Op.def   consCut            "cut /P ..."               "V -term"
+    , Op.def   consCutTerm        "cut-term /R"              "1 -relmap/"
+    , Op.def   consPick           "pick /P ..."              "V -term"
+    , Op.def   consPickTerm       "pick-term /R"             "1 -relmap/"
+    , Op.def   consRename         "rename /N /P ..."         "V -term"
+    , Op.def   consMove           "move /P ... -to /N ..."   "V -from | -to"
     ]
 
 

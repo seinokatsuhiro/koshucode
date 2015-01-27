@@ -2,7 +2,7 @@
 
 module Koshucode.Baala.Op.Builtin.Define
   ( RopDefine,
-    ropList,
+    ropList, def,
     ropN, ropE,
     ropI, ropII, ropIJ, ropIII,
     ropV, ropIV,
@@ -34,20 +34,45 @@ ropBy a cons usage attr = (cons, usage, attr') where
               [trunk]          -> a (names trunk) []
               [trunk, branch]  -> a (names trunk) (names branch)
               _                -> ropBug attr
-    names = map classify . words
+    names = map attrName . words
 
-    classify "-<"                     = C.AttrNameNest     "-<"
-    classify n@('-' : _) | l == '/'   = C.AttrNameRelmap $ init n
-                         | l == '<'   = C.AttrNameNest   $ init n
-                         | otherwise  = C.AttrNameNormal   n
-                         where l = last n
-    classify n = ropBug n
+ropBy2 :: (String -> [C.AttrName] -> [C.AttrName] -> C.AttrDefine)
+       -> C.RopCons c -> C.RopUsage -> String -> RopDefine c
+ropBy2 a cons usage attr = (cons, usage, attr') where
+    attr' = case map words $ B.divideBy (== '|') attr of
+              [q : trunk]          -> a q (n trunk) []
+              [q : trunk, branch]  -> a q (n trunk) (n branch)
+              _                    -> ropBug attr
+    n = map attrName
+
+attrName :: String -> C.AttrName
+attrName "-<"                    = C.AttrNameNest   "-<"
+attrName n@('-':_) | l == '/'    = C.AttrNameRelmap i
+                   | l == '<'    = C.AttrNameNest   i
+                   | otherwise   = C.AttrNameNormal n
+                   where l = last n
+                         i = init n
+attrName n = ropBug n
 
 ropBug :: String -> a
 ropBug x = B.bug $ "malformed attribute: " ++ x
 
 ropBugUnwords :: [C.AttrName] -> a
 ropBugUnwords = ropBug . unwords . map C.attrNameText
+
+def :: C.RopCons c -> C.RopUsage -> String -> RopDefine c
+def = ropBy2 f where
+    f "E"  as       = C.roaEnum as
+    f "0"  []       = C.roaNone
+    f "1"  [a]      = C.roaOne a
+    f "2"  [a,b]    = C.roaTwo a b
+    f "3"  [a,b,c]  = C.roaThree a b c
+    f "1?" [a,b]    = C.roaOneOpt a b
+    f "V"  [a]      = C.roaList a
+    f "1V" [a,b]    = C.roaOneList a b
+    f "T1" [a,b]    = C.roaTermsOne a b
+    f "T2" [a,b,c]  = C.roaTermsTwo a b c
+    f _ xs          = ropBugUnwords xs
 
 -- | No attributes
 ropN :: C.RopCons c -> C.RopUsage -> String -> RopDefine c

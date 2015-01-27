@@ -40,11 +40,11 @@ import qualified Koshucode.Baala.Op.Message as Msg
 --
 ropsGadget :: (C.CContent c) => [C.Rop c]
 ropsGadget = Op.ropList "gadget"  -- GROUP
-    --         CONSTRUCTOR  USAGE                      ATTRIBUTE
-    [ Op.ropV  consContents  "contents /N"              "-term"
-    , Op.ropV  consDumpTree  "dump-tree X"              "-tree"
-    , Op.ropII consDepRank   "dependent-rank /P /P -rank /N"  "-x -y | -rank"
-    , Op.ropI  consSize      "size /N"                  "-term"
+    --        CONSTRUCTOR   USAGE                      ATTRIBUTE
+    [ Op.def  consContents  "contents /N"              "V -term"
+    , Op.def  consDumpTree  "dump-tree X"              "V -tree"
+    , Op.def  consDepRank   "dependent-rank /P /P -rank /N"  "2 -x -y | -rank"
+    , Op.def  consSize      "size /N"                  "1 -term"
     ]
 
 

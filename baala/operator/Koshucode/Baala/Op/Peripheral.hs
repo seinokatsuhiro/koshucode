@@ -39,13 +39,13 @@ import qualified Koshucode.Baala.Op.Message   as Msg
 -- 
 ropsPeripheral :: (C.CContent c) => [C.Rop c]
 ropsPeripheral = Op.ropList "peripheral"
-    --         CONSTRUCTOR   USAGE                     ATTRIBUTE
-    [ Op.ropV  consAssn      "assn /P ... -to N"       "-term | -to"
-    , Op.ropE  consMember    "member /N /N"            "-1 -2"
-    , Op.ropIV consRdf       "rdf P /S /O"             "-pattern -term"
-    , Op.ropI  consTermName  "term-name /N"            "-term"
-    , Op.ropI  consToday     "today /N"                "-term"
-    , Op.ropI  consUnassn    "unassn /P -only /P ..."  "-from | -only"
+    --       CONSTRUCTOR   USAGE                     ATTRIBUTE
+    [ Op.def consAssn      "assn /P ... -to N"       "V -term | -to"
+    , Op.def consMember    "member /N /N"            "E -1 -2"
+    , Op.def consRdf       "rdf P /S /O"             "1V -pattern -term"
+    , Op.def consTermName  "term-name /N"            "1 -term"
+    , Op.def consToday     "today /N"                "1 -term"
+    , Op.def consUnassn    "unassn /P -only /P ..."  "1 -from | -only"
     ]
 
 -- ----------------------  member

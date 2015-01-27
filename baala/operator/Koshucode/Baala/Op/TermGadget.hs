@@ -35,11 +35,11 @@ import qualified Koshucode.Baala.Op.Term    as Op
 -- 
 ropsTermGadget :: (Ord c) => [C.Rop c]
 ropsTermGadget = Op.ropList "term"  -- GROUP
-    --          CONSTRUCTOR        USAGE                      ATTRIBUTE
-    [ Op.ropIV  consPrefix         "prefix /P /N ..."         "-prefix -term"
-    , Op.ropII  consPrefixChange   "prefix-change /P /Q"      "-new -old"
-    , Op.ropI   consUnprefix       "unprefix /P"              "-prefix"
-    , Op.ropN   consWipe           "wipe"                     ""
+    --        CONSTRUCTOR        USAGE                      ATTRIBUTE
+    [ Op.def  consPrefix         "prefix /P /N ..."         "1V -prefix -term"
+    , Op.def  consPrefixChange   "prefix-change /P /Q"      "2 -new -old"
+    , Op.def  consUnprefix       "unprefix /P"              "1 -prefix"
+    , Op.def  consWipe           "wipe"                     "0"
     ]
 
 
