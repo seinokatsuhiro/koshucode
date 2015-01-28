@@ -65,14 +65,14 @@ attrClassify trunkNames branchNames roa = roa2 where
 
 -- | Attribute sorter for no-attribute trunk.
 roaNone :: [C.AttrName] -> C.AttrDefine
-roaNone ns = spec (name f) [] ns where
+roaNone = spec (name f) [] where
     f []            = Right []
     f _             = Msg.unexpAttr "Attributes not required"
 
 -- | Attribute sorter for enumerating trunk,
 --   i.e., @-1@, @-2@, ...
 roaEnum :: [C.AttrName] -> [C.AttrName] -> C.AttrDefine
-roaEnum ks ns = spec (name f) ks ns where
+roaEnum ks = spec (name f) ks where
     f = Right . zip enumAttr . map B.li1
 
 enumAttr :: [C.AttrName]
@@ -80,53 +80,53 @@ enumAttr = map (C.AttrNameNormal . ('-' :) . show) [1 :: Int ..]
 
 -- | Attribute sorter for multiple-attribute trunk.
 roaList :: C.AttrName -> [C.AttrName] -> C.AttrDefine
-roaList a ns        = spec (name f) [a] ns where
+roaList a           = spec (name f) [a] where
     f xs            = Right [ (a, xs) ]
 
 -- | Attribute sorter for one-and-multiple-attribute trunk.
 roaOneList :: C.AttrName -> C.AttrName -> [C.AttrName] -> C.AttrDefine
-roaOneList a b ns = spec (name f) [a,b] ns where
+roaOneList a b      = spec (name f) [a,b] where
     f (a':b')       = Right [ (a, B.li1 a'), (b, b') ]
     f _             = Msg.unexpAttr "Require attributes"
 
 roaOneOpt :: C.AttrName -> C.AttrName -> [C.AttrName] -> C.AttrDefine
-roaOneOpt a b ns    = spec (name f) [a,b] ns where
+roaOneOpt a b       = spec (name f) [a,b] where
     f [a']          = Right [ (a, B.li1 a'), (b, []) ]
     f [a',b']       = Right [ (a, B.li1 a'), (b, B.li1 b') ]
     f _             = Msg.unexpAttr "Require one or two attributes"
 
 -- | Attribute sorter for one-attribute trunk.
 roaOne :: C.AttrName -> [C.AttrName] -> C.AttrDefine
-roaOne a ns         = spec (name f) [a] ns where
+roaOne a            = spec (name f) [a] where
     f [a']          = Right [ (a, B.li1 a') ]
     f _             = Msg.unexpAttr "Require one attribute"
 
 -- | Attribute sorter for two-attribute trunk.
 roaTwo :: C.AttrName -> C.AttrName -> [C.AttrName] -> C.AttrDefine
-roaTwo a b ns       = spec (name f) [a,b] ns where
+roaTwo a b          = spec (name f) [a,b] where
     f [a',b']       = Right [ (a, B.li1 a'), (b, B.li1 b') ]
     f _             = Msg.unexpAttr "Require two attributes"
 
 -- | Attribute sorter for three-attribute trunk.
 roaThree :: C.AttrName -> C.AttrName -> C.AttrName -> [C.AttrName] -> C.AttrDefine
-roaThree a b c ns   = spec (name f) [a,b,c] ns where
+roaThree a b c      = spec (name f) [a,b,c] where
     f [a',b',c']    = Right [ (a, B.li1 a'), (b, B.li1 b'), (c, B.li1 c') ]
     f _             = Msg.unexpAttr "Require three attributes"
 
 -- | Attribute sorter for four-attribute trunk.
 roaFour :: C.AttrName -> C.AttrName -> C.AttrName -> C.AttrName -> [C.AttrName] -> C.AttrDefine
-roaFour a b c d ns  = spec (name f) [a,b,c,d] ns where
+roaFour a b c d     = spec (name f) [a,b,c,d] where
     f [a',b',c',d'] = Right [ (a, B.li1 a'), (b, B.li1 b'), (c, B.li1 c'), (d, B.li1 d') ]
     f _             = Msg.unexpAttr "Require four attributes"
 
 roaTermsOne :: C.AttrName -> C.AttrName -> [C.AttrName] -> C.AttrDefine
-roaTermsOne a b ns = spec (name f) [a,b] ns where
+roaTermsOne a b = spec (name f) [a,b] where
     f xs = case span isTermLeaf xs of
              (a', [b']) -> Right [ (a, a'), (b, B.li1 b') ]
              _          -> Msg.unexpAttr "Require terms and one attribute"
 
 roaTermsTwo :: C.AttrName -> C.AttrName -> C.AttrName -> [C.AttrName] -> C.AttrDefine
-roaTermsTwo a b c ns = spec (name f) [a,b,c] ns where
+roaTermsTwo a b c = spec (name f) [a,b,c] where
     f xs = case span isTermLeaf xs of
              (a', [b',c']) -> Right [ (a, a'), (b, B.li1 b'), (c, B.li1 c') ]
              _             -> Msg.unexpAttr "Require terms and two attributes"
