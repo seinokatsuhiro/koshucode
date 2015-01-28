@@ -32,11 +32,11 @@ import qualified Koshucode.Baala.Op.Message  as Msg
 -- 
 ropsCoxFilter :: (C.CContent c) => [C.Rop c]
 ropsCoxFilter = Op.ropList "cox-filter"
-    --          CONSTRUCTOR         USAGE         ATTRIBUTE
-    [ Op.ropI   consContain         "contain E"   "-expr"
-    , Op.ropV   (consFilter True)   "keep E"      "-in | -where"
-    , Op.ropV   (consFilter False)  "omit E"      "-in | -where"
-    , Op.ropN   consOmitAll         "omit-all"    ""
+    --        CONSTRUCTOR         USAGE         ATTRIBUTE
+    [ Op.def  consContain         "contain E"   "1 -expr"
+    , Op.def  (consFilter True)   "keep E"      "V -in | -where"
+    , Op.def  (consFilter False)  "omit E"      "V -in | -where"
+    , Op.def  consOmitAll         "omit-all"    "0"
     ]
 
 

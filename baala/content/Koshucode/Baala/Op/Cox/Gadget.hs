@@ -27,12 +27,12 @@ import qualified Koshucode.Baala.Op.Message  as Msg
 -- | Implementation of relational operators.
 ropsCoxGadget :: (C.CContent c) => [C.Rop c]
 ropsCoxGadget = Op.ropList "cox-gadget"
-    --         CONSTRUCTOR    USAGE                        ATTRIBUTE
-    [ Op.ropI  consConst      "const R"                    "-lit"
-    , Op.ropI  consInterp     "interp E"                   "-interp | -x"
-    , Op.ropI  consNumber     "number /N -order /N ..."    "-term | -order -from"
-    , Op.ropI  consRank       "rank /N -order /N ..."      "-term | -order -from -dense"
-    , Op.ropII consRepeat     "repeat N R"                 "-count -relmap/"
+    --        CONSTRUCTOR    USAGE                        ATTRIBUTE
+    [ Op.def  consConst      "const R"                    "1 -lit"
+    , Op.def  consInterp     "interp E"                   "1 -interp | -x"
+    , Op.def  consNumber     "number /N -order /N ..."    "1 -term | -order -from"
+    , Op.def  consRank       "rank /N -order /N ..."      "1 -term | -order -from -dense"
+    , Op.def  consRepeat     "repeat N R"                 "2 -count -relmap/"
     ]
 
 

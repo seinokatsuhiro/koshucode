@@ -33,14 +33,14 @@ import qualified Koshucode.Baala.Op.Cox.Get  as Op
 -- | Implementation of relational operators.
 ropsCoxRange :: (C.CContent c) => [C.Rop c]
 ropsCoxRange = Op.ropList "cox-calc"
-    --          CONSTRUCTOR       USAGE                             ATTRIBUTE
-    [ Op.ropI   consRange         "range /N -from E -to E"          "-term | -from -to"
-    , Op.ropI   consRangeYear     "range-year /N -from /P to /P"    "-term | -from -to"
-    , Op.ropI   consRangeMonth    "range-month /N -from /P to /P"   "-term | -from -to"
-    , Op.ropI   consRangeDay      "range-day /N -from /P to /P"     "-term | -from -to"
-    , Op.ropI   consRangeHour     "range-hour /N -from /P to /P"    "-term | -from -to"
-    , Op.ropI   consRangeMinute   "range-minute /N -from /P to /P"  "-term | -from -to"
-    , Op.ropI   consRangeSecond   "range-second /N -from /P to /P"  "-term | -from -to"
+    --        CONSTRUCTOR       USAGE                             ATTRIBUTE
+    [ Op.def  consRange         "range /N -from E -to E"          "1 -term | -from -to"
+    , Op.def  consRangeYear     "range-year /N -from /P to /P"    "1 -term | -from -to"
+    , Op.def  consRangeMonth    "range-month /N -from /P to /P"   "1 -term | -from -to"
+    , Op.def  consRangeDay      "range-day /N -from /P to /P"     "1 -term | -from -to"
+    , Op.def  consRangeHour     "range-hour /N -from /P to /P"    "1 -term | -from -to"
+    , Op.def  consRangeMinute   "range-minute /N -from /P to /P"  "1 -term | -from -to"
+    , Op.def  consRangeSecond   "range-second /N -from /P to /P"  "1 -term | -from -to"
     ]
 
 

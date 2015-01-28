@@ -41,15 +41,15 @@ import qualified Koshucode.Baala.Op.Message  as Msg
 -- 
 ropsCoxCalc :: (C.CContent c) => [C.Rop c]
 ropsCoxCalc = Op.ropList "cox-calc"
-    --          CONSTRUCTOR       USAGE                          ATTRIBUTE
-    [ Op.ropV   consAdd           "add /N E ..."                 "-cox | -where"
-    , Op.ropTI  consFill          "fill /P E"                    "-term -to"
-    , Op.ropTI  consReplace       "replace /P E"                 "-term -by"
-    , Op.ropN   consReplaceAll    "replace-all -from E -to E"    "| -from -to"
-    , Op.ropV   consSplit         "split /N E ..."               "-cox | -where"
-    , Op.ropV   consSubst         "subst /N E ..."               "-cox | -where"
-    , Op.ropIV  consUnary         "unary /N E ..."               "-term -expr"
-    , Op.ropV   consDumpCox       "dump-cox E"                   "-cox"
+    --        CONSTRUCTOR       USAGE                          ATTRIBUTE
+    [ Op.def  consAdd           "add /N E ..."                 "V -cox | -where"
+    , Op.def  consFill          "fill /P E"                    "T1 -term -to"
+    , Op.def  consReplace       "replace /P E"                 "T1 -term -by"
+    , Op.def  consReplaceAll    "replace-all -from E -to E"    "0 | -from -to"
+    , Op.def  consSplit         "split /N E ..."               "V -cox | -where"
+    , Op.def  consSubst         "subst /N E ..."               "V -cox | -where"
+    , Op.def  consUnary         "unary /N E ..."               "1V -term -expr"
+    , Op.def  consDumpCox       "dump-cox E"                   "V -cox"
     ]
 
 
