@@ -49,6 +49,15 @@ module Koshucode.Baala.Core.Message
     reqGroup,
     reqTermName,
     unexpAttr,
+    unexpAttr0,
+    unexpAttr1,
+    unexpAttr2,
+    unexpAttr3,
+    unexpAttr4,
+    unexpAttr1V,
+    unexpAttr1Q,
+    unexpAttrT1,
+    unexpAttrT2,
     unkBracket,
     unkClause,
     unkCop,
@@ -236,6 +245,33 @@ reqTermName = Left $ B.abortBecause "Require term name"
 -- | Unexpected attribute
 unexpAttr :: String -> B.Ab a
 unexpAttr = Left . B.abortLine "Unexpected attribute"
+
+unexpAttr0 :: B.Ab a
+unexpAttr0 = unexpAttr "Attributes not required"
+
+unexpAttr1 :: B.Ab a
+unexpAttr1 = unexpAttr "Require one attribute"
+
+unexpAttr2 :: B.Ab a
+unexpAttr2 = unexpAttr "Require two attributes"
+
+unexpAttr3 :: B.Ab a
+unexpAttr3 = unexpAttr "Require three attributes"
+
+unexpAttr4 :: B.Ab a
+unexpAttr4 = unexpAttr "Require four attributes"
+
+unexpAttr1V :: B.Ab a
+unexpAttr1V = unexpAttr "Require attributes"
+
+unexpAttr1Q :: B.Ab a
+unexpAttr1Q = unexpAttr "Require one or two attributes"
+
+unexpAttrT1 :: B.Ab a
+unexpAttrT1 = unexpAttr "Require terms and one attribute"
+
+unexpAttrT2 :: B.Ab a
+unexpAttrT2 = unexpAttr "Require terms and two attributes"
 
 -- | Unknown bracket
 unkBracket :: B.Ab a
