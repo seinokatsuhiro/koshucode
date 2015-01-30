@@ -5,7 +5,7 @@
 module Koshucode.Baala.Base.Data.Para
   ( -- * Parameter constructor
     Para, ParaBody (..), ParaMap,
-    para,
+    para, paraPosName, paraNameMapKeys,
 
     -- * Types of parameters
     ParaType (..), ParaPosType (..), 
@@ -68,6 +68,16 @@ paraMultiples = paraNamesOf (not . B.isSingleton)
 
 paraNamesOf :: ([[a]] -> Bool) -> ParaBody n a -> [n]
 paraNamesOf f ParaBody { paraName = m } = Map.keys $ Map.filter f m
+
+paraPosName :: (Ord n, Monad m) => ([a] -> m [(n, [a])]) -> ParaBody n a -> m (ParaBody n a)
+paraPosName pn p =
+    do ns <- pn $ paraPos p
+       let m = Map.fromList $ map (B.mapSnd B.li1) ns
+       return $ p { paraName = Map.union m $ paraName p }
+
+paraNameMapKeys :: (Ord n2) => (n1 -> n2) -> ParaBody n1 a -> ParaBody n2 a
+paraNameMapKeys f p@ParaBody { paraName = m } =
+    p { paraName = Map.mapKeys f m }
 
 
 -- ----------------------  Parameter Type

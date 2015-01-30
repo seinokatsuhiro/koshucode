@@ -42,20 +42,17 @@ def trunkSorter trunkNames branchNames =
     C.AttrDefine trunkSorter classify trunkNames branchNames where
         classify = attrClassify trunkNames branchNames
 
-attrClassify :: [C.AttrName] -> [C.AttrName] -> B.AbMap [C.AttrTree]
-attrClassify trunkNames branchNames roa = roa2 where
-    roa2     :: B.Ab [C.AttrTree]
-    roa2     = B.sequenceFst $ B.mapFstTo relmap roa
-
-    relmap :: B.AbMap C.AttrName
-    relmap n = let nam = C.attrNameText n
-               in case lookup nam pairs of
-                 Just k  -> Right k
-                 Nothing -> Msg.unexpAttr $ "Unknown " ++ nam
+attrClassify :: [C.AttrName] -> [C.AttrName] -> B.Map C.AttrName
+attrClassify trunkNames branchNames n = n2 where
+    n2 :: C.AttrName
+    n2 = let nam = C.attrNameText n
+         in case lookup nam pairs of
+              Just k  -> k
+              Nothing -> n
 
     pairs    :: [B.Named C.AttrName]
     pairs    = map pair alls
-    pair n   = (C.attrNameText n, n)
+    pair k   = (C.attrNameText k, k)
     alls     = C.attrNameTrunk : trunkNames ++ branchNames
 
 pn :: B.Ab [(n, [a])] -> ([a] -> Maybe [(n, [a])]) -> [a] -> B.Ab [(n, [a])]

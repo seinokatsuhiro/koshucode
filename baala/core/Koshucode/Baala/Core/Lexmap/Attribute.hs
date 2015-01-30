@@ -68,10 +68,10 @@ attrNameTrunk = AttrNameNormal "@trunk"
 
 -- | Definition of attribute sorter.
 data AttrDefine = AttrDefine
-    { attrTrunkSorter :: AttrSort             -- Trunk sorter
-    , attrClassifier  :: B.AbMap [AttrTree]   -- Attribute classifier
-    , attrTrunkNames  :: [AttrName]           -- Trunk names
-    , attrBranchNames :: [AttrName]           -- Branch names
+    { attrTrunkSorter :: AttrSort           -- Trunk sorter
+    , attrClassifier  :: B.Map AttrName     -- Attribute classifier
+    , attrTrunkNames  :: [AttrName]         -- Trunk names
+    , attrBranchNames :: [AttrName]         -- Branch names
     }
 
 -- | List of attribute name and its contents.
@@ -115,14 +115,25 @@ hyphenAssc = B.assocBy name "@trunk" where
     name _ = Nothing
 
 attrTrunk :: AttrDefine -> B.AbMap [AttrTree]
-attrTrunk (AttrDefine sorter classify trunkNames _) attr = attr3 where
-    attr3, attr2 :: B.Ab [AttrTree]
-    attr3 = classify =<< attr2
+attrTrunk (AttrDefine sorter classify trunkNames branchNames) attr = attr4 where
+    attr4, attr3, attr2 :: B.Ab [AttrTree]
+    attr4 = Right . B.mapFstTo classify =<< attr3
+    attr3 = do a <- attr2
+               case t (map fst a) B.\\ textAll of
+                 []    -> attr2
+                 u : _ -> Msg.unexpAttr $ "Unknown " ++ u
     attr2 | B.notNull wrap  = Right attr
           | otherwise       = case lookup attrNameTrunk attr of
                                 Just xs -> Right . (++ attr) =<< sorter xs
                                 Nothing -> Right attr
 
+    t       = map attrNameText
+    textAll = "@attr" : "@trunk" : t trunkNames ++ t branchNames
+
     wrap, given :: [AttrName]
     wrap  = given `List.intersect` trunkNames
     given = map fst attr
+
+-- attrTrunk2 :: AttrDefine -> B.AbMap (B.ParaBody AttrName B.TTree)
+-- attrTrunk2 (AttrDefine sorter classify trunkNames _) p = p2 where
+--     p2 = B.paraPosName sorter p
