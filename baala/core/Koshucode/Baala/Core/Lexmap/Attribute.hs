@@ -15,12 +15,11 @@ module Koshucode.Baala.Core.Lexmap.Attribute
     AttrDefine (..),
     AttrTree,
     AttrSort,
-    TreeSort,
     RopName,
   
     -- * Attribute sorter
     attrSort,
-    attrSortBranch,
+    attrBranch,
     hyphenAssc,
     -- $AttributeSorter
   ) where
@@ -69,7 +68,7 @@ attrNameTrunk = AttrNameNormal "@trunk"
 
 -- | Definition of attribute sorter.
 data AttrDefine = AttrDefine
-    { attrTrunkSorter :: B.AbMap [AttrTree]   -- Trunk sorter
+    { attrTrunkSorter :: AttrSort             -- Trunk sorter
     , attrClassifier  :: B.AbMap [AttrTree]   -- Attribute classifier
     , attrTrunkNames  :: [AttrName]           -- Trunk names
     , attrBranchNames :: [AttrName]           -- Branch names
@@ -82,8 +81,6 @@ type AttrTree = (AttrName, [B.TTree])
 --   Sorters docompose attribute trees,
 --   and give a name to subattribute.
 type AttrSort = [B.TTree] -> B.Ab [AttrTree]
-
-type TreeSort = [B.TTree] -> [B.NamedTrees]
 
 -- | Name of relmap operator.
 type RopName = String
@@ -103,28 +100,29 @@ type RopName = String
 --   , ("-y", [TreeL (TText 14 0 "e")]) ]
 
 attrSort :: AttrDefine -> AttrSort
-attrSort spec = attrSortBranch B.>=> attrTrunk spec
+attrSort def = attrBranch B.>=> attrTrunk def
 
-attrSortBranch :: AttrSort
-attrSortBranch trees =
+attrBranch :: AttrSort
+attrBranch trees =
     do let assc = hyphenAssc trees
            dup  = B.duplicates $ map fst assc
        B.when (B.notNull dup) $ Msg.dupAttr dup
        Right $ B.mapFstTo AttrNameNormal assc
 
-hyphenAssc :: TreeSort
+hyphenAssc :: [B.TTree] -> [B.NamedTrees]
 hyphenAssc = B.assocBy name "@trunk" where
     name (B.TextLeafRaw _ n@('-' : _)) = Just n
     name _ = Nothing
 
 attrTrunk :: AttrDefine -> B.AbMap [AttrTree]
-attrTrunk (AttrDefine sorter classify trunkNames _) roa = roa3 where
-    roa3, roa2 :: B.Ab [AttrTree]
-    roa3 = classify =<< roa2
-    roa2 | B.notNull wrap = Right  roa
-         | otherwise      = sorter roa
+attrTrunk (AttrDefine sorter classify trunkNames _) attr = attr3 where
+    attr3, attr2 :: B.Ab [AttrTree]
+    attr3 = classify =<< attr2
+    attr2 | B.notNull wrap  = Right attr
+          | otherwise       = case lookup attrNameTrunk attr of
+                                Just xs -> Right . (++ attr) =<< sorter xs
+                                Nothing -> Right attr
 
     wrap, given :: [AttrName]
     wrap  = given `List.intersect` trunkNames
-    given = map fst roa
-
+    given = map fst attr

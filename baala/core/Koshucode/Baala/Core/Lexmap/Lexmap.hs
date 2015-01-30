@@ -141,7 +141,7 @@ consLexmap findSorter gslot findRelmap = lexmap where
     -- construct derived lexmap
     deriv :: B.Token -> RelmapSource -> ConsLexmapBody
     deriv rop src _ trees =
-        do attr <- C.attrSortBranch trees
+        do attr <- C.attrBranch trees
            let lx = cons LexmapDerived rop attr trees
            tab <- table lx src
            Right (lx, tab)

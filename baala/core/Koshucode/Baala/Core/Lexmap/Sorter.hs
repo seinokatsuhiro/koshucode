@@ -39,14 +39,8 @@ import qualified Koshucode.Baala.Core.Message          as Msg
 
 def :: C.AttrSort -> [C.AttrName] -> [C.AttrName] -> C.AttrDefine
 def trunkSorter trunkNames branchNames =
-    C.AttrDefine (name trunkSorter) classify trunkNames branchNames where
+    C.AttrDefine trunkSorter classify trunkNames branchNames where
         classify = attrClassify trunkNames branchNames
-
--- | Give a name to unnamed attribute.
-name :: C.AttrSort -> B.AbMap [C.AttrTree]
-name f roa = case lookup C.attrNameTrunk roa of
-               Just xs -> Right . (++ roa) =<< f xs
-               Nothing -> Right roa
 
 attrClassify :: [C.AttrName] -> [C.AttrName] -> B.AbMap [C.AttrTree]
 attrClassify trunkNames branchNames roa = roa2 where
