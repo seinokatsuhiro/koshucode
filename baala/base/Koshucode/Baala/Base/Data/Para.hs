@@ -77,7 +77,7 @@ paraPosName :: (Ord n, Monad m) => ([a] -> m [(n, [a])]) -> ParaBody n a -> m (P
 paraPosName pn p =
     do ns <- pn $ paraPos p
        let m = Map.fromList $ map (B.mapSnd B.li1) ns
-       return $ p { paraName = Map.union m $ paraName p }
+       return $ p { paraName = paraName p `Map.union` m }
 
 paraNameMapKeys :: (Ord n2) => (n1 -> n2) -> ParaBody n1 a -> ParaBody n2 a
 paraNameMapKeys f p@ParaBody { paraName = m } =
