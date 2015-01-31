@@ -20,7 +20,7 @@ module Koshucode.Baala.Core.Lexmap.Attribute
     -- * Attribute sorter
     attrSort,
     attrBranch,
-    hyphenAssc,
+    maybeHyname,
     -- $AttributeSorter
   ) where
 
@@ -104,36 +104,46 @@ attrSort def = attrBranch B.>=> attrTrunk def
 
 attrBranch :: AttrSort
 attrBranch trees =
-    do let assc = hyphenAssc trees
+    do let p = B.para maybeHyname trees
+           assc = ("@trunk", B.paraPos p) : attrList p
            dup  = B.duplicates $ map fst assc
        B.when (B.notNull dup) $ Msg.dupAttr dup
        Right $ B.mapFstTo AttrNameNormal assc
 
-hyphenAssc :: [B.TTree] -> [B.NamedTrees]
-hyphenAssc = B.assocBy name "@trunk" where
-    name (B.TextLeafRaw _ n@('-' : _)) = Just n
-    name _ = Nothing
+maybeHyname :: B.TTreeTo (Maybe String)
+maybeHyname (B.TextLeafRaw _ n@('-' : _))  = Just n
+maybeHyname _                              = Nothing
 
 attrTrunk :: AttrDefine -> B.AbMap [AttrTree]
 attrTrunk (AttrDefine sorter classify trunkNames branchNames) attr = attr4 where
     attr4, attr3, attr2 :: B.Ab [AttrTree]
     attr4 = Right . B.mapFstTo classify =<< attr3
-    attr3 = do a <- attr2
-               case t (map fst a) B.\\ textAll of
-                 []    -> attr2
-                 u : _ -> Msg.unexpAttr $ "Unknown " ++ u
+    attr3 = attrCheck trunkNames branchNames =<< attr2
     attr2 | B.notNull wrap  = Right attr
           | otherwise       = case lookup attrNameTrunk attr of
                                 Just xs -> Right . (++ attr) =<< sorter xs
                                 Nothing -> Right attr
 
-    t       = map attrNameText
-    textAll = "@attr" : "@trunk" : t trunkNames ++ t branchNames
-
     wrap, given :: [AttrName]
     wrap  = given `List.intersect` trunkNames
     given = map fst attr
 
--- attrTrunk2 :: AttrDefine -> B.AbMap (B.ParaBody AttrName B.TTree)
--- attrTrunk2 (AttrDefine sorter classify trunkNames _) p = p2 where
---     p2 = B.paraPosName sorter p
+attrCheck :: [AttrName] -> [AttrName] -> [AttrTree] -> B.Ab [AttrTree]
+attrCheck trunkNames branchNames attr =
+    case t (map fst attr) B.\\ textAll of
+      []    -> Right attr
+      u : _ -> Msg.unexpAttr $ "Unknown " ++ u
+    where
+      t       = map attrNameText
+      textAll = "@attr" : "@trunk" : t trunkNames ++ t branchNames
+
+-- attrTrunk2 :: AttrDefine -> B.ParaBody AttrName B.TTree -> B.Ab [AttrTree]
+-- attrTrunk2 (AttrDefine sorter classify trunkNames branchNames) p =
+--     do p2 <- B.paraPosName sorter p
+--        let p3   = B.paraNameMapKeys classify p2
+--            attr = attrList p3
+--        attrCheck trunkNames branchNames attr
+
+attrList :: B.ParaBody n a -> [(n, [a])]
+attrList = map (B.mapSnd concat) . B.paraNameList
+

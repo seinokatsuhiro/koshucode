@@ -5,7 +5,8 @@
 module Koshucode.Baala.Base.Data.Para
   ( -- * Parameter constructor
     Para, ParaBody (..), ParaMap,
-    para, paraPosName, paraNameMapKeys,
+    para, paraNameList,
+    paraPosName, paraNameMapKeys,
 
     -- * Types of parameters
     ParaType (..), ParaPosType (..), 
@@ -59,6 +60,9 @@ para name xxs = pos xxs [] where
                                        in val a2 n2 xs []
     add n vs =
         Map.insertWith (++) n [reverse vs]
+
+paraNameList :: ParaBody n a -> [(n, [[a]])]
+paraNameList ParaBody { paraName = m } = Map.assocs m
 
 paraLookup :: (Ord n) => n -> ParaBody n a -> Maybe [[a]]
 paraLookup n ParaBody { paraName = m } = Map.lookup n m
