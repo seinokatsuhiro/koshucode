@@ -114,11 +114,11 @@ attrBranch trees =
 
 attrBranch2 :: [B.TTree] -> B.Ab AttrPara
 attrBranch2 trees =
-    do let p = B.para maybeHyname trees
-           assc = ("@trunk", B.paraPos p) : attrList p
-           dup  = B.duplicates $ map fst assc
+    do let p   = B.para maybeHyname trees
+           p2  = B.paraNameAdd "@trunk" (B.paraPos p) p
+           dup = B.paraMultipleNames p2
        B.when (B.notNull dup) $ Msg.dupAttr dup
-       Right $ B.paraNameMapKeys AttrNameNormal p
+       Right $ B.paraNameMapKeys AttrNameNormal p2
 
 maybeHyname :: B.TTreeTo (Maybe String)
 maybeHyname (B.TextLeafRaw _ n@('-' : _))  = Just n

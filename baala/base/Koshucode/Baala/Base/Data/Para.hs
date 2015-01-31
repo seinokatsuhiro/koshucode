@@ -5,8 +5,8 @@
 module Koshucode.Baala.Base.Data.Para
   ( -- * Parameter constructor
     Para, ParaBody (..), ParaMap,
-    para, paraNameList,
-    paraPosName, paraNameMapKeys,
+    para, paraNameList, paraNameAdd,
+    paraPosName, paraMultipleNames, paraNameMapKeys,
 
     -- * Types of parameters
     ParaType (..), ParaPosType (..), 
@@ -44,6 +44,7 @@ data ParaBody n a
 
 type ParaMap n a = Map.Map n [[a]]
 
+-- | Parse list into parameter.
 para :: (Ord n) => (a -> Maybe n) -> [a] -> ParaBody n a
 para name xxs = pos xxs [] where
     make ps            = ParaBody xxs (reverse ps) Map.empty
@@ -58,27 +59,38 @@ para name xxs = pos xxs [] where
                            Nothing  -> val a n xs (x:vs)
                            Just n2  -> let a2 = add n vs a
                                        in val a2 n2 xs []
-    add n vs =
-        Map.insertWith (++) n [reverse vs]
+    add n vs = paraInsert n $ reverse vs
 
+-- | Association list of named parameters.
 paraNameList :: ParaBody n a -> [(n, [[a]])]
 paraNameList ParaBody { paraName = m } = Map.assocs m
+
+-- | Add named parameter.
+paraNameAdd :: (Ord n) => n -> [a] -> B.Map (ParaBody n a)
+paraNameAdd n vs p@ParaBody { paraName = m } =
+    p { paraName = paraInsert n vs m }
+
+paraInsert :: (Ord n) => n -> [a] -> B.Map (ParaMap n a)
+paraInsert n a = Map.insertWith (++) n [a]
 
 paraLookup :: (Ord n) => n -> ParaBody n a -> Maybe [[a]]
 paraLookup n ParaBody { paraName = m } = Map.lookup n m
 
-paraMultiples :: ParaBody n a -> [n]
-paraMultiples = paraNamesOf (not . B.isSingleton)
+-- | List of names which appear more than once.
+paraMultipleNames :: ParaBody n a -> [n]
+paraMultipleNames = paraNamesOf (not . B.isSingleton)
 
 paraNamesOf :: ([[a]] -> Bool) -> ParaBody n a -> [n]
 paraNamesOf f ParaBody { paraName = m } = Map.keys $ Map.filter f m
 
+-- | Give names to positional parameters.
 paraPosName :: (Ord n, Monad m) => ([a] -> m [(n, [a])]) -> ParaBody n a -> m (ParaBody n a)
 paraPosName pn p =
     do ns <- pn $ paraPos p
        let m = Map.fromList $ map (B.mapSnd B.li1) ns
        return $ p { paraName = paraName p `Map.union` m }
 
+-- | Map names of named parameters.
 paraNameMapKeys :: (Ord n2) => (n1 -> n2) -> ParaBody n1 a -> ParaBody n2 a
 paraNameMapKeys f p@ParaBody { paraName = m } =
     p { paraName = Map.mapKeys f m }
@@ -148,7 +160,7 @@ paraUnmatch p (ParaType pos req opt mul)
       upos              :: Maybe (ParaUnmatch n)
       upos              = paraPosUnmatch (paraPos p) pos
       ns                = Map.keys $ paraName p
-      ns2               = paraMultiples p
+      ns2               = paraMultipleNames p
       total             = req ++ opt ++ mul
       unknowns          = ns  B.\\ total
       missings          = req B.\\ ns
