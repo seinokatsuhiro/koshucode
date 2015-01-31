@@ -105,12 +105,7 @@ attrSort :: AttrDefine -> AttrSort
 attrSort def = attrBranch2 B.>=> attrTrunk def
 
 attrBranch :: AttrSort
-attrBranch trees =
-    do let p = B.para maybeHyname trees
-           assc = ("@trunk", B.paraPos p) : attrList p
-           dup  = B.duplicates $ map fst assc
-       B.when (B.notNull dup) $ Msg.dupAttr dup
-       Right $ B.mapFstTo AttrNameNormal assc
+attrBranch = attrBranch2 B.>=> Right . attrList
 
 attrBranch2 :: [B.TTree] -> B.Ab AttrPara
 attrBranch2 trees =
