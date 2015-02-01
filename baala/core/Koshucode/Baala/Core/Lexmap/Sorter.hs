@@ -37,7 +37,7 @@ import qualified Koshucode.Baala.Core.Message          as Msg
 --
 --    > roaOneList "-pattern" "-term" []
 
-def :: C.AttrSort -> [C.AttrName] -> [C.AttrName] -> C.AttrDefine
+def :: C.AttrSortTree -> [C.AttrName] -> [C.AttrName] -> C.AttrDefine
 def trunkSorter trunkNames branchNames =
     C.AttrDefine trunkSorter classify trunkNames branchNames where
         classify = attrClassify trunkNames branchNames

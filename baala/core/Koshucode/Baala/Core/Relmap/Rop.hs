@@ -12,11 +12,11 @@ import qualified Koshucode.Baala.Core.Relmap.Relmap    as C
 
 -- | Implementation of relmap operator.
 data Rop' h c = Rop
-    { ropName     :: C.RopName      -- ^ Operator name
-    , ropGroup    :: String         -- ^ Operator group
-    , ropSorter   :: C.AttrSort     -- ^ Attribute sorter
-    , ropCons     :: RopCons' h c   -- ^ Constructor of operator
-    , ropUsage    :: RopUsage       -- ^ Usage text of operator
+    { ropName     :: C.RopName        -- ^ Operator name
+    , ropGroup    :: String           -- ^ Operator group
+    , ropSorter   :: C.AttrSortPara   -- ^ Attribute sorter
+    , ropCons     :: RopCons' h c     -- ^ Constructor of operator
+    , ropUsage    :: RopUsage         -- ^ Usage text of operator
     }
 
 instance Show (Rop' h c) where

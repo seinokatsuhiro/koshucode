@@ -8,6 +8,7 @@ module Koshucode.Baala.Core.Lexmap.Lexmap
   ( -- * Data type
     Lexmap (..),
     LexmapType (..),
+    lexBase,
     lexRopName,
     lexAddMessage,
     lexMessageList,
@@ -37,6 +38,7 @@ data Lexmap = Lexmap
     { lexType      :: LexmapType    -- ^ Type of lexmap
     , lexRopToken  :: B.Token       -- ^ Token of operator
     , lexAttr      :: [C.AttrTree]  -- ^ Attribute of relmap operation
+    , lexPara      :: C.AttrPara    -- ^ Attribute of relmap operation
     , lexSubmap    :: [Lexmap]      -- ^ Submaps in the attribute
     , lexMessage   :: [String]      -- ^ Messages on lexmap
     } deriving (Show, Eq, Ord, G.Data, G.Typeable)
@@ -56,6 +58,14 @@ instance B.Write Lexmap where
 
 instance B.CodePtr Lexmap where
     codePtList = B.codePtList . lexRopToken
+
+lexBase :: Lexmap
+lexBase = Lexmap { lexType      = LexmapBase
+                 , lexRopToken  = B.textToken ""
+                 , lexAttr      = []
+                 , lexPara      = B.paraEmpty
+                 , lexSubmap    = []
+                 , lexMessage   = [] }
 
 -- | Name of relmap operator
 lexRopName :: Lexmap -> C.RopName
@@ -97,7 +107,7 @@ type NNamed a = (NName, a)
 -- | First step of constructing relmap,
 --   construct lexmap from token trees.
 --   The function returns lexmap and related lexmap links.
-consLexmap :: (C.RopName -> Maybe C.AttrSort) -> ConsLexmap
+consLexmap :: (C.RopName -> Maybe C.AttrSortPara) -> ConsLexmap
 consLexmap findSorter gslot findRelmap = lexmap where
 
     lexmap1 sec = lexmap sec . B.li1
@@ -135,30 +145,29 @@ consLexmap findSorter gslot findRelmap = lexmap where
     base name rop sec trees =
         case findSorter name of
           Nothing     -> Msg.unkRelmap name
-          Just sorter -> do attr <- sorter trees
-                            submap sec $ cons LexmapBase rop attr trees
+          Just sorter -> do (para, attr) <- sorter trees
+                            submap sec $ cons LexmapBase rop attr para trees
 
     -- construct derived lexmap
     deriv :: B.Token -> RelmapSource -> ConsLexmapBody
     deriv rop src _ trees =
-        do attr <- C.attrBranch trees
-           let lx = cons LexmapDerived rop attr trees
+        do (para, attr) <- C.attrBranch trees
+           let lx = cons LexmapDerived rop attr para trees
            tab <- table lx src
            Right (lx, tab)
 
     -- construct lexmap for nested relation reference
     nest :: B.Token -> ConsLexmapBody
-    nest rop _ []  = Right (cons LexmapNest rop [] [], [])
+    nest rop _ []  = Right (cons LexmapNest rop [] B.paraEmpty [], [])
     nest _ _ _     = Msg.extraAttr
 
     -- construct lexmap except for submaps
-    cons :: LexmapType -> B.Token -> [C.AttrTree] -> [B.TTree] -> Lexmap
-    cons ty rop attr trees =
-        check $ Lexmap { lexType      = ty
-                       , lexRopToken  = rop
-                       , lexAttr      = ((C.attrNameAttr, trees) : attr)
-                       , lexSubmap    = []
-                       , lexMessage   = [] }
+    cons :: LexmapType -> B.Token -> [C.AttrTree] -> C.AttrPara -> [B.TTree] -> Lexmap
+    cons ty rop attr para trees =
+        check $ lexBase { lexType      = ty
+                        , lexRopToken  = rop
+                        , lexAttr      = ((C.attrNameAttr, trees) : attr)
+                        , lexPara      = para }
 
     check :: B.Map Lexmap
     check lx | lexType lx == LexmapDerived

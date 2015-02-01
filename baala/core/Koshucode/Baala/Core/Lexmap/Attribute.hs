@@ -14,7 +14,7 @@ module Koshucode.Baala.Core.Lexmap.Attribute
     -- * Attribute trees
     AttrDefine (..),
     AttrTree,
-    AttrSort,
+    AttrSortPara, AttrSortTree,
     AttrPara,
     RopName,
   
@@ -68,10 +68,10 @@ attrNameTrunk = AttrNameNormal "@trunk"
 
 -- | Definition of attribute sorter.
 data AttrDefine = AttrDefine
-    { attrTrunkSorter :: AttrSort           -- Trunk sorter
-    , attrClassifier  :: B.Map AttrName     -- Attribute classifier
-    , attrTrunkNames  :: [AttrName]         -- Trunk names
-    , attrBranchNames :: [AttrName]         -- Branch names
+    { attrTrunkSorter  :: AttrSortTree       -- Trunk sorter
+    , attrClassifier   :: B.Map AttrName     -- Attribute classifier
+    , attrTrunkNames   :: [AttrName]         -- Trunk names
+    , attrBranchNames  :: [AttrName]         -- Branch names
     }
 
 -- | List of attribute name and its contents.
@@ -80,7 +80,9 @@ type AttrTree = (AttrName, [B.TTree])
 -- | Sorter for attribute of relmap operator.
 --   Sorters docompose attribute trees,
 --   and give a name to subattribute.
-type AttrSort = [B.TTree] -> B.Ab [AttrTree]
+type AttrSortPara = [B.TTree] -> B.Ab (AttrPara, [AttrTree])
+
+type AttrSortTree = [B.TTree] -> B.Ab [AttrTree]
 
 type AttrPara = B.ParaBody AttrName B.TTree
 
@@ -101,11 +103,13 @@ type RopName = String
 --   , ("-x", [TreeL (TTerm 7 ["/c"]), TreeL (TText 9 1 "d")])
 --   , ("-y", [TreeL (TText 14 0 "e")]) ]
 
-attrSort :: AttrDefine -> AttrSort
+attrSort :: AttrDefine -> AttrSortPara
 attrSort def = attrBranch2 B.>=> attrTrunk def
 
-attrBranch :: AttrSort
-attrBranch = attrBranch2 B.>=> Right . attrList
+attrBranch :: AttrSortPara
+attrBranch trees =
+    do para <- attrBranch2 trees
+       Right (para, attrList para)
 
 attrBranch2 :: [B.TTree] -> B.Ab AttrPara
 attrBranch2 trees =
@@ -119,16 +123,16 @@ maybeHyname :: B.TTreeTo (Maybe String)
 maybeHyname (B.TextLeafRaw _ n@('-' : _))  = Just n
 maybeHyname _                              = Nothing
 
-attrCheck :: [AttrName] -> [AttrName] -> [AttrTree] -> B.Ab [AttrTree]
+attrCheck :: [AttrName] -> [AttrName] -> [AttrTree] -> B.Ab ()
 attrCheck trunkNames branchNames attr =
     case t (map fst attr) B.\\ textAll of
-      []    -> Right attr
+      []    -> Right ()
       u : _ -> Msg.unexpAttr $ "Unknown " ++ u
     where
       textAll = "@attr" : "@trunk" : t trunkNames ++ t branchNames
       t       = map attrNameText
 
-attrTrunk :: AttrDefine -> AttrPara -> B.Ab [AttrTree]
+attrTrunk :: AttrDefine -> AttrPara -> B.Ab (AttrPara, [AttrTree])
 attrTrunk (AttrDefine sorter classify pos named) p =
     do let noPos      = null $ B.paraPos p
            nameList   = map fst $ B.paraNameList p
@@ -142,6 +146,7 @@ attrTrunk (AttrDefine sorter classify pos named) p =
            attr       = attrList p3
 
        attrCheck pos named attr
+       Right (p3, attr)
 
 attrList :: B.ParaBody n a -> [(n, [a])]
 attrList = map (B.mapSnd concat) . B.paraNameList

@@ -101,7 +101,7 @@ relmapId :: Relmap' h c
 relmapId = RelmapCalc lexId (const $ Right . C.relkitId) []
 
 lexId :: C.Lexmap
-lexId = C.Lexmap C.LexmapBase name attr [] [] where
+lexId = C.lexBase { C.lexRopToken = name, C.lexAttr = attr } where
     name = B.textToken "id"
     attr = [(C.attrNameAttr, [])]
 

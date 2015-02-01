@@ -1,3 +1,4 @@
+{-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TupleSections #-}
 {-# OPTIONS_GHC -Wall #-}
@@ -5,7 +6,8 @@
 module Koshucode.Baala.Base.Data.Para
   ( -- * Parameter constructor
     Para, ParaBody (..), ParaMap,
-    para, paraNameList, paraNameAdd,
+    para, paraEmpty,
+    paraNameList, paraNameAdd,
     paraPosName, paraMultipleNames, paraNameMapKeys,
 
     -- * Types of parameters
@@ -25,6 +27,7 @@ module Koshucode.Baala.Base.Data.Para
     paraGetRest, paraGetRRest,
   ) where
 
+import qualified Data.Generics                 as G
 import qualified Data.Map.Strict               as Map
 import qualified Koshucode.Baala.Base.Abort    as B
 import qualified Koshucode.Baala.Base.Prelude  as B
@@ -40,7 +43,7 @@ data ParaBody n a
       { paraAll   :: [a]
       , paraPos   :: [a]
       , paraName  :: ParaMap n a
-      } deriving (Show, Eq, Ord)
+      } deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 type ParaMap n a = Map.Map n [[a]]
 
@@ -60,6 +63,9 @@ para name xxs = pos xxs [] where
                            Just n2  -> let a2 = add n vs a
                                        in val a2 n2 xs []
     add n vs = paraInsert n $ reverse vs
+
+paraEmpty :: ParaBody n a
+paraEmpty = ParaBody [] [] Map.empty
 
 -- | Association list of named parameters.
 paraNameList :: ParaBody n a -> [(n, [[a]])]
