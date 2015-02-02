@@ -50,8 +50,8 @@ data LexmapType
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance B.Write Lexmap where
-    write sh Lexmap { lexRopToken = opToken, lexAttr = attr } =
-        case lookup C.attrNameAttr attr of
+    write sh lx@Lexmap { lexRopToken = opToken } =
+        case lookup C.attrNameAttr $ lexAttr lx of
           Nothing -> B.writeH sh [op, "..."]
           Just xs -> B.writeH sh [op, show xs]
         where op = B.tokenContent opToken
@@ -180,14 +180,15 @@ consLexmap findSorter gslot findRelmap = lexmap where
 
     -- construct lexmaps of submaps
     submap :: SecNo -> Lexmap -> B.Ab (Lexmap, LexmapLinkTable)
-    submap sec lx@Lexmap { lexAttr = attr } =
-        case B.lookupBy C.isAttrNameRelmap attr of
-          Nothing    -> Right (lx, [])
-          Just trees -> do ws    <- nestVars attr
-                           subs  <- lexmap1 sec `mapM` nestTrees ws trees
-                           let (sublx, tabs) = unzip subs
-                               lx2           = lx { lexSubmap = sublx }
-                           Right (lx2, concat tabs)
+    submap sec lx@Lexmap { lexPara = para } =
+        case filter (C.isAttrNameRelmap . fst) $ B.paraNameList para of
+          []              -> Right (lx, [])
+          [(_, [trees])]  -> do ws    <- nestVars $ lexAttr lx
+                                subs  <- lexmap1 sec `mapM` nestTrees ws trees
+                                let (sublx, tabs) = unzip subs
+                                    lx2           = lx { lexSubmap = sublx }
+                                Right (lx2, concat tabs)
+          _               -> Msg.bug "submpa"
 
     table :: Lexmap -> RelmapSource -> B.Ab LexmapLinkTable
     table lx ((sec, _), (form, edit)) =

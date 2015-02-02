@@ -9,6 +9,7 @@ module Koshucode.Baala.Base.Data.Para
     para, paraEmpty,
     paraNameList, paraNameAdd,
     paraPosName, paraMultipleNames, paraNameMapKeys,
+    paraLookupSingle,
 
     -- * Types of parameters
     ParaType (..), ParaPosType (..), 
@@ -79,9 +80,6 @@ paraNameAdd n vs p@ParaBody { paraName = m } =
 paraInsert :: (Ord n) => n -> [a] -> B.Map (ParaMap n a)
 paraInsert n a = Map.insertWith (++) n [a]
 
-paraLookup :: (Ord n) => n -> ParaBody n a -> Maybe [[a]]
-paraLookup n ParaBody { paraName = m } = Map.lookup n m
-
 -- | List of names which appear more than once.
 paraMultipleNames :: ParaBody n a -> [n]
 paraMultipleNames = paraNamesOf (not . B.isSingleton)
@@ -100,6 +98,17 @@ paraPosName pn p =
 paraNameMapKeys :: (Ord n2) => (n1 -> n2) -> ParaBody n1 a -> ParaBody n2 a
 paraNameMapKeys f p@ParaBody { paraName = m } =
     p { paraName = Map.mapKeys f m }
+
+paraLookup :: (Ord n) => n -> ParaBody n a -> Maybe [[a]]
+paraLookup n ParaBody { paraName = m } = Map.lookup n m
+
+paraLookupSingle :: (Ord n) => n -> ParaBody n a -> Maybe [a]
+paraLookupSingle n p =
+    case paraLookup n p of
+      Just [vs]  -> Just vs
+      Just _     -> Nothing
+      Nothing    -> Nothing
+
 
 
 -- ----------------------  Parameter Type
