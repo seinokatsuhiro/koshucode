@@ -45,7 +45,7 @@ lookupTree    = lookupAttr C.AttrNameNormal `B.mappend` lookupAttr C.AttrNameNes
 lookupRelmap  = lookupAttr C.AttrNameRelmap
 
 lookupAttr :: (String -> C.AttrName) -> String -> C.RopUse c -> Maybe [B.TTree]
-lookupAttr c name = B.paraLookupSingle (c name) . C.lexPara . C.ropLexmap
+lookupAttr c name = B.paraLookupSingle (c name) . C.lexAttr . C.ropLexmap
 
 getAbortable :: ([B.TTree] -> B.Ab b) -> RopGet c b
 getAbortable f u name =

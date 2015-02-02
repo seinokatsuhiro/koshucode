@@ -23,7 +23,7 @@ module Koshucode.Baala.Base.Prelude.List
 
     -- * Map
     map2, mapAt, mapWithLast,
-    omit, squeeze, squeezeEmptyLines,
+    omit, filterFst, squeeze, squeezeEmptyLines,
   
     -- * Divide
     chunks,
@@ -181,6 +181,9 @@ mapWithLast f g = loop where
 
 omit :: (a -> Bool) -> B.Map [a]
 omit f = filter $ not . f
+
+filterFst :: (a -> Bool) -> B.Map [(a, b)]
+filterFst p = filter (p . fst)
 
 squeeze :: (a -> Bool) -> B.Map [a]
 squeeze p = loop where

@@ -37,8 +37,7 @@ import qualified Koshucode.Baala.Core.Message           as Msg
 data Lexmap = Lexmap
     { lexType      :: LexmapType    -- ^ Type of lexmap
     , lexRopToken  :: B.Token       -- ^ Token of operator
-    , lexAttr      :: [C.AttrTree]  -- ^ Attribute of relmap operation
-    , lexPara      :: C.AttrPara    -- ^ Attribute of relmap operation
+    , lexAttr      :: C.AttrPara    -- ^ Attribute of relmap operation
     , lexSubmap    :: [Lexmap]      -- ^ Submaps in the attribute
     , lexMessage   :: [String]      -- ^ Messages on lexmap
     } deriving (Show, Eq, Ord, G.Data, G.Typeable)
@@ -51,7 +50,7 @@ data LexmapType
 
 instance B.Write Lexmap where
     write sh lx@Lexmap { lexRopToken = opToken } =
-        case lookup C.attrNameAttr $ lexAttr lx of
+        case lookup C.attrNameAttr $ lexAttrTree lx of
           Nothing -> B.writeH sh [op, "..."]
           Just xs -> B.writeH sh [op, show xs]
         where op = B.tokenContent opToken
@@ -59,11 +58,14 @@ instance B.Write Lexmap where
 instance B.CodePtr Lexmap where
     codePtList = B.codePtList . lexRopToken
 
+-- | Attribute of relmap operation.
+lexAttrTree :: Lexmap -> [C.AttrTree]
+lexAttrTree = map (B.mapSnd head) . B.paraNameList . lexAttr
+
 lexBase :: Lexmap
 lexBase = Lexmap { lexType      = LexmapBase
                  , lexRopToken  = B.textToken ""
-                 , lexAttr      = []
-                 , lexPara      = B.paraEmpty
+                 , lexAttr      = B.paraEmpty
                  , lexSubmap    = []
                  , lexMessage   = [] }
 
@@ -163,11 +165,10 @@ consLexmap findSorter gslot findRelmap = lexmap where
 
     -- construct lexmap except for submaps
     cons :: LexmapType -> B.Token -> [C.AttrTree] -> C.AttrPara -> [B.TTree] -> Lexmap
-    cons ty rop attr para trees =
+    cons ty rop _ para _ =
         check $ lexBase { lexType      = ty
                         , lexRopToken  = rop
-                        , lexAttr      = ((C.attrNameAttr, trees) : attr)
-                        , lexPara      = para }
+                        , lexAttr      = para }
 
     check :: B.Map Lexmap
     check lx | lexType lx == LexmapDerived
@@ -180,10 +181,10 @@ consLexmap findSorter gslot findRelmap = lexmap where
 
     -- construct lexmaps of submaps
     submap :: SecNo -> Lexmap -> B.Ab (Lexmap, LexmapLinkTable)
-    submap sec lx@Lexmap { lexPara = para } =
-        case filter (C.isAttrNameRelmap . fst) $ B.paraNameList para of
+    submap sec lx@Lexmap { lexAttr = para } =
+        case B.filterFst C.isAttrNameRelmap $ B.paraNameList para of
           []              -> Right (lx, [])
-          [(_, [trees])]  -> do ws    <- nestVars $ lexAttr lx
+          [(_, [trees])]  -> do ws    <- nestVars $ lexAttrTree lx
                                 subs  <- lexmap1 sec `mapM` nestTrees ws trees
                                 let (sublx, tabs) = unzip subs
                                     lx2           = lx { lexSubmap = sublx }
@@ -193,7 +194,7 @@ consLexmap findSorter gslot findRelmap = lexmap where
     table :: Lexmap -> RelmapSource -> B.Ab LexmapLinkTable
     table lx ((sec, _), (form, edit)) =
         Msg.abSlot [lx] $ do
-          attr2       <- C.runAttrmap edit $ lexAttr lx
+          attr2       <- C.runAttrmap edit $ lexAttrTree lx
           form2       <- C.substSlot gslot attr2 form
           (lx2, tab)  <- lexmap sec form2
           Right $ (lx, lx2) : tab
