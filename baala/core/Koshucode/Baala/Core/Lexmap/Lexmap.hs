@@ -49,11 +49,11 @@ data LexmapType
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance B.Write Lexmap where
-    write sh lx@Lexmap { lexRopToken = opToken } =
-        case lookup C.attrNameAttr $ lexAttrTree lx of
-          Nothing -> B.writeH sh [op, "..."]
-          Just xs -> B.writeH sh [op, show xs]
-        where op = B.tokenContent opToken
+    write sh lx@Lexmap { lexAttr = para } =
+        case B.paraAll para of
+          [] -> B.writeH sh [op, "..."]
+          xs -> B.writeH sh [op, show xs]
+        where op = lexRopName lx
 
 instance B.CodePtr Lexmap where
     codePtList = B.codePtList . lexRopToken
@@ -62,6 +62,7 @@ instance B.CodePtr Lexmap where
 lexAttrTree :: Lexmap -> [C.AttrTree]
 lexAttrTree = map (B.mapSnd head) . B.paraNameList . lexAttr
 
+-- | Base empty lexmap.
 lexBase :: Lexmap
 lexBase = Lexmap { lexType      = LexmapBase
                  , lexRopToken  = B.textToken ""
@@ -147,28 +148,35 @@ consLexmap findSorter gslot findRelmap = lexmap where
     base name rop sec trees =
         case findSorter name of
           Nothing     -> Msg.unkRelmap name
-          Just sorter -> do (para, attr) <- sorter trees
-                            submap sec $ cons LexmapBase rop attr para trees
+          Just sorter -> do para <- sorter trees
+                            submap sec $ cons LexmapBase rop para
 
     -- construct derived lexmap
     deriv :: B.Token -> RelmapSource -> ConsLexmapBody
     deriv rop src _ trees =
-        do (para, attr) <- C.attrBranch trees
-           let lx = cons LexmapDerived rop attr para trees
+        do para <- C.attrBranch trees
+           let lx = cons LexmapDerived rop para
            tab <- table lx src
            Right (lx, tab)
 
+    table :: Lexmap -> RelmapSource -> B.Ab LexmapLinkTable
+    table lx ((sec, _), (form, edit)) =
+        Msg.abSlot [lx] $ do
+          attr2       <- C.runAttrmap edit $ lexAttrTree lx
+          form2       <- C.substSlot gslot attr2 form
+          (lx2, tab)  <- lexmap sec form2
+          Right $ (lx, lx2) : tab
+
     -- construct lexmap for nested relation reference
     nest :: B.Token -> ConsLexmapBody
-    nest rop _ []  = Right (cons LexmapNest rop [] B.paraEmpty [], [])
+    nest rop _ []  = Right (cons LexmapNest rop B.paraEmpty, [])
     nest _ _ _     = Msg.extraAttr
 
     -- construct lexmap except for submaps
-    cons :: LexmapType -> B.Token -> [C.AttrTree] -> C.AttrPara -> [B.TTree] -> Lexmap
-    cons ty rop _ para _ =
-        check $ lexBase { lexType      = ty
-                        , lexRopToken  = rop
-                        , lexAttr      = para }
+    cons :: LexmapType -> B.Token -> C.AttrPara -> Lexmap
+    cons ty rop para = check $ lexBase { lexType      = ty
+                                       , lexRopToken  = rop
+                                       , lexAttr      = para }
 
     check :: B.Map Lexmap
     check lx | lexType lx == LexmapDerived
@@ -181,28 +189,23 @@ consLexmap findSorter gslot findRelmap = lexmap where
 
     -- construct lexmaps of submaps
     submap :: SecNo -> Lexmap -> B.Ab (Lexmap, LexmapLinkTable)
-    submap sec lx@Lexmap { lexAttr = para } =
-        case B.filterFst C.isAttrNameRelmap $ B.paraNameList para of
-          []              -> Right (lx, [])
-          [(_, [trees])]  -> do ws    <- nestVars $ lexAttrTree lx
-                                subs  <- lexmap1 sec `mapM` nestTrees ws trees
-                                let (sublx, tabs) = unzip subs
-                                    lx2           = lx { lexSubmap = sublx }
-                                Right (lx2, concat tabs)
-          _               -> Msg.bug "submpa"
-
-    table :: Lexmap -> RelmapSource -> B.Ab LexmapLinkTable
-    table lx ((sec, _), (form, edit)) =
-        Msg.abSlot [lx] $ do
-          attr2       <- C.runAttrmap edit $ lexAttrTree lx
-          form2       <- C.substSlot gslot attr2 form
-          (lx2, tab)  <- lexmap sec form2
-          Right $ (lx, lx2) : tab
+    submap sec lx =
+        let attr       = lexAttrTree lx
+            attrRelmap = B.filterFst C.isAttrNameRelmap attr
+            attrNest   = B.filterFst C.isAttrNameNest   attr
+        in case attrRelmap of
+             []            -> Right (lx, [])
+             [(_, trees)]  -> do ws    <- nestVars attrNest
+                                 subs  <- lexmap1 sec `mapM` nestTrees ws trees
+                                 let (sublx, tabs) = unzip subs
+                                     lx2           = lx { lexSubmap = sublx }
+                                 Right (lx2, concat tabs)
+             _             -> Msg.bug "submpa"
 
     nestVars :: [C.AttrTree] -> B.Ab [String]
-    nestVars attr = case B.lookupBy C.isAttrNameNest attr of
-                      Nothing  -> Right []
-                      Just ws  -> Right . map snd =<< nestTerms ws
+    nestVars [(_, ws)]  = Right . map snd =<< nestTerms ws
+    nestVars []         = Right []
+    nestVars _          = Msg.bug "nest"
 
     nestTrees :: [String] -> B.Map [B.TTree]
     nestTrees ws = map loop where
