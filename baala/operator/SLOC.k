@@ -2,15 +2,15 @@
 
 |-- DIR  /code 29   /comment 6    /dir "operator/Koshucode/Baala"
 |-- DIR  /code 976  /comment 658  /dir "operator/Koshucode/Baala/Op"
-|-- DIR  /code 248  /comment 167  /dir "operator/Koshucode/Baala/Op/Builtin"
+|-- DIR  /code 216  /comment 147  /dir "operator/Koshucode/Baala/Op/Builtin"
 |-- DIR  /code 159  /comment 165  /dir "operator/Koshucode/Baala/Op/Lattice"
 |-- DIR  /code 248  /comment 244  /dir "operator/Koshucode/Baala/Op/Nest"
 
-|-- DIR-TOTAL  /code 1660  /comment 1240
+|-- DIR-TOTAL  /code 1628  /comment 1220
 
 |-- FILE  /code 29   /comment 6    /file "Op.hs"          /dir "operator/Koshucode/Baala"
 |-- FILE  /code 10   /comment 6    /file "Builtin.hs"     /dir "operator/Koshucode/Baala/Op"
-|-- FILE  /code 78   /comment 32   /file "Define.hs"      /dir "operator/Koshucode/Baala/Op/Builtin"
+|-- FILE  /code 46   /comment 12   /file "Define.hs"      /dir "operator/Koshucode/Baala/Op/Builtin"
 |-- FILE  /code 116  /comment 74   /file "Get.hs"         /dir "operator/Koshucode/Baala/Op/Builtin"
 |-- FILE  /code 22   /comment 39   /file "Rop.hs"         /dir "operator/Koshucode/Baala/Op/Builtin"
 |-- FILE  /code 32   /comment 22   /file "Term.hs"        /dir "operator/Koshucode/Baala/Op/Builtin"
@@ -35,4 +35,4 @@
 |-- FILE  /code 103  /comment 66   /file "Term.hs"        /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 77   /comment 53   /file "TermGadget.hs"  /dir "operator/Koshucode/Baala/Op"
 
-|-- FILE-TOTAL  /code 1660  /comment 1240
+|-- FILE-TOTAL  /code 1628  /comment 1220
