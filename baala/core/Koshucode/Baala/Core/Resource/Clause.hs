@@ -42,6 +42,7 @@ data ClauseBody
     | CRelmap   String [B.Token]                            -- ^ Source of relmap
     | CAssert   C.AssertType B.JudgePat [B.Token] [B.Token] -- ^ Assertion
     | CJudge    C.AssertType B.JudgePat [B.Token]           -- ^ Judge
+    | CAbout    [B.Token]                                   -- ^ About
     | CSlot     String [B.Token]                            -- ^ Global slot
     | CUnknown                                              -- ^ Unknown clause
     | CUnres    [B.Token]                                   -- ^ Unresolved short sign
@@ -60,6 +61,7 @@ clauseTypeText (Clause _ _ body) =
       CRelmap   _ _       -> "relmap"
       CAssert   _ _ _ _   -> "assert"
       CJudge    _ _ _     -> "judge"
+      CAbout    _         -> "about"
       CSlot     _ _       -> "slot"
       CUnknown            -> "unknown"
       CUnres    _         -> "unres"
@@ -89,10 +91,23 @@ consClause :: C.SecNo -> [B.TokenLine] -> [ShortClause]
 consClause sec = shortClause . consPreclause sec
 
 consPreclause :: C.SecNo -> [B.TokenLine] -> [Clause]
-consPreclause sec = loop sec . B.tokenClauses where
+consPreclause sec = mergeAbout . loop sec . B.tokenClauses where
     loop _ []     = []
     loop n (x:xs) = let (n', cs) = consPreclause' n x
                     in cs ++ loop n' xs
+
+mergeAbout :: B.Map [Clause]
+mergeAbout = off where
+    off (Clause _ _ (CAbout a) : cs)      = on a cs
+    off (c : cs)                          = c : off cs
+    off []                                = []
+
+    on a (Clause src sec (CJudge q p ts) : cs)
+        = Clause src sec (CJudge q p $ a ++ ts) : on a cs
+    on _ (Clause _ _ (CAbout []) : cs)    = off cs
+    on _ (Clause _ _ (CAbout a') : cs)    = on a' cs
+    on a (c : cs)                         = c : on a cs
+    on _ []                               = []
 
 consPreclause' :: C.SecNo -> B.TokenClause -> (C.SecNo, [Clause])
 consPreclause' no src = dispatch $ liaison $ B.clauseTokens src where
@@ -114,6 +129,7 @@ consPreclause' no src = dispatch $ liaison $ B.clauseTokens src where
         | k == "include"            = same $ incl xs
         | k == "export"             = same $ expt xs
         | k == "short"              = same $ short xs
+        | k == "about"              = same $ about xs
         | k == "****"               = same []
     dispatch (B.TSlot _ 2 n : xs)   = same $ slot n xs
     dispatch []                     = same []
@@ -157,6 +173,8 @@ consPreclause' no src = dispatch $ liaison $ B.clauseTokens src where
     expt _                      = unk
 
     incl xs                     = c1 $ CInclude xs
+
+    about xs                    = c1 $ CAbout xs
 
     short xs                    = case wordPairs xs of
                                     Nothing  -> unk
