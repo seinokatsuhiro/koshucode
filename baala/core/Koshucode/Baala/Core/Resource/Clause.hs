@@ -8,6 +8,7 @@ module Koshucode.Baala.Core.Resource.Clause
   ( -- * Data type
     -- $Documentation
     Clause (..),
+    ClauseHead (..),
     ClauseBody (..),
     clauseTypeText,
   
@@ -27,11 +28,15 @@ import qualified Koshucode.Baala.Core.Content  as C
 -- ----------------------  Data type
 
 data Clause =
-    Clause { clauseSource  :: B.TokenClause
-           , clauseSecNo   :: C.SecNo
-           , clauseShort   :: [B.ShortDef]
+    Clause { clauseHead    :: ClauseHead
            , clauseBody    :: ClauseBody
            } deriving (Show, G.Data, G.Typeable)
+
+data ClauseHead = ClauseHead
+    { clauseSource  :: B.TokenClause
+    , clauseSecNo   :: C.SecNo
+    , clauseShort   :: [B.ShortDef]
+    } deriving (Show, G.Data, G.Typeable)
 
 data ClauseBody
     = CInclude  [B.Token]                                   -- ^ Includeing source
@@ -46,11 +51,14 @@ data ClauseBody
       deriving (Show, G.Data, G.Typeable)
 
 instance B.CodePtr Clause where
-    codePtList (Clause src _ _ _) = B.codePtList src
+    codePtList = B.codePtList . clauseHead
+
+instance B.CodePtr ClauseHead where
+    codePtList = B.codePtList . clauseSource
 
 -- | Name of clause type. e.g., @\"relmap\"@, @\"assert\"@.
 clauseTypeText :: Clause -> String
-clauseTypeText (Clause _ _ _ body) =
+clauseTypeText (Clause _ body) =
     case body of
       CInclude  _           -> "include"
       CExport   _           -> "export"
@@ -87,26 +95,28 @@ consClause :: C.SecNo -> [B.TokenLine] -> [Clause]
 consClause sec = map shortToLong . consPreclause sec
 
 consPreclause :: C.SecNo -> [B.TokenLine] -> [Clause]
-consPreclause sec = mergeAbout . loop sec [] . B.tokenClauses where
-    loop _ _ []      = []
-    loop n sh (x:xs) = let (n', sh', cs) = consPreclause' n sh x
-                       in cs ++ loop n' sh' xs
+consPreclause sec = mergeAbout . loop h0 . B.tokenClauses where
+    h0 = ClauseHead (B.CodeClause [] []) sec []
+
+    loop _ []     = []
+    loop h (x:xs) = let (h', cs) = consPreclause' $ h { clauseSource = x }
+                       in cs ++ loop h' xs
 
 mergeAbout :: B.Map [Clause]
 mergeAbout = off where
-    off (Clause _ _ _ (CAbout a) : cs)    = on a cs
-    off (c : cs)                          = c : off cs
-    off []                                = []
+    off (Clause _ (CAbout a) : cs)    = on a cs
+    off (c : cs)                      = c : off cs
+    off []                            = []
 
-    on a (Clause src sec sh (CJudge q p ts) : cs)
-        = Clause src sec sh (CJudge q p $ a ++ ts) : on a cs
-    on _ (Clause _ _ _ (CAbout []) : cs)    = off cs
-    on _ (Clause _ _ _ (CAbout a') : cs)    = on a' cs
-    on a (c : cs)                           = c : on a cs
-    on _ []                                 = []
+    on a (Clause h (CJudge q p ts) : cs)
+        = Clause h (CJudge q p $ a ++ ts) : on a cs
+    on _ (Clause _ (CAbout []) : cs)    = off cs
+    on _ (Clause _ (CAbout a') : cs)    = on a' cs
+    on a (c : cs)                       = c : on a cs
+    on _ []                             = []
 
-consPreclause' :: C.SecNo -> [B.ShortDef] -> B.TokenClause -> (C.SecNo, [B.ShortDef], [Clause])
-consPreclause' sec sh src = dispatch $ liaison $ B.clauseTokens src where
+consPreclause' :: ClauseHead -> (ClauseHead, [Clause])
+consPreclause' h@(ClauseHead src sec sh) = dispatch $ liaison $ B.clauseTokens src where
 
     liaison :: B.Map [B.Token]
     liaison [] = []
@@ -115,7 +125,7 @@ consPreclause' sec sh src = dispatch $ liaison $ B.clauseTokens src where
                          in liaison $ tok : xs
     liaison (x : xs)   = x : liaison xs
 
-    dispatch :: [B.Token] -> (C.SecNo, [B.ShortDef], [Clause])
+    dispatch :: [B.Token] -> (ClauseHead, [Clause])
     dispatch (B.TTextBar _ ('|' : k) : xs) =
         same $ frege (map Char.toUpper k) xs   -- Frege's judgement stroke
     dispatch (B.TTextRaw _ name : B.TTextRaw _ is : body)
@@ -131,12 +141,12 @@ consPreclause' sec sh src = dispatch $ liaison $ B.clauseTokens src where
     dispatch []                     = same []
     dispatch _                      = same unk
 
-    up   cs         = (sec + 1, sh,  cs)
-    same cs         = (sec,     sh,  cs)
-    new  (sh', cs)  = (sec,     sh', cs)
+    up   cs         = (h { clauseSecNo = sec + 1 }, cs)
+    same cs         = (h, cs)
+    new  (sh', cs)  = (h { clauseShort = sh' }, cs)
 
     unk          = c1 CUnknown
-    c0           = Clause src sec sh
+    c0           = Clause h
     c1           = B.li1 . c0
 
     isDelim      = ( `elem` ["=", ":", "|"] )
@@ -197,8 +207,8 @@ wordPairs toks =
 -- ----------------------  Short-to-long conversion
 
 shortToLong :: B.Map Clause
-shortToLong c@(Clause _ _ [] _) = c
-shortToLong (Clause src sec sh bo) = Clause src sec sh bo' where
+shortToLong c@(Clause (ClauseHead _ _ []) _) = c
+shortToLong (Clause h bo) = Clause h bo' where
     bo' = case bo of
             CJudge  q p     xs   -> body (CJudge  q p)     xs
             CAssert q p opt xs   -> body (CAssert q p opt) xs
@@ -220,6 +230,8 @@ shortToLong (Clause src sec sh bo) = Clause src sec sh bo' where
           Just l  -> B.TTextQQ n $ l ++ b
           Nothing -> token
     long token = token
+
+    sh = clauseShort h
 
 
 

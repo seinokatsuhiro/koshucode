@@ -32,7 +32,7 @@ resInclude res src code =
            cs   = C.consClause sec ls
        B.foldM resIncludeBody res $ reverse cs
 
-type Cl   a  = (C.SecNo, [B.ShortDef]) -> [B.Token] -> C.ClauseBody -> a
+type Cl   a  = C.ClauseHead -> [B.Token] -> C.ClauseBody -> a
 type Clab a  = Cl (B.Ab a)
 
 resIncludeBody :: forall c. (C.CContent c) =>
@@ -61,12 +61,12 @@ resIncludeBody res xs =
       for  isX f = pass     f  `map`  filter (isX . C.clauseBody) [xs]
       forM isX f = pass (ab f) `mapM` filter (isX . C.clauseBody) [xs]
 
-      pass f (C.Clause src sec sh body) = f (sec, sh) (B.front $ B.clauseTokens src) body
-      ab f (sec, sh) toks body = Msg.abClause toks $ f (sec, sh) toks body
+      pass f (C.Clause h body) = f h (B.front $ B.clauseTokens $ C.clauseSource h) body
+      ab f h toks body = Msg.abClause toks $ f h toks body
 
       lastSecNo :: [C.Clause] -> Int
       lastSecNo []   = 0
-      lastSecNo xs2  = C.clauseSecNo $ last xs2
+      lastSecNo xs2  = C.clauseSecNo $ C.clauseHead $ last xs2
 
       up res2@C.Resource { C.resJudge = js }
           = res2 { C.resSelect = C.datasetSelect $ C.dataset js }
@@ -88,7 +88,7 @@ resIncludeBody res xs =
                             Right (n, trees)
 
       relmap :: Clab C.RelmapSource
-      relmap (sec, _) _ (C.CRelmap n toks) =
+      relmap C.ClauseHead { C.clauseSecNo = sec } _ (C.CRelmap n toks) =
           case B.splitTokensBy (== "---") toks of
             Left  _         -> ntrees2 sec n toks []
             Right (r, _, e) -> ntrees2 sec n r e
@@ -107,7 +107,7 @@ resIncludeBody res xs =
       calc = calcContG $ C.resGlobal res
 
       assert :: Clab (C.ShortAssert' h c)
-      assert (sec, sh) src (C.CAssert typ pat opt toks) =
+      assert C.ClauseHead { C.clauseSecNo = sec, C.clauseShort = sh } src (C.CAssert typ pat opt toks) =
           do optPara    <- C.tokenPara opt
              rmapTrees  <- B.tokenTrees toks
              checkShort sh
