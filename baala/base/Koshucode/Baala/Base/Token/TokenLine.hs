@@ -117,6 +117,7 @@ relation r@B.CodeRoll { B.codeInputPt = cp } = start gen cp r where
     v           = scan r
     u   cs tok  = Right $ B.codeUpdate cs tok r
     int cs tok  = Right $ B.codeChange interp  $ B.codeUpdate cs tok r
+    xs =^ pre    = pre `B.isPrefixOf` xs
 
     gen ""                           =  Right r
 
@@ -125,12 +126,13 @@ relation r@B.CodeRoll { B.codeInputPt = cp } = start gen cp r where
                    | isGrip a &&
                      isClose b       =  u cs            $ B.TClose   cp [a,b]
 
-    gen (c:cs)     | c == '*'        =  ast   cs [c]
+    gen ccs@(c:cs) | c == '*'        =  ast   cs [c]
                    | c == '<'        =  bra   cs [c]
                    | c == '>'        =  cket  cs [c]
                    | c == '@'        =  slot  cs 1
                    | c == '|'        =  bar   cs [c]
-                   | c == '#'        =  hash  cs [c]
+                   | ccs =^ "#!"     =  u     ""        $ B.TComment cp cs
+                   | ccs =^ "-*-"    =  u     ""        $ B.TComment cp cs
                    | isOpen c        =  u     cs        $ B.TOpen    cp [c]
                    | isClose c       =  u     cs        $ B.TClose   cp [c]
                    | isSingle c      =  u     cs        $ B.TTextRaw cp [c]
@@ -163,9 +165,6 @@ relation r@B.CodeRoll { B.codeInputPt = cp } = start gen cp r where
     slot (c:cs) n  | c == '@'        =  slot cs         $ n + 1
                    | c == '\''       =  v               $ scanSlot 0 cp cs  -- positional
     slot cs n                        =  v               $ scanSlot n cp cs
-
-    hash ('!':cs) _                  =  u ""            $ B.TComment cp cs
-    hash cs w                        =  u cs            $ B.TTextRaw cp w
 
     short (c:cs) w  | c == '.'       =  let pre = rv w
                                             (cs', body) = nextCode   cs
