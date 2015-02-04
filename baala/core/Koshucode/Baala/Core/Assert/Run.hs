@@ -28,8 +28,8 @@ runAssertJudges hook a@(B.Short pt sh _) =
 -- | Calculate assertion list.
 runAssertDataset :: forall h. forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c, B.SelectRel h, C.GetGlobal h)
   => h c -> C.ShortAssert' h c -> B.Ab [B.OutputChunk c]
-runAssertDataset hook (B.Short _ sh asserts) =
-    Right . concat =<< mapM each asserts
+runAssertDataset hook (B.Short _ sh ass) =
+    Right . concat =<< mapM each [ass]
     where
       each (C.Assert _ _ _ _ _ _ Nothing _) = B.bug "runAssertDataset"
       each a@(C.Assert _ typ pat opt _ _ (Just relmap) libs) =

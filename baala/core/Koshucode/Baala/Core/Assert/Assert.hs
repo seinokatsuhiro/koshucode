@@ -56,16 +56,16 @@ tokenPara toks =
 -- ----------------------  Short assertion
 
 -- | Assertion list with short signs.
-type ShortAssert' h c = B.Short [Assert' h c]
+type ShortAssert' h c = B.Short (Assert' h c)
 
 -- | Select affirmative or denial assertions.
 assertNormal :: B.Map [ShortAssert' h c]
-assertNormal = B.map2 $ B.omit violated
+assertNormal = B.omit violated
 
 -- | Select violated assertions.
 assertViolated :: B.Map [ShortAssert' h c]
-assertViolated = B.map2 $ filter violated
+assertViolated = filter violated
 
-violated :: Assert' h c -> Bool
-violated = (== C.AssertViolate) . assType
+violated :: ShortAssert' h c -> Bool
+violated = (== C.AssertViolate) . assType . B.shortBody
 

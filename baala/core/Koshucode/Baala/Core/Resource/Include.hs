@@ -32,7 +32,7 @@ resInclude res src code =
            shorts   = C.consClause sec ls
        B.foldM resIncludeBody res shorts
 
-type Cl   a  = C.SecNo -> [B.Token] -> C.ClauseBody -> a
+type Cl   a  = (C.SecNo, [B.ShortDef]) -> [B.Token] -> C.ClauseBody -> a
 type Clab a  = Cl (B.Ab a)
 
 resIncludeBody :: forall c. (C.CContent c) =>
@@ -52,7 +52,7 @@ resIncludeBody res (B.Short pt shorts xs) =
            { C.resExport     = C.resExport   << for isCExport expt
            , C.resSlot       = C.resSlot     << slots
            , C.resRelmap     = C.resRelmap   << relmaps
-           , C.resAssert     = C.resAssert   << [B.Short pt shorts asserts]
+           , C.resAssert     = C.resAssert   << asserts
            , C.resJudge      = C.resJudge    << judges
            , C.resArticle    = C.resArticle  <: reverse incs
            , C.resLastSecNo  = lastSecNo xs }
@@ -63,8 +63,8 @@ resIncludeBody res (B.Short pt shorts xs) =
       for  isX f = pass     f  `map`  filter (isX . C.clauseBody) xs
       forM isX f = pass (ab f) `mapM` filter (isX . C.clauseBody) xs
 
-      pass f (C.Clause src sec body) = f sec (B.front $ B.clauseTokens src) body
-      ab f sec toks body = Msg.abClause toks $ f sec toks body
+      pass f (C.Clause src sec sh body) = f (sec, sh) (B.front $ B.clauseTokens src) body
+      ab f (sec, sh) toks body = Msg.abClause toks $ f (sec, sh) toks body
 
       lastSecNo :: [C.Clause] -> Int
       lastSecNo []   = 0
@@ -90,7 +90,7 @@ resIncludeBody res (B.Short pt shorts xs) =
                             Right (n, trees)
 
       relmap :: Clab C.RelmapSource
-      relmap sec _ (C.CRelmap n toks) =
+      relmap (sec, _) _ (C.CRelmap n toks) =
           case B.splitTokensBy (== "---") toks of
             Left  _         -> ntrees2 sec n toks []
             Right (r, _, e) -> ntrees2 sec n r e
@@ -108,11 +108,12 @@ resIncludeBody res (B.Short pt shorts xs) =
 
       calc = calcContG $ C.resGlobal res
 
-      assert :: Clab (C.Assert' h c)
-      assert sec src (C.CAssert typ pat opt toks) =
+      assert :: Clab (C.ShortAssert' h c)
+      assert (sec, sh) src (C.CAssert typ pat opt toks) =
           do optPara    <- C.tokenPara opt
              rmapTrees  <- B.tokenTrees toks
-             Right $ C.Assert sec typ pat optPara src rmapTrees Nothing []
+             Right $ B.Short (B.codePtList $ head src) sh
+                       $ C.Assert sec typ pat optPara src rmapTrees Nothing []
 
       checkShort :: [B.ShortDef] -> B.Ab ()
       checkShort sh =

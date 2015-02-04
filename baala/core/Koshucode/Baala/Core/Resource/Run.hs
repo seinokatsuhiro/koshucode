@@ -43,10 +43,10 @@ assembleRelmap res@C.Resource { C.resSlot    = slots
                               , C.resRelmap  = derives
                               , C.resAssert  = asserts } = res'
     where
-      res' = do result <- B.shortListM $ mapM assemble `B.map2` asserts
-                let asserts2  = map fst `B.map2` result
-                    msg       = map snd `B.map2` result
-                    msg2      = concat $ concat $ map B.shortBody msg
+      res' = do result <- B.shortListM $ fmap assemble `map` asserts
+                let asserts2  = fmap fst `map` result
+                    msg       = fmap snd `map` result
+                    msg2      = concat $ map B.shortBody msg
                 Right $ C.addMessages msg2 $ res { C.resAssert = asserts2 }
 
       (consLexmap, consRelmap) = C.relmapCons res

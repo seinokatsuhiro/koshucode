@@ -32,6 +32,7 @@ type ShortClause = B.Short [Clause]
 data Clause =
     Clause { clauseSource  :: B.TokenClause
            , clauseSecNo   :: C.SecNo
+           , clauseShort   :: [B.ShortDef]
            , clauseBody    :: ClauseBody
            } deriving (Show, G.Data, G.Typeable)
 
@@ -49,22 +50,22 @@ data ClauseBody
       deriving (Show, G.Data, G.Typeable)
 
 instance B.CodePtr Clause where
-    codePtList (Clause src _ _) = B.codePtList src
+    codePtList (Clause src _ _ _) = B.codePtList src
 
 -- | Name of clause type. e.g., @\"relmap\"@, @\"assert\"@.
 clauseTypeText :: Clause -> String
-clauseTypeText (Clause _ _ body) =
+clauseTypeText (Clause _ _ _ body) =
     case body of
-      CInclude  _         -> "include"
-      CExport   _         -> "export"
-      CShort    _         -> "short"
-      CRelmap   _ _       -> "relmap"
-      CAssert   _ _ _ _   -> "assert"
-      CJudge    _ _ _     -> "judge"
-      CAbout    _         -> "about"
-      CSlot     _ _       -> "slot"
-      CUnknown            -> "unknown"
-      CUnres    _         -> "unres"
+      CInclude  _           -> "include"
+      CExport   _           -> "export"
+      CShort    _           -> "short"
+      CRelmap   _ _         -> "relmap"
+      CAssert   _ _ _ _     -> "assert"
+      CJudge    _ _ _       -> "judge"
+      CAbout    _           -> "about"
+      CSlot     _ _         -> "slot"
+      CUnknown              -> "unknown"
+      CUnres    _           -> "unres"
 
 
 
@@ -91,26 +92,26 @@ consClause :: C.SecNo -> [B.TokenLine] -> [ShortClause]
 consClause sec = shortClause . consPreclause sec
 
 consPreclause :: C.SecNo -> [B.TokenLine] -> [Clause]
-consPreclause sec = mergeAbout . loop sec . B.tokenClauses where
-    loop _ []     = []
-    loop n (x:xs) = let (n', cs) = consPreclause' n x
-                    in cs ++ loop n' xs
+consPreclause sec = mergeAbout . loop sec [] . B.tokenClauses where
+    loop _ _ []      = []
+    loop n sh (x:xs) = let (n', sh', cs) = consPreclause' n sh x
+                       in cs ++ loop n' sh' xs
 
 mergeAbout :: B.Map [Clause]
 mergeAbout = off where
-    off (Clause _ _ (CAbout a) : cs)      = on a cs
+    off (Clause _ _ _ (CAbout a) : cs)    = on a cs
     off (c : cs)                          = c : off cs
     off []                                = []
 
-    on a (Clause src sec (CJudge q p ts) : cs)
-        = Clause src sec (CJudge q p $ a ++ ts) : on a cs
-    on _ (Clause _ _ (CAbout []) : cs)    = off cs
-    on _ (Clause _ _ (CAbout a') : cs)    = on a' cs
-    on a (c : cs)                         = c : on a cs
-    on _ []                               = []
+    on a (Clause src sec sh (CJudge q p ts) : cs)
+        = Clause src sec sh (CJudge q p $ a ++ ts) : on a cs
+    on _ (Clause _ _ _ (CAbout []) : cs)    = off cs
+    on _ (Clause _ _ _ (CAbout a') : cs)    = on a' cs
+    on a (c : cs)                           = c : on a cs
+    on _ []                                 = []
 
-consPreclause' :: C.SecNo -> B.TokenClause -> (C.SecNo, [Clause])
-consPreclause' no src = dispatch $ liaison $ B.clauseTokens src where
+consPreclause' :: C.SecNo -> [B.ShortDef] -> B.TokenClause -> (C.SecNo, [B.ShortDef], [Clause])
+consPreclause' sec sh src = dispatch $ liaison $ B.clauseTokens src where
 
     liaison :: B.Map [B.Token]
     liaison [] = []
@@ -119,7 +120,7 @@ consPreclause' no src = dispatch $ liaison $ B.clauseTokens src where
                          in liaison $ tok : xs
     liaison (x : xs)   = x : liaison xs
 
-    dispatch :: [B.Token] -> (C.SecNo, [Clause])
+    dispatch :: [B.Token] -> (C.SecNo, [B.ShortDef], [Clause])
     dispatch (B.TTextBar _ ('|' : k) : xs) =
         same $ frege (map Char.toUpper k) xs   -- Frege's judgement stroke
     dispatch (B.TTextRaw _ name : B.TTextRaw _ is : body)
@@ -128,18 +129,19 @@ consPreclause' no src = dispatch $ liaison $ B.clauseTokens src where
     dispatch (B.TTextRaw _ k : xs)
         | k == "include"            = same $ incl xs
         | k == "export"             = same $ expt xs
-        | k == "short"              = same $ short xs
+        | k == "short"              = new  $ short xs
         | k == "about"              = same $ about xs
         | k == "****"               = same []
     dispatch (B.TSlot _ 2 n : xs)   = same $ slot n xs
     dispatch []                     = same []
     dispatch _                      = same unk
 
-    same cs      = (no,     cs)
-    up   cs      = (no + 1, cs)
+    up   cs         = (sec + 1, sh,  cs)
+    same cs         = (sec,     sh,  cs)
+    new  (sh', cs)  = (sec,     sh', cs)
 
     unk          = c1 CUnknown
-    c0           = Clause src no
+    c0           = Clause src sec sh
     c1           = B.li1 . c0
 
     isDelim      = ( `elem` ["=", ":", "|"] )
@@ -177,8 +179,8 @@ consPreclause' no src = dispatch $ liaison $ B.clauseTokens src where
     about xs                    = c1 $ CAbout xs
 
     short xs                    = case wordPairs xs of
-                                    Nothing  -> unk
-                                    Just sh  -> c1 $ CShort sh
+                                    Just sh'  -> (sh', c1 $ CShort sh')
+                                    Nothing   -> (sh, unk)
 
 pairs :: [a] -> Maybe [(a, a)]
 pairs (a:b:cs)  = do cs' <- pairs cs
@@ -214,19 +216,19 @@ shortClause ccs@(c : cs)
           in  short : shortClause cs2
 
       shorts :: Clause -> [B.ShortDef]
-      shorts (Clause _  _ (CShort sh))  = sh
-      shorts _                          = B.bug "shortClause"
+      shorts (Clause _ _ _ (CShort sh))  = sh
+      shorts _                           = B.bug "shortClause"
 
       isCShort :: Clause -> Bool
-      isCShort (Clause _ _ (CShort _))  = True
-      isCShort _                        = False
+      isCShort (Clause _ _ _ (CShort _))  = True
+      isCShort _                          = False
 
 shortToLong :: [B.ShortDef] -> B.Map [Clause]
 shortToLong [] = id
 shortToLong sh = map clause where
     clause :: B.Map Clause
-    clause (Clause src sec bo) =
-        Clause src sec $ case bo of
+    clause (Clause src sec sh bo) =
+        Clause src sec sh $ case bo of
           CJudge  q p     xs   -> body (CJudge  q p)     xs
           CAssert q p opt xs   -> body (CAssert q p opt) xs
           CRelmap n       xs   -> body (CRelmap n)       xs
