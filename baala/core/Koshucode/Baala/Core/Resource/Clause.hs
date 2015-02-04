@@ -7,7 +7,6 @@
 module Koshucode.Baala.Core.Resource.Clause
   ( -- * Data type
     -- $Documentation
-    ShortClause,
     Clause (..),
     ClauseBody (..),
     clauseTypeText,
@@ -27,8 +26,6 @@ import qualified Koshucode.Baala.Core.Content  as C
 
 -- ----------------------  Data type
 
-type ShortClause = B.Short [Clause]
-
 data Clause =
     Clause { clauseSource  :: B.TokenClause
            , clauseSecNo   :: C.SecNo
@@ -39,7 +36,6 @@ data Clause =
 data ClauseBody
     = CInclude  [B.Token]                                   -- ^ Includeing source
     | CExport   String                                      -- ^ Exporting name
-    | CShort    [B.ShortDef]                                -- ^ Short signs
     | CRelmap   String [B.Token]                            -- ^ Source of relmap
     | CAssert   C.AssertType B.JudgePat [B.Token] [B.Token] -- ^ Assertion
     | CJudge    C.AssertType B.JudgePat [B.Token]           -- ^ Judge
@@ -58,7 +54,6 @@ clauseTypeText (Clause _ _ _ body) =
     case body of
       CInclude  _           -> "include"
       CExport   _           -> "export"
-      CShort    _           -> "short"
       CRelmap   _ _         -> "relmap"
       CAssert   _ _ _ _     -> "assert"
       CJudge    _ _ _       -> "judge"
@@ -88,8 +83,8 @@ clauseTypeText (Clause _ _ _ body) =
 --                ]]
 
 -- | First step of constructing 'Resource'.
-consClause :: C.SecNo -> [B.TokenLine] -> [ShortClause]
-consClause sec = shortClause . consPreclause sec
+consClause :: C.SecNo -> [B.TokenLine] -> [Clause]
+consClause sec = map shortToLong . consPreclause sec
 
 consPreclause :: C.SecNo -> [B.TokenLine] -> [Clause]
 consPreclause sec = mergeAbout . loop sec [] . B.tokenClauses where
@@ -179,7 +174,7 @@ consPreclause' sec sh src = dispatch $ liaison $ B.clauseTokens src where
     about xs                    = c1 $ CAbout xs
 
     short xs                    = case wordPairs xs of
-                                    Just sh'  -> (sh', c1 $ CShort sh')
+                                    Just sh'  -> (sh', [])
                                     Nothing   -> (sh, unk)
 
 pairs :: [a] -> Maybe [(a, a)]
@@ -201,39 +196,15 @@ wordPairs toks =
 
 -- ----------------------  Short-to-long conversion
 
-shortClause :: [Clause] -> [ShortClause]
-shortClause [] = []
-shortClause ccs@(c : cs)
-    | isCShort c = scope cs  $ shorts c
-    | otherwise  = scope ccs []
-    where
-      pt = B.codePtList c
-
-      scope :: [Clause] -> [B.ShortDef] -> [ShortClause]
-      scope cs12 sh =
-          let (cs1, cs2) = span (not . isCShort) cs12
-              short      = B.Short pt sh $ shortToLong sh cs1
-          in  short : shortClause cs2
-
-      shorts :: Clause -> [B.ShortDef]
-      shorts (Clause _ _ _ (CShort sh))  = sh
-      shorts _                           = B.bug "shortClause"
-
-      isCShort :: Clause -> Bool
-      isCShort (Clause _ _ _ (CShort _))  = True
-      isCShort _                          = False
-
-shortToLong :: [B.ShortDef] -> B.Map [Clause]
-shortToLong [] = id
-shortToLong sh = map clause where
-    clause :: B.Map Clause
-    clause (Clause src sec sh bo) =
-        Clause src sec sh $ case bo of
-          CJudge  q p     xs   -> body (CJudge  q p)     xs
-          CAssert q p opt xs   -> body (CAssert q p opt) xs
-          CRelmap n       xs   -> body (CRelmap n)       xs
-          CSlot   n       xs   -> body (CSlot   n)       xs
-          _                    -> bo
+shortToLong :: B.Map Clause
+shortToLong c@(Clause _ _ [] _) = c
+shortToLong (Clause src sec sh bo) = Clause src sec sh bo' where
+    bo' = case bo of
+            CJudge  q p     xs   -> body (CJudge  q p)     xs
+            CAssert q p opt xs   -> body (CAssert q p opt) xs
+            CRelmap n       xs   -> body (CRelmap n)       xs
+            CSlot   n       xs   -> body (CSlot   n)       xs
+            _                    -> bo
 
     body :: ([B.Token] -> ClauseBody) -> [B.Token] -> ClauseBody
     body k xs =

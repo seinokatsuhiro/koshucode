@@ -28,16 +28,16 @@ resInclude :: forall c. (C.CContent c)
     -> C.AbResource c   -- ^ Included resource
 resInclude res src code =
     do ls <- B.tokenLines src code
-       let sec      = C.resLastSecNo res + 1
-           shorts   = C.consClause sec ls
-       B.foldM resIncludeBody res shorts
+       let sec  = C.resLastSecNo res + 1
+           cs   = C.consClause sec ls
+       B.foldM resIncludeBody res $ reverse cs
 
 type Cl   a  = (C.SecNo, [B.ShortDef]) -> [B.Token] -> C.ClauseBody -> a
 type Clab a  = Cl (B.Ab a)
 
 resIncludeBody :: forall c. (C.CContent c) =>
-    C.Resource c -> C.ShortClause -> C.AbResource c
-resIncludeBody res (B.Short pt shorts xs) =
+    C.Resource c -> C.Clause -> C.AbResource c
+resIncludeBody res xs =
     do _        <- forM isCUnknown unk
        _        <- forM isCUnres   unres
        incs     <- forM isCInclude inc
@@ -46,8 +46,6 @@ resIncludeBody res (B.Short pt shorts xs) =
        relmaps  <- forM isCRelmap  relmap
        asserts  <- forM isCAssert  assert
 
-       checkShort shorts
-
        Right $ up $ res
            { C.resExport     = C.resExport   << for isCExport expt
            , C.resSlot       = C.resSlot     << slots
@@ -55,13 +53,13 @@ resIncludeBody res (B.Short pt shorts xs) =
            , C.resAssert     = C.resAssert   << asserts
            , C.resJudge      = C.resJudge    << judges
            , C.resArticle    = C.resArticle  <: reverse incs
-           , C.resLastSecNo  = lastSecNo xs }
+           , C.resLastSecNo  = lastSecNo [xs] }
     where
       f << ys   = ys ++ f res
       f <: t    = case f res of (todo1, todo2, done) -> (t ++ todo1, todo2, done)
 
-      for  isX f = pass     f  `map`  filter (isX . C.clauseBody) xs
-      forM isX f = pass (ab f) `mapM` filter (isX . C.clauseBody) xs
+      for  isX f = pass     f  `map`  filter (isX . C.clauseBody) [xs]
+      forM isX f = pass (ab f) `mapM` filter (isX . C.clauseBody) [xs]
 
       pass f (C.Clause src sec sh body) = f (sec, sh) (B.front $ B.clauseTokens src) body
       ab f (sec, sh) toks body = Msg.abClause toks $ f (sec, sh) toks body
@@ -112,12 +110,13 @@ resIncludeBody res (B.Short pt shorts xs) =
       assert (sec, sh) src (C.CAssert typ pat opt toks) =
           do optPara    <- C.tokenPara opt
              rmapTrees  <- B.tokenTrees toks
+             checkShort sh
              Right $ B.Short (B.codePtList $ head src) sh
                        $ C.Assert sec typ pat optPara src rmapTrees Nothing []
 
       checkShort :: [B.ShortDef] -> B.Ab ()
       checkShort sh =
-          Msg.abShort pt $ do
+          Msg.abShort (B.codePtList xs) $ do
             let (ss, rs) = unzip sh
                 prefix   = B.duplicates ss
                 replace  = B.duplicates rs
