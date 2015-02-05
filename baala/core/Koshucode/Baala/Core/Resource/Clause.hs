@@ -124,47 +124,48 @@ consPreclause h@(ClauseHead src sec sh ab) = dispatch $ liaison tokens where
                          in liaison $ tok : xs
     liaison (x : xs)   = x : liaison xs
 
-    dispatch (B.TTextBar _ ('|' : k) : xs) =
-        same $ frege (map Char.toUpper k) xs   -- Frege's judgement stroke
+    dispatch (B.TTextBar _ ('|' : k) : xs)   -- Frege's judgement stroke
+                                    = normal    $ frege (lower k) xs
     dispatch (B.TTextRaw _ name : B.TTextRaw _ is : body)
-        | isDelim is                = same $ rmap name body
-    dispatch (B.TTextSect _ : _)    = up   []
+        | isDelim is                = normal    $ rmap name body
+    dispatch (B.TTextSect _ : _)    = newSec
     dispatch (B.TTextRaw _ k : xs)
-        | k == "include"            = same $ incl xs
-        | k == "export"             = same $ expt xs
-        | k == "short"              = newShort $ short xs
-        | k == "about"              = newAbout xs
-        | k == "****"               = same []
-    dispatch (B.TSlot _ 2 n : xs)   = same $ slot n xs
-    dispatch []                     = same []
-    dispatch _                      = same unk
+        | k == "include"            = normal    $ incl xs
+        | k == "export"             = normal    $ expt xs
+        | k == "short"              = newShort  $ short xs
+        | k == "about"              = newAbout  xs
+        | k == "****"               = normal    []
+    dispatch (B.TSlot _ 2 n : xs)   = normal    $ slot n xs
+    dispatch []                     = normal    []
+    dispatch _                      = normal    unk
 
-    up   cs             = (unres ++ cs, h { clauseSecNo = sec + 1 })
-    same cs             = (unres ++ cs, h)
-    newShort (sh', cs)  = (unres ++ cs, h { clauseShort = sh' })
-    newAbout ab'        = (unres, h { clauseAbout = ab' })
+    normal cs             = (unres ++ cs, h)
+    newSec                = ([],          h { clauseSecNo = sec + 1 })
+    newShort (sh', cs)    = (unres ++ cs, h { clauseShort = sh' })
+    newAbout ab'          = (unres,       h { clauseAbout = ab' })
 
-    unk          = c1 CUnknown
-    c0           = Clause h
-    c1           = B.li1 . c0
+    unk            = c1 CUnknown
+    c0             = Clause h
+    c1             = B.li1 . c0
 
-    isDelim      = ( `elem` ["=", ":", "|"] )
+    isDelim        = ( `elem` ["=", ":", "|"] )
+    lower          = map Char.toLower
 
-    frege "--"   = judge C.AssertAffirm
-    frege "-X"   = judge C.AssertDeny
-    frege "-XX"  = judge C.AssertMultiDeny
-    frege "-C"   = judge C.AssertChange
-    frege "-CC"  = judge C.AssertMultiChange
-    frege "-V"   = judge C.AssertViolate
+    frege "--"     = judge C.AssertAffirm
+    frege "-x"     = judge C.AssertDeny
+    frege "-xx"    = judge C.AssertMultiDeny
+    frege "-c"     = judge C.AssertChange
+    frege "-cc"    = judge C.AssertMultiChange
+    frege "-v"     = judge C.AssertViolate
 
-    frege "=="   = assert C.AssertAffirm
-    frege "=X"   = assert C.AssertDeny
-    frege "=XX"  = assert C.AssertMultiDeny
-    frege "=C"   = assert C.AssertChange
-    frege "=CC"  = assert C.AssertMultiChange
-    frege "=V"   = assert C.AssertViolate
+    frege "=="     = assert C.AssertAffirm
+    frege "=x"     = assert C.AssertDeny
+    frege "=xx"    = assert C.AssertMultiDeny
+    frege "=c"     = assert C.AssertChange
+    frege "=cc"    = assert C.AssertMultiChange
+    frege "=v"     = assert C.AssertViolate
 
-    frege _      = const unk
+    frege _        = const unk
 
     judge q (B.TText _ _ p : xs)  = c1 $ CJudge q p $ ab ++ xs
     judge _ _                     = unk
