@@ -30,7 +30,7 @@ runResourceBody res@C.Resource { C.resAssert = ass, C.resMessage = msg } =
        Right (B.shortTrim js1, msgChunk : B.shortTrim js2)
     where
       run :: [C.ShortAssert c] -> B.Ab [B.OutputChunks c]
-      run = mapM $ C.runAssertJudges res
+      run = mapM (C.runAssertJudges res) . B.shortGroup
 
       msgChunk :: B.OutputChunks c
       msgChunk | null msg  = B.Short [] [] []

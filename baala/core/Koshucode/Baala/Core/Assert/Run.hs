@@ -20,16 +20,16 @@ import qualified Koshucode.Baala.Core.Message         as Msg
 
 -- | Calculate assertion list.
 runAssertJudges :: (Ord c, B.Write c, C.CRel c, C.CEmpty c, B.SelectRel h, C.GetGlobal h)
-  => h c -> C.ShortAssert' h c -> B.Ab (B.OutputChunks c)
-runAssertJudges hook a@(B.Short pt sh _) =
+  => h c -> C.ShortAsserts' h c -> B.Ab (B.OutputChunks c)
+runAssertJudges hook a =
     do chunks <- runAssertDataset hook a
-       Right $ B.Short pt sh chunks
+       Right $ a { B.shortBody = chunks }
 
 -- | Calculate assertion list.
 runAssertDataset :: forall h. forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c, B.SelectRel h, C.GetGlobal h)
-  => h c -> C.ShortAssert' h c -> B.Ab [B.OutputChunk c]
+  => h c -> C.ShortAsserts' h c -> B.Ab [B.OutputChunk c]
 runAssertDataset hook (B.Short _ sh ass) =
-    Right . concat =<< mapM each [ass]
+    Right . concat =<< mapM each ass
     where
       each (C.Assert _ _ _ _ _ _ Nothing _) = B.bug "runAssertDataset"
       each a@(C.Assert _ typ pat opt _ _ (Just relmap) libs) =

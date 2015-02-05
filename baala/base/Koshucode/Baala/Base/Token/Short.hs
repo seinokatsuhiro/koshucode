@@ -7,6 +7,7 @@ module Koshucode.Baala.Base.Token.Short
   
     -- * Utility
     shortTrim, shortM, shortListM,
+    shortGroup,
   
     -- * Shortener
     shortEmpty, shortText,
@@ -42,6 +43,14 @@ shortM (Short pt he bo) = return . Short pt he =<< bo
 
 shortListM :: (Monad m) => [Short (m a)] -> m [Short a]
 shortListM = mapM shortM
+
+shortGroup :: [Short a] -> [Short [a]]
+shortGroup [] = []
+shortGroup (Short cp1 sh1 a : xs) =
+    case shortGroup xs of
+      Short _ sh2 as : xs' | sh1 == sh2  -> Short cp1 sh1 (a:as) : xs'
+      []                                 -> [Short cp1 sh1 [a]]
+      xs'                                -> Short cp1 sh1 [a] : xs'
 
 
 -- ----------------------  Shortener

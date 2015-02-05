@@ -10,9 +10,8 @@ module Koshucode.Baala.Core.Assert.Assert
     tokenPara,
   
     -- * Short assertion
-    ShortAssert',
-    assertNormal,
-    assertViolated,
+    ShortAssert', ShortAsserts',
+    assertNormal, assertViolated,
   ) where
 
 import qualified Koshucode.Baala.Base           as B
@@ -55,8 +54,11 @@ tokenPara toks =
 
 -- ----------------------  Short assertion
 
--- | Assertion list with short signs.
+-- | Assertion with short signs.
 type ShortAssert' h c = B.Short (Assert' h c)
+
+-- | Assertion list with short signs.
+type ShortAsserts' h c = B.Short [Assert' h c]
 
 -- | Select affirmative or denial assertions.
 assertNormal :: B.Map [ShortAssert' h c]
