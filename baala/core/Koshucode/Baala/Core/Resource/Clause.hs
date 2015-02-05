@@ -10,6 +10,7 @@ module Koshucode.Baala.Core.Resource.Clause
     Clause (..),
     ClauseHead (..),
     ClauseBody (..),
+    clauseHeadEmpty,
     clauseTypeText,
   
     -- * Constructors
@@ -35,6 +36,7 @@ data ClauseHead = ClauseHead
     { clauseSource  :: B.TokenClause
     , clauseSecNo   :: C.SecNo
     , clauseShort   :: [B.ShortDef]
+    , clauseAbout   :: [B.Token]
     } deriving (Show, G.Data, G.Typeable)
 
 data ClauseBody
@@ -43,7 +45,6 @@ data ClauseBody
     | CRelmap   String [B.Token]                            -- ^ Source of relmap
     | CAssert   C.AssertType B.JudgePat [B.Token] [B.Token] -- ^ Assertion
     | CJudge    C.AssertType B.JudgePat [B.Token]           -- ^ Judge
-    | CAbout    [B.Token]                                   -- ^ About
     | CSlot     String [B.Token]                            -- ^ Global slot
     | CUnknown                                              -- ^ Unknown clause
     | CUnres    [B.Token]                                   -- ^ Unresolved short sign
@@ -55,6 +56,9 @@ instance B.CodePtr Clause where
 instance B.CodePtr ClauseHead where
     codePtList = B.codePtList . clauseSource
 
+clauseHeadEmpty :: ClauseHead
+clauseHeadEmpty = ClauseHead (B.CodeClause [] []) 0 [] []
+
 -- | Name of clause type. e.g., @\"relmap\"@, @\"assert\"@.
 clauseTypeText :: Clause -> String
 clauseTypeText (Clause _ body) =
@@ -64,7 +68,6 @@ clauseTypeText (Clause _ body) =
       CRelmap   _ _         -> "relmap"
       CAssert   _ _ _ _     -> "assert"
       CJudge    _ _ _       -> "judge"
-      CAbout    _           -> "about"
       CSlot     _ _         -> "slot"
       CUnknown              -> "unknown"
       CUnres    _           -> "unres"
@@ -91,28 +94,15 @@ clauseTypeText (Clause _ body) =
 
 -- | First step of constructing 'Resource'.
 consClause :: C.SecNo -> [B.TokenLine] -> [Clause]
-consClause sec = mergeAbout . loop h0 . B.tokenClauses where
-    h0 = ClauseHead (B.CodeClause [] []) sec []
+consClause sec = loop h0 . B.tokenClauses where
+    h0 = clauseHeadEmpty { clauseSecNo = sec }
 
     loop _ []     = []
     loop h (x:xs) = let (cs, h') = consPreclause' $ h { clauseSource = x }
                        in cs ++ loop h' xs
 
-mergeAbout :: B.Map [Clause]
-mergeAbout = off where
-    off (Clause _ (CAbout a) : cs)    = on a cs
-    off (c : cs)                      = c : off cs
-    off []                            = []
-
-    on a (Clause h (CJudge q p ts) : cs)
-        = Clause h (CJudge q p $ a ++ ts) : on a cs
-    on _ (Clause _ (CAbout []) : cs)    = off cs
-    on _ (Clause _ (CAbout a') : cs)    = on a' cs
-    on a (c : cs)                       = c : on a cs
-    on _ []                             = []
-
 consPreclause' :: ClauseHead -> ([Clause], ClauseHead)
-consPreclause' h@(ClauseHead src sec sh) = dispatch $ liaison tokens where
+consPreclause' h@(ClauseHead src sec sh ab) = dispatch $ liaison tokens where
 
     original = B.clauseTokens src
     (tokens, unres) | null sh    = (original, [])
@@ -142,16 +132,17 @@ consPreclause' h@(ClauseHead src sec sh) = dispatch $ liaison tokens where
     dispatch (B.TTextRaw _ k : xs)
         | k == "include"            = same $ incl xs
         | k == "export"             = same $ expt xs
-        | k == "short"              = new  $ short xs
-        | k == "about"              = same $ about xs
+        | k == "short"              = newShort $ short xs
+        | k == "about"              = newAbout xs
         | k == "****"               = same []
     dispatch (B.TSlot _ 2 n : xs)   = same $ slot n xs
     dispatch []                     = same []
     dispatch _                      = same unk
 
-    up   cs         = (unres ++ cs, h { clauseSecNo = sec + 1 })
-    same cs         = (unres ++ cs, h)
-    new  (sh', cs)  = (unres ++ cs, h { clauseShort = sh' })
+    up   cs             = (unres ++ cs, h { clauseSecNo = sec + 1 })
+    same cs             = (unres ++ cs, h)
+    newShort (sh', cs)  = (unres ++ cs, h { clauseShort = sh' })
+    newAbout ab'        = (unres, h { clauseAbout = ab' })
 
     unk          = c1 CUnknown
     c0           = Clause h
@@ -169,7 +160,7 @@ consPreclause' h@(ClauseHead src sec sh) = dispatch $ liaison tokens where
 
     frege _      = const unk
 
-    judge q (B.TText _ _ p : xs)  = c1 $ CJudge q p xs
+    judge q (B.TText _ _ p : xs)  = c1 $ CJudge q p $ ab ++ xs
     judge _ _                     = unk
 
     assert t (B.TText _ _ p : xs) =
@@ -188,8 +179,6 @@ consPreclause' h@(ClauseHead src sec sh) = dispatch $ liaison tokens where
     expt _                      = unk
 
     incl xs                     = c1 $ CInclude xs
-
-    about xs                    = c1 $ CAbout xs
 
     short xs                    = case wordPairs xs of
                                     Just sh'  -> (sh', [])
