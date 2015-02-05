@@ -119,29 +119,35 @@ litRel lit cs =
 --   Judges itself are not content type.
 --   It can be only used in the top-level of resources.
 treesToJudge :: (C.CContent c) => CalcContent c -> AssertType -> B.JudgePat -> B.TTreesToAb (B.Judge c)
-treesToJudge calc q p = Right . assertAs q p B.<=< litAssn (literal calc) where
+treesToJudge calc q p = Right . assertAs q p B.<=< litAssn (literal calc)
 
 
 -- ----------------------  Assert type
 
 data AssertType
-    = AssertAffirm     -- ^ @|==@ /pattern/ @:@ /relmap/
-    | AssertDeny       -- ^ @|=x@ /pattern/ @:@ /relmap/
-    | AssertMultiDeny  -- ^ @|=xx@ /pattern/ @:@ /relmap/
-    | AssertViolate    -- ^ @|=v@ /pattern/ @:@ /relmap/
+    = AssertAffirm       -- ^ @|==@ /pattern/ @:@ /relmap/
+    | AssertDeny         -- ^ @|=x@ /pattern/ @:@ /relmap/
+    | AssertMultiDeny    -- ^ @|=xx@ /pattern/ @:@ /relmap/
+    | AssertChange       -- ^ @|=c@ /pattern/ @:@ /relmap/
+    | AssertMultiChange  -- ^ @|=cc@ /pattern/ @:@ /relmap/
+    | AssertViolate      -- ^ @|=v@ /pattern/ @:@ /relmap/
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 assertSymbol :: AssertType -> String
-assertSymbol AssertAffirm     = "|=="
-assertSymbol AssertDeny       = "|=X"
-assertSymbol AssertMultiDeny  = "|=XX"
-assertSymbol AssertViolate    = "|=V"
+assertSymbol AssertAffirm       = "|=="
+assertSymbol AssertDeny         = "|=X"
+assertSymbol AssertMultiDeny    = "|=XX"
+assertSymbol AssertChange       = "|=C"
+assertSymbol AssertMultiChange  = "|=CC"
+assertSymbol AssertViolate      = "|=V"
 
 assertAs :: AssertType -> B.JudgeOf c
-assertAs AssertAffirm      = B.JudgeAffirm
-assertAs AssertDeny        = B.JudgeDeny
-assertAs AssertMultiDeny   = B.JudgeMultiDeny
-assertAs AssertViolate     = B.JudgeViolate
+assertAs AssertAffirm        = B.JudgeAffirm
+assertAs AssertDeny          = B.JudgeDeny
+assertAs AssertMultiDeny     = B.JudgeMultiDeny
+-- assertAs AssertChange        = B.JudgeChange
+-- assertAs AssertMultiChange   = B.JudgeMultiChange
+assertAs AssertViolate       = B.JudgeViolate
 
 
 -- ----------------------  Type

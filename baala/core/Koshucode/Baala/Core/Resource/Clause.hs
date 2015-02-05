@@ -153,11 +153,15 @@ consPreclause h@(ClauseHead src sec sh ab) = dispatch $ liaison tokens where
     frege "--"   = judge C.AssertAffirm
     frege "-X"   = judge C.AssertDeny
     frege "-XX"  = judge C.AssertMultiDeny
+    frege "-C"   = judge C.AssertChange
+    frege "-CC"  = judge C.AssertMultiChange
     frege "-V"   = judge C.AssertViolate
 
     frege "=="   = assert C.AssertAffirm
     frege "=X"   = assert C.AssertDeny
     frege "=XX"  = assert C.AssertMultiDeny
+    frege "=C"   = assert C.AssertChange
+    frege "=CC"  = assert C.AssertMultiChange
     frege "=V"   = assert C.AssertViolate
 
     frege _      = const unk

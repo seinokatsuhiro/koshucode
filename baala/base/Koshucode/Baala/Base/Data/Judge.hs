@@ -46,11 +46,12 @@ import qualified Koshucode.Baala.Base.Data.Head    as B
 --   'B.Named' @c@ in argument.
 
 data Judge c
-    = JudgeAffirm    JudgePat [B.Named c]
-    | JudgeDeny      JudgePat [B.Named c]
-    | JudgeMultiDeny JudgePat [B.Named c]
-    | JudgeViolate   JudgePat [B.Named c]
-    | JudgeAlter     JudgePat [B.Named c] [B.Named c] [B.Named c]
+    = JudgeAffirm      JudgePat [B.Named c]
+    | JudgeDeny        JudgePat [B.Named c]
+    | JudgeMultiDeny   JudgePat [B.Named c]
+    | JudgeChange      JudgePat [B.Named c] [B.Named c]
+    | JudgeMultiChange JudgePat [B.Named c] [B.Named c]
+    | JudgeViolate     JudgePat [B.Named c]
       deriving (Show)
 
 instance (Ord c) => Eq (Judge c) where
@@ -64,18 +65,20 @@ instance (Ord c) => Ord (Judge c) where
         in compare p1 p2 `B.mappend` compare xs1 xs2
 
 judgePat :: Judge c -> JudgePat
-judgePat (JudgeAffirm    p _)      = p
-judgePat (JudgeDeny      p _)      = p
-judgePat (JudgeMultiDeny p _)      = p
-judgePat (JudgeViolate   p _)      = p
-judgePat (JudgeAlter     p _ _ _)  = p
+judgePat (JudgeAffirm      p _)      = p
+judgePat (JudgeDeny        p _)      = p
+judgePat (JudgeMultiDeny   p _)      = p
+judgePat (JudgeChange      p _ _)    = p
+judgePat (JudgeMultiChange p _ _)    = p
+judgePat (JudgeViolate     p _)      = p
 
 judgeTerms :: Judge c -> [B.Named c]
-judgeTerms (JudgeAffirm    _ xs)      = xs
-judgeTerms (JudgeDeny      _ xs)      = xs
-judgeTerms (JudgeMultiDeny _ xs)      = xs
-judgeTerms (JudgeViolate   _ xs)      = xs
-judgeTerms (JudgeAlter     _ xs _ _)  = xs
+judgeTerms (JudgeAffirm      _ xs)      = xs
+judgeTerms (JudgeDeny        _ xs)      = xs
+judgeTerms (JudgeMultiDeny   _ xs)      = xs
+judgeTerms (JudgeChange      _ xs _)    = xs
+judgeTerms (JudgeMultiChange _ xs _)    = xs
+judgeTerms (JudgeViolate     _ xs)      = xs
 
 type JudgeOf c = JudgePat -> [B.Named c] -> Judge c
 
@@ -97,13 +100,14 @@ judgeDoc :: (B.Write c) => B.StringMap -> Judge c -> B.Doc
 judgeDoc shorts j =
     case j of
       -- Frege's judgement stroke, content line,
-      JudgeAffirm    p xs -> B.doc "|--"  B.<+> pat p B.<+> terms xs
-      JudgeDeny      p xs -> B.doc "|-X"  B.<+> pat p B.<+> terms xs
-      JudgeMultiDeny p xs -> B.doc "|-XX" B.<+> pat p B.<+> terms xs
-      JudgeViolate   p xs -> B.doc "|-V"  B.<+> pat p B.<+> terms xs
-      JudgeAlter     p key den aff -> B.doc "|-Y" B.<+> pat p B.<+> terms key
-                                      B.<+> B.doc "|-X" B.<+> terms den
-                                      B.<+> B.doc "|--" B.<+> terms aff
+      JudgeAffirm      p xs     -> B.doc "|--"  B.<+> pat p B.<+> terms xs
+      JudgeDeny        p xs     -> B.doc "|-X"  B.<+> pat p B.<+> terms xs
+      JudgeMultiDeny   p xs     -> B.doc "|-XX" B.<+> pat p B.<+> terms xs
+      JudgeChange      p xs ys  -> B.doc "|-C"  B.<+> pat p B.<+> terms xs
+                                                B.<+> terms ys
+      JudgeMultiChange p xs ys  -> B.doc "|-CC" B.<+> pat p B.<+> terms xs
+                                                B.<+> terms ys
+      JudgeViolate     p xs     -> B.doc "|-V"  B.<+> pat p B.<+> terms xs
     where
       -- pattern
       pat p | ':' `elem` p = B.docWrap "\"" "\"" p
@@ -125,11 +129,12 @@ abcJudge :: (Ord c) => B.Map (Judge c)
 abcJudge = judgeTermsMap B.sort
 
 judgeTermsMap :: ([B.Named a] -> [B.Named b]) -> Judge a -> Judge b
-judgeTermsMap f (JudgeAffirm    p xs)       = JudgeAffirm    p (f xs)
-judgeTermsMap f (JudgeDeny      p xs)       = JudgeDeny      p (f xs)
-judgeTermsMap f (JudgeMultiDeny p xs)       = JudgeMultiDeny p (f xs)
-judgeTermsMap f (JudgeViolate   p xs)       = JudgeViolate   p (f xs)
-judgeTermsMap f (JudgeAlter     p xs ys zs) = JudgeAlter     p (f xs) (f ys) (f zs)
+judgeTermsMap f (JudgeAffirm      p xs)      = JudgeAffirm    p (f xs)
+judgeTermsMap f (JudgeDeny        p xs)      = JudgeDeny      p (f xs)
+judgeTermsMap f (JudgeMultiDeny   p xs)      = JudgeMultiDeny p (f xs)
+judgeTermsMap f (JudgeChange      p xs ys)   = JudgeChange    p (f xs) (f ys)
+judgeTermsMap f (JudgeMultiChange p xs ys)   = JudgeChange    p (f xs) (f ys)
+judgeTermsMap f (JudgeViolate     p xs)      = JudgeViolate   p (f xs)
 
 judgeCons :: B.Named c -> B.Map (Judge c)
 judgeCons x = judgeTermsMap (x :)
@@ -162,10 +167,10 @@ isAffirmative _                 = False
 
 -- | Test that judgement is denied.
 isDenial :: Judge c -> Bool
-isDenial (JudgeDeny _ _) = True
-isDenial _               = False
+isDenial (JudgeDeny _ _)        = True
+isDenial _                      = False
 
 isViolative :: Judge c -> Bool
-isViolative (JudgeViolate _ _) = True
-isViolative _                  = False
+isViolative (JudgeViolate _ _)  = True
+isViolative _                   = False
 

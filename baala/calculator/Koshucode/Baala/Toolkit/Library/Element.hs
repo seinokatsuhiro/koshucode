@@ -35,10 +35,12 @@ elemAssert = B.unique . concatMap f where
         B.affirm (quality t) [ "/pat" -:- C.pText pat ]
              : elemRelmap r
 
-    quality C.AssertAffirm     = "KOSHU-AFFIRM"
-    quality C.AssertDeny       = "KOSHU-DENY"
-    quality C.AssertMultiDeny  = "KOSHU-MULTI-DENY"
-    quality C.AssertViolate    = "KOSHU-VIOLATE"
+    quality C.AssertAffirm       = "KOSHU-AFFIRM"
+    quality C.AssertDeny         = "KOSHU-DENY"
+    quality C.AssertMultiDeny    = "KOSHU-MULTI-DENY"
+    quality C.AssertChange       = "KOSHU-CHANGE"
+    quality C.AssertMultiChange  = "KOSHU-MULTI-CHANGE"
+    quality C.AssertViolate      = "KOSHU-VIOLATE"
 
 elemNamedRelmap :: (C.CContent c) => C.RelmapLinkTable c -> [B.Judge c]
 elemNamedRelmap = B.unique . concatMap f where
