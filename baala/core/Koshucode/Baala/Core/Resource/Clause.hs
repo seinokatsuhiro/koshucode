@@ -98,11 +98,11 @@ consClause sec = loop h0 . B.tokenClauses where
     h0 = clauseHeadEmpty { clauseSecNo = sec }
 
     loop _ []     = []
-    loop h (x:xs) = let (cs, h') = consPreclause' $ h { clauseSource = x }
+    loop h (x:xs) = let (cs, h') = consPreclause $ h { clauseSource = x }
                        in cs ++ loop h' xs
 
-consPreclause' :: ClauseHead -> ([Clause], ClauseHead)
-consPreclause' h@(ClauseHead src sec sh ab) = dispatch $ liaison tokens where
+consPreclause :: ClauseHead -> ([Clause], ClauseHead)
+consPreclause h@(ClauseHead src sec sh ab) = dispatch $ liaison tokens where
 
     original = B.clauseTokens src
     (tokens, unres) | null sh    = (original, [])
@@ -152,10 +152,12 @@ consPreclause' h@(ClauseHead src sec sh ab) = dispatch $ liaison tokens where
 
     frege "--"   = judge C.AssertAffirm
     frege "-X"   = judge C.AssertDeny
+    frege "-XX"  = judge C.AssertMultiDeny
     frege "-V"   = judge C.AssertViolate
 
     frege "=="   = assert C.AssertAffirm
     frege "=X"   = assert C.AssertDeny
+    frege "=XX"  = assert C.AssertMultiDeny
     frege "=V"   = assert C.AssertViolate
 
     frege _      = const unk

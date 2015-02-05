@@ -125,19 +125,22 @@ treesToJudge calc q p = Right . assertAs q p B.<=< litAssn (literal calc) where
 -- ----------------------  Assert type
 
 data AssertType
-    = AssertAffirm    -- ^ @|==@ /pattern/ @:@ /relmap/
-    | AssertDeny      -- ^ @|=X@ /pattern/ @:@ /relmap/
-    | AssertViolate   -- ^ @|=V@ /pattern/ @:@ /relmap/
+    = AssertAffirm     -- ^ @|==@ /pattern/ @:@ /relmap/
+    | AssertDeny       -- ^ @|=x@ /pattern/ @:@ /relmap/
+    | AssertMultiDeny  -- ^ @|=xx@ /pattern/ @:@ /relmap/
+    | AssertViolate    -- ^ @|=v@ /pattern/ @:@ /relmap/
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 assertSymbol :: AssertType -> String
-assertSymbol AssertAffirm    = "|=="
-assertSymbol AssertDeny      = "|=X"
-assertSymbol AssertViolate   = "|=V"
+assertSymbol AssertAffirm     = "|=="
+assertSymbol AssertDeny       = "|=X"
+assertSymbol AssertMultiDeny  = "|=XX"
+assertSymbol AssertViolate    = "|=V"
 
 assertAs :: AssertType -> B.JudgeOf c
 assertAs AssertAffirm      = B.JudgeAffirm
 assertAs AssertDeny        = B.JudgeDeny
+assertAs AssertMultiDeny   = B.JudgeMultiDeny
 assertAs AssertViolate     = B.JudgeViolate
 
 
