@@ -14,7 +14,6 @@ module Koshucode.Baala.Core.Resource.Clause
   
     -- * Constructors
     consClause,
-    consPreclause,
   ) where
 
 import qualified Data.Generics                 as G
@@ -92,14 +91,11 @@ clauseTypeText (Clause _ body) =
 
 -- | First step of constructing 'Resource'.
 consClause :: C.SecNo -> [B.TokenLine] -> [Clause]
-consClause sec = map shortToLong . consPreclause sec
-
-consPreclause :: C.SecNo -> [B.TokenLine] -> [Clause]
-consPreclause sec = mergeAbout . loop h0 . B.tokenClauses where
+consClause sec = mergeAbout . loop h0 . B.tokenClauses where
     h0 = ClauseHead (B.CodeClause [] []) sec []
 
     loop _ []     = []
-    loop h (x:xs) = let (h', cs) = consPreclause' $ h { clauseSource = x }
+    loop h (x:xs) = let (cs, h') = consPreclause' $ h { clauseSource = x }
                        in cs ++ loop h' xs
 
 mergeAbout :: B.Map [Clause]
@@ -115,8 +111,21 @@ mergeAbout = off where
     on a (c : cs)                       = c : on a cs
     on _ []                             = []
 
-consPreclause' :: ClauseHead -> (ClauseHead, [Clause])
-consPreclause' h@(ClauseHead src sec sh) = dispatch $ liaison $ B.clauseTokens src where
+consPreclause' :: ClauseHead -> ([Clause], ClauseHead)
+consPreclause' h@(ClauseHead src sec sh) = dispatch $ liaison tokens where
+
+    original = B.clauseTokens src
+    (tokens, unres) | null sh    = (original, [])
+                    | otherwise  = let ts = lengthen `map` original
+                                   in case filter B.isShortToken ts of
+                                        []  -> (ts, [])
+                                        us  -> (ts, [c0 $ CUnres us])
+
+    lengthen :: B.Map B.Token
+    lengthen t@(B.TShort n a b) = case lookup a sh of
+                                    Just l  -> B.TTextQQ n $ l ++ b
+                                    Nothing -> t
+    lengthen t = t
 
     liaison :: B.Map [B.Token]
     liaison [] = []
@@ -125,7 +134,6 @@ consPreclause' h@(ClauseHead src sec sh) = dispatch $ liaison $ B.clauseTokens s
                          in liaison $ tok : xs
     liaison (x : xs)   = x : liaison xs
 
-    dispatch :: [B.Token] -> (ClauseHead, [Clause])
     dispatch (B.TTextBar _ ('|' : k) : xs) =
         same $ frege (map Char.toUpper k) xs   -- Frege's judgement stroke
     dispatch (B.TTextRaw _ name : B.TTextRaw _ is : body)
@@ -141,9 +149,9 @@ consPreclause' h@(ClauseHead src sec sh) = dispatch $ liaison $ B.clauseTokens s
     dispatch []                     = same []
     dispatch _                      = same unk
 
-    up   cs         = (h { clauseSecNo = sec + 1 }, cs)
-    same cs         = (h, cs)
-    new  (sh', cs)  = (h { clauseShort = sh' }, cs)
+    up   cs         = (unres ++ cs, h { clauseSecNo = sec + 1 })
+    same cs         = (unres ++ cs, h)
+    new  (sh', cs)  = (unres ++ cs, h { clauseShort = sh' })
 
     unk          = c1 CUnknown
     c0           = Clause h
@@ -201,37 +209,6 @@ wordPairs toks =
       wordPair :: (B.Token, B.Token) -> Maybe (String, String)
       wordPair (B.TText _ _ a, B.TText _ _ b) = Just (a, b)
       wordPair _ = Nothing
-
-
-
--- ----------------------  Short-to-long conversion
-
-shortToLong :: B.Map Clause
-shortToLong c@(Clause (ClauseHead _ _ []) _) = c
-shortToLong (Clause h bo) = Clause h bo' where
-    bo' = case bo of
-            CJudge  q p     xs   -> body (CJudge  q p)     xs
-            CAssert q p opt xs   -> body (CAssert q p opt) xs
-            CRelmap n       xs   -> body (CRelmap n)       xs
-            CSlot   n       xs   -> body (CSlot   n)       xs
-            _                    -> bo
-
-    body :: ([B.Token] -> ClauseBody) -> [B.Token] -> ClauseBody
-    body k xs =
-        let ls = map long xs
-            ss = filter B.isShortToken ls
-        in if null ss
-           then k ls
-           else CUnres ss
-
-    long :: B.Map B.Token
-    long token@(B.TShort n a b) =
-        case lookup a sh of
-          Just l  -> B.TTextQQ n $ l ++ b
-          Nothing -> token
-    long token = token
-
-    sh = clauseShort h
 
 
 

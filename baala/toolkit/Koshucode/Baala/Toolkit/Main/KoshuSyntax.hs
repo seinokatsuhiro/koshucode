@@ -122,14 +122,14 @@ dumpStdin omit = dumpCode omit "(stdin)" =<< getContents
 dumpCode :: Bool -> FilePath -> String -> IO ()
 dumpCode omit path code = 
     ab f $ B.tokenLines (B.CodePiece 0 $ B.CodeFile path) code
-    where f ts = do let cs = C.consPreclause 0 ts
+    where f ts = do let cs = C.consClause 0 ts
                     B.putLines $ B.texts $ dumpDesc path
                     dumpClause omit `mapM_` zip [1 ..] cs
                     putNewline
 
 dumpClause :: Bool -> (Int, C.Clause) -> IO ()
 dumpClause omit (clseq, c) =
-    do let src = C.clauseSource c
+    do let src = C.clauseSource $ C.clauseHead c
            ls  = B.clauseLines src
        putNewline
        B.putLines $ map comment ls
@@ -183,9 +183,8 @@ judgeTokenType t = B.affirm "TOKEN-TYPE" args where
 
 judgesClauseType :: [B.Judge Type.VContent]
 judgesClauseType = map j cs where
-    j x = judgeClauseType $ C.Clause (B.CodeClause [] []) 0 x
-    cs  = [ C.CShort []
-          , C.CRelmap "" []
+    j x = judgeClauseType $ C.Clause (C.ClauseHead (B.CodeClause [] []) 0 []) x
+    cs  = [ C.CRelmap "" []
           , C.CAssert C.AssertAffirm "" [] []
           , C.CJudge  C.AssertAffirm "" []
           , C.CSlot "" []
@@ -197,7 +196,6 @@ judgesTokenType = map j cs where
     j x = judgeTokenType x
     cs  = [ B.TTextRaw B.codePtZero ""
           , B.TSlot    B.codePtZero 0 ""
-          , B.TShort   B.codePtZero "" ""
           , B.TTerm    B.codePtZero 0 []
           , B.TOpen    B.codePtZero ""
           , B.TClose   B.codePtZero ""
