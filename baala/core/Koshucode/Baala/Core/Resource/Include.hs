@@ -36,18 +36,19 @@ type Cl   a  = C.ClauseHead -> [B.Token] -> C.ClauseBody -> a
 type Clab a  = Cl (B.Ab a)
 
 resIncludeBody :: forall c. (C.CContent c) =>
-    C.Resource c -> C.Clause -> C.AbResource c
-resIncludeBody res xs =
-    do _        <- forM isCUnknown unk
-       _        <- forM isCUnres   unres
-       incs     <- forM isCInclude inc
-       judges   <- forM isCJudge   judge
-       slots    <- forM isCSlot    slot
-       relmaps  <- forM isCRelmap  relmap
-       asserts  <- forM isCAssert  assert
+    C.Resource c -> B.Ab C.Clause -> C.AbResource c
+resIncludeBody res abxs =
+    do xs       <- abxs
+       _        <- forM xs isCUnknown unk
+       _        <- forM xs isCUnres   unres
+       incs     <- forM xs isCInclude inc
+       judges   <- forM xs isCJudge   judge
+       slots    <- forM xs isCSlot    slot
+       relmaps  <- forM xs isCRelmap  relmap
+       asserts  <- forM xs isCAssert  assert
 
        Right $ up $ res
-           { C.resExport     = C.resExport   << for isCExport expt
+           { C.resExport     = C.resExport   << for xs isCExport expt
            , C.resSlot       = C.resSlot     << slots
            , C.resRelmap     = C.resRelmap   << relmaps
            , C.resAssert     = C.resAssert   << asserts
@@ -58,8 +59,8 @@ resIncludeBody res xs =
       f << ys   = ys ++ f res
       f <: t    = case f res of (todo1, todo2, done) -> (t ++ todo1, todo2, done)
 
-      for  isX f = pass     f  `map`  filter (isX . C.clauseBody) [xs]
-      forM isX f = pass (ab f) `mapM` filter (isX . C.clauseBody) [xs]
+      for  xs isX f = pass     f  `map`  filter (isX . C.clauseBody) [xs]
+      forM xs isX f = pass (ab f) `mapM` filter (isX . C.clauseBody) [xs]
 
       pass f (C.Clause h body) = f h (B.front $ B.clauseTokens $ C.clauseSource h) body
       ab f h toks body = Msg.abClause toks $ f h toks body
@@ -110,21 +111,8 @@ resIncludeBody res xs =
       assert C.ClauseHead { C.clauseSecNo = sec, C.clauseShort = sh } src (C.CAssert typ pat opt toks) =
           do optPara    <- C.tokenPara opt
              rmapTrees  <- B.tokenTrees toks
-             checkShort sh
              Right $ B.Short (B.codePtList $ head src) sh
                        $ C.Assert sec typ pat optPara src rmapTrees Nothing []
-
-      checkShort :: [B.ShortDef] -> B.Ab ()
-      checkShort sh =
-          Msg.abShort (B.codePtList xs) $ do
-            let (ss, rs) = unzip sh
-                prefix   = B.duplicates ss
-                replace  = B.duplicates rs
-                invalid  = B.omit B.isShortPrefix ss
-            B.unless (null prefix)  $ Msg.dupPrefix prefix
-            B.unless (null replace) $ Msg.dupReplacement replace
-            B.unless (null invalid) $ Msg.invalidPrefix invalid
-            Right ()
 
       unk   _ _ (C.CUnknown)  = Msg.unkClause
       unres _ _ (C.CUnres _)  = Msg.unresPrefix

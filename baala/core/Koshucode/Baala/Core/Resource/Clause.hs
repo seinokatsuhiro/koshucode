@@ -22,7 +22,7 @@ import qualified Data.Char                     as Char
 import qualified Koshucode.Baala.Base          as B
 import qualified Koshucode.Baala.Core.Lexmap   as C
 import qualified Koshucode.Baala.Core.Content  as C
-
+import qualified Koshucode.Baala.Core.Message  as Msg
 
 
 -- ----------------------  Data type
@@ -93,7 +93,7 @@ clauseTypeText (Clause _ body) =
 --                ]]
 
 -- | First step of constructing 'Resource'.
-consClause :: C.SecNo -> [B.TokenLine] -> [Clause]
+consClause :: C.SecNo -> [B.TokenLine] -> [B.Ab Clause]
 consClause sec = loop h0 . B.tokenClauses where
     h0 = clauseHeadEmpty { clauseSecNo = sec }
 
@@ -101,7 +101,7 @@ consClause sec = loop h0 . B.tokenClauses where
     loop h (x:xs) = let (cs, h') = consPreclause $ h { clauseSource = x }
                        in cs ++ loop h' xs
 
-consPreclause :: ClauseHead -> ([Clause], ClauseHead)
+consPreclause :: ClauseHead -> ([B.Ab Clause], ClauseHead)
 consPreclause h@(ClauseHead src sec sh ab) = dispatch $ liaison tokens where
 
     original = B.clauseTokens src
@@ -144,9 +144,9 @@ consPreclause h@(ClauseHead src sec sh ab) = dispatch $ liaison tokens where
     newShort (sh', cs)    = (unres ++ cs, h { clauseShort = sh' })
     newAbout ab'          = (unres,       h { clauseAbout = ab' })
 
-    unk            = c1 CUnknown
-    c0             = Clause h
+    c0             = Right . Clause h
     c1             = B.li1 . c0
+    unk            = c1 CUnknown
 
     isDelim        = ( `elem` ["=", ":", "|"] )
     lower          = map Char.toLower
@@ -188,8 +188,20 @@ consPreclause h@(ClauseHead src sec sh ab) = dispatch $ liaison tokens where
     incl xs                     = c1 $ CInclude xs
 
     short xs                    = case wordPairs xs of
-                                    Just sh'  -> (sh', [])
+                                    Just sh'  -> (sh', checkShort sh')
                                     Nothing   -> (sh, unk)
+
+    checkShort :: [B.ShortDef] -> [B.Ab Clause]
+    checkShort sh'
+        | B.notNull prefix    = abort $ Msg.dupPrefix prefix
+        | B.notNull replace   = abort $ Msg.dupReplacement replace
+        | B.notNull invalid   = abort $ Msg.invalidPrefix invalid
+        | otherwise           = []
+        where (pre, rep)  = unzip sh'
+              prefix      = B.duplicates pre
+              replace     = B.duplicates rep
+              invalid     = B.omit B.isShortPrefix pre
+              abort msg   = [Msg.abShort (B.codePtList h) msg]
 
 pairs :: [a] -> Maybe [(a, a)]
 pairs (a:b:cs)  = do cs' <- pairs cs
