@@ -46,7 +46,6 @@ data ClauseBody
     | CAssert   C.AssertType B.JudgePat [B.Token] [B.Token] -- ^ Assertion
     | CJudge    C.AssertType B.JudgePat [B.Token]           -- ^ Judge
     | CSlot     String [B.Token]                            -- ^ Global slot
-    | CUnknown                                              -- ^ Unknown clause
     | CUnres    [B.Token]                                   -- ^ Unresolved short sign
       deriving (Show, G.Data, G.Typeable)
 
@@ -69,7 +68,6 @@ clauseTypeText (Clause _ body) =
       CAssert   _ _ _ _     -> "assert"
       CJudge    _ _ _       -> "judge"
       CSlot     _ _         -> "slot"
-      CUnknown              -> "unknown"
       CUnres    _           -> "unres"
 
 
@@ -103,6 +101,8 @@ consClause sec = loop h0 . B.tokenClauses where
 
 consPreclause :: ClauseHead -> ([B.Ab Clause], ClauseHead)
 consPreclause h@(ClauseHead src sec sh ab) = dispatch $ liaison tokens where
+
+    cp = B.codePtList h
 
     original = B.clauseTokens src
     (tokens, unres) | null sh    = (original, [])
@@ -146,7 +146,7 @@ consPreclause h@(ClauseHead src sec sh ab) = dispatch $ liaison tokens where
 
     c0             = Right . Clause h
     c1             = B.li1 . c0
-    unk            = c1 CUnknown
+    unk            = [Msg.abClause cp Msg.unkClause]
 
     isDelim        = ( `elem` ["=", ":", "|"] )
     lower          = map Char.toLower
@@ -201,7 +201,7 @@ consPreclause h@(ClauseHead src sec sh ab) = dispatch $ liaison tokens where
               prefix      = B.duplicates pre
               replace     = B.duplicates rep
               invalid     = B.omit B.isShortPrefix pre
-              abort msg   = [Msg.abShort (B.codePtList h) msg]
+              abort msg   = [Msg.abShort cp msg]
 
 pairs :: [a] -> Maybe [(a, a)]
 pairs (a:b:cs)  = do cs' <- pairs cs

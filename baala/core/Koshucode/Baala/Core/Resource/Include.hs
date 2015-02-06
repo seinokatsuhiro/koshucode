@@ -39,7 +39,6 @@ resIncludeBody :: forall c. (C.CContent c) =>
     C.Resource c -> B.Ab C.Clause -> C.AbResource c
 resIncludeBody res abxs =
     do xs       <- abxs
-       _        <- forM xs isCUnknown unk
        _        <- forM xs isCUnres   unres
        incs     <- forM xs isCInclude inc
        judges   <- forM xs isCJudge   judge
@@ -114,7 +113,6 @@ resIncludeBody res abxs =
              Right $ B.Short (B.codePtList $ head src) sh
                        $ C.Assert sec typ pat optPara src rmapTrees Nothing []
 
-      unk   _ _ (C.CUnknown)  = Msg.unkClause
       unres _ _ (C.CUnres _)  = Msg.unresPrefix
 
 coxBuildG :: (C.CContent c) => C.Global c -> B.TTreeToAb (C.Cox c)
@@ -145,7 +143,7 @@ paraToCodeName = B.paraSelect unmatch ps where
 
 isCInclude, isCExport,
   isCSlot, isCRelmap, isCAssert, isCJudge,
-  isCUnknown, isCUnres :: C.ClauseBody -> Bool
+  isCUnres :: C.ClauseBody -> Bool
 
 isCInclude (C.CInclude _)      = True
 isCInclude _                   = False
@@ -164,9 +162,6 @@ isCAssert _                    = False
 
 isCJudge (C.CJudge _ _ _)      = True
 isCJudge _                     = False
-
-isCUnknown (C.CUnknown)        = True
-isCUnknown _                   = False
 
 isCUnres (C.CUnres _)          = True
 isCUnres _                     = False
