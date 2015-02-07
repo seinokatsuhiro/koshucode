@@ -10,10 +10,10 @@ module Koshucode.Baala.Core.Resource.Clause
     Clause (..),
     ClauseHead (..),
     ClauseBody (..),
+  
+    -- * Functions
     clauseHeadEmpty,
     clauseTypeText,
-  
-    -- * Constructors
     consClause,
   ) where
 
@@ -55,6 +55,7 @@ instance B.CodePtr Clause where
 instance B.CodePtr ClauseHead where
     codePtList = B.codePtList . clauseSource
 
+-- | The empty clause heading.
 clauseHeadEmpty :: ClauseHead
 clauseHeadEmpty = ClauseHead (B.CodeClause [] []) 0 [] []
 
@@ -80,7 +81,7 @@ clauseTypeText (Clause _ body) =
 --   'TTokmap' and 'CAssert' are contained.
 --   This function does not depend on 'C.ConsLexmap'.
 --
---   >>> consPreclause . B.tokenize $ "a : source A /x /y"
+--   >>> consClause . B.tokenize $ "a : source A /x /y"
 --   [ TTokmap ( TokenClause
 --                [TText 1 0 "a", TSpace 2 1, ..., TTerm 11 ["/y"]]
 --                [CodeLine 1 "a : source A /x /y" [TText 1 0 "a", ...]] )
@@ -96,13 +97,11 @@ consClause sec = loop h0 . B.tokenClauses where
     h0 = clauseHeadEmpty { clauseSecNo = sec }
 
     loop _ []     = []
-    loop h (x:xs) = let (cs, h') = consPreclause $ h { clauseSource = x }
+    loop h (x:xs) = let (cs, h') = consClauseEach $ h { clauseSource = x }
                        in cs ++ loop h' xs
 
-consPreclause :: ClauseHead -> ([B.Ab Clause], ClauseHead)
-consPreclause h@(ClauseHead src sec sh ab) = dispatch $ liaison tokens where
-
-    cp = B.codePtList h
+consClauseEach :: ClauseHead -> ([B.Ab Clause], ClauseHead)
+consClauseEach h@(ClauseHead src sec sh ab) = dispatch $ liaison tokens where
 
     original = B.clauseTokens src
     (tokens, unres) | null sh    = (original, [])
@@ -111,18 +110,20 @@ consPreclause h@(ClauseHead src sec sh ab) = dispatch $ liaison tokens where
                                         []  -> (ts, [])
                                         us  -> (ts, [c0 $ CUnres us])
 
-    lengthen :: B.Map B.Token
-    lengthen t@(B.TShort n a b) = case lookup a sh of
-                                    Just l  -> B.TTextQQ n $ l ++ b
-                                    Nothing -> t
-    lengthen t = t
-
     liaison :: B.Map [B.Token]
     liaison [] = []
     liaison (B.TTextQ _ "" : B.TTerm p2 0 w2 : xs)
                        = let tok = B.TTerm p2 1 w2
                          in liaison $ tok : xs
     liaison (x : xs)   = x : liaison xs
+
+    c0             = Right . Clause h
+    c1             = B.li1 . c0
+
+    isDelim        = ( `elem` ["=", ":", "|"] )
+    lower          = map Char.toLower
+
+    -- clause dispatcher
 
     dispatch (B.TTextBar _ ('|' : k) : xs)   -- Frege's judgement stroke
                                     = normal    $ frege (lower k) xs
@@ -137,19 +138,22 @@ consPreclause h@(ClauseHead src sec sh ab) = dispatch $ liaison tokens where
         | k == "****"               = normal    []
     dispatch (B.TSlot _ 2 n : xs)   = normal    $ slot n xs
     dispatch []                     = normal    []
-    dispatch _                      = normal    unk
+    dispatch _                      = normal    $ unkAtStart []
 
-    normal cs             = (unres ++ cs, h)
-    newSec                = ([],          h { clauseSecNo = sec + 1 })
-    newShort (sh', cs)    = (unres ++ cs, h { clauseShort = sh' })
-    newAbout ab'          = (unres,       h { clauseAbout = ab' })
+    normal cs             = (unres ++ cs , h)
+    newSec                = ([]          , h { clauseSecNo = sec + 1 })
+    newShort (sh', cs)    = (unres ++ cs , h { clauseShort = sh' })
+    newAbout ab'          = (unres       , h { clauseAbout = ab' })
 
-    c0             = Right . Clause h
-    c1             = B.li1 . c0
-    unk            = [Msg.abClause cp Msg.unkClause]
+    -- error messages
 
-    isDelim        = ( `elem` ["=", ":", "|"] )
-    lower          = map Char.toLower
+    unk ts msg     = let cp = B.codePtList $ B.headOr (head original) ts
+                     in [Msg.abClause cp msg]
+    unkAt ts xs    = unk ts $ Msg.unkClause xs
+    unkAtStart     = unkAt original
+    unkEEA e f a   = unkAtStart $ Msg.expect2Actual e f a
+
+    -- Frege's content lines, or logical qualities
 
     frege "--"     = judge C.AssertAffirm
     frege "-x"     = judge C.AssertDeny
@@ -165,31 +169,37 @@ consPreclause h@(ClauseHead src sec sh ab) = dispatch $ liaison tokens where
     frege "=cc"    = assert C.AssertMultiChange
     frege "=v"     = assert C.AssertViolate
 
-    frege _        = const unk
+    frege s        = const $ unkEEA
+                             "|--, |-x, |-xx, |-c, |-cc, |-v,"
+                             "  or |=x, |=xx, |=c, |=cc, |=v"
+                             ("|" ++ s)
+
+    -- judgement and assertion, or source and sink
 
     judge q (B.TText _ _ p : xs)  = c1 $ CJudge q p $ ab ++ xs
-    judge _ _                     = unk
+    judge _ ts                    = judgeError ts
 
-    assert t (B.TText _ _ p : xs) =
+    judgeError []                 = unkAtStart ["Give a judgement pattern"]
+    judgeError ts                 = unkAt ts ["Use text in judgement pattern"]
+
+    assert q (B.TText _ _ p : xs) =
         case B.splitTokensBy isDelim xs of
-          Right (opt, _, expr)  -> a expr opt
-          Left  expr            -> a expr []
-        where a expr opt        = c1 $ CAssert t p opt expr
-    assert _ _                  = unk
+          Right (opt, _, expr)    -> a expr opt
+          Left  expr              -> a expr []
+        where a expr opt          = c1 $ CAssert q p opt expr
+    assert _ ts                   = judgeError ts
 
-    rmap n xs                   = c1 $ CRelmap n xs
-    slot n xs                   = c1 $ CSlot   n xs
+    -- short signs
 
-    expt (B.TText _ _ n : B.TText _ _ ":" : xs)
-                                = c0 (CExport n) : rmap n xs
-    expt [B.TText _ _ n]        = c1 $ CExport n
-    expt _                      = unk
+    lengthen :: B.Map B.Token
+    lengthen t@(B.TShort n a b) = case lookup a sh of
+                                    Just l  -> B.TTextQQ n $ l ++ b
+                                    Nothing -> t
+    lengthen t = t
 
-    incl xs                     = c1 $ CInclude xs
-
-    short xs                    = case wordPairs xs of
-                                    Just sh'  -> (sh', checkShort sh')
-                                    Nothing   -> (sh, unk)
+    short xs                      = case wordPairs xs of
+                                      Just sh'  -> (sh', checkShort sh')
+                                      Nothing   -> (sh, unkAtStart [])
 
     checkShort :: [B.ShortDef] -> [B.Ab Clause]
     checkShort sh'
@@ -197,11 +207,23 @@ consPreclause h@(ClauseHead src sec sh ab) = dispatch $ liaison tokens where
         | B.notNull replace   = abort $ Msg.dupReplacement replace
         | B.notNull invalid   = abort $ Msg.invalidPrefix invalid
         | otherwise           = []
-        where (pre, rep)  = unzip sh'
-              prefix      = B.duplicates pre
-              replace     = B.duplicates rep
-              invalid     = B.omit B.isShortPrefix pre
-              abort msg   = [Msg.abShort cp msg]
+        where (pre, rep)      = unzip sh'
+              prefix          = B.duplicates pre
+              replace         = B.duplicates rep
+              invalid         = B.omit B.isShortPrefix pre
+              abort msg       = unk original msg
+
+    -- others
+
+    rmap n xs                     = c1 $ CRelmap n xs
+    slot n xs                     = c1 $ CSlot   n xs
+
+    expt (B.TText _ _ n : B.TText _ _ ":" : xs)
+                                  = c0 (CExport n) : rmap n xs
+    expt [B.TText _ _ n]          = c1 $ CExport n
+    expt _                        = unkAtStart []
+
+    incl xs                       = c1 $ CInclude xs
 
 pairs :: [a] -> Maybe [(a, a)]
 pairs (a:b:cs)  = do cs' <- pairs cs

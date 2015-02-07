@@ -21,7 +21,6 @@ module Koshucode.Baala.Core.Message
     abLiteral,
     abRelmap,
     abRun,
-    abShort,
     abSlot,
     abSlotTree,
     abSpecialize,
@@ -78,6 +77,8 @@ module Koshucode.Baala.Core.Message
   
     -- * Utility
     detailTermRel,
+    expectActual,
+    expect2Actual,
   ) where
 
 import qualified Koshucode.Baala.Base as B
@@ -133,9 +134,6 @@ abRelmap = B.abortable "relmap"
 
 abRun :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abRun = B.abortable "run"
-
-abShort :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
-abShort = B.abortable "short"
 
 abSlot :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abSlot = B.abortable "slot"
@@ -278,8 +276,8 @@ unkBracket :: B.Ab a
 unkBracket = Left $ B.abortBecause "Unknown bracket"
 
 -- | Unknown clause
-unkClause :: B.Ab a
-unkClause = Left $ B.abortBecause "Unknown clause"
+unkClause :: [String] -> B.Ab a
+unkClause = Left . B.abortLines "Unknown clause"
 
 -- | Unknown expression
 unkCox :: String -> B.Ab a
@@ -370,4 +368,13 @@ detailTermRel label ns he1 = detail where
     indent = map ("  " ++)
     ns'    = map B.showTermName ns
     ns1    = B.linesFrom $ B.headExplain he1
+
+expectActual :: String -> String -> [String]
+expectActual e a       = [ "Expect " ++ e
+                         , "Actual " ++ a ]
+
+expect2Actual :: String -> String -> String -> [String]
+expect2Actual e1 e2 a  = [ "Expect " ++ e1
+                         , "       " ++ e2
+                         , "Actual " ++ a ]
 
