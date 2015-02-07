@@ -3,7 +3,7 @@
 -- | Global parameters.
 
 module Koshucode.Baala.Core.Relmap.Global
-  ( -- * Global
+  ( -- * Global parameter
     Global' (..),
     globalVersionText,
     globalCommandLine,
@@ -13,6 +13,7 @@ module Koshucode.Baala.Core.Relmap.Global
     globalInfix,
     global',
 
+    -- * Getting global parameter
     GetGlobal (..),
     ropGlobal,
     ropCopset,
@@ -46,17 +47,16 @@ ropCopset = globalCopset . ropGlobal
 
 -- | Global parameters
 data Global' h c = Global
-      { globalSynopsis     :: String
-      , globalVersion      :: Ver.Version
-      , globalOpset        :: OpSet' (C.Rop' h) c
-      , globalProgram      :: String
-      , globalArgs         :: [String]
-      , globalProxy        :: [B.HttpProxy]
-      , globalTime         :: B.Time
-      , globalSourceCount  :: Int
-      , globalSources      :: [B.CodePiece]
-      , globalJudges       :: [B.Judge c]
-      , globalHook         :: h c
+      { globalSynopsis     :: String                -- ^ One-line description of calculator
+      , globalVersion      :: Ver.Version           -- ^ Version of calculator
+      , globalOpset        :: OpSet' (C.Rop' h) c   -- ^ Set of operators
+      , globalProgram      :: String                -- ^ Name of invoked program
+      , globalArgs         :: [String]              -- ^ Command line arguments
+      , globalProxy        :: [B.HttpProxy]         -- ^ Proxy setting from environment variables
+      , globalTime         :: B.Time                -- ^ Invocation time
+      , globalSourceCount  :: Int                   -- ^ Sequential number for sources
+      , globalSources      :: [B.CodePiece]         -- ^ Included sources
+      , globalHook         :: h c                   -- ^ Usually, data resource is used as hook
       }
 
 instance Show (Global' h c) where
@@ -76,9 +76,9 @@ globalFill g = g
 globalRops   :: Global' h c -> [C.Rop' h c]
 globalRops    = opsetRopList . globalOpset
 
-globalRopsAdd :: Global' h c -> [C.Rop' h c] -> Global' h c
-globalRopsAdd g rops = g { globalOpset = opsetFill ops' } where
-    ops' = ops { opsetRopList = rops ++ opsetRopList opset }
+globalRopsAdd :: [C.Rop' h c] -> B.Map (Global' h c)
+globalRopsAdd rops g = g { globalOpset = opsetFill ops' } where
+    ops' = opsetRopsAdd rops ops
     ops  = globalOpset g
 
 globalCops   :: Global' h c -> [C.Cop c]
@@ -102,7 +102,6 @@ global' h = Global
     , globalTime         = B.timeFromMjd 0
     , globalSourceCount  = 0
     , globalSources      = []
-    , globalJudges       = []
     , globalHook         = h }
 
 
@@ -128,4 +127,7 @@ opsetFill ops = ops2 where
     findRop   = B.assocFinder rops
     rops      = map name $ opsetRopList ops
     name rop  = (B.name rop, rop)
+
+opsetRopsAdd :: [rop c] -> B.Map (OpSet' rop c)
+opsetRopsAdd rops ops = ops { opsetRopList = rops ++ opsetRopList ops }
 

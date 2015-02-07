@@ -13,6 +13,7 @@ module Koshucode.Baala.Base.Syntax.Code
     CodeClause (..),
     lineIndentPair,
     splitClause,
+    codeClauseEmpty,
   
     -- * CodeRoll
     CodeRoll (..),
@@ -63,6 +64,9 @@ splitClause = first where
     first    []                       = ([], [])
     continue i ((n, x) : xs) | n > i  = B.consFst x $ continue i xs
     continue _ xs                     = ([], xs)
+
+codeClauseEmpty :: CodeClause a
+codeClauseEmpty = CodeClause [] []
 
 
 -- ----------------------  CodeRoll

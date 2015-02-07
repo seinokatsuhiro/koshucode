@@ -57,7 +57,7 @@ instance B.CodePtr ClauseHead where
 
 -- | The empty clause heading.
 clauseHeadEmpty :: ClauseHead
-clauseHeadEmpty = ClauseHead (B.CodeClause [] []) 0 [] []
+clauseHeadEmpty = ClauseHead B.codeClauseEmpty 0 [] []
 
 -- | Name of clause type. e.g., @\"relmap\"@, @\"assert\"@.
 clauseTypeText :: Clause -> String
