@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Base.Abort.Report
   ( CommandLine,
-    abort,
+    abort, abortPrint,
     bug,
   ) where
 
@@ -20,10 +20,15 @@ type CommandLine = [String]
 -- | Stop program execution abnormally.
 abort :: CommandLine -> B.AbortReason -> IO c
 abort cmd a =
-  do B.putCommentLines $ abortMessage cmd a
+  do abortPrint cmd a
      B.putCommentLines ["Exit with status 2", ""]
      Sys.exitWith $ Sys.ExitFailure 2
 
+-- | Print abort message.
+abortPrint :: CommandLine -> B.AbortReason -> IO ()
+abortPrint cmd a = B.putCommentLines $ abortMessage cmd a
+
+-- | Convert abort reason to message lines.
 abortMessage :: CommandLine -> B.AbortReason -> [String]
 abortMessage cmd a = B.squeezeEmptyLines $ map B.trimRight texts where
     texts  = sandwich "" "" $ B.renderTable " " tab ++ note
