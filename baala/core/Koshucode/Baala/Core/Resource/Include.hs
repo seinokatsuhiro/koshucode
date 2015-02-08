@@ -37,43 +37,29 @@ type Clab a  = Cl (B.Ab a)
 
 resIncludeBody :: forall c. (C.CContent c) =>
     C.Resource c -> B.Ab C.Clause -> C.AbResource c
-resIncludeBody res abxs =
-    do xs       <- abxs
-       incs     <- forM xs isCInclude inc
-       judges   <- forM xs isCJudge   judge
-       slots    <- forM xs isCSlot    slot
-       relmaps  <- forM xs isCRelmap  relmap
-       asserts  <- forM xs isCAssert  assert
-
-       Right $ up $ res
-           { C.resExport     = C.resExport   << for xs isCExport expt
-           , C.resSlot       = C.resSlot     << slots
-           , C.resRelmap     = C.resRelmap   << relmaps
-           , C.resAssert     = C.resAssert   << asserts
-           , C.resJudge      = C.resJudge    << judges
-           , C.resArticle    = C.resArticle  <: reverse incs
-           , C.resLastSecNo  = lastSecNo [xs] }
+resIncludeBody res abcl =
+    do cl <- abcl
+       let lastSecNo = C.clauseSecNo $ C.clauseHead cl
+           call f res2 = do x <- ab f `pass` cl
+                            Right $ up (res2 x) { C.resLastSecNo = lastSecNo }
+           
+       case C.clauseBody cl of
+         b | isCJudge   b -> judge  `call` \x -> res { C.resJudge   = C.resJudge   << x }
+           | isCAssert  b -> assert `call` \x -> res { C.resAssert  = C.resAssert  << x }
+           | isCSlot    b -> slot   `call` \x -> res { C.resSlot    = C.resSlot    << x }
+           | isCRelmap  b -> relmap `call` \x -> res { C.resRelmap  = C.resRelmap  << x }
+           | isCInclude b -> inc    `call` \x -> res { C.resArticle = C.resArticle <: x }
     where
-      f << ys   = ys ++ f res
-      f <: t    = case f res of (todo1, todo2, done) -> (t ++ todo1, todo2, done)
+      f << y    = y : f res
+      f <: t    = case f res of (todo1, todo2, done) -> (t : todo1, todo2, done)
 
-      for  xs isX f = pass     f  `map`  filter (isX . C.clauseBody) [xs]
-      forM xs isX f = pass (ab f) `mapM` filter (isX . C.clauseBody) [xs]
-
-      pass f (C.Clause h body) = f h (B.front $ B.clauseTokens $ C.clauseSource h) body
+      f `pass` (C.Clause h body) = f h (B.front $ B.clauseTokens $ C.clauseSource h) body
       ab f h toks body = Msg.abClause toks $ f h toks body
-
-      lastSecNo :: [C.Clause] -> Int
-      lastSecNo []   = 0
-      lastSecNo xs2  = C.clauseSecNo $ C.clauseHead $ last xs2
 
       up res2@C.Resource { C.resJudge = js }
           = res2 { C.resSelect = C.datasetSelect $ C.dataset js }
 
       -- Type of clauses
-
-      expt :: Cl String
-      expt _ _ (C.CExport n) = n
 
       inc :: Clab B.CodeName
       inc _ _ (C.CInclude toks) =
@@ -138,15 +124,11 @@ paraToCodeName = B.paraSelect unmatch ps where
 
 -- ----------------------  Clause type
 
-isCInclude, isCExport,
-  isCSlot, isCRelmap, isCAssert, isCJudge
-  :: C.ClauseBody -> Bool
+isCInclude, isCSlot, isCRelmap, isCAssert, isCJudge
+    :: C.ClauseBody -> Bool
 
 isCInclude (C.CInclude _)      = True
 isCInclude _                   = False
-
-isCExport (C.CExport _)        = True
-isCExport _                    = False
 
 isCSlot (C.CSlot _ _)          = True
 isCSlot _                      = False
