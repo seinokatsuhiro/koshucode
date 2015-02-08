@@ -359,8 +359,9 @@ args :: [String] -> String
 args vs = unwords $ map var $ zip vs [1..]
 
 -- | Unresolved prefix
-unresPrefix :: B.Ab a
-unresPrefix = Left $ B.abortBecause "Unresolved prefix"
+unresPrefix :: String -> B.Ab a
+unresPrefix pre = Left $ B.abortLine "Unresolved prefix"
+                       $ "Require short definition : short " ++ pre ++ " ..."
 
 detailTermRel :: String -> [String] -> B.Head -> [String]
 detailTermRel label ns he1 = detail where

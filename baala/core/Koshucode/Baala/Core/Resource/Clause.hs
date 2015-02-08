@@ -46,7 +46,6 @@ data ClauseBody
     | CAssert   C.AssertType B.JudgePat [B.Token] [B.Token] -- ^ Assertion
     | CJudge    C.AssertType B.JudgePat [B.Token]           -- ^ Judge
     | CSlot     String [B.Token]                            -- ^ Global slot
-    | CUnres    [B.Token]                                   -- ^ Unresolved short sign
       deriving (Show, G.Data, G.Typeable)
 
 instance B.CodePtr Clause where
@@ -69,7 +68,6 @@ clauseTypeText (Clause _ body) =
       CAssert   _ _ _ _     -> "assert"
       CJudge    _ _ _       -> "judge"
       CSlot     _ _         -> "slot"
-      CUnres    _           -> "unres"
 
 
 
@@ -101,14 +99,19 @@ consClause sec = loop h0 . B.tokenClauses where
                        in cs ++ loop h' xs
 
 consClauseEach :: ClauseHead -> ([B.Ab Clause], ClauseHead)
-consClauseEach h@(ClauseHead src sec sh ab) = dispatch $ liaison tokens where
+consClauseEach h@(ClauseHead src sec sh ab) = result where
+
+    result = case tokens of
+               Right ts -> dispatch $ liaison ts
+               Left tok@(B.TShort _ pre _)
+                        -> (unk [tok] $ Msg.unresPrefix pre, h)
+               Left tok -> (unk [tok] $ Msg.bug "short", h)
 
     original = B.clauseTokens src
-    (tokens, unres) | null sh    = (original, [])
-                    | otherwise  = let ts = lengthen `map` original
-                                   in case filter B.isShortToken ts of
-                                        []  -> (ts, [])
-                                        us  -> (ts, [c0 $ CUnres us])
+    tokens | null sh    = Right original
+           | otherwise  = case lengthen `mapM` original of
+                            Right ts -> Right ts
+                            Left  tok -> Left tok
 
     liaison :: B.Map [B.Token]
     liaison [] = []
@@ -140,10 +143,10 @@ consClauseEach h@(ClauseHead src sec sh ab) = dispatch $ liaison tokens where
     dispatch []                     = normal    []
     dispatch _                      = normal    $ unkAtStart []
 
-    normal cs             = (unres ++ cs , h)
-    newSec                = ([]          , h { clauseSecNo = sec + 1 })
-    newShort (sh', cs)    = (unres ++ cs , h { clauseShort = sh' })
-    newAbout ab'          = (unres       , h { clauseAbout = ab' })
+    normal cs             = (cs, h)
+    newSec                = ([], h { clauseSecNo = sec + 1 })
+    newShort (sh', cs)    = (cs, h { clauseShort = sh' })
+    newAbout ab'          = ([], h { clauseAbout = ab' })
 
     -- error messages
 
@@ -189,13 +192,13 @@ consClauseEach h@(ClauseHead src sec sh ab) = dispatch $ liaison tokens where
         where a expr opt          = c1 $ CAssert q p opt expr
     assert _ ts                   = judgeError ts
 
-    -- short signs
+    -- lengthen short signs
 
-    lengthen :: B.Map B.Token
-    lengthen t@(B.TShort n a b) = case lookup a sh of
-                                    Just l  -> B.TTextQQ n $ l ++ b
-                                    Nothing -> t
-    lengthen t = t
+    lengthen :: B.Token -> Either B.Token B.Token
+    lengthen t@(B.TShort n pre b) = case lookup pre sh of
+                                      Just l  -> Right $ B.TTextQQ n $ l ++ b
+                                      Nothing -> Left t
+    lengthen t = Right t
 
     short xs                      = case wordPairs xs of
                                       Just sh'  -> (sh', checkShort sh')
