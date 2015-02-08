@@ -30,7 +30,8 @@ resInclude res src code =
     do ls <- B.tokenLines src code
        let sec  = C.resLastSecNo res + 1
            cs   = C.consClause sec ls
-       B.foldM resIncludeBody res $ reverse cs
+       res2 <- B.foldM resIncludeBody res $ reverse cs
+       Right res2 { C.resSelect = C.datasetSelect $ C.dataset $ C.resJudge res2 }
 
 type Cl   a  = C.ClauseHead -> [B.Token] -> C.ClauseBody -> a
 type Clab a  = Cl (B.Ab a)
@@ -38,39 +39,33 @@ type Clab a  = Cl (B.Ab a)
 resIncludeBody :: forall c. (C.CContent c) =>
     C.Resource c -> B.Ab C.Clause -> C.AbResource c
 resIncludeBody res abcl =
-    do cl <- abcl
-       let lastSecNo = C.clauseSecNo $ C.clauseHead cl
-           call f res2 = do x <- ab f `pass` cl
-                            Right $ up (res2 x) { C.resLastSecNo = lastSecNo }
-           
-       case C.clauseBody cl of
-         b | isCJudge   b -> judge  `call` \x -> res { C.resJudge   = C.resJudge   << x }
+    do C.Clause h b <- abcl
+       let secNo = C.clauseSecNo h
+           toks  = B.front $ B.clauseTokens $ C.clauseSource h
+           f `call` res2 = do x <- Msg.abClause toks $ f h toks b
+                              Right $ (res2 x) { C.resLastSecNo = secNo }
+       case True of
+         _ | isCJudge   b -> judge  `call` \x -> res { C.resJudge   = C.resJudge   << x }
            | isCAssert  b -> assert `call` \x -> res { C.resAssert  = C.resAssert  << x }
-           | isCSlot    b -> slot   `call` \x -> res { C.resSlot    = C.resSlot    << x }
            | isCRelmap  b -> relmap `call` \x -> res { C.resRelmap  = C.resRelmap  << x }
+           | isCSlot    b -> slot   `call` \x -> res { C.resSlot    = C.resSlot    << x }
            | isCInclude b -> inc    `call` \x -> res { C.resArticle = C.resArticle <: x }
     where
-      f << y    = y : f res
-      f <: t    = case f res of (todo1, todo2, done) -> (t : todo1, todo2, done)
+      f << y  = y : f res
+      f <: t  = case f res of (todo1, todo2, done) -> (t : todo1, todo2, done)
 
-      f `pass` (C.Clause h body) = f h (B.front $ B.clauseTokens $ C.clauseSource h) body
-      ab f h toks body = Msg.abClause toks $ f h toks body
+      judge :: Clab (B.Judge c)
+      judge _ _ (C.CJudge q p toks) =
+          C.treesToJudge calc q p =<< B.tokenTrees toks
 
-      up res2@C.Resource { C.resJudge = js }
-          = res2 { C.resSelect = C.datasetSelect $ C.dataset js }
+      calc = calcContG $ C.resGlobal res
 
-      -- Type of clauses
-
-      inc :: Clab B.CodeName
-      inc _ _ (C.CInclude toks) =
-          C.tokenPara toks >>= paraToCodeName
-
-      slot :: Clab B.NamedTrees
-      slot _ _ (C.CSlot n toks) = ntrees (n, toks)
-
-      ntrees :: (String, [B.Token]) -> B.Ab (String, [B.TTree])
-      ntrees (n, toks) = do trees <- B.tokenTrees toks
-                            Right (n, trees)
+      assert :: Clab (C.ShortAssert' h c)
+      assert C.ClauseHead { C.clauseSecNo = sec, C.clauseShort = sh } src (C.CAssert typ pat opt toks) =
+          do optPara    <- C.tokenPara opt
+             rmapTrees  <- B.tokenTrees toks
+             Right $ B.Short (B.codePtList $ head src) sh
+                       $ C.Assert sec typ pat optPara src rmapTrees Nothing []
 
       relmap :: Clab C.RelmapSource
       relmap C.ClauseHead { C.clauseSecNo = sec } _ (C.CRelmap n toks) =
@@ -85,18 +80,16 @@ resIncludeBody res abcl =
              edit    <- C.consAttrmap trees2
              Right ((sec, n), (form, edit))
 
-      judge :: Clab (B.Judge c)
-      judge _ _ (C.CJudge q p toks) =
-          C.treesToJudge calc q p =<< B.tokenTrees toks
+      slot :: Clab B.NamedTrees
+      slot _ _ (C.CSlot n toks) = ntrees (n, toks)
 
-      calc = calcContG $ C.resGlobal res
+      ntrees :: (String, [B.Token]) -> B.Ab (String, [B.TTree])
+      ntrees (n, toks) = do trees <- B.tokenTrees toks
+                            Right (n, trees)
 
-      assert :: Clab (C.ShortAssert' h c)
-      assert C.ClauseHead { C.clauseSecNo = sec, C.clauseShort = sh } src (C.CAssert typ pat opt toks) =
-          do optPara    <- C.tokenPara opt
-             rmapTrees  <- B.tokenTrees toks
-             Right $ B.Short (B.codePtList $ head src) sh
-                       $ C.Assert sec typ pat optPara src rmapTrees Nothing []
+      inc :: Clab B.CodeName
+      inc _ _ (C.CInclude toks) =
+          C.tokenPara toks >>= paraToCodeName
 
 coxBuildG :: (C.CContent c) => C.Global c -> B.TTreeToAb (C.Cox c)
 coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)
