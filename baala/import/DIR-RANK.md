@@ -446,7 +446,7 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    172 judges
+**    173 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Base"
@@ -603,6 +603,7 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Clause"      /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Clause"      /import "Koshucode.Baala.Core.Lexmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Clause"      /import "Koshucode.Baala.Core.Content"
+|-- IMPORT  /module "Koshucode.Baala.Core.Resource.Clause"      /import "Koshucode.Baala.Core.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Include"     /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Resource.Include"     /import "Koshucode.Baala.Core.Content"
