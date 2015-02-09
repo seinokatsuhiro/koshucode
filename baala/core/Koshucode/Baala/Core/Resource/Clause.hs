@@ -102,7 +102,7 @@ consClauseEach :: ClauseHead -> ([B.Ab Clause], ClauseHead)
 consClauseEach h@(ClauseHead src sec sh ab) = result where
 
     result = case tokens of
-               Right ts -> dispatch $ liaison ts
+               Right ts -> dispatch ts
                Left tok@(B.TShort _ pre _)
                         -> (unk [tok] $ Msg.unresPrefix pre, h)
                Left tok -> (unk [tok] $ Msg.bug "short", h)
@@ -112,13 +112,6 @@ consClauseEach h@(ClauseHead src sec sh ab) = result where
            | otherwise  = case lengthen `mapM` original of
                             Right ts -> Right ts
                             Left  tok -> Left tok
-
-    liaison :: B.Map [B.Token]
-    liaison [] = []
-    liaison (B.TTextQ _ "" : B.TTerm p2 0 w2 : xs)
-                       = let tok = B.TTerm p2 1 w2
-                         in liaison $ tok : xs
-    liaison (x : xs)   = x : liaison xs
 
     c0             = Right . Clause h
     c1             = B.li1 . c0

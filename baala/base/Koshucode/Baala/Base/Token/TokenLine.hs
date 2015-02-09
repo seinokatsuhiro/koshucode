@@ -132,12 +132,13 @@ relation r@B.CodeRoll { B.codeInputPt = cp } = start gen cp r where
                    | c == '@'        =  slot  cs 1
                    | c == '|'        =  bar   cs [c]
                    | ccs =^ "^/"     =  nest  $ tail cs
+                   | ccs =^ "'/"     =  v               $ scanTerm 1 cp $ tail cs
                    | ccs =^ "#!"     =  u     ""        $ B.TComment cp cs
                    | ccs =^ "-*-"    =  u     ""        $ B.TComment cp cs
                    | isOpen c        =  u     cs        $ B.TOpen    cp [c]
                    | isClose c       =  u     cs        $ B.TClose   cp [c]
                    | isSingle c      =  u     cs        $ B.TTextRaw cp [c]
-                   | isTerm c        =  v               $ scanTerm   cp cs
+                   | isTerm c        =  v               $ scanTerm 0 cp cs
                    | isQQ c          =  v               $ scanQQ     cp cs
                    | isQ c           =  v               $ scanQ      cp cs
                    | isShort c       =  short cs [c]
@@ -213,8 +214,8 @@ interp r@B.CodeRoll { B.codeInputPt = cp } = start int cp r where
     gen cs tok  = Right $ B.codeChange relation $ B.codeUpdate cs tok r
 
     int ""                           =  Right r
-    int (c:cs)    | isSpace c        =  v         $ scanSpace cp cs
-                  | isTerm c         =  v         $ scanTerm  cp cs
+    int (c:cs)    | isSpace c        =  v         $ scanSpace  cp cs
+                  | isTerm c         =  v         $ scanTerm 0 cp cs
                   | otherwise        =  word (c:cs) ""
 
     word cs@('>':'>':'>':_) w        =  gen cs    $ B.TTextRaw cp $ rv w
@@ -267,8 +268,8 @@ scanQQ :: Scan
 scanQQ cp cs = do (cs', w) <- nextQQ cs
                   Right (cs', B.TTextQQ cp w)
 
-scanTerm :: Scan
-scanTerm cp = word [] where
+scanTerm :: Int -> Scan
+scanTerm q cp = word [] where
     word ns (c:cs) | c == '='   = let (cs', w) = nextCode (c:cs)
                                       n  = B.codeNumber $ B.codePtSource cp
                                       w' = show n ++ w
@@ -280,7 +281,7 @@ scanTerm cp = word [] where
     word _ _                    = Msg.forbiddenTerm
 
     term ns (c:cs) | isTerm c   = word ns cs
-    term ns cs                  = Right (cs, B.TTerm cp 0 $ rv ns)
+    term ns cs                  = Right (cs, B.TTerm cp q $ rv ns)
 
 scanSlot :: Int -> Scan
 scanSlot n cp cs = let (cs', w) = nextCode cs
