@@ -66,9 +66,6 @@ instance Eq CodePiece where
 instance Ord CodePiece where
     x `compare` y = codeName x `compare` codeName y
 
-codeText :: CodePiece -> String
-codeText = codeNameText . codeName
-
 -- | Empty code.
 codeEmpty :: CodePiece
 codeEmpty = codeTextOf ""
