@@ -58,7 +58,7 @@ consFor :: (C.CRel c) => C.RopCons c
 consFor use =
   do n    <- Op.getTerm   use "-term"
      rmap <- Op.getRelmap use "-relmap"
-     nest <- Op.getOption [] Op.getNestTerms use "-<"
+     nest <- Op.getNest use
      Right $ relmapFor use nest n rmap
 
 relmapFor :: (C.CRel c) => C.RopUse c -> [B.Terminal String] -> B.TermName -> B.Map (C.Relmap c)
@@ -151,7 +151,7 @@ consSlice :: (C.CRel c) => C.RopCons c
 consSlice use =
   do n    <- Op.getTerm   use "-term"
      rmap <- Op.getOptRelmap C.relmapId use "-relmap"
-     nest <- Op.getOption [] Op.getNestTerms use "-<"
+     nest <- Op.getNest use
      Right $ relmapSlice use nest n rmap
 
 relmapSlice :: (C.CRel c) => C.RopUse c -> [B.Terminal String] -> B.TermName -> B.Map (C.Relmap c)
@@ -174,7 +174,7 @@ relkitSlice _ _ _ = Right C.relkitNothing
 consSliceUp :: (C.CRel c) => C.RopCons c
 consSliceUp use =
   do rmap <- Op.getOptRelmap C.relmapId use "-relmap"
-     nest <- Op.getOption [] Op.getNestTerms use "-<"
+     nest <- Op.getNest use
      Right $ relmapSliceUp use nest rmap
 
 relmapSliceUp :: (C.CRel c) => C.RopUse c -> [B.Terminal String] -> B.Map (C.Relmap c)

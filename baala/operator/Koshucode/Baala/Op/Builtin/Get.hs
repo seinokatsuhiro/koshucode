@@ -24,6 +24,7 @@ module Koshucode.Baala.Op.Builtin.Get
     getTerms, getTermsCo,
     getTermPairs,
     getNestTerms,
+    getNest,
     getTermTrees,
   ) where
 
@@ -185,6 +186,13 @@ getTermPairs = getAbortable Op.termNamePairs
 
 getNestTerms :: RopGet c [B.Terminal C.RopName]
 getNestTerms = getAbortable C.nestTerms
+
+getNest :: C.RopUse c -> B.Ab [B.Terminal C.RopName]
+getNest u =
+    do nest1 <- getOption [] getNestTerms u "-<"
+       let p x   = (x, x)
+           nest2 = map p $ C.lexNest $ C.ropLexmap u
+       Right $ nest1 ++ nest2
 
 getTermTrees :: RopGet c [B.Named B.TTree]
 getTermTrees = getAbortable C.treesToTerms1

@@ -51,41 +51,44 @@ import qualified Koshucode.Baala.Base.Text      as B
 
 -- | There are nine types of tokens.
 data Token
-    = TText    B.CodePt TextForm String   -- ^ Text.
-    | TName    B.CodePt BlankName         -- ^ Blank name.
-    | TSlot    B.CodePt Int String        -- ^ Slot name.
-                                          --   'Int' represents slot level, i.e.,
-                                          --   0 for local positional slots,
-                                          --   1 for local named slots,
-                                          --   2 for global slots.
-    | TShort   B.CodePt String String     -- ^ Prefixed shorten text.
-    | TTerm    B.CodePt Int TermPath      -- ^ Term path.
-    | TOpen    B.CodePt String            -- ^ Opening bracket.
-    | TClose   B.CodePt String            -- ^ Closing bracket.
-    | TSpace   B.CodePt Int               -- ^ /N/ space characters.
-    | TComment B.CodePt String            -- ^ Comment.
+    = TText     B.CodePt TextForm String   -- ^ Text.
+    | TName     B.CodePt BlankName         -- ^ Blank name.
+    | TSlot     B.CodePt Int String        -- ^ Slot name.
+                                           --   'Int' represents slot level, i.e.,
+                                           --   0 for local positional slots,
+                                           --   1 for local named slots,
+                                           --   2 for global slots.
+    | TShort    B.CodePt String String     -- ^ Prefixed shorten text.
+    | TTerm     B.CodePt Int TermPath      -- ^ Term path.
+    | TTermVar  B.CodePt Int TermName      -- ^ Term variant.
+    | TOpen     B.CodePt String            -- ^ Opening bracket.
+    | TClose    B.CodePt String            -- ^ Closing bracket.
+    | TSpace    B.CodePt Int               -- ^ /N/ space characters.
+    | TComment  B.CodePt String            -- ^ Comment.
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance B.Name Token where
-    name (TTerm  _ _ ns)  = concat ns
-    name (TSlot   _ _ s)  = s
-    name (TText   _ _ s)  = s
-    name (TOpen     _ s)  = s
-    name (TClose    _ s)  = s
-    name (TComment  _ s)  = s
+    name (TTerm     _ _ ns)  = concat ns
+    name (TTermVar   _ _ n)  = n
+    name (TSlot      _ _ s)  = s
+    name (TText      _ _ s)  = s
+    name (TOpen        _ s)  = s
+    name (TClose       _ s)  = s
+    name (TComment     _ s)  = s
     name x = error $ "unknown name: " ++ show x
 
 instance B.Write Token where
     write sh = d where
-        d (TText    pt q w)    = pretty "TText"    pt [show q, show w]
-        d (TName    pt w)      = pretty "TName"    pt [show w]
-        d (TShort   pt a b)    = pretty "TShort"   pt [show a, show b]
-        d (TTerm    pt q ns)   = pretty "TTerm"    pt [show q, show ns]
-        d (TSlot    pt n w)    = pretty "TSlot"    pt [show n, show w]
-        d (TOpen    pt p)      = pretty "TOpen"    pt [show p]
-        d (TClose   pt p)      = pretty "TClose"   pt [show p]
-        d (TSpace   pt c)      = pretty "TSpace"   pt [show c]
-        d (TComment pt s)      = pretty "TComment" pt [show s]
+        d (TText      pt q w)    = pretty "TText"    pt [show q, show w]
+        d (TName      pt w)      = pretty "TName"    pt [show w]
+        d (TShort     pt a b)    = pretty "TShort"   pt [show a, show b]
+        d (TTerm      pt q ns)   = pretty "TTerm"    pt [show q, show ns]
+        d (TTermVar   pt q n)    = pretty "TTermVar" pt [show q, show n]
+        d (TSlot      pt n w)    = pretty "TSlot"    pt [show n, show w]
+        d (TOpen      pt p)      = pretty "TOpen"    pt [show p]
+        d (TClose     pt p)      = pretty "TClose"   pt [show p]
+        d (TSpace     pt c)      = pretty "TSpace"   pt [show c]
+        d (TComment   pt s)      = pretty "TComment" pt [show s]
         pretty k pt xs         = B.writeH sh $ lineCol pt : k : xs
         lineCol pt             = (show $ B.codePtLineNo pt)
                                  ++ "." ++ (show $ B.codePtColumnNo pt)
@@ -101,6 +104,7 @@ instance B.CodePtr Token where
     codePtList (TName    cp _)     = [cp]
     codePtList (TShort   cp _ _)   = [cp]
     codePtList (TTerm    cp _ _)   = [cp]
+    codePtList (TTermVar cp _ _)   = [cp]
     codePtList (TSlot    cp _ _)   = [cp]
     codePtList (TOpen    cp _)     = [cp]
     codePtList (TClose   cp _)     = [cp]
@@ -212,42 +216,45 @@ showNestedTermName = concat . map showTermName
 tokenContent :: Token -> String
 tokenContent tok =
     case tok of
-      TText    _ _ s   -> s
-      TName    _ op    -> B.name op
-      TShort   _ a b   -> a ++ "." ++ b
-      TTerm    _ _ ns  -> concatMap ('/' :) ns
-      TSlot    _ _ s   -> s
-      TOpen    _ s     -> s
-      TClose   _ s     -> s
-      TSpace   _ n     -> replicate n ' '
-      TComment _ s     -> s
+      TText     _ _ s   -> s
+      TName     _ op    -> B.name op
+      TShort    _ a b   -> a ++ "." ++ b
+      TTerm     _ _ ns  -> concatMap ('/' :) ns
+      TTermVar  _ _ n   -> '/' : n
+      TSlot     _ _ s   -> s
+      TOpen     _ s     -> s
+      TClose    _ s     -> s
+      TSpace    _ n     -> replicate n ' '
+      TComment  _ s     -> s
 
 -- | Text of token type, e.g., @\"text\"@, @\"open\"@.
 tokenTypeText :: Token -> String
 tokenTypeText tok =
     case tok of
-      TText    _ _ _   -> "text"
-      TName    _ _     -> "name"
-      TShort   _ _ _   -> "short"
-      TTerm    _ _ _   -> "term"
-      TSlot    _ _ _   -> "slot"
-      TOpen    _ _     -> "open"
-      TClose   _ _     -> "close"
-      TSpace   _ _     -> "space"
-      TComment _ _     -> "comment"
+      TText     _ _ _   -> "text"
+      TName     _ _     -> "name"
+      TShort    _ _ _   -> "short"
+      TTerm     _ _ _   -> "term"
+      TTermVar  _ _ _   -> "termvar"
+      TSlot     _ _ _   -> "slot"
+      TOpen     _ _     -> "open"
+      TClose    _ _     -> "close"
+      TSpace    _ _     -> "space"
+      TComment  _ _     -> "comment"
 
 tokenSubtypeText :: Token -> Maybe String
 tokenSubtypeText tok =
     case tok of
-      TText    _ f _   -> Just $ textFormTypeText f
-      TName    _ b     -> Just $ blankNameTypeText b
-      TShort   _ _ _   -> Nothing
-      TTerm    _ _ _   -> Nothing
-      TSlot    _ n _   -> Just $ slotTypeText n
-      TOpen    _ _     -> Nothing
-      TClose   _ _     -> Nothing
-      TSpace   _ _     -> Nothing
-      TComment _ _     -> Nothing
+      TText     _ f _   -> Just $ textFormTypeText f
+      TName     _ b     -> Just $ blankNameTypeText b
+      TShort    _ _ _   -> Nothing
+      TTerm     _ _ _   -> Nothing
+      TTermVar  _ _ _   -> Nothing
+      TSlot     _ n _   -> Just $ slotTypeText n
+      TOpen     _ _     -> Nothing
+      TClose    _ _     -> Nothing
+      TSpace    _ _     -> Nothing
+      TComment  _ _     -> Nothing
 
 slotTypeText :: Int -> String
 slotTypeText 0   = "positional"

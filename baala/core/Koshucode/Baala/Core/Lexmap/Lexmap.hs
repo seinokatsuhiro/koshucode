@@ -39,6 +39,7 @@ data Lexmap = Lexmap
     , lexRopToken  :: B.Token       -- ^ Token of operator
     , lexAttr      :: C.AttrPara    -- ^ Attribute of relmap operation
     , lexSubmap    :: [Lexmap]      -- ^ Submaps in the attribute
+    , lexNest      :: [String]      -- ^ Nested relation references
     , lexMessage   :: [String]      -- ^ Messages on lexmap
     } deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
@@ -68,6 +69,7 @@ lexBase = Lexmap { lexType      = LexmapBase
                  , lexRopToken  = B.textToken ""
                  , lexAttr      = B.paraEmpty
                  , lexSubmap    = []
+                 , lexNest      = []
                  , lexMessage   = [] }
 
 -- | Name of relmap operator
@@ -124,13 +126,14 @@ consLexmap findSorter gslot findRelmap = lexmap where
 
     -- relmap "/N E" is equivalent to "add /N ( E )"
     -- relmap "| R | R" is equivalent to "id | R | R"
-    single sec (B.TreeL rop@(B.TTextRaw _ _) : trees)  = dispatch rop sec trees
-    single sec (B.TreeL rop@(B.TTextKey _ _) : trees)  = nest     rop sec trees
-    single sec [B.TreeB B.BracketGroup _ trees]        = lexmap       sec trees
-    single _   [B.TreeB _ _ _]                         = Msg.reqGroup
-    single sec (n@(B.TermLeaf _ _ [_]) : trees)        = baseOf "add" sec $ n : [B.wrapTrees trees]
-    single sec []                                      = baseOf "id"  sec []
-    single _ _                                         = Msg.unkRelmap "???"
+    single sec (B.TreeL rop@(B.TTextRaw _ _) : trees)   = dispatch rop sec trees
+    single sec (B.TreeL rop@(B.TTextKey _ _) : trees)   = nest     rop sec trees
+    single sec (B.TreeL (B.TTermVar cp _ n) : trees)    = nest (B.TTextKey cp n) sec trees
+    single sec [B.TreeB B.BracketGroup _ trees]         = lexmap       sec trees
+    single _   [B.TreeB _ _ _]                          = Msg.reqGroup
+    single sec (n@(B.TermLeaf _ _ [_]) : trees)         = baseOf "add" sec $ n : [B.wrapTrees trees]
+    single sec []                                       = baseOf "id"  sec []
+    single _ _                                          = Msg.unkRelmap "???"
 
     dispatch :: B.Token -> ConsLexmapBody
     dispatch rop sec trees =
@@ -195,10 +198,13 @@ consLexmap findSorter gslot findRelmap = lexmap where
             attrNest   = B.filterFst C.isAttrNameNest   attr
         in case attrRelmap of
              []            -> Right (lx, [])
-             [(_, trees)]  -> do ws    <- nestVars attrNest
-                                 subs  <- lexmap1 sec `mapM` nestTrees ws trees
+             [(_, trees)]  -> do ws      <- nestVars attrNest
+                                 let ws2  = nestVars2 trees
+                                     ws'  = ws ++ ws2
+                                 subs    <- lexmap1 sec `mapM` nestTrees ws' trees
                                  let (sublx, tabs) = unzip subs
-                                     lx2           = lx { lexSubmap = sublx }
+                                     lx2           = lx { lexSubmap = sublx
+                                                        , lexNest   = ws2 }
                                  Right (lx2, concat tabs)
              _             -> Msg.bug "submpa"
 
@@ -206,6 +212,13 @@ consLexmap findSorter gslot findRelmap = lexmap where
     nestVars [(_, ws)]  = Right . map snd =<< nestTerms ws
     nestVars []         = Right []
     nestVars _          = Msg.bug "nest"
+
+    nestVars2 :: [B.TTree] -> [String]
+    nestVars2 = B.mapMaybe termVarName . concatMap B.untree
+
+    termVarName :: B.Token -> Maybe String
+    termVarName (B.TTermVar _ _ n)  = Just n
+    termVarName _                   = Nothing
 
     nestTrees :: [String] -> B.Map [B.TTree]
     nestTrees ws = map loop where

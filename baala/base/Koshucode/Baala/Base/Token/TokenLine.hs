@@ -131,6 +131,7 @@ relation r@B.CodeRoll { B.codeInputPt = cp } = start gen cp r where
                    | c == '>'        =  cket  cs [c]
                    | c == '@'        =  slot  cs 1
                    | c == '|'        =  bar   cs [c]
+                   | ccs =^ "^/"     =  nest  $ tail cs
                    | ccs =^ "#!"     =  u     ""        $ B.TComment cp cs
                    | ccs =^ "-*-"    =  u     ""        $ B.TComment cp cs
                    | isOpen c        =  u     cs        $ B.TOpen    cp [c]
@@ -184,6 +185,9 @@ relation r@B.CodeRoll { B.codeInputPt = cp } = start gen cp r where
     bar2 (c:cs) w  | c == '|'        =  u cs            $ B.TTextBar cp $ rv (c:w)
                     | isSpace c      =  u (c:cs)        $ B.TTextBar cp $ rv w
                     | otherwise      =  bar2 cs (c:w)
+
+    nest cs                          = let (cs', n) = nextCode cs
+                                       in u cs'         $ B.TTermVar cp 0 n
 
     ang (c:cs) w    | c == '>'       =  u     cs        $ angle $ rv w
                     | isCode c       =  ang   cs        $ c:w
@@ -265,18 +269,18 @@ scanQQ cp cs = do (cs', w) <- nextQQ cs
 
 scanTerm :: Scan
 scanTerm cp = word [] where
-    word ns (c:cs) | c == '='  =  let (cs', w) = nextCode (c:cs)
+    word ns (c:cs) | c == '='   = let (cs', w) = nextCode (c:cs)
                                       n  = B.codeNumber $ B.codePtSource cp
                                       w' = show n ++ w
                                   in term (w' : ns) cs'
-                   | isCode c  =  let (cs', w) = nextCode (c:cs)
+                   | isCode c   = let (cs', w) = nextCode (c:cs)
                                   in term (w : ns) cs'
-                   | isQQ c    =  do (cs', w) <- nextQQ cs
+                   | isQQ c     = do (cs', w) <- nextQQ cs
                                      term (w : ns) cs'
-    word _ _                   =  Msg.forbiddenTerm
+    word _ _                    = Msg.forbiddenTerm
 
-    term ns (c:cs) | isTerm c  =  word ns cs
-    term ns cs                 =  Right (cs, B.TTerm cp 0 $ rv ns)
+    term ns (c:cs) | isTerm c   = word ns cs
+    term ns cs                  = Right (cs, B.TTerm cp 0 $ rv ns)
 
 scanSlot :: Int -> Scan
 scanSlot n cp cs = let (cs', w) = nextCode cs
