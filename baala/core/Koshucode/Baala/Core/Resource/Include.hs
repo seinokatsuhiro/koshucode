@@ -40,16 +40,16 @@ resIncludeBody :: forall c. (C.CContent c) =>
     C.Resource c -> B.Ab C.Clause -> C.AbResource c
 resIncludeBody res abcl =
     do C.Clause h b <- abcl
-       let secNo = C.clauseSecNo h
+       let sec   = C.clauseSecNo h
            toks  = B.front $ B.clauseTokens $ C.clauseSource h
-           f `call` res2 = do x <- Msg.abClause toks $ f h toks b
-                              Right $ (res2 x) { C.resLastSecNo = secNo }
-       case True of
-         _ | isCJudge   b -> judge  `call` \x -> res { C.resJudge   = C.resJudge   << x }
-           | isCAssert  b -> assert `call` \x -> res { C.resAssert  = C.resAssert  << x }
-           | isCRelmap  b -> relmap `call` \x -> res { C.resRelmap  = C.resRelmap  << x }
-           | isCSlot    b -> slot   `call` \x -> res { C.resSlot    = C.resSlot    << x }
-           | isCInclude b -> inc    `call` \x -> res { C.resArticle = C.resArticle <: x }
+           f `to` res2 = do x <- Msg.abClause toks $ f h toks b
+                            Right $ (res2 x) { C.resLastSecNo = sec }
+       case b of
+         C.CJudge _ _ _    -> judge  `to` \x -> res { C.resJudge   = C.resJudge   << x }
+         C.CAssert _ _ _ _ -> assert `to` \x -> res { C.resAssert  = C.resAssert  << x }
+         C.CRelmap _ _     -> relmap `to` \x -> res { C.resRelmap  = C.resRelmap  << x }
+         C.CSlot _ _       -> slot   `to` \x -> res { C.resSlot    = C.resSlot    << x }
+         C.CInclude _      -> inc    `to` \x -> res { C.resArticle = C.resArticle <: x }
     where
       f << y  = y : f res
       f <: t  = case f res of (todo1, todo2, done) -> (t : todo1, todo2, done)
@@ -113,27 +113,6 @@ paraToCodeName = B.paraSelect unmatch ps where
                    _  -> Msg.adlib "include no args"
 
     unmatch = Msg.adlib "include unknown"
-
-
--- ----------------------  Clause type
-
-isCInclude, isCSlot, isCRelmap, isCAssert, isCJudge
-    :: C.ClauseBody -> Bool
-
-isCInclude (C.CInclude _)      = True
-isCInclude _                   = False
-
-isCSlot (C.CSlot _ _)          = True
-isCSlot _                      = False
-
-isCRelmap (C.CRelmap _ _)      = True
-isCRelmap _                    = False
-
-isCAssert (C.CAssert _ _ _ _)  = True
-isCAssert _                    = False
-
-isCJudge (C.CJudge _ _ _)      = True
-isCJudge _                     = False
 
 
 
