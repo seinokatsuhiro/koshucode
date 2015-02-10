@@ -93,7 +93,7 @@ litColon lit cs = lt `mapM` B.divideTreesByColon cs where
 
 -- | Literal reader for angled group.
 litAngle :: (C.CContent c) => B.TTreeToAb c -> B.TTreesToAb c
-litAngle lit xs@(B.TermLeaf _ 0 _ : _) = C.putAssn =<< litAssn lit xs
+litAngle lit xs@(B.TermLeafPath _ _ : _) = C.putAssn =<< litAssn lit xs
 litAngle _ [] = C.putAssn []
 litAngle _ [B.TextLeafRaw _ "words", B.TextLeafQQ _ ws] =
     C.putList $ map C.pText $ words ws

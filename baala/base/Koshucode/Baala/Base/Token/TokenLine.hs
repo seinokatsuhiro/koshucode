@@ -132,13 +132,13 @@ relation r@B.CodeRoll { B.codeInputPt = cp } = start gen cp r where
                    | c == '@'        =  slot  cs 1
                    | c == '|'        =  bar   cs [c]
                    | ccs =^ "^/"     =  nest  $ tail cs
-                   | ccs =^ "'/"     =  v               $ scanTerm 1 cp $ tail cs
+                   | ccs =^ "'/"     =  v               $ scanTermQ  cp $ tail cs
                    | ccs =^ "#!"     =  u     ""        $ B.TComment cp cs
                    | ccs =^ "-*-"    =  u     ""        $ B.TComment cp cs
                    | isOpen c        =  u     cs        $ B.TOpen    cp [c]
                    | isClose c       =  u     cs        $ B.TClose   cp [c]
                    | isSingle c      =  u     cs        $ B.TTextRaw cp [c]
-                   | isTerm c        =  v               $ scanTerm 0 cp cs
+                   | isTerm c        =  v               $ scanTermP  cp cs
                    | isQQ c          =  v               $ scanQQ     cp cs
                    | isQ c           =  v               $ scanQ      cp cs
                    | isShort c       =  short cs [c]
@@ -215,7 +215,7 @@ interp r@B.CodeRoll { B.codeInputPt = cp } = start int cp r where
 
     int ""                           =  Right r
     int (c:cs)    | isSpace c        =  v         $ scanSpace  cp cs
-                  | isTerm c         =  v         $ scanTerm 0 cp cs
+                  | isTerm c         =  v         $ scanTermP  cp cs
                   | otherwise        =  word (c:cs) ""
 
     word cs@('>':'>':'>':_) w        =  gen cs    $ B.TTextRaw cp $ rv w
@@ -268,7 +268,11 @@ scanQQ :: Scan
 scanQQ cp cs = do (cs', w) <- nextQQ cs
                   Right (cs', B.TTextQQ cp w)
 
-scanTerm :: Int -> Scan
+scanTermP, scanTermQ :: Scan
+scanTermP = scanTerm B.TermTypePath
+scanTermQ = scanTerm B.TermTypeQuoted
+
+scanTerm :: B.TermType -> Scan
 scanTerm q cp = word [] where
     word ns (c:cs) | c == '='   = let (cs', w) = nextCode (c:cs)
                                       n  = B.codeNumber $ B.codePtSource cp

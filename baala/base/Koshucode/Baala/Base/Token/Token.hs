@@ -23,6 +23,11 @@ module Koshucode.Baala.Base.Token.Token
     pattern TTextName,
     pattern TTextSect,
 
+    -- * TermType
+    TermType (..),
+    pattern TTermPath,
+    pattern TTermQ,
+
     -- * Term name
     TermName, TermName2, TermName3, TermName4,
     Terminal, TermPath,
@@ -51,20 +56,20 @@ import qualified Koshucode.Baala.Base.Text      as B
 
 -- | There are nine types of tokens.
 data Token
-    = TText     B.CodePt TextForm String   -- ^ Text.
-    | TName     B.CodePt BlankName         -- ^ Blank name.
-    | TSlot     B.CodePt Int String        -- ^ Slot name.
-                                           --   'Int' represents slot level, i.e.,
-                                           --   0 for local positional slots,
-                                           --   1 for local named slots,
-                                           --   2 for global slots.
-    | TShort    B.CodePt String String     -- ^ Prefixed shorten text.
-    | TTerm     B.CodePt Int TermPath      -- ^ Term path.
-    | TTermVar  B.CodePt Int TermName      -- ^ Term variant.
-    | TOpen     B.CodePt String            -- ^ Opening bracket.
-    | TClose    B.CodePt String            -- ^ Closing bracket.
-    | TSpace    B.CodePt Int               -- ^ /N/ space characters.
-    | TComment  B.CodePt String            -- ^ Comment.
+    = TText     B.CodePt TextForm String    -- ^ Text.
+    | TName     B.CodePt BlankName          -- ^ Blank name.
+    | TSlot     B.CodePt Int String         -- ^ Slot name.
+                                            --   'Int' represents slot level, i.e.,
+                                            --   0 for local positional slots,
+                                            --   1 for local named slots,
+                                            --   2 for global slots.
+    | TShort    B.CodePt String String      -- ^ Prefixed shorten text.
+    | TTerm     B.CodePt TermType TermPath  -- ^ Term path.
+    | TTermVar  B.CodePt Int TermName       -- ^ Term variant.
+    | TOpen     B.CodePt String             -- ^ Opening bracket.
+    | TClose    B.CodePt String             -- ^ Closing bracket.
+    | TSpace    B.CodePt Int                -- ^ /N/ space characters.
+    | TComment  B.CodePt String             -- ^ Comment.
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance B.Name Token where
@@ -143,6 +148,18 @@ textFormTypeText form =
       TextKey   -> "key"
       TextBar   -> "bar"
       TextName  -> "name"
+
+
+-- ----------------------  Term type
+
+data TermType
+    = TermTypePath
+    | TermTypeQuoted
+    | TermTypeNest
+      deriving (Show, Eq, Ord, G.Data, G.Typeable)
+
+pattern TTermPath cp ws  = TTerm cp TermTypePath   ws
+pattern TTermQ    cp ws  = TTerm cp TermTypeQuoted ws
 
 
 -- ----------------------  Blank name

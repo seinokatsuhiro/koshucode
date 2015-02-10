@@ -206,9 +206,9 @@ concatTime = year where
 -- | Get flat term name from token tree.
 --   If the token tree contains nested term name, this function failed.
 treeToFlatTerm :: B.TTreeToAb B.TermName
-treeToFlatTerm (B.TermLeaf _ 0 [n])  = Right n
-treeToFlatTerm (B.TreeL t)           = Msg.reqFlatName t
-treeToFlatTerm _                     = Msg.reqTermName
+treeToFlatTerm (B.TermLeafPath _ [n])  = Right n
+treeToFlatTerm (B.TreeL t)             = Msg.reqFlatName t
+treeToFlatTerm _                       = Msg.reqTermName
 
 -- | Convert token trees into a list of named token trees.
 treesToTerms :: B.TTreesToAb [B.NamedTrees]
@@ -220,9 +220,9 @@ treesToTerms = name where
                        Right $ (n, c) : xs2'
 
     cont :: B.TTreesTo ([B.TTree], [B.TTree])
-    cont xs@(B.TermLeaf _ 0 _ : _)  = ([], xs)
-    cont []                         = ([], [])
-    cont (x : xs)                   = B.consFst x $ cont xs
+    cont xs@(B.TermLeafPath _ _ : _)  = ([], xs)
+    cont []                           = ([], [])
+    cont (x : xs)                     = B.consFst x $ cont xs
 
 treesToTerms1 :: B.TTreesToAb [B.NamedTree]
 treesToTerms1 xs = do xs' <- treesToTerms xs

@@ -105,12 +105,12 @@ construct calc = expr where
 
     -- literal or variable
     cons cp tree@(B.TreeL tok) = case tok of
-        B.TTerm _ 0 ns ->  Right $ C.CoxTerm  cp ns []
-        B.TName _ op   ->  Right $ C.CoxBlank cp op
-        B.TTextRaw _ n | isName n ->  Right $ C.CoxBlank cp $ B.BlankNormal n
-        B.TText _ _ _  ->  lit cp tree
-        B.TTerm _ 1 _  ->  lit cp tree
-        _              ->  B.bug "core/leaf"
+        B.TTermPath _ ns           -> Right $ C.CoxTerm  cp ns []
+        B.TName _ op               -> Right $ C.CoxBlank cp op
+        B.TTextRaw _ n | isName n  -> Right $ C.CoxBlank cp $ B.BlankNormal n
+        B.TText _ _ _              -> lit cp tree
+        B.TTermQ _ _               -> lit cp tree
+        _                          -> B.bug "core/leaf"
 
     fill cp f xs =
         do f'  <- expr f

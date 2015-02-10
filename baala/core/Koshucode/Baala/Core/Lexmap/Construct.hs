@@ -172,12 +172,12 @@ consLexmap findSorter gslot findRelmap = lexmap where
     -- | Parse nested relation attribute.
     nestTerms :: [B.TTree] -> B.Ab [B.Terminal C.RopName]
     nestTerms = loop where
-        loop (B.TermLeaf _ 0 [n] :
-              B.TextLeafRaw _ v : xs)   = next (n, v) xs
-        loop (B.TermLeaf _ 0 [n] : xs)  = next (n, n) xs
-        loop (B.TextLeafRaw _ v : xs)   = next (v, v) xs
-        loop []                         = Right []
-        loop _                          = Msg.reqTermName
+        loop (B.TermLeafPath _ [n] :
+              B.TextLeafRaw  _  v  : xs)   = next (n, v) xs
+        loop (B.TermLeafPath _ [n] : xs)   = next (n, n) xs
+        loop (B.TextLeafRaw  _  v  : xs)   = next (v, v) xs
+        loop []                            = Right []
+        loop _                             = Msg.reqTermName
 
         next p xs = do xs' <- loop xs
                        Right $ p : xs'
