@@ -188,7 +188,7 @@ relation r@B.CodeRoll { B.codeInputPt = cp } = start gen cp r where
                     | otherwise      =  bar2 cs (c:w)
 
     nest cs                          = let (cs', n) = nextCode cs
-                                       in u cs'         $ B.TTermVar cp 0 n
+                                       in u cs'         $ B.TTermNest cp n
 
     ang (c:cs) w    | c == '>'       =  u     cs        $ angle $ rv w
                     | isCode c       =  ang   cs        $ c:w

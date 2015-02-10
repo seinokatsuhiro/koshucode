@@ -27,6 +27,7 @@ module Koshucode.Baala.Base.Token.Token
     TermType (..),
     pattern TTermPath,
     pattern TTermQ,
+    pattern TTermNest,
 
     -- * Term name
     TermName, TermName2, TermName3, TermName4,
@@ -65,7 +66,6 @@ data Token
                                             --   2 for global slots.
     | TShort    B.CodePt String String      -- ^ Prefixed shorten text.
     | TTerm     B.CodePt TermType TermPath  -- ^ Term path.
-    | TTermVar  B.CodePt Int TermName       -- ^ Term variant.
     | TOpen     B.CodePt String             -- ^ Opening bracket.
     | TClose    B.CodePt String             -- ^ Closing bracket.
     | TSpace    B.CodePt Int                -- ^ /N/ space characters.
@@ -74,7 +74,6 @@ data Token
 
 instance B.Name Token where
     name (TTerm     _ _ ns)  = concat ns
-    name (TTermVar   _ _ n)  = n
     name (TSlot      _ _ s)  = s
     name (TText      _ _ s)  = s
     name (TOpen        _ s)  = s
@@ -88,7 +87,6 @@ instance B.Write Token where
         d (TName      pt w)      = pretty "TName"    pt [show w]
         d (TShort     pt a b)    = pretty "TShort"   pt [show a, show b]
         d (TTerm      pt q ns)   = pretty "TTerm"    pt [show q, show ns]
-        d (TTermVar   pt q n)    = pretty "TTermVar" pt [show q, show n]
         d (TSlot      pt n w)    = pretty "TSlot"    pt [show n, show w]
         d (TOpen      pt p)      = pretty "TOpen"    pt [show p]
         d (TClose     pt p)      = pretty "TClose"   pt [show p]
@@ -109,7 +107,6 @@ instance B.CodePtr Token where
     codePtList (TName    cp _)     = [cp]
     codePtList (TShort   cp _ _)   = [cp]
     codePtList (TTerm    cp _ _)   = [cp]
-    codePtList (TTermVar cp _ _)   = [cp]
     codePtList (TSlot    cp _ _)   = [cp]
     codePtList (TOpen    cp _)     = [cp]
     codePtList (TClose   cp _)     = [cp]
@@ -160,6 +157,7 @@ data TermType
 
 pattern TTermPath cp ws  = TTerm cp TermTypePath   ws
 pattern TTermQ    cp ws  = TTerm cp TermTypeQuoted ws
+pattern TTermNest cp w   = TTerm cp TermTypeNest   [w]
 
 
 -- ----------------------  Blank name
@@ -237,7 +235,6 @@ tokenContent tok =
       TName     _ op    -> B.name op
       TShort    _ a b   -> a ++ "." ++ b
       TTerm     _ _ ns  -> concatMap ('/' :) ns
-      TTermVar  _ _ n   -> '/' : n
       TSlot     _ _ s   -> s
       TOpen     _ s     -> s
       TClose    _ s     -> s
@@ -252,7 +249,6 @@ tokenTypeText tok =
       TName     _ _     -> "name"
       TShort    _ _ _   -> "short"
       TTerm     _ _ _   -> "term"
-      TTermVar  _ _ _   -> "termvar"
       TSlot     _ _ _   -> "slot"
       TOpen     _ _     -> "open"
       TClose    _ _     -> "close"
@@ -266,7 +262,6 @@ tokenSubtypeText tok =
       TName     _ b     -> Just $ blankNameTypeText b
       TShort    _ _ _   -> Nothing
       TTerm     _ _ _   -> Nothing
-      TTermVar  _ _ _   -> Nothing
       TSlot     _ n _   -> Just $ slotTypeText n
       TOpen     _ _     -> Nothing
       TClose    _ _     -> Nothing

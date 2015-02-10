@@ -71,7 +71,7 @@ consLexmap findSorter gslot findRelmap = lexmap where
     -- relmap "| R | R" is equivalent to "id | R | R"
     single sec (B.TreeL rop@(B.TTextRaw _ _) : trees)   = dispatch rop sec trees
     single sec (B.TreeL rop@(B.TTextKey _ _) : trees)   = nest     rop sec trees
-    single sec (B.TreeL (B.TTermVar cp _ n) : trees)    = nest (B.TTextKey cp n) sec trees
+    single sec (B.TreeL (B.TTermNest cp n) : trees)     = nest (B.TTextKey cp n) sec trees
     single sec [B.TreeB B.BracketGroup _ trees]         = lexmap       sec trees
     single _   [B.TreeB _ _ _]                          = Msg.reqGroup
     single sec (n@(B.TermLeaf _ _ [_]) : trees)         = baseOf "add" sec $ n : [B.wrapTrees trees]
@@ -160,7 +160,7 @@ consLexmap findSorter gslot findRelmap = lexmap where
     nestVars2 = B.mapMaybe termVarName . concatMap B.untree
 
     termVarName :: B.Token -> Maybe String
-    termVarName (B.TTermVar _ _ n)  = Just n
+    termVarName (B.TTermNest _ n)   = Just n
     termVarName _                   = Nothing
 
     nestTrees :: [String] -> B.Map [B.TTree]
