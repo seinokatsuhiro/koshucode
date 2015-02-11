@@ -22,6 +22,7 @@ module Koshucode.Baala.Base.Message
     forbiddenInput,
     forbiddenTerm,
     quotNotEnd,
+    reqFlatTerm,
     unexpSect,
     unkAngleText,
   ) where
@@ -99,6 +100,10 @@ forbiddenTerm = Left $ B.abortBecause "Forbidden term name"
 -- | Quotation not end in line
 quotNotEnd :: B.Ab a
 quotNotEnd = Left $ B.abortBecause "Quotation not end in line"
+
+-- | Require flat term name
+reqFlatTerm :: String -> B.Ab a
+reqFlatTerm = Left . B.abortLine "Require flat term name"
 
 -- | Unexpedted section delimiter
 unexpSect :: [String] -> B.Ab a
