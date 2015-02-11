@@ -124,7 +124,7 @@ consLexmap findSorter gslot findDeriv = lexmap where
         -- -----------  lexmap for nested relation reference
 
         nest :: B.Token -> ConsLexmapBody
-        nest rop []  = Right (cons C.LexmapNest rop B.paraEmpty, [])
+        nest rop []  = Right (cons C.LexmapLocal rop B.paraEmpty, [])
         nest _ _     = Msg.extraAttr
 
         -- -----------  construct lexmap except for submaps

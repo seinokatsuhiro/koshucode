@@ -46,7 +46,7 @@ consGroupBy use =
 relmapGroupBy :: (Ord c, C.CRel c) => C.RopUse c -> B.TermName -> B.Map (C.Relmap c)
 relmapGroupBy use n rmap = C.relmapCopy use n rmapGroup where
     rmapGroup = rmap `B.mappend` Op.relmapGroup use n rmapCopy
-    rmapCopy  = C.relmapNestVar use n
+    rmapCopy  = C.relmapLocalVar use n
 
 
 -- ----------------------  join-up
@@ -58,9 +58,9 @@ consJoinUp use =
      Right $ relmapJoinUp use $ map p nest
 
 relmapJoinUp :: (Ord c) => C.RopUse c -> [B.Terminal String] -> C.Relmap c
-relmapJoinUp use nest = C.relmapNest use nest $ Op.relmapJoinList use rmaps where
+relmapJoinUp use nest = C.relmapLocal use nest $ Op.relmapJoinList use rmaps where
     rmaps   = link `map` map snd nest
-    link n  = C.relmapNestVar use n
+    link n  = C.relmapLocalVar use n
 
 
 -- ----------------------  nest / hang
@@ -113,6 +113,6 @@ relmapUnnest :: (Ord c, C.CRel c) => C.RopUse c -> B.TermName -> C.Relmap c
 relmapUnnest use n = unnest where
     unnest  =  slice `B.mappend` cut
     slice   =  Op.relmapSliceUp use [(n, n)] meet
-    meet    =  Op.relmapMeet use $ C.relmapNestVar use n
+    meet    =  Op.relmapMeet use $ C.relmapLocalVar use n
     cut     =  Op.relmapCut  use [n]
 

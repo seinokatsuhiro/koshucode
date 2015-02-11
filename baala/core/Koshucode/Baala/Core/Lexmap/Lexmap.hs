@@ -36,7 +36,7 @@ data Lexmap = Lexmap
 data LexmapType
     = LexmapBase         -- ^ Built-in relmap
     | LexmapDerived      -- ^ User-defined relmap
-    | LexmapNest         -- ^ Nested relation reference
+    | LexmapLocal        -- ^ Local relation variable
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance B.Write Lexmap where

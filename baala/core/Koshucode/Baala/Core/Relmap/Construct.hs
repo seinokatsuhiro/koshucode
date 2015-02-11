@@ -10,7 +10,7 @@ module Koshucode.Baala.Core.Relmap.Construct
     relmapSource, relmapConst,
     relmapFlow, relmapHook,
     relmapBinary, relmapConfl,
-    relmapCopy, relmapNest, relmapNestVar,
+    relmapCopy, relmapLocal, relmapLocalVar,
     relmapLink,
   
     -- * Select from relmap
@@ -47,7 +47,7 @@ consRelmap findRop hook = relmap where
     relmap lx =
         case C.lexType lx of
           C.LexmapDerived  -> Right $ C.RelmapLink lx
-          C.LexmapNest     -> Right $ C.RelmapLink lx
+          C.LexmapLocal    -> Right $ C.RelmapLink lx
           C.LexmapBase     -> case findRop $ C.lexRopName lx of
                                 Just rop -> Msg.abRelmap [lx] $ cons rop
                                 Nothing  -> Msg.bug "missing operator @consRelmap"
@@ -86,13 +86,13 @@ relmapConfl = C.RelmapCalc . C.ropLexmap
 relmapCopy :: C.RopUse' h c -> String -> B.Map (C.Relmap' h c)
 relmapCopy = C.RelmapCopy . C.ropLexmap
 
-relmapNest :: C.RopUse' h c -> [B.Terminal String] -> B.Map (C.Relmap' h c)
-relmapNest = C.RelmapNest . C.ropLexmap
+relmapLocal :: C.RopUse' h c -> [B.Terminal String] -> B.Map (C.Relmap' h c)
+relmapLocal = C.RelmapNest . C.ropLexmap
 
-relmapNestVar :: C.RopUse' h c -> String -> C.Relmap' h c
-relmapNestVar u@C.RopUse { C.ropLexmap = lx } n = relmapLink u2 where
+relmapLocalVar :: C.RopUse' h c -> String -> C.Relmap' h c
+relmapLocalVar u@C.RopUse { C.ropLexmap = lx } n = relmapLink u2 where
     u2   = u  { C.ropLexmap = lx2 }
-    lx2  = lx { C.lexType     = C.LexmapNest
+    lx2  = lx { C.lexType     = C.LexmapLocal
               , C.lexRopToken = B.textToken n }
 
 relmapLink :: C.RopUse' h c -> C.Relmap' h c
