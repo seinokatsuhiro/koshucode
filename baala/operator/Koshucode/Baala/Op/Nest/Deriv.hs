@@ -54,12 +54,11 @@ relmapGroupBy use n rmap = C.relmapCopy use n rmapGroup where
 consJoinUp :: (Ord c) => C.RopCons c
 consJoinUp use =
   do nest <- Op.getTerms use "-term"
-     let p x = (x,x)
-     Right $ relmapJoinUp use $ map p nest
+     Right $ relmapJoinUp use nest
 
-relmapJoinUp :: (Ord c) => C.RopUse c -> [B.Terminal String] -> C.Relmap c
+relmapJoinUp :: (Ord c) => C.RopUse c -> [B.TermName] -> C.Relmap c
 relmapJoinUp use nest = C.relmapLocal use nest $ Op.relmapJoinList use rmaps where
-    rmaps   = link `map` map snd nest
+    rmaps   = link `map` nest
     link n  = C.relmapLocalVar use n
 
 
@@ -112,7 +111,7 @@ consUnnest use =
 relmapUnnest :: (Ord c, C.CRel c) => C.RopUse c -> B.TermName -> C.Relmap c
 relmapUnnest use n = unnest where
     unnest  =  slice `B.mappend` cut
-    slice   =  Op.relmapSliceUp use [(n, n)] meet
+    slice   =  Op.relmapSliceUp use [n] meet
     meet    =  Op.relmapMeet use $ C.relmapLocalVar use n
     cut     =  Op.relmapCut  use [n]
 

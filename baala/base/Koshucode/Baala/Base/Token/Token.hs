@@ -31,7 +31,7 @@ module Koshucode.Baala.Base.Token.Token
 
     -- * Term name
     TermName, TermName2, TermName3, TermName4,
-    Terminal, TermPath,
+    TermPath,
     showTermName,
     showNestedTermName,
   
@@ -201,9 +201,6 @@ type TermName    = String
 type TermName2   = (String, String)
 type TermName3   = (String, String, String)
 type TermName4   = (String, String, String, String)
-
--- | Pair of term name and something.
-type Terminal a  = (TermName, a)
 
 -- | Path of term names, e.g., term name @\/r\/x@
 --   is correspond to path @[\"r\", \"x\"]@.

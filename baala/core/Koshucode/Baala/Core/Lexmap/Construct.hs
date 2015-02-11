@@ -149,53 +149,45 @@ consLexmap findSorter gslot findDeriv = lexmap where
         submap lx =
             let attr         = C.lexAttrTree lx
                 attrRelmap   = B.filterFst C.isAttrNameRelmap attr
-                attrNest     = B.filterFst C.isAttrNameLocal  attr
+                attrLocal    = B.filterFst C.isAttrNameLocal  attr
             in case attrRelmap of
                  []         -> Right (lx, [])  -- no submaps
-                 [(_, ts)]  -> do ws1     <- nestVars1 attrNest
-                                  let ws2  = nestVars2 ts
-                                      ws'  = ws1 ++ ws2
-                                  subs    <- lexmap1 sec `mapM` nestTrees ws' ts
+                 [(_, ts)]  -> do vs1     <- varsLocal attrLocal
+                                  let vs2  = varsNest ts
+                                      vs'  = vs1 ++ vs2
+                                  subs    <- lexmap1 sec `mapM` nestTrees vs' ts
                                   let (sublx, tabs) = unzip subs
                                       lx2           = lx { C.lexSubmap = sublx
-                                                         , C.lexNest   = ws2 }
+                                                         , C.lexNest   = vs2 }
                                   Right (lx2, concat tabs)
                  _          -> Msg.bug "submap"
 
     -- -----------  Local relation name
 
-    nestVars1 :: [C.AttrTree] -> B.Ab [String]
-    nestVars1 [(_, ws)]  = Right . map snd =<< nestTerms ws
-    nestVars1 []         = Right []
-    nestVars1 _          = Msg.bug "nest"
+    varsLocal :: [C.AttrTree] -> B.Ab [String]
+    varsLocal [(_, vs)]  = mapM vars vs
+    varsLocal []         = Right []
+    varsLocal _          = Msg.bug "nest"
 
-    nestTerms :: [B.TTree] -> B.Ab [B.Terminal C.RopName]
-    nestTerms = loop where
-        loop (B.TermLeafPath _ [n] :
-              B.TextLeafRaw  _  v  : xs)   = next (n, v) xs
-        loop (B.TermLeafPath _ [n] : xs)   = next (n, n) xs
-        loop (B.TextLeafRaw  _  v  : xs)   = next (v, v) xs
-        loop []                            = Right []
-        loop _                             = Msg.reqTermName
-
-        next p xs = do xs' <- loop xs
-                       Right $ p : xs'
+    vars :: B.TTree -> B.Ab String
+    vars (B.TextLeafRaw _ v)  = Right v
+    vars _                    = Msg.reqTermName
 
     -- -----------  Nested relation reference
 
-    nestVars2 :: [B.TTree] -> [String]
-    nestVars2 = B.mapMaybe nestName . concatMap B.untree
+    varsNest :: [B.TTree] -> [String]
+    varsNest = B.mapMaybe unwrap . concatMap B.untree
 
-    nestName :: B.Token -> Maybe String
-    nestName (B.TTermNest _ n)   = Just n
-    nestName _                   = Nothing
+    unwrap :: B.Token -> Maybe String
+    unwrap (B.TTermNest _ n)   = Just n
+    unwrap _                   = Nothing
 
     -- -----------  Rewrite trees
 
     nestTrees :: [String] -> B.Map [B.TTree]
-    nestTrees ws = map loop where
+    nestTrees vs = map loop where
         loop (B.TreeB t cp trees) = B.TreeB t cp $ map loop trees
-        loop (B.TextLeafRaw cp w) | w `elem` ws = B.TreeL (B.TTermNest cp w)
+        loop (B.TextLeafRaw cp v) | v `elem` vs = B.TreeL (B.TTermNest cp v)
         loop tree = tree
 
 

@@ -66,12 +66,11 @@ relmapSpecialize hook links = spec [] [] where
                      (kdef2, kit2) <- post lx $ spec nest' keys kdef he1 rmap1
                      Right (kdef2, C.relkitCopy n kit2)
 
-              C.RelmapNest lx nest1 rmap1 ->
-                  do let (terms, vars) = unzip nest1
-                         heJust   = B.fromJust he1
-                         heNest   = B.assocPick terms $ B.headNested heJust
-                         heInd    = terms `B.snipIndex` B.headNames heJust
-                         nest'    = B.assocRehead nest1 heNest ++ nest
+              C.RelmapLocal lx vars rmap1 ->
+                  do let heJust   = B.fromJust he1
+                         heNest   = B.assocPick vars $ B.headNested heJust
+                         heInd    = vars `B.snipIndex` B.headNames heJust
+                         nest'    = B.assocRehead (map (\x -> (x,x)) vars) heNest ++ nest
                          nestInd  = zip vars heInd
                      (kdef2, kit2) <- post lx $ spec nest' keys kdef he1 rmap1
                      Right (kdef2, C.relkitNest nestInd kit2)

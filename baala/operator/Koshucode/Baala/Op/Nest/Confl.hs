@@ -61,10 +61,10 @@ consFor use =
      nest <- Op.getNest use
      Right $ relmapFor use nest n rmap
 
-relmapFor :: (C.CRel c) => C.RopUse c -> [B.Terminal String] -> B.TermName -> B.Map (C.Relmap c)
+relmapFor :: (C.CRel c) => C.RopUse c -> [B.TermName] -> B.TermName -> B.Map (C.Relmap c)
 relmapFor use nest n rmap = relmapForInner use nest n (Op.relmapUp use n `B.mappend` rmap)
 
-relmapForInner :: (C.CRel c) => C.RopUse c -> [B.Terminal String] -> B.TermName -> B.Map (C.Relmap c)
+relmapForInner :: (C.CRel c) => C.RopUse c -> [B.TermName] -> B.TermName -> B.Map (C.Relmap c)
 relmapForInner use nest n = C.relmapLocal use nest . bin where
     bin = C.relmapBinary use $ relkitFor n
 
@@ -154,7 +154,7 @@ consSlice use =
      nest <- Op.getNest use
      Right $ relmapSlice use nest n rmap
 
-relmapSlice :: (C.CRel c) => C.RopUse c -> [B.Terminal String] -> B.TermName -> B.Map (C.Relmap c)
+relmapSlice :: (C.CRel c) => C.RopUse c -> [B.TermName] -> B.TermName -> B.Map (C.Relmap c)
 relmapSlice use nest n = C.relmapLocal use nest . bin where
     bin = C.relmapBinary use $ relkitSlice n
 
@@ -177,7 +177,7 @@ consSliceUp use =
      nest <- Op.getNest use
      Right $ relmapSliceUp use nest rmap
 
-relmapSliceUp :: (C.CRel c) => C.RopUse c -> [B.Terminal String] -> B.Map (C.Relmap c)
+relmapSliceUp :: (C.CRel c) => C.RopUse c -> [B.TermName] -> B.Map (C.Relmap c)
 relmapSliceUp use nest = C.relmapLocal use nest . bin where
     bin = C.relmapBinary use relkitSliceUp
 

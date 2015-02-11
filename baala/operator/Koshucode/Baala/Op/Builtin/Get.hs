@@ -183,9 +183,8 @@ getTermsCo = getAbortable Op.termNamesCo
 getTermPairs :: RopGet c [B.TermName2]
 getTermPairs = getAbortable Op.termNamePairs
 
-getNest :: C.RopUse c -> B.Ab [B.Terminal C.RopName]
-getNest = Right . map p . C.lexNest . C.ropLexmap where
-    p x = (x, x)
+getNest :: C.RopUse c -> B.Ab [B.TermName]
+getNest = Right . C.lexNest . C.ropLexmap
 
 getTermTrees :: RopGet c [B.Named B.TTree]
 getTermTrees = getAbortable C.treesToTerms1
