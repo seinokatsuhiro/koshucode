@@ -40,7 +40,7 @@ import qualified Koshucode.Baala.Op.Nest.Flow  as Op
 
 consCopy :: C.RopCons c
 consCopy use =
-  do n    <- Op.getWord   use "-<"
+  do n    <- Op.getWord   use "-var"
      rmap <- Op.getRelmap use "-relmap"
      Right $ C.relmapCopy use n rmap
 
@@ -144,7 +144,7 @@ relkitGroup _ _ _ = Right C.relkitNothing
 --
 --  Add nested relation as meet of @\/p@ and @\/q@.
 --
---    > slice /r ( p | meet q ) -< /p /q
+--    > slice /r ( ^/p | meet ^/q )
 --
 
 consSlice :: (C.CRel c) => C.RopCons c

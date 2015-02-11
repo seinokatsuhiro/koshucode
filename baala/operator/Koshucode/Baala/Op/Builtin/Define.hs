@@ -32,9 +32,8 @@ def cons usage attr = (cons, usage, attr') where
               _                    -> ropBug attr
 
 attrName :: String -> C.AttrName
-attrName "-<"                    = C.AttrNameNest   "-<"
 attrName n@('-':_) | l == '/'    = C.AttrNameRelmap i
-                   | l == '<'    = C.AttrNameNest   i
+                   | l == '^'    = C.AttrNameNest   i
                    | otherwise   = C.AttrNameNormal n
                    where l = last n
                          i = init n
