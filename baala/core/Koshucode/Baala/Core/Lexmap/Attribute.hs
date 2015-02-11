@@ -7,16 +7,14 @@
 module Koshucode.Baala.Core.Lexmap.Attribute
   ( -- * Attribute name
     AttrName (..),
-    isAttrNameRelmap, isAttrNameNest,
+    isAttrNameRelmap, isAttrNameLocal,
     attrNameText,
     attrNameTrunk,
   
     -- * Attribute trees
     AttrDefine (..),
-    AttrTree,
-    AttrSortPara, AttrSortTree,
-    AttrPara,
-    RopName,
+    AttrTree, AttrPara,
+    AttrSortTree, AttrSortPara,
   
     -- * Attribute sorter
     attrSort,
@@ -36,7 +34,7 @@ import qualified Koshucode.Baala.Core.Message as Msg
 data AttrName
     = AttrNameNormal String    -- ^ Normal attribute
     | AttrNameRelmap String    -- ^ Attribute for subrelmap
-    | AttrNameNest   String    -- ^ Attribute for nested relation reference
+    | AttrNameLocal  String    -- ^ Attribute for local relation variable
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 -- | Test attribute name is for subrelmap.
@@ -44,16 +42,16 @@ isAttrNameRelmap :: AttrName -> Bool
 isAttrNameRelmap (AttrNameRelmap _)  = True
 isAttrNameRelmap _                   = False
 
--- | Test attribute name is for nested relation reference.
-isAttrNameNest :: AttrName -> Bool
-isAttrNameNest (AttrNameNest _)      = True
-isAttrNameNest _                     = False
+-- | Test attribute name is for local variable.
+isAttrNameLocal :: AttrName -> Bool
+isAttrNameLocal (AttrNameLocal _)    = True
+isAttrNameLocal _                    = False
 
 -- | String part of attribute names.
 attrNameText :: AttrName -> String
 attrNameText (AttrNameNormal n)  = n
 attrNameText (AttrNameRelmap n)  = n
-attrNameText (AttrNameNest   n)  = n
+attrNameText (AttrNameLocal  n)  = n
 
 -- | Constant for attribute name @\@trunk@.
 attrNameTrunk :: AttrName
@@ -70,7 +68,7 @@ data AttrDefine = AttrDefine
     , attrBranchNames  :: [AttrName]         -- Branch names
     }
 
--- | List of attribute name and its contents.
+-- | Attribute name and its contents.
 type AttrTree = (AttrName, [B.TTree])
 
 -- | Sorter for attribute of relmap operator.
@@ -81,9 +79,6 @@ type AttrSortPara = [B.TTree] -> B.Ab AttrPara
 type AttrSortTree = [B.TTree] -> B.Ab [AttrTree]
 
 type AttrPara = B.ParaBody AttrName B.TTree
-
--- | Name of relmap operator.
-type RopName = String
 
 
 -- ----------------------  Attribute sorter

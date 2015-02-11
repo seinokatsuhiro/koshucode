@@ -149,7 +149,7 @@ consLexmap findSorter gslot findDeriv = lexmap where
         submap lx =
             let attr         = C.lexAttrTree lx
                 attrRelmap   = B.filterFst C.isAttrNameRelmap attr
-                attrNest     = B.filterFst C.isAttrNameNest   attr
+                attrNest     = B.filterFst C.isAttrNameLocal  attr
             in case attrRelmap of
                  []         -> Right (lx, [])  -- no submaps
                  [(_, ts)]  -> do ws1     <- nestVars1 attrNest

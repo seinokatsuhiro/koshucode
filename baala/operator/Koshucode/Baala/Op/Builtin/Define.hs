@@ -25,7 +25,7 @@ ropList group = map rop where
 
 def :: C.RopCons c -> C.RopUsage -> String -> RopDefine c
 def cons usage attr = (cons, usage, attr') where
-    n = map attrName
+    n     = map attrName
     attr' = case map words $ B.divideBy (== '|') attr of
               [q : trunk]          -> attrDef q (n trunk) []
               [q : trunk, branch]  -> attrDef q (n trunk) (n branch)
@@ -33,7 +33,7 @@ def cons usage attr = (cons, usage, attr') where
 
 attrName :: String -> C.AttrName
 attrName n@('-':_) | l == '/'    = C.AttrNameRelmap i
-                   | l == '^'    = C.AttrNameNest   i
+                   | l == '^'    = C.AttrNameLocal  i
                    | otherwise   = C.AttrNameNormal n
                    where l = last n
                          i = init n

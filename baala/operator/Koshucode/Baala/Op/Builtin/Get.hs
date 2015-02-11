@@ -41,7 +41,7 @@ type RopGet c a
     -> B.Ab a       -- ^ Attribute of relmap
 
 lookupTree, lookupRelmap :: String -> C.RopUse c -> Maybe [B.TTree]
-lookupTree    = lookupAttr C.AttrNameNormal `B.mappend` lookupAttr C.AttrNameNest
+lookupTree    = lookupAttr C.AttrNameNormal `B.mappend` lookupAttr C.AttrNameLocal
 lookupRelmap  = lookupAttr C.AttrNameRelmap
 
 lookupAttr :: (String -> C.AttrName) -> String -> C.RopUse c -> Maybe [B.TTree]

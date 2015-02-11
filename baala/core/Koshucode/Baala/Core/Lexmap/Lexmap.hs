@@ -7,6 +7,7 @@ module Koshucode.Baala.Core.Lexmap.Lexmap
   ( -- * Data types
     Lexmap (..),
     LexmapType (..),
+    RopName,
 
     -- * Functions
     lexBase,
@@ -48,6 +49,9 @@ instance B.Write Lexmap where
 instance B.CodePtr Lexmap where
     codePtList = B.codePtList . lexRopToken
 
+-- | Name of relmap operator.
+type RopName = String
+
 -- | Attribute of relmap operation.
 lexAttrTree :: Lexmap -> [C.AttrTree]
 lexAttrTree = map (B.mapSnd head) . B.paraNameList . lexAttr
@@ -62,7 +66,7 @@ lexBase = Lexmap { lexType      = LexmapBase
                  , lexMessage   = [] }
 
 -- | Name of relmap operator
-lexRopName :: Lexmap -> C.RopName
+lexRopName :: Lexmap -> RopName
 lexRopName = B.tokenContent . lexRopToken
 
 lexAddMessage :: String -> B.Map Lexmap
