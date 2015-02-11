@@ -64,7 +64,7 @@ assembleRelmap res@C.Resource { C.resSlot    = slots
                               , C.assLinks   = links }
             Right (ass2, msg1 ++ msg2)
 
-findRelmap :: [C.RelmapSource] -> C.FindRelmap
+findRelmap :: [C.RelmapSource] -> C.FindDeriv
 findRelmap ds sec name =
     case filter isSameName ds of
       [def]  -> [def]
