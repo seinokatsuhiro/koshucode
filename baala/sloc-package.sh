@@ -47,6 +47,8 @@ main () {
     for pkg in base core operator content calculator toolkit; do
         count $pkg
     done
+
+    koshu sloc-all-list.k */SLOC.k > SLOC-ALL.k
 }
 
 main

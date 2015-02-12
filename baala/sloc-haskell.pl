@@ -10,6 +10,9 @@
 
 use strict;
 
+my $Package     = "unknown";
+$Package        = $1 if $ARGV[0] =~ /^([^\/]+)/;
+
 my %DirCode     = ();
 my %ModCode     = ();
 my %DirComments = ();
@@ -66,7 +69,10 @@ foreach my $path ( @ARGV ) {
 #  Report for directories
 #
 
-print "** -*- koshu -*-\n\n";
+print "-*- koshu -*-\n";
+print "\n";
+print "about /package '$Package\n";
+print "\n";
 
 my $tot = 0;
 my $totcmts = 0;
