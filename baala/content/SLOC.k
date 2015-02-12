@@ -1,4 +1,6 @@
-** -*- koshu -*-
+-*- koshu -*-
+
+about /package 'content
 
 |-- DIR  /code 118  /comment 45   /dir "content/Koshucode/Baala/Op"
 |-- DIR  /code 513  /comment 326  /dir "content/Koshucode/Baala/Op/Cop"

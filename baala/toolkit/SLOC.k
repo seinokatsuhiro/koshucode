@@ -1,4 +1,6 @@
-** -*- koshu -*-
+-*- koshu -*-
+
+about /package 'toolkit
 
 |-- DIR  /code 127  /comment 75   /dir "toolkit/Koshucode/Baala/Toolkit/Library"
 |-- DIR  /code 355  /comment 147  /dir "toolkit/Koshucode/Baala/Toolkit/Main"

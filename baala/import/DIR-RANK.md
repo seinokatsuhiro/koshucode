@@ -446,7 +446,7 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    173 judges
+**    177 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Base"
@@ -528,12 +528,16 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Attrmap"       /import "Koshucode.Baala.Core.Lexmap.Slot"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Attrmap"       /import "Koshucode.Baala.Core.Message"
 
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Lexmap.Attrmap"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Lexmap.Attribute"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Lexmap.Lexmap"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Lexmap.Slot"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Message"
+
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Lexmap"        /import "Data.Generics"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Lexmap"        /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Lexmap"        /import "Koshucode.Baala.Core.Lexmap.Attrmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Lexmap"        /import "Koshucode.Baala.Core.Lexmap.Attribute"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Lexmap"        /import "Koshucode.Baala.Core.Lexmap.Slot"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Lexmap"        /import "Koshucode.Baala.Core.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Slot"          /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Slot"          /import "Koshucode.Baala.Core.Lexmap.Attribute"
@@ -545,6 +549,7 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.Attribute"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.Attrmap"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.Construct"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.Lexmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.Slot"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.Sorter"
@@ -672,7 +677,7 @@ Command `./dir-rank.k ../core/IMPORT.k` produces:
 
 |-- DIR-RANK  /dir-rank 0  /dir 'Koshucode.Baala.Base  /base-rank {| /rank : /base : /import-dir | 0 : 'Message : [ ] |}
 |-- DIR-RANK  /dir-rank 5  /dir 'Koshucode.Baala.Core.Content  /base-rank {| /rank : /base : /import-dir | 2 : 'Class : [ ] | 2 : 'Cox : [ ] | 2 : 'Tree : [ ] | 3 : 'Cop : [ ] | 3 : 'Literal : [ ] | 4 : 'Build : [ ] | 5 : 'Run : [ ] |}
-|-- DIR-RANK  /dir-rank 5  /dir 'Koshucode.Baala.Core.Lexmap  /base-rank {| /rank : /base : /import-dir | 2 : 'Attribute : [ ] | 3 : 'Slot : [ ] | 3 : 'Sorter : [ ] | 4 : 'Attrmap : [ ] | 5 : 'Lexmap : [ ] |}
+|-- DIR-RANK  /dir-rank 5  /dir 'Koshucode.Baala.Core.Lexmap  /base-rank {| /rank : /base : /import-dir | 2 : 'Attribute : [ ] | 3 : 'Lexmap : [ ] | 3 : 'Slot : [ ] | 3 : 'Sorter : [ ] | 4 : 'Attrmap : [ ] | 5 : 'Construct : [ ] |}
 |-- DIR-RANK  /dir-rank 11  /dir 'Koshucode.Baala.Core.Relmap  /base-rank {| /rank : /base : /import-dir | 7 : 'Relkit : [ 'Lexmap ] | 8 : 'Relmap : [ 'Lexmap ] | 9 : 'Rop : [ 'Lexmap ] | 10 : 'Global : [ 'Content : 'Lexmap ] | 11 : 'Construct : [ 'Lexmap ] | 11 : 'Run : [ 'Content ] | 11 : 'Specialize : [ 'Lexmap ] |}
 |-- DIR-RANK  /dir-rank 14  /dir 'Koshucode.Baala.Core.Assert  /base-rank {| /rank : /base : /import-dir | 7 : 'RelTable : [ 'Content ] | 13 : 'Assert : [ 'Content : 'Lexmap : 'Relmap ] | 13 : 'Dataset : [ 'Content : 'Relmap ] | 14 : 'Run : [ 'Content : 'Relmap ] |}
 
@@ -703,10 +708,11 @@ Command `./dir-rank.k ../core/IMPORT.k` produces:
 **    5         'Koshucode.Baala.Core.Lexmap     /rank /base         /import-dir
 **                                               ----- ------------- --------------------------------------------------------
 **                                               2     'Attribute    [ ]
+**                                               3     'Lexmap       [ ]
 **                                               3     'Slot         [ ]
 **                                               3     'Sorter       [ ]
 **                                               4     'Attrmap      [ ]
-**                                               5     'Lexmap       [ ]
+**                                               5     'Construct    [ ]
 **                                               
 **    11        'Koshucode.Baala.Core.Relmap     /rank /base         /import-dir
 **                                               ----- ------------- --------------------------------------------------------

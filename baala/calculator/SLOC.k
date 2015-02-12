@@ -1,4 +1,6 @@
-** -*- koshu -*-
+-*- koshu -*-
+
+about /package 'calculator
 
 |-- DIR  /code 138  /comment 111  /dir "calculator/Koshucode/Baala/Toolkit/Library"
 |-- DIR  /code 104  /comment 107  /dir "calculator/Koshucode/Baala/Toolkit/Main"
