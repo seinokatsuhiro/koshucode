@@ -101,17 +101,18 @@ consClause sec = loop h0 . B.tokenClauses where
 consClauseEach :: ClauseHead -> ([B.Ab Clause], ClauseHead)
 consClauseEach h@(ClauseHead src sec sh ab) = result where
 
+    original = B.clauseTokens src
+
+    tokens | sh /= []   = lengthen `mapM` original
+           | otherwise  = case filter B.isShortToken original of
+                            []        -> Right original
+                            tok : _   -> Left tok
+
     result = case tokens of
                Right ts -> dispatch ts
                Left tok@(B.TShort _ pre _)
                         -> (unk [tok] $ Msg.unresPrefix pre, h)
                Left tok -> (unk [tok] $ Msg.bug "short", h)
-
-    original = B.clauseTokens src
-    tokens | null sh    = Right original
-           | otherwise  = case lengthen `mapM` original of
-                            Right ts -> Right ts
-                            Left  tok -> Left tok
 
     c0             = Right . Clause h
     c1             = B.li1 . c0

@@ -29,10 +29,11 @@ import qualified Koshucode.Baala.Base.Message as Msg
 
 -- ----------------------  Bracket
 
+-- | Bracket type.
 data Bracket p
-    = BracketNone
-    | BracketOpen  p
-    | BracketClose p
+    = BracketNone       -- ^ None bracket
+    | BracketOpen  p    -- ^ Open bracket
+    | BracketClose p    -- ^ Close bracket
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 isNotBracket :: B.Pred (Bracket p)
@@ -52,19 +53,14 @@ isCloseBracket _                = False
 
 -- | Tree of leaf and branch.
 data CodeTree p a
-    = TreeL a       -- ^ Leaf. Terminal of tree.
-    | TreeB p (Maybe (a, a)) [CodeTree p a] -- ^ Branch. Bracket-type and subtrees.
+    = TreeL a                                -- ^ Terminal of tree.
+    | TreeB p (Maybe (a, a)) [CodeTree p a]  -- ^ Bracket-type and subtrees.
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 instance Functor (CodeTree p) where
     fmap f (TreeL x)       = TreeL (f x)
     fmap f (TreeB n Nothing xs) = TreeB n Nothing $ map (fmap f) xs
     fmap f (TreeB n (Just (x, y)) xs) = TreeB n (Just (f x, f y)) $ map (fmap f) xs
-
--- treeG :: [CodeTree a] -> CodeTree a
--- treeG [TreeB 1 _ xs] = treeG xs
--- treeG [x] = x
--- treeG xs = TreeB 1 Nothing xs
 
 -- | Convert a list of elements to a single tree.
 tree :: (Ord p, B.CodePtr a) => GetBracketType p a -> Bracket p -> p -> [a] -> B.Ab (CodeTree p a)
@@ -73,27 +69,27 @@ tree bracketType zero one =
 
 -- |  Convert a list of elements to trees.
 trees :: forall a. forall p. (Ord p, B.CodePtr a)
-         => GetBracketType p a -> Bracket p -> [a] -> B.Ab [CodeTree p a]
+      => GetBracketType p a -> Bracket p -> [a] -> B.Ab [CodeTree p a]
 trees bracketType zero xs = result where
-    result :: B.Ab [CodeTree p a]
     result       = do (ts, _) <- loop xs zero
                       Right ts
-    add a xs2 p  = do (ts, xs3) <- loop xs2 p
+    add xs2 p a  = do (ts, xs3) <- loop xs2 p
                       Right (a : ts, xs3)
 
     loop :: [a] -> Bracket p -> B.Ab ([CodeTree p a], [a])
-    loop [] _        = Right ([], [])
+    loop [] _ = Right ([], [])
     loop (x : xs2) p
-        | isNotBracket   px = add (TreeL x) xs2 p
-        | isOpenBracket  px = do (trees2, cxs3) <- loop xs2 px
-                                 case (px, cxs3) of
-                                   (BracketOpen p2, c : xs3) -> add (TreeB p2 (Just (x, c)) trees2) xs3 p
-                                   _       -> abort Msg.extraOpenBracket
-        | isCloseBracket px = Right ([], x : xs2)
-        | otherwise         = abort Msg.extraCloseBracket
-        where 
-          px       = bracketType x
-          abort    = B.abortable "tree" [x]
+        | isNotBracket   px  = add xs2 p $ TreeL x
+        | isOpenBracket  px  =
+            do (trees2, cxs3) <- loop xs2 px
+               case (px, cxs3) of
+                 (BracketOpen p2, c : xs3)
+                            -> add xs3 p $ TreeB p2 (Just (x, c)) trees2
+                 _          -> ab Msg.extraOpenBracket
+        | isCloseBracket px  = Right ([], x : xs2)
+        | otherwise          = ab Msg.extraCloseBracket
+        where px  = bracketType x
+              ab  = Msg.abTree [x]
 
 
 -- ----------------------  Utility

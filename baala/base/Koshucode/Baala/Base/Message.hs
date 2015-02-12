@@ -3,6 +3,7 @@
 module Koshucode.Baala.Base.Message
   ( -- * Abortables
     abToken,
+    abTree,
   
     -- * Base package
     bug,
@@ -31,8 +32,17 @@ import qualified Koshucode.Baala.Base.Abort    as B
 import qualified Koshucode.Baala.Base.Prelude  as B
 import qualified Koshucode.Baala.Base.Text     as B
 
+
+-- ----------------------  Abortables
+
 abToken :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abToken = B.abortable "token"
+
+abTree :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
+abTree = B.abortable "tree"
+
+
+-- ----------------------  Base package
 
 -- | BUG: reason
 bug :: String -> B.Ab a
@@ -86,6 +96,7 @@ notImplemented = Left . B.abortLine "Not implemented"
     loop [] = notFound key
     loop ((k,v) : kvs) | k == key  = Right v
                        | otherwise = loop kvs
+
 
 -- --------------------  Tokenizer
 
