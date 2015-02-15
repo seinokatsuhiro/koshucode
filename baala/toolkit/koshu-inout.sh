@@ -287,6 +287,7 @@ io_diff () {
 }
 
 io_diff_body () {
+    io_diff_retry=n
     io_doc $@  # output to $io_output_work
 
     if io_diff_cmd $io_output_orig $io_output_work > $io_temp; then
@@ -356,21 +357,24 @@ io_update () {
     io_diff_show
 
     case $io_update in
-        no-prompt ) io_update_copy   ;;
-        diff      ) io_diff_status=0 ;;
-        *         ) io_update_prompt ;;
+        prompt ) io_update_prompt ;;
+        batch  ) io_update_copy   ;;
+        diff   ) io_diff_status=0 ;;
     esac
 }
 
 io_update_prompt () {
-    while [ $io_update = prompt ]; do
-        printf "Type [update] [skip] [quit] or [help]: "
-        read io_update
-        case $io_update in
+    io_response=
+    while [ -z $io_response ]; do
+        printf "Type [update] [retry] [skip] [quit] or [help]: "
+        read io_response
+        case $io_response in
             u | update ) io_update_copy   ;;
+            r | retry  ) io_diff_retry=y  ;;
             s | skip   ) io_diff_status=0 ;;
             q | quit   ) io_update_quit   ;;
-            *          ) io_update_help   ;;
+            *          ) io_response=
+                         io_update_help   ;;
         esac
     done
     echo
@@ -389,11 +393,11 @@ io_update_quit () {
 }
 
 io_update_help () {
-    io_update=prompt
     echo
-    echo "  update | u    update this I/O list because differences are right"
-    echo "  skip | s      skip this I/O list"
-    echo "  quit | q      quit $io_cmd"
+    echo "  u | update     update this I/O list because differences are right"
+    echo "  r | retry      retry this I/O list"
+    echo "  s | skip       skip this I/O list"
+    echo "  q | quit       quit $io_cmd"
     echo
 }
 
@@ -432,7 +436,7 @@ io_glob_type=args     # args | glob | file
 io_keep_temp_yn=n     # y | n
 io_link_yn=n          # y | n
 io_output_orig=       # README.md | INOUT.md | ...
-io_update=prompt      # prompt | no-prompt | diff | ...
+io_update=prompt      # prompt | batch | diff
 
 while getopts df:ghlo:rstux:V io_opt; do
     case $io_opt in
@@ -445,7 +449,7 @@ while getopts df:ghlo:rstux:V io_opt; do
         r)  io_output_orig=README.md  ;;
         s)  io_output_orig=INOUT.md   ;;
         t)  io_keep_temp_yn=y         ;;
-        u)  io_update=no-prompt       ;;
+        u)  io_update=batch           ;;
         x)  io_glob_ext=$OPTARG       ;;
         V)  io_version                ;;
         *)  io_help                   ;;
@@ -468,7 +472,10 @@ io_temp=`io_create_temporary`
 if [ -f "$io_output_orig" ]; then
     # second invocation
     io_error_yn=n
-    io_diff $@
+    io_diff_retry=y
+    while [ $io_diff_retry = y ]; do
+        io_diff $@
+    done
     io_status=$io_diff_status
 else
     # first invocation
