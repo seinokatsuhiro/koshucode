@@ -32,14 +32,16 @@ import qualified Koshucode.Baala.Op.Message as Msg
 
 copsArith :: (C.CContent c) => [C.Cop c]
 copsArith =
-    [ C.CopCalc  (C.copInfix "+")      copPlus2
-    , C.CopCalc  (C.copInfix "-")      copMinus
-    , C.CopCalc  (C.copInfix "*")      copTimes
-    , C.CopCalc  (C.copInfix "quo")    copQuo
-    , C.CopCalc  (C.copInfix "rem")    copRem
+    [ C.CopCalc  (C.copPrefix "+")     copPlus1
+    , C.CopCalc  (C.copPrefix "-")     copMinus1
+    , C.CopCalc  (C.copInfix  "+")     copPlus2
+    , C.CopCalc  (C.copInfix  "-")     copMinus2
+    , C.CopCalc  (C.copInfix  "*")     copTimes
+    , C.CopCalc  (C.copInfix  "quo")   copQuo
+    , C.CopCalc  (C.copInfix  "rem")   copRem
 
     , C.CopCalc  (C.copNormal "+")     copPlus
-    , C.CopCalc  (C.copNormal "-")     copMinus
+    , C.CopCalc  (C.copNormal "-")     copMinus2
     , C.CopCalc  (C.copNormal "*")     copTimes
     , C.CopCalc  (C.copNormal "quo")   copQuo
     , C.CopCalc  (C.copNormal "rem")   copRem
@@ -66,6 +68,10 @@ copPlus2 [Right xc, Right yc]
     | C.isClock xc && C.isTime  yc = C.putTime  =<< B.timeAddClock (C.gClock xc) (C.gTime  yc)
 copPlus2 _ = Msg.unexpAttr "+"
 
+copPlus1 :: (C.CDec c, C.CClock c, C.CTime c) => C.CopCalc c
+copPlus1 [Right x] | C.isDec x = Right x
+copPlus1 _ = Msg.unexpAttr "+"
+
 copTimes :: (C.CText c, C.CDec c) => C.CopCalc c
 copTimes xs = fmap C.pDec $ loop xs where
     loop [] = Right $ B.intDecimal 1
@@ -73,15 +79,16 @@ copTimes xs = fmap C.pDec $ loop xs where
                       m' <- loop m
                       B.decimalMul n' m'
 
-copMinus :: (C.CText c, C.CDec c, C.CClock c, C.CTime c) => C.CopCalc c
-copMinus [a] =
-    do a' <- copDec a
-       Right $ C.pDec $ B.decimalRevsign a'
-copMinus [Right xc, Right yc]
+copMinus2 :: (C.CText c, C.CDec c, C.CClock c, C.CTime c) => C.CopCalc c
+copMinus2 [Right xc, Right yc]
     | C.isDec   xc && C.isDec   yc = C.putDec   =<< B.decimalSub (C.gDec   xc) (C.gDec   yc)
     | C.isClock xc && C.isClock yc = C.putClock =<< B.clockSub   (C.gClock xc) (C.gClock yc)
     | C.isTime  xc && C.isTime  yc = C.putClock =<< B.timeDiff   (C.gTime  xc) (C.gTime  yc)
-copMinus _ = Msg.unexpAttr "-"
+copMinus2 _ = Msg.unexpAttr "-"
+
+copMinus1 :: (C.CDec c) => C.CopCalc c
+copMinus1 [Right x] | C.isDec x = C.putDec $ B.decimalRevsign (C.gDec x)
+copMinus1 _ = Msg.unexpAttr "-"
 
 copQuo :: (C.CText c, C.CDec c) => C.CopCalc c
 copQuo [a, b] =
