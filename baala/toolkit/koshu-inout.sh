@@ -1,7 +1,7 @@
 #!/bin/sh
 
 io_version () {
-    echo "koshu-inout-0.77"
+    echo "koshu-inout-0.97"
     exit
 }
 
@@ -78,6 +78,12 @@ io_table_calc () { echo "- [$@]`io_link $@`" ; }
 io_table_data () { echo "- $io_calc [$@]`io_link "$@"`" ; }
 io_table_from () { echo "$@" | xargs -n 1 | io_table ; }
 
+io_table_head () {
+    echo
+    echo "$k" | sed 's/^=* *//'
+    echo
+}
+
 io_link () {
     echo "(#$@)" \
         | tr -d ./ \
@@ -91,7 +97,11 @@ io_table () {
     done
 
     while read k; do
-        io_table_data $k
+        case "$k" in
+            '' | ' '* | '#'*)      ;;
+            '='*) io_table_head    ;;
+            *)    io_table_data $k ;;
+        esac
     done
 }
 
@@ -200,10 +210,28 @@ io_body_file () {
     # Input
     for k in $io_calc; do io_input $k; done
     # Output
-    cat $io_glob_file | while read io_data; do
-        io_head $io_data
-        io_list_all $io_data
-        io_output $io_calc $io_data
+    cat $io_glob_file | io_body_output
+}
+
+io_body_output () {
+    while read io_data; do
+        case "$io_data" in
+            '' | ' '* | '#'*)
+                # skip
+                ;;
+            '='*)
+                # heading
+                echo
+                echo "$io_data" | sed 's/^=*/#/'
+                echo
+                ;;
+            *)
+                # command
+                io_head $io_data
+                io_list_all $io_data
+                io_output $io_calc $io_data
+                ;;
+        esac
     done
 }
 
