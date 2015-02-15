@@ -17,11 +17,10 @@ ropList
     -> [RopDefine c]  -- ^ Operator definitions
     -> [C.Rop c]      -- ^ Relmap operators
 ropList group = map rop where
-    rop :: RopDefine c -> C.Rop c
-    rop (cons, usage, roa) =
+    rop (cons, usage, attr) =
         let name   = head $ words usage
-            sorter = C.attrSort roa
-        in C.Rop name group sorter cons usage
+            sorter = C.attrSort attr
+        in C.Rop name group usage attr sorter cons
 
 def :: C.RopCons c -> C.RopUsage -> String -> RopDefine c
 def cons usage attr = (cons, usage, attr') where

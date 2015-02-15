@@ -35,7 +35,7 @@ ropsBuiltin = Op.ropList "builtin"
 -- ----------------------  append
 
 consAppend :: C.RopCons c
-consAppend = Right . foldl B.mappend B.mempty . C.ropSubrelmap
+consAppend = Right . foldl B.mappend B.mempty . C.ropSubmap
 
 
 -- ----------------------  id

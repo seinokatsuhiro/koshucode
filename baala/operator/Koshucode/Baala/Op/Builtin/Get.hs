@@ -154,7 +154,7 @@ getRelmapRaw u name =
 
 -- | Get relmaps from operator use.
 getRelmaps :: C.RopUse c -> B.Ab [C.Relmap c]
-getRelmaps = Right . C.ropSubrelmap
+getRelmaps = Right . C.ropSubmap
 
 getOptRelmap :: C.Relmap c -> C.RopUse c -> String -> B.Ab (C.Relmap c)
 getOptRelmap rmap0 u = B.right rmap0 . getRelmap u
