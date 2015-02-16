@@ -3,7 +3,7 @@
 
 -- | Attributes of relmap operator.
 
-module Koshucode.Baala.Core.Lexmap.Attribute
+module Koshucode.Baala.Core.Lexmap.Attr
   ( -- * Attributes of relmap operator
     RopAttr (..),
     ropAttrCons,

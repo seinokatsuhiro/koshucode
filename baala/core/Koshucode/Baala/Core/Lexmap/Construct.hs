@@ -16,7 +16,7 @@ module Koshucode.Baala.Core.Lexmap.Construct
 
 import qualified Koshucode.Baala.Base                   as B
 import qualified Koshucode.Baala.Core.Lexmap.Attrmap    as C
-import qualified Koshucode.Baala.Core.Lexmap.Attribute  as C
+import qualified Koshucode.Baala.Core.Lexmap.Attr       as C
 import qualified Koshucode.Baala.Core.Lexmap.AttrPos    as C
 import qualified Koshucode.Baala.Core.Lexmap.Lexmap     as C
 import qualified Koshucode.Baala.Core.Lexmap.Slot       as C

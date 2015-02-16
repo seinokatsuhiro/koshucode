@@ -65,8 +65,8 @@ library
         Koshucode.Baala.Core.Content.Tree
 
         Koshucode.Baala.Core.Lexmap
+        Koshucode.Baala.Core.Lexmap.Attr
         Koshucode.Baala.Core.Lexmap.AttrPos
-        Koshucode.Baala.Core.Lexmap.Attribute
         Koshucode.Baala.Core.Lexmap.Attrmap
         Koshucode.Baala.Core.Lexmap.Construct
         Koshucode.Baala.Core.Lexmap.Lexmap
