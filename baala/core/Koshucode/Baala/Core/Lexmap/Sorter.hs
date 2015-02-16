@@ -1,15 +1,11 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
--- | Attribute sorters.
+-- | Positional attributes.
 
 module Koshucode.Baala.Core.Lexmap.Sorter
-  ( -- * Trunk sorter
-    roaNone, roaEnum,
-    roaList, roaOneList, roaOneOpt,
-    roaOne, roaTwo, roaThree, roaFour,
-    roaTermsOne, roaTermsTwo,
-    -- $TrunkSorter
+  ( AttrPos (..),
+    ropAttrDef,
   ) where
 
 import qualified Koshucode.Baala.Base                  as B
@@ -17,30 +13,79 @@ import qualified Koshucode.Baala.Core.Lexmap.Attribute as C
 import qualified Koshucode.Baala.Core.Message          as Msg
 
 
--- $TrunkSorter
---
---  /Examples/
---
---  One required attribute and no options.
---
---    > roaOne "-term" []
---
---  Two required attributes and no options.
---
---    > roaTwo "-name" "-relmap" []
---
---  Any number of attributes and no options.
---
---    > roaList "-term" []
---
---  One and any number of attributes.
---
---    > roaOneList "-pattern" "-term" []
+data AttrPos a
+    = AttrPos0
+    | AttrPos1 a
+    | AttrPos2 a a
+    | AttrPos3 a a a
+    | AttrPos4 a a a a
+    | AttrPosE [a]
+    | AttrPosV a
+    | AttrPos1V a a
+    | AttrPos1Q a a
+    | AttrPosT1 a a
+    | AttrPosT2 a a a
+      deriving (Show, Eq, Ord)
 
-def :: C.AttrSortTree -> [C.AttrName] -> [C.AttrName] -> C.AttrDefine
-def trunkSorter trunkNames branchNames =
+attrTypeNames :: AttrPos a -> [a]
+attrTypeNames attrType = case attrType of
+    AttrPos0           -> []
+    AttrPos1  a        -> [a]
+    AttrPos2  a b      -> [a,b]
+    AttrPos3  a b c    -> [a,b,c]
+    AttrPos4  a b c d  -> [a,b,c,d]
+    AttrPosE  as       -> as
+    AttrPosV  a        -> [a]
+    AttrPos1V a b      -> [a,b]
+    AttrPos1Q a b      -> [a,b]
+    AttrPosT1 a b      -> [a,b]
+    AttrPosT2 a b c    -> [a,b,c]
+
+ropAttrPos :: AttrPos C.AttrName -> C.AttrSortTree
+ropAttrPos (AttrPos0)         []         = Right []
+
+ropAttrPos (AttrPos1 a)       [v]        = Right [a#v]
+ropAttrPos (AttrPos2 a b)     [v,w]      = Right [a#v, b#w]
+ropAttrPos (AttrPos3 a b c)   [v,w,x]    = Right [a#v, b#w, c#x]
+ropAttrPos (AttrPos4 a b c d) [v,w,x,y]  = Right [a#v, b#w, c#x, d#y]
+ropAttrPos (AttrPosE _)       xs         = Right $ zip enumAttr $ map B.li1 xs
+ropAttrPos (AttrPosV a)       vv         = Right [a##vv]
+ropAttrPos (AttrPos1V a b)    (v:ww)     = Right [a#v, b##ww]
+ropAttrPos (AttrPos1Q a _)    [v]        = Right [a#v]
+ropAttrPos (AttrPos1Q a b)    [v,w]      = Right [a#v, b#w]
+ropAttrPos (AttrPosT1 a b)    xs         = case span isTermLeaf xs of
+                                              (vv,[w])    -> Right [a##vv, b#w]
+                                              _           -> Msg.unexpAttrT1
+ropAttrPos (AttrPosT2 a b c)  xs         = case span isTermLeaf xs of
+                                              (vv,[w,x])  -> Right [a##vv, b#w, c#x]
+                                              _           -> Msg.unexpAttrT2
+ropAttrPos (AttrPos0)         _          = Msg.unexpAttr0
+ropAttrPos (AttrPos1 _)       _          = Msg.unexpAttr1
+ropAttrPos (AttrPos2 _ _)     _          = Msg.unexpAttr2
+ropAttrPos (AttrPos3 _ _ _)   _          = Msg.unexpAttr3
+ropAttrPos (AttrPos4 _ _ _ _) _          = Msg.unexpAttr4
+ropAttrPos (AttrPos1V _ _)    _          = Msg.unexpAttr1V
+ropAttrPos (AttrPos1Q _ _)    _          = Msg.unexpAttr1Q
+
+(#) :: a -> v -> (a, [v])
+a # v = (a ,[v])
+
+(##) :: a -> vv -> (a, vv)
+a ## vv = (a, vv)
+
+enumAttr :: [C.AttrName]
+enumAttr = map (C.AttrNameNormal . ('-' :) . show) [1 :: Int ..]
+
+isTermLeaf :: B.TTree -> Bool
+isTermLeaf (B.TreeL token) = B.isTermToken token
+isTermLeaf _               = False
+
+ropAttrDef :: AttrPos C.AttrName -> [C.AttrName] -> C.AttrDefine
+ropAttrDef attrType branchNames =
     C.AttrDefine trunkSorter classify trunkNames branchNames where
-        classify = attrClassify trunkNames branchNames
+        trunkSorter = ropAttrPos attrType
+        trunkNames  = attrTypeNames attrType
+        classify    = attrClassify trunkNames branchNames
 
 attrClassify :: [C.AttrName] -> [C.AttrName] -> B.Map C.AttrName
 attrClassify trunkNames branchNames n = n2 where
@@ -54,103 +99,3 @@ attrClassify trunkNames branchNames n = n2 where
     pairs    = map pair alls
     pair k   = (C.attrNameText k, k)
     alls     = C.attrNameTrunk : trunkNames ++ branchNames
-
-pn :: B.Ab [(n, [a])] -> ([a] -> Maybe [(n, [a])]) -> [a] -> B.Ab [(n, [a])]
-pn msg p xs =
-    case p xs of
-      Just attr -> Right attr
-      Nothing   -> msg
-
-enumAttr :: [C.AttrName]
-enumAttr = map (C.AttrNameNormal . ('-' :) . show) [1 :: Int ..]
-
--- | Attribute sorter for enumerating trunk,
---   i.e., @-1@, @-2@, ...
-roaEnum :: [C.AttrName] -> [C.AttrName] -> C.AttrDefine
-roaEnum ks          = def (Right . zip enumAttr . map B.li1) ks
-
--- | Attribute sorter for no-attribute trunk.
-roaNone :: [C.AttrName] -> C.AttrDefine
-roaNone             = def (pn Msg.unexpAttr0 posName0) []
-
--- | Attribute sorter for multiple-attribute trunk.
-roaList :: C.AttrName -> [C.AttrName] -> C.AttrDefine
-roaList a           = def (pn (Msg.bug "list") $ posNameV a) [a]
-
--- | Attribute sorter for one-and-multiple-attribute trunk.
-roaOneList :: C.AttrName -> C.AttrName -> [C.AttrName] -> C.AttrDefine
-roaOneList a b      = def (pn Msg.unexpAttr1V $ posName1V a b) [a,b]
-
-roaOneOpt :: C.AttrName -> C.AttrName -> [C.AttrName] -> C.AttrDefine
-roaOneOpt a b       = def (pn Msg.unexpAttr1Q $ posName1Q a b) [a,b]
-
--- | Attribute sorter for one-attribute trunk.
-roaOne :: C.AttrName -> [C.AttrName] -> C.AttrDefine
-roaOne a            = def (pn Msg.unexpAttr1 $ posName1 a) [a]
-
--- | Attribute sorter for two-attribute trunk.
-roaTwo :: C.AttrName -> C.AttrName -> [C.AttrName] -> C.AttrDefine
-roaTwo a b          = def (pn Msg.unexpAttr2 $ posName2 a b) [a,b]
-
--- | Attribute sorter for three-attribute trunk.
-roaThree :: C.AttrName -> C.AttrName -> C.AttrName -> [C.AttrName] -> C.AttrDefine
-roaThree a b c      = def (pn Msg.unexpAttr3 $ posName3 a b c) [a,b,c]
-
--- | Attribute sorter for four-attribute trunk.
-roaFour :: C.AttrName -> C.AttrName -> C.AttrName -> C.AttrName -> [C.AttrName] -> C.AttrDefine
-roaFour a b c d     = def (pn Msg.unexpAttr4 $ posName4 a b c d) [a,b,c,d]
-
-roaTermsOne :: C.AttrName -> C.AttrName -> [C.AttrName] -> C.AttrDefine
-roaTermsOne a b     = def (pn Msg.unexpAttrT1 $ posNameT1 a b) [a,b]
-
-roaTermsTwo :: C.AttrName -> C.AttrName -> C.AttrName -> [C.AttrName] -> C.AttrDefine
-roaTermsTwo a b c   = def (pn Msg.unexpAttrT2 $ posNameT2 a b c) [a,b,c]
-
-
--- ----------------------  Positional name
-
-posName0 :: [a] -> Maybe [(n, [a])]
-posName0 []                     = Just []
-posName0 _                      = Nothing
-
-posName1 :: n -> [a] -> Maybe [(n, [a])]
-posName1 a [aa]                 = Just [(a,[aa])]
-posName1 _ _                    = Nothing
-
-posName2 :: n -> n -> [a] -> Maybe [(n, [a])]
-posName2 a b [aa,bb]            = Just [(a,[aa]), (b,[bb])]
-posName2 _ _ _                  = Nothing
-
-posName3 :: n -> n -> n -> [a] -> Maybe [(n, [a])]
-posName3 a b c [aa,bb,cc]       = Just [(a,[aa]), (b,[bb]), (c,[cc])]
-posName3 _ _ _ _                = Nothing
-
-posName4 :: n -> n -> n -> n -> [a] -> Maybe [(n, [a])]
-posName4 a b c d [aa,bb,cc,dd]  = Just [(a,[aa]), (b,[bb]), (c,[cc]), (d,[dd])]
-posName4 _ _ _ _ _              = Nothing
-
-posNameV :: n -> [a] -> Maybe [(n, [a])]
-posNameV a aa                   = Just [(a,aa)]
-
-posName1V :: n -> n -> [a] -> Maybe [(n, [a])]
-posName1V a b (aa:bb)           = Just [(a,[aa]), (b,bb)]
-posName1V _ _ _                 = Nothing
-
-posName1Q :: n -> n -> [a] -> Maybe [(n, [a])]
-posName1Q a b [aa]              = Just [(a,[aa]), (b,[])]
-posName1Q a b [aa,bb]           = Just [(a,[aa]), (b,[bb])]
-posName1Q _ _ _                 = Nothing
-
-posNameT1 :: n -> n -> [B.TTree] -> Maybe [(n, [B.TTree])]
-posNameT1 a b xs   = case span isTermLeaf xs of
-                       (aa, [bb])  -> Just [ (a,aa), (b,[bb]) ]
-                       _           -> Nothing
-
-posNameT2 :: n -> n -> n -> [B.TTree] -> Maybe [(n, [B.TTree])]
-posNameT2 a b c xs = case span isTermLeaf xs of
-                       (aa, [bb,cc])  -> Just [ (a,aa), (b,[bb]), (c,[cc]) ]
-                       _              -> Nothing
-
-isTermLeaf :: B.TTree -> Bool
-isTermLeaf (B.TreeL token) = B.isTermToken token
-isTermLeaf _               = False

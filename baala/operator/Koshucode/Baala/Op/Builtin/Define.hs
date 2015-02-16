@@ -39,17 +39,19 @@ attrName n@('-':_) | l == '/'    = C.AttrNameRelmap i
 attrName n = ropBug n
 
 attrDef :: String -> [C.AttrName] -> [C.AttrName] -> C.AttrDefine
-attrDef "E"  as       = C.roaEnum as
-attrDef "0"  []       = C.roaNone
-attrDef "1"  [a]      = C.roaOne a
-attrDef "2"  [a,b]    = C.roaTwo a b
-attrDef "3"  [a,b,c]  = C.roaThree a b c
-attrDef "1?" [a,b]    = C.roaOneOpt a b
-attrDef "V"  [a]      = C.roaList a
-attrDef "1V" [a,b]    = C.roaOneList a b
-attrDef "T1" [a,b]    = C.roaTermsOne a b
-attrDef "T2" [a,b,c]  = C.roaTermsTwo a b c
-attrDef _ xs          = ropBug $ unwords $ map C.attrNameText xs
+attrDef q ns = C.ropAttrDef $ select q ns where
+    select "E"  as         = C.AttrPosE as
+    select "0"  []         = C.AttrPos0
+    select "1"  [a]        = C.AttrPos1  a
+    select "2"  [a,b]      = C.AttrPos2  a b
+    select "3"  [a,b,c]    = C.AttrPos3  a b c
+    select "4"  [a,b,c,d]  = C.AttrPos4  a b c d
+    select "1?" [a,b]      = C.AttrPos1Q a b
+    select "V"  [a]        = C.AttrPosV  a
+    select "1V" [a,b]      = C.AttrPos1V a b
+    select "T1" [a,b]      = C.AttrPosT1 a b
+    select "T2" [a,b,c]    = C.AttrPosT2 a b c
+    select _ xs            = ropBug $ unwords $ map C.attrNameText xs
 
 ropBug :: String -> a
 ropBug x = B.bug $ "malformed attribute: " ++ x
