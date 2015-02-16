@@ -24,21 +24,22 @@ import qualified Koshucode.Baala.Core.Message          as Msg
 
 -- | Definition of attribute sorter.
 data RopAttr = RopAttr
-    { attrTrunkSorter  :: C.AttrSortTree     -- Trunk sorter
-    , attrClassifier   :: B.Map C.AttrName   -- Attribute classifier
-    , attrTrunkNames   :: [C.AttrName]       -- Trunk names
-    , attrBranchNames  :: [C.AttrName]       -- Branch names
+    { attrPosSorter    :: C.AttrSortTree         -- Sorter for positional attributes
+    , attrClassifier   :: B.Map C.AttrName       -- Attribute classifier
+    , attrPos          :: C.AttrPos C.AttrName   -- Positional attribute
+    , attrPosNames     :: [C.AttrName]           -- Positional names
+    , attrBranchNames  :: [C.AttrName]           -- Branch names
     }
 
 ropAttrCons :: C.AttrPos C.AttrName -> [C.AttrName] -> RopAttr
-ropAttrCons attrType branchNames = ropAttr where
-    ropAttr      = RopAttr trunkSorter classify trunkNames branchNames
-    trunkSorter  = C.ropAttrPos attrType
-    trunkNames   = C.attrTypeNames attrType
-    classify     = attrClassify trunkNames branchNames
+ropAttrCons pos branchNames = ropAttr where
+    ropAttr      = RopAttr posSorter classify pos posNames branchNames
+    posSorter    = C.ropAttrPos pos
+    posNames     = C.attrTypeNames pos
+    classify     = attrClassify posNames branchNames
 
 attrClassify :: [C.AttrName] -> [C.AttrName] -> B.Map C.AttrName
-attrClassify trunkNames branchNames n = n2 where
+attrClassify posNames branchNames n = n2 where
     n2 :: C.AttrName
     n2 = let nam = C.attrNameText n
          in case lookup nam pairs of
@@ -48,7 +49,7 @@ attrClassify trunkNames branchNames n = n2 where
     pairs    :: [B.Named C.AttrName]
     pairs    = map pair alls
     pair k   = (C.attrNameText k, k)
-    alls     = C.attrNameTrunk : trunkNames ++ branchNames
+    alls     = C.attrNameTrunk : posNames ++ branchNames
 
 
 -- ----------------------  Attribute sorter
@@ -72,7 +73,7 @@ type AttrSortPara = [B.TTree] -> B.Ab AttrPara
 type AttrPara = B.ParaBody C.AttrName B.TTree
 
 attrSort :: RopAttr -> AttrSortPara
-attrSort def = attrBranch B.>=> attrTrunk def
+attrSort def = attrBranch B.>=> attrSortPos def
 
 attrBranch :: AttrSortPara
 attrBranch trees =
@@ -86,8 +87,8 @@ maybeHyname :: B.TTreeTo (Maybe String)
 maybeHyname (B.TextLeafRaw _ n@('-' : _))  = Just n
 maybeHyname _                              = Nothing
 
-attrTrunk :: RopAttr -> B.AbMap AttrPara
-attrTrunk (RopAttr sorter classify pos named) p =
+attrSortPos :: RopAttr -> B.AbMap AttrPara
+attrSortPos (RopAttr sorter classify _ pos named) p =
     do let noPos      = null $ B.paraPos p
            nameList   = map fst $ B.paraNameList p
            overlapped = pos `B.overlap` nameList
@@ -103,12 +104,12 @@ attrTrunk (RopAttr sorter classify pos named) p =
        Right p3
 
 attrCheck :: [C.AttrName] -> [C.AttrName] -> [C.AttrTree] -> B.Ab ()
-attrCheck trunkNames branchNames attr =
+attrCheck posNames branchNames attr =
     case t (map fst attr) B.\\ textAll of
       []    -> Right ()
       u : _ -> Msg.unexpAttr $ "Unknown " ++ u
     where
-      textAll = "@trunk" : t trunkNames ++ t branchNames
+      textAll = "@trunk" : t posNames ++ t branchNames
       t       = map C.attrNameText
 
 attrList :: B.ParaBody n a -> [(n, [a])]
