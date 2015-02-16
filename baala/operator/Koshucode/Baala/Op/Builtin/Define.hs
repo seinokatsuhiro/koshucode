@@ -9,7 +9,7 @@ import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 
 -- | Constructor, usage, and attribute sorter
-type RopDefine c = (C.RopCons c, C.RopUsage, C.AttrDefine)
+type RopDefine c = (C.RopCons c, C.RopUsage, C.RopAttr)
 
 -- | Make implementations of relmap operators.
 ropList
@@ -38,8 +38,8 @@ attrName n@('-':_) | l == '/'    = C.AttrNameRelmap i
                          i = init n
 attrName n = ropBug n
 
-attrDef :: String -> [C.AttrName] -> [C.AttrName] -> C.AttrDefine
-attrDef q ns = C.ropAttrDef $ select q ns where
+attrDef :: String -> [C.AttrName] -> [C.AttrName] -> C.RopAttr
+attrDef q ns = C.ropAttrCons $ select q ns where
     select "E"  as         = C.AttrPosE as
     select "0"  []         = C.AttrPos0
     select "1"  [a]        = C.AttrPos1  a

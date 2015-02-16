@@ -9,7 +9,7 @@ module Koshucode.Baala.Core.Lexmap.Slot
   ) where
 
 import qualified Koshucode.Baala.Base                   as B
-import qualified Koshucode.Baala.Core.Lexmap.Attribute  as C
+import qualified Koshucode.Baala.Core.Lexmap.AttrPos    as C
 import qualified Koshucode.Baala.Core.Message           as Msg
 
 type GlobalSlot = B.NamedTrees

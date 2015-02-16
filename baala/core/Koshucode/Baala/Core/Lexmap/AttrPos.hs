@@ -1,17 +1,30 @@
+{-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Positional attributes.
 
-module Koshucode.Baala.Core.Lexmap.Sorter
-  ( AttrPos (..),
-    ropAttrDef,
+module Koshucode.Baala.Core.Lexmap.AttrPos
+  ( -- * Positional attribute
+    AttrPos (..),
+    attrTypeNames,
+    ropAttrPos,
+    AttrSortTree,
+    AttrTree,
+
+    -- * Attribute name
+    AttrName (..),
+    isAttrNameRelmap, isAttrNameLocal,
+    attrNameText,
+    attrNameTrunk,
   ) where
 
-import qualified Koshucode.Baala.Base                  as B
-import qualified Koshucode.Baala.Core.Lexmap.Attribute as C
-import qualified Koshucode.Baala.Core.Message          as Msg
+import qualified Data.Generics                  as G
+import qualified Koshucode.Baala.Base           as B
+import qualified Koshucode.Baala.Core.Message   as Msg
 
+
+-- ----------------------  Positional attribute
 
 data AttrPos a
     = AttrPos0
@@ -41,7 +54,12 @@ attrTypeNames attrType = case attrType of
     AttrPosT1 a b      -> [a,b]
     AttrPosT2 a b c    -> [a,b,c]
 
-ropAttrPos :: AttrPos C.AttrName -> C.AttrSortTree
+type AttrSortTree = [B.TTree] -> B.Ab [AttrTree]
+
+-- | Attribute name and its contents.
+type AttrTree = (AttrName, [B.TTree])
+
+ropAttrPos :: AttrPos AttrName -> AttrSortTree
 ropAttrPos (AttrPos0)         []         = Right []
 
 ropAttrPos (AttrPos1 a)       [v]        = Right [a#v]
@@ -73,29 +91,39 @@ a # v = (a ,[v])
 (##) :: a -> vv -> (a, vv)
 a ## vv = (a, vv)
 
-enumAttr :: [C.AttrName]
-enumAttr = map (C.AttrNameNormal . ('-' :) . show) [1 :: Int ..]
+enumAttr :: [AttrName]
+enumAttr = map (AttrNameNormal . ('-' :) . show) [1 :: Int ..]
 
 isTermLeaf :: B.TTree -> Bool
 isTermLeaf (B.TreeL token) = B.isTermToken token
 isTermLeaf _               = False
 
-ropAttrDef :: AttrPos C.AttrName -> [C.AttrName] -> C.AttrDefine
-ropAttrDef attrType branchNames =
-    C.AttrDefine trunkSorter classify trunkNames branchNames where
-        trunkSorter = ropAttrPos attrType
-        trunkNames  = attrTypeNames attrType
-        classify    = attrClassify trunkNames branchNames
 
-attrClassify :: [C.AttrName] -> [C.AttrName] -> B.Map C.AttrName
-attrClassify trunkNames branchNames n = n2 where
-    n2 :: C.AttrName
-    n2 = let nam = C.attrNameText n
-         in case lookup nam pairs of
-              Just k  -> k
-              Nothing -> n
+-- ----------------------  Attribute name
 
-    pairs    :: [B.Named C.AttrName]
-    pairs    = map pair alls
-    pair k   = (C.attrNameText k, k)
-    alls     = C.attrNameTrunk : trunkNames ++ branchNames
+-- | Attribute name for relmap operator.
+data AttrName
+    = AttrNameNormal String    -- ^ Normal attribute
+    | AttrNameRelmap String    -- ^ Attribute for subrelmap
+    | AttrNameLocal  String    -- ^ Attribute for local relation variable
+      deriving (Show, Eq, Ord, G.Data, G.Typeable)
+
+-- | Test attribute name is for subrelmap.
+isAttrNameRelmap :: AttrName -> Bool
+isAttrNameRelmap (AttrNameRelmap _)  = True
+isAttrNameRelmap _                   = False
+
+-- | Test attribute name is for local variable.
+isAttrNameLocal :: AttrName -> Bool
+isAttrNameLocal (AttrNameLocal _)    = True
+isAttrNameLocal _                    = False
+
+-- | String part of attribute names.
+attrNameText :: AttrName -> String
+attrNameText (AttrNameNormal n)  = n
+attrNameText (AttrNameRelmap n)  = n
+attrNameText (AttrNameLocal  n)  = n
+
+-- | Constant for attribute name @\@trunk@.
+attrNameTrunk :: AttrName
+attrNameTrunk = AttrNameNormal "@trunk"

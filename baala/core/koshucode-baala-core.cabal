@@ -65,12 +65,12 @@ library
         Koshucode.Baala.Core.Content.Tree
 
         Koshucode.Baala.Core.Lexmap
+        Koshucode.Baala.Core.Lexmap.AttrPos
         Koshucode.Baala.Core.Lexmap.Attribute
         Koshucode.Baala.Core.Lexmap.Attrmap
         Koshucode.Baala.Core.Lexmap.Construct
         Koshucode.Baala.Core.Lexmap.Lexmap
         Koshucode.Baala.Core.Lexmap.Slot
-        Koshucode.Baala.Core.Lexmap.Sorter
 
         Koshucode.Baala.Core.Relmap
         Koshucode.Baala.Core.Relmap.Construct

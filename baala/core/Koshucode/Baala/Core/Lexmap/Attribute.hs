@@ -1,84 +1,54 @@
-{-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Attributes of relmap operator.
 
 module Koshucode.Baala.Core.Lexmap.Attribute
-  ( -- * Attribute name
-    AttrName (..),
-    isAttrNameRelmap, isAttrNameLocal,
-    attrNameText,
-    attrNameTrunk,
-  
-    -- * Attribute trees
-    AttrDefine (..),
-    AttrTree, AttrPara,
-    AttrSortTree, AttrSortPara,
+  ( -- * Attributes of relmap operator
+    RopAttr (..),
+    ropAttrCons,
   
     -- * Attribute sorter
-    attrSort,
-    attrBranch,
+    AttrPara, AttrSortPara,
+    attrSort, attrBranch,
     maybeHyname,
     -- $AttributeSorter
   ) where
 
-import qualified Data.Generics                as G
-import qualified Koshucode.Baala.Base         as B
-import qualified Koshucode.Baala.Core.Message as Msg
-
-
--- ----------------------  Attribute name
-
--- | Attribute name for relmap operator.
-data AttrName
-    = AttrNameNormal String    -- ^ Normal attribute
-    | AttrNameRelmap String    -- ^ Attribute for subrelmap
-    | AttrNameLocal  String    -- ^ Attribute for local relation variable
-      deriving (Show, Eq, Ord, G.Data, G.Typeable)
-
--- | Test attribute name is for subrelmap.
-isAttrNameRelmap :: AttrName -> Bool
-isAttrNameRelmap (AttrNameRelmap _)  = True
-isAttrNameRelmap _                   = False
-
--- | Test attribute name is for local variable.
-isAttrNameLocal :: AttrName -> Bool
-isAttrNameLocal (AttrNameLocal _)    = True
-isAttrNameLocal _                    = False
-
--- | String part of attribute names.
-attrNameText :: AttrName -> String
-attrNameText (AttrNameNormal n)  = n
-attrNameText (AttrNameRelmap n)  = n
-attrNameText (AttrNameLocal  n)  = n
-
--- | Constant for attribute name @\@trunk@.
-attrNameTrunk :: AttrName
-attrNameTrunk = AttrNameNormal "@trunk"
+import qualified Koshucode.Baala.Base                  as B
+import qualified Koshucode.Baala.Core.Lexmap.AttrPos   as C
+import qualified Koshucode.Baala.Core.Message          as Msg
 
 
 -- ----------------------  Attribute trees
 
 -- | Definition of attribute sorter.
-data AttrDefine = AttrDefine
-    { attrTrunkSorter  :: AttrSortTree       -- Trunk sorter
-    , attrClassifier   :: B.Map AttrName     -- Attribute classifier
-    , attrTrunkNames   :: [AttrName]         -- Trunk names
-    , attrBranchNames  :: [AttrName]         -- Branch names
+data RopAttr = RopAttr
+    { attrTrunkSorter  :: C.AttrSortTree     -- Trunk sorter
+    , attrClassifier   :: B.Map C.AttrName   -- Attribute classifier
+    , attrTrunkNames   :: [C.AttrName]       -- Trunk names
+    , attrBranchNames  :: [C.AttrName]       -- Branch names
     }
 
--- | Attribute name and its contents.
-type AttrTree = (AttrName, [B.TTree])
+ropAttrCons :: C.AttrPos C.AttrName -> [C.AttrName] -> RopAttr
+ropAttrCons attrType branchNames = ropAttr where
+    ropAttr      = RopAttr trunkSorter classify trunkNames branchNames
+    trunkSorter  = C.ropAttrPos attrType
+    trunkNames   = C.attrTypeNames attrType
+    classify     = attrClassify trunkNames branchNames
 
--- | Sorter for attribute of relmap operator.
---   Sorters docompose attribute trees,
---   and give a name to subattribute.
-type AttrSortPara = [B.TTree] -> B.Ab AttrPara
+attrClassify :: [C.AttrName] -> [C.AttrName] -> B.Map C.AttrName
+attrClassify trunkNames branchNames n = n2 where
+    n2 :: C.AttrName
+    n2 = let nam = C.attrNameText n
+         in case lookup nam pairs of
+              Just k  -> k
+              Nothing -> n
 
-type AttrSortTree = [B.TTree] -> B.Ab [AttrTree]
-
-type AttrPara = B.ParaBody AttrName B.TTree
+    pairs    :: [B.Named C.AttrName]
+    pairs    = map pair alls
+    pair k   = (C.attrNameText k, k)
+    alls     = C.attrNameTrunk : trunkNames ++ branchNames
 
 
 -- ----------------------  Attribute sorter
@@ -94,7 +64,14 @@ type AttrPara = B.ParaBody AttrName B.TTree
 --   , ("-x", [TreeL (TTerm 7 ["/c"]), TreeL (TText 9 1 "d")])
 --   , ("-y", [TreeL (TText 14 0 "e")]) ]
 
-attrSort :: AttrDefine -> AttrSortPara
+-- | Sorter for attribute of relmap operator.
+--   Sorters docompose attribute trees,
+--   and give a name to subattribute.
+type AttrSortPara = [B.TTree] -> B.Ab AttrPara
+
+type AttrPara = B.ParaBody C.AttrName B.TTree
+
+attrSort :: RopAttr -> AttrSortPara
 attrSort def = attrBranch B.>=> attrTrunk def
 
 attrBranch :: AttrSortPara
@@ -103,14 +80,14 @@ attrBranch trees =
            p2  = B.paraNameAdd "@trunk" (B.paraPos p) p
            dup = B.paraMultipleNames p2
        B.when (B.notNull dup) $ Msg.dupAttr dup
-       Right $ B.paraNameMapKeys AttrNameNormal p2
+       Right $ B.paraNameMapKeys C.AttrNameNormal p2
 
 maybeHyname :: B.TTreeTo (Maybe String)
 maybeHyname (B.TextLeafRaw _ n@('-' : _))  = Just n
 maybeHyname _                              = Nothing
 
-attrTrunk :: AttrDefine -> B.AbMap AttrPara
-attrTrunk (AttrDefine sorter classify pos named) p =
+attrTrunk :: RopAttr -> B.AbMap AttrPara
+attrTrunk (RopAttr sorter classify pos named) p =
     do let noPos      = null $ B.paraPos p
            nameList   = map fst $ B.paraNameList p
            overlapped = pos `B.overlap` nameList
@@ -125,14 +102,14 @@ attrTrunk (AttrDefine sorter classify pos named) p =
        attrCheck pos named attr
        Right p3
 
-attrCheck :: [AttrName] -> [AttrName] -> [AttrTree] -> B.Ab ()
+attrCheck :: [C.AttrName] -> [C.AttrName] -> [C.AttrTree] -> B.Ab ()
 attrCheck trunkNames branchNames attr =
     case t (map fst attr) B.\\ textAll of
       []    -> Right ()
       u : _ -> Msg.unexpAttr $ "Unknown " ++ u
     where
       textAll = "@trunk" : t trunkNames ++ t branchNames
-      t       = map attrNameText
+      t       = map C.attrNameText
 
 attrList :: B.ParaBody n a -> [(n, [a])]
 attrList = map (B.mapSnd concat) . B.paraNameList
