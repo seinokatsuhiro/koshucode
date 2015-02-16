@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    177 judges
+**    179 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Base"
@@ -79,41 +79,43 @@
 |-- IMPORT  /module "Koshucode.Baala.Core.Content"              /import "Koshucode.Baala.Core.Content.Run"
 |-- IMPORT  /module "Koshucode.Baala.Core.Content"              /import "Koshucode.Baala.Core.Content.Tree"
 
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Attribute"     /import "Data.Generics"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Attribute"     /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Attribute"     /import "Koshucode.Baala.Core.Message"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Attr"          /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Attr"          /import "Koshucode.Baala.Core.Lexmap.AttrPos"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Attr"          /import "Koshucode.Baala.Core.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Attrmap"       /import "Data.Generics"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Attrmap"       /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Attrmap"       /import "Koshucode.Baala.Core.Lexmap.Attribute"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Attrmap"       /import "Koshucode.Baala.Core.Lexmap.AttrPos"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Attrmap"       /import "Koshucode.Baala.Core.Lexmap.Slot"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Attrmap"       /import "Koshucode.Baala.Core.Message"
 
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.AttrPos"       /import "Data.Generics"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.AttrPos"       /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.AttrPos"       /import "Koshucode.Baala.Core.Message"
+
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Lexmap.Attrmap"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Lexmap.Attribute"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Lexmap.Attr"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Lexmap.AttrPos"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Lexmap.Lexmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Lexmap.Slot"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Lexmap"        /import "Data.Generics"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Lexmap"        /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Lexmap"        /import "Koshucode.Baala.Core.Lexmap.Attribute"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Lexmap"        /import "Koshucode.Baala.Core.Lexmap.AttrPos"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Lexmap"        /import "Koshucode.Baala.Core.Lexmap.Attr"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Slot"          /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Slot"          /import "Koshucode.Baala.Core.Lexmap.Attribute"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Slot"          /import "Koshucode.Baala.Core.Lexmap.AttrPos"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Slot"          /import "Koshucode.Baala.Core.Message"
 
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Sorter"        /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Sorter"        /import "Koshucode.Baala.Core.Lexmap.Attribute"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Sorter"        /import "Koshucode.Baala.Core.Message"
-
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.Attribute"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.Attr"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.Attrmap"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.AttrPos"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.Construct"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.Lexmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.Slot"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.Sorter"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Message"              /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Message"              /import "Koshucode.Baala.Base.Message"

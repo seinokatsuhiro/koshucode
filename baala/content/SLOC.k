@@ -3,14 +3,14 @@
 about /package 'content
 
 |-- DIR  /code 118  /comment 45   /dir "content/Koshucode/Baala/Op"
-|-- DIR  /code 513  /comment 326  /dir "content/Koshucode/Baala/Op/Cop"
+|-- DIR  /code 518  /comment 328  /dir "content/Koshucode/Baala/Op/Cop"
 |-- DIR  /code 719  /comment 376  /dir "content/Koshucode/Baala/Op/Cox"
 |-- DIR  /code 170  /comment 42   /dir "content/Koshucode/Baala/Type"
 
-|-- DIR-TOTAL  /code 1520  /comment 789
+|-- DIR-TOTAL  /code 1525  /comment 791
 
 |-- FILE  /code 14   /comment 5    /file "Cop.hs"         /dir "content/Koshucode/Baala/Op"
-|-- FILE  /code 73   /comment 37   /file "Arith.hs"       /dir "content/Koshucode/Baala/Op/Cop"
+|-- FILE  /code 78   /comment 39   /file "Arith.hs"       /dir "content/Koshucode/Baala/Op/Cop"
 |-- FILE  /code 32   /comment 40   /file "Coxhand.hs"     /dir "content/Koshucode/Baala/Op/Cop"
 |-- FILE  /code 203  /comment 102  /file "List.hs"        /dir "content/Koshucode/Baala/Op/Cop"
 |-- FILE  /code 52   /comment 36   /file "Logic.hs"       /dir "content/Koshucode/Baala/Op/Cop"
@@ -29,4 +29,4 @@ about /package 'content
 |-- FILE  /code 11   /comment 11   /file "Quoter.hs"      /dir "content/Koshucode/Baala/Op"
 |-- FILE  /code 170  /comment 42   /file "Vanilla.hs"     /dir "content/Koshucode/Baala/Type"
 
-|-- FILE-TOTAL  /code 1520  /comment 789
+|-- FILE-TOTAL  /code 1525  /comment 791

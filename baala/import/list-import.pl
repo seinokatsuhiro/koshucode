@@ -18,7 +18,7 @@ foreach my $path ( @ARGV ) {
 
     my $mod = "<Unknown>";
     while ( <IN> ) {
-        chomp;
+        s/[\r\n]//g;
         if ( $mod eq "<Unknown>" && /^module\s+(.*)/ ) {
             $mod = $1;
         } elsif ( /^\s*import(\s+qualified)?\s+([^ ]+)(\s+as\s+.*)?/ ) {

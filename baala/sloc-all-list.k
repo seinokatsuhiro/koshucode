@@ -15,7 +15,7 @@ file-total : source FILE-TOTAL /package /code /comment
 
 long-top : file
   | cut /comment
-  | add /=code-minus ( 0 - /code )
+  | add /=code-minus ( - /code )
   | rank /rank -from 1 -order /=code-minus
   | keep /rank <= @'1
   | wipe
