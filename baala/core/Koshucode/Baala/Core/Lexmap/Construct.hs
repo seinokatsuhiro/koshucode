@@ -152,13 +152,13 @@ consLexmap findSorter gslot findDeriv = lexmap where
                 attrRelmap = B.filterFst C.isAttrNameRelmap attr
             in case attrRelmap of
                  [(C.AttrNameRelmapFlat _, ts)] -> submap2 lx attr ts []
-                 [(C.AttrNameRelmapNest _, ts)] -> submap2 lx attr ts $ varsNest ts
+                 [(C.AttrNameRelmapNest _, ts)] -> submap2 lx attr ts $ nestVars ts
                  []                             -> Right (lx, [])  -- no submaps
                  _                              -> Msg.bug "submap"
 
         submap2 lx attr ts vsNest =
             do let attrLocal = B.filterFst C.isAttrNameLocal attr
-               vs     <- varsLocal attrLocal
+               vs     <- localVars attrLocal
                subs   <- lexmap1 sec `mapM` nestTrees (vs ++ vsNest) ts
                let (sublx, tabs) = unzip subs
                    lx2           = lx { C.lexSubmap = sublx
@@ -167,10 +167,10 @@ consLexmap findSorter gslot findDeriv = lexmap where
 
     -- -----------  Local relation name
 
-    varsLocal :: [C.AttrTree] -> B.Ab [String]
-    varsLocal [(_, vs)]  = mapM vars vs
-    varsLocal []         = Right []
-    varsLocal _          = Msg.bug "nest"
+    localVars :: [C.AttrTree] -> B.Ab [String]
+    localVars [(_, vs)]  = mapM vars vs
+    localVars []         = Right []
+    localVars _          = Msg.bug "nest"
 
     vars :: B.TTree -> B.Ab String
     vars (B.TextLeafRaw _ v)  = Right v
@@ -178,12 +178,12 @@ consLexmap findSorter gslot findDeriv = lexmap where
 
     -- -----------  Nested relation reference
 
-    varsNest :: [B.TTree] -> [String]
-    varsNest = B.mapMaybe unwrap . concatMap B.untree
+    nestVars :: [B.TTree] -> [String]
+    nestVars = B.mapMaybe nestTerm . concatMap B.leaves
 
-    unwrap :: B.Token -> Maybe String
-    unwrap (B.TTermNest _ n)   = Just n
-    unwrap _                   = Nothing
+    nestTerm :: B.Token -> Maybe String
+    nestTerm (B.TTermNest _ v)   = Just v
+    nestTerm _                   = Nothing
 
     -- -----------  Rewrite trees
 

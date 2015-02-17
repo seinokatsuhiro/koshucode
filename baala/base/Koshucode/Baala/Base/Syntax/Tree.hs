@@ -12,7 +12,7 @@ module Koshucode.Baala.Base.Syntax.Tree
     tree, trees,
     treeWrap,
     untree, untrees,
-    undouble,
+    leaves, undouble,
   
     -- * Bracket table
     GetBracketType,
@@ -111,6 +111,10 @@ untree = loop where
     loop (TreeB _ (Just (open, close)) xs) =
         open : concatMap loop xs ++ [close]
 
+leaves :: CodeTree p a -> [a]
+leaves (TreeB _ _ ts)  = concatMap leaves ts
+leaves (TreeL x)       = [x]
+
 -- | Simplify tree by removing double brackets,
 --   like @((a))@ to @(a)@.
 --
@@ -128,7 +132,6 @@ undouble p = loop where
 -- e1 = TreeB 2 [TreeB 1 [TreeB 0 [TreeL 0]]]
 -- e2 = TreeB 2 [e1, TreeB 1 [TreeB 0 [TreeL 0]]]
 -- e3 = undouble e2
-
 
 
 -- ----------------------  Bracket table
