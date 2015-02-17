@@ -31,12 +31,18 @@ def cons usage attr = (cons, usage, attr') where
               _                    -> ropBug attr
 
 attrName :: String -> C.AttrName
-attrName n@('-':_) | l == '/'    = C.AttrNameRelmap i
-                   | l == '^'    = C.AttrNameLocal  i
-                   | otherwise   = C.AttrNameNormal n
+attrName n@('-':_) | l == '^'    = attrLocal i
+                   | l == '/'    = C.AttrNameRelmapFlat i  -- "-xxx/"
+                   | otherwise   = C.AttrNameNormal n      -- "-xxx"
                    where l = last n
                          i = init n
 attrName n = ropBug n
+
+attrLocal :: String -> C.AttrName
+attrLocal n        | l == '/'    = C.AttrNameRelmapNest i    -- "-xxx/^"
+                   | otherwise   = C.AttrNameLocal      n    -- "-xxx^"
+                   where l = last n
+                         i = init n
 
 attrDef :: String -> [C.AttrName] -> [C.AttrName] -> C.RopAttr
 attrDef q ns = C.ropAttrCons $ select q ns where

@@ -14,7 +14,8 @@ module Koshucode.Baala.Core.Lexmap.AttrPos
 
     -- * Attribute name
     AttrName (..),
-    isAttrNameRelmap, isAttrNameLocal,
+    isAttrNameRelmap,
+    isAttrNameLocal,
     attrNameText,
     attrNameTrunk,
   ) where
@@ -103,15 +104,17 @@ isTermLeaf _               = False
 
 -- | Attribute name for relmap operator.
 data AttrName
-    = AttrNameNormal String    -- ^ Normal attribute
-    | AttrNameRelmap String    -- ^ Attribute for subrelmap
-    | AttrNameLocal  String    -- ^ Attribute for local relation variable
+    = AttrNameNormal     String    -- ^ Normal attribute
+    | AttrNameRelmapFlat String    -- ^ Attribute for submap
+    | AttrNameRelmapNest String    -- ^ Attribute for submap with nested relation references
+    | AttrNameLocal      String    -- ^ Attribute for local relation reference
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 -- | Test attribute name is for subrelmap.
 isAttrNameRelmap :: AttrName -> Bool
-isAttrNameRelmap (AttrNameRelmap _)  = True
-isAttrNameRelmap _                   = False
+isAttrNameRelmap (AttrNameRelmapFlat _)  = True
+isAttrNameRelmap (AttrNameRelmapNest _)  = True
+isAttrNameRelmap _                       = False
 
 -- | Test attribute name is for local variable.
 isAttrNameLocal :: AttrName -> Bool
@@ -120,9 +123,10 @@ isAttrNameLocal _                    = False
 
 -- | String part of attribute names.
 attrNameText :: AttrName -> String
-attrNameText (AttrNameNormal n)  = n
-attrNameText (AttrNameRelmap n)  = n
-attrNameText (AttrNameLocal  n)  = n
+attrNameText (AttrNameNormal     n)  = n
+attrNameText (AttrNameRelmapFlat n)  = n
+attrNameText (AttrNameRelmapNest n)  = n
+attrNameText (AttrNameLocal      n)  = n
 
 -- | Constant for attribute name @\@trunk@.
 attrNameTrunk :: AttrName

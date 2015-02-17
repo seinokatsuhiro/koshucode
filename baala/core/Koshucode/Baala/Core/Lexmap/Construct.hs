@@ -148,20 +148,22 @@ consLexmap findSorter gslot findDeriv = lexmap where
 
         submap :: C.Lexmap -> B.Ab (C.Lexmap, LexmapLinkTable)
         submap lx =
-            let attr         = C.lexAttrTree lx
-                attrRelmap   = B.filterFst C.isAttrNameRelmap attr
-                attrLocal    = B.filterFst C.isAttrNameLocal  attr
+            let attr       = C.lexAttrTree lx
+                attrRelmap = B.filterFst C.isAttrNameRelmap attr
             in case attrRelmap of
-                 []         -> Right (lx, [])  -- no submaps
-                 [(_, ts)]  -> do vs1     <- varsLocal attrLocal
-                                  let vs2  = varsNest ts
-                                      vs'  = vs1 ++ vs2
-                                  subs    <- lexmap1 sec `mapM` nestTrees vs' ts
-                                  let (sublx, tabs) = unzip subs
-                                      lx2           = lx { C.lexSubmap = sublx
-                                                         , C.lexNest   = vs2 }
-                                  Right (lx2, concat tabs)
-                 _          -> Msg.bug "submap"
+                 [(C.AttrNameRelmapFlat _, ts)] -> submap2 lx attr ts []
+                 [(C.AttrNameRelmapNest _, ts)] -> submap2 lx attr ts $ varsNest ts
+                 []                             -> Right (lx, [])  -- no submaps
+                 _                              -> Msg.bug "submap"
+
+        submap2 lx attr ts vsNest =
+            do let attrLocal = B.filterFst C.isAttrNameLocal attr
+               vs     <- varsLocal attrLocal
+               subs   <- lexmap1 sec `mapM` nestTrees (vs ++ vsNest) ts
+               let (sublx, tabs) = unzip subs
+                   lx2           = lx { C.lexSubmap = sublx
+                                      , C.lexNest   = vsNest }
+               Right (lx2, concat tabs)
 
     -- -----------  Local relation name
 
