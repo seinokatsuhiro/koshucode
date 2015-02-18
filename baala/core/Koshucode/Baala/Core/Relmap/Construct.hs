@@ -46,8 +46,9 @@ consRelmap :: (C.RopName -> Maybe (C.Rop' h c)) -> h c -> ConsRelmap' h c
 consRelmap findRop hook = relmap where
     relmap lx =
         case C.lexType lx of
-          C.LexmapDerived  -> Right $ C.RelmapLink lx
           C.LexmapLocal    -> Right $ C.RelmapLink lx
+          C.LexmapNest     -> Right $ C.RelmapLink lx
+          C.LexmapDerived  -> Right $ C.RelmapLink lx
           C.LexmapBase     -> case findRop $ C.lexRopName lx of
                                 Just rop -> Msg.abRelmap [lx] $ cons rop
                                 Nothing  -> Msg.bug "missing operator @consRelmap"

@@ -73,10 +73,10 @@ consLexmap findSorter gslot findDeriv = lexmap [] where
 
         -- operator
         single (B.TextLeafRaw cp v : ts)
-            | v `elem` vs                         = let rop = B.TTextKey cp v
+            | v `elem` vs                            = let rop = B.TTextKey cp v
                                                        in local rop ts
         single (B.TreeL (B.TTermNest cp v) : ts)     = let rop = B.TTextKey cp v
-                                                       in local rop ts
+                                                       in nest rop ts
         single (B.TreeL rop@(B.TTextRaw _ _) : ts)   = find rop ts
         -- group
         single [B.TreeB B.BracketGroup _ ts]         = lexmap vs sec ts
@@ -125,11 +125,14 @@ consLexmap findSorter gslot findDeriv = lexmap [] where
               (lx2, tab)  <- lexmap [] sec' form2
               Right $ (lx, lx2) : tab
 
-        -- -----------  local relation reference
+        -- -----------  nested and local relation reference
 
-        local :: B.Token -> ConsLexmapBody
-        local rop []  = Right (cons C.LexmapLocal rop B.paraEmpty, [])
-        local _ _     = Msg.extraAttr
+        nest  = ref C.LexmapNest
+        local = ref C.LexmapLocal
+
+        ref :: C.LexmapType -> B.Token -> ConsLexmapBody
+        ref typ rop []  = Right (cons typ rop B.paraEmpty, [])
+        ref _ _ _       = Msg.extraAttr
 
         -- -----------  construct lexmap except for submaps
 
