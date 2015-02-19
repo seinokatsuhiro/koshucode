@@ -33,6 +33,11 @@ module Koshucode.Baala.Core.Relmap.Relkit
     relkitNest,
     relkitNestVar,
     relkitSetSource,
+
+    Local, Lexical,
+    lexical,
+    lookupLexical,
+    localsLines,
   ) where
 
 import qualified Koshucode.Baala.Base         as B
@@ -169,4 +174,36 @@ relkitNestVar n he = kit where
 relkitSetSource :: (B.CodePtr a) => a -> B.Map (Relkit c)
 relkitSetSource src (Relkit he (B.Sourced _ core)) =
     Relkit he $ B.Sourced (B.codePtList src) core
+
+
+-- ----------------------  Local relations
+
+type Local a = Lexical [B.Named a]
+
+type Lexical a = (B.Token, a)
+
+lexicalDummy :: B.Token
+lexicalDummy = B.textToken "???"
+
+lexical :: a -> Lexical a
+lexical a = (lexicalDummy, a)
+
+lookupLexical :: String -> [Local a] -> Maybe a
+lookupLexical n = lookup (lexicalDummy, n) . a2expand
+--lookupLexical = lookup2 (B.textToken "???")
+
+localsLines :: [Local a] -> [String]
+localsLines xs = map desc $ a2keys xs where
+    desc (a, bs) = B.tokenContent a ++ " / " ++ unwords bs
+
+a2keys :: [(a, [(b, c)])] -> [(a, [b])]
+a2keys = B.mapSndTo (map fst)
+
+a2expand :: [(a, [(b, c)])] -> [((a, b), c)]
+a2expand = concatMap f where
+    f (a, bc)   = map (g a) bc
+    g a (b, c)  = ((a, b), c)
+
+a2lookup :: (Eq a, Eq b) => a -> b -> [(a, [(b, c)])] -> Maybe c
+a2lookup a b = lookup a B.>=> lookup b
 

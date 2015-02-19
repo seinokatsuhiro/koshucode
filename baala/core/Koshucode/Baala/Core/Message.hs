@@ -292,8 +292,9 @@ unkGlobalVar :: String -> B.Ab a
 unkGlobalVar = Left . B.abortLine "Unknown global variable"
 
 -- | Unknown nested relation
-unkNestRel :: String -> B.Ab a
-unkNestRel = Left . B.abortLine "Unknown nested relation"
+unkNestRel :: String -> [String] -> B.Ab a
+unkNestRel n rs = Left $ B.abortLines "Unknown nested relation"
+                       $ n : rs
 
 -- | Unknown option
 unkOption :: B.ParaUnmatch String -> B.Ab a

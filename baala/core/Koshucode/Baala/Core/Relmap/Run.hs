@@ -45,7 +45,7 @@ relkitLink kits = linkKit where
 
 -- todo: optimization
 relkitRun :: forall h. forall c. (Ord c, C.CRel c, B.SelectRel h, C.GetGlobal h)
-    => h c -> [B.Named [[c]]] -> C.RelkitBody c -> B.AbMap [[c]]
+    => h c -> [C.Local [[c]]] -> C.RelkitBody c -> B.AbMap [[c]]
 relkitRun hook rs (B.Sourced toks core) bo1 =
     Msg.abRun toks $
      case core of
@@ -54,9 +54,9 @@ relkitRun hook rs (B.Sourced toks core) bo1 =
        C.RelkitOneToOne    u f     -> right u $ f `map`       bo1
        C.RelkitPred          f     -> Right   $ filter f      bo1
 
-       C.RelkitAbFull      u f bs  -> monad u $            f (bmaps bs)        bo1
-       C.RelkitOneToAbOne  u f bs  -> monad u $            f (bmaps bs) `mapM` bo1
-       C.RelkitOneToAbMany u f bs  -> right u . concat =<< f (bmaps bs) `mapM` bo1
+       C.RelkitAbFull      u f bs  -> monad u $            f (mrun bs)        bo1
+       C.RelkitOneToAbOne  u f bs  -> monad u $            f (mrun bs) `mapM` bo1
+       C.RelkitOneToAbMany u f bs  -> right u . concat =<< f (mrun bs) `mapM` bo1
        C.RelkitAbSemi        f b   -> B.filterM (semi f b) bo1
        C.RelkitAbPred        f     -> B.filterM f bo1
 
@@ -64,28 +64,28 @@ relkitRun hook rs (B.Sourced toks core) bo1 =
        C.RelkitId                  -> Right bo1
 
        C.RelkitAppend b1@(B.Sourced toks1 _) b2
-                                   -> do bo2 <- relkitRun hook rs b1 bo1
-                                         Msg.abRun toks1 $ relkitRun hook rs b2 bo2
+                                   -> do bo2 <- run b1 bo1
+                                         Msg.abRun toks1 $ run b2 bo2
 
        C.RelkitSource pat ns       -> let r = B.selectRel hook pat ns
                                       in Right $ B.relBody r
 
-       C.RelkitLink _ _ (Just b2)  -> relkitRun hook rs b2 bo1
+       C.RelkitLink _ _ (Just b2)  -> run b2 bo1
        C.RelkitLink n _ (Nothing)  -> Msg.unkRelmap n
 
-       C.RelkitNestVar n           -> case lookup n rs of
-                                        Just bo2 -> Right bo2
-                                        Nothing  -> Msg.unkNestRel n
-
-       C.RelkitCopy n b            -> do bo2 <- relkitRun hook ((n, bo1) : rs) b bo1
-                                         right True $ bo2
+       C.RelkitNestVar n           -> case C.lookupLexical n rs of
+                                        Just bo2  -> Right bo2
+                                        Nothing   -> Msg.unkNestRel n $ C.localsLines rs
        C.RelkitNest nest b         -> do bo2 <- nestRel nest b `mapM` bo1
                                          right True $ concat bo2
+       C.RelkitCopy n b            -> do bo2 <- relkitRun hook (C.lexical [(n, bo1)] : rs) b bo1
+                                         right True $ bo2
     where
-      bmaps  = map $ relkitRun hook rs
+      run    = relkitRun hook rs
+      mrun   = map run
 
       semi :: ([[c]] -> B.Ab Bool) -> C.RelkitBody c -> [c] -> B.Ab Bool
-      semi f b cs = f =<< relkitRun hook rs b [cs]
+      semi f b cs = f =<< run b [cs]
 
       right :: (Ord b) => Bool -> [b] -> B.Ab [b]
       right u = Right . uif u
@@ -100,7 +100,7 @@ relkitRun hook rs (B.Sourced toks core) bo1 =
       nestRel :: [(String, Int)] -> C.RelkitBody c -> [c] -> B.Ab [[c]]
       nestRel nest b cs =
           let cs2 = pickup cs `map` nest
-          in relkitRun hook (cs2 ++ rs) b [cs]
+          in relkitRun hook (C.lexical cs2 : rs) b [cs]
 
       pickup :: [c] -> (String, Int) -> B.Named [[c]]
       pickup cs (name, ind) = (name, B.relBody $ C.gRel $ cs !! ind)

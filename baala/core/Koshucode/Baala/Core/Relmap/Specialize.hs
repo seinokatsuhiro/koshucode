@@ -21,7 +21,7 @@ relmapSpecialize :: forall h. forall c. (C.GetGlobal h)
     => h c -> RelmapLinkTable' h c -> [C.RelkitDef c]
     -> Maybe B.Head -> C.Relmap' h c -> B.Ab ([C.RelkitDef c], C.Relkit c)
 relmapSpecialize hook links = spec [] [] where
-    spec :: [(String, B.Head)]   -- name of nested relation, and its heading
+    spec :: [C.Local B.Head]     -- name of nested relation, and its heading
          -> [C.RelkitKey]        -- information for detecting cyclic relmap
          -> [C.RelkitDef c]      -- list of known specialized relkits
          -> Maybe B.Head         -- input head feeding into generic relmap
@@ -51,7 +51,7 @@ relmapSpecialize hook links = spec [] [] where
               C.RelmapLink lx
                   | C.lexType lx == C.LexmapLocal ||
                     C.lexType lx == C.LexmapNest ->
-                      post lx $ case lookup n nest of
+                      post lx $ case C.lookupLexical n nest of
                            Just he    -> Right (kdef, C.relkitNestVar n he)
                            Nothing    -> Msg.unkNestVar n
                   | otherwise ->
@@ -63,7 +63,7 @@ relmapSpecialize hook links = spec [] [] where
 
               C.RelmapCopy lx n rmap1 ->
                   do let heJust = B.fromJust he1
-                         nest' = (n, heJust) : nest
+                         nest' = C.lexical [(n, heJust)] : nest
                      (kdef2, kit2) <- post lx $ spec nest' keys kdef he1 rmap1
                      Right (kdef2, C.relkitCopy n kit2)
 
@@ -72,7 +72,7 @@ relmapSpecialize hook links = spec [] [] where
                          heNest   = B.headNested heJust
                          vars     = map fst heNest
                          heInd    = vars `B.snipIndex` B.headNames heJust
-                         nest'    = heNest ++ nest
+                         nest'    = C.lexical heNest : nest
                          nestInd  = zip vars heInd
                      (kdef2, kit2) <- post lx $ spec nest' keys kdef he1 rmap1
                      Right (kdef2, C.relkitNest nestInd kit2)
