@@ -23,7 +23,6 @@ module Koshucode.Baala.Op.Builtin.Get
     getTerm, getTermOpt,
     getTerms, getTermsCo,
     getTermPairs,
-    getNest,
     getTermTrees,
   ) where
 
@@ -182,9 +181,6 @@ getTermsCo = getAbortable Op.termNamesCo
 -- | Get list of term-name pairs from named attribute.
 getTermPairs :: RopGet c [B.TermName2]
 getTermPairs = getAbortable Op.termNamePairs
-
-getNest :: C.RopUse c -> B.Ab [B.TermName]
-getNest = Right . C.lexNest . C.ropLexmap
 
 getTermTrees :: RopGet c [B.Named B.TTree]
 getTermTrees = getAbortable C.treesToTerms1

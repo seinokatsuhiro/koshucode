@@ -67,7 +67,7 @@ relmapSpecialize hook links = spec [] [] where
                      (kdef2, kit2) <- post lx $ spec nest' keys kdef he1 rmap1
                      Right (kdef2, C.relkitCopy n kit2)
 
-              C.RelmapLocal lx rmap1 ->
+              C.RelmapNest lx rmap1 ->
                   do let heJust   = B.fromJust he1
                          heNest   = B.headNested heJust
                          vars     = map fst heNest

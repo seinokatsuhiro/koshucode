@@ -57,7 +57,7 @@ consJoinUp use =
      Right $ relmapJoinUp use nest
 
 relmapJoinUp :: (Ord c) => C.RopUse c -> [B.TermName] -> C.Relmap c
-relmapJoinUp use nest = C.relmapLocal use $ Op.relmapJoinList use rmaps where
+relmapJoinUp use nest = C.relmapNest use $ Op.relmapJoinList use rmaps where
     rmaps   = link `map` nest
     link n  = C.relmapLocalVar use n
 

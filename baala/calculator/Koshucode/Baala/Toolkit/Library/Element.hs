@@ -63,7 +63,7 @@ elemRelmap relmap = name : f relmap where
     f (C.RelmapHook   _ _)       = [ rop (B.name relmap) ]
     f (C.RelmapConst  _ _)       = [ rop (B.name relmap) ]
     f (C.RelmapCopy   _ _ r1)    = f r1
-    f (C.RelmapLocal  _ r1)      = f r1
+    f (C.RelmapNest   _ r1)      = f r1
 
 
 -- ------------------------------------------------------------------
