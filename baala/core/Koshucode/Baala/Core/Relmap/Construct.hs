@@ -87,7 +87,7 @@ relmapConfl = C.RelmapCalc . C.ropLexmap
 relmapCopy :: C.RopUse' h c -> String -> B.Map (C.Relmap' h c)
 relmapCopy = C.RelmapCopy . C.ropLexmap
 
-relmapLocal :: C.RopUse' h c -> [B.TermName] -> B.Map (C.Relmap' h c)
+relmapLocal :: C.RopUse' h c -> B.Map (C.Relmap' h c)
 relmapLocal = C.RelmapLocal . C.ropLexmap
 
 relmapLocalVar :: C.RopUse' h c -> String -> C.Relmap' h c

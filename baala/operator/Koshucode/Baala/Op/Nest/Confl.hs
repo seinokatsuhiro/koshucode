@@ -56,16 +56,15 @@ consCopy use =
 
 consFor :: (C.CRel c) => C.RopCons c
 consFor use =
-  do n    <- Op.getTerm   use "-term"
-     rmap <- Op.getRelmap use "-relmap"
-     nest <- Op.getNest use
-     Right $ relmapFor use nest n rmap
+    do n    <- Op.getTerm   use "-term"
+       rmap <- Op.getRelmap use "-relmap"
+       Right $ relmapFor use n rmap
 
-relmapFor :: (C.CRel c) => C.RopUse c -> [B.TermName] -> B.TermName -> B.Map (C.Relmap c)
-relmapFor use nest n rmap = relmapForInner use nest n (Op.relmapUp use n `B.mappend` rmap)
+relmapFor :: (C.CRel c) => C.RopUse c -> B.TermName -> B.Map (C.Relmap c)
+relmapFor use n rmap = relmapForInner use n (Op.relmapUp use n `B.mappend` rmap)
 
-relmapForInner :: (C.CRel c) => C.RopUse c -> [B.TermName] -> B.TermName -> B.Map (C.Relmap c)
-relmapForInner use nest n = C.relmapLocal use nest . bin where
+relmapForInner :: (C.CRel c) => C.RopUse c -> B.TermName -> B.Map (C.Relmap c)
+relmapForInner use n = C.relmapLocal use . bin where
     bin = C.relmapBinary use $ relkitFor n
 
 relkitFor :: forall c. (C.CRel c) => B.TermName -> C.RelkitBinary c
@@ -151,11 +150,10 @@ consSlice :: (C.CRel c) => C.RopCons c
 consSlice use =
   do n    <- Op.getTerm   use "-term"
      rmap <- Op.getOptRelmap C.relmapId use "-relmap"
-     nest <- Op.getNest use
-     Right $ relmapSlice use nest n rmap
+     Right $ relmapSlice use n rmap
 
-relmapSlice :: (C.CRel c) => C.RopUse c -> [B.TermName] -> B.TermName -> B.Map (C.Relmap c)
-relmapSlice use nest n = C.relmapLocal use nest . bin where
+relmapSlice :: (C.CRel c) => C.RopUse c -> B.TermName -> B.Map (C.Relmap c)
+relmapSlice use n = C.relmapLocal use . bin where
     bin = C.relmapBinary use $ relkitSlice n
 
 relkitSlice :: (C.CRel c) => B.TermName -> C.RelkitBinary c
@@ -174,11 +172,10 @@ relkitSlice _ _ _ = Right C.relkitNothing
 consSliceUp :: (C.CRel c) => C.RopCons c
 consSliceUp use =
   do rmap <- Op.getOptRelmap C.relmapId use "-relmap"
-     nest <- Op.getNest use
-     Right $ relmapSliceUp use nest rmap
+     Right $ relmapSliceUp use rmap
 
-relmapSliceUp :: (C.CRel c) => C.RopUse c -> [B.TermName] -> B.Map (C.Relmap c)
-relmapSliceUp use nest = C.relmapLocal use nest . bin where
+relmapSliceUp :: (C.CRel c) => C.RopUse c -> B.Map (C.Relmap c)
+relmapSliceUp use = C.relmapLocal use . bin where
     bin = C.relmapBinary use relkitSliceUp
 
 relkitSliceUp :: (C.CRel c) => C.RelkitBinary c

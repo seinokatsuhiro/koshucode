@@ -28,7 +28,7 @@ data Relmap' h c
                     -- ^ Relmap that maps relations to a relation
     | RelmapCopy    C.Lexmap String (Relmap' h c)
                     -- ^ Relmap for environment of input relation
-    | RelmapLocal   C.Lexmap [B.TermName] (Relmap' h c)
+    | RelmapLocal   C.Lexmap (Relmap' h c)
                     -- ^ Relmap for environment of nested relations
     | RelmapLink    C.Lexmap
                     -- ^ Relmap reference
@@ -47,7 +47,7 @@ showRelmap r = sh r where
     sh (RelmapCalc   _ _ rs)   = "RelmapCalc "   ++ show (B.name r) ++ " _" ++ joinSubs rs
 
     sh (RelmapCopy   _ n r1)   = "RelmapCopy "   ++ show n  ++ joinSubs [r1]
-    sh (RelmapLocal  _ ns r1)  = "RelmapLocal "   ++ show ns ++ joinSubs [r1]
+    sh (RelmapLocal  _ r1)     = "RelmapLocal "  ++ joinSubs [r1]
     sh (RelmapLink   lx)       = "RelmapLink "   ++ show (C.lexRopName lx)
     sh (RelmapAppend r1 r2)    = "RelmapAppend"  ++ joinSubs [r1, r2]
 
@@ -73,7 +73,7 @@ instance B.Write (Relmap' h c) where
     write sh (RelmapCalc   lx _ _)  = B.write sh lx -- hang (text $ name m) 2 (writeh (map write ms))
 
     write sh (RelmapCopy   _ _ r1)  = B.write sh r1
-    write sh (RelmapLocal  _ _ r1)  = B.write sh r1
+    write sh (RelmapLocal  _ r1)    = B.write sh r1
     write sh (RelmapLink   lx)      = B.write sh lx
     write sh (RelmapAppend r1 r2)   = B.docHang (B.write sh r1) 2 (docRelmapAppend sh r2)
 
@@ -112,7 +112,7 @@ relmapLexmaps = collect where
     collect (RelmapCalc    lx _ _)   = [lx]
 
     collect (RelmapCopy    lx _ _)   = [lx]
-    collect (RelmapLocal   lx _ _)   = [lx]
+    collect (RelmapLocal   lx _)     = [lx]
     collect (RelmapLink    lx)       = [lx]
     collect (RelmapAppend  r1 r2)    = collect r1 ++ collect r2
 
