@@ -59,12 +59,12 @@ type RelmapSource = NNamed ([B.TTree], C.Attrmap)
 --   construct lexmap from token trees.
 --   The function returns lexmap and related lexmap links.
 consLexmap :: FindSorter -> ConsLexmap
-consLexmap findSorter gslot findDeriv = lexmap [] where
+consLexmap findSorter gslot findDeriv = lexmap [] [] where
 
-    lexmap1 vs sec tree = lexmap vs sec [tree]
+    lexmap1 ps vs sec tree = lexmap ps vs sec [tree]
 
-    lexmap :: [String] -> SecNo -> ConsLexmapBody
-    lexmap vs sec trees = result where
+    lexmap :: [C.Lexmap] -> [String] -> SecNo -> ConsLexmapBody
+    lexmap ps vs sec trees = result where
         result = Msg.abLexmap trees
                    $ case B.divideTreesByBar trees of
                        []    -> Msg.bug "empty list"
@@ -79,7 +79,7 @@ consLexmap findSorter gslot findDeriv = lexmap [] where
                                                        in nest rop ts
         single (B.TreeL rop@(B.TTextRaw _ _) : ts)   = find rop ts
         -- group
-        single [B.TreeB B.BracketGroup _ ts]         = lexmap vs sec ts
+        single [B.TreeB B.BracketGroup _ ts]         = lexmap ps vs sec ts
         single [B.TreeB _ _ _]                       = Msg.reqGroup
 
         -- special case
@@ -122,7 +122,7 @@ consLexmap findSorter gslot findDeriv = lexmap [] where
             Msg.abSlot [lx] $ do
               attr2       <- C.runAttrmap edit $ C.lexAttrTree lx
               form2       <- C.substSlot gslot attr2 form
-              (lx2, tab)  <- lexmap [] sec' form2
+              (lx2, tab)  <- lexmap [] [] sec' form2
               Right $ (lx, lx2) : tab
 
         -- -----------  nested and local relation reference
@@ -131,8 +131,10 @@ consLexmap findSorter gslot findDeriv = lexmap [] where
         local = ref C.LexmapLocal
 
         ref :: C.LexmapType -> B.Token -> ConsLexmapBody
-        ref typ rop []  = Right (cons typ rop B.paraEmpty, [])
+        ref typ rop []  = Right (add $ cons typ rop B.paraEmpty, [])
         ref _ _ _       = Msg.extraAttr
+
+        add lx = lx { C.lexParent = ps }
 
         -- -----------  construct lexmap except for submaps
 
@@ -157,15 +159,15 @@ consLexmap findSorter gslot findDeriv = lexmap [] where
             let attr       = C.lexAttrTree lx
                 attrRelmap = B.filterFst C.isAttrNameRelmap attr
             in case attrRelmap of
-                 [(C.AttrNameRelmapFlat _, ts)] -> submap2 lx attr ts
-                 [(C.AttrNameRelmapNest _, ts)] -> submap2 lx attr ts
+                 [(C.AttrNameRelmapFlat _, ts)] -> submap2 lx attr ts ps
+                 [(C.AttrNameRelmapNest _, ts)] -> submap2 lx attr ts $ lx : ps
                  []                             -> Right (lx, [])  -- no submaps
                  _                              -> Msg.bug "submap"
 
-        submap2 lx attr ts =
+        submap2 lx attr ts ps' =
             do let attrLocal = B.filterFst C.isAttrNameLocal attr
                vs'    <- localVars attrLocal
-               subs   <- lexmap1 (vs' ++ vs) sec `mapM` ts
+               subs   <- lexmap1 ps' (vs' ++ vs) sec `mapM` ts
                let (sublx, tabs) = unzip subs
                    lx2           = lx { C.lexSubmap = sublx }
                Right (lx2, concat tabs)
