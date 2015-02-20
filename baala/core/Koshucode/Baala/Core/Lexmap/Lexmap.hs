@@ -30,7 +30,6 @@ data Lexmap = Lexmap
     , lexRopToken  :: B.Token       -- ^ Token of operator
     , lexAttr      :: C.AttrPara    -- ^ Attribute of relmap operation
     , lexSubmap    :: [Lexmap]      -- ^ Submaps in the attribute
-    , lexNest      :: [String]      -- ^ Nested relation references
     , lexMessage   :: [String]      -- ^ Messages on lexmap
     } deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
@@ -64,7 +63,6 @@ lexBase = Lexmap { lexType      = LexmapBase
                  , lexRopToken  = B.textToken ""
                  , lexAttr      = B.paraEmpty
                  , lexSubmap    = []
-                 , lexNest      = []
                  , lexMessage   = [] }
 
 -- | Name of relmap operator

@@ -157,18 +157,17 @@ consLexmap findSorter gslot findDeriv = lexmap [] where
             let attr       = C.lexAttrTree lx
                 attrRelmap = B.filterFst C.isAttrNameRelmap attr
             in case attrRelmap of
-                 [(C.AttrNameRelmapFlat _, ts)] -> submap2 lx attr ts []
-                 [(C.AttrNameRelmapNest _, ts)] -> submap2 lx attr ts $ nestVars ts
+                 [(C.AttrNameRelmapFlat _, ts)] -> submap2 lx attr ts
+                 [(C.AttrNameRelmapNest _, ts)] -> submap2 lx attr ts
                  []                             -> Right (lx, [])  -- no submaps
                  _                              -> Msg.bug "submap"
 
-        submap2 lx attr ts vsNest =
+        submap2 lx attr ts =
             do let attrLocal = B.filterFst C.isAttrNameLocal attr
                vs'    <- localVars attrLocal
                subs   <- lexmap1 (vs' ++ vs) sec `mapM` ts
                let (sublx, tabs) = unzip subs
-                   lx2           = lx { C.lexSubmap = sublx
-                                      , C.lexNest   = vsNest }
+                   lx2           = lx { C.lexSubmap = sublx }
                Right (lx2, concat tabs)
 
     -- -----------  Local relation name
@@ -182,14 +181,6 @@ consLexmap findSorter gslot findDeriv = lexmap [] where
     vars (B.TextLeafRaw _ v)  = Right v
     vars _                    = Msg.reqTermName
 
-    -- -----------  Nested relation reference
-
-    nestVars :: [B.TTree] -> [String]
-    nestVars = B.mapMaybe nestTerm . concatMap B.leaves
-
-    nestTerm :: B.Token -> Maybe String
-    nestTerm (B.TTermNest _ v)   = Just v
-    nestTerm _                   = Nothing
 
 
 -- ----------------------
