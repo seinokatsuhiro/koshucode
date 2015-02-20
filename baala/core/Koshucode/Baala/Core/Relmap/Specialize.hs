@@ -21,7 +21,7 @@ relmapSpecialize :: forall h. forall c. (C.GetGlobal h)
     => h c -> RelmapLinkTable' h c -> [C.RelkitDef c]
     -> Maybe B.Head -> C.Relmap' h c -> B.Ab ([C.RelkitDef c], C.Relkit c)
 relmapSpecialize hook links = spec [] [] where
-    spec :: [C.Local B.Head]     -- name of nested relation, and its heading
+    spec :: [(String, (B.Head, B.Token))]  -- name of nested relation, and its heading
          -> [C.RelkitKey]        -- information for detecting cyclic relmap
          -> [C.RelkitDef c]      -- list of known specialized relkits
          -> Maybe B.Head         -- input head feeding into generic relmap
@@ -51,9 +51,9 @@ relmapSpecialize hook links = spec [] [] where
               C.RelmapLink lx
                   | C.lexType lx == C.LexmapLocal ||
                     C.lexType lx == C.LexmapNest ->
-                      post lx $ case C.lookupLexical n nest of
-                           Just he    -> Right (kdef, C.relkitNestVar n he)
-                           Nothing    -> Msg.unkNestVar n
+                      post lx $ case lookup n nest of
+                           Just (he, p)  -> Right (kdef, C.relkitNestVar n p he)
+                           Nothing       -> Msg.unkNestVar n
                   | otherwise ->
                       post lx $ case lookup lx links of
                            Just rmap1 -> link n rmap1 (he1, C.relmapLexmaps rmap1)
@@ -63,17 +63,18 @@ relmapSpecialize hook links = spec [] [] where
 
               C.RelmapCopy lx n rmap1 ->
                   do let heJust = B.fromJust he1
-                         nest' = C.lexical [(n, heJust)] : nest
+                         nest' = (n, (heJust, C.lexRopToken lx)) : nest
                      (kdef2, kit2) <- post lx $ spec nest' keys kdef he1 rmap1
                      Right (kdef2, C.relkitCopy n kit2)
 
               C.RelmapNest lx rmap1 ->
-                  do let heJust   = B.fromJust he1
-                         heNest   = B.headNested heJust
-                         vars     = map fst heNest
-                         heInd    = vars `B.snipIndex` B.headNames heJust
-                         nest'    = C.lexical heNest : nest
-                         nestInd  = zip vars heInd
+                  do let heJust    = B.fromJust he1
+                         heNest    = B.headNested heJust
+                         vars      = map fst heNest
+                         tk (n,he) = (n, (he, C.lexRopToken lx))
+                         heInd     = vars `B.snipIndex` B.headNames heJust
+                         nest'     = map tk heNest ++ nest
+                         nestInd   = zip vars heInd
                      (kdef2, kit2) <- post lx $ spec nest' keys kdef he1 rmap1
                      Right (kdef2, C.relkitNest nestInd kit2)
 

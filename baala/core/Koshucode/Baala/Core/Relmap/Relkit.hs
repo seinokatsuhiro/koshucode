@@ -5,33 +5,21 @@
 module Koshucode.Baala.Core.Relmap.Relkit
   ( 
     -- * Datatype
-    Relkit (..),
-    RelkitCore (..),
+    Relkit (..), RelkitCore (..),
   
-    RelkitBody,
-    RelkitKey,
-    RelkitDef,
-    Relbmap,
-    RelSelect,
+    RelkitBody, RelkitKey, RelkitDef,
+    Relbmap, RelSelect,
   
-    RelkitFlow,
-    RelkitHook',
-    RelkitBinary,
-    RelkitConfl,
+    RelkitFlow, RelkitHook', RelkitBinary, RelkitConfl,
 
     -- * Constructor
     relkit,
-    relkitJust,
-    relkitNothing,
+    relkitJust, relkitNothing,
     relkitId,
-    relkitConst,
-    relkitConstEmpty,
-    relkitConstSingleton,
-    relkitConstBody,
+    relkitConst, relkitConstEmpty,
+    relkitConstSingleton, relkitConstBody,
     relkitSource,
-    relkitCopy,
-    relkitNest,
-    relkitNestVar,
+    relkitCopy, relkitNest, relkitNestVar,
     relkitSetSource,
 
     Local, Lexical,
@@ -77,8 +65,8 @@ data RelkitCore c
     | RelkitSource       B.JudgePat [B.TermName]
 
     | RelkitLink         C.RopName RelkitKey (Maybe (RelkitBody c))
-    | RelkitNestVar      C.RopName
     | RelkitCopy         C.RopName (RelkitBody c)
+    | RelkitNestVar      C.RopName B.Token
     | RelkitNest         [(String, Int)] (RelkitBody c)
 
 instance Show (RelkitCore c) where
@@ -99,8 +87,8 @@ instance Show (RelkitCore c) where
 
     show (RelkitSource     p ns)   = "RelkitSource " ++ p ++ " " ++ show ns
     show (RelkitLink      n _ _)   = "RelkitLink " ++ n
-    show (RelkitNestVar       n)   = "RelkitNestVar " ++ n
     show (RelkitCopy        _ _)   = "RelkitCopy "
+    show (RelkitNestVar     n _)   = "RelkitNestVar " ++ n
     show (RelkitNest        _ _)   = "RelkitNest "
 
 type RelkitBody c = B.Sourced (RelkitCore c)
@@ -160,16 +148,13 @@ relkitSource p ns = relkitJust he kit where
     kit = RelkitSource p ns
 
 relkitCopy :: String -> B.Map (Relkit c)
-relkitCopy n (Relkit he kitb) = kit2 where
-    kit2 = relkit he $ RelkitCopy n kitb
+relkitCopy n (Relkit he kitb) = relkit he $ RelkitCopy n kitb
 
 relkitNest :: [(String, Int)] -> B.Map (Relkit c)
-relkitNest nest (Relkit he kitb) = kit2 where
-    kit2 = relkit he $ RelkitNest nest kitb
+relkitNest nest (Relkit he kitb) = relkit he $ RelkitNest nest kitb
 
-relkitNestVar :: String -> B.Head -> Relkit c
-relkitNestVar n he = kit where
-    kit = relkitJust he $ RelkitNestVar n
+relkitNestVar :: String -> B.Token -> B.Head -> Relkit c
+relkitNestVar n p he = relkitJust he $ RelkitNestVar n p
 
 relkitSetSource :: (B.CodePtr a) => a -> B.Map (Relkit c)
 relkitSetSource src (Relkit he (B.Sourced _ core)) =
