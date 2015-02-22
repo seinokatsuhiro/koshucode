@@ -3,14 +3,14 @@
 about /package 'core
 
 |-- DIR  /code 13   /comment 72   /dir "core/Koshucode/Baala"
-|-- DIR  /code 326  /comment 224  /dir "core/Koshucode/Baala/Core"
+|-- DIR  /code 343  /comment 226  /dir "core/Koshucode/Baala/Core"
 |-- DIR  /code 242  /comment 126  /dir "core/Koshucode/Baala/Core/Assert"
 |-- DIR  /code 969  /comment 522  /dir "core/Koshucode/Baala/Core/Content"
-|-- DIR  /code 446  /comment 252  /dir "core/Koshucode/Baala/Core/Lexmap"
-|-- DIR  /code 559  /comment 284  /dir "core/Koshucode/Baala/Core/Relmap"
+|-- DIR  /code 457  /comment 252  /dir "core/Koshucode/Baala/Core/Lexmap"
+|-- DIR  /code 572  /comment 294  /dir "core/Koshucode/Baala/Core/Relmap"
 |-- DIR  /code 503  /comment 255  /dir "core/Koshucode/Baala/Core/Resource"
 
-|-- DIR-TOTAL  /code 3058  /comment 1735
+|-- DIR-TOTAL  /code 3099  /comment 1747
 
 |-- FILE  /code 13   /comment 72   /file "Core.hs"        /dir "core/Koshucode/Baala"
 |-- FILE  /code 10   /comment 6    /file "Assert.hs"      /dir "core/Koshucode/Baala/Core"
@@ -28,20 +28,20 @@ about /package 'core
 |-- FILE  /code 169  /comment 74   /file "Tree.hs"        /dir "core/Koshucode/Baala/Core/Content"
 |-- FILE  /code 14   /comment 3    /file "Lexmap.hs"      /dir "core/Koshucode/Baala/Core"
 |-- FILE  /code 71   /comment 46   /file "Attr.hs"        /dir "core/Koshucode/Baala/Core/Lexmap"
-|-- FILE  /code 93   /comment 36   /file "AttrPos.hs"     /dir "core/Koshucode/Baala/Core/Lexmap"
+|-- FILE  /code 97   /comment 36   /file "AttrPos.hs"     /dir "core/Koshucode/Baala/Core/Lexmap"
 |-- FILE  /code 73   /comment 32   /file "Attrmap.hs"     /dir "core/Koshucode/Baala/Core/Lexmap"
-|-- FILE  /code 116  /comment 97   /file "Construct.hs"   /dir "core/Koshucode/Baala/Core/Lexmap"
-|-- FILE  /code 56   /comment 26   /file "Lexmap.hs"      /dir "core/Koshucode/Baala/Core/Lexmap"
+|-- FILE  /code 122  /comment 97   /file "Construct.hs"   /dir "core/Koshucode/Baala/Core/Lexmap"
+|-- FILE  /code 57   /comment 26   /file "Lexmap.hs"      /dir "core/Koshucode/Baala/Core/Lexmap"
 |-- FILE  /code 37   /comment 15   /file "Slot.hs"        /dir "core/Koshucode/Baala/Core/Lexmap"
-|-- FILE  /code 255  /comment 126  /file "Message.hs"     /dir "core/Koshucode/Baala/Core"
+|-- FILE  /code 272  /comment 128  /file "Message.hs"     /dir "core/Koshucode/Baala/Core"
 |-- FILE  /code 16   /comment 55   /file "Relmap.hs"      /dir "core/Koshucode/Baala/Core"
-|-- FILE  /code 71   /comment 75   /file "Construct.hs"   /dir "core/Koshucode/Baala/Core/Relmap"
+|-- FILE  /code 72   /comment 75   /file "Construct.hs"   /dir "core/Koshucode/Baala/Core/Relmap"
 |-- FILE  /code 91   /comment 42   /file "Global.hs"      /dir "core/Koshucode/Baala/Core/Relmap"
-|-- FILE  /code 116  /comment 56   /file "Relkit.hs"      /dir "core/Koshucode/Baala/Core/Relmap"
+|-- FILE  /code 117  /comment 66   /file "Relkit.hs"      /dir "core/Koshucode/Baala/Core/Relmap"
 |-- FILE  /code 77   /comment 41   /file "Relmap.hs"      /dir "core/Koshucode/Baala/Core/Relmap"
 |-- FILE  /code 30   /comment 23   /file "Rop.hs"         /dir "core/Koshucode/Baala/Core/Relmap"
-|-- FILE  /code 89   /comment 28   /file "Run.hs"         /dir "core/Koshucode/Baala/Core/Relmap"
-|-- FILE  /code 85   /comment 19   /file "Specialize.hs"  /dir "core/Koshucode/Baala/Core/Relmap"
+|-- FILE  /code 90   /comment 27   /file "Run.hs"         /dir "core/Koshucode/Baala/Core/Relmap"
+|-- FILE  /code 95   /comment 20   /file "Specialize.hs"  /dir "core/Koshucode/Baala/Core/Relmap"
 |-- FILE  /code 15   /comment 29   /file "Resource.hs"    /dir "core/Koshucode/Baala/Core"
 |-- FILE  /code 158  /comment 114  /file "Clause.hs"      /dir "core/Koshucode/Baala/Core/Resource"
 |-- FILE  /code 87   /comment 48   /file "Include.hs"     /dir "core/Koshucode/Baala/Core/Resource"
@@ -50,4 +50,4 @@ about /package 'core
 |-- FILE  /code 69   /comment 34   /file "Resource.hs"    /dir "core/Koshucode/Baala/Core/Resource"
 |-- FILE  /code 63   /comment 13   /file "Run.hs"         /dir "core/Koshucode/Baala/Core/Resource"
 
-|-- FILE-TOTAL  /code 3058  /comment 1735
+|-- FILE-TOTAL  /code 3099  /comment 1747
