@@ -16,6 +16,7 @@ module Koshucode.Baala.Base.Token.TokenTree
     -- * Pattern
     pattern TermLeaf,
     pattern TermLeafPath,
+    pattern TermLeafNest,
     pattern TextLeaf,
     pattern TextLeafRaw,
     pattern TextLeafQ,
@@ -69,14 +70,17 @@ type TTreeToAb a  = TTree -> B.Ab a
 -- | Convert list of token tree to sometning, abortable.
 type TTreesToAb a = [TTree] -> B.Ab a
 
-pattern TermLeaf     cp q ws  = B.TreeL (B.TTerm   cp q ws)
-pattern TermLeafPath cp ws    = TermLeaf cp B.TermTypePath ws
+-- term leaf
+pattern TermLeaf     cp q ws   = B.TreeL (B.TTerm   cp q ws)
+pattern TermLeafPath cp ws     = TermLeaf cp B.TermTypePath ws
+pattern TermLeafNest cp v e ps = TermLeaf cp (B.TermTypeNest e ps) [v]
 
-pattern TextLeaf form cp w    = B.TreeL (B.TText   cp form w)
-pattern TextLeafRaw   cp w    = TextLeaf B.TextRaw cp w
-pattern TextLeafQ     cp w    = TextLeaf B.TextQ   cp w
-pattern TextLeafQQ    cp w    = TextLeaf B.TextQQ  cp w
-pattern TextLeafKey   cp w    = TextLeaf B.TextKey cp w
+-- text leaf
+pattern TextLeaf form cp w     = B.TreeL (B.TText   cp form w)
+pattern TextLeafRaw   cp w     = TextLeaf B.TextRaw cp w
+pattern TextLeafQ     cp w     = TextLeaf B.TextQ   cp w
+pattern TextLeafQQ    cp w     = TextLeaf B.TextQQ  cp w
+pattern TextLeafKey   cp w     = TextLeaf B.TextKey cp w
 
 -- | Parse tokens with brackets into trees.
 --   Blank tokens and comments are excluded.

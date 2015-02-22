@@ -59,12 +59,12 @@ type RelmapSource = NNamed ([B.TTree], C.Attrmap)
 --   construct lexmap from token trees.
 --   The function returns lexmap and related lexmap links.
 consLexmap :: FindSorter -> ConsLexmap
-consLexmap findSorter gslot findDeriv = lexmap [] [] where
+consLexmap findSorter gslot findDeriv = lexmap [] [] 0 where
 
-    lexmap1 ps vs sec tree = lexmap ps vs sec [tree]
+    lexmap1 ps vs e sec tree = lexmap ps vs e sec [tree]
 
-    lexmap :: [C.Lexmap] -> [String] -> SecNo -> ConsLexmapBody
-    lexmap ps vs sec trees = result where
+    lexmap :: [C.Lexmap] -> [String] -> Int -> SecNo -> ConsLexmapBody
+    lexmap ps vs e sec trees = result where
         result = Msg.abLexmap trees
                    $ case B.divideTreesByBar trees of
                        []    -> Msg.bug "empty list"
@@ -75,11 +75,11 @@ consLexmap findSorter gslot findDeriv = lexmap [] [] where
         single (B.TextLeafRaw cp v : ts)
             | v `elem` vs                            = let rop = B.TTextKey cp v
                                                        in local rop [] ts
-        single (B.TreeL (B.TTermNest cp v ps2) : ts) = let rop = B.TTextKey cp v
+        single (B.TermLeafNest cp v _ ps2 : ts)      = let rop = B.TTextKey cp v
                                                        in nest rop ps2 ts
         single (B.TreeL rop@(B.TTextRaw _ _) : ts)   = find rop ts
         -- group
-        single [B.TreeB B.BracketGroup _ ts]         = lexmap ps vs sec ts
+        single [B.TreeB B.BracketGroup _ ts]         = lexmap ps vs e sec ts
         single [B.TreeB _ _ _]                       = Msg.reqGroup
 
         -- special case
@@ -122,7 +122,7 @@ consLexmap findSorter gslot findDeriv = lexmap [] [] where
             Msg.abSlot [lx] $ do
               attr2       <- C.runAttrmap edit $ C.lexAttrTree lx
               form2       <- C.substSlot gslot attr2 form
-              (lx2, tab)  <- lexmap [] [] sec' form2
+              (lx2, tab)  <- lexmap [] [] (e + 1) sec' form2
               Right $ (lx, lx2) : tab
 
         -- -----------  nested and local relation reference
@@ -161,7 +161,7 @@ consLexmap findSorter gslot findDeriv = lexmap [] [] where
                 attrRelmap = B.filterFst C.isAttrNameRelmap attr
             in case attrRelmap of
                  [(C.AttrNameRelmapFlat _, ts)] -> submap2 lx attr ts ps
-                 [(C.AttrNameRelmapNest _, ts)] -> submap2 lx attr (bind p `map` ts) $ lx : ps
+                 [(C.AttrNameRelmapNest _, ts)] -> submap2 lx attr (bind e p `map` ts) $ lx : ps
                  []                             -> Right (lx, [])  -- no submaps
                  _                              -> Msg.bug "submap"
 
@@ -169,7 +169,7 @@ consLexmap findSorter gslot findDeriv = lexmap [] [] where
             do let p         = C.lexRopToken lx
                    attrLocal = B.filterFst C.isAttrNameLocal attr
                vs'    <- localVars attrLocal
-               subs   <- lexmap1 ps' (vs' ++ vs) sec `mapM` (bindLocal vs' p `map` ts)
+               subs   <- lexmap1 ps' (vs' ++ vs) e sec `mapM` (bindLocal vs' p `map` ts)
                let (sublx, tabs) = unzip subs
                    lx2           = lx { C.lexSubmap = sublx }
                Right (lx2, concat tabs)
@@ -187,16 +187,18 @@ consLexmap findSorter gslot findDeriv = lexmap [] [] where
 
     bindLocal :: [String] -> B.Token -> B.Map B.TTree
     bindLocal vs p (B.TreeB b a trees) = B.TreeB b a $ map (bindLocal vs p) trees
-    bindLocal vs p (B.TextLeafRaw cp v) | v `elem` vs = B.TreeL (B.TTermNest cp v [p])
+    bindLocal vs p (B.TextLeafRaw cp v) | v `elem` vs = B.TermLeafNest cp v 0 [p]
     bindLocal _ _ t@(B.TreeL _) = t
 
     -- -----------  Nest
 
     -- todo: when parent operators are nested
-    bind :: B.Token -> B.Map B.TTree
-    bind p (B.TreeB b a trees) = B.TreeB b a $ map (bind p) trees
-    bind p (B.TreeL (B.TTermNest cp v [])) = B.TreeL (B.TTermNest cp v [p])
-    bind _ t@(B.TreeL _) = t
+    bind :: Int -> B.Token -> B.Map B.TTree
+    bind e p (B.TreeB b a trees) = B.TreeB b a $ map (bind e p) trees
+    bind e p (B.TermLeafNest cp v e' ps)
+        | null ps  = B.TermLeafNest cp v e' $ p : ps
+        | e == e'  = B.TermLeafNest cp v e  $ p : ps
+    bind _ _ t@(B.TreeL _) = t
 
 
 -- ----------------------

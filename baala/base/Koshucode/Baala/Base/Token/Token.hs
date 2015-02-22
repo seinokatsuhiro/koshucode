@@ -150,14 +150,15 @@ textFormTypeText form =
 -- ----------------------  Term type
 
 data TermType
-    = TermTypePath
-    | TermTypeQuoted
-    | TermTypeNest [Token]
+    = TermTypePath               -- ^ Normal term path
+    | TermTypeQuoted             -- ^ Quoted term name
+    | TermTypeNest Int [Token]   -- ^ Nested relation reference
+                                 --   with env id and parent tokens
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
-pattern TTermPath cp ws    = TTerm cp TermTypePath   ws
-pattern TTermQ    cp ws    = TTerm cp TermTypeQuoted ws
-pattern TTermNest cp w tok = TTerm cp (TermTypeNest tok) [w]
+pattern TTermPath cp ws       = TTerm cp TermTypePath   ws
+pattern TTermQ    cp ws       = TTerm cp TermTypeQuoted ws
+pattern TTermNest cp w e tok  = TTerm cp (TermTypeNest e tok) [w]
 
 
 -- ----------------------  Blank name
