@@ -189,8 +189,8 @@ relation r@B.CodeRoll { B.codeInputPt = cp } = start gen cp r where
 
     nest cs                          = do (cs', tok) <- scanTermN cp cs
                                           case tok of
-                                            B.TTermNest _ _ -> u cs' tok
-                                            _               -> Msg.reqFlatTerm $ B.tokenContent tok
+                                            B.TTermNest _ _ _ -> u cs' tok
+                                            _                 -> Msg.reqFlatTerm $ B.tokenContent tok
 
     ang (c:cs) w    | c == '>'       = u     cs        $ angle $ rv w
                     | isCode c       = ang   cs        $ c:w
@@ -270,10 +270,10 @@ scanQQ :: Scan
 scanQQ cp cs = do (cs', w) <- nextQQ cs
                   Right (cs', B.TTextQQ cp w)
 
-scanTermP, scanTermQ, scanTermN:: Scan
+scanTermP, scanTermQ, scanTermN :: Scan
 scanTermP = scanTerm B.TermTypePath
 scanTermQ = scanTerm B.TermTypeQuoted
-scanTermN = scanTerm B.TermTypeNest
+scanTermN = scanTerm $ B.TermTypeNest []
 
 scanTerm :: B.TermType -> Scan
 scanTerm q cp = word [] where

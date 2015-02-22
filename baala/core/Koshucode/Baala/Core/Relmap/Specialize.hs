@@ -21,7 +21,7 @@ relmapSpecialize :: forall h. forall c. (C.GetGlobal h)
     => h c -> RelmapLinkTable' h c -> [C.RelkitDef c]
     -> Maybe B.Head -> C.Relmap' h c -> B.Ab ([C.RelkitDef c], C.Relkit c)
 relmapSpecialize hook links = spec [] [] where
-    spec :: [(String, (B.Head, B.Token))]  -- name of nested relation, and its heading
+    spec :: [((B.Token, String), B.Head)]  -- name of nested relation, and its heading
          -> [C.RelkitKey]        -- information for detecting cyclic relmap
          -> [C.RelkitDef c]      -- list of known specialized relkits
          -> Maybe B.Head         -- input head feeding into generic relmap
@@ -51,38 +51,46 @@ relmapSpecialize hook links = spec [] [] where
               C.RelmapLink lx
                   | C.lexType lx == C.LexmapLocal ||
                     C.lexType lx == C.LexmapNest ->
-                      post lx $ case lookup n nest of
-                           Just (he, p)  -> Right (kdef, C.relkitNestVar n p he)
-                           Nothing       -> Msg.unkNestVar n
+                      post lx $ case find ps n of
+                           Just (p, he)  -> Right (kdef, C.relkitNestVar p n he)
+                           Nothing       -> Msg.unkNestVar n ps nest
                   | otherwise ->
                       post lx $ case lookup lx links of
                            Just rmap1 -> link n rmap1 (he1, C.relmapLexmaps rmap1)
                            Nothing    -> Msg.unkRelmap n
                   where
-                    n = C.lexRopName lx
+                    n   = C.lexRopName lx
+                    ps  = C.lexParent  lx
 
               C.RelmapCopy lx n rmap1 ->
-                  do let heJust = B.fromJust he1
-                         nest' = (n, (heJust, C.lexRopToken lx)) : nest
+                  do let p      = C.lexRopToken lx
+                         heJust = B.fromJust he1
+                         nest'  = ((p,n), heJust) : nest
                      (kdef2, kit2) <- post lx $ spec nest' keys kdef he1 rmap1
-                     Right (kdef2, C.relkitCopy n kit2)
+                     Right (kdef2, C.relkitCopy p n kit2)
 
               C.RelmapNest lx rmap1 ->
                   do let heJust    = B.fromJust he1
                          heNest    = B.headNested heJust
                          vars      = map fst heNest
-                         tk (n,he) = (n, (he, C.lexRopToken lx))
+                         p         = C.lexRopToken lx
+                         tk (n,he) = ((p,n), he)
                          heInd     = vars `B.snipIndex` B.headNames heJust
                          nest'     = map tk heNest ++ nest
                          nestInd   = zip vars heInd
                      (kdef2, kit2) <- post lx $ spec nest' keys kdef he1 rmap1
-                     Right (kdef2, C.relkitNest nestInd kit2)
+                     Right (kdef2, C.relkitNest p nestInd kit2)
 
         post :: C.Lexmap -> B.Map (B.Ab ([C.RelkitDef c], C.Relkit c))
         post lx result =
             Msg.abSpecialize [lx] $ do
                (kdef2, kit) <- result
                Right (kdef2, C.relkitSetSource lx kit)
+
+        find [] _     = Nothing
+        find (p:ps) n = case lookup (p,n) nest of
+                          Nothing -> find ps n
+                          Just he -> Just (p,he)
 
         -- specialize subrelmaps to subrelkits
         list :: [C.RelkitDef c] -> [C.Relmap' h c] -> B.Ab ([C.RelkitDef c], [C.Relkit c])

@@ -45,8 +45,13 @@ relmapBoth use fill rmap = C.relmapCopy use "i" rmapBoth where
     rmapBoth = rmapL `B.mappend` Op.relmapJoin use rmapR
     rmapR    = rmap  `B.mappend` relmapMaybe use fill rmapIn
     rmapL    = relmapMaybe use fill rmap
-    rmapIn   = C.relmapLocalVar use "i"
+    rmapIn   = C.relmapLocalVar (withParent use) "i"
 
+withParent :: B.Map (C.RopUse c)
+withParent use = use' where
+    lx    = C.ropLexmap use
+    tok   = C.lexRopToken lx
+    use'  = use { C.ropLexmap = lx { C.lexParent = [tok] }}
 
 
 -- ----------------------  maybe

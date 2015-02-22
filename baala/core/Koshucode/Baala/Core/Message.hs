@@ -63,13 +63,13 @@ module Koshucode.Baala.Core.Message
     unkCox,
     unkGlobalVar,
     unkNestRel,
+    unkNestVar,
     unkOption,
     unkRefVar,
     unkRelmap,
     unkShow,
     unkTerm,
     unkType,
-    unkNestVar,
     unkWord,
     unmatchType,
     unmatchBlank,
@@ -292,9 +292,30 @@ unkGlobalVar :: String -> B.Ab a
 unkGlobalVar = Left . B.abortLine "Unknown global variable"
 
 -- | Unknown nested relation
-unkNestRel :: String -> [String] -> B.Ab a
-unkNestRel n rs = Left $ B.abortLines "Unknown nested relation"
-                       $ n : rs
+unkNestRel :: B.Token -> String -> [String] -> B.Ab a
+unkNestRel p n rs = Left $ B.abortLines "Unknown nested relation" $ ref : rs
+    where ref = "/" ++ n ++ " in " ++ B.tokenContent p
+
+unkNestVar :: String -> [B.Token] -> [((B.Token, String), B.Head)] -> B.Ab a
+unkNestVar n ls ds = Left $ B.abortLines "Unknown nested relation reference"
+                           $ ("search" : map indent dynamic)
+                          ++ ("for"    : map indent lexical)
+    where lexical = map (text n) ls
+          dynamic = map f ds
+          f ((tk, k), _) = text k tk
+          text k tk = unwords ["nested relation", term k, "in", tokenAtPoint tk]
+          indent    = ("  " ++)
+          term      = ('/' :)
+
+tokenAtPoint :: B.Token -> String
+tokenAtPoint tok = unwords ws where
+    ws    = [B.tokenContent tok, "at L" ++ line, "C" ++ col]
+    cp    = B.codePt tok
+    line  = show $ B.codePtLineNo   cp
+    col   = show $ B.codePtColumnNo cp
+
+quote :: B.Map String
+quote s = "'" ++ s ++ "'"
 
 -- | Unknown option
 unkOption :: B.ParaUnmatch String -> B.Ab a
@@ -335,9 +356,6 @@ unkTerm ns he1 =
 -- | Unknown type name
 unkType :: String -> B.Ab a
 unkType = Left . B.abortLine "Unknown type name"
-
-unkNestVar :: String -> B.Ab a
-unkNestVar = Left . B.abortLine "Unknown nested relation reference"
 
 -- | Unknown word
 unkWord :: String -> B.Ab a

@@ -30,7 +30,7 @@ data Lexmap = Lexmap
     , lexRopToken  :: B.Token       -- ^ Token of operator
     , lexAttr      :: C.AttrPara    -- ^ Attribute of relmap operation
     , lexSubmap    :: [Lexmap]      -- ^ Submaps in the attribute
-    , lexParent    :: [Lexmap]      -- ^ Parent of local relation reference
+    , lexParent    :: [B.Token]     -- ^ Parent of local relation reference
     , lexMessage   :: [String]      -- ^ Messages on lexmap
     } deriving (Show, Eq, Ord, G.Data, G.Typeable)
 

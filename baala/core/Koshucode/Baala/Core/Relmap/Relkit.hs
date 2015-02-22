@@ -23,9 +23,8 @@ module Koshucode.Baala.Core.Relmap.Relkit
     relkitSetSource,
 
     Local, Lexical,
-    lexical,
-    lookupLexical,
     localsLines,
+    a2lookup,
   ) where
 
 import qualified Koshucode.Baala.Base         as B
@@ -65,9 +64,9 @@ data RelkitCore c
     | RelkitSource       B.JudgePat [B.TermName]
 
     | RelkitLink         C.RopName RelkitKey (Maybe (RelkitBody c))
-    | RelkitCopy         C.RopName (RelkitBody c)
-    | RelkitNestVar      C.RopName B.Token
-    | RelkitNest         [(String, Int)] (RelkitBody c)
+    | RelkitCopy         B.Token C.RopName (RelkitBody c)
+    | RelkitNestVar      B.Token C.RopName
+    | RelkitNest         B.Token [(String, Int)] (RelkitBody c)
 
 instance Show (RelkitCore c) where
     show (RelkitFull        _ _)   = "RelkitFull"
@@ -87,9 +86,9 @@ instance Show (RelkitCore c) where
 
     show (RelkitSource     p ns)   = "RelkitSource " ++ p ++ " " ++ show ns
     show (RelkitLink      n _ _)   = "RelkitLink " ++ n
-    show (RelkitCopy        _ _)   = "RelkitCopy "
-    show (RelkitNestVar     n _)   = "RelkitNestVar " ++ n
-    show (RelkitNest        _ _)   = "RelkitNest "
+    show (RelkitCopy      _ _ _)   = "RelkitCopy "
+    show (RelkitNestVar     _ n)   = "RelkitNestVar " ++ n
+    show (RelkitNest      _ _ _)   = "RelkitNest "
 
 type RelkitBody c = B.Sourced (RelkitCore c)
 type RelkitKey    = (Maybe B.Head, [C.Lexmap])
@@ -147,14 +146,14 @@ relkitSource p ns = relkitJust he kit where
     he  = B.headFrom ns
     kit = RelkitSource p ns
 
-relkitCopy :: String -> B.Map (Relkit c)
-relkitCopy n (Relkit he kitb) = relkit he $ RelkitCopy n kitb
+relkitCopy :: B.Token -> String -> B.Map (Relkit c)
+relkitCopy p n (Relkit he kitb) = relkit he $ RelkitCopy p n kitb
 
-relkitNest :: [(String, Int)] -> B.Map (Relkit c)
-relkitNest nest (Relkit he kitb) = relkit he $ RelkitNest nest kitb
+relkitNest :: B.Token -> [(String, Int)] -> B.Map (Relkit c)
+relkitNest p nest (Relkit he kitb) = relkit he $ RelkitNest p nest kitb
 
-relkitNestVar :: String -> B.Token -> B.Head -> Relkit c
-relkitNestVar n p he = relkitJust he $ RelkitNestVar n p
+relkitNestVar :: B.Token -> String -> B.Head -> Relkit c
+relkitNestVar p n he = relkitJust he $ RelkitNestVar p n
 
 relkitSetSource :: (B.CodePtr a) => a -> B.Map (Relkit c)
 relkitSetSource src (Relkit he (B.Sourced _ core)) =
@@ -166,16 +165,6 @@ relkitSetSource src (Relkit he (B.Sourced _ core)) =
 type Local a = Lexical [B.Named a]
 
 type Lexical a = (B.Token, a)
-
-lexicalDummy :: B.Token
-lexicalDummy = B.textToken "???"
-
-lexical :: a -> Lexical a
-lexical a = (lexicalDummy, a)
-
-lookupLexical :: String -> [Local a] -> Maybe a
-lookupLexical n = lookup (lexicalDummy, n) . a2expand
---lookupLexical = lookup2 (B.textToken "???")
 
 localsLines :: [Local a] -> [String]
 localsLines xs = map desc $ a2keys xs where

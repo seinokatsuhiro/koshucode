@@ -45,8 +45,14 @@ consGroupBy use =
 
 relmapGroupBy :: (Ord c, C.CRel c) => C.RopUse c -> B.TermName -> B.Map (C.Relmap c)
 relmapGroupBy use n rmap = C.relmapCopy use n rmapGroup where
-    rmapGroup = rmap `B.mappend` Op.relmapGroup use n rmapCopy
-    rmapCopy  = C.relmapLocalVar use n
+    rmapGroup  = rmap `B.mappend` Op.relmapGroup use n rmapLocal
+    rmapLocal  = C.relmapLocalVar (withParent use) n
+
+withParent :: B.Map (C.RopUse c)
+withParent use = use' where
+    lx    = C.ropLexmap use
+    tok   = C.lexRopToken lx
+    use'  = use { C.ropLexmap = lx { C.lexParent = [tok] }}
 
 
 -- ----------------------  join-up
@@ -59,7 +65,7 @@ consJoinUp use =
 relmapJoinUp :: (Ord c) => C.RopUse c -> [B.TermName] -> C.Relmap c
 relmapJoinUp use nest = C.relmapNest use $ Op.relmapJoinList use rmaps where
     rmaps   = link `map` nest
-    link n  = C.relmapLocalVar use n
+    link n  = C.relmapLocalVar (withParent use) n
 
 
 -- ----------------------  nest / hang
@@ -112,6 +118,6 @@ relmapUnnest :: (Ord c, C.CRel c) => C.RopUse c -> B.TermName -> C.Relmap c
 relmapUnnest use n = unnest where
     unnest  =  slice `B.mappend` cut
     slice   =  Op.relmapSliceUp use meet
-    meet    =  Op.relmapMeet use $ C.relmapLocalVar use n
+    meet    =  Op.relmapMeet use $ C.relmapLocalVar (withParent use) n
     cut     =  Op.relmapCut  use [n]
 

@@ -152,12 +152,12 @@ textFormTypeText form =
 data TermType
     = TermTypePath
     | TermTypeQuoted
-    | TermTypeNest
+    | TermTypeNest [Token]
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
-pattern TTermPath cp ws  = TTerm cp TermTypePath   ws
-pattern TTermQ    cp ws  = TTerm cp TermTypeQuoted ws
-pattern TTermNest cp w   = TTerm cp TermTypeNest   [w]
+pattern TTermPath cp ws    = TTerm cp TermTypePath   ws
+pattern TTermQ    cp ws    = TTerm cp TermTypeQuoted ws
+pattern TTermNest cp w tok = TTerm cp (TermTypeNest tok) [w]
 
 
 -- ----------------------  Blank name

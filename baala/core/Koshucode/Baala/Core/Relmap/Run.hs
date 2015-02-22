@@ -35,8 +35,8 @@ relkitLink kits = linkKit where
            C.RelkitOneToAbOne  u f bs    -> C.RelkitOneToAbOne  u f $ links bs
            C.RelkitAbSemi        f b     -> C.RelkitAbSemi        f $ link  b
            C.RelkitAppend        b1 b2   -> C.RelkitAppend (link b1) (link b2)
-           C.RelkitNest          nest b  -> C.RelkitNest       nest $ link  b
-           C.RelkitCopy          copy b  -> C.RelkitCopy       copy $ link  b
+           C.RelkitNest        p nest b  -> C.RelkitNest     p nest $ link  b
+           C.RelkitCopy        p copy b  -> C.RelkitCopy     p copy $ link  b
            C.RelkitLink n key _ ->
                case lookup key kitsRec of
                  Just (C.Relkit _ b)  -> C.RelkitLink n key $ Just b
@@ -73,12 +73,12 @@ relkitRun hook rs (B.Sourced toks core) bo1 =
        C.RelkitLink _ _ (Just b2)  -> run b2 bo1
        C.RelkitLink n _ (Nothing)  -> Msg.unkRelmap n
 
-       C.RelkitNestVar n _         -> case C.lookupLexical n rs of
+       C.RelkitNestVar p n         -> case C.a2lookup p n rs of
                                         Just bo2  -> Right bo2
-                                        Nothing   -> Msg.unkNestRel n $ C.localsLines rs
-       C.RelkitNest nest b         -> do bo2 <- nestRel nest b `mapM` bo1
+                                        Nothing   -> Msg.unkNestRel p n $ C.localsLines rs
+       C.RelkitNest p nest b       -> do bo2 <- nestRel p nest b `mapM` bo1
                                          right True $ concat bo2
-       C.RelkitCopy n b            -> do bo2 <- relkitRun hook (C.lexical [(n, bo1)] : rs) b bo1
+       C.RelkitCopy p n b          -> do bo2 <- relkitRun hook ((p, [(n, bo1)]) : rs) b bo1
                                          right True $ bo2
     where
       run    = relkitRun hook rs
@@ -97,10 +97,10 @@ relkitRun hook rs (B.Sourced toks core) bo1 =
       uif True   = B.unique
       uif False  = id
 
-      nestRel :: [(String, Int)] -> C.RelkitBody c -> [c] -> B.Ab [[c]]
-      nestRel nest b cs =
+      nestRel :: B.Token -> [(String, Int)] -> C.RelkitBody c -> [c] -> B.Ab [[c]]
+      nestRel p nest b cs =
           let cs2 = pickup cs `map` nest
-          in relkitRun hook (C.lexical cs2 : rs) b [cs]
+          in relkitRun hook ((p, cs2) : rs) b [cs]
 
       pickup :: [c] -> (String, Int) -> B.Named [[c]]
       pickup cs (name, ind) = (name, B.relBody $ C.gRel $ cs !! ind)
