@@ -1,12 +1,16 @@
 {-# OPTIONS_GHC -Wall #-}
 
--- | Implementation of relmap operators.
+-- | Generic relmap.
 
 module Koshucode.Baala.Core.Relmap.Relmap
-  ( -- * Relmap
+  ( -- * Type for relmap
     Relmap' (..),
     relmapId,
+
+    -- * Select from relmap
     relmapLexmaps,
+    relmapSourceList,
+    relmapNameList,
   ) where
 
 import qualified Koshucode.Baala.Base                 as B
@@ -18,33 +22,35 @@ import qualified Koshucode.Baala.Core.Relmap.Relkit   as C
 
 -- | Generic relmap.
 data Relmap' h c
-    = RelmapSource  C.Lexmap B.JudgePat [B.TermName]
-                    -- ^ Retrieve a relation from a dataset
-    | RelmapConst   C.Lexmap (B.Rel c)
-                    -- ^ Constant relation
-    | RelmapHook    C.Lexmap (C.RelkitHook' h c)
-                    -- ^ Relmap that maps relations to a relation with hook data
+    = RelmapConst   C.Lexmap (B.Rel c)
+                             -- ^ Constant relation
+    | RelmapSource  C.Lexmap B.JudgePat [B.TermName]
+                             -- ^ Retrieve a relation from a dataset
+
     | RelmapCalc    C.Lexmap (C.RelkitConfl c) [Relmap' h c]
-                    -- ^ Relmap that maps relations to a relation
+                             -- ^ Relmap that maps relations to a relation
+    | RelmapHook    C.Lexmap (C.RelkitHook' h c)
+                             -- ^ Relmap that maps relations to a relation with hook data
+
     | RelmapCopy    C.Lexmap String (Relmap' h c)
-                    -- ^ Relmap for environment of input relation
+                             -- ^ Relmap for environment of input relation
     | RelmapNest    C.Lexmap (Relmap' h c)
-                    -- ^ Relmap for environment of nested relations
+                             -- ^ Relmap for environment of nested relations
     | RelmapLink    C.Lexmap
-                    -- ^ Relmap reference
+                             -- ^ Relmap reference
     | RelmapAppend  (Relmap' h c) (Relmap' h c)
-                    -- ^ Connect two relmaps
+                             -- ^ Connect two relmaps
 
 instance Show (Relmap' h c) where
     show = showRelmap
 
 showRelmap :: Relmap' h c -> String
 showRelmap r = sh r where
-    sh (RelmapSource _ p xs)   = "RelmapSource " ++ show p ++ " " ++ show xs
     sh (RelmapConst  _ _)      = "RelmapConst "  ++ show (B.name r) ++ " _"
+    sh (RelmapSource _ p xs)   = "RelmapSource " ++ show p ++ " " ++ show xs
 
-    sh (RelmapHook   _ _)      = "RelmapHook "   ++ show (B.name r)
     sh (RelmapCalc   _ _ rs)   = "RelmapCalc "   ++ show (B.name r) ++ " _" ++ joinSubs rs
+    sh (RelmapHook   _ _)      = "RelmapHook "   ++ show (B.name r)
 
     sh (RelmapCopy   _ n r1)   = "RelmapCopy "   ++ show n  ++ joinSubs [r1]
     sh (RelmapNest   _ r1)     = "RelmapNest "   ++ joinSubs [r1]
@@ -60,17 +66,17 @@ instance B.Monoid (Relmap' h c) where
 
 instance B.Name (Relmap' h c) where
     name (RelmapSource _ _ _)       = "source"
+    name (RelmapAppend _ _)         = "append"
     name (RelmapConst  lx _)        = C.lexRopName lx
     name (RelmapCalc   lx _ _)      = C.lexRopName lx
-    name (RelmapAppend _ _)         = "append"
     name _ = undefined
 
 instance B.Write (Relmap' h c) where
-    write sh (RelmapSource lx _ _)  = B.write sh lx
     write sh (RelmapConst  lx _)    = B.write sh lx
+    write sh (RelmapSource lx _ _)  = B.write sh lx
 
-    write sh (RelmapHook   lx _)    = B.write sh lx -- hang (text $ name m) 2 (writeh (map write ms))
     write sh (RelmapCalc   lx _ _)  = B.write sh lx -- hang (text $ name m) 2 (writeh (map write ms))
+    write sh (RelmapHook   lx _)    = B.write sh lx -- hang (text $ name m) 2 (writeh (map write ms))
 
     write sh (RelmapCopy   _ _ r1)  = B.write sh r1
     write sh (RelmapNest   _ r1)    = B.write sh r1
@@ -103,16 +109,36 @@ relmapId = RelmapCalc lexId (const $ Right . C.relkitId) []
 lexId :: C.Lexmap
 lexId = C.lexBase { C.lexRopToken = B.textToken "id" }
 
+
+-- ----------------------  Selector
+
 relmapLexmaps :: Relmap' h c -> [C.Lexmap]
 relmapLexmaps = collect where
-    collect (RelmapSource  lx _ _)   = [lx]
     collect (RelmapConst   lx _)     = [lx]
+    collect (RelmapSource  lx _ _)   = [lx]
 
-    collect (RelmapHook    lx _)     = [lx]
     collect (RelmapCalc    lx _ _)   = [lx]
+    collect (RelmapHook    lx _)     = [lx]
 
     collect (RelmapCopy    lx _ _)   = [lx]
     collect (RelmapNest    lx _)     = [lx]
     collect (RelmapLink    lx)       = [lx]
     collect (RelmapAppend  r1 r2)    = collect r1 ++ collect r2
 
+-- | List of 'C.RelmapSource'
+relmapSourceList :: Relmap' h c -> [Relmap' h c]
+relmapSourceList = relmapList f where
+    f rmap@(RelmapSource _ _ _) = [rmap]
+    f _ = []
+
+-- | List of name in 'C.RelmapLink'
+relmapNameList :: Relmap' h c -> [String]
+relmapNameList = relmapList f where
+    f (RelmapLink lx) = [C.lexRopName lx]
+    f _ = []
+
+relmapList :: B.Map (Relmap' h c -> [a])
+relmapList f = loop where
+    loop (RelmapAppend rmap1 rmap2)  = loop rmap1 ++ loop rmap2
+    loop (RelmapCalc _ _ rmaps)      = concatMap loop rmaps
+    loop m = f m

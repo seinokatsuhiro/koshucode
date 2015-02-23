@@ -16,9 +16,6 @@ module Koshucode.Baala.Core.Relmap.Construct
     relmapNest, relmapCopy, relmapLocalVar,
     relmapLink,
   
-    -- * Select from relmap
-    relmapSourceList, relmapNameList,
-  
     -- * Append relmaps
     -- $AppendRelmaps
   ) where
@@ -107,27 +104,6 @@ relmapLocalVar u@C.RopUse { C.ropLexmap = lx } n = relmapLink u2 where
     u2   = u  { C.ropLexmap = lx2 }
     lx2  = lx { C.lexType     = C.LexmapLocal
               , C.lexRopToken = B.textToken n }
-
-
--- ----------------------  Selector
-
--- | List of 'C.RelmapSource'
-relmapSourceList :: C.Relmap' h c -> [C.Relmap' h c]
-relmapSourceList = relmapList f where
-    f rmap@(C.RelmapSource _ _ _) = [rmap]
-    f _ = []
-
--- | List of name in 'C.RelmapLink'
-relmapNameList :: C.Relmap' h c -> [String]
-relmapNameList = relmapList f where
-    f (C.RelmapLink lx) = [C.lexRopName lx]
-    f _ = []
-
-relmapList :: B.Map (C.Relmap' h c -> [a])
-relmapList f = loop where
-    loop (C.RelmapAppend rmap1 rmap2) = loop rmap1 ++ loop rmap2
-    loop (C.RelmapCalc _ _ rmaps)     = concatMap loop rmaps
-    loop m = f m
 
 
 -- ----------------------
