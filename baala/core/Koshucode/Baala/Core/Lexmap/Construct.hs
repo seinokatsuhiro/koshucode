@@ -73,7 +73,7 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
 
         -- operator
         single (B.TermLeafNest cp v _ ps2 : ts)      = let rop = B.TTextKey cp v
-                                                       in ref C.LexmapNest rop ps2 ts
+                                                       in ref C.LexmapLocal rop ps2 ts
         single (B.TreeL rop@(B.TTextRaw _ _) : ts)   = find rop ts
         -- group
         single [B.TreeB B.BracketGroup _ ts]         = lexmap  e sec ts

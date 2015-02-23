@@ -49,8 +49,7 @@ relmapSpecialize hook links = spec [] [] where
                      Right (kdef, kit)
 
               C.RelmapLink lx
-                  | C.lexType lx == C.LexmapLocal ||
-                    C.lexType lx == C.LexmapNest ->
+                  | C.lexType lx == C.LexmapLocal ->
                       post lx $ case find ps n of
                            Just (p, he)  -> Right (kdef, C.relkitNestVar p n he)
                            Nothing       -> Msg.unkNestVar n ps nest
