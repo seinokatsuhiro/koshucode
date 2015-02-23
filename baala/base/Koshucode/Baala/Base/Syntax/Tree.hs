@@ -13,6 +13,7 @@ module Koshucode.Baala.Base.Syntax.Tree
     treeWrap,
     untree, untrees,
     leaves, undouble,
+    mapToLeaf,
   
     -- * Bracket table
     GetBracketType,
@@ -132,6 +133,11 @@ undouble p = loop where
 -- e1 = TreeB 2 [TreeB 1 [TreeB 0 [TreeL 0]]]
 -- e2 = TreeB 2 [e1, TreeB 1 [TreeB 0 [TreeL 0]]]
 -- e3 = undouble e2
+
+mapToLeaf :: (a -> a) -> B.Map (CodeTree p a)
+mapToLeaf f = loop where
+    loop (TreeB p aa sub)  = TreeB p aa $ map loop sub
+    loop (TreeL a)        = TreeL $ f a
 
 
 -- ----------------------  Bracket table

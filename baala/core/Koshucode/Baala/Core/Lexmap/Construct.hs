@@ -180,19 +180,18 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
     vars _                    = Msg.reqTermName
 
     bindLocal :: [String] -> B.Token -> B.Map B.TTree
-    bindLocal vs p (B.TreeB b a trees) = B.TreeB b a $ map (bindLocal vs p) trees
-    bindLocal vs p (B.TextLeafRaw cp v) | v `elem` vs = B.TermLeafNest cp v 0 [p]
-    bindLocal _ _ t@(B.TreeL _) = t
+    bindLocal vs p = B.mapToLeaf f where
+        f (B.TTextRaw cp v) | v `elem` vs = B.TTermNest cp v 0 [p]
+        f tok = tok
 
     -- -----------  Nest
 
-    -- todo: when parent operators are nested
     bind :: Int -> B.Token -> B.Map B.TTree
-    bind e p (B.TreeB b a trees) = B.TreeB b a $ map (bind e p) trees
-    bind e p (B.TermLeafNest cp v e' ps)
-        | null ps  = B.TermLeafNest cp v e' $ p : ps
-        | e == e'  = B.TermLeafNest cp v e  $ p : ps
-    bind _ _ t@(B.TreeL _) = t
+    bind e p = B.mapToLeaf f where
+        f (B.TTermNest cp v e' ps)
+            | null ps  = B.TTermNest cp v e' $ p : ps
+            | e == e'  = B.TTermNest cp v e  $ p : ps
+        f tok = tok
 
 
 -- ----------------------
