@@ -57,7 +57,7 @@ ropsNest :: (C.CContent c) => [C.Rop c]
 ropsNest = Op.ropList "nest"
     --        CONSTRUCTOR     USAGE                           ATTRIBUTE
     [ Op.def  Op.consChunk    "chunk /T ... [-order /P ...]"  "V -term | -order"
-    , Op.def  Op.consCopy     "copy N R"                      "2 -var^ -relmap/"
+    , Op.def  Op.consCopy     "copy N R"                      "2 -var^ -relmap/^"
     , Op.def  Op.consDown     "down /N"                       "1 -term"
     , Op.def  Op.consFor      "for /N R"                      "2 -term -relmap/^"
     , Op.def  Op.consGroup    "group /N R"                    "2 -term -relmap/"
