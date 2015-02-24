@@ -3,21 +3,22 @@
 -- | Construction of relmaps.
 
 module Koshucode.Baala.Core.Relmap.Construct
-  (  -- * Generic relmap
-    ConsRelmap', relmapCons,
-  
-    -- * Constructor
-    -- ** Source
+  ( -- * Source
     relmapConst, relmapSource,
-    -- ** Calculation
+
+    -- * Calculation
     relmapFlow, relmapHook,
     relmapBinary, relmapConfl,
-    -- ** Others
-    relmapNest, relmapCopy, relmapLocalVar,
-    relmapLink,
-  
+
+    -- * Variable
+    relmapNest, relmapCopy,
+    relmapLink, relmapLocalVar,
+
     -- * Append relmaps
     -- $AppendRelmaps
+
+    -- * Bundle of constructors
+    ConsRelmap', consRelmap,
   ) where
 
 import qualified Koshucode.Baala.Base                  as B
@@ -29,35 +30,7 @@ import qualified Koshucode.Baala.Core.Relmap.Rop       as C
 import qualified Koshucode.Baala.Core.Message          as Msg
 
 
--- ----------------------  Generic relmap
-
--- | Make a constructor pair of lexmap and relmap.
-relmapCons :: (C.GetGlobal h) => h c -> (C.ConsLexmap, ConsRelmap' h c)
-relmapCons hook = (consL, consR) where
-    consL         = C.consLexmap findSorter
-    consR         = consRelmap findRop hook
-    findSorter n  = C.ropSorter `fmap` findRop n
-    findRop       = C.opsetFindRop $ C.globalOpset $ C.getGlobal hook
-
--- | Second step of constructing relmap, make relmap from lexmap.
-type ConsRelmap' h c = C.Lexmap -> B.Ab (C.Relmap' h c)
-
-consRelmap :: (C.RopName -> Maybe (C.Rop' h c)) -> h c -> ConsRelmap' h c
-consRelmap findRop hook = relmap where
-    relmap lx
-        | typ /= C.LexmapBase  = Right $ C.RelmapLink lx
-        | otherwise            = case findRop name of
-                                   Just rop -> Msg.abRelmap [lx] $ cons rop
-                                   Nothing  -> Msg.bug "missing operator @consRelmap"
-        where typ              = C.lexType    lx
-              name             = C.lexRopName lx
-              cons rop         = do sub <- relmap `mapM` C.lexSubmap lx
-                                    C.ropCons rop $ C.RopUse hook lx sub
-
-
--- ----------------------  Constructor
-
--- -----------  Source
+-- ----------------------  Source
 
 -- | Make a constant relmap.
 relmapConst :: C.RopUse' h c -> B.Rel c -> C.Relmap' h c
@@ -67,7 +40,8 @@ relmapConst = C.RelmapConst . C.ropLexmap
 relmapSource :: C.RopUse' h c -> B.JudgePat -> [B.TermName] -> C.Relmap' h c
 relmapSource = C.RelmapSource . C.ropLexmap
 
--- -----------  Calculation
+
+-- ----------------------  Calculation
 
 -- | Make a flow relmap.
 --   Flow relmaps take no submaps.
@@ -87,7 +61,8 @@ relmapBinary use kit rmap = relmapConfl use (kit . head) [rmap]
 relmapConfl :: C.RopUse' h c -> C.RelkitConfl c -> [C.Relmap' h c] -> C.Relmap' h c
 relmapConfl = C.RelmapCalc . C.ropLexmap
 
--- -----------  Others
+
+-- ----------------------  Variable
 
 -- | Parent for nested relation references.
 relmapNest :: C.RopUse' h c -> B.Map (C.Relmap' h c)
@@ -129,4 +104,23 @@ relmapLocalVar u@C.RopUse { C.ropLexmap = lx } n = relmapLink u2 where
 --  This whole structure is also 'RelmapAppend' /A B/.
 --
 --  > R1 -[ A ]--[ B ]- R3
+
+
+-- ----------------------  Bundle of constructors
+
+-- | Second step of constructing relmap, make relmap from lexmap.
+type ConsRelmap' h c = C.Lexmap -> B.Ab (C.Relmap' h c)
+
+-- | Construct relmap from lexmap.
+consRelmap :: C.FindRop' h c -> h c -> ConsRelmap' h c
+consRelmap findRop hook = relmap where
+    relmap lx
+        | link      = Right $ C.RelmapLink lx
+        | otherwise = Msg.abRelmap [lx] $ case findRop name of
+                        Nothing  -> Msg.bug "missing operator"
+                        Just rop -> do sub <- relmap `mapM` C.lexSubmap lx
+                                       C.ropCons rop $ C.RopUse hook lx sub
+        where link = C.lexType lx /= C.LexmapBase
+              name = C.lexRopName lx
+
 

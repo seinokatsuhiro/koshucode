@@ -19,7 +19,7 @@ module Koshucode.Baala.Core.Relmap.Global
     ropCopset,
 
     -- * Operator set
-    OpSet' (..),
+    OpSet' (..), FindRop',
     opset, opsetFill,
   ) where
 
@@ -49,7 +49,7 @@ ropCopset = globalCopset . ropGlobal
 data Global' h c = Global
       { globalSynopsis     :: String                -- ^ One-line description of calculator
       , globalVersion      :: Ver.Version           -- ^ Version of calculator
-      , globalOpset        :: OpSet' (C.Rop' h) c   -- ^ Set of operators
+      , globalOpset        :: OpSet' h c            -- ^ Set of operators
       , globalProgram      :: String                -- ^ Name of invoked program
       , globalArgs         :: [String]              -- ^ Command line arguments
       , globalProxy        :: [B.HttpProxy]         -- ^ Proxy setting from environment variables
@@ -108,18 +108,20 @@ global' h = Global
 -- ----------------------  Operator set
 
 -- | Set of relmap and content operators.
-data OpSet' rop c = OpSet
-    { opsetRopList     :: [rop c]
-    , opsetFindRop     :: C.RopName -> Maybe (rop c)
+data OpSet' h c = OpSet
+    { opsetRopList     :: [C.Rop' h c]
+    , opsetFindRop     :: FindRop' h c
     , opsetCop         :: C.CopSet c
     }
 
+type FindRop' h c = C.RopName -> Maybe (C.Rop' h c)
+
 -- | Empty operator set.
-opset :: OpSet' rop c
+opset :: OpSet' h c
 opset = OpSet [] find C.copset where
     find _ = Nothing
 
-opsetFill :: (B.Name (rop c)) => B.Map (OpSet' rop c)
+opsetFill :: B.Map (OpSet' h c)
 opsetFill ops = ops2 where
     ops2      = ops { opsetFindRop = findRop
                     , opsetCop     = copset2 }
@@ -128,6 +130,6 @@ opsetFill ops = ops2 where
     rops      = map name $ opsetRopList ops
     name rop  = (B.name rop, rop)
 
-opsetRopsAdd :: [rop c] -> B.Map (OpSet' rop c)
+opsetRopsAdd :: [C.Rop' h c] -> B.Map (OpSet' h c)
 opsetRopsAdd rops ops = ops { opsetRopList = rops ++ opsetRopList ops }
 

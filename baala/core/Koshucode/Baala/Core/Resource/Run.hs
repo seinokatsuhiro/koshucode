@@ -4,6 +4,7 @@
 -- | Run resource.
 module Koshucode.Baala.Core.Resource.Run
   ( runResource,
+    relmapCons,
   ) where
 
 import qualified Koshucode.Baala.Base                    as B
@@ -49,7 +50,7 @@ assembleRelmap res@C.Resource { C.resSlot    = slots
                     msg2      = concat $ map B.shortBody msg
                 Right $ C.addMessages msg2 $ res { C.resAssert = asserts2 }
 
-      (consLexmap, consRelmap) = C.relmapCons res
+      (consLexmap, consRelmap) = relmapCons res
 
       assemble :: C.Assert c -> B.Ab (C.Assert c, [String])
       assemble ass@C.Assert { C.assSection = sec } =
@@ -63,6 +64,14 @@ assembleRelmap res@C.Resource { C.resSlot    = slots
                 ass2    = ass { C.assRelmap  = Just relmap
                               , C.assLinks   = links }
             Right (ass2, msg1 ++ msg2)
+
+-- | Make a constructor pair of lexmap and relmap.
+relmapCons :: (C.GetGlobal h) => h c -> (C.ConsLexmap, C.ConsRelmap' h c)
+relmapCons hook = (consL, consR) where
+    consL         = C.consLexmap findSorter
+    consR         = C.consRelmap findRop hook
+    findSorter n  = C.ropSorter `fmap` findRop n
+    findRop       = C.opsetFindRop $ C.globalOpset $ C.getGlobal hook
 
 findRelmap :: [C.RelmapSource] -> C.FindDeriv
 findRelmap ds sec name =
