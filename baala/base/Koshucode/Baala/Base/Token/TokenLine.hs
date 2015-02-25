@@ -187,11 +187,12 @@ relation r@B.CodeRoll { B.codeInputPt = cp } = start gen cp r where
                     | isSpace c      = u (c:cs)        $ B.TTextBar cp $ rv w
                     | otherwise      = bar2 cs (c:w)
 
-    local ('/' : cs)                 = let (cs', w) = nextCode cs
-                                       in  u cs'       $ B.TTermNest cp w (-1) []
-    local cs@(c : _) | isCode c      = let (cs', w) = nextCode cs
-                                       in  u cs'       $ B.TLocal cp $ B.LocalSymbol w
+    local ('/' : cs)                 = localToken cs B.LocalNest
+    local cs@(c : _) | isCode c      = localToken cs B.LocalSymbol
     local _                          = Msg.adlib "local"
+
+    localToken cs k                  = let (cs', w) = nextCode cs
+                                       in u cs'        $ B.TLocal cp (k w) (-1) []
 
     ang (c:cs) w    | c == '>'       = u     cs        $ angle $ rv w
                     | isCode c       = ang   cs        $ c:w

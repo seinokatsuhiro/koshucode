@@ -31,7 +31,6 @@ module Koshucode.Baala.Base.Token.Token
     TermType (..),
     pattern TTermPath,
     pattern TTermQ,
-    pattern TTermNest,
 
     -- * Term name
     TermName, TermName2, TermName3, TermName4,
@@ -70,7 +69,7 @@ data Token
                                             --   2 for global slots.
     | TShort    B.CodePt String String      -- ^ Prefixed shorten text.
     | TTerm     B.CodePt TermType TermPath  -- ^ Term path.
-    | TLocal    B.CodePt (Local String)     -- ^ Local name.
+    | TLocal    B.CodePt (Local String) Int [Token]  -- ^ Local name.
     | TOpen     B.CodePt String             -- ^ Opening bracket.
     | TClose    B.CodePt String             -- ^ Closing bracket.
     | TSpace    B.CodePt Int                -- ^ /N/ space characters.
@@ -92,7 +91,7 @@ instance B.Write Token where
         d (TName      cp w)      = pretty "TName"    cp [show w]
         d (TShort     cp a b)    = pretty "TShort"   cp [show a, show b]
         d (TTerm      cp q ns)   = pretty "TTerm"    cp [show q, show ns]
-        d (TLocal     cp n)      = pretty "TLocal"   cp [show n]
+        d (TLocal     cp n _ _)  = pretty "TLocal"   cp [show n]
         d (TSlot      cp n w)    = pretty "TSlot"    cp [show n, show w]
         d (TOpen      cp p)      = pretty "TOpen"    cp [show p]
         d (TClose     cp p)      = pretty "TClose"   cp [show p]
@@ -109,16 +108,16 @@ nameToken :: String -> Token
 nameToken = TName B.codePtZero . BlankNormal
 
 instance B.CodePtr Token where
-    codePtList (TText    cp _ _)   = [cp]
-    codePtList (TName    cp _)     = [cp]
-    codePtList (TShort   cp _ _)   = [cp]
-    codePtList (TTerm    cp _ _)   = [cp]
-    codePtList (TLocal   cp _)     = [cp]
-    codePtList (TSlot    cp _ _)   = [cp]
-    codePtList (TOpen    cp _)     = [cp]
-    codePtList (TClose   cp _)     = [cp]
-    codePtList (TSpace   cp _)     = [cp]
-    codePtList (TComment cp _)     = [cp]
+    codePtList (TText    cp _ _)    = [cp]
+    codePtList (TName    cp _)      = [cp]
+    codePtList (TShort   cp _ _)    = [cp]
+    codePtList (TTerm    cp _ _)    = [cp]
+    codePtList (TLocal   cp _ _ _)  = [cp]
+    codePtList (TSlot    cp _ _)    = [cp]
+    codePtList (TOpen    cp _)      = [cp]
+    codePtList (TClose   cp _)      = [cp]
+    codePtList (TSpace   cp _)      = [cp]
+    codePtList (TComment cp _)      = [cp]
 
 
 -- ----------------------  Local
@@ -171,13 +170,10 @@ textFormTypeText form =
 data TermType
     = TermTypePath               -- ^ Normal term path
     | TermTypeQuoted             -- ^ Quoted term name
-    | TermTypeNest Int [Token]   -- ^ Nested relation reference
-                                 --   with env id and parent tokens
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 pattern TTermPath cp ws       = TTerm cp TermTypePath   ws
 pattern TTermQ    cp ws       = TTerm cp TermTypeQuoted ws
-pattern TTermNest cp w e tok  = TTerm cp (TermTypeNest e tok) [w]
 
 
 -- ----------------------  Blank name
@@ -248,45 +244,45 @@ showNestedTermName = concat . map showTermName
 tokenContent :: Token -> String
 tokenContent tok =
     case tok of
-      TText     _ _ s   -> s
-      TName     _ op    -> B.name op
-      TShort    _ a b   -> a ++ "." ++ b
-      TTerm     _ _ ns  -> concatMap ('/' :) ns
-      TLocal    _ n     -> unlocal n
-      TSlot     _ _ s   -> s
-      TOpen     _ s     -> s
-      TClose    _ s     -> s
-      TSpace    _ n     -> replicate n ' '
-      TComment  _ s     -> s
+      TText     _ _ s    -> s
+      TName     _ op     -> B.name op
+      TShort    _ a b    -> a ++ "." ++ b
+      TTerm     _ _ ns   -> concatMap ('/' :) ns
+      TLocal    _ n _ _  -> unlocal n
+      TSlot     _ _ s    -> s
+      TOpen     _ s      -> s
+      TClose    _ s      -> s
+      TSpace    _ n      -> replicate n ' '
+      TComment  _ s      -> s
 
 -- | Text of token type, e.g., @\"text\"@, @\"open\"@.
 tokenTypeText :: Token -> String
 tokenTypeText tok =
     case tok of
-      TText     _ _ _   -> "text"
-      TName     _ _     -> "name"
-      TShort    _ _ _   -> "short"
-      TTerm     _ _ _   -> "term"
-      TLocal    _ _     -> "local"
-      TSlot     _ _ _   -> "slot"
-      TOpen     _ _     -> "open"
-      TClose    _ _     -> "close"
-      TSpace    _ _     -> "space"
-      TComment  _ _     -> "comment"
+      TText     _ _ _    -> "text"
+      TName     _ _      -> "name"
+      TShort    _ _ _    -> "short"
+      TTerm     _ _ _    -> "term"
+      TLocal    _ _ _ _  -> "local"
+      TSlot     _ _ _    -> "slot"
+      TOpen     _ _      -> "open"
+      TClose    _ _      -> "close"
+      TSpace    _ _      -> "space"
+      TComment  _ _      -> "comment"
 
 tokenSubtypeText :: Token -> Maybe String
 tokenSubtypeText tok =
     case tok of
-      TText     _ f _   -> Just $ textFormTypeText f
-      TName     _ b     -> Just $ blankNameTypeText b
-      TShort    _ _ _   -> Nothing
-      TTerm     _ _ _   -> Nothing
-      TLocal    _ _     -> Nothing
-      TSlot     _ n _   -> Just $ slotTypeText n
-      TOpen     _ _     -> Nothing
-      TClose    _ _     -> Nothing
-      TSpace    _ _     -> Nothing
-      TComment  _ _     -> Nothing
+      TText     _ f _    -> Just $ textFormTypeText f
+      TName     _ b      -> Just $ blankNameTypeText b
+      TShort    _ _ _    -> Nothing
+      TTerm     _ _ _    -> Nothing
+      TLocal    _ _ _ _  -> Nothing
+      TSlot     _ n _    -> Just $ slotTypeText n
+      TOpen     _ _      -> Nothing
+      TClose    _ _      -> Nothing
+      TSpace    _ _      -> Nothing
+      TComment  _ _      -> Nothing
 
 slotTypeText :: Int -> String
 slotTypeText 0   = "positional"

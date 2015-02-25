@@ -72,7 +72,7 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
                        tss   -> baseOf "append" $ map B.wrapTrees tss
 
         -- operator
-        single (B.TermLeafNest cp v _ ps2 : ts)      = let rop = B.TTextKey cp v
+        single (B.TermLeafLocal cp v _ ps2 : ts)     = let rop = B.TTextKey cp $ B.unlocal v
                                                        in ref C.LexmapLocal rop ps2 ts
         single (B.TreeL rop@(B.TTextRaw _ _) : ts)   = find rop ts
         -- group
@@ -166,9 +166,8 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
                    lx2           = lx { C.lexSubmap = sublx }
                Right (lx2, concat tabs)
 
-        bind p (B.TTermNest cp v eid' ps)
-            | null ps || eid == eid'  = B.TTermNest cp v eid' $ p : ps
-        bind p (B.TLocal cp v)        = B.TTermNest cp (B.unlocal v) eid [p]
+        bind p (B.TLocal cp v eid' ps)
+            | null ps || eid == eid'  = B.TLocal cp v eid $ p : ps
         bind _ tok = tok
 
 

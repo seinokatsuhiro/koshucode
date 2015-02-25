@@ -16,7 +16,7 @@ module Koshucode.Baala.Base.Token.TokenTree
     -- * Pattern
     pattern TermLeaf,
     pattern TermLeafPath,
-    pattern TermLeafNest,
+    pattern TermLeafLocal,
     pattern TextLeaf,
     pattern TextLeafRaw,
     pattern TextLeafQ,
@@ -70,10 +70,12 @@ type TTreeToAb a  = TTree -> B.Ab a
 -- | Convert list of token tree to sometning, abortable.
 type TTreesToAb a = [TTree] -> B.Ab a
 
+-- local leaf
+pattern TermLeafLocal cp v e ps = B.TreeL (B.TLocal cp v e ps)
+
 -- term leaf
-pattern TermLeaf     cp q ws   = B.TreeL (B.TTerm   cp q ws)
-pattern TermLeafPath cp ws     = TermLeaf cp B.TermTypePath ws
-pattern TermLeafNest cp v e ps = TermLeaf cp (B.TermTypeNest e ps) [v]
+pattern TermLeaf      cp q ws   = B.TreeL (B.TTerm   cp q ws)
+pattern TermLeafPath  cp ws     = TermLeaf cp B.TermTypePath ws
 
 -- text leaf
 pattern TextLeaf form cp w     = B.TreeL (B.TText   cp form w)
