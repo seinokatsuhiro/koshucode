@@ -87,8 +87,7 @@ relmapVar k use n = relmapLink use' where
     tok   = C.lexToken lx
     use'  = use { C.ropLexmap = lx' }
     lx'   = lx  { C.lexType   = C.LexmapLocal
-                , C.lexToken  = B.TLocal cp (k n) (-1) [tok]
-                , C.lexParent = [tok] }
+                , C.lexToken  = B.TLocal cp (k n) (-1) [tok] }
 
 -- ----------------------
 -- $AppendRelmaps

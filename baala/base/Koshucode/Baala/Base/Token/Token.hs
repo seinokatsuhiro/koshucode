@@ -41,6 +41,7 @@ module Koshucode.Baala.Base.Token.Token
     -- * Selectors
     tokenContent,
     tokenTypeText, tokenSubtypeText,
+    tokenParents,
     -- $Selector
   
     -- * Predicates
@@ -289,6 +290,10 @@ slotTypeText 0   = "positional"
 slotTypeText 1   = "named"
 slotTypeText 2   = "global"
 slotTypeText _   = "unknown"
+
+tokenParents :: Token -> [Token]
+tokenParents (TLocal _ _ _ ps) = ps
+tokenParents _                 = []
 
 
 -- ----------------------  Predicate

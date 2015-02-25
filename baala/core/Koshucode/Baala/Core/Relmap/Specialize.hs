@@ -79,7 +79,7 @@ relmapSpecialize hook links = spec [] [] where
                   where
                     tok = C.lexToken  lx
                     n   = C.lexName   lx
-                    ps  = C.lexParent lx
+                    ps  = B.tokenParents tok
 
         post :: C.Lexmap -> B.Map (B.Ab ([C.RelkitDef c], C.Relkit c))
         post lx result =

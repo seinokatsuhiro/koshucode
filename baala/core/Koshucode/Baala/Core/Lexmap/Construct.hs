@@ -72,7 +72,7 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
                        tss   -> baseOf "append" $ map B.wrapTrees tss
 
         -- operator
-        single (B.TreeL rop@(B.TLocal _ _ _ ps) : ts) = ref C.LexmapLocal rop ps ts
+        single (B.TreeL rop@(B.TLocal _ _ _ _) : ts) = local C.LexmapLocal rop ts
         single (B.TreeL rop@(B.TTextRaw _ _) : ts)   = find rop ts
         -- group
         single [B.TreeB B.BracketGroup _ ts]         = lexmap  eid sec ts
@@ -84,6 +84,10 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
         single (n@(B.TermLeaf _ _ [_]) : ts)         = baseOf "add" $ n : [B.wrapTrees ts]
         single []                                    = baseOf "id"  []
         single _                                     = Msg.unkRelmap "???"
+
+        local :: C.LexmapType -> B.Token -> ConsLexmapBody
+        local typ rop []  = Right (cons typ rop B.paraEmpty, [])
+        local _ _ _       = Msg.extraAttr
 
         find :: B.Token -> ConsLexmapBody
         find rop ts = let name = B.tokenContent rop
@@ -120,14 +124,6 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
               form2       <- C.substSlot gslot attr2 form
               (lx2, tab)  <- lexmap (eid + 1) sec' form2
               Right $ (lx, lx2) : tab
-
-        -- -----------  nested and local relation reference
-
-        ref :: C.LexmapType -> B.Token -> [B.Token] -> ConsLexmapBody
-        ref typ rop ps2 []  = Right (add ps2 $ cons typ rop B.paraEmpty, [])
-        ref _ _ _ _         = Msg.extraAttr
-
-        add ps2 lx = lx { C.lexParent = ps2 }
 
         -- -----------  construct lexmap except for submaps
 
