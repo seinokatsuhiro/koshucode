@@ -153,13 +153,10 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
             let p           = C.lexRopToken lx
                 attr        = C.lexAttrTree lx
                 attrRelmap  = B.filterFst C.isAttrNameRelmap attr
-                attrLocal   = B.filterFst C.isAttrNameLocal  attr
             in case attrRelmap of
                  [(C.AttrNameRelmapFlat _, ts)] -> submap2 lx ts
-                 [(C.AttrNameRelmapNest _, ts)] -> do vs <- localVars attrLocal
-                                                      let ts2 = bind eid p `map` ts
-                                                          ts3 = bindLocal vs p `map` ts2
-                                                      submap2 lx ts3
+                 [(C.AttrNameRelmapNest _, ts)] -> do let ts2 = B.mapToLeaf (bind p) `map` ts
+                                                      submap2 lx ts2
                  []                             -> Right (lx, [])  -- no submaps
                  _                              -> Msg.bug "submap"
 
@@ -169,30 +166,10 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
                    lx2           = lx { C.lexSubmap = sublx }
                Right (lx2, concat tabs)
 
-    -- -----------  Local relation name
-
-    localVars :: [C.AttrTree] -> B.Ab [String]
-    localVars [(_, vs)]  = mapM vars vs
-    localVars []         = Right []
-    localVars _          = Msg.bug "nest"
-
-    vars :: B.TTree -> B.Ab String
-    vars (B.TextLeafRaw _ v)  = Right v
-    vars _                    = Msg.reqTermName
-
-    bindLocal :: [String] -> B.Token -> B.Map B.TTree
-    bindLocal vs p = B.mapToLeaf f where
-        f (B.TTextRaw cp v) | v `elem` vs = B.TTermNest cp v 0 [p]
-        f tok = tok
-
-    -- -----------  Nest
-
-    bind :: Int -> B.Token -> B.Map B.TTree
-    bind e p = B.mapToLeaf f where
-        f (B.TTermNest cp v e' ps)
-            | null ps  = B.TTermNest cp v e' $ p : ps
-            | e == e'  = B.TTermNest cp v e  $ p : ps
-        f tok = tok
+        bind p (B.TTermNest cp v eid' ps)
+            | null ps || eid == eid'  = B.TTermNest cp v eid' $ p : ps
+        bind p (B.TLocal cp v)        = B.TTermNest cp (B.unlocal v) eid [p]
+        bind _ tok = tok
 
 
 -- ----------------------

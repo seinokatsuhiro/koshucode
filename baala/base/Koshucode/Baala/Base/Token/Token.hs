@@ -70,6 +70,7 @@ data Token
                                             --   2 for global slots.
     | TShort    B.CodePt String String      -- ^ Prefixed shorten text.
     | TTerm     B.CodePt TermType TermPath  -- ^ Term path.
+    | TLocal    B.CodePt (Local String)     -- ^ Local name.
     | TOpen     B.CodePt String             -- ^ Opening bracket.
     | TClose    B.CodePt String             -- ^ Closing bracket.
     | TSpace    B.CodePt Int                -- ^ /N/ space characters.
@@ -87,18 +88,19 @@ instance B.Name Token where
 
 instance B.Write Token where
     write sh = d where
-        d (TText      pt q w)    = pretty "TText"    pt [show q, show w]
-        d (TName      pt w)      = pretty "TName"    pt [show w]
-        d (TShort     pt a b)    = pretty "TShort"   pt [show a, show b]
-        d (TTerm      pt q ns)   = pretty "TTerm"    pt [show q, show ns]
-        d (TSlot      pt n w)    = pretty "TSlot"    pt [show n, show w]
-        d (TOpen      pt p)      = pretty "TOpen"    pt [show p]
-        d (TClose     pt p)      = pretty "TClose"   pt [show p]
-        d (TSpace     pt c)      = pretty "TSpace"   pt [show c]
-        d (TComment   pt s)      = pretty "TComment" pt [show s]
-        pretty k pt xs         = B.writeH sh $ lineCol pt : k : xs
-        lineCol pt             = (show $ B.codePtLineNo pt)
-                                 ++ "." ++ (show $ B.codePtColumnNo pt)
+        d (TText      cp q w)    = pretty "TText"    cp [show q, show w]
+        d (TName      cp w)      = pretty "TName"    cp [show w]
+        d (TShort     cp a b)    = pretty "TShort"   cp [show a, show b]
+        d (TTerm      cp q ns)   = pretty "TTerm"    cp [show q, show ns]
+        d (TLocal     cp n)      = pretty "TLocal"   cp [show n]
+        d (TSlot      cp n w)    = pretty "TSlot"    cp [show n, show w]
+        d (TOpen      cp p)      = pretty "TOpen"    cp [show p]
+        d (TClose     cp p)      = pretty "TClose"   cp [show p]
+        d (TSpace     cp c)      = pretty "TSpace"   cp [show c]
+        d (TComment   cp s)      = pretty "TComment" cp [show s]
+        pretty k cp xs         = B.writeH sh $ lineCol cp : k : xs
+        lineCol cp             = (show $ B.codePtLineNo cp)
+                                 ++ "." ++ (show $ B.codePtColumnNo cp)
 
 textToken :: String -> Token
 textToken = TText B.codePtZero TextRaw
@@ -111,6 +113,7 @@ instance B.CodePtr Token where
     codePtList (TName    cp _)     = [cp]
     codePtList (TShort   cp _ _)   = [cp]
     codePtList (TTerm    cp _ _)   = [cp]
+    codePtList (TLocal   cp _)     = [cp]
     codePtList (TSlot    cp _ _)   = [cp]
     codePtList (TOpen    cp _)     = [cp]
     codePtList (TClose   cp _)     = [cp]
@@ -249,6 +252,7 @@ tokenContent tok =
       TName     _ op    -> B.name op
       TShort    _ a b   -> a ++ "." ++ b
       TTerm     _ _ ns  -> concatMap ('/' :) ns
+      TLocal    _ n     -> unlocal n
       TSlot     _ _ s   -> s
       TOpen     _ s     -> s
       TClose    _ s     -> s
@@ -263,6 +267,7 @@ tokenTypeText tok =
       TName     _ _     -> "name"
       TShort    _ _ _   -> "short"
       TTerm     _ _ _   -> "term"
+      TLocal    _ _     -> "local"
       TSlot     _ _ _   -> "slot"
       TOpen     _ _     -> "open"
       TClose    _ _     -> "close"
@@ -276,6 +281,7 @@ tokenSubtypeText tok =
       TName     _ b     -> Just $ blankNameTypeText b
       TShort    _ _ _   -> Nothing
       TTerm     _ _ _   -> Nothing
+      TLocal    _ _     -> Nothing
       TSlot     _ n _   -> Just $ slotTypeText n
       TOpen     _ _     -> Nothing
       TClose    _ _     -> Nothing

@@ -131,7 +131,7 @@ relation r@B.CodeRoll { B.codeInputPt = cp } = start gen cp r where
                    | c == '>'        = cket  cs [c]
                    | c == '@'        = slot  cs 1
                    | c == '|'        = bar   cs [c]
-                   | ccs =^ "^/"     = nest  $ tail cs
+                   | c == '^'        = local cs
                    | ccs =^ "'/"     = v               $ scanTermQ  cp $ tail cs
                    | ccs =^ "#!"     = u     ""        $ B.TComment cp cs
                    | ccs =^ "-*-"    = u     ""        $ B.TComment cp cs
@@ -187,10 +187,11 @@ relation r@B.CodeRoll { B.codeInputPt = cp } = start gen cp r where
                     | isSpace c      = u (c:cs)        $ B.TTextBar cp $ rv w
                     | otherwise      = bar2 cs (c:w)
 
-    nest cs                          = do (cs', tok) <- scanTermN cp cs
-                                          case tok of
-                                            B.TTermNest _ _ _ _ -> u cs' tok
-                                            _                   -> Msg.reqFlatTerm $ B.tokenContent tok
+    local ('/' : cs)                 = let (cs', w) = nextCode cs
+                                       in  u cs'       $ B.TTermNest cp w (-1) []
+    local cs@(c : _) | isCode c      = let (cs', w) = nextCode cs
+                                       in  u cs'       $ B.TLocal cp $ B.LocalSymbol w
+    local _                          = Msg.adlib "local"
 
     ang (c:cs) w    | c == '>'       = u     cs        $ angle $ rv w
                     | isCode c       = ang   cs        $ c:w
@@ -270,10 +271,9 @@ scanQQ :: Scan
 scanQQ cp cs = do (cs', w) <- nextQQ cs
                   Right (cs', B.TTextQQ cp w)
 
-scanTermP, scanTermQ, scanTermN :: Scan
+scanTermP, scanTermQ :: Scan
 scanTermP = scanTerm B.TermTypePath
 scanTermQ = scanTerm B.TermTypeQuoted
-scanTermN = scanTerm $ B.TermTypeNest (-1) []
 
 scanTerm :: B.TermType -> Scan
 scanTerm q cp = word [] where
