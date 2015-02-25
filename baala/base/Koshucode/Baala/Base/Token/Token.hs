@@ -11,6 +11,10 @@ module Koshucode.Baala.Base.Token.Token
     BlankName (..),
     textToken,
     nameToken,
+
+    -- * Local
+    Local (..),
+    unlocal,
   
     -- * TextForm
     TextForm (..),
@@ -112,6 +116,18 @@ instance B.CodePtr Token where
     codePtList (TClose   cp _)     = [cp]
     codePtList (TSpace   cp _)     = [cp]
     codePtList (TComment cp _)     = [cp]
+
+
+-- ----------------------  Local
+
+data Local a
+    = LocalSymbol a
+    | LocalNest a
+      deriving (Show, Eq, Ord, G.Data, G.Typeable)
+
+unlocal :: Local a -> a
+unlocal (LocalNest   a) = a
+unlocal (LocalSymbol a) = a
 
 
 -- ----------------------  TextForm
