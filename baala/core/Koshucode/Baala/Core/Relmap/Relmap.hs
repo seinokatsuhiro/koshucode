@@ -54,7 +54,7 @@ showRelmap r = sh r where
 
     sh (RelmapCopy   _ n r1)   = "RelmapCopy "   ++ show n  ++ joinSubs [r1]
     sh (RelmapNest   _ r1)     = "RelmapNest "   ++ joinSubs [r1]
-    sh (RelmapLink   lx)       = "RelmapLink "   ++ show (C.lexRopName lx)
+    sh (RelmapLink   lx)       = "RelmapLink "   ++ show (C.lexName lx)
     sh (RelmapAppend r1 r2)    = "RelmapAppend"  ++ joinSubs [r1, r2]
 
     joinSubs = concatMap sub
@@ -67,8 +67,8 @@ instance B.Monoid (Relmap' h c) where
 instance B.Name (Relmap' h c) where
     name (RelmapSource _ _ _)       = "source"
     name (RelmapAppend _ _)         = "append"
-    name (RelmapConst  lx _)        = C.lexRopName lx
-    name (RelmapCalc   lx _ _)      = C.lexRopName lx
+    name (RelmapConst  lx _)        = C.lexName lx
+    name (RelmapCalc   lx _ _)      = C.lexName lx
     name _ = undefined
 
 instance B.Write (Relmap' h c) where
@@ -107,7 +107,7 @@ relmapId :: Relmap' h c
 relmapId = RelmapCalc lexId (const $ Right . C.relkitId) []
 
 lexId :: C.Lexmap
-lexId = C.lexBase { C.lexRopToken = B.textToken "id" }
+lexId = C.lexBase { C.lexToken = B.textToken "id" }
 
 
 -- ----------------------  Selector
@@ -134,7 +134,7 @@ relmapSourceList = relmapList f where
 -- | List of name in 'C.RelmapLink'
 relmapNameList :: Relmap' h c -> [String]
 relmapNameList = relmapList f where
-    f (RelmapLink lx) = [C.lexRopName lx]
+    f (RelmapLink lx) = [C.lexName lx]
     f _ = []
 
 relmapList :: B.Map (Relmap' h c -> [a])

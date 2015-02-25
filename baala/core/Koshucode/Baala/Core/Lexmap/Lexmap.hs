@@ -11,7 +11,7 @@ module Koshucode.Baala.Core.Lexmap.Lexmap
 
     -- * Functions
     lexBase,
-    lexRopName,
+    lexName,
     lexAddMessage,
     lexMessageList,
     lexAttrTree,
@@ -27,7 +27,7 @@ import qualified Koshucode.Baala.Core.Lexmap.Attr       as C
 --   and generic relmap is constructed from a lexmap.
 data Lexmap = Lexmap
     { lexType      :: LexmapType    -- ^ Type of lexmap
-    , lexRopToken  :: B.Token       -- ^ Token of operator
+    , lexToken     :: B.Token       -- ^ Token of operator
     , lexAttr      :: C.AttrPara    -- ^ Attribute of relmap operation
     , lexSubmap    :: [Lexmap]      -- ^ Submaps in the attribute
     , lexParent    :: [B.Token]     -- ^ Parent of local relation reference
@@ -45,10 +45,10 @@ instance B.Write Lexmap where
         case B.paraAll para of
           [] -> B.writeH sh [op, "..."]
           xs -> B.writeH sh [op, show xs]
-        where op = lexRopName lx
+        where op = lexName lx
 
 instance B.CodePtr Lexmap where
-    codePtList = B.codePtList . lexRopToken
+    codePtList = B.codePtList . lexToken
 
 -- | Name of relmap operator.
 type RopName = String
@@ -60,21 +60,21 @@ lexAttrTree = map (B.mapSnd head) . B.paraNameList . lexAttr
 -- | Base empty lexmap.
 lexBase :: Lexmap
 lexBase = Lexmap { lexType      = LexmapBase
-                 , lexRopToken  = B.textToken ""
+                 , lexToken     = B.textToken ""
                  , lexAttr      = B.paraEmpty
                  , lexSubmap    = []
                  , lexParent    = []
                  , lexMessage   = [] }
 
 -- | Name of relmap operator
-lexRopName :: Lexmap -> RopName
-lexRopName = B.tokenContent . lexRopToken
+lexName :: Lexmap -> RopName
+lexName = B.tokenContent . lexToken
 
 lexAddMessage :: String -> B.Map Lexmap
 lexAddMessage msg lx = lx { lexMessage = msg : lexMessage lx }
 
 lexMessageList :: Lexmap -> [String]
-lexMessageList Lexmap { lexRopToken = tok, lexMessage = msg }
+lexMessageList Lexmap { lexToken = tok, lexMessage = msg }
     | null msg  = []
     | otherwise = msg ++ src
     where src = map (("  " ++) . fst) $ B.codePtDisplay ("", pt)

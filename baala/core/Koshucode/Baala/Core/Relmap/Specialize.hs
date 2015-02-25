@@ -49,7 +49,7 @@ relmapSpecialize hook links = spec [] [] where
                      Right (kdef, kit)
 
               C.RelmapCopy lx n rmap1 ->
-                  do let p      = C.lexRopToken lx
+                  do let p      = C.lexToken lx
                          heJust = B.fromJust he1
                          local' = (B.LocalSymbol (p,n), heJust) : local
                      (kdef2, kit2) <- post lx $ spec local' keys kdef he1 rmap1
@@ -59,7 +59,7 @@ relmapSpecialize hook links = spec [] [] where
                   do let heJust    = B.fromJust he1
                          heNest    = B.headNested heJust
                          vars      = map fst heNest
-                         p         = C.lexRopToken lx
+                         p         = C.lexToken lx
                          tk (n,he) = (B.LocalNest (p,n), he)
                          heInd     = vars `B.snipIndex` B.headNames heJust
                          local'     = map tk heNest ++ local
@@ -77,8 +77,8 @@ relmapSpecialize hook links = spec [] [] where
                            Just rmap1 -> link n rmap1 (he1, C.relmapLexmaps rmap1)
                            Nothing    -> Msg.unkRelmap n
                   where
-                    n   = C.lexRopName lx
-                    ps  = C.lexParent  lx
+                    n   = C.lexName   lx
+                    ps  = C.lexParent lx
 
         post :: C.Lexmap -> B.Map (B.Ab ([C.RelkitDef c], C.Relkit c))
         post lx result =

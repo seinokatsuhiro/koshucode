@@ -133,13 +133,13 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
         -- -----------  construct lexmap except for submaps
 
         cons :: C.LexmapType -> B.Token -> C.AttrPara -> C.Lexmap
-        cons ty rop attr = check $ C.lexBase { C.lexType      = ty
-                                             , C.lexRopToken  = rop
-                                             , C.lexAttr      = attr }
+        cons ty rop attr = check $ C.lexBase { C.lexType   = ty
+                                             , C.lexToken  = rop
+                                             , C.lexAttr   = attr }
 
         check :: B.Map C.Lexmap
         check lx | C.lexType lx == C.LexmapDerived
-                     = let n    = C.lexRopName lx
+                     = let n    = C.lexName lx
                            msg  = "Same name as base relmap operator '" ++ n ++ "'"
                        in case findSorter n of
                             Just _  -> C.lexAddMessage msg lx
@@ -150,7 +150,7 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
 
         submap :: C.Lexmap -> B.Ab (C.Lexmap, LexmapLinkTable)
         submap lx =
-            let p           = C.lexRopToken lx
+            let p           = C.lexToken lx
                 attr        = C.lexAttrTree lx
                 attrRelmap  = B.filterFst C.isAttrNameRelmap attr
             in case attrRelmap of

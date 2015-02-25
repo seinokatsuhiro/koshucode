@@ -50,7 +50,7 @@ relmapBoth use fill rmap = C.relmapCopy use "i" rmapBoth where
 withParent :: B.Map (C.RopUse c)
 withParent use = use' where
     lx    = C.ropLexmap use
-    tok   = C.lexRopToken lx
+    tok   = C.lexToken lx
     use'  = use { C.ropLexmap = lx { C.lexParent = [tok] }}
 
 

@@ -77,8 +77,8 @@ relmapLink = C.RelmapLink . C.ropLexmap
 relmapLocalVar :: C.RopUse' h c -> String -> C.Relmap' h c
 relmapLocalVar u@C.RopUse { C.ropLexmap = lx } n = relmapLink u2 where
     u2   = u  { C.ropLexmap = lx2 }
-    lx2  = lx { C.lexType     = C.LexmapLocal
-              , C.lexRopToken = B.textToken n }
+    lx2  = lx { C.lexType   = C.LexmapLocal
+              , C.lexToken  = B.textToken n }
 
 
 -- ----------------------
@@ -121,6 +121,6 @@ consRelmap findRop hook = relmap where
                         Just rop -> do sub <- relmap `mapM` C.lexSubmap lx
                                        C.ropCons rop $ C.RopUse hook lx sub
         where link = C.lexType lx /= C.LexmapBase
-              name = C.lexRopName lx
+              name = C.lexName lx
 
 
