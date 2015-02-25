@@ -296,14 +296,15 @@ unkNestRel :: B.Token -> String -> [String] -> B.Ab a
 unkNestRel p n rs = Left $ B.abortLines "Unknown nested relation" $ ref : rs
     where ref = "/" ++ n ++ " in " ++ B.tokenContent p
 
-unkNestVar :: String -> [B.Token] -> [((B.Token, String), B.Head)] -> B.Ab a
+unkNestVar :: String -> [B.Token] -> [((B.Token, B.Local String), B.Head)] -> B.Ab a
 unkNestVar n ls ds = Left $ B.abortLines "Unknown nested relation reference"
                            $ ("search" : map indent dynamic)
                           ++ ("for"    : map indent lexical)
-    where lexical = map (text n) ls
+    where lexical = map (text $ B.LocalSymbol n) ls
           dynamic = map f ds
           f ((tk, k), _) = text k tk
-          text k tk = unwords ["nested relation", term k, "in", tokenAtPoint tk]
+          text (B.LocalSymbol k) tk = unwords ["nested relation", quote k, "in", tokenAtPoint tk]
+          text (B.LocalNest   k) tk = unwords ["nested relation", term  k, "in", tokenAtPoint tk]
           indent    = ("  " ++)
           term      = ('/' :)
 

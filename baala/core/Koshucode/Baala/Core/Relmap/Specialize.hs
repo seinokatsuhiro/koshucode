@@ -21,7 +21,7 @@ relmapSpecialize :: forall h. forall c. (C.GetGlobal h)
     => h c -> RelmapLinkTable' h c -> [C.RelkitDef c]
     -> Maybe B.Head -> C.Relmap' h c -> B.Ab ([C.RelkitDef c], C.Relkit c)
 relmapSpecialize hook links = spec [] [] where
-    spec :: [(B.Local (B.Token, String), B.Head)]  -- name of local relation, and its heading
+    spec :: [((B.Token, B.Local String), B.Head)]  -- name of local relation, and its heading
          -> [C.RelkitKey]        -- information for detecting cyclic relmap
          -> [C.RelkitDef c]      -- list of known specialized relkits
          -> Maybe B.Head         -- input head feeding into generic relmap
@@ -51,7 +51,7 @@ relmapSpecialize hook links = spec [] [] where
               C.RelmapCopy lx n rmap1 ->
                   do let p      = C.lexToken lx
                          heJust = B.fromJust he1
-                         local' = (B.LocalSymbol (p,n), heJust) : local
+                         local' = ((p, B.LocalSymbol n), heJust) : local
                      (kdef2, kit2) <- post lx $ spec local' keys kdef he1 rmap1
                      Right (kdef2, C.relkitCopy p n kit2)
 
@@ -60,7 +60,7 @@ relmapSpecialize hook links = spec [] [] where
                          heNest    = B.headNested heJust
                          vars      = map fst heNest
                          p         = C.lexToken lx
-                         tk (n,he) = (B.LocalNest (p,n), he)
+                         tk (n,he) = ((p, B.LocalNest n), he)
                          heInd     = vars `B.snipIndex` B.headNames heJust
                          local'     = map tk heNest ++ local
                          nestInd   = zip vars heInd
@@ -69,14 +69,15 @@ relmapSpecialize hook links = spec [] [] where
 
               C.RelmapLink lx
                   | C.lexType lx == C.LexmapLocal ->
-                      post lx $ case find ps n of
+                      post lx $ case find tok of
                            Just (p,he)  -> Right (kdef, C.relkitNestVar p n he)
-                           Nothing      -> Msg.unkNestVar n ps $ B.mapFstTo B.unlocal local
+                           Nothing      -> Msg.unkNestVar n ps local
                   | otherwise ->
                       post lx $ case lookup lx links of
                            Just rmap1 -> link n rmap1 (he1, C.relmapLexmaps rmap1)
                            Nothing    -> Msg.unkRelmap n
                   where
+                    tok = C.lexToken  lx
                     n   = C.lexName   lx
                     ps  = C.lexParent lx
 
@@ -86,12 +87,11 @@ relmapSpecialize hook links = spec [] [] where
                (kdef2, kit) <- result
                Right (kdef2, C.relkitSetSource lx kit)
 
-        find [] _     = Nothing
-        find (p:ps) n = case lookup (B.LocalNest (p,n)) local of
-                          Just he -> Just (p,he)
-                          Nothing -> case lookup (B.LocalSymbol (p,n)) local of
-                                       Just he -> Just (p,he)
-                                       Nothing -> find ps n
+        find (B.TLocal cp v eid (p:ps)) =
+            case lookup ((p,v)) local of
+              Just he -> Just (p,he)
+              Nothing -> find (B.TLocal cp v eid ps)
+        find _ = Nothing
 
         -- specialize subrelmaps to subrelkits
         list :: [C.RelkitDef c] -> [C.Relmap' h c] -> B.Ab ([C.RelkitDef c], [C.Relkit c])

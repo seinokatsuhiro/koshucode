@@ -72,8 +72,7 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
                        tss   -> baseOf "append" $ map B.wrapTrees tss
 
         -- operator
-        single (B.TermLeafLocal cp v _ ps2 : ts)     = let rop = B.TTextKey cp $ B.unlocal v
-                                                       in ref C.LexmapLocal rop ps2 ts
+        single (B.TreeL rop@(B.TLocal _ _ _ ps) : ts) = ref C.LexmapLocal rop ps ts
         single (B.TreeL rop@(B.TTextRaw _ _) : ts)   = find rop ts
         -- group
         single [B.TreeB B.BracketGroup _ ts]         = lexmap  eid sec ts

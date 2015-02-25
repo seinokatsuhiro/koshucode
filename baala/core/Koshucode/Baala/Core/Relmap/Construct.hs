@@ -12,7 +12,7 @@ module Koshucode.Baala.Core.Relmap.Construct
 
     -- * Variable
     relmapNest, relmapCopy,
-    relmapLink, relmapLocalVar,
+    relmapLink, relmapLocalSymbol, relmapLocalNest,
 
     -- * Append relmaps
     -- $AppendRelmaps
@@ -74,12 +74,21 @@ relmapCopy = C.RelmapCopy . C.ropLexmap
 relmapLink :: C.RopUse' h c -> C.Relmap' h c
 relmapLink = C.RelmapLink . C.ropLexmap
 
-relmapLocalVar :: C.RopUse' h c -> String -> C.Relmap' h c
-relmapLocalVar u@C.RopUse { C.ropLexmap = lx } n = relmapLink u2 where
-    u2   = u  { C.ropLexmap = lx2 }
-    lx2  = lx { C.lexType   = C.LexmapLocal
-              , C.lexToken  = B.textToken n }
+relmapLocalSymbol :: C.RopUse' h c -> String -> C.Relmap' h c
+relmapLocalSymbol = relmapVar B.LocalSymbol
 
+relmapLocalNest :: C.RopUse' h c -> String -> C.Relmap' h c
+relmapLocalNest = relmapVar B.LocalNest
+
+relmapVar :: (String -> B.Local String) -> C.RopUse' h c -> String -> C.Relmap' h c
+relmapVar k use n = relmapLink use' where
+    lx    = C.ropLexmap use
+    cp    = B.codePt lx
+    tok   = C.lexToken lx
+    use'  = use { C.ropLexmap = lx' }
+    lx'   = lx  { C.lexType   = C.LexmapLocal
+                , C.lexToken  = B.TLocal cp (k n) (-1) [tok]
+                , C.lexParent = [tok] }
 
 -- ----------------------
 -- $AppendRelmaps
