@@ -61,59 +61,47 @@ type RelmapSource = NNamed ([B.TTree], C.Attrmap)
 consLexmap :: FindSorter -> ConsLexmap
 consLexmap findSorter gslot findDeriv = lexmap 0 where
 
-    lexmap1 e sec tree = lexmap e sec [tree]
+    lexmap1 eid sec tree = lexmap eid sec [tree]
 
     lexmap :: Int -> SecNo -> ConsLexmapBody
     lexmap eid sec trees = result where
-        result = Msg.abLexmap trees
-                   $ case B.divideTreesByBar trees of
-                       []    -> Msg.bug "empty list"
-                       [ts]  -> single ts
-                       tss   -> baseOf "append" $ map B.wrapTrees tss
+        result = Msg.abLexmap trees $ case B.divideTreesByBar trees of
+                      []    -> Msg.bug "empty list"
+                      [ts]  -> single ts
+                      tss   -> baseOf "append" $ map B.wrapTrees tss
 
-        -- operator
-        single (B.TreeL rop@(B.TLocal _ _ _ _) : ts) = local C.LexmapLocal rop ts
-        single (B.TreeL rop@(B.TTextRaw _ _) : ts)   = find rop ts
-        -- group
-        single [B.TreeB B.BracketGroup _ ts]         = lexmap  eid sec ts
-        single [B.TreeB _ _ _]                       = Msg.reqGroup
+        single (B.TreeL tok@(B.TTextRaw _ n)   : ts)
+            = find tok n ts                       -- derived or base
+        single (B.TreeL tok@(B.TLocal _ _ _ _) : ts)
+            = local tok ts                        -- local relation "^/x" or "^x"
+        single [B.TreeB B.BracketGroup _ ts]
+            = lexmap eid sec ts                   -- group "( ... )"
+        single [B.TreeB _ _ _]
+            = Msg.reqGroup                        -- unknown group
+        single (n@(B.TermLeaf _ _ [_]) : ts)
+            = baseOf "add" $ n : [B.wrapTrees ts] -- "/N E" means "add /N ( E )"
+        single []
+            = baseOf "id" []                      -- "| R | R" means "id | R | R"
+        single _
+            = Msg.unkRelmap "???"                 -- unknown relmap
+        
+        -- derived or base relmap operator
+        find :: B.Token -> String -> ConsLexmapBody
+        find tok n ts = case findDeriv sec n of
+                           [src] -> deriv tok src ts
+                           []    -> base n tok ts
+                           ds    -> Msg.ambRelmap n ds
 
-        -- special case
-        -- relmap "/N E" is equivalent to "add /N ( E )"
-        -- relmap "| R | R" is equivalent to "id | R | R"
-        single (n@(B.TermLeaf _ _ [_]) : ts)         = baseOf "add" $ n : [B.wrapTrees ts]
-        single []                                    = baseOf "id"  []
-        single _                                     = Msg.unkRelmap "???"
+        -- -----------  local, derived, or base lexmap
 
-        local :: C.LexmapType -> B.Token -> ConsLexmapBody
-        local typ rop []  = Right (cons typ rop B.paraEmpty, [])
-        local _ _ _       = Msg.extraAttr
-
-        find :: B.Token -> ConsLexmapBody
-        find rop ts = let name = B.tokenContent rop
-                      in case findDeriv sec name of
-                           [src] -> deriv rop src ts
-                           []    -> base name rop ts
-                           ds    -> Msg.ambRelmap name ds
-
-        -- -----------  base lexmap
-
-        baseOf :: C.RopName -> ConsLexmapBody
-        baseOf n = base n $ B.textToken n
-
-        base :: C.RopName -> B.Token -> ConsLexmapBody
-        base n rop ts = case findSorter n of
-                          Nothing     -> Msg.unkRelmap n
-                          Just sorter -> do attr  <- sorter ts
-                                            let lx = cons C.LexmapBase rop attr
-                                            submap lx
-
-        -- -----------  derived lexmap
+        local :: B.Token -> ConsLexmapBody
+        local tok [] = Right (cons C.LexmapLocal tok B.paraEmpty, [])
+        local _ _    = Msg.extraAttr
 
         deriv :: B.Token -> RelmapSource -> ConsLexmapBody
-        deriv rop src ts =
+        deriv tok src ts =
             do attr  <- C.attrBranch ts
-               let lx = cons C.LexmapDerived rop attr
+               let lx = cons C.LexmapDerived tok attr
                tab   <- table lx src
                Right (lx, tab)
 
@@ -125,11 +113,22 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
               (lx2, tab)  <- lexmap (eid + 1) sec' form2
               Right $ (lx, lx2) : tab
 
+        baseOf :: C.RopName -> ConsLexmapBody
+        baseOf n = base n $ B.textToken n
+
+        base :: C.RopName -> B.Token -> ConsLexmapBody
+        base n tok ts =
+            case findSorter n of
+              Nothing     -> Msg.unkRelmap n
+              Just sorter -> do attr <- sorter ts
+                                let lx = cons C.LexmapBase tok attr
+                                submap lx
+
         -- -----------  construct lexmap except for submaps
 
         cons :: C.LexmapType -> B.Token -> C.AttrPara -> C.Lexmap
-        cons ty rop attr = check $ C.lexBase { C.lexType   = ty
-                                             , C.lexToken  = rop
+        cons ty tok attr = check $ C.lexBase { C.lexType   = ty
+                                             , C.lexToken  = tok
                                              , C.lexAttr   = attr }
 
         check :: B.Map C.Lexmap
@@ -141,17 +140,15 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
                             Nothing -> lx
         check lx = lx
 
-        -- -----------  construct lexmaps of submaps
+        -- -----------  construct lexmaps for submaps
 
         submap :: C.Lexmap -> B.Ab (C.Lexmap, LexmapLinkTable)
         submap lx =
-            let p           = C.lexToken lx
-                attr        = C.lexAttrTree lx
-                attrRelmap  = B.filterFst C.isAttrNameRelmap attr
-            in case attrRelmap of
+            let mark = B.mapToLeaf $ markLocal $ C.lexToken lx
+                attr = C.lexAttrTree lx
+            in case B.filterFst C.isAttrNameRelmap attr of
                  [(C.AttrNameRelmapFlat _, ts)] -> submap2 lx ts
-                 [(C.AttrNameRelmapNest _, ts)] -> do let ts2 = B.mapToLeaf (bind p) `map` ts
-                                                      submap2 lx ts2
+                 [(C.AttrNameRelmapNest _, ts)] -> submap2 lx $ map mark ts
                  []                             -> Right (lx, [])  -- no submaps
                  _                              -> Msg.bug "submap"
 
@@ -161,9 +158,9 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
                    lx2           = lx { C.lexSubmap = sublx }
                Right (lx2, concat tabs)
 
-        bind p (B.TLocal cp v eid' ps)
-            | null ps || eid == eid'  = B.TLocal cp v eid $ p : ps
-        bind _ tok = tok
+        markLocal p (B.TLocal cp v eid' ps) | null ps || eid == eid'
+                       = B.TLocal cp v eid $ p : ps
+        markLocal _ loc = loc
 
 
 -- ----------------------
