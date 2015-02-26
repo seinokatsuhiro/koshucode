@@ -32,15 +32,15 @@ def cons usage attr = (cons, usage, attr') where
 
 attrName :: String -> C.AttrName
 attrName n@('-':_) | l == '^'    = attrLocal i
-                   | l == '/'    = C.AttrNameRelmapFlat i  -- "-xxx/"
-                   | otherwise   = C.AttrNameNormal n      -- "-xxx"
+                   | l == '/'    = C.AttrRelmapNormal i  -- "-xxx/"
+                   | otherwise   = C.AttrNormal       n  -- "-xxx"
                    where l = last n
                          i = init n
 attrName n = ropBug n
 
 attrLocal :: String -> C.AttrName
-attrLocal n        | l == '/'    = C.AttrNameRelmapNest i    -- "-xxx/^"
-                   | otherwise   = C.AttrNameLocal      n    -- "-xxx^"
+attrLocal n        | l == '/'    = C.AttrRelmapLocal i    -- "-xxx/^"
+                   | otherwise   = C.AttrNormal      n    -- "-xxx^"
                    where l = last n
                          i = init n
 

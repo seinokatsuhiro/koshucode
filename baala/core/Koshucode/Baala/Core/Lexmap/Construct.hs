@@ -147,10 +147,10 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
             let mark = B.mapToLeaf $ markLocal $ C.lexToken lx
                 attr = C.lexAttrTree lx
             in case B.filterFst C.isAttrNameRelmap attr of
-                 [(C.AttrNameRelmapFlat _, ts)] -> submap2 lx ts
-                 [(C.AttrNameRelmapNest _, ts)] -> submap2 lx $ map mark ts
-                 []                             -> Right (lx, [])  -- no submaps
-                 _                              -> Msg.bug "submap"
+                 [(C.AttrRelmapNormal _, ts)] -> submap2 lx ts
+                 [(C.AttrRelmapLocal  _, ts)] -> submap2 lx $ map mark ts
+                 []                           -> Right (lx, [])  -- no submaps
+                 _                            -> Msg.bug "submap"
 
         submap2 lx ts =
             do subs <- lexmap1 eid sec `mapM` ts

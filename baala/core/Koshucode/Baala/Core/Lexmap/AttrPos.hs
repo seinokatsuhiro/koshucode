@@ -15,7 +15,6 @@ module Koshucode.Baala.Core.Lexmap.AttrPos
     -- * Attribute name
     AttrName (..),
     isAttrNameRelmap,
-    isAttrNameLocal,
     attrNameText,
     attrNameTrunk,
   ) where
@@ -93,7 +92,7 @@ a # v = (a ,[v])
 a ## vv = (a, vv)
 
 enumAttr :: [AttrName]
-enumAttr = map (AttrNameNormal . ('-' :) . show) [1 :: Int ..]
+enumAttr = map (AttrNormal . ('-' :) . show) [1 :: Int ..]
 
 isTermLeaf :: B.TTree -> Bool
 isTermLeaf (B.TreeL token) = B.isTermToken token
@@ -102,32 +101,25 @@ isTermLeaf _               = False
 
 -- ----------------------  Attribute name
 
--- | Attribute name for relmap operator.
+-- | Attribute name of relmap.
 data AttrName
-    = AttrNameNormal     String    -- ^ Normal attribute
-    | AttrNameRelmapFlat String    -- ^ Attribute for submap
-    | AttrNameRelmapNest String    -- ^ Attribute for submap with nested relation references
-    | AttrNameLocal      String    -- ^ Attribute for local relation reference
+    = AttrNormal       String  -- ^ Normal attribute
+    | AttrRelmapNormal String  -- ^ Attribute for submap
+    | AttrRelmapLocal  String  -- ^ Attribute for submap with local relation references
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 -- | Test attribute name is for subrelmap.
 isAttrNameRelmap :: AttrName -> Bool
-isAttrNameRelmap (AttrNameRelmapFlat _)  = True
-isAttrNameRelmap (AttrNameRelmapNest _)  = True
-isAttrNameRelmap _                       = False
-
--- | Test attribute name is for local variable.
-isAttrNameLocal :: AttrName -> Bool
-isAttrNameLocal (AttrNameLocal _)    = True
-isAttrNameLocal _                    = False
+isAttrNameRelmap (AttrRelmapNormal _)  = True
+isAttrNameRelmap (AttrRelmapLocal  _)  = True
+isAttrNameRelmap _                     = False
 
 -- | String part of attribute names.
 attrNameText :: AttrName -> String
-attrNameText (AttrNameNormal     n)  = n
-attrNameText (AttrNameRelmapFlat n)  = n
-attrNameText (AttrNameRelmapNest n)  = n
-attrNameText (AttrNameLocal      n)  = n
+attrNameText (AttrNormal       n)  = n
+attrNameText (AttrRelmapNormal n)  = n
+attrNameText (AttrRelmapLocal  n)  = n
 
 -- | Constant for attribute name @\@trunk@.
 attrNameTrunk :: AttrName
-attrNameTrunk = AttrNameNormal "@trunk"
+attrNameTrunk = AttrNormal "@trunk"

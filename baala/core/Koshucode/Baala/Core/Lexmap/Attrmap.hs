@@ -77,8 +77,8 @@ runAttrmap = loop where
         let Just pos = lookup C.attrNameTrunk attr
         in Msg.abAttr toks $ case edit of
           AttrmapId                -> Right  attr
-          AttrmapAdd opt k xs      -> add    attr opt (C.AttrNameNormal k) xs
-          AttrmapRename (k', k)    -> rename attr (C.AttrNameNormal k') (C.AttrNameNormal k)
+          AttrmapAdd opt k xs      -> add    attr opt (C.AttrNormal k) xs
+          AttrmapRename (k', k)    -> rename attr (C.AttrNormal k') (C.AttrNormal k)
           AttrmapFill xs           -> do xs2 <- fill pos xs
                                          Right $ (C.attrNameTrunk, xs2) : attr
           AttrmapAppend rs         -> B.foldM (flip loop) attr rs

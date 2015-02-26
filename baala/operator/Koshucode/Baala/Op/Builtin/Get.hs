@@ -40,8 +40,8 @@ type RopGet c a
     -> B.Ab a       -- ^ Attribute of relmap
 
 lookupTree, lookupRelmap :: String -> C.RopUse c -> Maybe [B.TTree]
-lookupTree    = lookupAttr C.AttrNameNormal     `B.mappend` lookupAttr C.AttrNameLocal
-lookupRelmap  = lookupAttr C.AttrNameRelmapFlat `B.mappend` lookupAttr C.AttrNameRelmapNest
+lookupTree    = lookupAttr C.AttrNormal
+lookupRelmap  = lookupAttr C.AttrRelmapNormal `B.mappend` lookupAttr C.AttrRelmapLocal
 
 lookupAttr :: (String -> C.AttrName) -> String -> C.RopUse c -> Maybe [B.TTree]
 lookupAttr c name = B.paraLookupSingle (c name) . C.lexAttr . C.ropLexmap

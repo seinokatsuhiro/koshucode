@@ -81,7 +81,7 @@ attrBranch trees =
            p2  = B.paraNameAdd "@trunk" (B.paraPos p) p
            dup = B.paraMultipleNames p2
        B.when (B.notNull dup) $ Msg.dupAttr dup
-       Right $ B.paraNameMapKeys C.AttrNameNormal p2
+       Right $ B.paraNameMapKeys C.AttrNormal p2
 
 maybeHyname :: B.TTreeTo (Maybe String)
 maybeHyname (B.TextLeafRaw _ n@('-' : _))  = Just n
