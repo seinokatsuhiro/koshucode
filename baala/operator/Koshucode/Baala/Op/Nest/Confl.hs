@@ -60,10 +60,10 @@ consFor use =
        rmap <- Op.getRelmap use "-relmap"
        Right $ relmapFor use n rmap
 
-relmapFor :: (C.CRel c) => C.RopUse c -> B.TermName -> B.Map (C.Relmap c)
+relmapFor :: (C.CRel c) => C.Intmed c -> B.TermName -> B.Map (C.Relmap c)
 relmapFor use n rmap = relmapForInner use n (Op.relmapUp use n `B.mappend` rmap)
 
-relmapForInner :: (C.CRel c) => C.RopUse c -> B.TermName -> B.Map (C.Relmap c)
+relmapForInner :: (C.CRel c) => C.Intmed c -> B.TermName -> B.Map (C.Relmap c)
 relmapForInner use n = C.relmapNest use . bin where
     bin = C.relmapBinary use $ relkitFor n
 
@@ -100,7 +100,7 @@ consGroup use =
      rmap <- Op.getRelmap use "-relmap"
      Right $ relmapGroup use n rmap
 
-relmapGroup :: (Ord c, C.CRel c) => C.RopUse c -> B.TermName -> B.Map (C.Relmap c)
+relmapGroup :: (Ord c, C.CRel c) => C.Intmed c -> B.TermName -> B.Map (C.Relmap c)
 relmapGroup use = C.relmapBinary use . relkitGroup
 
 relkitGroup :: forall c. (Ord c, C.CRel c) => B.TermName -> C.RelkitBinary c
@@ -152,7 +152,7 @@ consSlice use =
      rmap <- Op.getOptRelmap C.relmapId use "-relmap"
      Right $ relmapSlice use n rmap
 
-relmapSlice :: (C.CRel c) => C.RopUse c -> B.TermName -> B.Map (C.Relmap c)
+relmapSlice :: (C.CRel c) => C.Intmed c -> B.TermName -> B.Map (C.Relmap c)
 relmapSlice use n = C.relmapNest use . bin where
     bin = C.relmapBinary use $ relkitSlice n
 
@@ -174,7 +174,7 @@ consSliceUp use =
   do rmap <- Op.getOptRelmap C.relmapId use "-relmap"
      Right $ relmapSliceUp use rmap
 
-relmapSliceUp :: (C.CRel c) => C.RopUse c -> B.Map (C.Relmap c)
+relmapSliceUp :: (C.CRel c) => C.Intmed c -> B.Map (C.Relmap c)
 relmapSliceUp use = C.relmapNest use . bin where
     bin = C.relmapBinary use relkitSliceUp
 

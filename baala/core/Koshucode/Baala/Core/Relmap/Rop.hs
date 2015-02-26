@@ -6,7 +6,7 @@ module Koshucode.Baala.Core.Relmap.Rop
   ( -- * Operator
     Rop' (..), RopUsage,
     -- * Constructor
-    RopCons', RopUse' (..),
+    RopCons', Intmed' (..),
   ) where
 
 import qualified Koshucode.Baala.Base                  as B
@@ -38,16 +38,16 @@ type RopUsage = String
 -- ----------------------  Constructor
 
 -- | Constructor of relmap operator,
---   i.e., function from use of operator to generic relmap.
-type RopCons' h c = RopUse' h c -> B.Ab (C.Relmap' h c)
+--   i.e., function from intermediate relamp to generic relmap.
+type RopCons' h c = Intmed' h c -> B.Ab (C.Relmap' h c)
 
--- | Use of relmap operator.
-data RopUse' h c = RopUse
+-- | Intermediate relmap, that is in between lexmap and generic relmap.
+data Intmed' h c = Intmed
     { ropHook     :: h c
     , ropLexmap   :: C.Lexmap         -- ^ Syntactic data of operator use
     , ropSubmap   :: [C.Relmap' h c]  -- ^ Subrelmaps
     } deriving (Show)
 
-instance B.CodePtr (RopUse' h c) where
+instance B.CodePtr (Intmed' h c) where
     codePtList = B.codePtList . ropLexmap
 

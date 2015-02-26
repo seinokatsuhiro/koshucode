@@ -56,7 +56,7 @@ consPick use =
   do ns <- Op.getTerms use "-term"
      Right $ relmapPick use ns
 
-relmapPick :: C.RopUse c -> [B.TermName] -> C.Relmap c
+relmapPick :: C.Intmed c -> [B.TermName] -> C.Relmap c
 relmapPick use = C.relmapFlow use . relkitPick
 
 relkitPick :: [B.TermName] -> C.RelkitFlow c
@@ -67,7 +67,7 @@ consCut use =
   do ns <- Op.getTerms use "-term"
      Right $ relmapCut use ns
 
-relmapCut :: C.RopUse c -> [B.TermName] -> C.Relmap c
+relmapCut :: C.Intmed c -> [B.TermName] -> C.Relmap c
 relmapCut use = C.relmapFlow use . relkitCut
 
 relkitCut :: [B.TermName] -> C.RelkitFlow c
@@ -81,7 +81,7 @@ consPickTerm use =
   do rmap <- Op.getRelmap use "-relmap"
      Right $ relmapPickTerm use rmap
 
-relmapPickTerm :: C.RopUse c -> C.Relmap c -> C.Relmap c
+relmapPickTerm :: C.Intmed c -> C.Relmap c -> C.Relmap c
 relmapPickTerm use = C.relmapBinary use relkitPickTerm
 
 relkitPickTerm :: C.RelkitBinary c
@@ -92,7 +92,7 @@ consCutTerm use =
   do rmap <- Op.getRelmap use "-relmap"
      Right $ relmapCutTerm use rmap
 
-relmapCutTerm :: C.RopUse c -> C.Relmap c -> C.Relmap c
+relmapCutTerm :: C.Intmed c -> C.Relmap c -> C.Relmap c
 relmapCutTerm use = C.relmapBinary use relkitCutTerm
 
 relkitCutTerm :: C.RelkitBinary c
@@ -127,7 +127,7 @@ consRename use =
   do np <- Op.getTermPairs use "-term"
      Right $ relmapRename use np
 
-relmapRename :: C.RopUse c -> [B.TermName2] -> C.Relmap c
+relmapRename :: C.Intmed c -> [B.TermName2] -> C.Relmap c
 relmapRename use = C.relmapFlow use . relkitMove . unzip . map B.swap
 
 
@@ -139,7 +139,7 @@ consMove use =
      ns <- Op.getTerms use "-to"
      Right $ relmapMove use (ps, ns)
 
-relmapMove :: C.RopUse c -> ([B.TermName], [B.TermName]) -> C.Relmap c
+relmapMove :: C.Intmed c -> ([B.TermName], [B.TermName]) -> C.Relmap c
 relmapMove use = C.relmapFlow use . relkitMove
 
 relkitMove :: ([B.TermName], [B.TermName]) -> C.RelkitFlow c

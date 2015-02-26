@@ -53,7 +53,7 @@ consEmpty use =
     do ns <- Op.getTerms use "-term"
        Right $ relmapEmpty use ns
 
-relmapEmpty :: C.RopUse c -> [B.TermName] -> C.Relmap c
+relmapEmpty :: C.Intmed c -> [B.TermName] -> C.Relmap c
 relmapEmpty use = C.relmapFlow use . relkitEmpty
 
 relkitEmpty :: [B.TermName] -> C.RelkitFlow c
@@ -91,7 +91,7 @@ consSourceTerm use =
      rmap  <- Op.getRelmap use "-relmap"
      Right $ relmapSourceTerm use pat rmap
 
-relmapSourceTerm :: C.RopUse c -> String -> B.Map (C.Relmap c)
+relmapSourceTerm :: C.Intmed c -> String -> B.Map (C.Relmap c)
 relmapSourceTerm use pat = C.relmapBinary use $ relkitSourceTerm pat
 
 relkitSourceTerm :: String -> C.RelkitBinary c

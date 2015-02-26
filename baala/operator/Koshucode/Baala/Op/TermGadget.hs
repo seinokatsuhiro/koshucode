@@ -51,7 +51,7 @@ consPrefix use =
        ns  <- Op.getTerms use "-term"
        Right $ relmapPrefix use pre ns
 
-relmapPrefix :: C.RopUse c -> String -> [String] -> C.Relmap c
+relmapPrefix :: C.Intmed c -> String -> [String] -> C.Relmap c
 relmapPrefix use pre ns = C.relmapFlow use $ relkitPrefix pre ns
 
 -- | Add prefix to specified terms.
@@ -75,7 +75,7 @@ consUnprefix use =
     do pre <- Op.getTerm use "-prefix"
        Right $ relmapUnprefix use pre
 
-relmapUnprefix :: C.RopUse c -> String -> C.Relmap c
+relmapUnprefix :: C.Intmed c -> String -> C.Relmap c
 relmapUnprefix use = C.relmapFlow use . relkitUnprefix
 
 -- | Remove prefix
@@ -100,7 +100,7 @@ consPrefixChange use =
        old <- Op.getTerm use "-old"
        Right $ relmapPrefixChange use (new, old)
 
-relmapPrefixChange :: C.RopUse c -> (String, String) -> C.Relmap c
+relmapPrefixChange :: C.Intmed c -> (String, String) -> C.Relmap c
 relmapPrefixChange use = C.relmapFlow use . relkitPrefixChange
 
 -- | Change prefix
@@ -121,7 +121,7 @@ relkitPrefixChange (new, old) (Just he1) = Right kit2 where
 consWipe :: C.RopCons c
 consWipe = Right . relmapWipe
 
-relmapWipe :: C.RopUse c -> C.Relmap c
+relmapWipe :: C.Intmed c -> C.Relmap c
 relmapWipe use = C.relmapFlow use relkitWipe
 
 relkitWipe :: C.RelkitFlow c

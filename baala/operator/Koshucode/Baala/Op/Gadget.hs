@@ -55,7 +55,7 @@ consContents use =
     do n <- Op.getTerm use "-term"
        Right $ relmapContents use n
 
-relmapContents :: (Ord c) => C.RopUse c -> B.TermName -> C.Relmap c
+relmapContents :: (Ord c) => C.Intmed c -> B.TermName -> C.Relmap c
 relmapContents use = C.relmapFlow use . relkitContents
 
 relkitContents :: (Ord c) => B.TermName -> C.RelkitFlow c
@@ -75,7 +75,7 @@ consDepRank use =
        r <- Op.getTerm use "-rank"
        Right $ relmapDepRank use (x,y,r)
 
-relmapDepRank :: (Ord c, C.CDec c) => C.RopUse c -> B.TermName3 -> C.Relmap c
+relmapDepRank :: (Ord c, C.CDec c) => C.Intmed c -> B.TermName3 -> C.Relmap c
 relmapDepRank use = C.relmapFlow use . relkitDepRank
 
 relkitDepRank :: (Ord c, C.CDec c) => B.TermName3 -> C.RelkitFlow c
@@ -104,7 +104,7 @@ consSize use =
   do n <- Op.getTerm use "-term"
      Right $ relmapSize use n
 
-relmapSize :: (C.CDec c) => C.RopUse c -> B.TermName -> C.Relmap c
+relmapSize :: (C.CDec c) => C.Intmed c -> B.TermName -> C.Relmap c
 relmapSize use n = C.relmapFlow use $ relkitSize n
 
 relkitSize :: (C.CDec c) => B.TermName -> C.RelkitFlow c

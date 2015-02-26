@@ -35,7 +35,7 @@ consDown use =
   do n <- Op.getTerm use "-term"
      Right $ relmapDown use n
 
-relmapDown :: (C.CRel c) => C.RopUse c -> B.TermName -> C.Relmap c
+relmapDown :: (C.CRel c) => C.Intmed c -> B.TermName -> C.Relmap c
 relmapDown use = C.relmapFlow use . relkitDown
 
 relkitDown :: (C.CRel c) => B.TermName -> C.RelkitFlow c
@@ -60,7 +60,7 @@ consUp use =
   do n <- Op.getTerm use "-term"
      Right $ relmapUp use n
 
-relmapUp :: (C.CRel c) => C.RopUse c -> B.TermName -> C.Relmap c
+relmapUp :: (C.CRel c) => C.Intmed c -> B.TermName -> C.Relmap c
 relmapUp use = C.relmapFlow use . relkitUp
 
 relkitUp :: (C.CRel c) => B.TermName -> C.RelkitFlow c
@@ -90,7 +90,7 @@ consChunk use =
      ord <- Op.getOption [] Op.getTerms use "-order"
      Right $ relmapChunk use ns ord
 
-relmapChunk :: (Ord c, C.CRel c) => C.RopUse c -> [B.TermName] -> [B.TermName] -> C.Relmap c
+relmapChunk :: (Ord c, C.CRel c) => C.Intmed c -> [B.TermName] -> [B.TermName] -> C.Relmap c
 relmapChunk use ns ord = C.relmapFlow use $ relkitChunk ns ord
 
 relkitChunk :: (Ord c, C.CRel c) => [B.TermName] -> [B.TermName] -> C.RelkitFlow c

@@ -62,7 +62,7 @@ consAdd use =
        Right $ relmapAdd use (cops, cox)
 
 relmapAdd :: (C.CList c, C.CRel c, B.Write c)
-  => C.RopUse c -> (C.CopSet c, [C.NamedCox c]) -> C.Relmap c
+  => C.Intmed c -> (C.CopSet c, [C.NamedCox c]) -> C.Relmap c
 relmapAdd use = C.relmapFlow use . relkitAdd
 
 relkitAdd :: (C.CList c, C.CRel c, B.Write c)
@@ -90,7 +90,7 @@ consSubst use =
        Right $ relmapSubst use (cops, cox)
 
 relmapSubst :: (C.CList c, C.CRel c, B.Write c)
-  => C.RopUse c -> (C.CopSet c, [C.NamedCox c]) -> C.Relmap c
+  => C.Intmed c -> (C.CopSet c, [C.NamedCox c]) -> C.Relmap c
 relmapSubst use = C.relmapFlow use . relkitSubst
 
 relkitSubst :: (C.CList c, C.CRel c, B.Write c)
@@ -122,7 +122,7 @@ consFill use =
      let cops = C.globalCopset $ C.ropGlobal use
      Right $ relmapFill use (ns, cops, coxTo)
 
-relmapFill :: (C.CContent c) => C.RopUse c -> ([B.TermName], C.CopSet c, C.Cox c) -> C.Relmap c
+relmapFill :: (C.CContent c) => C.Intmed c -> ([B.TermName], C.CopSet c, C.Cox c) -> C.Relmap c
 relmapFill use = C.relmapFlow use . relkitFill
 
 relkitFill :: (C.CContent c) => ([B.TermName], C.CopSet c, C.Cox c) -> C.RelkitFlow c
@@ -167,7 +167,7 @@ consReplaceAll use =
      let cops = C.globalCopset $ C.ropGlobal use
      Right $ relmapReplaceAll use (cops, coxFrom, coxTo)
 
-relmapReplaceAll :: (C.CContent c) => C.RopUse c -> (C.CopSet c, C.Cox c, C.Cox c) -> C.Relmap c
+relmapReplaceAll :: (C.CContent c) => C.Intmed c -> (C.CopSet c, C.Cox c, C.Cox c) -> C.Relmap c
 relmapReplaceAll use = C.relmapFlow use . relkitReplaceAll
 
 relkitReplaceAll :: (C.CContent c) => (C.CopSet c, C.Cox c, C.Cox c) -> C.RelkitFlow c
@@ -190,7 +190,7 @@ consSplit use =
        Right $ relmapSplit use (cops, cox)
 
 relmapSplit :: (C.CList c, C.CRel c, B.Write c, C.CBool c)
-  => C.RopUse c -> (C.CopSet c, [C.NamedCox c]) -> C.Relmap c
+  => C.Intmed c -> (C.CopSet c, [C.NamedCox c]) -> C.Relmap c
 relmapSplit use = C.relmapFlow use . relkitSplit
 
 relkitSplit :: forall c. (C.CList c, C.CRel c, B.Write c, C.CBool c)
@@ -237,7 +237,7 @@ consUnary use =
        cs <- Op.getContents use "-expr"
        Right $ relmapUnary use (n, cs)
 
-relmapUnary :: (C.CContent c) => C.RopUse c -> (B.TermName, [c]) -> C.Relmap c
+relmapUnary :: (C.CContent c) => C.Intmed c -> (B.TermName, [c]) -> C.Relmap c
 relmapUnary use = C.relmapFlow use . relkitUnary
 
 relkitUnary :: (C.CContent c) => (B.TermName, [c]) -> C.RelkitFlow c

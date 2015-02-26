@@ -43,7 +43,7 @@ consKoshuResRop use =
      Right $ relmapKoshuResRop use (sec, name)
 
 relmapKoshuResRop :: (C.CContent c)
-    => C.RopUse c -> (B.TermName, B.TermName)
+    => C.Intmed c -> (B.TermName, B.TermName)
     -> C.Relmap c
 relmapKoshuResRop use = C.relmapHook use . relkitKoshuResRop
 
@@ -66,7 +66,7 @@ consKoshuResSink use =
      Right $ relmapKoshuResSink use (sec, pat)
 
 relmapKoshuResSink :: (C.CContent c)
-    => C.RopUse c -> (B.TermName, B.TermName)
+    => C.Intmed c -> (B.TermName, B.TermName)
     -> C.Relmap c
 relmapKoshuResSink use = C.relmapHook use . relkitKoshuResSink
 
@@ -88,7 +88,7 @@ consKoshuResArticle use =
   do name <- Op.getTerm use "-name"
      Right $ relmapKoshuResArticle use name
 
-relmapKoshuResArticle :: (C.CContent c) => C.RopUse c -> B.TermName -> C.Relmap c
+relmapKoshuResArticle :: (C.CContent c) => C.Intmed c -> B.TermName -> C.Relmap c
 relmapKoshuResArticle use = C.relmapHook use . relkitKoshuResArticle
 
 relkitKoshuResArticle :: (C.CContent c) => B.TermName -> C.RelkitHook c

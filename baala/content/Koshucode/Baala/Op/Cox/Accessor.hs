@@ -51,7 +51,7 @@ consClock use =
       fill hms = hms
 
 relmapClock :: (C.CContent c) =>
-  C.RopUse c -> (C.CopSet c, B.TermName, (C.Cox c, C.Cox c, (C.MaybeCox c, C.MaybeCox c, C.MaybeCox c))) -> C.Relmap c
+  C.Intmed c -> (C.CopSet c, B.TermName, (C.Cox c, C.Cox c, (C.MaybeCox c, C.MaybeCox c, C.MaybeCox c))) -> C.Relmap c
 relmapClock use = C.relmapFlow use . relkitClock
 
 relkitClock :: (C.CContent c)
@@ -105,7 +105,7 @@ consClockGet use =
      Right $ relmapClockGet use (cops, clock, ns)
 
 relmapClockGet :: (C.CContent c) =>
-  C.RopUse c -> (C.CopSet c, C.Cox c, [Maybe B.TermName]) -> C.Relmap c
+  C.Intmed c -> (C.CopSet c, C.Cox c, [Maybe B.TermName]) -> C.Relmap c
 relmapClockGet use = C.relmapFlow use . relkitClockGet
 
 relkitClockGet :: (C.CContent c) =>
@@ -141,7 +141,7 @@ consClockAlter use =
        Right $ relmapClockAlter use (cops, clock, (day, hour, minute, sec))
 
 relmapClockAlter :: (C.CContent c) =>
-  C.RopUse c -> (C.CopSet c, B.TermName, (C.MaybeCox c, C.MaybeCox c, C.MaybeCox c, C.MaybeCox c)) -> C.Relmap c
+  C.Intmed c -> (C.CopSet c, B.TermName, (C.MaybeCox c, C.MaybeCox c, C.MaybeCox c, C.MaybeCox c)) -> C.Relmap c
 relmapClockAlter use = C.relmapFlow use . relkitClockAlter
 
 relkitClockAlter :: (C.CContent c)

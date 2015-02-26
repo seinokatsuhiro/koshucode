@@ -29,7 +29,7 @@ consSome use =
     do rmap <- Op.getRelmap use "-relmap"
        Right $ relmapSome use rmap
 
-relmapSome :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
+relmapSome :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
 relmapSome use = C.relmapBinary use relkitSome
 
 relkitSome :: (Ord c) => C.RelkitBinary c
@@ -49,7 +49,7 @@ consNone use =
     do rmap <- Op.getRelmap use "-relmap"
        Right $ relmapNone use rmap
 
-relmapNone :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
+relmapNone :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
 relmapNone use = C.relmapBinary use relkitNone
 
 relkitNone :: (Ord c) => C.RelkitBinary c
@@ -64,7 +64,7 @@ consSub use =
     do rmap <- Op.getRelmap use "-relmap"
        Right $ relmapSub use rmap
 
-relmapSub :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
+relmapSub :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
 relmapSub use = C.relmapBinary use relkitSub
 
 relkitSub :: (Ord c) => C.RelkitBinary c
@@ -86,7 +86,7 @@ consCompose use =
     do rmap <- Op.getRelmap use "-relmap"
        Right $ relmapCompose use rmap
 
-relmapCompose :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
+relmapCompose :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
 relmapCompose use = C.relmapBinary use relkitCompose
 
 relkitCompose :: forall c. (Ord c) => C.RelkitBinary c

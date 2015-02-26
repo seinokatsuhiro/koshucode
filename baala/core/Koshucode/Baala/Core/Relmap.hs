@@ -50,10 +50,10 @@ import Koshucode.Baala.Core.Relmap.Specialize
 --    'Koshucode.Baala.Base.Syntax.TTree.TTree'.
 --
 --  * Data 'RopCons' has
---    'RopUse' and
+--    'Intmed' and
 --    'Relmap'.
 --
---  * Data 'RopUse' has
+--  * Data 'Intmed' has
 --    'Lexmap' and
 --    'Relmap'.
 --

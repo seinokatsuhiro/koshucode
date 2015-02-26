@@ -43,7 +43,7 @@ consGroupBy use =
      rmap <- Op.getRelmap use "-relmap"
      Right $ relmapGroupBy use n rmap
 
-relmapGroupBy :: (Ord c, C.CRel c) => C.RopUse c -> B.TermName -> B.Map (C.Relmap c)
+relmapGroupBy :: (Ord c, C.CRel c) => C.Intmed c -> B.TermName -> B.Map (C.Relmap c)
 relmapGroupBy use n rmap = C.relmapCopy use n rmapGroup where
     rmapGroup  = rmap `B.mappend` Op.relmapGroup use n rmapLocal
     rmapLocal  = C.relmapLocalSymbol use n
@@ -56,7 +56,7 @@ consJoinUp use =
   do nest <- Op.getTerms use "-term"
      Right $ relmapJoinUp use nest
 
-relmapJoinUp :: (Ord c) => C.RopUse c -> [B.TermName] -> C.Relmap c
+relmapJoinUp :: (Ord c) => C.Intmed c -> [B.TermName] -> C.Relmap c
 relmapJoinUp use nest = C.relmapNest use $ Op.relmapJoinList use rmaps where
     rmaps   = link `map` nest
     link n  = C.relmapLocalNest use n
@@ -80,7 +80,7 @@ consNest use =
      to       <- Op.getTerm    use "-to"
      Right $ relmapNest use (co, ns, to)
 
-relmapNest :: (Ord c, C.CRel c) => C.RopUse c -> (Bool, [B.TermName], B.TermName) -> C.Relmap c
+relmapNest :: (Ord c, C.CRel c) => C.Intmed c -> (Bool, [B.TermName], B.TermName) -> C.Relmap c
 relmapNest use (co, ns, to) = group `B.mappend` for where
     group  = relmapGroupBy use to key
     for    = Op.relmapFor use to nest
@@ -108,7 +108,7 @@ consUnnest use =
   do n <- Op.getTerm use "-term"
      Right $ relmapUnnest use n
 
-relmapUnnest :: (Ord c, C.CRel c) => C.RopUse c -> B.TermName -> C.Relmap c
+relmapUnnest :: (Ord c, C.CRel c) => C.Intmed c -> B.TermName -> C.Relmap c
 relmapUnnest use n = unnest where
     unnest  = slice `B.mappend` cut
     slice   = Op.relmapSliceUp use meet

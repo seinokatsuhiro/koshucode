@@ -70,7 +70,7 @@ consMember use =
      Right $ relmapMember use (x, xs)
 
 relmapMember :: (Ord c, C.CSet c, C.CList c, C.CText c)
-  => C.RopUse c -> B.TermName2 -> C.Relmap c
+  => C.Intmed c -> B.TermName2 -> C.Relmap c
 relmapMember use = C.relmapFlow use . relkitMember
 
 relkitMember :: (Ord c, C.CSet c, C.CList c, C.CText c)
@@ -125,7 +125,7 @@ consAssn use =
      to <- Op.getTerm  use "-to"
      Right $ relmapAssn use (ns, to)
 
-relmapAssn :: (C.CAssn c) => C.RopUse c -> ([B.TermName], B.TermName) -> C.Relmap c
+relmapAssn :: (C.CAssn c) => C.Intmed c -> ([B.TermName], B.TermName) -> C.Relmap c
 relmapAssn use = C.relmapFlow use . relkitAssn
 
 relkitAssn :: (C.CAssn c) => ([B.TermName], B.TermName) -> C.RelkitFlow c
@@ -148,7 +148,7 @@ consUnassn use =
      ns   <- Op.getTerms use "-only"
      Right $ relmapUnassn use (from, ns)
 
-relmapUnassn :: (C.CAssn c) => C.RopUse c -> (B.TermName, [B.TermName]) -> C.Relmap c
+relmapUnassn :: (C.CAssn c) => C.Intmed c -> (B.TermName, [B.TermName]) -> C.Relmap c
 relmapUnassn use = C.relmapFlow use . relkitUnassn
 
 relkitUnassn :: (C.CAssn c) => (B.TermName, [B.TermName]) -> C.RelkitFlow c
@@ -175,7 +175,7 @@ consTermName use =
   do n <- Op.getTerm use "-term"
      Right $ relmapTermName use n
 
-relmapTermName :: (C.CTerm c) => C.RopUse c -> B.TermName -> C.Relmap c
+relmapTermName :: (C.CTerm c) => C.Intmed c -> B.TermName -> C.Relmap c
 relmapTermName use n = C.relmapFlow use $ relkitTermName n
 
 relkitTermName :: (C.CTerm c) => B.TermName -> C.RelkitFlow c
@@ -197,7 +197,7 @@ consToday use =
      let t = C.globalTime $ C.ropGlobal use
      Right $ relmapToday use (n, t)
 
-relmapToday :: (C.CTime c) => C.RopUse c -> (B.TermName, B.Time) -> C.Relmap c
+relmapToday :: (C.CTime c) => C.Intmed c -> (B.TermName, B.Time) -> C.Relmap c
 relmapToday use = C.relmapFlow use . relkitToday
 
 relkitToday :: (C.CTime c) => (B.TermName, B.Time) -> Maybe B.Head -> B.Ab (C.Relkit c)

@@ -35,11 +35,11 @@ import qualified Koshucode.Baala.Core.Relmap.Rop     as C
 class GetGlobal h where
     getGlobal :: h c -> Global' h c
 
-ropGlobal :: (GetGlobal h) => C.RopUse' h c -> Global' h c
+ropGlobal :: (GetGlobal h) => C.Intmed' h c -> Global' h c
 ropGlobal = getGlobal . C.ropHook
 
--- | Get operator set from 'RopUse'.
-ropCopset :: (GetGlobal h) => C.RopUse' h c -> C.CopSet c
+-- | Get operator set from 'Intmed'.
+ropCopset :: (GetGlobal h) => C.Intmed' h c -> C.CopSet c
 ropCopset = globalCopset . ropGlobal
 
 

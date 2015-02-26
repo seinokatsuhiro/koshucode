@@ -44,10 +44,10 @@ getNamedCoxes use = ropNamedAlphas use B.<=< Op.getWordTrees use
 getTermCoxes :: (C.CContent c) => Op.RopGet c [C.NamedCox c]
 getTermCoxes use = ropNamedAlphas use B.<=< Op.getTermTrees use
 
-ropBuild :: (C.CContent c) => C.RopUse c -> B.TTreeToAb (C.Cox c)
+ropBuild :: (C.CContent c) => C.Intmed c -> B.TTreeToAb (C.Cox c)
 ropBuild = C.coxBuildG . C.ropGlobal
 
-ropNamedAlphas :: (C.CContent c) => C.RopUse c -> [B.NamedTree] -> B.Ab [C.NamedCox c]
+ropNamedAlphas :: (C.CContent c) => C.Intmed c -> [B.NamedTree] -> B.Ab [C.NamedCox c]
 ropNamedAlphas use = mapM (B.namedMapM $ ropBuild use)
 
 
@@ -64,7 +64,7 @@ getWhereBody u name =
     do xs <- Op.getTreesByColon u name
        getWhereClause u `mapM` xs
 
-getWhereClause :: (C.CContent c) => C.RopUse c -> [B.TTree] -> B.Ab (C.NamedCox c)
+getWhereClause :: (C.CContent c) => C.Intmed c -> [B.TTree] -> B.Ab (C.NamedCox c)
 getWhereClause u trees =
     do (he, bo) <- getTreesByEqual trees
        (n, vs)  <- getWhereHead he
@@ -109,7 +109,7 @@ getContents use name =
        let trees2 = B.wrapTrees `map` B.divideTreesByColon trees
        calcTree use `mapM` trees2
 
-calcTree :: (C.CContent c) => C.RopUse c -> C.CalcContent c
+calcTree :: (C.CContent c) => C.Intmed c -> C.CalcContent c
 calcTree = C.calcContent . C.ropCopset
 
 -- | Get relmap attribute as optional content.

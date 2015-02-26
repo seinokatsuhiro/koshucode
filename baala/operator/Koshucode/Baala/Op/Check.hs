@@ -44,9 +44,9 @@ consCheckTerm use =
        (Nothing, Nothing, Just ns) -> Right $ relmapCheckTermBut  use ns
        _ -> Msg.unexpAttr "require one of -just / -has / -but"
 
-relmapCheckTermJust :: C.RopUse c -> [B.TermName] -> C.Relmap c
-relmapCheckTermHas  :: C.RopUse c -> [B.TermName] -> C.Relmap c
-relmapCheckTermBut  :: C.RopUse c -> [B.TermName] -> C.Relmap c
+relmapCheckTermJust :: C.Intmed c -> [B.TermName] -> C.Relmap c
+relmapCheckTermHas  :: C.Intmed c -> [B.TermName] -> C.Relmap c
+relmapCheckTermBut  :: C.Intmed c -> [B.TermName] -> C.Relmap c
 relmapCheckTermJust use = C.relmapFlow use . relkitCheckTermJust
 relmapCheckTermHas  use = C.relmapFlow use . relkitCheckTermHas
 relmapCheckTermBut  use = C.relmapFlow use . relkitCheckTermBut
@@ -80,7 +80,7 @@ consDuplicate use =
   do ns <- Op.getTerms use "-term"
      Right $ relmapDuplicate use ns
 
-relmapDuplicate :: (Ord c) => C.RopUse c -> [B.TermName] -> C.Relmap c
+relmapDuplicate :: (Ord c) => C.Intmed c -> [B.TermName] -> C.Relmap c
 relmapDuplicate use = C.relmapFlow use . relkitDuplicate
 
 relkitDuplicate :: (Ord c) => [B.TermName] -> C.RelkitFlow c
@@ -115,7 +115,7 @@ consExclude use =
      m  <- Op.getRelmap use "-from"
      Right $ relmapExclude use (ns, m)
 
-relmapExclude :: (Ord c) => C.RopUse c -> ([B.TermName], C.Relmap c) -> C.Relmap c
+relmapExclude :: (Ord c) => C.Intmed c -> ([B.TermName], C.Relmap c) -> C.Relmap c
 relmapExclude use (ns, m) = excl where
     excl = Op.relmapNone use (pick `B.mappend` meet)
     pick = Op.relmapPick use ns

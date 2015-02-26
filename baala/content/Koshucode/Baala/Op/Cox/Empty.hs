@@ -40,7 +40,7 @@ consBoth use =
        fill <- Op.getFiller use "-fill"
        Right $ relmapBoth use fill rmap
 
-relmapBoth :: (Ord c) => C.RopUse c -> c -> B.Map (C.Relmap c)
+relmapBoth :: (Ord c) => C.Intmed c -> c -> B.Map (C.Relmap c)
 relmapBoth use fill rmap = C.relmapCopy use "i" rmapBoth where
     rmapBoth = rmapL `B.mappend` Op.relmapJoin use rmapR
     rmapR    = rmap  `B.mappend` relmapMaybe use fill rmapIn
@@ -56,7 +56,7 @@ consMaybe use =
        fill <- Op.getFiller use "-fill"
        Right $ relmapMaybe use fill rmap
 
-relmapMaybe :: (Ord c) => C.RopUse c -> c -> B.Map (C.Relmap c)
+relmapMaybe :: (Ord c) => C.Intmed c -> c -> B.Map (C.Relmap c)
 relmapMaybe use = C.relmapBinary use . relkitMaybe
 
 relkitMaybe :: forall c. (Ord c) => c -> C.RelkitBinary c

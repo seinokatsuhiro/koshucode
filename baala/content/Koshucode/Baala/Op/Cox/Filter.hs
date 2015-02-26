@@ -49,7 +49,7 @@ consFilter b use =
        Right $ relmapFilter use (b, cops, coxIn)
 
 relmapFilter :: (C.CList c, C.CRel c, C.CBool c, B.Write c)
-  => C.RopUse c -> (Bool, C.CopSet c, C.Cox c) -> C.Relmap c
+  => C.Intmed c -> (Bool, C.CopSet c, C.Cox c) -> C.Relmap c
 relmapFilter use = C.relmapFlow use . relkitFilter
 
 relkitFilter :: (C.CList c, C.CRel c, C.CBool c, B.Write c)
@@ -70,7 +70,7 @@ consContain use =
     do c <- Op.getContent use "-expr"
        Right $ relmapContain use c
 
-relmapContain :: (Eq c) => C.RopUse c -> c -> C.Relmap c
+relmapContain :: (Eq c) => C.Intmed c -> c -> C.Relmap c
 relmapContain use = C.relmapFlow use . relkitContain
 
 relkitContain :: (Eq c) => c -> C.RelkitFlow c
@@ -85,7 +85,7 @@ relkitContain c (Just he1) = Right kit2 where
 consOmitAll :: C.RopCons c
 consOmitAll use = Right $ relmapOmitAll use
 
-relmapOmitAll :: C.RopUse c -> C.Relmap c
+relmapOmitAll :: C.Intmed c -> C.Relmap c
 relmapOmitAll use = C.relmapFlow use relkitOmitAll
 
 -- | Throw away all tuples in a relation.

@@ -55,7 +55,7 @@ consConst use =
          True  -> Right $ relmapConst use $ C.gRel lit
          False -> Msg.reqRel
 
-relmapConst :: C.RopUse c -> B.Rel c -> C.Relmap c
+relmapConst :: C.Intmed c -> B.Rel c -> C.Relmap c
 relmapConst use = C.relmapFlow use . relkitConst
 
 relkitConst :: B.Rel c -> C.RelkitFlow c
@@ -80,7 +80,7 @@ consInterp2 use =
          True  -> Right $ relmapInterp use $ C.gInterp c
          False -> Msg.reqInterp
 
-relmapInterp :: (C.CContent c) => C.RopUse c -> B.Interp -> C.Relmap c
+relmapInterp :: (C.CContent c) => C.Intmed c -> B.Interp -> C.Relmap c
 relmapInterp use = C.relmapFlow use . relkitInterp
 
 relkitInterp :: (C.CContent c) => B.Interp -> C.RelkitFlow c
@@ -104,7 +104,7 @@ consNumber use =
        from <- Op.getOption 0  Op.getInt   use "-from"
        Right $ relmapNumber use (n, ns, from)
 
-relmapNumber :: (C.CDec c, Ord c) => C.RopUse c -> (B.TermName, [B.TermName], Int) -> C.Relmap c
+relmapNumber :: (C.CDec c, Ord c) => C.Intmed c -> (B.TermName, [B.TermName], Int) -> C.Relmap c
 relmapNumber use = C.relmapFlow use . relkitNumber
 
 relkitNumber :: (Ord c, C.CDec c) => (B.TermName, [B.TermName], Int) -> C.RelkitFlow c
@@ -137,14 +137,14 @@ consRank use =
        Right $ relmapRank use (n, ns, from)
 
 relmapDenseRank :: (C.CDec c, Ord c) =>
-   C.RopUse c -> (B.TermName, [B.TermName], Int) -> C.Relmap c
+   C.Intmed c -> (B.TermName, [B.TermName], Int) -> C.Relmap c
 relmapDenseRank use = C.relmapFlow use . relkitDenseRank
 
 relkitDenseRank :: (Ord c, C.CDec c) => (B.TermName, [B.TermName], Int) -> C.RelkitFlow c
 relkitDenseRank = relkitRanking B.sortByNameDenseRank
 
 relmapGapRank :: (C.CDec c, Ord c) =>
-   C.RopUse c -> (B.TermName, [B.TermName], Int) -> C.Relmap c
+   C.Intmed c -> (B.TermName, [B.TermName], Int) -> C.Relmap c
 relmapGapRank use = C.relmapFlow use . relkitGapRank
 
 relkitGapRank :: (Ord c, C.CDec c) => (B.TermName, [B.TermName], Int) -> C.RelkitFlow c
@@ -159,7 +159,7 @@ consRepeat use =
      rmap <- Op.getRelmap use "-relmap"
      Right $ relmapRepeat use cnt rmap
 
-relmapRepeat :: (Ord c) => C.RopUse c -> Int -> B.Map (C.Relmap c)
+relmapRepeat :: (Ord c) => C.Intmed c -> Int -> B.Map (C.Relmap c)
 relmapRepeat use cnt = C.relmapBinary use $ relkitRepeat cnt
 
 relkitRepeat :: forall c. (Ord c) => Int -> C.RelkitBinary c

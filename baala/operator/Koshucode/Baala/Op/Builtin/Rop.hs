@@ -49,7 +49,7 @@ consAppend = Right . foldl B.mappend B.mempty . C.ropSubmap
 consId :: C.RopCons c
 consId use = Right $ relmapId use
 
-relmapId :: C.RopUse c -> C.Relmap c
+relmapId :: C.Intmed c -> C.Relmap c
 relmapId use = C.relmapFlow use $ Right . C.relkitId
 
 

@@ -47,7 +47,7 @@ consIf use =
   do rmaps <- Op.getRelmaps use
      Right $ relmapIf use rmaps
 
-relmapIf :: (Ord c) => C.RopUse c -> [C.Relmap c] -> C.Relmap c
+relmapIf :: (Ord c) => C.Intmed c -> [C.Relmap c] -> C.Relmap c
 relmapIf use = C.relmapConfl use relkitIf
 
 relkitIf :: (Ord c) => C.RelkitConfl c
@@ -105,7 +105,7 @@ consFixJoin use =
   do rmap <- Op.getRelmap use "-relmap"
      Right $ relmapFix use (Op.relmapJoin use rmap)
 
-relmapFix :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
+relmapFix :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
 relmapFix use = C.relmapBinary use relkitFix
 
 relkitFix :: forall c. (Ord c) => C.RelkitBinary c
@@ -127,7 +127,7 @@ consEqual use =
     do rmap <- Op.getRelmap use "-relmap"
        Right $ relmapEqual use rmap
 
-relmapEqual :: (Ord c) => C.RopUse c -> B.Map (C.Relmap c)
+relmapEqual :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
 relmapEqual use = C.relmapBinary use relkitEqual
 
 relkitEqual :: (Ord c) => C.RelkitBinary c

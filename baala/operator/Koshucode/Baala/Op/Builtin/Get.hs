@@ -35,15 +35,15 @@ import qualified Koshucode.Baala.Op.Message      as Msg
 -- ----------------------  Datatype
 
 type RopGet c a
-    = C.RopUse c    -- ^ Use of relmap operator
+    = C.Intmed c    -- ^ Use of relmap operator
     -> String       -- ^ Name of keyword, e.g., @\"-term\"@
     -> B.Ab a       -- ^ Attribute of relmap
 
-lookupTree, lookupRelmap :: String -> C.RopUse c -> Maybe [B.TTree]
+lookupTree, lookupRelmap :: String -> C.Intmed c -> Maybe [B.TTree]
 lookupTree    = lookupAttr C.AttrNormal
 lookupRelmap  = lookupAttr C.AttrRelmapNormal `B.mappend` lookupAttr C.AttrRelmapLocal
 
-lookupAttr :: (String -> C.AttrName) -> String -> C.RopUse c -> Maybe [B.TTree]
+lookupAttr :: (String -> C.AttrName) -> String -> C.Intmed c -> Maybe [B.TTree]
 lookupAttr c name = B.paraLookupSingle (c name) . C.lexAttr . C.ropLexmap
 
 getAbortable :: ([B.TTree] -> B.Ab b) -> RopGet c b
@@ -74,7 +74,7 @@ getMaybe get u name =
       Just _  -> Right . Just =<< get u name
 
 -- | Get @True@ when attribute is given, @False@ otherwise.
-getSwitch :: C.RopUse c -> String -> B.Ab Bool
+getSwitch :: C.Intmed c -> String -> B.Ab Bool
 getSwitch u name = getAbortableOption False get u name where
     get [] = Right True
     get _  = Msg.unexpAttr $ "Just type only " ++ name
@@ -136,7 +136,7 @@ getTreesByColon u name =
 --   > consMeet u = do
 --   >   m <- getRelmap u
 --   >   Right $ relmapMeet u m
-getRelmap :: C.RopUse c -> String -> B.Ab (C.Relmap c)
+getRelmap :: C.Intmed c -> String -> B.Ab (C.Relmap c)
 getRelmap u name =
     do ms    <- getRelmaps u
        trees <- getRelmapRaw u name
@@ -152,10 +152,10 @@ getRelmapRaw u name =
 
 
 -- | Get relmaps from operator use.
-getRelmaps :: C.RopUse c -> B.Ab [C.Relmap c]
+getRelmaps :: C.Intmed c -> B.Ab [C.Relmap c]
 getRelmaps = Right . C.ropSubmap
 
-getOptRelmap :: C.Relmap c -> C.RopUse c -> String -> B.Ab (C.Relmap c)
+getOptRelmap :: C.Relmap c -> C.Intmed c -> String -> B.Ab (C.Relmap c)
 getOptRelmap rmap0 u = B.right rmap0 . getRelmap u
 
 

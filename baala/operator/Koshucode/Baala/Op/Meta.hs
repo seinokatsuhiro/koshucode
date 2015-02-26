@@ -59,7 +59,7 @@ consKoshuCop use =
   do name <- Op.getTerm use "-name"
      Right $ relmapKoshuCop use name
 
-relmapKoshuCop :: (C.CContent c) => C.RopUse c -> B.TermName -> C.Relmap c
+relmapKoshuCop :: (C.CContent c) => C.Intmed c -> B.TermName -> C.Relmap c
 relmapKoshuCop use = C.relmapHook use . relkitKoshuCop
 
 relkitKoshuCop :: (C.CContent c) => B.TermName -> C.RelkitHook c
@@ -77,7 +77,7 @@ consKoshuCopInfix use =
      dir    <- Op.getMaybe Op.getTerm use "-dir"
      Right $ relmapKoshuCopInfix use (name, height, dir)
 
-relmapKoshuCopInfix :: (C.CContent c) => C.RopUse c -> (B.TermName, Maybe B.TermName, Maybe B.TermName) -> C.Relmap c
+relmapKoshuCopInfix :: (C.CContent c) => C.Intmed c -> (B.TermName, Maybe B.TermName, Maybe B.TermName) -> C.Relmap c
 relmapKoshuCopInfix use = C.relmapHook use . relkitKoshuCopInfix
 
 relkitKoshuCopInfix :: (C.CContent c) => (B.TermName, Maybe B.TermName, Maybe B.TermName) -> C.RelkitHook c
@@ -107,7 +107,7 @@ consKoshuRop use =
      Right $ relmapKoshuRop use (Just name, group, usage)
 
 relmapKoshuRop :: (C.CContent c)
-    => C.RopUse c -> (Maybe B.TermName, Maybe B.TermName, Maybe B.TermName)
+    => C.Intmed c -> (Maybe B.TermName, Maybe B.TermName, Maybe B.TermName)
     -> C.Relmap c
 relmapKoshuRop use = C.relmapHook use . relkitKoshuRop
 
@@ -136,7 +136,7 @@ consKoshuProxy use =
      Right $ relmapKoshuProxy use (Just proto, Just uri)
 
 relmapKoshuProxy :: (C.CContent c)
-    => C.RopUse c -> (Maybe B.TermName, Maybe B.TermName)
+    => C.Intmed c -> (Maybe B.TermName, Maybe B.TermName)
     -> C.Relmap c
 relmapKoshuProxy use = C.relmapHook use . relkitKoshuProxy
 
@@ -210,7 +210,7 @@ consKoshuSource use =
      name <- Op.getMaybe Op.getTerm use "-name"
      Right $ relmapKoshuSource use (num, ty, name)
 
-relmapKoshuSource :: (C.CContent c) => C.RopUse c -> (B.TermName, Maybe B.TermName, Maybe B.TermName) -> C.Relmap c
+relmapKoshuSource :: (C.CContent c) => C.Intmed c -> (B.TermName, Maybe B.TermName, Maybe B.TermName) -> C.Relmap c
 relmapKoshuSource use = C.relmapHook use . relkitKoshuSource
 
 relkitKoshuSource :: (C.CContent c) => (B.TermName, Maybe B.TermName, Maybe B.TermName) -> C.RelkitHook c
@@ -240,7 +240,7 @@ consKoshuAngleText use =
      c <- Op.getMaybe Op.getTerm use "-text"
      Right $ relmapKoshuAngleText use (n, c)
 
-relmapKoshuAngleText :: (Ord c, C.CText c) => C.RopUse c -> (B.TermName, Maybe B.TermName) -> C.Relmap c
+relmapKoshuAngleText :: (Ord c, C.CText c) => C.Intmed c -> (B.TermName, Maybe B.TermName) -> C.Relmap c
 relmapKoshuAngleText use = C.relmapFlow use . relkitKoshuAngleText
 
 relkitKoshuAngleText :: (Ord c, C.CText c) => (B.TermName, Maybe B.TermName) -> Maybe B.Head -> B.Ab (C.Relkit c)

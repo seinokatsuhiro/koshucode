@@ -33,11 +33,11 @@ import qualified Koshucode.Baala.Core.Message          as Msg
 -- ----------------------  Source
 
 -- | Make a constant relmap.
-relmapConst :: C.RopUse' h c -> B.Rel c -> C.Relmap' h c
+relmapConst :: C.Intmed' h c -> B.Rel c -> C.Relmap' h c
 relmapConst = C.RelmapConst . C.ropLexmap
 
 -- | Relmap for retrieving relation from dataset.
-relmapSource :: C.RopUse' h c -> B.JudgePat -> [B.TermName] -> C.Relmap' h c
+relmapSource :: C.Intmed' h c -> B.JudgePat -> [B.TermName] -> C.Relmap' h c
 relmapSource = C.RelmapSource . C.ropLexmap
 
 
@@ -45,42 +45,42 @@ relmapSource = C.RelmapSource . C.ropLexmap
 
 -- | Make a flow relmap.
 --   Flow relmaps take no submaps.
-relmapFlow :: C.RopUse' h c -> C.RelkitFlow c -> C.Relmap' h c
+relmapFlow :: C.Intmed' h c -> C.RelkitFlow c -> C.Relmap' h c
 relmapFlow use relkit = relmapConfl use (const relkit) []
 
-relmapHook :: C.RopUse' h c -> C.RelkitHook' h c -> C.Relmap' h c
+relmapHook :: C.Intmed' h c -> C.RelkitHook' h c -> C.Relmap' h c
 relmapHook = C.RelmapHook . C.ropLexmap
 
 -- | Make a binary relmap.
 --   Binary relmaps take one submap.
-relmapBinary :: C.RopUse' h c -> C.RelkitBinary c -> C.Relmap' h c -> C.Relmap' h c
+relmapBinary :: C.Intmed' h c -> C.RelkitBinary c -> C.Relmap' h c -> C.Relmap' h c
 relmapBinary use kit rmap = relmapConfl use (kit . head) [rmap]
 
 -- | Make a confluent relmap.
 --   Confluent relmaps take multiple submaps.
-relmapConfl :: C.RopUse' h c -> C.RelkitConfl c -> [C.Relmap' h c] -> C.Relmap' h c
+relmapConfl :: C.Intmed' h c -> C.RelkitConfl c -> [C.Relmap' h c] -> C.Relmap' h c
 relmapConfl = C.RelmapCalc . C.ropLexmap
 
 
 -- ----------------------  Variable
 
 -- | Parent for nested relation references.
-relmapNest :: C.RopUse' h c -> B.Map (C.Relmap' h c)
+relmapNest :: C.Intmed' h c -> B.Map (C.Relmap' h c)
 relmapNest = C.RelmapNest . C.ropLexmap
 
-relmapCopy :: C.RopUse' h c -> C.RopName -> B.Map (C.Relmap' h c)
+relmapCopy :: C.Intmed' h c -> C.RopName -> B.Map (C.Relmap' h c)
 relmapCopy = C.RelmapCopy . C.ropLexmap
 
-relmapLink :: C.RopUse' h c -> C.Relmap' h c
+relmapLink :: C.Intmed' h c -> C.Relmap' h c
 relmapLink = C.RelmapLink . C.ropLexmap
 
-relmapLocalSymbol :: C.RopUse' h c -> String -> C.Relmap' h c
+relmapLocalSymbol :: C.Intmed' h c -> String -> C.Relmap' h c
 relmapLocalSymbol = relmapVar B.LocalSymbol
 
-relmapLocalNest :: C.RopUse' h c -> String -> C.Relmap' h c
+relmapLocalNest :: C.Intmed' h c -> String -> C.Relmap' h c
 relmapLocalNest = relmapVar B.LocalNest
 
-relmapVar :: (String -> B.Local String) -> C.RopUse' h c -> String -> C.Relmap' h c
+relmapVar :: (String -> B.Local String) -> C.Intmed' h c -> String -> C.Relmap' h c
 relmapVar k use n = relmapLink use' where
     lx    = C.ropLexmap use
     cp    = B.codePt lx
@@ -127,7 +127,7 @@ consRelmap findRop hook = relmap where
         | otherwise = Msg.abRelmap [lx] $ case findRop name of
                         Nothing  -> Msg.bug "missing operator"
                         Just rop -> do sub <- relmap `mapM` C.lexSubmap lx
-                                       C.ropCons rop $ C.RopUse hook lx sub
+                                       C.ropCons rop $ C.Intmed hook lx sub
         where link = C.lexType lx /= C.LexmapBase
               name = C.lexName lx
 
