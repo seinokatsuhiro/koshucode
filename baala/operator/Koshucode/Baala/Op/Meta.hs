@@ -55,12 +55,12 @@ ropsMeta = Op.ropList "meta"
 -- ----------------------  koshu-cop
 
 consKoshuCop :: C.CContent c => C.RopCons c
-consKoshuCop use =
-  do name <- Op.getTerm use "-name"
-     Right $ relmapKoshuCop use name
+consKoshuCop med =
+  do name <- Op.getTerm med "-name"
+     Right $ relmapKoshuCop med name
 
 relmapKoshuCop :: (C.CContent c) => C.Intmed c -> B.TermName -> C.Relmap c
-relmapKoshuCop use = C.relmapHook use . relkitKoshuCop
+relmapKoshuCop med = C.relmapHook med . relkitKoshuCop
 
 relkitKoshuCop :: (C.CContent c) => B.TermName -> C.RelkitHook c
 relkitKoshuCop name res _ =
@@ -71,14 +71,14 @@ relkitKoshuCop name res _ =
 -- ----------------------  koshu-cop-infix
 
 consKoshuCopInfix :: (C.CContent c) => C.RopCons c
-consKoshuCopInfix use =
-  do name   <- Op.getTerm use "-name"
-     height <- Op.getMaybe Op.getTerm use "-height"
-     dir    <- Op.getMaybe Op.getTerm use "-dir"
-     Right $ relmapKoshuCopInfix use (name, height, dir)
+consKoshuCopInfix med =
+  do name   <- Op.getTerm med "-name"
+     height <- Op.getMaybe Op.getTerm med "-height"
+     dir    <- Op.getMaybe Op.getTerm med "-dir"
+     Right $ relmapKoshuCopInfix med (name, height, dir)
 
 relmapKoshuCopInfix :: (C.CContent c) => C.Intmed c -> (B.TermName, Maybe B.TermName, Maybe B.TermName) -> C.Relmap c
-relmapKoshuCopInfix use = C.relmapHook use . relkitKoshuCopInfix
+relmapKoshuCopInfix med = C.relmapHook med . relkitKoshuCopInfix
 
 relkitKoshuCopInfix :: (C.CContent c) => (B.TermName, Maybe B.TermName, Maybe B.TermName) -> C.RelkitHook c
 relkitKoshuCopInfix (name, height, dir) res _ = Right kit2 where
@@ -100,16 +100,16 @@ relkitKoshuCopInfix (name, height, dir) res _ = Right kit2 where
 -- ----------------------  koshu-rop
 
 consKoshuRop :: (C.CContent c) => C.RopCons c
-consKoshuRop use =
-  do name  <- Op.getTerm use "-name"
-     group <- Op.getMaybe Op.getTerm use "-group"
-     usage <- Op.getMaybe Op.getTerm use "-usage"
-     Right $ relmapKoshuRop use (Just name, group, usage)
+consKoshuRop med =
+  do name  <- Op.getTerm med "-name"
+     group <- Op.getMaybe Op.getTerm med "-group"
+     usage <- Op.getMaybe Op.getTerm med "-usage"
+     Right $ relmapKoshuRop med (Just name, group, usage)
 
 relmapKoshuRop :: (C.CContent c)
     => C.Intmed c -> (Maybe B.TermName, Maybe B.TermName, Maybe B.TermName)
     -> C.Relmap c
-relmapKoshuRop use = C.relmapHook use . relkitKoshuRop
+relmapKoshuRop med = C.relmapHook med . relkitKoshuRop
 
 relkitKoshuRop :: (C.CContent c)
     => (Maybe B.TermName, Maybe B.TermName, Maybe B.TermName)
@@ -130,15 +130,15 @@ relkitKoshuRop (name, group, usage) res _ = Right kit2 where
 -- ----------------------  koshu-proxy
 
 consKoshuProxy :: (C.CContent c) => C.RopCons c
-consKoshuProxy use =
-  do proto  <- Op.getTerm use "-proto"
-     uri    <- Op.getTerm use "-uri"
-     Right $ relmapKoshuProxy use (Just proto, Just uri)
+consKoshuProxy med =
+  do proto  <- Op.getTerm med "-proto"
+     uri    <- Op.getTerm med "-uri"
+     Right $ relmapKoshuProxy med (Just proto, Just uri)
 
 relmapKoshuProxy :: (C.CContent c)
     => C.Intmed c -> (Maybe B.TermName, Maybe B.TermName)
     -> C.Relmap c
-relmapKoshuProxy use = C.relmapHook use . relkitKoshuProxy
+relmapKoshuProxy med = C.relmapHook med . relkitKoshuProxy
 
 relkitKoshuProxy :: (C.CContent c)
     => (Maybe B.TermName, Maybe B.TermName)
@@ -162,11 +162,11 @@ relkitKoshuProxy (proto, uri) res _ = Right kit2 where
 --  koshu-version /ver [1:0] [1:2]
 
 consKoshuVersion :: (C.CContent c) => C.RopCons c
-consKoshuVersion use =
-  do n   <- Op.getTerm  use "-term"
-     ver <- Op.getTrees use "-version"
+consKoshuVersion med =
+  do n   <- Op.getTerm  med "-term"
+     ver <- Op.getTrees med "-version"
      case ver of
-       []      -> Right $ C.relmapHook use $ relkitKoshuVersion n
+       []      -> Right $ C.relmapHook med $ relkitKoshuVersion n
        [f]     -> check n f f
        [f, t]  -> check n f t
        _       -> Msg.unexpAttr ""
@@ -174,7 +174,7 @@ consKoshuVersion use =
     check n f t = do
       from <- C.literal undefined f
       to   <- C.literal undefined t
-      Right $ C.relmapHook use $ relkitKoshuVersionCheck (from, to) n
+      Right $ C.relmapHook med $ relkitKoshuVersionCheck (from, to) n
 
 relkitKoshuVersion :: (C.CContent c) => B.TermName -> C.RelkitHook c
 relkitKoshuVersion n h _ =
@@ -204,14 +204,14 @@ apiVersion V.Version { V.versionBranch = ver } =
 --  koshu-source /number -type /type -name /name
 
 consKoshuSource :: (C.CContent c) => C.RopCons c
-consKoshuSource use =
-  do num  <- Op.getTerm use "-number"
-     ty   <- Op.getMaybe Op.getTerm use "-type"
-     name <- Op.getMaybe Op.getTerm use "-name"
-     Right $ relmapKoshuSource use (num, ty, name)
+consKoshuSource med =
+  do num  <- Op.getTerm med "-number"
+     ty   <- Op.getMaybe Op.getTerm med "-type"
+     name <- Op.getMaybe Op.getTerm med "-name"
+     Right $ relmapKoshuSource med (num, ty, name)
 
 relmapKoshuSource :: (C.CContent c) => C.Intmed c -> (B.TermName, Maybe B.TermName, Maybe B.TermName) -> C.Relmap c
-relmapKoshuSource use = C.relmapHook use . relkitKoshuSource
+relmapKoshuSource med = C.relmapHook med . relkitKoshuSource
 
 relkitKoshuSource :: (C.CContent c) => (B.TermName, Maybe B.TermName, Maybe B.TermName) -> C.RelkitHook c
 relkitKoshuSource (num, ty, name) h _ = Right kit2 where
@@ -235,13 +235,13 @@ maybeAs (Nothing) _  =  Nothing
 --  koshu-angle-text /name /text
 
 consKoshuAngleText :: (Ord c, C.CText c) => C.RopCons c
-consKoshuAngleText use =
-  do n <- Op.getTerm use "-name"
-     c <- Op.getMaybe Op.getTerm use "-text"
-     Right $ relmapKoshuAngleText use (n, c)
+consKoshuAngleText med =
+  do n <- Op.getTerm med "-name"
+     c <- Op.getMaybe Op.getTerm med "-text"
+     Right $ relmapKoshuAngleText med (n, c)
 
 relmapKoshuAngleText :: (Ord c, C.CText c) => C.Intmed c -> (B.TermName, Maybe B.TermName) -> C.Relmap c
-relmapKoshuAngleText use = C.relmapFlow use . relkitKoshuAngleText
+relmapKoshuAngleText med = C.relmapFlow med . relkitKoshuAngleText
 
 relkitKoshuAngleText :: (Ord c, C.CText c) => (B.TermName, Maybe B.TermName) -> Maybe B.Head -> B.Ab (C.Relkit c)
 relkitKoshuAngleText (n, Just c) _ = Right kit2 where

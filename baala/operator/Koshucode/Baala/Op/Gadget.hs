@@ -51,12 +51,12 @@ ropsGadget = Op.ropList "gadget"  -- GROUP
 -- ----------------------  contents
 
 consContents :: (Ord c) => C.RopCons c
-consContents use =
-    do n <- Op.getTerm use "-term"
-       Right $ relmapContents use n
+consContents med =
+    do n <- Op.getTerm med "-term"
+       Right $ relmapContents med n
 
 relmapContents :: (Ord c) => C.Intmed c -> B.TermName -> C.Relmap c
-relmapContents use = C.relmapFlow use . relkitContents
+relmapContents med = C.relmapFlow med . relkitContents
 
 relkitContents :: (Ord c) => B.TermName -> C.RelkitFlow c
 relkitContents n _ = Right $ C.relkitJust he2 $ C.RelkitFull False kitf where
@@ -69,14 +69,14 @@ relkitContents n _ = Right $ C.relkitJust he2 $ C.RelkitFull False kitf where
 --  dependent-rank /x /y -rank /r
 
 consDepRank :: (Ord c, C.CDec c) => C.RopCons c
-consDepRank use =
-    do x <- Op.getTerm use "-x"
-       y <- Op.getTerm use "-y"
-       r <- Op.getTerm use "-rank"
-       Right $ relmapDepRank use (x,y,r)
+consDepRank med =
+    do x <- Op.getTerm med "-x"
+       y <- Op.getTerm med "-y"
+       r <- Op.getTerm med "-rank"
+       Right $ relmapDepRank med (x,y,r)
 
 relmapDepRank :: (Ord c, C.CDec c) => C.Intmed c -> B.TermName3 -> C.Relmap c
-relmapDepRank use = C.relmapFlow use . relkitDepRank
+relmapDepRank med = C.relmapFlow med . relkitDepRank
 
 relkitDepRank :: (Ord c, C.CDec c) => B.TermName3 -> C.RelkitFlow c
 relkitDepRank _  Nothing = Right C.relkitNothing
@@ -100,12 +100,12 @@ relkitDepRank (x,y,r) (Just he1) = Right kit2 where
 --
 
 consSize :: (C.CDec c) => C.RopCons c
-consSize use =
-  do n <- Op.getTerm use "-term"
-     Right $ relmapSize use n
+consSize med =
+  do n <- Op.getTerm med "-term"
+     Right $ relmapSize med n
 
 relmapSize :: (C.CDec c) => C.Intmed c -> B.TermName -> C.Relmap c
-relmapSize use n = C.relmapFlow use $ relkitSize n
+relmapSize med n = C.relmapFlow med $ relkitSize n
 
 relkitSize :: (C.CDec c) => B.TermName -> C.RelkitFlow c
 relkitSize n _ = Right kit2 where
@@ -117,7 +117,7 @@ relkitSize n _ = Right kit2 where
 -- ----------------------  dump-tree
 
 consDumpTree :: (C.CDec c) => C.RopCons c
-consDumpTree use =
-  do trees <- Op.getTrees use "-tree"
+consDumpTree med =
+  do trees <- Op.getTrees med "-tree"
      Msg.dumpTrees trees
 

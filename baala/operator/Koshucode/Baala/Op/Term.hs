@@ -52,23 +52,23 @@ ropsTerm = Op.ropList "term"  -- GROUP
 -- ----------------------  pick & cut
 
 consPick :: C.RopCons c
-consPick use =
-  do ns <- Op.getTerms use "-term"
-     Right $ relmapPick use ns
+consPick med =
+  do ns <- Op.getTerms med "-term"
+     Right $ relmapPick med ns
 
 relmapPick :: C.Intmed c -> [B.TermName] -> C.Relmap c
-relmapPick use = C.relmapFlow use . relkitPick
+relmapPick med = C.relmapFlow med . relkitPick
 
 relkitPick :: [B.TermName] -> C.RelkitFlow c
 relkitPick = relkitSnip B.snipFrom B.snipFrom
 
 consCut :: C.RopCons c
-consCut use =
-  do ns <- Op.getTerms use "-term"
-     Right $ relmapCut use ns
+consCut med =
+  do ns <- Op.getTerms med "-term"
+     Right $ relmapCut med ns
 
 relmapCut :: C.Intmed c -> [B.TermName] -> C.Relmap c
-relmapCut use = C.relmapFlow use . relkitCut
+relmapCut med = C.relmapFlow med . relkitCut
 
 relkitCut :: [B.TermName] -> C.RelkitFlow c
 relkitCut = relkitSnip B.snipOff B.snipOff
@@ -77,23 +77,23 @@ relkitCut = relkitSnip B.snipOff B.snipOff
 -- ----------------------  pick-term & cut-term
 
 consPickTerm :: C.RopCons c
-consPickTerm use =
-  do rmap <- Op.getRelmap use "-relmap"
-     Right $ relmapPickTerm use rmap
+consPickTerm med =
+  do rmap <- Op.getRelmap med "-relmap"
+     Right $ relmapPickTerm med rmap
 
 relmapPickTerm :: C.Intmed c -> C.Relmap c -> C.Relmap c
-relmapPickTerm use = C.relmapBinary use relkitPickTerm
+relmapPickTerm med = C.relmapBinary med relkitPickTerm
 
 relkitPickTerm :: C.RelkitBinary c
 relkitPickTerm = relkitSnipTerm B.snipFrom B.snipFrom
 
 consCutTerm :: C.RopCons c
-consCutTerm use =
-  do rmap <- Op.getRelmap use "-relmap"
-     Right $ relmapCutTerm use rmap
+consCutTerm med =
+  do rmap <- Op.getRelmap med "-relmap"
+     Right $ relmapCutTerm med rmap
 
 relmapCutTerm :: C.Intmed c -> C.Relmap c -> C.Relmap c
-relmapCutTerm use = C.relmapBinary use relkitCutTerm
+relmapCutTerm med = C.relmapBinary med relkitCutTerm
 
 relkitCutTerm :: C.RelkitBinary c
 relkitCutTerm = relkitSnipTerm B.snipOff B.snipOff
@@ -123,24 +123,24 @@ relkitSnip heSnip boSnip ns (Just he1)
 -- ----------------------  rename
 
 consRename :: C.RopCons c
-consRename use =
-  do np <- Op.getTermPairs use "-term"
-     Right $ relmapRename use np
+consRename med =
+  do np <- Op.getTermPairs med "-term"
+     Right $ relmapRename med np
 
 relmapRename :: C.Intmed c -> [B.TermName2] -> C.Relmap c
-relmapRename use = C.relmapFlow use . relkitMove . unzip . map B.swap
+relmapRename med = C.relmapFlow med . relkitMove . unzip . map B.swap
 
 
 -- ----------------------  move
 
 consMove :: C.RopCons c
-consMove use =
-  do ps <- Op.getTerms use "-from"
-     ns <- Op.getTerms use "-to"
-     Right $ relmapMove use (ps, ns)
+consMove med =
+  do ps <- Op.getTerms med "-from"
+     ns <- Op.getTerms med "-to"
+     Right $ relmapMove med (ps, ns)
 
 relmapMove :: C.Intmed c -> ([B.TermName], [B.TermName]) -> C.Relmap c
-relmapMove use = C.relmapFlow use . relkitMove
+relmapMove med = C.relmapFlow med . relkitMove
 
 relkitMove :: ([B.TermName], [B.TermName]) -> C.RelkitFlow c
 relkitMove _ Nothing = Right C.relkitNothing

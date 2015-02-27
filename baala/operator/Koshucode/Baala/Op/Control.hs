@@ -43,12 +43,12 @@ ropsControl = Op.ropList "control"
 --  or same as 'B' when T is not an empty relation.
 
 consIf :: (Ord c) => C.RopCons c
-consIf use =
-  do rmaps <- Op.getRelmaps use
-     Right $ relmapIf use rmaps
+consIf med =
+  do rmaps <- Op.getRelmaps med
+     Right $ relmapIf med rmaps
 
 relmapIf :: (Ord c) => C.Intmed c -> [C.Relmap c] -> C.Relmap c
-relmapIf use = C.relmapConfl use relkitIf
+relmapIf med = C.relmapConfl med relkitIf
 
 relkitIf :: (Ord c) => C.RelkitConfl c
 relkitIf [C.Relkit _ kitbT, C.Relkit (Just heA) kitbA, C.Relkit (Just heB) kitbB] _
@@ -82,31 +82,31 @@ isNothing2 a b = isNothing a && isNothing b
 -- ----------------------  when & unless
 
 consWhen :: (Ord c) => C.RopCons c
-consWhen use =
-  do [rmapT, rmapA] <- Op.getRelmaps use
-     Right $ relmapIf use [rmapT, rmapA, C.relmapId]
+consWhen med =
+  do [rmapT, rmapA] <- Op.getRelmaps med
+     Right $ relmapIf med [rmapT, rmapA, C.relmapId]
 
 consUnless :: (Ord c) => C.RopCons c
-consUnless use =
-  do [rmapT, rmapB] <- Op.getRelmaps use
-     Right $ relmapIf use [rmapT, C.relmapId, rmapB]
+consUnless med =
+  do [rmapT, rmapB] <- Op.getRelmaps med
+     Right $ relmapIf med [rmapT, C.relmapId, rmapB]
 
 
 
 -- ----------------------  fix & fix-join
 
 consFix :: (Ord c) => C.RopCons c
-consFix use =
-  do rmap <- Op.getRelmap use "-relmap"
-     Right $ relmapFix use rmap
+consFix med =
+  do rmap <- Op.getRelmap med "-relmap"
+     Right $ relmapFix med rmap
 
 consFixJoin :: (Ord c) => C.RopCons c
-consFixJoin use =
-  do rmap <- Op.getRelmap use "-relmap"
-     Right $ relmapFix use (Op.relmapJoin use rmap)
+consFixJoin med =
+  do rmap <- Op.getRelmap med "-relmap"
+     Right $ relmapFix med (Op.relmapJoin med rmap)
 
 relmapFix :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
-relmapFix use = C.relmapBinary use relkitFix
+relmapFix med = C.relmapBinary med relkitFix
 
 relkitFix :: forall c. (Ord c) => C.RelkitBinary c
 relkitFix (C.Relkit (Just he2) kitb2) (Just he1)
@@ -123,12 +123,12 @@ relkitFix _ _ = Right C.relkitNothing
 -- ----------------------  equal
 
 consEqual :: (Ord c) => C.RopCons c
-consEqual use =
-    do rmap <- Op.getRelmap use "-relmap"
-       Right $ relmapEqual use rmap
+consEqual med =
+    do rmap <- Op.getRelmap med "-relmap"
+       Right $ relmapEqual med rmap
 
 relmapEqual :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
-relmapEqual use = C.relmapBinary use relkitEqual
+relmapEqual med = C.relmapBinary med relkitEqual
 
 relkitEqual :: (Ord c) => C.RelkitBinary c
 relkitEqual (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where

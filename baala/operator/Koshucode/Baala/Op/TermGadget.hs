@@ -46,13 +46,13 @@ ropsTermGadget = Op.ropList "term"  -- GROUP
 -- ----------------------  prefix
 
 consPrefix :: C.RopCons c
-consPrefix use =
-    do pre <- Op.getTerm  use "-prefix"
-       ns  <- Op.getTerms use "-term"
-       Right $ relmapPrefix use pre ns
+consPrefix med =
+    do pre <- Op.getTerm  med "-prefix"
+       ns  <- Op.getTerms med "-term"
+       Right $ relmapPrefix med pre ns
 
 relmapPrefix :: C.Intmed c -> String -> [String] -> C.Relmap c
-relmapPrefix use pre ns = C.relmapFlow use $ relkitPrefix pre ns
+relmapPrefix med pre ns = C.relmapFlow med $ relkitPrefix pre ns
 
 -- | Add prefix to specified terms.
 relkitPrefix :: String -> [String] -> C.RelkitFlow c
@@ -71,12 +71,12 @@ prefixName _ _ = undefined
 -- ----------------------  unprefix
 
 consUnprefix :: C.RopCons c
-consUnprefix use =
-    do pre <- Op.getTerm use "-prefix"
-       Right $ relmapUnprefix use pre
+consUnprefix med =
+    do pre <- Op.getTerm med "-prefix"
+       Right $ relmapUnprefix med pre
 
 relmapUnprefix :: C.Intmed c -> String -> C.Relmap c
-relmapUnprefix use = C.relmapFlow use . relkitUnprefix
+relmapUnprefix med = C.relmapFlow med . relkitUnprefix
 
 -- | Remove prefix
 relkitUnprefix :: String -> C.RelkitFlow c
@@ -95,13 +95,13 @@ unprefixName pre n =
 -- ----------------------  prefix-change
 
 consPrefixChange :: C.RopCons c
-consPrefixChange use =
-    do new <- Op.getTerm use "-new"
-       old <- Op.getTerm use "-old"
-       Right $ relmapPrefixChange use (new, old)
+consPrefixChange med =
+    do new <- Op.getTerm med "-new"
+       old <- Op.getTerm med "-old"
+       Right $ relmapPrefixChange med (new, old)
 
 relmapPrefixChange :: C.Intmed c -> (String, String) -> C.Relmap c
-relmapPrefixChange use = C.relmapFlow use . relkitPrefixChange
+relmapPrefixChange med = C.relmapFlow med . relkitPrefixChange
 
 -- | Change prefix
 relkitPrefixChange :: (String, String) -> C.RelkitFlow c
@@ -122,7 +122,7 @@ consWipe :: C.RopCons c
 consWipe = Right . relmapWipe
 
 relmapWipe :: C.Intmed c -> C.Relmap c
-relmapWipe use = C.relmapFlow use relkitWipe
+relmapWipe med = C.relmapFlow med relkitWipe
 
 relkitWipe :: C.RelkitFlow c
 relkitWipe Nothing = Right C.relkitNothing

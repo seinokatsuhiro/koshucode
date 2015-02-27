@@ -38,28 +38,28 @@ import qualified Koshucode.Baala.Op.Nest.Confl as Op
 --   > source P /a /b | group-by /g ( pick /a )
 
 consGroupBy :: (Ord c, C.CRel c) => C.RopCons c
-consGroupBy use =
-  do n    <- Op.getTerm   use "-term"
-     rmap <- Op.getRelmap use "-relmap"
-     Right $ relmapGroupBy use n rmap
+consGroupBy med =
+  do n    <- Op.getTerm   med "-term"
+     rmap <- Op.getRelmap med "-relmap"
+     Right $ relmapGroupBy med n rmap
 
 relmapGroupBy :: (Ord c, C.CRel c) => C.Intmed c -> B.TermName -> B.Map (C.Relmap c)
-relmapGroupBy use n rmap = C.relmapCopy use n rmapGroup where
-    rmapGroup  = rmap `B.mappend` Op.relmapGroup use n rmapLocal
-    rmapLocal  = C.relmapLocalSymbol use n
+relmapGroupBy med n rmap = C.relmapCopy med n rmapGroup where
+    rmapGroup  = rmap `B.mappend` Op.relmapGroup med n rmapLocal
+    rmapLocal  = C.relmapLocalSymbol med n
 
 
 -- ----------------------  join-up
 
 consJoinUp :: (Ord c) => C.RopCons c
-consJoinUp use =
-  do nest <- Op.getTerms use "-term"
-     Right $ relmapJoinUp use nest
+consJoinUp med =
+  do nest <- Op.getTerms med "-term"
+     Right $ relmapJoinUp med nest
 
 relmapJoinUp :: (Ord c) => C.Intmed c -> [B.TermName] -> C.Relmap c
-relmapJoinUp use nest = C.relmapNest use $ Op.relmapJoinList use rmaps where
+relmapJoinUp med nest = C.relmapNest med $ Op.relmapJoinList med rmaps where
     rmaps   = link `map` nest
-    link n  = C.relmapLocalNest use n
+    link n  = C.relmapLocalNest med n
 
 
 -- ----------------------  nest / hang
@@ -75,25 +75,25 @@ relmapJoinUp use nest = C.relmapNest use $ Op.relmapJoinList use rmaps where
 --    > hang /g -on /x
 
 consNest :: (Ord c, C.CRel c) => C.RopCons c
-consNest use =
-  do (co, ns) <- Op.getTermsCo use "-term"
-     to       <- Op.getTerm    use "-to"
-     Right $ relmapNest use (co, ns, to)
+consNest med =
+  do (co, ns) <- Op.getTermsCo med "-term"
+     to       <- Op.getTerm    med "-to"
+     Right $ relmapNest med (co, ns, to)
 
 relmapNest :: (Ord c, C.CRel c) => C.Intmed c -> (Bool, [B.TermName], B.TermName) -> C.Relmap c
-relmapNest use (co, ns, to) = group `B.mappend` for where
-    group  = relmapGroupBy use to key
-    for    = Op.relmapFor use to nest
+relmapNest med (co, ns, to) = group `B.mappend` for where
+    group  = relmapGroupBy med to key
+    for    = Op.relmapFor med to nest
     key    = if co then pick else cut
     nest   = if co then cut  else pick
-    pick   = Op.relmapPick use ns
-    cut    = Op.relmapCut  use ns
+    pick   = Op.relmapPick med ns
+    cut    = Op.relmapCut  med ns
 
 consHang :: (Ord c, C.CRel c) => C.RopCons c
-consHang use =
-  do ns <- Op.getTerms use "-on"
-     to <- Op.getTerm  use "-term"
-     Right $ relmapNest use (True, ns, to)
+consHang med =
+  do ns <- Op.getTerms med "-on"
+     to <- Op.getTerm  med "-term"
+     Right $ relmapNest med (True, ns, to)
 
 
 -- ----------------------  unnest
@@ -104,14 +104,14 @@ consHang use =
 --  > slice-up ( meet ^/g ) | cut /g
 
 consUnnest :: (Ord c, C.CRel c) => C.RopCons c
-consUnnest use =
-  do n <- Op.getTerm use "-term"
-     Right $ relmapUnnest use n
+consUnnest med =
+  do n <- Op.getTerm med "-term"
+     Right $ relmapUnnest med n
 
 relmapUnnest :: (Ord c, C.CRel c) => C.Intmed c -> B.TermName -> C.Relmap c
-relmapUnnest use n = unnest where
+relmapUnnest med n = unnest where
     unnest  = slice `B.mappend` cut
-    slice   = Op.relmapSliceUp use meet
-    meet    = Op.relmapMeet use $ C.relmapLocalNest use n
-    cut     = Op.relmapCut  use [n]
+    slice   = Op.relmapSliceUp med meet
+    meet    = Op.relmapMeet med $ C.relmapLocalNest med n
+    cut     = Op.relmapCut  med [n]
 

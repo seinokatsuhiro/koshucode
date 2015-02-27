@@ -31,12 +31,12 @@ import qualified Koshucode.Baala.Op.Message    as Msg
 --    > a | down /r
 
 consDown :: (C.CRel c) => C.RopCons c
-consDown use =
-  do n <- Op.getTerm use "-term"
-     Right $ relmapDown use n
+consDown med =
+  do n <- Op.getTerm med "-term"
+     Right $ relmapDown med n
 
 relmapDown :: (C.CRel c) => C.Intmed c -> B.TermName -> C.Relmap c
-relmapDown use = C.relmapFlow use . relkitDown
+relmapDown med = C.relmapFlow med . relkitDown
 
 relkitDown :: (C.CRel c) => B.TermName -> C.RelkitFlow c
 relkitDown _ Nothing = Right C.relkitNothing
@@ -56,12 +56,12 @@ relkitDown n (Just he1) = Right kit2 where
 --    > b | up /r
 
 consUp :: (C.CRel c) => C.RopCons c
-consUp use =
-  do n <- Op.getTerm use "-term"
-     Right $ relmapUp use n
+consUp med =
+  do n <- Op.getTerm med "-term"
+     Right $ relmapUp med n
 
 relmapUp :: (C.CRel c) => C.Intmed c -> B.TermName -> C.Relmap c
-relmapUp use = C.relmapFlow use . relkitUp
+relmapUp med = C.relmapFlow med . relkitUp
 
 relkitUp :: (C.CRel c) => B.TermName -> C.RelkitFlow c
 relkitUp _ Nothing = Right C.relkitNothing
@@ -85,13 +85,13 @@ relkitUp n (Just he1)
 --  > chunk /a /b /c
 
 consChunk :: (Ord c, C.CRel c) => C.RopCons c
-consChunk use =
-  do ns  <- Op.getTerms use "-term"
-     ord <- Op.getOption [] Op.getTerms use "-order"
-     Right $ relmapChunk use ns ord
+consChunk med =
+  do ns  <- Op.getTerms med "-term"
+     ord <- Op.getOption [] Op.getTerms med "-order"
+     Right $ relmapChunk med ns ord
 
 relmapChunk :: (Ord c, C.CRel c) => C.Intmed c -> [B.TermName] -> [B.TermName] -> C.Relmap c
-relmapChunk use ns ord = C.relmapFlow use $ relkitChunk ns ord
+relmapChunk med ns ord = C.relmapFlow med $ relkitChunk ns ord
 
 relkitChunk :: (Ord c, C.CRel c) => [B.TermName] -> [B.TermName] -> C.RelkitFlow c
 relkitChunk _ _ Nothing = Right C.relkitNothing

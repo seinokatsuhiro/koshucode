@@ -36,16 +36,16 @@ import qualified Koshucode.Baala.Op.Builtin as Op
 -- ----------------------  meet
 
 consMeet :: (Ord c) => C.RopCons c
-consMeet use =
-  do rmap <- Op.getRelmap use "-relmap"
-     Right $ relmapMeet use rmap
+consMeet med =
+  do rmap <- Op.getRelmap med "-relmap"
+     Right $ relmapMeet med rmap
 
 -- | Meet two relations.
 relmapMeet :: (Ord c)
     => C.Intmed c     -- ^ Source infomation
     -> C.Relmap c     -- ^ Subrelmap of meet operator
     -> C.Relmap c     -- ^ Relmap of meet operator
-relmapMeet use = C.relmapBinary use relkitMeet
+relmapMeet med = C.relmapBinary med relkitMeet
 
 -- | Meet two relations.
 relkitMeet :: forall c. (Ord c) => C.RelkitBinary c
@@ -88,9 +88,9 @@ cartesian bo1 bo2 =
 -- ----------------------  join
 
 consJoin :: (Ord c) => C.RopCons c
-consJoin use =
-    do rmap <- Op.getRelmap use "-relmap"
-       Right $ relmapJoin use rmap
+consJoin med =
+    do rmap <- Op.getRelmap med "-relmap"
+       Right $ relmapJoin med rmap
 
 -- | Join two relations.
 relmapJoin
@@ -98,13 +98,13 @@ relmapJoin
     => C.Intmed c     -- ^ Source infomation
     -> C.Relmap c     -- ^ Subrelmap of join operator
     -> C.Relmap c     -- ^ Relmap of join operator
-relmapJoin use = C.relmapBinary use relkitJoin
+relmapJoin med = C.relmapBinary med relkitJoin
 
 relmapJoinList :: (Ord c) => C.Intmed c -> [C.Relmap c] -> C.Relmap c
-relmapJoinList use [] = C.relmapConst use B.reldau
+relmapJoinList med [] = C.relmapConst med B.reldau
 relmapJoinList _ [rmap] = rmap
-relmapJoinList use (rmap : rmaps) = rmap `B.mappend` rmaps' where
-    rmaps' = relmapJoin use $ relmapJoinList use rmaps
+relmapJoinList med (rmap : rmaps) = rmap `B.mappend` rmaps' where
+    rmaps' = relmapJoin med $ relmapJoinList med rmaps
 
 -- | Join two relations.
 relkitJoin :: C.RelkitBinary c

@@ -39,10 +39,10 @@ import qualified Koshucode.Baala.Op.Nest.Flow  as Op
 --    > copy r ( dee | slice /r r )
 
 consCopy :: C.RopCons c
-consCopy use =
-  do n    <- Op.getWord   use "-var"
-     rmap <- Op.getRelmap use "-relmap"
-     Right $ C.relmapCopy use n rmap
+consCopy med =
+  do n    <- Op.getWord   med "-var"
+     rmap <- Op.getRelmap med "-relmap"
+     Right $ C.relmapCopy med n rmap
 
 
 
@@ -55,17 +55,17 @@ consCopy use =
 --    > for /r ( cut /c )
 
 consFor :: (C.CRel c) => C.RopCons c
-consFor use =
-    do n    <- Op.getTerm   use "-term"
-       rmap <- Op.getRelmap use "-relmap"
-       Right $ relmapFor use n rmap
+consFor med =
+    do n    <- Op.getTerm   med "-term"
+       rmap <- Op.getRelmap med "-relmap"
+       Right $ relmapFor med n rmap
 
 relmapFor :: (C.CRel c) => C.Intmed c -> B.TermName -> B.Map (C.Relmap c)
-relmapFor use n rmap = relmapForInner use n (Op.relmapUp use n `B.mappend` rmap)
+relmapFor med n rmap = relmapForInner med n (Op.relmapUp med n `B.mappend` rmap)
 
 relmapForInner :: (C.CRel c) => C.Intmed c -> B.TermName -> B.Map (C.Relmap c)
-relmapForInner use n = C.relmapNest use . bin where
-    bin = C.relmapBinary use $ relkitFor n
+relmapForInner med n = C.relmapNest med . bin where
+    bin = C.relmapBinary med $ relkitFor n
 
 relkitFor :: forall c. (C.CRel c) => B.TermName -> C.RelkitBinary c
 relkitFor n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
@@ -95,13 +95,13 @@ relkitFor _ _ _ = Right C.relkitNothing
 --    > a | group /r b
 
 consGroup :: (Ord c, C.CRel c) => C.RopCons c
-consGroup use =
-  do n    <- Op.getTerm   use "-term"
-     rmap <- Op.getRelmap use "-relmap"
-     Right $ relmapGroup use n rmap
+consGroup med =
+  do n    <- Op.getTerm   med "-term"
+     rmap <- Op.getRelmap med "-relmap"
+     Right $ relmapGroup med n rmap
 
 relmapGroup :: (Ord c, C.CRel c) => C.Intmed c -> B.TermName -> B.Map (C.Relmap c)
-relmapGroup use = C.relmapBinary use . relkitGroup
+relmapGroup med = C.relmapBinary med . relkitGroup
 
 relkitGroup :: forall c. (Ord c, C.CRel c) => B.TermName -> C.RelkitBinary c
 relkitGroup n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
@@ -147,14 +147,14 @@ relkitGroup _ _ _ = Right C.relkitNothing
 --
 
 consSlice :: (C.CRel c) => C.RopCons c
-consSlice use =
-  do n    <- Op.getTerm   use "-term"
-     rmap <- Op.getOptRelmap C.relmapId use "-relmap"
-     Right $ relmapSlice use n rmap
+consSlice med =
+  do n    <- Op.getTerm   med "-term"
+     rmap <- Op.getOptRelmap C.relmapId med "-relmap"
+     Right $ relmapSlice med n rmap
 
 relmapSlice :: (C.CRel c) => C.Intmed c -> B.TermName -> B.Map (C.Relmap c)
-relmapSlice use n = C.relmapNest use . bin where
-    bin = C.relmapBinary use $ relkitSlice n
+relmapSlice med n = C.relmapNest med . bin where
+    bin = C.relmapBinary med $ relkitSlice n
 
 relkitSlice :: (C.CRel c) => B.TermName -> C.RelkitBinary c
 relkitSlice n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
@@ -170,13 +170,13 @@ relkitSlice _ _ _ = Right C.relkitNothing
 -- ----------------------  slice-up
 
 consSliceUp :: (C.CRel c) => C.RopCons c
-consSliceUp use =
-  do rmap <- Op.getOptRelmap C.relmapId use "-relmap"
-     Right $ relmapSliceUp use rmap
+consSliceUp med =
+  do rmap <- Op.getOptRelmap C.relmapId med "-relmap"
+     Right $ relmapSliceUp med rmap
 
 relmapSliceUp :: (C.CRel c) => C.Intmed c -> B.Map (C.Relmap c)
-relmapSliceUp use = C.relmapNest use . bin where
-    bin = C.relmapBinary use relkitSliceUp
+relmapSliceUp med = C.relmapNest med . bin where
+    bin = C.relmapBinary med relkitSliceUp
 
 relkitSliceUp :: (C.CRel c) => C.RelkitBinary c
 relkitSliceUp (C.Relkit (Just he2) kitb2) _ = Right kit3 where

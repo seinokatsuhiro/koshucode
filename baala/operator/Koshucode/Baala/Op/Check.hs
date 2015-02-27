@@ -34,22 +34,22 @@ ropsCheck = Op.ropList "check"
 -- ----------------------  check-term
 
 consCheckTerm :: C.RopCons c
-consCheckTerm use =
-  do optJust <- Op.getMaybe Op.getTerms use "-just"
-     optHas  <- Op.getMaybe Op.getTerms use "-has"
-     optBut  <- Op.getMaybe Op.getTerms use "-but"
+consCheckTerm med =
+  do optJust <- Op.getMaybe Op.getTerms med "-just"
+     optHas  <- Op.getMaybe Op.getTerms med "-has"
+     optBut  <- Op.getMaybe Op.getTerms med "-but"
      case (optJust, optHas, optBut) of
-       (Just ns, Nothing, Nothing) -> Right $ relmapCheckTermJust use ns
-       (Nothing, Just ns, Nothing) -> Right $ relmapCheckTermHas  use ns
-       (Nothing, Nothing, Just ns) -> Right $ relmapCheckTermBut  use ns
+       (Just ns, Nothing, Nothing) -> Right $ relmapCheckTermJust med ns
+       (Nothing, Just ns, Nothing) -> Right $ relmapCheckTermHas  med ns
+       (Nothing, Nothing, Just ns) -> Right $ relmapCheckTermBut  med ns
        _ -> Msg.unexpAttr "require one of -just / -has / -but"
 
 relmapCheckTermJust :: C.Intmed c -> [B.TermName] -> C.Relmap c
 relmapCheckTermHas  :: C.Intmed c -> [B.TermName] -> C.Relmap c
 relmapCheckTermBut  :: C.Intmed c -> [B.TermName] -> C.Relmap c
-relmapCheckTermJust use = C.relmapFlow use . relkitCheckTermJust
-relmapCheckTermHas  use = C.relmapFlow use . relkitCheckTermHas
-relmapCheckTermBut  use = C.relmapFlow use . relkitCheckTermBut
+relmapCheckTermJust med = C.relmapFlow med . relkitCheckTermJust
+relmapCheckTermHas  med = C.relmapFlow med . relkitCheckTermHas
+relmapCheckTermBut  med = C.relmapFlow med . relkitCheckTermBut
 
 relkitCheckTermJust :: [B.TermName] -> C.RelkitFlow c
 relkitCheckTermHas  :: [B.TermName] -> C.RelkitFlow c
@@ -76,12 +76,12 @@ checkTerm opt check ns (Just he1)
 --  there are another tuples that has the same key.
 
 consDuplicate :: (Ord c) => C.RopCons c
-consDuplicate use =
-  do ns <- Op.getTerms use "-term"
-     Right $ relmapDuplicate use ns
+consDuplicate med =
+  do ns <- Op.getTerms med "-term"
+     Right $ relmapDuplicate med ns
 
 relmapDuplicate :: (Ord c) => C.Intmed c -> [B.TermName] -> C.Relmap c
-relmapDuplicate use = C.relmapFlow use . relkitDuplicate
+relmapDuplicate med = C.relmapFlow med . relkitDuplicate
 
 relkitDuplicate :: (Ord c) => [B.TermName] -> C.RelkitFlow c
 relkitDuplicate _ Nothing = Right C.relkitNothing
@@ -110,22 +110,22 @@ relkitDuplicate ns (Just he1)
 -- exclude : none ( pick @'all | meet ( @from | pick @'all ))
 
 consExclude :: (Ord c) => C.RopCons c
-consExclude use =
-  do ns <- Op.getTerms  use "-term"
-     m  <- Op.getRelmap use "-from"
-     Right $ relmapExclude use (ns, m)
+consExclude med =
+  do ns <- Op.getTerms  med "-term"
+     m  <- Op.getRelmap med "-from"
+     Right $ relmapExclude med (ns, m)
 
 relmapExclude :: (Ord c) => C.Intmed c -> ([B.TermName], C.Relmap c) -> C.Relmap c
-relmapExclude use (ns, m) = excl where
-    excl = Op.relmapNone use (pick `B.mappend` meet)
-    pick = Op.relmapPick use ns
-    meet = Op.relmapMeet use (m `B.mappend` pick)
+relmapExclude med (ns, m) = excl where
+    excl = Op.relmapNone med (pick `B.mappend` meet)
+    pick = Op.relmapPick med ns
+    meet = Op.relmapMeet med (m `B.mappend` pick)
 
 
 -- ----------------------  dump
 
 consDump :: (B.Write c, C.CRel c) => C.RopCons c
-consDump use = Right $ C.relmapFlow use $ relkitDump
+consDump med = Right $ C.relmapFlow med $ relkitDump
 
 relkitDump :: (B.Write c, C.CRel c) => C.RelkitFlow c
 relkitDump Nothing = Right C.relkitNothing

@@ -49,12 +49,12 @@ ropsSource = Op.ropList "source"
 -- ----------------------  empty
 
 consEmpty :: C.RopCons c
-consEmpty use =
-    do ns <- Op.getTerms use "-term"
-       Right $ relmapEmpty use ns
+consEmpty med =
+    do ns <- Op.getTerms med "-term"
+       Right $ relmapEmpty med ns
 
 relmapEmpty :: C.Intmed c -> [B.TermName] -> C.Relmap c
-relmapEmpty use = C.relmapFlow use . relkitEmpty
+relmapEmpty med = C.relmapFlow med . relkitEmpty
 
 relkitEmpty :: [B.TermName] -> C.RelkitFlow c
 relkitEmpty ns _ = Right $ C.relkit he2 $ C.RelkitConst [] where
@@ -70,10 +70,10 @@ relkitEmpty ns _ = Right $ C.relkit he2 $ C.RelkitConst [] where
 --    > source P /a /b
 
 consSource :: C.RopCons c
-consSource use =
-  do pattern  <- Op.getWord  use "-pattern"
-     terms    <- Op.getTerms use "-term"
-     Right $ C.relmapSource use pattern terms
+consSource med =
+  do pattern  <- Op.getWord  med "-pattern"
+     terms    <- Op.getTerms med "-term"
+     Right $ C.relmapSource med pattern terms
 
 
 -- ----------------------  source-term
@@ -86,13 +86,13 @@ consSource use =
 --    > p2 : source-term P2 p2
 
 consSourceTerm :: C.RopCons c
-consSourceTerm use =
-  do pat   <- Op.getWord   use "-pattern"
-     rmap  <- Op.getRelmap use "-relmap"
-     Right $ relmapSourceTerm use pat rmap
+consSourceTerm med =
+  do pat   <- Op.getWord   med "-pattern"
+     rmap  <- Op.getRelmap med "-relmap"
+     Right $ relmapSourceTerm med pat rmap
 
 relmapSourceTerm :: C.Intmed c -> String -> B.Map (C.Relmap c)
-relmapSourceTerm use pat = C.relmapBinary use $ relkitSourceTerm pat
+relmapSourceTerm med pat = C.relmapBinary med $ relkitSourceTerm pat
 
 relkitSourceTerm :: String -> C.RelkitBinary c
 relkitSourceTerm _   (C.Relkit Nothing    _) _ = Right C.relkitNothing
@@ -114,8 +114,8 @@ relkitSourceTerm pat (C.Relkit (Just he2) _) _ = Right kit3 where
 --    > dum
 
 consDee :: C.RopCons c
-consDee use = Right $ C.relmapConst use B.reldee
+consDee med = Right $ C.relmapConst med B.reldee
 
 consDum :: C.RopCons c
-consDum use = Right $ C.relmapConst use B.reldum
+consDum med = Right $ C.relmapConst med B.reldum
 

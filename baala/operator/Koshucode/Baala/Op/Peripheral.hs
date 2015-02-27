@@ -64,14 +64,14 @@ ropsPeripheral = Op.ropList "peripheral"
 --
 
 consMember :: (Ord c, C.CSet c, C.CList c, C.CText c) => C.RopCons c
-consMember use =
-  do x    <- Op.getTerm use "-1"
-     xs   <- Op.getTerm use "-2"
-     Right $ relmapMember use (x, xs)
+consMember med =
+  do x    <- Op.getTerm med "-1"
+     xs   <- Op.getTerm med "-2"
+     Right $ relmapMember med (x, xs)
 
 relmapMember :: (Ord c, C.CSet c, C.CList c, C.CText c)
   => C.Intmed c -> B.TermName2 -> C.Relmap c
-relmapMember use = C.relmapFlow use . relkitMember
+relmapMember med = C.relmapFlow med . relkitMember
 
 relkitMember :: (Ord c, C.CSet c, C.CList c, C.CText c)
   => B.TermName2 -> C.RelkitFlow c
@@ -107,11 +107,11 @@ relkitMemberExpand x xsi (Just he1) = Right kit2 where
 -- ----------------------  RDF
 
 consRdf :: C.RopCons c
-consRdf use =
-    do sign  <- Op.getWord  use "-pattern"
-       [s,o] <- Op.getTerms use "-term"
-       Right $ C.relmapSource use sign ["/s", "/o"] `B.mappend`
-               Op.relmapRename use [(s,"/s"), (o,"/o")]
+consRdf med =
+    do sign  <- Op.getWord  med "-pattern"
+       [s,o] <- Op.getTerms med "-term"
+       Right $ C.relmapSource med sign ["/s", "/o"] `B.mappend`
+               Op.relmapRename med [(s,"/s"), (o,"/o")]
 
 
 
@@ -120,13 +120,13 @@ consRdf use =
 --    > assn /x /y /z -to /a
 
 consAssn :: (C.CAssn c) => C.RopCons c
-consAssn use =
-  do ns <- Op.getTerms use "-term"
-     to <- Op.getTerm  use "-to"
-     Right $ relmapAssn use (ns, to)
+consAssn med =
+  do ns <- Op.getTerms med "-term"
+     to <- Op.getTerm  med "-to"
+     Right $ relmapAssn med (ns, to)
 
 relmapAssn :: (C.CAssn c) => C.Intmed c -> ([B.TermName], B.TermName) -> C.Relmap c
-relmapAssn use = C.relmapFlow use . relkitAssn
+relmapAssn med = C.relmapFlow med . relkitAssn
 
 relkitAssn :: (C.CAssn c) => ([B.TermName], B.TermName) -> C.RelkitFlow c
 relkitAssn _ Nothing = Right C.relkitNothing
@@ -143,13 +143,13 @@ relkitAssn (ns, to) (Just he1) = Right kit2 where
 --    > unassn /a -only /x /y
 
 consUnassn :: (C.CAssn c) => C.RopCons c
-consUnassn use =
-  do from <- Op.getTerm  use "-from"
-     ns   <- Op.getTerms use "-only"
-     Right $ relmapUnassn use (from, ns)
+consUnassn med =
+  do from <- Op.getTerm  med "-from"
+     ns   <- Op.getTerms med "-only"
+     Right $ relmapUnassn med (from, ns)
 
 relmapUnassn :: (C.CAssn c) => C.Intmed c -> (B.TermName, [B.TermName]) -> C.Relmap c
-relmapUnassn use = C.relmapFlow use . relkitUnassn
+relmapUnassn med = C.relmapFlow med . relkitUnassn
 
 relkitUnassn :: (C.CAssn c) => (B.TermName, [B.TermName]) -> C.RelkitFlow c
 relkitUnassn _ Nothing = Right C.relkitNothing
@@ -171,12 +171,12 @@ assnPick ns assn = mapM pick ns where
 -- ----------------------  term-name
 
 consTermName :: (C.CTerm c) => C.RopCons c
-consTermName use =
-  do n <- Op.getTerm use "-term"
-     Right $ relmapTermName use n
+consTermName med =
+  do n <- Op.getTerm med "-term"
+     Right $ relmapTermName med n
 
 relmapTermName :: (C.CTerm c) => C.Intmed c -> B.TermName -> C.Relmap c
-relmapTermName use n = C.relmapFlow use $ relkitTermName n
+relmapTermName med n = C.relmapFlow med $ relkitTermName n
 
 relkitTermName :: (C.CTerm c) => B.TermName -> C.RelkitFlow c
 relkitTermName n Nothing    = Msg.noAttr n
@@ -192,13 +192,13 @@ relkitTermName n (Just he1) = Right kit2 where
 --  today /day
 
 consToday :: (C.CTime c) => C.RopCons c
-consToday use =
-  do n <- Op.getTerm use "-term"
-     let t = C.globalTime $ C.ropGlobal use
-     Right $ relmapToday use (n, t)
+consToday med =
+  do n <- Op.getTerm med "-term"
+     let t = C.globalTime $ C.ropGlobal med
+     Right $ relmapToday med (n, t)
 
 relmapToday :: (C.CTime c) => C.Intmed c -> (B.TermName, B.Time) -> C.Relmap c
-relmapToday use = C.relmapFlow use . relkitToday
+relmapToday med = C.relmapFlow med . relkitToday
 
 relkitToday :: (C.CTime c) => (B.TermName, B.Time) -> Maybe B.Head -> B.Ab (C.Relkit c)
 relkitToday _ Nothing = Right C.relkitNothing

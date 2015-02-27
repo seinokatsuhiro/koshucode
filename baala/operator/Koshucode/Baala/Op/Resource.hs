@@ -37,15 +37,15 @@ ropsResource = Op.ropList "resource"
 -- ----------------------  koshu-res-rop
 
 consKoshuResRop :: (C.CContent c) => C.RopCons c
-consKoshuResRop use =
-  do sec   <- Op.getTerm use "-sec"
-     name  <- Op.getTerm use "-name"
-     Right $ relmapKoshuResRop use (sec, name)
+consKoshuResRop med =
+  do sec   <- Op.getTerm med "-sec"
+     name  <- Op.getTerm med "-name"
+     Right $ relmapKoshuResRop med (sec, name)
 
 relmapKoshuResRop :: (C.CContent c)
     => C.Intmed c -> (B.TermName, B.TermName)
     -> C.Relmap c
-relmapKoshuResRop use = C.relmapHook use . relkitKoshuResRop
+relmapKoshuResRop med = C.relmapHook med . relkitKoshuResRop
 
 relkitKoshuResRop :: (C.CContent c)
     => (B.TermName, B.TermName)
@@ -60,15 +60,15 @@ relkitKoshuResRop (sec, name) res _ = Right kit2 where
 -- ----------------------  koshu-res-sink
 
 consKoshuResSink :: (C.CContent c) => C.RopCons c
-consKoshuResSink use =
-  do sec   <- Op.getTerm use "-sec"
-     pat   <- Op.getTerm use "-pat"
-     Right $ relmapKoshuResSink use (sec, pat)
+consKoshuResSink med =
+  do sec   <- Op.getTerm med "-sec"
+     pat   <- Op.getTerm med "-pat"
+     Right $ relmapKoshuResSink med (sec, pat)
 
 relmapKoshuResSink :: (C.CContent c)
     => C.Intmed c -> (B.TermName, B.TermName)
     -> C.Relmap c
-relmapKoshuResSink use = C.relmapHook use . relkitKoshuResSink
+relmapKoshuResSink med = C.relmapHook med . relkitKoshuResSink
 
 relkitKoshuResSink :: (C.CContent c)
     => (B.TermName, B.TermName)
@@ -84,12 +84,12 @@ relkitKoshuResSink (sec, pat) res _ = Right kit2 where
 -- ----------------------  koshu-res-article
 
 consKoshuResArticle :: (C.CContent c) => C.RopCons c
-consKoshuResArticle use =
-  do name <- Op.getTerm use "-name"
-     Right $ relmapKoshuResArticle use name
+consKoshuResArticle med =
+  do name <- Op.getTerm med "-name"
+     Right $ relmapKoshuResArticle med name
 
 relmapKoshuResArticle :: (C.CContent c) => C.Intmed c -> B.TermName -> C.Relmap c
-relmapKoshuResArticle use = C.relmapHook use . relkitKoshuResArticle
+relmapKoshuResArticle med = C.relmapHook med . relkitKoshuResArticle
 
 relkitKoshuResArticle :: (C.CContent c) => B.TermName -> C.RelkitHook c
 relkitKoshuResArticle name res _ = Right kit2 where

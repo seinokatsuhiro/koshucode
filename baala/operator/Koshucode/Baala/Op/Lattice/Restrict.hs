@@ -25,12 +25,12 @@ import qualified Koshucode.Baala.Op.Term              as Op
 -- ----------------------  some
 
 consSome :: (Ord c) => C.RopCons c
-consSome use = 
-    do rmap <- Op.getRelmap use "-relmap"
-       Right $ relmapSome use rmap
+consSome med = 
+    do rmap <- Op.getRelmap med "-relmap"
+       Right $ relmapSome med rmap
 
 relmapSome :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
-relmapSome use = C.relmapBinary use relkitSome
+relmapSome med = C.relmapBinary med relkitSome
 
 relkitSome :: (Ord c) => C.RelkitBinary c
 relkitSome = relkitSemi False
@@ -45,12 +45,12 @@ relkitSemi isEmpty (C.Relkit _ kitb2) he1 =
 -- ----------------------  none
 
 consNone :: (Ord c) => C.RopCons c
-consNone use =
-    do rmap <- Op.getRelmap use "-relmap"
-       Right $ relmapNone use rmap
+consNone med =
+    do rmap <- Op.getRelmap med "-relmap"
+       Right $ relmapNone med rmap
 
 relmapNone :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
-relmapNone use = C.relmapBinary use relkitNone
+relmapNone med = C.relmapBinary med relkitNone
 
 relkitNone :: (Ord c) => C.RelkitBinary c
 relkitNone = relkitSemi True
@@ -60,12 +60,12 @@ relkitNone = relkitSemi True
 -- ----------------------  sub
 
 consSub :: (Ord c) => C.RopCons c
-consSub use =
-    do rmap <- Op.getRelmap use "-relmap"
-       Right $ relmapSub use rmap
+consSub med =
+    do rmap <- Op.getRelmap med "-relmap"
+       Right $ relmapSub med rmap
 
 relmapSub :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
-relmapSub use = C.relmapBinary use relkitSub
+relmapSub med = C.relmapBinary med relkitSub
 
 relkitSub :: (Ord c) => C.RelkitBinary c
 relkitSub kit2@(C.Relkit (Just he2) _) he1'@(Just he1)
@@ -82,12 +82,12 @@ relkitSub _ _ = Right C.relkitNothing
 -- ----------------------  compose
 
 consCompose :: (Ord c) => C.RopCons c
-consCompose use =
-    do rmap <- Op.getRelmap use "-relmap"
-       Right $ relmapCompose use rmap
+consCompose med =
+    do rmap <- Op.getRelmap med "-relmap"
+       Right $ relmapCompose med rmap
 
 relmapCompose :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
-relmapCompose use = C.relmapBinary use relkitCompose
+relmapCompose med = C.relmapBinary med relkitCompose
 
 relkitCompose :: forall c. (Ord c) => C.RelkitBinary c
 relkitCompose kit2@(C.Relkit (Just he2) _) (Just he1) =
