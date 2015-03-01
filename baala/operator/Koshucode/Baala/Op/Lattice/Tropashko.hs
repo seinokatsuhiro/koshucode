@@ -49,7 +49,7 @@ relmapMeet med = C.relmapBinary med relkitMeet
 
 -- | Meet two relations.
 relkitMeet :: forall c. (Ord c) => C.RelkitBinary c
-relkitMeet (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
+relkitMeet (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
 
     ind1, ind2 :: [Int]
     (ind1, ind2) = B.headNames he1 `B.snipPair` B.headNames he2
@@ -108,7 +108,7 @@ relmapJoinList med (rmap : rmaps) = rmap `B.mappend` rmaps' where
 
 -- | Join two relations.
 relkitJoin :: C.RelkitBinary c
-relkitJoin (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
+relkitJoin (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
 
     ind1, ind2 :: [Int]
     (ind1, ind2) = B.headNames he1 `B.snipPair` B.headNames he2

@@ -102,8 +102,8 @@ relkitCutTerm = relkitSnipTerm B.snipOff B.snipOff
 -- ----------------------  snip
 
 relkitSnipTerm :: B.Snip B.NamedType -> B.Snip c -> C.RelkitBinary c
-relkitSnipTerm _ _ (C.Relkit Nothing _) = const $ Right C.relkitNothing
-relkitSnipTerm heSnip boSnip (C.Relkit (Just he2) _) =
+relkitSnipTerm _ _ (C.Relkit _ Nothing _) = const $ Right C.relkitNothing
+relkitSnipTerm heSnip boSnip (C.Relkit _ (Just he2) _) =
     relkitSnip heSnip boSnip $ B.headNames he2
 
 relkitSnip :: B.Snip B.NamedType -> B.Snip c -> [B.TermName] -> C.RelkitFlow c

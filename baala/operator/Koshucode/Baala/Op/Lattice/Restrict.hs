@@ -36,7 +36,7 @@ relkitSome :: (Ord c) => C.RelkitBinary c
 relkitSome = relkitSemi False
 
 relkitSemi :: (Ord c) => Bool -> C.RelkitBinary c
-relkitSemi isEmpty (C.Relkit _ kitb2) he1 =
+relkitSemi isEmpty (C.Relkit _ _ kitb2) he1 =
     Right $ C.relkit he1 $ C.RelkitAbSemi p kitb2
     where p bo2 = Right $ null bo2 == isEmpty
 
@@ -68,7 +68,7 @@ relmapSub :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
 relmapSub med = C.relmapBinary med relkitSub
 
 relkitSub :: (Ord c) => C.RelkitBinary c
-relkitSub kit2@(C.Relkit (Just he2) _) he1'@(Just he1)
+relkitSub kit2@(C.Relkit _ (Just he2) _) he1'@(Just he1)
     | B.isSuperhead he1 he2 = kit
     | otherwise = Right $ C.relkitJust he1 $ C.RelkitConst []
     where
@@ -90,9 +90,9 @@ relmapCompose :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
 relmapCompose med = C.relmapBinary med relkitCompose
 
 relkitCompose :: forall c. (Ord c) => C.RelkitBinary c
-relkitCompose kit2@(C.Relkit (Just he2) _) (Just he1) =
+relkitCompose kit2@(C.Relkit _ (Just he2) _) (Just he1) =
     do kitMeet <- Op.relkitMeet kit2 (Just he1)
-       kitCut  <- Op.relkitCut shared $ C.relkitHead kitMeet
+       kitCut  <- Op.relkitCut shared $ C.relkitOutput kitMeet
        Right $ kitMeet `B.mappend` kitCut
     where
       ns1    = B.headNames he1

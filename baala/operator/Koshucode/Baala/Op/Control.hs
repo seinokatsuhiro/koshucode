@@ -51,7 +51,7 @@ relmapIf :: (Ord c) => C.Intmed c -> [C.Relmap c] -> C.Relmap c
 relmapIf med = C.relmapConfl med relkitIf
 
 relkitIf :: (Ord c) => C.RelkitConfl c
-relkitIf [C.Relkit _ kitbT, C.Relkit (Just heA) kitbA, C.Relkit (Just heB) kitbB] _
+relkitIf [C.Relkit _ _ kitbT, C.Relkit _ (Just heA) kitbA, C.Relkit _ (Just heB) kitbB] _
     | B.headEquiv heA heB = Right $ kit3
     | otherwise = Msg.diffHead [heA, heB]
     where
@@ -65,10 +65,10 @@ relkitIf [C.Relkit _ kitbT, C.Relkit (Just heA) kitbA, C.Relkit (Just heB) kitbB
       align :: B.Map (B.Ab [[c]])
       align = fmap $ B.bodyAlign heA heB
 
-relkitIf [kitT@(C.Relkit _ _), kitA@(C.Relkit heA' kitbA), kitB@(C.Relkit heB' kitbB)] _
-    | isNothing2 heA' heB' = Right C.relkitNothing
-    | isNothing heA'       = relkitIf [kitT, C.Relkit heB' kitbA, kitB] Nothing
-    | isNothing heB'       = relkitIf [kitT, kitA, C.Relkit heA' kitbB] Nothing
+relkitIf [kitT@(C.Relkit _ _ _), kitA@(C.Relkit hiA' hoA' kitbA), kitB@(C.Relkit hiB' hoB' kitbB)] _
+    | isNothing2 hoA' hoB' = Right C.relkitNothing
+    | isNothing hoA'       = relkitIf [kitT, C.Relkit hiB' hoB' kitbA, kitB] Nothing
+    | isNothing hoB'       = relkitIf [kitT, kitA, C.Relkit hiA' hoA' kitbB] Nothing
 relkitIf _ _ = Msg.unexpAttr "if T A b"
 
 isNothing :: Maybe B.Head -> Bool
@@ -109,7 +109,7 @@ relmapFix :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
 relmapFix med = C.relmapBinary med relkitFix
 
 relkitFix :: forall c. (Ord c) => C.RelkitBinary c
-relkitFix (C.Relkit (Just he2) kitb2) (Just he1)
+relkitFix (C.Relkit _ (Just he2) kitb2) (Just he1)
     | B.headEquiv he1 he2 = Right $ kit3
     | otherwise = Msg.diffHead [he1, he2]
     where
@@ -131,7 +131,7 @@ relmapEqual :: (Ord c) => C.Intmed c -> B.Map (C.Relmap c)
 relmapEqual med = C.relmapBinary med relkitEqual
 
 relkitEqual :: (Ord c) => C.RelkitBinary c
-relkitEqual (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
+relkitEqual (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
     kit3 = C.relkitJust B.headEmpty $ C.RelkitAbFull False kitf3 [kitb2]
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps

@@ -19,7 +19,7 @@ import qualified Koshucode.Baala.Core.Message          as Msg
 relkitLink :: forall c. (Ord c) => [C.RelkitDef c] -> B.Map (C.Relkit c)
 relkitLink kits = linkKit where
     linkKit :: B.Map (C.Relkit c)
-    linkKit (C.Relkit he bo) = C.Relkit he $ link bo
+    linkKit (C.Relkit hi ho bo) = C.Relkit hi ho $ link bo
 
     kitsRec :: [C.RelkitDef c]
     kitsRec = linkKit `B.mapSndTo` kits
@@ -37,7 +37,7 @@ relkitLink kits = linkKit where
            C.RelkitCopy        p copy b  -> C.RelkitCopy     p copy $ link  b
            C.RelkitLink n key _ ->
                case lookup key kitsRec of
-                 Just (C.Relkit _ b)     -> C.RelkitLink n key $ Just b
+                 Just (C.Relkit _ _ b)   -> C.RelkitLink n key $ Just b
                  Nothing                 -> core
            _                             -> core
 

@@ -60,7 +60,7 @@ relmapMaybe :: (Ord c) => C.Intmed c -> c -> B.Map (C.Relmap c)
 relmapMaybe med = C.relmapBinary med . relkitMaybe
 
 relkitMaybe :: forall c. (Ord c) => c -> C.RelkitBinary c
-relkitMaybe fill (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
+relkitMaybe fill (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
 
     ind1, ind2 :: [Int]
     (ind1, ind2) = B.headNames he1 `B.snipPair` B.headNames he2

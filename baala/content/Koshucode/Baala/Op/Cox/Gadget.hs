@@ -163,7 +163,7 @@ relmapRepeat :: (Ord c) => C.Intmed c -> Int -> B.Map (C.Relmap c)
 relmapRepeat med cnt = C.relmapBinary med $ relkitRepeat cnt
 
 relkitRepeat :: forall c. (Ord c) => Int -> C.RelkitBinary c
-relkitRepeat cnt (C.Relkit (Just he2) kitb2) (Just he1)
+relkitRepeat cnt (C.Relkit _ (Just he2) kitb2) (Just he1)
     | B.headEquiv he1 he2 = Right $ kit3
     | otherwise = Msg.diffHead [he1, he2]
     where

@@ -95,8 +95,8 @@ relmapSourceTerm :: C.Intmed c -> String -> B.Map (C.Relmap c)
 relmapSourceTerm med pat = C.relmapBinary med $ relkitSourceTerm pat
 
 relkitSourceTerm :: String -> C.RelkitBinary c
-relkitSourceTerm _   (C.Relkit Nothing    _) _ = Right C.relkitNothing
-relkitSourceTerm pat (C.Relkit (Just he2) _) _ = Right kit3 where
+relkitSourceTerm _   (C.Relkit _ Nothing    _) _ = Right C.relkitNothing
+relkitSourceTerm pat (C.Relkit _ (Just he2) _) _ = Right kit3 where
     kit3   = C.relkitJust he2 $ C.RelkitSource pat ns2
     ns2    = B.headNames he2
 

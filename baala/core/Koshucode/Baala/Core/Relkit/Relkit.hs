@@ -24,8 +24,9 @@ import qualified Koshucode.Baala.Core.Lexmap  as C
 
 -- | Specialized relmap.
 data Relkit c = Relkit
-    { relkitHead :: Maybe B.Head
-    , relkitBody :: RelkitBody c
+    { relkitInput  :: Maybe B.Head
+    , relkitOutput :: Maybe B.Head
+    , relkitBody   :: RelkitBody c
     }
 
 data RelkitCore c

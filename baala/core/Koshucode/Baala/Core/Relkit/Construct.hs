@@ -30,25 +30,25 @@ import qualified Koshucode.Baala.Core.Relkit.Relkit  as C
 -- ----------------------  General constructor
 
 relkit :: Maybe B.Head -> C.RelkitCore c -> C.Relkit c
-relkit he = C.Relkit he . B.Sourced []
+relkit ho = C.Relkit Nothing ho . B.Sourced []
 
 relkitId :: Maybe B.Head -> C.Relkit c
-relkitId he = relkit he C.RelkitId
+relkitId ho = relkit ho C.RelkitId
 
 relkitJust :: B.Head -> C.RelkitCore c -> C.Relkit c
-relkitJust he = relkit $ Just he
+relkitJust ho = relkit $ Just ho
 
 relkitNothing :: C.Relkit c
 relkitNothing = relkit Nothing C.RelkitId
 
 relkitSetSource :: (B.CodePtr a) => a -> B.Map (C.Relkit c)
-relkitSetSource src (C.Relkit he (B.Sourced _ core)) =
-    C.Relkit he $ B.Sourced (B.codePtList src) core
+relkitSetSource src (C.Relkit hi ho (B.Sourced _ core)) =
+    C.Relkit hi ho $ B.Sourced (B.codePtList src) core
 
 instance B.Monoid (C.Relkit c) where
     mempty = relkitConst B.reldee
-    mappend (C.Relkit _ bo1) (C.Relkit he2 bo2) =
-        relkit he2 $ C.RelkitAppend bo1 bo2
+    mappend (C.Relkit _ _ bo1) (C.Relkit _ ho2 bo2) =
+        relkit ho2 $ C.RelkitAppend bo1 bo2
 
 
 -- ----------------------  Source of relation
@@ -76,10 +76,10 @@ relkitSource p ns = relkitJust he kit where
 -- ----------------------  Relation reference
 
 relkitCopy :: B.Token -> String -> B.Map (C.Relkit c)
-relkitCopy p n (C.Relkit he kitb) = relkit he $ C.RelkitCopy p n kitb
+relkitCopy p n (C.Relkit _ ho kitb) = relkit ho $ C.RelkitCopy p n kitb
 
 relkitNest :: B.Token -> [(String, Int)] -> B.Map (C.Relkit c)
-relkitNest p nest (C.Relkit he kitb) = relkit he $ C.RelkitNest p nest kitb
+relkitNest p nest (C.Relkit _ ho kitb) = relkit ho $ C.RelkitNest p nest kitb
 
 relkitNestVar :: B.Token -> String -> B.Head -> C.Relkit c
 relkitNestVar p n he = relkitJust he $ C.RelkitNestVar p n

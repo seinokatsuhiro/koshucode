@@ -68,7 +68,7 @@ relmapForInner med n = C.relmapNest med . bin where
     bin = C.relmapBinary med $ relkitFor n
 
 relkitFor :: forall c. (C.CRel c) => B.TermName -> C.RelkitBinary c
-relkitFor n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
+relkitFor n (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
     ns1   =  B.headNames he1
     ind1  =  [n] `B.snipIndex` ns1
     cut1  =  B.snipOff  ind1
@@ -104,7 +104,7 @@ relmapGroup :: (Ord c, C.CRel c) => C.Intmed c -> B.TermName -> B.Map (C.Relmap 
 relmapGroup med = C.relmapBinary med . relkitGroup
 
 relkitGroup :: forall c. (Ord c, C.CRel c) => B.TermName -> C.RelkitBinary c
-relkitGroup n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
+relkitGroup n (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
 
     ind1, ind2 :: [Int]
     (ind1, ind2) = B.headNames he1 `B.snipPair` B.headNames he2
@@ -157,7 +157,7 @@ relmapSlice med n = C.relmapNest med . bin where
     bin = C.relmapBinary med $ relkitSlice n
 
 relkitSlice :: (C.CRel c) => B.TermName -> C.RelkitBinary c
-relkitSlice n (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where
+relkitSlice n (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
     he3   = B.headConsNest n he2 he1
     kit3  = C.relkitJust he3 $ C.RelkitOneToAbOne False kitf3 [kitb2]
     kitf3 bmaps cs1 =
@@ -179,7 +179,7 @@ relmapSliceUp med = C.relmapNest med . bin where
     bin = C.relmapBinary med relkitSliceUp
 
 relkitSliceUp :: (C.CRel c) => C.RelkitBinary c
-relkitSliceUp (C.Relkit (Just he2) kitb2) _ = Right kit3 where
+relkitSliceUp (C.Relkit _ (Just he2) kitb2) _ = Right kit3 where
     kit3  = C.relkitJust he2 $ C.RelkitOneToAbMany False kitf3 [kitb2]
     kitf3 bmaps cs1 = do let [bmap2] = bmaps
                          bmap2 [cs1]
