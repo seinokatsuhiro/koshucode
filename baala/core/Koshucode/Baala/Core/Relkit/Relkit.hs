@@ -4,27 +4,15 @@
 
 module Koshucode.Baala.Core.Relkit.Relkit
   ( 
-    -- * Datatype
+    -- * Datatype for Relkit
     Relkit (..), RelkitCore (..),
   
+    -- * Derived types
     RelkitBody, RelkitKey, RelkitDef,
     Relbmap, RelSelect,
-  
+
+    -- * Calculation type
     RelkitFlow, RelkitHook', RelkitBinary, RelkitConfl,
-
-    -- * Constructor
-    relkit,
-    relkitJust, relkitNothing,
-    relkitId,
-    relkitConst, relkitConstEmpty,
-    relkitConstSingleton, relkitConstBody,
-    relkitSource,
-    relkitCopy, relkitNest, relkitNestVar,
-    relkitSetSource,
-
-    Local, Lexical,
-    localsLines,
-    a2lookup,
   ) where
 
 import qualified Koshucode.Baala.Base         as B
@@ -39,11 +27,6 @@ data Relkit c = Relkit
     { relkitHead :: Maybe B.Head
     , relkitBody :: RelkitBody c
     }
-
-instance B.Monoid (Relkit c) where
-    mempty = relkitConst B.reldee
-    mappend (Relkit _ bo1) (Relkit he2 bo2) =
-        relkit he2 $ RelkitAppend bo1 bo2
 
 data RelkitCore c
     = RelkitFull         Bool (                [[c]] -> [[c]] )
@@ -111,73 +94,3 @@ type RelkitBinary c   = Relkit c -> RelkitFlow c
 
 -- | Make 'C.Relkit' from multiple subrelmaps and input heading.
 type RelkitConfl c    = [Relkit c] -> RelkitFlow c
-
-
--- ----------------------  Constructor
-
-relkit :: Maybe B.Head -> RelkitCore c -> Relkit c
-relkit he = Relkit he . B.Sourced []
-
-relkitJust :: B.Head -> RelkitCore c -> Relkit c
-relkitJust he = relkit $ Just he
-
-relkitNothing :: Relkit c
-relkitNothing = relkit Nothing RelkitId
-
-relkitId :: Maybe B.Head -> Relkit c
-relkitId he = relkit he RelkitId
-
-relkitConst :: B.Rel c -> Relkit c
-relkitConst (B.Rel he bo) = relkitJust he $ RelkitConst bo
-
-relkitConstEmpty :: [B.TermName] -> Relkit c
-relkitConstEmpty ns = relkitConstBody ns []
-
-relkitConstSingleton :: [B.TermName] -> [c] -> Relkit c
-relkitConstSingleton ns tuple = relkitConstBody ns [tuple]
-
-relkitConstBody :: [B.TermName] -> [[c]] -> Relkit c
-relkitConstBody ns bo = kit where
-    he  = B.headFrom ns
-    kit = relkitJust he $ RelkitConst bo
-
-relkitSource :: B.JudgePat -> [B.TermName] -> Relkit c
-relkitSource p ns = relkitJust he kit where
-    he  = B.headFrom ns
-    kit = RelkitSource p ns
-
-relkitCopy :: B.Token -> String -> B.Map (Relkit c)
-relkitCopy p n (Relkit he kitb) = relkit he $ RelkitCopy p n kitb
-
-relkitNest :: B.Token -> [(String, Int)] -> B.Map (Relkit c)
-relkitNest p nest (Relkit he kitb) = relkit he $ RelkitNest p nest kitb
-
-relkitNestVar :: B.Token -> String -> B.Head -> Relkit c
-relkitNestVar p n he = relkitJust he $ RelkitNestVar p n
-
-relkitSetSource :: (B.CodePtr a) => a -> B.Map (Relkit c)
-relkitSetSource src (Relkit he (B.Sourced _ core)) =
-    Relkit he $ B.Sourced (B.codePtList src) core
-
-
--- ----------------------  Local relations
-
-type Local a = Lexical [B.Named a]
-
-type Lexical a = (B.Token, a)
-
-localsLines :: [Local a] -> [String]
-localsLines xs = map desc $ a2keys xs where
-    desc (a, bs) = B.tokenContent a ++ " / " ++ unwords bs
-
-a2keys :: [(a, [(b, c)])] -> [(a, [b])]
-a2keys = B.mapSndTo (map fst)
-
-a2expand :: [(a, [(b, c)])] -> [((a, b), c)]
-a2expand = concatMap f where
-    f (a, bc)   = map (g a) bc
-    g a (b, c)  = ((a, b), c)
-
-a2lookup :: (Eq a, Eq b) => a -> b -> [(a, [(b, c)])] -> Maybe c
-a2lookup a b = lookup a B.>=> lookup b
-
