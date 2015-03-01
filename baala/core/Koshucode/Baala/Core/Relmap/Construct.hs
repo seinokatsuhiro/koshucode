@@ -34,11 +34,11 @@ import qualified Koshucode.Baala.Core.Message          as Msg
 
 -- | Make a constant relmap.
 relmapConst :: C.Intmed' h c -> B.Rel c -> C.Relmap' h c
-relmapConst = C.RelmapConst . C.ropLexmap
+relmapConst = C.RelmapConst . C.medLexmap
 
 -- | Relmap for retrieving relation from dataset.
 relmapSource :: C.Intmed' h c -> B.JudgePat -> [B.TermName] -> C.Relmap' h c
-relmapSource = C.RelmapSource . C.ropLexmap
+relmapSource = C.RelmapSource . C.medLexmap
 
 
 -- ----------------------  Calculation
@@ -49,7 +49,7 @@ relmapFlow :: C.Intmed' h c -> C.RelkitFlow c -> C.Relmap' h c
 relmapFlow use relkit = relmapConfl use (const relkit) []
 
 relmapHook :: C.Intmed' h c -> C.RelkitHook' h c -> C.Relmap' h c
-relmapHook = C.RelmapHook . C.ropLexmap
+relmapHook = C.RelmapHook . C.medLexmap
 
 -- | Make a binary relmap.
 --   Binary relmaps take one submap.
@@ -59,20 +59,20 @@ relmapBinary use kit rmap = relmapConfl use (kit . head) [rmap]
 -- | Make a confluent relmap.
 --   Confluent relmaps take multiple submaps.
 relmapConfl :: C.Intmed' h c -> C.RelkitConfl c -> [C.Relmap' h c] -> C.Relmap' h c
-relmapConfl = C.RelmapCalc . C.ropLexmap
+relmapConfl = C.RelmapCalc . C.medLexmap
 
 
 -- ----------------------  Variable
 
 -- | Parent for nested relation references.
 relmapNest :: C.Intmed' h c -> B.Map (C.Relmap' h c)
-relmapNest = C.RelmapNest . C.ropLexmap
+relmapNest = C.RelmapNest . C.medLexmap
 
 relmapCopy :: C.Intmed' h c -> C.RopName -> B.Map (C.Relmap' h c)
-relmapCopy = C.RelmapCopy . C.ropLexmap
+relmapCopy = C.RelmapCopy . C.medLexmap
 
 relmapLink :: C.Intmed' h c -> C.Relmap' h c
-relmapLink = C.RelmapLink . C.ropLexmap
+relmapLink = C.RelmapLink . C.medLexmap
 
 relmapLocalSymbol :: C.Intmed' h c -> String -> C.Relmap' h c
 relmapLocalSymbol = relmapVar B.LocalSymbol
@@ -82,10 +82,10 @@ relmapLocalNest = relmapVar B.LocalNest
 
 relmapVar :: (String -> B.Local String) -> C.Intmed' h c -> String -> C.Relmap' h c
 relmapVar k use n = relmapLink use' where
-    lx    = C.ropLexmap use
+    lx    = C.medLexmap use
     cp    = B.codePt lx
     tok   = C.lexToken lx
-    use'  = use { C.ropLexmap = lx' }
+    use'  = use { C.medLexmap = lx' }
     lx'   = lx  { C.lexType   = C.LexmapLocal
                 , C.lexToken  = B.TLocal cp (k n) (-1) [tok] }
 

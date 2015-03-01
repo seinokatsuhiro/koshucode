@@ -36,7 +36,7 @@ class GetGlobal h where
     getGlobal :: h c -> Global' h c
 
 ropGlobal :: (GetGlobal h) => C.Intmed' h c -> Global' h c
-ropGlobal = getGlobal . C.ropHook
+ropGlobal = getGlobal . C.medHook
 
 -- | Get operator set from 'Intmed'.
 ropCopset :: (GetGlobal h) => C.Intmed' h c -> C.CopSet c
