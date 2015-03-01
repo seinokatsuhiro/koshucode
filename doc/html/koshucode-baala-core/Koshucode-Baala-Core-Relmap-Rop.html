@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.93.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.101.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -51,12 +51,26 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	><p class="caption"
 	>Koshucode.Baala.Core.Relmap.Rop</p
 	></div
+      ><div id="table-of-contents"
+      ><p class="caption"
+	>Contents</p
+	><ul
+	><li
+	  ><a href="#g:1"
+	    >Operator</a
+	    ></li
+	  ><li
+	  ><a href="#g:2"
+	    >Constructor</a
+	    ></li
+	  ></ul
+	></div
       ><div id="description"
       ><p class="caption"
 	>Description</p
 	><div class="doc"
 	><p
-	  >Implementation of relmap operators.</p
+	  >Relmap operators.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -74,7 +88,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ><li
 	      ><a href="#v:ropName"
 		>ropName</a
-		> :: <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:RopName"
+		> :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:RopName"
 		>RopName</a
 		></li
 	      ><li
@@ -84,10 +98,22 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		>String</a
 		></li
 	      ><li
+	      ><a href="#v:ropUsage"
+		>ropUsage</a
+		> :: <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
+		>RopUsage</a
+		></li
+	      ><li
+	      ><a href="#v:ropAttr"
+		>ropAttr</a
+		> :: <a href="Koshucode-Baala-Core-Lexmap-Attr.html#t:RopAttr"
+		>RopAttr</a
+		></li
+	      ><li
 	      ><a href="#v:ropSorter"
 		>ropSorter</a
-		> :: <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrSort"
-		>AttrSort</a
+		> :: <a href="Koshucode-Baala-Core-Lexmap-Attr.html#t:AttrSortPara"
+		>AttrSortPara</a
 		></li
 	      ><li
 	      ><a href="#v:ropCons"
@@ -95,12 +121,6 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		> :: <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopCons-39-"
 		>RopCons'</a
 		> h c</li
-	      ><li
-	      ><a href="#v:ropUsage"
-		>ropUsage</a
-		> :: <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
-		>RopUsage</a
-		></li
 	      ></ul
 	    >}</li
 	  ><li class="src short"
@@ -113,47 +133,59 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ></li
 	  ><li class="src short"
 	  ><span class="keyword"
-	    >data</span
-	    > <a href="#t:RopUse-39-"
-	    >RopUse'</a
-	    > h c = <a href="#v:RopUse"
-	    >RopUse</a
-	    > {<ul class="subs"
-	    ><li
-	      ><a href="#v:ropHook"
-		>ropHook</a
-		> :: h c</li
-	      ><li
-	      ><a href="#v:ropLexmap"
-		>ropLexmap</a
-		> :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
-		>Lexmap</a
-		></li
-	      ><li
-	      ><a href="#v:ropSubrelmap"
-		>ropSubrelmap</a
-		> :: [<a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
-		>Relmap'</a
-		> h c]</li
-	      ></ul
-	    >}</li
+	    >type</span
+	    > <a href="#t:FindRop-39-"
+	    >FindRop'</a
+	    > h c = <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:RopName"
+	    >RopName</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (<a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Rop-39-"
+	    >Rop'</a
+	    > h c)</li
 	  ><li class="src short"
 	  ><span class="keyword"
 	    >type</span
 	    > <a href="#t:RopCons-39-"
 	    >RopCons'</a
-	    > h c = <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse-39-"
-	    >RopUse'</a
+	    > h c = <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Intmed-39-"
+	    >Intmed'</a
 	    > h c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
 	    > (<a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
 	    >Relmap'</a
 	    > h c)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >data</span
+	    > <a href="#t:Intmed-39-"
+	    >Intmed'</a
+	    > h c = <a href="#v:Intmed"
+	    >Intmed</a
+	    > {<ul class="subs"
+	    ><li
+	      ><a href="#v:medHook"
+		>medHook</a
+		> :: h c</li
+	      ><li
+	      ><a href="#v:medLexmap"
+		>medLexmap</a
+		> :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
+		>Lexmap</a
+		></li
+	      ><li
+	      ><a href="#v:medSubmap"
+		>medSubmap</a
+		> :: [<a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+		>Relmap'</a
+		> h c]</li
+	      ></ul
+	    >}</li
 	  ></ul
 	></div
       ><div id="interface"
-      ><h1
-	>Documentation</h1
+      ><h1 id="g:1"
+	>Operator</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -165,7 +197,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Implementation of relmap operator</p
+	    >Implementation of relmap operator.</p
 	    ></div
 	  ><div class="subs constructors"
 	  ><p class="caption"
@@ -188,12 +220,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		    ><dt class="src"
 		      ><a name="v:ropName" class="def"
 			>ropName</a
-			> :: <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:RopName"
+			> :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:RopName"
 			>RopName</a
 			></dt
 		      ><dd class="doc"
 		      ><p
-			>Operator name</p
+			>Operator name</p
 			></dd
 		      ><dt class="src"
 		      ><a name="v:ropGroup" class="def"
@@ -203,27 +235,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 			></dt
 		      ><dd class="doc"
 		      ><p
-			>Operator group</p
-			></dd
-		      ><dt class="src"
-		      ><a name="v:ropSorter" class="def"
-			>ropSorter</a
-			> :: <a href="Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrSort"
-			>AttrSort</a
-			></dt
-		      ><dd class="doc"
-		      ><p
-			>Attribute sorter</p
-			></dd
-		      ><dt class="src"
-		      ><a name="v:ropCons" class="def"
-			>ropCons</a
-			> :: <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopCons-39-"
-			>RopCons'</a
-			> h c</dt
-		      ><dd class="doc"
-		      ><p
-			>Constructor of operator</p
+			>Operator group</p
 			></dd
 		      ><dt class="src"
 		      ><a name="v:ropUsage" class="def"
@@ -233,7 +245,37 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 			></dt
 		      ><dd class="doc"
 		      ><p
-			>Usage of operator</p
+			>Usage text of operator</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:ropAttr" class="def"
+			>ropAttr</a
+			> :: <a href="Koshucode-Baala-Core-Lexmap-Attr.html#t:RopAttr"
+			>RopAttr</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Attribute of operator</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:ropSorter" class="def"
+			>ropSorter</a
+			> :: <a href="Koshucode-Baala-Core-Lexmap-Attr.html#t:AttrSortPara"
+			>AttrSortPara</a
+			></dt
+		      ><dd class="doc"
+		      ><p
+			>Attribute sorter</p
+			></dd
+		      ><dt class="src"
+		      ><a name="v:ropCons" class="def"
+			>ropCons</a
+			> :: <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopCons-39-"
+			>RopCons'</a
+			> h c</dt
+		      ><dd class="doc"
+		      ><p
+			>Constructor of operator</p
 			></dd
 		      ></dl
 		    ><div class="clear"
@@ -285,21 +327,60 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Operator usage.</p
+	    >Usage text of operator.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:FindRop-39-" class="def"
+	    >FindRop'</a
+	    > h c = <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:RopName"
+	    >RopName</a
+	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > (<a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Rop-39-"
+	    >Rop'</a
+	    > h c) <a href="src/Koshucode-Baala-Core-Relmap-Rop.html#FindRop%27" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:2"
+	>Constructor</h1
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:RopCons-39-" class="def"
+	    >RopCons'</a
+	    > h c = <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Intmed-39-"
+	    >Intmed'</a
+	    > h c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
+	    >Relmap'</a
+	    > h c) <a href="src/Koshucode-Baala-Core-Relmap-Rop.html#RopCons%27" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Constructor of relmap operator,
+   i.e., function from intermediate relamp to generic relmap.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
 	    >data</span
-	    > <a name="t:RopUse-39-" class="def"
-	    >RopUse'</a
-	    > h c <a href="src/Koshucode-Baala-Core-Relmap-Rop.html#RopUse%27" class="link"
+	    > <a name="t:Intmed-39-" class="def"
+	    >Intmed'</a
+	    > h c <a href="src/Koshucode-Baala-Core-Relmap-Rop.html#Intmed%27" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Use of relmap operator</p
+	    >Intermediate relmap, that is in between lexmap and generic relmap.</p
 	    ></div
 	  ><div class="subs constructors"
 	  ><p class="caption"
@@ -307,8 +388,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    ><table
 	    ><tr
 	      ><td class="src"
-		><a name="v:RopUse" class="def"
-		  >RopUse</a
+		><a name="v:Intmed" class="def"
+		  >Intmed</a
 		  ></td
 		><td class="doc empty"
 		>&nbsp;</td
@@ -320,30 +401,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		    >Fields</p
 		    ><dl
 		    ><dt class="src"
-		      ><a name="v:ropHook" class="def"
-			>ropHook</a
+		      ><a name="v:medHook" class="def"
+			>medHook</a
 			> :: h c</dt
 		      ><dd class="doc empty"
 		      >&nbsp;</dd
 		      ><dt class="src"
-		      ><a name="v:ropLexmap" class="def"
-			>ropLexmap</a
+		      ><a name="v:medLexmap" class="def"
+			>medLexmap</a
 			> :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:Lexmap"
 			>Lexmap</a
 			></dt
 		      ><dd class="doc"
 		      ><p
-			>Syntactic data of operator use</p
+			>Syntactic data of operator use</p
 			></dd
 		      ><dt class="src"
-		      ><a name="v:ropSubrelmap" class="def"
-			>ropSubrelmap</a
+		      ><a name="v:medSubmap" class="def"
+			>medSubmap</a
 			> :: [<a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
 			>Relmap'</a
 			> h c]</dt
 		      ><dd class="doc"
 		      ><p
-			>Subrelmaps</p
+			>Subrelmaps</p
 			></dd
 		      ></dl
 		    ><div class="clear"
@@ -354,9 +435,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	      ></table
 	    ></div
 	  ><div class="subs instances"
-	  ><p id="control.i:RopUse-39-" class="caption collapser" onclick="toggleSection('i:RopUse-39-')"
+	  ><p id="control.i:Intmed-39-" class="caption collapser" onclick="toggleSection('i:Intmed-39-')"
 	    >Instances</p
-	    ><div id="section.i:RopUse-39-" class="show"
+	    ><div id="section.i:Intmed-39-" class="show"
 	    ><table
 	      ><tr
 		><td class="src"
@@ -364,8 +445,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		    >Show</a
 		    > (h c) =&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Text-Show.html#t:Show"
 		    >Show</a
-		    > (<a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse-39-"
-		    >RopUse'</a
+		    > (<a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Intmed-39-"
+		    >Intmed'</a
 		    > h c)</td
 		  ><td class="doc empty"
 		  >&nbsp;</td
@@ -374,34 +455,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 		><td class="src"
 		  ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Text-CodePt.html#t:CodePtr"
 		    >CodePtr</a
-		    > (<a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse-39-"
-		    >RopUse'</a
+		    > (<a href="Koshucode-Baala-Core-Relmap-Rop.html#t:Intmed-39-"
+		    >Intmed'</a
 		    > h c)</td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
 		></table
 	      ></div
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><span class="keyword"
-	    >type</span
-	    > <a name="t:RopCons-39-" class="def"
-	    >RopCons'</a
-	    > h c = <a href="Koshucode-Baala-Core-Relmap-Rop.html#t:RopUse-39-"
-	    >RopUse'</a
-	    > h c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
-	    >Ab</a
-	    > (<a href="Koshucode-Baala-Core-Relmap-Relmap.html#t:Relmap-39-"
-	    >Relmap'</a
-	    > h c) <a href="src/Koshucode-Baala-Core-Relmap-Rop.html#RopCons%27" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Constructor of relmap operator</p
 	    ></div
 	  ></div
 	></div

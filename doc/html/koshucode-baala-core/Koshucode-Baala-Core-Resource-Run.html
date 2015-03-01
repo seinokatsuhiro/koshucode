@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.93.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.101.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -56,8 +56,36 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	>Description</p
 	><div class="doc"
 	><p
-	  >Run resource.</p
+	  >Run resource.</p
 	  ></div
+	></div
+      ><div id="synopsis"
+      ><p id="control.syn" class="caption expander" onclick="toggleSection('syn')"
+	>Synopsis</p
+	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
+	><li class="src short"
+	  ><a href="#v:runResource"
+	    >runResource</a
+	    > :: <a href="Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="Koshucode-Baala-Core-Resource-Resource.html#t:Resource"
+	    >Resource</a
+	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Output.html#t:OutputResult"
+	    >OutputResult</a
+	    > c)</li
+	  ><li class="src short"
+	  ><a href="#v:relmapCons"
+	    >relmapCons</a
+	    > :: <a href="Koshucode-Baala-Core-Relmap-Global.html#t:GetGlobal"
+	    >GetGlobal</a
+	    > h =&gt; h c -&gt; (<a href="Koshucode-Baala-Core-Lexmap-Construct.html#t:ConsLexmap"
+	    >ConsLexmap</a
+	    >, <a href="Koshucode-Baala-Core-Relmap-Construct.html#t:ConsRelmap-39-"
+	    >ConsRelmap'</a
+	    > h c)</li
+	  ></ul
 	></div
       ><div id="interface"
       ><h1
@@ -77,6 +105,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-R
 	    > c) <a href="src/Koshucode-Baala-Core-Resource-Run.html#runResource" class="link"
 	    >Source</a
 	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relmapCons" class="def"
+	    >relmapCons</a
+	    > :: <a href="Koshucode-Baala-Core-Relmap-Global.html#t:GetGlobal"
+	    >GetGlobal</a
+	    > h =&gt; h c -&gt; (<a href="Koshucode-Baala-Core-Lexmap-Construct.html#t:ConsLexmap"
+	    >ConsLexmap</a
+	    >, <a href="Koshucode-Baala-Core-Relmap-Construct.html#t:ConsRelmap-39-"
+	    >ConsRelmap'</a
+	    > h c) <a href="src/Koshucode-Baala-Core-Resource-Run.html#relmapCons" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Make a constructor pair of lexmap and relmap.</p
+	    ></div
 	  ></div
 	></div
       ></div

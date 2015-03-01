@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.93.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.101.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -57,11 +57,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Data type</a
+	    >Data type</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Short assertion</a
+	    >Short assertion</a
 	    ></li
 	  ></ul
 	></div
@@ -70,7 +70,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	>Description</p
 	><div class="doc"
 	><p
-	  >Data structure for mapping relation to judges</p
+	  >Data structure for mapping relation to judges</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -88,7 +88,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	    ><li
 	      ><a href="#v:assSection"
 		>assSection</a
-		> :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:SecNo"
+		> :: <a href="Koshucode-Baala-Core-Lexmap-Construct.html#t:SecNo"
 		>SecNo</a
 		></li
 	      ><li
@@ -164,6 +164,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	    >ShortAssert'</a
 	    > h c = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Short.html#t:Short"
 	    >Short</a
+	    > (<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert-39-"
+	    >Assert'</a
+	    > h c)</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:ShortAsserts-39-"
+	    >ShortAsserts'</a
+	    > h c = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Short.html#t:Short"
+	    >Short</a
 	    > [<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert-39-"
 	    >Assert'</a
 	    > h c]</li
@@ -187,7 +197,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Data type</h1
+	>Data type</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -205,7 +215,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	      ><a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 		>Judge</a
 		></code
-	      ></p
+	      ></p
 	    ></div
 	  ><div class="subs constructors"
 	  ><p class="caption"
@@ -228,12 +238,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 		    ><dt class="src"
 		      ><a name="v:assSection" class="def"
 			>assSection</a
-			> :: <a href="Koshucode-Baala-Core-Lexmap-Lexmap.html#t:SecNo"
+			> :: <a href="Koshucode-Baala-Core-Lexmap-Construct.html#t:SecNo"
 			>SecNo</a
 			></dt
 		      ><dd class="doc"
 		      ><p
-			>Section number</p
+			>Section number</p
 			></dd
 		      ><dt class="src"
 		      ><a name="v:assType" class="def"
@@ -243,7 +253,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 			></dt
 		      ><dd class="doc"
 		      ><p
-			>Logical quality</p
+			>Logical quality</p
 			></dd
 		      ><dt class="src"
 		      ><a name="v:assPattern" class="def"
@@ -253,7 +263,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 			></dt
 		      ><dd class="doc"
 		      ><p
-			>Pattern of judgement</p
+			>Pattern of judgement</p
 			></dd
 		      ><dt class="src"
 		      ><a name="v:assOption" class="def"
@@ -263,7 +273,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 			></dt
 		      ><dd class="doc"
 		      ><p
-			>Assert option</p
+			>Assert option</p
 			></dd
 		      ><dt class="src"
 		      ><a name="v:assToken" class="def"
@@ -273,7 +283,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 			>]</dt
 		      ><dd class="doc"
 		      ><p
-			>Source token list</p
+			>Source token list</p
 			></dd
 		      ><dt class="src"
 		      ><a name="v:assTree" class="def"
@@ -283,7 +293,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 			>]</dt
 		      ><dd class="doc"
 		      ><p
-			>Token relmap</p
+			>Token relmap</p
 			></dd
 		      ><dt class="src"
 		      ><a name="v:assRelmap" class="def"
@@ -295,7 +305,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 			> h c)</dt
 		      ><dd class="doc"
 		      ><p
-			>Relmap</p
+			>Relmap</p
 			></dd
 		      ><dt class="src"
 		      ><a name="v:assLinks" class="def"
@@ -381,7 +391,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	    ></p
 	  ></div
 	><h1 id="g:2"
-	>Short assertion</h1
+	>Short assertion</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -390,14 +400,32 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	    >ShortAssert'</a
 	    > h c = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Short.html#t:Short"
 	    >Short</a
-	    > [<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert-39-"
+	    > (<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert-39-"
 	    >Assert'</a
-	    > h c] <a href="src/Koshucode-Baala-Core-Assert-Assert.html#ShortAssert%27" class="link"
+	    > h c) <a href="src/Koshucode-Baala-Core-Assert-Assert.html#ShortAssert%27" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Assertion list with short signs.</p
+	    >Assertion with short signs.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:ShortAsserts-39-" class="def"
+	    >ShortAsserts'</a
+	    > h c = <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Short.html#t:Short"
+	    >Short</a
+	    > [<a href="Koshucode-Baala-Core-Assert-Assert.html#t:Assert-39-"
+	    >Assert'</a
+	    > h c] <a href="src/Koshucode-Baala-Core-Assert-Assert.html#ShortAsserts%27" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Assertion list with short signs.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -413,7 +441,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Select affirmative or denial assertions.</p
+	    >Select affirmative or denial assertions.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -429,7 +457,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-A
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Select violated assertions.</p
+	    >Select violated assertions.</p
 	    ></div
 	  ></div
 	></div

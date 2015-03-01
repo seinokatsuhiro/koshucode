@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.93.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.101.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -57,23 +57,23 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Functions</a
+	    >Functions</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Assert type</a
+	    >Assert type</a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >Document</a
+	    >Document</a
 	    ><ul
 	    ><li
 	      ><a href="#g:4"
-		>Simple data</a
+		>Simple data</a
 		></li
 	      ><li
 	      ><a href="#g:5"
-		>Compound data</a
+		>Compound data</a
 		></li
 	      ></ul
 	    ></li
@@ -84,7 +84,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	>Description</p
 	><div class="doc"
 	><p
-	  >Make literal contents from token tree.</p
+	  >Make literal contents from token tree.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -142,6 +142,18 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 		>AssertDeny</a
 		></li
 	      ><li
+	      >| <a href="#v:AssertMultiDeny"
+		>AssertMultiDeny</a
+		></li
+	      ><li
+	      >| <a href="#v:AssertChange"
+		>AssertChange</a
+		></li
+	      ><li
+	      >| <a href="#v:AssertMultiChange"
+		>AssertMultiChange</a
+		></li
+	      ><li
 	      >| <a href="#v:AssertViolate"
 		>AssertViolate</a
 		></li
@@ -167,7 +179,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Functions</h1
+	>Functions</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -181,7 +193,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Content calculator.</p
+	    >Content calculator.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -201,7 +213,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Convert token tree into internal form of content.</p
+	    >Convert token tree into internal form of content.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -227,11 +239,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	  ><p
 	    >Convert token trees into a judge.
    Judges itself are not content type.
-   It can be only used in the top-level of resources.</p
+   It can be only used in the top-level of resources.</p
 	    ></div
 	  ></div
 	><h1 id="g:2"
-	>Assert type</h1
+	>Assert type</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -260,7 +272,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 		    >:</code
 		    > <em
 		    >relmap</em
-		    ></p
+		    ></p
 		  ></td
 		></tr
 	      ><tr
@@ -271,14 +283,68 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 		><td class="doc"
 		><p
 		  ><code
-		    >|=X</code
+		    >|=x</code
 		    > <em
 		    >pattern</em
 		    > <code
 		    >:</code
 		    > <em
 		    >relmap</em
-		    ></p
+		    ></p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AssertMultiDeny" class="def"
+		  >AssertMultiDeny</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><code
+		    >|=xx</code
+		    > <em
+		    >pattern</em
+		    > <code
+		    >:</code
+		    > <em
+		    >relmap</em
+		    ></p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AssertChange" class="def"
+		  >AssertChange</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><code
+		    >|=c</code
+		    > <em
+		    >pattern</em
+		    > <code
+		    >:</code
+		    > <em
+		    >relmap</em
+		    ></p
+		  ></td
+		></tr
+	      ><tr
+	      ><td class="src"
+		><a name="v:AssertMultiChange" class="def"
+		  >AssertMultiChange</a
+		  ></td
+		><td class="doc"
+		><p
+		  ><code
+		    >|=cc</code
+		    > <em
+		    >pattern</em
+		    > <code
+		    >:</code
+		    > <em
+		    >relmap</em
+		    ></p
 		  ></td
 		></tr
 	      ><tr
@@ -289,14 +355,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 		><td class="doc"
 		><p
 		  ><code
-		    >|=V</code
+		    >|=v</code
 		    > <em
 		    >pattern</em
 		    > <code
 		    >:</code
 		    > <em
 		    >relmap</em
-		    ></p
+		    ></p
 		  ></td
 		></tr
 	      ></table
@@ -385,12 +451,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    ></p
 	  ></div
 	><h1 id="g:3"
-	>Document</h1
+	>Document</h1
 	><h2 id="g:4"
-	>Simple data</h2
+	>Simple data</h2
 	><div class="doc"
 	><p
-	  >Prepere some definitions.</p
+	  >Prepere some definitions.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -422,7 +488,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	      ></strong
 	    ></pre
 	  ><p
-	  >Boolean.</p
+	  >Boolean.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -434,7 +500,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >Right [VBool True, VBool False]
 </pre
 	  ><p
-	  >Words.</p
+	  >Words.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -446,7 +512,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >Right [VText &quot;a&quot;, VText &quot;b c&quot;]
 </pre
 	  ><p
-	  >Decimal.</p
+	  >Decimal.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -458,7 +524,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >Right [VDec (Decimal (120, 10), 1, False)]
 </pre
 	  ><p
-	  >Empty as no ordinary value.</p
+	  >Empty as no ordinary value.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -471,10 +537,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 </pre
 	  ></div
 	><h2 id="g:5"
-	>Compound data</h2
+	>Compound data</h2
 	><div class="doc"
 	><p
-	  >Set.</p
+	  >Set.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -486,7 +552,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >Right [VSet [VText &quot;b&quot;, VText &quot;a&quot;, VText &quot;c&quot;]]
 </pre
 	  ><p
-	  >List.</p
+	  >List.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -498,7 +564,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
 	    >Right [VList [VText &quot;a&quot;, VText &quot;10&quot;, VDec (Decimal (20, 1), 0, False)]]
 </pre
 	  ><p
-	  >Assn.</p
+	  >Assn.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -512,7 +578,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core-C
   , (&quot;/b&quot;, VSet [VText &quot;y&quot;, VText &quot;z&quot;])]]
 </pre
 	  ><p
-	  >Relation.</p
+	  >Relation.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code

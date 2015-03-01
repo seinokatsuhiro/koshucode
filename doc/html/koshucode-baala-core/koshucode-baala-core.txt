@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-core
-@version 0.93.0.0
+@version 0.101.0.0
 
 module Koshucode.Baala.Core.Message
 abAssert :: CodePtr cp => [cp] -> Map (Ab b)
@@ -27,7 +27,6 @@ abLexmap :: TTreesTo (Map (Ab b))
 abLiteral :: TTreeTo (Map (Ab b))
 abRelmap :: CodePtr cp => [cp] -> Map (Ab b)
 abRun :: CodePtr cp => [cp] -> Map (Ab b)
-abShort :: CodePtr cp => [cp] -> Map (Ab b)
 abSlot :: CodePtr cp => [cp] -> Map (Ab b)
 abSlotTree :: TTreeTo (Map (Ab b))
 abSpecialize :: CodePtr cp => [cp] -> Map (Ab b)
@@ -97,12 +96,21 @@ reqTermName :: Ab a
 
 -- | Unexpected attribute
 unexpAttr :: String -> Ab a
+unexpAttr0 :: Ab a
+unexpAttr1 :: Ab a
+unexpAttr2 :: Ab a
+unexpAttr3 :: Ab a
+unexpAttr4 :: Ab a
+unexpAttr1V :: Ab a
+unexpAttr1Q :: Ab a
+unexpAttrT1 :: Ab a
+unexpAttrT2 :: Ab a
 
 -- | Unknown bracket
 unkBracket :: Ab a
 
 -- | Unknown clause
-unkClause :: Ab a
+unkClause :: [String] -> Ab a
 
 -- | Unknown content operator
 unkCop :: String -> Ab a
@@ -114,7 +122,8 @@ unkCox :: String -> Ab a
 unkGlobalVar :: String -> Ab a
 
 -- | Unknown nested relation
-unkNestRel :: String -> Ab a
+unkNestRel :: Token -> String -> [String] -> Ab a
+unkNestVar :: String -> [Token] -> [((Token, Local String), Head)] -> Ab a
 
 -- | Unknown option
 unkOption :: ParaUnmatch String -> Ab a
@@ -133,7 +142,6 @@ unkTerm :: [TermName] -> Head -> Ab a
 
 -- | Unknown type name
 unkType :: String -> Ab a
-unkNestVar :: String -> Ab a
 
 -- | Unknown word
 unkWord :: String -> Ab a
@@ -143,8 +151,10 @@ unmatchType :: String -> Ab a
 unmatchBlank :: String -> Int -> String -> [String] -> Ab a
 
 -- | Unresolved prefix
-unresPrefix :: Ab a
+unresPrefix :: String -> Ab a
 detailTermRel :: String -> [String] -> Head -> [String]
+expectActual :: String -> String -> [String]
+expect2Actual :: String -> String -> String -> [String]
 
 module Koshucode.Baala.Core.Content.Class
 class (Ord c, Write c, CTypeOf c, CEmpty c, CBool c, CText c, CClock c, CTime c, CTerm c, CDec c, CType c, CInterp c, CList c, CSet c, CAssn c, CRel c) => CContent c where joinContent = foldM appendContent empty
@@ -386,10 +396,19 @@ data AssertType
 -- | <tt>|==</tt> <i>pattern</i> <tt>:</tt> <i>relmap</i>
 AssertAffirm :: AssertType
 
--- | <tt>|=X</tt> <i>pattern</i> <tt>:</tt> <i>relmap</i>
+-- | <tt>|=x</tt> <i>pattern</i> <tt>:</tt> <i>relmap</i>
 AssertDeny :: AssertType
 
--- | <tt>|=V</tt> <i>pattern</i> <tt>:</tt> <i>relmap</i>
+-- | <tt>|=xx</tt> <i>pattern</i> <tt>:</tt> <i>relmap</i>
+AssertMultiDeny :: AssertType
+
+-- | <tt>|=c</tt> <i>pattern</i> <tt>:</tt> <i>relmap</i>
+AssertChange :: AssertType
+
+-- | <tt>|=cc</tt> <i>pattern</i> <tt>:</tt> <i>relmap</i>
+AssertMultiChange :: AssertType
+
+-- | <tt>|=v</tt> <i>pattern</i> <tt>:</tt> <i>relmap</i>
 AssertViolate :: AssertType
 assertAs :: AssertType -> JudgeOf c
 assertSymbol :: AssertType -> String
@@ -423,62 +442,138 @@ getArg3 :: [Ab c] -> Ab (Ab c, Ab c, Ab c)
 instance CodePtr (Beta c)
 
 
--- | Attributes of relmap operator.
-module Koshucode.Baala.Core.Lexmap.Attribute
+-- | Positional attributes.
+module Koshucode.Baala.Core.Lexmap.AttrPos
+data AttrPos a
+AttrPos0 :: AttrPos a
+AttrPos1 :: a -> AttrPos a
+AttrPos2 :: a -> a -> AttrPos a
+AttrPos3 :: a -> a -> a -> AttrPos a
+AttrPos4 :: a -> a -> a -> a -> AttrPos a
+AttrPosE :: [a] -> AttrPos a
+AttrPosV :: a -> AttrPos a
+AttrPos1V :: a -> a -> AttrPos a
+AttrPos1Q :: a -> a -> AttrPos a
+AttrPosT1 :: a -> a -> AttrPos a
+AttrPosT2 :: a -> a -> a -> AttrPos a
+attrTypeNames :: AttrPos a -> [a]
+ropAttrPos :: AttrPos AttrName -> AttrSortTree
+type AttrSortTree = [TTree] -> Ab [AttrTree]
 
--- | Attribute name for relmap operator.
+-- | Attribute name and its contents.
+type AttrTree = (AttrName, [TTree])
+
+-- | Attribute name of relmap.
 data AttrName
 
 -- | Normal attribute
-AttrNameNormal :: String -> AttrName
+AttrNormal :: String -> AttrName
 
--- | Attribute for subrelmap
-AttrNameRelmap :: String -> AttrName
+-- | Attribute for submap
+AttrRelmapNormal :: String -> AttrName
 
--- | Attribute for nested relation reference
-AttrNameNest :: String -> AttrName
+-- | Attribute for submap with local relation references
+AttrRelmapLocal :: String -> AttrName
 
 -- | Test attribute name is for subrelmap.
 isAttrNameRelmap :: AttrName -> Bool
 
--- | Test attribute name is for nested relation reference.
-isAttrNameNest :: AttrName -> Bool
-
 -- | String part of attribute names.
 attrNameText :: AttrName -> String
 
--- | Constant for attribute name <tt>@attr</tt>.
-attrNameAttr :: AttrName
-
 -- | Constant for attribute name <tt>@trunk</tt>.
 attrNameTrunk :: AttrName
-
--- | Definition of attribute sorter.
-data AttrDefine
-AttrDefine :: AbMap [AttrTree] -> AbMap [AttrTree] -> [AttrName] -> [AttrName] -> AttrDefine
-attrTrunkSorter :: AttrDefine -> AbMap [AttrTree]
-attrClassifier :: AttrDefine -> AbMap [AttrTree]
-attrTrunkNames :: AttrDefine -> [AttrName]
-attrBranchNames :: AttrDefine -> [AttrName]
-
--- | List of attribute name and its contents.
-type AttrTree = (AttrName, [TTree])
-
--- | Sorter for attribute of relmap operator. Sorters docompose attribute
---   trees, and give a name to subattribute.
-type AttrSort = [TTree] -> Ab [AttrTree]
-type TreeSort = [TTree] -> [NamedTrees]
-
--- | Name of relmap operator.
-type RopName = String
-attrSort :: AttrDefine -> AttrSort
-attrSortBranch :: AttrSort
-hyphenAssc :: TreeSort
 instance Typeable AttrName
+instance Show a => Show (AttrPos a)
+instance Eq a => Eq (AttrPos a)
+instance Ord a => Ord (AttrPos a)
 instance Show AttrName
 instance Eq AttrName
 instance Ord AttrName
 instance Data AttrName
+
+
+-- | Attributes of relmap operator.
+module Koshucode.Baala.Core.Lexmap.Attr
+
+-- | Definition of attribute sorter.
+data RopAttr
+RopAttr :: AttrSortTree -> Map AttrName -> AttrPos AttrName -> [AttrName] -> [AttrName] -> RopAttr
+attrPosSorter :: RopAttr -> AttrSortTree
+attrClassifier :: RopAttr -> Map AttrName
+attrPos :: RopAttr -> AttrPos AttrName
+attrPosNames :: RopAttr -> [AttrName]
+attrBranchNames :: RopAttr -> [AttrName]
+ropAttrCons :: AttrPos AttrName -> [AttrName] -> RopAttr
+type AttrPara = ParaBody AttrName TTree
+
+-- | Sorter for attribute of relmap operator. Sorters docompose attribute
+--   trees, and give a name to subattribute.
+type AttrSortPara = [TTree] -> Ab AttrPara
+attrSort :: RopAttr -> AttrSortPara
+attrBranch :: AttrSortPara
+maybeHyname :: TTreeTo (Maybe String)
+
+
+-- | Lexical relmap.
+module Koshucode.Baala.Core.Lexmap.Lexmap
+
+-- | Intermediate data that represents use of relmap operator. Lexmap is
+--   constructed from a list of <a>TTree</a>, and generic relmap is
+--   constructed from a lexmap.
+data Lexmap
+Lexmap :: LexmapType -> Token -> AttrPara -> [Lexmap] -> [String] -> Lexmap
+
+-- | Type of lexmap
+lexType :: Lexmap -> LexmapType
+
+-- | Token of operator
+lexToken :: Lexmap -> Token
+
+-- | Attribute of relmap operation
+lexAttr :: Lexmap -> AttrPara
+
+-- | Submaps in the attribute
+lexSubmap :: Lexmap -> [Lexmap]
+
+-- | Messages on lexmap
+lexMessage :: Lexmap -> [String]
+data LexmapType
+
+-- | Built-in relmap
+LexmapBase :: LexmapType
+
+-- | User-defined relmap
+LexmapDerived :: LexmapType
+
+-- | Local relation reference
+LexmapLocal :: LexmapType
+
+-- | Name of relmap operator.
+type RopName = String
+
+-- | Empty base lexmap.
+lexBase :: Lexmap
+
+-- | Name of relmap operator
+lexName :: Lexmap -> RopName
+lexAddMessage :: String -> Map Lexmap
+lexMessageList :: Lexmap -> [String]
+
+-- | Attribute of relmap operation.
+lexAttrTree :: Lexmap -> [AttrTree]
+instance Typeable LexmapType
+instance Typeable Lexmap
+instance Show LexmapType
+instance Eq LexmapType
+instance Ord LexmapType
+instance Data LexmapType
+instance Show Lexmap
+instance Eq Lexmap
+instance Ord Lexmap
+instance Data Lexmap
+instance CodePtr Lexmap
+instance Write Lexmap
 
 
 -- | Slot substitution.
@@ -525,122 +620,45 @@ instance Ord AttrmapBody
 instance Data AttrmapBody
 
 
--- | Lexical relmap.
-module Koshucode.Baala.Core.Lexmap.Lexmap
-
--- | Intermediate data that represents use of relmap operator. Lexmap is
---   constructed from a list of <a>TTree</a>, and generic relmap is
---   constructed from a lexmap.
-data Lexmap
-Lexmap :: LexmapType -> Token -> [AttrTree] -> [Lexmap] -> [String] -> Lexmap
-
--- | Type of lexmap
-lexType :: Lexmap -> LexmapType
-
--- | Token of operator
-lexRopToken :: Lexmap -> Token
-
--- | Attribute of relmap operation
-lexAttr :: Lexmap -> [AttrTree]
-
--- | Submaps in the attribute
-lexSubmap :: Lexmap -> [Lexmap]
-
--- | Messages on lexmap
-lexMessage :: Lexmap -> [String]
-data LexmapType
-
--- | Built-in relmap
-LexmapBase :: LexmapType
-
--- | User-defined relmap
-LexmapDerived :: LexmapType
-
--- | Nested relation reference
-LexmapNest :: LexmapType
-
--- | Name of relmap operator
-lexRopName :: Lexmap -> RopName
-lexAddMessage :: String -> Map Lexmap
-lexMessageList :: Lexmap -> [String]
+-- | Construction of lexical relmaps.
+module Koshucode.Baala.Core.Lexmap.Construct
 
 -- | First step of constructing relmap, construct lexmap from token trees.
 --   The function returns lexmap and related lexmap links.
-consLexmap :: (RopName -> Maybe AttrSort) -> ConsLexmap
+consLexmap :: FindSorter -> ConsLexmap
+type ConsLexmap = [GlobalSlot] -> FindDeriv -> SecNo -> ConsLexmapBody
 
--- | Parse nested relation attribute.
-nestTerms :: [TTree] -> Ab [Terminal RopName]
-type ConsLexmap = [GlobalSlot] -> FindRelmap -> ConsLexmapBody
-type ConsLexmapBody = SecNo -> [TTree] -> Ab (Lexmap, LexmapLinkTable)
-
--- | Section number.
-type SecNo = Int
-type FindRelmap = SecNo -> RopName -> [RelmapSource]
-type LexmapLinkTable = [(Lexmap, Lexmap)]
+-- | Find derived relmap operator.
+type FindDeriv = SecNo -> RopName -> [RelmapSource]
 
 -- | Source of relmap: its name, replacement, and attribute editor.
 type RelmapSource = NNamed ([TTree], Attrmap)
+
+-- | Section number.
+type SecNo = Int
 
 -- | Numbered name.
 type NName = (SecNo, String)
 
 -- | Pair which key is a numbered name.
 type NNamed a = (NName, a)
-instance Typeable LexmapType
-instance Typeable Lexmap
-instance Show LexmapType
-instance Eq LexmapType
-instance Ord LexmapType
-instance Data LexmapType
-instance Show Lexmap
-instance Eq Lexmap
-instance Ord Lexmap
-instance Data Lexmap
-instance CodePtr Lexmap
-instance Write Lexmap
 
-
--- | Attribute sorters.
-module Koshucode.Baala.Core.Lexmap.Sorter
-
--- | Attribute sorter for no-attribute trunk.
-roaNone :: [AttrName] -> AttrDefine
-
--- | Attribute sorter for enumerating trunk, i.e., <tt>-1</tt>,
---   <tt>-2</tt>, ...
-roaEnum :: [AttrName] -> [AttrName] -> AttrDefine
-
--- | Attribute sorter for multiple-attribute trunk.
-roaList :: AttrName -> [AttrName] -> AttrDefine
-
--- | Attribute sorter for one-and-multiple-attribute trunk.
-roaOneList :: AttrName -> AttrName -> [AttrName] -> AttrDefine
-roaOneOpt :: AttrName -> AttrName -> [AttrName] -> AttrDefine
-
--- | Attribute sorter for one-attribute trunk.
-roaOne :: AttrName -> [AttrName] -> AttrDefine
-
--- | Attribute sorter for two-attribute trunk.
-roaTwo :: AttrName -> AttrName -> [AttrName] -> AttrDefine
-
--- | Attribute sorter for three-attribute trunk.
-roaThree :: AttrName -> AttrName -> AttrName -> [AttrName] -> AttrDefine
-
--- | Attribute sorter for four-attribute trunk.
-roaFour :: AttrName -> AttrName -> AttrName -> AttrName -> [AttrName] -> AttrDefine
-roaTermsOne :: AttrName -> AttrName -> [AttrName] -> AttrDefine
-roaTermsTwo :: AttrName -> AttrName -> AttrName -> [AttrName] -> AttrDefine
+-- | Find attribute sorter of relmap operator.
+type FindSorter = RopName -> Maybe AttrSortPara
+type ConsLexmapBody = [TTree] -> Ab (Lexmap, LexmapLinkTable)
+type LexmapLinkTable = [(Lexmap, Lexmap)]
 
 module Koshucode.Baala.Core.Lexmap
 
 
 -- | Specialized relmap.
-module Koshucode.Baala.Core.Relmap.Relkit
+module Koshucode.Baala.Core.Relkit.Relkit
 
 -- | Specialized relmap.
 data Relkit c
-Relkit :: Maybe Head -> RelkitBody c -> Relkit c
-relkitHead :: Relkit c -> Maybe Head
+Relkit :: Maybe Head -> Maybe Head -> RelkitBody c -> Relkit c
+relkitInput :: Relkit c -> Maybe Head
+relkitOutput :: Relkit c -> Maybe Head
 relkitBody :: Relkit c -> RelkitBody c
 data RelkitCore c
 RelkitFull :: Bool -> ([[c]] -> [[c]]) -> RelkitCore c
@@ -657,9 +675,9 @@ RelkitConst :: [[c]] -> RelkitCore c
 RelkitId :: RelkitCore c
 RelkitSource :: JudgePat -> [TermName] -> RelkitCore c
 RelkitLink :: RopName -> RelkitKey -> (Maybe (RelkitBody c)) -> RelkitCore c
-RelkitNestVar :: RopName -> RelkitCore c
-RelkitCopy :: RopName -> (RelkitBody c) -> RelkitCore c
-RelkitNest :: [(String, Int)] -> (RelkitBody c) -> RelkitCore c
+RelkitCopy :: Token -> RopName -> (RelkitBody c) -> RelkitCore c
+RelkitNestVar :: Token -> RopName -> RelkitCore c
+RelkitNest :: Token -> [(String, Int)] -> (RelkitBody c) -> RelkitCore c
 type RelkitBody c = Sourced (RelkitCore c)
 type RelkitKey = (Maybe Head, [Lexmap])
 type RelkitDef c = (RelkitKey, Relkit c)
@@ -681,107 +699,29 @@ type RelkitBinary c = Relkit c -> RelkitFlow c
 
 -- | Make <a>Relkit</a> from multiple subrelmaps and input heading.
 type RelkitConfl c = [Relkit c] -> RelkitFlow c
+instance Show (RelkitCore c)
+
+
+-- | Relkit constructors.
+module Koshucode.Baala.Core.Relkit.Construct
 relkit :: Maybe Head -> RelkitCore c -> Relkit c
+relkitId :: Maybe Head -> Relkit c
 relkitJust :: Head -> RelkitCore c -> Relkit c
 relkitNothing :: Relkit c
-relkitId :: Maybe Head -> Relkit c
+relkitSetSource :: CodePtr a => a -> Map (Relkit c)
 relkitConst :: Rel c -> Relkit c
 relkitConstEmpty :: [TermName] -> Relkit c
 relkitConstSingleton :: [TermName] -> [c] -> Relkit c
 relkitConstBody :: [TermName] -> [[c]] -> Relkit c
 relkitSource :: JudgePat -> [TermName] -> Relkit c
-relkitCopy :: String -> Map (Relkit c)
-relkitNest :: [(String, Int)] -> Map (Relkit c)
-relkitNestVar :: String -> Head -> Relkit c
-relkitSetSource :: CodePtr a => a -> Map (Relkit c)
-instance Show (RelkitCore c)
+relkitCopy :: Token -> String -> Map (Relkit c)
+relkitNest :: Token -> [(String, Int)] -> Map (Relkit c)
+relkitNestVar :: Token -> String -> Head -> Relkit c
+type Local a = Lexical [Named a]
+type Lexical a = (Token, a)
+localsLines :: [Local a] -> [String]
+a2lookup :: (Eq a, Eq b) => a -> b -> [(a, [(b, c)])] -> Maybe c
 instance Monoid (Relkit c)
-
-
--- | Implementation of relmap operators.
-module Koshucode.Baala.Core.Relmap.Relmap
-
--- | Generic relmap.
-data Relmap' h c
-
--- | Retrieve a relation from a dataset
-RelmapSource :: Lexmap -> JudgePat -> [TermName] -> Relmap' h c
-
--- | Constant relation
-RelmapConst :: Lexmap -> (Rel c) -> Relmap' h c
-
--- | Relmap that maps relations to a relation with hook data
-RelmapHook :: Lexmap -> (RelkitHook' h c) -> Relmap' h c
-
--- | Relmap that maps relations to a relation
-RelmapCalc :: Lexmap -> (RelkitConfl c) -> [Relmap' h c] -> Relmap' h c
-
--- | Relmap for environment of input relation
-RelmapCopy :: Lexmap -> String -> (Relmap' h c) -> Relmap' h c
-
--- | Relmap for environment of nested relations
-RelmapNest :: Lexmap -> [Terminal String] -> (Relmap' h c) -> Relmap' h c
-
--- | Relmap reference
-RelmapLink :: Lexmap -> Relmap' h c
-
--- | Connect two relmaps
-RelmapAppend :: (Relmap' h c) -> (Relmap' h c) -> Relmap' h c
-
--- | Identity relmap.
-relmapId :: Relmap' h c
-relmapLexmaps :: Relmap' h c -> [Lexmap]
-instance Eq (Relmap' h c)
-instance Ord (Relmap' h c)
-instance CodePtr (Relmap' h c)
-instance Write (Relmap' h c)
-instance Name (Relmap' h c)
-instance Monoid (Relmap' h c)
-instance Show (Relmap' h c)
-
-
--- | Implementation of relmap operators.
-module Koshucode.Baala.Core.Relmap.Rop
-
--- | Implementation of relmap operator
-data Rop' h c
-Rop :: RopName -> String -> AttrSort -> RopCons' h c -> RopUsage -> Rop' h c
-
--- | Operator name
-ropName :: Rop' h c -> RopName
-
--- | Operator group
-ropGroup :: Rop' h c -> String
-
--- | Attribute sorter
-ropSorter :: Rop' h c -> AttrSort
-
--- | Constructor of operator
-ropCons :: Rop' h c -> RopCons' h c
-
--- | Usage of operator
-ropUsage :: Rop' h c -> RopUsage
-
--- | Operator usage.
-type RopUsage = String
-
--- | Use of relmap operator
-data RopUse' h c
-RopUse :: h c -> Lexmap -> [Relmap' h c] -> RopUse' h c
-ropHook :: RopUse' h c -> h c
-
--- | Syntactic data of operator use
-ropLexmap :: RopUse' h c -> Lexmap
-
--- | Subrelmaps
-ropSubrelmap :: RopUse' h c -> [Relmap' h c]
-
--- | Constructor of relmap operator
-type RopCons' h c = RopUse' h c -> Ab (Relmap' h c)
-instance Show (h c) => Show (RopUse' h c)
-instance CodePtr (RopUse' h c)
-instance Name (Rop' h c)
-instance Show (Rop' h c)
 
 
 -- | Content of term in judgement.
@@ -795,28 +735,218 @@ relTableLines :: (Write c, CRel c) => [ShortDef] -> Rel c -> [String]
 relText :: (Write c, CRel c) => [ShortDef] -> Rel c -> RelText
 
 
+-- | Link and run relmaps.
+module Koshucode.Baala.Core.Relkit.Run
+relkitLink :: Ord c => [RelkitDef c] -> Map (Relkit c)
+relkitRun :: (Ord c, CRel c, SelectRel h) => h c -> [Local [[c]]] -> RelkitBody c -> AbMap [[c]]
+fixedRelation :: Ord c => Map (AbMap [[c]])
+bmapAlign :: Head -> Head -> Map (AbMap [[c]])
+
+
+-- | Relation-to-relation mapping.
+module Koshucode.Baala.Core.Relkit
+
+
+-- | Dataset as a set of judges.
+--   
+--   Dataset is like a bridge of judges and relations. We can get a
+--   relation from a dataset, that dataset is build from judges.
+module Koshucode.Baala.Core.Assert.Dataset
+
+-- | Dataset is a set of judges.
+data Dataset c
+
+-- | Dataset that has no judges.
+datasetEmpty :: Dataset c
+
+-- | Gather judges into a dataset.
+dataset :: [Judge c] -> Dataset c
+
+-- | Add judges to dataset.
+datasetAdd :: [Judge c] -> Dataset c -> Dataset c
+
+-- | Select relation from dataset. If a giving term is not in judges,
+--   <tt>CEmpty</tt> sign is used.
+datasetSelect :: (Ord c, CEmpty c) => Dataset c -> RelSelect c
+
+
+-- | Generic relmap.
+module Koshucode.Baala.Core.Relmap.Relmap
+
+-- | Generic relmap.
+data Relmap' h c
+
+-- | Constant relation
+RelmapConst :: Lexmap -> (Rel c) -> Relmap' h c
+
+-- | Retrieve a relation from a dataset
+RelmapSource :: Lexmap -> JudgePat -> [TermName] -> Relmap' h c
+
+-- | Relmap that maps relations to a relation
+RelmapCalc :: Lexmap -> (RelkitConfl c) -> [Relmap' h c] -> Relmap' h c
+
+-- | Relmap that maps relations to a relation with hook data
+RelmapHook :: Lexmap -> (RelkitHook' h c) -> Relmap' h c
+
+-- | Relmap for environment of input relation
+RelmapCopy :: Lexmap -> String -> (Relmap' h c) -> Relmap' h c
+
+-- | Relmap for environment of nested relations
+RelmapNest :: Lexmap -> (Relmap' h c) -> Relmap' h c
+
+-- | Relmap reference
+RelmapLink :: Lexmap -> Relmap' h c
+
+-- | Connect two relmaps
+RelmapAppend :: (Relmap' h c) -> (Relmap' h c) -> Relmap' h c
+
+-- | Identity relmap.
+relmapId :: Relmap' h c
+relmapLexmaps :: Relmap' h c -> [Lexmap]
+
+-- | List of <a>RelmapSource</a>
+relmapSourceList :: Relmap' h c -> [Relmap' h c]
+
+-- | List of name in <a>RelmapLink</a>
+relmapNameList :: Relmap' h c -> [String]
+instance Eq (Relmap' h c)
+instance Ord (Relmap' h c)
+instance CodePtr (Relmap' h c)
+instance Write (Relmap' h c)
+instance Name (Relmap' h c)
+instance Monoid (Relmap' h c)
+instance Show (Relmap' h c)
+
+
+-- | Relmap operators.
+module Koshucode.Baala.Core.Relmap.Rop
+
+-- | Implementation of relmap operator.
+data Rop' h c
+Rop :: RopName -> String -> RopUsage -> RopAttr -> AttrSortPara -> RopCons' h c -> Rop' h c
+
+-- | Operator name
+ropName :: Rop' h c -> RopName
+
+-- | Operator group
+ropGroup :: Rop' h c -> String
+
+-- | Usage text of operator
+ropUsage :: Rop' h c -> RopUsage
+
+-- | Attribute of operator
+ropAttr :: Rop' h c -> RopAttr
+
+-- | Attribute sorter
+ropSorter :: Rop' h c -> AttrSortPara
+
+-- | Constructor of operator
+ropCons :: Rop' h c -> RopCons' h c
+
+-- | Usage text of operator.
+type RopUsage = String
+type FindRop' h c = RopName -> Maybe (Rop' h c)
+
+-- | Constructor of relmap operator, i.e., function from intermediate
+--   relamp to generic relmap.
+type RopCons' h c = Intmed' h c -> Ab (Relmap' h c)
+
+-- | Intermediate relmap, that is in between lexmap and generic relmap.
+data Intmed' h c
+Intmed :: h c -> Lexmap -> [Relmap' h c] -> Intmed' h c
+medHook :: Intmed' h c -> h c
+
+-- | Syntactic data of operator use
+medLexmap :: Intmed' h c -> Lexmap
+
+-- | Subrelmaps
+medSubmap :: Intmed' h c -> [Relmap' h c]
+instance Show (h c) => Show (Intmed' h c)
+instance CodePtr (Intmed' h c)
+instance Name (Rop' h c)
+instance Show (Rop' h c)
+
+
+-- | Construction of relmaps.
+module Koshucode.Baala.Core.Relmap.Construct
+
+-- | Make a constant relmap.
+relmapConst :: Intmed' h c -> Rel c -> Relmap' h c
+
+-- | Relmap for retrieving relation from dataset.
+relmapSource :: Intmed' h c -> JudgePat -> [TermName] -> Relmap' h c
+
+-- | Make a flow relmap. Flow relmaps take no submaps.
+relmapFlow :: Intmed' h c -> RelkitFlow c -> Relmap' h c
+relmapHook :: Intmed' h c -> RelkitHook' h c -> Relmap' h c
+
+-- | Make a binary relmap. Binary relmaps take one submap.
+relmapBinary :: Intmed' h c -> RelkitBinary c -> Relmap' h c -> Relmap' h c
+
+-- | Make a confluent relmap. Confluent relmaps take multiple submaps.
+relmapConfl :: Intmed' h c -> RelkitConfl c -> [Relmap' h c] -> Relmap' h c
+
+-- | Parent for nested relation references.
+relmapNest :: Intmed' h c -> Map (Relmap' h c)
+relmapCopy :: Intmed' h c -> RopName -> Map (Relmap' h c)
+relmapLink :: Intmed' h c -> Relmap' h c
+relmapLocalSymbol :: Intmed' h c -> String -> Relmap' h c
+relmapLocalNest :: Intmed' h c -> String -> Relmap' h c
+
+-- | Second step of constructing relmap, make relmap from lexmap.
+type ConsRelmap' h c = Lexmap -> Ab (Relmap' h c)
+
+-- | Construct relmap from lexmap.
+consRelmap :: FindRop' h c -> h c -> ConsRelmap' h c
+
+
+-- | Specialize generic relmaps to specific relmaps
+module Koshucode.Baala.Core.Relmap.Specialize
+relmapSpecialize :: h c -> RelmapLinkTable' h c -> [RelkitDef c] -> Maybe Head -> Relmap' h c -> Ab ([RelkitDef c], Relkit c)
+type RelmapLinkTable' h c = [(Lexmap, Relmap' h c)]
+
+
 -- | Global parameters.
 module Koshucode.Baala.Core.Relmap.Global
 
 -- | Global parameters
 data Global' h c
-Global :: String -> Version -> OpSet' (Rop' h) c -> String -> [String] -> [HttpProxy] -> Time -> Int -> [CodePiece] -> [Judge c] -> h c -> Global' h c
+Global :: String -> Version -> OpSet' h c -> String -> [String] -> [HttpProxy] -> Time -> Int -> [CodePiece] -> h c -> Global' h c
+
+-- | One-line description of calculator
 globalSynopsis :: Global' h c -> String
+
+-- | Version of calculator
 globalVersion :: Global' h c -> Version
-globalOpset :: Global' h c -> OpSet' (Rop' h) c
+
+-- | Set of operators
+globalOpset :: Global' h c -> OpSet' h c
+
+-- | Name of invoked program
 globalProgram :: Global' h c -> String
+
+-- | Command line arguments
 globalArgs :: Global' h c -> [String]
+
+-- | Proxy setting from environment variables
 globalProxy :: Global' h c -> [HttpProxy]
+
+-- | Invocation time
 globalTime :: Global' h c -> Time
+
+-- | Sequential number for sources
 globalSourceCount :: Global' h c -> Int
+
+-- | Included sources
 globalSources :: Global' h c -> [CodePiece]
-globalJudges :: Global' h c -> [Judge c]
+
+-- | Usually, data resource is used as hook
 globalHook :: Global' h c -> h c
 globalVersionText :: Global' h c -> String
 globalCommandLine :: Global' h c -> [String]
 globalFill :: CContent c => Map (Global' h c)
 globalRops :: Global' h c -> [Rop' h c]
-globalRopsAdd :: Global' h c -> [Rop' h c] -> Global' h c
+globalRopsAdd :: [Rop' h c] -> Map (Global' h c)
 globalCops :: Global' h c -> [Cop c]
 globalCopset :: Global' h c -> CopSet c
 globalInfix :: Global' h c -> [Named InfixHeight]
@@ -825,72 +955,22 @@ globalInfix :: Global' h c -> [Named InfixHeight]
 global' :: h c -> Global' h c
 class GetGlobal h
 getGlobal :: GetGlobal h => h c -> Global' h c
-ropGlobal :: GetGlobal h => RopUse' h c -> Global' h c
+ropGlobal :: GetGlobal h => Intmed' h c -> Global' h c
 
--- | Get operator set from <tt>RopUse</tt>.
-ropCopset :: GetGlobal h => RopUse' h c -> CopSet c
+-- | Get operator set from <tt>Intmed</tt>.
+ropCopset :: GetGlobal h => Intmed' h c -> CopSet c
 
 -- | Set of relmap and content operators.
-data OpSet' rop c
-OpSet :: [rop c] -> (RopName -> Maybe (rop c)) -> CopSet c -> OpSet' rop c
-opsetRopList :: OpSet' rop c -> [rop c]
-opsetFindRop :: OpSet' rop c -> RopName -> Maybe (rop c)
-opsetCop :: OpSet' rop c -> CopSet c
+data OpSet' h c
+OpSet :: [Rop' h c] -> FindRop' h c -> CopSet c -> OpSet' h c
+opsetRopList :: OpSet' h c -> [Rop' h c]
+opsetFindRop :: OpSet' h c -> FindRop' h c
+opsetCop :: OpSet' h c -> CopSet c
 
 -- | Empty operator set.
-opset :: OpSet' rop c
-opsetFill :: Name (rop c) => Map (OpSet' rop c)
+opset :: OpSet' h c
+opsetFill :: Map (OpSet' h c)
 instance Show (Global' h c)
-
-
--- | Operations on <a>Relmap</a>.
-module Koshucode.Baala.Core.Relmap.Construct
-
--- | Second step of constructing relmap, make relmap from lexmap.
-type ConsRelmap' h c = Lexmap -> Ab (Relmap' h c)
-
--- | Make a constructor pair of lexmap and relmap.
-relmapCons :: GetGlobal h => h c -> (ConsLexmap, ConsRelmap' h c)
-
--- | Retrieve relation from dataset.
-relmapSource :: RopUse' h c -> JudgePat -> [TermName] -> (Relmap' h c)
-
--- | Make a constant relmap.
-relmapConst :: RopUse' h c -> Rel c -> Relmap' h c
-
--- | Make a flow relmap. Flow relmaps take no subrelmaps.
-relmapFlow :: RopUse' h c -> RelkitFlow c -> Relmap' h c
-relmapHook :: RopUse' h c -> RelkitHook' h c -> Relmap' h c
-
--- | Make a binary relmap. Binary relmaps take one subrelmap.
-relmapBinary :: RopUse' h c -> RelkitBinary c -> Relmap' h c -> Relmap' h c
-
--- | Make a confluent relmap. Confluent relmaps take multiple subrelmaps.
-relmapConfl :: RopUse' h c -> RelkitConfl c -> [Relmap' h c] -> Relmap' h c
-relmapCopy :: RopUse' h c -> String -> Map (Relmap' h c)
-relmapNest :: RopUse' h c -> [Terminal String] -> Map (Relmap' h c)
-relmapNestVar :: RopUse' h c -> String -> Relmap' h c
-relmapLink :: RopUse' h c -> Relmap' h c
-
--- | List of <a>RelmapSource</a>
-relmapSourceList :: Relmap' h c -> [Relmap' h c]
-
--- | List of name in <a>RelmapLink</a>
-relmapNameList :: Relmap' h c -> [String]
-
-
--- | Specialize generic relmaps to specific relmaps
-module Koshucode.Baala.Core.Relmap.Specialize
-relmapSpecialize :: GetGlobal h => h c -> RelmapLinkTable' h c -> [RelkitDef c] -> Maybe Head -> Relmap' h c -> Ab ([RelkitDef c], Relkit c)
-type RelmapLinkTable' h c = [(Lexmap, Relmap' h c)]
-
-
--- | Link and run relmaps.
-module Koshucode.Baala.Core.Relmap.Run
-relkitLink :: Ord c => [RelkitDef c] -> Map (Relkit c)
-relkitRun :: (Ord c, CRel c, SelectRel h, GetGlobal h) => h c -> [Named [[c]]] -> RelkitBody c -> AbMap [[c]]
-fixedRelation :: Ord c => Map (AbMap [[c]])
-bmapAlign :: Head -> Head -> Map (AbMap [[c]])
 
 
 -- | Relation-to-relation mapping.
@@ -929,8 +1009,11 @@ assLinks :: Assert' h c -> RelmapLinkTable' h c
 type TokenPara = Para TTree
 tokenPara :: [Token] -> Ab TokenPara
 
+-- | Assertion with short signs.
+type ShortAssert' h c = Short (Assert' h c)
+
 -- | Assertion list with short signs.
-type ShortAssert' h c = Short [Assert' h c]
+type ShortAsserts' h c = Short [Assert' h c]
 
 -- | Select affirmative or denial assertions.
 assertNormal :: Map [ShortAssert' h c]
@@ -942,44 +1025,25 @@ instance Write (Assert' h c)
 instance CodePtr (Assert' h c)
 
 
--- | Dataset as a set of judges.
---   
---   Dataset is like a bridge of judges and relations. We can get a
---   relation from a dataset, that dataset is build from judges.
-module Koshucode.Baala.Core.Assert.Dataset
-
--- | Dataset is a set of judges.
-data Dataset c
-
--- | Dataset that has no judges.
-datasetEmpty :: Dataset c
-
--- | Gather judges into a dataset.
-dataset :: [Judge c] -> Dataset c
-
--- | Add judges to dataset.
-datasetAdd :: [Judge c] -> Dataset c -> Dataset c
-
--- | Select relation from dataset. If a giving term is not in judges,
---   <tt>CEmpty</tt> sign is used.
-datasetSelect :: (Ord c, CEmpty c) => Dataset c -> RelSelect c
-
-
 -- | Running relational calculation.
 module Koshucode.Baala.Core.Assert.Run
 
 -- | Calculate assertion list.
-runAssertJudges :: (Ord c, Write c, CRel c, CEmpty c, SelectRel h, GetGlobal h) => h c -> ShortAssert' h c -> Ab (OutputChunks c)
+runAssertJudges :: (Ord c, Write c, CRel c, CEmpty c, SelectRel h, GetGlobal h) => h c -> ShortAsserts' h c -> Ab (OutputChunks c)
 
 
 -- | Intermidiate structure between <a>String</a> and <tt>Resource</tt>.
 module Koshucode.Baala.Core.Resource.Clause
-type ShortClause = Short [Clause]
 data Clause
-Clause :: TokenClause -> SecNo -> ClauseBody -> Clause
-clauseSource :: Clause -> TokenClause
-clauseSecNo :: Clause -> SecNo
+Clause :: ClauseHead -> ClauseBody -> Clause
+clauseHead :: Clause -> ClauseHead
 clauseBody :: Clause -> ClauseBody
+data ClauseHead
+ClauseHead :: TokenClause -> SecNo -> [ShortDef] -> [Token] -> ClauseHead
+clauseSource :: ClauseHead -> TokenClause
+clauseSecNo :: ClauseHead -> SecNo
+clauseShort :: ClauseHead -> [ShortDef]
+clauseAbout :: ClauseHead -> [Token]
 data ClauseBody
 
 -- | Includeing source
@@ -987,9 +1051,6 @@ CInclude :: [Token] -> ClauseBody
 
 -- | Exporting name
 CExport :: String -> ClauseBody
-
--- | Short signs
-CShort :: [ShortDef] -> ClauseBody
 
 -- | Source of relmap
 CRelmap :: String -> [Token] -> ClauseBody
@@ -1003,11 +1064,8 @@ CJudge :: AssertType -> JudgePat -> [Token] -> ClauseBody
 -- | Global slot
 CSlot :: String -> [Token] -> ClauseBody
 
--- | Unknown clause
-CUnknown :: ClauseBody
-
--- | Unresolved short sign
-CUnres :: [Token] -> ClauseBody
+-- | The empty clause heading.
+clauseHeadEmpty :: ClauseHead
 
 -- | Name of clause type. e.g., <tt>"relmap"</tt>, <tt>"assert"</tt>.
 clauseTypeText :: Clause -> String
@@ -1018,7 +1076,7 @@ clauseTypeText :: Clause -> String
 --   not depend on <a>ConsLexmap</a>.
 --   
 --   <pre>
---   &gt;&gt;&gt; consPreclause . B.tokenize $ "a : source A /x /y"
+--   &gt;&gt;&gt; consClause . B.tokenize $ "a : source A /x /y"
 --   [ TTokmap ( TokenClause
 --                [TText 1 0 "a", TSpace 2 1, ..., TTerm 11 ["/y"]]
 --                [CodeLine 1 "a : source A /x /y" [TText 1 0 "a", ...]] )
@@ -1030,14 +1088,17 @@ clauseTypeText :: Clause -> String
 --   </pre>
 --   
 --   First step of constructing <tt>Resource</tt>.
-consClause :: SecNo -> [TokenLine] -> [ShortClause]
-consPreclause :: SecNo -> [TokenLine] -> [Clause]
+consClause :: SecNo -> [TokenLine] -> [Ab Clause]
+instance Typeable ClauseHead
 instance Typeable ClauseBody
 instance Typeable Clause
+instance Show ClauseHead
+instance Data ClauseHead
 instance Show ClauseBody
 instance Data ClauseBody
 instance Show Clause
 instance Data Clause
+instance CodePtr ClauseHead
 instance CodePtr Clause
 
 
@@ -1104,8 +1165,9 @@ type Relmap c = Relmap' Resource c
 type RelmapLinkTable c = RelmapLinkTable' Resource c
 type Rop c = Rop' Resource c
 type RopCons c = RopCons' Resource c
-type RopUse c = RopUse' Resource c
+type Intmed c = Intmed' Resource c
 type ShortAssert c = ShortAssert' Resource c
+type ShortAsserts c = ShortAsserts' Resource c
 global :: Global c
 instance GetGlobal Resource
 instance SelectRel Resource
@@ -1145,6 +1207,9 @@ readSources :: CContent c => [CodeName] -> ResourceIO c
 -- | Run resource.
 module Koshucode.Baala.Core.Resource.Run
 runResource :: CContent c => Resource c -> Ab (OutputResult c)
+
+-- | Make a constructor pair of lexmap and relmap.
+relmapCons :: GetGlobal h => h c -> (ConsLexmap, ConsRelmap' h c)
 
 
 -- | Runtime structure for calculations written in Koshucode.

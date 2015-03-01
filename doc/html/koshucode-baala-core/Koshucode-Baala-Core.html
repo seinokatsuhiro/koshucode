@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-core-0.93.0.0: A notational system for relational model</p
+      >koshucode-baala-core-0.101.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -57,11 +57,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Modules</a
+	    >Modules</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Dependencies</a
+	    >Dependencies</a
 	    ></li
 	  ></ul
 	></div
@@ -82,6 +82,10 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	    >Koshucode.Baala.Core.Lexmap</a
 	    ></li
 	  ><li class="src short"
+	  >module <a href="Koshucode-Baala-Core-Relkit.html"
+	    >Koshucode.Baala.Core.Relkit</a
+	    ></li
+	  ><li class="src short"
 	  >module <a href="Koshucode-Baala-Core-Relmap.html"
 	    >Koshucode.Baala.Core.Relmap</a
 	    ></li
@@ -93,7 +97,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Modules</h1
+	>Modules</h1
 	><div class="top"
 	><p class="src"
 	  >module <a href="Koshucode-Baala-Core-Assert.html"
@@ -114,6 +118,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	  ></div
 	><div class="top"
 	><p class="src"
+	  >module <a href="Koshucode-Baala-Core-Relkit.html"
+	    >Koshucode.Baala.Core.Relkit</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
 	  >module <a href="Koshucode-Baala-Core-Relmap.html"
 	    >Koshucode.Baala.Core.Relmap</a
 	    ></p
@@ -125,7 +135,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	    ></p
 	  ></div
 	><h1 id="g:2"
-	>Dependencies</h1
+	>Dependencies</h1
 	><div class="doc"
 	><ul
 	  ><li
@@ -143,7 +153,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	      >, and
    <code
 	      >Content</code
-	      > modules.</li
+	      > modules.</li
 	    ><li
 	    ><code
 	      >Resource</code
@@ -159,7 +169,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	      >, and
    <code
 	      >[Base]</code
-	      > modules.</li
+	      > modules.</li
 	    ><li
 	    ><code
 	      >Assert</code
@@ -172,7 +182,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	      >, and
    <code
 	      >[Base]</code
-	      > modules.</li
+	      > modules.</li
 	    ><li
 	    ><code
 	      >Relmap</code
@@ -182,7 +192,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	      >, and
    <code
 	      >[Base]</code
-	      > modules.</li
+	      > modules.</li
 	    ><li
 	    ><code
 	      >Content</code
@@ -192,7 +202,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	      >, and
    <code
 	      >[Base]</code
-	      > modules.</li
+	      > modules.</li
 	    ><li
 	    ><code
 	      >[Base]</code
@@ -208,7 +218,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	      >, and
    <code
 	      >Prelude</code
-	      > modules.</li
+	      > modules.</li
 	    ><li
 	    ><code
 	      >Abort</code
@@ -218,29 +228,29 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Core.h
 	      > and
    <code
 	      >Prelude</code
-	      > modules.</li
+	      > modules.</li
 	    ><li
 	    ><code
 	      >Syntax</code
 	      > module uses
    <code
 	      >Prelude</code
-	      > module.</li
+	      > module.</li
 	    ><li
 	    ><code
 	      >Data</code
 	      > module uses
    <code
 	      >Prelude</code
-	      > module.</li
+	      > module.</li
 	    ><li
 	    ><code
 	      >Prelude</code
 	      > module uses
-   no modules in Koshucode.</li
+   no modules in Koshucode.</li
 	    ></ul
 	  ><p
-	  >Following picture shows reduced dependencies.</p
+	  >Following picture shows reduced dependencies.</p
 	  ><pre
 	  >     [Core]             [Base]
        |                /    \
