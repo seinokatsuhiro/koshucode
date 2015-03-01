@@ -19,14 +19,13 @@ module Koshucode.Baala.Core.Relmap.Global
     ropCopset,
 
     -- * Operator set
-    OpSet' (..), FindRop',
+    OpSet' (..),
     opset, opsetFill,
   ) where
 
 import qualified Data.Version                        as Ver
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Core.Content        as C
-import qualified Koshucode.Baala.Core.Lexmap         as C
 import qualified Koshucode.Baala.Core.Relmap.Rop     as C
 
 
@@ -110,11 +109,9 @@ global' h = Global
 -- | Set of relmap and content operators.
 data OpSet' h c = OpSet
     { opsetRopList     :: [C.Rop' h c]
-    , opsetFindRop     :: FindRop' h c
+    , opsetFindRop     :: C.FindRop' h c
     , opsetCop         :: C.CopSet c
     }
-
-type FindRop' h c = C.RopName -> Maybe (C.Rop' h c)
 
 -- | Empty operator set.
 opset :: OpSet' h c

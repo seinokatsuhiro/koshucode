@@ -11,14 +11,13 @@ module Koshucode.Baala.Core.Relmap.Specialize
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Core.Lexmap          as C
 import qualified Koshucode.Baala.Core.Relkit          as C
-import qualified Koshucode.Baala.Core.Relmap.Global   as C
 import qualified Koshucode.Baala.Core.Relmap.Relmap   as C
 import qualified Koshucode.Baala.Core.Message         as Msg
 
 type RelmapLinkTable' h c = [(C.Lexmap, C.Relmap' h c)]
 
-relmapSpecialize :: forall h. forall c. (C.GetGlobal h)
-    => h c -> RelmapLinkTable' h c -> [C.RelkitDef c]
+relmapSpecialize :: forall h. forall c.
+    h c -> RelmapLinkTable' h c -> [C.RelkitDef c]
     -> Maybe B.Head -> C.Relmap' h c -> B.Ab ([C.RelkitDef c], C.Relkit c)
 relmapSpecialize hook links = spec [] [] where
     spec :: [((B.Token, B.Local String), B.Head)]  -- name of local relation, and its heading

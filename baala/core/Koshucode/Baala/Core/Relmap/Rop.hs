@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Core.Relmap.Rop
   ( -- * Operator
-    Rop' (..), RopUsage,
+    Rop' (..), RopUsage, FindRop',
     -- * Constructor
     RopCons', Intmed' (..),
   ) where
@@ -12,6 +12,7 @@ module Koshucode.Baala.Core.Relmap.Rop
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Core.Lexmap           as C
 import qualified Koshucode.Baala.Core.Relmap.Relmap    as C
+
 
 -- ----------------------  Operator
 
@@ -34,6 +35,9 @@ instance B.Name (Rop' h c) where
 
 -- | Usage text of operator.
 type RopUsage = String
+
+type FindRop' h c = C.RopName -> Maybe (Rop' h c)
+
 
 -- ----------------------  Constructor
 
