@@ -3,7 +3,7 @@
 
 -- | Link and run relmaps.
 
-module Koshucode.Baala.Core.Relmap.Run
+module Koshucode.Baala.Core.Relkit.Run
   ( relkitLink,
     relkitRun,
     fixedRelation,
@@ -12,7 +12,7 @@ module Koshucode.Baala.Core.Relmap.Run
 
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Core.Content          as C
-import qualified Koshucode.Baala.Core.Relmap.Relkit    as C
+import qualified Koshucode.Baala.Core.Relkit.Relkit    as C
 import qualified Koshucode.Baala.Core.Message          as Msg
 
 relkitLink :: forall c. (Ord c) => [C.RelkitDef c] -> B.Map (C.Relkit c)

@@ -72,13 +72,15 @@ library
         Koshucode.Baala.Core.Lexmap.Lexmap
         Koshucode.Baala.Core.Lexmap.Slot
 
+        Koshucode.Baala.Core.Relkit
+        Koshucode.Baala.Core.Relkit.Relkit
+        Koshucode.Baala.Core.Relkit.Run
+
         Koshucode.Baala.Core.Relmap
         Koshucode.Baala.Core.Relmap.Construct
         Koshucode.Baala.Core.Relmap.Global
-        Koshucode.Baala.Core.Relmap.Relkit
         Koshucode.Baala.Core.Relmap.Relmap
         Koshucode.Baala.Core.Relmap.Rop
-        Koshucode.Baala.Core.Relmap.Run
         Koshucode.Baala.Core.Relmap.Specialize
 
         Koshucode.Baala.Core.Resource

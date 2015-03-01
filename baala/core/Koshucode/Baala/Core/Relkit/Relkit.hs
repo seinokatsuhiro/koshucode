@@ -2,7 +2,7 @@
 
 -- | Specialized relmap.
 
-module Koshucode.Baala.Core.Relmap.Relkit
+module Koshucode.Baala.Core.Relkit.Relkit
   ( 
     -- * Datatype
     Relkit (..), RelkitCore (..),
