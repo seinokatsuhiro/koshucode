@@ -12,7 +12,6 @@ module Koshucode.Baala.Core.Relmap.Run
 
 import qualified Koshucode.Baala.Base                  as B
 import qualified Koshucode.Baala.Core.Content          as C
-import qualified Koshucode.Baala.Core.Relmap.Global    as C
 import qualified Koshucode.Baala.Core.Relmap.Relkit    as C
 import qualified Koshucode.Baala.Core.Message          as Msg
 
@@ -24,27 +23,25 @@ relkitLink kits = linkKit where
     kitsRec :: [C.RelkitDef c]
     kitsRec = linkKit `B.mapSndTo` kits
 
-    links = map link
-
     link :: B.Map (C.RelkitBody c)
     link (B.Sourced src core) =
         B.Sourced src $
          case core of
-           C.RelkitAbFull      u f bs    -> C.RelkitAbFull      u f $ links bs
-           C.RelkitOneToAbMany u f bs    -> C.RelkitOneToAbMany u f $ links bs
-           C.RelkitOneToAbOne  u f bs    -> C.RelkitOneToAbOne  u f $ links bs
+           C.RelkitAbFull      u f bs    -> C.RelkitAbFull      u f $ map link bs
+           C.RelkitOneToAbMany u f bs    -> C.RelkitOneToAbMany u f $ map link bs
+           C.RelkitOneToAbOne  u f bs    -> C.RelkitOneToAbOne  u f $ map link bs
            C.RelkitAbSemi        f b     -> C.RelkitAbSemi        f $ link  b
            C.RelkitAppend        b1 b2   -> C.RelkitAppend (link b1) (link b2)
            C.RelkitNest        p nest b  -> C.RelkitNest     p nest $ link  b
            C.RelkitCopy        p copy b  -> C.RelkitCopy     p copy $ link  b
            C.RelkitLink n key _ ->
                case lookup key kitsRec of
-                 Just (C.Relkit _ b)  -> C.RelkitLink n key $ Just b
-                 Nothing              -> core
-           _                          -> core
+                 Just (C.Relkit _ b)     -> C.RelkitLink n key $ Just b
+                 Nothing                 -> core
+           _                             -> core
 
 -- todo: optimization
-relkitRun :: forall h. forall c. (Ord c, C.CRel c, B.SelectRel h, C.GetGlobal h)
+relkitRun :: forall h. forall c. (Ord c, C.CRel c, B.SelectRel h)
     => h c -> [C.Local [[c]]] -> C.RelkitBody c -> B.AbMap [[c]]
 relkitRun hook rs (B.Sourced toks core) bo1 =
     Msg.abRun toks $
