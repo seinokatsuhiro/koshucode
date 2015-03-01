@@ -56,14 +56,14 @@ ropsCoxCalc = Op.ropList "cox-calc"
 -- ----------------------  add
 
 consAdd :: (C.CContent c) => C.RopCons c
-consAdd use =
-    do cops <- Op.getWhere use "-where"
-       cox <- Op.getTermCoxes use "-cox"
-       Right $ relmapAdd use (cops, cox)
+consAdd med =
+    do cops <- Op.getWhere med "-where"
+       cox <- Op.getTermCoxes med "-cox"
+       Right $ relmapAdd med (cops, cox)
 
 relmapAdd :: (C.CList c, C.CRel c, B.Write c)
   => C.Intmed c -> (C.CopSet c, [C.NamedCox c]) -> C.Relmap c
-relmapAdd use = C.relmapFlow use . relkitAdd
+relmapAdd med = C.relmapFlow med . relkitAdd
 
 relkitAdd :: (C.CList c, C.CRel c, B.Write c)
   => (C.CopSet c, [C.NamedCox c]) -> C.RelkitFlow c
@@ -84,14 +84,14 @@ relkitAdd (cops, cox) (Just he1)
 -- ----------------------  subst
 
 consSubst :: (C.CContent c) => C.RopCons c
-consSubst use =
-    do cops <- Op.getWhere use "-where"
-       cox <- Op.getTermCoxes use "-cox"
-       Right $ relmapSubst use (cops, cox)
+consSubst med =
+    do cops <- Op.getWhere med "-where"
+       cox <- Op.getTermCoxes med "-cox"
+       Right $ relmapSubst med (cops, cox)
 
 relmapSubst :: (C.CList c, C.CRel c, B.Write c)
   => C.Intmed c -> (C.CopSet c, [C.NamedCox c]) -> C.Relmap c
-relmapSubst use = C.relmapFlow use . relkitSubst
+relmapSubst med = C.relmapFlow med . relkitSubst
 
 relkitSubst :: (C.CList c, C.CRel c, B.Write c)
   => (C.CopSet c, [C.NamedCox c]) -> C.RelkitFlow c
@@ -116,14 +116,14 @@ relkitSubst (cops, cox) (Just he1)
 --    > fill /a /b 0
 
 consFill :: (C.CContent c) => C.RopCons c
-consFill use =
-  do ns    <- Op.getTerms use "-term"
-     coxTo <- Op.getCox use "-to"
-     let cops = C.globalCopset $ C.ropGlobal use
-     Right $ relmapFill use (ns, cops, coxTo)
+consFill med =
+  do ns    <- Op.getTerms med "-term"
+     coxTo <- Op.getCox med "-to"
+     let cops = C.globalCopset $ C.ropGlobal med
+     Right $ relmapFill med (ns, cops, coxTo)
 
 relmapFill :: (C.CContent c) => C.Intmed c -> ([B.TermName], C.CopSet c, C.Cox c) -> C.Relmap c
-relmapFill use = C.relmapFlow use . relkitFill
+relmapFill med = C.relmapFlow med . relkitFill
 
 relkitFill :: (C.CContent c) => ([B.TermName], C.CopSet c, C.Cox c) -> C.RelkitFlow c
 relkitFill _ Nothing = Right C.relkitNothing
@@ -146,14 +146,14 @@ relkitFill (ns, cops, coxTo) (Just he1) = Right kit2 where
 --    > replace /a /b (| x | if x < 0 -> 0 : x |)
 
 consReplace :: (C.CContent c) => C.RopCons c
-consReplace use =
-    do ns     <- Op.getTerms use "-term"
-       coxBy  <- Op.getCox use "-by"
+consReplace med =
+    do ns     <- Op.getTerms med "-term"
+       coxBy  <- Op.getCox med "-by"
        B.unless (C.coxSyntacticArity coxBy == 1) $ do
          B.abortable "relmap-replace" [coxBy] Msg.reqUnaryFn
        let expr n = (n, C.CoxFill [] coxBy [C.CoxTerm [] [n] []])
-           cops   = C.globalCopset $ C.ropGlobal use
-       Right $ relmapSubst use (cops, map expr ns)
+           cops   = C.globalCopset $ C.ropGlobal med
+       Right $ relmapSubst med (cops, map expr ns)
 
 
 -- ----------------------  replace-all
@@ -161,14 +161,14 @@ consReplace use =
 --    > replace-all -from () -to 0
 
 consReplaceAll :: (C.CContent c) => C.RopCons c
-consReplaceAll use =
-  do coxFrom <- Op.getCox use "-from"
-     coxTo   <- Op.getCox use "-to"
-     let cops = C.globalCopset $ C.ropGlobal use
-     Right $ relmapReplaceAll use (cops, coxFrom, coxTo)
+consReplaceAll med =
+  do coxFrom <- Op.getCox med "-from"
+     coxTo   <- Op.getCox med "-to"
+     let cops = C.globalCopset $ C.ropGlobal med
+     Right $ relmapReplaceAll med (cops, coxFrom, coxTo)
 
 relmapReplaceAll :: (C.CContent c) => C.Intmed c -> (C.CopSet c, C.Cox c, C.Cox c) -> C.Relmap c
-relmapReplaceAll use = C.relmapFlow use . relkitReplaceAll
+relmapReplaceAll med = C.relmapFlow med . relkitReplaceAll
 
 relkitReplaceAll :: (C.CContent c) => (C.CopSet c, C.Cox c, C.Cox c) -> C.RelkitFlow c
 relkitReplaceAll _ Nothing = Right C.relkitNothing
@@ -184,14 +184,14 @@ relkitReplaceAll (cops, coxFrom, coxTo) (Just he1) = Right kit2 where
 -- ----------------------  split
 
 consSplit :: (C.CContent c) => C.RopCons c
-consSplit use =
-    do cops <- Op.getWhere use "-where"
-       cox <- Op.getTermCoxes use "-cox"
-       Right $ relmapSplit use (cops, cox)
+consSplit med =
+    do cops <- Op.getWhere med "-where"
+       cox <- Op.getTermCoxes med "-cox"
+       Right $ relmapSplit med (cops, cox)
 
 relmapSplit :: (C.CList c, C.CRel c, B.Write c, C.CBool c)
   => C.Intmed c -> (C.CopSet c, [C.NamedCox c]) -> C.Relmap c
-relmapSplit use = C.relmapFlow use . relkitSplit
+relmapSplit med = C.relmapFlow med . relkitSplit
 
 relkitSplit :: forall c. (C.CList c, C.CRel c, B.Write c, C.CBool c)
   => (C.CopSet c, [C.NamedCox c]) -> C.RelkitFlow c
@@ -232,13 +232,13 @@ relkitSplit (cops, cox) (Just he1)
 --  > unary /n 1 : 2 : 3
 
 consUnary :: (C.CContent c) => C.RopCons c
-consUnary use =
-    do n  <- Op.getTerm  use "-term"
-       cs <- Op.getContents use "-expr"
-       Right $ relmapUnary use (n, cs)
+consUnary med =
+    do n  <- Op.getTerm  med "-term"
+       cs <- Op.getContents med "-expr"
+       Right $ relmapUnary med (n, cs)
 
 relmapUnary :: (C.CContent c) => C.Intmed c -> (B.TermName, [c]) -> C.Relmap c
-relmapUnary use = C.relmapFlow use . relkitUnary
+relmapUnary med = C.relmapFlow med . relkitUnary
 
 relkitUnary :: (C.CContent c) => (B.TermName, [c]) -> C.RelkitFlow c
 relkitUnary (n, cs) _ = Right kit2 where
@@ -253,7 +253,7 @@ relkitUnary (n, cs) _ = Right kit2 where
 --  > dump-cox /x >= 0
 
 consDumpCox :: (C.CContent c) => C.RopCons c
-consDumpCox use =
-    do cox <- Op.getCox use "-cox"
+consDumpCox med =
+    do cox <- Op.getCox med "-cox"
        Msg.dumpCox cox
 

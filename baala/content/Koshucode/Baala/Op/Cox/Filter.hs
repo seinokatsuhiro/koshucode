@@ -43,14 +43,14 @@ ropsCoxFilter = Op.ropList "cox-filter"
 -- ----------------------  filter
 
 consFilter :: (C.CContent c) => Bool -> C.RopCons c
-consFilter b use =
-    do cops   <- Op.getWhere use "-where"
-       coxIn  <- Op.getCox use "-in"
-       Right $ relmapFilter use (b, cops, coxIn)
+consFilter b med =
+    do cops   <- Op.getWhere med "-where"
+       coxIn  <- Op.getCox med "-in"
+       Right $ relmapFilter med (b, cops, coxIn)
 
 relmapFilter :: (C.CList c, C.CRel c, C.CBool c, B.Write c)
   => C.Intmed c -> (Bool, C.CopSet c, C.Cox c) -> C.Relmap c
-relmapFilter use = C.relmapFlow use . relkitFilter
+relmapFilter med = C.relmapFlow med . relkitFilter
 
 relkitFilter :: (C.CList c, C.CRel c, C.CBool c, B.Write c)
   => (Bool, C.CopSet c, C.Cox c) -> C.RelkitFlow c
@@ -66,12 +66,12 @@ relkitFilter (which, cops, body) (Just he1) = Right kit2 where
 -- ----------------------  contain
 
 consContain :: (C.CContent c) => C.RopCons c
-consContain use =
-    do c <- Op.getContent use "-expr"
-       Right $ relmapContain use c
+consContain med =
+    do c <- Op.getContent med "-expr"
+       Right $ relmapContain med c
 
 relmapContain :: (Eq c) => C.Intmed c -> c -> C.Relmap c
-relmapContain use = C.relmapFlow use . relkitContain
+relmapContain med = C.relmapFlow med . relkitContain
 
 relkitContain :: (Eq c) => c -> C.RelkitFlow c
 relkitContain _ Nothing = Right C.relkitNothing
@@ -83,10 +83,10 @@ relkitContain c (Just he1) = Right kit2 where
 -- ----------------------  omit-all
 
 consOmitAll :: C.RopCons c
-consOmitAll use = Right $ relmapOmitAll use
+consOmitAll med = Right $ relmapOmitAll med
 
 relmapOmitAll :: C.Intmed c -> C.Relmap c
-relmapOmitAll use = C.relmapFlow use relkitOmitAll
+relmapOmitAll med = C.relmapFlow med relkitOmitAll
 
 -- | Throw away all tuples in a relation.
 relkitOmitAll :: C.RelkitFlow c

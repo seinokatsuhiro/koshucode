@@ -35,29 +35,29 @@ ropsCoxEmpty = Op.ropList "cox-empty"  -- GROUP
 -- ----------------------  both
 
 consBoth :: (C.CContent c) => C.RopCons c
-consBoth use =
-    do rmap <- Op.getRelmap use "-relmap"
-       fill <- Op.getFiller use "-fill"
-       Right $ relmapBoth use fill rmap
+consBoth med =
+    do rmap <- Op.getRelmap med "-relmap"
+       fill <- Op.getFiller med "-fill"
+       Right $ relmapBoth med fill rmap
 
 relmapBoth :: (Ord c) => C.Intmed c -> c -> B.Map (C.Relmap c)
-relmapBoth use fill rmap = C.relmapCopy use "i" rmapBoth where
-    rmapBoth = rmapL `B.mappend` Op.relmapJoin use rmapR
-    rmapR    = rmap  `B.mappend` relmapMaybe use fill rmapIn
-    rmapL    = relmapMaybe use fill rmap
-    rmapIn   = C.relmapLocalSymbol use "i"
+relmapBoth med fill rmap = C.relmapCopy med "i" rmapBoth where
+    rmapBoth = rmapL `B.mappend` Op.relmapJoin med rmapR
+    rmapR    = rmap  `B.mappend` relmapMaybe med fill rmapIn
+    rmapL    = relmapMaybe med fill rmap
+    rmapIn   = C.relmapLocalSymbol med "i"
 
 
 -- ----------------------  maybe
 
 consMaybe :: (C.CContent c) => C.RopCons c
-consMaybe use =
-    do rmap <- Op.getRelmap use "-relmap"
-       fill <- Op.getFiller use "-fill"
-       Right $ relmapMaybe use fill rmap
+consMaybe med =
+    do rmap <- Op.getRelmap med "-relmap"
+       fill <- Op.getFiller med "-fill"
+       Right $ relmapMaybe med fill rmap
 
 relmapMaybe :: (Ord c) => C.Intmed c -> c -> B.Map (C.Relmap c)
-relmapMaybe use = C.relmapBinary use . relkitMaybe
+relmapMaybe med = C.relmapBinary med . relkitMaybe
 
 relkitMaybe :: forall c. (Ord c) => c -> C.RelkitBinary c
 relkitMaybe fill (C.Relkit (Just he2) kitb2) (Just he1) = Right kit3 where

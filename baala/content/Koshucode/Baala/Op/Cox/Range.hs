@@ -55,18 +55,18 @@ ropsCoxRange = Op.ropList "cox-calc"
 type RangeAttr c = (B.TermName, C.CopSet c, C.Cox c, C.Cox c)
 
 getRangeAttr :: (C.CContent c) => C.Intmed c -> B.Ab (RangeAttr c)
-getRangeAttr use =
-  do term     <- Op.getTerm use "-term"
-     coxLow   <- Op.getCox  use "-from"
-     coxHigh  <- Op.getCox  use "-to"
-     let cops = C.globalCopset $ C.ropGlobal use
+getRangeAttr med =
+  do term     <- Op.getTerm med "-term"
+     coxLow   <- Op.getCox  med "-from"
+     coxHigh  <- Op.getCox  med "-to"
+     let cops = C.globalCopset $ C.ropGlobal med
      Right (term, cops, coxLow, coxHigh)
 
 consRange :: (C.CContent c) => C.RopCons c
-consRange use = Right . relmapRange use =<< getRangeAttr use
+consRange med = Right . relmapRange med =<< getRangeAttr med
 
 relmapRange :: (C.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
-relmapRange use = C.relmapFlow use . relkitRange
+relmapRange med = C.relmapFlow med . relkitRange
 
 relkitRange :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
 relkitRange _ Nothing = Right C.relkitNothing
@@ -86,10 +86,10 @@ relkitRange (n, cops, coxLow, coxHigh) (Just he1) = Right kit2 where
 -- ----------------------  range-year
 
 consRangeYear :: (C.CContent c) => C.RopCons c
-consRangeYear use = Right . relmapRangeYear use =<< getRangeAttr use
+consRangeYear med = Right . relmapRangeYear med =<< getRangeAttr med
 
 relmapRangeYear :: (C.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
-relmapRangeYear use = C.relmapFlow use . relkitRangeYear
+relmapRangeYear med = C.relmapFlow med . relkitRangeYear
 
 relkitRangeYear :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
 relkitRangeYear = relkitRangeBy B.timeRangeYear
@@ -98,10 +98,10 @@ relkitRangeYear = relkitRangeBy B.timeRangeYear
 -- ----------------------  range-month
 
 consRangeMonth :: (C.CContent c) => C.RopCons c
-consRangeMonth use = Right . relmapRangeMonth use =<< getRangeAttr use
+consRangeMonth med = Right . relmapRangeMonth med =<< getRangeAttr med
 
 relmapRangeMonth :: (C.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
-relmapRangeMonth use = C.relmapFlow use . relkitRangeMonth
+relmapRangeMonth med = C.relmapFlow med . relkitRangeMonth
 
 relkitRangeMonth :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
 relkitRangeMonth = relkitRangeBy B.timeRangeMonth
@@ -110,10 +110,10 @@ relkitRangeMonth = relkitRangeBy B.timeRangeMonth
 -- ----------------------  range-day
 
 consRangeDay :: (C.CContent c) => C.RopCons c
-consRangeDay use = Right . relmapRangeDay use =<< getRangeAttr use
+consRangeDay med = Right . relmapRangeDay med =<< getRangeAttr med
 
 relmapRangeDay :: (C.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
-relmapRangeDay use = C.relmapFlow use . relkitRangeDay
+relmapRangeDay med = C.relmapFlow med . relkitRangeDay
 
 relkitRangeDay :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
 relkitRangeDay = relkitRangeBy B.timeRangeDay
@@ -132,10 +132,10 @@ relkitRangeBy range (n, cops, from, to) (Just he1) = Right kit2 where
 -- ----------------------  range-hour
 
 consRangeHour :: (C.CContent c) => C.RopCons c
-consRangeHour use = Right . relmapRangeHour use =<< getRangeAttr use
+consRangeHour med = Right . relmapRangeHour med =<< getRangeAttr med
 
 relmapRangeHour :: (C.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
-relmapRangeHour use = C.relmapFlow use . relkitRangeHour
+relmapRangeHour med = C.relmapFlow med . relkitRangeHour
 
 relkitRangeHour :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
 relkitRangeHour = relkitRangeClock 3600
@@ -144,10 +144,10 @@ relkitRangeHour = relkitRangeClock 3600
 -- ----------------------  range-minute
 
 consRangeMinute :: (C.CContent c) => C.RopCons c
-consRangeMinute use = Right . relmapRangeMinute use =<< getRangeAttr use
+consRangeMinute med = Right . relmapRangeMinute med =<< getRangeAttr med
 
 relmapRangeMinute :: (C.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
-relmapRangeMinute use = C.relmapFlow use . relkitRangeMinute
+relmapRangeMinute med = C.relmapFlow med . relkitRangeMinute
 
 relkitRangeMinute :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
 relkitRangeMinute = relkitRangeClock 60
@@ -156,10 +156,10 @@ relkitRangeMinute = relkitRangeClock 60
 -- ----------------------  range-second
 
 consRangeSecond :: (C.CContent c) => C.RopCons c
-consRangeSecond use = Right . relmapRangeSecond use =<< getRangeAttr use
+consRangeSecond med = Right . relmapRangeSecond med =<< getRangeAttr med
 
 relmapRangeSecond :: (C.CContent c) => C.Intmed c -> RangeAttr c -> C.Relmap c
-relmapRangeSecond use = C.relmapFlow use . relkitRangeSecond
+relmapRangeSecond med = C.relmapFlow med . relkitRangeSecond
 
 relkitRangeSecond :: (C.CContent c) => RangeAttr c -> C.RelkitFlow c
 relkitRangeSecond = relkitRangeClock 1

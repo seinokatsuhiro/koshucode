@@ -49,14 +49,14 @@ ropsCoxGadget = Op.ropList "cox-gadget"
 --    > const {| |}
 
 consConst :: (C.CContent c) => C.RopCons c
-consConst use =
-    do lit <- Op.getContent use "-lit"
+consConst med =
+    do lit <- Op.getContent med "-lit"
        case C.isRel lit of
-         True  -> Right $ relmapConst use $ C.gRel lit
+         True  -> Right $ relmapConst med $ C.gRel lit
          False -> Msg.reqRel
 
 relmapConst :: C.Intmed c -> B.Rel c -> C.Relmap c
-relmapConst use = C.relmapFlow use . relkitConst
+relmapConst med = C.relmapFlow med . relkitConst
 
 relkitConst :: B.Rel c -> C.RelkitFlow c
 relkitConst _ Nothing = Right C.relkitNothing
@@ -67,21 +67,21 @@ relkitConst (B.Rel he bo) _ = Right kit2 where
 -- ----------------------  interp
 
 consInterp :: (C.CContent c) => C.RopCons c
-consInterp use =
-    do skip <- Op.getSwitch use "-x"
+consInterp med =
+    do skip <- Op.getSwitch med "-x"
        case skip of
-         True  -> Right $ Op.relmapId use
-         False -> consInterp2 use
+         True  -> Right $ Op.relmapId med
+         False -> consInterp2 med
 
 consInterp2 :: (C.CContent c) => C.RopCons c
-consInterp2 use =
-    do c <- Op.getContent use "-interp"
+consInterp2 med =
+    do c <- Op.getContent med "-interp"
        case C.isInterp c of
-         True  -> Right $ relmapInterp use $ C.gInterp c
+         True  -> Right $ relmapInterp med $ C.gInterp c
          False -> Msg.reqInterp
 
 relmapInterp :: (C.CContent c) => C.Intmed c -> B.Interp -> C.Relmap c
-relmapInterp use = C.relmapFlow use . relkitInterp
+relmapInterp med = C.relmapFlow med . relkitInterp
 
 relkitInterp :: (C.CContent c) => B.Interp -> C.RelkitFlow c
 relkitInterp _ Nothing = Right C.relkitNothing
@@ -98,14 +98,14 @@ interpMatch interp he = ns1 == ns2 where
 -- ----------------------  number
 
 consNumber :: (Ord c, C.CContent c) => C.RopCons c
-consNumber use =
-    do n    <- Op.getTerm use "-term"
-       ns   <- Op.getOption [] Op.getTerms use "-order"
-       from <- Op.getOption 0  Op.getInt   use "-from"
-       Right $ relmapNumber use (n, ns, from)
+consNumber med =
+    do n    <- Op.getTerm med "-term"
+       ns   <- Op.getOption [] Op.getTerms med "-order"
+       from <- Op.getOption 0  Op.getInt   med "-from"
+       Right $ relmapNumber med (n, ns, from)
 
 relmapNumber :: (C.CDec c, Ord c) => C.Intmed c -> (B.TermName, [B.TermName], Int) -> C.Relmap c
-relmapNumber use = C.relmapFlow use . relkitNumber
+relmapNumber med = C.relmapFlow med . relkitNumber
 
 relkitNumber :: (Ord c, C.CDec c) => (B.TermName, [B.TermName], Int) -> C.RelkitFlow c
 relkitNumber = relkitRanking B.sortByNameNumbering
@@ -126,26 +126,26 @@ relkitRanking ranking (n, ns, from) (Just he1) = Right kit2 where
 -- ----------------------  rank
 
 consRank :: (Ord c, C.CContent c) => C.RopCons c
-consRank use =
-    do n     <- Op.getTerm   use "-term"
-       ns    <- Op.getTerms  use "-order"
-       from  <- Op.getOption 0 Op.getInt use "-from"
-       dense <- Op.getSwitch use "-dense"
+consRank med =
+    do n     <- Op.getTerm   med "-term"
+       ns    <- Op.getTerms  med "-order"
+       from  <- Op.getOption 0 Op.getInt med "-from"
+       dense <- Op.getSwitch med "-dense"
        let relmapRank = if dense
                         then relmapDenseRank
                         else relmapGapRank
-       Right $ relmapRank use (n, ns, from)
+       Right $ relmapRank med (n, ns, from)
 
 relmapDenseRank :: (C.CDec c, Ord c) =>
    C.Intmed c -> (B.TermName, [B.TermName], Int) -> C.Relmap c
-relmapDenseRank use = C.relmapFlow use . relkitDenseRank
+relmapDenseRank med = C.relmapFlow med . relkitDenseRank
 
 relkitDenseRank :: (Ord c, C.CDec c) => (B.TermName, [B.TermName], Int) -> C.RelkitFlow c
 relkitDenseRank = relkitRanking B.sortByNameDenseRank
 
 relmapGapRank :: (C.CDec c, Ord c) =>
    C.Intmed c -> (B.TermName, [B.TermName], Int) -> C.Relmap c
-relmapGapRank use = C.relmapFlow use . relkitGapRank
+relmapGapRank med = C.relmapFlow med . relkitGapRank
 
 relkitGapRank :: (Ord c, C.CDec c) => (B.TermName, [B.TermName], Int) -> C.RelkitFlow c
 relkitGapRank = relkitRanking B.sortByNameGapRank
@@ -154,13 +154,13 @@ relkitGapRank = relkitRanking B.sortByNameGapRank
 -- ----------------------  repeat
 
 consRepeat :: (Ord c, C.CContent c) => C.RopCons c
-consRepeat use =
-  do cnt  <- Op.getInt    use "-count"
-     rmap <- Op.getRelmap use "-relmap"
-     Right $ relmapRepeat use cnt rmap
+consRepeat med =
+  do cnt  <- Op.getInt    med "-count"
+     rmap <- Op.getRelmap med "-relmap"
+     Right $ relmapRepeat med cnt rmap
 
 relmapRepeat :: (Ord c) => C.Intmed c -> Int -> B.Map (C.Relmap c)
-relmapRepeat use cnt = C.relmapBinary use $ relkitRepeat cnt
+relmapRepeat med cnt = C.relmapBinary med $ relkitRepeat cnt
 
 relkitRepeat :: forall c. (Ord c) => Int -> C.RelkitBinary c
 relkitRepeat cnt (C.Relkit (Just he2) kitb2) (Just he1)

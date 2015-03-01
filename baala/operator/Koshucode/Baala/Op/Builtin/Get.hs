@@ -47,13 +47,13 @@ lookupAttr :: (String -> C.AttrName) -> String -> C.Intmed c -> Maybe [B.TTree]
 lookupAttr c name = B.paraLookupSingle (c name) . C.lexAttr . C.ropLexmap
 
 getAbortable :: ([B.TTree] -> B.Ab b) -> RopGet c b
-getAbortable f u name =
-    do trees <- getTrees u name
+getAbortable f med name =
+    do trees <- getTrees med name
        Msg.abAttrTrees trees $ f trees
 
 getAbortableOption :: b -> ([B.TTree] -> B.Ab b) -> RopGet c b
-getAbortableOption y f u name =
-    do m <- getMaybe getTrees u name
+getAbortableOption y f med name =
+    do m <- getMaybe getTrees med name
        case m of
          Nothing    -> Right y
          Just trees -> Msg.abAttrTrees trees $ f trees
@@ -62,28 +62,28 @@ getAbortableOption y f u name =
 -- ----------------------  Basic
 
 getOption :: a -> RopGet c a -> RopGet c a
-getOption y get u name =
-    case lookupTree name u of
+getOption y get med name =
+    case lookupTree name med of
       Nothing -> Right y
-      Just _  -> get u name
+      Just _  -> get med name
 
 getMaybe :: RopGet c a -> RopGet c (Maybe a)
-getMaybe get u name =
-    case lookupTree name u of
+getMaybe get med name =
+    case lookupTree name med of
       Nothing -> Right Nothing
-      Just _  -> Right . Just =<< get u name
+      Just _  -> Right . Just =<< get med name
 
 -- | Get @True@ when attribute is given, @False@ otherwise.
 getSwitch :: C.Intmed c -> String -> B.Ab Bool
-getSwitch u name = getAbortableOption False get u name where
+getSwitch med name = getAbortableOption False get med name where
     get [] = Right True
     get _  = Msg.unexpAttr $ "Just type only " ++ name
 
 -- | Get word from named attribute.
 --
 --   > consXxx :: RopCons c
---   > consXxx u = do
---   >   sign <- getWord u "-sign"
+--   > consXxx med = do
+--   >   sign <- getWord med "-sign"
 --   >   ...
 getWord :: RopGet c String
 getWord = getAbortable get where
@@ -94,19 +94,19 @@ getWord = getAbortable get where
 -- ----------------------  Tree
 
 getTrees :: RopGet c [B.TTree]
-getTrees u name =
-    case lookupTree name u of
+getTrees med name =
+    case lookupTree name med of
       Just trees -> Right trees
       Nothing    -> Msg.noAttr name
 
 getTree :: RopGet c B.TTree
-getTree u name =
-    do trees <- getTrees u name
+getTree med name =
+    do trees <- getTrees med name
        Right $ B.wrapTrees trees
 
 getWordTrees :: RopGet c [B.Named B.TTree]
-getWordTrees u name =
-    case lookupTree name u of
+getWordTrees med name =
+    case lookupTree name med of
       Just trees -> wordTrees trees
       Nothing    -> Msg.noAttr name
 
@@ -123,8 +123,8 @@ word (B.TextLeaf _ _ w) = Right w
 word _ = Msg.unexpAttr "Require one word"
 
 getTreesByColon :: RopGet c [[B.TTree]]
-getTreesByColon u name =
-    do trees <- getTrees u name
+getTreesByColon med name =
+    do trees <- getTrees med name
        Right $ B.omit null $ B.divideTreesByColon trees
 
 
@@ -133,20 +133,20 @@ getTreesByColon u name =
 -- | Get a relmap from operator use.
 --
 --   > consMeet :: (Ord c) => RopCons c
---   > consMeet u = do
---   >   m <- getRelmap u
---   >   Right $ relmapMeet u m
+--   > consMeet med = do
+--   >   m <- getRelmap med
+--   >   Right $ relmapMeet med m
 getRelmap :: C.Intmed c -> String -> B.Ab (C.Relmap c)
-getRelmap u name =
-    do ms    <- getRelmaps u
-       trees <- getRelmapRaw u name
+getRelmap med name =
+    do ms    <- getRelmaps med
+       trees <- getRelmapRaw med name
        Msg.abAttrTrees trees $ case ms of
          [m] -> Right m
          _   -> Msg.unexpAttr "Require one relmap"
 
 getRelmapRaw :: RopGet c [B.TTree]
-getRelmapRaw u name =
-    case lookupRelmap name u of
+getRelmapRaw med name =
+    case lookupRelmap name med of
       Just trees -> Right trees
       Nothing    -> Msg.noAttr name
 
@@ -156,7 +156,7 @@ getRelmaps :: C.Intmed c -> B.Ab [C.Relmap c]
 getRelmaps = Right . C.ropSubmap
 
 getOptRelmap :: C.Relmap c -> C.Intmed c -> String -> B.Ab (C.Relmap c)
-getOptRelmap rmap0 u = B.right rmap0 . getRelmap u
+getOptRelmap rmap0 med = B.right rmap0 . getRelmap med
 
 
 -- ----------------------  Term

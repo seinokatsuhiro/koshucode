@@ -28,7 +28,7 @@ import qualified Koshucode.Baala.Op.Message  as Msg
 
 -- | Get relmap attribute as single cox.
 getCox :: (C.CContent c) => Op.RopGet c (C.Cox c)
-getCox use = ropBuild use . B.wrapTrees B.<=< Op.getTrees use
+getCox med = ropBuild med . B.wrapTrees B.<=< Op.getTrees med
 
 getOptionCox :: (C.CContent c) => c -> Op.RopGet c (C.Cox c)
 getOptionCox c = Op.getOption (C.CoxLit [] c) getCox
@@ -38,17 +38,17 @@ getMaybeCox = Op.getMaybe getCox
 
 -- | Get relmap attribute as cox list with name.
 getNamedCoxes :: (C.CContent c) => Op.RopGet c [C.NamedCox c]
-getNamedCoxes use = ropNamedAlphas use B.<=< Op.getWordTrees use 
+getNamedCoxes med = ropNamedAlphas med B.<=< Op.getWordTrees med 
 
 -- | Get relmap attribute as cox list with term name.
 getTermCoxes :: (C.CContent c) => Op.RopGet c [C.NamedCox c]
-getTermCoxes use = ropNamedAlphas use B.<=< Op.getTermTrees use
+getTermCoxes med = ropNamedAlphas med B.<=< Op.getTermTrees med
 
 ropBuild :: (C.CContent c) => C.Intmed c -> B.TTreeToAb (C.Cox c)
 ropBuild = C.coxBuildG . C.ropGlobal
 
 ropNamedAlphas :: (C.CContent c) => C.Intmed c -> [B.NamedTree] -> B.Ab [C.NamedCox c]
-ropNamedAlphas use = mapM (B.namedMapM $ ropBuild use)
+ropNamedAlphas med = mapM (B.namedMapM $ ropBuild med)
 
 
 -- --------------------------------------------  Where
@@ -98,16 +98,16 @@ getTextFromTree _ = Msg.adlib "getTextFromTree"
 
 -- | Get relmap attribute as calculated content.
 getContent :: (C.CContent c) => Op.RopGet c c
-getContent use name =
-    do tree <- Op.getTree use name
-       calcTree use tree
+getContent med name =
+    do tree <- Op.getTree med name
+       calcTree med tree
 
 -- | Get relmap attribute as list of calculated contents.
 getContents :: (C.CContent c) => Op.RopGet c [c]
-getContents use name =
-    do trees <- Op.getTrees use name
+getContents med name =
+    do trees <- Op.getTrees med name
        let trees2 = B.wrapTrees `map` B.divideTreesByColon trees
-       calcTree use `mapM` trees2
+       calcTree med `mapM` trees2
 
 calcTree :: (C.CContent c) => C.Intmed c -> C.CalcContent c
 calcTree = C.calcContent . C.ropCopset
@@ -121,7 +121,7 @@ getFiller :: (C.CContent c) => Op.RopGet c c
 getFiller = getOptContent C.empty
 
 getInt :: (C.CContent c) => Op.RopGet c Int
-getInt use name =
-    do dec <- C.getDec $ getContent use name
+getInt med name =
+    do dec <- C.getDec $ getContent med name
        Right $ B.decimalNum dec
 

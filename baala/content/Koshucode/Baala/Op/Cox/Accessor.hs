@@ -34,16 +34,16 @@ ropsCoxAccessor = Op.ropList "cox-accessor"
 -- ----------------------  clock
 
 consClock :: (C.CContent c) => C.RopCons c
-consClock use =
-    do cops     <- Op.getWhere    use "-where"
-       clock    <- Op.getTerm     use "-clock"
-       times    <- Op.getOptionCox (C.pDecFromInt 1) use "-times"
-       day      <- Op.getOptionCox (C.pDecFromInt 0) use "-day"
-       hour     <- Op.getMaybeCox use "-hour"
-       minute   <- Op.getMaybeCox use "-min"
-       sec      <- Op.getMaybeCox use "-sec"
+consClock med =
+    do cops     <- Op.getWhere    med "-where"
+       clock    <- Op.getTerm     med "-clock"
+       times    <- Op.getOptionCox (C.pDecFromInt 1) med "-times"
+       day      <- Op.getOptionCox (C.pDecFromInt 0) med "-day"
+       hour     <- Op.getMaybeCox med "-hour"
+       minute   <- Op.getMaybeCox med "-min"
+       sec      <- Op.getMaybeCox med "-sec"
        let hms   = fill (hour, minute, sec)
-       Right $ relmapClock use (cops, clock, (times, day, hms))
+       Right $ relmapClock med (cops, clock, (times, day, hms))
     where
       zero = C.coxLit $ C.pDecFromInt 0
       fill (h, Nothing, Just s) = fill (h, Just zero, Just s)
@@ -52,7 +52,7 @@ consClock use =
 
 relmapClock :: (C.CContent c) =>
   C.Intmed c -> (C.CopSet c, B.TermName, (C.Cox c, C.Cox c, (C.MaybeCox c, C.MaybeCox c, C.MaybeCox c))) -> C.Relmap c
-relmapClock use = C.relmapFlow use . relkitClock
+relmapClock med = C.relmapFlow med . relkitClock
 
 relkitClock :: (C.CContent c)
   => (C.CopSet c, B.TermName, (C.Cox c, C.Cox c, (C.MaybeCox c, C.MaybeCox c, C.MaybeCox c)))
@@ -93,20 +93,20 @@ getInteger c = do i <- getInt c
 -- ----------------------  clock-get
 
 consClockGet :: (C.CContent c) => C.RopCons c
-consClockGet use =
-  do cops     <- Op.getWhere   use "-where"
-     clock    <- Op.getCox     use "-clock"
-     sign     <- Op.getTermOpt use "-sign"
-     day      <- Op.getTermOpt use "-day"
-     hour     <- Op.getTermOpt use "-hour"
-     minute   <- Op.getTermOpt use "-min"
-     sec      <- Op.getTermOpt use "-sec"
+consClockGet med =
+  do cops     <- Op.getWhere   med "-where"
+     clock    <- Op.getCox     med "-clock"
+     sign     <- Op.getTermOpt med "-sign"
+     day      <- Op.getTermOpt med "-day"
+     hour     <- Op.getTermOpt med "-hour"
+     minute   <- Op.getTermOpt med "-min"
+     sec      <- Op.getTermOpt med "-sec"
      let ns    = [sign, day, hour, minute, sec]
-     Right $ relmapClockGet use (cops, clock, ns)
+     Right $ relmapClockGet med (cops, clock, ns)
 
 relmapClockGet :: (C.CContent c) =>
   C.Intmed c -> (C.CopSet c, C.Cox c, [Maybe B.TermName]) -> C.Relmap c
-relmapClockGet use = C.relmapFlow use . relkitClockGet
+relmapClockGet med = C.relmapFlow med . relkitClockGet
 
 relkitClockGet :: (C.CContent c) =>
   (C.CopSet c, C.Cox c, [Maybe B.TermName]) -> C.RelkitFlow c
@@ -131,18 +131,18 @@ clockProps clock = [sign, day, hour, minute, sec] where
 -- ----------------------  clock-alter
 
 consClockAlter :: (C.CContent c) => C.RopCons c
-consClockAlter use =
-    do cops     <- Op.getWhere    use "-where"
-       clock    <- Op.getTerm     use "-clock"
-       day      <- Op.getMaybeCox use "-day"
-       hour     <- Op.getMaybeCox use "-hour"
-       minute   <- Op.getMaybeCox use "-min"
-       sec      <- Op.getMaybeCox use "-sec"
-       Right $ relmapClockAlter use (cops, clock, (day, hour, minute, sec))
+consClockAlter med =
+    do cops     <- Op.getWhere    med "-where"
+       clock    <- Op.getTerm     med "-clock"
+       day      <- Op.getMaybeCox med "-day"
+       hour     <- Op.getMaybeCox med "-hour"
+       minute   <- Op.getMaybeCox med "-min"
+       sec      <- Op.getMaybeCox med "-sec"
+       Right $ relmapClockAlter med (cops, clock, (day, hour, minute, sec))
 
 relmapClockAlter :: (C.CContent c) =>
   C.Intmed c -> (C.CopSet c, B.TermName, (C.MaybeCox c, C.MaybeCox c, C.MaybeCox c, C.MaybeCox c)) -> C.Relmap c
-relmapClockAlter use = C.relmapFlow use . relkitClockAlter
+relmapClockAlter med = C.relmapFlow med . relkitClockAlter
 
 relkitClockAlter :: (C.CContent c)
   => (C.CopSet c, B.TermName, (C.MaybeCox c, C.MaybeCox c, C.MaybeCox c, C.MaybeCox c))
