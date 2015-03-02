@@ -75,9 +75,9 @@ resIncludeBody res abcl =
 
       ntrees2 :: C.SecNo -> String -> [B.Token] -> [B.Token] -> B.Ab C.RelmapSource
       ntrees2 sec n toks1 toks2 =
-          do form    <- B.tokenTrees  toks1
-             trees2  <- B.tokenTrees  toks2
-             edit    <- C.consAttrmap trees2
+          do form    <- B.tokenTrees toks1
+             trees2  <- B.tokenTrees toks2
+             edit    <- C.consAttrEd trees2
              Right ((sec, n), (form, edit))
 
       slot :: Clab B.NamedTrees

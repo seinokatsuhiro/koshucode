@@ -15,7 +15,7 @@ module Koshucode.Baala.Core.Lexmap.Construct
   ) where
 
 import qualified Koshucode.Baala.Base                   as B
-import qualified Koshucode.Baala.Core.Lexmap.Attrmap    as C
+import qualified Koshucode.Baala.Core.Lexmap.AttrEd     as C
 import qualified Koshucode.Baala.Core.Lexmap.Attr       as C
 import qualified Koshucode.Baala.Core.Lexmap.AttrPos    as C
 import qualified Koshucode.Baala.Core.Lexmap.Lexmap     as C
@@ -50,7 +50,7 @@ type FindSorter = C.RopName -> Maybe C.AttrSortPara
 type FindDeriv = SecNo -> C.RopName -> [RelmapSource]
 
 -- | Source of relmap: its name, replacement, and attribute editor.
-type RelmapSource = NNamed ([B.TTree], C.Attrmap)
+type RelmapSource = NNamed ([B.TTree], C.AttrEd)
 
 
 -- ----------------------  Constructor
@@ -108,7 +108,7 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
         table :: C.Lexmap -> RelmapSource -> B.Ab LexmapLinkTable
         table lx ((sec', _), (form, edit)) =
             Msg.abSlot [lx] $ do
-              attr2       <- C.runAttrmap edit $ C.lexAttrTree lx
+              attr2       <- C.runAttrEd edit $ C.lexAttrTree lx
               form2       <- C.substSlot gslot attr2 form
               (lx2, tab)  <- lexmap (eid + 1) sec' form2
               Right $ (lx, lx2) : tab
