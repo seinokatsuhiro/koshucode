@@ -38,7 +38,7 @@ data Resource c = Resource
     , resImport     :: [Resource c]       -- ^ Importing resources
     , resExport     :: [String]           -- ^ Exporting names
     , resSlot       :: [B.NamedTrees]     -- ^ Global slots
-    , resRelmap     :: [C.RelmapSource]   -- ^ Source of relmaps
+    , resRelmap     :: [C.RelmapClause]   -- ^ Source of relmaps
     , resAssert     :: [ShortAssert c]    -- ^ Assertions of relmaps
     , resJudge      :: [B.Judge c]        -- ^ Affirmative or denial judgements
     , resArticle    :: ([B.CodeName], [B.CodeName], [B.CodePiece])  -- ^ Codes of resource

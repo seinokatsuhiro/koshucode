@@ -73,7 +73,7 @@ relmapCons hook = (consL, consR) where
     findSorter n  = C.ropSorter `fmap` findRop n
     findRop       = C.opsetFindRop $ C.globalOpset $ C.getGlobal hook
 
-findRelmap :: [C.RelmapSource] -> C.FindDeriv
+findRelmap :: [C.RelmapClause] -> C.FindDeriv
 findRelmap ds sec name =
     case filter isSameName ds of
       [def]  -> [def]

@@ -67,13 +67,13 @@ resIncludeBody res abcl =
              Right $ B.Short (B.codePtList $ head src) sh
                        $ C.Assert sec typ pat optPara src rmapTrees Nothing []
 
-      relmap :: Clab C.RelmapSource
+      relmap :: Clab C.RelmapClause
       relmap C.ClauseHead { C.clauseSecNo = sec } _ (C.CRelmap n toks) =
           case B.splitTokensBy (== "---") toks of
             Left  _         -> ntrees2 sec n toks []
             Right (r, _, e) -> ntrees2 sec n r e
 
-      ntrees2 :: C.SecNo -> String -> [B.Token] -> [B.Token] -> B.Ab C.RelmapSource
+      ntrees2 :: C.SecNo -> String -> [B.Token] -> [B.Token] -> B.Ab C.RelmapClause
       ntrees2 sec n toks1 toks2 =
           do form    <- B.tokenTrees toks1
              trees2  <- B.tokenTrees toks2
