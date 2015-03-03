@@ -7,7 +7,7 @@ module Koshucode.Baala.Core.Lexmap.Construct
   ( -- * Constructor
     consLexmap,
     -- * Constructor types
-    ConsLexmap, FindDeriv, RelmapClause, RelmapTrees,
+    ConsLexmap, FindDeriv, LexmapClause, LexmapTrees (..),
     -- * Types with section number
     SecNo, NName, NNamed,
     -- * Local types
@@ -47,12 +47,15 @@ type LexmapLinkTable = [(C.Lexmap, C.Lexmap)]
 type FindSorter = C.RopName -> Maybe C.AttrSortPara
 
 -- | Find derived relmap operator.
-type FindDeriv = SecNo -> C.RopName -> [RelmapClause]
+type FindDeriv = SecNo -> C.RopName -> [LexmapClause]
 
 -- | Source of relmap: its name, replacement, and attribute editor.
-type RelmapClause = NNamed RelmapTrees
+type LexmapClause = NNamed LexmapTrees
 
-type RelmapTrees = ([B.TTree], C.AttrEd)
+data LexmapTrees = LexmapTrees
+    { relmapTrees   :: [B.TTree]
+    , relmapAttrEd  :: C.AttrEd
+    } deriving (Show, Eq, Ord)
 
 
 -- ----------------------  Constructor
@@ -100,15 +103,15 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
         local tok [] = Right (cons C.LexmapLocal tok B.paraEmpty, [])
         local _ _    = Msg.extraAttr
 
-        deriv :: B.Token -> RelmapClause -> ConsLexmapBody
+        deriv :: B.Token -> LexmapClause -> ConsLexmapBody
         deriv tok src ts =
             do attr  <- C.attrBranch ts
                let lx = cons C.LexmapDerived tok attr
                tab   <- table lx src
                Right (lx, tab)
 
-        table :: C.Lexmap -> RelmapClause -> B.Ab LexmapLinkTable
-        table lx ((sec', _), (form, edit)) =
+        table :: C.Lexmap -> LexmapClause -> B.Ab LexmapLinkTable
+        table lx ((sec', _), LexmapTrees { relmapTrees = form, relmapAttrEd = edit }) =
             Msg.abSlot [lx] $ do
               attr2       <- C.runAttrEd edit $ C.lexAttrTree lx
               form2       <- C.substSlot gslot attr2 form

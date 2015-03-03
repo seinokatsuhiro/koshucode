@@ -41,7 +41,7 @@ runResourceBody res@C.Resource { C.resAssert = ass, C.resMessage = msg } =
 
 assembleRelmap :: forall c. B.AbMap (C.Resource c)
 assembleRelmap res@C.Resource { C.resSlot    = slots
-                              , C.resRelmap  = derives
+                              , C.resLexmap  = derives
                               , C.resAssert  = asserts } = res'
     where
       res' = do result <- B.shortListM $ fmap assemble `map` asserts
@@ -73,7 +73,7 @@ relmapCons hook = (consL, consR) where
     findSorter n  = C.ropSorter `fmap` findRop n
     findRop       = C.opsetFindRop $ C.globalOpset $ C.getGlobal hook
 
-findRelmap :: [C.RelmapClause] -> C.FindDeriv
+findRelmap :: [C.LexmapClause] -> C.FindDeriv
 findRelmap ds sec name =
     case filter isSameName ds of
       [def]  -> [def]

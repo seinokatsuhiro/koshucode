@@ -47,7 +47,7 @@ resIncludeBody res abcl =
        case b of
          C.CJudge _ _ _    -> judge  `to` \x -> res { C.resJudge   = C.resJudge   << x }
          C.CAssert _ _ _ _ -> assert `to` \x -> res { C.resAssert  = C.resAssert  << x }
-         C.CRelmap _ _     -> relmap `to` \x -> res { C.resRelmap  = C.resRelmap  << x }
+         C.CRelmap _ _     -> relmap `to` \x -> res { C.resLexmap  = C.resLexmap  << x }
          C.CSlot _ _       -> slot   `to` \x -> res { C.resSlot    = C.resSlot    << x }
          C.CInclude _      -> inc    `to` \x -> res { C.resArticle = C.resArticle <: x }
     where
@@ -67,18 +67,18 @@ resIncludeBody res abcl =
              Right $ B.Short (B.codePtList $ head src) sh
                        $ C.Assert sec typ pat optPara src rmapTrees Nothing []
 
-      relmap :: Clab C.RelmapClause
+      relmap :: Clab C.LexmapClause
       relmap C.ClauseHead { C.clauseSecNo = sec } _ (C.CRelmap n toks) =
           case B.splitTokensBy (== "---") toks of
             Left  _         -> ntrees2 sec n toks []
             Right (r, _, e) -> ntrees2 sec n r e
 
-      ntrees2 :: C.SecNo -> String -> [B.Token] -> [B.Token] -> B.Ab C.RelmapClause
+      ntrees2 :: C.SecNo -> String -> [B.Token] -> [B.Token] -> B.Ab C.LexmapClause
       ntrees2 sec n toks1 toks2 =
           do form    <- B.tokenTrees toks1
              trees2  <- B.tokenTrees toks2
              edit    <- C.consAttrEd trees2
-             Right ((sec, n), (form, edit))
+             Right ((sec, n), C.LexmapTrees form edit)
 
       slot :: Clab B.NamedTrees
       slot _ _ (C.CSlot n toks) = ntrees (n, toks)

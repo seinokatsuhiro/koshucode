@@ -53,7 +53,7 @@ relkitKoshuResRop :: (C.CContent c)
 relkitKoshuResRop (sec, name) res _ = Right kit2 where
     kit2  = C.relkitConstBody ns bo2
     ns    = [sec, name]
-    bo2   = f `map` C.resRelmap res
+    bo2   = f `map` C.resLexmap res
     f ((s, n), _) = [C.pDecFromInt s, C.pText n]
 
 
