@@ -6,12 +6,9 @@
 module Koshucode.Baala.Core.Lexmap.Construct
   ( -- * Constructor
     consLexmap,
-    -- * Constructor types
-    ConsLexmap, FindDeriv,
-    LexmapClause, LexmapTrees (..),
 
-    -- * Parameter of token trees
-    TTreePara, ttreePara1, ttreePara2,
+    -- * Constructor types
+    ConsLexmap, FindDeriv, LexmapClause,
 
     -- * Types with section number
     SecNo, NName, NNamed,
@@ -20,13 +17,14 @@ module Koshucode.Baala.Core.Lexmap.Construct
     FindSorter, ConsLexmapBody, LexmapLinkTable,
   ) where
 
-import qualified Koshucode.Baala.Base                   as B
-import qualified Koshucode.Baala.Core.Lexmap.AttrEd     as C
-import qualified Koshucode.Baala.Core.Lexmap.Attr       as C
-import qualified Koshucode.Baala.Core.Lexmap.AttrPos    as C
-import qualified Koshucode.Baala.Core.Lexmap.Lexmap     as C
-import qualified Koshucode.Baala.Core.Lexmap.Slot       as C
-import qualified Koshucode.Baala.Core.Message           as Msg
+import qualified Koshucode.Baala.Base                     as B
+import qualified Koshucode.Baala.Core.Lexmap.AttrEd       as C
+import qualified Koshucode.Baala.Core.Lexmap.Attr         as C
+import qualified Koshucode.Baala.Core.Lexmap.AttrPos      as C
+import qualified Koshucode.Baala.Core.Lexmap.Lexmap       as C
+import qualified Koshucode.Baala.Core.Lexmap.LexmapTrees  as C
+import qualified Koshucode.Baala.Core.Lexmap.Slot         as C
+import qualified Koshucode.Baala.Core.Message             as Msg
 
 
 -- ----------------------  Section number
@@ -56,30 +54,7 @@ type FindSorter = C.RopName -> Maybe C.AttrSortPara
 type FindDeriv = SecNo -> C.RopName -> [LexmapClause]
 
 -- | Source of relmap: its name, replacement, and attribute editor.
-type LexmapClause = NNamed LexmapTrees
-
-data LexmapTrees = LexmapTrees
-    { lexmapTrees   :: [B.TTree]
-    , lexmapAttrEd  :: C.AttrEd
-    , lexmapPara    :: TTreePara
-    } deriving (Show, Eq, Ord)
-
-type TTreePara = B.Para B.TTree
-
-ttreePara1 :: [B.Token] -> B.Ab TTreePara
-ttreePara1 = ttreeParaBy C.maybeSingleHyphen
-
-ttreePara2 :: [B.Token] -> B.Ab TTreePara
-ttreePara2 = ttreeParaBy maybeDoubleHyphen
-
-ttreeParaBy :: B.TTreeTo (Maybe String) -> [B.Token] -> B.Ab TTreePara
-ttreeParaBy f toks =
-    do trees <- B.tokenTrees toks
-       Right $ B.para f trees
-
-maybeDoubleHyphen :: B.TTreeTo (Maybe String)
-maybeDoubleHyphen (B.TextLeafRaw _ n@('-' : '-' : _))  = Just n
-maybeDoubleHyphen _                                    = Nothing
+type LexmapClause = NNamed C.LexmapTrees
 
 
 -- ----------------------  Constructor
@@ -135,7 +110,7 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
                Right (lx, tab)
 
         table :: C.Lexmap -> LexmapClause -> B.Ab LexmapLinkTable
-        table lx ((sec', _), LexmapTrees { lexmapTrees = form, lexmapAttrEd = edit }) =
+        table lx ((sec', _), C.LexmapTrees { C.lexmapTrees = form, C.lexmapAttrEd = edit }) =
             Msg.abSlot [lx] $ do
               attr2       <- C.runAttrEd edit $ C.lexAttrTree lx
               form2       <- C.substSlot gslot attr2 form

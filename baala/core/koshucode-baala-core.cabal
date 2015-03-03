@@ -70,6 +70,7 @@ library
         Koshucode.Baala.Core.Lexmap.AttrPos
         Koshucode.Baala.Core.Lexmap.Construct
         Koshucode.Baala.Core.Lexmap.Lexmap
+        Koshucode.Baala.Core.Lexmap.LexmapTrees
         Koshucode.Baala.Core.Lexmap.Slot
 
         Koshucode.Baala.Core.Relkit

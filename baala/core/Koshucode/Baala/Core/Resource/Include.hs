@@ -69,7 +69,7 @@ resIncludeBody res abcl =
 
       relmap :: Clab C.LexmapClause
       relmap C.ClauseHead { C.clauseSecNo = sec } _ (C.CRelmap n toks) =
-          do lt <- consLexmapTrees =<< C.ttreePara2 toks
+          do lt <- C.consLexmapTrees =<< C.ttreePara2 toks
              Right ((sec, n), lt)
 
       slot :: Clab B.NamedTrees
@@ -80,19 +80,6 @@ resIncludeBody res abcl =
       inc :: Clab B.CodeName
       inc _ _ (C.CInclude toks) =
           paraToCodeName =<< C.ttreePara1 toks
-
-clauseAttrType :: B.ParaType String
-clauseAttrType = B.paraType `B.paraMin` 0 `B.paraOpt` ["--attr"]
-
-consLexmapTrees :: C.TTreePara -> B.Ab C.LexmapTrees
-consLexmapTrees para =
-    do case B.paraUnmatch para clauseAttrType of
-         Nothing -> Right ()
-         Just u  -> Msg.adlib $ "unknown attribute: " ++ show u
-       attr <- B.paraGetOpt [] para "--attr"
-       edit <- C.consAttrEd attr
-       let body = B.paraPos para
-       Right $ C.LexmapTrees body edit para
 
 coxBuildG :: (C.CContent c) => C.Global c -> B.TTreeToAb (C.Cox c)
 coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)
