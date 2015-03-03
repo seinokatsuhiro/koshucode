@@ -69,16 +69,12 @@ resIncludeBody res abcl =
 
       relmap :: Clab C.LexmapClause
       relmap C.ClauseHead { C.clauseSecNo = sec } _ (C.CRelmap n toks) =
-          case B.splitTokensBy (== "---") toks of
-            Left  _         -> ntrees2 sec n toks []
-            Right (r, _, e) -> ntrees2 sec n r e
-
-      ntrees2 :: C.SecNo -> String -> [B.Token] -> [B.Token] -> B.Ab C.LexmapClause
-      ntrees2 sec n toks1 toks2 =
-          do form    <- B.tokenTrees toks1
-             trees2  <- B.tokenTrees toks2
-             edit    <- C.consAttrEd trees2
-             Right ((sec, n), C.LexmapTrees form edit)
+          do trees <- B.tokenTrees toks
+             let para = B.para maybeDoubleHyphen trees
+                 body = B.paraPos para
+             attr <- B.paraGetOpt [] para "--attr"
+             edit <- C.consAttrEd attr
+             Right ((sec, n), C.LexmapTrees body edit para)
 
       slot :: Clab B.NamedTrees
       slot _ _ (C.CSlot n toks) = ntrees (n, toks)
@@ -90,6 +86,10 @@ resIncludeBody res abcl =
       inc :: Clab B.CodeName
       inc _ _ (C.CInclude toks) =
           C.tokenPara toks >>= paraToCodeName
+
+maybeDoubleHyphen :: B.TTreeTo (Maybe String)
+maybeDoubleHyphen (B.TextLeafRaw _ n@('-' : '-' : _))  = Just n
+maybeDoubleHyphen _                                    = Nothing
 
 coxBuildG :: (C.CContent c) => C.Global c -> B.TTreeToAb (C.Cox c)
 coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)

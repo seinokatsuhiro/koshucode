@@ -7,7 +7,8 @@ module Koshucode.Baala.Core.Lexmap.Construct
   ( -- * Constructor
     consLexmap,
     -- * Constructor types
-    ConsLexmap, FindDeriv, LexmapClause, LexmapTrees (..),
+    ConsLexmap, FindDeriv,
+    LexmapClause, LexmapTrees (..), ClausePara,
     -- * Types with section number
     SecNo, NName, NNamed,
     -- * Local types
@@ -53,9 +54,12 @@ type FindDeriv = SecNo -> C.RopName -> [LexmapClause]
 type LexmapClause = NNamed LexmapTrees
 
 data LexmapTrees = LexmapTrees
-    { relmapTrees   :: [B.TTree]
-    , relmapAttrEd  :: C.AttrEd
+    { lexmapTrees   :: [B.TTree]
+    , lexmapAttrEd  :: C.AttrEd
+    , lexmapPara    :: ClausePara
     } deriving (Show, Eq, Ord)
+
+type ClausePara = B.Para B.TTree
 
 
 -- ----------------------  Constructor
@@ -111,7 +115,7 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
                Right (lx, tab)
 
         table :: C.Lexmap -> LexmapClause -> B.Ab LexmapLinkTable
-        table lx ((sec', _), LexmapTrees { relmapTrees = form, relmapAttrEd = edit }) =
+        table lx ((sec', _), LexmapTrees { lexmapTrees = form, lexmapAttrEd = edit }) =
             Msg.abSlot [lx] $ do
               attr2       <- C.runAttrEd edit $ C.lexAttrTree lx
               form2       <- C.substSlot gslot attr2 form

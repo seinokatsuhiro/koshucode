@@ -11,7 +11,7 @@ module Koshucode.Baala.Core.Lexmap.Attr
     -- * Attribute sorter
     AttrPara, AttrSortPara,
     attrSort, attrBranch,
-    maybeHyname,
+    maybeSingleHyphen,
     -- $AttributeSorter
   ) where
 
@@ -77,15 +77,15 @@ attrSort def = attrBranch B.>=> attrSortPos def
 
 attrBranch :: AttrSortPara
 attrBranch trees =
-    do let p   = B.para maybeHyname trees
+    do let p   = B.para maybeSingleHyphen trees
            p2  = B.paraNameAdd "@trunk" (B.paraPos p) p
            dup = B.paraMultipleNames p2
        B.when (B.notNull dup) $ Msg.dupAttr dup
        Right $ B.paraNameMapKeys C.AttrNormal p2
 
-maybeHyname :: B.TTreeTo (Maybe String)
-maybeHyname (B.TextLeafRaw _ n@('-' : _))  = Just n
-maybeHyname _                              = Nothing
+maybeSingleHyphen :: B.TTreeTo (Maybe String)
+maybeSingleHyphen (B.TextLeafRaw _ n@('-' : _))  = Just n
+maybeSingleHyphen _                              = Nothing
 
 attrSortPos :: RopAttr -> B.AbMap AttrPara
 attrSortPos (RopAttr sorter classify _ pos named) p =

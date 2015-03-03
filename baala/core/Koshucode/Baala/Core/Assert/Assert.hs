@@ -49,7 +49,7 @@ type TokenPara = B.Para B.TTree
 tokenPara :: [B.Token] -> B.Ab TokenPara
 tokenPara toks =
     do trees <- B.tokenTrees toks
-       Right $ B.para C.maybeHyname trees
+       Right $ B.para C.maybeSingleHyphen trees
 
 
 -- ----------------------  Short assertion

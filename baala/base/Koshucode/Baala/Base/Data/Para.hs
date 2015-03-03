@@ -23,7 +23,7 @@ module Koshucode.Baala.Base.Data.Para
     paraSelect, paraMatch, paraUnmatch,
 
     -- * Getting parameter elements
-    paraGet, paraGetList, paraGetSwitch,
+    paraGet, paraGetOpt, paraGetList, paraGetSwitch,
     paraGetPos, paraGetFst, paraGetSnd, paraGetTrd,
     paraGetRest, paraGetRRest,
   ) where
@@ -206,6 +206,12 @@ paraGet p n =
       Just [vs]  -> Right vs
       Just _     -> Msg.adlib "multiple-occurence parameter"
       Nothing    -> Msg.adlib "no named parameter"
+
+paraGetOpt :: (Ord n) => [a] -> ParaBody n a -> n -> B.Ab [a]
+paraGetOpt opt p n =
+    case paraGet p n of
+      Right a  -> Right a
+      Left  _  -> Right opt
 
 paraGetList :: (Ord n) => ParaBody n a -> n -> B.Ab [[a]]
 paraGetList p n =
