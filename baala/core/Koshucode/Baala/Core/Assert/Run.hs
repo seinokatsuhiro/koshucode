@@ -10,6 +10,7 @@ module Koshucode.Baala.Core.Assert.Run
 
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Core.Content         as C
+import qualified Koshucode.Baala.Core.Lexmap          as C
 import qualified Koshucode.Baala.Core.Relkit          as C
 import qualified Koshucode.Baala.Core.Relmap          as C
 import qualified Koshucode.Baala.Core.Assert.Assert   as C
@@ -73,7 +74,7 @@ optionType = B.paraType `B.paraOpt`
              ]
 
 optionProcess :: (Ord c, B.Write c, C.CRel c)
-    => [B.ShortDef] -> (Bool -> B.JudgeOf c) -> B.JudgePat -> C.TokenPara
+    => [B.ShortDef] -> (Bool -> B.JudgeOf c) -> B.JudgePat -> C.TTreePara
     -> B.Rel c -> B.Ab [B.OutputChunk c]
 optionProcess sh judgeOf pat opt r1 =
     do case B.paraUnmatch opt optionType of
@@ -85,7 +86,7 @@ optionProcess sh judgeOf pat opt r1 =
        comment <- optionComment sh pat opt r2
        Right [ B.OutputJudge judges, B.OutputComment comment ]
 
-optionRelmap :: (Ord c, C.CRel c) => C.TokenPara -> B.AbMap (B.Rel c)
+optionRelmap :: (Ord c, C.CRel c) => C.TTreePara -> B.AbMap (B.Rel c)
 optionRelmap opt r1 =
     Right r1 >>= call optionFore  "-fore"
              >>= call optionOrder "-order"
@@ -94,7 +95,7 @@ optionRelmap opt r1 =
                              Left _     -> Right r2
 
 optionComment :: (B.Write c, C.CRel c) =>
-    [B.ShortDef] -> B.JudgePat -> C.TokenPara -> B.Rel c -> B.Ab [String]
+    [B.ShortDef] -> B.JudgePat -> C.TTreePara -> B.Rel c -> B.Ab [String]
 optionComment sh p opt r =
     do optTable <- B.paraGetSwitch opt "-table"
        case optTable of

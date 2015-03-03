@@ -62,34 +62,37 @@ resIncludeBody res abcl =
 
       assert :: Clab (C.ShortAssert' h c)
       assert C.ClauseHead { C.clauseSecNo = sec, C.clauseShort = sh } src (C.CAssert typ pat opt toks) =
-          do optPara    <- C.tokenPara opt
+          do optPara    <- C.ttreePara1 opt
              rmapTrees  <- B.tokenTrees toks
              Right $ B.Short (B.codePtList $ head src) sh
                        $ C.Assert sec typ pat optPara src rmapTrees Nothing []
 
       relmap :: Clab C.LexmapClause
       relmap C.ClauseHead { C.clauseSecNo = sec } _ (C.CRelmap n toks) =
-          do trees <- B.tokenTrees toks
-             let para = B.para maybeDoubleHyphen trees
-                 body = B.paraPos para
-             attr <- B.paraGetOpt [] para "--attr"
-             edit <- C.consAttrEd attr
-             Right ((sec, n), C.LexmapTrees body edit para)
+          do lt <- consLexmapTrees =<< C.ttreePara2 toks
+             Right ((sec, n), lt)
 
       slot :: Clab B.NamedTrees
-      slot _ _ (C.CSlot n toks) = ntrees (n, toks)
-
-      ntrees :: (String, [B.Token]) -> B.Ab (String, [B.TTree])
-      ntrees (n, toks) = do trees <- B.tokenTrees toks
-                            Right (n, trees)
+      slot _ _ (C.CSlot n toks) =
+          do trees <- B.tokenTrees toks
+             Right (n, trees)
 
       inc :: Clab B.CodeName
       inc _ _ (C.CInclude toks) =
-          C.tokenPara toks >>= paraToCodeName
+          paraToCodeName =<< C.ttreePara1 toks
 
-maybeDoubleHyphen :: B.TTreeTo (Maybe String)
-maybeDoubleHyphen (B.TextLeafRaw _ n@('-' : '-' : _))  = Just n
-maybeDoubleHyphen _                                    = Nothing
+clauseAttrType :: B.ParaType String
+clauseAttrType = B.paraType `B.paraMin` 0 `B.paraOpt` ["--attr"]
+
+consLexmapTrees :: C.TTreePara -> B.Ab C.LexmapTrees
+consLexmapTrees para =
+    do case B.paraUnmatch para clauseAttrType of
+         Nothing -> Right ()
+         Just u  -> Msg.adlib $ "unknown attribute: " ++ show u
+       attr <- B.paraGetOpt [] para "--attr"
+       edit <- C.consAttrEd attr
+       let body = B.paraPos para
+       Right $ C.LexmapTrees body edit para
 
 coxBuildG :: (C.CContent c) => C.Global c -> B.TTreeToAb (C.Cox c)
 coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)
@@ -97,7 +100,7 @@ coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)
 calcContG :: (C.CContent c) => C.Global c -> C.CalcContent c
 calcContG = C.calcContent . C.globalCopset
 
-paraToCodeName :: C.TokenPara -> B.Ab B.CodeName
+paraToCodeName :: C.TTreePara -> B.Ab B.CodeName
 paraToCodeName = B.paraSelect unmatch ps where
     ps = [ (just1, B.paraType `B.paraJust` 1)
          , (stdin, B.paraType `B.paraReq` ["-stdin"]) ]

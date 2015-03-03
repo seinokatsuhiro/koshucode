@@ -8,9 +8,14 @@ module Koshucode.Baala.Core.Lexmap.Construct
     consLexmap,
     -- * Constructor types
     ConsLexmap, FindDeriv,
-    LexmapClause, LexmapTrees (..), ClausePara,
+    LexmapClause, LexmapTrees (..),
+
+    -- * Parameter of token trees
+    TTreePara, ttreePara1, ttreePara2,
+
     -- * Types with section number
     SecNo, NName, NNamed,
+
     -- * Local types
     FindSorter, ConsLexmapBody, LexmapLinkTable,
   ) where
@@ -56,10 +61,25 @@ type LexmapClause = NNamed LexmapTrees
 data LexmapTrees = LexmapTrees
     { lexmapTrees   :: [B.TTree]
     , lexmapAttrEd  :: C.AttrEd
-    , lexmapPara    :: ClausePara
+    , lexmapPara    :: TTreePara
     } deriving (Show, Eq, Ord)
 
-type ClausePara = B.Para B.TTree
+type TTreePara = B.Para B.TTree
+
+ttreePara1 :: [B.Token] -> B.Ab TTreePara
+ttreePara1 = ttreeParaBy C.maybeSingleHyphen
+
+ttreePara2 :: [B.Token] -> B.Ab TTreePara
+ttreePara2 = ttreeParaBy maybeDoubleHyphen
+
+ttreeParaBy :: B.TTreeTo (Maybe String) -> [B.Token] -> B.Ab TTreePara
+ttreeParaBy f toks =
+    do trees <- B.tokenTrees toks
+       Right $ B.para f trees
+
+maybeDoubleHyphen :: B.TTreeTo (Maybe String)
+maybeDoubleHyphen (B.TextLeafRaw _ n@('-' : '-' : _))  = Just n
+maybeDoubleHyphen _                                    = Nothing
 
 
 -- ----------------------  Constructor

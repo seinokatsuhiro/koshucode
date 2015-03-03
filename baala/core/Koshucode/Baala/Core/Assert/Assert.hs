@@ -6,8 +6,6 @@
 module Koshucode.Baala.Core.Assert.Assert
   ( -- * Data type
     Assert' (..),
-    TokenPara,
-    tokenPara,
   
     -- * Short assertion
     ShortAssert', ShortAsserts',
@@ -29,7 +27,7 @@ data Assert' h c = Assert
     { assSection   :: C.SecNo                -- ^ Section number
     , assType      :: C.AssertType           -- ^ Logical quality
     , assPattern   :: B.JudgePat             -- ^ Pattern of judgement
-    , assOption    :: TokenPara              -- ^ Assert option
+    , assOption    :: C.TTreePara            -- ^ Assert option
     , assToken     :: [B.Token]              -- ^ Source token list
     , assTree      :: [B.TTree]              -- ^ Token relmap
     , assRelmap    :: Maybe (C.Relmap' h c)  -- ^ Relmap
@@ -43,13 +41,6 @@ instance B.Write (Assert' h c) where
     write sh (Assert _ q pat _ toks _ _ _) =
         let qs = B.writeH sh [C.assertSymbol q, pat]
         in B.docHang qs 2 (B.writeH sh toks)
-
-type TokenPara = B.Para B.TTree
-
-tokenPara :: [B.Token] -> B.Ab TokenPara
-tokenPara toks =
-    do trees <- B.tokenTrees toks
-       Right $ B.para C.maybeSingleHyphen trees
 
 
 -- ----------------------  Short assertion
