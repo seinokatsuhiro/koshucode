@@ -5,13 +5,13 @@ about /package 'base
 |-- DIR  /code 14   /comment 4    /dir "base/Koshucode/Baala"
 |-- DIR  /code 165  /comment 82   /dir "base/Koshucode/Baala/Base"
 |-- DIR  /code 98   /comment 56   /dir "base/Koshucode/Baala/Base/Abort"
-|-- DIR  /code 1347  /comment 779  /dir "base/Koshucode/Baala/Base/Data"
+|-- DIR  /code 1352  /comment 780  /dir "base/Koshucode/Baala/Base/Data"
 |-- DIR  /code 512  /comment 474  /dir "base/Koshucode/Baala/Base/Prelude"
 |-- DIR  /code 272  /comment 190  /dir "base/Koshucode/Baala/Base/Syntax"
 |-- DIR  /code 518  /comment 290  /dir "base/Koshucode/Baala/Base/Text"
 |-- DIR  /code 722  /comment 518  /dir "base/Koshucode/Baala/Base/Token"
 
-|-- DIR-TOTAL  /code 3648  /comment 2393
+|-- DIR-TOTAL  /code 3653  /comment 2394
 
 |-- FILE  /code 14   /comment 4    /file "Base.hs"        /dir "base/Koshucode/Baala"
 |-- FILE  /code 8    /comment 6    /file "Abort.hs"       /dir "base/Koshucode/Baala/Base"
@@ -27,7 +27,7 @@ about /package 'base
 |-- FILE  /code 112  /comment 64   /file "Judge.hs"       /dir "base/Koshucode/Baala/Base/Data"
 |-- FILE  /code 30   /comment 14   /file "Mono.hs"        /dir "base/Koshucode/Baala/Base/Data"
 |-- FILE  /code 117  /comment 45   /file "Output.hs"      /dir "base/Koshucode/Baala/Base/Data"
-|-- FILE  /code 182  /comment 71   /file "Para.hs"        /dir "base/Koshucode/Baala/Base/Data"
+|-- FILE  /code 187  /comment 72   /file "Para.hs"        /dir "base/Koshucode/Baala/Base/Data"
 |-- FILE  /code 45   /comment 58   /file "Rel.hs"         /dir "base/Koshucode/Baala/Base/Data"
 |-- FILE  /code 179  /comment 107  /file "Time.hs"        /dir "base/Koshucode/Baala/Base/Data"
 |-- FILE  /code 135  /comment 91   /file "Type.hs"        /dir "base/Koshucode/Baala/Base/Data"
@@ -62,4 +62,4 @@ about /package 'base
 |-- FILE  /code 232  /comment 189  /file "TokenLine.hs"   /dir "base/Koshucode/Baala/Base/Token"
 |-- FILE  /code 112  /comment 99   /file "TokenTree.hs"   /dir "base/Koshucode/Baala/Base/Token"
 
-|-- FILE-TOTAL  /code 3648  /comment 2393
+|-- FILE-TOTAL  /code 3653  /comment 2394

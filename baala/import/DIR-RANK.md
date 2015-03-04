@@ -446,7 +446,7 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    182 judges
+**    189 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Assert"        /import "Koshucode.Baala.Base"
@@ -467,6 +467,7 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Core.Content"
+|-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Core.Lexmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Core.Relkit"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Core.Relmap"
 |-- IMPORT  /module "Koshucode.Baala.Core.Assert.Run"           /import "Koshucode.Baala.Core.Assert.Assert"
@@ -523,21 +524,22 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Attr"          /import "Koshucode.Baala.Core.Lexmap.AttrPos"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Attr"          /import "Koshucode.Baala.Core.Message"
 
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Attrmap"       /import "Data.Generics"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Attrmap"       /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Attrmap"       /import "Koshucode.Baala.Core.Lexmap.AttrPos"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Attrmap"       /import "Koshucode.Baala.Core.Lexmap.Slot"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Attrmap"       /import "Koshucode.Baala.Core.Message"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.AttrEd"        /import "Data.Generics"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.AttrEd"        /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.AttrEd"        /import "Koshucode.Baala.Core.Lexmap.AttrPos"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.AttrEd"        /import "Koshucode.Baala.Core.Lexmap.Slot"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.AttrEd"        /import "Koshucode.Baala.Core.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.AttrPos"       /import "Data.Generics"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.AttrPos"       /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.AttrPos"       /import "Koshucode.Baala.Core.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Base"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Lexmap.Attrmap"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Lexmap.AttrEd"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Lexmap.Attr"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Lexmap.AttrPos"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Lexmap.Lexmap"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Lexmap.LexmapTrees"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Lexmap.Slot"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Construct"     /import "Koshucode.Baala.Core.Message"
 
@@ -546,15 +548,21 @@ Command `./dir-rank.k ../base/IMPORT.k` produces:
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Lexmap"        /import "Koshucode.Baala.Core.Lexmap.AttrPos"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Lexmap"        /import "Koshucode.Baala.Core.Lexmap.Attr"
 
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.LexmapTrees"   /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.LexmapTrees"   /import "Koshucode.Baala.Core.Lexmap.AttrEd"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.LexmapTrees"   /import "Koshucode.Baala.Core.Lexmap.Attr"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.LexmapTrees"   /import "Koshucode.Baala.Core.Message"
+
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Slot"          /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Slot"          /import "Koshucode.Baala.Core.Lexmap.AttrPos"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap.Slot"          /import "Koshucode.Baala.Core.Message"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.Attr"
-|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.Attrmap"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.AttrEd"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.AttrPos"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.Construct"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.Lexmap"
+|-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.LexmapTrees"
 |-- IMPORT  /module "Koshucode.Baala.Core.Lexmap"               /import "Koshucode.Baala.Core.Lexmap.Slot"
 
 |-- IMPORT  /module "Koshucode.Baala.Core.Message"              /import "Koshucode.Baala.Base"
@@ -684,88 +692,89 @@ Command `./dir-rank.k ../core/IMPORT.k` produces:
 
 |-- DIR-RANK  /dir-rank 0  /dir 'Koshucode.Baala.Base  /base-rank {| /rank : /base : /import-dir | 0 : 'Message : [ ] |}
 |-- DIR-RANK  /dir-rank 5  /dir 'Koshucode.Baala.Core.Content  /base-rank {| /rank : /base : /import-dir | 2 : 'Class : [ ] | 2 : 'Cox : [ ] | 2 : 'Tree : [ ] | 3 : 'Cop : [ ] | 3 : 'Literal : [ ] | 4 : 'Build : [ ] | 5 : 'Run : [ ] |}
-|-- DIR-RANK  /dir-rank 5  /dir 'Koshucode.Baala.Core.Lexmap  /base-rank {| /rank : /base : /import-dir | 2 : 'AttrPos : [ ] | 3 : 'Attr : [ ] | 3 : 'Slot : [ ] | 4 : 'Attrmap : [ ] | 4 : 'Lexmap : [ ] | 5 : 'Construct : [ ] |}
-|-- DIR-RANK  /dir-rank 9  /dir 'Koshucode.Baala.Core.Relkit  /base-rank {| /rank : /base : /import-dir | 7 : 'Relkit : [ 'Lexmap ] | 8 : 'Construct : [ ] | 9 : 'Run : [ 'Content ] |}
-|-- DIR-RANK  /dir-rank 13  /dir 'Koshucode.Baala.Core.Relmap  /base-rank {| /rank : /base : /import-dir | 11 : 'Relmap : [ 'Lexmap : 'Relkit ] | 12 : 'Rop : [ 'Lexmap ] | 12 : 'Specialize : [ 'Lexmap : 'Relkit ] | 13 : 'Construct : [ 'Lexmap : 'Relkit ] | 13 : 'Global : [ 'Content ] |}
+|-- DIR-RANK  /dir-rank 6  /dir 'Koshucode.Baala.Core.Lexmap  /base-rank {| /rank : /base : /import-dir | 2 : 'AttrPos : [ ] | 3 : 'Attr : [ ] | 3 : 'Slot : [ ] | 4 : 'AttrEd : [ ] | 4 : 'Lexmap : [ ] | 5 : 'LexmapTrees : [ ] | 6 : 'Construct : [ ] |}
+|-- DIR-RANK  /dir-rank 10  /dir 'Koshucode.Baala.Core.Relkit  /base-rank {| /rank : /base : /import-dir | 8 : 'Relkit : [ 'Lexmap ] | 9 : 'Construct : [ ] | 10 : 'Run : [ 'Content ] |}
+|-- DIR-RANK  /dir-rank 14  /dir 'Koshucode.Baala.Core.Relmap  /base-rank {| /rank : /base : /import-dir | 12 : 'Relmap : [ 'Lexmap : 'Relkit ] | 13 : 'Rop : [ 'Lexmap ] | 13 : 'Specialize : [ 'Lexmap : 'Relkit ] | 14 : 'Construct : [ 'Lexmap : 'Relkit ] | 14 : 'Global : [ 'Content ] |}
 
-|-- DIR-RANK  /dir-rank 16  /dir 'Koshucode.Baala.Core.Assert  /base-rank {| /rank : /base : /import-dir | 7 : 'RelTable : [ 'Content ] | 11 : 'Dataset : [ 'Content : 'Relkit ] | 15 : 'Assert : [ 'Content : 'Lexmap : 'Relmap ] | 16 : 'Run : [ 'Content : 'Relkit : 'Relmap ] |}
-|-- DIR-RANK  /dir-rank 20  /dir 'Koshucode.Baala.Core.Resource  /base-rank {| /rank : /base : /import-dir | 7 : 'Clause : [ 'Content : 'Lexmap ] | 18 : 'Resource : [ 'Assert : 'Lexmap : 'Relkit : 'Relmap ] | 19 : 'Include : [ 'Assert : 'Content : 'Lexmap : 'Relmap ] | 19 : 'Run : [ 'Assert : 'Content : 'Lexmap : 'Relmap ] | 20 : 'Quoter : [ 'Lexmap ] | 20 : 'Read : [ 'Content : 'Relmap ] |}
-|-- DIR-RANK  /dir-rank 21  /dir 'Koshucode.Baala.Core  /base-rank {| /rank : /base : /import-dir | 1 : 'Message : [ ] | 6 : 'Content : [ ] | 6 : 'Lexmap : [ ] | 10 : 'Relkit : [ ] | 14 : 'Relmap : [ ] | 17 : 'Assert : [ ] | 21 : 'Resource : [ ] |}
-|-- DIR-RANK  /dir-rank 22  /dir 'Koshucode.Baala  /base-rank {| /rank : /base : /import-dir | 0 : 'Base : [ ] | 22 : 'Core : [ 'Assert : 'Content : 'Lexmap : 'Relkit : 'Relmap : 'Resource ] |}
+|-- DIR-RANK  /dir-rank 17  /dir 'Koshucode.Baala.Core.Assert  /base-rank {| /rank : /base : /import-dir | 7 : 'RelTable : [ 'Content ] | 12 : 'Dataset : [ 'Content : 'Relkit ] | 16 : 'Assert : [ 'Content : 'Lexmap : 'Relmap ] | 17 : 'Run : [ 'Content : 'Lexmap : 'Relkit : 'Relmap ] |}
+|-- DIR-RANK  /dir-rank 21  /dir 'Koshucode.Baala.Core.Resource  /base-rank {| /rank : /base : /import-dir | 8 : 'Clause : [ 'Content : 'Lexmap ] | 19 : 'Resource : [ 'Assert : 'Lexmap : 'Relkit : 'Relmap ] | 20 : 'Include : [ 'Assert : 'Content : 'Lexmap : 'Relmap ] | 20 : 'Run : [ 'Assert : 'Content : 'Lexmap : 'Relmap ] | 21 : 'Quoter : [ 'Lexmap ] | 21 : 'Read : [ 'Content : 'Relmap ] |}
+|-- DIR-RANK  /dir-rank 22  /dir 'Koshucode.Baala.Core  /base-rank {| /rank : /base : /import-dir | 1 : 'Message : [ ] | 6 : 'Content : [ ] | 7 : 'Lexmap : [ ] | 11 : 'Relkit : [ ] | 15 : 'Relmap : [ ] | 18 : 'Assert : [ ] | 22 : 'Resource : [ ] |}
+|-- DIR-RANK  /dir-rank 23  /dir 'Koshucode.Baala  /base-rank {| /rank : /base : /import-dir | 0 : 'Base : [ ] | 23 : 'Core : [ 'Assert : 'Content : 'Lexmap : 'Relkit : 'Relmap : 'Resource ] |}
 
 *** 9 judges
 
 **  TABLE : DIR-RANK
 **
 **    /dir-rank /dir                             /base-rank
-**    --------- -------------------------------- --------------------------------------------------------------------------------------
-**    0         'Koshucode.Baala.Base            /rank /base         /import-dir
-**                                               ----- ------------- ------------------------------------------------------------------
-**                                               0     'Message      [ ]
+**    --------- -------------------------------- ---------------------------------------------------------------------------------------
+**    0         'Koshucode.Baala.Base            /rank /base          /import-dir
+**                                               ----- -------------- ------------------------------------------------------------------
+**                                               0     'Message       [ ]
 **                                               
-**    5         'Koshucode.Baala.Core.Content    /rank /base         /import-dir
-**                                               ----- ------------- ------------------------------------------------------------------
-**                                               2     'Class        [ ]
-**                                               2     'Cox          [ ]
-**                                               2     'Tree         [ ]
-**                                               3     'Cop          [ ]
-**                                               3     'Literal      [ ]
-**                                               4     'Build        [ ]
-**                                               5     'Run          [ ]
+**    5         'Koshucode.Baala.Core.Content    /rank /base          /import-dir
+**                                               ----- -------------- ------------------------------------------------------------------
+**                                               2     'Class         [ ]
+**                                               2     'Cox           [ ]
+**                                               2     'Tree          [ ]
+**                                               3     'Cop           [ ]
+**                                               3     'Literal       [ ]
+**                                               4     'Build         [ ]
+**                                               5     'Run           [ ]
 **                                               
-**    5         'Koshucode.Baala.Core.Lexmap     /rank /base         /import-dir
-**                                               ----- ------------- ------------------------------------------------------------------
-**                                               2     'AttrPos      [ ]
-**                                               3     'Attr         [ ]
-**                                               3     'Slot         [ ]
-**                                               4     'Attrmap      [ ]
-**                                               4     'Lexmap       [ ]
-**                                               5     'Construct    [ ]
+**    6         'Koshucode.Baala.Core.Lexmap     /rank /base          /import-dir
+**                                               ----- -------------- ------------------------------------------------------------------
+**                                               2     'AttrPos       [ ]
+**                                               3     'Attr          [ ]
+**                                               3     'Slot          [ ]
+**                                               4     'AttrEd        [ ]
+**                                               4     'Lexmap        [ ]
+**                                               5     'LexmapTrees   [ ]
+**                                               6     'Construct     [ ]
 **                                               
-**    9         'Koshucode.Baala.Core.Relkit     /rank /base         /import-dir
-**                                               ----- ------------- ------------------------------------------------------------------
-**                                               7     'Relkit       [ 'Lexmap ]
-**                                               8     'Construct    [ ]
-**                                               9     'Run          [ 'Content ]
+**    10        'Koshucode.Baala.Core.Relkit     /rank /base          /import-dir
+**                                               ----- -------------- ------------------------------------------------------------------
+**                                               8     'Relkit        [ 'Lexmap ]
+**                                               9     'Construct     [ ]
+**                                               10    'Run           [ 'Content ]
 **                                               
-**    13        'Koshucode.Baala.Core.Relmap     /rank /base         /import-dir
-**                                               ----- ------------- ------------------------------------------------------------------
-**                                               11    'Relmap       [ 'Lexmap : 'Relkit ]
-**                                               12    'Rop          [ 'Lexmap ]
-**                                               12    'Specialize   [ 'Lexmap : 'Relkit ]
-**                                               13    'Construct    [ 'Lexmap : 'Relkit ]
-**                                               13    'Global       [ 'Content ]
+**    14        'Koshucode.Baala.Core.Relmap     /rank /base          /import-dir
+**                                               ----- -------------- ------------------------------------------------------------------
+**                                               12    'Relmap        [ 'Lexmap : 'Relkit ]
+**                                               13    'Rop           [ 'Lexmap ]
+**                                               13    'Specialize    [ 'Lexmap : 'Relkit ]
+**                                               14    'Construct     [ 'Lexmap : 'Relkit ]
+**                                               14    'Global        [ 'Content ]
 **                                               
-**    16        'Koshucode.Baala.Core.Assert     /rank /base         /import-dir
-**                                               ----- ------------- ------------------------------------------------------------------
-**                                               7     'RelTable     [ 'Content ]
-**                                               11    'Dataset      [ 'Content : 'Relkit ]
-**                                               15    'Assert       [ 'Content : 'Lexmap : 'Relmap ]
-**                                               16    'Run          [ 'Content : 'Relkit : 'Relmap ]
+**    17        'Koshucode.Baala.Core.Assert     /rank /base          /import-dir
+**                                               ----- -------------- ------------------------------------------------------------------
+**                                               7     'RelTable      [ 'Content ]
+**                                               12    'Dataset       [ 'Content : 'Relkit ]
+**                                               16    'Assert        [ 'Content : 'Lexmap : 'Relmap ]
+**                                               17    'Run           [ 'Content : 'Lexmap : 'Relkit : 'Relmap ]
 **                                               
-**    20        'Koshucode.Baala.Core.Resource   /rank /base         /import-dir
-**                                               ----- ------------- ------------------------------------------------------------------
-**                                               7     'Clause       [ 'Content : 'Lexmap ]
-**                                               18    'Resource     [ 'Assert : 'Lexmap : 'Relkit : 'Relmap ]
-**                                               19    'Include      [ 'Assert : 'Content : 'Lexmap : 'Relmap ]
-**                                               19    'Run          [ 'Assert : 'Content : 'Lexmap : 'Relmap ]
-**                                               20    'Quoter       [ 'Lexmap ]
-**                                               20    'Read         [ 'Content : 'Relmap ]
+**    21        'Koshucode.Baala.Core.Resource   /rank /base          /import-dir
+**                                               ----- -------------- ------------------------------------------------------------------
+**                                               8     'Clause        [ 'Content : 'Lexmap ]
+**                                               19    'Resource      [ 'Assert : 'Lexmap : 'Relkit : 'Relmap ]
+**                                               20    'Include       [ 'Assert : 'Content : 'Lexmap : 'Relmap ]
+**                                               20    'Run           [ 'Assert : 'Content : 'Lexmap : 'Relmap ]
+**                                               21    'Quoter        [ 'Lexmap ]
+**                                               21    'Read          [ 'Content : 'Relmap ]
 **                                               
-**    21        'Koshucode.Baala.Core            /rank /base         /import-dir
-**                                               ----- ------------- ------------------------------------------------------------------
-**                                               1     'Message      [ ]
-**                                               6     'Content      [ ]
-**                                               6     'Lexmap       [ ]
-**                                               10    'Relkit       [ ]
-**                                               14    'Relmap       [ ]
-**                                               17    'Assert       [ ]
-**                                               21    'Resource     [ ]
+**    22        'Koshucode.Baala.Core            /rank /base          /import-dir
+**                                               ----- -------------- ------------------------------------------------------------------
+**                                               1     'Message       [ ]
+**                                               6     'Content       [ ]
+**                                               7     'Lexmap        [ ]
+**                                               11    'Relkit        [ ]
+**                                               15    'Relmap        [ ]
+**                                               18    'Assert        [ ]
+**                                               22    'Resource      [ ]
 **                                               
-**    22        'Koshucode.Baala                 /rank /base         /import-dir
-**                                               ----- ------------- ------------------------------------------------------------------
-**                                               0     'Base         [ ]
-**                                               22    'Core         [ 'Assert : 'Content : 'Lexmap : 'Relkit : 'Relmap : 'Resource ]
+**    23        'Koshucode.Baala                 /rank /base          /import-dir
+**                                               ----- -------------- ------------------------------------------------------------------
+**                                               0     'Base          [ ]
+**                                               23    'Core          [ 'Assert : 'Content : 'Lexmap : 'Relkit : 'Relmap : 'Resource ]
 **                                               
 
 **
