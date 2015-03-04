@@ -28,6 +28,7 @@ data AttrEdBody
     | AttrEdRename  (String, String)       -- ^ Rename attribute keyword
     | AttrEdFill    [Maybe B.TTree]        -- ^ Fill positional attributes
     | AttrEdTerm    String [B.TTree]       -- ^ Make term name
+    | AttrEdNest    String [B.TTree]       -- ^ Nested relation reference
     | AttrEdAppend  [AttrEd]               -- ^ Append editors
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
@@ -58,6 +59,7 @@ consAttrEd = loop where
             | op == "add"       -> right trees $ AttrEdAdd False k xs
             | op == "opt"       -> right trees $ AttrEdAdd True  k xs
             | op == "term"      -> right trees $ AttrEdTerm k xs
+            | op == "nest"      -> right trees $ AttrEdNest k xs
 
           [ B.TextLeafRaw _ op : B.TextLeafRaw _ k'
                 : B.TextLeafRaw _ k : _ ]
@@ -81,7 +83,8 @@ runAttrEd (B.Sourced toks edit) attr = run where
             AttrEdRename (k', k)    -> rename (C.AttrNormal k') (C.AttrNormal k)
             AttrEdFill xs           -> do xs2 <- fill pos xs
                                           Right $ (C.attrNameTrunk, xs2) : attr
-            AttrEdTerm k xs         -> term (C.AttrNormal k) xs
+            AttrEdTerm  k xs        -> term (C.AttrNormal k) xs
+            AttrEdNest  k xs        -> nest (C.AttrNormal k) xs
             AttrEdAppend rs         -> B.foldM (flip runAttrEd) attr rs
 
     Just pos = lookup C.attrNameTrunk attr
@@ -94,6 +97,10 @@ runAttrEd (B.Sourced toks edit) attr = run where
 
     term k xs = do xs' <- C.substSlot [] attr xs
                    n   <- termPath xs'
+                   Right $ (k, n) : attr
+
+    nest k xs = do xs' <- C.substSlot [] attr xs
+                   n   <- nestName xs'
                    Right $ (k, n) : attr
 
     rename :: C.AttrName -> C.AttrName -> B.Ab [C.AttrTree]
@@ -113,4 +120,8 @@ termPath = loop [] where
     loop path [] = Right [B.TreeL $ B.TTerm B.codePtZero B.TermTypePath $ reverse path]
     loop path (B.TermLeafPath _ ps : xs)  = loop (reverse ps ++ path) xs
     loop _ _                              = Msg.adlib "require term name"
+
+nestName :: B.AbMap [B.TTree]
+nestName [B.TermLeafPath _ [p]] = Right [B.TreeL $ B.TLocal B.codePtZero (B.LocalNest p) (-1) []]
+nestName _ = Msg.adlib "require term name"
 
