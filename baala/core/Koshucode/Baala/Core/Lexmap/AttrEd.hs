@@ -27,6 +27,7 @@ data AttrEdBody
     | AttrEdAdd     Bool String [B.TTree]  -- ^ Add attribute
     | AttrEdRename  (String, String)       -- ^ Rename attribute keyword
     | AttrEdFill    [Maybe B.TTree]        -- ^ Fill positional attributes
+    | AttrEdTerm    String [B.TTree]       -- ^ Make term name
     | AttrEdAppend  [AttrEd]               -- ^ Append editors
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
@@ -56,6 +57,7 @@ consAttrEd = loop where
             | notKeyword k      -> Msg.reqAttrName k
             | op == "add"       -> right trees $ AttrEdAdd False k xs
             | op == "opt"       -> right trees $ AttrEdAdd True  k xs
+            | op == "term"      -> right trees $ AttrEdTerm k xs
 
           [ B.TextLeafRaw _ op : B.TextLeafRaw _ k'
                 : B.TextLeafRaw _ k : _ ]
@@ -72,29 +74,32 @@ consAttrEd = loop where
 
 -- | Edit relmap attributes.
 runAttrEd :: AttrEd -> B.AbMap [C.AttrTree]
-runAttrEd = loop where
-    loop (B.Sourced toks edit) attr =
-        let Just pos = lookup C.attrNameTrunk attr
-        in Msg.abAttr toks $ case edit of
-          AttrEdId                -> Right  attr
-          AttrEdAdd opt k xs      -> add    attr opt (C.AttrNormal k) xs
-          AttrEdRename (k', k)    -> rename attr (C.AttrNormal k') (C.AttrNormal k)
-          AttrEdFill xs           -> do xs2 <- fill pos xs
-                                        Right $ (C.attrNameTrunk, xs2) : attr
-          AttrEdAppend rs         -> B.foldM (flip loop) attr rs
+runAttrEd (B.Sourced toks edit) attr = run where
+    run = Msg.abAttr toks $ case edit of
+            AttrEdId                -> Right attr
+            AttrEdAdd opt k xs      -> add opt (C.AttrNormal k) xs
+            AttrEdRename (k', k)    -> rename (C.AttrNormal k') (C.AttrNormal k)
+            AttrEdFill xs           -> do xs2 <- fill pos xs
+                                          Right $ (C.attrNameTrunk, xs2) : attr
+            AttrEdTerm k xs         -> term (C.AttrNormal k) xs
+            AttrEdAppend rs         -> B.foldM (flip runAttrEd) attr rs
 
-    add attr opt k xs =
-        case lookup k attr of
-          Just _ | opt           -> Right attr
-                 | otherwise     -> Msg.extraAttr
-          Nothing                -> do xs' <- C.substSlot [] attr xs
-                                       Right $ (k, xs') : attr
+    Just pos = lookup C.attrNameTrunk attr
 
-    rename :: [C.AttrTree] -> C.AttrName -> C.AttrName -> B.Ab [C.AttrTree]
-    rename attr k' k =
-        case lookup k attr of
-          Just _                 -> Right $ B.assocRename1 k' k attr
-          Nothing                -> Msg.reqAttr $ C.attrNameText k
+    add opt k xs = case lookup k attr of
+                     Just _ | opt           -> Right attr
+                            | otherwise     -> Msg.extraAttr
+                     Nothing                -> do xs' <- C.substSlot [] attr xs
+                                                  Right $ (k, xs') : attr
+
+    term k xs = do xs' <- C.substSlot [] attr xs
+                   n   <- termPath xs'
+                   Right $ (k, n) : attr
+
+    rename :: C.AttrName -> C.AttrName -> B.Ab [C.AttrTree]
+    rename k' k = case lookup k attr of
+          Just _   -> Right $ B.assocRename1 k' k attr
+          Nothing  -> Msg.reqAttr $ C.attrNameText k
 
     fill :: [B.TTree] -> [Maybe B.TTree] -> B.Ab [B.TTree]
     fill (p : ps) (Nothing : xs)   = Right . (p:) =<< fill ps xs
@@ -102,4 +107,10 @@ runAttrEd = loop where
     fill []       (Just x  : xs)   = Right . (x:) =<< fill [] xs
     fill []       (Nothing : _ )   = Msg.reqAttr "*"
     fill ps       []               = Right $ ps
+
+termPath :: B.AbMap [B.TTree]
+termPath = loop [] where
+    loop path [] = Right [B.TreeL $ B.TTerm B.codePtZero B.TermTypePath $ reverse path]
+    loop path (B.TermLeafPath _ ps : xs)  = loop (reverse ps ++ path) xs
+    loop _ _                              = Msg.adlib "require term name"
 
