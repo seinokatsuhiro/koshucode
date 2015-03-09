@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.85.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.102.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -57,19 +57,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Association list</a
+	    >Association list</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Tuple-like operator</a
+	    >Tuple-like operator</a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >Once/more list</a
+	    >Once/more list</a
 	    ></li
 	  ><li
 	  ><a href="#g:4"
-	    >Gather</a
+	    >Gather</a
 	    ></li
 	  ></ul
 	></div
@@ -78,7 +78,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	>Description</p
 	><div class="doc"
 	><p
-	  >Utilities for association lists.</p
+	  >Utilities for association lists.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -253,7 +253,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Association list</h1
+	>Association list</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -279,7 +279,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Construct assoc list by splitting base list.</p
+	    >Construct assoc list by splitting base list.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -295,7 +295,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Check which given key is there in assoc list.</p
+	    >Check which given key is there in assoc list.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -333,7 +333,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Lookup assoc list that keys are truth-valued functions.</p
+	    >Lookup assoc list that keys are truth-valued functions.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -352,11 +352,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	><p
 	  ><em
 	    >Examples</em
-	    ></p
+	    ></p
 	  ><p
 	  >Construct assoc list by splitting at char <code
 	    >'a'</code
-	    >.</p
+	    >.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -376,7 +376,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >[(&quot;-&quot;,&quot;&quot;)]
 </pre
 	  ><p
-	  >Check key exists.</p
+	  >Check key exists.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -398,7 +398,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ><p
 	  >Lookup entry that satisfies <code
 	    >'n' `elem` &quot;banana&quot;</code
-	    >.</p
+	    >.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -414,7 +414,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
 	      >Maybe</a
 	      ></code
-	    >.</p
+	    >.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -435,7 +435,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 </pre
 	  ></div
 	><h1 id="g:2"
-	>Tuple-like operator</h1
+	>Tuple-like operator</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:assocPick" class="def"
@@ -449,7 +449,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Pick up associations that have given keys.</p
+	    >Pick up associations that have given keys.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -465,7 +465,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Cut off associations that have given keys.</p
+	    >Cut off associations that have given keys.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -506,9 +506,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	><p
 	  ><em
 	    >Examples</em
-	    ></p
+	    ></p
 	  ><p
-	  >Pick up entries from assoc list.</p
+	  >Pick up entries from assoc list.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -520,7 +520,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >[(&quot;a&quot;,1), (&quot;c&quot;,3)]
 </pre
 	  ><p
-	  >Cut off entries from assoc list.</p
+	  >Cut off entries from assoc list.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -540,7 +540,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >[(&quot;a&quot;,1), (&quot;c&quot;,3)]
 </pre
 	  ><p
-	  >Change key of assoc list.</p
+	  >Change key of assoc list.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -553,7 +553,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 </pre
 	  ></div
 	><h1 id="g:3"
-	>Once/more list</h1
+	>Once/more list</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -643,7 +643,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Convert general assoc list into once/more assoc list.</p
+	    >Convert general assoc list into once/more assoc list.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -661,7 +661,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Push  key and value into once/more assoc list.</p
+	    >Push  key and value into once/more assoc list.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -675,7 +675,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Extract once part from once/more assoc list.</p
+	    >Extract once part from once/more assoc list.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -689,16 +689,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Extract more part from once/more assoc list.</p
+	    >Extract more part from once/more assoc list.</p
 	    ></div
 	  ></div
 	><div class="doc"
 	><p
 	  ><em
 	    >Examples</em
-	    ></p
+	    ></p
 	  ><p
-	  >Convert into once/more list.</p
+	  >Convert into once/more list.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -710,7 +710,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >[(1, More [&quot;1&quot;, &quot;01&quot;]), (2, Once &quot;2&quot;)]
 </pre
 	  ><p
-	  >Push key and value into once/more list</p
+	  >Push key and value into once/more list</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -722,7 +722,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >[(1, Once &quot;1&quot;), (2, More [&quot;02&quot;, &quot;2&quot;])]
 </pre
 	  ><p
-	  >Extract once part.</p
+	  >Extract once part.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -734,7 +734,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >[(1, &quot;1&quot;)]
 </pre
 	  ><p
-	  >Extract more part.</p
+	  >Extract more part.</p
 	  ><pre class="screen"
 	  ><code class="prompt"
 	    >&gt;&gt;&gt; </code
@@ -747,7 +747,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 </pre
 	  ></div
 	><h1 id="g:4"
-	>Gather</h1
+	>Gather</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -769,7 +769,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Gather what is gotten by splitter.</p
+	    >Gather what is gotten by splitter.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -805,7 +805,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	      >key</em
 	      > [<em
 	      >value</em
-	      >].</p
+	      >].</p
 	    ></div
 	  ></div
 	></div

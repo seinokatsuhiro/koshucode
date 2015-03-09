@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.85.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.102.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -57,31 +57,31 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Control.Monad</a
+	    >Control.Monad</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Data.List</a
+	    >Data.List</a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >Data.Map</a
+	    >Data.Map</a
 	    ></li
 	  ><li
 	  ><a href="#g:4"
-	    >Data.Maybe</a
+	    >Data.Maybe</a
 	    ></li
 	  ><li
 	  ><a href="#g:5"
-	    >Data.Monoid</a
+	    >Data.Monoid</a
 	    ></li
 	  ><li
 	  ><a href="#g:6"
-	    >Data.Tuple</a
+	    >Data.Tuple</a
 	    ></li
 	  ><li
 	  ><a href="#g:7"
-	    >Text.PrettyPrint</a
+	    >Text.PrettyPrint</a
 	    ></li
 	  ></ul
 	></div
@@ -152,6 +152,24 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >Monad</a
 	    > m =&gt; (a -&gt; m [b]) -&gt; [a] -&gt; m [b]</li
 	  ><li class="src short"
+	  ><a href="#v:intercalate"
+	    >intercalate</a
+	    > ::  [a] -&gt; [[a]] -&gt; [a]</li
+	  ><li class="src short"
+	  ><a href="#v:intersect"
+	    >intersect</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; [a]</li
+	  ><li class="src short"
+	  ><a href="#v:isPrefixOf"
+	    >isPrefixOf</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
 	  ><a href="#v:sort"
 	    >sort</a
 	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Ord.html#t:Ord"
@@ -162,9 +180,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	    >transpose</a
 	    > ::  [[a]] -&gt; [[a]]</li
 	  ><li class="src short"
-	  ><a href="#v:intercalate"
-	    >intercalate</a
-	    > ::  [a] -&gt; [[a]] -&gt; [a]</li
+	  ><a href="#v:-92--92-"
+	    >(\\)</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; [a]</li
+	  ><li class="src short"
+	  ><a href="#v:disjoint"
+	    >disjoint</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
+	  ><li class="src short"
+	  ><a href="#v:overlap"
+	    >overlap</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></li
 	  ><li class="src short"
 	  ><a href="#v:lookupMap"
 	    >lookupMap</a
@@ -319,7 +355,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-P
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Control.Monad</h1
+	>Control.Monad</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:-60--61--60-" class="def"
@@ -533,7 +569,93 @@ and otherwise do nothing.</p
 	    ></p
 	  ></div
 	><h1 id="g:2"
-	>Data.List</h1
+	>Data.List</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:intercalate" class="def"
+	    >intercalate</a
+	    > ::  [a] -&gt; [[a]] -&gt; [a]</p
+	  ><div class="doc"
+	  ><p
+	    ><code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:intercalate"
+		>intercalate</a
+		></code
+	      > <code
+	      >xs xss</code
+	      > is equivalent to <code
+	      >(<code
+		><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:concat"
+		  >concat</a
+		  ></code
+		> (<code
+		><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:intersperse"
+		  >intersperse</a
+		  ></code
+		> xs xss))</code
+	      >.
+ It inserts the list <code
+	      >xs</code
+	      > in between the lists in <code
+	      >xss</code
+	      > and concatenates the
+ result.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:intersect" class="def"
+	    >intersect</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; [a]</p
+	  ><div class="doc"
+	  ><p
+	    >The <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:intersect"
+		>intersect</a
+		></code
+	      > function takes the list intersection of two lists.
+ For example,</p
+	    ><pre
+	    >[1,2,3,4] `intersect` [2,4,6,8] == [2,4]</pre
+	    ><p
+	    >If the first list contains duplicates, so will the result.</p
+	    ><pre
+	    >[1,2,2,3,4] `intersect` [6,4,4,2] == [2,2,4]</pre
+	    ><p
+	    >It is a special case of <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:intersectBy"
+		>intersectBy</a
+		></code
+	      >, which allows the programmer to
+ supply their own equality test. If the element is found in both the first
+ and the second list, the element from the first list will be used.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:isPrefixOf" class="def"
+	    >isPrefixOf</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >The <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:isPrefixOf"
+		>isPrefixOf</a
+		></code
+	      > function takes two lists and returns <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#v:True"
+		>True</a
+		></code
+	      >
+ iff the first list is a prefix of the second.</p
+	    ></div
+	  ></div
 	><div class="top"
 	><p class="src"
 	  ><a name="v:sort" class="def"
@@ -575,38 +697,81 @@ and otherwise do nothing.</p
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:intercalate" class="def"
-	    >intercalate</a
-	    > ::  [a] -&gt; [[a]] -&gt; [a]</p
+	  ><a name="v:-92--92-" class="def"
+	    >(\\)</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; [a] <span class="fixity"
+	    >infix 5</span
+	    ><span class="rightedge"
+	    ></span
+	    ></p
 	  ><div class="doc"
 	  ><p
-	    ><code
-	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:intercalate"
-		>intercalate</a
+	    >The <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:-92--92-"
+		>\\</a
+		></code
+	      > function is list difference (non-associative).
+ In the result of <code
+	      >xs</code
+	      > <code
+	      ><a href="Koshucode-Baala-Base-Prelude-Import.html#v:-92--92-"
+		>\\</a
 		></code
 	      > <code
-	      >xs xss</code
-	      > is equivalent to <code
-	      >(<code
-		><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:concat"
-		  >concat</a
-		  ></code
-		> (<code
-		><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:intersperse"
-		  >intersperse</a
-		  ></code
-		> xs xss))</code
-	      >.
- It inserts the list <code
+	      >ys</code
+	      >, the first occurrence of each element of
+ <code
+	      >ys</code
+	      > in turn (if any) has been removed from <code
 	      >xs</code
-	      > in between the lists in <code
-	      >xss</code
-	      > and concatenates the
- result.</p
+	      >.  Thus</p
+	    ><pre
+	    >(xs ++ ys) \\ xs == ys.</pre
+	    ><p
+	    >It is a special case of <code
+	      ><a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:deleteFirstsBy"
+		>deleteFirstsBy</a
+		></code
+	      >, which allows the programmer
+ to supply their own equality test.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:disjoint" class="def"
+	    >disjoint</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a href="src/Koshucode-Baala-Base-Prelude-Import.html#disjoint" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test two list has no elements in common.</p
+	    ></div
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:overlap" class="def"
+	    >overlap</a
+	    > :: <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Eq.html#t:Eq"
+	    >Eq</a
+	    > a =&gt; [a] -&gt; [a] -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Bool.html#t:Bool"
+	    >Bool</a
+	    > <a href="src/Koshucode-Baala-Base-Prelude-Import.html#overlap" class="link"
+	    >Source</a
+	    ></p
+	  ><div class="doc"
+	  ><p
+	    >Test two list has some common elements.</p
 	    ></div
 	  ></div
 	><h1 id="g:3"
-	>Data.Map</h1
+	>Data.Map</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:lookupMap" class="def"
@@ -628,11 +793,11 @@ and otherwise do nothing.</p
 		></code
 	      > in <code
 	      >Data.Map</code
-	      > module.</p
+	      > module.</p
 	    ></div
 	  ></div
 	><h1 id="g:4"
-	>Data.Maybe</h1
+	>Data.Maybe</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:catMaybes" class="def"
@@ -760,7 +925,7 @@ and otherwise do nothing.</p
 	    ></div
 	  ></div
 	><h1 id="g:5"
-	>Data.Monoid</h1
+	>Data.Monoid</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -925,9 +1090,69 @@ and otherwise do nothing.</p
 		><td class="src"
 		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
 		    >Monoid</a
+		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-ByteString-Lazy.html#t:ByteString"
+		    >ByteString</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		    >Monoid</a
+		    > <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-ByteString.html#t:ByteString"
+		    >ByteString</a
+		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		    >Monoid</a
 		    > <a href="Koshucode-Baala-Base-Prelude-Import.html#t:Doc"
 		    >Doc</a
 		    ></td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		    >Monoid</a
+		    > RequestBody</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		    >Monoid</a
+		    > CookieJar</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		    >Monoid</a
+		    > Text</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		    >Monoid</a
+		    > CertificateStore</td
+		  ><td class="doc empty"
+		  >&nbsp;</td
+		  ></tr
+		><tr
+		><td class="src"
+		  ><a href="Koshucode-Baala-Base-Prelude-Import.html#t:Monoid"
+		    >Monoid</a
+		    > Text</td
 		  ><td class="doc empty"
 		  >&nbsp;</td
 		  ></tr
@@ -1244,7 +1469,7 @@ and otherwise do nothing.</p
 	    ></div
 	  ></div
 	><h1 id="g:6"
-	>Data.Tuple</h1
+	>Data.Tuple</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:swap" class="def"
@@ -1256,7 +1481,7 @@ and otherwise do nothing.</p
 	    ></div
 	  ></div
 	><h1 id="g:7"
-	>Text.PrettyPrint</h1
+	>Text.PrettyPrint</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"

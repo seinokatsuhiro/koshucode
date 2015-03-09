@@ -8,7 +8,7 @@
 --   calculate relational data. This library provides functions for
 --   handling koshucode on computers.
 @package koshucode-baala-base
-@version 0.85.0.0
+@version 0.102.0.0
 
 module Koshucode.Baala.Base.Text.Unicode
 data GeneralCategoryGroup
@@ -92,16 +92,6 @@ linesCrlfNumbered :: String -> [NumberedLine]
 linesCrlf :: String -> [String]
 linesFrom :: Show a => a -> [String]
 
-module Koshucode.Baala.Base.Prelude.Pair
-mapFst :: (a -> c) -> (a, b) -> (c, b)
-mapSnd :: (b -> c) -> (a, b) -> (a, c)
-cons1 :: a -> ([a], b) -> ([a], b)
-mapFstTo :: Functor m => (a -> c) -> m (a, b) -> m (c, b)
-mapSndTo :: Functor m => (b -> c) -> m (a, b) -> m (a, c)
-maybePairs :: [a] -> Maybe [(a, a)]
-sequenceFst :: Monad m => [(m a, b)] -> m [(a, b)]
-sequenceSnd :: Monad m => [(a, m b)] -> m [(a, b)]
-
 module Koshucode.Baala.Base.Prelude.Import
 
 -- | Right-to-left Kleisli composition of monads.
@@ -160,6 +150,34 @@ unless :: Monad m => Bool -> m () -> m ()
 guard :: MonadPlus m => Bool -> m ()
 concatMapM :: Monad m => (a -> m [b]) -> [a] -> m [b]
 
+-- | <a>intercalate</a> <tt>xs xss</tt> is equivalent to <tt>(<a>concat</a>
+--   (<a>intersperse</a> xs xss))</tt>. It inserts the list <tt>xs</tt> in
+--   between the lists in <tt>xss</tt> and concatenates the result.
+intercalate :: [a] -> [[a]] -> [a]
+
+-- | The <a>intersect</a> function takes the list intersection of two
+--   lists. For example,
+--   
+--   <pre>
+--   [1,2,3,4] `intersect` [2,4,6,8] == [2,4]
+--   </pre>
+--   
+--   If the first list contains duplicates, so will the result.
+--   
+--   <pre>
+--   [1,2,2,3,4] `intersect` [6,4,4,2] == [2,2,4]
+--   </pre>
+--   
+--   It is a special case of <a>intersectBy</a>, which allows the
+--   programmer to supply their own equality test. If the element is found
+--   in both the first and the second list, the element from the first list
+--   will be used.
+intersect :: Eq a => [a] -> [a] -> [a]
+
+-- | The <a>isPrefixOf</a> function takes two lists and returns <a>True</a>
+--   iff the first list is a prefix of the second.
+isPrefixOf :: Eq a => [a] -> [a] -> Bool
+
 -- | The <a>sort</a> function implements a stable sorting algorithm. It is
 --   a special case of <a>sortBy</a>, which allows the programmer to supply
 --   their own comparison function.
@@ -173,10 +191,24 @@ sort :: Ord a => [a] -> [a]
 --   </pre>
 transpose :: [[a]] -> [[a]]
 
--- | <a>intercalate</a> <tt>xs xss</tt> is equivalent to <tt>(<a>concat</a>
---   (<a>intersperse</a> xs xss))</tt>. It inserts the list <tt>xs</tt> in
---   between the lists in <tt>xss</tt> and concatenates the result.
-intercalate :: [a] -> [[a]] -> [a]
+-- | The <a>\\</a> function is list difference (non-associative). In the
+--   result of <tt>xs</tt> <a>\\</a> <tt>ys</tt>, the first occurrence of
+--   each element of <tt>ys</tt> in turn (if any) has been removed from
+--   <tt>xs</tt>. Thus
+--   
+--   <pre>
+--   (xs ++ ys) \\ xs == ys.
+--   </pre>
+--   
+--   It is a special case of <a>deleteFirstsBy</a>, which allows the
+--   programmer to supply their own equality test.
+(\\) :: Eq a => [a] -> [a] -> [a]
+
+-- | Test two list has no elements in common.
+disjoint :: Eq a => [a] -> [a] -> Bool
+
+-- | Test two list has some common elements.
+overlap :: Eq a => [a] -> [a] -> Bool
 
 -- | Same as <a>lookup</a> in <tt>Data.Map</tt> module.
 lookupMap :: Ord k => k -> Map k a -> Maybe a
@@ -334,6 +366,7 @@ instance Choose (Either a)
 instance Choose Maybe
 
 module Koshucode.Baala.Base.Prelude.List
+headOr :: a -> [a] -> a
 
 -- | Head or empty.
 front :: [a] -> [a]
@@ -362,6 +395,7 @@ unionUp :: Eq a => [a] -> [a] -> [a]
 li1 :: a -> [a]
 li2 :: a -> a -> [a]
 li3 :: a -> a -> a -> [a]
+consIf :: Bool -> a -> [a] -> [a]
 type RangeBy a = a -> a -> [a]
 rangeBy :: Ord a => Map a -> RangeBy a
 zipMaybe :: [Maybe a] -> [b] -> [(a, b)]
@@ -370,6 +404,7 @@ map2 :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
 mapAt :: (Map a) -> Int -> Map [a]
 mapWithLast :: (a -> b) -> (a -> b) -> [a] -> [b]
 omit :: (a -> Bool) -> Map [a]
+filterFst :: (a -> Bool) -> Map [(a, b)]
 squeeze :: (a -> Bool) -> Map [a]
 squeezeEmptyLines :: Map [String]
 chunks :: Int -> [a] -> [[a]]
@@ -385,6 +420,17 @@ divide :: Eq a => a -> [a] -> [[a]]
 
 -- | Divide list.
 divideBy :: (a -> Bool) -> [a] -> [[a]]
+
+module Koshucode.Baala.Base.Prelude.Pair
+mapFst :: (a -> c) -> (a, b) -> (c, b)
+mapSnd :: (b -> c) -> (a, b) -> (a, c)
+consFst :: a -> Map ([a], b)
+consSnd :: b -> Map (a, [b])
+mapFstTo :: Functor m => (a -> c) -> m (a, b) -> m (c, b)
+mapSndTo :: Functor m => (b -> c) -> m (a, b) -> m (a, c)
+maybePairs :: [a] -> Maybe [(a, a)]
+sequenceFst :: Monad m => [(m a, b)] -> m [(a, b)]
+sequenceSnd :: Monad m => [(a, m b)] -> m [(a, b)]
 
 
 -- | Snipping elements.
@@ -500,63 +546,73 @@ instance Ord a => Ord (OnceMore a)
 
 module Koshucode.Baala.Base.Prelude
 
-module Koshucode.Baala.Base.Text.Source
-data Source
-Source :: Int -> SourceName -> Source
-sourceNumber :: Source -> Int
-sourceName :: Source -> SourceName
-data SourceName
-SourceFile :: String -> SourceName
-SourceURL :: String -> SourceName
-SourceText :: String -> SourceName
-SourceStdin :: SourceName
+module Koshucode.Baala.Base.Text.CodeName
+data CodeName
+CodeFile :: FilePath -> CodeName
+CodeUri :: String -> CodeName
+CodeText :: String -> CodeName
+CodeStdin :: CodeName
 
--- | Name of resourcd type, i.e., <tt>"file"</tt>, <tt>"text"</tt>,
---   <tt>"url"</tt>.
-sourceType :: Source -> String
-sourceText :: Source -> String
-sourceZero :: Source
-sourceOf :: String -> Source
-sourceList :: Bool -> [String] -> [String] -> [String] -> [Source]
+-- | Name of code type, i.e., <tt>"file"</tt>, <tt>"url"</tt>,
+--   <tt>"text"</tt>, or <tt>"stdin"</tt>.
+codeNameType :: CodeName -> String
+codeNameText :: CodeName -> String
+codeNameFrom :: String -> CodeName
+
+-- | Create sources from using stdin, texts itself, filenames, and urls.
+codeNameList :: Bool -> [String] -> [String] -> [CodeName]
+data CodePiece
+CodePiece :: Int -> CodeName -> CodePiece
+codeNumber :: CodePiece -> Int
+codeName :: CodePiece -> CodeName
+
+-- | Empty code.
+codeEmpty :: CodePiece
+
+-- | Create text code.
+codeTextOf :: String -> CodePiece
+instance Typeable CodeName
+instance Typeable CodePiece
+instance Show CodeName
+instance Eq CodeName
+instance Ord CodeName
+instance Data CodeName
+instance Show CodePiece
+instance Data CodePiece
+instance Ord CodePiece
+instance Eq CodePiece
+
+module Koshucode.Baala.Base.Text.CodePt
 data CodePt
-CodePt :: Source -> Int -> String -> String -> CodePt
+CodePt :: CodePiece -> Int -> String -> String -> CodePt
 
 -- | Source of code
-codeSource :: CodePt -> Source
+codePtSource :: CodePt -> CodePiece
 
 -- | Line number
-codeLineNumber :: CodePt -> Int
+codePtLineNo :: CodePt -> Int
 
 -- | Line content
-codeLineText :: CodePt -> String
+codePtLineText :: CodePt -> String
 
 -- | Text at which begins token
-codeText :: CodePt -> String
+codePtText :: CodePt -> String
 
 -- | Empty code point, i.e., empty content and zero line number.
-codeZero :: CodePt
+codePtZero :: CodePt
 
 -- | Column number at which code starts.
-codeColumnNumber :: CodePt -> Int
-codeDisplay :: (String, CodePt) -> [(String, String)]
-class CodePtr a
-codePts :: CodePtr a => a -> [CodePt]
+codePtColumnNo :: CodePt -> Int
+codePtDisplay :: (String, CodePt) -> [(String, String)]
+class CodePtr a where codePt p = headOr codePtZero $ codePtList p
+codePtList :: CodePtr a => a -> [CodePt]
+codePt :: CodePtr a => a -> CodePt
 data Sourced a
 Sourced :: [CodePt] -> a -> Sourced a
 source :: Sourced a -> [CodePt]
 unsourced :: Sourced a -> a
-instance Typeable SourceName
-instance Typeable Source
 instance Typeable CodePt
 instance Typeable Sourced
-instance Show SourceName
-instance Eq SourceName
-instance Ord SourceName
-instance Data SourceName
-instance Show Source
-instance Eq Source
-instance Ord Source
-instance Data Source
 instance Show CodePt
 instance Eq CodePt
 instance Data CodePt
@@ -568,6 +624,14 @@ instance CodePtr (Sourced a)
 instance Functor Sourced
 instance CodePtr CodePt
 instance Ord CodePt
+
+module Koshucode.Baala.Base.Text.Http
+type UriText = String
+
+-- | Pair of protocol name and proxy URI.
+type HttpProxy = (String, Maybe UriText)
+uriContent :: [HttpProxy] -> UriText -> IO (Either (Int, String) String)
+httpExceptionSummary :: HttpException -> String
 
 
 -- | Text table
@@ -680,6 +744,7 @@ type Ab a = Either AbortReason a
 
 -- | Abortable mapping.
 type AbMap a = a -> Ab a
+type IOAb a = IO (Ab a)
 
 -- | Construct abort reason with reason text.
 abortBecause :: String -> AbortReason
@@ -714,6 +779,9 @@ type CommandLine = [String]
 -- | Stop program execution abnormally.
 abort :: CommandLine -> AbortReason -> IO c
 
+-- | Print abort message.
+abortPrint :: CommandLine -> AbortReason -> IO ()
+
 -- | Stop on error <tt>'BUG DISCOVERED'</tt>
 bug :: String -> a
 
@@ -741,6 +809,7 @@ type ShortDef = Named String
 shortTrim :: Map [Short [a]]
 shortM :: Monad m => Short (m a) -> m (Short a)
 shortListM :: Monad m => [Short (m a)] -> m [Short a]
+shortGroup :: [Short a] -> [Short [a]]
 
 -- | String shortener with no short definition.
 shortEmpty :: StringMap
@@ -775,7 +844,10 @@ TSlot :: CodePt -> Int -> String -> Token
 TShort :: CodePt -> String -> String -> Token
 
 -- | Term path.
-TTerm :: CodePt -> Int -> TermPath -> Token
+TTerm :: CodePt -> TermType -> TermPath -> Token
+
+-- | Local name.
+TLocal :: CodePt -> (Local String) -> Int -> [Token] -> Token
 
 -- | Opening bracket.
 TOpen :: CodePt -> String -> Token
@@ -796,6 +868,10 @@ BlankInfix :: String -> BlankName
 BlankPostfix :: String -> BlankName
 textToken :: String -> Token
 nameToken :: String -> Token
+data Local a
+LocalSymbol :: a -> Local a
+LocalNest :: a -> Local a
+unlocal :: Local a -> a
 data TextForm
 
 -- | Unknown keyword
@@ -818,15 +894,19 @@ TextBar :: TextForm
 
 -- | Text used as name
 TextName :: TextForm
+data TermType
+
+-- | Normal term path
+TermTypePath :: TermType
+
+-- | Quoted term name
+TermTypeQuoted :: TermType
 
 -- | Name of term, e.g., <tt>"file"</tt> for the term name <tt>/file</tt>.
 type TermName = String
 type TermName2 = (String, String)
 type TermName3 = (String, String, String)
 type TermName4 = (String, String, String, String)
-
--- | Pair of term name and something.
-type Terminal a = (TermName, a)
 
 -- | Path of term names, e.g., term name <tt>/r/x</tt> is correspond to
 --   path <tt>["r", "x"]</tt>.
@@ -840,6 +920,7 @@ tokenContent :: Token -> String
 -- | Text of token type, e.g., <tt>"text"</tt>, <tt>"open"</tt>.
 tokenTypeText :: Token -> String
 tokenSubtypeText :: Token -> Maybe String
+tokenParents :: Token -> [Token]
 
 -- | Test the token is blank, i.e., comment or space.
 isBlankToken :: Pred Token
@@ -856,13 +937,23 @@ isOpenTokenOf :: String -> Pred Token
 
 -- | Check token is a <a>TClose</a> of the specific bracket.
 isCloseTokenOf :: String -> Pred Token
+instance Typeable Local
 instance Typeable TextForm
+instance Typeable TermType
 instance Typeable BlankName
 instance Typeable Token
+instance Show a => Show (Local a)
+instance Eq a => Eq (Local a)
+instance Ord a => Ord (Local a)
+instance Data a => Data (Local a)
 instance Show TextForm
 instance Eq TextForm
 instance Ord TextForm
 instance Data TextForm
+instance Show TermType
+instance Eq TermType
+instance Ord TermType
+instance Data TermType
 instance Show BlankName
 instance Eq BlankName
 instance Ord BlankName
@@ -883,6 +974,7 @@ module Koshucode.Baala.Base.Abort
 
 module Koshucode.Baala.Base.Message
 abToken :: CodePtr cp => [cp] -> Map (Ab b)
+abTree :: CodePtr cp => [cp] -> Map (Ab b)
 
 -- | BUG: reason
 bug :: String -> Ab a
@@ -927,11 +1019,14 @@ forbiddenTerm :: Ab a
 -- | Quotation not end in line
 quotNotEnd :: Ab a
 
+-- | Require flat term name
+reqFlatTerm :: String -> Ab a
+
+-- | Unexpedted section delimiter
+unexpSect :: [String] -> Ab a
+
 -- | Unknown bracket text
 unkAngleText :: String -> Ab a
-
--- | Unknown section type
-unkSectType :: String -> Ab a
 
 module Koshucode.Baala.Base.Data.Clock
 data Clock
@@ -1075,6 +1170,86 @@ instance Show Decimal
 instance Eq Decimal
 instance Ord Decimal
 
+module Koshucode.Baala.Base.Data.Para
+type Para a = ParaBody String a
+data ParaBody n a
+ParaBody :: [a] -> [a] -> ParaMap n a -> ParaBody n a
+paraAll :: ParaBody n a -> [a]
+paraPos :: ParaBody n a -> [a]
+paraName :: ParaBody n a -> ParaMap n a
+type ParaMap n a = Map n [[a]]
+
+-- | Parse list into parameter.
+para :: Ord n => (a -> Maybe n) -> [a] -> ParaBody n a
+paraEmpty :: ParaBody n a
+
+-- | Association list of named parameters.
+paraNameList :: ParaBody n a -> [(n, [[a]])]
+
+-- | Add named parameter.
+paraNameAdd :: Ord n => n -> [a] -> Map (ParaBody n a)
+
+-- | Give names to positional parameters.
+paraPosName :: (Ord n, Monad m) => ([a] -> m [(n, [a])]) -> ParaBody n a -> m (ParaBody n a)
+
+-- | List of names which appear more than once.
+paraMultipleNames :: ParaBody n a -> [n]
+
+-- | Map names of named parameters.
+paraNameMapKeys :: Ord n2 => (n1 -> n2) -> ParaBody n1 a -> ParaBody n2 a
+paraLookupSingle :: Ord n => n -> ParaBody n a -> Maybe [a]
+data ParaType n
+ParaType :: ParaPosType -> [n] -> [n] -> [n] -> ParaType n
+paraTypePos :: ParaType n -> ParaPosType
+paraTypeReq :: ParaType n -> [n]
+paraTypeOpt :: ParaType n -> [n]
+paraTypeMult :: ParaType n -> [n]
+data ParaPosType
+ParaPosJust :: Int -> ParaPosType
+ParaPosMin :: Int -> ParaPosType
+ParaPosMax :: Int -> ParaPosType
+ParaPosRange :: Int -> Int -> ParaPosType
+paraType :: ParaType n
+paraJust :: (Show n, Ord n) => ParaType n -> Int -> ParaType n
+paraMin :: (Show n, Ord n) => ParaType n -> Int -> ParaType n
+paraMax :: (Show n, Ord n) => ParaType n -> Int -> ParaType n
+paraRange :: (Show n, Ord n) => ParaType n -> (Int, Int) -> ParaType n
+paraReq :: (Show n, Ord n) => ParaType n -> [n] -> ParaType n
+paraOpt :: (Show n, Ord n) => ParaType n -> [n] -> ParaType n
+paraMult :: (Show n, Ord n) => ParaType n -> [n] -> ParaType n
+data ParaUnmatch n
+ParaOutOfRange :: Int -> ParaPosType -> ParaUnmatch n
+ParaUnknown :: [n] -> ParaUnmatch n
+ParaMissing :: [n] -> ParaUnmatch n
+ParaMultiple :: [n] -> ParaUnmatch n
+paraSelect :: Eq n => b -> [(ParaBody n a -> b, ParaType n)] -> ParaBody n a -> b
+paraMatch :: Eq n => ParaBody n a -> ParaType n -> Bool
+paraUnmatch :: Eq n => ParaBody n a -> ParaType n -> Maybe (ParaUnmatch n)
+paraGet :: Ord n => ParaBody n a -> n -> Ab [a]
+paraGetOpt :: Ord n => [a] -> ParaBody n a -> n -> Ab [a]
+paraGetList :: Ord n => ParaBody n a -> n -> Ab [[a]]
+paraGetSwitch :: Ord n => ParaBody n a -> n -> Ab Bool
+paraGetPos :: ParaBody n a -> Ab [a]
+paraGetFst :: ParaBody n a -> Ab a
+paraGetSnd :: ParaBody n a -> Ab a
+paraGetTrd :: ParaBody n a -> Ab a
+paraGetRest :: ParaBody n a -> Ab [a]
+paraGetRRest :: ParaBody n a -> Ab [a]
+instance Typeable ParaBody
+instance (Show n, Show a) => Show (ParaBody n a)
+instance (Eq n, Eq a) => Eq (ParaBody n a)
+instance (Ord n, Ord a) => Ord (ParaBody n a)
+instance (Data n, Data a, Ord n) => Data (ParaBody n a)
+instance Show ParaPosType
+instance Eq ParaPosType
+instance Ord ParaPosType
+instance Show n => Show (ParaType n)
+instance Eq n => Eq (ParaType n)
+instance Ord n => Ord (ParaType n)
+instance Show n => Show (ParaUnmatch n)
+instance Eq n => Eq (ParaUnmatch n)
+instance Ord n => Ord (ParaUnmatch n)
+
 module Koshucode.Baala.Base.Data.Time
 data Time
 
@@ -1171,6 +1346,7 @@ clauseLines :: CodeClause a -> [CodeLine a]
 clauseTokens :: CodeClause a -> [a]
 lineIndentPair :: (a -> Int) -> CodeLine a -> (Int, CodeLine a)
 splitClause :: Gather [(Int, a)] [a]
+codeClauseEmpty :: CodeClause a
 data CodeRoll a
 CodeRoll :: AbMap (CodeRoll a) -> CodePt -> String -> [a] -> CodeRoll a
 codeMap :: CodeRoll a -> AbMap (CodeRoll a)
@@ -1189,7 +1365,7 @@ codeOutput :: CodeRoll a -> [a]
 --   <li>Tokenize each lines, and put tokens together in
 --   <a>CodeLine</a>.</li>
 --   </ol>
-codeRollUp :: AbMap (CodeRoll a) -> Source -> String -> Ab [CodeLine a]
+codeRollUp :: AbMap (CodeRoll a) -> CodePiece -> String -> Ab [CodeLine a]
 
 -- | Update <a>codeInput</a> and push result element to <a>codeOutput</a>.
 codeUpdate :: String -> a -> Map (CodeRoll a)
@@ -1209,18 +1385,26 @@ instance CodePtr a => CodePtr (CodeLine a)
 instance Write (CodeLine a)
 
 module Koshucode.Baala.Base.Syntax.Tree
+
+-- | Bracket type.
 data Bracket p
+
+-- | None bracket
 BracketNone :: Bracket p
+
+-- | Open bracket
 BracketOpen :: p -> Bracket p
+
+-- | Close bracket
 BracketClose :: p -> Bracket p
 
 -- | Tree of leaf and branch.
 data CodeTree p a
 
--- | Leaf. Terminal of tree.
+-- | Terminal of tree.
 TreeL :: a -> CodeTree p a
 
--- | Branch. Bracket-type and subtrees.
+-- | Bracket-type and subtrees.
 TreeB :: p -> (Maybe (a, a)) -> [CodeTree p a] -> CodeTree p a
 
 -- | Convert a list of elements to a single tree.
@@ -1235,6 +1419,7 @@ untree :: CodeTree p a -> [a]
 
 -- | Convert tree to list of tokens.
 untrees :: [CodeTree p a] -> [a]
+leaves :: CodeTree p a -> [a]
 
 -- | Simplify tree by removing double brackets, like <tt>((a))</tt> to
 --   <tt>(a)</tt>.
@@ -1244,6 +1429,7 @@ untrees :: [CodeTree p a] -> [a]
 --   TreeB 0 Nothing [TreeL "A", TreeL "B"]
 --   </pre>
 undouble :: Pred p -> Map (CodeTree p a)
+mapToLeaf :: (a -> a) -> Map (CodeTree p a)
 
 -- | Get a bracket type.
 type GetBracketType p a = a -> Bracket p
@@ -1323,11 +1509,11 @@ module Koshucode.Baala.Base.Token.TokenLine
 type TokenLine = CodeLine Token
 
 -- | Tokenize text.
-tokenLines :: Source -> String -> Ab [TokenLine]
+tokenLines :: CodePiece -> String -> Ab [TokenLine]
 
 -- | Split string into list of tokens. Result token list does not contain
 --   newline characters.
-tokens :: Source -> String -> Ab [Token]
+tokens :: CodePiece -> String -> Ab [Token]
 isShortPrefix :: Pred String
 
 module Koshucode.Baala.Base.Token.TokenClause
@@ -1682,12 +1868,16 @@ module Koshucode.Baala.Base.Data.Judge
 data Judge c
 JudgeAffirm :: JudgePat -> [Named c] -> Judge c
 JudgeDeny :: JudgePat -> [Named c] -> Judge c
+JudgeMultiDeny :: JudgePat -> [Named c] -> Judge c
+JudgeChange :: JudgePat -> [Named c] -> [Named c] -> Judge c
+JudgeMultiChange :: JudgePat -> [Named c] -> [Named c] -> Judge c
 JudgeViolate :: JudgePat -> [Named c] -> Judge c
-JudgeAlter :: JudgePat -> [Named c] -> [Named c] -> [Named c] -> Judge c
 type JudgeOf c = JudgePat -> [Named c] -> Judge c
 
 -- | Name of judgement pattern.
 type JudgePat = String
+class SelectRel r
+selectRel :: SelectRel r => r c -> JudgePat -> [TermName] -> Rel c
 judgePat :: Judge c -> JudgePat
 judgeTerms :: Judge c -> [Named c]
 judgeTermsMap :: ([Named a] -> [Named b]) -> Judge a -> Judge b

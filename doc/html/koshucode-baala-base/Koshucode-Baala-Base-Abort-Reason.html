@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-base-0.85.0.0: A notational system for relational model</p
+      >koshucode-baala-base-0.102.0.0: A notational system for relational model</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -57,11 +57,11 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >Data type</a
+	    >Data type</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >Constructor</a
+	    >Constructor</a
 	    ></li
 	  ></ul
 	></div
@@ -70,7 +70,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	>Description</p
 	><div class="doc"
 	><p
-	  >Abort reasons.</p
+	  >Abort reasons.</p
 	  ></div
 	></div
       ><div id="synopsis"
@@ -108,7 +108,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 		>abortPoint</a
 		> :: [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 		>String</a
-		>, <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
+		>, <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePt"
 		>CodePt</a
 		>)]</li
 	      ></ul
@@ -131,6 +131,16 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    > a = a -&gt; <a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
 	    >Ab</a
 	    > a</li
+	  ><li class="src short"
+	  ><span class="keyword"
+	    >type</span
+	    > <a href="#t:IOAb"
+	    >IOAb</a
+	    > a = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > (<a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a)</li
 	  ><li class="src short"
 	  ><a href="#v:abortBecause"
 	    >abortBecause</a
@@ -173,7 +183,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	></div
       ><div id="interface"
       ><h1 id="g:1"
-	>Data type</h1
+	>Data type</h1
 	><div class="top"
 	><p class="src"
 	  ><span class="keyword"
@@ -209,7 +219,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 			></dt
 		      ><dd class="doc"
 		      ><p
-			>Reason in one line</p
+			>Reason in one line</p
 			></dd
 		      ><dt class="src"
 		      ><a name="v:abortDetail" class="def"
@@ -219,7 +229,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 			>]</dt
 		      ><dd class="doc"
 		      ><p
-			>Detailed description</p
+			>Detailed description</p
 			></dd
 		      ><dt class="src"
 		      ><a name="v:abortNote" class="def"
@@ -229,19 +239,19 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 			>]</dt
 		      ><dd class="doc"
 		      ><p
-			>Additional notes for long description</p
+			>Additional notes for long description</p
 			></dd
 		      ><dt class="src"
 		      ><a name="v:abortPoint" class="def"
 			>abortPoint</a
 			> :: [(<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
 			>String</a
-			>, <a href="Koshucode-Baala-Base-Text-Source.html#t:CodePt"
+			>, <a href="Koshucode-Baala-Base-Text-CodePt.html#t:CodePt"
 			>CodePt</a
 			>)]</dt
 		      ><dd class="doc"
 		      ><p
-			>Tag and aborting point</p
+			>Tag and aborting point</p
 			></dd
 		      ></dl
 		    ><div class="clear"
@@ -305,7 +315,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Abortable result, i.e., either of right result or abort reason.</p
+	    >Abortable result, i.e., either of right result or abort reason.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -321,11 +331,25 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Abortable mapping.</p
+	    >Abortable mapping.</p
 	    ></div
 	  ></div
+	><div class="top"
+	><p class="src"
+	  ><span class="keyword"
+	    >type</span
+	    > <a name="t:IOAb" class="def"
+	    >IOAb</a
+	    > a = <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html#t:IO"
+	    >IO</a
+	    > (<a href="Koshucode-Baala-Base-Abort-Reason.html#t:Ab"
+	    >Ab</a
+	    > a) <a href="src/Koshucode-Baala-Base-Abort-Reason.html#IOAb" class="link"
+	    >Source</a
+	    ></p
+	  ></div
 	><h1 id="g:2"
-	>Constructor</h1
+	>Constructor</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:abortBecause" class="def"
@@ -339,7 +363,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Construct abort reason with reason text.</p
+	    >Construct abort reason with reason text.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -357,7 +381,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Construct abort reason with reason and detailed text.</p
+	    >Construct abort reason with reason and detailed text.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -375,7 +399,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Construct abort reason with reason and multilined detailed text.</p
+	    >Construct abort reason with reason and multilined detailed text.</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -393,7 +417,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Base-A
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Construct abort reason with reason and note.</p
+	    >Construct abort reason with reason and note.</p
 	    ></div
 	  ></div
 	></div
