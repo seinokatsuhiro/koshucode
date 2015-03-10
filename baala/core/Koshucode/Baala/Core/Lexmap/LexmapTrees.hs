@@ -26,14 +26,14 @@ data LexmapTrees = LexmapTrees
     } deriving (Show, Eq, Ord)
 
 clauseAttrType :: B.ParaType String
-clauseAttrType = B.paraType `B.paraMin` 0 `B.paraOpt` ["--attr"]
+clauseAttrType = B.paraType `B.paraMin` 0 `B.paraOpt` ["attr"]
 
 consLexmapTrees :: TTreePara -> B.Ab LexmapTrees
 consLexmapTrees para =
     do case B.paraUnmatch para clauseAttrType of
          Nothing -> Right ()
          Just u  -> Msg.adlib $ "unknown attribute: " ++ show u
-       attr <- B.paraGetOpt [] para "--attr"
+       attr <- B.paraGetOpt [] para "attr"
        edit <- C.consAttrEd attr
        let body = B.paraPos para
        Right $ LexmapTrees body para edit
@@ -58,6 +58,6 @@ ttreeParaBy f toks =
        Right $ B.para f trees
 
 maybeDoubleHyphen :: B.TTreeTo (Maybe String)
-maybeDoubleHyphen (B.TextLeafRaw _ n@('-' : '-' : _))  = Just n
-maybeDoubleHyphen _                                    = Nothing
+maybeDoubleHyphen (B.TextLeafRaw _ ('-' : '-' : n))  = Just n
+maybeDoubleHyphen _                                  = Nothing
 
