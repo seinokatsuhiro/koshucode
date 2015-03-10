@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Bui
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-operator-0.89.0.0: Relation-mapping operators in Koshucode</p
+      >koshucode-baala-operator-0.102.0.0: Relation-mapping operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -64,8 +64,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Bui
 	    >RopCons</a
 	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
 	    >RopUsage</a
-	    >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrDefine"
-	    >AttrDefine</a
+	    >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Lexmap-Attr.html#t:RopAttr"
+	    >RopAttr</a
 	    >)</li
 	  ><li class="src short"
 	  ><a href="#v:ropList"
@@ -78,116 +78,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Bui
 	    >Rop</a
 	    > c]</li
 	  ><li class="src short"
-	  ><a href="#v:ropN"
-	    >ropN</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
-	    >RopCons</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
-	    >RopUsage</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Op-Builtin-Define.html#t:RopDefine"
-	    >RopDefine</a
-	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:ropE"
-	    >ropE</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
-	    >RopCons</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
-	    >RopUsage</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Op-Builtin-Define.html#t:RopDefine"
-	    >RopDefine</a
-	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:ropI"
-	    >ropI</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
-	    >RopCons</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
-	    >RopUsage</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Op-Builtin-Define.html#t:RopDefine"
-	    >RopDefine</a
-	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:ropII"
-	    >ropII</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
-	    >RopCons</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
-	    >RopUsage</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Op-Builtin-Define.html#t:RopDefine"
-	    >RopDefine</a
-	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:ropIJ"
-	    >ropIJ</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
-	    >RopCons</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
-	    >RopUsage</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Op-Builtin-Define.html#t:RopDefine"
-	    >RopDefine</a
-	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:ropIII"
-	    >ropIII</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
-	    >RopCons</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
-	    >RopUsage</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Op-Builtin-Define.html#t:RopDefine"
-	    >RopDefine</a
-	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:ropV"
-	    >ropV</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
-	    >RopCons</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
-	    >RopUsage</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Op-Builtin-Define.html#t:RopDefine"
-	    >RopDefine</a
-	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:ropIV"
-	    >ropIV</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
-	    >RopCons</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
-	    >RopUsage</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Op-Builtin-Define.html#t:RopDefine"
-	    >RopDefine</a
-	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:ropTI"
-	    >ropTI</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
-	    >RopCons</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
-	    >RopUsage</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Op-Builtin-Define.html#t:RopDefine"
-	    >RopDefine</a
-	    > c</li
-	  ><li class="src short"
-	  ><a href="#v:ropTII"
-	    >ropTII</a
+	  ><a href="#v:def"
+	    >def</a
 	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
 	    >RopCons</a
 	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
@@ -212,14 +104,14 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Bui
 	    >RopCons</a
 	    > c, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
 	    >RopUsage</a
-	    >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Lexmap-Attribute.html#t:AttrDefine"
-	    >AttrDefine</a
+	    >, <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Lexmap-Attr.html#t:RopAttr"
+	    >RopAttr</a
 	    >) <a href="src/Koshucode-Baala-Op-Builtin-Define.html#RopDefine" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Constructor, usage, and attribute sorter</p
+	    >Constructor, usage, and attribute sorter</p
 	    ></div
 	  ></div
 	><div class="top"
@@ -240,7 +132,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Bui
 		  ></td
 		><td class="doc"
 		><p
-		  >Operator group</p
+		  >Operator group</p
 		  ></td
 		></tr
 	      ><tr
@@ -250,7 +142,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Bui
 		  > c]</td
 		><td class="doc"
 		><p
-		  >Operator definitions</p
+		  >Operator definitions</p
 		  ></td
 		></tr
 	      ><tr
@@ -260,20 +152,20 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Bui
 		  > c]</td
 		><td class="doc"
 		><p
-		  >Relmap operators</p
+		  >Relmap operators</p
 		  ></td
 		></tr
 	      ></table
 	    ></div
 	  ><div class="doc"
 	  ><p
-	    >Make implementations of relmap operators.</p
+	    >Make implementations of relmap operators.</p
 	    ></div
 	  ></div
 	><div class="top"
 	><p class="src"
-	  ><a name="v:ropN" class="def"
-	    >ropN</a
+	  ><a name="v:def" class="def"
+	    >def</a
 	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
 	    >RopCons</a
 	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
@@ -282,193 +174,9 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Bui
 	    >String</a
 	    > -&gt; <a href="Koshucode-Baala-Op-Builtin-Define.html#t:RopDefine"
 	    >RopDefine</a
-	    > c <a href="src/Koshucode-Baala-Op-Builtin-Define.html#ropN" class="link"
+	    > c <a href="src/Koshucode-Baala-Op-Builtin-Define.html#def" class="link"
 	    >Source</a
 	    ></p
-	  ><div class="doc"
-	  ><p
-	    >No attributes</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:ropE" class="def"
-	    >ropE</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
-	    >RopCons</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
-	    >RopUsage</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Op-Builtin-Define.html#t:RopDefine"
-	    >RopDefine</a
-	    > c <a href="src/Koshucode-Baala-Op-Builtin-Define.html#ropE" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Enumerating attributes</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:ropI" class="def"
-	    >ropI</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
-	    >RopCons</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
-	    >RopUsage</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Op-Builtin-Define.html#t:RopDefine"
-	    >RopDefine</a
-	    > c <a href="src/Koshucode-Baala-Op-Builtin-Define.html#ropI" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >One attribute</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:ropII" class="def"
-	    >ropII</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
-	    >RopCons</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
-	    >RopUsage</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Op-Builtin-Define.html#t:RopDefine"
-	    >RopDefine</a
-	    > c <a href="src/Koshucode-Baala-Op-Builtin-Define.html#ropII" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Two attributes</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:ropIJ" class="def"
-	    >ropIJ</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
-	    >RopCons</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
-	    >RopUsage</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Op-Builtin-Define.html#t:RopDefine"
-	    >RopDefine</a
-	    > c <a href="src/Koshucode-Baala-Op-Builtin-Define.html#ropIJ" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >One and optional attributes</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:ropIII" class="def"
-	    >ropIII</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
-	    >RopCons</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
-	    >RopUsage</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Op-Builtin-Define.html#t:RopDefine"
-	    >RopDefine</a
-	    > c <a href="src/Koshucode-Baala-Op-Builtin-Define.html#ropIII" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Three attributes</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:ropV" class="def"
-	    >ropV</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
-	    >RopCons</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
-	    >RopUsage</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Op-Builtin-Define.html#t:RopDefine"
-	    >RopDefine</a
-	    > c <a href="src/Koshucode-Baala-Op-Builtin-Define.html#ropV" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Variable-length attributes</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:ropIV" class="def"
-	    >ropIV</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
-	    >RopCons</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
-	    >RopUsage</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Op-Builtin-Define.html#t:RopDefine"
-	    >RopDefine</a
-	    > c <a href="src/Koshucode-Baala-Op-Builtin-Define.html#ropIV" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >One and variable-length attributes</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:ropTI" class="def"
-	    >ropTI</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
-	    >RopCons</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
-	    >RopUsage</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Op-Builtin-Define.html#t:RopDefine"
-	    >RopDefine</a
-	    > c <a href="src/Koshucode-Baala-Op-Builtin-Define.html#ropTI" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Term list and one attribute</p
-	    ></div
-	  ></div
-	><div class="top"
-	><p class="src"
-	  ><a name="v:ropTII" class="def"
-	    >ropTII</a
-	    > ::  <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
-	    >RopCons</a
-	    > c -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Relmap-Rop.html#t:RopUsage"
-	    >RopUsage</a
-	    > -&gt; <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-String.html#t:String"
-	    >String</a
-	    > -&gt; <a href="Koshucode-Baala-Op-Builtin-Define.html#t:RopDefine"
-	    >RopDefine</a
-	    > c <a href="src/Koshucode-Baala-Op-Builtin-Define.html#ropTII" class="link"
-	    >Source</a
-	    ></p
-	  ><div class="doc"
-	  ><p
-	    >Term list and two attributes</p
-	    ></div
 	  ></div
 	></div
       ></div

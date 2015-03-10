@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Met
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-operator-0.89.0.0: Relation-mapping operators in Koshucode</p
+      >koshucode-baala-operator-0.102.0.0: Relation-mapping operators in Koshucode</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -57,23 +57,27 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Met
 	><ul
 	><li
 	  ><a href="#g:1"
-	    >koshu-cop</a
+	    >koshu-cop</a
 	    ></li
 	  ><li
 	  ><a href="#g:2"
-	    >koshu-cop-infix</a
+	    >koshu-cop-infix</a
 	    ></li
 	  ><li
 	  ><a href="#g:3"
-	    >koshu-source</a
+	    >koshu-source</a
 	    ></li
 	  ><li
 	  ><a href="#g:4"
-	    >koshu-rop</a
+	    >koshu-rop</a
 	    ></li
 	  ><li
 	  ><a href="#g:5"
-	    >koshu-version</a
+	    >koshu-proxy</a
+	    ></li
+	  ><li
+	  ><a href="#g:6"
+	    >koshu-version</a
 	    ></li
 	  ></ul
 	></div
@@ -146,8 +150,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Met
 	    >relmapKoshuSource</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopUse"
-	    >RopUse</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
 	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
 	    >TermName</a
 	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
@@ -179,6 +183,30 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Met
 	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
 	    >TermName</a
 	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    >TermName</a
+	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    >TermName</a
+	    >) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RelkitHook"
+	    >RelkitHook</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:consKoshuProxy"
+	    >consKoshuProxy</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c</li
+	  ><li class="src short"
+	  ><a href="#v:relkitKoshuProxy"
+	    >relkitKoshuProxy</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
 	    >Maybe</a
 	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
 	    >TermName</a
@@ -225,36 +253,36 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Met
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Implementation of relational operators.</p
+	    >Implementation of relational operators.</p
 	    ><dl
 	    ><dt
 	      ><code
 		>koshu-cop /N</code
 		></dt
 	      ><dd
-	      >Retrieve list of content operators.</dd
+	      >Retrieve list of content operators.</dd
 	      ><dt
 	      >@koshu-cop-infix /N [ -height /N \</dt
 	      ><dd
 	      >[ -dir /N ]@]
-     Retrieve list of infix specifications.</dd
+     Retrieve list of infix specifications.</dd
 	      ><dt
 	      ><code
 		>koshu-rop /N</code
 		></dt
 	      ><dd
-	      >Retrieve list of relmap operators.</dd
+	      >Retrieve list of relmap operators.</dd
 	      ><dt
 	      ><code
 		>koshu-version /N</code
 		></dt
 	      ><dd
-	      >Get version number of the koshu calculator.</dd
+	      >Get version number of the koshu calculator.</dd
 	      ></dl
 	    ></div
 	  ></div
 	><h1 id="g:1"
-	>koshu-cop</h1
+	>koshu-cop</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:consKoshuCop" class="def"
@@ -282,7 +310,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Met
 	    ></p
 	  ></div
 	><h1 id="g:2"
-	>koshu-cop-infix</h1
+	>koshu-cop-infix</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:consKoshuCopInfix" class="def"
@@ -318,7 +346,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Met
 	    ></p
 	  ></div
 	><h1 id="g:3"
-	>koshu-source</h1
+	>koshu-source</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:consKoshuSource" class="def"
@@ -337,8 +365,8 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Met
 	    >relmapKoshuSource</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopUse"
-	    >RopUse</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Intmed"
+	    >Intmed</a
 	    > c -&gt; (<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
 	    >TermName</a
 	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
@@ -356,7 +384,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Met
 	    ></p
 	  ></div
 	><h1 id="g:4"
-	>koshu-rop</h1
+	>koshu-rop</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:consKoshuRop" class="def"
@@ -394,7 +422,41 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Op-Met
 	    ></p
 	  ></div
 	><h1 id="g:5"
-	>koshu-version</h1
+	>koshu-proxy</h1
+	><div class="top"
+	><p class="src"
+	  ><a name="v:consKoshuProxy" class="def"
+	    >consKoshuProxy</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RopCons"
+	    >RopCons</a
+	    > c <a href="src/Koshucode-Baala-Op-Meta.html#consKoshuProxy" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><div class="top"
+	><p class="src"
+	  ><a name="v:relkitKoshuProxy" class="def"
+	    >relkitKoshuProxy</a
+	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
+	    >CContent</a
+	    > c =&gt; (<a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    >TermName</a
+	    >, <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Maybe.html#t:Maybe"
+	    >Maybe</a
+	    > <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Token-Token.html#t:TermName"
+	    >TermName</a
+	    >) -&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:RelkitHook"
+	    >RelkitHook</a
+	    > c <a href="src/Koshucode-Baala-Op-Meta.html#relkitKoshuProxy" class="link"
+	    >Source</a
+	    ></p
+	  ></div
+	><h1 id="g:6"
+	>koshu-version</h1
 	><div class="top"
 	><p class="src"
 	  ><a name="v:consKoshuVersion" class="def"

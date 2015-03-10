@@ -8,59 +8,16 @@
 --   the <tt>koshu</tt> calculator that is contained in the
 --   <tt>koshucode-baala-calculator</tt> package.
 @package koshucode-baala-operator
-@version 0.89.0.0
+@version 0.102.0.0
 
 module Koshucode.Baala.Op.Builtin.Define
 
 -- | Constructor, usage, and attribute sorter
-type RopDefine c = (RopCons c, RopUsage, AttrDefine)
+type RopDefine c = (RopCons c, RopUsage, RopAttr)
 
 -- | Make implementations of relmap operators.
 ropList :: String -> [RopDefine c] -> [Rop c]
-
--- | No attributes
-ropN :: RopCons c -> RopUsage -> String -> RopDefine c
-
--- | Enumerating attributes
-ropE :: RopCons c -> RopUsage -> String -> RopDefine c
-
--- | One attribute
-ropI :: RopCons c -> RopUsage -> String -> RopDefine c
-
--- | Two attributes
-ropII :: RopCons c -> RopUsage -> String -> RopDefine c
-
--- | One and optional attributes
-ropIJ :: RopCons c -> RopUsage -> String -> RopDefine c
-
--- | Three attributes
-ropIII :: RopCons c -> RopUsage -> String -> RopDefine c
-
--- | Variable-length attributes
-ropV :: RopCons c -> RopUsage -> String -> RopDefine c
-
--- | One and variable-length attributes
-ropIV :: RopCons c -> RopUsage -> String -> RopDefine c
-
--- | Term list and one attribute
-ropTI :: RopCons c -> RopUsage -> String -> RopDefine c
-
--- | Term list and two attributes
-ropTII :: RopCons c -> RopUsage -> String -> RopDefine c
-
-
--- | Built-in relmap operator.
-module Koshucode.Baala.Op.Builtin.Rop
-
--- | Built-in relmap operator.
---   
---   <ul>
---   <li><i><i>r</i> <tt>|</tt> <i>s</i></i> Append relmaps</li>
---   <li><i><tt>id</tt></i> Identity relmap</li>
---   </ul>
-ropsBuiltin :: [Rop c]
-consId :: RopCons c
-relmapId :: RopUse c -> Relmap c
+def :: RopCons c -> RopUsage -> String -> RopDefine c
 
 module Koshucode.Baala.Op.Message
 
@@ -84,6 +41,9 @@ dumpTrees :: [TTree] -> Ab a
 
 -- | Attribute not found
 noAttr :: String -> Ab a
+
+-- | Not implemented
+notImpl :: Ab a
 
 -- | Not a nested relation
 notNestRel :: [TermName] -> Head -> Ab a
@@ -113,6 +73,23 @@ reqUnaryFn :: Ab a
 unexpTermName :: Ab a
 
 
+-- | Built-in relmap operator.
+module Koshucode.Baala.Op.Builtin.Rop
+
+-- | Built-in relmap operator.
+--   
+--   <ul>
+--   <li><i><i>r</i> <tt>|</tt> <i>s</i></i> Append relmaps</li>
+--   <li><i><tt>id</tt></i> Identity relmap</li>
+--   </ul>
+ropsBuiltin :: [Rop c]
+consId :: RopCons c
+relmapId :: Intmed c -> Relmap c
+
+-- | Placeholder for unimplemented operator.
+consXxx :: RopCons c
+
+
 -- | Parsing list of terms.
 module Koshucode.Baala.Op.Builtin.Term
 
@@ -140,19 +117,19 @@ picker :: Head -> [TermName] -> Map [c]
 
 -- | Attribute getters: Extract attribute from use of relmap.
 module Koshucode.Baala.Op.Builtin.Get
-type RopGet c a = RopUse c -> String -> Ab a
+type RopGet c a = Intmed c -> String -> Ab a
 getOption :: a -> RopGet c a -> RopGet c a
 getMaybe :: RopGet c a -> RopGet c (Maybe a)
 
 -- | Get <tt>True</tt> when attribute is given, <tt>False</tt> otherwise.
-getSwitch :: RopUse c -> String -> Ab Bool
+getSwitch :: Intmed c -> String -> Ab Bool
 
 -- | Get word from named attribute.
 --   
 --   <pre>
 --   consXxx :: RopCons c
---   consXxx u = do
---     sign &lt;- getWord u "-sign"
+--   consXxx med = do
+--     sign &lt;- getWord med "-sign"
 --     ...
 --   </pre>
 getWord :: RopGet c String
@@ -165,15 +142,15 @@ getTreesByColon :: RopGet c [[TTree]]
 --   
 --   <pre>
 --   consMeet :: (Ord c) =&gt; RopCons c
---   consMeet u = do
---     m &lt;- getRelmap u
---     Right $ relmapMeet u m
+--   consMeet med = do
+--     m &lt;- getRelmap med
+--     Right $ relmapMeet med m
 --   </pre>
-getRelmap :: RopUse c -> String -> Ab (Relmap c)
+getRelmap :: Intmed c -> String -> Ab (Relmap c)
 
 -- | Get relmaps from operator use.
-getRelmaps :: RopUse c -> Ab [Relmap c]
-getOptRelmap :: Relmap c -> RopUse c -> String -> Ab (Relmap c)
+getRelmaps :: Intmed c -> Ab [Relmap c]
+getOptRelmap :: Relmap c -> Intmed c -> String -> Ab (Relmap c)
 
 -- | Get a term name from named attribute.
 getTerm :: RopGet c TermName
@@ -187,7 +164,6 @@ getTermsCo :: RopGet c (Bool, [TermName])
 
 -- | Get list of term-name pairs from named attribute.
 getTermPairs :: RopGet c [TermName2]
-getNestTerms :: RopGet c [Terminal RopName]
 getTermTrees :: RopGet c [Named TTree]
 
 module Koshucode.Baala.Op.DepRank
@@ -231,11 +207,11 @@ module Koshucode.Baala.Op.Gadget
 --   </ul>
 ropsGadget :: CContent c => [Rop c]
 consContents :: Ord c => RopCons c
-relmapContents :: Ord c => RopUse c -> TermName -> Relmap c
+relmapContents :: Ord c => Intmed c -> TermName -> Relmap c
 consDepRank :: (Ord c, CDec c) => RopCons c
-relmapDepRank :: (Ord c, CDec c) => RopUse c -> TermName3 -> Relmap c
+relmapDepRank :: (Ord c, CDec c) => Intmed c -> TermName3 -> Relmap c
 consSize :: CDec c => RopCons c
-relmapSize :: CDec c => RopUse c -> TermName -> Relmap c
+relmapSize :: CDec c => Intmed c -> TermName -> Relmap c
 relkitSize :: CDec c => TermName -> RelkitFlow c
 consDumpTree :: CDec c => RopCons c
 
@@ -259,29 +235,31 @@ relkitKoshuCop :: CContent c => TermName -> RelkitHook c
 consKoshuCopInfix :: CContent c => RopCons c
 relkitKoshuCopInfix :: CContent c => (TermName, Maybe TermName, Maybe TermName) -> RelkitHook c
 consKoshuSource :: CContent c => RopCons c
-relmapKoshuSource :: CContent c => RopUse c -> (TermName, Maybe TermName, Maybe TermName) -> Relmap c
+relmapKoshuSource :: CContent c => Intmed c -> (TermName, Maybe TermName, Maybe TermName) -> Relmap c
 consKoshuRop :: CContent c => RopCons c
 relkitKoshuRop :: CContent c => (Maybe TermName, Maybe TermName, Maybe TermName) -> RelkitHook c
+consKoshuProxy :: CContent c => RopCons c
+relkitKoshuProxy :: CContent c => (Maybe TermName, Maybe TermName) -> RelkitHook c
 consKoshuVersion :: CContent c => RopCons c
 relkitKoshuVersion :: CContent c => TermName -> RelkitHook c
 
 module Koshucode.Baala.Op.Resource
 
--- | Implementation of relational operators.
+-- | Relmap operators about resources.
 --   
 --   <ul>
---   <li><i><tt>koshu-cop /N</tt></i> Retrieve list of content
---   operators.</li>
---   <li><i>@koshu-cop-infix /N [ -height /N \</i> [ -dir /N ]@] Retrieve
---   list of infix specifications.</li>
---   <li><i><tt>koshu-rop /N</tt></i> Retrieve list of relmap
---   operators.</li>
---   <li><i><tt>koshu-version /N</tt></i> Get version number of the koshu
---   calculator.</li>
+--   <li><i><tt>koshu-res-rop /N /N</tt></i> Derived relmap operators in
+--   the current resource.</li>
+--   <li><i><tt>koshu-res-sink /N /N</tt></i> Judgement patterns of sinks
+--   in the current resource.</li>
 --   </ul>
 ropsResource :: CContent c => [Rop c]
 consKoshuResRop :: CContent c => RopCons c
 relkitKoshuResRop :: CContent c => (TermName, TermName) -> RelkitHook c
+consKoshuResSink :: CContent c => RopCons c
+relkitKoshuResSink :: CContent c => (TermName, TermName) -> RelkitHook c
+consKoshuResArticle :: CContent c => RopCons c
+relkitKoshuResArticle :: CContent c => TermName -> RelkitHook c
 
 module Koshucode.Baala.Op.Source
 
@@ -297,10 +275,10 @@ ropsSource :: CContent c => [Rop c]
 consDee :: RopCons c
 consDum :: RopCons c
 consEmpty :: RopCons c
-relmapEmpty :: RopUse c -> [TermName] -> Relmap c
+relmapEmpty :: Intmed c -> [TermName] -> Relmap c
 consSource :: RopCons c
 consSourceTerm :: RopCons c
-relmapSourceTerm :: RopUse c -> String -> Map (Relmap c)
+relmapSourceTerm :: Intmed c -> String -> Map (Relmap c)
 
 module Koshucode.Baala.Op.Term
 
@@ -318,22 +296,22 @@ module Koshucode.Baala.Op.Term
 --   </ul>
 ropsTerm :: Ord c => [Rop c]
 consPick :: RopCons c
-relmapPick :: RopUse c -> [TermName] -> Relmap c
+relmapPick :: Intmed c -> [TermName] -> Relmap c
 relkitPick :: [TermName] -> RelkitFlow c
 consCut :: RopCons c
-relmapCut :: RopUse c -> [TermName] -> Relmap c
+relmapCut :: Intmed c -> [TermName] -> Relmap c
 relkitCut :: [TermName] -> RelkitFlow c
 consPickTerm :: RopCons c
-relmapPickTerm :: RopUse c -> Relmap c -> Relmap c
+relmapPickTerm :: Intmed c -> Relmap c -> Relmap c
 relkitPickTerm :: RelkitBinary c
 consCutTerm :: RopCons c
-relmapCutTerm :: RopUse c -> Relmap c -> Relmap c
+relmapCutTerm :: Intmed c -> Relmap c -> Relmap c
 relkitCutTerm :: RelkitBinary c
 consMove :: RopCons c
-relmapMove :: RopUse c -> ([TermName], [TermName]) -> Relmap c
+relmapMove :: Intmed c -> ([TermName], [TermName]) -> Relmap c
 relkitMove :: ([TermName], [TermName]) -> RelkitFlow c
 consRename :: RopCons c
-relmapRename :: RopUse c -> [TermName2] -> Relmap c
+relmapRename :: Intmed c -> [TermName2] -> Relmap c
 
 module Koshucode.Baala.Op.Peripheral
 
@@ -346,19 +324,19 @@ module Koshucode.Baala.Op.Peripheral
 --   </ul>
 ropsPeripheral :: CContent c => [Rop c]
 consMember :: (Ord c, CSet c, CList c, CText c) => RopCons c
-relmapMember :: (Ord c, CSet c, CList c, CText c) => RopUse c -> TermName2 -> Relmap c
+relmapMember :: (Ord c, CSet c, CList c, CText c) => Intmed c -> TermName2 -> Relmap c
 relkitMember :: (Ord c, CSet c, CList c, CText c) => TermName2 -> RelkitFlow c
 consRdf :: RopCons c
 consAssn :: CAssn c => RopCons c
-relmapAssn :: CAssn c => RopUse c -> ([TermName], TermName) -> Relmap c
+relmapAssn :: CAssn c => Intmed c -> ([TermName], TermName) -> Relmap c
 relkitAssn :: CAssn c => ([TermName], TermName) -> RelkitFlow c
 consUnassn :: CAssn c => RopCons c
-relmapUnassn :: CAssn c => RopUse c -> (TermName, [TermName]) -> Relmap c
+relmapUnassn :: CAssn c => Intmed c -> (TermName, [TermName]) -> Relmap c
 relkitUnassn :: CAssn c => (TermName, [TermName]) -> RelkitFlow c
 consTermName :: CTerm c => RopCons c
-relmapTermName :: CTerm c => RopUse c -> TermName -> Relmap c
+relmapTermName :: CTerm c => Intmed c -> TermName -> Relmap c
 relkitTermName :: CTerm c => TermName -> RelkitFlow c
-relmapToday :: CTime c => RopUse c -> (TermName, Time) -> Relmap c
+relmapToday :: CTime c => Intmed c -> (TermName, Time) -> Relmap c
 relkitToday :: CTime c => (TermName, Time) -> Maybe Head -> Ab (Relkit c)
 
 module Koshucode.Baala.Op.TermGadget
@@ -376,22 +354,22 @@ module Koshucode.Baala.Op.TermGadget
 --   </ul>
 ropsTermGadget :: Ord c => [Rop c]
 consPrefix :: RopCons c
-relmapPrefix :: RopUse c -> String -> [String] -> Relmap c
+relmapPrefix :: Intmed c -> String -> [String] -> Relmap c
 
 -- | Add prefix to specified terms.
 relkitPrefix :: String -> [String] -> RelkitFlow c
 consUnprefix :: RopCons c
-relmapUnprefix :: RopUse c -> String -> Relmap c
+relmapUnprefix :: Intmed c -> String -> Relmap c
 
 -- | Remove prefix
 relkitUnprefix :: String -> RelkitFlow c
 consPrefixChange :: RopCons c
-relmapPrefixChange :: RopUse c -> (String, String) -> Relmap c
+relmapPrefixChange :: Intmed c -> (String, String) -> Relmap c
 
 -- | Change prefix
 relkitPrefixChange :: (String, String) -> RelkitFlow c
 consWipe :: RopCons c
-relmapWipe :: RopUse c -> Relmap c
+relmapWipe :: Intmed c -> Relmap c
 relkitWipe :: RelkitFlow c
 
 
@@ -406,15 +384,15 @@ module Koshucode.Baala.Op.Lattice.Tropashko
 consMeet :: Ord c => RopCons c
 
 -- | Meet two relations.
-relmapMeet :: Ord c => RopUse c -> Relmap c -> Relmap c
+relmapMeet :: Ord c => Intmed c -> Relmap c -> Relmap c
 
 -- | Meet two relations.
 relkitMeet :: Ord c => RelkitBinary c
 consJoin :: Ord c => RopCons c
 
 -- | Join two relations.
-relmapJoin :: Ord c => RopUse c -> Relmap c -> Relmap c
-relmapJoinList :: Ord c => RopUse c -> [Relmap c] -> Relmap c
+relmapJoin :: Ord c => Intmed c -> Relmap c -> Relmap c
+relmapJoinList :: Ord c => Intmed c -> [Relmap c] -> Relmap c
 
 -- | Join two relations.
 relkitJoin :: RelkitBinary c
@@ -423,16 +401,16 @@ relkitJoin :: RelkitBinary c
 -- | Restrict by relmap
 module Koshucode.Baala.Op.Lattice.Restrict
 consSome :: Ord c => RopCons c
-relmapSome :: Ord c => RopUse c -> Map (Relmap c)
+relmapSome :: Ord c => Intmed c -> Map (Relmap c)
 relkitSome :: Ord c => RelkitBinary c
 consNone :: Ord c => RopCons c
-relmapNone :: Ord c => RopUse c -> Map (Relmap c)
+relmapNone :: Ord c => Intmed c -> Map (Relmap c)
 relkitNone :: Ord c => RelkitBinary c
 consSub :: Ord c => RopCons c
-relmapSub :: Ord c => RopUse c -> Map (Relmap c)
+relmapSub :: Ord c => Intmed c -> Map (Relmap c)
 relkitSub :: Ord c => RelkitBinary c
 consCompose :: Ord c => RopCons c
-relmapCompose :: Ord c => RopUse c -> Map (Relmap c)
+relmapCompose :: Ord c => Intmed c -> Map (Relmap c)
 relkitCompose :: Ord c => RelkitBinary c
 
 
@@ -471,40 +449,40 @@ module Koshucode.Baala.Op.Control
 -- | Implementation of relational operators.
 ropsControl :: CContent c => [Rop c]
 consIf :: Ord c => RopCons c
-relmapIf :: Ord c => RopUse c -> [Relmap c] -> Relmap c
+relmapIf :: Ord c => Intmed c -> [Relmap c] -> Relmap c
 relkitIf :: Ord c => RelkitConfl c
 consWhen :: Ord c => RopCons c
 consUnless :: Ord c => RopCons c
 consFix :: Ord c => RopCons c
 consFixJoin :: Ord c => RopCons c
 consEqual :: Ord c => RopCons c
-relmapEqual :: Ord c => RopUse c -> Map (Relmap c)
+relmapEqual :: Ord c => Intmed c -> Map (Relmap c)
 relkitEqual :: Ord c => RelkitBinary c
 
 module Koshucode.Baala.Op.Nest.Flow
 consDown :: CRel c => RopCons c
-relmapDown :: CRel c => RopUse c -> TermName -> Relmap c
+relmapDown :: CRel c => Intmed c -> TermName -> Relmap c
 relkitDown :: CRel c => TermName -> RelkitFlow c
 consUp :: CRel c => RopCons c
-relmapUp :: CRel c => RopUse c -> TermName -> Relmap c
+relmapUp :: CRel c => Intmed c -> TermName -> Relmap c
 relkitUp :: CRel c => TermName -> RelkitFlow c
 consChunk :: (Ord c, CRel c) => RopCons c
-relmapChunk :: (Ord c, CRel c) => RopUse c -> [TermName] -> [TermName] -> Relmap c
+relmapChunk :: (Ord c, CRel c) => Intmed c -> [TermName] -> [TermName] -> Relmap c
 relkitChunk :: (Ord c, CRel c) => [TermName] -> [TermName] -> RelkitFlow c
 
 module Koshucode.Baala.Op.Nest.Confl
 consCopy :: RopCons c
 consFor :: CRel c => RopCons c
-relmapFor :: CRel c => RopUse c -> [Terminal String] -> TermName -> Map (Relmap c)
+relmapFor :: CRel c => Intmed c -> TermName -> Map (Relmap c)
 relkitFor :: CRel c => TermName -> RelkitBinary c
 consGroup :: (Ord c, CRel c) => RopCons c
-relmapGroup :: (Ord c, CRel c) => RopUse c -> TermName -> Map (Relmap c)
+relmapGroup :: (Ord c, CRel c) => Intmed c -> TermName -> Map (Relmap c)
 relkitGroup :: (Ord c, CRel c) => TermName -> RelkitBinary c
 consSlice :: CRel c => RopCons c
-relmapSlice :: CRel c => RopUse c -> [Terminal String] -> TermName -> Map (Relmap c)
+relmapSlice :: CRel c => Intmed c -> TermName -> Map (Relmap c)
 relkitSlice :: CRel c => TermName -> RelkitBinary c
 consSliceUp :: CRel c => RopCons c
-relmapSliceUp :: CRel c => RopUse c -> [Terminal String] -> Map (Relmap c)
+relmapSliceUp :: CRel c => Intmed c -> Map (Relmap c)
 relkitSliceUp :: CRel c => RelkitBinary c
 
 
@@ -512,12 +490,12 @@ relkitSliceUp :: CRel c => RelkitBinary c
 module Koshucode.Baala.Op.Nest.Deriv
 consGroupBy :: (Ord c, CRel c) => RopCons c
 consJoinUp :: Ord c => RopCons c
-relmapJoinUp :: Ord c => RopUse c -> [Terminal String] -> Relmap c
+relmapJoinUp :: Ord c => Intmed c -> [TermName] -> Relmap c
 consHang :: (Ord c, CRel c) => RopCons c
 consNest :: (Ord c, CRel c) => RopCons c
-relmapNest :: (Ord c, CRel c) => RopUse c -> (Bool, [TermName], TermName) -> Relmap c
+relmapNest :: (Ord c, CRel c) => Intmed c -> (Bool, [TermName], TermName) -> Relmap c
 consUnnest :: (Ord c, CRel c) => RopCons c
-relmapUnnest :: (Ord c, CRel c) => RopUse c -> TermName -> Relmap c
+relmapUnnest :: (Ord c, CRel c) => Intmed c -> TermName -> Relmap c
 
 
 -- | Relational operators for nested relations.
@@ -545,10 +523,9 @@ module Koshucode.Baala.Op.Nest.Rop
 --   <li><i><tt>nest /P ... -to /N</tt></i> Nest terms <tt>/P</tt> ... into
 --   nested relation.</li>
 --   <li><i><tt>unnest /P</tt></i> Unnest nested relation <tt>/P</tt>.</li>
---   <li><i>@slice /N [R\</i> [-&lt; /N ...]<tt>] Add nested relation as
---   output of relmap </tt>R@.</li>
---   <li><i>@slice-up R [-&lt; /N ...\</i> @] Slice, nested map, and lift
---   up.</li>
+--   <li><i>@slice /N [R\</i> <tt>] Add nested relation as output of relmap
+--   </tt>R@.</li>
+--   <li><i><tt>slice-up R</tt></i> Slice, nested map, and lift up.</li>
 --   <li><i><tt>up /P</tt></i> Lift up nested relation.</li>
 --   </ul>
 ropsNest :: CContent c => [Rop c]
