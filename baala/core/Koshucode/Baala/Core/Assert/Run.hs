@@ -66,11 +66,11 @@ runRelmapViaRelkit hook links r (B.Rel he1 bo1) =
 
 optionType :: B.ParaType String
 optionType = B.paraType `B.paraOpt`
-             [ "-empty"  -- show empty filler
-             , "-fore"   -- move terms to front
-             , "-order"  -- sort list of judges by content
-             , "-align"  -- align terms vertically
-             , "-table"  -- output relation in tabular format
+             [ "empty"  -- show empty filler
+             , "fore"   -- move terms to front
+             , "order"  -- sort list of judges by content
+             , "align"  -- align terms vertically
+             , "table"  -- output relation in tabular format
              ]
 
 optionProcess :: (Ord c, B.Write c, C.CRel c)
@@ -80,7 +80,7 @@ optionProcess sh judgeOf pat opt r1 =
     do case B.paraUnmatch opt optionType of
          Nothing  -> Right ()
          Just un  -> Msg.unkOption un
-       showEmpty <- B.paraGetSwitch opt "-empty"
+       showEmpty <- B.paraGetSwitch opt "empty"
        r2 <- optionRelmap opt r1
        let judges    = B.judgesFromRel (judgeOf showEmpty) pat r2
        comment <- optionComment sh pat opt r2
@@ -88,8 +88,8 @@ optionProcess sh judgeOf pat opt r1 =
 
 optionRelmap :: (Ord c, C.CRel c) => C.TTreePara -> B.AbMap (B.Rel c)
 optionRelmap opt r1 =
-    Right r1 >>= call optionFore  "-fore"
-             >>= call optionOrder "-order"
+    Right r1 >>= call optionFore  "fore"
+             >>= call optionOrder "order"
     where call f name r2 = case B.paraGet opt name of
                              Right args -> f args r2
                              Left _     -> Right r2
@@ -97,7 +97,7 @@ optionRelmap opt r1 =
 optionComment :: (B.Write c, C.CRel c) =>
     [B.ShortDef] -> B.JudgePat -> C.TTreePara -> B.Rel c -> B.Ab [String]
 optionComment sh p opt r =
-    do optTable <- B.paraGetSwitch opt "-table"
+    do optTable <- B.paraGetSwitch opt "table"
        case optTable of
          True  -> Right $ title : "" : table
          False -> Right []
@@ -106,7 +106,7 @@ optionComment sh p opt r =
       table = ("  " ++) `map` C.relTableLines sh r
 
 
--- ---------------------------------  Option "-fore"
+-- ---------------------------------  Option "fore"
 
 optionFore :: (Ord c) => [B.TTree] -> B.AbMap (B.Rel c)
 optionFore opt2 r1 =
@@ -138,7 +138,7 @@ snipRelRaw (heSnip, boSnip) ns (B.Rel he1 bo1)
       bo2  =  boSnip ind `map` bo1
 
 
--- ---------------------------------  Option "-order"
+-- ---------------------------------  Option "order"
 
 optionOrder :: (Ord c, C.CRel c) => [B.TTree] ->  B.AbMap (B.Rel c)
 optionOrder _ r1 = Right $ relSortDeep r1

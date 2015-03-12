@@ -12,6 +12,7 @@ module Koshucode.Baala.Core.Lexmap.Attr
     AttrPara, AttrSortPara,
     attrSort, attrBranch,
     maybeSingleHyphen,
+    maybeSingleHyphen',
     -- $AttributeSorter
   ) where
 
@@ -86,6 +87,10 @@ attrBranch trees =
 maybeSingleHyphen :: B.TTreeTo (Maybe String)
 maybeSingleHyphen (B.TextLeafRaw _ n@('-' : _))  = Just n
 maybeSingleHyphen _                              = Nothing
+
+maybeSingleHyphen' :: B.TTreeTo (Maybe String)
+maybeSingleHyphen' (B.TextLeafRaw _ ('-' : n))  = Just n
+maybeSingleHyphen' _                            = Nothing
 
 attrSortPos :: RopAttr -> B.AbMap AttrPara
 attrSortPos (RopAttr sorter classify _ pos named) p =

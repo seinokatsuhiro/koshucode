@@ -62,7 +62,7 @@ resIncludeBody res abcl =
 
       assert :: Clab (C.ShortAssert' h c)
       assert C.ClauseHead { C.clauseSecNo = sec, C.clauseShort = sh } src (C.CAssert typ pat opt toks) =
-          do optPara    <- C.ttreePara1 opt
+          do optPara    <- C.ttreePara1' opt
              rmapTrees  <- B.tokenTrees toks
              Right $ B.Short (B.codePtList $ head src) sh
                        $ C.Assert sec typ pat optPara src rmapTrees Nothing []
@@ -79,7 +79,7 @@ resIncludeBody res abcl =
 
       inc :: Clab B.CodeName
       inc _ _ (C.CInclude toks) =
-          paraToCodeName =<< C.ttreePara1 toks
+          paraToCodeName =<< C.ttreePara2 toks
 
 coxBuildG :: (C.CContent c) => C.Global c -> B.TTreeToAb (C.Cox c)
 coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)
@@ -90,14 +90,14 @@ calcContG = C.calcContent . C.globalCopset
 paraToCodeName :: C.TTreePara -> B.Ab B.CodeName
 paraToCodeName = B.paraSelect unmatch ps where
     ps = [ (just1, B.paraType `B.paraJust` 1)
-         , (stdin, B.paraType `B.paraReq` ["-stdin"]) ]
+         , (stdin, B.paraType `B.paraReq` ["stdin"]) ]
 
     just1 p = do arg <- B.paraGetFst p
                  case arg of
                    B.TextLeaf _ _ path -> Right $ B.codeNameFrom path
                    _ -> Msg.adlib "include not text"
 
-    stdin p = do args <- B.paraGet p "-stdin"
+    stdin p = do args <- B.paraGet p "stdin"
                  case args of
                    [] -> Right B.CodeStdin
                    _  -> Msg.adlib "include no args"
