@@ -92,7 +92,7 @@ a # v = (a ,[v])
 a ## vv = (a, vv)
 
 enumAttr :: [AttrName]
-enumAttr = map (AttrNormal . ('-' :) . show) [1 :: Int ..]
+enumAttr = map (AttrNormal . show) [1 :: Int ..]
 
 isTermLeaf :: B.TTree -> Bool
 isTermLeaf (B.TreeL token) = B.isTermToken token

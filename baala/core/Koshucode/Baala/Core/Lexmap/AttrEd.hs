@@ -54,8 +54,8 @@ consAttrEd = loop where
             | op == "id"        -> right trees $ AttrEdId
             | op == "fill"      -> right trees $ AttrEdFill $ fill xs
 
-          [ B.TextLeafRaw _ op : B.TextLeafRaw _ k : xs ]
-            | notKeyword k      -> Msg.reqAttrName k
+          [ B.TextLeafRaw _ op : B.TextLeafRaw _ ('-' : k) : xs ]
+            -- | notKeyword k      -> Msg.reqAttrName k
             | op == "add"       -> right trees $ AttrEdAdd False k xs
             | op == "opt"       -> right trees $ AttrEdAdd True  k xs
             | op == "term"      -> right trees $ AttrEdTerm k xs

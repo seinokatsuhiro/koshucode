@@ -8,7 +8,8 @@ module Koshucode.Baala.Core.Lexmap.LexmapTrees
     LexmapTrees (..), consLexmapTrees,
 
     -- * Parameter of token trees
-    TTreePara, ttreePara1, ttreePara1', ttreePara2,
+    TTreePara,
+    ttreePara1, ttreePara2,
   ) where
 
 import qualified Koshucode.Baala.Base                 as B
@@ -47,9 +48,6 @@ type TTreePara = B.Para B.TTree
 -- | Make token tree parameter with single-hyphen names.
 ttreePara1 :: [B.Token] -> B.Ab TTreePara
 ttreePara1 = ttreeParaBy C.maybeSingleHyphen
-
-ttreePara1' :: [B.Token] -> B.Ab TTreePara
-ttreePara1' = ttreeParaBy C.maybeSingleHyphen'
 
 -- | Make token tree parameter with double-hyphen names.
 ttreePara2 :: [B.Token] -> B.Ab TTreePara

@@ -16,15 +16,15 @@ type GlobalSlot = B.NamedTrees
 
 -- | Substitute slots by global and attribute slots.
 substSlot :: [GlobalSlot] -> [C.AttrTree] -> B.AbMap [B.TTree]
-substSlot gslot roa = Right . concat B.<=< mapM (substTree gslot roa)
+substSlot gslot attr = Right . concat B.<=< mapM (substTree gslot attr)
 
 substTree :: [GlobalSlot] -> [C.AttrTree] -> B.TTree -> B.Ab [B.TTree]
-substTree gslot roa tree = Msg.abSlotTree tree $ loop tree where
+substTree gslot attr tree = Msg.abSlotTree tree $ loop tree where
     loop (B.TreeB p q sub) = do sub' <- mapM loop sub
                                 Right [B.TreeB p q $ concat sub']
     loop (B.TreeL (B.TSlot _ n name))
-        | n == 0    = replace n name C.attrNameTrunk roa (`pos` name)
-        | n == 1    = replace n name (C.AttrNormal $ '-' : name) roa Right
+        | n == 0    = replace n name C.attrNameTrunk attr (`pos` name)
+        | n == 1    = replace n name (C.AttrNormal name) attr Right
         | n == 2    = replace n name name gslot Right
         | otherwise = Msg.noSlotName n name
     loop tk = Right [tk]

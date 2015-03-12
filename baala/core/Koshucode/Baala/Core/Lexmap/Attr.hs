@@ -12,7 +12,6 @@ module Koshucode.Baala.Core.Lexmap.Attr
     AttrPara, AttrSortPara,
     attrSort, attrBranch,
     maybeSingleHyphen,
-    maybeSingleHyphen',
     -- $AttributeSorter
   ) where
 
@@ -85,12 +84,8 @@ attrBranch trees =
        Right $ B.paraNameMapKeys C.AttrNormal p2
 
 maybeSingleHyphen :: B.TTreeTo (Maybe String)
-maybeSingleHyphen (B.TextLeafRaw _ n@('-' : _))  = Just n
-maybeSingleHyphen _                              = Nothing
-
-maybeSingleHyphen' :: B.TTreeTo (Maybe String)
-maybeSingleHyphen' (B.TextLeafRaw _ ('-' : n))  = Just n
-maybeSingleHyphen' _                            = Nothing
+maybeSingleHyphen (B.TextLeafRaw _ ('-' : n))  = Just n
+maybeSingleHyphen _                            = Nothing
 
 attrSortPos :: RopAttr -> B.AbMap AttrPara
 attrSortPos (RopAttr sorter classify _ pos named) p =
@@ -112,7 +107,7 @@ attrCheck :: [C.AttrName] -> [C.AttrName] -> [C.AttrTree] -> B.Ab ()
 attrCheck posNames branchNames attr =
     case t (map fst attr) B.\\ textAll of
       []    -> Right ()
-      u : _ -> Msg.unexpAttr $ "Unknown " ++ u
+      u : _ -> Msg.unexpAttr $ "Unknown " ++ ('-' : u)
     where
       textAll = "@trunk" : t posNames ++ t branchNames
       t       = map C.attrNameText

@@ -62,7 +62,7 @@ resIncludeBody res abcl =
 
       assert :: Clab (C.ShortAssert' h c)
       assert C.ClauseHead { C.clauseSecNo = sec, C.clauseShort = sh } src (C.CAssert typ pat opt toks) =
-          do optPara    <- C.ttreePara1' opt
+          do optPara    <- C.ttreePara1 opt
              rmapTrees  <- B.tokenTrees toks
              Right $ B.Short (B.codePtList $ head src) sh
                        $ C.Assert sec typ pat optPara src rmapTrees Nothing []

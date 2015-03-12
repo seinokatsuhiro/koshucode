@@ -44,7 +44,7 @@ lookupTree    = lookupAttr C.AttrNormal
 lookupRelmap  = lookupAttr C.AttrRelmapNormal `B.mappend` lookupAttr C.AttrRelmapLocal
 
 lookupAttr :: (String -> C.AttrName) -> String -> C.Intmed c -> Maybe [B.TTree]
-lookupAttr c name = B.paraLookupSingle (c name) . C.lexAttr . C.medLexmap
+lookupAttr c ('-' : name) = B.paraLookupSingle (c name) . C.lexAttr . C.medLexmap
 
 getAbortable :: ([B.TTree] -> B.Ab b) -> RopGet c b
 getAbortable f med name =
