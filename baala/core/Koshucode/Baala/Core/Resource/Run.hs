@@ -55,7 +55,7 @@ assembleRelmap res@C.Resource { C.resSlot    = slots
       assemble :: C.Assert c -> B.Ab (C.Assert c, [String])
       assemble ass@C.Assert { C.assSection = sec } =
           Msg.abAssert [ass] $ do
-            trees      <- C.substSlot slots [] $ C.assTree ass
+            trees      <- C.substSlot slots [] $ B.paraPos $ C.assPara ass
             (lx, lxs)  <- consLexmap slots (findRelmap derives) sec trees
             relmap     <- consRelmap lx
             links      <- B.sequenceSnd $ B.mapSndTo consRelmap lxs

@@ -27,9 +27,8 @@ data Assert' h c = Assert
     { assSection   :: C.SecNo                -- ^ Section number
     , assType      :: C.AssertType           -- ^ Logical quality
     , assPattern   :: B.JudgePat             -- ^ Pattern of judgement
-    , assOption    :: C.TTreePara            -- ^ Assert option
     , assToken     :: [B.Token]              -- ^ Source token list
-    , assTree      :: [B.TTree]              -- ^ Token relmap
+    , assPara      :: C.TTreePara
     , assRelmap    :: Maybe (C.Relmap' h c)  -- ^ Relmap
     , assLinks     :: C.RelmapLinkTable' h c
     } deriving (Show)
@@ -38,7 +37,7 @@ instance B.CodePtr (Assert' h c) where
     codePtList = concatMap B.codePtList . assToken
 
 instance B.Write (Assert' h c) where
-    write sh (Assert _ q pat _ toks _ _ _) =
+    write sh (Assert _ q pat toks _ _ _) =
         let qs = B.writeH sh [C.assertSymbol q, pat]
         in B.docHang qs 2 (B.writeH sh toks)
 

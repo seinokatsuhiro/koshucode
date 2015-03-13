@@ -33,8 +33,8 @@ runAssertDataset :: forall h. forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c,
 runAssertDataset hook (B.Short _ sh ass) =
     Right . concat =<< mapM each ass
     where
-      each (C.Assert _ _ _ _ _ _ Nothing _) = B.bug "runAssertDataset"
-      each a@(C.Assert _ typ pat opt _ _ (Just relmap) libs) =
+      each (C.Assert _ _ _ _ _ Nothing _) = B.bug "runAssertDataset"
+      each a@(C.Assert _ typ pat _ opt (Just relmap) libs) =
           Msg.abAssert [a] $ do
             r1 <- runRelmapViaRelkit hook libs relmap B.reldee
             let judgeOf showEmpty = assert showEmpty typ
@@ -65,7 +65,7 @@ runRelmapViaRelkit hook links r (B.Rel he1 bo1) =
 -- ---------------------------------  Options
 
 optionType :: B.ParaType String
-optionType = B.paraType `B.paraOpt`
+optionType = B.paraType `B.paraMin` 0 `B.paraOpt`
              [ "empty"  -- show empty filler
              , "fore"   -- move terms to front
              , "order"  -- sort list of judges by content
