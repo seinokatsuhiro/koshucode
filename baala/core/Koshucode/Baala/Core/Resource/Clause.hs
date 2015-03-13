@@ -40,12 +40,12 @@ data ClauseHead = ClauseHead
     } deriving (Show, G.Data, G.Typeable)
 
 data ClauseBody
-    = CInclude  [B.Token]                                   -- ^ Includeing source
-    | CExport   String                                      -- ^ Exporting name
-    | CRelmap   String [B.Token]                            -- ^ Source of relmap
-    | CAssert   C.AssertType B.JudgePat [B.Token] [B.Token] -- ^ Assertion
-    | CJudge    C.AssertType B.JudgePat [B.Token]           -- ^ Judge
-    | CSlot     String [B.Token]                            -- ^ Global slot
+    = CInclude  [B.Token]                          -- ^ Includeing source
+    | CExport   String                             -- ^ Exporting name
+    | CRelmap   String [B.Token]                   -- ^ Source of relmap
+    | CAssert   C.AssertType B.JudgePat [B.Token]  -- ^ Assertion
+    | CJudge    C.AssertType B.JudgePat [B.Token]  -- ^ Judge
+    | CSlot     String [B.Token]                   -- ^ Global slot
       deriving (Show, G.Data, G.Typeable)
 
 instance B.CodePtr Clause where
@@ -62,12 +62,12 @@ clauseHeadEmpty = ClauseHead B.codeClauseEmpty 0 [] []
 clauseTypeText :: Clause -> String
 clauseTypeText (Clause _ body) =
     case body of
-      CInclude  _           -> "include"
-      CExport   _           -> "export"
-      CRelmap   _ _         -> "relmap"
-      CAssert   _ _ _ _     -> "assert"
-      CJudge    _ _ _       -> "judge"
-      CSlot     _ _         -> "slot"
+      CInclude  _       -> "include"
+      CExport   _       -> "export"
+      CRelmap   _ _     -> "relmap"
+      CAssert   _ _ _   -> "assert"
+      CJudge    _ _ _   -> "judge"
+      CSlot     _ _     -> "slot"
 
 
 
@@ -181,9 +181,9 @@ consClauseEach h@(ClauseHead src sec sh ab) = result where
 
     assert q (B.TText _ _ p : xs) =
         case B.splitTokensBy isDelim xs of
-          Right (opt, _, expr)    -> a expr opt
-          Left  expr              -> a expr []
-        where a expr opt          = c1 $ CAssert q p opt expr
+          Right (_, _, expr)      -> a expr
+          Left  expr              -> a expr
+        where a expr              = c1 $ CAssert q p expr
     assert _ ts                   = judgeError ts
 
     -- lengthen short signs

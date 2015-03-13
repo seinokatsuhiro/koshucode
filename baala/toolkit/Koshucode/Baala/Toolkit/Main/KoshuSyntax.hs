@@ -188,7 +188,7 @@ judgesClauseType :: [B.Judge Type.VContent]
 judgesClauseType = map j cs where
     j x = judgeClauseType $ C.Clause C.clauseHeadEmpty x
     cs  = [ C.CRelmap "" []
-          , C.CAssert C.AssertAffirm "" [] []
+          , C.CAssert C.AssertAffirm "" []
           , C.CJudge  C.AssertAffirm "" []
           , C.CSlot "" []
           ]

@@ -46,7 +46,7 @@ resIncludeBody res abcl =
                             Right $ (res2 x) { C.resLastSecNo = sec }
        case b of
          C.CJudge _ _ _    -> judge  `to` \x -> res { C.resJudge   = C.resJudge   << x }
-         C.CAssert _ _ _ _ -> assert `to` \x -> res { C.resAssert  = C.resAssert  << x }
+         C.CAssert _ _ _   -> assert `to` \x -> res { C.resAssert  = C.resAssert  << x }
          C.CRelmap _ _     -> relmap `to` \x -> res { C.resLexmap  = C.resLexmap  << x }
          C.CSlot _ _       -> slot   `to` \x -> res { C.resSlot    = C.resSlot    << x }
          C.CInclude _      -> inc    `to` \x -> res { C.resArticle = C.resArticle <: x }
@@ -61,11 +61,9 @@ resIncludeBody res abcl =
       calc = calcContG $ C.resGlobal res
 
       assert :: Clab (C.ShortAssert' h c)
-      assert C.ClauseHead { C.clauseSecNo = sec, C.clauseShort = sh } src (C.CAssert typ pat opt toks) =
-          do optPara1   <- C.ttreePara1 opt
-             optPara2   <- C.ttreePara2 toks
-             let optPara   = optPara1 `B.mappend` optPara2
-                 ass       = C.Assert sec typ pat src optPara Nothing []
+      assert C.ClauseHead { C.clauseSecNo = sec, C.clauseShort = sh } src (C.CAssert typ pat toks) =
+          do optPara <- C.ttreePara2 toks
+             let ass  = C.Assert sec typ pat src optPara Nothing []
              Right $ B.Short (B.codePtList $ head src) sh ass
 
       relmap :: Clab C.LexmapClause
