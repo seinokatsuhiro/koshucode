@@ -62,10 +62,14 @@ resIncludeBody res abcl =
 
       assert :: Clab (C.ShortAssert' h c)
       assert C.ClauseHead { C.clauseSecNo = sec, C.clauseShort = sh } src (C.CAssert typ pat opt toks) =
-          do optPara    <- C.ttreePara1 opt
-             rmapTrees  <- B.tokenTrees toks
-             Right $ B.Short (B.codePtList $ head src) sh
-                       $ C.Assert sec typ pat optPara src rmapTrees Nothing []
+          do optPara1   <- C.ttreePara1 opt
+             optPara2   <- C.ttreePara2 toks
+             let optPara2' = optPara2 { B.paraAll = [], B.paraPos = [] }
+                 optPara   = optPara1 `B.mappend` optPara2'
+                 rmapTrees = B.paraPos optPara2
+                 ass       = C.Assert sec typ pat optPara src rmapTrees Nothing []
+             --rmapTrees  <- B.tokenTrees toks
+             Right $ B.Short (B.codePtList $ head src) sh ass
 
       relmap :: Clab C.LexmapClause
       relmap C.ClauseHead { C.clauseSecNo = sec } _ (C.CRelmap n toks) =

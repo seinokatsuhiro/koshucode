@@ -48,6 +48,13 @@ data ParaBody n a
 
 type ParaMap n a = Map.Map n [[a]]
 
+instance (Ord n) => B.Monoid (ParaBody n a) where
+    mempty        = paraEmpty
+    mappend p1 p2 = ParaBody { paraAll   = paraAll  p1 ++  paraAll p2
+                             , paraPos   = paraPos  p1 ++  paraPos p2
+                             , paraName  = paraName p1 `u` paraName p2 }
+        where u = Map.unionWith (++)
+
 -- | Parse list into parameter.
 para :: (Ord n) => (a -> Maybe n) -> [a] -> ParaBody n a
 para name xxs = pos xxs [] where
