@@ -23,8 +23,8 @@
 **    ./dir-rank.k ../*/IMPORT.k
 **
 
-|== DIR-RANK -order -table -fore /dir-rank /dir
-    : dir
+|== DIR-RANK : dir
+  --order --table --fore /dir-rank /dir
 
 dir : dep
     | add /dir  ( dir-part  <dot> /module )
