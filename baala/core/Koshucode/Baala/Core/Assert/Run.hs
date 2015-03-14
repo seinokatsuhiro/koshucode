@@ -66,11 +66,13 @@ runRelmapViaRelkit hook links r (B.Rel he1 bo1) =
 
 optionType :: B.ParaType String
 optionType = B.paraType `B.paraMin` 0 `B.paraOpt`
-             [ "empty"  -- show empty filler
-             , "fore"   -- move terms to front
-             , "order"  -- sort list of judges by content
-             , "align"  -- align terms vertically
-             , "table"  -- output relation in tabular format
+             [ "empty"     -- show empty filler
+             , "fore"      -- move terms to front
+             , "forward"   -- move terms to front
+             , "backward"  -- move terms to rear
+             , "order"     -- sort list of judges by content
+             , "align"     -- align terms vertically
+             , "table"     -- output relation in tabular format
              ]
 
 optionProcess :: (Ord c, B.Write c, C.CRel c)
@@ -88,8 +90,10 @@ optionProcess sh judgeOf pat opt r1 =
 
 optionRelmap :: (Ord c, C.CRel c) => C.TTreePara -> B.AbMap (B.Rel c)
 optionRelmap opt r1 =
-    Right r1 >>= call optionFore  "fore"
-             >>= call optionOrder "order"
+    Right r1 >>= call optionForward  "fore"
+             >>= call optionForward  "forward"
+             >>= call optionBackward "backward"
+             >>= call optionOrder    "order"
     where call f name r2 = case B.paraGet opt name of
                              Right args -> f args r2
                              Left _     -> Right r2
@@ -106,12 +110,18 @@ optionComment sh p opt r =
       table = ("  " ++) `map` C.relTableLines sh r
 
 
--- ---------------------------------  Option "fore"
+-- ---------------------------------  Option "forward" and "backward"
 
-optionFore :: (Ord c) => [B.TTree] -> B.AbMap (B.Rel c)
-optionFore opt2 r1 =
+type SnipRel c = B.Snip2 B.NamedType c
+
+optionForward, optionBackward :: (Ord c) => [B.TTree] -> B.AbMap (B.Rel c)
+optionForward  = optionToward B.snipForward2
+optionBackward = optionToward B.snipBackward2
+
+optionToward :: (Ord c) => SnipRel c -> [B.TTree] -> B.AbMap (B.Rel c)
+optionToward snip2 opt2 r1 =
     do ns <- flatnames opt2
-       snipRel B.snipForward2 ns r1
+       snipRel snip2 ns r1
 
 flatnames :: [B.TTree] -> B.Ab [B.TermName]
 flatnames trees =
@@ -124,7 +134,7 @@ flatname :: B.TTree -> Maybe B.TermName
 flatname (B.TermLeaf _ _ [n])  = Just n
 flatname _                     = Nothing
 
-snipRel :: (Ord c) => B.Snip2 B.NamedType c -> [B.TermName] -> B.AbMap (B.Rel c)
+snipRel :: (Ord c) => SnipRel c -> [B.TermName] -> B.AbMap (B.Rel c)
 snipRel (heSnip, boSnip) ns (B.Rel he1 bo1)
     | null left  = Right r2
     | otherwise  = Msg.unkTerm left he1
