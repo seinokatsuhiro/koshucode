@@ -14,6 +14,10 @@ module Koshucode.Baala.Op.Term
     consMove, relmapMove, relkitMove,
     -- * rename
     consRename, relmapRename,
+    -- * forward
+    consForward, relmapForward,
+    -- * backward
+    consBackward, relmapBackward,
   ) where
 
 import qualified Koshucode.Baala.Base       as B
@@ -39,8 +43,10 @@ import qualified Koshucode.Baala.Op.Message as Msg
 ropsTerm :: (Ord c) => [C.Rop c]
 ropsTerm = Op.ropList "term"  -- GROUP
     --         CONSTRUCTOR        USAGE                      ATTRIBUTE
-    [ Op.def   consCut            "cut /P ..."               "V -term"
+    [ Op.def   consBackward       "backward /P ..."          "V -term"
+    , Op.def   consCut            "cut /P ..."               "V -term"
     , Op.def   consCutTerm        "cut-term /R"              "1 -relmap/"
+    , Op.def   consForward        "forward /P ..."           "V -term"
     , Op.def   consPick           "pick /P ..."              "V -term"
     , Op.def   consPickTerm       "pick-term /R"             "1 -relmap/"
     , Op.def   consRename         "rename /N /P ..."         "V -term"
@@ -167,3 +173,34 @@ relkitMove (ps, ns) (Just he1)
       moveTerm (n, i)    =  moveName n `B.mapAt` i
       moveName n (_, t)  =  (n, t)
 
+
+-- ----------------------  forward & backward
+
+consForward :: C.RopCons c
+consForward med =
+  do ns <- Op.getTerms med "-term"
+     Right $ relmapForward med ns
+
+relmapForward :: C.Intmed c -> [B.TermName] -> C.Relmap c
+relmapForward med = C.relmapFlow med . relkitToward B.snipForward2
+
+consBackward :: C.RopCons c
+consBackward med =
+  do ns <- Op.getTerms med "-term"
+     Right $ relmapBackward med ns
+
+relmapBackward :: C.Intmed c -> [B.TermName] -> C.Relmap c
+relmapBackward med = C.relmapFlow med . relkitToward B.snipBackward2
+
+relkitToward :: B.Snip2 B.NamedType c -> [B.TermName] -> C.RelkitFlow c
+relkitToward _ _ Nothing = Right C.relkitNothing
+relkitToward (heSnip, boSnip) ns (Just he1)
+    | B.sameLength ns ind1 = Right kit2
+    | otherwise = Msg.unkTerm non he1
+    where
+      he2   = B.headMap (heSnip ind1) he1
+      kit2  = C.relkitJust he2 $ C.RelkitOneToOne False $ boSnip ind1
+      ns1   = B.headNames he1
+      non   = B.snipOff ind ns
+      ind1  = ns  `B.snipIndex` ns1
+      ind   = ns1 `B.snipIndex` ns
