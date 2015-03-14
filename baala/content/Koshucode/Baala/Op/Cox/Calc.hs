@@ -100,11 +100,11 @@ relkitSubst (cops, cox) (Just he1)
     | B.sameLength ns ind = Right kit2
     | otherwise           = Msg.unexpTermName
     where
-      (ns, xs)  =  unzip cox                  -- names and expressions
-      ns1       =  B.headNames he1            -- term names of input relation
-      ind       =  ns `B.snipIndex` ns1       -- indicies for ns on input relation
-      cut       =  B.snipOff  ind             -- cutting-ns function
-      fore      =  B.snipFore ind             -- cutting-ns function
+      (ns, xs)  =  unzip cox               -- names and expressions
+      ns1       =  B.headNames he1         -- term names of input relation
+      ind       =  ns `B.snipIndex` ns1    -- indicies for ns on input relation
+      cut       =  B.snipOff  ind          -- cutting-ns function
+      fore      =  B.snipForward ind       -- cutting-ns function
       he2       =  B.headMap fore he1      -- heading of output relation
       kit2      =  C.relkitJust he2 $ C.RelkitOneToAbOne True f2 []
       f2 _ cs1  =  do cs2 <- C.coxRunCox cops he1 cs1 `mapM` xs
@@ -132,7 +132,7 @@ relkitFill (ns, cops, coxTo) (Just he1) = Right kit2 where
     ind       =  ns `B.snipIndex` ns1
     pick      =  B.snipFrom ind
     cut       =  B.snipOff  ind
-    fore      =  B.snipFore ind
+    fore      =  B.snipForward ind
     he2       =  B.headMap fore he1
     kit2      =  C.relkitJust he2 $ C.RelkitOneToAbOne True f2 []
     f2 _ cs1  =  do cTo  <- C.coxRunCox cops he1 cs1 coxTo

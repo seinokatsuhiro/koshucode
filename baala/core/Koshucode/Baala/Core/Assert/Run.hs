@@ -111,7 +111,7 @@ optionComment sh p opt r =
 optionFore :: (Ord c) => [B.TTree] -> B.AbMap (B.Rel c)
 optionFore opt2 r1 =
     do ns <- flatnames opt2
-       snipRelRaw B.snipFore2 ns r1
+       snipRel B.snipForward2 ns r1
 
 flatnames :: [B.TTree] -> B.Ab [B.TermName]
 flatnames trees =
@@ -124,18 +124,18 @@ flatname :: B.TTree -> Maybe B.TermName
 flatname (B.TermLeaf _ _ [n])  = Just n
 flatname _                     = Nothing
 
-snipRelRaw :: (Ord c) => B.SnipPair B.NamedType c -> [B.TermName] -> B.AbMap (B.Rel c)
-snipRelRaw (heSnip, boSnip) ns (B.Rel he1 bo1)
+snipRel :: (Ord c) => B.Snip2 B.NamedType c -> [B.TermName] -> B.AbMap (B.Rel c)
+snipRel (heSnip, boSnip) ns (B.Rel he1 bo1)
     | null left  = Right r2
     | otherwise  = Msg.unkTerm left he1
     where
-      ns1  =  B.headNames he1
-      ind  =  ns `B.snipIndex` ns1
-      left =  ns `B.snipLeft`  ns1
+      ns1   = B.headNames he1
+      ind   = ns `B.snipIndex` ns1
+      left  = ns `B.snipLeft`  ns1
 
-      r2   =  B.Rel he2 bo2
-      he2  =  heSnip ind `B.headMap` he1
-      bo2  =  boSnip ind `map` bo1
+      r2    = B.Rel he2 bo2
+      he2   = heSnip ind `B.headMap` he1
+      bo2   = boSnip ind `map` bo1
 
 
 -- ---------------------------------  Option "order"

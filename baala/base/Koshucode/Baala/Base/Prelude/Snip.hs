@@ -4,7 +4,7 @@
 
 module Koshucode.Baala.Base.Prelude.Snip
   ( -- * Type
-    Snip, SnipPair, Bin,
+    Snip, Snip2, Bin,
   
     -- * Function
     snipFull, snipIndex, snipPair,
@@ -12,7 +12,8 @@ module Koshucode.Baala.Base.Prelude.Snip
     -- $FunctionExample
   
     -- * Derivative
-    snipFore, snipFore2,
+    snipForward, snipBackward, 
+    snipForward2, snipBackward2,
     snipLeft, snipShare, snipRight,
     snipOrder,
     sameLength, notSameLength,
@@ -21,15 +22,17 @@ module Koshucode.Baala.Base.Prelude.Snip
   
   ) where
 
-import qualified Data.List as List
+import qualified Data.List                           as List
 import qualified Koshucode.Baala.Base.Prelude.Import as B
 import qualified Koshucode.Baala.Base.Prelude.Class  as B
 
+-- | Snipping elements using indicies.
 type Snip a = [Int] -> B.Map [a]
 
-type SnipPair a b = (Snip a, Snip b)
+-- | Snip for differenct type values.
+type Snip2 a b = (Snip a, Snip b)
 
-type Bin a  = a -> a -> a
+type Bin a = a -> a -> a
 
 -- --------------------------------------------  Function
 
@@ -110,10 +113,12 @@ snipOff ps xs = loop 0 xs where
 --
 -- /Examples/
 --
---  Move snipping elements to the front.
+--  Move snipping elements to the front and rear.
 --
---    >>> (snipIndex "cd" "abcdefg") `snipFore` "ABCDEFG"
+--    >>> (snipIndex "cd" "abcdefg") `snipForward` "ABCDEFG"
 --    "CDABEFG"
+--    >>> (snipIndex "cd" "abcdefg") `snipBackward` "ABCDEFG"
+--    "ABEFGCD"
 --
 --  Shared elements of @\"abcd\"@ and @\"bcefg\"@.
 --
@@ -136,13 +141,20 @@ snipOff ps xs = loop 0 xs where
 --    False
 
 -- | Move indexed elements to the front.
-snipFore :: Snip a
-snipFore ps xs =
-    let (from, off) = snipBoth ps xs
-    in from ++ off
+snipForward :: Snip a
+snipForward ps xs = case snipBoth ps xs of
+                      (snip, rest) -> snip ++ rest
 
-snipFore2 :: SnipPair a b
-snipFore2 = (snipFore, snipFore)
+-- | Move indexed elements to the rear.
+snipBackward :: Snip a
+snipBackward ps xs = case snipBoth ps xs of
+                       (snip, rest) -> rest ++ snip
+
+snipForward2 :: Snip2 a b
+snipForward2 = (snipForward, snipForward)
+
+snipBackward2 :: Snip2 a b
+snipBackward2 = (snipBackward, snipBackward)
 
 -- | Take left-side elements.
 snipLeft :: (Eq a) => Bin [a]

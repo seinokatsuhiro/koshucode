@@ -153,7 +153,7 @@ relkitClockAlter (cops, n, (day, hour, minute, sec)) (Just he1) = Right kit2 whe
       ind       = [n] `B.snipIndex` ns1
       pick      = B.snipFrom ind
       cut       = B.snipOff ind
-      fore      = B.snipFore ind
+      fore      = B.snipForward ind
       he2       = B.headMap fore he1
       kit2      = C.relkitJust he2 $ C.RelkitOneToAbOne False f2 []
       f2 _ cs1  = do let run    = C.coxRunCox cops he1 cs1
