@@ -4,6 +4,7 @@
 -- | Run resource.
 module Koshucode.Baala.Core.Resource.Run
   ( runResource,
+    assembleRelmap,
     relmapCons,
   ) where
 
@@ -17,10 +18,10 @@ import qualified Koshucode.Baala.Core.Message            as Msg
 
 runResource :: (C.CContent c) => C.Resource c -> B.Ab (B.OutputResult c)
 runResource res =
-    do s2 <- assembleRelmap res
-       let js = C.resJudge s2
+    do res' <- assembleRelmap res
+       let js = C.resJudge res'
        case filter B.isViolative js of
-         []  -> runResourceBody s2
+         []  -> runResourceBody res'
          jsV -> Right ([B.Short [] [] [B.OutputJudge jsV]], [])
 
 runResourceBody :: forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c) =>

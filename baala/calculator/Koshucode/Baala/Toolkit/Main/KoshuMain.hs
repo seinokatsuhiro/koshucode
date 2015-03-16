@@ -137,9 +137,15 @@ oneLinerPreprocess = loop where
 putElems :: (C.CContent c) => C.Global c -> [B.CodeName] -> IO Int
 putElems g src =
     do (abres, _) <- C.gioResource (C.readSources src) g
-       case abres of
-         Right res -> B.putJudges 0 $ L.resourceElem res
-         Left  _   -> B.bug "putElems"
+       res2 <- abio abres
+       res3 <- abio $ C.assembleRelmap res2
+       putStrLn "-*- koshu -*-"
+       putStrLn ""
+       B.putJudges 0 $ L.resourceElem res3
+    where
+      abio mx = case mx of
+                  Left  a -> B.abort [] a
+                  Right x -> return x
 
 
 -- ----------------------  Pretty printing
