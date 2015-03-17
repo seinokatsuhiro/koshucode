@@ -21,6 +21,10 @@ module Koshucode.Baala.Core.Relmap.Global
     -- * Operator set
     OpSet' (..),
     opset, opsetFill,
+
+    -- * Option
+    Option (..),
+    defaultOption,
   ) where
 
 import qualified Data.Version                        as Ver
@@ -53,6 +57,7 @@ data Global' h c = Global
       , globalArgs         :: [String]              -- ^ Command line arguments
       , globalProxy        :: [B.HttpProxy]         -- ^ Proxy setting from environment variables
       , globalTime         :: B.Time                -- ^ Invocation time
+      , globalOption       :: Option                -- ^ Options
       , globalSourceCount  :: Int                   -- ^ Sequential number for sources
       , globalSources      :: [B.CodePiece]         -- ^ Included sources
       , globalHook         :: h c                   -- ^ Usually, data resource is used as hook
@@ -99,6 +104,7 @@ global' h = Global
     , globalArgs         = []
     , globalProxy        = []
     , globalTime         = B.timeFromMjd 0
+    , globalOption       = defaultOption
     , globalSourceCount  = 0
     , globalSources      = []
     , globalHook         = h }
@@ -129,4 +135,17 @@ opsetFill ops = ops2 where
 
 opsetRopsAdd :: [C.Rop' h c] -> B.Map (OpSet' h c)
 opsetRopsAdd rops ops = ops { opsetRopList = rops ++ opsetRopList ops }
+
+
+-- ----------------------  Options
+
+data Option = Option
+    { optOrderingJudges :: Bool
+    , optSeparatorChar  :: Char
+    } deriving (Show, Eq, Ord)
+
+defaultOption :: Option
+defaultOption =
+    Option { optOrderingJudges = False
+           , optSeparatorChar  = ':' }
 

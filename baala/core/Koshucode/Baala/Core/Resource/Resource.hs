@@ -35,6 +35,7 @@ import qualified Koshucode.Baala.Core.Assert    as C
 -- | Relational data resource
 data Resource c = Resource
     { resGlobal     :: Global c           -- ^ Global parameter
+    , resOption     :: C.Option           -- ^ Options
     , resImport     :: [Resource c]       -- ^ Importing resources
     , resExport     :: [String]           -- ^ Exporting names
     , resSlot       :: [B.NamedTrees]     -- ^ Global slots
@@ -67,6 +68,7 @@ resIncluded Resource { resArticle = (_, _, done) } = done
 resEmpty :: Resource c
 resEmpty = Resource
            { resGlobal     = global
+           , resOption     = C.defaultOption
            , resImport     = []
            , resExport     = []
            , resSlot       = []
