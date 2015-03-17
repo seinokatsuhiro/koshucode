@@ -46,6 +46,7 @@ data ClauseBody
     | CAssert   C.AssertType B.JudgePat [B.Token]  -- ^ Assertion
     | CJudge    C.AssertType B.JudgePat [B.Token]  -- ^ Judge
     | CSlot     String [B.Token]                   -- ^ Global slot
+    | COption   [B.Token]                          -- ^ Option settings
       deriving (Show, G.Data, G.Typeable)
 
 instance B.CodePtr Clause where
@@ -68,6 +69,7 @@ clauseTypeText (Clause _ body) =
       CAssert   _ _ _   -> "assert"
       CJudge    _ _ _   -> "judge"
       CSlot     _ _     -> "slot"
+      COption   _       -> "option"
 
 
 
@@ -132,6 +134,7 @@ consClauseEach h@(ClauseHead src sec sh ab) = result where
         | k == "export"             = normal    $ expt xs
         | k == "short"              = newShort  $ short xs
         | k == "about"              = newAbout  xs
+        | k == "option"             = normal    $ option xs
         | k == "****"               = normal    []
     dispatch (B.TSlot _ 2 n : xs)   = normal    $ slot n xs
     dispatch []                     = normal    []
@@ -214,13 +217,14 @@ consClauseEach h@(ClauseHead src sec sh ab) = result where
 
     rmap n xs                     = c1 $ CRelmap n xs
     slot n xs                     = c1 $ CSlot   n xs
+    incl xs                       = c1 $ CInclude  xs
+    option xs                     = c1 $ COption   xs
 
     expt (B.TText _ _ n : B.TText _ _ ":" : xs)
                                   = c0 (CExport n) : rmap n xs
     expt [B.TText _ _ n]          = c1 $ CExport n
     expt _                        = unkAtStart []
 
-    incl xs                       = c1 $ CInclude xs
 
 pairs :: [a] -> Maybe [(a, a)]
 pairs (a:b:cs)  = do cs' <- pairs cs

@@ -42,14 +42,15 @@ resIncludeBody res abcl =
     do C.Clause h b <- abcl
        let sec   = C.clauseSecNo h
            toks  = B.front $ B.clauseTokens $ C.clauseSource h
-           f `to` res2 = do x <- Msg.abClause toks $ f h toks b
-                            Right $ (res2 x) { C.resLastSecNo = sec }
+           f `to` upd = do x <- Msg.abClause toks $ f h toks b
+                           Right $ (upd x) { C.resLastSecNo = sec }
        case b of
-         C.CJudge _ _ _    -> judge  `to` \x -> res { C.resJudge   = C.resJudge   << x }
-         C.CAssert _ _ _   -> assert `to` \x -> res { C.resAssert  = C.resAssert  << x }
-         C.CRelmap _ _     -> relmap `to` \x -> res { C.resLexmap  = C.resLexmap  << x }
-         C.CSlot _ _       -> slot   `to` \x -> res { C.resSlot    = C.resSlot    << x }
-         C.CInclude _      -> inc    `to` \x -> res { C.resArticle = C.resArticle <: x }
+         C.CJudge   _ _ _ -> judge  `to` \x -> res { C.resJudge   = C.resJudge   << x }
+         C.CAssert  _ _ _ -> assert `to` \x -> res { C.resAssert  = C.resAssert  << x }
+         C.CRelmap  _ _   -> relmap `to` \x -> res { C.resLexmap  = C.resLexmap  << x }
+         C.CSlot    _ _   -> slot   `to` \x -> res { C.resSlot    = C.resSlot    << x }
+         C.CInclude _     -> inc    `to` \x -> res { C.resArticle = C.resArticle <: x }
+         C.COption  _     -> option `to` \x -> res { C.resOption = x }
     where
       f << y  = y : f res
       f <: t  = case f res of (todo1, todo2, done) -> (t : todo1, todo2, done)
@@ -58,10 +59,17 @@ resIncludeBody res abcl =
       judge _ _ (C.CJudge q p toks) =
           C.treesToJudge calc q p =<< B.tokenTrees toks
 
+      calc :: C.CalcContent c
       calc = calcContG $ C.resGlobal res
 
+      calc2 :: (String, [B.TTree]) -> B.Ab (String, c)
+      calc2 (name, trees) =
+          do c <- calc $ B.wrapTrees trees
+             Right (name, c)
+
       assert :: Clab (C.ShortAssert' h c)
-      assert C.ClauseHead { C.clauseSecNo = sec, C.clauseShort = sh } src (C.CAssert typ pat toks) =
+      assert C.ClauseHead { C.clauseSecNo = sec, C.clauseShort = sh }
+                          src (C.CAssert typ pat toks) =
           do optPara <- C.ttreePara2 toks
              let ass  = C.Assert sec typ pat src optPara Nothing []
              Right $ B.Short (B.codePtList $ head src) sh ass
@@ -79,6 +87,12 @@ resIncludeBody res abcl =
       inc :: Clab B.CodeName
       inc _ _ (C.CInclude toks) =
           paraToCodeName =<< C.ttreePara2 toks
+
+      option :: Clab C.Option
+      option _ _ (C.COption toks) =
+          do assn  <- optionAssn toks
+             assn' <- mapM calc2 assn
+             optionUpdate assn' $ C.resOption res
 
 coxBuildG :: (C.CContent c) => C.Global c -> B.TTreeToAb (C.Cox c)
 coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)
@@ -103,7 +117,24 @@ paraToCodeName = B.paraSelect unmatch ps where
 
     unmatch = Msg.adlib "include unknown"
 
+optionAssn :: [B.Token] -> B.Ab [(String, [B.TTree])]
+optionAssn toks =
+    do trees <- B.tokenTrees toks
+       Right $ B.assocBy maybeName "" trees
+    where
+      maybeName (B.TextLeafRaw _ n) = Just n
+      maybeName _ = Nothing
 
+optionUpdate :: (C.CBool c) => [(String, c)] -> B.AbMap C.Option
+optionUpdate assn option = loop option assn where
+    loop opt [] = Right opt
+    loop opt ((name, c) : rest) =
+        case name of
+          "order" -> do let b    = C.gBool c
+                            opt' = opt { C.optOrderingJudges = b }
+                        loop opt' rest
+          ""      -> loop opt rest
+          _       -> Msg.adlib $ "unknown option: " ++ name
 
 -- ----------------------
 -- $Process
