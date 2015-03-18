@@ -120,7 +120,9 @@ paraToCodeName = B.paraSelect unmatch ps where
 optionAssn :: [B.Token] -> B.Ab [(String, [B.TTree])]
 optionAssn toks =
     do trees <- B.tokenTrees toks
-       Right $ B.assocBy maybeName "" trees
+       case B.assocBy maybeName trees of
+         ([], assoc) -> Right assoc
+         _           -> Msg.adlib "extra input"
     where
       maybeName (B.TextLeafRaw _ n) = Just n
       maybeName _ = Nothing

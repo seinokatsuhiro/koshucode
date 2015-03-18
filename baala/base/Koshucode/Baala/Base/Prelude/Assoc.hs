@@ -42,7 +42,7 @@ import qualified Koshucode.Baala.Base.Prelude.Class as B
 
 
 
--- ---------------------- Association list
+-- ----------------------  Association list
 
 -- $Assoc
 --
@@ -50,10 +50,10 @@ import qualified Koshucode.Baala.Base.Prelude.Class as B
 --
 --  Construct assoc list by splitting at char @\'a\'@.
 --
---    >>> assocBy (`lookup` [('a', "A")]) "-" "banana apple cocoa"
---    [("-","b"), ("A","n"), ("A","n"), ("A"," "), ("A","pple coco"), ("A","")]
---    >>> assocBy (`lookup` [('a', "A")]) "-" ""
---    [("-","")]
+--    >>> assocBy (`lookup` [('a', "A")]) "banana apple cocoa"
+--    ("b", [("A","n"), ("A","n"), ("A"," "), ("A","pple coco"), ("A","")])
+--    >>> assocBy (`lookup` [('a', "A")]) ""
+--    ("", [])
 --
 --  Check key exists.
 --
@@ -77,13 +77,17 @@ import qualified Koshucode.Baala.Base.Prelude.Class as B
 type Lookup a = String -> Maybe a
 
 -- | Construct assoc list by splitting base list.
-assocBy :: (a -> Maybe k) -> k -> [a] -> [(k, [a])]
-assocBy p k0 = loop k0 [] where
-    loop k1 ys [] = [(k1, reverse ys)]
-    loop k1 ys (x : xs) =
-        case p x of
-          Just k2 -> (k1, reverse ys) : loop k2 [] xs
-          Nothing -> loop k1 (x : ys) xs
+assocBy :: (a -> Maybe k) -> [a] -> ([a], [(k, [a])])
+assocBy p = lead [] where
+    lead ys []         = (reverse ys, [])
+    lead ys (x : xs)   = case p x of
+                           Nothing -> lead (x : ys) xs
+                           Just k  -> (reverse ys, ass k [] xs)
+
+    ass k ys []        = [(k, reverse ys)]
+    ass k ys (x : xs)  = case p x of
+                           Nothing -> ass k (x : ys) xs
+                           Just k' -> (k, reverse ys) : ass k' [] xs
 
 -- | Check which given key is there in assoc list.
 assocExist :: (Eq k) => k -> [(k, a)] -> Bool
