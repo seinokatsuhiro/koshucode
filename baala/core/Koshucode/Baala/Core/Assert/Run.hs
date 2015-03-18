@@ -22,15 +22,15 @@ import qualified Koshucode.Baala.Core.Message         as Msg
 
 -- | Calculate assertion list.
 runAssertJudges :: (Ord c, B.Write c, C.CRel c, C.CEmpty c, B.SelectRel h, C.GetGlobal h)
-  => h c -> C.ShortAsserts' h c -> B.Ab (B.OutputChunks c)
-runAssertJudges hook a =
-    do chunks <- runAssertDataset hook a
+  => h c -> C.Option c -> C.ShortAsserts' h c -> B.Ab (B.OutputChunks c)
+runAssertJudges hook opt a =
+    do chunks <- runAssertDataset hook opt a
        Right $ a { B.shortBody = chunks }
 
 -- | Calculate assertion list.
 runAssertDataset :: forall h. forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c, B.SelectRel h, C.GetGlobal h)
-  => h c -> C.ShortAsserts' h c -> B.Ab [B.OutputChunk c]
-runAssertDataset hook (B.Short _ sh ass) =
+  => h c -> C.Option c -> C.ShortAsserts' h c -> B.Ab [B.OutputChunk c]
+runAssertDataset hook option (B.Short _ sh ass) =
     Right . concat =<< mapM each ass
     where
       each (C.Assert _ _ _ _ _ Nothing _) = B.bug "runAssertDataset"
@@ -38,7 +38,7 @@ runAssertDataset hook (B.Short _ sh ass) =
           Msg.abAssert [a] $ do
             r1 <- runRelmapViaRelkit hook libs relmap B.reldee
             let judgeOf showEmpty = assert showEmpty typ
-            optionProcess sh judgeOf pat opt r1
+            optionProcess sh judgeOf pat option opt r1
 
       assert :: (C.CEmpty c) => Bool -> C.AssertType -> B.JudgeOf c
       assert True  q p = C.assertAs q p
@@ -76,20 +76,28 @@ optionType = B.paraType `B.paraMin` 0 `B.paraOpt`
              ]
 
 optionProcess :: (Ord c, B.Write c, C.CRel c)
-    => [B.ShortDef] -> (Bool -> B.JudgeOf c) -> B.JudgePat -> C.TTreePara
+    => [B.ShortDef] -> (Bool -> B.JudgeOf c) -> B.JudgePat
+    -> C.Option c -> C.TTreePara
     -> B.Rel c -> B.Ab [B.OutputChunk c]
-optionProcess sh judgeOf pat opt r1 =
+optionProcess sh judgeOf pat option opt r1 =
     do case B.paraUnmatch opt optionType of
          Nothing  -> Right ()
          Just un  -> Msg.unkOption un
        showEmpty <- B.paraGetSwitch opt "empty"
-       r2 <- optionRelmap opt r1
-       let judges    = B.judgesFromRel (judgeOf showEmpty) pat r2
-       comment <- optionComment sh pat opt r2
-       Right [ B.OutputJudge judges, B.OutputComment comment ]
+       r2 <- optionRelmapResource option r1
+       r3 <- optionRelmapAssert   opt    r2
+       let js = B.judgesFromRel (judgeOf showEmpty) pat r3
+       comment <- optionComment sh pat opt r3
+       Right [ B.OutputJudge js, B.OutputComment comment ]
 
-optionRelmap :: (Ord c, C.CRel c) => C.TTreePara -> B.AbMap (B.Rel c)
-optionRelmap opt r1 =
+optionRelmapResource :: (Ord c, C.CRel c) => C.Option c -> B.AbMap (B.Rel c)
+optionRelmapResource option r1 =
+    Right r1 >>= call optionOrder (C.optionBool "order" option)
+    where call f True  r2 = f [] r2
+          call _ False r2 = Right r2
+
+optionRelmapAssert :: (Ord c, C.CRel c) => C.TTreePara -> B.AbMap (B.Rel c)
+optionRelmapAssert opt r1 =
     Right r1 >>= call optionForward  "fore"
              >>= call optionForward  "forward"
              >>= call optionBackward "backward"

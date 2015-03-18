@@ -88,11 +88,11 @@ resIncludeBody res abcl =
       inc _ _ (C.CInclude toks) =
           paraToCodeName =<< C.ttreePara2 toks
 
-      option :: Clab C.Option
+      option :: Clab (C.Option c)
       option _ _ (C.COption toks) =
           do assn  <- optionAssn toks
              assn' <- mapM calc2 assn
-             optionUpdate assn' $ C.resOption res
+             B.foldM C.optionUpdate (C.resOption res) assn'
 
 coxBuildG :: (C.CContent c) => C.Global c -> B.TTreeToAb (C.Cox c)
 coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)
@@ -127,16 +127,6 @@ optionAssn toks =
       maybeName (B.TextLeafRaw _ n) = Just n
       maybeName _ = Nothing
 
-optionUpdate :: (C.CBool c) => [(String, c)] -> B.AbMap C.Option
-optionUpdate assn option = loop option assn where
-    loop opt [] = Right opt
-    loop opt ((name, c) : rest) =
-        case name of
-          "order" -> do let b    = C.gBool c
-                            opt' = opt { C.optOrderingJudges = b }
-                        loop opt' rest
-          ""      -> loop opt rest
-          _       -> Msg.adlib $ "unknown option: " ++ name
 
 -- ----------------------
 -- $Process

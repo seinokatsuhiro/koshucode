@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -Wall #-}
+{-# LANGUAGE NamedFieldPuns #-}
 
 -- | Global parameters.
 
@@ -23,14 +24,19 @@ module Koshucode.Baala.Core.Relmap.Global
     opset, opsetFill,
 
     -- * Option
-    Option (..),
-    defaultOption,
+    Option,
+    OptionContent (..),
+    option,
+    optionBool,
+    optionUpdate,
   ) where
 
+import qualified Data.Map.Strict                     as Map
 import qualified Data.Version                        as Ver
 import qualified Koshucode.Baala.Base                as B
 import qualified Koshucode.Baala.Core.Content        as C
 import qualified Koshucode.Baala.Core.Relmap.Rop     as C
+import qualified Koshucode.Baala.Core.Message        as Msg
 
 
 -- ----------------------  GetGlobal
@@ -57,7 +63,7 @@ data Global' h c = Global
       , globalArgs         :: [String]              -- ^ Command line arguments
       , globalProxy        :: [B.HttpProxy]         -- ^ Proxy setting from environment variables
       , globalTime         :: B.Time                -- ^ Invocation time
-      , globalOption       :: Option                -- ^ Options
+      , globalOption       :: Option c              -- ^ Options
       , globalSourceCount  :: Int                   -- ^ Sequential number for sources
       , globalSources      :: [B.CodePiece]         -- ^ Included sources
       , globalHook         :: h c                   -- ^ Usually, data resource is used as hook
@@ -95,7 +101,7 @@ globalCopset :: Global' h c -> C.CopSet c
 globalCopset  = opsetCop . globalOpset
 
 -- | Empty global parameters.
-global' :: h c -> Global' h c
+global' :: (C.CBool c, C.CText c) => h c -> Global' h c
 global' h = Global
     { globalSynopsis     = "koshu"
     , globalVersion      = Ver.Version [] []
@@ -104,7 +110,7 @@ global' h = Global
     , globalArgs         = []
     , globalProxy        = []
     , globalTime         = B.timeFromMjd 0
-    , globalOption       = defaultOption
+    , globalOption       = option
     , globalSourceCount  = 0
     , globalSources      = []
     , globalHook         = h }
@@ -139,13 +145,34 @@ opsetRopsAdd rops ops = ops { opsetRopList = rops ++ opsetRopList ops }
 
 -- ----------------------  Options
 
-data Option = Option
-    { optOrderingJudges :: Bool
-    , optSeparatorChar  :: Char
-    } deriving (Show, Eq, Ord)
+type Option c = Map.Map String (OptionContent c)
 
-defaultOption :: Option
-defaultOption =
-    Option { optOrderingJudges = False
-           , optSeparatorChar  = ':' }
+data OptionContent c
+    = OptionBool [c] Bool
+    | OptionChar [c] Char
+      deriving (Show, Eq, Ord)
+
+option :: (C.CBool c, C.CText c) => Option c
+option =
+    Map.fromList
+           [ ("order"    , OptionBool [C.pBool True, C.pBool False] False)
+           , ("sep-char" , OptionChar [C.pText ":", C.pText "|"] ':') ]
+
+optionBool :: String -> Option c -> Bool
+optionBool name opt =
+    case Map.lookup name opt of
+      Just (OptionBool _ b) -> b
+      _                     -> B.bug "unknown option"
+
+optionUpdate :: (Eq c, C.CBool c, C.CText c) => Option c -> (String, c) -> B.Ab (Option c)
+optionUpdate opt (name, c) = opt' where
+    opt' = case Map.lookup name opt of
+             Just oc  -> upd oc
+             Nothing  -> Msg.adlib "unknown option"
+
+    upd (OptionBool cs _) | c `elem` cs = ins (OptionBool cs $ C.gBool c)
+    upd (OptionChar cs _) | c `elem` cs = ins (OptionChar cs $ head $ C.gText c)
+    upd _ = Msg.adlib "unknown content"
+
+    ins oc = Right $ Map.insert name oc opt
 

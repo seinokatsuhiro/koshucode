@@ -24,10 +24,11 @@ module Koshucode.Baala.Core.Resource.Resource
   ) where
 
 import qualified Koshucode.Baala.Base           as B
+import qualified Koshucode.Baala.Core.Assert    as C
+import qualified Koshucode.Baala.Core.Content   as C
 import qualified Koshucode.Baala.Core.Lexmap    as C
 import qualified Koshucode.Baala.Core.Relkit    as C
 import qualified Koshucode.Baala.Core.Relmap    as C
-import qualified Koshucode.Baala.Core.Assert    as C
 
 
 -- ----------------------  Data type
@@ -35,7 +36,7 @@ import qualified Koshucode.Baala.Core.Assert    as C
 -- | Relational data resource
 data Resource c = Resource
     { resGlobal     :: Global c           -- ^ Global parameter
-    , resOption     :: C.Option           -- ^ Options
+    , resOption     :: C.Option c         -- ^ Options
     , resImport     :: [Resource c]       -- ^ Importing resources
     , resExport     :: [String]           -- ^ Exporting names
     , resSlot       :: [B.NamedTrees]     -- ^ Global slots
@@ -65,10 +66,10 @@ resIncluded :: Resource c -> [B.CodePiece]
 resIncluded Resource { resArticle = (_, _, done) } = done
 
 -- | Resource that has no contents.
-resEmpty :: Resource c
+resEmpty :: (C.CContent c) => Resource c
 resEmpty = Resource
            { resGlobal     = global
-           , resOption     = C.defaultOption
+           , resOption     = C.option
            , resImport     = []
            , resExport     = []
            , resSlot       = []
@@ -102,5 +103,5 @@ type Intmed          c = C.Intmed'          Resource c
 type ShortAssert     c = C.ShortAssert'     Resource c
 type ShortAsserts    c = C.ShortAsserts'    Resource c
 
-global :: Global c
+global :: (C.CContent c) => Global c
 global = C.global' resEmpty
