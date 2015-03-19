@@ -1,5 +1,5 @@
 {-# OPTIONS_GHC -Wall #-}
-{-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE PatternSynonyms #-}
 
 -- | Global parameters.
 
@@ -28,7 +28,7 @@ module Koshucode.Baala.Core.Relmap.Global
     OptionContent (..),
     option,
     optionBool,
-    optionUpdate,
+    optionParse,
   ) where
 
 import qualified Data.Map.Strict                     as Map
@@ -148,31 +148,65 @@ opsetRopsAdd rops ops = ops { opsetRopList = rops ++ opsetRopList ops }
 type Option c = Map.Map String (OptionContent c)
 
 data OptionContent c
-    = OptionBool [c] Bool
-    | OptionChar [c] Char
+    = OptionBool Bool
+    | OptionChar [Char] Char
+    | OptionTerms [String]
       deriving (Show, Eq, Ord)
 
 option :: (C.CBool c, C.CText c) => Option c
 option =
     Map.fromList
-           [ ("order"    , OptionBool [C.pBool True, C.pBool False] False)
-           , ("sep-char" , OptionChar [C.pText ":", C.pText "|"] ':') ]
+           [ ("order"    , OptionBool False)
+           , ("sep-char" , OptionChar ":|" ':')
+           , ("forward"  , OptionTerms [])
+           , ("backward" , OptionTerms []) ]
 
 optionBool :: String -> Option c -> Bool
 optionBool name opt =
     case Map.lookup name opt of
-      Just (OptionBool _ b) -> b
-      _                     -> B.bug "unknown option"
+      Just (OptionBool b) -> b
+      _                   -> B.bug "unknown option"
 
-optionUpdate :: (Eq c, C.CBool c, C.CText c) => Option c -> (String, c) -> B.Ab (Option c)
-optionUpdate opt (name, c) = opt' where
-    opt' = case Map.lookup name opt of
-             Just oc  -> upd oc
-             Nothing  -> Msg.adlib "unknown option"
+optionParse :: (Eq c, C.CBool c, C.CText c)
+  => C.CalcContent c -> [B.Token] -> B.AbMap (Option c)
+optionParse calc toks opt =
+    do assn  <- optionAssn toks
+       B.foldM (optionUpdate calc) opt assn
 
-    upd (OptionBool cs _) | c `elem` cs = ins (OptionBool cs $ C.gBool c)
-    upd (OptionChar cs _) | c `elem` cs = ins (OptionChar cs $ head $ C.gText c)
-    upd _ = Msg.adlib "unknown content"
+type NamedT a = ((String, [B.TTree]), a)
 
-    ins oc = Right $ Map.insert name oc opt
+optionAssn :: [B.Token] -> B.Ab [NamedT [B.TTree]]
+optionAssn toks =
+    do trees <- B.tokenTrees toks
+       case B.assocBy maybeName trees of
+         ([], assoc) -> Right assoc
+         _           -> Msg.adlib "extra input"
+    where
+      maybeName pt@(B.TextLeafRaw _ n) = Just (n, [pt])
+      maybeName _ = Nothing
+
+optionUpdate :: (Eq c, C.CBool c, C.CText c)
+   => C.CalcContent c -> Option c -> NamedT [B.TTree] -> B.Ab (Option c)
+optionUpdate calc opt ((name, pt), trees) =
+    Msg.abOption pt $ do
+      case Map.lookup name opt of
+        Just oc  -> Msg.abOption trees $ upd oc
+        Nothing  -> Msg.adlib $ "unknown option: " ++ name
+    where
+      abc = calc $ B.wrapTrees trees
+
+      upd (OptionBool    _) = do let ab = C.getBool abc
+                                 bool <- ab
+                                 ins $ OptionBool bool
+
+      upd (OptionChar cs _) = do let ab = C.getText abc
+                                 text <- ab
+                                 case text of
+                                   [ch] | elem ch cs -> ins $ OptionChar cs ch
+                                   _                 -> Msg.adlib "not one letter"
+
+      upd (OptionTerms _)   = do terms <- mapM C.treeToFlatTerm trees
+                                 ins $ OptionTerms terms
+                                                        
+      ins oc = Right $ Map.insert name oc opt
 

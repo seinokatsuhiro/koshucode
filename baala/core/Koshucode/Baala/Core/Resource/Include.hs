@@ -42,8 +42,9 @@ resIncludeBody res abcl =
     do C.Clause h b <- abcl
        let sec   = C.clauseSecNo h
            toks  = B.front $ B.clauseTokens $ C.clauseSource h
-           f `to` upd = do x <- Msg.abClause toks $ f h toks b
-                           Right $ (upd x) { C.resLastSecNo = sec }
+           f `to` upd = Msg.abClause toks $ do
+                          x <- f h toks b
+                          Right $ (upd x) { C.resLastSecNo = sec }
        case b of
          C.CJudge   _ _ _ -> judge  `to` \x -> res { C.resJudge   = C.resJudge   << x }
          C.CAssert  _ _ _ -> assert `to` \x -> res { C.resAssert  = C.resAssert  << x }
@@ -61,11 +62,6 @@ resIncludeBody res abcl =
 
       calc :: C.CalcContent c
       calc = calcContG $ C.resGlobal res
-
-      calc2 :: (String, [B.TTree]) -> B.Ab (String, c)
-      calc2 (name, trees) =
-          do c <- calc $ B.wrapTrees trees
-             Right (name, c)
 
       assert :: Clab (C.ShortAssert' h c)
       assert C.ClauseHead { C.clauseSecNo = sec, C.clauseShort = sh }
@@ -89,10 +85,7 @@ resIncludeBody res abcl =
           paraToCodeName =<< C.ttreePara2 toks
 
       option :: Clab (C.Option c)
-      option _ _ (C.COption toks) =
-          do assn  <- optionAssn toks
-             assn' <- mapM calc2 assn
-             B.foldM C.optionUpdate (C.resOption res) assn'
+      option _ _ (C.COption toks) = C.optionParse calc toks (C.resOption res)
 
 coxBuildG :: (C.CContent c) => C.Global c -> B.TTreeToAb (C.Cox c)
 coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)
@@ -116,16 +109,6 @@ paraToCodeName = B.paraSelect unmatch ps where
                    _  -> Msg.adlib "include no args"
 
     unmatch = Msg.adlib "include unknown"
-
-optionAssn :: [B.Token] -> B.Ab [(String, [B.TTree])]
-optionAssn toks =
-    do trees <- B.tokenTrees toks
-       case B.assocBy maybeName trees of
-         ([], assoc) -> Right assoc
-         _           -> Msg.adlib "extra input"
-    where
-      maybeName (B.TextLeafRaw _ n) = Just n
-      maybeName _ = Nothing
 
 
 -- ----------------------

@@ -19,6 +19,7 @@ module Koshucode.Baala.Core.Message
     abCoxSyntax,
     abLexmap,
     abLiteral,
+    abOption,
     abRelmap,
     abRun,
     abSlot,
@@ -128,6 +129,9 @@ abLexmap = B.abortableTrees "lexmap"
 
 abLiteral :: B.TTreeTo (B.Map (B.Ab b))
 abLiteral = B.abortableTree "literal"
+
+abOption :: B.TTreesTo (B.Map (B.Ab b))
+abOption = B.abortableTrees "option"
 
 abRelmap :: (B.CodePtr cp) => [cp] -> B.Map (B.Ab b)
 abRelmap = B.abortable "relmap"
