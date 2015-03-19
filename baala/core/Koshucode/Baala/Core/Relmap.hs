@@ -5,6 +5,7 @@
 module Koshucode.Baala.Core.Relmap
   ( module Koshucode.Baala.Core.Relmap.Construct,
     module Koshucode.Baala.Core.Relmap.Global,
+    module Koshucode.Baala.Core.Relmap.Option,
     module Koshucode.Baala.Core.Relmap.Relmap,
     module Koshucode.Baala.Core.Relmap.Rop,
     module Koshucode.Baala.Core.Relmap.Specialize,
@@ -15,6 +16,7 @@ module Koshucode.Baala.Core.Relmap
 
 import Koshucode.Baala.Core.Relmap.Construct
 import Koshucode.Baala.Core.Relmap.Global
+import Koshucode.Baala.Core.Relmap.Option
 import Koshucode.Baala.Core.Relmap.Relmap
 import Koshucode.Baala.Core.Relmap.Rop
 import Koshucode.Baala.Core.Relmap.Specialize
