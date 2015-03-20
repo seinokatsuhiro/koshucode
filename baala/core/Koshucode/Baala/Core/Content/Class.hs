@@ -23,7 +23,7 @@ module Koshucode.Baala.Core.Content.Class
     -- ** Time
     CTime (..),
     -- ** Term
-    CTerm (..),
+    CTerm (..), pTermSet,
 
     -- * Koshu complex data type
     -- ** Set
@@ -182,6 +182,9 @@ class (CTypeOf c) => CTerm c where
 
     putTerm      ::      String -> B.Ab c
     putTerm      =       Right . pTerm
+
+pTermSet :: (CTerm c, CSet c) => [String] -> c
+pTermSet = pSet . map pTerm
 
 class (CTypeOf c) => CSet c where
     isSet       ::          c -> Bool

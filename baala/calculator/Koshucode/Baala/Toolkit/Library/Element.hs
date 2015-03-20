@@ -15,7 +15,7 @@ infixr 0 -:-
 -- | Retrive constituents of sections.
 resourceElem :: (C.CContent c) => C.Resource c -> [B.Judge c]
 resourceElem res = map art js where
-    art  = B.judgeCons ("article" -:- path)
+    art  = B.judgeCons ("point" -:- path)
     path = C.pText $ B.codeNameText $ B.codeName $ head $ C.resIncluded res
     ass  = map B.shortBody $ C.resAssert res
     js   = concat [ elemJudge       $ C.resJudge res
@@ -34,8 +34,10 @@ elemAssert :: (C.CContent c) => [C.Assert c] -> [B.Judge c]
 elemAssert = B.unique . concatMap f where
     f (C.Assert _ _ _ _ _ Nothing _) = B.bug "elemAssert"
     f (C.Assert _ t pat _ _ (Just r) _) =
-        B.affirm (quality t) [ "pat" -:- C.pText pat ]
-             : elemRelmap r
+        let p     = "name" -:- C.pText pat
+            ass   = B.affirm (quality t) [p]
+            rmaps = B.judgeCons p `map` elemRelmap r
+        in ass : rmaps
 
     quality C.AssertAffirm       = "KOSHU-AFFIRM"
     quality C.AssertDeny         = "KOSHU-DENY"
@@ -46,26 +48,31 @@ elemAssert = B.unique . concatMap f where
 
 elemNamedRelmap :: (C.CContent c) => C.RelmapLinkTable c -> [B.Judge c]
 elemNamedRelmap = B.unique . concatMap f where
-    f (lx, relmap) = map (B.judgeCons ("name" -:- C.pText $ C.lexName lx))
-                            $ elemRelmap relmap
+    f (lx, relmap) = B.judgeCons ("name" -:- C.pText $ C.lexName lx)
+                        `map` elemRelmap relmap
 
 elemRelmap :: (C.CContent c) => C.Relmap c -> [B.Judge c]
 elemRelmap relmap = name : f relmap where
-    name     = B.affirm "KOSHU-RELMAP-NAME" []
-    ref n    = B.affirm "KOSHU-RELMAP-REF"  [ "ref" -:- C.pText n ]
-    rop n    = B.affirm "KOSHU-RELMAP-ROP"  [ "rop" -:- C.pText n ]
-    src p xs = B.affirm "KOSHU-RELMAP-SOURCE"
-               [ "pat"   -:- C.pText p
-               , "terms" -:- C.pTextSet xs ]
+    name          = B.affirm "KOSHU-RELMAP-NAME" []
+    op lx         = let p = opType lx
+                        n = C.lexName lx
+                    in B.affirm p [ "rop" -:- C.pText n ]
+    opType lx     = case C.lexType lx of
+                      C.LexmapBase    -> "KOSHU-RELMAP-BASE"
+                      C.LexmapDerived -> "KOSHU-RELMAP-DERIV"
+                      C.LexmapLocal   -> "KOSHU-RELMAP-LOCAL"
+    src p xs      = B.affirm "KOSHU-RELMAP-SOURCE"
+                      [ "pat"   -:- C.pText p
+                      , "terms" -:- C.pTermSet xs ]
 
     f (C.RelmapAppend r1 r2)     = f r1 ++ f r2
-    f (C.RelmapCalc   lx _ rs)   = rop (C.lexName lx) : concatMap f rs
-    f (C.RelmapCopy   lx _ r1)   = rop (C.lexName lx) : f r1
-    f (C.RelmapNest   lx r1)     = rop (C.lexName lx) : f r1
-    f (C.RelmapSource _ p xs)    = [ rop "source", src p xs ]
-    f (C.RelmapLink   lx)        = [ ref $ C.lexName lx ]
-    f (C.RelmapHook   lx _)      = [ rop $ C.lexName lx ]
-    f (C.RelmapConst  lx _)      = [ rop $ C.lexName lx ]
+    f (C.RelmapCalc   lx _ rs)   = op lx : concatMap f rs
+    f (C.RelmapCopy   lx _ r1)   = op lx : f r1
+    f (C.RelmapNest   lx r1)     = op lx : f r1
+    f (C.RelmapSource lx p xs)   = [op lx, src p xs]
+    f (C.RelmapLink   lx)        = [op lx]
+    f (C.RelmapHook   lx _)      = [op lx]
+    f (C.RelmapConst  lx _)      = [op lx]
 
 
 -- ------------------------------------------------------------------
