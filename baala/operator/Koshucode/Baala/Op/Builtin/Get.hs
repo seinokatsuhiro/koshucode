@@ -102,7 +102,7 @@ getTrees med name =
 getTree :: RopGet c B.TTree
 getTree med name =
     do trees <- getTrees med name
-       Right $ B.wrapTrees trees
+       Right $ B.ttreeGroup trees
 
 getWordTrees :: RopGet c [B.Named B.TTree]
 getWordTrees med name =

@@ -189,8 +189,8 @@ convTree find = expand where
 
     expand (B.TreeB B.BracketForm p trees) =
         case B.divideTreesByBar trees of
-          [vars, b1] -> do b2 <- expand $ B.wrapTrees b1
-                           Right $ B.TreeB B.BracketForm p [B.wrapTrees vars, b2]
+          [vars, b1] -> do b2 <- expand $ B.ttreeGroup b1
+                           Right $ B.TreeB B.BracketForm p [B.ttreeGroup vars, b2]
           _ -> Msg.unkCox "abstruction"
 
     expand tree = Right tree

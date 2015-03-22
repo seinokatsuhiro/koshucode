@@ -72,7 +72,7 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
         result = Msg.abLexmap trees $ case B.divideTreesByBar trees of
                       []    -> Msg.bug "empty list"
                       [ts]  -> single ts
-                      tss   -> baseOf "append" $ map B.wrapTrees tss
+                      tss   -> baseOf "append" $ map B.ttreeGroup tss
 
         single (B.TreeL tok@(B.TTextRaw _ n)   : ts)
             = find tok n ts                       -- derived or base
@@ -83,7 +83,7 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
         single [B.TreeB _ _ _]
             = Msg.reqGroup                        -- unknown group
         single (n@(B.TermLeaf _ _ [_]) : ts)
-            = baseOf "add" $ n : [B.wrapTrees ts] -- "/N E" means "add /N ( E )"
+            = baseOf "add" $ n : [B.ttreeGroup ts] -- "/N E" means "add /N ( E )"
         single []
             = baseOf "id" []                      -- "| R | R" means "id | R | R"
         single _

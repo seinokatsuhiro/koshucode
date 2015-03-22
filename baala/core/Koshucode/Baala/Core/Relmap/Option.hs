@@ -49,7 +49,7 @@ type NamedT a = ((String, [B.TTree]), a)
 
 optionAssn :: [B.Token] -> B.Ab [NamedT [B.TTree]]
 optionAssn toks =
-    do trees <- B.tokenTrees toks
+    do trees <- B.ttrees toks
        case B.assocBy maybeName trees of
          ([], assoc) -> Right assoc
          _           -> Msg.adlib "extra input"
@@ -65,7 +65,7 @@ optionUpdate calc opt ((name, pt), trees) =
         Just oc  -> Msg.abOption trees $ upd oc
         Nothing  -> Msg.adlib $ "unknown option: " ++ name
     where
-      abc = calc $ B.wrapTrees trees
+      abc = calc $ B.ttreeGroup trees
 
       upd (OptionBool    _) = do bool <- C.getBool abc
                                  ins $ OptionBool bool

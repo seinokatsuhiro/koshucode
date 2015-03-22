@@ -58,7 +58,7 @@ resIncludeBody res abcl =
 
       judge :: Clab (B.Judge c)
       judge _ _ (C.CJudge q p toks) =
-          C.treesToJudge calc q p =<< B.tokenTrees toks
+          C.treesToJudge calc q p =<< B.ttrees toks
 
       calc :: C.CalcContent c
       calc = calcContG $ C.resGlobal res
@@ -77,7 +77,7 @@ resIncludeBody res abcl =
 
       slot :: Clab B.NamedTrees
       slot _ _ (C.CSlot n toks) =
-          do trees <- B.tokenTrees toks
+          do trees <- B.ttrees toks
              Right (n, trees)
 
       inc :: Clab B.CodeName

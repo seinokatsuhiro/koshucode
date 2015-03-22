@@ -212,7 +212,7 @@ litType = gen where
 --  Prepere some definitions.
 --
 --  >>> :m +Koshucode.Baala.Op.Vanilla.Type
---  >>> let trees = B.tokenTrees . B.tokens
+--  >>> let trees = B.ttrees . B.tokens
 --  >>> let lit  = literal [] :: B.TTree -> B.Ab VContent
 --  >>> let lits = litColon lit . trees
 --

@@ -10,8 +10,8 @@ module Koshucode.Baala.Base.Token.TokenTree
     NamedTree, NamedTrees,
     TTreeTo, TTreesTo,
     TTreeToAb, TTreesToAb,
-    tokenTrees,
-    wrapTrees,
+    ttrees,
+    ttreeGroup,
 
     -- * Pattern
     pattern TermLeaf,
@@ -86,13 +86,13 @@ pattern TextLeafKey   cp w     = TextLeaf B.TextKey cp w
 
 -- | Parse tokens with brackets into trees.
 --   Blank tokens and comments are excluded.
-tokenTrees :: [B.Token] -> B.Ab [TTree]
-tokenTrees = B.trees getBracketType B.BracketNone where
+ttrees :: [B.Token] -> B.Ab [TTree]
+ttrees = B.trees getBracketType B.BracketNone where
     --und = map (B.undouble (== BracketGroup))
 
 -- | Wrap trees in group.
-wrapTrees :: TTreesTo TTree
-wrapTrees = B.treeWrap BracketGroup
+ttreeGroup :: TTreesTo TTree
+ttreeGroup = B.treeWrap BracketGroup
 
 
 -- ----------------------  Bracket type
@@ -187,10 +187,10 @@ abortableTrees tag = B.abortable tag . B.untrees
 -- | Convert text to token trees.
 tt :: String -> B.Ab [TTree]
 tt s = do toks <- B.tokens (B.codeTextOf s) s
-          tokenTrees $ B.sweepToken toks
+          ttrees $ B.sweepToken toks
 
 tt1 :: String -> B.Ab TTree
-tt1 = Right . wrapTrees B.<=< tt
+tt1 = Right . ttreeGroup B.<=< tt
 
 -- | Get 'B.Doc' value of token trees for pretty printing.
 ttDoc :: TTreesTo B.Doc

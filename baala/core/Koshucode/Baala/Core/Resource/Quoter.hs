@@ -34,7 +34,7 @@ koshuQ _ fullQ text =
     where
       dispatch src = resQ src -- relmapQ src
       resQ = resIncludeQ fullQ . {- C.consClause -} undefined
-      --relmapQ  = consFullRelmapQ fullQ . lx [] . tokenTrees
+      --relmapQ  = consFullRelmapQ fullQ . lx [] . ttrees
 
 {- Construct ExpQ of Resource
    Tokens like @name in resource context and relmap context

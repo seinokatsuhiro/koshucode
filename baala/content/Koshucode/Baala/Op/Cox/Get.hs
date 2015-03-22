@@ -28,7 +28,7 @@ import qualified Koshucode.Baala.Op.Message  as Msg
 
 -- | Get relmap attribute as single cox.
 getCox :: (C.CContent c) => Op.RopGet c (C.Cox c)
-getCox med = ropBuild med . B.wrapTrees B.<=< Op.getTrees med
+getCox med = ropBuild med . B.ttreeGroup B.<=< Op.getTrees med
 
 getOptionCox :: (C.CContent c) => c -> Op.RopGet c (C.Cox c)
 getOptionCox c = Op.getOption (C.CoxLit [] c) getCox
@@ -68,7 +68,7 @@ getWhereClause :: (C.CContent c) => C.Intmed c -> [B.TTree] -> B.Ab (C.NamedCox 
 getWhereClause u trees =
     do (he, bo) <- getTreesByEqual trees
        (n, vs)  <- getWhereHead he
-       cox      <- ropBuild u $ B.wrapTrees bo
+       cox      <- ropBuild u $ B.ttreeGroup bo
        let cp = B.codePtList $ head $ B.untrees trees
        case vs of
          [] -> Right (n, cox)
@@ -106,7 +106,7 @@ getContent med name =
 getContents :: (C.CContent c) => Op.RopGet c [c]
 getContents med name =
     do trees <- Op.getTrees med name
-       let trees2 = B.wrapTrees `map` B.divideTreesByColon trees
+       let trees2 = B.ttreeGroup `map` B.divideTreesByColon trees
        calcTree med `mapM` trees2
 
 calcTree :: (C.CContent c) => C.Intmed c -> C.CalcContent c

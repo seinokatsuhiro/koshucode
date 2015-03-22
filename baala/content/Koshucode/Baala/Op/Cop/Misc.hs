@@ -64,11 +64,11 @@ nameLeaf :: B.BlankName -> B.TTree
 nameLeaf = B.TreeL . B.TName B.codePtZero
 
 treeIf :: B.TTree -> B.TTree -> B.TTree -> B.TTree
-treeIf test con alt = B.wrapTrees [ nameLeaf $ C.copInternal "#if" , test, con , alt ]
+treeIf test con alt = B.ttreeGroup [ nameLeaf $ C.copInternal "#if" , test, con , alt ]
 
 treeOrList :: [B.TTree] -> B.TTree
 treeOrList [x] = x
-treeOrList xs = B.wrapTrees $ (nameLeaf $ C.copNormal "or") : xs
+treeOrList xs = B.ttreeGroup $ (nameLeaf $ C.copNormal "or") : xs
 
 copFunIf  :: (C.CBool c, C.CEmpty c) => C.CopCalc c
 copFunIf arg =
@@ -94,21 +94,21 @@ copTreeIf trees = folding $ filter (/= []) $ B.divideTreesBy ":" trees where
         case B.divideTreesBy "->" trees2 of
           [_]         -> back trees2 alt
           [test, con] -> do test2 <- stairs ">>" "<<" test
-                            Right $ treeIf test2 (B.wrapTrees con) alt
+                            Right $ treeIf test2 (B.ttreeGroup con) alt
           _           -> abortSyntax trees2 "Expect E -> E"
 
     back :: [B.TTree] -> B.AbMap B.TTree
     back trees2 alt =
         case B.divideTreesBy "<-" trees2 of
-          [alt2]      -> Right $ B.wrapTrees alt2
+          [alt2]      -> Right $ B.ttreeGroup alt2
           [con, test] -> do test2 <- stairs "<<" ">>" test
-                            Right $ treeIf test2 (B.wrapTrees con) alt
+                            Right $ treeIf test2 (B.ttreeGroup con) alt
           _           -> abortSyntax trees2 "Expect E <- E"
 
     stairs :: String -> String -> [B.TTree] -> B.Ab B.TTree
     stairs del del2 xs =
         do notInclude del2 xs
-           Right $ treeOrList $ map B.wrapTrees $ B.divideTreesBy del xs
+           Right $ treeOrList $ map B.ttreeGroup $ B.divideTreesBy del xs
 
     notInclude :: String -> [B.TTree] -> B.Ab ()
     notInclude del xs =

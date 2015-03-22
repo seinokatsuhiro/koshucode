@@ -226,7 +226,7 @@ treesToTerms = name where
 
 treesToTerms1 :: B.TTreesToAb [B.NamedTree]
 treesToTerms1 xs = do xs' <- treesToTerms xs
-                      Right $ B.mapSndTo B.wrapTrees xs'
+                      Right $ B.mapSndTo B.ttreeGroup xs'
 
 
 -- ----------------------  Interp
