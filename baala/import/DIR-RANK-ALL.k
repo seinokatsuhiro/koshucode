@@ -22,9 +22,9 @@
 |-- DIR-RANK  /dir-rank 29  /dir 'Koshucode.Baala.Core.Lexmap  /base-rank {| /rank : /base : /import-dir | 25 : 'AttrPos : [ 'Base ] | 26 : 'Attr : [ 'Base ] | 26 : 'Slot : [ 'Base ] | 27 : 'AttrEd : [ 'Base ] | 27 : 'Lexmap : [ 'Base ] | 28 : 'LexmapTrees : [ 'Base ] | 29 : 'Construct : [ 'Base ] |}
 |-- DIR-RANK  /dir-rank 33  /dir 'Koshucode.Baala.Core.Relkit  /base-rank {| /rank : /base : /import-dir | 31 : 'Relkit : [ 'Base : 'Lexmap ] | 32 : 'Construct : [ 'Base ] | 33 : 'Run : [ 'Base : 'Content ] |}
 
-|-- DIR-RANK  /dir-rank 37  /dir 'Koshucode.Baala.Core.Relmap  /base-rank {| /rank : /base : /import-dir | 35 : 'Relmap : [ 'Base : 'Lexmap : 'Relkit ] | 36 : 'Rop : [ 'Base : 'Lexmap ] | 36 : 'Specialize : [ 'Base : 'Lexmap : 'Relkit ] | 37 : 'Construct : [ 'Base : 'Lexmap : 'Relkit ] | 37 : 'Global : [ 'Base : 'Content ] |}
+|-- DIR-RANK  /dir-rank 37  /dir 'Koshucode.Baala.Core.Relmap  /base-rank {| /rank : /base : /import-dir | 30 : 'Option : [ 'Base : 'Content ] | 35 : 'Relmap : [ 'Base : 'Lexmap : 'Relkit ] | 36 : 'Rop : [ 'Base : 'Lexmap ] | 36 : 'Specialize : [ 'Base : 'Lexmap : 'Relkit ] | 37 : 'Construct : [ 'Base : 'Lexmap : 'Relkit ] | 37 : 'Global : [ 'Base : 'Content ] |}
 |-- DIR-RANK  /dir-rank 40  /dir 'Koshucode.Baala.Core.Assert  /base-rank {| /rank : /base : /import-dir | 30 : 'RelTable : [ 'Base : 'Content ] | 35 : 'Dataset : [ 'Base : 'Content : 'Relkit ] | 39 : 'Assert : [ 'Base : 'Content : 'Lexmap : 'Relmap ] | 40 : 'Run : [ 'Base : 'Content : 'Lexmap : 'Relkit : 'Relmap ] |}
-|-- DIR-RANK  /dir-rank 44  /dir 'Koshucode.Baala.Core.Resource  /base-rank {| /rank : /base : /import-dir | 31 : 'Clause : [ 'Base : 'Content : 'Lexmap ] | 42 : 'Resource : [ 'Assert : 'Base : 'Lexmap : 'Relkit : 'Relmap ] | 43 : 'Include : [ 'Assert : 'Base : 'Content : 'Lexmap : 'Relmap ] | 43 : 'Run : [ 'Assert : 'Base : 'Content : 'Lexmap : 'Relmap ] | 44 : 'Quoter : [ 'Base : 'Lexmap ] | 44 : 'Read : [ 'Base : 'Content : 'Relmap ] |}
+|-- DIR-RANK  /dir-rank 44  /dir 'Koshucode.Baala.Core.Resource  /base-rank {| /rank : /base : /import-dir | 31 : 'Clause : [ 'Base : 'Content : 'Lexmap ] | 42 : 'Resource : [ 'Assert : 'Base : 'Content : 'Lexmap : 'Relkit : 'Relmap ] | 43 : 'Include : [ 'Assert : 'Base : 'Content : 'Lexmap : 'Relmap ] | 43 : 'Run : [ 'Assert : 'Base : 'Content : 'Lexmap : 'Relmap ] | 44 : 'Quoter : [ 'Base : 'Lexmap ] | 44 : 'Read : [ 'Base : 'Content : 'Relmap ] |}
 |-- DIR-RANK  /dir-rank 45  /dir 'Koshucode.Baala.Core  /base-rank {| /rank : /base : /import-dir | 24 : 'Message : [ 'Base ] | 29 : 'Content : [ ] | 30 : 'Lexmap : [ ] | 34 : 'Relkit : [ ] | 38 : 'Relmap : [ ] | 41 : 'Assert : [ ] | 45 : 'Resource : [ ] |}
 |-- DIR-RANK  /dir-rank 48  /dir 'Koshucode.Baala.Op.Cop  /base-rank {| /rank : /base : /import-dir | 47 : 'Coxhand : [ 'Base : 'Core ] | 48 : 'Arith : [ 'Base : 'Core ] | 48 : 'List : [ 'Base : 'Core ] | 48 : 'Logic : [ 'Base : 'Core ] | 48 : 'Misc : [ 'Base : 'Core ] | 48 : 'Order : [ 'Base : 'Core ] | 48 : 'Time : [ 'Base : 'Core ] |}
 
@@ -141,6 +141,7 @@
 **                                                 
 **    37        'Koshucode.Baala.Core.Relmap       /rank /base          /import-dir
 **                                                 ----- -------------- ------------------------------------------------------------------
+**                                                 30    'Option        [ 'Base : 'Content ]
 **                                                 35    'Relmap        [ 'Base : 'Lexmap : 'Relkit ]
 **                                                 36    'Rop           [ 'Base : 'Lexmap ]
 **                                                 36    'Specialize    [ 'Base : 'Lexmap : 'Relkit ]
@@ -157,7 +158,7 @@
 **    44        'Koshucode.Baala.Core.Resource     /rank /base          /import-dir
 **                                                 ----- -------------- ------------------------------------------------------------------
 **                                                 31    'Clause        [ 'Base : 'Content : 'Lexmap ]
-**                                                 42    'Resource      [ 'Assert : 'Base : 'Lexmap : 'Relkit : 'Relmap ]
+**                                                 42    'Resource      [ 'Assert : 'Base : 'Content : 'Lexmap : 'Relkit : 'Relmap ]
 **                                                 43    'Include       [ 'Assert : 'Base : 'Content : 'Lexmap : 'Relmap ]
 **                                                 43    'Run           [ 'Assert : 'Base : 'Content : 'Lexmap : 'Relmap ]
 **                                                 44    'Quoter        [ 'Base : 'Lexmap ]
