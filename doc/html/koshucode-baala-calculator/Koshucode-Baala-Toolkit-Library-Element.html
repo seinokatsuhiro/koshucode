@@ -30,7 +30,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	  ></li
 	></ul
       ><p class="caption"
-      >koshucode-baala-calculator-0.48.0.0: A portable relational calculator</p
+      >koshucode-baala-calculator-0.103.0.0: A portable relational calculator</p
       ></div
     ><div id="content"
     ><div id="module-header"
@@ -41,6 +41,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	    ><td
 	    >None</td
 	    ></tr
+	  ><tr
+	  ><th
+	    >Language</th
+	    ><td
+	    >Haskell98</td
+	    ></tr
 	  ></table
 	><p class="caption"
 	>Koshucode.Baala.Toolkit.Library.Element</p
@@ -50,12 +56,12 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	>Synopsis</p
 	><ul id="section.syn" class="hide" onclick="toggleSection('syn')"
 	><li class="src short"
-	  ><a href="#v:sectionElem"
-	    >sectionElem</a
+	  ><a href="#v:resourceElem"
+	    >resourceElem</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Section-Section.html#t:Section"
-	    >Section</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Resource"
+	    >Resource</a
 	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
 	    > c]</li
@@ -66,65 +72,58 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	>Documentation</h1
 	><div class="top"
 	><p class="src"
-	  ><a name="v:sectionElem" class="def"
-	    >sectionElem</a
+	  ><a name="v:resourceElem" class="def"
+	    >resourceElem</a
 	    > :: <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Content-Class.html#t:CContent"
 	    >CContent</a
-	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Section-Section.html#t:Section"
-	    >Section</a
+	    > c =&gt; <a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-core/Koshucode-Baala-Core-Resource-Resource.html#t:Resource"
+	    >Resource</a
 	    > c -&gt; [<a href="http://seinokatsuhiro.github.io/koshucode/doc/html/koshucode-baala-base/Koshucode-Baala-Base-Data-Judge.html#t:Judge"
 	    >Judge</a
-	    > c]<a href="src/Koshucode-Baala-Toolkit-Library-Element.html#sectionElem" class="link"
+	    > c] <a href="src/Koshucode-Baala-Toolkit-Library-Element.html#resourceElem" class="link"
 	    >Source</a
 	    ></p
 	  ><div class="doc"
 	  ><p
-	    >Retrive constituents of sections.
-</p
+	    >Retrive constituents of sections.</p
 	    ></div
 	  ></div
 	><div class="doc"
 	><p
 	  ><code
-	    ><a href="Koshucode-Baala-Toolkit-Library-Element.html#v:sectionElem"
-	      >sectionElem</a
+	    ><a href="Koshucode-Baala-Toolkit-Library-Element.html#v:resourceElem"
+	      >resourceElem</a
 	      ></code
-	    > may output judges of the following patterns.
-</p
+	    > may output judges of the following patterns.</p
 	  ><dl
 	  ><dt
 	    ><code
 	      >KOSHU-AFFIRM</code
 	      ></dt
 	    ><dd
-	    >
-   There is affirmed relmap for pattern <code
+	    >There is affirmed relmap for pattern <code
 	      >/pat</code
 	      >
    in the resource <code
 	      >/res</code
-	      >.
-</dd
+	      >.</dd
 	    ><dt
 	    ><code
 	      >KOSHU-DENY</code
 	      ></dt
 	    ><dd
-	    >
-   There is denied relmap for pattern <code
+	    >There is denied relmap for pattern <code
 	      >/pat</code
 	      >
    in the resource <code
 	      >/res</code
-	      >.
-</dd
+	      >.</dd
 	    ><dt
 	    ><code
 	      >KOSHU-JUDGE-TERM</code
 	      ></dt
 	    ><dd
-	    >
-   In the resource <code
+	    >In the resource <code
 	      >/res</code
 	      >,
    there are judges of pattern <code
@@ -134,65 +133,56 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
 	      >/name</code
 	      > having <code
 	      >/content</code
-	      >.
-</dd
+	      >.</dd
 	    ><dt
 	    ><code
 	      >KOSHU-RELMAP-NAME</code
 	      ></dt
 	    ><dd
-	    >
-   There is a relmap named <code
+	    >There is a relmap named <code
 	      >/name</code
 	      > in the resource <code
 	      >/res</code
-	      >.
-</dd
+	      >.</dd
 	    ><dt
 	    ><code
 	      >KOSHU-RELMAP-REF</code
 	      ></dt
 	    ><dd
-	    >
-   Relmap <code
+	    >Relmap <code
 	      >/name</code
 	      > in the resource <code
 	      >/res</code
 	      >
    refers the other relmap <code
 	      >/ref</code
-	      >.
-</dd
+	      >.</dd
 	    ><dt
 	    ><code
 	      >KOSHU-RELMAP-ROP</code
 	      ></dt
 	    ><dd
-	    >
-   Relmap <code
+	    >Relmap <code
 	      >/name</code
 	      > in the resource <code
 	      >/res</code
 	      >
    uses the relmap operator <code
 	      >/rop</code
-	      >.
-</dd
+	      >.</dd
 	    ><dt
 	    ><code
 	      >KOSHU-RELMAP-SOURCE</code
 	      ></dt
 	    ><dd
-	    >
-   Judges of pattern <code
+	    >Judges of pattern <code
 	      >/pat</code
 	      > with terms <code
 	      >/terms</code
 	      >
    are read from the resource <code
 	      >/res</code
-	      >.
-</dd
+	      >.</dd
 	    ></dl
 	  ></div
 	></div
@@ -201,7 +191,7 @@ window.onload = function () {pageLoad();setSynopsis("mini_Koshucode-Baala-Toolki
     ><p
       >Produced by <a href="http://www.haskell.org/haddock/"
 	>Haddock</a
-	> version 2.13.2</p
+	> version 2.14.3</p
       ></div
     ></body
   ></html

@@ -9,24 +9,18 @@
 --   <a>koshu</a> command. <a>koshu</a> reads koshucode data, calculates
 --   it, and writes the result.
 @package koshucode-baala-calculator
-@version 0.48.0.0
+@version 0.103.0.0
 
 module Koshucode.Baala.Toolkit.Library.Version
 version :: Version
 versionString :: String
 
 module Koshucode.Baala.Toolkit.Library.Run
-runFiles :: CContent c => Global c -> SectionBundle c -> IO Int
+runFiles :: CContent c => Global c -> [CodeName] -> IO Int
 
 -- | Read and union sections from files, and run the section.
-hRunFiles :: CContent c => Handle -> Global c -> SectionBundle c -> IO Int
-concatMM :: (Monad m, Monoid a) => [m a] -> m a
-runCalc :: CContent c => CommandLine -> SectionBundle c -> IO Int
-runCalcTo :: CContent c => FilePath -> CommandLine -> SectionBundle c -> IO Int
+hRunFiles :: CContent c => Handle -> Global c -> [CodeName] -> IO Int
 theContent :: CContent c => String -> [Named c] -> Maybe c
-readSec :: CContent c => SectionBundle c -> IO (Ab (Section c))
-readSecList :: CContent c => SectionBundle c -> IO (Ab [Section c])
-mkdir :: FilePath -> IO ()
 
 module Koshucode.Baala.Toolkit.Library.Exit
 prelude :: IO (String, [String])
@@ -36,13 +30,13 @@ putSuccess :: String -> IO a
 
 -- | Print error message and exit on 1.
 putFailure :: String -> IO a
-currentEncodings :: IO (String)
+currentEncodings :: IO String
 exit :: Int -> IO a
 
 module Koshucode.Baala.Toolkit.Library.Element
 
 -- | Retrive constituents of sections.
-sectionElem :: CContent c => Section c -> [Judge c]
+resourceElem :: CContent c => Resource c -> [Judge c]
 
 
 -- | A portable relational calculator.
