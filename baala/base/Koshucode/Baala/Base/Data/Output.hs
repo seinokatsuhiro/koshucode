@@ -45,13 +45,15 @@ putJudges = hPutJudges IO.stdout
 
 hPutJudges :: (Ord c, B.Write c) => IO.Handle -> Int -> [B.Judge c] -> IO Int
 hPutJudges h status js =
-    do cnt <- judges h B.shortEmpty js initialCounter
+    do cnt <- judges h writer js initialCounter
        hPutLines h $ summary status cnt
        return status
+    where
+      writer = IO.hPutStrLn h . B.judgeLine . B.judgeText B.shortEmpty
 
 judges :: forall c. (Ord c, B.Write c) =>
-    IO.Handle -> B.StringMap -> [B.Judge c] -> Counter -> IO Counter
-judges h sh = loop where
+    IO.Handle -> (B.Judge c -> IO ()) -> [B.Judge c] -> Counter -> IO Counter
+judges h writer = loop where
     loop (j : js) cnt  = loop js =<< put j cnt
     loop [] cnt@(c, _) = do M.when (c > 0) $ hPutEmptyLine h
                             total c
@@ -59,14 +61,15 @@ judges h sh = loop where
                             return cnt
 
     put :: B.Judge c -> Counter -> IO Counter
-    put judge (c, tab) =
-        do M.when (mod5 c && c > 0) $
-            do M.when (mod25 c) $ progress c
-               hPutEmptyLine h
-           IO.hPutStrLn h $ show $ B.write sh judge
-           let c'  = c + 1
-               pat = B.judgePat judge
-           return (c', Map.alter inc pat tab)
+    put judge (c, tab) = do gutter c
+                            writer judge
+                            let c'  = c + 1
+                                pat = B.judgePat judge
+                            return (c', Map.alter inc pat tab)
+
+    gutter c      = M.when (mod5 c && c > 0) $
+                      do M.when (mod25 c) $ progress c
+                         hPutEmptyLine h
 
     mod25 n       = (n `mod` 25 == 0)
     mod5  n       = (n `mod` 5  == 0)
@@ -150,13 +153,12 @@ short h cnt (B.Short _ def output) =
 chunks :: (Ord c, B.Write c) => IO.Handle -> B.StringMap
        -> [OutputChunk c] -> Counter -> IO Counter
 chunks h sh = loop where
-    loop [] cnt = return cnt
-    loop (OutputJudge js : xs) (_, tab) =
-        do cnt' <- judges h sh js (0, tab)
-           loop xs cnt'
-    loop (OutputComment [] : xs) cnt = loop xs cnt
-    loop (OutputComment ls : xs) cnt =
-        do B.hPutCommentLines h ls
-           hPutEmptyLine h
-           loop xs cnt
+    writer = IO.hPutStrLn h . B.judgeLine . B.judgeText sh
 
+    loop [] cnt = return cnt
+    loop (OutputJudge js : xs) (_, tab) = do cnt' <- judges h writer js (0, tab)
+                                             loop xs cnt'
+    loop (OutputComment [] : xs) cnt    = loop xs cnt
+    loop (OutputComment ls : xs) cnt    = do B.hPutCommentLines h ls
+                                             hPutEmptyLine h
+                                             loop xs cnt

@@ -15,6 +15,7 @@ module Koshucode.Baala.Base.Data.Judge
     judgeTermsMap,
     judgeCons,
     judgesFromRel,
+    judgeText, judgeLine,
     abcJudge,
   
     -- * Logical quality
@@ -117,6 +118,23 @@ judgeDoc shorts j =
       terms [] = B.docEmpty
       terms ((n, c) : xs) = B.doc " " B.<> B.doc (B.showTermName n)
                             B.<+> B.write shorts c B.<+> terms xs
+
+judgeText :: (B.Write c) => B.StringMap -> Judge c -> Judge String
+judgeText shorts = (text `fmap`) where
+    text = show . B.write shorts
+
+judgeLine :: Judge String -> String
+judgeLine j =
+    case j of
+      JudgeAffirm      p xs     -> line "|--"  p xs
+      JudgeDeny        p xs     -> line "|-X"  p xs
+      JudgeMultiDeny   p xs     -> line "|-XX" p xs
+      JudgeChange      p xs _   -> line "|-C"  p xs
+      JudgeMultiChange p xs _   -> line "|-CC" p xs
+      JudgeViolate     p xs     -> line "|-V"  p xs
+    where
+      line f p xs  = unwords $ f : p : map str xs
+      str (n,c)    = " " ++ ('/' : n) ++ " " ++ c
 
 -- | Convert relation to list of judges.
 judgesFromRel :: JudgeOf c -> JudgePat -> B.Rel c -> [Judge c]
