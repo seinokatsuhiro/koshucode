@@ -30,7 +30,7 @@
   | keep part "Koshucode" /import
   | dependent-rank /module /import -rank /rank
   | interp <<< /module has dependent rank /rank . >>>
-  --order --fore /rank
+  --order --forward /rank
 ```
 
 

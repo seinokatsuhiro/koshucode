@@ -24,7 +24,7 @@
 **
 
 |== DIR-RANK : dir
-  --order --table --fore /dir-rank /dir
+  --order --table --forward /dir-rank /dir
 
 dir : dep
     | add /dir  ( dir-part  <dot> /module )
