@@ -67,7 +67,6 @@ runRelmapViaRelkit hook links r (B.Rel he1 bo1) =
 optionType :: B.ParaType String
 optionType = B.paraType `B.paraMin` 0 `B.paraOpt`
              [ "empty"     -- show empty filler
-             , "fore"      -- move terms to front
              , "forward"   -- move terms to front
              , "backward"  -- move terms to rear
              , "order"     -- sort list of judges by content
@@ -98,8 +97,7 @@ optionRelmapResource option r1 =
 
 optionRelmapAssert :: (Ord c, C.CRel c) => C.TTreePara -> B.AbMap (B.Rel c)
 optionRelmapAssert opt r1 =
-    Right r1 >>= call optionForward  "fore"
-             >>= call optionForward  "forward"
+    Right r1 >>= call optionForward  "forward"
              >>= call optionBackward "backward"
              >>= call optionOrder    "order"
     where call f name r2 = case B.paraGet opt name of
