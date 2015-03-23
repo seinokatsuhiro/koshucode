@@ -399,6 +399,8 @@ io_update_help () {
     echo "  s | skip       skip this I/O list"
     echo "  q | quit       quit $io_cmd"
     echo
+    echo "  cd `io_pwd`"
+    echo
 }
 
 
