@@ -4,8 +4,7 @@
 -- | Output judgements.
 
 module Koshucode.Baala.Base.Data.Output
-  (
-    -- * Data type
+  ( -- * Data type
     OutputResult,
     OutputChunks,
     OutputChunk (..),
@@ -105,44 +104,41 @@ showCount n = show n ++ " judges"
 
 -- ----------------------  Output chunks
 
-type OutputResult c = ([OutputChunks c], [OutputChunks c])
-type OutputChunks c = B.Short [OutputChunk c]
+type OutputResult  = ([OutputChunks], [OutputChunks])
+type OutputChunks  = B.Short [OutputChunk]
 
-data OutputChunk c
-    = OutputJudge   [B.Judge c]
+data OutputChunk
+    = OutputJudge   [B.Judge String]
     | OutputComment [String]
       deriving (Show, Eq, Ord)
 
 -- | Print result of calculation, and return status.
-hPutOutputResult :: forall c. (Ord c, B.Write c) => IO.Handle -> OutputResult c -> IO Int
+hPutOutputResult :: IO.Handle -> OutputResult -> IO Int
 hPutOutputResult h (vio, jud)
     | null vio2  = shortList h 0 jud
     | otherwise  = shortList h 1 vio2
     where
-      vio2 :: [OutputChunks c]
+      vio2 :: [OutputChunks]
       vio2 = B.shortTrim $ B.map2 (filter $ existJudge) vio
 
-      existJudge :: OutputChunk c -> Bool
-      existJudge (OutputComment _) = False
-      existJudge (OutputJudge [])  = False
-      existJudge _                 = True
+      existJudge :: OutputChunk -> Bool
+      existJudge (OutputComment _)  = False
+      existJudge (OutputJudge [])   = False
+      existJudge _                  = True
 
-shortList :: (Ord c, B.Write c) => IO.Handle -> Int -> [OutputChunks c] -> IO Int
+shortList :: IO.Handle -> Int -> [OutputChunks] -> IO Int
 shortList h status sh =
     do cnt <- M.foldM (short h) initialCounter sh
        hPutLines h $ summary status cnt
        return status
 
-short :: (Ord c, B.Write c) => IO.Handle -> Counter -> OutputChunks c -> IO Counter
-short h cnt (B.Short _ []  output) = chunks h B.shortEmpty output cnt
+short :: IO.Handle -> Counter -> OutputChunks -> IO Counter
+short h cnt (B.Short _ []  output) = chunks h output cnt
 short h cnt (B.Short _ def output) =
     do hPutLines h $ "short" : map shortLine def
        hPutEmptyLine h
-       chunks h sh output cnt
+       chunks h output cnt
     where
-      sh :: B.StringMap
-      sh = B.shortText def
-
       shortLine :: (String, String) -> String
       shortLine (a, b) = "  " ++ B.padRight width a ++
                          " "  ++ show b
@@ -150,10 +146,9 @@ short h cnt (B.Short _ def output) =
       width :: Int
       width = maximum $ map (length . fst) def
 
-chunks :: (Ord c, B.Write c) => IO.Handle -> B.StringMap
-       -> [OutputChunk c] -> Counter -> IO Counter
-chunks h sh = loop where
-    writer = IO.hPutStrLn h . B.judgeLine . B.judgeText sh
+chunks :: IO.Handle -> [OutputChunk] -> Counter -> IO Counter
+chunks h = loop where
+    writer = IO.hPutStrLn h . B.judgeLine
 
     loop [] cnt = return cnt
     loop (OutputJudge js : xs) (_, tab) = do cnt' <- judges h writer js (0, tab)
