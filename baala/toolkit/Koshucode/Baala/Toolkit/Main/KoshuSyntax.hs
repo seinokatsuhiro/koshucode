@@ -215,7 +215,7 @@ putJudge :: (Ord c, B.Write c) => B.Judge c -> IO ()
 putJudge = putStrLn . judgeText
 
 judgeText :: (Ord c, B.Write c) => B.Judge c -> String
-judgeText = show . B.write B.shortEmpty
+judgeText = B.judgeShow B.shortEmpty
 
 putNewline :: IO ()
 putNewline = putStrLn ""

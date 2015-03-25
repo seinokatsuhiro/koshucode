@@ -15,7 +15,7 @@ module Koshucode.Baala.Base.Data.Judge
     judgeTermsMap,
     judgeCons,
     judgesFromRel,
-    judgeText, judgeLine,
+    judgeShow, judgeText, judgeLine,
     abcJudge,
   
     -- * Logical quality
@@ -91,33 +91,11 @@ instance Functor Judge where
     fmap f j = judgeTermsMap (map g) j
         where g (n, v) = (n, f v)
 
-instance (Ord c, B.Write c) => B.Write (Judge c) where
-    write = judgeDoc 
-
 class SelectRel r where
     selectRel :: r c -> JudgePat -> [B.TermName] -> B.Rel c
 
-judgeDoc :: (B.Write c) => B.StringMap -> Judge c -> B.Doc
-judgeDoc shorts j =
-    case j of
-      -- Frege's judgement stroke, content line,
-      JudgeAffirm      p xs     -> B.doc "|--"  B.<+> pat p B.<+> terms xs
-      JudgeDeny        p xs     -> B.doc "|-X"  B.<+> pat p B.<+> terms xs
-      JudgeMultiDeny   p xs     -> B.doc "|-XX" B.<+> pat p B.<+> terms xs
-      JudgeChange      p xs ys  -> B.doc "|-C"  B.<+> pat p B.<+> terms xs
-                                                B.<+> terms ys
-      JudgeMultiChange p xs ys  -> B.doc "|-CC" B.<+> pat p B.<+> terms xs
-                                                B.<+> terms ys
-      JudgeViolate     p xs     -> B.doc "|-V"  B.<+> pat p B.<+> terms xs
-    where
-      -- pattern
-      pat p | ':' `elem` p = B.docWrap "\"" "\"" p
-            | otherwise    = B.doc p
-
-      -- term name and content
-      terms [] = B.docEmpty
-      terms ((n, c) : xs) = B.doc " " B.<> B.doc (B.showTermName n)
-                            B.<+> B.write shorts c B.<+> terms xs
+judgeShow :: (B.Write c) => B.StringMap -> Judge c -> String
+judgeShow sh = judgeLine . judgeText sh
 
 judgeText :: (B.Write c) => B.StringMap -> Judge c -> Judge String
 judgeText shorts = (text `fmap`) where

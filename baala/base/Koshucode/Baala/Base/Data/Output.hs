@@ -49,7 +49,7 @@ hPutJudges h status js =
        hPutLines h $ summary status cnt
        return status
     where
-      writer = IO.hPutStrLn h . B.judgeLine . B.judgeText B.shortEmpty
+      writer = IO.hPutStrLn h . B.judgeShow B.shortEmpty
 
 judges :: forall c. (Ord c, B.Write c) =>
     IO.Handle -> (B.Judge c -> IO ()) -> [B.Judge c] -> Counter -> IO Counter
