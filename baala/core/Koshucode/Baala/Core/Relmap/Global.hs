@@ -12,6 +12,7 @@ module Koshucode.Baala.Core.Relmap.Global
     globalRops, globalRopsAdd,
     globalCops, globalCopset,
     globalInfix,
+    globalAbort,
     global',
 
     -- * Getting global parameter
@@ -91,6 +92,9 @@ globalInfix   = C.copsetInfixList . opsetCop . globalOpset
 
 globalCopset :: Global' h c -> C.CopSet c
 globalCopset  = opsetCop . globalOpset
+
+globalAbort :: Global' h c -> B.AbortReason -> IO Int
+globalAbort = B.abort . globalCommandLine
 
 -- | Empty global parameters.
 global' :: (C.CBool c, C.CText c) => h c -> Global' h c

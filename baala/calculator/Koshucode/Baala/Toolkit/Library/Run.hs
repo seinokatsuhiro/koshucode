@@ -2,12 +2,13 @@
 
 module Koshucode.Baala.Toolkit.Library.Run
   ( runFiles, hRunFiles,
-    --runCalc, runCalcTo,
+    getProxies,
     theContent,
     --mkdir,
   ) where
 
 import qualified System.IO            as IO
+import qualified System.Environment   as Env
 import qualified Koshucode.Baala.Base as B
 import qualified Koshucode.Baala.Core as C
 
@@ -35,13 +36,21 @@ hRunFiles h g ns =
        IO.hPutStr      h $ unlines $ B.texts comm
        IO.hPutStrLn    h ""
 
-       let cmd = C.globalCommandLine g
-           js' = do res <- abRes
+       let js' = do res <- abRes
                     C.runResource res
 
        case js' of
-         Left a   -> B.abort cmd a
+         Left a   -> C.globalAbort g a
          Right js -> B.hPutOutputResult h js
+
+getProxies :: IO [(String, Maybe String)]
+getProxies =
+    do httpProxy   <- Env.lookupEnv "http_proxy"
+       httpsProxy  <- Env.lookupEnv "https_proxy"
+       ftpProxy    <- Env.lookupEnv "ftp_proxy"
+       return [ ("http"  , httpProxy)
+              , ("https" , httpsProxy)
+              , ("ftp"   , ftpProxy) ]
 
 
 
