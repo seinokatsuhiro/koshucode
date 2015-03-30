@@ -108,8 +108,8 @@ type OutputResult  = ([OutputChunks], [OutputChunks])
 type OutputChunks  = B.Short [OutputChunk]
 
 data OutputChunk
-    = OutputJudge   [B.Judge String]
-    | OutputComment [String]
+    = OutputJudge  [B.Judge String]
+    | OutputNote   [String]
       deriving (Show, Eq, Ord)
 
 -- | Print result of calculation, and return status.
@@ -122,9 +122,9 @@ hPutOutputResult h (vio, jud)
       vio2 = B.shortTrim $ B.map2 (filter $ existJudge) vio
 
       existJudge :: OutputChunk -> Bool
-      existJudge (OutputComment _)  = False
-      existJudge (OutputJudge [])   = False
-      existJudge _                  = True
+      existJudge (OutputNote _)    = False
+      existJudge (OutputJudge [])  = False
+      existJudge _                 = True
 
 shortList :: IO.Handle -> Int -> [OutputChunks] -> IO Int
 shortList h status sh =
@@ -153,7 +153,14 @@ chunks h = loop where
     loop [] cnt = return cnt
     loop (OutputJudge js : xs) (_, tab) = do cnt' <- judges h writer js (0, tab)
                                              loop xs cnt'
-    loop (OutputComment [] : xs) cnt    = loop xs cnt
-    loop (OutputComment ls : xs) cnt    = do B.hPutCommentLines h ls
-                                             hPutEmptyLine h
+    loop (OutputNote [] : xs) cnt       = loop xs cnt
+    loop (OutputNote ls : xs) cnt       = do hPutNote h $ unlines ls
                                              loop xs cnt
+
+hPutNote :: IO.Handle -> String -> IO ()
+hPutNote h s = do IO.hPutStrLn  h "=== note"
+                  hPutEmptyLine h
+                  IO.hPutStr    h s
+                  hPutEmptyLine h
+                  IO.hPutStrLn  h "=== rel"
+                  hPutEmptyLine h

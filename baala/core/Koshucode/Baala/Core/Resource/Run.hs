@@ -38,7 +38,7 @@ runResourceBody res@C.Resource { C.resAssert = ass, C.resMessage = msg } =
 
       msgChunk :: B.OutputChunks
       msgChunk | null msg  = B.Short [] [] []
-               | otherwise = B.Short [] [] [B.OutputComment message]
+               | otherwise = B.Short [] [] [B.OutputNote message]
 
       message = "" : "MESSAGE" : map ("  " ++) msg ++ [""]
 

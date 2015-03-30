@@ -149,7 +149,7 @@ deny = JudgeDeny
 -- | Affirm judgement, i.e., change logical quality to affirmative.
 affirmJudge :: B.Map (Judge c)
 affirmJudge (JudgeDeny p xs) = JudgeAffirm p xs
-affirmJudge _ = B.bug "denyJudge"
+affirmJudge _ = B.bug "affirmJudge"
 
 -- | Deny judgement, i.e., change logical quality to denial.
 denyJudge :: B.Map (Judge c)
