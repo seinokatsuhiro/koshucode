@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Op.Peripheral
@@ -7,6 +8,9 @@ module Koshucode.Baala.Op.Peripheral
     consMember, relmapMember, relkitMember,
     -- $member
   
+    -- * index-elem
+    consIndexElem, relmapIndexElem, relkitIndexElem,
+
     -- * RDF
     consRdf,
   
@@ -41,6 +45,7 @@ ropsPeripheral :: (C.CContent c) => [C.Rop c]
 ropsPeripheral = Op.ropList "peripheral"
     --       CONSTRUCTOR   USAGE                     ATTRIBUTE
     [ Op.def consAssn      "assn /P ... -to N"       "V -term | -to"
+    , Op.def consIndexElem "index-elem /N /N /P"     "3 -index -elem -list"
     , Op.def consMember    "member /N /N"            "E -1 -2"
     , Op.def consRdf       "rdf P /S /O"             "1V -pattern -term"
     , Op.def consTermName  "term-name /N"            "1 -term"
@@ -77,10 +82,10 @@ relkitMember :: (Ord c, C.CSet c, C.CList c, C.CText c)
   => B.TermName2 -> C.RelkitFlow c
 relkitMember _ Nothing = Right C.relkitNothing
 relkitMember (x, xs) he1'@(Just he1) = kit2 where
-    kit2 | B.operand [xi, xsi] [] = relkitMemberCheck  xi xsi he1'
-         | B.operand [xsi] [xi]   = relkitMemberExpand x  xsi he1'
-         | otherwise              = Msg.unkTerm [x, xs] he1
-    [xi, xsi] = [x, xs] `B.snipFull` B.headNames he1
+    kit2 | [xi, xsi] B.+- []   = relkitMemberCheck  xi xsi he1'
+         | [xsi]     B.+- [xi] = relkitMemberExpand x  xsi he1'
+         | otherwise            = Msg.unkTerm [x, xs] he1
+    [xi, xsi] = headIndex he1 [x, xs]
 
 relkitMemberCheck :: (Eq c, C.CSet c, C.CList c)
   => Int -> Int -> C.RelkitFlow c
@@ -102,6 +107,54 @@ relkitMemberExpand x xsi (Just he1) = Right kit2 where
                     _ | C.isText xsc -> map (: cs) $ map (C.pText . B.li1)
                                                    $ B.unique $ C.gText xsc
                     _                -> [xsc : cs]
+
+
+-- ----------------------  indexElem
+
+consIndexElem :: (Ord c, C.CSet c, C.CList c, C.CText c, C.CDec c) => C.RopCons c
+consIndexElem med =
+  do i   <- Op.getTerm med "-index"
+     x   <- Op.getTerm med "-elem"
+     xs  <- Op.getTerm med "-list"
+     Right $ relmapIndexElem med (i, x, xs)
+
+relmapIndexElem :: (Ord c, C.CSet c, C.CList c, C.CText c, C.CDec c)
+  => C.Intmed c -> B.TermName3 -> C.Relmap c
+relmapIndexElem med = C.relmapFlow med . relkitIndexElem
+
+relkitIndexElem :: (Ord c, C.CSet c, C.CList c, C.CText c, C.CDec c)
+  => B.TermName3 -> C.RelkitFlow c
+relkitIndexElem _ Nothing = Right C.relkitNothing
+relkitIndexElem (i, x, xs) he1'@(Just he1) = kit2 where
+    kit2 | [xsi] B.+- [xi, ii]  = relkitIndexElemExpand i x xsi he1'
+         | otherwise            = Msg.unkTerm [i, x, xs] he1
+    [ii, xi, xsi] = headIndex he1 [i, x, xs]
+
+headIndex :: B.Head -> [B.TermName] -> [Int]
+headIndex he ns = ns `B.snipFull` B.headNames he
+
+relkitIndexElemExpand :: forall c. (Ord c, C.CSet c, C.CList c, C.CText c, C.CDec c)
+  => B.TermName -> B.TermName -> Int -> C.RelkitFlow c
+relkitIndexElemExpand _ _ _ Nothing = Right C.relkitNothing
+relkitIndexElemExpand i x xsi (Just he1) = Right kit2 where
+    he2      = B.headAppend [i, x] he1
+    kit2     = C.relkitJust he2 $ C.RelkitOneToMany False kitf2
+    kitf2 cs = let [xsc] = [xsi] `B.snipFrom` cs
+               in case xsc of
+                    _ | C.isSet  xsc -> indexElem cs $ B.sort $ C.gSet xsc
+                    _ | C.isList xsc -> indexElem cs $ C.gList xsc
+                    _ | C.isText xsc -> indexElem cs $ map (C.pText . B.li1)
+                                                     $ C.gText xsc
+                    _                -> [xsc : cs]
+
+    indexElem :: [c] -> [c] -> [[c]]
+    indexElem cs = map (cons cs) . index
+
+    index :: [c] -> [(c, c)]
+    index = zip $ map C.pDecFromInt [1 ..]
+
+    cons :: [c] -> (c, c) -> [c]
+    cons cs (ic, xc) = ic : xc : cs
 
 
 -- ----------------------  RDF

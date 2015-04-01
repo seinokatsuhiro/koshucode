@@ -17,7 +17,7 @@ module Koshucode.Baala.Base.Prelude.Snip
     snipLeft, snipShare, snipRight,
     snipOrder,
     sameLength, notSameLength,
-    operand,
+    (+-),
     -- $DerivativeExample
   
   ) where
@@ -135,9 +135,9 @@ snipOff ps xs = loop 0 xs where
 --  Check elements in the first list are non-negative,
 --  and second are negative.
 --
---    >>> operand [0, 1] [-1]
+--    >>> [0, 1] +- [-1]
 --    True
---    >>> operand [0] [1, -1]
+--    >>> [0] +- [1, -1]
 --    False
 
 -- | Move indexed elements to the front.
@@ -182,6 +182,7 @@ notSameLength a b = not $ sameLength a b
 
 -- | Check elements in the first list are non-negative,
 --   and elements in the second are negative.
-operand :: [Int] -> [Int] -> Bool
-operand pos neg = all (>= 0) pos && all (< 0) neg
+(+-) :: [Int] -> [Int] -> Bool
+(+-) pos neg = all (>= 0) pos
+            && all (< 0)  neg
 
