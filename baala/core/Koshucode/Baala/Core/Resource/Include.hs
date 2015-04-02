@@ -51,6 +51,7 @@ resIncludeBody res abcl =
          C.CRelmap  _ _   -> relmap `to` \x -> res { C.resLexmap  = C.resLexmap  << x }
          C.CSlot    _ _   -> slot   `to` \x -> res { C.resSlot    = C.resSlot    << x }
          C.CInclude _     -> inc    `to` \x -> res { C.resArticle = C.resArticle <: x }
+         C.COutput  _     -> output `to` \x -> res { C.resOutput = x }
          C.COption  _     -> option `to` \x -> res { C.resOption = x }
     where
       f << y  = y : f res
@@ -82,6 +83,10 @@ resIncludeBody res abcl =
 
       inc :: Clab B.CodeName
       inc _ _ (C.CInclude toks) =
+          paraToCodeName =<< C.ttreePara2 toks
+
+      output :: Clab B.CodeName
+      output _ _ (C.COutput toks) =
           paraToCodeName =<< C.ttreePara2 toks
 
       option :: Clab (C.Option c)

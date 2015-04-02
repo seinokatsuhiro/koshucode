@@ -47,6 +47,7 @@ data ClauseBody
     | CJudge    C.AssertType B.JudgePat [B.Token]  -- ^ Judge
     | CSlot     String [B.Token]                   -- ^ Global slot
     | COption   [B.Token]                          -- ^ Option settings
+    | COutput   [B.Token]                          -- ^ Output point
       deriving (Show, G.Data, G.Typeable)
 
 instance B.CodePtr Clause where
@@ -70,6 +71,7 @@ clauseTypeText (Clause _ body) =
       CJudge    _ _ _   -> "judge"
       CSlot     _ _     -> "slot"
       COption   _       -> "option"
+      COutput   _       -> "output"
 
 
 
@@ -130,13 +132,14 @@ consClauseEach h@(ClauseHead src sec sh ab) = result where
         | isDelim is                = normal    $ rmap name body
     dispatch (B.TTextSect _ : _)    = newSec
     dispatch (B.TTextRaw _ k : xs)
-        | k == "include"            = normal    $ incl xs
+        | k == "include"            = normal    $ c1 $ CInclude xs
         | k == "export"             = normal    $ expt xs
         | k == "short"              = newShort  $ short xs
         | k == "about"              = newAbout  xs
-        | k == "option"             = normal    $ option xs
+        | k == "option"             = normal    $ c1 $ COption xs
+        | k == "output"             = normal    $ c1 $ COutput xs
         | k == "****"               = normal    []
-    dispatch (B.TSlot _ 2 n : xs)   = normal    $ slot n xs
+    dispatch (B.TSlot _ 2 n : xs)   = normal    $ c1 $ CSlot n xs
     dispatch []                     = normal    []
     dispatch _                      = normal    $ unkAtStart []
 
@@ -216,9 +219,6 @@ consClauseEach h@(ClauseHead src sec sh ab) = result where
     -- others
 
     rmap n xs                     = c1 $ CRelmap n xs
-    slot n xs                     = c1 $ CSlot   n xs
-    incl xs                       = c1 $ CInclude  xs
-    option xs                     = c1 $ COption   xs
 
     expt (B.TText _ _ n : B.TText _ _ ":" : xs)
                                   = c0 (CExport n) : rmap n xs
