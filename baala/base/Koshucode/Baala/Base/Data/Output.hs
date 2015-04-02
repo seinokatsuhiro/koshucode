@@ -12,12 +12,14 @@ module Koshucode.Baala.Base.Data.Output
     -- * Function
     putJudges,
     hPutJudges,
+    putOutputResult,
     hPutOutputResult,
   ) where
 
 import qualified Control.Monad                     as M
 import qualified Data.Map                          as Map
 import qualified System.IO                         as IO
+import qualified Koshucode.Baala.Base.Abort        as B
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
 import qualified Koshucode.Baala.Base.Token        as B
@@ -104,7 +106,7 @@ showCount n = show n ++ " judges"
 
 -- ----------------------  Output chunks
 
-type OutputResult  = ([OutputChunks], [OutputChunks])
+type OutputResult  = (B.CodeName, [OutputChunks], [OutputChunks])
 type OutputChunks  = B.Short [OutputChunk]
 
 data OutputChunk
@@ -113,10 +115,20 @@ data OutputChunk
       deriving (Show, Eq, Ord)
 
 -- | Print result of calculation, and return status.
-hPutOutputResult :: IO.Handle -> OutputResult -> IO Int
-hPutOutputResult h (vio, jud)
-    | null vio2  = shortList h 0 jud
-    | otherwise  = shortList h 1 vio2
+putOutputResult :: [B.CodeName] -> OutputResult -> IO Int
+putOutputResult ns (B.CodeStdin, vio, jud) =
+    hPutOutputResult IO.stdout ns vio jud
+putOutputResult ns (B.CodeFile path, vio, jud) =
+    do h <- IO.openFile path IO.WriteMode
+       n <- hPutOutputResult h ns vio jud
+       IO.hClose h
+       return n
+putOutputResult _ _ = B.bug "putOutputResult"
+
+hPutOutputResult :: IO.Handle -> [B.CodeName] -> [OutputChunks] -> [OutputChunks] -> IO Int
+hPutOutputResult h ns vio jud
+    | null vio2  = shortList h 0 ns jud
+    | otherwise  = shortList h 1 ns vio2
     where
       vio2 :: [OutputChunks]
       vio2 = B.shortTrim $ B.map2 (filter $ existJudge) vio
@@ -126,9 +138,17 @@ hPutOutputResult h (vio, jud)
       existJudge (OutputJudge [])  = False
       existJudge _                 = True
 
-shortList :: IO.Handle -> Int -> [OutputChunks] -> IO Int
-shortList h status sh =
-    do cnt <- M.foldM (short h) initialCounter sh
+shortList :: IO.Handle -> Int -> [B.CodeName] -> [OutputChunks] -> IO Int
+shortList h status ns sh =
+    do let inputs  = B.codeNameText `map` ns
+           comm    = B.CommentDoc [ B.CommentSec "INPUT" inputs ]
+
+       IO.hSetEncoding h IO.utf8
+       IO.hPutStrLn    h B.emacsModeComment
+       IO.hPutStr      h $ unlines $ B.texts comm
+       IO.hPutStrLn    h ""
+
+       cnt <- M.foldM (short h) initialCounter sh
        hPutLines h $ summary status cnt
        return status
 

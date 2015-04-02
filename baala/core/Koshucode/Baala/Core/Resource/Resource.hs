@@ -43,7 +43,8 @@ data Resource c = Resource
     , resLexmap     :: [C.LexmapClause]   -- ^ Source of relmaps
     , resAssert     :: [ShortAssert c]    -- ^ Assertions of relmaps
     , resJudge      :: [B.Judge c]        -- ^ Affirmative or denial judgements
-    , resArticle    :: ([B.CodeName], [B.CodeName], [B.CodePiece])  -- ^ Codes of resource
+    , resArticle    :: ([B.CodeName], [B.CodeName], [B.CodePiece])  -- ^ Input points
+    , resOutput     :: B.CodeName         -- ^ Output point
     , resMessage    :: [String]           -- ^ Collection of messages
     , resLastSecNo  :: C.SecNo            -- ^ Last section number
     , resSelect     :: C.RelSelect c
@@ -77,6 +78,7 @@ resEmpty = Resource
            , resAssert     = []
            , resJudge      = []
            , resArticle    = ([], [], [])
+           , resOutput     = B.CodeStdin
            , resMessage    = []
            , resLastSecNo  = 0
            , resSelect     = \_ _ -> B.reldee
