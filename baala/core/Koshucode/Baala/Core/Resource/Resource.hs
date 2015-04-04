@@ -43,7 +43,7 @@ data Resource c = Resource
     , resLexmap     :: [C.LexmapClause]   -- ^ Source of relmaps
     , resAssert     :: [ShortAssert c]    -- ^ Assertions of relmaps
     , resJudge      :: [B.Judge c]        -- ^ Affirmative or denial judgements
-    , resArticle    :: ([B.CodeName], [B.CodeName], [B.CodePiece])  -- ^ Input points
+    , resInput      :: ([B.CodeName], [B.CodeName], [B.CodePiece])  -- ^ Input points
     , resOutput     :: B.CodeName         -- ^ Output point
     , resMessage    :: [String]           -- ^ Collection of messages
     , resLastSecNo  :: C.SecNo            -- ^ Last section number
@@ -51,7 +51,7 @@ data Resource c = Resource
     }
 
 instance Show (Resource c) where
-    show Resource { resArticle = art }
+    show Resource { resInput = art }
         = "Resources " ++ show art
 
 instance B.SelectRel Resource where
@@ -64,7 +64,7 @@ instance C.GetGlobal Resource where
 type AbResource c = B.Ab (Resource c)
 
 resIncluded :: Resource c -> [B.CodePiece]
-resIncluded Resource { resArticle = (_, _, done) } = done
+resIncluded Resource { resInput = (_, _, done) } = done
 
 -- | Resource that has no contents.
 resEmpty :: (C.CContent c) => Resource c
@@ -77,7 +77,7 @@ resEmpty = Resource
            , resLexmap     = []
            , resAssert     = []
            , resJudge      = []
-           , resArticle    = ([], [], [])
+           , resInput      = ([], [], [])
            , resOutput     = B.CodeStdin
            , resMessage    = []
            , resLastSecNo  = 0

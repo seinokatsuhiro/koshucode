@@ -50,9 +50,9 @@ resIncludeBody res abcl =
          C.CAssert  _ _ _ -> assert `to` \x -> res { C.resAssert  = C.resAssert  << x }
          C.CRelmap  _ _   -> relmap `to` \x -> res { C.resLexmap  = C.resLexmap  << x }
          C.CSlot    _ _   -> slot   `to` \x -> res { C.resSlot    = C.resSlot    << x }
-         C.CInclude _     -> inc    `to` \x -> res { C.resArticle = C.resArticle <: x }
-         C.COutput  _     -> output `to` \x -> res { C.resOutput = x }
-         C.COption  _     -> option `to` \x -> res { C.resOption = x }
+         C.CInput   _     -> input  `to` \x -> res { C.resInput   = C.resInput <: x }
+         C.COutput  _     -> output `to` \x -> res { C.resOutput  = x }
+         C.COption  _     -> option `to` \x -> res { C.resOption  = x }
     where
       f << y  = y : f res
       f <: t  = case f res of (todo1, todo2, done) -> (t : todo1, todo2, done)
@@ -81,8 +81,8 @@ resIncludeBody res abcl =
           do trees <- B.ttrees toks
              Right (n, trees)
 
-      inc :: Clab B.CodeName
-      inc _ _ (C.CInclude toks) =
+      input :: Clab B.CodeName
+      input _ _ (C.CInput toks) =
           paraToCodeName =<< C.ttreePara2 toks
 
       output :: Clab B.CodeName
@@ -106,14 +106,14 @@ paraToCodeName = B.paraSelect unmatch ps where
     just1 p = do arg <- B.paraGetFst p
                  case arg of
                    B.TextLeaf _ _ path -> Right $ B.codeNameFrom path
-                   _ -> Msg.adlib "include not text"
+                   _ -> Msg.adlib "input not text"
 
     stdin p = do args <- B.paraGet p "stdin"
                  case args of
                    [] -> Right B.CodeStdin
-                   _  -> Msg.adlib "include no args"
+                   _  -> Msg.adlib "input no args"
 
-    unmatch = Msg.adlib "include unknown"
+    unmatch = Msg.adlib "input unknown"
 
 
 -- ----------------------

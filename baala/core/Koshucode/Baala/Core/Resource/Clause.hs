@@ -40,7 +40,7 @@ data ClauseHead = ClauseHead
     } deriving (Show, G.Data, G.Typeable)
 
 data ClauseBody
-    = CInclude  [B.Token]                          -- ^ Includeing source
+    = CInput    [B.Token]                          -- ^ Input point
     | CExport   String                             -- ^ Exporting name
     | CRelmap   String [B.Token]                   -- ^ Source of relmap
     | CAssert   C.AssertType B.JudgePat [B.Token]  -- ^ Assertion
@@ -64,7 +64,7 @@ clauseHeadEmpty = ClauseHead B.codeClauseEmpty 0 [] []
 clauseTypeText :: Clause -> String
 clauseTypeText (Clause _ body) =
     case body of
-      CInclude  _       -> "include"
+      CInput    _       -> "input"
       CExport   _       -> "export"
       CRelmap   _ _     -> "relmap"
       CAssert   _ _ _   -> "assert"
@@ -132,7 +132,8 @@ consClauseEach h@(ClauseHead src sec sh ab) = result where
         | isDelim is                = normal    $ rmap name body
     dispatch (B.TTextSect _ : _)    = newSec
     dispatch (B.TTextRaw _ k : xs)
-        | k == "include"            = normal    $ c1 $ CInclude xs
+        | k == "input"              = normal    $ c1 $ CInput xs
+        | k == "include"            = normal    $ c1 $ CInput xs
         | k == "export"             = normal    $ expt xs
         | k == "short"              = newShort  $ short xs
         | k == "about"              = newAbout  xs

@@ -43,10 +43,10 @@ nextSourceCount =
        return n
 
 readResource :: (C.CContent c) => C.Resource c -> ResourceIO c
-readResource res@C.Resource { C.resArticle = article@(todo, _, done) }
+readResource res@C.Resource { C.resInput = article@(todo, _, done) }
     = case article of
         ([], [], _)            -> return $ Right res
-        (_ , [], _)            -> readResource res { C.resArticle = ([], todo', done) }
+        (_ , [], _)            -> readResource res { C.resInput = ([], todo', done) }
         (_ , src : _, _)
             | B.CodePiece 0 src `elem` done
                                -> readResource $ pop res
@@ -60,7 +60,7 @@ readResource res@C.Resource { C.resArticle = article@(todo, _, done) }
         todo'                   = reverse todo
         pop                     = call $ map2 tail
         push                    = call . cons3
-        call f r                = r { C.resArticle = f $ C.resArticle r }
+        call f r                = r { C.resInput = f $ C.resInput r }
         map2  f (a, b, c)       = (a, f b, c)
         cons3 x (a, b, c)       = (a, b, x : c)
 
@@ -95,5 +95,5 @@ readResourceText res code = C.resInclude res (B.codeTextOf code) code
 readSources :: forall c. (C.CContent c) => [B.CodeName] -> ResourceIO c
 readSources src =
     do res <- getRootResoruce
-       readResource $ res { C.resArticle = ([], reverse src, []) }
+       readResource $ res { C.resInput = ([], reverse src, []) }
 
