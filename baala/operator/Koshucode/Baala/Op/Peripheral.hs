@@ -11,6 +11,9 @@ module Koshucode.Baala.Op.Peripheral
     -- * index-elem
     consIndexElem, relmapIndexElem, relkitIndexElem,
 
+    -- * uncollect
+    consUncollect, relmapUncollect, relkitUncollect,
+
     -- * RDF
     consRdf,
   
@@ -43,14 +46,15 @@ import qualified Koshucode.Baala.Op.Message   as Msg
 -- 
 ropsPeripheral :: (C.CContent c) => [C.Rop c]
 ropsPeripheral = Op.ropList "peripheral"
-    --       CONSTRUCTOR   USAGE                     ATTRIBUTE
-    [ Op.def consAssn      "assn /P ... -to N"       "V -term | -to"
-    , Op.def consIndexElem "index-elem /N /N /P"     "3 -index -elem -list"
-    , Op.def consMember    "member /N /N"            "E -1 -2"
-    , Op.def consRdf       "rdf P /S /O"             "1V -pattern -term"
-    , Op.def consTermName  "term-name /N"            "1 -term"
-    , Op.def consToday     "today /N"                "1 -term"
-    , Op.def consUnassn    "unassn /P -only /P ..."  "1 -from | -only"
+    --       CONSTRUCTOR   USAGE                      ATTRIBUTE
+    [ Op.def consAssn      "assn /P ... -to N"        "V -term | -to"
+    , Op.def consIndexElem "index-elem /N /N /P"      "3 -index -elem -list"
+    , Op.def consMember    "member /N /N"             "E -1 -2"
+    , Op.def consRdf       "rdf P /S /O"              "1V -pattern -term"
+    , Op.def consTermName  "term-name /N"             "1 -term"
+    , Op.def consToday     "today /N"                 "1 -term"
+    , Op.def consUnassn    "unassn /P -only /P ..."   "1 -from | -only"
+    , Op.def consUncollect "uncollect /P -to /N ..."  "1 -coll | -to"
     ]
 
 -- ----------------------  member
@@ -109,7 +113,7 @@ relkitMemberExpand x xsi (Just he1) = Right kit2 where
                     _                -> [xsc : cs]
 
 
--- ----------------------  indexElem
+-- ----------------------  index-elem
 
 consIndexElem :: (Ord c, C.CSet c, C.CList c, C.CText c, C.CDec c) => C.RopCons c
 consIndexElem med =
@@ -126,8 +130,8 @@ relkitIndexElem :: (Ord c, C.CSet c, C.CList c, C.CText c, C.CDec c)
   => B.TermName3 -> C.RelkitFlow c
 relkitIndexElem _ Nothing = Right C.relkitNothing
 relkitIndexElem (i, x, xs) he1'@(Just he1) = kit2 where
-    kit2 | [xsi] B.+- [xi, ii]  = relkitIndexElemExpand i x xsi he1'
-         | otherwise            = Msg.unkTerm [i, x, xs] he1
+    kit2 | B.termsPN [xsi] [xi, ii]  = relkitIndexElemExpand i x xsi he1'
+         | otherwise                 = Msg.unkTerm [i, x, xs] he1
     [ii, xi, xsi] = headIndex he1 [i, x, xs]
 
 headIndex :: B.Head -> [B.TermName] -> [Int]
@@ -155,6 +159,44 @@ relkitIndexElemExpand i x xsi (Just he1) = Right kit2 where
 
     cons :: [c] -> (c, c) -> [c]
     cons cs (ic, xc) = ic : xc : cs
+
+
+-- ----------------------  uncollect
+
+consUncollect :: (Ord c, C.CSet c, C.CList c, C.CText c, C.CDec c, C.CEmpty c) => C.RopCons c
+consUncollect med =
+  do coll  <- Op.getTerm  med "-coll"
+     to    <- Op.getTerms med "-to"
+     Right $ relmapUncollect med (coll, to)
+
+relmapUncollect :: (Ord c, C.CSet c, C.CList c, C.CText c, C.CDec c, C.CEmpty c)
+  => C.Intmed c -> (B.TermName, [B.TermName]) -> C.Relmap c
+relmapUncollect med = C.relmapFlow med . relkitUncollect
+
+relkitUncollect :: (Ord c, C.CSet c, C.CList c, C.CText c, C.CDec c, C.CEmpty c)
+  => (B.TermName, [B.TermName]) -> C.RelkitFlow c
+relkitUncollect _ Nothing = Right C.relkitNothing
+relkitUncollect (coll, to) (Just he1) = kit2 where
+    kit2 | B.termsPN icoll ito  = Right $ C.relkitJust he2 $ C.RelkitOneToOne False kitf2
+         | otherwise            = Msg.unkTerm (coll : to) he1
+
+    icoll    = headIndex he1 [coll]
+    ito      = headIndex he1 to
+    he2      = B.headAppend to he1
+    kitf2 cs = let [xsc]    = icoll `B.snipFrom` cs
+                   char     = C.pText . B.li1
+                   ys << xs = appendCount C.empty (length to) xs ys
+               in case () of
+                    _ | C.isSet  xsc  -> cs << (B.sort $ C.gSet xsc)
+                      | C.isList xsc  -> cs << (C.gList xsc)
+                      | C.isText xsc  -> cs << (map char $ C.gText xsc)
+                      | otherwise     -> cs << []
+
+appendCount :: a -> Int -> [a] -> [a] -> [a]
+appendCount fill num xs ys = loop num xs where
+    loop 0 _        = ys
+    loop n (x:xs2)  = x    : loop (n - 1) xs2
+    loop n []       = fill : loop (n - 1) []
 
 
 -- ----------------------  RDF

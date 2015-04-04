@@ -37,6 +37,8 @@ module Koshucode.Baala.Base.Token.Token
     TermPath,
     showTermName,
     showNestedTermName,
+    termP, termN, termPN,
+    termsP, termsN, termsPN,
   
     -- * Selectors
     tokenContent,
@@ -229,6 +231,23 @@ showTermName n = ('/' : n)
 showNestedTermName :: [String] -> String
 showNestedTermName = concat . map showTermName
 
+termP :: Int -> Bool
+termP = (>= 0)
+
+termN :: Int -> Bool
+termN = (< 0)
+
+termPN :: Int -> Int -> Bool
+termPN p n = termP p && termN n
+
+termsP :: [Int] -> Bool
+termsP = all termP
+
+termsN :: [Int] -> Bool
+termsN = all termN
+
+termsPN :: [Int] -> [Int] -> Bool
+termsPN p n = termsP p && termsN n
 
 
 -- ----------------------  Selector
