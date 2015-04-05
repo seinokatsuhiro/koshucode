@@ -110,7 +110,7 @@ paraToIOPoint = B.paraSelect unmatch ps where
 
     stdin p = do args <- B.paraGet p "stdin"
                  case args of
-                   [] -> Right B.CodeStdin
+                   [] -> Right B.IOPointStdin
                    _  -> Msg.adlib "input no args"
 
     unmatch = Msg.adlib "input unknown"

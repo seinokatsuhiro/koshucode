@@ -117,9 +117,9 @@ data OutputChunk
 
 -- | Print result of calculation, and return status.
 putOutputResult :: IOPoints -> OutputResult -> IO Int
-putOutputResult iop (B.CodeStdout, vio, jud) =
+putOutputResult iop (B.IOPointStdout, vio, jud) =
     hPutOutputResult IO.stdout iop vio jud
-putOutputResult iop (B.CodeFile path, vio, jud) =
+putOutputResult iop (B.IOPointFile path, vio, jud) =
     do h <- IO.openFile path IO.WriteMode
        n <- hPutOutputResult h iop vio jud
        IO.hClose h

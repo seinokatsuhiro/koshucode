@@ -19,41 +19,41 @@ import qualified Koshucode.Baala.Base.Prelude as B
 -- ----------------------  IOPoint
 
 data IOPoint
-    = CodeFile  FilePath
-    | CodeUri   String
-    | CodeText  String
-    | CodeStdin
-    | CodeStdout
+    = IOPointFile  FilePath
+    | IOPointUri   String
+    | IOPointText  String
+    | IOPointStdin
+    | IOPointStdout
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 -- | Name of I/O point, i.e., @\"file\"@, @\"url\"@, @\"text\"@,
 --   @\"stdin\"@, or @\"stdout\"@.
 ioPointType :: IOPoint -> String
-ioPointType (CodeFile _)     = "file"
-ioPointType (CodeUri  _)     = "url"
-ioPointType (CodeText _)     = "text"
-ioPointType (CodeStdin)      = "stdin"
-ioPointType (CodeStdout)     = "stdout"
+ioPointType (IOPointFile _)     = "file"
+ioPointType (IOPointUri  _)     = "url"
+ioPointType (IOPointText _)     = "text"
+ioPointType (IOPointStdin)      = "stdin"
+ioPointType (IOPointStdout)     = "stdout"
 
 ioPointText :: IOPoint -> String
-ioPointText (CodeFile file)  = file
-ioPointText (CodeUri  url)   = url
-ioPointText (CodeText text)  = text
-ioPointText (CodeStdin)      = "<stdin>"
-ioPointText (CodeStdout)     = "<stdout>"
+ioPointText (IOPointFile file)  = file
+ioPointText (IOPointUri  url)   = url
+ioPointText (IOPointText text)  = text
+ioPointText (IOPointStdin)      = "<stdin>"
+ioPointText (IOPointStdout)     = "<stdout>"
 
 ioPointFrom :: String -> IOPoint
 ioPointFrom path
-    | B.isPrefixOf "http://"  path  = CodeUri  path
-    | B.isPrefixOf "https://" path  = CodeUri  path
-    | B.isPrefixOf "ftp://"   path  = CodeUri  path
-    | otherwise                     = CodeFile path
+    | B.isPrefixOf "http://"  path  = IOPointUri  path
+    | B.isPrefixOf "https://" path  = IOPointUri  path
+    | B.isPrefixOf "ftp://"   path  = IOPointUri  path
+    | otherwise                     = IOPointFile path
 
 -- | Create I/O points from using stdin, texts itself, filenames, and urls.
 ioPointList :: Bool -> [String] -> [FilePath] -> [IOPoint]
 ioPointList stdin texts paths =
-    B.consIf stdin CodeStdin $
-         CodeText    `map` texts ++
+    B.consIf stdin IOPointStdin $
+         IOPointText `map` texts ++
          ioPointFrom `map` paths
 
 
@@ -76,5 +76,5 @@ codeEmpty = codeTextOf ""
 
 -- | Create text code.
 codeTextOf :: String -> CodePiece
-codeTextOf = CodePiece 0 . CodeText
+codeTextOf = CodePiece 0 . IOPointText
 

@@ -68,13 +68,13 @@ readResource res@C.Resource { C.resInput = article@(todo, _, done) }
 readResourceOne :: forall c. (C.CContent c) =>
     C.Resource c -> B.CodePiece -> ResourceIO c
 readResourceOne res src = dispatch $ B.codeName src where
-    dispatch (B.CodeFile path) =
+    dispatch (B.IOPointFile path) =
         gio $ do exist <- Dir.doesFileExist path
                  case exist of
                    True   -> include =<< readFile path
                    False  -> return $ Msg.noFile path
 
-    dispatch (B.CodeUri url) =
+    dispatch (B.IOPointUri url) =
         do g <- M.get
            let proxy = C.globalProxy g
            abcode <- gio $ B.uriContent proxy url
@@ -82,8 +82,9 @@ readResourceOne res src = dispatch $ B.codeName src where
              Right code       -> include code
              Left (code, msg) -> return $ Msg.httpError url code msg
 
-    dispatch (B.CodeText text)  = gio $ include text
-    dispatch (B.CodeStdin)      = gio $ include =<< getContents
+    dispatch (B.IOPointText text)  = gio $ include text
+    dispatch (B.IOPointStdin)      = gio $ include =<< getContents
+    dispatch (B.IOPointStdout)     = B.bug "readResourceOne"
 
     include :: String -> IO (C.AbResource c)
     include = return . C.resInclude res src
