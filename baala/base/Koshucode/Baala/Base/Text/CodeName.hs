@@ -23,20 +23,24 @@ data CodeName
     | CodeUri   String
     | CodeText  String
     | CodeStdin
+    | CodeStdout
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
--- | Name of code type, i.e., @\"file\"@, @\"url\"@, @\"text\"@, or @\"stdin\"@.
+-- | Name of code type, i.e., @\"file\"@, @\"url\"@, @\"text\"@,
+--   @\"stdin\"@, or @\"stdout\"@.
 codeNameType :: CodeName -> String
 codeNameType (CodeFile _)     = "file"
 codeNameType (CodeUri  _)     = "url"
 codeNameType (CodeText _)     = "text"
 codeNameType (CodeStdin)      = "stdin"
+codeNameType (CodeStdout)     = "stdout"
 
 codeNameText :: CodeName -> String
 codeNameText (CodeFile file)  = file
 codeNameText (CodeUri  url)   = url
 codeNameText (CodeText text)  = text
 codeNameText (CodeStdin)      = "<stdin>"
+codeNameText (CodeStdout)     = "<stdout>"
 
 codeNameFrom :: String -> CodeName
 codeNameFrom path

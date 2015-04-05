@@ -117,14 +117,14 @@ data OutputChunk
 
 -- | Print result of calculation, and return status.
 putOutputResult :: IOPoints -> OutputResult -> IO Int
-putOutputResult iop (B.CodeStdin, vio, jud) =
+putOutputResult iop (B.CodeStdout, vio, jud) =
     hPutOutputResult IO.stdout iop vio jud
 putOutputResult iop (B.CodeFile path, vio, jud) =
     do h <- IO.openFile path IO.WriteMode
        n <- hPutOutputResult h iop vio jud
        IO.hClose h
        return n
-putOutputResult _ _ = B.bug "putOutputResult"
+putOutputResult _ (p, _, _) = B.bug $ "putOutputResult " ++ show p
 
 hPutOutputResult :: IO.Handle -> IOPoints -> [OutputChunks] -> [OutputChunks] -> IO Int
 hPutOutputResult h iop vio jud
@@ -143,8 +143,8 @@ shortList :: IO.Handle -> Int -> IOPoints -> [OutputChunks] -> IO Int
 shortList h status (inputs, output) sh =
     do let itext  = B.codeNameText `map` inputs
            otext  = B.codeNameText output
-           comm   = B.CommentDoc [ B.CommentSec "INPUT"  itext ]
-                                 --, B.CommentSec "OUTPUT" [otext] ]
+           comm   = B.CommentDoc [ B.CommentSec "INPUT"  itext
+                                 , B.CommentSec "OUTPUT" [otext] ]
 
        IO.hSetEncoding h IO.utf8
        IO.hPutStrLn    h B.emacsModeComment
