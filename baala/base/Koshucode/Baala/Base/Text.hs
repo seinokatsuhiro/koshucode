@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -Wall #-}
 
 module Koshucode.Baala.Base.Text
-  ( module Koshucode.Baala.Base.Text.CodeName,
+  ( module Koshucode.Baala.Base.Text.IOPoint,
     module Koshucode.Baala.Base.Text.CodePt,
     module Koshucode.Baala.Base.Text.Comment,
     module Koshucode.Baala.Base.Text.Http,
@@ -11,7 +11,7 @@ module Koshucode.Baala.Base.Text
     module Koshucode.Baala.Base.Text.Write,
   ) where
 
-import Koshucode.Baala.Base.Text.CodeName
+import Koshucode.Baala.Base.Text.IOPoint
 import Koshucode.Baala.Base.Text.CodePt
 import Koshucode.Baala.Base.Text.Comment
 import Koshucode.Baala.Base.Text.Http

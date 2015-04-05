@@ -15,9 +15,9 @@ module Koshucode.Baala.Base.Text.CodePt
     Sourced (..),
   ) where
 
-import qualified Data.Generics                       as G
-import qualified Koshucode.Baala.Base.Prelude        as B
-import qualified Koshucode.Baala.Base.Text.CodeName  as B
+import qualified Data.Generics                      as G
+import qualified Koshucode.Baala.Base.Prelude       as B
+import qualified Koshucode.Baala.Base.Text.IOPoint  as B
 
 
 -- ----------------------  CodePt

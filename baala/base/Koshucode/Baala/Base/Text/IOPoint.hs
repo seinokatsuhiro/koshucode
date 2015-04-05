@@ -1,8 +1,8 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wall #-}
 
-module Koshucode.Baala.Base.Text.CodeName
-  ( -- * Name of code
+module Koshucode.Baala.Base.Text.IOPoint
+  ( -- * I/O Point
     IOPoint (..),
     ioPointType, ioPointText,
     ioPointFrom, ioPointList,
@@ -26,7 +26,7 @@ data IOPoint
     | CodeStdout
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
--- | Name of code type, i.e., @\"file\"@, @\"url\"@, @\"text\"@,
+-- | Name of I/O point, i.e., @\"file\"@, @\"url\"@, @\"text\"@,
 --   @\"stdin\"@, or @\"stdout\"@.
 ioPointType :: IOPoint -> String
 ioPointType (CodeFile _)     = "file"
@@ -49,8 +49,8 @@ ioPointFrom path
     | B.isPrefixOf "ftp://"   path  = CodeUri  path
     | otherwise                     = CodeFile path
 
--- | Create sources from using stdin, texts itself, filenames, and urls.
-ioPointList :: Bool -> [String] -> [String] -> [IOPoint]
+-- | Create I/O points from using stdin, texts itself, filenames, and urls.
+ioPointList :: Bool -> [String] -> [FilePath] -> [IOPoint]
 ioPointList stdin texts paths =
     B.consIf stdin CodeStdin $
          CodeText    `map` texts ++
