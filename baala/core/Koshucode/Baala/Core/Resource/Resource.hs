@@ -12,7 +12,7 @@
 module Koshucode.Baala.Core.Resource.Resource
   ( -- * Data type
     Resource (..), AbResource,
-    resEmpty, resIncluded, resCodeName,
+    resEmpty, resIncluded, resIOPoints,
     addMessage, addMessages,
 
     -- * Hook
@@ -43,8 +43,8 @@ data Resource c = Resource
     , resLexmap     :: [C.LexmapClause]   -- ^ Source of relmaps
     , resAssert     :: [ShortAssert c]    -- ^ Assertions of relmaps
     , resJudge      :: [B.Judge c]        -- ^ Affirmative or denial judgements
-    , resInput      :: ([B.CodeName], [B.CodeName], [B.CodePiece])  -- ^ Input points
-    , resOutput     :: B.CodeName         -- ^ Output point
+    , resInput      :: ([B.IOPoint], [B.IOPoint], [B.CodePiece])  -- ^ Input points
+    , resOutput     :: B.IOPoint          -- ^ Output point
     , resMessage    :: [String]           -- ^ Collection of messages
     , resLastSecNo  :: C.SecNo            -- ^ Last section number
     , resSelect     :: C.RelSelect c
@@ -84,8 +84,8 @@ resEmpty = Resource
 resIncluded :: Resource c -> [B.CodePiece]
 resIncluded Resource { resInput = (_, _, done) } = done
 
-resCodeName :: Resource c -> B.IOPoints
-resCodeName (Resource { resInput = (_, _, inputs), resOutput = output })
+resIOPoints :: Resource c -> B.IOPoints
+resIOPoints (Resource { resInput = (_, _, inputs), resOutput = output })
     = (map B.codeName inputs, output)
 
 addMessage :: String -> B.Map (Resource c)

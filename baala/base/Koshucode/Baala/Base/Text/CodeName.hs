@@ -3,9 +3,9 @@
 
 module Koshucode.Baala.Base.Text.CodeName
   ( -- * Name of code
-    CodeName (..),
-    codeNameType, codeNameText,
-    codeNameFrom, codeNameList,
+    IOPoint (..),
+    ioPointType, ioPointText,
+    ioPointFrom, ioPointList,
 
     -- * Code information
     CodePiece (..),
@@ -16,9 +16,9 @@ import qualified Data.Generics                as G
 import qualified Koshucode.Baala.Base.Prelude as B
 
 
--- ----------------------  CodeName
+-- ----------------------  IOPoint
 
-data CodeName
+data IOPoint
     = CodeFile  FilePath
     | CodeUri   String
     | CodeText  String
@@ -28,40 +28,40 @@ data CodeName
 
 -- | Name of code type, i.e., @\"file\"@, @\"url\"@, @\"text\"@,
 --   @\"stdin\"@, or @\"stdout\"@.
-codeNameType :: CodeName -> String
-codeNameType (CodeFile _)     = "file"
-codeNameType (CodeUri  _)     = "url"
-codeNameType (CodeText _)     = "text"
-codeNameType (CodeStdin)      = "stdin"
-codeNameType (CodeStdout)     = "stdout"
+ioPointType :: IOPoint -> String
+ioPointType (CodeFile _)     = "file"
+ioPointType (CodeUri  _)     = "url"
+ioPointType (CodeText _)     = "text"
+ioPointType (CodeStdin)      = "stdin"
+ioPointType (CodeStdout)     = "stdout"
 
-codeNameText :: CodeName -> String
-codeNameText (CodeFile file)  = file
-codeNameText (CodeUri  url)   = url
-codeNameText (CodeText text)  = text
-codeNameText (CodeStdin)      = "<stdin>"
-codeNameText (CodeStdout)     = "<stdout>"
+ioPointText :: IOPoint -> String
+ioPointText (CodeFile file)  = file
+ioPointText (CodeUri  url)   = url
+ioPointText (CodeText text)  = text
+ioPointText (CodeStdin)      = "<stdin>"
+ioPointText (CodeStdout)     = "<stdout>"
 
-codeNameFrom :: String -> CodeName
-codeNameFrom path
+ioPointFrom :: String -> IOPoint
+ioPointFrom path
     | B.isPrefixOf "http://"  path  = CodeUri  path
     | B.isPrefixOf "https://" path  = CodeUri  path
     | B.isPrefixOf "ftp://"   path  = CodeUri  path
     | otherwise                     = CodeFile path
 
 -- | Create sources from using stdin, texts itself, filenames, and urls.
-codeNameList :: Bool -> [String] -> [String] -> [CodeName]
-codeNameList stdin texts paths =
+ioPointList :: Bool -> [String] -> [String] -> [IOPoint]
+ioPointList stdin texts paths =
     B.consIf stdin CodeStdin $
-         CodeText     `map` texts ++
-         codeNameFrom `map` paths
+         CodeText    `map` texts ++
+         ioPointFrom `map` paths
 
 
 -- ----------------------  CodePiece
 
 data CodePiece
     = CodePiece { codeNumber :: Int
-                , codeName   :: CodeName }
+                , codeName   :: IOPoint }
       deriving (Show, G.Data, G.Typeable)
 
 instance Eq CodePiece where

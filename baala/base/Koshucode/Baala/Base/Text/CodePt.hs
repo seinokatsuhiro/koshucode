@@ -55,7 +55,7 @@ codePtDisplay (tag, p)
       pos       = show lno ++ " " ++ show cno ++ " " ++ code
       lno       = codePtLineNo p
       cno       = codePtColumnNo p
-      code      = B.codeNameText $ B.codeName $ codePtSource p
+      code      = B.ioPointText $ B.codeName $ codePtSource p
       text      = codePtText p
 
       shorten :: B.Map String

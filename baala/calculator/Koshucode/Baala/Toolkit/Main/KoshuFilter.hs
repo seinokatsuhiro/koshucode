@@ -56,7 +56,7 @@ koshuFilter g withRes =
              has   = (`elem` opts)
              ver   = C.globalSynopsis g ++ " " ++ C.globalVersionText g
              root  = C.resEmpty { C.resGlobal = g2 }
-             src   = B.codeNameList (has OptStdin) [] paths
+             src   = B.ioPointList (has OptStdin) [] paths
              g2    = C.globalFill g
                        { C.globalProgram   = prog
                        , C.globalArgs      = argv
@@ -66,7 +66,7 @@ koshuFilter g withRes =
 
        (_, _, errs) -> L.putFailure $ concat errs
 
-runFiles :: (C.CContent c) => C.Global c -> (C.Resource c -> IO Int) -> [B.CodeName] -> IO Int
+runFiles :: (C.CContent c) => C.Global c -> (C.Resource c -> IO Int) -> [B.IOPoint] -> IO Int
 runFiles = hRunFiles IO.stdout
 
 hRunFiles
@@ -74,7 +74,7 @@ hRunFiles
     => IO.Handle                 -- ^ Output file handler
     -> C.Global c                -- ^ Global parameters
     -> (C.Resource c -> IO Int)  -- ^ Resource handler
-    -> [B.CodeName]              -- ^ Names of source codes
+    -> [B.IOPoint]               -- ^ Names of source codes
     -> IO Int
 hRunFiles h g withRes ns =
     do (abRes, _) <- C.gioResource (C.readSources ns) g

@@ -16,14 +16,14 @@ import qualified Koshucode.Baala.Core as C
 -- ----------------------
 
 -- | Read and union sections from files, and run the section.
-runFiles :: (C.CContent c) => C.Global c -> [B.CodeName] -> IO Int
+runFiles :: (C.CContent c) => C.Global c -> [B.IOPoint] -> IO Int
 runFiles g ns =
     do (abRes, _) <- C.gioResource (C.readSources ns) g
        case abRes of
          Left a    -> C.globalAbort g a
          Right res -> case C.runResource res of
                         Left a   -> C.globalAbort g a
-                        Right js -> B.putOutputResult (C.resCodeName res) js
+                        Right js -> B.putOutputResult (C.resIOPoints res) js
 
 getProxies :: IO [(String, Maybe String)]
 getProxies =

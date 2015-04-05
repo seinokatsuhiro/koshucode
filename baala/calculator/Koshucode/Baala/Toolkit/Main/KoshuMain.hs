@@ -103,7 +103,7 @@ koshuMain g =
              has   = (`elem` opts)
              text  = concatMap oneLiner opts
              root  = C.resEmpty { C.resGlobal = g2 }
-             src   = B.codeNameList (has OptStdin) text paths
+             src   = B.ioPointList (has OptStdin) text paths
              g2    = C.globalFill g
                        { C.globalProgram   = prog
                        , C.globalArgs      = argv
@@ -124,7 +124,7 @@ oneLinerPreprocess = loop where
     loop ('|' : '|' : xs) = '\n' : loop (B.trimLeft xs)
     loop (x : xs) = x : loop xs
 
-putElems :: (C.CContent c) => C.Global c -> [B.CodeName] -> IO Int
+putElems :: (C.CContent c) => C.Global c -> [B.IOPoint] -> IO Int
 putElems g src =
     do (abres, _) <- C.gioResource (C.readSources src) g
        res2 <- abio abres

@@ -106,9 +106,9 @@ showCount n = show n ++ " judges"
 
 -- ----------------------  Output chunks
 
-type OutputResult  = (B.CodeName, [OutputChunks], [OutputChunks])
+type OutputResult  = (B.IOPoint, [OutputChunks], [OutputChunks])
 type OutputChunks  = B.Short [OutputChunk]
-type IOPoints      = ([B.CodeName], B.CodeName)
+type IOPoints      = ([B.IOPoint], B.IOPoint)
 
 data OutputChunk
     = OutputJudge  [B.Judge String]
@@ -141,8 +141,8 @@ hPutOutputResult h iop vio jud
 
 shortList :: IO.Handle -> Int -> IOPoints -> [OutputChunks] -> IO Int
 shortList h status (inputs, output) sh =
-    do let itext  = B.codeNameText `map` inputs
-           otext  = B.codeNameText output
+    do let itext  = B.ioPointText `map` inputs
+           otext  = B.ioPointText output
            comm   = B.CommentDoc [ B.CommentSec "INPUT"  itext
                                  , B.CommentSec "OUTPUT" [otext] ]
 

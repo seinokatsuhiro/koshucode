@@ -221,8 +221,8 @@ relkitKoshuSource (num, ty, name) h _ = Right kit2 where
     assn c     = B.catMaybes [codeNo c, codeType c, codeText c]
 
     codeNo     = Just         . C.pDecFromInt . B.codeNumber
-    codeType   = maybeAs ty   . C.pText       . B.codeNameType . B.codeName
-    codeText   = maybeAs name . C.pText       . B.codeNameText . B.codeName
+    codeType   = maybeAs ty   . C.pText       . B.ioPointType . B.codeName
+    codeText   = maybeAs name . C.pText       . B.ioPointText . B.codeName
 
 maybeAs :: Maybe a -> b -> Maybe b
 maybeAs (Just _)  c  =  Just c

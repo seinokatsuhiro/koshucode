@@ -92,7 +92,7 @@ readResourceOne res src = dispatch $ B.codeName src where
 readResourceText :: (C.CContent c) => C.Resource c -> String -> C.AbResource c
 readResourceText res code = C.resInclude res (B.codeTextOf code) code
 
-readSources :: forall c. (C.CContent c) => [B.CodeName] -> ResourceIO c
+readSources :: forall c. (C.CContent c) => [B.IOPoint] -> ResourceIO c
 readSources src =
     do res <- getRootResoruce
        readResource $ res { C.resInput = ([], reverse src, []) }

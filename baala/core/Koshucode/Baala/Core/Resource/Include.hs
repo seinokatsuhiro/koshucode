@@ -81,13 +81,13 @@ resIncludeBody res abcl =
           do trees <- B.ttrees toks
              Right (n, trees)
 
-      input :: Clab B.CodeName
+      input :: Clab B.IOPoint
       input _ _ (C.CInput toks) =
-          paraToCodeName =<< C.ttreePara2 toks
+          paraToIOPoint =<< C.ttreePara2 toks
 
-      output :: Clab B.CodeName
+      output :: Clab B.IOPoint
       output _ _ (C.COutput toks) =
-          paraToCodeName =<< C.ttreePara2 toks
+          paraToIOPoint =<< C.ttreePara2 toks
 
       option :: Clab (C.Option c)
       option _ _ (C.COption toks) = C.optionParse calc toks (C.resOption res)
@@ -98,14 +98,14 @@ coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)
 calcContG :: (C.CContent c) => C.Global c -> C.CalcContent c
 calcContG = C.calcContent . C.globalCopset
 
-paraToCodeName :: C.TTreePara -> B.Ab B.CodeName
-paraToCodeName = B.paraSelect unmatch ps where
+paraToIOPoint :: C.TTreePara -> B.Ab B.IOPoint
+paraToIOPoint = B.paraSelect unmatch ps where
     ps = [ (just1, B.paraType `B.paraJust` 1)
          , (stdin, B.paraType `B.paraReq` ["stdin"]) ]
 
     just1 p = do arg <- B.paraGetFst p
                  case arg of
-                   B.TextLeaf _ _ path -> Right $ B.codeNameFrom path
+                   B.TextLeaf _ _ path -> Right $ B.ioPointFrom path
                    _ -> Msg.adlib "input not text"
 
     stdin p = do args <- B.paraGet p "stdin"
