@@ -12,7 +12,7 @@
 module Koshucode.Baala.Core.Resource.Resource
   ( -- * Data type
     Resource (..), AbResource,
-    resEmpty, resIncluded,
+    resEmpty, resIncluded, resCodeName,
     addMessage, addMessages,
 
     -- * Hook
@@ -63,9 +63,6 @@ instance C.GetGlobal Resource where
 -- | Abort or resource.
 type AbResource c = B.Ab (Resource c)
 
-resIncluded :: Resource c -> [B.CodePiece]
-resIncluded Resource { resInput = (_, _, done) } = done
-
 -- | Resource that has no contents.
 resEmpty :: (C.CContent c) => Resource c
 resEmpty = Resource
@@ -83,6 +80,13 @@ resEmpty = Resource
            , resLastSecNo  = 0
            , resSelect     = \_ _ -> B.reldee
            }
+
+resIncluded :: Resource c -> [B.CodePiece]
+resIncluded Resource { resInput = (_, _, done) } = done
+
+resCodeName :: Resource c -> B.IOPoints
+resCodeName (Resource { resInput = (_, _, inputs), resOutput = output })
+    = (map B.codeName inputs, output)
 
 addMessage :: String -> B.Map (Resource c)
 addMessage msg res = res { resMessage = msg : resMessage res }

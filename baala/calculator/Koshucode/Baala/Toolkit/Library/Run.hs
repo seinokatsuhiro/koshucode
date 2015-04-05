@@ -19,11 +19,11 @@ import qualified Koshucode.Baala.Core as C
 runFiles :: (C.CContent c) => C.Global c -> [B.CodeName] -> IO Int
 runFiles g ns =
     do (abRes, _) <- C.gioResource (C.readSources ns) g
-       let js' = do res <- abRes
-                    C.runResource res
-       case js' of
-         Left a   -> C.globalAbort g a
-         Right js -> B.putOutputResult ns js
+       case abRes of
+         Left a    -> C.globalAbort g a
+         Right res -> case C.runResource res of
+                        Left a   -> C.globalAbort g a
+                        Right js -> B.putOutputResult (C.resCodeName res) js
 
 getProxies :: IO [(String, Maybe String)]
 getProxies =
