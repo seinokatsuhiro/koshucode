@@ -85,8 +85,8 @@ resIncluded :: Resource c -> [B.CodePiece]
 resIncluded Resource { resInput = (_, _, done) } = done
 
 resIOPoints :: Resource c -> B.IOPoints
-resIOPoints (Resource { resInput = (_, _, inputs), resOutput = output })
-    = (map B.codeName inputs, output)
+resIOPoints (Resource { resInput = (in1, in2, in3), resOutput = output })
+    = (in1 ++ in2 ++ map B.codeName in3, output)
 
 addMessage :: String -> B.Map (Resource c)
 addMessage msg res = res { resMessage = msg : resMessage res }

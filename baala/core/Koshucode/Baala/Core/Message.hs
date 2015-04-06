@@ -48,6 +48,7 @@ module Koshucode.Baala.Core.Message
     reqFlatName,
     reqGroup,
     reqTermName,
+    sameIOPoints,
     unexpAttr,
     unexpAttr0,
     unexpAttr1,
@@ -243,6 +244,10 @@ reqGroup = Left $ B.abortBecause "Require grouping parens"
 -- | Require term name
 reqTermName :: B.Ab a
 reqTermName = Left $ B.abortBecause "Require term name"
+
+-- | Same I/O points
+sameIOPoints :: B.IOPoint -> B.Ab a
+sameIOPoints = Left . B.abortLine "Same I/O points" . B.ioPointText
 
 -- | Unexpected attribute
 unexpAttr :: String -> B.Ab a

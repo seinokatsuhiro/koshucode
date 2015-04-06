@@ -50,8 +50,8 @@ resIncludeBody res abcl =
          C.CAssert  _ _ _ -> assert `to` \x -> res { C.resAssert  = C.resAssert  << x }
          C.CRelmap  _ _   -> relmap `to` \x -> res { C.resLexmap  = C.resLexmap  << x }
          C.CSlot    _ _   -> slot   `to` \x -> res { C.resSlot    = C.resSlot    << x }
-         C.CInput   _     -> input  `to` \x -> res { C.resInput   = C.resInput <: x }
-         C.COutput  _     -> output `to` \x -> res { C.resOutput  = x }
+         C.CInput   _     -> input  `to` id
+         C.COutput  _     -> output `to` id
          C.COption  _     -> option `to` \x -> res { C.resOption  = x }
     where
       f << y  = y : f res
@@ -81,16 +81,27 @@ resIncludeBody res abcl =
           do trees <- B.ttrees toks
              Right (n, trees)
 
-      input :: Clab B.IOPoint
-      input _ _ (C.CInput toks) =
-          paraToIOPoint =<< C.ttreePara2 toks
-
-      output :: Clab B.IOPoint
-      output _ _ (C.COutput toks) =
-          paraToIOPoint =<< C.ttreePara2 toks
-
       option :: Clab (C.Option c)
       option _ _ (C.COption toks) = C.optionParse calc toks (C.resOption res)
+
+      input :: Clab (C.Resource c)
+      input _ _ (C.CInput toks) =
+          do io <- ioPoint toks
+             checkIOPoint $ res { C.resInput = C.resInput <: io }
+
+      output :: Clab (C.Resource c)
+      output _ _ (C.COutput toks) =
+          do io <- ioPoint toks
+             checkIOPoint $ res { C.resOutput = io }
+
+      ioPoint :: [B.Token] -> B.Ab B.IOPoint
+      ioPoint = C.ttreePara2 B.>=> paraToIOPoint
+
+      checkIOPoint :: B.AbMap (C.Resource c)
+      checkIOPoint res' = let (ins, out) = C.resIOPoints res'
+                          in if out `elem` ins
+                             then Msg.sameIOPoints out
+                             else Right res'
 
 coxBuildG :: (C.CContent c) => C.Global c -> B.TTreeToAb (C.Cox c)
 coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)
