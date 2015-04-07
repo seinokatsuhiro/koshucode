@@ -3,12 +3,12 @@
 about /package 'operator
 
 |-- DIR  /code 29   /comment 6    /dir "operator/Koshucode/Baala"
-|-- DIR  /code 1043  /comment 681  /dir "operator/Koshucode/Baala/Op"
+|-- DIR  /code 1075  /comment 691  /dir "operator/Koshucode/Baala/Op"
 |-- DIR  /code 218  /comment 147  /dir "operator/Koshucode/Baala/Op/Builtin"
 |-- DIR  /code 159  /comment 165  /dir "operator/Koshucode/Baala/Op/Lattice"
 |-- DIR  /code 245  /comment 244  /dir "operator/Koshucode/Baala/Op/Nest"
 
-|-- DIR-TOTAL  /code 1694  /comment 1243
+|-- DIR-TOTAL  /code 1726  /comment 1253
 
 |-- FILE  /code 29   /comment 6    /file "Op.hs"          /dir "operator/Koshucode/Baala"
 |-- FILE  /code 10   /comment 6    /file "Builtin.hs"     /dir "operator/Koshucode/Baala/Op"
@@ -31,10 +31,10 @@ about /package 'operator
 |-- FILE  /code 58   /comment 59   /file "Deriv.hs"       /dir "operator/Koshucode/Baala/Op/Nest"
 |-- FILE  /code 65   /comment 47   /file "Flow.hs"        /dir "operator/Koshucode/Baala/Op/Nest"
 |-- FILE  /code 24   /comment 49   /file "Rop.hs"         /dir "operator/Koshucode/Baala/Op/Nest"
-|-- FILE  /code 165  /comment 97   /file "Peripheral.hs"  /dir "operator/Koshucode/Baala/Op"
+|-- FILE  /code 197  /comment 107  /file "Peripheral.hs"  /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 64   /comment 36   /file "Resource.hs"    /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 48   /comment 73   /file "Source.hs"      /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 131  /comment 75   /file "Term.hs"        /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 77   /comment 53   /file "TermGadget.hs"  /dir "operator/Koshucode/Baala/Op"
 
-|-- FILE-TOTAL  /code 1694  /comment 1243
+|-- FILE-TOTAL  /code 1726  /comment 1253

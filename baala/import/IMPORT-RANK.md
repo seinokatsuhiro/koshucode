@@ -47,7 +47,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    204 judges
+**    205 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Abortable"      /import "Koshucode.Baala.Base.Prelude"
@@ -106,6 +106,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Output"          /import "Control.Monad"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Output"          /import "Data.Map"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Output"          /import "System.IO"
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Output"          /import "Koshucode.Baala.Base.Abort"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Output"          /import "Koshucode.Baala.Base.Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Output"          /import "Koshucode.Baala.Base.Text"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Output"          /import "Koshucode.Baala.Base.Token"
@@ -211,12 +212,9 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax"               /import "Koshucode.Baala.Base.Syntax.Line"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax"               /import "Koshucode.Baala.Base.Syntax.Tree"
 
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.CodeName"        /import "Data.Generics"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.CodeName"        /import "Koshucode.Baala.Base.Prelude"
-
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.CodePt"          /import "Data.Generics"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.CodePt"          /import "Koshucode.Baala.Base.Prelude"
-|-- IMPORT  /module "Koshucode.Baala.Base.Text.CodePt"          /import "Koshucode.Baala.Base.Text.CodeName"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.CodePt"          /import "Koshucode.Baala.Base.Text.IOPoint"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Comment"         /import "System.IO"
 
@@ -227,6 +225,9 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Http"            /import "Network.HTTP.Types.Status"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Http"            /import "Text.URI"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Http"            /import "Koshucode.Baala.Base.Prelude"
+
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.IOPoint"         /import "Data.Generics"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.IOPoint"         /import "Koshucode.Baala.Base.Prelude"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.TextTable"       /import "Data.Char"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.TextTable"       /import "Data.List"
@@ -241,7 +242,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Write"           /import "Text.PrettyPrint"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Write"           /import "Koshucode.Baala.Base.Prelude"
 
-|-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.CodeName"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.IOPoint"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.CodePt"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.Comment"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text"                 /import "Koshucode.Baala.Base.Text.Http"
@@ -318,7 +319,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    27 judges
+**    26 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Element"   /import "Koshucode.Baala.Base"
@@ -330,7 +331,6 @@
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Exit"      /import "System.IO"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Exit"      /import "Koshucode.Baala.Base"
 
-|-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Run"       /import "System.IO"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Run"       /import "System.Environment"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Run"       /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Toolkit.Library.Run"       /import "Koshucode.Baala.Core"
@@ -971,6 +971,9 @@ Command `./import-rank.k ../base/IMPORT.k ../calculator/IMPORT.k ../content/IMPO
 **    ../operator/IMPORT.k
 **    ../toolkit/IMPORT.k
 **
+**  OUTPUT
+**    <stdout>
+**
 
 |-- IMPORT-RANK  /rank 0  /module 'Koshucode.Baala.Base.Prelude.Class
 |-- IMPORT-RANK  /rank 0  /module 'Koshucode.Baala.Base.Prelude.Import
@@ -986,8 +989,8 @@ Command `./import-rank.k ../base/IMPORT.k ../calculator/IMPORT.k ../content/IMPO
 
 |-- IMPORT-RANK  /rank 2  /module 'Koshucode.Baala.Base.Prelude.Order
 |-- IMPORT-RANK  /rank 3  /module 'Koshucode.Baala.Base.Prelude
-|-- IMPORT-RANK  /rank 4  /module 'Koshucode.Baala.Base.Text.CodeName
 |-- IMPORT-RANK  /rank 4  /module 'Koshucode.Baala.Base.Text.Http
+|-- IMPORT-RANK  /rank 4  /module 'Koshucode.Baala.Base.Text.IOPoint
 |-- IMPORT-RANK  /rank 4  /module 'Koshucode.Baala.Base.Text.TextTable
 
 |-- IMPORT-RANK  /rank 4  /module 'Koshucode.Baala.Base.Text.Utility
