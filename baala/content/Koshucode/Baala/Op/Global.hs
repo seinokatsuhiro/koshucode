@@ -56,7 +56,8 @@ vanillaCops = concat [ Cop.copsArith
                      , Cop.copsList
                      , Cop.copsMisc
                      , Cop.copsOrder
-                     , Cop.copsTime ]
+                     , Cop.copsTime
+                     , Cop.copsType ]
 
 -- | Height table.
 vanillaInfix :: [B.Named B.InfixHeight]

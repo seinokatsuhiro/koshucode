@@ -58,6 +58,7 @@ library
         Koshucode.Baala.Op.Cop.Misc
         Koshucode.Baala.Op.Cop.Order
         Koshucode.Baala.Op.Cop.Time
+        Koshucode.Baala.Op.Cop.Type
 
         Koshucode.Baala.Op.Cox
         Koshucode.Baala.Op.Cox.Accessor
