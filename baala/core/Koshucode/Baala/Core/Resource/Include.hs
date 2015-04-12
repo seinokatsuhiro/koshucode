@@ -20,6 +20,8 @@ import qualified Koshucode.Baala.Core.Resource.Resource  as C
 import qualified Koshucode.Baala.Core.Message            as Msg
 
 
+type Include c = C.ClauseHead -> [B.Token] -> C.ClauseBody -> B.Ab (C.Resource c)
+
 -- | Include source code into resource.
 resInclude :: forall c. (C.CContent c)
     => C.Resource c     -- ^ Base resource
@@ -33,63 +35,66 @@ resInclude res src code =
        res2 <- B.foldM resIncludeBody res $ reverse cs
        Right res2 { C.resSelect = C.datasetSelect $ C.dataset $ C.resJudge res2 }
 
-type Cl   a  = C.ClauseHead -> [B.Token] -> C.ClauseBody -> a
-type Clab a  = Cl (B.Ab a)
-
 resIncludeBody :: forall c. (C.CContent c) =>
     C.Resource c -> B.Ab C.Clause -> C.AbResource c
 resIncludeBody res abcl =
     do C.Clause h b <- abcl
        let sec   = C.clauseSecNo h
            toks  = B.front $ B.clauseTokens $ C.clauseSource h
-           f `to` upd = Msg.abClause toks $ do
-                          x <- f h toks b
-                          Right $ (upd x) { C.resLastSecNo = sec }
+           call f = Msg.abClause toks $ do
+                      res' <- f h toks b
+                      Right $ res' { C.resLastSecNo = sec }
        case b of
-         C.CJudge   _ _ _ -> judge  `to` \x -> res { C.resJudge   = C.resJudge   << x }
-         C.CAssert  _ _ _ -> assert `to` \x -> res { C.resAssert  = C.resAssert  << x }
-         C.CRelmap  _ _   -> relmap `to` \x -> res { C.resLexmap  = C.resLexmap  << x }
-         C.CSlot    _ _   -> slot   `to` \x -> res { C.resSlot    = C.resSlot    << x }
-         C.CInput   _     -> input  `to` id
-         C.COutput  _     -> output `to` id
-         C.COption  _     -> option `to` \x -> res { C.resOption  = x }
+         C.CJudge   _ _ _  -> call judge
+         C.CAssert  _ _ _  -> call assert
+         C.CRelmap  _ _    -> call relmap
+         C.CSlot    _ _    -> call slot
+         C.CInput   _      -> call input
+         C.COutput  _      -> call output
+         C.COption  _      -> call option
+         C.CEcho    _      -> call echo
     where
       f << y  = y : f res
       f <: t  = case f res of (todo1, todo2, done) -> (t : todo1, todo2, done)
 
-      judge :: Clab (B.Judge c)
+      judge :: Include c
       judge _ _ (C.CJudge q p toks) =
-          C.treesToJudge calc q p =<< B.ttrees toks
+          do trees <- B.ttrees toks
+             js    <- C.treesToJudge calc q p trees
+             Right $ res { C.resJudge = C.resJudge << js }
 
       calc :: C.CalcContent c
       calc = calcContG $ C.resGlobal res
 
-      assert :: Clab (C.ShortAssert' h c)
+      assert :: Include c
       assert C.ClauseHead { C.clauseSecNo = sec, C.clauseShort = sh }
                           src (C.CAssert typ pat toks) =
           do optPara <- C.ttreePara2 toks
-             let ass  = C.Assert sec typ pat src optPara Nothing []
-             Right $ B.Short (B.codePtList $ head src) sh ass
+             let ass   = C.Assert sec typ pat src optPara Nothing []
+                 ass'  = B.Short (B.codePtList $ head src) sh ass
+             Right $ res { C.resAssert = C.resAssert << ass' }
 
-      relmap :: Clab C.LexmapClause
+      relmap :: Include c
       relmap C.ClauseHead { C.clauseSecNo = sec } _ (C.CRelmap n toks) =
           do lt <- C.consLexmapTrees =<< C.ttreePara2 toks
-             Right ((sec, n), lt)
+             Right $ res { C.resLexmap = C.resLexmap  << ((sec, n), lt) }
 
-      slot :: Clab B.NamedTrees
+      slot :: Include c
       slot _ _ (C.CSlot n toks) =
           do trees <- B.ttrees toks
-             Right (n, trees)
+             Right res { C.resSlot = C.resSlot << (n, trees) }
 
-      option :: Clab (C.Option c)
-      option _ _ (C.COption toks) = C.optionParse calc toks (C.resOption res)
+      option :: Include c
+      option _ _ (C.COption toks) =
+          do opt <- C.optionParse calc toks (C.resOption res)
+             Right $ res { C.resOption = opt }
 
-      input :: Clab (C.Resource c)
+      input :: Include c
       input _ _ (C.CInput toks) =
           do io <- ioPoint toks
              checkIOPoint $ res { C.resInput = C.resInput <: io }
 
-      output :: Clab (C.Resource c)
+      output :: Include c
       output _ _ (C.COutput toks) =
           do io <- ioPoint toks
              checkIOPoint $ res { C.resOutput = io }
@@ -102,6 +107,11 @@ resIncludeBody res abcl =
                           in if out `elem` ins
                              then Msg.sameIOPoints out
                              else Right res'
+
+      echo :: Include c
+      echo _ _ (C.CEcho clause) =
+          Right $ res { C.resEcho = C.resEcho << B.clauseLines clause }
+
 
 coxBuildG :: (C.CContent c) => C.Global c -> B.TTreeToAb (C.Cox c)
 coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)

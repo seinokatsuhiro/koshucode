@@ -23,14 +23,22 @@ runResource res =
        case filter B.isViolative js of
          []  -> runResourceBody res'
          jsV -> let jsV' = B.judgeText B.shortEmpty `map` jsV
-                in Right (C.resOutput res, [B.Short [] [] [B.OutputJudge jsV']], [])
+                in Right $ B.outputResultEmpty
+                       { B.outputPoint    = C.resOutput res
+                       , B.outputViolated = [B.Short [] [] [B.OutputJudge jsV']] }
 
 runResourceBody :: forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c) =>
     C.Resource c -> B.Ab B.OutputResult
-runResourceBody res@C.Resource { C.resAssert = ass, C.resMessage = msg } =
+runResourceBody res@C.Resource { C.resAssert  = ass
+                               , C.resEcho    = echo
+                               , C.resMessage = msg } =
     do js1 <- run $ C.assertViolated ass
        js2 <- run $ C.assertNormal   ass
-       Right (C.resOutput res, B.shortTrim js1, msgChunk : B.shortTrim js2)
+       Right $ B.outputResultEmpty
+                 { B.outputPoint    = C.resOutput res
+                 , B.outputEcho     = map B.lineContent `map` echo
+                 , B.outputViolated = B.shortTrim js1
+                 , B.outputNormal   = msgChunk : B.shortTrim js2 }
     where
       run :: [C.ShortAssert c] -> B.Ab [B.OutputChunks]
       run = let opt = C.resOption res

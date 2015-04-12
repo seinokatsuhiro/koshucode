@@ -48,6 +48,7 @@ data ClauseBody
     | CSlot     String [B.Token]                   -- ^ Global slot
     | COption   [B.Token]                          -- ^ Option settings
     | COutput   [B.Token]                          -- ^ Output point
+    | CEcho     B.TokenClause                      -- ^ Echo text
       deriving (Show, G.Data, G.Typeable)
 
 instance B.CodePtr Clause where
@@ -72,6 +73,7 @@ clauseTypeText (Clause _ body) =
       CSlot     _ _     -> "slot"
       COption   _       -> "option"
       COutput   _       -> "output"
+      CEcho     _       -> "echo"
 
 
 
@@ -139,6 +141,7 @@ consClauseEach h@(ClauseHead src sec sh ab) = result where
         | k == "about"              = newAbout  xs
         | k == "option"             = normal    $ c1 $ COption xs
         | k == "output"             = normal    $ c1 $ COutput xs
+        | k == "echo"               = normal    $ c1 $ CEcho src
         | k == "****"               = normal    []
     dispatch (B.TSlot _ 2 n : xs)   = normal    $ c1 $ CSlot n xs
     dispatch []                     = normal    []

@@ -5,12 +5,13 @@
 
 module Koshucode.Baala.Base.Data.Output
   ( -- * Data type
-    OutputResult,
+    OutputResult (..),
     OutputChunks,
     OutputChunk (..),
     IOPoints,
   
     -- * Function
+    outputResultEmpty,
     putJudges,
     hPutJudges,
     putOutputResult,
@@ -106,7 +107,14 @@ showCount n = show n ++ " judges"
 
 -- ----------------------  Output chunks
 
-type OutputResult  = (B.IOPoint, [OutputChunks], [OutputChunks])
+data OutputResult = 
+    OutputResult
+    { outputPoint    :: B.IOPoint
+    , outputEcho     :: [[String]]
+    , outputViolated :: [OutputChunks]
+    , outputNormal   :: [OutputChunks]
+    } deriving (Show, Eq, Ord)
+
 type OutputChunks  = B.Short [OutputChunk]
 type IOPoints      = ([B.IOPoint], B.IOPoint)
 
@@ -115,21 +123,33 @@ data OutputChunk
     | OutputNote   [String]
       deriving (Show, Eq, Ord)
 
+outputResultEmpty :: OutputResult
+outputResultEmpty =
+    OutputResult { outputPoint    = B.IOPointStdin
+                 , outputEcho     = []
+                 , outputViolated = []
+                 , outputNormal   = [] }
+
 -- | Print result of calculation, and return status.
 putOutputResult :: IOPoints -> OutputResult -> IO Int
-putOutputResult iop (B.IOPointStdout, vio, jud) =
-    hPutOutputResult IO.stdout iop vio jud
-putOutputResult iop (B.IOPointFile path, vio, jud) =
-    do h <- IO.openFile path IO.WriteMode
-       n <- hPutOutputResult h iop vio jud
-       IO.hClose h
-       return n
-putOutputResult _ (p, _, _) = B.bug $ "putOutputResult " ++ show p
+putOutputResult iop OutputResult { outputPoint    = output
+                                 , outputEcho     = echo
+                                 , outputViolated = vio
+                                 , outputNormal   = jud } =
+    case output of
+      B.IOPointStdout ->
+          hPutOutputResult IO.stdout iop echo vio jud
+      B.IOPointFile path ->
+          do h <- IO.openFile path IO.WriteMode
+             n <- hPutOutputResult h iop echo vio jud
+             IO.hClose h
+             return n
+      _ -> B.bug $ "putOutputResult " ++ show output
 
-hPutOutputResult :: IO.Handle -> IOPoints -> [OutputChunks] -> [OutputChunks] -> IO Int
-hPutOutputResult h iop vio jud
-    | null vio2  = shortList h 0 iop jud
-    | otherwise  = shortList h 1 iop vio2
+hPutOutputResult :: IO.Handle -> IOPoints -> [[String]] -> [OutputChunks] -> [OutputChunks] -> IO Int
+hPutOutputResult h iop echo vio jud
+    | null vio2  = shortList h 0 iop echo jud
+    | otherwise  = shortList h 1 iop echo vio2
     where
       vio2 :: [OutputChunks]
       vio2 = B.shortTrim $ B.map2 (filter $ existJudge) vio
@@ -139,8 +159,8 @@ hPutOutputResult h iop vio jud
       existJudge (OutputJudge [])  = False
       existJudge _                 = True
 
-shortList :: IO.Handle -> Int -> IOPoints -> [OutputChunks] -> IO Int
-shortList h status (inputs, output) sh =
+shortList :: IO.Handle -> Int -> IOPoints -> [[String]] -> [OutputChunks] -> IO Int
+shortList h status (inputs, output) echo sh =
     do let itext  = B.ioPointText `map` inputs
            otext  = B.ioPointText output
            comm   = B.CommentDoc [ B.CommentSec "INPUT"  itext
@@ -150,6 +170,9 @@ shortList h status (inputs, output) sh =
        IO.hPutStrLn    h B.emacsModeComment
        IO.hPutStr      h $ unlines $ B.texts comm
        IO.hPutStrLn    h ""
+
+       IO.hPutStr      h $ unlines $ concat echo
+       B.when (echo /= []) $ IO.hPutStrLn h ""
 
        cnt <- M.foldM (short h) initialCounter sh
        hPutLines h $ summary status cnt

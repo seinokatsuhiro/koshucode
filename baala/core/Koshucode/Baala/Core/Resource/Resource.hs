@@ -45,6 +45,7 @@ data Resource c = Resource
     , resJudge      :: [B.Judge c]        -- ^ Affirmative or denial judgements
     , resInput      :: ([B.IOPoint], [B.IOPoint], [B.CodePiece])  -- ^ Input points
     , resOutput     :: B.IOPoint          -- ^ Output point
+    , resEcho       :: [[B.TokenLine]]    -- ^ Echo text
     , resMessage    :: [String]           -- ^ Collection of messages
     , resLastSecNo  :: C.SecNo            -- ^ Last section number
     , resSelect     :: C.RelSelect c
@@ -76,6 +77,7 @@ resEmpty = Resource
            , resJudge      = []
            , resInput      = ([], [], [])
            , resOutput     = B.IOPointStdout
+           , resEcho       = []
            , resMessage    = []
            , resLastSecNo  = 0
            , resSelect     = \_ _ -> B.reldee
