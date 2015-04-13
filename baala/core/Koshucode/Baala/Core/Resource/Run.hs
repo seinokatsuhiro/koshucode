@@ -34,11 +34,13 @@ runResourceBody res@C.Resource { C.resAssert  = ass
                                , C.resMessage = msg } =
     do js1 <- run $ C.assertViolated ass
        js2 <- run $ C.assertNormal   ass
+       let (input, output) = C.resIOPoints res
        Right $ B.outputResultEmpty
-                 { B.outputPoint    = C.resOutput res
-                 , B.outputEcho     = map B.lineContent `map` echo
-                 , B.outputViolated = B.shortTrim js1
-                 , B.outputNormal   = msgChunk : B.shortTrim js2 }
+                 { B.outputInput     = input
+                 , B.outputPoint     = output
+                 , B.outputEcho      = map B.lineContent `map` echo
+                 , B.outputViolated  = B.shortTrim js1
+                 , B.outputNormal    = msgChunk : B.shortTrim js2 }
     where
       run :: [C.ShortAssert c] -> B.Ab [B.OutputChunks]
       run = let opt = C.resOption res

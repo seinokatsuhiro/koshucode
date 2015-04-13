@@ -22,8 +22,8 @@ runFiles g ns =
        case abRes of
          Left a    -> C.globalAbort g a
          Right res -> case C.runResource res of
-                        Left a   -> C.globalAbort g a
-                        Right js -> B.putOutputResult (C.resIOPoints res) js
+                        Left a    -> C.globalAbort g a
+                        Right out -> B.putOutputResult out
 
 getProxies :: IO [(String, Maybe String)]
 getProxies =

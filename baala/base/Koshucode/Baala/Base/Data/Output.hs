@@ -109,7 +109,8 @@ showCount n = show n ++ " judges"
 
 data OutputResult = 
     OutputResult
-    { outputPoint    :: B.IOPoint
+    { outputInput    :: [B.IOPoint]
+    , outputPoint    :: B.IOPoint
     , outputEcho     :: [[String]]
     , outputViolated :: [OutputChunks]
     , outputNormal   :: [OutputChunks]
@@ -125,23 +126,25 @@ data OutputChunk
 
 outputResultEmpty :: OutputResult
 outputResultEmpty =
-    OutputResult { outputPoint    = B.IOPointStdin
+    OutputResult { outputInput    = []
+                 , outputPoint    = B.IOPointStdin
                  , outputEcho     = []
                  , outputViolated = []
                  , outputNormal   = [] }
 
 -- | Print result of calculation, and return status.
-putOutputResult :: IOPoints -> OutputResult -> IO Int
-putOutputResult iop OutputResult { outputPoint    = output
-                                 , outputEcho     = echo
-                                 , outputViolated = vio
-                                 , outputNormal   = jud } =
+putOutputResult :: OutputResult -> IO Int
+putOutputResult OutputResult { outputInput    = input
+                             , outputPoint    = output
+                             , outputEcho     = echo
+                             , outputViolated = vio
+                             , outputNormal   = jud } =
     case output of
       B.IOPointStdout ->
-          hPutOutputResult IO.stdout iop echo vio jud
+          hPutOutputResult IO.stdout (input, output) echo vio jud
       B.IOPointFile path ->
           do h <- IO.openFile path IO.WriteMode
-             n <- hPutOutputResult h iop echo vio jud
+             n <- hPutOutputResult h (input, output) echo vio jud
              IO.hClose h
              return n
       _ -> B.bug $ "putOutputResult " ++ show output
