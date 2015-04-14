@@ -5,16 +5,16 @@
 
 module Koshucode.Baala.Base.Data.Output
   ( -- * Data type
-    OutputResult (..),
+    ResourceOutput (..),
     OutputChunks,
     OutputChunk (..),
     IOPoints,
   
     -- * Function
-    outputResultEmpty,
+    resoutEmpty,
     putJudges,
     hPutJudges,
-    putOutputResult,
+    putResout,
   ) where
 
 import qualified Control.Monad                     as M
@@ -107,13 +107,13 @@ showCount n = show n ++ " judges"
 
 -- ----------------------  Output chunks
 
-data OutputResult = 
-    OutputResult
-    { outputInput    :: [B.IOPoint]
-    , outputPoint    :: B.IOPoint
-    , outputEcho     :: [[String]]
-    , outputViolated :: [OutputChunks]
-    , outputNormal   :: [OutputChunks]
+data ResourceOutput = 
+    ResourceOutput
+    { resoutInput    :: [B.IOPoint]
+    , resoutOutput   :: B.IOPoint
+    , resoutEcho     :: [[String]]
+    , resoutViolated :: [OutputChunks]
+    , resoutNormal   :: [OutputChunks]
     } deriving (Show, Eq, Ord)
 
 type OutputChunks  = B.Short [OutputChunk]
@@ -124,33 +124,33 @@ data OutputChunk
     | OutputNote   [String]
       deriving (Show, Eq, Ord)
 
-outputResultEmpty :: OutputResult
-outputResultEmpty =
-    OutputResult { outputInput    = []
-                 , outputPoint    = B.IOPointStdin
-                 , outputEcho     = []
-                 , outputViolated = []
-                 , outputNormal   = [] }
+resoutEmpty :: ResourceOutput
+resoutEmpty =
+    ResourceOutput { resoutInput    = []
+                   , resoutOutput   = B.IOPointStdin
+                   , resoutEcho     = []
+                   , resoutViolated = []
+                   , resoutNormal   = [] }
 
 -- | Print result of calculation, and return status.
-putOutputResult :: OutputResult -> IO Int
-putOutputResult OutputResult { outputInput    = input
-                             , outputPoint    = output
-                             , outputEcho     = echo
-                             , outputViolated = vio
-                             , outputNormal   = jud } =
+putResout :: ResourceOutput -> IO Int
+putResout ResourceOutput { resoutInput    = input
+                         , resoutOutput   = output
+                         , resoutEcho     = echo
+                         , resoutViolated = vio
+                         , resoutNormal   = jud } =
     case output of
       B.IOPointStdout ->
-          hPutOutputResult IO.stdout (input, output) echo vio jud
+          hPutResourceOutput IO.stdout (input, output) echo vio jud
       B.IOPointFile path ->
           do h <- IO.openFile path IO.WriteMode
-             n <- hPutOutputResult h (input, output) echo vio jud
+             n <- hPutResourceOutput h (input, output) echo vio jud
              IO.hClose h
              return n
-      _ -> B.bug $ "putOutputResult " ++ show output
+      _ -> B.bug $ "putResout " ++ show output
 
-hPutOutputResult :: IO.Handle -> IOPoints -> [[String]] -> [OutputChunks] -> [OutputChunks] -> IO Int
-hPutOutputResult h iop echo vio jud
+hPutResourceOutput :: IO.Handle -> IOPoints -> [[String]] -> [OutputChunks] -> [OutputChunks] -> IO Int
+hPutResourceOutput h iop echo vio jud
     | null vio2  = shortList h 0 iop echo jud
     | otherwise  = shortList h 1 iop echo vio2
     where

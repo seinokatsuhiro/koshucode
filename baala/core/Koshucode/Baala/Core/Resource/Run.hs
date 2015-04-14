@@ -16,31 +16,31 @@ import qualified Koshucode.Baala.Core.Assert             as C
 import qualified Koshucode.Baala.Core.Resource.Resource  as C
 import qualified Koshucode.Baala.Core.Message            as Msg
 
-runResource :: (C.CContent c) => C.Resource c -> B.Ab B.OutputResult
+runResource :: (C.CContent c) => C.Resource c -> B.Ab B.ResourceOutput
 runResource res =
     do res' <- assembleRelmap res
        let js = C.resJudge res'
        case filter B.isViolative js of
          []  -> runResourceBody res'
          jsV -> let jsV' = B.judgeText B.shortEmpty `map` jsV
-                in Right $ B.outputResultEmpty
-                       { B.outputPoint    = C.resOutput res
-                       , B.outputViolated = [B.Short [] [] [B.OutputJudge jsV']] }
+                in Right $ B.resoutEmpty
+                       { B.resoutOutput   = C.resOutput res
+                       , B.resoutViolated = [B.Short [] [] [B.OutputJudge jsV']] }
 
 runResourceBody :: forall c. (Ord c, B.Write c, C.CRel c, C.CEmpty c) =>
-    C.Resource c -> B.Ab B.OutputResult
+    C.Resource c -> B.Ab B.ResourceOutput
 runResourceBody res@C.Resource { C.resAssert  = ass
                                , C.resEcho    = echo
                                , C.resMessage = msg } =
     do js1 <- run $ C.assertViolated ass
        js2 <- run $ C.assertNormal   ass
        let (input, output) = C.resIOPoints res
-       Right $ B.outputResultEmpty
-                 { B.outputInput     = input
-                 , B.outputPoint     = output
-                 , B.outputEcho      = map B.lineContent `map` echo
-                 , B.outputViolated  = B.shortTrim js1
-                 , B.outputNormal    = msgChunk : B.shortTrim js2 }
+       Right $ B.resoutEmpty
+                 { B.resoutInput     = input
+                 , B.resoutOutput    = output
+                 , B.resoutEcho      = map B.lineContent `map` echo
+                 , B.resoutViolated  = B.shortTrim js1
+                 , B.resoutNormal    = msgChunk : B.shortTrim js2 }
     where
       run :: [C.ShortAssert c] -> B.Ab [B.OutputChunks]
       run = let opt = C.resOption res
