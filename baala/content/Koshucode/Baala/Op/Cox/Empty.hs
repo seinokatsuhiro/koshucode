@@ -40,7 +40,7 @@ consBoth med =
        fill <- Op.getFiller med "-fill"
        Right $ relmapBoth med fill rmap
 
-relmapBoth :: (Ord c) => C.Intmed c -> c -> B.Map (C.Relmap c)
+relmapBoth :: (Ord c, C.CRel c) => C.Intmed c -> c -> B.Map (C.Relmap c)
 relmapBoth med fill rmap = C.relmapCopy med "i" rmapBoth where
     rmapBoth = rmapL `B.mappend` Op.relmapJoin med rmapR
     rmapR    = rmap  `B.mappend` relmapMaybe med fill rmapIn
@@ -56,19 +56,20 @@ consMaybe med =
        fill <- Op.getFiller med "-fill"
        Right $ relmapMaybe med fill rmap
 
-relmapMaybe :: (Ord c) => C.Intmed c -> c -> B.Map (C.Relmap c)
+relmapMaybe :: (Ord c, C.CRel c) => C.Intmed c -> c -> B.Map (C.Relmap c)
 relmapMaybe med = C.relmapBinary med . relkitMaybe
 
-relkitMaybe :: forall c. (Ord c) => c -> C.RelkitBinary c
+relkitMaybe :: forall c. (Ord c, C.CRel c) => c -> C.RelkitBinary c
 relkitMaybe fill (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
 
     ind1, ind2 :: [Int]
     (ind1, ind2) = B.headNames he1 `B.snipPair` B.headNames he2
 
     share1, share2, right2 :: B.Map [c]
-    share1 = B.snipFrom ind1
-    share2 = B.snipFrom ind2
-    right2 = B.snipOff  ind2
+    share1  = B.snipFrom ind1
+    share2  = B.snipFrom ind2
+    right2  = B.snipOff  ind2
+    right2' = B.snipOff  ind2
 
     kv cs2  = (share2 cs2, right2 cs2)
 
@@ -81,10 +82,14 @@ relkitMaybe fill (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
            let b2map = B.gatherToMap $ map kv bo2
            Right $ step b2map `concatMap` bo1
 
-    fills = replicate (B.headDegree he3 - B.headDegree he1) fill
+    heFill = right2' $ B.headTypes he2
+    fills = selectFiller fill `map` heFill
     step b2map cs1 = case B.lookupMap (share1 cs1) b2map of
                        Just b2side -> map (++ cs1) b2side
                        Nothing     -> [fills ++ cs1]
 
 relkitMaybe _ _ _ = Right C.relkitNothing
 
+selectFiller :: (C.CRel c) => c -> B.Type -> c
+selectFiller _ t@(B.TypeRel _) = C.pRel $ B.Rel (B.Head t) []
+selectFiller fill _ = fill

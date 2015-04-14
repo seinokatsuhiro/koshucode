@@ -64,8 +64,7 @@ relkitPrefix pre ns (Just he1) = Right kit2 where
         | otherwise    = n
 
 prefixName :: String -> String -> String
-prefixName pre ('/' : ns) = pre ++ "-" ++ ns
-prefixName _ _ = undefined
+prefixName pre ns = pre ++ "-" ++ ns
 
 
 -- ----------------------  unprefix

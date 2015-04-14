@@ -18,6 +18,7 @@ module Koshucode.Baala.Base.Data.Head
     headDegree,
     headNested,
     headIndex1,
+    headTypes,
     -- $Selector
   
     -- * Add terms
@@ -36,6 +37,7 @@ module Koshucode.Baala.Base.Data.Head
     -- $Mapping
   ) where
 
+import qualified Koshucode.Baala.Base.Abort        as B
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
 import qualified Koshucode.Baala.Base.Token        as B
@@ -154,6 +156,9 @@ headNested he = ts2 where
     ts2 = map h $ filter (B.isTypeRel . snd) $ B.typeTerms $ headType he
     h (n, t) = (n, headOf t)
 
+headTypes :: Head -> [B.Type]
+headTypes (Head (B.TypeRel ts)) = map snd ts
+headTypes _ = B.bug "headTypes"
 
 
 -- ----------------------  Add terms
