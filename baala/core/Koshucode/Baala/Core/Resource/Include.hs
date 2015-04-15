@@ -92,7 +92,7 @@ resIncludeBody res abcl =
       input :: Include c
       input _ _ (C.CInput toks) =
           do io <- ioPoint toks
-             checkIOPoint $ res { C.resInput = C.resInput <: io }
+             checkIOPoint $ res { C.resInputStack = C.resInputStack <: io }
 
       output :: Include c
       output _ _ (C.COutput toks) =
@@ -103,7 +103,8 @@ resIncludeBody res abcl =
       ioPoint = C.ttreePara2 B.>=> paraToIOPoint
 
       checkIOPoint :: B.AbMap (C.Resource c)
-      checkIOPoint res' = let (ins, out) = C.resIOPoints res'
+      checkIOPoint res' = let ins = C.resInput  res'
+                              out = C.resOutput res'
                           in if out `elem` ins
                              then Msg.sameIOPoints out
                              else Right res'

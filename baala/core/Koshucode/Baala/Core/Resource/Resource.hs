@@ -12,7 +12,7 @@
 module Koshucode.Baala.Core.Resource.Resource
   ( -- * Data type
     Resource (..), AbResource,
-    resEmpty, resIncluded, resIOPoints,
+    resEmpty, resIncluded, resInput,
     addMessage, addMessages,
 
     -- * Hook
@@ -43,7 +43,7 @@ data Resource c = Resource
     , resLexmap     :: [C.LexmapClause]   -- ^ Source of relmaps
     , resAssert     :: [ShortAssert c]    -- ^ Assertions of relmaps
     , resJudge      :: [B.Judge c]        -- ^ Affirmative or denial judgements
-    , resInput      :: ([B.IOPoint], [B.IOPoint], [B.CodePiece])  -- ^ Input points
+    , resInputStack :: ([B.IOPoint], [B.IOPoint], [B.CodePiece])  -- ^ Input points
     , resOutput     :: B.IOPoint          -- ^ Output point
     , resEcho       :: [[B.TokenLine]]    -- ^ Echo text
     , resMessage    :: [String]           -- ^ Collection of messages
@@ -52,7 +52,7 @@ data Resource c = Resource
     }
 
 instance Show (Resource c) where
-    show Resource { resInput = art }
+    show Resource { resInputStack = art }
         = "Resources " ++ show art
 
 instance B.SelectRel Resource where
@@ -75,7 +75,7 @@ resEmpty = Resource
            , resLexmap     = []
            , resAssert     = []
            , resJudge      = []
-           , resInput      = ([], [], [])
+           , resInputStack = ([], [], [])
            , resOutput     = B.IOPointStdout
            , resEcho       = []
            , resMessage    = []
@@ -84,11 +84,11 @@ resEmpty = Resource
            }
 
 resIncluded :: Resource c -> [B.CodePiece]
-resIncluded Resource { resInput = (_, _, done) } = done
+resIncluded Resource { resInputStack = (_, _, done) } = done
 
-resIOPoints :: Resource c -> B.IOPoints
-resIOPoints (Resource { resInput = (in1, in2, in3), resOutput = output })
-    = (in1 ++ in2 ++ map B.codeName in3, output)
+resInput :: Resource c -> [B.IOPoint]
+resInput (Resource { resInputStack = (in1, in2, in3) })
+    = in1 ++ in2 ++ map B.codeName in3
 
 addMessage :: String -> B.Map (Resource c)
 addMessage msg res = res { resMessage = msg : resMessage res }

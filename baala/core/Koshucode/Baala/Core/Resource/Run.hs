@@ -34,7 +34,8 @@ runResourceBody res@C.Resource { C.resAssert  = ass
                                , C.resMessage = msg } =
     do js1 <- run $ C.assertViolated ass
        js2 <- run $ C.assertNormal   ass
-       let (input, output) = C.resIOPoints res
+       let input  = C.resInput  res
+           output = C.resOutput res
        Right $ B.resoutEmpty
                  { B.resoutInput     = input
                  , B.resoutOutput    = output
