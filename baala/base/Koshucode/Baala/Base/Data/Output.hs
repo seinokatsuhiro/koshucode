@@ -35,10 +35,10 @@ hPutLines h = (IO.hPutStrLn h `mapM_`)
 -- ----------------------  Output judges
 
 -- total and per-judgement counter
-type Counter = (Int, Map.Map String Int)
+type Counter = (Int, Map.Map B.JudgePat Int)
 
-initialCounter :: Counter
-initialCounter = (0, Map.empty)
+initCounter :: [B.JudgePat] -> Counter
+initCounter ps = (0, Map.fromList $ zip ps $ repeat 0)
 
 -- | Print judges to `IO.stdout`.
 putJudges :: (Ord c, B.Write c) => Int -> [B.Judge c] -> IO Int
@@ -46,7 +46,7 @@ putJudges = hPutJudges IO.stdout
 
 hPutJudges :: (Ord c, B.Write c) => IO.Handle -> Int -> [B.Judge c] -> IO Int
 hPutJudges h status js =
-    do cnt <- judges h writer js initialCounter
+    do cnt <- judges h writer js $ initCounter []
        hPutLines h $ summary status cnt
        return status
     where
@@ -113,7 +113,7 @@ data ResourceOutput =
     , resoutEcho     :: [[String]]
     , resoutViolated :: [OutputChunks]
     , resoutNormal   :: [OutputChunks]
-    , resoutPattern  :: [String]
+    , resoutPattern  :: [B.JudgePat]
     } deriving (Show, Eq, Ord)
 
 type OutputChunks  = B.Short [OutputChunk]
@@ -174,7 +174,7 @@ shortList h status ro sh =
        IO.hPutStr      h $ unlines $ concat echo
        B.when (echo /= []) $ IO.hPutStrLn h ""
 
-       cnt <- M.foldM (short h) initialCounter sh
+       cnt <- M.foldM (short h) (initCounter $ resoutPattern ro) sh
        hPutLines h $ summary status cnt
        return status
 

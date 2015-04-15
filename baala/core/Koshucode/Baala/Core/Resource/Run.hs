@@ -41,7 +41,8 @@ runResourceBody res@C.Resource { C.resAssert  = ass
                  , B.resoutOutput    = output
                  , B.resoutEcho      = map B.lineContent `map` echo
                  , B.resoutViolated  = B.shortTrim js1
-                 , B.resoutNormal    = msgChunk : B.shortTrim js2 }
+                 , B.resoutNormal    = msgChunk : B.shortTrim js2
+                 , B.resoutPattern   = C.resPattern res }
     where
       run :: [C.ShortAssert c] -> B.Ab [B.OutputChunks]
       run = let opt = C.resOption res
