@@ -8,7 +8,6 @@ module Koshucode.Baala.Base.Data.Output
     ResourceOutput (..),
     OutputChunks,
     OutputChunk (..),
-    IOPoints,
   
     -- * Function
     resoutEmpty,
@@ -114,10 +113,10 @@ data ResourceOutput =
     , resoutEcho     :: [[String]]
     , resoutViolated :: [OutputChunks]
     , resoutNormal   :: [OutputChunks]
+    , resoutPattern  :: [String]
     } deriving (Show, Eq, Ord)
 
 type OutputChunks  = B.Short [OutputChunk]
-type IOPoints      = ([B.IOPoint], B.IOPoint)
 
 data OutputChunk
     = OutputJudge  [B.Judge String]
@@ -130,42 +129,40 @@ resoutEmpty =
                    , resoutOutput   = B.IOPointStdin
                    , resoutEcho     = []
                    , resoutViolated = []
-                   , resoutNormal   = [] }
+                   , resoutNormal   = []
+                   , resoutPattern  = [] }
 
 -- | Print result of calculation, and return status.
 putResout :: ResourceOutput -> IO Int
-putResout ResourceOutput { resoutInput    = input
-                         , resoutOutput   = output
-                         , resoutEcho     = echo
-                         , resoutViolated = vio
-                         , resoutNormal   = jud } =
-    case output of
+putResout ro =
+    case resoutOutput ro of
       B.IOPointStdout ->
-          hPutResourceOutput IO.stdout (input, output) echo vio jud
+          hPutResourceOutput IO.stdout ro
       B.IOPointFile path ->
           do h <- IO.openFile path IO.WriteMode
-             n <- hPutResourceOutput h (input, output) echo vio jud
+             n <- hPutResourceOutput h ro
              IO.hClose h
              return n
-      _ -> B.bug $ "putResout " ++ show output
+      output -> B.bug $ "putResout " ++ show output
 
-hPutResourceOutput :: IO.Handle -> IOPoints -> [[String]] -> [OutputChunks] -> [OutputChunks] -> IO Int
-hPutResourceOutput h iop echo vio jud
-    | null vio2  = shortList h 0 iop echo jud
-    | otherwise  = shortList h 1 iop echo vio2
+hPutResourceOutput :: IO.Handle -> ResourceOutput -> IO Int
+hPutResourceOutput h ro
+    | null vio   = shortList h 0 ro $ resoutNormal ro
+    | otherwise  = shortList h 1 ro vio
     where
-      vio2 :: [OutputChunks]
-      vio2 = B.shortTrim $ B.map2 (filter $ existJudge) vio
+      vio :: [OutputChunks]
+      vio = B.shortTrim $ B.map2 (filter $ existJudge) $ resoutViolated ro
 
       existJudge :: OutputChunk -> Bool
       existJudge (OutputNote _)    = False
       existJudge (OutputJudge [])  = False
       existJudge _                 = True
 
-shortList :: IO.Handle -> Int -> IOPoints -> [[String]] -> [OutputChunks] -> IO Int
-shortList h status (inputs, output) echo sh =
-    do let itext  = B.ioPointText `map` inputs
-           otext  = B.ioPointText output
+shortList :: IO.Handle -> Int -> ResourceOutput -> [OutputChunks] -> IO Int
+shortList h status ro sh =
+    do let itext  = B.ioPointText `map` resoutInput ro
+           otext  = B.ioPointText $ resoutOutput ro
+           echo   = resoutEcho ro
            comm   = B.CommentDoc [ B.CommentSec "INPUT"  itext
                                  , B.CommentSec "OUTPUT" [otext] ]
 
