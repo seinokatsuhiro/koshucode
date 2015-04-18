@@ -35,6 +35,10 @@ module Koshucode.Baala.Base.Data.Head
     headAlign,
     bodyAlign,
     -- $Mapping
+
+    -- * Picker
+    HeadLR (..),
+    headLR,
   ) where
 
 import qualified Koshucode.Baala.Base.Abort        as B
@@ -225,3 +229,36 @@ headAlign to from = B.snipOrder (headNames to) (headNames from)
 bodyAlign :: Head -> Head -> B.Map [[c]]
 bodyAlign to from = (headAlign to from `map`)
 
+
+-- ----------------------  Picker
+
+data HeadLR c = HeadLR
+    { headLShareIndex  :: [Int]        -- ^ Indicies of right-shared part
+    , headRShareIndex  :: [Int]        -- ^ Indicies of left-shared part
+
+    , headLSide        :: [c] -> [c]   -- ^ Pick left-side part from left contents
+    , headLShare       :: [c] -> [c]   -- ^ Pick left-shared part from left contents
+    , headRShare       :: [c] -> [c]   -- ^ Pick right-shared part from right contents
+    , headRSide        :: [c] -> [c]   -- ^ Pick right-side part from right contents
+
+    , headRSplit       :: [c] -> ([c], [c])  -- ^ Pick left-shared and right-shared part
+    }
+
+headLR :: [B.TermName] -> [B.TermName] -> HeadLR a
+headLR left right = lr where
+    (li, ri)   = left `B.snipPair` right
+
+    lside      = B.snipOff  li
+    lshare     = B.snipFrom li
+    rshare     = B.snipFrom ri
+    rside      = B.snipOff  ri
+    rsplit xs  = (rshare xs, rside xs)
+
+    lr = HeadLR { headLShareIndex  = li
+                , headRShareIndex  = ri
+                , headLSide        = lside
+                , headLShare       = lshare
+                , headRShare       = rshare
+                , headRSide        = rside
+                , headRSplit       = rsplit
+                }
