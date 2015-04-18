@@ -100,20 +100,15 @@ relmapJoinList med (rmap : rmaps) = rmap `B.mappend` rmaps' where
 -- | Join two relations.
 relkitJoin :: C.RelkitBinary c
 relkitJoin (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
-
-    ind1, ind2 :: [Int]
-    (ind1, ind2) = B.headNames he1 `B.snipPair` B.headNames he2
-
-    share1, share2 :: B.Map [c]
-    share1 = B.snipFrom ind1
-    share2 = B.snipFrom ind2
-
-    he3    =  B.headMap share1 he1
-    kit3   =  C.relkitJust he3 $ C.RelkitAbFull True kitf3 [kitb2]
+    lr     = B.headNames he1 `B.headLR` B.headNames he2
+    he3    = B.headLShare lr `B.headMap` he1
+    kit3   = C.relkitJust he3 $ C.RelkitAbFull True kitf3 [kitb2]
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
+               left    = map $ B.headLShare lr
+               right   = map $ B.headRShare lr
            bo2 <- bmap2 bo1
-           Right $ map share1 bo1 ++ map share2 bo2
+           Right $ left bo1 ++ right bo2
 
 relkitJoin _ _ = Right C.relkitNothing
 
