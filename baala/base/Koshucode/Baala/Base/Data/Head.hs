@@ -241,7 +241,8 @@ data HeadLR c = HeadLR
     , headRShare       :: [c] -> [c]   -- ^ Pick right-shared part from right contents
     , headRSide        :: [c] -> [c]   -- ^ Pick right-side part from right contents
 
-    , headRSplit       :: [c] -> ([c], [c])  -- ^ Pick left-shared and right-shared part
+    , headRSplit       :: [c] -> ([c], [c])  -- ^ Pick right-shared and right-side part
+    , headRAssoc       :: [c] -> ([c], [c])  -- ^ Pick right-shared part and right contents
     }
 
 headLR :: [B.TermName] -> [B.TermName] -> HeadLR a
@@ -253,6 +254,7 @@ headLR left right = lr where
     rshare     = B.snipFrom ri
     rside      = B.snipOff  ri
     rsplit xs  = (rshare xs, rside xs)
+    rassoc xs  = (rshare xs, xs)
 
     lr = HeadLR { headLShareIndex  = li
                 , headRShareIndex  = ri
@@ -261,4 +263,5 @@ headLR left right = lr where
                 , headRShare       = rshare
                 , headRSide        = rside
                 , headRSplit       = rsplit
+                , headRAssoc       = rassoc
                 }

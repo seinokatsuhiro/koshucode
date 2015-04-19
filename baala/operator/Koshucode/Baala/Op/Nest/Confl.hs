@@ -105,27 +105,18 @@ relmapGroup med = C.relmapBinary med . relkitGroup
 
 relkitGroup :: forall c. (Ord c, C.CRel c) => B.TermName -> C.RelkitBinary c
 relkitGroup n (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
-
-    ind1, ind2 :: [Int]
-    (ind1, ind2) = B.headNames he1 `B.snipPair` B.headNames he2
-
-    share1, share2 :: B.Map [c]
-    share1 = B.snipFrom ind1
-    share2 = B.snipFrom ind2
-
-    toMap2 bo2 = Right $ B.gatherToMap $ map kv bo2
-    kv cs2     = (share2 cs2, cs2)
-
-    he3        = B.headConsNest n he2 he1
-    kit3       = C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
+    lr      = B.headNames he1 `B.headLR` B.headNames he2
+    toMap2  = B.gatherToMap . map (B.headRAssoc lr)
+    he3     = B.headConsNest n he2 he1
+    kit3    = C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
            bo2  <- bmap2 bo1
-           map2 <- toMap2 bo2
+           let map2 = toMap2 bo2
            Right $ map (add map2) bo1
 
     add map2 cs1 =
-        let b2maybe = B.lookupMap (share1 cs1) map2
+        let b2maybe = B.lookupMap (B.headLShare lr cs1) map2
             b2sub   = B.fromMaybe [] b2maybe
         in C.pRel (B.Rel he2 b2sub) : cs1
 
