@@ -61,30 +61,19 @@ relmapMaybe med = C.relmapBinary med . relkitMaybe
 
 relkitMaybe :: forall c. (Ord c, C.CRel c) => c -> C.RelkitBinary c
 relkitMaybe fill (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
-
-    ind1, ind2 :: [Int]
-    (ind1, ind2) = B.headNames he1 `B.snipPair` B.headNames he2
-
-    share1, share2, right2 :: B.Map [c]
-    share1  = B.snipFrom ind1
-    share2  = B.snipFrom ind2
-    right2  = B.snipOff  ind2
-    right2' = B.snipOff  ind2
-
-    kv cs2  = (share2 cs2, right2 cs2)
-
+    lr   = B.headNames he1 `B.headLR` B.headNames he2
     he3  = he2 `B.mappend` he1
     kit3 = C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
     kitf3 :: [C.Relbmap c] -> C.Relbmap c
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
            bo2 <- bmap2 bo1
-           let b2map = B.gatherToMap $ map kv bo2
+           let b2map = B.gatherToMap $ map (B.headRSplit lr) bo2
            Right $ step b2map `concatMap` bo1
 
-    heFill = right2' $ B.headTypes he2
-    fills = selectFiller fill `map` heFill
-    step b2map cs1 = case B.lookupMap (share1 cs1) b2map of
+    heFill = B.headRShare lr $ B.headTypes he2
+    fills  = selectFiller fill `map` heFill
+    step b2map cs1 = case B.lookupMap (B.headLShare lr cs1) b2map of
                        Just b2side -> map (++ cs1) b2side
                        Nothing     -> [fills ++ cs1]
 
