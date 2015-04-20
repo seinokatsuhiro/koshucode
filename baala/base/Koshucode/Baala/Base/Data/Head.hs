@@ -37,8 +37,9 @@ module Koshucode.Baala.Base.Data.Head
     -- $Mapping
 
     -- * Picker
+    HeadLRMap,
     HeadLR (..),
-    headLR,
+    headLR, headLROrd,
   ) where
 
 import qualified Koshucode.Baala.Base.Abort        as B
@@ -232,6 +233,8 @@ bodyAlign to from = (headAlign to from `map`)
 
 -- ----------------------  Picker
 
+type HeadLRMap c = HeadLR c -> [c] -> [c]
+
 data HeadLR c = HeadLR
     { headLShareIndex  :: [Int]        -- ^ Indicies of right-shared part
     , headRShareIndex  :: [Int]        -- ^ Indicies of left-shared part
@@ -252,9 +255,17 @@ data HeadLR c = HeadLR
     }
 
 headLR :: [B.TermName] -> [B.TermName] -> HeadLR a
-headLR left right = lr where
-    (li, ri)   = left `B.snipPair` right
+headLR left right = headLRBody li ri left right where
+    (li, ri)  = left `B.snipPair` right
 
+headLROrd :: [B.TermName] -> [B.TermName] -> HeadLR a
+headLROrd left right = headLRBody li ri left right where
+    (li, ri)  = (ind2 left, ind2 right)
+    ind       = B.snipIndex left right
+    ind2      = B.snipIndex $ B.snipFrom ind right
+
+headLRBody :: [Int] -> [Int] -> [B.TermName] -> [B.TermName] -> HeadLR a
+headLRBody li ri left right = lr where
     lside      = B.snipOff  li
     lshare     = B.snipFrom li
     rshare     = B.snipFrom ri
