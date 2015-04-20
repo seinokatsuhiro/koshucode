@@ -237,6 +237,11 @@ data HeadLR c = HeadLR
     , headRShareIndex  :: [Int]        -- ^ Indicies of left-shared part
     , headDisjoint     :: Bool         -- ^ Whether shared part is empty
 
+    , headLSideNames   :: [B.TermName]   -- ^ Left-side term names
+    , headLShareNames  :: [B.TermName]   -- ^ Left-shared term names
+    , headRShareNames  :: [B.TermName]   -- ^ Right-shared term names
+    , headRSideNames   :: [B.TermName]   -- ^ Right-side term names
+
     , headLSide        :: [c] -> [c]   -- ^ Pick left-side part from left contents
     , headLShare       :: [c] -> [c]   -- ^ Pick left-shared part from left contents
     , headRShare       :: [c] -> [c]   -- ^ Pick right-shared part from right contents
@@ -260,6 +265,10 @@ headLR left right = lr where
     lr = HeadLR { headLShareIndex  = li
                 , headRShareIndex  = ri
                 , headDisjoint     = null li
+                , headLSideNames   = lside  left
+                , headLShareNames  = lshare left
+                , headRShareNames  = rshare right
+                , headRSideNames   = rside  right
                 , headLSide        = lside
                 , headLShare       = lshare
                 , headRShare       = rshare

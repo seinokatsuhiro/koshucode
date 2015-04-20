@@ -86,22 +86,17 @@ relmapDuplicate med = C.relmapFlow med . relkitDuplicate
 relkitDuplicate :: (Ord c) => [B.TermName] -> C.RelkitFlow c
 relkitDuplicate _ Nothing = Right C.relkitNothing
 relkitDuplicate ns (Just he1)
-    | null nsLeft = Right kit2
-    | otherwise   = Msg.unkTerm nsLeft he1
+    | null unk   = Right kit2
+    | otherwise  = Msg.unkTerm unk he1
     where
-      nsLeft :: [B.TermName]
-      nsLeft = ns `B.snipLeft` ns1
+      lr     = ns `B.headLR` B.headNames he1
+      unk    = B.headLSideNames lr
+      kit2   = C.relkitJust he1 $ C.RelkitFull False kitf2
+      dup    = not . B.isSingleton
 
-      ns1    = B.headNames he1
-      ind1   = ns `B.snipIndex` ns1
-      share1 = B.snipFrom ind1
-
-      kit2 = C.relkitJust he1 $ C.RelkitFull False kitf2
       kitf2 :: (Ord c) => [[c]] -> [[c]]
-      kitf2 bo1 = let bo1map = B.gatherToMap $ map kv bo1
+      kitf2 bo1 = let bo1map = B.gatherToMap $ map (B.headRAssoc lr) bo1
                   in concat $ Map.elems $ Map.filter dup bo1map
-      kv cs1    = (share1 cs1, cs1)
-      dup       = not . B.isSingleton
 
 
 
