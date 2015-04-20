@@ -235,6 +235,7 @@ bodyAlign to from = (headAlign to from `map`)
 data HeadLR c = HeadLR
     { headLShareIndex  :: [Int]        -- ^ Indicies of right-shared part
     , headRShareIndex  :: [Int]        -- ^ Indicies of left-shared part
+    , headDisjoint     :: Bool         -- ^ Whether shared part is empty
 
     , headLSide        :: [c] -> [c]   -- ^ Pick left-side part from left contents
     , headLShare       :: [c] -> [c]   -- ^ Pick left-shared part from left contents
@@ -258,6 +259,7 @@ headLR left right = lr where
 
     lr = HeadLR { headLShareIndex  = li
                 , headRShareIndex  = ri
+                , headDisjoint     = null li
                 , headLSide        = lside
                 , headLShare       = lshare
                 , headRShare       = rshare

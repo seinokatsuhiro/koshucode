@@ -66,18 +66,17 @@ relmapUp med = C.relmapFlow med . relkitUp
 relkitUp :: (C.CRel c) => B.TermName -> C.RelkitFlow c
 relkitUp _ Nothing = Right C.relkitNothing
 relkitUp n (Just he1)
-    | null ind1         =  Msg.unkTerm [n] he1
-    | B.isSingleton t1  =  Right kit2
-    | otherwise         =  Msg.notNestRel [n] he1
+    | B.headDisjoint lr  = Msg.unkTerm [n] he1
+    | B.isSingleton t1   = Right kit2
+    | otherwise          = Msg.notNestRel [n] he1
     where
-      ns1    =  B.headNames he1
-      ind1   =  [n] `B.snipIndex` ns1
-      pick1  =  B.snipFrom ind1
-      he1'   =  B.headMap pick1 he1
-      t1     =  B.headNested he1'
-      he2    =  B.headUp he1'
-      kit2   =  C.relkitJust he2 $ C.RelkitOneToMany True kitf2
-      kitf2  =  B.relBody . C.gRel . head . pick1
+      lr     = [n] `B.headLR` B.headNames he1
+      share  = B.headRShare lr
+      he1'   = B.headMap share he1
+      t1     = B.headNested he1'
+      he2    = B.headUp he1'
+      kit2   = C.relkitJust he2 $ C.RelkitOneToMany True kitf2
+      kitf2  = B.relBody . C.gRel . head . share
 
 
 -- ----------------------  chunk
