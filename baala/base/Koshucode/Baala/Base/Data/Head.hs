@@ -37,8 +37,9 @@ module Koshucode.Baala.Base.Data.Head
     -- $Mapping
 
     -- * Picker
-    HeadLRMap,
     HeadLR (..),
+    HeadLRMap,
+    HeadLRMap2,
     headLR, headLROrd,
   ) where
 
@@ -234,21 +235,25 @@ bodyAlign to from = (headAlign to from `map`)
 -- ----------------------  Picker
 
 type HeadLRMap c = HeadLR c -> [c] -> [c]
+type HeadLRMap2 a b = (HeadLRMap a, HeadLRMap b)
 
 data HeadLR c = HeadLR
-    { headLShareIndex  :: [Int]        -- ^ Indicies of right-shared part
-    , headRShareIndex  :: [Int]        -- ^ Indicies of left-shared part
-    , headDisjoint     :: Bool         -- ^ Whether shared part is empty
+    { headLShareIndex  :: [Int]         -- ^ Indicies of right-shared part
+    , headRShareIndex  :: [Int]         -- ^ Indicies of left-shared part
+    , headDisjoint     :: Bool          -- ^ Whether shared part is empty
 
-    , headLSideNames   :: [B.TermName]   -- ^ Left-side term names
-    , headLShareNames  :: [B.TermName]   -- ^ Left-shared term names
-    , headRShareNames  :: [B.TermName]   -- ^ Right-shared term names
-    , headRSideNames   :: [B.TermName]   -- ^ Right-side term names
+    , headLSideNames   :: [B.TermName]  -- ^ Left-side term names
+    , headLShareNames  :: [B.TermName]  -- ^ Left-shared term names
+    , headRShareNames  :: [B.TermName]  -- ^ Right-shared term names
+    , headRSideNames   :: [B.TermName]  -- ^ Right-side term names
 
-    , headLSide        :: [c] -> [c]   -- ^ Pick left-side part from left contents
-    , headLShare       :: [c] -> [c]   -- ^ Pick left-shared part from left contents
-    , headRShare       :: [c] -> [c]   -- ^ Pick right-shared part from right contents
-    , headRSide        :: [c] -> [c]   -- ^ Pick right-side part from right contents
+    , headLSide        :: [c] -> [c]    -- ^ Pick left-side part from left contents
+    , headLShare       :: [c] -> [c]    -- ^ Pick left-shared part from left contents
+    , headRShare       :: [c] -> [c]    -- ^ Pick right-shared part from right contents
+    , headRSide        :: [c] -> [c]    -- ^ Pick right-side part from right contents
+
+    , headRForward     :: [c] -> [c]
+    , headRBackward    :: [c] -> [c]
 
     , headRSplit       :: [c] -> ([c], [c])  -- ^ Pick right-shared and right-side part
     , headRAssoc       :: [c] -> ([c], [c])  -- ^ Pick right-shared part and right contents
@@ -270,6 +275,8 @@ headLRBody li ri left right = lr where
     lshare     = B.snipFrom li
     rshare     = B.snipFrom ri
     rside      = B.snipOff  ri
+    rfor       = B.snipForward  ri
+    rback      = B.snipBackward ri
     rsplit xs  = (rshare xs, rside xs)
     rassoc xs  = (rshare xs, xs)
 
@@ -284,6 +291,8 @@ headLRBody li ri left right = lr where
                 , headLShare       = lshare
                 , headRShare       = rshare
                 , headRSide        = rside
+                , headRForward     = rfor
+                , headRBackward    = rback
                 , headRSplit       = rsplit
                 , headRAssoc       = rassoc
                 }

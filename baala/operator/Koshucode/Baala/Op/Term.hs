@@ -66,7 +66,7 @@ relmapPick :: C.Intmed c -> [B.TermName] -> C.Relmap c
 relmapPick med = C.relmapFlow med . relkitPick
 
 relkitPick :: [B.TermName] -> C.RelkitFlow c
-relkitPick = relkitSnip B.headRShare B.headRShare
+relkitPick = relkitProject (B.headRShare, B.headRShare)
 
 consCut :: C.RopCons c
 consCut med =
@@ -77,7 +77,7 @@ relmapCut :: C.Intmed c -> [B.TermName] -> C.Relmap c
 relmapCut med = C.relmapFlow med . relkitCut
 
 relkitCut :: [B.TermName] -> C.RelkitFlow c
-relkitCut = relkitSnip B.headRSide B.headRSide
+relkitCut = relkitProject (B.headRSide, B.headRSide)
 
 
 -- ----------------------  pick-term & cut-term
@@ -91,7 +91,7 @@ relmapPickTerm :: C.Intmed c -> C.Relmap c -> C.Relmap c
 relmapPickTerm med = C.relmapBinary med relkitPickTerm
 
 relkitPickTerm :: C.RelkitBinary c
-relkitPickTerm = relkitSnipTerm B.headRShare B.headRShare
+relkitPickTerm = relkitProjectTerm (B.headRShare, B.headRShare)
 
 consCutTerm :: C.RopCons c
 consCutTerm med =
@@ -102,26 +102,26 @@ relmapCutTerm :: C.Intmed c -> C.Relmap c -> C.Relmap c
 relmapCutTerm med = C.relmapBinary med relkitCutTerm
 
 relkitCutTerm :: C.RelkitBinary c
-relkitCutTerm = relkitSnipTerm B.headRSide B.headRSide
+relkitCutTerm = relkitProjectTerm (B.headRSide, B.headRSide)
 
 
--- ----------------------  snip
+-- ----------------------  project
 
-relkitSnipTerm :: B.HeadLRMap B.NamedType -> B.HeadLRMap c -> C.RelkitBinary c
-relkitSnipTerm _ _ (C.Relkit _ Nothing _) = const $ Right C.relkitNothing
-relkitSnipTerm heSnip boSnip (C.Relkit _ (Just he2) _) =
-    relkitSnip heSnip boSnip $ B.headNames he2
+relkitProjectTerm :: B.HeadLRMap2 B.NamedType c -> C.RelkitBinary c
+relkitProjectTerm _ (C.Relkit _ Nothing _) = const $ Right C.relkitNothing
+relkitProjectTerm lrMap (C.Relkit _ (Just he2) _) =
+    relkitProject lrMap $ B.headNames he2
 
-relkitSnip :: B.HeadLRMap B.NamedType -> B.HeadLRMap c -> [B.TermName] -> C.RelkitFlow c
-relkitSnip _ _ _ Nothing = Right C.relkitNothing
-relkitSnip heSnip boSnip ns (Just he1)
+relkitProject :: B.HeadLRMap2 B.NamedType c -> [B.TermName] -> C.RelkitFlow c
+relkitProject _ _ Nothing = Right C.relkitNothing
+relkitProject (heMap, boMap) ns (Just he1)
     | null unk   = Right kit2
     | otherwise  = Msg.unkTerm unk he1
     where
       lr    = ns `B.headLROrd` B.headNames he1
       unk   = B.headLSideNames lr
-      he2   = heSnip lr `B.headMap` he1
-      kit2  = C.relkitJust he2 $ C.RelkitOneToOne True $ boSnip lr
+      he2   = heMap lr `B.headMap` he1
+      kit2  = C.relkitJust he2 $ C.RelkitOneToOne True $ boMap lr
 
 
 -- ----------------------  rename
@@ -180,7 +180,7 @@ consForward med =
      Right $ relmapForward med ns
 
 relmapForward :: C.Intmed c -> [B.TermName] -> C.Relmap c
-relmapForward med = C.relmapFlow med . relkitToward B.snipForward2
+relmapForward med = C.relmapFlow med . relkitToward (B.headRForward, B.headRForward)
 
 consBackward :: C.RopCons c
 consBackward med =
@@ -188,17 +188,16 @@ consBackward med =
      Right $ relmapBackward med ns
 
 relmapBackward :: C.Intmed c -> [B.TermName] -> C.Relmap c
-relmapBackward med = C.relmapFlow med . relkitToward B.snipBackward2
+relmapBackward med = C.relmapFlow med . relkitToward (B.headRBackward, B.headRBackward)
 
-relkitToward :: B.Snip2 B.NamedType c -> [B.TermName] -> C.RelkitFlow c
+relkitToward :: B.HeadLRMap2 B.NamedType c -> [B.TermName] -> C.RelkitFlow c
 relkitToward _ _ Nothing = Right C.relkitNothing
-relkitToward (heSnip, boSnip) ns (Just he1)
-    | B.sameLength ns ind1 = Right kit2
-    | otherwise = Msg.unkTerm non he1
+relkitToward (heMap, boMap) ns (Just he1)
+    | null unk   = Right kit2
+    | otherwise  = Msg.unkTerm unk he1
     where
-      he2   = B.headMap (heSnip ind1) he1
-      kit2  = C.relkitJust he2 $ C.RelkitOneToOne False $ boSnip ind1
-      ns1   = B.headNames he1
-      non   = B.snipOff ind ns
-      ind1  = ns  `B.snipIndex` ns1
-      ind   = ns1 `B.snipIndex` ns
+      lr    = ns `B.headLR` B.headNames he1
+      unk   = B.headLSide lr ns
+      he2   = B.headMap (heMap lr) he1
+      kit2  = C.relkitJust he2 $ C.RelkitOneToOne False $ boMap lr
+
