@@ -92,11 +92,13 @@ relmapCompose med = C.relmapBinary med relkitCompose
 relkitCompose :: forall c. (Ord c) => C.RelkitBinary c
 relkitCompose kit2@(C.Relkit _ (Just he2) _) (Just he1) =
     do kitMeet <- Op.relkitMeet kit2 (Just he1)
-       kitCut  <- Op.relkitCut shared $ C.relkitOutput kitMeet
+       kitCut  <- Op.relkitCut (sharedNames he1 he2) (C.relkitOutput kitMeet)
        Right $ kitMeet `B.mappend` kitCut
-    where
-      ns1    = B.headNames he1
-      ns2    = B.headNames he2
-      ind    = B.snipIndex ns1 ns2
-      shared = B.snipFrom  ind ns2
 relkitCompose _ _ = Right C.relkitNothing
+
+sharedNames :: B.Head -> B.Head -> [B.TermName]
+sharedNames he1 he2 = shared where
+    ns1     = B.headNames he1
+    ns2     = B.headNames he2
+    lr      = B.headLR ns1 ns2
+    shared  = B.headRShare lr ns2
