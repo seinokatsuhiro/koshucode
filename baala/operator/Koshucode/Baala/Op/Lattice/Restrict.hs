@@ -9,8 +9,10 @@ module Koshucode.Baala.Op.Lattice.Restrict
     -- * none
     consNone, relmapNone, relkitNone,
     -- * some-meet
-    consSomeMeet, relmapSomeMeet, relkitSomeMeet,
-        -- * sub
+    consSomeMeet, relmapSomeMeet,
+    -- * none-meet
+    consNoneMeet, relmapNoneMeet,
+    -- * sub
     consSub, relmapSub, relkitSub,
     -- * compose
     consCompose, relmapCompose, relkitCompose,
@@ -60,7 +62,7 @@ relkitNone = relkitSemi True
 
 
 
--- ----------------------  some-meet
+-- ----------------------  some-meet & none-meet
 
 consSomeMeet :: (Ord c) => C.RopCons c
 consSomeMeet med =
@@ -68,10 +70,18 @@ consSomeMeet med =
      Right $ relmapSomeMeet med rmap
 
 relmapSomeMeet :: (Ord c) => C.Intmed c -> C.Relmap c -> C.Relmap c
-relmapSomeMeet med = C.relmapBinary med relkitSomeMeet
+relmapSomeMeet med = C.relmapBinary med $ relkitFilterMeet True
 
-relkitSomeMeet :: forall c. (Ord c) => C.RelkitBinary c
-relkitSomeMeet (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
+consNoneMeet :: (Ord c) => C.RopCons c
+consNoneMeet med =
+  do rmap <- Op.getRelmap med "-relmap"
+     Right $ relmapNoneMeet med rmap
+
+relmapNoneMeet :: (Ord c) => C.Intmed c -> C.Relmap c -> C.Relmap c
+relmapNoneMeet med = C.relmapBinary med $ relkitFilterMeet False
+
+relkitFilterMeet :: forall c. (Ord c) => Bool -> C.RelkitBinary c
+relkitFilterMeet which (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
     lr     = B.headNames he1 `B.headLR` B.headNames he2
     kit3   = C.relkitJust he1 $ C.RelkitAbFull False kitf3 [kitb2]
 
@@ -82,9 +92,10 @@ relkitSomeMeet (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
            Right $ test (toSet bo2) `filter` bo1
 
     toSet = Set.fromList . map (B.headRShare lr)
-    test b2set cs1 = B.headLShare lr cs1 `Set.member` b2set
+    test b2set cs1 = B.headLShare lr cs1 `Set.member` b2set == which
 
-relkitSomeMeet _ _ = Right C.relkitNothing
+relkitFilterMeet _ _ _ = Right C.relkitNothing
+
 
 
 -- ----------------------  sub
