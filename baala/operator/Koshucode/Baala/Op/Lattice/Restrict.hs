@@ -8,12 +8,15 @@ module Koshucode.Baala.Op.Lattice.Restrict
     consSome, relmapSome, relkitSome,
     -- * none
     consNone, relmapNone, relkitNone,
-    -- * sub
+    -- * some-meet
+    consSomeMeet, relmapSomeMeet, relkitSomeMeet,
+        -- * sub
     consSub, relmapSub, relkitSub,
     -- * compose
     consCompose, relmapCompose, relkitCompose,
   ) where
 
+import qualified Data.Set                             as Set
 import qualified Koshucode.Baala.Base                 as B
 import qualified Koshucode.Baala.Core                 as C
 import qualified Koshucode.Baala.Op.Builtin           as Op
@@ -55,6 +58,33 @@ relmapNone med = C.relmapBinary med relkitNone
 relkitNone :: (Ord c) => C.RelkitBinary c
 relkitNone = relkitSemi True
 
+
+
+-- ----------------------  some-meet
+
+consSomeMeet :: (Ord c) => C.RopCons c
+consSomeMeet med =
+  do rmap <- Op.getRelmap med "-relmap"
+     Right $ relmapSomeMeet med rmap
+
+relmapSomeMeet :: (Ord c) => C.Intmed c -> C.Relmap c -> C.Relmap c
+relmapSomeMeet med = C.relmapBinary med relkitSomeMeet
+
+relkitSomeMeet :: forall c. (Ord c) => C.RelkitBinary c
+relkitSomeMeet (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
+    lr     = B.headNames he1 `B.headLR` B.headNames he2
+    kit3   = C.relkitJust he1 $ C.RelkitAbFull False kitf3 [kitb2]
+
+    kitf3 :: [C.Relbmap c] -> C.Relbmap c
+    kitf3 bmaps bo1 =
+        do let [bmap2] = bmaps
+           bo2 <- bmap2 bo1
+           Right $ test (toSet bo2) `filter` bo1
+
+    toSet = Set.fromList . map (B.headRShare lr)
+    test b2set cs1 = B.headLShare lr cs1 `Set.member` b2set
+
+relkitSomeMeet _ _ = Right C.relkitNothing
 
 
 -- ----------------------  sub
