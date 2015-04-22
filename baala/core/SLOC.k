@@ -9,9 +9,9 @@ about /package 'core
 |-- DIR  /code 486  /comment 265  /dir "core/Koshucode/Baala/Core/Lexmap"
 |-- DIR  /code 211  /comment 110  /dir "core/Koshucode/Baala/Core/Relkit"
 |-- DIR  /code 432  /comment 238  /dir "core/Koshucode/Baala/Core/Relmap"
-|-- DIR  /code 538  /comment 259  /dir "core/Koshucode/Baala/Core/Resource"
+|-- DIR  /code 566  /comment 262  /dir "core/Koshucode/Baala/Core/Resource"
 
-|-- DIR-TOTAL  /code 3261  /comment 1828
+|-- DIR-TOTAL  /code 3289  /comment 1831
 
 |-- FILE  /code 15   /comment 72   /file "Core.hs"        /dir "core/Koshucode/Baala"
 |-- FILE  /code 10   /comment 6    /file "Assert.hs"      /dir "core/Koshucode/Baala/Core"
@@ -48,11 +48,11 @@ about /package 'core
 |-- FILE  /code 31   /comment 26   /file "Rop.hs"         /dir "core/Koshucode/Baala/Core/Relmap"
 |-- FILE  /code 95   /comment 20   /file "Specialize.hs"  /dir "core/Koshucode/Baala/Core/Relmap"
 |-- FILE  /code 15   /comment 29   /file "Resource.hs"    /dir "core/Koshucode/Baala/Core"
-|-- FILE  /code 163  /comment 114  /file "Clause.hs"      /dir "core/Koshucode/Baala/Core/Resource"
-|-- FILE  /code 97   /comment 49   /file "Include.hs"     /dir "core/Koshucode/Baala/Core/Resource"
+|-- FILE  /code 166  /comment 114  /file "Clause.hs"      /dir "core/Koshucode/Baala/Core/Resource"
+|-- FILE  /code 106  /comment 51   /file "Include.hs"     /dir "core/Koshucode/Baala/Core/Resource"
 |-- FILE  /code 52   /comment 21   /file "Quoter.hs"      /dir "core/Koshucode/Baala/Core/Resource"
 |-- FILE  /code 75   /comment 25   /file "Read.hs"        /dir "core/Koshucode/Baala/Core/Resource"
-|-- FILE  /code 78   /comment 35   /file "Resource.hs"    /dir "core/Koshucode/Baala/Core/Resource"
-|-- FILE  /code 73   /comment 15   /file "Run.hs"         /dir "core/Koshucode/Baala/Core/Resource"
+|-- FILE  /code 82   /comment 36   /file "Resource.hs"    /dir "core/Koshucode/Baala/Core/Resource"
+|-- FILE  /code 85   /comment 15   /file "Run.hs"         /dir "core/Koshucode/Baala/Core/Resource"
 
-|-- FILE-TOTAL  /code 3261  /comment 1828
+|-- FILE-TOTAL  /code 3289  /comment 1831

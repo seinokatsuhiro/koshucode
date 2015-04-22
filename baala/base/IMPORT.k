@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    205 judges
+**    206 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Abortable"      /import "Koshucode.Baala.Base.Prelude"
@@ -44,6 +44,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Decimal"         /import "Koshucode.Baala.Base.Abort"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Decimal"         /import "Koshucode.Baala.Base.Prelude"
 
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Head"            /import "Koshucode.Baala.Base.Abort"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Head"            /import "Koshucode.Baala.Base.Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Head"            /import "Koshucode.Baala.Base.Text"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Head"            /import "Koshucode.Baala.Base.Token"

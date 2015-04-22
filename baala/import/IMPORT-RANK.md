@@ -47,7 +47,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    205 judges
+**    206 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Abortable"      /import "Koshucode.Baala.Base.Prelude"
@@ -84,6 +84,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Decimal"         /import "Koshucode.Baala.Base.Abort"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Decimal"         /import "Koshucode.Baala.Base.Prelude"
 
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Head"            /import "Koshucode.Baala.Base.Abort"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Head"            /import "Koshucode.Baala.Base.Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Head"            /import "Koshucode.Baala.Base.Text"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Head"            /import "Koshucode.Baala.Base.Token"
@@ -370,7 +371,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    86 judges
+**    90 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Op.Cop.Arith"              /import "Koshucode.Baala.Base"
@@ -405,12 +406,17 @@
 |-- IMPORT  /module "Koshucode.Baala.Op.Cop.Time"               /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Op.Cop.Time"               /import "Koshucode.Baala.Op.Message"
 
+|-- IMPORT  /module "Koshucode.Baala.Op.Cop.Type"               /import "Koshucode.Baala.Base"
+|-- IMPORT  /module "Koshucode.Baala.Op.Cop.Type"               /import "Koshucode.Baala.Core"
+|-- IMPORT  /module "Koshucode.Baala.Op.Cop.Type"               /import "Koshucode.Baala.Op.Message"
+
 |-- IMPORT  /module "Koshucode.Baala.Op.Cop"                    /import "Koshucode.Baala.Op.Cop.Arith"
 |-- IMPORT  /module "Koshucode.Baala.Op.Cop"                    /import "Koshucode.Baala.Op.Cop.List"
 |-- IMPORT  /module "Koshucode.Baala.Op.Cop"                    /import "Koshucode.Baala.Op.Cop.Logic"
 |-- IMPORT  /module "Koshucode.Baala.Op.Cop"                    /import "Koshucode.Baala.Op.Cop.Misc"
 |-- IMPORT  /module "Koshucode.Baala.Op.Cop"                    /import "Koshucode.Baala.Op.Cop.Order"
 |-- IMPORT  /module "Koshucode.Baala.Op.Cop"                    /import "Koshucode.Baala.Op.Cop.Time"
+|-- IMPORT  /module "Koshucode.Baala.Op.Cop"                    /import "Koshucode.Baala.Op.Cop.Type"
 
 |-- IMPORT  /module "Koshucode.Baala.Op.Cox.Accessor"           /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Op.Cox.Accessor"           /import "Koshucode.Baala.Core"
@@ -1106,62 +1112,63 @@ Command `./import-rank.k ../base/IMPORT.k ../calculator/IMPORT.k ../content/IMPO
 |-- IMPORT-RANK  /rank 48  /module 'Koshucode.Baala.Op.Cop.Order
 
 |-- IMPORT-RANK  /rank 48  /module 'Koshucode.Baala.Op.Cop.Time
+|-- IMPORT-RANK  /rank 48  /module 'Koshucode.Baala.Op.Cop.Type
 |-- IMPORT-RANK  /rank 48  /module 'Koshucode.Baala.Toolkit.Main.KoshuFilter
 |-- IMPORT-RANK  /rank 48  /module 'Koshucode.Baala.Toolkit.Main.KoshuMain
 |-- IMPORT-RANK  /rank 48  /module 'Koshucode.Baala.Type.Vanilla
-|-- IMPORT-RANK  /rank 49  /module 'Koshucode.Baala.Op.Builtin.Get
 
+|-- IMPORT-RANK  /rank 49  /module 'Koshucode.Baala.Op.Builtin.Get
 |-- IMPORT-RANK  /rank 49  /module 'Koshucode.Baala.Op.Cop
 |-- IMPORT-RANK  /rank 49  /module 'Koshucode.Baala.Op.Quoter
 |-- IMPORT-RANK  /rank 49  /module 'Koshucode.Baala.Toolkit.Library.Input
 |-- IMPORT-RANK  /rank 49  /module 'Koshucode.Baala.Toolkit.Main.KoshuRdf
-|-- IMPORT-RANK  /rank 49  /module 'Koshucode.Baala.Toolkit.Main.KoshuSyntax
 
+|-- IMPORT-RANK  /rank 49  /module 'Koshucode.Baala.Toolkit.Main.KoshuSyntax
 |-- IMPORT-RANK  /rank 50  /module 'Koshucode.Baala.Op.Builtin
 |-- IMPORT-RANK  /rank 50  /module 'Koshucode.Baala.Toolkit.Library.Change
 |-- IMPORT-RANK  /rank 51  /module 'Koshucode.Baala.Op.Cox.Get
 |-- IMPORT-RANK  /rank 51  /module 'Koshucode.Baala.Op.Gadget
-|-- IMPORT-RANK  /rank 51  /module 'Koshucode.Baala.Op.Lattice.Tropashko
 
+|-- IMPORT-RANK  /rank 51  /module 'Koshucode.Baala.Op.Lattice.Tropashko
 |-- IMPORT-RANK  /rank 51  /module 'Koshucode.Baala.Op.Meta
 |-- IMPORT-RANK  /rank 51  /module 'Koshucode.Baala.Op.Nest.Flow
 |-- IMPORT-RANK  /rank 51  /module 'Koshucode.Baala.Op.Resource
 |-- IMPORT-RANK  /rank 51  /module 'Koshucode.Baala.Op.Source
-|-- IMPORT-RANK  /rank 51  /module 'Koshucode.Baala.Op.Term
 *** 125
 
+|-- IMPORT-RANK  /rank 51  /module 'Koshucode.Baala.Op.Term
 |-- IMPORT-RANK  /rank 51  /module 'Koshucode.Baala.Toolkit.Main.KoshuChange
 |-- IMPORT-RANK  /rank 52  /module 'Koshucode.Baala.Op.Cox.Accessor
 |-- IMPORT-RANK  /rank 52  /module 'Koshucode.Baala.Op.Cox.Calc
 |-- IMPORT-RANK  /rank 52  /module 'Koshucode.Baala.Op.Cox.Filter
-|-- IMPORT-RANK  /rank 52  /module 'Koshucode.Baala.Op.Cox.Gadget
 
+|-- IMPORT-RANK  /rank 52  /module 'Koshucode.Baala.Op.Cox.Gadget
 |-- IMPORT-RANK  /rank 52  /module 'Koshucode.Baala.Op.Cox.Range
 |-- IMPORT-RANK  /rank 52  /module 'Koshucode.Baala.Op.Lattice.Restrict
 |-- IMPORT-RANK  /rank 52  /module 'Koshucode.Baala.Op.Nest.Confl
 |-- IMPORT-RANK  /rank 52  /module 'Koshucode.Baala.Op.Peripheral
-|-- IMPORT-RANK  /rank 52  /module 'Koshucode.Baala.Op.TermGadget
 
+|-- IMPORT-RANK  /rank 52  /module 'Koshucode.Baala.Op.TermGadget
 |-- IMPORT-RANK  /rank 53  /module 'Koshucode.Baala.Op.Lattice.Rop
 |-- IMPORT-RANK  /rank 54  /module 'Koshucode.Baala.Op.Lattice
 |-- IMPORT-RANK  /rank 55  /module 'Koshucode.Baala.Op.Check
 |-- IMPORT-RANK  /rank 55  /module 'Koshucode.Baala.Op.Control
-|-- IMPORT-RANK  /rank 55  /module 'Koshucode.Baala.Op.Cox.Empty
 
+|-- IMPORT-RANK  /rank 55  /module 'Koshucode.Baala.Op.Cox.Empty
 |-- IMPORT-RANK  /rank 55  /module 'Koshucode.Baala.Op.Nest.Deriv
 |-- IMPORT-RANK  /rank 56  /module 'Koshucode.Baala.Op.Cox
 |-- IMPORT-RANK  /rank 56  /module 'Koshucode.Baala.Op.Nest.Rop
 |-- IMPORT-RANK  /rank 57  /module 'Koshucode.Baala.Op.Nest
-|-- IMPORT-RANK  /rank 58  /module 'Koshucode.Baala.Op
 
+|-- IMPORT-RANK  /rank 58  /module 'Koshucode.Baala.Op
 |-- IMPORT-RANK  /rank 59  /module 'Koshucode.Baala.Op.Global
 
-*** 146 judges
+*** 147 judges
 
 **
 **  SUMMARY
-**     146 judges on IMPORT-RANK
-**     146 judges in total
+**     147 judges on IMPORT-RANK
+**     147 judges in total
 **
 ```
 
