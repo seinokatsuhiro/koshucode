@@ -85,7 +85,7 @@ relkitFilterMeet which (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 whe
     lr     = B.headNames he1 `B.headLR` B.headNames he2
     kit3   = C.relkitJust he1 $ C.RelkitAbFull False kitf3 [kitb2]
 
-    kitf3 :: [C.Relbmap c] -> C.Relbmap c
+    kitf3 :: [C.BodyMap c] -> C.BodyMap c
     kitf3 bmaps bo1 =
         do let [bmap2] = bmaps
            bo2 <- bmap2 bo1

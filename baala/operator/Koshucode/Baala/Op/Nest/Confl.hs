@@ -74,7 +74,7 @@ relkitFor n (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
     he3   = B.headConsNest n he2 $ B.headMap side he1
     kit3  = C.relkitJust he3 $ C.RelkitOneToAbOne False kitf3 [kitb2]
 
-    kitf3 :: [C.Relbmap c] -> [c] -> B.Ab [c]
+    kitf3 :: [C.BodyMap c] -> B.AbMap [c]
     kitf3 bmaps cs1 =
         do let [bmap2] = bmaps
            bo2 <- bmap2 [cs1]

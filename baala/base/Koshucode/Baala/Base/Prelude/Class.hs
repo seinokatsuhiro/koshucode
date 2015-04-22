@@ -6,7 +6,7 @@ module Koshucode.Baala.Base.Prelude.Class
   ( Name (..),
     Named,
     named,
-    Map,
+    Map, ManyMap,
     Pred,
     YesNo (..),
     Index,
@@ -27,6 +27,7 @@ named :: (Name a) => a -> Named a
 named a = (name a, a)
 
 type Map a = a -> a
+type ManyMap a = a -> [a]
 
 type Pred a = a -> Bool
 

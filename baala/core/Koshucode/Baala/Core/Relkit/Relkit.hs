@@ -9,7 +9,7 @@ module Koshucode.Baala.Core.Relkit.Relkit
   
     -- * Derived types
     RelkitBody, RelkitKey, RelkitDef,
-    Relbmap, RelSelect,
+    BodyMap, RelSelect,
 
     -- * Calculation type
     RelkitFlow, RelkitHook', RelkitBinary, RelkitConfl,
@@ -30,16 +30,16 @@ data Relkit c = Relkit
     }
 
 data RelkitCore c
-    = RelkitFull         Bool (                [[c]] -> [[c]] )
-    | RelkitOneToMany    Bool (                 [c]  -> [[c]] )
-    | RelkitOneToOne     Bool (                 [c]  ->  [c]  )
-    | RelkitPred              (                 [c]  -> Bool  )
+    = RelkitFull         Bool (                B.Map     [[c]] )
+    | RelkitOneToMany    Bool (                B.ManyMap [c]   )
+    | RelkitOneToOne     Bool (                B.Map     [c]   )
+    | RelkitPred              (                B.Pred    [c]   )
 
-    | RelkitAbFull       Bool ( [Relbmap c] -> [[c]] -> B.Ab [[c]] ) [RelkitBody c]
-    | RelkitOneToAbMany  Bool ( [Relbmap c] ->  [c]  -> B.Ab [[c]] ) [RelkitBody c]
-    | RelkitOneToAbOne   Bool ( [Relbmap c] ->  [c]  -> B.Ab  [c]  ) [RelkitBody c]
-    | RelkitAbSemi            (                [[c]] -> B.Ab Bool  ) (RelkitBody c)
-    | RelkitAbPred            (                 [c]  -> B.Ab Bool  )
+    | RelkitAbFull       Bool ( [BodyMap c] -> B.AbMap     [[c]]   ) [RelkitBody c]
+    | RelkitOneToAbMany  Bool ( [BodyMap c] -> B.AbManyMap [c]     ) [RelkitBody c]
+    | RelkitOneToAbOne   Bool ( [BodyMap c] -> B.AbMap     [c]     ) [RelkitBody c]
+    | RelkitAbSemi            (                B.AbPred    [[c]]   ) (RelkitBody c)
+    | RelkitAbPred            (                B.AbPred    [c]     )
 
     | RelkitAppend       (RelkitBody c) (RelkitBody c)
     | RelkitConst        [[c]]
@@ -82,7 +82,7 @@ type RelkitDef c  = (RelkitKey, Relkit c)
 type RelSelect c = B.JudgePat -> [String] -> B.Rel c
 
 -- | Mapping for body of relation.
-type Relbmap c = [[c]] -> B.Ab [[c]]
+type BodyMap c = B.AbMap [[c]]
 
 -- | Make 'C.Relkit' from heading of input relation.
 type RelkitFlow c     = Maybe B.Head -> B.Ab (Relkit c)
