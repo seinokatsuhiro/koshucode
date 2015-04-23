@@ -29,6 +29,7 @@ module Koshucode.Baala.Base.Token.TokenTree
     -- * Divide trees
     splitTokensBy, divideTreesBy,
     divideTreesByBar, divideTreesByColon, divideTreesByEqual,
+    divideTreesContents,
   
     -- * Abortable
     abortableTree, abortableTrees,
@@ -156,6 +157,11 @@ divideTreesBy w1 = B.divideBy p where
     p (TextLeafRaw _ w2)  = w1 == w2
     p _                   = False
 
+divideTreesBy2 :: String -> String -> TTreesTo [[TTree]]
+divideTreesBy2 w1 w2 = B.divideBy p where
+    p (TextLeafRaw _ w)  = w == w1 || w == w2
+    p _                  = False
+
 -- | Divide token trees by vertical bar @\"|\"@.
 divideTreesByBar :: TTreesTo [[TTree]]
 divideTreesByBar = divideTreesBy "|"
@@ -167,6 +173,9 @@ divideTreesByColon = divideTreesBy ":"
 -- | Divide token trees by equal sign @\"=\"@.
 divideTreesByEqual :: TTreesTo [[TTree]]
 divideTreesByEqual = divideTreesBy "="
+
+divideTreesContents :: TTreesTo [[TTree]]
+divideTreesContents = divideTreesBy2 "|" ":"
 
 
 -- ----------------------  Abortable

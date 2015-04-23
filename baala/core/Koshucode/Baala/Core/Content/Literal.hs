@@ -50,8 +50,8 @@ literal calc tree = Msg.abLiteral tree $ lit tree where
             decimal     $ C.treesToDigits [x]
     lit g@(B.TreeB b _ xs) = case b of
         B.BracketGroup   ->  group g
-        B.BracketList    ->  C.putList   =<< litColon lit xs
-        B.BracketSet     ->  C.putSet    =<< litColon lit xs
+        B.BracketList    ->  C.putList   =<< litContents lit xs
+        B.BracketSet     ->  C.putSet    =<< litContents lit xs
         B.BracketAssn    ->                  litAngle lit xs
         B.BracketRel     ->  C.putRel    =<< litRel   lit xs
         B.BracketType    ->  C.putType   =<< litType  xs
@@ -83,13 +83,13 @@ literal calc tree = Msg.abLiteral tree $ lit tree where
     keyword "1"  = Right C.true
     keyword w    = Msg.unkWord w
 
--- | Colon-separated contents.
-litColon :: (C.CContent c) => B.TTreeToAb c -> B.TTreesToAb [c]
-litColon _   [] = Right []
-litColon lit cs = lt `mapM` B.divideTreesByColon cs where
-    lt []  =  Right C.empty
-    lt [x] =  lit x
-    lt xs  =  lit $ B.TreeB B.BracketGroup Nothing xs
+-- | Bar-separated contents.
+litContents :: (C.CContent c) => B.TTreeToAb c -> B.TTreesToAb [c]
+litContents _   [] = Right []
+litContents lit cs = lt `mapM` B.divideTreesContents cs where
+    lt []   = Right C.empty
+    lt [x]  = lit x
+    lt xs   = lit $ B.TreeB B.BracketGroup Nothing xs
 
 -- | Literal reader for angled group.
 litAngle :: (C.CContent c) => B.TTreeToAb c -> B.TTreesToAb c
@@ -109,7 +109,7 @@ litRel :: (C.CContent c) => B.TTreeToAb c -> B.TTreesToAb (B.Rel c)
 litRel lit cs =
     do let (h1 : b1) = B.divideTreesByBar cs
        h2 <- C.treeToFlatTerm `mapM` (concat $ B.divideTreesByColon h1)
-       b2 <- litColon lit `mapM` b1
+       b2 <- litContents lit `mapM` b1
        let b3 = B.unique b2
        if any (length h2 /=) $ map length b3
           then Msg.oddRelation
@@ -214,7 +214,7 @@ litType = gen where
 --  >>> :m +Koshucode.Baala.Op.Vanilla.Type
 --  >>> let trees = B.ttrees . B.tokens
 --  >>> let lit  = literal [] :: B.TTree -> B.Ab VContent
---  >>> let lits = litColon lit . trees
+--  >>> let lits = litContents lit . trees
 --
 --  Boolean.
 --
