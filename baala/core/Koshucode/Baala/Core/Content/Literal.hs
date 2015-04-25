@@ -81,9 +81,11 @@ contentCons calc tree = Msg.abLiteral tree $ cons tree where
     decimal      = C.putDec B.<=< B.litDecimal
 
     keyword :: (C.CEmpty c, C.CBool c) => String -> B.Ab c
-    keyword "0"  = Right C.false
-    keyword "1"  = Right C.true
-    keyword w    = Msg.unkWord w
+    keyword "0"    = Right C.false
+    keyword "1"    = Right C.true
+    keyword "dum"  = Right C.dum
+    keyword "dee"  = Right C.dee
+    keyword w      = Msg.unkWord w
 
 -- List of contents
 --

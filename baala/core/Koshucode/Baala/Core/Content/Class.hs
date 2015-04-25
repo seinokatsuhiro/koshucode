@@ -31,7 +31,7 @@ module Koshucode.Baala.Core.Content.Class
     -- ** Association
     CAssn (..),
     -- ** Relation
-    CRel (..), isMember,
+    CRel (..), isMember, dee, dum,
     -- ** Interpretation
     CInterp (..),
     -- ** Type
@@ -218,6 +218,10 @@ class (CTypeOf c) => CRel c where
 
     putRel      ::     B.Rel c -> B.Ab c
     putRel      =      Right . pRel
+
+dee, dum :: (CRel c) => c
+dee = pRel $ B.reldee
+dum = pRel $ B.reldum
 
 class (CTypeOf c) => CInterp c where
     isInterp    ::           c -> Bool
