@@ -8,10 +8,8 @@
 
 module Koshucode.Baala.Core.Content.Literal
   ( -- * Functions
-    CalcContent,
-    ContentCons,
-    literal,
-    treesToJudge,
+    ContentCons, ContentCalc, 
+    contentCons, treesToJudge,
 
     -- * Assert type
     AssertType (..),
@@ -37,15 +35,15 @@ import qualified Koshucode.Baala.Core.Message        as Msg
 
 -- ----------------------  General content
 
--- | Content calculator.
-type CalcContent c = B.TTreeToAb c
-
 -- | Content constructor.
 type ContentCons c = B.TTreeToAb c
 
+-- | Content calculator.
+type ContentCalc c = B.TTreeToAb c
+
 -- | Convert token tree into internal form of content.
-literal :: forall c. (C.CContent c) => CalcContent c -> ContentCons c
-literal calc tree = Msg.abLiteral tree $ cons tree where
+contentCons :: forall c. (C.CContent c) => ContentCalc c -> ContentCons c
+contentCons calc tree = Msg.abLiteral tree $ cons tree where
     cons :: ContentCons c
     cons x@(B.TreeL t)
         = eithcon (eithcon (eithcon (token t)
@@ -53,14 +51,14 @@ literal calc tree = Msg.abLiteral tree $ cons tree where
             C.putTime   $ C.treesToTime   [x])
             decimal     $ C.treesToDigits [x]
     cons g@(B.TreeB b _ xs) = case b of
-        B.BracketGroup   ->  group g
-        B.BracketList    ->  C.putList   =<< litContents cons xs
-        B.BracketSet     ->  C.putSet    =<< litContents cons xs
-        B.BracketAssn    ->                  litAngle cons xs
-        B.BracketRel     ->  C.putRel    =<< litRel   cons xs
-        B.BracketType    ->  C.putType   =<< litType  xs
-        B.BracketInterp  ->  C.putInterp =<< C.treesToInterp xs
-        _                ->  Msg.unkBracket
+        B.BracketGroup   -> group g
+        B.BracketList    -> C.putList   =<< consContents cons xs
+        B.BracketSet     -> C.putSet    =<< consContents cons xs
+        B.BracketAssn    ->                 consAngle    cons xs
+        B.BracketRel     -> C.putRel    =<< consRel      cons xs
+        B.BracketType    -> C.putType   =<< consType          xs
+        B.BracketInterp  -> C.putInterp =<< C.treesToInterp   xs
+        _                -> Msg.unkBracket
 
     token :: B.Token -> B.Ab c
     token (B.TText _ n w) | n <= B.TextRaw  = keyword w
@@ -70,12 +68,12 @@ literal calc tree = Msg.abLiteral tree $ cons tree where
 
     group :: B.TTreeToAb c
     group g@(B.TreeB _ _ xs@(B.TextLeaf f _ _ : _))
-        | f  > B.TextRaw    =  eith g text $ C.treesToTexts True xs
-        | f == B.TextRaw    =  eithcon (eith g
-                                 C.putTime $ C.treesToTime   xs)
-                                 decimal   $ C.treesToDigits xs
-    group (B.TreeB _ _ [])  =  Right C.empty
-    group g                 =  calc g
+        | f  > B.TextRaw    = eith g text $ C.treesToTexts True xs
+        | f == B.TextRaw    = eithcon (eith g
+                                C.putTime $ C.treesToTime   xs)
+                                decimal   $ C.treesToDigits xs
+    group (B.TreeB _ _ [])  = Right C.empty
+    group g                 = calc g
 
     eithcon f    = either (const f)
     eith g       = either (const $ calc g)
@@ -93,67 +91,78 @@ literal calc tree = Msg.abLiteral tree $ cons tree where
 --   [ 0 | 1 | 2 ]
 --     .........
 --     :
---     litContents
+--     consContents
 
-litContents :: (C.CContent c) => ContentCons c -> B.TTreesToAb [c]
-litContents _   [] = Right []
-litContents cons cs = lt `mapM` B.divideTreesByBar cs where
+consContents :: (C.CContent c) => ContentCons c -> B.TTreesToAb [c]
+consContents _   [] = Right []
+consContents cons cs = lt `mapM` B.divideTreesByBar cs where
     lt []   = Right C.empty
     lt [x]  = cons x
     lt xs   = cons $ B.TreeB B.BracketGroup Nothing xs
 
--- | Literal reader for angled group.
-litAngle :: (C.CContent c) => ContentCons c -> B.TTreesToAb c
-litAngle cons xs@(B.TermLeafPath _ _ : _) = C.putAssn =<< litAssn cons xs
-litAngle _ [] = C.putAssn []
-litAngle _ [B.TextLeafRaw _ "words", B.TextLeafQQ _ ws] =
-    C.putList $ map C.pText $ words ws
-litAngle _ _ = Msg.adlib "unknown angle bracket"
+-- Contents enclosed in angle brackets
+--
+--   << /a 1  /b 2  /c 3 >>   << words "a b c" >>
+--      ................         .............
+--      :                        :
+--      consAngle                consAngle
 
--- | Literal reader for associations.
-litAssn :: (C.CContent c) => ContentCons c -> B.TTreesToAb [B.Named c]
-litAssn cons = mapM p B.<=< C.treesToTerms1 where
+consAngle :: (C.CContent c) => ContentCons c -> B.TTreesToAb c
+consAngle cons xs@(B.TermLeafPath _ _ : _) = C.putAssn =<< consAssn cons xs
+consAngle _ [] = C.putAssn []
+consAngle _ [B.TextLeafRaw _ "words", B.TextLeafQQ _ ws] = C.putList $ map C.pText $ words ws
+consAngle _ _ = Msg.adlib "unknown angle bracket"
+
+-- Association
+--
+--   << /a 1  /b 2  /c 3 >>
+--      ................
+--      :
+--      consAssn
+
+consAssn :: (C.CContent c) => ContentCons c -> B.TTreesToAb [B.Named c]
+consAssn cons = mapM p B.<=< C.treesToTerms1 where
     p (name, tree) = Right . (name,) =<< cons tree
 
 -- | Convert token trees into a judge.
 --   Judges itself are not content type.
 --   It can be only used in the top-level of resources.
-treesToJudge :: (C.CContent c) => CalcContent c -> AssertType -> B.JudgePat -> B.TTreesToAb (B.Judge c)
-treesToJudge calc q p = Right . assertAs q p B.<=< litAssn (literal calc)
+treesToJudge :: (C.CContent c) => ContentCalc c -> AssertType -> B.JudgePat -> B.TTreesToAb (B.Judge c)
+treesToJudge calc q p = Right . assertAs q p B.<=< consAssn (contentCons calc)
 
 
 -- ----------------------  Relation
 --
---        ..............  litRel  ..............
+--        .............  consRel  ..............
 --        :                                    :
 --     {| /a /b /c  [ 0 | 1 | 2 ]  [ 3 | 4 | 5 ] |}
 --        ........  .............  .............
 --        :         :              :
---        :         litRelTuple    litRelTuple
---        litTermNames
+--        :         consRelTuple   consRelTuple
+--        consTermNames
 --
 
-litRel :: (C.CContent c) => ContentCons c -> B.TTreesToAb (B.Rel c)
-litRel cons xs =
-    do bo <- litRelTuple cons n `mapM` xs'
+consRel :: (C.CContent c) => ContentCons c -> B.TTreesToAb (B.Rel c)
+consRel cons xs =
+    do bo <- consRelTuple cons n `mapM` xs'
        Right $ B.Rel he $ B.unique bo
     where
-      (ns, xs')  = litTermNames xs
+      (ns, xs')  = consTermNames xs
       n          = length ns
       he         = B.headFrom ns
 
-litTermNames :: B.TTreesTo ([B.TermName], [B.TTree])
-litTermNames = terms [] where
+consTermNames :: B.TTreesTo ([B.TermName], [B.TTree])
+consTermNames = terms [] where
     terms ns (B.TermLeafPath _ [n] : xs) = terms (n : ns) xs
     terms ns xs = (reverse ns, xs)
 
-litRelTuple :: (C.CContent c) => ContentCons c -> Int -> B.TTreeToAb [c]
-litRelTuple cons n g@(B.TreeB B.BracketList _ xs) =
-    do cs <- litContents cons xs
+consRelTuple :: (C.CContent c) => ContentCons c -> Int -> B.TTreeToAb [c]
+consRelTuple cons n g@(B.TreeB B.BracketList _ xs) =
+    do cs <- consContents cons xs
        let n' = length cs
        B.when (n /= n') $ Msg.abLiteral g $ Msg.oddRelation n n'
        Right cs
-litRelTuple _ _ g = Msg.abLiteral g $ Msg.reqRelTuple
+consRelTuple _ _ g = Msg.abLiteral g $ Msg.reqRelTuple
 
 
 -- ----------------------  Assert type
@@ -187,8 +196,8 @@ assertAs AssertViolate       = B.JudgeViolate
 -- ----------------------  Type
 
 -- | Literal reader for types.
-litType :: B.TTreesToAb B.Type
-litType = gen where
+consType :: B.TTreesToAb B.Type
+consType = gen where
     gen xs = case B.divideTreesByBar xs of
                [x] ->  single x
                xs2 ->  Right . B.TypeSum =<< mapM gen xs2
@@ -247,8 +256,8 @@ litType = gen where
 --
 --  >>> :m +Koshucode.Baala.Op.Vanilla.Type
 --  >>> let trees = B.ttrees . B.tokens
---  >>> let lit  = literal [] :: B.TTree -> B.Ab VContent
---  >>> let lits = litContents lit . trees
+--  >>> let lit  = contentCons [] :: B.TTree -> B.Ab VContent
+--  >>> let lits = consContents lit . trees
 --
 --  Boolean.
 --

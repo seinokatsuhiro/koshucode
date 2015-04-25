@@ -109,7 +109,7 @@ getContents med name =
        let trees2 = B.ttreeGroup `map` B.divideTreesByColon trees
        calcTree med `mapM` trees2
 
-calcTree :: (C.CContent c) => C.Intmed c -> C.CalcContent c
+calcTree :: (C.CContent c) => C.Intmed c -> C.ContentCalc c
 calcTree = C.calcContent . C.ropCopset
 
 -- | Get relmap attribute as optional content.

@@ -144,7 +144,7 @@ coxRunList :: (B.Write c, C.CRel c, C.CList c) =>
     C.CopSet c -> B.Head -> C.Cox c -> RunList c
 coxRunList cops he cox cs = coxRun cs =<< beta cops he cox
 
-calcContent :: (C.CContent c) => C.CopSet c -> C.CalcContent c
+calcContent :: (C.CContent c) => C.CopSet c -> C.ContentCalc c
 calcContent cops = calc where
     calc tree = coxRunPure cops =<< C.coxBuild calc cops tree
 

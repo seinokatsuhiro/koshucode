@@ -17,7 +17,7 @@ import qualified Koshucode.Baala.Core.Message           as Msg
 
 -- | Construct content expression from token tree
 coxBuild :: forall c. (C.CContent c)
-  => C.CalcContent c -> C.CopSet c -> B.TTreeToAb (C.Cox c)
+  => C.ContentCalc c -> C.CopSet c -> B.TTreeToAb (C.Cox c)
 coxBuild calc copset =
     convCox findCox            -- convert cox to cox
       B.<=< Right
@@ -74,7 +74,7 @@ convCox find = expand where
                       Right $ C.CoxFill cp f' xs'
     
 -- construct content expression from token tree
-construct :: forall c. (C.CContent c) => C.CalcContent c -> B.TTreeToAb (C.Cox c)
+construct :: forall c. (C.CContent c) => C.ContentCalc c -> B.TTreeToAb (C.Cox c)
 construct calc = expr where
     expr tree = Msg.abCoxBuild tree $
          let cp = concatMap B.codePtList $ B.front $ B.untree tree
@@ -117,7 +117,7 @@ construct calc = expr where
            xs' <- expr `mapM` xs
            Right $ C.CoxFill cp f' xs'
 
-    lit cp tree  = fmap (C.CoxLit cp) $ C.literal calc tree
+    lit cp tree  = fmap (C.CoxLit cp) $ C.contentCons calc tree
 
     untag :: B.TTreeTo (C.CoxTag, B.TTree)
     untag (B.TreeB l p (B.TextLeafQ _ tag : vars))

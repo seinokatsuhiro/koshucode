@@ -63,7 +63,7 @@ resIncludeBody res abcl =
              js    <- C.treesToJudge calc q p trees
              Right $ res { C.resJudge = C.resJudge << js }
 
-      calc :: C.CalcContent c
+      calc :: C.ContentCalc c
       calc = calcContG $ C.resGlobal res
 
       assert :: Include c
@@ -117,7 +117,7 @@ resIncludeBody res abcl =
 coxBuildG :: (C.CContent c) => C.Global c -> B.TTreeToAb (C.Cox c)
 coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)
 
-calcContG :: (C.CContent c) => C.Global c -> C.CalcContent c
+calcContG :: (C.CContent c) => C.Global c -> C.ContentCalc c
 calcContG = C.calcContent . C.globalCopset
 
 paraToIOPoint :: C.TTreePara -> B.Ab B.IOPoint

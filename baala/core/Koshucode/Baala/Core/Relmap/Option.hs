@@ -40,7 +40,7 @@ optionBool name opt =
       _                   -> B.bug "unknown option"
 
 optionParse :: (Eq c, C.CBool c, C.CText c)
-  => C.CalcContent c -> [B.Token] -> B.AbMap (Option c)
+  => C.ContentCalc c -> [B.Token] -> B.AbMap (Option c)
 optionParse calc toks opt =
     do assn <- optionAssn toks
        B.foldM (optionUpdate calc) opt assn
@@ -58,7 +58,7 @@ optionAssn toks =
       maybeName _ = Nothing
 
 optionUpdate :: (Eq c, C.CBool c, C.CText c)
-   => C.CalcContent c -> Option c -> NamedT [B.TTree] -> B.Ab (Option c)
+   => C.ContentCalc c -> Option c -> NamedT [B.TTree] -> B.Ab (Option c)
 optionUpdate calc opt ((name, pt), trees) =
     Msg.abOption pt $ do
       case Map.lookup name opt of

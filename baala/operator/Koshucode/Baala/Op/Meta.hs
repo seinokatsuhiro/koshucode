@@ -172,8 +172,8 @@ consKoshuVersion med =
        _       -> Msg.unexpAttr ""
   where
     check n f t = do
-      from <- C.literal undefined f
-      to   <- C.literal undefined t
+      from <- C.contentCons undefined f
+      to   <- C.contentCons undefined t
       Right $ C.relmapHook med $ relkitKoshuVersionCheck (from, to) n
 
 relkitKoshuVersion :: (C.CContent c) => B.TermName -> C.RelkitHook c
