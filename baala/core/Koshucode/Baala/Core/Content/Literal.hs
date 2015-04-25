@@ -104,22 +104,45 @@ litAssn :: (C.CContent c) => B.TTreeToAb c -> B.TTreesToAb [B.Named c]
 litAssn lit = mapM p B.<=< C.treesToTerms1 where
     p (name, tree) = Right . (name,) =<< lit tree
 
--- | Literal reader for relations.
-litRel :: (C.CContent c) => B.TTreeToAb c -> B.TTreesToAb (B.Rel c)
-litRel lit cs =
-    do let (h1 : b1) = B.divideTreesByBar cs
-       h2 <- C.treeToFlatTerm `mapM` (concat $ B.divideTreesByColon h1)
-       b2 <- litContents lit `mapM` b1
-       let b3 = B.unique b2
-       if any (length h2 /=) $ map length b3
-          then Msg.oddRelation
-          else Right $ B.Rel (B.headFrom h2) b3
-
 -- | Convert token trees into a judge.
 --   Judges itself are not content type.
 --   It can be only used in the top-level of resources.
 treesToJudge :: (C.CContent c) => CalcContent c -> AssertType -> B.JudgePat -> B.TTreesToAb (B.Judge c)
 treesToJudge calc q p = Right . assertAs q p B.<=< litAssn (literal calc)
+
+
+-- ----------------------  Relation
+--
+--        ..............  litRel  ..............
+--        :                                    :
+--     {| /a /b /c  [ 0 | 1 | 2 ]  [ 3 | 4 | 5 ] |}
+--        ........  .............  .............
+--        :         :              :
+--        :         litRelTuple    litRelTuple
+--        litTermNames
+--
+
+litRel :: (C.CContent c) => B.TTreeToAb c -> B.TTreesToAb (B.Rel c)
+litRel lit xs =
+    do bo <- litRelTuple lit n `mapM` xs'
+       Right $ B.Rel he $ B.unique bo
+    where
+      (ns, xs')  = litTermNames xs
+      n          = length ns
+      he         = B.headFrom ns
+
+litTermNames :: B.TTreesTo ([B.TermName], [B.TTree])
+litTermNames = terms [] where
+    terms ns (B.TermLeafPath _ [n] : xs) = terms (n : ns) xs
+    terms ns xs = (reverse ns, xs)
+
+litRelTuple :: (C.CContent c) => B.TTreeToAb c -> Int -> B.TTreeToAb [c]
+litRelTuple lit n g@(B.TreeB B.BracketList _ xs) =
+    do cs <- litContents lit xs
+       let n' = length cs
+       B.when (n /= n') $ Msg.abLiteral g $ Msg.oddRelation n n'
+       Right cs
+litRelTuple _ _ g = Msg.abLiteral g $ Msg.reqRelTuple
 
 
 -- ----------------------  Assert type

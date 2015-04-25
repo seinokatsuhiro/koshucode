@@ -47,6 +47,7 @@ module Koshucode.Baala.Core.Message
     reqAttrName,
     reqFlatName,
     reqGroup,
+    reqRelTuple,
     reqTermName,
     sameIOPoints,
     unexpAttr,
@@ -217,8 +218,14 @@ nothing :: B.Ab a
 nothing = Left $ B.abortBecause "Nothing"
 
 -- | Odd relation literal
-oddRelation :: B.Ab a
-oddRelation = Left $ B.abortBecause "Odd relation literal"
+oddRelation :: Int -> Int -> B.Ab a
+oddRelation e a  = Left $ B.abortLines "Odd relation literal"
+                        $ expectActual (len e) (len a)
+    where len n = show n ++ " contents"
+
+-- | Require tuple in list
+reqRelTuple :: B.Ab a
+reqRelTuple = Left $ B.abortBecause "Require tuple in list"
 
 -- | Quoted type name
 quoteType :: String -> B.Ab a
