@@ -108,10 +108,10 @@ instance B.Write VContent where
         VBool b      ->  B.doc b
         VEmpty       ->  B.doc "()"
         VInterp i    ->  B.write sh i
-        VType t      ->  B.docWraps "[-" "-]" $ B.write sh t
-        VList xs     ->  B.docWraps "["   "]" $ B.writeColon sh xs
-        VSet  xs     ->  B.docWraps "{"   "}" $ B.writeColon sh xs
-        VAssn xs     ->  B.docWraps "<<" ">>" $ B.writeH     sh xs
+        VType t      ->  B.docWraps "[-" "-]" $ B.write    sh t
+        VList xs     ->  B.docWraps "["   "]" $ B.writeBar sh xs
+        VSet  xs     ->  B.docWraps "{"   "}" $ B.writeBar sh xs
+        VAssn xs     ->  B.docWraps "<<" ">>" $ B.writeH   sh xs
         VRel r       ->  B.write sh r
 
 
