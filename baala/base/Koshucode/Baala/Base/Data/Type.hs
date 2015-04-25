@@ -159,7 +159,7 @@ typeRelIndexList :: Type -> [B.TermPath] -> [[Int]]
 typeRelIndexList = map . typeRelIndex
 
 typeTermDoc :: Type -> B.Doc
-typeTermDoc (TypeRel ts) = B.writeColon id $ map name ts where
+typeTermDoc (TypeRel ts) = B.doch $ map name ts where
     name (n, _) = B.doc $ B.showTermName n
 typeTermDoc _ = B.docEmpty
 
