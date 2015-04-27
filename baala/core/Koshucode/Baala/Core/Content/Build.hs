@@ -117,7 +117,9 @@ construct calc = expr where
            xs' <- expr `mapM` xs
            Right $ C.CoxFill cp f' xs'
 
-    lit cp tree  = fmap (C.CoxLit cp) $ C.contentCons calc tree
+    lit cp tree  = fmap (C.CoxLit cp) $ C.contentCons (calc' tree) tree
+    calc' tree tree' | tree' == tree  = Msg.unkCox "Neither literal nor calculable"
+                     | otherwise      = calc tree'
 
     untag :: B.TTreeTo (C.CoxTag, B.TTree)
     untag (B.TreeB l p (B.TextLeafQ _ tag : vars))
