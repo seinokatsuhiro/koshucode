@@ -5,10 +5,10 @@ about /package 'operator
 |-- DIR  /code 29   /comment 6    /dir "operator/Koshucode/Baala"
 |-- DIR  /code 1066  /comment 691  /dir "operator/Koshucode/Baala/Op"
 |-- DIR  /code 218  /comment 147  /dir "operator/Koshucode/Baala/Op/Builtin"
-|-- DIR  /code 152  /comment 160  /dir "operator/Koshucode/Baala/Op/Lattice"
+|-- DIR  /code 181  /comment 174  /dir "operator/Koshucode/Baala/Op/Lattice"
 |-- DIR  /code 238  /comment 241  /dir "operator/Koshucode/Baala/Op/Nest"
 
-|-- DIR-TOTAL  /code 1703  /comment 1245
+|-- DIR-TOTAL  /code 1732  /comment 1259
 
 |-- FILE  /code 29   /comment 6    /file "Op.hs"          /dir "operator/Koshucode/Baala"
 |-- FILE  /code 10   /comment 6    /file "Builtin.hs"     /dir "operator/Koshucode/Baala/Op"
@@ -21,8 +21,8 @@ about /package 'operator
 |-- FILE  /code 49   /comment 23   /file "DepRank.hs"     /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 62   /comment 61   /file "Gadget.hs"      /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 8    /comment 26   /file "Lattice.hs"     /dir "operator/Koshucode/Baala/Op"
-|-- FILE  /code 65   /comment 39   /file "Restrict.hs"    /dir "operator/Koshucode/Baala/Op/Lattice"
-|-- FILE  /code 16   /comment 21   /file "Rop.hs"         /dir "operator/Koshucode/Baala/Op/Lattice"
+|-- FILE  /code 92   /comment 53   /file "Restrict.hs"    /dir "operator/Koshucode/Baala/Op/Lattice"
+|-- FILE  /code 18   /comment 21   /file "Rop.hs"         /dir "operator/Koshucode/Baala/Op/Lattice"
 |-- FILE  /code 71   /comment 100  /file "Tropashko.hs"   /dir "operator/Koshucode/Baala/Op/Lattice"
 |-- FILE  /code 70   /comment 43   /file "Message.hs"     /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 171  /comment 84   /file "Meta.hs"        /dir "operator/Koshucode/Baala/Op"
@@ -37,4 +37,4 @@ about /package 'operator
 |-- FILE  /code 127  /comment 76   /file "Term.hs"        /dir "operator/Koshucode/Baala/Op"
 |-- FILE  /code 76   /comment 53   /file "TermGadget.hs"  /dir "operator/Koshucode/Baala/Op"
 
-|-- FILE-TOTAL  /code 1703  /comment 1245
+|-- FILE-TOTAL  /code 1732  /comment 1259
