@@ -5,9 +5,9 @@
 
 module Koshucode.Baala.Op.Nest.Deriv
   ( 
-    -- * group-by
-    consGroupBy,
-    -- $GroupByExample
+    -- * opp-group
+    consOppGroup,
+    -- $OppGroupExample
   
     -- * join-up
     consJoinUp, relmapJoinUp,
@@ -29,22 +29,22 @@ import qualified Koshucode.Baala.Op.Nest.Confl as Op
 
 
 
--- ----------------------  group-by
+-- ----------------------  opp-group
 
--- $GroupByExample
+-- $OppGroupExample
 --
---  Grouping relation by relmap output.
+--  Opposite operand version of group -- grouping relation by relmap output.
 --
---   > source P /a /b | group-by /g ( pick /a )
+--   > source P /a /b | opp-group ( pick /a ) -to /g
 
-consGroupBy :: (Ord c, C.CRel c) => C.RopCons c
-consGroupBy med =
-  do n    <- Op.getTerm   med "-term"
-     rmap <- Op.getRelmap med "-relmap"
-     Right $ relmapGroupBy med n rmap
+consOppGroup :: (Ord c, C.CRel c) => C.RopCons c
+consOppGroup med =
+  do rmap <- Op.getRelmap med "-relmap"
+     n    <- Op.getTerm   med "-to"
+     Right $ relmapOppGroup med n rmap
 
-relmapGroupBy :: (Ord c, C.CRel c) => C.Intmed c -> B.TermName -> B.Map (C.Relmap c)
-relmapGroupBy med n rmap = C.relmapCopy med n rmapGroup where
+relmapOppGroup :: (Ord c, C.CRel c) => C.Intmed c -> B.TermName -> B.Map (C.Relmap c)
+relmapOppGroup med n rmap = C.relmapCopy med n rmapGroup where
     rmapGroup  = rmap `B.mappend` Op.relmapGroup med n rmapLocal
     rmapLocal  = C.relmapLocalSymbol med n
 
@@ -82,7 +82,7 @@ consNest med =
 
 relmapNest :: (Ord c, C.CRel c) => C.Intmed c -> (Bool, [B.TermName], B.TermName) -> C.Relmap c
 relmapNest med (co, ns, to) = group `B.mappend` for where
-    group  = relmapGroupBy med to key
+    group  = relmapOppGroup med to key
     for    = Op.relmapFor med to nest
     key    = if co then pick else cut
     nest   = if co then cut  else pick
