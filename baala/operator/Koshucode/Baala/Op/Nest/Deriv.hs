@@ -12,8 +12,8 @@ module Koshucode.Baala.Op.Nest.Deriv
     -- * join-up
     consJoinUp, relmapJoinUp,
   
-    -- * nest / hang
-    consHang, consNest, relmapNest,
+    -- * nest / pick-group
+    consPickGroup, consNest, relmapNest,
     -- $Nest
   
     -- * unnest
@@ -62,7 +62,7 @@ relmapJoinUp med nest = C.relmapNest med $ Op.relmapJoinList med rmaps where
     link n  = C.relmapLocalNest med n
 
 
--- ----------------------  nest / hang
+-- ----------------------  nest / pick-group
 
 -- $Nest
 --
@@ -70,9 +70,9 @@ relmapJoinUp med nest = C.relmapNest med $ Op.relmapJoinList med rmaps where
 --
 --    > nest /y /z -to /g
 --
---  Hang nested relation @\/g@ on term @\/x@.
+--  Make nested relation @\/g@ for each term @\/x@.
 --
---    > hang /g -on /x
+--    > pick-group /x -to /g
 
 consNest :: (Ord c, C.CRel c) => C.RopCons c
 consNest med =
@@ -89,10 +89,10 @@ relmapNest med (co, ns, to) = group `B.mappend` for where
     pick   = Op.relmapPick med ns
     cut    = Op.relmapCut  med ns
 
-consHang :: (Ord c, C.CRel c) => C.RopCons c
-consHang med =
-  do ns <- Op.getTerms med "-on"
-     to <- Op.getTerm  med "-term"
+consPickGroup :: (Ord c, C.CRel c) => C.RopCons c
+consPickGroup med =
+  do ns <- Op.getTerms med "-term"
+     to <- Op.getTerm  med "-to"
      Right $ relmapNest med (True, ns, to)
 
 
