@@ -16,8 +16,8 @@ module Koshucode.Baala.Op.Nest.Deriv
     consPickGroup, consNest, relmapNest,
     -- $Nest
   
-    -- * unnest
-    consUnnest, relmapUnnest,
+    -- * ungroup
+    consUngroup, relmapUngroup,
   ) where
 
 import qualified Koshucode.Baala.Base          as B
@@ -96,21 +96,21 @@ consPickGroup med =
      Right $ relmapNest med (True, ns, to)
 
 
--- ----------------------  unnest
+-- ----------------------  ungroup
 
--- $Unnest
+-- $Ungroup
 --
---  > unnest /g
+--  > ungroup /g
 --  > slice-up ( meet ^/g ) | cut /g
 
-consUnnest :: (Ord c, C.CRel c) => C.RopCons c
-consUnnest med =
+consUngroup :: (Ord c, C.CRel c) => C.RopCons c
+consUngroup med =
   do n <- Op.getTerm med "-term"
-     Right $ relmapUnnest med n
+     Right $ relmapUngroup med n
 
-relmapUnnest :: (Ord c, C.CRel c) => C.Intmed c -> B.TermName -> C.Relmap c
-relmapUnnest med n = unnest where
-    unnest  = slice `B.mappend` cut
+relmapUngroup :: (Ord c, C.CRel c) => C.Intmed c -> B.TermName -> C.Relmap c
+relmapUngroup med n = ungroup where
+    ungroup = slice `B.mappend` cut
     slice   = Op.relmapSliceUp med meet
     meet    = Op.relmapMeet med $ C.relmapLocalNest med n
     cut     = Op.relmapCut  med [n]

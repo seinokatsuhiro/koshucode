@@ -64,10 +64,10 @@ ropsNest = Op.ropList "nest"
     , Op.def  Op.consJoinUp     "join-up /P ..."                "V -term"
     , Op.def  Op.consNest       "nest [~] /P ... -to /N"        "V -term | -to"
     , Op.def  Op.consOppGroup   "opp-group R -to /N"            "1 -relmap/ | -to"
-    , Op.def  Op.consPickGroup  "pick-group /P ... -to /N"      "1 -term | -to"
+    , Op.def  Op.consPickGroup  "pick-group /P ... -to /N"      "V -term | -to"
     , Op.def  Op.consSlice      "slice /N [R]"                  "1? -term -relmap/^"
     , Op.def  Op.consSliceUp    "slice-up R"                    "1 -relmap/^"
-    , Op.def  Op.consUnnest     "unnest /P"                     "V -term"
+    , Op.def  Op.consUngroup    "ungroup /P"                    "1 -term"
     , Op.def  Op.consUp         "up /N"                         "1 -term"
     ]
 
