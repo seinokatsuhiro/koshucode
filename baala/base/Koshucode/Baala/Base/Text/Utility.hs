@@ -4,7 +4,7 @@ module Koshucode.Baala.Base.Text.Utility
   ( -- * Trim
     trimLeft, trimRight, trimBoth,
     -- * Padding
-    padRight, padLeft,
+    padRight, padLeft, stringWidth,
     -- * Put
     putShow, putShowLn, putLines,
     -- * Read
@@ -57,8 +57,8 @@ stringWidth = sum . map charWidth
 
 charWidth :: Char -> Int
 charWidth c
-    | Ch.ord c >= 256 = 2
-    | otherwise         = 1
+    | Ch.ord c >= 256  = 2
+    | otherwise        = 1
 
 
 -- ----------------------  Put

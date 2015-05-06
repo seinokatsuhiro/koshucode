@@ -59,7 +59,7 @@ type TermMap a = Map.Map B.TermPath a
 type TermSize = TermMap Int
 
 maxTermSize :: B.RelText -> TermSize
-maxTermSize = termMap B.gMonoNest (length . B.gMonoType) max
+maxTermSize = termMap B.gMonoNest (B.stringWidth . B.gMonoType) max
 
 termMap :: forall a. forall c.
     (c -> B.Rel c) -> (c -> a) -> (a -> a -> a) -> B.Rel c -> TermMap a
