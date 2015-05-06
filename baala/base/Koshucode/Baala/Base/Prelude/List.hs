@@ -11,8 +11,8 @@ module Koshucode.Baala.Base.Prelude.List
     -- $List
   
     -- * Uniqueness
-    duplicates,
-    unique, unionUp,
+    duplicates, unique,
+    unionUp, intersectionFilter,
     -- $Uniqueness
   
     -- * Construct
@@ -123,6 +123,11 @@ unique xs = loop xs Set.empty where
 -- | Union list to base list.
 unionUp :: (Eq a) => [a] -> [a] -> [a]
 unionUp xs ys = (xs List.\\ ys) ++ ys
+
+-- intersectionFilter "abcd" "dxcy"
+-- >>> "dc"
+intersectionFilter :: (Ord a) => [a] -> [a] -> [a]
+intersectionFilter xs = filter (`Set.member` Set.fromList xs)
 
 
 -- ----------------------  Construct

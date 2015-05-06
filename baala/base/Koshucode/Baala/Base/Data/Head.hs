@@ -261,7 +261,16 @@ data HeadLR c = HeadLR
 
 headLR :: [B.TermName] -> [B.TermName] -> HeadLR a
 headLR left right = headLRBody li ri left right where
-    (li, ri)  = left `B.snipPair` right
+    (li, ri) = sharedIndex left right
+
+-- sharedIndex "dxcy" "abcd"
+-- >>> ([0,2], [3,2])
+--       d c    d c
+sharedIndex :: (Ord a) => [a] -> [a] -> ([Int], [Int])
+sharedIndex xs1 xs2 = (ind1, ind2) where
+    ind1  = B.snipIndex sh xs1
+    ind2  = B.snipIndex sh xs2
+    sh    = B.intersectionFilter xs2 xs1
 
 headLROrd :: [B.TermName] -> [B.TermName] -> HeadLR a
 headLROrd left right = headLRBody li ri left right where
