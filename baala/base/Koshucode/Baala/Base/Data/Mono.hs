@@ -3,42 +3,51 @@
 -- | Content type for nested relations.
 
 module Koshucode.Baala.Base.Data.Mono
-  ( Mono (..),
-    RelText,
-    isMonoType, isMonoNest,
-    gMonoType, gMonoNest,
-    pMonoNest, pMonoType,
+  ( Mono (..), RelMono, RelText,
+    isMonoTerm, isMonoNest,
+    gMonoTerm, gMonoNest,
+    pMonoTerm, pMonoNest,
   ) where
 
 import qualified Koshucode.Baala.Base.Data.Rel  as B
 import qualified Koshucode.Baala.Base.Abort     as B
 
-data Mono a
-    = MonoType a
-    | MonoNest (B.Rel (Mono a))
+-- | Monotype relation.
+data Mono c
+    = MonoTerm c                 -- ^ Terminal content
+    | MonoNest (RelMono c)       -- ^ Nested relation
       deriving (Show, Eq, Ord)
 
-type RelText = B.Rel (Mono String)
+type RelMono c = B.Rel (Mono c)
 
-isMonoNest :: Mono a -> Bool
-isMonoNest (MonoType _) = False
+-- | Text relation.
+type RelText = RelMono String
+
+-- | Test terminal content.
+isMonoTerm :: Mono c -> Bool
+isMonoTerm (MonoTerm _) = True
+isMonoTerm (MonoNest _) = False
+
+-- | Test nested relation.
+isMonoNest :: Mono c -> Bool
+isMonoNest (MonoTerm _) = False
 isMonoNest (MonoNest _) = True
 
-isMonoType :: Mono a -> Bool
-isMonoType (MonoType _) = True
-isMonoType (MonoNest _) = False
+-- | Get terminal content.
+gMonoTerm :: Mono c -> c
+gMonoTerm (MonoTerm c) = c
+gMonoTerm (MonoNest _) = B.bug "gMonoTerm"
 
-gMonoType :: Mono a -> a
-gMonoType (MonoType a) = a
-gMonoType (MonoNest _) = B.bug "gMonoType"
-
-gMonoNest :: Mono a -> B.Rel (Mono a)
+-- | Get nested relation.
+gMonoNest :: Mono c -> RelMono c
 gMonoNest (MonoNest r) = r
-gMonoNest (MonoType _) = B.bug "gMonoNest"
+gMonoNest (MonoTerm _) = B.bug "gMonoNest"
 
-pMonoType :: a -> Mono a
-pMonoType = MonoType
+-- | Put terminal content.
+pMonoTerm :: c -> Mono c
+pMonoTerm = MonoTerm
 
-pMonoNest :: B.Rel (Mono a) -> Mono a
+-- | Put nested relation.
+pMonoNest :: RelMono c -> Mono c
 pMonoNest = MonoNest
 

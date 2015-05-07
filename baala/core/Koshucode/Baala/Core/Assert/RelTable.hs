@@ -34,7 +34,7 @@ relCells pad m path (B.Rel he bo) = table where
     tuple ns cs = map content $ zip ns cs
     content (n, c) = case c of
                        B.MonoNest r -> texts $ render $ relCells pad m path' r
-                       B.MonoType s -> width $ text s
+                       B.MonoTerm s -> width $ text s
         where path' = n : path
               width cell = let w = Map.findWithDefault 0 path' m
                            in cell { B.cellWidth = pad + w }
@@ -46,7 +46,7 @@ relCells pad m path (B.Rel he bo) = table where
 relText :: (B.Write c, C.CRel c) => [B.ShortDef] -> B.Rel c -> B.RelText
 relText sh (B.Rel he bo) = B.Rel he $ map (map content) bo where
     content c | C.isRel c  = B.MonoNest $ relText sh $ C.gRel c
-              | otherwise  = B.MonoType $ show $ B.write (B.shortText sh) c
+              | otherwise  = B.MonoTerm $ show $ B.write (B.shortText sh) c
 
 render :: [[B.Cell]] -> [String]
 render = B.squeezeEmptyLines . B.renderTable " " . B.alignTable
@@ -59,7 +59,7 @@ type TermMap a = Map.Map B.TermPath a
 type TermSize = TermMap Int
 
 maxTermSize :: B.RelText -> TermSize
-maxTermSize = termMap B.gMonoNest (B.stringWidth . B.gMonoType) max
+maxTermSize = termMap B.gMonoNest (B.stringWidth . B.gMonoTerm) max
 
 termMap :: forall a. forall c.
     (c -> B.Rel c) -> (c -> a) -> (a -> a -> a) -> B.Rel c -> TermMap a
