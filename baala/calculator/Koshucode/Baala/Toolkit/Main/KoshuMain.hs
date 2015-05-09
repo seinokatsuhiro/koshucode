@@ -45,6 +45,7 @@ data Option
     | OptPretty
     | OptStdin
     | OptSection String
+    | OptAssertX String
     | OptElement
       deriving (Show, Eq)
 
@@ -57,6 +58,7 @@ koshuOptions =
     , Option ""  ["pretty"]   (NoArg OptPretty)  "Pretty print section."
     , Option "i" ["stdin"]    (NoArg OptStdin)   "Read from stdin."
     , Option "s" ["section"]  (ReqArg OptSection "SEC") "One-line section"
+    , Option "x" ["assert-x"] (ReqArg OptAssertX "EXPR") "|== X : add /x ( EXPR )"
     , Option ""  ["element"]  (NoArg OptElement) "Analize sections"
     ]
 
@@ -114,7 +116,8 @@ koshuMain g =
        (_, _, errs) -> L.putFailure $ concat errs
 
 oneLiner :: Option -> [String]
-oneLiner (OptSection sec) = [oneLinerPreprocess sec]
+oneLiner (OptSection sec)   = [oneLinerPreprocess sec]
+oneLiner (OptAssertX expr)  = ["|== X : add /x ( " ++ expr ++ " )"]
 oneLiner _ = []
 
 -- replace "||" to "\n"
