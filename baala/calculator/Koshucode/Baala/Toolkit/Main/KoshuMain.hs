@@ -44,22 +44,22 @@ data Option
     | OptRun
     | OptPretty
     | OptStdin
-    | OptSection String
+    | OptLiner String
     | OptAssertX String
     | OptElement
       deriving (Show, Eq)
 
 koshuOptions :: [OptDescr Option]
 koshuOptions =
-    [ Option "h" ["help"]     (NoArg OptHelp)    "Print help message."
-    , Option "V" ["version"]  (NoArg OptVersion) "Print version number."
-    , Option ""  ["run"]      (NoArg OptRun)     "Run section."
-    , Option ""  ["show-encoding"] (NoArg OptShowEncoding) "Show character encoding."
-    , Option ""  ["pretty"]   (NoArg OptPretty)  "Pretty print section."
-    , Option "i" ["stdin"]    (NoArg OptStdin)   "Read from stdin."
-    , Option "s" ["section"]  (ReqArg OptSection "SEC") "One-line section"
+    [ Option "h" ["help"]     (NoArg OptHelp)    "Print help message"
+    , Option "V" ["version"]  (NoArg OptVersion) "Print version number"
+    , Option ""  ["run"]      (NoArg OptRun)     "Run input code"
+    , Option ""  ["show-encoding"] (NoArg OptShowEncoding) "Show character encoding"
+    , Option ""  ["pretty"]   (NoArg OptPretty)  "Pretty print"
+    , Option "i" ["stdin"]    (NoArg OptStdin)   "Read from stdin"
+    , Option ""  ["liner"]    (ReqArg OptLiner "CODE") "One liner"
     , Option "x" ["assert-x"] (ReqArg OptAssertX "EXPR") "|== X : add /x ( EXPR )"
-    , Option ""  ["element"]  (NoArg OptElement) "Analize sections"
+    , Option ""  ["element"]  (NoArg OptElement) "Analize input code"
     ]
 
 usage :: String
@@ -116,7 +116,7 @@ koshuMain g =
        (_, _, errs) -> L.putFailure $ concat errs
 
 oneLiner :: Option -> [String]
-oneLiner (OptSection sec)   = [oneLinerPreprocess sec]
+oneLiner (OptLiner code)    = [oneLinerPreprocess code]
 oneLiner (OptAssertX expr)  = ["|== X : add /x ( " ++ expr ++ " )"]
 oneLiner _ = []
 
