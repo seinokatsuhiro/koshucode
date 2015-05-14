@@ -92,12 +92,12 @@ relkitFor _ _ _ = Right C.relkitNothing
 --  In other words, group @b@ by @a@.
 --  Result relations are nested in term @\/r@.
 --
---    > a | group /r b
+--    > a | group b -to /r
 
 consGroup :: (Ord c, C.CRel c) => C.RopCons c
 consGroup med =
-  do n    <- Op.getTerm   med "-term"
-     rmap <- Op.getRelmap med "-relmap"
+  do rmap <- Op.getRelmap med "-relmap"
+     n    <- Op.getTerm   med "-to"
      Right $ relmapGroup med n rmap
 
 relmapGroup :: (Ord c, C.CRel c) => C.Intmed c -> B.TermName -> B.Map (C.Relmap c)
