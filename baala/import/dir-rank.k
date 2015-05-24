@@ -15,7 +15,7 @@
 dir : dep
     | add /dir  ( dir-part  <dot> /module )
           /base ( base-part <dot> /module )
-    | hang /base-rank -on /dir
+    | pick-group /dir -to /base-rank
     | for /base-rank ( pick /rank /base /import-dir )
     | add /dir-rank ( max /base-rank/rank )
     | interp <<< Module directory /dir has dependent rank /dir-rank ,
@@ -23,7 +23,7 @@ dir : dep
 
 dep : imp
     | dependent-rank /module /import -rank /rank
-    | group /=import ( imp | meet imp-dir )
+    | group ( imp | meet imp-dir ) -to /=import
     | add /import-dir ( sort /=import/dirname )
     | wipe
     | interp <<< /module has dependent rank /rank .
