@@ -43,7 +43,7 @@ ropsCoxCalc :: (C.CContent c) => [C.Rop c]
 ropsCoxCalc = Op.ropList "cox-calc"
     --        CONSTRUCTOR       USAGE                          ATTRIBUTE
     [ Op.def  consAdd           "add /N E ..."                 "V -cox | -where"
-    , Op.def  consFill          "fill /P E"                    "T1 -term -to"
+    , Op.def  consFill          "fill /P ... -with E"          "V -term | -with"
     , Op.def  consReplace       "replace /P E"                 "T1 -term -by"
     , Op.def  consReplaceAll    "replace-all -from E -to E"    "0 | -from -to"
     , Op.def  consSplit         "split /N E ..."               "V -cox | -where"
@@ -113,12 +113,12 @@ relkitSubst (cops, cox) (Just he1)
 
 -- ----------------------  fill
 
---    > fill /a /b 0
+--    > fill /a /b -with 0
 
 consFill :: (C.CContent c) => C.RopCons c
 consFill med =
   do ns    <- Op.getTerms med "-term"
-     coxTo <- Op.getCox med "-to"
+     coxTo <- Op.getCox med "-with"
      let cops = C.globalCopset $ C.ropGlobal med
      Right $ relmapFill med (ns, cops, coxTo)
 
