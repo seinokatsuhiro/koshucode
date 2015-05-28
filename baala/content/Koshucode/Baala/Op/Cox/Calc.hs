@@ -44,7 +44,7 @@ ropsCoxCalc = Op.ropList "cox-calc"
     --        CONSTRUCTOR       USAGE                          ATTRIBUTE
     [ Op.def  consAdd           "add /N E ..."                 "V -cox | -where"
     , Op.def  consFill          "fill /P ... -with E"          "V -term | -with"
-    , Op.def  consReplace       "replace /P E"                 "T1 -term -by"
+    , Op.def  consReplace       "replace /P ... -by F"         "V -term | -by"
     , Op.def  consReplaceAll    "replace-all -from E -to E"    "0 | -from -to"
     , Op.def  consSplit         "split /N E ..."               "V -cox | -where"
     , Op.def  consSubst         "subst /N E ..."               "V -cox | -where"
@@ -143,7 +143,7 @@ relkitFill (ns, cops, coxTo) (Just he1) = Right kit2 where
 
 -- ----------------------  replace
 
---    > replace /a /b (| x | if x < 0 -> 0 : x |)
+--    > replace /a /b -by (| x | if x < 0 -> 0 : x |)
 
 consReplace :: (C.CContent c) => C.RopCons c
 consReplace med =
