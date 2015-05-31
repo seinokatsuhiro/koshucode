@@ -36,8 +36,6 @@ data AttrPos a
     | AttrPosV a
     | AttrPos1V a a
     | AttrPos1Q a a
-    | AttrPosT1 a a
-    | AttrPosT2 a a a
       deriving (Show, Eq, Ord)
 
 attrTypeNames :: AttrPos a -> [a]
@@ -51,8 +49,6 @@ attrTypeNames attrType = case attrType of
     AttrPosV  a        -> [a]
     AttrPos1V a b      -> [a,b]
     AttrPos1Q a b      -> [a,b]
-    AttrPosT1 a b      -> [a,b]
-    AttrPosT2 a b c    -> [a,b,c]
 
 type AttrSortTree = [B.TTree] -> B.Ab [AttrTree]
 
@@ -71,12 +67,6 @@ ropAttrPos (AttrPosV a)       vv         = Right [a##vv]
 ropAttrPos (AttrPos1V a b)    (v:ww)     = Right [a#v, b##ww]
 ropAttrPos (AttrPos1Q a _)    [v]        = Right [a#v]
 ropAttrPos (AttrPos1Q a b)    [v,w]      = Right [a#v, b#w]
-ropAttrPos (AttrPosT1 a b)    xs         = case span isTermLeaf xs of
-                                              (vv,[w])    -> Right [a##vv, b#w]
-                                              _           -> Msg.unexpAttrT1
-ropAttrPos (AttrPosT2 a b c)  xs         = case span isTermLeaf xs of
-                                              (vv,[w,x])  -> Right [a##vv, b#w, c#x]
-                                              _           -> Msg.unexpAttrT2
 ropAttrPos (AttrPos0)         _          = Msg.unexpAttr0
 ropAttrPos (AttrPos1 _)       _          = Msg.unexpAttr1
 ropAttrPos (AttrPos2 _ _)     _          = Msg.unexpAttr2

@@ -58,8 +58,6 @@ module Koshucode.Baala.Core.Message
     unexpAttr4,
     unexpAttr1V,
     unexpAttr1Q,
-    unexpAttrT1,
-    unexpAttrT2,
     unkBracket,
     unkClause,
     unkCop,
@@ -280,12 +278,6 @@ unexpAttr1V = unexpAttr "Require attributes"
 
 unexpAttr1Q :: B.Ab a
 unexpAttr1Q = unexpAttr "Require one or two attributes"
-
-unexpAttrT1 :: B.Ab a
-unexpAttrT1 = unexpAttr "Require terms and one attribute"
-
-unexpAttrT2 :: B.Ab a
-unexpAttrT2 = unexpAttr "Require terms and two attributes"
 
 -- | Unknown bracket
 unkBracket :: B.Ab a

@@ -55,8 +55,6 @@ attrDef q ns = C.ropAttrCons $ select q ns where
     select "1?" [a,b]      = C.AttrPos1Q a b
     select "V"  [a]        = C.AttrPosV  a
     select "1V" [a,b]      = C.AttrPos1V a b
-    select "T1" [a,b]      = C.AttrPosT1 a b
-    select "T2" [a,b,c]    = C.AttrPosT2 a b c
     select _ xs            = ropBug $ unwords $ map C.attrNameText xs
 
 ropBug :: String -> a
