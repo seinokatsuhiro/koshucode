@@ -5,7 +5,7 @@
 
 module Koshucode.Baala.Op.Builtin.Term
   ( termName, termNames, termNamesCo,
-    termNamePairs,
+    termNamePairs, termNamesColon,
     picker,
   ) where
 
@@ -37,7 +37,7 @@ termCo trees                          = Right (False, trees)
 
 -- | Extract a list of name-and-name pairs.
 -- 
---   >>> termNamePairs . B.tt $ "/a /x /b /y"
+--   >>> termNamePairs =<< B.tt "/a /x /b /y"
 --   Right [("/a", "/x"), ("/b", "/y")]
 termNamePairs :: [B.TTree] -> B.Ab [B.TermName2]
 termNamePairs = loop where
@@ -49,6 +49,19 @@ termNamePairs = loop where
     loop [] = Right []
     loop _  = Msg.reqTermName
 
+-- >>> termNamesColon =<< B.tt "/a /b : /x /y"
+-- Right (["a", "b"], ["x", "y"])
+termNamesColon :: [B.TTree] -> B.Ab ([B.TermName], [B.TermName])
+termNamesColon = first [] where
+    first ns1 (B.TermLeaf _ _ [n] : ts)       = first (n : ns1) ts
+    first ns1 (B.TextLeafRaw _ ":" : ts)      = second ns1 [] ts
+    first _ _                                 = Msg.reqTermName
+
+    second ns1 ns2 (B.TermLeaf _ _ [n] : ts)  = second ns1 (n : ns2) ts
+    second ns1 ns2 []                         = Right (reverse ns1, reverse ns2)
+    second _ _ _                              = Msg.reqTermName
+
 picker :: B.Head -> [B.TermName] -> B.Map [c]
 picker he ts = B.snipFrom ind where
     ind = ts `B.snipIndex` B.headNames he
+

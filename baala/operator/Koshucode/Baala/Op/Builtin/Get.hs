@@ -22,7 +22,7 @@ module Koshucode.Baala.Op.Builtin.Get
     -- * Term
     getTerm, getTermOpt,
     getTerms, getTermsCo,
-    getTermPairs,
+    getTermPairs, getTermsColon,
     getTermTrees,
   ) where
 
@@ -181,6 +181,9 @@ getTermsCo = getAbortable Op.termNamesCo
 -- | Get list of term-name pairs from named attribute.
 getTermPairs :: RopGet c [B.TermName2]
 getTermPairs = getAbortable Op.termNamePairs
+
+getTermsColon :: RopGet c ([B.TermName], [B.TermName])
+getTermsColon = getAbortable Op.termNamesColon
 
 getTermTrees :: RopGet c [B.Named B.TTree]
 getTermTrees = getAbortable C.treesToTerms1
