@@ -50,16 +50,13 @@ termNamePairs = loop where
     loop _  = Msg.reqTermName
 
 -- >>> termNamesColon =<< B.tt "/a /b : /x /y"
--- Right (["a", "b"], ["x", "y"])
-termNamesColon :: [B.TTree] -> B.Ab ([B.TermName], [B.TermName])
-termNamesColon = first [] where
-    first ns1 (B.TermLeaf _ _ [n] : ts)       = first (n : ns1) ts
-    first ns1 (B.TextLeafRaw _ ":" : ts)      = second ns1 [] ts
-    first _ _                                 = Msg.reqTermName
-
-    second ns1 ns2 (B.TermLeaf _ _ [n] : ts)  = second ns1 (n : ns2) ts
-    second ns1 ns2 []                         = Right (reverse ns1, reverse ns2)
-    second _ _ _                              = Msg.reqTermName
+-- Right [["a", "b"], ["x", "y"]]
+termNamesColon :: [B.TTree] -> B.Ab [[B.TermName]]
+termNamesColon = loop [] [] where
+    loop ret ns (B.TermLeaf _ _ [n] : ts)   = loop ret (n : ns) ts
+    loop ret ns (B.TextLeafRaw _ ":" : ts)  = loop (reverse ns : ret) [] ts
+    loop ret ns []                          = Right $ reverse $ reverse ns : ret
+    loop _ _ _                              = Msg.reqTermName
 
 picker :: B.Head -> [B.TermName] -> B.Map [c]
 picker he ts = B.snipFrom ind where

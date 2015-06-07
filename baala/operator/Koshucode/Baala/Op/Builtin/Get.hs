@@ -182,7 +182,7 @@ getTermsCo = getAbortable Op.termNamesCo
 getTermPairs :: RopGet c [B.TermName2]
 getTermPairs = getAbortable Op.termNamePairs
 
-getTermsColon :: RopGet c ([B.TermName], [B.TermName])
+getTermsColon :: RopGet c [[B.TermName]]
 getTermsColon = getAbortable Op.termNamesColon
 
 getTermTrees :: RopGet c [B.Named B.TTree]

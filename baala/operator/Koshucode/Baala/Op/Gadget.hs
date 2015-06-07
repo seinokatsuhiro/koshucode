@@ -101,35 +101,56 @@ relkitDepRank (x,y,r) (Just he1) = Right kit2 where
 
 consVisitDistance :: (Ord c, C.CDec c, C.CRel c) => C.RopCons c
 consVisitDistance med =
-    do rmap <- Op.getRelmap med "-relmap"
-       to   <- Op.getTerm   med "-to"
-       dist <- Op.getTerm   med "-distance"
-       (step1, step2) <- Op.getTermsColon med "-step"
-       Right $ relmapVisitDistance med (step1, step2, to, dist) rmap
+    do rmap  <- Op.getRelmap med "-relmap"
+       to    <- Op.getTerm   med "-to"
+       dist  <- Op.getTerm   med "-distance"
+       steps <- Op.getTermsColon med "-step"
+       case steps of
+         [step1, step2] -> Right $ relmapVisitDistance med (step1, step2, to, dist) rmap
+         _              -> Msg.adlib "Require two sets of terms"
 
 relmapVisitDistance :: (Ord c, C.CDec c, C.CRel c) => C.Intmed c -> ([B.TermName], [B.TermName], B.TermName, B.TermName) -> B.Map (C.Relmap c)
 relmapVisitDistance med = C.relmapBinary med . relkitVisitDistance
 
 relkitVisitDistance :: (Ord c, C.CDec c, C.CRel c) => ([B.TermName], [B.TermName], B.TermName, B.TermName) -> C.RelkitBinary c
-relkitVisitDistance (step1, step2, to, dist) (C.Relkit _ (Just he2) kitb2) (Just he1) = Right kit3 where
-    lr      = step1 `B.headLROrd` B.headNames he1
-    lrFrom  = step1 `B.headLROrd` B.headNames he2
-    lrTo    = step2 `B.headLROrd` B.headNames he2
-    he3     = B.headConsNest to heTo he1
-    heTo    = B.headFrom $ dist : step1
-    kit3    = C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
-    kitf3 bmaps bo1 =
-        do let [bmap2] = bmaps
-           bo2 <- bmap2 bo1
-           let vstep = visitStep lrFrom lrTo bo2
-           Right $ add vstep `map` bo1
+relkitVisitDistance (step1, step2, to, dist) (C.Relkit _ (Just he2) kitb2) (Just he1)
+    | unkStart /= []     = Msg.unkTerm unkStart he1
+    | unkFrom  /= []     = Msg.unkTerm unkFrom  he2
+    | unkTo    /= []     = Msg.unkTerm unkTo    he2
+    | dup      /= []     = Msg.dupAttr dup
+    | newDist  == []     = Msg.adlib "Require new term"
+    | lenFrom  /= lenTo  = Msg.adlib "Require same number of terms"
+    | otherwise          = Right kit3
+    where
+      lrStart   = step1 `B.headLROrd` B.headNames he1
+      lrDist    = [to]  `B.headLROrd` B.headNames he1
+      lrFrom    = step1 `B.headLROrd` B.headNames he2
+      lrTo      = step2 `B.headLROrd` B.headNames he2
 
-    add vstep cs1 = rel : cs1 where
-        start   = B.headRShare lr cs1
-        vdist   = visitDistanceFrom vstep start
-        body    = tuple `map` Map.assocs vdist
-        rel     = C.pRel $ B.Rel heTo body
-        tuple (cs, n) = C.pDecFromInt n : cs
+      unkStart  = B.headLSideNames lrStart
+      unkFrom   = B.headLSideNames lrFrom
+      unkTo     = B.headLSideNames lrTo
+      newDist   = B.headLSideNames lrDist
+
+      lenFrom   = length step1
+      lenTo     = length step2
+      dup       = B.duplicates $ dist : step1
+      he3       = B.headConsNest to heTo he1
+      heTo      = B.headFrom $ dist : step1
+      kit3      = C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
+
+      kitf3 bmaps bo1 =
+          do let [bmap2] = bmaps
+             bo2 <- bmap2 bo1
+             let vstep = visitStep lrFrom lrTo bo2
+             Right $ add vstep `map` bo1
+
+      add vstep cs1 = rel : cs1 where
+          start   = B.headRShare lrStart cs1
+          vdist   = visitDistanceFrom vstep start
+          body    = tuple `map` Map.assocs vdist
+          rel     = C.pRel $ B.Rel heTo body
+          tuple (cs, n) = C.pDecFromInt n : cs
 
 relkitVisitDistance _ _ _ = Right C.relkitNothing
 

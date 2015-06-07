@@ -162,7 +162,7 @@ ambRelmap name ds = Left $ B.abortLine "Ambiguous relmaps"
 
 -- | Unexpected attribute / Duplicate
 dupAttr :: [String] -> B.Ab a
-dupAttr ns = unexpAttr $ "Duplicate " ++ unwords ns
+dupAttr ns = unexpAttr $ "Duplicate " ++ unwords (map B.showTermName ns)
 
 -- | Duplicate prefix
 dupPrefix :: [String] -> B.Ab a
