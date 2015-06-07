@@ -138,25 +138,40 @@ relkitVisitDistance (step1, step2, to, dist) (C.Relkit _ (Just he2) kitb2) (Just
       he3       = B.headConsNest to heTo he1
       heTo      = B.headFrom $ dist : step1
       kit3      = C.relkitJust he3 $ C.RelkitAbFull False kitf3 [kitb2]
-
-      kitf3 bmaps bo1 =
-          do let [bmap2] = bmaps
-             bo2 <- bmap2 bo1
-             let vstep = visitStep lrFrom lrTo bo2
-             Right $ add vstep `map` bo1
-
-      add vstep cs1 = rel : cs1 where
-          start   = B.headRShare lrStart cs1
-          vdist   = visitDistanceFrom vstep start
-          body    = tuple `map` Map.assocs vdist
-          rel     = C.pRel $ B.Rel heTo body
-          tuple (cs, n) = C.pDecFromInt n : cs
+      kitf3     = relkitVisitDistanceBody (lenFrom == 1) lrStart lrFrom lrTo heTo
 
 relkitVisitDistance _ _ _ = Right C.relkitNothing
 
-visitStep :: (Ord c) => B.HeadLR c -> B.HeadLR c -> [[c]] -> VisitStep [c]
-visitStep from to = foldr add Map.empty where
-    add cs = insertPush (B.headRShare from cs) (B.headRShare to cs)
+relkitVisitDistanceBody :: (C.CDec c, C.CRel c, Ord c) =>
+  Bool -> B.HeadLR c -> B.HeadLR c -> B.HeadLR c -> B.Head -> [C.BodyMap c] -> B.AbMap [[c]]
+relkitVisitDistanceBody optimize1 lrStart lrFrom lrTo heTo
+    | optimize1 = kitf3 (add1, tuple1, vdist1)
+    | otherwise = kitf3 (addN, tupleN, vdistN)
+    where
+      kitf3 x@(addX, _, _) bmaps bo1 =
+          do [bo2] <- calcBody bmaps bo1
+             let vstep = foldr addX Map.empty bo2
+             Right $ calc x vstep `map` bo1
+
+      calc (_, tupleX, vdistX) vstep cs1 = rel : cs1 where
+          rel    = C.pRel $ B.Rel heTo body
+          body   = map tupleX $ Map.assocs $ vdistX vstep start
+          start  = B.headRShare lrStart cs1
+
+      vdistN vstep cs   = visitDistanceFrom vstep cs
+      vdist1 vstep [c]  = visitDistanceFrom vstep c
+      vdist1 _ _        = B.bug "visit-distance"
+
+      tupleN (cs, n)    = C.pDecFromInt n : cs
+      tuple1 (c, n)     = [C.pDecFromInt n, c]
+
+      addN cs           = insertPush (B.headRShare lrFrom cs)
+                                     (B.headRShare lrTo cs)
+      add1 cs           = insertPush (head $ B.headRShare lrFrom cs)
+                                     (head $ B.headRShare lrTo cs)
+
+calcBody :: [C.BodyMap c] -> [[c]] -> B.Ab [[[c]]]
+calcBody bmaps bo = (\bmap -> bmap bo) `mapM` bmaps
 
 -- | Mapping node to next nodes.
 type VisitStep a = Map.Map a [a]
