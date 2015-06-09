@@ -46,8 +46,8 @@ cabal-version:       >= 1.8
 extra-source-files:
 
 executable koshu
-  main-is:
-        koshu.hs
+  main-is: koshu.hs
+  ghc-options: -rtsopts
   other-modules:
   build-depends:
          base                     == 4.*
