@@ -24,6 +24,7 @@ module Koshucode.Baala.Base.Token.TokenLine
     -- $Examples
   ) where
 
+import qualified Data.Map                             as Map
 import qualified Data.Char                            as Ch
 import qualified Koshucode.Baala.Base.Abort           as B
 import qualified Koshucode.Baala.Base.Prelude         as B
@@ -112,9 +113,10 @@ comment r cs = Right $ B.codeUpdate "" tok r where
 
 -- | Split a next token from source text.
 relation :: B.AbMap TokenRoll
-relation r@B.CodeRoll { B.codeInputPt = cp } = start gen cp r where
+relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = start gen cp r where
 
     v           = scan r
+    vw          = scanW r
     u   cs tok  = Right $ B.codeUpdate cs tok r
     int cs tok  = Right $ B.codeChange interp  $ B.codeUpdate cs tok r
     xs =^ pre   = pre `B.isPrefixOf` xs
@@ -132,13 +134,13 @@ relation r@B.CodeRoll { B.codeInputPt = cp } = start gen cp r where
                    | c == '@'        = slot  cs 1
                    | c == '|'        = bar   cs [c]
                    | c == '^'        = local cs
-                   | ccs =^ "'/"     = v               $ scanTermQ  cp $ tail cs
+                   | ccs =^ "'/"     = vw              $ scanTermQ  cp ws $ tail cs
                    | ccs =^ "#!"     = u     ""        $ B.TComment cp cs
                    | ccs =^ "-*-"    = u     ""        $ B.TComment cp cs
                    | isOpen c        = u     cs        $ B.TOpen    cp [c]
                    | isClose c       = u     cs        $ B.TClose   cp [c]
                    | isSingle c      = u     cs        $ B.TTextRaw cp [c]
-                   | isTerm c        = v               $ scanTermP  cp cs
+                   | isTerm c        = vw              $ scanTermP  cp ws cs
                    | isQQ c          = v               $ scanQQ     cp cs
                    | isQ c           = v               $ scanQ      cp cs
                    | isShort c       = short cs [c]
@@ -211,15 +213,16 @@ charCodes :: String -> Maybe [Int]
 charCodes = mapM B.readInt . B.omit null . B.divide '-'
 
 interp :: B.AbMap TokenRoll
-interp r@B.CodeRoll { B.codeInputPt = cp } = start int cp r where
+interp r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = start int cp r where
 
     v           = scan r
+    vw          = scanW r
     u   cs tok  = Right $ B.codeUpdate cs tok r
     gen cs tok  = Right $ B.codeChange relation $ B.codeUpdate cs tok r
 
     int ""                           =  Right r
     int (c:cs)    | isSpace c        =  v         $ scanSpace  cp cs
-                  | isTerm c         =  v         $ scanTermP  cp cs
+                  | isTerm c         =  vw        $ scanTermP  cp ws cs
                   | otherwise        =  word (c:cs) ""
 
     word cs@('>':'>':'>':_) w        =  gen cs    $ B.TTextRaw cp $ rv w
@@ -234,6 +237,7 @@ interp r@B.CodeRoll { B.codeInputPt = cp } = start int cp r where
 type Next   a = String -> (String, a)
 type AbNext a = String -> B.Ab (String, a)
 type Scan     = B.CodePt -> String -> B.Ab (String, B.Token)
+type ScanW    = B.CodePt -> B.WordTable -> String -> B.Ab (B.WordTable, String, B.Token)
 
 rv :: B.Map [a]
 rv = reverse
@@ -241,6 +245,10 @@ rv = reverse
 scan :: TokenRoll -> B.Ab (String, B.Token) -> B.Ab TokenRoll
 scan r (Right (cs, tok)) = Right $ B.codeUpdate cs tok r
 scan _ (Left message)    = Left message
+
+scanW :: TokenRoll -> B.Ab (B.WordTable, String, B.Token) -> B.Ab TokenRoll
+scanW r (Right (ws, cs, tok)) = Right $ B.codeUpdateWords ws cs tok r
+scanW _ (Left message)        = Left message
 
 nextCode :: Next String
 nextCode = loop "" where
@@ -272,12 +280,12 @@ scanQQ :: Scan
 scanQQ cp cs = do (cs', w) <- nextQQ cs
                   Right (cs', B.TTextQQ cp w)
 
-scanTermP, scanTermQ :: Scan
+scanTermP, scanTermQ :: ScanW
 scanTermP = scanTerm B.TermTypePath
 scanTermQ = scanTerm B.TermTypeQuoted
 
-scanTerm :: B.TermType -> Scan
-scanTerm q cp = word [] where
+scanTerm :: B.TermType -> ScanW
+scanTerm q cp ws = word [] where
     word ns (c:cs) | c == '='   = let (cs', w) = nextCode (c:cs)
                                       n  = B.codeNumber $ B.codePtSource cp
                                       w' = show n ++ w
@@ -289,7 +297,11 @@ scanTerm q cp = word [] where
     word _ _                    = Msg.forbiddenTerm
 
     term ns (c:cs) | isTerm c   = word ns cs
-    term ns cs                  = Right (cs, B.TTerm cp q $ rv ns)
+    term [n] cs                 = case Map.lookup n ws of
+                                    Just n' -> Right (ws, cs, B.TTerm cp q [n'])
+                                    Nothing -> let ws' = Map.insert n n ws
+                                               in Right (ws', cs, B.TTerm cp q [n])
+    term ns cs                  = Right (ws, cs, B.TTerm cp q $ rv ns)
 
 scanSlot :: Int -> Scan
 scanSlot n cp cs = let (cs', w) = nextCode cs

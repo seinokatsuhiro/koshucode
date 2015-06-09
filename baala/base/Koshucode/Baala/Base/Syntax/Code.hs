@@ -16,12 +16,14 @@ module Koshucode.Baala.Base.Syntax.Code
     codeClauseEmpty,
   
     -- * CodeRoll
-    CodeRoll (..),
+    CodeRoll (..), WordTable,
     codeRollUp,
-    codeUpdate, codeChange
+    codeUpdate, codeUpdateWords,
+    codeChange,
   ) where
 
 import qualified Data.Generics                    as G
+import qualified Data.Map                         as Map
 import qualified Koshucode.Baala.Base.Abort       as B
 import qualified Koshucode.Baala.Base.Prelude     as B
 import qualified Koshucode.Baala.Base.Text        as B
@@ -71,11 +73,14 @@ codeClauseEmpty = CodeClause [] []
 
 -- ----------------------  CodeRoll
 
+type WordTable = Map.Map String String
+
 data CodeRoll a =
     CodeRoll { codeMap     :: B.AbMap (CodeRoll a)
              , codeInputPt :: B.CodePt
              , codeInput   :: String
              , codeOutput  :: [a]
+             , codeWords   :: WordTable
              }
 
 -- | Split source text into 'CodeLine' list.
@@ -91,7 +96,7 @@ data CodeRoll a =
 --      and put tokens together in 'CodeLine'.
 --
 codeRollUp :: B.AbMap (CodeRoll a) -> B.CodePiece -> String -> B.Ab [CodeLine a]
-codeRollUp f res = loop (CodeRoll f cp "" []) . B.linesCrlfNumbered where
+codeRollUp f res = loop (CodeRoll f cp "" [] Map.empty) . B.linesCrlfNumbered where
     cp    = B.codePtZero { B.codePtSource = res }
 
     loop _ [] = Right []
@@ -128,6 +133,12 @@ codeUpdate :: String -> a -> B.Map (CodeRoll a)
 codeUpdate cs tok roll =
     roll { codeInput  = cs
          , codeOutput = tok : codeOutput roll }
+
+codeUpdateWords :: WordTable -> String -> a -> B.Map (CodeRoll a)
+codeUpdateWords ws cs tok roll =
+    roll { codeInput  = cs
+         , codeOutput = tok : codeOutput roll
+         , codeWords  = ws }
 
 -- | Change mapper of code roll.
 codeChange :: B.AbMap (CodeRoll a) -> B.Map (CodeRoll a)
