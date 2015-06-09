@@ -65,14 +65,16 @@ start f cp r@B.CodeRoll { B.codeMap    = prev
 section :: B.AbMap TokenRoll -> B.AbMap TokenRoll
 section prev r@B.CodeRoll { B.codeInputPt  = cp
                           , B.codeInput    = cs0
+                          , B.codeWords    = ws
                           } = sec cs0 where
     v    = scan r
+    vw   = scanW r
     out  = reverse $ B.sweepToken $ B.codeOutput r
 
     sec ""                    = dispatch out
     sec ('*' : '*' : _)       = dispatch out
-    sec (c:cs)  | isSpace c   = v $ scanSpace cp cs
-                | isCode c    = v $ scanCode cp (c:cs)
+    sec (c:cs)  | isSpace c   = v  $ scanSpace cp cs
+                | isCode c    = vw $ scanCode cp ws (c:cs)
                 | otherwise   = Msg.unexpSect help
 
     dispatch :: [B.Token] -> B.Ab TokenRoll
@@ -144,7 +146,7 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = start gen cp r 
                    | isQQ c          = v               $ scanQQ     cp cs
                    | isQ c           = v               $ scanQ      cp cs
                    | isShort c       = short cs [c]
-                   | isCode c        = v               $ scanCode   cp (c:cs)
+                   | isCode c        = vw              $ scanCode   cp ws (c:cs)
                    | isSpace c       = v               $ scanSpace  cp cs
                    | otherwise       = Msg.forbiddenInput $ B.shortEmpty [c]
 
@@ -161,7 +163,7 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = start gen cp r 
                    | otherwise       = Msg.unkAngleText w
 
     cket (c:cs) w  | c == '>'        = cket cs         $ c:w
-    cket cs w      | w == ">"        = v               $ scanCode   cp ('>':cs)
+    cket cs w      | w == ">"        = vw              $ scanCode   cp ws ('>':cs)
                    | w == ">>"       = u    cs         $ B.TClose   cp w
                    | w == ">>>"      = u    cs         $ B.TClose   cp w
                    | otherwise       = Msg.unkAngleText w
@@ -268,9 +270,12 @@ scanSpace cp = loop 1 where
     loop n (c:cs) | isSpace c     =  loop (n + 1) cs
     loop n cs                     =  Right (cs, B.TSpace cp n)
 
-scanCode :: Scan
-scanCode cp cs = let (cs', w) = nextCode cs
-                 in  Right (cs', B.TTextRaw cp w)
+scanCode :: ScanW
+scanCode cp ws cs = let (cs', w) = nextCode cs
+                    in case Map.lookup w ws of
+                         Just w' -> Right (ws, cs', B.TTextRaw cp w')
+                         Nothing -> let ws' = Map.insert w w ws
+                                    in Right (ws', cs', B.TTextRaw cp w)
 
 scanQ :: Scan
 scanQ cp cs =    let (cs', w) = nextCode cs
