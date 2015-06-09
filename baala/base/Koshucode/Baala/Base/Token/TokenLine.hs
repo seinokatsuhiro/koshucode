@@ -144,7 +144,7 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = start gen cp r 
                    | isSingle c      = u     cs        $ B.TTextRaw cp [c]
                    | isTerm c        = vw              $ scanTermP  cp ws cs
                    | isQQ c          = v               $ scanQQ     cp cs
-                   | isQ c           = v               $ scanQ      cp cs
+                   | isQ c           = vw              $ scanQ      cp ws cs
                    | isShort c       = short cs [c]
                    | isCode c        = vw              $ scanCode   cp ws (c:cs)
                    | isSpace c       = v               $ scanSpace  cp cs
@@ -277,9 +277,12 @@ scanCode cp ws cs = let (cs', w) = nextCode cs
                          Nothing -> let ws' = Map.insert w w ws
                                     in Right (ws', cs', B.TTextRaw cp w)
 
-scanQ :: Scan
-scanQ cp cs =    let (cs', w) = nextCode cs
-                 in Right (cs', B.TTextQ cp w)
+scanQ :: ScanW
+scanQ cp ws cs = let (cs', w) = nextCode cs
+                 in case Map.lookup w ws of
+                      Just w' -> Right (ws, cs', B.TTextQ cp w')
+                      Nothing -> let ws' = Map.insert w w ws
+                                 in Right (ws', cs', B.TTextQ cp w)
 
 scanQQ :: Scan
 scanQQ cp cs = do (cs', w) <- nextQQ cs
