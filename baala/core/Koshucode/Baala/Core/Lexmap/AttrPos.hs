@@ -84,9 +84,9 @@ a ## vv = (a, vv)
 enumAttr :: [AttrName]
 enumAttr = map (AttrNormal . show) [1 :: Int ..]
 
-isTermLeaf :: B.TTree -> Bool
-isTermLeaf (B.TreeL token) = B.isTermToken token
-isTermLeaf _               = False
+-- isTermLeaf :: B.TTree -> Bool
+-- isTermLeaf (B.TreeL token) = B.isTermToken token
+-- isTermLeaf _               = False
 
 
 -- ----------------------  Attribute name

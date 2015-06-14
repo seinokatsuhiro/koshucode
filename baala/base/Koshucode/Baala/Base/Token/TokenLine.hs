@@ -289,11 +289,11 @@ scanQQ cp cs = do (cs', w) <- nextQQ cs
                   Right (cs', B.TTextQQ cp w)
 
 scanTermP, scanTermQ :: ScanW
-scanTermP = scanTerm B.TermTypePath
-scanTermQ = scanTerm B.TermTypeQuoted
+scanTermP = scanTerm B.TTermPath
+scanTermQ = scanTerm B.TTermQ
 
-scanTerm :: B.TermType -> ScanW
-scanTerm q cp ws = word [] where
+scanTerm :: (B.CodePt -> B.TermPath -> B.Token) -> ScanW
+scanTerm k cp ws = word [] where
     word ns (c:cs) | c == '='   = let (cs', w) = nextCode (c:cs)
                                       n  = B.codeNumber $ B.codePtSource cp
                                       w' = show n ++ w
@@ -306,10 +306,10 @@ scanTerm q cp ws = word [] where
 
     term ns (c:cs) | isTerm c   = word ns cs
     term [n] cs                 = case Map.lookup n ws of
-                                    Just n' -> Right (ws, cs, B.TTerm cp q [n'])
+                                    Just n' -> Right (ws, cs, k cp [n'])
                                     Nothing -> let ws' = Map.insert n n ws
-                                               in Right (ws', cs, B.TTerm cp q [n])
-    term ns cs                  = Right (ws, cs, B.TTerm cp q $ rv ns)
+                                               in Right (ws', cs, k cp [n])
+    term ns cs                  = Right (ws, cs, k cp $ rv ns)
 
 scanSlot :: Int -> Scan
 scanSlot n cp cs = let (cs', w) = nextCode cs

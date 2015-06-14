@@ -116,7 +116,7 @@ runAttrEd (B.Sourced toks edit) attr = run where
 
 termPath :: B.AbMap [B.TTree]
 termPath = loop [] where
-    loop path [] = Right [B.TreeL $ B.TTerm B.codePtZero B.TermTypePath $ reverse path]
+    loop path [] = Right [B.TreeL $ B.TTermPath B.codePtZero $ reverse path]
     loop path (B.TermLeafPath _ ps : xs)  = loop (reverse ps ++ path) xs
     loop _ _                              = Msg.adlib "require term name"
 
