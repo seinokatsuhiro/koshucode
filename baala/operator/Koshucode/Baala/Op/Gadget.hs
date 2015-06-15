@@ -16,6 +16,9 @@ module Koshucode.Baala.Op.Gadget
     consSize, relmapSize, relkitSize,
     -- $size
   
+    -- * eqlize
+    consEqlize, relmapEqlize, relkitEqlize,
+
     -- * dump-tree
     consDumpTree,
   ) where
@@ -48,6 +51,7 @@ ropsGadget = Op.ropList "gadget"  -- GROUP
     [ Op.def  consContents      "contents /N"              "V -term"
     , Op.def  consDumpTree      "dump-tree X"              "V -tree"
     , Op.def  consDepRank       "dependent-rank /P /P -rank /N"     "2 -x -y | -rank"
+    , Op.def  consEqlize        "eqlize"                   "0"
     , Op.def  consVisitDistance "visit-distance R -step /P ... -to /N -distance /N"  "1 -relmap/ | -step -to -distance"
     , Op.def  consSize          "size /N"                  "1 -term"
     ]
@@ -226,6 +230,41 @@ relkitSize n _ = Right kit2 where
     he2       = B.headFrom [n]
     kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
     kitf2 bo1 = [[ C.pDecFromInt $ length bo1 ]]
+
+
+-- ----------------------  eqlize
+
+consEqlize :: (Ord c) => C.RopCons c
+consEqlize med = Right $ relmapEqlize med
+
+relmapEqlize :: (Ord c) => C.Intmed c -> C.Relmap c
+relmapEqlize med = C.relmapFlow med relkitEqlize
+
+relkitEqlize :: (Ord c) => C.RelkitFlow c
+relkitEqlize Nothing = Right C.relkitNothing
+relkitEqlize (Just he1) = Right kit2 where
+    kit2       = C.relkitJust he1 $ C.RelkitFull False kitf2
+    kitf2 bo1  = case eqlizeBody Map.empty bo1 of
+                   (_, bo2) -> bo2
+
+eqlize :: (Ord c) => Map.Map c c -> c -> (Map.Map c c, c)
+eqlize m c = case Map.lookup c m of
+               Just c' -> (m, c')
+               Nothing -> (Map.insert c c m, c)
+
+eqlizeList :: (Ord c) => Map.Map c c -> [c] -> (Map.Map c c, [c])
+eqlizeList = loop where
+    loop m [] = (m, [])
+    loop m (c : cs) = let (m1, c')  = eqlize m c
+                          (m2, cs') = loop m1 cs
+                      in (m2, c' : cs')
+
+eqlizeBody :: (Ord c) => Map.Map c c -> [[c]] -> (Map.Map c c, [[c]])
+eqlizeBody = loop where
+    loop m [] = (m, [])
+    loop m (t : ts) = let (m1, t')  = eqlizeList m t
+                          (m2, ts') = loop m1 ts
+                      in (m2, t' : ts')
 
 
 -- ----------------------  dump-tree
