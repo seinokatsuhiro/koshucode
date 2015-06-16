@@ -138,6 +138,7 @@ flatnames trees =
 
 -- | Get term name as string only if term is flat.
 flatname :: B.TTree -> Maybe B.TermName
+flatname (B.TermLeafName _ n)  = Just n
 flatname (B.TermLeaf _ _ [n])  = Just n
 flatname _                     = Nothing
 

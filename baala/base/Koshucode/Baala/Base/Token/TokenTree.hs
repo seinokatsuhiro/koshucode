@@ -15,6 +15,7 @@ module Koshucode.Baala.Base.Token.TokenTree
 
     -- * Pattern
     pattern TermLeaf,
+    pattern TermLeafName,
     pattern TermLeafPath,
     pattern TermLeafLocal,
     pattern TextLeaf,
@@ -75,6 +76,7 @@ pattern TermLeafLocal cp v e ps = B.TreeL (B.TLocal cp v e ps)
 
 -- term leaf
 pattern TermLeaf      cp q ws   = B.TreeL (B.TTerm   cp q ws)
+pattern TermLeafName  cp w      = B.TreeL (B.TTermN  cp w)
 pattern TermLeafPath  cp ws     = TermLeaf cp B.TermTypePath ws
 
 -- text leaf

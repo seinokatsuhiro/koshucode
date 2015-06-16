@@ -63,6 +63,7 @@ contentCons calc tree = Msg.abLiteral tree $ cons tree where
     token :: B.Token -> B.Ab c
     token (B.TText _ n w) | n <= B.TextRaw  = keyword w
     token (B.TText _ _ w)                   = C.putText w
+    token (B.TTermN _ n)                    = C.putTerm n
     token (B.TTerm _ _ [n])                 = C.putTerm n
     token t                                 = Msg.unkWord $ B.tokenContent t
 
@@ -110,6 +111,7 @@ consContents cons cs = lt `mapM` B.divideTreesByBar cs where
 --      consAngle                consAngle
 
 consAngle :: (C.CContent c) => ContentCons c -> B.TTreesToAb c
+consAngle cons xs@(B.TermLeafName _ _ : _) = C.putAssn =<< consAssn cons xs
 consAngle cons xs@(B.TermLeafPath _ _ : _) = C.putAssn =<< consAssn cons xs
 consAngle _ [] = C.putAssn []
 consAngle _ [B.TextLeafRaw _ "words", B.TextLeafQQ _ ws] = C.putList $ map C.pText $ words ws
@@ -155,6 +157,7 @@ consRel cons xs =
 
 consTermNames :: B.TTreesTo ([B.TermName], [B.TTree])
 consTermNames = terms [] where
+    terms ns (B.TermLeafName _ n   : xs) = terms (n : ns) xs
     terms ns (B.TermLeafPath _ [n] : xs) = terms (n : ns) xs
     terms ns xs = (reverse ns, xs)
 

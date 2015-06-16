@@ -14,8 +14,9 @@ import qualified Koshucode.Baala.Op.Message as Msg
 
 -- | Extract a term name.
 termName :: B.TTree -> B.Ab B.TermName
+termName (B.TermLeafName _ n) = Right n
 termName (B.TermLeaf _ _ [n]) = Right n
-termName _ = Msg.reqTermName
+termName _                    = Msg.reqTermName
 
 -- | Extract a list of term names.
 -- 
@@ -53,6 +54,7 @@ termNamePairs = loop where
 -- Right [["a", "b"], ["x", "y"]]
 termNamesColon :: [B.TTree] -> B.Ab [[B.TermName]]
 termNamesColon = loop [] [] where
+    loop ret ns (B.TermLeafName _ n : ts)   = loop ret (n : ns) ts
     loop ret ns (B.TermLeaf _ _ [n] : ts)   = loop ret (n : ns) ts
     loop ret ns (B.TextLeafRaw _ ":" : ts)  = loop (reverse ns : ret) [] ts
     loop ret ns []                          = Right $ reverse $ reverse ns : ret

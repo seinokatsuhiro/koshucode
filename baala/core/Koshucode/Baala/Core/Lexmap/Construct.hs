@@ -82,7 +82,7 @@ consLexmap findSorter gslot findDeriv = lexmap 0 where
             = lexmap eid sec ts                   -- group "( ... )"
         single [B.TreeB _ _ _]
             = Msg.reqGroup                        -- unknown group
-        single (n@(B.TermLeaf _ _ [_]) : ts)
+        single (n@(B.TermLeafName _ _) : ts)
             = baseOf "add" $ n : [B.ttreeGroup ts] -- "/N E" means "add /N ( E )"
         single []
             = baseOf "id" []                      -- "| R | R" means "id | R | R"
