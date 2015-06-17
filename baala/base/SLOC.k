@@ -7,11 +7,11 @@ about /package 'base
 |-- DIR  /code 100  /comment 58   /dir "base/Koshucode/Baala/Base/Abort"
 |-- DIR  /code 1468  /comment 811  /dir "base/Koshucode/Baala/Base/Data"
 |-- DIR  /code 524  /comment 485  /dir "base/Koshucode/Baala/Base/Prelude"
-|-- DIR  /code 272  /comment 190  /dir "base/Koshucode/Baala/Base/Syntax"
+|-- DIR  /code 281  /comment 192  /dir "base/Koshucode/Baala/Base/Syntax"
 |-- DIR  /code 521  /comment 291  /dir "base/Koshucode/Baala/Base/Text"
-|-- DIR  /code 736  /comment 523  /dir "base/Koshucode/Baala/Base/Token"
+|-- DIR  /code 765  /comment 524  /dir "base/Koshucode/Baala/Base/Token"
 
-|-- DIR-TOTAL  /code 3800  /comment 2444
+|-- DIR-TOTAL  /code 3838  /comment 2447
 
 |-- FILE  /code 14   /comment 4    /file "Base.hs"        /dir "base/Koshucode/Baala"
 |-- FILE  /code 8    /comment 6    /file "Abort.hs"       /dir "base/Koshucode/Baala/Base"
@@ -41,7 +41,7 @@ about /package 'base
 |-- FILE  /code 35   /comment 12   /file "Pair.hs"        /dir "base/Koshucode/Baala/Base/Prelude"
 |-- FILE  /code 74   /comment 114  /file "Snip.hs"        /dir "base/Koshucode/Baala/Base/Prelude"
 |-- FILE  /code 10   /comment 6    /file "Syntax.hs"      /dir "base/Koshucode/Baala/Base"
-|-- FILE  /code 82   /comment 53   /file "Code.hs"        /dir "base/Koshucode/Baala/Base/Syntax"
+|-- FILE  /code 91   /comment 55   /file "Code.hs"        /dir "base/Koshucode/Baala/Base/Syntax"
 |-- FILE  /code 68   /comment 50   /file "Infix.hs"       /dir "base/Koshucode/Baala/Base/Syntax"
 |-- FILE  /code 20   /comment 14   /file "Line.hs"        /dir "base/Koshucode/Baala/Base/Syntax"
 |-- FILE  /code 102  /comment 73   /file "Tree.hs"        /dir "base/Koshucode/Baala/Base/Syntax"
@@ -57,9 +57,9 @@ about /package 'base
 |-- FILE  /code 14   /comment 6    /file "Token.hs"       /dir "base/Koshucode/Baala/Base"
 |-- FILE  /code 53   /comment 72   /file "AngleText.hs"   /dir "base/Koshucode/Baala/Base/Token"
 |-- FILE  /code 57   /comment 32   /file "Short.hs"       /dir "base/Koshucode/Baala/Base/Token"
-|-- FILE  /code 246  /comment 117  /file "Token.hs"       /dir "base/Koshucode/Baala/Base/Token"
+|-- FILE  /code 253  /comment 117  /file "Token.hs"       /dir "base/Koshucode/Baala/Base/Token"
 |-- FILE  /code 36   /comment 14   /file "TokenClause.hs"  /dir "base/Koshucode/Baala/Base/Token"
-|-- FILE  /code 232  /comment 189  /file "TokenLine.hs"   /dir "base/Koshucode/Baala/Base/Token"
-|-- FILE  /code 112  /comment 99   /file "TokenTree.hs"   /dir "base/Koshucode/Baala/Base/Token"
+|-- FILE  /code 252  /comment 190  /file "TokenLine.hs"   /dir "base/Koshucode/Baala/Base/Token"
+|-- FILE  /code 114  /comment 99   /file "TokenTree.hs"   /dir "base/Koshucode/Baala/Base/Token"
 
-|-- FILE-TOTAL  /code 3800  /comment 2444
+|-- FILE-TOTAL  /code 3838  /comment 2447

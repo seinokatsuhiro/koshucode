@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    115 judges
+**    116 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Op.Builtin.Define"         /import "Koshucode.Baala.Base"
@@ -48,6 +48,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Op.DepRank"                /import "Data.Map"
 |-- IMPORT  /module "Koshucode.Baala.Op.DepRank"                /import "Koshucode.Baala.Base"
 
+|-- IMPORT  /module "Koshucode.Baala.Op.Gadget"                 /import "Data.Map.Strict"
 |-- IMPORT  /module "Koshucode.Baala.Op.Gadget"                 /import "Koshucode.Baala.Base"
 |-- IMPORT  /module "Koshucode.Baala.Op.Gadget"                 /import "Koshucode.Baala.Core"
 |-- IMPORT  /module "Koshucode.Baala.Op.Gadget"                 /import "Koshucode.Baala.Op.Builtin"

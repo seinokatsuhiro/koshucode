@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    206 judges
+**    208 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Abortable"      /import "Koshucode.Baala.Base.Prelude"
@@ -151,6 +151,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Prelude"              /import "Koshucode.Baala.Base.Prelude.Snip"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Code"          /import "Data.Generics"
+|-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Code"          /import "Data.Map"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Code"          /import "Koshucode.Baala.Base.Abort"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Code"          /import "Koshucode.Baala.Base.Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Base.Syntax.Code"          /import "Koshucode.Baala.Base.Text"
@@ -231,6 +232,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Token.TokenClause"    /import "Koshucode.Baala.Base.Token.Token"
 |-- IMPORT  /module "Koshucode.Baala.Base.Token.TokenClause"    /import "Koshucode.Baala.Base.Token.TokenLine"
 
+|-- IMPORT  /module "Koshucode.Baala.Base.Token.TokenLine"      /import "Data.Map"
 |-- IMPORT  /module "Koshucode.Baala.Base.Token.TokenLine"      /import "Data.Char"
 |-- IMPORT  /module "Koshucode.Baala.Base.Token.TokenLine"      /import "Koshucode.Baala.Base.Abort"
 |-- IMPORT  /module "Koshucode.Baala.Base.Token.TokenLine"      /import "Koshucode.Baala.Base.Prelude"
