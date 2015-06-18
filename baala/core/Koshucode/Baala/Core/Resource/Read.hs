@@ -11,6 +11,7 @@ module Koshucode.Baala.Core.Resource.Read
   ) where
 
 import qualified System.Directory                        as Dir
+import qualified System.FilePath                         as Path
 import qualified Control.Monad.State                     as M
 import qualified Koshucode.Baala.Base                    as B
 import qualified Koshucode.Baala.Core.Content            as C
@@ -68,11 +69,13 @@ readResource res@C.Resource { C.resInputStack = article@(todo, _, done) }
 readResourceOne :: forall c. (C.CContent c) =>
     C.Resource c -> B.CodePiece -> ResourceIO c
 readResourceOne res src = dispatch $ B.codeName src where
-    dispatch (B.IOPointFile path) =
-        gio $ do exist <- Dir.doesFileExist path
+    dispatch (B.IOPointFile cd path) =
+        gio $ do let path' = cd ++ path
+                     cd'   = cd ++ Path.dropFileName path
+                 exist <- Dir.doesFileExist path'
                  case exist of
-                   True   -> include =<< readFile path
-                   False  -> return $ Msg.noFile path
+                   True   -> includeUnder cd' =<< readFile path'
+                   False  -> return $ Msg.noFile cd path
 
     dispatch (B.IOPointUri url) =
         do g <- M.get
@@ -86,12 +89,15 @@ readResourceOne res src = dispatch $ B.codeName src where
     dispatch (B.IOPointStdin)      = gio $ include =<< getContents
     dispatch (B.IOPointStdout)     = B.bug "readResourceOne"
 
-    include :: String -> IO (C.AbResource c)
-    include = return . C.resInclude res src
+    include :: FilePath -> IO (C.AbResource c)
+    include = includeUnder ""
+
+    includeUnder :: FilePath -> FilePath -> IO (C.AbResource c)
+    includeUnder cd = return . C.resInclude cd res src
 
 -- | Read resource from text.
 readResourceText :: (C.CContent c) => C.Resource c -> String -> C.AbResource c
-readResourceText res code = C.resInclude res (B.codeTextOf code) code
+readResourceText res code = C.resInclude "" res (B.codeTextOf code) code
 
 readSources :: forall c. (C.CContent c) => [B.IOPoint] -> ResourceIO c
 readSources src =

@@ -24,20 +24,21 @@ type Include c = C.ClauseHead -> [B.Token] -> C.ClauseBody -> B.Ab (C.Resource c
 
 -- | Include source code into resource.
 resInclude :: forall c. (C.CContent c)
-    => C.Resource c     -- ^ Base resource
+    => FilePath         -- ^ Context directory
+    -> C.Resource c     -- ^ Base resource
     -> B.CodePiece      -- ^ Source name
     -> String           -- ^ Source code
     -> C.AbResource c   -- ^ Included resource
-resInclude res src code =
+resInclude cd res src code =
     do ls <- B.tokenLines src code
        let sec  = C.resLastSecNo res + 1
            cs   = C.consClause sec ls
-       res2 <- B.foldM resIncludeBody res $ reverse cs
+       res2 <- B.foldM (resIncludeBody cd) res $ reverse cs
        Right res2 { C.resSelect = C.datasetSelect $ C.dataset $ C.resJudge res2 }
 
 resIncludeBody :: forall c. (C.CContent c) =>
-    C.Resource c -> B.Ab C.Clause -> C.AbResource c
-resIncludeBody res abcl =
+    FilePath -> C.Resource c -> B.Ab C.Clause -> C.AbResource c
+resIncludeBody cd res abcl =
     do C.Clause h b <- abcl
        let sec   = C.clauseSecNo h
            toks  = B.front $ B.clauseTokens $ C.clauseSource h
@@ -100,7 +101,7 @@ resIncludeBody res abcl =
              checkIOPoint $ res { C.resOutput = io }
 
       ioPoint :: [B.Token] -> B.Ab B.IOPoint
-      ioPoint = C.ttreePara2 B.>=> paraToIOPoint
+      ioPoint = C.ttreePara2 B.>=> paraToIOPoint cd
 
       checkIOPoint :: B.AbMap (C.Resource c)
       checkIOPoint res' = let ins = C.resInput  res'
@@ -120,14 +121,14 @@ coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)
 calcContG :: (C.CContent c) => C.Global c -> C.ContentCalc c
 calcContG = C.calcContent . C.globalCopset
 
-paraToIOPoint :: C.TTreePara -> B.Ab B.IOPoint
-paraToIOPoint = B.paraSelect unmatch ps where
+paraToIOPoint :: FilePath -> C.TTreePara -> B.Ab B.IOPoint
+paraToIOPoint cd = B.paraSelect unmatch ps where
     ps = [ (just1, B.paraType `B.paraJust` 1)
          , (stdin, B.paraType `B.paraReq` ["stdin"]) ]
 
     just1 p = do arg <- B.paraGetFst p
                  case arg of
-                   B.TextLeaf _ _ path -> Right $ B.ioPointFrom path
+                   B.TextLeaf _ _ path -> Right $ B.ioPointFrom cd path
                    _ -> Msg.adlib "input not text"
 
     stdin p = do args <- B.paraGet p "stdin"

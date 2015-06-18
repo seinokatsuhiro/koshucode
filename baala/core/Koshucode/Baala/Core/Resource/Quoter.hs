@@ -45,7 +45,7 @@ resIncludeQ
     -> TH.ExpQ      -- ^ ExpQ of 'Resource'
 resIncludeQ fullQ xs =
     [| either consError id
-         (C.resInclude C.resEmpty (B.codeTextOf "qq")
+         (C.resInclude "" C.resEmpty (B.codeTextOf "qq")
                $(TH.dataToExpQ plain xs)) |]
 
 {- construction error -}

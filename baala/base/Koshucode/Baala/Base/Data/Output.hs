@@ -138,7 +138,7 @@ putResout ro =
     case resoutOutput ro of
       B.IOPointStdout ->
           hPutResourceOutput IO.stdout ro
-      B.IOPointFile path ->
+      B.IOPointFile _ path ->
           do h <- IO.openFile path IO.WriteMode
              n <- hPutResourceOutput h ro
              IO.hClose h

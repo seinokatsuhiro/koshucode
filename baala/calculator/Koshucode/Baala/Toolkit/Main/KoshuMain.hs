@@ -105,7 +105,7 @@ koshuMain g =
              has   = (`elem` opts)
              text  = concatMap oneLiner opts
              root  = C.resEmpty { C.resGlobal = g2 }
-             src   = B.ioPointList (has OptStdin) text paths
+             src   = B.ioPointList (has OptStdin) text "" paths
              g2    = C.globalFill g
                        { C.globalProgram   = prog
                        , C.globalArgs      = argv

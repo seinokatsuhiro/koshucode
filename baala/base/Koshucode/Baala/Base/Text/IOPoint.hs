@@ -19,42 +19,42 @@ import qualified Koshucode.Baala.Base.Prelude as B
 -- ----------------------  IOPoint
 
 data IOPoint
-    = IOPointFile  FilePath
-    | IOPointUri   String
-    | IOPointText  String
-    | IOPointStdin
-    | IOPointStdout
+    = IOPointFile  FilePath FilePath   -- ^ Context directory and target path
+    | IOPointUri   String              -- ^ Universal resource identifier
+    | IOPointText  String              -- ^ Code itself
+    | IOPointStdin                     -- ^ Sandard input
+    | IOPointStdout                    -- ^ Sandard output
       deriving (Show, Eq, Ord, G.Data, G.Typeable)
 
 -- | Name of I/O point, i.e., @\"file\"@, @\"url\"@, @\"text\"@,
 --   @\"stdin\"@, or @\"stdout\"@.
 ioPointType :: IOPoint -> String
-ioPointType (IOPointFile _)     = "file"
+ioPointType (IOPointFile _ _)   = "file"
 ioPointType (IOPointUri  _)     = "url"
 ioPointType (IOPointText _)     = "text"
 ioPointType (IOPointStdin)      = "stdin"
 ioPointType (IOPointStdout)     = "stdout"
 
 ioPointText :: IOPoint -> String
-ioPointText (IOPointFile file)  = file
-ioPointText (IOPointUri  url)   = url
-ioPointText (IOPointText text)  = text
-ioPointText (IOPointStdin)      = "<stdin>"
-ioPointText (IOPointStdout)     = "<stdout>"
+ioPointText (IOPointFile _ file) = file
+ioPointText (IOPointUri  url)    = url
+ioPointText (IOPointText text)   = text
+ioPointText (IOPointStdin)       = "<stdin>"
+ioPointText (IOPointStdout)      = "<stdout>"
 
-ioPointFrom :: String -> IOPoint
-ioPointFrom path
+ioPointFrom :: FilePath -> FilePath -> IOPoint
+ioPointFrom context path
     | B.isPrefixOf "http://"  path  = IOPointUri  path
     | B.isPrefixOf "https://" path  = IOPointUri  path
     | B.isPrefixOf "ftp://"   path  = IOPointUri  path
-    | otherwise                     = IOPointFile path
+    | otherwise                     = IOPointFile context path
 
 -- | Create I/O points from using stdin, texts itself, filenames, and urls.
-ioPointList :: Bool -> [String] -> [FilePath] -> [IOPoint]
-ioPointList stdin texts paths =
+ioPointList :: Bool -> [String] -> FilePath -> [FilePath] -> [IOPoint]
+ioPointList stdin texts context paths =
     B.consIf stdin IOPointStdin $
          IOPointText `map` texts ++
-         ioPointFrom `map` paths
+         ioPointFrom context `map` paths
 
 
 -- ----------------------  CodePiece

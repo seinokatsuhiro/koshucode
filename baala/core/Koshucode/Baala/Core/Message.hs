@@ -195,8 +195,9 @@ lackArg :: String -> B.Ab a
 lackArg = Left . B.abortLine "Lack of argument"
 
 -- | File not found
-noFile :: String -> B.Ab a
-noFile = Left . B.abortLine "File not found"
+noFile :: FilePath -> String -> B.Ab a
+noFile "" path = Left $ B.abortLine "File not found" path
+noFile cd path = Left $ B.abortLines "File not found" [path, "directory: " ++ cd]
 
 -- | No slot content
 noSlotName :: Int -> String -> B.Ab a
