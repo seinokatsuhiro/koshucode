@@ -112,7 +112,6 @@ consContents cons cs = lt `mapM` B.divideTreesByBar cs where
 
 consAngle :: (C.CContent c) => ContentCons c -> B.TTreesToAb c
 consAngle cons xs@(B.TermLeafName _ _ : _) = C.putAssn =<< consAssn cons xs
-consAngle cons xs@(B.TermLeafPath _ _ : _) = C.putAssn =<< consAssn cons xs
 consAngle _ [] = C.putAssn []
 consAngle _ [B.TextLeafRaw _ "words", B.TextLeafQQ _ ws] = C.putList $ map C.pText $ words ws
 consAngle _ _ = Msg.adlib "unknown angle bracket"
@@ -158,7 +157,6 @@ consRel cons xs =
 consTermNames :: B.TTreesTo ([B.TermName], [B.TTree])
 consTermNames = terms [] where
     terms ns (B.TermLeafName _ n   : xs) = terms (n : ns) xs
-    terms ns (B.TermLeafPath _ [n] : xs) = terms (n : ns) xs
     terms ns xs = (reverse ns, xs)
 
 consRelTuple :: (C.CContent c) => ContentCons c -> Int -> B.TTreeToAb [c]
