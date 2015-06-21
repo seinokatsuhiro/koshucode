@@ -70,8 +70,8 @@ readResourceOne :: forall c. (C.CContent c) =>
     C.Resource c -> B.CodePiece -> ResourceIO c
 readResourceOne res src = dispatch $ B.codeName src where
     dispatch (B.IOPointFile cd path) =
-        gio $ do let path' = cd ++ path
-                     cd'   = cd ++ Path.dropFileName path
+        gio $ do let path' = putDir cd path
+                     cd'   = putDir cd $ Path.dropFileName path
                  exist <- Dir.doesFileExist path'
                  case exist of
                    True   -> includeUnder cd' =<< readFile path'
@@ -88,6 +88,11 @@ readResourceOne res src = dispatch $ B.codeName src where
     dispatch (B.IOPointText text)  = gio $ include text
     dispatch (B.IOPointStdin)      = gio $ include =<< getContents
     dispatch (B.IOPointStdout)     = B.bug "readResourceOne"
+
+    putDir dir path  = cutDot dir ++ cutDot path
+
+    cutDot ('.' : '/' : path) = cutDot path
+    cutDot path               = path
 
     include :: FilePath -> IO (C.AbResource c)
     include = includeUnder ""

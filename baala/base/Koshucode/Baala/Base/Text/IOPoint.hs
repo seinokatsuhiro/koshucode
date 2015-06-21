@@ -36,11 +36,11 @@ ioPointType (IOPointStdin)      = "stdin"
 ioPointType (IOPointStdout)     = "stdout"
 
 ioPointText :: IOPoint -> String
-ioPointText (IOPointFile _ file) = file
-ioPointText (IOPointUri  url)    = url
-ioPointText (IOPointText text)   = text
-ioPointText (IOPointStdin)       = "<stdin>"
-ioPointText (IOPointStdout)      = "<stdout>"
+ioPointText (IOPointFile dir file) = dir ++ file
+ioPointText (IOPointUri  url)      = url
+ioPointText (IOPointText text)     = text
+ioPointText (IOPointStdin)         = "<stdin>"
+ioPointText (IOPointStdout)        = "<stdout>"
 
 ioPointFrom :: FilePath -> FilePath -> IOPoint
 ioPointFrom context path
