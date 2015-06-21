@@ -16,6 +16,8 @@ module Koshucode.Baala.Base.Prelude.Import
     Data.List.intercalate,
     Data.List.intersect,
     Data.List.isPrefixOf,
+    Data.List.isInfixOf,
+    Data.List.isSuffixOf,
     Data.List.sort,
     Data.List.transpose,
     (Data.List.\\),

@@ -7,7 +7,7 @@ module Koshucode.Baala.Core.Content.Class
   
     -- * Haskell data type
     -- ** Boolean
-    CBool (..), true, false,
+    CBool (..), true, false, putTrue, putFalse,
     -- ** Text
     CText (..), pTextList, pTextSet,
     -- ** List
@@ -88,6 +88,12 @@ class (CTypeOf c) => CBool c where
 true, false :: (CBool c) => c
 true  = pBool True
 false = pBool False
+
+putTrue :: (CBool c) => B.Ab c
+putTrue  = putBool True
+
+putFalse :: (CBool c) => B.Ab c
+putFalse = putBool False
 
 class (CTypeOf c) => CText c where
     isText      ::       c -> Bool

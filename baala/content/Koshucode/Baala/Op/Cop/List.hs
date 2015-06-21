@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
 -- | Content operators.
@@ -51,6 +52,9 @@ copsList =
     , C.CopCalc  (C.copNormal "intersect")     copIntersect
     , C.CopCalc  (C.copNormal "length")        copLength
     , C.CopCalc  (C.copNormal "list")          copList
+    , C.CopCalc  (C.copNormal "match-beg")     $ copMatchBeg
+    , C.CopCalc  (C.copNormal "match-end")     $ copMatchBeg
+    , C.CopCalc  (C.copNormal "match-mid")     $ copMatchBeg
     , C.CopCalc  (C.copNormal "max")           copMax
     , C.CopCalc  (C.copNormal "min")           copMin
     , C.CopCalc  (C.copNormal "minus")         copMinus
@@ -199,6 +203,25 @@ copPush arg =
              | C.isSet cs -> C.putSet $ c : C.gSet cs
              | otherwise  -> Msg.reqCollection
          _ -> typeUnmatch arg
+
+
+-- --------------------------------------------  match-xxx
+
+copMatchBeg :: (C.CContent c) => C.CopCalc c
+copMatchBeg = op where
+    match g part whole = C.putBool $ B.isPrefixOf (g part) (g whole)
+    op arg = do arg2 <- C.getArg2 arg
+                case arg2 of
+                  (Right part, Right whole)
+                      | isText2 part whole -> match C.gText part whole
+                      | isList2 part whole -> match C.gList part whole
+                  _ -> C.putFalse
+
+isList2 :: (C.CList c) => c -> c -> Bool
+isList2 x y = C.isList x && C.isList y
+
+isText2 :: (C.CText c) => c -> c -> Bool
+isText2 x y = C.isText x && C.isText y
 
 
 -- --------------------------------------------  in
