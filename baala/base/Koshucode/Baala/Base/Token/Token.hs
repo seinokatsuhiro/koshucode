@@ -41,7 +41,7 @@ module Koshucode.Baala.Base.Token.Token
     termsP, termsN, termsPN,
   
     -- * Selectors
-    tokenContent,
+    tokenContent, untoken,
     tokenTypeText, tokenSubtypeText,
     tokenParents,
     -- $Selector
@@ -268,6 +268,28 @@ tokenContent :: Token -> String
 tokenContent tok =
     case tok of
       TText     _ _ s    -> s
+      TName     _ op     -> B.name op
+      TShort    _ a b    -> a ++ "." ++ b
+      TTermN    _ n      -> '/' : n
+      TTerm     _ _ ns   -> concatMap ('/' :) ns
+      TLocal    _ n _ _  -> unlocal n
+      TSlot     _ _ s    -> s
+      TOpen     _ s      -> s
+      TClose    _ s      -> s
+      TSpace    _ n      -> replicate n ' '
+      TComment  _ s      -> s
+
+untoken :: Token -> String
+untoken tok =
+    case tok of
+      TText     _ q s    -> case q of
+                              TextUnk  -> s
+                              TextRaw  -> s
+                              TextQ    -> "'" ++ s
+                              TextQQ   -> "\"" ++ s ++ "\""
+                              TextKey  -> s
+                              TextBar  -> s
+                              TextName -> s
       TName     _ op     -> B.name op
       TShort    _ a b    -> a ++ "." ++ b
       TTermN    _ n      -> '/' : n
