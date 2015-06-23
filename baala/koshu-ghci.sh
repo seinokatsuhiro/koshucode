@@ -14,22 +14,41 @@ pkg_dir () {
     pwd | sed -n 's:\(.*/koshucode-master/baala/[a-z]*\).*:\1:p'
 }
 
-cabal_repl () {
+cabal_repl () {(
     echo "-- Repl in $1"
     cd "$1"
     cabal repl
+)}
+
+koshu_ghci () {
+    if [ -f cabal.sandbox.config ]; then
+        cabal_repl `pwd`
+    elif [ -d "$PKG_DIR" ]; then
+        cabal_repl "$PKG_DIR"
+    elif [ -d "$KOSHU_DIR" ]; then
+        cabal_repl "$KOSHU_DIR"
+    else
+        help
+    fi
+}
+
+koshu_ghc () {
+    if [ -d "$KOSHU_PKG_DB" ]; then
+        echo "-- Package DB: $KOSHU_PKG_DB"
+        ghc -rtsopts -package-db "$KOSHU_PKG_DB" "$@"
+    else
+        help
+    fi
 }
 
 PKG_DIR=`pkg_dir`
 PROG_DIR=`dirname $0`
-KOSHU_DIR=$PROG_DIR/koshucode-master/baala/calculator
+KOSHU_MASTER=$PROG_DIR/koshucode-master
+KOSHU_DIR=$KOSHU_MASTER/baala/calculator
+KOSHU_PKG_DB=`echo $KOSHU_MASTER/baala/cabal/sandbox/*-packages.conf.d`
 
-if [ $# != 0 ]; then
-    help
-elif [ -d "$PKG_DIR" ]; then
-    ( cabal_repl "$PKG_DIR" )
-elif [ -d "$KOSHU_DIR" ]; then
-    ( cabal_repl "$KOSHU_DIR" )
+if [ $# = 0 ]; then
+    koshu_ghci
 else
-    help
+    koshu_ghc "$@"
 fi
