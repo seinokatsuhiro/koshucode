@@ -1,16 +1,17 @@
 NAME
 ----------------------
 
-koshucode — a notational system for relational data
+koshucode — a notational system for relational model
 
 
 DESCRIPTION
 ----------------------
 
 This repository contains a computer program named `koshu`
-that processes data written in koshucode.
-Koshucode is a notation for people and computers
+that processes data written in Koshucode.
+Koshucode is a notational system for people and computers
 who read, write, and calculate relational data.
+This notation widely improves the data literacy of all human beings.
 
 There are no released packages yet.
 Please download a zipped repository file from GitHub.
