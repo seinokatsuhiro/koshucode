@@ -98,9 +98,9 @@ resIncludeBody cd res abcl =
       output :: Include c
       output _ _ (C.COutput toks) =
           do io <- ioPoint toks
-             checkIOPoint $ res { C.resOutput = io }
+             checkIOPoint $ res { C.resOutput = C.inputPoint io }
 
-      ioPoint :: [B.Token] -> B.Ab B.IOPoint
+      ioPoint :: [B.Token] -> B.Ab C.InputPoint
       ioPoint = C.ttreePara2 B.>=> paraToIOPoint cd
 
       checkIOPoint :: B.AbMap (C.Resource c)
@@ -114,26 +114,28 @@ resIncludeBody cd res abcl =
       echo _ _ (C.CEcho clause) =
           Right $ res { C.resEcho = C.resEcho << B.clauseLines clause }
 
-
 coxBuildG :: (C.CContent c) => C.Global c -> B.TTreeToAb (C.Cox c)
 coxBuildG g = C.coxBuild (calcContG g) (C.globalCopset g)
 
 calcContG :: (C.CContent c) => C.Global c -> C.ContentCalc c
 calcContG = C.calcContent . C.globalCopset
 
-paraToIOPoint :: FilePath -> C.TTreePara -> B.Ab B.IOPoint
+paraToIOPoint :: FilePath -> C.TTreePara -> B.Ab C.InputPoint
 paraToIOPoint cd = B.paraSelect unmatch ps where
-    ps = [ (just1, B.paraType `B.paraJust` 1)
+    ps = [ (just1, B.paraType `B.paraJust` 1 `B.paraOpt` ["add"])
          , (stdin, B.paraType `B.paraReq` ["stdin"]) ]
 
+    just1 :: C.TTreePara -> B.Ab C.InputPoint
     just1 p = do arg <- B.paraGetFst p
+                 add <- B.paraGetOpt [] p "add"
                  case arg of
-                   B.TextLeaf _ _ path -> Right $ B.ioPointFrom cd path
+                   B.TextLeaf _ _ path -> Right $ C.InputPoint (B.ioPointFrom cd path) add
                    _ -> Msg.adlib "input not text"
 
+    stdin :: C.TTreePara -> B.Ab C.InputPoint
     stdin p = do args <- B.paraGet p "stdin"
                  case args of
-                   [] -> Right B.IOPointStdin
+                   [] -> Right $ C.InputPoint B.IOPointStdin []
                    _  -> Msg.adlib "input no args"
 
     unmatch = Msg.adlib "input unknown"

@@ -49,14 +49,15 @@ readResource res@C.Resource { C.resInputStack = article@(todo, _, done) }
         ([], [], _)            -> return $ Right res
         (_ , [], _)            -> readResource res { C.resInputStack = ([], todo', done) }
         (_ , src : _, _)
-            | B.CodePiece 0 src `elem` done
+            | B.CodePiece 0 srcPt `elem` done
                                -> readResource $ pop res
             | otherwise        -> do n <- nextSourceCount
-                                     let src' = B.CodePiece n src
+                                     let src' = B.CodePiece n srcPt
                                      abres' <- readResourceOne (pop res) src'
                                      case abres' of
                                        Right res' -> readResource $ push src' res'
                                        left       -> return left
+            where srcPt         = C.inputPoint src
       where
         todo'                   = reverse todo
         pop                     = call $ map2 tail
@@ -107,5 +108,10 @@ readResourceText res code = C.resInclude "" res (B.codeTextOf code) code
 readSources :: forall c. (C.CContent c) => [B.IOPoint] -> ResourceIO c
 readSources src =
     do res <- getRootResoruce
-       readResource $ res { C.resInputStack = ([], reverse src, []) }
+       readResource $ res { C.resInputStack = ([]
+                            , map input $ reverse src
+                            , []) }
+
+input :: B.IOPoint -> C.InputPoint
+input pt = C.InputPoint pt []
 
