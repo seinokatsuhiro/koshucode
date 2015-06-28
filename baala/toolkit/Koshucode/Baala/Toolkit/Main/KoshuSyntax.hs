@@ -122,7 +122,7 @@ dumpStdin omit = dumpCode omit "(stdin)" =<< getContents
 dumpCode :: Bool -> FilePath -> String -> IO ()
 dumpCode omit path code = 
     ab f $ B.tokenLines (B.CodePiece 0 $ B.IOPointFile "" path) code
-    where f ts = do let cs = C.consClause 0 ts
+    where f ts = do let cs = C.consClause [] 0 ts
                     B.putLines $ B.texts $ dumpDesc path
                     dumpClause omit `mapM_` zip [1 ..] cs
                     putNewline

@@ -96,16 +96,16 @@ clauseTypeText (Clause _ body) =
 --                ]]
 
 -- | First step of constructing 'Resource'.
-consClause :: C.SecNo -> [B.TokenLine] -> [B.Ab Clause]
-consClause sec = loop h0 . B.tokenClauses where
+consClause :: [B.Token] -> C.SecNo -> [B.TokenLine] -> [B.Ab Clause]
+consClause add sec = loop h0 . B.tokenClauses where
     h0 = clauseHeadEmpty { clauseSecNo = sec }
 
     loop _ []     = []
-    loop h (x:xs) = let (cs, h') = consClauseEach $ h { clauseSource = x }
+    loop h (x:xs) = let (cs, h') = consClauseEach add $ h { clauseSource = x }
                        in cs ++ loop h' xs
 
-consClauseEach :: ClauseHead -> ([B.Ab Clause], ClauseHead)
-consClauseEach h@(ClauseHead src sec sh ab) = result where
+consClauseEach :: [B.Token] -> ClauseHead -> ([B.Ab Clause], ClauseHead)
+consClauseEach add h@(ClauseHead src sec sh ab) = result where
 
     original = B.clauseTokens src
 
@@ -183,7 +183,7 @@ consClauseEach h@(ClauseHead src sec sh ab) = result where
 
     -- judgement and assertion, or source and sink
 
-    judge q (B.TText _ _ p : xs)  = c1 $ CJudge q p $ ab ++ xs
+    judge q (B.TText _ _ p : xs)  = c1 $ CJudge q p $ add ++ ab ++ xs
     judge _ ts                    = judgeError ts
 
     judgeError []                 = unkAtStart ["Give a judgement pattern"]

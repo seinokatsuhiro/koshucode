@@ -53,11 +53,12 @@ readResource res@C.Resource { C.resInputStack = article@(todo, _, done) }
                                -> readResource $ pop res
             | otherwise        -> do n <- nextSourceCount
                                      let src' = B.CodePiece n srcPt
-                                     abres' <- readResourceOne (pop res) src'
+                                     abres' <- readResourceOne (pop res) src' srcAbout
                                      case abres' of
                                        Right res' -> readResource $ push src' res'
                                        left       -> return left
             where srcPt         = C.inputPoint src
+                  srcAbout      = C.inputPointAbout src
       where
         todo'                   = reverse todo
         pop                     = call $ map2 tail
@@ -68,8 +69,8 @@ readResource res@C.Resource { C.resInputStack = article@(todo, _, done) }
 
 -- | Read resource from certain source.
 readResourceOne :: forall c. (C.CContent c) =>
-    C.Resource c -> B.CodePiece -> ResourceIO c
-readResourceOne res src = dispatch $ B.codeName src where
+    C.Resource c -> B.CodePiece -> [B.TTree] -> ResourceIO c
+readResourceOne res src add = dispatch $ B.codeName src where
     dispatch (B.IOPointFile cd path) =
         gio $ do let path' = putDir cd path
                      cd'   = putDir cd $ Path.dropFileName path
@@ -99,11 +100,13 @@ readResourceOne res src = dispatch $ B.codeName src where
     include = includeUnder ""
 
     includeUnder :: FilePath -> FilePath -> IO (C.AbResource c)
-    includeUnder cd = return . C.resInclude cd res src
+    includeUnder cd = return . C.resInclude add' cd res src
+
+    add' = concatMap B.untree add
 
 -- | Read resource from text.
 readResourceText :: (C.CContent c) => C.Resource c -> String -> C.AbResource c
-readResourceText res code = C.resInclude "" res (B.codeTextOf code) code
+readResourceText res code = C.resInclude [] "" res (B.codeTextOf code) code
 
 readSources :: forall c. (C.CContent c) => [B.IOPoint] -> ResourceIO c
 readSources src =

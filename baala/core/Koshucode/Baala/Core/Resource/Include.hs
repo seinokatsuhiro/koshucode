@@ -24,15 +24,16 @@ type Include c = C.ClauseHead -> [B.Token] -> C.ClauseBody -> B.Ab (C.Resource c
 
 -- | Include source code into resource.
 resInclude :: forall c. (C.CContent c)
-    => FilePath         -- ^ Context directory
+    => [B.Token]        -- ^ Additional terms
+    -> FilePath         -- ^ Context directory
     -> C.Resource c     -- ^ Base resource
     -> B.CodePiece      -- ^ Source name
     -> String           -- ^ Source code
     -> C.AbResource c   -- ^ Included resource
-resInclude cd res src code =
+resInclude add cd res src code =
     do ls <- B.tokenLines src code
        let sec  = C.resLastSecNo res + 1
-           cs   = C.consClause sec ls
+           cs   = C.consClause add sec ls
        res2 <- B.foldM (resIncludeBody cd) res $ reverse cs
        Right res2 { C.resSelect = C.datasetSelect $ C.dataset $ C.resJudge res2 }
 
@@ -122,14 +123,14 @@ calcContG = C.calcContent . C.globalCopset
 
 paraToIOPoint :: FilePath -> C.TTreePara -> B.Ab C.InputPoint
 paraToIOPoint cd = B.paraSelect unmatch ps where
-    ps = [ (just1, B.paraType `B.paraJust` 1 `B.paraOpt` ["add"])
+    ps = [ (just1, B.paraType `B.paraJust` 1 `B.paraOpt` ["about"])
          , (stdin, B.paraType `B.paraReq` ["stdin"]) ]
 
     just1 :: C.TTreePara -> B.Ab C.InputPoint
-    just1 p = do arg <- B.paraGetFst p
-                 add <- B.paraGetOpt [] p "add"
+    just1 p = do arg   <- B.paraGetFst p
+                 about <- B.paraGetOpt [] p "about"
                  case arg of
-                   B.TextLeaf _ _ path -> Right $ C.InputPoint (B.ioPointFrom cd path) add
+                   B.TextLeaf _ _ path -> Right $ C.InputPoint (B.ioPointFrom cd path) about
                    _ -> Msg.adlib "input not text"
 
     stdin :: C.TTreePara -> B.Ab C.InputPoint

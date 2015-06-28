@@ -52,8 +52,8 @@ data Resource c = Resource
     }
 
 data InputPoint = InputPoint
-    { inputPoint    :: B.IOPoint
-    , inputPointAdd :: [B.TTree]
+    { inputPoint      :: B.IOPoint
+    , inputPointAbout :: [B.TTree]
     } deriving (Show, Eq, Ord)
 
 instance Show (Resource c) where
