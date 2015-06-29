@@ -86,7 +86,7 @@ optionProcess sh judgeOf pat option opt r1 =
        r2 <- optionRelmapResource option r1
        r3 <- optionRelmapAssert   opt    r2
        let js  = B.judgesFromRel (judgeOf showEmpty) pat r3
-           js' = B.judgeText (B.shortText sh) `map` js
+           js' = B.textualjudge (B.shortText sh) `map` js
        comment <- optionComment sh pat opt r3
        Right [ B.OutputJudge js', B.OutputNote comment ]
 

@@ -212,10 +212,7 @@ putJudges :: (Ord c, B.Write c) => [B.Judge c] -> IO ()
 putJudges = mapM_ putJudge
 
 putJudge :: (Ord c, B.Write c) => B.Judge c -> IO ()
-putJudge = putStrLn . judgeText
-
-judgeText :: (Ord c, B.Write c) => B.Judge c -> String
-judgeText = B.judgeShow B.shortEmpty
+putJudge = putStrLn . B.writeDownJudge B.shortEmpty
 
 putNewline :: IO ()
 putNewline = putStrLn ""

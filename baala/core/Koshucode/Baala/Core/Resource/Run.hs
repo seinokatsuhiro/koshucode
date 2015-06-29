@@ -22,7 +22,7 @@ runResource res =
        let js = C.resJudge res'
        case filter B.isViolative js of
          []  -> runResourceBody res'
-         jsV -> let jsV' = B.judgeText B.shortEmpty `map` jsV
+         jsV -> let jsV' = B.textualjudge B.shortEmpty `map` jsV
                 in Right $ B.resoutEmpty
                        { B.resoutOutput   = C.resOutput res
                        , B.resoutViolated = [B.Short [] [] [B.OutputJudge jsV']] }

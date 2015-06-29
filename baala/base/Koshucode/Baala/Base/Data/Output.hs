@@ -50,7 +50,7 @@ hPutJudges h status js =
        hPutLines h $ summary status cnt
        return status
     where
-      writer = IO.hPutStrLn h . B.judgeShow B.shortEmpty
+      writer = IO.hPutStrLn h . B.writeDownJudge B.shortEmpty
 
 judges :: forall c. (Ord c, B.Write c) =>
     IO.Handle -> (B.Judge c -> IO ()) -> [B.Judge c] -> Counter -> IO Counter
@@ -194,7 +194,7 @@ short h cnt (B.Short _ def output) =
 
 chunks :: IO.Handle -> [OutputChunk] -> Counter -> IO Counter
 chunks h = loop where
-    writer = IO.hPutStrLn h . B.judgeLine
+    writer = IO.hPutStrLn h . B.judgeText
 
     loop [] cnt = return cnt
     loop (OutputJudge js : xs) (_, tab) = do cnt' <- judges h writer js (0, tab)

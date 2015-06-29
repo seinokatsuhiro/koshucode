@@ -6,17 +6,21 @@
 module Koshucode.Baala.Base.Data.Judge
   (
     -- * Datatype
-    Judge (..),
-    JudgeOf,
-    JudgePat,
-    SelectRel (..),
-    judgePat,
-    judgeTerms,
-    judgeTermsMap,
+    Judge (..), JudgePat,
+    judgePat, judgeTerms,
     judgeCons,
+    judgeTermsMap,
+    sortJudgeTerms, 
+
+    -- * Converter
+    JudgeOf,
+    SelectRel (..),
     judgesFromRel,
-    judgeShow, judgeText, judgeLine,
-    abcJudge,
+
+    -- * Writer
+    writeDownJudge, writeDownTerms,
+    textualjudge, judgeText,
+    termText, termsText,
   
     -- * Logical quality
     affirm, deny,
@@ -61,68 +65,43 @@ instance (Ord c) => Eq (Judge c) where
 
 instance (Ord c) => Ord (Judge c) where
     compare j1 j2 =
-        let JudgeAffirm p1 xs1 = abcJudge j1
-            JudgeAffirm p2 xs2 = abcJudge j2
+        let JudgeAffirm p1 xs1 = sortJudgeTerms j1
+            JudgeAffirm p2 xs2 = sortJudgeTerms j2
         in compare p1 p2 `B.mappend` compare xs1 xs2
-
-judgePat :: Judge c -> JudgePat
-judgePat (JudgeAffirm      p _)      = p
-judgePat (JudgeDeny        p _)      = p
-judgePat (JudgeMultiDeny   p _)      = p
-judgePat (JudgeChange      p _ _)    = p
-judgePat (JudgeMultiChange p _ _)    = p
-judgePat (JudgeViolate     p _)      = p
-
-judgeTerms :: Judge c -> [B.Named c]
-judgeTerms (JudgeAffirm      _ xs)      = xs
-judgeTerms (JudgeDeny        _ xs)      = xs
-judgeTerms (JudgeMultiDeny   _ xs)      = xs
-judgeTerms (JudgeChange      _ xs _)    = xs
-judgeTerms (JudgeMultiChange _ xs _)    = xs
-judgeTerms (JudgeViolate     _ xs)      = xs
-
-type JudgeOf c = JudgePat -> [B.Named c] -> Judge c
-
--- | Name of judgement pattern.
-type JudgePat = String
 
 -- Apply function to each values
 instance Functor Judge where
     fmap f j = judgeTermsMap (map g) j
         where g (n, v) = (n, f v)
 
-class SelectRel r where
-    selectRel :: r c -> JudgePat -> [B.TermName] -> B.Rel c
+-- | Return pattern of judgement.
+judgePat :: Judge c -> JudgePat
+judgePat (JudgeAffirm      p _)        = p
+judgePat (JudgeDeny        p _)        = p
+judgePat (JudgeMultiDeny   p _)        = p
+judgePat (JudgeChange      p _ _)      = p
+judgePat (JudgeMultiChange p _ _)      = p
+judgePat (JudgeViolate     p _)        = p
 
-judgeShow :: (B.Write c) => B.StringMap -> Judge c -> String
-judgeShow sh = judgeLine . judgeText sh
+-- | Return term list of judgement.
+judgeTerms :: Judge c -> [B.Named c]
+judgeTerms (JudgeAffirm      _ xs)     = xs
+judgeTerms (JudgeDeny        _ xs)     = xs
+judgeTerms (JudgeMultiDeny   _ xs)     = xs
+judgeTerms (JudgeChange      _ xs _)   = xs
+judgeTerms (JudgeMultiChange _ xs _)   = xs
+judgeTerms (JudgeViolate     _ xs)     = xs
 
-judgeText :: (B.Write c) => B.StringMap -> Judge c -> Judge String
-judgeText shorts = (text `fmap`) where
-    text = show . B.write shorts
-
-judgeLine :: Judge String -> String
-judgeLine j =
-    case j of
-      JudgeAffirm      p xs     -> line "|--"  p xs
-      JudgeDeny        p xs     -> line "|-X"  p xs
-      JudgeMultiDeny   p xs     -> line "|-XX" p xs
-      JudgeChange      p xs _   -> line "|-C"  p xs
-      JudgeMultiChange p xs _   -> line "|-CC" p xs
-      JudgeViolate     p xs     -> line "|-V"  p xs
-    where
-      line f p xs  = unwords $ f : p : map str xs
-      str (n,c)    = " " ++ ('/' : n) ++ " " ++ c
-
--- | Convert relation to list of judges.
-judgesFromRel :: JudgeOf c -> JudgePat -> B.Rel c -> [Judge c]
-judgesFromRel judgeOf pat (B.Rel he bo) = map judge bo where
-    judge = judgeOf pat . zip names
-    names = B.headNames he
+-- | Name of judgement pattern.
+type JudgePat = String
 
 -- | Sort terms in alphabetical order.
-abcJudge :: (Ord c) => B.Map (Judge c)
-abcJudge = judgeTermsMap B.sort
+sortJudgeTerms :: (Ord c) => B.Map (Judge c)
+sortJudgeTerms = judgeTermsMap B.sort
+
+-- | Prepend a term into judgement.
+judgeCons :: B.Named c -> B.Map (Judge c)
+judgeCons x = judgeTermsMap (x :)
 
 judgeTermsMap :: ([B.Named a] -> [B.Named b]) -> Judge a -> Judge b
 judgeTermsMap f (JudgeAffirm      p xs)      = JudgeAffirm    p (f xs)
@@ -132,8 +111,52 @@ judgeTermsMap f (JudgeChange      p xs ys)   = JudgeChange    p (f xs) (f ys)
 judgeTermsMap f (JudgeMultiChange p xs ys)   = JudgeChange    p (f xs) (f ys)
 judgeTermsMap f (JudgeViolate     p xs)      = JudgeViolate   p (f xs)
 
-judgeCons :: B.Named c -> B.Map (Judge c)
-judgeCons x = judgeTermsMap (x :)
+
+-- ----------------------  Converter
+
+type JudgeOf c = JudgePat -> [B.Named c] -> Judge c
+
+class SelectRel r where
+    selectRel :: r c -> JudgePat -> [B.TermName] -> B.Rel c
+
+-- | Convert relation to list of judges.
+judgesFromRel :: JudgeOf c -> JudgePat -> B.Rel c -> [Judge c]
+judgesFromRel judgeOf pat (B.Rel he bo) = map judge bo where
+    judge = judgeOf pat . zip names
+    names = B.headNames he
+
+
+-- ----------------------  Writer
+
+writeDownJudge :: (B.Write c) => B.StringMap -> Judge c -> String
+writeDownJudge sh = judgeText . textualjudge sh
+
+writeDownTerms :: (B.Write c) => B.StringMap -> [B.Named c] -> String
+writeDownTerms sh = concatMap term where
+    term (n, c) = termText n $ show $ B.write sh c
+
+textualjudge :: (B.Write c) => B.StringMap -> Judge c -> Judge String
+textualjudge sh = (text `fmap`) where
+    text = show . B.write sh
+
+judgeText :: Judge String -> String
+judgeText jud =
+    case jud of
+      JudgeAffirm      p xs     -> line "|--"  p xs
+      JudgeDeny        p xs     -> line "|-X"  p xs
+      JudgeMultiDeny   p xs     -> line "|-XX" p xs
+      JudgeChange      p xs _   -> line "|-C"  p xs
+      JudgeMultiChange p xs _   -> line "|-CC" p xs
+      JudgeViolate     p xs     -> line "|-V"  p xs
+    where
+      line j p xs  = j ++ " " ++ p ++ termsText xs
+
+termText :: String -> String -> String
+termText n c = "  /" ++ n ++ " " ++ c
+
+termsText :: [B.Named String] -> String
+termsText = concatMap term where
+    term (n, c)  = termText n c
 
 
 -- ----------------------  Logical quality
@@ -156,16 +179,17 @@ denyJudge :: B.Map (Judge c)
 denyJudge (JudgeAffirm p xs) = JudgeDeny p xs
 denyJudge _ = B.bug "denyJudge"
 
--- | Test that judgement is affirmd.
+-- | Test which judgement is affirmed.
 isAffirmative :: Judge c -> Bool
 isAffirmative (JudgeAffirm _ _) = True
 isAffirmative _                 = False
 
--- | Test that judgement is denied.
+-- | Test which judgement is denied.
 isDenial :: Judge c -> Bool
 isDenial (JudgeDeny _ _)        = True
 isDenial _                      = False
 
+-- | Test which judgement is for violation.
 isViolative :: Judge c -> Bool
 isViolative (JudgeViolate _ _)  = True
 isViolative _                   = False
