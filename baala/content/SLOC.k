@@ -3,16 +3,16 @@
 about /package 'content
 
 |-- DIR  /code 121  /comment 45   /dir "content/Koshucode/Baala/Op"
-|-- DIR  /code 558  /comment 355  /dir "content/Koshucode/Baala/Op/Cop"
+|-- DIR  /code 574  /comment 362  /dir "content/Koshucode/Baala/Op/Cop"
 |-- DIR  /code 717  /comment 371  /dir "content/Koshucode/Baala/Op/Cox"
 |-- DIR  /code 170  /comment 42   /dir "content/Koshucode/Baala/Type"
 
-|-- DIR-TOTAL  /code 1566  /comment 813
+|-- DIR-TOTAL  /code 1582  /comment 820
 
 |-- FILE  /code 16   /comment 5    /file "Cop.hs"         /dir "content/Koshucode/Baala/Op"
 |-- FILE  /code 78   /comment 39   /file "Arith.hs"       /dir "content/Koshucode/Baala/Op/Cop"
 |-- FILE  /code 32   /comment 40   /file "Coxhand.hs"     /dir "content/Koshucode/Baala/Op/Cop"
-|-- FILE  /code 203  /comment 102  /file "List.hs"        /dir "content/Koshucode/Baala/Op/Cop"
+|-- FILE  /code 219  /comment 109  /file "List.hs"        /dir "content/Koshucode/Baala/Op/Cop"
 |-- FILE  /code 52   /comment 36   /file "Logic.hs"       /dir "content/Koshucode/Baala/Op/Cop"
 |-- FILE  /code 72   /comment 50   /file "Misc.hs"        /dir "content/Koshucode/Baala/Op/Cop"
 |-- FILE  /code 50   /comment 34   /file "Order.hs"       /dir "content/Koshucode/Baala/Op/Cop"
@@ -30,4 +30,4 @@ about /package 'content
 |-- FILE  /code 11   /comment 11   /file "Quoter.hs"      /dir "content/Koshucode/Baala/Op"
 |-- FILE  /code 170  /comment 42   /file "Vanilla.hs"     /dir "content/Koshucode/Baala/Type"
 
-|-- FILE-TOTAL  /code 1566  /comment 813
+|-- FILE-TOTAL  /code 1582  /comment 820
