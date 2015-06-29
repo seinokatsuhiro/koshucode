@@ -4,6 +4,7 @@
 
 module Koshucode.Baala.Base.Data
   (
+    module Koshucode.Baala.Base.Data.About,
     module Koshucode.Baala.Base.Data.Clock,
     module Koshucode.Baala.Base.Data.Date,
     module Koshucode.Baala.Base.Data.Decimal,
@@ -18,6 +19,7 @@ module Koshucode.Baala.Base.Data
     module Koshucode.Baala.Base.Data.Type,
   ) where
 
+import Koshucode.Baala.Base.Data.About
 import Koshucode.Baala.Base.Data.Clock
 import Koshucode.Baala.Base.Data.Date
 import Koshucode.Baala.Base.Data.Decimal

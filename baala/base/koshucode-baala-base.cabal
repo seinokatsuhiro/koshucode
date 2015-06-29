@@ -55,6 +55,7 @@ library
         Koshucode.Baala.Base.Abort.Report
 
         Koshucode.Baala.Base.Data
+        Koshucode.Baala.Base.Data.About
         Koshucode.Baala.Base.Data.Clock
         Koshucode.Baala.Base.Data.Date
         Koshucode.Baala.Base.Data.Decimal
