@@ -11,6 +11,7 @@ module Koshucode.Baala.Base.Data.Output
   
     -- * Function
     resoutEmpty,
+    putJudge,
     putJudges,
     hPutJudges,
     putResout,
@@ -39,6 +40,9 @@ type Counter = (Int, Map.Map B.JudgePat Int)
 
 initCounter :: [B.JudgePat] -> Counter
 initCounter ps = (0, Map.fromList $ zip ps $ repeat 0)
+
+putJudge :: (B.Write c) => B.Judge c -> IO ()
+putJudge = putStrLn . B.writeDownJudge B.shortEmpty
 
 -- | Print judges to `IO.stdout`.
 putJudges :: (Ord c, B.Write c) => Int -> [B.Judge c] -> IO Int
