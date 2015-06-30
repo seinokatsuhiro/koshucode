@@ -37,15 +37,15 @@ consClock :: (C.CContent c) => C.RopCons c
 consClock med =
     do cops     <- Op.getWhere    med "-where"
        clock    <- Op.getTerm     med "-clock"
-       times    <- Op.getOptionCox (C.pDecFromInt 1) med "-times"
-       day      <- Op.getOptionCox (C.pDecFromInt 0) med "-day"
+       times    <- Op.getOptionCox (C.pInt 1) med "-times"
+       day      <- Op.getOptionCox (C.pInt 0) med "-day"
        hour     <- Op.getMaybeCox med "-hour"
        minute   <- Op.getMaybeCox med "-min"
        sec      <- Op.getMaybeCox med "-sec"
        let hms   = fill (hour, minute, sec)
        Right $ relmapClock med (cops, clock, (times, day, hms))
     where
-      zero = C.coxLit $ C.pDecFromInt 0
+      zero = C.coxLit $ C.pInt 0
       fill (h, Nothing, Just s) = fill (h, Just zero, Just s)
       fill (Nothing, Just m, s) = fill (Just zero, Just m, s)
       fill hms = hms
@@ -120,11 +120,11 @@ relkitClockGet (cops, cox, ns) (Just he1) = Right kit2 where
 
 clockProps :: (C.CContent c) => B.Clock -> [c]
 clockProps clock = [sign, day, hour, minute, sec] where
-    sign          = C.pDecFromInt $ B.clockSign clock
-    day           = C.pDecFromInteger d
-    hour          = C.maybeEmpty C.pDecFromInt h
-    minute        = C.maybeEmpty C.pDecFromInt m
-    sec           = C.maybeEmpty C.pDecFromInt s
+    sign          = C.pInt $ B.clockSign clock
+    day           = C.pInteger d
+    hour          = C.maybeEmpty C.pInt h
+    minute        = C.maybeEmpty C.pInt m
+    sec           = C.maybeEmpty C.pInt s
     (d, h, m, s)  = B.clockDhms clock
 
 

@@ -90,8 +90,8 @@ relkitKoshuCopInfix (name, height, dir) res _ = Right kit2 where
     heightMaybe = B.maybeEmpty height
     dirMaybe    = B.maybeEmpty dir
 
-    heightTerm (Left  h) _ = [C.pDecFromInt h]
-    heightTerm (Right h) _ = [C.pDecFromInt h]
+    heightTerm (Left  h) _ = [C.pInt h]
+    heightTerm (Right h) _ = [C.pInt h]
 
     dirTerm    (Left  _) _ = [C.pText "left"]
     dirTerm    (Right _) _ = [C.pText "right"]
@@ -178,7 +178,7 @@ consKoshuVersion med =
 
 relkitKoshuVersion :: (C.CContent c) => B.TermName -> C.RelkitHook c
 relkitKoshuVersion n h _ =
-    Right $ C.relkitConstSingleton [n] [ C.pList $ map C.pDecFromInt $ apiVersion ver ] where
+    Right $ C.relkitConstSingleton [n] [ C.pList $ map C.pInt $ apiVersion ver ] where
         ver = C.globalVersion $ C.getGlobal h
 
 relkitKoshuVersionCheck :: (C.CContent c) => (c, c) -> B.TermName -> C.RelkitHook c
@@ -186,7 +186,7 @@ relkitKoshuVersionCheck (from, to) n h _
     | verC >= from && verC <= to  = Right kitV
     | otherwise                   = Right kitE
     where ver  = C.globalVersion $ C.getGlobal h
-          verC = C.pList $ map C.pDecFromInt $ apiVersion ver
+          verC = C.pList $ map C.pInt $ apiVersion ver
           kitV = C.relkitConstSingleton [n] [verC] -- todo
           kitE = C.relkitConstEmpty [n]
 
@@ -220,9 +220,9 @@ relkitKoshuSource (num, ty, name) h _ = Right kit2 where
     kit2       = C.relkitConstBody ns $ map assn code
     assn c     = B.catMaybes [codeNo c, codeType c, codeText c]
 
-    codeNo     = Just         . C.pDecFromInt . B.codeNumber
-    codeType   = maybeAs ty   . C.pText       . B.ioPointType . B.codeName
-    codeText   = maybeAs name . C.pText       . B.ioPointText . B.codeName
+    codeNo     = Just         . C.pInt  . B.codeNumber
+    codeType   = maybeAs ty   . C.pText . B.ioPointType . B.codeName
+    codeText   = maybeAs name . C.pText . B.ioPointText . B.codeName
 
 maybeAs :: Maybe a -> b -> Maybe b
 maybeAs (Just _)  c  =  Just c

@@ -95,9 +95,9 @@ copMax = op where
 
 copLength :: (C.CContent c) => C.CopCalc c
 copLength = op where
-    op [Right c] | C.isList c  = Right . C.pDecFromInt $ length (C.gList c)
-                 | C.isText c  = Right . C.pDecFromInt $ length (C.gText c)
-                 | C.isRel c   = Right . C.pDecFromInt $ length (B.relBody $ C.gRel c)
+    op [Right c] | C.isList c  = Right . C.pInt $ length (C.gList c)
+                 | C.isText c  = Right . C.pInt $ length (C.gText c)
+                 | C.isRel c   = Right . C.pInt $ length (B.relBody $ C.gRel c)
     op xs = typeUnmatch xs
 
 typeUnmatch :: C.CTypeOf c => [B.Ab c] -> B.Ab c
@@ -257,7 +257,7 @@ copCodeList = op where
     op xs = typeUnmatch xs
 
     contOrd :: (C.CDec c) => Char -> c
-    contOrd = C.pDecFromInt . Char.ord
+    contOrd = C.pInt . Char.ord
 
 -- char-group "a!" => [ 'letter : 'punct ]
 copCharGroup :: (C.CContent c) => C.CopCalc c

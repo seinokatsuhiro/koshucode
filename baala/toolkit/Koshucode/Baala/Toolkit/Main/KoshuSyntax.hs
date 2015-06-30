@@ -97,18 +97,18 @@ dumpDesc path = B.CommentDoc [desc, input, js] where
 
 judgeClause :: Int -> C.Clause -> B.Judge Type.VContent
 judgeClause clseq c = B.affirm "CLAUSE" args where
-    args = [ ("clause"       , C.pDecFromInt clseq)
+    args = [ ("clause"       , C.pInt clseq)
            , ("clause-type"  , C.pText $ C.clauseTypeText c)]
 
 judgeLine :: Int -> B.TokenLine -> B.Judge Type.VContent
 judgeLine clseq (B.CodeLine ln _ _) = B.affirm "LINE" args where
-    args = [ ("line"         , C.pDecFromInt ln)
-           , ("clause"       , C.pDecFromInt clseq) ]
+    args = [ ("line"         , C.pInt ln)
+           , ("clause"       , C.pInt clseq) ]
 
 judgeToken :: Int -> B.Token -> B.Judge Type.VContent
 judgeToken ln tok = B.affirm "TOKEN" $ C.omitEmpty args where
-    args = [ ("line"           , C.pDecFromInt ln)
-           , ("column"         , C.pDecFromInt $ B.codePtColumnNo $ head $ B.codePtList tok)
+    args = [ ("line"           , C.pInt ln)
+           , ("column"         , C.pInt $ B.codePtColumnNo $ head $ B.codePtList tok)
            , ("token-type"     , C.pText $ B.tokenTypeText tok)
            , ("token-subtype"  , C.maybeEmpty C.pText $ B.tokenSubtypeText tok)
            , ("cont"           , C.pText $ B.tokenContent  tok) ]

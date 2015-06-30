@@ -119,7 +119,7 @@ relkitRanking ranking (n, ns, from) (Just he1) = Right kit2 where
     he2   = B.headCons n he1
     kit2  = C.relkitJust he2 $ C.RelkitFull False kitf2
     kitf2 bo1 = let (rank, bo2) = ranking from ords (B.headNames he1) bo1
-                in zipWith (:) (map C.pDecFromInt rank) bo2
+                in zipWith (:) (map C.pInt rank) bo2
     ords  = map B.Asc ns
 
 

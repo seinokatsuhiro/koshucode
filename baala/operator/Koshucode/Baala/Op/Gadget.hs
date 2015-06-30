@@ -95,7 +95,7 @@ relkitDepRank (x,y,r) (Just he1) = Right kit2 where
     xyPick      = Op.picker he1 [x,y]
     f2 bo1      = map put $ rank $ map get bo1
     get cs      = let [cx,cy] = xyPick cs in (cx,cy)
-    put (cx,i)  = [cx, C.pDecFromInt i]
+    put (cx,i)  = [cx, C.pInt i]
     rank        = Op.depRankList . Op.depRankUpdateAll . Op.depRankFromPairs
 
 
@@ -166,8 +166,8 @@ relkitVisitDistanceBody optimize1 lrStart lrFrom lrTo heTo
       vdist1 vstep [c]  = visitDistanceFrom vstep c
       vdist1 _ _        = B.bug "visit-distance"
 
-      tupleN (cs, n)    = C.pDecFromInt n : cs
-      tuple1 (c, n)     = [C.pDecFromInt n, c]
+      tupleN (cs, n)    = C.pInt n : cs
+      tuple1 (c, n)     = [C.pInt n, c]
 
       addN cs           = insertPush (B.headRShare lrFrom cs)
                                      (B.headRShare lrTo cs)
@@ -229,7 +229,7 @@ relkitSize :: (C.CDec c) => B.TermName -> C.RelkitFlow c
 relkitSize n _ = Right kit2 where
     he2       = B.headFrom [n]
     kit2      = C.relkitJust he2 $ C.RelkitFull False kitf2
-    kitf2 bo1 = [[ C.pDecFromInt $ length bo1 ]]
+    kitf2 bo1 = [[ C.pInt $ length bo1 ]]
 
 
 -- ----------------------  eqlize

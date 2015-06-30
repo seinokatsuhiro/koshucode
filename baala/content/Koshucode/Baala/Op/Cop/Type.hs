@@ -42,8 +42,8 @@ copToDec = op where
                                    Right n  -> Right $ C.pDec n
                                    Left _   -> Right c
                  | C.isBool c  = case C.gBool c of
-                                   True   -> Right $ C.pDecFromInt 1
-                                   False  -> Right $ C.pDecFromInt 0
+                                   True   -> Right $ C.pInt 1
+                                   False  -> Right $ C.pInt 0
                  | otherwise   = Right c
     op xs = typeUnmatch xs
 

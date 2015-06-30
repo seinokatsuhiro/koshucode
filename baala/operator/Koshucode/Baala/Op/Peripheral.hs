@@ -155,7 +155,7 @@ relkitIndexElemExpand i x xsi (Just he1) = Right kit2 where
     indexElem cs = map (cons cs) . index
 
     index :: [c] -> [(c, c)]
-    index = zip $ map C.pDecFromInt [1 ..]
+    index = zip $ map C.pInt [1 ..]
 
     cons :: [c] -> (c, c) -> [c]
     cons cs (ic, xc) = ic : xc : cs

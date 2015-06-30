@@ -17,7 +17,7 @@ module Koshucode.Baala.Core.Content.Class
     -- ** Empty
     CEmpty (..), maybeEmpty, omitEmpty,
     -- ** Decimal
-    CDec (..), pDecFromInt, pDecFromInteger,
+    CDec (..), pInt, pInteger, pDecFromInt, pDecFromInteger,
     -- ** Clock
     CClock (..),
     -- ** Time
@@ -150,11 +150,17 @@ class (CTypeOf c) => CDec c where
     putDec      ::   B.Decimal -> B.Ab c
     putDec      =    Right . pDec
 
+pInt :: (CDec c) => Int -> c
+pInt = pDec . B.intDecimal
+
+pInteger :: (CDec c) => Integer -> c
+pInteger = pDec . B.intDecimal . fromInteger
+
 pDecFromInt :: (CDec c) => Int -> c
-pDecFromInt = pDec . B.intDecimal
+pDecFromInt = pInt
 
 pDecFromInteger :: (CDec c) => Integer -> c
-pDecFromInteger = pDec . B.intDecimal . fromInteger
+pDecFromInteger = pInteger
 
 class (CTypeOf c) => CClock c where
     isClock      ::           c -> Bool

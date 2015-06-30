@@ -49,7 +49,7 @@ copTimeAdd add [Right c1, Right c2]
 copTimeAdd _ _ = Msg.unexpAttr "add-time"
 
 copMjd :: (C.CTime c, C.CDec c) => C.CopCalc c
-copMjd [Right c] | C.isTime c = Right $ C.pDecFromInteger $ B.timeMjd $ C.gTime c
+copMjd [Right c] | C.isTime c = Right $ C.pInteger $ B.timeMjd $ C.gTime c
 copMjd _ = Msg.unexpAttr "mjd"
 
 copDateForm :: (C.CTime c) => B.Map B.Date -> C.CopCalc c

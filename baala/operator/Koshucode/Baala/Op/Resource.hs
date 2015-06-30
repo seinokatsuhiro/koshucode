@@ -54,7 +54,7 @@ relkitKoshuResRop (sec, name) res _ = Right kit2 where
     kit2  = C.relkitConstBody ns bo2
     ns    = [sec, name]
     bo2   = f `map` C.resLexmap res
-    f ((s, n), _) = [C.pDecFromInt s, C.pText n]
+    f ((s, n), _) = [C.pInt s, C.pText n]
 
 
 -- ----------------------  koshu-res-sink
@@ -76,7 +76,7 @@ relkitKoshuResSink :: (C.CContent c)
 relkitKoshuResSink (sec, pat) res _ = Right kit2 where
     kit2  = C.relkitConstBody ns bo2
     ns    = [sec, pat]
-    g a   = [C.pDecFromInt $ C.assSection a, C.pText $ C.assPattern a]
+    g a   = [C.pInt $ C.assSection a, C.pText $ C.assPattern a]
     f     = g . B.shortBody
     bo2   = f `map` C.resAssert res
 

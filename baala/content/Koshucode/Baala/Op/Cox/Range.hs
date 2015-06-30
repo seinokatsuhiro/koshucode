@@ -78,7 +78,7 @@ relkitRange (n, cops, coxLow, coxHigh) (Just he1) = Right kit2 where
 
                   let low   =   B.decimalNum decLow
                       high  =   B.decimalNum decHigh
-                      decs  =   map C.pDecFromInt [low .. high]
+                      decs  =   map C.pInt [low .. high]
 
                   Right $ map (: cs) decs
 
