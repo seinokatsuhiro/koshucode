@@ -154,7 +154,7 @@ relation r@B.CodeRoll { B.codeInputPt = cp, B.codeWords = ws } = start gen cp r 
                    | c == '*'        = ast  cs         $ c:w
     ast cs w       | w == "**"       = u    ""         $ B.TComment cp cs
                    | w == "***"      = u    ""         $ B.TComment cp cs
-                   | otherwise       = u    cs         $ B.TTextRaw cp w
+                   | otherwise       = vw              $ scanCode   cp ws $ w ++ cs
 
     bra (c:cs) w   | c == '<'        = bra  cs         $ c:w
     bra cs w       | w == "<"        = ang  cs ""

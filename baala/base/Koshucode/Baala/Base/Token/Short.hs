@@ -84,6 +84,6 @@ isCodeChar c =
       B.UnicodeLetter       ->  True
       B.UnicodeNumber       ->  True
       B.UnicodeSymbol       ->  c `elem` "+<=>~"
-      B.UnicodePunctuation  ->  c `elem` "-_.#"
+      B.UnicodePunctuation  ->  c `elem` "-_.*#"
       _                     ->  False
 

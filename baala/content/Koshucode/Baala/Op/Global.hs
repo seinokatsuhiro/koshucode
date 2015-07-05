@@ -77,16 +77,15 @@ vanillaInfix = htab where
         , 7 ! "and"
 
         , 6 ! "in"
-        , 6 ! "="
-        , 6 ! "<>"
-        , 6 ! "<"
-        , 6 ! ">"
-        , 6 ! "<="
-        , 6 ! ">="
-
-        , 3 ! "begin-with"
-        , 3 ! "end-with"
-        , 3 ! "contain"
+        , 6 ! "="     -- equal
+        , 6 ! "<>"    -- not equal
+        , 6 ! "<"     -- less than
+        , 6 ! ">"     -- greater than
+        , 6 ! "<="    -- less than or equal
+        , 6 ! ">="    -- greater than or equal
+        , 6 ! "=*"    -- begin with
+        , 6 ! "*="    -- end with
+        , 6 ! "*=*"   -- contain
 
         , 2 ! "+"
         , 2 ! "-"

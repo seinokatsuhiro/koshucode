@@ -41,7 +41,14 @@ import qualified Koshucode.Baala.Op.Message         as Msg
 copsList :: (C.CContent c) => [C.Cop c]
 copsList =
     [ C.CopCalc  (C.copInfix "++")              copAppend
+    , C.CopCalc  (C.copInfix "*=")              copEndWithInfix
+    , C.CopCalc  (C.copInfix "*=*")             copContainInfix
+    , C.CopCalc  (C.copInfix "=*")              copBeginWithInfix
+    , C.CopCalc  (C.copInfix "in")              copFunIn
     , C.CopCalc  (C.copInfix "intersect")       copIntersect
+
+    , C.CopCox   (C.copPrefix "in")             copCoxIn
+
     , C.CopCalc  (C.copNormal "++")             copAppend
     , C.CopCalc  (C.copNormal "base-part")      copBasePart
     , C.CopCalc  (C.copNormal "char")           copChar
@@ -52,9 +59,6 @@ copsList =
     , C.CopCalc  (C.copNormal "intersect")      copIntersect
     , C.CopCalc  (C.copNormal "length")         copLength
     , C.CopCalc  (C.copNormal "list")           copList
-    , C.CopCalc  (C.copInfix  "begin-with")     copBeginWithInfix
-    , C.CopCalc  (C.copInfix  "end-with")       copEndWithInfix
-    , C.CopCalc  (C.copInfix  "contain")        copContainInfix
     , C.CopCalc  (C.copNormal "match-beg")      copBeginWithNormal
     , C.CopCalc  (C.copNormal "match-end")      copEndWithNormal
     , C.CopCalc  (C.copNormal "match-mid")      copContainNormal
@@ -63,20 +67,17 @@ copsList =
     , C.CopCalc  (C.copNormal "minus")          copMinus
     , C.CopCalc  (C.copNormal "part")           copPart
     , C.CopCalc  (C.copNormal "push")           copPush
-    , C.CopCalc  (C.copNormal "reverse")        copReverse
     , C.CopCalc  (C.copNormal "replace-all")    copReplaceAll
     , C.CopCalc  (C.copNormal "replace-begin")  copReplaceBegin
     , C.CopCalc  (C.copNormal "replace-end")    copReplaceEnd
     , C.CopCalc  (C.copNormal "replace-first")  copReplaceFirst
     , C.CopCalc  (C.copNormal "replace-last")   copReplaceLast
+    , C.CopCalc  (C.copNormal "reverse")        copReverse
     , C.CopCalc  (C.copNormal "sort")           copSort
-    , C.CopCalc  (C.copNormal "total")          copTotal
     , C.CopCalc  (C.copNormal "sub-index")      copSubIndex
     , C.CopCalc  (C.copNormal "sub-length")     copSubLength
     , C.CopCalc  (C.copNormal "term-set")       copTermSet
-
-    , C.CopCalc  (C.copInfix  "in") copFunIn
-    , C.CopCox   (C.copPrefix "in") copCoxIn
+    , C.CopCalc  (C.copNormal "total")          copTotal
     ]
 
 copList :: (C.CList c) => C.CopCalc c
