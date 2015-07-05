@@ -40,35 +40,40 @@ import qualified Koshucode.Baala.Op.Message         as Msg
 
 copsList :: (C.CContent c) => [C.Cop c]
 copsList =
-    [ C.CopCalc  (C.copInfix "++")             copAppend
-    , C.CopCalc  (C.copInfix "intersect")      copIntersect
-    , C.CopCalc  (C.copNormal "++")            copAppend
-    , C.CopCalc  (C.copNormal "base-part")     copBasePart
-    , C.CopCalc  (C.copNormal "char")          copChar
-    , C.CopCalc  (C.copNormal "char-group")    copCharGroup
-    , C.CopCalc  (C.copNormal "char-group-1")  copCharGroup1
-    , C.CopCalc  (C.copNormal "code-list")     copCodeList
-    , C.CopCalc  (C.copNormal "dir-part")      copDirPart
-    , C.CopCalc  (C.copNormal "intersect")     copIntersect
-    , C.CopCalc  (C.copNormal "length")        copLength
-    , C.CopCalc  (C.copNormal "list")          copList
-    , C.CopCalc  (C.copInfix  "begin-with")    copBeginWithInfix
-    , C.CopCalc  (C.copInfix  "end-with")      copEndWithInfix
-    , C.CopCalc  (C.copInfix  "contain")       copContainInfix
-    , C.CopCalc  (C.copNormal "match-beg")     copBeginWithNormal
-    , C.CopCalc  (C.copNormal "match-end")     copEndWithNormal
-    , C.CopCalc  (C.copNormal "match-mid")     copContainNormal
-    , C.CopCalc  (C.copNormal "max")           copMax
-    , C.CopCalc  (C.copNormal "min")           copMin
-    , C.CopCalc  (C.copNormal "minus")         copMinus
-    , C.CopCalc  (C.copNormal "part")          copPart
-    , C.CopCalc  (C.copNormal "push")          copPush
-    , C.CopCalc  (C.copNormal "reverse")       copReverse
-    , C.CopCalc  (C.copNormal "sort")          copSort
-    , C.CopCalc  (C.copNormal "total")         copTotal
-    , C.CopCalc  (C.copNormal "sub-index")     copSubIndex
-    , C.CopCalc  (C.copNormal "sub-length")    copSubLength
-    , C.CopCalc  (C.copNormal "term-set")      copTermSet
+    [ C.CopCalc  (C.copInfix "++")              copAppend
+    , C.CopCalc  (C.copInfix "intersect")       copIntersect
+    , C.CopCalc  (C.copNormal "++")             copAppend
+    , C.CopCalc  (C.copNormal "base-part")      copBasePart
+    , C.CopCalc  (C.copNormal "char")           copChar
+    , C.CopCalc  (C.copNormal "char-group")     copCharGroup
+    , C.CopCalc  (C.copNormal "char-group-1")   copCharGroup1
+    , C.CopCalc  (C.copNormal "code-list")      copCodeList
+    , C.CopCalc  (C.copNormal "dir-part")       copDirPart
+    , C.CopCalc  (C.copNormal "intersect")      copIntersect
+    , C.CopCalc  (C.copNormal "length")         copLength
+    , C.CopCalc  (C.copNormal "list")           copList
+    , C.CopCalc  (C.copInfix  "begin-with")     copBeginWithInfix
+    , C.CopCalc  (C.copInfix  "end-with")       copEndWithInfix
+    , C.CopCalc  (C.copInfix  "contain")        copContainInfix
+    , C.CopCalc  (C.copNormal "match-beg")      copBeginWithNormal
+    , C.CopCalc  (C.copNormal "match-end")      copEndWithNormal
+    , C.CopCalc  (C.copNormal "match-mid")      copContainNormal
+    , C.CopCalc  (C.copNormal "max")            copMax
+    , C.CopCalc  (C.copNormal "min")            copMin
+    , C.CopCalc  (C.copNormal "minus")          copMinus
+    , C.CopCalc  (C.copNormal "part")           copPart
+    , C.CopCalc  (C.copNormal "push")           copPush
+    , C.CopCalc  (C.copNormal "reverse")        copReverse
+    , C.CopCalc  (C.copNormal "replace-all")    copReplaceAll
+    , C.CopCalc  (C.copNormal "replace-begin")  copReplaceBegin
+    , C.CopCalc  (C.copNormal "replace-end")    copReplaceEnd
+    , C.CopCalc  (C.copNormal "replace-first")  copReplaceFirst
+    , C.CopCalc  (C.copNormal "replace-last")   copReplaceLast
+    , C.CopCalc  (C.copNormal "sort")           copSort
+    , C.CopCalc  (C.copNormal "total")          copTotal
+    , C.CopCalc  (C.copNormal "sub-index")      copSubIndex
+    , C.CopCalc  (C.copNormal "sub-length")     copSubLength
+    , C.CopCalc  (C.copNormal "term-set")       copTermSet
 
     , C.CopCalc  (C.copInfix  "in") copFunIn
     , C.CopCox   (C.copPrefix "in") copCoxIn
@@ -327,6 +332,67 @@ dirBasePart sep s =
     case reverse $ B.divide sep s of
       (base : dir) -> (B.intercalate [sep] $ reverse dir, base)
       []           -> ("", "")
+
+
+-- ----------------------  replace
+
+copReplaceAll :: (C.CContent c) => C.CopCalc c
+copReplaceAll = copReplace replaceAll
+
+copReplaceFirst :: (C.CContent c) => C.CopCalc c
+copReplaceFirst = copReplace replaceFirst
+
+copReplaceLast :: (C.CContent c) => C.CopCalc c
+copReplaceLast = copReplace replaceLast
+
+copReplaceBegin :: (C.CContent c) => C.CopCalc c
+copReplaceBegin = copReplace replaceBegin
+
+copReplaceEnd :: (C.CContent c) => C.CopCalc c
+copReplaceEnd = copReplace replaceEnd
+
+copReplace :: (C.CContent c) => (String -> String -> String -> String) -> C.CopCalc c
+copReplace rep = op where
+    op [Right from, Right to, Right text]
+        | C.isText from && C.isText to && C.isText text =
+            C.contApTextToText (C.gText from `rep` C.gText to) text
+    op xs = typeUnmatch xs
+
+replaceAll :: (Eq a) => [a] -> [a] -> [a] -> [a]
+replaceAll from to = loop where
+    n           = length from
+    loop []     = []
+    loop xxs@(x:xs)
+        | from `B.isPrefixOf` xxs = to ++ loop (drop n xxs)
+        | otherwise               = x : loop xs
+
+replaceFirst :: (Eq a) => [a] -> [a] -> [a] -> [a]
+replaceFirst from to = loop where
+    n           = length from
+    loop []     = []
+    loop xxs@(x:xs)
+        | from `B.isPrefixOf` xxs = to ++ drop n xxs
+        | otherwise               = x : loop xs
+
+replaceLast :: (Eq a) => [a] -> [a] -> [a] -> [a]
+replaceLast from to xs = reverse $ replaceFirst from' to' xs' where
+    from' = reverse from
+    to'   = reverse to
+    xs'   = reverse xs
+
+replaceBegin :: (Eq a) => [a] -> [a] -> [a] -> [a]
+replaceBegin from to = loop where
+    n           = length from
+    loop []     = []
+    loop xxs
+        | from `B.isPrefixOf` xxs = to ++ drop n xxs
+        | otherwise               = xxs
+
+replaceEnd :: (Eq a) => [a] -> [a] -> [a] -> [a]
+replaceEnd from to xs = reverse $ replaceBegin from' to' xs' where
+    from' = reverse from
+    to'   = reverse to
+    xs'   = reverse xs
 
 
 -- ----------------------  part
