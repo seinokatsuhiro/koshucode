@@ -52,9 +52,12 @@ copsList =
     , C.CopCalc  (C.copNormal "intersect")     copIntersect
     , C.CopCalc  (C.copNormal "length")        copLength
     , C.CopCalc  (C.copNormal "list")          copList
-    , C.CopCalc  (C.copNormal "match-beg")     $ copMatchBeg
-    , C.CopCalc  (C.copNormal "match-end")     $ copMatchBeg
-    , C.CopCalc  (C.copNormal "match-mid")     $ copMatchBeg
+    , C.CopCalc  (C.copInfix  "begin-with")    copBeginWithInfix
+    , C.CopCalc  (C.copInfix  "end-with")      copEndWithInfix
+    , C.CopCalc  (C.copInfix  "contain")       copContainInfix
+    , C.CopCalc  (C.copNormal "match-beg")     copBeginWithNormal
+    , C.CopCalc  (C.copNormal "match-end")     copEndWithNormal
+    , C.CopCalc  (C.copNormal "match-mid")     copContainNormal
     , C.CopCalc  (C.copNormal "max")           copMax
     , C.CopCalc  (C.copNormal "min")           copMin
     , C.CopCalc  (C.copNormal "minus")         copMinus
@@ -205,17 +208,39 @@ copPush arg =
          _ -> typeUnmatch arg
 
 
--- --------------------------------------------  match-xxx
+-- --------------------------------------------  begin-with / end-with
 
-copMatchBeg :: (C.CContent c) => C.CopCalc c
-copMatchBeg = op where
-    match g part whole = C.putBool $ B.isPrefixOf (g part) (g whole)
-    op arg = do arg2 <- C.getArg2 arg
-                case arg2 of
-                  (Right part, Right whole)
-                      | isText2 part whole -> match C.gText part whole
-                      | isList2 part whole -> match C.gList part whole
-                  _ -> C.putFalse
+copBeginWithNormal, copEndWithNormal, copContainNormal :: (C.CContent c) => C.CopCalc c
+copBeginWithNormal  = copMatchNormal B.isPrefixOf B.isPrefixOf
+copEndWithNormal    = copMatchNormal B.isSuffixOf B.isSuffixOf
+copContainNormal    = copMatchNormal B.isInfixOf  B.isInfixOf
+
+copBeginWithInfix, copEndWithInfix, copContainInfix :: (C.CContent c) => C.CopCalc c
+copBeginWithInfix  = copMatchInfix B.isPrefixOf B.isPrefixOf
+copEndWithInfix    = copMatchInfix B.isSuffixOf B.isSuffixOf
+copContainInfix    = copMatchInfix B.isInfixOf  B.isInfixOf
+
+copMatchNormal :: (C.CContent c) => (String -> String -> Bool) -> ([c] -> [c] -> Bool) -> C.CopCalc c
+copMatchNormal bf1 bf2 arg =
+    do arg2  <- C.getArg2 arg
+       whole <- snd arg2
+       part  <- fst arg2
+       copMatch bf1 bf2 part whole
+
+copMatchInfix :: (C.CContent c) => (String -> String -> Bool) -> ([c] -> [c] -> Bool) -> C.CopCalc c
+copMatchInfix bf1 bf2 arg =
+    do arg2  <- C.getArg2 arg
+       whole <- fst arg2
+       part  <- snd arg2
+       copMatch bf1 bf2 part whole
+
+copMatch :: (C.CContent c)
+  => (String -> String -> Bool) -> ([c] -> [c] -> Bool) -> c -> c -> B.Ab c
+copMatch bf1 bf2 part whole
+    | isText2 part whole = match bf1 C.gText
+    | isList2 part whole = match bf2 C.gList
+    | otherwise          = C.putFalse
+    where match bf g = C.putBool $ bf (g part) (g whole)
 
 isList2 :: (C.CList c) => c -> c -> Bool
 isList2 x y = C.isList x && C.isList y

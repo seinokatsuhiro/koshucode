@@ -84,6 +84,10 @@ vanillaInfix = htab where
         , 6 ! "<="
         , 6 ! ">="
 
+        , 3 ! "begin-with"
+        , 3 ! "end-with"
+        , 3 ! "contain"
+
         , 2 ! "+"
         , 2 ! "-"
         , 2 ! "++"
