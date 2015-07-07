@@ -23,7 +23,7 @@ runFiles g ns =
          Left a    -> C.globalAbort g a
          Right res -> case C.runResource res of
                         Left a   -> C.globalAbort g a
-                        Right ro -> B.putResout ro
+                        Right r  -> B.putResult r
 
 getProxies :: IO [(String, Maybe String)]
 getProxies =

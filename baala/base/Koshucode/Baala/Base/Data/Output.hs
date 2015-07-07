@@ -1,17 +1,17 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wall #-}
 
--- | Output judgements.
+-- | Result of relational calculation.
 
 module Koshucode.Baala.Base.Data.Output
   ( -- * Data type
-    ResourceOutput (..), InputPoint (..),
-    OutputChunks, OutputChunk (..),
+    Result (..), InputPoint (..),
+    ResultChunks, ResultChunk (..),
   
     -- * Function
-    resoutEmpty,
+    resultEmpty,
     putJudge, putJudges, hPutJudges,
-    putResout,
+    putResult,
   ) where
 
 import qualified Control.Monad                     as M
@@ -30,7 +30,7 @@ hPutLines :: IO.Handle -> [String] -> IO ()
 hPutLines h = (IO.hPutStrLn h `mapM_`)
 
 
--- ----------------------  Output judges
+-- ----------------------  Result judges
 
 -- total and per-judgement counter
 type Counter = (Int, Map.Map B.JudgePat Int)
@@ -105,16 +105,17 @@ showCount 1 = "1 judge "
 showCount n = show n ++ " judges"
 
 
--- ----------------------  Output chunks
+-- ----------------------  Result chunks
 
-data ResourceOutput = 
-    ResourceOutput
-    { resoutInput    :: [InputPoint]
-    , resoutOutput   :: B.IOPoint
-    , resoutEcho     :: [[String]]
-    , resoutViolated :: [OutputChunks]
-    , resoutNormal   :: [OutputChunks]
-    , resoutPattern  :: [B.JudgePat]
+-- | Result of calculation.
+data Result = 
+    Result
+    { resultInput    :: [InputPoint]
+    , resultOutput   :: B.IOPoint
+    , resultEcho     :: [[String]]
+    , resultViolated :: [ResultChunks]
+    , resultNormal   :: [ResultChunks]
+    , resultPattern  :: [B.JudgePat]
     } deriving (Show, Eq, Ord)
 
 data InputPoint = InputPoint
@@ -122,53 +123,53 @@ data InputPoint = InputPoint
     , inputPointAbout :: [B.TTree]
     } deriving (Show, Eq, Ord)
 
-type OutputChunks  = B.Short [OutputChunk]
+type ResultChunks  = B.Short [ResultChunk]
 
-data OutputChunk
-    = OutputJudge  [B.Judge String]
-    | OutputNote   [String]
+data ResultChunk
+    = ResultJudge  [B.Judge String]
+    | ResultNote   [String]
       deriving (Show, Eq, Ord)
 
-resoutEmpty :: ResourceOutput
-resoutEmpty =
-    ResourceOutput { resoutInput    = []
-                   , resoutOutput   = B.IOPointStdin
-                   , resoutEcho     = []
-                   , resoutViolated = []
-                   , resoutNormal   = []
-                   , resoutPattern  = [] }
+resultEmpty :: Result
+resultEmpty =
+    Result { resultInput    = []
+           , resultOutput   = B.IOPointStdin
+           , resultEcho     = []
+           , resultViolated = []
+           , resultNormal   = []
+           , resultPattern  = [] }
 
 -- | Print result of calculation, and return status.
-putResout :: ResourceOutput -> IO Int
-putResout ro =
-    case resoutOutput ro of
+putResult :: Result -> IO Int
+putResult ro =
+    case resultOutput ro of
       B.IOPointStdout ->
-          hPutResourceOutput IO.stdout ro
+          hPutResult IO.stdout ro
       B.IOPointFile _ path ->
           do h <- IO.openFile path IO.WriteMode
-             n <- hPutResourceOutput h ro
+             n <- hPutResult h ro
              IO.hClose h
              return n
-      output -> B.bug $ "putResout " ++ show output
+      output -> B.bug $ "putResult " ++ show output
 
-hPutResourceOutput :: IO.Handle -> ResourceOutput -> IO Int
-hPutResourceOutput h ro
-    | null vio   = shortList h 0 ro $ resoutNormal ro
+hPutResult :: IO.Handle -> Result -> IO Int
+hPutResult h ro
+    | null vio   = shortList h 0 ro $ resultNormal ro
     | otherwise  = shortList h 1 ro vio
     where
-      vio :: [OutputChunks]
-      vio = B.shortTrim $ B.map2 (filter $ existJudge) $ resoutViolated ro
+      vio :: [ResultChunks]
+      vio = B.shortTrim $ B.map2 (filter $ existJudge) $ resultViolated ro
 
-      existJudge :: OutputChunk -> Bool
-      existJudge (OutputNote _)    = False
-      existJudge (OutputJudge [])  = False
+      existJudge :: ResultChunk -> Bool
+      existJudge (ResultNote _)    = False
+      existJudge (ResultJudge [])  = False
       existJudge _                 = True
 
-shortList :: IO.Handle -> Int -> ResourceOutput -> [OutputChunks] -> IO Int
+shortList :: IO.Handle -> Int -> Result -> [ResultChunks] -> IO Int
 shortList h status ro sh =
-    do let itext  = (B.ioPointText . inputPoint) `map` resoutInput ro
-           otext  = B.ioPointText $ resoutOutput ro
-           echo   = resoutEcho ro
+    do let itext  = (B.ioPointText . inputPoint) `map` resultInput ro
+           otext  = B.ioPointText $ resultOutput ro
+           echo   = resultEcho ro
            comm   = B.CommentDoc [ B.CommentSec "INPUT"  itext
                                  , B.CommentSec "OUTPUT" [otext] ]
 
@@ -180,11 +181,11 @@ shortList h status ro sh =
        IO.hPutStr      h $ unlines $ concat echo
        B.when (echo /= []) $ IO.hPutStrLn h ""
 
-       cnt <- M.foldM (short h) (initCounter $ resoutPattern ro) sh
+       cnt <- M.foldM (short h) (initCounter $ resultPattern ro) sh
        hPutLines h $ summary status cnt
        return status
 
-short :: IO.Handle -> Counter -> OutputChunks -> IO Counter
+short :: IO.Handle -> Counter -> ResultChunks -> IO Counter
 short h cnt (B.Short _ []  output) = chunks h output cnt
 short h cnt (B.Short _ def output) =
     do hPutLines h $ "short" : map shortLine def
@@ -198,15 +199,15 @@ short h cnt (B.Short _ def output) =
       width :: Int
       width = maximum $ map (length . fst) def
 
-chunks :: IO.Handle -> [OutputChunk] -> Counter -> IO Counter
+chunks :: IO.Handle -> [ResultChunk] -> Counter -> IO Counter
 chunks h = loop where
     writer = IO.hPutStrLn h . B.judgeText
 
     loop [] cnt = return cnt
-    loop (OutputJudge js : xs) (_, tab) = do cnt' <- judges h writer js (0, tab)
+    loop (ResultJudge js : xs) (_, tab) = do cnt' <- judges h writer js (0, tab)
                                              loop xs cnt'
-    loop (OutputNote [] : xs) cnt       = loop xs cnt
-    loop (OutputNote ls : xs) cnt       = do hPutNote h $ unlines ls
+    loop (ResultNote [] : xs) cnt       = loop xs cnt
+    loop (ResultNote ls : xs) cnt       = do hPutNote h $ unlines ls
                                              loop xs cnt
 
 hPutNote :: IO.Handle -> String -> IO ()
