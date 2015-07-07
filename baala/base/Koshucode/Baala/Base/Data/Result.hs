@@ -11,7 +11,7 @@ module Koshucode.Baala.Base.Data.Result
     -- * Function
     resultEmpty,
     putJudge, putJudges, hPutJudges,
-    putResult,
+    putResult, hPutResult,
   ) where
 
 import qualified Control.Monad                     as M

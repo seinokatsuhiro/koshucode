@@ -5,7 +5,7 @@
 module Koshucode.Baala.Base.Abort.Report
   ( CommandLine,
     abort, abortPrint,
-    bug,
+    abortMessage, bug,
   ) where
 
 import qualified System.Exit                        as Sys
