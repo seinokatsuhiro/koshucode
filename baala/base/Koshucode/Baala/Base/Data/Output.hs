@@ -5,15 +5,12 @@
 
 module Koshucode.Baala.Base.Data.Output
   ( -- * Data type
-    ResourceOutput (..),
-    OutputChunks,
-    OutputChunk (..),
+    ResourceOutput (..), InputPoint (..),
+    OutputChunks, OutputChunk (..),
   
     -- * Function
     resoutEmpty,
-    putJudge,
-    putJudges,
-    hPutJudges,
+    putJudge, putJudges, hPutJudges,
     putResout,
   ) where
 
@@ -112,12 +109,17 @@ showCount n = show n ++ " judges"
 
 data ResourceOutput = 
     ResourceOutput
-    { resoutInput    :: [B.IOPoint]
+    { resoutInput    :: [InputPoint]
     , resoutOutput   :: B.IOPoint
     , resoutEcho     :: [[String]]
     , resoutViolated :: [OutputChunks]
     , resoutNormal   :: [OutputChunks]
     , resoutPattern  :: [B.JudgePat]
+    } deriving (Show, Eq, Ord)
+
+data InputPoint = InputPoint
+    { inputPoint      :: B.IOPoint
+    , inputPointAbout :: [B.TTree]
     } deriving (Show, Eq, Ord)
 
 type OutputChunks  = B.Short [OutputChunk]
@@ -164,7 +166,7 @@ hPutResourceOutput h ro
 
 shortList :: IO.Handle -> Int -> ResourceOutput -> [OutputChunks] -> IO Int
 shortList h status ro sh =
-    do let itext  = B.ioPointText `map` resoutInput ro
+    do let itext  = (B.ioPointText . inputPoint) `map` resoutInput ro
            otext  = B.ioPointText $ resoutOutput ro
            echo   = resoutEcho ro
            comm   = B.CommentDoc [ B.CommentSec "INPUT"  itext

@@ -57,8 +57,8 @@ readResource res@C.Resource { C.resInputStack = article@(todo, _, done) }
                                      case abres' of
                                        Right res' -> readResource $ push src' res'
                                        left       -> return left
-            where srcPt         = C.inputPoint src
-                  srcAbout      = C.inputPointAbout src
+            where srcPt         = B.inputPoint src
+                  srcAbout      = B.inputPointAbout src
       where
         todo'                   = reverse todo
         pop                     = call $ map2 tail
@@ -115,6 +115,6 @@ readSources src =
                             , map input $ reverse src
                             , []) }
 
-input :: B.IOPoint -> C.InputPoint
-input pt = C.InputPoint pt []
+input :: B.IOPoint -> B.InputPoint
+input pt = B.InputPoint pt []
 

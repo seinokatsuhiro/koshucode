@@ -34,11 +34,9 @@ runResourceBody res@C.Resource { C.resAssert  = ass
                                , C.resMessage = msg } =
     do js1 <- run $ C.assertViolated ass
        js2 <- run $ C.assertNormal   ass
-       let input  = C.resInput  res
-           output = C.resOutput res
        Right $ B.resoutEmpty
-                 { B.resoutInput     = input
-                 , B.resoutOutput    = output
+                 { B.resoutInput     = C.resInputPoint res
+                 , B.resoutOutput    = C.resOutput res
                  , B.resoutEcho      = map B.lineContent `map` echo
                  , B.resoutViolated  = B.shortTrim js1
                  , B.resoutNormal    = msgChunk : B.shortTrim js2

@@ -11,8 +11,8 @@
 
 module Koshucode.Baala.Core.Resource.Resource
   ( -- * Data type
-    Resource (..), AbResource, InputPoint (..),
-    resEmpty, resIncluded, resInput, resPattern,
+    Resource (..), AbResource,
+    resEmpty, resIncluded, resInput, resInputPoint, resPattern,
     addMessage, addMessages,
 
     -- * Hook
@@ -43,18 +43,13 @@ data Resource c = Resource
     , resLexmap     :: [C.LexmapClause]   -- ^ Source of relmaps
     , resAssert     :: [ShortAssert c]    -- ^ Assertions of relmaps
     , resJudge      :: [B.Judge c]        -- ^ Affirmative or denial judgements
-    , resInputStack :: ([InputPoint], [InputPoint], [B.CodePiece])  -- ^ Input points
+    , resInputStack :: ([B.InputPoint], [B.InputPoint], [B.CodePiece])  -- ^ Input points
     , resOutput     :: B.IOPoint          -- ^ Output point
     , resEcho       :: [[B.TokenLine]]    -- ^ Echo text
     , resMessage    :: [String]           -- ^ Collection of messages
     , resLastSecNo  :: C.SecNo            -- ^ Last section number
     , resSelect     :: C.RelSelect c
     }
-
-data InputPoint = InputPoint
-    { inputPoint      :: B.IOPoint
-    , inputPointAbout :: [B.TTree]
-    } deriving (Show, Eq, Ord)
 
 instance Show (Resource c) where
     show Resource { resInputStack = art }
@@ -92,8 +87,12 @@ resIncluded :: Resource c -> [B.CodePiece]
 resIncluded Resource { resInputStack = (_, _, done) } = done
 
 resInput :: Resource c -> [B.IOPoint]
-resInput Resource { resInputStack = (in1, in2, in3) }
-    = map inputPoint in1 ++ map inputPoint in2 ++ map B.codeName in3
+resInput = map B.inputPoint . resInputPoint
+
+resInputPoint :: Resource c -> [B.InputPoint]
+resInputPoint Resource { resInputStack = (in1, in2, in3) }
+    = in1 ++ in2 ++ map (ip . B.codeName) in3 where
+      ip p = B.InputPoint p []
 
 resPattern :: Resource c -> [B.JudgePat]
 resPattern Resource { resAssert = ass } = map (C.assPattern . B.shortBody) ass
