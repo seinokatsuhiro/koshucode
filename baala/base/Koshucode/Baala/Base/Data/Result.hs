@@ -3,7 +3,7 @@
 
 -- | Result of relational calculation.
 
-module Koshucode.Baala.Base.Data.Output
+module Koshucode.Baala.Base.Data.Result
   ( -- * Data type
     Result (..), InputPoint (..),
     ResultChunks, ResultChunk (..),

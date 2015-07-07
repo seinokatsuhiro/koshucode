@@ -63,9 +63,9 @@ library
         Koshucode.Baala.Base.Data.Interp
         Koshucode.Baala.Base.Data.Judge
         Koshucode.Baala.Base.Data.Mono
-        Koshucode.Baala.Base.Data.Output
         Koshucode.Baala.Base.Data.Para
         Koshucode.Baala.Base.Data.Rel
+        Koshucode.Baala.Base.Data.Result
         Koshucode.Baala.Base.Data.Time
         Koshucode.Baala.Base.Data.Type
 
