@@ -4,21 +4,23 @@
 
 module Koshucode.Baala.Base.Data.Rel
   ( -- * Data type
-    Rel (..),
-    Body,
+    Rel (..), Body,
     relSort,
   
     -- * Constant
-    reldum,
-    reldee,
-    reldau,
+    reldum, reldee, reldau,
     -- $Constant
+
+    -- * Converter
+    SelectRel (..),
+    judgesFromRel,
   ) where
 
 import qualified Koshucode.Baala.Base.Prelude      as B
 import qualified Koshucode.Baala.Base.Text         as B
+import qualified Koshucode.Baala.Base.Token        as B
 import qualified Koshucode.Baala.Base.Data.Head    as B
-
+import qualified Koshucode.Baala.Base.Data.Judge   as B
 
 
 -- ----------------------  Data
@@ -82,7 +84,7 @@ relSortBody (Rel he bo) = Rel he (B.sort $ B.unique bo)
 --    {| |}
 --
 --    >>> B.doc (reldee :: Rel Bool)
---    {| | |}
+--    {| [] |}
 
 -- | The nullary empty relation.
 --   In other words, relational constant
@@ -101,3 +103,15 @@ reldee = Rel B.mempty [[]]
 reldau :: Rel c
 reldau = Rel B.mempty []
 
+
+-- ----------------------  Converter
+
+class SelectRel r where
+    -- | Convert judges to relation.
+    selectRel :: r c -> B.JudgePat -> [B.TermName] -> Rel c
+
+-- | Convert relation to list of judges.
+judgesFromRel :: B.JudgeOf c -> B.JudgePat -> Rel c -> [B.Judge c]
+judgesFromRel judgeOf pat (Rel he bo) = map judge bo where
+    judge = judgeOf pat . zip names
+    names = B.headNames he

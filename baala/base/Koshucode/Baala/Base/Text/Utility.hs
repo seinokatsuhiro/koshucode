@@ -6,12 +6,13 @@ module Koshucode.Baala.Base.Text.Utility
     -- * Padding
     padRight, padLeft, stringWidth,
     -- * Put
-    putShow, putShowLn, putLines,
+    putShow, putShowLn, putLines, hPutLines,
     -- * Read
     readInt, readInteger,
   ) where
 
 import qualified Data.Char                     as Ch
+import qualified System.IO                     as IO
 import qualified Koshucode.Baala.Base.Prelude  as B
 
 
@@ -71,6 +72,9 @@ putShowLn = putStrLn . show
 
 putLines :: [String] -> IO ()
 putLines = putStr . unlines
+
+hPutLines :: IO.Handle -> [String] -> IO ()
+hPutLines h = (IO.hPutStrLn h `mapM_`)
 
 
 -- ----------------------  Read
