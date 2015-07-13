@@ -2,17 +2,17 @@
 
 about /package 'content
 
-|-- DIR  /code 121  /comment 45   /dir "content/Koshucode/Baala/Op"
-|-- DIR  /code 574  /comment 362  /dir "content/Koshucode/Baala/Op/Cop"
+|-- DIR  /code 124  /comment 45   /dir "content/Koshucode/Baala/Op"
+|-- DIR  /code 647  /comment 381  /dir "content/Koshucode/Baala/Op/Cop"
 |-- DIR  /code 717  /comment 371  /dir "content/Koshucode/Baala/Op/Cox"
-|-- DIR  /code 170  /comment 42   /dir "content/Koshucode/Baala/Type"
+|-- DIR  /code 175  /comment 41   /dir "content/Koshucode/Baala/Type"
 
-|-- DIR-TOTAL  /code 1582  /comment 820
+|-- DIR-TOTAL  /code 1663  /comment 838
 
 |-- FILE  /code 16   /comment 5    /file "Cop.hs"         /dir "content/Koshucode/Baala/Op"
 |-- FILE  /code 78   /comment 39   /file "Arith.hs"       /dir "content/Koshucode/Baala/Op/Cop"
 |-- FILE  /code 32   /comment 40   /file "Coxhand.hs"     /dir "content/Koshucode/Baala/Op/Cop"
-|-- FILE  /code 219  /comment 109  /file "List.hs"        /dir "content/Koshucode/Baala/Op/Cop"
+|-- FILE  /code 292  /comment 128  /file "List.hs"        /dir "content/Koshucode/Baala/Op/Cop"
 |-- FILE  /code 52   /comment 36   /file "Logic.hs"       /dir "content/Koshucode/Baala/Op/Cop"
 |-- FILE  /code 72   /comment 50   /file "Misc.hs"        /dir "content/Koshucode/Baala/Op/Cop"
 |-- FILE  /code 50   /comment 34   /file "Order.hs"       /dir "content/Koshucode/Baala/Op/Cop"
@@ -26,8 +26,8 @@ about /package 'content
 |-- FILE  /code 120  /comment 61   /file "Gadget.hs"      /dir "content/Koshucode/Baala/Op/Cox"
 |-- FILE  /code 81   /comment 46   /file "Get.hs"         /dir "content/Koshucode/Baala/Op/Cox"
 |-- FILE  /code 104  /comment 72   /file "Range.hs"       /dir "content/Koshucode/Baala/Op/Cox"
-|-- FILE  /code 78   /comment 23   /file "Global.hs"      /dir "content/Koshucode/Baala/Op"
+|-- FILE  /code 81   /comment 23   /file "Global.hs"      /dir "content/Koshucode/Baala/Op"
 |-- FILE  /code 11   /comment 11   /file "Quoter.hs"      /dir "content/Koshucode/Baala/Op"
-|-- FILE  /code 170  /comment 42   /file "Vanilla.hs"     /dir "content/Koshucode/Baala/Type"
+|-- FILE  /code 175  /comment 41   /file "Vanilla.hs"     /dir "content/Koshucode/Baala/Type"
 
-|-- FILE-TOTAL  /code 1582  /comment 820
+|-- FILE-TOTAL  /code 1663  /comment 838

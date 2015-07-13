@@ -7,7 +7,7 @@
 **    <<< Module named /module imports module /import. >>>
 **
 **  SUMMARY
-**    212 judges
+**    214 judges
 **
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Abort.Abortable"      /import "Koshucode.Baala.Base.Prelude"
@@ -58,24 +58,14 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Interp"          /import "Koshucode.Baala.Base.Text"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Interp"          /import "Koshucode.Baala.Base.Token"
 
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Judge"           /import "System.IO"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Judge"           /import "Koshucode.Baala.Base.Abort"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Judge"           /import "Koshucode.Baala.Base.Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Judge"           /import "Koshucode.Baala.Base.Text"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Judge"           /import "Koshucode.Baala.Base.Token"
-|-- IMPORT  /module "Koshucode.Baala.Base.Data.Judge"           /import "Koshucode.Baala.Base.Data.Rel"
-|-- IMPORT  /module "Koshucode.Baala.Base.Data.Judge"           /import "Koshucode.Baala.Base.Data.Head"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Mono"            /import "Koshucode.Baala.Base.Data.Rel"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Mono"            /import "Koshucode.Baala.Base.Abort"
-
-|-- IMPORT  /module "Koshucode.Baala.Base.Data.Output"          /import "Control.Monad"
-|-- IMPORT  /module "Koshucode.Baala.Base.Data.Output"          /import "Data.Map"
-|-- IMPORT  /module "Koshucode.Baala.Base.Data.Output"          /import "System.IO"
-|-- IMPORT  /module "Koshucode.Baala.Base.Data.Output"          /import "Koshucode.Baala.Base.Abort"
-|-- IMPORT  /module "Koshucode.Baala.Base.Data.Output"          /import "Koshucode.Baala.Base.Prelude"
-|-- IMPORT  /module "Koshucode.Baala.Base.Data.Output"          /import "Koshucode.Baala.Base.Text"
-|-- IMPORT  /module "Koshucode.Baala.Base.Data.Output"          /import "Koshucode.Baala.Base.Token"
-|-- IMPORT  /module "Koshucode.Baala.Base.Data.Output"          /import "Koshucode.Baala.Base.Data.Judge"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Para"            /import "Data.Generics"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Para"            /import "Data.Map.Strict"
@@ -85,7 +75,18 @@
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Rel"             /import "Koshucode.Baala.Base.Prelude"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Rel"             /import "Koshucode.Baala.Base.Text"
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Rel"             /import "Koshucode.Baala.Base.Token"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Rel"             /import "Koshucode.Baala.Base.Data.Head"
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Rel"             /import "Koshucode.Baala.Base.Data.Judge"
+
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Control.Monad"
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Data.Map"
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "System.IO"
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Koshucode.Baala.Base.Abort"
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Koshucode.Baala.Base.Prelude"
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Koshucode.Baala.Base.Text"
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Koshucode.Baala.Base.Token"
+|-- IMPORT  /module "Koshucode.Baala.Base.Data.Result"          /import "Koshucode.Baala.Base.Data.Judge"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Time"            /import "Data.Time.Calendar"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data.Time"            /import "Data.Time.Calendar.WeekDate"
@@ -108,9 +109,9 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Data"                 /import "Koshucode.Baala.Base.Data.Interp"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data"                 /import "Koshucode.Baala.Base.Data.Judge"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data"                 /import "Koshucode.Baala.Base.Data.Mono"
-|-- IMPORT  /module "Koshucode.Baala.Base.Data"                 /import "Koshucode.Baala.Base.Data.Output"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data"                 /import "Koshucode.Baala.Base.Data.Para"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data"                 /import "Koshucode.Baala.Base.Data.Rel"
+|-- IMPORT  /module "Koshucode.Baala.Base.Data"                 /import "Koshucode.Baala.Base.Data.Result"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data"                 /import "Koshucode.Baala.Base.Data.Time"
 |-- IMPORT  /module "Koshucode.Baala.Base.Data"                 /import "Koshucode.Baala.Base.Data.Type"
 
@@ -203,6 +204,7 @@
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Unicode"         /import "Data.Char"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Utility"         /import "Data.Char"
+|-- IMPORT  /module "Koshucode.Baala.Base.Text.Utility"         /import "System.IO"
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Utility"         /import "Koshucode.Baala.Base.Prelude"
 
 |-- IMPORT  /module "Koshucode.Baala.Base.Text.Write"           /import "Data.List"
