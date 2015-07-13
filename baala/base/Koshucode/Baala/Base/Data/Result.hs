@@ -66,9 +66,6 @@ resultEmpty =
 
 -- ----------------------  Writer
 
-hPutEmptyLine :: IO.Handle -> IO ()
-hPutEmptyLine h = IO.hPutStrLn h ""
-
 -- | `IO.stdout` version of `hPutResult`.
 putResult :: Result -> IO Int
 putResult ro =
@@ -106,7 +103,7 @@ hPutAllChunks h status result sh =
        -- echo
        let echo = resultEcho result
        B.hPutLines h $ concat echo
-       B.when (echo /= []) $ IO.hPutStrLn h ""
+       B.when (echo /= []) $ B.hPutEmptyLine h
 
        -- body
        cnt <- M.foldM (hPutShort h) (initCounter $ resultPattern result) sh
@@ -122,13 +119,13 @@ hPutHead h result =
 
        IO.hPutStrLn h B.emacsModeComment
        B.hPutLines  h $ B.texts comm
-       IO.hPutStrLn h ""
+       B.hPutEmptyLine h
 
 hPutShort :: IO.Handle -> Counter -> ResultChunks -> IO Counter
 hPutShort h cnt (B.Short _ []  output) = hPutChunks h output cnt
 hPutShort h cnt (B.Short _ def output) =
     do B.hPutLines h $ "short" : map shortLine def
-       hPutEmptyLine h
+       B.hPutEmptyLine h
        hPutChunks h output cnt
     where
       shortLine :: (String, String) -> String
@@ -151,11 +148,11 @@ hPutChunks h = loop where
 
 hPutNote :: IO.Handle -> String -> IO ()
 hPutNote h s = do IO.hPutStrLn  h "=== note"
-                  hPutEmptyLine h
+                  B.hPutEmptyLine h
                   IO.hPutStr    h s
-                  hPutEmptyLine h
+                  B.hPutEmptyLine h
                   IO.hPutStrLn  h "=== rel"
-                  hPutEmptyLine h
+                  B.hPutEmptyLine h
 
 
 -- ----------------------  Output list of judges
@@ -181,9 +178,9 @@ hPutJudgesCount :: forall c. (Ord c, B.Write c) =>
     IO.Handle -> (B.Judge c -> IO ()) -> [B.Judge c] -> Counter -> IO Counter
 hPutJudgesCount h writer = loop where
     loop (j : js) cnt  = loop js =<< put j cnt
-    loop [] cnt@(c, _) = do M.when (c > 0) $ hPutEmptyLine h
+    loop [] cnt@(c, _) = do M.when (c > 0) $ B.hPutEmptyLine h
                             total c
-                            hPutEmptyLine h
+                            B.hPutEmptyLine h
                             return cnt
 
     put :: B.Judge c -> Counter -> IO Counter
@@ -195,7 +192,7 @@ hPutJudgesCount h writer = loop where
 
     gutter c      = M.when (mod5 c && c > 0) $
                       do M.when (mod25 c) $ progress c
-                         hPutEmptyLine h
+                         B.hPutEmptyLine h
 
     mod25 n       = n `mod` 25 == 0
     mod5  n       = n `mod` 5  == 0

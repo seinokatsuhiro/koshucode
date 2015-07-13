@@ -6,7 +6,8 @@ module Koshucode.Baala.Base.Text.Utility
     -- * Padding
     padRight, padLeft, stringWidth,
     -- * Put
-    putShow, putShowLn, putLines, hPutLines,
+    putShow, putShowLn,
+    putLines, hPutLines, hPutEmptyLine,
     -- * Read
     readInt, readInteger,
   ) where
@@ -75,6 +76,9 @@ putLines = putStr . unlines
 
 hPutLines :: IO.Handle -> [String] -> IO ()
 hPutLines h = (IO.hPutStrLn h `mapM_`)
+
+hPutEmptyLine :: IO.Handle -> IO ()
+hPutEmptyLine h = IO.hPutStrLn h ""
 
 
 -- ----------------------  Read
