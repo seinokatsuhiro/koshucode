@@ -30,12 +30,13 @@ import qualified Koshucode.Baala.Base.Data.Judge   as B
 
 -- | Result of calculation.
 data Result = Result
-    { resultInput    :: [InputPoint]
-    , resultOutput   :: B.IOPoint
-    , resultEcho     :: [[String]]
-    , resultViolated :: [ResultChunks]
-    , resultNormal   :: [ResultChunks]
-    , resultPattern  :: [B.JudgePat]
+    { resultPrintHead :: Bool
+    , resultInput     :: [InputPoint]
+    , resultOutput    :: B.IOPoint
+    , resultEcho      :: [[String]]
+    , resultViolated  :: [ResultChunks]
+    , resultNormal    :: [ResultChunks]
+    , resultPattern   :: [B.JudgePat]
     } deriving (Show, Eq, Ord)
 
 data InputPoint = InputPoint
@@ -54,12 +55,13 @@ data ResultChunk
 -- | Empty result.
 resultEmpty :: Result
 resultEmpty =
-    Result { resultInput    = []
-           , resultOutput   = B.IOPointStdin
-           , resultEcho     = []
-           , resultViolated = []
-           , resultNormal   = []
-           , resultPattern  = [] }
+    Result { resultPrintHead = True
+           , resultInput     = []
+           , resultOutput    = B.IOPointStdout
+           , resultEcho      = []
+           , resultViolated  = []
+           , resultNormal    = []
+           , resultPattern   = [] }
 
 
 -- ----------------------  Writer
@@ -82,44 +84,52 @@ putResult ro =
 
 -- | Print result of calculation, and return status.
 hPutResult :: IO.Handle -> Result -> IO Int
-hPutResult h ro
-    | null vio   = shortList h 0 ro $ resultNormal ro
-    | otherwise  = shortList h 1 ro vio
+hPutResult h result
+    | null vio   = hPutAllChunks h 0 result $ resultNormal result
+    | otherwise  = hPutAllChunks h 1 result vio
     where
       vio :: [ResultChunks]
-      vio = B.shortTrim $ B.map2 (filter $ existJudge) $ resultViolated ro
+      vio = B.shortTrim $ B.map2 (filter $ existJudge) $ resultViolated result
 
       existJudge :: ResultChunk -> Bool
       existJudge (ResultNote _)    = False
       existJudge (ResultJudge [])  = False
       existJudge _                 = True
 
-shortList :: IO.Handle -> Int -> Result -> [ResultChunks] -> IO Int
-shortList h status ro sh =
-    do let itext  = (B.ioPointText . inputPoint) `map` resultInput ro
-           otext  = B.ioPointText $ resultOutput ro
-           echo   = resultEcho ro
-           comm   = B.CommentDoc [ B.CommentSec "INPUT"  itext
-                                 , B.CommentSec "OUTPUT" [otext] ]
+hPutAllChunks :: IO.Handle -> Int -> Result -> [ResultChunks] -> IO Int
+hPutAllChunks h status result sh =
+    do IO.hSetEncoding h IO.utf8
 
-       IO.hSetEncoding h IO.utf8
-       IO.hPutStrLn    h B.emacsModeComment
-       IO.hPutStr      h $ unlines $ B.texts comm
-       IO.hPutStrLn    h ""
+       -- head
+       B.when (resultPrintHead result) $ hPutHead h result
 
-       IO.hPutStr      h $ unlines $ concat echo
+       -- echo
+       let echo = resultEcho result
+       B.hPutLines h $ concat echo
        B.when (echo /= []) $ IO.hPutStrLn h ""
 
-       cnt <- M.foldM (short h) (initCounter $ resultPattern ro) sh
+       -- body
+       cnt <- M.foldM (hPutShort h) (initCounter $ resultPattern result) sh
        B.hPutLines h $ summaryLines status cnt
        return status
 
-short :: IO.Handle -> Counter -> ResultChunks -> IO Counter
-short h cnt (B.Short _ []  output) = chunks h output cnt
-short h cnt (B.Short _ def output) =
+hPutHead :: IO.Handle -> Result -> IO ()
+hPutHead h result =
+    do let itext  = (B.ioPointText . inputPoint) `map` resultInput result
+           otext  = B.ioPointText $ resultOutput result
+           comm   = B.CommentDoc [ B.CommentSec "INPUT"  itext
+                                 , B.CommentSec "OUTPUT" [otext] ]
+
+       IO.hPutStrLn h B.emacsModeComment
+       B.hPutLines  h $ B.texts comm
+       IO.hPutStrLn h ""
+
+hPutShort :: IO.Handle -> Counter -> ResultChunks -> IO Counter
+hPutShort h cnt (B.Short _ []  output) = hPutChunks h output cnt
+hPutShort h cnt (B.Short _ def output) =
     do B.hPutLines h $ "short" : map shortLine def
        hPutEmptyLine h
-       chunks h output cnt
+       hPutChunks h output cnt
     where
       shortLine :: (String, String) -> String
       shortLine (a, b) = "  " ++ B.padRight width a ++
@@ -128,8 +138,8 @@ short h cnt (B.Short _ def output) =
       width :: Int
       width = maximum $ map (length . fst) def
 
-chunks :: IO.Handle -> [ResultChunk] -> Counter -> IO Counter
-chunks h = loop where
+hPutChunks :: IO.Handle -> [ResultChunk] -> Counter -> IO Counter
+hPutChunks h = loop where
     writer = IO.hPutStrLn h . B.judgeText
 
     loop [] cnt = return cnt
