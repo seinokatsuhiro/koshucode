@@ -22,7 +22,7 @@ import qualified Koshucode.Baala.Core.Message         as Msg
 
 -- | Calculate assertion list.
 runAssertJudges :: (Ord c, B.Write c, C.CRel c, C.CEmpty c, B.SelectRel h, C.GetGlobal h)
-  => h c -> C.Option c -> C.ShortAsserts' h c -> B.Ab B.ResultChunks
+  => h c -> C.Option c -> C.ShortAsserts' h c -> B.Ab B.ResultShortChunks
 runAssertJudges hook opt a =
     do chunks <- runAssertDataset hook opt a
        Right $ a { B.shortBody = chunks }

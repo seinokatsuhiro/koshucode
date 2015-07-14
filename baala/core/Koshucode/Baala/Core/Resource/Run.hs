@@ -42,11 +42,11 @@ runResourceBody res@C.Resource { C.resAssert  = ass
                  , B.resultNormal    = msgChunk : B.shortTrim js2
                  , B.resultPattern   = C.resPattern res }
     where
-      run :: [C.ShortAssert c] -> B.Ab [B.ResultChunks]
+      run :: [C.ShortAssert c] -> B.Ab [B.ResultShortChunks]
       run = let opt = C.resOption res
             in mapM (C.runAssertJudges res opt) . B.shortGroup
 
-      msgChunk :: B.ResultChunks
+      msgChunk :: B.ResultShortChunks
       msgChunk | null msg  = B.Short [] [] []
                | otherwise = B.Short [] [] [B.ResultNote message]
 

@@ -9,7 +9,7 @@ module Koshucode.Baala.Base.Data.Result
     resultEmpty,
 
     -- * ResultChunk
-    ResultChunks, ResultChunk (..),
+    ResultShortChunks, ResultChunk (..),
   
     -- * Writer
     putResult, hPutResult,
@@ -35,8 +35,8 @@ data Result = Result
     , resultInput     :: [InputPoint]
     , resultOutput    :: B.IOPoint
     , resultEcho      :: [[String]]
-    , resultViolated  :: [ResultChunks]
-    , resultNormal    :: [ResultChunks]
+    , resultViolated  :: [ResultShortChunks]
+    , resultNormal    :: [ResultShortChunks]
     , resultPattern   :: [B.JudgePat]
     } deriving (Show, Eq, Ord)
 
@@ -45,7 +45,7 @@ data InputPoint = InputPoint
     , inputPointAbout :: [B.TTree]
     } deriving (Show, Eq, Ord)
 
-type ResultChunks  = B.Short [ResultChunk]
+type ResultShortChunks  = B.Short [ResultChunk]
 
 -- | Chunk of judgements.
 data ResultChunk
@@ -87,7 +87,7 @@ hPutResult h result
     | null vio   = hPutAllChunks h 0 result $ resultNormal result
     | otherwise  = hPutAllChunks h 1 result vio
     where
-      vio :: [ResultChunks]
+      vio :: [ResultShortChunks]
       vio = B.shortTrim $ B.map2 (filter $ existJudge) $ resultViolated result
 
       existJudge :: ResultChunk -> Bool
@@ -95,7 +95,7 @@ hPutResult h result
       existJudge (ResultJudge [])  = False
       existJudge _                 = True
 
-hPutAllChunks :: IO.Handle -> Int -> Result -> [ResultChunks] -> IO Int
+hPutAllChunks :: IO.Handle -> Int -> Result -> [ResultShortChunks] -> IO Int
 hPutAllChunks h status result sh =
     do IO.hSetEncoding h IO.utf8
        -- head
@@ -115,7 +115,7 @@ hPutEcho h result =
        B.hPutLines h $ concat echo
        B.when (echo /= []) $ B.hPutEmptyLine h
 
-hPutShortChunk :: IO.Handle -> Counter -> ResultChunks -> IO Counter
+hPutShortChunk :: IO.Handle -> Counter -> ResultShortChunks -> IO Counter
 hPutShortChunk h cnt (B.Short _ def output) =
     do hPutShort h def
        hPutChunks h output cnt
