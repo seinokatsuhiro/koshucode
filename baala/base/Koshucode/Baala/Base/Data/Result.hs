@@ -96,42 +96,37 @@ hPutResult h result
 hPutAllChunks :: IO.Handle -> Int -> Result -> [ResultChunks] -> IO Int
 hPutAllChunks h status result sh =
     do IO.hSetEncoding h IO.utf8
-
        -- head
        B.when (resultPrintHead result) $ hPutHead h result
-
        -- echo
-       let echo = resultEcho result
+       hPutEcho h result
+       -- body
+       let cnt = initCounter $ resultPattern result
+       cnt' <- M.foldM (hPutShortChunk h) cnt sh
+       -- foot
+       hPutFoot h status cnt'
+       return status
+
+hPutEcho :: IO.Handle -> Result -> IO ()
+hPutEcho h result =
+    do let echo = resultEcho result
        B.hPutLines h $ concat echo
        B.when (echo /= []) $ B.hPutEmptyLine h
 
-       -- body
-       cnt <- M.foldM (hPutShort h) (initCounter $ resultPattern result) sh
-       B.hPutLines h $ summaryLines status cnt
-       return status
+hPutShortChunk :: IO.Handle -> Counter -> ResultChunks -> IO Counter
+hPutShortChunk h cnt (B.Short _ def output) =
+    do hPutShort h def
+       hPutChunks h output cnt
 
-hPutHead :: IO.Handle -> Result -> IO ()
-hPutHead h result =
-    do let itext  = (B.ioPointText . inputPoint) `map` resultInput result
-           otext  = B.ioPointText $ resultOutput result
-           comm   = B.CommentDoc [ B.CommentSec "INPUT"  itext
-                                 , B.CommentSec "OUTPUT" [otext] ]
-
-       IO.hPutStrLn h B.emacsModeComment
-       B.hPutLines  h $ B.texts comm
-       B.hPutEmptyLine h
-
-hPutShort :: IO.Handle -> Counter -> ResultChunks -> IO Counter
-hPutShort h cnt (B.Short _ []  output) = hPutChunks h output cnt
-hPutShort h cnt (B.Short _ def output) =
+hPutShort :: IO.Handle -> [B.ShortDef] -> IO ()
+hPutShort _ [] = return ()
+hPutShort h def =
     do B.hPutLines h $ "short" : map shortLine def
        B.hPutEmptyLine h
-       hPutChunks h output cnt
     where
       shortLine :: (String, String) -> String
       shortLine (a, b) = "  " ++ B.padRight width a ++
                          " "  ++ show b
-
       width :: Int
       width = maximum $ map (length . fst) def
 
@@ -139,23 +134,63 @@ hPutChunks :: IO.Handle -> [ResultChunk] -> Counter -> IO Counter
 hPutChunks h = loop where
     writer = IO.hPutStrLn h . B.judgeText
 
-    loop [] cnt = return cnt
-    loop (ResultJudge js : xs) (_, tab) = do cnt' <- hPutJudgesCount h writer js (0, tab)
-                                             loop xs cnt'
-    loop (ResultNote [] : xs) cnt       = loop xs cnt
-    loop (ResultNote ls : xs) cnt       = do hPutNote h $ unlines ls
-                                             loop xs cnt
+    loop [] cnt                          = return cnt
+    loop (ResultJudge js : xs) (_, tab)  = do cnt' <- hPutJudgesCount h writer js (0, tab)
+                                              loop xs cnt'
+    loop (ResultNote [] : xs) cnt        = loop xs cnt
+    loop (ResultNote ls : xs) cnt        = do hPutNote h ls
+                                              loop xs cnt
 
-hPutNote :: IO.Handle -> String -> IO ()
-hPutNote h s = do IO.hPutStrLn  h "=== note"
-                  B.hPutEmptyLine h
-                  IO.hPutStr    h s
-                  B.hPutEmptyLine h
-                  IO.hPutStrLn  h "=== rel"
-                  B.hPutEmptyLine h
+hPutNote :: IO.Handle -> [String] -> IO ()
+hPutNote h ls =
+    do IO.hPutStrLn    h "=== note"
+       B.hPutEmptyLine h
+       B.hPutLines     h ls
+       B.hPutEmptyLine h
+       IO.hPutStrLn    h "=== rel"
+       B.hPutEmptyLine h
 
 
--- ----------------------  Output list of judges
+-- ----------------------  Header and Footer
+
+hPutHead :: IO.Handle -> Result -> IO ()
+hPutHead h result =
+    do IO.hPutStrLn h B.emacsModeComment
+       B.hPutLines  h $ B.texts comm
+       B.hPutEmptyLine h
+    where
+      itext = (B.ioPointText . inputPoint) `map` resultInput result
+      otext = B.ioPointText $ resultOutput result
+      comm  = B.CommentDoc [ B.CommentSec "INPUT"  itext
+                           , B.CommentSec "OUTPUT" [otext] ]
+
+hPutFoot :: IO.Handle -> Int -> Counter -> IO ()
+hPutFoot h status cnt = B.hPutLines h $ summaryLines status cnt
+
+-- B.putLines $ summaryLines 0 (10, Map.fromList [("A", 3), ("B", 6), ("C", 1)])
+summaryLines :: Int -> Counter -> [String]
+summaryLines status (_, tab) = B.texts sumDoc where
+    label | status == 0 = "SUMMARY"
+          | otherwise   = "SUMMARY (VIOLATED)"
+
+    sumDoc              = B.CommentDoc [sumSec]
+    sumSec              = B.CommentSec label $ sumLines ++ [total]
+    sumLines            = map sumLine $ Map.assocs tab
+    sumLine (p, n)      = count n ++ " on " ++ p
+    total               = count (sumOf tab) ++ " in total"
+
+    count n             = B.padLeft 11 $ judgeCount n
+
+    sumOf :: Map.Map a Int -> Int
+    sumOf = Map.foldr (+) 0
+
+judgeCount :: Int -> String
+judgeCount 0  = "no judges"
+judgeCount 1  = "1 judge "
+judgeCount n  = show n ++ " judges"
+
+
+-- ----------------------  Output judges
 
 -- total and per-judgement counter
 type Counter = (Int, Map.Map B.JudgePat Int)
@@ -197,30 +232,9 @@ hPutJudgesCount h writer = loop where
     mod25 n       = n `mod` 25 == 0
     mod5  n       = n `mod` 5  == 0
 
-    total    n    = IO.hPutStrLn h $ "*** " ++ countText n
+    total    n    = IO.hPutStrLn h $ "*** " ++ judgeCount n
     progress n    = IO.hPutStrLn h $ "*** " ++ show n
 
     inc (Nothing) = Just 1
     inc (Just n)  = Just $ n + 1
 
--- B.putLines $ summaryLines 0 (10, Map.fromList [("A", 3), ("B", 6), ("C", 1)])
-summaryLines :: Int -> Counter -> [String]
-summaryLines status (_, tab) = B.texts sumDoc where
-    label | status == 0 =  "SUMMARY"
-          | otherwise   =  "SUMMARY (VIOLATED)"
-
-    sumDoc              =  B.CommentDoc [sumSec]
-    sumSec              =  B.CommentSec label $ sumLines ++ [total]
-    sumLines            =  map sumLine $ Map.assocs tab
-    sumLine (p, n)      =  count n ++ " on " ++ p
-    total               =  count (sumOf tab) ++ " in total"
-
-    count n             =  B.padLeft 11 $ countText n
-
-sumOf :: Map.Map a Int -> Int
-sumOf = Map.foldr (+) 0
-
-countText :: Int -> String
-countText 0 = "no judges"
-countText 1 = "1 judge "
-countText n = show n ++ " judges"
