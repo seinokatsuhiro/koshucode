@@ -31,6 +31,7 @@ import qualified Koshucode.Baala.Base.Data.Judge   as B
 -- | Result of calculation.
 data Result = Result
     { resultPrintHead :: Bool
+    , resultPrintFoot :: Bool
     , resultInput     :: [InputPoint]
     , resultOutput    :: B.IOPoint
     , resultEcho      :: [[String]]
@@ -56,6 +57,7 @@ data ResultChunk
 resultEmpty :: Result
 resultEmpty =
     Result { resultPrintHead = True
+           , resultPrintFoot = True
            , resultInput     = []
            , resultOutput    = B.IOPointStdout
            , resultEcho      = []
@@ -104,7 +106,7 @@ hPutAllChunks h status result sh =
        let cnt = initCounter $ resultPattern result
        cnt' <- M.foldM (hPutShortChunk h) cnt sh
        -- foot
-       hPutFoot h status cnt'
+       B.when (resultPrintFoot result) $ hPutFoot h status cnt'
        return status
 
 hPutEcho :: IO.Handle -> Result -> IO ()
