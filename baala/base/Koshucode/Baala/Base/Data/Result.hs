@@ -30,14 +30,16 @@ import qualified Koshucode.Baala.Base.Data.Judge   as B
 
 -- | Result of calculation.
 data Result = Result
-    { resultPrintHead :: Bool
-    , resultPrintFoot :: Bool
-    , resultInput     :: [InputPoint]
-    , resultOutput    :: B.IOPoint
-    , resultEcho      :: [[String]]
-    , resultViolated  :: [ResultShortChunks]
-    , resultNormal    :: [ResultShortChunks]
-    , resultPattern   :: [B.JudgePat]
+    { resultPrintHead  :: Bool
+    , resultPrintFoot  :: Bool
+    , resultGutter     :: Int
+    , resultMeasure    :: Int
+    , resultInput      :: [InputPoint]
+    , resultOutput     :: B.IOPoint
+    , resultEcho       :: [[String]]
+    , resultViolated   :: [ResultShortChunks]
+    , resultNormal     :: [ResultShortChunks]
+    , resultPattern    :: [B.JudgePat]
     } deriving (Show, Eq, Ord)
 
 data InputPoint = InputPoint
@@ -56,27 +58,29 @@ data ResultChunk
 -- | Empty result.
 resultEmpty :: Result
 resultEmpty =
-    Result { resultPrintHead = True
-           , resultPrintFoot = True
-           , resultInput     = []
-           , resultOutput    = B.IOPointStdout
-           , resultEcho      = []
-           , resultViolated  = []
-           , resultNormal    = []
-           , resultPattern   = [] }
+    Result { resultPrintHead  = True
+           , resultPrintFoot  = True
+           , resultGutter     = 5
+           , resultMeasure    = 25
+           , resultInput      = []
+           , resultOutput     = B.IOPointStdout
+           , resultEcho       = []
+           , resultViolated   = []
+           , resultNormal     = []
+           , resultPattern    = [] }
 
 
 -- ----------------------  Writer
 
 -- | `IO.stdout` version of `hPutResult`.
 putResult :: Result -> IO Int
-putResult ro =
-    case resultOutput ro of
+putResult result =
+    case resultOutput result of
       B.IOPointStdout ->
-          hPutResult IO.stdout ro
+          hPutResult IO.stdout result
       B.IOPointFile _ path ->
           do h <- IO.openFile path IO.WriteMode
-             n <- hPutResult h ro
+             n <- hPutResult h result
              IO.hClose h
              return n
       output -> B.bug $ "putResult " ++ show output
@@ -104,7 +108,7 @@ hPutAllChunks h status result sh =
        hPutEcho h result
        -- body
        let cnt = initCounter $ resultPattern result
-       cnt' <- M.foldM (hPutShortChunk h) cnt sh
+       cnt' <- M.foldM (hPutShortChunk h result) cnt sh
        -- foot
        B.when (resultPrintFoot result) $ hPutFoot h status cnt'
        return status
@@ -115,10 +119,13 @@ hPutEcho h result =
        B.hPutLines h $ concat echo
        B.when (echo /= []) $ B.hPutEmptyLine h
 
-hPutShortChunk :: IO.Handle -> Counter -> ResultShortChunks -> IO Counter
-hPutShortChunk h cnt (B.Short _ def output) =
+
+-- ----------------------  Chunk
+
+hPutShortChunk :: IO.Handle -> Result -> Counter -> ResultShortChunks -> IO Counter
+hPutShortChunk h result cnt (B.Short _ def output) =
     do hPutShort h def
-       hPutChunks h output cnt
+       hPutChunks h result output cnt
 
 hPutShort :: IO.Handle -> [B.ShortDef] -> IO ()
 hPutShort _ [] = return ()
@@ -132,12 +139,12 @@ hPutShort h def =
       width :: Int
       width = maximum $ map (length . fst) def
 
-hPutChunks :: IO.Handle -> [ResultChunk] -> Counter -> IO Counter
-hPutChunks h = loop where
+hPutChunks :: IO.Handle -> Result -> [ResultChunk] -> Counter -> IO Counter
+hPutChunks h result = loop where
     writer = IO.hPutStrLn h . B.judgeText
 
     loop [] cnt                          = return cnt
-    loop (ResultJudge js : xs) (_, tab)  = do cnt' <- hPutJudgesCount h writer js (0, tab)
+    loop (ResultJudge js : xs) (_, tab)  = do cnt' <- hPutJudgesCount h result writer js (0, tab)
                                               loop xs cnt'
     loop (ResultNote [] : xs) cnt        = loop xs cnt
     loop (ResultNote ls : xs) cnt        = do hPutNote h ls
@@ -192,7 +199,7 @@ judgeCount 1  = "1 judge "
 judgeCount n  = show n ++ " judges"
 
 
--- ----------------------  Output judges
+-- ----------------------  List of judges
 
 -- total and per-judgement counter
 type Counter = (Int, Map.Map B.JudgePat Int)
@@ -202,18 +209,18 @@ initCounter ps = (0, Map.fromList $ zip ps $ repeat 0)
 
 -- | `IO.stdout` version of `hPutJudges`.
 putJudges :: (Ord c, B.Write c) => Int -> [B.Judge c] -> IO Int
-putJudges = hPutJudges IO.stdout
+putJudges = hPutJudges IO.stdout resultEmpty
 
 -- | Print list of judges.
-hPutJudges :: (Ord c, B.Write c) => IO.Handle -> Int -> [B.Judge c] -> IO Int
-hPutJudges h status js =
-    do cnt <- hPutJudgesCount h (B.hPutJudge h) js $ initCounter []
+hPutJudges :: (Ord c, B.Write c) => IO.Handle -> Result -> Int -> [B.Judge c] -> IO Int
+hPutJudges h result status js =
+    do cnt <- hPutJudgesCount h result (B.hPutJudge h) js $ initCounter []
        B.hPutLines h $ summaryLines status cnt
        return status
 
 hPutJudgesCount :: forall c. (Ord c, B.Write c) =>
-    IO.Handle -> (B.Judge c -> IO ()) -> [B.Judge c] -> Counter -> IO Counter
-hPutJudgesCount h writer = loop where
+    IO.Handle -> Result -> (B.Judge c -> IO ()) -> [B.Judge c] -> Counter -> IO Counter
+hPutJudgesCount h result writer = loop where
     loop (j : js) cnt  = loop js =<< put j cnt
     loop [] cnt@(c, _) = do M.when (c > 0) $ B.hPutEmptyLine h
                             total c
@@ -221,18 +228,20 @@ hPutJudgesCount h writer = loop where
                             return cnt
 
     put :: B.Judge c -> Counter -> IO Counter
-    put judge (c, tab) = do gutter c
+    put judge (c, tab) = do putGutter c
                             writer judge
                             let c'  = c + 1
                                 pat = B.judgePat judge
                             return (c', Map.alter inc pat tab)
 
-    gutter c      = M.when (mod5 c && c > 0) $
+    putGutter c   = M.when (mod5 c && c > 0) $
                       do M.when (mod25 c) $ progress c
                          B.hPutEmptyLine h
 
-    mod25 n       = n `mod` 25 == 0
-    mod5  n       = n `mod` 5  == 0
+    mod25 n       = n `mod` measure == 0
+    mod5  n       = n `mod` gutter  == 0
+    gutter        = resultGutter  result
+    measure       = resultMeasure result
 
     total    n    = IO.hPutStrLn h $ "*** " ++ judgeCount n
     progress n    = IO.hPutStrLn h $ "*** " ++ show n
