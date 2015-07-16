@@ -69,6 +69,7 @@ optionType = B.paraType `B.paraMin` 0 `B.paraOpt`
              [ "empty"     -- show empty filler
              , "forward"   -- move terms to front
              , "backward"  -- move terms to rear
+             , "lexical"   -- make terms lexical order
              , "order"     -- sort list of judges by content
              , "align"     -- align terms vertically
              , "table"     -- output relation in tabular format
@@ -100,6 +101,7 @@ optionRelmapAssert :: (Ord c, C.CRel c) => C.TTreePara -> B.AbMap (B.Rel c)
 optionRelmapAssert opt r1 =
     Right r1 >>= call optionForward  "forward"
              >>= call optionBackward "backward"
+             >>= call optionLexical  "lexical"
              >>= call optionOrder    "order"
     where call f name r2 = case B.paraGet opt name of
                              Right args -> f args r2
@@ -154,6 +156,13 @@ snipRel (heSnip, boSnip) ns (B.Rel he1 bo1)
       r2    = B.Rel he2 bo2
       he2   = heSnip ind `B.headMap` he1
       bo2   = boSnip ind `map` bo1
+
+optionLexical :: (Ord c) => [B.TTree] -> B.AbMap (B.Rel c)
+optionLexical _ = lexicalOrderRel
+
+lexicalOrderRel :: (Ord c) => B.AbMap (B.Rel c)
+lexicalOrderRel rel@(B.Rel he1 _) = snipRel B.snipForward2 ns' rel where
+    ns' = B.sort $ B.headNames he1
 
 
 -- ---------------------------------  Option "order"
