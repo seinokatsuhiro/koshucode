@@ -35,7 +35,7 @@ minusInput inputA inputB =
     do js <- minusInputJudge inputA inputB
        putStr . unlines . B.texts $ minusHead inputA inputB
        putStrLn ""
-       B.putJudges 0 js
+       B.putJudgesWith 0 js
 
 minusInputJudge :: L.Input -> L.Input -> IO ([B.Judge Type.VContent])
 minusInputJudge inputA inputB =
@@ -75,7 +75,7 @@ updateInput inputB inputC =
     do [textB, textC] <- L.readInputs [inputB, inputC]
        putStr . unlines . B.texts $ updateHead inputB inputC
        putStrLn ""
-       B.putJudges 0 $ L.readJudge textB `updateJudge` L.readJudge textC
+       B.putJudgesWith 0 $ L.readJudge textB `updateJudge` L.readJudge textC
 
 updateJudge :: (Ord c) => [B.Judge c] -> [B.Judge c] -> [B.Judge c]
 updateJudge judB judC = judA where

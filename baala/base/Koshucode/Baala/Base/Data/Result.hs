@@ -13,7 +13,7 @@ module Koshucode.Baala.Base.Data.Result
   
     -- * Writer
     putResult, hPutResult,
-    putJudges, hPutJudges,
+    putJudges, putJudgesWith, hPutJudgesWith,
   ) where
 
 import qualified Control.Monad                     as M
@@ -207,13 +207,18 @@ type Counter = (Int, Map.Map B.JudgePat Int)
 initCounter :: [B.JudgePat] -> Counter
 initCounter ps = (0, Map.fromList $ zip ps $ repeat 0)
 
--- | `IO.stdout` version of `hPutJudges`.
-putJudges :: (Ord c, B.Write c) => Int -> [B.Judge c] -> IO Int
-putJudges = hPutJudges IO.stdout resultEmpty
+putJudges :: (B.Write c, Ord c) => [B.Judge c] -> IO ()
+putJudges js =
+    do _ <- putJudgesWith 0 js
+       return ()
+
+-- | `IO.stdout` version of `hPutJudgesWith`.
+putJudgesWith :: (Ord c, B.Write c) => Int -> [B.Judge c] -> IO Int
+putJudgesWith = hPutJudgesWith IO.stdout resultEmpty
 
 -- | Print list of judges.
-hPutJudges :: (Ord c, B.Write c) => IO.Handle -> Result -> Int -> [B.Judge c] -> IO Int
-hPutJudges h result status js =
+hPutJudgesWith :: (Ord c, B.Write c) => IO.Handle -> Result -> Int -> [B.Judge c] -> IO Int
+hPutJudgesWith h result status js =
     do cnt <- hPutJudgesCount h result (B.hPutJudge h) js $ initCounter []
        B.hPutLines h $ summaryLines status cnt
        return status

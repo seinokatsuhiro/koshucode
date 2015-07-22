@@ -134,7 +134,7 @@ putElems g src =
        res3 <- abio $ C.assembleRelmap res2
        putStrLn "-*- koshu -*-"
        putStrLn ""
-       B.putJudges 0 $ L.resourceElem res3
+       B.putJudgesWith 0 $ L.resourceElem res3
     where
       abio mx = case mx of
                   Left  a -> B.abort [] a
