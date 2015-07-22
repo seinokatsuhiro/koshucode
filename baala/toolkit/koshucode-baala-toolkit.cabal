@@ -67,7 +67,7 @@ executable koshu-rdf
          base                       == 4.*
        , containers                 == 0.5.*
        , rdf4h                      == 1.2.*
-       , text                       == 1.1.*
+       , text                       == 1.*
        , koshucode-baala-base       == 0.112.*
        , koshucode-baala-core       == 0.112.*
        , koshucode-baala-operator   == 0.112.*
@@ -107,7 +107,7 @@ library
        , containers                 == 0.5.*
        , directory                  == 1.2.*
        , rdf4h                      == 1.2.*
-       , text                       == 1.1.*
+       , text                       == 1.*
        , koshucode-baala-base       == 0.112.*
        , koshucode-baala-core       == 0.112.*
        , koshucode-baala-operator   == 0.112.*
